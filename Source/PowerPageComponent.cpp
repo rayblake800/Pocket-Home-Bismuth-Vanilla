@@ -195,10 +195,10 @@ void PowerPageComponent::buttonClicked(Button *button) {
     getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontalLeft);
   } else if (button == powerOffButton) {
     showPowerSpinner();
-    child.start("systemctl poweroff");
+    child.start("shutdown");
   } else if (button == rebootButton) {
     showPowerSpinner();
-    child.start("systemctl reboot");
+    child.start("shutdown -r");
   } else if (button == sleepButton) {
     setSleep();
   } else if (button == felButton) {
