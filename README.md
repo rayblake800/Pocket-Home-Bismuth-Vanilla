@@ -1,3 +1,5 @@
+This fork exists so I can maintain my own custom version of this launcher.  You're not likely to find much that would be useful to you here.
+
 # PocketCHIP Launcher (Marshmallow Edition)
 
 # How to install
