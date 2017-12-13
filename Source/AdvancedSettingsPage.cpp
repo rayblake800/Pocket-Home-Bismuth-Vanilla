@@ -12,7 +12,7 @@ spl(new SettingsPageLogin),
 datetime(new DateTimePage(lc)),
 ppc(new PersonalizePageComponent(lc)),
 inputsettings(new InputSettingsPage(lc)),
-testpage(new LauncherTestPage(lc)),
+testpage(new LauncherTestPage()),
 index(0)
 {
   //Title font
