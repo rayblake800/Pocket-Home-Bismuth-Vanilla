@@ -144,7 +144,7 @@ void AdvancedSettingsPage::buttonClicked(Button* button){
   else if(button == &dateandtime){
     getMainStack().pushPage(datetime, PageStackComponent::kTransitionTranslateHorizontal);
   }
-  else if(button == &launcherTesting{
+  else if(button == &launcherTesting){
     getMainStack().pushPage(testpage, PageStackComponent::kTransitionTranslateHorizontal);
   }
 }
