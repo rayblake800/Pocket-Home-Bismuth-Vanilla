@@ -20,7 +20,7 @@
 //[Headers] You can add your own extra header files here...
 //[/Headers]
 
-#include "LauncherTest.h"
+#include "LauncherTestPage.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
