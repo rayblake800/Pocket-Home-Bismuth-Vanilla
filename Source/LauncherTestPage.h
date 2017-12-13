@@ -21,6 +21,9 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "PersonalizePageComponent.h"
+#include "Utils.h"
+#include "Main.h"
 //[/Headers]
 
 
