@@ -46,7 +46,7 @@ private:
   ScopedPointer<DateTimePage> datetime;
   ScopedPointer<InputSettingsPage> inputsettings;
   
-  ScopedPointer<LauncherTestPage> launcherTest;
+  ScopedPointer<LauncherTestPage> testpage;
   
   //Next and previous buttons
   ScopedPointer<ImageButton> previousarrow;
