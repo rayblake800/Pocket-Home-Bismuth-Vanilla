@@ -36,13 +36,13 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class LauncherTest  : public Component,
-                      public Button::Listener
+class LauncherTestPage  : public Component,
+                          public Button::Listener
 {
 public:
     //==============================================================================
-    LauncherTest ();
-    ~LauncherTest();
+    LauncherTestPage ();
+    ~LauncherTestPage();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
@@ -66,7 +66,7 @@ private:
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LauncherTest)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LauncherTestPage)
 };
 
 //[EndFile] You can add extra defines here...
