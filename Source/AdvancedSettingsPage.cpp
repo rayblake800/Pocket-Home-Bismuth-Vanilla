@@ -12,6 +12,7 @@ spl(new SettingsPageLogin),
 datetime(new DateTimePage(lc)),
 ppc(new PersonalizePageComponent(lc)),
 inputsettings(new InputSettingsPage(lc)),
+testpage(new LauncherTestPage(lc)),
 index(0)
 {
   //Title font
@@ -27,6 +28,7 @@ index(0)
   personalizeButton.addListener(this);
   dateandtime.addListener(this);
   inputoptions.addListener(this);
+  launcherTesting.addListener(this);
   addAndMakeVisible(title);
   addAndMakeVisible(backButton);
   addAndMakeVisible(addLogin);
@@ -34,6 +36,7 @@ index(0)
   addAndMakeVisible(personalizeButton);
   addAndMakeVisible(dateandtime);
   addAndMakeVisible(inputoptions);
+  addAndMakeVisible(launcherTesting);
   
   //Adding to our buttons
   allbuttons.push_back(&personalizeButton);
@@ -41,6 +44,7 @@ index(0)
   allbuttons.push_back(&removeLogin);
   allbuttons.push_back(&dateandtime);
   allbuttons.push_back(&inputoptions);
+  allbuttons.push_back(&launcherTesting);
   
   //Creating the previous and next arrows images
   previousarrow = createImageButton("Previous", createImageFromFile(assetFile("pageUpIcon.png")));
@@ -139,6 +143,9 @@ void AdvancedSettingsPage::buttonClicked(Button* button){
   }
   else if(button == &dateandtime){
     getMainStack().pushPage(datetime, PageStackComponent::kTransitionTranslateHorizontal);
+  }
+  else if(button == &launcherTesting{
+    getMainStack().pushPage(testpage, PageStackComponent::kTransitionTranslateHorizontal);
   }
 }
 

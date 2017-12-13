@@ -10,8 +10,7 @@
 
 */
 
-#ifndef __APPHEADERFILE_EFUQKG__
-#define __APPHEADERFILE_EFUQKG__
+#pragma once
 
 #include "AppConfig.h"
 
@@ -37,5 +36,3 @@ namespace ProjectInfo
     const int          versionNumber  = 0x1;
 }
 #endif
-
-#endif   // __APPHEADERFILE_EFUQKG__
