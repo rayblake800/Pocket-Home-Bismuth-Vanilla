@@ -142,7 +142,7 @@ void AppListComponent::removeIcon(Component* icon){
 
 Array<DrawableButton *> AppListComponent::createIconsFromJsonArray(const var &json) {
   Array<DrawableButton *> buttons;
-  DesktopEntries de();
+  DesktopEntries de;
   /**
   if (json.isArray()) {
     for (const auto &item : *json.getArray()) {
