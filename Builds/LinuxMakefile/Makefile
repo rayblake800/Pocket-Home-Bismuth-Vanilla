@@ -66,6 +66,9 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/DesktopEntries_5218f65d.o \
+  $(JUCE_OBJDIR)/DesktopEntry_8dc99f3f.o \
+  $(JUCE_OBJDIR)/sysutils_5720ce6d.o \
   $(JUCE_OBJDIR)/LauncherTestPage_6f6e940a.o \
   $(JUCE_OBJDIR)/OverlaySpinner_80e19ab2.o \
   $(JUCE_OBJDIR)/AdvancedSettingsPage_6068151d.o \
@@ -112,6 +115,21 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
+
+$(JUCE_OBJDIR)/DesktopEntries_5218f65d.o: ../../Source/DesktopEntries.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling DesktopEntries.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/DesktopEntry_8dc99f3f.o: ../../Source/DesktopEntry.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling DesktopEntry.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/sysutils_5720ce6d.o: ../../Source/sysutils.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling sysutils.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/LauncherTestPage_6f6e940a.o: ../../Source/LauncherTestPage.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)

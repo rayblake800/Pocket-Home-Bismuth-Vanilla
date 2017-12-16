@@ -14,6 +14,15 @@
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
+      <FILE id="rtJuAf" name="DesktopEntries.cpp" compile="1" resource="0"
+            file="Source/DesktopEntries.cpp"/>
+      <FILE id="GmJU6E" name="DesktopEntries.h" compile="0" resource="0"
+            file="Source/DesktopEntries.h"/>
+      <FILE id="V4z6JG" name="DesktopEntry.cpp" compile="1" resource="0"
+            file="Source/DesktopEntry.cpp"/>
+      <FILE id="nE5pIY" name="DesktopEntry.h" compile="0" resource="0" file="Source/DesktopEntry.h"/>
+      <FILE id="yFOWZB" name="sysutils.cpp" compile="1" resource="0" file="Source/sysutils.cpp"/>
+      <FILE id="NKZy83" name="sysutils.h" compile="0" resource="0" file="Source/sysutils.h"/>
       <FILE id="yPSgNB" name="LauncherTestPage.cpp" compile="1" resource="0"
             file="Source/LauncherTestPage.cpp"/>
       <FILE id="V5LrYP" name="LauncherTestPage.h" compile="0" resource="0"
