@@ -1,6 +1,8 @@
 #include "AppsPageComponent.h"
 #include "LauncherComponent.h"
 #include "PokeLookAndFeel.h"
+#include "DesktopEntries.h"
+#include "DesktopEntry.h"
 #include "Main.h"
 #include "Utils.h"
 
@@ -140,6 +142,8 @@ void AppListComponent::removeIcon(Component* icon){
 
 Array<DrawableButton *> AppListComponent::createIconsFromJsonArray(const var &json) {
   Array<DrawableButton *> buttons;
+  DesktopEntries de();
+  /**
   if (json.isArray()) {
     for (const auto &item : *json.getArray()) {
       auto name = item["name"];
@@ -153,7 +157,14 @@ Array<DrawableButton *> AppListComponent::createIconsFromJsonArray(const var &js
       }
     }
   }
-  
+  **/
+  for(int i=0;i<6;i++){
+      DesktopEntry d = de.getEntry(i);
+      auto icon = createAndOwnIcon(d.getName(),d.getIconPath(),d.getExec());
+      if (icon) {
+        buttons.add(icon);
+      }
+  }
   checkShowPageNav();
   return buttons;
 }
