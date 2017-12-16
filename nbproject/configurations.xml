@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="." name="0">
+      <df name="JuceLibraryCode">
+        <in>BinaryData.cpp</in>
+        <in>include_juce_core.cpp</in>
+        <in>include_juce_data_structures.cpp</in>
+        <in>include_juce_events.cpp</in>
+        <in>include_juce_graphics.cpp</in>
+        <in>include_juce_gui_basics.cpp</in>
+      </df>
+      <df name="Source">
+        <in>AdvancedSettingsPage.cpp</in>
+        <in>AppsPageComponent.cpp</in>
+        <in>BatteryMonitor.cpp</in>
+        <in>ClockMonitor.cpp</in>
+        <in>DateTimePage.cpp</in>
+        <in>DesktopEntries.cpp</in>
+        <in>DesktopEntry.cpp</in>
+        <in>Grid.cpp</in>
+        <in>IconSliderComponent.cpp</in>
+        <in>InputSettingsPage.cpp</in>
+        <in>LauncherBarComponent.cpp</in>
+        <in>LauncherComponent.cpp</in>
+        <in>LauncherTestPage.cpp</in>
+        <in>LibraryPageComponent.cpp</in>
+        <in>Main.cpp</in>
+        <in>MainComponent.cpp</in>
+        <in>OverlaySpinner.cpp</in>
+        <in>PageStackComponent.cpp</in>
+        <in>PersonalizePageComponent.cpp</in>
+        <in>PokeLookAndFeel.cpp</in>
+        <in>PowerPageComponent.cpp</in>
+        <in>PowerPageFelComponent.cpp</in>
+        <in>SettingsPageBluetoothComponent.cpp</in>
+        <in>SettingsPageComponent.cpp</in>
+        <in>SettingsPageLogin.cpp</in>
+        <in>SettingsPageWifiComponent.cpp</in>
+        <in>SwitchComponent.cpp</in>
+        <in>Utils.cpp</in>
+        <in>WifiStatus.cpp</in>
+        <in>WifiStatusJson.cpp</in>
+        <in>WifiStatusNM.cpp</in>
+        <in>sysutils.cpp</in>
+      </df>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>nbproject/private/launcher.properties</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>false</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <flagsDictionary>
+        <element flagsID="0" commonFlags="-march=native -O3 -std=c++11"/>
+      </flagsDictionary>
+      <codeAssistance>
+      </codeAssistance>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>.</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath></executablePath>
+          <ccTool>
+            <incDir>
+              <pElem>/usr/include/libnm-glib</pElem>
+              <pElem>/usr/include/NetworkManager</pElem>
+              <pElem>/usr/include/dbus-1.0</pElem>
+              <pElem>/usr/lib/dbus-1.0/include</pElem>
+              <pElem>/usr/include/alsa</pElem>
+              <pElem>/usr/include/freetype2</pElem>
+              <pElem>/usr/include/libpng16</pElem>
+              <pElem>/usr/include/harfbuzz</pElem>
+              <pElem>/usr/include/glib-2.0</pElem>
+              <pElem>/usr/lib/glib-2.0/include</pElem>
+              <pElem>JuceLibraryCode</pElem>
+              <pElem>deps/JUCE/modules</pElem>
+              <pElem>Builds/LinuxMakefile</pElem>
+            </incDir>
+            <preprocessorList>
+              <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
+              <Elem>JUCE_APP_VERSION=0.0.1</Elem>
+              <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
+              <Elem>JucePlugin_Build_AAX=0</Elem>
+              <Elem>JucePlugin_Build_AU=0</Elem>
+              <Elem>JucePlugin_Build_AUv3=0</Elem>
+              <Elem>JucePlugin_Build_RTAS=0</Elem>
+              <Elem>JucePlugin_Build_Standalone=0</Elem>
+              <Elem>JucePlugin_Build_VST3=0</Elem>
+              <Elem>JucePlugin_Build_VST=0</Elem>
+              <Elem>LINUX=1</Elem>
+              <Elem>NDEBUG=1</Elem>
+            </preprocessorList>
+          </ccTool>
+        </makeTool>
+        <preBuild>
+          <preBuildCommandWorkingDir>.</preBuildCommandWorkingDir>
+          <preBuildCommand></preBuildCommand>
+        </preBuild>
+      </makefileType>
+      <item path="JuceLibraryCode/BinaryData.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="JuceLibraryCode/include_juce_core.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="JuceLibraryCode/include_juce_data_structures.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="JuceLibraryCode/include_juce_events.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="JuceLibraryCode/include_juce_graphics.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="JuceLibraryCode/include_juce_gui_basics.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/AdvancedSettingsPage.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/AppsPageComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/BatteryMonitor.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/ClockMonitor.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/DateTimePage.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/DesktopEntries.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/DesktopEntry.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/Grid.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/IconSliderComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/InputSettingsPage.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/LauncherBarComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/LauncherComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/LauncherTestPage.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/LibraryPageComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/Main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/MainComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/OverlaySpinner.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/PageStackComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/PersonalizePageComponent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/PokeLookAndFeel.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/PowerPageComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/PowerPageFelComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/SettingsPageBluetoothComponent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/SettingsPageComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/SettingsPageLogin.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/SettingsPageWifiComponent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/SwitchComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/Utils.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/WifiStatus.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/WifiStatusJson.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/WifiStatusNM.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/sysutils.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
