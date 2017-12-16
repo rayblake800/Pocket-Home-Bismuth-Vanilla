@@ -1,15 +1,15 @@
 /*
-  ==============================================================================
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-    DesktopEntry.cpp
-    Created: 15 Dec 2017 6:08:57pm
-    Author:  anthony
-
-  ==============================================================================
-*/
-
-#include "DesktopEntry.h"
-
+/* 
+ * File:   DesktopEntry.cpp
+ * Author: anthony
+ * 
+ * Created on December 14, 2017, 1:46 PM
+ */
 
 #include "DesktopEntry.h"
 #include "DesktopEntries.h"
@@ -146,8 +146,79 @@ std::string DesktopEntry::getComment() {
     return appStrings["Comment"];
 }
 
-std::string DesktopEntry::getExec(){
+std::string DesktopEntry::getIconPath() {
+    if (!iconPath.empty())return iconPath;
+    return findIconPath();
+}
+
+std::string DesktopEntry::getExec() {
     return appStrings["Exec"];
+}
+
+std::string DesktopEntry::getPath() {
+    return appStrings["Path"];
+}
+
+std::string DesktopEntry::getStartupWMClass() {
+    return appStrings["StartupWm"];
+}
+
+std::string DesktopEntry::getURL() {
+    return appStrings["Exec"];
+}
+
+std::vector<std::string> DesktopEntry::getActions() {
+    return split(appStrings["Actions"], ';');
+}
+
+std::vector<std::string> DesktopEntry::getMimeType() {
+    return split(appStrings["MimeType"], ';');
+}
+
+std::vector<std::string> DesktopEntry::getCategories() {
+    std::string categories=appStrings["Categories"];
+    if(categories.empty())categories="Other";
+    return split(categories, ';');
+}
+
+std::vector<std::string> DesktopEntry::getImplements() {
+    return split(appStrings["Implements"], ';');
+}
+
+std::vector<std::string> DesktopEntry::getKeywords() {
+    return split(appStrings["Keywords"], ';');
+}
+
+bool DesktopEntry::onlyShowIn(std::string env) {
+    std::string showIn = appStrings["OnlyShowIn"];
+    int i = showIn.find(env);
+    return i != std::string::npos;
+}
+
+bool DesktopEntry::notShowIn(std::string env) {
+    std::string showIn = appStrings["NotShowIn"];
+    int i = showIn.find(env);
+    return i != std::string::npos;
+}
+
+bool DesktopEntry::tryExec() {
+    return fileExists(appStrings["TryExec"]);
+}
+
+bool DesktopEntry::noDisplay(){
+    return appBools["NoDisplay"];
+}
+bool DesktopEntry::hidden(){
+    return appBools["Hidden"];
+}
+bool DesktopEntry::dBusActivatable(){
+    return appBools["DBusActivatable"];
+}
+bool DesktopEntry::terminal(){
+    return appBools["Terminal"];
+}
+bool DesktopEntry::startupNotify(){
+    return appBools["StartupNotify"];
 }
 
 inline bool fileExists(const std::string& path) {
@@ -155,58 +226,57 @@ inline bool fileExists(const std::string& path) {
     return (stat(path.c_str(), &buffer) == 0);
 }
 
-std::string searchIconPaths(std::string icon, std::string path,int depth) {
+std::string DesktopEntry::searchIconPaths(std::string icon, std::string path) {
     using namespace std;
     vector<string> files = listFiles(path);
     string iconFile;
     regex iconMatch(icon + "(\\.(png|svg|xpm))?$", regex::ECMAScript | regex::icase);
 
-    foreach(files, [path,&iconFile, iconMatch](string file)->bool {
+    foreach(files, [path, &iconFile, iconMatch](string file)->bool {
         if (regex_search(file, iconMatch)) {
-            iconFile = path+file;
+            iconFile = path + file;
             return true;
         }
         return false;
     });
-    if(!iconFile.empty())return iconFile;
+    if (!iconFile.empty())return iconFile;
     //check subdirectories if not already found
-    vector<string> dirs=listDirectoryFiles(path);
+    vector<string> dirs = listDirectoryFiles(path);
     //cout<<depth<<":path="<<path<<"\n";
     //prioritize higher-res icon directories
-    if(dirs.empty())return iconFile;
+    if (dirs.empty())return iconFile;
     regex re("^([0-9]+)");
     smatch numMatch;
-    sort(dirs.begin(),dirs.end(),[&numMatch,&re](const string& a,const string& b)->bool{
-        if(a==b)return false;
-        int aVal=0;
-        int bVal=0;
-        if(regex_search(a,numMatch,re)){
-            sscanf(numMatch.str(1).c_str(),"%d",&aVal);
+    sort(dirs.begin(), dirs.end(), [&numMatch, &re](const string& a, const string & b)->bool {
+        if (a == b)return false;
+        int aVal = 0;
+        int bVal = 0;
+        if (regex_search(a, numMatch, re)) {
+            sscanf(numMatch.str(1).c_str(), "%d", &aVal);
         }
-        if(regex_search(b,numMatch,re)){
-            sscanf(numMatch.str(1).c_str(),"%d",&bVal);
+        if (regex_search(b, numMatch, re)) {
+            sscanf(numMatch.str(1).c_str(), "%d", &bVal);
         }
-        if(aVal!=bVal){
+        if (aVal != bVal) {
             //higher numbers first, until after 128px
-            if(aVal>128)aVal=1+128/aVal;
-            if(bVal>128)bVal=1+128/bVal;
-            return aVal>bVal;
-        }
+            if (aVal > 128)aVal = 1 + 128 / aVal;
+                if (bVal > 128)bVal = 1 + 128 / bVal;
+                    return aVal > bVal;
+                }
         return false;
     });
     //cout<<"sorted:\n";
     //foreach(dirs,[](string s)->bool{cout<<"\t"<<s<<"\n";return false;});
 
-    foreach(dirs,[icon,path,depth,&iconFile](string s)->bool{
-        iconFile=searchIconPaths(icon,path+s+"/",depth+1);
+    foreach(dirs,[icon, path,this, &iconFile](string s)->bool {
+        iconFile = searchIconPaths(icon, path + s + "/");
         return !iconFile.empty();
     });
     return iconFile;
-    
+
 }
 
-std::string DesktopEntry::getIconPath() {
-    if (!iconPath.empty())return iconPath;
+std::string DesktopEntry::findIconPath() {
     std::vector<std::string> checkPaths;
     std::string icon = appStrings["Icon"];
     if (icon.empty())return "";
@@ -214,7 +284,7 @@ std::string DesktopEntry::getIconPath() {
     //explicit path defined, return it
     if (icon.substr(0, 1) == "/") {
         iconPath = icon;
-        return "abs:"+iconPath;
+        return "abs:" + iconPath;
     }
 
     std::vector<std::string> basePaths = {
@@ -229,14 +299,14 @@ std::string DesktopEntry::getIconPath() {
     std::string theme = getTheme();
     if (!theme.empty()) {
         for (int i = 0; i < basePaths.size(); i++) {
-            checkPaths.push_back(basePaths[i] + theme+"/");
+            checkPaths.push_back(basePaths[i] + theme + "/");
         }
     }
     //if it didn't turn up there, try the fallback theme
     std::string fallbackTheme = getFallbackTheme();
     if (!fallbackTheme.empty()) {
         for (int i = 0; i < basePaths.size(); i++) {
-            checkPaths.push_back(basePaths[i] + fallbackTheme+"/");
+            checkPaths.push_back(basePaths[i] + fallbackTheme + "/");
         }
     }
     //search all icon files if a theme-specific one doesn't show up
@@ -246,7 +316,7 @@ std::string DesktopEntry::getIconPath() {
 
     //actually search directories until the icon file turns up
     for (int i = 0; i < checkPaths.size(); i++) {
-        iconPath = searchIconPaths(icon, checkPaths[i],0);
+        iconPath = searchIconPaths(icon, checkPaths[i]);
         if (!iconPath.empty())break;
     }
     if (iconPath.empty())return "MISSING:" + icon;

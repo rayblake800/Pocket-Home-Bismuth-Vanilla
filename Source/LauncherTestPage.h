@@ -24,6 +24,7 @@
 #include "PersonalizePageComponent.h"
 #include "Utils.h"
 #include "Main.h"
+#include <vector>
 //[/Headers]
 
 
@@ -55,14 +56,20 @@ public:
     // Binary resources:
     static const char* icon_png;
     static const int icon_pngSize;
+    static const char* iambread_jpg;
+    static const int iambread_jpgSize;
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    ScopedPointer<TextButton>* launchButtons;
+    int numButtons;
     //[/UserVariables]
 
     //==============================================================================
     ScopedPointer<ImageButton> imageButton;
+    ScopedPointer<TextButton> protobutton;
+    Image cachedImage_iambread_jpg_1;
 
 
     //==============================================================================

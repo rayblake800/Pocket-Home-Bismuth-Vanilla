@@ -1,12 +1,4 @@
 /*
-  ==============================================================================
-
-    DesktopEntries.cpp
-    Created: 15 Dec 2017 6:10:43pm
-    Author:  anthony
-
-  ==============================================================================
-/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -22,6 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
+#include <map>
 #include <stdlib.h>
 #include <dirent.h>
 #include <stdlib.h>
@@ -65,9 +58,25 @@ DesktopEntries::~DesktopEntries() {
 
 
 void DesktopEntries::printAll(){
+    std::map<std::string,std::vector<std::string>> catMap;
     for(int i=0;i<entries.size();i++){
-        std::cout<<"entry "<<i<<":"<<entries[i].getName()<<",exec="
-                <<entries[i].getExec()<<"\n";
+        DesktopEntry de = entries[i];
+        if(de.hidden() || de.noDisplay())continue;
+        std::vector<std::string> cats=de.getCategories();
+        foreach(cats,[&catMap,&de](std::string c)->bool{
+            catMap[c].push_back(de.getName());
+            return false;
+        });
+    
+    }
+    for(std::map<std::string,std::vector<std::string>>::iterator it=catMap.begin();
+            it!=catMap.end();it++){
+        std::cout<<"Category:"<<it->first<<"\n";
+        std::vector<std::string> apps = it->second;
+        foreach(apps,[](std::string app)->bool{
+            std::cout<<"\t"<<app<<"\n";
+            return false;
+        });
     }
 }
 

@@ -28,8 +28,13 @@ public:
     void printAll();
     int size();
     DesktopEntry getEntry(int index);
+    
 private:
     std::vector<DesktopEntry> entries;
+    
+    
+    std::map<std::string,std::vector<std::string>> catMap;
+    void loadCategories();
  
 };
 

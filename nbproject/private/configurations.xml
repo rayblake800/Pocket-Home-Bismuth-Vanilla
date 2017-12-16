@@ -3543,6 +3543,20 @@
       <df name="pack-debian">
         <df name="DEBIAN">
         </df>
+        <df name="usr">
+          <df name="bin">
+          </df>
+          <df name="share">
+            <df name="pocket-home">
+              <df name="appIcons">
+              </df>
+              <df name="fonts">
+              </df>
+              <df name="login">
+              </df>
+            </df>
+          </df>
+        </df>
       </df>
       <df name="Source">
         <in>AdvancedSettingsPage.cpp</in>

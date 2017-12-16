@@ -1,15 +1,13 @@
-/*
-  ==============================================================================
-
-    DesktopEntry.h
-    Created: 15 Dec 2017 6:08:57pm
-    Author:  anthony
-
-  ==============================================================================
-*/
-
-#pragma once
-
+/* 
+ * File:   DesktopEntry.h
+ * Author: anthony
+ *
+ * Created on December 14, 2017, 1:46 PM
+ * 
+ * Reads in standardized .Desktop file data
+ * the Desktop entry format is very well documented at
+ * https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys
+ */
 
 #ifndef DESKTOPENTRY_H
 #define DESKTOPENTRY_H
@@ -35,6 +33,24 @@ public:
     std::string getComment();
     std::string getIconPath();
     std::string getExec();
+    std::string getPath();
+    std::string getStartupWMClass();
+    std::string getURL();
+    std::vector<std::string> getActions();
+    std::vector<std::string> getMimeType();
+    std::vector<std::string> getCategories();
+    std::vector<std::string> getImplements();
+    std::vector<std::string> getKeywords();
+    
+    bool onlyShowIn(std::string env);
+    bool notShowIn(std::string env);
+    bool tryExec();
+    
+    bool noDisplay();
+    bool hidden();
+    bool dBusActivatable();
+    bool terminal();
+    bool startupNotify();
 private:
     //path of the .Desktop file
     std::string entrypath;
@@ -45,6 +61,9 @@ private:
     Type type;
     //stores icon path
     std::string iconPath;
+    //util functions to track down absolute icon paths
+    std::string findIconPath();
+    std::string searchIconPaths(std::string icon, std::string path); 
 };
 
 #endif /* DESKTOPENTRY_H */

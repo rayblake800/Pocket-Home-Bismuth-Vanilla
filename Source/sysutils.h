@@ -1,15 +1,4 @@
 /*
-  ==============================================================================
-
-    sysutils.h
-    Created: 15 Dec 2017 6:07:53pm
-    Author:  anthony
-
-  ==============================================================================
-*/
-
-#pragma once
-/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -60,5 +49,9 @@ void foreach(C container,F fn){
     }
 }
 
+/**
+ * Split string s into vector entries around char c
+ */
+std::vector<std::string> split(std::string s,char c);
 #endif /* SYSUTILS_H */
 

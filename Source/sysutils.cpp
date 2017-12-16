@@ -1,15 +1,4 @@
 /*
-  ==============================================================================
-
-    sysutils.cpp
-    Created: 15 Dec 2017 6:07:53pm
-    Author:  anthony
-
-  ==============================================================================
-*/
-
-#include "sysutils.h"
-/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -110,5 +99,21 @@ std::vector<std::string> listDirectoryFiles(const std::string& path){
         }
     });
     return directories;
+}
+
+
+/**
+ * Split string s into vector entries around char c
+ */
+std::vector<std::string> split(std::string s,char c){
+    std::vector<std::string> list;
+    int split=s.find(c);
+    while(split != std::string::npos){
+        list.push_back(s.substr(0,split));
+        s=s.substr(split+1);
+        split=s.find(c);
+    }
+    list.push_back(s);
+    return list;
 }
 
