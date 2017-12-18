@@ -73,10 +73,10 @@ LauncherTestPage::LauncherTestPage() {
         std::stringstream index;
         index << i;
         launchButtons[arrayIndex] = new AppMenuButton(d);
-        int x = 5;
-        int y = 24 + (launchButtons[arrayIndex]->getHeight() + 2) * arrayIndex;
         int w = launchButtons[arrayIndex]->getWidth();
         int h = launchButtons[arrayIndex]->getHeight();
+        int x = 5;
+        int y = 12 + ((h+2)*arrayIndex);
         launchButtons[arrayIndex]->setComponentID(index.str());
         launchButtons[arrayIndex]->setBounds(x, y, w, h);
         addAndMakeVisible(launchButtons[arrayIndex]);
