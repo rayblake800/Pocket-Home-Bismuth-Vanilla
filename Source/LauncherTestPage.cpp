@@ -60,7 +60,7 @@ LauncherTestPage::LauncherTestPage ()
     launchButtons = new ScopedPointer<AppMenuButton>[numButtons];
     int arrayIndex = 0;
     for (int i = 0; i < de.size(); i++) {
-        if(arrayIndex>=numButtons()){
+        if(arrayIndex>=numButtons){
             std::cout<<"array index exceeds button count!\n";
             break;
         }
