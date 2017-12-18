@@ -67,9 +67,9 @@ LauncherTestPage::LauncherTestPage ()
         index << i;
         ScopedPointer<AppMenuButton> appButton = new AppMenuButton(d);
         appButton->setComponentID(index.str());
+        appButton->setBounds(5,4+(i*appButton->getHeight()),appButton->getWidth(),appButton->getHeight());
         addAndMakeVisible(appButton);
         launchButtons[arrayIndex] = appButton;
-        appButton->setBounds(5,4+(i*appButton->getHeight()),appButton->getWidth(),appButton->getHeight());
         arrayIndex++;
     }
     //[/Constructor]
