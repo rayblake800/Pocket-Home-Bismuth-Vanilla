@@ -74,7 +74,7 @@ LauncherTestPage::LauncherTestPage() {
         index << i;
         launchButtons[arrayIndex] = new AppMenuButton(d);
         int x = 5;
-        int y = 24 + (launchButtons[arrayIndex]->getWidth() + 2) * arrayIndex;
+        int y = 24 + (launchButtons[arrayIndex]->getHeight() + 2) * arrayIndex;
         int w = launchButtons[arrayIndex]->getWidth();
         int h = launchButtons[arrayIndex]->getHeight();
         launchButtons[arrayIndex]->setComponentID(index.str());
