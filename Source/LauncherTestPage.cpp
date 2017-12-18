@@ -71,7 +71,7 @@ LauncherTestPage::LauncherTestPage ()
         index << i;
         ScopedPointer<AppMenuButton> appButton = new AppMenuButton(d);
         appButton->setComponentID(index.str());
-        appButton->setBounds(5,4+(i*appButton->getHeight()),appButton->getWidth(),appButton->getHeight());
+        appButton->setBounds(5,4+(i*64),64,64);
         addAndMakeVisible(appButton);
         launchButtons[arrayIndex] = appButton;
         arrayIndex++;
@@ -124,7 +124,7 @@ void LauncherTestPage::resized()
     //[UserResized] Add your own custom resize handling here..
     for(int i =1;i<numButtons;i++){
         ScopedPointer<AppMenuButton> appButton = launchButtons[i];
-        appButton->setBounds(5,4+(i*appButton->getHeight()),appButton->getWidth(),appButton->getHeight());
+        appButton->setBounds(5,4+(i*64),64,64);
     }
     //[/UserResized]
 }
