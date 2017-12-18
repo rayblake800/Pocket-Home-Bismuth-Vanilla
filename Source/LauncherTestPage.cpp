@@ -31,6 +31,9 @@
 //[/MiscUserDefs]
 
 //==============================================================================
+void printRect(const Rectangle<int>& rect){
+    std::cout<<"("<<rect.getX()<<","<<rect.getY()<<","<<rect.getWidth()<<","<<rect.getHeight()<<")\n";
+}
 
 LauncherTestPage::LauncherTestPage() {
     //[Constructor_pre] You can add your own custom stuff here..
@@ -85,6 +88,20 @@ LauncherTestPage::LauncherTestPage() {
     //[/Constructor]
     for (int i = 0; i < numButtons; i++) {
         std::cout << i << ":" << launchButtons[i]->getName() << "\n";
+        std::cout<<"\tIndex:"<<getIndexOfChildComponent(launchButtons[i])<<"\n";
+        std::cout<<"\tBounds:";
+        printRect(launchButtons[i]->getBounds());
+        std::cout<<"\tBounds in parent:";
+        printRect(launchButtons[i]->getBoundsInParent());
+        std::cout<<"\tLocal bounds:";
+        printRect(launchButtons[i]->getLocalBounds());
+        std::cout<<"\tScreen bounds:";
+        printRect(launchButtons[i]->getScreenBounds());
+        launchButtons[i]->getScreenBounds();
+        Point<int> pos =launchButtons[i]->getPosition();
+        Point<int> screenpos =launchButtons[i]->getScreenPosition();
+        std::cout<<"\tPosition:("<<pos.x<<","<<pos.y<<")\n";
+        std::cout<<"\tScreen position:("<<screenpos.x<<","<<screenpos.y<<")\n";   
     }
 }
 
