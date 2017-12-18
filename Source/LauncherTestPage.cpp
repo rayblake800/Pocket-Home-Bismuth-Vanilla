@@ -60,9 +60,13 @@ LauncherTestPage::LauncherTestPage ()
     launchButtons = new ScopedPointer<AppMenuButton>[numButtons];
     int arrayIndex = 0;
     for (int i = 0; i < de.size(); i++) {
+        if(arrayIndex>=numButtons()){
+            std::cout<<"array index exceeds button count!\n";
+            break;
+        }
         DesktopEntry d = de.getEntry(i);
         if (d.hidden() || d.noDisplay())continue;
-       
+
         std::stringstream index;
         index << i;
         ScopedPointer<AppMenuButton> appButton = new AppMenuButton(d);
@@ -118,6 +122,10 @@ void LauncherTestPage::resized()
 
     imageButton->setBounds (432, 224, 40, 40);
     //[UserResized] Add your own custom resize handling here..
+    for(int i =0;i<numButtons;i++){
+        ScopedPointer<AppMenuButton> * appButton = launchButtons[i]
+        appButton->setBounds(5,4+(i*appButton->getHeight()),appButton->getWidth(),appButton->getHeight());
+    }
     //[/UserResized]
 }
 
