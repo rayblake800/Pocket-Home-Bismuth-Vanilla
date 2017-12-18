@@ -11,7 +11,7 @@
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "DesktopEntry.h"
-class AppMenuButton : public ShapeButton {
+class AppMenuButton : public TextButton {
 public:
   AppMenuButton(DesktopEntry desktopEntry);
   void paint (Graphics& g) override;

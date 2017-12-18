@@ -25,6 +25,7 @@
 DesktopEntries::DesktopEntries() {
     std::string localeName=getLocale();
     //read the contents of all desktop application directories
+    std::cout<<"finding desktop entries...\n";
     std::vector<std::string> dirs={
     "~/.local/share/applications",
     "/usr/share/applications",
@@ -37,6 +38,7 @@ DesktopEntries::DesktopEntries() {
             files.push_back(dirs[i]+"/"+dfiles[i2]);
         }
     }
+    std::cout<<"Reading "<<files.size()<<" potential desktop files\n";
     //read in files as DesktopEntry objects
     std::regex dfileMatch(".*\\.(desktop|directory)$",std::regex::icase);
     for(std::vector<std::string>::iterator it=files.begin();
