@@ -122,7 +122,7 @@ void LauncherTestPage::resized()
 
     imageButton->setBounds (432, 224, 40, 40);
     //[UserResized] Add your own custom resize handling here..
-    for(int i =0;i<numButtons;i++){
+    for(int i =1;i<numButtons;i++){
         ScopedPointer<AppMenuButton> appButton = launchButtons[i];
         appButton->setBounds(5,4+(i*appButton->getHeight()),appButton->getWidth(),appButton->getHeight());
     }
