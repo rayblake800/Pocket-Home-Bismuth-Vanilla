@@ -19,6 +19,7 @@ public:
   
   void setSelected(bool selected);
   bool isFolder();
+  String getName();
   
   private:
       DesktopEntry dEntry;

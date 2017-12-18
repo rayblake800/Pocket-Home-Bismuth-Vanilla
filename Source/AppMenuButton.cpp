@@ -32,12 +32,17 @@ bool AppMenuButton::isFolder(){
     return folder;
 }
 
+String AppMenuButton::getName(){
+    return appName;
+}
+
 void AppMenuButton::paint(Graphics& g) {
     //background
     int x = getX();
     int y = getY();
     int width = getWidth();
     int height = getHeight();
+    std::cout<<"drawing "<<appName<<" at "<<x<<","<<y<<","<<width<<","<<height<<"\n";
     g.setColour(selected ? selectedFillColour : fillColour);
     g.fillRoundedRectangle(x, y, width, height, 10.000f);
     //app icon

@@ -63,7 +63,7 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    ScopedPointer<AppMenuButton>* launchButtons;
+    ScopedPointer<AppMenuButton>* launchButtons=NULL;
     int numButtons;
     //[/UserVariables]
 

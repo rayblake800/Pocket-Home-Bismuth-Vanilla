@@ -69,20 +69,23 @@ LauncherTestPage::LauncherTestPage ()
 
         std::stringstream index;
         index << i;
-        ScopedPointer<AppMenuButton> appButton = new AppMenuButton(d);
-        appButton->setComponentID(index.str());
-        appButton->setBounds(5,24+(i*64),appButton->getWidth(),appButton->getHeight());
-        addAndMakeVisible(appButton);
-        launchButtons[arrayIndex] = appButton;
+        launchButtons[arrayIndex]= new AppMenuButton(d);
+        launchButtons[arrayIndex]->setComponentID(index.str());
+        launchButtons[arrayIndex]->setBounds(5,24,launchButtons[arrayIndex]->getWidth(),launchButtons[arrayIndex]->getHeight());
+        if(arrayIndex>2)addAndMakeVisible(launchButtons[arrayIndex]);
         arrayIndex++;
     }
     std::cout<<"added "<<numButtons<<" buttons\n";
     //[/Constructor]
+    for(int i=0;i<numButtons;i++){
+        std::cout<<i<<":"<<launchButtons[i]->getName()<<"\n";
+    }
 }
 
 LauncherTestPage::~LauncherTestPage()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+    for(int i=0;i<numButtons;i++)delete launchButtons[i];
     delete[] launchButtons;
     //[/Destructor_pre]
 
@@ -123,11 +126,14 @@ void LauncherTestPage::resized()
 
     imageButton->setBounds (432, 224, 40, 40);
     //[UserResized] Add your own custom resize handling here..
-    for(int i =1;i<numButtons;i++){
-        ScopedPointer<AppMenuButton> appButton = launchButtons[i];
-        appButton->setBounds(7,34+(i*appButton->getHeight()),appButton->getWidth(),appButton->getHeight());
+    if(launchButtons!=NULL){
+         for(int i =1;i<numButtons;i++){
+             ScopedPointer<AppMenuButton> appButton = launchButtons[i];
+             appButton->setBounds(7,34,appButton->getWidth(),appButton->getHeight());
+         }
     }
-    //[/UserResized]
+    
+//[/UserResized]
 }
 
 void LauncherTestPage::buttonClicked (Button* buttonThatWasClicked)
