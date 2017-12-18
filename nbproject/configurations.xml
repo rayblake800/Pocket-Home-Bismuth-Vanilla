@@ -12,6 +12,7 @@
       </df>
       <df name="Source">
         <in>AdvancedSettingsPage.cpp</in>
+        <in>AppMenuButton.cpp</in>
         <in>AppsPageComponent.cpp</in>
         <in>BatteryMonitor.cpp</in>
         <in>ClockMonitor.cpp</in>
@@ -27,6 +28,7 @@
         <in>LibraryPageComponent.cpp</in>
         <in>Main.cpp</in>
         <in>MainComponent.cpp</in>
+        <in>MenuItem.cpp</in>
         <in>OverlaySpinner.cpp</in>
         <in>PageStackComponent.cpp</in>
         <in>PersonalizePageComponent.cpp</in>
@@ -156,6 +158,10 @@
         <ccTool flags="0">
         </ccTool>
       </item>
+      <item path="Source/AppMenuButton.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
       <item path="Source/AppsPageComponent.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
         </ccTool>
@@ -213,6 +219,10 @@
         </ccTool>
       </item>
       <item path="Source/MainComponent.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/MenuItem.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
         </ccTool>
       </item>

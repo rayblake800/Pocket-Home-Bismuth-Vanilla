@@ -23,6 +23,7 @@
 #include <regex>
 #include <stdio.h>
 
+DesktopEntry::DesktopEntry(){}
 DesktopEntry::DesktopEntry(std::string path, std::string localeName) {
     entrypath = path;
     std::vector<std::string> stringKeys = {

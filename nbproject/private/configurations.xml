@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Release">
-        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -3561,6 +3559,8 @@
       <df name="Source">
         <in>AdvancedSettingsPage.cpp</in>
         <in>AdvancedSettingsPage.h</in>
+        <in>AppMenuButton.cpp</in>
+        <in>AppMenuButton.h</in>
         <in>AppsPageComponent.cpp</in>
         <in>AppsPageComponent.h</in>
         <in>BatteryMonitor.cpp</in>
@@ -3591,6 +3591,8 @@
         <in>Main.h</in>
         <in>MainComponent.cpp</in>
         <in>MainComponent.h</in>
+        <in>MenuItem.cpp</in>
+        <in>MenuItem.h</in>
         <in>OverlaySpinner.cpp</in>
         <in>OverlaySpinner.h</in>
         <in>PageStackComponent.cpp</in>

@@ -23,6 +23,7 @@ public:
         LINK,
         DIRECTORY
     };
+    DesktopEntry();
     DesktopEntry(std::string path, std::string localeName);
     DesktopEntry(const DesktopEntry& orig);
     virtual ~DesktopEntry();

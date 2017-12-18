@@ -21,11 +21,6 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "PersonalizePageComponent.h"
-#include "Utils.h"
-#include "AppMenuButton.h"
-#include "Main.h"
-#include <vector>
 //[/Headers]
 
 
@@ -38,16 +33,17 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class LauncherTestPage  : public Component,
-                          public Button::Listener
+class MenuItem  : public Component,
+                  public Button::Listener
 {
 public:
     //==============================================================================
-    LauncherTestPage ();
-    ~LauncherTestPage();
+    MenuItem ();
+    ~MenuItem();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    void setText(std::string text);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
@@ -57,23 +53,22 @@ public:
     // Binary resources:
     static const char* icon_png;
     static const int icon_pngSize;
-    static const char* iambread_jpg;
-    static const int iambread_jpgSize;
+    static const char* arrow_png;
+    static const int arrow_pngSize;
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    ScopedPointer<AppMenuButton>* launchButtons;
-    int numButtons;
+    std::string buttonText;
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<ImageButton> imageButton;
-    Image cachedImage_iambread_jpg_1;
+    ScopedPointer<ImageButton> openButton;
+    Image cachedImage_icon_png_1;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LauncherTestPage)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MenuItem)
 };
 
 //[EndFile] You can add extra defines here...

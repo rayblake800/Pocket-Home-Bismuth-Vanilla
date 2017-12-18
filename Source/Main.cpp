@@ -8,6 +8,7 @@
 // FIXME: this is a hack to fix touch screen presses causing buzzing
 // when no application holds alsa open
 #if JUCE_LINUX
+#define DEBUG
 #include <alsa/asoundlib.h>
 
 #define DEFAULT_BUFFER_SIZE	4096	/*in samples*/
@@ -174,6 +175,7 @@ void PokeLaunchApplication::initialise(const String &commandLine) {
   }
 
   auto configJson = JSON::parse(configFile);
+#if !defined DEBUG
   if (!configJson) {
     bool launch = AlertWindow::showOkCancelBox(AlertWindow::AlertIconType::WarningIcon,
 	"Cannot launch Pocket-Home",
@@ -199,7 +201,7 @@ configuration automatically ?",
              "-g", "20", "20", NULL);
     }
   }
-
+#endif
   // open sound handle
 
   if(!sound())
