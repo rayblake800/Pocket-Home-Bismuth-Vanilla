@@ -18,7 +18,7 @@ AppMenuButton::AppMenuButton(DesktopEntry desktopEntry)
     setSize(416, 64);
     appName = desktopEntry.getName();
     
-    std::string iconPath=desktopEntry.getIconPath();
+    String iconPath=desktopEntry.getIconPath();
     if(iconPath=="")iconPath="appIcons/default.png";
     appIcon = createImageFromFile(File(iconPath));
 }

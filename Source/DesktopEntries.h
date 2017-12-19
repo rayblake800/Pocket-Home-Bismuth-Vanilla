@@ -19,7 +19,7 @@
 #include <map>
 #include <string>
 #include "DesktopEntry.h"
-
+#include "../JuceLibraryCode/JuceHeader.h"
 class DesktopEntries {
 public:
     DesktopEntries();
@@ -28,12 +28,12 @@ public:
     void printAll();
     int size();
     DesktopEntry getEntry(int index);
-    std::vector<DesktopEntry*> getCategoryEntries(std::string category);
-    std::vector<std::string> getCategoryNames();
+    std::vector<DesktopEntry*> getCategoryEntries(String category);
+    std::vector<String> getCategoryNames();
 private:
     std::vector<DesktopEntry> entries;
-    std::vector<std::string> categoryNames;
-    std::map<std::string,std::vector<DesktopEntry*>> categories;
+    std::vector<String> categoryNames;
+    std::map<String,std::vector<DesktopEntry*>> categories;
  
 };
 

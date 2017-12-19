@@ -3626,8 +3626,6 @@
         <in>WifiStatusNM.cpp</in>
         <in>WifiStatusNM.h</in>
         <in>WifiTest.cpp</in>
-        <in>sysutils.cpp</in>
-        <in>sysutils.h</in>
       </df>
     </df>
   </logicalFolder>

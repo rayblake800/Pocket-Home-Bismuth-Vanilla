@@ -1,4 +1,10 @@
 #include "Utils.h"
+#include <sys/stat.h>
+#include <dirent.h>
+#include <fstream>
+#include <regex>
+#include <locale.h>
+
 
 File absoluteFileFromPath(const String &path) {
   return File::isAbsolutePath(path) ? File(path)
@@ -146,3 +152,90 @@ std::vector<String> split(const String &orig, const String &delim) {
   }
   return elems;
 };
+
+bool fileExists(const String& path) {
+    struct stat buffer;
+    return (stat(path.toRawUTF8(), &buffer) == 0);
+}
+
+String getLocale() {
+    std::locale l("");
+    std::string localeName=l.name();
+    std::string::size_type cutIndex=localeName.find(".");
+    if(cutIndex != std::string::npos)localeName.erase(cutIndex);
+    return String(localeName);
+}
+
+String getTheme() {
+    std::string configPath = getHomePath().toStdString() + "/.gtkrc-2.0";
+    if (fileExists(configPath)) {
+        std::regex re("icon.*theme.*=\"(.+)\"");
+        std::ifstream file(configPath);
+        std::smatch match;
+        for (std::string line; getline(file, line);) {
+            if (std::regex_search(line, match, re)) {
+                return String(match.str(1));
+            }
+        }
+    }
+    return "";
+}
+
+String getFallbackTheme() {
+    std::string configPath = getHomePath().toStdString() + "/.gtkrc-2.0";
+    if (fileExists(configPath)) {
+        std::regex re("fallback.*icon.*theme.*=\"(.+)\"");
+        std::ifstream file(configPath);
+        std::smatch match;
+        for (std::string line; getline(file, line);) {
+            if (std::regex_search(line, match, re)) {
+                return String(match.str(1));
+            }
+        }
+    }
+    return "";
+}
+
+String getHomePath() {
+    return String(std::getenv("HOME"));
+}
+
+//perform function(struct dirent*) on all files in path
+void foreachFile(const String& path, std::function<void(struct dirent*)> fn){
+    DIR * dir = opendir(path.toRawUTF8());
+    if (dir != NULL) {
+        struct dirent *dirdata = NULL;
+        do {
+            dirdata = readdir(dir);
+            if (dirdata != NULL) {
+                fn(dirdata);
+            }
+        } while (dirdata != NULL);
+        closedir(dir);
+    }
+}
+
+//List all non-directory files in path
+std::vector<String> listFiles(const String& path){
+    std::vector<String> files;
+    foreachFile(path,[&files](struct dirent* dirdata){
+        if(dirdata->d_type!=DT_DIR && dirdata->d_name!=""){
+                files.push_back(dirdata->d_name);
+        }
+    });
+    return files;
+}
+
+//list all directory files in path, ignoring ./ and ../
+std::vector<String> listDirectoryFiles(const String& path){
+    std::vector<String> directories;
+    foreachFile(path,[&directories](struct dirent* dirdata){
+        String name=dirdata->d_name;
+        if(dirdata->d_type==DT_DIR 
+                && name != "." && name != ".." && !name.isEmpty()){
+                directories.push_back(name);
+        }
+    });
+    return directories;
+}
+

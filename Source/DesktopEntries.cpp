@@ -19,21 +19,21 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include "DesktopEntries.h"
-#include "sysutils.h"
+#include "Utils.h"
 
 
 DesktopEntries::DesktopEntries() {
-    std::string localeName=getLocale();
+    String localeName=getLocale();
     //read the contents of all desktop application directories
     std::cout<<"finding desktop entries...\n";
-    std::vector<std::string> dirs={
+    std::vector<String> dirs={
     "~/.local/share/applications",
     "/usr/share/applications",
     "/usr/local/share/applications"
     };
-    std::vector<std::string> files {};
+    std::vector<String> files {};
     for(int i=0;i<dirs.size();i++){
-        std::vector<std::string> dfiles=listFiles(dirs[i]);
+        std::vector<String> dfiles=listFiles(dirs[i]);
         for(int i2=0;i2<dfiles.size();i2++){
             files.push_back(dirs[i]+"/"+dfiles[i2]);
         }
@@ -42,14 +42,14 @@ DesktopEntries::DesktopEntries() {
     //read in files as DesktopEntry objects
     std::regex dfileMatch(".*\\.(desktop|directory)$",std::regex::icase);
     categoryNames.push_back("All");
-    for(std::vector<std::string>::iterator it=files.begin();
+    for(std::vector<String>::iterator it=files.begin();
             it!= files.end();it++){
-        std::string path = *it;
-        if(std::regex_search(path,dfileMatch)){
+        String path = *it;
+        if(std::regex_search(path.toStdString(),dfileMatch)){
             DesktopEntry de(path,localeName);
             categories["All"].push_back(&de);
-            std::vector<std::string> deCats=de.getCategories();
-            foreach(deCats,[&de,this](std::string c)->bool{
+            std::vector<String> deCats=de.getCategories();
+            foreach(deCats,[&de,this](String c)->bool{
                 if(this->categories[c].empty()){
                     this->categoryNames.push_back(c);
                 }
@@ -71,22 +71,22 @@ DesktopEntries::~DesktopEntries() {
 
 
 void DesktopEntries::printAll(){
-    std::map<std::string,std::vector<std::string>> catMap;
+    std::map<String,std::vector<String>> catMap;
     for(int i=0;i<entries.size();i++){
         DesktopEntry de = entries[i];
         if(de.hidden() || de.noDisplay())continue;
-        std::vector<std::string> cats=de.getCategories();
-        foreach(cats,[&catMap,&de](std::string c)->bool{
+        std::vector<String> cats=de.getCategories();
+        foreach(cats,[&catMap,&de](String c)->bool{
             catMap[c].push_back(de.getName());
             return false;
         });
     
     }
-    for(std::map<std::string,std::vector<std::string>>::iterator it=catMap.begin();
+    for(std::map<String,std::vector<String>>::iterator it=catMap.begin();
             it!=catMap.end();it++){
         std::cout<<"Category:"<<it->first<<"\n";
-        std::vector<std::string> apps = it->second;
-        foreach(apps,[](std::string app)->bool{
+        std::vector<String> apps = it->second;
+        foreach(apps,[](String app)->bool{
             std::cout<<"\t"<<app<<"\n";
             return false;
         });
@@ -102,10 +102,10 @@ DesktopEntry DesktopEntries::getEntry(int index){
     return entries[index];
 }
 
-std::vector<DesktopEntry*> DesktopEntries::getCategoryEntries(std::string category){
+std::vector<DesktopEntry*> DesktopEntries::getCategoryEntries(String category){
     return categories[category];
 }
 
-std::vector<std::string> DesktopEntries::getCategoryNames(){
+std::vector<String> DesktopEntries::getCategoryNames(){
     return categoryNames;
 }

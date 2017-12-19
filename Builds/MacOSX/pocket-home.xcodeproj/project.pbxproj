@@ -16,7 +16,6 @@
 		C68347B1A04D8D7799E6C20F = {isa = PBXBuildFile; fileRef = FC4434A0B4D7D732E2E7A80D; };
 		F9D7EB995020BE7207E30110 = {isa = PBXBuildFile; fileRef = 723F0CEC89693948A86E31F3; };
 		79DBAA4941554E58B6978435 = {isa = PBXBuildFile; fileRef = 6DB807DAB4D43EF5455FDB36; };
-		5B5A8EF0B2E443224AE468C1 = {isa = PBXBuildFile; fileRef = E66B42AA3879E35D7FBEC51D; };
 		FCCF5BFBA8AE93AB24F5110A = {isa = PBXBuildFile; fileRef = B4F349911E6C04BBA62353AF; };
 		2EC33A42703666C0EFDCFCB7 = {isa = PBXBuildFile; fileRef = 2D26CA6064ED6D94C27F170E; };
 		06E72E563615982650F4D790 = {isa = PBXBuildFile; fileRef = AA186929E4CA8BDF06676814; };
@@ -73,7 +72,6 @@
 		2FA4414DDB2E41341AA75BA5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BatteryMonitor.cpp; path = ../../Source/BatteryMonitor.cpp; sourceTree = "SOURCE_ROOT"; };
 		30CC0A87BD4F79BD73F99809 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenuButton.h; path = ../../Source/AppMenuButton.h; sourceTree = "SOURCE_ROOT"; };
 		35746BBC95BA81195F42FC71 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiStatus.h; path = ../../Source/WifiStatus.h; sourceTree = "SOURCE_ROOT"; };
-		382FE8C8F0E5378452C776DF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sysutils.h; path = ../../Source/sysutils.h; sourceTree = "SOURCE_ROOT"; };
 		38F251FAE84AF4CC352C6BC0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuButton.cpp; path = ../../Source/AppMenuButton.cpp; sourceTree = "SOURCE_ROOT"; };
 		3CC4D037EC314AAA33636672 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MainComponent.h; path = ../../Source/MainComponent.h; sourceTree = "SOURCE_ROOT"; };
 		3D8BA8E1900EE05677B2CC13 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_events.mm"; path = "../../JuceLibraryCode/include_juce_events.mm"; sourceTree = "SOURCE_ROOT"; };
@@ -134,7 +132,6 @@
 		DB6EA9D180F9F82F316B3764 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesktopEntry.h; path = ../../Source/DesktopEntry.h; sourceTree = "SOURCE_ROOT"; };
 		DD05234870A9D28A1C7FAE42 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LauncherTestPage.h; path = ../../Source/LauncherTestPage.h; sourceTree = "SOURCE_ROOT"; };
 		E10CCF27E71FCD846DAC0AB3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Main.h; path = ../../Source/Main.h; sourceTree = "SOURCE_ROOT"; };
-		E66B42AA3879E35D7FBEC51D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sysutils.cpp; path = ../../Source/sysutils.cpp; sourceTree = "SOURCE_ROOT"; };
 		E74FB2AE953C4B7F19F17360 = {isa = PBXFileReference; lastKnownFileType = file; name = "juce_gui_basics"; path = "../../deps/JUCE/modules/juce_gui_basics"; sourceTree = "SOURCE_ROOT"; };
 		EE6DB577FB7C0E8A3B8DA0B9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ClockMonitor.cpp; path = ../../Source/ClockMonitor.cpp; sourceTree = "SOURCE_ROOT"; };
 		EEA5E18A0CAB4FA3C57C4951 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -159,8 +156,6 @@
 					71623B7CD75938C5057AE7BD,
 					6DB807DAB4D43EF5455FDB36,
 					DB6EA9D180F9F82F316B3764,
-					E66B42AA3879E35D7FBEC51D,
-					382FE8C8F0E5378452C776DF,
 					B4F349911E6C04BBA62353AF,
 					DD05234870A9D28A1C7FAE42,
 					2D26CA6064ED6D94C27F170E,
@@ -406,7 +401,6 @@
 					C68347B1A04D8D7799E6C20F,
 					F9D7EB995020BE7207E30110,
 					79DBAA4941554E58B6978435,
-					5B5A8EF0B2E443224AE468C1,
 					FCCF5BFBA8AE93AB24F5110A,
 					2EC33A42703666C0EFDCFCB7,
 					06E72E563615982650F4D790,
