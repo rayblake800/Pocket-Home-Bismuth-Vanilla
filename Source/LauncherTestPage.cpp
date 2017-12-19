@@ -18,9 +18,6 @@
 */
 
 //[Headers] You can add your own extra header files here...
-#include "DesktopEntries.h"
-#include "DesktopEntry.h"
-#include "AppMenuButton.h"
 #include <sstream>
 //[/Headers]
 
@@ -34,7 +31,6 @@
 LauncherTestPage::LauncherTestPage ()
 {
     //[Constructor_pre] You can add your own custom stuff here..
-    DesktopEntries de;
     //[/Constructor_pre]
 
     addAndMakeVisible (imageButton = new ImageButton ("new button"));
@@ -53,43 +49,15 @@ LauncherTestPage::LauncherTestPage ()
 
 
     //[Constructor] You can add your own custom stuff here..
-    numButtons = 0;
-    for (int i = 0; i < de.size(); i++) {
-        if (!de.getEntry(i).hidden()&&!de.getEntry(i).noDisplay())numButtons++;
-    }
-    launchButtons = new ScopedPointer<AppMenuButton>[numButtons];
-    int arrayIndex = 0;
-    for (int i = 0; i < de.size(); i++) {
-        if (arrayIndex >= numButtons) {
-            std::cout << "array index exceeds button count!\n";
-            break;
-        }
-        DesktopEntry d = de.getEntry(i);
-        if (d.hidden() || d.noDisplay())continue;
-
-        std::stringstream index;
-        index << i;
-        launchButtons[arrayIndex] = new AppMenuButton(d);
-        int w = launchButtons[arrayIndex]->getWidth();
-        int h = launchButtons[arrayIndex]->getHeight();
-        int x = 0;
-        int y = ((h+2)*arrayIndex);
-        launchButtons[arrayIndex]->setComponentID(index.str());
-        launchButtons[arrayIndex]->setBounds(x, y, w, h);
-        addAndMakeVisible(launchButtons[arrayIndex]);
-        launchButtons[arrayIndex]->setEnabled(true);
-        launchButtons[arrayIndex]->setVisible(true);
-        arrayIndex++;
-    }
-    std::cout << "added " << numButtons << " buttons\n";
+    appMenu=new AppMenu();
+    addAndMakeVisible(appMenu);
     //[/Constructor]
 }
 
 LauncherTestPage::~LauncherTestPage()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-    for (int i = 0; i < numButtons; i++)delete launchButtons[i];
-    delete[] launchButtons;
+    appMenu=nullptr;
     //[/Destructor_pre]
 
     imageButton = nullptr;

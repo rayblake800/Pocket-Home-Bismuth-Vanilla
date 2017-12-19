@@ -3561,6 +3561,8 @@
       <df name="Source">
         <in>AdvancedSettingsPage.cpp</in>
         <in>AdvancedSettingsPage.h</in>
+        <in>AppMenu.cpp</in>
+        <in>AppMenu.h</in>
         <in>AppMenuButton.cpp</in>
         <in>AppMenuButton.h</in>
         <in>AppsPageComponent.cpp</in>

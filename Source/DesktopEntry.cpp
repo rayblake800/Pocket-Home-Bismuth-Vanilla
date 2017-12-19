@@ -23,9 +23,10 @@
 #include <regex>
 #include <stdio.h>
 
-DesktopEntry::DesktopEntry(){}
-DesktopEntry::DesktopEntry(String path, String localeName) {
-    entrypath = path;
+
+//initialize string and bool maps with all valid keys
+
+void DesktopEntry::mapInit() {
     std::vector<String> stringKeys = {
         "Version",
         "Name",
@@ -58,6 +59,14 @@ DesktopEntry::DesktopEntry(String path, String localeName) {
     for (int i = 0; i < boolKeys.size(); i++) {
         appBools[String(boolKeys[i])] = false;
     }
+}
+
+DesktopEntry::DesktopEntry() {
+}
+
+DesktopEntry::DesktopEntry(String path, String localeName) {
+    entrypath = path;
+    mapInit();
     try {
         std::ifstream file(path.toStdString());
         //capture groups: key,locale,value
@@ -77,7 +86,7 @@ DesktopEntry::DesktopEntry(String path, String localeName) {
                     val = match.str(2);
                 }
                 if (locale.isEmpty() || locale == localeName) {
-                    std::map<String,String>::iterator ssearch =
+                    std::map<String, String>::iterator ssearch =
                             appStrings.find(key);
                     if (key == "Type") {
                         if (val == "Application") {
@@ -119,6 +128,19 @@ DesktopEntry::DesktopEntry(String path, String localeName) {
         std::cout << "couldn't open " << path << "\n";
     }
 }
+
+/**
+ * Creates a DesktopEntry object representing an application category
+ * @param category the category name
+ */
+DesktopEntry::DesktopEntry(String category) {
+    mapInit();
+    type=DIRECTORY;
+    appStrings["Name"]=category;
+    appStrings["Icon"]=category;
+    appStrings["Exec"]="OPEN:"+category;
+}
+
 
 DesktopEntry::DesktopEntry(const DesktopEntry& orig) {
     entrypath = orig.entrypath;
@@ -177,8 +199,8 @@ std::vector<String> DesktopEntry::getMimeType() {
 }
 
 std::vector<String> DesktopEntry::getCategories() {
-    String categories=appStrings["Categories"];
-    if(categories.isEmpty())categories="Other";
+    String categories = appStrings["Categories"];
+    if (categories.isEmpty())categories = "Other";
     return split(categories, ";");
 }
 
@@ -204,19 +226,23 @@ bool DesktopEntry::tryExec() {
     return fileExists(appStrings["TryExec"]);
 }
 
-bool DesktopEntry::noDisplay(){
+bool DesktopEntry::noDisplay() {
     return appBools["NoDisplay"];
 }
-bool DesktopEntry::hidden(){
+
+bool DesktopEntry::hidden() {
     return appBools["Hidden"];
 }
-bool DesktopEntry::dBusActivatable(){
+
+bool DesktopEntry::dBusActivatable() {
     return appBools["DBusActivatable"];
 }
-bool DesktopEntry::terminal(){
+
+bool DesktopEntry::terminal() {
     return appBools["Terminal"];
 }
-bool DesktopEntry::startupNotify(){
+
+bool DesktopEntry::startupNotify() {
     return appBools["StartupNotify"];
 }
 
@@ -246,14 +272,14 @@ String DesktopEntry::searchIconPaths(String icon, String path) {
     std::regex re("^([0-9]+)");
     std::smatch numMatch;
     std::sort(dirs.begin(), dirs.end(), [&numMatch, &re](const String& a, const String & b)->bool {
-        std::string a_str=a.toStdString();
-        std::string b_str=b.toStdString();
+        std::string a_str = a.toStdString();
+        std::string b_str = b.toStdString();
         if (a == b)return false;
-        int aVal = 0;
-        int bVal = 0;
-        if (std::regex_search(a_str, numMatch, re)) {
-            sscanf(numMatch.str(1).c_str(), "%d", &aVal);
-        }
+                int aVal = 0;
+                int bVal = 0;
+            if (std::regex_search(a_str, numMatch, re)) {
+                sscanf(numMatch.str(1).c_str(), "%d", &aVal);
+            }
         if (std::regex_search(b_str, numMatch, re)) {
             sscanf(numMatch.str(1).c_str(), "%d", &bVal);
         }
@@ -268,7 +294,7 @@ String DesktopEntry::searchIconPaths(String icon, String path) {
     //cout<<"sorted:\n";
     //foreach(dirs,[](string s)->bool{cout<<"\t"<<s<<"\n";return false;});
 
-    foreach(dirs,[icon, path,this, &iconFile](String s)->bool {
+    foreach(dirs, [icon, path, this, &iconFile](String s)->bool {
         iconFile = searchIconPaths(icon, path + s + "/");
         return !iconFile.isEmpty();
     });
@@ -282,7 +308,7 @@ String DesktopEntry::findIconPath() {
     if (icon.isEmpty())return "";
 
     //explicit path defined, return it
-    if (icon.substring(0,1) == "/") {
+    if (icon.substring(0, 1) == "/") {
         iconPath = icon;
         return "abs:" + iconPath;
     }

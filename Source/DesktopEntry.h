@@ -22,7 +22,19 @@ public:
         DIRECTORY
     };
     DesktopEntry();
+    /**
+     * Load DesktopEntry data from a .desktop or .directory file
+     * @param path absolute path of the source file
+     * @param localeName used for selecting locale-specific data from the file
+     */
     DesktopEntry(String path, String localeName);
+    
+    /**
+     * Creates a DesktopEntry object representing an application category
+     * @param category the category name
+     */
+    DesktopEntry(String category);
+    
     DesktopEntry(const DesktopEntry& orig);
     virtual ~DesktopEntry();
     
@@ -57,6 +69,8 @@ private:
     std::map<String, String> appStrings;
     //keys that store boolean data:
     std::map<String,bool> appBools;
+    //initialize string and bool maps with all valid keys
+    void mapInit();
     Type type;
     //stores icon path
     String iconPath;

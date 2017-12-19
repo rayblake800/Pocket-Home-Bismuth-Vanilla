@@ -23,10 +23,10 @@ public:
   
   private:
       DesktopEntry dEntry;
-      bool folder;
+      bool folder=false;
+      bool selected=false;
       Image appIcon;
       String appName;
       Colour fillColour = Colour (0xff939089);
       Colour selectedFillColour = Colour (0xffffade8);
-      bool selected;
 };

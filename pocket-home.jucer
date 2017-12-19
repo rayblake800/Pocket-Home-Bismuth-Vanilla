@@ -14,6 +14,8 @@
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
+      <FILE id="bUSiHM" name="AppMenu.cpp" compile="1" resource="0" file="Source/AppMenu.cpp"/>
+      <FILE id="JCiZYj" name="AppMenu.h" compile="0" resource="0" file="Source/AppMenu.h"/>
       <FILE id="H9ciLu" name="AppMenuButton.cpp" compile="1" resource="0"
             file="Source/AppMenuButton.cpp"/>
       <FILE id="A44isr" name="AppMenuButton.h" compile="0" resource="0" file="Source/AppMenuButton.h"/>

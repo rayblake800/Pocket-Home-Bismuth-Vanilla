@@ -23,7 +23,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PersonalizePageComponent.h"
 #include "Utils.h"
-#include "AppMenuButton.h"
+#include "AppMenu.h"
 #include "Main.h"
 #include <vector>
 //[/Headers]
@@ -63,8 +63,7 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    ScopedPointer<AppMenuButton>* launchButtons=NULL;
-    int numButtons;
+    ScopedPointer<AppMenu> appMenu;
     //[/UserVariables]
 
     //==============================================================================

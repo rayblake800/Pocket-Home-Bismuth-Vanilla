@@ -12,6 +12,7 @@
 		7FF75E28BA5CA892192A3B8F = {isa = PBXBuildFile; fileRef = 793D45A4A9D717F9F0133903; };
 		B97B8F50999FAC525F837AEC = {isa = PBXBuildFile; fileRef = B5DCAF01E0490D7413E9E85F; };
 		B60DD03FE5B471BE4AFBF56B = {isa = PBXBuildFile; fileRef = 81D682238B383EB3D7010236; };
+		3F21374F97FEADAC6473A009 = {isa = PBXBuildFile; fileRef = 7D497BB720566628323D3CAE; };
 		4920DDFF2CA2CE5759E23875 = {isa = PBXBuildFile; fileRef = 38F251FAE84AF4CC352C6BC0; };
 		C68347B1A04D8D7799E6C20F = {isa = PBXBuildFile; fileRef = FC4434A0B4D7D732E2E7A80D; };
 		F9D7EB995020BE7207E30110 = {isa = PBXBuildFile; fileRef = 723F0CEC89693948A86E31F3; };
@@ -99,6 +100,7 @@
 		78F1C9D57B6F659965FED0FB = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Grid.cpp; path = ../../Source/Grid.cpp; sourceTree = "SOURCE_ROOT"; };
 		793D45A4A9D717F9F0133903 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		7D25D6DE752792416F183AC0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LauncherBarComponent.cpp; path = ../../Source/LauncherBarComponent.cpp; sourceTree = "SOURCE_ROOT"; };
+		7D497BB720566628323D3CAE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenu.cpp; path = ../../Source/AppMenu.cpp; sourceTree = "SOURCE_ROOT"; };
 		7E9569E7D94AAE9B40A8E9F6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = ../../Source/Utils.h; sourceTree = "SOURCE_ROOT"; };
 		81D682238B383EB3D7010236 = {isa = PBXFileReference; lastKnownFileType = file.nib; name = RecentFilesMenuTemplate.nib; path = RecentFilesMenuTemplate.nib; sourceTree = "SOURCE_ROOT"; };
 		838A1FDC1A43D1D0D86FFFD8 = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = "Lato-Regular.ttf"; path = "../../assets/fonts/Lato-Regular.ttf"; sourceTree = "SOURCE_ROOT"; };
@@ -133,6 +135,7 @@
 		DD05234870A9D28A1C7FAE42 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LauncherTestPage.h; path = ../../Source/LauncherTestPage.h; sourceTree = "SOURCE_ROOT"; };
 		E10CCF27E71FCD846DAC0AB3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Main.h; path = ../../Source/Main.h; sourceTree = "SOURCE_ROOT"; };
 		E74FB2AE953C4B7F19F17360 = {isa = PBXFileReference; lastKnownFileType = file; name = "juce_gui_basics"; path = "../../deps/JUCE/modules/juce_gui_basics"; sourceTree = "SOURCE_ROOT"; };
+		E9ED278154F7F0766FCE5607 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenu.h; path = ../../Source/AppMenu.h; sourceTree = "SOURCE_ROOT"; };
 		EE6DB577FB7C0E8A3B8DA0B9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ClockMonitor.cpp; path = ../../Source/ClockMonitor.cpp; sourceTree = "SOURCE_ROOT"; };
 		EEA5E18A0CAB4FA3C57C4951 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		EF57F8D59B0C326941BD663E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_data_structures.mm"; path = "../../JuceLibraryCode/include_juce_data_structures.mm"; sourceTree = "SOURCE_ROOT"; };
@@ -148,6 +151,8 @@
 					838A1FDC1A43D1D0D86FFFD8,
 					BEA73F0F044F15F4ECD6275B, ); name = assets; sourceTree = "<group>"; };
 		60F3A7B8686F8757E46AB3EA = {isa = PBXGroup; children = (
+					7D497BB720566628323D3CAE,
+					E9ED278154F7F0766FCE5607,
 					38F251FAE84AF4CC352C6BC0,
 					30CC0A87BD4F79BD73F99809,
 					FC4434A0B4D7D732E2E7A80D,
@@ -397,6 +402,7 @@
 		E516430E69AFE7FF222054F4 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (
 					B60DD03FE5B471BE4AFBF56B, ); runOnlyForDeploymentPostprocessing = 0; };
 		467462E1976B8F50EA1165E3 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+					3F21374F97FEADAC6473A009,
 					4920DDFF2CA2CE5759E23875,
 					C68347B1A04D8D7799E6C20F,
 					F9D7EB995020BE7207E30110,
