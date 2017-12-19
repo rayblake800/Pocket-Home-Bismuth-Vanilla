@@ -41,11 +41,22 @@ DesktopEntries::DesktopEntries() {
     std::cout<<"Reading "<<files.size()<<" potential desktop files\n";
     //read in files as DesktopEntry objects
     std::regex dfileMatch(".*\\.(desktop|directory)$",std::regex::icase);
+    categoryNames.push_back("All");
     for(std::vector<std::string>::iterator it=files.begin();
             it!= files.end();it++){
         std::string path = *it;
         if(std::regex_search(path,dfileMatch)){
-            entries.push_back(DesktopEntry(path,localeName));
+            DesktopEntry de(path,localeName);
+            categories["All"].push_back(&de);
+            std::vector<std::string> deCats=de.getCategories();
+            foreach(deCats,[&de,this](std::string c)->bool{
+                if(this->categories[c].empty()){
+                    this->categoryNames.push_back(c);
+                }
+                this->categories[c].push_back(&de);
+                return false;
+            });
+            entries.push_back(de);
         }
     }
     std::cout<<"found "<<entries.size()<<" entries\n";
@@ -91,5 +102,10 @@ DesktopEntry DesktopEntries::getEntry(int index){
     return entries[index];
 }
 
+std::vector<DesktopEntry*> DesktopEntries::getCategoryEntries(std::string category){
+    return categories[category];
+}
 
-
+std::vector<std::string> DesktopEntries::getCategoryNames(){
+    return categoryNames;
+}
