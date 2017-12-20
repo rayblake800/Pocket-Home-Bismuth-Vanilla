@@ -42,7 +42,7 @@ void AppMenuButton::paint(Graphics& g) {
     int y =0;// getY();
     int width = getWidth();
     int height = getHeight();
-    std::cout<<"drawing "<<appName<<" at "<<x<<","<<y<<","<<width<<","<<height<<"\n";
+    //std::cout<<"drawing "<<appName<<" at "<<x<<","<<y<<","<<width<<","<<height<<"\n";
     g.setColour(Colours::black);
     g.drawRoundedRectangle(Rectangle<float>(x,y,width,height),10.0f,2.0f);
     g.setColour(selected ? selectedFillColour : fillColour);

@@ -310,7 +310,7 @@ String DesktopEntry::findIconPath() {
     //explicit path defined, return it
     if (icon.substring(0, 1) == "/") {
         iconPath = icon;
-        return "abs:" + iconPath;
+        return iconPath;
     }
 
     std::vector<String> basePaths = {
@@ -345,6 +345,9 @@ String DesktopEntry::findIconPath() {
         iconPath = searchIconPaths(icon, checkPaths[i]);
         if (!iconPath.isEmpty())break;
     }
-    if (iconPath.isEmpty())return "MISSING:" + icon;
+    if (iconPath.isEmpty()){
+        std::cout<<"Missing icon "<<icon<<"\n";
+        return "";
+    }
     return iconPath;
 }
