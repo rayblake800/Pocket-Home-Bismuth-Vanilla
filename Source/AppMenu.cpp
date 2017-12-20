@@ -16,6 +16,7 @@
 #include <sstream>
 
 AppMenu::AppMenu() {
+    addKeyListener(this);
     DesktopEntries de;
     numButtons = 0;
     for (int i = 0; i < de.size(); i++) {
@@ -81,11 +82,20 @@ void AppMenu::buttonClicked (Button* buttonClicked)
     else if(getHeight()>screenHeight && dest.getBottom()<screenHeight){
         dest.setBottom(screenHeight);
     }
-    Desktop::getInstance().getAnimator().animateComponent(this,dest,getAlpha(),100,true,1,1);
-    //buttonPos-x=mid
-    //x=buttonPos-mid
-    
-    
-    
+    Desktop::getInstance().getAnimator().animateComponent(this,dest,getAlpha(),100,true,1,1);  
+}
+
+
+bool AppMenu::keyPressed(const KeyPress &key,Component *srcComponent){
+    int keyCode=key.getKeyCode();
+    if(selected==NULL){
+        if(launchButtons!=NULL)launchButtons[0]->triggerClick();
+    }else{
+        if(keyCode==KeyPress::upKey || keyCode==KeyPress::downKey){
+            int index=selected->getComponentID().getIntValue();
+            index+=(keyCode==KeyPress::upKey?-1:1);
+            if(index<numButtons && index>=0)launchButtons[index]->triggerClick();
+        }
+    }
 }
 

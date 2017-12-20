@@ -44,7 +44,8 @@ void AppMenuButton::paint(Graphics& g) {
     int height = getHeight();
     std::cout<<"drawing "<<appName<<" at "<<x<<","<<y<<","<<width<<","<<height<<"\n";
     g.setColour(selected ? selectedFillColour : fillColour);
-    g.fillRoundedRectangle(x, y, width, height, 10.000f);
+    g.drawRoundedRectangle(Rectangle<float>(x,y,width,height),10.0f,2.0f);
+    //g.fillRoundedRectangle(x, y, width, height, 10.000f);
     //app icon
     Rectangle<float> imgBox(x + 2, +2, height - 4, height - 4);
     g.drawImageWithin(appIcon,x+2,y+2,height-4,height-4,RectanglePlacement::centred,false);

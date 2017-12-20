@@ -17,11 +17,13 @@
 #include "AppMenuButton.h"
 
 class AppMenu : public Component,
-public Button::Listener {
+public Button::Listener,
+public KeyListener{
 public:
     AppMenu();
     virtual ~AppMenu();
     void buttonClicked (Button* buttonClicked) override;
+    bool keyPressed(const KeyPress &key,Component *srcComponent) override;
 private:
     ScopedPointer<AppMenuButton>* launchButtons=NULL;
     AppMenuButton* selected=NULL;
