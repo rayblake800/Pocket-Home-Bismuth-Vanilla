@@ -128,7 +128,7 @@ bool LauncherTestPage::keyPressed (const KeyPress& key)
         getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
         return true;
     }
-    
+
     return false;  // Return true if your handler uses this key event, or false to allow it to be passed-on.
     //[/UserCode_keyPressed]
 }
