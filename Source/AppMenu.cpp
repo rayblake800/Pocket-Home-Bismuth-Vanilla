@@ -17,12 +17,13 @@
 
 AppMenu::AppMenu() {
     DesktopEntries de;
-    setSize (600, 400);
     numButtons = 0;
     for (int i = 0; i < de.size(); i++) {
         if (!de.getEntry(i).hidden()&&!de.getEntry(i).noDisplay())numButtons++;
     }
     launchButtons = new ScopedPointer<AppMenuButton>[numButtons];
+    int menu_width=0;
+    int menu_height=0;
     int arrayIndex = 0;
     for (int i = 0; i < de.size(); i++) {
         if (arrayIndex >= numButtons) {
@@ -31,14 +32,15 @@ AppMenu::AppMenu() {
         }
         DesktopEntry d = de.getEntry(i);
         if (d.hidden() || d.noDisplay())continue;
-
         std::stringstream index;
         index << i;
         launchButtons[arrayIndex] = new AppMenuButton(d);
         int w = launchButtons[arrayIndex]->getWidth();
         int h = launchButtons[arrayIndex]->getHeight();
+        if(arrayIndex==0)menu_width=w;
+        menu_height+=h;
         int x = 0;
-        int y = ((h+2)*arrayIndex);
+        int y =h*arrayIndex;
         launchButtons[arrayIndex]->setComponentID(index.str());
         launchButtons[arrayIndex]->setBounds(x, y, w, h);
         addAndMakeVisible(launchButtons[arrayIndex]);
@@ -47,6 +49,8 @@ AppMenu::AppMenu() {
         launchButtons[arrayIndex]->addListener(this);
         arrayIndex++;
     }
+    
+    setSize (menu_width,menu_height);
     std::cout << "added " << numButtons << " buttons\n";
 }
 AppMenu::~AppMenu() {
@@ -65,5 +69,23 @@ void AppMenu::buttonClicked (Button* buttonClicked)
     selected = (AppMenuButton *) buttonClicked;
     selected->setSelected(true);
     selected->repaint();
+    
+    //move AppMenu to center the selected button, if it's not near an edge
+    int buttonPos=selected->getY();
+    int screenHeight=Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight();
+    Rectangle<int> dest(getBounds());
+    dest.setX(-buttonPos+screenHeight/2);
+    if(dest.getX()>0){
+        dest.setX(0);
+    }
+    else if(getHeight()>screenHeight && dest.getBottom()<screenHeight){
+        dest.setBottom(screenHeight);
+    }
+    Desktop::getInstance().getAnimator().animateComponent(this,dest,getAlpha(),100,true,1,1);
+    //buttonPos-x=mid
+    //x=buttonPos-mid
+    
+    
+    
 }
 
