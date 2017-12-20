@@ -17,48 +17,40 @@
 
 AppMenu::AppMenu() {
     DesktopEntries de;
-    numButtons = 0;
-    for (int i = 0; i < de.size(); i++) {
-        if (!de.getEntry(i).hidden()&&!de.getEntry(i).noDisplay())numButtons++;
-    }
-    launchButtons = new ScopedPointer<AppMenuButton>[numButtons];
     int menu_width = 0;
     int menu_height = 0;
     int arrayIndex = 0;
     for (int i = 0; i < de.size(); i++) {
-        if (arrayIndex >= numButtons) {
-            std::cout << "array index exceeds button count!\n";
-            break;
-        }
         DesktopEntry d = de.getEntry(i);
         if (d.hidden() || d.noDisplay())continue;
         std::stringstream index;
         index << arrayIndex;
-        launchButtons[arrayIndex] = new AppMenuButton(d);
-        int w = launchButtons[arrayIndex]->getWidth();
-        int h = launchButtons[arrayIndex]->getHeight();
+        AppMenuButton * dButton = new AppMenuButton(d);
+        launchButtons.push_back(dButton);
+        int w = dButton->getWidth();
+        int h = dButton->getHeight();
         if (arrayIndex == 0)menu_width = w;
         menu_height += h;
         int x = 0;
         int y = h*arrayIndex;
-        launchButtons[arrayIndex]->setComponentID(index.str());
-        launchButtons[arrayIndex]->setBounds(x, y, w, h);
-        addAndMakeVisible(launchButtons[arrayIndex]);
-        launchButtons[arrayIndex]->setEnabled(true);
-        launchButtons[arrayIndex]->setVisible(true);
-        launchButtons[arrayIndex]->addListener(this);
-        arrayIndex++;
+        dButton->setComponentID(index.str());
+        dButton->setBounds(x, y, w, h);
+        addAndMakeVisible(dButton);
+        dButton->setEnabled(true);
+        dButton->setVisible(true);
+        dButton->addListener(this);
     }
-
     setSize(menu_width, menu_height);
-    std::cout << "added " << numButtons << " buttons\n";
+    std::cout << "added " << launchButtons.size() << " buttons\n";
 }
 
 AppMenu::~AppMenu() {
-    for (int i = 0; i < numButtons; i++)delete launchButtons[i];
-    delete[] launchButtons;
-    launchButtons = NULL;
-    selected = nullptr;
+    for (int i = launchButtons.size(); i > 0; i--) {
+        AppMenuButton * toDelete = launchButtons.back();
+        launchButtons.pop_back();
+        delete toDelete;
+    }
+    selected = NULL;
 }
 
 void AppMenu::buttonClicked(Button* buttonClicked) {
@@ -84,8 +76,7 @@ void AppMenu::buttonClicked(Button* buttonClicked) {
 }
 
 void AppMenu::selectIndex(int index) {
-    if (launchButtons != NULL &&
-            index < numButtons
+    if (index < launchButtons.size()
             && index >= 0)launchButtons[index]->triggerClick();
 
 }
@@ -96,15 +87,13 @@ int AppMenu::getSelectedIndex() {
 }
 
 void AppMenu::selectNext() {
-    if (selected == NULL) {
-        if (launchButtons != NULL)selectIndex(0);
-    } else selectIndex(getSelectedIndex() + 1);
+    if (selected == NULL) selectIndex(0);
+    else selectIndex(getSelectedIndex() + 1);
 }
 
 void AppMenu::selectPrevious() {
-    if (selected == NULL) {
-        if (launchButtons != NULL)selectIndex(0);
-    } else selectIndex(getSelectedIndex() - 1);
+    if (selected == NULL)selectIndex(0);
+    else selectIndex(getSelectedIndex() - 1);
 }
 
 AppMenuButton* AppMenu::getSelectedAppButton() {
