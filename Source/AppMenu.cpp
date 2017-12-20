@@ -17,6 +17,7 @@
 
 AppMenu::AppMenu() {
     addKeyListener(this);
+    setWantsKeyboardFocus(true);
     DesktopEntries de;
     numButtons = 0;
     for (int i = 0; i < de.size(); i++) {
