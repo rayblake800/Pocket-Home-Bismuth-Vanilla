@@ -28,8 +28,9 @@ public:
 private:
     void selectIndex(int index);
     int getSelectedIndex();
-    std::vector<AppMenuButton*> launchButtons;
+    ScopedPointer<AppMenuButton>* launchButtons=NULL;
     AppMenuButton* selected=NULL;
+    int numButtons;
 };
 
 #endif /* APPMENU_H */
