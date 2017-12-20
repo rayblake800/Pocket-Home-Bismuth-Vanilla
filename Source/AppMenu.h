@@ -24,7 +24,6 @@ public:
     void buttonClicked (Button* buttonClicked) override;
     void selectNext();
     void selectPrevious();
-    AppMenuButton* getSelectedAppButton();
 private:
     void selectIndex(int index);
     int getSelectedIndex();
