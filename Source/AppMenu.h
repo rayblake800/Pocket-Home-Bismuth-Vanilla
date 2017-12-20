@@ -17,8 +17,7 @@
 #include "AppMenuButton.h"
 
 class AppMenu : public Component,
-public Button::Listener,
-public KeyListener{
+public Button::Listener{
 public:
     AppMenu();
     virtual ~AppMenu();

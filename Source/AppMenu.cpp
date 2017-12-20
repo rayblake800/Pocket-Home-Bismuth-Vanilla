@@ -16,7 +16,6 @@
 #include <sstream>
 
 AppMenu::AppMenu() {
-    addKeyListener(this);
     setWantsKeyboardFocus(true);
     setExplicitFocusOrder(1);
     DesktopEntries de;
@@ -88,7 +87,7 @@ void AppMenu::buttonClicked (Button* buttonClicked)
 }
 
 
-bool AppMenu::keyPressed(const KeyPress &key,Component *srcComponent){
+bool AppMenu::keyPressed(const KeyPress &key){
     int keyCode=key.getKeyCode();
     std::cout<<"pressed key "<<keyCode<<"\n";
     if(selected==NULL){
@@ -100,5 +99,6 @@ bool AppMenu::keyPressed(const KeyPress &key,Component *srcComponent){
             if(index<numButtons && index>=0)launchButtons[index]->triggerClick();
         }
     }
+    return true;
 }
 
