@@ -22,7 +22,7 @@ public:
     AppMenu();
     virtual ~AppMenu();
     void buttonClicked (Button* buttonClicked) override;
-    bool keyPressed(const KeyPress &key,Component *srcComponent) override;
+    bool keyPressed(const KeyPress &key) override;
 private:
     ScopedPointer<AppMenuButton>* launchButtons=NULL;
     AppMenuButton* selected=NULL;
