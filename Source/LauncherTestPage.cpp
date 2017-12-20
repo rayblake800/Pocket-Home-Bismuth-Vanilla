@@ -45,11 +45,12 @@ LauncherTestPage::LauncherTestPage ()
     //[/UserPreSize]
 
     setSize (600, 400);
-    setWantsKeyboardFocus(true);
+
 
     //[Constructor] You can add your own custom stuff here..
     appMenu=new AppMenu();
     addAndMakeVisible(appMenu);
+    setWantsKeyboardFocus(true);
     //[/Constructor]
 }
 
@@ -64,10 +65,6 @@ LauncherTestPage::~LauncherTestPage()
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
-}
-
-void LauncherTestPage::visibilityChanged() {
-    if (isVisible())grabKeyboardFocus();
 }
 
 //==============================================================================
@@ -109,30 +106,34 @@ void LauncherTestPage::buttonClicked (Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-bool LauncherTestPage::keyPressed(const KeyPress &key) {
-    if(appMenu==NULL)return false;
-    int keyCode = key.getKeyCode();
-    std::cout << "pressed key " << keyCode << "\n";
-    if(keyCode==KeyPress::upKey || keyCode==KeyPress::downKey){
-        if(keyCode==KeyPress::upKey)appMenu->selectPrevious();
-        else appMenu->selectNext();
-        grabKeyboardFocus();
+void LauncherTestPage::visibilityChanged()
+{
+    //[UserCode_visibilityChanged] -- Add your code here...
+    if(isVisible())setWantsKeyboardFocus(true);
+    //[/UserCode_visibilityChanged]
+}
+
+bool LauncherTestPage::keyPressed (const KeyPress& key)
+{
+    //[UserCode_keyPressed] -- Add your code here...
+    if(key.isKeyCode(KeyPress::upKey)){
+        appMenu->selectPrevious();
         return true;
     }
-    else if(keyCode==KeyPress::leftKey){
+    if(key.isKeyCode(KeyPress::downKey)){
+        appMenu->selectNext();
+        return true;
+    }
+    if(key.isKeyCode(KeyPress::leftKey)){
         getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
         return true;
     }
-    else if(keyCode==KeyPress::returnKey){
-        AppMenuButton * selected = appMenu->getSelectedAppButton();
-        if(selected != NULL){
-            ChildProcess* launchApp = new ChildProcess();
-            launchApp->start("xmodmap ${HOME}/.Xmodmap"); 
-            launchApp->start(selected->getExec());
-        }
-    }
-    return false;
+    
+    return false;  // Return true if your handler uses this key event, or false to allow it to be passed-on.
+    //[/UserCode_keyPressed]
 }
+
+
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 //[/MiscUserCode]
@@ -151,9 +152,11 @@ BEGIN_JUCER_METADATA
                  parentClasses="public Component" constructorParams="" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="600" initialHeight="400">
-  <BACKGROUND backgroundColour="ff323e44">
-    <RECT pos="4 4 480 272" fill="image: iambread_jpg, 1, 0 0" hasStroke="0"/>
-  </BACKGROUND>
+  <METHODS>
+    <METHOD name="visibilityChanged()"/>
+    <METHOD name="keyPressed (const KeyPress&amp; key)"/>
+  </METHODS>
+  <BACKGROUND backgroundColour="ff323e44"/>
   <IMAGEBUTTON name="new button" id="cfbb5d0646892c84" memberName="imageButton"
                virtualName="" explicitFocusOrder="0" pos="432 224 40 40" buttonText="new button"
                connectedEdges="0" needsCallback="1" radioGroupId="0" keepProportions="1"
@@ -178,7 +181,6 @@ static const unsigned char resource_LauncherTestPage_icon_png[] = { 137,80,78,71
 
 const char* LauncherTestPage::icon_png = (const char*) resource_LauncherTestPage_icon_png;
 const int LauncherTestPage::icon_pngSize = 272;
-
 
 
 //[EndFile] You can add extra defines here...
