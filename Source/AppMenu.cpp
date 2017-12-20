@@ -74,9 +74,9 @@ void AppMenu::buttonClicked (Button* buttonClicked)
     int buttonPos=selected->getY();
     int screenHeight=Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight();
     Rectangle<int> dest(getBounds());
-    dest.setX(-buttonPos+screenHeight/2);
-    if(dest.getX()>0){
-        dest.setX(0);
+    dest.setY(-buttonPos+screenHeight/2);
+    if(dest.getY()>0){
+        dest.setY(0);
     }
     else if(getHeight()>screenHeight && dest.getBottom()<screenHeight){
         dest.setBottom(screenHeight);
