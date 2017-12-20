@@ -147,7 +147,7 @@ DesktopEntry::DesktopEntry(const DesktopEntry& orig) {
     appStrings = orig.appStrings;
     appBools = orig.appBools;
     type = orig.type;
-    iconPath = orig.iconPath;
+    iconPath = "applications-"+orig.iconPath;
 }
 
 DesktopEntry::~DesktopEntry() {

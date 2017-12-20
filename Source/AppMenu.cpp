@@ -33,7 +33,7 @@ AppMenu::AppMenu() {
         DesktopEntry d = de.getEntry(i);
         if (d.hidden() || d.noDisplay())continue;
         std::stringstream index;
-        index << i;
+        index << arrayIndex;
         launchButtons[arrayIndex] = new AppMenuButton(d);
         int w = launchButtons[arrayIndex]->getWidth();
         int h = launchButtons[arrayIndex]->getHeight();
@@ -61,8 +61,6 @@ AppMenu::~AppMenu() {
     selected = nullptr;
 }
 
-
-
 void AppMenu::buttonClicked(Button* buttonClicked) {
     if (selected != NULL) {
         selected->setSelected(false);
@@ -85,29 +83,31 @@ void AppMenu::buttonClicked(Button* buttonClicked) {
     Desktop::getInstance().getAnimator().animateComponent(this, dest, getAlpha(), 100, true, 1, 1);
 }
 
-
-void AppMenu::selectIndex(int index){
-    if(launchButtons != NULL && 
-            index < numButtons 
+void AppMenu::selectIndex(int index) {
+    if (launchButtons != NULL &&
+            index < numButtons
             && index >= 0)launchButtons[index]->triggerClick();
-    
+
 }
-int AppMenu::getSelectedIndex(){
-    if(selected==NULL)return -1;
+
+int AppMenu::getSelectedIndex() {
+    if (selected == NULL)return -1;
     return selected->getComponentID().getIntValue();
 }
 
 void AppMenu::selectNext() {
     if (selected == NULL) {
         if (launchButtons != NULL)selectIndex(0);
-    }else selectIndex(getSelectedIndex()+1);
+    } else selectIndex(getSelectedIndex() + 1);
 }
 
 void AppMenu::selectPrevious() {
     if (selected == NULL) {
         if (launchButtons != NULL)selectIndex(0);
-    }else selectIndex(getSelectedIndex()-1);
+    } else selectIndex(getSelectedIndex() - 1);
 }
 
-
+AppMenuButton* AppMenu::getSelectedAppButton() {
+    return selected;
+}
 

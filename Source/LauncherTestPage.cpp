@@ -122,6 +122,14 @@ bool LauncherTestPage::keyPressed(const KeyPress &key) {
         getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
         return true;
     }
+    else if(keyCode==KeyPress::returnKey){
+        AppMenuButton * selected = appMenu->getSelectedAppButton();
+        if(selected != NULL){
+            ChildProcess* launchApp = new ChildProcess();
+            launchApp->start("xmodmap ${HOME}/.Xmodmap"); 
+            launchApp->start(selected->getExec());
+        }
+    }
     return false;
 }
 
