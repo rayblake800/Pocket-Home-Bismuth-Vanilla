@@ -52,6 +52,8 @@ public:
 
     void paint (Graphics& g) override;
     void resized() override;
+    void visibilityChanged() override;
+    bool keyPressed(const KeyPress &key) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
 
     // Binary resources:

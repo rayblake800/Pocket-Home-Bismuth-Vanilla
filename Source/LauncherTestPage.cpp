@@ -45,7 +45,7 @@ LauncherTestPage::LauncherTestPage ()
     //[/UserPreSize]
 
     setSize (600, 400);
-
+    setWantsKeyboardFocus(true);
 
     //[Constructor] You can add your own custom stuff here..
     appMenu=new AppMenu();
@@ -64,6 +64,10 @@ LauncherTestPage::~LauncherTestPage()
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
+}
+
+void LauncherTestPage::visibilityChanged() {
+    if (isVisible())grabKeyboardFocus();
 }
 
 //==============================================================================
@@ -105,7 +109,21 @@ void LauncherTestPage::buttonClicked (Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-
+bool LauncherTestPage::keyPressed(const KeyPress &key) {
+    int keyCode = key.getKeyCode();
+    std::cout << "pressed key " << keyCode << "\n";
+    if(keyCode==KeyPress::upKey || keyCode==KeyPress::downKey){
+        if(keyCode==KeyPress::upKey)appMenu->selectPrevious();
+        else appMenu->selectNext();
+        grabKeyboardFocus();
+        return true;
+    }
+    else if(keyCode==KeyPress::leftKey){
+        getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
+        return true;
+    }
+    return false;
+}
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 //[/MiscUserCode]

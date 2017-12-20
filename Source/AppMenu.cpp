@@ -16,15 +16,14 @@
 #include <sstream>
 
 AppMenu::AppMenu() {
-    setWantsKeyboardFocus(true);
     DesktopEntries de;
     numButtons = 0;
     for (int i = 0; i < de.size(); i++) {
         if (!de.getEntry(i).hidden()&&!de.getEntry(i).noDisplay())numButtons++;
     }
     launchButtons = new ScopedPointer<AppMenuButton>[numButtons];
-    int menu_width=0;
-    int menu_height=0;
+    int menu_width = 0;
+    int menu_height = 0;
     int arrayIndex = 0;
     for (int i = 0; i < de.size(); i++) {
         if (arrayIndex >= numButtons) {
@@ -38,10 +37,10 @@ AppMenu::AppMenu() {
         launchButtons[arrayIndex] = new AppMenuButton(d);
         int w = launchButtons[arrayIndex]->getWidth();
         int h = launchButtons[arrayIndex]->getHeight();
-        if(arrayIndex==0)menu_width=w;
-        menu_height+=h;
+        if (arrayIndex == 0)menu_width = w;
+        menu_height += h;
         int x = 0;
-        int y =h*arrayIndex;
+        int y = h*arrayIndex;
         launchButtons[arrayIndex]->setComponentID(index.str());
         launchButtons[arrayIndex]->setBounds(x, y, w, h);
         addAndMakeVisible(launchButtons[arrayIndex]);
@@ -50,58 +49,65 @@ AppMenu::AppMenu() {
         launchButtons[arrayIndex]->addListener(this);
         arrayIndex++;
     }
-    
-    setSize (menu_width,menu_height);
+
+    setSize(menu_width, menu_height);
     std::cout << "added " << numButtons << " buttons\n";
 }
+
 AppMenu::~AppMenu() {
     for (int i = 0; i < numButtons; i++)delete launchButtons[i];
     delete[] launchButtons;
-    launchButtons=NULL;
-    selected=nullptr;
+    launchButtons = NULL;
+    selected = nullptr;
 }
 
-void AppMenu::visibilityChanged(){
-    if(isVisible())grabKeyboardFocus();
-}
-void AppMenu::buttonClicked (Button* buttonClicked)
-{
-    if(selected!=NULL){
+
+
+void AppMenu::buttonClicked(Button* buttonClicked) {
+    if (selected != NULL) {
         selected->setSelected(false);
         selected->repaint();
     }
     selected = (AppMenuButton *) buttonClicked;
     selected->setSelected(true);
     selected->repaint();
-    
+
     //move AppMenu to center the selected button, if it's not near an edge
-    int buttonPos=selected->getY();
-    int screenHeight=Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight();
+    int buttonPos = selected->getY();
+    int screenHeight = Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight();
     Rectangle<int> dest(getBounds());
-    dest.setY(-buttonPos+screenHeight/2);
-    if(dest.getY()>0){
+    dest.setY(-buttonPos + screenHeight / 2);
+    if (dest.getY() > 0) {
         dest.setY(0);
-    }
-    else if(getHeight()>screenHeight && dest.getBottom()<screenHeight){
+    } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {
         dest.setBottom(screenHeight);
     }
-    Desktop::getInstance().getAnimator().animateComponent(this,dest,getAlpha(),100,true,1,1);  
+    Desktop::getInstance().getAnimator().animateComponent(this, dest, getAlpha(), 100, true, 1, 1);
 }
 
 
-bool AppMenu::keyPressed(const KeyPress &key){
-    int keyCode=key.getKeyCode();
-    std::cout<<"pressed key "<<keyCode<<"\n";
-    if(selected==NULL){
-        if(launchButtons!=NULL)launchButtons[0]->triggerClick();
-    }else{
-        if(keyCode==KeyPress::upKey || keyCode==KeyPress::downKey){
-            int index=selected->getComponentID().getIntValue();
-            index+=(keyCode==KeyPress::upKey?-1:1);
-            if(index<numButtons && index>=0)launchButtons[index]->triggerClick();
-        }
-    }
-    grabKeyboardFocus();
-    return true;
+void AppMenu::selectIndex(int index){
+    if(launchButtons != NULL && 
+            index < numButtons 
+            && index >= 0)launchButtons[index]->triggerClick();
+    
 }
+int AppMenu::getSelectedIndex(){
+    if(selected==NULL)return -1;
+    return selected->getComponentID().getIntValue();
+}
+
+void AppMenu::selectNext() {
+    if (selected == NULL) {
+        if (launchButtons != NULL)selectIndex(0);
+    }else selectIndex(getSelectedIndex()+1);
+}
+
+void AppMenu::selectPrevious() {
+    if (selected == NULL) {
+        if (launchButtons != NULL)selectIndex(0);
+    }else selectIndex(getSelectedIndex()-1);
+}
+
+
 

@@ -22,9 +22,11 @@ public:
     AppMenu();
     virtual ~AppMenu();
     void buttonClicked (Button* buttonClicked) override;
-    void visibilityChanged() override;
-    bool keyPressed(const KeyPress &key) override;
+    void selectNext();
+    void selectPrevious();
 private:
+    void selectIndex(int index);
+    int getSelectedIndex();
     ScopedPointer<AppMenuButton>* launchButtons=NULL;
     AppMenuButton* selected=NULL;
     int numButtons;
