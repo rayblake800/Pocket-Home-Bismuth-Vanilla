@@ -12,15 +12,37 @@
  */
 
 #include "AppMenu.h"
-#include "DesktopEntries.h"
 #include <sstream>
+#include <functional>
 
 AppMenu::AppMenu() {
-    DesktopEntries de;
     int menu_width = 0;
     int menu_height = 0;
-    for (int i = 0; i < de.size(); i++) {
-        DesktopEntry d = de.getEntry(i);
+    std::function<void(AppMenuButton*)> addButton=[this,&menu_width,&menu_height](AppMenuButton* appButton){ 
+        std::stringstream index;
+        index << this->launchButtons.size();
+        int w = appButton->getWidth();
+        int h = appButton->getHeight();
+        if (this->launchButtons.size() == 0)menu_width = w;
+        menu_height += h;
+        int x = 0;
+        int y = h*this->launchButtons.size();
+        appButton->setComponentID(index.str());
+        appButton->setBounds(x, y, w, h);
+        addAndMakeVisible(appButton);
+        appButton->setEnabled(true);
+        appButton->setVisible(true);
+        appButton->addListener(this);
+        this->nameMap[appButton->getName()]=appButton;
+        this->launchButtons.push_back(appButton);
+    };
+    std::vector<String> categories= desktopEntries.getCategoryNames();
+    for (int i = 0;i < categories.size();i++){
+        addButton(new AppMenuButton(DesktopEntry(categories[i])));
+        
+    }
+    for (int i = 0; i < desktopEntries.size(); i++) {
+        DesktopEntry d = desktopEntries.getEntry(i);
         if (d.hidden() || d.noDisplay())continue;
         std::stringstream index;
         index << launchButtons.size();
@@ -37,6 +59,7 @@ AppMenu::AppMenu() {
         dButton->setEnabled(true);
         dButton->setVisible(true);
         dButton->addListener(this);
+        nameMap[dButton->getName()]=dButton;
         launchButtons.push_back(dButton);
     }
 

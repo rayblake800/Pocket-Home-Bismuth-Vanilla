@@ -15,6 +15,7 @@
 #define APPMENU_H
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AppMenuButton.h"
+#include "DesktopEntries.h"
 
 class AppMenu : public Component,
 public Button::Listener{
@@ -25,9 +26,11 @@ public:
     void selectNext();
     void selectPrevious();
 private:
+    DesktopEntries desktopEntries;
     void selectIndex(int index);
     int getSelectedIndex();
     std::vector<AppMenuButton*> launchButtons;
+    std::map<String,AppMenuButton*> nameMap;
     AppMenuButton* selected=NULL;
 };
 
