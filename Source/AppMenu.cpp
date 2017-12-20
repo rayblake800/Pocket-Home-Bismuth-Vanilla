@@ -19,7 +19,6 @@ AppMenu::AppMenu() {
     DesktopEntries de;
     int menu_width = 0;
     int menu_height = 0;
-    int arrayIndex = 0;
     for (int i = 0; i < de.size(); i++) {
         DesktopEntry d = de.getEntry(i);
         if (d.hidden() || d.noDisplay())continue;
@@ -28,10 +27,10 @@ AppMenu::AppMenu() {
         AppMenuButton * dButton = new AppMenuButton(d);
         int w = dButton->getWidth();
         int h = dButton->getHeight();
-        if (arrayIndex == 0)menu_width = w;
+        if (launchButtons.size() == 0)menu_width = w;
         menu_height += h;
         int x = 0;
-        int y = h*arrayIndex;
+        int y = h*launchButtons.size();
         dButton->setComponentID(index.str());
         dButton->setBounds(x, y, w, h);
         addAndMakeVisible(dButton);
