@@ -59,7 +59,9 @@ AppMenu::~AppMenu() {
 void AppMenu::buttonClicked (Button* buttonClicked)
 {
     if(selected!=NULL)selected->setSelected(false);
+    selected->repaint();
     selected = (AppMenuButton *) buttonClicked;
     selected->setSelected(true);
+    selected->repaint();
 }
 

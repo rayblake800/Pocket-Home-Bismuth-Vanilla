@@ -53,8 +53,4 @@ void AppMenuButton::paint(Graphics& g) {
     g.setFont(Font(15.00f, Font::plain));
     g.drawText(appName, x + height + 8, y + 4, width - height - 8, height - 8,
             Justification::centredLeft, true);
-    if(selected){
-        g.drawText("selected", x + height + 8, y + 16, width - height - 8, height - 8,
-            Justification::centredLeft, true);
-    }
 }
