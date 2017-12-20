@@ -17,7 +17,6 @@
 
 AppMenu::AppMenu() {
     setWantsKeyboardFocus(true);
-    setExplicitFocusOrder(1);
     DesktopEntries de;
     numButtons = 0;
     for (int i = 0; i < de.size(); i++) {
@@ -54,6 +53,7 @@ AppMenu::AppMenu() {
     
     setSize (menu_width,menu_height);
     std::cout << "added " << numButtons << " buttons\n";
+    grabKeyboardFocus();
 }
 AppMenu::~AppMenu() {
     for (int i = 0; i < numButtons; i++)delete launchButtons[i];
