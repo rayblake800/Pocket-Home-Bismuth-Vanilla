@@ -110,7 +110,6 @@ void LauncherTestPage::buttonClicked (Button* buttonThatWasClicked)
 }
 
 bool LauncherTestPage::keyPressed(const KeyPress &key) {
-    if(appMenu==NULL)return false;
     int keyCode = key.getKeyCode();
     std::cout << "pressed key " << keyCode << "\n";
     if(keyCode==KeyPress::upKey || keyCode==KeyPress::downKey){
