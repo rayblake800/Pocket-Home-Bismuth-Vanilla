@@ -53,7 +53,6 @@ AppMenu::AppMenu() {
     
     setSize (menu_width,menu_height);
     std::cout << "added " << numButtons << " buttons\n";
-    grabKeyboardFocus();
 }
 AppMenu::~AppMenu() {
     for (int i = 0; i < numButtons; i++)delete launchButtons[i];
@@ -62,6 +61,9 @@ AppMenu::~AppMenu() {
     selected=nullptr;
 }
 
+void AppMenu::visibilityChanged(){
+    if(isVisible())grabKeyboardFocus();
+}
 void AppMenu::buttonClicked (Button* buttonClicked)
 {
     if(selected!=NULL){
@@ -99,6 +101,7 @@ bool AppMenu::keyPressed(const KeyPress &key){
             if(index<numButtons && index>=0)launchButtons[index]->triggerClick();
         }
     }
+    grabKeyboardFocus();
     return true;
 }
 

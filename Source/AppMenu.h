@@ -22,6 +22,7 @@ public:
     AppMenu();
     virtual ~AppMenu();
     void buttonClicked (Button* buttonClicked) override;
+    void visibilityChanged() override;
     bool keyPressed(const KeyPress &key) override;
 private:
     ScopedPointer<AppMenuButton>* launchButtons=NULL;
