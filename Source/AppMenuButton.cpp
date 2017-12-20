@@ -15,7 +15,7 @@
 AppMenuButton::AppMenuButton(DesktopEntry desktopEntry)
 :TextButton(desktopEntry.getName()){
     this->shell=shell;
-    setSize(416, 64);
+    setSize(416, 32);
     appName = desktopEntry.getName();
     
     String iconPath=desktopEntry.getIconPath();
@@ -24,8 +24,8 @@ AppMenuButton::AppMenuButton(DesktopEntry desktopEntry)
 }
 
 
-void AppMenuButton::setSelected(bool selected) {
-    this->selected = selected;
+void AppMenuButton::setSelected(bool select) {
+    selected = select;
 }
 
 bool AppMenuButton::isFolder(){
@@ -53,4 +53,8 @@ void AppMenuButton::paint(Graphics& g) {
     g.setFont(Font(15.00f, Font::plain));
     g.drawText(appName, x + height + 8, y + 4, width - height - 8, height - 8,
             Justification::centredLeft, true);
+    if(selected){
+        g.drawText("selected", x + height + 8, y + 16, width - height - 8, height - 8,
+            Justification::centredLeft, true);
+    }
 }

@@ -52,13 +52,14 @@ AppMenu::AppMenu() {
 AppMenu::~AppMenu() {
     for (int i = 0; i < numButtons; i++)delete launchButtons[i];
     delete[] launchButtons;
+    launchButtons=NULL;
+    selected=nullptr;
 }
 
 void AppMenu::buttonClicked (Button* buttonClicked)
 {
-    if(selected>=0)launchButtons[selected]->setSelected(false);
-    AppMenuButton * menuButton = (AppMenuButton *) buttonClicked;
-    menuButton->setSelected(true);
-    selected=menuButton->getComponentID().getIntValue();
+    if(selected!=NULL)selected->setSelected(false);
+    selected = (AppMenuButton *) buttonClicked;
+    selected->setSelected(true);
 }
 

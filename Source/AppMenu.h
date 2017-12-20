@@ -24,9 +24,8 @@ public:
     void buttonClicked (Button* buttonClicked) override;
 private:
     ScopedPointer<AppMenuButton>* launchButtons=NULL;
+    AppMenuButton* selected=NULL;
     int numButtons;
-    int selected=-1;
-
 };
 
 #endif /* APPMENU_H */

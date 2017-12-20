@@ -17,7 +17,7 @@ public:
   void paint (Graphics& g) override;
   String shell;
   
-  void setSelected(bool selected);
+  void setSelected(bool select);
   bool isFolder();
   String getName();
   
