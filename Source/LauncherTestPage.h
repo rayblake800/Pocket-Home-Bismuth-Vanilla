@@ -52,9 +52,9 @@ public:
 
     void paint (Graphics& g) override;
     void resized() override;
-    void buttonClicked (Button* buttonThatWasClicked) override;
     void visibilityChanged() override;
-    bool keyPressed (const KeyPress& key) override;
+    bool keyPressed(const KeyPress &key) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
 
     // Binary resources:
     static const char* icon_png;
