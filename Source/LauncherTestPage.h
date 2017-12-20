@@ -57,8 +57,6 @@ public:
     // Binary resources:
     static const char* icon_png;
     static const int icon_pngSize;
-    static const char* iambread_jpg;
-    static const int iambread_jpgSize;
 
 
 private:
@@ -68,7 +66,6 @@ private:
 
     //==============================================================================
     ScopedPointer<ImageButton> imageButton;
-    Image cachedImage_iambread_jpg_1;
 
 
     //==============================================================================

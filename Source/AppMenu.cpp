@@ -89,6 +89,7 @@ void AppMenu::buttonClicked (Button* buttonClicked)
 
 bool AppMenu::keyPressed(const KeyPress &key,Component *srcComponent){
     int keyCode=key.getKeyCode();
+    std::cout<<"pressed key "<<keyCode<<"\n";
     if(selected==NULL){
         if(launchButtons!=NULL)launchButtons[0]->triggerClick();
     }else{

@@ -47,6 +47,7 @@ DesktopEntries::DesktopEntries() {
         String path = *it;
         if(std::regex_search(path.toStdString(),dfileMatch)){
             DesktopEntry de(path,localeName);
+            std::cout<<de.getName()<<":"<<de.getIconPath()<<"\n";
             categories["All"].push_back(&de);
             std::vector<String> deCats=de.getCategories();
             foreach(deCats,[&de,this](String c)->bool{
