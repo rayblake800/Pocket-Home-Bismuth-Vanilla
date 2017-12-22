@@ -112,16 +112,18 @@ DesktopEntry::DesktopEntry(String path, String localeName) {
                                 std::cout << "invalid boolean pair " << key <<
                                         ":" << val << "\n";
                             }
-                        } else {
-                            //std::cout << "unrecognized data:" << key <<
-                            //        "=" << val << "\n";
                         }
+                        //else {
+                        //std::cout << "unrecognized data:" << key <<
+                        //        "=" << val << "\n";
+                        //}
 
                     }
                 }
-            } else {
-                //std::cout << "no match:" << line << "\n";
             }
+            //else {
+            //std::cout << "no match:" << line << "\n";
+            //}
         }
         file.close();
     } catch (std::ifstream::failure e) {
@@ -135,12 +137,11 @@ DesktopEntry::DesktopEntry(String path, String localeName) {
  */
 DesktopEntry::DesktopEntry(String category) {
     mapInit();
-    type=DIRECTORY;
-    appStrings["Name"]=category;
-    appStrings["Icon"]=category;
-    appStrings["Exec"]="OPEN:"+category;
+    type = DIRECTORY;
+    appStrings["Name"] = category;
+    appStrings["Icon"] = category;
+    appStrings["Exec"] = "OPEN:" + category;
 }
-
 
 DesktopEntry::DesktopEntry(const DesktopEntry& orig) {
     entrypath = orig.entrypath;
@@ -157,7 +158,7 @@ String DesktopEntry::getName() {
     return appStrings["Name"];
 }
 
-DesktopEntry::Type DesktopEntry::getType(){
+DesktopEntry::Type DesktopEntry::getType() {
     return type;
 }
 
@@ -349,8 +350,8 @@ String DesktopEntry::findIconPath() {
         iconPath = searchIconPaths(icon, checkPaths[i]);
         if (!iconPath.isEmpty())break;
     }
-    if (iconPath.isEmpty()){
-        std::cout<<"Missing icon "<<icon<<"\n";
+    if (iconPath.isEmpty()) {
+        std::cout << "Missing icon " << icon << "\n";
         return "";
     }
     return iconPath;

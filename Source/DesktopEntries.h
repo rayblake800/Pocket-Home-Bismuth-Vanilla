@@ -25,7 +25,6 @@ public:
     DesktopEntries();
     DesktopEntries(const DesktopEntries& orig);
     virtual ~DesktopEntries();
-    void printAll();
     int size();
     DesktopEntry getEntry(int index);
     std::vector<DesktopEntry> getCategoryEntries(String category);

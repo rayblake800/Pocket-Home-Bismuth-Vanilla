@@ -25,7 +25,7 @@
 DesktopEntries::DesktopEntries() {
     String localeName=getLocale();
     //read the contents of all desktop application directories
-    std::cout<<"finding desktop entries...\n";
+    //std::cout<<"finding desktop entries...\n";
     std::vector<String> dirs={
     "~/.local/share/applications",
     "/usr/share/applications",
@@ -38,7 +38,7 @@ DesktopEntries::DesktopEntries() {
             files.push_back(dirs[i]+"/"+dfiles[i2]);
         }
     }
-    std::cout<<"Reading "<<files.size()<<" potential desktop files\n";
+    //std::cout<<"Reading "<<files.size()<<" potential desktop files\n";
     //read in files as DesktopEntry objects
     std::regex dfileMatch(".*\\.(desktop|directory)$",std::regex::icase);
     categoryNames.push_back("All");
@@ -48,7 +48,6 @@ DesktopEntries::DesktopEntries() {
         String path = *it;
         if(std::regex_search(path.toStdString(),dfileMatch)){
             DesktopEntry de(path,localeName);
-            std::cout<<de.getName()<<":"<<de.getIconPath()<<"\n";
             categories["All"].push_back(de);
             std::vector<String> deCats=de.getCategories();
             if(deCats.empty())categories["Other"].push_back(de);
@@ -72,29 +71,6 @@ DesktopEntries::DesktopEntries(const DesktopEntries& orig) {
 DesktopEntries::~DesktopEntries() {
 }
 
-
-void DesktopEntries::printAll(){
-    std::map<String,std::vector<String>> catMap;
-    for(int i=0;i<entries.size();i++){
-        DesktopEntry de = entries[i];
-        if(de.hidden() || de.noDisplay())continue;
-        std::vector<String> cats=de.getCategories();
-        foreach(cats,[&catMap,&de](String c)->bool{
-            catMap[c].push_back(de.getName());
-            return false;
-        });
-    
-    }
-    for(std::map<String,std::vector<String>>::iterator it=catMap.begin();
-            it!=catMap.end();it++){
-        std::cout<<"Category:"<<it->first<<"\n";
-        std::vector<String> apps = it->second;
-        foreach(apps,[](String app)->bool{
-            std::cout<<"\t"<<app<<"\n";
-            return false;
-        });
-    }
-}
 
 int DesktopEntries::size(){
     return entries.size();

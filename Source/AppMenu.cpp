@@ -22,12 +22,6 @@ AppMenu::AppMenu() {
     for (int i = 0; i < categories.size(); i++) {
         addButton(new AppMenuButton(DesktopEntry(categories[i]), buttonColumns[activeColumn()].size(), activeColumn()));
     }
-    /**
-    for (int i = 0; i < desktopEntries.size(); i++) {
-        DesktopEntry d = desktopEntries.getEntry(i);
-        addButton(new AppMenuButton(d,buttonColumns[0].size(),0));
-    }
-     **/
     std::cout << "added " << buttonColumns[activeColumn()].size() << " buttons\n";
 }
 
