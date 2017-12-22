@@ -22,13 +22,18 @@ public Button::Listener{
 public:
     AppMenu();
     virtual ~AppMenu();
+    void openFolder(String categoryName);
+    void closeFolder();
     void buttonClicked (Button* buttonClicked) override;
     void selectNext();
     void selectPrevious();
-    void openFolder(String categoryName);
+    void clickSelected();
+    int activeColumn();
 private:
     DesktopEntries desktopEntries;
     void selectIndex(int index);
+    void addButton(AppMenuButton* appButton);
+    void scrollTo(Rectangle<int> dest);
     std::map<String,AppMenuButton*> nameMap;
 
     std::vector<std::vector<AppMenuButton*>> buttonColumns;

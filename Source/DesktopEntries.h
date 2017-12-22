@@ -29,7 +29,22 @@ public:
     int size();
     DesktopEntry getEntry(int index);
     std::vector<DesktopEntry*> getCategoryEntries(String category);
+    
+    /**
+     * Get the list of all categories found in all
+     * desktop entries
+     * @return the category names
+     */
     std::vector<String> getCategoryNames();
+    
+    /**
+     * Get the list of main categories specified by 
+     * the desktop menu specification
+     * @param excludeUnused if true, don't return categories unless
+     * at least one application is using them.
+     * @return the category names
+     */
+    std::vector<String> getMainCategories(bool excludeUnused);
 private:
     std::vector<DesktopEntry> entries;
     std::vector<String> categoryNames;

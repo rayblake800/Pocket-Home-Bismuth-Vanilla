@@ -42,6 +42,7 @@ DesktopEntries::DesktopEntries() {
     //read in files as DesktopEntry objects
     std::regex dfileMatch(".*\\.(desktop|directory)$",std::regex::icase);
     categoryNames.push_back("All");
+    categoryNames.push_back("Other");
     for(std::vector<String>::iterator it=files.begin();
             it!= files.end();it++){
         String path = *it;
@@ -50,6 +51,7 @@ DesktopEntries::DesktopEntries() {
             std::cout<<de.getName()<<":"<<de.getIconPath()<<"\n";
             categories["All"].push_back(&de);
             std::vector<String> deCats=de.getCategories();
+            if(deCats.empty())categories["Other"].push_back(&de);
             foreach(deCats,[&de,this](String c)->bool{
                 if(this->categories[c].empty()){
                     this->categoryNames.push_back(c);
@@ -110,3 +112,37 @@ std::vector<DesktopEntry*> DesktopEntries::getCategoryEntries(String category){
 std::vector<String> DesktopEntries::getCategoryNames(){
     return categoryNames;
 }
+
+   /**
+     * Get the list of main categories specified by 
+     * the desktop menu specification
+     * @return the category names
+     */
+    std::vector<String> DesktopEntries::getMainCategories(bool excludeUnused){
+        std::vector<String> mainCategories={
+            "AudioVideo",
+            "Audio",
+            "Video",
+            "Development",
+            "Education",
+            "Game",
+            "Graphics",
+            "Network",
+            "Office",
+            "Science",
+            "Settings",
+            "System",
+            "Utility",
+            "Other"
+        };
+        if(excludeUnused){
+            std::vector<String>::iterator it = mainCategories.begin();
+            while(it!=mainCategories.end()){
+                if(categories[*it].empty()){
+                    it=mainCategories.erase(it);
+                }
+                else it++;
+            }
+        }
+        return mainCategories;
+    }

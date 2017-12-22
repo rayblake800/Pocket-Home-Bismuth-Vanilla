@@ -18,87 +18,131 @@
 AppMenu::AppMenu() {
     selected.push_back(NULL);
     buttonColumns.emplace(buttonColumns.begin());
-    int menu_width = 0;
-    int menu_height = 0;
-    std::function<void(AppMenuButton*)> addButton=[this,&menu_width,&menu_height](AppMenuButton* appButton){ 
-        std::stringstream index;
-        index << this->buttonColumns[0].size();
-        int w = appButton->getWidth();
-        int h = appButton->getHeight();
-        if (this->buttonColumns[0].size() == 0)menu_width = w;
-        menu_height += h;
-        int x = 0;
-        int y = h*this->buttonColumns[0].size();
-        appButton->setComponentID(index.str());
-        appButton->setBounds(x, y, w, h);
-        addAndMakeVisible(appButton);
-        appButton->setEnabled(true);
-        appButton->setVisible(true);
-        appButton->addListener(this);
-        this->nameMap[appButton->getName()]=appButton;
-        this->buttonColumns[0].push_back(appButton);
-    };
-    std::vector<String> categories= desktopEntries.getCategoryNames();
-    for (int i = 0;i < categories.size();i++){
-        addButton(new AppMenuButton(DesktopEntry(categories[i]),buttonColumns[0].size(),0));        
+    std::vector<String> categories = desktopEntries.getMainCategories(true);
+    for (int i = 0; i < categories.size(); i++) {
+        addButton(new AppMenuButton(DesktopEntry(categories[i]), buttonColumns[activeColumn()].size(), activeColumn()));
     }
+    /**
     for (int i = 0; i < desktopEntries.size(); i++) {
         DesktopEntry d = desktopEntries.getEntry(i);
         addButton(new AppMenuButton(d,buttonColumns[0].size(),0));
     }
-    setSize(menu_width, menu_height);
-    std::cout << "added " << buttonColumns[0].size() << " buttons\n";
+     **/
+    std::cout << "added " << buttonColumns[activeColumn()].size() << " buttons\n";
 }
 
 AppMenu::~AppMenu() {
-    for (int i = buttonColumns[0].size(); i >= 0; i++){
-        AppMenuButton * toDelete = buttonColumns[0].back();
-        buttonColumns[0].pop_back();
+    while (!buttonColumns.empty())closeFolder();
+}
+
+void AppMenu::openFolder(String categoryName) {
+    std::vector<DesktopEntry*> folderItems = desktopEntries.getCategoryEntries(categoryName);
+    if (folderItems.empty())return;
+    selected.push_back(NULL);
+    int columnWidth = 0;
+    for (int i = 0; i < folderItems.size(); i++) {
+        DesktopEntry* de = folderItems[i];
+        if (!de->hidden() && !de->noDisplay()) {
+            AppMenuButton* newButton = new AppMenuButton(*de, buttonColumns[activeColumn()].size(), activeColumn());
+            if (columnWidth == 0)columnWidth = newButton->getWidth();
+            addButton(newButton);
+        }
+    }
+    Rectangle<int> dest(getBounds());
+    dest.setX(dest.getX() + columnWidth - 20);
+    scrollTo(dest);
+}
+
+void AppMenu::closeFolder() {
+    int columnWidth = 0;
+    for (int i = buttonColumns[activeColumn()].size(); i >= 0; i--) {
+        AppMenuButton * toDelete = buttonColumns[activeColumn()][i];
+        if (columnWidth == 0)columnWidth = toDelete->getWidth();
+        toDelete->removeFromDesktop();
+        buttonColumns[activeColumn()].pop_back();
         delete toDelete;
     }
-    selected[0] = NULL;
+    buttonColumns.pop_back();
+    selected.pop_back();
+
+    Rectangle<int> dest(getBounds());
+    int x = dest.getX() - columnWidth;
+    if (x < 0)x = 0;
+    dest.setX(x);
+    scrollTo(dest);
 }
-
-
 
 void AppMenu::buttonClicked(Button* buttonClicked) {
-    if (selected[0] != NULL) {
-        selected[0]->setSelected(false);
-        selected[0]->repaint();
+    if (selected[activeColumn()] != NULL) {
+        selected[activeColumn()]->setSelected(false);
+        selected[activeColumn()]->repaint();
     }
-    selected[0] = (AppMenuButton *) buttonClicked;
-    selected[0]->setSelected(true);
-    selected[0]->repaint();
+    AppMenuButton * appClicked = (AppMenuButton *) buttonClicked;
+    if (selected[activeColumn()] == appClicked) {
+        if (appClicked->isFolder()) {
+            openFolder(appClicked->getAppName());
+        }
+    } else {
+        selected[activeColumn()] = appClicked;
+        selected[activeColumn()]->setSelected(true);
+        selected[activeColumn()]->repaint();
 
-    //move AppMenu to center the selected button, if it's not near an edge
-    int buttonPos = selected[0]->getY();
-    int screenHeight = Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight();
-    Rectangle<int> dest(getBounds());
-    dest.setY(-buttonPos + screenHeight / 2);
-    if (dest.getY() > 0) {
-        dest.setY(0);
-    } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {
-        dest.setBottom(screenHeight);
+        //move AppMenu to center the selected button, if it's not near an edge
+        int buttonPos = selected[0]->getY();
+        int screenHeight = Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight();
+        Rectangle<int> dest(getBounds());
+        dest.setY(-buttonPos + screenHeight / 2);
+        if (dest.getY() > 0) {
+            dest.setY(0);
+        } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {
+            dest.setBottom(screenHeight);
+        }
+        scrollTo(dest);
+
     }
-    Desktop::getInstance().getAnimator().animateComponent(this, dest, getAlpha(), 100, true, 1, 1);
 }
 
-
-void AppMenu::selectIndex(int index){
-    if(index < buttonColumns[0].size() 
-            && index >= 0)buttonColumns[0][index]->triggerClick();
-    
+void AppMenu::selectIndex(int index) {
+    if (index < buttonColumns[activeColumn()].size()
+            && index >= 0)buttonColumns[activeColumn()][index]->triggerClick();
 }
 
 void AppMenu::selectNext() {
-    if (selected[0] == NULL)selectIndex(0);
-    else selectIndex(selected[0]->getIndex()+1);
+    if (selected[activeColumn()] == NULL)selectIndex(0);
+    else selectIndex(selected[activeColumn()]->getIndex() + 1);
 }
 
 void AppMenu::selectPrevious() {
-    if (selected[0] == NULL)selectIndex(0);
-    else selectIndex(selected[0]->getIndex()-1);
+    if (selected[activeColumn()] == NULL)selectIndex(0);
+    else selectIndex(selected[activeColumn()]->getIndex() - 1);
 }
 
+void AppMenu::clickSelected() {
+    if (selected[activeColumn()] != NULL)selected[activeColumn()]->triggerClick();
+}
 
+int AppMenu::activeColumn() {
+    return selected.size() - 1;
+}
 
+void AppMenu::scrollTo(Rectangle<int> dest) {
+    Desktop::getInstance().getAnimator().animateComponent(this, dest, getAlpha(), 100, true, 1, 1);
+}
+
+void AppMenu::addButton(AppMenuButton* appButton) {
+    int index = appButton->getIndex();
+    int column = appButton->getColumn();
+    int w = appButton->getWidth();
+    int h = appButton->getHeight();
+    int x = column*w;
+    int y = h * this->buttonColumns[column].size();
+    appButton->setBounds(x, y, w, h);
+    addAndMakeVisible(appButton);
+    appButton->setEnabled(true);
+    appButton->setVisible(true);
+    appButton->addListener(this);
+    this->nameMap[appButton->getName()] = appButton;
+    this->buttonColumns[column].push_back(appButton);
+    if ((x + w) > getWidth())setBounds(getX(), getY(), x + w, getHeight());
+    if ((index + 1) * h > getHeight())setBounds(getX(), getY(), getWidth(), index + 1 * h);
+}
