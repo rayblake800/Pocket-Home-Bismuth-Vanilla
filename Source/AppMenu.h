@@ -25,13 +25,14 @@ public:
     void buttonClicked (Button* buttonClicked) override;
     void selectNext();
     void selectPrevious();
+    void openFolder(String categoryName);
 private:
     DesktopEntries desktopEntries;
     void selectIndex(int index);
-    int getSelectedIndex();
-    std::vector<AppMenuButton*> launchButtons;
     std::map<String,AppMenuButton*> nameMap;
-    AppMenuButton* selected=NULL;
+
+    std::vector<std::vector<AppMenuButton*>> buttonColumns;
+    std::vector<AppMenuButton*> selected;
 };
 
 #endif /* APPMENU_H */

@@ -13,20 +13,26 @@
 #include "DesktopEntry.h"
 class AppMenuButton : public TextButton {
 public:
-  AppMenuButton(DesktopEntry desktopEntry);
+  AppMenuButton(DesktopEntry desktopEntry,int index,int column);
   void paint (Graphics& g) override;
-  String shell;
   
   void setSelected(bool select);
   bool isFolder();
-  String getName();
+  //Get the display name of the associated application
+  String getAppName();
+  String getCommand();
+  int getIndex();
+  int getColumn();
   
   private:
       DesktopEntry dEntry;
       bool folder=false;
       bool selected=false;
       Image appIcon;
-      String appName;
+      //index in the column, starting at the top
+      int index;
+      //containing column number, counted left to right
+      int column;
       Colour fillColour = Colour (0xff939089);
       Colour selectedFillColour = Colour (0xffffade8);
 };

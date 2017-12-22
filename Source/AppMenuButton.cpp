@@ -12,11 +12,10 @@
 #include "PokeLookAndFeel.h"
 #include "Utils.h"
 
-AppMenuButton::AppMenuButton(DesktopEntry desktopEntry)
-:TextButton(desktopEntry.getName()){
-    this->shell=shell;
+AppMenuButton::AppMenuButton(DesktopEntry desktopEntry,int index,int column)
+:TextButton(desktopEntry.getName()),
+ dEntry(desktopEntry),index(index),column(column){
     setSize(416,Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight()/6);
-    appName = desktopEntry.getName();
     
     String iconPath=desktopEntry.getIconPath();
     if(iconPath=="")iconPath="appIcons/default.png";
@@ -32,17 +31,29 @@ bool AppMenuButton::isFolder(){
     return folder;
 }
 
-String AppMenuButton::getName(){
-    return appName;
+String AppMenuButton::getAppName(){
+    return dEntry.getName();
+}
+
+String AppMenuButton::getCommand(){
+    return dEntry.getExec();
+}
+
+int AppMenuButton::getIndex(){
+    return index;
+}
+
+int AppMenuButton::getColumn(){
+    return column;
 }
 
 void AppMenuButton::paint(Graphics& g) {
     //background
-    int x =0;// getX();
-    int y =0;// getY();
+    int x=0;
+    int y=0;
     int width = getWidth();
     int height = getHeight();
-    //std::cout<<"drawing "<<appName<<" at "<<x<<","<<y<<","<<width<<","<<height<<"\n";
+    //std::cout<<"drawing "<<getAppName()<<" at "<<x<<","<<y<<","<<width<<","<<height<<"\n";
     g.setColour(Colours::black);
     g.drawRect(x,y,width,height,2);
     //g.drawRoundedRectangle(Rectangle<float>(x,y,width,height),10.0f,2.0f);
@@ -57,6 +68,6 @@ void AppMenuButton::paint(Graphics& g) {
     //app title
     g.setColour(Colours::black);
     g.setFont(Font(15.00f, Font::plain));
-    g.drawText(appName, x + height + 8, y + 4, width - height - 8, height - 8,
+    g.drawText(getAppName(), x + height + 8, y + 4, width - height - 8, height - 8,
             Justification::centredLeft, true);
 }
