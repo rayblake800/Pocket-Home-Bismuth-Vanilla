@@ -30,16 +30,16 @@ AppMenu::~AppMenu() {
 }
 
 void AppMenu::openFolder(String categoryName) {
-    std::vector<DesktopEntry> folderItems = desktopEntries.getCategoryEntries(categoryName);
+    std::vector<DesktopEntry*> folderItems = desktopEntries.getCategoryEntries(categoryName);
     if (folderItems.empty())return;
     selected.push_back(NULL);
     buttonColumns.push_back(std::vector<AppMenuButton*>());
     int columnWidth = 0;
-    std::cout<<"found "<<folderItems.size()<<" items in "<<categoryName<<"\n";
+    std::cout << "found " << folderItems.size() << " items in " << categoryName << "\n";
     for (int i = 0; i < folderItems.size(); i++) {
-        DesktopEntry de = folderItems[i];
-        if (!de.hidden() && !de.noDisplay()) {
-            AppMenuButton* newButton = new AppMenuButton(de, buttonColumns[activeColumn()].size(), activeColumn());
+        DesktopEntry* de = folderItems[i];
+        if (!de->hidden() && !de->noDisplay()) {
+            AppMenuButton* newButton = new AppMenuButton(*de, buttonColumns[activeColumn()].size(), activeColumn());
             if (columnWidth == 0)columnWidth = newButton->getWidth();
             addButton(newButton);
         }
@@ -51,7 +51,7 @@ void AppMenu::openFolder(String categoryName) {
 
 void AppMenu::closeFolder() {
     int columnWidth = 0;
-    for (int i = buttonColumns[activeColumn()].size()-1; i >= 0; i--) {
+    for (int i = buttonColumns[activeColumn()].size() - 1; i >= 0; i--) {
         AppMenuButton * toDelete = buttonColumns[activeColumn()][i];
         if (columnWidth == 0)columnWidth = toDelete->getWidth();
         toDelete->removeFromDesktop();
@@ -69,16 +69,19 @@ void AppMenu::closeFolder() {
 }
 
 void AppMenu::buttonClicked(Button* buttonClicked) {
-    if (selected[activeColumn()] != NULL) {
-        selected[activeColumn()]->setSelected(false);
-        selected[activeColumn()]->repaint();
-    }
     AppMenuButton * appClicked = (AppMenuButton *) buttonClicked;
+    while(appClicked->getColumn()<activeColumn()){
+        closeFolder();
+    }
     if (selected[activeColumn()] == appClicked) {
         if (appClicked->isFolder()) {
             openFolder(appClicked->getAppName());
         }
     } else {
+        if (selected[activeColumn()] != NULL) {
+            selected[activeColumn()]->setSelected(false);
+            selected[activeColumn()]->repaint();
+        }
         selected[activeColumn()] = appClicked;
         selected[activeColumn()]->setSelected(true);
         selected[activeColumn()]->repaint();

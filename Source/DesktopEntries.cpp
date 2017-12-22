@@ -48,14 +48,14 @@ DesktopEntries::DesktopEntries() {
         String path = *it;
         if(std::regex_search(path.toStdString(),dfileMatch)){
             DesktopEntry de(path,localeName);
-            categories["All"].push_back(de);
+            categories["All"].push_back(&de);
             std::vector<String> deCats=de.getCategories();
-            if(deCats.empty())categories["Other"].push_back(de);
+            if(deCats.empty())categories["Other"].push_back(&de);
             foreach(deCats,[&de,this](String c)->bool{
                 if(this->categories[c].empty()){
                     this->categoryNames.push_back(c);
                 }
-                this->categories[c].push_back(de);
+                this->categories[c].push_back(&de);
                 return false;
             });
             entries.push_back(de);
@@ -81,7 +81,7 @@ DesktopEntry DesktopEntries::getEntry(int index){
     return entries[index];
 }
 
-std::vector<DesktopEntry> DesktopEntries::getCategoryEntries(String category){
+std::vector<DesktopEntry*> DesktopEntries::getCategoryEntries(String category){
     return categories[category];
 }
 
@@ -96,6 +96,7 @@ std::vector<String> DesktopEntries::getCategoryNames(){
      */
     std::vector<String> DesktopEntries::getMainCategories(bool excludeUnused){
         std::vector<String> mainCategories={
+            "All",
             "AudioVideo",
             "Audio",
             "Video",
@@ -112,13 +113,12 @@ std::vector<String> DesktopEntries::getCategoryNames(){
             "Other"
         };
         if(excludeUnused){
-            std::vector<String>::iterator it = mainCategories.begin();
-            while(it!=mainCategories.end()){
-                if(categories[*it].empty()){
-                    it=mainCategories.erase(it);
-                }
-                else it++;
+            std::vector<String> usedCategories;
+            for(int i=0;i< mainCategories.size();i++){
+                String category=mainCategories[i];
+                if(categories[category].size()>0)usedCategories.push_back(category);
             }
+            mainCategories=usedCategories;
         }
         return mainCategories;
     }

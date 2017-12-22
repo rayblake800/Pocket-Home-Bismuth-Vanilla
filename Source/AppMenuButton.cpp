@@ -64,6 +64,12 @@ void AppMenuButton::paint(Graphics& g) {
     g.setOpacity(1);
     //app icon
     Rectangle<float> imgBox(x + 2, +2, height - 4, height - 4);
+    if(getScreenX()<0){
+        imgBox.setX(-getScreenX()+2);
+    }
+    if(imgBox.getRight() > getRight()){
+        imgBox.setRight(getRight()-2);
+    }
     g.drawImageWithin(appIcon,x+2,y+2,height-4,height-4,RectanglePlacement::centred,false);
     //app title
     g.setColour(Colours::black);
