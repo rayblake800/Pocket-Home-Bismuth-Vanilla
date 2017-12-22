@@ -30,16 +30,16 @@ AppMenu::~AppMenu() {
 }
 
 void AppMenu::openFolder(String categoryName) {
-    std::vector<DesktopEntry*> folderItems = desktopEntries.getCategoryEntries(categoryName);
+    std::vector<DesktopEntry> folderItems = desktopEntries.getCategoryEntries(categoryName);
     if (folderItems.empty())return;
     selected.push_back(NULL);
     buttonColumns.push_back(std::vector<AppMenuButton*>());
     int columnWidth = 0;
     std::cout << "found " << folderItems.size() << " items in " << categoryName << "\n";
     for (int i = 0; i < folderItems.size(); i++) {
-        DesktopEntry* de = folderItems[i];
-        if (!de->hidden() && !de->noDisplay()) {
-            AppMenuButton* newButton = new AppMenuButton(*de, buttonColumns[activeColumn()].size(), activeColumn());
+        DesktopEntry de = folderItems[i];
+        if (!de.hidden() && !de.noDisplay()) {
+            AppMenuButton* newButton = new AppMenuButton(de, buttonColumns[activeColumn()].size(), activeColumn());
             if (columnWidth == 0)columnWidth = newButton->getWidth();
             addButton(newButton);
         }

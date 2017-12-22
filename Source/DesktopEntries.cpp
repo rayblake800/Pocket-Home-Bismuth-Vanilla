@@ -48,14 +48,14 @@ DesktopEntries::DesktopEntries() {
         String path = *it;
         if(std::regex_search(path.toStdString(),dfileMatch)){
             DesktopEntry de(path,localeName);
-            categories["All"].push_back(&de);
+            categories["All"].push_back(de);
             std::vector<String> deCats=de.getCategories();
-            if(deCats.empty())categories["Other"].push_back(&de);
-            foreach(deCats,[&de,this](String c)->bool{
+            if(deCats.empty())categories["Other"].push_back(de);
+            foreach(deCats,[de,this](String c)->bool{
                 if(this->categories[c].empty()){
                     this->categoryNames.push_back(c);
                 }
-                this->categories[c].push_back(&de);
+                this->categories[c].push_back(de);
                 return false;
             });
             entries.push_back(de);
@@ -81,7 +81,7 @@ DesktopEntry DesktopEntries::getEntry(int index){
     return entries[index];
 }
 
-std::vector<DesktopEntry*> DesktopEntries::getCategoryEntries(String category){
+std::vector<DesktopEntry> DesktopEntries::getCategoryEntries(String category){
     return categories[category];
 }
 
