@@ -38,6 +38,7 @@ public:
     DesktopEntry(const DesktopEntry& orig);
     virtual ~DesktopEntry();
     
+    Type getType();
     String getName();
     String getVersion();
     String getGenericName();
@@ -53,6 +54,7 @@ public:
     std::vector<String> getImplements();
     std::vector<String> getKeywords();
     
+
     bool onlyShowIn(String env);
     bool notShowIn(String env);
     bool tryExec();

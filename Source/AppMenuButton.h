@@ -25,7 +25,7 @@ public:
   int getColumn();
   
   private:
-      DesktopEntry dEntry;
+      DesktopEntry desktopEntry;
       bool folder=false;
       bool selected=false;
       Image appIcon;

@@ -14,7 +14,7 @@
 
 AppMenuButton::AppMenuButton(DesktopEntry desktopEntry,int index,int column)
 :TextButton(desktopEntry.getName()),
- dEntry(desktopEntry),index(index),column(column){
+ desktopEntry(desktopEntry),index(index),column(column){
     setSize(416,Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight()/6);
     
     String iconPath=desktopEntry.getIconPath();
@@ -28,15 +28,15 @@ void AppMenuButton::setSelected(bool select) {
 }
 
 bool AppMenuButton::isFolder(){
-    return folder;
+    return desktopEntry.getType()==DesktopEntry::DIRECTORY;
 }
 
 String AppMenuButton::getAppName(){
-    return dEntry.getName();
+    return desktopEntry.getName();
 }
 
 String AppMenuButton::getCommand(){
-    return dEntry.getExec();
+    return desktopEntry.getExec();
 }
 
 int AppMenuButton::getIndex(){

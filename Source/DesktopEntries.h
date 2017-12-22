@@ -28,7 +28,7 @@ public:
     void printAll();
     int size();
     DesktopEntry getEntry(int index);
-    std::vector<DesktopEntry*> getCategoryEntries(String category);
+    std::vector<DesktopEntry> getCategoryEntries(String category);
     
     /**
      * Get the list of all categories found in all
@@ -48,7 +48,7 @@ public:
 private:
     std::vector<DesktopEntry> entries;
     std::vector<String> categoryNames;
-    std::map<String,std::vector<DesktopEntry*>> categories;
+    std::map<String,std::vector<DesktopEntry>> categories;
  
 };
 

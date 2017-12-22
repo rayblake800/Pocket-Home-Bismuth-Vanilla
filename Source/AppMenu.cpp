@@ -36,26 +36,28 @@ AppMenu::~AppMenu() {
 }
 
 void AppMenu::openFolder(String categoryName) {
-    std::vector<DesktopEntry*> folderItems = desktopEntries.getCategoryEntries(categoryName);
+    std::vector<DesktopEntry> folderItems = desktopEntries.getCategoryEntries(categoryName);
     if (folderItems.empty())return;
     selected.push_back(NULL);
+    buttonColumns.push_back(std::vector<AppMenuButton*>());
     int columnWidth = 0;
+    std::cout<<"found "<<folderItems.size()<<" items in "<<categoryName<<"\n";
     for (int i = 0; i < folderItems.size(); i++) {
-        DesktopEntry* de = folderItems[i];
-        if (!de->hidden() && !de->noDisplay()) {
-            AppMenuButton* newButton = new AppMenuButton(*de, buttonColumns[activeColumn()].size(), activeColumn());
+        DesktopEntry de = folderItems[i];
+        if (!de.hidden() && !de.noDisplay()) {
+            AppMenuButton* newButton = new AppMenuButton(de, buttonColumns[activeColumn()].size(), activeColumn());
             if (columnWidth == 0)columnWidth = newButton->getWidth();
             addButton(newButton);
         }
     }
     Rectangle<int> dest(getBounds());
-    dest.setX(dest.getX() + columnWidth - 20);
+    dest.setX(dest.getX() - columnWidth + 30);
     scrollTo(dest);
 }
 
 void AppMenu::closeFolder() {
     int columnWidth = 0;
-    for (int i = buttonColumns[activeColumn()].size(); i >= 0; i--) {
+    for (int i = buttonColumns[activeColumn()].size()-1; i >= 0; i--) {
         AppMenuButton * toDelete = buttonColumns[activeColumn()][i];
         if (columnWidth == 0)columnWidth = toDelete->getWidth();
         toDelete->removeFromDesktop();
@@ -88,7 +90,7 @@ void AppMenu::buttonClicked(Button* buttonClicked) {
         selected[activeColumn()]->repaint();
 
         //move AppMenu to center the selected button, if it's not near an edge
-        int buttonPos = selected[0]->getY();
+        int buttonPos = selected[activeColumn()]->getY();
         int screenHeight = Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight();
         Rectangle<int> dest(getBounds());
         dest.setY(-buttonPos + screenHeight / 2);
@@ -144,5 +146,5 @@ void AppMenu::addButton(AppMenuButton* appButton) {
     this->nameMap[appButton->getName()] = appButton;
     this->buttonColumns[column].push_back(appButton);
     if ((x + w) > getWidth())setBounds(getX(), getY(), x + w, getHeight());
-    if ((index + 1) * h > getHeight())setBounds(getX(), getY(), getWidth(), index + 1 * h);
+    if ((y + h) > getHeight())setBounds(getX(), getY(), getWidth(), y + h);
 }

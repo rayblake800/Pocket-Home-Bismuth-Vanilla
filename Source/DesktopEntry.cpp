@@ -157,6 +157,10 @@ String DesktopEntry::getName() {
     return appStrings["Name"];
 }
 
+DesktopEntry::Type DesktopEntry::getType(){
+    return type;
+}
+
 String DesktopEntry::getVersion() {
     return appStrings["Version"];
 }

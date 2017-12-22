@@ -129,6 +129,7 @@ bool LauncherTestPage::keyPressed(const KeyPress &key) {
     }
     else if(keyCode==KeyPress::returnKey || keyCode==KeyPress::spaceKey){
         appMenu->clickSelected();
+        return true;
     }
     return false;
 }
