@@ -11,9 +11,8 @@
 #include "AppMenu.h"
 
 AppMenu::AppMenu(const var &configJson) {
-    jassert(configJson.isObject());
-    auto buttonSize=configJson["AppMenuButtons"];
-    jassert(buttonSize.isObject());
+    String jsonDebug=JSON::toString(configJson,false);
+    DBG(jsonDebug);
     buttonWidth=configJson["menuButtonWidth"];
     buttonHeight=configJson["menuButtonHeight"];
     DBG(String("AppMenu:read button size from config:")+String(buttonWidth)+"x"+String(buttonHeight));
