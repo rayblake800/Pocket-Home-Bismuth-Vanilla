@@ -266,6 +266,7 @@ PathRecord::PathRecord() {
         }
         file.close();
     } else {
+        DBG(String("PathRecord:didn't find record file at ")+path);
         iconTheme = getTheme();
         changesWritten = false;
     }
@@ -306,6 +307,7 @@ void PathRecord::writeRecords() {
         }
         changesWritten = true;
         file.close();
+        DBG(String("PathRecord:wrote icon cache to ")+path);
     } catch (std::ofstream::failure e) {
         DBG("Couldn't write to path record file!");
     }
