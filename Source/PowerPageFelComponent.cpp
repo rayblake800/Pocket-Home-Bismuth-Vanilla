@@ -8,8 +8,8 @@
 #include <fcntl.h>
 
 #include <numeric>
-//#define DEBUG
-#if JUCE_LINUX && !defined DEBUG
+//#define TEST_BUILD
+#if JUCE_LINUX && !defined TEST_BUILD
 
 #include <linux/i2c-dev.h>
 

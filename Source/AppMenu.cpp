@@ -22,7 +22,7 @@ AppMenu::AppMenu(const var &configJson) {
                 buttonColumns[activeColumn()].size(), activeColumn(),
                 buttonWidth,buttonHeight));
     }
-    DBG("added " + buttonColumns[activeColumn()].size() + " buttons");
+    DBG(String("added ") + String(buttonColumns[activeColumn()].size()) + " buttons");
 }
 
 AppMenu::~AppMenu() {
@@ -38,7 +38,7 @@ void AppMenu::openFolder(String categoryName) {
     if (folderItems.empty())return;
     selected.push_back(NULL);
     buttonColumns.push_back(std::vector<AppMenuButton*>());
-    DBG("found " + folderItems.size() + " items in " + categoryName);
+    DBG(String("found ") + String(folderItems.size()) + " items in " + categoryName);
     for (int i = 0; i < folderItems.size(); i++) {
         DesktopEntry desktopEntry = folderItems[i];
         if (!desktopEntry.hidden() && !desktopEntry.noDisplay()) {

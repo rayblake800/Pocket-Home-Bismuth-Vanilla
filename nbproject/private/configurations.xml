@@ -11,6 +11,8 @@
         </df>
       </df>
       <df name="build">
+        <df name="Debug">
+        </df>
         <df name="Release">
         </df>
       </df>
@@ -18,6 +20,8 @@
         <df name="LinuxMakefile">
           <df name="build">
             <df name="intermediate">
+              <df name="Debug">
+              </df>
               <df name="Release">
               </df>
             </df>

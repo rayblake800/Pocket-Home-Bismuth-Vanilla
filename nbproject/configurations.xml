@@ -13,7 +13,6 @@
       <df name="Source">
         <in>AdvancedSettingsPage.cpp</in>
         <in>AppMenu.cpp</in>
-        <in>AppMenu.h</in>
         <in>AppMenuButton.cpp</in>
         <in>AppsPageComponent.cpp</in>
         <in>BatteryMonitor.cpp</in>
@@ -69,7 +68,7 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <flagsDictionary>
-        <element flagsID="0" commonFlags="-march=native -O3 -std=c++11"/>
+        <element flagsID="0" commonFlags="-march=native -std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -96,6 +95,7 @@
               <pElem>Builds/LinuxMakefile</pElem>
             </incDir>
             <preprocessorList>
+              <Elem>DEBUG=1</Elem>
               <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
               <Elem>JUCE_APP_VERSION=0.0.1</Elem>
               <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
@@ -107,7 +107,7 @@
               <Elem>JucePlugin_Build_VST3=0</Elem>
               <Elem>JucePlugin_Build_VST=0</Elem>
               <Elem>LINUX=1</Elem>
-              <Elem>NDEBUG=1</Elem>
+              <Elem>_DEBUG=1</Elem>
             </preprocessorList>
           </ccTool>
         </makeTool>
@@ -159,9 +159,9 @@
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="Source/AppMenu.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Source/AppMenu.h" ex="false" tool="3" flavor2="0">
+      <item path="Source/AppMenu.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
       </item>
       <item path="Source/AppMenuButton.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">

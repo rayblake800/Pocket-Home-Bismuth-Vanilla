@@ -31,7 +31,7 @@ DesktopEntries::DesktopEntries() {
             files.push_back(dirs[i] + "/" + dfiles[i2]);
         }
     }
-    DBG("Reading " + " potential desktop files");
+    DBG(String("Reading ") + String(files.size())+" potential desktop files");
     //read in files as DesktopEntry objects
     std::regex dfileMatch(".*\\.(desktop|directory)$", std::regex::icase);
     categoryEntries.push_back(DesktopEntry("All",&pathRecord));
@@ -54,7 +54,7 @@ DesktopEntries::DesktopEntries() {
             entries.push_back(de);
         }
     }
-    DBG("found " + entries.size() + " entries");
+    DBG(String("found ") + String(entries.size()) + " entries");
 }
 
 DesktopEntries::DesktopEntries(const DesktopEntries& orig) {
