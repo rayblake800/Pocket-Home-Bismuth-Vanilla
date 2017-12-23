@@ -12,7 +12,6 @@
 #ifndef DESKTOPENTRY_H
 #define DESKTOPENTRY_H
 #include <map>
-#include "Utils.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
 class DesktopEntry {
@@ -26,18 +25,14 @@ public:
      * Load DesktopEntry data from a .desktop or .directory file
      * @param path absolute path of the source file
      * @param localeName used for selecting locale-specific data from the file
-     * @param pathRecords points to an icon path object held by the 
-     * object that created this DesktopEntry
      */
-    DesktopEntry(String path, String localeName,PathRecord * pathRecords);
+    DesktopEntry(String path, String localeName);
     
     /**
      * Creates a DesktopEntry object representing an application category
      * @param category the category name
-     * @param pathRecords points to an icon path object held by the 
-     * object that created this DesktopEntry
      */
-    DesktopEntry(String category,PathRecord * pathRecords);
+    DesktopEntry(String category);
     
     DesktopEntry(const DesktopEntry& orig);
     virtual ~DesktopEntry();
@@ -72,20 +67,25 @@ public:
     bool terminal();
     bool startupNotify();
 private:
+    static constexpr const char* DEFAULT_APP_ICON_PATH=
+    "/usr/share/pocket-home/appIcons/default.png";
+    static constexpr const char* DEFAULT_DIRECTORY_ICON_PATH=
+    "/usr/share/pocket-home/appIcons/filebrowser.png";
+    //Contains filename(no extention)=fullpath/filename.extension mappings
+    //for all icons found on the system.  Recursively mapping all icon
+    //directories is time consuming and should only be done once per run.
+    static std::map<String,String> iconPaths;
+    static bool iconPathsMapped;
     //path of the .Desktop/.Directory file
     String entrypath;
     //keys that store string and boolean data:
     std::map<String, String> appStrings;
     std::map<String,bool> appBools;
+    Type type;
     //initialize string and bool maps with all valid keys
     void mapInit();
-    Type type;
-    //stores icon path
-    String iconPath;
     //used to track down absolute icon paths
-    String findIconPath();
-    String searchIconPaths(String icon, String path); 
-    PathRecord * pathRecord=NULL;
+    void mapIcons(); 
 };
 
 #endif /* DESKTOPENTRY_H */

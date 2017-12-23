@@ -13,10 +13,11 @@
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
+#include <functional>
 #include <regex>
-#include <stdio.h>
 
+std::map<String, String> DesktopEntry::iconPaths;
+bool DesktopEntry::iconPathsMapped;
 
 //initialize string and bool maps with all valid keys
 
@@ -57,8 +58,7 @@ void DesktopEntry::mapInit() {
 
 //Load DesktopEntry data from a .desktop or .directory file
 
-DesktopEntry::DesktopEntry(String path, String localeName, PathRecord * pathRecords) :
-pathRecord(pathRecords),
+DesktopEntry::DesktopEntry(String path, String localeName) :
 entrypath(path) {
     mapInit();
     try {
@@ -117,8 +117,8 @@ entrypath(path) {
 }
 
 //Creates a DesktopEntry object representing an application category
-DesktopEntry::DesktopEntry(String category, PathRecord * pathRecords) :
-pathRecord(pathRecords) {
+
+DesktopEntry::DesktopEntry(String category) {
     mapInit();
     type = DIRECTORY;
     appStrings["Name"] = category;
@@ -127,12 +127,10 @@ pathRecord(pathRecords) {
 }
 
 DesktopEntry::DesktopEntry(const DesktopEntry& orig) {
-    pathRecord = orig.pathRecord;
     entrypath = orig.entrypath;
     appStrings = orig.appStrings;
     appBools = orig.appBools;
     type = orig.type;
-    iconPath = orig.iconPath;
 }
 
 DesktopEntry::~DesktopEntry() {
@@ -159,8 +157,13 @@ String DesktopEntry::getComment() {
 }
 
 String DesktopEntry::getIconPath() {
-    if (!iconPath.isEmpty())return iconPath;
-    return findIconPath();
+    if (!iconPathsMapped)mapIcons();
+    String fullPath = iconPaths[appStrings["Icon"]];
+    if (fullPath.isEmpty()) {
+        return type == DIRECTORY ? String(DEFAULT_DIRECTORY_ICON_PATH) :
+                String(DEFAULT_APP_ICON_PATH);
+    }
+    return fullPath;
 }
 
 String DesktopEntry::getExec() {
@@ -235,80 +238,58 @@ bool DesktopEntry::startupNotify() {
     return appBools["StartupNotify"];
 }
 
-//Recursively search directories under path for an icon file
-
-String DesktopEntry::searchIconPaths(String icon, String path) {
-    std::vector<String> files = listFiles(path);
-    String iconFile;
-    std::regex iconMatch(icon.toStdString() + "(\\.(png|svg|xpm))?$", std::regex::ECMAScript | std::regex::icase);
-
-    foreach(files, [path, &iconFile, iconMatch](String file)->bool {
-        if (std::regex_search(file.toStdString(), iconMatch)) {
-            iconFile = path + file;
-            return true;
-        }
-        return false;
-    });
-    if (!iconFile.isEmpty())return iconFile;
-    //check subdirectories if not already found
-    std::vector<String> dirs = listDirectoryFiles(path);
-    if (dirs.empty())return iconFile;
-    //sort icon size directories, if found
-    std::regex re("^([0-9]+)");
-    std::smatch numMatch;
-    std::sort(dirs.begin(), dirs.end(), [&numMatch, &re](const String& a, const String & b)->bool {
-        std::string a_str = a.toStdString();
-        std::string b_str = b.toStdString();
-        if (a == b)return false;
-                int aVal = 0;
-                int bVal = 0;
-            if (std::regex_search(a_str, numMatch, re)) {
-                sscanf(numMatch.str(1).c_str(), "%d", &aVal);
-            }
-        if (std::regex_search(b_str, numMatch, re)) {
-            sscanf(numMatch.str(1).c_str(), "%d", &bVal);
-        }
-        if (aVal != bVal) {
-            //higher numbers first, until after 128px
-            if (aVal > 128)aVal = 1 + 128 / aVal;
-                if (bVal > 128)bVal = 1 + 128 / bVal;
-                    return aVal > bVal;
+void DesktopEntry::mapIcons() {
+    std::function<void(String) > recursiveIconSearch;
+    recursiveIconSearch = [&recursiveIconSearch, this](String path) {
+        //first, map image files with new names
+        std::vector<String> files = listFiles(path);
+        std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
+        std::smatch iconMatch;
+        foreach(files, [path, &iconPattern, &iconMatch, this](String file)->bool {
+            std::string fileStr = file.toStdString();
+            if (std::regex_search(fileStr, iconMatch, iconPattern)) {
+                String filename = iconMatch.str(1);
+                if (this->iconPaths[filename].isEmpty()) {
+                    this->iconPaths[filename] = path + iconMatch.str(0);
                 }
-        return false;
-    });
+            }
+            return false;
+        });
+        //then recursively search subdirectories
+        std::vector<String> dirs = listDirectoryFiles(path);
+        if (dirs.empty())return;
+        //sort icon size directories, if found
+        std::regex sizePattern("^([0-9]+)");
+        std::smatch sizeMatch;
+        std::sort(dirs.begin(), dirs.end(), [&sizeMatch, &sizePattern](const String& a, const String & b)->bool {
+            std::string a_str = a.toStdString();
+            std::string b_str = b.toStdString();
+            if (a == b)return false;
+                    int aVal = 0;
+                    int bVal = 0;
+                if (std::regex_search(a_str, sizeMatch, sizePattern)) {
+                    sscanf(sizeMatch.str(1).c_str(), "%d", &aVal);
+                }
+            if (std::regex_search(b_str, sizeMatch, sizePattern)) {
+                sscanf(sizeMatch.str(1).c_str(), "%d", &bVal);
+            }
+            if (aVal != bVal) {
+                //higher numbers first, until after 128px
+                if (aVal > 128)aVal = 1 + 128 / aVal;
+                    if (bVal > 128)bVal = 1 + 128 / bVal;
+                        return aVal > bVal;
+                    }
+            return false;
+        });
+        foreach(dirs, [path, this, &recursiveIconSearch](String subDir)->bool {
+            recursiveIconSearch(path + subDir + "/");
+        });
+        iconPathsMapped = true;
 
-    foreach(dirs, [icon, path, this, &iconFile](String s)->bool {
-        iconFile = searchIconPaths(icon, path + s + "/");
-        return !iconFile.isEmpty();
-    });
-    return iconFile;
-}
+    };
 
-//look through likely directories to find an icon file's path.
-
-String DesktopEntry::findIconPath() {
+    //build a list of primary search directories
     std::vector<String> checkPaths;
-    String icon;
-    try {
-        icon = appStrings.at("Icon");
-    } catch (std::out_of_range e) {//no icon defined
-        return "";
-    }
-
-    //explicit path defined, return it
-    if (icon.substring(0, 1) == "/") {
-        iconPath = icon;
-        return iconPath;
-    }
-    //check cached data
-    if (pathRecord != NULL) {
-        String path = pathRecord->getRecord(icon);
-        if (path == PathRecord::noPath)return "";
-        if (!path.isEmpty()) {
-            iconPath = path;
-            return iconPath;
-        }
-    }
     std::vector<String> basePaths = {
         getHomePath() + "/.icons/",
         "/usr/share/pocket-home/appIcons/",
@@ -316,37 +297,45 @@ String DesktopEntry::findIconPath() {
         "/usr/local/icons/",
         "/usr/share/pixmaps/"
     };
-
-    //if no explicit path, find all directories to search
-    //check under system theme first
-    String theme = getTheme();
-    if (!theme.isEmpty()) {
-        for (int i = 0; i < basePaths.size(); i++) {
-            checkPaths.push_back(basePaths[i] + theme + "/");
+    //search for icon theme directories, prioritize them if found
+    String iconTheme;
+    String fallbackIconTheme;
+    std::string configPath = getHomePath().toStdString() + "/.gtkrc-2.0";
+    if (fileExists(configPath)) {
+        std::regex themeMatch("gtk-icon-theme-name=\"(.+)\"");
+        std::regex fallbackThemeMatch("gtk-fallback=icon-theme=\"(.+)\"");
+        try {
+            std::ifstream file(configPath);
+            std::smatch match;
+            for (std::string line; getline(file, line);) {
+                if (std::regex_search(line, match, themeMatch)) {
+                    themeMatch = (match.str(1));
+                } else if (std::regex_search(line, match, fallbackThemeMatch)) {
+                    fallbackIconTheme = (match.str(1));
+                }
+                if (iconTheme.isNotEmpty() && fallbackIconTheme.isNotEmpty())break;
+            }
+            file.close();
+        } catch (std::ifstream::failure f) {
+            DBG("DesktopEntry:failed to read icon them from .gtkrc-2.0");
         }
     }
-    //if it didn't turn up there, try the fallback theme
-    String fallbackTheme = getFallbackTheme();
-    if (!fallbackTheme.isEmpty()) {
+    if (iconTheme.isNotEmpty()) {
         for (int i = 0; i < basePaths.size(); i++) {
-            checkPaths.push_back(basePaths[i] + fallbackTheme + "/");
+            checkPaths.push_back(basePaths[i] + iconTheme + "/");
         }
     }
-    //search all icon files if a theme-specific one doesn't show up
+    if (!fallbackIconTheme.isEmpty()) {
+        for (int i = 0; i < basePaths.size(); i++) {
+            checkPaths.push_back(basePaths[i] + fallbackIconTheme + "/");
+        }
+    }
     for (int i = 0; i < basePaths.size(); i++) {
         checkPaths.push_back(basePaths[i]);
     }
 
-    //recursively search directories until the icon file turns up
+    //finally, run recursive mapping for all directories
     for (int i = 0; i < checkPaths.size(); i++) {
-        iconPath = searchIconPaths(icon, checkPaths[i]);
-        if (!iconPath.isEmpty()) {
-            if (pathRecord != NULL)pathRecord->addRecord(icon, iconPath);
-            pathRecord->writeRecords();
-            return iconPath;
-        }
+        recursiveIconSearch(checkPaths[i]);
     }
-    DBG("Missing icon " + icon);
-    if (pathRecord != NULL)pathRecord->addRecord(icon, PathRecord::noPath);
-    return iconPath;
 }

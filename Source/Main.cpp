@@ -8,7 +8,6 @@
 // FIXME: this is a hack to fix touch screen presses causing buzzing
 // when no application holds alsa open
 #if JUCE_LINUX
-#define DEBUG
 #include <alsa/asoundlib.h>
 
 #define DEFAULT_BUFFER_SIZE	4096	/*in samples*/

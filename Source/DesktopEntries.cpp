@@ -8,7 +8,6 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
-#include <map>
 #include <stdlib.h>
 #include <dirent.h>
 #include <stdlib.h>
@@ -34,19 +33,19 @@ DesktopEntries::DesktopEntries() {
     DBG(String("Reading ") + String(files.size())+" potential desktop files");
     //read in files as DesktopEntry objects
     std::regex dfileMatch(".*\\.(desktop|directory)$", std::regex::icase);
-    categoryEntries.push_back(DesktopEntry("All",&pathRecord));
-    categoryEntries.push_back(DesktopEntry("Other",&pathRecord));
+    categoryEntries.push_back(DesktopEntry("All"));
+    categoryEntries.push_back(DesktopEntry("Other"));
     for (std::vector<String>::iterator it = files.begin();
             it != files.end(); it++) {
         String path = *it;
         if (std::regex_search(path.toStdString(), dfileMatch)) {
-            DesktopEntry de(path, localeName, &pathRecord);
+            DesktopEntry de(path, localeName);
             categories["All"].push_back(de);
             std::vector<String> deCats = de.getCategories();
             if (deCats.empty())categories["Other"].push_back(de);
             foreach(deCats, [de, this](String c)->bool {
                 if (this->categories[c].empty()) {
-                    this->categoryEntries.push_back(DesktopEntry(c,&pathRecord));
+                    this->categoryEntries.push_back(DesktopEntry(c));
                 }
                 this->categories[c].push_back(de);
                 return false;
@@ -108,7 +107,7 @@ std::vector<DesktopEntry> DesktopEntries::getMainCategories(bool excludeUnused) 
     for (int i = 0; i < mainCategories.size(); i++) {
         String category = mainCategories[i];
         if (categories[category].size() > 0 || !excludeUnused) {
-            categoryEntries.push_back(DesktopEntry(category, &pathRecord));
+            categoryEntries.push_back(DesktopEntry(category));
         }
     }
     return categoryEntries;

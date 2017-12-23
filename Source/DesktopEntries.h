@@ -11,9 +11,7 @@
 #define DESKTOPENTRIES_H
 
 
-#include <vector>
 #include <map>
-#include <string>
 #include "DesktopEntry.h"
 #include "Utils.h"
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -56,8 +54,6 @@ private:
     std::vector<DesktopEntry> categoryEntries;
     //maps category names to lists of entries
     std::map<String,std::vector<DesktopEntry>> categories;
-    //stores previously searched icon paths
-    PathRecord pathRecord;
  
 };
 
