@@ -1,9 +1,6 @@
 {
-  
-  "AppMenuButtons" : {
-        "width" : 416,
-        "height" : 45
-  },
+  "menuButtonWidth" : 416,
+  "menuButtonHeight" : 45, 
   "defaultPage" : "Apps",
   "pages": [
     {

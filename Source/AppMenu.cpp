@@ -14,8 +14,8 @@ AppMenu::AppMenu(const var &configJson) {
     jassert(configJson.isObject());
     auto buttonSize=configJson["AppMenuButtons"];
     jassert(buttonSize.isObject());
-    buttonWidth=buttonSize["width"];
-    buttonHeight=buttonSize["height"];
+    buttonWidth=configJson["menuButtonWidth"];
+    buttonHeight=configJson["menuButtonHeight"];
     DBG(String("AppMenu:read button size from config:")+String(buttonWidth)+"x"+String(buttonHeight));
     selected.push_back(NULL);
     buttonColumns.emplace(buttonColumns.begin());
