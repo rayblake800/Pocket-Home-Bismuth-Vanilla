@@ -175,7 +175,6 @@ void PokeLaunchApplication::initialise(const String &commandLine) {
   }
 
   auto configJson = JSON::parse(configFile);
-#if !defined DEBUG
   if (!configJson) {
     bool launch = AlertWindow::showOkCancelBox(AlertWindow::AlertIconType::WarningIcon,
 	"Cannot launch Pocket-Home",
@@ -201,7 +200,6 @@ configuration automatically ?",
              "-g", "20", "20", NULL);
     }
   }
-#endif
   // open sound handle
 
   if(!sound())

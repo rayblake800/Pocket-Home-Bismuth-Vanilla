@@ -19,6 +19,7 @@
 
 //[Headers] You can add your own extra header files here...
 #include <sstream>
+#include "Utils.h"
 //[/Headers]
 
 #include "LauncherTestPage.h"
@@ -31,6 +32,8 @@
 LauncherTestPage::LauncherTestPage ()
 {
     //[Constructor_pre] You can add your own custom stuff here..
+    File configFile=assetConfigFile("config.json");
+    var configJSON = JSON::parse(configFile);
     //[/Constructor_pre]
 
     addAndMakeVisible (imageButton = new ImageButton ("new button"));
@@ -48,7 +51,7 @@ LauncherTestPage::LauncherTestPage ()
     setWantsKeyboardFocus(true);
 
     //[Constructor] You can add your own custom stuff here..
-    appMenu=new AppMenu();
+    appMenu=new AppMenu(configJSON);
     addAndMakeVisible(appMenu);
     //[/Constructor]
 }
@@ -111,7 +114,6 @@ void LauncherTestPage::buttonClicked (Button* buttonThatWasClicked)
 
 bool LauncherTestPage::keyPressed(const KeyPress &key) {
     int keyCode = key.getKeyCode();
-    std::cout << "pressed key " << keyCode << "\n";
     if(keyCode==KeyPress::upKey || keyCode==KeyPress::downKey){
         if(keyCode==KeyPress::upKey)appMenu->selectPrevious();
         else appMenu->selectNext();

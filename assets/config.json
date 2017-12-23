@@ -71,5 +71,9 @@
     {
       "name": "Battery"
     }
-  ]
+  ],
+  "AppMenuButtons" : {
+        "width" : 416,
+        "height" : 45
+  }
 }

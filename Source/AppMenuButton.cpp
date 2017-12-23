@@ -12,37 +12,44 @@
 #include "PokeLookAndFeel.h"
 #include "Utils.h"
 
-AppMenuButton::AppMenuButton(DesktopEntry desktopEntry,int index,int column)
+//Create a new button representing an application or folder
+AppMenuButton::AppMenuButton(DesktopEntry desktopEntry,int index,int column,int width,int height)
 :TextButton(desktopEntry.getName()),
  desktopEntry(desktopEntry),index(index),column(column){
-    setSize(416,Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight()/6);
+    setSize(width,height);
     
     String iconPath=desktopEntry.getIconPath();
-    if(iconPath=="")iconPath="appIcons/default.png";
+    if(iconPath=="")iconPath="/usr/share/pocket-home/appIcons/"+
+            isFolder()?"filebrowser.png":"default.png";
     appIcon = createImageFromFile(File(iconPath));
 }
 
-
+//Set whether this button is currently selected.
 void AppMenuButton::setSelected(bool select) {
     selected = select;
 }
 
+//return true if this button is for an application folder
 bool AppMenuButton::isFolder(){
     return desktopEntry.getType()==DesktopEntry::DIRECTORY;
 }
 
+//return the display name of the associated application
 String AppMenuButton::getAppName(){
     return desktopEntry.getName();
 }
 
+//return application shell command or directory path.
 String AppMenuButton::getCommand(){
     return desktopEntry.getExec();
 }
 
+//return button position in its column
 int AppMenuButton::getIndex(){
     return index;
 }
 
+//return button's column in the AppMenu
 int AppMenuButton::getColumn(){
     return column;
 }

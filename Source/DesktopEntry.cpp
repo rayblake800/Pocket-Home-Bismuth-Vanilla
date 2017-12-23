@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   DesktopEntry.cpp
  * Author: anthony
@@ -61,32 +55,32 @@ void DesktopEntry::mapInit() {
     }
 }
 
-DesktopEntry::DesktopEntry() {
-}
+//Load DesktopEntry data from a .desktop or .directory file
 
-DesktopEntry::DesktopEntry(String path, String localeName) {
-    entrypath = path;
+DesktopEntry::DesktopEntry(String path, String localeName, PathRecord * pathRecords) :
+pathRecord(pathRecords),
+entrypath(path) {
     mapInit();
     try {
-        std::ifstream file(path.toStdString());
-        //capture groups: key,locale,value
-        std::regex re("([A-Za-z]+)(\\[[a-zA-Z0-9_@]+\\])?\\=(.*)");
-        std::smatch match;
-        for (std::string line; getline(file, line);) {
+        std::ifstream desktopFile(path.toStdString());
+        //capture "key[locale]=val" lines from the .Desktop/.Directory file
+        std::regex varCapture("([A-Za-z]+)(\\[[a-zA-Z0-9_@]+\\])?\\=(.*)");
+        std::smatch varMatch;
+        for (std::string line; getline(desktopFile, line);) {
             if (line.substr(0, 1) == "#")continue; //skip comments
-            if (std::regex_search(line, match, re)) {
+            if (std::regex_search(line, varMatch, varCapture)) {
                 String key;
                 String locale;
                 String val;
-                key = match.str(1);
-                if (match.size() > 3) {
-                    locale = match.str(2);
-                    val = match.str(3);
+                key = varMatch.str(1);
+                if (varMatch.size() > 3) {
+                    locale = varMatch.str(2);
+                    val = varMatch.str(3);
                 } else {
-                    val = match.str(2);
+                    val = varMatch.str(2);
                 }
                 if (locale.isEmpty() || locale == localeName) {
-                    std::map<String, String>::iterator ssearch =
+                    std::map<String, String>::iterator strSearch =
                             appStrings.find(key);
                     if (key == "Type") {
                         if (val == "Application") {
@@ -96,46 +90,35 @@ DesktopEntry::DesktopEntry(String path, String localeName) {
                         } else if (val == "Directory") {
                             type = DIRECTORY;
                         } else {
-                            std::cout << "invalid type:" << val << "\n";
+                            DBG("invalid type:" + val);
                         }
-                    } else if (ssearch != appStrings.end()) {
+                    } else if (strSearch != appStrings.end()) {
                         appStrings[key] = val;
                     } else {
-                        std::map < String, bool>::iterator bsearch =
+                        std::map < String, bool>::iterator boolSearch =
                                 appBools.find(key);
-                        if (bsearch != appBools.end()) {
+                        if (boolSearch != appBools.end()) {
                             if (val == "true") {
                                 appBools[key] = true;
                             } else if (val == "false") {
                                 appBools[key] = false;
                             } else {
-                                std::cout << "invalid boolean pair " << key <<
-                                        ":" << val << "\n";
+                                DBG("invalid boolean pair " + key + ":" + val);
                             }
-                        }
-                        //else {
-                        //std::cout << "unrecognized data:" << key <<
-                        //        "=" << val << "\n";
-                        //}
-
+                        } else DBG("unrecognized data:" + key + "=" + val);
                     }
                 }
-            }
-            //else {
-            //std::cout << "no match:" << line << "\n";
-            //}
+            } else DBG("no match:" + line);
         }
-        file.close();
+        desktopFile.close();
     } catch (std::ifstream::failure e) {
-        std::cout << "couldn't open " << path << "\n";
+        DBG("couldn't open " + path);
     }
 }
 
-/**
- * Creates a DesktopEntry object representing an application category
- * @param category the category name
- */
-DesktopEntry::DesktopEntry(String category) {
+//Creates a DesktopEntry object representing an application category
+DesktopEntry::DesktopEntry(String category, PathRecord * pathRecords) :
+pathRecord(pathRecords) {
     mapInit();
     type = DIRECTORY;
     appStrings["Name"] = category;
@@ -144,6 +127,7 @@ DesktopEntry::DesktopEntry(String category) {
 }
 
 DesktopEntry::DesktopEntry(const DesktopEntry& orig) {
+    pathRecord = orig.pathRecord;
     entrypath = orig.entrypath;
     appStrings = orig.appStrings;
     appBools = orig.appBools;
@@ -251,10 +235,7 @@ bool DesktopEntry::startupNotify() {
     return appBools["StartupNotify"];
 }
 
-inline bool fileExists(const String& path) {
-    struct stat buffer;
-    return (stat(path.toUTF8(), &buffer) == 0);
-}
+//Recursively search directories under path for an icon file
 
 String DesktopEntry::searchIconPaths(String icon, String path) {
     std::vector<String> files = listFiles(path);
@@ -271,9 +252,8 @@ String DesktopEntry::searchIconPaths(String icon, String path) {
     if (!iconFile.isEmpty())return iconFile;
     //check subdirectories if not already found
     std::vector<String> dirs = listDirectoryFiles(path);
-    //std::cout<<depth<<":path="<<path<<"\n";
-    //prioritize higher-res icon directories
     if (dirs.empty())return iconFile;
+    //sort icon size directories, if found
     std::regex re("^([0-9]+)");
     std::smatch numMatch;
     std::sort(dirs.begin(), dirs.end(), [&numMatch, &re](const String& a, const String & b)->bool {
@@ -296,32 +276,44 @@ String DesktopEntry::searchIconPaths(String icon, String path) {
                 }
         return false;
     });
-    //cout<<"sorted:\n";
-    //foreach(dirs,[](string s)->bool{cout<<"\t"<<s<<"\n";return false;});
 
     foreach(dirs, [icon, path, this, &iconFile](String s)->bool {
         iconFile = searchIconPaths(icon, path + s + "/");
         return !iconFile.isEmpty();
     });
     return iconFile;
-
 }
+
+//look through likely directories to find an icon file's path.
 
 String DesktopEntry::findIconPath() {
     std::vector<String> checkPaths;
-    String icon = appStrings["Icon"];
-    if (icon.isEmpty())return "";
+    String icon;
+    try {
+        icon = appStrings.at("icon");
+    } catch (std::out_of_range e) {//no icon defined
+        return "";
+    }
 
     //explicit path defined, return it
     if (icon.substring(0, 1) == "/") {
         iconPath = icon;
         return iconPath;
     }
-
+    //check cached data
+    if (pathRecord != NULL) {
+        String path = pathRecord->getRecord(icon);
+        if (path == PathRecord::noPath)return "";
+        if (!path.isEmpty()) {
+            iconPath = path;
+            return iconPath;
+        }
+    }
     std::vector<String> basePaths = {
         getHomePath() + "/.icons/",
-        "/usr/local/icons/",
+        "/usr/share/pocket-home/appIcons/",
         "/usr/share/icons/",
+        "/usr/local/icons/",
         "/usr/share/pixmaps/"
     };
 
@@ -345,14 +337,15 @@ String DesktopEntry::findIconPath() {
         checkPaths.push_back(basePaths[i]);
     }
 
-    //actually search directories until the icon file turns up
+    //recursively search directories until the icon file turns up
     for (int i = 0; i < checkPaths.size(); i++) {
         iconPath = searchIconPaths(icon, checkPaths[i]);
-        if (!iconPath.isEmpty())break;
+        if (!iconPath.isEmpty()) {
+            if (pathRecord != NULL)pathRecord->addRecord(icon, iconPath);
+            return iconPath;
+        }
     }
-    if (iconPath.isEmpty()) {
-        std::cout << "Missing icon " << icon << "\n";
-        return "";
-    }
+    DBG("Missing icon " + icon);
+    if (pathRecord != NULL)pathRecord->addRecord(icon, PathRecord::noPath);
     return iconPath;
 }
