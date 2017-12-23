@@ -342,6 +342,7 @@ String DesktopEntry::findIconPath() {
         iconPath = searchIconPaths(icon, checkPaths[i]);
         if (!iconPath.isEmpty()) {
             if (pathRecord != NULL)pathRecord->addRecord(icon, iconPath);
+            pathRecord->writeRecords();
             return iconPath;
         }
     }
