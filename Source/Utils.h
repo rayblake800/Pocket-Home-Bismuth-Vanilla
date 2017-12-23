@@ -104,6 +104,6 @@ private:
     std::map<String,String> pathRecords;//maps iconName=fullPath pairs
     String iconTheme;//current icon theme
     //cache file location in the user's home directory
-    static constexpr const char* recordPath=".pocket-home/pathcache";
+    static constexpr const char* recordPath="/.pocket-home/pathcache";
     bool changesWritten=true;
 };
