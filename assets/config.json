@@ -1,4 +1,9 @@
 {
+  
+  "AppMenuButtons" : {
+        "width" : 416,
+        "height" : 45
+  },
   "defaultPage" : "Apps",
   "pages": [
     {
@@ -71,9 +76,5 @@
     {
       "name": "Battery"
     }
-  ],
-  "AppMenuButtons" : {
-        "width" : 416,
-        "height" : 45
-  }
+  ]
 }

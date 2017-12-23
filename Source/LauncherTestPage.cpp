@@ -20,6 +20,7 @@
 //[Headers] You can add your own extra header files here...
 #include <sstream>
 #include "Utils.h"
+#include "Main.h"
 //[/Headers]
 
 #include "LauncherTestPage.h"
@@ -32,7 +33,7 @@
 LauncherTestPage::LauncherTestPage ()
 {
     //[Constructor_pre] You can add your own custom stuff here..
-    var configJSON = JSON::parse(assetConfigFile("config.json"));
+    var configJSON = getConfigJSON();
     //[/Constructor_pre]
 
     addAndMakeVisible (imageButton = new ImageButton ("new button"));
