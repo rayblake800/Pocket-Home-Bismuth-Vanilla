@@ -290,7 +290,7 @@ String DesktopEntry::findIconPath() {
     std::vector<String> checkPaths;
     String icon;
     try {
-        icon = appStrings.at("icon");
+        icon = appStrings.at("Icon");
     } catch (std::out_of_range e) {//no icon defined
         return "";
     }

@@ -19,8 +19,11 @@ AppMenuButton::AppMenuButton(DesktopEntry desktopEntry,int index,int column,int 
     setSize(width,height);
     
     String iconPath=desktopEntry.getIconPath();
-    if(iconPath=="")iconPath="/usr/share/pocket-home/appIcons/"+
-            isFolder()?"filebrowser.png":"default.png";
+    if(iconPath==""){
+        iconPath="/usr/share/pocket-home/appIcons/";
+        if(isFolder())iconPath+="filebrowser.png";
+        else iconPath += "default.png";
+    }
     DBG(String("Found icon path "+iconPath));
     appIcon = createImageFromFile(File(iconPath));
 }

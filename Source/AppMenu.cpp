@@ -15,7 +15,6 @@ AppMenu::AppMenu(const var &configJson) {
     DBG(jsonDebug);
     buttonWidth=configJson["menuButtonWidth"];
     buttonHeight=configJson["menuButtonHeight"];
-    DBG(String("AppMenu:read button size from config:")+String(buttonWidth)+"x"+String(buttonHeight));
     selected.push_back(NULL);
     buttonColumns.emplace(buttonColumns.begin());
     std::vector<DesktopEntry> categories = desktopEntries.getMainCategories(true);

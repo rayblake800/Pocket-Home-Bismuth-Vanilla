@@ -76,7 +76,7 @@ void WifiIconTimer::timerCallback() {
         // don't include the wifi-off icon as a bin
         int iconBins = launcherComponent->wifiIconImages.size() - 2;
         int idx = round( ( iconBins * (sigStrength)/100.0f) );
-        DBG(__func__ << ": accessing icon " << idx);
+        //DBG(__func__ << ": accessing icon " << idx);
         wifiIcon = launcherComponent->wifiIconImages[idx];
       }
       // wifi on but no connection
