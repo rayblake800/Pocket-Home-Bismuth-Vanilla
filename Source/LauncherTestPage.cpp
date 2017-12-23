@@ -32,8 +32,7 @@
 LauncherTestPage::LauncherTestPage ()
 {
     //[Constructor_pre] You can add your own custom stuff here..
-    File configFile=assetConfigFile("config.json");
-    var configJSON = JSON::parse(configFile);
+    var configJSON = JSON::parse(assetConfigFile("config.json"));
     //[/Constructor_pre]
 
     addAndMakeVisible (imageButton = new ImageButton ("new button"));
