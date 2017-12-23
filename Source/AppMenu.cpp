@@ -11,7 +11,6 @@
 #include "AppMenu.h"
 
 AppMenu::AppMenu(const var &configJson) {
-    if(!fileExists(getHomePath()+C))
     buttonWidth=configJson["menuButtonWidth"];
     buttonHeight=configJson["menuButtonHeight"];
     selected.push_back(NULL);
