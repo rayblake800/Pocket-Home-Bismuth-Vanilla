@@ -73,11 +73,13 @@ void AppMenuButton::setClipRegion(Rectangle<int>clipRegion) {
 }
 
 void AppMenuButton::paint(Graphics& g) {
-    Rectangle<int> border = getBounds();
+    Rectangle<int> border = getBounds().withPosition(0,0);
     if (clip) {
         Rectangle<int>clip = clipRegion.translated(-getScreenX(), -getScreenY());
+        if(border.intersects(clip)){
+            border = border.getIntersection(clip);
+        }
         g.reduceClipRegion(clip);
-        border = border.getIntersection(clip);
     }
     //background
     g.setColour(selected ? selectedFillColour : fillColour);
@@ -85,7 +87,7 @@ void AppMenuButton::paint(Graphics& g) {
     g.fillRect(border);
     g.setOpacity(1);
     //app icon
-    Rectangle<float> imgBox=border.toFloat();
+    Rectangle<float> imgBox=getBounds().withPosition(0,0).toFloat();
     imgBox.setWidth(imgBox.getHeight());
     imgBox.reduce(2,2);
     if (getScreenX() < 0) {
@@ -99,7 +101,7 @@ void AppMenuButton::paint(Graphics& g) {
     //app title
     g.setColour(Colours::black);
     g.setFont(Font(15.00f, Font::plain));
-    Rectangle<float> textBox=getBounds().toFloat();
+    Rectangle<float> textBox=getBounds().withPosition(0,0).toFloat();
     textBox.setLeft(imgBox.getRight());
     textBox.reduce(4,4);
     g.drawText(getAppName(),textBox,Justification::centredLeft, true);
