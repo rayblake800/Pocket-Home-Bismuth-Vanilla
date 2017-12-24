@@ -26,7 +26,6 @@ void AppDebounceTimer::timerCallback() {
 AppListComponent::AppListComponent(Component* parent, bool ishorizontal) {
     var config = getConfigJSON();
     Rectangle<int> appMenuBorder = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
-    appMenuBorder.reduce(50,50);
     appMenu=new AppMenu(config,appMenuBorder);
     addAndMakeVisible(appMenu);
 }
@@ -158,9 +157,6 @@ bool AppsPageComponent::keyPressed(const KeyPress& key) {
         if(appMenu->activeColumn()>0){
             appMenu->closeFolder();
             grabKeyboardFocus();
-        }
-        else{
-            getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
         }
         return true;
     }
