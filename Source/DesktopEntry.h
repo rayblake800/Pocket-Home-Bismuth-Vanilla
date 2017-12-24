@@ -34,6 +34,18 @@ public:
      */
     DesktopEntry(String category);
     
+    /**
+     * Create a DesktopEntry object with data from the config file
+     * @param entryJson a var object formatted as:
+     * {
+          "name": "Application Display Name",
+          "icon": "path/to/icon.png",
+          "shell": "launch command"
+         }
+     * }
+     */
+    DesktopEntry(const var &entryJson);
+    
     DesktopEntry(const DesktopEntry& orig);
     virtual ~DesktopEntry();
     

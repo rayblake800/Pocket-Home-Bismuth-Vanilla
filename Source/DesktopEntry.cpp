@@ -126,6 +126,16 @@ DesktopEntry::DesktopEntry(String category) {
     appStrings["Exec"] = "OPEN:" + category;
 }
 
+//Create a DesktopEntry object with data from the config file
+
+DesktopEntry::DesktopEntry(const var &entryJson) {
+    mapInit();
+    type = APPLICATION;
+    appStrings["Name"] = entryJson["name"];
+    appStrings["Icon"] = entryJson["icon"];
+    appStrings["Exec"] = entryJson["shell"];
+}
+
 DesktopEntry::DesktopEntry(const DesktopEntry& orig) {
     entrypath = orig.entrypath;
     appStrings = orig.appStrings;
@@ -157,14 +167,21 @@ String DesktopEntry::getComment() {
 }
 
 String DesktopEntry::getIconPath() {
-    String icon=appStrings["Icon"];
+    String icon = appStrings["Icon"];
     //if the icon variable is a full path, return that
-    if(icon.substring(0,1)=="/")return icon;
+    if (icon.substring(0, 1) == "/")return icon;
     //otherwise check the iconPaths map
+    //if icon is a partial path, trim it
+    if(icon.contains("/"))icon=icon.substring(1+icon.lastIndexOf("/"));
+    //if icon contains file extensions, trim them
+    std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
+    std::smatch iconMatch;
+    std::string searchString=icon.toStdString();
+    if(std::regex_search(searchString,iconMatch,iconPattern))icon=iconMatch.str(1);
     if (!iconPathsMapped)mapIcons();
     String fullPath = iconPaths[icon];
     if (fullPath.isEmpty()) {
-        DBG(String("DesktopEntry::Couldn't find icon ")+icon);
+        DBG(String("DesktopEntry::Couldn't find icon ") + icon);
         return type == DIRECTORY ? String(DEFAULT_DIRECTORY_ICON_PATH) :
                 String(DEFAULT_APP_ICON_PATH);
     }
@@ -341,6 +358,7 @@ void DesktopEntry::mapIcons() {
 
     //finally, run recursive mapping for all directories
     for (int i = 0; i < checkPaths.size(); i++) {
+        DBG(String("Mapping icon files under ") + checkPaths[i]);
         recursiveIconSearch(checkPaths[i]);
     }
 }

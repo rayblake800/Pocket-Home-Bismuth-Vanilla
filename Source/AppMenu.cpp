@@ -13,6 +13,23 @@
 AppMenu::AppMenu(const var &configJson) {
     buttonWidth = configJson["menuButtonWidth"];
     buttonHeight = configJson["menuButtonHeight"];
+    //read in main page apps from config
+    Array<var>* pagesData = configJson["pages"].getArray();
+    if (pagesData) {
+        for (const var &page : *pagesData) {
+            String name = page["name"].toString();
+            if (name == "Apps") {
+                var items = page["items"];
+                for (const var &item : *items.getArray()) {
+                    if (item["name"] && item["shell"] && item["icon"]) {
+                        addButton(new AppMenuButton(DesktopEntry(item),
+                                buttonColumns[activeColumn()].size(), activeColumn(),
+                                buttonWidth, buttonHeight));
+                    }
+                }
+            }
+        }
+    }
     selected.push_back(NULL);
     buttonColumns.emplace(buttonColumns.begin());
     std::vector<DesktopEntry> categories = desktopEntries.getMainCategories(true);
@@ -65,7 +82,8 @@ void AppMenu::closeFolder() {
 }
 
 //handle AppMenuButton clicks
-void AppMenu::buttonClicked(Button* buttonClicked) {
+
+void AppMenu::buttonClicked(Button * buttonClicked) {
     AppMenuButton * appClicked = (AppMenuButton *) buttonClicked;
     while (appClicked->getColumn() < activeColumn()) {
         closeFolder();
@@ -81,9 +99,9 @@ void AppMenu::buttonClicked(Button* buttonClicked) {
 
 void AppMenu::selectIndex(int index) {
     int column = activeColumn();
-    if (index >= buttonColumns[column].size() 
+    if (index >= buttonColumns[column].size()
             || index < 0
-            || selected[column]==buttonColumns[column][index])return;
+            || selected[column] == buttonColumns[column][index])return;
     if (selected[column] != NULL) {
         selected[column]->setSelected(false);
         selected[column]->repaint();
@@ -96,6 +114,7 @@ void AppMenu::selectIndex(int index) {
 }
 
 //Select the next appMenuButton in the active button column.
+
 void AppMenu::selectNext() {
     if (selected[activeColumn()] == NULL)selectIndex(0);
     else selectIndex(selected[activeColumn()]->getIndex() + 1);
@@ -145,7 +164,7 @@ void AppMenu::scrollToSelected() {
     animator.animateComponent(this, dest, getAlpha(), 100, true, 1, 1);
 }
 
-void AppMenu::addButton(AppMenuButton* appButton) {
+void AppMenu::addButton(AppMenuButton * appButton) {
     int index = appButton->getIndex();
     int column = appButton->getColumn();
     int w = appButton->getWidth();

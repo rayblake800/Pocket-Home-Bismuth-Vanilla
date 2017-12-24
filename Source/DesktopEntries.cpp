@@ -33,8 +33,8 @@ DesktopEntries::DesktopEntries() {
     DBG(String("Reading ") + String(files.size())+" potential desktop files");
     //read in files as DesktopEntry objects
     std::regex dfileMatch(".*\\.(desktop|directory)$", std::regex::icase);
-    categoryEntries.push_back(DesktopEntry("All"));
-    categoryEntries.push_back(DesktopEntry("Other"));
+    categoryEntries.push_back(DesktopEntry(String("All")));
+    categoryEntries.push_back(DesktopEntry(String("Other")));
     for (std::vector<String>::iterator it = files.begin();
             it != files.end(); it++) {
         String path = *it;
