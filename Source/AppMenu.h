@@ -36,7 +36,7 @@ public:
      * @param launchFn when a selected app button is clicked, 
      * launchFn(shell command) will run.
      */
-    void setLaunchFunction(std::function<void(String) > launchFn);
+    void setLaunchFunction(std::function<void(AppMenuButton*) > launchFn);
 
     //handle AppMenuButton clicks
     void buttonClicked(Button* buttonClicked) override;
@@ -70,7 +70,7 @@ private:
     void scrollToSelected();
     std::map<String, AppMenuButton*> nameMap;
 
-    std::function<void(String) > launchFunction;
+    std::function<void(AppMenuButton*) > launchFunction;
 
     //all buttons in each column
     std::vector<std::vector<AppMenuButton*>> buttonColumns;

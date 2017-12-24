@@ -277,7 +277,6 @@ bool PersonalizePageComponent::updateJSON(){
     name_b = true;
     
     /* Adding to the grid */
-    lcomp->addIcon(name, path, cmmd);
   }
   if(choose_back.getSelectedId()==1){
     DynamicObject* new_back = json.getDynamicObject();

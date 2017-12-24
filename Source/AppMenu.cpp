@@ -19,7 +19,7 @@ drawRegion(drawRegion) {
     selected.push_back(NULL);
     columnTops.push_back(0);
     buttonColumns.emplace(buttonColumns.begin());
-    launchFunction=[](String command){};
+    launchFunction=[](AppMenuButton* button){};
 
     //read in main page apps from config
     Array<var>* pagesData = configJson["pages"].getArray();
@@ -99,7 +99,7 @@ void AppMenu::closeFolder() {
 
 
 //Assigns a callback handler for launching applications.
-void AppMenu::setLaunchFunction(std::function<void(String) > launchFn) {
+void AppMenu::setLaunchFunction(std::function<void(AppMenuButton*) > launchFn) {
     launchFunction=launchFn;
 }
 
@@ -119,7 +119,7 @@ void AppMenu::buttonClicked(Button * buttonClicked) {
             openFolder(appClicked->getAppName());
         }
         else{
-            launchFunction(appClicked->getCommand());
+            launchFunction(appClicked);
         }
     } else {
         selectIndex(appClicked->getIndex());

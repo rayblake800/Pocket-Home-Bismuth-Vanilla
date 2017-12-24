@@ -51,15 +51,15 @@ LauncherTestPage::LauncherTestPage ()
     Rectangle<int>screenArea=Desktop::getInstance().getDisplays().getMainDisplay().userArea;
     screenArea.reduce(20,20);
     //[Constructor] You can add your own custom stuff here..
-    appMenu=new AppMenu(configJSON,screenArea);
-    addAndMakeVisible(appMenu);
+    //appMenu=new AppMenu(configJSON,screenArea);
+    //addAndMakeVisible(appMenu);
     //[/Constructor]
 }
 
 LauncherTestPage::~LauncherTestPage()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-    appMenu=nullptr;
+    //appMenu=nullptr;
     //[/Destructor_pre]
 
     imageButton = nullptr;
@@ -113,33 +113,33 @@ void LauncherTestPage::buttonClicked (Button* buttonThatWasClicked)
 }
 
 bool LauncherTestPage::keyPressed(const KeyPress &key) {
-    //don't interrupt animation
-    if(Desktop::getInstance().getAnimator().isAnimating(appMenu))return false;
-    int keyCode = key.getKeyCode();
-    if(keyCode==KeyPress::upKey || keyCode==KeyPress::downKey){
-        if(keyCode==KeyPress::upKey)appMenu->selectPrevious();
-        else appMenu->selectNext();
-        grabKeyboardFocus();
-        return true;
-    }
-    else if(keyCode==KeyPress::leftKey || keyCode==KeyPress::escapeKey){
-        if(appMenu->activeColumn()>0){
-            appMenu->closeFolder();
-            grabKeyboardFocus();
-        }
-        else{
-            getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
-        }
-        return true;
-    }
-    else if(keyCode==KeyPress::returnKey || 
-            keyCode==KeyPress::spaceKey || 
-            keyCode==KeyPress::rightKey){
-        appMenu->clickSelected();
-        grabKeyboardFocus();
-        return true;
-    }
-    return false;
+//    //don't interrupt animation
+//    if(Desktop::getInstance().getAnimator().isAnimating(appMenu))return false;
+//    int keyCode = key.getKeyCode();
+//    if(keyCode==KeyPress::upKey || keyCode==KeyPress::downKey){
+//        if(keyCode==KeyPress::upKey)appMenu->selectPrevious();
+//        else appMenu->selectNext();
+//        grabKeyboardFocus();
+//        return true;
+//    }
+//    else if(keyCode==KeyPress::leftKey || keyCode==KeyPress::escapeKey){
+//        if(appMenu->activeColumn()>0){
+//            appMenu->closeFolder();
+//            grabKeyboardFocus();
+//        }
+//        else{
+//            getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
+//        }
+//        return true;
+//    }
+//    else if(keyCode==KeyPress::returnKey || 
+//            keyCode==KeyPress::spaceKey || 
+//            keyCode==KeyPress::rightKey){
+//        appMenu->clickSelected();
+//        grabKeyboardFocus();
+//        return true;
+//    }
+//    return false;
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...

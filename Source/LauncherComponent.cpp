@@ -239,24 +239,6 @@ clock(nullptr), labelip("ip", "")
   if (pagesData) {
     for (const auto &page : *pagesData) {
       auto name = page["name"].toString();
-      if (name == "Apps") {
-        
-        const auto& appButtons = appsPage->createIconsFromJsonArray(page["items"]);
-        for (auto button : appButtons) { button->setWantsKeyboardFocus(false); }
-        appsLibrary->createIconsFromJsonArray(page["items"]);
-        auto buttonsData = *(page["cornerButtons"].getArray());
-        
-        // FIXME: is there a better way to slice juce Array<var> ?
-        Array<var> topData{};
-        Array<var> botData{};
-        topData.add(buttonsData[0]);
-        topData.add(buttonsData[1]);
-        botData.add(buttonsData[2]);
-        botData.add(buttonsData[3]);
-        
-        topButtons->addButtonsFromJsonArray(topData);
-        botButtons->addButtonsFromJsonArray(botData);
-      }
     }
   }
   
@@ -352,13 +334,6 @@ void LauncherComponent::setIpVisible(bool v){
   labelip.setVisible(v);
 }
 
-void LauncherComponent::addIcon(const String& name, const String& path, const String& shell){
-  AppsPageComponent* appsPage = (AppsPageComponent*) pagesByName["Apps"];
-  DrawableButton* db = appsPage->createAndOwnIcon(name, path, shell);
-  db->setWantsKeyboardFocus(false);
-  appsPage->grid->showCurrentPage();
-  appsPage->checkShowPageNav();
-}
 
 void LauncherComponent::showLaunchSpinner() {
   DBG("Show launch spinner");
@@ -370,9 +345,6 @@ void LauncherComponent::hideLaunchSpinner() {
   launchSpinner->setVisible(false);
 }
 
-void LauncherComponent::showAppsLibrary() {
-  getMainStack().pushPage(pagesByName["AppsLibrary"], PageStackComponent::kTransitionTranslateHorizontalLeft);
-}
 
 void LauncherComponent::buttonClicked(Button *button) {
   auto currentPage = pageStack->getCurrentPage();
@@ -390,10 +362,3 @@ void LauncherComponent::buttonClicked(Button *button) {
   }
 }
 
-void LauncherComponent::deleteIcon(String name, String shell, Component* button){
-  SettingsPageComponent* system = (SettingsPageComponent*) pagesByName["Settings"];
-  system->deleteIcon(name,shell);
-  /* Deleting graphically, without rebooting the app */
-  AppsPageComponent* appsPage = (AppsPageComponent*) pagesByName["Apps"];
-  appsPage->removeIcon(button);
-}

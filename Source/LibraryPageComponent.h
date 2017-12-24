@@ -12,9 +12,6 @@ public:
   ScopedPointer<ImageButton> backButton;
   
   void paint(Graphics &g) override;
-  void resized() override;
-  
-  void buttonClicked(Button *button) override;
 private:
   Colour bgColor;
   
