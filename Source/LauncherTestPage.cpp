@@ -113,6 +113,8 @@ void LauncherTestPage::buttonClicked (Button* buttonThatWasClicked)
 }
 
 bool LauncherTestPage::keyPressed(const KeyPress &key) {
+    //don't interrupt animation
+    if(Desktop::getInstance().getAnimator().isAnimating(appMenu))return false;
     int keyCode = key.getKeyCode();
     if(keyCode==KeyPress::upKey || keyCode==KeyPress::downKey){
         if(keyCode==KeyPress::upKey)appMenu->selectPrevious();
