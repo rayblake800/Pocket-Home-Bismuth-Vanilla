@@ -17,7 +17,7 @@ xPos(xPos),yPos(yPos){
     buttonWidth = configJson["menuButtonWidth"];
     buttonHeight = configJson["menuButtonHeight"];
     selected.push_back(NULL);
-    columnTops.push_back(yPos);
+    columnTops.push_back(0);
     buttonColumns.emplace(buttonColumns.begin());
 
     //read in main page apps from config
@@ -163,10 +163,10 @@ void AppMenu::scrollToSelected() {
         int distanceFromCenter = abs(buttonPos-getY()+screenHeight/2);
         //only scroll vertically if selected button is outside the center 3/5 
         if(distanceFromCenter>screenHeight/5*3){
-            dest.setY(columnTops[column]-buttonPos + screenHeight / 2 - buttonHeight / 2);
+            dest.setY(yPos-buttonPos + screenHeight / 2 - buttonHeight / 2);
         }
-        if (dest.getY() > columnTops[column]) {
-            dest.setY(columnTops[column]);
+        if (dest.getY() > yPos) {
+            dest.setY(yPos);
         } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {
             dest.setBottom(screenHeight);
         }
