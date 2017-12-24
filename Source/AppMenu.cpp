@@ -47,6 +47,7 @@ xPos(xPos),yPos(yPos){
                 buttonWidth, buttonHeight));
     }
     DBG(String("added ") + String(buttonColumns[activeColumn()].size()) + " buttons");
+    scrollToSelected();
 }
 
 AppMenu::~AppMenu() {
@@ -170,7 +171,7 @@ void AppMenu::scrollToSelected() {
         } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {
             dest.setBottom(screenHeight);
         }
-    } else dest.setY(columnTops[column]);
+    } else dest.setY(yPos-columnTops[column]);
     if (column == 0)dest.setX(xPos);
     else {
         dest.setX(xPos-column * buttonWidth + buttonHeight);
