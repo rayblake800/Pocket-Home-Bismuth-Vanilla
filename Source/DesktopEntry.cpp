@@ -164,6 +164,7 @@ String DesktopEntry::getIconPath() {
     if (!iconPathsMapped)mapIcons();
     String fullPath = iconPaths[icon];
     if (fullPath.isEmpty()) {
+        DBG(String("DesktopEntry::Couldn't find icon ")+icon);
         return type == DIRECTORY ? String(DEFAULT_DIRECTORY_ICON_PATH) :
                 String(DEFAULT_APP_ICON_PATH);
     }

@@ -64,6 +64,6 @@ public:
       int index;
       //containing column number, counted left to right
       int column;
-      Colour fillColour = Colour (0xff939089);
+      Colour fillColour = Colours::transparentBlack;
       Colour selectedFillColour = Colour (0xffffade8);
 };

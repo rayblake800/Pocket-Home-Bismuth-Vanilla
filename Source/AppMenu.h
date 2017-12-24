@@ -56,7 +56,7 @@ private:
     DesktopEntries desktopEntries;
     void selectIndex(int index);
     void addButton(AppMenuButton* appButton);
-    void scrollTo(Rectangle<int> dest);
+    void scrollToSelected();
     std::map<String,AppMenuButton*> nameMap;
 
     //all buttons in each column
