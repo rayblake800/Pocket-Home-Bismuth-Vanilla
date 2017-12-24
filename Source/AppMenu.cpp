@@ -163,14 +163,14 @@ void AppMenu::scrollToSelected() {
         int distanceFromCenter = abs(buttonPos-getY()+screenHeight/2);
         //only scroll vertically if selected button is outside the center 3/5 
         if(distanceFromCenter>screenHeight/5*3){
-            dest.setY(yPos-buttonPos + screenHeight / 2 - buttonHeight / 2);
+            dest.setY(columnTops[column]-buttonPos + screenHeight / 2 - buttonHeight / 2);
         }
-        if (dest.getY() > yPos) {
-            dest.setY(yPos);
+        if (dest.getY() > columnTops[column]) {
+            dest.setY(columnTops[column]);
         } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {
             dest.setBottom(screenHeight);
         }
-    } else dest.setY(yPos);
+    } else dest.setY(columnTops[column]);
     if (column == 0)dest.setX(xPos);
     else {
         dest.setX(xPos-column * buttonWidth + buttonHeight);
