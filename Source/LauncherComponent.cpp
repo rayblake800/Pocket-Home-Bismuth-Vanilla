@@ -239,6 +239,24 @@ clock(nullptr), labelip("ip", "")
   if (pagesData) {
     for (const auto &page : *pagesData) {
       auto name = page["name"].toString();
+        if (name == "Apps") {
+        
+        //const auto& appButtons = appsPage->createIconsFromJsonArray(page["items"]);
+        //for (auto button : appButtons) { button->setWantsKeyboardFocus(false); }
+        //appsLibrary->createIconsFromJsonArray(page["items"]);
+        auto buttonsData = *(page["cornerButtons"].getArray());
+        
+        // FIXME: is there a better way to slice juce Array<var> ?
+        Array<var> topData{};
+        Array<var> botData{};
+        topData.add(buttonsData[0]);
+        topData.add(buttonsData[1]);
+        botData.add(buttonsData[2]);
+        botData.add(buttonsData[3]);
+        
+        topButtons->addButtonsFromJsonArray(topData);
+        botButtons->addButtonsFromJsonArray(botData);
+      }
     }
   }
   
