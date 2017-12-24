@@ -40,6 +40,7 @@ DesktopEntries::DesktopEntries() {
         String path = *it;
         if (std::regex_search(path.toStdString(), dfileMatch)) {
             DesktopEntry de(path, localeName);
+            if(de.hidden()||de.noDisplay())continue;
             categories["All"].push_back(de);
             std::vector<String> deCats = de.getCategories();
             if (deCats.empty())categories["Other"].push_back(de);
