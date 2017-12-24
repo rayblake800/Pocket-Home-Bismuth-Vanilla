@@ -66,7 +66,7 @@ void AppMenuButton::paint(Graphics& g) {
     int height = getHeight();
     //std::cout<<"drawing "<<getAppName()<<" at "<<x<<","<<y<<","<<width<<","<<height<<"\n";
     g.setColour(Colours::black);
-    g.drawRect(x,y,width,height,2);
+    //g.drawRect(x,y,width,height,2);
     //g.drawRoundedRectangle(Rectangle<float>(x,y,width,height),10.0f,2.0f);
     g.setColour(selected ? selectedFillColour : fillColour);
     g.setOpacity(.5);

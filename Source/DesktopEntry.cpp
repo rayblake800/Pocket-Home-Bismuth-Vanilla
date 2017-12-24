@@ -157,8 +157,12 @@ String DesktopEntry::getComment() {
 }
 
 String DesktopEntry::getIconPath() {
+    String icon=appStrings["Icon"];
+    //if the icon variable is a full path, return that
+    if(icon.substring(0,1)=="/")return icon;
+    //otherwise check the iconPaths map
     if (!iconPathsMapped)mapIcons();
-    String fullPath = iconPaths[appStrings["Icon"]];
+    String fullPath = iconPaths[icon];
     if (fullPath.isEmpty()) {
         return type == DIRECTORY ? String(DEFAULT_DIRECTORY_ICON_PATH) :
                 String(DEFAULT_APP_ICON_PATH);

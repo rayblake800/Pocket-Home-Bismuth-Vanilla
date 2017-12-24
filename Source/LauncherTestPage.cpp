@@ -123,14 +123,18 @@ bool LauncherTestPage::keyPressed(const KeyPress &key) {
     else if(keyCode==KeyPress::leftKey || keyCode==KeyPress::escapeKey){
         if(appMenu->activeColumn()>0){
             appMenu->closeFolder();
+            grabKeyboardFocus();
         }
         else{
             getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
         }
         return true;
     }
-    else if(keyCode==KeyPress::returnKey || keyCode==KeyPress::spaceKey){
+    else if(keyCode==KeyPress::returnKey || 
+            keyCode==KeyPress::spaceKey || 
+            keyCode==KeyPress::rightKey){
         appMenu->clickSelected();
+        grabKeyboardFocus();
         return true;
     }
     return false;

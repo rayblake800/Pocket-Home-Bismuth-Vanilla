@@ -107,6 +107,7 @@ std::vector<DesktopEntry> DesktopEntries::getMainCategories(bool excludeUnused) 
     for (int i = 0; i < mainCategories.size(); i++) {
         String category = mainCategories[i];
         if (categories[category].size() > 0 || !excludeUnused) {
+            DBG(String("Found category ")+category+String(",size ")+String(categories[category].size()));
             categoryEntries.push_back(DesktopEntry(category));
         }
     }
