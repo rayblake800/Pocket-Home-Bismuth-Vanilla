@@ -7,6 +7,7 @@
 
 #include <sstream>
 #include <functional>
+#include <stdlib.h>
 #include "Utils.h"
 #include "AppMenu.h"
 
@@ -97,7 +98,7 @@ void AppMenu::buttonClicked(Button * buttonClicked) {
             openFolder(appClicked->getAppName());
         }
     } else {
-        //launch commands to go here
+        selectIndex(appClicked->getIndex());
     }
 }
 
@@ -150,7 +151,11 @@ void AppMenu::scrollToSelected() {
     if (selectedButton != NULL) {
         int buttonPos = selectedButton->getY();
         int screenHeight = Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight();
-        dest.setY(-buttonPos + screenHeight / 2 - buttonHeight / 2);
+        int distanceFromCenter = abs(buttonPos-getY()+screenHeight/2);
+        //only scroll vertically if selected button is outside the center 3/5 
+        if(distanceFromCenter>screenHeight/5*3){
+            dest.setY(-buttonPos + screenHeight / 2 - buttonHeight / 2);
+        }
         if (dest.getY() > 0) {
             dest.setY(0);
         } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {

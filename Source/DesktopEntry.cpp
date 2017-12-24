@@ -168,7 +168,7 @@ String DesktopEntry::getComment() {
 
 String DesktopEntry::getIconPath() {
     String icon = appStrings["Icon"];
-    DBG(String("Searching for ")+icon);
+    //DBG(String("Searching for ")+icon);
     //if the icon variable is a full path, return that
     if (icon.substring(0, 1) == "/")return icon;
     //otherwise check the iconPaths map
@@ -275,7 +275,7 @@ void DesktopEntry::mapIcons() {
                 String filename = iconMatch.str(1);
                 if (this->iconPaths[filename].isEmpty()) {
                     this->iconPaths[filename] = path + iconMatch.str(0);
-                    DBG(filename+String("=")+path+iconMatch.str(0));
+                    //DBG(filename+String("=")+path+iconMatch.str(0));
                 }
             }
             return false;
@@ -306,8 +306,11 @@ void DesktopEntry::mapIcons() {
                     }
             return false;
         });
+        DBG(String("Searching ")+String(dirs.size())+String(" subdirectories"));
         foreach(dirs, [path, this, &recursiveIconSearch](String subDir)->bool {
-            recursiveIconSearch(path + subDir + "/");
+            String subPath=path+subDir+"/";
+            DBG(String("About to search ")+subPath);
+            recursiveIconSearch(subPath);
         });
         iconPathsMapped = true;
 
@@ -361,7 +364,7 @@ void DesktopEntry::mapIcons() {
 
     //finally, run recursive mapping for all directories
     for (int i = 0; i < checkPaths.size(); i++) {
-        DBG(String("Mapping icon files under ") + checkPaths[i]);
+        //DBG(String("Mapping icon files under ") + checkPaths[i]);
         recursiveIconSearch(checkPaths[i]);
     }
 }
