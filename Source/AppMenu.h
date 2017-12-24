@@ -18,8 +18,6 @@ public:
     AppMenu(const var &configJson,Rectangle<int>drawRegion);
     virtual ~AppMenu();
     
-    void paint (Graphics& g) override;
-    
     /**
      * Open an application category folder, creating AppMenuButtons for all
      * associated desktop applications.

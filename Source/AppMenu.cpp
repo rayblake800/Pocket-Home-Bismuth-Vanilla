@@ -54,10 +54,6 @@ AppMenu::~AppMenu() {
     while (!buttonColumns.empty())closeFolder();
 }
 
-void AppMenu::paint (Graphics& g){
-    g.reduceClipRegion(drawRegion);
-    this->Component::paint(g);
-}
 
 /**
  * Open an application category folder, creating AppMenuButtons for all
@@ -204,6 +200,7 @@ void AppMenu::addButton(AppMenuButton * appButton) {
     appButton->setEnabled(true);
     appButton->setVisible(true);
     appButton->addListener(this);
+    appButton->setClipRegion(drawRegion);
     this->nameMap[appButton->getName()] = appButton;
     this->buttonColumns[column].push_back(appButton);
     if ((x + w) > getWidth())setBounds(getX(), getY(), x + w, getHeight());

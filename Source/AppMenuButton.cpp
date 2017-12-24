@@ -58,7 +58,16 @@ int AppMenuButton::getColumn(){
     return column;
 }
 
+//If called, the button will not be drawn outside of clipRegion
+  void AppMenuButton::setClipRegion(Rectangle<int>clipRegion){
+      this->clipRegion=clipRegion;
+      clip=true;
+  }
+
 void AppMenuButton::paint(Graphics& g) {
+    if(clip){
+        g.reduceClipRegion(clipRegion);
+    }
     //background
     int x=0;
     int y=0;

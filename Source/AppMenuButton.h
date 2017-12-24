@@ -54,6 +54,12 @@ public:
    */
   int getColumn();
   
+  /**
+   * If called, the button will not be drawn outside of clipRegion
+   * @param clipRegion a rectangle relative to the parent component
+   */
+  void setClipRegion(Rectangle<int>clipRegion);
+  
     //custom button draw routines
   void paint (Graphics& g) override;
   private:
@@ -66,4 +72,6 @@ public:
       int column;
       Colour fillColour = Colours::transparentWhite;
       Colour selectedFillColour = Colour (0xffeb008b);
+      bool clip=false;
+      Rectangle<int> clipRegion;
 };
