@@ -122,7 +122,7 @@ DesktopEntry::DesktopEntry(String category) {
     mapInit();
     type = DIRECTORY;
     appStrings["Name"] = category;
-    appStrings["Icon"] = category;
+    appStrings["Icon"] = String("applications-")+category;
     appStrings["Exec"] = "OPEN:" + category;
 }
 
@@ -320,7 +320,6 @@ void DesktopEntry::mapIcons() {
         DBG(String("Searching ")+String(dirs.size())+String(" subdirectories"));
         foreach(dirs, [path, this, &recursiveIconSearch](String subDir)->bool {
             String subPath=path+subDir+"/";
-            DBG(String("About to search ")+subPath);
             recursiveIconSearch(subPath);
             return false;
         });
