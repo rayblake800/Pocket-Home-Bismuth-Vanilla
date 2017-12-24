@@ -311,6 +311,7 @@ void DesktopEntry::mapIcons() {
             String subPath=path+subDir+"/";
             DBG(String("About to search ")+subPath);
             recursiveIconSearch(subPath);
+            return false;
         });
         iconPathsMapped = true;
 
