@@ -26,7 +26,7 @@ void AppDebounceTimer::timerCallback() {
 AppListComponent::AppListComponent(Component* parent, bool ishorizontal) {
     var config = getConfigJSON();
     Rectangle<int> appMenuBorder = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
-    appMenuBorder.reduce(50);
+    appMenuBorder.reduce(50,50);
     appMenu=new AppMenu(config,appMenuBorder);
     addAndMakeVisible(appMenu);
 }
