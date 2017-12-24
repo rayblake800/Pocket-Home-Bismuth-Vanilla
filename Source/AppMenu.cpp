@@ -19,6 +19,7 @@ drawRegion(drawRegion) {
     selected.push_back(NULL);
     columnTops.push_back(0);
     buttonColumns.emplace(buttonColumns.begin());
+    launchFunction=[](String command){};
 
     //read in main page apps from config
     Array<var>* pagesData = configJson["pages"].getArray();
@@ -129,7 +130,7 @@ void AppMenu::buttonClicked(Button * buttonClicked) {
 void AppMenu::paint(Graphics& g){
     g.reduceClipRegion(drawRegion);
     g.setColour(Colours::black);
-    g.drawRect(drawRegion,2);
+    g.drawRect(drawRegion.translated(-getX(),-getY()),2);
 }
 
 void AppMenu::selectIndex(int index) {
