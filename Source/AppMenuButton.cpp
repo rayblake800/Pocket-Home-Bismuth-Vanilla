@@ -83,7 +83,7 @@ void AppMenuButton::paint(Graphics& g) {
     }
     //background
     g.setColour(selected ? selectedFillColour : fillColour);
-    g.setOpacity(.2);
+    g.setOpacity(selected?.2:.8);
     g.fillRect(border);
     g.setOpacity(1);
     //app icon
@@ -106,6 +106,6 @@ void AppMenuButton::paint(Graphics& g) {
     textBox.reduce(4,4);
     g.drawText(getAppName(),textBox,Justification::centredLeft, true);
     g.setColour(Colours::black);
-    g.setOpacity(selected ? 1.0 : 0.4);
+    g.setOpacity(selected ? 1.0 : 0.8);
     g.drawRect(border, 2);
 }
