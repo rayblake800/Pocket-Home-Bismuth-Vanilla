@@ -65,7 +65,6 @@ void AppMenu::closeFolder() {
 }
 
 //handle AppMenuButton clicks
-
 void AppMenu::buttonClicked(Button* buttonClicked) {
     AppMenuButton * appClicked = (AppMenuButton *) buttonClicked;
     while (appClicked->getColumn() < activeColumn()) {
@@ -76,26 +75,27 @@ void AppMenu::buttonClicked(Button* buttonClicked) {
             openFolder(appClicked->getAppName());
         }
     } else {
-        if (selected[activeColumn()] != NULL) {
-            selected[activeColumn()]->setSelected(false);
-            selected[activeColumn()]->repaint();
-        }
-        selected[activeColumn()] = appClicked;
-        selected[activeColumn()]->setSelected(true);
-        selected[activeColumn()]->repaint();
-
-        //move AppMenu to center the selected button, if it's not near an edge
-        scrollToSelected();
+        //launch commands to go here
     }
 }
 
 void AppMenu::selectIndex(int index) {
-    if (index < buttonColumns[activeColumn()].size()
-            && index >= 0)buttonColumns[activeColumn()][index]->triggerClick();
+    int column = activeColumn();
+    if (index >= buttonColumns[column].size() 
+            || index < 0
+            || selected[column]==buttonColumns[column][index])return;
+    if (selected[column] != NULL) {
+        selected[column]->setSelected(false);
+        selected[column]->repaint();
+    }
+    selected[column] = buttonColumns[column][index];
+    selected[column]->setSelected(true);
+    selected[column]->repaint();
+    //move AppMenu to center the selected button, if it's not near an edge
+    scrollToSelected();
 }
 
 //Select the next appMenuButton in the active button column.
-
 void AppMenu::selectNext() {
     if (selected[activeColumn()] == NULL)selectIndex(0);
     else selectIndex(selected[activeColumn()]->getIndex() + 1);
@@ -144,7 +144,6 @@ void AppMenu::scrollToSelected() {
     }
     animator.animateComponent(this, dest, getAlpha(), 100, true, 1, 1);
 }
-
 
 void AppMenu::addButton(AppMenuButton* appButton) {
     int index = appButton->getIndex();
