@@ -183,6 +183,16 @@ String DesktopEntry::getIconPath() {
     String fullPath = iconPaths[icon];
     if (fullPath.isEmpty()) {
         DBG(String("DesktopEntry::Couldn't find icon ") + icon);
+        for(std::map<String,String>::iterator it = iconPaths.begin();
+                it!= iconPaths.end();it++){
+            String iconCandidate=it->first;
+            if(iconCandidate.containsIgnoreCase(icon) ||
+                    icon.containsIgnoreCase(iconCandidate)){
+                DBG(icon+String("~")+iconCandidate);
+                iconPaths[icon]=it->second;
+                return it->second;
+            }
+        }
         return type == DIRECTORY ? String(DEFAULT_DIRECTORY_ICON_PATH) :
                 String(DEFAULT_APP_ICON_PATH);
     }
