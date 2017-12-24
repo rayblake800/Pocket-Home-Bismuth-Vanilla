@@ -174,7 +174,7 @@ String DesktopEntry::getIconPath() {
     //if icon is a partial path, trim it
     if(icon.contains("/"))icon=icon.substring(1+icon.lastIndexOf("/"));
     //if icon contains file extensions, trim them
-    std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
+    std::regex iconPattern("^(.+)\\.(png|svg)$", std::regex::ECMAScript | std::regex::icase);
     std::smatch iconMatch;
     std::string searchString=icon.toStdString();
     if(std::regex_search(searchString,iconMatch,iconPattern))icon=iconMatch.str(1);
@@ -265,7 +265,7 @@ void DesktopEntry::mapIcons() {
     recursiveIconSearch = [&recursiveIconSearch, this](String path) {
         //first, map image files with new names
         std::vector<String> files = listFiles(path);
-        std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
+        std::regex iconPattern("^(.+)\\.(png|svg)$", std::regex::ECMAScript | std::regex::icase);
         std::smatch iconMatch;
         foreach(files, [path, &iconPattern, &iconMatch, this](String file)->bool {
             std::string fileStr = file.toStdString();
