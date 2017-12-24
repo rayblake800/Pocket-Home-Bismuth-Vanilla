@@ -125,6 +125,13 @@ void AppMenu::buttonClicked(Button * buttonClicked) {
     }
 }
 
+//custom draw routines
+void AppMenu::paint(Graphics& g){
+    g.reduceClipRegion(drawRegion);
+    g.setColour(Colours::black);
+    g.drawRect(drawRegion,2);
+}
+
 void AppMenu::selectIndex(int index) {
     int column = activeColumn();
     if (index >= buttonColumns[column].size()
