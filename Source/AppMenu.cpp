@@ -21,7 +21,10 @@ AppMenu::AppMenu(const var &configJson) {
             if (name == "Apps") {
                 var items = page["items"];
                 for (const var &item : *items.getArray()) {
-                    if (item["name"] && item["shell"] && item["icon"]) {
+                    if (item["name"].isString() 
+                            && item["shell"].isString() 
+                            && item["icon"].isString()) {
+                        DBG(String("AppMenu:Found app in config:")+item["name"].toString());
                         addButton(new AppMenuButton(DesktopEntry(item),
                                 buttonColumns[activeColumn()].size(), activeColumn(),
                                 buttonWidth, buttonHeight));
