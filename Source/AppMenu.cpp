@@ -126,12 +126,12 @@ void AppMenu::buttonClicked(Button * buttonClicked) {
     }
 }
 
-//custom draw routines
-void AppMenu::paint(Graphics& g){
-    g.reduceClipRegion(drawRegion);
-    g.setColour(Colours::black);
-    g.drawRect(drawRegion.translated(-getX(),-getY()),2);
-}
+////custom draw routines
+//void AppMenu::paint(Graphics& g){
+//    g.reduceClipRegion(drawRegion);
+//    g.setColour(Colours::black);
+//    g.drawRect(drawRegion.translated(-getX(),-getY()),2);
+//}
 
 void AppMenu::selectIndex(int index) {
     int column = activeColumn();

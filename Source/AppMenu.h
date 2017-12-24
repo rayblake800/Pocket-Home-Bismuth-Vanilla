@@ -41,8 +41,8 @@ public:
     //handle AppMenuButton clicks
     void buttonClicked(Button* buttonClicked) override;
     
-    //custom draw routines
-    void paint(Graphics& g) override;
+//    //custom draw routines
+//    void paint(Graphics& g) override;
     
     /**
      * Select the next appMenuButton in the active button column.
