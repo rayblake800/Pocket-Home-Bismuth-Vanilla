@@ -136,7 +136,7 @@ void AppMenu::scrollToSelected() {
     } else dest.setY(0);
     if (column == 0)dest.setX(0);
     else {
-        dest.setX(column * buttonWidth + buttonHeight);
+        dest.setX(-column * buttonWidth + buttonHeight);
     }
     ComponentAnimator& animator = Desktop::getInstance().getAnimator();
     if (animator.isAnimating(this)) {
