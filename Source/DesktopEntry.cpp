@@ -264,6 +264,7 @@ bool DesktopEntry::startupNotify() {
 void DesktopEntry::mapIcons() {
     std::function<void(String) > recursiveIconSearch;
     recursiveIconSearch = [&recursiveIconSearch, this](String path) {
+        DBG(String("Running recursive icon search on ")+path);
         //first, map image files with new names
         std::vector<String> files = listFiles(path);
         std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
