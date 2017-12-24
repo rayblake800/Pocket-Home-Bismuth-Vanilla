@@ -71,14 +71,15 @@ void AppMenuButton::paint(Graphics& g) {
     g.fillRect(x,y,width,height);
     g.setOpacity(1);
     //app icon
-    Rectangle<float> imgBox(x + 2, +2, height - 4, height - 4);
+    Rectangle<float> imgBox(x+2,y+2,height-4,height-4);
     if(getScreenX()<0){
-        imgBox.setX(-getScreenX()+2);
+        imgBox.setX(2-getScreenX());
     }
     if(imgBox.getRight() > getRight()){
         imgBox.setRight(getRight()-2);
     }
-    g.drawImageWithin(appIcon,x+2,y+2,height-4,height-4,RectanglePlacement::centred,false);
+    g.drawImageWithin(appIcon,imgBox.getX(),imgBox.getY(),
+            imgBox.getWidth(),imgBox.getHeight(),RectanglePlacement::centred,false);
     //app title
     g.setColour(Colours::black);
     g.setFont(Font(15.00f, Font::plain));
