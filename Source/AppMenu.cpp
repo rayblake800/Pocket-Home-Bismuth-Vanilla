@@ -12,8 +12,8 @@
 #include "Utils.h"
 #include "AppMenu.h"
 
-AppMenu::AppMenu(const var &configJson,int xPos,int yPos) :
-xPos(xPos),yPos(yPos){
+AppMenu::AppMenu(const var &configJson, int xPos, int yPos) :
+xPos(xPos), yPos(yPos) {
     buttonWidth = configJson["menuButtonWidth"];
     buttonHeight = configJson["menuButtonHeight"];
     selected.push_back(NULL);
@@ -28,10 +28,10 @@ xPos(xPos),yPos(yPos){
             if (name == "Apps") {
                 var items = page["items"];
                 for (const var &item : *items.getArray()) {
-                    if (item["name"].isString() 
-                            && item["shell"].isString() 
+                    if (item["name"].isString()
+                            && item["shell"].isString()
                             && item["icon"].isString()) {
-                        DBG(String("AppMenu:Found app in config:")+item["name"].toString());
+                        DBG(String("AppMenu:Found app in config:") + item["name"].toString());
                         addButton(new AppMenuButton(DesktopEntry(item),
                                 buttonColumns[activeColumn()].size(), activeColumn(),
                                 buttonWidth, buttonHeight));
@@ -61,9 +61,9 @@ AppMenu::~AppMenu() {
 void AppMenu::openFolder(String categoryName) {
     std::vector<DesktopEntry> folderItems = desktopEntries.getCategoryEntries(categoryName);
     if (folderItems.empty())return;
-    int columnTop=yPos;
-    if(selected[activeColumn()]!=NULL){
-        columnTop=selected[activeColumn()]->getY();
+    int columnTop = yPos;
+    if (selected[activeColumn()] != NULL) {
+        columnTop = selected[activeColumn()]->getY();
     }
     selected.push_back(NULL);
     columnTops.push_back(columnTop);
@@ -100,8 +100,12 @@ void AppMenu::closeFolder() {
 
 void AppMenu::buttonClicked(Button * buttonClicked) {
     AppMenuButton * appClicked = (AppMenuButton *) buttonClicked;
-    while (appClicked->getColumn() < activeColumn()) {
-        closeFolder();
+    if (appClicked->getColumn() < activeColumn()) {
+        while (appClicked->getColumn() < activeColumn()) {
+            closeFolder();
+        }
+        selectIndex(appClicked->getIndex());
+        return;
     }
     if (selected[activeColumn()] == appClicked) {
         if (appClicked->isFolder()) {
@@ -161,20 +165,20 @@ void AppMenu::scrollToSelected() {
     if (selectedButton != NULL) {
         int buttonPos = selectedButton->getY();
         int screenHeight = Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight();
-        int distanceFromCenter = abs(buttonPos-getY()+screenHeight/2);
+        int distanceFromCenter = abs(buttonPos - getY() + screenHeight / 2);
         //only scroll vertically if selected button is outside the center 3/5 
-        if(distanceFromCenter>screenHeight/5*3){
-            dest.setY(yPos-buttonPos + screenHeight / 2 - buttonHeight / 2);
+        if (distanceFromCenter > screenHeight / 5 * 3) {
+            dest.setY(yPos - buttonPos + screenHeight / 2 - buttonHeight / 2);
         }
         if (dest.getY() > yPos) {
             dest.setY(yPos);
         } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {
             dest.setBottom(screenHeight);
         }
-    } else dest.setY(yPos-columnTops[column]);
+    } else dest.setY(yPos - columnTops[column]);
     if (column == 0)dest.setX(xPos);
     else {
-        dest.setX(xPos-column * buttonWidth + buttonHeight);
+        dest.setX(xPos - column * buttonWidth + buttonHeight);
     }
     ComponentAnimator& animator = Desktop::getInstance().getAnimator();
     if (animator.isAnimating(this)) {
@@ -188,8 +192,8 @@ void AppMenu::addButton(AppMenuButton * appButton) {
     int column = appButton->getColumn();
     int w = appButton->getWidth();
     int h = appButton->getHeight();
-    int x = xPos+column*w;
-    int y = columnTops[column]+h*buttonColumns[column].size();
+    int x = xPos + column*w;
+    int y = columnTops[column] + h * buttonColumns[column].size();
     appButton->setBounds(x, y, w, h);
     addAndMakeVisible(appButton);
     appButton->setEnabled(true);
