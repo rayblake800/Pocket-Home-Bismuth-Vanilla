@@ -331,6 +331,7 @@ void DesktopEntry::mapIcons() {
     std::vector<String> checkPaths;
     std::vector<String> basePaths = {
         getHomePath() + "/.icons/",
+        getHomePath() + "/.local/share/icons",
         "/usr/share/pocket-home/appIcons/",
         "/usr/share/icons/",
         "/usr/local/icons/",

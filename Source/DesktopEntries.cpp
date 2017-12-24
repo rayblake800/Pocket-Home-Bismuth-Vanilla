@@ -19,15 +19,20 @@ DesktopEntries::DesktopEntries() {
     //read the contents of all desktop application directories
     DBG("finding desktop entries...");
     std::vector<String> dirs = {
-        "~/.local/share/applications",
+        getHomePath()+"/.local/share/applications",
         "/usr/share/applications",
         "/usr/local/share/applications"
     };
+    //track entry names and ignore duplicates
+    std::map<String,bool> filesFound;
     std::vector<String> files{};
     for (int i = 0; i < dirs.size(); i++) {
         std::vector<String> dfiles = listFiles(dirs[i]);
         for (int i2 = 0; i2 < dfiles.size(); i2++) {
-            files.push_back(dirs[i] + "/" + dfiles[i2]);
+            if(!filesFound[dfiles[i2]]){
+                files.push_back(dirs[i] + "/" + dfiles[i2]);
+                filesFound[dfiles[i2]]=true;
+            }
         }
     }
     DBG(String("Reading ") + String(files.size())+" potential desktop files");

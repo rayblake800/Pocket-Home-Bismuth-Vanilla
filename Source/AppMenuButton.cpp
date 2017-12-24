@@ -50,7 +50,11 @@ String AppMenuButton::getAppName() {
 //return application shell command or directory path.
 
 String AppMenuButton::getCommand() {
-    return desktopEntry.getExec();
+    String command=desktopEntry.getExec();
+    if(desktopEntry.terminal()){
+        command = String(std::getenv("TERM"))+" "+command;
+    }
+    return command;
 }
 
 //return button position in its column
