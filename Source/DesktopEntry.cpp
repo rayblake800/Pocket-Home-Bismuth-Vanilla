@@ -186,9 +186,10 @@ String DesktopEntry::getIconPath() {
         for(std::map<String,String>::iterator it = iconPaths.begin();
                 it!= iconPaths.end();it++){
             String iconCandidate=it->first;
-            if(iconCandidate.containsIgnoreCase(icon) ||
-                    icon.containsIgnoreCase(iconCandidate)){
-                DBG(icon+String("~")+iconCandidate);
+            if(!it->second.isEmpty() &&
+                    (iconCandidate.containsIgnoreCase(icon) ||
+                    icon.containsIgnoreCase(iconCandidate))){
+                DBG(icon+String("~")+iconCandidate+String("=")+it->second);
                 iconPaths[icon]=it->second;
                 return it->second;
             }
