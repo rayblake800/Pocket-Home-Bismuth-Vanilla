@@ -12,8 +12,8 @@
 #include "Utils.h"
 #include "AppMenu.h"
 
-AppMenu::AppMenu(const var &configJson, int xPos, int yPos) :
-xPos(xPos), yPos(yPos) {
+AppMenu::AppMenu(const var &configJson, Rectangle<int>drawRegion) :
+drawRegion(drawRegion){
     buttonWidth = configJson["menuButtonWidth"];
     buttonHeight = configJson["menuButtonHeight"];
     selected.push_back(NULL);
@@ -54,6 +54,11 @@ AppMenu::~AppMenu() {
     while (!buttonColumns.empty())closeFolder();
 }
 
+void AppMenu::paint (Graphics& g){
+    g.reduceClipRegion(drawRegion);
+    this->Component::paint(g);
+}
+
 /**
  * Open an application category folder, creating AppMenuButtons for all
  * associated desktop applications.
@@ -61,7 +66,7 @@ AppMenu::~AppMenu() {
 void AppMenu::openFolder(String categoryName) {
     std::vector<DesktopEntry> folderItems = desktopEntries.getCategoryEntries(categoryName);
     if (folderItems.empty())return;
-    int columnTop = yPos;
+    int columnTop = drawRegion.getY();
     if (selected[activeColumn()] != NULL) {
         columnTop = selected[activeColumn()]->getY();
     }
@@ -168,17 +173,17 @@ void AppMenu::scrollToSelected() {
         int distanceFromCenter = abs(buttonPos - getY() + screenHeight / 2);
         //only scroll vertically if selected button is outside the center 3/5 
         if (distanceFromCenter > screenHeight / 5 * 3) {
-            dest.setY(yPos - buttonPos + screenHeight / 2 - buttonHeight / 2);
+            dest.setY(drawRegion.getY() - buttonPos + screenHeight / 2 - buttonHeight / 2);
         }
-        if (dest.getY() > yPos) {
-            dest.setY(yPos);
+        if (dest.getY() > drawRegion.getY()) {
+            dest.setY(drawRegion.getY());
         } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {
             dest.setBottom(screenHeight);
         }
-    } else dest.setY(yPos - columnTops[column]);
-    if (column == 0)dest.setX(xPos);
+    } else dest.setY(drawRegion.getY() - columnTops[column]);
+    if (column == 0)dest.setX(drawRegion.getX());
     else {
-        dest.setX(xPos - column * buttonWidth + buttonHeight);
+        dest.setX(drawRegion.getX() - column * buttonWidth + buttonHeight);
     }
     ComponentAnimator& animator = Desktop::getInstance().getAnimator();
     if (animator.isAnimating(this)) {
@@ -192,7 +197,7 @@ void AppMenu::addButton(AppMenuButton * appButton) {
     int column = appButton->getColumn();
     int w = appButton->getWidth();
     int h = appButton->getHeight();
-    int x = xPos + column*w;
+    int x = drawRegion.getX() + column*w;
     int y = columnTops[column] + h * buttonColumns[column].size();
     appButton->setBounds(x, y, w, h);
     addAndMakeVisible(appButton);

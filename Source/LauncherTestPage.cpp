@@ -18,7 +18,6 @@
 */
 
 //[Headers] You can add your own extra header files here...
-#include <sstream>
 #include "Utils.h"
 #include "Main.h"
 //[/Headers]
@@ -36,22 +35,23 @@ LauncherTestPage::LauncherTestPage ()
     var configJSON = getConfigJSON();
     //[/Constructor_pre]
 
-    addAndMakeVisible (imageButton = new ImageButton ("new button"));
-    imageButton->addListener (this);
+    //addAndMakeVisible (imageButton = new ImageButton ("new button"));
+    //imageButton->addListener (this);
 
-    imageButton->setImages (false, true, true,
-                            ImageCache::getFromMemory (icon_png, icon_pngSize), 1.000f, Colour (0x00000000),
-                            Image(), 1.000f, Colour (0x00000000),
-                            Image(), 1.000f, Colour (0x00000000));
+    //imageButton->setImages (false, true, true,
+    //                        ImageCache::getFromMemory (icon_png, icon_pngSize), 1.000f, Colour (0x00000000),
+    //                        Image(), 1.000f, Colour (0x00000000),
+    //                       Image(), 1.000f, Colour (0x00000000));
 
     //[UserPreSize]
     //[/UserPreSize]
 
     setSize (600, 400);
     setWantsKeyboardFocus(true);
-
+    Rectangle<int>screenArea=Desktop::getInstance().getDisplays().getMainDisplay().userArea;
+    screenArea.reduce(20,20);
     //[Constructor] You can add your own custom stuff here..
-    appMenu=new AppMenu(configJSON,20,20);
+    appMenu=new AppMenu(configJSON,screenArea);
     addAndMakeVisible(appMenu);
     //[/Constructor]
 }

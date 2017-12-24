@@ -15,8 +15,10 @@
 class AppMenu : public Component,
 public Button::Listener{
 public:
-    AppMenu(const var &configJson,int xPos,int yPos);
+    AppMenu(const var &configJson,Rectangle<int>drawRegion);
     virtual ~AppMenu();
+    
+    void paint (Graphics& g) override;
     
     /**
      * Open an application category folder, creating AppMenuButtons for all
@@ -70,8 +72,7 @@ private:
     int buttonWidth;
     int buttonHeight;
     //base component position
-    int xPos;
-    int yPos;
+    Rectangle<int>drawRegion;
 };
 
 #endif /* APPMENU_H */
