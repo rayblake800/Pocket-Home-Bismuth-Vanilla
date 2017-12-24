@@ -13,7 +13,7 @@
 #include "AppMenu.h"
 
 AppMenu::AppMenu(const var &configJson, Rectangle<int>drawRegion) :
-drawRegion(drawRegion){
+drawRegion(drawRegion) {
     buttonWidth = configJson["menuButtonWidth"];
     buttonHeight = configJson["menuButtonHeight"];
     selected.push_back(NULL);
@@ -53,7 +53,6 @@ drawRegion(drawRegion){
 AppMenu::~AppMenu() {
     while (!buttonColumns.empty())closeFolder();
 }
-
 
 /**
  * Open an application category folder, creating AppMenuButtons for all
@@ -97,6 +96,12 @@ void AppMenu::closeFolder() {
     scrollToSelected();
 }
 
+
+//Assigns a callback handler for launching applications.
+void AppMenu::setLaunchFunction(std::function<void(String) > launchFn) {
+    launchFunction=launchFn;
+}
+
 //handle AppMenuButton clicks
 
 void AppMenu::buttonClicked(Button * buttonClicked) {
@@ -111,6 +116,9 @@ void AppMenu::buttonClicked(Button * buttonClicked) {
     if (selected[activeColumn()] == appClicked) {
         if (appClicked->isFolder()) {
             openFolder(appClicked->getAppName());
+        }
+        else{
+            launchFunction(appClicked->getCommand());
         }
     } else {
         selectIndex(appClicked->getIndex());
@@ -185,7 +193,7 @@ void AppMenu::scrollToSelected() {
     if (animator.isAnimating(this)) {
         animator.cancelAnimation(this, false);
     }
-    animator.animateComponent(this, dest, getAlpha(), 100, true, 1, 1);
+    animator.animateComponent(this, dest, getAlpha(), 100, false, 1, 1);
 }
 
 void AppMenu::addButton(AppMenuButton * appButton) {

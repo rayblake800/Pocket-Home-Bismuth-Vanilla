@@ -8,6 +8,7 @@
 
 #ifndef APPMENU_H
 #define APPMENU_H
+#include <functional>
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AppMenuButton.h"
 #include "DesktopEntries.h"
@@ -29,6 +30,13 @@ public:
      * close the topmost open folder, removing all contained buttons
      */
     void closeFolder();
+    
+    /**
+     * Assigns a callback handler for launching applications.
+     * @param launchFn when a selected app button is clicked, 
+     * launchFn(shell command) will run.
+     */
+    void setLaunchFunction(std::function<void(String)> launchFn);
     
     //handle AppMenuButton clicks
     void buttonClicked (Button* buttonClicked) override;
@@ -58,6 +66,8 @@ private:
     void addButton(AppMenuButton* appButton);
     void scrollToSelected();
     std::map<String,AppMenuButton*> nameMap;
+    
+    std::function<void(String)> launchFunction;
 
     //all buttons in each column
     std::vector<std::vector<AppMenuButton*>> buttonColumns;
