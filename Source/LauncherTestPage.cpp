@@ -35,13 +35,13 @@ LauncherTestPage::LauncherTestPage ()
     var configJSON = getConfigJSON();
     //[/Constructor_pre]
 
-    //addAndMakeVisible (imageButton = new ImageButton ("new button"));
-    //imageButton->addListener (this);
+    addAndMakeVisible (imageButton = new ImageButton ("new button"));
+    imageButton->addListener (this);
 
-    //imageButton->setImages (false, true, true,
-    //                        ImageCache::getFromMemory (icon_png, icon_pngSize), 1.000f, Colour (0x00000000),
-    //                        Image(), 1.000f, Colour (0x00000000),
-    //                       Image(), 1.000f, Colour (0x00000000));
+    imageButton->setImages (false, true, true,
+                            ImageCache::getFromMemory (icon_png, icon_pngSize), 1.000f, Colour (0x00000000),
+                            Image(), 1.000f, Colour (0x00000000),
+                           Image(), 1.000f, Colour (0x00000000));
 
     //[UserPreSize]
     //[/UserPreSize]
