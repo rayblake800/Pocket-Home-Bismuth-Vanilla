@@ -56,7 +56,7 @@ public:
   
   /**
    * If called, the button will not be drawn outside of clipRegion
-   * @param clipRegion a rectangle relative to the parent component
+   * @param clipRegion a screen coordinate rectangle
    */
   void setClipRegion(Rectangle<int>clipRegion);
   

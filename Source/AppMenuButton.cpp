@@ -66,7 +66,8 @@ int AppMenuButton::getColumn(){
 
 void AppMenuButton::paint(Graphics& g) {
     if(clip){
-        g.reduceClipRegion(clipRegion);
+        Rectangle<int>clip=clipRegion.translated(-getScreenX(),-getScreenY());
+        g.reduceClipRegion(clip);
     }
     //background
     int x=0;
