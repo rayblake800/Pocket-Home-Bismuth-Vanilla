@@ -51,7 +51,7 @@ LauncherTestPage::LauncherTestPage ()
     setWantsKeyboardFocus(true);
 
     //[Constructor] You can add your own custom stuff here..
-    appMenu=new AppMenu(configJSON);
+    appMenu=new AppMenu(configJSON,20,20);
     addAndMakeVisible(appMenu);
     //[/Constructor]
 }

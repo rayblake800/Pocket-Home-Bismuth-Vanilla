@@ -15,7 +15,7 @@
 class AppMenu : public Component,
 public Button::Listener{
 public:
-    AppMenu(const var &configJson);
+    AppMenu(const var &configJson,int xPos,int yPos);
     virtual ~AppMenu();
     
     /**
@@ -63,10 +63,15 @@ private:
     std::vector<std::vector<AppMenuButton*>> buttonColumns;
     //current button selection(if any) for each open column
     std::vector<AppMenuButton*> selected;
+    //top y-position of each open column
+    std::vector<int> columnTops;
     
     //appMenuButton dimensions, loaded in constructor
     int buttonWidth;
     int buttonHeight;
+    //base component position
+    int xPos;
+    int yPos;
 };
 
 #endif /* APPMENU_H */

@@ -122,7 +122,7 @@ DesktopEntry::DesktopEntry(String category) {
     mapInit();
     type = DIRECTORY;
     appStrings["Name"] = category;
-    appStrings["Icon"] = String("applications-")+category;
+    appStrings["Icon"] = String("applications-")+category.toLowerCase();
     appStrings["Exec"] = "OPEN:" + category;
 }
 

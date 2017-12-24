@@ -8,15 +8,18 @@
 #include <sstream>
 #include <functional>
 #include <stdlib.h>
+#include <vector>
 #include "Utils.h"
 #include "AppMenu.h"
 
-AppMenu::AppMenu(const var &configJson) {
+AppMenu::AppMenu(const var &configJson,int xPos,int yPos) :
+xPos(xPos),yPos(yPos){
     buttonWidth = configJson["menuButtonWidth"];
     buttonHeight = configJson["menuButtonHeight"];
     selected.push_back(NULL);
+    columnTops.push_back(yPos);
     buttonColumns.emplace(buttonColumns.begin());
-    
+
     //read in main page apps from config
     Array<var>* pagesData = configJson["pages"].getArray();
     if (pagesData) {
@@ -57,7 +60,12 @@ AppMenu::~AppMenu() {
 void AppMenu::openFolder(String categoryName) {
     std::vector<DesktopEntry> folderItems = desktopEntries.getCategoryEntries(categoryName);
     if (folderItems.empty())return;
+    int columnTop=yPos;
+    if(selected[activeColumn()]!=NULL){
+        columnTop=selected[activeColumn()]->getY();
+    }
     selected.push_back(NULL);
+    columnTops.push_back(columnTop);
     buttonColumns.push_back(std::vector<AppMenuButton*>());
     DBG(String("found ") + String(folderItems.size()) + " items in " + categoryName);
     for (int i = 0; i < folderItems.size(); i++) {
@@ -83,6 +91,7 @@ void AppMenu::closeFolder() {
     }
     buttonColumns.pop_back();
     selected.pop_back();
+    columnTops.pop_back();
     scrollToSelected();
 }
 
@@ -154,17 +163,17 @@ void AppMenu::scrollToSelected() {
         int distanceFromCenter = abs(buttonPos-getY()+screenHeight/2);
         //only scroll vertically if selected button is outside the center 3/5 
         if(distanceFromCenter>screenHeight/5*3){
-            dest.setY(-buttonPos + screenHeight / 2 - buttonHeight / 2);
+            dest.setY(yPos-buttonPos + screenHeight / 2 - buttonHeight / 2);
         }
-        if (dest.getY() > 0) {
-            dest.setY(0);
+        if (dest.getY() > yPos) {
+            dest.setY(yPos);
         } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {
             dest.setBottom(screenHeight);
         }
-    } else dest.setY(0);
-    if (column == 0)dest.setX(0);
+    } else dest.setY(yPos);
+    if (column == 0)dest.setX(xPos);
     else {
-        dest.setX(-column * buttonWidth + buttonHeight);
+        dest.setX(xPos-column * buttonWidth + buttonHeight);
     }
     ComponentAnimator& animator = Desktop::getInstance().getAnimator();
     if (animator.isAnimating(this)) {
@@ -178,8 +187,8 @@ void AppMenu::addButton(AppMenuButton * appButton) {
     int column = appButton->getColumn();
     int w = appButton->getWidth();
     int h = appButton->getHeight();
-    int x = column*w;
-    int y = h * this->buttonColumns[column].size();
+    int x = xPos+column*w;
+    int y = columnTops[column]+h*buttonColumns[column].size();
     appButton->setBounds(x, y, w, h);
     addAndMakeVisible(appButton);
     appButton->setEnabled(true);
