@@ -168,6 +168,7 @@ String DesktopEntry::getComment() {
 
 String DesktopEntry::getIconPath() {
     String icon = appStrings["Icon"];
+    DBG(String("Searching for ")+icon);
     //if the icon variable is a full path, return that
     if (icon.substring(0, 1) == "/")return icon;
     //otherwise check the iconPaths map
@@ -273,6 +274,7 @@ void DesktopEntry::mapIcons() {
                 String filename = iconMatch.str(1);
                 if (this->iconPaths[filename].isEmpty()) {
                     this->iconPaths[filename] = path + iconMatch.str(0);
+                    DBG(filename+String("=")+path+iconMatch.str(0));
                 }
             }
             return false;
