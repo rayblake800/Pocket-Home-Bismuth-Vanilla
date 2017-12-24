@@ -13,6 +13,9 @@
 AppMenu::AppMenu(const var &configJson) {
     buttonWidth = configJson["menuButtonWidth"];
     buttonHeight = configJson["menuButtonHeight"];
+    selected.push_back(NULL);
+    buttonColumns.emplace(buttonColumns.begin());
+    
     //read in main page apps from config
     Array<var>* pagesData = configJson["pages"].getArray();
     if (pagesData) {
@@ -33,8 +36,6 @@ AppMenu::AppMenu(const var &configJson) {
             }
         }
     }
-    selected.push_back(NULL);
-    buttonColumns.emplace(buttonColumns.begin());
     std::vector<DesktopEntry> categories = desktopEntries.getMainCategories(true);
     for (int i = 0; i < categories.size(); i++) {
         addButton(new AppMenuButton(categories[i],
