@@ -86,8 +86,8 @@ void AppMenuButton::paint(Graphics& g) {
         g.reduceClipRegion(clip);
     }
     //background
-    g.setColour(selected ? selectedFillColour : fillColour);
-    g.setOpacity(selected?.2:.8);
+    g.setColour(selected ? PokeLookAndFeel::chipPurple : PokeLookAndFeel::medGrey);
+    //g.setOpacity(selected?.2:.8);
     g.fillRect(border);
     g.setOpacity(1);
     //app icon
@@ -103,13 +103,13 @@ void AppMenuButton::paint(Graphics& g) {
     g.drawImageWithin(appIcon, imgBox.getX(), imgBox.getY(),
             imgBox.getWidth(), imgBox.getHeight(), RectanglePlacement::centred, false);
     //app title
-    g.setColour(Colours::black);
+    g.setColour(Colours::white);
     g.setFont(Font(15.00f, Font::plain));
     Rectangle<float> textBox=getBounds().withPosition(0,0).toFloat();
     textBox.setLeft(imgBox.getRight());
     textBox.reduce(4,4);
     g.drawText(getAppName(),textBox,Justification::centredLeft, true);
-    g.setColour(Colours::black);
+    g.setColour(Colour(0x4D4D4D));
     g.setOpacity(selected ? 1.0 : 0.8);
     g.drawRect(border, 2);
 }
