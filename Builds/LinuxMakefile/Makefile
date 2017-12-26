@@ -33,13 +33,13 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
   JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 $(CFLAGS)
   JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs NetworkManager libnm-glib alsa freetype2) -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -lssl -lcrypto$(LDFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs NetworkManager libnm-glib alsa freetype2 libssl) -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
@@ -54,24 +54,24 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
-  JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O3 $(CFLAGS)
+  JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -O3 $(CFLAGS)
   JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs NetworkManager libnm-glib alsa freetype2) -fvisibility=hidden -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -lssl -lcrypto $(LDFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs NetworkManager libnm-glib alsa freetype2 libssl) -fvisibility=hidden -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
 
 OBJECTS_APP := \
-  $(JUCE_OBJDIR)/AppMenu_cedcb81.o \
+  $(JUCE_OBJDIR)/AppMenuPage_54656cb0.o \
+  $(JUCE_OBJDIR)/AppMenuComponent_3f3eb5c6.o \
   $(JUCE_OBJDIR)/AppMenuButton_d9661cd3.o \
   $(JUCE_OBJDIR)/MenuItem_92409e9b.o \
   $(JUCE_OBJDIR)/DesktopEntries_5218f65d.o \
   $(JUCE_OBJDIR)/DesktopEntry_8dc99f3f.o \
-  $(JUCE_OBJDIR)/LauncherTestPage_6f6e940a.o \
   $(JUCE_OBJDIR)/OverlaySpinner_80e19ab2.o \
   $(JUCE_OBJDIR)/AdvancedSettingsPage_6068151d.o \
   $(JUCE_OBJDIR)/ClockMonitor_d7cf07f5.o \
@@ -81,7 +81,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/SettingsPageLogin_497cef18.o \
   $(JUCE_OBJDIR)/Grid_a461bccf.o \
   $(JUCE_OBJDIR)/PowerPageFelComponent_e97c8ca5.o \
-  $(JUCE_OBJDIR)/LibraryPageComponent_6532e93c.o \
   $(JUCE_OBJDIR)/PowerPageComponent_4a26c732.o \
   $(JUCE_OBJDIR)/BatteryMonitor_37302b96.o \
   $(JUCE_OBJDIR)/WifiStatusJson_715858f8.o \
@@ -92,7 +91,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/SwitchComponent_a904080a.o \
   $(JUCE_OBJDIR)/Utils_e4b11b92.o \
   $(JUCE_OBJDIR)/LauncherBarComponent_b69b173.o \
-  $(JUCE_OBJDIR)/AppsPageComponent_7872953d.o \
   $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
   $(JUCE_OBJDIR)/SettingsPageComponent_10c3e5ac.o \
@@ -118,9 +116,14 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
 
-$(JUCE_OBJDIR)/AppMenu_cedcb81.o: ../../Source/AppMenu.cpp
+$(JUCE_OBJDIR)/AppMenuPage_54656cb0.o: ../../Source/AppMenuPage.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling AppMenu.cpp"
+	@echo "Compiling AppMenuPage.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AppMenuComponent_3f3eb5c6.o: ../../Source/AppMenuComponent.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AppMenuComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AppMenuButton_d9661cd3.o: ../../Source/AppMenuButton.cpp
@@ -141,11 +144,6 @@ $(JUCE_OBJDIR)/DesktopEntries_5218f65d.o: ../../Source/DesktopEntries.cpp
 $(JUCE_OBJDIR)/DesktopEntry_8dc99f3f.o: ../../Source/DesktopEntry.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling DesktopEntry.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/LauncherTestPage_6f6e940a.o: ../../Source/LauncherTestPage.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling LauncherTestPage.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/OverlaySpinner_80e19ab2.o: ../../Source/OverlaySpinner.cpp
@@ -191,11 +189,6 @@ $(JUCE_OBJDIR)/Grid_a461bccf.o: ../../Source/Grid.cpp
 $(JUCE_OBJDIR)/PowerPageFelComponent_e97c8ca5.o: ../../Source/PowerPageFelComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PowerPageFelComponent.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/LibraryPageComponent_6532e93c.o: ../../Source/LibraryPageComponent.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling LibraryPageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PowerPageComponent_4a26c732.o: ../../Source/PowerPageComponent.cpp
@@ -246,11 +239,6 @@ $(JUCE_OBJDIR)/Utils_e4b11b92.o: ../../Source/Utils.cpp
 $(JUCE_OBJDIR)/LauncherBarComponent_b69b173.o: ../../Source/LauncherBarComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling LauncherBarComponent.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/AppsPageComponent_7872953d.o: ../../Source/AppsPageComponent.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling AppsPageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o: ../../Source/PokeLookAndFeel.cpp
@@ -320,7 +308,7 @@ $(JUCE_OBJDIR)/include_juce_gui_basics_e3f79785.o: ../../JuceLibraryCode/include
 
 check-pkg-config:
 	@command -v pkg-config >/dev/null 2>&1 || { echo >&2 "pkg-config not installed. Please, install it."; exit 1; }
-	@pkg-config --print-errors NetworkManager libnm-glib alsa freetype2
+	@pkg-config --print-errors NetworkManager libnm-glib alsa freetype2 libssl
 
 clean:
 	@echo Cleaning pocket-home

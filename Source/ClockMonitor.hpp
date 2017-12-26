@@ -11,21 +11,20 @@
 
 using namespace juce;
 
-class ClockMonitor : public Thread{
+class ClockMonitor : public Thread {
 public:
-  ClockMonitor();
-  ~ClockMonitor();
-  
-  void run() override;
-  void setAmMode(bool);
-  Label& getLabel();
+    ClockMonitor();
+    ~ClockMonitor();
+
+    void run() override;
+    void setAmMode(bool);
+    Label& getLabel();
 
 private:
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ClockMonitor)
-  char formatted[10];
-  bool ampm;
-  CriticalSection lock;
-  ScopedPointer<Label> clock;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ClockMonitor)
+    char formatted[10];
+    bool ampm;
+    ScopedPointer<Label> clock;
 };
 
 #endif

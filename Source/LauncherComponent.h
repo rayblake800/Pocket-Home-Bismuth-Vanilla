@@ -40,7 +40,6 @@ public:
     BatteryMonitor batteryMonitor;
     ScopedPointer<LauncherBarComponent> botButtons;
     ScopedPointer<LauncherBarComponent> topButtons;
-    ScopedPointer<OverlaySpinner> launchSpinner;
     ScopedPointer<ImageComponent> focusButtonPopup;
   
     Array<Image> batteryIconImages;
@@ -72,13 +71,12 @@ public:
     void updateIp();
     void setIpVisible(bool);
     
-    void showLaunchSpinner();
-    void hideLaunchSpinner();
-    
     void setClockAMPM(bool);
     void setColorBackground(const String&);
     void setImageBackground(const String&);
     void setClockVisible(bool);
+    
+    void hideLaunchSpinner();
     
 private:
     Colour bgColor;
@@ -88,6 +86,5 @@ private:
     ScopedPointer<ClockMonitor> clock;
   
     void buttonClicked(Button *) override;
-    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LauncherComponent)
 };

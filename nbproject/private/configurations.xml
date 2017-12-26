@@ -3565,12 +3565,13 @@
       <df name="Source">
         <in>AdvancedSettingsPage.cpp</in>
         <in>AdvancedSettingsPage.h</in>
-        <in>AppMenu.cpp</in>
-        <in>AppMenu.h</in>
         <in>AppMenuButton.cpp</in>
         <in>AppMenuButton.h</in>
+        <in>AppMenuComponent.cpp</in>
+        <in>AppMenuComponent.h</in>
+        <in>AppMenuPage.cpp</in>
+        <in>AppMenuPage.h</in>
         <in>AppsPageComponent.cpp</in>
-        <in>AppsPageComponent.h</in>
         <in>BatteryMonitor.cpp</in>
         <in>BatteryMonitor.h</in>
         <in>ClockMonitor.cpp</in>
@@ -3592,9 +3593,7 @@
         <in>LauncherComponent.cpp</in>
         <in>LauncherComponent.h</in>
         <in>LauncherTestPage.cpp</in>
-        <in>LauncherTestPage.h</in>
         <in>LibraryPageComponent.cpp</in>
-        <in>LibraryPageComponent.h</in>
         <in>Main.cpp</in>
         <in>Main.h</in>
         <in>MainComponent.cpp</in>

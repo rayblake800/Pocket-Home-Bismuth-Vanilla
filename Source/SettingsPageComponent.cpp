@@ -6,387 +6,386 @@
 #include <numeric>
 
 void SettingsBrightnessTimer::timerCallback() {
-  if (settingsPage) {
-    settingsPage->setScreenBrightness();
-  }
+    if (settingsPage) {
+        settingsPage->setScreenBrightness();
+    }
 }
 
 void SettingsVolumeTimer::timerCallback() {
-  if (settingsPage) {
-    settingsPage->setSoundVolume();
-  }
+    if (settingsPage) {
+        settingsPage->setSoundVolume();
+    }
 }
 
 SettingsCategoryButton::SettingsCategoryButton(const String &name)
 : Button(name),
-  displayText(name)
-{}
+displayText(name) {
+}
 
 void SettingsCategoryButton::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown) {
-  const auto& bounds = pillBounds;
-  float borderThick = 4.0f;
-  
-  g.setColour(Colours::white);
-  isButtonDown ? setAlpha(0.5f) : setAlpha(1.0f);
-  
-  if (isEnabled()) {
-    g.drawRoundedRectangle(bounds.getX() + borderThick, bounds.getY() + borderThick,
-                           bounds.getWidth() - 2*borderThick, bounds.getHeight()  - 2*borderThick,
-                           1, borderThick);
-  }
-  
-  // TODO: write button text as grey if choice is completely unset?
-  g.setFont(20);
-  g.drawText(displayText, bounds.getX(), bounds.getY(),
-             bounds.getWidth(), bounds.getHeight(),
-             Justification::centred);
+    const auto& bounds = pillBounds;
+    float borderThick = 4.0f;
+
+    g.setColour(Colours::white);
+    isButtonDown ? setAlpha(0.5f) : setAlpha(1.0f);
+
+    if (isEnabled()) {
+        g.drawRoundedRectangle(bounds.getX() + borderThick, bounds.getY() + borderThick,
+                bounds.getWidth() - 2 * borderThick, bounds.getHeight() - 2 * borderThick,
+                1, borderThick);
+    }
+
+    // TODO: write button text as grey if choice is completely unset?
+    g.setFont(20);
+    g.drawText(displayText, bounds.getX(), bounds.getY(),
+            bounds.getWidth(), bounds.getHeight(),
+            Justification::centred);
 }
 
 void SettingsCategoryButton::resized() {
-  pillBounds.setSize(getLocalBounds().getWidth(), 42);
-  fitRectInRect(pillBounds, getLocalBounds(), Justification::centred, false);
+    pillBounds.setSize(getLocalBounds().getWidth(), 42);
+    fitRectInRect(pillBounds, getLocalBounds(), Justification::centred, false);
 }
 
 void SettingsCategoryButton::setText(const String &text) {
-  displayText = text;
-  repaint();
+    displayText = text;
+    repaint();
 }
 
 SettingsCategoryItemComponent::SettingsCategoryItemComponent(const String &name)
-: icon{ new DrawableButton("icon", DrawableButton::ImageFitted) },
-  toggle{ new SwitchComponent() },
-  button{ new SettingsCategoryButton(name) } {
-  toggle->addListener(this);
-  addAndMakeVisible(icon);
-  addAndMakeVisible(toggle);
-  addAndMakeVisible(button);
-  button->setEnabled(false); // default to disabled state
+: icon{new DrawableButton("icon", DrawableButton::ImageFitted)},
+toggle{ new SwitchComponent()},
+button{ new SettingsCategoryButton(name)}
+{
+    toggle->addListener(this);
+    addAndMakeVisible(icon);
+    addAndMakeVisible(toggle);
+    addAndMakeVisible(button);
+    button->setEnabled(false); // default to disabled state
 }
 
-void SettingsCategoryItemComponent::paint(Graphics &g) {}
+void SettingsCategoryItemComponent::paint(Graphics &g) {
+}
 
 void SettingsCategoryItemComponent::resized() {
-  auto b = getLocalBounds();
-  auto h = b.getHeight();
+    auto b = getLocalBounds();
+    auto h = b.getHeight();
 
-  int spacing = 10;
-  int togWidth = h * 1.1f;
+    int spacing = 10;
+    int togWidth = h * 1.1f;
 
-  layout.setItemLayout(0, h, h, h);
-  layout.setItemLayout(1, spacing, spacing, spacing);
-  layout.setItemLayout(2, togWidth, togWidth, togWidth);
-  layout.setItemLayout(3, spacing, spacing, spacing);
-  layout.setItemLayout(4, h, -1, -1);
+    layout.setItemLayout(0, h, h, h);
+    layout.setItemLayout(1, spacing, spacing, spacing);
+    layout.setItemLayout(2, togWidth, togWidth, togWidth);
+    layout.setItemLayout(3, spacing, spacing, spacing);
+    layout.setItemLayout(4, h, -1, -1);
 
-  Component *comps[] = { icon, nullptr, toggle, nullptr, button };
-  layout.layOutComponents(comps, 5, b.getX(), b.getY(), b.getWidth(), b.getHeight(), false, true);
+    Component * comps[] = {icon, nullptr, toggle, nullptr, button};
+    layout.layOutComponents(comps, 5, b.getX(), b.getY(), b.getWidth(), b.getHeight(), false, true);
 }
 
 void SettingsCategoryItemComponent::buttonClicked(Button *b) {
-  if (b == toggle) {
-    enabledStateChanged(toggle->getToggleState());
-  }
+    if (b == toggle) {
+        enabledStateChanged(toggle->getToggleState());
+    }
 }
 
 void SettingsCategoryItemComponent::enablementChanged() {
-  updateButtonText();
+    updateButtonText();
 }
 
 WifiCategoryItemComponent::WifiCategoryItemComponent() :
-  SettingsCategoryItemComponent("wifi"),
-  spinner(new WifiSpinner("SettingsWifiSpinner"))
-{
-  iconDrawable =
-      Drawable::createFromImageFile(assetFile("wifiIcon.png"));
-  icon->setImages(iconDrawable);
-  bool isEnabled = getWifiStatus().isEnabled();
-  toggle->setToggleState(isEnabled, NotificationType::dontSendNotification);
-  button->setEnabled(isEnabled);
-  addChildComponent(spinner);
-  updateButtonText();
+SettingsCategoryItemComponent("wifi"),
+spinner(new WifiSpinner("SettingsWifiSpinner")) {
+    iconDrawable =
+            Drawable::createFromImageFile(assetFile("wifiIcon.png"));
+    icon->setImages(iconDrawable);
+    bool isEnabled = getWifiStatus().isEnabled();
+    toggle->setToggleState(isEnabled, NotificationType::dontSendNotification);
+    button->setEnabled(isEnabled);
+    addChildComponent(spinner);
+    updateButtonText();
 }
 
 void WifiCategoryItemComponent::resized() {
-  SettingsCategoryItemComponent::resized();
-  const auto& sb = icon->getBoundsInParent();
-  spinner->setBoundsToFit(sb.getX(), sb.getY(), sb.getWidth(), sb.getHeight(), Justification::centred, true);
+    SettingsCategoryItemComponent::resized();
+    const auto& sb = icon->getBoundsInParent();
+    spinner->setBoundsToFit(sb.getX(), sb.getY(), sb.getWidth(), sb.getHeight(), Justification::centred, true);
 }
 
 void WifiCategoryItemComponent::enabledStateChanged(bool enabled) {
-  updateButtonText();
-  
-  enabled ? getWifiStatus().setEnabled() : getWifiStatus().setDisabled();
+    updateButtonText();
+
+    enabled ? getWifiStatus().setEnabled() : getWifiStatus().setDisabled();
 }
 
 void WifiCategoryItemComponent::handleWifiEnabled() {
-  enableWifiActions();
+    enableWifiActions();
 }
 
 void WifiCategoryItemComponent::handleWifiDisabled() {
-  enableWifiActions();
+    enableWifiActions();
 }
 
 void WifiCategoryItemComponent::handleWifiConnected() {
-  enableWifiActions();
+    enableWifiActions();
 }
 
 void WifiCategoryItemComponent::handleWifiDisconnected() {
-  enableWifiActions();
+    enableWifiActions();
 }
 
 void WifiCategoryItemComponent::handleWifiFailedConnect() {
-  enableWifiActions();
+    enableWifiActions();
 }
 
 void WifiCategoryItemComponent::handleWifiBusy() {
-  disableWifiActions();
+    disableWifiActions();
 }
 
 void WifiCategoryItemComponent::enableWifiActions() {
-  spinner->hide();
-  icon->setVisible(true);
-  
-  button->setEnabled(getWifiStatus().isEnabled());
-  toggle->setEnabled(true);
-  
-  updateButtonText();
-  toggle->setToggleState(getWifiStatus().isEnabled(), NotificationType::dontSendNotification);
+    spinner->hide();
+    icon->setVisible(true);
+
+    button->setEnabled(getWifiStatus().isEnabled());
+    toggle->setEnabled(true);
+
+    updateButtonText();
+    toggle->setToggleState(getWifiStatus().isEnabled(), NotificationType::dontSendNotification);
 }
 
 void WifiCategoryItemComponent::disableWifiActions() {
-  spinner->show();
-  icon->setVisible(false);
-  
-  button->setEnabled(getWifiStatus().isEnabled());
-  toggle->setEnabled(false);
-  
-  updateButtonText();
-  toggle->setToggleState(getWifiStatus().isEnabled(), NotificationType::dontSendNotification);
+    spinner->show();
+    icon->setVisible(false);
+
+    button->setEnabled(getWifiStatus().isEnabled());
+    toggle->setEnabled(false);
+
+    updateButtonText();
+    toggle->setToggleState(getWifiStatus().isEnabled(), NotificationType::dontSendNotification);
 }
 
-
 void WifiCategoryItemComponent::updateButtonText() {
-  const auto &status = getWifiStatus();
-  if (status.isEnabled()) {
-    if (status.isConnected() && status.connectedAccessPoint()) {
-      button->setText(status.connectedAccessPoint()->ssid);
+    const auto &status = getWifiStatus();
+    if (status.isEnabled()) {
+        if (status.isConnected() && status.connectedAccessPoint()) {
+            button->setText(status.connectedAccessPoint()->ssid);
+        } else {
+            button->setText("Not Connected");
+        }
+    } else {
+        button->setText("WiFi Off");
     }
-    else {
-      button->setText("Not Connected");
-    }
-  } else {
-    button->setText("WiFi Off");
-  }
 }
 
 BluetoothCategoryItemComponent::BluetoothCategoryItemComponent()
 : SettingsCategoryItemComponent("bluetooth") {
-  iconDrawable = Drawable::createFromImageFile(assetFile("bluetoothIcon.png"));
-  icon->setImages(iconDrawable);
-  updateButtonText();
+    iconDrawable = Drawable::createFromImageFile(assetFile("bluetoothIcon.png"));
+    icon->setImages(iconDrawable);
+    updateButtonText();
 }
 
-
 void BluetoothCategoryItemComponent::enabledStateChanged(bool enabled) {
-  getBluetoothStatus().enabled = enabled;
-  button->setEnabled(enabled);
-  updateButtonText();
+    getBluetoothStatus().enabled = enabled;
+    button->setEnabled(enabled);
+    updateButtonText();
 }
 
 void BluetoothCategoryItemComponent::updateButtonText() {
-  const auto &status = getBluetoothStatus();
-  if (status.enabled) {
-    int connectedDeviceCount =
-        std::accumulate(status.devices.begin(), status.devices.end(), 0,
-                        [](int n, BluetoothDevice *d) { return n + d->connected; });
-    if (connectedDeviceCount > 0) {
-      button->setText(std::to_string(connectedDeviceCount) + " Devices Connected");
+    const auto &status = getBluetoothStatus();
+    if (status.enabled) {
+        int connectedDeviceCount =
+                std::accumulate(status.devices.begin(), status.devices.end(), 0,
+                [](int n, BluetoothDevice * d) {
+                    return n + d->connected; });
+        if (connectedDeviceCount > 0) {
+            button->setText(std::to_string(connectedDeviceCount) + " Devices Connected");
+        } else {
+            button->setText("No Devices Connected");
+        }
     } else {
-      button->setText("No Devices Connected");
+        button->setText("Bluetooth Off");
     }
-  } else {
-    button->setText("Bluetooth Off");
-  }
 }
-
 
 SettingsPageComponent::SettingsPageComponent(LauncherComponent* lc) {
-  bgColor = Colour(0xffd23c6d);
-  bgImage = createImageFromFile(assetFile("settingsBackground.png"));
-  mainPage = new Component();
-  addAndMakeVisible(mainPage);
-  mainPage->toBack();
-  ChildProcess child{};
+    bgColor = Colour(0xffd23c6d);
+    bgImage = createImageFromFile(assetFile("settingsBackground.png"));
+    mainPage = new Component();
+    addAndMakeVisible(mainPage);
+    mainPage->toBack();
+    ChildProcess child{};
 
-  /* Adding the personalize button */
-  advancedPage = new AdvancedSettingsPage(lc);
-  advanced = new TextButton("Advanced Settings");
-  advanced->addListener(this);
-  addAndMakeVisible(advanced);
-  
-  brightness = 8;
-  #if JUCE_LINUX
-     // Get initial brightness value
-     if(child.start("cat /sys/class/backlight/backlight/brightness")) {
-    	String result{child.readAllProcessOutput()};
-	brightness = result.getIntValue();
-     };
-  #endif
+    /* Adding the personalize button */
+    advancedPage = new AdvancedSettingsPage(lc);
+    advanced = new TextButton("Advanced Settings");
+    advanced->addListener(this);
+    addAndMakeVisible(advanced);
+
+    brightness = 8;
+#if JUCE_LINUX
+    // Get initial brightness value
+    if (child.start("cat /sys/class/backlight/backlight/brightness")) {
+        String result{child.readAllProcessOutput()};
+        brightness = result.getIntValue();
+    };
+#endif
 
 
-  volume = 90;
-  
-  #if JUCE_LINUX
+    volume = 90;
+
+#if JUCE_LINUX
     // Get initial volume value
-    StringArray cmd{ "amixer","sget","Power Amplifier" };
-    if(child.start(cmd)) {
-      const String result (child.readAllProcessOutput());
-      int resultIndex = result.indexOf("[")+1;
-      child.waitForProcessToFinish (5 * 1000);
-      char buff[4];
-      for (int i = 0; i<4; i++) {
-	      char c = result[resultIndex+i];
-	      if( c >= '0' && c <= '9' ) {
-		       buff[i]=c;
-      	} else {
-		     buff[i]=(char)0;
-      	}
-      }
-      String newVol = String(buff);
-      volume = newVol.getIntValue();
+    StringArray cmd{ "amixer", "sget", "Power Amplifier"};
+    if (child.start(cmd)) {
+        const String result(child.readAllProcessOutput());
+        int resultIndex = result.indexOf("[") + 1;
+        child.waitForProcessToFinish(5 * 1000);
+        char buff[4];
+        for (int i = 0; i < 4; i++) {
+            char c = result[resultIndex + i];
+            if (c >= '0' && c <= '9') {
+                buff[i] = c;
+            } else {
+                buff[i] = (char) 0;
+            }
+        }
+        String newVol = String(buff);
+        volume = newVol.getIntValue();
     }
-  #endif
+#endif
 
-  ScopedPointer<Drawable> brightLo = Drawable::createFromImageFile(assetFile("brightnessIconLo.png"));
-  ScopedPointer<Drawable> brightHi = Drawable::createFromImageFile(assetFile("brightnessIconHi.png"));
-  screenBrightnessSlider =
-      ScopedPointer<IconSliderComponent>(new IconSliderComponent(*brightLo, *brightHi));
-  screenBrightnessSlider->addListener(this);
-  screenBrightnessSlider->slider->setValue(1+(brightness-0.09)*10);
+    ScopedPointer<Drawable> brightLo = Drawable::createFromImageFile(assetFile("brightnessIconLo.png"));
+    ScopedPointer<Drawable> brightHi = Drawable::createFromImageFile(assetFile("brightnessIconHi.png"));
+    screenBrightnessSlider =
+            ScopedPointer<IconSliderComponent>(new IconSliderComponent(*brightLo, *brightHi));
+    screenBrightnessSlider->addListener(this);
+    screenBrightnessSlider->slider->setValue(1 + (brightness - 0.09)*10);
 
-  ScopedPointer<Drawable> volLo =
-      Drawable::createFromImageFile(assetFile("volumeIconLo.png"));
-  ScopedPointer<Drawable> volHi =
-      Drawable::createFromImageFile(assetFile("volumeIconHi.png"));
-  volumeSlider = ScopedPointer<IconSliderComponent>(new IconSliderComponent(*volLo, *volHi));
-  volumeSlider->addListener(this);
-  volumeSlider->slider->setValue(volume);
+    ScopedPointer<Drawable> volLo =
+            Drawable::createFromImageFile(assetFile("volumeIconLo.png"));
+    ScopedPointer<Drawable> volHi =
+            Drawable::createFromImageFile(assetFile("volumeIconHi.png"));
+    volumeSlider = ScopedPointer<IconSliderComponent>(new IconSliderComponent(*volLo, *volHi));
+    volumeSlider->addListener(this);
+    volumeSlider->slider->setValue(volume);
 
-  // create back button
-  backButton = createImageButton(
-                                 "Back", createImageFromFile(assetFile("backIcon.png")));
-  backButton->addListener(this);
-  backButton->setAlwaysOnTop(true);
-  addAndMakeVisible(backButton);
+    // create back button
+    backButton = createImageButton(
+            "Back", createImageFromFile(assetFile("backIcon.png")));
+    backButton->addListener(this);
+    backButton->setAlwaysOnTop(true);
+    addAndMakeVisible(backButton);
 
-  wifiCategoryItem = new WifiCategoryItemComponent();
-  wifiCategoryItem->button->addListener(this);
-  addAndMakeVisible(wifiCategoryItem);
-  getWifiStatus().addListener(wifiCategoryItem);
+    wifiCategoryItem = new WifiCategoryItemComponent();
+    wifiCategoryItem->button->addListener(this);
+    addAndMakeVisible(wifiCategoryItem);
+    getWifiStatus().addListener(wifiCategoryItem);
 
-  addAndMakeVisible(screenBrightnessSlider);
-  addAndMakeVisible(volumeSlider);
+    addAndMakeVisible(screenBrightnessSlider);
+    addAndMakeVisible(volumeSlider);
 
-  wifiPage = new SettingsPageWifiComponent();
+    wifiPage = new SettingsPageWifiComponent();
 }
 
-SettingsPageComponent::~SettingsPageComponent() {}
+SettingsPageComponent::~SettingsPageComponent() {
+}
 
-void SettingsPageComponent::deleteIcon(String name, String shell){
-  advancedPage->deleteIcon(name, shell);
+void SettingsPageComponent::deleteIcon(String name, String shell) {
+    advancedPage->deleteIcon(name, shell);
 }
 
 void SettingsPageComponent::paint(Graphics &g) {
     auto bounds = getLocalBounds();
     g.fillAll(bgColor);
-    g.drawImage(bgImage,bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), 0, 0, bgImage.getWidth(), bgImage.getHeight(), false);
+    g.drawImage(bgImage, bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), 0, 0, bgImage.getWidth(), bgImage.getHeight(), false);
 }
 
 void SettingsPageComponent::resized() {
-  auto bounds = getLocalBounds();
-  int numRows = 4;
-  double rowProp = 0.6/numRows;
-  {
-    for (int i = 0, j = 0; i < numRows; ++i) {
-      if (i > 0) verticalLayout.setItemLayout(j++, 0, -1, -1);
-      verticalLayout.setItemLayout(j++, -rowProp, -rowProp, -rowProp);
+    auto bounds = getLocalBounds();
+    int numRows = 4;
+    double rowProp = 0.6 / numRows;
+    {
+        for (int i = 0, j = 0; i < numRows; ++i) {
+            if (i > 0) verticalLayout.setItemLayout(j++, 0, -1, -1);
+            verticalLayout.setItemLayout(j++, -rowProp, -rowProp, -rowProp);
+        }
+
+        Component * settingsItems[] = {
+            wifiCategoryItem, nullptr,
+            screenBrightnessSlider, nullptr,
+            volumeSlider, nullptr,
+            advanced
+        };
+        int numItems = sizeof (settingsItems) / sizeof (Component*);
+
+        auto b = bounds;
+        b.setLeft(60);
+        b.setTop(30);
+        b.setHeight(b.getHeight() - 30);
+        b.setWidth(b.getWidth() - 60);
+        verticalLayout.layOutComponents(settingsItems, numItems, b.getX(), b.getY(), b.getWidth(),
+                b.getHeight(), true, true);
     }
 
-    Component *settingsItems[] = {
-      wifiCategoryItem, nullptr,
-      screenBrightnessSlider, nullptr,
-      volumeSlider, nullptr,
-      advanced
-    };
-    int numItems = sizeof(settingsItems) / sizeof(Component*);
-    
-    auto b = bounds;
-    b.setLeft(60);
-    b.setTop(30);
-    b.setHeight(b.getHeight() - 30);
-    b.setWidth(b.getWidth() - 60);
-    verticalLayout.layOutComponents(settingsItems, numItems, b.getX(), b.getY(), b.getWidth(),
-                                    b.getHeight(), true, true);
-  }
+    mainPage->setBounds(bounds);
 
-  mainPage->setBounds(bounds);
-
-  backButton->setBounds(bounds.getX(), bounds.getY(), 60, bounds.getHeight());
+    backButton->setBounds(bounds.getX(), bounds.getY(), 60, bounds.getHeight());
 }
 
 void SettingsPageComponent::buttonClicked(Button *button) {
-  if (button == backButton) {
-    getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
-  } else if (button == wifiCategoryItem->button) {
-    wifiPage->updateAccessPoints();
-    getMainStack().pushPage(wifiPage, PageStackComponent::kTransitionTranslateHorizontal);
-  } else if (button == advanced) {
-    getMainStack().pushPage(advancedPage, PageStackComponent::kTransitionTranslateHorizontal);
-  }
+    if (button == backButton) {
+        getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
+    } else if (button == wifiCategoryItem->button) {
+        wifiPage->updateAccessPoints();
+        getMainStack().pushPage(wifiPage, PageStackComponent::kTransitionTranslateHorizontal);
+    } else if (button == advanced) {
+        getMainStack().pushPage(advancedPage, PageStackComponent::kTransitionTranslateHorizontal);
+    }
 }
 
 void SettingsPageComponent::setSoundVolume() {
-  volume = volumeSlider->slider->getValue();
-  #if JUCE_LINUX
-     StringArray cmd{ "amixer","sset","Power Amplifier",(String(volume)+"%").toRawUTF8()};
-     if( child.start(cmd ) ) {
-       String result{child.readAllProcessOutput()};
-     }
+    volume = volumeSlider->slider->getValue();
+#if JUCE_LINUX
+    StringArray cmd{ "amixer", "sset", "Power Amplifier", (String(volume) + "%").toRawUTF8()};
+    if (child.start(cmd)) {
+        String result{child.readAllProcessOutput()};
+    }
 
-  #endif
+#endif
 }
 
 void SettingsPageComponent::setScreenBrightness() {
-    brightness = 1+(screenBrightnessSlider->slider->getValue()*0.09);
-    #if JUCE_LINUX
-      StringArray cmd{ "sh","-c",(String("echo ") + String(brightness) + String(" > /sys/class/backlight/backlight/brightness")).toRawUTF8() };
-      if( child.start(cmd) ) {
-          String result{child.readAllProcessOutput()};
-          DBG(result);
-      }
-    #endif
+    brightness = 1 + (screenBrightnessSlider->slider->getValue()*0.09);
+#if JUCE_LINUX
+    StringArray cmd{ "sh", "-c", (String("echo ") + String(brightness) + String(" > /sys/class/backlight/backlight/brightness")).toRawUTF8()};
+    if (child.start(cmd)) {
+        String result{child.readAllProcessOutput()};
+        DBG(result);
+    }
+#endif
 }
 
 void SettingsPageComponent::sliderValueChanged(IconSliderComponent* slider) {
-  //
+    //
 }
 
 void SettingsPageComponent::sliderDragStarted(IconSliderComponent* slider) {
-  if( slider == screenBrightnessSlider && !brightnessSliderTimer.isTimerRunning()) {
-    brightnessSliderTimer.startTimer(200);
-    brightnessSliderTimer.settingsPage = this;
-  } else if( slider == volumeSlider&& !volumeSliderTimer.isTimerRunning()) {
-    volumeSliderTimer.startTimer(200);
-    volumeSliderTimer.settingsPage = this;
-  }
+    if (slider == screenBrightnessSlider && !brightnessSliderTimer.isTimerRunning()) {
+        brightnessSliderTimer.startTimer(200);
+        brightnessSliderTimer.settingsPage = this;
+    } else if (slider == volumeSlider&& !volumeSliderTimer.isTimerRunning()) {
+        volumeSliderTimer.startTimer(200);
+        volumeSliderTimer.settingsPage = this;
+    }
 }
 
 void SettingsPageComponent::sliderDragEnded(IconSliderComponent* slider) {
-  if( slider == screenBrightnessSlider && brightnessSliderTimer.isTimerRunning()) {
-    brightnessSliderTimer.stopTimer();
-    setScreenBrightness();
-  } else if( slider == volumeSlider&& volumeSliderTimer.isTimerRunning()) {
-    volumeSliderTimer.stopTimer();
-    setSoundVolume();
-  }
+    if (slider == screenBrightnessSlider && brightnessSliderTimer.isTimerRunning()) {
+        brightnessSliderTimer.stopTimer();
+        setScreenBrightness();
+    } else if (slider == volumeSlider && volumeSliderTimer.isTimerRunning()) {
+        volumeSliderTimer.stopTimer();
+        setSoundVolume();
+    }
 }

@@ -2,7 +2,6 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "AppsPageComponent.h"
 #include "IconSliderComponent.h"
 #include "SwitchComponent.h"
 #include "SettingsPageWifiComponent.h"

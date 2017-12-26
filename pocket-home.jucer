@@ -14,8 +14,12 @@
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
-      <FILE id="bUSiHM" name="AppMenu.cpp" compile="1" resource="0" file="Source/AppMenu.cpp"/>
-      <FILE id="JCiZYj" name="AppMenu.h" compile="0" resource="0" file="Source/AppMenu.h"/>
+      <FILE id="r7XiPC" name="AppMenuPage.cpp" compile="1" resource="0" file="Source/AppMenuPage.cpp"/>
+      <FILE id="CmGN6f" name="AppMenuPage.h" compile="0" resource="0" file="Source/AppMenuPage.h"/>
+      <FILE id="bUSiHM" name="AppMenuComponent.cpp" compile="1" resource="0"
+            file="Source/AppMenuComponent.cpp"/>
+      <FILE id="JCiZYj" name="AppMenuComponent.h" compile="0" resource="0"
+            file="Source/AppMenuComponent.h"/>
       <FILE id="H9ciLu" name="AppMenuButton.cpp" compile="1" resource="0"
             file="Source/AppMenuButton.cpp"/>
       <FILE id="A44isr" name="AppMenuButton.h" compile="0" resource="0" file="Source/AppMenuButton.h"/>
@@ -28,10 +32,6 @@
       <FILE id="V4z6JG" name="DesktopEntry.cpp" compile="1" resource="0"
             file="Source/DesktopEntry.cpp"/>
       <FILE id="nE5pIY" name="DesktopEntry.h" compile="0" resource="0" file="Source/DesktopEntry.h"/>
-      <FILE id="yPSgNB" name="LauncherTestPage.cpp" compile="1" resource="0"
-            file="Source/LauncherTestPage.cpp"/>
-      <FILE id="V5LrYP" name="LauncherTestPage.h" compile="0" resource="0"
-            file="Source/LauncherTestPage.h"/>
       <FILE id="sPYoCU" name="OverlaySpinner.cpp" compile="1" resource="0"
             file="Source/OverlaySpinner.cpp"/>
       <FILE id="DZZeul" name="OverlaySpinner.h" compile="0" resource="0"
@@ -65,10 +65,6 @@
             file="Source/PowerPageFelComponent.cpp"/>
       <FILE id="wCEi8b" name="PowerPageFelComponent.h" compile="0" resource="0"
             file="Source/PowerPageFelComponent.h"/>
-      <FILE id="B0mjr7" name="LibraryPageComponent.cpp" compile="1" resource="0"
-            file="Source/LibraryPageComponent.cpp"/>
-      <FILE id="z8Ob3L" name="LibraryPageComponent.h" compile="0" resource="0"
-            file="Source/LibraryPageComponent.h"/>
       <FILE id="Bc6FLL" name="PowerPageComponent.cpp" compile="1" resource="0"
             file="Source/PowerPageComponent.cpp"/>
       <FILE id="nawuRd" name="PowerPageComponent.h" compile="0" resource="0"
@@ -104,10 +100,6 @@
             file="Source/LauncherBarComponent.cpp"/>
       <FILE id="fwxP6X" name="LauncherBarComponent.h" compile="0" resource="0"
             file="Source/LauncherBarComponent.h"/>
-      <FILE id="zoO9Fb" name="AppsPageComponent.cpp" compile="1" resource="0"
-            file="Source/AppsPageComponent.cpp"/>
-      <FILE id="MMG2ZH" name="AppsPageComponent.h" compile="0" resource="0"
-            file="Source/AppsPageComponent.h"/>
       <FILE id="xoVLAp" name="PokeLookAndFeel.cpp" compile="1" resource="0"
             file="Source/PokeLookAndFeel.cpp"/>
       <FILE id="g1eykD" name="PokeLookAndFeel.h" compile="0" resource="0"
@@ -155,7 +147,7 @@
     </XCODE_MAC>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile" cppLanguageStandard="-std=c++11"
                 extraDefs="" extraLinkerFlags="" externalLibraries="" extraCompilerFlags=""
-                linuxExtraPkgConfig="NetworkManager libnm-glib alsa freetype2">
+                linuxExtraPkgConfig="NetworkManager libnm-glib alsa freetype2 libssl">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
                        targetName="pocket-home" binaryPath="build/Debug" headerPath=""/>

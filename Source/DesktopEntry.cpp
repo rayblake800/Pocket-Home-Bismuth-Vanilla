@@ -90,7 +90,7 @@ entrypath(path) {
                         } else if (val == "Directory") {
                             type = DIRECTORY;
                         } else {
-                            DBG("invalid type:" + val);
+                            //DBG("invalid type:" + val);
                         }
                     } else if (strSearch != appStrings.end()) {
                         appStrings[key] = val;
@@ -103,12 +103,12 @@ entrypath(path) {
                             } else if (val == "false") {
                                 appBools[key] = false;
                             } else {
-                                DBG("invalid boolean pair " + key + ":" + val);
+                                //DBG("invalid boolean pair " + key + ":" + val);
                             }
-                        } else DBG("unrecognized data:" + key + "=" + val);
+                        } //else DBG("unrecognized data:" + key + "=" + val);
                     }
                 }
-            } else DBG("no match:" + line);
+            } //else DBG("no match:" + line);
         }
         desktopFile.close();
     } catch (std::ifstream::failure e) {
@@ -122,7 +122,7 @@ DesktopEntry::DesktopEntry(String category) {
     mapInit();
     type = DIRECTORY;
     appStrings["Name"] = category;
-    appStrings["Icon"] = String("applications-")+category.toLowerCase();
+    appStrings["Icon"] = String("applications-") + category.toLowerCase();
     appStrings["Exec"] = "OPEN:" + category;
 }
 
@@ -173,24 +173,24 @@ String DesktopEntry::getIconPath() {
     if (icon.substring(0, 1) == "/")return icon;
     //otherwise check the iconPaths map
     //if icon is a partial path, trim it
-    if(icon.contains("/"))icon=icon.substring(1+icon.lastIndexOf("/"));
+    if (icon.contains("/"))icon = icon.substring(1 + icon.lastIndexOf("/"));
     //if icon contains file extensions, trim them
     std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
     std::smatch iconMatch;
-    std::string searchString=icon.toStdString();
-    if(std::regex_search(searchString,iconMatch,iconPattern))icon=iconMatch.str(1);
+    std::string searchString = icon.toStdString();
+    if (std::regex_search(searchString, iconMatch, iconPattern))icon = iconMatch.str(1);
     if (!iconPathsMapped)mapIcons();
     String fullPath = iconPaths[icon];
     if (fullPath.isEmpty()) {
-        DBG(String("DesktopEntry::Couldn't find icon ") + icon);
-        for(std::map<String,String>::iterator it = iconPaths.begin();
-                it!= iconPaths.end();it++){
-            String iconCandidate=it->first;
-            if(!it->second.isEmpty() &&
+        //DBG(String("DesktopEntry::Couldn't find icon ") + icon);
+        for (std::map<String, String>::iterator it = iconPaths.begin();
+                it != iconPaths.end(); it++) {
+            String iconCandidate = it->first;
+            if (!it->second.isEmpty() &&
                     (iconCandidate.containsIgnoreCase(icon) ||
-                    icon.containsIgnoreCase(iconCandidate))){
-                DBG(icon+String("~")+iconCandidate+String("=")+it->second);
-                iconPaths[icon]=it->second;
+                    icon.containsIgnoreCase(iconCandidate))) {
+                //DBG(icon+String("~")+iconCandidate+String("=")+it->second);
+                iconPaths[icon] = it->second;
                 return it->second;
             }
         }
@@ -275,7 +275,7 @@ bool DesktopEntry::startupNotify() {
 void DesktopEntry::mapIcons() {
     std::function<void(String) > recursiveIconSearch;
     recursiveIconSearch = [&recursiveIconSearch, this](String path) {
-        DBG(String("Running recursive icon search on ")+path);
+        //DBG(String("Running recursive icon search on ")+path);
         //first, map image files with new names
         std::vector<String> files = listFiles(path);
         std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
@@ -286,7 +286,7 @@ void DesktopEntry::mapIcons() {
                 String filename = iconMatch.str(1);
                 if (this->iconPaths[filename].isEmpty()) {
                     this->iconPaths[filename] = path + iconMatch.str(0);
-                    //DBG(filename+String("=")+path+iconMatch.str(0));
+                            //DBG(filename+String("=")+path+iconMatch.str(0));
                 }
             }
             return false;
@@ -317,9 +317,9 @@ void DesktopEntry::mapIcons() {
                     }
             return false;
         });
-        DBG(String("Searching ")+String(dirs.size())+String(" subdirectories"));
+        //DBG(String("Searching ")+String(dirs.size())+String(" subdirectories"));
         foreach(dirs, [path, this, &recursiveIconSearch](String subDir)->bool {
-            String subPath=path+subDir+"/";
+            String subPath = path + subDir + "/";
             recursiveIconSearch(subPath);
             return false;
         });
