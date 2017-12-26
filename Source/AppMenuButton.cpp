@@ -27,6 +27,7 @@ desktopEntry(desktopEntry), index(index), column(column) {
     }
     DBG(String("Found icon path " + iconPath));
     appIcon = createImageFromFile(File(iconPath));
+    setWantsKeyboardFocus(false);
 }
 
 //Set whether this button is currently selected.

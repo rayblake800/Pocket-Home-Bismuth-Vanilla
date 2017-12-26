@@ -66,6 +66,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/ConfigFile_cd42f267.o \
   $(JUCE_OBJDIR)/AppMenuPage_54656cb0.o \
   $(JUCE_OBJDIR)/AppMenuComponent_3f3eb5c6.o \
   $(JUCE_OBJDIR)/AppMenuButton_d9661cd3.o \
@@ -115,6 +116,11 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
+
+$(JUCE_OBJDIR)/ConfigFile_cd42f267.o: ../../Source/ConfigFile.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigFile.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AppMenuPage_54656cb0.o: ../../Source/AppMenuPage.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)

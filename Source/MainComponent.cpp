@@ -11,6 +11,7 @@ MainContentComponent::MainContentComponent(const var &configJson)
 {
   lookAndFeel = new PokeLookAndFeel();
   setLookAndFeel(lookAndFeel);
+  setWantsKeyboardFocus(false);
 
   //Function to execute when the login button is pressed on login page
   auto function = [this] () { this->loggedIn(); };

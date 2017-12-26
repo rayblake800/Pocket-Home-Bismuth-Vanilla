@@ -169,7 +169,7 @@ void PokeLaunchApplication::initialise(const String &commandLine) {
     if (!configJson) {
         bool launch = AlertWindow::showOkCancelBox(AlertWindow::AlertIconType::WarningIcon,
                 "Cannot launch Pocket-Home",
-                "Home configuartion could not be read\n\
+                "Home configuration could not be read\n\
 Do you want to restore the default \n \
 configuration automatically ?",
                 "Yes",

@@ -15,6 +15,7 @@
 
 AppMenuPage::AppMenuPage(LauncherComponent * launcherComponent) {
     setWantsKeyboardFocus(true);
+    setExplicitFocusOrder(1);
     Rectangle<int> appMenuBorder = getScreenSize();
     appMenuBorder.setLeft(10);
     appMenuBorder.setTop(30);
@@ -33,6 +34,7 @@ AppMenuPage::AppMenuPage(LauncherComponent * launcherComponent) {
       addAndMakeVisible(drawable);
       drawable->setTransformToFit(Desktop::getInstance().getDisplays().getMainDisplay().userArea.toFloat(),
               RectanglePlacement::stretchToFit);
+      drawable->setWantsKeyboardFocus(false);
       return drawable;
     };
     innerFrame=loadSVG("innerFrame.svg",PokeLookAndFeel::chipPurple);
@@ -62,6 +64,7 @@ bool AppMenuPage::keyPressed(const KeyPress& key) {
     } else if (keyCode == KeyPress::returnKey ||
             keyCode == KeyPress::spaceKey ||
             keyCode == KeyPress::rightKey) {
+        DBG("AppMenuPage:click selected key");
         appMenu->clickSelected();
         return true;
     }

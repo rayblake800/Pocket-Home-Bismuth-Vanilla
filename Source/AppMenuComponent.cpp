@@ -24,7 +24,7 @@ debounceTimer(this, [](AppMenuComponent* appMenu) {
 }),
 buttonWidth(configJson["menuButtonWidth"]),
 buttonHeight(configJson["menuButtonHeight"]) {
-
+    setWantsKeyboardFocus(false);
     launchSpinner = new OverlaySpinner();
     selected.push_back(NULL);
     columnTops.push_back(0);
@@ -165,6 +165,7 @@ void AppMenuComponent::selectIndex(int index) {
         return;
     }
     int column = activeColumn();
+    DBG(String("AppMenuComponent: selecting column ")+String(column)+String(" index ")+String(index));
     if (index >= buttonColumns[column].size()
             || index < 0
             || selected[column] == buttonColumns[column][index])return;

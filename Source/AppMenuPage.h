@@ -30,4 +30,6 @@ private:
     
     //for each of these values, screenSize/val=totalSize
     //static const int leftFrameRatio=
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuPage);
 };

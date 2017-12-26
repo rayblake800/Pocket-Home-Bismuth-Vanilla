@@ -71,8 +71,6 @@ const char* bluetooth_json = (const char*) temp_binary_data_0;
 //================== config.json ==================
 static const unsigned char temp_binary_data_1[] =
 "{\r\n"
-"  \"menuButtonWidth\" : 416,\r\n"
-"  \"menuButtonHeight\" : 45, \r\n"
 "  \"defaultPage\" : \"Apps\",\r\n"
 "  \"pages\": [\r\n"
 "    {\r\n"
@@ -1624,7 +1622,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
     switch (hash)
     {
         case 0x0d665fd9:  numBytes = 1119; return bluetooth_json;
-        case 0x0106dbc5:  numBytes = 1696; return config_json;
+        case 0x0106dbc5:  numBytes = 1639; return config_json;
         case 0xdc5a21d3:  numBytes = 120196; return LatoRegular_ttf;
         case 0x53801bd2:  numBytes = 1167; return wifi_json;
         default: break;

@@ -229,6 +229,7 @@ clock(nullptr), labelip("ip", "") {
     appsPage->setName("Apps");
     pages.add(appsPage);
     pagesByName.set("Apps", appsPage);
+    appsPage->grabKeyboardFocus();
 
     // Read config for corner locations
     auto pagesData = configJson["pages"].getArray();
@@ -299,7 +300,7 @@ void LauncherComponent::resized() {
     botButtons->setBounds(bounds.getX(), bounds.getHeight() - barSize, bounds.getWidth(),
             barSize);
     pageStack->setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
-    pageStack->setWantsKeyboardFocus(true);
+    //pageStack->setWantsKeyboardFocus(true);
 
     batteryLabel->setBounds(bounds.getX() + 50, bounds.getY(), 50, 30);
 

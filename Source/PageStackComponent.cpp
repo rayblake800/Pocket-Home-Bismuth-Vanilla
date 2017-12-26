@@ -3,6 +3,7 @@
 
 PageStackComponent::PageStackComponent() {
   setInterceptsMouseClicks(false, true);
+  setWantsKeyboardFocus(false);
 }
 
 PageStackComponent::~PageStackComponent() {}

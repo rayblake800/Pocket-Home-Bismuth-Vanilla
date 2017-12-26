@@ -3576,6 +3576,8 @@
         <in>BatteryMonitor.h</in>
         <in>ClockMonitor.cpp</in>
         <in>ClockMonitor.hpp</in>
+        <in>ConfigFile.cpp</in>
+        <in>ConfigFile.h</in>
         <in>DateTimePage.cpp</in>
         <in>DateTimePage.h</in>
         <in>DesktopEntries.cpp</in>

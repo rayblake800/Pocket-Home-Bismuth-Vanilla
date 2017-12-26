@@ -18,6 +18,7 @@
         <in>AppsPageComponent.cpp</in>
         <in>BatteryMonitor.cpp</in>
         <in>ClockMonitor.cpp</in>
+        <in>ConfigFile.cpp</in>
         <in>DateTimePage.cpp</in>
         <in>DesktopEntries.cpp</in>
         <in>DesktopEntry.cpp</in>
@@ -540,6 +541,40 @@
             <pElem>JuceLibraryCode</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
+        </ccTool>
+      </item>
+      <item path="Source/ConfigFile.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>/usr/include/libnm-glib</pElem>
+            <pElem>/usr/include/NetworkManager</pElem>
+            <pElem>/usr/include/dbus-1.0</pElem>
+            <pElem>/usr/lib/dbus-1.0/include</pElem>
+            <pElem>/usr/include/alsa</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/libpng16</pElem>
+            <pElem>/usr/include/harfbuzz</pElem>
+            <pElem>/usr/include/glib-2.0</pElem>
+            <pElem>/usr/lib/glib-2.0/include</pElem>
+            <pElem>JuceLibraryCode</pElem>
+            <pElem>deps/JUCE/modules</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>DEBUG=1</Elem>
+            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
+            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
+            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
+            <Elem>JucePlugin_Build_AAX=0</Elem>
+            <Elem>JucePlugin_Build_AU=0</Elem>
+            <Elem>JucePlugin_Build_AUv3=0</Elem>
+            <Elem>JucePlugin_Build_RTAS=0</Elem>
+            <Elem>JucePlugin_Build_Standalone=0</Elem>
+            <Elem>JucePlugin_Build_VST3=0</Elem>
+            <Elem>JucePlugin_Build_VST=0</Elem>
+            <Elem>LINUX=1</Elem>
+            <Elem>_DEBUG=1</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/DateTimePage.cpp" ex="false" tool="1" flavor2="8">
