@@ -154,7 +154,7 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked) {
 }
 
 void AppMenuComponent::resized() {
-    launchSpinner->setBounds(Desktop::getInstance().getDisplays().getMainDisplay().userArea);
+    launchSpinner->setBounds(getScreenSize());
     //if (selected[activeColumn()] != NULL){
     //    scrollToSelected();
     //}
@@ -219,7 +219,7 @@ void AppMenuComponent::scrollToSelected() {
     Rectangle<int>dest = getBounds();
     if (selectedButton != NULL) {
         int buttonPos = selectedButton->getY();
-        int screenHeight = Desktop::getInstance().getDisplays().getMainDisplay().userArea.getHeight();
+        int screenHeight = getScreenSize().getHeight();
         int distanceFromCenter = abs(buttonPos - getY() + screenHeight / 2);
         //only scroll vertically if selected button is outside the center 3/5 
         if (distanceFromCenter > screenHeight / 5 * 3) {

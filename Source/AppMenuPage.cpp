@@ -9,13 +9,34 @@
  */
 
 #include "AppMenuPage.h"
+#include "PokeLookAndFeel.h"
+#include "Utils.h"
 #include "Main.h"
 
 AppMenuPage::AppMenuPage(LauncherComponent * launcherComponent) {
-    Rectangle<int> appMenuBorder = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
+    setWantsKeyboardFocus(true);
+    Rectangle<int> appMenuBorder = getScreenSize();
+    appMenuBorder.setLeft(10);
+    appMenuBorder.setTop(30);
     appMenu = new AppMenuComponent(getConfigJSON(), appMenuBorder);
     addAndMakeVisible(appMenu);
-    setWantsKeyboardFocus(true);
+
+    std::function<Drawable*(String,Colour)>loadSVG=
+    [this](String filename,Colour fillColour)->Drawable*{
+      File svgFile=assetFile(filename);
+      if(!svgFile.exists()){
+          return NULL;
+      }
+      ScopedPointer<XmlElement> svgElement=XmlDocument::parse(svgFile);
+      Drawable * drawable= Drawable::createFromSVG(*svgElement);
+      drawable->replaceColour(Colours::black,fillColour);
+      addAndMakeVisible(drawable);
+      drawable->setTransformToFit(Desktop::getInstance().getDisplays().getMainDisplay().userArea.toFloat(),
+              RectanglePlacement::stretchToFit);
+      return drawable;
+    };
+    innerFrame=loadSVG("innerFrame.svg",PokeLookAndFeel::chipPurple);
+    outerFrame=loadSVG("outerFrame.svg",PokeLookAndFeel::medGrey);
 }
 
 AppMenuPage::~AppMenuPage() {

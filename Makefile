@@ -1,4 +1,4 @@
-export CONFIG:=Debug
+export CONFIG:=Release
 
 VERSION=0.0.8.9
 BUILD=1

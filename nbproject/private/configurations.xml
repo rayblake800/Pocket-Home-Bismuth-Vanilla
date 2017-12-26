@@ -3592,8 +3592,6 @@
         <in>LauncherBarComponent.h</in>
         <in>LauncherComponent.cpp</in>
         <in>LauncherComponent.h</in>
-        <in>LauncherTestPage.cpp</in>
-        <in>LibraryPageComponent.cpp</in>
         <in>Main.cpp</in>
         <in>Main.h</in>
         <in>MainComponent.cpp</in>

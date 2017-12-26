@@ -24,5 +24,10 @@ private:
     void resized() override;
     
     ScopedPointer<AppMenuComponent> appMenu;
+    ScopedPointer<Drawable> innerFrame;
+    ScopedPointer<Drawable> outerFrame;
     LauncherComponent * launcherComponent;
+    
+    //for each of these values, screenSize/val=totalSize
+    //static const int leftFrameRatio=
 };

@@ -46,6 +46,8 @@ std::vector<String> listFiles(const String& path);
 //list all directory files in path, ignoring ./ and ../
 std::vector<String> listDirectoryFiles(const String& path);
 
+Rectangle<int>getScreenSize();
+
 /**
 for each entry in container, run fn(entry)
 if fn returns true, stop the loop

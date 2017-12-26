@@ -80,14 +80,14 @@ void AppMenuButton::paint(Graphics& g) {
     Rectangle<int> border = getBounds().withPosition(0,0);
     if (clip) {
         Rectangle<int>clip = clipRegion.translated(-getScreenX(), -getScreenY());
-        if(border.intersects(clip)){
-            border = border.getIntersection(clip);
-        }
+//        if(border.intersects(clip)){
+//            border = border.getIntersection(clip);
+//        }
         g.reduceClipRegion(clip);
     }
     //background
     g.setColour(selected ? PokeLookAndFeel::chipPurple : PokeLookAndFeel::medGrey);
-    //g.setOpacity(selected?.2:.8);
+    g.setOpacity(selected?.8:.2);
     g.fillRect(border);
     g.setOpacity(1);
     //app icon

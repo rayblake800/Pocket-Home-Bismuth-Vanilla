@@ -242,6 +242,10 @@ std::vector<String> listDirectoryFiles(const String& path) {
     });
     return directories;
 }
+
+Rectangle<int> getScreenSize(){
+    return Rectangle<int>(Desktop::getInstance().getDisplays().getMainDisplay().userArea);
+}
 //
 //PathRecord::PathRecord() {
 //    String path = getHomePath() + recordPath;

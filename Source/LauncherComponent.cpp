@@ -147,7 +147,7 @@ clock(nullptr), labelip("ip", "") {
 
     /* Setting the clock */
     clock = new ClockMonitor;
-    clock->getLabel().setBounds(380, 0, 50, 50);
+    clock->getLabel().setBounds(380, -10, 50, 20);
     String displayclock = (configJson["showclock"]).toString();
     String formatclock = (configJson["timeformat"]).toString();
     if (displayclock.length() == 0 || displayclock == String("yes"))
@@ -162,7 +162,7 @@ clock(nullptr), labelip("ip", "") {
     addAndMakeVisible(batteryLabel);
     batteryLabel->setFont(Font(15.f));
     //   batteryLabel->setOpaque(false);
-    //   batteryLabel->setAlwaysOnTop(true);
+       batteryLabel->setAlwaysOnTop(true);
     //   batteryLabel->addToDesktop(ComponentPeer::StyleFlags::windowIsSemiTransparent);
 
     String value = (configJson["background"]).toString();
@@ -291,7 +291,7 @@ void LauncherComponent::paint(Graphics &g) {
 
 void LauncherComponent::resized() {
     auto bounds = getLocalBounds();
-    int barSize = 50;
+    int barSize = 30;
 
     topButtons->setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(),
             barSize);
@@ -301,9 +301,9 @@ void LauncherComponent::resized() {
     pageStack->setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
     pageStack->setWantsKeyboardFocus(true);
 
-    batteryLabel->setBounds(bounds.getX() + 40, bounds.getY(), 50, 50);
+    batteryLabel->setBounds(bounds.getX() + 50, bounds.getY(), 50, 30);
 
-    clock->getLabel().setBounds(bounds.getX() + 370, bounds.getY(), 80, 50);
+    clock->getLabel().setBounds(bounds.getX() + 365, bounds.getY(), 80, 30);
 
     labelip.setBounds(bounds.getX() + 190, bounds.getY(), 100, 30);
     // init
