@@ -23,9 +23,9 @@ private:
     void visibilityChanged() override;
     void resized() override;
     
-    ScopedPointer<AppMenuComponent> appMenu;
-    ScopedPointer<Drawable> innerFrame;
-    ScopedPointer<Drawable> outerFrame;
+    ScopedPointer<AppMenuComponent> appMenu=nullptr;
+    ScopedPointer<Drawable> innerFrame=nullptr;
+    ScopedPointer<Drawable> outerFrame=nullptr;
     LauncherComponent * launcherComponent;
     
     //for each of these values, screenSize/val=totalSize

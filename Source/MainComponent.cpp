@@ -13,27 +13,28 @@ MainContentComponent::MainContentComponent()
   setLookAndFeel(lookAndFeel);
   setWantsKeyboardFocus(false);
 
+  setSize(480, 272);
+
   //Function to execute when the login button is pressed on login page
   auto function = [this] () { this->loggedIn(); };
-  lp = new LoginPage(function);
+  loginPage = new LoginPage(function);
   LookAndFeel::setDefaultLookAndFeel(lookAndFeel);
 
   pageStack = new PageStackComponent();
   
-  if(lp->hasPassword())
-    addAndMakeVisible(lp);
+  if(loginPage->hasPassword())
+    addAndMakeVisible(loginPage);
   else
     addAndMakeVisible(pageStack);  
-  lp->textFocus();
+  loginPage->textFocus();
   
   launcher = new LauncherComponent();
   pageStack->pushPage(launcher, PageStackComponent::kTransitionNone);
-
-  setSize(480, 272);
+  repaint();
 }
 
 void MainContentComponent::loggedIn(){
-  removeChildComponent(lp);
+  removeChildComponent(loginPage);
   addAndMakeVisible(pageStack);
 }
 
@@ -45,8 +46,12 @@ void MainContentComponent::paint(Graphics &g) {
 
 void MainContentComponent::resized() {
   auto bounds = getLocalBounds();
-  pageStack->setBounds(bounds);
-  lp->setBounds(bounds);
+  if(pageStack != nullptr){
+      pageStack->setBounds(bounds);
+  }
+  if(loginPage != nullptr){
+    loginPage->setBounds(bounds);
+  }
 }
 
 void MainContentComponent::handleMainWindowInactive() {
@@ -64,7 +69,7 @@ bool LoginPage::hasPassword(){
     content = content.removeCharacters("\n");
     if(content==String("none")) return false;
     else hashed_password = content;
-    haspassword = true;
+    foundPassword = true;
     label_password->setVisible(true);
     cur_password->setVisible(true);
     return true;
@@ -78,7 +83,7 @@ ntcIcon(new DrawableImage),
 cur_password(new TextEditor("field_password", 0x2022)),
 label_password(new Label("pass", "Password :")),
 log(new TextButton("login")), hashed_password("none"),
-functiontoexecute(lambda), haspassword(false)
+functionToExecute(lambda), foundPassword(false)
 {
   this->setBounds(0, 0, 480, 272);
   Image bg = createImageFromFile(assetFile("login/background.png"));
@@ -102,7 +107,7 @@ functiontoexecute(lambda), haspassword(false)
   addAndMakeVisible(cur_password, 3);
   addAndMakeVisible(label_password, 2);
   
-  if(!haspassword){
+  if(!foundPassword){
       cur_password->setVisible(false);
       label_password->setVisible(false);
   }
@@ -134,7 +139,7 @@ void LoginPage::buttonClicked(Button *button){
   String hashed = SettingsPageLogin::hashString(pass_tmp);
   if(hashed_password=="none" || hashed == hashed_password){
       cur_password->setText("");
-      functiontoexecute();
+      functionToExecute();
   }
   else displayError();
 }
@@ -147,5 +152,5 @@ void LoginPage::textEditorReturnKeyPressed(TextEditor& te){
 }
 
 void LoginPage::paint(Graphics &g) {
-  g.fillAll(Colours::white);
+  //g.fillAll(Colours::white);
 }

@@ -11,6 +11,7 @@
 #include "AppMenuPage.h"
 #include "PokeLookAndFeel.h"
 #include "Utils.h"
+#include "ConfigFile.h"
 #include "Main.h"
 
 AppMenuPage::AppMenuPage(LauncherComponent * launcherComponent) {
@@ -18,24 +19,33 @@ AppMenuPage::AppMenuPage(LauncherComponent * launcherComponent) {
     setExplicitFocusOrder(1);
     appMenu = new AppMenuComponent();
     addAndMakeVisible(appMenu);
-
-    std::function < Drawable * (String, Colour) > loadSVG =
-            [this](String filename, Colour fillColour)->Drawable* {
+    ConfigFile * config = ConfigFile::getInstance();
+    ConfigFile::ComponentSettings frameSettings =
+            config->getComponentSettings(ConfigFile::MENU_FRAME);
+    std::function < Drawable * (int) > loadSVG =
+            [this, &frameSettings](int assetIndex) ->Drawable* {
+                String filename = frameSettings.getAssetFiles()[assetIndex];
+                Colour colour = frameSettings.getColours()[assetIndex];
                 File svgFile = assetFile(filename);
                 if (!svgFile.exists()) {
-                    return NULL;
+                    return nullptr;
                 }
                 ScopedPointer<XmlElement> svgElement = XmlDocument::parse(svgFile);
                 Drawable * drawable = Drawable::createFromSVG(*svgElement);
-                drawable->replaceColour(Colours::black, fillColour);
+                drawable->replaceColour(Colours::black, 
+                        frameSettings.getColours()[assetIndex]);
                 addAndMakeVisible(drawable);
                 drawable->setTransformToFit(getWindowSize().toFloat(),
                         RectanglePlacement::stretchToFit);
                 drawable->setWantsKeyboardFocus(false);
                 return drawable;
             };
-    innerFrame = loadSVG("innerFrame.svg", PokeLookAndFeel::chipPurple);
-    outerFrame = loadSVG("outerFrame.svg", PokeLookAndFeel::medGrey);
+
+    if (frameSettings.getColours().size() >= 2 &&
+            frameSettings.getAssetFiles().size() >= 2) {
+        innerFrame = loadSVG(0);
+        outerFrame = loadSVG(1);
+    }
 }
 
 AppMenuPage::~AppMenuPage() {
@@ -75,12 +85,22 @@ void AppMenuPage::visibilityChanged() {
 }
 
 void AppMenuPage::resized() {
-    setBounds(getWindowSize());
-    innerFrame->setBounds(0,0,getWidth(),getHeight());
-    outerFrame->setBounds(0,0,getWidth(),getHeight());
-    innerFrame->setTransformToFit(getBounds().toFloat(),
-            RectanglePlacement::stretchToFit);
-    outerFrame->setTransformToFit(getBounds().toFloat(),
-            RectanglePlacement::stretchToFit);
-
+    ConfigFile * config = ConfigFile::getInstance();
+    ConfigFile::ComponentSettings frameSettings =
+            config->getComponentSettings(ConfigFile::MENU_FRAME);
+    if (innerFrame != nullptr) {
+        frameSettings.applyBounds(innerFrame);
+        innerFrame->setTransformToFit(innerFrame->getBounds().toFloat(),
+                RectanglePlacement::stretchToFit);
+    }
+    if (outerFrame != nullptr) {
+        frameSettings.applyBounds(outerFrame);
+        outerFrame->setTransformToFit(outerFrame->getBounds().toFloat(),
+                RectanglePlacement::stretchToFit);
+    }
+    if (appMenu != nullptr) {
+        ConfigFile::ComponentSettings menuSettings =
+                config->getComponentSettings(ConfigFile::APP_MENU);
+        menuSettings.applyBounds(appMenu);
+    }
 }

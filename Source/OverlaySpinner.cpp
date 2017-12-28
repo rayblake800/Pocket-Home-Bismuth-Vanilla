@@ -32,6 +32,7 @@ OverlaySpinner::OverlaySpinner() : overlaySpinnerTimer(this) {
     spinnerImage = new ImageComponent();
     spinnerImage->setImage(spinnerImages[0], RectanglePlacement::centred);
     addAndMakeVisible(spinnerImage);
+    setWantsKeyboardFocus(false);
 }
 
 OverlaySpinner::~OverlaySpinner() {

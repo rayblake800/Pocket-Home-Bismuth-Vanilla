@@ -94,7 +94,7 @@ private:
         virtual ~AppMenuTimer();
         virtual void timerCallback() override;
     private:
-        AppMenuComponent* appMenu = NULL;
+        AppMenuComponent* appMenu = nullptr;
         std::function<void(AppMenuComponent*)> callback;
     };
     AppMenuTimer runningCheckTimer;

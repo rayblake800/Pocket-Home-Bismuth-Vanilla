@@ -3590,7 +3590,6 @@
         <in>InputSettingsPage.cpp</in>
         <in>InputSettingsPage.h</in>
         <in>LauncherBarComponent.cpp</in>
-        <in>LauncherBarComponent.h</in>
         <in>LauncherComponent.cpp</in>
         <in>LauncherComponent.h</in>
         <in>Main.cpp</in>

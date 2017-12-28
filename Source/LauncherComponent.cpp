@@ -26,7 +26,8 @@ void BatteryIconTimer::timerCallback() {
             if (button->getName() == "Battery") {
                 int status = round(((float) batteryStatus.percentage) / 100.0f * 3.0f);
 
-                int pct = (int) batteryStatus.percentage;
+                //int pct = (int) batteryStatus.percentage;
+                int pct = 100;
                 String pct_s = std::to_string(pct) + " %";
                 launcherComponent->batteryLabel->setText(pct_s, dontSendNotification);
 
@@ -136,37 +137,40 @@ void LauncherComponent::setClockAMPM(bool ampm) {
 
 void LauncherComponent::hideLaunchSpinner() {
     AppMenuPage * appPage = (AppMenuPage *) pagesByName["Apps"];
-    if (appPage != NULL) {
+    if (appPage != nullptr) {
         appPage->hideLaunchSpinner();
     }
 }
 
 LauncherComponent::LauncherComponent() :
 clock(nullptr), labelip("ip", "") {
+    pageStack = new PageStackComponent();
+    pageStack->setWantsKeyboardFocus(false);
+    addAndMakeVisible(pageStack);
+
     ConfigFile * config = ConfigFile::getInstance();
     /* Ip settings */
     labelip.setVisible(false);
 
+    std::function<void(Label*, ConfigFile::ComponentType) > positionLabel =
+            [this, config](Label * label, ConfigFile::ComponentType type) {
+                config->getComponentSettings(type).applyBounds(label);
+                label->setFont(Font(label->getHeight()));
+                label->setWantsKeyboardFocus(false);
+                addAndMakeVisible(label);
+            };
     /* Setting the clock */
     clock = new ClockMonitor;
-    config->getComponentSettings(ConfigFile::CLOCK).
-            applyComponentBounds(&(clock->getLabel()));
-    //clock->getLabel().setBounds(380, -10, 50, 20);
-    clock->getLabel().setWantsKeyboardFocus(false);
+    positionLabel(&(clock->getLabel()), ConfigFile::CLOCK);
+    clock->getLabel().setJustificationType(Justification::centredRight);
     String formatclock = config->getConfigString(ConfigFile::TIME_FORMAT);
     setClockVisible(config->getConfigBool(ConfigFile::SHOW_CLOCK));
     setClockAMPM(formatclock == "ampm");
 
     /* Battery percentage label */
     batteryLabel = new Label("percentage", "-%");
-    addAndMakeVisible(batteryLabel);
-    batteryLabel->setFont(Font(15.f));
-    batteryLabel->setWantsKeyboardFocus(false);
-    //   batteryLabel->setOpaque(false);
-    batteryLabel->setAlwaysOnTop(true);
-    config->getComponentSettings(ConfigFile::BATTERY_PERCENT).
-            applyComponentBounds(batteryLabel);
-    //   batteryLabel->addToDesktop(ComponentPeer::StyleFlags::windowIsSemiTransparent);
+    positionLabel(batteryLabel, ConfigFile::BATTERY_PERCENT);
+    batteryLabel->setJustificationType(Justification::centredLeft);
 
     String value = config->getConfigString(ConfigFile::BACKGROUND);
 
@@ -175,10 +179,6 @@ clock(nullptr), labelip("ip", "") {
         setColorBackground(value);
     else
         setImageBackground(value);
-
-    pageStack = new PageStackComponent();
-    pageStack->setWantsKeyboardFocus(false);
-    addAndMakeVisible(pageStack);
 
     Array<String> wifiImgPaths{"wifiStrength0.png", "wifiStrength1.png", "wifiStrength2.png", "wifiStrength3.png", "wifiOff.png"};
     for (auto& path : wifiImgPaths) {
@@ -226,9 +226,9 @@ clock(nullptr), labelip("ip", "") {
     std::function<void(ConfigFile::ComponentSettings, String) > loadButton =
             [this](ConfigFile::ComponentSettings buttonSettings, String name) {
                 ImageButton * button = new ImageButton(name);
-                buttonSettings.applyComponentBounds(button);
-                if (!buttonSettings.assetFiles.empty()) {
-                    Image buttonImg = createImageFromFile(assetFile(buttonSettings.assetFiles[0]));
+                buttonSettings.applyBounds(button);
+                if (!buttonSettings.getAssetFiles().empty()) {
+                    Image buttonImg = createImageFromFile(assetFile(buttonSettings.getAssetFiles()[0]));
                     button->setImages(false, false, true,
                             buttonImg, 1.0f, Colours::transparentWhite, // normal
                             buttonImg, 1.0f, Colours::transparentWhite, // over
@@ -236,7 +236,7 @@ clock(nullptr), labelip("ip", "") {
                             0);
                 }
                 button->setWantsKeyboardFocus(false);
-                if (name == "Power" || name =="Settings") {
+                if (name == "Power" || name == "Settings") {
                     button->addListener(this);
                 } else {
                     button->setInterceptsMouseClicks(false, false);
@@ -296,17 +296,21 @@ void LauncherComponent::resized() {
             DBG(String("LauncherComponent: found unexpected button ") + button->getName());
             break;
         }
-        config->getComponentSettings(componentType).applyComponentBounds(button);
+        config->getComponentSettings(componentType).applyBounds(button);
     }
 
     pageStack->setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
     //pageStack->setWantsKeyboardFocus(true);
 
-    config->getComponentSettings(ConfigFile::BATTERY_PERCENT)
-            .applyComponentBounds(batteryLabel);
-    config->getComponentSettings(ConfigFile::CLOCK)
-            .applyComponentBounds(&(clock->getLabel()));
-    batteryLabel->setBounds(bounds.getX() + 50, bounds.getY(), 50, 30);
+    std::function<void(ConfigFile::ComponentType, Label*) > resizeText =
+            [this, config](ConfigFile::ComponentType type, Label * label) {
+                Font labelFont = label->getFont();
+                config->getComponentSettings(type).applyBounds(label);
+                labelFont.setHeight(label->getHeight());
+                label->setFont(labelFont);
+            };
+    resizeText(ConfigFile::BATTERY_PERCENT, batteryLabel);
+    resizeText(ConfigFile::CLOCK, &(clock->getLabel()));
     labelip.setBounds(bounds.getX() + 190, bounds.getY(), 100, 30);
     // init
     if (!resize) {

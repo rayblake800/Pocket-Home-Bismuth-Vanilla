@@ -185,14 +185,16 @@ PageStackComponent &PokeLaunchApplication::getMainStack() {
 
 PokeLaunchApplication::MainWindow::MainWindow(String name)
 : DocumentWindow(name, Colours::darkgrey, DocumentWindow::allButtons) {
+    setWantsKeyboardFocus(false);
     setUsingNativeTitleBar(true);
     setResizable(true, false);
     setContentOwned(new MainContentComponent(), true);
-    centreWithSize(getWidth(), getHeight());
+    Rectangle<int>screenSize=Desktop::getInstance().getDisplays().getMainDisplay().userArea;
+    setBounds(screenSize);
     setVisible(true);
 #if JUCE_LINUX
-    //  setTitleBarHeight(0);
-    //  setFullScreen(true);
+      //setTitleBarHeight(0);
+      //setFullScreen(true);
 #endif
 }
 

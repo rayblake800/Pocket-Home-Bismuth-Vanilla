@@ -21,7 +21,7 @@ void ClockMonitor::setAmMode(bool mode) {
 void ClockMonitor::run() {
     while (!threadShouldExit()) {
         struct timeval tv;
-        int error = gettimeofday(&tv, NULL);
+        int error = gettimeofday(&tv, nullptr);
         if (error) perror("Time of the day");
         struct tm res;
         localtime_r(&tv.tv_sec, &res);

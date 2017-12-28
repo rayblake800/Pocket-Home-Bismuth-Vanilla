@@ -11,8 +11,7 @@
 #include "DesktopEntry.h"
 class AppMenuButton : public TextButton {
 public:
-  //button size definitions:
-  //consider putting these in a config file
+    
   /**
    * Create a new button representing an application or folder
    * @param desktopEntry defines the application/directory data
@@ -51,6 +50,12 @@ public:
    * @return button position in its column
    */
   int getIndex();
+  
+  /**
+   * @return the size of an AppMenuButton with the current window size
+   * and config file ratios.
+   */
+  static Rectangle<int> getButtonSize();
   
   /**
    * @return button's column in the AppMenu

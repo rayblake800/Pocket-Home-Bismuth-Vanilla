@@ -3,7 +3,6 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "OverlaySpinner.h"
-#include "LauncherBarComponent.h"
 #include "PageStackComponent.h"
 #include "BatteryMonitor.h"
 #include "SwitchComponent.h"

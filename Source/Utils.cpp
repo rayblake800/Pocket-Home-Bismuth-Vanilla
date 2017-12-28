@@ -168,14 +168,14 @@ String getHomePath() {
 
 void foreachFile(const String& path, std::function<void(struct dirent*) > fn) {
     DIR * dir = opendir(path.toRawUTF8());
-    if (dir != NULL) {
-        struct dirent *dirdata = NULL;
+    if (dir != nullptr) {
+        struct dirent *dirdata = nullptr;
         do {
             dirdata = readdir(dir);
-            if (dirdata != NULL) {
+            if (dirdata != nullptr) {
                 fn(dirdata);
             }
-        } while (dirdata != NULL);
+        } while (dirdata != nullptr);
         closedir(dir);
     }
 }
@@ -206,7 +206,41 @@ std::vector<String> listDirectoryFiles(const String& path) {
     return directories;
 }
 
+//Print debug info about the component tree
+void componentTrace(){
+    std::function<void(Component*,int)> recursiveInfo;
+    recursiveInfo = [&recursiveInfo](Component* component, int depth){
+        String indent;
+        for(int i=0;i<depth;i++){
+            indent+="\t";
+        }
+        DBG(indent+String("Component:")+component->getName());
+        indent+=" ";
+        DBG(indent+String("Position: (")+String(component->getX())+String(",")+
+                String(component->getY()) + String(")"));
+        DBG(indent+String("Size: ")+String(component->getWidth())+String("x")+
+                String(component->getHeight()));
+        String properties;
+        if(component->getWantsKeyboardFocus()){
+            properties+="wantsKeyFocus,";
+        }
+        if(component->hasKeyboardFocus(false)){
+            properties+="hasKeyFocus,";
+        }
+        properties+=component->isShowing()?"showing":"not showing";
+        DBG(indent+properties);
+        int numChildren = component->getNumChildComponents();
+        if(numChildren>0){
+            DBG(indent+String("Children:")+String(numChildren));
+        }
+        for(int i=0;i<numChildren;i++){
+            recursiveInfo(component->getChildComponent(i),depth+1);
+        }
+    };
+    Component * rootComponent=Desktop::getInstance().getComponent(0);
+    recursiveInfo(rootComponent,0);
+}
+
 Rectangle<int> getWindowSize(){
     return Desktop::getInstance().getComponent(0)->getBounds().withPosition(0,0);
-    //return Rectangle<int>(Desktop::getInstance().getDisplays().getMainDisplay().userArea);
 }

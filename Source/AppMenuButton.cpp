@@ -19,10 +19,11 @@ desktopEntry(desktopEntry), index(index), column(column) {
     ConfigFile * configFile = ConfigFile::getInstance();
     ConfigFile::ComponentSettings buttonSettings =
             configFile->getComponentSettings(ConfigFile::APP_MENU_BUTTON);
-    buttonSettings.applyComponentBounds(this);
-    if (buttonSettings.colours.size() >= 2) {
-        fillColour = buttonSettings.colours[0];
-        selectedFillColour = buttonSettings.colours[1];
+    buttonSettings.applySize(this);
+    std::vector<Colour> colours=buttonSettings.getColours();
+    if (colours.size() >= 2) {
+        fillColour = colours[0];
+        selectedFillColour = colours[1];
     }
 
     String iconPath = desktopEntry.getIconPath();
@@ -68,6 +69,13 @@ int AppMenuButton::getColumn() {
     return column;
 }
 
+Rectangle<int> AppMenuButton::getButtonSize(){
+    ConfigFile * config = ConfigFile::getInstance();
+    ConfigFile::ComponentSettings buttonConf= 
+            config->getComponentSettings(ConfigFile::APP_MENU_BUTTON);
+    return buttonConf.getBounds().withPosition(0,0);
+}
+
 void AppMenuButton::paint(Graphics& g) {
     Rectangle<int> border = getBounds().withPosition(0, 0);
     g.setColour(selected ? selectedFillColour : fillColour);
@@ -84,8 +92,8 @@ void AppMenuButton::paint(Graphics& g) {
     if (imgBox.getRight() > getRight()) {
         imgBox.setRight(getRight() - 2);
     }
-    g.drawImageWithin(appIcon, imgBox.getX(), imgBox.getY(),
-            imgBox.getWidth(), imgBox.getHeight(), RectanglePlacement::centred, false);
+    g.drawImageWithin(appIcon, imgBox.getX(), imgBox.getY(),imgBox.getWidth(), 
+            imgBox.getHeight(), RectanglePlacement::centred, false);
     //app title
     g.setColour(Colours::white);
     g.setFont(Font(15.00f, Font::plain));
@@ -97,3 +105,4 @@ void AppMenuButton::paint(Graphics& g) {
     g.setOpacity(selected ? 1.0 : 0.8);
     g.drawRect(border, 2);
 }
+

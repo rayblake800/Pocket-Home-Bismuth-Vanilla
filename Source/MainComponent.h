@@ -24,8 +24,8 @@ private:
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LoginPage)
   void displayError();
   
-  std::function<void(void)> functiontoexecute;
-  bool haspassword;
+  std::function<void(void)> functionToExecute;
+  bool foundPassword;
   ScopedPointer<TextButton> log;
   ScopedPointer<Label> label_password;
   String hashed_password;
@@ -36,10 +36,9 @@ private:
 
 class MainContentComponent : public Component {
 public:
-  ScopedPointer<LauncherComponent> launcher;
-  ScopedPointer<LookAndFeel> lookAndFeel;
-
-  ScopedPointer<PageStackComponent> pageStack;
+  ScopedPointer<LauncherComponent> launcher = nullptr;
+  ScopedPointer<LookAndFeel> lookAndFeel = nullptr;
+  ScopedPointer<PageStackComponent> pageStack = nullptr;
 
   MainContentComponent();
   ~MainContentComponent();
@@ -52,5 +51,5 @@ public:
 
 private:
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainContentComponent)
-  ScopedPointer<LoginPage> lp;
+  ScopedPointer<LoginPage> loginPage;
 };

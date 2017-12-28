@@ -35,6 +35,9 @@ String getHomePath();
 //perform function(struct dirent*) on all files in path
 void foreachFile(const String& path, std::function<void(struct dirent*)> fn);
 
+//Print debug info about the component tree
+void componentTrace();
+
 //List all non-directory files in path
 std::vector<String> listFiles(const String& path);
 

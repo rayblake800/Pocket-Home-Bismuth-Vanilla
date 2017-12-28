@@ -206,7 +206,6 @@ DynamicObject * ConfigFile::ComponentSettings::getDynamicObject() {
     componentObject->setProperty("y", y);
     componentObject->setProperty("width", width);
     componentObject->setProperty("height", height);
-
     Array<var> coloursListed;
     for (int i = 0; i < colours.size(); i++) {
         coloursListed.add(var(colours[i].toString()));
@@ -221,19 +220,33 @@ DynamicObject * ConfigFile::ComponentSettings::getDynamicObject() {
     return componentObject;
 }
 
-void ConfigFile::ComponentSettings::applyComponentBounds(Component * component) {
-    Rectangle<int>screen=getWindowSize();
-    component->setBounds(x*screen.getWidth(),y*screen.getHeight(),
-            width*screen.getWidth(),height*screen.getHeight());
+Rectangle<int> ConfigFile::ComponentSettings::getBounds(){
+    Rectangle<int>window = getWindowSize();
+    return Rectangle<int>(x*window.getWidth(),y*window.getHeight(),
+            width*window.getWidth(),height*window.getHeight());
+}
 
+std::vector<Colour> ConfigFile::ComponentSettings::getColours(){
+    return colours;
+}
+
+std::vector<String> ConfigFile::ComponentSettings::getAssetFiles(){
+    return assetFiles;
+}
+
+void ConfigFile::ComponentSettings::applyBounds(Component * component) {
+    component->setBounds(getBounds());
+}
+
+void ConfigFile::ComponentSettings::applySize(Component * component) {
+    Rectangle<int>screen = getWindowSize();
+    component->setSize(width * screen.getWidth(), height * screen.getHeight());
 }
 
 ConfigFile::ComponentSettings ConfigFile::getComponentSettings(ConfigFile::ComponentType componentType) {
     const ScopedLock readLock(lock);
     return components[componentType];
 }
-
-
 
 //################################# File IO ####################################
 
@@ -249,16 +262,16 @@ ConfigFile::ConfigFile() {
 
     //checks if a var member exists
     std::function<bool(var, String) > exists = [](var json, String key)->bool {
-        return json.getProperty(key,var::null) != var::null;
+        return json.getProperty(key, var::null) != var::null;
     };
 
     //gets a var member from config if it exists, or from the default config
     //file otherwise.
     var defaultConfig = var::null;
     std::function < var(String) > getMainProperty =
-            [exists,&jsonConfig, &defaultConfig, &madeChanges](String key)->var {
-                if(exists(jsonConfig,key)) {
-                    return jsonConfig.getProperty(key,"");
+            [exists, &jsonConfig, &defaultConfig, &madeChanges](String key)->var {
+                if (exists(jsonConfig, key)) {
+                    return jsonConfig.getProperty(key, "");
                 } else {
                     if (defaultConfig == var::null) {
                         defaultConfig = JSON::parse(assetFile("config.json"));
@@ -274,9 +287,9 @@ ConfigFile::ConfigFile() {
             stringKeys.begin();
             it != stringKeys.end(); it++) {
         String key = it->second;
-//        if (!(jsonConfig->getProperty(key).isString())) {
-//            jsonConfig->setProperty(key, var::null);
-//        }
+        //        if (!(jsonConfig->getProperty(key).isString())) {
+        //            jsonConfig->setProperty(key, var::null);
+        //        }
         stringValues[key] = getMainProperty(key).toString();
     }
 
@@ -285,21 +298,21 @@ ConfigFile::ConfigFile() {
             boolKeys.begin();
             it != boolKeys.end(); it++) {
         String key = it->second;
-//        if (!jsonConfig->getProperty(key).isBool()) {
-//            jsonConfig->setProperty(key, var::null);
-//        }
+        //        if (!jsonConfig->getProperty(key).isBool()) {
+        //            jsonConfig->setProperty(key, var::null);
+        //        }
         boolValues[key] = getMainProperty(key);
     }
 
     //load favorites
     var favoriteList;
-    if (exists(jsonConfig,"pages")) {
+    if (exists(jsonConfig, "pages")) {
         DBG("backing up and extracting data from marshmallow config file");
         //found a Marshmallow Pocket-Home config file, update it.
         File legacyBackup = File(getHomePath() + "/.pocket-home/marshmallowConfig.json");
         legacyBackup.create();
         legacyBackup.replaceWithText(JSON::toString(jsonConfig));
-        var pages = jsonConfig.getProperty("pages",Array<var>());
+        var pages = jsonConfig.getProperty("pages", Array<var>());
         for (const var& page : *pages.getArray()) {
             if (page["name"] == "Apps" && page["items"].isArray()) {
                 favoriteList = page["items"];

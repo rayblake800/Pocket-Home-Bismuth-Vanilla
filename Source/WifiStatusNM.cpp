@@ -83,7 +83,7 @@ bool resolveAPSecurity(NMAccessPoint *ap) {
 WifiAccessPoint *createNMWifiAccessPoint(NMAccessPoint *ap) {
   const GByteArray *ssid = nm_access_point_get_ssid(ap);
   //GBytes *ssid = nm_access_point_get_ssid(ap);
-  char *ssid_str = NULL, *ssid_hex_str = NULL;
+  char *ssid_str = nullptr, *ssid_hex_str = nullptr;
   bool security = resolveAPSecurity(ap);
 
   /* Convert to strings */
@@ -162,7 +162,7 @@ static void handle_add_and_activate_finish(NMClient *client,
   WifiStatusNM *wifiStatus = (WifiStatusNM *) user_data;
   /*
   NMActiveConnection *active;
-  GError *err = NULL;
+  GError *err = nullptr;
 
   active = nm_client_add_and_activate_connection_finish(NM_CLIENT(client), result, &err);
   */
@@ -220,10 +220,10 @@ OwnedArray<WifiAccessPoint> WifiStatusNM::nearbyAccessPoints() {
   OwnedArray<WifiAccessPoint> accessPoints;
 
   wdev = NM_DEVICE_WIFI(nmdevice);
-  //nm_device_wifi_request_scan(wdev, NULL, NULL);
+  //nm_device_wifi_request_scan(wdev, nullptr, nullptr);
 
   ap_list =  nm_device_wifi_get_access_points(wdev);
-  if (ap_list != NULL) {
+  if (ap_list != nullptr) {
     std::map<String, WifiAccessPoint *> uniqueAPs;
     for (int i = 0; i < ap_list->len; i++) {
       NMAccessPoint *ap = (NMAccessPoint *) g_ptr_array_index(ap_list, i);
@@ -313,8 +313,8 @@ void removeNMConnection(NMDevice *nmdevice, NMActiveConnection *conn) {
       const char *test_uuid = nm_connection_get_uuid(NM_CONNECTION(candidate));
 
       if (g_strcmp0(ac_uuid, test_uuid) == 0) {
-        GError *err = NULL;
-        nm_remote_connection_delete(candidate, NULL, &err);
+        GError *err = nullptr;
+        nm_remote_connection_delete(candidate, nullptr, &err);
         if (err) {
           DBG("WifiStatusNM: failed to remove active connection!");
           DBG("WifiStatusNM::" << __func__ << ": " << err->message);
@@ -404,7 +404,7 @@ void WifiStatusNM::handleConnectedAccessPoint() {
   if (connectedAP)
     DBG("WifiStatusNM::" << __func__ << " ssid = " << connectedAP->ssid);
   else
-    DBG("WifiStatusNM::" << __func__ << " connectedAP = NULL");
+    DBG("WifiStatusNM::" << __func__ << " connectedAP = nullptr");
 }
 
 bool isValidWEPKeyFormat(String key) {
@@ -430,16 +430,16 @@ void WifiStatusNM::setConnectedAccessPoint(WifiAccessPoint *ap, String psk) {
   }
   // try to connect to ap, dispatch events on success and failure
   else {
-    NMConnection *connection = NULL;
-    NMSettingWireless *s_wifi = NULL;
-    NMSettingWirelessSecurity *s_wsec = NULL;
-    const char *nm_ap_path = NULL;
+    NMConnection *connection = nullptr;
+    NMSettingWireless *s_wifi = nullptr;
+    NMSettingWirelessSecurity *s_wsec = nullptr;
+    const char *nm_ap_path = nullptr;
     const GPtrArray *ap_list;
     NMAccessPoint *candidate_ap;
 
     //FIXME: expand WifiAccessPoint struct to know which NMAccessPoint it is
     ap_list = nm_device_wifi_get_access_points(NM_DEVICE_WIFI(nmdevice));
-    if (ap_list == NULL)
+    if (ap_list == nullptr)
       return;
 
     for (int i = 0; i < ap_list->len; i++) {
@@ -468,7 +468,7 @@ void WifiStatusNM::setConnectedAccessPoint(WifiAccessPoint *ap, String psk) {
     g_object_set(s_wifi,
                  NM_SETTING_WIRELESS_SSID, nm_access_point_get_ssid(candidate_ap),
                  NM_SETTING_WIRELESS_HIDDEN, false,
-                 NULL);
+                 nullptr);
 
     if (!psk.isEmpty()) {
       s_wsec = (NMSettingWirelessSecurity *) nm_setting_wireless_security_new();
@@ -480,15 +480,15 @@ void WifiStatusNM::setConnectedAccessPoint(WifiAccessPoint *ap, String psk) {
         nm_setting_wireless_security_set_wep_key(s_wsec, 0, psk.toRawUTF8());
 	if (isValidWEPKeyFormat(psk))
           g_object_set(G_OBJECT(s_wsec), NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
-                       NM_WEP_KEY_TYPE_KEY, NULL);
+                       NM_WEP_KEY_TYPE_KEY, nullptr);
 	else if (isValidWEPPassphraseFormat(psk))
           g_object_set(G_OBJECT(s_wsec), NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
-                       NM_WEP_KEY_TYPE_PASSPHRASE, NULL);
+                       NM_WEP_KEY_TYPE_PASSPHRASE, nullptr);
 	else
 	  DBG("User input invalid WEP Key type, psk.length() = " << psk.length()
               << ", not in [5,10,13,26]");
       } else {
-        g_object_set(s_wsec, NM_SETTING_WIRELESS_SECURITY_PSK, psk.toRawUTF8(), NULL);
+        g_object_set(s_wsec, NM_SETTING_WIRELESS_SECURITY_PSK, psk.toRawUTF8(), nullptr);
       }
     }
 

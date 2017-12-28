@@ -71,7 +71,7 @@ void WifiAccessPointListItem::paintButton(Graphics &g, bool isMouseOverButton, b
             1, borderThick);
 
     if (!ap) {
-        DBG(__func__ << ": ERROR: trying to paint NULL AP!!!!");
+        DBG(__func__ << ": ERROR: trying to paint nullptr AP!!!!");
         return;
     }
     icons->wifiStrength[wifiSignalStrengthToIdx(ap->signalStrength)]->drawWithin(g, iconBounds,

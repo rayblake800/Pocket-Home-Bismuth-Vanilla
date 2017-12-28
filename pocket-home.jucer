@@ -14,19 +14,100 @@
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
+      <GROUP id="{3911B28B-4F73-61C8-49FD-75C1B19EC83E}" name="Components">
+        <GROUP id="{72FAFC8F-3196-9496-17F7-29D199ED23D7}" name="Pages">
+          <FILE id="g04lyK" name="SettingsPageComponent.cpp" compile="1" resource="0"
+                file="Source/SettingsPageComponent.cpp"/>
+          <FILE id="NRuhIp" name="SettingsPageComponent.h" compile="0" resource="0"
+                file="Source/SettingsPageComponent.h"/>
+          <FILE id="SsaxMA" name="LauncherComponent.cpp" compile="1" resource="0"
+                file="Source/LauncherComponent.cpp"/>
+          <FILE id="EmBY30" name="LauncherComponent.h" compile="0" resource="0"
+                file="Source/LauncherComponent.h"/>
+          <FILE id="pIj8mU" name="PageStackComponent.cpp" compile="1" resource="0"
+                file="Source/PageStackComponent.cpp"/>
+          <FILE id="uhO7dM" name="PageStackComponent.h" compile="0" resource="0"
+                file="Source/PageStackComponent.h"/>
+          <FILE id="vtFBhi" name="InputSettingsPage.cpp" compile="1" resource="0"
+                file="Source/InputSettingsPage.cpp"/>
+          <FILE id="lOaFb8" name="InputSettingsPage.h" compile="0" resource="0"
+                file="Source/InputSettingsPage.h"/>
+          <FILE id="epQH2R" name="DateTimePage.cpp" compile="1" resource="0"
+                file="Source/DateTimePage.cpp"/>
+          <FILE id="ZRujL4" name="DateTimePage.h" compile="0" resource="0" file="Source/DateTimePage.h"/>
+          <FILE id="Oo8gXi" name="AdvancedSettingsPage.cpp" compile="1" resource="0"
+                file="Source/AdvancedSettingsPage.cpp"/>
+          <FILE id="WN9Xea" name="AdvancedSettingsPage.h" compile="0" resource="0"
+                file="Source/AdvancedSettingsPage.h"/>
+          <FILE id="r7XiPC" name="AppMenuPage.cpp" compile="1" resource="0" file="Source/AppMenuPage.cpp"/>
+          <FILE id="CmGN6f" name="AppMenuPage.h" compile="0" resource="0" file="Source/AppMenuPage.h"/>
+        </GROUP>
+        <GROUP id="{7C20CFDF-D7FB-2F49-5103-C7264FCFB13D}" name="Basic">
+          <FILE id="spNyrm" name="MenuItem.cpp" compile="1" resource="0" file="Source/MenuItem.cpp"/>
+          <FILE id="Vzoods" name="MenuItem.h" compile="0" resource="0" file="Source/MenuItem.h"/>
+          <FILE id="sPYoCU" name="OverlaySpinner.cpp" compile="1" resource="0"
+                file="Source/OverlaySpinner.cpp"/>
+          <FILE id="DZZeul" name="OverlaySpinner.h" compile="0" resource="0"
+                file="Source/OverlaySpinner.h"/>
+          <FILE id="flS9A2" name="Grid.cpp" compile="1" resource="0" file="Source/Grid.cpp"/>
+          <FILE id="RsGKce" name="Grid.h" compile="0" resource="0" file="Source/Grid.h"/>
+          <FILE id="CvUayI" name="SwitchComponent.cpp" compile="1" resource="0"
+                file="Source/SwitchComponent.cpp"/>
+          <FILE id="vb1qdw" name="SwitchComponent.h" compile="0" resource="0"
+                file="Source/SwitchComponent.h"/>
+          <FILE id="Uuf9X1" name="IconSliderComponent.cpp" compile="1" resource="0"
+                file="Source/IconSliderComponent.cpp"/>
+          <FILE id="ICQxAN" name="IconSliderComponent.h" compile="0" resource="0"
+                file="Source/IconSliderComponent.h"/>
+        </GROUP>
+        <FILE id="TEaSbW" name="SettingsPageBluetoothComponent.cpp" compile="1"
+              resource="0" file="Source/SettingsPageBluetoothComponent.cpp"/>
+        <FILE id="ygeS0y" name="SettingsPageBluetoothComponent.h" compile="0"
+              resource="0" file="Source/SettingsPageBluetoothComponent.h"/>
+        <FILE id="WSp7Ko" name="SettingsPageWifiComponent.cpp" compile="1"
+              resource="0" file="Source/SettingsPageWifiComponent.cpp"/>
+        <FILE id="ODeJET" name="SettingsPageWifiComponent.h" compile="0" resource="0"
+              file="Source/SettingsPageWifiComponent.h"/>
+        <FILE id="mapBpD" name="MainComponent.cpp" compile="1" resource="0"
+              file="Source/MainComponent.cpp"/>
+        <FILE id="i4exVn" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+        <FILE id="eKYlUb" name="PowerPageFelComponent.cpp" compile="1" resource="0"
+              file="Source/PowerPageFelComponent.cpp"/>
+        <FILE id="wCEi8b" name="PowerPageFelComponent.h" compile="0" resource="0"
+              file="Source/PowerPageFelComponent.h"/>
+        <FILE id="Bc6FLL" name="PowerPageComponent.cpp" compile="1" resource="0"
+              file="Source/PowerPageComponent.cpp"/>
+        <FILE id="nawuRd" name="PowerPageComponent.h" compile="0" resource="0"
+              file="Source/PowerPageComponent.h"/>
+        <FILE id="Ds9kKz" name="SettingsPageLogin.cpp" compile="1" resource="0"
+              file="Source/SettingsPageLogin.cpp"/>
+        <FILE id="r3n3Fp" name="SettingsPageLogin.h" compile="0" resource="0"
+              file="Source/SettingsPageLogin.h"/>
+        <FILE id="dGWMDB" name="PersonalizePageComponent.cpp" compile="1" resource="0"
+              file="Source/PersonalizePageComponent.cpp"/>
+        <FILE id="RRMvGD" name="PersonalizePageComponent.h" compile="0" resource="0"
+              file="Source/PersonalizePageComponent.h"/>
+        <FILE id="H9ciLu" name="AppMenuButton.cpp" compile="1" resource="0"
+              file="Source/AppMenuButton.cpp"/>
+        <FILE id="A44isr" name="AppMenuButton.h" compile="0" resource="0" file="Source/AppMenuButton.h"/>
+        <FILE id="bUSiHM" name="AppMenuComponent.cpp" compile="1" resource="0"
+              file="Source/AppMenuComponent.cpp"/>
+        <FILE id="JCiZYj" name="AppMenuComponent.h" compile="0" resource="0"
+              file="Source/AppMenuComponent.h"/>
+      </GROUP>
+      <GROUP id="{33BF0C5A-338A-3FEE-7BED-59E8CA78CB79}" name="Wifi">
+        <FILE id="s5uSOy" name="WifiStatusJson.cpp" compile="1" resource="0"
+              file="Source/WifiStatusJson.cpp"/>
+        <FILE id="sRZyEf" name="WifiStatusJson.h" compile="0" resource="0"
+              file="Source/WifiStatusJson.h"/>
+        <FILE id="Y1sYzG" name="WifiStatusNM.cpp" compile="1" resource="0"
+              file="Source/WifiStatusNM.cpp"/>
+        <FILE id="Lq0SiZ" name="WifiStatusNM.h" compile="0" resource="0" file="Source/WifiStatusNM.h"/>
+        <FILE id="lKUWj5" name="WifiStatus.cpp" compile="1" resource="0" file="Source/WifiStatus.cpp"/>
+        <FILE id="TvdjJE" name="WifiStatus.h" compile="0" resource="0" file="Source/WifiStatus.h"/>
+      </GROUP>
       <FILE id="cu8zhf" name="ConfigFile.cpp" compile="1" resource="0" file="Source/ConfigFile.cpp"/>
       <FILE id="z82LDW" name="ConfigFile.h" compile="0" resource="0" file="Source/ConfigFile.h"/>
-      <FILE id="r7XiPC" name="AppMenuPage.cpp" compile="1" resource="0" file="Source/AppMenuPage.cpp"/>
-      <FILE id="CmGN6f" name="AppMenuPage.h" compile="0" resource="0" file="Source/AppMenuPage.h"/>
-      <FILE id="bUSiHM" name="AppMenuComponent.cpp" compile="1" resource="0"
-            file="Source/AppMenuComponent.cpp"/>
-      <FILE id="JCiZYj" name="AppMenuComponent.h" compile="0" resource="0"
-            file="Source/AppMenuComponent.h"/>
-      <FILE id="H9ciLu" name="AppMenuButton.cpp" compile="1" resource="0"
-            file="Source/AppMenuButton.cpp"/>
-      <FILE id="A44isr" name="AppMenuButton.h" compile="0" resource="0" file="Source/AppMenuButton.h"/>
-      <FILE id="spNyrm" name="MenuItem.cpp" compile="1" resource="0" file="Source/MenuItem.cpp"/>
-      <FILE id="Vzoods" name="MenuItem.h" compile="0" resource="0" file="Source/MenuItem.h"/>
       <FILE id="rtJuAf" name="DesktopEntries.cpp" compile="1" resource="0"
             file="Source/DesktopEntries.cpp"/>
       <FILE id="GmJU6E" name="DesktopEntries.h" compile="0" resource="0"
@@ -34,97 +115,20 @@
       <FILE id="V4z6JG" name="DesktopEntry.cpp" compile="1" resource="0"
             file="Source/DesktopEntry.cpp"/>
       <FILE id="nE5pIY" name="DesktopEntry.h" compile="0" resource="0" file="Source/DesktopEntry.h"/>
-      <FILE id="sPYoCU" name="OverlaySpinner.cpp" compile="1" resource="0"
-            file="Source/OverlaySpinner.cpp"/>
-      <FILE id="DZZeul" name="OverlaySpinner.h" compile="0" resource="0"
-            file="Source/OverlaySpinner.h"/>
-      <FILE id="Oo8gXi" name="AdvancedSettingsPage.cpp" compile="1" resource="0"
-            file="Source/AdvancedSettingsPage.cpp"/>
-      <FILE id="WN9Xea" name="AdvancedSettingsPage.h" compile="0" resource="0"
-            file="Source/AdvancedSettingsPage.h"/>
       <FILE id="pkDsWS" name="ClockMonitor.cpp" compile="1" resource="0"
             file="Source/ClockMonitor.cpp"/>
       <FILE id="ofQnwi" name="ClockMonitor.hpp" compile="0" resource="0"
             file="Source/ClockMonitor.hpp"/>
-      <FILE id="epQH2R" name="DateTimePage.cpp" compile="1" resource="0"
-            file="Source/DateTimePage.cpp"/>
-      <FILE id="ZRujL4" name="DateTimePage.h" compile="0" resource="0" file="Source/DateTimePage.h"/>
-      <FILE id="vtFBhi" name="InputSettingsPage.cpp" compile="1" resource="0"
-            file="Source/InputSettingsPage.cpp"/>
-      <FILE id="lOaFb8" name="InputSettingsPage.h" compile="0" resource="0"
-            file="Source/InputSettingsPage.h"/>
-      <FILE id="dGWMDB" name="PersonalizePageComponent.cpp" compile="1" resource="0"
-            file="Source/PersonalizePageComponent.cpp"/>
-      <FILE id="RRMvGD" name="PersonalizePageComponent.h" compile="0" resource="0"
-            file="Source/PersonalizePageComponent.h"/>
-      <FILE id="Ds9kKz" name="SettingsPageLogin.cpp" compile="1" resource="0"
-            file="Source/SettingsPageLogin.cpp"/>
-      <FILE id="r3n3Fp" name="SettingsPageLogin.h" compile="0" resource="0"
-            file="Source/SettingsPageLogin.h"/>
-      <FILE id="flS9A2" name="Grid.cpp" compile="1" resource="0" file="Source/Grid.cpp"/>
-      <FILE id="RsGKce" name="Grid.h" compile="0" resource="0" file="Source/Grid.h"/>
-      <FILE id="eKYlUb" name="PowerPageFelComponent.cpp" compile="1" resource="0"
-            file="Source/PowerPageFelComponent.cpp"/>
-      <FILE id="wCEi8b" name="PowerPageFelComponent.h" compile="0" resource="0"
-            file="Source/PowerPageFelComponent.h"/>
-      <FILE id="Bc6FLL" name="PowerPageComponent.cpp" compile="1" resource="0"
-            file="Source/PowerPageComponent.cpp"/>
-      <FILE id="nawuRd" name="PowerPageComponent.h" compile="0" resource="0"
-            file="Source/PowerPageComponent.h"/>
       <FILE id="PvOyzY" name="BatteryMonitor.cpp" compile="1" resource="0"
             file="Source/BatteryMonitor.cpp"/>
       <FILE id="XWBNHn" name="BatteryMonitor.h" compile="0" resource="0"
             file="Source/BatteryMonitor.h"/>
-      <FILE id="s5uSOy" name="WifiStatusJson.cpp" compile="1" resource="0"
-            file="Source/WifiStatusJson.cpp"/>
-      <FILE id="sRZyEf" name="WifiStatusJson.h" compile="0" resource="0"
-            file="Source/WifiStatusJson.h"/>
-      <FILE id="Y1sYzG" name="WifiStatusNM.cpp" compile="1" resource="0"
-            file="Source/WifiStatusNM.cpp"/>
-      <FILE id="Lq0SiZ" name="WifiStatusNM.h" compile="0" resource="0" file="Source/WifiStatusNM.h"/>
-      <FILE id="lKUWj5" name="WifiStatus.cpp" compile="1" resource="0" file="Source/WifiStatus.cpp"/>
-      <FILE id="TvdjJE" name="WifiStatus.h" compile="0" resource="0" file="Source/WifiStatus.h"/>
-      <FILE id="SsaxMA" name="LauncherComponent.cpp" compile="1" resource="0"
-            file="Source/LauncherComponent.cpp"/>
-      <FILE id="EmBY30" name="LauncherComponent.h" compile="0" resource="0"
-            file="Source/LauncherComponent.h"/>
-      <FILE id="pIj8mU" name="PageStackComponent.cpp" compile="1" resource="0"
-            file="Source/PageStackComponent.cpp"/>
-      <FILE id="uhO7dM" name="PageStackComponent.h" compile="0" resource="0"
-            file="Source/PageStackComponent.h"/>
-      <FILE id="CvUayI" name="SwitchComponent.cpp" compile="1" resource="0"
-            file="Source/SwitchComponent.cpp"/>
-      <FILE id="vb1qdw" name="SwitchComponent.h" compile="0" resource="0"
-            file="Source/SwitchComponent.h"/>
       <FILE id="Ury6Cc" name="Utils.cpp" compile="1" resource="0" file="Source/Utils.cpp"/>
       <FILE id="AywA6o" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
-      <FILE id="OWABwr" name="LauncherBarComponent.cpp" compile="1" resource="0"
-            file="Source/LauncherBarComponent.cpp"/>
-      <FILE id="fwxP6X" name="LauncherBarComponent.h" compile="0" resource="0"
-            file="Source/LauncherBarComponent.h"/>
       <FILE id="xoVLAp" name="PokeLookAndFeel.cpp" compile="1" resource="0"
             file="Source/PokeLookAndFeel.cpp"/>
       <FILE id="g1eykD" name="PokeLookAndFeel.h" compile="0" resource="0"
             file="Source/PokeLookAndFeel.h"/>
-      <FILE id="mapBpD" name="MainComponent.cpp" compile="1" resource="0"
-            file="Source/MainComponent.cpp"/>
-      <FILE id="i4exVn" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
-      <FILE id="g04lyK" name="SettingsPageComponent.cpp" compile="1" resource="0"
-            file="Source/SettingsPageComponent.cpp"/>
-      <FILE id="NRuhIp" name="SettingsPageComponent.h" compile="0" resource="0"
-            file="Source/SettingsPageComponent.h"/>
-      <FILE id="TEaSbW" name="SettingsPageBluetoothComponent.cpp" compile="1"
-            resource="0" file="Source/SettingsPageBluetoothComponent.cpp"/>
-      <FILE id="ygeS0y" name="SettingsPageBluetoothComponent.h" compile="0"
-            resource="0" file="Source/SettingsPageBluetoothComponent.h"/>
-      <FILE id="WSp7Ko" name="SettingsPageWifiComponent.cpp" compile="1"
-            resource="0" file="Source/SettingsPageWifiComponent.cpp"/>
-      <FILE id="ODeJET" name="SettingsPageWifiComponent.h" compile="0" resource="0"
-            file="Source/SettingsPageWifiComponent.h"/>
-      <FILE id="Uuf9X1" name="IconSliderComponent.cpp" compile="1" resource="0"
-            file="Source/IconSliderComponent.cpp"/>
-      <FILE id="ICQxAN" name="IconSliderComponent.h" compile="0" resource="0"
-            file="Source/IconSliderComponent.h"/>
       <FILE id="gV5DrH" name="Main.h" compile="0" resource="0" file="Source/Main.h"/>
       <FILE id="GJ9TER" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
