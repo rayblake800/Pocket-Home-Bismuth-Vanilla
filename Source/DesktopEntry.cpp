@@ -118,22 +118,25 @@ entrypath(path) {
 
 //Creates a DesktopEntry object representing an application category
 
-DesktopEntry::DesktopEntry(String category) {
+DesktopEntry::DesktopEntry(ConfigFile::AppFolder appFolder) {
     mapInit();
     type = DIRECTORY;
-    appStrings["Name"] = category;
-    appStrings["Icon"] = String("applications-") + category.toLowerCase();
-    appStrings["Exec"] = "OPEN:" + category;
+    appStrings["Name"] = appFolder.name;
+    appStrings["Icon"] = appFolder.icon;
+    for (int i = 0; i < appFolder.categories.size(); i++) {
+        if (i > 0)appStrings["Categories"] += ";";
+        appStrings["Categories"] += appFolder.categories[i];
+    }
 }
 
 //Create a DesktopEntry object with data from the config file
 
-DesktopEntry::DesktopEntry(const var &entryJson) {
+DesktopEntry::DesktopEntry(ConfigFile::AppItem appItem) {
     mapInit();
     type = APPLICATION;
-    appStrings["Name"] = entryJson["name"];
-    appStrings["Icon"] = entryJson["icon"];
-    appStrings["Exec"] = entryJson["shell"];
+    appStrings["Name"] = appItem.name;
+    appStrings["Icon"] = appItem.icon;
+    appStrings["Exec"] = appItem.shell;
 }
 
 DesktopEntry::DesktopEntry(const DesktopEntry& orig) {
@@ -146,8 +149,20 @@ DesktopEntry::DesktopEntry(const DesktopEntry& orig) {
 DesktopEntry::~DesktopEntry() {
 }
 
-String DesktopEntry::getName() {
-    return appStrings["Name"];
+bool DesktopEntry::operator==(const DesktopEntry toCompare) const{
+    return getName() == toCompare.getName();
+}
+
+bool DesktopEntry::operator<(const DesktopEntry toCompare) const{
+    return getName() < toCompare.getName();
+}
+
+String DesktopEntry::getName() const{
+    try{
+    return appStrings.at("Name");
+    }catch(std::out_of_range e){
+        return "";
+    }
 }
 
 DesktopEntry::Type DesktopEntry::getType() {
@@ -280,17 +295,16 @@ void DesktopEntry::mapIcons() {
         std::vector<String> files = listFiles(path);
         std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
         std::smatch iconMatch;
-        foreach(files, [path, &iconPattern, &iconMatch, this](String file)->bool {
+        for (const String& file : files) {
             std::string fileStr = file.toStdString();
             if (std::regex_search(fileStr, iconMatch, iconPattern)) {
                 String filename = iconMatch.str(1);
                 if (this->iconPaths[filename].isEmpty()) {
                     this->iconPaths[filename] = path + iconMatch.str(0);
-                            //DBG(filename+String("=")+path+iconMatch.str(0));
+                    //DBG(filename+String("=")+path+iconMatch.str(0));
                 }
             }
-            return false;
-        });
+        }
         //then recursively search subdirectories
         std::vector<String> dirs = listDirectoryFiles(path);
         if (dirs.empty())return;
@@ -318,11 +332,10 @@ void DesktopEntry::mapIcons() {
             return false;
         });
         //DBG(String("Searching ")+String(dirs.size())+String(" subdirectories"));
-        foreach(dirs, [path, this, &recursiveIconSearch](String subDir)->bool {
+        for (const String& subDir : dirs) {
             String subPath = path + subDir + "/";
             recursiveIconSearch(subPath);
-            return false;
-        });
+        };
         iconPathsMapped = true;
 
     };

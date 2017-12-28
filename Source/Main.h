@@ -22,8 +22,6 @@ struct BluetoothStatus {
 PageStackComponent &getMainStack();
 WifiStatus &getWifiStatus();
 BluetoothStatus &getBluetoothStatus();
-File getConfigFile();
-var  getConfigJSON();
 
 class PokeLaunchApplication : public JUCEApplication {
 public:
@@ -61,7 +59,7 @@ public:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)
 
   public:
-    MainWindow(String name, const var &configJson);
+    MainWindow(String name);
 
     void activeWindowStatusChanged() override;
     void closeButtonPressed() override;

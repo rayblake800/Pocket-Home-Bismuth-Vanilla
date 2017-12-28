@@ -1,6 +1,7 @@
 #include "LauncherComponent.h"
 #include "SettingsPageComponent.h"
 #include "PowerPageComponent.h"
+#include "ConfigFile.h"
 
 #include "Main.h"
 #include "Utils.h"
@@ -20,13 +21,13 @@ void BatteryIconTimer::timerCallback() {
         const auto& batteryIconsCharging = launcherComponent->batteryIconChargingImages;
 
 
-        for (auto button : launcherComponent->topButtons->buttons) {
+        for (auto button : *buttons) {
             Image batteryImg = batteryIcons[3];
             if (button->getName() == "Battery") {
                 int status = round(((float) batteryStatus.percentage) / 100.0f * 3.0f);
 
                 int pct = (int) batteryStatus.percentage;
-                juce::String pct_s = std::to_string(pct) + " %";
+                String pct_s = std::to_string(pct) + " %";
                 launcherComponent->batteryLabel->setText(pct_s, dontSendNotification);
 
                 if (batteryStatus.percentage <= 5) {
@@ -61,7 +62,7 @@ void WifiIconTimer::timerCallback() {
         return;
     }
 
-    for (auto button : launcherComponent->topButtons->buttons) {
+    for (auto button : *buttons) {
         if (button->getName() == "WiFi") {
             Image wifiIcon;
             const auto& conAp = getWifiStatus().connectedAccessPoint();
@@ -140,32 +141,34 @@ void LauncherComponent::hideLaunchSpinner() {
     }
 }
 
-LauncherComponent::LauncherComponent(const var &configJson) :
+LauncherComponent::LauncherComponent() :
 clock(nullptr), labelip("ip", "") {
+    ConfigFile * config = ConfigFile::getInstance();
     /* Ip settings */
     labelip.setVisible(false);
 
     /* Setting the clock */
     clock = new ClockMonitor;
-    clock->getLabel().setBounds(380, -10, 50, 20);
-    String displayclock = (configJson["showclock"]).toString();
-    String formatclock = (configJson["timeformat"]).toString();
-    if (displayclock.length() == 0 || displayclock == String("yes"))
-        setClockVisible(true);
-    else
-        setClockVisible(false);
-
+    config->getComponentSettings(ConfigFile::CLOCK).
+            applyComponentBounds(&(clock->getLabel()));
+    //clock->getLabel().setBounds(380, -10, 50, 20);
+    clock->getLabel().setWantsKeyboardFocus(false);
+    String formatclock = config->getConfigString(ConfigFile::TIME_FORMAT);
+    setClockVisible(config->getConfigBool(ConfigFile::SHOW_CLOCK));
     setClockAMPM(formatclock == "ampm");
 
     /* Battery percentage label */
     batteryLabel = new Label("percentage", "-%");
     addAndMakeVisible(batteryLabel);
     batteryLabel->setFont(Font(15.f));
+    batteryLabel->setWantsKeyboardFocus(false);
     //   batteryLabel->setOpaque(false);
-       batteryLabel->setAlwaysOnTop(true);
+    batteryLabel->setAlwaysOnTop(true);
+    config->getComponentSettings(ConfigFile::BATTERY_PERCENT).
+            applyComponentBounds(batteryLabel);
     //   batteryLabel->addToDesktop(ComponentPeer::StyleFlags::windowIsSemiTransparent);
 
-    String value = (configJson["background"]).toString();
+    String value = config->getConfigString(ConfigFile::BACKGROUND);
 
     bgColor = Colour(0x4D4D4D);
     if (value.length() == 6 && value.containsOnly("0123456789ABCDEF"))
@@ -174,16 +177,8 @@ clock(nullptr), labelip("ip", "") {
         setImageBackground(value);
 
     pageStack = new PageStackComponent();
+    pageStack->setWantsKeyboardFocus(false);
     addAndMakeVisible(pageStack);
-
-    topButtons = new LauncherBarComponent();
-    botButtons = new LauncherBarComponent();
-    topButtons->setInterceptsMouseClicks(false, true);
-    botButtons->setInterceptsMouseClicks(false, true);
-    topButtons->setAlwaysOnTop(true);
-    botButtons->setAlwaysOnTop(true);
-    addAndMakeVisible(topButtons);
-    addAndMakeVisible(botButtons);
 
     Array<String> wifiImgPaths{"wifiStrength0.png", "wifiStrength1.png", "wifiStrength2.png", "wifiStrength3.png", "wifiOff.png"};
     for (auto& path : wifiImgPaths) {
@@ -205,6 +200,7 @@ clock(nullptr), labelip("ip", "") {
 
     focusButtonPopup = new ImageComponent("Focus Button Popup");
     focusButtonPopup->setInterceptsMouseClicks(false, false);
+    focusButtonPopup->setWantsKeyboardFocus(false);
     addChildComponent(focusButtonPopup);
 
     // Settings page
@@ -220,59 +216,52 @@ clock(nullptr), labelip("ip", "") {
     pages.add(powerPage);
     pagesByName.set("Power", powerPage);
 
-    // Apps page
-    /* Check whether we have to display vertically the icons
-     * Checking "VERTICAL" lets horizontal direction be the default one
-     */
-    bool vertical = (configJson["direction"].toString() == "VERTICAL");
+
     auto appsPage = new AppMenuPage(this);
     appsPage->setName("Apps");
     pages.add(appsPage);
     pagesByName.set("Apps", appsPage);
-    appsPage->grabKeyboardFocus();
 
-    // Read config for corner locations
-    auto pagesData = configJson["pages"].getArray();
-    if (pagesData) {
-        for (const auto &page : *pagesData) {
-            auto name = page["name"].toString();
-            if (name == "Apps") {
-                auto buttonsData = *(page["cornerButtons"].getArray());
-                // FIXME: is there a better way to slice juce Array<var> ?
-                Array<var> topData{};
-                Array<var> botData{};
-                topData.add(buttonsData[0]);
-                topData.add(buttonsData[1]);
-                botData.add(buttonsData[2]);
-                botData.add(buttonsData[3]);
+    // Read config for button locations and images
+    std::function<void(ConfigFile::ComponentSettings, String) > loadButton =
+            [this](ConfigFile::ComponentSettings buttonSettings, String name) {
+                ImageButton * button = new ImageButton(name);
+                buttonSettings.applyComponentBounds(button);
+                if (!buttonSettings.assetFiles.empty()) {
+                    Image buttonImg = createImageFromFile(assetFile(buttonSettings.assetFiles[0]));
+                    button->setImages(false, false, true,
+                            buttonImg, 1.0f, Colours::transparentWhite, // normal
+                            buttonImg, 1.0f, Colours::transparentWhite, // over
+                            buttonImg, 0.5f, Colours::transparentWhite, // down
+                            0);
+                }
+                button->setWantsKeyboardFocus(false);
+                if (name == "Power" || name =="Settings") {
+                    button->addListener(this);
+                } else {
+                    button->setInterceptsMouseClicks(false, false);
+                }
+                addAndMakeVisible(button);
+                cornerButtons.add(button);
+            };
 
-                topButtons->addButtonsFromJsonArray(topData);
-                botButtons->addButtonsFromJsonArray(botData);
-            }
-        }
-    }
+    loadButton(config->getComponentSettings(ConfigFile::BATTERY), "Battery");
+    loadButton(config->getComponentSettings(ConfigFile::WIFI), "Wifi");
+    loadButton(config->getComponentSettings(ConfigFile::POWER), "Power");
+    loadButton(config->getComponentSettings(ConfigFile::SETTINGS), "Settings");
 
-    // NOTE(ryan): Maybe do something with a custom event later.. For now we just listen to all the
-    // buttons manually.
-    for (auto button : topButtons->buttons) {
-        button->setWantsKeyboardFocus(false);
-        button->setInterceptsMouseClicks(false, false);
-    }
-    for (auto button : botButtons->buttons) {
-        button->addListener(this);
-        button->setWantsKeyboardFocus(false);
-    }
-
-    defaultPage = pagesByName[configJson["defaultPage"]];
+    defaultPage = appsPage;
 
     batteryMonitor.updateStatus();
     batteryMonitor.startThread();
 
     batteryIconTimer.launcherComponent = this;
+    batteryIconTimer.buttons = &cornerButtons;
     batteryIconTimer.startTimer(1000);
     batteryIconTimer.timerCallback();
 
     wifiIconTimer.launcherComponent = this;
+    wifiIconTimer.buttons = &cornerButtons;
     wifiIconTimer.startTimer(2000);
     wifiIconTimer.timerCallback();
 
@@ -291,21 +280,33 @@ void LauncherComponent::paint(Graphics &g) {
 }
 
 void LauncherComponent::resized() {
-    auto bounds = getLocalBounds();
-    int barSize = 30;
+    ConfigFile * config = ConfigFile::getInstance();
+    Rectangle<int>bounds = getLocalBounds();
+    for (ImageButton * button : cornerButtons) {
+        ConfigFile::ComponentType componentType;
+        if (button->getName() == "Battery") {
+            componentType = ConfigFile::BATTERY;
+        } else if (button->getName() == "Wifi") {
+            componentType = ConfigFile::WIFI;
+        } else if (button->getName() == "Power") {
+            componentType = ConfigFile::POWER;
+        } else if (button->getName() == "Settings") {
+            componentType = ConfigFile::SETTINGS;
+        } else {
+            DBG(String("LauncherComponent: found unexpected button ") + button->getName());
+            break;
+        }
+        config->getComponentSettings(componentType).applyComponentBounds(button);
+    }
 
-    topButtons->setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(),
-            barSize);
-
-    botButtons->setBounds(bounds.getX(), bounds.getHeight() - barSize, bounds.getWidth(),
-            barSize);
     pageStack->setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
     //pageStack->setWantsKeyboardFocus(true);
 
+    config->getComponentSettings(ConfigFile::BATTERY_PERCENT)
+            .applyComponentBounds(batteryLabel);
+    config->getComponentSettings(ConfigFile::CLOCK)
+            .applyComponentBounds(&(clock->getLabel()));
     batteryLabel->setBounds(bounds.getX() + 50, bounds.getY(), 50, 30);
-
-    clock->getLabel().setBounds(bounds.getX() + 365, bounds.getY(), 80, 30);
-
     labelip.setBounds(bounds.getX() + 190, bounds.getY(), 100, 30);
     // init
     if (!resize) {

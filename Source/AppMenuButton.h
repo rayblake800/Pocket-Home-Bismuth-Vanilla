@@ -18,10 +18,8 @@ public:
    * @param desktopEntry defines the application/directory data
    * @param index button position in its column
    * @param column button's column in the AppMenu
-   * @param width measured in pixels
-   * @param height measured in pixels
    */
-  AppMenuButton(DesktopEntry desktopEntry,int index,int column,int width,int height);
+  AppMenuButton(DesktopEntry desktopEntry,int index,int column);
   
   /**
    * Set whether this button is currently selected.
@@ -45,6 +43,11 @@ public:
   String getCommand();
   
   /**
+   * @return all application categories linked to this button.
+   */
+  std::vector<String> getCategories();
+  
+  /**
    * @return button position in its column
    */
   int getIndex();
@@ -54,13 +57,6 @@ public:
    */
   int getColumn();
   
-  /**
-   * If called, the button will not be drawn outside of clipRegion
-   * @param clipRegion a screen coordinate rectangle
-   */
-  void setClipRegion(Rectangle<int>clipRegion);
-  
-    //custom button draw routines
   void paint (Graphics& g) override;
   private:
       DesktopEntry desktopEntry;
@@ -70,8 +66,6 @@ public:
       int index;
       //containing column number, counted left to right
       int column;
-      Colour fillColour = Colours::transparentWhite;
-      Colour selectedFillColour = Colour (0xffeb008b);
-      bool clip=false;
-      Rectangle<int> clipRegion;
+      Colour fillColour;
+      Colour selectedFillColour;
 };

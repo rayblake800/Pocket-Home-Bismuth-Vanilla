@@ -8,17 +8,15 @@
 
 #ifndef APPMENU_H
 #define APPMENU_H
-#include <functional>
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "AppMenuButton.h"
 #include "DesktopEntries.h"
-#include "PageStackComponent.h"
 #include "OverlaySpinner.h"
+#include "AppMenuButton.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 
 class AppMenuComponent : public Component,
 public Button::Listener {
 public:
-    AppMenuComponent(const var &configJson, Rectangle<int>clipBounds);
+    AppMenuComponent();
     virtual ~AppMenuComponent();
     
     void showLaunchSpinner();
@@ -43,26 +41,23 @@ public:
     /**
      * Open an application category folder, creating AppMenuButtons for all
      * associated desktop applications.
-     * @param categoryName the category to open
+     * @param categoryName the categories include in the folder
      */
-    void openFolder(String categoryName);
+    void openFolder(std::vector<String> categoryNames);
 
     /**
      * close the topmost open folder, removing all contained buttons
      */
     void closeFolder();
-
+    /**
+     * @return the index of the active button column.
+     */
+    int activeColumn();
 
     void checkRunningApps();
     bool getDebounce();
     void setDebounce(bool newState);
 
-
-
-    /**
-     * @return the index of the active button column.
-     */
-    int activeColumn();
 private:
     //handle all AppMenuButton clicks
     void buttonClicked(Button* buttonClicked) override;
@@ -76,7 +71,6 @@ private:
     ScopedPointer<OverlaySpinner> launchSpinner;
     DesktopEntries desktopEntries;
     OwnedArray<ChildProcess> runningApps;
-    bool debounce = false;
     //all buttons in each column
     std::vector<std::vector<AppMenuButton*>> buttonColumns;
     //current button selection(if any) for each open column
@@ -84,18 +78,14 @@ private:
     //top y-position of each open column
     std::vector<int> columnTops;
 
-    //appMenuButton dimensions, loaded in constructor
+    //appMenuButton dimensions
     int buttonWidth;
     int buttonHeight;
-    //base component position/clip bounds
-    Rectangle<int>clipBounds;
+    //base component position
+    int x_origin;
+    int y_origin;
 
-    //################## Application Launching #################################
-    /**
-     * Assigns a callback handler for launching applications.
-     * @param launchFn when a selected app button is clicked, 
-     * launchFn(shell command) will run.
-     */
+
     using AppRunningMap = HashMap<AppMenuButton*, int>;
     AppRunningMap runningAppsByButton;
     class AppMenuTimer : public Timer {
@@ -109,6 +99,7 @@ private:
     };
     AppMenuTimer runningCheckTimer;
     AppMenuTimer debounceTimer;
+    bool debounce = false;
     void startApp(AppMenuButton * appButton);
     void focusApp(AppMenuButton* appButton, const String& windowId);
     void startOrFocusApp(AppMenuButton* appButton);

@@ -26,6 +26,7 @@ public:
     BatteryIconTimer() {};
     void timerCallback();
     LauncherComponent* launcherComponent;
+    OwnedArray<ImageButton> * buttons;
 };
 
 class WifiIconTimer : public Timer {
@@ -33,13 +34,12 @@ public:
   WifiIconTimer() {};
   void timerCallback();
   LauncherComponent* launcherComponent;
+  OwnedArray<ImageButton> * buttons;
 };
 
 class LauncherComponent : public Component, private Button::Listener {
 public:
     BatteryMonitor batteryMonitor;
-    ScopedPointer<LauncherBarComponent> botButtons;
-    ScopedPointer<LauncherBarComponent> topButtons;
     ScopedPointer<ImageComponent> focusButtonPopup;
   
     Array<Image> batteryIconImages;
@@ -63,7 +63,7 @@ public:
     
     StretchableLayoutManager categoryButtonLayout;
     
-    LauncherComponent(const var &configJson);
+    LauncherComponent();
     ~LauncherComponent();
     
     void paint(Graphics &) override;
@@ -84,6 +84,7 @@ private:
     Image bgImage;
     bool hasImg;
     ScopedPointer<ClockMonitor> clock;
+    OwnedArray<ImageButton> cornerButtons;
   
     void buttonClicked(Button *) override;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LauncherComponent)

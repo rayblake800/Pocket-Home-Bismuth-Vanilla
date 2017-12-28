@@ -39,16 +39,6 @@ BluetoothStatus &getBluetoothStatus() {
     return PokeLaunchApplication::get()->bluetoothStatus;
 }
 
-File getConfigFile() {
-    static File configfile = assetConfigFile("config.json");
-    return configfile;
-}
-
-var getConfigJSON() {
-    static var configjson = JSON::parse(getConfigFile());
-    return configjson;
-}
-
 PokeLaunchApplication::PokeLaunchApplication() {
 }
 
@@ -151,47 +141,7 @@ void PokeLaunchApplication::initialise(const String &commandLine) {
         quit();
     }
 
-    auto configFile = assetConfigFile("config.json");
-    if (!configFile.exists()) {
-        File folder("~/.pocket-home");
-        folder.createDirectory();
-        configFile.create();
-        if (!configFile.setReadOnly(false))
-            std::cerr << "Problem creating the config file !" << std::endl;
-        File configOriginal = assetFile("config.json");
-        String content = configOriginal.loadFileAsString();
-        configFile.replaceWithText(content);
-        /*    std::cerr << "Missing config file: " << configFile.getFullPathName() << std::endl;
-          quit();*/
-    }
-
-    auto configJson = JSON::parse(configFile);
-    if (!configJson) {
-        bool launch = AlertWindow::showOkCancelBox(AlertWindow::AlertIconType::WarningIcon,
-                "Cannot launch Pocket-Home",
-                "Home configuration could not be read\n\
-Do you want to restore the default \n \
-configuration automatically ?",
-                "Yes",
-                "No, let me do it");
-        if (launch) {
-            int pid = vfork();
-            if (!pid)
-                execlp("cp",
-                    "cp",
-                    "/usr/share/pocket-home/config.json",
-                    "/home/chip/.pocket-home/", NULL);
-            wait(NULL);
-            execlp("pocket-home", "pocket-home", NULL);
-        } else {
-            execlp("vala-terminal",
-                    "vala-terminal",
-                    "-fs", "8",
-                    "-g", "20", "20", NULL);
-        }
-    }
     // open sound handle
-
     if (!sound())
         DBG("Sound failed to initialize");
 
@@ -208,7 +158,7 @@ configuration automatically ?",
         bluetoothStatus.populateFromJson(JSON::parse(deviceListFile));
     }
     
-    mainWindow = new MainWindow(getApplicationName(), configJson);
+    mainWindow = new MainWindow(getApplicationName());
 }
 
 void PokeLaunchApplication::shutdown() {
@@ -233,16 +183,11 @@ PageStackComponent &PokeLaunchApplication::getMainStack() {
     return *dynamic_cast<MainContentComponent *> (mainWindow->getContentComponent())->pageStack;
 }
 
-PokeLaunchApplication::MainWindow::MainWindow(String name, const var &configJson)
+PokeLaunchApplication::MainWindow::MainWindow(String name)
 : DocumentWindow(name, Colours::darkgrey, DocumentWindow::allButtons) {
-    if(MessageManager::getInstance()->isThisTheMessageThread()){
-        DBG("This is the message thread");
-    }else{
-        DBG("This is NOT the message thread!");
-    }
     setUsingNativeTitleBar(true);
     setResizable(true, false);
-    setContentOwned(new MainContentComponent(configJson), true);
+    setContentOwned(new MainContentComponent(), true);
     centreWithSize(getWidth(), getHeight());
     setVisible(true);
 #if JUCE_LINUX

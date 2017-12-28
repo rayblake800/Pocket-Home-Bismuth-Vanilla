@@ -11,13 +11,6 @@ File absoluteFileFromPath(const String &path) {
 
 }
 
-//Function to create or load the writable config file
-
-File assetConfigFile(const String &fileName) {
-    File linuxAssetFile = absoluteFileFromPath("~/.pocket-home/" + fileName);
-    return linuxAssetFile;
-}
-
 
 // TODO: allow user overrides of asset files
 
@@ -167,36 +160,6 @@ String getLocale() {
     return String(localeName);
 }
 
-String getTheme() {
-    std::string configPath = getHomePath().toStdString() + "/.gtkrc-2.0";
-    if (fileExists(configPath)) {
-        std::regex re("icon.*theme.*=\"(.+)\"");
-        std::ifstream file(configPath);
-        std::smatch match;
-        for (std::string line; getline(file, line);) {
-            if (std::regex_search(line, match, re)) {
-                return String(match.str(1));
-            }
-        }
-    }
-    return "";
-}
-
-String getFallbackTheme() {
-    std::string configPath = getHomePath().toStdString() + "/.gtkrc-2.0";
-    if (fileExists(configPath)) {
-        std::regex re("fallback.*icon.*theme.*=\"(.+)\"");
-        std::ifstream file(configPath);
-        std::smatch match;
-        for (std::string line; getline(file, line);) {
-            if (std::regex_search(line, match, re)) {
-                return String(match.str(1));
-            }
-        }
-    }
-    return "";
-}
-
 String getHomePath() {
     return String(std::getenv("HOME"));
 }
@@ -243,76 +206,7 @@ std::vector<String> listDirectoryFiles(const String& path) {
     return directories;
 }
 
-Rectangle<int> getScreenSize(){
-    return Rectangle<int>(Desktop::getInstance().getDisplays().getMainDisplay().userArea);
+Rectangle<int> getWindowSize(){
+    return Desktop::getInstance().getComponent(0)->getBounds().withPosition(0,0);
+    //return Rectangle<int>(Desktop::getInstance().getDisplays().getMainDisplay().userArea);
 }
-//
-//PathRecord::PathRecord() {
-//    String path = getHomePath() + recordPath;
-//    if (fileExists(path)) {
-//        std::ifstream file(path.toStdString());
-//        std::regex re("([a-zA-Z0-9_@]+)\\=(.*)");
-//        std::smatch match;
-//        for (std::string line; getline(file, line);) {
-//            if (std::regex_search(line, match, re)) {
-//                String key = match.str(1);
-//                String val = match.str(2);
-//                if (key == "THEME") {
-//                    iconTheme = val;
-//                    if (iconTheme != getTheme()) {
-//                        pathRecords.clear();
-//                        break;
-//                    }
-//                } else {
-//                    pathRecords[key] = val;
-//                }
-//            }
-//        }
-//        file.close();
-//    } else {
-//        DBG(String("PathRecord:didn't find record file at ")+path);
-//        iconTheme = getTheme();
-//        changesWritten = false;
-//    }
-//}
-//
-//PathRecord::PathRecord(const PathRecord& orig) {
-//    iconTheme = orig.iconTheme;
-//    pathRecords = orig.pathRecords;
-//
-//}
-//
-//PathRecord::~PathRecord() {
-//    if (!changesWritten)writeRecords();
-//}
-//
-//String PathRecord::getRecord(String iconName){
-//    try{
-//        return pathRecords.at(iconName);
-//    }catch(std::out_of_range e){
-//        return "";
-//    }
-//}
-//void PathRecord::addRecord(String iconName, String fullPath){
-//    pathRecords[iconName]=fullPath;
-//    changesWritten=false;
-//}
-//
-//void PathRecord::writeRecords() {
-//    String path = getHomePath() + recordPath;
-//    if(changesWritten)return;
-//    try {
-//        std::ofstream file(path.getCharPointer(),
-//                std::ofstream::out | std::ofstream::trunc);
-//        file << "THEME=" + iconTheme + "\n";
-//        for (std::map<String, String>::iterator it = pathRecords.begin();
-//                it != pathRecords.end(); it++) {
-//            file << it->first + "=" + it->second + "\n";
-//        }
-//        changesWritten = true;
-//        file.close();
-//        DBG(String("PathRecord:wrote icon cache to ")+path);
-//    } catch (std::ofstream::failure e) {
-//        DBG("Couldn't write to path record file!");
-//    }
-//}

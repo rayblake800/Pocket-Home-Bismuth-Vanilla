@@ -4,9 +4,6 @@
  * 
  * Created on December 14, 2017, 1:36 PM
  */
-#include <cstdlib>
-#include <iostream>
-#include <fstream>
 #include <regex>
 #include <stdlib.h>
 #include <dirent.h>
@@ -19,44 +16,36 @@ DesktopEntries::DesktopEntries() {
     //read the contents of all desktop application directories
     DBG("finding desktop entries...");
     std::vector<String> dirs = {
-        getHomePath()+"/.local/share/applications",
+        getHomePath() + "/.local/share/applications",
         "/usr/share/applications",
         "/usr/local/share/applications"
     };
     //track entry names and ignore duplicates
-    std::map<String,bool> filesFound;
-    std::vector<String> files{};
+    std::set<String> files{};
     for (int i = 0; i < dirs.size(); i++) {
         std::vector<String> dfiles = listFiles(dirs[i]);
         for (int i2 = 0; i2 < dfiles.size(); i2++) {
-            if(!filesFound[dfiles[i2]]){
-                files.push_back(dirs[i] + "/" + dfiles[i2]);
-                filesFound[dfiles[i2]]=true;
-            }
+            files.insert(dirs[i] + "/" + dfiles[i2]);
         }
     }
-    DBG(String("Reading ") + String(files.size())+" potential desktop files");
+    DBG(String("Reading ") + String(files.size()) + " potential desktop files");
     //read in files as DesktopEntry objects
     std::regex dfileMatch(".*\\.(desktop|directory)$", std::regex::icase);
-    categoryEntries.push_back(DesktopEntry(String("All")));
-    categoryEntries.push_back(DesktopEntry(String("Other")));
-    for (std::vector<String>::iterator it = files.begin();
+    for (std::set<String>::iterator it = files.begin();
             it != files.end(); it++) {
         String path = *it;
         if (std::regex_search(path.toStdString(), dfileMatch)) {
             DesktopEntry de(path, localeName);
-            if(de.hidden()||de.noDisplay())continue;
-            categories["All"].push_back(de);
-            std::vector<String> deCats = de.getCategories();
-            if (deCats.empty())categories["Other"].push_back(de);
-            foreach(deCats, [de, this](String c)->bool {
-                if (this->categories[c].empty()) {
-                    this->categoryEntries.push_back(DesktopEntry(c));
-                }
-                this->categories[c].push_back(de);
-                return false;
-            });
-            entries.push_back(de);
+            if (de.hidden() || de.noDisplay())continue;
+            std::vector<String> deCategories = de.getCategories();
+            if(deCategories.empty()){
+                deCategories.push_back("Other");
+            }
+            deCategories.push_back("All");
+            for (String category : deCategories) {
+                this->categories[category].insert(de);
+            }
+            entries.insert(de);
         }
     }
     DBG(String("found ") + String(entries.size()) + " entries");
@@ -75,47 +64,33 @@ int DesktopEntries::size() {
     return entries.size();
 }
 
+
+//Get a list of all DesktopEntry objects within several categories
+
+std::set<DesktopEntry> DesktopEntries::getCategoryListEntries(std::vector<String> categoryList) {
+    std::set<DesktopEntry> categoryEntries;
+    for (String& category : categoryList) {
+        std::set<DesktopEntry> catEntries = getCategoryEntries(category);
+        for (DesktopEntry entry : catEntries) {
+            categoryEntries.insert(entry);
+        }
+    }
+    return categoryEntries;
+}
+
 //Get all DesktopEntries with a given category name
 
-std::vector<DesktopEntry> DesktopEntries::getCategoryEntries(String category) {
+std::set<DesktopEntry> DesktopEntries::getCategoryEntries(String category) {
     return categories[category];
 }
 
 //Get the list of all categories found in all desktop entries.
 
-std::vector<DesktopEntry> DesktopEntries::getCategories() {
-    return categoryEntries;
-}
-
-/**
- * Get the list of main categories specified by 
- * the desktop menu specification
- */
-std::vector<DesktopEntry> DesktopEntries::getMainCategories(bool excludeUnused) {
-    std::vector<String> mainCategories = {
-        "All",
-        "AudioVideo",
-        "Audio",
-        "Video",
-        "Development",
-        "Education",
-        "Game",
-        "Graphics",
-        "Network",
-        "Office",
-        "Science",
-        "Settings",
-        "System",
-        "Utility",
-        "Other"
-    };
-    std::vector<DesktopEntry> categoryEntries;
-    for (int i = 0; i < mainCategories.size(); i++) {
-        String category = mainCategories[i];
-        if (categories[category].size() > 0 || !excludeUnused) {
-            DBG(String("Found category ")+category+String(",size ")+String(categories[category].size()));
-            categoryEntries.push_back(DesktopEntry(category));
-        }
+std::set<String> DesktopEntries::getCategories() {
+    std::set<String> categoryNames;
+    for(std::map<String,std::set<DesktopEntry>>::iterator it = categories.begin();
+            it!= categories.end();it++){
+        categoryNames.insert(it->first);
     }
-    return categoryEntries;
+    return categoryNames;
 }

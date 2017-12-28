@@ -1,4 +1,5 @@
 #include "DateTimePage.h"
+#include "ConfigFile.h"
 
 DateTimePage::DateTimePage(LauncherComponent* lc):
 bg_color(0xffd23c6d),
@@ -21,8 +22,8 @@ lc(lc)
   choosemode.addListener(this);
   
   //Let's check whether there is an option for time format in the config
-  var json = getConfigJSON();
-  if(json["timeformat"].toString() == "ampm")
+  ConfigFile * config = ConfigFile::getInstance();
+  if(config->getConfigString(ConfigFile::TIME_FORMAT) == "ampm")
     choosemode.setSelectedId(2);
   else choosemode.setSelectedId(1);
   
@@ -49,16 +50,10 @@ void DateTimePage::buttonClicked(Button* but){
 
 void DateTimePage::comboBoxChanged(ComboBox* c){
   if(c != &choosemode) return;
-  var json = getConfigJSON();
-  DynamicObject* hour = json.getDynamicObject();
-  String format = (c->getSelectedId()==1)?"24h":"ampm";
-  hour->setProperty("timeformat", format);
-  //JSON config has been changed, let's write it to the file
-  File configfile = getConfigFile();
-  String jsonstring = JSON::toString(json);
-  configfile.replaceWithText(jsonstring);
-  
-  lc->setClockAMPM(format=="ampm");
+  ConfigFile * config = ConfigFile::getInstance();
+  bool useAMPM=(c->getSelectedId()==2);
+  config->setConfigString(ConfigFile::TIME_FORMAT,useAMPM?"ampm":"24h");
+  lc->setClockAMPM(useAMPM);
 }
 
 void DateTimePage::paint(Graphics& g){

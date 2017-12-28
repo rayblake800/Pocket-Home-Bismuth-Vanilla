@@ -5,57 +5,47 @@
  */
 
 
-#include <sstream>
-#include <functional>
-#include <stdlib.h>
-#include <vector>
-#include "Utils.h"
+#include <set>
 #include "AppMenuComponent.h"
 
 
-AppMenuComponent::AppMenuComponent(const var &configJson, Rectangle<int>drawRegion) :
-clipBounds(drawRegion),
+AppMenuComponent::AppMenuComponent() :
 runningCheckTimer(this, [](AppMenuComponent* appMenu) {
     appMenu->checkRunningApps();
 }),
 debounceTimer(this, [](AppMenuComponent* appMenu) {
 
     appMenu->setDebounce(false);
-}),
-buttonWidth(configJson["menuButtonWidth"]),
-buttonHeight(configJson["menuButtonHeight"]) {
+}) {
+    ConfigFile * configFile = ConfigFile::getInstance();
+    Rectangle<int> screenSize = getWindowSize();
+    ConfigFile::ComponentSettings menuSettings = configFile->getComponentSettings(ConfigFile::APP_MENU);
+    x_origin=menuSettings.x * screenSize.getWidth();
+    y_origin=menuSettings.y * screenSize.getHeight();
+
+    ConfigFile::ComponentSettings buttonSettings =
+            configFile->getComponentSettings(ConfigFile::APP_MENU_BUTTON);
+    buttonWidth = screenSize.getWidth() * buttonSettings.width;
+    buttonHeight = screenSize.getHeight() * buttonSettings.height;
     setWantsKeyboardFocus(false);
     launchSpinner = new OverlaySpinner();
     selected.push_back(NULL);
-    columnTops.push_back(0);
+    columnTops.push_back(y_origin);
     buttonColumns.emplace(buttonColumns.begin());
 
     //read in main page apps from config
-    Array<var>* pagesData = configJson["pages"].getArray();
-    if (pagesData) {
-        for (const var &page : *pagesData) {
-            String name = page["name"].toString();
-            if (name == "Apps") {
-                var items = page["items"];
-                for (const var &item : *items.getArray()) {
-                    if (item["name"].isString()
-                            && item["shell"].isString()
-                            && item["icon"].isString()) {
-                        DBG(String("AppMenu:Found app in config:") + item["name"].toString());
-                        addButton(new AppMenuButton(DesktopEntry(item),
-                                buttonColumns[activeColumn()].size(), activeColumn(),
-                                buttonWidth, buttonHeight));
-                    }
-                }
-            }
-        }
+    std::vector<ConfigFile::AppItem> favorites = configFile->getFavorites();
+    for (const ConfigFile::AppItem& favorite : favorites) {
+        DBG(String("AppMenu:Found app in config:") + favorite.name);
+        addButton(new AppMenuButton(DesktopEntry(favorite),
+                buttonColumns[activeColumn()].size(), activeColumn()));
     }
+
     //add category buttons
-    std::vector<DesktopEntry> categories = desktopEntries.getMainCategories(true);
-    for (int i = 0; i < categories.size(); i++) {
-        addButton(new AppMenuButton(categories[i],
-                buttonColumns[activeColumn()].size(), activeColumn(),
-                buttonWidth, buttonHeight));
+    std::vector<ConfigFile::AppFolder> categories = configFile->getFolders();
+    for (const ConfigFile::AppFolder& category : categories) {
+        addButton(new AppMenuButton(DesktopEntry(category),
+                buttonColumns[activeColumn()].size(), activeColumn()));
     }
     DBG(String("added ") + String(buttonColumns[activeColumn()].size()) + " buttons");
     scrollToSelected();
@@ -88,23 +78,22 @@ void AppMenuComponent::hideLaunchSpinner() {
  * Open an application category folder, creating AppMenuButtons for all
  * associated desktop applications.
  */
-void AppMenuComponent::openFolder(String categoryName) {
-    std::vector<DesktopEntry> folderItems = desktopEntries.getCategoryEntries(categoryName);
+void AppMenuComponent::openFolder(std::vector<String> categoryNames) {
+    std::set<DesktopEntry> folderItems = 
+            desktopEntries.getCategoryListEntries(categoryNames);
     if (folderItems.empty())return;
-    int columnTop = clipBounds.getY();
+    int columnTop = y_origin;
     if (selected[activeColumn()] != NULL) {
         columnTop = selected[activeColumn()]->getY();
     }
     selected.push_back(NULL);
     columnTops.push_back(columnTop);
     buttonColumns.push_back(std::vector<AppMenuButton*>());
-    DBG(String("found ") + String(folderItems.size()) + " items in " + categoryName);
-    for (int i = 0; i < folderItems.size(); i++) {
-        DesktopEntry desktopEntry = folderItems[i];
+    DBG(String("found ") + String(folderItems.size()) + " items in folder");
+    for (DesktopEntry desktopEntry : folderItems) {
         if (!desktopEntry.hidden() && !desktopEntry.noDisplay()) {
             AppMenuButton* newButton = new AppMenuButton(desktopEntry,
-                    buttonColumns[activeColumn()].size(), activeColumn(),
-                    buttonWidth, buttonHeight);
+                    buttonColumns[activeColumn()].size(), activeColumn());
             addButton(newButton);
         }
     }
@@ -114,7 +103,9 @@ void AppMenuComponent::openFolder(String categoryName) {
 //close the topmost open folder, removing all contained buttons
 
 void AppMenuComponent::closeFolder() {
-    if (debounce)return;
+    if (debounce){
+        return;
+    }
     for (int i = buttonColumns[activeColumn()].size() - 1; i >= 0; i--) {
         AppMenuButton * toDelete = buttonColumns[activeColumn()][i];
         toDelete->removeFromDesktop();
@@ -144,7 +135,7 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked) {
     }
     if (selected[activeColumn()] == appClicked) {
         if (appClicked->isFolder()) {
-            openFolder(appClicked->getAppName());
+            openFolder(appClicked->getCategories());
         } else {
             startApp(appClicked);
         }
@@ -154,7 +145,7 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked) {
 }
 
 void AppMenuComponent::resized() {
-    launchSpinner->setBounds(getScreenSize());
+    launchSpinner->setBounds(getWindowSize());
     //if (selected[activeColumn()] != NULL){
     //    scrollToSelected();
     //}
@@ -165,7 +156,7 @@ void AppMenuComponent::selectIndex(int index) {
         return;
     }
     int column = activeColumn();
-    DBG(String("AppMenuComponent: selecting column ")+String(column)+String(" index ")+String(index));
+    DBG(String("AppMenuComponent: selecting column ") + String(column) + String(" index ") + String(index));
     if (index >= buttonColumns[column].size()
             || index < 0
             || selected[column] == buttonColumns[column][index])return;
@@ -220,21 +211,21 @@ void AppMenuComponent::scrollToSelected() {
     Rectangle<int>dest = getBounds();
     if (selectedButton != NULL) {
         int buttonPos = selectedButton->getY();
-        int screenHeight = getScreenSize().getHeight();
+        int screenHeight = getWindowSize().getHeight();
         int distanceFromCenter = abs(buttonPos - getY() + screenHeight / 2);
         //only scroll vertically if selected button is outside the center 3/5 
         if (distanceFromCenter > screenHeight / 5 * 3) {
-            dest.setY(clipBounds.getY() - buttonPos + screenHeight / 2 - buttonHeight / 2);
+            dest.setY(y_origin - buttonPos + screenHeight / 2 - buttonHeight / 2);
         }
-        if (dest.getY() > clipBounds.getY()) {
-            dest.setY(clipBounds.getY());
+        if (dest.getY() > y_origin) {
+            dest.setY(y_origin);
         } else if (getHeight() > screenHeight && dest.getBottom() < screenHeight) {
             dest.setBottom(screenHeight);
         }
-    } else dest.setY(clipBounds.getY() - columnTops[column]);
-    if (column == 0)dest.setX(clipBounds.getX());
+    } else dest.setY(y_origin - columnTops[column]);
+    if (column == 0)dest.setX(x_origin);
     else {
-        dest.setX(clipBounds.getX() - column * buttonWidth + buttonHeight);
+        dest.setX(x_origin - column * buttonWidth + buttonHeight);
     }
     ComponentAnimator& animator = Desktop::getInstance().getAnimator();
     if (animator.isAnimating(this)) {
@@ -248,14 +239,13 @@ void AppMenuComponent::addButton(AppMenuButton * appButton) {
     int column = appButton->getColumn();
     int w = appButton->getWidth();
     int h = appButton->getHeight();
-    int x = clipBounds.getX() + column*w;
+    int x = x_origin + column*w;
     int y = columnTops[column] + h * buttonColumns[column].size();
     appButton->setBounds(x, y, w, h);
     addAndMakeVisible(appButton);
     appButton->setEnabled(true);
     appButton->setVisible(true);
     appButton->addListener(this);
-    appButton->setClipRegion(clipBounds);
     this->buttonColumns[column].push_back(appButton);
     if ((x + w) > getWidth())setBounds(getX(), getY(), x + w, getHeight());
     if ((y + h) > getHeight())setBounds(getX(), getY(), getWidth(), y + h);
@@ -328,7 +318,7 @@ void AppMenuComponent::startApp(AppMenuButton * appButton) {
     }
 }
 
-void AppMenuComponent::focusApp(AppMenuButton* appButton, const String& windowId) {
+void AppMenuComponent::focusApp(AppMenuButton* appButton, const String & windowId) {
 
     DBG("AppsPageComponent::focusApp - " << appButton->getCommand());
     String focusShell = "echo 'focus_client_by_window_id(" + windowId + ")' | awesome-client";
@@ -337,7 +327,7 @@ void AppMenuComponent::focusApp(AppMenuButton* appButton, const String& windowId
     focusWindow.start(focusCmd);
 }
 
-void AppMenuComponent::startOrFocusApp(AppMenuButton* appButton) {
+void AppMenuComponent::startOrFocusApp(AppMenuButton * appButton) {
     if (debounce) return;
 
     bool shouldStart = true;

@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 
-MainContentComponent::MainContentComponent(const var &configJson)
+MainContentComponent::MainContentComponent()
 {
   lookAndFeel = new PokeLookAndFeel();
   setLookAndFeel(lookAndFeel);
@@ -26,7 +26,7 @@ MainContentComponent::MainContentComponent(const var &configJson)
     addAndMakeVisible(pageStack);  
   lp->textFocus();
   
-  launcher = new LauncherComponent(configJson);
+  launcher = new LauncherComponent();
   pageStack->pushPage(launcher, PageStackComponent::kTransitionNone);
 
   setSize(480, 272);

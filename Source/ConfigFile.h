@@ -14,26 +14,119 @@
 
 class ConfigFile {
 public:
+    virtual ~ConfigFile();
+    /**
+     * @return the single ConfigFile access objects
+     */
+    static ConfigFile* getInstance();
+    
+        //######################### String Data ####################################
 
+    /**
+     * Maps all string values stored in the config file.
+     */
+    enum ConfigString {
+        BACKGROUND,//Background image or color
+        SHUTDOWN_COMMAND,
+        RESTART_COMMAND,
+        TIME_FORMAT//ampm or 24h
+    };
+    
+    /**
+     * Gets a string value
+     * @param configString the string you need
+     * @return the string value from the config file
+     */
+    String getConfigString(ConfigString configString);
+    
+    /**
+     *Sets a string value, writing it to the config file if the value has
+     * changed
+     * @param configString the string variable to access
+     * @param newValue the new value for the string
+     */
+    void setConfigString(ConfigString configString,String newValue);
+
+   //######################### Boolean Data ####################################
+    /**
+     *Maps all boolean values stored in the config file
+     */
+    enum ConfigBool{
+        SHOW_CURSOR,
+        SHOW_CLOCK
+    };
+    /**
+     * Gets a boolean value
+     * @param configBool the boolean value you need
+     * @return the bool value from the config file
+     */
+    bool getConfigBool(ConfigBool configBool);
+    
+    /**
+     *Sets a boolean value, writing it to the config file if the value has
+     * changed
+     * @param configBool the boolean variable to access
+     * @param newValue the new value for the bool
+     */
+    void setConfigBool(ConfigBool configBool,bool newValue);
+    
+    //######################### Application Data ###############################
     /**
      *Represents an application pinned to the main menu
      */
     struct AppItem {
+        AppItem();
+        AppItem(var jsonObj);
         String name;
         String icon;
         String shell;
+        DynamicObject * getDynamicObject();
     };
+    /**
+     * @return a list of AppItems to be pinned to the main column 
+     * of the AppMenu
+     */
+    std::vector<AppItem> getFavorites();
+    
+    /**
+     * Save new favorites data into config.
+     * @param newFavorites a new list of favorite apps to be pinned to the
+     * main column of the AppMenu
+     */
+    void setFavorites(std::vector<AppItem> newFavorites);
 
+    //######################### Folder/Category Data ###########################
     /**
      * Represents an application folder
      * TODO:add sub-folders
      */
-    struct AppFolder{
-        String displayName;
-        std::vector<String> categoryNames;
+    struct AppFolder {
+        AppFolder();
+        AppFolder(var jsonObj);
+        String name;
+        std::vector<String> categories;
         String icon;
+        std::vector<AppItem> pinnedApps;
+        DynamicObject * getDynamicObject();
     };
+    /**
+     * @return A list of folders to display in the AppMenu 
+     */
+    std::vector<AppFolder> getFolders();
 
+    //######################### UI Component Data ##############################
+    //Defines all component types managed in the config file
+    enum ComponentType {
+        APP_MENU_BUTTON,
+        APP_MENU,
+        MENU_FRAME,
+        BATTERY,
+        BATTERY_PERCENT,
+        CLOCK,
+        WIFI,
+        POWER,
+        SETTINGS
+    };
     /**
      * Represents a configurable UI element
      * Position and size data is represented in terms of total screen size,
@@ -41,55 +134,89 @@ public:
      * x=0.2 has a left border 1/5 of the way from the left of the screen, etc.
      */
     struct ComponentSettings {
+        ComponentSettings();
+        ComponentSettings(var jsonObj);
         float x;
         float y;
         float width;
         float height;
         std::vector<Colour> colours;
         std::vector<String> assetFiles;
+        DynamicObject * getDynamicObject();
+        //apply these settings to a component
+        void applyComponentBounds(Component * component);
     };
-    enum ComponentType {
-        APP_MENU_BUTTON
-    };
-    virtual ~ConfigFile();
-    static ConfigFile* getInstance();
-    void writeChanges();
-    std::vector<AppItem> getFavorites();
-    std::vector<AppFolder> getFolders();
-    ComponentSettings * getComponentSettings(ComponentType componentType);
+    /**
+     * @param componentType a configurable UI component
+     * @return properties defined for that component
+     */
+    ComponentSettings getComponentSettings(ComponentType componentType);
 
-    
 
-    
+
 private:
+    /**
+     * Reads in all data from the config value, copying any missing values
+     * from the default config.json in assets.
+     * If a marshmallow pocket-home config.json file is found, it will be backed
+     * up to .pocket-home/marshmallowConfig.json
+     */
     ConfigFile();
-    //Update a pocket-home marshmallow config file, saving the original as
-    //marshmallowConfig.json
-    void updateLegacyConfig(var jsonConfig);
-    //Completely recreate the config file using default values.
-    void loadDefaultConfig();
-    //load in config data from json,replacing missing data with default values
-
-    //Convert the different configFile objects to DynamicObject
-    //so they can be converted back to JSON and written to the config file
-    ScopedPointer<DynamicObject> getDynamicObject(AppItem appItem);
-    ScopedPointer<DynamicObject> getDynamicObject(AppFolder appFolder);
-    ScopedPointer<DynamicObject> getDynamicObject(ComponentSettings componentSettings);
-
-    std::vector<AppItem> favorites;
-    std::vector<AppFolder> categories;
+    
+    /**
+     * Re-writes all data back to the config file.
+     */
+    void writeChanges();
+    
+    std::map<String,String> stringValues;
+    std::map<String,bool> boolValues;
+    std::vector<AppItem> favoriteApps;
+    std::vector<AppFolder> categoryFolders;
     std::map<ComponentType, ComponentSettings> components;
     CriticalSection lock;
-    
+
     //constants and default values: 
     static constexpr const char* CONFIG_PATH = "/.pocket-home/config.json";
     static constexpr const char* FAVORITES_KEY = "favorites";
+    static constexpr const char* FOLDERS_KEY = "folders";
     
-    static std::map<ComponentType,String> setComponentKeys(){
-        std::map<ComponentType,String> keymap;
-        keymap[APP_MENU_BUTTON]="appMenuButtons";
+    //component data keys
+    static std::map<String, ComponentType> setComponentKeys() {
+        std::map<String, ComponentType> keymap;
+        keymap["app menu buttons"] = APP_MENU_BUTTON;
+        keymap["app menu"] = APP_MENU;
+        keymap["menu frame"] = MENU_FRAME;
+        keymap["battery"] = BATTERY;
+        keymap["battery percent text"] = BATTERY_PERCENT;
+        keymap["time"] = CLOCK;
+        keymap["wifi"] = WIFI;
+        keymap["power button"] = POWER;
+        keymap["settings button"] = SETTINGS;
         return keymap;
     }
-    static const std::map<ComponentType,String> componentKeys;
+    static const std::map<String, ComponentType> componentKeys;
     
+    //string data keys
+    static std::map<ConfigString, String> setStringKeys() {
+        std::map<ConfigString, String> keymap;
+        keymap[BACKGROUND] = "background";
+        keymap[SHUTDOWN_COMMAND] = "shutdown command";
+        keymap[RESTART_COMMAND] = "restart command";
+        keymap[TIME_FORMAT] = "timeformat";
+        return keymap;
+    }
+    static const std::map<ConfigString, String> stringKeys;
+    
+    //boolean data keys
+    static std::map<ConfigBool, String> setBoolKeys() {
+        std::map<ConfigBool, String> keymap;
+        keymap[SHOW_CURSOR] = "cursor";
+        keymap[SHOW_CLOCK] = "showclock";
+        return keymap;
+    }
+    static const std::map<ConfigBool, String> boolKeys;
+
+
+    
+
 };

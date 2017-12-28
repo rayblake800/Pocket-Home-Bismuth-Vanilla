@@ -6,7 +6,7 @@
 #include "Main.h"
 class LauncherComponent;
 
-/* Adding personnalization page */
+/* Adding personalization page */
 class PersonalizePageComponent : public Component, private Button::Listener, private ComboBox::Listener {
 public:
   PersonalizePageComponent(LauncherComponent*);
@@ -31,7 +31,6 @@ private:
   Colour bgColor;
   Image bgImage;
   File config;
-  var json;
   
   /* Launcher component */
   LauncherComponent* lcomp;

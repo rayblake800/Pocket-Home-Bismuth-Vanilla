@@ -12,6 +12,7 @@
 
 
 #include <map>
+#include <set>
 #include "DesktopEntry.h"
 #include "Utils.h"
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -27,33 +28,31 @@ public:
     int size();
     
     /**
-     * Get all DesktopEntries with a given category name
+     * Get all DesktopEntry objects with a given category name
      * @param category the category name
-     * @return a vector of all matching DesktopEntries
+     * @return a set of all matching DesktopEntries
      */
-    std::vector<DesktopEntry> getCategoryEntries(String category);
+    std::set<DesktopEntry> getCategoryEntries(String category);
+    
+    /**
+     * Get a list of all DesktopEntry objects within several categories
+     * @param categoryList one or more category values
+     * @return all DesktopEntry objects with at least one of the category values
+     * in categories
+     */
+    std::set<DesktopEntry> getCategoryListEntries(std::vector<String> categoryList);
     
     /**
      * Get the list of all categories found in all desktop entries.
-     * @return a vector of all category entries
+     * @return a set of all category entries
      */
-    std::vector<DesktopEntry> getCategories();
+    std::set<String> getCategories();
     
-    /**
-     * Get the list of main categories specified by 
-     * the desktop menu specification
-     * @param excludeUnused if true, don't return categories unless
-     * at least one application is using them.
-     * @return the category entries
-     */
-    std::vector<DesktopEntry> getMainCategories(bool excludeUnused);
 private:
     //list of all entries
-    std::vector<DesktopEntry> entries;
-    //all categories found in entries
-    std::vector<DesktopEntry> categoryEntries;
+    std::set<DesktopEntry> entries;
     //maps category names to lists of entries
-    std::map<String,std::vector<DesktopEntry>> categories;
+    std::map<String,std::set<DesktopEntry>> categories;
  
 };
 

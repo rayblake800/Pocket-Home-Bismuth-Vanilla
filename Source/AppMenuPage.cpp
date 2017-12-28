@@ -16,29 +16,26 @@
 AppMenuPage::AppMenuPage(LauncherComponent * launcherComponent) {
     setWantsKeyboardFocus(true);
     setExplicitFocusOrder(1);
-    Rectangle<int> appMenuBorder = getScreenSize();
-    appMenuBorder.setLeft(10);
-    appMenuBorder.setTop(30);
-    appMenu = new AppMenuComponent(getConfigJSON(), appMenuBorder);
+    appMenu = new AppMenuComponent();
     addAndMakeVisible(appMenu);
 
-    std::function<Drawable*(String,Colour)>loadSVG=
-    [this](String filename,Colour fillColour)->Drawable*{
-      File svgFile=assetFile(filename);
-      if(!svgFile.exists()){
-          return NULL;
-      }
-      ScopedPointer<XmlElement> svgElement=XmlDocument::parse(svgFile);
-      Drawable * drawable= Drawable::createFromSVG(*svgElement);
-      drawable->replaceColour(Colours::black,fillColour);
-      addAndMakeVisible(drawable);
-      drawable->setTransformToFit(Desktop::getInstance().getDisplays().getMainDisplay().userArea.toFloat(),
-              RectanglePlacement::stretchToFit);
-      drawable->setWantsKeyboardFocus(false);
-      return drawable;
-    };
-    innerFrame=loadSVG("innerFrame.svg",PokeLookAndFeel::chipPurple);
-    outerFrame=loadSVG("outerFrame.svg",PokeLookAndFeel::medGrey);
+    std::function < Drawable * (String, Colour) > loadSVG =
+            [this](String filename, Colour fillColour)->Drawable* {
+                File svgFile = assetFile(filename);
+                if (!svgFile.exists()) {
+                    return NULL;
+                }
+                ScopedPointer<XmlElement> svgElement = XmlDocument::parse(svgFile);
+                Drawable * drawable = Drawable::createFromSVG(*svgElement);
+                drawable->replaceColour(Colours::black, fillColour);
+                addAndMakeVisible(drawable);
+                drawable->setTransformToFit(getWindowSize().toFloat(),
+                        RectanglePlacement::stretchToFit);
+                drawable->setWantsKeyboardFocus(false);
+                return drawable;
+            };
+    innerFrame = loadSVG("innerFrame.svg", PokeLookAndFeel::chipPurple);
+    outerFrame = loadSVG("outerFrame.svg", PokeLookAndFeel::medGrey);
 }
 
 AppMenuPage::~AppMenuPage() {
@@ -78,5 +75,12 @@ void AppMenuPage::visibilityChanged() {
 }
 
 void AppMenuPage::resized() {
+    setBounds(getWindowSize());
+    innerFrame->setBounds(0,0,getWidth(),getHeight());
+    outerFrame->setBounds(0,0,getWidth(),getHeight());
+    innerFrame->setTransformToFit(getBounds().toFloat(),
+            RectanglePlacement::stretchToFit);
+    outerFrame->setTransformToFit(getBounds().toFloat(),
+            RectanglePlacement::stretchToFit);
 
 }

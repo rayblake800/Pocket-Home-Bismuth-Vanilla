@@ -41,7 +41,7 @@ public:
 
   ScopedPointer<PageStackComponent> pageStack;
 
-  MainContentComponent(const var &configJson);
+  MainContentComponent();
   ~MainContentComponent();
 
   void paint(Graphics &) override;

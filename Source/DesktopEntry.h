@@ -12,6 +12,8 @@
 #ifndef DESKTOPENTRY_H
 #define DESKTOPENTRY_H
 #include <map>
+#include <set>
+#include "ConfigFile.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
 class DesktopEntry {
@@ -30,30 +32,29 @@ public:
     
     /**
      * Creates a DesktopEntry object representing an application category
-     * @param category the category name
+     * @param category a ConfigFile app folder data structure
      */
-    DesktopEntry(String category);
+    DesktopEntry(ConfigFile::AppFolder appFolder);
     
     /**
      * Create a DesktopEntry object with data from the config file
-     * @param entryJson a var object formatted as:
-     * {
-          "name": "Application Display Name",
-          "icon": "path/to/icon.png",
-          "shell": "launch command"
-         }
-     * }
+     * @param appItem a ConfigFile app data structure
      */
-    DesktopEntry(const var &entryJson);
+    DesktopEntry(ConfigFile::AppItem appItem);
     
     DesktopEntry(const DesktopEntry& orig);
     virtual ~DesktopEntry();
+    
+    //To prevent duplicates, two entries are equal as long as they have
+    //the same display name.
+    bool operator == (const DesktopEntry toCompare) const;
+    bool operator < (const DesktopEntry toCompare) const;
     
     //The following methods get Desktop file variables as they are
     //defined by the standard.
     
     Type getType();
-    String getName();
+    String getName() const;
     String getVersion();
     String getGenericName();
     String getComment();
