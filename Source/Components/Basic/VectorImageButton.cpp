@@ -17,11 +17,11 @@ const std::vector<Colour> VectorImageButton::defaultColours =
 VectorImageButton::VectorImageButton(ConfigFile::ComponentSettings settings,
         String title) : TextButton(title), buttonSettings(settings) {
     buttonSettings.applyBounds(this);
+    DBG(String("Created button ") + title + String(" at ") + getBounds().toString());
     setImage(0);
 }
 
 VectorImageButton::~VectorImageButton() {
-    image=nullptr;
 }
 
 int VectorImageButton::getImageCount() {
@@ -29,33 +29,56 @@ int VectorImageButton::getImageCount() {
 }
 
 void VectorImageButton::setImage(int imageIndex) {
-    if (imageIndex >= 0 && imageIndex < getImageCount()) {
-        loadSVG(buttonSettings.getAssetFiles()[imageIndex]);
+    if (this->imageIndex == imageIndex) {
+        return;
     }
-    repaint();
+    if (imageIndex >= 0 && imageIndex < getImageCount()) {
+        if (images[imageIndex] != nullptr) {
+            this->imageIndex = imageIndex;
+        } else {
+            String filename = buttonSettings.getAssetFiles()[imageIndex];
+            File svgFile = assetFile(filename);
+            if (!svgFile.existsAsFile()) {
+                DBG(String("VectorImageButton:") + filename + " not found!");
+                return;
+            }
+            ScopedPointer<XmlElement> svgElement = XmlDocument::parse(svgFile);
+            if (svgElement == nullptr) {
+                DBG(String("VectorImageButton:") + filename + " not a valid svg!");
+                return;
+            }
+            images.insert(imageIndex, Drawable::createFromSVG(*svgElement));
+            if (images[imageIndex] == nullptr) {
+                DBG(String("VectorImageButton:") + filename + " couldn't convert to drawable!");
+                return;
+            }
+            std::vector<Colour> colours = buttonSettings.getColours();
+            for (int i = 0; i < colours.size(); i++) {
+                images[imageIndex]->replaceColour(defaultColours[i], colours[i]);
+            }
+
+        }
+        removeChildComponent(images[this->imageIndex]);
+        this->imageIndex = imageIndex;
+        addAndMakeVisible(images[imageIndex]);
+        images[imageIndex]->setTransformToFit(getBounds().withPosition(0, 0).toFloat(), RectanglePlacement::centred);
+        images[imageIndex]->setWantsKeyboardFocus(false);
+        repaint();
+    }
+}
+
+void VectorImageButton::resizeImage() {
+    if (images[imageIndex] != nullptr) {
+        Rectangle<int> imageBounds=buttonSettings.getBounds()-getPosition();
+        images[imageIndex]->setTransformToFit(imageBounds.toFloat(), 
+                RectanglePlacement::centred);
+    }
 }
 
 void VectorImageButton::resized() {
-    if(image!=nullptr){
-        image->setTransformToFit(getBounds().withPosition(0,0).toFloat(),RectanglePlacement::centred);
-    }
+    resizeImage();
 }
 
 void VectorImageButton::paint(Graphics& g) {
 }
 
-void VectorImageButton::loadSVG(String svgFilename) {
-    File svgFile = assetFile(svgFilename);
-    if (!svgFile.exists()) {
-        return;
-    }
-    ScopedPointer<XmlElement> svgElement = XmlDocument::parse(svgFile);
-    image = Drawable::createFromSVG(*svgElement);
-    std::vector<Colour> colours=buttonSettings.getColours();
-    for(int i=0;i<colours.size();i++){
-        image->replaceColour(defaultColours[i],colours[i]);
-    }
-    addAndMakeVisible(image);
-    image->setTransformToFit(getBounds().withPosition(0,0).toFloat(),RectanglePlacement::centred);
-    image->setWantsKeyboardFocus(false);
-}

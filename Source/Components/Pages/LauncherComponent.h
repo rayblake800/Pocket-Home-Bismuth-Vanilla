@@ -13,6 +13,7 @@
 #include "../Basic/SwitchComponent.h"
 #include "../Basic/OverlaySpinner.h"
 #include "../Basic/VectorImageButton.h"
+#include "../BatteryIcon.h"
 #include "PageStackComponent.h"
 
 
@@ -20,14 +21,6 @@
 class LauncherComponent;
 class LibraryPageComponent;
 class AppsPageComponent;
-
-class BatteryIconTimer : public Timer {
-public:
-    BatteryIconTimer() {};
-    void timerCallback();
-    LauncherComponent* launcherComponent;
-    OwnedArray<VectorImageButton> * buttons;
-};
 
 class WifiIconTimer : public Timer {
 public:
@@ -39,13 +32,9 @@ public:
 
 class LauncherComponent : public Component, private Button::Listener {
 public:
-    BatteryMonitor batteryMonitor;
     ScopedPointer<ImageComponent> focusButtonPopup;
-    
-    ScopedPointer<Label> batteryLabel;
     ScopedPointer<Label> modeLabel;
-  
-    BatteryIconTimer batteryIconTimer;
+    BatteryIcon::ReferencePtr batteryIcon;
     WifiIconTimer wifiIconTimer;
     Component* defaultPage;
   
@@ -56,8 +45,6 @@ public:
     HashMap<String, Component *> pagesByName;
     
     bool resize = false;
-    
-    StretchableLayoutManager categoryButtonLayout;
     
     LauncherComponent();
     ~LauncherComponent();

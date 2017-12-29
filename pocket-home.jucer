@@ -94,6 +94,8 @@
               file="Source/Components/AppMenuComponent.cpp"/>
         <FILE id="CwWWhK" name="AppMenuComponent.h" compile="0" resource="0"
               file="Source/Components/AppMenuComponent.h"/>
+        <FILE id="Vmaddf" name="BatteryIcon.cpp" compile="1" resource="0" file="Source/Components/BatteryIcon.cpp"/>
+        <FILE id="uipX6r" name="BatteryIcon.h" compile="0" resource="0" file="Source/Components/BatteryIcon.h"/>
         <FILE id="DE1dLJ" name="MainComponent.cpp" compile="1" resource="0"
               file="Source/Components/MainComponent.cpp"/>
         <FILE id="QjMIw2" name="MainComponent.h" compile="0" resource="0" file="Source/Components/MainComponent.h"/>
@@ -109,6 +111,8 @@
               resource="0" file="Source/Components/SettingsPageWifiComponent.cpp"/>
         <FILE id="y3N9GY" name="SettingsPageWifiComponent.h" compile="0" resource="0"
               file="Source/Components/SettingsPageWifiComponent.h"/>
+        <FILE id="DAO7oX" name="WifiIcon.cpp" compile="1" resource="0" file="Source/Components/WifiIcon.cpp"/>
+        <FILE id="RxQblP" name="WifiIcon.h" compile="0" resource="0" file="Source/Components/WifiIcon.h"/>
       </GROUP>
       <FILE id="cu8zhf" name="ConfigFile.cpp" compile="1" resource="0" file="Source/ConfigFile.cpp"/>
       <FILE id="z82LDW" name="ConfigFile.h" compile="0" resource="0" file="Source/ConfigFile.h"/>

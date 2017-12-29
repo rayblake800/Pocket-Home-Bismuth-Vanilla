@@ -13,7 +13,7 @@
 #include "../AppMenuComponent.h"
 #include "LauncherComponent.h"
 
-class AppMenuPage : public PageStackComponent {
+class AppMenuPage : public Component{
 public:
     AppMenuPage(LauncherComponent * launcherComponent);
     virtual ~AppMenuPage();

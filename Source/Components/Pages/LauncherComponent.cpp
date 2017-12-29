@@ -8,16 +8,6 @@
 #include "AppMenuPage.h"
 #include "LauncherComponent.h"
 
-enum BatteryIconImage{
-    BATTERY_0,
-    BATTERY_1,
-    BATTERY_2,
-    BATTERY_3,
-    CHARGING_0,
-    CHARGING_1,
-    CHARGING_2,
-    CHARGING_3
-};
 
 enum WifiIconImage{
     WIFI_OFF,
@@ -26,45 +16,6 @@ enum WifiIconImage{
     WIFI_STRENGTH_2,
     WIFI_STRENGTH_3
 };
-
-void BatteryIconTimer::timerCallback() {
-    // get current battery status from the battery monitor thread
-    auto batteryStatus = launcherComponent->batteryMonitor.getCurrentStatus();
-
-    // we can't change anything if we don't have a LauncherComponent
-    if (launcherComponent) {
-        for (VectorImageButton * button : *buttons) {
-            BatteryIconImage batteryImg = BATTERY_3;
-            if (button->getName() == "Battery") {
-                int status = round(((float) batteryStatus.percentage) / 100.0f * 3.0f);
-
-                //int pct = (int) batteryStatus.percentage;
-                int pct = 100;
-                String pct_s = std::to_string(pct) + " %";
-                launcherComponent->batteryLabel->setText(pct_s, dontSendNotification);
-
-                if (batteryStatus.percentage <= 5) {
-                    status = 3;
-                } else {
-                    // limit status range to [0:3]
-                    if (status < 0) status = 0;
-                    if (status > 2) status = 2;
-                }
-                if (!batteryStatus.isCharging) {
-                    batteryImg = (BatteryIconImage)status;
-                } else {
-                    batteryImg = (BatteryIconImage)(status+(int)CHARGING_0);
-
-                }
-
-                button->setImage((int) batteryImg);
-            }
-        }
-    }
-    //DBG( "Charging: "  << batteryStatus.isCharging );
-    //DBG( "Voltage: " << batteryStatus.percentage );
-
-}
 
 void WifiIconTimer::timerCallback() {
     if (!launcherComponent) {
@@ -167,11 +118,6 @@ clock(nullptr), labelip("ip", "") {
     setClockVisible(config->getConfigBool(ConfigFile::SHOW_CLOCK));
     setClockAMPM(formatclock == "ampm");
 
-    /* Battery percentage label */
-    batteryLabel = new Label("percentage", "-%");
-    positionLabel(batteryLabel, ConfigFile::BATTERY_PERCENT);
-    batteryLabel->setJustificationType(Justification::centredLeft);
-
     String value = config->getConfigString(ConfigFile::BACKGROUND);
 
     bgColor = Colour(0x4D4D4D);
@@ -217,21 +163,13 @@ clock(nullptr), labelip("ip", "") {
                 addAndMakeVisible(button);
                 cornerButtons.add(button);
             };
-
-    loadButton(config->getComponentSettings(ConfigFile::BATTERY), "Battery");
     loadButton(config->getComponentSettings(ConfigFile::WIFI), "Wifi");
     loadButton(config->getComponentSettings(ConfigFile::POWER), "Power");
     loadButton(config->getComponentSettings(ConfigFile::SETTINGS), "Settings");
-
+    
+    batteryIcon=new BatteryIcon();
+    addAndMakeVisible(batteryIcon);
     defaultPage = appsPage;
-
-    batteryMonitor.updateStatus();
-    batteryMonitor.startThread();
-
-    batteryIconTimer.launcherComponent = this;
-    batteryIconTimer.buttons = &cornerButtons;
-    batteryIconTimer.startTimer(1000);
-    batteryIconTimer.timerCallback();
 
     wifiIconTimer.launcherComponent = this;
     wifiIconTimer.buttons = &cornerButtons;
@@ -241,8 +179,6 @@ clock(nullptr), labelip("ip", "") {
 }
 
 LauncherComponent::~LauncherComponent() {
-    batteryIconTimer.stopTimer();
-    batteryMonitor.stopThread(2000);
 }
 
 void LauncherComponent::paint(Graphics &g) {
@@ -257,9 +193,7 @@ void LauncherComponent::resized() {
     Rectangle<int>bounds = getLocalBounds();
     for (VectorImageButton * button : cornerButtons) {
         ConfigFile::ComponentType componentType;
-        if (button->getName() == "Battery") {
-            componentType = ConfigFile::BATTERY;
-        } else if (button->getName() == "Wifi") {
+        if (button->getName() == "Wifi") {
             componentType = ConfigFile::WIFI;
         } else if (button->getName() == "Power") {
             componentType = ConfigFile::POWER;
@@ -271,9 +205,8 @@ void LauncherComponent::resized() {
         }
         config->getComponentSettings(componentType).applyBounds(button);
     }
-
+    config->getComponentSettings(ConfigFile::BATTERY).applyBounds(batteryIcon);
     pageStack->setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
-    //pageStack->setWantsKeyboardFocus(true);
 
     std::function<void(ConfigFile::ComponentType, Label*) > resizeText =
             [this, config](ConfigFile::ComponentType type, Label * label) {
@@ -282,7 +215,6 @@ void LauncherComponent::resized() {
                 labelFont.setHeight(label->getHeight());
                 label->setFont(labelFont);
             };
-    resizeText(ConfigFile::BATTERY_PERCENT, batteryLabel);
     resizeText(ConfigFile::CLOCK, &(clock->getLabel()));
     labelip.setBounds(bounds.getX() + 190, bounds.getY(), 100, 30);
     // init

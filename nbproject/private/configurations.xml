@@ -11,6 +11,8 @@
         </df>
       </df>
       <df name="build">
+        <df name="Debug">
+        </df>
         <df name="Release">
         </df>
       </df>
@@ -3602,6 +3604,8 @@
           <in>AppMenuButton.h</in>
           <in>AppMenuComponent.cpp</in>
           <in>AppMenuComponent.h</in>
+          <in>BatteryIcon.cpp</in>
+          <in>BatteryIcon.h</in>
           <in>MainComponent.cpp</in>
           <in>MainComponent.h</in>
           <in>SettingsPageBluetoothComponent.cpp</in>
@@ -3610,6 +3614,8 @@
           <in>SettingsPageLogin.h</in>
           <in>SettingsPageWifiComponent.cpp</in>
           <in>SettingsPageWifiComponent.h</in>
+          <in>WifiIcon.cpp</in>
+          <in>WifiIcon.h</in>
         </df>
         <df name="Wifi">
           <in>WifiStatus.cpp</in>

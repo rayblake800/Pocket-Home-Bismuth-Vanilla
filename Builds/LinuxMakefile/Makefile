@@ -87,10 +87,12 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/SettingsPageComponent_4769c410.o \
   $(JUCE_OBJDIR)/AppMenuButton_1edbbd22.o \
   $(JUCE_OBJDIR)/AppMenuComponent_5288ff17.o \
+  $(JUCE_OBJDIR)/BatteryIcon_8f0f0f96.o \
   $(JUCE_OBJDIR)/MainComponent_ec7554f4.o \
   $(JUCE_OBJDIR)/SettingsPageBluetoothComponent_69dfe57b.o \
   $(JUCE_OBJDIR)/SettingsPageLogin_9f7bcfe7.o \
   $(JUCE_OBJDIR)/SettingsPageWifiComponent_4c8b2566.o \
+  $(JUCE_OBJDIR)/WifiIcon_d784eb08.o \
   $(JUCE_OBJDIR)/ConfigFile_cd42f267.o \
   $(JUCE_OBJDIR)/DesktopEntries_5218f65d.o \
   $(JUCE_OBJDIR)/DesktopEntry_8dc99f3f.o \
@@ -222,6 +224,11 @@ $(JUCE_OBJDIR)/AppMenuComponent_5288ff17.o: ../../Source/Components/AppMenuCompo
 	@echo "Compiling AppMenuComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/BatteryIcon_8f0f0f96.o: ../../Source/Components/BatteryIcon.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling BatteryIcon.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/MainComponent_ec7554f4.o: ../../Source/Components/MainComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling MainComponent.cpp"
@@ -240,6 +247,11 @@ $(JUCE_OBJDIR)/SettingsPageLogin_9f7bcfe7.o: ../../Source/Components/SettingsPag
 $(JUCE_OBJDIR)/SettingsPageWifiComponent_4c8b2566.o: ../../Source/Components/SettingsPageWifiComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling SettingsPageWifiComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/WifiIcon_d784eb08.o: ../../Source/Components/WifiIcon.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling WifiIcon.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigFile_cd42f267.o: ../../Source/ConfigFile.cpp

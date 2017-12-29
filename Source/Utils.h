@@ -44,4 +44,10 @@ std::vector<String> listFiles(const String& path);
 //list all directory files in path, ignoring ./ and ../
 std::vector<String> listDirectoryFiles(const String& path);
 
+//get the size of the active window
 Rectangle<int>getWindowSize();
+
+//resizes a font to fit in a containing rectangle.
+//If fitting it in would require mangling the font size too much, the
+//font gets set to size zero.
+Font fontResizedToFit(Font font,String text,Rectangle<int>container);

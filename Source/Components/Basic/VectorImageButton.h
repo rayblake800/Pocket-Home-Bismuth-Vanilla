@@ -19,12 +19,14 @@ public:
     
     int getImageCount();
     void setImage(int imageIndex);
+protected:
+    void resizeImage();
 private:
     void resized() override;
     void paint (Graphics& g) override;
-    void loadSVG(String svgFilename);
     ConfigFile::ComponentSettings buttonSettings;
-    ScopedPointer<Drawable>image;
+    OwnedArray<Drawable>images;
+    int imageIndex;
     static const std::vector<Colour> defaultColours;
 
     static const std::vector<Colour> loadDefaultColours() {

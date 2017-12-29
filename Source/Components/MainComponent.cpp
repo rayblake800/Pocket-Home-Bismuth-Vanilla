@@ -13,7 +13,7 @@ MainContentComponent::MainContentComponent()
   setLookAndFeel(lookAndFeel);
   setWantsKeyboardFocus(false);
 
-  setSize(480, 272);
+  
 
   //Function to execute when the login button is pressed on login page
   auto function = [this] () { this->loggedIn(); };
@@ -22,14 +22,16 @@ MainContentComponent::MainContentComponent()
 
   pageStack = new PageStackComponent();
   
-  if(loginPage->hasPassword())
-    addAndMakeVisible(loginPage);
-  else
-    addAndMakeVisible(pageStack);  
+  if(loginPage->hasPassword()){
+    addAndMakeVisible(loginPage);  
   loginPage->textFocus();
-  
+  }
+  else{
+    addAndMakeVisible(pageStack);
+  }
   launcher = new LauncherComponent();
   pageStack->pushPage(launcher, PageStackComponent::kTransitionNone);
+  setSize(480, 272);
   repaint();
 }
 
@@ -51,6 +53,9 @@ void MainContentComponent::resized() {
   }
   if(loginPage != nullptr){
     loginPage->setBounds(bounds);
+  }
+  if(launcher != nullptr){
+      launcher->setBounds(bounds);
   }
 }
 

@@ -244,3 +244,18 @@ void componentTrace(){
 Rectangle<int> getWindowSize(){
     return Desktop::getInstance().getComponent(0)->getBounds().withPosition(0,0);
 }
+
+//resizes a font to fit in a containing rectangle.
+//If fitting it in would require mangling the font size too much, the
+//font gets set to size zero.
+Font fontResizedToFit(Font font,String text,Rectangle<int>container){
+    float currentHeight=font.getHeight();
+    float currentWidth = font.getStringWidth(text);
+    int newHeight=currentHeight*container.getWidth()/currentWidth;
+    if(newHeight>container.getHeight()){
+        newHeight=container.getHeight();
+    }
+    //DBG(String("setting font height to ")+String(newHeight));
+    font.setHeight(newHeight);
+    return font;
+}
