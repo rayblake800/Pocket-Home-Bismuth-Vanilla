@@ -14,18 +14,19 @@ runningCheckTimer(this, [](AppMenuComponent* appMenu) {
     appMenu->checkRunningApps();
 }),
 debounceTimer(this, [](AppMenuComponent* appMenu) {
+
     appMenu->setDebounce(false);
 }) {
     ConfigFile * configFile = ConfigFile::getInstance();
     Rectangle<int> screenSize = getWindowSize();
     ConfigFile::ComponentSettings menuSettings = configFile->getComponentSettings(ConfigFile::APP_MENU);
-    Rectangle<int>bounds=menuSettings.getBounds();
-    x_origin=bounds.getX();
-    y_origin=bounds.getY();
+    Rectangle<int>bounds = menuSettings.getBounds();
+    x_origin = bounds.getX();
+    y_origin = bounds.getY();
 
     ConfigFile::ComponentSettings buttonSettings =
             configFile->getComponentSettings(ConfigFile::APP_MENU_BUTTON);
-    Rectangle<int>buttonSize=AppMenuButton::getButtonSize();
+    Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
     buttonWidth = buttonSize.getWidth();
     buttonHeight = buttonSize.getHeight();
     setWantsKeyboardFocus(false);
@@ -81,9 +82,13 @@ void AppMenuComponent::hideLaunchSpinner() {
  * associated desktop applications.
  */
 void AppMenuComponent::openFolder(std::vector<String> categoryNames) {
-    std::set<DesktopEntry> folderItems = 
+    ConfigFile * config = ConfigFile::getInstance();
+    int folderIndex = selected[activeColumn()]->getIndex() -
+            config->getFavorites().size();
+    ConfigFile::AppFolder selectedFolder = config->getFolders()[folderIndex];
+    std::set<DesktopEntry> folderItems =
             desktopEntries.getCategoryListEntries(categoryNames);
-    if (folderItems.empty())return;
+    if (folderItems.empty() && selectedFolder.pinnedApps.empty())return;
     int columnTop = y_origin;
     if (selected[activeColumn()] != nullptr) {
         columnTop = selected[activeColumn()]->getY();
@@ -91,6 +96,11 @@ void AppMenuComponent::openFolder(std::vector<String> categoryNames) {
     selected.push_back(nullptr);
     columnTops.push_back(columnTop);
     buttonColumns.push_back(std::vector<AppMenuButton*>());
+    for (ConfigFile::AppItem item : selectedFolder.pinnedApps) {
+        AppMenuButton* newButton = new AppMenuButton(DesktopEntry(item),
+                buttonColumns[activeColumn()].size(), activeColumn());
+        addButton(newButton);
+    }
     DBG(String("found ") + String(folderItems.size()) + " items in folder");
     for (DesktopEntry desktopEntry : folderItems) {
         if (!desktopEntry.hidden() && !desktopEntry.noDisplay()) {
@@ -99,13 +109,15 @@ void AppMenuComponent::openFolder(std::vector<String> categoryNames) {
             addButton(newButton);
         }
     }
+    selected[activeColumn()]=buttonColumns[activeColumn()][0];
+    buttonColumns[activeColumn()][0]->setSelected(true);
     scrollToSelected();
 }
 
 //close the topmost open folder, removing all contained buttons
 
 void AppMenuComponent::closeFolder() {
-    if (debounce){
+    if (debounce) {
         return;
     }
     for (int i = buttonColumns[activeColumn()].size() - 1; i >= 0; i--) {
@@ -150,34 +162,34 @@ void AppMenuComponent::resized() {
     launchSpinner->setBounds(getWindowSize());
     ConfigFile * config = ConfigFile::getInstance();
     ConfigFile::ComponentSettings menuSettings = config->getComponentSettings(ConfigFile::APP_MENU);
-    Rectangle<int> menuBounds=menuSettings.getBounds();
-    x_origin=menuBounds.getX();
-    y_origin=menuBounds.getY();
+    Rectangle<int> menuBounds = menuSettings.getBounds();
+    x_origin = menuBounds.getX();
+    y_origin = menuBounds.getY();
     //resize all buttons
-    Rectangle<int>buttonSize=AppMenuButton::getButtonSize();
-    buttonWidth=buttonSize.getWidth();
-    buttonHeight=buttonSize.getHeight();
-    int numColumns=selected.size();
-    if(menuBounds.getWidth()<numColumns*buttonWidth){
-        menuBounds.setWidth(numColumns*buttonWidth);
+    Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
+    buttonWidth = buttonSize.getWidth();
+    buttonHeight = buttonSize.getHeight();
+    int numColumns = selected.size();
+    if (menuBounds.getWidth() < numColumns * buttonWidth) {
+        menuBounds.setWidth(numColumns * buttonWidth);
     }
-    for(int c=0;c<numColumns;c++){
-        if(c>0){
-            columnTops[c]=selected[c-1]->getY();
+    for (int c = 0; c < numColumns; c++) {
+        if (c > 0) {
+            columnTops[c] = selected[c - 1]->getY();
         }
-        int numRows=buttonColumns[c].size();
-        if(menuBounds.getHeight()<numRows*buttonHeight+columnTops[c]){
-            menuBounds.setHeight(numRows*buttonHeight+columnTops[c]);
+        int numRows = buttonColumns[c].size();
+        if (menuBounds.getHeight() < numRows * buttonHeight + columnTops[c]) {
+            menuBounds.setHeight(numRows * buttonHeight + columnTops[c]);
         }
-        for(int i =0; i<numRows;i++){
+        for (int i = 0; i < numRows; i++) {
             AppMenuButton * button = buttonColumns[c][i];
             button->setBounds(buttonSize.withPosition(c*buttonWidth,
-                    i*buttonHeight+columnTops[c]));
+                    i * buttonHeight + columnTops[c]));
         }
     }
     setBounds(menuBounds);
-    if(activeColumn() >= 0 && selected[activeColumn()] != nullptr
-            && !Desktop::getInstance().getAnimator().isAnimating()){
+    if (activeColumn() >= 0 && selected[activeColumn()] != nullptr
+            && !Desktop::getInstance().getAnimator().isAnimating()) {
         scrollToSelected();
     }
 }
@@ -238,7 +250,7 @@ int AppMenuComponent::activeColumn() {
 
 void AppMenuComponent::scrollToSelected() {
     int column = activeColumn();
-    if(column<0){
+    if (column < 0) {
         return;
     }
     AppMenuButton* selectedButton = selected[column];
@@ -263,10 +275,10 @@ void AppMenuComponent::scrollToSelected() {
     if (animator.isAnimating(this)) {
         animator.cancelAnimation(this, false);
     }
-    if (selectedButton != nullptr){
-    DBG(String("scrolling to ")+dest.toString()+String(",button bounds=")+
-            selectedButton->getBounds().toString());
-    }
+//    if (selectedButton != nullptr) {
+//        DBG(String("scrolling to ") + dest.toString() + String(",button bounds=") +
+//                selectedButton->getBounds().toString());
+//    }
     animator.animateComponent(this, dest, 1, 100, false, 1, 1);
 }
 
@@ -281,10 +293,10 @@ void AppMenuComponent::addButton(AppMenuButton * appButton) {
     appButton->setVisible(true);
     appButton->addListener(this);
     this->buttonColumns[column].push_back(appButton);
-    if ((x + buttonWidth) > getWidth()){
+    if ((x + buttonWidth) > getWidth()) {
         setBounds(getX(), getY(), x + buttonWidth, getHeight());
     }
-    if ((y + buttonHeight) > getHeight()){
+    if ((y + buttonHeight) > getHeight()) {
         setBounds(getX(), getY(), getWidth(), y + buttonHeight);
     }
 }
