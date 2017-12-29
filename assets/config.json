@@ -1,258 +1,258 @@
 {
-  "background": "4D4D4D",
-  "shutdown command": "sudo shutdown -hP now",
-  "restart command": "sudo shutdown -r now",
-  "timeformat": "24h",
-  "cursor": true,
-  "showclock": true,
-  "favorites": [
-    {
-      "name": "Terminal",
-      "icon": "appIcons/terminal.png",
-      "shell": "vala-terminal -fs 8 -g 20 20"
-    },
-    {
-      "name": "Play PICO-8",
-      "icon": "appIcons/pico8.png",
-      "shell": "pico8"
-    },
-    {
-      "name": "Make Music",
-      "icon": "appIcons/musicsequencer.png",
-      "shell": "sunvox"
-    },
-    {
-      "name": "Get Help",
-      "icon": "appIcons/help.png",
-      "shell": "surf /usr/share/pocketchip-localdoc/index.html"
-    },
-    {
-      "name": "Write",
-      "icon": "appIcons/texteditor.png",
-      "shell": "leafpad"
-    },
-    {
-      "name": "Browse Files",
-      "icon": "appIcons/filebrowser.png",
-      "shell": "pcmanfm"
-    }
-  ],
-  "folders": [
-    {
-      "name": "All",
-      "icon": "default",
-      "categories": [
-        "All"
-      ],
-      "pinned apps": []
-    },
-    {
-      "name": "Multimedia",
-      "icon": "applications-multimedia",
-      "categories": [
-        "AudioVideo",
-        "Audio",
-        "Video"
-      ],
-      "pinned apps": []
-    },
-    {
-      "name": "Development",
-      "icon": "applications-development",
-      "categories": [
-        "Development"
-      ],
-      "pinned apps": [
+    "favorites": [
         {
-          "name": "PICO-8",
-          "icon": "pico8terminal",
-          "shell": "pico8"
+            "name": "Terminal",
+            "icon": "appIcons/terminal.svg",
+            "shell": "vala-terminal -fs 8 -g 20 20"
+        },
+        {
+            "name": "Play PICO-8",
+            "icon": "appIcons/pico8.svg",
+            "shell": "pico8"
+        },
+        {
+            "name": "Make Music",
+            "icon": "appIcons/musicsequencer.svg",
+            "shell": "sunvox"
+        },
+        {
+            "name": "Get Help",
+            "icon": "appIcons/help.svg",
+            "shell": "surf /usr/share/pocketchip-localdoc/index.html"
+        },
+        {
+            "name": "Write",
+            "icon": "appIcons/texteditor.svg",
+            "shell": "leafpad"
+        },
+        {
+            "name": "Browse Files",
+            "icon": "appIcons/filebrowser.svg",
+            "shell": "pcmanfm"
         }
-      ]
+    ],
+    "folders": [
+        {
+            "name": "All",
+            "icon": "default",
+            "categories": [
+                "All"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "Multimedia",
+            "icon": "applications-multimedia",
+            "categories": [
+                "AudioVideo",
+                "Audio",
+                "Video"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "Development",
+            "icon": "applications-development",
+            "categories": [
+                "Development"
+            ],
+            "pinned apps": [
+                {
+                    "name": "PICO-8",
+                    "icon": "pico8terminal",
+                    "shell": "pico8"
+                }
+            ]
+        },
+        {
+            "name": "Education",
+            "icon": "applications-accessories",
+            "categories": [
+                "Education"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "Games",
+            "icon": "applications-games",
+            "categories": [
+                "Game"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "Graphics",
+            "icon": "applications-graphics",
+            "categories": [
+                "Graphics"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "Internet",
+            "icon": "applications-internet",
+            "categories": [
+                "Network"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "Office",
+            "icon": "applications-office",
+            "categories": [
+                "Office"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "Science",
+            "icon": "applications-science",
+            "categories": [
+                "Science"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "Settings",
+            "icon": "configuration_section",
+            "categories": [
+                "Settings"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "System",
+            "icon": "applications-system",
+            "categories": [
+                "System"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "Utility",
+            "icon": "applications-utilities",
+            "categories": [
+                "Utility"
+            ],
+            "pinned apps": []
+        },
+        {
+            "name": "Other",
+            "icon": "applications-other",
+            "categories": [
+                "Other"
+            ],
+            "pinned apps": []
+        }
+    ],
+    "shutdown command": "sudo shutdown -hP now",
+    "restart command": "sudo shutdown -r now",
+    "background": "/home/chip/chip.png",
+    "app menu": {
+        "x": 0.25,
+        "y": 0.08,
+        "width": 0.65,
+        "height": 0.85,
+        "colours": [],
+        "asset files": []
     },
-    {
-      "name": "Education",
-      "icon": "applications-accessories",
-      "categories": [
-        "Education"
-      ],
-      "pinned apps": []
+    "app menu buttons": {
+        "x": 0,
+        "y": 0,
+        "width": 0.3,
+        "height": 0.15,
+        "colours": [],
+        "asset files": []
     },
-    {
-      "name": "Games",
-      "icon": "applications-games",
-      "categories": [
-        "Game"
-      ],
-      "pinned apps": []
+    "battery": {
+        "x": 0.01,
+        "y": 0.011,
+        "width": 0.085,
+        "height": 0.075,
+        "colours": [
+            "ffffffff",
+            "fffa9622",
+            "ffff0000"
+        ],
+        "asset files": [
+            "battery_0.svg",
+            "battery_1.svg",
+            "battery_2.svg",
+            "battery_3.svg",
+            "batteryCharging_0.svg",
+            "batteryCharging_1.svg",
+            "batteryCharging_2.svg",
+            "batteryCharging_3.svg"
+        ]
     },
-    {
-      "name": "Graphics",
-      "icon": "applications-graphics",
-      "categories": [
-        "Graphics"
-      ],
-      "pinned apps": []
+    "battery percent text": {
+        "x": 0.115,
+        "y": 0.0125,
+        "width": 0.15,
+        "height": 0.075,
+        "colours": [
+            "ffffffff"
+        ],
+        "asset files": []
     },
-    {
-      "name": "Internet",
-      "icon": "applications-internet",
-      "categories": [
-        "Network"
-      ],
-      "pinned apps": []
+    "menu frame": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "colours": [
+            "ffd23c6d",
+            "ffc0c0c0"
+        ],
+        "asset files": [
+            "innerFrame.svg",
+            "outerFrame.svg"
+        ]
     },
-    {
-      "name": "Office",
-      "icon": "applications-office",
-      "categories": [
-        "Office"
-      ],
-      "pinned apps": []
+    "power button": {
+        "x": 0,
+        "y": 0.9,
+        "width": 0.09,
+        "height": 0.09,
+        "colours": [],
+        "asset files": [
+            "powerIcon.svg"
+        ]
     },
-    {
-      "name": "Science",
-      "icon": "applications-science",
-      "categories": [
-        "Science"
-      ],
-      "pinned apps": []
+    "settings button": {
+        "x": 0.91,
+        "y": 0.9,
+        "width": 0.09,
+        "height": 0.09,
+        "colours": [],
+        "asset files": [
+            "settingsIcon.svg"
+        ]
     },
-    {
-      "name": "Settings",
-      "icon": "configuration_section",
-      "categories": [
-        "Settings"
-      ],
-      "pinned apps": []
+    "time": {
+        "x": 0.74,
+        "y": 0.0125,
+        "width": 0.15,
+        "height": 0.075,
+        "colours": [
+            "ffffffff"
+        ],
+        "asset files": []
     },
-    {
-      "name": "System",
-      "icon": "applications-system",
-      "categories": [
-        "System"
-      ],
-      "pinned apps": []
-    },
-    {
-      "name": "Utility",
-      "icon": "applications-utilities",
-      "categories": [
-        "Utility"
-      ],
-      "pinned apps": []
-    },
-    {
-      "name": "Other",
-      "icon": "applications-other",
-      "categories": [
-        "Other"
-      ],
-      "pinned apps": []
+    "wifi": {
+        "x": 0.91,
+        "y": 0.01,
+        "width": 0.085,
+        "height": 0.085,
+        "colours": [
+            "ffffffff",
+        ],
+        "asset files": [
+            "wifiOff.svg",
+            "wifiStrength0.svg",
+            "wifiStrength1.svg",
+            "wifiStrength2.svg",
+            "wifiStrength3.svg"
+        ]
     }
-  ],
-  "app menu": {
-    "x": 0.25,
-    "y": 0.1,
-    "width": 1,
-    "height": 1,
-    "colours": [],
-    "asset files": []
-  },
-  "app menu buttons": {
-    "x": 0,
-    "y": 0,
-    "width": 0.3,
-    "height": 0.1,
-    "colours": [
-      "ffc0c0ff",
-      "ffd23c6d"
-    ],
-    "asset files": []
-  },
-  "battery": {
-    "x": 0,
-    "y": 0,
-    "width": 0.1,
-    "height": 0.1,
-    "colours": [],
-    "asset files": [
-      "battery_0.png",
-      "battery_1.png",
-      "battery_2.png",
-      "battery_3.png",
-      "batteryCharging_0.png",
-      "batteryCharging_1.png",
-      "batteryCharging_2.png",
-      "batteryCharging_3.png"
-    ]
-  },
-  "battery percent text": {
-    "x": 0.15,
-    "y": 0.011,
-    "width": 0.15,
-    "height": 0.08,
-    "colours": [
-      "ffffffff"
-    ],
-    "asset files": []
-  },
-  "menu frame": {
-    "x": 0,
-    "y": 0,
-    "width": 1,
-    "height": 1,
-    "colours": [
-      "ffd23c6d",
-      "ffc0c0c0"
-    ],
-    "asset files": [
-      "innerFrame.svg",
-      "outerFrame.svg"
-    ]
-  },
-  "power button": {
-    "x": 0,
-    "y": 0.9,
-    "width": 0.1,
-    "height": 0.1,
-    "colours": [],
-    "asset files": [
-      "powerIcon.png"
-    ]
-  },
-  "settings button": {
-    "x": 0.9,
-    "y": 0.9,
-    "width": 0.1,
-    "height": 0.1,
-    "colours": [],
-    "asset files": [
-      "settingsIcon.png"
-    ]
-  },
-  "time": {
-    "x": 0.69,
-    "y": 0.011,
-    "width": 0.16670000553131103516,
-    "height": 0.08,
-    "colours": [
-      "ffffffff"
-    ],
-    "asset files": []
-  },
-  "wifi": {
-    "x": 0.9,
-    "y": 0,
-    "width": 0.1,
-    "height": 0.1,
-    "colours": [],
-    "asset files": [
-      "wifiOff.png",
-      "wifiStrength0.png",
-      "wifiStrength1.png",
-      "wifiStrength2.png",
-      "wifiStrength3.png"
-    ]
-  }
 }

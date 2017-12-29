@@ -2,8 +2,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "MainComponent.h"
-#include "WifiStatus.h"
+#include "Components/MainComponent.h"
+#include "Wifi/WifiStatus.h"
 #include "Utils.h"
 
 struct BluetoothDevice {

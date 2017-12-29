@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
         <df name="Release">
         </df>
       </df>
@@ -3563,14 +3561,67 @@
         </df>
       </df>
       <df name="Source">
-        <in>AdvancedSettingsPage.cpp</in>
-        <in>AdvancedSettingsPage.h</in>
+        <df name="Components">
+          <df name="Basic">
+            <in>Grid.cpp</in>
+            <in>Grid.h</in>
+            <in>IconSliderComponent.cpp</in>
+            <in>IconSliderComponent.h</in>
+            <in>MenuItem.cpp</in>
+            <in>MenuItem.h</in>
+            <in>OverlaySpinner.cpp</in>
+            <in>OverlaySpinner.h</in>
+            <in>SwitchComponent.cpp</in>
+            <in>SwitchComponent.h</in>
+            <in>VectorImageButton.cpp</in>
+            <in>VectorImageButton.h</in>
+          </df>
+          <df name="Pages">
+            <in>AdvancedSettingsPage.cpp</in>
+            <in>AdvancedSettingsPage.h</in>
+            <in>AppMenuPage.cpp</in>
+            <in>AppMenuPage.h</in>
+            <in>DateTimePage.cpp</in>
+            <in>DateTimePage.h</in>
+            <in>InputSettingsPage.cpp</in>
+            <in>InputSettingsPage.h</in>
+            <in>LauncherComponent.cpp</in>
+            <in>LauncherComponent.h</in>
+            <in>PageStackComponent.cpp</in>
+            <in>PageStackComponent.h</in>
+            <in>PersonalizePageComponent.cpp</in>
+            <in>PersonalizePageComponent.h</in>
+            <in>PowerPageComponent.cpp</in>
+            <in>PowerPageComponent.h</in>
+            <in>PowerPageFelComponent.cpp</in>
+            <in>PowerPageFelComponent.h</in>
+            <in>SettingsPageComponent.cpp</in>
+            <in>SettingsPageComponent.h</in>
+          </df>
+          <in>AppMenuButton.cpp</in>
+          <in>AppMenuButton.h</in>
+          <in>AppMenuComponent.cpp</in>
+          <in>AppMenuComponent.h</in>
+          <in>MainComponent.cpp</in>
+          <in>MainComponent.h</in>
+          <in>SettingsPageBluetoothComponent.cpp</in>
+          <in>SettingsPageBluetoothComponent.h</in>
+          <in>SettingsPageLogin.cpp</in>
+          <in>SettingsPageLogin.h</in>
+          <in>SettingsPageWifiComponent.cpp</in>
+          <in>SettingsPageWifiComponent.h</in>
+        </df>
+        <df name="Wifi">
+          <in>WifiStatus.cpp</in>
+          <in>WifiStatus.h</in>
+          <in>WifiStatusJson.cpp</in>
+          <in>WifiStatusJson.h</in>
+          <in>WifiStatusNM.cpp</in>
+          <in>WifiStatusNM.h</in>
+          <in>WifiTest.cpp</in>
+        </df>
         <in>AppMenuButton.cpp</in>
-        <in>AppMenuButton.h</in>
         <in>AppMenuComponent.cpp</in>
-        <in>AppMenuComponent.h</in>
-        <in>AppMenuPage.cpp</in>
-        <in>AppMenuPage.h</in>
         <in>BatteryMonitor.cpp</in>
         <in>BatteryMonitor.h</in>
         <in>ClockMonitor.cpp</in>
@@ -3578,48 +3629,31 @@
         <in>ConfigFile.cpp</in>
         <in>ConfigFile.h</in>
         <in>DateTimePage.cpp</in>
-        <in>DateTimePage.h</in>
         <in>DesktopEntries.cpp</in>
         <in>DesktopEntries.h</in>
         <in>DesktopEntry.cpp</in>
         <in>DesktopEntry.h</in>
         <in>Grid.cpp</in>
-        <in>Grid.h</in>
         <in>IconSliderComponent.cpp</in>
-        <in>IconSliderComponent.h</in>
         <in>InputSettingsPage.cpp</in>
-        <in>InputSettingsPage.h</in>
         <in>LauncherBarComponent.cpp</in>
         <in>LauncherComponent.cpp</in>
-        <in>LauncherComponent.h</in>
         <in>Main.cpp</in>
         <in>Main.h</in>
         <in>MainComponent.cpp</in>
-        <in>MainComponent.h</in>
         <in>MenuItem.cpp</in>
-        <in>MenuItem.h</in>
         <in>OverlaySpinner.cpp</in>
-        <in>OverlaySpinner.h</in>
         <in>PageStackComponent.cpp</in>
-        <in>PageStackComponent.h</in>
         <in>PersonalizePageComponent.cpp</in>
-        <in>PersonalizePageComponent.h</in>
         <in>PokeLookAndFeel.cpp</in>
         <in>PokeLookAndFeel.h</in>
         <in>PowerPageComponent.cpp</in>
-        <in>PowerPageComponent.h</in>
         <in>PowerPageFelComponent.cpp</in>
-        <in>PowerPageFelComponent.h</in>
         <in>SettingsPageBluetoothComponent.cpp</in>
-        <in>SettingsPageBluetoothComponent.h</in>
         <in>SettingsPageComponent.cpp</in>
-        <in>SettingsPageComponent.h</in>
         <in>SettingsPageLogin.cpp</in>
-        <in>SettingsPageLogin.h</in>
         <in>SettingsPageWifiComponent.cpp</in>
-        <in>SettingsPageWifiComponent.h</in>
         <in>SwitchComponent.cpp</in>
-        <in>SwitchComponent.h</in>
         <in>Utils.cpp</in>
         <in>Utils.h</in>
         <in>WifiStatus.cpp</in>
@@ -3628,7 +3662,6 @@
         <in>WifiStatusJson.h</in>
         <in>WifiStatusNM.cpp</in>
         <in>WifiStatusNM.h</in>
-        <in>WifiTest.cpp</in>
       </df>
     </df>
   </logicalFolder>

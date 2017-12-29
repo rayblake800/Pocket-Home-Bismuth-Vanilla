@@ -1,5 +1,5 @@
 #include "PokeLookAndFeel.h"
-#include "SwitchComponent.h"
+#include "Components/Basic/SwitchComponent.h"
 #include "Utils.h"
 
 Colour PokeLookAndFeel::lightGrey = Colour(0xffe1e1e1);

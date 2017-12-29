@@ -1,6 +1,5 @@
 #include "Main.h"
-#include "MainComponent.h"
-#include "WifiStatus.h"
+#include "Wifi/WifiStatus.h"
 #include "Utils.h"
 #include <sys/types.h>
 #include <sys/wait.h>
