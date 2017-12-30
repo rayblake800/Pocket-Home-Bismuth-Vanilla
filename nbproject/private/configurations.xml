@@ -3626,40 +3626,20 @@
           <in>WifiStatusNM.h</in>
           <in>WifiTest.cpp</in>
         </df>
-        <in>AppMenuButton.cpp</in>
-        <in>AppMenuComponent.cpp</in>
         <in>BatteryMonitor.cpp</in>
         <in>BatteryMonitor.h</in>
         <in>ClockMonitor.cpp</in>
         <in>ClockMonitor.hpp</in>
         <in>ConfigFile.cpp</in>
         <in>ConfigFile.h</in>
-        <in>DateTimePage.cpp</in>
         <in>DesktopEntries.cpp</in>
         <in>DesktopEntries.h</in>
         <in>DesktopEntry.cpp</in>
         <in>DesktopEntry.h</in>
-        <in>Grid.cpp</in>
-        <in>IconSliderComponent.cpp</in>
-        <in>InputSettingsPage.cpp</in>
-        <in>LauncherBarComponent.cpp</in>
-        <in>LauncherComponent.cpp</in>
         <in>Main.cpp</in>
         <in>Main.h</in>
-        <in>MainComponent.cpp</in>
-        <in>MenuItem.cpp</in>
-        <in>OverlaySpinner.cpp</in>
-        <in>PageStackComponent.cpp</in>
-        <in>PersonalizePageComponent.cpp</in>
         <in>PokeLookAndFeel.cpp</in>
         <in>PokeLookAndFeel.h</in>
-        <in>PowerPageComponent.cpp</in>
-        <in>PowerPageFelComponent.cpp</in>
-        <in>SettingsPageBluetoothComponent.cpp</in>
-        <in>SettingsPageComponent.cpp</in>
-        <in>SettingsPageLogin.cpp</in>
-        <in>SettingsPageWifiComponent.cpp</in>
-        <in>SwitchComponent.cpp</in>
         <in>Utils.cpp</in>
         <in>Utils.h</in>
         <in>WifiStatus.cpp</in>

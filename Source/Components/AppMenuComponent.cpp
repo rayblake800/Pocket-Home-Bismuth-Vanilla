@@ -373,6 +373,13 @@ void AppMenuComponent::startApp(AppMenuButton::Ptr appButton) {
     DBG("AppsPageComponent::startApp - " << appButton->getCommand());
     ChildProcess* launchApp = new ChildProcess();
     launchApp->start("xmodmap ${HOME}/.Xmodmap"); // Reload xmodmap to ensure it's running
+#if JUCE_DEBUG
+    File launchLog("launchLog.txt");
+    if(!launchLog.existsAsFile()){
+        launchLog.create();
+    }
+    launchLog.appendText(appButton->getCommand(),false,false);
+#endif
     if (launchApp->start(appButton->getCommand())) {
 
         runningApps.add(launchApp);
