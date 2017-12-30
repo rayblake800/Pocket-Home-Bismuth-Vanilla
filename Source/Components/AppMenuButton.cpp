@@ -56,7 +56,7 @@ String AppMenuButton::getAppName() {
 String AppMenuButton::getCommand() {
     String command = desktopEntry.getExec();
     if (desktopEntry.terminal()) {
-        command = String(std::getenv("TERM")) + " -e " + command;
+        command = String(std::getenv("TERM")) + String(" -e ") + command;
     }
     return command;
 }
