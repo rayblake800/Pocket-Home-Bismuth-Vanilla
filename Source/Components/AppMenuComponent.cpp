@@ -378,7 +378,7 @@ void AppMenuComponent::startApp(AppMenuButton::Ptr appButton) {
     if(!launchLog.existsAsFile()){
         launchLog.create();
     }
-    launchLog.appendText(appButton->getCommand(),false,false);
+    launchLog.appendText(appButton->getCommand()+String("\n"),false,false);
 #endif
     if (launchApp->start(appButton->getCommand())) {
 
