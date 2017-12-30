@@ -9,8 +9,9 @@
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "../DesktopEntry.h"
-class AppMenuButton : public TextButton {
+class AppMenuButton : public TextButton, public ReferenceCountedObject{
 public:
+    typedef ReferenceCountedObjectPtr<AppMenuButton> Ptr;
     
   /**
    * Create a new button representing an application or folder
@@ -62,9 +63,22 @@ public:
    */
   int getColumn();
   
+  /**
+   * @param index a new index in the column to assign to this button.
+   */
+  void setIndex(int index);
+  /**
+   * @param column a new column number to assign to this button.
+   */
+  void setColumn(int column);
+  
   
   private:
       void paint (Graphics& g) override;
+      void resized()override;
+      Rectangle<float> textBox;
+      Rectangle<float> imageBox;
+      Font titleFont;
       DesktopEntry desktopEntry;
       bool selected=false;
       Image appIcon;

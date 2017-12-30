@@ -14,8 +14,11 @@
 #include "../ConfigFile.h"
 
 AppMenuButton::AppMenuButton(DesktopEntry desktopEntry, int index, int column)
-: TextButton(desktopEntry.getName()),
-desktopEntry(desktopEntry), index(index), column(column) {
+:TextButton(desktopEntry.getName()), 
+        desktopEntry(desktopEntry), 
+        index(index), 
+        column(column){
+    //setName(desktopEntry.getName());
     ConfigFile * configFile = ConfigFile::getInstance();
     ConfigFile::ComponentSettings buttonSettings =
             configFile->getComponentSettings(ConfigFile::APP_MENU_BUTTON);
@@ -35,6 +38,7 @@ desktopEntry(desktopEntry), index(index), column(column) {
     DBG(String("Found icon path " + iconPath));
     appIcon = createImageFromFile(File(iconPath));
     setWantsKeyboardFocus(false);
+    resized();
 }
 
 void AppMenuButton::setSelected(bool select) {
@@ -69,6 +73,15 @@ int AppMenuButton::getColumn() {
     return column;
 }
 
+
+  void AppMenuButton::setIndex(int index){
+      this->index=index;
+  }
+
+  void AppMenuButton::setColumn(int column){
+      this->column=column;
+  }
+
 Rectangle<int> AppMenuButton::getButtonSize(){
     ConfigFile * config = ConfigFile::getInstance();
     ConfigFile::ComponentSettings buttonConf= 
@@ -83,26 +96,28 @@ void AppMenuButton::paint(Graphics& g) {
     g.fillRect(border);
     g.setOpacity(1);
     //app icon
-    Rectangle<float> imgBox = getBounds().withPosition(0, 0).toFloat();
-    imgBox.setWidth(imgBox.getHeight());
-    imgBox.reduce(2, 2);
-    if (getScreenX() < 0) {
-        imgBox.setX(2 - getScreenX());
-    }
-    if (imgBox.getRight() > getRight()) {
-        imgBox.setRight(getRight() - 2);
-    }
-    g.drawImageWithin(appIcon, imgBox.getX(), imgBox.getY(),imgBox.getWidth(), 
-            imgBox.getHeight(), RectanglePlacement::centred, false);
+    g.drawImageWithin(appIcon, imageBox.getX(), imageBox.getY(),
+            imageBox.getWidth(), imageBox.getHeight(),
+            RectanglePlacement::centred, false);
     //app title
     g.setColour(Colours::white);
-    g.setFont(Font(15.00f, Font::plain));
-    Rectangle<float> textBox = getBounds().withPosition(0, 0).toFloat();
-    textBox.setLeft(imgBox.getRight());
-    textBox.reduce(4, 4);
+    g.setFont(titleFont);
     g.drawText(getAppName(), textBox, Justification::centredLeft, true);
     g.setColour(Colour(0x4D4D4D));
     g.setOpacity(selected ? 1.0 : 0.8);
     g.drawRect(border, 2);
+}
+
+void AppMenuButton::resized(){
+    Rectangle<float> bounds=getLocalBounds().toFloat();
+    imageBox=bounds.withWidth(bounds.getHeight());
+    imageBox.reduce(2,2);
+    textBox=bounds;
+    textBox.setLeft(imageBox.getRight());
+    textBox.reduce(4,4);
+    //It looks messy if all the fonts are different sizes, so using a default
+    //String for size calculations is preferable even if really long names can 
+    //get clipped.
+    titleFont=fontResizedToFit(titleFont,"DefaultAppName",textBox.toNearestInt());
 }
 

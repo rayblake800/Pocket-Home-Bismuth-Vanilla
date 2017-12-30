@@ -1,5 +1,6 @@
 #include "PowerPageComponent.h"
 #include "PowerPageFelComponent.h"
+#include "../../ConfigFile.h"
 #include "../../Main.h"
 #include "../../Utils.h"
 #include "../../PokeLookAndFeel.h"
@@ -191,14 +192,15 @@ void PowerPageComponent::buttonStateChanged(Button *btn) {
 }
 
 void PowerPageComponent::buttonClicked(Button *button) {
+    ConfigFile * config = ConfigFile::getInstance();
   if (button == backButton) {
     getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontalLeft);
   } else if (button == powerOffButton) {
     showPowerSpinner();
-    child.start("sudo shutdown -hP now");
+    child.start(config->getConfigString(ConfigFile::SHUTDOWN_COMMAND));
   } else if (button == rebootButton) {
     showPowerSpinner();
-    child.start("sudo shutdown -r now");
+    child.start(config->getConfigString(ConfigFile::RESTART_COMMAND));
   } else if (button == sleepButton) {
     setSleep();
   } else if (button == felButton) {

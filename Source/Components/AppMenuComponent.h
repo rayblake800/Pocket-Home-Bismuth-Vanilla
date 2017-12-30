@@ -73,7 +73,7 @@ private:
     void buttonClicked(Button* buttonClicked) override;
     void resized() override;
     
-    void addButton(AppMenuButton* appButton);
+    void addButton(AppMenuButton::Ptr appButton);
     void selectIndex(int index);
     void scrollToSelected();
 
@@ -82,11 +82,12 @@ private:
     DesktopEntries desktopEntries;
     OwnedArray<ChildProcess> runningApps;
     //all buttons in each column
-    std::vector<std::vector<AppMenuButton*>> buttonColumns;
+    std::vector<std::vector<AppMenuButton::Ptr>> buttonColumns;
     //current button selection(if any) for each open column
-    std::vector<AppMenuButton*> selected;
+    std::vector<AppMenuButton::Ptr> selected;
     //top y-position of each open column
     std::vector<int> columnTops;
+    std::map<String,AppMenuButton::Ptr> buttonNameMap;
 
     //appMenuButton dimensions
     int buttonWidth;
@@ -96,7 +97,7 @@ private:
     int y_origin;
 
 
-    using AppRunningMap = HashMap<AppMenuButton*, int>;
+    using AppRunningMap = HashMap<AppMenuButton::Ptr, int>;
     AppRunningMap runningAppsByButton;
     class AppMenuTimer : public Timer {
     public:
@@ -110,9 +111,9 @@ private:
     AppMenuTimer runningCheckTimer;
     AppMenuTimer debounceTimer;
     bool debounce = false;
-    void startApp(AppMenuButton * appButton);
-    void focusApp(AppMenuButton* appButton, const String& windowId);
-    void startOrFocusApp(AppMenuButton* appButton);
+    void startApp(AppMenuButton::Ptr appButton);
+    void focusApp(AppMenuButton::Ptr appButton, const String& windowId);
+    void startOrFocusApp(AppMenuButton::Ptr appButton);
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
 };
 

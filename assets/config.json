@@ -1,7 +1,7 @@
 {
 
-    "shutdown command": "sudo shutdown -hP now",
-    "restart command": "sudo shutdown -r now",
+    "shutdown command": "systemctl poweroff",
+    "restart command": "systemctl reboot",
     "background": "/home/chip/chip.png",
     "timeformat": "24h",
     "cursor": true,

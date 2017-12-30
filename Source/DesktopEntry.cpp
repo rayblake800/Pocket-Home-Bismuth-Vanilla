@@ -379,7 +379,7 @@ void DesktopEntry::mapIcons() {
             }
             file.close();
         } catch (std::ifstream::failure f) {
-            DBG("DesktopEntry:failed to read icon them from .gtkrc-2.0");
+            DBG("DesktopEntry:failed to read icon theme from .gtkrc-2.0");
         }
     }
     if (iconTheme.isNotEmpty()) {

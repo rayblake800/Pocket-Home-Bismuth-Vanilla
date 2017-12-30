@@ -95,21 +95,38 @@ void AppMenuComponent::openFolder(std::vector<String> categoryNames) {
     }
     selected.push_back(nullptr);
     columnTops.push_back(columnTop);
-    buttonColumns.push_back(std::vector<AppMenuButton*>());
+    buttonColumns.push_back(std::vector<AppMenuButton::Ptr>());
     for (ConfigFile::AppItem item : selectedFolder.pinnedApps) {
-        AppMenuButton* newButton = new AppMenuButton(DesktopEntry(item),
-                buttonColumns[activeColumn()].size(), activeColumn());
-        addButton(newButton);
+        AppMenuButton::Ptr addedButton;
+        if (buttonNameMap[item.name] != nullptr &&
+                buttonNameMap[item.name]->getParentComponent() == nullptr) {
+            addedButton = buttonNameMap[item.name];
+            addedButton->setIndex(buttonColumns[activeColumn()].size());
+            addedButton->setColumn(activeColumn());
+        } else {
+            addedButton = new AppMenuButton(DesktopEntry(item),
+                    buttonColumns[activeColumn()].size(), activeColumn());
+        }
+        addButton(addedButton);
     }
     DBG(String("found ") + String(folderItems.size()) + " items in folder");
     for (DesktopEntry desktopEntry : folderItems) {
         if (!desktopEntry.hidden() && !desktopEntry.noDisplay()) {
-            AppMenuButton* newButton = new AppMenuButton(desktopEntry,
-                    buttonColumns[activeColumn()].size(), activeColumn());
-            addButton(newButton);
+            String name = desktopEntry.getName();
+            AppMenuButton::Ptr addedButton;
+            if (buttonNameMap[name] != nullptr &&
+                    buttonNameMap[name]->getParentComponent() == nullptr) {
+                addedButton = buttonNameMap[name];
+                addedButton->setIndex(buttonColumns[activeColumn()].size());
+                addedButton->setColumn(activeColumn());
+            } else {
+                addedButton = new AppMenuButton(desktopEntry,
+                        buttonColumns[activeColumn()].size(), activeColumn());
+            }
+            addButton(addedButton);
         }
     }
-    selected[activeColumn()]=buttonColumns[activeColumn()][0];
+    selected[activeColumn()] = buttonColumns[activeColumn()][0];
     buttonColumns[activeColumn()][0]->setSelected(true);
     scrollToSelected();
 }
@@ -121,13 +138,17 @@ void AppMenuComponent::closeFolder() {
         return;
     }
     for (int i = buttonColumns[activeColumn()].size() - 1; i >= 0; i--) {
-        AppMenuButton * toDelete = buttonColumns[activeColumn()][i];
-        toDelete->removeFromDesktop();
+        AppMenuButton::Ptr toRemove = buttonColumns[activeColumn()][i];
+        toRemove->setVisible(false);
+        toRemove->setSelected(false);
+        Component * parent = toRemove->getParentComponent();
+        if (parent != nullptr) {
+            parent->removeChildComponent(toRemove);
+        }
         buttonColumns[activeColumn()].pop_back();
-        delete toDelete;
     }
-    buttonColumns.pop_back();
     selected.pop_back();
+    buttonColumns.pop_back();
     columnTops.pop_back();
     scrollToSelected();
 }
@@ -139,7 +160,7 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked) {
     if (debounce) {
         return;
     }
-    AppMenuButton * appClicked = (AppMenuButton *) buttonClicked;
+    AppMenuButton::Ptr appClicked = (AppMenuButton *) buttonClicked;
     if (appClicked->getColumn() < activeColumn()) {
         while (appClicked->getColumn() < activeColumn()) {
             closeFolder();
@@ -253,7 +274,7 @@ void AppMenuComponent::scrollToSelected() {
     if (column < 0) {
         return;
     }
-    AppMenuButton* selectedButton = selected[column];
+    AppMenuButton::Ptr selectedButton = selected[column];
     Rectangle<int>dest = getBounds();
     if (selectedButton != nullptr && selectedButton->isVisible()) {
         int buttonPos = selectedButton->getY();
@@ -278,7 +299,11 @@ void AppMenuComponent::scrollToSelected() {
     animator.animateComponent(this, dest, 1, 100, false, 1, 1);
 }
 
-void AppMenuComponent::addButton(AppMenuButton * appButton) {
+void AppMenuComponent::addButton(AppMenuButton::Ptr appButton) {
+    String name = appButton->getAppName();
+    if (buttonNameMap[name] == nullptr) {
+        buttonNameMap[name] = appButton;
+    }
     int index = appButton->getIndex();
     int column = appButton->getColumn();
     int x = column*buttonWidth;
@@ -344,7 +369,7 @@ void AppMenuComponent::AppMenuTimer::timerCallback() {
     }
 }
 
-void AppMenuComponent::startApp(AppMenuButton * appButton) {
+void AppMenuComponent::startApp(AppMenuButton::Ptr appButton) {
     DBG("AppsPageComponent::startApp - " << appButton->getCommand());
     ChildProcess* launchApp = new ChildProcess();
     launchApp->start("xmodmap ${HOME}/.Xmodmap"); // Reload xmodmap to ensure it's running
@@ -364,7 +389,7 @@ void AppMenuComponent::startApp(AppMenuButton * appButton) {
     }
 }
 
-void AppMenuComponent::focusApp(AppMenuButton* appButton, const String & windowId) {
+void AppMenuComponent::focusApp(AppMenuButton::Ptr appButton, const String & windowId) {
 
     DBG("AppsPageComponent::focusApp - " << appButton->getCommand());
     String focusShell = "echo 'focus_client_by_window_id(" + windowId + ")' | awesome-client";
@@ -373,7 +398,7 @@ void AppMenuComponent::focusApp(AppMenuButton* appButton, const String & windowI
     focusWindow.start(focusCmd);
 }
 
-void AppMenuComponent::startOrFocusApp(AppMenuButton * appButton) {
+void AppMenuComponent::startOrFocusApp(AppMenuButton::Ptr appButton) {
     if (debounce) return;
 
     bool shouldStart = true;

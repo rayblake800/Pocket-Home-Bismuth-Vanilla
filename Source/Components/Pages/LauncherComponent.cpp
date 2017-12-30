@@ -8,47 +8,6 @@
 #include "AppMenuPage.h"
 #include "LauncherComponent.h"
 
-
-//enum WifiIconImage{
-//    WIFI_OFF,
-//    WIFI_STRENGTH_0,
-//    WIFI_STRENGTH_1,
-//    WIFI_STRENGTH_2,
-//    WIFI_STRENGTH_3
-//};
-//
-//void WifiIconTimer::timerCallback() {
-//    if (!launcherComponent) {
-//        return;
-//    }
-//
-//    for (VectorImageButton * button : *buttons) {
-//        if (button->getName() == "WiFi") {
-//            WifiIconImage wifiIcon;
-//            const auto& conAp = getWifiStatus().connectedAccessPoint();
-//
-//            // wifi on and connected
-//            if (getWifiStatus().isConnected() && conAp) {
-//                //Get IP and show it  
-//                launcherComponent->updateIp();
-//                // 0 to 100
-//                float sigStrength = std::max(0, std::min(99, conAp->signalStrength));
-//                wifiIcon = (WifiIconImage)(2+(int)(sigStrength*3/100));
-//            }// wifi on but no connection
-//            else if (getWifiStatus().isEnabled()) {
-//                wifiIcon = WIFI_STRENGTH_0;
-//                launcherComponent->setIpVisible(false);
-//            }// wifi off
-//            else {
-//                wifiIcon = WIFI_OFF;
-//                launcherComponent->setIpVisible(false);
-//            }
-//
-//            button->setImage((int)wifiIcon);
-//        }
-//    }
-//}
-
 void LauncherComponent::setColorBackground(const String& str) {
     String value = "FF" + str;
     unsigned int x;
@@ -153,7 +112,7 @@ clock(nullptr), labelip("ip", "") {
     // Read config for button locations and images
     std::function<void(ConfigFile::ComponentSettings, String) > loadButton =
             [this](ConfigFile::ComponentSettings buttonSettings, String name) {
-                VectorImageButton * button = new VectorImageButton(buttonSettings,name);
+                VectorImageButton * button = new VectorImageButton(buttonSettings, name);
                 button->setWantsKeyboardFocus(false);
                 if (name == "Power" || name == "Settings") {
                     button->addListener(this);
@@ -163,22 +122,15 @@ clock(nullptr), labelip("ip", "") {
                 addAndMakeVisible(button);
                 cornerButtons.add(button);
             };
-    //loadButton(config->getComponentSettings(ConfigFile::WIFI), "Wifi");
     loadButton(config->getComponentSettings(ConfigFile::POWER), "Power");
     loadButton(config->getComponentSettings(ConfigFile::SETTINGS), "Settings");
-    
-    batteryIcon=new BatteryIcon();
+
+    batteryIcon = new BatteryIcon();
     addAndMakeVisible(batteryIcon);
-    wifiIcon=new WifiIcon();
+    wifiIcon = new WifiIcon();
     addAndMakeVisible(wifiIcon);
     defaultPage = appsPage;
-    
-    
 
-//    wifiIconTimer.launcherComponent = this;
-//    wifiIconTimer.buttons = &cornerButtons;
-//    wifiIconTimer.startTimer(2000);
-//    wifiIconTimer.timerCallback();
 
 }
 
@@ -189,7 +141,7 @@ void LauncherComponent::paint(Graphics &g) {
     auto bounds = getLocalBounds();
     g.fillAll(bgColor);
     if (hasImg) g.drawImage(bgImage, bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), 0, 0, bgImage.getWidth(), bgImage.getHeight(), false);
-    //g.drawImage(trashButton, bounds.getX()+395, bounds.getY()+16, 40, 20, 0, 0, 50, 50, false);
+
 }
 
 void LauncherComponent::resized() {
@@ -197,10 +149,7 @@ void LauncherComponent::resized() {
     Rectangle<int>bounds = getLocalBounds();
     for (VectorImageButton * button : cornerButtons) {
         ConfigFile::ComponentType componentType;
-//        if (button->getName() == "Wifi") {
-//            componentType = ConfigFile::WIFI;
-//        } else 
-            if (button->getName() == "Power") {
+        if (button->getName() == "Power") {
             componentType = ConfigFile::POWER;
         } else if (button->getName() == "Settings") {
             componentType = ConfigFile::SETTINGS;
