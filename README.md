@@ -1,4 +1,5 @@
 pocket-home freedesktop launcher
+
 I'm working on building a proper application launcher from pocket-home marshmallow that
 follows the freedesktop standard.  Built-in application management is currently
 lacking, but there a lot more options you can tweak in ~/.pocket-home/config.json.
@@ -40,8 +41,3 @@ lacking, but there a lot more options you can tweak in ~/.pocket-home/config.jso
       make
       make devinstall
       sudo systemctl restart lightdm
-
-
-### Thanks
-Big thanks to [Celti](https://github.com/Celti) who made this repo updated to new JUCE version and easier to compile and @sgentle who made the install by apt repository !
-
