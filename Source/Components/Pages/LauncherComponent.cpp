@@ -9,45 +9,45 @@
 #include "LauncherComponent.h"
 
 
-enum WifiIconImage{
-    WIFI_OFF,
-    WIFI_STRENGTH_0,
-    WIFI_STRENGTH_1,
-    WIFI_STRENGTH_2,
-    WIFI_STRENGTH_3
-};
-
-void WifiIconTimer::timerCallback() {
-    if (!launcherComponent) {
-        return;
-    }
-
-    for (VectorImageButton * button : *buttons) {
-        if (button->getName() == "WiFi") {
-            WifiIconImage wifiIcon;
-            const auto& conAp = getWifiStatus().connectedAccessPoint();
-
-            // wifi on and connected
-            if (getWifiStatus().isConnected() && conAp) {
-                //Get IP and show it  
-                launcherComponent->updateIp();
-                // 0 to 100
-                float sigStrength = std::max(0, std::min(99, conAp->signalStrength));
-                wifiIcon = (WifiIconImage)(2+(int)(sigStrength*3/100));
-            }// wifi on but no connection
-            else if (getWifiStatus().isEnabled()) {
-                wifiIcon = WIFI_STRENGTH_0;
-                launcherComponent->setIpVisible(false);
-            }// wifi off
-            else {
-                wifiIcon = WIFI_OFF;
-                launcherComponent->setIpVisible(false);
-            }
-
-            button->setImage((int)wifiIcon);
-        }
-    }
-}
+//enum WifiIconImage{
+//    WIFI_OFF,
+//    WIFI_STRENGTH_0,
+//    WIFI_STRENGTH_1,
+//    WIFI_STRENGTH_2,
+//    WIFI_STRENGTH_3
+//};
+//
+//void WifiIconTimer::timerCallback() {
+//    if (!launcherComponent) {
+//        return;
+//    }
+//
+//    for (VectorImageButton * button : *buttons) {
+//        if (button->getName() == "WiFi") {
+//            WifiIconImage wifiIcon;
+//            const auto& conAp = getWifiStatus().connectedAccessPoint();
+//
+//            // wifi on and connected
+//            if (getWifiStatus().isConnected() && conAp) {
+//                //Get IP and show it  
+//                launcherComponent->updateIp();
+//                // 0 to 100
+//                float sigStrength = std::max(0, std::min(99, conAp->signalStrength));
+//                wifiIcon = (WifiIconImage)(2+(int)(sigStrength*3/100));
+//            }// wifi on but no connection
+//            else if (getWifiStatus().isEnabled()) {
+//                wifiIcon = WIFI_STRENGTH_0;
+//                launcherComponent->setIpVisible(false);
+//            }// wifi off
+//            else {
+//                wifiIcon = WIFI_OFF;
+//                launcherComponent->setIpVisible(false);
+//            }
+//
+//            button->setImage((int)wifiIcon);
+//        }
+//    }
+//}
 
 void LauncherComponent::setColorBackground(const String& str) {
     String value = "FF" + str;
@@ -163,18 +163,22 @@ clock(nullptr), labelip("ip", "") {
                 addAndMakeVisible(button);
                 cornerButtons.add(button);
             };
-    loadButton(config->getComponentSettings(ConfigFile::WIFI), "Wifi");
+    //loadButton(config->getComponentSettings(ConfigFile::WIFI), "Wifi");
     loadButton(config->getComponentSettings(ConfigFile::POWER), "Power");
     loadButton(config->getComponentSettings(ConfigFile::SETTINGS), "Settings");
     
     batteryIcon=new BatteryIcon();
     addAndMakeVisible(batteryIcon);
+    wifiIcon=new WifiIcon();
+    addAndMakeVisible(wifiIcon);
     defaultPage = appsPage;
+    
+    
 
-    wifiIconTimer.launcherComponent = this;
-    wifiIconTimer.buttons = &cornerButtons;
-    wifiIconTimer.startTimer(2000);
-    wifiIconTimer.timerCallback();
+//    wifiIconTimer.launcherComponent = this;
+//    wifiIconTimer.buttons = &cornerButtons;
+//    wifiIconTimer.startTimer(2000);
+//    wifiIconTimer.timerCallback();
 
 }
 
@@ -193,9 +197,10 @@ void LauncherComponent::resized() {
     Rectangle<int>bounds = getLocalBounds();
     for (VectorImageButton * button : cornerButtons) {
         ConfigFile::ComponentType componentType;
-        if (button->getName() == "Wifi") {
-            componentType = ConfigFile::WIFI;
-        } else if (button->getName() == "Power") {
+//        if (button->getName() == "Wifi") {
+//            componentType = ConfigFile::WIFI;
+//        } else 
+            if (button->getName() == "Power") {
             componentType = ConfigFile::POWER;
         } else if (button->getName() == "Settings") {
             componentType = ConfigFile::SETTINGS;
@@ -206,6 +211,7 @@ void LauncherComponent::resized() {
         config->getComponentSettings(componentType).applyBounds(button);
     }
     config->getComponentSettings(ConfigFile::BATTERY).applyBounds(batteryIcon);
+    config->getComponentSettings(ConfigFile::WIFI).applyBounds(wifiIcon);
     pageStack->setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 
     std::function<void(ConfigFile::ComponentType, Label*) > resizeText =

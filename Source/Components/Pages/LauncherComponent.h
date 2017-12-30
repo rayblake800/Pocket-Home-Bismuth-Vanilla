@@ -14,6 +14,7 @@
 #include "../Basic/OverlaySpinner.h"
 #include "../Basic/VectorImageButton.h"
 #include "../BatteryIcon.h"
+#include "../WifiIcon.h"
 #include "PageStackComponent.h"
 
 
@@ -22,20 +23,19 @@ class LauncherComponent;
 class LibraryPageComponent;
 class AppsPageComponent;
 
-class WifiIconTimer : public Timer {
-public:
-  WifiIconTimer() {};
-  void timerCallback();
-  LauncherComponent* launcherComponent;
-  OwnedArray<VectorImageButton> * buttons;
-};
+//class WifiIconTimer : public Timer {
+//public:
+//  WifiIconTimer() {};
+//  void timerCallback();
+//  LauncherComponent* launcherComponent;
+//  OwnedArray<VectorImageButton> * buttons;
+//};
 
 class LauncherComponent : public Component, private Button::Listener {
 public:
     ScopedPointer<ImageComponent> focusButtonPopup;
     ScopedPointer<Label> modeLabel;
-    BatteryIcon::ReferencePtr batteryIcon;
-    WifiIconTimer wifiIconTimer;
+    //WifiIconTimer wifiIconTimer;
     Component* defaultPage;
   
     // FIXME: we have no need for the pages/pagesByName if we're using scoped pointers for each page.
@@ -62,6 +62,8 @@ public:
     void hideLaunchSpinner();
     
 private:
+    BatteryIcon::ReferencePtr batteryIcon;
+    WifiIcon::ReferencePtr wifiIcon;
     Colour bgColor;
     Label labelip;
     Image bgImage;

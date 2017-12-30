@@ -61,9 +61,8 @@ void VectorImageButton::setImage(int imageIndex) {
         removeChildComponent(images[this->imageIndex]);
         this->imageIndex = imageIndex;
         addAndMakeVisible(images[imageIndex]);
-        images[imageIndex]->setTransformToFit(getBounds().withPosition(0, 0).toFloat(), RectanglePlacement::centred);
         images[imageIndex]->setWantsKeyboardFocus(false);
-        repaint();
+        resizeImage();
     }
 }
 
@@ -72,6 +71,7 @@ void VectorImageButton::resizeImage() {
         Rectangle<int> imageBounds=buttonSettings.getBounds()-getPosition();
         images[imageIndex]->setTransformToFit(imageBounds.toFloat(), 
                 RectanglePlacement::centred);
+        repaint();
     }
 }
 

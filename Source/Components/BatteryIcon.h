@@ -31,7 +31,6 @@ public:
     typedef ReferenceCountedObjectPtr<BatteryIcon> ReferencePtr;
     void setStatus(BatteryIconImage batteryImage, String percent);
     const BatteryStatus& getBatteryStatus();
-    void stopUpdates();
 private:
     void visibilityChanged() override;
     void resized() override;

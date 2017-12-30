@@ -31,10 +31,10 @@ private:
 
     static const std::vector<Colour> loadDefaultColours() {
         std::vector<Colour> defaults;
-        defaults.push_back(Colours::white);
-        defaults.push_back(Colours::black);
-        defaults.push_back(Colours::red);
-        defaults.push_back(Colours::lime);
+        defaults.push_back(Colour(0xff,0xff,0xff));
+        defaults.push_back(Colour(0x00,0x00,0x00));
+        defaults.push_back(Colour(0xff,0x00,0x00));
+        defaults.push_back(Colour(0x00,0xff,0x00));
         return defaults;
     };
 };
