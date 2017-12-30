@@ -40,7 +40,7 @@ Image createImageFromFile(const File &imageFile) {
         ScopedPointer<Drawable> svgDrawable = Drawable::createFromSVG(*svgElement);
         Graphics g(image);
         svgDrawable->drawWithin(g, Rectangle<float>(0, 0, image.getWidth(), image.getHeight()),
-                RectanglePlacement::stretchToFit, 1.0f);
+                RectanglePlacement::fillDestination, 1.0f);
     } else {
         image = ImageFileFormat::loadFrom(imageFile);
     }

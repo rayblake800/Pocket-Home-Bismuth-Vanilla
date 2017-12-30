@@ -320,9 +320,8 @@ void DesktopEntry::mapIcons() {
             std::string a_str = a.toStdString();
             std::string b_str = b.toStdString();
             if (a == b)return false;
-                    //named directories go first
-                    int aVal = 9999;
-                    int bVal = 9999;
+                    int aVal = 0;
+                    int bVal = 0;
                 if (std::regex_search(a_str, sizeMatch, sizePattern)) {
                     sscanf(sizeMatch.str(1).c_str(), "%d", &aVal);
                 }
