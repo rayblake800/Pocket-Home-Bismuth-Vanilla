@@ -199,7 +199,7 @@ void AppMenuComponent::selectIndex(int index) {
         return;
     }
     int column = activeColumn();
-    DBG(String("AppMenuComponent: selecting column ") + String(column) + String(" index ") + String(index));
+    //DBG(String("AppMenuComponent: selecting column ") + String(column) + String(" index ") + String(index));
     if (index >= buttonColumns[column].size()
             || index < 0
             || selected[column] == buttonColumns[column][index])return;
@@ -275,10 +275,6 @@ void AppMenuComponent::scrollToSelected() {
     if (animator.isAnimating(this)) {
         animator.cancelAnimation(this, false);
     }
-//    if (selectedButton != nullptr) {
-//        DBG(String("scrolling to ") + dest.toString() + String(",button bounds=") +
-//                selectedButton->getBounds().toString());
-//    }
     animator.animateComponent(this, dest, 1, 100, false, 1, 1);
 }
 

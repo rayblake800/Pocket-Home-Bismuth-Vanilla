@@ -11,11 +11,18 @@
 #pragma once
 #include "Basic/VectorImageButton.h"
 
-class WifiIcon : public VectorImageButton, public ReferenceCountedObject {
+/**
+ * WifiIcon tracks WiFi status and displays an image indicating connection
+ * state.
+ */
+class WifiIcon : public VectorImageButton{
 public:
     WifiIcon();
     virtual ~WifiIcon();
 
+private:
+    //All tracked WiFi states.  Each corresponds with an image asset file
+    //defined in config.json
     enum WifiIconImage {
         WIFI_OFF,
         WIFI_STRENGTH_0,
@@ -23,11 +30,19 @@ public:
         WIFI_STRENGTH_2,
         WIFI_STRENGTH_3
     };
-
-    typedef ReferenceCountedObjectPtr<WifiIcon> ReferencePtr;
+    /**
+     * Set the WiFi connection status image.
+     * @param wifiState the last discovered state of the WiFi connection.
+     */
     void setStatus(WifiIconImage wifiState);
-private:
+    /**
+     * Enable/disable the WiFi checking timer based on component visibility
+     */
     void visibilityChanged() override;
+    /**
+     * WifiTimer periodically checks the current WiFi connection state, and
+     * updates the WiFi icon.
+     */
     class WifiTimer : public Timer {
     public:
         WifiTimer(WifiIcon * wifiIcon);
@@ -35,8 +50,6 @@ private:
         void removeTimer();
     private:
         void timerCallback();
-        //NOT a reference pointer because the timer shouldn't keep the icon
-        //from being destroyed.
         WifiIcon * wifiIcon;
         const static int frequency = 2000;
     };

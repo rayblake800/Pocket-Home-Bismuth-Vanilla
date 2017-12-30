@@ -149,18 +149,18 @@ DesktopEntry::DesktopEntry(const DesktopEntry& orig) {
 DesktopEntry::~DesktopEntry() {
 }
 
-bool DesktopEntry::operator==(const DesktopEntry toCompare) const{
+bool DesktopEntry::operator==(const DesktopEntry toCompare) const {
     return getName() == toCompare.getName();
 }
 
-bool DesktopEntry::operator<(const DesktopEntry toCompare) const{
+bool DesktopEntry::operator<(const DesktopEntry toCompare) const {
     return getName() < toCompare.getName();
 }
 
-String DesktopEntry::getName() const{
-    try{
-    return appStrings.at("Name");
-    }catch(std::out_of_range e){
+String DesktopEntry::getName() const {
+    try {
+        return appStrings.at("Name");
+    } catch (std::out_of_range e) {
         return "";
     }
 }
@@ -288,24 +288,29 @@ bool DesktopEntry::startupNotify() {
 }
 
 void DesktopEntry::mapIcons() {
-    std::function<void(String) > recursiveIconSearch;
-    recursiveIconSearch = [&recursiveIconSearch, this](String path) {
-        //DBG(String("Running recursive icon search on ")+path);
-        //first, map image files with new names
-        std::vector<String> files = listFiles(path);
-        std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
-        std::smatch iconMatch;
-        for (const String& file : files) {
-            std::string fileStr = file.toStdString();
-            if (std::regex_search(fileStr, iconMatch, iconPattern)) {
-                String filename = iconMatch.str(1);
-                if (this->iconPaths[filename].isEmpty()) {
-                    this->iconPaths[filename] = path + iconMatch.str(0);
-                    //DBG(filename+String("=")+path+iconMatch.str(0));
-                }
-            }
-        }
-        //then recursively search subdirectories
+    std::set<String> ignore = {
+        "actions",
+        "applets",
+        "cursors",
+        "devices",
+        "emblems",
+        "emotes",
+        "mimetypes",
+        "places",
+        "status",
+        "stock",
+        "symbolic"
+    };
+    Array<String> searchPaths;
+    //check user and pocket-home directories before all else
+    searchPaths.add("/usr/share/pocket-home/appIcons/");
+    searchPaths.add(getHomePath() + "/.icons/");
+    searchPaths.add(getHomePath() + "/.local/share/icons");
+    //Recursively traverse all subdirectories at a given path, and add all valid
+    //ones to the list of paths to search
+    std::function<void(String) > findSearchPaths;
+    findSearchPaths = [&findSearchPaths, &ignore, &searchPaths, this]
+            (String path) {
         std::vector<String> dirs = listDirectoryFiles(path);
         if (dirs.empty())return;
         //sort icon size directories, if found
@@ -315,8 +320,9 @@ void DesktopEntry::mapIcons() {
             std::string a_str = a.toStdString();
             std::string b_str = b.toStdString();
             if (a == b)return false;
-                    int aVal = 0;
-                    int bVal = 0;
+                    //named directories go first
+                    int aVal = 9999;
+                    int bVal = 9999;
                 if (std::regex_search(a_str, sizeMatch, sizePattern)) {
                     sscanf(sizeMatch.str(1).c_str(), "%d", &aVal);
                 }
@@ -325,16 +331,22 @@ void DesktopEntry::mapIcons() {
             }
             if (aVal != bVal) {
                 //higher numbers first, until after 128px
-                if (aVal > 128)aVal = 1 + 128 / aVal;
-                    if (bVal > 128)bVal = 1 + 128 / bVal;
+                if (aVal > 128 && aVal < 999)aVal = 1 + 128 / aVal;
+                    if (bVal > 128 && bVal < 999)bVal = 1 + 128 / bVal;
                         return aVal > bVal;
                     }
             return false;
         });
         //DBG(String("Searching ")+String(dirs.size())+String(" subdirectories"));
         for (const String& subDir : dirs) {
-            String subPath = path + subDir + "/";
-            recursiveIconSearch(subPath);
+            //only add directories outside of the ignore set
+            if (ignore.find(subDir) == ignore.end()) {
+                String subPath = path + subDir + "/";
+                if (!searchPaths.contains(subPath)) {
+                    searchPaths.add(subPath);
+                    findSearchPaths(subPath);
+                }
+            }
         };
         iconPathsMapped = true;
 
@@ -343,9 +355,6 @@ void DesktopEntry::mapIcons() {
     //build a list of primary search directories
     std::vector<String> checkPaths;
     std::vector<String> basePaths = {
-        getHomePath() + "/.icons/",
-        getHomePath() + "/.local/share/icons",
-        "/usr/share/pocket-home/appIcons/",
         "/usr/share/icons/",
         "/usr/local/icons/",
         "/usr/share/pixmaps/"
@@ -387,9 +396,27 @@ void DesktopEntry::mapIcons() {
         checkPaths.push_back(basePaths[i]);
     }
 
-    //finally, run recursive mapping for all directories
+    //run recursive mapping for all subdirectories
     for (int i = 0; i < checkPaths.size(); i++) {
         //DBG(String("Mapping icon files under ") + checkPaths[i]);
-        recursiveIconSearch(checkPaths[i]);
+        findSearchPaths(checkPaths[i]);
     }
+    DBG(String("Searching ")+String(searchPaths.size())+" icon paths:");
+    //finally, find and map icon files
+    for (const String& path : searchPaths) {
+        std::vector<String> files = listFiles(path);
+        std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
+        std::smatch iconMatch;
+        for (const String& file : files) {
+            std::string fileStr = file.toStdString();
+            if (std::regex_search(fileStr, iconMatch, iconPattern)) {
+                String filename = iconMatch.str(1);
+                if (this->iconPaths[filename].isEmpty()) {
+                    this->iconPaths[filename] = path + iconMatch.str(0);
+                    //DBG(filename+String("=")+path+iconMatch.str(0));
+                }
+            }
+        }
+    }
+    DBG(String("Mapped ")+String(iconPaths.size())+String(" icon files."));
 }

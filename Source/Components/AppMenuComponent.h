@@ -3,7 +3,6 @@
  * Author: anthony
  *
  * Created on December 19, 2017, 1:37 PM
- * A menu for launching applications, populated with .Desktop file info
  */
 
 #ifndef APPMENU_H
@@ -13,13 +12,24 @@
 #include "AppMenuButton.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
+/**
+ * 
+ * A menu for launching applications, populated with .Desktop file info
+ */
 class AppMenuComponent : public Component,
 public Button::Listener {
 public:
     AppMenuComponent();
     virtual ~AppMenuComponent();
     
+    /**
+     * Display the spinner that indicates application launch. This will
+     * also disable input.
+     */
     void showLaunchSpinner();
+    /**
+     * Hide the launch spinner, re-enabling user input.
+     */
     void hideLaunchSpinner();
 
     //################ AppMenuButton Management   #############################

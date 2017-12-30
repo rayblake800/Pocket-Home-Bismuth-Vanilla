@@ -1,4 +1,11 @@
 {
+
+    "shutdown command": "sudo shutdown -hP now",
+    "restart command": "sudo shutdown -r now",
+    "background": "/home/chip/chip.png",
+    "timeformat": "24h",
+    "cursor": true,
+    "showclock": true,
     "favorites": [
         {
             "name": "Terminal",
@@ -145,9 +152,6 @@
             "pinned apps": []
         }
     ],
-    "shutdown command": "sudo shutdown -hP now",
-    "restart command": "sudo shutdown -r now",
-    "background": "/home/chip/chip.png",
     "app menu": {
         "x": 0.25,
         "y": 0.08,
@@ -161,7 +165,10 @@
         "y": 0,
         "width": 0.3,
         "height": 0.15,
-        "colours": [],
+        "colours": [
+            "ffc0c0c0",
+            "ffd23c6d"
+        ],
         "asset files": []
     },
     "battery": {

@@ -62,8 +62,8 @@ public:
     void hideLaunchSpinner();
     
 private:
-    BatteryIcon::ReferencePtr batteryIcon;
-    WifiIcon::ReferencePtr wifiIcon;
+    ScopedPointer<BatteryIcon> batteryIcon;
+    ScopedPointer<WifiIcon> wifiIcon;
     Colour bgColor;
     Label labelip;
     Image bgImage;
