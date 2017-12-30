@@ -55,7 +55,12 @@ String AppMenuButton::getAppName() {
 
 String AppMenuButton::getCommand() {
     String command = desktopEntry.getExec();
-    if (desktopEntry.terminal()) {
+    if (desktopEntry.terminal()){
+        String term=std::getenv("TERM");
+        DBG(String("Term is")+term);
+        if(term.isEmpty()){
+          term="urxvt";
+        } 
         command = String(std::getenv("TERM")) + String(" -e ") + command;
     }
     return command;
