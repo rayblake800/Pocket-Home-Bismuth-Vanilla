@@ -3,7 +3,7 @@ pocket-home freedesktop launcher
 I'm working on building a proper application launcher from pocket-home marshmallow that
 follows the freedesktop standard.  Built-in application management is currently
 lacking, but there a lot more options you can tweak in ~/.pocket-home/config.json.
-
+![Menu example](home.gif?raw=true "Home Menu")
 # How to install
 
 ## Building from sources
