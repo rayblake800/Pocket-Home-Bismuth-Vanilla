@@ -71,6 +71,13 @@ const char* bluetooth_json = (const char*) temp_binary_data_0;
 //================== config.json ==================
 static const unsigned char temp_binary_data_1[] =
 "{\r\n"
+"\r\n"
+"    \"shutdown command\": \"systemctl poweroff\",\r\n"
+"    \"restart command\": \"systemctl reboot\",\r\n"
+"    \"background\": \"/home/chip/chip.png\",\r\n"
+"    \"timeformat\": \"24h\",\r\n"
+"    \"cursor\": true,\r\n"
+"    \"showclock\": true,\r\n"
 "    \"favorites\": [\r\n"
 "        {\r\n"
 "            \"name\": \"Terminal\",\r\n"
@@ -217,9 +224,6 @@ static const unsigned char temp_binary_data_1[] =
 "            \"pinned apps\": []\r\n"
 "        }\r\n"
 "    ],\r\n"
-"    \"shutdown command\": \"sudo shutdown -hP now\",\r\n"
-"    \"restart command\": \"sudo shutdown -r now\",\r\n"
-"    \"background\": \"/home/chip/chip.png\",\r\n"
 "    \"app menu\": {\r\n"
 "        \"x\": 0.25,\r\n"
 "        \"y\": 0.08,\r\n"
@@ -233,7 +237,10 @@ static const unsigned char temp_binary_data_1[] =
 "        \"y\": 0,\r\n"
 "        \"width\": 0.3,\r\n"
 "        \"height\": 0.15,\r\n"
-"        \"colours\": [],\r\n"
+"        \"colours\": [\r\n"
+"            \"ffc0c0c0\",\r\n"
+"            \"ffd23c6d\"\r\n"
+"        ],\r\n"
 "        \"asset files\": []\r\n"
 "    },\r\n"
 "    \"battery\": {\r\n"
@@ -1805,7 +1812,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
     switch (hash)
     {
         case 0x0d665fd9:  numBytes = 1119; return bluetooth_json;
-        case 0x0106dbc5:  numBytes = 6297; return config_json;
+        case 0x0106dbc5:  numBytes = 6422; return config_json;
         case 0xdc5a21d3:  numBytes = 120196; return LatoRegular_ttf;
         case 0x53801bd2:  numBytes = 1167; return wifi_json;
         default: break;

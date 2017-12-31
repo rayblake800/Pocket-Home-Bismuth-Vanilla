@@ -8,15 +8,8 @@
 #include <set>
 #include "AppMenuComponent.h"
 
+AppMenuComponent::AppMenuComponent() : launchTimer(this) {
 
-AppMenuComponent::AppMenuComponent() :
-runningCheckTimer(this, [](AppMenuComponent* appMenu) {
-    appMenu->checkRunningApps();
-}),
-debounceTimer(this, [](AppMenuComponent* appMenu) {
-
-    appMenu->setDebounce(false);
-}) {
     ConfigFile * configFile = ConfigFile::getInstance();
     Rectangle<int> screenSize = getWindowSize();
     ConfigFile::ComponentSettings menuSettings = configFile->getComponentSettings(ConfigFile::APP_MENU);
@@ -55,26 +48,8 @@ debounceTimer(this, [](AppMenuComponent* appMenu) {
 }
 
 AppMenuComponent::~AppMenuComponent() {
-    runningCheckTimer.stopTimer();
-    debounceTimer.stopTimer();
-    debounce = false;
+    stopWaitingOnLaunch();
     while (!buttonColumns.empty())closeFolder();
-}
-
-void AppMenuComponent::showLaunchSpinner() {
-    DBG("Show launch spinner");
-    Component * parentPage = getParentComponent();
-    if (parentPage != nullptr) {
-        parentPage->addAndMakeVisible(launchSpinner);
-    }
-}
-
-void AppMenuComponent::hideLaunchSpinner() {
-    DBG("Hide launch spinner");
-    Component * parentPage = getParentComponent();
-    if (parentPage != nullptr) {
-        parentPage->removeChildComponent(launchSpinner);
-    }
 }
 
 /**
@@ -134,7 +109,7 @@ void AppMenuComponent::openFolder(std::vector<String> categoryNames) {
 //close the topmost open folder, removing all contained buttons
 
 void AppMenuComponent::closeFolder() {
-    if (debounce) {
+    if (waitingOnLaunch()) {
         return;
     }
     for (int i = buttonColumns[activeColumn()].size() - 1; i >= 0; i--) {
@@ -157,7 +132,7 @@ void AppMenuComponent::closeFolder() {
 //handle all AppMenuButton clicks
 
 void AppMenuComponent::buttonClicked(Button * buttonClicked) {
-    if (debounce) {
+    if (waitingOnLaunch()) {
         return;
     }
     AppMenuButton::Ptr appClicked = (AppMenuButton *) buttonClicked;
@@ -172,7 +147,7 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked) {
         if (appClicked->isFolder()) {
             openFolder(appClicked->getCategories());
         } else {
-            startApp(appClicked);
+            startOrFocusApp(appClicked);
         }
     } else {
         selectIndex(appClicked->getIndex());
@@ -215,8 +190,17 @@ void AppMenuComponent::resized() {
     }
 }
 
+
+//if it loses visibility, stop waiting for apps to launch
+
+void AppMenuComponent::visibilityChanged() {
+    if (!isVisible()) {
+        stopWaitingOnLaunch();
+    }
+}
+
 void AppMenuComponent::selectIndex(int index) {
-    if (debounce) {
+    if (waitingOnLaunch()) {
         return;
     }
     int column = activeColumn();
@@ -258,7 +242,7 @@ void AppMenuComponent::selectPrevious() {
 //Trigger a click for the selected button.
 
 void AppMenuComponent::clickSelected() {
-    if (selected[activeColumn()] != nullptr && !debounce) {
+    if (selected[activeColumn()] != nullptr && !waitingOnLaunch()) {
         selected[activeColumn()]->triggerClick();
     }
 }
@@ -323,81 +307,76 @@ void AppMenuComponent::addButton(AppMenuButton::Ptr appButton) {
 }
 
 //################## Application Launching #################################
-
-void AppMenuComponent::checkRunningApps() {
-    Array<int> needsRemove{};
-
-    // check list to mark any needing removal
-    for (const auto& cp : runningApps) {
-        if (!cp->isRunning()) {
-            needsRemove.add(runningApps.indexOf(cp));
-        }
-    }
-
-    // cleanup list
-    for (const auto appIdx : needsRemove) {
-        runningApps.remove(appIdx);
-        runningAppsByButton.removeValue(appIdx);
-    }
-
-    if (!runningApps.size()) {
-        // FIXME: uncomment when process running check works
-        // runningCheckTimer.stopTimer();
-        hideLaunchSpinner();
-    }
+/**
+ * @return true if currently waiting on an application to launch.
+ */
+bool AppMenuComponent::waitingOnLaunch(){
+    return launchSpinner->isShowing();
+}
+/**
+ * Makes the menu stop waiting on an application to launch, re-enabling
+ * user input.
+ */
+void AppMenuComponent::stopWaitingOnLaunch(){
+    hideLaunchSpinner();
+    launchTimer.stopTimer();
 }
 
-void AppMenuComponent::setDebounce(bool newState) {
-    debounce = newState;
+AppMenuComponent::AppLaunchTimer::AppLaunchTimer(AppMenuComponent* appMenu) :
+appMenu(appMenu) {
 }
 
-AppMenuComponent::AppMenuTimer::AppMenuTimer(AppMenuComponent* appMenu,
-        std::function<void(AppMenuComponent*) > callback) :
-appMenu(appMenu), callback(callback) {
-}
-
-AppMenuComponent::AppMenuTimer::~AppMenuTimer() {
-
+AppMenuComponent::AppLaunchTimer::~AppLaunchTimer() {
     appMenu = nullptr;
-    this->stopTimer();
+    trackedProcess = nullptr;
+    stopTimer();
 }
 
-void AppMenuComponent::AppMenuTimer::timerCallback() {
-    if (appMenu != nullptr) {
+void AppMenuComponent::AppLaunchTimer::setTrackedProcess(ChildProcess * trackedProcess) {
+    this->trackedProcess = trackedProcess;
+}
 
-        callback(appMenu);
+void AppMenuComponent::AppLaunchTimer::stopTimer() {
+    trackedProcess = nullptr;
+    ((Timer*)this)->stopTimer();
+}
+
+void AppMenuComponent::AppLaunchTimer::timerCallback() {
+    if (appMenu != nullptr) {
+        if (trackedProcess != nullptr && trackedProcess->isRunning()) {
+            //if the process is still going, wait longer for it to take over
+            //if not, stop waiting on it
+            return;
+        }
+        appMenu->hideLaunchSpinner();
     }
+    stopTimer();
+
 }
 
 void AppMenuComponent::startApp(AppMenuButton::Ptr appButton) {
+
     DBG("AppsPageComponent::startApp - " << appButton->getCommand());
     ChildProcess* launchApp = new ChildProcess();
     launchApp->start("xmodmap ${HOME}/.Xmodmap"); // Reload xmodmap to ensure it's running
 #if JUCE_DEBUG
     File launchLog("launchLog.txt");
-    if(!launchLog.existsAsFile()){
+    if (!launchLog.existsAsFile()) {
         launchLog.create();
     }
-    launchLog.appendText(appButton->getCommand()+String("\n"),false,false);
+    launchLog.appendText(appButton->getCommand() + String("\n"), false, false);
 #endif
     if (launchApp->start(appButton->getCommand())) {
 
         runningApps.add(launchApp);
         runningAppsByButton.set(appButton, runningApps.indexOf(launchApp));
-        // FIXME: uncomment when process running check works
-        // runningCheckTimer.startTimer(5 * 1000);
-
-        debounce = true;
-        debounceTimer.startTimer(2 * 1000);
-
-        // TODO: should probably put app button clicking logic up into LauncherComponent
-        // correct level for event handling needs more thought
+        launchTimer.setTrackedProcess(launchApp);
+        launchTimer.startTimer(2 * 1000);
         showLaunchSpinner();
     }
 }
 
 void AppMenuComponent::focusApp(AppMenuButton::Ptr appButton, const String & windowId) {
-
     DBG("AppsPageComponent::focusApp - " << appButton->getCommand());
     String focusShell = "echo 'focus_client_by_window_id(" + windowId + ")' | awesome-client";
     StringArray focusCmd{"sh", "-c", focusShell.toRawUTF8()};
@@ -405,31 +384,76 @@ void AppMenuComponent::focusApp(AppMenuButton::Ptr appButton, const String & win
     focusWindow.start(focusCmd);
 }
 
-void AppMenuComponent::startOrFocusApp(AppMenuButton::Ptr appButton) {
-    if (debounce) return;
-
-    bool shouldStart = true;
-    int appIdx = runningAppsByButton[appButton];
-    bool hasLaunched = runningApps[appIdx] != nullptr;
-    String windowId;
-
-    if (hasLaunched) {
-        const auto shellWords = split(appButton->getCommand(), " ");
-        const auto& cmdName = shellWords[0];
-        StringArray findCmd{"xdotool", "search", "--all", "--limit", "1", "--class", cmdName.toRawUTF8()};
+String AppMenuComponent::getWindowId(AppMenuButton::Ptr appButton) {
+    std::function < String(String) > windowSearch = [this](String searchTerm)->String {
+        StringArray findCmd{"xdotool", "search", "--all", "--limit", "1", "--class", searchTerm.toRawUTF8()};
+        DBG(String("Running command:") + findCmd.joinIntoString(" ", 0, -1));
         ChildProcess findWindow;
         findWindow.start(findCmd);
-        findWindow.waitForProcessToFinish(1000);
-        windowId = findWindow.readAllProcessOutput().trimEnd();
-
-        // does xdotool find a window id? if so, we shouldn't start a new one
-        shouldStart = (windowId.length() > 0) ? false : true;
+        String windowId = findWindow.readAllProcessOutput();
+        DBG(String("Search result:") + windowId);
+        return windowId.trimEnd();
+    };
+    String result = windowSearch(appButton->getAppName());
+    //if no result on the title, try the launch command
+    if (result.isEmpty()) {
+        result = windowSearch(appButton->getCommand().upToFirstOccurrenceOf(" ", false, true));
     }
+    return result;
+}
 
-    if (shouldStart) {
-        startApp(appButton);
-    } else {
-        focusApp(appButton, windowId);
+void AppMenuComponent::startOrFocusApp(AppMenuButton::Ptr appButton) {
+    if (waitingOnLaunch()) {
+        return;
     }
+    DBG(String("Attempting to launch ") + appButton->getAppName());
+    //before adding another process to the list, clean out any old dead ones,
+    //so they don't start piling up
+    std::vector<int>toRemove;
+    for (int i = 0; i < runningApps.size(); i++) {
+        if (runningApps[i] != nullptr && !runningApps[i]->isRunning()) {
+            toRemove.push_back(i);
+        }
+    }
+    for (int index : toRemove) {
+        runningApps.remove(index, true);
+        runningAppsByButton.removeValue(index);
+    }
+    if (runningAppsByButton.contains(appButton)) {
+        int appId = runningAppsByButton[appButton];
+        if (runningApps[appId] != nullptr && runningApps[appId]->isRunning()) {
+            DBG("app is already running, attempting to find the window id");
+            String windowId = getWindowId(appButton);
 
+            if (!windowId.isEmpty()) {
+                DBG(String("Found window ") + windowId + String(", focusing app"));
+                focusApp(appButton, windowId);
+
+            } else {
+                DBG("Process exists, but has no window to focus. Leave it alone for now.");
+            }
+            return;
+        } else {
+            if (runningApps[appId] != nullptr) {
+                DBG("Old process is dead, we're good to launch");
+            }
+        }
+    }
+    startApp(appButton);
+}
+
+void AppMenuComponent::showLaunchSpinner() {
+    DBG("Show launch spinner");
+    Component * parentPage = getParentComponent();
+    if (parentPage != nullptr) {
+        parentPage->addAndMakeVisible(launchSpinner);
+    }
+}
+
+void AppMenuComponent::hideLaunchSpinner() {
+    DBG("Hide launch spinner");
+    Component * parentPage = getParentComponent();
+    if (parentPage != nullptr) {
+        parentPage->removeChildComponent(launchSpinner);
+    }
 }

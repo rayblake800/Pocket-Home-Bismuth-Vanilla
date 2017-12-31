@@ -17,7 +17,7 @@ class AppMenuPage : public Component{
 public:
     AppMenuPage(LauncherComponent * launcherComponent);
     virtual ~AppMenuPage();
-    void hideLaunchSpinner();
+    void stopWaitingOnLaunch();
 private:
     bool keyPressed(const KeyPress &) override;
     void visibilityChanged() override;

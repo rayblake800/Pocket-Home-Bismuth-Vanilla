@@ -4,7 +4,7 @@
 #include <fstream>
 #include <regex>
 #include <locale.h>
-
+using namespace juce;
 File absoluteFileFromPath(const String &path) {
     return File::isAbsolutePath(path) ? File(path)
             : File::getCurrentWorkingDirectory().getChildFile(path);

@@ -10,7 +10,7 @@ File assetFile(const String &path);
 Image createImageFromFile(const File &imageFile);
 ImageButton *createImageButton(const String &name, const File &imageFile);
 ImageButton *createImageButton(const String &name, const Image &image);
-ImageButton *createImageButtonFromDrawable(const String &name, const Drawable &drawable);
+ImageButton *createImageButtonFromDrawable(const String &name, const juce::Drawable &drawable);
 
 void fitRectInRect(Rectangle<int> &rect, int x, int y, int width, int height,
                    Justification justification, const bool onlyReduceInSize);
@@ -50,4 +50,4 @@ Rectangle<int>getWindowSize();
 //resizes a font to fit in a containing rectangle.
 //If fitting it in would require mangling the font size too much, the
 //font gets set to size zero.
-Font fontResizedToFit(Font font,String text,Rectangle<int>container);
+juce::Font fontResizedToFit(juce::Font font,String text,Rectangle<int>container);

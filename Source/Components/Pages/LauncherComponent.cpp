@@ -48,7 +48,7 @@ void LauncherComponent::setClockAMPM(bool ampm) {
 void LauncherComponent::hideLaunchSpinner() {
     AppMenuPage * appPage = (AppMenuPage *) pagesByName["Apps"];
     if (appPage != nullptr) {
-        appPage->hideLaunchSpinner();
+        appPage->stopWaitingOnLaunch();
     }
 }
 

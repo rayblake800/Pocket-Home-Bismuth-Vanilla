@@ -21,16 +21,8 @@ public Button::Listener {
 public:
     AppMenuComponent();
     virtual ~AppMenuComponent();
+
     
-    /**
-     * Display the spinner that indicates application launch. This will
-     * also disable input.
-     */
-    void showLaunchSpinner();
-    /**
-     * Hide the launch spinner, re-enabling user input.
-     */
-    void hideLaunchSpinner();
 
     //################ AppMenuButton Management   #############################
 
@@ -63,15 +55,24 @@ public:
      * @return the index of the active button column.
      */
     int activeColumn();
-
-    void checkRunningApps();
-    bool getDebounce();
-    void setDebounce(bool newState);
+    //######################## App Launching #################################
+    /**
+     * @return true if currently waiting on an application to launch.
+     */
+    bool waitingOnLaunch();
+    /**
+     * Makes the menu stop waiting on an application to launch, re-enabling
+     * user input.
+     */
+    void stopWaitingOnLaunch();
 
 private:
     //handle all AppMenuButton clicks
     void buttonClicked(Button* buttonClicked) override;
     void resized() override;
+    //if it loses visibility, stop waiting for apps to launch
+    void visibilityChanged() override;
+
     
     void addButton(AppMenuButton::Ptr appButton);
     void selectIndex(int index);
@@ -80,7 +81,6 @@ private:
     
     ScopedPointer<OverlaySpinner> launchSpinner;
     DesktopEntries desktopEntries;
-    OwnedArray<ChildProcess> runningApps;
     //all buttons in each column
     std::vector<std::vector<AppMenuButton::Ptr>> buttonColumns;
     //current button selection(if any) for each open column
@@ -96,24 +96,48 @@ private:
     int x_origin;
     int y_origin;
 
-
-    using AppRunningMap = HashMap<AppMenuButton::Ptr, int>;
-    AppRunningMap runningAppsByButton;
-    class AppMenuTimer : public Timer {
+    //store active processes with a pointer to their button index
+    struct ButtonProcess{
+        ButtonProcess(AppMenuButton::Ptr b,ChildProcess* p):
+        menuButton(b),process(p){}
+        AppMenuButton::Ptr menuButton;
+        ScopedPointer<ChildProcess> process;
+    };
+    HashMap<AppMenuButton::Ptr, int> runningAppsByButton;
+    OwnedArray<ChildProcess> runningApps;
+    
+    class AppLaunchTimer : public Timer {
     public:
-        AppMenuTimer(AppMenuComponent* appMenu, std::function<void(AppMenuComponent*)> callback);
-        virtual ~AppMenuTimer();
+        AppLaunchTimer(AppMenuComponent* appMenu);
+        virtual ~AppLaunchTimer();
         virtual void timerCallback() override;
+        void setTrackedProcess(ChildProcess * trackedProcess);
+        //does the same thing as the base class method, but it also
+        //gets rid of its launchButton pointer.
+        void stopTimer();
     private:
         AppMenuComponent* appMenu = nullptr;
-        std::function<void(AppMenuComponent*)> callback;
+        ChildProcess * trackedProcess = nullptr;
     };
-    AppMenuTimer runningCheckTimer;
-    AppMenuTimer debounceTimer;
-    bool debounce = false;
+    AppLaunchTimer launchTimer;
+    /**
+     * Attempt to find an open window of a launched application
+     * @param appButton a button that launched a running process
+     * @return the window ID, or the empty string if none was found
+     */
+    String getWindowId(AppMenuButton::Ptr appButton);
     void startApp(AppMenuButton::Ptr appButton);
     void focusApp(AppMenuButton::Ptr appButton, const String& windowId);
     void startOrFocusApp(AppMenuButton::Ptr appButton);
+    /**
+     * Display the spinner that indicates application launch. This will
+     * also disable input.
+     */
+    void showLaunchSpinner();
+    /**
+     * Hide the launch spinner, re-enabling user input.
+     */
+    void hideLaunchSpinner();
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
 };
 

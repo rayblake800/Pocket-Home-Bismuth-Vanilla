@@ -51,8 +51,8 @@ AppMenuPage::AppMenuPage(LauncherComponent * launcherComponent) {
 AppMenuPage::~AppMenuPage() {
 }
 
-void AppMenuPage::hideLaunchSpinner() {
-    appMenu->hideLaunchSpinner();
+void AppMenuPage::stopWaitingOnLaunch() {
+    appMenu->stopWaitingOnLaunch();
 }
 
 bool AppMenuPage::keyPressed(const KeyPress& key) {
