@@ -1,10 +1,10 @@
-#include "Utils.h"
+
 #include <sys/stat.h>
 #include <dirent.h>
-#include <fstream>
-#include <regex>
 #include <locale.h>
+#include "Utils.h"
 using namespace juce;
+
 File absoluteFileFromPath(const String &path) {
     return File::isAbsolutePath(path) ? File(path)
             : File::getCurrentWorkingDirectory().getChildFile(path);
@@ -36,8 +36,7 @@ File assetFile(const String &fileName) {
 Image createImageFromFile(const File &imageFile) {
     auto image = Image(Image::ARGB, 128, 128, true);
     if (imageFile.getFileExtension() == ".svg") {
-        ScopedPointer<XmlElement> svgElement = XmlDocument::parse(imageFile);
-        ScopedPointer<Drawable> svgDrawable = Drawable::createFromSVG(*svgElement);
+        ScopedPointer<Drawable> svgDrawable = createSVGDrawable(imageFile);
         Graphics g(image);
         svgDrawable->drawWithin(g, Rectangle<float>(0, 0, image.getWidth(), image.getHeight()),
                 RectanglePlacement::fillDestination, 1.0f);
@@ -72,6 +71,19 @@ ImageButton *createImageButtonFromDrawable(const String &name, const Drawable &d
     drawable.drawWithin(g, Rectangle<float>(0, 0, image.getWidth(), image.getHeight()),
             RectanglePlacement::fillDestination, 1.0f);
     return createImageButton(name, image);
+}
+
+Drawable * createSVGDrawable(const File& svgFile) {
+    if (!svgFile.existsAsFile()) {
+        DBG(String("createSVGDrawable:") + svgFile.getFileName() + " not found!");
+        return nullptr;
+    }
+    ScopedPointer<XmlElement> svgElement = XmlDocument::parse(svgFile);
+    if (svgElement == nullptr) {
+        DBG(String("createSVGDrawable:") + svgFile.getFileName() + " not a valid svg!");
+        return nullptr;
+    }
+    return Drawable::createFromSVG(*svgElement);
 }
 
 void fitRectInRect(Rectangle<int> &rect, int x, int y, int width, int height,
@@ -207,53 +219,55 @@ std::vector<String> listDirectoryFiles(const String& path) {
 }
 
 //Print debug info about the component tree
-void componentTrace(){
-    std::function<void(Component*,int)> recursiveInfo;
-    recursiveInfo = [&recursiveInfo](Component* component, int depth){
+
+void componentTrace() {
+    std::function<void(Component*, int) > recursiveInfo;
+    recursiveInfo = [&recursiveInfo](Component* component, int depth) {
         String indent;
-        for(int i=0;i<depth;i++){
-            indent+="\t";
+        for (int i = 0; i < depth; i++) {
+            indent += "\t";
         }
-        DBG(indent+String("Component:")+component->getName());
-        indent+=" ";
-        DBG(indent+String("Position: (")+String(component->getX())+String(",")+
+        DBG(indent + String("Component:") + component->getName());
+        indent += " ";
+        DBG(indent + String("Position: (") + String(component->getX()) + String(",") +
                 String(component->getY()) + String(")"));
-        DBG(indent+String("Size: ")+String(component->getWidth())+String("x")+
+        DBG(indent + String("Size: ") + String(component->getWidth()) + String("x") +
                 String(component->getHeight()));
         String properties;
-        if(component->getWantsKeyboardFocus()){
-            properties+="wantsKeyFocus,";
+        if (component->getWantsKeyboardFocus()) {
+            properties += "wantsKeyFocus,";
         }
-        if(component->hasKeyboardFocus(false)){
-            properties+="hasKeyFocus,";
+        if (component->hasKeyboardFocus(false)) {
+            properties += "hasKeyFocus,";
         }
-        properties+=component->isShowing()?"showing":"not showing";
-        DBG(indent+properties);
+        properties += component->isShowing() ? "showing" : "not showing";
+        DBG(indent + properties);
         int numChildren = component->getNumChildComponents();
-        if(numChildren>0){
-            DBG(indent+String("Children:")+String(numChildren));
+        if (numChildren > 0) {
+            DBG(indent + String("Children:") + String(numChildren));
         }
-        for(int i=0;i<numChildren;i++){
-            recursiveInfo(component->getChildComponent(i),depth+1);
+        for (int i = 0; i < numChildren; i++) {
+            recursiveInfo(component->getChildComponent(i), depth + 1);
         }
     };
-    Component * rootComponent=Desktop::getInstance().getComponent(0);
-    recursiveInfo(rootComponent,0);
+    Component * rootComponent = Desktop::getInstance().getComponent(0);
+    recursiveInfo(rootComponent, 0);
 }
 
-Rectangle<int> getWindowSize(){
-    return Desktop::getInstance().getComponent(0)->getBounds().withPosition(0,0);
+Rectangle<int> getWindowSize() {
+    return Desktop::getInstance().getComponent(0)->getBounds().withPosition(0, 0);
 }
 
 //resizes a font to fit in a containing rectangle.
 //If fitting it in would require mangling the font size too much, the
 //font gets set to size zero.
-Font fontResizedToFit(Font font,String text,Rectangle<int>container){
-    float currentHeight=font.getHeight();
+
+Font fontResizedToFit(Font font, String text, Rectangle<int>container) {
+    float currentHeight = font.getHeight();
     float currentWidth = font.getStringWidth(text);
-    int newHeight=currentHeight*container.getWidth()/currentWidth;
-    if(newHeight>container.getHeight()){
-        newHeight=container.getHeight();
+    int newHeight = currentHeight * container.getWidth() / currentWidth;
+    if (newHeight > container.getHeight()) {
+        newHeight = container.getHeight();
     }
     //DBG(String("setting font height to ")+String(newHeight));
     font.setHeight(newHeight);

@@ -1,7 +1,4 @@
 #pragma once
-
-#include<functional>
-#include<map>
 #include "../JuceLibraryCode/JuceHeader.h"
 
 File absoluteFileFromPath(const String &path);
@@ -11,6 +8,13 @@ Image createImageFromFile(const File &imageFile);
 ImageButton *createImageButton(const String &name, const File &imageFile);
 ImageButton *createImageButton(const String &name, const Image &image);
 ImageButton *createImageButtonFromDrawable(const String &name, const juce::Drawable &drawable);
+
+/**
+ * Creates a Drawable object from an svg file
+ * @param svgFile a valid svg file.
+ * @return A drawable if the file was valid, nullptr otherwise
+ */
+Drawable * createSVGDrawable(const File& svgFile);
 
 void fitRectInRect(Rectangle<int> &rect, int x, int y, int width, int height,
                    Justification justification, const bool onlyReduceInSize);

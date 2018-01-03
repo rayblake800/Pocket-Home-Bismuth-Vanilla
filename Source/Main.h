@@ -1,8 +1,7 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
-
-#include "Components/MainComponent.h"
+#include "MainComponent.h"
 #include "Wifi/WifiStatus.h"
 #include "Utils.h"
 

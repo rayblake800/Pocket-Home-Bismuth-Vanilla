@@ -1,5 +1,4 @@
 #pragma once
-
 #include "../JuceLibraryCode/JuceHeader.h"
 
 class PokeLookAndFeel : public LookAndFeel_V3 {

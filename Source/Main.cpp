@@ -179,7 +179,7 @@ void PokeLaunchApplication::anotherInstanceStarted(const String &commandLine) {
 }
 
 PageStackComponent &PokeLaunchApplication::getMainStack() {
-    return *dynamic_cast<MainContentComponent *> (mainWindow->getContentComponent())->pageStack;
+    return *dynamic_cast<MainContentComponent *> (mainWindow->getContentComponent())->getPageStack();
 }
 
 PokeLaunchApplication::MainWindow::MainWindow(String name)
