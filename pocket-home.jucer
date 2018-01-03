@@ -14,6 +14,14 @@
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
+      <FILE id="QfgT5g" name="BluetoothStatus.cpp" compile="1" resource="0"
+            file="Source/BluetoothStatus.cpp"/>
+      <FILE id="cpqm4n" name="BluetoothStatus.h" compile="0" resource="0"
+            file="Source/BluetoothStatus.h"/>
+      <FILE id="rdg6xk" name="PocketHomeApplication.cpp" compile="1" resource="0"
+            file="Source/PocketHomeApplication.cpp"/>
+      <FILE id="cK501J" name="PocketHomeApplication.h" compile="0" resource="0"
+            file="Source/PocketHomeApplication.h"/>
       <FILE id="LxVUAo" name="LoginPage.cpp" compile="1" resource="0" file="Source/LoginPage.cpp"/>
       <FILE id="ecOl3Y" name="LoginPage.h" compile="0" resource="0" file="Source/LoginPage.h"/>
       <FILE id="GuBz6r" name="PageStackComponent.cpp" compile="1" resource="0"
@@ -23,7 +31,6 @@
       <FILE id="i9KuWR" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="QHVcKo" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
-      <FILE id="gV5DrH" name="Main.h" compile="0" resource="0" file="Source/Main.h"/>
       <FILE id="GJ9TER" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="Ury6Cc" name="Utils.cpp" compile="1" resource="0" file="Source/Utils.cpp"/>
       <FILE id="AywA6o" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>

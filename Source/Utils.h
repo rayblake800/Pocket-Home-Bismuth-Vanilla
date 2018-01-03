@@ -39,6 +39,8 @@ String getHomePath();
 //perform function(struct dirent*) on all files in path
 void foreachFile(const String& path, std::function<void(struct dirent*)> fn);
 
+
+static DrawableRectangle highlightFocus;
 //Print debug info about the component tree
 void componentTrace();
 

@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "../Utils.h"
 #include "SettingsPageLogin.h"
 

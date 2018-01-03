@@ -1,15 +1,17 @@
 #include "../PokeLookAndFeel.h"
 #include "../Utils.h"
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "SettingsPageWifiComponent.h"
 
 WifiSpinner::WifiSpinner(const String& componentName) :
-ImageComponent(componentName) {
+ImageComponent(componentName)
+{
     const Array<String> spinnerImgPaths{
         "spinner0.png", "spinner1.png", "spinner2.png", "spinner3.png",
         "spinner4.png", "spinner5.png", "spinner6.png", "spinner7.png"};
 
-    for (auto& path : spinnerImgPaths) {
+    for (auto& path : spinnerImgPaths)
+    {
         auto image = createImageFromFile(assetFile(path));
         images.add(image);
     }
@@ -21,30 +23,36 @@ ImageComponent(componentName) {
     timer.spinner = this;
 }
 
-WifiSpinner::~WifiSpinner() {
+WifiSpinner::~WifiSpinner()
+{
     timer.stopTimer();
     timer.spinner = nullptr;
 }
 
-void WifiSpinner::hide() {
+void WifiSpinner::hide()
+{
     setVisible(false);
     timer.stopTimer();
 }
 
-void WifiSpinner::show() {
+void WifiSpinner::show()
+{
     setVisible(true);
     timer.startTimer(500);
 }
 
-void WifiSpinner::nextImage() {
+void WifiSpinner::nextImage()
+{
     i++;
-    if (i == images.size()) {
+    if (i == images.size())
+    {
         i = 0;
     }
     setImage(images[i]);
 }
 
-void WifiSpinnerTimer::timerCallback() {
+void WifiSpinnerTimer::timerCallback()
+{
     spinner->nextImage();
 }
 
@@ -53,11 +61,13 @@ WifiAccessPointListItem::WifiAccessPointListItem(WifiAccessPoint *ap, WifiIcons 
 {
 }
 
-void WifiAccessPointListItem::resized() {
+void WifiAccessPointListItem::resized()
+{
     setSize(getLocalBounds().getWidth(), 42);
 }
 
-void WifiAccessPointListItem::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown) {
+void WifiAccessPointListItem::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown)
+{
     auto bounds = getLocalBounds();
     auto inset = bounds.reduced(6, 4);
     auto w = bounds.getWidth(), h = bounds.getHeight();
@@ -70,13 +80,15 @@ void WifiAccessPointListItem::paintButton(Graphics &g, bool isMouseOverButton, b
             bounds.getWidth() - 4 * borderThick, bounds.getHeight() - 2 * borderThick,
             1, borderThick);
 
-    if (!ap) {
+    if (!ap)
+    {
         DBG(__func__ << ": ERROR: trying to paint nullptr AP!!!!");
         return;
     }
     icons->wifiStrength[wifiSignalStrengthToIdx(ap->signalStrength)]->drawWithin(g, iconBounds,
             RectanglePlacement::fillDestination, 1.0f);
-    if (ap->requiresAuth) {
+    if (ap->requiresAuth)
+    {
         iconBounds.translate(-h * 0.75, 0);
         icons->lockIcon->drawWithin(g, iconBounds, RectanglePlacement::fillDestination, 1.0f);
     }
@@ -87,7 +99,8 @@ void WifiAccessPointListItem::paintButton(Graphics &g, bool isMouseOverButton, b
     g.drawText(getName(), inset.reduced(h * 0.3, 0), Justification::centredLeft);
 }
 
-int WifiAccessPointListItem::wifiSignalStrengthToIdx(int strength) {
+int WifiAccessPointListItem::wifiSignalStrengthToIdx(int strength)
+{
     // 0 to 100
     float sigStrength = std::max(0., std::fmin(100, strength));
     int iconBins = icons->wifiStrength.size() - 1;
@@ -98,7 +111,8 @@ SettingsPageWifiComponent::SettingsPageWifiComponent() :
 nextPageBtn(createImageButton("NextAppsPage",
 ImageFileFormat::loadFrom(assetFile("pageDownIcon.png")))),
 prevPageBtn(createImageButton("PrevAppsPage",
-ImageFileFormat::loadFrom(assetFile("pageUpIcon.png")))) {
+ImageFileFormat::loadFrom(assetFile("pageUpIcon.png"))))
+{
     bgColor = Colour(PokeLookAndFeel::chipPurple);
     bgImage = createImageFromFile(assetFile("settingsBackground.png"));
 
@@ -168,19 +182,23 @@ ImageFileFormat::loadFrom(assetFile("pageUpIcon.png")))) {
     connectionButton->addChildComponent(spinner);
 
     // register for wifi status events
-    getWifiStatus().addListener(this);
+    PocketHomeApplication::getInstance()
+            ->getWifiStatus().addListener(this);
 }
 
-SettingsPageWifiComponent::~SettingsPageWifiComponent() {
+SettingsPageWifiComponent::~SettingsPageWifiComponent()
+{
 }
 
-void SettingsPageWifiComponent::paint(Graphics &g) {
+void SettingsPageWifiComponent::paint(Graphics &g)
+{
     auto bounds = getLocalBounds();
     g.fillAll(bgColor);
     g.drawImage(bgImage, bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), 0, 0, bgImage.getWidth(), bgImage.getHeight(), false);
 }
 
-void SettingsPageWifiComponent::resized() {
+void SettingsPageWifiComponent::resized()
+{
     auto b = getLocalBounds();
     auto pb = Rectangle<int>(60, 0, b.getWidth() - 120, b.getHeight());
 
@@ -209,35 +227,42 @@ void SettingsPageWifiComponent::resized() {
     accessPointList->setBoundsToFit(0, 0, pb.getWidth(), pb.getHeight(), Justification::centred, true);
 
     // FIXME: this logic belongs in constructor, but sizing info shows wrong on resize.
-    if (!init) {
+    if (!init)
+    {
         init = true;
 
         // check wifi status to pick correct initial page
-        auto& wifiStatus = getWifiStatus();
-        if (wifiStatus.isConnected()) {
+        WifiStatus& wifiStatus = PocketHomeApplication::getInstance()
+                ->getWifiStatus();
+        if (wifiStatus.isConnected())
+        {
             selectedAp = wifiStatus.connectedAccessPoint();
             updateConnectionLabelAndButton();
             passwordEditor->setVisible(false);
             pageStack->pushPage(connectionPage, PageStackComponent::kTransitionNone);
-        } else {
+        } else
+        {
             pageStack->pushPage(accessPointListPage, PageStackComponent::kTransitionNone);
         }
     }
 }
 
-void SettingsPageWifiComponent::handleWifiEnabled() {
+void SettingsPageWifiComponent::handleWifiEnabled()
+{
     DBG("SettingsPageWifiComponent::wifiEnabled");
 
     enableWifiActions();
 }
 
-void SettingsPageWifiComponent::handleWifiDisabled() {
+void SettingsPageWifiComponent::handleWifiDisabled()
+{
     DBG("SettingsPageWifiComponent::wifiDisabled");
 
     enableWifiActions();
 
     // if wifi is disabled while we're on this page, pop back to previous page.
-    if (getMainStack().getCurrentPage() == this) {
+    if (getMainStack().getCurrentPage() == this)
+    {
         getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
         // make sure we leave access list page as entry page.
         pageStack->clear(PageStackComponent::kTransitionNone);
@@ -245,37 +270,48 @@ void SettingsPageWifiComponent::handleWifiDisabled() {
     }
 }
 
-void SettingsPageWifiComponent::handleWifiConnected() {
+void SettingsPageWifiComponent::handleWifiConnected()
+{
     DBG("SettingsPageWifiComponent::wifiConnected");
-    selectedAp = getWifiStatus().connectedAccessPoint();
+    selectedAp = PocketHomeApplication::getInstance()
+            ->getWifiStatus().connectedAccessPoint();
 
     enableWifiActions();
     passwordEditor->setVisible(false);
     errorLabel->setVisible(false);
 
     // if we're on the connection page
-    if (pageStack->getCurrentPage() == connectionPage) {
+    if (pageStack->getCurrentPage() == connectionPage)
+    {
         // remove the ability to go back to the access point list
-        if (pageStack->getDepth() > 1) {
+        if (pageStack->getDepth() > 1)
+        {
             pageStack->removePage(pageStack->getDepth() - 2);
         }
     }// if we're on the access point list
-    else if (pageStack->getCurrentPage() == accessPointListPage) {
+    else if (pageStack->getCurrentPage() == accessPointListPage)
+    {
         // swap to the connection page
-        pageStack->swapPage(connectionPage, PageStackComponent::kTransitionTranslateHorizontal);
+        pageStack->swapPage(connectionPage,
+                PageStackComponent::kTransitionTranslateHorizontal);
     }
 
     // pop back to previous page if we're focused
     if (getMainStack().getCurrentPage() == this)
-        getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
+    {
+        getMainStack().popPage
+                (PageStackComponent::kTransitionTranslateHorizontal);
+    }
 }
 
-void SettingsPageWifiComponent::handleWifiFailedConnect() {
+void SettingsPageWifiComponent::handleWifiFailedConnect()
+{
     DBG("SettingsPageWifiComponent::wifiFailedConnect");
 
     enableWifiActions();
 
-    if (selectedAp && selectedAp->requiresAuth) {
+    if (selectedAp && selectedAp->requiresAuth)
+    {
         errorLabel->setVisible(true);
         passwordEditor->setText("");
         passwordEditor->grabKeyboardFocus();
@@ -283,27 +319,32 @@ void SettingsPageWifiComponent::handleWifiFailedConnect() {
 
     // make sure we show the ap list from back button
     // add our access point list back into the stack, so it's available from back button
-    if (pageStack->getDepth() == 1) {
+    if (pageStack->getDepth() == 1)
+    {
         pageStack->insertPage(accessPointListPage, 0);
     }
 }
 
-void SettingsPageWifiComponent::handleWifiDisconnected() {
+void SettingsPageWifiComponent::handleWifiDisconnected()
+{
     DBG("SettingsPageWifiComponent::wifiDisconnected");
 
     enableWifiActions();
     updateAccessPoints();
 
-    if (selectedAp && selectedAp->requiresAuth) {
+    if (selectedAp && selectedAp->requiresAuth)
+    {
         passwordEditor->setVisible(true);
         passwordEditor->grabKeyboardFocus();
     }
     errorLabel->setVisible(false);
 
     // if we receive disconnect while on connection page
-    if (pageStack->getCurrentPage() == connectionPage) {
+    if (pageStack->getCurrentPage() == connectionPage)
+    {
         // add our access point list back into the stack, so it's available from back button
-        if (pageStack->getDepth() == 1) {
+        if (pageStack->getDepth() == 1)
+        {
             pageStack->insertPage(accessPointListPage, 0);
         }
 
@@ -312,12 +353,15 @@ void SettingsPageWifiComponent::handleWifiDisconnected() {
     }
 }
 
-void SettingsPageWifiComponent::handleWifiBusy() {
+void SettingsPageWifiComponent::handleWifiBusy()
+{
     disableWifiActions();
 }
 
-void SettingsPageWifiComponent::enableWifiActions() {
-    bool isEnabled = getWifiStatus().isEnabled();
+void SettingsPageWifiComponent::enableWifiActions()
+{
+    bool isEnabled = PocketHomeApplication::getInstance()
+            ->getWifiStatus().isEnabled();
 
     spinner->hide();
     connectionButton->setEnabled(isEnabled);
@@ -326,7 +370,8 @@ void SettingsPageWifiComponent::enableWifiActions() {
     updateConnectionLabelAndButton();
 }
 
-void SettingsPageWifiComponent::disableWifiActions() {
+void SettingsPageWifiComponent::disableWifiActions()
+{
     spinner->show();
     connectionButton->setButtonText("");
 
@@ -334,63 +379,79 @@ void SettingsPageWifiComponent::disableWifiActions() {
     passwordEditor->setEnabled(false);
 }
 
-void SettingsPageWifiComponent::beginSetConnected() {
-    auto &status = getWifiStatus();
+void SettingsPageWifiComponent::beginSetConnected()
+{
+    WifiStatus& status = PocketHomeApplication::getInstance()
+            ->getWifiStatus();
 
     errorLabel->setVisible(false);
 
     // make sure we hide the ap list while attempting to connect
-    if (pageStack->getDepth() > 1) {
+    if (pageStack->getDepth() > 1)
+    {
         pageStack->removePage(pageStack->getDepth() - 2);
     }
 
-    if (selectedAp && selectedAp->requiresAuth) {
+    if (selectedAp && selectedAp->requiresAuth)
+    {
         const auto& psk = passwordEditor->getTextValue().toString();
         status.setConnectedAccessPoint(selectedAp, psk);
-    } else {
+    } else
+    {
         status.setConnectedAccessPoint(selectedAp);
     }
 }
 
-void SettingsPageWifiComponent::beginSetDisconnected() {
-    getWifiStatus().setDisconnected();
+void SettingsPageWifiComponent::beginSetDisconnected()
+{
+    PocketHomeApplication::getInstance()->getWifiStatus().setDisconnected();
 }
 
-void SettingsPageWifiComponent::updateConnectionLabelAndButton() {
-    const auto& status = getWifiStatus();
+void SettingsPageWifiComponent::updateConnectionLabelAndButton()
+{
+    const WifiStatus& status = PocketHomeApplication::getInstance()
+            ->getWifiStatus();
     String ssidText;
     String buttonText;
 
-    if (selectedAp) {
+    if (selectedAp)
+    {
         ssidText = selectedAp->ssid;
         buttonText = "Connect";
 
         auto connectedAp = status.connectedAccessPoint();
         if (status.isConnected() && connectedAp &&
-                connectedAp->hash == selectedAp->hash) {
+                connectedAp->hash == selectedAp->hash)
+        {
             ssidText += " (connected)";
             buttonText = "Disconnect";
         }
-    } else {
+    } else
+    {
         ssidText = "Access point disconnected.";
         buttonText = "...";
     }
 
-    connectionLabel->setText(ssidText, juce::NotificationType::dontSendNotification);
+    connectionLabel->setText(ssidText, 
+            juce::NotificationType::dontSendNotification);
     connectionButton->setButtonText(buttonText);
 }
 
-// TODO: this is pretty expensive, but the cleanup is very simple. Could be replaced with a change
+// TODO: this is pretty expensive, but the cleanup is very simple. 
+//  Could be replaced with a change
 // listener, or a merge operation.
 
-void SettingsPageWifiComponent::createAccessPointList() {
+void SettingsPageWifiComponent::createAccessPointList()
+{
     // create ssid list
     accessPointList = new Grid(1, 4);
 
-    accessPoints = getWifiStatus().nearbyAccessPoints();
-    for (auto ap : accessPoints) {
-        DBG(__func__ << ": added " << ap->ssid << ", " << ap->signalStrength << ", "
-                << ap->requiresAuth);
+    accessPoints = PocketHomeApplication::getInstance()
+    ->getWifiStatus().nearbyAccessPoints();
+    for (auto ap : accessPoints)
+    {
+        DBG(__func__ << ": added " << ap->ssid << ", " 
+                << ap->signalStrength << ", "<< ap->requiresAuth);
         auto item = new WifiAccessPointListItem(ap, icons);
         item->addListener(this);
         accessPointItems.add(item);
@@ -400,98 +461,123 @@ void SettingsPageWifiComponent::createAccessPointList() {
     accessPointListPage->addAndMakeVisible(accessPointList);
 }
 
-void SettingsPageWifiComponent::updateAccessPoints() {
+void SettingsPageWifiComponent::updateAccessPoints()
+{
     createAccessPointList();
     checkShowListNav();
     if (init) resized();
 }
 
-void SettingsPageWifiComponent::checkShowListNav() {
-    if (accessPointList->hasNextPage()) {
+void SettingsPageWifiComponent::checkShowListNav()
+{
+    if (accessPointList->hasNextPage())
+    {
         nextPageBtn->setVisible(true);
         nextPageBtn->setEnabled(true);
-    } else {
+    } else
+    {
         nextPageBtn->setVisible(false);
         nextPageBtn->setEnabled(false);
     }
 
-    if (accessPointList->hasPrevPage()) {
+    if (accessPointList->hasPrevPage())
+    {
         prevPageBtn->setVisible(true);
         prevPageBtn->setEnabled(true);
-    } else {
+    } else
+    {
         prevPageBtn->setVisible(false);
         prevPageBtn->setEnabled(false);
     }
 }
 
-void SettingsPageWifiComponent::buttonStateChanged(Button *btn) {
-    if (btn->isMouseButtonDown() && btn->isMouseOver()) {
+void SettingsPageWifiComponent::buttonStateChanged(Button *btn)
+{
+    if (btn->isMouseButtonDown() && btn->isMouseOver())
+    {
         btn->setAlpha(0.5f);
-    } else {
+    } else
+    {
         btn->setAlpha(1.0f);
     }
 }
 
-void SettingsPageWifiComponent::buttonClicked(Button *button) {
-    auto &status = getWifiStatus();
+void SettingsPageWifiComponent::buttonClicked(Button *button)
+{
+    WifiStatus &status = PocketHomeApplication::getInstance()->getWifiStatus();
 
     // button from the connection dialog
-    if (button == connectionButton) {
-        if (status.isConnected()) {
+    if (button == connectionButton)
+    {
+        if (status.isConnected())
+        {
             beginSetDisconnected();
-        } else {
+        } else
+        {
             beginSetConnected();
         }
     }// button from the ap list
-    else {
+    else
+    {
         auto apButton = dynamic_cast<WifiAccessPointListItem *> (button);
-        if (apButton) {
+        if (apButton)
+        {
             selectedAp = new WifiAccessPoint(*apButton->ap);
             auto connectedAp = status.connectedAccessPoint().get();
 
             updateConnectionLabelAndButton();
 
             if (status.isConnected() && connectedAp &&
-                    connectedAp->hash == selectedAp->hash) {
+                    connectedAp->hash == selectedAp->hash)
+            {
                 passwordEditor->setText(String::empty);
                 passwordEditor->setVisible(false);
                 errorLabel->setVisible(false);
-            } else {
+            } else
+            {
                 passwordEditor->setText(String::empty);
                 passwordEditor->setVisible(apButton->ap->requiresAuth);
                 errorLabel->setVisible(false);
             }
 
             pageStack->pushPage(connectionPage, PageStackComponent::kTransitionTranslateHorizontal);
-        } else if (button == prevPageBtn) {
+        } else if (button == prevPageBtn)
+        {
             accessPointList->showPrevPage();
             checkShowListNav();
-        } else if (button == nextPageBtn) {
+        } else if (button == nextPageBtn)
+        {
             accessPointList->showNextPage();
             checkShowListNav();
-        } else if (button == backButton) {
+        } else if (button == backButton)
+        {
             // leave connection page
-            if (pageStack->getDepth() > 1) {
+            if (pageStack->getDepth() > 1)
+            {
                 pageStack->popPage(PageStackComponent::kTransitionTranslateHorizontal);
                 checkShowListNav();
                 // leave wifi settings page
-            } else {
+            } else
+            {
                 getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
             }
         }
     }
 }
 
-void SettingsPageWifiComponent::textEditorReturnKeyPressed(TextEditor &) {
+void SettingsPageWifiComponent::textEditorReturnKeyPressed(TextEditor &)
+{
     beginSetConnected();
 }
 
 // FIXME: this is a hack for setting keyboard focus on animation completion
 // why can't we set in when we queue the animation and have it respected on completion?
 
-void SettingsPageWifiComponent::componentVisibilityChanged(Component& component) {
+void SettingsPageWifiComponent::componentVisibilityChanged(Component& component)
+{
     // focus the password editor after the connection page finishes its transition in
-    if (&component == connectionPage.get() && component.isVisible()) {
+    if (&component == connectionPage.get() && component.isVisible())
+    {
         passwordEditor->grabKeyboardFocus();
     }
 }

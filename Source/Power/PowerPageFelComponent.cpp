@@ -5,7 +5,7 @@
 #include <numeric>
 #include "../Utils.h"
 #include "../PokeLookAndFeel.h"
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "PowerPageFelComponent.h"
 
 #define TEST_BUILD

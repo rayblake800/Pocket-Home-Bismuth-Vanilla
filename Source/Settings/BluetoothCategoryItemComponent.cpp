@@ -6,9 +6,9 @@
     Author:  anthony
 
   ==============================================================================
-*/
+ */
 #include <numeric>
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "../Utils.h"
 #include "BluetoothCategoryItemComponent.h"
 
@@ -22,19 +22,21 @@ BluetoothCategoryItemComponent::BluetoothCategoryItemComponent()
 
 void BluetoothCategoryItemComponent::enabledStateChanged(bool enabled)
 {
-    getBluetoothStatus().enabled = enabled;
+    PocketHomeApplication::getInstance()->getBluetoothStatus().enabled 
+            = enabled;
     button->setEnabled(enabled);
     updateButtonText();
 }
 
 void BluetoothCategoryItemComponent::updateButtonText()
 {
-    const auto &status = getBluetoothStatus();
+    const auto &status = PocketHomeApplication::getInstance()
+            ->getBluetoothStatus();
     if (status.enabled)
     {
         int connectedDeviceCount =
                 std::accumulate(status.devices.begin(), status.devices.end(), 0,
-                [](int n, BluetoothDevice * d)
+                [](int n, BluetoothStatus::BluetoothDevice * d)
                 {
                     return n + d->connected; });
         if (connectedDeviceCount > 0)

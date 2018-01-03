@@ -3677,6 +3677,8 @@
           <in>WifiTest.cpp</in>
         </df>
         <in>BatteryMonitor.cpp</in>
+        <in>BluetoothStatus.cpp</in>
+        <in>BluetoothStatus.h</in>
         <in>ClockMonitor.cpp</in>
         <in>ConfigFile.cpp</in>
         <in>DesktopEntries.cpp</in>
@@ -3686,11 +3688,12 @@
         <in>LoginPage.cpp</in>
         <in>LoginPage.h</in>
         <in>Main.cpp</in>
-        <in>Main.h</in>
         <in>MainComponent.cpp</in>
         <in>MainComponent.h</in>
         <in>PageStackComponent.cpp</in>
         <in>PageStackComponent.h</in>
+        <in>PocketHomeApplication.cpp</in>
+        <in>PocketHomeApplication.h</in>
         <in>PokeLookAndFeel.cpp</in>
         <in>PokeLookAndFeel.h</in>
         <in>Utils.cpp</in>

@@ -1,5 +1,5 @@
 #include "AdvancedSettingsPage.h"
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 
 AdvancedSettingsPage::AdvancedSettingsPage():
 bg_color(0xffd23c6d),

@@ -221,6 +221,9 @@ std::vector<String> listDirectoryFiles(const String& path) {
 //Print debug info about the component tree
 
 void componentTrace() {
+    highlightFocus.setFill(FillType(Colour(0x0))); 
+    highlightFocus.setStrokeFill(FillType(Colour(0xff00ff00)));
+    highlightFocus.setStrokeType(PathStrokeType(4));
     std::function<void(Component*, int) > recursiveInfo;
     recursiveInfo = [&recursiveInfo](Component* component, int depth) {
         String indent;
@@ -239,6 +242,7 @@ void componentTrace() {
         }
         if (component->hasKeyboardFocus(false)) {
             properties += "hasKeyFocus,";
+            highlightFocus.setBounds(component->getBounds());
         }
         properties += component->isShowing() ? "showing" : "not showing";
         DBG(indent + properties);
@@ -252,6 +256,7 @@ void componentTrace() {
     };
     Component * rootComponent = Desktop::getInstance().getComponent(0);
     recursiveInfo(rootComponent, 0);
+    rootComponent->addAndMakeVisible(highlightFocus);
 }
 
 Rectangle<int> getWindowSize() {

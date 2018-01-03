@@ -8,7 +8,7 @@
   ==============================================================================
 */
 
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "SettingsCategoryButton.h"
 
 

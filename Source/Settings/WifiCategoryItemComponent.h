@@ -7,6 +7,9 @@
 
   ==============================================================================
 */
+/**
+ *To do: get rid of all the unnecessary redundancy.
+ */
 #pragma once
 
 #include "../Wifi/WifiStatus.h"

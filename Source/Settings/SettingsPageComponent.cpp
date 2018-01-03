@@ -1,13 +1,11 @@
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "../Utils.h"
 #include "../PokeLookAndFeel.h"
 #include "SettingsPageComponent.h"
 
-
-
-SettingsPageComponent::SettingsPageComponent():
+SettingsPageComponent::SettingsPageComponent() :
 brightnessSliderTimer(this),
-        volumeSliderTimer(this)
+volumeSliderTimer(this)
 {
     bgColor = Colour(0xffd23c6d);
     bgImage = createImageFromFile(assetFile("settingsBackground.png"));
@@ -85,7 +83,8 @@ brightnessSliderTimer(this),
     wifiCategoryItem = new WifiCategoryItemComponent();
     wifiCategoryItem->button->addListener(this);
     addAndMakeVisible(wifiCategoryItem);
-    getWifiStatus().addListener(wifiCategoryItem);
+    PocketHomeApplication::getInstance()
+            ->getWifiStatus().addListener(wifiCategoryItem);
 
     addAndMakeVisible(screenBrightnessSlider);
     addAndMakeVisible(volumeSlider);

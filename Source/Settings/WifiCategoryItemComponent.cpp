@@ -6,9 +6,10 @@
     Author:  anthony
 
   ==============================================================================
-*/
-#include "../Main.h"
+ */
+#include "../PocketHomeApplication.h"
 #include "WifiCategoryItemComponent.h"
+
 WifiCategoryItemComponent::WifiCategoryItemComponent() :
 SettingsCategoryItemComponent("wifi"),
 spinner(new WifiSpinner("SettingsWifiSpinner"))
@@ -16,7 +17,8 @@ spinner(new WifiSpinner("SettingsWifiSpinner"))
     iconDrawable =
             Drawable::createFromImageFile(assetFile("wifiIcon.png"));
     icon->setImages(iconDrawable);
-    bool isEnabled = getWifiStatus().isEnabled();
+    bool isEnabled = PocketHomeApplication::getInstance()
+            ->getWifiStatus().isEnabled();
     toggle->setToggleState(isEnabled, NotificationType::dontSendNotification);
     button->setEnabled(isEnabled);
     addChildComponent(spinner);
@@ -33,8 +35,10 @@ void WifiCategoryItemComponent::resized()
 void WifiCategoryItemComponent::enabledStateChanged(bool enabled)
 {
     updateButtonText();
-
-    enabled ? getWifiStatus().setEnabled() : getWifiStatus().setDisabled();
+    WifiStatus& wifiStatus = PocketHomeApplication::getInstance()
+            ->getWifiStatus();
+            
+    enabled ? wifiStatus.setEnabled() : wifiStatus.setDisabled();
 }
 
 void WifiCategoryItemComponent::handleWifiEnabled()
@@ -69,31 +73,37 @@ void WifiCategoryItemComponent::handleWifiBusy()
 
 void WifiCategoryItemComponent::enableWifiActions()
 {
+    
+   bool wifiEnabled= PocketHomeApplication::getInstance()
+            ->getWifiStatus().isEnabled();
     spinner->hide();
     icon->setVisible(true);
 
-    button->setEnabled(getWifiStatus().isEnabled());
+    button->setEnabled(wifiEnabled);
     toggle->setEnabled(true);
 
     updateButtonText();
-    toggle->setToggleState(getWifiStatus().isEnabled(), NotificationType::dontSendNotification);
+    toggle->setToggleState(wifiEnabled, NotificationType::dontSendNotification);
 }
 
 void WifiCategoryItemComponent::disableWifiActions()
 {
+    bool wifiEnabled= PocketHomeApplication::getInstance()
+            ->getWifiStatus().isEnabled();
     spinner->show();
     icon->setVisible(false);
 
-    button->setEnabled(getWifiStatus().isEnabled());
+    button->setEnabled(wifiEnabled);
     toggle->setEnabled(false);
 
     updateButtonText();
-    toggle->setToggleState(getWifiStatus().isEnabled(), NotificationType::dontSendNotification);
+    toggle->setToggleState(wifiEnabled, NotificationType::dontSendNotification);
 }
 
 void WifiCategoryItemComponent::updateButtonText()
 {
-    const auto &status = getWifiStatus();
+    const WifiStatus &status = PocketHomeApplication::getInstance()
+            ->getWifiStatus();
     if (status.isEnabled())
     {
         if (status.isConnected() && status.connectedAccessPoint())

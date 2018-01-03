@@ -1,59 +1,63 @@
 #pragma once
 
 #include "../Basic Components/SwitchComponent.h"
+#include "../BluetoothStatus.h"
 #include "../PageStackComponent.h"
 #include "../Basic Components/Grid.h"
 
 struct BTIcons {
-  ScopedPointer<Drawable> checkIcon;
-  ScopedPointer<Drawable> arrowIcon;
+    ScopedPointer<Drawable> checkIcon;
+    ScopedPointer<Drawable> arrowIcon;
 };
-struct BluetoothDevice;
+
 class BluetoothDeviceListItem : public Button {
 public:
-  BluetoothDevice *device;
-  BTIcons *icons;
+    BluetoothStatus::BluetoothDevice *device;
+    BTIcons *icons;
 
-  BluetoothDeviceListItem(BluetoothDevice *device, BTIcons *icons);
+    BluetoothDeviceListItem(BluetoothStatus::BluetoothDevice *device,
+            BTIcons *icons);
 
-  void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown) override;
+    void paintButton(Graphics &g, bool isMouseOverButton,
+            bool isButtonDown) override;
 
 private:
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BluetoothDeviceListItem)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BluetoothDeviceListItem)
 };
 
-class SettingsPageBluetoothComponent : public Component, private Button::Listener {
+class SettingsPageBluetoothComponent : public Component,
+private Button::Listener {
 public:
-  SettingsPageBluetoothComponent();
-  ~SettingsPageBluetoothComponent();
+    SettingsPageBluetoothComponent();
+    ~SettingsPageBluetoothComponent();
 
-  bool init = false;
+    bool init = false;
 
-  bool bluetoothEnabled = true;
-  int currentDeviceIndex;
+    bool bluetoothEnabled = true;
+    int currentDeviceIndex;
 
-  BluetoothDevice *selectedDevice;
+    BluetoothStatus::BluetoothDevice *selectedDevice;
 
-  ScopedPointer<PageStackComponent> pageStack;
+    ScopedPointer<PageStackComponent> pageStack;
 
-  ScopedPointer<ImageButton> backButton;
-  ScopedPointer<Drawable> checkIcon;
-  ScopedPointer<ImageComponent> btIcon;
+    ScopedPointer<ImageButton> backButton;
+    ScopedPointer<Drawable> checkIcon;
+    ScopedPointer<ImageComponent> btIcon;
 
-  ScopedPointer<Grid> deviceListPage;
-  OwnedArray<Component> deviceListItems;
+    ScopedPointer<Grid> deviceListPage;
+    OwnedArray<Component> deviceListItems;
 
-  ScopedPointer<Component> connectionPage;
-  ScopedPointer<Label> connectionLabel;
-  ScopedPointer<TextButton> connectionButton;
+    ScopedPointer<Component> connectionPage;
+    ScopedPointer<Label> connectionLabel;
+    ScopedPointer<TextButton> connectionButton;
 
-  BTIcons icons;
+    BTIcons icons;
 
-  void paint(Graphics &) override;
-  void resized() override;
+    void paint(Graphics &) override;
+    void resized() override;
 
 private:
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsPageBluetoothComponent)
 
-  void buttonClicked(Button *) override;
+    void buttonClicked(Button *) override;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsPageBluetoothComponent)
 };

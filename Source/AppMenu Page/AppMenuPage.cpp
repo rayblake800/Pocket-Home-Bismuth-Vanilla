@@ -11,7 +11,7 @@
 #include "../PokeLookAndFeel.h"
 #include "../Utils.h"
 #include "../Configuration/ConfigFile.h"
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "AppMenuPage.h"
 
 AppMenuPage::AppMenuPage()

@@ -1,8 +1,9 @@
 #include "../Utils.h"
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "SettingsPageBluetoothComponent.h"
 
-BluetoothDeviceListItem::BluetoothDeviceListItem(BluetoothDevice *device, BTIcons *icons)
+BluetoothDeviceListItem::BluetoothDeviceListItem
+(BluetoothStatus::BluetoothDevice *device, BTIcons *icons)
 : Button(device->name), device(device), icons(icons){}
 
 void BluetoothDeviceListItem::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown) {
@@ -37,8 +38,9 @@ SettingsPageBluetoothComponent::SettingsPageBluetoothComponent() {
 
   // create device list "page"
   deviceListPage = new Grid(1, 4);
-
-  for (auto btDevice : getBluetoothStatus().devices) {
+  BluetoothStatus& status=PocketHomeApplication::getInstance()
+          ->getBluetoothStatus();
+  for (auto btDevice : status.devices) {
     auto item = new BluetoothDeviceListItem(btDevice, &icons);
     item->addListener(this);
     deviceListItems.add(item);

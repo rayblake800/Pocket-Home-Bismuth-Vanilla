@@ -1,4 +1,4 @@
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "ConfigFile.h"
 #include "PersonalizePageComponent.h"
 //TODO: Re-organize this into something that works with AppMenus and

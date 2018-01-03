@@ -7,7 +7,7 @@
 
   ==============================================================================
 */
-#include "Main.h"
+#include "PocketHomeApplication.h"
 #include "LoginPage.h"
 
 LoginPage::LoginPage(std::function<void ()> loginCallback):

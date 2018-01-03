@@ -2,7 +2,7 @@
 #include <numeric>
 #include "../Configuration/ConfigFile.h"
 #include "../Utils.h"
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "../LoginPage.h"
 #include "../PokeLookAndFeel.h"
 #include "PowerPageFelComponent.h"

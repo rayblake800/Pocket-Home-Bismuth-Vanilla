@@ -1,5 +1,5 @@
 #include "../Configuration/ConfigFile.h"
-#include "../Main.h"
+#include "../PocketHomeApplication.h"
 #include "InputSettingsPage.h"
 
 InputSettingsPage::InputSettingsPage() :
