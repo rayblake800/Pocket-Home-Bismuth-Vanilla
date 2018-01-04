@@ -65,7 +65,8 @@ AppMenuPage::AppMenuPage()
         setColorBackground(value);
     else
         setImageBackground(value);
-
+    batteryIcon=new BatteryIcon();
+    wifiIcon=new WifiIcon();
     addAndMakeVisible(batteryIcon);
     addAndMakeVisible(wifiIcon);
 
@@ -74,6 +75,10 @@ AppMenuPage::AppMenuPage()
     settingsButton = 
             new VectorImageButton(config->getComponentSettings(SETTINGS), 
             "Settings");
+    powerButton->addListener(this);
+    settingsButton->addListener(this);
+    addAndMakeVisible(powerButton);
+    addAndMakeVisible(settingsButton);
 }
 
 AppMenuPage::~AppMenuPage()
@@ -192,8 +197,10 @@ void AppMenuPage::resized()
         frame->setTransformToFit(frame->getBounds().toFloat(),
                 RectanglePlacement::stretchToFit);
     }
-    config->getComponentSettings(BATTERY).applyBounds(&batteryIcon);
-    config->getComponentSettings(WIFI).applyBounds(&wifiIcon);
+    config->getComponentSettings(BATTERY).applyBounds(batteryIcon);
+    config->getComponentSettings(WIFI).applyBounds(wifiIcon);
+    config->getComponentSettings(POWER).applyBounds(powerButton);
+    config->getComponentSettings(SETTINGS).applyBounds(settingsButton);
     Label * clockLabel = &(clock.getLabel());
     config->getComponentSettings(CLOCK).applyBounds(clockLabel);
     Font labelFont = clockLabel->getFont();

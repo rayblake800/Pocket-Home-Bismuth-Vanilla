@@ -96,12 +96,6 @@ private:
     int y_origin;
 
     //store active processes with a pointer to their button index
-    struct ButtonProcess{
-        ButtonProcess(AppMenuButton::Ptr b,ChildProcess* p):
-        menuButton(b),process(p){}
-        AppMenuButton::Ptr menuButton;
-        ScopedPointer<ChildProcess> process;
-    };
     HashMap<AppMenuButton::Ptr, int> runningAppsByButton;
     OwnedArray<ChildProcess> runningApps;
     

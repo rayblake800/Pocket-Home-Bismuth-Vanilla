@@ -37,10 +37,10 @@ private:
     void paint(Graphics &) override;
 
     AppMenuComponent appMenu;
-    BatteryIcon batteryIcon;
-    WifiIcon wifiIcon;
     Colour bgColor;
     ClockMonitor clock;
+    ScopedPointer<BatteryIcon> batteryIcon;
+    ScopedPointer<WifiIcon> wifiIcon;
     ScopedPointer<VectorImageButton> powerButton;
     ScopedPointer<VectorImageButton> settingsButton;
     

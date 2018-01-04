@@ -8,7 +8,8 @@
 #include <set>
 #include "AppMenuComponent.h"
 
-AppMenuComponent::AppMenuComponent() : launchTimer(this) {
+AppMenuComponent::AppMenuComponent() : launchTimer(this)
+{
 
     ConfigFile * configFile = ConfigFile::getInstance();
     Rectangle<int> screenSize = getWindowSize();
@@ -31,7 +32,8 @@ AppMenuComponent::AppMenuComponent() : launchTimer(this) {
 
     //read in main page apps from config
     std::vector<ConfigFile::AppItem> favorites = configFile->getFavorites();
-    for (const ConfigFile::AppItem& favorite : favorites) {
+    for (const ConfigFile::AppItem& favorite : favorites)
+    {
         DBG(String("AppMenu:Found app in config:") + favorite.name);
         addButton(new AppMenuButton(DesktopEntry(favorite),
                 buttonColumns[activeColumn()].size(), activeColumn()));
@@ -39,7 +41,8 @@ AppMenuComponent::AppMenuComponent() : launchTimer(this) {
 
     //add category buttons
     std::vector<ConfigFile::AppFolder> categories = configFile->getFolders();
-    for (const ConfigFile::AppFolder& category : categories) {
+    for (const ConfigFile::AppFolder& category : categories)
+    {
         addButton(new AppMenuButton(DesktopEntry(category),
                 buttonColumns[activeColumn()].size(), activeColumn()));
     }
@@ -47,7 +50,8 @@ AppMenuComponent::AppMenuComponent() : launchTimer(this) {
     scrollToSelected();
 }
 
-AppMenuComponent::~AppMenuComponent() {
+AppMenuComponent::~AppMenuComponent()
+{
     stopWaitingOnLaunch();
     while (!buttonColumns.empty())closeFolder();
 }
@@ -56,7 +60,8 @@ AppMenuComponent::~AppMenuComponent() {
  * Open an application category folder, creating AppMenuButtons for all
  * associated desktop applications.
  */
-void AppMenuComponent::openFolder(std::vector<String> categoryNames) {
+void AppMenuComponent::openFolder(std::vector<String> categoryNames)
+{
     ConfigFile * config = ConfigFile::getInstance();
     int folderIndex = selected[activeColumn()]->getIndex() -
             config->getFavorites().size();
@@ -65,36 +70,44 @@ void AppMenuComponent::openFolder(std::vector<String> categoryNames) {
             desktopEntries.getCategoryListEntries(categoryNames);
     if (folderItems.empty() && selectedFolder.pinnedApps.empty())return;
     int columnTop = y_origin;
-    if (selected[activeColumn()] != nullptr) {
+    if (selected[activeColumn()] != nullptr)
+    {
         columnTop = selected[activeColumn()]->getY();
     }
     selected.push_back(nullptr);
     columnTops.push_back(columnTop);
     buttonColumns.push_back(std::vector<AppMenuButton::Ptr>());
-    for (ConfigFile::AppItem item : selectedFolder.pinnedApps) {
+    for (ConfigFile::AppItem item : selectedFolder.pinnedApps)
+    {
         AppMenuButton::Ptr addedButton;
         if (buttonNameMap[item.name] != nullptr &&
-                buttonNameMap[item.name]->getParentComponent() == nullptr) {
+                buttonNameMap[item.name]->getParentComponent() == nullptr)
+        {
             addedButton = buttonNameMap[item.name];
             addedButton->setIndex(buttonColumns[activeColumn()].size());
             addedButton->setColumn(activeColumn());
-        } else {
+        } else
+        {
             addedButton = new AppMenuButton(DesktopEntry(item),
                     buttonColumns[activeColumn()].size(), activeColumn());
         }
         addButton(addedButton);
     }
     DBG(String("found ") + String(folderItems.size()) + " items in folder");
-    for (DesktopEntry desktopEntry : folderItems) {
-        if (!desktopEntry.hidden() && !desktopEntry.noDisplay()) {
+    for (DesktopEntry desktopEntry : folderItems)
+    {
+        if (!desktopEntry.hidden() && !desktopEntry.noDisplay())
+        {
             String name = desktopEntry.getName();
             AppMenuButton::Ptr addedButton;
             if (buttonNameMap[name] != nullptr &&
-                    buttonNameMap[name]->getParentComponent() == nullptr) {
+                    buttonNameMap[name]->getParentComponent() == nullptr)
+            {
                 addedButton = buttonNameMap[name];
                 addedButton->setIndex(buttonColumns[activeColumn()].size());
                 addedButton->setColumn(activeColumn());
-            } else {
+            } else
+            {
                 addedButton = new AppMenuButton(desktopEntry,
                         buttonColumns[activeColumn()].size(), activeColumn());
             }
@@ -108,16 +121,20 @@ void AppMenuComponent::openFolder(std::vector<String> categoryNames) {
 
 //close the topmost open folder, removing all contained buttons
 
-void AppMenuComponent::closeFolder() {
-    if (waitingOnLaunch()) {
+void AppMenuComponent::closeFolder()
+{
+    if (waitingOnLaunch())
+    {
         return;
     }
-    for (int i = buttonColumns[activeColumn()].size() - 1; i >= 0; i--) {
+    for (int i = buttonColumns[activeColumn()].size() - 1; i >= 0; i--)
+    {
         AppMenuButton::Ptr toRemove = buttonColumns[activeColumn()][i];
         toRemove->setVisible(false);
         toRemove->setSelected(false);
         Component * parent = toRemove->getParentComponent();
-        if (parent != nullptr) {
+        if (parent != nullptr)
+        {
             parent->removeChildComponent(toRemove);
         }
         buttonColumns[activeColumn()].pop_back();
@@ -131,30 +148,39 @@ void AppMenuComponent::closeFolder() {
 
 //handle all AppMenuButton clicks
 
-void AppMenuComponent::buttonClicked(Button * buttonClicked) {
-    if (waitingOnLaunch()) {
+void AppMenuComponent::buttonClicked(Button * buttonClicked)
+{
+    if (waitingOnLaunch())
+    {
         return;
     }
     AppMenuButton::Ptr appClicked = (AppMenuButton *) buttonClicked;
-    if (appClicked->getColumn() < activeColumn()) {
-        while (appClicked->getColumn() < activeColumn()) {
+    if (appClicked->getColumn() < activeColumn())
+    {
+        while (appClicked->getColumn() < activeColumn())
+        {
             closeFolder();
         }
         selectIndex(appClicked->getIndex());
         return;
     }
-    if (selected[activeColumn()] == appClicked) {
-        if (appClicked->isFolder()) {
+    if (selected[activeColumn()] == appClicked)
+    {
+        if (appClicked->isFolder())
+        {
             openFolder(appClicked->getCategories());
-        } else {
+        } else
+        {
             startOrFocusApp(appClicked);
         }
-    } else {
+    } else
+    {
         selectIndex(appClicked->getIndex());
     }
 }
 
-void AppMenuComponent::resized() {
+void AppMenuComponent::resized()
+{
     launchSpinner->setBounds(getWindowSize());
     ConfigFile * config = ConfigFile::getInstance();
     ConfigFile::ComponentSettings menuSettings = config->getComponentSettings(APP_MENU);
@@ -166,18 +192,23 @@ void AppMenuComponent::resized() {
     buttonWidth = buttonSize.getWidth();
     buttonHeight = buttonSize.getHeight();
     int numColumns = selected.size();
-    if (menuBounds.getWidth() < numColumns * buttonWidth) {
+    if (menuBounds.getWidth() < numColumns * buttonWidth)
+    {
         menuBounds.setWidth(numColumns * buttonWidth);
     }
-    for (int c = 0; c < numColumns; c++) {
-        if (c > 0) {
+    for (int c = 0; c < numColumns; c++)
+    {
+        if (c > 0)
+        {
             columnTops[c] = selected[c - 1]->getY();
         }
         int numRows = buttonColumns[c].size();
-        if (menuBounds.getHeight() < numRows * buttonHeight + columnTops[c]) {
+        if (menuBounds.getHeight() < numRows * buttonHeight + columnTops[c])
+        {
             menuBounds.setHeight(numRows * buttonHeight + columnTops[c]);
         }
-        for (int i = 0; i < numRows; i++) {
+        for (int i = 0; i < numRows; i++)
+        {
             AppMenuButton * button = buttonColumns[c][i];
             button->setBounds(buttonSize.withPosition(c*buttonWidth,
                     i * buttonHeight + columnTops[c]));
@@ -185,7 +216,8 @@ void AppMenuComponent::resized() {
     }
     setBounds(menuBounds);
     if (activeColumn() >= 0 && selected[activeColumn()] != nullptr
-            && !Desktop::getInstance().getAnimator().isAnimating()) {
+            && !Desktop::getInstance().getAnimator().isAnimating())
+    {
         scrollToSelected();
     }
 }
@@ -193,14 +225,18 @@ void AppMenuComponent::resized() {
 
 //if it loses visibility, stop waiting for apps to launch
 
-void AppMenuComponent::visibilityChanged() {
-    if (!isVisible()) {
+void AppMenuComponent::visibilityChanged()
+{
+    if (!isVisible())
+    {
         stopWaitingOnLaunch();
     }
 }
 
-void AppMenuComponent::selectIndex(int index) {
-    if (waitingOnLaunch()) {
+void AppMenuComponent::selectIndex(int index)
+{
+    if (waitingOnLaunch())
+    {
         return;
     }
     int column = activeColumn();
@@ -208,7 +244,8 @@ void AppMenuComponent::selectIndex(int index) {
     if (index >= buttonColumns[column].size()
             || index < 0
             || selected[column] == buttonColumns[column][index])return;
-    if (selected[column] != nullptr) {
+    if (selected[column] != nullptr)
+    {
         selected[column]->setSelected(false);
         selected[column]->repaint();
     }
@@ -221,71 +258,89 @@ void AppMenuComponent::selectIndex(int index) {
 
 //Select the next appMenuButton in the active button column.
 
-void AppMenuComponent::selectNext() {
-    if (selected[activeColumn()] == nullptr) {
+void AppMenuComponent::selectNext()
+{
+    if (selected[activeColumn()] == nullptr)
+    {
         selectIndex(0);
-    } else {
+    } else
+    {
         selectIndex(selected[activeColumn()]->getIndex() + 1);
     }
 }
 
 //Select the previous appMenuButton in the active button column.
 
-void AppMenuComponent::selectPrevious() {
-    if (selected[activeColumn()] == nullptr) {
+void AppMenuComponent::selectPrevious()
+{
+    if (selected[activeColumn()] == nullptr)
+    {
         selectIndex(0);
-    } else {
+    } else
+    {
         selectIndex(selected[activeColumn()]->getIndex() - 1);
     }
 }
 
 //Trigger a click for the selected button.
 
-void AppMenuComponent::clickSelected() {
-    if (selected[activeColumn()] != nullptr && !waitingOnLaunch()) {
+void AppMenuComponent::clickSelected()
+{
+    if (selected[activeColumn()] != nullptr && !waitingOnLaunch())
+    {
         selected[activeColumn()]->triggerClick();
     }
 }
 
 //return the index of the active button column.
 
-int AppMenuComponent::activeColumn() {
+int AppMenuComponent::activeColumn()
+{
     return selected.size() - 1;
 }
 
-void AppMenuComponent::scrollToSelected() {
+void AppMenuComponent::scrollToSelected()
+{
     int column = activeColumn();
-    if (column < 0) {
+    if (column < 0)
+    {
         return;
     }
     AppMenuButton::Ptr selectedButton = selected[column];
     Rectangle<int>dest = getBounds();
-    if (selectedButton != nullptr && selectedButton->isVisible()) {
+    if (selectedButton != nullptr && selectedButton->isVisible())
+    {
         int buttonPos = selectedButton->getY();
         int screenHeight = getWindowSize().getHeight();
         int distanceFromCenter = abs(buttonPos - getY() + screenHeight / 2);
         //only scroll vertically if selected button is outside the center 3/5 
-        if (distanceFromCenter > screenHeight / 5 * 3) {
+        if (distanceFromCenter > screenHeight / 5 * 3)
+        {
             dest.setY(y_origin - buttonPos + screenHeight / 2 - buttonHeight / 2);
         }
-        if (dest.getY() > y_origin) {
+        if (dest.getY() > y_origin)
+        {
             dest.setY(y_origin);
         }
     } else dest.setY(y_origin - columnTops[column]);
     if (column == 0)dest.setX(x_origin);
-    else {
+    else
+    {
         dest.setX(x_origin - column * buttonWidth + buttonHeight);
     }
     ComponentAnimator& animator = Desktop::getInstance().getAnimator();
-    if (animator.isAnimating(this)) {
+    if (animator.isAnimating(this))
+    {
         animator.cancelAnimation(this, false);
     }
     animator.animateComponent(this, dest, 1, 100, false, 1, 1);
 }
 
-void AppMenuComponent::addButton(AppMenuButton::Ptr appButton) {
+void AppMenuComponent::addButton(AppMenuButton::Ptr appButton)
+{
     String name = appButton->getAppName();
-    if (buttonNameMap[name] == nullptr) {
+    if (buttonNameMap[name] == nullptr)
+    {
         buttonNameMap[name] = appButton;
     }
     int index = appButton->getIndex();
@@ -298,55 +353,87 @@ void AppMenuComponent::addButton(AppMenuButton::Ptr appButton) {
     appButton->setVisible(true);
     appButton->addListener(this);
     this->buttonColumns[column].push_back(appButton);
-    if ((x + buttonWidth) > getWidth()) {
+    if ((x + buttonWidth) > getWidth())
+    {
         setBounds(getX(), getY(), x + buttonWidth, getHeight());
     }
-    if ((y + buttonHeight) > getHeight()) {
+    if ((y + buttonHeight) > getHeight())
+    {
         setBounds(getX(), getY(), getWidth(), y + buttonHeight);
     }
 }
 
 //################## Application Launching #################################
+
 /**
  * @return true if currently waiting on an application to launch.
  */
-bool AppMenuComponent::waitingOnLaunch(){
+bool AppMenuComponent::waitingOnLaunch()
+{
     return launchSpinner->isShowing();
 }
+
 /**
  * Makes the menu stop waiting on an application to launch, re-enabling
  * user input.
  */
-void AppMenuComponent::stopWaitingOnLaunch(){
+void AppMenuComponent::stopWaitingOnLaunch()
+{
     hideLaunchSpinner();
     launchTimer.stopTimer();
 }
 
 AppMenuComponent::AppLaunchTimer::AppLaunchTimer(AppMenuComponent* appMenu) :
-appMenu(appMenu) {
+appMenu(appMenu)
+{
 }
 
-AppMenuComponent::AppLaunchTimer::~AppLaunchTimer() {
+AppMenuComponent::AppLaunchTimer::~AppLaunchTimer()
+{
     appMenu = nullptr;
     trackedProcess = nullptr;
     stopTimer();
 }
 
-void AppMenuComponent::AppLaunchTimer::setTrackedProcess(ChildProcess * trackedProcess) {
+void AppMenuComponent::AppLaunchTimer::setTrackedProcess(ChildProcess * trackedProcess)
+{
     this->trackedProcess = trackedProcess;
 }
 
-void AppMenuComponent::AppLaunchTimer::stopTimer() {
+void AppMenuComponent::AppLaunchTimer::stopTimer()
+{
     trackedProcess = nullptr;
     ((Timer*)this)->stopTimer();
 }
 
-void AppMenuComponent::AppLaunchTimer::timerCallback() {
-    if (appMenu != nullptr) {
-        if (trackedProcess != nullptr && trackedProcess->isRunning()) {
-            //if the process is still going, wait longer for it to take over
-            //if not, stop waiting on it
-            return;
+void AppMenuComponent::AppLaunchTimer::timerCallback()
+{
+    DBG("timer callback");
+    if (appMenu != nullptr)
+    {
+        if (trackedProcess != nullptr)
+        {
+            DBG("tracked process is null");
+            if (trackedProcess->isRunning())
+            {
+                //if the process is still going, wait longer for it to take over
+                //if not, stop waiting on it
+                return;
+            } else
+            {
+                DBG("process dies, show message");
+                String output = trackedProcess->readAllProcessOutput();
+                std::vector<String> lines = split(output,"\n");
+                output="";
+                for(int i =lines.size()-1;
+                        i>lines.size()-6 && i>=0;i--){
+                    output=lines[i]+String("\n")+output;
+                }
+                AlertWindow::showMessageBoxAsync
+                        (AlertWindow::AlertIconType::WarningIcon,
+                        "Couldn't open application",output);
+                trackedProcess=nullptr;
+            }
         }
         appMenu->hideLaunchSpinner();
     }
@@ -354,19 +441,22 @@ void AppMenuComponent::AppLaunchTimer::timerCallback() {
 
 }
 
-void AppMenuComponent::startApp(AppMenuButton::Ptr appButton) {
+void AppMenuComponent::startApp(AppMenuButton::Ptr appButton)
+{
 
     DBG("AppsPageComponent::startApp - " << appButton->getCommand());
     ChildProcess* launchApp = new ChildProcess();
     launchApp->start("xmodmap ${HOME}/.Xmodmap"); // Reload xmodmap to ensure it's running
 #if JUCE_DEBUG
     File launchLog("launchLog.txt");
-    if (!launchLog.existsAsFile()) {
+    if (!launchLog.existsAsFile())
+    {
         launchLog.create();
     }
     launchLog.appendText(appButton->getCommand() + String("\n"), false, false);
 #endif
-    if (launchApp->start(appButton->getCommand())) {
+    if (launchApp->start(appButton->getCommand()))
+    {
 
         runningApps.add(launchApp);
         runningAppsByButton.set(appButton, runningApps.indexOf(launchApp));
@@ -376,7 +466,8 @@ void AppMenuComponent::startApp(AppMenuButton::Ptr appButton) {
     }
 }
 
-void AppMenuComponent::focusApp(AppMenuButton::Ptr appButton, const String & windowId) {
+void AppMenuComponent::focusApp(AppMenuButton::Ptr appButton, const String & windowId)
+{
     DBG("AppsPageComponent::focusApp - " << appButton->getCommand());
     String focusShell = "echo 'focus_client_by_window_id(" + windowId + ")' | awesome-client";
     StringArray focusCmd{"sh", "-c", focusShell.toRawUTF8()};
@@ -384,8 +475,10 @@ void AppMenuComponent::focusApp(AppMenuButton::Ptr appButton, const String & win
     focusWindow.start(focusCmd);
 }
 
-String AppMenuComponent::getWindowId(AppMenuButton::Ptr appButton) {
-    std::function < String(String) > windowSearch = [this](String searchTerm)->String {
+String AppMenuComponent::getWindowId(AppMenuButton::Ptr appButton)
+{
+    std::function < String(String) > windowSearch = [this](String searchTerm)->String
+    {
         StringArray findCmd{"xdotool", "search", "--all", "--limit", "1", "--class", searchTerm.toRawUTF8()};
         DBG(String("Running command:") + findCmd.joinIntoString(" ", 0, -1));
         ChildProcess findWindow;
@@ -396,45 +489,57 @@ String AppMenuComponent::getWindowId(AppMenuButton::Ptr appButton) {
     };
     String result = windowSearch(appButton->getAppName());
     //if no result on the title, try the launch command
-    if (result.isEmpty()) {
+    if (result.isEmpty())
+    {
         result = windowSearch(appButton->getCommand().upToFirstOccurrenceOf(" ", false, true));
     }
     return result;
 }
 
-void AppMenuComponent::startOrFocusApp(AppMenuButton::Ptr appButton) {
-    if (waitingOnLaunch()) {
+void AppMenuComponent::startOrFocusApp(AppMenuButton::Ptr appButton)
+{
+    if (waitingOnLaunch())
+    {
         return;
     }
     DBG(String("Attempting to launch ") + appButton->getAppName());
     //before adding another process to the list, clean out any old dead ones,
     //so they don't start piling up
     std::vector<int>toRemove;
-    for (int i = 0; i < runningApps.size(); i++) {
-        if (runningApps[i] != nullptr && !runningApps[i]->isRunning()) {
+    for (int i = 0; i < runningApps.size(); i++)
+    {
+        if (runningApps[i] != nullptr && !runningApps[i]->isRunning())
+        {
             toRemove.push_back(i);
         }
     }
-    for (int index : toRemove) {
+    for (int index : toRemove)
+    {
         runningApps.remove(index, true);
         runningAppsByButton.removeValue(index);
     }
-    if (runningAppsByButton.contains(appButton)) {
+    if (runningAppsByButton.contains(appButton))
+    {
         int appId = runningAppsByButton[appButton];
-        if (runningApps[appId] != nullptr && runningApps[appId]->isRunning()) {
+        if (runningApps[appId] != nullptr && runningApps[appId]->isRunning())
+        {
             DBG("app is already running, attempting to find the window id");
             String windowId = getWindowId(appButton);
 
-            if (!windowId.isEmpty()) {
+            if (!windowId.isEmpty())
+            {
                 DBG(String("Found window ") + windowId + String(", focusing app"));
                 focusApp(appButton, windowId);
 
-            } else {
+            } else
+            {
                 DBG("Process exists, but has no window to focus. Leave it alone for now.");
             }
             return;
-        } else {
-            if (runningApps[appId] != nullptr) {
+        } else
+        {
+            if (runningApps[appId] != nullptr)
+            {
                 DBG("Old process is dead, we're good to launch");
             }
         }
@@ -442,18 +547,22 @@ void AppMenuComponent::startOrFocusApp(AppMenuButton::Ptr appButton) {
     startApp(appButton);
 }
 
-void AppMenuComponent::showLaunchSpinner() {
+void AppMenuComponent::showLaunchSpinner()
+{
     DBG("Show launch spinner");
     Component * parentPage = getParentComponent();
-    if (parentPage != nullptr) {
+    if (parentPage != nullptr)
+    {
         parentPage->addAndMakeVisible(launchSpinner);
     }
 }
 
-void AppMenuComponent::hideLaunchSpinner() {
+void AppMenuComponent::hideLaunchSpinner()
+{
     DBG("Hide launch spinner");
     Component * parentPage = getParentComponent();
-    if (parentPage != nullptr) {
+    if (parentPage != nullptr)
+    {
         parentPage->removeChildComponent(launchSpinner);
     }
 }

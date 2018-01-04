@@ -7,7 +7,7 @@
 #include "Utils.h"
 #include "MainComponent.h"
 
-MainContentComponent::MainContentComponent() {
+MainContentComponent::MainContentComponent(){
     lookAndFeel = new PokeLookAndFeel();
     setLookAndFeel(lookAndFeel);
     setWantsKeyboardFocus(false);
