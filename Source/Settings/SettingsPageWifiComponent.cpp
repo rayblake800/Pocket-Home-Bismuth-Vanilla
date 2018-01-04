@@ -259,11 +259,12 @@ void SettingsPageWifiComponent::handleWifiDisabled()
     DBG("SettingsPageWifiComponent::wifiDisabled");
 
     enableWifiActions();
-
+    PageStackComponent& mainStack = PocketHomeApplication::getInstance()
+            ->getMainStack();
     // if wifi is disabled while we're on this page, pop back to previous page.
-    if (getMainStack().getCurrentPage() == this)
+    if (mainStack.getCurrentPage() == this)
     {
-        getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
+        mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontal);
         // make sure we leave access list page as entry page.
         pageStack->clear(PageStackComponent::kTransitionNone);
         pageStack->pushPage(accessPointListPage, PageStackComponent::kTransitionNone);
@@ -297,10 +298,11 @@ void SettingsPageWifiComponent::handleWifiConnected()
     }
 
     // pop back to previous page if we're focused
-    if (getMainStack().getCurrentPage() == this)
+    PageStackComponent& mainStack = PocketHomeApplication::getInstance()
+            ->getMainStack();
+    if (mainStack.getCurrentPage() == this)
     {
-        getMainStack().popPage
-                (PageStackComponent::kTransitionTranslateHorizontal);
+        mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontal);
     }
 }
 
@@ -432,7 +434,7 @@ void SettingsPageWifiComponent::updateConnectionLabelAndButton()
         buttonText = "...";
     }
 
-    connectionLabel->setText(ssidText, 
+    connectionLabel->setText(ssidText,
             juce::NotificationType::dontSendNotification);
     connectionButton->setButtonText(buttonText);
 }
@@ -447,11 +449,11 @@ void SettingsPageWifiComponent::createAccessPointList()
     accessPointList = new Grid(1, 4);
 
     accessPoints = PocketHomeApplication::getInstance()
-    ->getWifiStatus().nearbyAccessPoints();
+            ->getWifiStatus().nearbyAccessPoints();
     for (auto ap : accessPoints)
     {
-        DBG(__func__ << ": added " << ap->ssid << ", " 
-                << ap->signalStrength << ", "<< ap->requiresAuth);
+        DBG(__func__ << ": added " << ap->ssid << ", "
+                << ap->signalStrength << ", " << ap->requiresAuth);
         auto item = new WifiAccessPointListItem(ap, icons);
         item->addListener(this);
         accessPointItems.add(item);
@@ -559,7 +561,8 @@ void SettingsPageWifiComponent::buttonClicked(Button *button)
                 // leave wifi settings page
             } else
             {
-                getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
+                PocketHomeApplication::getInstance()->getMainStack().popPage
+                        (PageStackComponent::kTransitionTranslateHorizontal);
             }
         }
     }

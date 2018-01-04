@@ -130,8 +130,9 @@ void SettingsPageLogin::loadPassword()
         File passwordFile(getHomePath() + String("/.pocket-home/.passwd"));
         if (!passwordFile.existsAsFile())
         {
-            Result makeFile=passwordFile.create();
-            if(makeFile.failed()){
+            Result makeFile = passwordFile.create();
+            if (makeFile.failed())
+            {
                 DBG("Failed to create password file!");
                 return;
             }
@@ -144,7 +145,6 @@ bool SettingsPageLogin::isPasswordCorrect(const String& pass)
 {
     return !has_password || (pass == cur_hashed);
 }
-
 
 String SettingsPageLogin::hashString(const String& string)
 {
@@ -297,7 +297,8 @@ void SettingsPageLogin::buttonClicked(Button* button)
 {
     if (button == backButton)
     {
-        getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
+        PocketHomeApplication::getInstance()->getMainStack().popPage
+                (PageStackComponent::kTransitionTranslateHorizontal);
         clearAllFields();
     } else if (button == &apply)
     {

@@ -144,16 +144,18 @@ void SettingsPageComponent::resized()
 
 void SettingsPageComponent::buttonClicked(Button *button)
 {
+    PageStackComponent& mainStack = PocketHomeApplication::getInstance()
+            ->getMainStack();
     if (button == backButton)
     {
-        getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
+        mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontal);
     } else if (button == wifiCategoryItem->button)
     {
         wifiPage->updateAccessPoints();
-        getMainStack().pushPage(wifiPage, PageStackComponent::kTransitionTranslateHorizontal);
+        mainStack.pushPage(wifiPage, PageStackComponent::kTransitionTranslateHorizontal);
     } else if (button == advanced)
     {
-        getMainStack().pushPage(advancedPage, PageStackComponent::kTransitionTranslateHorizontal);
+        mainStack.pushPage(advancedPage, PageStackComponent::kTransitionTranslateHorizontal);
     }
 }
 

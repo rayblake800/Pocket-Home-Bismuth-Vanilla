@@ -40,10 +40,12 @@ PageStackComponent& PocketHomeApplication::getMainStack()
 }
 
 WifiStatus& PocketHomeApplication::getWifiStatus(){
-    
+    return *wifiStatus;
 }
 
-BluetoothStatus& getBluetoothStatus();
+BluetoothStatus& PocketHomeApplication::getBluetoothStatus(){
+    return bluetoothStatus;
+}
 
 const String PocketHomeApplication::getApplicationName()
 {

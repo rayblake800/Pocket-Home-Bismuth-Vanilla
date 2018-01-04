@@ -112,21 +112,23 @@ AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,
 }
 
 void AdvancedSettingsPage::buttonClicked(Button* button){
+    PageStackComponent& mainStack = PocketHomeApplication::getInstance()
+            ->getMainStack();
   if (button == backButton)
-    getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
+    mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontal);
   else if(button == &addLogin){
     spl->switchToModify();
-    getMainStack().pushPage(spl, PageStackComponent::kTransitionTranslateHorizontal);
+    mainStack.pushPage(spl, PageStackComponent::kTransitionTranslateHorizontal);
   }
   else if(button == &removeLogin){
     if(spl->hasPassword()){
       spl->switchToRemove();
-      getMainStack().pushPage(spl, PageStackComponent::kTransitionTranslateHorizontal);
+      mainStack.pushPage(spl, PageStackComponent::kTransitionTranslateHorizontal);
     }
     else displayNoPassword();
   }
   else if(button == &personalizeButton)
-    getMainStack().pushPage(ppc, PageStackComponent::kTransitionTranslateHorizontal);
+    mainStack.pushPage(ppc, PageStackComponent::kTransitionTranslateHorizontal);
   else if(button == &(*nextarrow)){
     index += OPTPERPAGE;
     resized();
@@ -136,10 +138,10 @@ void AdvancedSettingsPage::buttonClicked(Button* button){
     resized();
   }
   else if(button == &inputoptions){
-    getMainStack().pushPage(inputsettings, PageStackComponent::kTransitionTranslateHorizontal);
+    mainStack.pushPage(inputsettings, PageStackComponent::kTransitionTranslateHorizontal);
   }
   else if(button == &dateandtime){
-    getMainStack().pushPage(datetime, PageStackComponent::kTransitionTranslateHorizontal);
+    mainStack.pushPage(datetime, PageStackComponent::kTransitionTranslateHorizontal);
   }
 }
 

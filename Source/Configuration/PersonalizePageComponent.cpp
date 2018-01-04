@@ -159,7 +159,8 @@ void PersonalizePageComponent::buttonClicked(Button* button)
 {
     if (button == backButton)
     {
-        getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontal);
+        PocketHomeApplication::getInstance()->getMainStack()
+                .popPage(PageStackComponent::kTransitionTranslateHorizontal);
         resetApplySuccess();
         updateComboBox();
     } else if (button == &apply)

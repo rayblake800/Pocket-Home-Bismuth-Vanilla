@@ -3562,6 +3562,8 @@
           </df>
         </df>
       </df>
+      <df name="PocketCHIP-pocket-home">
+      </df>
       <df name="Source">
         <df name="AppMenu Page">
           <df name="Info Components">
@@ -3666,6 +3668,108 @@
           <in>SettingsPageWifiComponent.h</in>
           <in>WifiCategoryItemComponent.cpp</in>
           <in>WifiCategoryItemComponent.h</in>
+        </df>
+        <df name="Source">
+          <df name="AppMenu Page">
+            <df name="Info Components">
+              <in>BatteryIcon.cpp</in>
+              <in>BatteryIcon.h</in>
+              <in>BatteryMonitor.cpp</in>
+              <in>BatteryMonitor.h</in>
+              <in>ClockMonitor.cpp</in>
+              <in>ClockMonitor.h</in>
+              <in>WifiIcon.cpp</in>
+              <in>WifiIcon.h</in>
+            </df>
+            <in>AppMenuButton.cpp</in>
+            <in>AppMenuButton.h</in>
+            <in>AppMenuComponent.cpp</in>
+            <in>AppMenuComponent.h</in>
+            <in>AppMenuPage.cpp</in>
+            <in>AppMenuPage.h</in>
+            <in>DesktopEntries.cpp</in>
+            <in>DesktopEntries.h</in>
+            <in>DesktopEntry.cpp</in>
+            <in>DesktopEntry.h</in>
+          </df>
+          <df name="Basic Components">
+            <in>Grid.cpp</in>
+            <in>Grid.h</in>
+            <in>IconSliderComponent.cpp</in>
+            <in>IconSliderComponent.h</in>
+            <in>MenuItem.cpp</in>
+            <in>MenuItem.h</in>
+            <in>OverlaySpinner.cpp</in>
+            <in>OverlaySpinner.h</in>
+            <in>SwitchComponent.cpp</in>
+            <in>SwitchComponent.h</in>
+            <in>VectorImageButton.cpp</in>
+            <in>VectorImageButton.h</in>
+          </df>
+          <df name="Configuration">
+            <in>ConfigFile.cpp</in>
+            <in>ConfigFile.h</in>
+            <in>ConfigurableComponent.cpp</in>
+            <in>ConfigurableComponent.h</in>
+            <in>DateTimePage.cpp</in>
+            <in>DateTimePage.h</in>
+            <in>PersonalizePageComponent.cpp</in>
+            <in>PersonalizePageComponent.h</in>
+          </df>
+          <df name="Power">
+            <in>PowerPageComponent.cpp</in>
+            <in>PowerPageComponent.h</in>
+            <in>PowerPageFelComponent.cpp</in>
+            <in>PowerPageFelComponent.h</in>
+          </df>
+          <df name="Settings">
+            <in>AdvancedSettingsPage.cpp</in>
+            <in>AdvancedSettingsPage.h</in>
+            <in>BluetoothCategoryItemComponent.cpp</in>
+            <in>BluetoothCategoryItemComponent.h</in>
+            <in>InputSettingsPage.cpp</in>
+            <in>InputSettingsPage.h</in>
+            <in>SettingsCategoryButton.cpp</in>
+            <in>SettingsCategoryButton.h</in>
+            <in>SettingsCategoryItemComponent.cpp</in>
+            <in>SettingsCategoryItemComponent.h</in>
+            <in>SettingsPageBluetoothComponent.cpp</in>
+            <in>SettingsPageBluetoothComponent.h</in>
+            <in>SettingsPageComponent.cpp</in>
+            <in>SettingsPageComponent.h</in>
+            <in>SettingsPageLogin.cpp</in>
+            <in>SettingsPageLogin.h</in>
+            <in>SettingsPageWifiComponent.cpp</in>
+            <in>SettingsPageWifiComponent.h</in>
+            <in>WifiCategoryItemComponent.cpp</in>
+            <in>WifiCategoryItemComponent.h</in>
+          </df>
+          <df name="Wifi">
+            <in>WifiStatus.cpp</in>
+            <in>WifiStatus.h</in>
+            <in>WifiStatusJson.cpp</in>
+            <in>WifiStatusJson.h</in>
+            <in>WifiStatusNM.cpp</in>
+            <in>WifiStatusNM.h</in>
+            <in>WifiTest.cpp</in>
+          </df>
+          <in>BluetoothStatus.cpp</in>
+          <in>BluetoothStatus.h</in>
+          <in>LauncherComponent.cpp</in>
+          <in>LauncherComponent.h</in>
+          <in>LoginPage.cpp</in>
+          <in>LoginPage.h</in>
+          <in>Main.cpp</in>
+          <in>MainComponent.cpp</in>
+          <in>MainComponent.h</in>
+          <in>PageStackComponent.cpp</in>
+          <in>PageStackComponent.h</in>
+          <in>PocketHomeApplication.cpp</in>
+          <in>PocketHomeApplication.h</in>
+          <in>PokeLookAndFeel.cpp</in>
+          <in>PokeLookAndFeel.h</in>
+          <in>Utils.cpp</in>
+          <in>Utils.h</in>
         </df>
         <df name="Wifi">
           <in>WifiStatus.cpp</in>

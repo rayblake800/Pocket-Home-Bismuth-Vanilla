@@ -107,7 +107,8 @@ PowerPageComponent::~PowerPageComponent() {}
 void PowerPageComponent::hideLockscreen(){
     removeChildComponent(lockscreen);
     //Let's go back to the homescreen
-    getMainStack().popPage(PageStackComponent::kTransitionNone);    
+    PocketHomeApplication::getInstance()
+    ->getMainStack().popPage(PageStackComponent::kTransitionNone);    
 }
 
 void PowerPageComponent::paint(Graphics &g) {
@@ -194,8 +195,9 @@ void PowerPageComponent::buttonStateChanged(Button *btn) {
 
 void PowerPageComponent::buttonClicked(Button *button) {
     ConfigFile * config = ConfigFile::getInstance();
+    PageStackComponent& mainStack = PocketHomeApplication::getInstance()->getMainStack();
   if (button == backButton) {
-    getMainStack().popPage(PageStackComponent::kTransitionTranslateHorizontalLeft);
+    mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontalLeft);
   } else if (button == powerOffButton) {
     showPowerSpinner();
     child.start(config->getConfigString(SHUTDOWN_COMMAND));
@@ -205,6 +207,6 @@ void PowerPageComponent::buttonClicked(Button *button) {
   } else if (button == sleepButton) {
     setSleep();
   } else if (button == felButton) {
-    getMainStack().pushPage(felPage, PageStackComponent::kTransitionTranslateHorizontalLeft);
+    mainStack.pushPage(felPage, PageStackComponent::kTransitionTranslateHorizontalLeft);
   }
 }

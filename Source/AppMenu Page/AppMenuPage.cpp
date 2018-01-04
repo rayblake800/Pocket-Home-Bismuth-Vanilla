@@ -129,13 +129,15 @@ void AppMenuPage::setClockAMPM(bool ampm)
 
 void AppMenuPage::buttonClicked(Button * button)
 {
+    PageStackComponent& pageStack = PocketHomeApplication::getInstance()
+            ->getMainStack();
     if (button == settingsButton)
     {
-        getMainStack().pushPage(&settingsPage, 
+        pageStack.pushPage(&settingsPage, 
                 PageStackComponent::kTransitionTranslateHorizontal);
     } else if (button == powerButton)
     {
-        getMainStack().pushPage(&powerPage, 
+        pageStack.pushPage(&powerPage, 
                 PageStackComponent::kTransitionTranslateHorizontalLeft);
     }
 }
