@@ -23,7 +23,7 @@
 snd_pcm_t *g_alsa_playback_handle = 0;
 #endif
 
-PocketHomeApplication::PocketHomeApplication()
+PocketHomeApplication::PocketHomeApplication() :configFile("config.json")
 {
 }
 
@@ -45,6 +45,10 @@ WifiStatus& PocketHomeApplication::getWifiStatus(){
 
 BluetoothStatus& PocketHomeApplication::getBluetoothStatus(){
     return bluetoothStatus;
+}
+
+ConfigFile& PocketHomeApplication::getConfig(){
+    return configFile;
 }
 
 const String PocketHomeApplication::getApplicationName()

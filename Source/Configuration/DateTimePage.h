@@ -1,6 +1,8 @@
 #ifndef DATETIME_H
 #define DATETIME_H
 
+#include "../../JuceLibraryCode/JuceHeader.h"
+
 class DateTimePage : public Component, public Button::Listener, private ComboBox::Listener{
 public:
   DateTimePage();

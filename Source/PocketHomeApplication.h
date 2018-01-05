@@ -11,6 +11,7 @@
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainComponent.h"
+#include "Configuration/ConfigFile.h"
 #include "Wifi/WifiStatus.h"
 #include "BluetoothStatus.h"
 #include "Utils.h"
@@ -30,9 +31,12 @@ public:
     WifiStatus& getWifiStatus();
     
     BluetoothStatus& getBluetoothStatus();
+    
+    ConfigFile& getConfig();
 
 private:
     bool initAudio();
+    ConfigFile configFile;
 #ifdef LINUX
     WifiStatusNM wifiStatusNM;
 #else

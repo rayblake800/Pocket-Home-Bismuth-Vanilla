@@ -10,7 +10,7 @@
 
 #include "../PokeLookAndFeel.h"
 #include "../Utils.h"
-#include "../Configuration/ConfigFile.h"
+#include "../PocketHomeApplication.h"
 #include "AppMenuButton.h"
 
 AppMenuButton::AppMenuButton(DesktopEntry desktopEntry, int index, int column)
@@ -19,9 +19,9 @@ AppMenuButton::AppMenuButton(DesktopEntry desktopEntry, int index, int column)
         index(index), 
         column(column){
     //setName(desktopEntry.getName());
-    ConfigFile * configFile = ConfigFile::getInstance();
+    ConfigFile& configFile = PocketHomeApplication::getInstance()->getConfig();
     ConfigFile::ComponentSettings buttonSettings =
-            configFile->getComponentSettings(APP_MENU_BUTTON);
+            configFile.getComponentSettings(APP_MENU_BUTTON);
     buttonSettings.applySize(this);
     std::vector<Colour> colours=buttonSettings.getColours();
     if (colours.size() >= 2) {
@@ -54,10 +54,10 @@ String AppMenuButton::getAppName() {
 }
 
 String AppMenuButton::getCommand() {
-    ConfigFile * config = ConfigFile::getInstance();
+    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     String command = desktopEntry.getExec();
     if (desktopEntry.terminal()){
-        command = config->getConfigString(TERMINAL_LAUNCH_COMMAND) + command;
+        command = config.getConfigString(TERMINAL_LAUNCH_COMMAND) + command;
     }
     return command;
 }
@@ -84,9 +84,9 @@ int AppMenuButton::getColumn() {
   }
 
 Rectangle<int> AppMenuButton::getButtonSize(){
-    ConfigFile * config = ConfigFile::getInstance();
+    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     ConfigFile::ComponentSettings buttonConf= 
-            config->getComponentSettings(APP_MENU_BUTTON);
+            config.getComponentSettings(APP_MENU_BUTTON);
     return buttonConf.getBounds().withPosition(0,0);
 }
 

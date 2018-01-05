@@ -10,13 +10,12 @@
 
 #include "../PokeLookAndFeel.h"
 #include "../Utils.h"
-#include "../Configuration/ConfigFile.h"
 #include "../PocketHomeApplication.h"
 #include "AppMenuPage.h"
 
 AppMenuPage::AppMenuPage()
 {
-    ConfigFile * config = ConfigFile::getInstance();
+    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     setWantsKeyboardFocus(true);
     setExplicitFocusOrder(1);
 
@@ -24,7 +23,7 @@ AppMenuPage::AppMenuPage()
     addAndMakeVisible(appMenu);
 
     ConfigFile::ComponentSettings frameSettings =
-            config->getComponentSettings(MENU_FRAME);
+            config.getComponentSettings(MENU_FRAME);
     std::vector<String> assets = frameSettings.getAssetFiles();
     if (!assets.empty())
     {
@@ -45,9 +44,9 @@ AppMenuPage::AppMenuPage()
         addAndMakeVisible(frame);
     }
     std::function<void(Label*, ComponentType) > positionLabel =
-            [this, config](Label * label, ComponentType type)
+            [this, &config](Label * label, ComponentType type)
             {
-                config->getComponentSettings(type).applyBounds(label);
+                config.getComponentSettings(type).applyBounds(label);
                 label->setFont(Font(label->getHeight()));
                 label->setWantsKeyboardFocus(false);
                 addAndMakeVisible(label);
@@ -55,11 +54,11 @@ AppMenuPage::AppMenuPage()
     /* Setting the clock */
     positionLabel(&(clock.getLabel()), CLOCK);
     clock.getLabel().setJustificationType(Justification::centredRight);
-    String formatclock = config->getConfigString(TIME_FORMAT);
-    setClockVisible(config->getConfigBool(SHOW_CLOCK));
+    String formatclock = config.getConfigString(TIME_FORMAT);
+    setClockVisible(config.getConfigBool(SHOW_CLOCK));
     setClockAMPM(formatclock == "ampm");
 
-    String value = config->getConfigString(BACKGROUND);
+    String value = config.getConfigString(BACKGROUND);
 
     bgColor = Colour(0x4D4D4D);
     if (value.length() == 6 && value.containsOnly("0123456789ABCDEF"))
@@ -71,10 +70,10 @@ AppMenuPage::AppMenuPage()
     addAndMakeVisible(batteryIcon);
     addAndMakeVisible(wifiIcon);
 
-    powerButton = new VectorImageButton(config->getComponentSettings(POWER), 
+    powerButton = new VectorImageButton(config.getComponentSettings(POWER), 
             "Power");
     settingsButton = 
-            new VectorImageButton(config->getComponentSettings(SETTINGS), 
+            new VectorImageButton(config.getComponentSettings(SETTINGS), 
             "Settings");
     powerButton->addListener(this);
     settingsButton->addListener(this);
@@ -193,11 +192,11 @@ void AppMenuPage::visibilityChanged()
 
 void AppMenuPage::resized()
 {
-    ConfigFile * config = ConfigFile::getInstance();
+    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     ConfigFile::ComponentSettings frameSettings =
-            config->getComponentSettings(MENU_FRAME);
+            config.getComponentSettings(MENU_FRAME);
     ConfigFile::ComponentSettings menuSettings =
-            config->getComponentSettings(APP_MENU);
+            config.getComponentSettings(APP_MENU);
     menuSettings.applyBounds(appMenu);
     if (frame != nullptr)
     {
@@ -205,12 +204,12 @@ void AppMenuPage::resized()
         frame->setTransformToFit(frame->getBounds().toFloat(),
                 RectanglePlacement::stretchToFit);
     }
-    config->getComponentSettings(BATTERY).applyBounds(batteryIcon);
-    config->getComponentSettings(WIFI).applyBounds(wifiIcon);
-    config->getComponentSettings(POWER).applyBounds(powerButton);
-    config->getComponentSettings(SETTINGS).applyBounds(settingsButton);
+    config.getComponentSettings(BATTERY).applyBounds(batteryIcon);
+    config.getComponentSettings(WIFI).applyBounds(wifiIcon);
+    config.getComponentSettings(POWER).applyBounds(powerButton);
+    config.getComponentSettings(SETTINGS).applyBounds(settingsButton);
     Label * clockLabel = &(clock.getLabel());
-    config->getComponentSettings(CLOCK).applyBounds(clockLabel);
+    config.getComponentSettings(CLOCK).applyBounds(clockLabel);
     Font labelFont = clockLabel->getFont();
     labelFont.setHeight(clockLabel->getHeight());
     clockLabel->setFont(labelFont);

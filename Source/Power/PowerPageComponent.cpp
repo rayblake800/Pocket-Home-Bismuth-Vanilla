@@ -1,6 +1,5 @@
 
 #include <numeric>
-#include "../Configuration/ConfigFile.h"
 #include "../Utils.h"
 #include "../PocketHomeApplication.h"
 #include "../LoginPage.h"
@@ -194,16 +193,17 @@ void PowerPageComponent::buttonStateChanged(Button *btn) {
 }
 
 void PowerPageComponent::buttonClicked(Button *button) {
-    ConfigFile * config = ConfigFile::getInstance();
-    PageStackComponent& mainStack = PocketHomeApplication::getInstance()->getMainStack();
+    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    PageStackComponent& mainStack = PocketHomeApplication::getInstance()
+            ->getMainStack();
   if (button == backButton) {
     mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontalLeft);
   } else if (button == powerOffButton) {
     showPowerSpinner();
-    child.start(config->getConfigString(SHUTDOWN_COMMAND));
+    child.start(config.getConfigString(SHUTDOWN_COMMAND));
   } else if (button == rebootButton) {
     showPowerSpinner();
-    child.start(config->getConfigString(RESTART_COMMAND));
+    child.start(config.getConfigString(RESTART_COMMAND));
   } else if (button == sleepButton) {
     setSleep();
   } else if (button == felButton) {

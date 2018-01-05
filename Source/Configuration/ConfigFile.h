@@ -19,7 +19,7 @@ enum ConfigString {
     BACKGROUND, //Background image or color
     SHUTDOWN_COMMAND,
     RESTART_COMMAND,
-    TIME_FORMAT,//ampm or 24h
+    TIME_FORMAT, //ampm or 24h
     TERMINAL_LAUNCH_COMMAND
 };
 
@@ -46,13 +46,22 @@ enum ComponentType {
     SETTINGS
 };
 
-class ConfigFile{
+class ConfigFile {
 public:
-    virtual ~ConfigFile();
+
     /**
-     * @return the single ConfigFile access objects
+     * Reads in all data from ~/.pocket-home/configFilename, copying any
+     * missing data from the default file, which should exist at 
+     * /usr/share/pocket-home/configFilename
+     * If a marshmallow pocket-home config.json file is found, it will be backed
+     * up to .pocket-home/marshmallowConfig.json
+     * 
+     * Having more than one ConfigFile object tied to the same file should be
+     * avoided.
      */
-    static ConfigFile* getInstance();
+    ConfigFile(String configFilename);
+    
+    virtual ~ConfigFile();
 
     //######################### String Data ####################################
 
@@ -147,6 +156,7 @@ public:
      */
     class ComponentSettings {
     public:
+
         /**
          * Initializes the object with all empty/zero values
          */
@@ -203,19 +213,13 @@ public:
 
 
 private:
-    /**
-     * Reads in all data from the config value, copying any missing values
-     * from the default config.json in assets.
-     * If a marshmallow pocket-home config.json file is found, it will be backed
-     * up to .pocket-home/marshmallowConfig.json
-     */
-    ConfigFile();
 
     /**
      * Re-writes all data back to the config file.
      */
     void writeChanges();
 
+    String filename;
     std::map<String, String> stringValues;
     std::map<String, bool> boolValues;
     std::vector<AppItem> favoriteApps;
@@ -224,7 +228,7 @@ private:
     CriticalSection lock;
 
     //constants and default values: 
-    static constexpr const char* CONFIG_PATH = "/.pocket-home/config.json";
+    static constexpr const char* CONFIG_PATH = "/.pocket-home/";
     static constexpr const char* FAVORITES_KEY = "favorites";
     static constexpr const char* FOLDERS_KEY = "folders";
 

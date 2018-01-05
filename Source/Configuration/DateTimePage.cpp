@@ -1,6 +1,5 @@
-#include "ConfigFile.h"
-#include "DateTimePage.h"
 #include "../PocketHomeApplication.h"
+#include "DateTimePage.h"
 
 DateTimePage::DateTimePage() :
 bg_color(0xffd23c6d),
@@ -22,8 +21,8 @@ datemode("datemode", "Select the display mode for the clock:")
     choosemode.addListener(this);
 
     //Let's check whether there is an option for time format in the config
-    ConfigFile * config = ConfigFile::getInstance();
-    if (config->getConfigString(TIME_FORMAT) == "ampm")
+    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    if (config.getConfigString(TIME_FORMAT) == "ampm")
         choosemode.setSelectedId(2);
     else choosemode.setSelectedId(1);
 
@@ -56,9 +55,9 @@ void DateTimePage::buttonClicked(Button* but)
 void DateTimePage::comboBoxChanged(ComboBox* c)
 {
     if (c != &choosemode) return;
-    ConfigFile * config = ConfigFile::getInstance();
+    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     bool useAMPM = (c->getSelectedId() == 2);
-    config->setConfigString(TIME_FORMAT, useAMPM ? "ampm" : "24h");
+    config.setConfigString(TIME_FORMAT, useAMPM ? "ampm" : "24h");
 }
 
 void DateTimePage::paint(Graphics& g)

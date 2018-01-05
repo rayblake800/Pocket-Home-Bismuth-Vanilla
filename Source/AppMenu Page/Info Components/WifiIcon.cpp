@@ -13,8 +13,8 @@
 #include "../../PocketHomeApplication.h"
 
 WifiIcon::WifiIcon() :
-VectorImageButton(ConfigFile::getInstance()->
-getComponentSettings(WIFI), "Wifi")
+VectorImageButton(PocketHomeApplication::getInstance()->getConfig()
+.getComponentSettings(WIFI), "Wifi")
 {
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);

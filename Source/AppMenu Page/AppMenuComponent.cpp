@@ -6,20 +6,21 @@
 
 
 #include <set>
+#include "../PocketHomeApplication.h"
 #include "AppMenuComponent.h"
 
 AppMenuComponent::AppMenuComponent() : launchTimer(this)
 {
 
-    ConfigFile * configFile = ConfigFile::getInstance();
+    ConfigFile& configFile = PocketHomeApplication::getInstance()->getConfig();
     Rectangle<int> screenSize = getWindowSize();
-    ConfigFile::ComponentSettings menuSettings = configFile->getComponentSettings(APP_MENU);
+    ConfigFile::ComponentSettings menuSettings = configFile.getComponentSettings(APP_MENU);
     Rectangle<int>bounds = menuSettings.getBounds();
     x_origin = bounds.getX();
     y_origin = bounds.getY();
 
     ConfigFile::ComponentSettings buttonSettings =
-            configFile->getComponentSettings(APP_MENU_BUTTON);
+            configFile.getComponentSettings(APP_MENU_BUTTON);
     Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
     buttonWidth = buttonSize.getWidth();
     buttonHeight = buttonSize.getHeight();
@@ -31,7 +32,7 @@ AppMenuComponent::AppMenuComponent() : launchTimer(this)
     buttonColumns.emplace(buttonColumns.begin());
 
     //read in main page apps from config
-    std::vector<ConfigFile::AppItem> favorites = configFile->getFavorites();
+    std::vector<ConfigFile::AppItem> favorites = configFile.getFavorites();
     for (const ConfigFile::AppItem& favorite : favorites)
     {
         DBG(String("AppMenu:Found app in config:") + favorite.name);
@@ -40,7 +41,7 @@ AppMenuComponent::AppMenuComponent() : launchTimer(this)
     }
 
     //add category buttons
-    std::vector<ConfigFile::AppFolder> categories = configFile->getFolders();
+    std::vector<ConfigFile::AppFolder> categories = configFile.getFolders();
     for (const ConfigFile::AppFolder& category : categories)
     {
         addButton(new AppMenuButton(DesktopEntry(category),
@@ -62,10 +63,10 @@ AppMenuComponent::~AppMenuComponent()
  */
 void AppMenuComponent::openFolder(std::vector<String> categoryNames)
 {
-    ConfigFile * config = ConfigFile::getInstance();
+    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     int folderIndex = selected[activeColumn()]->getIndex() -
-            config->getFavorites().size();
-    ConfigFile::AppFolder selectedFolder = config->getFolders()[folderIndex];
+            config.getFavorites().size();
+    ConfigFile::AppFolder selectedFolder = config.getFolders()[folderIndex];
     std::set<DesktopEntry> folderItems =
             desktopEntries.getCategoryListEntries(categoryNames);
     if (folderItems.empty() && selectedFolder.pinnedApps.empty())return;
@@ -182,8 +183,9 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked)
 void AppMenuComponent::resized()
 {
     launchSpinner->setBounds(getWindowSize());
-    ConfigFile * config = ConfigFile::getInstance();
-    ConfigFile::ComponentSettings menuSettings = config->getComponentSettings(APP_MENU);
+    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    ConfigFile::ComponentSettings menuSettings = 
+            config.getComponentSettings(APP_MENU);
     Rectangle<int> menuBounds = menuSettings.getBounds();
     x_origin = menuBounds.getX();
     y_origin = menuBounds.getY();
@@ -240,7 +242,6 @@ void AppMenuComponent::selectIndex(int index)
         return;
     }
     int column = activeColumn();
-    //DBG(String("AppMenuComponent: selecting column ") + String(column) + String(" index ") + String(index));
     if (index >= buttonColumns[column].size()
             || index < 0
             || selected[column] == buttonColumns[column][index])return;
