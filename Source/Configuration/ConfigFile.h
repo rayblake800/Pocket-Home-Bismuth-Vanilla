@@ -19,7 +19,8 @@ enum ConfigString {
     BACKGROUND, //Background image or color
     SHUTDOWN_COMMAND,
     RESTART_COMMAND,
-    TIME_FORMAT//ampm or 24h
+    TIME_FORMAT,//ampm or 24h
+    TERMINAL_LAUNCH_COMMAND
 };
 
 /**
@@ -252,6 +253,7 @@ private:
         keymap[SHUTDOWN_COMMAND] = "shutdown command";
         keymap[RESTART_COMMAND] = "restart command";
         keymap[TIME_FORMAT] = "timeformat";
+        keymap[TERMINAL_LAUNCH_COMMAND] = "terminal launch command";
         return keymap;
     }
     static const std::map<ConfigString, String> stringKeys;

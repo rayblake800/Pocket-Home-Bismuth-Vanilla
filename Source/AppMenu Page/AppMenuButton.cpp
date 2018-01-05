@@ -54,14 +54,10 @@ String AppMenuButton::getAppName() {
 }
 
 String AppMenuButton::getCommand() {
+    ConfigFile * config = ConfigFile::getInstance();
     String command = desktopEntry.getExec();
     if (desktopEntry.terminal()){
-        String term=std::getenv("TERM");
-        DBG(String("Term is")+term);
-        if(term.isEmpty()){
-          term="urxvt";
-        } 
-        command = String(std::getenv("TERM")) + String(" -e ") + command;
+        command = config->getConfigString(TERMINAL_LAUNCH_COMMAND) + command;
     }
     return command;
 }
