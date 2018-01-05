@@ -22,9 +22,7 @@ public:
   void handleMainWindowInactive();
 
 private:
-  AppMenuPage appMenuPage;
-  SettingsPageComponent settingsPage;
-  PowerPageComponent powerPage;
+  ScopedPointer<AppMenuPage> appMenuPage;
   ScopedPointer<LookAndFeel> lookAndFeel;
   ScopedPointer<PageStackComponent> pageStack;
   ScopedPointer<LoginPage> loginPage;

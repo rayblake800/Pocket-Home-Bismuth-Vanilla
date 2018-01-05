@@ -17,7 +17,7 @@ MainContentComponent::MainContentComponent(){
         loggedIn();
     });
     LookAndFeel::setDefaultLookAndFeel(lookAndFeel);
-
+    appMenuPage=new AppMenuPage();
     pageStack = new PageStackComponent();
 
     if (loginPage->hasPassword()) {
@@ -26,7 +26,7 @@ MainContentComponent::MainContentComponent(){
     } else {
         addAndMakeVisible(pageStack);
     }
-    pageStack->pushPage(&appMenuPage, PageStackComponent::kTransitionNone);
+    pageStack->pushPage(appMenuPage, PageStackComponent::kTransitionNone);
     setSize(480, 272);
     repaint();
 }
@@ -58,6 +58,6 @@ void MainContentComponent::resized() {
 }
 
 void MainContentComponent::handleMainWindowInactive() {
-    appMenuPage.stopWaitingOnLaunch();
+    appMenuPage->stopWaitingOnLaunch();
 }
 

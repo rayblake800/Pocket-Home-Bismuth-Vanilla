@@ -20,7 +20,8 @@ AppMenuPage::AppMenuPage()
     setWantsKeyboardFocus(true);
     setExplicitFocusOrder(1);
 
-    addAndMakeVisible(&appMenu);
+    appMenu=new AppMenuComponent();
+    addAndMakeVisible(appMenu);
 
     ConfigFile::ComponentSettings frameSettings =
             config->getComponentSettings(MENU_FRAME);
@@ -79,15 +80,22 @@ AppMenuPage::AppMenuPage()
     settingsButton->addListener(this);
     addAndMakeVisible(powerButton);
     addAndMakeVisible(settingsButton);
+    
+    powerPage=new PowerPageComponent();
+    settingsPage=new SettingsPageComponent();
 }
 
 AppMenuPage::~AppMenuPage()
 {
+    if(clock.isThreadRunning())
+    {
+        clock.stopThread(1000);
+    }
 }
 
 void AppMenuPage::stopWaitingOnLaunch()
 {
-    appMenu.stopWaitingOnLaunch();
+    appMenu->stopWaitingOnLaunch();
 }
 
 void AppMenuPage::setColorBackground(const String& str)
@@ -138,11 +146,11 @@ void AppMenuPage::buttonClicked(Button * button)
             ->getMainStack();
     if (button == settingsButton)
     {
-        pageStack.pushPage(&settingsPage, 
+        pageStack.pushPage(settingsPage, 
                 PageStackComponent::kTransitionTranslateHorizontal);
     } else if (button == powerButton)
     {
-        pageStack.pushPage(&powerPage, 
+        pageStack.pushPage(powerPage, 
                 PageStackComponent::kTransitionTranslateHorizontalLeft);
     }
 }
@@ -150,18 +158,18 @@ void AppMenuPage::buttonClicked(Button * button)
 bool AppMenuPage::keyPressed(const KeyPress& key)
 {
     //don't interrupt animation
-    if (Desktop::getInstance().getAnimator().isAnimating(&appMenu))return false;
+    if (Desktop::getInstance().getAnimator().isAnimating(appMenu))return false;
     int keyCode = key.getKeyCode();
     if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
     {
-        if (keyCode == KeyPress::upKey)appMenu.selectPrevious();
-        else appMenu.selectNext();
+        if (keyCode == KeyPress::upKey)appMenu->selectPrevious();
+        else appMenu->selectNext();
         return true;
     } else if (keyCode == KeyPress::leftKey || keyCode == KeyPress::escapeKey)
     {
-        if (appMenu.activeColumn() > 0)
+        if (appMenu->activeColumn() > 0)
         {
-            appMenu.closeFolder();
+            appMenu->closeFolder();
         }
         return true;
     } else if (keyCode == KeyPress::returnKey ||
@@ -169,7 +177,7 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
             keyCode == KeyPress::rightKey)
     {
         DBG("AppMenuPage:click selected key");
-        appMenu.clickSelected();
+        appMenu->clickSelected();
         return true;
     }
     return false;
@@ -190,7 +198,7 @@ void AppMenuPage::resized()
             config->getComponentSettings(MENU_FRAME);
     ConfigFile::ComponentSettings menuSettings =
             config->getComponentSettings(APP_MENU);
-    menuSettings.applyBounds(&appMenu);
+    menuSettings.applyBounds(appMenu);
     if (frame != nullptr)
     {
         frameSettings.applyBounds(frame);

@@ -57,15 +57,19 @@ volumeSliderTimer(this)
         volume = newVol.getIntValue();
     }
 #endif
-    screenBrightnessSlider = new IconSliderComponent
-            (Drawable::createFromImageFile(assetFile("brightnessIconLo.png")),
-            Drawable::createFromImageFile(assetFile("brightnessIconHi.png")));
+    ScopedPointer<Drawable> brightLow=Drawable::createFromImageFile
+            (assetFile("brightnessIconLo.png"));
+    ScopedPointer<Drawable> brightHigh=Drawable::createFromImageFile
+            (assetFile("brightnessIconHi.png"));
+    screenBrightnessSlider = new IconSliderComponent(brightLow,brightHigh);
     screenBrightnessSlider->addListener(this);
     screenBrightnessSlider->setValue(1 + (brightness - 0.09)*10);
 
-    volumeSlider = new IconSliderComponent
-            (Drawable::createFromImageFile(assetFile("volumeIconLo.png")),
-            Drawable::createFromImageFile(assetFile("volumeIconHi.png")));
+    ScopedPointer<Drawable> volLow=Drawable::createFromImageFile
+            (assetFile("volumeIconLo.png"));
+    ScopedPointer<Drawable> volHigh=Drawable::createFromImageFile
+            (assetFile("volumeIconHi.png"));
+    volumeSlider = new IconSliderComponent(volLow,volHigh);
     volumeSlider->addListener(this);
     volumeSlider->setValue(volume);
 

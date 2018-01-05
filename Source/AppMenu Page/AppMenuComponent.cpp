@@ -423,16 +423,17 @@ void AppMenuComponent::AppLaunchTimer::timerCallback()
             {
                 DBG("process dies, show message");
                 String output = trackedProcess->readAllProcessOutput();
-                std::vector<String> lines = split(output,"\n");
-                output="";
-                for(int i =lines.size()-1;
-                        i>lines.size()-6 && i>=0;i--){
-                    output=lines[i]+String("\n")+output;
+                std::vector<String> lines = split(output, "\n");
+                output = "";
+                for (int i = lines.size() - 1;
+                        i > lines.size() - 6 && i >= 0; i--)
+                {
+                    output = lines[i] + String("\n") + output;
                 }
                 AlertWindow::showMessageBoxAsync
                         (AlertWindow::AlertIconType::WarningIcon,
-                        "Couldn't open application",output);
-                trackedProcess=nullptr;
+                        "Couldn't open application", output);
+                trackedProcess = nullptr;
             }
         }
         appMenu->hideLaunchSpinner();
@@ -443,8 +444,18 @@ void AppMenuComponent::AppLaunchTimer::timerCallback()
 
 void AppMenuComponent::startApp(AppMenuButton::Ptr appButton)
 {
+    String command = appButton->getCommand();
+    DBG("AppsPageComponent::startApp - " << command);
+    String testExistance = String("command -v ") + command;
+    if (system(testExistance.toRawUTF8()) != 0)
+    {
+        AlertWindow::showMessageBoxAsync
+                (AlertWindow::AlertIconType::WarningIcon,
+                "Couldn't open application", String("\"")+command
+        +String("\" is not a valid command."));
+        return;
 
-    DBG("AppsPageComponent::startApp - " << appButton->getCommand());
+    }
     ChildProcess* launchApp = new ChildProcess();
     launchApp->start("xmodmap ${HOME}/.Xmodmap"); // Reload xmodmap to ensure it's running
 #if JUCE_DEBUG

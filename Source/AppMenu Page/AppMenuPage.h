@@ -36,16 +36,16 @@ private:
     void resized() override;
     void paint(Graphics &) override;
 
-    AppMenuComponent appMenu;
     Colour bgColor;
     ClockMonitor clock;
+    ScopedPointer<AppMenuComponent> appMenu;
     ScopedPointer<BatteryIcon> batteryIcon;
     ScopedPointer<WifiIcon> wifiIcon;
     ScopedPointer<VectorImageButton> powerButton;
     ScopedPointer<VectorImageButton> settingsButton;
     
-    PowerPageComponent powerPage;
-    SettingsPageComponent settingsPage;
+    ScopedPointer<PowerPageComponent> powerPage;
+    ScopedPointer<SettingsPageComponent> settingsPage;
     
     ScopedPointer<Image> bgImage;
     ScopedPointer<Drawable> frame;

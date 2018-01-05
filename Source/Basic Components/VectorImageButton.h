@@ -17,7 +17,7 @@ public:
     virtual ~VectorImageButton();
     
     int getImageCount();
-    void setImage(int imageIndex);
+    void setImage(int newImageIndex);
 protected:
     void resizeImage();
 private:
@@ -25,7 +25,7 @@ private:
     void paint (Graphics& g) override;
     ConfigFile::ComponentSettings buttonSettings;
     OwnedArray<Drawable>images;
-    int imageIndex;
+    int imageIndex=0;
     static const std::vector<Colour> defaultColours;
 
     static const std::vector<Colour> loadDefaultColours() {

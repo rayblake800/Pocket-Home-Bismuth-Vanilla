@@ -15,65 +15,86 @@ const std::vector<Colour> VectorImageButton::defaultColours =
         VectorImageButton::loadDefaultColours();
 
 VectorImageButton::VectorImageButton(ConfigFile::ComponentSettings settings,
-        String title) : TextButton(title), buttonSettings(settings) {
+        String title) : TextButton(title), buttonSettings(settings)
+{
+    std::vector<String> assets = buttonSettings.getAssetFiles();
+    std::vector<Colour> colours = buttonSettings.getColours();
+    images.ensureStorageAllocated(assets.size());
+    for (int i = 0; i < assets.size(); i++)
+    {
+        String filename = assets[i];
+        File svgFile = assetFile(filename);
+        if (!svgFile.existsAsFile())
+        {
+            DBG(String("VectorImageButton:") + filename + " not found!");
+            images.add(nullptr);
+            continue;
+        }
+        Drawable * svgDrawable=createSVGDrawable(svgFile);
+        if (svgDrawable == nullptr)
+        {
+            DBG(String("VectorImageButton:") + filename + " couldn't convert to drawable!");
+            images.add(nullptr);
+            continue;
+        }
+        images.add(svgDrawable);
+        for (int ci = 0; ci < colours.size(); ci++)
+        {
+            images[i]->replaceColour
+                    (defaultColours[ci], colours[ci]);
+        }
+    }
     buttonSettings.applyBounds(this);
     DBG(String("Created button ") + title + String(" at ") + getBounds().toString());
     setImage(0);
 }
 
-VectorImageButton::~VectorImageButton() {
+VectorImageButton::~VectorImageButton()
+{
+    images.clear(true);
 }
 
-int VectorImageButton::getImageCount() {
+int VectorImageButton::getImageCount()
+{
     return buttonSettings.getAssetFiles().size();
 }
 
-void VectorImageButton::setImage(int imageIndex) {
-    if (this->imageIndex == imageIndex) {
-        return;
-    }
-    if (imageIndex >= 0 && imageIndex < getImageCount()) {
-        if (images[imageIndex] != nullptr) {
-            this->imageIndex = imageIndex;
-        } else {
-            String filename = buttonSettings.getAssetFiles()[imageIndex];
-            File svgFile = assetFile(filename);
-            if (!svgFile.existsAsFile()) {
-                DBG(String("VectorImageButton:") + filename + " not found!");
-                return;
-            }
-            images.insert(imageIndex, createSVGDrawable(svgFile));
-            if (images[imageIndex] == nullptr) {
-                DBG(String("VectorImageButton:") + filename + " couldn't convert to drawable!");
-                return;
-            }
-            std::vector<Colour> colours = buttonSettings.getColours();
-            for (int i = 0; i < colours.size(); i++) {
-                images[imageIndex]->replaceColour(defaultColours[i], colours[i]);
-            }
-
+void VectorImageButton::setImage(int newImageIndex)
+{
+    if (newImageIndex >= 0
+            && newImageIndex < images.size()
+            && images[newImageIndex] != nullptr
+            && !images[newImageIndex]->isVisible())
+    {
+        if (images[imageIndex] != nullptr)
+        {
+            images[imageIndex]->setVisible(false);
+            removeChildComponent(images[imageIndex]);
         }
-        removeChildComponent(images[this->imageIndex]);
-        this->imageIndex = imageIndex;
-        addAndMakeVisible(images[imageIndex]);
-        images[imageIndex]->setWantsKeyboardFocus(false);
+        addAndMakeVisible(images[newImageIndex]);
+        images[newImageIndex]->setWantsKeyboardFocus(false);
+        imageIndex = newImageIndex;
         resizeImage();
     }
 }
 
-void VectorImageButton::resizeImage() {
-    if (images[imageIndex] != nullptr) {
-        Rectangle<int> imageBounds=buttonSettings.getBounds()-getPosition();
-        images[imageIndex]->setTransformToFit(imageBounds.toFloat(), 
+void VectorImageButton::resizeImage()
+{
+    if (images.size() > 0 && images[imageIndex] != nullptr)
+    {
+        Rectangle<int> imageBounds = buttonSettings.getBounds() - getPosition();
+        images[imageIndex]->setTransformToFit(imageBounds.toFloat(),
                 RectanglePlacement::centred);
         repaint();
     }
 }
 
-void VectorImageButton::resized() {
+void VectorImageButton::resized()
+{
     resizeImage();
 }
 
-void VectorImageButton::paint(Graphics& g) {
+void VectorImageButton::paint(Graphics& g)
+{
 }
 
