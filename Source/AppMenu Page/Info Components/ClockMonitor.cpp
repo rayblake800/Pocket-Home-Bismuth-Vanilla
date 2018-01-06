@@ -1,13 +1,18 @@
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/time.h>
+#include <errno.h>
+#include <unistd.h>
 #include "../../PokeLookAndFeel.h"
-#include "../../Configuration/MainConfigFile.h"
+#include "../../Configuration/ComponentConfigFile.h"
 #include "../../PocketHomeApplication.h"
 #include "ClockMonitor.h"
 
 ClockMonitor::ClockMonitor() :
 Configurable(static_cast<ConfigFile*>
-(&PocketHomeApplication::getInstance()->getConfig()),{
-
-    MainConfigFile::showClockKey, MainConfigFile::use24HrModeKey
+(&PocketHomeApplication::getInstance()->getComponentConfig()),{
+    ComponentConfigFile::showClockKey, ComponentConfigFile::use24HrModeKey
 }),
 Thread("Clock"),
 
@@ -60,10 +65,12 @@ void ClockMonitor::run()
  */
 void ClockMonitor::loadConfigProperties(ConfigFile * config, String key)
 {
-    MainConfigFile * mainConfig = static_cast<MainConfigFile*> (config);
-    if (key == MainConfigFile::showClockKey)
+    ComponentConfigFile * componentConfig =
+            static_cast<ComponentConfigFile*> (config);
+    if (key == ComponentConfigFile::showClockKey)
     {
-        bool visible = mainConfig->getConfigBool(MainConfigFile::showClockKey);
+        bool visible = componentConfig->getConfigBool
+                (ComponentConfigFile::showClockKey);
         MessageManager::callAsync([this, visible]
         {
             clock->setAlpha(visible ? 1 : 0);
@@ -76,9 +83,10 @@ void ClockMonitor::loadConfigProperties(ConfigFile * config, String key)
                 stopThread(1000);
             }
         });
-    } else if (key == MainConfigFile::use24HrModeKey)
+    } else if (key == ComponentConfigFile::use24HrModeKey)
     {
-        use24HrMode = mainConfig->getConfigBool(MainConfigFile::use24HrModeKey);
+        use24HrMode = componentConfig->getConfigBool
+                (ComponentConfigFile::use24HrModeKey);
     }
 }
 

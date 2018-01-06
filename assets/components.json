@@ -1,4 +1,6 @@
-{
+{  
+    "use 24h mode": true,
+    "show clock": true,
     "app menu": {
         "x": 0.25,
         "y": 0.079999998211860656738,

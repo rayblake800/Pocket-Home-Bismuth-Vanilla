@@ -260,24 +260,24 @@ void PersonalizePageComponent::comboBoxChanged(ComboBox* box)
 bool PersonalizePageComponent::updateJSON()
 {
     MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    std::vector<MainConfigFile::AppItem> favorites = config.getFavorites();
+    //std::vector<MainConfigFile::AppItem> favorites = config.getFavorites();
     bool name_b = false;
     bool color_b = false;
-    if (edit_name.isVisible())
-    {
-        String name = edit_name.getText();
-        String icon = edit_icn.getText();
-        String shell = edit_shell.getText();
-        MainConfigFile::AppItem newFavorite;
-        newFavorite.name = name;
-        newFavorite.icon = icon;
-        newFavorite.shell = shell;
-        favorites.push_back(newFavorite);
-        config.setFavorites(favorites);
-        name_b = true;
-
-        /* Adding to the grid */
-    }
+//    if (edit_name.isVisible())
+//    {
+//        String name = edit_name.getText();
+//        String icon = edit_icn.getText();
+//        String shell = edit_shell.getText();
+//        MainConfigFile::AppItem newFavorite;
+//        newFavorite.name = name;
+//        newFavorite.icon = icon;
+//        newFavorite.shell = shell;
+//        favorites.push_back(newFavorite);
+//        config.setFavorites(favorites);
+//        name_b = true;
+//
+//        /* Adding to the grid */
+//    }
     if (choose_back.getSelectedId() == 1)
     {
         config.setConfigString(MainConfigFile::backgroundKey, "4D4D4D");
@@ -321,18 +321,18 @@ void PersonalizePageComponent::resetApplySuccess()
 
 void PersonalizePageComponent::deleteIcon(String name, String shell)
 {
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    std::vector<MainConfigFile::AppItem> favorites = config.getFavorites();
-
-    //Searching for the element in the Array
-    for (std::vector<MainConfigFile::AppItem>::iterator it = favorites.begin();
-            it != favorites.end(); it++)
-    {
-        if (it->name == name && it->shell == shell)
-        {
-            favorites.erase(it);
-            break;
-        }
-    }
-    config.setFavorites(favorites);
+//    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+//    std::vector<MainConfigFile::AppItem> favorites = config.getFavorites();
+//
+//    //Searching for the element in the Array
+//    for (std::vector<MainConfigFile::AppItem>::iterator it = favorites.begin();
+//            it != favorites.end(); it++)
+//    {
+//        if (it->name == name && it->shell == shell)
+//        {
+//            favorites.erase(it);
+//            break;
+//        }
+//    }
+//    config.setFavorites(favorites);
 }

@@ -1,14 +1,9 @@
+#ifndef CLOCKMONITOR_H
+#define CLOCKMONITOR_H
+
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "../../Configuration/Configurable.h"
 
-#ifndef CLOCKMONITOR_H
-#define CLOCKMONITOR_H
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/time.h>
-#include <errno.h>
-#include <unistd.h>
 
 using namespace juce;
 

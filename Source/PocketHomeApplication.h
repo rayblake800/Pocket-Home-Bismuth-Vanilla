@@ -12,6 +12,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainComponent.h"
 #include "Configuration/MainConfigFile.h"
+#include "Configuration/ComponentConfigFile.h"
 #include "Wifi/WifiStatus.h"
 #include "BluetoothStatus.h"
 #include "Utils.h"
@@ -33,10 +34,13 @@ public:
     BluetoothStatus& getBluetoothStatus();
 
     MainConfigFile& getConfig();
+    
+    ComponentConfigFile& getComponentConfig();
 
 private:
     bool initAudio();
     MainConfigFile configFile;
+    ComponentConfigFile componentConfig;
 #ifdef LINUX
     WifiStatusNM wifiStatusNM;
 #else

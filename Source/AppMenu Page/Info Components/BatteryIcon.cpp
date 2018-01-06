@@ -12,16 +12,16 @@
 #include "../../Utils.h"
 
 BatteryIcon::BatteryIcon() :
-VectorImageButton(PocketHomeApplication::getInstance()->getConfig()
-.getComponentSettings(BATTERY), "Battery")
+VectorImageButton(ComponentConfigFile::batteryIconKey, String("Battery"))
 {
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    MainConfigFile::ComponentSettings iconSettings =
-            config.getComponentSettings(BATTERY);
-    MainConfigFile::ComponentSettings textSettings =
-            config.getComponentSettings(BATTERY_PERCENT);
+    ComponentConfigFile& config = PocketHomeApplication::getInstance()
+            ->getComponentConfig();
+    ComponentConfigFile::ComponentSettings iconSettings =
+            config.getComponentSettings(ComponentConfigFile::batteryIconKey);
+    ComponentConfigFile::ComponentSettings textSettings =
+            config.getComponentSettings(ComponentConfigFile::batteryPercentKey);
     batteryLabel = new Label("percentage", "-%");
     batteryLabel->setJustificationType(Justification::centredLeft);
     Rectangle<int> bounds = iconSettings.getBounds();
@@ -87,9 +87,10 @@ void BatteryIcon::visibilityChanged()
 void BatteryIcon::resized()
 {
     resizeImage();
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    MainConfigFile::ComponentSettings textSettings =
-            config.getComponentSettings(BATTERY_PERCENT);
+    ComponentConfigFile& config = PocketHomeApplication::getInstance()
+            ->getComponentConfig();
+    ComponentConfigFile::ComponentSettings textSettings =
+            config.getComponentSettings(ComponentConfigFile::batteryPercentKey);
     Rectangle<int> textBounds = textSettings.getBounds() - getPosition();
     batteryLabel->setBounds(textBounds);
     //DBG(String("Text bounds set to ")+textBounds.toString());

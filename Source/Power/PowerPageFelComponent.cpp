@@ -8,7 +8,7 @@
 #include "../PocketHomeApplication.h"
 #include "PowerPageFelComponent.h"
 
-//#define TEST_BUILD
+#define TEST_BUILD
 #if JUCE_LINUX && !defined TEST_BUILD
 #include <linux/i2c-dev.h>
 

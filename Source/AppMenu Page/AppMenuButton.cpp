@@ -14,23 +14,28 @@
 #include "AppMenuButton.h"
 
 AppMenuButton::AppMenuButton(DesktopEntry desktopEntry, int index, int column)
-:TextButton(desktopEntry.getName()), 
-        desktopEntry(desktopEntry), 
-        index(index), 
-        column(column){
+: TextButton(desktopEntry.getName()),
+desktopEntry(desktopEntry),
+index(index),
+column(column)
+{
     //setName(desktopEntry.getName());
-    MainConfigFile& configFile = PocketHomeApplication::getInstance()->getConfig();
-    MainConfigFile::ComponentSettings buttonSettings =
-            configFile.getComponentSettings(APP_MENU_BUTTON);
+    ComponentConfigFile& configFile = PocketHomeApplication::getInstance()
+            ->getComponentConfig();
+    ComponentConfigFile::ComponentSettings buttonSettings =
+            configFile.getComponentSettings
+            (ComponentConfigFile::appMenuButtonKey);
     buttonSettings.applySize(this);
-    std::vector<Colour> colours=buttonSettings.getColours();
-    if (colours.size() >= 2) {
+    std::vector<Colour> colours = buttonSettings.getColours();
+    if (colours.size() >= 2)
+    {
         fillColour = colours[0];
         selectedFillColour = colours[1];
     }
 
     String iconPath = desktopEntry.getIconPath();
-    if (iconPath == "") {
+    if (iconPath == "")
+    {
         iconPath = "/usr/share/pocket-home/appIcons/";
         if (isFolder())iconPath += "filebrowser.png";
         else iconPath += "default.png";
@@ -41,57 +46,69 @@ AppMenuButton::AppMenuButton(DesktopEntry desktopEntry, int index, int column)
     resized();
 }
 
-void AppMenuButton::setSelected(bool select) {
+void AppMenuButton::setSelected(bool select)
+{
     selected = select;
 }
 
-bool AppMenuButton::isFolder() {
+bool AppMenuButton::isFolder()
+{
     return desktopEntry.getType() == DesktopEntry::DIRECTORY;
 }
 
-String AppMenuButton::getAppName() {
+String AppMenuButton::getAppName()
+{
     return desktopEntry.getName();
 }
 
-String AppMenuButton::getCommand() {
+String AppMenuButton::getCommand()
+{
     MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     String command = desktopEntry.getExec();
-    if (desktopEntry.terminal()){
-        command = config.getConfigString(MainConfigFile::termLaunchCommandKey) 
+    if (desktopEntry.terminal())
+    {
+        command = config.getConfigString(MainConfigFile::termLaunchCommandKey)
                 + command;
     }
     return command;
 }
 
-std::vector<String> AppMenuButton::getCategories() {
+std::vector<String> AppMenuButton::getCategories()
+{
     return desktopEntry.getCategories();
 }
 
-int AppMenuButton::getIndex() {
+int AppMenuButton::getIndex()
+{
     return index;
 }
 
-int AppMenuButton::getColumn() {
+int AppMenuButton::getColumn()
+{
     return column;
 }
 
-
-  void AppMenuButton::setIndex(int index){
-      this->index=index;
-  }
-
-  void AppMenuButton::setColumn(int column){
-      this->column=column;
-  }
-
-Rectangle<int> AppMenuButton::getButtonSize(){
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    MainConfigFile::ComponentSettings buttonConf= 
-            config.getComponentSettings(APP_MENU_BUTTON);
-    return buttonConf.getBounds().withPosition(0,0);
+void AppMenuButton::setIndex(int index)
+{
+    this->index = index;
 }
 
-void AppMenuButton::paint(Graphics& g) {
+void AppMenuButton::setColumn(int column)
+{
+    this->column = column;
+}
+
+Rectangle<int> AppMenuButton::getButtonSize()
+{
+    ComponentConfigFile& config = PocketHomeApplication::getInstance()
+            ->getComponentConfig();
+    ComponentConfigFile::ComponentSettings buttonConf =
+            config.getComponentSettings(ComponentConfigFile::appMenuButtonKey);
+    return buttonConf.getBounds().withPosition(0, 0);
+}
+
+void AppMenuButton::paint(Graphics& g)
+{
     Rectangle<int> border = getBounds().withPosition(0, 0);
     g.setColour(selected ? selectedFillColour : fillColour);
     g.setOpacity(selected ? .8 : .2);
@@ -110,16 +127,17 @@ void AppMenuButton::paint(Graphics& g) {
     g.drawRect(border, 2);
 }
 
-void AppMenuButton::resized(){
-    Rectangle<float> bounds=getLocalBounds().toFloat();
-    imageBox=bounds.withWidth(bounds.getHeight());
-    imageBox.reduce(2,2);
-    textBox=bounds;
+void AppMenuButton::resized()
+{
+    Rectangle<float> bounds = getLocalBounds().toFloat();
+    imageBox = bounds.withWidth(bounds.getHeight());
+    imageBox.reduce(2, 2);
+    textBox = bounds;
     textBox.setLeft(imageBox.getRight());
-    textBox.reduce(4,4);
+    textBox.reduce(4, 4);
     //It looks messy if all the fonts are different sizes, so using a default
     //String for size calculations is preferable even if really long names can 
     //get clipped.
-    titleFont=fontResizedToFit(titleFont,"DefaultAppName",textBox.toNearestInt());
+    titleFont = fontResizedToFit(titleFont, "DefaultAppName", textBox.toNearestInt());
 }
 

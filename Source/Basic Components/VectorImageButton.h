@@ -9,22 +9,28 @@
  */
 
 #pragma once
-#include "../Configuration/MainConfigFile.h"
+#include "../Configuration/ComponentConfigFile.h"
+#include "../Configuration/Configurable.h"
 
-class VectorImageButton : public TextButton {
+class VectorImageButton : public TextButton, public Configurable {
 public:
-    VectorImageButton
-    (MainConfigFile::ComponentSettings settings, String title);
+    VectorImageButton(String componentKey, String title);
     virtual ~VectorImageButton();
 
     int getImageCount();
     void setImage(int newImageIndex);
 protected:
+    /**
+     * Receives notification whenever configuration values change
+     * @param config the component config file object
+     * @param key should be the key for this object's component settings
+     */
+    void loadConfigProperties(ConfigFile * config,String key);
     void resizeImage();
 private:
     void resized() override;
     void paint(Graphics& g) override;
-    MainConfigFile::ComponentSettings buttonSettings;
+    ComponentConfigFile::ComponentSettings buttonSettings;
     OwnedArray<Drawable>images;
     int imageIndex = 0;
     static const std::vector<Colour> defaultColours;

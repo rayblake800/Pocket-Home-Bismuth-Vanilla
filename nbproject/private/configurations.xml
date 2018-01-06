@@ -3630,10 +3630,15 @@
           <in>WifiIcon.cpp</in>
         </df>
         <df name="Configuration">
+          <in>AppConfigFile.cpp</in>
+          <in>AppConfigFile.h</in>
+          <in>ComponentConfigFile.cpp</in>
+          <in>ComponentConfigFile.h</in>
           <in>ConfigFile.cpp</in>
           <in>ConfigFile.h</in>
+          <in>Configurable.cpp</in>
+          <in>Configurable.h</in>
           <in>ConfigurableComponent.cpp</in>
-          <in>ConfigurableComponent.h</in>
           <in>DateTimePage.cpp</in>
           <in>DateTimePage.h</in>
           <in>MainConfigFile.cpp</in>
@@ -3705,6 +3710,7 @@
         <in>WifiStatusNM.cpp</in>
       </df>
     </df>
+    <itemPath>assets/apps.json</itemPath>
     <itemPath>assets/components.json</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>

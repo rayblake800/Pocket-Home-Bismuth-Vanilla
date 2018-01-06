@@ -51,6 +51,10 @@ MainConfigFile& PocketHomeApplication::getConfig(){
     return configFile;
 }
 
+ComponentConfigFile& PocketHomeApplication::getComponentConfig(){
+    return componentConfig;
+}
+
 const String PocketHomeApplication::getApplicationName()
 {
     return ProjectInfo::projectName;

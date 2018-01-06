@@ -65,6 +65,13 @@
               file="Source/Basic Components/VectorImageButton.h"/>
       </GROUP>
       <GROUP id="{85D01745-B7AD-BE3B-8D28-80F47A0AA8BA}" name="Configuration">
+        <FILE id="DCzTro" name="AppConfigFile.cpp" compile="1" resource="0"
+              file="Source/Configuration/AppConfigFile.cpp"/>
+        <FILE id="IYWdZr" name="AppConfigFile.h" compile="0" resource="0" file="Source/Configuration/AppConfigFile.h"/>
+        <FILE id="FDPktI" name="ComponentConfigFile.cpp" compile="1" resource="0"
+              file="Source/Configuration/ComponentConfigFile.cpp"/>
+        <FILE id="VIPq8u" name="ComponentConfigFile.h" compile="0" resource="0"
+              file="Source/Configuration/ComponentConfigFile.h"/>
         <FILE id="dNgJxN" name="ConfigFile.cpp" compile="1" resource="0" file="Source/Configuration/ConfigFile.cpp"/>
         <FILE id="sqDYSh" name="ConfigFile.h" compile="0" resource="0" file="Source/Configuration/ConfigFile.h"/>
         <FILE id="Xpr78t" name="Configurable.cpp" compile="1" resource="0"

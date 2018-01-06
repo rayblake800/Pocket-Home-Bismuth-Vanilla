@@ -11,18 +11,20 @@
 
 AppMenuComponent::AppMenuComponent() : launchTimer(this)
 {
+    ComponentConfigFile& componentConfig =
+            PocketHomeApplication::getInstance()->getComponentConfig();
 
-    MainConfigFile& configFile =
-            PocketHomeApplication::getInstance()->getConfig();
     Rectangle<int> screenSize = getWindowSize();
-    MainConfigFile::ComponentSettings menuSettings =
-            configFile.getComponentSettings(APP_MENU);
+    ComponentConfigFile::ComponentSettings menuSettings =
+            componentConfig.getComponentSettings
+            (ComponentConfigFile::appMenuKey);
     Rectangle<int>bounds = menuSettings.getBounds();
     x_origin = bounds.getX();
     y_origin = bounds.getY();
 
-    MainConfigFile::ComponentSettings buttonSettings =
-            configFile.getComponentSettings(APP_MENU_BUTTON);
+    ComponentConfigFile::ComponentSettings buttonSettings =
+            componentConfig.getComponentSettings
+            (ComponentConfigFile::appMenuButtonKey);
     Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
     buttonWidth = buttonSize.getWidth();
     buttonHeight = buttonSize.getHeight();
@@ -34,8 +36,8 @@ AppMenuComponent::AppMenuComponent() : launchTimer(this)
     buttonColumns.emplace(buttonColumns.begin());
 
     //read in main page apps from config
-    std::vector<MainConfigFile::AppItem> favorites = configFile.getFavorites();
-    for (const MainConfigFile::AppItem& favorite : favorites)
+    std::vector<AppConfigFile::AppItem> favorites = appConfig.getFavorites();
+    for (const AppConfigFile::AppItem& favorite : favorites)
     {
         DBG(String("AppMenu:Found app in config:") + favorite.name);
         addButton(new AppMenuButton(DesktopEntry(favorite),
@@ -43,8 +45,8 @@ AppMenuComponent::AppMenuComponent() : launchTimer(this)
     }
 
     //add category buttons
-    std::vector<MainConfigFile::AppFolder> categories = configFile.getFolders();
-    for (const MainConfigFile::AppFolder& category : categories)
+    std::vector<AppConfigFile::AppFolder> categories = appConfig.getFolders();
+    for (const AppConfigFile::AppFolder& category : categories)
     {
         addButton(new AppMenuButton(DesktopEntry(category),
                 buttonColumns[activeColumn()].size(), activeColumn()));
@@ -66,10 +68,10 @@ AppMenuComponent::~AppMenuComponent()
  */
 void AppMenuComponent::openFolder(std::vector<String> categoryNames)
 {
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     int folderIndex = selected[activeColumn()]->getIndex() -
-            config.getFavorites().size();
-    MainConfigFile::AppFolder selectedFolder = config.getFolders()[folderIndex];
+            appConfig.getFavorites().size();
+    AppConfigFile::AppFolder selectedFolder = 
+            appConfig.getFolders()[folderIndex];
     std::set<DesktopEntry> folderItems =
             desktopEntries.getCategoryListEntries(categoryNames);
     if (folderItems.empty() && selectedFolder.pinnedApps.empty())return;
@@ -81,7 +83,7 @@ void AppMenuComponent::openFolder(std::vector<String> categoryNames)
     selected.push_back(nullptr);
     columnTops.push_back(columnTop);
     buttonColumns.push_back(std::vector<AppMenuButton::Ptr>());
-    for (MainConfigFile::AppItem item : selectedFolder.pinnedApps)
+    for (AppConfigFile::AppItem item : selectedFolder.pinnedApps)
     {
         AppMenuButton::Ptr addedButton;
         if (buttonNameMap[item.name] != nullptr &&
@@ -186,9 +188,10 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked)
 void AppMenuComponent::resized()
 {
     launchSpinner->setBounds(getWindowSize());
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    MainConfigFile::ComponentSettings menuSettings =
-            config.getComponentSettings(APP_MENU);
+    ComponentConfigFile& config = PocketHomeApplication::getInstance()
+            ->getComponentConfig();
+    ComponentConfigFile::ComponentSettings menuSettings =
+            config.getComponentSettings(ComponentConfigFile::appMenuKey);
     Rectangle<int> menuBounds = menuSettings.getBounds();
     x_origin = menuBounds.getX();
     y_origin = menuBounds.getY();

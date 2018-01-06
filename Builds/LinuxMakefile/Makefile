@@ -81,6 +81,8 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/OverlaySpinner_eb9f06b1.o \
   $(JUCE_OBJDIR)/SwitchComponent_95f41beb.o \
   $(JUCE_OBJDIR)/VectorImageButton_c4de9f2c.o \
+  $(JUCE_OBJDIR)/AppConfigFile_8463bec7.o \
+  $(JUCE_OBJDIR)/ComponentConfigFile_28621e63.o \
   $(JUCE_OBJDIR)/ConfigFile_9d15fdc0.o \
   $(JUCE_OBJDIR)/Configurable_13dc1c5b.o \
   $(JUCE_OBJDIR)/DateTimePage_a32d156c.o \
@@ -201,6 +203,16 @@ $(JUCE_OBJDIR)/SwitchComponent_95f41beb.o: ../../Source/Basic\ Components/Switch
 $(JUCE_OBJDIR)/VectorImageButton_c4de9f2c.o: ../../Source/Basic\ Components/VectorImageButton.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling VectorImageButton.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AppConfigFile_8463bec7.o: ../../Source/Configuration/AppConfigFile.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AppConfigFile.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ComponentConfigFile_28621e63.o: ../../Source/Configuration/ComponentConfigFile.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ComponentConfigFile.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigFile_9d15fdc0.o: ../../Source/Configuration/ConfigFile.cpp

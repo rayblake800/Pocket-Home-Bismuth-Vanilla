@@ -39,10 +39,11 @@ clockModeLabel("clockModeLabel", clockModeLabelText)
     setClockMode.addListener(this);
 
     //Let's check whether there is an option for time format in the config
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    if (config.getConfigBool(MainConfigFile::showClockKey))
+    ComponentConfigFile& config = PocketHomeApplication::getInstance()
+            ->getComponentConfig();
+    if (config.getConfigBool(ComponentConfigFile::showClockKey))
     {
-        if (config.getConfigBool(MainConfigFile::use24HrModeKey))
+        if (config.getConfigBool(ComponentConfigFile::use24HrModeKey))
         {
             setClockMode.setSelectedId(1);
         } else
@@ -88,14 +89,15 @@ void DateTimePage::buttonClicked(Button* but)
 void DateTimePage::comboBoxChanged(ComboBox* c)
 {
     if (c != &setClockMode) return;
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    ComponentConfigFile& config = PocketHomeApplication::getInstance()
+            ->getComponentConfig();
     bool showClock = (c->getSelectedId() != 3);
     bool use24HrMode = (c->getSelectedId() == 1);
     if (showClock)
     {
-        config.setConfigBool(MainConfigFile::use24HrModeKey, use24HrMode);
+        config.setConfigBool(ComponentConfigFile::use24HrModeKey, use24HrMode);
     }
-    config.setConfigBool(MainConfigFile::showClockKey, showClock);
+    config.setConfigBool(ComponentConfigFile::showClockKey, showClock);
 }
 
 void DateTimePage::paint(Graphics& g)

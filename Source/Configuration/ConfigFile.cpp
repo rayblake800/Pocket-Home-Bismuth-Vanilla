@@ -179,7 +179,8 @@ void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
  */
 bool ConfigFile::propertyExists(var& config, String propertyKey)
 {
-    return config.getProperty(propertyKey, var::null) != var::null;
+    var property = config.getProperty(propertyKey,var::null);
+    return var::null != property;
 }
 
 /**
@@ -188,6 +189,8 @@ bool ConfigFile::propertyExists(var& config, String propertyKey)
  */
 var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
 {
+    bool exists=propertyExists(config, key);
+    DBG(key+(exists?String("exists"):String("doesn't exist")));
     if (propertyExists(config, key))
     {
         return config.getProperty(key, var::null);

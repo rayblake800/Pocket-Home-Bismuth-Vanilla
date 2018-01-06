@@ -13,7 +13,7 @@
 #define DESKTOPENTRY_H
 #include <map>
 #include <set>
-#include "../Configuration/MainConfigFile.h"
+#include "../Configuration/AppConfigFile.h"
 
 class DesktopEntry {
 public:
@@ -33,13 +33,13 @@ public:
      * Creates a DesktopEntry object representing an application category
      * @param category a ConfigFile app folder data structure
      */
-    DesktopEntry(MainConfigFile::AppFolder appFolder);
+    DesktopEntry(AppConfigFile::AppFolder appFolder);
     
     /**
      * Create a DesktopEntry object with data from the config file
      * @param appItem a ConfigFile app data structure
      */
-    DesktopEntry(MainConfigFile::AppItem appItem);
+    DesktopEntry(AppConfigFile::AppItem appItem);
     
     DesktopEntry(const DesktopEntry& orig);
     virtual ~DesktopEntry();

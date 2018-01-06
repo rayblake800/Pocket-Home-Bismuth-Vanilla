@@ -15,15 +15,16 @@
 
 AppMenuPage::AppMenuPage()
 {
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    ComponentConfigFile& config = PocketHomeApplication::getInstance()
+            ->getComponentConfig();
     setWantsKeyboardFocus(true);
     setExplicitFocusOrder(1);
 
-    appMenu=new AppMenuComponent();
+    appMenu = new AppMenuComponent();
     addAndMakeVisible(appMenu);
 
-    MainConfigFile::ComponentSettings frameSettings =
-            config.getComponentSettings(MENU_FRAME);
+    ComponentConfigFile::ComponentSettings frameSettings =
+            config.getComponentSettings(ComponentConfigFile::menuFrameKey);
     std::vector<String> assets = frameSettings.getAssetFiles();
     if (!assets.empty())
     {
@@ -43,50 +44,51 @@ AppMenuPage::AppMenuPage()
                 RectanglePlacement::stretchToFit);
         addAndMakeVisible(frame);
     }
-    std::function<void(Label*, ComponentType) > positionLabel =
-            [this, &config](Label * label, ComponentType type)
+    std::function<void(Label*, String) > positionLabel =
+            [this, &config](Label * label, String componentKey)
             {
-                config.getComponentSettings(type).applyBounds(label);
+                config.getComponentSettings(componentKey).applyBounds(label);
                 label->setFont(Font(label->getHeight()));
                 label->setWantsKeyboardFocus(false);
                 addAndMakeVisible(label);
             };
     /* Setting the clock */
-    positionLabel(&(clock.getLabel()), CLOCK);
+    positionLabel(&(clock.getLabel()), ComponentConfigFile::clockIconKey);
     clock.getLabel().setJustificationType(Justification::centredRight);
 
     bgColor = Colour(0x4D4D4D);
-    String bgValue=config.getConfigString(MainConfigFile::backgroundKey);
+    MainConfigFile& mainConfig = PocketHomeApplication::getInstance()
+            ->getConfig();
+    String bgValue = mainConfig.getConfigString(MainConfigFile::backgroundKey);
     if (bgValue.length() == 6 && bgValue.containsOnly("0123456789ABCDEF"))
     {
         setColorBackground(bgValue);
-    }
-    else
+    } else
     {
         setImageBackground(bgValue);
     }
-    batteryIcon=new BatteryIcon();
-    wifiIcon=new WifiIcon();
+    batteryIcon = new BatteryIcon();
+    wifiIcon = new WifiIcon();
     addAndMakeVisible(batteryIcon);
     addAndMakeVisible(wifiIcon);
 
-    powerButton = new VectorImageButton(config.getComponentSettings(POWER), 
+    powerButton = new VectorImageButton(ComponentConfigFile::powerButtonKey,
             "Power");
-    settingsButton = 
-            new VectorImageButton(config.getComponentSettings(SETTINGS), 
+    settingsButton =
+            new VectorImageButton(ComponentConfigFile::settingsButtonKey,
             "Settings");
     powerButton->addListener(this);
     settingsButton->addListener(this);
     addAndMakeVisible(powerButton);
     addAndMakeVisible(settingsButton);
-    
-    powerPage=new PowerPageComponent();
-    settingsPage=new SettingsPageComponent();
+
+    powerPage = new PowerPageComponent();
+    settingsPage = new SettingsPageComponent();
 }
 
 AppMenuPage::~AppMenuPage()
 {
-    if(clock.isThreadRunning())
+    if (clock.isThreadRunning())
     {
         clock.stopThread(1000);
     }
@@ -118,18 +120,17 @@ void AppMenuPage::setImageBackground(const String& str)
     *bgImage = createImageFromFile(f);
 }
 
-
 void AppMenuPage::buttonClicked(Button * button)
 {
     PageStackComponent& pageStack = PocketHomeApplication::getInstance()
             ->getMainStack();
     if (button == settingsButton)
     {
-        pageStack.pushPage(settingsPage, 
+        pageStack.pushPage(settingsPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     } else if (button == powerButton)
     {
-        pageStack.pushPage(powerPage, 
+        pageStack.pushPage(powerPage,
                 PageStackComponent::kTransitionTranslateHorizontalLeft);
     }
 }
@@ -172,11 +173,12 @@ void AppMenuPage::visibilityChanged()
 
 void AppMenuPage::resized()
 {
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    MainConfigFile::ComponentSettings frameSettings =
-            config.getComponentSettings(MENU_FRAME);
-    MainConfigFile::ComponentSettings menuSettings =
-            config.getComponentSettings(APP_MENU);
+    ComponentConfigFile& config = PocketHomeApplication::getInstance()
+            ->getComponentConfig();
+    ComponentConfigFile::ComponentSettings frameSettings =
+            config.getComponentSettings(ComponentConfigFile::menuFrameKey);
+    ComponentConfigFile::ComponentSettings menuSettings =
+            config.getComponentSettings(ComponentConfigFile::appMenuKey);
     menuSettings.applyBounds(appMenu);
     if (frame != nullptr)
     {
@@ -184,12 +186,17 @@ void AppMenuPage::resized()
         frame->setTransformToFit(frame->getBounds().toFloat(),
                 RectanglePlacement::stretchToFit);
     }
-    config.getComponentSettings(BATTERY).applyBounds(batteryIcon);
-    config.getComponentSettings(WIFI).applyBounds(wifiIcon);
-    config.getComponentSettings(POWER).applyBounds(powerButton);
-    config.getComponentSettings(SETTINGS).applyBounds(settingsButton);
+    config.getComponentSettings(ComponentConfigFile::batteryIconKey)
+            .applyBounds(batteryIcon);
+    config.getComponentSettings(ComponentConfigFile::wifiIconKey)
+            .applyBounds(wifiIcon);
+    config.getComponentSettings(ComponentConfigFile::powerButtonKey)
+            .applyBounds(powerButton);
+    config.getComponentSettings(ComponentConfigFile::settingsButtonKey)
+            .applyBounds(settingsButton);
     Label * clockLabel = &(clock.getLabel());
-    config.getComponentSettings(CLOCK).applyBounds(clockLabel);
+    config.getComponentSettings(ComponentConfigFile::clockIconKey)
+            .applyBounds(clockLabel);
     Font labelFont = clockLabel->getFont();
     labelFont.setHeight(clockLabel->getHeight());
     clockLabel->setFont(labelFont);

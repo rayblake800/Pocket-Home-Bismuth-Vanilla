@@ -8,6 +8,7 @@
 #ifndef APPMENU_H
 #define APPMENU_H
 #include "../Basic Components/OverlaySpinner.h"
+#include "../Configuration/AppConfigFile.h"
 #include "DesktopEntries.h"
 #include "AppMenuButton.h"
 
@@ -77,7 +78,7 @@ private:
     void selectIndex(int index);
     void scrollToSelected();
 
-    
+    AppConfigFile appConfig;
     ScopedPointer<OverlaySpinner> launchSpinner;
     DesktopEntries desktopEntries;
     //all buttons in each column
