@@ -76,9 +76,9 @@ PersonalizePageComponent::~PersonalizePageComponent()
 
 void PersonalizePageComponent::updateComboBox()
 {
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     /* Checking the current configuration */
-    String background = config.getConfigString(BACKGROUND);
+    String background = config.getConfigString(MainConfigFile::backgroundKey);
     bool display = false;
     if (background.length() == 0);
     else if (background.length() == 6 &&
@@ -259,8 +259,8 @@ void PersonalizePageComponent::comboBoxChanged(ComboBox* box)
 
 bool PersonalizePageComponent::updateJSON()
 {
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    std::vector<ConfigFile::AppItem> favorites = config.getFavorites();
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    std::vector<MainConfigFile::AppItem> favorites = config.getFavorites();
     bool name_b = false;
     bool color_b = false;
     if (edit_name.isVisible())
@@ -268,7 +268,7 @@ bool PersonalizePageComponent::updateJSON()
         String name = edit_name.getText();
         String icon = edit_icn.getText();
         String shell = edit_shell.getText();
-        ConfigFile::AppItem newFavorite;
+        MainConfigFile::AppItem newFavorite;
         newFavorite.name = name;
         newFavorite.icon = icon;
         newFavorite.shell = shell;
@@ -280,7 +280,7 @@ bool PersonalizePageComponent::updateJSON()
     }
     if (choose_back.getSelectedId() == 1)
     {
-        config.setConfigString(BACKGROUND, "4D4D4D");
+        config.setConfigString(MainConfigFile::backgroundKey, "4D4D4D");
     }
     if (choose_back.getSelectedId() == 2)
     {
@@ -289,7 +289,7 @@ bool PersonalizePageComponent::updateJSON()
             edit_back.setText("Invalid color");
         else
         {
-            config.setConfigString(BACKGROUND, value);
+            config.setConfigString(MainConfigFile::backgroundKey, value);
             color_b = true;
 
             /* Change background in LauncherComponent */
@@ -298,7 +298,7 @@ bool PersonalizePageComponent::updateJSON()
     if (choose_back.getSelectedId() == 3)
     {
         String value = edit_back.getText();
-        config.setConfigString(BACKGROUND, value);
+        config.setConfigString(MainConfigFile::backgroundKey, value);
         color_b = true;
 
         /* Change background in LauncherComponent */
@@ -321,11 +321,11 @@ void PersonalizePageComponent::resetApplySuccess()
 
 void PersonalizePageComponent::deleteIcon(String name, String shell)
 {
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    std::vector<ConfigFile::AppItem> favorites = config.getFavorites();
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    std::vector<MainConfigFile::AppItem> favorites = config.getFavorites();
 
     //Searching for the element in the Array
-    for (std::vector<ConfigFile::AppItem>::iterator it = favorites.begin();
+    for (std::vector<MainConfigFile::AppItem>::iterator it = favorites.begin();
             it != favorites.end(); it++)
     {
         if (it->name == name && it->shell == shell)

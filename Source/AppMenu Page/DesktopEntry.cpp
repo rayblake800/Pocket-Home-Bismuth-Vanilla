@@ -118,7 +118,7 @@ entrypath(path) {
 
 //Creates a DesktopEntry object representing an application category
 
-DesktopEntry::DesktopEntry(ConfigFile::AppFolder appFolder) {
+DesktopEntry::DesktopEntry(MainConfigFile::AppFolder appFolder) {
     mapInit();
     type = DIRECTORY;
     appStrings["Name"] = appFolder.name;
@@ -131,7 +131,7 @@ DesktopEntry::DesktopEntry(ConfigFile::AppFolder appFolder) {
 
 //Create a DesktopEntry object with data from the config file
 
-DesktopEntry::DesktopEntry(ConfigFile::AppItem appItem) {
+DesktopEntry::DesktopEntry(MainConfigFile::AppItem appItem) {
     mapInit();
     type = APPLICATION;
     appStrings["Name"] = appItem.name;

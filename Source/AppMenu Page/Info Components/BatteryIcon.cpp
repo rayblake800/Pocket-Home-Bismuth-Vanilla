@@ -17,10 +17,10 @@ VectorImageButton(PocketHomeApplication::getInstance()->getConfig()
 {
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    ConfigFile::ComponentSettings iconSettings =
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile::ComponentSettings iconSettings =
             config.getComponentSettings(BATTERY);
-    ConfigFile::ComponentSettings textSettings =
+    MainConfigFile::ComponentSettings textSettings =
             config.getComponentSettings(BATTERY_PERCENT);
     batteryLabel = new Label("percentage", "-%");
     batteryLabel->setJustificationType(Justification::centredLeft);
@@ -87,8 +87,8 @@ void BatteryIcon::visibilityChanged()
 void BatteryIcon::resized()
 {
     resizeImage();
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    ConfigFile::ComponentSettings textSettings =
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile::ComponentSettings textSettings =
             config.getComponentSettings(BATTERY_PERCENT);
     Rectangle<int> textBounds = textSettings.getBounds() - getPosition();
     batteryLabel->setBounds(textBounds);

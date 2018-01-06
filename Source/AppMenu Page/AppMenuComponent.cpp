@@ -12,14 +12,16 @@
 AppMenuComponent::AppMenuComponent() : launchTimer(this)
 {
 
-    ConfigFile& configFile = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile& configFile =
+            PocketHomeApplication::getInstance()->getConfig();
     Rectangle<int> screenSize = getWindowSize();
-    ConfigFile::ComponentSettings menuSettings = configFile.getComponentSettings(APP_MENU);
+    MainConfigFile::ComponentSettings menuSettings =
+            configFile.getComponentSettings(APP_MENU);
     Rectangle<int>bounds = menuSettings.getBounds();
     x_origin = bounds.getX();
     y_origin = bounds.getY();
 
-    ConfigFile::ComponentSettings buttonSettings =
+    MainConfigFile::ComponentSettings buttonSettings =
             configFile.getComponentSettings(APP_MENU_BUTTON);
     Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
     buttonWidth = buttonSize.getWidth();
@@ -32,8 +34,8 @@ AppMenuComponent::AppMenuComponent() : launchTimer(this)
     buttonColumns.emplace(buttonColumns.begin());
 
     //read in main page apps from config
-    std::vector<ConfigFile::AppItem> favorites = configFile.getFavorites();
-    for (const ConfigFile::AppItem& favorite : favorites)
+    std::vector<MainConfigFile::AppItem> favorites = configFile.getFavorites();
+    for (const MainConfigFile::AppItem& favorite : favorites)
     {
         DBG(String("AppMenu:Found app in config:") + favorite.name);
         addButton(new AppMenuButton(DesktopEntry(favorite),
@@ -41,13 +43,14 @@ AppMenuComponent::AppMenuComponent() : launchTimer(this)
     }
 
     //add category buttons
-    std::vector<ConfigFile::AppFolder> categories = configFile.getFolders();
-    for (const ConfigFile::AppFolder& category : categories)
+    std::vector<MainConfigFile::AppFolder> categories = configFile.getFolders();
+    for (const MainConfigFile::AppFolder& category : categories)
     {
         addButton(new AppMenuButton(DesktopEntry(category),
                 buttonColumns[activeColumn()].size(), activeColumn()));
     }
-    DBG(String("added ") + String(buttonColumns[activeColumn()].size()) + " buttons");
+    DBG(String("added ") + String(buttonColumns[activeColumn()].size())
+            + " buttons");
     scrollToSelected();
 }
 
@@ -63,10 +66,10 @@ AppMenuComponent::~AppMenuComponent()
  */
 void AppMenuComponent::openFolder(std::vector<String> categoryNames)
 {
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     int folderIndex = selected[activeColumn()]->getIndex() -
             config.getFavorites().size();
-    ConfigFile::AppFolder selectedFolder = config.getFolders()[folderIndex];
+    MainConfigFile::AppFolder selectedFolder = config.getFolders()[folderIndex];
     std::set<DesktopEntry> folderItems =
             desktopEntries.getCategoryListEntries(categoryNames);
     if (folderItems.empty() && selectedFolder.pinnedApps.empty())return;
@@ -78,7 +81,7 @@ void AppMenuComponent::openFolder(std::vector<String> categoryNames)
     selected.push_back(nullptr);
     columnTops.push_back(columnTop);
     buttonColumns.push_back(std::vector<AppMenuButton::Ptr>());
-    for (ConfigFile::AppItem item : selectedFolder.pinnedApps)
+    for (MainConfigFile::AppItem item : selectedFolder.pinnedApps)
     {
         AppMenuButton::Ptr addedButton;
         if (buttonNameMap[item.name] != nullptr &&
@@ -183,8 +186,8 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked)
 void AppMenuComponent::resized()
 {
     launchSpinner->setBounds(getWindowSize());
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    ConfigFile::ComponentSettings menuSettings = 
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile::ComponentSettings menuSettings =
             config.getComponentSettings(APP_MENU);
     Rectangle<int> menuBounds = menuSettings.getBounds();
     x_origin = menuBounds.getX();
@@ -452,8 +455,8 @@ void AppMenuComponent::startApp(AppMenuButton::Ptr appButton)
     {
         AlertWindow::showMessageBoxAsync
                 (AlertWindow::AlertIconType::WarningIcon,
-                "Couldn't open application", String("\"")+command
-        +String("\" is not a valid command."));
+                "Couldn't open application", String("\"") + command
+                + String("\" is not a valid command."));
         return;
 
     }

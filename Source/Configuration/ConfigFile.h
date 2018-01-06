@@ -12,24 +12,18 @@
 #include <map>
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-/**
- * Maps all string values stored in the config file.
- */
-enum ConfigString {
-    BACKGROUND, //Background image or color
-    SHUTDOWN_COMMAND,
-    RESTART_COMMAND,
-    TIME_FORMAT, //ampm or 24h
-    TERMINAL_LAUNCH_COMMAND
-};
+class Configurable;
 
-/**
- *Maps all boolean values stored in the config file
- */
-enum ConfigBool {
-    SHOW_CURSOR,
-    SHOW_CLOCK
-};
+//Component type keys
+static const String appMenuButtonKey;
+static const String appMenuKey;
+static const String menuFrameKey;
+static const String batteryKey;
+static const String batteryPercentKey;
+static const String clockKey;
+static const String wifiKey;
+static const String powerKey;
+static const String settingsKey;
 
 /**
  * Maps all configurable component types.
@@ -50,229 +44,154 @@ class ConfigFile {
 public:
 
     /**
-     * Reads in all data from ~/.pocket-home/configFilename, copying any
-     * missing data from the default file, which should exist at 
-     * /usr/share/pocket-home/configFilename
-     * If a marshmallow pocket-home config.json file is found, it will be backed
-     * up to .pocket-home/marshmallowConfig.json
-     * 
-     * Having more than one ConfigFile object tied to the same file should be
-     * avoided.
+     * @param configFilename the name of a json file to be read or created in
+     * ~/.pocket-home/. There should be a file with the same name in assets
+     * filled with default values.
      */
     ConfigFile(String configFilename);
-    
+
+    /**
+     * Writes any pending changes to the file before destruction.
+     */
     virtual ~ConfigFile();
+
+    /**
+     * Register an object as tracking configuration changes. That object
+     * is notified whenever any data it tracks is changed.
+     * 
+     * @param configurable an object that uses data stored in this ConfigFile 
+     * @param keys all data keys that the object needs to track.
+     */
+    void registerConfigurable(Configurable * configurable,
+            Array<String> keys);
+
+    /**
+     * Removes an object from the list of objects to notify when configuration
+     * changes.
+     * @param configurable a configurable object to be unregistered.  If the
+     * object wasn't actually registered, nothing will happen.
+     * @param keys all keys that the configurable object will no longer track.
+     */
+    void unregisterConfigurable(Configurable * configurable,
+            Array<String> keys);
 
     //######################### String Data ####################################
 
-
-
     /**
      * Gets a string value
-     * @param configString the string you need
-     * @return the string value from the config file
+     * @param stringKey the key for the string value you need
+     * @return the string value from the config file, or empty string if
+     * nothing is found
      */
-    String getConfigString(ConfigString configString);
+    String getConfigString(String stringKey);
 
     /**
      *Sets a string value, writing it to the config file if the value has
      * changed
-     * @param configString the string variable to access
+     * @param configString the key of the string value to set
      * @param newValue the new value for the string
      */
-    void setConfigString(ConfigString configString, String newValue);
-
-    //######################### Boolean Data ####################################
-
-
+    void setConfigString(String stringKey, String newValue);
+    //######################### Boolean Data ###################################
     /**
      * Gets a boolean value
-     * @param configBool the boolean value you need
+     * @param boolKey key string for the boolean value you need
      * @return the bool value from the config file
      */
-    bool getConfigBool(ConfigBool configBool);
+    bool getConfigBool(String boolKey);
 
     /**
      *Sets a boolean value, writing it to the config file if the value has
      * changed
-     * @param configBool the boolean variable to access
+     * @param boolKey key of the boolean variable to access
      * @param newValue the new value for the bool
      */
-    void setConfigBool(ConfigBool configBool, bool newValue);
-
-    //######################### Application Data ###############################
-
+    void setConfigBool(String boolKey, bool newValue);
+protected:
     /**
-     *Represents an application pinned to the main menu
+     * Read in this object's data from a json config object
+     * 
+     * @param config json data from ~/.pocket-home/filename.json
+     * 
+     * @param defaultConfig default json config data from the filename.json
+     * in assets. If this value is var::null and default data is needed, this 
+     * method will open it as the appropriate default config file from assets
      */
-    struct AppItem {
-        AppItem();
-        AppItem(var jsonObj);
-        String name;
-        String icon;
-        String shell;
-        DynamicObject * getDynamicObject();
-        bool operator==(const AppItem& rhs)const;
-    };
+    virtual void readDataFromJson(var& config, var& defaultConfig);
+
     /**
-     * @return a list of AppItems to be pinned to the main column 
-     * of the AppMenu
+     * Copy all config data to a json object.
+     * 
+     * @param jsonObj a dynamicObject that can later be
+     * written to a json file
+     * 
+     * @pre any code calling this function is expected to have already
+     * acquired the object's lock
      */
-    std::vector<AppItem> getFavorites();
+    virtual void copyDataToJson(DynamicObject::Ptr jsonObj);
 
     /**
-     * Save new favorites data into config.
-     * @param newFavorites a new list of favorite apps to be pinned to the
-     * main column of the AppMenu
+     * Checks if a property exists in config data
+     * @param config json configuration loaded from the file
+     * @param propertyKey the key of some data member
+     * @return true iff propertyKey has a value in config
      */
-    void setFavorites(std::vector<AppItem> newFavorites);
+    bool propertyExists(var& config, String propertyKey);
 
-    //######################### Folder/Category Data ###########################
 
     /**
-     * Represents an application folder
-     * TODO:add sub-folders
+     * Gets a property from json configuration data, or from default
+     * configuration data if necessary
+     * 
+     * @param config json configuration data for this object.
+     * 
+     * @param defaultConfig backup configuration data source. If this value is
+     * var::null and default data is needed, this method will open it as the 
+     * appropriate default config file from assets
+     * 
+     * @param key the key value for some main property in the json config
+     * 
+     * @return the value read from config/defaultConfig at [key], or var::null
+     * if nothing was found in either var object.
      */
-    struct AppFolder {
-        AppFolder();
-        AppFolder(var jsonObj);
-        String name;
-        std::vector<String> categories;
-        String icon;
-        std::vector<AppItem> pinnedApps;
-        DynamicObject * getDynamicObject();
-        bool operator==(const AppFolder& rhs) const;
-    };
-    /**
-     * @return A list of folders to display in the AppMenu 
-     */
-    std::vector<AppFolder> getFolders();
-
-    //######################### UI Component Data ##############################
-    //Defines all component types managed in the config file
+    var getProperty(var& config, var& defaultConfig, String key);
 
     /**
-     * Represents a configurable UI element
-     */
-    class ComponentSettings {
-    public:
-
-        /**
-         * Initializes the object with all empty/zero values
-         */
-        ComponentSettings();
-        /**
-         * Initializes from json data
-         * @param jsonObj an object var containing json data
-         */
-        ComponentSettings(var jsonObj);
-        DynamicObject * getDynamicObject();
-
-        /**
-         * @return the bounds of the component relative to the window,
-         * measured in pixels
-         */
-        Rectangle<int> getBounds();
-
-        /**
-         * @return the list of configurable colors.
-         */
-        std::vector<Colour> getColours();
-        /**
-         * @return the list of component asset files.
-         */
-        std::vector<String> getAssetFiles();
-        /**
-         * Use these settings to position and size a component
-         * @param component an active component
-         */
-        void applyBounds(Component * component);
-        /**
-         * Use these settings to re-size a component without adjusting position
-         * @param component an active component
-         */
-        void applySize(Component * component);
-        bool operator==(const ComponentSettings& rhs) const;
-    private:
-        //Position and size data is stored in terms of total screen size,
-        //e.g. height=0.5 takes up half the screen height,
-        //x=0.2 has a left border 1/5 of the way from the left of the screen, etc.
-        float x;
-        float y;
-        float width;
-        float height;
-        std::vector<Colour> colours;
-        std::vector<String> assetFiles;
-    };
-    /**
-     * @param componentType a configurable UI component
-     * @return properties defined for that component
-     */
-    ComponentSettings getComponentSettings(ComponentType componentType);
-
-
-
-private:
-
-    /**
-     * Re-writes all data back to the config file.
+     * Re-writes all data back to the config file, as long as there are
+     * changes to write.
+     * 
+     * @pre any code calling this function is expected to have already
+     * acquired the object's lock
      */
     void writeChanges();
 
+    /**
+     * Announce new changes to each object tracking a particular key.
+     * @param key the value that has changed in this ConfigFile. 
+     * @pre make sure the lock is not held when calling this, so that
+     * the Configurable objects can read the property changes.
+     */
+    void notifyConfigurables(String key);
+
+    /**
+     * @return the keys to all string variables tracked in this config file.
+     */
+    virtual Array<String> getStringKeys() const = 0;
+
+    /**
+     * @return the keys to all boolean variables tracked in this config file.
+     */
+    virtual Array<String> getBoolKeys() const = 0;
     String filename;
+    bool changesPending = false;
     std::map<String, String> stringValues;
     std::map<String, bool> boolValues;
-    std::vector<AppItem> favoriteApps;
-    std::vector<AppFolder> categoryFolders;
-    std::map<ComponentType, ComponentSettings> components;
     CriticalSection lock;
 
     //constants and default values: 
     static constexpr const char* CONFIG_PATH = "/.pocket-home/";
-    static constexpr const char* FAVORITES_KEY = "favorites";
-    static constexpr const char* FOLDERS_KEY = "folders";
 
-    //component data keys
-
-    static std::map<String, ComponentType> setComponentKeys() {
-        std::map<String, ComponentType> keymap;
-        keymap["app menu buttons"] = APP_MENU_BUTTON;
-        keymap["app menu"] = APP_MENU;
-        keymap["menu frame"] = MENU_FRAME;
-        keymap["battery"] = BATTERY;
-        keymap["battery percent text"] = BATTERY_PERCENT;
-        keymap["time"] = CLOCK;
-        keymap["wifi"] = WIFI;
-        keymap["power button"] = POWER;
-        keymap["settings button"] = SETTINGS;
-        return keymap;
-    }
-    static const std::map<String, ComponentType> componentKeys;
-
-    //string data keys
-
-    static std::map<ConfigString, String> setStringKeys() {
-        std::map<ConfigString, String> keymap;
-        keymap[BACKGROUND] = "background";
-        keymap[SHUTDOWN_COMMAND] = "shutdown command";
-        keymap[RESTART_COMMAND] = "restart command";
-        keymap[TIME_FORMAT] = "timeformat";
-        keymap[TERMINAL_LAUNCH_COMMAND] = "terminal launch command";
-        return keymap;
-    }
-    static const std::map<ConfigString, String> stringKeys;
-
-    //boolean data keys
-
-    static std::map<ConfigBool, String> setBoolKeys() {
-        std::map<ConfigBool, String> keymap;
-        keymap[SHOW_CURSOR] = "cursor";
-        keymap[SHOW_CLOCK] = "showclock";
-        return keymap;
-    }
-    static const std::map<ConfigBool, String> boolKeys;
-
-
-
+private:
+    std::map<String, Array<Configurable*>> configured;
 
 };

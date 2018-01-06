@@ -12,7 +12,7 @@ namespace BinaryData
     const int            bluetooth_jsonSize = 1119;
 
     extern const char*   config_json;
-    const int            config_jsonSize = 6422;
+    const int            config_jsonSize = 6919;
 
     extern const char*   LatoRegular_ttf;
     const int            LatoRegular_ttfSize = 120196;

@@ -2,10 +2,10 @@
     "background": "/home/chip/chip.png",
     "shutdown command": "sudo shutdown -hP now",
     "restart command": "sudo shutdown -r now",
-    "timeformat": "24h",
+    "use 24h mode": true,
     "terminal launch command": "vala-terminal -e",
     "cursor": true,
-    "showclock": true,
+    "show clock": true,
     "favorites": [
         {
             "name": "Terminal",

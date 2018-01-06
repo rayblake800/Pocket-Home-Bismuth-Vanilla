@@ -14,8 +14,10 @@
 const std::vector<Colour> VectorImageButton::defaultColours =
         VectorImageButton::loadDefaultColours();
 
-VectorImageButton::VectorImageButton(ConfigFile::ComponentSettings settings,
-        String title) : TextButton(title), buttonSettings(settings)
+VectorImageButton::VectorImageButton
+(MainConfigFile::ComponentSettings settings, String title) :
+TextButton(title),
+buttonSettings(settings)
 {
     std::vector<String> assets = buttonSettings.getAssetFiles();
     std::vector<Colour> colours = buttonSettings.getColours();
@@ -30,7 +32,7 @@ VectorImageButton::VectorImageButton(ConfigFile::ComponentSettings settings,
             images.add(nullptr);
             continue;
         }
-        Drawable * svgDrawable=createSVGDrawable(svgFile);
+        Drawable * svgDrawable = createSVGDrawable(svgFile);
         if (svgDrawable == nullptr)
         {
             DBG(String("VectorImageButton:") + filename + " couldn't convert to drawable!");

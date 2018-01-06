@@ -25,10 +25,8 @@ public:
     void stopWaitingOnLaunch();
 
     //TODO: remove these after implementing configuration change messaging
-    void setClockAMPM(bool);
     void setColorBackground(const String&);
     void setImageBackground(const String&);
-    void setClockVisible(bool);
 private:
     void buttonClicked(Button *) override;
     bool keyPressed(const KeyPress &) override;

@@ -1,37 +1,65 @@
 #include "../PocketHomeApplication.h"
 #include "DateTimePage.h"
 
+const Colour DateTimePage::bgColour = Colour(0xffd23c6d);
+const String DateTimePage::pageTitle = "Date and time settings";
+
+const String DateTimePage::clockModeLabelText
+        = "Select the display mode for the clock:";
+const String DateTimePage::clockMode24h = "24h mode";
+const String DateTimePage::clockModeAmPm = "AM/PM mode";
+const String DateTimePage::clockModeNoShow = "Don't show clock";
+
+const String DateTimePage::reconfigureBtnText = "Reconfigure system clock";
+const String DateTimePage::reconfigureCommand
+        = " 'sudo dpkg-reconfigure tzdata ; exit'";
+const String DateTimePage::reconfErrorTitle = "Failed to launch terminal:";
+const String DateTimePage::reconfErrorPreCmd = "Running '";
+const String DateTimePage::reconfErrorPostCmd
+        = "' failed.\nIs the terminal launch command set correctly?";
+
 DateTimePage::DateTimePage() :
-bg_color(0xffd23c6d),
-title("settings", "Date and time settings"),
-choosemode("choosemode"),
-reconfigure("Reconfigure time"),
-datemode("datemode", "Select the display mode for the clock:")
+titleLabel("dateTimeTitleLabel", pageTitle),
+setClockMode("setClockMode"),
+reconfigureBtn(reconfigureBtnText),
+clockModeLabel("clockModeLabel", clockModeLabelText)
 {
     //Title font
-    title.setFont(Font(27.f));
-    datemode.setFont(Font(20.f));
+    titleLabel.setFont(Font(27.f));
+    clockModeLabel.setFont(Font(20.f));
     //Back button
-    backButton = createImageButton("Back", createImageFromFile(assetFile("backIcon.png")));
+    backButton = createImageButton("Back",
+            createImageFromFile(assetFile("backIcon.png")));
     backButton->addListener(this);
     backButton->setAlwaysOnTop(true);
     //ComboBox
-    choosemode.addItem("24h mode", 1);
-    choosemode.addItem("AM/PM mode", 2);
-    choosemode.addListener(this);
+    setClockMode.addItem(clockMode24h, 1);
+    setClockMode.addItem(clockModeAmPm, 2);
+    setClockMode.addItem(clockModeNoShow, 3);
+    setClockMode.addListener(this);
 
     //Let's check whether there is an option for time format in the config
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    if (config.getConfigString(TIME_FORMAT) == "ampm")
-        choosemode.setSelectedId(2);
-    else choosemode.setSelectedId(1);
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    if (config.getConfigBool(MainConfigFile::showClockKey))
+    {
+        if (config.getConfigBool(MainConfigFile::use24HrModeKey))
+        {
+            setClockMode.setSelectedId(1);
+        } else
+        {
+            setClockMode.setSelectedId(2);
+        }
+    } else
+    {
+        setClockMode.setSelectedId(3);
+    }
 
-    reconfigure.addListener(this);
+    reconfigureBtn.addListener(this);
 
-    addAndMakeVisible(datemode);
-    addAndMakeVisible(reconfigure);
-    addAndMakeVisible(choosemode);
-    addAndMakeVisible(title);
+    addAndMakeVisible(clockModeLabel);
+    addAndMakeVisible(reconfigureBtn);
+    addAndMakeVisible(setClockMode);
+    addAndMakeVisible(titleLabel);
     addAndMakeVisible(backButton);
 }
 
@@ -44,26 +72,36 @@ void DateTimePage::buttonClicked(Button* but)
     if (but == backButton)
         PocketHomeApplication::getInstance()->getMainStack()
         .popPage(PageStackComponent::kTransitionTranslateHorizontal);
-    else if (but == &reconfigure)
+    else if (but == &reconfigureBtn)
     {
-        int ret = system("vala-terminal -fs 8 -g 20 20 -e 'sudo dpkg-reconfigure tzdata ; exit'");
-        if (ret == -1)
-            AlertWindow::showMessageBox(AlertWindow::WarningIcon, "Error", "Failed launching vala-terminal, is it installed ?");
+        String configureTime = PocketHomeApplication::getInstance()->getConfig()
+                .getConfigString(MainConfigFile::termLaunchCommandKey)
+                + reconfigureCommand;
+        int ret = system(configureTime.toRawUTF8());
+        if (ret != 0)
+            AlertWindow::showMessageBox(AlertWindow::WarningIcon,
+                reconfErrorTitle,
+                reconfErrorPreCmd + configureTime + reconfErrorPostCmd);
     }
 }
 
 void DateTimePage::comboBoxChanged(ComboBox* c)
 {
-    if (c != &choosemode) return;
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    bool useAMPM = (c->getSelectedId() == 2);
-    config.setConfigString(TIME_FORMAT, useAMPM ? "ampm" : "24h");
+    if (c != &setClockMode) return;
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    bool showClock = (c->getSelectedId() != 3);
+    bool use24HrMode = (c->getSelectedId() == 1);
+    if (showClock)
+    {
+        config.setConfigBool(MainConfigFile::use24HrModeKey, use24HrMode);
+    }
+    config.setConfigBool(MainConfigFile::showClockKey, showClock);
 }
 
 void DateTimePage::paint(Graphics& g)
 {
     auto bounds = getLocalBounds();
-    g.fillAll(bg_color);
+    g.fillAll(bgColour);
 }
 
 void DateTimePage::resized()
@@ -72,17 +110,22 @@ void DateTimePage::resized()
     int btn_height = 30;
     int btn_width = 345;
 
-    int titlewidth = title.getFont().getStringWidth(title.getText());
+    int titlewidth = titleLabel.getFont().getStringWidth(titleLabel.getText());
     titlewidth /= 2;
-    title.setBounds(bounds.getX() + 240 - titlewidth, bounds.getY() + 10, btn_width, btn_height);
+    titleLabel.setBounds(bounds.getX() + 240 - titlewidth, bounds.getY() + 10,
+            btn_width, btn_height);
 
     backButton->setBounds(bounds.getX(), bounds.getY(), 60, bounds.getHeight());
 
-    int datewidth = datemode.getFont().getStringWidth(datemode.getText());
-    datemode.setBounds(bounds.getX() + 60, bounds.getY() + 70, datewidth, btn_height);
+    int datewidth = clockModeLabel.getFont()
+            .getStringWidth(clockModeLabel.getText());
+    clockModeLabel.setBounds(bounds.getX() + 60, bounds.getY() + 70, datewidth,
+            btn_height);
     int combowidth = 360 - datewidth;
-    choosemode.setBounds(bounds.getX() + 60 + datewidth, bounds.getY() + 70, combowidth, btn_height);
+    setClockMode.setBounds(bounds.getX() + 60 + datewidth, bounds.getY() + 70,
+            combowidth, btn_height);
 
     int middle = 240 - btn_width / 2;
-    reconfigure.setBounds(bounds.getX() + middle, bounds.getY() + 150, btn_width, btn_height);
+    reconfigureBtn.setBounds(bounds.getX() + middle, bounds.getY() + 150,
+            btn_width, btn_height);
 }

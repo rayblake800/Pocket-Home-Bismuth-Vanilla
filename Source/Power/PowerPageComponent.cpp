@@ -193,17 +193,17 @@ void PowerPageComponent::buttonStateChanged(Button *btn) {
 }
 
 void PowerPageComponent::buttonClicked(Button *button) {
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     PageStackComponent& mainStack = PocketHomeApplication::getInstance()
             ->getMainStack();
   if (button == backButton) {
     mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontalLeft);
   } else if (button == powerOffButton) {
     showPowerSpinner();
-    child.start(config.getConfigString(SHUTDOWN_COMMAND));
+    child.start(config.getConfigString(MainConfigFile::shutdownCommandKey));
   } else if (button == rebootButton) {
     showPowerSpinner();
-    child.start(config.getConfigString(RESTART_COMMAND));
+    child.start(config.getConfigString(MainConfigFile::restartCommandKey));
   } else if (button == sleepButton) {
     setSleep();
   } else if (button == felButton) {

@@ -19,8 +19,8 @@ AppMenuButton::AppMenuButton(DesktopEntry desktopEntry, int index, int column)
         index(index), 
         column(column){
     //setName(desktopEntry.getName());
-    ConfigFile& configFile = PocketHomeApplication::getInstance()->getConfig();
-    ConfigFile::ComponentSettings buttonSettings =
+    MainConfigFile& configFile = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile::ComponentSettings buttonSettings =
             configFile.getComponentSettings(APP_MENU_BUTTON);
     buttonSettings.applySize(this);
     std::vector<Colour> colours=buttonSettings.getColours();
@@ -54,10 +54,11 @@ String AppMenuButton::getAppName() {
 }
 
 String AppMenuButton::getCommand() {
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     String command = desktopEntry.getExec();
     if (desktopEntry.terminal()){
-        command = config.getConfigString(TERMINAL_LAUNCH_COMMAND) + command;
+        command = config.getConfigString(MainConfigFile::termLaunchCommandKey) 
+                + command;
     }
     return command;
 }
@@ -84,8 +85,8 @@ int AppMenuButton::getColumn() {
   }
 
 Rectangle<int> AppMenuButton::getButtonSize(){
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    ConfigFile::ComponentSettings buttonConf= 
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile::ComponentSettings buttonConf= 
             config.getComponentSettings(APP_MENU_BUTTON);
     return buttonConf.getBounds().withPosition(0,0);
 }

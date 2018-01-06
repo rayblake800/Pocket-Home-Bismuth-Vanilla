@@ -22,8 +22,8 @@ cursorvisible("cursorvisible", "Select the visibility of the cursor:")
     choosemode.addListener(this);
 
     //Let's check whether there is an option for time format in the config
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    if (config.getConfigBool(SHOW_CURSOR))
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    if (config.getConfigBool(MainConfigFile::showCursorKey))
     {
         choosemode.setSelectedId(2);
     } else
@@ -63,9 +63,9 @@ void InputSettingsPage::buttonClicked(Button* but)
 void InputSettingsPage::comboBoxChanged(ComboBox* c)
 {
     if (c != &choosemode) return;
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     bool cursorVisible = (c->getSelectedId() == 2);
-    config.setConfigBool(SHOW_CURSOR, cursorVisible);
+    config.setConfigBool(MainConfigFile::showCursorKey, cursorVisible);
 
     LookAndFeel& laf = getLookAndFeel();
     PokeLookAndFeel* mc = (PokeLookAndFeel*) & laf;

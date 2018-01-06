@@ -82,8 +82,9 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/SwitchComponent_95f41beb.o \
   $(JUCE_OBJDIR)/VectorImageButton_c4de9f2c.o \
   $(JUCE_OBJDIR)/ConfigFile_9d15fdc0.o \
-  $(JUCE_OBJDIR)/ConfigurableComponent_1df4ba2c.o \
+  $(JUCE_OBJDIR)/Configurable_13dc1c5b.o \
   $(JUCE_OBJDIR)/DateTimePage_a32d156c.o \
+  $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o \
   $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o \
   $(JUCE_OBJDIR)/BatteryIcon_9d60bae8.o \
   $(JUCE_OBJDIR)/BatteryMonitor_f25e5095.o \
@@ -207,14 +208,19 @@ $(JUCE_OBJDIR)/ConfigFile_9d15fdc0.o: ../../Source/Configuration/ConfigFile.cpp
 	@echo "Compiling ConfigFile.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/ConfigurableComponent_1df4ba2c.o: ../../Source/Configuration/ConfigurableComponent.cpp
+$(JUCE_OBJDIR)/Configurable_13dc1c5b.o: ../../Source/Configuration/Configurable.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ConfigurableComponent.cpp"
+	@echo "Compiling Configurable.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/DateTimePage_a32d156c.o: ../../Source/Configuration/DateTimePage.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling DateTimePage.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o: ../../Source/Configuration/MainConfigFile.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling MainConfigFile.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o: ../../Source/Configuration/PersonalizePageComponent.cpp

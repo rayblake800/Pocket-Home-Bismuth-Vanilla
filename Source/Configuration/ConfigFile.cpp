@@ -6,156 +6,67 @@
     Author:  anthony
   ==============================================================================
  */
-/**
- * Implementation reminder: Every method that gets data,sets data, or does file 
- * IO should use the lock. Don't forget to unlock before calling one locking
- * method within another!  
- */
 
 
 #include "../Utils.h"
 #include "ConfigFile.h"
-
-//Assign keymaps
-const std::map<String, ComponentType> ConfigFile::componentKeys =
-        ConfigFile::setComponentKeys();
-const std::map<ConfigString, String> ConfigFile::stringKeys =
-        ConfigFile::setStringKeys();
-const std::map<ConfigBool, String> ConfigFile::boolKeys =
-        ConfigFile::setBoolKeys();
+#include "Configurable.h"
 
 ConfigFile::ConfigFile(String configFilename) : filename(configFilename)
 {
-    bool madeChanges = false;
-    const ScopedLock readLock(lock);
+}
 
-    File configFile = File(getHomePath() + String(CONFIG_PATH)+filename);
-    if (!configFile.exists())
-    {
-        configFile.create();
-    }
-    var jsonConfig = JSON::parse(configFile);
+/**
+ * Writes any pending changes to the file before destruction.
+ */
+ConfigFile::~ConfigFile()
+{
+    const ScopedLock writeLock(lock);
+    writeChanges();
+}
 
-    //checks if a var member exists
-    std::function<bool(var, String) > exists = [](var json, String key)->bool
+/**
+ * Register an object as tracking configuration changes. That object
+ * is notified whenever any data it tracks is changed.
+ * 
+ * @param configurable an object that uses data stored in this ConfigFile 
+ * @param keys all data keys that the object needs to track.
+ */
+void ConfigFile::registerConfigurable(Configurable * configurable,
+        Array<String> keys)
+{
+    const ScopedLock changeLock(lock);
+    for (const String& key : keys)
     {
-        return json.getProperty(key, var::null) != var::null;
-    };
-
-    //gets a var member from config if it exists, or from the default config
-    //file otherwise.
-    var defaultConfig = var::null;
-    std::function < var(String) > getMainProperty =
-            [exists, &jsonConfig, &defaultConfig, &madeChanges](String key)->var
-            {
-                if (exists(jsonConfig, key))
-                {
-                    return jsonConfig.getProperty(key, "");
-                } else
-                {
-                    if (defaultConfig == var::null)
-                    {
-                        defaultConfig = JSON::parse(assetFile("config.json"));
-                    }
-                    madeChanges = true;
-                    return defaultConfig.getProperty(key, "");
-                }
-            };
-
-
-    //load strings
-    for (std::map<ConfigString, String>::const_iterator it =
-            stringKeys.begin();
-            it != stringKeys.end(); it++)
-    {
-        String key = it->second;
-        //        if (!(jsonConfig->getProperty(key).isString())) {
-        //            jsonConfig->setProperty(key, var::null);
-        //        }
-        stringValues[key] = getMainProperty(key).toString();
-    }
-
-    //load bools
-    for (std::map<ConfigBool, String>::const_iterator it =
-            boolKeys.begin();
-            it != boolKeys.end(); it++)
-    {
-        String key = it->second;
-        //        if (!jsonConfig->getProperty(key).isBool()) {
-        //            jsonConfig->setProperty(key, var::null);
-        //        }
-        boolValues[key] = getMainProperty(key);
-    }
-
-    //load favorites
-    var favoriteList;
-    if (exists(jsonConfig, "pages"))
-    {
-        DBG("backing up and extracting data from marshmallow config file");
-        //found a Marshmallow Pocket-Home config file, update it.
-        File legacyBackup = File(getHomePath() + "/.pocket-home/marshmallowConfig.json");
-        legacyBackup.create();
-        legacyBackup.replaceWithText(JSON::toString(jsonConfig));
-        var pages = jsonConfig.getProperty("pages", Array<var>());
-        for (const var& page : *pages.getArray())
-        {
-            if (page["name"] == "Apps" && page["items"].isArray())
-            {
-                favoriteList = page["items"];
-                madeChanges = true;
-                break;
-            }
-        }
-    } else
-    {//load favorites normally
-        favoriteList = getMainProperty(FAVORITES_KEY);
-    }
-    if (favoriteList.isArray())
-    {
-        for (const var& app : *favoriteList.getArray())
-        {
-            favoriteApps.push_back(AppItem(app));
-        }
-    }
-
-    //load categories
-    var categoryList = getMainProperty(FOLDERS_KEY);
-    if (categoryList.isArray())
-    {
-        for (const var& folder : *categoryList.getArray())
-        {
-            categoryFolders.push_back(AppFolder(folder));
-        }
-    }
-
-    //load component settings
-    for (std::map<String, ComponentType>::const_iterator it = componentKeys.begin();
-            it != componentKeys.end(); it++)
-    {
-        var componentData = getMainProperty(it->first);
-        components[it->second] = ComponentSettings(componentData);
-    }
-    if (madeChanges)
-    {
-        //writeChanges will want the lock, so it must be unlocked now
-        const ScopedUnlock unlock(lock);
-        writeChanges();
+        configured[key].add(configurable);
     }
 }
 
-ConfigFile::~ConfigFile()
+/**
+ * Removes an object from the list of objects to notify when configuration
+ * changes.
+ * @param configurable a configurable object to be unregistered.  If the
+ * object wasn't actually registered, nothing will happen.
+ * @param keys all keys that the configurable object will no longer track.
+ */
+void ConfigFile::unregisterConfigurable(Configurable * configurable,
+        Array<String> keys)
 {
+    const ScopedLock changeLock(lock);
+    for (const String& key : keys)
+    {
+        configured[key].removeAllInstancesOf(configurable);
+    }
 }
 
 //############################ String Data #####################################
 
-String ConfigFile::getConfigString(ConfigString configString)
+String ConfigFile::getConfigString(String stringKey)
 {
     const ScopedLock readLock(lock);
     try
     {
-        String key = stringKeys.at(configString);
-        return stringValues[key];
+        return stringValues.at(stringKey);
     } catch (std::out_of_range e)
     {
         DBG("getConfigString:missing key value!");
@@ -163,18 +74,20 @@ String ConfigFile::getConfigString(ConfigString configString)
     }
 }
 
-void ConfigFile::setConfigString(ConfigString configString,
+void ConfigFile::setConfigString(String stringKey,
         String newValue)
 {
     const ScopedLock writeLock(lock);
     try
     {
-        String key = stringKeys.at(configString);
-        if (stringValues[key] != newValue)
+        if (stringValues.at(stringKey) != newValue)
         {
-            stringValues[key] = newValue;
-            const ScopedUnlock writeUnlock(lock);
+            changesPending = true;
+            stringValues[stringKey] = newValue;
             writeChanges();
+
+            const ScopedUnlock allowDataAccess(lock);
+            notifyConfigurables(stringKey);
         }
     } catch (std::out_of_range e)
     {
@@ -184,13 +97,12 @@ void ConfigFile::setConfigString(ConfigString configString,
 
 //############################ Boolean Data ####################################
 
-bool ConfigFile::getConfigBool(ConfigBool configBool)
+bool ConfigFile::getConfigBool(String boolKey)
 {
     const ScopedLock readLock(lock);
     try
     {
-        String key = boolKeys.at(configBool);
-        return boolValues[key];
+        return boolValues.at(boolKey);
     } catch (std::out_of_range e)
     {
         DBG("setConfigBool:missing key value!");
@@ -199,18 +111,19 @@ bool ConfigFile::getConfigBool(ConfigBool configBool)
 
 }
 
-void ConfigFile::setConfigBool(ConfigBool configBool,
-        bool newValue)
+void ConfigFile::setConfigBool(String boolKey, bool newValue)
 {
     const ScopedLock writeLock(lock);
     try
     {
-        String key = boolKeys.at(configBool);
-        if (boolValues[key] != newValue)
+        if (boolValues.at(boolKey) != newValue)
         {
-            boolValues[key] = newValue;
-            const ScopedUnlock writeUnlock(lock);
+            changesPending = true;
+            boolValues[boolKey] = newValue;
             writeChanges();
+            const ScopedUnlock allowDataAccess(lock);
+            notifyConfigurables(boolKey);
+
         }
     } catch (std::out_of_range e)
     {
@@ -218,272 +131,93 @@ void ConfigFile::setConfigBool(ConfigBool configBool,
     }
 }
 
-//######################### Application Data ###############################
 
-ConfigFile::AppItem::AppItem()
-{
-}
-
-ConfigFile::AppItem::AppItem(var jsonObj)
-{
-    name = jsonObj.getProperty("name", "");
-    icon = jsonObj.getProperty("icon", "");
-    shell = jsonObj.getProperty("shell", "");
-}
-
-DynamicObject* ConfigFile::AppItem::getDynamicObject()
-{
-    DynamicObject * appObject = new DynamicObject();
-    appObject->setProperty("name", name);
-    appObject->setProperty("icon", icon);
-    appObject->setProperty("shell", shell);
-    return appObject;
-}
-
-bool ConfigFile::AppItem::operator==(const AppItem& rhs) const
-{
-    return icon == rhs.icon &&
-            name == rhs.name &&
-            shell == rhs.shell;
-}
-
-std::vector<ConfigFile::AppItem> ConfigFile::getFavorites()
-{
-    const ScopedLock readLock(lock);
-    return favoriteApps;
-}
-
-void ConfigFile::setFavorites(std::vector<AppItem> newFavorites)
-{
-    const ScopedLock writeLock(lock);
-    favoriteApps = newFavorites;
-    {
-        const ScopedUnlock writeUnlock(lock);
-        writeChanges();
-    }
-}
-
-//######################### Folder/Category Data ###########################
-
-ConfigFile::AppFolder::AppFolder()
-{
-}
-
-ConfigFile::AppFolder::AppFolder(var jsonObj)
-{
-    name = jsonObj.getProperty("name", "");
-    icon = jsonObj.getProperty("icon", "");
-
-    categories.clear();
-    var catList = jsonObj["categories"];
-    if (catList.isArray())
-    {
-        for (var category : *catList.getArray())
-        {
-            categories.push_back(category);
-        }
-    }
-
-    pinnedApps.clear();
-    var appList = jsonObj["pinned apps"];
-    if (appList.isArray())
-    {
-        for (var app : *appList.getArray())
-        {
-            pinnedApps.push_back(AppItem(app));
-        }
-    }
-}
-
-DynamicObject* ConfigFile::AppFolder::getDynamicObject()
-{
-    DynamicObject * folderObject = new DynamicObject();
-    folderObject->setProperty("name", name);
-    folderObject->setProperty("icon", icon);
-
-    Array<var> categoryArray;
-    for (int i = 0; i < categories.size(); i++)
-    {
-        categoryArray.add(categories[i]);
-    }
-    folderObject->setProperty(String("categories"), categoryArray);
-
-    Array<var> appArray;
-    for (int i = 0; i < pinnedApps.size(); i++)
-    {
-        appArray.add(var(pinnedApps[i].getDynamicObject()));
-    }
-    folderObject->setProperty(String("pinned apps"), appArray);
-    return folderObject;
-}
-
-bool ConfigFile::AppFolder::operator==(const AppFolder& rhs) const
-{
-    return name == rhs.name &&
-            icon == rhs.icon &&
-            categories == rhs.categories &&
-            pinnedApps == rhs.pinnedApps;
-}
-
-std::vector<ConfigFile::AppFolder> ConfigFile::getFolders()
-{
-    const ScopedLock readLock(lock);
-    return categoryFolders;
-}
-
-//########################### UI Component Data ################################
-
-ConfigFile::ComponentSettings::ComponentSettings() : x(0), y(0), width(0), height(0)
-{
-}
-
-ConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
-{
-    x = jsonObj.getProperty("x", 0);
-    y = jsonObj.getProperty("y", 0);
-    width = jsonObj.getProperty("width", 0);
-    height = jsonObj.getProperty("height", 0);
-
-    var colourList = jsonObj["colours"];
-    if (colourList.isArray())
-    {
-        for (var colour : *colourList.getArray())
-        {
-            if (colour.isString())
-            {
-                colours.push_back(Colour::fromString(colour.toString()));
-            }
-        }
-    }
-    var assetList = jsonObj["asset files"];
-    if (assetList.isArray())
-    {
-        for (var asset : *assetList.getArray())
-        {
-            assetFiles.push_back(asset);
-        }
-    }
-}
-
-DynamicObject * ConfigFile::ComponentSettings::getDynamicObject()
-{
-    DynamicObject * componentObject = new DynamicObject();
-    componentObject->setProperty("x", x);
-    componentObject->setProperty("y", y);
-    componentObject->setProperty("width", width);
-    componentObject->setProperty("height", height);
-    Array<var> coloursListed;
-    for (int i = 0; i < colours.size(); i++)
-    {
-        coloursListed.add(var(colours[i].toString()));
-    }
-    componentObject->setProperty("colours", coloursListed);
-
-    Array<var> assetFilesListed;
-    for (int i = 0; i < assetFiles.size(); i++)
-    {
-        assetFilesListed.add(var(assetFiles[i]));
-    }
-    componentObject->setProperty("asset files", assetFilesListed);
-    return componentObject;
-}
-
-bool ConfigFile::ComponentSettings::operator==(const ComponentSettings& rhs) const
-{
-    return x == rhs.x &&
-            y == rhs.y &&
-            width == rhs.width &&
-            height == rhs.height &&
-            colours == rhs.colours &&
-            assetFiles == rhs.assetFiles;
-}
-
-Rectangle<int> ConfigFile::ComponentSettings::getBounds()
-{
-    Rectangle<int>window = getWindowSize();
-    return Rectangle<int>(x * window.getWidth(), y * window.getHeight(),
-            width * window.getWidth(), height * window.getHeight());
-}
-
-std::vector<Colour> ConfigFile::ComponentSettings::getColours()
-{
-    return colours;
-}
-
-std::vector<String> ConfigFile::ComponentSettings::getAssetFiles()
-{
-    return assetFiles;
-}
-
-void ConfigFile::ComponentSettings::applyBounds(Component * component)
-{
-    component->setBounds(getBounds());
-}
-
-void ConfigFile::ComponentSettings::applySize(Component * component)
-{
-    Rectangle<int>screen = getWindowSize();
-    component->setSize(width * screen.getWidth(), height * screen.getHeight());
-}
-
-ConfigFile::ComponentSettings ConfigFile::getComponentSettings(ComponentType componentType)
-{
-    const ScopedLock readLock(lock);
-    return components[componentType];
-}
 
 //################################# File IO ####################################
 
+/**
+ * Read in this object's data from a json config object
+ */
+void ConfigFile::readDataFromJson(var& config, var& defaultConfig)
+{
+    //load strings
+    Array<String> stringKeys = getStringKeys();
+    for (const String& key : stringKeys)
+    {
+        stringValues[key] = getProperty(config, defaultConfig, key).toString();
+    }
+
+    //load bools
+    Array<String> boolKeys = getBoolKeys();
+    for (const String& key : boolKeys)
+    {
+        boolValues[key] = getProperty(config, defaultConfig, key);
+    }
+
+}
+
+/**
+ * Copy all config data to a json object
+ */
+void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
+{
+    Array<String> stringKeys = getStringKeys();
+    for (const String& key : stringKeys)
+    {
+        jsonObj->setProperty(key, stringValues[key]);
+    }
+
+    Array<String> boolKeys = getBoolKeys();
+    for (const String& key : boolKeys)
+    {
+        jsonObj->setProperty(key, boolValues[key]);
+    }
+}
+
+/**
+ * Checks if a property exists in config data
+ */
+bool ConfigFile::propertyExists(var& config, String propertyKey)
+{
+    return config.getProperty(propertyKey, var::null) != var::null;
+}
+
+/**
+ * Gets a property from json configuration data, or from default
+ * configuration data if necessary
+ */
+var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
+{
+    if (propertyExists(config, key))
+    {
+        return config.getProperty(key, var::null);
+    } else
+    {
+        if (defaultConfig == var::null)
+        {
+            defaultConfig = JSON::parse(assetFile(filename));
+        }
+        changesPending = true;
+        return defaultConfig.getProperty(key, var::null);
+    }
+}
+
+/**
+ * Re-writes all data back to the config file, as long as there are
+ * changes to write.
+ */
 void ConfigFile::writeChanges()
 {
-    const ScopedLock writeLock(lock);
-    DynamicObject * jsonBuilder = new DynamicObject();
-
-    //set strings
-    for (std::map<ConfigString, String>::const_iterator it =
-            stringKeys.begin();
-            it != stringKeys.end(); it++)
+    if (!changesPending)
     {
-        String key = it->second;
-        jsonBuilder->setProperty(key, stringValues[key]);
+        return;
     }
-
-    //set bools
-    for (std::map<ConfigBool, String>::const_iterator it =
-            boolKeys.begin();
-            it != boolKeys.end(); it++)
-    {
-        String key = it->second;
-        jsonBuilder->setProperty(key, boolValues[key]);
-    }
-
-    //set favorites
-    Array<var> favoriteArray;
-    for (int i = 0; i < favoriteApps.size(); i++)
-    {
-        favoriteArray.add(var(favoriteApps[i].getDynamicObject()));
-    }
-
-    //set folders
-    Array<var> categoryArray;
-    for (int i = 0; i < categoryFolders.size(); i++)
-    {
-        categoryArray.add(var(categoryFolders[i].getDynamicObject()));
-    }
-    jsonBuilder->setProperty(FAVORITES_KEY, favoriteArray);
-    jsonBuilder->setProperty(FOLDERS_KEY, categoryArray);
-
-    //set components
-    for (std::map<String, ComponentType>::const_iterator it = componentKeys.begin();
-            it != componentKeys.end(); it++)
-    {
-        String key = it->first;
-        jsonBuilder->setProperty(key, components[it->second].getDynamicObject());
-    }
+    DynamicObject::Ptr jsonBuilder = new DynamicObject();
+    copyDataToJson(jsonBuilder.get());
 
     //convert to JSON string, write to config.json
-    String jsonText = JSON::toString(jsonBuilder);
-    File configFile = File(getHomePath() + String(CONFIG_PATH)+filename);
+    String jsonText = JSON::toString(jsonBuilder.get());
+    File configFile = File(getHomePath() + String(CONFIG_PATH) + filename);
     if (!configFile.exists())
     {
         configFile.create();
@@ -491,14 +225,25 @@ void ConfigFile::writeChanges()
     if (!configFile.replaceWithText(jsonText))
     {
         String message = String("Failed to save changes to ~")
-                +String(CONFIG_PATH)+filename
-                +String("\nMake sure you have permission to write to this file.");
+                + String(CONFIG_PATH) + filename
+                + String("\nMake sure you have permission to write to this file.");
         AlertWindow::showMessageBox(
                 AlertWindow::AlertIconType::WarningIcon,
                 "Error saving configuration:",
                 message);
+    } else
+    {
+        changesPending = false;
     }
 }
 
-
-
+/**
+ * Announce new changes to each object tracking a particular key.
+ */
+void ConfigFile::notifyConfigurables(String key)
+{
+    for (Configurable * tracking : configured[key])
+    {
+        tracking->configChanged(key);
+    }
+}

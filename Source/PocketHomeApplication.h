@@ -11,7 +11,7 @@
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainComponent.h"
-#include "Configuration/ConfigFile.h"
+#include "Configuration/MainConfigFile.h"
 #include "Wifi/WifiStatus.h"
 #include "BluetoothStatus.h"
 #include "Utils.h"
@@ -27,16 +27,16 @@ public:
     static PocketHomeApplication* getInstance();
 
     PageStackComponent& getMainStack();
-    
+
     WifiStatus& getWifiStatus();
-    
+
     BluetoothStatus& getBluetoothStatus();
-    
-    ConfigFile& getConfig();
+
+    MainConfigFile& getConfig();
 
 private:
     bool initAudio();
-    ConfigFile configFile;
+    MainConfigFile configFile;
 #ifdef LINUX
     WifiStatusNM wifiStatusNM;
 #else

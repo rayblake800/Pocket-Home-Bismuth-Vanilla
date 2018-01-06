@@ -15,14 +15,14 @@
 
 AppMenuPage::AppMenuPage()
 {
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     setWantsKeyboardFocus(true);
     setExplicitFocusOrder(1);
 
     appMenu=new AppMenuComponent();
     addAndMakeVisible(appMenu);
 
-    ConfigFile::ComponentSettings frameSettings =
+    MainConfigFile::ComponentSettings frameSettings =
             config.getComponentSettings(MENU_FRAME);
     std::vector<String> assets = frameSettings.getAssetFiles();
     if (!assets.empty())
@@ -54,17 +54,17 @@ AppMenuPage::AppMenuPage()
     /* Setting the clock */
     positionLabel(&(clock.getLabel()), CLOCK);
     clock.getLabel().setJustificationType(Justification::centredRight);
-    String formatclock = config.getConfigString(TIME_FORMAT);
-    setClockVisible(config.getConfigBool(SHOW_CLOCK));
-    setClockAMPM(formatclock == "ampm");
-
-    String value = config.getConfigString(BACKGROUND);
 
     bgColor = Colour(0x4D4D4D);
-    if (value.length() == 6 && value.containsOnly("0123456789ABCDEF"))
-        setColorBackground(value);
+    String bgValue=config.getConfigString(MainConfigFile::backgroundKey);
+    if (bgValue.length() == 6 && bgValue.containsOnly("0123456789ABCDEF"))
+    {
+        setColorBackground(bgValue);
+    }
     else
-        setImageBackground(value);
+    {
+        setImageBackground(bgValue);
+    }
     batteryIcon=new BatteryIcon();
     wifiIcon=new WifiIcon();
     addAndMakeVisible(batteryIcon);
@@ -118,26 +118,6 @@ void AppMenuPage::setImageBackground(const String& str)
     *bgImage = createImageFromFile(f);
 }
 
-void AppMenuPage::setClockVisible(bool visible)
-{
-    if (visible)
-    {
-        if (clock.isThreadRunning()) return;
-        addAndMakeVisible(clock.getLabel(), 10);
-        clock.startThread();
-    } else
-    {
-        if (!clock.isThreadRunning()) return;
-        Label& l = clock.getLabel();
-        removeChildComponent(&l);
-        clock.stopThread(1500);
-    }
-}
-
-void AppMenuPage::setClockAMPM(bool ampm)
-{
-    clock.setAmMode(ampm);
-}
 
 void AppMenuPage::buttonClicked(Button * button)
 {
@@ -192,10 +172,10 @@ void AppMenuPage::visibilityChanged()
 
 void AppMenuPage::resized()
 {
-    ConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    ConfigFile::ComponentSettings frameSettings =
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile::ComponentSettings frameSettings =
             config.getComponentSettings(MENU_FRAME);
-    ConfigFile::ComponentSettings menuSettings =
+    MainConfigFile::ComponentSettings menuSettings =
             config.getComponentSettings(APP_MENU);
     menuSettings.applyBounds(appMenu);
     if (frame != nullptr)
