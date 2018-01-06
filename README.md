@@ -28,7 +28,7 @@ lacking, but there a lot more options you can tweak in ~/.pocket-home/config.jso
 
 ####  2. Cloning and building
       
-      git clone --recursive https://github.com/o-marshmallow/PocketCHIP-pocket-home/
+      git clone --recursive https://github.com/centuryglass/PocketCHIP-pocket-home.git
       make
       make devinstall
       sudo systemctl restart lightdm
