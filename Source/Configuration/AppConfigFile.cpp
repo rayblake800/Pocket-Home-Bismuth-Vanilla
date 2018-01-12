@@ -65,13 +65,13 @@ bool AppConfigFile::AppItem::operator==(const AppItem& rhs) const
             shell == rhs.shell;
 }
 
-std::vector<AppConfigFile::AppItem> AppConfigFile::getFavorites()
+Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 {
     const ScopedLock readLock(lock);
     return favoriteApps;
 }
 
-void AppConfigFile::setFavorites(std::vector<AppItem> newFavorites)
+void AppConfigFile::setFavorites(Array<AppItem> newFavorites)
 {
     const ScopedLock writeLock(lock);
     favoriteApps = newFavorites;
@@ -98,7 +98,7 @@ AppConfigFile::AppFolder::AppFolder(var jsonObj)
     {
         for (var category : *catList.getArray())
         {
-            categories.push_back(category);
+            categories.add(category);
         }
     }
 
@@ -108,7 +108,10 @@ AppConfigFile::AppFolder::AppFolder(var jsonObj)
     {
         for (var app : *appList.getArray())
         {
-            pinnedApps.push_back(AppItem(app));
+            AppItem pinnedApp=AppItem(app);
+            pinnedApp.index=pinnedApps.size();
+            pinnedApp.folder=name;
+            pinnedApps.add(pinnedApp);
         }
     }
 }
@@ -143,7 +146,7 @@ bool AppConfigFile::AppFolder::operator==(const AppFolder& rhs) const
             pinnedApps == rhs.pinnedApps;
 }
 
-std::vector<AppConfigFile::AppFolder> AppConfigFile::getFolders()
+Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 {
     const ScopedLock readLock(lock);
     return categoryFolders;
@@ -159,34 +162,14 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
 {
     ConfigFile::readDataFromJson(config, defaultConfig);
     //load favorites
-    var favoriteList;
-    if (propertyExists(config, "pages"))
-    {
-        DBG("backing up and extracting data from marshmallow config file");
-        //found a Marshmallow Pocket-Home config file, update it.
-        File legacyBackup = File(getHomePath()
-                + "/.pocket-home/marshmallowConfig.json");
-        legacyBackup.create();
-        legacyBackup.replaceWithText(JSON::toString(config));
-        var pages = config.getProperty("pages", Array<var>());
-        for (const var& page : *pages.getArray())
-        {
-            if (page["name"] == "Apps" && page["items"].isArray())
-            {
-                favoriteList = page["items"];
-                changesPending = true;
-                break;
-            }
-        }
-    } else
-    {//load favorites normally
-        favoriteList = getProperty(config, defaultConfig, FAVORITES_KEY);
-    }
+    var favoriteList = getProperty(config, defaultConfig, FAVORITES_KEY);
     if (favoriteList.isArray())
     {
         for (const var& app : *favoriteList.getArray())
         {
-            favoriteApps.push_back(AppItem(app));
+            AppItem fave = AppItem(app);
+            fave.index=favoriteApps.size();
+            favoriteApps.add(fave);
         }
     }
     //load categories
@@ -195,7 +178,9 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
     {
         for (const var& folder : *categoryList.getArray())
         {
-            categoryFolders.push_back(AppFolder(folder));
+            AppFolder menuFolder = AppFolder(folder);
+            menuFolder.index=categoryFolders.size();
+            categoryFolders.add(menuFolder);
         }
     }
 }
@@ -221,5 +206,4 @@ void AppConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
     }
     jsonObj->setProperty(FAVORITES_KEY, favoriteArray);
     jsonObj->setProperty(FOLDERS_KEY, categoryArray);
-
 }

@@ -9,8 +9,9 @@
 #define APPMENU_H
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Configuration/AppConfigFile.h"
+#include "IconThread.h"
 #include "DesktopEntries.h"
-#include "AppMenuButton.h"
+#include "AppMenuButton/AppMenuButton.h"
 
 /**
  * 
@@ -22,6 +23,12 @@ public:
     AppMenuComponent();
     virtual ~AppMenuComponent();
 
+    /**
+     * Loads all app menu buttons, optionally reloading desktop entries as well
+     * @param reloadEntries if true, read all desktop entries from the
+     * file system again
+     */
+    void loadButtons(bool reloadEntries);
     
 
     //################ AppMenuButton Management   #############################
@@ -45,7 +52,7 @@ public:
      * associated desktop applications.
      * @param categoryName the categories include in the folder
      */
-    void openFolder(std::vector<String> categoryNames);
+    void openFolder(Array<String> categoryNames);
 
     /**
      * close the topmost open folder, removing all contained buttons
@@ -96,6 +103,7 @@ private:
     int x_origin;
     int y_origin;
 
+    IconThread iconThread;
     //store active processes with a pointer to their button index
     HashMap<AppMenuButton::Ptr, int> runningAppsByButton;
     OwnedArray<ChildProcess> runningApps;

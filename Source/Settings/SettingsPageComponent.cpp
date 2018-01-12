@@ -58,24 +58,24 @@ volumeSliderTimer(this)
     }
 #endif
     ScopedPointer<Drawable> brightLow=Drawable::createFromImageFile
-            (assetFile("brightnessIconLo.png"));
+            (assetFile("brightnessIconLo.svg"));
     ScopedPointer<Drawable> brightHigh=Drawable::createFromImageFile
-            (assetFile("brightnessIconHi.png"));
+            (assetFile("brightnessIconHi.svg"));
     screenBrightnessSlider = new IconSliderComponent(brightLow,brightHigh);
     screenBrightnessSlider->addListener(this);
     screenBrightnessSlider->setValue(1 + (brightness - 0.09)*10);
 
     ScopedPointer<Drawable> volLow=Drawable::createFromImageFile
-            (assetFile("volumeIconLo.png"));
+            (assetFile("volumeIconLo.svg"));
     ScopedPointer<Drawable> volHigh=Drawable::createFromImageFile
-            (assetFile("volumeIconHi.png"));
+            (assetFile("volumeIconHi.svg"));
     volumeSlider = new IconSliderComponent(volLow,volHigh);
     volumeSlider->addListener(this);
     volumeSlider->setValue(volume);
 
     // create back button
     backButton = createImageButton(
-            "Back", createImageFromFile(assetFile("backIcon.png")));
+            "Back", createImageFromFile(assetFile("backIcon.svg")));
     backButton->addListener(this);
     backButton->setAlwaysOnTop(true);
     addAndMakeVisible(backButton);

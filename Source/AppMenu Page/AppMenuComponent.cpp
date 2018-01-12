@@ -7,6 +7,9 @@
 
 #include <set>
 #include "../PocketHomeApplication.h"
+#include "AppMenuButton/DesktopEntryButton.h"
+#include "AppMenuButton/ConfigAppButton.h"
+#include "AppMenuButton/AppFolderButton.h"
 #include "AppMenuComponent.h"
 
 AppMenuComponent::AppMenuComponent() : launchTimer(this)
@@ -31,29 +34,8 @@ AppMenuComponent::AppMenuComponent() : launchTimer(this)
     setWantsKeyboardFocus(false);
     launchSpinner = new OverlaySpinner();
     launchSpinner->setAlwaysOnTop(true);
-    selected.push_back(nullptr);
-    columnTops.push_back(y_origin);
-    buttonColumns.emplace(buttonColumns.begin());
 
-    //read in main page apps from config
-    std::vector<AppConfigFile::AppItem> favorites = appConfig.getFavorites();
-    for (const AppConfigFile::AppItem& favorite : favorites)
-    {
-        DBG(String("AppMenu:Found app in config:") + favorite.name);
-        addButton(new AppMenuButton(DesktopEntry(favorite),
-                buttonColumns[activeColumn()].size(), activeColumn()));
-    }
-
-    //add category buttons
-    std::vector<AppConfigFile::AppFolder> categories = appConfig.getFolders();
-    for (const AppConfigFile::AppFolder& category : categories)
-    {
-        addButton(new AppMenuButton(DesktopEntry(category),
-                buttonColumns[activeColumn()].size(), activeColumn()));
-    }
-    DBG(String("added ") + String(buttonColumns[activeColumn()].size())
-            + " buttons");
-    scrollToSelected();
+    loadButtons(false);
 }
 
 AppMenuComponent::~AppMenuComponent()
@@ -63,18 +45,64 @@ AppMenuComponent::~AppMenuComponent()
 }
 
 /**
+ * Loads all app menu buttons, optionally reloading desktop entries as well
+ * @param reloadEntries if true, read all desktop entries from the
+ * file system again
+ */
+void AppMenuComponent::loadButtons(bool reloadEntries)
+{
+    if (reloadEntries)
+    {
+        desktopEntries.loadEntries();
+    }
+
+    while (!buttonColumns.empty())
+    {
+        closeFolder();
+    }
+    buttonColumns.clear();
+    columnTops.clear();
+    selected.clear();
+    selected.push_back(nullptr);
+    columnTops.push_back(y_origin);
+    buttonColumns.emplace(buttonColumns.begin());
+
+    //read in main page apps from config
+    Array<AppConfigFile::AppItem> favorites = appConfig.getFavorites();
+    for (const AppConfigFile::AppItem& favorite : favorites)
+    {
+        DBG(String("AppMenu:Found app in config:") + favorite.name);
+        addButton(new ConfigAppButton(favorite,
+                buttonColumns[activeColumn()].size(),
+                activeColumn(),iconThread));
+    }
+
+    //add category buttons
+    Array<AppConfigFile::AppFolder> categories = appConfig.getFolders();
+    for (const AppConfigFile::AppFolder& category : categories)
+    {
+        addButton(new AppFolderButton(category,
+                buttonColumns[activeColumn()].size(),
+                activeColumn(),iconThread));
+    }
+    DBG(String("added ") + String(buttonColumns[activeColumn()].size())
+            + " buttons");
+    scrollToSelected();
+}
+
+/**
  * Open an application category folder, creating AppMenuButtons for all
  * associated desktop applications.
  */
-void AppMenuComponent::openFolder(std::vector<String> categoryNames)
+void AppMenuComponent::openFolder(Array<String> categoryNames)
 {
     int folderIndex = selected[activeColumn()]->getIndex() -
             appConfig.getFavorites().size();
-    AppConfigFile::AppFolder selectedFolder = 
+    AppConfigFile::AppFolder selectedFolder =
             appConfig.getFolders()[folderIndex];
     std::set<DesktopEntry> folderItems =
             desktopEntries.getCategoryListEntries(categoryNames);
-    if (folderItems.empty() && selectedFolder.pinnedApps.empty())return;
+    if (folderItems.empty() && selectedFolder.pinnedApps.isEmpty())return;
     int columnTop = y_origin;
     if (selected[activeColumn()] != nullptr)
     {
@@ -94,17 +122,19 @@ void AppMenuComponent::openFolder(std::vector<String> categoryNames)
             addedButton->setColumn(activeColumn());
         } else
         {
-            addedButton = new AppMenuButton(DesktopEntry(item),
-                    buttonColumns[activeColumn()].size(), activeColumn());
+            addedButton = new ConfigAppButton(item,
+                    buttonColumns[activeColumn()].size(),
+                    activeColumn(),iconThread);
         }
         addButton(addedButton);
     }
     DBG(String("found ") + String(folderItems.size()) + " items in folder");
     for (DesktopEntry desktopEntry : folderItems)
     {
-        if (!desktopEntry.hidden() && !desktopEntry.noDisplay())
+        if (!desktopEntry.getValue(DesktopEntry::hidden) 
+                && !desktopEntry.getValue(DesktopEntry::hidden))
         {
-            String name = desktopEntry.getName();
+            String name = desktopEntry.getValue(DesktopEntry::name);
             AppMenuButton::Ptr addedButton;
             if (buttonNameMap[name] != nullptr &&
                     buttonNameMap[name]->getParentComponent() == nullptr)
@@ -114,8 +144,9 @@ void AppMenuComponent::openFolder(std::vector<String> categoryNames)
                 addedButton->setColumn(activeColumn());
             } else
             {
-                addedButton = new AppMenuButton(desktopEntry,
-                        buttonColumns[activeColumn()].size(), activeColumn());
+                addedButton = new DesktopEntryButton(desktopEntry,
+                        buttonColumns[activeColumn()].size(), 
+                        activeColumn(),iconThread);
             }
             addButton(addedButton);
         }
@@ -430,7 +461,7 @@ void AppMenuComponent::AppLaunchTimer::timerCallback()
             {
                 DBG("process dies, show message");
                 String output = trackedProcess->readAllProcessOutput();
-                std::vector<String> lines = split(output, "\n");
+                Array<String> lines = split(output, "\n");
                 output = "";
                 for (int i = lines.size() - 1;
                         i > lines.size() - 6 && i >= 0; i--)

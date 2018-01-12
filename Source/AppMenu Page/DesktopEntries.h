@@ -12,6 +12,7 @@
 
 
 #include <map>
+#include <set>
 #include "../Utils.h"
 #include "DesktopEntry.h"
 class DesktopEntries {
@@ -38,13 +39,19 @@ public:
      * @return all DesktopEntry objects with at least one of the category values
      * in categories
      */
-    std::set<DesktopEntry> getCategoryListEntries(std::vector<String> categoryList);
+    std::set<DesktopEntry> getCategoryListEntries(Array<String> categoryList);
     
     /**
      * Get the list of all categories found in all desktop entries.
      * @return a set of all category entries
      */
     std::set<String> getCategories();
+    
+    /**
+     * Discards any existing entry data and reloads all desktop entries
+     * from the file system.
+     */
+    void loadEntries();
     
 private:
     //list of all entries

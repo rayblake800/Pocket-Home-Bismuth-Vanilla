@@ -12,92 +12,179 @@
 #ifndef DESKTOPENTRY_H
 #define DESKTOPENTRY_H
 #include <map>
-#include <set>
 #include "../Configuration/AppConfigFile.h"
 
 class DesktopEntry {
 public:
-    enum Type {
-        APPLICATION,
-        LINK,
-        DIRECTORY
-    };
     /**
      * Load DesktopEntry data from a .desktop or .directory file
      * @param path absolute path of the source file
-     * @param localeName used for selecting locale-specific data from the file
      */
-    DesktopEntry(String path, String localeName);
-    
-    /**
-     * Creates a DesktopEntry object representing an application category
-     * @param category a ConfigFile app folder data structure
-     */
-    DesktopEntry(AppConfigFile::AppFolder appFolder);
-    
-    /**
-     * Create a DesktopEntry object with data from the config file
-     * @param appItem a ConfigFile app data structure
-     */
-    DesktopEntry(AppConfigFile::AppItem appItem);
-    
+    DesktopEntry(String path);
+
+    //Copy constructor
     DesktopEntry(const DesktopEntry& orig);
     virtual ~DesktopEntry();
+
+    /**
+     * Defines all entry Type values. Only the application type is currently
+     * handled correctly.
+     */
+    enum Type {
+        application,
+        link,
+        directory
+    };
+
+    /**
+     * @return the file type for this entry, or application if no valid type
+     * is found
+     */
+    Type getType() const;
+
+    /**
+     * Defines all possible String values that can be stored in a DesktopEntry.
+     */
+    enum StringValue {
+        version,
+        name,
+        genericName,
+        comment,
+        icon,
+        tryExec,
+        exec,
+        path,
+        startupWMClass,
+        url
+    };
+    
+    /**
+     * Defines all possible boolean values that can be stored in a DesktopEntry.
+     */
+    enum BoolValue {
+        noDisplay,
+        hidden,
+        dBusActivatable,
+        terminal,
+        startupNotify
+    };
+    /**
+     * Defines all String list values that can be stored in a DesktopEntry.
+     */
+    enum ListValue {
+        onlyShowIn,
+        notShowIn,
+        actions,
+        mimeType,
+        categories,
+        implements,
+        keywords
+    };
+
+    /**
+     * Get stored string data.
+     * @param valueType the desired string variable
+     * @return the stored value, or empty string if not found.
+     */
+    String getValue(StringValue valueType) const;
+
+    /**
+     * Get stored boolean data.
+     * @param valueType the desired bool variable
+     * @return the stored value, or false if not found.
+     */
+    bool getValue(BoolValue valueType) const;
+
+    /**
+     * Get stored list data.
+     * @param valueType the desired list variable
+     * @return the stored value, or false if not found.
+     */
+    Array<String> getValue(ListValue valueType) const;
+
+    /**
+     * Changes the value of stored string data.
+     * @param valueType the StringValue to change
+     * @param newValue the new value for valueType
+     */
+    void setValue(StringValue valueType, String newValue);
+
+    /**
+     * Changes the value of stored boolean data.
+     * @param valueType the BoolValue to change
+     * @param newValue the new value for valueType
+     */
+    void setValue(BoolValue valueType, bool newValue);
+
+    /**
+     * Changes the value of stored list data.
+     * @param valueType the StringValue to change
+     * @param newValue the new value for valueType
+     */
+    void setValue(ListValue valueType, Array<String> newValue);
+
+    /**
+     * Exports this entry to a .Desktop file.  This creates or
+     * overwrites a file in ~/.local/share/applications, so the changes will
+     * only apply to this user.
+     */
+    void writeFile();
+    
     
     //To prevent duplicates, two entries are equal as long as they have
-    //the same display name.
-    bool operator == (const DesktopEntry toCompare) const;
-    bool operator < (const DesktopEntry toCompare) const;
-    
-    //The following methods get Desktop file variables as they are
-    //defined by the standard.
-    
-    Type getType();
-    String getName() const;
-    String getVersion();
-    String getGenericName();
-    String getComment();
-    String getIconPath();
-    String getExec();
-    String getPath();
-    String getStartupWMClass();
-    String getURL();
-    std::vector<String> getActions();
-    std::vector<String> getMimeType();
-    std::vector<String> getCategories();
-    std::vector<String> getImplements();
-    std::vector<String> getKeywords();
-    
+    //the same file name.
+    bool operator==(const DesktopEntry toCompare) const;
+    //useful for sorting entries by name, 
+    bool operator<(const DesktopEntry toCompare) const;
 
-    bool onlyShowIn(String env);
-    bool notShowIn(String env);
-    bool tryExec();
-    
-    bool noDisplay();
-    bool hidden();
-    bool dBusActivatable();
-    bool terminal();
-    bool startupNotify();
 private:
-    static constexpr const char* DEFAULT_APP_ICON_PATH=
-    "/usr/share/pocket-home/appIcons/default.png";
-    static constexpr const char* DEFAULT_DIRECTORY_ICON_PATH=
-    "/usr/share/pocket-home/appIcons/filebrowser.png";
-    //Contains filename(no extention)=fullpath/filename.extension mappings
-    //for all icons found on the system.  Recursively mapping all icon
-    //directories is time consuming and should only be done once per run.
-    static std::map<String,String> iconPaths;
-    static bool iconPathsMapped;
+    /**
+     * @param valueType any StringValue
+     * @return that value's key String
+     */
+    String getKey(StringValue valueType) const;
+
+    /**
+     * @param valueType any BoolValue
+     * @return that value's key String
+     */
+    String getKey(BoolValue valueType) const;
+
+    /**
+     * @param valueType any ListValue
+     * @return that value's key String
+     */
+    String getKey(ListValue valueType) const;
+
+    static constexpr const char* typeKey = "Type";
+
+    /**
+     * @return the locale name as it would appear in .desktop files
+     */
+    String getLocale();
+
+    struct LineValues {
+        String key;
+        String locale;
+        String value;
+    };
+
+    /**
+     * Parses desktop entry file lines
+     * @param line a single line from a desktop entry file
+     * @return the data extracted from that line
+     */
+    LineValues getLineData(String line);
+
+    //Stores all data values as strings, mapped to their respective key values
+    std::map<String, String> dataStrings;
+
     //path of the .Desktop/.Directory file
     String entrypath;
-    //keys that store string and boolean data:
-    std::map<String, String> appStrings;
-    std::map<String,bool> appBools;
-    Type type;
-    //initialize string and bool maps with all valid keys
-    void mapInit();
-    //used to track down absolute icon paths
-    void mapIcons(); 
+
+    //local user directory for storing updated .Desktop files
+    static const String localEntryPath;
+
 };
 
 #endif /* DESKTOPENTRY_H */

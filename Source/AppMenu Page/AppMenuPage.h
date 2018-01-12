@@ -18,16 +18,26 @@
 #include "Info Components/WifiIcon.h"
 #include "AppMenuComponent.h"
 
-class AppMenuPage : public Component, private Button::Listener{
+class AppMenuPage : public Component,
+public Configurable,
+private Button::Listener {
 public:
     AppMenuPage();
     virtual ~AppMenuPage();
     void stopWaitingOnLaunch();
 
     //TODO: remove these after implementing configuration change messaging
+
+protected:
+    /**
+     * Tracks page background changes
+     * @param config should be the MainConfigFile
+     * @param key should be the background key
+     */
+    void loadConfigProperties(ConfigFile * config, String key);
+private:    
     void setColorBackground(const String&);
     void setImageBackground(const String&);
-private:
     void buttonClicked(Button *) override;
     bool keyPressed(const KeyPress &) override;
     void visibilityChanged() override;
@@ -41,10 +51,10 @@ private:
     ScopedPointer<WifiIcon> wifiIcon;
     ScopedPointer<VectorImageButton> powerButton;
     ScopedPointer<VectorImageButton> settingsButton;
-    
+
     ScopedPointer<PowerPageComponent> powerPage;
     ScopedPointer<SettingsPageComponent> settingsPage;
-    
+
     ScopedPointer<Image> bgImage;
     ScopedPointer<Drawable> frame;
     //for each of these values, screenSize/val=totalSize

@@ -12,17 +12,28 @@
       </df>
       <df name="Source">
         <df name="AppMenu Page">
+          <df name="AppMenuButton">
+            <in>AppFolderButton.cpp</in>
+            <in>AppMenuButton.cpp</in>
+            <in>ConfigAppButton.cpp</in>
+            <in>DesktopEntryButton.cpp</in>
+          </df>
           <df name="Info Components">
             <in>BatteryIcon.cpp</in>
             <in>BatteryMonitor.cpp</in>
             <in>ClockMonitor.cpp</in>
             <in>WifiIcon.cpp</in>
           </df>
+          <in>AppEditComponent.cpp</in>
+          <in>AppFolderButton.cpp</in>
           <in>AppMenuButton.cpp</in>
           <in>AppMenuComponent.cpp</in>
           <in>AppMenuPage.cpp</in>
+          <in>ConfigAppButton.cpp</in>
           <in>DesktopEntries.cpp</in>
           <in>DesktopEntry.cpp</in>
+          <in>DesktopEntryButton.cpp</in>
+          <in>IconThread.cpp</in>
         </df>
         <df name="Basic Components">
           <in>Grid.cpp</in>
@@ -63,6 +74,7 @@
           <in>WifiIcon.cpp</in>
         </df>
         <df name="Configuration">
+          <in>AppConfigFile.cpp</in>
           <in>ComponentConfigFile.cpp</in>
           <in>ConfigFile.cpp</in>
           <in>Configurable.cpp</in>
@@ -194,7 +206,49 @@
         <ccTool flags="2">
         </ccTool>
       </item>
+      <item path="Source/AppMenu Page/AppEditComponent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/AppFolderButton.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
       <item path="Source/AppMenu Page/AppMenuButton.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/AppMenuButton/AppFolderButton.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/AppMenuButton/AppMenuButton.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/AppMenuButton/ConfigAppButton.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/AppMenuButton/DesktopEntryButton.cpp"
             ex="false"
             tool="1"
             flavor2="8">
@@ -215,6 +269,13 @@
         <ccTool flags="2">
         </ccTool>
       </item>
+      <item path="Source/AppMenu Page/ConfigAppButton.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
       <item path="Source/AppMenu Page/DesktopEntries.cpp"
             ex="false"
             tool="1"
@@ -226,6 +287,17 @@
             ex="false"
             tool="1"
             flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/DesktopEntryButton.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/IconThread.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="2">
         </ccTool>
       </item>
@@ -868,6 +940,47 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
+        </ccTool>
+      </item>
+      <item path="Source/Configuration/AppConfigFile.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+          <incDir>
+            <pElem>/usr/include/libnm-glib</pElem>
+            <pElem>/usr/include/NetworkManager</pElem>
+            <pElem>/usr/include/dbus-1.0</pElem>
+            <pElem>/usr/lib/dbus-1.0/include</pElem>
+            <pElem>/usr/include/alsa</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/libpng16</pElem>
+            <pElem>/usr/include/harfbuzz</pElem>
+            <pElem>/usr/include/glib-2.0</pElem>
+            <pElem>/usr/lib/glib-2.0/include</pElem>
+            <pElem>JuceLibraryCode</pElem>
+            <pElem>deps/JUCE/modules</pElem>
+            <pElem>Source/Wifi</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Pages</pElem>
+            <pElem>Source/Components/Basic</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>DEBUG=1</Elem>
+            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
+            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
+            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
+            <Elem>JucePlugin_Build_AAX=0</Elem>
+            <Elem>JucePlugin_Build_AU=0</Elem>
+            <Elem>JucePlugin_Build_AUv3=0</Elem>
+            <Elem>JucePlugin_Build_RTAS=0</Elem>
+            <Elem>JucePlugin_Build_Standalone=0</Elem>
+            <Elem>JucePlugin_Build_VST3=0</Elem>
+            <Elem>JucePlugin_Build_VST=0</Elem>
+            <Elem>LINUX=1</Elem>
+            <Elem>_DEBUG=1</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Configuration/ComponentConfigFile.cpp"
@@ -1802,8 +1915,6 @@
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
         </ccTool>
-      </item>
-      <item path="assets/apps.json" ex="false" tool="3" flavor2="0">
       </item>
       <folder path="0/JuceLibraryCode">
         <ccTool>

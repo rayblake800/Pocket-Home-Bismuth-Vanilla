@@ -29,6 +29,8 @@ public:
         String name;
         String icon;
         String shell;
+        int index;
+        String folder;
         DynamicObject * getDynamicObject();
         bool operator==(const AppItem& rhs)const;
     };
@@ -36,14 +38,14 @@ public:
      * @return a list of AppItems to be pinned to the main column 
      * of the AppMenu
      */
-    std::vector<AppItem> getFavorites();
+    Array<AppItem> getFavorites();
 
     /**
      * Save new favorites data into config.
      * @param newFavorites a new list of favorite apps to be pinned to the
      * main column of the AppMenu
      */
-    void setFavorites(std::vector<AppItem> newFavorites);
+    void setFavorites(Array<AppItem> newFavorites);
 
     //######################### Folder/Category Data ###########################
 
@@ -55,16 +57,17 @@ public:
         AppFolder();
         AppFolder(var jsonObj);
         String name;
-        std::vector<String> categories;
+        Array<String> categories;
         String icon;
-        std::vector<AppItem> pinnedApps;
+        Array<AppItem> pinnedApps;
+        int index;
         DynamicObject * getDynamicObject();
         bool operator==(const AppFolder& rhs) const;
     };
     /**
      * @return A list of folders to display in the AppMenu 
      */
-    std::vector<AppFolder> getFolders();
+    Array<AppFolder> getFolders();
 
 private:
 
@@ -84,8 +87,8 @@ private:
      */
     void copyDataToJson(DynamicObject::Ptr jsonObj) override final;
 
-    std::vector<AppItem> favoriteApps;
-    std::vector<AppFolder> categoryFolders;
+    Array<AppItem> favoriteApps;
+    Array<AppFolder> categoryFolders;
     static constexpr const char* filenameConst = "apps.json";
     static constexpr const char* FAVORITES_KEY = "favorites";
     static constexpr const char* FOLDERS_KEY = "folders";

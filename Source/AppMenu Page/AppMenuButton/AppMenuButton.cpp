@@ -8,18 +8,17 @@
   ==============================================================================
  */
 
-#include "../PokeLookAndFeel.h"
-#include "../Utils.h"
-#include "../PocketHomeApplication.h"
+#include "../../PokeLookAndFeel.h"
+#include "../../Utils.h"
+#include "../../PocketHomeApplication.h"
 #include "AppMenuButton.h"
 
-AppMenuButton::AppMenuButton(DesktopEntry desktopEntry, int index, int column)
-: TextButton(desktopEntry.getName()),
-desktopEntry(desktopEntry),
+AppMenuButton::AppMenuButton
+(String name, int index, int column)
+: TextButton(name),
 index(index),
 column(column)
 {
-    //setName(desktopEntry.getName());
     ComponentConfigFile& configFile = PocketHomeApplication::getInstance()
             ->getComponentConfig();
     ComponentConfigFile::ComponentSettings buttonSettings =
@@ -32,16 +31,6 @@ column(column)
         fillColour = colours[0];
         selectedFillColour = colours[1];
     }
-
-    String iconPath = desktopEntry.getIconPath();
-    if (iconPath == "")
-    {
-        iconPath = "/usr/share/pocket-home/appIcons/";
-        if (isFolder())iconPath += "filebrowser.png";
-        else iconPath += "default.png";
-    }
-    DBG(String("Found icon path " + iconPath));
-    appIcon = createImageFromFile(File(iconPath));
     setWantsKeyboardFocus(false);
     resized();
 }
@@ -51,39 +40,12 @@ void AppMenuButton::setSelected(bool select)
     selected = select;
 }
 
-bool AppMenuButton::isFolder()
-{
-    return desktopEntry.getType() == DesktopEntry::DIRECTORY;
-}
-
-String AppMenuButton::getAppName()
-{
-    return desktopEntry.getName();
-}
-
-String AppMenuButton::getCommand()
-{
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    String command = desktopEntry.getExec();
-    if (desktopEntry.terminal())
-    {
-        command = config.getConfigString(MainConfigFile::termLaunchCommandKey)
-                + command;
-    }
-    return command;
-}
-
-std::vector<String> AppMenuButton::getCategories()
-{
-    return desktopEntry.getCategories();
-}
-
-int AppMenuButton::getIndex()
+int AppMenuButton::getIndex() const
 {
     return index;
 }
 
-int AppMenuButton::getColumn()
+int AppMenuButton::getColumn() const
 {
     return column;
 }
@@ -138,6 +100,7 @@ void AppMenuButton::resized()
     //It looks messy if all the fonts are different sizes, so using a default
     //String for size calculations is preferable even if really long names can 
     //get clipped.
-    titleFont = fontResizedToFit(titleFont, "DefaultAppName", textBox.toNearestInt());
+    titleFont = fontResizedToFit(titleFont, "DefaultAppNameString",
+            textBox.toNearestInt());
 }
 

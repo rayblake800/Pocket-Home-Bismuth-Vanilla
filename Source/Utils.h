@@ -27,12 +27,11 @@ float mapLinear(float x, float imin, float imax, float omin, float omax);
 
 void animateTranslation(Component *component, int x, int y, float alpha, int durationMillis);
 
-std::vector<String> split(const String &orig, const String &delim);
+Array<String> split(const String &orig, const String &delim);
 
 //returns true if the file at path already exists
 bool fileExists(const String& path);
-//get the locale name as it would appear in .desktop files
-String getLocale();
+
 //get the user's home path
 String getHomePath();
 

@@ -13,7 +13,12 @@
 #include "../PocketHomeApplication.h"
 #include "AppMenuPage.h"
 
-AppMenuPage::AppMenuPage()
+AppMenuPage::AppMenuPage() :
+Configurable(&PocketHomeApplication::getInstance()->getConfig(),
+{
+
+    MainConfigFile::backgroundKey
+})
 {
     ComponentConfigFile& config = PocketHomeApplication::getInstance()
             ->getComponentConfig();
@@ -56,17 +61,7 @@ AppMenuPage::AppMenuPage()
     positionLabel(&(clock.getLabel()), ComponentConfigFile::clockIconKey);
     clock.getLabel().setJustificationType(Justification::centredRight);
 
-    bgColor = Colour(0x4D4D4D);
-    MainConfigFile& mainConfig = PocketHomeApplication::getInstance()
-            ->getConfig();
-    String bgValue = mainConfig.getConfigString(MainConfigFile::backgroundKey);
-    if (bgValue.length() == 6 && bgValue.containsOnly("0123456789ABCDEF"))
-    {
-        setColorBackground(bgValue);
-    } else
-    {
-        setImageBackground(bgValue);
-    }
+    loadAllConfigProperties();
     batteryIcon = new BatteryIcon();
     wifiIcon = new WifiIcon();
     addAndMakeVisible(batteryIcon);
@@ -99,10 +94,45 @@ void AppMenuPage::stopWaitingOnLaunch()
     appMenu->stopWaitingOnLaunch();
 }
 
+
+
+void AppMenuPage::loadConfigProperties(ConfigFile * config, String key)
+{
+    MainConfigFile& mainConf = PocketHomeApplication::getInstance()->getConfig();
+    if (mainConf == *config && key == MainConfigFile::backgroundKey)
+    {
+        String background = mainConf.getConfigString
+                (MainConfigFile::backgroundKey);
+        if (background.containsOnly("0123456789ABCDEF"))
+        {
+            setColorBackground(background);
+        } else
+        {
+            setImageBackground(background);
+        }
+    }
+}
+
+
+void AppMenuPage::buttonClicked(Button * button)
+{
+    PageStackComponent& pageStack = PocketHomeApplication::getInstance()
+            ->getMainStack();
+    if (button == settingsButton)
+    {
+        pageStack.pushPage(settingsPage,
+                PageStackComponent::kTransitionTranslateHorizontal);
+    } else if (button == powerButton)
+    {
+        pageStack.pushPage(powerPage,
+                PageStackComponent::kTransitionTranslateHorizontalLeft);
+    }
+}
+
 void AppMenuPage::setColorBackground(const String& str)
 {
     String value = "FF" + str;
-    bgColor = Colour(str.getHexValue32());
+    bgColor = Colour(value.getHexValue32());
     bgImage = nullptr;
 }
 
@@ -120,26 +150,14 @@ void AppMenuPage::setImageBackground(const String& str)
     *bgImage = createImageFromFile(f);
 }
 
-void AppMenuPage::buttonClicked(Button * button)
-{
-    PageStackComponent& pageStack = PocketHomeApplication::getInstance()
-            ->getMainStack();
-    if (button == settingsButton)
-    {
-        pageStack.pushPage(settingsPage,
-                PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == powerButton)
-    {
-        pageStack.pushPage(powerPage,
-                PageStackComponent::kTransitionTranslateHorizontalLeft);
-    }
-}
-
 bool AppMenuPage::keyPressed(const KeyPress& key)
 {
     //don't interrupt animation
     if (Desktop::getInstance().getAnimator().isAnimating(appMenu))return false;
     int keyCode = key.getKeyCode();
+    if (keyCode == KeyPress::tabKey){
+        appMenu->loadButtons(true);
+    }
     if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
     {
         if (keyCode == KeyPress::upKey)appMenu->selectPrevious();

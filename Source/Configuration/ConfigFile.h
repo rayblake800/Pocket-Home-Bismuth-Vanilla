@@ -107,6 +107,9 @@ public:
      * @param newValue the new value for the bool
      */
     void setConfigBool(String boolKey, bool newValue);
+    
+    //ConfigFiles are equal if they have the same filename.
+    bool operator==(const ConfigFile& rhs) const;
 protected:
     /**
      * Read in this object's data from a json config object

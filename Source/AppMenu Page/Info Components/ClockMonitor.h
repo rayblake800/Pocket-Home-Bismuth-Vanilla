@@ -23,10 +23,10 @@ protected:
      */
     void loadConfigProperties(ConfigFile * config,String key);
 private:
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ClockMonitor)
     char formatted[10];
     bool use24HrMode;
     ScopedPointer<Label> clock;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ClockMonitor)
 };
 
 #endif

@@ -23,6 +23,7 @@ Configurable(static_cast<ConfigFile*>
 TextButton(title)
 {
     loadAllConfigProperties();
+    setWantsKeyboardFocus(false);
     DBG(String("Created button ") + title + String(" at ")
             + getBounds().toString());
 }

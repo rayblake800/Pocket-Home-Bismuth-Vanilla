@@ -90,6 +90,23 @@
               file="Source/Configuration/PersonalizePageComponent.h"/>
       </GROUP>
       <GROUP id="{E5D177ED-F000-E2C8-AB9E-11F897C0E250}" name="AppMenu Page">
+        <GROUP id="{14A7C029-841F-00F9-4B37-871CD7FA6F85}" name="AppMenuButton">
+          <FILE id="fvzvAY" name="ConfigAppButton.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/ConfigAppButton.cpp"/>
+          <FILE id="U6ltQT" name="ConfigAppButton.h" compile="0" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/ConfigAppButton.h"/>
+          <FILE id="ywgZrz" name="DesktopEntryButton.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/DesktopEntryButton.cpp"/>
+          <FILE id="yffTeN" name="DesktopEntryButton.h" compile="0" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/DesktopEntryButton.h"/>
+          <FILE id="S9FOVq" name="AppFolderButton.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/AppFolderButton.cpp"/>
+          <FILE id="QvD4I5" name="AppFolderButton.h" compile="0" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/AppFolderButton.h"/>
+          <FILE id="yT2LgN" name="AppMenuButton.h" compile="0" resource="0" file="Source/AppMenu Page/AppMenuButton/AppMenuButton.h"/>
+          <FILE id="wuxNd9" name="AppMenuButton.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/AppMenuButton.cpp"/>
+        </GROUP>
         <GROUP id="{559D4599-2DCA-D578-255D-9A50712E8E88}" name="Info Components">
           <FILE id="r72J8h" name="BatteryIcon.cpp" compile="1" resource="0" file="Source/AppMenu Page/Info Components/BatteryIcon.cpp"/>
           <FILE id="HVRJip" name="BatteryIcon.h" compile="0" resource="0" file="Source/AppMenu Page/Info Components/BatteryIcon.h"/>
@@ -103,9 +120,10 @@
           <FILE id="TnTmFi" name="WifiIcon.cpp" compile="1" resource="0" file="Source/AppMenu Page/Info Components/WifiIcon.cpp"/>
           <FILE id="BIw8ef" name="WifiIcon.h" compile="0" resource="0" file="Source/AppMenu Page/Info Components/WifiIcon.h"/>
         </GROUP>
-        <FILE id="RfZTfT" name="AppMenuButton.cpp" compile="1" resource="0"
-              file="Source/AppMenu Page/AppMenuButton.cpp"/>
-        <FILE id="SXnRzo" name="AppMenuButton.h" compile="0" resource="0" file="Source/AppMenu Page/AppMenuButton.h"/>
+        <FILE id="aOGazE" name="AppEditComponent.cpp" compile="1" resource="0"
+              file="Source/AppMenu Page/AppEditComponent.cpp"/>
+        <FILE id="TJaQOq" name="AppEditComponent.h" compile="0" resource="0"
+              file="Source/AppMenu Page/AppEditComponent.h"/>
         <FILE id="CQWz5p" name="AppMenuComponent.cpp" compile="1" resource="0"
               file="Source/AppMenu Page/AppMenuComponent.cpp"/>
         <FILE id="Kt2Wk4" name="AppMenuComponent.h" compile="0" resource="0"
@@ -115,10 +133,12 @@
         <FILE id="CyIMe5" name="DesktopEntries.cpp" compile="1" resource="0"
               file="Source/AppMenu Page/DesktopEntries.cpp"/>
         <FILE id="ZwmY3m" name="DesktopEntries.h" compile="0" resource="0"
-              file="Source/AppMenu Page/DesktopEntries.h"/>
+              file="Source/AppMenu Page/DesktopEntries.h" xcodeResource="1"/>
         <FILE id="gzJ765" name="DesktopEntry.cpp" compile="1" resource="0"
               file="Source/AppMenu Page/DesktopEntry.cpp"/>
         <FILE id="sxvXV0" name="DesktopEntry.h" compile="0" resource="0" file="Source/AppMenu Page/DesktopEntry.h"/>
+        <FILE id="a25qaH" name="IconThread.cpp" compile="1" resource="0" file="Source/AppMenu Page/IconThread.cpp"/>
+        <FILE id="kTeYJT" name="IconThread.h" compile="0" resource="0" file="Source/AppMenu Page/IconThread.h"/>
       </GROUP>
       <GROUP id="{C8D0B15F-7CBD-8609-EE8B-F47CFF846C00}" name="Settings">
         <FILE id="zZK08d" name="AdvancedSettingsPage.cpp" compile="1" resource="0"

@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
         <df name="Release">
         </df>
       </df>
@@ -3564,6 +3562,16 @@
       </df>
       <df name="Source">
         <df name="AppMenu Page">
+          <df name="AppMenuButton">
+            <in>AppFolderButton.cpp</in>
+            <in>AppFolderButton.h</in>
+            <in>AppMenuButton.cpp</in>
+            <in>AppMenuButton.h</in>
+            <in>ConfigAppButton.cpp</in>
+            <in>ConfigAppButton.h</in>
+            <in>DesktopEntryButton.cpp</in>
+            <in>DesktopEntryButton.h</in>
+          </df>
           <df name="Info Components">
             <in>BatteryIcon.cpp</in>
             <in>BatteryIcon.h</in>
@@ -3574,16 +3582,22 @@
             <in>WifiIcon.cpp</in>
             <in>WifiIcon.h</in>
           </df>
+          <in>AppEditComponent.cpp</in>
+          <in>AppEditComponent.h</in>
+          <in>AppFolderButton.cpp</in>
           <in>AppMenuButton.cpp</in>
-          <in>AppMenuButton.h</in>
           <in>AppMenuComponent.cpp</in>
           <in>AppMenuComponent.h</in>
           <in>AppMenuPage.cpp</in>
           <in>AppMenuPage.h</in>
+          <in>ConfigAppButton.cpp</in>
           <in>DesktopEntries.cpp</in>
           <in>DesktopEntries.h</in>
           <in>DesktopEntry.cpp</in>
           <in>DesktopEntry.h</in>
+          <in>DesktopEntryButton.cpp</in>
+          <in>IconThread.cpp</in>
+          <in>IconThread.h</in>
         </df>
         <df name="Basic Components">
           <in>Grid.cpp</in>
