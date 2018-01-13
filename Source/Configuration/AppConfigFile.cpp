@@ -6,7 +6,7 @@
     Author:  anthony
 
   ==============================================================================
-*/
+ */
 
 #include "AppConfigFile.h"
 #include "../Utils.h"
@@ -24,7 +24,6 @@ AppConfigFile::AppConfigFile() : ConfigFile(filenameConst)
 AppConfigFile::~AppConfigFile()
 {
 }
-
 
 Array<String> AppConfigFile::getStringKeys() const
 {
@@ -65,18 +64,35 @@ bool AppConfigFile::AppItem::operator==(const AppItem& rhs) const
             shell == rhs.shell;
 }
 
+/**
+ * @return a list of AppItems to be pinned to the main column 
+ * of the AppMenu
+ */
 Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 {
     const ScopedLock readLock(lock);
     return favoriteApps;
 }
 
-void AppConfigFile::setFavorites(Array<AppItem> newFavorites)
+/**
+ * Add a new app to the list of pinned favorite apps in the config file
+ */
+void AppConfigFile::addFavoriteApp(AppItem newApp, int index)
 {
-    const ScopedLock writeLock(lock);
-    favoriteApps = newFavorites;
+    const ScopedLock changeLock(lock);
+    favoriteApps.insert(index,newApp);
+    writeChanges();
+}
+
+/**
+ * Remove an app from the list of favorite applications
+ */
+void AppConfigFile::removeFavoriteApp(int index)
+{
+    const ScopedLock changeLock(lock);
+    if(index>=0 && index < favoriteApps.size())
     {
-        const ScopedUnlock writeUnlock(lock);
+        favoriteApps.remove(index);
         writeChanges();
     }
 }
@@ -108,9 +124,9 @@ AppConfigFile::AppFolder::AppFolder(var jsonObj)
     {
         for (var app : *appList.getArray())
         {
-            AppItem pinnedApp=AppItem(app);
-            pinnedApp.index=pinnedApps.size();
-            pinnedApp.folder=name;
+            AppItem pinnedApp = AppItem(app);
+            pinnedApp.index = pinnedApps.size();
+            pinnedApp.folder = name;
             pinnedApps.add(pinnedApp);
         }
     }
@@ -146,10 +162,60 @@ bool AppConfigFile::AppFolder::operator==(const AppFolder& rhs) const
             pinnedApps == rhs.pinnedApps;
 }
 
+/**
+ * @return A list of folders to display in the AppMenu 
+ */
 Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 {
     const ScopedLock readLock(lock);
     return categoryFolders;
+}
+
+/**
+ * Add a new folder to the list of AppFolders in the config file
+ */
+void AppConfigFile::addAppFolder(AppFolder newFolder, int index)
+{
+    const ScopedLock changeLock(lock);
+    categoryFolders.insert(index, newFolder);
+    writeChanges();
+}
+
+/**
+ * Remove a folder from the list of AppFolders
+ */
+void AppConfigFile::removeAppFolder(int index)
+{
+    const ScopedLock changeLock(lock);
+    categoryFolders.remove(index);
+    writeChanges();
+}
+
+/**
+ * Add a new app to the top of an AppFolder
+ */
+void AppConfigFile::addPinnedApp
+(AppItem newApp, int folderIndex, int appIndex)
+{
+    const ScopedLock changeLock(lock);
+    if(folderIndex >= 0 && folderIndex < categoryFolders.size())
+    {
+        categoryFolders[folderIndex].pinnedApps.insert(appIndex);
+        writeChanges();
+    }
+}
+
+/**
+ * Remove a pinned app from an AppFolder
+ */
+void AppConfigFile::removePinnedApp(int folderIndex, int appIndex)
+{
+    const ScopedLock changeLock(lock);
+    if(folderIndex >= 0 && folderIndex < categoryFolders.size())
+    {
+        categoryFolders[folderIndex].pinnedApps.remove(appIndex);
+        writeChanges();
+    }
 }
 
 
@@ -168,7 +234,7 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
         for (const var& app : *favoriteList.getArray())
         {
             AppItem fave = AppItem(app);
-            fave.index=favoriteApps.size();
+            fave.index = favoriteApps.size();
             favoriteApps.add(fave);
         }
     }
@@ -179,7 +245,7 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
         for (const var& folder : *categoryList.getArray())
         {
             AppFolder menuFolder = AppFolder(folder);
-            menuFolder.index=categoryFolders.size();
+            menuFolder.index = categoryFolders.size();
             categoryFolders.add(menuFolder);
         }
     }

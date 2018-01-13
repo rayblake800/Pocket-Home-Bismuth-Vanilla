@@ -1,8 +1,7 @@
 {
-    "background": "/home/chip/chip.png",
-    "shutdown command": "sudo shutdown -hP now",
-    "restart command": "sudo shutdown -r now",
+    "background": "FF4D4D4D",
+    "shutdown command": "systemctl poweroff",
+    "restart command": "systemctl reboot",
     "terminal launch command": "vala-terminal -e",
-    "cursor": true,
-    
+    "cursor": true
 }

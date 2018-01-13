@@ -47,7 +47,7 @@ String DesktopEntryButton::getCommand() const
         MainConfigFile& config = PocketHomeApplication::getInstance()
                 ->getConfig();
         command = config.getConfigString
-                (MainConfigFile::termLaunchCommandKey) + command;
+                (MainConfigFile::termLaunchCommandKey) + String(" ")  + command;
     }
     return command;
 }

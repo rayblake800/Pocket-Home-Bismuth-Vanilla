@@ -34,6 +34,7 @@ public:
         DynamicObject * getDynamicObject();
         bool operator==(const AppItem& rhs)const;
     };
+    
     /**
      * @return a list of AppItems to be pinned to the main column 
      * of the AppMenu
@@ -41,11 +42,17 @@ public:
     Array<AppItem> getFavorites();
 
     /**
-     * Save new favorites data into config.
-     * @param newFavorites a new list of favorite apps to be pinned to the
-     * main column of the AppMenu
+     * Add a new app to the list of pinned favorite apps in the config file
+     * @param newApp new application information
+     * @param index position to insert the new application
      */
-    void setFavorites(Array<AppItem> newFavorites);
+    void addFavoriteApp(AppItem newApp, int index);
+
+    /**
+     * Remove an app from the list of favorite applications
+     * @param index position of the app to remove
+     */
+    void removeFavoriteApp(int index);
 
     //######################### Folder/Category Data ###########################
 
@@ -64,10 +71,39 @@ public:
         DynamicObject * getDynamicObject();
         bool operator==(const AppFolder& rhs) const;
     };
+    
     /**
      * @return A list of folders to display in the AppMenu 
      */
     Array<AppFolder> getFolders();
+
+    /**
+     * Add a new folder to the list of AppFolders in the config file
+     * @param newFolder defines the new folder
+     * @param index where to insert the new folder
+     */
+    void addAppFolder(AppFolder newFolder, int index);
+    
+    /**
+     * Remove a folder from the list of AppFolders
+     * @param index position of the folder to remove
+     */
+    void removeAppFolder(int index);
+    
+    /**
+     * Add a new app to the top of an AppFolder
+     * @param newApp defines the new application
+     * @param folderIndex which folder holds the new pinned app
+     * @param appIndex index of the new app in the folder's pinned apps
+     */
+    void addPinnedApp(AppItem newApp, int folderIndex, int appIndex);
+
+    /**
+     * Remove a pinned app from an AppFolder
+     * @param folderIndex the position of the folder
+     * @param appIndex the position of the pinned app in the folder
+     */
+    void removePinnedApp(int folderIndex, int appIndex);
 
 private:
 

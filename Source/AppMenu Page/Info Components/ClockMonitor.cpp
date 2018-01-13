@@ -22,7 +22,6 @@ use24HrMode(false)
     clock->setFont(Font(16.5f));
     //clock->setColour(Label::backgroundColourId, PokeLookAndFeel::chipPurple);
     clock->setColour(Label::textColourId, Colours::white);
-    clock->setAlwaysOnTop(true);
     loadAllConfigProperties();
 }
 
