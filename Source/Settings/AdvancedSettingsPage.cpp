@@ -101,7 +101,7 @@ void AdvancedSettingsPage::resized(){
 }
 
 void AdvancedSettingsPage::deleteIcon(String name, String shell){
-  ppc->deleteIcon(name, shell);
+  //ppc->deleteIcon(name, shell);
 }
 
 void AdvancedSettingsPage::displayNoPassword(){

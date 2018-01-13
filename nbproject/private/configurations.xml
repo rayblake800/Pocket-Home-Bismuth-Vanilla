@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
         <df name="Release">
         </df>
       </df>
@@ -3717,6 +3715,8 @@
         <in>ConfigFile.cpp</in>
         <in>DesktopEntries.cpp</in>
         <in>DesktopEntry.cpp</in>
+        <in>GridLayoutManager.cpp</in>
+        <in>GridLayoutManager.h</in>
         <in>LauncherComponent.cpp</in>
         <in>LauncherComponent.h</in>
         <in>LoginPage.cpp</in>

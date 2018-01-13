@@ -14,6 +14,10 @@
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
+      <FILE id="X7wz2M" name="GridLayoutManager.cpp" compile="1" resource="0"
+            file="Source/GridLayoutManager.cpp"/>
+      <FILE id="r4oAKB" name="GridLayoutManager.h" compile="0" resource="0"
+            file="Source/GridLayoutManager.h"/>
       <FILE id="QfgT5g" name="BluetoothStatus.cpp" compile="1" resource="0"
             file="Source/BluetoothStatus.cpp"/>
       <FILE id="cpqm4n" name="BluetoothStatus.h" compile="0" resource="0"
