@@ -80,7 +80,7 @@ void FileSelectTextEditor::buttonClicked(Button* button)
             false,
             Colours::lightgrey);
     Rectangle<int> size = getWindowSize();
-    if (dialogBox.show(size.getX(), size.getY()))
+    if (dialogBox.show(size.getWidth(), size.getHeight()))
     {
         File selectedFile = browser.getSelectedFile(0);
         setText(selectedFile.getFullPathName());
