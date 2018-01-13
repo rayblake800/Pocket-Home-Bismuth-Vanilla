@@ -200,7 +200,7 @@ void AppConfigFile::addPinnedApp
     const ScopedLock changeLock(lock);
     if(folderIndex >= 0 && folderIndex < categoryFolders.size())
     {
-        categoryFolders[folderIndex].pinnedApps.insert(appIndex);
+        categoryFolders[folderIndex].pinnedApps.insert(appIndex,newApp);
         writeChanges();
     }
 }
