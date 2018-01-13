@@ -4,13 +4,17 @@
 //isn't so messy
 
 /* Personalize class */
-PersonalizePageComponent::PersonalizePageComponent() :
+PersonalizePageComponent::PersonalizePageComponent(AppConfigFile& appConfig) :
+appConfig(appConfig),
 background("lab_back", "Background"), icons("lab_icons", "Icons management"),
 opt_back("opt_back", ""), opt_name("opt_name", "Name:"),
 opt_img("opt_img", "Icon path:"), opt_shell("opt_shell", "Command:"),
 add_btn("Add"), apply("Apply"), choose_back("back_box"),
-edit_back("back_field"), edit_name("name"), edit_icn("icn"),
-edit_shell("shell"), success("suc", "Success !"), browse("..."),
+edit_back("Choose the new background",
+"Please choose your new background image"),
+edit_name("name"), edit_icn("icn"),
+edit_shell("shell"), success("suc", "Success !"), 
+        //browse("..."),
 browseicon("...")
 {
     bgColor = Colour(0xffd23c6d);
@@ -42,7 +46,8 @@ browseicon("...")
     addAndMakeVisible(choose_back);
     //////////////
     /* + */
-    edit_back.setColour(TextEditor::ColourIds::textColourId, Colour::greyLevel(0.f));
+    edit_back.setColour(TextEditor::ColourIds::textColourId,
+            Colour::greyLevel(0.f));
     addAndMakeVisible(edit_back);
     addAndMakeVisible(opt_back);
     addAndMakeVisible(opt_name);
@@ -51,18 +56,19 @@ browseicon("...")
     addAndMakeVisible(edit_name);
     addAndMakeVisible(edit_icn);
     addAndMakeVisible(edit_shell);
-    addAndMakeVisible(browse);
+    //addAndMakeVisible(browse);
     addAndMakeVisible(browseicon);
 
-    browse.addListener(this);
+    //browse.addListener(this);
     browseicon.addListener(this);
     showAddComponents(false);
     success.setVisible(false);
-    browse.setVisible(false);
+    //browse.setVisible(false);
     browseicon.setVisible(false);
 
     /* Create back button */
-    backButton = createImageButton("Back", createImageFromFile(assetFile("backIcon.png")));
+    backButton = createImageButton("Back", createImageFromFile
+            (assetFile("backIcon.png")));
     backButton->addListener(this);
     backButton->setAlwaysOnTop(true);
     addAndMakeVisible(backButton);
@@ -102,7 +108,9 @@ void PersonalizePageComponent::paint(Graphics &g)
 {
     auto bounds = getLocalBounds();
     g.fillAll(bgColor);
-    g.drawImage(bgImage, bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), 0, 0, bgImage.getWidth(), bgImage.getHeight(), false);
+    g.drawImage(bgImage, bounds.getX(), bounds.getY(),
+            bounds.getWidth(), bounds.getHeight(),
+            0, 0, bgImage.getWidth(), bgImage.getHeight(), false);
 }
 
 void PersonalizePageComponent::resized()
@@ -111,18 +119,24 @@ void PersonalizePageComponent::resized()
     backButton->setBounds(bounds.getX(), bounds.getY(), 60, bounds.getHeight());
 
     background.setBounds(bounds.getX() + 70, bounds.getY() + 20, 150, 30);
-    icons.setBounds(bounds.getX() + 70, bounds.getY() + 25 + bounds.getHeight() / 3, 200, 30);
+    icons.setBounds(bounds.getX() + 70,
+            bounds.getY() + 25 + bounds.getHeight() / 3, 200, 30);
 
     int btn_width = 85;
     int btn_height = 30;
-    choose_back.setBounds(bounds.getX() + 260, bounds.getY() + 20, 2 * btn_width + 20, btn_height);
+    choose_back.setBounds(bounds.getX() + 260,
+            bounds.getY() + 20, 2 * btn_width + 20, btn_height);
 
-    add_btn.setBounds(bounds.getX() + 260, bounds.getY() + 25 + bounds.getHeight() / 3,
+    add_btn.setBounds(bounds.getX() + 260,
+            bounds.getY() + 25 + bounds.getHeight() / 3,
             btn_width, btn_height);
 
-    opt_back.setBounds(bounds.getX() + 70, bounds.getY() + 70, 150, btn_height);
-    edit_back.setBounds(bounds.getX() + 155, bounds.getY() + 70, 265, btn_height);
-    browse.setBounds(bounds.getX() + 422, bounds.getY() + 70, 30, btn_height);
+    opt_back.setBounds(bounds.getX() + 70, bounds.getY() + 70,
+            150, btn_height);
+    edit_back.setBounds(bounds.getX() + 155, bounds.getY() + 70,
+            295, btn_height);
+    //browse.setBounds(bounds.getX() + 422, bounds.getY() + 70,
+     //       30, btn_height);
 
     int gap = 40;
     int x = bounds.getX() + 70;
@@ -174,30 +188,32 @@ void PersonalizePageComponent::buttonClicked(Button* button)
         edit_name.setText("");
         edit_icn.setText("");
         edit_shell.setText("");
-    } else if (button == &browse)
-    {
-        WildcardFileFilter wildcardFilter("*.png;*.jpg;*.jpeg",
-                String::empty,
-                "Image files");
-
-        FileBrowserComponent browser(FileBrowserComponent::canSelectFiles |
-                FileBrowserComponent::openMode,
-                File::nonexistent,
-                &wildcardFilter,
-                nullptr);
-
-        FileChooserDialogBox dialogBox("Choose the new background",
-                "Please choose your new background (png) image",
-                browser,
-                false,
-                Colours::lightgrey);
-        if (dialogBox.show(480, 272))
-        {
-            File selectedFile = browser.getSelectedFile(0);
-            String path = selectedFile.getFullPathName();
-            edit_back.setText(path);
-        }
-    } else if (button == &browseicon)
+    } 
+//    else if (button == &browse)
+//    {
+//        WildcardFileFilter wildcardFilter("*.png;*.jpg;*.jpeg",
+//                String::empty,
+//                "Image files");
+//
+//        FileBrowserComponent browser(FileBrowserComponent::canSelectFiles |
+//                FileBrowserComponent::openMode,
+//                File::nonexistent,
+//                &wildcardFilter,
+//                nullptr);
+//
+//        FileChooserDialogBox dialogBox("Choose the new background",
+//                "Please choose your new background (png) image",
+//                browser,
+//                false,
+//                Colours::lightgrey);
+//        if (dialogBox.show(480, 272))
+//        {
+//            File selectedFile = browser.getSelectedFile(0);
+//            String path = selectedFile.getFullPathName();
+//            edit_back.setText(path);
+//        }
+//    } 
+    else if (button == &browseicon)
     {
         WildcardFileFilter wildcardFilter("*.png;*.jpg;*.jpeg",
                 String::empty,
@@ -239,18 +255,22 @@ void PersonalizePageComponent::comboBoxChanged(ComboBox* box)
     if (box == &choose_back)
     {
         edit_back.setText("");
-        browse.setVisible(false);
+        //browse.setVisible(false);
         if (box->getSelectedId() == 1)
         {
             edit_back.setVisible(false);
             opt_back.setVisible(false);
             return;
         } else if (box->getSelectedId() == 2)
+        {
             opt_back.setText("Hex value:", dontSendNotification);
+            edit_back.showFileSelectButton(false);
+        }
         else if (box->getSelectedId() == 3)
         {
-            browse.setVisible(true);
+            //browse.setVisible(true);
             opt_back.setText("Image path:", dontSendNotification);
+            edit_back.showFileSelectButton(true);
         }
         edit_back.setVisible(true);
         opt_back.setVisible(true);
@@ -260,24 +280,22 @@ void PersonalizePageComponent::comboBoxChanged(ComboBox* box)
 bool PersonalizePageComponent::updateJSON()
 {
     MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    //std::vector<MainConfigFile::AppItem> favorites = config.getFavorites();
     bool name_b = false;
     bool color_b = false;
-//    if (edit_name.isVisible())
-//    {
-//        String name = edit_name.getText();
-//        String icon = edit_icn.getText();
-//        String shell = edit_shell.getText();
-//        MainConfigFile::AppItem newFavorite;
-//        newFavorite.name = name;
-//        newFavorite.icon = icon;
-//        newFavorite.shell = shell;
-//        favorites.push_back(newFavorite);
-//        config.setFavorites(favorites);
-//        name_b = true;
-//
-//        /* Adding to the grid */
-//    }
+    if (edit_name.isVisible())
+    {
+        String name = edit_name.getText();
+        String icon = edit_icn.getText();
+        String shell = edit_shell.getText();
+        AppConfigFile::AppItem newFavorite;
+        newFavorite.name = name;
+        newFavorite.icon = icon;
+        newFavorite.shell = shell;
+        appConfig.addFavoriteApp(newFavorite, -1);
+        name_b = true;
+
+        /* Adding to the grid */
+    }
     if (choose_back.getSelectedId() == 1)
     {
         config.setConfigString(MainConfigFile::backgroundKey, "4D4D4D");
@@ -321,18 +339,18 @@ void PersonalizePageComponent::resetApplySuccess()
 
 void PersonalizePageComponent::deleteIcon(String name, String shell)
 {
-//    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-//    std::vector<MainConfigFile::AppItem> favorites = config.getFavorites();
-//
-//    //Searching for the element in the Array
-//    for (std::vector<MainConfigFile::AppItem>::iterator it = favorites.begin();
-//            it != favorites.end(); it++)
-//    {
-//        if (it->name == name && it->shell == shell)
-//        {
-//            favorites.erase(it);
-//            break;
-//        }
-//    }
-//    config.setFavorites(favorites);
+    //    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    //    std::vector<MainConfigFile::AppItem> favorites = config.getFavorites();
+    //
+    //    //Searching for the element in the Array
+    //    for (std::vector<MainConfigFile::AppItem>::iterator it = favorites.begin();
+    //            it != favorites.end(); it++)
+    //    {
+    //        if (it->name == name && it->shell == shell)
+    //        {
+    //            favorites.erase(it);
+    //            break;
+    //        }
+    //    }
+    //    config.setFavorites(favorites);
 }

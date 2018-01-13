@@ -71,12 +71,11 @@ const char* bluetooth_json = (const char*) temp_binary_data_0;
 //================== config.json ==================
 static const unsigned char temp_binary_data_1[] =
 "{\r\n"
-"    \"background\": \"/home/chip/chip.png\",\r\n"
-"    \"shutdown command\": \"sudo shutdown -hP now\",\r\n"
-"    \"restart command\": \"sudo shutdown -r now\",\r\n"
+"    \"background\": \"FF4D4D4D\",\r\n"
+"    \"shutdown command\": \"systemctl poweroff\",\r\n"
+"    \"restart command\": \"systemctl reboot\",\r\n"
 "    \"terminal launch command\": \"vala-terminal -e\",\r\n"
-"    \"cursor\": true,\r\n"
-"    \r\n"
+"    \"cursor\": true\r\n"
 "}";
 
 const char* config_json = (const char*) temp_binary_data_1;
@@ -1555,7 +1554,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
     switch (hash)
     {
         case 0x0d665fd9:  numBytes = 1119; return bluetooth_json;
-        case 0x0106dbc5:  numBytes = 223; return config_json;
+        case 0x0106dbc5:  numBytes = 198; return config_json;
         case 0xdc5a21d3:  numBytes = 120196; return LatoRegular_ttf;
         case 0x53801bd2:  numBytes = 1167; return wifi_json;
         default: break;

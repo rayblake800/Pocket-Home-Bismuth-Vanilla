@@ -1,12 +1,14 @@
 #ifndef PERSONAlIZEPAGE_H
 #define PERSONAlIZEPAGE_H
 
+#include "../Basic Components/FileSelectTextEditor.h"
+#include "../Configuration/AppConfigFile.h"
 #include "../Utils.h"
 
 /* Adding personalization page */
 class PersonalizePageComponent : public Component, private Button::Listener, private ComboBox::Listener {
 public:
-  PersonalizePageComponent();
+  PersonalizePageComponent(AppConfigFile& appConfig);
   ~PersonalizePageComponent();
   
   void paint(Graphics &g) override;
@@ -19,7 +21,7 @@ public:
   
 private:
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PersonalizePageComponent)
-  
+  AppConfigFile& appConfig;
   void updateFile(bool);
   bool updateJSON();
   void updateComboBox();
@@ -43,11 +45,12 @@ private:
   /* Inputs */
   ComboBox choose_back;
   TextButton add_btn;
-  TextButton browse;
+  //TextButton browse;
   TextButton browseicon;
   
+  FileSelectTextEditor edit_back;
   TextButton apply;
-  TextEditor edit_back;
+  //TextEditor edit_back;
   TextEditor edit_name;
   TextEditor edit_icn;
   TextEditor edit_shell;

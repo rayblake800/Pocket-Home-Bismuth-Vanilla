@@ -24,6 +24,12 @@
             <in>ClockMonitor.cpp</in>
             <in>WifiIcon.cpp</in>
           </df>
+          <df name="Popup Editor Components">
+            <in>DesktopEntryEditorPopup.cpp</in>
+            <in>FavoriteEditorPopup.cpp</in>
+            <in>FolderEditorPopup.cpp</in>
+            <in>PopupEditorComponent.cpp</in>
+          </df>
           <in>AppEditComponent.cpp</in>
           <in>AppFolderButton.cpp</in>
           <in>AppMenuButton.cpp</in>
@@ -36,6 +42,7 @@
           <in>IconThread.cpp</in>
         </df>
         <df name="Basic Components">
+          <in>FileSelectTextEditor.cpp</in>
           <in>Grid.cpp</in>
           <in>IconSliderComponent.cpp</in>
           <in>MenuItem.cpp</in>
@@ -323,6 +330,41 @@
         </ccTool>
       </item>
       <item path="Source/AppMenu Page/Info Components/WifiIcon.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/Popup Editor Components/DesktopEntryEditorPopup.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/Popup Editor Components/FavoriteEditorPopup.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/Popup Editor Components/FolderEditorPopup.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/AppMenu Page/Popup Editor Components/PopupEditorComponent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="Source/Basic Components/FileSelectTextEditor.cpp"
             ex="false"
             tool="1"
             flavor2="8">

@@ -20,7 +20,7 @@
 class AppMenuComponent : public Component,
 public Button::Listener {
 public:
-    AppMenuComponent();
+    AppMenuComponent(AppConfigFile& appConfig);
     virtual ~AppMenuComponent();
 
     /**
@@ -74,6 +74,7 @@ public:
     void stopWaitingOnLaunch();
 
 private:
+    AppConfigFile& appConfig;
     //handle all AppMenuButton clicks
     void buttonClicked(Button* buttonClicked) override;
     void resized() override;
@@ -85,7 +86,7 @@ private:
     void selectIndex(int index);
     void scrollToSelected();
 
-    AppConfigFile appConfig;
+    
     ScopedPointer<OverlaySpinner> launchSpinner;
     DesktopEntries desktopEntries;
     //all buttons in each column

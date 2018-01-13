@@ -1,7 +1,7 @@
 #include "AdvancedSettingsPage.h"
 #include "../PocketHomeApplication.h"
 
-AdvancedSettingsPage::AdvancedSettingsPage():
+AdvancedSettingsPage::AdvancedSettingsPage(AppConfigFile& appConfig):
 bg_color(0xffd23c6d),
 title("settings", "Advanced Settings"),
 addLogin("Change your password"), 
@@ -11,7 +11,7 @@ dateandtime("Date and time"),
 inputoptions("Input settings"),
 spl(new SettingsPageLogin),
 datetime(new DateTimePage()),
-ppc(new PersonalizePageComponent()),
+ppc(new PersonalizePageComponent(appConfig)),
 inputsettings(new InputSettingsPage()),
 index(0)
 {

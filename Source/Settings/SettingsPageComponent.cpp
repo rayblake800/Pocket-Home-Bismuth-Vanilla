@@ -3,7 +3,7 @@
 #include "../PokeLookAndFeel.h"
 #include "SettingsPageComponent.h"
 
-SettingsPageComponent::SettingsPageComponent() :
+SettingsPageComponent::SettingsPageComponent(AppConfigFile& appConfig) :
 brightnessSliderTimer(this),
 volumeSliderTimer(this)
 {
@@ -15,7 +15,7 @@ volumeSliderTimer(this)
     ChildProcess child{};
 
     /* Adding the personalize button */
-    advancedPage = new AdvancedSettingsPage();
+    advancedPage = new AdvancedSettingsPage(appConfig);
     advanced = new TextButton("Advanced Settings");
     advanced->addListener(this);
     addAndMakeVisible(advanced);

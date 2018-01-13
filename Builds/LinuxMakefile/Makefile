@@ -75,6 +75,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/Utils_e4b11b92.o \
   $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o \
   $(JUCE_OBJDIR)/LauncherComponent_8a29041e.o \
+  $(JUCE_OBJDIR)/FileSelectTextEditor_3a9868fa.o \
   $(JUCE_OBJDIR)/Grid_db974b8e.o \
   $(JUCE_OBJDIR)/IconSliderComponent_1c60ba5.o \
   $(JUCE_OBJDIR)/MenuItem_282b5da.o \
@@ -88,6 +89,10 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/DateTimePage_a32d156c.o \
   $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o \
   $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o \
+  $(JUCE_OBJDIR)/DesktopEntryEditorPopup_e1148f38.o \
+  $(JUCE_OBJDIR)/FavoriteEditorPopup_a63f3392.o \
+  $(JUCE_OBJDIR)/FolderEditorPopup_461e7100.o \
+  $(JUCE_OBJDIR)/PopupEditorComponent_7e06b15f.o \
   $(JUCE_OBJDIR)/ConfigAppButton_74b82edd.o \
   $(JUCE_OBJDIR)/DesktopEntryButton_31ccac6.o \
   $(JUCE_OBJDIR)/AppFolderButton_297e94d.o \
@@ -96,7 +101,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/BatteryMonitor_f25e5095.o \
   $(JUCE_OBJDIR)/ClockMonitor_95f060b4.o \
   $(JUCE_OBJDIR)/WifiIcon_590950f6.o \
-  $(JUCE_OBJDIR)/AppEditComponent_2c35f653.o \
   $(JUCE_OBJDIR)/AppMenuComponent_363da11e.o \
   $(JUCE_OBJDIR)/AppMenuPage_e766ca58.o \
   $(JUCE_OBJDIR)/DesktopEntries_7e0ad7b5.o \
@@ -180,6 +184,11 @@ $(JUCE_OBJDIR)/LauncherComponent_8a29041e.o: ../../Source/LauncherComponent.cpp
 	@echo "Compiling LauncherComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/FileSelectTextEditor_3a9868fa.o: ../../Source/Basic\ Components/FileSelectTextEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling FileSelectTextEditor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/Grid_db974b8e.o: ../../Source/Basic\ Components/Grid.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling Grid.cpp"
@@ -245,6 +254,26 @@ $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o: ../../Source/Configuration/P
 	@echo "Compiling PersonalizePageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/DesktopEntryEditorPopup_e1148f38.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/DesktopEntryEditorPopup.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling DesktopEntryEditorPopup.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/FavoriteEditorPopup_a63f3392.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/FavoriteEditorPopup.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling FavoriteEditorPopup.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/FolderEditorPopup_461e7100.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/FolderEditorPopup.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling FolderEditorPopup.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/PopupEditorComponent_7e06b15f.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/PopupEditorComponent.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling PopupEditorComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/ConfigAppButton_74b82edd.o: ../../Source/AppMenu\ Page/AppMenuButton/ConfigAppButton.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ConfigAppButton.cpp"
@@ -283,11 +312,6 @@ $(JUCE_OBJDIR)/ClockMonitor_95f060b4.o: ../../Source/AppMenu\ Page/Info\ Compone
 $(JUCE_OBJDIR)/WifiIcon_590950f6.o: ../../Source/AppMenu\ Page/Info\ Components/WifiIcon.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling WifiIcon.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/AppEditComponent_2c35f653.o: ../../Source/AppMenu\ Page/AppEditComponent.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling AppEditComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AppMenuComponent_363da11e.o: ../../Source/AppMenu\ Page/AppMenuComponent.cpp

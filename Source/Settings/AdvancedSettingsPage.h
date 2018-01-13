@@ -13,7 +13,7 @@ using namespace juce;
 
 class AdvancedSettingsPage : public Component, public Button::Listener{
 public:
-  AdvancedSettingsPage();
+  AdvancedSettingsPage(AppConfigFile& appConfig);
   ~AdvancedSettingsPage();
   void buttonClicked(Button*) override;
   void paint(Graphics&) override;

@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
         <df name="Release">
         </df>
       </df>
@@ -3584,8 +3582,17 @@
             <in>WifiIcon.cpp</in>
             <in>WifiIcon.h</in>
           </df>
+          <df name="Popup Editor Components">
+            <in>DesktopEntryEditorPopup.cpp</in>
+            <in>DesktopEntryEditorPopup.h</in>
+            <in>FavoriteEditorPopup.cpp</in>
+            <in>FavoriteEditorPopup.h</in>
+            <in>FolderEditorPopup.cpp</in>
+            <in>FolderEditorPopup.h</in>
+            <in>PopupEditorComponent.cpp</in>
+            <in>PopupEditorComponent.h</in>
+          </df>
           <in>AppEditComponent.cpp</in>
-          <in>AppEditComponent.h</in>
           <in>AppFolderButton.cpp</in>
           <in>AppMenuButton.cpp</in>
           <in>AppMenuComponent.cpp</in>
@@ -3602,6 +3609,8 @@
           <in>IconThread.h</in>
         </df>
         <df name="Basic Components">
+          <in>FileSelectTextEditor.cpp</in>
+          <in>FileSelectTextEditor.h</in>
           <in>Grid.cpp</in>
           <in>Grid.h</in>
           <in>IconSliderComponent.cpp</in>

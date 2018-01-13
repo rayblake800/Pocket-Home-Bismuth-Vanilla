@@ -43,6 +43,10 @@
       <FILE id="rGcSg1" name="LauncherComponent.h" compile="0" resource="0"
             file="Source/LauncherComponent.h"/>
       <GROUP id="{185415EC-B399-8F03-8F25-DEE2244D2B03}" name="Basic Components">
+        <FILE id="jt3Brk" name="FileSelectTextEditor.cpp" compile="1" resource="0"
+              file="Source/Basic Components/FileSelectTextEditor.cpp"/>
+        <FILE id="NCotgj" name="FileSelectTextEditor.h" compile="0" resource="0"
+              file="Source/Basic Components/FileSelectTextEditor.h"/>
         <FILE id="CHuJ0i" name="Grid.cpp" compile="1" resource="0" file="Source/Basic Components/Grid.cpp"/>
         <FILE id="HWGQHF" name="Grid.h" compile="0" resource="0" file="Source/Basic Components/Grid.h"/>
         <FILE id="GudXZR" name="IconSliderComponent.cpp" compile="1" resource="0"
@@ -90,6 +94,24 @@
               file="Source/Configuration/PersonalizePageComponent.h"/>
       </GROUP>
       <GROUP id="{E5D177ED-F000-E2C8-AB9E-11F897C0E250}" name="AppMenu Page">
+        <GROUP id="{33D902E9-E269-A70A-90A9-B34BDE5E4635}" name="PopupEditorComponent">
+          <FILE id="JJXpyY" name="DesktopEntryEditorPopup.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/DesktopEntryEditorPopup.cpp"/>
+          <FILE id="N32fvn" name="DesktopEntryEditorPopup.h" compile="0" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/DesktopEntryEditorPopup.h"/>
+          <FILE id="rQiMOn" name="FavoriteEditorPopup.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/FavoriteEditorPopup.cpp"/>
+          <FILE id="ZxQJ8F" name="FavoriteEditorPopup.h" compile="0" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/FavoriteEditorPopup.h"/>
+          <FILE id="W6FvZ4" name="FolderEditorPopup.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/FolderEditorPopup.cpp"/>
+          <FILE id="x6HbTa" name="FolderEditorPopup.h" compile="0" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/FolderEditorPopup.h"/>
+          <FILE id="uKPVyL" name="PopupEditorComponent.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/PopupEditorComponent.cpp"/>
+          <FILE id="JY94pZ" name="PopupEditorComponent.h" compile="0" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/PopupEditorComponent.h"/>
+        </GROUP>
         <GROUP id="{14A7C029-841F-00F9-4B37-871CD7FA6F85}" name="AppMenuButton">
           <FILE id="fvzvAY" name="ConfigAppButton.cpp" compile="1" resource="0"
                 file="Source/AppMenu Page/AppMenuButton/ConfigAppButton.cpp"/>
@@ -120,10 +142,6 @@
           <FILE id="TnTmFi" name="WifiIcon.cpp" compile="1" resource="0" file="Source/AppMenu Page/Info Components/WifiIcon.cpp"/>
           <FILE id="BIw8ef" name="WifiIcon.h" compile="0" resource="0" file="Source/AppMenu Page/Info Components/WifiIcon.h"/>
         </GROUP>
-        <FILE id="aOGazE" name="AppEditComponent.cpp" compile="1" resource="0"
-              file="Source/AppMenu Page/AppEditComponent.cpp"/>
-        <FILE id="TJaQOq" name="AppEditComponent.h" compile="0" resource="0"
-              file="Source/AppMenu Page/AppEditComponent.h"/>
         <FILE id="CQWz5p" name="AppMenuComponent.cpp" compile="1" resource="0"
               file="Source/AppMenu Page/AppMenuComponent.cpp"/>
         <FILE id="Kt2Wk4" name="AppMenuComponent.h" compile="0" resource="0"

@@ -12,7 +12,10 @@
 #include "AppMenuButton/AppFolderButton.h"
 #include "AppMenuComponent.h"
 
-AppMenuComponent::AppMenuComponent() : launchTimer(this)
+AppMenuComponent::AppMenuComponent(AppConfigFile& appConfig) :
+launchTimer(this),
+appConfig(appConfig)
+
 {
     ComponentConfigFile& componentConfig =
             PocketHomeApplication::getInstance()->getComponentConfig();
@@ -74,7 +77,7 @@ void AppMenuComponent::loadButtons(bool reloadEntries)
         DBG(String("AppMenu:Found app in config:") + favorite.name);
         addButton(new ConfigAppButton(favorite,
                 buttonColumns[activeColumn()].size(),
-                activeColumn(),iconThread));
+                activeColumn(), iconThread));
     }
 
     //add category buttons
@@ -83,7 +86,7 @@ void AppMenuComponent::loadButtons(bool reloadEntries)
     {
         addButton(new AppFolderButton(category,
                 buttonColumns[activeColumn()].size(),
-                activeColumn(),iconThread));
+                activeColumn(), iconThread));
     }
     DBG(String("added ") + String(buttonColumns[activeColumn()].size())
             + " buttons");
@@ -124,14 +127,14 @@ void AppMenuComponent::openFolder(Array<String> categoryNames)
         {
             addedButton = new ConfigAppButton(item,
                     buttonColumns[activeColumn()].size(),
-                    activeColumn(),iconThread);
+                    activeColumn(), iconThread);
         }
         addButton(addedButton);
     }
     DBG(String("found ") + String(folderItems.size()) + " items in folder");
     for (DesktopEntry desktopEntry : folderItems)
     {
-        if (!desktopEntry.getValue(DesktopEntry::hidden) 
+        if (!desktopEntry.getValue(DesktopEntry::hidden)
                 && !desktopEntry.getValue(DesktopEntry::hidden))
         {
             String name = desktopEntry.getValue(DesktopEntry::name);
@@ -145,8 +148,8 @@ void AppMenuComponent::openFolder(Array<String> categoryNames)
             } else
             {
                 addedButton = new DesktopEntryButton(desktopEntry,
-                        buttonColumns[activeColumn()].size(), 
-                        activeColumn(),iconThread);
+                        buttonColumns[activeColumn()].size(),
+                        activeColumn(), iconThread);
             }
             addButton(addedButton);
         }

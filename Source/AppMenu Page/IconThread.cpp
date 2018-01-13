@@ -105,6 +105,7 @@ void IconThread::run()
             MessageManager::callAsync([fullPath, activeJob]
             {
                 activeJob.button->appIcon = createImageFromFile(File(fullPath));
+                activeJob.button->repaint();
             });
         }
         //Allow other threads to run
@@ -151,7 +152,8 @@ void IconThread::mapIcons()
         //sort icon size directories, if found
         std::regex sizePattern("^([0-9]+)");
         std::smatch sizeMatch;
-        std::sort(dirs.begin(), dirs.end(), [&sizeMatch, &sizePattern](const String& a, const String & b)->bool
+        std::sort(dirs.begin(), dirs.end(), [&sizeMatch, &sizePattern]
+        (const String& a, const String & b)->bool
         {
             std::string a_str = a.toStdString();
             std::string b_str = b.toStdString();
@@ -261,7 +263,8 @@ void IconThread::mapIcons()
     for (const String& path : searchPaths)
     {
         std::vector<String> files = listFiles(path);
-        std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", std::regex::ECMAScript | std::regex::icase);
+        std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", 
+                std::regex::ECMAScript | std::regex::icase);
         std::smatch iconMatch;
         for (const String& file : files)
         {

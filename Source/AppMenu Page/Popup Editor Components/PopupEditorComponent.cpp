@@ -1,11 +1,11 @@
 /*
   ==============================================================================
 
-    AppEditComponent.h
-    Created: 6 Jan 2018 3:36:02pm
+    PopupEditorComponent.cpp
+    Created: 12 Jan 2018 9:53:18pm
     Author:  anthony
 
   ==============================================================================
 */
 
-#pragma once
+#include "PopupEditorComponent.h"

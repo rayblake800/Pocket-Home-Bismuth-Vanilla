@@ -13,6 +13,7 @@
 #include "../Power/PowerPageComponent.h"
 #include "../Settings/SettingsPageComponent.h"
 #include "../Basic Components/VectorImageButton.h"
+#include "../Configuration/AppConfigFile.h"
 #include "Info Components/ClockMonitor.h"
 #include "Info Components/BatteryIcon.h"
 #include "Info Components/WifiIcon.h"
@@ -44,6 +45,8 @@ private:
     void resized() override;
     void paint(Graphics &) override;
 
+    AppConfigFile appConfig;
+    
     Colour bgColor;
     ClockMonitor clock;
     ScopedPointer<AppMenuComponent> appMenu;

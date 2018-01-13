@@ -25,7 +25,7 @@ Configurable(&PocketHomeApplication::getInstance()->getConfig(),
     setWantsKeyboardFocus(true);
     setExplicitFocusOrder(1);
 
-    appMenu = new AppMenuComponent();
+    appMenu = new AppMenuComponent(appConfig);
     addAndMakeVisible(appMenu);
 
     ComponentConfigFile::ComponentSettings frameSettings =
@@ -78,7 +78,7 @@ Configurable(&PocketHomeApplication::getInstance()->getConfig(),
     addAndMakeVisible(settingsButton);
 
     powerPage = new PowerPageComponent();
-    settingsPage = new SettingsPageComponent();
+    settingsPage = new SettingsPageComponent(appConfig);
 }
 
 AppMenuPage::~AppMenuPage()
