@@ -133,6 +133,7 @@ void DesktopEntries::LoadingThread::run()
                     + String(dirs.size()) + String("..."));
             this->notify();
         });
+        Thread::yield();
         std::vector<String> dfiles = listFiles(dirs[i]);
         for (int i2 = 0; i2 < dfiles.size(); i2++)
         {
@@ -154,6 +155,7 @@ void DesktopEntries::LoadingThread::run()
             notifyCallback(String("Reading file ") + String(fileIndex) +
                     String(" of ") + String(files.size()) + String("..."));
         });
+        Thread::yield();
         String path = *it;
         if (std::regex_search(path.toStdString(), dfileMatch))
         {
