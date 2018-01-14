@@ -13,6 +13,7 @@
 #include "AppMenuComponent.h"
 
 AppMenuComponent::AppMenuComponent(AppConfigFile& appConfig) :
+loadingAsync(false),
 launchTimer(this),
 appConfig(appConfig)
 
@@ -38,7 +39,7 @@ appConfig(appConfig)
     launchSpinner = new OverlaySpinner();
     launchSpinner->setAlwaysOnTop(true);
 
-    loadButtons(false);
+    loadButtons();
 }
 
 AppMenuComponent::~AppMenuComponent()
@@ -48,21 +49,15 @@ AppMenuComponent::~AppMenuComponent()
 }
 
 /**
- * Loads all app menu buttons, optionally reloading desktop entries as well
- * @param reloadEntries if true, read all desktop entries from the
- * file system again
+ * Loads all app menu buttons
  */
-void AppMenuComponent::loadButtons(bool reloadEntries)
+void AppMenuComponent::loadButtons()
 {
-    if (reloadEntries)
-    {
-        desktopEntries.loadEntries();
-    }
-
     while (!buttonColumns.empty())
     {
         closeFolder();
     }
+    buttonNameMap.clear();
     buttonColumns.clear();
     columnTops.clear();
     selected.clear();
@@ -91,6 +86,20 @@ void AppMenuComponent::loadButtons(bool reloadEntries)
     DBG(String("added ") + String(buttonColumns[activeColumn()].size())
             + " buttons");
     scrollToSelected();
+    showLaunchSpinner();
+    if (!loadingAsync)
+    {
+        loadingAsync = true;
+        desktopEntries.loadEntries([this](String loadingMsg)
+        {
+            launchSpinner->setLoadingText(loadingMsg);
+        },
+        [this]()
+        {
+            loadingAsync = false;
+            hideLaunchSpinner();
+        });
+    }
 }
 
 /**
@@ -222,6 +231,10 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked)
 void AppMenuComponent::resized()
 {
     launchSpinner->setBounds(getWindowSize());
+    if (loadingAsync)
+    {
+        showLaunchSpinner();
+    }
     ComponentConfigFile& config = PocketHomeApplication::getInstance()
             ->getComponentConfig();
     ComponentConfigFile::ComponentSettings menuSettings =
@@ -269,7 +282,11 @@ void AppMenuComponent::resized()
 
 void AppMenuComponent::visibilityChanged()
 {
-    if (!isVisible())
+    if (loadingAsync)
+    {
+        showLaunchSpinner();
+    }
+    else if(!isVisible())
     {
         stopWaitingOnLaunch();
     }
@@ -605,16 +622,20 @@ void AppMenuComponent::showLaunchSpinner()
     Component * parentPage = getParentComponent();
     if (parentPage != nullptr)
     {
+        DBG("Now showing...");
         parentPage->addAndMakeVisible(launchSpinner);
     }
 }
 
 void AppMenuComponent::hideLaunchSpinner()
 {
-    DBG("Hide launch spinner");
-    Component * parentPage = getParentComponent();
-    if (parentPage != nullptr)
+    if (!loadingAsync)
     {
-        parentPage->removeChildComponent(launchSpinner);
+        DBG("Hide launch spinner");
+        Component * parentPage = getParentComponent();
+        if (parentPage != nullptr)
+        {
+            parentPage->removeChildComponent(launchSpinner);
+        }
     }
 }

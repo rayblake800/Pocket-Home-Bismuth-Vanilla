@@ -12,11 +12,11 @@
 
 DesktopEntries::DesktopEntries()
 {
-    loadEntries();
 }
 
 DesktopEntries::DesktopEntries(const DesktopEntries& orig)
 {
+    const ScopedLock readLock(orig.lock);
     entries = orig.entries;
 }
 
@@ -28,6 +28,8 @@ DesktopEntries::~DesktopEntries()
 
 int DesktopEntries::size()
 {
+
+    const ScopedLock readLock(lock);
     return entries.size();
 }
 
@@ -37,6 +39,8 @@ int DesktopEntries::size()
 std::set<DesktopEntry> DesktopEntries::getCategoryListEntries
 (Array<String> categoryList)
 {
+
+    const ScopedLock readLock(lock);
     std::set<DesktopEntry> categoryEntries;
     for (String& category : categoryList)
     {
@@ -53,6 +57,8 @@ std::set<DesktopEntry> DesktopEntries::getCategoryListEntries
 
 std::set<DesktopEntry> DesktopEntries::getCategoryEntries(String category)
 {
+
+    const ScopedLock readLock(lock);
     return categories[category];
 }
 
@@ -60,6 +66,7 @@ std::set<DesktopEntry> DesktopEntries::getCategoryEntries(String category)
 
 std::set<String> DesktopEntries::getCategories()
 {
+    const ScopedLock readLock(lock);
     std::set<String> categoryNames;
     for (std::map<String, std::set < DesktopEntry>>::iterator it = categories.begin();
             it != categories.end(); it++)
@@ -73,10 +80,40 @@ std::set<String> DesktopEntries::getCategories()
  * Discards any existing entry data and reloads all desktop entries
  * from the file system.
  */
-void DesktopEntries::loadEntries()
+void DesktopEntries::loadEntries
+(std::function<void(String) > notifyCallback, std::function<void() > onFinish)
 {
-    entries.clear();
-    categories.clear();
+    {
+        const ScopedLock readLock(lock);
+        entries.clear();
+        categories.clear();
+    }
+    loadingThread.asyncLoadEntries(this, notifyCallback, onFinish);
+}
+
+DesktopEntries::LoadingThread::LoadingThread() : Thread("DesktopEntryLoader")
+{
+}
+
+void DesktopEntries::LoadingThread::asyncLoadEntries
+(DesktopEntries * threadOwner,
+        std::function<void(String) > notifyCallback,
+        std::function<void() > onFinish)
+{
+    this->threadOwner = threadOwner;
+    this->notifyCallback = notifyCallback;
+    this->onFinish = onFinish;
+    startThread();
+}
+
+DesktopEntries::LoadingThread::~LoadingThread()
+{
+    waitForThreadToExit(1000);
+}
+
+void DesktopEntries::LoadingThread::run()
+{
+    const ScopedLock loadingLock(threadOwner->lock);
     //read the contents of all desktop application directories
     DBG("finding desktop entries...");
     std::vector<String> dirs = {
@@ -89,6 +126,13 @@ void DesktopEntries::loadEntries()
     std::set<String> paths;
     for (int i = 0; i < dirs.size(); i++)
     {
+        MessageManager::callAsync([&i, &dirs, this]
+        {
+            notifyCallback(String("Scanning application directory ") +
+                    String(i + 1) + String(" of ")
+                    + String(dirs.size()) + String("..."));
+            this->notify();
+        });
         std::vector<String> dfiles = listFiles(dirs[i]);
         for (int i2 = 0; i2 < dfiles.size(); i2++)
         {
@@ -98,12 +142,18 @@ void DesktopEntries::loadEntries()
             }
         }
     }
-    DBG(String("Reading ") + String(files.size()) + " potential desktop files");
+    int fileIndex = 0;
     //read in files as DesktopEntry objects
     std::regex dfileMatch(".*\\.(desktop|directory)$", std::regex::icase);
     for (std::set<String>::iterator it = paths.begin();
             it != paths.end(); it++)
     {
+        fileIndex++;
+        MessageManager::callAsync([&fileIndex, &files, this]
+        {
+            notifyCallback(String("Reading file ") + String(fileIndex) +
+                    String(" of ") + String(files.size()) + String("..."));
+        });
         String path = *it;
         if (std::regex_search(path.toStdString(), dfileMatch))
         {
@@ -121,10 +171,14 @@ void DesktopEntries::loadEntries()
             deCategories.add("All");
             for (String category : deCategories)
             {
-                this->categories[category].insert(entry);
+                threadOwner->categories[category].insert(entry);
             }
-            entries.insert(entry);
+            threadOwner->entries.insert(entry);
         }
     }
-    DBG(String("found ") + String(entries.size()) + " entries");
+    MessageManager::callAsync([this]
+    {
+        DBG("All desktop entries loaded.");
+        onFinish();
+    });
 }

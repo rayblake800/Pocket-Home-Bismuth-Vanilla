@@ -156,7 +156,7 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
     if (Desktop::getInstance().getAnimator().isAnimating(appMenu))return false;
     int keyCode = key.getKeyCode();
     if (keyCode == KeyPress::tabKey){
-        appMenu->loadButtons(true);
+        appMenu->loadButtons();
     }
     if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
     {

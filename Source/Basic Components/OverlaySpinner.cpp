@@ -1,50 +1,39 @@
 #include "../Utils.h"
 #include "OverlaySpinner.h"
 
-
-void OverlaySpinnerTimer::timerCallback() {
-    if (overlaySpinner) {
-        auto lsp = overlaySpinner->spinnerImage.get();
-        const auto& lspImg = overlaySpinner->spinnerImages;
-
-        // change image
-        i = (i + 1) % lspImg.size();
-        lsp->setImage(lspImg[i]);
-
-        // check timeout
-        t += getTimerInterval();
-        if (t > timeout) {
-            t = 0;
-            overlaySpinner->setVisible(false);
-            stopTimer();
-        }
-    }
-}
-
-OverlaySpinner::OverlaySpinner() : overlaySpinnerTimer(this) {
-    //launchSpinnerTimer.launcherComponent = this;
-    Array<String> spinnerImgPaths{"wait0.png", "wait1.png", "wait2.png", "wait3.png", "wait4.png", "wait5.png", "wait6.png", "wait7.png"};
-    for (auto& path : spinnerImgPaths) {
-        auto image = createImageFromFile(assetFile(path));
+OverlaySpinner::OverlaySpinner() : overlaySpinnerTimer(this)
+{
+    Array<String> spinnerImgPaths{"wait0.png", "wait1.png", "wait2.png",
+        "wait3.png", "wait4.png", "wait5.png", "wait6.png", "wait7.png"};
+    for (const String& path : spinnerImgPaths)
+    {
+        Image image = createImageFromFile(assetFile(path));
         spinnerImages.add(image);
     }
 
     spinnerImage = new ImageComponent();
     spinnerImage->setImage(spinnerImages[0], RectanglePlacement::centred);
     addAndMakeVisible(spinnerImage);
-    setWantsKeyboardFocus(false);
+
+    loadingText.setText("", NotificationType::dontSendNotification);
+    loadingText.setJustificationType(Justification::centred);
+    loadingText.setColour(Label::textColourId,Colours::black);
+    addAndMakeVisible(loadingText);
 }
 
-OverlaySpinner::~OverlaySpinner() {
+OverlaySpinner::~OverlaySpinner()
+{
     overlaySpinnerTimer.stopTimer();
 }
 
-void OverlaySpinner::paint(Graphics &g) {
+void OverlaySpinner::paint(Graphics &g)
+{
     g.fillAll(Colour((uint8) 254, 255, 255, (uint8) 201));
 }
 
-void OverlaySpinner::resized() {
-    auto bounds = getLocalBounds();
+void OverlaySpinner::resized()
+{
+    Rectangle<int> bounds = getLocalBounds();
     int spinnerSize = bounds.getHeight() / 10;
     spinnerImage->setBounds(
             (bounds.getWidth() - spinnerSize) / 2,
@@ -52,15 +41,52 @@ void OverlaySpinner::resized() {
             spinnerSize,
             spinnerSize
             );
+    Rectangle<int> textBounds = bounds.withHeight(spinnerSize)
+            .withY(bounds.getX() + bounds.getHeight()*2 / 3);
+    Font scaledFont = loadingText.getFont().withHeight(spinnerSize - 2);
+    loadingText.setFont(scaledFont);
+    loadingText.setBounds(textBounds);
+
 }
 
-void OverlaySpinner::setVisible(bool shouldBeVisible) {
+void OverlaySpinner::setVisible(bool shouldBeVisible)
+{
     DBG("Show spinner");
     Component::setVisible(shouldBeVisible);
 
-    if (shouldBeVisible) {
+    if (shouldBeVisible)
+    {
         overlaySpinnerTimer.startTimer(500);
-    } else {
+    } else
+    {
         overlaySpinnerTimer.stopTimer();
     }
 }
+
+void OverlaySpinner::setLoadingText(String newText)
+{
+    loadingText.setText(newText, NotificationType::dontSendNotification);
+}
+
+void OverlaySpinner::OverlaySpinnerTimer::timerCallback()
+{
+    if (overlaySpinner != nullptr)
+    {
+        ImageComponent* spinnerImage = overlaySpinner->spinnerImage;
+        const Array<Image>& spinnerImages = overlaySpinner->spinnerImages;
+
+        // change image
+        imageIndex = (imageIndex + 1) % spinnerImages.size();
+        spinnerImage->setImage(spinnerImages[imageIndex]);
+
+        // check timeout
+        runtime += getTimerInterval();
+        if (runtime > timeout)
+        {
+            runtime = 0;
+            overlaySpinner->setVisible(false);
+            stopTimer();
+        }
+    }
+}
+

@@ -7,6 +7,7 @@
 
 #ifndef APPMENU_H
 #define APPMENU_H
+#include <atomic>
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Configuration/AppConfigFile.h"
 #include "IconThread.h"
@@ -24,11 +25,9 @@ public:
     virtual ~AppMenuComponent();
 
     /**
-     * Loads all app menu buttons, optionally reloading desktop entries as well
-     * @param reloadEntries if true, read all desktop entries from the
-     * file system again
+     * Loads all app menu buttons
      */
-    void loadButtons(bool reloadEntries);
+    void loadButtons();
     
 
     //################ AppMenuButton Management   #############################
@@ -89,6 +88,9 @@ private:
     
     ScopedPointer<OverlaySpinner> launchSpinner;
     DesktopEntries desktopEntries;
+    //True iff desktopEntries are loading in another thread.
+    std::atomic<bool> loadingAsync;
+    
     //all buttons in each column
     std::vector<std::vector<AppMenuButton::Ptr>> buttonColumns;
     //current button selection(if any) for each open column
