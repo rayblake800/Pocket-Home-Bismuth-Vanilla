@@ -97,6 +97,7 @@ void AppMenuComponent::loadButtons()
         [this]()
         {
             loadingAsync = false;
+            launchSpinner->setLoadingText("");
             hideLaunchSpinner();
         });
     }
