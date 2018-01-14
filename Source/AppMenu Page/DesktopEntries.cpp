@@ -5,6 +5,7 @@
  * Created on December 14, 2017, 1:36 PM
  */
 #include <regex>
+#include <atomic>
 #include <stdlib.h>
 #include <dirent.h>
 #include <stdlib.h>
@@ -114,6 +115,8 @@ DesktopEntries::LoadingThread::~LoadingThread()
 void DesktopEntries::LoadingThread::run()
 {
     const ScopedLock loadingLock(threadOwner->lock);
+    std::atomic<bool> uiCallPending;
+    uiCallPending = false;
     //read the contents of all desktop application directories
     DBG("finding desktop entries...");
     std::vector<String> dirs = {
@@ -126,14 +129,19 @@ void DesktopEntries::LoadingThread::run()
     std::set<String> paths;
     for (int i = 0; i < dirs.size(); i++)
     {
+        while (uiCallPending)
+        {
+            wait(-1);
+        }
+        uiCallPending = true;
         MessageManager::callAsync([&i, &dirs, this]
         {
             notifyCallback(String("Scanning application directory ") +
                     String(i + 1) + String(" of ")
                     + String(dirs.size()) + String("..."));
+            uiCallPending = false;
             this->notify();
         });
-        Thread::yield();
         std::vector<String> dfiles = listFiles(dirs[i]);
         for (int i2 = 0; i2 < dfiles.size(); i2++)
         {
@@ -150,12 +158,18 @@ void DesktopEntries::LoadingThread::run()
             it != paths.end(); it++)
     {
         fileIndex++;
+        while (uiCallPending)
+        {
+            wait(-1);
+        }
+        uiCallPending = true;
         MessageManager::callAsync([&fileIndex, &files, this]
         {
             notifyCallback(String("Reading file ") + String(fileIndex) +
                     String(" of ") + String(files.size()) + String("..."));
+            uiCallPending = false;
+            this->notify();
         });
-        Thread::yield();
         String path = *it;
         if (std::regex_search(path.toStdString(), dfileMatch))
         {
@@ -178,9 +192,16 @@ void DesktopEntries::LoadingThread::run()
             threadOwner->entries.insert(entry);
         }
     }
+    while (uiCallPending)
+    {
+        wait(-1);
+    }
+    uiCallPending = true;
     MessageManager::callAsync([this]
     {
         DBG("All desktop entries loaded.");
         onFinish();
+        uiCallPending = false;
+        this->notify();
     });
 }
