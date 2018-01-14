@@ -134,7 +134,7 @@ void DesktopEntries::LoadingThread::run()
             wait(-1);
         }
         uiCallPending = true;
-        MessageManager::callAsync([&i, &dirs, this]
+        MessageManager::callAsync([&i, &dirs,&uiCallPending, this]
         {
             notifyCallback(String("Scanning application directory ") +
                     String(i + 1) + String(" of ")
@@ -163,7 +163,7 @@ void DesktopEntries::LoadingThread::run()
             wait(-1);
         }
         uiCallPending = true;
-        MessageManager::callAsync([&fileIndex, &files, this]
+        MessageManager::callAsync([&fileIndex, &files,&uiCallPending, this]
         {
             notifyCallback(String("Reading file ") + String(fileIndex) +
                     String(" of ") + String(files.size()) + String("..."));
@@ -197,7 +197,7 @@ void DesktopEntries::LoadingThread::run()
         wait(-1);
     }
     uiCallPending = true;
-    MessageManager::callAsync([this]
+    MessageManager::callAsync([&uiCallPending,this]
     {
         DBG("All desktop entries loaded.");
         onFinish();
