@@ -17,9 +17,9 @@ ImageButton *createImageButtonFromDrawable(const String &name, const juce::Drawa
 Drawable * createSVGDrawable(const File& svgFile);
 
 void fitRectInRect(Rectangle<int> &rect, int x, int y, int width, int height,
-                   Justification justification, const bool onlyReduceInSize);
+        Justification justification, const bool onlyReduceInSize);
 void fitRectInRect(Rectangle<int> &rect, const Rectangle<int> &container,
-                   Justification justification, const bool onlyReduceInSize);
+        Justification justification, const bool onlyReduceInSize);
 
 float smoothstep(float edge0, float edge1, float x);
 float mix(float a, float b, float t);
@@ -36,7 +36,7 @@ bool fileExists(const String& path);
 String getHomePath();
 
 //perform function(struct dirent*) on all files in path
-void foreachFile(const String& path, std::function<void(struct dirent*)> fn);
+void foreachFile(const String& path, std::function<void(struct dirent*) > fn);
 
 
 static DrawableRectangle highlightFocus;
@@ -50,9 +50,9 @@ std::vector<String> listFiles(const String& path);
 std::vector<String> listDirectoryFiles(const String& path);
 
 //get the size of the active window
-Rectangle<int>getWindowSize();
+Rectangle<int> getWindowSize();
 
 //resizes a font to fit in a containing rectangle.
 //If fitting it in would require mangling the font size too much, the
 //font gets set to size zero.
-juce::Font fontResizedToFit(juce::Font font,String text,Rectangle<int>container);
+juce::Font fontResizedToFit(juce::Font font, String text, Rectangle<int>container);

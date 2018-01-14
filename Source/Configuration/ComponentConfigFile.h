@@ -36,6 +36,8 @@ public:
     static const String wifiIconKey;
     static const String powerButtonKey;
     static const String settingsButtonKey;
+    static const String popupMenuKey;
+    
 
     /**
      * @return the list of all component keys.

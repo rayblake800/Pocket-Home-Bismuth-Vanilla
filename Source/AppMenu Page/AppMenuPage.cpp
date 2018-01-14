@@ -178,6 +178,13 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
         appMenu->clickSelected();
         return true;
     }
+    else if (key==KeyPress::createFromDescription("CTRL+e")){
+        DBG("show editor");
+        popupEditor=new PopupEditorComponent("Test Editor");
+        addAndMakeVisible(popupEditor);
+        DBG(popupEditor->getBounds().toString());
+        return true;
+    }
     return false;
 }
 
@@ -197,6 +204,9 @@ void AppMenuPage::resized()
             config.getComponentSettings(ComponentConfigFile::menuFrameKey);
     ComponentConfigFile::ComponentSettings menuSettings =
             config.getComponentSettings(ComponentConfigFile::appMenuKey);
+    ComponentConfigFile::ComponentSettings popupSettings =
+            config.getComponentSettings(ComponentConfigFile::popupMenuKey);
+    
     menuSettings.applyBounds(appMenu);
     if (frame != nullptr)
     {
@@ -204,6 +214,8 @@ void AppMenuPage::resized()
         frame->setTransformToFit(frame->getBounds().toFloat(),
                 RectanglePlacement::stretchToFit);
     }
+    
+    
     config.getComponentSettings(ComponentConfigFile::batteryIconKey)
             .applyBounds(batteryIcon);
     config.getComponentSettings(ComponentConfigFile::wifiIconKey)

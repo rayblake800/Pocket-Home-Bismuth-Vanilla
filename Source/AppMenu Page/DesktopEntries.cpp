@@ -134,11 +134,11 @@ void DesktopEntries::LoadingThread::run()
             wait(-1);
         }
         uiCallPending = true;
-        MessageManager::callAsync([&i, &dirs,&uiCallPending, this]
+        MessageManager::callAsync([&i, &dirs, &uiCallPending, this]
         {
             notifyCallback(String("Scanning application directory ") +
-                    String(i + 1) + String(" of ")
-                    + String(dirs.size()) + String("..."));
+                    String(i + 1) + String("/")
+                    + String(dirs.size()));
             uiCallPending = false;
             this->notify();
         });
@@ -163,10 +163,10 @@ void DesktopEntries::LoadingThread::run()
             wait(-1);
         }
         uiCallPending = true;
-        MessageManager::callAsync([&fileIndex, &files,&uiCallPending, this]
+        MessageManager::callAsync([&fileIndex, &files, &uiCallPending, this]
         {
             notifyCallback(String("Reading file ") + String(fileIndex) +
-                    String(" of ") + String(files.size()) + String("..."));
+                    String("/") + String(files.size()));
             uiCallPending = false;
             this->notify();
         });
@@ -197,7 +197,7 @@ void DesktopEntries::LoadingThread::run()
         wait(-1);
     }
     uiCallPending = true;
-    MessageManager::callAsync([&uiCallPending,this]
+    MessageManager::callAsync([&uiCallPending, this]
     {
         DBG("All desktop entries loaded.");
         onFinish();

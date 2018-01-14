@@ -50,6 +50,7 @@ const String ComponentConfigFile::clockIconKey = "time";
 const String ComponentConfigFile::wifiIconKey = "wifi";
 const String ComponentConfigFile::powerButtonKey = "power button";
 const String ComponentConfigFile::settingsButtonKey = "settings button";
+const String ComponentConfigFile::popupMenuKey = "popup menu";
 
 ComponentConfigFile::ComponentSettings ComponentConfigFile::getComponentSettings
 (String componentKey)
@@ -98,7 +99,8 @@ Array<String> ComponentConfigFile::getComponentKeys()
         clockIconKey,
         wifiIconKey,
         powerButtonKey,
-        settingsButtonKey};
+        settingsButtonKey,
+        popupMenuKey};
 }
 
 ComponentConfigFile::ComponentSettings::ComponentSettings() :
@@ -107,6 +109,7 @@ x(0), y(0), width(0), height(0)
 }
 
 //copy constructor
+
 ComponentConfigFile::ComponentSettings::ComponentSettings
 (const ComponentConfigFile::ComponentSettings& copy) :
 x(copy.x), y(copy.y),

@@ -109,5 +109,16 @@
             "wifiStrength2.svg",
             "wifiStrength3.svg"
         ]
+    },  
+    "popup menu": {
+        "x": 0,
+        "y": 0,
+        "width": 0.3333,
+        "height": 0.6666,
+        "colours": [
+            "ffc0c0c0"
+        ],
+        "asset files": [
+        ]
     }
 }

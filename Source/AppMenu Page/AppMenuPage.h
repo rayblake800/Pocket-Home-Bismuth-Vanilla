@@ -14,6 +14,7 @@
 #include "../Settings/SettingsPageComponent.h"
 #include "../Basic Components/VectorImageButton.h"
 #include "../Configuration/AppConfigFile.h"
+#include "Popup Editor Components/PopupEditorComponent.h"
 #include "Info Components/ClockMonitor.h"
 #include "Info Components/BatteryIcon.h"
 #include "Info Components/WifiIcon.h"
@@ -60,8 +61,8 @@ private:
 
     ScopedPointer<Image> bgImage;
     ScopedPointer<Drawable> frame;
-    //for each of these values, screenSize/val=totalSize
-    //static const int leftFrameRatio=
+    
+    ScopedPointer<PopupEditorComponent> popupEditor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuPage);
 };

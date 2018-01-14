@@ -6,6 +6,130 @@
     Author:  anthony
 
   ==============================================================================
-*/
-
+ */
+#include "../../Utils.h"
+#include "../../PocketHomeApplication.h"
 #include "PopupEditorComponent.h"
+
+PopupEditorComponent::PopupEditorComponent(String title) :
+Configurable(&PocketHomeApplication::getInstance()->getComponentConfig(),
+{
+
+    ComponentConfigFile::popupMenuKey
+}),
+titleLabel(title),
+cancelBtn("cancel"),
+confirmBtn("confirm")
+{
+    layoutManager.addComponent(&titleLabel, 0, 1);
+    layoutManager.addComponent(&cancelBtn, 5, 1);
+    layoutManager.addComponent(&confirmBtn, 5, 1);
+
+    titleLabel.setColour(Label::textColourId, Colours::black);
+    titleLabel.setText(title, NotificationType::dontSendNotification);
+    titleLabel.setJustificationType(Justification::centred);
+
+    cancelBtn.setImages(true, true, true,
+            createImageFromFile(assetFile("cancel.svg")),
+            1.0f, Colours::transparentWhite, // normal
+            Image::null, 1.0f, Colours::transparentWhite, // over
+            Image::null, 0.5f, Colours::transparentWhite, // down
+            0);
+
+    confirmBtn.setImages(true, true, true,
+            createImageFromFile(assetFile("confirm.svg")),
+            1.0f, Colours::transparentWhite, // normal
+            Image::null, 1.0f, Colours::transparentWhite, // over
+            Image::null, 0.5f, Colours::transparentWhite, // down
+            0);
+
+    cancelBtn.addListener(this);
+    confirmBtn.addListener(this);
+
+    addAndMakeVisible(titleLabel);
+    addAndMakeVisible(cancelBtn);
+    addAndMakeVisible(confirmBtn);
+    loadAllConfigProperties();
+    MessageManager::callAsync([this]{
+        this->grabKeyboardFocus();
+    });
+}
+
+PopupEditorComponent::~PopupEditorComponent()
+{
+}
+
+void PopupEditorComponent::closePopup()
+{
+    setVisible(false);
+    getParentComponent()->removeChildComponent(this);
+}
+
+void PopupEditorComponent::buttonClicked(Button* buttonClicked)
+{
+    if (buttonClicked == &cancelBtn)
+    {
+        cancel();
+
+    } else if (buttonClicked == &confirmBtn)
+    {
+        confirm();
+    }
+}
+
+void PopupEditorComponent::resized()
+{
+    layoutManager.layoutComponents(getLocalBounds(), 3, 3);
+    titleLabel.setFont(titleLabel.getFont()
+            .withHeight(titleLabel.getHeight() - 1));
+
+}
+
+void PopupEditorComponent::paint(Graphics & g)
+{
+    g.setColour(bgColour);
+    g.fillRect(getLocalBounds());
+}
+
+bool PopupEditorComponent::keyPressed(const KeyPress & key)
+{
+    if(key==KeyPress::escapeKey){
+        cancel();
+        return true;
+    }
+    else if(key == KeyPress::returnKey){
+        confirm();
+        return true;
+    }
+    return false;
+}
+
+void PopupEditorComponent::confirm()
+{
+    DBG("Confirmed!");
+    closePopup();
+}
+
+void PopupEditorComponent::cancel()
+{
+    DBG("Canceled!");
+    closePopup();
+}
+
+void PopupEditorComponent::loadConfigProperties
+(ConfigFile * config, String key)
+{
+    ComponentConfigFile::ComponentSettings settings =
+            (static_cast<ComponentConfigFile*> (config))
+            ->getComponentSettings(key);
+    std::vector<Colour> colours = settings.getColours();
+    if (colours.size() > 0)
+    {
+        bgColour = colours[0];
+    }
+    Rectangle<int> bounds = settings.getBounds();
+    Rectangle<int> windowBounds = getWindowSize();
+    bounds.setCentre(windowBounds.getCentre());
+    setBounds(bounds);
+
+}
