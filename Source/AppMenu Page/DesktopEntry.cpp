@@ -20,7 +20,13 @@ const String DesktopEntry::localEntryPath =
 DesktopEntry::DesktopEntry(String path) :
 entrypath(path)
 {
-    Array<String> lines = split(File(path).loadFileAsString(), "\n");
+    File entryFile(path);
+    ScopedPointer<FileInputStream> in=entryFile.createInputStream();
+    Array<String> lines;
+    while(!in->isExhausted())
+    {
+        lines.add(in->readNextLine());
+    }
     String locale = getLocale();
     for (const String& line : lines)
     {
