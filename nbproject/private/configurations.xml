@@ -3617,6 +3617,8 @@
           <in>Grid.h</in>
           <in>IconSliderComponent.cpp</in>
           <in>IconSliderComponent.h</in>
+          <in>ListEditor.cpp</in>
+          <in>ListEditor.h</in>
           <in>MenuItem.cpp</in>
           <in>MenuItem.h</in>
           <in>OverlaySpinner.cpp</in>

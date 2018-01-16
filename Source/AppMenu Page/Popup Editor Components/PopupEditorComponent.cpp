@@ -19,16 +19,51 @@ Configurable(&PocketHomeApplication::getInstance()->getComponentConfig(),
 }),
 titleLabel(title),
 cancelBtn("cancel"),
-confirmBtn("confirm")
+confirmBtn("confirm"),
+listEditor({}, Colours::white, Colours::aquamarine, Colours::black)
 {
+
     layoutManager.addComponent(&titleLabel, 0, 1);
-    layoutManager.addComponent(&cancelBtn, 5, 1);
-    layoutManager.addComponent(&confirmBtn, 5, 1);
 
     titleLabel.setColour(Label::textColourId, Colours::black);
     titleLabel.setText(title, NotificationType::dontSendNotification);
     titleLabel.setJustificationType(Justification::centred);
+    titleLabel.setEditable(true);
 
+    //test code: remove later!
+    layoutManager.addRow(6);
+    layoutManager.addComponent(&listEditor, 1, 1);
+    addAndMakeVisible(listEditor);
+    addClosingButtons();
+
+    addAndMakeVisible(titleLabel);
+    loadAllConfigProperties();
+    MessageManager::callAsync([this]
+    {
+        this->grabKeyboardFocus();
+    });
+}
+
+PopupEditorComponent::~PopupEditorComponent()
+{
+}
+
+void PopupEditorComponent::closePopup()
+{
+    setVisible(false);
+    getParentComponent()->removeChildComponent(this);
+}
+
+/**
+ * Add the cancel and confirm buttons to the bottom of the layout manager.
+ * This only needs to be called once, after adding all subclass-specific
+ * menu components.
+ */
+void PopupEditorComponent::addClosingButtons()
+{
+    int btnRow = layoutManager.getNumRows();
+    layoutManager.addComponent(&cancelBtn, btnRow, 1);
+    layoutManager.addComponent(&confirmBtn, btnRow, 1);
     cancelBtn.setImages(true, true, true,
             createImageFromFile(assetFile("cancel.svg")),
             1.0f, Colours::transparentWhite, // normal
@@ -45,24 +80,8 @@ confirmBtn("confirm")
 
     cancelBtn.addListener(this);
     confirmBtn.addListener(this);
-
-    addAndMakeVisible(titleLabel);
     addAndMakeVisible(cancelBtn);
     addAndMakeVisible(confirmBtn);
-    loadAllConfigProperties();
-    MessageManager::callAsync([this]{
-        this->grabKeyboardFocus();
-    });
-}
-
-PopupEditorComponent::~PopupEditorComponent()
-{
-}
-
-void PopupEditorComponent::closePopup()
-{
-    setVisible(false);
-    getParentComponent()->removeChildComponent(this);
 }
 
 void PopupEditorComponent::buttonClicked(Button* buttonClicked)
@@ -93,21 +112,16 @@ void PopupEditorComponent::paint(Graphics & g)
 
 bool PopupEditorComponent::keyPressed(const KeyPress & key)
 {
-    if(key==KeyPress::escapeKey){
+    if (key == KeyPress::escapeKey)
+    {
         cancel();
         return true;
-    }
-    else if(key == KeyPress::returnKey){
+    } else if (key == KeyPress::returnKey)
+    {
         confirm();
         return true;
     }
     return false;
-}
-
-void PopupEditorComponent::confirm()
-{
-    DBG("Confirmed!");
-    closePopup();
 }
 
 void PopupEditorComponent::cancel()

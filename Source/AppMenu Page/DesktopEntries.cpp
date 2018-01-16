@@ -109,7 +109,10 @@ void DesktopEntries::LoadingThread::asyncLoadEntries
 
 DesktopEntries::LoadingThread::~LoadingThread()
 {
-    waitForThreadToExit(1000);
+    if (isThreadRunning())
+    {
+        stopThread(1000);
+    }
 }
 
 void DesktopEntries::LoadingThread::run()
@@ -129,8 +132,13 @@ void DesktopEntries::LoadingThread::run()
     std::set<String> paths;
     for (int i = 0; i < dirs.size(); i++)
     {
+
         while (uiCallPending)
         {
+            if (threadShouldExit())
+            {
+                return;
+            }
             wait(-1);
         }
         uiCallPending = true;
@@ -157,9 +165,14 @@ void DesktopEntries::LoadingThread::run()
     for (std::set<String>::iterator it = paths.begin();
             it != paths.end(); it++)
     {
+
         fileIndex++;
         while (uiCallPending)
         {
+            if (threadShouldExit())
+            {
+                return;
+            }
             wait(-1);
         }
         uiCallPending = true;
@@ -194,6 +207,10 @@ void DesktopEntries::LoadingThread::run()
     }
     while (uiCallPending)
     {
+        if (threadShouldExit())
+        {
+            return;
+        }
         wait(-1);
     }
     uiCallPending = true;

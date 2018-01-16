@@ -20,6 +20,11 @@ public:
     void addRow(int vertWeight);
     
     /**
+     * @return the number of rows in the layout.  This may include empty rows.
+     */
+    int getNumRows();
+    
+    /**
      * Add a new component to a grid row.
      * @param comp any UI component
      * @param row index of the component's row. The component will be added

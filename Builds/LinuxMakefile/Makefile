@@ -79,6 +79,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/FileSelectTextEditor_3a9868fa.o \
   $(JUCE_OBJDIR)/Grid_db974b8e.o \
   $(JUCE_OBJDIR)/IconSliderComponent_1c60ba5.o \
+  $(JUCE_OBJDIR)/ListEditor_42725b33.o \
   $(JUCE_OBJDIR)/MenuItem_282b5da.o \
   $(JUCE_OBJDIR)/OverlaySpinner_eb9f06b1.o \
   $(JUCE_OBJDIR)/SwitchComponent_95f41beb.o \
@@ -203,6 +204,11 @@ $(JUCE_OBJDIR)/Grid_db974b8e.o: ../../Source/Basic\ Components/Grid.cpp
 $(JUCE_OBJDIR)/IconSliderComponent_1c60ba5.o: ../../Source/Basic\ Components/IconSliderComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling IconSliderComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ListEditor_42725b33.o: ../../Source/Basic\ Components/ListEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ListEditor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/MenuItem_282b5da.o: ../../Source/Basic\ Components/MenuItem.cpp

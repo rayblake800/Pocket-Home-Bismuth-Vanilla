@@ -20,6 +20,14 @@ void GridLayoutManager::addRow(int vertWeight)
 }
 
 /**
+ * @return the number of rows in the layout.  This may include empty rows.
+ */
+int GridLayoutManager::getNumRows()
+{
+    return rows.size();
+}
+
+/**
  * Add a new component to a grid row.
  */
 void GridLayoutManager::addComponent(Component * comp, int rowIndex,
