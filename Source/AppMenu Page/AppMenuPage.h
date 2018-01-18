@@ -1,11 +1,10 @@
-/*
-  ==============================================================================
-
-    AppMenuPage.h
-    Created: 25 Dec 2017 5:48:25pm
-    Author:  anthony
-
-  ==============================================================================
+/**
+ * @file AppMenuPage.h
+ * @author Anthony Brown
+ * 
+ * AppMenuPage is the main page of the application. It displays the app launch
+ * menu, assorted system information, and navigation controls to access
+ * power and settings pages.
  */
 #pragma once
 
@@ -28,18 +27,26 @@ public:
     virtual ~AppMenuPage();
     void stopWaitingOnLaunch();
 
-    //TODO: remove these after implementing configuration change messaging
-
 protected:
     /**
-     * Tracks page background changes
+     * Tracks page background changes. Only the MainConfigFile should be
+     * calling this.
      * @param config should be the MainConfigFile
      * @param key should be the background key
      */
     void loadConfigProperties(ConfigFile * config, String key);
 private:    
-    void setColorBackground(const String&);
-    void setImageBackground(const String&);
+    /**
+     * Set the page background as a solid color.
+     * @param color a six-digit hex color string
+     */
+    void setColorBackground(const String& color);
+    
+    /**
+     * Set the page background to a background image.
+     * @param path the path to an image file.
+     */
+    void setImageBackground(const String& path);
     void buttonClicked(Button *) override;
     bool keyPressed(const KeyPress &) override;
     void visibilityChanged() override;
@@ -50,7 +57,7 @@ private:
     
     Colour bgColor;
     ClockMonitor clock;
-    ScopedPointer<AppMenuComponent> appMenu;
+    AppMenuComponent appMenu;
     BatteryIcon batteryIcon;
     WifiIcon wifiIcon;
     

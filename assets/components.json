@@ -113,7 +113,7 @@
     "popup menu": {
         "x": -1,
         "y": -1,
-        "width": 0.3333,
+        "width": 0.5,
         "height": 0.6666,
         "colours": [
             "ffc0c0c0"

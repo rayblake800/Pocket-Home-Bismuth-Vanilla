@@ -96,6 +96,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/DateTimePage_a32d156c.o \
   $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o \
   $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o \
+  $(JUCE_OBJDIR)/AppLauncher_5194dc6a.o \
   $(JUCE_OBJDIR)/DesktopEntryEditorPopup_e1148f38.o \
   $(JUCE_OBJDIR)/FavoriteEditorPopup_a63f3392.o \
   $(JUCE_OBJDIR)/FolderEditorPopup_461e7100.o \
@@ -294,6 +295,11 @@ $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o: ../../Source/Configuration/MainConfigF
 $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o: ../../Source/Configuration/PersonalizePageComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PersonalizePageComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AppLauncher_5194dc6a.o: ../../Source/AppMenu\ Page/AppLauncher.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AppLauncher.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/DesktopEntryEditorPopup_e1148f38.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/DesktopEntryEditorPopup.cpp

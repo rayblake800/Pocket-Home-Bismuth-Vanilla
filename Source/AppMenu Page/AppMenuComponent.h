@@ -1,25 +1,27 @@
 /* 
- * File:   AppMenuComponent.h
- * Author: anthony
+ * @file   AppMenuComponent.h
  *
- * Created on December 19, 2017, 1:37 PM
+ * AppMenuComponent is a scrolling application menu that loads its
+ * contents from system .Desktop files and the AppConfigFile
  */
 
 #ifndef APPMENU_H
 #define APPMENU_H
 #include <atomic>
 #include "../Basic Components/OverlaySpinner.h"
-#include "../Configuration/AppConfigFile.h"
+#include "../Configuration/Configurables/ConfigurableComponent.h"
 #include "Popup Editor Components/PopupEditorComponent.h"
+#include "AppMenuButton/AppMenuButton.h"
+#include "AppLauncher.h"
 #include "IconThread.h"
 #include "DesktopEntries.h"
-#include "AppMenuButton/AppMenuButton.h"
 
 /**
  * 
  * A menu for launching applications, populated with .Desktop file info
  */
 class AppMenuComponent : public Component,
+public ConfigurableComponent,
 public Button::Listener {
 public:
     AppMenuComponent(AppConfigFile& appConfig);
@@ -29,7 +31,7 @@ public:
      * Loads all app menu buttons
      */
     void loadButtons();
-    
+
 
     //################ AppMenuButton Management   #############################
 
@@ -45,7 +47,7 @@ public:
      * Trigger a click for the selected button.
      */
     void clickSelected();
-    
+
     /**
      * Returns a popup editor component for updating the selected button.
      * @return either an editor component, or nullptr if no button is selected.
@@ -69,87 +71,66 @@ public:
      */
     int activeColumn();
     //######################## App Launching #################################
+    
     /**
-     * @return true if currently waiting on an application to launch.
+     * @return true if currently loading information or a new child process.
      */
-    bool waitingOnLaunch();
+    bool isLoading();
+    
     /**
-     * Makes the menu stop waiting on an application to launch, re-enabling
+     * Makes the menu stop waiting to load something, re-enabling
      * user input.
      */
-    void stopWaitingOnLaunch();
-
+    void stopWaitingForLoading();
+    
+protected:
+    //AppMenuComponent has no asset files or colors.
+    void applyConfigAssets(Array<String> assetNames,
+            Array<Colour> colours){};
 private:
     AppConfigFile& appConfig;
+    AppLauncher appLauncher;
     //handle all AppMenuButton clicks
     void buttonClicked(Button* buttonClicked) override;
     void resized() override;
     //if it loses visibility, stop waiting for apps to launch
     void visibilityChanged() override;
 
-    
+
     void addButton(AppMenuButton::Ptr appButton);
     void selectIndex(int index);
     void scrollToSelected();
 
-    
-    ScopedPointer<OverlaySpinner> launchSpinner;
+
+    ScopedPointer<OverlaySpinner> loadingSpinner;
     DesktopEntries desktopEntries;
     //True iff desktopEntries are loading in another thread.
     std::atomic<bool> loadingAsync;
-    
+
     //all buttons in each column
     std::vector<std::vector<AppMenuButton::Ptr>> buttonColumns;
     //current button selection(if any) for each open column
     std::vector<AppMenuButton::Ptr> selected;
     //top y-position of each open column
     std::vector<int> columnTops;
-    std::map<String,AppMenuButton::Ptr> buttonNameMap;
+    std::map<String, AppMenuButton::Ptr> buttonNameMap;
 
-    //appMenuButton dimensions
-    int buttonWidth;
-    int buttonHeight;
     //base component position
     int x_origin;
     int y_origin;
 
     IconThread iconThread;
-    //store active processes with a pointer to their button index
-    HashMap<AppMenuButton::Ptr, int> runningAppsByButton;
-    OwnedArray<ChildProcess> runningApps;
-    
-    class AppLaunchTimer : public Timer {
-    public:
-        AppLaunchTimer(AppMenuComponent* appMenu);
-        virtual ~AppLaunchTimer();
-        virtual void timerCallback() override;
-        void setTrackedProcess(ChildProcess * trackedProcess);
-        //does the same thing as the base class method, but it also
-        //gets rid of its launchButton pointer.
-        void stopTimer();
-    private:
-        AppMenuComponent* appMenu = nullptr;
-        ChildProcess * trackedProcess = nullptr;
-    };
-    AppLaunchTimer launchTimer;
+
     /**
-     * Attempt to find an open window of a launched application
-     * @param appButton a button that launched a running process
-     * @return the window ID, or the empty string if none was found
-     */
-    String getWindowId(AppMenuButton::Ptr appButton);
-    void startApp(AppMenuButton::Ptr appButton);
-    void focusApp(AppMenuButton::Ptr appButton, const String& windowId);
-    void startOrFocusApp(AppMenuButton::Ptr appButton);
-    /**
-     * Display the spinner that indicates application launch. This will
+     * Display the spinner that indicates application loading. This will
      * also disable input.
      */
-    void showLaunchSpinner();
+    void showLoadingSpinner();
+    
     /**
-     * Hide the launch spinner, re-enabling user input.
+     * Hide the loading spinner, re-enabling user input.
      */
-    void hideLaunchSpinner();
+    void hideLoadingSpinner();
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
 };
 

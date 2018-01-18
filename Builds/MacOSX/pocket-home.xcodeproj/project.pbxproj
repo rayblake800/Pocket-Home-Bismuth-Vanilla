@@ -42,6 +42,7 @@
 		C31317B11EDD4258E699AFDF = {isa = PBXBuildFile; fileRef = 4381DCF89AA62B5E55854964; };
 		98D2131C8DAFE9964BDD67B2 = {isa = PBXBuildFile; fileRef = E6CF5E1B94B172AFBC59D970; };
 		75AE7A9AF44C4AA338295B2F = {isa = PBXBuildFile; fileRef = D2BD2AFB34F8D49A3F1BA390; };
+		EEB8956364C5831C44592E36 = {isa = PBXBuildFile; fileRef = F15933BE07B27B22BE8A82FA; };
 		4433D4A76D6E85413F2E6166 = {isa = PBXBuildFile; fileRef = 03CD3908D94B9D53340C6662; };
 		9991ACFA0C0786E025260FD2 = {isa = PBXBuildFile; fileRef = 46F4106A96363EE29ABA42E6; };
 		86E9399CA9C3557834E1DECC = {isa = PBXBuildFile; fileRef = F25B91B28CBC52709D51F1B9; };
@@ -203,6 +204,7 @@
 		CEF12C0830CD02B20A1D410F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SettingsPageWifiComponent.h; path = ../../Source/Settings/SettingsPageWifiComponent.h; sourceTree = "SOURCE_ROOT"; };
 		D1294451B8BD3BB508571129 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurableImageButton.cpp; path = ../../Source/Configuration/Configurables/ConfigurableImageButton.cpp; sourceTree = "SOURCE_ROOT"; };
 		D2BD2AFB34F8D49A3F1BA390 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PersonalizePageComponent.cpp; path = ../../Source/Configuration/PersonalizePageComponent.cpp; sourceTree = "SOURCE_ROOT"; };
+		D3F1D8FFEC898FE69B812D93 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppLauncher.h; path = "../../Source/AppMenu Page/AppLauncher.h"; sourceTree = "SOURCE_ROOT"; };
 		D4282739BFD2B90CD80F616E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DrawableImageComponent.cpp; path = "../../Source/Basic Components/DrawableImageComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		D464520A570FD77CFE0F189B = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Grid.cpp; path = "../../Source/Basic Components/Grid.cpp"; sourceTree = "SOURCE_ROOT"; };
 		D661C85AE36DF798E86FEFFD = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AdvancedSettingsPage.h; path = ../../Source/Settings/AdvancedSettingsPage.h; sourceTree = "SOURCE_ROOT"; };
@@ -219,6 +221,7 @@
 		EF57F8D59B0C326941BD663E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_data_structures.mm"; path = "../../JuceLibraryCode/include_juce_data_structures.mm"; sourceTree = "SOURCE_ROOT"; };
 		F039BB440004EEC68FDBBDFE = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DateTimePage.h; path = ../../Source/Configuration/DateTimePage.h; sourceTree = "SOURCE_ROOT"; };
 		F157BEFBFA6E611CDE910D11 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Configurable.h; path = ../../Source/Configuration/Configurables/Configurable.h; sourceTree = "SOURCE_ROOT"; };
+		F15933BE07B27B22BE8A82FA = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppLauncher.cpp; path = "../../Source/AppMenu Page/AppLauncher.cpp"; sourceTree = "SOURCE_ROOT"; };
 		F2410ED2E7562C3A5247FDFC = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiCategoryItemComponent.h; path = ../../Source/Settings/WifiCategoryItemComponent.h; sourceTree = "SOURCE_ROOT"; };
 		F25B91B28CBC52709D51F1B9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FolderEditorPopup.cpp; path = "../../Source/AppMenu Page/Popup Editor Components/FolderEditorPopup.cpp"; sourceTree = "SOURCE_ROOT"; };
 		F2A74CD1DDE7E42A737C2704 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GridLayoutManager.cpp; path = ../../Source/GridLayoutManager.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -306,6 +309,8 @@
 					F702D32E786267D6B19E312A,
 					5D13D8BED415F048017261C5, ); name = "Info Components"; sourceTree = "<group>"; };
 		F6220F92F5FE2B60D16C9BD0 = {isa = PBXGroup; children = (
+					F15933BE07B27B22BE8A82FA,
+					D3F1D8FFEC898FE69B812D93,
 					0DF4BD143A781E4F3F872A43,
 					6314317FA79BCAF32DED06D3,
 					79A29D1303A3E058626B72D3,
@@ -593,6 +598,7 @@
 					C31317B11EDD4258E699AFDF,
 					98D2131C8DAFE9964BDD67B2,
 					75AE7A9AF44C4AA338295B2F,
+					EEB8956364C5831C44592E36,
 					4433D4A76D6E85413F2E6166,
 					9991ACFA0C0786E025260FD2,
 					86E9399CA9C3557834E1DECC,

@@ -17,14 +17,16 @@ folderButton(folderButton),
 config(config),
 folder(folder),
 nameLabel("nameLabel", "Folder name:"),
-nameEditor(folder.name),
+nameEditor("nameEditor"),
 iconLabel("iconLabel", "Icon path:"),
-iconPathEditor(folder.icon),
+iconPathEditor("iconPathEditor"),
 iconPreview(folderButton->getIcon()),
 categoryLabel("categoryLabel", "Folder categories:"),
 categoryList(folder.categories, Colours::white, Colours::blueviolet, Colours::black),
 deleteButton("Delete folder")
 {
+    nameEditor.setText(folder.name,false);
+    iconPathEditor.setText(folder.icon);
     std::vector<GridLayoutManager::ComponentLayoutParams> layoutList{
         {&nameLabel, 1, 1},
         {&nameEditor, 1, 1},

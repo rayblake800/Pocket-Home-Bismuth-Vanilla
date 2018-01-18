@@ -121,6 +121,8 @@
               file="Source/Configuration/PersonalizePageComponent.h"/>
       </GROUP>
       <GROUP id="{E5D177ED-F000-E2C8-AB9E-11F897C0E250}" name="AppMenu Page">
+        <FILE id="zJPlv7" name="AppLauncher.cpp" compile="1" resource="0" file="Source/AppMenu Page/AppLauncher.cpp"/>
+        <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppMenu Page/AppLauncher.h"/>
         <GROUP id="{33D902E9-E269-A70A-90A9-B34BDE5E4635}" name="PopupEditorComponent">
           <FILE id="JJXpyY" name="DesktopEntryEditorPopup.cpp" compile="1" resource="0"
                 file="Source/AppMenu Page/Popup Editor Components/DesktopEntryEditorPopup.cpp"/>

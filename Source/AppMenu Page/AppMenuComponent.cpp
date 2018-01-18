@@ -13,38 +13,24 @@
 #include "AppMenuComponent.h"
 
 AppMenuComponent::AppMenuComponent(AppConfigFile& appConfig) :
+ConfigurableComponent(ComponentConfigFile::appMenuKey),
 loadingAsync(false),
-launchTimer(this),
 appConfig(appConfig)
 
 {
-    ComponentConfigFile& componentConfig =
-            PocketHomeApplication::getInstance()->getComponentConfig();
-
-    Rectangle<int> screenSize = getWindowSize();
-    ComponentConfigFile::ComponentSettings menuSettings =
-            componentConfig.getComponentSettings
-            (ComponentConfigFile::appMenuKey);
-    Rectangle<int>bounds = menuSettings.getBounds();
-    x_origin = bounds.getX();
-    y_origin = bounds.getY();
-
-    ComponentConfigFile::ComponentSettings buttonSettings =
-            componentConfig.getComponentSettings
-            (ComponentConfigFile::appMenuButtonKey);
-    Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
-    buttonWidth = buttonSize.getWidth();
-    buttonHeight = buttonSize.getHeight();
+    applyConfigBounds();
+    x_origin = getBounds().getX();
+    y_origin = getBounds().getY();
     setWantsKeyboardFocus(false);
-    launchSpinner = new OverlaySpinner();
-    launchSpinner->setAlwaysOnTop(true);
+    loadingSpinner = new OverlaySpinner();
+    loadingSpinner->setAlwaysOnTop(true);
 
     loadButtons();
 }
 
 AppMenuComponent::~AppMenuComponent()
 {
-    stopWaitingOnLaunch();
+    stopWaitingForLoading();
     while (!buttonColumns.empty())closeFolder();
 }
 
@@ -86,19 +72,19 @@ void AppMenuComponent::loadButtons()
     DBG(String("added ") + String(buttonColumns[activeColumn()].size())
             + " buttons");
     scrollToSelected();
-    showLaunchSpinner();
+    showLoadingSpinner();
     if (!loadingAsync)
     {
         loadingAsync = true;
         desktopEntries.loadEntries([this](String loadingMsg)
         {
-            launchSpinner->setLoadingText(loadingMsg);
+            loadingSpinner->setLoadingText(loadingMsg);
         },
         [this]()
         {
             loadingAsync = false;
-            launchSpinner->setLoadingText("");
-            hideLaunchSpinner();
+            loadingSpinner->setLoadingText("");
+            hideLoadingSpinner();
         });
     }
 }
@@ -173,7 +159,7 @@ void AppMenuComponent::openFolder(Array<String> categoryNames)
 
 void AppMenuComponent::closeFolder()
 {
-    if (waitingOnLaunch())
+    if (isLoading())
     {
         return;
     }
@@ -200,12 +186,11 @@ void AppMenuComponent::closeFolder()
 
 void AppMenuComponent::buttonClicked(Button * buttonClicked)
 {
-    DBG("button clicked");
-    if (waitingOnLaunch())
+    if (isLoading())
     {
         return;
     }
-    AppMenuButton::Ptr appClicked = (AppMenuButton *) buttonClicked;
+    AppMenuButton::Ptr appClicked = dynamic_cast<AppMenuButton*>(buttonClicked);
     if (appClicked->getColumn() < activeColumn())
     {
         while (appClicked->getColumn() < activeColumn())
@@ -222,7 +207,8 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked)
             openFolder(appClicked->getCategories());
         } else
         {
-            startOrFocusApp(appClicked);
+            appLauncher.startOrFocusApp(appClicked->getAppName()
+                    ,appClicked->getCommand());
         }
     } else
     {
@@ -232,10 +218,10 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked)
 
 void AppMenuComponent::resized()
 {
-    launchSpinner->setBounds(getWindowSize());
+    loadingSpinner->setBounds(getWindowSize());
     if (loadingAsync)
     {
-        showLaunchSpinner();
+        showLoadingSpinner();
     }
     ComponentConfigFile& config = PocketHomeApplication::getInstance()
             ->getComponentConfig();
@@ -246,8 +232,8 @@ void AppMenuComponent::resized()
     y_origin = menuBounds.getY();
     //resize all buttons
     Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
-    buttonWidth = buttonSize.getWidth();
-    buttonHeight = buttonSize.getHeight();
+    int buttonWidth = buttonSize.getWidth();
+    int buttonHeight = buttonSize.getHeight();
     int numColumns = selected.size();
     if (menuBounds.getWidth() < numColumns * buttonWidth)
     {
@@ -286,16 +272,16 @@ void AppMenuComponent::visibilityChanged()
 {
     if (loadingAsync)
     {
-        showLaunchSpinner();
+        showLoadingSpinner();
     } else if (!isVisible())
     {
-        stopWaitingOnLaunch();
+        stopWaitingForLoading();
     }
 }
 
 void AppMenuComponent::selectIndex(int index)
 {
-    if (waitingOnLaunch())
+    if (isLoading())
     {
         return;
     }
@@ -345,7 +331,7 @@ void AppMenuComponent::selectPrevious()
 
 void AppMenuComponent::clickSelected()
 {
-    if (selected[activeColumn()] != nullptr && !waitingOnLaunch())
+    if (selected[activeColumn()] != nullptr && !isLoading())
     {
         selected[activeColumn()]->triggerClick();
     }
@@ -356,9 +342,9 @@ void AppMenuComponent::clickSelected()
  */
 PopupEditorComponent* AppMenuComponent::getEditorForSelected()
 {
-    if (selected[activeColumn()] != nullptr && !waitingOnLaunch())
+    if (selected[activeColumn()] != nullptr && !isLoading())
     {
-       return selected[activeColumn()]->getEditor();
+        return selected[activeColumn()]->getEditor();
     }
     return nullptr;
 }
@@ -379,6 +365,10 @@ void AppMenuComponent::scrollToSelected()
     }
     AppMenuButton::Ptr selectedButton = selected[column];
     Rectangle<int>dest = getBounds();
+
+    Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
+    int buttonWidth = buttonSize.getWidth();
+    int buttonHeight = buttonSize.getHeight();
     if (selectedButton != nullptr && selectedButton->isVisible())
     {
         int buttonPos = selectedButton->getY();
@@ -410,6 +400,9 @@ void AppMenuComponent::scrollToSelected()
 void AppMenuComponent::addButton(AppMenuButton::Ptr appButton)
 {
     String name = appButton->getAppName();
+    Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
+    int buttonWidth = buttonSize.getWidth();
+    int buttonHeight = buttonSize.getHeight();
     if (buttonNameMap[name] == nullptr)
     {
         buttonNameMap[name] = appButton;
@@ -437,218 +430,40 @@ void AppMenuComponent::addButton(AppMenuButton::Ptr appButton)
 //################## Application Launching #################################
 
 /**
- * @return true if currently waiting on an application to launch.
+ * @return true if currently loading information or a new child process.
  */
-bool AppMenuComponent::waitingOnLaunch()
+bool AppMenuComponent::isLoading()
 {
-    return launchSpinner->isShowing();
+    return loadingSpinner->isShowing();
 }
 
 /**
- * Makes the menu stop waiting on an application to launch, re-enabling
+ * Makes the menu stop waiting to load something, re-enabling
  * user input.
  */
-void AppMenuComponent::stopWaitingOnLaunch()
+void AppMenuComponent::stopWaitingForLoading()
 {
-    hideLaunchSpinner();
-    launchTimer.stopTimer();
+    hideLoadingSpinner();
+    appLauncher.stopTimer();
 }
 
-AppMenuComponent::AppLaunchTimer::AppLaunchTimer(AppMenuComponent* appMenu) :
-appMenu(appMenu)
+void AppMenuComponent::showLoadingSpinner()
 {
-}
-
-AppMenuComponent::AppLaunchTimer::~AppLaunchTimer()
-{
-    appMenu = nullptr;
-    trackedProcess = nullptr;
-    stopTimer();
-}
-
-void AppMenuComponent::AppLaunchTimer::setTrackedProcess(ChildProcess * trackedProcess)
-{
-    this->trackedProcess = trackedProcess;
-}
-
-void AppMenuComponent::AppLaunchTimer::stopTimer()
-{
-    trackedProcess = nullptr;
-    ((Timer*)this)->stopTimer();
-}
-
-void AppMenuComponent::AppLaunchTimer::timerCallback()
-{
-    DBG("timer callback");
-    if (appMenu != nullptr)
-    {
-        if (trackedProcess != nullptr)
-        {
-            DBG("tracked process is null");
-            if (trackedProcess->isRunning())
-            {
-                //if the process is still going, wait longer for it to take over
-                //if not, stop waiting on it
-                return;
-            } else
-            {
-                DBG("process dies, show message");
-                String output = trackedProcess->readAllProcessOutput();
-                Array<String> lines = split(output, "\n");
-                output = "";
-                for (int i = lines.size() - 1;
-                        i > lines.size() - 6 && i >= 0; i--)
-                {
-                    output = lines[i] + String("\n") + output;
-                }
-                AlertWindow::showMessageBoxAsync
-                        (AlertWindow::AlertIconType::WarningIcon,
-                        "Couldn't open application", output);
-                trackedProcess = nullptr;
-            }
-        }
-        appMenu->hideLaunchSpinner();
-    }
-    stopTimer();
-
-}
-
-void AppMenuComponent::startApp(AppMenuButton::Ptr appButton)
-{
-    String command = appButton->getCommand();
-    DBG("AppsPageComponent::startApp - " << command);
-    String testExistance = String("command -v ") + command;
-    if (system(testExistance.toRawUTF8()) != 0)
-    {
-        AlertWindow::showMessageBoxAsync
-                (AlertWindow::AlertIconType::WarningIcon,
-                "Couldn't open application", String("\"") + command
-                + String("\" is not a valid command."));
-        return;
-
-    }
-    ChildProcess* launchApp = new ChildProcess();
-    launchApp->start("xmodmap ${HOME}/.Xmodmap"); // Reload xmodmap to ensure it's running
-#if JUCE_DEBUG
-    File launchLog("launchLog.txt");
-    if (!launchLog.existsAsFile())
-    {
-        launchLog.create();
-    }
-    launchLog.appendText(appButton->getCommand() + String("\n"), false, false);
-#endif
-    if (launchApp->start(appButton->getCommand()))
-    {
-
-        runningApps.add(launchApp);
-        runningAppsByButton.set(appButton, runningApps.indexOf(launchApp));
-        launchTimer.setTrackedProcess(launchApp);
-        launchTimer.startTimer(2 * 1000);
-        showLaunchSpinner();
-    }
-}
-
-void AppMenuComponent::focusApp(AppMenuButton::Ptr appButton, const String & windowId)
-{
-    DBG("AppsPageComponent::focusApp - " << appButton->getCommand());
-    String focusShell = "echo 'focus_client_by_window_id(" + windowId + ")' | awesome-client";
-    StringArray focusCmd{"sh", "-c", focusShell.toRawUTF8()};
-    ChildProcess focusWindow;
-    focusWindow.start(focusCmd);
-}
-
-String AppMenuComponent::getWindowId(AppMenuButton::Ptr appButton)
-{
-    std::function < String(String) > windowSearch = [this](String searchTerm)->String
-    {
-        StringArray findCmd{"xdotool", "search", "--all", "--limit", "1", "--class", searchTerm.toRawUTF8()};
-        DBG(String("Running command:") + findCmd.joinIntoString(" ", 0, -1));
-        ChildProcess findWindow;
-        findWindow.start(findCmd);
-        String windowId = findWindow.readAllProcessOutput();
-        DBG(String("Search result:") + windowId);
-        return windowId.trimEnd();
-    };
-    String result = windowSearch(appButton->getAppName());
-    //if no result on the title, try the launch command
-    if (result.isEmpty())
-    {
-        result = windowSearch(appButton->getCommand().upToFirstOccurrenceOf(" ", false, true));
-    }
-    return result;
-}
-
-void AppMenuComponent::startOrFocusApp(AppMenuButton::Ptr appButton)
-{
-    if (waitingOnLaunch())
-    {
-        return;
-    }
-    DBG(String("Attempting to launch ") + appButton->getAppName());
-    //before adding another process to the list, clean out any old dead ones,
-    //so they don't start piling up
-    std::vector<int>toRemove;
-    for (int i = 0; i < runningApps.size(); i++)
-    {
-        if (runningApps[i] != nullptr && !runningApps[i]->isRunning())
-        {
-            toRemove.push_back(i);
-        }
-    }
-    for (int index : toRemove)
-    {
-        runningApps.remove(index, true);
-        runningAppsByButton.removeValue(index);
-    }
-    if (runningAppsByButton.contains(appButton))
-    {
-        int appId = runningAppsByButton[appButton];
-        if (runningApps[appId] != nullptr && runningApps[appId]->isRunning())
-        {
-            DBG("app is already running, attempting to find the window id");
-            String windowId = getWindowId(appButton);
-
-            if (!windowId.isEmpty())
-            {
-                DBG(String("Found window ") + windowId + String(", focusing app"));
-                focusApp(appButton, windowId);
-
-            } else
-            {
-                DBG("Process exists, but has no window to focus. Leave it alone for now.");
-            }
-            return;
-        } else
-        {
-            if (runningApps[appId] != nullptr)
-            {
-                DBG("Old process is dead, we're good to launch");
-            }
-        }
-    }
-    startApp(appButton);
-}
-
-void AppMenuComponent::showLaunchSpinner()
-{
-    DBG("Show launch spinner");
     Component * parentPage = getParentComponent();
     if (parentPage != nullptr)
     {
-        DBG("Now showing...");
-        parentPage->addAndMakeVisible(launchSpinner);
+        parentPage->addAndMakeVisible(loadingSpinner);
     }
 }
 
-void AppMenuComponent::hideLaunchSpinner()
+void AppMenuComponent::hideLoadingSpinner()
 {
     if (!loadingAsync)
     {
-        DBG("Hide launch spinner");
         Component * parentPage = getParentComponent();
         if (parentPage != nullptr)
         {
-            parentPage->removeChildComponent(launchSpinner);
+            parentPage->removeChildComponent(loadingSpinner);
         }
     }
 }

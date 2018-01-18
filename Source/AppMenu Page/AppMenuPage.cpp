@@ -22,12 +22,12 @@ Configurable(&PocketHomeApplication::getInstance()->getConfig(),
 }),
 frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
 powerButton(ComponentConfigFile::powerButtonKey),
-settingsButton(ComponentConfigFile::settingsButtonKey)
+settingsButton(ComponentConfigFile::settingsButtonKey),
+appMenu(appConfig)
 {
     setWantsKeyboardFocus(true);
     setExplicitFocusOrder(1);
-
-    appMenu = new AppMenuComponent(appConfig);
+    
     addAndMakeVisible(appMenu);
     addAndMakeVisible(frame);
     addAndMakeVisible(clock.getLabel());
@@ -39,7 +39,7 @@ settingsButton(ComponentConfigFile::settingsButtonKey)
     powerButton.addListener(this);
     powerButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(powerButton);
-   
+
     settingsButton.addListener(this);
     settingsButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(settingsButton);
@@ -57,7 +57,7 @@ AppMenuPage::~AppMenuPage()
 
 void AppMenuPage::stopWaitingOnLaunch()
 {
-    appMenu->stopWaitingOnLaunch();
+    appMenu.stopWaitingForLoading();
 }
 
 void AppMenuPage::loadConfigProperties(ConfigFile * config, String key)
@@ -92,20 +92,22 @@ void AppMenuPage::buttonClicked(Button * button)
     }
 }
 
-void AppMenuPage::setColorBackground(const String& str)
+void AppMenuPage::setColorBackground(const String& color)
 {
-    String value = "FF" + str;
+    String value = "FF" + color;
     bgColor = Colour(value.getHexValue32());
     bgImage = nullptr;
 }
 
-void AppMenuPage::setImageBackground(const String& str)
+void AppMenuPage::setImageBackground(const String& path)
 {
-    String value(str);
-    if (value == "") value = "mainBackground.png";
+    if(path.isEmpty())
+    {
+        return;
+    }
     File f;
-    if (value[0] == '~' || value[0] == '/') f = File(value);
-    else f = assetFile(value);
+    if (path[0] == '~' || path[0] == '/') f = File(path);
+    else f = assetFile(path);
     if (bgImage == nullptr)
     {
         bgImage = new Image();
@@ -116,26 +118,26 @@ void AppMenuPage::setImageBackground(const String& str)
 bool AppMenuPage::keyPressed(const KeyPress& key)
 {
     //don't interrupt animation or loading
-    if (Desktop::getInstance().getAnimator().isAnimating(appMenu)
-            || appMenu->waitingOnLaunch())
+    if (Desktop::getInstance().getAnimator().isAnimating(&appMenu)
+            || appMenu.isLoading())
     {
         return false;
     }
     int keyCode = key.getKeyCode();
     if (keyCode == KeyPress::tabKey)
     {
-        appMenu->loadButtons();
+        appMenu.loadButtons();
     }
     if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
     {
-        if (keyCode == KeyPress::upKey)appMenu->selectPrevious();
-        else appMenu->selectNext();
+        if (keyCode == KeyPress::upKey)appMenu.selectPrevious();
+        else appMenu.selectNext();
         return true;
     } else if (keyCode == KeyPress::leftKey || keyCode == KeyPress::escapeKey)
     {
-        if (appMenu->activeColumn() > 0)
+        if (appMenu.activeColumn() > 0)
         {
-            appMenu->closeFolder();
+            appMenu.closeFolder();
         }
         return true;
     } else if (keyCode == KeyPress::returnKey ||
@@ -143,12 +145,12 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
             keyCode == KeyPress::rightKey)
     {
         DBG("AppMenuPage:click selected key");
-        appMenu->clickSelected();
+        appMenu.clickSelected();
         return true;
     } else if (key == KeyPress::createFromDescription("CTRL+e"))
     {
         DBG("show editor");
-        popupEditor = appMenu->getEditorForSelected();
+        popupEditor = appMenu.getEditorForSelected();
         if (popupEditor != nullptr)
         {
             addAndMakeVisible(popupEditor);
@@ -169,23 +171,11 @@ void AppMenuPage::visibilityChanged()
 
 void AppMenuPage::resized()
 {
-    ComponentConfigFile& config = PocketHomeApplication::getInstance()
-            ->getComponentConfig();
-    ComponentConfigFile::ComponentSettings menuSettings =
-            config.getComponentSettings(ComponentConfigFile::appMenuKey);
-    ComponentConfigFile::ComponentSettings popupSettings =
-            config.getComponentSettings(ComponentConfigFile::popupMenuKey);
-
-    menuSettings.applyBounds(appMenu);
-
+    appMenu.applyConfigBounds();
     frame.applyConfigBounds();
-
     clock.getLabel().applyConfigBounds();
-
     batteryIcon.applyConfigBounds();
-
     wifiIcon.applyConfigBounds();
-    
     powerButton.applyConfigBounds();
     settingsButton.applyConfigBounds();
 }
