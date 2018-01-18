@@ -4,7 +4,6 @@
  * 
  * Created on December 14, 2017, 1:36 PM
  */
-#include <regex>
 #include <atomic>
 #include <stdlib.h>
 #include <dirent.h>
@@ -161,7 +160,6 @@ void DesktopEntries::LoadingThread::run()
     }
     int fileIndex = 0;
     //read in files as DesktopEntry objects
-    std::regex dfileMatch(".*\\.(desktop|directory)$", std::regex::icase);
     for (std::set<String>::iterator it = paths.begin();
             it != paths.end(); it++)
     {
@@ -184,7 +182,8 @@ void DesktopEntries::LoadingThread::run()
             this->notify();
         });
         String path = *it;
-        if (std::regex_search(path.toStdString(), dfileMatch))
+        String extension = path.fromLastOccurrenceOf(".",false,true);
+        if (extension == "desktop" || extension == "directory")
         {
             DesktopEntry entry(path);
             if (entry.getValue(DesktopEntry::hidden) ||

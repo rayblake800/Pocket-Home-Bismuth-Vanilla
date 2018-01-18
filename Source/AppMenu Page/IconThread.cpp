@@ -7,10 +7,9 @@
 
   ==============================================================================
  */
-
+#include <regex>
 #include <fstream>
 #include <set>
-#include <regex>
 #include "../Utils.h"
 #include "IconThread.h"
 
@@ -263,18 +262,17 @@ void IconThread::mapIcons()
     for (const String& path : searchPaths)
     {
         std::vector<String> files = listFiles(path);
-        std::regex iconPattern("^(.+)\\.(png|svg|xpm)$", 
-                std::regex::ECMAScript | std::regex::icase);
-        std::smatch iconMatch;
         for (const String& file : files)
         {
-            std::string fileStr = file.toStdString();
-            if (std::regex_search(fileStr, iconMatch, iconPattern))
+            String extension=file.fromLastOccurrenceOf(".",false,false);
+            
+            if (extension=="png"||extension=="svg"||
+                    extension=="xpm"||extension=="jpg")
             {
-                String filename = iconMatch.str(1);
+                String filename = file.dropLastCharacters(4);
                 if (this->iconPaths[filename].isEmpty())
                 {
-                    this->iconPaths[filename] = path + iconMatch.str(0);
+                    this->iconPaths[filename] = path + file;
                 }
             }
         }

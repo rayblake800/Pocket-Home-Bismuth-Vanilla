@@ -5,9 +5,8 @@
  * Created on December 14, 2017, 1:46 PM
  */
 
-#include <fstream>
+
 #include <set>
-#include <regex>
 #include "../Utils.h"
 #include "DesktopEntry.h"
 
@@ -21,9 +20,9 @@ DesktopEntry::DesktopEntry(String path) :
 entrypath(path)
 {
     File entryFile(path);
-    ScopedPointer<FileInputStream> in=entryFile.createInputStream();
+    ScopedPointer<FileInputStream> in = entryFile.createInputStream();
     Array<String> lines;
-    while(!in->isExhausted())
+    while (!in->isExhausted())
     {
         lines.add(in->readNextLine());
     }
@@ -124,8 +123,6 @@ Array<String> DesktopEntry::getValue(ListValue valueType) const
         return Array<String>();
     }
 }
-
-
 
 /**
  * Changes the value of stored string data.
@@ -268,33 +265,18 @@ String DesktopEntry::getLocale()
 DesktopEntry::LineValues DesktopEntry::getLineData(String line)
 {
     LineValues values;
-
-    /**
-     * capture "key[locale]=val" lines from the .Desktop/.Directory file
-     * 
-     * If two groups are captured:
-     * group1 = key, 
-     * group2 = value
-     * 
-     * If three groups are captured:
-     * group1 = key,
-     * group2 = locale,
-     * group3 = value
-     */
-    std::regex varPattern("([A-Za-z]+)(\\[[a-zA-Z0-9_@]+\\])?\\=(.*)");
-    std::smatch varMatch;
-    std::string stdLine = line.toStdString();
-    if (std::regex_search(stdLine, varMatch, varPattern))
+    int valueIndex = line.indexOf("=");
+    if (valueIndex < 0)
     {
-        values.key = String(varMatch[1]);
-        if (varMatch.size() > 3)
-        {
-            values.locale = String(varMatch[2]);
-            values.value = String(varMatch[3]);
-        } else
-        {
-            values.value = String(varMatch[2]);
-        }
+        return values;
     }
+    values.value = line.substring(valueIndex + 1);
+    line=line.substring(0,valueIndex);
+    if(line.contains("[") && line.contains("]")){
+        values.locale=line.fromFirstOccurrenceOf("[",false,false)
+                .initialSectionNotContaining("]");
+        line=line.initialSectionNotContaining("]");
+    }
+    values.key=line;
     return values;
 }
