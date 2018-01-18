@@ -35,7 +35,7 @@ PocketHomeApplication* PocketHomeApplication::getInstance()
 
 PageStackComponent& PocketHomeApplication::getMainStack()
 {
-    return *dynamic_cast<MainContentComponent *> 
+    return dynamic_cast<MainContentComponent *> 
             (mainWindow->getContentComponent())->getPageStack();
 }
 

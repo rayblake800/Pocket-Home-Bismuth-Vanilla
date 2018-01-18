@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "ConfigFile.h"
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../ConfigFile.h"
+#include "../../../JuceLibraryCode/JuceHeader.h"
 
 /**
  * Configurable objects set some of their properties based on user 

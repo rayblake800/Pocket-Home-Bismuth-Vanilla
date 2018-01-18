@@ -76,18 +76,23 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/Utils_e4b11b92.o \
   $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o \
   $(JUCE_OBJDIR)/LauncherComponent_8a29041e.o \
+  $(JUCE_OBJDIR)/DrawableImageComponent_6182aea8.o \
   $(JUCE_OBJDIR)/FileSelectTextEditor_3a9868fa.o \
   $(JUCE_OBJDIR)/Grid_db974b8e.o \
   $(JUCE_OBJDIR)/IconSliderComponent_1c60ba5.o \
   $(JUCE_OBJDIR)/ListEditor_42725b33.o \
   $(JUCE_OBJDIR)/MenuItem_282b5da.o \
   $(JUCE_OBJDIR)/OverlaySpinner_eb9f06b1.o \
+  $(JUCE_OBJDIR)/ScalingLabel_5d9da175.o \
   $(JUCE_OBJDIR)/SwitchComponent_95f41beb.o \
-  $(JUCE_OBJDIR)/VectorImageButton_c4de9f2c.o \
+  $(JUCE_OBJDIR)/ConfigurableImageButton_b88c5d87.o \
+  $(JUCE_OBJDIR)/ConfigurableLabel_e34e044e.o \
+  $(JUCE_OBJDIR)/ConfigurableComponent_d2d89b57.o \
+  $(JUCE_OBJDIR)/Configurable_d79d2ed0.o \
+  $(JUCE_OBJDIR)/ConfigurableImageComponent_63c24892.o \
   $(JUCE_OBJDIR)/AppConfigFile_8463bec7.o \
   $(JUCE_OBJDIR)/ComponentConfigFile_28621e63.o \
   $(JUCE_OBJDIR)/ConfigFile_9d15fdc0.o \
-  $(JUCE_OBJDIR)/Configurable_13dc1c5b.o \
   $(JUCE_OBJDIR)/DateTimePage_a32d156c.o \
   $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o \
   $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o \
@@ -191,6 +196,11 @@ $(JUCE_OBJDIR)/LauncherComponent_8a29041e.o: ../../Source/LauncherComponent.cpp
 	@echo "Compiling LauncherComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/DrawableImageComponent_6182aea8.o: ../../Source/Basic\ Components/DrawableImageComponent.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling DrawableImageComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/FileSelectTextEditor_3a9868fa.o: ../../Source/Basic\ Components/FileSelectTextEditor.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling FileSelectTextEditor.cpp"
@@ -221,14 +231,39 @@ $(JUCE_OBJDIR)/OverlaySpinner_eb9f06b1.o: ../../Source/Basic\ Components/Overlay
 	@echo "Compiling OverlaySpinner.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/ScalingLabel_5d9da175.o: ../../Source/Basic\ Components/ScalingLabel.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ScalingLabel.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/SwitchComponent_95f41beb.o: ../../Source/Basic\ Components/SwitchComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling SwitchComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/VectorImageButton_c4de9f2c.o: ../../Source/Basic\ Components/VectorImageButton.cpp
+$(JUCE_OBJDIR)/ConfigurableImageButton_b88c5d87.o: ../../Source/Configuration/Configurables/ConfigurableImageButton.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling VectorImageButton.cpp"
+	@echo "Compiling ConfigurableImageButton.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigurableLabel_e34e044e.o: ../../Source/Configuration/Configurables/ConfigurableLabel.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigurableLabel.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigurableComponent_d2d89b57.o: ../../Source/Configuration/Configurables/ConfigurableComponent.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigurableComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/Configurable_d79d2ed0.o: ../../Source/Configuration/Configurables/Configurable.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling Configurable.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigurableImageComponent_63c24892.o: ../../Source/Configuration/Configurables/ConfigurableImageComponent.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigurableImageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AppConfigFile_8463bec7.o: ../../Source/Configuration/AppConfigFile.cpp
@@ -244,11 +279,6 @@ $(JUCE_OBJDIR)/ComponentConfigFile_28621e63.o: ../../Source/Configuration/Compon
 $(JUCE_OBJDIR)/ConfigFile_9d15fdc0.o: ../../Source/Configuration/ConfigFile.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ConfigFile.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/Configurable_13dc1c5b.o: ../../Source/Configuration/Configurable.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling Configurable.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/DateTimePage_a32d156c.o: ../../Source/Configuration/DateTimePage.cpp

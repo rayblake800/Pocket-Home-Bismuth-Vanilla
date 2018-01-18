@@ -7,7 +7,7 @@ struct BatteryStatus {
   int percentage;
   int isCharging;
 };
-class BatteryMonitor: public juce::Thread {
+class BatteryMonitor: public Thread {
 private:
   BatteryStatus status;
   

@@ -8,6 +8,7 @@
   ==============================================================================
  */
 
+#include "../Configuration/Configurables/ConfigurableImageComponent.h"
 #include "../PokeLookAndFeel.h"
 #include "../Utils.h"
 #include "../PocketHomeApplication.h"
@@ -18,66 +19,31 @@ Configurable(&PocketHomeApplication::getInstance()->getConfig(),
 {
 
     MainConfigFile::backgroundKey
-})
+}),
+frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
+powerButton(ComponentConfigFile::powerButtonKey),
+settingsButton(ComponentConfigFile::settingsButtonKey)
 {
-    ComponentConfigFile& config = PocketHomeApplication::getInstance()
-            ->getComponentConfig();
     setWantsKeyboardFocus(true);
     setExplicitFocusOrder(1);
 
     appMenu = new AppMenuComponent(appConfig);
     addAndMakeVisible(appMenu);
-
-    ComponentConfigFile::ComponentSettings frameSettings =
-            config.getComponentSettings(ComponentConfigFile::menuFrameKey);
-    std::vector<String> assets = frameSettings.getAssetFiles();
-    if (!assets.empty())
-    {
-        frame = createSVGDrawable(assetFile(assets[0]));
-        std::vector<Colour> colours = frameSettings.getColours();
-        if (!colours.empty())
-        {
-            std::vector<Colour> defaults = {Colour(0xff, 0xff, 0xff),
-                Colour(0x00, 0x00, 0x00)};
-            for (int i = 0; i < defaults.size() && i < colours.size(); i++)
-            {
-                frame->replaceColour(defaults[i], colours[i]);
-            }
-        }
-        frameSettings.applyBounds(frame);
-        frame->setTransformToFit(frame->getBounds().toFloat(),
-                RectanglePlacement::stretchToFit);
-        addAndMakeVisible(frame);
-    }
-    std::function<void(Label*, String) > positionLabel =
-            [this, &config](Label * label, String componentKey)
-            {
-                config.getComponentSettings(componentKey).applyBounds(label);
-                label->setFont(Font(label->getHeight()));
-                label->setWantsKeyboardFocus(false);
-                addAndMakeVisible(label);
-            };
-    /* Setting the clock */
-    positionLabel(&(clock.getLabel()), ComponentConfigFile::clockIconKey);
-    clock.getLabel().setJustificationType(Justification::centredRight);
+    addAndMakeVisible(frame);
+    addAndMakeVisible(clock.getLabel());
 
     loadAllConfigProperties();
-    batteryIcon = new BatteryIcon();
-    wifiIcon = new WifiIcon();
     addAndMakeVisible(batteryIcon);
     addAndMakeVisible(wifiIcon);
 
-    powerButton = new VectorImageButton(ComponentConfigFile::powerButtonKey,
-            "Power");
-    settingsButton =
-            new VectorImageButton(ComponentConfigFile::settingsButtonKey,
-            "Settings");
-    powerButton->addListener(this);
-    settingsButton->addListener(this);
+    powerButton.addListener(this);
+    powerButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(powerButton);
+   
+    settingsButton.addListener(this);
+    settingsButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(settingsButton);
 
-    powerPage = new PowerPageComponent();
     settingsPage = new SettingsPageComponent(appConfig);
 }
 
@@ -93,8 +59,6 @@ void AppMenuPage::stopWaitingOnLaunch()
 {
     appMenu->stopWaitingOnLaunch();
 }
-
-
 
 void AppMenuPage::loadConfigProperties(ConfigFile * config, String key)
 {
@@ -113,18 +77,17 @@ void AppMenuPage::loadConfigProperties(ConfigFile * config, String key)
     }
 }
 
-
 void AppMenuPage::buttonClicked(Button * button)
 {
     PageStackComponent& pageStack = PocketHomeApplication::getInstance()
             ->getMainStack();
-    if (button == settingsButton)
+    if (button == &settingsButton)
     {
         pageStack.pushPage(settingsPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == powerButton)
+    } else if (button == &powerButton)
     {
-        pageStack.pushPage(powerPage,
+        pageStack.pushPage(&powerPage,
                 PageStackComponent::kTransitionTranslateHorizontalLeft);
     }
 }
@@ -152,10 +115,15 @@ void AppMenuPage::setImageBackground(const String& str)
 
 bool AppMenuPage::keyPressed(const KeyPress& key)
 {
-    //don't interrupt animation
-    if (Desktop::getInstance().getAnimator().isAnimating(appMenu))return false;
+    //don't interrupt animation or loading
+    if (Desktop::getInstance().getAnimator().isAnimating(appMenu)
+            || appMenu->waitingOnLaunch())
+    {
+        return false;
+    }
     int keyCode = key.getKeyCode();
-    if (keyCode == KeyPress::tabKey){
+    if (keyCode == KeyPress::tabKey)
+    {
         appMenu->loadButtons();
     }
     if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
@@ -177,13 +145,16 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
         DBG("AppMenuPage:click selected key");
         appMenu->clickSelected();
         return true;
-    }
-    else if (key==KeyPress::createFromDescription("CTRL+e")){
+    } else if (key == KeyPress::createFromDescription("CTRL+e"))
+    {
         DBG("show editor");
-        popupEditor=new PopupEditorComponent("Test Editor");
-        addAndMakeVisible(popupEditor);
-        DBG(popupEditor->getBounds().toString());
-        return true;
+        popupEditor = appMenu->getEditorForSelected();
+        if (popupEditor != nullptr)
+        {
+            addAndMakeVisible(popupEditor);
+            DBG(popupEditor->getBounds().toString());
+            return true;
+        }
     }
     return false;
 }
@@ -200,36 +171,23 @@ void AppMenuPage::resized()
 {
     ComponentConfigFile& config = PocketHomeApplication::getInstance()
             ->getComponentConfig();
-    ComponentConfigFile::ComponentSettings frameSettings =
-            config.getComponentSettings(ComponentConfigFile::menuFrameKey);
     ComponentConfigFile::ComponentSettings menuSettings =
             config.getComponentSettings(ComponentConfigFile::appMenuKey);
     ComponentConfigFile::ComponentSettings popupSettings =
             config.getComponentSettings(ComponentConfigFile::popupMenuKey);
-    
+
     menuSettings.applyBounds(appMenu);
-    if (frame != nullptr)
-    {
-        frameSettings.applyBounds(frame);
-        frame->setTransformToFit(frame->getBounds().toFloat(),
-                RectanglePlacement::stretchToFit);
-    }
+
+    frame.applyConfigBounds();
+
+    clock.getLabel().applyConfigBounds();
+
+    batteryIcon.applyConfigBounds();
+
+    wifiIcon.applyConfigBounds();
     
-    
-    config.getComponentSettings(ComponentConfigFile::batteryIconKey)
-            .applyBounds(batteryIcon);
-    config.getComponentSettings(ComponentConfigFile::wifiIconKey)
-            .applyBounds(wifiIcon);
-    config.getComponentSettings(ComponentConfigFile::powerButtonKey)
-            .applyBounds(powerButton);
-    config.getComponentSettings(ComponentConfigFile::settingsButtonKey)
-            .applyBounds(settingsButton);
-    Label * clockLabel = &(clock.getLabel());
-    config.getComponentSettings(ComponentConfigFile::clockIconKey)
-            .applyBounds(clockLabel);
-    Font labelFont = clockLabel->getFont();
-    labelFont.setHeight(clockLabel->getHeight());
-    clockLabel->setFont(labelFont);
+    powerButton.applyConfigBounds();
+    settingsButton.applyConfigBounds();
 }
 
 void AppMenuPage::paint(Graphics &g)

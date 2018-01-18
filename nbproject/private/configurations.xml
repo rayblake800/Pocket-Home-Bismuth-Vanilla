@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
         <df name="Release">
         </df>
       </df>
@@ -3611,18 +3609,23 @@
           <in>IconThread.h</in>
         </df>
         <df name="Basic Components">
+          <in>DrawableImageComponent.cpp</in>
+          <in>DrawableImageComponent.h</in>
           <in>FileSelectTextEditor.cpp</in>
           <in>FileSelectTextEditor.h</in>
           <in>Grid.cpp</in>
           <in>Grid.h</in>
           <in>IconSliderComponent.cpp</in>
           <in>IconSliderComponent.h</in>
+          <in>ImageComponent.cpp</in>
           <in>ListEditor.cpp</in>
           <in>ListEditor.h</in>
           <in>MenuItem.cpp</in>
           <in>MenuItem.h</in>
           <in>OverlaySpinner.cpp</in>
           <in>OverlaySpinner.h</in>
+          <in>ScalingLabel.cpp</in>
+          <in>ScalingLabel.h</in>
           <in>SwitchComponent.cpp</in>
           <in>SwitchComponent.h</in>
           <in>VectorImageButton.cpp</in>
@@ -3659,6 +3662,16 @@
           <in>WifiIcon.cpp</in>
         </df>
         <df name="Configuration">
+          <df name="Configurables">
+            <in>Configurable.cpp</in>
+            <in>Configurable.h</in>
+            <in>ConfigurableComponent.cpp</in>
+            <in>ConfigurableComponent.h</in>
+            <in>ConfigurableImageComponent.cpp</in>
+            <in>ConfigurableImageComponent.h</in>
+            <in>ConfigurableLabel.cpp</in>
+            <in>ConfigurableLabel.h</in>
+          </df>
           <in>AppConfigFile.cpp</in>
           <in>AppConfigFile.h</in>
           <in>ComponentConfigFile.cpp</in>
@@ -3666,7 +3679,6 @@
           <in>ConfigFile.cpp</in>
           <in>ConfigFile.h</in>
           <in>Configurable.cpp</in>
-          <in>Configurable.h</in>
           <in>ConfigurableComponent.cpp</in>
           <in>DateTimePage.cpp</in>
           <in>DateTimePage.h</in>

@@ -8,17 +8,21 @@
  */
 
 #pragma once
-#include "../../Basic Components/VectorImageButton.h"
+#include "../../Configuration/Configurables/ConfigurableImageComponent.h"
+#include "../../Configuration/Configurables/ConfigurableLabel.h"
+
 #include "BatteryMonitor.h"
 
 /**
  * BatteryIcon displays the current battery state using an icon and percentage
  * text.
  */
-class BatteryIcon : public VectorImageButton {
+class BatteryIcon : public Component {
 public:
     BatteryIcon();
     virtual ~BatteryIcon();
+    void applyConfigBounds();
+
 private:
     //All tracked battery states.  Each corresponds with an image asset file
     //defined in config.json
@@ -38,15 +42,17 @@ private:
      * config.json
      * @param percent battery charge percentage
      */
-    void setStatus(BatteryIconImage batteryImage, String percent);
-
+    void setStatus(BatteryIconImage imageSelection, String percent);
+    
+    
     /**
      * @return the BatteryStatus thread object that's tracking battery state
      */
     const BatteryStatus& getBatteryStatus();
     void visibilityChanged() override;
     void resized() override;
-    ScopedPointer<Label> batteryLabel;
+    ConfigurableImageComponent batteryImage;
+    ConfigurableLabel batteryPercent;
     BatteryMonitor batteryMonitor;
     /**
      * BatteryTimer periodically checks the battery monitor, and uses it

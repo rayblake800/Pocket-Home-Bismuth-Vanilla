@@ -1,21 +1,16 @@
-/*
-  ==============================================================================
-
-    WifiIcon.h
-    Created: 29 Dec 2017 12:02:41pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
-#pragma once
-#include "../../Basic Components/VectorImageButton.h"
-
 /**
+ * @File WifiIcon.h
+ * @Author Anthony Brown
+ * 
  * WifiIcon tracks WiFi status and displays an image indicating connection
  * state.
  */
-class WifiIcon : public VectorImageButton{
+
+#pragma once
+#include "../../Configuration/Configurables/ConfigurableImageComponent.h"
+
+
+class WifiIcon : public ConfigurableImageComponent{
 public:
     WifiIcon();
     virtual ~WifiIcon();
@@ -30,15 +25,18 @@ private:
         WIFI_STRENGTH_2,
         WIFI_STRENGTH_3
     };
+    
     /**
      * Set the WiFi connection status image.
      * @param wifiState the last discovered state of the WiFi connection.
      */
     void setStatus(WifiIconImage wifiState);
+    
     /**
      * Enable/disable the WiFi checking timer based on component visibility
      */
     void visibilityChanged() override;
+    
     /**
      * WifiTimer periodically checks the current WiFi connection state, and
      * updates the WiFi icon.

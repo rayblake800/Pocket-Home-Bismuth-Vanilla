@@ -9,8 +9,9 @@
  */
 #pragma once
 #include "../../GridLayoutManager.h"
-#include "../../Configuration/Configurable.h"
+#include "../../Configuration/Configurables/Configurable.h"
 #include "../../Basic Components/ListEditor.h"
+#include "../../Basic Components/ScalingLabel.h"
 
 class PopupEditorComponent : public Component,
 public Button::Listener,
@@ -21,7 +22,7 @@ public:
 
     void closePopup();
 protected:
-    virtual void confirm(){};// =0;
+    virtual void confirm()=0;
     virtual void loadConfigProperties(ConfigFile * config, String key);
     
     /**
@@ -40,7 +41,7 @@ private:
 
     virtual void cancel();
   
-    Label titleLabel;
+    ScalingLabel titleLabel;
     ListEditor listEditor;
     ImageButton cancelBtn;
     ImageButton confirmBtn;

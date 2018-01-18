@@ -17,24 +17,16 @@ Configurable(&PocketHomeApplication::getInstance()->getComponentConfig(),
 
     ComponentConfigFile::popupMenuKey
 }),
-titleLabel(title),
+titleLabel("EditorTitle",title,2),
 cancelBtn("cancel"),
 confirmBtn("confirm"),
 listEditor({}, Colours::white, Colours::aquamarine, Colours::black)
 {
-
+    setName("popupEditor");
     layoutManager.addComponent(&titleLabel, 0, 1);
 
     titleLabel.setColour(Label::textColourId, Colours::black);
-    titleLabel.setText(title, NotificationType::dontSendNotification);
     titleLabel.setJustificationType(Justification::centred);
-    titleLabel.setEditable(true);
-
-    //test code: remove later!
-    layoutManager.addRow(6);
-    layoutManager.addComponent(&listEditor, 1, 1);
-    addAndMakeVisible(listEditor);
-    addClosingButtons();
 
     addAndMakeVisible(titleLabel);
     loadAllConfigProperties();
@@ -99,9 +91,6 @@ void PopupEditorComponent::buttonClicked(Button* buttonClicked)
 void PopupEditorComponent::resized()
 {
     layoutManager.layoutComponents(getLocalBounds(), 3, 3);
-    titleLabel.setFont(titleLabel.getFont()
-            .withHeight(titleLabel.getHeight() - 1));
-
 }
 
 void PopupEditorComponent::paint(Graphics & g)
@@ -136,7 +125,7 @@ void PopupEditorComponent::loadConfigProperties
     ComponentConfigFile::ComponentSettings settings =
             (static_cast<ComponentConfigFile*> (config))
             ->getComponentSettings(key);
-    std::vector<Colour> colours = settings.getColours();
+    Array<Colour> colours = settings.getColours();
     if (colours.size() > 0)
     {
         bgColour = colours[0];

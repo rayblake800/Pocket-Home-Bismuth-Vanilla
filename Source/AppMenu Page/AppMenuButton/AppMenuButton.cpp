@@ -25,7 +25,7 @@ column(column)
             configFile.getComponentSettings
             (ComponentConfigFile::appMenuButtonKey);
     buttonSettings.applySize(this);
-    std::vector<Colour> colours = buttonSettings.getColours();
+    Array<Colour> colours = buttonSettings.getColours();
     if (colours.size() >= 2)
     {
         fillColour = colours[0];
@@ -58,6 +58,14 @@ void AppMenuButton::setIndex(int index)
 void AppMenuButton::setColumn(int column)
 {
     this->column = column;
+}
+
+/**
+ * @return the icon image used by this button.
+ */
+const Image& AppMenuButton::getIcon()
+{
+    return appIcon;
 }
 
 Rectangle<int> AppMenuButton::getButtonSize()

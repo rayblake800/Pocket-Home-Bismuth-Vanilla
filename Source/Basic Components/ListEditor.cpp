@@ -40,7 +40,6 @@ textColour(textColour)
 
 ListEditor::~ListEditor()
 {
-    listItems.clear();
 }
 
 /**
@@ -164,12 +163,15 @@ Component * ListEditor::refreshComponentForRow
             static_cast<ListItemComponent*> (existingComponent);
     if (rowNumber >= getNumRows())
     {
+        if(existingComponent != nullptr)
+        {
+            delete existingComponent;
+        }
         return nullptr;
     }
     if (rowLabel == nullptr)
     {
         rowLabel = new ListItemComponent(listItems[rowNumber], this);
-        listComponents.add(rowLabel);
         rowLabel->setColour(Label::textColourId, textColour);
         rowLabel->addListener(this);
     }

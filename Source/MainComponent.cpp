@@ -2,62 +2,71 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include "PokeLookAndFeel.h"
 #include "LauncherComponent.h"
 #include "Utils.h"
 #include "MainComponent.h"
 
-MainContentComponent::MainContentComponent(){
-    lookAndFeel = new PokeLookAndFeel();
-    setLookAndFeel(lookAndFeel);
+MainContentComponent::MainContentComponent() :
+loginPage([this] ()
+{
+
+    loggedIn();
+})
+{
+    setLookAndFeel(&lookAndFeel);
+    LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
     setWantsKeyboardFocus(false);
 
     //Function to execute when the login button is pressed on login page
-    loginPage = new LoginPage([this] () {
-        loggedIn();
-    });
-    LookAndFeel::setDefaultLookAndFeel(lookAndFeel);
-    appMenuPage=new AppMenuPage();
-    pageStack = new PageStackComponent();
+//    loginPage = new LoginPage([this] ()
+//    {
+//        loggedIn();
+//    });
+    //appMenuPage=new AppMenuPage();
+    //pageStack = new PageStackComponent();
 
-    if (loginPage->hasPassword()) {
+    if (loginPage.hasPassword())
+    {
         addAndMakeVisible(loginPage);
-        loginPage->textFocus();
-    } else {
+        loginPage.textFocus();
+    } else
+    {
         addAndMakeVisible(pageStack);
     }
-    pageStack->pushPage(appMenuPage, PageStackComponent::kTransitionNone);
+    pageStack.pushPage(&appMenuPage, PageStackComponent::kTransitionNone);
     setSize(480, 272);
     repaint();
 }
 
-void MainContentComponent::loggedIn() {
-    removeChildComponent(loginPage);
+void MainContentComponent::loggedIn()
+{
+    removeChildComponent(&loginPage);
     addAndMakeVisible(pageStack);
 }
 
-PageStackComponent * MainContentComponent::getPageStack() {
+PageStackComponent& MainContentComponent::getPageStack()
+{
     return pageStack;
 }
 
-MainContentComponent::~MainContentComponent() {
+MainContentComponent::~MainContentComponent()
+{
 }
 
-void MainContentComponent::paint(Graphics &g) {
+void MainContentComponent::paint(Graphics &g)
+{
     g.fillAll(Colours::white);
 }
 
-void MainContentComponent::resized() {
+void MainContentComponent::resized()
+{
     auto bounds = getLocalBounds();
-    if (pageStack != nullptr) {
-        pageStack->setBounds(bounds);
-    }
-    if (loginPage != nullptr) {
-        loginPage->setBounds(bounds);
-    }
+    pageStack.setBounds(bounds);
+        loginPage.setBounds(bounds);
 }
 
-void MainContentComponent::handleMainWindowInactive() {
-    appMenuPage->stopWaitingOnLaunch();
+void MainContentComponent::handleMainWindowInactive()
+{
+    appMenuPage.stopWaitingOnLaunch();
 }
 

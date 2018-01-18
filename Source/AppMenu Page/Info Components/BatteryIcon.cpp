@@ -12,41 +12,14 @@
 #include "../../Utils.h"
 
 BatteryIcon::BatteryIcon() :
-VectorImageButton(ComponentConfigFile::batteryIconKey, String("Battery"))
+batteryImage(ComponentConfigFile::batteryIconKey),
+batteryPercent(ComponentConfigFile::batteryPercentKey)
 {
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
-    ComponentConfigFile& config = PocketHomeApplication::getInstance()
-            ->getComponentConfig();
-    ComponentConfigFile::ComponentSettings iconSettings =
-            config.getComponentSettings(ComponentConfigFile::batteryIconKey);
-    ComponentConfigFile::ComponentSettings textSettings =
-            config.getComponentSettings(ComponentConfigFile::batteryPercentKey);
-    batteryLabel = new Label("percentage", "-%");
-    batteryLabel->setJustificationType(Justification::centredLeft);
-    Rectangle<int> bounds = iconSettings.getBounds();
-    Rectangle<int> textBounds = textSettings.getBounds();
-    bounds = bounds.getUnion(textBounds);
-    Component * parent = getParentComponent();
-    if (parent != nullptr)
-    {
-        Point<int> parentPos = parent->getScreenPosition();
-        bounds = bounds - parentPos;
-    }
-    setBounds(bounds);
-    batteryLabel->setBounds(textBounds - bounds.getPosition());
-    batteryLabel->setFont(Font(textBounds.getHeight()));
-    batteryLabel->setJustificationType(Justification::centredLeft);
-    addAndMakeVisible(batteryLabel);
-    Colour textColour;
-    try
-    {
-        textColour = textSettings.getColours().at(0);
-    } catch (std::out_of_range e)
-    {
-        textColour = Colours::white;
-    }
-    batteryLabel->setColour(Label::ColourIds::textColourId, textColour);
+    batteryPercent.setJustificationType(Justification::centredLeft);
+    addAndMakeVisible(batteryPercent);
+    addAndMakeVisible(batteryImage);
     batteryMonitor.updateStatus();
     batteryMonitor.startThread();
     batteryTimer = new BatteryTimer(this);
@@ -86,33 +59,32 @@ void BatteryIcon::visibilityChanged()
 
 void BatteryIcon::resized()
 {
-    resizeImage();
-    ComponentConfigFile& config = PocketHomeApplication::getInstance()
-            ->getComponentConfig();
-    ComponentConfigFile::ComponentSettings textSettings =
-            config.getComponentSettings(ComponentConfigFile::batteryPercentKey);
-    Rectangle<int> textBounds = textSettings.getBounds() - getPosition();
-    batteryLabel->setBounds(textBounds);
-    //DBG(String("Text bounds set to ")+textBounds.toString());
-    batteryLabel->setFont(fontResizedToFit(batteryLabel->getFont(),
-            batteryLabel->getText(false), textBounds));
-    if (!getBounds().contains(textBounds))
-    {
-        setBounds(getBounds().getUnion(textBounds));
-    }
-
 }
 
-void BatteryIcon::setStatus(BatteryIconImage batteryImage, String percent)
+void BatteryIcon::setStatus(BatteryIconImage imageSelection, String percent)
 {
-    ((VectorImageButton*)this)->setImage((int) batteryImage);
-    batteryLabel->setText(percent, dontSendNotification);
+    batteryImage.setImageAssetIndex((int) imageSelection);
+    batteryPercent.setText(percent, dontSendNotification);
+}
+
+void BatteryIcon::applyConfigBounds(){
+    batteryImage.applyConfigBounds();
+    batteryPercent.applyConfigBounds();
+    Rectangle<int> childBounds=batteryImage.getBounds()
+    .getUnion(batteryPercent.getBounds());
+    childBounds.setLeft(0);
+    childBounds.setTop(0);
+    if(childBounds != getBounds()){
+        setBounds(childBounds);
+    }
 }
 
 BatteryIcon::BatteryTimer::BatteryTimer(BatteryIcon * batteryIcon) :
 batteryIcon(batteryIcon)
 {
 }
+
+
 
 BatteryIcon::BatteryTimer::~BatteryTimer()
 {

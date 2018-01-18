@@ -38,4 +38,6 @@ private:
     static const WildcardFileFilter imageFilter;
     static const String imgSelectTitle;
     static const String imgSelectText;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FileSelectTextEditor)
 };

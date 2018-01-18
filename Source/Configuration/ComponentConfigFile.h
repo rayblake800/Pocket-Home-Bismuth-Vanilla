@@ -32,7 +32,7 @@ public:
     static const String menuFrameKey;
     static const String batteryIconKey;
     static const String batteryPercentKey;
-    static const String clockIconKey;
+    static const String clockLabelKey;
     static const String wifiIconKey;
     static const String powerButtonKey;
     static const String settingsButtonKey;
@@ -73,11 +73,11 @@ public:
         /**
          * @return the list of configurable colors.
          */
-        std::vector<Colour> getColours();
+        Array<Colour> getColours();
         /**
          * @return the list of component asset files.
          */
-        std::vector<String> getAssetFiles();
+        Array<String> getAssetFiles();
         /**
          * Use these settings to position and size a component
          * @param component an active component
@@ -97,8 +97,8 @@ public:
         float y;
         float width;
         float height;
-        std::vector<Colour> colours;
-        std::vector<String> assetFiles;
+        Array<Colour> colours;
+        Array<String> assetFiles;
     };
 
 

@@ -64,7 +64,7 @@ private:
     
     //Custom ListBox item component class, basically just a label with a 
     //delete button.
-    class ListItemComponent : public Label {
+    class ListItemComponent : public Label{
     public:
         ListItemComponent(String text, ListEditor * owner);
         virtual ~ListItemComponent();
@@ -95,9 +95,10 @@ private:
 
 
     Array<String> listItems;
-    OwnedArray<ListItemComponent> listComponents;
     GridLayoutManager layoutManager;
     ListBox listContainer;
     TextEditor newItemField;
     TextButton addItemBtn;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ListEditor)
 };

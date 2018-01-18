@@ -10,8 +10,8 @@
         "asset files": []
     },
     "app menu buttons": {
-        "x": 0,
-        "y": 0,
+        "x": -1,
+        "y": -1,
         "width": 0.30000001192092895508,
         "height": 0.12,
         "colours": [
@@ -111,8 +111,8 @@
         ]
     },  
     "popup menu": {
-        "x": 0,
-        "y": 0,
+        "x": -1,
+        "y": -1,
         "width": 0.3333,
         "height": 0.6666,
         "colours": [

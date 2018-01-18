@@ -41,6 +41,12 @@ public:
      * @return all application categories linked to this button.
      */
     Array<String> getCategories() const;
+    
+    /**
+     * Gets a PopupEditorComponent configured to edit this button
+     * @return a new PopupEditorComponent, ready to be added to the screen.
+     */
+    PopupEditorComponent* getEditor() {return nullptr;};
 private:
     DesktopEntry desktopEntry;
 };

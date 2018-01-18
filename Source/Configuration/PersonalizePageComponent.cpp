@@ -8,33 +8,23 @@
 PersonalizePageComponent::PersonalizePageComponent(AppConfigFile& appConfig) :
 appConfig(appConfig),
 bgTitle("bgTitle", "Background"),
-iconTitle("lab_icons", "Icon management"),
-bgLabel("bgLabel", ""),
-nameLabel("nameLabel", "Name:"),
-iconLabel("iconLabel", "Icon path:"),
-shellLabel("shellLabel", "Command:"),
-addFaveAppBtn("Add"),
-applyChangesBtn("Apply Changes"),
+bgLabel("bgLabel", "",2),
 bgTypePicker("bgTypePicker"),
 bgEditor("Choose the new background",
 "Please choose your new background image"),
+iconTitle("iconTitle", "Icon management"),
+addFaveAppBtn("Add"),
+successLabel("suc", "Success !"),
+nameLabel("nameLabel", "Name:",3),
 appNameEditor("name"),
+iconLabel("iconLabel", "Icon:",3),
 appIconEditor("Choose the icon",
 "Please choose your icon image (ideal size : 90x70 px)"),
-launchCmdEditor("shell"), successLabel("suc", "Success !")
+shellLabel("shellLabel", "Command:",3),
+launchCmdEditor("shell"),
+applyChangesBtn("Apply Changes")
 {
     bgColor = Colour(0xffd23c6d);
-    bgImage = createImageFromFile(assetFile("settingsBackground.png"));
-    Font big_font(Font::getDefaultMonospacedFontName(), 25.f, 0);
-    bgTitle.setFont(big_font);
-    iconTitle.setFont(big_font);
-
-    Font small_font(Font::getDefaultMonospacedFontName(), 17.5f, 0);
-    bgLabel.setFont(small_font);
-    nameLabel.setFont(small_font);
-    iconLabel.setFont(small_font);
-    shellLabel.setFont(small_font);
-    successLabel.setFont(big_font);
 
     addAndMakeVisible(bgTitle);
     addAndMakeVisible(iconTitle);
@@ -109,9 +99,6 @@ void PersonalizePageComponent::paint(Graphics &g)
 {
     auto bounds = getLocalBounds();
     g.fillAll(bgColor);
-    g.drawImage(bgImage, bounds.getX(), bounds.getY(),
-            bounds.getWidth(), bounds.getHeight(),
-            0, 0, bgImage.getWidth(), bgImage.getHeight(), false);
 }
 
 void PersonalizePageComponent::resized()
@@ -120,6 +107,7 @@ void PersonalizePageComponent::resized()
     backButton->setBounds(bounds.withWidth(bounds.getWidth() / 8));
 
     bounds.setLeft(backButton->getBounds().getRight());
+    bounds.reduce(4,0);
 
     GridLayoutManager layoutManager;
     //Row 0:
@@ -137,13 +125,13 @@ void PersonalizePageComponent::resized()
 
     //Row 3: 
     layoutManager.addComponent(&nameLabel, 3, 1);
-    layoutManager.addComponent(&appNameEditor, 3, 1);
+    layoutManager.addComponent(&appNameEditor, 3, 2);
     layoutManager.addComponent(&iconLabel, 3, 1);
-    layoutManager.addComponent(&appIconEditor, 3, 1);
+    layoutManager.addComponent(&appIconEditor, 3, 2);
 
     //Row 4:
     layoutManager.addComponent(&shellLabel, 4, 1);
-    layoutManager.addComponent(&launchCmdEditor, 4, 5);
+    layoutManager.addComponent(&launchCmdEditor, 4, 3);
 
     //Row 5:
     layoutManager.addComponent(&applyChangesBtn, 5, 1);

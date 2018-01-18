@@ -10,6 +10,8 @@
 
 #pragma once
 #include "../../Basic Components/FileSelectTextEditor.h"
+#include "../../Basic Components/ListEditor.h"
+#include "../../Basic Components/DrawableImageComponent.h"
 #include "../../Configuration/AppConfigFile.h"
 #include "../AppMenuButton/AppFolderButton.h"
 #include "PopupEditorComponent.h"
@@ -17,16 +19,23 @@
 class FolderEditorPopup : public PopupEditorComponent {
 public:
     FolderEditorPopup(AppFolderButton* folderButton,
-            AppConfigFile::AppFolder folder);
+            AppConfigFile& config, AppConfigFile::AppFolder folder);
     virtual ~FolderEditorPopup();
 private:
     void confirm();
     AppMenuButton::Ptr folderButton;
+    AppConfigFile& config;
     AppConfigFile::AppFolder folder;
     
-    TextEditor nameEdit;
+    ScalingLabel nameLabel;
+    TextEditor nameEditor;
     
-    FileSelectTextEditor iconPathEdit;
-    DrawableImage iconPreview;
+    ScalingLabel iconLabel;
+    DrawableImageComponent iconPreview;
+    FileSelectTextEditor iconPathEditor;
+    
+    ScalingLabel categoryLabel;
+    ListEditor categoryList;
+    
     TextButton deleteButton;
 };

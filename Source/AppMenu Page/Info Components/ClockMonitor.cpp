@@ -15,13 +15,10 @@ Configurable(static_cast<ConfigFile*>
     ComponentConfigFile::showClockKey, ComponentConfigFile::use24HrModeKey
 }),
 Thread("Clock"),
-
-clock(new Label("clock")),
+clockLabel(ComponentConfigFile::clockLabelKey,"clockLabel","00:00"),
 use24HrMode(false)
 {
-    clock->setFont(Font(16.5f));
-    //clock->setColour(Label::backgroundColourId, PokeLookAndFeel::chipPurple);
-    clock->setColour(Label::textColourId, Colours::white);
+    clockLabel.setJustificationType(Justification::centredRight);
     loadAllConfigProperties();
 }
 
@@ -33,27 +30,23 @@ void ClockMonitor::run()
 {
     while (!threadShouldExit())
     {
-        struct timeval tv;
-        int error = gettimeofday(&tv, nullptr);
-        if (error) perror("Time of the day");
-        struct tm res;
-        localtime_r(&tv.tv_sec, &res);
-        if (use24HrMode)
-            sprintf(formatted, "%02d:%02d", res.tm_hour, res.tm_min);
-        else
+        Time timeNow = Time::getCurrentTime();
+        String hours = String(use24HrMode 
+                ? timeNow.getHours() : timeNow.getHoursInAmPmFormat());
+        String minutes= String(timeNow.getMinutes());
+        while(minutes.length()<2)
         {
-            const char* moment = (res.tm_hour > 12) ? "pm" : "am";
-            int hour = (res.tm_hour > 12) ? res.tm_hour - 12 : res.tm_hour;
-            sprintf(formatted, "%02d:%02d %s", hour, res.tm_min, moment);
+            minutes=String("0")+minutes;
         }
-        MessageManager::callAsync([this]
+        String timeStr = hours + String(":")+minutes;
+        if(!use24HrMode)
         {
-            clock->setText(String(formatted),
+            timeStr += String(timeNow.isAfternoon() ? " PM" : " AM");
+        } 
+        MessageManager::callAsync([this,&timeStr]
+        {
+            clockLabel.setText(timeStr,
                     NotificationType::dontSendNotification);
-            //int width = Font(16.5f).getStringWidth(clock->getText(false));
-            //int height = Font(16.5f).getHeight();
-            //Rectangle<int> bounds = clock->getBounds();
-            //clock->setBounds(bounds.withSizeKeepingCentre(width, height));
         });
         Thread::sleep(1000);
     }
@@ -72,7 +65,7 @@ void ClockMonitor::loadConfigProperties(ConfigFile * config, String key)
                 (ComponentConfigFile::showClockKey);
         MessageManager::callAsync([this, visible]
         {
-            clock->setAlpha(visible ? 1 : 0);
+            clockLabel.setAlpha(visible ? 1 : 0);
             bool threadRunning = isThreadRunning();
             if (visible && !threadRunning)
             {
@@ -89,7 +82,7 @@ void ClockMonitor::loadConfigProperties(ConfigFile * config, String key)
     }
 }
 
-Label& ClockMonitor::getLabel()
+ConfigurableLabel& ClockMonitor::getLabel()
 {
-    return *clock;
+    return clockLabel;
 }

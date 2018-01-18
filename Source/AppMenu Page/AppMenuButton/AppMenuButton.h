@@ -7,7 +7,7 @@
  */
 
 #pragma once
-#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "../Popup Editor Components/PopupEditorComponent.h"
 
 class IconThread;
 class AppMenuButton : public TextButton, public ReferenceCountedObject {
@@ -68,13 +68,23 @@ public:
      * @param column a new column number to assign to this button.
      */
     void setColumn(int column);
+    
+    /**
+     * Gets a PopupEditorComponent configured to edit this button
+     * @return a new PopupEditorComponent, ready to be added to the screen.
+     */
+    virtual PopupEditorComponent* getEditor() = 0;
+    
+    /**
+     * @return the icon image used by this button.
+     */
+    const Image& getIcon();
 
     /**
      * @return the size of an AppMenuButton with the current window size
      * and config file ratios.
      */
     static Rectangle<int> getButtonSize();
-
 protected:
     /**
      * Custom button painting method.

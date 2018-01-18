@@ -2,6 +2,7 @@
 #include "Settings/SettingsPageComponent.h"
 #include "Power/PowerPageComponent.h"
 #include "AppMenu Page/AppMenuPage.h"
+#include "PokeLookAndFeel.h"
 #include "LoginPage.h"
 #include "PageStackComponent.h"
 
@@ -17,14 +18,14 @@ public:
   void paint(Graphics &) override;
   void resized() override;
   void loggedIn();
-  PageStackComponent * getPageStack();
+  PageStackComponent& getPageStack();
   
   void handleMainWindowInactive();
 
 private:
-  ScopedPointer<AppMenuPage> appMenuPage;
-  ScopedPointer<LookAndFeel> lookAndFeel;
-  ScopedPointer<PageStackComponent> pageStack;
-  ScopedPointer<LoginPage> loginPage;
+  AppMenuPage appMenuPage;
+  PokeLookAndFeel lookAndFeel;
+  PageStackComponent pageStack;
+  LoginPage loginPage;
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainContentComponent)
 };

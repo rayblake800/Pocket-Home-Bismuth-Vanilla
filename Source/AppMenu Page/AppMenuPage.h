@@ -12,8 +12,8 @@
 #include "../LauncherComponent.h"
 #include "../Power/PowerPageComponent.h"
 #include "../Settings/SettingsPageComponent.h"
-#include "../Basic Components/VectorImageButton.h"
 #include "../Configuration/AppConfigFile.h"
+#include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "Popup Editor Components/PopupEditorComponent.h"
 #include "Info Components/ClockMonitor.h"
 #include "Info Components/BatteryIcon.h"
@@ -51,16 +51,17 @@ private:
     Colour bgColor;
     ClockMonitor clock;
     ScopedPointer<AppMenuComponent> appMenu;
-    ScopedPointer<BatteryIcon> batteryIcon;
-    ScopedPointer<WifiIcon> wifiIcon;
-    ScopedPointer<VectorImageButton> powerButton;
-    ScopedPointer<VectorImageButton> settingsButton;
+    BatteryIcon batteryIcon;
+    WifiIcon wifiIcon;
+    
+    ConfigurableImageButton powerButton;
+    ConfigurableImageButton settingsButton;
 
-    ScopedPointer<PowerPageComponent> powerPage;
+    PowerPageComponent powerPage;
     ScopedPointer<SettingsPageComponent> settingsPage;
 
     ScopedPointer<Image> bgImage;
-    ScopedPointer<Drawable> frame;
+    ConfigurableImageComponent frame;
     
     ScopedPointer<PopupEditorComponent> popupEditor;
 

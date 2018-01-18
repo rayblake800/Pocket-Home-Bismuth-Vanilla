@@ -47,6 +47,10 @@
       <FILE id="rGcSg1" name="LauncherComponent.h" compile="0" resource="0"
             file="Source/LauncherComponent.h"/>
       <GROUP id="{185415EC-B399-8F03-8F25-DEE2244D2B03}" name="Basic Components">
+        <FILE id="hzXzqU" name="DrawableImageComponent.cpp" compile="1" resource="0"
+              file="Source/Basic Components/DrawableImageComponent.cpp"/>
+        <FILE id="gYBZcj" name="DrawableImageComponent.h" compile="0" resource="0"
+              file="Source/Basic Components/DrawableImageComponent.h"/>
         <FILE id="jt3Brk" name="FileSelectTextEditor.cpp" compile="1" resource="0"
               file="Source/Basic Components/FileSelectTextEditor.cpp"/>
         <FILE id="NCotgj" name="FileSelectTextEditor.h" compile="0" resource="0"
@@ -65,16 +69,36 @@
               file="Source/Basic Components/OverlaySpinner.cpp"/>
         <FILE id="MSrLBn" name="OverlaySpinner.h" compile="0" resource="0"
               file="Source/Basic Components/OverlaySpinner.h"/>
+        <FILE id="I0X6lt" name="ScalingLabel.cpp" compile="1" resource="0"
+              file="Source/Basic Components/ScalingLabel.cpp"/>
+        <FILE id="bdPDpp" name="ScalingLabel.h" compile="0" resource="0" file="Source/Basic Components/ScalingLabel.h"/>
         <FILE id="S4Qmur" name="SwitchComponent.cpp" compile="1" resource="0"
               file="Source/Basic Components/SwitchComponent.cpp"/>
         <FILE id="N5QVhc" name="SwitchComponent.h" compile="0" resource="0"
               file="Source/Basic Components/SwitchComponent.h"/>
-        <FILE id="cg1Ghe" name="VectorImageButton.cpp" compile="1" resource="0"
-              file="Source/Basic Components/VectorImageButton.cpp"/>
-        <FILE id="yg9Buy" name="VectorImageButton.h" compile="0" resource="0"
-              file="Source/Basic Components/VectorImageButton.h"/>
       </GROUP>
       <GROUP id="{85D01745-B7AD-BE3B-8D28-80F47A0AA8BA}" name="Configuration">
+        <GROUP id="{0620BF40-B02B-426D-C70D-993F44358C78}" name="Configurables">
+          <FILE id="gzdytE" name="ConfigurableImageButton.cpp" compile="1" resource="0"
+                file="Source/Configuration/Configurables/ConfigurableImageButton.cpp"/>
+          <FILE id="qHMdEQ" name="ConfigurableImageButton.h" compile="0" resource="0"
+                file="Source/Configuration/Configurables/ConfigurableImageButton.h"/>
+          <FILE id="a9u0EC" name="ConfigurableLabel.cpp" compile="1" resource="0"
+                file="Source/Configuration/Configurables/ConfigurableLabel.cpp"/>
+          <FILE id="pINIgS" name="ConfigurableLabel.h" compile="0" resource="0"
+                file="Source/Configuration/Configurables/ConfigurableLabel.h"/>
+          <FILE id="g1W6SX" name="ConfigurableComponent.cpp" compile="1" resource="0"
+                file="Source/Configuration/Configurables/ConfigurableComponent.cpp"/>
+          <FILE id="OBFKiD" name="ConfigurableComponent.h" compile="0" resource="0"
+                file="Source/Configuration/Configurables/ConfigurableComponent.h"/>
+          <FILE id="zxMEf3" name="Configurable.cpp" compile="1" resource="0"
+                file="Source/Configuration/Configurables/Configurable.cpp"/>
+          <FILE id="xL6pBS" name="Configurable.h" compile="0" resource="0" file="Source/Configuration/Configurables/Configurable.h"/>
+          <FILE id="HkMUgr" name="ConfigurableImageComponent.h" compile="0" resource="0"
+                file="Source/Configuration/Configurables/ConfigurableImageComponent.h"/>
+          <FILE id="Gf8A1r" name="ConfigurableImageComponent.cpp" compile="1"
+                resource="0" file="Source/Configuration/Configurables/ConfigurableImageComponent.cpp"/>
+        </GROUP>
         <FILE id="DCzTro" name="AppConfigFile.cpp" compile="1" resource="0"
               file="Source/Configuration/AppConfigFile.cpp"/>
         <FILE id="IYWdZr" name="AppConfigFile.h" compile="0" resource="0" file="Source/Configuration/AppConfigFile.h"/>
@@ -84,9 +108,6 @@
               file="Source/Configuration/ComponentConfigFile.h"/>
         <FILE id="dNgJxN" name="ConfigFile.cpp" compile="1" resource="0" file="Source/Configuration/ConfigFile.cpp"/>
         <FILE id="sqDYSh" name="ConfigFile.h" compile="0" resource="0" file="Source/Configuration/ConfigFile.h"/>
-        <FILE id="Xpr78t" name="Configurable.cpp" compile="1" resource="0"
-              file="Source/Configuration/Configurable.cpp"/>
-        <FILE id="x3ij3F" name="Configurable.h" compile="0" resource="0" file="Source/Configuration/Configurable.h"/>
         <FILE id="Fu5GTF" name="DateTimePage.cpp" compile="1" resource="0"
               file="Source/Configuration/DateTimePage.cpp"/>
         <FILE id="Ja1BN2" name="DateTimePage.h" compile="0" resource="0" file="Source/Configuration/DateTimePage.h"/>

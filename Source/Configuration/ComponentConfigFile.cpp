@@ -46,7 +46,7 @@ const String ComponentConfigFile::appMenuKey = "app menu";
 const String ComponentConfigFile::menuFrameKey = "menu frame";
 const String ComponentConfigFile::batteryIconKey = "battery";
 const String ComponentConfigFile::batteryPercentKey = "battery percent text";
-const String ComponentConfigFile::clockIconKey = "time";
+const String ComponentConfigFile::clockLabelKey = "time";
 const String ComponentConfigFile::wifiIconKey = "wifi";
 const String ComponentConfigFile::powerButtonKey = "power button";
 const String ComponentConfigFile::settingsButtonKey = "settings button";
@@ -96,7 +96,7 @@ Array<String> ComponentConfigFile::getComponentKeys()
         menuFrameKey,
         batteryIconKey,
         batteryPercentKey,
-        clockIconKey,
+        clockLabelKey,
         wifiIconKey,
         powerButtonKey,
         settingsButtonKey,
@@ -132,7 +132,7 @@ ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
         {
             if (colour.isString())
             {
-                colours.push_back(Colour::fromString(colour.toString()));
+                colours.add(Colour::fromString(colour.toString()));
             }
         }
     }
@@ -141,7 +141,7 @@ ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
     {
         for (var asset : *assetList.getArray())
         {
-            assetFiles.push_back(asset);
+            assetFiles.add(asset);
         }
     }
 }
@@ -187,12 +187,12 @@ Rectangle<int> ComponentConfigFile::ComponentSettings::getBounds()
             width * window.getWidth(), height * window.getHeight());
 }
 
-std::vector<Colour> ComponentConfigFile::ComponentSettings::getColours()
+Array<Colour> ComponentConfigFile::ComponentSettings::getColours()
 {
     return colours;
 }
 
-std::vector<String> ComponentConfigFile::ComponentSettings::getAssetFiles()
+Array<String> ComponentConfigFile::ComponentSettings::getAssetFiles()
 {
     return assetFiles;
 }

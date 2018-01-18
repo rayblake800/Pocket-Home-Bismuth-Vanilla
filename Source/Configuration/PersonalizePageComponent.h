@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Basic Components/FileSelectTextEditor.h"
+#include "../Basic Components/ScalingLabel.h"
 #include "../Configuration/AppConfigFile.h"
 #include "../Utils.h"
 
@@ -24,18 +25,17 @@ private:
   
   ScopedPointer<ImageButton> backButton;
   Colour bgColor;
-  Image bgImage;
   
   /* Labels for inputs */
-  Label bgTitle;
-  Label iconTitle;
+  ScalingLabel bgTitle;
+  ScalingLabel iconTitle;
   
   /* Labels to show before the inputs */
-  Label bgLabel;
-  Label nameLabel;
-  Label iconLabel;
-  Label shellLabel;
-  Label successLabel;
+  ScalingLabel bgLabel;
+  ScalingLabel nameLabel;
+  ScalingLabel iconLabel;
+  ScalingLabel shellLabel;
+  ScalingLabel successLabel;
   
   /* Inputs */
   ComboBox bgTypePicker;

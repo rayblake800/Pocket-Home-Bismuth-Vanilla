@@ -2,7 +2,7 @@
 #define CLOCKMONITOR_H
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "../../Configuration/Configurable.h"
+#include "../../Configuration/Configurables/ConfigurableLabel.h"
 
 
 using namespace juce;
@@ -13,7 +13,7 @@ public:
     ~ClockMonitor();
 
     void run() override;
-    Label& getLabel();
+    ConfigurableLabel& getLabel();
 protected:
     /**
      * Receives notification whenever clock configuration values change
@@ -23,9 +23,8 @@ protected:
      */
     void loadConfigProperties(ConfigFile * config,String key);
 private:
-    char formatted[10];
     bool use24HrMode;
-    ScopedPointer<Label> clock;
+    ConfigurableLabel clockLabel;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ClockMonitor)
 };
 

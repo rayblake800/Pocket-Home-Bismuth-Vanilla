@@ -3,7 +3,7 @@
 
     WifiIcon.cpp
     Created: 29 Dec 2017 12:02:41pm
-    Author:  anthony
+    Author:  Anthony Brown
 
   ==============================================================================
  */
@@ -13,10 +13,8 @@
 #include "../../PocketHomeApplication.h"
 
 WifiIcon::WifiIcon() :
-VectorImageButton(ComponentConfigFile::wifiIconKey, "Wifi")
+ConfigurableImageComponent(ComponentConfigFile::wifiIconKey)
 {
-    setInterceptsMouseClicks(false, false);
-    setWantsKeyboardFocus(false);
 
     wifiTimer = new WifiTimer(this);
     wifiTimer->startTimer(1);
@@ -27,11 +25,17 @@ WifiIcon::~WifiIcon()
     wifiTimer->removeTimer();
 }
 
+/**
+ * Set the WiFi connection status image.
+ */
 void WifiIcon::setStatus(WifiIconImage wifiState)
 {
-    ((VectorImageButton*)this)->setImage((int) wifiState);
+    setImageAssetIndex((int) wifiState);
 }
 
+/**
+ * Enable/disable the WiFi checking timer based on component visibility
+ */
 void WifiIcon::visibilityChanged()
 {
     if (wifiTimer != nullptr)
@@ -64,6 +68,9 @@ void WifiIcon::WifiTimer::removeTimer()
     stopTimer();
 }
 
+/**
+ * Check WiFi state and update the image.
+ */
 void WifiIcon::WifiTimer::timerCallback()
 {
     if (wifiIcon != nullptr)
@@ -85,7 +92,9 @@ void WifiIcon::WifiTimer::timerCallback()
             wifiState = WIFI_STRENGTH_0;
         }// wifi off
         wifiIcon->setStatus(wifiState);
-    } else
+        startTimer(frequency);
+    } 
+    else
     {
         stopTimer();
     }

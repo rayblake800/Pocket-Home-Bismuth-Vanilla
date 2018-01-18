@@ -79,7 +79,7 @@ void AppMenuComponent::loadButtons()
     Array<AppConfigFile::AppFolder> categories = appConfig.getFolders();
     for (const AppConfigFile::AppFolder& category : categories)
     {
-        addButton(new AppFolderButton(category,
+        addButton(new AppFolderButton(appConfig, category,
                 buttonColumns[activeColumn()].size(),
                 activeColumn(), iconThread));
     }
@@ -200,6 +200,7 @@ void AppMenuComponent::closeFolder()
 
 void AppMenuComponent::buttonClicked(Button * buttonClicked)
 {
+    DBG("button clicked");
     if (waitingOnLaunch())
     {
         return;
@@ -286,8 +287,7 @@ void AppMenuComponent::visibilityChanged()
     if (loadingAsync)
     {
         showLaunchSpinner();
-    }
-    else if(!isVisible())
+    } else if (!isVisible())
     {
         stopWaitingOnLaunch();
     }
@@ -349,6 +349,18 @@ void AppMenuComponent::clickSelected()
     {
         selected[activeColumn()]->triggerClick();
     }
+}
+
+/**
+ * Returns a popup editor component for updating the selected button.
+ */
+PopupEditorComponent* AppMenuComponent::getEditorForSelected()
+{
+    if (selected[activeColumn()] != nullptr && !waitingOnLaunch())
+    {
+       return selected[activeColumn()]->getEditor();
+    }
+    return nullptr;
 }
 
 //return the index of the active button column.

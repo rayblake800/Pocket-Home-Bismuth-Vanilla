@@ -9,13 +9,16 @@
  */
 #include "../../Utils.h"
 #include "AppFolderButton.h"
+#include "../Popup Editor Components/FolderEditorPopup.h"
 
-AppFolderButton::AppFolderButton(AppConfigFile::AppFolder appFolder,
+AppFolderButton::AppFolderButton(AppConfigFile& config,
+        AppConfigFile::AppFolder appFolder,
         int index, int column, IconThread& iconThread) :
 AppMenuButton(appFolder.name, index, column),
+config(config),
 appFolder(appFolder)
 {
-    iconThread.loadIcon(this,appFolder.icon);
+    iconThread.loadIcon(this, appFolder.icon);
 }
 
 /**
@@ -50,4 +53,13 @@ String AppFolderButton::getCommand() const
 Array<String> AppFolderButton::getCategories() const
 {
     return appFolder.categories;
+}
+
+/**
+ * Gets a PopupEditorComponent configured to edit this button
+ * @return a new PopupEditorComponent, ready to be added to the screen.
+ */
+PopupEditorComponent* AppFolderButton::getEditor()
+{
+    return new FolderEditorPopup(this,config,appFolder);
 }

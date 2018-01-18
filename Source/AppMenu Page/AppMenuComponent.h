@@ -10,6 +10,7 @@
 #include <atomic>
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Configuration/AppConfigFile.h"
+#include "Popup Editor Components/PopupEditorComponent.h"
 #include "IconThread.h"
 #include "DesktopEntries.h"
 #include "AppMenuButton/AppMenuButton.h"
@@ -44,6 +45,12 @@ public:
      * Trigger a click for the selected button.
      */
     void clickSelected();
+    
+    /**
+     * Returns a popup editor component for updating the selected button.
+     * @return either an editor component, or nullptr if no button is selected.
+     */
+    PopupEditorComponent* getEditorForSelected();
 
     //#################### Folder Management  ############################
     /**

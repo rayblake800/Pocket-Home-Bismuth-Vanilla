@@ -10,7 +10,7 @@
 
 #include "../Utils.h"
 #include "ConfigFile.h"
-#include "Configurable.h"
+#include "Configurables/Configurable.h"
 
 ConfigFile::ConfigFile(String configFilename) : filename(configFilename)
 {

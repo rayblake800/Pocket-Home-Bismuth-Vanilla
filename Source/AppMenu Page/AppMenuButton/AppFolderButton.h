@@ -14,12 +14,14 @@ class AppFolderButton : public AppMenuButton {
 public:
     /**
      * Create a new button representing an AppFolder
+     * @param config the config file defining this folder
      * @param appFolder defines the application data
      * @param index button position in its column
      * @param column button's column in the AppMenu
      * @param a reference to the thread that loads button icons
      */
-    AppFolderButton(AppConfigFile::AppFolder appFolder, 
+    AppFolderButton(AppConfigFile& config,
+            AppConfigFile::AppFolder appFolder, 
             int index, int column,IconThread& iconThread);
 
     /**
@@ -43,7 +45,14 @@ public:
      * @return all application categories linked to this button.
      */
     Array<String> getCategories() const;
+    
+    /**
+     * Gets a PopupEditorComponent configured to edit this button
+     * @return a new PopupEditorComponent, ready to be added to the screen.
+     */
+    PopupEditorComponent* getEditor();
 private:
+    AppConfigFile& config;
     AppConfigFile::AppFolder appFolder;
 };
 

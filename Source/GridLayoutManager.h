@@ -25,6 +25,14 @@ public:
     int getNumRows();
     
     /**
+     * Updates the vertical weight value of a row. If the row doesn't exist,
+     * nothing will happen.
+     * @param rowIndex the row to update.
+     * @param newWeight the new weight value to set.
+     */
+    void setRowWeight(int rowIndex,int newWeight);
+    
+    /**
      * Add a new component to a grid row.
      * @param comp any UI component
      * @param row index of the component's row. The component will be added
@@ -32,8 +40,33 @@ public:
      * a vertical weight of 1 will be added until it does exist. If the index is
      * less than zero, it is rounded up to zero.
      * @param horizWeight determines the relative width of the component.
+     * @param parentToInit if this optional argument is provided, this will add
+     * comp as a child of parentToInit and make it visible.
      */
-    void addComponent(Component * comp,int row,int horizWeight);
+    void addComponent(Component * comp,int row,int horizWeight,
+        Component* parentToInit=nullptr);
+    
+    //bulk component setup:
+    struct ComponentLayoutParams{
+        ComponentLayoutParams(Component* comp,int row, int horizWeight):
+        comp(comp),
+        row(row),
+        horizWeight(horizWeight){};
+        
+        Component* comp;
+        int row;
+        int horizWeight;
+    };
+    
+    /**
+     * Add a list of components to the layout manager
+     * @param components a list of components, with their weights and 
+     * row indexes
+     * @param parentToInit if this optional argument is provided, this will add
+     * all components as children of parentToInit and make them visible.
+     */
+    void addComponents(std::vector<ComponentLayoutParams> components,
+        Component* parentToInit=nullptr);
 
     /**
      * Arrange the components within a bounding rectangle
