@@ -9,13 +9,13 @@
  */
 #pragma once
 #include "../../GridLayoutManager.h"
-#include "../../Configuration/Configurables/Configurable.h"
+#include "../../Configuration/Configurables/ConfigurableImageComponent.h"
+#include "../../Basic Components/DrawableImageButton.h"
 #include "../../Basic Components/ListEditor.h"
 #include "../../Basic Components/ScalingLabel.h"
 
-class PopupEditorComponent : public Component,
-public Button::Listener,
-public Configurable {
+class PopupEditorComponent : public ConfigurableImageComponent,
+public Button::Listener{
 public:
     PopupEditorComponent(String title);
     virtual ~PopupEditorComponent();
@@ -23,7 +23,14 @@ public:
     void closePopup();
 protected:
     virtual void confirm()=0;
-    virtual void loadConfigProperties(ConfigFile * config, String key);
+    
+    protected:
+    /**
+     * run the parent class version to set image colors, then save
+     * text color
+     */
+    virtual void applyConfigAssets(Array<String> assetNames,
+            Array<Colour> colours);
     
     /**
      * Add the cancel and confirm buttons to the bottom of the layout manager.
@@ -31,20 +38,20 @@ protected:
      * menu components.
      */
     void addClosingButtons();
-    
-    GridLayoutManager layoutManager;
-private:
     void buttonClicked(Button* buttonClicked) override;
+    GridLayoutManager layoutManager;
+    
+    Colour selectionColour;
+    Colour bgColour;
+    Colour textColour;
+private:
     void resized() override;
-    void paint(Graphics &) override;
     bool keyPressed(const KeyPress &) override;
 
     virtual void cancel();
   
     ScalingLabel titleLabel;
-    ListEditor listEditor;
-    ImageButton cancelBtn;
-    ImageButton confirmBtn;
+    DrawableImageButton cancelBtn;
+    DrawableImageButton confirmBtn;
 
-    Colour bgColour;
 };

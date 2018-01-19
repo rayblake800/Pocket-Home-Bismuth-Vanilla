@@ -10,6 +10,7 @@
 
 #pragma once
 #include "../GridLayoutManager.h"
+#include "DrawableImageButton.h"
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 class ListEditor : public Component,
@@ -70,9 +71,10 @@ private:
         virtual ~ListItemComponent();
         //button component id should be set to String(rowIndex)
         void setButtonComponentID(String id);
+        void setButtonColour(Colour colour);
         void resized() override;
     private:
-        ImageButton delBtn;
+        DrawableImageButton delBtn;
     };
 
     //Updates ListBox rows

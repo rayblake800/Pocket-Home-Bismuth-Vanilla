@@ -43,7 +43,7 @@ protected:
             Array<Colour> colours);
 
 private:
-    int assetIndex;
+    int assetIndex=0;
     static const Array<Colour> defaultColours;
 
     static const Array<Colour> loadDefaultColours() {

@@ -72,7 +72,9 @@ void DrawableImageComponent::setImage(String assetFilename)
 void DrawableImageComponent::setImage(File imageFile)
 {
     imageDrawable = Drawable::createFromImageFile(imageFile);
-    repaint();
+    DBG("loading Image file");
+    addAndMakeVisible(imageDrawable);
+    imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
 }
 
 /**
@@ -81,9 +83,11 @@ void DrawableImageComponent::setImage(File imageFile)
 void DrawableImageComponent::setImage(Image image)
 {
     DrawableImage * drawable = new DrawableImage();
+    DBG("loading Image object");
     drawable->setImage(image);
     imageDrawable=drawable;
-    repaint();
+    addAndMakeVisible(imageDrawable);
+    imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
 }
 
 /**
@@ -99,10 +103,10 @@ bool DrawableImageComponent::replaceColour(Colour originalColour,
     return imageDrawable->replaceColour(originalColour, replacementColour);
 }
 
-void DrawableImageComponent::paint(Graphics& g)
+void DrawableImageComponent::resized()
 {
     if (imageDrawable != nullptr)
     {
-        imageDrawable->drawWithin(g, getLocalBounds().toFloat(), placement, 1);
+        imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
     }
 }

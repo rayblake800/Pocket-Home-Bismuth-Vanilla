@@ -80,7 +80,7 @@ Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 void AppConfigFile::addFavoriteApp(AppItem newApp, int index)
 {
     const ScopedLock changeLock(lock);
-    favoriteApps.insert(index,newApp);
+    favoriteApps.insert(index, newApp);
     writeChanges();
 }
 
@@ -90,7 +90,7 @@ void AppConfigFile::addFavoriteApp(AppItem newApp, int index)
 void AppConfigFile::removeFavoriteApp(int index)
 {
     const ScopedLock changeLock(lock);
-    if(index>=0 && index < favoriteApps.size())
+    if (index >= 0 && index < favoriteApps.size())
     {
         favoriteApps.remove(index);
         writeChanges();
@@ -177,7 +177,15 @@ Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 void AppConfigFile::addAppFolder(AppFolder newFolder, int index)
 {
     const ScopedLock changeLock(lock);
+    for (AppFolder& folder : categoryFolders)
+    {
+        if (folder.index >= index)
+        {
+            folder.index++;
+        }
+    }
     categoryFolders.insert(index, newFolder);
+    changesPending = true;
     writeChanges();
 }
 
@@ -186,8 +194,17 @@ void AppConfigFile::addAppFolder(AppFolder newFolder, int index)
  */
 void AppConfigFile::removeAppFolder(int index)
 {
+    int size = categoryFolders.size();
     const ScopedLock changeLock(lock);
+    for (AppFolder& folder : categoryFolders)
+    {
+        if (folder.index > index)
+        {
+            folder.index--;
+        }
+    }
     categoryFolders.remove(index);
+    changesPending = true;
     writeChanges();
 }
 
@@ -198,9 +215,10 @@ void AppConfigFile::addPinnedApp
 (AppItem newApp, int folderIndex, int appIndex)
 {
     const ScopedLock changeLock(lock);
-    if(folderIndex >= 0 && folderIndex < categoryFolders.size())
+    if (folderIndex >= 0 && folderIndex < categoryFolders.size())
     {
-        categoryFolders[folderIndex].pinnedApps.insert(appIndex,newApp);
+        categoryFolders[folderIndex].pinnedApps.insert(appIndex, newApp);
+        changesPending = true;
         writeChanges();
     }
 }
@@ -211,9 +229,10 @@ void AppConfigFile::addPinnedApp
 void AppConfigFile::removePinnedApp(int folderIndex, int appIndex)
 {
     const ScopedLock changeLock(lock);
-    if(folderIndex >= 0 && folderIndex < categoryFolders.size())
+    if (folderIndex >= 0 && folderIndex < categoryFolders.size())
     {
         categoryFolders[folderIndex].pinnedApps.remove(appIndex);
+        changesPending = true;
         writeChanges();
     }
 }

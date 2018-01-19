@@ -32,4 +32,10 @@ void ConfigurableImageButton::applyConfigBounds()
 
 void ConfigurableImageButton::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
+    if(isButtonDown){
+        g.setColour(Colours::black);
+        g.setOpacity(0.3);
+        g.fillAll();
+        g.resetToDefaultState();
+    }
 }

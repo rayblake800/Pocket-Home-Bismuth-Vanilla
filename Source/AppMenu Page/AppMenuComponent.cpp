@@ -39,6 +39,8 @@ AppMenuComponent::~AppMenuComponent()
  */
 void AppMenuComponent::loadButtons()
 {
+    DBG("loading AppMenuButtons");
+    int selection = selected.empty() ? 0 : selected[0]->getIndex();
     while (!buttonColumns.empty())
     {
         closeFolder();
@@ -71,11 +73,17 @@ void AppMenuComponent::loadButtons()
     }
     DBG(String("added ") + String(buttonColumns[activeColumn()].size())
             + " buttons");
-    scrollToSelected();
-    showLoadingSpinner();
+    if (selection >= buttonColumns[0].size())
+    {
+        selection = buttonColumns[0].size() - 1;
+    }
+    selected[0] = buttonColumns[0][selection];
+    buttonColumns[0][selection]->setSelected(true);
+    scrollToSelected(false);
     if (!loadingAsync)
     {
         loadingAsync = true;
+        showLoadingSpinner();
         desktopEntries.loadEntries([this](String loadingMsg)
         {
             loadingSpinner->setLoadingText(loadingMsg);
@@ -190,7 +198,7 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked)
     {
         return;
     }
-    AppMenuButton::Ptr appClicked = dynamic_cast<AppMenuButton*>(buttonClicked);
+    AppMenuButton::Ptr appClicked = dynamic_cast<AppMenuButton*> (buttonClicked);
     if (appClicked->getColumn() < activeColumn())
     {
         while (appClicked->getColumn() < activeColumn())
@@ -208,7 +216,7 @@ void AppMenuComponent::buttonClicked(Button * buttonClicked)
         } else
         {
             appLauncher.startOrFocusApp(appClicked->getAppName()
-                    ,appClicked->getCommand());
+                    , appClicked->getCommand());
         }
     } else
     {
@@ -356,7 +364,7 @@ int AppMenuComponent::activeColumn()
     return selected.size() - 1;
 }
 
-void AppMenuComponent::scrollToSelected()
+void AppMenuComponent::scrollToSelected(bool animatedScroll)
 {
     int column = activeColumn();
     if (column < 0)
@@ -389,12 +397,18 @@ void AppMenuComponent::scrollToSelected()
     {
         dest.setX(x_origin - column * buttonWidth + buttonHeight);
     }
-    ComponentAnimator& animator = Desktop::getInstance().getAnimator();
-    if (animator.isAnimating(this))
+    if (animatedScroll)
     {
-        animator.cancelAnimation(this, false);
+        ComponentAnimator& animator = Desktop::getInstance().getAnimator();
+        if (animator.isAnimating(this))
+        {
+            animator.cancelAnimation(this, false);
+        }
+        animator.animateComponent(this, dest, 1, 100, false, 1, 1);
+    } else
+    {
+        setBounds(dest);
     }
-    animator.animateComponent(this, dest, 1, 100, false, 1, 1);
 }
 
 void AppMenuComponent::addButton(AppMenuButton::Ptr appButton)

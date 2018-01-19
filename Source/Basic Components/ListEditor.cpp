@@ -60,15 +60,10 @@ Array<String> ListEditor::getListItems() const
 
 ListEditor::ListItemComponent::ListItemComponent
 (String text, ListEditor * owner) : Label(text),
-delBtn("x")
+delBtn("cancel.svg")
 {
     setJustificationType(Justification::left);
-    delBtn.setImages(true, true, true,
-            createImageFromFile(assetFile("cancel.svg")),
-            1.0f, Colours::transparentWhite, // normal
-            Image::null, 1.0f, Colours::transparentWhite, // over
-            Image::null, 0.5f, Colours::transparentWhite, // down
-            0);
+    setButtonColour(owner->textColour);
     addAndMakeVisible(delBtn);
     delBtn.addListener(owner);
     delBtn.setWantsKeyboardFocus(false);
@@ -82,6 +77,11 @@ ListEditor::ListItemComponent::~ListItemComponent()
 void ListEditor::ListItemComponent::setButtonComponentID(String id)
 {
     delBtn.setComponentID(id);
+}
+
+void ListEditor::ListItemComponent::setButtonColour(Colour colour)
+{
+    delBtn.replaceColour(Colours::black,colour);
 }
 
 void ListEditor::ListItemComponent::resized()

@@ -36,13 +36,14 @@ PokeLookAndFeel::~PokeLookAndFeel()
 
 float PokeLookAndFeel::getDrawableButtonTextHeightForBounds(const Rectangle<int> &bounds)
 {
-    return jmin(23.0f, bounds.getHeight() * 0.99f);
+    return jmin(23.0f, bounds.getHeight() * 0.95f);
 }
 
 float PokeLookAndFeel::getDrawableButtonImageHeightForBounds(const Rectangle<int> &bounds)
 {
     static const float padding = 5.0f;
-    return bounds.getHeight() - (getDrawableButtonTextHeightForBounds(bounds) + padding);
+    return bounds.getHeight() - (getDrawableButtonTextHeightForBounds(bounds) 
+            + padding);
 }
 
 Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const Font &font)
@@ -50,7 +51,8 @@ Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const Font &font)
     return seguibl;
 }
 
-void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y, int width, int height,
+void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
+        int width, int height,
         float sliderPos, float minSliderPos, float maxSliderPos,
         const Slider::SliderStyle style, Slider &slider)
 {
@@ -121,7 +123,7 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button, bool isMou
 {
     Font font(getTextButtonFont(button, button.getHeight()));
     font.setExtraKerningFactor(0.06f);
-    font.setHeight(24);
+    font.setHeight(jmin(button.getHeight(),24));
     g.setFont(font);
     g.setColour(button.findColour(button.getToggleState() ? TextButton::textColourOnId
             : TextButton::textColourOffId)

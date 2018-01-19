@@ -9,6 +9,7 @@
  */
 #include "../../Utils.h"
 #include "AppFolderButton.h"
+#include "../AppMenuComponent.h"
 #include "../Popup Editor Components/FolderEditorPopup.h"
 
 AppFolderButton::AppFolderButton(AppConfigFile& config,
@@ -61,5 +62,34 @@ Array<String> AppFolderButton::getCategories() const
  */
 PopupEditorComponent* AppFolderButton::getEditor()
 {
-    return new FolderEditorPopup(this,config,appFolder);
+    return new FolderEditorPopup(this, config, appFolder);
+}
+
+/**
+ * Assign new properties to this folder button, changing configuration files
+ * @param name folder display name
+ * @param icon folder icon image name/path
+ * @param categories list of folder application categories
+ */
+void AppFolderButton::editFolder
+(String name, String icon, Array<String> categories)
+{
+    appFolder.name=name;
+    appFolder.icon=icon;
+    appFolder.categories=categories;
+    config.addAppFolder(appFolder,appFolder.index);
+    config.removeAppFolder(appFolder.index+1);
+}
+
+/**
+ * Remove this folder from config, and reload buttons.
+ */
+void AppFolderButton::deleteFolder()
+{
+    config.removeAppFolder(appFolder.index);
+    AppMenuComponent* appMenu = 
+            dynamic_cast<AppMenuComponent*>(getParentComponent());
+    if(appMenu != nullptr){
+        appMenu->loadButtons();
+    }
 }

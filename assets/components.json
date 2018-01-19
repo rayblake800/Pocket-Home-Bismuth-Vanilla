@@ -15,6 +15,7 @@
         "width": 0.30000001192092895508,
         "height": 0.12,
         "colours": [
+            "ffffffff",
             "ffc0c0c0",
             "ffd23c6d"
         ],
@@ -116,9 +117,12 @@
         "width": 0.5,
         "height": 0.6666,
         "colours": [
-            "ffc0c0c0"
+            "ffd23c6d",
+            "ff202020",
+            "ffffffff"
         ],
         "asset files": [
+            "popupFrame.svg"
         ]
     }
 }

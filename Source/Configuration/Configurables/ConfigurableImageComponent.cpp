@@ -48,15 +48,21 @@ void ConfigurableImageComponent::applyConfigAssets(Array<String> assetNames,
     {
         DBG(String("applyConfigAssets:Loading image ") + assetNames[assetIndex]);
         setImage(assetNames[assetIndex]);
-    } else
+    } 
+    else
     {
-        DBG("applyConfigAssets: couldn't load asset, doesn't exist!");
+        DBG(String("applyConfigAssets: couldn't load asset ") 
+        +String(assetIndex) +String(", it doesn't exist!"));
         assetIndex = -1;
     }
 
     for (int i = 0; i < colours.size() && i < defaultColours.size(); i++)
     {
-        replaceColour(defaultColours[i], colours[i]);
+        DBG(String("Replace ")+defaultColours[i].toDisplayString(true)
+                +String(" with ")+String(colours[i].toDisplayString(true)));
+        if(!replaceColour(defaultColours[i], colours[i])){
+            DBG("replacement failed!");
+        }
     }
     applyConfigBounds();
 

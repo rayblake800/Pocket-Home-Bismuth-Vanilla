@@ -47,6 +47,10 @@
       <FILE id="rGcSg1" name="LauncherComponent.h" compile="0" resource="0"
             file="Source/LauncherComponent.h"/>
       <GROUP id="{185415EC-B399-8F03-8F25-DEE2244D2B03}" name="Basic Components">
+        <FILE id="lsHR0C" name="DrawableImageButton.cpp" compile="1" resource="0"
+              file="Source/Basic Components/DrawableImageButton.cpp"/>
+        <FILE id="MFPfd5" name="DrawableImageButton.h" compile="0" resource="0"
+              file="Source/Basic Components/DrawableImageButton.h"/>
         <FILE id="hzXzqU" name="DrawableImageComponent.cpp" compile="1" resource="0"
               file="Source/Basic Components/DrawableImageComponent.cpp"/>
         <FILE id="gYBZcj" name="DrawableImageComponent.h" compile="0" resource="0"

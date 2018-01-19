@@ -16,26 +16,28 @@
 #include "../AppMenuButton/AppFolderButton.h"
 #include "PopupEditorComponent.h"
 
-class FolderEditorPopup : public PopupEditorComponent {
+class FolderEditorPopup : public PopupEditorComponent{
 public:
     FolderEditorPopup(AppFolderButton* folderButton,
             AppConfigFile& config, AppConfigFile::AppFolder folder);
     virtual ~FolderEditorPopup();
 private:
+    
+    void buttonClicked(Button* buttonClicked) override;
     void confirm();
-    AppMenuButton::Ptr folderButton;
+    AppFolderButton::Ptr folderButton;
     AppConfigFile& config;
     AppConfigFile::AppFolder folder;
-    
+
     ScalingLabel nameLabel;
     TextEditor nameEditor;
-    
+
     ScalingLabel iconLabel;
     DrawableImageComponent iconPreview;
     FileSelectTextEditor iconPathEditor;
-    
+
     ScalingLabel categoryLabel;
     ListEditor categoryList;
-    
+
     TextButton deleteButton;
 };

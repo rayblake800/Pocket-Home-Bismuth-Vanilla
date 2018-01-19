@@ -15,24 +15,12 @@
 
 AppMenuButton::AppMenuButton
 (String name, int index, int column)
-: TextButton(name),
+: Button(name),
+ConfigurableComponent(ComponentConfigFile::appMenuButtonKey),
 index(index),
 column(column)
 {
-    ComponentConfigFile& configFile = PocketHomeApplication::getInstance()
-            ->getComponentConfig();
-    ComponentConfigFile::ComponentSettings buttonSettings =
-            configFile.getComponentSettings
-            (ComponentConfigFile::appMenuButtonKey);
-    buttonSettings.applySize(this);
-    Array<Colour> colours = buttonSettings.getColours();
-    if (colours.size() >= 2)
-    {
-        fillColour = colours[0];
-        selectedFillColour = colours[1];
-    }
-    setWantsKeyboardFocus(false);
-    resized();
+    loadAllConfigProperties();
 }
 
 void AppMenuButton::setSelected(bool select)
@@ -77,7 +65,8 @@ Rectangle<int> AppMenuButton::getButtonSize()
     return buttonConf.getBounds().withPosition(0, 0);
 }
 
-void AppMenuButton::paint(Graphics& g)
+void AppMenuButton::paintButton
+(Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
     Rectangle<int> border = getBounds().withPosition(0, 0);
     g.setColour(selected ? selectedFillColour : fillColour);
@@ -89,7 +78,7 @@ void AppMenuButton::paint(Graphics& g)
             imageBox.getWidth(), imageBox.getHeight(),
             RectanglePlacement::centred, false);
     //app title
-    g.setColour(Colours::white);
+    g.setColour(textColour);
     g.setFont(titleFont);
     g.drawText(getAppName(), textBox, Justification::centredLeft, true);
     g.setColour(Colour(0x4D4D4D));
@@ -112,3 +101,13 @@ void AppMenuButton::resized()
             textBox.toNearestInt());
 }
 
+void AppMenuButton::applyConfigAssets(Array<String> assetNames,
+        Array<Colour> colours)
+{
+    while(colours.size()<3){
+        colours.add(Colours::transparentBlack);
+    }
+    textColour=colours[0];
+    fillColour=colours[1];
+    selectedFillColour=colours[2];
+}

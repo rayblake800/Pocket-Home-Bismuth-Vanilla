@@ -99,7 +99,7 @@ private:
 
     void addButton(AppMenuButton::Ptr appButton);
     void selectIndex(int index);
-    void scrollToSelected();
+    void scrollToSelected(bool animatedScroll=true);
 
 
     ScopedPointer<OverlaySpinner> loadingSpinner;

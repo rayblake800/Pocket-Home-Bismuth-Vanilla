@@ -27,7 +27,7 @@ appMenu(appConfig)
 {
     setWantsKeyboardFocus(true);
     setExplicitFocusOrder(1);
-    
+
     addAndMakeVisible(appMenu);
     addAndMakeVisible(frame);
     addAndMakeVisible(clock.getLabel());
@@ -101,7 +101,7 @@ void AppMenuPage::setColorBackground(const String& color)
 
 void AppMenuPage::setImageBackground(const String& path)
 {
-    if(path.isEmpty())
+    if (path.isEmpty())
     {
         return;
     }
@@ -126,6 +126,7 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
     int keyCode = key.getKeyCode();
     if (keyCode == KeyPress::tabKey)
     {
+        DBG("pressed tab");
         appMenu.loadButtons();
     }
     if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
@@ -154,7 +155,8 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
         if (popupEditor != nullptr)
         {
             addAndMakeVisible(popupEditor);
-            DBG(popupEditor->getBounds().toString());
+            popupEditor->setCentrePosition(getBounds().getCentreX(),
+                    getBounds().getCentreY());
             return true;
         }
     }
@@ -178,6 +180,12 @@ void AppMenuPage::resized()
     wifiIcon.applyConfigBounds();
     powerButton.applyConfigBounds();
     settingsButton.applyConfigBounds();
+    if (popupEditor != nullptr)
+    {
+        popupEditor->applyConfigBounds();
+        popupEditor->setCentrePosition(getBounds().getCentreX(),
+                getBounds().getCentreY());
+    }
 }
 
 void AppMenuPage::paint(Graphics &g)

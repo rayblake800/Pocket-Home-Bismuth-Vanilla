@@ -47,8 +47,6 @@ void GridLayoutManager::setRowWeight(int rowIndex, int newWeight)
 void GridLayoutManager::addComponent(Component * comp, int rowIndex,
         int horizWeight, Component* parentToInit)
 {
-    DBG(String("Adding ")+comp->getName()+String(" to row ")
-            +String(rowIndex)+String(" with weight ")+String(horizWeight));
     WeightedCompPtr wCompPtr;
     wCompPtr.component = comp;
     wCompPtr.weight = horizWeight;
@@ -63,10 +61,10 @@ void GridLayoutManager::addComponent(Component * comp, int rowIndex,
     Row& row = rows.getReference(rowIndex);
     row.columns.add(wCompPtr);
     row.horizWeightSum += horizWeight;
-    if (parentToInit != nullptr)
+    if (comp != nullptr && parentToInit != nullptr)
     {
-        DBG(String("adding ")+comp->getName()+String( "to parent" )
-                +parentToInit->getName());
+        DBG(String("adding ") + comp->getName() + String("to parent")
+                + parentToInit->getName());
         parentToInit->addAndMakeVisible(comp);
     }
 }
@@ -101,20 +99,22 @@ void GridLayoutManager::layoutComponents(Rectangle<int> bounds, int xPadding,
     for (int rowInd = 0; rowInd < rows.size(); rowInd++)
     {
         Row row = rows[rowInd];
-        DBG(String("row ")+String(rowInd)+String(" weight ")
-                +String(row.vertWeight)+String("/")+String(vertWeightSum));
+        DBG(String("row ") + String(rowInd) + String(" weight ")
+                + String(row.vertWeight) + String("/") + String(vertWeightSum));
         int height = fullHeight * row.vertWeight / vertWeightSum - yPadding;
-        
+
         DBG(String("\theight ")
-                +String(height)+String("/")+String(bounds.getHeight()));
+                + String(height) + String("/") + String(bounds.getHeight()));
         int xPos = xStart;
         for (int columnInd = 0; columnInd < row.columns.size(); columnInd++)
         {
             WeightedCompPtr compPtr = row.columns[columnInd];
             int width = fullWidth * compPtr.weight / row.horizWeightSum
                     - xPadding;
-
-            compPtr.component->setBounds(xPos, yPos, width, height);
+            if (compPtr.component != nullptr)
+            {
+                compPtr.component->setBounds(xPos, yPos, width, height);
+            }
             xPos += width + xPadding;
         }
         yPos += height + yPadding;

@@ -1,7 +1,7 @@
 /**
  * @File ConfigurableImageButton.h
  * @author Anthony Brown
- * ConfigurableImageButton is a button drawn using a DrawableImageComponent
+ * ConfigurableImageButton is a button drawn using a ConfigurableImageComponent
  */
 
 #pragma once

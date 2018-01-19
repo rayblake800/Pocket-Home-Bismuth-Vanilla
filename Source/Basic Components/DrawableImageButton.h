@@ -1,40 +1,38 @@
 /**
- * @file DrawableImageComponent.h
+ * @File DrawableImageButton.h
  * @author Anthony Brown
- * 
- * DrawableImageComponent is a component that draws a scaled image.
+ * DrawableImageButton is a button drawn using a DrawableImageComponent
  */
 
+
 #pragma once
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include "DrawableImageComponent.h"
 
-class DrawableImageComponent : public Component {
+class DrawableImageButton : public Button {
 public:
+
     /**
-     * Create a DrawableImageComponent using an asset file.
-     * @param assetFilename the filename of an image in assets
+     * @param imageFile the button image will be loaded from this file.
      * @param placement defines how the image will be scaled
      */
-    DrawableImageComponent(String assetFilename,
+    DrawableImageButton(File imageFile,
             RectanglePlacement placement = RectanglePlacement::centred);
 
     /**
-     * Create a DrawableImageComponent using any image file.
-     * @param imageFile an image file
+     * @param assetName the button image will be loaded from this asset file.
      * @param placement defines how the image will be scaled
      */
-    DrawableImageComponent(File imageFile,
-            RectanglePlacement placement = RectanglePlacement::centred);
-    
-    /**
-     * Create a DrawableImageComponent using an image object.
-     * @param image an image object
-     * @param placement defines how the image will be scaled
-     */
-    DrawableImageComponent(Image image,
+    DrawableImageButton(String assetName,
             RectanglePlacement placement = RectanglePlacement::centred);
 
-    ~DrawableImageComponent();
+    /**
+     * @param imageObject the button image will be loaded from this image.
+     * @param placement defines how the image will be scaled
+     */
+    DrawableImageButton(Image imageObject,
+            RectanglePlacement placement = RectanglePlacement::centred);
+
+    virtual ~DrawableImageButton();
 
     /**
      * Change the image drawn by this component
@@ -52,7 +50,7 @@ public:
      * Change the image drawn by this component
      * @param image an image object
      */
-    void setImage(Image image);
+    void setImage(Image imageObject);
 
     /**
      * Recursively replace an image color
@@ -64,19 +62,13 @@ public:
     bool replaceColour(Colour originalColour, Colour replacementColour);
 
 protected:
-    /**
-     * Create a DrawableImageComponent without an initial image.
-     * @param placement defines how the image will be scaled
-     */
-    DrawableImageComponent
-            (RectanglePlacement placement = RectanglePlacement::centred);
 
     void resized() override;
+
 private:
-
-    File imageSource;
-    ScopedPointer<Drawable> imageDrawable;
-    RectanglePlacement placement;
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DrawableImageComponent)
+    
+    //no special painting needed, button appearance is handled by the 
+    //configurable image
+    void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
+    DrawableImageComponent imageComponent;
 };

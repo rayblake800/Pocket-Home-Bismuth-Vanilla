@@ -22,10 +22,16 @@ iconLabel("iconLabel", "Icon path:"),
 iconPathEditor("iconPathEditor"),
 iconPreview(folderButton->getIcon()),
 categoryLabel("categoryLabel", "Folder categories:"),
-categoryList(folder.categories, Colours::white, Colours::blueviolet, Colours::black),
+categoryList(folder.categories, bgColour, selectionColour, textColour),
 deleteButton("Delete folder")
 {
-    nameEditor.setText(folder.name,false);
+    nameLabel.setColour(Label::textColourId, textColour);
+    nameEditor.setColour(TextEditor::textColourId, textColour);
+    iconLabel.setColour(Label::textColourId, textColour);
+    iconPathEditor.setColour(TextEditor::textColourId, textColour);
+    categoryLabel.setColour(Label::textColourId, textColour);
+
+    nameEditor.setText(folder.name, false);
     iconPathEditor.setText(folder.icon);
     std::vector<GridLayoutManager::ComponentLayoutParams> layoutList{
         {&nameLabel, 1, 1},
@@ -35,20 +41,37 @@ deleteButton("Delete folder")
         {&iconPathEditor, 2, 3},
         {&categoryLabel, 3, 1},
         {&categoryList, 4, 1},
-        {&deleteButton, 5, 1}};
+        {nullptr, 5, 1},
+        {&deleteButton, 5, 2},
+        {nullptr, 5, 1}};
 
     layoutManager.addComponents(layoutList, this);
     layoutManager.setRowWeight(4, 5);
+    deleteButton.addListener(this);
     addClosingButtons();
-    layoutManager.layoutComponents(getLocalBounds(), 1, 1);
-    
+    layoutManager.layoutComponents(getLocalBounds(), 2, 2);
+
 }
 
 FolderEditorPopup::~FolderEditorPopup()
 {
 }
 
+void FolderEditorPopup::buttonClicked(Button* buttonClicked)
+{
+    if (buttonClicked == &deleteButton)
+    {
+        folderButton->deleteFolder();
+        closePopup();
+    } else
+    {
+        this->PopupEditorComponent::buttonClicked(buttonClicked);
+    }
+}
+
 void FolderEditorPopup::confirm()
 {
+    folderButton->editFolder(nameEditor.getText(),iconPathEditor.getText(),
+            categoryList.getListItems());
     closePopup();
 }

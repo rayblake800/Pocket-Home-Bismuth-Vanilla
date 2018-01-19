@@ -12,24 +12,21 @@
 #include "PopupEditorComponent.h"
 
 PopupEditorComponent::PopupEditorComponent(String title) :
-Configurable(&PocketHomeApplication::getInstance()->getComponentConfig(),
-{
-
-    ComponentConfigFile::popupMenuKey
-}),
-titleLabel("EditorTitle",title,2),
-cancelBtn("cancel"),
-confirmBtn("confirm"),
-listEditor({}, Colours::white, Colours::aquamarine, Colours::black)
+ConfigurableImageComponent(ComponentConfigFile::popupMenuKey,
+0,RectanglePlacement::stretchToFit),
+titleLabel("EditorTitle", title, 2),
+cancelBtn("cancel.svg"),
+confirmBtn("confirm.svg")
 {
     setName("popupEditor");
-    layoutManager.addComponent(&titleLabel, 0, 1);
-
-    titleLabel.setColour(Label::textColourId, Colours::black);
-    titleLabel.setJustificationType(Justification::centred);
-
-    addAndMakeVisible(titleLabel);
     loadAllConfigProperties();
+
+    titleLabel.setColour(Label::textColourId, textColour);
+    titleLabel.setJustificationType(Justification::centred);
+    layoutManager.addComponent(&titleLabel, 0, 1);
+    addAndMakeVisible(titleLabel);
+    
+    setInterceptsMouseClicks(true,true);
     MessageManager::callAsync([this]
     {
         this->grabKeyboardFocus();
@@ -56,22 +53,11 @@ void PopupEditorComponent::addClosingButtons()
     int btnRow = layoutManager.getNumRows();
     layoutManager.addComponent(&cancelBtn, btnRow, 1);
     layoutManager.addComponent(&confirmBtn, btnRow, 1);
-    cancelBtn.setImages(true, true, true,
-            createImageFromFile(assetFile("cancel.svg")),
-            1.0f, Colours::transparentWhite, // normal
-            Image::null, 1.0f, Colours::transparentWhite, // over
-            Image::null, 0.5f, Colours::transparentWhite, // down
-            0);
-
-    confirmBtn.setImages(true, true, true,
-            createImageFromFile(assetFile("confirm.svg")),
-            1.0f, Colours::transparentWhite, // normal
-            Image::null, 1.0f, Colours::transparentWhite, // over
-            Image::null, 0.5f, Colours::transparentWhite, // down
-            0);
 
     cancelBtn.addListener(this);
     confirmBtn.addListener(this);
+    cancelBtn.replaceColour(Colours::black,textColour);
+    confirmBtn.replaceColour(Colours::black,textColour);
     addAndMakeVisible(cancelBtn);
     addAndMakeVisible(confirmBtn);
 }
@@ -90,14 +76,10 @@ void PopupEditorComponent::buttonClicked(Button* buttonClicked)
 
 void PopupEditorComponent::resized()
 {
+    this->ConfigurableImageComponent::resized();
     layoutManager.layoutComponents(getLocalBounds(), 3, 3);
 }
 
-void PopupEditorComponent::paint(Graphics & g)
-{
-    g.setColour(bgColour);
-    g.fillRect(getLocalBounds());
-}
 
 bool PopupEditorComponent::keyPressed(const KeyPress & key)
 {
@@ -119,20 +101,18 @@ void PopupEditorComponent::cancel()
     closePopup();
 }
 
-void PopupEditorComponent::loadConfigProperties
-(ConfigFile * config, String key)
+/**
+ * run the parent class version to set image colors, then save
+ * text color
+ */
+void PopupEditorComponent::applyConfigAssets(Array<String> assetNames,
+        Array<Colour> colours)
 {
-    ComponentConfigFile::ComponentSettings settings =
-            (static_cast<ComponentConfigFile*> (config))
-            ->getComponentSettings(key);
-    Array<Colour> colours = settings.getColours();
-    if (colours.size() > 0)
-    {
-        bgColour = colours[0];
+    this->ConfigurableImageComponent::applyConfigAssets(assetNames,colours);
+    while(colours.size()<3){
+        colours.add(Colours::transparentBlack);
     }
-    Rectangle<int> bounds = settings.getBounds();
-    Rectangle<int> windowBounds = getWindowSize();
-    bounds.setCentre(windowBounds.getCentre());
-    setBounds(bounds);
-
+    selectionColour=colours[0];
+    bgColour=colours[1];
+    textColour=colours[2];
 }

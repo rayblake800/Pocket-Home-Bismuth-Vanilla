@@ -7,10 +7,12 @@
  */
 
 #pragma once
+#include "../../Configuration/Configurables/ConfigurableComponent.h"
 #include "../Popup Editor Components/PopupEditorComponent.h"
 
 class IconThread;
-class AppMenuButton : public TextButton, public ReferenceCountedObject {
+class AppMenuButton : public Button, public ReferenceCountedObject,
+        public ConfigurableComponent {
 public:
     friend class IconThread;
     typedef ReferenceCountedObjectPtr<AppMenuButton> Ptr;
@@ -89,12 +91,16 @@ protected:
     /**
      * Custom button painting method.
      */
-    void paint(Graphics& g) override;
+    void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
     
     /**
      * Re-calculates draw values whenever the button is resized
      */
     void resized() override;
+    
+    
+    virtual void applyConfigAssets(Array<String> assetNames,
+            Array<Colour> colours);
 
     //Icon image to draw
     Image appIcon;
@@ -112,6 +118,8 @@ private:
     int index;
     //containing column number, counted left to right
     int column;
+    //Button text color
+    Colour textColour;
     //Button background fill color, if not selected.
     Colour fillColour;
     //Button background fill color, if selected.

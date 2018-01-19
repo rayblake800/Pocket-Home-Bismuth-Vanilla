@@ -22,6 +22,7 @@
 		876CD721D4DE614DAB7AF7EF = {isa = PBXBuildFile; fileRef = 973AF63D6A9528AF7BF1D903; };
 		F3BD01E8B7DDAE942CAF6612 = {isa = PBXBuildFile; fileRef = 884315C5A1EC8DB03C7B543B; };
 		58208E04154DCF66933C9106 = {isa = PBXBuildFile; fileRef = 9641275F75101080F459BA54; };
+		269595AEBD81E104ADA4B657 = {isa = PBXBuildFile; fileRef = 4BB769DA994304C755266267; };
 		A0AE5B77AD8C7BE370B6C3D6 = {isa = PBXBuildFile; fileRef = D4282739BFD2B90CD80F616E; };
 		32650F706B688C1458F19860 = {isa = PBXBuildFile; fileRef = 6C236952145F806DB0A83B29; };
 		F5739E8B1092BA7644E6A153 = {isa = PBXBuildFile; fileRef = D464520A570FD77CFE0F189B; };
@@ -92,6 +93,7 @@
 		0ABE7BEDB69639F8DF05520A = {isa = PBXFileReference; lastKnownFileType = file; name = "juce_data_structures"; path = "../../deps/JUCE/modules/juce_data_structures"; sourceTree = "SOURCE_ROOT"; };
 		0D6AC4CD1AB952DA99E28B23 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_graphics.mm"; path = "../../JuceLibraryCode/include_juce_graphics.mm"; sourceTree = "SOURCE_ROOT"; };
 		0EA5F70BB96DEA3B63886CFE = {isa = PBXFileReference; lastKnownFileType = file.json; name = config.json; path = ../../assets/config.json; sourceTree = "SOURCE_ROOT"; };
+		16F66C9A5F33F159CC0ECCD2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DrawableImageButton.h; path = "../../Source/Basic Components/DrawableImageButton.h"; sourceTree = "SOURCE_ROOT"; };
 		1A81AC215A871E0373EAC646 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IconThread.cpp; path = "../../Source/AppMenu Page/IconThread.cpp"; sourceTree = "SOURCE_ROOT"; };
 		1BD01B5195CE19BBDB96955D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuButton.cpp; path = "../../Source/AppMenu Page/AppMenuButton/AppMenuButton.cpp"; sourceTree = "SOURCE_ROOT"; };
 		1C77D938883D1BA9892195AC = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppFolderButton.h; path = "../../Source/AppMenu Page/AppMenuButton/AppFolderButton.h"; sourceTree = "SOURCE_ROOT"; };
@@ -125,6 +127,7 @@
 		489410AB85E2676944BC6849 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiStatusNM.cpp; path = ../../Source/Wifi/WifiStatusNM.cpp; sourceTree = "SOURCE_ROOT"; };
 		4A6DDB405AEF56B01A7E76CF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BluetoothCategoryItemComponent.h; path = ../../Source/Settings/BluetoothCategoryItemComponent.h; sourceTree = "SOURCE_ROOT"; };
 		4AE99066EC9E52CF56709467 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenuButton.h; path = "../../Source/AppMenu Page/AppMenuButton/AppMenuButton.h"; sourceTree = "SOURCE_ROOT"; };
+		4BB769DA994304C755266267 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DrawableImageButton.cpp; path = "../../Source/Basic Components/DrawableImageButton.cpp"; sourceTree = "SOURCE_ROOT"; };
 		4BF38E82A47A4D109F1B3570 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MainConfigFile.h; path = ../../Source/Configuration/MainConfigFile.h; sourceTree = "SOURCE_ROOT"; };
 		4C2B033D0DAAA6309E330DE7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_core.mm"; path = "../../JuceLibraryCode/include_juce_core.mm"; sourceTree = "SOURCE_ROOT"; };
 		4DF5A943F9582DC0DA4FEB73 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BatteryMonitor.h; path = "../../Source/AppMenu Page/Info Components/BatteryMonitor.h"; sourceTree = "SOURCE_ROOT"; };
@@ -238,6 +241,8 @@
 					838A1FDC1A43D1D0D86FFFD8,
 					BEA73F0F044F15F4ECD6275B, ); name = assets; sourceTree = "<group>"; };
 		FE8CAAF1F4599E1506C8A569 = {isa = PBXGroup; children = (
+					4BB769DA994304C755266267,
+					16F66C9A5F33F159CC0ECCD2,
 					D4282739BFD2B90CD80F616E,
 					EE780BD61AFA4B57438287D8,
 					6C236952145F806DB0A83B29,
@@ -578,6 +583,7 @@
 					876CD721D4DE614DAB7AF7EF,
 					F3BD01E8B7DDAE942CAF6612,
 					58208E04154DCF66933C9106,
+					269595AEBD81E104ADA4B657,
 					A0AE5B77AD8C7BE370B6C3D6,
 					32650F706B688C1458F19860,
 					F5739E8B1092BA7644E6A153,

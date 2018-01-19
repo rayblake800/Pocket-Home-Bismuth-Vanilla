@@ -12,6 +12,8 @@
 
 class AppFolderButton : public AppMenuButton {
 public:
+    typedef ReferenceCountedObjectPtr<AppFolderButton> Ptr;
+    
     /**
      * Create a new button representing an AppFolder
      * @param config the config file defining this folder
@@ -51,6 +53,19 @@ public:
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
     PopupEditorComponent* getEditor();
+    
+    /**
+ * Assign new properties to this folder button, changing configuration files
+ * @param name folder display name
+ * @param icon folder icon image name/path
+ * @param categories list of folder application categories
+ */
+void editFolder(String name,String icon,Array<String> categories);
+
+/**
+ * Remove this folder from config and reload buttons.
+ */
+void deleteFolder();
 private:
     AppConfigFile& config;
     AppConfigFile::AppFolder appFolder;
