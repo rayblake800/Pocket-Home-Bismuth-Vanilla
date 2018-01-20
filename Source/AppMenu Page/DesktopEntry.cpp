@@ -162,40 +162,60 @@ void DesktopEntry::setValue(ListValue valueType, Array<String> newValue)
  */
 void DesktopEntry::writeFile()
 {
-    String outFile = "";
+    String outFileText = "";
     String locale = getLocale();
+    Array<String> foundKeys;
     //Reload the source file to preserve comments and alternate locale data
     Array<String> lines = split(File(entrypath).loadFileAsString(), "\n");
     for (const String& line : lines)
     {
-        outFile += "\n";
+        if (outFileText.isNotEmpty())
+        {
+            outFileText += "\n";
+        }
         //copy comments unedited
         if (line.substring(0, 1) == "#")
         {
-            outFile += line;
+            outFileText += line;
             continue;
         }
         LineValues lineData = getLineData(line);
         if (lineData.key.isNotEmpty()
                 && (lineData.locale.isEmpty() || lineData.locale == locale))
         {
-            outFile += lineData.key;
+            foundKeys.add(lineData.key);
+            outFileText += lineData.key;
             if (lineData.locale.isNotEmpty())
             {
-                outFile += "[";
-                outFile += lineData.locale;
-                outFile += "]";
+                outFileText += "[";
+                outFileText += lineData.locale;
+                outFileText += "]";
             }
-            outFile += "=";
-            outFile += lineData.value;
+            outFileText += "=";
+            outFileText += dataStrings[lineData.key];
         }//copy unexpected lines and other locales unedited
         else
         {
-            outFile += line;
+            outFileText += line;
         }
     }
+    //copy keys not found in the original file
+    for (std::map<String, String>::iterator it = dataStrings.begin();
+            it != dataStrings.end(); it++)
+    {
+        String key = it->first;
+        String value = it->second;
+        if (value.isNotEmpty() && !foundKeys.contains(value))
+        {
+            outFileText += String("\n")+key+String("=")+value;
+        }
+
+    }
     //Get new file path
-    entrypath = getHomePath() + String();
+    entrypath = localEntryPath + entrypath.fromLastOccurrenceOf("/", false, false);
+    File outFile(entrypath);
+    outFile.create();
+    outFile.replaceWithText(outFileText);
 }
 
 /**
@@ -271,12 +291,13 @@ DesktopEntry::LineValues DesktopEntry::getLineData(String line)
         return values;
     }
     values.value = line.substring(valueIndex + 1);
-    line=line.substring(0,valueIndex);
-    if(line.contains("[") && line.contains("]")){
-        values.locale=line.fromFirstOccurrenceOf("[",false,false)
+    line = line.substring(0, valueIndex);
+    if (line.contains("[") && line.contains("]"))
+    {
+        values.locale = line.fromFirstOccurrenceOf("[", false, false)
                 .initialSectionNotContaining("]");
-        line=line.initialSectionNotContaining("]");
+        line = line.initialSectionNotContaining("]");
     }
-    values.key=line;
+    values.key = line;
     return values;
 }

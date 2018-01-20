@@ -84,6 +84,7 @@ void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y, int 
         float maxSliderPos,
         const Slider::SliderStyle style, Slider &slider)
 {
+    DBG(String("Drawing slider background:")+Rectangle<int>(x,y,width,height).toString());
     const float radius = std::floor(getSliderThumbRadius(slider) * 0.333f);
 
     g.setColour(slider.findColour(Slider::backgroundColourId));
@@ -107,6 +108,8 @@ void PokeLookAndFeel::drawLinearSlider(Graphics &g, int x, int y, int width, int
         float sliderPos, float minSliderPos, float maxSliderPos,
         const Slider::SliderStyle style, Slider &slider)
 {
+    
+    DBG(String("Drawing slider:")+Rectangle<int>(x,y,width,height).toString());
     drawLinearSliderBackground(g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style,
             slider);
     drawLinearSliderThumb(g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style,

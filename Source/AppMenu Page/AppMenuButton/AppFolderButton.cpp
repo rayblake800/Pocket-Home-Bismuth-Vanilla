@@ -15,11 +15,11 @@
 AppFolderButton::AppFolderButton(AppConfigFile& config,
         AppConfigFile::AppFolder appFolder,
         int index, int column, IconThread& iconThread) :
-AppMenuButton(appFolder.name, index, column),
+AppMenuButton(appFolder.name, index, column,iconThread),
 config(config),
 appFolder(appFolder)
 {
-    iconThread.loadIcon(this, appFolder.icon);
+    loadIcon(appFolder.icon);
 }
 
 /**
@@ -62,7 +62,7 @@ Array<String> AppFolderButton::getCategories() const
  */
 PopupEditorComponent* AppFolderButton::getEditor()
 {
-    return new FolderEditorPopup(this, config, appFolder);
+    return new FolderEditorPopup(this, config, appFolder,iconThread);
 }
 
 /**
@@ -74,9 +74,14 @@ PopupEditorComponent* AppFolderButton::getEditor()
 void AppFolderButton::editFolder
 (String name, String icon, Array<String> categories)
 {
+    if(icon != appFolder.icon)
+    {
+        loadIcon(icon);
+    }
     appFolder.name=name;
     appFolder.icon=icon;
     appFolder.categories=categories;
+    loadIcon(icon);
     config.addAppFolder(appFolder,appFolder.index);
     config.removeAppFolder(appFolder.index+1);
 }

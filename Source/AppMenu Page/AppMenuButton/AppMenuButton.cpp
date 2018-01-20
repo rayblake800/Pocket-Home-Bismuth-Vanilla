@@ -14,11 +14,12 @@
 #include "AppMenuButton.h"
 
 AppMenuButton::AppMenuButton
-(String name, int index, int column)
+(String name, int index, int column, IconThread& iconThread)
 : Button(name),
 ConfigurableComponent(ComponentConfigFile::appMenuButtonKey),
 index(index),
-column(column)
+column(column),
+iconThread(iconThread)
 {
     loadAllConfigProperties();
 }
@@ -104,10 +105,23 @@ void AppMenuButton::resized()
 void AppMenuButton::applyConfigAssets(Array<String> assetNames,
         Array<Colour> colours)
 {
-    while(colours.size()<3){
+    while (colours.size() < 3)
+    {
         colours.add(Colours::transparentBlack);
     }
-    textColour=colours[0];
-    fillColour=colours[1];
-    selectedFillColour=colours[2];
+    textColour = colours[0];
+    fillColour = colours[1];
+    selectedFillColour = colours[2];
+}
+
+/**
+ * Requests an icon from the icon thread.
+ */
+void AppMenuButton::loadIcon(String icon)
+{
+    iconThread.loadIcon(icon, [this](Image iconImg)
+    {
+        appIcon = iconImg;
+        repaint();
+    });
 }

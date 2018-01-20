@@ -30,6 +30,7 @@ fileSelectButton("..."),
 showButton(true)
 {
     fileSelectButton.addListener(this);
+    filePath.addListener(this);
     addAndMakeVisible(filePath);
     addAndMakeVisible(fileSelectButton);
 }
@@ -40,7 +41,8 @@ FileSelectTextEditor::~FileSelectTextEditor()
 
 void FileSelectTextEditor::setText(String path)
 {
-    filePath.setText(path, false);
+    filePath.setText(path, true);
+    notifyListeners();
 }
 
 String FileSelectTextEditor::getText()
@@ -64,7 +66,44 @@ void FileSelectTextEditor::showFileSelectButton(bool shouldShow)
     }
     showButton = shouldShow;
     resized();
+}
 
+FileSelectTextEditor::Listener::Listener()
+{
+}
+
+FileSelectTextEditor::Listener::~Listener()
+{
+}
+
+void FileSelectTextEditor::addFileSelectListener(Listener * listener)
+{
+    listeners.insert(listener);
+}
+
+void FileSelectTextEditor::notifyListeners()
+{
+    for (std::set<Listener*>::iterator it = listeners.begin();
+            it != listeners.end(); it++)
+    {
+        (*it)->fileSelected(this);
+    }
+}
+
+void FileSelectTextEditor::textEditorFocusLost(TextEditor& editor)
+{
+    if (editor.getText().isNotEmpty())
+    {
+        notifyListeners();
+    }
+}
+
+void FileSelectTextEditor::textEditorReturnKeyPressed(TextEditor & editor)
+{
+    if (editor.getText().isNotEmpty())
+    {
+        notifyListeners();
+    }
 }
 
 void FileSelectTextEditor::buttonClicked(Button* button)
@@ -84,6 +123,7 @@ void FileSelectTextEditor::buttonClicked(Button* button)
     {
         File selectedFile = browser.getSelectedFile(0);
         setText(selectedFile.getFullPathName());
+        notifyListeners();
     }
 }
 

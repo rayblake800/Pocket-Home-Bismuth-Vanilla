@@ -14,40 +14,102 @@
 #include "IconThread.h"
 
 
-const String IconThread::defaultAppIconPath =
+const String IconThread::defaultIconPath =
         "/usr/share/pocket-home/appIcons/default.png";
-
-const String IconThread::defaultDirectoryIconPath =
-        "/usr/share/pocket-home/appIcons/filebrowser.png";
 
 IconThread::IconThread() : Thread("IconThread")
 {
-    defaultAppIcon = createImageFromFile(File(defaultAppIconPath));
-    defaultDirectoryIcon = createImageFromFile(File(defaultDirectoryIconPath));
+    defaultIcon = createImageFromFile(File(defaultIconPath));
 }
 
 IconThread::~IconThread()
 {
 }
 
-void IconThread::loadIcon(AppMenuButton::Ptr button, String icon)
+/**
+ * Queues up an icon request.  
+ */
+void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
 {
-    if (button->isFolder())
+
+    //if the icon variable is a full path, return that
+    if (icon.substring(0, 1) == "/")
     {
-        button->appIcon = defaultDirectoryIcon;
+        assignImage(createImageFromFile(File(icon)));
     } else
     {
-        button->appIcon = defaultAppIcon;
+        //if icon is a partial path, trim it
+        if (icon.contains("/"))
+        {
+            icon = icon.substring(1 + icon.lastIndexOf("/"));
+        }
+        String mappedPath;
+        try
+        {
+            mappedPath = iconPaths.at(icon);
+        }        catch (std::out_of_range e)
+        {
+            mappedPath = "";
+        }
+        if (mappedPath.isNotEmpty())
+        {
+            assignImage(createImageFromFile(File(mappedPath)));
+        } else
+        {
+            assignImage(defaultIcon);
+            const ScopedLock queueLock(lock);
+            QueuedJob iconRequest;
+            iconRequest.icon = icon;
+            iconRequest.callback = assignImage;
+            queuedJobs.add(iconRequest);
+            if (!isThreadRunning())
+            {
+                startThread();
+            }
+        }
+
     }
-    const ScopedLock queueLock(lock);
-    QueuedJob iconRequest;
-    iconRequest.button = button;
-    iconRequest.icon = icon;
-    queuedJobs.add(iconRequest);
-    if (!isThreadRunning())
+}
+
+/**
+ * Searches for and returns an icon path.
+ */
+String IconThread::getIconPath(String icon)
+{
+    const ScopedLock iconLock(lock);
+    String fullPath;
+
+    //if it hasn't happened already, build the icon path map
+    if (!iconPathsMapped)
     {
-        startThread();
+        const ScopedUnlock mapUnlock(lock);
+        mapIcons();
     }
+    fullPath = iconPaths[icon];
+
+    // If the icon isn't in the map, look for one with a similar name
+    if (fullPath.isEmpty())
+    {
+        for (std::map<String, String>::iterator it = iconPaths.begin();
+                it != iconPaths.end(); it++)
+        {
+            String iconCandidate = it->first;
+            if (!it->second.isEmpty() &&
+                    (iconCandidate.containsIgnoreCase(icon) ||
+                    icon.containsIgnoreCase(iconCandidate)))
+            {
+                iconPaths[icon] = it->second;
+                fullPath = it->second;
+                break;
+            }
+        }
+    }
+
+    if (fullPath.isNotEmpty())
+    {
+        return fullPath;
+    }
+    return String();
 }
 
 void IconThread::run()
@@ -57,56 +119,19 @@ void IconThread::run()
     {
         QueuedJob activeJob = queuedJobs[0];
         queuedJobs.remove(0);
-        String fullPath;
         String icon = activeJob.icon;
-
-        //if the icon variable is a full path, return that
-        if (icon.substring(0, 1) == "/")
         {
-            fullPath = icon;
-        } else
-        {
-            //if icon is a partial path, trim it
-            if (icon.contains("/"))
-            {
-                icon = icon.substring(1 + icon.lastIndexOf("/"));
-            }
-
-            //if it hasn't happened already, build the icon path map
-            if (!iconPathsMapped)
-            {
-                const ScopedUnlock mapUnlock(lock);
-                mapIcons();
-            }
-            fullPath = iconPaths[icon];
-
-            // If the icon isn't in the map, look for one with a similar name
-            if (fullPath.isEmpty())
-            {
-                for (std::map<String, String>::iterator it = iconPaths.begin();
-                        it != iconPaths.end(); it++)
-                {
-                    String iconCandidate = it->first;
-                    if (!it->second.isEmpty() &&
-                            (iconCandidate.containsIgnoreCase(icon) ||
-                            icon.containsIgnoreCase(iconCandidate)))
-                    {
-                        iconPaths[icon] = it->second;
-                        fullPath = it->second;
-                        break;
-                    }
-                }
-            }
+            const ScopedUnlock getIconWillRelock(lock);
+            icon = getIconPath(icon);
         }
-        if (fullPath.isNotEmpty())
+        if (icon.isNotEmpty())
         {
-            //load icon into button asynchronously.
-            MessageManager::callAsync([fullPath, activeJob]
+            MessageManager::callAsync([icon, activeJob]
             {
-                activeJob.button->appIcon = createImageFromFile(File(fullPath));
-                activeJob.button->repaint();
+                activeJob.callback(createImageFromFile(File(icon)));
             });
         }
+
         //Allow other threads to run
         {
             const ScopedUnlock yieldUnlock(lock);
@@ -120,6 +145,7 @@ void IconThread::run()
  */
 void IconThread::mapIcons()
 {
+    const ScopedLock mapLock(lock);
     //Subdirectories with these names are likely to appear, but should
     //not be searched for icons.
     std::set<String> ignore = {
@@ -152,30 +178,30 @@ void IconThread::mapIcons()
         std::regex sizePattern("^([0-9]+)");
         std::smatch sizeMatch;
         std::sort(dirs.begin(), dirs.end(), [&sizeMatch, &sizePattern]
-        (const String& a, const String & b)->bool
-        {
-            std::string a_str = a.toStdString();
-            std::string b_str = b.toStdString();
-            if (a == b)return false;
-                    int aVal = 0;
-                    int bVal = 0;
-                if (std::regex_search(a_str, sizeMatch, sizePattern))
+                (const String& a, const String & b)->bool
                 {
-                    sscanf(sizeMatch.str(1).c_str(), "%d", &aVal);
-                }
-            if (std::regex_search(b_str, sizeMatch, sizePattern))
-            {
-                sscanf(sizeMatch.str(1).c_str(), "%d", &bVal);
-            }
-            if (aVal != bVal)
-            {
-                //higher numbers first, until after 128px
-                if (aVal > 128 && aVal < 999)aVal = 1 + 128 / aVal;
-                    if (bVal > 128 && bVal < 999)bVal = 1 + 128 / bVal;
-                        return aVal > bVal;
+                    std::string a_str = a.toStdString();
+                    std::string b_str = b.toStdString();
+                    if (a == b)return false;
+                            int aVal = 0;
+                            int bVal = 0;
+                        if (std::regex_search(a_str, sizeMatch, sizePattern))
+                        {
+                            sscanf(sizeMatch.str(1).c_str(), "%d", &aVal);
+                        }
+                    if (std::regex_search(b_str, sizeMatch, sizePattern))
+                    {
+                        sscanf(sizeMatch.str(1).c_str(), "%d", &bVal);
                     }
-            return false;
-        });
+                    if (aVal != bVal)
+                    {
+                        //higher numbers first, until after 128px
+                        if (aVal > 128 && aVal < 999)aVal = 1 + 128 / aVal;
+                            if (bVal > 128 && bVal < 999)bVal = 1 + 128 / bVal;
+                                return aVal > bVal;
+                            }
+                    return false;
+                });
         for (const String& subDir : dirs)
         {
             //only add directories outside of the ignore set
@@ -264,10 +290,10 @@ void IconThread::mapIcons()
         std::vector<String> files = listFiles(path);
         for (const String& file : files)
         {
-            String extension=file.fromLastOccurrenceOf(".",false,false);
-            
-            if (extension=="png"||extension=="svg"||
-                    extension=="xpm"||extension=="jpg")
+            String extension = file.fromLastOccurrenceOf(".", false, false);
+
+            if (extension == "png" || extension == "svg" ||
+                    extension == "xpm" || extension == "jpg")
             {
                 String filename = file.dropLastCharacters(4);
                 if (this->iconPaths[filename].isEmpty())

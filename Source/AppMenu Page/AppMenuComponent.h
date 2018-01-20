@@ -5,8 +5,7 @@
  * contents from system .Desktop files and the AppConfigFile
  */
 
-#ifndef APPMENU_H
-#define APPMENU_H
+#pragma once
 #include <atomic>
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Configuration/Configurables/ConfigurableComponent.h"
@@ -21,8 +20,7 @@
  * A menu for launching applications, populated with .Desktop file info
  */
 class AppMenuComponent : public Component,
-public ConfigurableComponent,
-public Button::Listener {
+public ConfigurableComponent{
 public:
     AppMenuComponent(AppConfigFile& appConfig);
     virtual ~AppMenuComponent();
@@ -47,7 +45,7 @@ public:
      * Trigger a click for the selected button.
      */
     void clickSelected();
-
+    
     /**
      * Returns a popup editor component for updating the selected button.
      * @return either an editor component, or nullptr if no button is selected.
@@ -71,38 +69,48 @@ public:
      */
     int activeColumn();
     //######################## App Launching #################################
-    
+
     /**
      * @return true if currently loading information or a new child process.
      */
     bool isLoading();
-    
+
     /**
      * Makes the menu stop waiting to load something, re-enabling
      * user input.
      */
     void stopWaitingForLoading();
-    
+
 protected:
     //AppMenuComponent has no asset files or colors.
+
     void applyConfigAssets(Array<String> assetNames,
-            Array<Colour> colours){};
+            Array<Colour> colours) {
+    };
 private:
     AppConfigFile& appConfig;
     AppLauncher appLauncher;
     //handle all AppMenuButton clicks
-    void buttonClicked(Button* buttonClicked) override;
+    virtual void mouseDown(const MouseEvent &event) override;
     void resized() override;
     //if it loses visibility, stop waiting for apps to launch
     void visibilityChanged() override;
 
-
+    
     void addButton(AppMenuButton::Ptr appButton);
     void selectIndex(int index);
-    void scrollToSelected(bool animatedScroll=true);
+    void scrollToSelected(bool animatedScroll = true);
+
+    /**
+     * Sets what should happen when a button is left clicked.
+     * This opens selected buttons, and selects unselected button
+     * @param button
+     */
+    void onButtonClick(AppMenuButton* button);
 
 
     ScopedPointer<OverlaySpinner> loadingSpinner;
+    ScopedPointer<PopupEditorComponent> buttonEditor;
     DesktopEntries desktopEntries;
     //True iff desktopEntries are loading in another thread.
     std::atomic<bool> loadingAsync;
@@ -126,7 +134,7 @@ private:
      * also disable input.
      */
     void showLoadingSpinner();
-    
+
     /**
      * Hide the loading spinner, re-enabling user input.
      */
@@ -134,5 +142,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
 };
 
-#endif /* APPMENU_H */
 

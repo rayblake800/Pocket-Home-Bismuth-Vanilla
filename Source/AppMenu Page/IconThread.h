@@ -7,7 +7,8 @@
 
 #pragma once
 #include <map>
-#include "AppMenuButton/AppMenuButton.h"
+#include <functional>
+#include "../../JuceLibraryCode/JuceHeader.h"
 
 class IconThread : public Thread {
 public:
@@ -16,13 +17,17 @@ public:
 
     /**
      * Queues up an icon request.  
-     * @param button a button that needs an icon.  It will be assigned
-     * a default icon immediately, while the correct icon is loaded
-     * asynchronously.
      * @param icon either a full icon file path, or the filename(without
      * extension) of an icon in one of the system icon directories.
+     * @param assignImage a callback function to asynchronously use the
+     * image found by the thread.  
+     * Unless the icon can be immediately located without searching,
+     * It will be called twice, once to immediately
+     * apply a default image, and again when the requested image has been found.
      */
-    void loadIcon(AppMenuButton::Ptr button, String icon);
+    void loadIcon(String icon, std::function<void(Image)> assignImage);
+    
+    
     
     /**
      * While AppMenuButtons still need icons, find them in a
@@ -33,11 +38,19 @@ public:
 
 private:
     struct QueuedJob{
-        AppMenuButton::Ptr button;
         String icon;
+        std::function<void(Image)> callback;
     };
     Array<QueuedJob> queuedJobs;
     
+    /**
+     * Searches for and returns an icon's full path. 
+     * @param icon either a full icon file path, or the filename(without
+     * extension) of an icon in one of the system icon directories.
+     * @return an icon path if one is found, or the default application button
+     * if nothing shows up.
+     */
+    String getIconPath(String icon);
     
     //Contains <filename(no extention),fullpath/filename.extension>
     //mappings for all icons found on the system.
@@ -54,12 +67,10 @@ private:
     CriticalSection lock;
     
     //Default image icons to copy into AppMenuButtons
-    Image defaultAppIcon;
-    Image defaultDirectoryIcon;
+    Image defaultIcon;
 
     //default icon path definitions
-    static const String defaultAppIconPath;
-    static const String defaultDirectoryIconPath;
+    static const String defaultIconPath;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconThread)
 };

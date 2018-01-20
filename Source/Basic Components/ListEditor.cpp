@@ -11,14 +11,10 @@
 #include "../Utils.h"
 #include "ListEditor.h"
 
-ListEditor::ListEditor(Array<String> initialList, Colour bgColour,
-        Colour selectedBgColour, Colour textColour) :
+ListEditor::ListEditor(Array<String> initialList) :
 listItems(initialList),
 listContainer("ListEditor", nullptr),
-addItemBtn("+"),
-bgColour(bgColour),
-selectedBgColour(selectedBgColour),
-textColour(textColour)
+addItemBtn("+")
 {
     addAndMakeVisible(listContainer);
     addAndMakeVisible(newItemField);
@@ -27,7 +23,6 @@ textColour(textColour)
     listContainer.setModel(this);
     listContainer.addMouseListener(this, true);
 
-    addItemBtn.setColour(TextButton::textColourOnId, textColour);
     addItemBtn.addListener(this);
 
 
@@ -40,6 +35,34 @@ textColour(textColour)
 
 ListEditor::~ListEditor()
 {
+}
+
+/**
+ * Set new colour values to use with this list
+ * @param backgroundColour fill colour for the listbox background.
+ * @param listItemColour fill colour for unselected list items.
+ * @param selectedItemColour fill colour for unselected list items.
+ * @param textColour text draw color.
+ */
+void ListEditor::setColours(Colour backgroundColour, Colour listItemColour,
+        Colour selectedListItemColour, Colour txtColour)
+{
+    bgColour = backgroundColour;
+    itemColour = listItemColour;
+    selectedItemColour = selectedListItemColour;
+    textColour = txtColour;
+
+
+    addItemBtn.setColour(TextButton::textColourOnId, textColour);
+    listContainer.setColour(ListBox::backgroundColourId, bgColour);
+    listContainer.setColour(ListBox::outlineColourId, selectedItemColour);
+    listContainer.setOutlineThickness(1);
+
+    ScrollBar* scrollbar = listContainer.getVerticalScrollBar();
+    scrollbar->setColour(ScrollBar::trackColourId, selectedItemColour);
+    scrollbar->setColour(ScrollBar::thumbColourId, textColour);
+    listContainer.updateContent();
+    repaint();
 }
 
 /**
@@ -56,6 +79,16 @@ int ListEditor::getNumRows()
 Array<String> ListEditor::getListItems() const
 {
     return listItems;
+}
+
+/**
+ * Replace the existing item list entries with new ones.
+ */
+void ListEditor::setListItems(Array<String> newItems)
+{
+    listItems = newItems;
+    listContainer.updateContent();
+    repaint();
 }
 
 ListEditor::ListItemComponent::ListItemComponent
@@ -81,12 +114,13 @@ void ListEditor::ListItemComponent::setButtonComponentID(String id)
 
 void ListEditor::ListItemComponent::setButtonColour(Colour colour)
 {
-    delBtn.replaceColour(Colours::black,colour);
+    delBtn.replaceColour(Colours::black, colour);
 }
 
 void ListEditor::ListItemComponent::resized()
 {
     setFont(getFont().withHeight(getHeight() - 1));
+
     delBtn.setBounds(getLocalBounds()
             .withWidth(getHeight()).withX(getRight() - getHeight())
             .reduced(2));
@@ -131,7 +165,9 @@ void ListEditor::resized()
 {
     layoutManager.layoutComponents(getLocalBounds(), 0, 2);
     listContainer.setRowHeight(newItemField.getHeight());
-    DBG(String("ListEditor:") + getBounds().toString());
+    ScrollBar* scrollbar = listContainer.getVerticalScrollBar();
+
+    DBG(String("Scrollbar:") + scrollbar->getBounds().toString());
 }
 
 /**
@@ -163,7 +199,7 @@ Component * ListEditor::refreshComponentForRow
             static_cast<ListItemComponent*> (existingComponent);
     if (rowNumber >= getNumRows())
     {
-        if(existingComponent != nullptr)
+        if (existingComponent != nullptr)
         {
             delete existingComponent;
         }
@@ -172,17 +208,19 @@ Component * ListEditor::refreshComponentForRow
     if (rowLabel == nullptr)
     {
         rowLabel = new ListItemComponent(listItems[rowNumber], this);
-        rowLabel->setColour(Label::textColourId, textColour);
         rowLabel->addListener(this);
     }
     rowLabel->setText(listItems[rowNumber],
             NotificationType::dontSendNotification);
+    rowLabel->setColour(Label::textColourId, textColour);
     rowLabel->setButtonComponentID(String(rowNumber));
+    rowLabel->setButtonColour(textColour);
+
     rowLabel->setComponentID(String(rowNumber));
 
     rowLabel->setFont(rowLabel->getFont().withHeight(rowLabel->getHeight() - 1));
     rowLabel->setColour(Label::backgroundColourId, isRowSelected ?
-            selectedBgColour : bgColour);
+            selectedItemColour : itemColour);
     return rowLabel;
 
 }

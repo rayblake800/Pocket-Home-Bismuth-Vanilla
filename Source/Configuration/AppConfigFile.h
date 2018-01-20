@@ -29,8 +29,9 @@ public:
         String name;
         String icon;
         String shell;
+        bool launchInTerminal;
         int index;
-        String folder;
+        int folderIndex;
         DynamicObject * getDynamicObject();
         bool operator==(const AppItem& rhs)const;
     };
@@ -62,7 +63,7 @@ public:
      */
     struct AppFolder {
         AppFolder();
-        AppFolder(var jsonObj);
+        AppFolder(var jsonObj,int index);
         String name;
         Array<String> categories;
         String icon;

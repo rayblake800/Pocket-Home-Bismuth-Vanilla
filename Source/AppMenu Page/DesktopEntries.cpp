@@ -187,7 +187,9 @@ void DesktopEntries::LoadingThread::run()
         {
             DesktopEntry entry(path);
             if (entry.getValue(DesktopEntry::hidden) ||
-                    entry.getValue(DesktopEntry::noDisplay))
+                    entry.getValue(DesktopEntry::noDisplay) ||
+                    entry.getValue(DesktopEntry::notShowIn)
+                    .contains("pocket-home"))
             {
                 continue;
             }

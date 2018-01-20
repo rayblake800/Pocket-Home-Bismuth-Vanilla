@@ -9,15 +9,16 @@
  */
 #include "../../Utils.h"
 #include "../../PocketHomeApplication.h"
+#include "../Popup Editor Components/DesktopEntryEditorPopup.h"
 #include "DesktopEntryButton.h"
 
 DesktopEntryButton::DesktopEntryButton
-(DesktopEntry desktopEntry, int index, int column,IconThread& iconThread)
+(DesktopEntry desktopEntry, int index, int column, IconThread& iconThread)
 : AppMenuButton
-(desktopEntry.getValue(DesktopEntry::name), index, column),
+(desktopEntry.getValue(DesktopEntry::name), index, column, iconThread),
 desktopEntry(desktopEntry)
 {
-    iconThread.loadIcon(this,desktopEntry.getValue(DesktopEntry::icon));
+    loadIcon(desktopEntry.getValue(DesktopEntry::icon));
 }
 
 /**
@@ -47,7 +48,7 @@ String DesktopEntryButton::getCommand() const
         MainConfigFile& config = PocketHomeApplication::getInstance()
                 ->getConfig();
         command = config.getConfigString
-                (MainConfigFile::termLaunchCommandKey) + String(" ")  + command;
+                (MainConfigFile::termLaunchCommandKey) + String(" ") + command;
     }
     return command;
 }
@@ -58,4 +59,50 @@ String DesktopEntryButton::getCommand() const
 Array<String> DesktopEntryButton::getCategories() const
 {
     return desktopEntry.getValue(DesktopEntry::categories);
+}
+
+/**
+ * Gets a PopupEditorComponent configured to edit this button
+ * @return a new PopupEditorComponent, ready to be added to the screen.
+ */
+PopupEditorComponent* DesktopEntryButton::getEditor()
+{
+    return new DesktopEntryEditorPopup(this, desktopEntry, iconThread);
+};
+
+/**
+ * Update this button's desktopEntry. This writes to 
+ * ~/.local/share/applications, so changes will only affect the current user.
+ * @param name application display name
+ * @param icon application icon
+ * @param categories application categories
+ * @param command application launch command
+ * @param useTerminal sets if this launches in a terminal window
+ */
+void DesktopEntryButton::editEntry(String name, String icon, 
+        Array<String> categories,
+        String command, bool useTerminal){
+    desktopEntry.setValue(DesktopEntry::name,name);
+    desktopEntry.setValue(DesktopEntry::icon,icon);
+    desktopEntry.setValue(DesktopEntry::categories,categories);
+    desktopEntry.setValue(DesktopEntry::exec,command);
+    desktopEntry.setValue(DesktopEntry::terminal,useTerminal);
+    desktopEntry.writeFile();
+}
+
+/**
+ * Sets this button's desktopEntry to not display in pocket-home for the
+ * current user, and reload all AppMenuButtons.
+ */
+void DesktopEntryButton::hideEntry(){
+    Array<String> notShowIn = desktopEntry.getValue(DesktopEntry::notShowIn);
+    notShowIn.add("pocket-home");
+    desktopEntry.setValue(DesktopEntry::notShowIn,notShowIn);
+    desktopEntry.writeFile();
+    AppMenuComponent* appMenu = 
+            dynamic_cast<AppMenuComponent*>(getParentComponent());
+    if(appMenu != nullptr){
+        appMenu->loadButtons();
+    }
+    
 }

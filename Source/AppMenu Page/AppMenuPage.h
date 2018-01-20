@@ -26,6 +26,13 @@ public:
     AppMenuPage();
     virtual ~AppMenuPage();
     void stopWaitingOnLaunch();
+    
+    /**
+     * Add a popup editor window to the page.
+     * @param editor will be added, made visible, and positioned/scaled as
+     * needed.
+     */
+    void showPopupEditor(PopupEditorComponent* editor);
 
 protected:
     /**

@@ -63,8 +63,8 @@ void GridLayoutManager::addComponent(Component * comp, int rowIndex,
     row.horizWeightSum += horizWeight;
     if (comp != nullptr && parentToInit != nullptr)
     {
-        DBG(String("adding ") + comp->getName() + String("to parent")
-                + parentToInit->getName());
+        //        DBG(String("adding ") + comp->getName() + String("to parent")
+        //                + parentToInit->getName());
         parentToInit->addAndMakeVisible(comp);
     }
 }
@@ -99,12 +99,12 @@ void GridLayoutManager::layoutComponents(Rectangle<int> bounds, int xPadding,
     for (int rowInd = 0; rowInd < rows.size(); rowInd++)
     {
         Row row = rows[rowInd];
-        DBG(String("row ") + String(rowInd) + String(" weight ")
-                + String(row.vertWeight) + String("/") + String(vertWeightSum));
+        //        DBG(String("row ") + String(rowInd) + String(" weight ")
+        //                + String(row.vertWeight) + String("/") + String(vertWeightSum));
         int height = fullHeight * row.vertWeight / vertWeightSum - yPadding;
 
-        DBG(String("\theight ")
-                + String(height) + String("/") + String(bounds.getHeight()));
+        //        DBG(String("\theight ")
+        //                + String(height) + String("/") + String(bounds.getHeight()));
         int xPos = xStart;
         for (int columnInd = 0; columnInd < row.columns.size(); columnInd++)
         {

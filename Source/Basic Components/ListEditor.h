@@ -22,24 +22,36 @@ public:
     /**
      * Create a new ListEditor component
      * @param initialList the list begins with these list items
-     * @param bgColour draw color of an unselected list item background
-     * @param selectedBgColour draw color of a selected list item background
-     * @param textColour draw color of list item text.
      */
-    ListEditor(Array<String> initialList, Colour bgColour,
-            Colour selectedBgColour, Colour textColour);
+    ListEditor(Array<String> initialList);
 
     virtual ~ListEditor();
 
     /**
+     * Set new colour values to use with this list
+     * @param backgroundColour fill colour for the listbox background.
+     * @param listItemColour fill colour for unselected list items.
+     * @param selectedListItemColour fill colour for unselected list items.
+     * @param txtColour text draw color.
+     */
+    void setColours(Colour backgroundColour, Colour listItemColour, 
+            Colour selectedListItemColour, Colour txtColour);
+    
+    /**
      * @return the number of rows in the list
      */
     int getNumRows();
-
+    
     /**
      * @return all list row strings.
      */
     Array<String> getListItems() const;
+    
+    /**
+     * Replace the existing item list entries with new ones.
+     * @param newItems replacement list of Strings
+     */
+    void setListItems(Array<String> newItems);
 
 private:
     /**
@@ -91,9 +103,10 @@ private:
     void resized() override;
 
 
-    const Colour bgColour;
-    const Colour selectedBgColour;
-    const Colour textColour;
+    Colour bgColour;
+    Colour itemColour;
+    Colour selectedItemColour;
+    Colour textColour;
 
 
     Array<String> listItems;

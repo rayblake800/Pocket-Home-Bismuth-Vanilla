@@ -10,6 +10,7 @@
 #include "AppMenuButton/DesktopEntryButton.h"
 #include "AppMenuButton/ConfigAppButton.h"
 #include "AppMenuButton/AppFolderButton.h"
+#include "AppMenuPage.h"
 #include "AppMenuComponent.h"
 
 AppMenuComponent::AppMenuComponent(AppConfigFile& appConfig) :
@@ -58,7 +59,7 @@ void AppMenuComponent::loadButtons()
     for (const AppConfigFile::AppItem& favorite : favorites)
     {
         DBG(String("AppMenu:Found app in config:") + favorite.name);
-        addButton(new ConfigAppButton(favorite,
+        addButton(new ConfigAppButton(appConfig, favorite,
                 buttonColumns[activeColumn()].size(),
                 activeColumn(), iconThread));
     }
@@ -129,7 +130,7 @@ void AppMenuComponent::openFolder(Array<String> categoryNames)
             addedButton->setColumn(activeColumn());
         } else
         {
-            addedButton = new ConfigAppButton(item,
+            addedButton = new ConfigAppButton(appConfig, item,
                     buttonColumns[activeColumn()].size(),
                     activeColumn(), iconThread);
         }
@@ -192,36 +193,30 @@ void AppMenuComponent::closeFolder()
 
 //handle all AppMenuButton clicks
 
-void AppMenuComponent::buttonClicked(Button * buttonClicked)
+void AppMenuComponent::mouseDown(const MouseEvent &event)
 {
-    if (isLoading())
+    AppMenuButton::Ptr appClicked = dynamic_cast<AppMenuButton*>
+            (event.originalComponent);
+    if (isLoading() || appClicked == nullptr ||
+            (buttonEditor != nullptr && buttonEditor->isVisible()))
     {
         return;
     }
-    AppMenuButton::Ptr appClicked = dynamic_cast<AppMenuButton*> (buttonClicked);
-    if (appClicked->getColumn() < activeColumn())
+
+    if (selected[activeColumn()] == appClicked
+            && event.mods.isPopupMenu())
     {
-        while (appClicked->getColumn() < activeColumn())
+        AppMenuPage * appPage = dynamic_cast<AppMenuPage*>
+                (getParentComponent());
+        if (appPage != nullptr)
         {
-            closeFolder();
-        }
-        selectIndex(appClicked->getIndex());
-        return;
-    }
-    if (selected[activeColumn()] == appClicked)
-    {
-        if (appClicked->isFolder())
-        {
-            openFolder(appClicked->getCategories());
-        } else
-        {
-            appLauncher.startOrFocusApp(appClicked->getAppName()
-                    , appClicked->getCommand());
+            appPage->showPopupEditor(getEditorForSelected());
         }
     } else
     {
-        selectIndex(appClicked->getIndex());
+        onButtonClick(appClicked);
     }
+
 }
 
 void AppMenuComponent::resized()
@@ -269,6 +264,7 @@ void AppMenuComponent::resized()
     if (activeColumn() >= 0 && selected[activeColumn()] != nullptr
             && !Desktop::getInstance().getAnimator().isAnimating())
     {
+
         scrollToSelected();
     }
 }
@@ -283,6 +279,7 @@ void AppMenuComponent::visibilityChanged()
         showLoadingSpinner();
     } else if (!isVisible())
     {
+
         stopWaitingForLoading();
     }
 }
@@ -299,6 +296,7 @@ void AppMenuComponent::selectIndex(int index)
             || selected[column] == buttonColumns[column][index])return;
     if (selected[column] != nullptr)
     {
+
         selected[column]->setSelected(false);
         selected[column]->repaint();
     }
@@ -318,6 +316,7 @@ void AppMenuComponent::selectNext()
         selectIndex(0);
     } else
     {
+
         selectIndex(selected[activeColumn()]->getIndex() + 1);
     }
 }
@@ -331,6 +330,7 @@ void AppMenuComponent::selectPrevious()
         selectIndex(0);
     } else
     {
+
         selectIndex(selected[activeColumn()]->getIndex() - 1);
     }
 }
@@ -341,7 +341,7 @@ void AppMenuComponent::clickSelected()
 {
     if (selected[activeColumn()] != nullptr && !isLoading())
     {
-        selected[activeColumn()]->triggerClick();
+        onButtonClick(selected[activeColumn()]);
     }
 }
 
@@ -352,6 +352,7 @@ PopupEditorComponent* AppMenuComponent::getEditorForSelected()
 {
     if (selected[activeColumn()] != nullptr && !isLoading())
     {
+
         return selected[activeColumn()]->getEditor();
     }
     return nullptr;
@@ -361,6 +362,7 @@ PopupEditorComponent* AppMenuComponent::getEditorForSelected()
 
 int AppMenuComponent::activeColumn()
 {
+
     return selected.size() - 1;
 }
 
@@ -407,7 +409,40 @@ void AppMenuComponent::scrollToSelected(bool animatedScroll)
         animator.animateComponent(this, dest, 1, 100, false, 1, 1);
     } else
     {
+
         setBounds(dest);
+    }
+}
+
+/**
+ * Sets what should happen when a button is left clicked.
+ * This opens selected buttons, and selects unselected button
+ * @param button
+ */
+void AppMenuComponent::onButtonClick(AppMenuButton* button)
+{
+    if (button->getColumn() < activeColumn())
+    {
+        while (button->getColumn() < activeColumn())
+        {
+            closeFolder();
+        }
+        selectIndex(button->getIndex());
+        return;
+    }
+    if (selected[activeColumn()] == button)
+    {
+        if (button->isFolder())
+        {
+            openFolder(button->getCategories());
+        } else
+        {
+            appLauncher.startOrFocusApp(button->getAppName(),
+                    button->getCommand());
+        }
+    } else
+    {
+        selectIndex(button->getIndex());
     }
 }
 
@@ -429,7 +464,7 @@ void AppMenuComponent::addButton(AppMenuButton::Ptr appButton)
     addAndMakeVisible(appButton);
     appButton->setEnabled(true);
     appButton->setVisible(true);
-    appButton->addListener(this);
+    appButton->addMouseListener(this, true);
     this->buttonColumns[column].push_back(appButton);
     if ((x + buttonWidth) > getWidth())
     {
@@ -437,6 +472,7 @@ void AppMenuComponent::addButton(AppMenuButton::Ptr appButton)
     }
     if ((y + buttonHeight) > getHeight())
     {
+
         setBounds(getX(), getY(), getWidth(), y + buttonHeight);
     }
 }
@@ -448,6 +484,7 @@ void AppMenuComponent::addButton(AppMenuButton::Ptr appButton)
  */
 bool AppMenuComponent::isLoading()
 {
+
     return loadingSpinner->isShowing();
 }
 
@@ -457,6 +494,7 @@ bool AppMenuComponent::isLoading()
  */
 void AppMenuComponent::stopWaitingForLoading()
 {
+
     hideLoadingSpinner();
     appLauncher.stopTimer();
 }
@@ -466,6 +504,7 @@ void AppMenuComponent::showLoadingSpinner()
     Component * parentPage = getParentComponent();
     if (parentPage != nullptr)
     {
+
         parentPage->addAndMakeVisible(loadingSpinner);
     }
 }

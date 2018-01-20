@@ -12,6 +12,7 @@
 
 class DesktopEntryButton : public AppMenuButton {
 public:
+    typedef ReferenceCountedObjectPtr<DesktopEntryButton> Ptr;
     /**
      * Create a new button representing a DesktopEntry
      * @param desktopEntry defines the application/directory data
@@ -46,7 +47,25 @@ public:
      * Gets a PopupEditorComponent configured to edit this button
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
-    PopupEditorComponent* getEditor() {return nullptr;};
+    PopupEditorComponent* getEditor();
+    
+    /**
+     * Update this button's desktopEntry. This writes to 
+     * ~/.local/share/applications, so changes will only affect the current user.
+     * @param name application display name
+     * @param icon application icon
+     * @param categories application categories
+     * @param command application launch command
+     * @param useTerminal sets if this launches in a terminal window
+     */
+    void editEntry(String name,String icon,Array<String> categories,
+            String command,bool useTerminal);
+    
+    /**
+     * Sets this button's desktopEntry to not display in pocket-home for the
+     * current user, and reload all AppMenuButtons.
+     */
+    void hideEntry();
 private:
     DesktopEntry desktopEntry;
 };

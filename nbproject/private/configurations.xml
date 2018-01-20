@@ -11,6 +11,8 @@
         </df>
       </df>
       <df name="build">
+        <df name="Debug">
+        </df>
         <df name="Release">
         </df>
       </df>
@@ -3594,6 +3596,8 @@
           </df>
           <in>AppEditComponent.cpp</in>
           <in>AppFolderButton.cpp</in>
+          <in>AppLauncher.cpp</in>
+          <in>AppLauncher.h</in>
           <in>AppMenuButton.cpp</in>
           <in>AppMenuComponent.cpp</in>
           <in>AppMenuComponent.h</in>
@@ -3609,6 +3613,8 @@
           <in>IconThread.h</in>
         </df>
         <df name="Basic Components">
+          <in>DrawableImageButton.cpp</in>
+          <in>DrawableImageButton.h</in>
           <in>DrawableImageComponent.cpp</in>
           <in>DrawableImageComponent.h</in>
           <in>FileSelectTextEditor.cpp</in>
@@ -3629,7 +3635,6 @@
           <in>SwitchComponent.cpp</in>
           <in>SwitchComponent.h</in>
           <in>VectorImageButton.cpp</in>
-          <in>VectorImageButton.h</in>
         </df>
         <df name="Components">
           <df name="Basic">
@@ -3667,6 +3672,8 @@
             <in>Configurable.h</in>
             <in>ConfigurableComponent.cpp</in>
             <in>ConfigurableComponent.h</in>
+            <in>ConfigurableImageButton.cpp</in>
+            <in>ConfigurableImageButton.h</in>
             <in>ConfigurableImageComponent.cpp</in>
             <in>ConfigurableImageComponent.h</in>
             <in>ConfigurableLabel.cpp</in>

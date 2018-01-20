@@ -9,3 +9,18 @@
 */
 
 #pragma once
+#include "../DesktopEntry.h"
+#include "../AppMenuButton/DesktopEntryButton.h"
+#include "PopupEditorComponent.h"
+
+class DesktopEntryEditorPopup : public PopupEditorComponent {
+public:
+    DesktopEntryEditorPopup(DesktopEntryButton* appButton,
+            DesktopEntry desktopEntry, IconThread& iconThread);
+    virtual ~DesktopEntryEditorPopup();
+private:
+    void deleteBtnPressed();
+    void confirm();
+    DesktopEntryButton::Ptr appButton;
+    DesktopEntry desktopEntry;
+};

@@ -8,13 +8,12 @@
 
 #pragma once
 #include "../../Configuration/Configurables/ConfigurableComponent.h"
+#include "../IconThread.h"
 #include "../Popup Editor Components/PopupEditorComponent.h"
 
-class IconThread;
 class AppMenuButton : public Button, public ReferenceCountedObject,
         public ConfigurableComponent {
 public:
-    friend class IconThread;
     typedef ReferenceCountedObjectPtr<AppMenuButton> Ptr;
 
     /**
@@ -22,8 +21,9 @@ public:
      * @param name button name value
      * @param index button position in its column
      * @param column button's column in the AppMenu
+     * @param iconThread
      */
-    AppMenuButton(String name, int index, int column);
+    AppMenuButton(String name, int index, int column,IconThread& iconThread);
 
     /**
      * Set whether this button is currently selected.
@@ -102,8 +102,15 @@ protected:
     virtual void applyConfigAssets(Array<String> assetNames,
             Array<Colour> colours);
 
+    /**
+     * Requests an icon from the icon thread.
+     * @param icon an icon's full path, or the name of an icon file located
+     * in common icon directories.
+     */
+    void loadIcon(String icon);
     //Icon image to draw
     Image appIcon;
+    IconThread& iconThread;
 
 private:
     //bounds for drawing app/folder name

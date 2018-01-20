@@ -8,14 +8,18 @@
   ==============================================================================
  */
 #include "../../Utils.h"
+#include "../../PocketHomeApplication.h"
+#include "../Popup Editor Components/FavoriteEditorPopup.h"
 #include "ConfigAppButton.h"
 
-ConfigAppButton::ConfigAppButton(AppConfigFile::AppItem appItem,
+ConfigAppButton::ConfigAppButton(AppConfigFile& config,
+        AppConfigFile::AppItem appItem,
         int index, int column, IconThread& iconThread) :
-AppMenuButton(appItem.name, index, column),
+AppMenuButton(appItem.name, index, column, iconThread),
+config(config),
 appItem(appItem)
 {
-    iconThread.loadIcon(this,appItem.icon);
+    loadIcon(appItem.icon);
 }
 
 /**
@@ -40,7 +44,15 @@ String ConfigAppButton::getAppName() const
  */
 String ConfigAppButton::getCommand() const
 {
-    return appItem.shell;
+    String command = appItem.shell;
+    if (appItem.launchInTerminal)
+    {
+        MainConfigFile& config = PocketHomeApplication::getInstance()
+                ->getConfig();
+        command = config.getConfigString
+                (MainConfigFile::termLaunchCommandKey) + String(" ") + command;
+    }
+    return command;
 }
 
 /**
@@ -48,10 +60,58 @@ String ConfigAppButton::getCommand() const
  */
 Array<String> ConfigAppButton::getCategories() const
 {
-    Array<String> categories;
-    if (appItem.folder.isNotEmpty())
+    return Array<String>();
+}
+
+/**
+ * Gets a PopupEditorComponent configured to edit this button
+ */
+PopupEditorComponent* ConfigAppButton::getEditor()
+{
+    return new FavoriteEditorPopup(this, config, appItem, iconThread);
+}
+
+/**
+ * Edit this button's application in the settings
+ */
+void ConfigAppButton::editApp
+(String name, String icon, String command, bool terminal)
+{
+    if (icon != appItem.icon)
     {
-        categories.add(appItem.folder);
+        loadIcon(icon);
     }
-    return categories;
+    appItem.name = name;
+    appItem.icon = icon;
+    appItem.shell = command;
+    appItem.launchInTerminal = terminal;
+    if (appItem.folderIndex > 0)
+    {
+        config.removePinnedApp(appItem.folderIndex, appItem.index);
+        config.addPinnedApp(appItem, appItem.folderIndex, appItem.index);
+    } else
+    {
+        config.removeFavoriteApp(appItem.index);
+        config.addFavoriteApp(appItem, appItem.index);
+    }
+}
+
+/**
+ * Remove this button's application from config, and remove the button
+ * from its parent component.
+ */
+void ConfigAppButton::deleteApp()
+{
+    if (appItem.folderIndex > 0)
+    {
+        config.removePinnedApp(appItem.folderIndex, appItem.index);
+    } else
+    {
+        config.removeFavoriteApp(appItem.index);
+    }
+    AppMenuComponent* appMenu = 
+            dynamic_cast<AppMenuComponent*>(getParentComponent());
+    if(appMenu != nullptr){
+        appMenu->loadButtons();
+    }
 }

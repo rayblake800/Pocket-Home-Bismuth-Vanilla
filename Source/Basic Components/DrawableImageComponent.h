@@ -33,6 +33,14 @@ public:
      */
     DrawableImageComponent(Image image,
             RectanglePlacement placement = RectanglePlacement::centred);
+    
+    
+    /**
+     * Create a DrawableImageComponent without an initial image.
+     * @param placement defines how the image will be scaled
+     */
+    DrawableImageComponent
+            (RectanglePlacement placement = RectanglePlacement::centred);
 
     ~DrawableImageComponent();
 
@@ -64,12 +72,6 @@ public:
     bool replaceColour(Colour originalColour, Colour replacementColour);
 
 protected:
-    /**
-     * Create a DrawableImageComponent without an initial image.
-     * @param placement defines how the image will be scaled
-     */
-    DrawableImageComponent
-            (RectanglePlacement placement = RectanglePlacement::centred);
 
     void resized() override;
 private:

@@ -55,6 +55,20 @@ AppMenuPage::~AppMenuPage()
     }
 }
 
+/**
+ * Add a popup editor window to the page.
+ */
+void AppMenuPage::showPopupEditor(PopupEditorComponent* editor)
+{
+    popupEditor = editor;
+    if (popupEditor != nullptr)
+    {
+        addAndMakeVisible(popupEditor);
+        popupEditor->setCentrePosition(getBounds().getCentreX(),
+                getBounds().getCentreY());
+    }
+}
+
 void AppMenuPage::stopWaitingOnLaunch()
 {
     appMenu.stopWaitingForLoading();
@@ -145,20 +159,14 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
             keyCode == KeyPress::spaceKey ||
             keyCode == KeyPress::rightKey)
     {
-        DBG("AppMenuPage:click selected key");
+        DBG("AppMenuPage:click selected AppMenuButton");
         appMenu.clickSelected();
         return true;
     } else if (key == KeyPress::createFromDescription("CTRL+e"))
     {
         DBG("show editor");
-        popupEditor = appMenu.getEditorForSelected();
-        if (popupEditor != nullptr)
-        {
-            addAndMakeVisible(popupEditor);
-            popupEditor->setCentrePosition(getBounds().getCentreX(),
-                    getBounds().getCentreY());
-            return true;
-        }
+        showPopupEditor(appMenu.getEditorForSelected());
+        return true;
     }
     return false;
 }

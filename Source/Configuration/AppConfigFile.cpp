@@ -46,6 +46,8 @@ AppConfigFile::AppItem::AppItem(var jsonObj)
     name = jsonObj.getProperty("name", "");
     icon = jsonObj.getProperty("icon", "");
     shell = jsonObj.getProperty("shell", "");
+    folderIndex = -1;
+    launchInTerminal = jsonObj.getProperty("launch in terminal", false);
 }
 
 DynamicObject* AppConfigFile::AppItem::getDynamicObject()
@@ -54,6 +56,7 @@ DynamicObject* AppConfigFile::AppItem::getDynamicObject()
     appObject->setProperty("name", name);
     appObject->setProperty("icon", icon);
     appObject->setProperty("shell", shell);
+    appObject->setProperty("launch in terminal", launchInTerminal);
     return appObject;
 }
 
@@ -81,6 +84,7 @@ void AppConfigFile::addFavoriteApp(AppItem newApp, int index)
 {
     const ScopedLock changeLock(lock);
     favoriteApps.insert(index, newApp);
+    changesPending = true;
     writeChanges();
 }
 
@@ -93,6 +97,7 @@ void AppConfigFile::removeFavoriteApp(int index)
     if (index >= 0 && index < favoriteApps.size())
     {
         favoriteApps.remove(index);
+        changesPending = true;
         writeChanges();
     }
 }
@@ -103,7 +108,8 @@ AppConfigFile::AppFolder::AppFolder()
 {
 }
 
-AppConfigFile::AppFolder::AppFolder(var jsonObj)
+AppConfigFile::AppFolder::AppFolder(var jsonObj,int index):
+index(index)
 {
     name = jsonObj.getProperty("name", "");
     icon = jsonObj.getProperty("icon", "");
@@ -126,7 +132,7 @@ AppConfigFile::AppFolder::AppFolder(var jsonObj)
         {
             AppItem pinnedApp = AppItem(app);
             pinnedApp.index = pinnedApps.size();
-            pinnedApp.folder = name;
+            pinnedApp.folderIndex = index;
             pinnedApps.add(pinnedApp);
         }
     }
@@ -229,11 +235,15 @@ void AppConfigFile::addPinnedApp
 void AppConfigFile::removePinnedApp(int folderIndex, int appIndex)
 {
     const ScopedLock changeLock(lock);
+    DBG(String("Removing app ") + String(appIndex) + String(" from folder ") +
+            String(folderIndex) + String(" of ") + String(categoryFolders.size()));
     if (folderIndex >= 0 && folderIndex < categoryFolders.size())
     {
-        categoryFolders[folderIndex].pinnedApps.remove(appIndex);
-        changesPending = true;
-        writeChanges();
+        AppFolder editedFolder = categoryFolders[folderIndex];
+        editedFolder.pinnedApps.remove(appIndex);
+        jassert(editedFolder.pinnedApps.size() == 0);
+        removeAppFolder(folderIndex);
+        addAppFolder(editedFolder, folderIndex);
     }
 }
 
@@ -263,8 +273,7 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
     {
         for (const var& folder : *categoryList.getArray())
         {
-            AppFolder menuFolder = AppFolder(folder);
-            menuFolder.index = categoryFolders.size();
+            AppFolder menuFolder = AppFolder(folder,categoryFolders.size());
             categoryFolders.add(menuFolder);
         }
     }
