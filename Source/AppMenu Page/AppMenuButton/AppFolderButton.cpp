@@ -10,12 +10,11 @@
 #include "../../Utils.h"
 #include "AppFolderButton.h"
 #include "../AppMenuComponent.h"
-#include "../Popup Editor Components/FolderEditorPopup.h"
 
 AppFolderButton::AppFolderButton(AppConfigFile& config,
         AppConfigFile::AppFolder appFolder,
         int index, int column, IconThread& iconThread) :
-AppMenuButton(appFolder.name, index, column,iconThread),
+AppMenuButton(appFolder.name, index, column, iconThread),
 config(config),
 appFolder(appFolder)
 {
@@ -60,9 +59,24 @@ Array<String> AppFolderButton::getCategories() const
  * Gets a PopupEditorComponent configured to edit this button
  * @return a new PopupEditorComponent, ready to be added to the screen.
  */
-PopupEditorComponent* AppFolderButton::getEditor()
+AppMenuPopupEditor* AppFolderButton::getEditor()
 {
-    return new FolderEditorPopup(this, config, appFolder,iconThread);
+    AppMenuPopupEditor* editor = new AppMenuPopupEditor("Edit Application", 
+            iconThread,
+            true, false,
+            [this](AppMenuPopupEditor * editor)
+            {
+                editFolder(editor->getNameField(), editor->getIconField(),
+                        editor->getCategories());
+            },
+    [this]()
+    {
+        deleteFolder();
+    });
+    editor->setNameField(appFolder.name);
+    editor->setIconField(appFolder.icon);
+    editor->setCategories(appFolder.categories);
+    return editor;
 }
 
 /**
@@ -74,16 +88,16 @@ PopupEditorComponent* AppFolderButton::getEditor()
 void AppFolderButton::editFolder
 (String name, String icon, Array<String> categories)
 {
-    if(icon != appFolder.icon)
+    if (icon != appFolder.icon)
     {
         loadIcon(icon);
     }
-    appFolder.name=name;
-    appFolder.icon=icon;
-    appFolder.categories=categories;
+    appFolder.name = name;
+    appFolder.icon = icon;
+    appFolder.categories = categories;
     loadIcon(icon);
-    config.addAppFolder(appFolder,appFolder.index);
-    config.removeAppFolder(appFolder.index+1);
+    config.addAppFolder(appFolder, appFolder.index);
+    config.removeAppFolder(appFolder.index + 1);
 }
 
 /**
@@ -92,9 +106,5 @@ void AppFolderButton::editFolder
 void AppFolderButton::deleteFolder()
 {
     config.removeAppFolder(appFolder.index);
-    AppMenuComponent* appMenu = 
-            dynamic_cast<AppMenuComponent*>(getParentComponent());
-    if(appMenu != nullptr){
-        appMenu->loadButtons();
-    }
+    reloadAllButtons();
 }

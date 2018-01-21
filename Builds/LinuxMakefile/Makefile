@@ -98,10 +98,9 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o \
   $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o \
   $(JUCE_OBJDIR)/AppLauncher_5194dc6a.o \
-  $(JUCE_OBJDIR)/DesktopEntryEditorPopup_e1148f38.o \
-  $(JUCE_OBJDIR)/FavoriteEditorPopup_a63f3392.o \
-  $(JUCE_OBJDIR)/FolderEditorPopup_461e7100.o \
   $(JUCE_OBJDIR)/PopupEditorComponent_7e06b15f.o \
+  $(JUCE_OBJDIR)/CategoryPopupEditor_171254ea.o \
+  $(JUCE_OBJDIR)/AppMenuPopupEditor_bec38694.o \
   $(JUCE_OBJDIR)/ConfigAppButton_74b82edd.o \
   $(JUCE_OBJDIR)/DesktopEntryButton_31ccac6.o \
   $(JUCE_OBJDIR)/AppFolderButton_297e94d.o \
@@ -308,24 +307,19 @@ $(JUCE_OBJDIR)/AppLauncher_5194dc6a.o: ../../Source/AppMenu\ Page/AppLauncher.cp
 	@echo "Compiling AppLauncher.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/DesktopEntryEditorPopup_e1148f38.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/DesktopEntryEditorPopup.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling DesktopEntryEditorPopup.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/FavoriteEditorPopup_a63f3392.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/FavoriteEditorPopup.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling FavoriteEditorPopup.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/FolderEditorPopup_461e7100.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/FolderEditorPopup.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling FolderEditorPopup.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/PopupEditorComponent_7e06b15f.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/PopupEditorComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PopupEditorComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/CategoryPopupEditor_171254ea.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/CategoryPopupEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling CategoryPopupEditor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AppMenuPopupEditor_bec38694.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/AppMenuPopupEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AppMenuPopupEditor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigAppButton_74b82edd.o: ../../Source/AppMenu\ Page/AppMenuButton/ConfigAppButton.cpp

@@ -9,7 +9,7 @@
 #include <atomic>
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Configuration/Configurables/ConfigurableComponent.h"
-#include "Popup Editor Components/PopupEditorComponent.h"
+#include "Popup Editor Components/AppMenuPopupEditor.h"
 #include "AppMenuButton/AppMenuButton.h"
 #include "AppLauncher.h"
 #include "IconThread.h"
@@ -29,6 +29,20 @@ public:
      * Loads all app menu buttons
      */
     void loadButtons();
+    
+    /**
+     * Holding an unmoving pop-up window in a scrolling menu component is
+     * less than ideal, it's better if a parent component can deal with
+     * displaying any pop-up editor components.
+     * 
+     * If this function is called, when this component would create a pop-up
+     * editor component, instead of adding it to itself, it will pass the
+     * editor to this callback function.
+     * 
+     * @param callback should pass the editor component to another component
+     * that is prepared to handle it.
+     */
+    void setPopupCallback(std::function<void(AppMenuPopupEditor*)> callback);
 
 
     //################ AppMenuButton Management   #############################
@@ -50,7 +64,7 @@ public:
      * Returns a popup editor component for updating the selected button.
      * @return either an editor component, or nullptr if no button is selected.
      */
-    PopupEditorComponent* getEditorForSelected();
+    AppMenuPopupEditor* getEditorForSelected();
 
     //#################### Folder Management  ############################
     /**
@@ -90,6 +104,9 @@ protected:
 private:
     AppConfigFile& appConfig;
     AppLauncher appLauncher;
+    
+    std::function<void(AppMenuPopupEditor*)> showPopupCallback;
+    
     //handle all AppMenuButton clicks
     virtual void mouseDown(const MouseEvent &event) override;
     void resized() override;
@@ -110,7 +127,7 @@ private:
 
 
     ScopedPointer<OverlaySpinner> loadingSpinner;
-    ScopedPointer<PopupEditorComponent> buttonEditor;
+    ScopedPointer<AppMenuPopupEditor> buttonEditor;
     DesktopEntries desktopEntries;
     //True iff desktopEntries are loading in another thread.
     std::atomic<bool> loadingAsync;

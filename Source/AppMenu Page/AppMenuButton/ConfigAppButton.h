@@ -50,7 +50,7 @@ public:
      * Gets a PopupEditorComponent configured to edit this button
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
-    PopupEditorComponent* getEditor();
+    AppMenuPopupEditor* getEditor();
     
     /**
      * Edit this button's application in the settings

@@ -9,7 +9,6 @@
  */
 #include "../../Utils.h"
 #include "../../PocketHomeApplication.h"
-#include "../Popup Editor Components/FavoriteEditorPopup.h"
 #include "ConfigAppButton.h"
 
 ConfigAppButton::ConfigAppButton(AppConfigFile& config,
@@ -66,9 +65,25 @@ Array<String> ConfigAppButton::getCategories() const
 /**
  * Gets a PopupEditorComponent configured to edit this button
  */
-PopupEditorComponent* ConfigAppButton::getEditor()
+AppMenuPopupEditor* ConfigAppButton::getEditor()
 {
-    return new FavoriteEditorPopup(this, config, appItem, iconThread);
+    AppMenuPopupEditor* editor = new AppMenuPopupEditor("Edit Folder",
+            iconThread,
+            false, true,
+            [this](AppMenuPopupEditor * editor)
+            {
+                editApp(editor->getNameField(), editor->getIconField(),
+                        editor->getCommandField(), editor->launchInTerm());
+            },
+    [this]()
+    {
+        deleteApp();
+    });
+    editor->setNameField(appItem.name);
+    editor->setIconField(appItem.icon);
+    editor->setCommandField(appItem.shell);
+    editor->setTerminalCheckbox(appItem.launchInTerminal);
+    return editor;
 }
 
 /**
@@ -109,9 +124,5 @@ void ConfigAppButton::deleteApp()
     {
         config.removeFavoriteApp(appItem.index);
     }
-    AppMenuComponent* appMenu = 
-            dynamic_cast<AppMenuComponent*>(getParentComponent());
-    if(appMenu != nullptr){
-        appMenu->loadButtons();
-    }
+    reloadAllButtons();
 }

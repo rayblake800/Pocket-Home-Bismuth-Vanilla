@@ -47,7 +47,7 @@ public:
      * Gets a PopupEditorComponent configured to edit this button
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
-    PopupEditorComponent* getEditor();
+    AppMenuPopupEditor* getEditor();
     
     /**
      * Update this button's desktopEntry. This writes to 

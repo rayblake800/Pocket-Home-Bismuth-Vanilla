@@ -95,7 +95,7 @@ void GridLayoutManager::layoutComponents(Rectangle<int> bounds, int xPadding,
     int yStart = bounds.getY() + yPadding;
 
     int yPos = yStart;
-    DBG(String(rows.size()) + String(":") + String(vertWeightSum));
+    //DBG(String(rows.size()) + String(":") + String(vertWeightSum));
     for (int rowInd = 0; rowInd < rows.size(); rowInd++)
     {
         Row row = rows[rowInd];

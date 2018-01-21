@@ -16,11 +16,15 @@ listItems(initialList),
 listContainer("ListEditor", nullptr),
 addItemBtn("+")
 {
+    //default colors:
+    setColours(Colours::white,Colours::white,Colours::aqua,::Colours::black);
+    
     addAndMakeVisible(listContainer);
     addAndMakeVisible(newItemField);
     addAndMakeVisible(addItemBtn);
 
     listContainer.setModel(this);
+    listContainer.setOutlineThickness(1);
     listContainer.addMouseListener(this, true);
 
     addItemBtn.addListener(this);
@@ -31,6 +35,8 @@ addItemBtn("+")
     layoutManager.addComponent(&listContainer, 0, 1);
     layoutManager.addComponent(&newItemField, 1, 4);
     layoutManager.addComponent(&addItemBtn, 1, 1);
+    
+    
 }
 
 ListEditor::~ListEditor()
@@ -56,7 +62,6 @@ void ListEditor::setColours(Colour backgroundColour, Colour listItemColour,
     addItemBtn.setColour(TextButton::textColourOnId, textColour);
     listContainer.setColour(ListBox::backgroundColourId, bgColour);
     listContainer.setColour(ListBox::outlineColourId, selectedItemColour);
-    listContainer.setOutlineThickness(1);
 
     ScrollBar* scrollbar = listContainer.getVerticalScrollBar();
     scrollbar->setColour(ScrollBar::trackColourId, selectedItemColour);
@@ -114,7 +119,10 @@ void ListEditor::ListItemComponent::setButtonComponentID(String id)
 
 void ListEditor::ListItemComponent::setButtonColour(Colour colour)
 {
-    delBtn.replaceColour(Colours::black, colour);
+    if(delBtn.replaceColour(Colours::black, colour))
+    {
+        delBtn.repaint();
+    }
 }
 
 void ListEditor::ListItemComponent::resized()

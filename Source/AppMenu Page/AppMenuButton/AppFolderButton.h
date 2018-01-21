@@ -52,7 +52,7 @@ public:
      * Gets a PopupEditorComponent configured to edit this button
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
-    PopupEditorComponent* getEditor();
+    AppMenuPopupEditor* getEditor();
     
     /**
  * Assign new properties to this folder button, changing configuration files

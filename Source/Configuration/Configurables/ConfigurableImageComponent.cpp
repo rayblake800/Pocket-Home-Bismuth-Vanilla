@@ -58,11 +58,7 @@ void ConfigurableImageComponent::applyConfigAssets(Array<String> assetNames,
 
     for (int i = 0; i < colours.size() && i < defaultColours.size(); i++)
     {
-        DBG(String("Replace ")+defaultColours[i].toDisplayString(true)
-                +String(" with ")+String(colours[i].toDisplayString(true)));
-        if(!replaceColour(defaultColours[i], colours[i])){
-            DBG("replacement failed!");
-        }
+       replaceColour(defaultColours[i], colours[i]);
     }
     applyConfigBounds();
 

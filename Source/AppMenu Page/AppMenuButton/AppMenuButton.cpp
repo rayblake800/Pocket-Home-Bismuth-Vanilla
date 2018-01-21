@@ -13,6 +13,10 @@
 #include "../../PocketHomeApplication.h"
 #include "AppMenuButton.h"
 
+std::function<void()> AppMenuButton::reloadAllButtons = []()
+{
+};
+
 AppMenuButton::AppMenuButton
 (String name, int index, int column, IconThread& iconThread)
 : Button(name),
@@ -66,6 +70,15 @@ Rectangle<int> AppMenuButton::getButtonSize()
     return buttonConf.getBounds().withPosition(0, 0);
 }
 
+/**
+ * Sets a callback to run when button data changes and should be
+ * reloaded.
+ */
+void AppMenuButton::setReloadButtonsCallback(std::function<void() > reload)
+{
+    reloadAllButtons = reload;
+}
+
 void AppMenuButton::paintButton
 (Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
@@ -98,7 +111,7 @@ void AppMenuButton::resized()
     //It looks messy if all the fonts are different sizes, so using a default
     //String for size calculations is preferable even if really long names can 
     //get clipped.
-    titleFont = fontResizedToFit(titleFont, "DefaultAppNameString",
+    titleFont = fontResizedToFit(titleFont, "DefaultAppNameStr",
             textBox.toNearestInt());
 }
 

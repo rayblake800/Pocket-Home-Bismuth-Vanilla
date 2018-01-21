@@ -25,8 +25,11 @@ powerButton(ComponentConfigFile::powerButtonKey),
 settingsButton(ComponentConfigFile::settingsButtonKey),
 appMenu(appConfig)
 {
+    appMenu.setPopupCallback([this](AppMenuPopupEditor* newEditor){
+        showPopupEditor(newEditor);
+    });
     setWantsKeyboardFocus(true);
-    setExplicitFocusOrder(1);
+    //setExplicitFocusOrder(2);
 
     addAndMakeVisible(appMenu);
     addAndMakeVisible(frame);
@@ -58,7 +61,7 @@ AppMenuPage::~AppMenuPage()
 /**
  * Add a popup editor window to the page.
  */
-void AppMenuPage::showPopupEditor(PopupEditorComponent* editor)
+void AppMenuPage::showPopupEditor(AppMenuPopupEditor* editor)
 {
     popupEditor = editor;
     if (popupEditor != nullptr)
@@ -135,7 +138,7 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
     if (Desktop::getInstance().getAnimator().isAnimating(&appMenu)
             || appMenu.isLoading())
     {
-        return false;
+        return true;
     }
     int keyCode = key.getKeyCode();
     if (keyCode == KeyPress::tabKey)
@@ -168,7 +171,7 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
         showPopupEditor(appMenu.getEditorForSelected());
         return true;
     }
-    return false;
+    return true;
 }
 
 void AppMenuPage::visibilityChanged()

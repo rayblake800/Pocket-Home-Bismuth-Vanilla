@@ -18,10 +18,10 @@ loginPage([this] ()
     setWantsKeyboardFocus(false);
 
     //Function to execute when the login button is pressed on login page
-//    loginPage = new LoginPage([this] ()
-//    {
-//        loggedIn();
-//    });
+    //    loginPage = new LoginPage([this] ()
+    //    {
+    //        loggedIn();
+    //    });
     //appMenuPage=new AppMenuPage();
     //pageStack = new PageStackComponent();
 
@@ -34,7 +34,13 @@ loginPage([this] ()
         addAndMakeVisible(pageStack);
     }
     pageStack.pushPage(&appMenuPage, PageStackComponent::kTransitionNone);
+#if JUCE_DEBUG
     setSize(480, 272);
+#else
+    Rectangle<int> screenSize =
+            Desktop::getInstance().getDisplays().getMainDisplay().userArea;
+    setSize(screenSize.getWidth(),screenSize.getHeight());
+#endif
     repaint();
 }
 
@@ -62,7 +68,7 @@ void MainContentComponent::resized()
 {
     auto bounds = getLocalBounds();
     pageStack.setBounds(bounds);
-        loginPage.setBounds(bounds);
+    loginPage.setBounds(bounds);
 }
 
 void MainContentComponent::handleMainWindowInactive()

@@ -13,7 +13,7 @@
 #include "../Settings/SettingsPageComponent.h"
 #include "../Configuration/AppConfigFile.h"
 #include "../Configuration/Configurables/ConfigurableImageButton.h"
-#include "Popup Editor Components/PopupEditorComponent.h"
+#include "Popup Editor Components/AppMenuPopupEditor.h"
 #include "Info Components/ClockMonitor.h"
 #include "Info Components/BatteryIcon.h"
 #include "Info Components/WifiIcon.h"
@@ -32,7 +32,7 @@ public:
      * @param editor will be added, made visible, and positioned/scaled as
      * needed.
      */
-    void showPopupEditor(PopupEditorComponent* editor);
+    void showPopupEditor(AppMenuPopupEditor* editor);
 
 protected:
     /**
@@ -77,7 +77,7 @@ private:
     ScopedPointer<Image> bgImage;
     ConfigurableImageComponent frame;
     
-    ScopedPointer<PopupEditorComponent> popupEditor;
+    ScopedPointer<AppMenuPopupEditor> popupEditor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuPage);
 };

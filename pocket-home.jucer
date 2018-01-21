@@ -128,22 +128,18 @@
         <FILE id="zJPlv7" name="AppLauncher.cpp" compile="1" resource="0" file="Source/AppMenu Page/AppLauncher.cpp"/>
         <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppMenu Page/AppLauncher.h"/>
         <GROUP id="{33D902E9-E269-A70A-90A9-B34BDE5E4635}" name="PopupEditorComponent">
-          <FILE id="JJXpyY" name="DesktopEntryEditorPopup.cpp" compile="1" resource="0"
-                file="Source/AppMenu Page/Popup Editor Components/DesktopEntryEditorPopup.cpp"/>
-          <FILE id="N32fvn" name="DesktopEntryEditorPopup.h" compile="0" resource="0"
-                file="Source/AppMenu Page/Popup Editor Components/DesktopEntryEditorPopup.h"/>
-          <FILE id="rQiMOn" name="FavoriteEditorPopup.cpp" compile="1" resource="0"
-                file="Source/AppMenu Page/Popup Editor Components/FavoriteEditorPopup.cpp"/>
-          <FILE id="ZxQJ8F" name="FavoriteEditorPopup.h" compile="0" resource="0"
-                file="Source/AppMenu Page/Popup Editor Components/FavoriteEditorPopup.h"/>
-          <FILE id="W6FvZ4" name="FolderEditorPopup.cpp" compile="1" resource="0"
-                file="Source/AppMenu Page/Popup Editor Components/FolderEditorPopup.cpp"/>
-          <FILE id="x6HbTa" name="FolderEditorPopup.h" compile="0" resource="0"
-                file="Source/AppMenu Page/Popup Editor Components/FolderEditorPopup.h"/>
-          <FILE id="uKPVyL" name="PopupEditorComponent.cpp" compile="1" resource="0"
+          <FILE id="JajILW" name="PopupEditorComponent.cpp" compile="1" resource="0"
                 file="Source/AppMenu Page/Popup Editor Components/PopupEditorComponent.cpp"/>
-          <FILE id="JY94pZ" name="PopupEditorComponent.h" compile="0" resource="0"
+          <FILE id="PieSFW" name="PopupEditorComponent.h" compile="0" resource="0"
                 file="Source/AppMenu Page/Popup Editor Components/PopupEditorComponent.h"/>
+          <FILE id="fVMrlC" name="CategoryPopupEditor.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/CategoryPopupEditor.cpp"/>
+          <FILE id="y8b34O" name="CategoryPopupEditor.h" compile="0" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/CategoryPopupEditor.h"/>
+          <FILE id="uKPVyL" name="AppMenuPopupEditor.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/AppMenuPopupEditor.cpp"/>
+          <FILE id="JY94pZ" name="AppMenuPopupEditor.h" compile="0" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/AppMenuPopupEditor.h"/>
         </GROUP>
         <GROUP id="{14A7C029-841F-00F9-4B37-871CD7FA6F85}" name="AppMenuButton">
           <FILE id="fvzvAY" name="ConfigAppButton.cpp" compile="1" resource="0"

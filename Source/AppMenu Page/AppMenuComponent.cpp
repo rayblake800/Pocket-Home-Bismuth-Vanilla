@@ -16,9 +16,18 @@
 AppMenuComponent::AppMenuComponent(AppConfigFile& appConfig) :
 ConfigurableComponent(ComponentConfigFile::appMenuKey),
 loadingAsync(false),
-appConfig(appConfig)
-
+appConfig(appConfig),
+showPopupCallback([this](AppMenuPopupEditor* newEditor)
 {
+
+    buttonEditor = newEditor;
+    addAndMakeVisible(newEditor);
+})
+{
+    AppMenuButton::setReloadButtonsCallback([this]()
+    {
+        loadButtons();
+    });
     applyConfigBounds();
     x_origin = getBounds().getX();
     y_origin = getBounds().getY();
@@ -33,6 +42,12 @@ AppMenuComponent::~AppMenuComponent()
 {
     stopWaitingForLoading();
     while (!buttonColumns.empty())closeFolder();
+}
+
+void AppMenuComponent::setPopupCallback
+(std::function<void(AppMenuPopupEditor*) > callback)
+{
+    showPopupCallback = callback;
 }
 
 /**
@@ -204,14 +219,9 @@ void AppMenuComponent::mouseDown(const MouseEvent &event)
     }
 
     if (selected[activeColumn()] == appClicked
-            && event.mods.isPopupMenu())
+            && (event.mods.isPopupMenu() || event.mods.isRightButtonDown()))
     {
-        AppMenuPage * appPage = dynamic_cast<AppMenuPage*>
-                (getParentComponent());
-        if (appPage != nullptr)
-        {
-            appPage->showPopupEditor(getEditorForSelected());
-        }
+        showPopupCallback(getEditorForSelected());
     } else
     {
         onButtonClick(appClicked);
@@ -348,7 +358,7 @@ void AppMenuComponent::clickSelected()
 /**
  * Returns a popup editor component for updating the selected button.
  */
-PopupEditorComponent* AppMenuComponent::getEditorForSelected()
+AppMenuPopupEditor* AppMenuComponent::getEditorForSelected()
 {
     if (selected[activeColumn()] != nullptr && !isLoading())
     {
