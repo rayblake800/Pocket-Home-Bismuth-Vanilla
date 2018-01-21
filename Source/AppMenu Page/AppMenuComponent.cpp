@@ -447,6 +447,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton* button)
             openFolder(button->getCategories());
         } else
         {
+			showLoadingSpinner();
             appLauncher.startOrFocusApp(button->getAppName(),
                     button->getCommand());
         }
