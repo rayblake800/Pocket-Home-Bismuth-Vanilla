@@ -128,6 +128,14 @@
         <FILE id="zJPlv7" name="AppLauncher.cpp" compile="1" resource="0" file="Source/AppMenu Page/AppLauncher.cpp"/>
         <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppMenu Page/AppLauncher.h"/>
         <GROUP id="{33D902E9-E269-A70A-90A9-B34BDE5E4635}" name="PopupEditorComponent">
+          <FILE id="z7Dxt8" name="NewDesktopAppEditor.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/NewDesktopAppEditor.cpp"/>
+          <FILE id="u89zv6" name="NewDesktopAppEditor.h" compile="0" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/NewDesktopAppEditor.h"/>
+          <FILE id="N0cdoz" name="NewConfigAppEditor.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/NewConfigAppEditor.cpp"/>
+          <FILE id="L9Vs3E" name="NewConfigAppEditor.h" compile="0" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/NewConfigAppEditor.h"/>
           <FILE id="JajILW" name="PopupEditorComponent.cpp" compile="1" resource="0"
                 file="Source/AppMenu Page/Popup Editor Components/PopupEditorComponent.cpp"/>
           <FILE id="PieSFW" name="PopupEditorComponent.h" compile="0" resource="0"

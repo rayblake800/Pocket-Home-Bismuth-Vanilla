@@ -10,12 +10,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/PopupEditorComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuPage.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/ListEditor.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/PopupEditorComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/ListEditor.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuButton/AppFolderButton.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuButton/ConfigAppButton.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuComponent.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Configuration/AppConfigFile.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/AppMenuPopupEditor.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Configuration/AppConfigFile.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/AppMenuPopupEditor.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuButton/DesktopEntryButton.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/DesktopEntry.cpp</file>
         </group>
     </open-files>
 </project-private>

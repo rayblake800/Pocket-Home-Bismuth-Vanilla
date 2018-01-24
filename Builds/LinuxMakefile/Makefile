@@ -98,6 +98,8 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o \
   $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o \
   $(JUCE_OBJDIR)/AppLauncher_5194dc6a.o \
+  $(JUCE_OBJDIR)/NewDesktopAppEditor_5896ac01.o \
+  $(JUCE_OBJDIR)/NewConfigAppEditor_92dffb27.o \
   $(JUCE_OBJDIR)/PopupEditorComponent_7e06b15f.o \
   $(JUCE_OBJDIR)/CategoryPopupEditor_171254ea.o \
   $(JUCE_OBJDIR)/AppMenuPopupEditor_bec38694.o \
@@ -305,6 +307,16 @@ $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o: ../../Source/Configuration/P
 $(JUCE_OBJDIR)/AppLauncher_5194dc6a.o: ../../Source/AppMenu\ Page/AppLauncher.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppLauncher.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NewDesktopAppEditor_5896ac01.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/NewDesktopAppEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NewDesktopAppEditor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NewConfigAppEditor_92dffb27.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/NewConfigAppEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NewConfigAppEditor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PopupEditorComponent_7e06b15f.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/PopupEditorComponent.cpp
