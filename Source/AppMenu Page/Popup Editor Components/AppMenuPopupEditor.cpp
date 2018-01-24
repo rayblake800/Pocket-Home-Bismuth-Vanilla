@@ -13,9 +13,9 @@
 
 AppMenuPopupEditor::AppMenuPopupEditor
 (String title, IconThread& iconThread,
-        bool showCategoryList, bool showCommandField,
         std::function<void(AppMenuPopupEditor*) > onConfirm,
-        std::function<void() > onDelete) :
+        std::function<void() > onDelete,
+        bool showCategoryList, bool showCommandField, bool showDeleteButton) :
 PopupEditorComponent(title, [this, onConfirm](PopupEditorComponent* thisPopup)
 {
 
@@ -104,12 +104,14 @@ deleteButton("Delete")
         layoutManager.addComponent(&categoryEditButton, currentRow, 4, this);
         layoutManager.addComponent(nullptr, currentRow, 1, this);
     }
-
-    addRow(1);
-    layoutManager.addComponent(nullptr, currentRow, 1, this);
-    layoutManager.addComponent(&deleteButton, currentRow, 4, this);
-    layoutManager.addComponent(nullptr, currentRow, 1, this);
-
+    //delete button
+    if (showDeleteButton)
+    {
+        addRow(1);
+        layoutManager.addComponent(nullptr, currentRow, 1, this);
+        layoutManager.addComponent(&deleteButton, currentRow, 4, this);
+        layoutManager.addComponent(nullptr, currentRow, 1, this);
+    }
     //confirm/cancel buttons
     addRow(1);
     layoutManager.addComponent(&cancelButton, currentRow, 1, this);

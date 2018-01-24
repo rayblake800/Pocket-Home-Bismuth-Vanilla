@@ -69,7 +69,6 @@ AppMenuPopupEditor* ConfigAppButton::getEditor()
 {
     AppMenuPopupEditor* editor = new AppMenuPopupEditor("Edit Folder",
             iconThread,
-            false, true,
             [this](AppMenuPopupEditor * editor)
             {
                 editApp(editor->getNameField(), editor->getIconField(),
@@ -78,7 +77,7 @@ AppMenuPopupEditor* ConfigAppButton::getEditor()
     [this]()
     {
         deleteApp();
-    });
+    },false);
     editor->setNameField(appItem.name);
     editor->setIconField(appItem.icon);
     editor->setCommandField(appItem.shell);

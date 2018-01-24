@@ -7,6 +7,8 @@
 
 #include <set>
 #include "../PocketHomeApplication.h"
+#include "Popup Editor Components/NewConfigAppEditor.h"
+#include "Popup Editor Components/NewDesktopAppEditor.h"
 #include "AppMenuButton/DesktopEntryButton.h"
 #include "AppMenuButton/ConfigAppButton.h"
 #include "AppMenuButton/AppFolderButton.h"
@@ -219,9 +221,48 @@ void AppMenuComponent::mouseDown(const MouseEvent &event)
     }
 
     if (selected[activeColumn()] == appClicked
-            && (event.mods.isPopupMenu() || event.mods.isRightButtonDown()))
+            && (event.mods.isPopupMenu() || event.mods.isCtrlDown()))
     {
-        showPopupCallback(getEditorForSelected());
+        PopupMenu appMenu;
+        appMenu.addItem(1, "Edit");
+        if (appClicked->isFolder())
+        {
+            appMenu.addItem(2, "Add pinned application");
+            appMenu.addItem(3, "Add desktop application");
+        }
+        const int selection = appMenu.show();
+        std::function<void()> confirmNew = [this]()
+        {
+            loadButtons();
+        };
+        
+        if (selection == 1)
+        {
+            showPopupCallback(getEditorForSelected());
+        }
+        if (selection == 2)
+        {
+            int folderIndex = -1;
+            Array<AppConfigFile::AppFolder> folders = appConfig.getFolders();
+            for (const AppConfigFile::AppFolder& folder : folders)
+            {
+                if (folder.name == appClicked->getAppName())
+                {
+                    folderIndex = folder.index;
+                    break;
+                }
+            }
+            
+            showPopupCallback(new NewConfigAppEditor(appConfig, iconThread,
+                    confirmNew, folderIndex));
+        }
+        if (selection == 3)
+        {
+            AppMenuPopupEditor* newAppEditor=new NewDesktopAppEditor
+                    (iconThread,confirmNew);
+            newAppEditor->setCategories(appClicked->getCategories());
+            showPopupCallback(newAppEditor);
+        }
     } else
     {
         onButtonClick(appClicked);
@@ -447,7 +488,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton* button)
             openFolder(button->getCategories());
         } else
         {
-			showLoadingSpinner();
+            showLoadingSpinner();
             appLauncher.startOrFocusApp(button->getAppName(),
                     button->getCommand());
         }

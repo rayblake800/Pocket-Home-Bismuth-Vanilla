@@ -23,20 +23,22 @@ public:
     /**
      * @param title is printed at the top of the pop-up editor window
      * @param iconThread is used for loading preview icons
-     * @param showCategoryList sets if the editor will contain button that
-     * shows the category list.
-     * @param showCommandField sets if the editor will contain a terminal
-     * command field and an "open in terminal" check box.
      * @param onConfirm is the callback function to run when the confirm button
      * is pressed.
      * @param onDelete is the callback function to run when the delete button 
      * is pressed.
+     * @param showCategoryList sets if the editor will contain button that
+     * shows the category list.
+     * @param showCommandField sets if the editor will contain a terminal
+     * command field and an "open in terminal" check box.
+     * @param showDeleteButton sets if the editor will contain a delete button.
      */
     AppMenuPopupEditor(String title, IconThread& iconThread,
-            bool showCategoryList,
-            bool showCommandField,
             std::function<void(AppMenuPopupEditor*) > onConfirm,
-            std::function<void() > onDelete);
+            std::function<void() > onDelete,
+            bool showCategoryList = true,
+            bool showCommandField = true,
+            bool showDeleteButton = true);
 
     virtual ~AppMenuPopupEditor();
 

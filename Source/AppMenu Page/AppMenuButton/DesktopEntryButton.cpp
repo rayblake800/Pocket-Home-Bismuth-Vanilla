@@ -68,7 +68,6 @@ AppMenuPopupEditor* DesktopEntryButton::getEditor()
 {
     AppMenuPopupEditor* editor = new AppMenuPopupEditor("Edit Application",
             iconThread,
-            true, true,
             [this](AppMenuPopupEditor * editor)
             {
                 editEntry(editor->getNameField(), editor->getIconField(), 

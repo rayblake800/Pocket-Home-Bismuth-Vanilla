@@ -50,6 +50,31 @@ DesktopEntry::~DesktopEntry()
 }
 
 /**
+ * Creates a new desktop entry from parameter data.
+ */
+DesktopEntry::DesktopEntry(String title, String icon, String command,
+        Array<String> categories, bool launchInTerminal)
+{
+    dataStrings[typeKey]="Application";
+    setValue(StringValue::name,title);
+    setValue(StringValue::icon,icon);
+    setValue(StringValue::exec,command);
+    setValue(ListValue::categories,categories);
+    setValue(BoolValue::terminal,launchInTerminal);
+    int filesFound=0;
+    File newFile(localEntryPath+title+String(".desktop"));
+    while(newFile.exists()){
+        filesFound++;
+        newFile=File(localEntryPath+title
+                +String(filesFound)+String(".desktop"));
+    }
+    newFile.create();
+    newFile.appendText("[Desktop Entry]");
+    entrypath=newFile.getFullPathName();
+    writeFile();
+}
+
+/**
  * get the file type for this entry
  */
 DesktopEntry::Type DesktopEntry::getType() const
@@ -207,7 +232,7 @@ void DesktopEntry::writeFile()
         String value = it->second;
         if (value.isNotEmpty() && !foundKeys.contains(value))
         {
-            outFileText += String("\n")+key+String("=")+value;
+            outFileText += String("\n") + key + String("=") + value;
         }
 
     }

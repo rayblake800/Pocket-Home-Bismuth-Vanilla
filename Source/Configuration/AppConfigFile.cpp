@@ -220,12 +220,17 @@ void AppConfigFile::removeAppFolder(int index)
 void AppConfigFile::addPinnedApp
 (AppItem newApp, int folderIndex, int appIndex)
 {
+    DBG(String("Adding ")+newApp.name+String( "to folder ")
+            +String(folderIndex)+String(" index ")+String(appIndex));
     const ScopedLock changeLock(lock);
-    if (folderIndex >= 0 && folderIndex < categoryFolders.size())
+    if (folderIndex >= 0 && folderIndex <= categoryFolders.size())
     {
-        categoryFolders[folderIndex].pinnedApps.insert(appIndex, newApp);
-        changesPending = true;
-        writeChanges();
+        DBG("index was valid");
+        AppFolder updateFolder=categoryFolders[folderIndex];
+        updateFolder.pinnedApps.insert(appIndex, newApp);
+        const ScopedUnlock writeUnlock(lock);
+        removeAppFolder(folderIndex);
+        addAppFolder(updateFolder,folderIndex);
     }
 }
 

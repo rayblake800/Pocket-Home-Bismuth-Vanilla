@@ -24,6 +24,23 @@ public:
 
     //Copy constructor
     DesktopEntry(const DesktopEntry& orig);
+    
+    /**
+     * Creates a new desktop entry from parameter data.
+     * @param title is the application display title, which will also be
+     *  used to create the filename.
+     * @param icon is the full path of an icon file, or the name of an icon
+     *  file in one of the standard icon directories.
+     * @param command is the launch command for the desktop application.
+     * @param categories is the list of categories that describe the 
+     *  application.
+     * @param launchInTerminal marks if the application should run in a
+     *  terminal window.
+     */
+    DesktopEntry(String title,String icon,String command,
+    Array<String> categories,
+    bool launchInTerminal);
+    
     virtual ~DesktopEntry();
 
     /**
