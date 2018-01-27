@@ -3,7 +3,11 @@
  * @author Anthony Brown
  * 
  * ConfigAppButton is an AppMenuButton that gets its data from a 
- * AppConfigFile::AppItem struct.
+ * AppConfigFile::AppItem structure. It represents an application link
+ * created from a configuration file.  The object creating/managing this 
+ * button is expected to launch that application using the stored command
+ * value when this button is selected and clicked.
+ * @see AppMenuButton, AppMenuComponent, AppConfigFile
  */
 #pragma once
 #include "../../Configuration/AppConfigFile.h"
@@ -22,7 +26,7 @@ public:
      * @param column button's column in the AppMenu
      * @param a reference to the thread that loads button icons
      */
-    ConfigAppButton(AppConfigFile& config,AppConfigFile::AppItem appItem,
+    ConfigAppButton(AppConfigFile& config, AppConfigFile::AppItem appItem,
             int index, int column, IconThread& iconThread);
 
     /**
@@ -43,30 +47,53 @@ public:
 
     /**
      * @return all application categories linked to this button.
+     * This will be an empty list, as ConfigAppButtons are not associated with
+     * application categories.
      */
     Array<String> getCategories() const;
+
+    /**
+     * @return the name or path used to load the icon file. 
+     */
+    String getIconName() const;
 
     /**
      * Gets a PopupEditorComponent configured to edit this button
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
     AppMenuPopupEditor* getEditor();
-    
+
     /**
-     * Edit this button's application in the settings
+     * Edit this button's data source in the config file.
      * @param name application display name
      * @param icon application icon
      * @param command application launch command
      * @param terminal sets whether this application launches in the terminal
      */
-    void editApp(String name,String icon,String command,bool terminal);
-    
+    void editApp(String name, String icon, String command, bool terminal);
+
     /**
      * Remove this button's application from config, and remove the button
      * from its parent component.
      */
-    void deleteApp();
-    
+    void removeButtonSource();
+
+    /**
+     * Return true if this button's data source has an index that can be
+     * moved by a given amount.
+     * @param offset some value to add to the button index
+     * @return true if this button's data source has an index value i that can
+     * be changed to i+offset 
+     */
+    bool canChangeIndex(int offset);
+
+    /**
+     * If possible, change the index of this button's data source by some
+     * offset amount.
+     * @param offset will be added to the button's current index, if possible.
+     */
+    void moveDataIndex(int offset);
+
 private:
     AppConfigFile& config;
     AppConfigFile::AppItem appItem;

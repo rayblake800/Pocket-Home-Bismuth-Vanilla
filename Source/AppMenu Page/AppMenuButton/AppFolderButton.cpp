@@ -3,7 +3,7 @@
 
     AppFolderButton.cpp
     Created: 11 Jan 2018 6:58:52pm
-    Author:  anthony
+    Author:  Anthony Brown
 
   ==============================================================================
  */
@@ -18,6 +18,10 @@ AppMenuButton(appFolder.name, index, column, iconThread),
 config(config),
 appFolder(appFolder)
 {
+    confirmDeleteTitle = String("Delete \"") + appFolder.name
+            + String("\" folder?");
+    confirmDeleteMessage = 
+            "This will permanently remove this folder from the menu.";
     loadIcon(appFolder.icon);
 }
 
@@ -56,12 +60,20 @@ Array<String> AppFolderButton::getCategories() const
 }
 
 /**
+ * @return the name or path used to load the icon file. 
+ */
+String AppFolderButton::getIconName() const
+{
+    return appFolder.icon;
+}
+
+/**
  * Gets a PopupEditorComponent configured to edit this button
  * @return a new PopupEditorComponent, ready to be added to the screen.
  */
 AppMenuPopupEditor* AppFolderButton::getEditor()
 {
-    AppMenuPopupEditor* editor = new AppMenuPopupEditor("Edit Application", 
+    AppMenuPopupEditor* editor = new AppMenuPopupEditor("Edit Application",
             iconThread,
             [this](AppMenuPopupEditor * editor)
             {
@@ -70,8 +82,8 @@ AppMenuPopupEditor* AppFolderButton::getEditor()
             },
     [this]()
     {
-        deleteFolder();
-    },true,false);
+        removeButtonSource();
+    }, true, false);
     editor->setNameField(appFolder.name);
     editor->setIconField(appFolder.icon);
     editor->setCategories(appFolder.categories);
@@ -95,15 +107,42 @@ void AppFolderButton::editFolder
     appFolder.icon = icon;
     appFolder.categories = categories;
     loadIcon(icon);
-    config.addAppFolder(appFolder, appFolder.index);
-    config.removeAppFolder(appFolder.index + 1);
+    int index = config.getFolderIndex(appFolder);
+    config.removeAppFolder(index,false);
+    config.addAppFolder(appFolder,index);
 }
 
 /**
  * Remove this folder from config, and reload buttons.
  */
-void AppFolderButton::deleteFolder()
+void AppFolderButton::removeButtonSource()
 {
-    config.removeAppFolder(appFolder.index);
+    config.removeAppFolder(config.getFolderIndex(appFolder));
     reloadAllButtons();
+}
+
+/**
+ * Return true if this button's data source has an index that can be
+ * moved by a given amount.
+ */
+bool AppFolderButton::canChangeIndex(int offset)
+{
+    int newIndex = config.getFolderIndex(appFolder) + offset;
+    return newIndex >= 0 && newIndex < config.getFolders().size();
+}
+
+/**
+ * If possible, change the index of this button's data source by some
+ * offset amount.
+ */
+void AppFolderButton::moveDataIndex(int offset)
+{
+    if (canChangeIndex(offset))
+    {
+        int index = config.getFolderIndex(appFolder);
+        config.removeAppFolder(index,false);
+        config.addAppFolder(appFolder,index+offset);
+        DBG(String("Moved ")+appFolder.name+String(" from ")+String(index)+
+                String(" to ")+String(config.getFolderIndex(appFolder)));
+    }
 }

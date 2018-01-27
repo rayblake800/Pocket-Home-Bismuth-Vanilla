@@ -3,7 +3,7 @@
 
     BatteryIcon.cpp
     Created: 29 Dec 2017 12:02:24pm
-    Author:  anthony
+    Author:  Anthony Brown
 
   ==============================================================================
  */
@@ -13,7 +13,8 @@
 
 BatteryIcon::BatteryIcon() :
 batteryImage(ComponentConfigFile::batteryIconKey),
-batteryPercent(ComponentConfigFile::batteryPercentKey)
+batteryPercent(ComponentConfigFile::batteryPercentKey),
+batteryTimer(new BatteryTimer(this))
 {
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
@@ -32,6 +33,20 @@ BatteryIcon::~BatteryIcon()
     if (batteryMonitor.isThreadRunning())
     {
         batteryMonitor.stopThread(1000);
+    }
+}
+
+void BatteryIcon::applyConfigBounds()
+{
+    batteryImage.applyConfigBounds();
+    batteryPercent.applyConfigBounds();
+    Rectangle<int> childBounds = batteryImage.getBounds()
+            .getUnion(batteryPercent.getBounds());
+    childBounds.setLeft(0);
+    childBounds.setTop(0);
+    if (childBounds != getBounds())
+    {
+        setBounds(childBounds);
     }
 }
 
@@ -67,24 +82,10 @@ void BatteryIcon::setStatus(BatteryIconImage imageSelection, String percent)
     batteryPercent.setText(percent, dontSendNotification);
 }
 
-void BatteryIcon::applyConfigBounds(){
-    batteryImage.applyConfigBounds();
-    batteryPercent.applyConfigBounds();
-    Rectangle<int> childBounds=batteryImage.getBounds()
-    .getUnion(batteryPercent.getBounds());
-    childBounds.setLeft(0);
-    childBounds.setTop(0);
-    if(childBounds != getBounds()){
-        setBounds(childBounds);
-    }
-}
-
 BatteryIcon::BatteryTimer::BatteryTimer(BatteryIcon * batteryIcon) :
 batteryIcon(batteryIcon)
 {
 }
-
-
 
 BatteryIcon::BatteryTimer::~BatteryTimer()
 {

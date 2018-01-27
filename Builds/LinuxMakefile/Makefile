@@ -82,7 +82,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/Grid_db974b8e.o \
   $(JUCE_OBJDIR)/IconSliderComponent_1c60ba5.o \
   $(JUCE_OBJDIR)/ListEditor_42725b33.o \
-  $(JUCE_OBJDIR)/MenuItem_282b5da.o \
   $(JUCE_OBJDIR)/OverlaySpinner_eb9f06b1.o \
   $(JUCE_OBJDIR)/ScalingLabel_5d9da175.o \
   $(JUCE_OBJDIR)/SwitchComponent_95f41beb.o \
@@ -98,6 +97,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o \
   $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o \
   $(JUCE_OBJDIR)/AppLauncher_5194dc6a.o \
+  $(JUCE_OBJDIR)/NewFolderEditor_a62e01ca.o \
   $(JUCE_OBJDIR)/NewDesktopAppEditor_5896ac01.o \
   $(JUCE_OBJDIR)/NewConfigAppEditor_92dffb27.o \
   $(JUCE_OBJDIR)/PopupEditorComponent_7e06b15f.o \
@@ -229,11 +229,6 @@ $(JUCE_OBJDIR)/ListEditor_42725b33.o: ../../Source/Basic\ Components/ListEditor.
 	@echo "Compiling ListEditor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/MenuItem_282b5da.o: ../../Source/Basic\ Components/MenuItem.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling MenuItem.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/OverlaySpinner_eb9f06b1.o: ../../Source/Basic\ Components/OverlaySpinner.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling OverlaySpinner.cpp"
@@ -307,6 +302,11 @@ $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o: ../../Source/Configuration/P
 $(JUCE_OBJDIR)/AppLauncher_5194dc6a.o: ../../Source/AppMenu\ Page/AppLauncher.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppLauncher.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NewFolderEditor_a62e01ca.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/NewFolderEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NewFolderEditor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/NewDesktopAppEditor_5896ac01.o: ../../Source/AppMenu\ Page/Popup\ Editor\ Components/NewDesktopAppEditor.cpp

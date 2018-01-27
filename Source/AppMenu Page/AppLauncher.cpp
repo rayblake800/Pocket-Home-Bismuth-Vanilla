@@ -28,7 +28,8 @@ AppLauncher::~AppLauncher()
 /**
  * Assigns a function to call if loading an application fails.
  */
-void AppLauncher::setLaunchFailureCallback(std::function<void() > failureCallback)
+void AppLauncher::setLaunchFailureCallback
+(std::function<void() > failureCallback)
 {
     launchFailureCallback = failureCallback;
 }
@@ -170,7 +171,7 @@ bool AppLauncher::ProcessInfo::operator==(const ProcessInfo& rhs) const
 
 bool AppLauncher::ProcessInfo::operator<(const ProcessInfo& rhs) const
 {
-    return title.compare(rhs.title)<0;
+    return title.compare(rhs.title) < 0;
 }
 
 AppLauncher::AppLaunchTimer::AppLaunchTimer(AppLauncher* launcher) :

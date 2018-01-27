@@ -43,6 +43,14 @@ protected:
      */
     void loadConfigProperties(ConfigFile * config, String key);
 private:    
+   
+    /**
+     * Forward all clicks (except button clicks) to the appMenu so that it can 
+     * potentially create a pop-up menu
+     * @param event
+     */
+    virtual void mouseDown(const MouseEvent &event) override;
+    
     /**
      * Set the page background as a solid color.
      * @param color a six-digit hex color string

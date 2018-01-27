@@ -67,8 +67,6 @@
               file="Source/Basic Components/IconSliderComponent.h"/>
         <FILE id="GfQ0Qz" name="ListEditor.cpp" compile="1" resource="0" file="Source/Basic Components/ListEditor.cpp"/>
         <FILE id="YGFPYR" name="ListEditor.h" compile="0" resource="0" file="Source/Basic Components/ListEditor.h"/>
-        <FILE id="YYkhJA" name="MenuItem.cpp" compile="1" resource="0" file="Source/Basic Components/MenuItem.cpp"/>
-        <FILE id="yBKys6" name="MenuItem.h" compile="0" resource="0" file="Source/Basic Components/MenuItem.h"/>
         <FILE id="O5mqRG" name="OverlaySpinner.cpp" compile="1" resource="0"
               file="Source/Basic Components/OverlaySpinner.cpp"/>
         <FILE id="MSrLBn" name="OverlaySpinner.h" compile="0" resource="0"
@@ -128,6 +126,10 @@
         <FILE id="zJPlv7" name="AppLauncher.cpp" compile="1" resource="0" file="Source/AppMenu Page/AppLauncher.cpp"/>
         <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppMenu Page/AppLauncher.h"/>
         <GROUP id="{33D902E9-E269-A70A-90A9-B34BDE5E4635}" name="PopupEditorComponent">
+          <FILE id="AimLwj" name="NewFolderEditor.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/NewFolderEditor.cpp"/>
+          <FILE id="EsBVn7" name="NewFolderEditor.h" compile="0" resource="0"
+                file="Source/AppMenu Page/Popup Editor Components/NewFolderEditor.h"/>
           <FILE id="z7Dxt8" name="NewDesktopAppEditor.cpp" compile="1" resource="0"
                 file="Source/AppMenu Page/Popup Editor Components/NewDesktopAppEditor.cpp"/>
           <FILE id="u89zv6" name="NewDesktopAppEditor.h" compile="0" resource="0"

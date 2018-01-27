@@ -3,7 +3,7 @@
 
     desktopEntryButton.cpp
     Created: 11 Jan 2018 6:57:42pm
-    Author:  anthony
+    Author:  Anthony Brown
 
   ==============================================================================
  */
@@ -17,6 +17,9 @@ DesktopEntryButton::DesktopEntryButton
 (desktopEntry.getValue(DesktopEntry::name), index, column, iconThread),
 desktopEntry(desktopEntry)
 {
+    confirmDeleteTitle = String("Remove link to ")+getAppName()+String("?");
+    confirmDeleteMessage =
+            "This application will be hidden from pocket-home.";
     loadIcon(desktopEntry.getValue(DesktopEntry::icon));
 }
 
@@ -61,6 +64,14 @@ Array<String> DesktopEntryButton::getCategories() const
 }
 
 /**
+ * @return the name or path used to load the icon file. 
+ */
+String DesktopEntryButton::getIconName() const
+{
+    return desktopEntry.getValue(DesktopEntry::icon);
+}
+
+/**
  * Gets a PopupEditorComponent configured to edit this button
  * @return a new PopupEditorComponent, ready to be added to the screen.
  */
@@ -70,13 +81,13 @@ AppMenuPopupEditor* DesktopEntryButton::getEditor()
             iconThread,
             [this](AppMenuPopupEditor * editor)
             {
-                editEntry(editor->getNameField(), editor->getIconField(), 
-                        editor->getCategories(),editor->getCommandField(), 
+                editEntry(editor->getNameField(), editor->getIconField(),
+                        editor->getCategories(), editor->getCommandField(),
                         editor->launchInTerm());
             },
     [this]()
     {
-        hideEntry();
+        removeButtonSource();
     });
     editor->setNameField(getAppName());
     editor->setIconField(desktopEntry.getValue(DesktopEntry::icon));
@@ -111,7 +122,7 @@ void DesktopEntryButton::editEntry(String name, String icon,
  * Sets this button's desktopEntry to not display in pocket-home for the
  * current user, and reload all AppMenuButtons.
  */
-void DesktopEntryButton::hideEntry()
+void DesktopEntryButton::removeButtonSource()
 {
     Array<String> notShowIn = desktopEntry.getValue(DesktopEntry::notShowIn);
     notShowIn.add("pocket-home");

@@ -183,12 +183,6 @@ Array<String> split(const String &orig, const String &delim)
     return elems;
 };
 
-bool fileExists(const String& path)
-{
-    struct stat buffer;
-    return (stat(path.toRawUTF8(), &buffer) == 0);
-}
-
 String getHomePath()
 {
     return String(std::getenv("HOME"));
@@ -315,4 +309,20 @@ Font fontResizedToFit(Font font, String text, Rectangle<int>container)
     //DBG(String("setting font height to ")+String(newHeight));
     font.setHeight(newHeight);
     return font;
+}
+
+/**
+ * Requests user confirmation before performing some action
+ */
+void confirmAction(String title, String message, std::function<void() > onConfirm)
+{
+    NativeMessageBox::showOkCancelBox(AlertWindow::QuestionIcon,
+            title, message, nullptr,
+            ModalCallbackFunction::create([onConfirm](int response)
+            {
+                if (response == 1)
+                {
+                    onConfirm();
+                }
+            }));
 }

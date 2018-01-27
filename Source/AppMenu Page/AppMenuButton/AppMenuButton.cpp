@@ -3,8 +3,8 @@
 
     AppMenuButton.cpp
     Created: 17 Dec 2017 3:57:53pm
-    Author:  anthony
-
+    Author:  Anthony Brown
+ * 
   ==============================================================================
  */
 
@@ -13,44 +13,33 @@
 #include "../../PocketHomeApplication.h"
 #include "AppMenuButton.h"
 
-std::function<void()> AppMenuButton::reloadAllButtons = []()
+std::function<void() > AppMenuButton::reloadAllButtons = []()
 {
 };
 
+/**
+ * Create a new AppMenuButton
+ */
 AppMenuButton::AppMenuButton
 (String name, int index, int column, IconThread& iconThread)
 : Button(name),
 ConfigurableComponent(ComponentConfigFile::appMenuButtonKey),
 index(index),
 column(column),
-iconThread(iconThread)
+iconThread(iconThread),
+confirmDeleteTitle("Delete this menu item?"),
+confirmDeleteMessage("Really delete this item from the menu? This cannot be undone.")
 {
+    setWantsKeyboardFocus(false);
     loadAllConfigProperties();
 }
 
+/**
+ * Set whether this button is currently selected.
+ */
 void AppMenuButton::setSelected(bool select)
 {
     selected = select;
-}
-
-int AppMenuButton::getIndex() const
-{
-    return index;
-}
-
-int AppMenuButton::getColumn() const
-{
-    return column;
-}
-
-void AppMenuButton::setIndex(int index)
-{
-    this->index = index;
-}
-
-void AppMenuButton::setColumn(int column)
-{
-    this->column = column;
 }
 
 /**
@@ -61,6 +50,57 @@ const Image& AppMenuButton::getIcon()
     return appIcon;
 }
 
+/**
+ * @return the button's position in its column
+ */
+int AppMenuButton::getIndex() const
+{
+    return index;
+}
+
+/**
+ * @return the button's column in the AppMenu
+ */
+int AppMenuButton::getColumn() const
+{
+    return column;
+}
+
+/**
+ * Updates the stored button index. 
+ */
+void AppMenuButton::setIndex(int index)
+{
+    this->index = index;
+}
+
+/**
+ * 
+ * Updates the stored button column.
+ */
+void AppMenuButton::setColumn(int column)
+{
+    this->column = column;
+}
+
+/**
+ * Calling this method will create a message box asking for user 
+ * confirmation that this button and its source should be removed.
+ * If the user clicks "OK", removeButtonSource is called.
+ */
+void AppMenuButton::confirmRemoveButtonSource()
+{
+    confirmAction(confirmDeleteTitle,confirmDeleteMessage,
+            [this]()
+            {
+                removeButtonSource();
+            });
+}
+
+/**
+ * @return the size of an AppMenuButton with the current window size
+ * and config file ratios.
+ */
 Rectangle<int> AppMenuButton::getButtonSize()
 {
     ComponentConfigFile& config = PocketHomeApplication::getInstance()
@@ -79,6 +119,9 @@ void AppMenuButton::setReloadButtonsCallback(std::function<void() > reload)
     reloadAllButtons = reload;
 }
 
+/**
+ * Custom button painting method.
+ */
 void AppMenuButton::paintButton
 (Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
@@ -100,6 +143,9 @@ void AppMenuButton::paintButton
     g.drawRect(border, 2);
 }
 
+/**
+ * Re-calculates draw values whenever the button is resized
+ */
 void AppMenuButton::resized()
 {
     Rectangle<float> bounds = getLocalBounds().toFloat();
@@ -115,6 +161,9 @@ void AppMenuButton::resized()
             textBox.toNearestInt());
 }
 
+/**
+ * Load button colors from configuration files.
+ */
 void AppMenuButton::applyConfigAssets(Array<String> assetNames,
         Array<Colour> colours)
 {

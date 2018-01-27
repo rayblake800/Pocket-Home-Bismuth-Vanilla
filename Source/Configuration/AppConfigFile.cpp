@@ -46,7 +46,6 @@ AppConfigFile::AppItem::AppItem(var jsonObj)
     name = jsonObj.getProperty("name", "");
     icon = jsonObj.getProperty("icon", "");
     shell = jsonObj.getProperty("shell", "");
-    folderIndex = -1;
     launchInTerminal = jsonObj.getProperty("launch in terminal", false);
 }
 
@@ -80,26 +79,41 @@ Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 /**
  * Add a new app to the list of pinned favorite apps in the config file
  */
-void AppConfigFile::addFavoriteApp(AppItem newApp, int index)
+void AppConfigFile::addFavoriteApp
+(AppItem newApp, int index, bool writeChangesNow)
 {
     const ScopedLock changeLock(lock);
     favoriteApps.insert(index, newApp);
     changesPending = true;
-    writeChanges();
+    if (writeChangesNow)
+    {
+        writeChanges();
+    }
 }
 
 /**
  * Remove an app from the list of favorite applications
  */
-void AppConfigFile::removeFavoriteApp(int index)
+void AppConfigFile::removeFavoriteApp(int index, bool writeChangesNow)
 {
     const ScopedLock changeLock(lock);
     if (index >= 0 && index < favoriteApps.size())
     {
         favoriteApps.remove(index);
         changesPending = true;
-        writeChanges();
+        if (writeChangesNow)
+        {
+            writeChanges();
+        }
     }
+}
+
+/**
+ * Find the index of an AppItem in favorites.
+ */
+int AppConfigFile::getFavoriteIndex(AppItem toFind)
+{
+    return favoriteApps.indexOf(toFind);
 }
 
 //######################### Folder/Category Data ###############################
@@ -108,8 +122,7 @@ AppConfigFile::AppFolder::AppFolder()
 {
 }
 
-AppConfigFile::AppFolder::AppFolder(var jsonObj,int index):
-index(index)
+AppConfigFile::AppFolder::AppFolder(var jsonObj, int index)
 {
     name = jsonObj.getProperty("name", "");
     icon = jsonObj.getProperty("icon", "");
@@ -121,19 +134,6 @@ index(index)
         for (var category : *catList.getArray())
         {
             categories.add(category);
-        }
-    }
-
-    pinnedApps.clear();
-    var appList = jsonObj["pinned apps"];
-    if (appList.isArray())
-    {
-        for (var app : *appList.getArray())
-        {
-            AppItem pinnedApp = AppItem(app);
-            pinnedApp.index = pinnedApps.size();
-            pinnedApp.folderIndex = index;
-            pinnedApps.add(pinnedApp);
         }
     }
 }
@@ -150,13 +150,6 @@ DynamicObject* AppConfigFile::AppFolder::getDynamicObject()
         categoryArray.add(categories[i]);
     }
     folderObject->setProperty(String("categories"), categoryArray);
-
-    Array<var> appArray;
-    for (int i = 0; i < pinnedApps.size(); i++)
-    {
-        appArray.add(var(pinnedApps[i].getDynamicObject()));
-    }
-    folderObject->setProperty(String("pinned apps"), appArray);
     return folderObject;
 }
 
@@ -164,8 +157,7 @@ bool AppConfigFile::AppFolder::operator==(const AppFolder& rhs) const
 {
     return name == rhs.name &&
             icon == rhs.icon &&
-            categories == rhs.categories &&
-            pinnedApps == rhs.pinnedApps;
+            categories == rhs.categories;
 }
 
 /**
@@ -180,78 +172,40 @@ Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 /**
  * Add a new folder to the list of AppFolders in the config file
  */
-void AppConfigFile::addAppFolder(AppFolder newFolder, int index)
+void AppConfigFile::addAppFolder
+(AppFolder newFolder, int index, bool writeChangesNow)
 {
     const ScopedLock changeLock(lock);
-    for (AppFolder& folder : categoryFolders)
-    {
-        if (folder.index >= index)
-        {
-            folder.index++;
-        }
-    }
     categoryFolders.insert(index, newFolder);
     changesPending = true;
-    writeChanges();
+    if (writeChangesNow)
+    {
+        writeChanges();
+    }
 }
 
 /**
  * Remove a folder from the list of AppFolders
  */
-void AppConfigFile::removeAppFolder(int index)
+void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
 {
     int size = categoryFolders.size();
     const ScopedLock changeLock(lock);
-    for (AppFolder& folder : categoryFolders)
-    {
-        if (folder.index > index)
-        {
-            folder.index--;
-        }
-    }
     categoryFolders.remove(index);
     changesPending = true;
-    writeChanges();
-}
-
-/**
- * Add a new app to the top of an AppFolder
- */
-void AppConfigFile::addPinnedApp
-(AppItem newApp, int folderIndex, int appIndex)
-{
-    DBG(String("Adding ")+newApp.name+String( "to folder ")
-            +String(folderIndex)+String(" index ")+String(appIndex));
-    const ScopedLock changeLock(lock);
-    if (folderIndex >= 0 && folderIndex <= categoryFolders.size())
+    if (writeChangesNow)
     {
-        DBG("index was valid");
-        AppFolder updateFolder=categoryFolders[folderIndex];
-        updateFolder.pinnedApps.insert(appIndex, newApp);
-        const ScopedUnlock writeUnlock(lock);
-        removeAppFolder(folderIndex);
-        addAppFolder(updateFolder,folderIndex);
+        writeChanges();
     }
 }
 
 /**
- * Remove a pinned app from an AppFolder
+ * Find the index of an AppFolder in the list of folders.
  */
-void AppConfigFile::removePinnedApp(int folderIndex, int appIndex)
+int AppConfigFile::getFolderIndex(AppFolder toFind)
 {
-    const ScopedLock changeLock(lock);
-    DBG(String("Removing app ") + String(appIndex) + String(" from folder ") +
-            String(folderIndex) + String(" of ") + String(categoryFolders.size()));
-    if (folderIndex >= 0 && folderIndex < categoryFolders.size())
-    {
-        AppFolder editedFolder = categoryFolders[folderIndex];
-        editedFolder.pinnedApps.remove(appIndex);
-        jassert(editedFolder.pinnedApps.size() == 0);
-        removeAppFolder(folderIndex);
-        addAppFolder(editedFolder, folderIndex);
-    }
+    return categoryFolders.indexOf(toFind);
 }
-
 
 //################################# File IO ####################################
 
@@ -268,7 +222,6 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
         for (const var& app : *favoriteList.getArray())
         {
             AppItem fave = AppItem(app);
-            fave.index = favoriteApps.size();
             favoriteApps.add(fave);
         }
     }
@@ -278,7 +231,7 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
     {
         for (const var& folder : *categoryList.getArray())
         {
-            AppFolder menuFolder = AppFolder(folder,categoryFolders.size());
+            AppFolder menuFolder = AppFolder(folder, categoryFolders.size());
             categoryFolders.add(menuFolder);
         }
     }

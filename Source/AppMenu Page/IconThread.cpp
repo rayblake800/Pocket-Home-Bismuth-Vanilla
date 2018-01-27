@@ -230,7 +230,7 @@ void IconThread::mapIcons()
     String iconTheme;
     String fallbackIconTheme;
     std::string configPath = getHomePath().toStdString() + "/.gtkrc-2.0";
-    if (fileExists(configPath))
+    if (File(configPath).existsAsFile())
     {
         std::regex themeMatch("gtk-icon-theme-name=\"(.+)\"");
         std::regex fallbackThemeMatch("gtk-fallback=icon-theme=\"(.+)\"");

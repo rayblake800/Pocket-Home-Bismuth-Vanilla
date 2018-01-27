@@ -1,10 +1,12 @@
 /* 
- * File:   AppMenuButton.h
- * Author: Anthony Brown
+ * @file AppMenuButton.h
+ * @author Anthony Brown
  * 
- * Created on December 17, 2017, 3:57 PM
- * AppMenuButton is a custom button type for applications and application 
- * directories.
+ * AppMenuButton is a custom button type for launching applications and 
+ * opening application directories. Each button displays an icon and a title,
+ * and may have category strings or a command string stored. Button actions
+ * are handled elsewhere, using this data.
+ * @see AppMenuComponent
  */
 
 #pragma once
@@ -13,18 +15,18 @@
 #include "../Popup Editor Components/AppMenuPopupEditor.h"
 
 class AppMenuButton : public Button, public ReferenceCountedObject,
-        public ConfigurableComponent {
+public ConfigurableComponent {
 public:
     typedef ReferenceCountedObjectPtr<AppMenuButton> Ptr;
 
     /**
      * Create a new AppMenuButton
-     * @param name sets the button's display name
-     * @param index records the button's position in its column
-     * @param column records button's column in the AppMenu
-     * @param iconThread is needed to load the button's icon.
+     * @param name sets the button display name
+     * @param index records the button position in its column
+     * @param column records the button column in the AppMenu
+     * @param iconThread is needed to load the button icon.
      */
-    AppMenuButton(String name, int index, int column,IconThread& iconThread);
+    AppMenuButton(String name, int index, int column, IconThread& iconThread);
 
     /**
      * Set whether this button is currently selected.
@@ -53,12 +55,22 @@ public:
     virtual Array<String> getCategories() const = 0;
 
     /**
-     * @return the button's position in its column
+     * @return the name or path used to load the icon file. 
+     */
+    virtual String getIconName() const = 0;
+
+    /**
+     * @return the icon image used by this button.
+     */
+    const Image& getIcon();
+
+    /**
+     * @return the button position in its column
      */
     int getIndex() const;
 
     /**
-     * @return the button's column in the AppMenu
+     * @return the button column in the AppMenu
      */
     int getColumn() const;
 
@@ -76,24 +88,48 @@ public:
      * @param column a new column number to assign to this button.
      */
     void setColumn(int column);
-    
+
     /**
      * Gets a PopupEditorComponent configured to edit this button
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
     virtual AppMenuPopupEditor* getEditor() = 0;
-    
+
     /**
-     * @return the icon image used by this button.
+     * Calling this method will create a message box asking for user 
+     * confirmation that this button and its source should be removed.
+     * If the user clicks "OK", removeButtonSource is called.
      */
-    const Image& getIcon();
+    void confirmRemoveButtonSource();
+
+    /**
+     * Removes the source of this button's data, and remove the button
+     * from its parent component.
+     */
+    virtual void removeButtonSource() = 0;
+
+    /**
+     * Return true if this button's data source has an index that can be
+     * moved by a given amount.
+     * @param offset some value to add to the button index
+     * @return true if this button's data source has an index value i that can
+     * be changed to i+offset 
+     */
+    virtual bool canChangeIndex(int offset) = 0;
+
+    /**
+     * If possible, change the index of this button's data source by some
+     * offset amount.
+     * @param offset will be added to the button's current index, if possible.
+     */
+    virtual void moveDataIndex(int offset) = 0;
 
     /**
      * @return the size of an AppMenuButton with the current window size
-     * and config file ratios.
+     * and configuration file ratios.
      */
     static Rectangle<int> getButtonSize();
-    
+
     /**
      * Sets a callback to run when button data changes and should be
      * reloaded.  Only one component should be managing AppMenuButtons at
@@ -102,18 +138,18 @@ public:
      * @param reload should be set by the component that is managing
      * AppMenuButtons to re-calculate button data and arrangement.
      */
-    static void setReloadButtonsCallback(std::function<void()> reload);
+    static void setReloadButtonsCallback(std::function<void() > reload);
 protected:
     /**
      * Custom button painting method.
      */
     void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
-    
+
     /**
      * Re-calculates draw values whenever the button is resized
      */
     void resized() override;
-    
+
     /**
      * Load button colors from configuration files.
      * @param assetNames is ignored, this component has no configurable
@@ -129,10 +165,17 @@ protected:
      * in common icon directories.
      */
     void loadIcon(String icon);
+
+    //Title to display on the dialog box shown when confirming button deletion
+    String confirmDeleteTitle;
+    //Message to display on the dialog box shown when confirming button deletion
+    String confirmDeleteMessage;
     //Icon image to draw
     Image appIcon;
+    //Object used to load icons
     IconThread& iconThread;
-    static std::function<void()> reloadAllButtons;
+    //Callback function for reloading all AppMenuButtons
+    static std::function<void() > reloadAllButtons;
 
 private:
     //bounds for drawing app/folder name

@@ -29,9 +29,6 @@ void animateTranslation(Component *component, int x, int y, float alpha, int dur
 
 Array<String> split(const String &orig, const String &delim);
 
-//returns true if the file at path already exists
-bool fileExists(const String& path);
-
 //get the user's home path
 String getHomePath();
 
@@ -56,3 +53,12 @@ Rectangle<int> getWindowSize();
 //If fitting it in would require mangling the font size too much, the
 //font gets set to size zero.
 juce::Font fontResizedToFit(juce::Font font, String text, Rectangle<int>container);
+
+/**
+ * Requests user confirmation before performing some action
+ * @param title the text to print at the top of the confirmation box.
+ * @param message more detailed information on the action being confirmed.
+ * @param onConfirm if the user presses the "OK" button, this callback
+ * function will run.
+ */
+void confirmAction(String title,String message,std::function<void()> onConfirm);

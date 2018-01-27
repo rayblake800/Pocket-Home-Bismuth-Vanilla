@@ -1,11 +1,13 @@
-/*
-  ==============================================================================
-
-    BatteryIcon.h
-    Created: 29 Dec 2017 12:02:24pm
-    Author:  anthony
-  ==============================================================================
- */
+/* 
+ * @file   BatteryIcon.h
+ * @author Anthony Brown
+ * 
+ * BatteryIcon displays the current charge level and charging state of 
+ * the PocketCHIP battery as a component icon, and writes the battery percentage
+ * as text. While this icon is visible, it will periodically check battery state
+ *  and update itself accordingly.
+ *
+*/
 
 #pragma once
 #include "../../Configuration/Configurables/ConfigurableImageComponent.h"

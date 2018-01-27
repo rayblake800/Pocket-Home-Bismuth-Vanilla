@@ -29,9 +29,7 @@ public:
         String name;
         String icon;
         String shell;
-        bool launchInTerminal;
-        int index;
-        int folderIndex;
+        bool launchInTerminal=false;
         DynamicObject * getDynamicObject();
         bool operator==(const AppItem& rhs)const;
     };
@@ -46,14 +44,25 @@ public:
      * Add a new app to the list of pinned favorite apps in the config file
      * @param newApp new application information
      * @param index position to insert the new application
+     * @param writeChangesNow sets if the change should be written to the 
+     * config file immediately.
      */
-    void addFavoriteApp(AppItem newApp, int index);
+    void addFavoriteApp(AppItem newApp, int index,bool writeChangesNow=true);
 
     /**
      * Remove an app from the list of favorite applications
      * @param index position of the app to remove
+     * @param writeChangesNow sets if the change should be written to the 
+     * config file immediately.
      */
-    void removeFavoriteApp(int index);
+    void removeFavoriteApp(int index,bool writeChangesNow=true);
+    
+    /**
+     * Find the index of an AppItem in favorites.
+     * @param toFind will be searched for in the favorites list
+     * @return the index of toFind, or -1 if it isn't in the list.
+     */
+    int getFavoriteIndex(AppItem toFind);
 
     //######################### Folder/Category Data ###########################
 
@@ -67,8 +76,6 @@ public:
         String name;
         Array<String> categories;
         String icon;
-        Array<AppItem> pinnedApps;
-        int index;
         DynamicObject * getDynamicObject();
         bool operator==(const AppFolder& rhs) const;
     };
@@ -82,29 +89,26 @@ public:
      * Add a new folder to the list of AppFolders in the config file
      * @param newFolder defines the new folder
      * @param index where to insert the new folder
+     * @param writeChangesNow sets if the change should be written to the 
+     * config file immediately.
      */
-    void addAppFolder(AppFolder newFolder, int index);
+    void addAppFolder
+    (AppFolder newFolder, int index,bool writeChangesNow=true);
     
     /**
      * Remove a folder from the list of AppFolders
      * @param index position of the folder to remove
+     * @param writeChangesNow sets if the change should be written to the 
+     * config file immediately.
      */
-    void removeAppFolder(int index);
+    void removeAppFolder(int index,bool writeChangesNow=true);
     
     /**
-     * Add a new app to the top of an AppFolder
-     * @param newApp defines the new application
-     * @param folderIndex which folder holds the new pinned app
-     * @param appIndex index of the new app in the folder's pinned apps
+     * Find the index of an AppFolder in the list of folders.
+     * @param toFind will be searched for in the folder list
+     * @return the index of toFind, or -1 if it isn't in the list.
      */
-    void addPinnedApp(AppItem newApp, int folderIndex, int appIndex);
-
-    /**
-     * Remove a pinned app from an AppFolder
-     * @param folderIndex the position of the folder
-     * @param appIndex the position of the pinned app in the folder
-     */
-    void removePinnedApp(int folderIndex, int appIndex);
+    int getFolderIndex(AppFolder toFind);
 
 private:
 

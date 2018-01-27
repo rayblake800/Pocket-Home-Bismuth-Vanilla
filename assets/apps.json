@@ -43,8 +43,7 @@
             "icon": "default",
             "categories": [
                 "All"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "Multimedia",
@@ -53,22 +52,13 @@
                 "AudioVideo",
                 "Audio",
                 "Video"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "Development",
             "icon": "applications-development",
             "categories": [
                 "Development"
-            ],
-            "pinned apps": [
-                {
-                    "name": "PICO-8",
-                    "icon": "pico8terminal",
-                    "shell": "pico8",
-                    "launch in terminal": false
-                }
             ]
         },
         {
@@ -76,80 +66,70 @@
             "icon": "applications-accessories",
             "categories": [
                 "Education"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "Games",
             "icon": "applications-games",
             "categories": [
                 "Game"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "Graphics",
             "icon": "applications-graphics",
             "categories": [
                 "Graphics"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "Internet",
             "icon": "applications-internet",
             "categories": [
                 "Network"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "Office",
             "icon": "applications-office",
             "categories": [
                 "Office"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "Science",
             "icon": "applications-science",
             "categories": [
                 "Science"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "Settings",
             "icon": "configuration_section",
             "categories": [
                 "Settings"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "System",
             "icon": "applications-system",
             "categories": [
                 "System"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "Utility",
             "icon": "applications-utilities",
             "categories": [
                 "Utility"
-            ],
-            "pinned apps": []
+            ]
         },
         {
             "name": "Other",
             "icon": "applications-other",
             "categories": [
                 "Other"
-            ],
-            "pinned apps": []
+            ]
         }
     ]
 }

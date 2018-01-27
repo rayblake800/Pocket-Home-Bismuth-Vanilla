@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    ConfigAppButton.cpp
+    ConfigAppButton.cpp 
     Created: 11 Jan 2018 6:58:24pm
-    Author:  anthony
+    Author:  Anthony Brown
 
   ==============================================================================
  */
@@ -18,6 +18,10 @@ AppMenuButton(appItem.name, index, column, iconThread),
 config(config),
 appItem(appItem)
 {
+    confirmDeleteTitle = String("Remove \"")+
+            getAppName() + String("\" from favorites?");
+    confirmDeleteMessage = 
+            "This will permanently remove this link from the list of favorite applications.";
     loadIcon(appItem.icon);
 }
 
@@ -56,10 +60,20 @@ String ConfigAppButton::getCommand() const
 
 /**
  * @return all application categories linked to this button.
+ * This will be an empty list, as ConfigAppButtons are not associated with
+ * application categories.
  */
 Array<String> ConfigAppButton::getCategories() const
 {
     return Array<String>();
+}
+
+/**
+ * @return the name or path used to load the icon file. 
+ */
+String ConfigAppButton::getIconName() const
+{
+    return appItem.icon;
 }
 
 /**
@@ -76,8 +90,8 @@ AppMenuPopupEditor* ConfigAppButton::getEditor()
             },
     [this]()
     {
-        deleteApp();
-    },false);
+        removeButtonSource();
+    }, false);
     editor->setNameField(appItem.name);
     editor->setIconField(appItem.icon);
     editor->setCommandField(appItem.shell);
@@ -86,7 +100,7 @@ AppMenuPopupEditor* ConfigAppButton::getEditor()
 }
 
 /**
- * Edit this button's application in the settings
+ * Edit this button's data source in the config file.
  */
 void ConfigAppButton::editApp
 (String name, String icon, String command, bool terminal)
@@ -99,29 +113,48 @@ void ConfigAppButton::editApp
     appItem.icon = icon;
     appItem.shell = command;
     appItem.launchInTerminal = terminal;
-    if (appItem.folderIndex > 0)
-    {
-        config.removePinnedApp(appItem.folderIndex, appItem.index);
-        config.addPinnedApp(appItem, appItem.folderIndex, appItem.index);
-    } else
-    {
-        config.removeFavoriteApp(appItem.index);
-        config.addFavoriteApp(appItem, appItem.index);
-    }
+    int index=config.getFavoriteIndex(appItem);
+    config.removeFavoriteApp(index,false);
+    config.addFavoriteApp(appItem,index);
 }
 
 /**
  * Remove this button's application from config, and remove the button
  * from its parent component.
  */
-void ConfigAppButton::deleteApp()
+void ConfigAppButton::removeButtonSource()
 {
-    if (appItem.folderIndex > 0)
-    {
-        config.removePinnedApp(appItem.folderIndex, appItem.index);
-    } else
-    {
-        config.removeFavoriteApp(appItem.index);
-    }
+
+    config.removeFavoriteApp(config.getFavoriteIndex(appItem));
     reloadAllButtons();
+}
+
+/**
+ * Return true if this button's data source has an index that can be
+ * moved by a given amount.
+ * @param offset some value to add to the button index
+ * @return true if this button's data source has an index value i that can
+ * be changed to i+offset 
+ */
+bool ConfigAppButton::canChangeIndex(int offset)
+{
+    int newIndex = config.getFavoriteIndex(appItem) + offset;
+    return newIndex >= 0 && newIndex < config.getFavorites().size();
+}
+
+/**
+ * If possible, change the index of this button's data source by some
+ * offset amount.
+ * @param offset will be added to the button's current index, if possible.
+ */
+void ConfigAppButton::moveDataIndex(int offset)
+{
+    if (canChangeIndex(offset))
+    {
+        int index = config.getFavoriteIndex(appItem);
+        config.removeFavoriteApp(index,false);
+        config.addFavoriteApp(appItem,index+offset);
+        DBG(String("Moved ")+appItem.name+String(" from ")+String(index)+
+                String(" to ")+String(config.getFavoriteIndex(appItem)));
+    }
 }

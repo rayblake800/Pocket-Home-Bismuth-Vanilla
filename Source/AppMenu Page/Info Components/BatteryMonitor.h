@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../../Utils.h"
-#include <string>
+#include "../../../JuceLibraryCode/JuceHeader.h"
 
 struct BatteryStatus {
   int percentage;

@@ -3594,6 +3594,8 @@
             <in>FolderEditorPopup.cpp</in>
             <in>NewConfigAppEditor.cpp</in>
             <in>NewConfigAppEditor.h</in>
+            <in>NewDesktopAppEditor.cpp</in>
+            <in>NewDesktopAppEditor.h</in>
             <in>PopupEditorComponent.cpp</in>
             <in>PopupEditorComponent.h</in>
           </df>

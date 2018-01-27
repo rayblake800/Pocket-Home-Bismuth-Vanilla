@@ -3,7 +3,11 @@
  * @author Anthony Brown
  * 
  * DesktopEntryButton is an AppMenuButton that gets its data from a 
- * DesktopEntry object.
+ * DesktopEntry object, loaded from a .desktop file. It represents a shortcut
+ * to an installed application. The object creating/managing this button is 
+ * expected to launch that application using the stored command value when this 
+ * button is selected and clicked.
+ * @see AppMenuButton, AppMenuComponent, DesktopEntry
  */
 #pragma once
 #include "../DesktopEntry.h"
@@ -42,13 +46,18 @@ public:
      * @return all application categories linked to this button.
      */
     Array<String> getCategories() const;
+        
+    /**
+     * @return the name or path used to load the icon file. 
+     */
+    String getIconName() const;
     
     /**
      * Gets a PopupEditorComponent configured to edit this button
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
     AppMenuPopupEditor* getEditor();
-    
+
     /**
      * Update this button's desktopEntry. This writes to 
      * ~/.local/share/applications, so changes will only affect the current user.
@@ -58,14 +67,32 @@ public:
      * @param command application launch command
      * @param useTerminal sets if this launches in a terminal window
      */
-    void editEntry(String name,String icon,Array<String> categories,
-            String command,bool useTerminal);
-    
+    void editEntry(String name, String icon, Array<String> categories,
+            String command, bool useTerminal);
+
     /**
      * Sets this button's desktopEntry to not display in pocket-home for the
-     * current user, and reload all AppMenuButtons.
+     * current user, and removes the button from its parent component.
      */
-    void hideEntry();
+    void removeButtonSource();
+
+    /**
+     * Return true if this button's data source has an index that can be
+     * moved by a given amount.
+     * @param offset some value to add to the button index
+     * @return false, as DesktopEntryButtons don't have a variable order.
+     */
+    bool canChangeIndex(int offset) {
+        return false;
+    };
+
+    /**
+     * If possible, change the index of this button's data source by some
+     * offset amount. This does nothing, because DesktopEntryButtons don't have
+     * changing indices.
+     */
+    void moveDataIndex(int offset) {
+    };
 private:
     DesktopEntry desktopEntry;
 };

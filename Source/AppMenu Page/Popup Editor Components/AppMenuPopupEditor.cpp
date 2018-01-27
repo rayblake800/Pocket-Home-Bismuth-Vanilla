@@ -256,16 +256,11 @@ void AppMenuPopupEditor::fileSelected(FileSelectTextEditor* edited)
  */
 void AppMenuPopupEditor::askToDelete()
 {
-    NativeMessageBox::showOkCancelBox(AlertWindow::QuestionIcon,
-            "Delete", "Delete this menu item?", this,
-            ModalCallbackFunction::create([this](int response)
-            {
-                if (response == 1)
-                {
-                    onDelete();
-                    closePopup();
-                }
-            }));
+    confirmAction("Delete", "Delete this menu item?",
+            [this](){
+                onDelete();
+                closePopup();
+            });
 }
 
 

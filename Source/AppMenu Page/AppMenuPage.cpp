@@ -25,7 +25,9 @@ powerButton(ComponentConfigFile::powerButtonKey),
 settingsButton(ComponentConfigFile::settingsButtonKey),
 appMenu(appConfig)
 {
-    appMenu.setPopupCallback([this](AppMenuPopupEditor* newEditor){
+    addMouseListener(this, false);
+    appMenu.setPopupCallback([this](AppMenuPopupEditor * newEditor)
+    {
         showPopupEditor(newEditor);
     });
     setWantsKeyboardFocus(true);
@@ -94,6 +96,17 @@ void AppMenuPage::loadConfigProperties(ConfigFile * config, String key)
     }
 }
 
+
+//Forward all clicks (except button clicks) to the appMenu 
+
+void AppMenuPage::mouseDown(const MouseEvent &event)
+{
+    if(event.mods.isPopupMenu() || event.mods.isCtrlDown())
+    {
+        appMenu.openPopupMenu(false);
+    }
+}
+
 void AppMenuPage::buttonClicked(Button * button)
 {
     PageStackComponent& pageStack = PocketHomeApplication::getInstance()
@@ -148,8 +161,7 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
     }
     if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
     {
-        if (keyCode == KeyPress::upKey)appMenu.selectPrevious();
-        else appMenu.selectNext();
+        appMenu.changeSelection((keyCode == KeyPress::upKey)? -1 : 1);
         return true;
     } else if (keyCode == KeyPress::leftKey || keyCode == KeyPress::escapeKey)
     {
@@ -167,8 +179,7 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
         return true;
     } else if (key == KeyPress::createFromDescription("CTRL+e"))
     {
-        DBG("show editor");
-        showPopupEditor(appMenu.getEditorForSelected());
+        appMenu.openPopupMenu(true);
         return true;
     }
     return true;
