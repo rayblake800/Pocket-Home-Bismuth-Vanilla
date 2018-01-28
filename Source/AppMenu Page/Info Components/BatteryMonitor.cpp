@@ -86,7 +86,7 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
     } else
     {
         currentStatus.isCharging =
-                File(chargingPath).loadFileAsString() == "1";
+                (File(chargingPath).loadFileAsString() == "1");
         if (dataSource == voltageFile)
         {
             int voltage = File(voltagePath).loadFileAsString().getIntValue();

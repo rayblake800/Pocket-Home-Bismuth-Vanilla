@@ -14,7 +14,7 @@
 #include "../Configuration/AppConfigFile.h"
 #include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "Popup Editor Components/AppMenuPopupEditor.h"
-#include "Info Components/ClockMonitor.h"
+#include "Info Components/ClockLabel.h"
 #include "Info Components/BatteryIcon.h"
 #include "Info Components/WifiIcon.h"
 #include "AppMenuComponent.h"
@@ -71,7 +71,7 @@ private:
     AppConfigFile appConfig;
     
     Colour bgColor;
-    ClockMonitor clock;
+    ClockLabel clock;
     AppMenuComponent appMenu;
     BatteryIcon batteryIcon;
     WifiIcon wifiIcon;

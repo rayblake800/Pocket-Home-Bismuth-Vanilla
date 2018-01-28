@@ -35,7 +35,7 @@ appMenu(appConfig)
 
     addAndMakeVisible(appMenu);
     addAndMakeVisible(frame);
-    addAndMakeVisible(clock.getLabel());
+    addAndMakeVisible(clock);
 
     loadAllConfigProperties();
     addAndMakeVisible(batteryIcon);
@@ -54,10 +54,6 @@ appMenu(appConfig)
 
 AppMenuPage::~AppMenuPage()
 {
-    if (clock.isThreadRunning())
-    {
-        clock.stopThread(1000);
-    }
 }
 
 /**
@@ -197,7 +193,7 @@ void AppMenuPage::resized()
 {
     appMenu.applyConfigBounds();
     frame.applyConfigBounds();
-    clock.getLabel().applyConfigBounds();
+    clock.applyConfigBounds();
     batteryIcon.applyConfigBounds();
     wifiIcon.applyConfigBounds();
     powerButton.applyConfigBounds();

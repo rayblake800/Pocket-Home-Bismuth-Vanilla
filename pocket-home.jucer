@@ -175,9 +175,8 @@
                 file="Source/AppMenu Page/Info Components/BatteryMonitor.cpp"/>
           <FILE id="t1P8uc" name="BatteryMonitor.h" compile="0" resource="0"
                 file="Source/AppMenu Page/Info Components/BatteryMonitor.h"/>
-          <FILE id="V2Rjhu" name="ClockMonitor.cpp" compile="1" resource="0"
-                file="Source/AppMenu Page/Info Components/ClockMonitor.cpp"/>
-          <FILE id="andbx8" name="ClockMonitor.h" compile="0" resource="0" file="Source/AppMenu Page/Info Components/ClockMonitor.h"/>
+          <FILE id="V2Rjhu" name="ClockLabel.cpp" compile="1" resource="0" file="Source/AppMenu Page/Info Components/ClockLabel.cpp"/>
+          <FILE id="andbx8" name="ClockLabel.h" compile="0" resource="0" file="Source/AppMenu Page/Info Components/ClockLabel.h"/>
           <FILE id="TnTmFi" name="WifiIcon.cpp" compile="1" resource="0" file="Source/AppMenu Page/Info Components/WifiIcon.cpp"/>
           <FILE id="BIw8ef" name="WifiIcon.h" compile="0" resource="0" file="Source/AppMenu Page/Info Components/WifiIcon.h"/>
         </GROUP>

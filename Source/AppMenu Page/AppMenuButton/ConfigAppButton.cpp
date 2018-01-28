@@ -105,6 +105,7 @@ AppMenuPopupEditor* ConfigAppButton::getEditor()
 void ConfigAppButton::editApp
 (String name, String icon, String command, bool terminal)
 {
+    int index=config.getFavoriteIndex(appItem);
     if (icon != appItem.icon)
     {
         loadIcon(icon);
@@ -113,7 +114,6 @@ void ConfigAppButton::editApp
     appItem.icon = icon;
     appItem.shell = command;
     appItem.launchInTerminal = terminal;
-    int index=config.getFavoriteIndex(appItem);
     config.removeFavoriteApp(index,false);
     config.addFavoriteApp(appItem,index);
 }

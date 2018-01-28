@@ -222,7 +222,10 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
         for (const var& app : *favoriteList.getArray())
         {
             AppItem fave = AppItem(app);
-            favoriteApps.add(fave);
+            if (!favoriteApps.contains(fave))
+            {
+                favoriteApps.add(fave);
+            }
         }
     }
     //load categories
@@ -232,7 +235,10 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
         for (const var& folder : *categoryList.getArray())
         {
             AppFolder menuFolder = AppFolder(folder, categoryFolders.size());
-            categoryFolders.add(menuFolder);
+            if (!categoryFolders.contains(menuFolder))
+            {
+                categoryFolders.add(menuFolder);
+            }
         }
     }
 }

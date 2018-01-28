@@ -109,7 +109,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/AppMenuButton_92e29efe.o \
   $(JUCE_OBJDIR)/BatteryIcon_9d60bae8.o \
   $(JUCE_OBJDIR)/BatteryMonitor_f25e5095.o \
-  $(JUCE_OBJDIR)/ClockMonitor_95f060b4.o \
+  $(JUCE_OBJDIR)/ClockLabel_7ecbea8e.o \
   $(JUCE_OBJDIR)/WifiIcon_590950f6.o \
   $(JUCE_OBJDIR)/AppMenuComponent_363da11e.o \
   $(JUCE_OBJDIR)/AppMenuPage_e766ca58.o \
@@ -364,9 +364,9 @@ $(JUCE_OBJDIR)/BatteryMonitor_f25e5095.o: ../../Source/AppMenu\ Page/Info\ Compo
 	@echo "Compiling BatteryMonitor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/ClockMonitor_95f060b4.o: ../../Source/AppMenu\ Page/Info\ Components/ClockMonitor.cpp
+$(JUCE_OBJDIR)/ClockLabel_7ecbea8e.o: ../../Source/AppMenu\ Page/Info\ Components/ClockLabel.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ClockMonitor.cpp"
+	@echo "Compiling ClockLabel.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/WifiIcon_590950f6.o: ../../Source/AppMenu\ Page/Info\ Components/WifiIcon.cpp

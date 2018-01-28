@@ -7,18 +7,18 @@
  * as text. While this icon is visible, it will periodically check battery state
  *  and update itself accordingly.
  *
-*/
+ */
 
 #pragma once
 #include "../../Configuration/Configurables/ConfigurableImageComponent.h"
 #include "../../Configuration/Configurables/ConfigurableLabel.h"
 #include "BatteryMonitor.h"
 
-class BatteryIcon : public Component {
+class BatteryIcon : public Component, private Timer {
 public:
     BatteryIcon();
     virtual ~BatteryIcon();
-    
+
     /**
      * Run applyConfigBounds on all child components, and update bounds to
      * fit children.
@@ -28,6 +28,7 @@ public:
 private:
     //All tracked battery states.  Each corresponds with an image asset file
     //defined in config.json
+
     enum BatteryIconImage {
         battery0,
         battery1,
@@ -46,7 +47,7 @@ private:
      * @param percent battery charge percentage
      */
     void setStatus(BatteryIconImage imageSelection, String percent);
- 
+
     /**
      * Turn battery updates on when this component becomes visible, off
      * when it's hidden.
@@ -59,23 +60,8 @@ private:
     ConfigurableLabel batteryPercent;
     //Gets battery info
     BatteryMonitor batteryMonitor;
-    
-    /**
-     * BatteryTimer periodically checks the battery monitor, and uses it
-     * to update the battery icon image and percentage text.
-     */
-    class BatteryTimer : public Timer {
-    public:
-        BatteryTimer(BatteryIcon * batteryIcon);
-        virtual ~BatteryTimer();
-        void removeTimer();
-    private:
-        void timerCallback();
-        //NOT a reference pointer because the timer shouldn't keep the icon
-        //from being destroyed.
-        BatteryIcon * batteryIcon;
-        const static int frequency = 1000;
-    };
-    ScopedPointer<BatteryTimer> batteryTimer;
 
+    //periodically check battery status
+    void timerCallback();
+    const static int frequency = 60000;
 };

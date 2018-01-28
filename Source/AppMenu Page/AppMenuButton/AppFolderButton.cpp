@@ -99,6 +99,7 @@ AppMenuPopupEditor* AppFolderButton::getEditor()
 void AppFolderButton::editFolder
 (String name, String icon, Array<String> categories)
 {
+    int index = config.getFolderIndex(appFolder);
     if (icon != appFolder.icon)
     {
         loadIcon(icon);
@@ -106,8 +107,6 @@ void AppFolderButton::editFolder
     appFolder.name = name;
     appFolder.icon = icon;
     appFolder.categories = categories;
-    loadIcon(icon);
-    int index = config.getFolderIndex(appFolder);
     config.removeAppFolder(index,false);
     config.addAppFolder(appFolder,index);
 }

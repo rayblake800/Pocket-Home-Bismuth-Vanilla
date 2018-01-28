@@ -10,7 +10,7 @@
 #include "Configurable.h"
 #include "../ComponentConfigFile.h"
 
-class ConfigurableComponent : protected Configurable {
+class ConfigurableComponent : public Configurable {
 public:
     ConfigurableComponent(String componentKey);
     virtual ~ConfigurableComponent();
@@ -18,8 +18,8 @@ public:
 protected:
     virtual void applyConfigAssets(Array<String> assetNames,
             Array<Colour> colours)=0;
+    virtual void loadConfigProperties(ConfigFile * config,String key);
 private:
-    void loadConfigProperties(ConfigFile * config,String key);
     Component * component;
     ComponentConfigFile::ComponentSettings componentSettings;
 };

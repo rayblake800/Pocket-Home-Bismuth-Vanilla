@@ -13,21 +13,19 @@
 
 BatteryIcon::BatteryIcon() :
 batteryImage(ComponentConfigFile::batteryIconKey),
-batteryPercent(ComponentConfigFile::batteryPercentKey),
-batteryTimer(new BatteryTimer(this))
+batteryPercent(ComponentConfigFile::batteryPercentKey)
 {
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
     batteryPercent.setJustificationType(Justification::centredLeft);
     addAndMakeVisible(batteryPercent);
     addAndMakeVisible(batteryImage);
-    batteryTimer = new BatteryTimer(this);
-    batteryTimer->startTimer(1);
+    startTimer(1);
 }
 
 BatteryIcon::~BatteryIcon()
 {
-    batteryTimer->removeTimer();
+    stopTimer();
 }
 
 /**
@@ -63,65 +61,39 @@ void BatteryIcon::setStatus(BatteryIconImage imageSelection, String percent)
  */
 void BatteryIcon::visibilityChanged()
 {
-    if (batteryTimer != nullptr)
+    if (isVisible())
     {
-        if (isVisible())
+        if (!isTimerRunning())
         {
-            if (!batteryTimer->isTimerRunning())
-            {
-                batteryTimer->startTimer(1);
-            }
-        } else
-        {
-            batteryTimer->stopTimer();
+            startTimer(1);
         }
-    }
-}
-
-BatteryIcon::BatteryTimer::BatteryTimer(BatteryIcon * batteryIcon) :
-batteryIcon(batteryIcon)
-{
-}
-
-BatteryIcon::BatteryTimer::~BatteryTimer()
-{
-    removeTimer();
-}
-
-void BatteryIcon::BatteryTimer::removeTimer()
-{
-    batteryIcon = nullptr;
-    stopTimer();
-}
-
-void BatteryIcon::BatteryTimer::timerCallback()
-{
-    if (batteryIcon != nullptr)
-    {
-        BatteryMonitor::BatteryStatus batteryStatus =
-                batteryIcon->batteryMonitor.getBatteryStatus();
-        int batteryPercent = batteryStatus.percent;
-        if (batteryPercent < 0)
-        {//no battery info loaded
-            batteryIcon->setStatus(noBattery, "");
-        } else
-        {
-            int status = round(((float) batteryPercent) / 100.0f * 3.0f);
-            jassert(status >= 0 && status < 4);
-            if (batteryStatus.isCharging)
-            {
-                status += (int) charging0;
-            }
-            batteryIcon->setStatus((BatteryIconImage) status,
-                    String(batteryPercent) + String("%"));
-        }
-        if (getTimerInterval() != frequency)
-        {
-            startTimer(frequency);
-        }
-
     } else
     {
         stopTimer();
+    }
+}
+
+void BatteryIcon::timerCallback()
+{
+    BatteryMonitor::BatteryStatus batteryStatus =
+            batteryMonitor.getBatteryStatus();
+    int batteryPercent = batteryStatus.percent;
+    if (batteryPercent < 0)
+    {//no battery info loaded
+        setStatus(noBattery, "");
+    } else
+    {
+        int status = round(((float) batteryPercent) / 100.0f * 3.0f);
+        jassert(status >= 0 && status < 4);
+        if (batteryStatus.isCharging)
+        {
+            status += (int) charging0;
+        }
+        setStatus((BatteryIconImage) status,
+                String(batteryPercent) + String("%"));
+    }
+    if (getTimerInterval() != frequency)
+    {
+        startTimer(frequency);
     }
 }

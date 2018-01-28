@@ -15,14 +15,12 @@
 WifiIcon::WifiIcon() :
 ConfigurableImageComponent(ComponentConfigFile::wifiIconKey)
 {
-
-    wifiTimer = new WifiTimer(this);
-    wifiTimer->startTimer(1);
+    startTimer(1);
 }
 
 WifiIcon::~WifiIcon()
 {
-    wifiTimer->removeTimer();
+    stopTimer();
 }
 
 /**
@@ -38,46 +36,28 @@ void WifiIcon::setStatus(WifiIconImage wifiState)
  */
 void WifiIcon::visibilityChanged()
 {
-    if (wifiTimer != nullptr)
+    if (isVisible())
     {
-        if (isVisible())
+        if (!isTimerRunning())
         {
-            if (!wifiTimer->isTimerRunning())
-            {
-                wifiTimer->startTimer(10);
-            }
-        } else
-        {
-            wifiTimer->stopTimer();
+            startTimer(10);
         }
+    } else
+    {
+        stopTimer();
     }
 }
 
-WifiIcon::WifiTimer::WifiTimer(WifiIcon * wifiIcon) : wifiIcon(wifiIcon)
-{
-}
 
-WifiIcon::WifiTimer::~WifiTimer()
-{
-    removeTimer();
-}
-
-void WifiIcon::WifiTimer::removeTimer()
-{
-    wifiIcon = nullptr;
-    stopTimer();
-}
 
 /**
  * Check WiFi state and update the image.
  */
-void WifiIcon::WifiTimer::timerCallback()
+void WifiIcon::timerCallback()
 {
-    if (wifiIcon != nullptr)
-    {
         const WifiStatus& wifiStatus = PocketHomeApplication::getInstance()
                 ->getWifiStatus();
-        WifiIconImage wifiState = WIFI_OFF;
+        WifiIconImage wifiState = wifiOff;
         ScopedPointer<WifiAccessPoint> accessPoint =
                 wifiStatus.connectedAccessPoint();
         if (wifiStatus.isConnected() && accessPoint != nullptr)
@@ -89,13 +69,8 @@ void WifiIcon::WifiTimer::timerCallback()
         }// wifi on but no connection
         else if (wifiStatus.isEnabled())
         {
-            wifiState = WIFI_STRENGTH_0;
+            wifiState = wifiStrength0;
         }// wifi off
-        wifiIcon->setStatus(wifiState);
+        setStatus(wifiState);
         startTimer(frequency);
-    } 
-    else
-    {
-        stopTimer();
-    }
 }
