@@ -39,7 +39,8 @@
             "batteryCharging_0.svg",
             "batteryCharging_1.svg",
             "batteryCharging_2.svg",
-            "batteryCharging_3.svg"
+            "batteryCharging_3.svg",
+            "noBattery.svg"
         ]
     },
     "battery percent text": {

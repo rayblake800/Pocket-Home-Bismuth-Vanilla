@@ -12,31 +12,32 @@
 #pragma once
 #include "../../Configuration/Configurables/ConfigurableImageComponent.h"
 #include "../../Configuration/Configurables/ConfigurableLabel.h"
-
 #include "BatteryMonitor.h"
 
-/**
- * BatteryIcon displays the current battery state using an icon and percentage
- * text.
- */
 class BatteryIcon : public Component {
 public:
     BatteryIcon();
     virtual ~BatteryIcon();
+    
+    /**
+     * Run applyConfigBounds on all child components, and update bounds to
+     * fit children.
+     */
     void applyConfigBounds();
 
 private:
     //All tracked battery states.  Each corresponds with an image asset file
     //defined in config.json
     enum BatteryIconImage {
-        BATTERY_0,
-        BATTERY_1,
-        BATTERY_2,
-        BATTERY_3,
-        CHARGING_0,
-        CHARGING_1,
-        CHARGING_2,
-        CHARGING_3
+        battery0,
+        battery1,
+        battery2,
+        battery3,
+        charging0,
+        charging1,
+        charging2,
+        charging3,
+        noBattery
     };
     /**
      * Set the icon's new display status.
@@ -45,17 +46,20 @@ private:
      * @param percent battery charge percentage
      */
     void setStatus(BatteryIconImage imageSelection, String percent);
-    
-    
+ 
     /**
-     * @return the BatteryStatus thread object that's tracking battery state
+     * Turn battery updates on when this component becomes visible, off
+     * when it's hidden.
      */
-    const BatteryStatus& getBatteryStatus();
     void visibilityChanged() override;
-    void resized() override;
+
+    //Shows the battery icon
     ConfigurableImageComponent batteryImage;
+    //Shows battery percentage text
     ConfigurableLabel batteryPercent;
+    //Gets battery info
     BatteryMonitor batteryMonitor;
+    
     /**
      * BatteryTimer periodically checks the battery monitor, and uses it
      * to update the battery icon image and percentage text.
