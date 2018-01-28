@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    PopupEditorComponent.cpp
-    Created: 12 Jan 2018 9:53:18pm
-    Author:  anthony
-
-  ==============================================================================
- */
 #include "../../Utils.h"
 #include "../../PocketHomeApplication.h"
 #include "AppMenuPopupEditor.h"

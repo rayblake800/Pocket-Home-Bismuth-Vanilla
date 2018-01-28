@@ -1,6 +1,5 @@
 /* 
  * @file   NewConfigAppEditor.h
- * @author Anthony Brown
  * 
  * NewConfigAppEditor creates a pop-up editor component that allows the user
  * to add a new application link to the list of favorite applications managed

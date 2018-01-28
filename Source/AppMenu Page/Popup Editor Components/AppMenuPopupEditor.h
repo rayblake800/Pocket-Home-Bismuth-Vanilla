@@ -1,11 +1,8 @@
-/*
-  ==============================================================================
-
-    AppMenuPopupEditor.h
-    Created: 12 Jan 2018 9:53:18pm
-    Author:  anthony
-
-  ==============================================================================
+/**
+ * @file AppMenuPopupEditor.h
+ * 
+ * AppMenuPopupEditor is a pop-up editor that provides a user interface for
+ * editing application and folder data.
  */
 #pragma once
 #include "../../GridLayoutManager.h"

@@ -1,13 +1,12 @@
-/*
-  ==============================================================================
-
-    NewDesktopAppEditor.h
-    Created: 23 Jan 2018 10:44:43pm
-    Author:  anthony
-
-  ==============================================================================
+/* 
+ * @file   NewDesktopAppEditor.h
+ * 
+ * NewConfigAppEditor creates a pop-up editor component that allows the user
+ * to create a new application link as a local .desktop file.  After entering 
+ * data and pressing the confirm button, the new favorite application link is 
+ * added to the menu, and the .desktop file is written.
+ *
 */
-
 #pragma once
 #include "../DesktopEntry.h"
 #include "AppMenuPopupEditor.h"
