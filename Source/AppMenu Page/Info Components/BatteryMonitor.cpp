@@ -85,11 +85,11 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
 
     } else
     {
-        MemoryBlock chargeFile(1, true);
-        if (File(chargingPath).loadFileAsData(chargeFile))
+        String chargeFile=File(chargingPath).loadFileAsString().substring(0,1);
+        if (chargeFile.isNotEmpty())
         {
-            DBG(String("Charge Status <")+String(chargeFile[0])+String(">"));
-            currentStatus.isCharging = chargeFile[0] == '1';
+            DBG(String("Charge Status <")+chargeFile+String(">"));
+            currentStatus.isCharging = (chargeFile == "1");
         } else
         {
             DBG("BatteryMonitor::getBatteryStatus: Failed to read charging file");
