@@ -105,10 +105,6 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
             currentStatus.percent =
                     File(gaugePath).loadFileAsString().getIntValue();
         }
-        if (currentStatus.percent > 100)
-        {
-            currentStatus.percent = 100;
-        }
     }
     return currentStatus;
 }

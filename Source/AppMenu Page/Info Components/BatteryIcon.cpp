@@ -84,6 +84,7 @@ void BatteryIcon::timerCallback()
     } else
     {
         batteryPercents.add(batteryPercent);
+        batteryPercent = 0;
         for (const int& percent : batteryPercents)
         {
             batteryPercent += percent;
