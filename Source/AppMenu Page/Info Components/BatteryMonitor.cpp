@@ -88,6 +88,7 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
         MemoryBlock chargeFile(1, true);
         if (File(chargingPath).loadFileAsData(chargeFile))
         {
+            DBG(String("Charge Status <")+String(chargeFile[0])+String(">"));
             currentStatus.isCharging = chargeFile[0] == '1';
         } else
         {
