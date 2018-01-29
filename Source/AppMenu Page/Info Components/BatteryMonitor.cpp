@@ -85,10 +85,14 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
 
     } else
     {
-        String chargingFile = File(chargingPath).loadFileAsString();
-        DBG(String("Charging file contents:") + chargingFile);
-        jassert(chargingFile == "1" || chargingFile == "0");
-        currentStatus.isCharging = (chargingFile == "1");
+        MemoryBlock chargeFile(1, true);
+        if (File(chargingPath).loadFileAsData(chargeFile))
+        {
+            currentStatus.isCharging = chargeFile[0] == '1';
+        } else
+        {
+            DBG("BatteryMonitor::getBatteryStatus: Failed to read charging file");
+        }
         if (dataSource == voltageFile)
         {
             int voltage = File(voltagePath).loadFileAsString().getIntValue();
