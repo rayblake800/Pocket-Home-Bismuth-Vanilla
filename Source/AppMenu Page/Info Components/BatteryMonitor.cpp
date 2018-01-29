@@ -72,7 +72,7 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
             DBG("BatteryMonitor::getBatteryStatus: Failed to read charging status");
             return currentStatus;
         }
-        currentStatus.isCharging = ((char)buf == '1');
+        currentStatus.isCharging = ((char) buf == '1');
 
         //Read the battery percentage  
         if (!i2cRead(file_i2c, 0xB9, &buf, 1))
@@ -86,9 +86,9 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
     } else
     {
         String chargingFile = File(chargingPath).loadFileAsString();
-        DBG(String("Charging file contents:")+chargingFile);
-        currentStatus.isCharging =
-                (File(chargingPath).loadFileAsString() == "1");
+        DBG(String("Charging file contents:") + chargingFile);
+        jassert(chargingFile == "1" || chargingFile == "0");
+        currentStatus.isCharging = (chargingFile == "1");
         if (dataSource == voltageFile)
         {
             int voltage = File(voltagePath).loadFileAsString().getIntValue();
@@ -100,6 +100,10 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
         {//dataSource is gauge file
             currentStatus.percent =
                     File(gaugePath).loadFileAsString().getIntValue();
+        }
+        if (currentStatus.percent > 100)
+        {
+            currentStatus.percent = 100;
         }
     }
     return currentStatus;
