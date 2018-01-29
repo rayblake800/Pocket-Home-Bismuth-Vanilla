@@ -63,5 +63,7 @@ private:
 
     //periodically check battery status
     void timerCallback();
-    const static int frequency = 60000;
+    const static int frequency = 2000;
+    //Use a rolling average for the battery percentage
+    Array<int> batteryPercents;
 };

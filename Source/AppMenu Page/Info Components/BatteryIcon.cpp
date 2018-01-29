@@ -83,6 +83,16 @@ void BatteryIcon::timerCallback()
         setStatus(noBattery, "");
     } else
     {
+        batteryPercents.add(batteryPercent);
+        for (const int& percent : batteryPercents)
+        {
+            batteryPercent += percent;
+        }
+        batteryPercent /= batteryPercents.size();
+        if (batteryPercents.size() > 10)
+        {
+            batteryPercents.remove(0);
+        }
         int status = round(((float) batteryPercent) / 100.0f * 3.0f);
         jassert(status >= 0 && status < 4);
         if (batteryStatus.isCharging)
