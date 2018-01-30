@@ -1,5 +1,5 @@
 /**
- *@file BatteryMonitor.h
+ * @file BatteryMonitor.h
  * 
  * BatteryMonitor finds and shares the current charge percentage and charging
  * state of the PocketCHIP battery.

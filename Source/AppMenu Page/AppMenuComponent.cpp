@@ -1,10 +1,3 @@
-/* 
- * File:   AppMenuComponent.cpp
- * Author: Anthony Brown
- * Created on December 19, 2017, 1:37 PM
- */
-
-
 #include <set>
 #include "../PocketHomeApplication.h"
 #include "Popup Editor Components/NewConfigAppEditor.h"

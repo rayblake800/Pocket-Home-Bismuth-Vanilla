@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    AppFolderButton.cpp
-    Created: 11 Jan 2018 6:58:52pm
-    Author:  Anthony Brown
-
-  ==============================================================================
- */
 #include "../../Utils.h"
 #include "AppFolderButton.h"
 #include "../AppMenuComponent.h"

@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    BatteryIcon.cpp
-    Created: 29 Dec 2017 12:02:24pm
-    Author:  Anthony Brown
-
-  ==============================================================================
- */
 #include "BatteryIcon.h"
 #include "../../PocketHomeApplication.h"
 #include "../../Utils.h"

@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    WifiIcon.cpp
-    Created: 29 Dec 2017 12:02:41pm
-    Author:  Anthony Brown
-
-  ==============================================================================
- */
-
 #include "WifiIcon.h"
 #include "../../Wifi/WifiStatus.h"
 #include "../../PocketHomeApplication.h"

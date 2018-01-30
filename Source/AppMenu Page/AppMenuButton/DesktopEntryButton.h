@@ -1,6 +1,5 @@
 /**
  * @file DesktopEntryButton.h
- * @author Anthony Brown
  * 
  * DesktopEntryButton is an AppMenuButton that gets its data from a 
  * DesktopEntry object, loaded from a .desktop file. It represents a shortcut
@@ -94,5 +93,7 @@ public:
     void moveDataIndex(int offset) {
     };
 private:
+    //application data source, set on construction
     DesktopEntry desktopEntry;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DesktopEntryButton)
 };

@@ -1,6 +1,5 @@
 /**
  * @file AppFolderButton.h
- * @author Anthony Brown
  * 
  * AppFolderButton is an AppMenuButton that gets its data from a 
  * AppConfigFile::AppFolder structure. These buttons represent a set of 
@@ -96,5 +95,6 @@ public:
 private:
     AppConfigFile& config;
     AppConfigFile::AppFolder appFolder;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppFolderButton)
 };
 

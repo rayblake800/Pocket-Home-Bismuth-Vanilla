@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    desktopEntryButton.cpp
-    Created: 11 Jan 2018 6:57:42pm
-    Author:  Anthony Brown
-
-  ==============================================================================
- */
 #include "../../Utils.h"
 #include "../../PocketHomeApplication.h"
 #include "DesktopEntryButton.h"

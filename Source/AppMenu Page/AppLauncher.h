@@ -1,6 +1,5 @@
 /**
  * @file AppLauncher.h
- * @author Anthony Brown
  * 
  * AppLauncher launches and tracks new application processes. 
  */

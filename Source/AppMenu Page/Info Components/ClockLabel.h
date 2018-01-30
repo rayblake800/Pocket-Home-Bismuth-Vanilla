@@ -1,5 +1,6 @@
 /**
  * @file ClockLabel.h
+ * 
  * ClockLabel is a component managed by the ComponentConfigFile that displays
  * the current time.
  */

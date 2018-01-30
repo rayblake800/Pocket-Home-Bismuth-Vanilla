@@ -1,10 +1,7 @@
 /* 
- * File:   DesktopEntry.h
- * Author: anthony
- *
- * Created on December 14, 2017, 1:46 PM
+ * @file DesktopEntry.h
  * 
- * Reads in standardized .Desktop file data
+ * DesktopEntry reads in standardized .Desktop file data
  * the Desktop entry format is very well documented at
  * https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys
  */

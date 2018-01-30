@@ -1,8 +1,7 @@
 /**
  * @File IconThread.h
- * @Author Anthony Brown
  * 
- * Loads application and directory icons asynchronously for AppMenuButtons.
+ * Loads application and directory icons asynchronously.
  */
 
 #pragma once

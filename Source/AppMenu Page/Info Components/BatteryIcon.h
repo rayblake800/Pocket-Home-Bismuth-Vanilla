@@ -1,6 +1,5 @@
 /* 
  * @file   BatteryIcon.h
- * @author Anthony Brown
  * 
  * BatteryIcon displays the current charge level and charging state of 
  * the PocketCHIP battery as a component icon, and writes the battery percentage
@@ -63,7 +62,9 @@ private:
 
     //periodically check battery status
     void timerCallback();
+    //timer frequency in ms
     const static int frequency = 2000;
     //Use a rolling average for the battery percentage
     Array<int> batteryPercents;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BatteryIcon)
 };

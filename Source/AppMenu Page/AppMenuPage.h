@@ -1,6 +1,5 @@
 /**
  * @file AppMenuPage.h
- * @author Anthony Brown
  * 
  * AppMenuPage is the main page of the application. It displays the app launch
  * menu, assorted system information, and navigation controls to access

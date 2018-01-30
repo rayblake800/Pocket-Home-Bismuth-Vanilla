@@ -1,11 +1,3 @@
-/* 
- * File:   DesktopEntry.cpp
- * Author: anthony
- * 
- * Created on December 14, 2017, 1:46 PM
- */
-
-
 #include <set>
 #include "../Utils.h"
 #include "DesktopEntry.h"

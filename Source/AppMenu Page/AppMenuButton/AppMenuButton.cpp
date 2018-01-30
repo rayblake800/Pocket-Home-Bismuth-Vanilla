@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    AppMenuButton.cpp
-    Created: 17 Dec 2017 3:57:53pm
-    Author:  Anthony Brown
- * 
-  ==============================================================================
- */
-
 #include "../../PokeLookAndFeel.h"
 #include "../../Utils.h"
 #include "../../PocketHomeApplication.h"

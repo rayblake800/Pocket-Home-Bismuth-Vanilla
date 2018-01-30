@@ -1,6 +1,5 @@
 /* 
  * @file AppMenuButton.h
- * @author Anthony Brown
  * 
  * AppMenuButton is a custom button type for launching applications and 
  * opening application directories. Each button displays an icon and a title,
@@ -196,4 +195,6 @@ private:
     Colour fillColour;
     //Button background fill color, if selected.
     Colour selectedFillColour;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuButton)
 };

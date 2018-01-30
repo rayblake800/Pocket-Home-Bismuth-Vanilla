@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    DrawableImageComponent.cpp
-    Created: 17 Jan 2018 3:38:35pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "../Utils.h"
 #include "DrawableImageComponent.h"
 
@@ -19,7 +9,7 @@ DrawableImageComponent::DrawableImageComponent
 placement(placement)
 {
     setImage(assetFilename);
-    setInterceptsMouseClicks(false,false);
+    setInterceptsMouseClicks(false, false);
 }
 
 /**
@@ -30,18 +20,18 @@ DrawableImageComponent::DrawableImageComponent
 placement(placement)
 {
     setImage(imageFile);
-    setInterceptsMouseClicks(false,false);
+    setInterceptsMouseClicks(false, false);
 }
 
 /**
  * Create a DrawableImageComponent using an image object.
  */
 DrawableImageComponent::DrawableImageComponent(Image image,
-        RectanglePlacement placement):
+        RectanglePlacement placement) :
 placement(placement)
 {
     setImage(image);
-    setInterceptsMouseClicks(false,false);
+    setInterceptsMouseClicks(false, false);
 }
 
 /**
@@ -51,7 +41,7 @@ DrawableImageComponent::DrawableImageComponent
 (RectanglePlacement placement) :
 placement(placement)
 {
-    setInterceptsMouseClicks(false,false);
+    setInterceptsMouseClicks(false, false);
 }
 
 DrawableImageComponent::~DrawableImageComponent()
@@ -85,7 +75,7 @@ void DrawableImageComponent::setImage(Image image)
     DrawableImage * drawable = new DrawableImage();
     DBG("loading Image object");
     drawable->setImage(image);
-    imageDrawable=drawable;
+    imageDrawable = drawable;
     addAndMakeVisible(imageDrawable);
     imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
 }
@@ -103,6 +93,9 @@ bool DrawableImageComponent::replaceColour(Colour originalColour,
     return imageDrawable->replaceColour(originalColour, replacementColour);
 }
 
+/**
+ * Adjust image size and placement to match whenever component size changes.
+ */
 void DrawableImageComponent::resized()
 {
     if (imageDrawable != nullptr)

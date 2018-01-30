@@ -1,6 +1,5 @@
 /**
  * @file DrawableImageComponent.h
- * @author Anthony Brown
  * 
  * DrawableImageComponent is a component that draws a scaled image.
  */
@@ -72,7 +71,9 @@ public:
     bool replaceColour(Colour originalColour, Colour replacementColour);
 
 protected:
-
+    /**
+     * Adjust image size and placement to match whenever component size changes.
+     */
     void resized() override;
 private:
 

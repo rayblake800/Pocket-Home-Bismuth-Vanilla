@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    AppMenuPage.cpp
-    Created: 25 Dec 2017 5:48:25pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "../Configuration/Configurables/ConfigurableImageComponent.h"
 #include "../PokeLookAndFeel.h"
 #include "../Utils.h"

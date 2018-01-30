@@ -1,6 +1,5 @@
 /**
  * @file ConfigAppButton.h
- * @author Anthony Brown
  * 
  * ConfigAppButton is an AppMenuButton that gets its data from a 
  * AppConfigFile::AppItem structure. It represents an application link
@@ -95,7 +94,10 @@ public:
     void moveDataIndex(int offset);
 
 private:
+    //Application config file manager, used to read and write favorite app data
     AppConfigFile& config;
+    //Application information structure
     AppConfigFile::AppItem appItem;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConfigAppButton)
 };
 

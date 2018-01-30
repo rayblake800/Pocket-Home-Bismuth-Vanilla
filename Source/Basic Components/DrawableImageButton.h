@@ -1,6 +1,6 @@
 /**
- * @File DrawableImageButton.h
- * @author Anthony Brown
+ * @file DrawableImageButton.h
+ * 
  * DrawableImageButton is a button drawn using a DrawableImageComponent
  */
 

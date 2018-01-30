@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    ConfigAppButton.cpp 
-    Created: 11 Jan 2018 6:58:24pm
-    Author:  Anthony Brown
-
-  ==============================================================================
- */
 #include "../../Utils.h"
 #include "../../PocketHomeApplication.h"
 #include "ConfigAppButton.h"

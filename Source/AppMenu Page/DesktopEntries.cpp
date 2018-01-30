@@ -1,9 +1,3 @@
-/* 
- * File:   DesktopEntries.cpp
- * Author: anthony
- * 
- * Created on December 14, 2017, 1:36 PM
- */
 #include <atomic>
 #include <stdlib.h>
 #include <dirent.h>

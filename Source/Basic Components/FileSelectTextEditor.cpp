@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    FileSelectTextEditor.cpp
-    Created: 12 Jan 2018 9:50:15pm
-    Author:  anthony
-
-  ==============================================================================
- */
 #include "../Utils.h"
 #include "FileSelectTextEditor.h"
 
@@ -39,17 +30,28 @@ FileSelectTextEditor::~FileSelectTextEditor()
 {
 }
 
+/**
+ * Set the initial text value for the file selection text editor
+ */
 void FileSelectTextEditor::setText(String path)
 {
     filePath.setText(path, true);
     notifyListeners();
 }
 
+/**
+ * @return the text stored within this component's text editor box.
+ */
 String FileSelectTextEditor::getText()
 {
     return filePath.getText();
 }
 
+/**
+ * @param shouldShow sets the file selection button next to the text editor
+ * box to be either visible, or transparent.  By default, the button will
+ * be shown.
+ */
 void FileSelectTextEditor::showFileSelectButton(bool shouldShow)
 {
     if (shouldShow == showButton)
@@ -76,11 +78,20 @@ FileSelectTextEditor::Listener::~Listener()
 {
 }
 
+/**
+ * Adds a Listener to the list of Listeners that will be notified
+ * of changes.
+ * @param listener some object that needs to track the contents of this
+ * editor
+ */
 void FileSelectTextEditor::addFileSelectListener(Listener * listener)
 {
     listeners.insert(listener);
 }
 
+/**
+ * Signals to all listeners that editor data has updated.
+ */
 void FileSelectTextEditor::notifyListeners()
 {
     for (std::set<Listener*>::iterator it = listeners.begin();
@@ -90,6 +101,9 @@ void FileSelectTextEditor::notifyListeners()
     }
 }
 
+/**
+ * Runs notifyListeners when the editor loses focus
+ */
 void FileSelectTextEditor::textEditorFocusLost(TextEditor& editor)
 {
     if (editor.getText().isNotEmpty())
@@ -98,6 +112,10 @@ void FileSelectTextEditor::textEditorFocusLost(TextEditor& editor)
     }
 }
 
+/**
+ * Runs notifyListeners when the editor is focused and the return key
+ * is pressed
+ */
 void FileSelectTextEditor::textEditorReturnKeyPressed(TextEditor & editor)
 {
     if (editor.getText().isNotEmpty())
@@ -106,6 +124,9 @@ void FileSelectTextEditor::textEditorReturnKeyPressed(TextEditor & editor)
     }
 }
 
+/**
+ * Opens the file selection window when the file selection button is clicked.
+ */
 void FileSelectTextEditor::buttonClicked(Button* button)
 {
     FileBrowserComponent browser(FileBrowserComponent::canSelectFiles |
@@ -127,6 +148,9 @@ void FileSelectTextEditor::buttonClicked(Button* button)
     }
 }
 
+/**
+ * Resize child components to fit within the parent component.
+ */
 void FileSelectTextEditor::resized()
 {
     Rectangle<int> bounds = getLocalBounds();

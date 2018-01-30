@@ -1,8 +1,6 @@
 /* 
- * File:   DesktopEntries.h
- * Author: anthony
+ * @file   DesktopEntries.h
  *
- * Created on December 14, 2017, 1:36 PM
  * Finds all .Desktop and .Directory files in the system,
  * and stores and sorts them as DesktopEntry objects.
  */
