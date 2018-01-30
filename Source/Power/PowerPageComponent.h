@@ -1,57 +1,85 @@
+/**
+ * @file PowerPageComponent.h
+ * 
+ * PowerPageComponent is a UI menu page that shows buttons that perform actions
+ * related to system power state.  From this page, the user can shut down the
+ * system, reboot the system, turn off the display, enter PocketCHIP flashing
+ * mode, or close the page.
+ */
 #pragma once
-
+#include "../GridLayoutManager.h"
+#include "../Basic Components/DrawableImageButton.h"
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Basic Components/SwitchComponent.h"
-#include "../PageStackComponent.h"
 #include "../LoginPage.h"
 #include "../MainComponent.h"
+#include "PowerPageFelComponent.h"
+
+/**
+ * TODO:
+ * 
+ * -Set the sleep mode command in config.json
+ * -Restore build/version labels.
+ * -Make background color configurable.
+ */
 
 class PowerPageComponent : public Component, private Button::Listener {
 public:
-
-    StretchableLayoutManager verticalLayout;
-    
-    ScopedPointer<ImageButton> backButton;
-    ScopedPointer<TextButton> powerOffButton;
-    ScopedPointer<TextButton> rebootButton;
-    ScopedPointer<TextButton> sleepButton;
-    ScopedPointer<TextButton> felButton;
-    ScopedPointer<Label> buildNameLabel;
-    ScopedPointer<Label> rev;
-    ScopedPointer<Component> mainPage;
-    ScopedPointer<ImageComponent> powerSpinner;
-    ScopedPointer<AlertWindow> updateWindow;
-    ScopedPointer<OverlaySpinner> overlaySpinner;
-
-    HashMap<String, Component *> pagesByName;
-  
-  String buildName;
-    ScopedPointer<PageStackComponent> pageStack;
-    ScopedPointer<Component> felPage;
-    
-
-  PowerPageComponent();
-  ~PowerPageComponent();
-    
-  void paint(Graphics &g) override;
-  void resized() override;
-  void showPowerSpinner();
-  void buttonStateChanged(Button*) override;
-  void buttonClicked(Button*) override;
-  void setSleep();
-  void hideLockscreen();
-  
-  static unsigned char rev_number;
-  static unsigned char bug_number;
-  
+    PowerPageComponent();
+    ~PowerPageComponent();
 private:
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerPageComponent)
-  Colour bgColor;
-  Image bgImage;
-  String bgImagePath;
-  ChildProcess child;
-
-  //Lockscreen to display when the screen goes sleeping
-  ScopedPointer<LoginPage> lockscreen;
+    /**
+     * Turns off the display until key or mouse input is detected.
+     * The lock screen will be visible when the display turns on again.
+     */
+    void startSleepMode();
+    
+    /**
+     * If the lock screen is visible, this will remove it from the screen.
+     */
+    void hideLockscreen();
+    
+    /**
+     * Show the power spinner to indicate to the user that the system is
+     * restarting or shutting down.
+     */
+    void showPowerSpinner();
+    /**
+     * Fills in the background with bgColor.
+     */
+    void paint(Graphics &g) override;
+    /**
+     * Resize all child components to fit the page.
+     */
+    void resized() override;
+    /**
+     * Draw buttons differently on mouse-over or button click.
+     */
+    void buttonStateChanged(Button*) override;
+    /**
+     * Handles all button clicks.
+     */
+    void buttonClicked(Button*) override;
+    //Arranges buttons to fit on the page.
+    GridLayoutManager layoutManager;
+    //Closes this page.
+    DrawableImageButton backButton;
+    //Turns off the system using the shutdown command in the MainConfigFile.
+    TextButton powerOffButton;
+    //Starts sleep mode with startSleepMode()
+    TextButton sleepButton;
+    //Restarts the system using the reboot command in the MainConfigFile.
+    TextButton rebootButton;
+    //Shows a page that gives the user the option to enter flashing mode.
+    TextButton felButton;
+    //Spinner to indicate that the system is rebooting/shutting down
+    OverlaySpinner overlaySpinner;
+    //Page for showing flashing options, opened by felButton.
+    PowerFelPageComponent felPage;
+    //Background color for 
+    Colour bgColor;
+    ChildProcess commandProcess;
+    LoginPage lockscreen;    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerPageComponent)
 };
 

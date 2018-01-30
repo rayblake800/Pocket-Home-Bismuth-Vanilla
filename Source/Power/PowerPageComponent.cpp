@@ -10,196 +10,143 @@
 unsigned char PowerPageComponent::rev_number = 9;
 unsigned char PowerPageComponent::bug_number = 0;
 
-PowerPageComponent::PowerPageComponent()
+PowerPageComponent::PowerPageComponent() :
+bgColor(Colours::black),
+backButton("nextIcon.svg"),
+powerOffButton("Shutdown"),
+rebootButton("Reboot"),
+sleepButton("Sleep"),
+felButton("Flash Software"),
+lockscreen([this]()
 {
-    bgColor = Colours::black;
-    bgImage = createImageFromFile(assetFile("powerMenuBackground.png"));
-    mainPage = new Component();
-    addAndMakeVisible(mainPage);
-    mainPage->toBack();
-    ChildProcess child{};
 
-    felPage = new PowerFelPageComponent();
+    hideLockscreen();
+})
+{
+    std::vector<GridLayoutManager::ComponentLayoutParams> pageLayout = {
+        {nullptr, 0, 1},
+        {nullptr, 1, 1},
+        {&powerOffButton, 1, 6},
+        {nullptr, 1, 1},
 
-    //Setting up the lockscreen
-    auto lambda = [this]()
-    {
-        this->hideLockscreen();
+        {nullptr, 2, 1},
+        {&sleepButton, 2, 6},
+        {nullptr, 2, 1},
+
+        {nullptr, 3, 1},
+        {&rebootButton, 3, 6},
+        {nullptr, 3, 1},
+
+        {nullptr, 4, 1},
+        {&felButton, 4, 6},
+        {nullptr, 4, 1},
+        {nullptr, 5, 1}
     };
-    lockscreen = new LoginPage(lambda);
+    layoutManager.addComponents(pageLayout, this);
 
-    // create back button
-    backButton = createImageButton(
-            "Back", createImageFromFile(assetFile("nextIcon.png")));
-    backButton->addListener(this);
-    backButton->setAlwaysOnTop(true);
-    addAndMakeVisible(backButton);
-
-    powerOffButton = new TextButton("Power OFF");
-    powerOffButton->setButtonText("Shutdown");
-    powerOffButton->addListener(this);
-    addAndMakeVisible(powerOffButton);
-
-    rebootButton = new TextButton("Reboot");
-    rebootButton->setButtonText("Reboot");
-    rebootButton->addListener(this);
-    addAndMakeVisible(rebootButton);
-
-    sleepButton = new TextButton("Sleep");
-    sleepButton->setButtonText("Sleep");
-    sleepButton->addListener(this);
-    addAndMakeVisible(sleepButton);
-
-    felButton = new TextButton("Fel");
-    felButton->setButtonText("Flash Software");
-    felButton->addListener(this);
-    addAndMakeVisible(felButton);
-
-    overlaySpinner = new OverlaySpinner();
-    addChildComponent(overlaySpinner);
-
-    buildName = "Build: ";
-    File releaseFile = absoluteFileFromPath("/etc/os-release");
-    if (releaseFile.exists())
+    std::vector<Button*> buttons = {
+        &backButton,
+        &powerOffButton,
+        &sleepButton,
+        &rebootButton,
+        &felButton
+    };
+    for (Button* button : buttons)
     {
-        String fileStr = releaseFile.loadFileAsString();
-        auto lines = split(fileStr, "\n");
-        if (lines.size() < 9)
-            DBG(__func__ << ": No release information in /etc/os-release");
-        else
-        {
-            auto releaseKv = split(lines[8], "=");
-            std::vector<String> releaseV(releaseKv.begin() + 1, releaseKv.end());
-            for (const auto& val : releaseV)
-            {
-                // WIP: misses the removed equals
-                buildName += val;
-            }
-            DBG(buildName);
-        }
+        button->addListener(this);
     }
 
-#if JUCE_MAC
-    buildName = "Build: MacOsX Dev Build";
-#endif
+    backButton.setAlwaysOnTop(true);
+    addAndMakeVisible(backButton);
+    addChildComponent(overlaySpinner);
 
-    buildNameLabel = new Label("Build Name");
-    buildNameLabel->setText(buildName, NotificationType::dontSendNotification);
-    buildNameLabel-> setFont(16);
-    buildNameLabel->setJustificationType(Justification::centred);
-    addAndMakeVisible(buildNameLabel);
-
-    //Create rev Text
-    String rev_string = "Alpha v" + std::to_string(rev_number);
-    if (bug_number != 0)
-        rev_string += "." + std::to_string(bug_number);
-    rev = new Label("rev", rev_string);
-    addAndMakeVisible(rev);
-    rev->setAlwaysOnTop(true);
-    rev->setFont(Font(20.f));
-
-    //Update window
-    updateWindow = new AlertWindow("Checking for updates",
-            "Downloading informations, please wait...",
-            AlertWindow::AlertIconType::NoIcon);
-    addAndMakeVisible(updateWindow, 10);
-    updateWindow->setAlwaysOnTop(true);
-    updateWindow->setVisible(false);
 }
 
 PowerPageComponent::~PowerPageComponent()
 {
 }
 
-void PowerPageComponent::hideLockscreen()
-{
-    removeChildComponent(lockscreen);
-    //Let's go back to the homescreen
-    PocketHomeApplication::getInstance()
-            ->getMainStack().popPage(PageStackComponent::kTransitionNone);
-}
-
-void PowerPageComponent::paint(Graphics &g)
-{
-    auto bounds = getLocalBounds();
-    g.fillAll(bgColor);
-    g.drawImage(bgImage, bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), 0, 0, bgImage.getWidth(), bgImage.getHeight(), false);
-}
-
-void PowerPageComponent::resized()
-{
-
-    auto bounds = getLocalBounds();
-    overlaySpinner->setBounds(0, 0, bounds.getWidth(), bounds.getHeight());
-
-    {
-        unsigned int number = 4;
-
-        for (int i = 0, j = 0; i < number; ++i)
-        {
-            if (i > 0) verticalLayout.setItemLayout(j++, 0, -1, -1);
-            verticalLayout.setItemLayout(j++, 48, 48, 48);
-        }
-
-        Component * powerItems[] = {powerOffButton.get(), rebootButton.get(), sleepButton.get()};
-        auto b = bounds.reduced(10);
-        b.setLeft(70);
-        verticalLayout.layOutComponents(powerItems, 1, b.getX(), b.getY(), b.getWidth(),
-                b.getHeight(), true, true);
-    }
-
-    mainPage->setBounds(bounds);
-
-    powerOffButton->setBounds(bounds.getWidth() / 7, 40, 350, 40);
-    sleepButton->setBounds(bounds.getWidth() / 7, 90, 350, 40);
-    rebootButton->setBounds(bounds.getWidth() / 7, 140, 350, 40);
-    felButton->setBounds(bounds.getWidth() / 7, 190, 350, 40);
-    backButton->setBounds(bounds.getWidth() - 60, bounds.getY(), 60, bounds.getHeight());
-
-    buildNameLabel->setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), 30);
-    buildNameLabel->setBoundsToFit(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), Justification::centredBottom, true);
-    rev->setBounds(bounds.getX(), bounds.getY(), 100, 30);
-
-    int width = updateWindow->getWidth();
-    int height = updateWindow->getHeight();
-    int x = bounds.getWidth() / 2 - width / 2;
-    int y = bounds.getHeight() / 2 - height / 2;
-    updateWindow->setBounds(bounds.getX() + x, bounds.getY() + y, width, height);
-}
-
-void PowerPageComponent::setSleep()
+/**
+ * Turns off the display until key or mouse input is detected.
+ * The lock screen will be visible when the display turns on again.
+ */
+void PowerPageComponent::startSleepMode()
 {
 #if JUCE_LINUX
     StringArray cmd{ "xset", "q", "|", "grep", "is O"};
-    if (child.start(cmd))
+    if (commandProcess.start(cmd))
     {
-        const String result(child.readAllProcessOutput());
+        const String result(commandProcess.readAllProcessOutput());
         if (result == "Monitor is Off")
         {
-            child.start("xset dpms force on");
+            commandProcess.start("xset dpms force on");
         } else
         {
-            lockscreen->hasPassword();
-            //Show the lockscreen
             addAndMakeVisible(lockscreen);
-            lockscreen->setAlwaysOnTop(true);
+            lockscreen.setAlwaysOnTop(true);
             //Turn off the screen
-            child.start("xset dpms force off");
+            commandProcess.start("xset dpms force off");
         }
     }
 #endif
 }
 
-void PowerPageComponent::showPowerSpinner()
+/**
+ * If the lock screen is visible, this will remove it from the screen.
+ */
+void PowerPageComponent::hideLockscreen()
 {
-    backButton->setVisible(false);
-    powerOffButton->setVisible(false);
-    sleepButton->setVisible(false);
-    rebootButton->setVisible(false);
-    felButton->setVisible(false);
-    overlaySpinner->setVisible(true);
+    if (lockscreen.isShowing())
+    {
+        removeChildComponent(&lockscreen);
+        PocketHomeApplication::getInstance()
+                ->getMainStack().popPage(PageStackComponent::kTransitionNone);
+    }
 }
 
+/**
+ * Show the power spinner to indicate to the user that the system is
+ * restarting or shutting down.
+ */
+void PowerPageComponent::showPowerSpinner()
+{
+    backButton.setVisible(false);
+    powerOffButton.setVisible(false);
+    sleepButton.setVisible(false);
+    rebootButton.setVisible(false);
+    felButton.setVisible(false);
+    overlaySpinner.setVisible(true);
+}
+
+/**
+ * Fills in the background with bgColor.
+ */
+void PowerPageComponent::paint(Graphics &g)
+{
+    g.fillAll(bgColor);
+}
+
+/**
+ * Resize all child components to fit the page.
+ */
+void PowerPageComponent::resized()
+{
+
+    Rectangle<int> bounds = getLocalBounds();
+    overlaySpinner.setBounds(bounds);
+    lockscreen.setBounds(bounds);
+    layoutManager.layoutComponents(bounds, 0, bounds.getHeight() / 20);
+
+    Rectangle<int> backButtonBounds = bounds;
+    backButtonBounds.setLeft(sleepButton.getRight());
+    backButtonBounds.setTop(sleepButton.getBounds().getCentreY());
+    backButtonBounds.setBottom(rebootButton.getBounds().getCentreY());
+    backButton.setBounds(backButtonBounds);
+}
+
+/**
+ * Draw buttons differently on mouse-over or button click.
+ */
 void PowerPageComponent::buttonStateChanged(Button *btn)
 {
     if (btn->isMouseButtonDown() && btn->isMouseOver())
@@ -211,27 +158,34 @@ void PowerPageComponent::buttonStateChanged(Button *btn)
     }
 }
 
+/**
+ * Handles all button clicks.
+ */
 void PowerPageComponent::buttonClicked(Button *button)
 {
     MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     PageStackComponent& mainStack = PocketHomeApplication::getInstance()
             ->getMainStack();
-    if (button == backButton)
+    if (button == &backButton)
     {
-        mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontalLeft);
-    } else if (button == powerOffButton)
-    {
-        showPowerSpinner();
-        child.start(config.getConfigString(MainConfigFile::shutdownCommandKey));
-    } else if (button == rebootButton)
+        mainStack.popPage
+                (PageStackComponent::kTransitionTranslateHorizontalLeft);
+    } else if (button == &powerOffButton)
     {
         showPowerSpinner();
-        child.start(config.getConfigString(MainConfigFile::restartCommandKey));
-    } else if (button == sleepButton)
+        commandProcess.start(config.getConfigString
+                (MainConfigFile::shutdownCommandKey));
+    } else if (button == &rebootButton)
     {
-        setSleep();
-    } else if (button == felButton)
+        showPowerSpinner();
+        commandProcess.start(config.getConfigString
+                (MainConfigFile::restartCommandKey));
+    } else if (button == &sleepButton)
     {
-        mainStack.pushPage(felPage, PageStackComponent::kTransitionTranslateHorizontalLeft);
+        startSleepMode();
+    } else if (button == &felButton)
+    {
+        mainStack.pushPage(&felPage,
+                PageStackComponent::kTransitionTranslateHorizontalLeft);
     }
 }
