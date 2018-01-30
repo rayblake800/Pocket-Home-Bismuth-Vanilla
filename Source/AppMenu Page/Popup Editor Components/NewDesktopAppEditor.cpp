@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    NewDesktopAppEditor.cpp
-    Created: 23 Jan 2018 10:44:43pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "NewDesktopAppEditor.h"
 NewDesktopAppEditor::NewDesktopAppEditor(IconThread& iconThread,
         std::function<void() > onConfirm) :

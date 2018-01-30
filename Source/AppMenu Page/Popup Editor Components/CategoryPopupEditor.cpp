@@ -1,16 +1,4 @@
-/*
-  ==============================================================================
-
-    CategoryEditorPopup.cpp
-    Created: 20 Jan 2018 1:48:01pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "CategoryPopupEditor.h"
-
-//==============================================================================
 
 CategoryPopupEditor::CategoryPopupEditor(Array<String> categories,
         std::function<void(Array<String>) > onConfirm) :

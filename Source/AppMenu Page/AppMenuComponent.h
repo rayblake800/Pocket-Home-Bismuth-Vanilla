@@ -18,8 +18,11 @@
 #include "DesktopEntries.h"
 
 /**
- * 
- * A menu for launching applications, populated with .Desktop file info
+ * TODO:
+ * - Turn this into an abstract class, add inheriting class 
+ *   ScrollingAppMenuComponent
+ * - Add additional menu styles in new inheriting classes, e.g. 
+ *   TabbedAppMenuComponent
  */
 class AppMenuComponent : public Component,
 public ConfigurableComponent {

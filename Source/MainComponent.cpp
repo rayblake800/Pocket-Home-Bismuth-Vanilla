@@ -17,14 +17,6 @@ loginPage([this] ()
     LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
     setWantsKeyboardFocus(false);
 
-    //Function to execute when the login button is pressed on login page
-    //    loginPage = new LoginPage([this] ()
-    //    {
-    //        loggedIn();
-    //    });
-    //appMenuPage=new AppMenuPage();
-    //pageStack = new PageStackComponent();
-
     if (loginPage.hasPassword())
     {
         addAndMakeVisible(loginPage);

@@ -35,6 +35,7 @@ protected:
      */
     void loadConfigProperties(ConfigFile * config,String key);
 private:
+    //If true, use 24 hour time, if false, use 12 hour AM/PM time.
     bool use24HrMode;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ClockLabel)
 };

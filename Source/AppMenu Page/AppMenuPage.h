@@ -18,16 +18,26 @@
 #include "Info Components/WifiIcon.h"
 #include "AppMenuComponent.h"
 
+/**
+ * TODO:
+ *  -Add configurable key shortcuts
+ *  -Add alternate AppMenu class support
+ */
+
 class AppMenuPage : public Component,
 public Configurable,
 private Button::Listener {
 public:
     AppMenuPage();
     virtual ~AppMenuPage();
+    
+    /**
+     * 
+     */
     void stopWaitingOnLaunch();
     
     /**
-     * Add a popup editor window to the page.
+     * Add a pop-up editor window to the page.
      * @param editor will be added, made visible, and positioned/scaled as
      * needed.
      */
@@ -46,7 +56,6 @@ private:
     /**
      * Forward all clicks (except button clicks) to the appMenu so that it can 
      * potentially create a pop-up menu
-     * @param event
      */
     virtual void mouseDown(const MouseEvent &event) override;
     

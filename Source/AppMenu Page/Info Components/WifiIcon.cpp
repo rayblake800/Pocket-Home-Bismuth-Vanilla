@@ -38,8 +38,6 @@ void WifiIcon::visibilityChanged()
     }
 }
 
-
-
 /**
  * Check WiFi state and update the image.
  */

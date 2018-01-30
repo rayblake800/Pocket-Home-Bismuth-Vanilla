@@ -136,7 +136,8 @@ void PersonalizePageComponent::resized()
     //Row 5:
     layoutManager.addComponent(&applyChangesBtn, 5, 1);
 
-    layoutManager.layoutComponents(bounds, 4,15);
+    layoutManager.layoutComponents(bounds, bounds.getWidth()/100,
+            bounds.getWidth()/20);
 }
 
 void PersonalizePageComponent::buttonClicked(Button* button)

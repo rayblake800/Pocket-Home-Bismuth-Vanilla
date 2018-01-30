@@ -15,9 +15,13 @@ public:
     virtual ~WifiIcon();
 
 private:
-    //All tracked WiFi states.  Each corresponds with an image asset file
+    //
     //defined in config.json
 
+    /**
+     * All tracked WiFi states.  Each corresponds to an image asset file
+     * defined in components.json
+     */
     enum WifiIconImage {
         wifiOff,
         wifiStrength0,
@@ -42,5 +46,6 @@ private:
      * updates the WiFi icon.
      */
     void timerCallback();
+    //timer frequency in ms
     const static int frequency = 2000;
 };

@@ -3,11 +3,19 @@
  * 
  * AppLauncher launches and tracks new application processes. 
  */
+#pragma once
 #include <functional>
 #include <map>
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-#pragma once
+/**
+ * TODO:
+ *  -Test to see if it's really necessary to reload xmodmap every time an 
+ *   application launches
+ *  -Instead of holding a single instance of a custom Timer subclass, this
+ *   class should just inherit from Timer
+ */
+
 class AppLauncher{
 public:
     AppLauncher();
@@ -32,10 +40,12 @@ public:
      */
     void stopTimer();
 private:
-    
+    //Stores information on launched processes
     struct ProcessInfo{
         ProcessInfo(String title,String command);
+        //Application title
         String title;
+        //Application launch command
         String command;
         bool operator==(const ProcessInfo& rhs) const;
         bool operator<(const ProcessInfo& rhs) const;
@@ -53,6 +63,7 @@ private:
      * @param windowId the app window's id
      */
     void focusApp(const String& windowId);
+    
     /**
      * Attempt to find an open window of a launched application
      * @param processInfo running application process info

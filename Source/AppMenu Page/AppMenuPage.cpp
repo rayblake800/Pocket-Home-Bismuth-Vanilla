@@ -7,7 +7,6 @@
 AppMenuPage::AppMenuPage() :
 Configurable(&PocketHomeApplication::getInstance()->getConfig(),
 {
-
     MainConfigFile::backgroundKey
 }),
 frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
@@ -21,7 +20,6 @@ appMenu(appConfig)
         showPopupEditor(newEditor);
     });
     setWantsKeyboardFocus(true);
-    //setExplicitFocusOrder(2);
 
     addAndMakeVisible(appMenu);
     addAndMakeVisible(frame);
@@ -46,8 +44,13 @@ AppMenuPage::~AppMenuPage()
 {
 }
 
+void AppMenuPage::stopWaitingOnLaunch()
+{
+    appMenu.stopWaitingForLoading();
+}
+
 /**
- * Add a popup editor window to the page.
+ * Add a pop-up editor window to the page.
  */
 void AppMenuPage::showPopupEditor(AppMenuPopupEditor* editor)
 {
@@ -60,10 +63,7 @@ void AppMenuPage::showPopupEditor(AppMenuPopupEditor* editor)
     }
 }
 
-void AppMenuPage::stopWaitingOnLaunch()
-{
-    appMenu.stopWaitingForLoading();
-}
+
 
 void AppMenuPage::loadConfigProperties(ConfigFile * config, String key)
 {

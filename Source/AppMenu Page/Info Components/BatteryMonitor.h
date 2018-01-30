@@ -12,6 +12,10 @@ public:
     BatteryMonitor();
     ~BatteryMonitor();
     
+    /**
+     * Stores battery charge percentage and if the battery is currently
+     *  charging.
+     */
     struct BatteryStatus{
         int percent=0;
         bool isCharging=0;
@@ -66,6 +70,7 @@ private:
     };
     DataSource dataSource;
     
+    //i2c bus access methods:
     //i2c access will be needed iff there's no battery script updating files
     
     /**

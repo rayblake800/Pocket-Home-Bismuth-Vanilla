@@ -44,9 +44,10 @@ protected:
     virtual void buttonClicked(Button* buttonClicked) override;
     
     /**
-     * When this component is open, it should not let any button presses through
-     * to the components beneath it. The escape and return keys work the same
+     * The escape and return keys work the same
      * as pressing the cancel and confirm buttons, respectively.
+     * When this component is open, it should not let any button presses through
+     * to the components beneath it. 
      * @param key is the key pressed by the user.
      * @return true always to indicate to the key manager that key presses
      * should not be passed on to the components beneath it.
@@ -57,22 +58,40 @@ protected:
      * Calls layoutManager to resize all child components.
      */
     virtual void resized() override;
+    
+    //Inheriting classes are responsible for setting the layout of these
+    //child components
+    
+    //Window title, text must be set by the inheriting class.
     ScalingLabel titleLabel;
+    //Closes the editor without saving changes.
     DrawableImageButton cancelButton;
+    //Closes the editor, saving all changes
     DrawableImageButton confirmButton;
 
+    //UI colors, to be set by ComponentConfigFile
     Colour selectionColour;
     Colour bgColour;
     Colour textColour;
-    
+    //Handles child component 
     GridLayoutManager layoutManager;
+    //default layout margin/padding values
     int marginPixels=2;
     int xPaddingPixels=3;
     int yPaddingPixels=4;
     
 private:
+    /**
+     * Background image, colors, and component size are defined by
+     * ComponentConfigFile, which will call this method
+     * @param assetNames contains the background image
+     * @param colours contains selection color, background color, and text
+     * color, listed in that order.
+     */
     void applyConfigAssets(Array<String> assetNames,
             Array<Colour> colours) override;
+    //Callback function to run when confirm is pressed, passes "this" as 
+    //the sole parameter.
     std::function<void(PopupEditorComponent*) > onConfirm;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopupEditorComponent)
 };

@@ -18,7 +18,6 @@ public:
   void resetApplySuccess();
   
 private:
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PersonalizePageComponent)
   AppConfigFile& appConfig;
   bool updateJSON();
   void updateComboBox();
@@ -47,4 +46,5 @@ private:
   TextEditor launchCmdEditor;
   
   TextButton applyChangesBtn;
+  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PersonalizePageComponent)
 };

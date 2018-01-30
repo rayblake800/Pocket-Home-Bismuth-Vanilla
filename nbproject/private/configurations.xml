@@ -3579,8 +3579,9 @@
             <in>BatteryIcon.h</in>
             <in>BatteryMonitor.cpp</in>
             <in>BatteryMonitor.h</in>
+            <in>ClockLabel.cpp</in>
+            <in>ClockLabel.h</in>
             <in>ClockMonitor.cpp</in>
-            <in>ClockMonitor.h</in>
             <in>WifiIcon.cpp</in>
             <in>WifiIcon.h</in>
           </df>
@@ -3596,6 +3597,8 @@
             <in>NewConfigAppEditor.h</in>
             <in>NewDesktopAppEditor.cpp</in>
             <in>NewDesktopAppEditor.h</in>
+            <in>NewFolderEditor.cpp</in>
+            <in>NewFolderEditor.h</in>
             <in>PopupEditorComponent.cpp</in>
             <in>PopupEditorComponent.h</in>
           </df>
@@ -3632,7 +3635,6 @@
           <in>ListEditor.cpp</in>
           <in>ListEditor.h</in>
           <in>MenuItem.cpp</in>
-          <in>MenuItem.h</in>
           <in>OverlaySpinner.cpp</in>
           <in>OverlaySpinner.h</in>
           <in>ScalingLabel.cpp</in>

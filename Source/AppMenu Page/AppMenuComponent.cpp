@@ -522,27 +522,11 @@ void AppMenuComponent::swapButtons(AppMenuButton* button1, AppMenuButton* button
         button1->setColumn(button2->getColumn());
         button1->moveDataIndex(button2->getIndex()-index);
         button1->setIndex(button2->getIndex());
-//        if (button2 == selected.at(button2->getColumn()))
-//        {
-//            selected[button2->getColumn()] = button1;
-//            button1->setSelected(true);
-//        } else
-//        {
-//            button1->setSelected(false);
-//        }
         buttonColumns[button2->getColumn()][button2->getIndex()] = button1;
         button1->setBounds(button2->getBounds());
 
         button2->setColumn(column);
         button2->setIndex(index);
-//        if (button1 == selected.at(column))
-//        {
-//            selected[column] = button2;
-//            button2->setSelected(true);
-//        } else
-//        {
-//            button2->setSelected(false);
-//        }
         buttonColumns[column][index] = button2;
         button2->setBounds(bounds);
     }

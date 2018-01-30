@@ -12,6 +12,12 @@
 #include "CategoryPopupEditor.h"
 #include "PopupEditorComponent.h"
 
+/**
+ * TODO:
+ * - Consider removing the delete button
+ * - Consider adding a description TextEdit field
+ */
+
 class IconThread;
 
 class AppMenuPopupEditor : public PopupEditorComponent,
@@ -109,6 +115,10 @@ private:
      * @param buttonClicked
      */
     void buttonClicked(Button* buttonClicked) override;
+    /**
+     * If the delete button is drawn, run askToDelete() on backspace/delete
+     * key events. Otherwise, handle key events as usual for a PopupEditor.
+     */
     bool keyPressed(const KeyPress &) override;
     
     /**
@@ -118,25 +128,36 @@ private:
      */
     void askToDelete();
 
+    //Used for loading icon previews.
     IconThread& iconThread;
+    //Callback function for deleting the edited item, set on construction
     std::function<void() > onDelete;
 
-    ScalingLabel nameLabel;
+    ScalingLabel nameLabel;//text:"Name:"
+    //Edits an application/folder display name
     TextEditor nameEditor;
 
-    ScalingLabel iconLabel;
+    ScalingLabel iconLabel;//text:"Icon path:"
+    //Draws a preview of the selected icon
     DrawableImageComponent iconPreview;
+    //Edits the application/folder icon
     FileSelectTextEditor iconPathEditor;
 
-    TextButton categoryEditButton;
+    //Launches a category editor pop-up
+    TextButton categoryEditButton;//
+    //Holds the category editor when it's launched.
     ScopedPointer<CategoryPopupEditor> categoryEditor;
+    //List of editable categories associated with this application/folder
     Array<String> categories;
 
-    ScalingLabel commandLabel;
+    ScalingLabel commandLabel;//text:"Command"
+    //Edits the application launch command
     TextEditor commandEditor;
-    ScalingLabel terminalCheckboxLabel;
+    //Labels the terminal check
+    ScalingLabel terminalCheckboxLabel;//text:"Run in terminal:"
+    //Sets if this application launches as a terminal application
     ToggleButton terminalCheckbox;
-
+    //runs askToDelete()
     TextButton deleteButton;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuPopupEditor)
 };

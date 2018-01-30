@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    NewConfigAppEditor.cpp
-    Created: 23 Jan 2018 9:54:29pm
-    Author:  Anthony Brown
-
-  ==============================================================================
- */
 #include "NewConfigAppEditor.h"
 
 NewConfigAppEditor::NewConfigAppEditor(AppConfigFile& config,

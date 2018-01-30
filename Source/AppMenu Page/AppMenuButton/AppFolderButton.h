@@ -93,7 +93,9 @@ public:
      */
     void moveDataIndex(int offset);
 private:
+    //Used for saving changes made in the getEditor() edit window
     AppConfigFile& config;
+    //Source of this button's folder information
     AppConfigFile::AppFolder appFolder;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppFolderButton)
 };

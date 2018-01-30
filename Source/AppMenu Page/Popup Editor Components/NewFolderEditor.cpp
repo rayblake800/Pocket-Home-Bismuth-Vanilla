@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    NewFolderEditor.cpp
-    Created: 26 Jan 2018 5:53:53pm
-    Author:  anthony
-
-  ==============================================================================
-*/
-
 #include "NewFolderEditor.h"
 
 NewFolderEditor::NewFolderEditor(AppConfigFile& config,

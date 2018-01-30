@@ -197,6 +197,9 @@ void AppMenuPopupEditor::setTerminalCheckbox(bool launchInTerm)
             NotificationType::dontSendNotification);
 }
 
+/**
+ * Handles the delete, confirm, and cancel buttons.
+ */
 void AppMenuPopupEditor::buttonClicked(Button* buttonClicked)
 {
     if (buttonClicked == &deleteButton)
@@ -216,9 +219,15 @@ void AppMenuPopupEditor::buttonClicked(Button* buttonClicked)
     }
 }
 
+/**
+ * If the delete button/delete key is pressed, show a confirmation
+ * window, and run the onDelete callback if the user confirms the
+ * action.
+ */
 bool AppMenuPopupEditor::keyPressed(const KeyPress & key)
 {
-    if (key == KeyPress::backspaceKey || key == KeyPress::deleteKey)
+    if (deleteButton.isVisible() &&
+            (key == KeyPress::backspaceKey || key == KeyPress::deleteKey))
     {
         askToDelete();
         return true;
@@ -248,7 +257,8 @@ void AppMenuPopupEditor::fileSelected(FileSelectTextEditor* edited)
 void AppMenuPopupEditor::askToDelete()
 {
     confirmAction("Delete", "Delete this menu item?",
-            [this](){
+            [this]()
+            {
                 onDelete();
                 closePopup();
             });
