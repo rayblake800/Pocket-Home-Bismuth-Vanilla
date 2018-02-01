@@ -9,7 +9,6 @@ BatteryMonitor::BatteryMonitor()
     std::function<bool(const char*) > validFile = []
             (const char* filename)
     {
-        return false;
         File testFile(filename);
         return testFile.existsAsFile() &&
                 testFile.getLastModificationTime() + RelativeTime(600)

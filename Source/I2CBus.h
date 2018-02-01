@@ -82,9 +82,19 @@ private:
 
     //Path to the i2c bus device file. 
     static constexpr const char* i2cPath = "/dev/i2c-0";
-    //register addresses:
+    //charge state register
     static constexpr const uint8_t regCharging = 0x01;
+    //battery percent gauge register
     static constexpr const uint8_t regBattGauge = 0xB9;
+    
+    /**
+     * a series of <register,byte> pairs
+     * when each byte is written to its corresponding register in this order,
+     * the PocketCHIP system will enter fel/flashing mode on the next reboot.
+     * 
+     * I'm not actually sure if the order of writes makes any difference, now
+     * that I think of it.  
+     */
     static const std::vector<std::pair<uint8_t, char>> felModeSequence;
 
 };

@@ -5,8 +5,9 @@
 #include "I2CBus.h"
 
 const std::vector<std::pair<uint8_t, char>> I2CBus::felModeSequence = {
-    {0x4, 'f'},
+
     {0x5, 'b'},
+    {0x4, 'f'},
     {0x6, '0'},
     {0x7, 0x0}
 };
@@ -24,8 +25,8 @@ I2CBus::~I2CBus()
  * Read battery charge state from the i2c bus
  */
 bool I2CBus::batteryIsCharging()
-{  
-    i2cWriteByte(regCharging,1);
+{
+    i2cWriteByte(regCharging, 1);
     char isCharging = i2cReadByte(regCharging);
     return isCharging != '0';
 }
@@ -35,7 +36,7 @@ bool I2CBus::batteryIsCharging()
  */
 int I2CBus::batteryGaugePercent()
 {
-    i2cWriteByte(regBattGauge,1);
+    i2cWriteByte(regBattGauge, 1);
     return i2cReadByte(regBattGauge);
 }
 
@@ -45,8 +46,9 @@ int I2CBus::batteryGaugePercent()
  */
 void I2CBus::enableFelMode()
 {
-    for(const std::pair<uint8_t,char>& regBytePair : felModeSequence){
-        i2cWriteByte(regBytePair.first,regBytePair.second);
+    for (const std::pair<uint8_t, char>& regBytePair : felModeSequence)
+    {
+        i2cWriteByte(regBytePair.first, regBytePair.second);
     }
 }
 
