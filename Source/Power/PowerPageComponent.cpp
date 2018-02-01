@@ -9,7 +9,7 @@
 
 PowerPageComponent::PowerPageComponent() :
 bgColor(Colours::black),
-backButton("nextIcon.svg"),
+backButton(ComponentConfigFile::pageRightKey),
 powerOffButton("Shutdown"),
 rebootButton("Reboot"),
 sleepButton("Sleep"),
@@ -22,21 +22,10 @@ lockscreen([this]()
 {
     std::vector<GridLayoutManager::ComponentLayoutParams> pageLayout = {
         {nullptr, 0, 1},
-        {nullptr, 1, 1},
         {&powerOffButton, 1, 6},
-        {nullptr, 1, 1},
-
-        {nullptr, 2, 1},
         {&sleepButton, 2, 6},
-        {nullptr, 2, 1},
-
-        {nullptr, 3, 1},
         {&rebootButton, 3, 6},
-        {nullptr, 3, 1},
-
-        {nullptr, 4, 1},
         {&felButton, 4, 6},
-        {nullptr, 4, 1},
         {nullptr, 5, 1}
     };
     layoutManager.addComponents(pageLayout, this);
@@ -130,17 +119,12 @@ void PowerPageComponent::paint(Graphics &g)
  */
 void PowerPageComponent::resized()
 {
-
+    backButton.applyConfigBounds();
     Rectangle<int> bounds = getLocalBounds();
     overlaySpinner.setBounds(bounds);
     lockscreen.setBounds(bounds);
+    bounds.reduce(backButton.getWidth(),0);
     layoutManager.layoutComponents(bounds, 0, bounds.getHeight() / 20);
-
-    Rectangle<int> backButtonBounds = bounds;
-    backButtonBounds.setLeft(sleepButton.getRight());
-    backButtonBounds.setTop(sleepButton.getBounds().getCentreY());
-    backButtonBounds.setBottom(rebootButton.getBounds().getCentreY());
-    backButton.setBounds(backButtonBounds);
 }
 
 /**

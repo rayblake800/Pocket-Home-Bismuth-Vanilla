@@ -5,7 +5,8 @@
 
 SettingsPageComponent::SettingsPageComponent(AppConfigFile& appConfig) :
 brightnessSliderTimer(this),
-volumeSliderTimer(this)
+volumeSliderTimer(this),
+backButton(ComponentConfigFile::pageLeftKey)
 {
     bgColor = Colour(0xffd23c6d);
     bgImage = createImageFromFile(assetFile("settingsBackground.png"));
@@ -57,27 +58,24 @@ volumeSliderTimer(this)
         volume = newVol.getIntValue();
     }
 #endif
-    ScopedPointer<Drawable> brightLow=Drawable::createFromImageFile
+    ScopedPointer<Drawable> brightLow = Drawable::createFromImageFile
             (assetFile("brightnessIconLo.svg"));
-    ScopedPointer<Drawable> brightHigh=Drawable::createFromImageFile
+    ScopedPointer<Drawable> brightHigh = Drawable::createFromImageFile
             (assetFile("brightnessIconHi.svg"));
-    screenBrightnessSlider = new IconSliderComponent(brightLow,brightHigh);
+    screenBrightnessSlider = new IconSliderComponent(brightLow, brightHigh);
     screenBrightnessSlider->addListener(this);
     screenBrightnessSlider->setValue(1 + (brightness - 0.09)*10);
 
-    ScopedPointer<Drawable> volLow=Drawable::createFromImageFile
+    ScopedPointer<Drawable> volLow = Drawable::createFromImageFile
             (assetFile("volumeIconLo.svg"));
-    ScopedPointer<Drawable> volHigh=Drawable::createFromImageFile
+    ScopedPointer<Drawable> volHigh = Drawable::createFromImageFile
             (assetFile("volumeIconHi.svg"));
-    volumeSlider = new IconSliderComponent(volLow,volHigh);
+    volumeSlider = new IconSliderComponent(volLow, volHigh);
     volumeSlider->addListener(this);
     volumeSlider->setValue(volume);
 
     // create back button
-    backButton = createImageButton(
-            "Back", createImageFromFile(assetFile("backIcon.svg")));
-    backButton->addListener(this);
-    backButton->setAlwaysOnTop(true);
+    backButton.addListener(this);
     addAndMakeVisible(backButton);
 
     wifiCategoryItem = new WifiCategoryItemComponent();
@@ -143,14 +141,14 @@ void SettingsPageComponent::resized()
 
     mainPage->setBounds(bounds);
 
-    backButton->setBounds(bounds.getX(), bounds.getY(), 60, bounds.getHeight());
+    backButton.applyConfigBounds();
 }
 
 void SettingsPageComponent::buttonClicked(Button *button)
 {
     PageStackComponent& mainStack = PocketHomeApplication::getInstance()
             ->getMainStack();
-    if (button == backButton)
+    if (button == &backButton)
     {
         mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontal);
     } else if (button == wifiCategoryItem->button)

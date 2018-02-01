@@ -19,26 +19,19 @@ const String DateTimePage::reconfErrorPostCmd
         = "' failed.\nIs the terminal launch command set correctly?";
 
 DateTimePage::DateTimePage() :
+backButton("backIcon.svg"),
 titleLabel("dateTimeTitleLabel", pageTitle),
 setClockMode("setClockMode"),
 reconfigureBtn(reconfigureBtnText),
 clockModeLabel("clockModeLabel", clockModeLabelText)
 {
-    //Title font
-    titleLabel.setFont(Font(27.f));
-    clockModeLabel.setFont(Font(20.f));
-    //Back button
-    backButton = createImageButton("Back",
-            createImageFromFile(assetFile("backIcon.png")));
-    backButton->addListener(this);
-    backButton->setAlwaysOnTop(true);
-    //ComboBox
+    backButton.addListener(this);
+    reconfigureBtn.addListener(this);
+
     setClockMode.addItem(clockMode24h, 1);
     setClockMode.addItem(clockModeAmPm, 2);
     setClockMode.addItem(clockModeNoShow, 3);
     setClockMode.addListener(this);
-
-    //Let's check whether there is an option for time format in the config
     ComponentConfigFile& config = PocketHomeApplication::getInstance()
             ->getComponentConfig();
     if (config.getConfigBool(ComponentConfigFile::showClockKey))
@@ -55,12 +48,14 @@ clockModeLabel("clockModeLabel", clockModeLabelText)
         setClockMode.setSelectedId(3);
     }
 
-    reconfigureBtn.addListener(this);
-
-    addAndMakeVisible(clockModeLabel);
-    addAndMakeVisible(reconfigureBtn);
-    addAndMakeVisible(setClockMode);
-    addAndMakeVisible(titleLabel);
+    std::vector<GridLayoutManager::ComponentLayoutParams> layoutParams = {
+        {&titleLabel, 0, 1},
+        {&clockModeLabel, 1, 1},
+        {&setClockMode, 2, 1},
+        {nullptr, 3, 2},
+        {&reconfigureBtn, 4, 1}
+    };
+    layoutManager.addComponents(layoutParams, this);
     addAndMakeVisible(backButton);
 }
 
@@ -68,21 +63,24 @@ DateTimePage::~DateTimePage()
 {
 }
 
-void DateTimePage::buttonClicked(Button* but)
+void DateTimePage::buttonClicked(Button* button)
 {
-    if (but == backButton)
+    if (button == &backButton)
+    {
         PocketHomeApplication::getInstance()->getMainStack()
-        .popPage(PageStackComponent::kTransitionTranslateHorizontal);
-    else if (but == &reconfigureBtn)
+                .popPage(PageStackComponent::kTransitionTranslateHorizontal);
+    } else if (button == &reconfigureBtn)
     {
         String configureTime = PocketHomeApplication::getInstance()->getConfig()
                 .getConfigString(MainConfigFile::termLaunchCommandKey)
                 + reconfigureCommand;
         int ret = system(configureTime.toRawUTF8());
         if (ret != 0)
+        {
             AlertWindow::showMessageBox(AlertWindow::WarningIcon,
-                reconfErrorTitle,
-                reconfErrorPreCmd + configureTime + reconfErrorPostCmd);
+                    reconfErrorTitle,
+                    reconfErrorPreCmd + configureTime + reconfErrorPostCmd);
+        }
     }
 }
 
@@ -108,26 +106,31 @@ void DateTimePage::paint(Graphics& g)
 
 void DateTimePage::resized()
 {
-    auto bounds = getLocalBounds();
-    int btn_height = 30;
-    int btn_width = 345;
-
-    int titlewidth = titleLabel.getFont().getStringWidth(titleLabel.getText());
-    titlewidth /= 2;
-    titleLabel.setBounds(bounds.getX() + 240 - titlewidth, bounds.getY() + 10,
-            btn_width, btn_height);
-
-    backButton->setBounds(bounds.getX(), bounds.getY(), 60, bounds.getHeight());
-
-    int datewidth = clockModeLabel.getFont()
-            .getStringWidth(clockModeLabel.getText());
-    clockModeLabel.setBounds(bounds.getX() + 60, bounds.getY() + 70, datewidth,
-            btn_height);
-    int combowidth = 360 - datewidth;
-    setClockMode.setBounds(bounds.getX() + 60 + datewidth, bounds.getY() + 70,
-            combowidth, btn_height);
-
-    int middle = 240 - btn_width / 2;
-    reconfigureBtn.setBounds(bounds.getX() + middle, bounds.getY() + 150,
-            btn_width, btn_height);
+    Rectangle<int> bounds = getLocalBounds();
+    bounds.reduce(bounds.getWidth() / 7, bounds.getHeight() / 20);
+    layoutManager.layoutComponents(bounds, 0, bounds.getHeight() / 15);
+    int backBtnTop = clockModeLabel.getBounds().getCentreY();
+    int backBtnHeight = setClockMode.getBounds().getCentreY() - backBtnTop;
+    backButton.setBounds(0, backBtnTop, bounds.getX(), backBtnHeight);
+    //    int btn_height = 30;
+    //    int btn_width = 345;
+    //
+    //    int titlewidth = titleLabel.getFont().getStringWidth(titleLabel.getText());
+    //    titlewidth /= 2;
+    //    titleLabel.setBounds(bounds.getX() + 240 - titlewidth, bounds.getY() + 10,
+    //            btn_width, btn_height);
+    //
+    //    backButton.setBounds(bounds.getX(), bounds.getY(), 60, bounds.getHeight());
+    //
+    //    int datewidth = clockModeLabel.getFont()
+    //            .getStringWidth(clockModeLabel.getText());
+    //    clockModeLabel.setBounds(bounds.getX() + 60, bounds.getY() + 70, datewidth,
+    //            btn_height);
+    //    int combowidth = 360 - datewidth;
+    //    setClockMode.setBounds(bounds.getX() + 60 + datewidth, bounds.getY() + 70,
+    //            combowidth, btn_height);
+    //
+    //    int middle = 240 - btn_width / 2;
+    //    reconfigureBtn.setBounds(bounds.getX() + middle, bounds.getY() + 150,
+    //            btn_width, btn_height);
 }

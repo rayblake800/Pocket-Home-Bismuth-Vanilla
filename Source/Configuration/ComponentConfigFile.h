@@ -37,6 +37,8 @@ public:
     static const String powerButtonKey;
     static const String settingsButtonKey;
     static const String popupMenuKey;
+    static const String pageLeftKey;
+    static const String pageRightKey;
     
 
     /**

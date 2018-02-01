@@ -1,6 +1,13 @@
-#ifndef DATETIME_H
-#define DATETIME_H
-
+/**
+ * @file DateTimePage.h
+ * 
+ * DateTimePage is a UI page component that allows the user to change
+ * the clock display mode and adjust system time.
+ */
+#pragma once
+#include "../Basic Components/DrawableImageButton.h"
+#include "../Basic Components/ScalingLabel.h"
+#include "../GridLayoutManager.h"
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 class DateTimePage : public Component, public Button::Listener,
@@ -8,12 +15,12 @@ private ComboBox::Listener {
 public:
     DateTimePage();
     ~DateTimePage();
+private:
     void buttonClicked(Button*) override;
     void paint(Graphics&) override;
     void resized() override;
     void comboBoxChanged(ComboBox*) override;
 
-private:
     static const Colour bgColour;
     static const String pageTitle;
     
@@ -28,14 +35,13 @@ private:
     static const String reconfErrorPreCmd;
     static const String reconfErrorPostCmd;
     
-    ScopedPointer<ImageButton> backButton;
-    Label titleLabel;
-    Label clockModeLabel;
+    GridLayoutManager layoutManager;
+    DrawableImageButton backButton;
+    ScalingLabel titleLabel;
+    ScalingLabel clockModeLabel;
     ComboBox setClockMode;
 
     //Button for setting system time
     TextButton reconfigureBtn;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DateTimePage)
 };
-
-#endif

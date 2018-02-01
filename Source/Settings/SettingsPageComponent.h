@@ -3,6 +3,7 @@
 #include "../Basic Components/IconSliderComponent.h"
 #include "../Basic Components/SwitchComponent.h"
 #include "../Configuration/AppConfigFile.h"
+#include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "SettingsPageWifiComponent.h"
 #include "SettingsPageBluetoothComponent.h"
 #include "WifiCategoryItemComponent.h"
@@ -40,7 +41,7 @@ public:
 private:
     
     ScopedPointer<IconSliderComponent> screenBrightnessSlider, volumeSlider;
-    ScopedPointer<ImageButton> backButton;
+    ConfigurableImageButton backButton;
     ScopedPointer<Component> mainPage;
     ScopedPointer<WifiCategoryItemComponent> wifiCategoryItem;
 

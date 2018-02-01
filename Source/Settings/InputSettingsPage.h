@@ -1,6 +1,5 @@
-#ifndef INPUTPAGE_H
-#define INPUTPAGE_H
-
+#pragma once
+#include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../Utils.h"
 #include "../PokeLookAndFeel.h"
 
@@ -17,9 +16,8 @@ public:
   void comboBoxChanged(ComboBox*) override;
 
 private:
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(InputSettingsPage)
   //BackButton
-  ScopedPointer<ImageButton> backButton;
+  ConfigurableImageButton backButton;
   //Background color
   Colour bg_color;
   //Title of the pane
@@ -32,6 +30,5 @@ private:
   TextButton calibrating;
   //Button for the FN key (xmodmap)
   TextButton fnmapping;
+  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(InputSettingsPage)
 };
-
-#endif

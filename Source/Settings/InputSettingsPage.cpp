@@ -2,6 +2,7 @@
 #include "InputSettingsPage.h"
 
 InputSettingsPage::InputSettingsPage() :
+backButton(ComponentConfigFile::pageLeftKey),
 bg_color(0xffd23c6d),
 title("settings", "Input settings"),
 choosemode("choosemode"),
@@ -13,9 +14,7 @@ cursorvisible("cursorvisible", "Select the visibility of the cursor:")
     title.setFont(Font(27.f));
     cursorvisible.setFont(Font(20.f));
     //Back button
-    backButton = createImageButton("Back", createImageFromFile(assetFile("backIcon.png")));
-    backButton->addListener(this);
-    backButton->setAlwaysOnTop(true);
+    backButton.addListener(this);
     //ComboBox
     choosemode.addItem("Not visible", 1);
     choosemode.addItem("Visible", 2);
@@ -47,7 +46,7 @@ InputSettingsPage::~InputSettingsPage()
 
 void InputSettingsPage::buttonClicked(Button* but)
 {
-    if (but == backButton)
+    if (but == &backButton)
         PocketHomeApplication::getInstance()->getMainStack().popPage
             (PageStackComponent::kTransitionTranslateHorizontal);
     else if (but == &calibrating)
@@ -87,8 +86,7 @@ void InputSettingsPage::resized()
     int titlewidth = title.getFont().getStringWidth(title.getText());
     titlewidth /= 2;
     title.setBounds(bounds.getX() + 240 - titlewidth, bounds.getY() + 10, btn_width, btn_height);
-
-    backButton->setBounds(bounds.getX(), bounds.getY(), 60, bounds.getHeight());
+    backButton.applyConfigBounds();
 
     int datewidth = cursorvisible.getFont().getStringWidth(cursorvisible.getText());
     cursorvisible.setBounds(bounds.getX() + 60, bounds.getY() + 70, datewidth, btn_height);

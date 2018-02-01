@@ -4,6 +4,7 @@
 
 #include "../Configuration/PersonalizePageComponent.h"
 #include "../Configuration/DateTimePage.h"
+#include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../Utils.h"
 #include "InputSettingsPage.h"
 #include "SettingsPageLogin.h"
@@ -28,7 +29,7 @@ private:
   //Title of the pane
   Label title;
   //BackButton
-  ScopedPointer<ImageButton> backButton;
+  ConfigurableImageButton backButton;
   //Background color
   Colour bg_color;
   

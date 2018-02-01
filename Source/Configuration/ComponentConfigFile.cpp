@@ -51,6 +51,8 @@ const String ComponentConfigFile::wifiIconKey = "wifi";
 const String ComponentConfigFile::powerButtonKey = "power button";
 const String ComponentConfigFile::settingsButtonKey = "settings button";
 const String ComponentConfigFile::popupMenuKey = "popup menu";
+const String ComponentConfigFile::pageLeftKey = "left arrow button";
+const String ComponentConfigFile::pageRightKey = "right arrow button";
 
 ComponentConfigFile::ComponentSettings ComponentConfigFile::getComponentSettings
 (String componentKey)
@@ -100,7 +102,9 @@ Array<String> ComponentConfigFile::getComponentKeys()
         wifiIconKey,
         powerButtonKey,
         settingsButtonKey,
-        popupMenuKey};
+        popupMenuKey,
+        pageLeftKey,
+        pageRightKey};
 }
 
 ComponentConfigFile::ComponentSettings::ComponentSettings() :

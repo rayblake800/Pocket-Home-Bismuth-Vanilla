@@ -8,7 +8,7 @@
  */
 #pragma once
 #include "../GridLayoutManager.h"
-#include "../Basic Components/DrawableImageButton.h"
+#include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Basic Components/SwitchComponent.h"
 #include "../LoginPage.h"
@@ -63,7 +63,7 @@ private:
     //Arranges buttons to fit on the page.
     GridLayoutManager layoutManager;
     //Closes this page.
-    DrawableImageButton backButton;
+    ConfigurableImageButton backButton;
     //Turns off the system using the shutdown command in the MainConfigFile.
     TextButton powerOffButton;
     //Starts sleep mode with startSleepMode()
