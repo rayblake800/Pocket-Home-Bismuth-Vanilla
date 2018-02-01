@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
         <df name="Release">
         </df>
       </df>
@@ -3702,10 +3700,11 @@
           <in>PersonalizePageComponent.h</in>
         </df>
         <df name="Power">
+          <in>PowerFelPageComponent.cpp</in>
+          <in>PowerFelPageComponent.h</in>
           <in>PowerPageComponent.cpp</in>
           <in>PowerPageComponent.h</in>
           <in>PowerPageFelComponent.cpp</in>
-          <in>PowerPageFelComponent.h</in>
         </df>
         <df name="Settings">
           <in>AdvancedSettingsPage.cpp</in>

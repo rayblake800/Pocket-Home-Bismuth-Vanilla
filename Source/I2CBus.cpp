@@ -24,7 +24,8 @@ I2CBus::~I2CBus()
  * Read battery charge state from the i2c bus
  */
 bool I2CBus::batteryIsCharging()
-{
+{  
+    i2cWriteByte(regCharging,1);
     return (char) i2cReadByte(regCharging) == '1';
 }
 
@@ -33,6 +34,7 @@ bool I2CBus::batteryIsCharging()
  */
 int I2CBus::batteryGaugePercent()
 {
+    i2cWriteByte(regBattGauge,1);
     return i2cReadByte(regBattGauge);
 }
 
