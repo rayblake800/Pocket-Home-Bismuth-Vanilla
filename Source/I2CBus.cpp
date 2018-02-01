@@ -26,7 +26,8 @@ I2CBus::~I2CBus()
 bool I2CBus::batteryIsCharging()
 {  
     i2cWriteByte(regCharging,1);
-    return (char) i2cReadByte(regCharging) == '1';
+    char isCharging = i2cReadByte(regCharging);
+    return isCharging == '1';
 }
 
 /**
