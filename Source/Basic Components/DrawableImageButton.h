@@ -3,10 +3,12 @@
  * 
  * DrawableImageButton is a button drawn using a DrawableImageComponent
  */
-
-
 #pragma once
 #include "DrawableImageComponent.h"
+
+/**
+ * TODO: test replaceColour() with non-svg image files
+ */
 
 class DrawableImageButton : public Button {
 public:
@@ -54,7 +56,6 @@ public:
 
     /**
      * Recursively replace an image color
-     * TODO: test this with non-svg image files
      * @param originalColour
      * @param replacementColour
      * @return true if any instances of originalColour were found.
@@ -62,13 +63,14 @@ public:
     bool replaceColour(Colour originalColour, Colour replacementColour);
 
 protected:
-
+    /**
+     * Resize the image to fit the button.
+     */
     void resized() override;
-
+    ScopedPointer<DrawableImageComponent> imageComponent;
 private:
-    
-    //no special painting needed, button appearance is handled by the 
-    //configurable image
+    /**
+     * Change button alpha on click.
+     */
     void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
-    DrawableImageComponent imageComponent;
 };

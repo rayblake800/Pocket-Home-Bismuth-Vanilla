@@ -7,7 +7,7 @@
 DrawableImageButton::DrawableImageButton(File imageFile,
         RectanglePlacement placement) :
 Button(imageFile.getFileName() + String("ImageButton")),
-imageComponent(imageFile, placement)
+imageComponent(new DrawableImageComponent(imageFile, placement))
 {
     addAndMakeVisible(imageComponent);
 }
@@ -19,7 +19,7 @@ imageComponent(imageFile, placement)
 DrawableImageButton::DrawableImageButton(String assetName,
         RectanglePlacement placement) :
 Button(assetName + String("ImageButton")),
-imageComponent(assetName, placement)
+imageComponent(new DrawableImageComponent(assetName, placement))
 {
     addAndMakeVisible(imageComponent);
 }
@@ -31,7 +31,7 @@ imageComponent(assetName, placement)
 DrawableImageButton::DrawableImageButton(Image imageObject,
         RectanglePlacement placement) :
 Button("DrawableImageButton"),
-imageComponent(imageObject, placement)
+imageComponent(new DrawableImageComponent(imageObject, placement))
 {
     addAndMakeVisible(imageComponent);
 }
@@ -45,7 +45,7 @@ DrawableImageButton::~DrawableImageButton()
  */
 void DrawableImageButton::setImage(String assetFilename)
 {
-    imageComponent.setImage(assetFilename);
+    imageComponent->setImage(assetFilename);
 }
 
 /**
@@ -53,7 +53,7 @@ void DrawableImageButton::setImage(String assetFilename)
  */
 void DrawableImageButton::setImage(File imageFile)
 {
-    imageComponent.setImage(imageFile);
+    imageComponent->setImage(imageFile);
 }
 
 /**
@@ -61,7 +61,7 @@ void DrawableImageButton::setImage(File imageFile)
  */
 void DrawableImageButton::setImage(Image imageObject)
 {
-    imageComponent.setImage(imageObject);
+    imageComponent->setImage(imageObject);
 }
 
 /**
@@ -70,26 +70,29 @@ void DrawableImageButton::setImage(Image imageObject)
 bool DrawableImageButton::replaceColour
 (Colour originalColour, Colour replacementColour)
 {
-    imageComponent.replaceColour(originalColour,replacementColour);
+    imageComponent->replaceColour(originalColour, replacementColour);
 }
 
+/**
+ * Resize the image to fit the button.
+ */
 void DrawableImageButton::resized()
 {
-    imageComponent.setBounds(getLocalBounds());
+    imageComponent->setBounds(getLocalBounds());
 }
 
-
-
-//no special painting needed, button appearance is handled by the 
-//configurable image
-
+/**
+ * Change button alpha on click.
+ */
 void DrawableImageButton::paintButton
 (Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
-    if(isButtonDown){
-        g.setColour(Colours::black);
-        g.setOpacity(0.3);
-        g.fillAll();
-        g.resetToDefaultState();
+    if (isMouseOverButton && isButtonDown)
+    {
+        imageComponent->setAlpha(0.3f);
+    } 
+    else
+    {
+        imageComponent->setAlpha(1.0f);
     }
 }

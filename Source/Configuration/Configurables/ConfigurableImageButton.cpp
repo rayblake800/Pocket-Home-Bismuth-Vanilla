@@ -1,41 +1,32 @@
-/*
-  ==============================================================================
-
-    ConfigurableImageButton.cpp
-    Created: 18 Jan 2018 11:18:18am
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "ConfigurableImageButton.h"
 
 ConfigurableImageButton::ConfigurableImageButton
 (String componentKey, int assetIndex, RectanglePlacement placement) :
-Button(String("Button:")+componentKey),
-image(componentKey, assetIndex, placement)
+ConfigurableComponent(componentKey),
+DrawableImageButton("", placement)
 {
-    addAndMakeVisible(image);
+    imageComponent = new ConfigurableImageComponent
+            (componentKey, assetIndex, placement);
+    addAndMakeVisible(imageComponent);
 }
 
 ConfigurableImageButton::~ConfigurableImageButton()
 {
 }
 
+/**
+ *Adjust bounds based on config settings
+ */
 void ConfigurableImageButton::applyConfigBounds()
 {
-    image.applyConfigBounds();
-    Rectangle<int> bounds = image.getBounds();
-    setBounds(bounds);
-    image.setBounds(bounds.withPosition(0, 0));
-}
-
-void ConfigurableImageButton::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown)
-{
-    if(isButtonDown){
-        g.setColour(Colours::black);
-        g.setOpacity(0.3);
-        g.fillAll();
-        g.resetToDefaultState();
+    ConfigurableImageComponent * image =
+            dynamic_cast<ConfigurableImageComponent *> (imageComponent.get());
+    if (image != nullptr)
+    {
+        image->applyConfigBounds();
+        Rectangle<int> bounds = image->getBounds();
+        setBounds(bounds);
+        image->setBounds(bounds.withPosition(0, 0));
     }
 }
+

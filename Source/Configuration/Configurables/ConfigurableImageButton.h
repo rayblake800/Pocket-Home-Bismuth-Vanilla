@@ -1,16 +1,19 @@
 /**
  * @File ConfigurableImageButton.h
  * @author Anthony Brown
- * ConfigurableImageButton is a button drawn using a ConfigurableImageComponent
+ * ConfigurableImageButton is a DrawableImageButton managed by the
+ * ComponentConfigFile.
  */
 
 #pragma once
 #include "ConfigurableImageComponent.h"
+#include "../../Basic Components/DrawableImageButton.h"
 #include "../../../JuceLibraryCode/JuceHeader.h"
 
-class ConfigurableImageButton : public Button{
+class ConfigurableImageButton : public DrawableImageButton,
+public ConfigurableComponent {
 public:
-    
+
     /**
      * @param componentKey one of the component keys defined by the 
      *  ComponentConfigFile
@@ -19,18 +22,21 @@ public:
      * @param placement defines how the image will be scaled
      */
     ConfigurableImageButton(String componentKey, int assetIndex = 0,
-            RectanglePlacement placement=RectanglePlacement::centred);
-    
+            RectanglePlacement placement = RectanglePlacement::centred);
+
     virtual ~ConfigurableImageButton();
-    
+
     /**
-     *Re-calculate image bounds from config settings.
+     *Adjust bounds based on config settings
      */
-    void applyConfigBounds();
+    void applyConfigBounds() override;
     
 private:
-    //no special painting needed, button appearance is handled by the 
-    //configurable image
-    void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
-    ConfigurableImageComponent image;
+    /**
+     * No action needed, asset management is handled by the internal
+     * ConfigurableImageComponent
+     */
+    void applyConfigAssets(Array<String> assetNames,
+            Array<Colour> colours) {
+    }
 };

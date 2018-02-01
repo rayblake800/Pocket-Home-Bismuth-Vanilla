@@ -53,7 +53,10 @@ DrawableImageComponent::~DrawableImageComponent()
  */
 void DrawableImageComponent::setImage(String assetFilename)
 {
-    setImage(assetFile(assetFilename));
+    if (assetFilename.isNotEmpty())
+    {
+        setImage(assetFile(assetFilename));
+    }
 }
 
 /**
@@ -61,10 +64,12 @@ void DrawableImageComponent::setImage(String assetFilename)
  */
 void DrawableImageComponent::setImage(File imageFile)
 {
-    imageDrawable = Drawable::createFromImageFile(imageFile);
-    DBG("loading Image file");
-    addAndMakeVisible(imageDrawable);
-    imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
+    if (imageFile.existsAsFile())
+    {
+        imageDrawable = Drawable::createFromImageFile(imageFile);
+        addAndMakeVisible(imageDrawable);
+        imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
+    }
 }
 
 /**
@@ -73,7 +78,6 @@ void DrawableImageComponent::setImage(File imageFile)
 void DrawableImageComponent::setImage(Image image)
 {
     DrawableImage * drawable = new DrawableImage();
-    DBG("loading Image object");
     drawable->setImage(image);
     imageDrawable = drawable;
     addAndMakeVisible(imageDrawable);
