@@ -1,14 +1,5 @@
-/*
-  ==============================================================================
-
-    ScalingLabel.cpp
-    Created: 17 Jan 2018 3:37:20pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "ScalingLabel.h"
+#include "../Utils.h"
 
 ScalingLabel::ScalingLabel(const String &componentName,
         const String &labelText, const int& fontPadding) 
@@ -24,7 +15,14 @@ ScalingLabel::~ScalingLabel()
 void ScalingLabel::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
-    Font resizedFont = getFont().withHeight(getHeight()-fontPadding);
+    String text = getText();
+    int numLines = 1;
+    for(int i = 0;i < text.length(); i++){
+        if(text[i] == '\n'){
+            numLines++;
+        }
+    }
+    Font resizedFont = getFont().withHeight(getHeight()/numLines-fontPadding);
     int width=resizedFont.getStringWidth(getText());
     if(width>bounds.getWidth())
     {

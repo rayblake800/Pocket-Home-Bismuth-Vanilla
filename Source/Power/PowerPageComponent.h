@@ -13,7 +13,7 @@
 #include "../Basic Components/SwitchComponent.h"
 #include "../LoginPage.h"
 #include "../MainComponent.h"
-#include "PowerPageFelComponent.h"
+#include "PowerFelPageComponent.h"
 
 /**
  * TODO:
@@ -76,9 +76,11 @@ private:
     OverlaySpinner overlaySpinner;
     //Page for showing flashing options, opened by felButton.
     PowerFelPageComponent felPage;
-    //Background color for 
+    //Background fill color
     Colour bgColor;
-    ChildProcess commandProcess;
+    //Used to run shutdown/restart/sleep commands
+    //ChildProcess commandProcess;
+    //The lock screen is displayed after entering sleep mode.
     LoginPage lockscreen;    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerPageComponent)
 };

@@ -4,11 +4,8 @@
 #include "../PocketHomeApplication.h"
 #include "../LoginPage.h"
 #include "../PokeLookAndFeel.h"
-#include "PowerPageFelComponent.h"
 #include "PowerPageComponent.h"
 
-unsigned char PowerPageComponent::rev_number = 9;
-unsigned char PowerPageComponent::bug_number = 0;
 
 PowerPageComponent::PowerPageComponent() :
 bgColor(Colours::black),
@@ -73,6 +70,7 @@ PowerPageComponent::~PowerPageComponent()
 void PowerPageComponent::startSleepMode()
 {
 #if JUCE_LINUX
+    ChildProcess commandProcess;
     StringArray cmd{ "xset", "q", "|", "grep", "is O"};
     if (commandProcess.start(cmd))
     {
@@ -88,6 +86,7 @@ void PowerPageComponent::startSleepMode()
             commandProcess.start("xset dpms force off");
         }
     }
+    commandProcess.waitForProcessToFinish(10000);
 #endif
 }
 
@@ -163,14 +162,29 @@ void PowerPageComponent::buttonStateChanged(Button *btn)
  */
 void PowerPageComponent::buttonClicked(Button *button)
 {
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    PageStackComponent& mainStack = PocketHomeApplication::getInstance()
-            ->getMainStack();
-    if (button == &backButton)
+    if (button == &backButton || button == &felButton)
     {
-        mainStack.popPage
-                (PageStackComponent::kTransitionTranslateHorizontalLeft);
-    } else if (button == &powerOffButton)
+        PageStackComponent& mainStack = PocketHomeApplication::getInstance()
+                ->getMainStack();
+        if (button == &backButton)
+        {
+            mainStack.popPage
+                    (PageStackComponent::kTransitionTranslateHorizontalLeft);
+        } else//button == &felButton
+        {
+            mainStack.pushPage(&felPage,
+                    PageStackComponent::kTransitionTranslateHorizontalLeft);
+        }
+        return;
+    }
+    if (button == &sleepButton)
+    {
+        startSleepMode();
+        return;
+    }
+    ChildProcess commandProcess;
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    if (button == &powerOffButton)
     {
         showPowerSpinner();
         commandProcess.start(config.getConfigString
@@ -180,12 +194,6 @@ void PowerPageComponent::buttonClicked(Button *button)
         showPowerSpinner();
         commandProcess.start(config.getConfigString
                 (MainConfigFile::restartCommandKey));
-    } else if (button == &sleepButton)
-    {
-        startSleepMode();
-    } else if (button == &felButton)
-    {
-        mainStack.pushPage(&felPage,
-                PageStackComponent::kTransitionTranslateHorizontalLeft);
     }
+    commandProcess.waitForProcessToFinish(10000);
 }

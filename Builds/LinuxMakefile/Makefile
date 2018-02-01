@@ -66,6 +66,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/I2CBus_f247c82f.o \
   $(JUCE_OBJDIR)/GridLayoutManager_9f53725e.o \
   $(JUCE_OBJDIR)/BluetoothStatus_97f808a1.o \
   $(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o \
@@ -127,7 +128,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/SettingsPageWifiComponent_65622eb3.o \
   $(JUCE_OBJDIR)/WifiCategoryItemComponent_8fb0bb4.o \
   $(JUCE_OBJDIR)/PowerPageComponent_782a489c.o \
-  $(JUCE_OBJDIR)/PowerPageFelComponent_936d9afb.o \
+  $(JUCE_OBJDIR)/PowerFelPageComponent_47b7ae7d.o \
   $(JUCE_OBJDIR)/WifiStatus_22bcd2a2.o \
   $(JUCE_OBJDIR)/WifiStatusJson_a638b12a.o \
   $(JUCE_OBJDIR)/WifiStatusNM_9c199da1.o \
@@ -148,6 +149,11 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
+
+$(JUCE_OBJDIR)/I2CBus_f247c82f.o: ../../Source/I2CBus.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling I2CBus.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/GridLayoutManager_9f53725e.o: ../../Source/GridLayoutManager.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
@@ -454,9 +460,9 @@ $(JUCE_OBJDIR)/PowerPageComponent_782a489c.o: ../../Source/Power/PowerPageCompon
 	@echo "Compiling PowerPageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/PowerPageFelComponent_936d9afb.o: ../../Source/Power/PowerPageFelComponent.cpp
+$(JUCE_OBJDIR)/PowerFelPageComponent_47b7ae7d.o: ../../Source/Power/PowerFelPageComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling PowerPageFelComponent.cpp"
+	@echo "Compiling PowerFelPageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/WifiStatus_22bcd2a2.o: ../../Source/Wifi/WifiStatus.cpp

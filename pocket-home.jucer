@@ -14,6 +14,8 @@
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
+      <FILE id="Vgvkvg" name="I2CBus.cpp" compile="1" resource="0" file="Source/I2CBus.cpp"/>
+      <FILE id="b2jNEM" name="I2CBus.h" compile="0" resource="0" file="Source/I2CBus.h"/>
       <FILE id="X7wz2M" name="GridLayoutManager.cpp" compile="1" resource="0"
             file="Source/GridLayoutManager.cpp"/>
       <FILE id="r4oAKB" name="GridLayoutManager.h" compile="0" resource="0"
@@ -243,10 +245,10 @@
               file="Source/Power/PowerPageComponent.cpp"/>
         <FILE id="xYpw8n" name="PowerPageComponent.h" compile="0" resource="0"
               file="Source/Power/PowerPageComponent.h"/>
-        <FILE id="XG2PnG" name="PowerPageFelComponent.cpp" compile="1" resource="0"
-              file="Source/Power/PowerPageFelComponent.cpp"/>
-        <FILE id="JcDF39" name="PowerPageFelComponent.h" compile="0" resource="0"
-              file="Source/Power/PowerPageFelComponent.h"/>
+        <FILE id="XG2PnG" name="PowerFelPageComponent.cpp" compile="1" resource="0"
+              file="Source/Power/PowerFelPageComponent.cpp"/>
+        <FILE id="JcDF39" name="PowerFelPageComponent.h" compile="0" resource="0"
+              file="Source/Power/PowerFelPageComponent.h"/>
       </GROUP>
       <GROUP id="{E98D5B9C-4E34-6090-B2F4-D1F92AFB0C81}" name="Wifi">
         <FILE id="AXlA2k" name="WifiStatus.cpp" compile="1" resource="0" file="Source/Wifi/WifiStatus.cpp"/>

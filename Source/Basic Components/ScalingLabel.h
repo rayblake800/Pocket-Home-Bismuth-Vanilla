@@ -5,8 +5,8 @@
  * bounds whenever it is resized.
  */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
 #pragma once
+#include "../../JuceLibraryCode/JuceHeader.h"
 
 class ScalingLabel : public Label {
 public:

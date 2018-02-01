@@ -29,13 +29,6 @@ public:
      */
     BatteryStatus getBatteryStatus();
 private:
-    
-    /**
-     * If this doesn't exist, then the program isn't running on PocketCHIP
-     * or any similar device, and reading battery status isn't supported.
-     */
-    static constexpr const char* i2cPath = "/dev/i2c-0";
-    
     /**
      * If these files exist and are being actively updated, they will be used
      * as a source of battery info.  Otherwise the i2c-bus will need to be
@@ -63,31 +56,10 @@ private:
     
     //The most appropriate data source will be set by the constructor.
     enum DataSource{
-        gaugeFile,
-        voltageFile,
-        i2cBus,
-        noBattery
+        gaugeFile,  //read from gauge file
+        voltageFile,//read from voltage file
+        i2cBus,     //directly query i2c bus
+        noBattery   //no battery, or battery monitoring isn't supported
     };
     DataSource dataSource;
-    
-    //i2c bus access methods:
-    //i2c access will be needed iff there's no battery script updating files
-    
-    /**
-     * Opens access to battery registers on the i2c bus. 
-     * Don't forget to close the file when finished.
-     * @return the file descriptor int for the i2c bus, or -1 if the operation
-     * failed.
-     */
-    int i2cBatteryOpen();
-    
-    /**
-     * Copies data from i2c bus registers into a buffer.
-     * @param i2cFileDesc a file descriptor for the i2c bus returned by i2cOpen 
-     * @param regAddr the address of the register to access
-     * @param buf the address to copy data from the register
-     * @param length number of bytes to copy
-     * @return true iff reading data succeeded.
-     */
-    bool i2cRead(int i2cFileDesc,uint8_t regAddr,uint8_t * buf, int length);
 };

@@ -3747,6 +3747,8 @@
         <in>DesktopEntry.cpp</in>
         <in>GridLayoutManager.cpp</in>
         <in>GridLayoutManager.h</in>
+        <in>I2CBus.cpp</in>
+        <in>I2CBus.h</in>
         <in>LauncherComponent.cpp</in>
         <in>LauncherComponent.h</in>
         <in>LoginPage.cpp</in>
