@@ -11,6 +11,9 @@
 class I2CBus {
 public:
     I2CBus();
+    /**
+     * If the i2c bus file is still open at this point, it will be closed.
+     */
     virtual ~I2CBus();
 
     /**
@@ -35,11 +38,24 @@ public:
     void enableFelMode();
     
     /**
+     * If the i2c bus file was opened, this will close it. Otherwise, nothing
+     * will happen.
+     */
+    void i2cClose();
+    
+    /**
      * I2CException is thrown whenever accessing the i2c bus fails.
      */
     struct I2CException : public std::exception {
     public:
+        /**
+         * Throw I2C exceptions when i2c bus access fails
+         * @param errorMessage a short error message describing the failure.
+         */
         I2CException(String errorMessage);
+        /**
+         * @return a short message explaining the i2c bus access failure.
+         */
         String getErrorMessage();
     private:
         String errorMessage;
@@ -54,11 +70,7 @@ private:
      */
     void i2cOpen();
 
-    /**
-     * If the i2c bus file was opened, this will close it. Otherwise, nothing
-     * will happen.
-     */
-    void i2cClose();
+
 
     /**
      * Reads one byte from an i2c bus register.
@@ -89,11 +101,8 @@ private:
     
     /**
      * a series of <register,byte> pairs
-     * when each byte is written to its corresponding register in this order,
-     * the PocketCHIP system will enter fel/flashing mode on the next reboot.
-     * 
-     * I'm not actually sure if the order of writes makes any difference, now
-     * that I think of it.  
+     * when each byte is written to its corresponding register, the PocketCHIP 
+     * system will enter fel/flashing mode on the next reboot.
      */
     static const std::vector<std::pair<uint8_t, char>> felModeSequence;
 

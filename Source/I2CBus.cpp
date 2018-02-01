@@ -5,9 +5,8 @@
 #include "I2CBus.h"
 
 const std::vector<std::pair<uint8_t, char>> I2CBus::felModeSequence = {
-
-    {0x5, 'b'},
     {0x4, 'f'},
+    {0x5, 'b'},
     {0x6, '0'},
     {0x7, 0x0}
 };
@@ -16,6 +15,9 @@ I2CBus::I2CBus()
 {
 }
 
+/**
+ * If the i2c bus file is still open at this point, it will be closed.
+ */
 I2CBus::~I2CBus()
 {
     i2cClose();
@@ -52,10 +54,17 @@ void I2CBus::enableFelMode()
     }
 }
 
-I2CBus::I2CException::I2CException(String errorMessage) : errorMessage(errorMessage)
+/**
+ * Throw I2C exceptions when i2c bus access fails
+ */
+I2CBus::I2CException::I2CException(String errorMessage)
+: errorMessage(errorMessage)
 {
 }
 
+/**
+ * @return a short message explaining the i2c bus access failure.
+ */
 String I2CBus::I2CException::getErrorMessage()
 {
     return errorMessage;
