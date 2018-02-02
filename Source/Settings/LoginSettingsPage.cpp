@@ -6,9 +6,9 @@
 #include <fcntl.h>
 #include "../PocketHomeApplication.h"
 #include "../Utils.h"
-#include "SettingsPageLogin.h"
+#include "LoginSettingsPage.h"
 
-SettingsPageLogin::SettingsPageLogin() :
+LoginSettingsPage::LoginSettingsPage() :
 root_label("RootLab", "Sudo password"), root_password("Root", 0x2022),
 cur_label("CurLabel", "Current password"), cur_password("Current", 0x2022),
 new_label("NewLabel", "New password"), new_password("New", 0x2022),
@@ -42,17 +42,16 @@ deletemode(false), has_file(false), has_password(false)
     addAndMakeVisible(apply);
 }
 
-SettingsPageLogin::~SettingsPageLogin()
+LoginSettingsPage::~LoginSettingsPage()
 {
 }
 
-void SettingsPageLogin::paint(Graphics &g)
+void LoginSettingsPage::paint(Graphics &g)
 {
-    auto bounds = getLocalBounds();
     g.fillAll(bg_color);
 }
 
-void SettingsPageLogin::setLocations()
+void LoginSettingsPage::setLocations()
 {
     //Setting the position of the back button
     backButton->setBounds(0, 0, 60, 272);
@@ -84,7 +83,7 @@ void SettingsPageLogin::setLocations()
     apply.setBounds(x, y, 300, 30);
 }
 
-void SettingsPageLogin::switchToModify()
+void LoginSettingsPage::switchToModify()
 {
     if (new_password.isVisible()) return;
     new_label.setVisible(true);
@@ -95,7 +94,7 @@ void SettingsPageLogin::switchToModify()
     deletemode = false;
 }
 
-void SettingsPageLogin::switchToRemove()
+void LoginSettingsPage::switchToRemove()
 {
     if (!new_password.isVisible()) return;
     new_label.setVisible(false);
@@ -106,7 +105,7 @@ void SettingsPageLogin::switchToRemove()
     deletemode = true;
 }
 
-void SettingsPageLogin::loadPassword()
+void LoginSettingsPage::loadPassword()
 {
     char* home_str = getenv("HOME");
     String home(home_str);
@@ -141,12 +140,12 @@ void SettingsPageLogin::loadPassword()
     }
 }
 
-bool SettingsPageLogin::isPasswordCorrect(const String& pass)
+bool LoginSettingsPage::isPasswordCorrect(const String& pass)
 {
     return !has_password || (pass == cur_hashed);
 }
 
-String SettingsPageLogin::hashString(const String& string)
+String LoginSettingsPage::hashString(const String& string)
 {
     const unsigned char* str = (unsigned char*) string.toStdString().c_str();
     unsigned char hash[21];
@@ -161,7 +160,7 @@ String SettingsPageLogin::hashString(const String& string)
     return String(hashed);
 }
 
-bool SettingsPageLogin::passwordIdentical()
+bool LoginSettingsPage::passwordIdentical()
 {
     if (new_password.getText() != ret_password.getText())
     {
@@ -174,14 +173,14 @@ bool SettingsPageLogin::passwordIdentical()
     return true;
 }
 
-bool SettingsPageLogin::hasPassword()
+bool LoginSettingsPage::hasPassword()
 {
     //We need to often read the file in case it's manually modified
     loadPassword();
     return has_password;
 }
 
-void SettingsPageLogin::deletePassword()
+void LoginSettingsPage::deletePassword()
 {
     String typed_root = root_password.getText();
     String typed_current = cur_password.getText();
@@ -221,7 +220,7 @@ void SettingsPageLogin::deletePassword()
     has_password = false;
 }
 
-void SettingsPageLogin::savePassword()
+void LoginSettingsPage::savePassword()
 {
     if (!passwordIdentical()) return;
     loadPassword();
@@ -285,7 +284,7 @@ void SettingsPageLogin::savePassword()
     has_file = true;
 }
 
-void SettingsPageLogin::clearAllFields()
+void LoginSettingsPage::clearAllFields()
 {
     root_password.clear();
     cur_password.clear();
@@ -293,7 +292,7 @@ void SettingsPageLogin::clearAllFields()
     ret_password.clear();
 }
 
-void SettingsPageLogin::buttonClicked(Button* button)
+void LoginSettingsPage::buttonClicked(Button* button)
 {
     if (button == backButton)
     {

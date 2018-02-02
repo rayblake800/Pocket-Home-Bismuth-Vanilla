@@ -1,56 +1,84 @@
-#ifndef ADVANCEDSETTINGS_H
-#define ADVANCEDSETTINGS_H
-
-
+/**
+ * @file AdvancedSettingsPage.h
+ * 
+ * AdvancedSettingsPage is a navigation page containing buttons that open all
+ * other settings pages.
+ */
+#pragma once
 #include "../Configuration/PersonalizePageComponent.h"
 #include "../Configuration/DateTimePage.h"
 #include "../Configuration/Configurables/ConfigurableImageButton.h"
-#include "../Utils.h"
+#include "../Basic Components/ScalingLabel.h"
 #include "InputSettingsPage.h"
-#include "SettingsPageLogin.h"
+#include "LoginSettingsPage.h"
 
-#define OPTPERPAGE 4
-using namespace juce;
-
-class AdvancedSettingsPage : public Component, public Button::Listener{
+class AdvancedSettingsPage : public Component, public Button::Listener {
 public:
-  AdvancedSettingsPage(AppConfigFile& appConfig);
-  ~AdvancedSettingsPage();
-  void buttonClicked(Button*) override;
-  void paint(Graphics&) override;
-  void resized() override;
-  void deleteIcon(String, String);
-  void displayNoPassword();
+    AdvancedSettingsPage(AppConfigFile& appConfig);
+    ~AdvancedSettingsPage();
 
 private:
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AdvancedSettingsPage)
-  
-  void checkNav();
-  //Title of the pane
-  Label title;
-  //BackButton
-  ConfigurableImageButton backButton;
-  //Background color
-  Colour bg_color;
-  
-  //Pages with associated buttons
-  TextButton addLogin;
-  TextButton removeLogin;
-  TextButton personalizeButton;
-  TextButton dateandtime;
-  TextButton inputoptions;
-  ScopedPointer<SettingsPageLogin> spl;
-  ScopedPointer<PersonalizePageComponent> ppc;
-  ScopedPointer<DateTimePage> datetime;
-  ScopedPointer<InputSettingsPage> inputsettings;
-  
-  //Next and previous buttons
-  ScopedPointer<ImageButton> previousarrow;
-  ScopedPointer<ImageButton> nextarrow;
-  
-  //Array of buttons
-  std::vector<TextButton*> allbuttons;
-  int index;
-};
+    /**
+     * Get pointers to all buttons on the page
+     * @param includeAll if false, only get pointers to page buttons
+     * and exclude ones not relevant to the current program state.
+     * @return pointers to all page buttons, in order.
+     */
+    std::vector<Button*> getButtonList(bool includeAll = false);
 
-#endif
+    /**
+     * Reloads the page layout settings.
+     */
+    void reloadLayout();
+
+    /**
+     * Reloads page layout whenever the page becomes visible.
+     */
+    void visibilityChanged() override;
+
+    /**
+     * Handle button clicks to open menu pages, close this page, or 
+     * scroll the list of page buttons.
+     */
+    void buttonClicked(Button*) override;
+
+    /**
+     * Fills in the background color
+     */
+    void paint(Graphics&) override;
+
+    /**
+     * Layout child components to fit within the page bounds
+     */
+    void resized() override;
+
+    GridLayoutManager layoutManager;
+    //Title of the page: "Advanced Settings"
+    ScalingLabel titleLabel;
+    //Closes this page
+    ConfigurableImageButton backButton;
+    //Page background color: currently fixed at 0xffd23c6d
+    Colour bg_color;
+
+    //Pages with associated buttons
+    TextButton personalizeButton;
+    TextButton setPasswordButton;
+    TextButton removePasswordButton;
+    TextButton dateTimeButton;
+    TextButton inputOptionsButton;
+    LoginSettingsPage loginSettingPage;
+    PersonalizePageComponent personalizePage;
+    DateTimePage dateTimePage;
+    InputSettingsPage inputPage;
+
+    //Next and previous buttons for scrolling page buttons
+    DrawableImageButton prevArrow;
+    DrawableImageButton nextArrow;
+
+    //Number of page buttons to show on the screen at a time
+    static const int buttonsPerPage = 4;
+    //Current topmost page button index, corresponding to button index
+    //in the vector returned by getButtonList() 
+    int buttonIndex = 0;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AdvancedSettingsPage)
+};

@@ -1,13 +1,11 @@
-#ifndef SETTINGSPAGELOGIN_H
-#define SETTINGSPAGELOGIN_H
-
+#pragma once
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 
-class SettingsPageLogin : public Component, public Button::Listener{
+class LoginSettingsPage : public Component, public Button::Listener{
 public:
-  SettingsPageLogin();
-  ~SettingsPageLogin();
+  LoginSettingsPage();
+  ~LoginSettingsPage();
   void buttonClicked(Button*) override;
   void paint(Graphics&) override;
   static String hashString(const String&);
@@ -16,7 +14,7 @@ public:
   bool hasPassword();
   
 private:
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsPageLogin)
+  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LoginSettingsPage)
   //Title of the pane
   Label title;
   bool deletemode;
@@ -54,5 +52,3 @@ private:
   //Button for applying the settings
   TextButton apply;
 };
-
-#endif

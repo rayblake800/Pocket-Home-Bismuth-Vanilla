@@ -3,159 +3,165 @@
 
 AdvancedSettingsPage::AdvancedSettingsPage(AppConfigFile& appConfig) :
 bg_color(0xffd23c6d),
-title("settings", "Advanced Settings"),
-addLogin("Change your password"),
-removeLogin("Remove your password"),
+titleLabel("settings", "Advanced Settings"),
+setPasswordButton("Set your password"),
+removePasswordButton("Remove your password"),
 personalizeButton("Personalize your homepage"),
-dateandtime("Date and time"),
-inputoptions("Input settings"),
-spl(new SettingsPageLogin),
-datetime(new DateTimePage()),
-ppc(new PersonalizePageComponent(appConfig)),
-inputsettings(new InputSettingsPage()),
-index(0),
-backButton(ComponentConfigFile::pageLeftKey)
+dateTimeButton("Date and time"),
+inputOptionsButton("Input settings"),
+personalizePage(appConfig),
+backButton(ComponentConfigFile::pageLeftKey),
+prevArrow("pageUpIcon.svg"),
+nextArrow("pageDownIcon.svg")
 {
-    //Title font
-    title.setFont(Font(27.f));
-    //Back button
-    backButton.addListener(this);
-
-
-    addLogin.addListener(this);
-    removeLogin.addListener(this);
-    personalizeButton.addListener(this);
-    dateandtime.addListener(this);
-    inputoptions.addListener(this);
-    addAndMakeVisible(title);
+    std::vector<Button*> allButtons = getButtonList(true);
+    for (Button* button : allButtons)
+    {
+        button->addListener(this);
+    }
+    titleLabel.setJustificationType(Justification::centred);
     addAndMakeVisible(backButton);
-    addAndMakeVisible(addLogin);
-    addAndMakeVisible(removeLogin);
-    addAndMakeVisible(personalizeButton);
-    addAndMakeVisible(dateandtime);
-    addAndMakeVisible(inputoptions);
-
-    //Adding to our buttons
-    allbuttons.push_back(&personalizeButton);
-    allbuttons.push_back(&addLogin);
-    allbuttons.push_back(&removeLogin);
-    allbuttons.push_back(&dateandtime);
-    allbuttons.push_back(&inputoptions);
-
-    //Creating the previous and next arrows images
-    previousarrow = createImageButton("Previous", createImageFromFile(assetFile("pageUpIcon.png")));
-    nextarrow = createImageButton("Next", createImageFromFile(assetFile("pageDownIcon.png")));
-    //Adding the images to the view
-    addChildComponent(previousarrow);
-    addChildComponent(nextarrow);
-    //Adding lsiteners to it
-    previousarrow->addListener(this);
-    nextarrow->addListener(this);
-
-    checkNav();
+    reloadLayout();
 }
 
 AdvancedSettingsPage::~AdvancedSettingsPage()
 {
 }
 
-void AdvancedSettingsPage::checkNav()
+/**
+ * Get pointers to all buttons on the page
+ */
+std::vector<Button*> AdvancedSettingsPage::getButtonList(bool includeAll)
 {
-    if (index > 0)
+    std::vector<Button*> buttonList;
+    buttonList.push_back(&personalizeButton);
+    buttonList.push_back(&setPasswordButton);
+    if (loginSettingPage.hasPassword() || includeAll)
     {
-        title.setVisible(false);
-        previousarrow->setVisible(true);
-    } else
-    {
-        title.setVisible(true);
-        previousarrow->setVisible(false);
+        buttonList.push_back(&removePasswordButton);
     }
-
-    if (index + OPTPERPAGE < allbuttons.size())
-        nextarrow->setVisible(true);
-    else nextarrow->setVisible(false);
-}
-
-void AdvancedSettingsPage::resized()
-{
-    auto bounds = getLocalBounds();
-    int btn_height = 30;
-    int btn_width = 345;
-
-    backButton.applyConfigBounds();
-    title.setBounds(bounds.getX() + 150, bounds.getY() + 10, btn_width, btn_height);
-
-    //Hide all the buttons
-    for (int i = 0; i < allbuttons.size(); i++)
-        allbuttons[i]->setVisible(false);
-
-    //Display only the buttons of the current page
-    int y = 50;
-    for (int i = index; i < allbuttons.size() && i < index + OPTPERPAGE; i++)
+    buttonList.push_back(&dateTimeButton);
+    buttonList.push_back(&inputOptionsButton);
+    if (includeAll)
     {
-        allbuttons[i]->setVisible(true);
-        allbuttons[i]->setBounds(bounds.getX() + 70, bounds.getY() + y, btn_width, btn_height);
-        y += 50;
+        buttonList.push_back(&backButton);
+        buttonList.push_back(&prevArrow);
+        buttonList.push_back(&nextArrow);
     }
-
-    int arrow_height = 50;
-    nextarrow->setBoundsToFit(0, 252 - arrow_height / 2, 480, arrow_height, Justification::centred, true);
-    previousarrow->setBoundsToFit(0, 0, 480, arrow_height, Justification::centred, true);
-
-    checkNav();
+    return buttonList;
 }
 
-void AdvancedSettingsPage::deleteIcon(String name, String shell)
+/**
+ * Reloads the page layout settings.
+ */
+void AdvancedSettingsPage::reloadLayout()
 {
-    //ppc->deleteIcon(name, shell);
+    setPasswordButton.setButtonText(loginSettingPage.hasPassword() ?
+            "Change your password" : "Set your password");
+    std::vector<Button*> buttons = getButtonList();
+    if (buttonIndex >= buttons.size() || buttonIndex < 0)
+    {
+        buttonIndex = 0;
+    }
+    layoutManager.clearLayout(true);
+    layoutManager.addRow(2);
+    layoutManager.addComponent(&titleLabel, 0, 1, this);
+    layoutManager.addComponent((buttonIndex > 0) ?
+            &prevArrow : nullptr,
+            layoutManager.getNumRows(), 1, this);
+    for (int i = buttonIndex; i < (buttonIndex + buttonsPerPage); i++)
+    {
+        layoutManager.addRow(2);
+        layoutManager.addComponent((i < buttons.size()) ?
+                buttons[i] : nullptr,
+                layoutManager.getNumRows() - 1, 1, this);
+    }
+    layoutManager.addComponent((buttonIndex + buttonsPerPage < buttons.size()) ?
+            &nextArrow : nullptr,
+            layoutManager.getNumRows(), 1, this);
+    if (isVisible())
+    {
+        resized();
+    }
 }
 
-void AdvancedSettingsPage::displayNoPassword()
+/**
+ * Reloads page layout whenever the page becomes visible.
+ */
+void AdvancedSettingsPage::visibilityChanged()
 {
-    AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,
-            "Error",
-            "No password is set, cannot remove",
-            "Ok");
+    if (isVisible())
+    {
+        reloadLayout();
+    }
 }
 
+/**
+ * Handle button clicks to open menu pages, close this page, or 
+ * scroll the list of page buttons.
+ */
 void AdvancedSettingsPage::buttonClicked(Button* button)
 {
     PageStackComponent& mainStack = PocketHomeApplication::getInstance()
             ->getMainStack();
     if (button == &backButton)
+    {
         mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontal);
-    else if (button == &addLogin)
+    } else if (button == &setPasswordButton)
     {
-        spl->switchToModify();
-        mainStack.pushPage(spl, PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == &removeLogin)
+        loginSettingPage.switchToModify();
+        mainStack.pushPage(&loginSettingPage,
+                PageStackComponent::kTransitionTranslateHorizontal);
+    } else if (button == &removePasswordButton
+            && loginSettingPage.hasPassword())
     {
-        if (spl->hasPassword())
-        {
-            spl->switchToRemove();
-            mainStack.pushPage(spl, PageStackComponent::kTransitionTranslateHorizontal);
-        } else displayNoPassword();
+        loginSettingPage.switchToRemove();
+        mainStack.pushPage(&loginSettingPage,
+                PageStackComponent::kTransitionTranslateHorizontal);
     } else if (button == &personalizeButton)
-        mainStack.pushPage(ppc, PageStackComponent::kTransitionTranslateHorizontal);
-    else if (button == &(*nextarrow))
     {
-        index += OPTPERPAGE;
-        resized();
-    } else if (button == &(*previousarrow))
+        mainStack.pushPage(&personalizePage,
+                PageStackComponent::kTransitionTranslateHorizontal);
+    } else if (button == &nextArrow)
     {
-        index -= OPTPERPAGE;
-        resized();
-    } else if (button == &inputoptions)
+        buttonIndex += buttonsPerPage;
+        reloadLayout();
+    } else if (button == &prevArrow)
     {
-        mainStack.pushPage(inputsettings, PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == &dateandtime)
+        buttonIndex -= buttonsPerPage;
+        reloadLayout();
+    } else if (button == &inputOptionsButton)
     {
-        mainStack.pushPage(datetime, PageStackComponent::kTransitionTranslateHorizontal);
+        mainStack.pushPage(&inputPage,
+                PageStackComponent::kTransitionTranslateHorizontal);
+    } else if (button == &dateTimeButton)
+    {
+        mainStack.pushPage(&dateTimePage,
+                PageStackComponent::kTransitionTranslateHorizontal);
     }
 }
 
+/**
+ * Fills in the background color
+ */
 void AdvancedSettingsPage::paint(Graphics& g)
 {
-    auto bounds = getLocalBounds();
     g.fillAll(bg_color);
 }
+
+/**
+ * Layout child components to fit within the page bounds
+ */
+void AdvancedSettingsPage::resized()
+{
+    backButton.applyConfigBounds();
+    Rectangle<int> bounds = getLocalBounds();
+    bounds.reduce(backButton.getWidth(), 0);
+    layoutManager.layoutComponents(bounds, 0, bounds.getHeight() / 20);
+}
+
+
+
+
+
+

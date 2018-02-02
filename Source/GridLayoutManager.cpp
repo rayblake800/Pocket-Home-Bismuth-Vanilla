@@ -16,7 +16,7 @@ void GridLayoutManager::addRow(int vertWeight)
     Row newRow;
     newRow.vertWeight = vertWeight;
     vertWeightSum += vertWeight;
-    rows.add(newRow);
+    rows.push_back(newRow);
 }
 
 /**
@@ -35,8 +35,9 @@ void GridLayoutManager::setRowWeight(int rowIndex, int newWeight)
 {
     if (rowIndex >= 0 && rowIndex < rows.size())
     {
-        vertWeightSum -= rows.getReference(rowIndex).vertWeight;
-        rows.getReference(rowIndex).vertWeight = newWeight;
+        std::vector<Row>::iterator rowIter = rows.begin()+rowIndex;
+        vertWeightSum -= rowIter->vertWeight;
+        rowIter->vertWeight = newWeight;
         vertWeightSum += newWeight;
     }
 }
@@ -44,11 +45,11 @@ void GridLayoutManager::setRowWeight(int rowIndex, int newWeight)
 /**
  * Add a new component to a grid row.
  */
-void GridLayoutManager::addComponent(Component * comp, int rowIndex,
+void GridLayoutManager::addComponent(Component * addedComp, int rowIndex,
         int horizWeight, Component* parentToInit)
 {
     WeightedCompPtr wCompPtr;
-    wCompPtr.component = comp;
+    wCompPtr.component = addedComp;
     wCompPtr.weight = horizWeight;
     if (rowIndex < 0)
     {
@@ -58,14 +59,12 @@ void GridLayoutManager::addComponent(Component * comp, int rowIndex,
     {
         addRow(1);
     }
-    Row& row = rows.getReference(rowIndex);
-    row.columns.add(wCompPtr);
-    row.horizWeightSum += horizWeight;
-    if (comp != nullptr && parentToInit != nullptr)
+    std::vector<Row>::iterator rowIter = rows.begin()+rowIndex;
+    rowIter->columns.push_back(wCompPtr);
+    rowIter->horizWeightSum += horizWeight;
+    if (addedComp != nullptr && parentToInit != nullptr)
     {
-        //        DBG(String("adding ") + comp->getName() + String("to parent")
-        //                + parentToInit->getName());
-        parentToInit->addAndMakeVisible(comp);
+        parentToInit->addAndMakeVisible(addedComp);
     }
 }
 
@@ -96,15 +95,8 @@ void GridLayoutManager::layoutComponents(Rectangle<int> bounds, int xPadding,
 
     int yPos = yStart;
     //DBG(String(rows.size()) + String(":") + String(vertWeightSum));
-    for (int rowInd = 0; rowInd < rows.size(); rowInd++)
-    {
-        Row row = rows[rowInd];
-        //        DBG(String("row ") + String(rowInd) + String(" weight ")
-        //                + String(row.vertWeight) + String("/") + String(vertWeightSum));
+    for(const Row& row : rows){
         int height = fullHeight * row.vertWeight / vertWeightSum - yPadding;
-
-        //        DBG(String("\theight ")
-        //                + String(height) + String("/") + String(bounds.getHeight()));
         int xPos = xStart;
         for (int columnInd = 0; columnInd < row.columns.size(); columnInd++)
         {
@@ -119,4 +111,31 @@ void GridLayoutManager::layoutComponents(Rectangle<int> bounds, int xPadding,
         }
         yPos += height + yPadding;
     }
+}
+
+/**
+ * Remove all saved component layout parameters
+ */
+void GridLayoutManager::clearLayout(bool removeComponentsFromParent)
+{
+    if (removeComponentsFromParent)
+    {
+        for (const Row& row : rows)
+        {
+            for (const WeightedCompPtr& componentData : row.columns)
+            {
+                if (componentData.component != nullptr)
+                {
+                    Component * parent = componentData.component
+                            ->getParentComponent();
+                    if (parent != nullptr)
+                    {
+                        parent->removeChildComponent(componentData.component);
+                    }
+                }
+            }
+        }
+    }
+    rows.clear();
+    vertWeightSum = 0;
 }

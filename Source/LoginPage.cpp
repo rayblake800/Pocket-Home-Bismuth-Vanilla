@@ -8,6 +8,7 @@
   ==============================================================================
 */
 #include "PocketHomeApplication.h"
+#include "Settings/LoginSettingsPage.h"
 #include "LoginPage.h"
 
 LoginPage::LoginPage(std::function<void ()> loginCallback):
@@ -90,7 +91,7 @@ void LoginPage::textFocus(){
 
 void LoginPage::buttonClicked(Button *button){
   String pass_tmp = cur_password->getText();
-  String hashed = SettingsPageLogin::hashString(pass_tmp);
+  String hashed = LoginSettingsPage::hashString(pass_tmp);
   if(hashed_password=="none" || hashed == hashed_password){
       cur_password->setText("");
       loginCallback();

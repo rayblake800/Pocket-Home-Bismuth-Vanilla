@@ -8,7 +8,6 @@
 #include "SettingsPageBluetoothComponent.h"
 #include "WifiCategoryItemComponent.h"
 #include "SettingsCategoryButton.h"
-#include "SettingsPageLogin.h"
 #include "AdvancedSettingsPage.h"
 
 class SettingsPageComponent : public Component, private Button::Listener,
@@ -35,7 +34,6 @@ public:
     /* Advanced Settings */
     ScopedPointer<TextButton> advanced;
     ScopedPointer<AdvancedSettingsPage> advancedPage;
-    void deleteIcon(String, String);
     /*******************/
 
 private:

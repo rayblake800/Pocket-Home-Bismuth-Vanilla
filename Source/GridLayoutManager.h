@@ -77,6 +77,13 @@ public:
      * rows and the top and bottom edges of the bounds.
      */
     void layoutComponents(Rectangle<int> bounds,int xPadding,int yPadding);
+    
+    /**
+     * Remove all saved component layout parameters
+     * @param removeComponentsFromParent if true, all components will also
+     * be removed from their parent component.
+     */
+    void clearLayout(bool removeComponentsFromParent=false);
 private:
     struct WeightedCompPtr
     {
@@ -86,10 +93,10 @@ private:
 
     struct Row
     {
-        Array<WeightedCompPtr> columns;
+        std::vector<WeightedCompPtr> columns;
         int horizWeightSum=0;
         int vertWeight=0;
     };
     int vertWeightSum=0;
-    Array<Row> rows;
+    std::vector<Row> rows;
 };

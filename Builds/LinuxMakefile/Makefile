@@ -124,7 +124,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/SettingsCategoryItemComponent_92e70666.o \
   $(JUCE_OBJDIR)/SettingsPageBluetoothComponent_1e6ba44e.o \
   $(JUCE_OBJDIR)/SettingsPageComponent_1af97ec8.o \
-  $(JUCE_OBJDIR)/SettingsPageLogin_f6c37634.o \
+  $(JUCE_OBJDIR)/LoginSettingsPage_41b9c258.o \
   $(JUCE_OBJDIR)/SettingsPageWifiComponent_65622eb3.o \
   $(JUCE_OBJDIR)/WifiCategoryItemComponent_8fb0bb4.o \
   $(JUCE_OBJDIR)/PowerPageComponent_782a489c.o \
@@ -440,9 +440,9 @@ $(JUCE_OBJDIR)/SettingsPageComponent_1af97ec8.o: ../../Source/Settings/SettingsP
 	@echo "Compiling SettingsPageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/SettingsPageLogin_f6c37634.o: ../../Source/Settings/SettingsPageLogin.cpp
+$(JUCE_OBJDIR)/LoginSettingsPage_41b9c258.o: ../../Source/Settings/LoginSettingsPage.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling SettingsPageLogin.cpp"
+	@echo "Compiling LoginSettingsPage.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/SettingsPageWifiComponent_65622eb3.o: ../../Source/Settings/SettingsPageWifiComponent.cpp

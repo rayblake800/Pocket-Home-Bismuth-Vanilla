@@ -227,10 +227,10 @@
               file="Source/Settings/SettingsPageComponent.cpp"/>
         <FILE id="H7JAkN" name="SettingsPageComponent.h" compile="0" resource="0"
               file="Source/Settings/SettingsPageComponent.h"/>
-        <FILE id="L5eH6f" name="SettingsPageLogin.cpp" compile="1" resource="0"
-              file="Source/Settings/SettingsPageLogin.cpp"/>
-        <FILE id="aP9mqt" name="SettingsPageLogin.h" compile="0" resource="0"
-              file="Source/Settings/SettingsPageLogin.h"/>
+        <FILE id="L5eH6f" name="LoginSettingsPage.cpp" compile="1" resource="0"
+              file="Source/Settings/LoginSettingsPage.cpp"/>
+        <FILE id="aP9mqt" name="LoginSettingsPage.h" compile="0" resource="0"
+              file="Source/Settings/LoginSettingsPage.h"/>
         <FILE id="cOBxcn" name="SettingsPageWifiComponent.cpp" compile="1"
               resource="0" file="Source/Settings/SettingsPageWifiComponent.cpp"/>
         <FILE id="LaoqFh" name="SettingsPageWifiComponent.h" compile="0" resource="0"

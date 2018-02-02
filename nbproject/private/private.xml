@@ -10,32 +10,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/DesktopEntries.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/NewConfigAppEditor.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/AppMenuPopupEditor.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Info%20Components/BatteryIcon.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/I2CBus.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/NewConfigAppEditor.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/NewDesktopAppEditor.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Power/PowerPageFelComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/I2CBus.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/NewDesktopAppEditor.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/PopupEditorComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuPage.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/NewFolderEditor.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Info%20Components/BatteryMonitor.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Info%20Components/BatteryMonitor.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppLauncher.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/NewFolderEditor.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/DesktopEntries.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Power/PowerPageComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Power/PowerPageFelComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/CategoryPopupEditor.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/CategoryPopupEditor.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/Popup%20Editor%20Components/PopupEditorComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppMenu%20Page/AppMenuPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/GridLayoutManager.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/GridLayoutManager.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Settings/AdvancedSettingsPage.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Settings/AdvancedSettingsPage.cpp</file>
         </group>
     </open-files>
 </project-private>

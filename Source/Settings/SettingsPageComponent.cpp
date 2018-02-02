@@ -94,12 +94,6 @@ SettingsPageComponent::~SettingsPageComponent()
 {
 }
 
-void SettingsPageComponent::deleteIcon(String name, String shell)
-{
-
-    advancedPage->deleteIcon(name, shell);
-}
-
 void SettingsPageComponent::paint(Graphics &g)
 {
 
