@@ -1,12 +1,12 @@
 #include <set>
-#include "../PocketHomeApplication.h"
-#include "Popup Editor Components/NewConfigAppEditor.h"
-#include "Popup Editor Components/NewDesktopAppEditor.h"
-#include "Popup Editor Components/NewFolderEditor.h"
-#include "AppMenuButton/DesktopEntryButton.h"
-#include "AppMenuButton/ConfigAppButton.h"
-#include "AppMenuButton/AppFolderButton.h"
-#include "AppMenuPage.h"
+#include "../../PocketHomeApplication.h"
+#include "../Popup Editor Components/NewConfigAppEditor.h"
+#include "../Popup Editor Components/NewDesktopAppEditor.h"
+#include "../Popup Editor Components/NewFolderEditor.h"
+#include "../AppMenuButton/DesktopEntryButton.h"
+#include "../AppMenuButton/ConfigAppButton.h"
+#include "../AppMenuButton/AppFolderButton.h"
+#include "../AppMenuPage.h"
 #include "AppMenuComponent.h"
 
 AppMenuComponent::AppMenuComponent(AppConfigFile& appConfig) :

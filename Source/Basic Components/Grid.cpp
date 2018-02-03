@@ -115,7 +115,7 @@ selectindex(0) {
     addAndMakeVisible(page);
 
     //Selection square
-    Image image = createImageFromFile(assetFile("llselection.png"));
+    Image image = createImageFromFile(assetFile("llselection.svg"));
     selection->setImage(image);
     selection->setName("Select");
 

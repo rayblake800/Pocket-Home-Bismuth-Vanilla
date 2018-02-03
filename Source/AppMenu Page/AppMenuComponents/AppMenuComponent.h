@@ -9,13 +9,13 @@
 
 #pragma once
 #include <atomic>
-#include "../Basic Components/OverlaySpinner.h"
-#include "../Configuration/Configurables/ConfigurableComponent.h"
-#include "Popup Editor Components/AppMenuPopupEditor.h"
-#include "AppMenuButton/AppMenuButton.h"
-#include "AppLauncher.h"
-#include "IconThread.h"
-#include "DesktopEntries.h"
+#include "../../Basic Components/OverlaySpinner.h"
+#include "../../Configuration/Configurables/ConfigurableComponent.h"
+#include "../Popup Editor Components/AppMenuPopupEditor.h"
+#include "../AppMenuButton/AppMenuButton.h"
+#include "../AppLauncher.h"
+#include "../IconThread.h"
+#include "../DesktopEntries.h"
 
 /**
  * TODO:

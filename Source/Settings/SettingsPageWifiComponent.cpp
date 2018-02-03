@@ -7,8 +7,8 @@ WifiSpinner::WifiSpinner(const String& componentName) :
 ImageComponent(componentName)
 {
     const Array<String> spinnerImgPaths{
-        "spinner0.png", "spinner1.png", "spinner2.png", "spinner3.png",
-        "spinner4.png", "spinner5.png", "spinner6.png", "spinner7.png"};
+        "spinner0.svg", "spinner1.svg", "spinner2.svg", "spinner3.svg",
+        "spinner4.svg", "spinner5.svg", "spinner6.svg", "spinner7.svg"};
 
     for (auto& path : spinnerImgPaths)
     {
@@ -109,9 +109,9 @@ int WifiAccessPointListItem::wifiSignalStrengthToIdx(int strength)
 
 SettingsPageWifiComponent::SettingsPageWifiComponent() :
 nextPageBtn(createImageButton("NextAppsPage",
-ImageFileFormat::loadFrom(assetFile("pageDownIcon.png")))),
+ImageFileFormat::loadFrom(assetFile("pageDownIcon.svg")))),
 prevPageBtn(createImageButton("PrevAppsPage",
-ImageFileFormat::loadFrom(assetFile("pageUpIcon.png"))))
+ImageFileFormat::loadFrom(assetFile("pageUpIcon.svg"))))
 {
     bgColor = Colour(PokeLookAndFeel::chipPurple);
     bgImage = createImageFromFile(assetFile("settingsBackground.png"));
@@ -121,26 +121,27 @@ ImageFileFormat::loadFrom(assetFile("pageUpIcon.png"))))
 
     wifiIconComponent = new ImageComponent("WiFi Icon");
     wifiIconComponent->setImage(
-            ImageFileFormat::loadFrom(assetFile("wifiIcon.png")));
+            ImageFileFormat::loadFrom(assetFile("wifiIcon.svg")));
     addAndMakeVisible(wifiIconComponent);
 
     icons = new WifiIcons();
 
-    icons->lockIcon = Drawable::createFromImageFile(assetFile("lock.png"));
+    icons->lockIcon = Drawable::createFromImageFile(assetFile("lock.svg"));
 
     icons->wifiStrength = OwnedArray<Drawable>();
-    icons->wifiStrength.set(0, Drawable::createFromImageFile(assetFile("wifiStrength0.png")));
-    icons->wifiStrength.set(1, Drawable::createFromImageFile(assetFile("wifiStrength1.png")));
-    icons->wifiStrength.set(2, Drawable::createFromImageFile(assetFile("wifiStrength2.png")));
-    icons->wifiStrength.set(3, Drawable::createFromImageFile(assetFile("wifiStrength3.png")));
+    icons->wifiStrength.set(0, Drawable::createFromImageFile(assetFile("wifiStrength0.svg")));
+    icons->wifiStrength.set(1, Drawable::createFromImageFile(assetFile("wifiStrength1.svg")));
+    icons->wifiStrength.set(2, Drawable::createFromImageFile(assetFile("wifiStrength2.svg")));
+    icons->wifiStrength.set(3, Drawable::createFromImageFile(assetFile("wifiStrength3.svg "
+    "")));
 
-    icons->arrowIcon = Drawable::createFromImageFile(assetFile("backIcon.png"));
+    icons->arrowIcon = Drawable::createFromImageFile(assetFile("backIcon.svg"));
     auto xf = AffineTransform::identity.rotated(M_PI);
     icons->arrowIcon->setTransform(xf);
 
     // create back button
     backButton = createImageButton(
-            "Back", createImageFromFile(assetFile("backIcon.png")));
+            "Back", createImageFromFile(assetFile("backIcon.svg")));
     backButton->addListener(this);
     backButton->setAlwaysOnTop(true);
     addAndMakeVisible(backButton);

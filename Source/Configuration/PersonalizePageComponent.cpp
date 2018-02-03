@@ -1,69 +1,46 @@
 #include "../PocketHomeApplication.h"
-#include "../GridLayoutManager.h"
 #include "PersonalizePageComponent.h"
 //TODO: Re-organize this into something that works with AppMenus and
 //isn't so messy
 
 /* Personalize class */
-PersonalizePageComponent::PersonalizePageComponent(AppConfigFile& appConfig) :
-appConfig(appConfig),
+PersonalizePageComponent::PersonalizePageComponent() :
+bgColor(0xffd23c6d),
+backButton(ComponentConfigFile::pageLeftKey),
 bgTitle("bgTitle", "Background"),
-bgLabel("bgLabel", "",2),
 bgTypePicker("bgTypePicker"),
+bgLabel("bgLabel", "", 2),
 bgEditor("Choose the new background",
 "Please choose your new background image"),
-iconTitle("iconTitle", "Icon management"),
-addFaveAppBtn("Add"),
-successLabel("suc", "Success !"),
-nameLabel("nameLabel", "Name:",3),
-appNameEditor("name"),
-iconLabel("iconLabel", "Icon:",3),
-appIconEditor("Choose the icon",
-"Please choose your icon image (ideal size : 90x70 px)"),
-shellLabel("shellLabel", "Command:",3),
-launchCmdEditor("shell"),
-applyChangesBtn("Apply Changes")
+menuPickerLabel("menuPickerLabel", "Application menu type:"),
+menuTypePicker("menuTypePicker")
 {
-    bgColor = Colour(0xffd23c6d);
+    std::vector<GridLayoutManager::ComponentLayoutParams> layout = {
+        {&bgTitle, 0, 1},
+        {&bgTypePicker, 0, 1},
+        {&bgLabel, 1, 1},
+        {&bgEditor, 1, 1},
+        {&menuPickerLabel, 2, 1},
+        {&menuTypePicker, 2, 1}
+    };
+    layoutManager.addComponents(layout, this);
 
-    addAndMakeVisible(bgTitle);
-    addAndMakeVisible(iconTitle);
-    addAndMakeVisible(addFaveAppBtn);
-    addAndMakeVisible(applyChangesBtn);
-    addAndMakeVisible(successLabel);
-    applyChangesBtn.addListener(this);
-    addFaveAppBtn.addListener(this);
-    /* ComboBox */
+    backButton.addListener(this);
+    addAndMakeVisible(backButton);
+
     bgTypePicker.addItem("Default", 1);
     bgTypePicker.addItem("Color", 2);
     bgTypePicker.addItem("Image", 3);
     bgTypePicker.setSelectedId(1);
     bgTypePicker.addListener(this);
-    addAndMakeVisible(bgTypePicker);
-    //////////////
-    /* + */
+
     bgEditor.setColour(TextEditor::ColourIds::textColourId,
             Colour::greyLevel(0.f));
-    addAndMakeVisible(bgEditor);
-    addAndMakeVisible(bgLabel);
-    addAndMakeVisible(nameLabel);
-    addAndMakeVisible(iconLabel);
-    addAndMakeVisible(shellLabel);
-    addAndMakeVisible(appNameEditor);
-    addAndMakeVisible(appIconEditor);
-    addAndMakeVisible(launchCmdEditor);
+    bgEditor.addFileSelectListener(this);
 
-
-    showAddComponents(false);
-    successLabel.setVisible(false);
-
-    /* Create back button */
-    backButton = createImageButton("Back", createImageFromFile
-            (assetFile("backIcon.png")));
-    backButton->addListener(this);
-    backButton->setAlwaysOnTop(true);
-    addAndMakeVisible(backButton);
-
+    menuTypePicker.addItem("Scrolling menu", 1);
+    menuTypePicker.setSelectedId(1);
+    menuTypePicker.addListener(this);
     updateComboBox();
 }
 
@@ -83,12 +60,12 @@ void PersonalizePageComponent::updateComboBox()
     {
         bgTypePicker.setSelectedItemIndex(1, sendNotificationSync);
         display = true;
-        bgEditor.setText(background);
+        bgEditor.setText(background, false);
     } else
     {
         bgTypePicker.setSelectedItemIndex(2, sendNotificationSync);
         display = true;
-        bgEditor.setText(background);
+        bgEditor.setText(background, false);
     }
 
     bgEditor.setVisible(display);
@@ -97,160 +74,72 @@ void PersonalizePageComponent::updateComboBox()
 
 void PersonalizePageComponent::paint(Graphics &g)
 {
-    auto bounds = getLocalBounds();
     g.fillAll(bgColor);
 }
 
 void PersonalizePageComponent::resized()
 {
-    auto bounds = getLocalBounds();
-    backButton->setBounds(bounds.withWidth(bounds.getWidth() / 8));
-
-    bounds.setLeft(backButton->getBounds().getRight());
-    bounds.reduce(4,0);
-
-    GridLayoutManager layoutManager;
-    //Row 0:
-    layoutManager.addComponent(&bgTitle, 0, 1);
-    layoutManager.addComponent(&bgTypePicker, 0, 1);
-
-    //Row 1:
-    layoutManager.addComponent(&bgLabel, 1, 1);
-    layoutManager.addComponent(&bgEditor, 1, 2);
-
-    //Row 2: 
-    layoutManager.addComponent(&iconTitle, 2, 2);
-    layoutManager.addComponent(&addFaveAppBtn, 2, 1);
-    layoutManager.addComponent(&successLabel, 2, 1);
-
-    //Row 3: 
-    layoutManager.addComponent(&nameLabel, 3, 1);
-    layoutManager.addComponent(&appNameEditor, 3, 2);
-    layoutManager.addComponent(&iconLabel, 3, 1);
-    layoutManager.addComponent(&appIconEditor, 3, 2);
-
-    //Row 4:
-    layoutManager.addComponent(&shellLabel, 4, 1);
-    layoutManager.addComponent(&launchCmdEditor, 4, 3);
-
-    //Row 5:
-    layoutManager.addComponent(&applyChangesBtn, 5, 1);
-
-    layoutManager.layoutComponents(bounds, bounds.getWidth()/100,
-            bounds.getWidth()/20);
+    backButton.applyConfigBounds();
+    Rectangle<int> bounds = getLocalBounds();
+    bounds.reduce(backButton.getBounds().getWidth(), bounds.getHeight()/10);
+    layoutManager.layoutComponents(bounds, bounds.getWidth() / 100,
+            bounds.getWidth() / 20);
 }
 
 void PersonalizePageComponent::buttonClicked(Button* button)
 {
-    if (button == backButton)
+    if (button == &backButton)
     {
         PocketHomeApplication::getInstance()->getMainStack()
                 .popPage(PageStackComponent::kTransitionTranslateHorizontal);
-        resetApplySuccess();
         updateComboBox();
-    } else if (button == &applyChangesBtn)
-    {
-        bool ok = updateJSON();
-    } else if (button == &addFaveAppBtn)
-    {
-        showAddComponents(true);
-        successLabel.setVisible(false);
-        applyChangesBtn.setVisible(true);
-        appNameEditor.setText("");
-        appIconEditor.setText("");
-        launchCmdEditor.setText("");
     }
-}
-
-void PersonalizePageComponent::showAddComponents(bool show)
-{
-    nameLabel.setVisible(show);
-    iconLabel.setVisible(show);
-    shellLabel.setVisible(show);
-    appNameEditor.setVisible(show);
-    appIconEditor.setVisible(show);
-    launchCmdEditor.setVisible(show);
 }
 
 void PersonalizePageComponent::comboBoxChanged(ComboBox* box)
 {
-    //Default background
-    if (box->getSelectedId() == 1)
+    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    if (box == &bgTypePicker)
     {
-        bgEditor.setVisible(false);
-        bgLabel.setVisible(false);
-        return;
-    }        //Color background
-    else if (box->getSelectedId() == 2)
-    {
-        bgLabel.setText("Hex value:", dontSendNotification);
-        bgEditor.showFileSelectButton(false);
-    }        //Image background
-    else if (box->getSelectedId() == 3)
-    {
-        bgLabel.setText("Image path:", dontSendNotification);
-        bgEditor.showFileSelectButton(true);
+        switch (box->getSelectedId())
+        {
+            case 1:
+                config.setConfigString(MainConfigFile::backgroundKey, "4D4D4D");
+                bgEditor.setVisible(false);
+                bgLabel.setVisible(false);
+                return;
+            case 2:
+                bgLabel.setText("Hex value:", dontSendNotification);
+                bgEditor.showFileSelectButton(false);
+                break;
+            case 3:
+                bgLabel.setText("Image path:", dontSendNotification);
+                bgEditor.showFileSelectButton(true);
+        }
+        bgEditor.setVisible(true);
+        bgLabel.setVisible(true);
     }
-    bgEditor.setVisible(true);
-    bgLabel.setVisible(true);
+    else if (box == &menuTypePicker){
+        config.setConfigString(MainConfigFile::menuTypeKey,box->getText());
+    }
 }
 
-bool PersonalizePageComponent::updateJSON()
+void PersonalizePageComponent::fileSelected(FileSelectTextEditor* edited)
 {
     MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    bool name_b = false;
-    bool color_b = false;
-    if (appNameEditor.isVisible())
-    {
-        String name = appNameEditor.getText();
-        String icon = appIconEditor.getText();
-        String shell = launchCmdEditor.getText();
-        AppConfigFile::AppItem newFavorite;
-        newFavorite.name = name;
-        newFavorite.icon = icon;
-        newFavorite.shell = shell;
-        appConfig.addFavoriteApp(newFavorite, -1);
-        name_b = true;
-
-        /* Adding to the grid */
-    }
-    if (bgTypePicker.getSelectedId() == 1)
-    {
-        config.setConfigString(MainConfigFile::backgroundKey, "4D4D4D");
-    }
+    String value = edited->getText();
+    //color value
     if (bgTypePicker.getSelectedId() == 2)
     {
-        String value = bgEditor.getText().toUpperCase();
+        value = value.toUpperCase();
         if (value.length() != 6 || !value.containsOnly("0123456789ABCDEF"))
-            bgEditor.setText("Invalid color");
+            bgEditor.setText("Invalid color", false);
         else
         {
             config.setConfigString(MainConfigFile::backgroundKey, value);
-            color_b = true;
-
-            /* Change background in LauncherComponent */
         }
-    }
-    if (bgTypePicker.getSelectedId() == 3)
+    } else if (bgTypePicker.getSelectedId() == 3)
     {
-        String value = bgEditor.getText();
         config.setConfigString(MainConfigFile::backgroundKey, value);
-        color_b = true;
-
-        /* Change background in LauncherComponent */
     }
-    successLabel.setVisible(true);
-    return name_b || color_b;
-}
-
-void PersonalizePageComponent::resetApplySuccess()
-{
-    showAddComponents(false);
-    successLabel.setVisible(false);
-    bgEditor.setVisible(false);
-    bgEditor.setText("");
-    appNameEditor.setText("");
-    appIconEditor.setText("");
-    launchCmdEditor.setText("");
-    applyChangesBtn.setVisible(true);
 }

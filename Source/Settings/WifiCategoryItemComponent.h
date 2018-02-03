@@ -1,12 +1,4 @@
-/*
-  ==============================================================================
 
-    WifiCategoryItemComponent.h
-    Created: 2 Jan 2018 11:31:54pm
-    Author:  anthony
-
-  ==============================================================================
-*/
 /**
  *To do: get rid of all the unnecessary redundancy.
  */

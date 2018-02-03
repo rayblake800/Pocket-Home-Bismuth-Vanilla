@@ -1,7 +1,9 @@
 {
     "background": "FF4D4D4D",
+    "app menu type": "scrolling",
     "shutdown command": "systemctl poweroff",
     "restart command": "systemctl reboot",
+    "sleep command": "xset dpms force off",
     "terminal launch command": "vala-terminal -e",
     "cursor": true
 }

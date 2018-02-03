@@ -37,7 +37,7 @@ appMenu(appConfig)
     settingsButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(settingsButton);
 
-    settingsPage = new SettingsPageComponent(appConfig);
+    settingsPage = new SettingsPageComponent();
 }
 
 AppMenuPage::~AppMenuPage()

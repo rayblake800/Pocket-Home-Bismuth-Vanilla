@@ -2,7 +2,11 @@
 
 #include "../Basic Components/IconSliderComponent.h"
 #include "../Basic Components/SwitchComponent.h"
+<<<<<<< Updated upstream
 #include "../Configuration/AppConfigFile.h"
+=======
+#include "../Configuration/Configurables/ConfigurableImageButton.h"
+>>>>>>> Stashed changes
 #include "SettingsPageWifiComponent.h"
 #include "SettingsPageBluetoothComponent.h"
 #include "WifiCategoryItemComponent.h"
@@ -14,7 +18,7 @@ class SettingsPageComponent : public Component, private Button::Listener,
         private Slider::Listener {
 public:
 
-    SettingsPageComponent(AppConfigFile& appConfig);
+    SettingsPageComponent();
     ~SettingsPageComponent();
 
     void paint(Graphics &g) override;

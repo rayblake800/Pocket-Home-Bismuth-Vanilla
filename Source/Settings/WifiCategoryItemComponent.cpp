@@ -15,7 +15,7 @@ SettingsCategoryItemComponent("wifi"),
 spinner(new WifiSpinner("SettingsWifiSpinner"))
 {
     iconDrawable =
-            Drawable::createFromImageFile(assetFile("wifiIcon.png"));
+            Drawable::createFromImageFile(assetFile("wifiIcon.svg"));
     icon->setImages(iconDrawable);
     bool isEnabled = PocketHomeApplication::getInstance()
             ->getWifiStatus().isEnabled();

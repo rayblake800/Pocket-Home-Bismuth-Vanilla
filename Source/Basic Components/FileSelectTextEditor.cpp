@@ -33,10 +33,13 @@ FileSelectTextEditor::~FileSelectTextEditor()
 /**
  * Set the initial text value for the file selection text editor
  */
-void FileSelectTextEditor::setText(String path)
+void FileSelectTextEditor::setText(String path, bool notify)
 {
-    filePath.setText(path, true);
-    notifyListeners();
+    filePath.setText(path, notify);
+    if (notify)
+    {
+        notifyListeners();
+    }
 }
 
 /**

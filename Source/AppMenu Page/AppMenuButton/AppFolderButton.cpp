@@ -1,6 +1,6 @@
 #include "../../Utils.h"
 #include "AppFolderButton.h"
-#include "../AppMenuComponent.h"
+#include "../AppMenuComponents/AppMenuComponent.h"
 
 AppFolderButton::AppFolderButton(AppConfigFile& config,
         AppConfigFile::AppFolder appFolder,

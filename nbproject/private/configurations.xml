@@ -3572,6 +3572,8 @@
             <in>DesktopEntryButton.cpp</in>
             <in>DesktopEntryButton.h</in>
           </df>
+          <df name="AppMenuComponents">
+          </df>
           <df name="Info Components">
             <in>BatteryIcon.cpp</in>
             <in>BatteryIcon.h</in>
@@ -3606,7 +3608,6 @@
           <in>AppLauncher.h</in>
           <in>AppMenuButton.cpp</in>
           <in>AppMenuComponent.cpp</in>
-          <in>AppMenuComponent.h</in>
           <in>AppMenuPage.cpp</in>
           <in>AppMenuPage.h</in>
           <in>ConfigAppButton.cpp</in>
@@ -3713,6 +3714,8 @@
           <in>BluetoothCategoryItemComponent.h</in>
           <in>InputSettingsPage.cpp</in>
           <in>InputSettingsPage.h</in>
+          <in>LoginSettingsPage.cpp</in>
+          <in>LoginSettingsPage.h</in>
           <in>SettingsCategoryButton.cpp</in>
           <in>SettingsCategoryButton.h</in>
           <in>SettingsCategoryItemComponent.cpp</in>
@@ -3722,7 +3725,6 @@
           <in>SettingsPageComponent.cpp</in>
           <in>SettingsPageComponent.h</in>
           <in>SettingsPageLogin.cpp</in>
-          <in>SettingsPageLogin.h</in>
           <in>SettingsPageWifiComponent.cpp</in>
           <in>SettingsPageWifiComponent.h</in>
           <in>WifiCategoryItemComponent.cpp</in>

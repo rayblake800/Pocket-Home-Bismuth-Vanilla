@@ -1,5 +1,6 @@
 #include "../PocketHomeApplication.h"
 #include "InputSettingsPage.h"
+#include "../AppMenu Page/AppLauncher.h"
 
 InputSettingsPage::InputSettingsPage() :
 bg_color(0xffd23c6d),
@@ -7,11 +8,17 @@ title("settings", "Input settings"),
 choosemode("choosemode"),
 calibrating("Calibrate the screen"),
 fnmapping("Remap keyboard (FN key fix)"),
-cursorvisible("cursorvisible", "Select the visibility of the cursor:")
+cursorVisible("cursorvisible", "Select the visibility of the cursor:")
 {
-    //Title font
-    title.setFont(Font(27.f));
-    cursorvisible.setFont(Font(20.f));
+    std::vector<GridLayoutManager::ComponentLayoutParams> layoutParams = {
+        {&title,0,1},
+        {&cursorVisible,2,5},
+        {&choosemode,2,2},
+        {&calibrating,3,1},
+        {&fnmapping,4,1}
+    };
+    title.setJustificationType(Justification::centred);
+    layoutManager.addComponents(layoutParams,this);
     //Back button
     backButton = createImageButton("Back", createImageFromFile(assetFile("backIcon.png")));
     backButton->addListener(this);
@@ -20,8 +27,6 @@ cursorvisible("cursorvisible", "Select the visibility of the cursor:")
     choosemode.addItem("Not visible", 1);
     choosemode.addItem("Visible", 2);
     choosemode.addListener(this);
-
-    //Let's check whether there is an option for time format in the config
     MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     if (config.getConfigBool(MainConfigFile::showCursorKey))
     {
@@ -32,13 +37,6 @@ cursorvisible("cursorvisible", "Select the visibility of the cursor:")
     }
     calibrating.addListener(this);
     fnmapping.addListener(this);
-
-    addAndMakeVisible(cursorvisible);
-    addAndMakeVisible(calibrating);
-    addAndMakeVisible(fnmapping);
-    addAndMakeVisible(choosemode);
-    addAndMakeVisible(title);
-    addAndMakeVisible(backButton);
 }
 
 InputSettingsPage::~InputSettingsPage()
@@ -52,11 +50,8 @@ void InputSettingsPage::buttonClicked(Button* but)
             (PageStackComponent::kTransitionTranslateHorizontal);
     else if (but == &calibrating)
     {
-        int ret = system
-                ("vala-terminal -fs 8 -g 20 20 -e 'xinput_calibrator ; exit'");
-        if (ret == -1)
-            AlertWindow::showMessageBox(AlertWindow::WarningIcon,
-                "Error", "Failed launching vala-terminal, is it installed ?");
+        AppLauncher launcher;
+        launcher.startOrFocusApp("XInput Calibrator","xinput_calibrator");
     }
 }
 
@@ -80,6 +75,7 @@ void InputSettingsPage::paint(Graphics& g)
 
 void InputSettingsPage::resized()
 {
+<<<<<<< Updated upstream
     auto bounds = getLocalBounds();
     int btn_height = 30;
     int btn_width = 345;
@@ -99,4 +95,10 @@ void InputSettingsPage::resized()
     calibrating.setBounds(bounds.getX() + middle, bounds.getY() + 150, btn_width, btn_height);
 
     fnmapping.setBounds(bounds.getX() + middle, bounds.getY() + 200, btn_width, btn_height);
+=======
+    Rectangle<int> bounds = getLocalBounds();
+    backButton.applyConfigBounds();
+    bounds.reduce(backButton.getWidth(),bounds.getHeight()/15);
+    layoutManager.layoutComponents(bounds,bounds.getWidth()/20,bounds.getHeight()/14);
+>>>>>>> Stashed changes
 }

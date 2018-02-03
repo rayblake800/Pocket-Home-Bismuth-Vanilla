@@ -13,6 +13,7 @@ using namespace juce;
 
 class AdvancedSettingsPage : public Component, public Button::Listener{
 public:
+<<<<<<< Updated upstream
   AdvancedSettingsPage(AppConfigFile& appConfig);
   ~AdvancedSettingsPage();
   void buttonClicked(Button*) override;
@@ -20,6 +21,10 @@ public:
   void resized() override;
   void deleteIcon(String, String);
   void displayNoPassword();
+=======
+    AdvancedSettingsPage();
+    ~AdvancedSettingsPage();
+>>>>>>> Stashed changes
 
 private:
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AdvancedSettingsPage)

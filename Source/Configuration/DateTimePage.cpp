@@ -108,6 +108,7 @@ void DateTimePage::paint(Graphics& g)
 
 void DateTimePage::resized()
 {
+<<<<<<< Updated upstream
     auto bounds = getLocalBounds();
     int btn_height = 30;
     int btn_width = 345;
@@ -130,4 +131,12 @@ void DateTimePage::resized()
     int middle = 240 - btn_width / 2;
     reconfigureBtn.setBounds(bounds.getX() + middle, bounds.getY() + 150,
             btn_width, btn_height);
+=======
+    Rectangle<int> bounds = getLocalBounds();
+    bounds.reduce(bounds.getWidth() / 7, bounds.getHeight() / 20);
+    layoutManager.layoutComponents(bounds, 0, bounds.getHeight() / 15);
+    int backBtnTop = clockModeLabel.getBounds().getCentreY();
+    int backBtnHeight = setClockMode.getBounds().getCentreY() - backBtnTop;
+    backButton.setBounds(0, backBtnTop, bounds.getX(), backBtnHeight);
+>>>>>>> Stashed changes
 }

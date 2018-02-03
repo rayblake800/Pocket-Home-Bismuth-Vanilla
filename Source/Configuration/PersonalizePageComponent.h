@@ -1,50 +1,34 @@
 #pragma once
 
+#include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../Basic Components/FileSelectTextEditor.h"
 #include "../Basic Components/ScalingLabel.h"
-#include "../Configuration/AppConfigFile.h"
+#include "../GridLayoutManager.h"
 #include "../Utils.h"
 
-class PersonalizePageComponent : public Component, private Button::Listener, private ComboBox::Listener {
+class PersonalizePageComponent : public Component, private Button::Listener, 
+        private ComboBox::Listener, private FileSelectTextEditor::Listener {
 public:
-  PersonalizePageComponent(AppConfigFile& appConfig);
+  PersonalizePageComponent();
   ~PersonalizePageComponent();
   
   void paint(Graphics &g) override;
   void resized() override;
   void buttonClicked(Button*) override;
   void comboBoxChanged(ComboBox*) override;
-  void showAddComponents(bool);
-  void resetApplySuccess();
+  void fileSelected(FileSelectTextEditor* edited);
   
 private:
-  AppConfigFile& appConfig;
-  bool updateJSON();
   void updateComboBox();
-  
-  ScopedPointer<ImageButton> backButton;
+  GridLayoutManager layoutManager;
+  ConfigurableImageButton backButton;
   Colour bgColor;
-  
-  /* Labels for inputs */
   ScalingLabel bgTitle;
-  ScalingLabel iconTitle;
-  
-  /* Labels to show before the inputs */
   ScalingLabel bgLabel;
-  ScalingLabel nameLabel;
-  ScalingLabel iconLabel;
-  ScalingLabel shellLabel;
-  ScalingLabel successLabel;
-  
-  /* Inputs */
   ComboBox bgTypePicker;
-  TextButton addFaveAppBtn;
-  FileSelectTextEditor bgEditor; 
+  FileSelectTextEditor bgEditor;
   
-  TextEditor appNameEditor;
-  FileSelectTextEditor appIconEditor;
-  TextEditor launchCmdEditor;
-  
-  TextButton applyChangesBtn;
+  ScalingLabel menuPickerLabel;
+  ComboBox menuTypePicker;
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PersonalizePageComponent)
 };

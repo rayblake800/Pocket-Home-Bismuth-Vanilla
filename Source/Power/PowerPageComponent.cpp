@@ -8,8 +8,13 @@
 
 
 PowerPageComponent::PowerPageComponent() :
+<<<<<<< Updated upstream
 bgColor(Colours::black),
 backButton("nextIcon.svg"),
+=======
+bgColor(0xff2b2b2b),
+backButton(ComponentConfigFile::pageRightKey),
+>>>>>>> Stashed changes
 powerOffButton("Shutdown"),
 rebootButton("Reboot"),
 sleepButton("Sleep"),

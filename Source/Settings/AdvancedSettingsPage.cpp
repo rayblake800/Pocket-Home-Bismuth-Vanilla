@@ -1,12 +1,17 @@
 #include "AdvancedSettingsPage.h"
 #include "../PocketHomeApplication.h"
 
+<<<<<<< Updated upstream
 AdvancedSettingsPage::AdvancedSettingsPage(AppConfigFile& appConfig):
+=======
+AdvancedSettingsPage::AdvancedSettingsPage() :
+>>>>>>> Stashed changes
 bg_color(0xffd23c6d),
 title("settings", "Advanced Settings"),
 addLogin("Change your password"), 
 removeLogin("Remove your password"),
 personalizeButton("Personalize your homepage"),
+<<<<<<< Updated upstream
 dateandtime("Date and time"),
 inputoptions("Input settings"),
 spl(new SettingsPageLogin),
@@ -14,6 +19,13 @@ datetime(new DateTimePage()),
 ppc(new PersonalizePageComponent(appConfig)),
 inputsettings(new InputSettingsPage()),
 index(0)
+=======
+dateTimeButton("Date and time"),
+inputOptionsButton("Input settings"),
+backButton(ComponentConfigFile::pageLeftKey),
+prevArrow("pageUpIcon.svg"),
+nextArrow("pageDownIcon.svg")
+>>>>>>> Stashed changes
 {
   //Title font
   title.setFont(Font(27.f));

@@ -24,7 +24,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -39,21 +39,31 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1918"
-     inkscape:window-height="1027"
+     inkscape:window-width="1535"
+     inkscape:window-height="882"
      id="namedview4"
      showgrid="false"
      inkscape:pagecheckerboard="true"
-     inkscape:zoom="1.84375"
-     inkscape:cx="-89.491525"
+     inkscape:zoom="5.19"
+     inkscape:cx="64"
      inkscape:cy="64"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="1"
+     inkscape:window-maximized="0"
      inkscape:current-layer="svg2" />
-  <path
-     style="fill:#ffffff"
-     d="M 64,83 H 63.470043 L 43.235022,65.409154 23,47.818307 V 45.409154 43 h 2.779662 2.779662 L 45.768753,58 62.978181,73 H 64 65.021819 L 82.231247,58 99.440676,43 H 102.22034 105 v 2.409154 2.409153 L 84.764978,65.409154 64.529957,83 Z"
-     id="path12"
-     inkscape:connector-curvature="0" />
+  <g
+     id="g171">
+    <path
+       inkscape:connector-curvature="0"
+       id="rect12"
+       d="m 24.623164,40.739425 c -0.884381,0.06184 -1.744728,0.462456 -2.375,1.1875 -1.260543,1.45009 -1.108293,3.632035 0.341797,4.892578 l 38.972656,33.876951 c 0.752682,0.6543 1.701284,0.91912 2.617188,0.82813 0.915904,0.09099 1.864506,-0.17383 2.617187,-0.82813 L 105.76965,46.819503 c 1.45009,-1.260543 1.60234,-3.442488 0.3418,-4.892578 -1.26055,-1.450089 -3.44249,-1.60234 -4.89258,-0.341797 L 64.179805,73.780444 27.140742,41.585128 c -0.725045,-0.630271 -1.633197,-0.907545 -2.517578,-0.845703 z"
+       style="opacity:1;fill:#ffffff;fill-opacity:0.97000002;stroke-width:0.86531407" />
+    <rect
+       y="0.25433525"
+       x="-0.19267823"
+       height="128"
+       width="128"
+       id="rect167"
+       style="opacity:1;fill:none;fill-opacity:0.97000002" />
+  </g>
 </svg>
