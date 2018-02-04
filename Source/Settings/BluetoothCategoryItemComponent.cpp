@@ -1,12 +1,3 @@
-/*
-  ==============================================================================
-
-    BluetoothCategoryItemComponent.cpp
-    Created: 2 Jan 2018 11:32:09pm
-    Author:  anthony
-
-  ==============================================================================
- */
 #include <numeric>
 #include "../PocketHomeApplication.h"
 #include "../Utils.h"

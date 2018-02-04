@@ -3581,6 +3581,8 @@
             <in>ScrollingAppMenu.cpp</in>
             <in>ScrollingAppMenu.h</in>
           </df>
+          <df name="AppMenuComponents">
+          </df>
           <df name="Info Components">
             <in>BatteryIcon.cpp</in>
             <in>BatteryIcon.h</in>

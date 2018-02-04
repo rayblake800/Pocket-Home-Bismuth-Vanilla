@@ -66,20 +66,69 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+<<<<<<< HEAD
   $(JUCE_OBJDIR)/AppMenuComponent_1c11e457.o \
   $(JUCE_OBJDIR)/PagedAppMenu_17020fc5.o \
   $(JUCE_OBJDIR)/ScrollingAppMenu_7fd1fb05.o \
+=======
+  $(JUCE_OBJDIR)/I2CBus_f247c82f.o \
+  $(JUCE_OBJDIR)/GridLayoutManager_9f53725e.o \
+  $(JUCE_OBJDIR)/BluetoothStatus_97f808a1.o \
+  $(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o \
+  $(JUCE_OBJDIR)/LoginPage_85e0f2f9.o \
+  $(JUCE_OBJDIR)/PageStackComponent_8da9db4d.o \
+  $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
+  $(JUCE_OBJDIR)/Main_90ebc5c2.o \
+  $(JUCE_OBJDIR)/Utils_e4b11b92.o \
+  $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o \
+  $(JUCE_OBJDIR)/LauncherComponent_8a29041e.o \
+  $(JUCE_OBJDIR)/DrawableImageButton_3a059f31.o \
+  $(JUCE_OBJDIR)/DrawableImageComponent_6182aea8.o \
+  $(JUCE_OBJDIR)/FileSelectTextEditor_3a9868fa.o \
+  $(JUCE_OBJDIR)/Grid_db974b8e.o \
+  $(JUCE_OBJDIR)/IconSliderComponent_1c60ba5.o \
+  $(JUCE_OBJDIR)/ListEditor_42725b33.o \
+  $(JUCE_OBJDIR)/OverlaySpinner_eb9f06b1.o \
+  $(JUCE_OBJDIR)/ScalingLabel_5d9da175.o \
+  $(JUCE_OBJDIR)/SwitchComponent_95f41beb.o \
+  $(JUCE_OBJDIR)/ConfigurableImageButton_b88c5d87.o \
+  $(JUCE_OBJDIR)/ConfigurableLabel_e34e044e.o \
+  $(JUCE_OBJDIR)/ConfigurableComponent_d2d89b57.o \
+  $(JUCE_OBJDIR)/Configurable_d79d2ed0.o \
+  $(JUCE_OBJDIR)/ConfigurableImageComponent_63c24892.o \
+  $(JUCE_OBJDIR)/AppConfigFile_8463bec7.o \
+  $(JUCE_OBJDIR)/ComponentConfigFile_28621e63.o \
+  $(JUCE_OBJDIR)/ConfigFile_9d15fdc0.o \
+  $(JUCE_OBJDIR)/DateTimePage_a32d156c.o \
+  $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o \
+  $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o \
+  $(JUCE_OBJDIR)/AppMenuComponent_1c11e457.o \
+  $(JUCE_OBJDIR)/PagedAppMenu_17020fc5.o \
+  $(JUCE_OBJDIR)/ScrollingAppMenu_7fd1fb05.o \
+  $(JUCE_OBJDIR)/AppLauncher_5194dc6a.o \
+>>>>>>> refs/remotes/origin/chipDebugging
   $(JUCE_OBJDIR)/NewFolderEditor_a62e01ca.o \
   $(JUCE_OBJDIR)/NewDesktopAppEditor_5896ac01.o \
   $(JUCE_OBJDIR)/NewConfigAppEditor_92dffb27.o \
   $(JUCE_OBJDIR)/PopupEditorComponent_7e06b15f.o \
   $(JUCE_OBJDIR)/CategoryPopupEditor_171254ea.o \
   $(JUCE_OBJDIR)/AppMenuPopupEditor_bec38694.o \
+<<<<<<< HEAD
+=======
+  $(JUCE_OBJDIR)/AppMenuItem_4bd7b41f.o \
+  $(JUCE_OBJDIR)/AppMenuButtonFactory_b3fec636.o \
+>>>>>>> refs/remotes/origin/chipDebugging
   $(JUCE_OBJDIR)/PageMenuButton_5ed82091.o \
   $(JUCE_OBJDIR)/ScrollingMenuButton_ae6c11ff.o \
   $(JUCE_OBJDIR)/ConfigAppMenuItem_8e6b4c4b.o \
   $(JUCE_OBJDIR)/DesktopEntryMenuItem_7d009518.o \
   $(JUCE_OBJDIR)/FolderMenuItem_2b189c10.o \
+<<<<<<< HEAD
+=======
+  $(JUCE_OBJDIR)/ConfigAppButton_74b82edd.o \
+  $(JUCE_OBJDIR)/DesktopEntryButton_31ccac6.o \
+  $(JUCE_OBJDIR)/AppFolderButton_297e94d.o \
+>>>>>>> refs/remotes/origin/chipDebugging
   $(JUCE_OBJDIR)/AppMenuButton_92e29efe.o \
   $(JUCE_OBJDIR)/AppMenuItem_4bd7b41f.o \
   $(JUCE_OBJDIR)/AppMenuItemFactory_ca1ed9f5.o \
@@ -87,7 +136,10 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/BatteryMonitor_f25e5095.o \
   $(JUCE_OBJDIR)/ClockLabel_7ecbea8e.o \
   $(JUCE_OBJDIR)/WifiIcon_590950f6.o \
+<<<<<<< HEAD
   $(JUCE_OBJDIR)/AppLauncher_5194dc6a.o \
+=======
+>>>>>>> refs/remotes/origin/chipDebugging
   $(JUCE_OBJDIR)/AppMenuPage_e766ca58.o \
   $(JUCE_OBJDIR)/DesktopEntries_7e0ad7b5.o \
   $(JUCE_OBJDIR)/DesktopEntry_5af3f697.o \
@@ -341,7 +393,26 @@ $(JUCE_OBJDIR)/PersonalizePageComponent_89cf519c.o: ../../Source/Configuration/P
 	@echo "Compiling PersonalizePageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+<<<<<<< HEAD
 $(JUCE_OBJDIR)/AdvancedSettingsPage_a2cce881.o: ../../Source/Settings/AdvancedSettingsPage.cpp
+=======
+$(JUCE_OBJDIR)/AppMenuComponent_1c11e457.o: ../../Source/AppMenu\ Page/AppMenuComponents/AppMenuComponent.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AppMenuComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/PagedAppMenu_17020fc5.o: ../../Source/AppMenu\ Page/AppMenuComponents/PagedAppMenu.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling PagedAppMenu.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ScrollingAppMenu_7fd1fb05.o: ../../Source/AppMenu\ Page/AppMenuComponents/ScrollingAppMenu.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ScrollingAppMenu.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AppLauncher_5194dc6a.o: ../../Source/AppMenu\ Page/AppLauncher.cpp
+>>>>>>> refs/remotes/origin/chipDebugging
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AdvancedSettingsPage.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
@@ -376,7 +447,46 @@ $(JUCE_OBJDIR)/SettingsPageComponent_1af97ec8.o: ../../Source/Settings/SettingsP
 	@echo "Compiling SettingsPageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+<<<<<<< HEAD
 $(JUCE_OBJDIR)/LoginSettingsPage_41b9c258.o: ../../Source/Settings/LoginSettingsPage.cpp
+=======
+$(JUCE_OBJDIR)/AppMenuItem_4bd7b41f.o: ../../Source/AppMenu\ Page/AppMenuButton/AppMenuItem.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AppMenuItem.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AppMenuButtonFactory_b3fec636.o: ../../Source/AppMenu\ Page/AppMenuButton/AppMenuButtonFactory.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AppMenuButtonFactory.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/PageMenuButton_5ed82091.o: ../../Source/AppMenu\ Page/AppMenuButton/MenuButton\ Types/PageMenuButton.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling PageMenuButton.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ScrollingMenuButton_ae6c11ff.o: ../../Source/AppMenu\ Page/AppMenuButton/MenuButton\ Types/ScrollingMenuButton.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ScrollingMenuButton.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigAppMenuItem_8e6b4c4b.o: ../../Source/AppMenu\ Page/AppMenuButton/MenuItem\ Types/ConfigAppMenuItem.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigAppMenuItem.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/DesktopEntryMenuItem_7d009518.o: ../../Source/AppMenu\ Page/AppMenuButton/MenuItem\ Types/DesktopEntryMenuItem.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling DesktopEntryMenuItem.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/FolderMenuItem_2b189c10.o: ../../Source/AppMenu\ Page/AppMenuButton/MenuItem\ Types/FolderMenuItem.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling FolderMenuItem.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigAppButton_74b82edd.o: ../../Source/AppMenu\ Page/AppMenuButton/ConfigAppButton.cpp
+>>>>>>> refs/remotes/origin/chipDebugging
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling LoginSettingsPage.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
@@ -416,12 +526,16 @@ $(JUCE_OBJDIR)/WifiStatusNM_9c199da1.o: ../../Source/Wifi/WifiStatusNM.cpp
 	@echo "Compiling WifiStatusNM.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+<<<<<<< HEAD
 $(JUCE_OBJDIR)/DrawableImageButton_3a059f31.o: ../../Source/Basic\ Components/DrawableImageButton.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling DrawableImageButton.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/DrawableImageComponent_6182aea8.o: ../../Source/Basic\ Components/DrawableImageComponent.cpp
+=======
+$(JUCE_OBJDIR)/AppMenuPage_e766ca58.o: ../../Source/AppMenu\ Page/AppMenuPage.cpp
+>>>>>>> refs/remotes/origin/chipDebugging
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling DrawableImageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"

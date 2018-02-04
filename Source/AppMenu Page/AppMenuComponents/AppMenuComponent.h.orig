@@ -9,7 +9,10 @@
 
 #pragma once
 #include <atomic>
+<<<<<<< HEAD:Source/AppMenu Page/AppMenuComponents/AppMenuComponent.h
 #include <set>
+=======
+>>>>>>> refs/remotes/origin/chipDebugging:Source/AppMenu Page/AppMenuComponents/AppMenuComponent.h
 #include "../../Basic Components/OverlaySpinner.h"
 #include "../../Configuration/Configurables/ConfigurableComponent.h"
 #include "../Popup Editor Components/AppMenuPopupEditor.h"
@@ -144,7 +147,7 @@ private:
      * Add a new application button to the active menu column.
      * @param appButton will be added to the bottom of the active menu column.
      */
-    void addButton(AppMenuButton* appButton);
+    void addButton(AppMenuButton::Ptr appButton);
 
     /**
      * Change which button is selected in the active menu column.

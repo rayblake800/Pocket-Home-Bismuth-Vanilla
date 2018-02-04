@@ -15,6 +15,7 @@
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
       <GROUP id="{E5D177ED-F000-E2C8-AB9E-11F897C0E250}" name="AppMenu Page">
+<<<<<<< HEAD
         <GROUP id="{801FBCFD-9C32-24E0-456F-A5D2AA7B6689}" name="AppMenuComponents">
           <FILE id="uoTYvl" name="AppMenuComponent.cpp" compile="1" resource="0"
                 file="Source/AppMenu Page/AppMenuComponents/AppMenuComponent.cpp"/>
@@ -28,30 +29,23 @@
           <FILE id="Zzogft" name="ScrollingAppMenu.h" compile="0" resource="0"
                 file="Source/AppMenu Page/AppMenuComponents/ScrollingAppMenu.h"/>
         </GROUP>
-        <FILE id="DCzTro" name="AppConfigFile.cpp" compile="1" resource="0"
-              file="Source/Configuration/AppConfigFile.cpp"/>
-        <FILE id="IYWdZr" name="AppConfigFile.h" compile="0" resource="0" file="Source/Configuration/AppConfigFile.h"/>
-        <FILE id="FDPktI" name="ComponentConfigFile.cpp" compile="1" resource="0"
-              file="Source/Configuration/ComponentConfigFile.cpp"/>
-        <FILE id="VIPq8u" name="ComponentConfigFile.h" compile="0" resource="0"
-              file="Source/Configuration/ComponentConfigFile.h"/>
-        <FILE id="dNgJxN" name="ConfigFile.cpp" compile="1" resource="0" file="Source/Configuration/ConfigFile.cpp"/>
-        <FILE id="sqDYSh" name="ConfigFile.h" compile="0" resource="0" file="Source/Configuration/ConfigFile.h"/>
-        <FILE id="Fu5GTF" name="DateTimePage.cpp" compile="1" resource="0"
-              file="Source/Configuration/DateTimePage.cpp"/>
-        <FILE id="Ja1BN2" name="DateTimePage.h" compile="0" resource="0" file="Source/Configuration/DateTimePage.h"/>
-        <FILE id="iCUbxT" name="MainConfigFile.cpp" compile="1" resource="0"
-              file="Source/Configuration/MainConfigFile.cpp"/>
-        <FILE id="N1gZuQ" name="MainConfigFile.h" compile="0" resource="0"
-              file="Source/Configuration/MainConfigFile.h"/>
-        <FILE id="lL4zp6" name="PersonalizePageComponent.cpp" compile="1" resource="0"
-              file="Source/Configuration/PersonalizePageComponent.cpp"/>
-        <FILE id="bPFFa7" name="PersonalizePageComponent.h" compile="0" resource="0"
-              file="Source/Configuration/PersonalizePageComponent.h"/>
-      </GROUP>
-      <GROUP id="{E5D177ED-F000-E2C8-AB9E-11F897C0E250}" name="AppMenu Page">
+=======
+        <GROUP id="{5283883A-0BA4-33F2-21C1-FE5617FF7FFD}" name="AppMenuComponents">
+          <FILE id="QyR3BP" name="AppMenuComponent.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuComponents/AppMenuComponent.cpp"/>
+          <FILE id="Syiv76" name="AppMenuComponent.h" compile="0" resource="0"
+                file="Source/AppMenu Page/AppMenuComponents/AppMenuComponent.h"/>
+          <FILE id="PIrAma" name="PagedAppMenu.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuComponents/PagedAppMenu.cpp"/>
+          <FILE id="Ay2joc" name="PagedAppMenu.h" compile="0" resource="0" file="Source/AppMenu Page/AppMenuComponents/PagedAppMenu.h"/>
+          <FILE id="QySf7m" name="ScrollingAppMenu.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuComponents/ScrollingAppMenu.cpp"/>
+          <FILE id="eDoqNp" name="ScrollingAppMenu.h" compile="0" resource="0"
+                file="Source/AppMenu Page/AppMenuComponents/ScrollingAppMenu.h"/>
+        </GROUP>
         <FILE id="zJPlv7" name="AppLauncher.cpp" compile="1" resource="0" file="Source/AppMenu Page/AppLauncher.cpp"/>
         <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppMenu Page/AppLauncher.h"/>
+>>>>>>> refs/remotes/origin/chipDebugging
         <GROUP id="{33D902E9-E269-A70A-90A9-B34BDE5E4635}" name="PopupEditorComponent">
           <FILE id="AimLwj" name="NewFolderEditor.cpp" compile="1" resource="0"
                 file="Source/AppMenu Page/Popup Editor Components/NewFolderEditor.cpp"/>
@@ -79,6 +73,7 @@
                 file="Source/AppMenu Page/Popup Editor Components/AppMenuPopupEditor.h"/>
         </GROUP>
         <GROUP id="{14A7C029-841F-00F9-4B37-871CD7FA6F85}" name="AppMenuButton">
+<<<<<<< HEAD
           <GROUP id="{97BBBC1A-1BD2-AAF4-85F2-F384C3775DB0}" name="MenuButton Types">
             <FILE id="aIWdTl" name="PageMenuButton.cpp" compile="1" resource="0"
                   file="Source/AppMenu Page/AppMenuButton/MenuButton Types/PageMenuButton.cpp"/>
@@ -103,6 +98,50 @@
             <FILE id="PaT4m5" name="FolderMenuItem.h" compile="0" resource="0"
                   file="Source/AppMenu Page/AppMenuButton/MenuItem Types/FolderMenuItem.h"/>
           </GROUP>
+=======
+          <FILE id="KzTYzc" name="AppMenuItem.cpp" compile="1" resource="0" file="Source/AppMenu Page/AppMenuButton/AppMenuItem.cpp"/>
+          <FILE id="iFiLhW" name="AppMenuItem.h" compile="0" resource="0" file="Source/AppMenu Page/AppMenuButton/AppMenuItem.h"/>
+          <FILE id="v2MsaP" name="AppMenuButtonFactory.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/AppMenuButtonFactory.cpp"/>
+          <FILE id="aVSOZh" name="AppMenuButtonFactory.h" compile="0" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/AppMenuButtonFactory.h"/>
+          <GROUP id="{9687A1D6-AF6C-F24A-4D58-75E7DF0C695D}" name="MenuButton Types">
+            <FILE id="z1sBr9" name="PageMenuButton.cpp" compile="1" resource="0"
+                  file="Source/AppMenu Page/AppMenuButton/MenuButton Types/PageMenuButton.cpp"/>
+            <FILE id="idJOCa" name="PageMenuButton.h" compile="0" resource="0"
+                  file="Source/AppMenu Page/AppMenuButton/MenuButton Types/PageMenuButton.h"/>
+            <FILE id="eXxQKg" name="ScrollingMenuButton.cpp" compile="1" resource="0"
+                  file="Source/AppMenu Page/AppMenuButton/MenuButton Types/ScrollingMenuButton.cpp"/>
+            <FILE id="TiRfGq" name="ScrollingMenuButton.h" compile="0" resource="0"
+                  file="Source/AppMenu Page/AppMenuButton/MenuButton Types/ScrollingMenuButton.h"/>
+          </GROUP>
+          <GROUP id="{97BBBC1A-1BD2-AAF4-85F2-F384C3775DB0}" name="MenuItem Types">
+            <FILE id="NmM7DX" name="ConfigAppMenuItem.cpp" compile="1" resource="0"
+                  file="Source/AppMenu Page/AppMenuButton/MenuItem Types/ConfigAppMenuItem.cpp"/>
+            <FILE id="VM2KsV" name="ConfigAppMenuItem.h" compile="0" resource="0"
+                  file="Source/AppMenu Page/AppMenuButton/MenuItem Types/ConfigAppMenuItem.h"/>
+            <FILE id="xlYuJF" name="DesktopEntryMenuItem.cpp" compile="1" resource="0"
+                  file="Source/AppMenu Page/AppMenuButton/MenuItem Types/DesktopEntryMenuItem.cpp"/>
+            <FILE id="UIfZcc" name="DesktopEntryMenuItem.h" compile="0" resource="0"
+                  file="Source/AppMenu Page/AppMenuButton/MenuItem Types/DesktopEntryMenuItem.h"/>
+            <FILE id="rdi1XH" name="FolderMenuItem.cpp" compile="1" resource="0"
+                  file="Source/AppMenu Page/AppMenuButton/MenuItem Types/FolderMenuItem.cpp"/>
+            <FILE id="CN1GQY" name="FolderMenuItem.h" compile="0" resource="0"
+                  file="Source/AppMenu Page/AppMenuButton/MenuItem Types/FolderMenuItem.h"/>
+          </GROUP>
+          <FILE id="fvzvAY" name="ConfigAppButton.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/ConfigAppButton.cpp"/>
+          <FILE id="U6ltQT" name="ConfigAppButton.h" compile="0" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/ConfigAppButton.h"/>
+          <FILE id="ywgZrz" name="DesktopEntryButton.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/DesktopEntryButton.cpp"/>
+          <FILE id="yffTeN" name="DesktopEntryButton.h" compile="0" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/DesktopEntryButton.h"/>
+          <FILE id="S9FOVq" name="AppFolderButton.cpp" compile="1" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/AppFolderButton.cpp"/>
+          <FILE id="QvD4I5" name="AppFolderButton.h" compile="0" resource="0"
+                file="Source/AppMenu Page/AppMenuButton/AppFolderButton.h"/>
+>>>>>>> refs/remotes/origin/chipDebugging
           <FILE id="yT2LgN" name="AppMenuButton.h" compile="0" resource="0" file="Source/AppMenu Page/AppMenuButton/AppMenuButton.h"/>
           <FILE id="wuxNd9" name="AppMenuButton.cpp" compile="1" resource="0"
                 file="Source/AppMenu Page/AppMenuButton/AppMenuButton.cpp"/>
@@ -125,8 +164,11 @@
           <FILE id="TnTmFi" name="WifiIcon.cpp" compile="1" resource="0" file="Source/AppMenu Page/Info Components/WifiIcon.cpp"/>
           <FILE id="BIw8ef" name="WifiIcon.h" compile="0" resource="0" file="Source/AppMenu Page/Info Components/WifiIcon.h"/>
         </GROUP>
+<<<<<<< HEAD
         <FILE id="zJPlv7" name="AppLauncher.cpp" compile="1" resource="0" file="Source/AppMenu Page/AppLauncher.cpp"/>
         <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppMenu Page/AppLauncher.h"/>
+=======
+>>>>>>> refs/remotes/origin/chipDebugging
         <FILE id="e0rlnj" name="AppMenuPage.cpp" compile="1" resource="0" file="Source/AppMenu Page/AppMenuPage.cpp"/>
         <FILE id="NstX3c" name="AppMenuPage.h" compile="0" resource="0" file="Source/AppMenu Page/AppMenuPage.h"/>
         <FILE id="CyIMe5" name="DesktopEntries.cpp" compile="1" resource="0"

@@ -14,8 +14,23 @@
 
 class AdvancedSettingsPage : public Component, public Button::Listener {
 public:
+<<<<<<< HEAD
     AdvancedSettingsPage();
     ~AdvancedSettingsPage();
+=======
+<<<<<<< Updated upstream
+  AdvancedSettingsPage(AppConfigFile& appConfig);
+  ~AdvancedSettingsPage();
+  void buttonClicked(Button*) override;
+  void paint(Graphics&) override;
+  void resized() override;
+  void deleteIcon(String, String);
+  void displayNoPassword();
+=======
+    AdvancedSettingsPage();
+    ~AdvancedSettingsPage();
+>>>>>>> Stashed changes
+>>>>>>> refs/remotes/origin/chipDebugging
 
 private:
     /**
