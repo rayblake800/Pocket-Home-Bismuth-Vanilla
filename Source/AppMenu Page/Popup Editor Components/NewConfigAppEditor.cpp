@@ -12,10 +12,7 @@ AppMenuPopupEditor("New favorite application link", iconThread,
     newApp.launchInTerminal = editor->launchInTerm();
     config.addFavoriteApp(newApp, config.getFavorites().size());
     onConfirm();
-},
-[]()
-{
 }
-, false, true, false)
+, false, true)
 {
 }

@@ -19,8 +19,10 @@ public:
     //######################### String Data ###################################
     //string value keys
     static const String backgroundKey;
+    static const String menuTypeKey;
     static const String shutdownCommandKey;
     static const String restartCommandKey;
+    static const String sleepCommandKey;
     static const String termLaunchCommandKey;
     Array<String> getStringKeys() const;
     //######################### Boolean Data ###################################

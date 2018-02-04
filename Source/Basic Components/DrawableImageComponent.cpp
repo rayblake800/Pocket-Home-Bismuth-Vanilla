@@ -67,8 +67,14 @@ void DrawableImageComponent::setImage(File imageFile)
     if (imageFile.existsAsFile())
     {
         imageDrawable = Drawable::createFromImageFile(imageFile);
-        addAndMakeVisible(imageDrawable);
-        imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
+        if (imageDrawable != nullptr)
+        {
+            addAndMakeVisible(imageDrawable);
+            imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
+        }else{
+            DBG(String("DrawableImageComponent::setImage Failed to load")
+            +imageFile.getFullPathName());
+        }
     }
 }
 

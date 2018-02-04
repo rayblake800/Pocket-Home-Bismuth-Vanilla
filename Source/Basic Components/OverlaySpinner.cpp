@@ -3,8 +3,8 @@
 
 OverlaySpinner::OverlaySpinner() : overlaySpinnerTimer(this)
 {
-    Array<String> spinnerImgPaths{"wait0.png", "wait1.png", "wait2.png",
-        "wait3.png", "wait4.png", "wait5.png", "wait6.png", "wait7.png"};
+    Array<String> spinnerImgPaths{"wait0.svg", "wait1.svg", "wait2.svg",
+        "wait3.svg", "wait4.svg", "wait5.svg", "wait6.svg", "wait7.svg"};
     for (const String& path : spinnerImgPaths)
     {
         Image image = createImageFromFile(assetFile(path));

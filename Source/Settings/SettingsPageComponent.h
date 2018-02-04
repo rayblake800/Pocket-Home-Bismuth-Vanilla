@@ -14,7 +14,7 @@ class SettingsPageComponent : public Component, private Button::Listener,
         private Slider::Listener {
 public:
 
-    SettingsPageComponent(AppConfigFile& appConfig);
+    SettingsPageComponent();
     ~SettingsPageComponent();
 
     void paint(Graphics &g) override;

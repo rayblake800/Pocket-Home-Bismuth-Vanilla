@@ -12,10 +12,6 @@ AppMenuPopupEditor("New folder", iconThread,
     config.addAppFolder(newFolder, config.getFolders().size());
     onConfirm();
 },
-[]()
-{
-}
-
-, false, true, false)
+false, true)
 {
 }

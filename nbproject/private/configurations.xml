@@ -13,8 +13,6 @@
       <df name="build">
         <df name="Debug">
         </df>
-        <df name="Release">
-        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -3547,32 +3545,41 @@
       <df name="pack-debian">
         <df name="DEBIAN">
         </df>
-        <df name="usr">
-          <df name="bin">
-          </df>
-          <df name="share">
-            <df name="pocket-home">
-              <df name="appIcons">
-              </df>
-              <df name="fonts">
-              </df>
-              <df name="login">
-              </df>
-            </df>
-          </df>
-        </df>
       </df>
       <df name="Source">
         <df name="AppMenu Page">
           <df name="AppMenuButton">
+            <df name="MenuButton Types">
+              <in>PageMenuButton.cpp</in>
+              <in>PageMenuButton.h</in>
+              <in>ScrollingMenuButton.cpp</in>
+              <in>ScrollingMenuButton.h</in>
+            </df>
+            <df name="MenuItem Types">
+              <in>ConfigAppMenuItem.cpp</in>
+              <in>ConfigAppMenuItem.h</in>
+              <in>DesktopEntryMenuItem.cpp</in>
+              <in>DesktopEntryMenuItem.h</in>
+              <in>FolderMenuItem.cpp</in>
+              <in>FolderMenuItem.h</in>
+            </df>
             <in>AppFolderButton.cpp</in>
-            <in>AppFolderButton.h</in>
             <in>AppMenuButton.cpp</in>
             <in>AppMenuButton.h</in>
+            <in>AppMenuItem.cpp</in>
+            <in>AppMenuItem.h</in>
+            <in>AppMenuItemFactory.cpp</in>
+            <in>AppMenuItemFactory.h</in>
             <in>ConfigAppButton.cpp</in>
-            <in>ConfigAppButton.h</in>
             <in>DesktopEntryButton.cpp</in>
-            <in>DesktopEntryButton.h</in>
+          </df>
+          <df name="AppMenuComponents">
+            <in>AppMenuComponent.cpp</in>
+            <in>AppMenuComponent.h</in>
+            <in>PagedAppMenu.cpp</in>
+            <in>PagedAppMenu.h</in>
+            <in>ScrollingAppMenu.cpp</in>
+            <in>ScrollingAppMenu.h</in>
           </df>
           <df name="Info Components">
             <in>BatteryIcon.cpp</in>
@@ -3608,7 +3615,6 @@
           <in>AppLauncher.h</in>
           <in>AppMenuButton.cpp</in>
           <in>AppMenuComponent.cpp</in>
-          <in>AppMenuComponent.h</in>
           <in>AppMenuPage.cpp</in>
           <in>AppMenuPage.h</in>
           <in>ConfigAppButton.cpp</in>
@@ -3702,6 +3708,8 @@
           <in>PersonalizePageComponent.h</in>
         </df>
         <df name="Power">
+          <in>PowerFelPageComponent.cpp</in>
+          <in>PowerFelPageComponent.h</in>
           <in>PowerPageComponent.cpp</in>
           <in>PowerPageComponent.h</in>
           <in>PowerPageFelComponent.cpp</in>
@@ -3713,6 +3721,8 @@
           <in>BluetoothCategoryItemComponent.h</in>
           <in>InputSettingsPage.cpp</in>
           <in>InputSettingsPage.h</in>
+          <in>LoginSettingsPage.cpp</in>
+          <in>LoginSettingsPage.h</in>
           <in>SettingsCategoryButton.cpp</in>
           <in>SettingsCategoryButton.h</in>
           <in>SettingsCategoryItemComponent.cpp</in>
@@ -3722,7 +3732,6 @@
           <in>SettingsPageComponent.cpp</in>
           <in>SettingsPageComponent.h</in>
           <in>SettingsPageLogin.cpp</in>
-          <in>SettingsPageLogin.h</in>
           <in>SettingsPageWifiComponent.cpp</in>
           <in>SettingsPageWifiComponent.h</in>
           <in>WifiCategoryItemComponent.cpp</in>

@@ -16,7 +16,7 @@
 #include "Info Components/ClockLabel.h"
 #include "Info Components/BatteryIcon.h"
 #include "Info Components/WifiIcon.h"
-#include "AppMenuComponent.h"
+#include "AppMenuComponents/AppMenuComponent.h"
 
 /**
  * TODO:

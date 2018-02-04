@@ -38,10 +38,8 @@ public:
      */
     AppMenuPopupEditor(String title, IconThread& iconThread,
             std::function<void(AppMenuPopupEditor*) > onConfirm,
-            std::function<void() > onDelete,
             bool showCategoryList = true,
-            bool showCommandField = true,
-            bool showDeleteButton = true);
+            bool showCommandField = true);
 
     virtual ~AppMenuPopupEditor();
 

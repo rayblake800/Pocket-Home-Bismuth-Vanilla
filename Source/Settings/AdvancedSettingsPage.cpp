@@ -1,7 +1,7 @@
 #include "AdvancedSettingsPage.h"
 #include "../PocketHomeApplication.h"
 
-AdvancedSettingsPage::AdvancedSettingsPage(AppConfigFile& appConfig) :
+AdvancedSettingsPage::AdvancedSettingsPage() :
 bg_color(0xffd23c6d),
 titleLabel("settings", "Advanced Settings"),
 setPasswordButton("Set your password"),
@@ -9,7 +9,7 @@ removePasswordButton("Remove your password"),
 personalizeButton("Personalize your homepage"),
 dateTimeButton("Date and time"),
 inputOptionsButton("Input settings"),
-personalizePage(appConfig),
+personalizePage(),
 backButton(ComponentConfigFile::pageLeftKey),
 prevArrow("pageUpIcon.svg"),
 nextArrow("pageDownIcon.svg")

@@ -32,8 +32,10 @@ public:
      * Set the initial text value for the file selection text editor
      * @param path the initial text value. The usual purpose of this is
      * to set the path of the last selected file, but any string will work.
+     * @param shouldNotify sets whether FileSelectTextEditor::Listener
+     * objects will be notified of this change.
      */
-    void setText(String path);
+    void setText(String path,bool shouldNotify=true);
 
     /**
      * @return the text stored within this component's text editor box.

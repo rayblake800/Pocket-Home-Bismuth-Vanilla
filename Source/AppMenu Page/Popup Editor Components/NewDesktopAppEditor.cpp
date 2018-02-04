@@ -14,10 +14,6 @@ AppMenuPopupEditor("New desktop application", iconThread,
         onConfirm();
     }
 },
-[]()
-{
-}
-
-, true, true, false)
+ true, true)
 {
 }

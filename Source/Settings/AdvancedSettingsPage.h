@@ -14,7 +14,7 @@
 
 class AdvancedSettingsPage : public Component, public Button::Listener {
 public:
-    AdvancedSettingsPage(AppConfigFile& appConfig);
+    AdvancedSettingsPage();
     ~AdvancedSettingsPage();
 
 private:

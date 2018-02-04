@@ -1,12 +1,11 @@
 #include <set>
-#include "../PocketHomeApplication.h"
-#include "Popup Editor Components/NewConfigAppEditor.h"
-#include "Popup Editor Components/NewDesktopAppEditor.h"
-#include "Popup Editor Components/NewFolderEditor.h"
-#include "AppMenuButton/DesktopEntryButton.h"
-#include "AppMenuButton/ConfigAppButton.h"
-#include "AppMenuButton/AppFolderButton.h"
-#include "AppMenuPage.h"
+#include "../../PocketHomeApplication.h"
+#include "../Popup Editor Components/NewConfigAppEditor.h"
+#include "../Popup Editor Components/NewDesktopAppEditor.h"
+#include "../Popup Editor Components/NewFolderEditor.h"
+#include "../AppMenuButton/MenuButton Types/ScrollingMenuButton.h"
+#include "../AppMenuButton/AppMenuItemFactory.h"
+#include "../AppMenuPage.h"
 #include "AppMenuComponent.h"
 
 AppMenuComponent::AppMenuComponent(AppConfigFile& appConfig) :
@@ -20,10 +19,6 @@ showPopupCallback([this](AppMenuPopupEditor* newEditor)
     addAndMakeVisible(newEditor);
 })
 {
-    AppMenuButton::setReloadButtonsCallback([this]()
-    {
-        loadButtons();
-    });
     applyConfigBounds();
     x_origin = getBounds().getX();
     y_origin = getBounds().getY();
@@ -46,7 +41,7 @@ AppMenuComponent::~AppMenuComponent()
 void AppMenuComponent::loadButtons()
 {
     DBG("loading AppMenuButtons");
-    int selection = selected.empty() ? 0 : selected[0]->getIndex();
+    int selection = selected.empty() ? 0 : selected[0]->getRowIndex();
     while (!buttonColumns.empty())
     {
         closeFolder();
@@ -64,18 +59,18 @@ void AppMenuComponent::loadButtons()
     for (const AppConfigFile::AppItem& favorite : favorites)
     {
         DBG(String("AppMenu:Found app in config:") + favorite.name);
-        addButton(new ConfigAppButton(appConfig, favorite,
-                buttonColumns[activeColumn()].size(),
-                activeColumn(), iconThread));
+        addButton(new ScrollingMenuButton
+                (AppMenuItemFactory::create(favorite, appConfig),
+                favorite.name + String("Button"), iconThread));
     }
 
     //add category buttons
     Array<AppConfigFile::AppFolder> categories = appConfig.getFolders();
     for (const AppConfigFile::AppFolder& category : categories)
     {
-        addButton(new AppFolderButton(appConfig, category,
-                buttonColumns[activeColumn()].size(),
-                activeColumn(), iconThread));
+        addButton(new ScrollingMenuButton
+                (AppMenuItemFactory::create(category, appConfig),
+                category.name + String("Button"), iconThread));
     }
     DBG(String("added ") + String(buttonColumns[activeColumn()].size())
             + " buttons");
@@ -84,7 +79,7 @@ void AppMenuComponent::loadButtons()
         selection = buttonColumns[0].size() - 1;
     }
     selected[0] = buttonColumns[0][selection];
-    buttonColumns[0][selection]->setSelected(true);
+    buttonColumns[0][selection]->setToggleState(true, NotificationType::dontSendNotification);
     scrollToSelected(false);
     if (!loadingAsync)
     {
@@ -124,7 +119,7 @@ void AppMenuComponent::changeSelection(int indexOffset)
         selectIndex(0);
     } else
     {
-        selectIndex(getSelectedButton()->getIndex() + indexOffset);
+        selectIndex(getSelectedButton()->getRowIndex() + indexOffset);
     }
 
 }
@@ -151,6 +146,9 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
     AppMenuButton* selectedButton = selectionMenu ?
             getSelectedButton() : nullptr;
 
+    AppMenuItem * selectedMenuItem = selectedButton == nullptr ?
+            nullptr : selectedButton->getMenuItem();
+
     /* Menu Options:
      * 1. Edit button
      * 2. Delete button (and button source)
@@ -167,18 +165,18 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
     {
         appMenu.addItem(1, "Edit");
         appMenu.addItem(2, "Delete");
-        if (selectedButton->isFolder())
+        if (selectedMenuItem->isFolder())
         {
             appMenu.addItem(4, "New application link");
-        } else if (selectedButton->getColumn() != 0)
+        } else if (selectedButton->getColumnIndex() != 0)
         {
             appMenu.addItem(6, "Pin to favorites");
         }
-        if (selectedButton->canChangeIndex(-1))
+        if (selectedMenuItem->canChangeIndex(-1))
         {
             appMenu.addItem(7, "Move up");
         }
-        if (selectedButton->canChangeIndex(1))
+        if (selectedMenuItem->canChangeIndex(1))
         {
             appMenu.addItem(8, "Move down");
         }
@@ -200,7 +198,10 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
             showPopupCallback(getEditorForSelected());
             break;
         case 2://User selects "Delete"
-            selectedButton->confirmRemoveButtonSource();
+            selectedButton->confirmRemoveButtonSource([this]()
+            {
+                loadButtons();
+            });
             break;
         case 3://User selects "New favorite application"
             showPopupCallback(new NewConfigAppEditor(appConfig, iconThread,
@@ -212,7 +213,7 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
                     (iconThread, confirmNew);
             if (selectedButton != nullptr)
             {
-                newAppEditor->setCategories(selectedButton->getCategories());
+                newAppEditor->setCategories(selectedButton->getMenuItem()->getCategories());
             }
             showPopupCallback(newAppEditor);
             break;
@@ -227,9 +228,9 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
         case 6://User selects "Pin to favorites"
         {
             AppConfigFile::AppItem newFavorite;
-            newFavorite.name = selectedButton->getAppName();
-            newFavorite.icon = selectedButton->getIconName();
-            newFavorite.shell = selectedButton->getCommand();
+            newFavorite.name = selectedMenuItem->getAppName();
+            newFavorite.icon = selectedMenuItem->getIconName();
+            newFavorite.shell = selectedMenuItem->getCommand();
             newFavorite.launchInTerminal = false;
             appConfig.addFavoriteApp(newFavorite,
                     appConfig.getFavorites().size());
@@ -238,13 +239,13 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
         }
         case 7://User selects "Move up"
             swapButtons(selectedButton,
-                    buttonColumns[selectedButton->getColumn()]
-                    [selectedButton->getIndex() - 1]);
+                    buttonColumns[selectedButton->getColumnIndex()]
+                    [selectedButton->getRowIndex() - 1]);
             break;
         case 8://User selects "Move down"
             swapButtons(selectedButton,
-                    buttonColumns[selectedButton->getColumn()]
-                    [selectedButton->getIndex() + 1]);
+                    buttonColumns[selectedButton->getColumnIndex()]
+                    [selectedButton->getRowIndex() + 1]);
     }
 }
 
@@ -262,7 +263,7 @@ int AppMenuComponent::activeColumn()
  */
 void AppMenuComponent::openFolder(Array<String> categoryNames)
 {
-    int folderIndex = selected[activeColumn()]->getIndex() -
+    int folderIndex = selected[activeColumn()]->getRowIndex() -
             appConfig.getFavorites().size();
     AppConfigFile::AppFolder selectedFolder =
             appConfig.getFolders()[folderIndex];
@@ -284,24 +285,25 @@ void AppMenuComponent::openFolder(Array<String> categoryNames)
                 && !desktopEntry.getValue(DesktopEntry::hidden))
         {
             String name = desktopEntry.getValue(DesktopEntry::name);
-            AppMenuButton* addedButton;
-            if (buttonNameMap[name] != nullptr &&
+            AppMenuButton::Ptr addedButton;
+            if (buttonNameMap[name].get() != nullptr &&
                     buttonNameMap[name]->getParentComponent() == nullptr)
             {
                 addedButton = buttonNameMap[name];
-                addedButton->setIndex(buttonColumns[activeColumn()].size());
-                addedButton->setColumn(activeColumn());
+                addedButton->setRowIndex(buttonColumns[activeColumn()].size());
+                addedButton->setColumnIndex(activeColumn());
             } else
             {
-                addedButton = new DesktopEntryButton(desktopEntry,
-                        buttonColumns[activeColumn()].size(),
-                        activeColumn(), iconThread);
+                addedButton = new ScrollingMenuButton
+                        (AppMenuItemFactory::create(desktopEntry),
+                        desktopEntry.getValue(DesktopEntry::name)
+                        + String("Button"), iconThread);
             }
             addButton(addedButton);
         }
     }
     selected[activeColumn()] = buttonColumns[activeColumn()][0];
-    buttonColumns[activeColumn()][0]->setSelected(true);
+    buttonColumns[activeColumn()][0]->setToggleState(true, NotificationType::dontSendNotification);
     scrollToSelected();
 }
 
@@ -318,7 +320,7 @@ void AppMenuComponent::closeFolder()
     {
         AppMenuButton* toRemove = buttonColumns[activeColumn()][i];
         toRemove->setVisible(false);
-        toRemove->setSelected(false);
+        toRemove->setToggleState(false, NotificationType::dontSendNotification);
         Component * parent = toRemove->getParentComponent();
         if (parent != nullptr)
         {
@@ -387,29 +389,30 @@ void AppMenuComponent::hideLoadingSpinner()
  */
 void AppMenuComponent::onButtonClick(AppMenuButton* button)
 {
-    if (button->getColumn() < activeColumn())
+    if (button->getColumnIndex() < activeColumn())
     {
-        while (button->getColumn() < activeColumn())
+        while (button->getColumnIndex() < activeColumn())
         {
             closeFolder();
         }
-        selectIndex(button->getIndex());
+        selectIndex(button->getRowIndex());
         return;
     }
     if (selected[activeColumn()] == button)
     {
-        if (button->isFolder())
+        AppMenuItem * selectedMenuItem = button->getMenuItem();
+        if (selectedMenuItem->isFolder())
         {
-            openFolder(button->getCategories());
+            openFolder(selectedMenuItem->getCategories());
         } else
         {
             showLoadingSpinner();
-            appLauncher.startOrFocusApp(button->getAppName(),
-                    button->getCommand());
+            appLauncher.startOrFocusApp(selectedMenuItem->getAppName(),
+                    selectedMenuItem->getCommand());
         }
     } else
     {
-        selectIndex(button->getIndex());
+        selectIndex(button->getRowIndex());
     }
 }
 
@@ -420,7 +423,15 @@ AppMenuPopupEditor* AppMenuComponent::getEditorForSelected()
 {
     if (!isLoading() && getSelectedButton() != nullptr)
     {
-        return getSelectedButton()->getEditor();
+        AppMenuItem * selectedItem = getSelectedButton()->getMenuItem();
+        return getSelectedButton()->getEditor(
+                [this, selectedItem](AppMenuPopupEditor * editor)
+                {
+                    if (editor->getCategories() != selectedItem->getCategories())
+                    {
+                        loadButtons();
+                    }
+                });
     }
     return nullptr;
 }
@@ -428,26 +439,32 @@ AppMenuPopupEditor* AppMenuComponent::getEditorForSelected()
 /**
  * Add a new application button to the active menu column.
  */
-void AppMenuComponent::addButton(AppMenuButton* appButton)
+void AppMenuComponent::addButton(AppMenuButton::Ptr appButton)
 {
-    String name = appButton->getAppName();
-    Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
+    AppMenuItem * newMenuItem = appButton->getMenuItem();
+    String name = newMenuItem->getAppName();
+    Rectangle<int>buttonSize = PocketHomeApplication::getInstance()
+            ->getComponentConfig().getComponentSettings
+            (ComponentConfigFile::appMenuButtonKey).getBounds();
+
     int buttonWidth = buttonSize.getWidth();
     int buttonHeight = buttonSize.getHeight();
     if (buttonNameMap[name] == nullptr)
     {
         buttonNameMap[name] = appButton;
     }
-    int index = appButton->getIndex();
-    int column = appButton->getColumn();
-    int x = column*buttonWidth;
-    int y = columnTops[column] + buttonHeight * buttonColumns[column].size();
+    int columnIndex = activeColumn();
+    int rowIndex = buttonColumns[columnIndex].size();
+    appButton->setColumnIndex(columnIndex);
+    appButton->setRowIndex(rowIndex);
+    int x = columnIndex*buttonWidth;
+    int y = columnTops[columnIndex] + buttonHeight * rowIndex;
     appButton->setBounds(x, y, buttonWidth, buttonHeight);
     addAndMakeVisible(appButton);
     appButton->setEnabled(true);
     appButton->setVisible(true);
     appButton->addMouseListener(this, true);
-    this->buttonColumns[column].push_back(appButton);
+    this->buttonColumns[columnIndex].push_back(appButton);
     if ((x + buttonWidth) > getWidth())
     {
         setBounds(getX(), getY(), x + buttonWidth, getHeight());
@@ -473,11 +490,13 @@ void AppMenuComponent::selectIndex(int index)
         {
             if (selectedButton != nullptr)
             {
-                selectedButton->setSelected(false);
+                selectedButton->setToggleState(false,
+                        NotificationType::dontSendNotification);
                 selectedButton->repaint();
             }
             selectedButton = column[index];
-            selectedButton->setSelected(true);
+            selectedButton->setToggleState(true,
+                    NotificationType::dontSendNotification);
             selectedButton->repaint();
 
             selected[activeColumn()] = selectedButton;
@@ -507,31 +526,32 @@ AppMenuButton* AppMenuComponent::getSelectedButton()
  */
 void AppMenuComponent::swapButtons(AppMenuButton* button1, AppMenuButton* button2)
 {
-    DBG(String("Swapping ")+button1->getAppName()+String(" and ")+button2->getAppName());
-    int column = button1->getColumn();
-    int index = button1->getIndex();
-    if (column != button2->getColumn())
+    DBG(String("Swapping ") + button1->getMenuItem()->getAppName()
+            + String(" and ") + button2->getMenuItem()->getAppName());
+    int column = button1->getColumnIndex();
+    int index = button1->getRowIndex();
+    if (column != button2->getColumnIndex())
     {
         DBG("AppMenuComponent::swapButtons: swapping buttons between columns isn't allowed.");
         return;
     }
-    if (button1->canChangeIndex(button2->getIndex()-index))
+    if (button1->getMenuItem()->canChangeIndex(button2->getRowIndex() - index))
     {
         Rectangle<int> bounds = button1->getBounds();
 
-        button1->setColumn(button2->getColumn());
-        button1->moveDataIndex(button2->getIndex()-index);
-        button1->setIndex(button2->getIndex());
-        buttonColumns[button2->getColumn()][button2->getIndex()] = button1;
+        button1->setColumnIndex(button2->getColumnIndex());
+        button1->moveDataIndex(button2->getRowIndex() - index);
+        button1->setRowIndex(button2->getRowIndex());
+        buttonColumns[button2->getColumnIndex()][button2->getRowIndex()] = button1;
         button1->setBounds(button2->getBounds());
 
-        button2->setColumn(column);
-        button2->setIndex(index);
+        button2->setColumnIndex(column);
+        button2->setRowIndex(index);
         buttonColumns[column][index] = button2;
         button2->setBounds(bounds);
-    }
-    else{
-        DBG(String("Cant move index ")+String(index)+String(" by ")+String(button2->getIndex()-index));
+    } else
+    {
+        DBG(String("Cant move index ") + String(index) + String(" by ") + String(button2->getRowIndex() - index));
     }
 }
 
@@ -545,8 +565,8 @@ void AppMenuComponent::scrollToSelected(bool animatedScroll)
     {
         int buttonWidth = selectedButton->getWidth();
         int buttonHeight = selectedButton->getHeight();
-        int index = selectedButton->getIndex();
-        int column = selectedButton->getColumn();
+        int index = selectedButton->getRowIndex();
+        int column = selectedButton->getColumnIndex();
         Rectangle<int> dest = getBounds();
         //calculate y-position
         if (selectedButton->isVisible())
@@ -646,7 +666,7 @@ void AppMenuComponent::resized()
     x_origin = menuBounds.getX();
     y_origin = menuBounds.getY();
     //resize all buttons
-    Rectangle<int>buttonSize = AppMenuButton::getButtonSize();
+    Rectangle<int>buttonSize = buttonColumns[0][0]->getBounds().withZeroOrigin();
     int buttonWidth = buttonSize.getWidth();
     int buttonHeight = buttonSize.getHeight();
     int numColumns = selected.size();

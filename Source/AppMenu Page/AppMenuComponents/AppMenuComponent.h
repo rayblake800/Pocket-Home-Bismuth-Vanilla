@@ -9,13 +9,14 @@
 
 #pragma once
 #include <atomic>
-#include "../Basic Components/OverlaySpinner.h"
-#include "../Configuration/Configurables/ConfigurableComponent.h"
-#include "Popup Editor Components/AppMenuPopupEditor.h"
-#include "AppMenuButton/AppMenuButton.h"
-#include "AppLauncher.h"
-#include "IconThread.h"
-#include "DesktopEntries.h"
+#include <set>
+#include "../../Basic Components/OverlaySpinner.h"
+#include "../../Configuration/Configurables/ConfigurableComponent.h"
+#include "../Popup Editor Components/AppMenuPopupEditor.h"
+#include "../AppMenuButton/AppMenuButton.h"
+#include "../AppLauncher.h"
+#include "../IconThread.h"
+#include "../DesktopEntries.h"
 
 /**
  * TODO:
@@ -143,7 +144,7 @@ private:
      * Add a new application button to the active menu column.
      * @param appButton will be added to the bottom of the active menu column.
      */
-    void addButton(AppMenuButton* appButton);
+    void addButton(AppMenuButton::Ptr appButton);
 
     /**
      * Change which button is selected in the active menu column.

@@ -3,167 +3,75 @@
 #include "../../PocketHomeApplication.h"
 #include "AppMenuButton.h"
 
-std::function<void() > AppMenuButton::reloadAllButtons = []()
-{
-};
-
 /**
  * Create a new AppMenuButton
  */
 AppMenuButton::AppMenuButton
-(String name, int index, int column, IconThread& iconThread)
-: Button(name),
-ConfigurableComponent(ComponentConfigFile::appMenuButtonKey),
-index(index),
-column(column),
-iconThread(iconThread),
-confirmDeleteTitle("Delete this menu item?"),
-confirmDeleteMessage("Really delete this item from the menu? This cannot be undone.")
+(AppMenuItem* menuItem, IconThread& iconThread, String name) : Button(name),
+menuItem(menuItem),
+iconThread(iconThread)
 {
     setWantsKeyboardFocus(false);
-    loadAllConfigProperties();
+    loadIcon(menuItem->getIconName());
+}
+
+AppMenuButton::~AppMenuButton()
+{
+}
+
+AppMenuItem* AppMenuButton::getMenuItem()
+{
+    return menuItem;
 }
 
 /**
- * Set whether this button is currently selected.
+ * Gets a PopupEditorComponent configured to edit this button's data
  */
-void AppMenuButton::setSelected(bool select)
+AppMenuPopupEditor* AppMenuButton::getEditor(std::function<void(AppMenuPopupEditor*) > onConfirm)
 {
-    selected = select;
-}
+    AppMenuPopupEditor* editor = new AppMenuPopupEditor
+            (menuItem->getEditorTitle(),
+            iconThread,
+            [this,onConfirm](AppMenuPopupEditor * editor)
+            {
+                onConfirm(editor);
+                menuItem->getEditorCallback()(editor);
+                reloadDataFromSource();
+            },
+    menuItem->hasEditableCategories(),
+            menuItem->hasEditableCommand());
 
-/**
- * @return the icon image used by this button.
- */
-const Image& AppMenuButton::getIcon()
-{
-    return appIcon;
-}
-
-/**
- * @return the button's position in its column
- */
-int AppMenuButton::getIndex() const
-{
-    return index;
-}
-
-/**
- * @return the button's column in the AppMenu
- */
-int AppMenuButton::getColumn() const
-{
-    return column;
-}
-
-/**
- * Updates the stored button index. 
- */
-void AppMenuButton::setIndex(int index)
-{
-    this->index = index;
-}
-
-/**
- * 
- * Updates the stored button column.
- */
-void AppMenuButton::setColumn(int column)
-{
-    this->column = column;
-}
+    editor->setNameField(menuItem->getAppName());
+    editor->setIconField(menuItem->getIconName());
+    editor->setCategories(menuItem->getCategories());
+    editor->setCommandField(menuItem->getCommand());
+    editor->setTerminalCheckbox(menuItem->isTerminalApp());
+    return editor;
+};
 
 /**
  * Calling this method will create a message box asking for user 
  * confirmation that this button and its source should be removed.
  * If the user clicks "OK", removeButtonSource is called.
  */
-void AppMenuButton::confirmRemoveButtonSource()
+void AppMenuButton::confirmRemoveButtonSource(std::function<void() > onRemove)
 {
-    confirmAction(confirmDeleteTitle,confirmDeleteMessage,
-            [this]()
+    confirmAction(menuItem->getConfirmDeleteTitle(),
+            menuItem->getConfirmDeleteMessage(),
+            [this,onRemove]()
             {
-                removeButtonSource();
+                menuItem->removeMenuItemSource();
+                onRemove();
             });
 }
 
 /**
- * @return the size of an AppMenuButton with the current window size
- * and config file ratios.
+ * If possible, change the index of this button's data source by some
+ * offset amount.
  */
-Rectangle<int> AppMenuButton::getButtonSize()
+bool AppMenuButton::moveDataIndex(int offset)
 {
-    ComponentConfigFile& config = PocketHomeApplication::getInstance()
-            ->getComponentConfig();
-    ComponentConfigFile::ComponentSettings buttonConf =
-            config.getComponentSettings(ComponentConfigFile::appMenuButtonKey);
-    return buttonConf.getBounds().withPosition(0, 0);
-}
-
-/**
- * Sets a callback to run when button data changes and should be
- * reloaded.
- */
-void AppMenuButton::setReloadButtonsCallback(std::function<void() > reload)
-{
-    reloadAllButtons = reload;
-}
-
-/**
- * Custom button painting method.
- */
-void AppMenuButton::paintButton
-(Graphics &g, bool isMouseOverButton, bool isButtonDown)
-{
-    Rectangle<int> border = getBounds().withPosition(0, 0);
-    g.setColour(selected ? selectedFillColour : fillColour);
-    g.setOpacity(selected ? .8 : .2);
-    g.fillRect(border);
-    g.setOpacity(1);
-    //app icon
-    g.drawImageWithin(appIcon, imageBox.getX(), imageBox.getY(),
-            imageBox.getWidth(), imageBox.getHeight(),
-            RectanglePlacement::centred, false);
-    //app title
-    g.setColour(textColour);
-    g.setFont(titleFont);
-    g.drawText(getAppName(), textBox, Justification::centredLeft, true);
-    g.setColour(Colour(0x4D4D4D));
-    g.setOpacity(selected ? 1.0 : 0.8);
-    g.drawRect(border, 2);
-}
-
-/**
- * Re-calculates draw values whenever the button is resized
- */
-void AppMenuButton::resized()
-{
-    Rectangle<float> bounds = getLocalBounds().toFloat();
-    imageBox = bounds.withWidth(bounds.getHeight());
-    imageBox.reduce(2, 2);
-    textBox = bounds;
-    textBox.setLeft(imageBox.getRight());
-    textBox.reduce(4, 4);
-    //It looks messy if all the fonts are different sizes, so using a default
-    //String for size calculations is preferable even if really long names can 
-    //get clipped.
-    titleFont = fontResizedToFit(titleFont, "DefaultAppNameStr",
-            textBox.toNearestInt());
-}
-
-/**
- * Load button colors from configuration files.
- */
-void AppMenuButton::applyConfigAssets(Array<String> assetNames,
-        Array<Colour> colours)
-{
-    while (colours.size() < 3)
-    {
-        colours.add(Colours::transparentBlack);
-    }
-    textColour = colours[0];
-    fillColour = colours[1];
-    selectedFillColour = colours[2];
+    return menuItem->moveDataIndex(offset);
 }
 
 /**
@@ -176,4 +84,12 @@ void AppMenuButton::loadIcon(String icon)
         appIcon = iconImg;
         repaint();
     });
+}
+
+/**
+ * Reload this button's data from its menu item
+ */
+void AppMenuButton::reloadDataFromSource()
+{
+    loadIcon(menuItem->getIconName());
 }
