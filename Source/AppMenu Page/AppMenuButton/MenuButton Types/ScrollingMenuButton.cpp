@@ -1,9 +1,9 @@
 #include "ScrollingMenuButton.h"
 #include "../../../Utils.h"
 
-ScrollingMenuButton::ScrollingMenuButton(AppMenuItem* menuItem, String name,
-        IconThread& iconThread) :
-AppMenuButton(menuItem,iconThread, name),
+ScrollingMenuButton::ScrollingMenuButton(AppMenuItem* menuItem,
+        IconThread& iconThread, int columnIndex,int rowIndex, String name) :
+AppMenuButton(menuItem,iconThread, columnIndex,rowIndex, name),
 ConfigurableComponent(ComponentConfigFile::appMenuButtonKey)
 {
     loadAllConfigProperties();

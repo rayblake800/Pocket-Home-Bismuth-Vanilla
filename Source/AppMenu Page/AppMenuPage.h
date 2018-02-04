@@ -80,7 +80,7 @@ private:
     
     Colour bgColor;
     ClockLabel clock;
-    AppMenuComponent appMenu;
+    ScopedPointer<AppMenuComponent> appMenu;
     BatteryIcon batteryIcon;
     WifiIcon wifiIcon;
     

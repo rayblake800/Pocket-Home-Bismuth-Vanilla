@@ -2,6 +2,8 @@
 #include "../PokeLookAndFeel.h"
 #include "../Utils.h"
 #include "../PocketHomeApplication.h"
+#include "AppMenuComponents/PagedAppMenu.h"
+#include "AppMenuComponents/ScrollingAppMenu.h"
 #include "AppMenuPage.h"
 
 AppMenuPage::AppMenuPage() :
@@ -12,10 +14,10 @@ Configurable(&PocketHomeApplication::getInstance()->getConfig(),
 frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
 powerButton(ComponentConfigFile::powerButtonKey),
 settingsButton(ComponentConfigFile::settingsButtonKey),
-appMenu(appConfig)
+appMenu(new ScrollingAppMenu(appConfig))
 {
     addMouseListener(this, false);
-    appMenu.setPopupCallback([this](AppMenuPopupEditor * newEditor)
+    appMenu->setPopupCallback([this](AppMenuPopupEditor * newEditor)
     {
         showPopupEditor(newEditor);
     });
@@ -46,7 +48,7 @@ AppMenuPage::~AppMenuPage()
 
 void AppMenuPage::stopWaitingOnLaunch()
 {
-    appMenu.stopWaitingForLoading();
+    appMenu->stopWaitingForLoading();
 }
 
 /**
@@ -89,7 +91,7 @@ void AppMenuPage::mouseDown(const MouseEvent &event)
 {
     if(event.mods.isPopupMenu() || event.mods.isCtrlDown())
     {
-        appMenu.openPopupMenu(false);
+        appMenu->openPopupMenu(false);
     }
 }
 
@@ -134,8 +136,8 @@ void AppMenuPage::setImageBackground(const String& path)
 bool AppMenuPage::keyPressed(const KeyPress& key)
 {
     //don't interrupt animation or loading
-    if (Desktop::getInstance().getAnimator().isAnimating(&appMenu)
-            || appMenu.isLoading())
+    if (Desktop::getInstance().getAnimator().isAnimating(appMenu)
+            || appMenu->isLoading())
     {
         return true;
     }
@@ -143,17 +145,17 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
     if (keyCode == KeyPress::tabKey)
     {
         DBG("pressed tab");
-        appMenu.loadButtons();
+        appMenu->loadButtons();
     }
     if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
     {
-        appMenu.changeSelection((keyCode == KeyPress::upKey)? -1 : 1);
+        appMenu->changeSelection((keyCode == KeyPress::upKey)? -1 : 1);
         return true;
     } else if (keyCode == KeyPress::leftKey || keyCode == KeyPress::escapeKey)
     {
-        if (appMenu.activeColumn() > 0)
+        if (appMenu->activeColumn() > 0)
         {
-            appMenu.closeFolder();
+            appMenu->closeFolder();
         }
         return true;
     } else if (keyCode == KeyPress::returnKey ||
@@ -161,11 +163,11 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
             keyCode == KeyPress::rightKey)
     {
         DBG("AppMenuPage:click selected AppMenuButton");
-        appMenu.clickSelected();
+        appMenu->clickSelected();
         return true;
     } else if (key == KeyPress::createFromDescription("CTRL+e"))
     {
-        appMenu.openPopupMenu(true);
+        appMenu->openPopupMenu(true);
         return true;
     }
     return true;
@@ -181,7 +183,7 @@ void AppMenuPage::visibilityChanged()
 
 void AppMenuPage::resized()
 {
-    appMenu.applyConfigBounds();
+    appMenu->applyConfigBounds();
     frame.applyConfigBounds();
     clock.applyConfigBounds();
     batteryIcon.applyConfigBounds();

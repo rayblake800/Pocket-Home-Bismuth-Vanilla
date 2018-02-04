@@ -3,7 +3,6 @@
 #include "../Popup Editor Components/NewConfigAppEditor.h"
 #include "../Popup Editor Components/NewDesktopAppEditor.h"
 #include "../Popup Editor Components/NewFolderEditor.h"
-#include "../AppMenuButton/MenuButton Types/ScrollingMenuButton.h"
 #include "../AppMenuButton/AppMenuItemFactory.h"
 #include "../AppMenuPage.h"
 #include "AppMenuComponent.h"
@@ -20,13 +19,9 @@ showPopupCallback([this](AppMenuPopupEditor* newEditor)
 })
 {
     applyConfigBounds();
-    x_origin = getBounds().getX();
-    y_origin = getBounds().getY();
     setWantsKeyboardFocus(false);
     loadingSpinner = new OverlaySpinner();
     loadingSpinner->setAlwaysOnTop(true);
-
-    loadButtons();
 }
 
 AppMenuComponent::~AppMenuComponent()
@@ -48,10 +43,8 @@ void AppMenuComponent::loadButtons()
     }
     buttonNameMap.clear();
     buttonColumns.clear();
-    columnTops.clear();
     selected.clear();
     selected.push_back(nullptr);
-    columnTops.push_back(y_origin);
     buttonColumns.emplace(buttonColumns.begin());
 
     //read in main page apps from config
@@ -59,18 +52,18 @@ void AppMenuComponent::loadButtons()
     for (const AppConfigFile::AppItem& favorite : favorites)
     {
         DBG(String("AppMenu:Found app in config:") + favorite.name);
-        addButton(new ScrollingMenuButton
-                (AppMenuItemFactory::create(favorite, appConfig),
-                favorite.name + String("Button"), iconThread));
+        addButton(createMenuButton(AppMenuItemFactory::create
+                (favorite, appConfig),
+                activeColumn(), buttonColumns[activeColumn()].size()));
     }
 
     //add category buttons
     Array<AppConfigFile::AppFolder> categories = appConfig.getFolders();
     for (const AppConfigFile::AppFolder& category : categories)
     {
-        addButton(new ScrollingMenuButton
-                (AppMenuItemFactory::create(category, appConfig),
-                category.name + String("Button"), iconThread));
+        addButton(createMenuButton(AppMenuItemFactory::create
+                (category, appConfig),
+                activeColumn(), buttonColumns[activeColumn()].size()));
     }
     DBG(String("added ") + String(buttonColumns[activeColumn()].size())
             + " buttons");
@@ -270,13 +263,7 @@ void AppMenuComponent::openFolder(Array<String> categoryNames)
     std::set<DesktopEntry> folderItems =
             desktopEntries.getCategoryListEntries(categoryNames);
     if (folderItems.empty())return;
-    int columnTop = y_origin;
-    if (selected[activeColumn()] != nullptr)
-    {
-        columnTop = selected[activeColumn()]->getY();
-    }
     selected.push_back(nullptr);
-    columnTops.push_back(columnTop);
     buttonColumns.push_back(std::vector<AppMenuButton::Ptr>());
     DBG(String("found ") + String(folderItems.size()) + " items in folder");
     for (DesktopEntry desktopEntry : folderItems)
@@ -294,10 +281,9 @@ void AppMenuComponent::openFolder(Array<String> categoryNames)
                 addedButton->setColumnIndex(activeColumn());
             } else
             {
-                addedButton = new ScrollingMenuButton
-                        (AppMenuItemFactory::create(desktopEntry),
-                        desktopEntry.getValue(DesktopEntry::name)
-                        + String("Button"), iconThread);
+                addedButton = createMenuButton(AppMenuItemFactory::create
+                        (desktopEntry), activeColumn(),
+                        buttonColumns[activeColumn()].size());
             }
             addButton(addedButton);
         }
@@ -330,7 +316,6 @@ void AppMenuComponent::closeFolder()
     }
     selected.pop_back();
     buttonColumns.pop_back();
-    columnTops.pop_back();
     scrollToSelected();
 }
 
@@ -351,6 +336,32 @@ void AppMenuComponent::stopWaitingForLoading()
 
     hideLoadingSpinner();
     appLauncher.stopTimer();
+}
+
+/**
+ * Gets the selected button in the active button column.
+ */
+AppMenuButton* AppMenuComponent::getSelectedButton()
+{
+    try
+    {
+        return selected.at(activeColumn());
+    } catch (std::out_of_range e)
+    {
+        return nullptr;
+    }
+}
+
+/**
+ * Resize all child components.
+ */
+void AppMenuComponent::resized()
+{
+    loadingSpinner->setBounds(getWindowSize());
+    if (loadingAsync)
+    {
+        showLoadingSpinner();
+    }
 }
 
 /**
@@ -443,12 +454,6 @@ void AppMenuComponent::addButton(AppMenuButton::Ptr appButton)
 {
     AppMenuItem * newMenuItem = appButton->getMenuItem();
     String name = newMenuItem->getAppName();
-    Rectangle<int>buttonSize = PocketHomeApplication::getInstance()
-            ->getComponentConfig().getComponentSettings
-            (ComponentConfigFile::appMenuButtonKey).getBounds();
-
-    int buttonWidth = buttonSize.getWidth();
-    int buttonHeight = buttonSize.getHeight();
     if (buttonNameMap[name] == nullptr)
     {
         buttonNameMap[name] = appButton;
@@ -457,22 +462,9 @@ void AppMenuComponent::addButton(AppMenuButton::Ptr appButton)
     int rowIndex = buttonColumns[columnIndex].size();
     appButton->setColumnIndex(columnIndex);
     appButton->setRowIndex(rowIndex);
-    int x = columnIndex*buttonWidth;
-    int y = columnTops[columnIndex] + buttonHeight * rowIndex;
-    appButton->setBounds(x, y, buttonWidth, buttonHeight);
-    addAndMakeVisible(appButton);
-    appButton->setEnabled(true);
-    appButton->setVisible(true);
-    appButton->addMouseListener(this, true);
     this->buttonColumns[columnIndex].push_back(appButton);
-    if ((x + buttonWidth) > getWidth())
-    {
-        setBounds(getX(), getY(), x + buttonWidth, getHeight());
-    }
-    if ((y + buttonHeight) > getHeight())
-    {
-        setBounds(getX(), getY(), getWidth(), y + buttonHeight);
-    }
+    appButton->addMouseListener(this, true);
+    addButtonComponent(appButton);
 }
 
 /**
@@ -502,20 +494,6 @@ void AppMenuComponent::selectIndex(int index)
             selected[activeColumn()] = selectedButton;
             scrollToSelected();
         }
-    }
-}
-
-/**
- * Gets the selected button in the active button column.
- */
-AppMenuButton* AppMenuComponent::getSelectedButton()
-{
-    try
-    {
-        return selected.at(activeColumn());
-    } catch (std::out_of_range e)
-    {
-        return nullptr;
     }
 }
 
@@ -556,66 +534,6 @@ void AppMenuComponent::swapButtons(AppMenuButton* button1, AppMenuButton* button
 }
 
 /**
- * Scroll the menu so that the selected button is centered.
- */
-void AppMenuComponent::scrollToSelected(bool animatedScroll)
-{
-    AppMenuButton* selectedButton = getSelectedButton();
-    if (selectedButton != nullptr)
-    {
-        int buttonWidth = selectedButton->getWidth();
-        int buttonHeight = selectedButton->getHeight();
-        int index = selectedButton->getRowIndex();
-        int column = selectedButton->getColumnIndex();
-        Rectangle<int> dest = getBounds();
-        //calculate y-position
-        if (selectedButton->isVisible())
-        {
-            int buttonYPos = selectedButton->getY();
-            int screenHeight = getWindowSize().getHeight();
-
-            int distanceFromCenter = abs(buttonYPos - getY()
-                    + screenHeight / 2);
-            //only scroll vertically if selected button is outside 
-            //the center 3/5 
-            if (distanceFromCenter > screenHeight / 5 * 3)
-            {
-                dest.setY(y_origin - buttonYPos + screenHeight / 2
-                        - buttonHeight / 2);
-            }
-            if (dest.getY() > y_origin)
-            {
-                dest.setY(y_origin);
-            }
-        } else
-        {
-            dest.setY(y_origin - columnTops[column]);
-        }
-        //calculate x-position
-        if (column == 0)
-        {
-            dest.setX(x_origin);
-        } else
-        {
-            dest.setX(x_origin - column * buttonWidth + buttonHeight);
-        }
-        //scroll to the calculated position
-        if (animatedScroll)
-        {
-            ComponentAnimator& animator = Desktop::getInstance().getAnimator();
-            if (animator.isAnimating(this))
-            {
-                animator.cancelAnimation(this, false);
-            }
-            animator.animateComponent(this, dest, 1, 100, false, 1, 1);
-        } else
-        {
-            setBounds(dest);
-        }
-    }
-}
-
-/**
  * handle all AppMenuButton clicks
  */
 void AppMenuComponent::mouseDown(const MouseEvent &event)
@@ -645,59 +563,6 @@ void AppMenuComponent::mouseDown(const MouseEvent &event)
         {
             onButtonClick(appClicked);
         }
-    }
-}
-
-/**
- * Resize all child components.
- */
-void AppMenuComponent::resized()
-{
-    loadingSpinner->setBounds(getWindowSize());
-    if (loadingAsync)
-    {
-        showLoadingSpinner();
-    }
-    ComponentConfigFile& config = PocketHomeApplication::getInstance()
-            ->getComponentConfig();
-    ComponentConfigFile::ComponentSettings menuSettings =
-            config.getComponentSettings(ComponentConfigFile::appMenuKey);
-    Rectangle<int> menuBounds = menuSettings.getBounds();
-    x_origin = menuBounds.getX();
-    y_origin = menuBounds.getY();
-    //resize all buttons
-    Rectangle<int>buttonSize = buttonColumns[0][0]->getBounds().withZeroOrigin();
-    int buttonWidth = buttonSize.getWidth();
-    int buttonHeight = buttonSize.getHeight();
-    int numColumns = selected.size();
-    if (menuBounds.getWidth() < numColumns * buttonWidth)
-    {
-        menuBounds.setWidth(numColumns * buttonWidth);
-    }
-    for (int c = 0; c < numColumns; c++)
-    {
-        if (c > 0)
-        {
-            columnTops[c] = selected[c - 1]->getY();
-        }
-        int numRows = buttonColumns[c].size();
-        if (menuBounds.getHeight() < numRows * buttonHeight + columnTops[c])
-        {
-            menuBounds.setHeight(numRows * buttonHeight + columnTops[c]);
-        }
-        for (int i = 0; i < numRows; i++)
-        {
-            AppMenuButton * button = buttonColumns[c][i];
-            button->setBounds(buttonSize.withPosition(c*buttonWidth,
-                    i * buttonHeight + columnTops[c]));
-        }
-    }
-    setBounds(menuBounds);
-    if (activeColumn() >= 0 && selected[activeColumn()] != nullptr
-            && !Desktop::getInstance().getAnimator().isAnimating())
-    {
-
-        scrollToSelected();
     }
 }
 

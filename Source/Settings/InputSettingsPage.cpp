@@ -74,29 +74,8 @@ void InputSettingsPage::paint(Graphics& g)
 
 void InputSettingsPage::resized()
 {
-<<<<<<< Updated upstream
-    auto bounds = getLocalBounds();
-    int btn_height = 30;
-    int btn_width = 345;
-
-    int titlewidth = title.getFont().getStringWidth(title.getText());
-    titlewidth /= 2;
-    title.setBounds(bounds.getX() + 240 - titlewidth, bounds.getY() + 10, btn_width, btn_height);
-    backButton.applyConfigBounds();
-
-    int datewidth = cursorvisible.getFont().getStringWidth(cursorvisible.getText());
-    cursorvisible.setBounds(bounds.getX() + 60, bounds.getY() + 70, datewidth, btn_height);
-    int combowidth = 360 - datewidth;
-    choosemode.setBounds(bounds.getX() + 60 + datewidth, bounds.getY() + 70, combowidth, btn_height);
-
-    int middle = 240 - btn_width / 2;
-    calibrating.setBounds(bounds.getX() + middle, bounds.getY() + 150, btn_width, btn_height);
-
-    fnmapping.setBounds(bounds.getX() + middle, bounds.getY() + 200, btn_width, btn_height);
-=======
     Rectangle<int> bounds = getLocalBounds();
     backButton.applyConfigBounds();
     bounds.reduce(backButton.getWidth(),bounds.getHeight()/15);
     layoutManager.layoutComponents(bounds,bounds.getWidth()/20,bounds.getHeight()/14);
->>>>>>> Stashed changes
 }

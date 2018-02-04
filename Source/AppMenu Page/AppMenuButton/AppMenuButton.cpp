@@ -6,11 +6,15 @@
 /**
  * Create a new AppMenuButton
  */
-AppMenuButton::AppMenuButton
-(AppMenuItem* menuItem, IconThread& iconThread, String name) : Button(name),
+AppMenuButton::AppMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
+        int columnIndex, int rowIndex, String name) :
+Button(name),
 menuItem(menuItem),
-iconThread(iconThread)
+iconThread(iconThread),
+columnIndex(columnIndex),
+rowIndex(rowIndex)
 {
+    setName(name);
     setWantsKeyboardFocus(false);
     loadIcon(menuItem->getIconName());
 }
@@ -18,6 +22,26 @@ iconThread(iconThread)
 AppMenuButton::~AppMenuButton()
 {
 }
+
+int AppMenuButton::getColumnIndex()
+{
+    return columnIndex;
+};
+
+int AppMenuButton::getRowIndex()
+{
+    return rowIndex;
+};
+
+void AppMenuButton::setColumnIndex(int newColumn)
+{
+    columnIndex = newColumn;
+};
+
+void AppMenuButton::setRowIndex(int newRow)
+{
+    rowIndex = newRow;
+};
 
 AppMenuItem* AppMenuButton::getMenuItem()
 {
@@ -32,7 +56,7 @@ AppMenuPopupEditor* AppMenuButton::getEditor(std::function<void(AppMenuPopupEdit
     AppMenuPopupEditor* editor = new AppMenuPopupEditor
             (menuItem->getEditorTitle(),
             iconThread,
-            [this,onConfirm](AppMenuPopupEditor * editor)
+            [this, onConfirm](AppMenuPopupEditor * editor)
             {
                 onConfirm(editor);
                 menuItem->getEditorCallback()(editor);
@@ -58,7 +82,7 @@ void AppMenuButton::confirmRemoveButtonSource(std::function<void() > onRemove)
 {
     confirmAction(menuItem->getConfirmDeleteTitle(),
             menuItem->getConfirmDeleteMessage(),
-            [this,onRemove]()
+            [this, onRemove]()
             {
                 menuItem->removeMenuItemSource();
                 onRemove();

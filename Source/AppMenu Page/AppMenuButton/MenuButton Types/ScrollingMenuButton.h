@@ -12,7 +12,8 @@ public ConfigurableComponent {
 public:
     
     typedef ReferenceCountedObjectPtr<ScrollingMenuButton> Ptr;
-    ScrollingMenuButton(AppMenuItem* menuItem, String name,IconThread& iconThread);
+    ScrollingMenuButton(AppMenuItem* menuItem,IconThread& iconThread,
+            int columnIndex,int rowIndex, String name=String());
     virtual ~ScrollingMenuButton();
 private:
 
@@ -48,4 +49,6 @@ private:
     Colour fillColour;
     //Button background fill color, if selected.
     Colour selectedFillColour;
+    int columnIndex;
+    int rowIndex;
 };

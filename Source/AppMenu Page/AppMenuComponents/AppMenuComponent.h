@@ -14,6 +14,7 @@
 #include "../../Configuration/Configurables/ConfigurableComponent.h"
 #include "../Popup Editor Components/AppMenuPopupEditor.h"
 #include "../AppMenuButton/AppMenuButton.h"
+#include "../AppMenuButton/AppMenuItem.h"
 #include "../AppLauncher.h"
 #include "../IconThread.h"
 #include "../DesktopEntries.h"
@@ -115,7 +116,35 @@ protected:
     void applyConfigAssets(Array<String> assetNames,
             Array<Colour> colours) {
     };
+
+    /**
+     * Gets the selected button in the active button column.
+     * @return a pointer to the selected button if one exists, or nullptr
+     * otherwise.
+     */
+    AppMenuButton* getSelectedButton();
+    
+    /**
+     * Resize all child components.
+     */
+    virtual void resized() override;
+
+    //all buttons in each column
+    std::vector<std::vector<AppMenuButton::Ptr>> buttonColumns;
+
+    //current button selection(if any) for each open column
+    std::vector<AppMenuButton::Ptr> selected;
+
+    //this gets passed to AppMenuButtons to load button icons.
+    IconThread iconThread;
 private:
+
+    /**
+     * Create a new menu button component.
+     * @param menuItem menu data to be held by the component
+     */
+    virtual AppMenuButton::Ptr createMenuButton
+    (AppMenuItem* menuItem, int rowIndex, int columnIndex) = 0;
     /**
      * Display the spinner that indicates application or button loading. This 
      * will also disable input.
@@ -144,7 +173,12 @@ private:
      * Add a new application button to the active menu column.
      * @param appButton will be added to the bottom of the active menu column.
      */
-    void addButton(AppMenuButton* appButton);
+    virtual void addButton(AppMenuButton::Ptr appButton);
+
+    /**
+     * Handles the placement of new button components in the menu bounds
+     */
+    virtual void addButtonComponent(AppMenuButton* appButton) = 0;
 
     /**
      * Change which button is selected in the active menu column.
@@ -154,27 +188,20 @@ private:
     void selectIndex(int index);
 
     /**
-     * Gets the selected button in the active button column.
-     * @return a pointer to the selected button if one exists, or nullptr
-     * otherwise.
-     */
-    AppMenuButton* getSelectedButton();
-    
-    /**
      * Swaps the positions of two different buttons in the menu. This updates
      * their column and index values, swaps their bounds, and changes their
      * placements in the buttonColumns array.
      * @param button1
      * @param button2
      */
-    void swapButtons(AppMenuButton* button1,AppMenuButton* button2);
+    void swapButtons(AppMenuButton* button1, AppMenuButton* button2);
 
     /**
      * Scroll the menu so that the selected button is centered.
      * @param animatedScroll sets if the menu should animate its scrolling,
      * or just jump immediately to the destination position.
      */
-    void scrollToSelected(bool animatedScroll = true);
+    virtual void scrollToSelected(bool animatedScroll = true) = 0;
 
     /**
      * handle all AppMenuButton clicks
@@ -182,10 +209,7 @@ private:
      */
     virtual void mouseDown(const MouseEvent &event) override;
 
-    /**
-     * Resize all child components.
-     */
-    void resized() override;
+
 
     /**
      * Exit the loading state when visibility is lost, enter the loading state
@@ -221,25 +245,14 @@ private:
     //True iff desktopEntries are loading in another thread.
     std::atomic<bool> loadingAsync;
 
-    //all buttons in each column
-    std::vector<std::vector<AppMenuButton::Ptr>> buttonColumns;
-
-    //current button selection(if any) for each open column
-    std::vector<AppMenuButton::Ptr> selected;
-
-    //top y-position of each open column
-    std::vector<int> columnTops;
 
     //Stores each button by name, so buttons don't need to be re-loaded
     //every time you close a folder and open it again.
     std::map<String, AppMenuButton::Ptr> buttonNameMap;
 
-    //base component position
-    int x_origin;
-    int y_origin;
 
-    //this gets passed to AppMenuButtons to load button icons.
-    IconThread iconThread;
+
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
 };

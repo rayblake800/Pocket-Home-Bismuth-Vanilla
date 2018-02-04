@@ -25,14 +25,18 @@ public:
      * @param name sets the button's internal component name
      */
     AppMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
+            int columnIndex,int rowIndex,
             String name = String());
+    
     virtual ~AppMenuButton();
 
-    //temporary, move to subclasses soon!
-    int getColumnIndex(){return column;};
-    int getRowIndex(){return row;};
-    void setColumnIndex(int newColumn){column=newColumn;};
-    void setRowIndex(int newRow){row=newRow;};
+    int getColumnIndex();
+    
+    int getRowIndex();
+    
+    void setColumnIndex(int newColumn);
+    
+    void setRowIndex(int newRow);
 
     /**
      * Get this button's menu data.
@@ -90,9 +94,8 @@ private:
     //Menu item data object
     ScopedPointer<AppMenuItem> menuItem;
 
-    //temporary, move to subclasses soon!
-    int column = -1;
-    int row = -1;
+    int columnIndex;
+    int rowIndex;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuButton)
 };
