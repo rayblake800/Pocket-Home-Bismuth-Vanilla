@@ -33,7 +33,8 @@ void ScrollingAppMenu::addButtonComponent(AppMenuButton* appButton)
         int rowIndex = scrollButton->getRowIndex();
         if (rowIndex == 0 || columnIndex >= columnTops.size())
         {
-            if (columnIndex = 0 || selected[columnIndex - 1] == nullptr)
+            if (columnIndex == 0 || selected.size() < columnIndex
+               || selected[columnIndex - 1]  == nullptr)
             {
                 columnTops.push_back(y_origin);
             } else
