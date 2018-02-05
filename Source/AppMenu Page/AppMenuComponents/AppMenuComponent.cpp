@@ -167,11 +167,11 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
         }
         if (selectedMenuItem->canChangeIndex(-1))
         {
-            appMenu.addItem(7, "Move up");
+            appMenu.addItem(7, "Move forward");
         }
         if (selectedMenuItem->canChangeIndex(1))
         {
-            appMenu.addItem(8, "Move down");
+            appMenu.addItem(8, "Move back");
         }
     } else
     {
@@ -230,12 +230,12 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
             confirmNew();
             break;
         }
-        case 7://User selects "Move up"
+        case 7://User selects "Move forward"
             swapButtons(selectedButton,
                     buttonColumns[selectedButton->getColumnIndex()]
                     [selectedButton->getRowIndex() - 1]);
             break;
-        case 8://User selects "Move down"
+        case 8://User selects "Move back"
             swapButtons(selectedButton,
                     buttonColumns[selectedButton->getColumnIndex()]
                     [selectedButton->getRowIndex() + 1]);
@@ -262,10 +262,14 @@ void AppMenuComponent::openFolder(Array<String> categoryNames)
             appConfig.getFolders()[folderIndex];
     std::set<DesktopEntry> folderItems =
             desktopEntries.getCategoryListEntries(categoryNames);
-    if (folderItems.empty())return;
+    if (folderItems.empty())
+    {
+        return;
+    }
     selected.push_back(nullptr);
     buttonColumns.push_back(std::vector<AppMenuButton::Ptr>());
     DBG(String("found ") + String(folderItems.size()) + " items in folder");
+    
     for (DesktopEntry desktopEntry : folderItems)
     {
         if (!desktopEntry.getValue(DesktopEntry::hidden)

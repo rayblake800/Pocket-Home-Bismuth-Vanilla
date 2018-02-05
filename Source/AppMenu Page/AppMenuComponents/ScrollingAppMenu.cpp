@@ -1,5 +1,4 @@
 #include "../../PocketHomeApplication.h"
-#include "../AppMenuButton/MenuButton Types/ScrollingMenuButton.h"
 #include "ScrollingAppMenu.h"
 
 ScrollingAppMenu::ScrollingAppMenu(AppConfigFile& appConfig) :
@@ -34,7 +33,7 @@ void ScrollingAppMenu::addButtonComponent(AppMenuButton* appButton)
         if (rowIndex == 0 || columnIndex >= columnTops.size())
         {
             if (columnIndex == 0 || selected.size() < columnIndex
-               || selected[columnIndex - 1]  == nullptr)
+                    || selected[columnIndex - 1] == nullptr)
             {
                 columnTops.push_back(y_origin);
             } else
@@ -121,6 +120,45 @@ void ScrollingAppMenu::scrollToSelected(bool animatedScroll)
 }
 
 /**
+ * Receives all keyPress events and uses them for page navigation.
+ * @param key
+ * @return true iff the key press was used by the AppMenu
+ */
+bool ScrollingAppMenu::keyPressed(const KeyPress& key)
+{
+    int keyCode = key.getKeyCode();
+    if (keyCode == KeyPress::tabKey)
+    {
+        DBG("pressed tab");
+        loadButtons();
+    }
+    if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
+    {
+        changeSelection((keyCode == KeyPress::upKey)? -1 : 1);
+        return true;
+    } else if (keyCode == KeyPress::leftKey || keyCode == KeyPress::escapeKey)
+    {
+        if (activeColumn() > 0)
+        {
+            closeFolder();
+        }
+        return true;
+    } else if (keyCode == KeyPress::returnKey ||
+            keyCode == KeyPress::spaceKey ||
+            keyCode == KeyPress::rightKey)
+    {
+        DBG("AppMenuPage:click selected AppMenuButton");
+       clickSelected();
+        return true;
+    } else if (key == KeyPress::createFromDescription("CTRL+e"))
+    {
+        openPopupMenu(true);
+        return true;
+    }
+    return false;
+}
+
+/**
  * Create a new menu button component.
  * @param menuItem menu data to be held by the component
  */
@@ -175,7 +213,77 @@ void ScrollingAppMenu::resized()
     if (activeColumn() >= 0 && selected[activeColumn()] != nullptr
             && !Desktop::getInstance().getAnimator().isAnimating())
     {
-
         scrollToSelected();
     }
+}
+
+ScrollingAppMenu::ScrollingMenuButton::ScrollingMenuButton
+(AppMenuItem* menuItem, IconThread& iconThread, int columnIndex,
+        int rowIndex, String name) :
+AppMenuButton(menuItem,iconThread, columnIndex,rowIndex, name),
+ConfigurableComponent(ComponentConfigFile::appMenuButtonKey)
+{
+    loadAllConfigProperties();
+}
+
+ScrollingAppMenu::ScrollingMenuButton::~ScrollingMenuButton()
+{
+}
+
+/**
+ * Custom button painting method.
+ */
+void ScrollingAppMenu::ScrollingMenuButton::paintButton
+(Graphics &g, bool isMouseOverButton, bool isButtonDown)
+{
+    Rectangle<int> border = getBounds().withPosition(0, 0);
+    g.setColour(getToggleState() ? selectedFillColour : fillColour);
+    g.setOpacity(getToggleState() ? .8 : .2);
+    g.fillRect(border);
+    g.setOpacity(1);
+    //app icon
+    g.drawImageWithin(appIcon, imageBox.getX(), imageBox.getY(),
+            imageBox.getWidth(), imageBox.getHeight(),
+            RectanglePlacement::centred, false);
+    //app title
+    g.setColour(textColour);
+    g.setFont(titleFont);
+    g.drawText(getMenuItem()->getAppName(), textBox, 
+            Justification::centredLeft, true);
+    g.setColour(Colour(0x4D4D4D));
+    g.setOpacity(getToggleState() ? 1.0 : 0.8);
+    g.drawRect(border, 2);
+}
+
+/**
+ * Re-calculates draw values whenever the button is resized
+ */
+void ScrollingAppMenu::ScrollingMenuButton::resized()
+{
+    Rectangle<float> bounds = getLocalBounds().toFloat();
+    imageBox = bounds.withWidth(bounds.getHeight());
+    imageBox.reduce(2, 2);
+    textBox = bounds;
+    textBox.setLeft(imageBox.getRight());
+    textBox.reduce(4, 4);
+    //It looks messy if all the fonts are different sizes, so using a default
+    //String for size calculations is preferable even if really long names can 
+    //get clipped.
+    titleFont = fontResizedToFit(titleFont, "DefaultAppNameStr",
+            textBox.toNearestInt());
+}
+
+/**
+ * Load button colors from configuration files.
+ */
+void ScrollingAppMenu::ScrollingMenuButton::applyConfigAssets
+(Array<String> assetNames, Array<Colour> colours)
+{
+    while (colours.size() < 3)
+    {
+        colours.add(Colours::transparentBlack);
+    }
+    textColour = colours[0];
+    fillColour = colours[1];
+    selectedFillColour = colours[2];
 }

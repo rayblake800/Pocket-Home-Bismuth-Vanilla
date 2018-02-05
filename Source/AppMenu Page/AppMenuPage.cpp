@@ -141,36 +141,7 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
     {
         return true;
     }
-    int keyCode = key.getKeyCode();
-    if (keyCode == KeyPress::tabKey)
-    {
-        DBG("pressed tab");
-        appMenu->loadButtons();
-    }
-    if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
-    {
-        appMenu->changeSelection((keyCode == KeyPress::upKey)? -1 : 1);
-        return true;
-    } else if (keyCode == KeyPress::leftKey || keyCode == KeyPress::escapeKey)
-    {
-        if (appMenu->activeColumn() > 0)
-        {
-            appMenu->closeFolder();
-        }
-        return true;
-    } else if (keyCode == KeyPress::returnKey ||
-            keyCode == KeyPress::spaceKey ||
-            keyCode == KeyPress::rightKey)
-    {
-        DBG("AppMenuPage:click selected AppMenuButton");
-        appMenu->clickSelected();
-        return true;
-    } else if (key == KeyPress::createFromDescription("CTRL+e"))
-    {
-        appMenu->openPopupMenu(true);
-        return true;
-    }
-    return true;
+    else return appMenu->keyPressed(key);
 }
 
 void AppMenuPage::visibilityChanged()

@@ -51,7 +51,18 @@ public:
      */
     void setPopupCallback(std::function<void(AppMenuPopupEditor*) > callback);
 
-
+    
+    /**
+     * AppMenuComponent should be passed all key events from the page component
+     * that contains it, as long as the menu isn't either loading or animating.
+     * AppMenuComponent subclasses are then free to use key events in whatever
+     * way works best for them.
+     * @param key
+     * @return true iff the key press was used by the AppMenu
+     */
+    virtual bool keyPressed(const KeyPress& key) = 0;
+    
+    
     //################  AppMenuButton Management   #############################
 
     /**
