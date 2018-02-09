@@ -27,33 +27,38 @@ public:
 
     virtual ~ListEditor();
 
-    /**
-     * Set new colour values to use with this list
-     * @param backgroundColour fill colour for the listbox background.
-     * @param listItemColour fill colour for unselected list items.
-     * @param selectedListItemColour fill colour for unselected list items.
-     * @param txtColour text draw color.
-     */
-    void setColours(Colour backgroundColour, Colour listItemColour, 
-            Colour selectedListItemColour, Colour txtColour);
-    
+    enum ColourIds {
+        backgroundColour = 0x1900100,
+        listItemColour = 0x1900101,
+        selectedListItemColour = 0x1900102,
+        textColour = 0x1900103
+    };
+
     /**
      * @return the number of rows in the list
      */
     int getNumRows();
-    
+
     /**
      * @return all list row strings.
      */
     Array<String> getListItems() const;
-    
+
     /**
      * Replace the existing item list entries with new ones.
      * @param newItems replacement list of Strings
      */
     void setListItems(Array<String> newItems);
 
+    void colourChanged() override;
+
 private:
+    
+    /**
+     * Sets the colors of child components to match ListEditor colors
+     */
+    void updateColours();
+    
     /**
      * Receives notifications when ListItemComponent text is changed.
      * These changes are then copied back to the appropriate string in the list
@@ -64,20 +69,21 @@ private:
 
     //Clicking a listBoxItem selects it.
     void listBoxItemClicked(int row, const MouseEvent& mouseEvent);
-    
+
     //Double clicking a listBoxItem makes it editable.
     virtual void listBoxItemDoubleClicked
     (int row, const MouseEvent & mouseEvent);
-    
+
     //Pressing the delete key removes the selected row.
     void deleteKeyPressed(int lastRowSelected);
-    
+
     //Remove a string from the list and update the underlying ListBox
     void removeRow(int rowNumber);
-    
+
     //Custom ListBox item component class, basically just a label with a 
     //delete button.
-    class ListItemComponent : public Label{
+
+    class ListItemComponent : public Label {
     public:
         ListItemComponent(String text, ListEditor * owner);
         virtual ~ListItemComponent();
@@ -97,16 +103,10 @@ private:
     //Handles add and delete item buttons
     void buttonClicked(Button* buttonClicked) override;
 
-    
+
     void paintListBoxItem(int rowNumber, Graphics&g, int width,
             int height, bool rowIsSelected);
     void resized() override;
-
-
-    Colour bgColour;
-    Colour itemColour;
-    Colour selectedItemColour;
-    Colour textColour;
 
 
     Array<String> listItems;
@@ -114,6 +114,6 @@ private:
     ListBox listContainer;
     TextEditor newItemField;
     TextButton addItemBtn;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ListEditor)
 };

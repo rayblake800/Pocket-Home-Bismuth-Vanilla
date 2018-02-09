@@ -44,14 +44,4 @@ protected:
 
 private:
     int assetIndex=0;
-    static const Array<Colour> defaultColours;
-
-    static const Array<Colour> loadDefaultColours() {
-        Array<Colour> defaults;
-        defaults.add(Colour(0xff, 0xff, 0xff));
-        defaults.add(Colour(0x00, 0x00, 0x00));
-        defaults.add(Colour(0xff, 0x00, 0x00));
-        defaults.add(Colour(0x00, 0xff, 0x00));
-        return defaults;
-    };
 };

@@ -14,7 +14,9 @@
 ConfigurableComponent::ConfigurableComponent
 (String componentKey) :
 Configurable(static_cast<ConfigFile*>
-(&PocketHomeApplication::getInstance()->getComponentConfig()),{componentKey})
+(&PocketHomeApplication::getInstance()->getComponentConfig()),{componentKey}),
+componentSettings(PocketHomeApplication::getInstance()->getComponentConfig()
+        .getComponentSettings(componentKey))
 {
 }
 
@@ -33,7 +35,6 @@ void ConfigurableComponent::applyConfigBounds()
     }
 
     Rectangle<int> newBounds = componentSettings.getBounds();
-
     if (newBounds.getX() < 0)
     {
         newBounds.setX(component->getX());

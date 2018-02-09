@@ -14,7 +14,7 @@ Configurable(&PocketHomeApplication::getInstance()->getConfig(),
 frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
 powerButton(ComponentConfigFile::powerButtonKey),
 settingsButton(ComponentConfigFile::settingsButtonKey),
-appMenu(new ScrollingAppMenu(appConfig))
+appMenu(new PagedAppMenu(appConfig))
 {
     addMouseListener(this, false);
     appMenu->setPopupCallback([this](AppMenuPopupEditor * newEditor)

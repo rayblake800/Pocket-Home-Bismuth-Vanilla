@@ -1,4 +1,6 @@
 #include "Basic Components/SwitchComponent.h"
+#include "Basic Components/DrawableImageComponent.h"
+#include "Basic Components/ListEditor.h"
 #include "PokeLookAndFeel.h"
 
 Colour PokeLookAndFeel::lightGrey = Colour(0xffe1e1e1);
@@ -10,6 +12,16 @@ Colour PokeLookAndFeel::chipPurple = Colour(0xffd23c6d);
 PokeLookAndFeel::PokeLookAndFeel() :
 cursor(MouseCursor::NoCursor)
 {
+    for(int i = 0; i < DrawableImageComponent::defaultColours.size(); i++){
+        int colourId=DrawableImageComponent::imageColour0+i;
+        setColour(colourId,DrawableImageComponent::defaultColours[i]);
+    }
+    
+    setColour(ListEditor::backgroundColour, Colour(0xffd23c6d));   
+    setColour(ListEditor::listItemColour, Colour(0xffd23c6d));  
+    setColour(ListEditor::selectedListItemColour, Colour(0xff202020));  
+    setColour(ListEditor::textColour, Colour(0xffffffff));
+    
     setColour(DrawableButton::textColourId, Colours::white);
     setColour(TextButton::buttonColourId, Colours::white);
     setColour(TextButton::buttonOnColourId, Colours::white);

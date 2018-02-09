@@ -23,10 +23,12 @@
             </formatting>
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>colour</word>
             <word>colours</word>
             <word>config</word>
             <word>Configurables</word>
             <word>json</word>
+            <word>listbox</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

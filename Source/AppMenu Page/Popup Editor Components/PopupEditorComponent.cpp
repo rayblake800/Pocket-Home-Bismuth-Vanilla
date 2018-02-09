@@ -27,12 +27,9 @@ confirmButton("confirm.svg")
     titleLabel.setColour(Label::textColourId, textColour);
     titleLabel.setJustificationType(Justification::centred);
 
-
-    cancelButton.replaceColour(Colours::black, textColour);
     cancelButton.setWantsKeyboardFocus(false);
     cancelButton.addListener(this);
 
-    confirmButton.replaceColour(Colours::black, textColour);
     confirmButton.setWantsKeyboardFocus(false);
     confirmButton.addListener(this);
     

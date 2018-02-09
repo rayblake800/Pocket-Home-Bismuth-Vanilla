@@ -10,12 +10,8 @@ categoryList(categories)
 {
     setName("categoryEditor");
     loadAllConfigProperties();
-    categoryList.setColours(bgColour, bgColour, selectionColour, textColour);
 
-    cancelButton.replaceColour(Colours::black, textColour);
     cancelButton.addListener(this);
-
-    confirmButton.replaceColour(Colours::black, textColour);
     confirmButton.addListener(this);
 
     layoutManager.addRow(1);

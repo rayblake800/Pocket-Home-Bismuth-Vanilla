@@ -10,8 +10,7 @@
 
 #include "ConfigurableImageComponent.h"
 
-const Array<Colour> ConfigurableImageComponent::defaultColours =
-        ConfigurableImageComponent::loadDefaultColours();
+
 
 ConfigurableImageComponent::ConfigurableImageComponent
 (String componentKey, int assetIndex, RectanglePlacement placement) :
@@ -39,10 +38,10 @@ int ConfigurableImageComponent::setImageAssetIndex(int index)
 }
 
 /**
- * (re)load the image file and set the colors.
+ * reload all image files
  */
 void ConfigurableImageComponent::applyConfigAssets(Array<String> assetNames,
-        Array<Colour> colours)
+            Array<Colour> colours)
 {
     if (assetIndex >= 0 && assetIndex < assetNames.size())
     {
@@ -55,10 +54,9 @@ void ConfigurableImageComponent::applyConfigAssets(Array<String> assetNames,
         +String(assetIndex) +String(", it doesn't exist!"));
         assetIndex = -1;
     }
-
-    for (int i = 0; i < colours.size() && i < defaultColours.size(); i++)
-    {
-       replaceColour(defaultColours[i], colours[i]);
+    for(int i=0;i<colours.size();i++){
+        int colourId = imageColour0+i;
+        setColour(colourId,colours[i]);
     }
     applyConfigBounds();
 

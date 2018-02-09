@@ -3551,9 +3551,7 @@
           <df name="AppMenuButton">
             <df name="MenuButton Types">
               <in>PageMenuButton.cpp</in>
-              <in>PageMenuButton.h</in>
               <in>ScrollingMenuButton.cpp</in>
-              <in>ScrollingMenuButton.h</in>
             </df>
             <df name="MenuItem Types">
               <in>ConfigAppMenuItem.cpp</in>
@@ -3566,6 +3564,8 @@
             <in>AppFolderButton.cpp</in>
             <in>AppMenuButton.cpp</in>
             <in>AppMenuButton.h</in>
+            <in>AppMenuButtonFactory.cpp</in>
+            <in>AppMenuButtonFactory.h</in>
             <in>AppMenuItem.cpp</in>
             <in>AppMenuItem.h</in>
             <in>AppMenuItemFactory.cpp</in>
@@ -3580,8 +3580,6 @@
             <in>PagedAppMenu.h</in>
             <in>ScrollingAppMenu.cpp</in>
             <in>ScrollingAppMenu.h</in>
-          </df>
-          <df name="AppMenuComponents">
           </df>
           <df name="Info Components">
             <in>BatteryIcon.cpp</in>

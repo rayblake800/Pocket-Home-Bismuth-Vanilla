@@ -15,6 +15,7 @@
 #include "Configuration/ComponentConfigFile.h"
 #include "Wifi/WifiStatus.h"
 #include "BluetoothStatus.h"
+#include "PokeLookAndFeel.h"
 #include "Utils.h"
 
 
@@ -39,6 +40,7 @@ public:
 
 private:
     bool initAudio();
+    PokeLookAndFeel lookAndFeel;
     MainConfigFile configFile;
     ComponentConfigFile componentConfig;
 #ifdef LINUX

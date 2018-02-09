@@ -9,11 +9,14 @@
 AppMenuButton::AppMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
         int columnIndex, int rowIndex, String name) :
 Button(name),
+ConfigurableComponent(ComponentConfigFile::appMenuButtonKey),
 menuItem(menuItem),
 iconThread(iconThread),
 columnIndex(columnIndex),
 rowIndex(rowIndex)
 {
+
+    loadAllConfigProperties();
     setName(name);
     setWantsKeyboardFocus(false);
     loadIcon(menuItem->getIconName());
@@ -116,4 +119,54 @@ void AppMenuButton::loadIcon(String icon)
 void AppMenuButton::reloadDataFromSource()
 {
     loadIcon(menuItem->getIconName());
+}
+
+/**
+ * Load button colors from configuration files.
+ */
+void AppMenuButton::applyConfigAssets
+(Array<String> assetNames, Array<Colour> colours)
+{
+    while (colours.size() < 3)
+    {
+        colours.add(Colours::transparentBlack);
+    }
+    textColour = colours[0];
+    fillColour = colours[1];
+    selectedFillColour = colours[2];
+}
+
+/**
+ * Custom button painting method.
+ */
+void AppMenuButton::paintButton
+(Graphics &g, bool isMouseOverButton, bool isButtonDown)
+{
+    Rectangle<int> border = getBounds().withPosition(0, 0);
+    if ((imageBox.isEmpty() || textBox.isEmpty()) && !border.isEmpty())
+    {
+        resized();
+    }
+    if (fillInBackground)
+    {
+        g.setColour(getToggleState() ? selectedFillColour : fillColour);
+        g.setOpacity(getToggleState() ? .8 : .2);
+        g.fillRect(border);
+        g.setOpacity(1);
+    }
+    //app icon
+    g.drawImageWithin(appIcon, imageBox.getX(), imageBox.getY(),
+            imageBox.getWidth(), imageBox.getHeight(),
+            RectanglePlacement::centred, false);
+    //app title
+    g.setColour(textColour);
+    g.setFont(titleFont);
+    g.drawText(getMenuItem()->getAppName(), textBox,
+            Justification::centredLeft, true);
+    if (drawBorder)
+    {
+        g.setColour(Colour(0x4D4D4D));
+        g.setOpacity(getToggleState() ? 1.0 : 0.8);
+        g.drawRect(border, 2);
+    }
 }

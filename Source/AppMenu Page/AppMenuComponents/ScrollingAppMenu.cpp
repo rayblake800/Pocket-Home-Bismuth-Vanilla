@@ -2,7 +2,7 @@
 #include "ScrollingAppMenu.h"
 
 ScrollingAppMenu::ScrollingAppMenu(AppConfigFile& appConfig) :
-AppMenuComponent(appConfig)
+AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey, appConfig)
 {
     x_origin = getBounds().getX();
     y_origin = getBounds().getY();
@@ -32,19 +32,20 @@ void ScrollingAppMenu::addButtonComponent(AppMenuButton* appButton)
         int rowIndex = scrollButton->getRowIndex();
         if (rowIndex == 0 || columnIndex >= columnTops.size())
         {
+            columnTops.resize(columnIndex+1);
             if (columnIndex == 0 || selected.size() < columnIndex
                     || selected[columnIndex - 1] == nullptr)
             {
-                columnTops.push_back(y_origin);
+                columnTops[columnIndex]=y_origin;
             } else
             {
-                columnTops.push_back(selected[columnIndex - 1]->getY());
+                columnTops[columnIndex]=selected[columnIndex - 1]->getY();
             }
         }
         int x = columnIndex*buttonWidth;
         int y = columnTops[columnIndex] + buttonHeight * rowIndex;
+        addAndMakeVisible(scrollButton);
         scrollButton->setBounds(x, y, buttonWidth, buttonHeight);
-        addAndMakeVisible(appButton);
         if ((x + buttonWidth) > getWidth())
         {
             setBounds(getX(), getY(), x + buttonWidth, getHeight());
@@ -134,7 +135,7 @@ bool ScrollingAppMenu::keyPressed(const KeyPress& key)
     }
     if (keyCode == KeyPress::upKey || keyCode == KeyPress::downKey)
     {
-        changeSelection((keyCode == KeyPress::upKey)? -1 : 1);
+        changeSelection((keyCode == KeyPress::upKey) ? -1 : 1);
         return true;
     } else if (keyCode == KeyPress::leftKey || keyCode == KeyPress::escapeKey)
     {
@@ -148,7 +149,7 @@ bool ScrollingAppMenu::keyPressed(const KeyPress& key)
             keyCode == KeyPress::rightKey)
     {
         DBG("AppMenuPage:click selected AppMenuButton");
-       clickSelected();
+        clickSelected();
         return true;
     } else if (key == KeyPress::createFromDescription("CTRL+e"))
     {
@@ -178,12 +179,14 @@ void ScrollingAppMenu::resized()
     ComponentConfigFile& config = PocketHomeApplication::getInstance()
             ->getComponentConfig();
     ComponentConfigFile::ComponentSettings menuSettings =
-            config.getComponentSettings(ComponentConfigFile::appMenuKey);
+            config.getComponentSettings(ComponentConfigFile::scrollingAppMenuKey);
+    ComponentConfigFile::ComponentSettings buttonSettings =
+            config.getComponentSettings(ComponentConfigFile::appMenuButtonKey);
     Rectangle<int> menuBounds = menuSettings.getBounds();
     x_origin = menuBounds.getX();
     y_origin = menuBounds.getY();
     //resize all buttons
-    Rectangle<int>buttonSize = buttonColumns[0][0]->getBounds().withZeroOrigin();
+    Rectangle<int>buttonSize = buttonSettings.getBounds().withZeroOrigin();
     int buttonWidth = buttonSize.getWidth();
     int buttonHeight = buttonSize.getHeight();
     int numColumns = selected.size();
@@ -204,56 +207,35 @@ void ScrollingAppMenu::resized()
         }
         for (int i = 0; i < numRows; i++)
         {
-            AppMenuButton * button = buttonColumns[c][i];
-            button->setBounds(buttonSize.withPosition(c*buttonWidth,
-                    i * buttonHeight + columnTops[c]));
+            ScrollingMenuButton * button =
+                    dynamic_cast<ScrollingMenuButton*> (buttonColumns[c][i].get());
+            if (button != nullptr)
+            {
+                button->setBounds(buttonSize.withPosition(c*buttonWidth,
+                        i * buttonHeight + columnTops[c]));
+            } 
         }
     }
     setBounds(menuBounds);
     if (activeColumn() >= 0 && selected[activeColumn()] != nullptr
             && !Desktop::getInstance().getAnimator().isAnimating())
     {
-        scrollToSelected();
+        scrollToSelected(false);
     }
 }
 
 ScrollingAppMenu::ScrollingMenuButton::ScrollingMenuButton
 (AppMenuItem* menuItem, IconThread& iconThread, int columnIndex,
         int rowIndex, String name) :
-AppMenuButton(menuItem,iconThread, columnIndex,rowIndex, name),
-ConfigurableComponent(ComponentConfigFile::appMenuButtonKey)
+AppMenuButton(menuItem, iconThread, columnIndex, rowIndex, name)
 {
-    loadAllConfigProperties();
 }
 
 ScrollingAppMenu::ScrollingMenuButton::~ScrollingMenuButton()
 {
 }
 
-/**
- * Custom button painting method.
- */
-void ScrollingAppMenu::ScrollingMenuButton::paintButton
-(Graphics &g, bool isMouseOverButton, bool isButtonDown)
-{
-    Rectangle<int> border = getBounds().withPosition(0, 0);
-    g.setColour(getToggleState() ? selectedFillColour : fillColour);
-    g.setOpacity(getToggleState() ? .8 : .2);
-    g.fillRect(border);
-    g.setOpacity(1);
-    //app icon
-    g.drawImageWithin(appIcon, imageBox.getX(), imageBox.getY(),
-            imageBox.getWidth(), imageBox.getHeight(),
-            RectanglePlacement::centred, false);
-    //app title
-    g.setColour(textColour);
-    g.setFont(titleFont);
-    g.drawText(getMenuItem()->getAppName(), textBox, 
-            Justification::centredLeft, true);
-    g.setColour(Colour(0x4D4D4D));
-    g.setOpacity(getToggleState() ? 1.0 : 0.8);
-    g.drawRect(border, 2);
-}
+
 
 /**
  * Re-calculates draw values whenever the button is resized
@@ -273,17 +255,4 @@ void ScrollingAppMenu::ScrollingMenuButton::resized()
             textBox.toNearestInt());
 }
 
-/**
- * Load button colors from configuration files.
- */
-void ScrollingAppMenu::ScrollingMenuButton::applyConfigAssets
-(Array<String> assetNames, Array<Colour> colours)
-{
-    while (colours.size() < 3)
-    {
-        colours.add(Colours::transparentBlack);
-    }
-    textColour = colours[0];
-    fillColour = colours[1];
-    selectedFillColour = colours[2];
-}
+

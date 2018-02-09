@@ -14,7 +14,8 @@
 #include "../Popup Editor Components/AppMenuPopupEditor.h"
 #include "AppMenuItem.h"
 
-class AppMenuButton : public Button, public ReferenceCountedObject {
+class AppMenuButton : public Button, public ReferenceCountedObject,
+public ConfigurableComponent {
 public:
     typedef ReferenceCountedObjectPtr<AppMenuButton> Ptr;
 
@@ -25,17 +26,17 @@ public:
      * @param name sets the button's internal component name
      */
     AppMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
-            int columnIndex,int rowIndex,
+            int columnIndex, int rowIndex,
             String name = String());
-    
+
     virtual ~AppMenuButton();
 
     int getColumnIndex();
-    
+
     int getRowIndex();
-    
+
     void setColumnIndex(int newColumn);
-    
+
     void setRowIndex(int newRow);
 
     /**
@@ -85,12 +86,33 @@ protected:
      */
     virtual void reloadDataFromSource();
 
+
+    /**
+     * Load button colors from configuration files.
+     * @param assetNames is ignored, this component has no configurable
+     * image asset.
+     * @param colours
+     */
+    virtual void applyConfigAssets(Array<String> assetNames,
+            Array<Colour> colours);
+
     //Icon image to draw
     Image appIcon;
     //Object used to load icons
     IconThread& iconThread;
 
+    Rectangle<float> textBox;
+    Rectangle<float> imageBox;
+    Font titleFont;
+    Colour textColour;
+    Colour fillColour;
+    Colour selectedFillColour;
+    bool fillInBackground=true;
+    bool drawBorder=true;
+
 private:
+
+    void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
     //Menu item data object
     ScopedPointer<AppMenuItem> menuItem;
 

@@ -59,36 +59,18 @@ private:
      * ScrollingMenuButton is an AppMenuButton that draws itself appropriately
      * for a ScrollingAppMenu.
      */
-    class ScrollingMenuButton : public AppMenuButton,
-    public ConfigurableComponent {
+    class ScrollingMenuButton : public AppMenuButton{
     public:
         ScrollingMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
                 int columnIndex, int rowIndex, String name = String());
         virtual ~ScrollingMenuButton();
     private:
         /**
-         * Custom button painting method.
-         */
-        void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
-        /**
          * Re-calculates draw values whenever the button is resized
          */
         void resized() override;
-        /**
-         * Load button colors from configuration files.
-         * @param assetNames is ignored, this component has no configurable
-         * image asset.
-         * @param colours
-         */
-        virtual void applyConfigAssets(Array<String> assetNames,
-                Array<Colour> colours);
 
-        Rectangle<float> textBox;
-        Rectangle<float> imageBox;
-        Font titleFont;
-        Colour textColour;
-        Colour fillColour;
-        Colour selectedFillColour;
+        
         int columnIndex;
         int rowIndex;
     };

@@ -13,8 +13,6 @@ loginPage([this] ()
     loggedIn();
 })
 {
-    setLookAndFeel(&lookAndFeel);
-    LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
     setWantsKeyboardFocus(false);
 
     if (loginPage.hasPassword())

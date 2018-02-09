@@ -182,6 +182,7 @@ void PocketHomeApplication::initialise(const String &commandLine)
         bluetoothStatus.populateFromJson(JSON::parse(deviceListFile));
     }
 
+    LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
     mainWindow = new MainWindow(getApplicationName());
 }
 
@@ -217,12 +218,9 @@ PocketHomeApplication::MainWindow::MainWindow(String name)
     setWantsKeyboardFocus(false);
     setUsingNativeTitleBar(true);
     setResizable(true, false);
+    setLookAndFeel(&LookAndFeel::getDefaultLookAndFeel());
     setContentOwned(new MainContentComponent(), true);
     setVisible(true);
-#if JUCE_LINUX
-    //setTitleBarHeight(0);
-    //setFullScreen(true);
-#endif
 }
 
 void PocketHomeApplication::MainWindow::activeWindowStatusChanged()

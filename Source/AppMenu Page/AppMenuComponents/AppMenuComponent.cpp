@@ -7,8 +7,9 @@
 #include "../AppMenuPage.h"
 #include "AppMenuComponent.h"
 
-AppMenuComponent::AppMenuComponent(AppConfigFile& appConfig) :
-ConfigurableComponent(ComponentConfigFile::appMenuKey),
+AppMenuComponent::AppMenuComponent
+(String componentKey, AppConfigFile& appConfig) :
+ConfigurableComponent(componentKey),
 loadingAsync(false),
 appConfig(appConfig),
 showPopupCallback([this](AppMenuPopupEditor* newEditor)
@@ -20,8 +21,7 @@ showPopupCallback([this](AppMenuPopupEditor* newEditor)
 {
     applyConfigBounds();
     setWantsKeyboardFocus(false);
-    loadingSpinner = new OverlaySpinner();
-    loadingSpinner->setAlwaysOnTop(true);
+    loadingSpinner.setAlwaysOnTop(true);
 }
 
 AppMenuComponent::~AppMenuComponent()
@@ -80,12 +80,12 @@ void AppMenuComponent::loadButtons()
         showLoadingSpinner();
         desktopEntries.loadEntries([this](String loadingMsg)
         {
-            loadingSpinner->setLoadingText(loadingMsg);
+            loadingSpinner.setLoadingText(loadingMsg);
         },
         [this]()
         {
             loadingAsync = false;
-            loadingSpinner->setLoadingText("");
+            loadingSpinner.setLoadingText("");
             hideLoadingSpinner();
         });
     }
@@ -269,7 +269,7 @@ void AppMenuComponent::openFolder(Array<String> categoryNames)
     selected.push_back(nullptr);
     buttonColumns.push_back(std::vector<AppMenuButton::Ptr>());
     DBG(String("found ") + String(folderItems.size()) + " items in folder");
-    
+
     for (DesktopEntry desktopEntry : folderItems)
     {
         if (!desktopEntry.getValue(DesktopEntry::hidden)
@@ -328,7 +328,7 @@ void AppMenuComponent::closeFolder()
  */
 bool AppMenuComponent::isLoading()
 {
-    return loadingSpinner->isShowing();
+    return loadingSpinner.isShowing();
 }
 
 /**
@@ -361,7 +361,7 @@ AppMenuButton* AppMenuComponent::getSelectedButton()
  */
 void AppMenuComponent::resized()
 {
-    loadingSpinner->setBounds(getWindowSize());
+    loadingSpinner.setBounds(getWindowSize());
     if (loadingAsync)
     {
         showLoadingSpinner();
@@ -392,14 +392,14 @@ void AppMenuComponent::hideLoadingSpinner()
         Component * parentPage = getParentComponent();
         if (parentPage != nullptr)
         {
-            parentPage->removeChildComponent(loadingSpinner);
+            parentPage->removeChildComponent(&loadingSpinner);
         }
     }
 }
 
 /**
  * Sets what should happen when a button is left clicked.
- * This opens selected buttons, and selects unselected button
+ * This opens selected buttons, and selects unselected buttons
  * @param button
  */
 void AppMenuComponent::onButtonClick(AppMenuButton* button)

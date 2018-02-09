@@ -54,15 +54,19 @@ public:
      */
     void setImage(Image imageObject);
 
-    /**
-     * Recursively replace an image color
-     * @param originalColour
-     * @param replacementColour
-     * @return true if any instances of originalColour were found.
-     */
-    bool replaceColour(Colour originalColour, Colour replacementColour);
+    enum ColourIds {
+        imageColour0 = 0x1900000,
+        imageColour1 = 0x1900001,
+        imageColour2 = 0x1900002,
+        imageColour3 = 0x1900003,
+        imageColour4 = 0x1900004
+    };
+    
+    
+    virtual void colourChanged() override;
 
 protected:
+    void updateImageColors();
     /**
      * Resize the image to fit the button.
      */

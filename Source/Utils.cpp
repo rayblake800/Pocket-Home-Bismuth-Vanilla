@@ -290,7 +290,11 @@ void componentTrace()
 
 Rectangle<int> getWindowSize()
 {
-    return Desktop::getInstance().getComponent(0)->getBounds().withPosition(0, 0);
+    Component * windowComp = Desktop::getInstance().getComponent(0);
+    if(windowComp == nullptr){
+        return Rectangle<int>();
+    }
+    return windowComp->getLocalBounds();
 }
 
 //resizes a font to fit in a containing rectangle.

@@ -8,7 +8,6 @@
 #include "Settings/SettingsPageComponent.h"
 #include "Power/PowerPageComponent.h"
 #include "AppMenu Page/AppMenuPage.h"
-#include "PokeLookAndFeel.h"
 #include "LoginPage.h"
 #include "PageStackComponent.h"
 
@@ -30,7 +29,6 @@ public:
 
 private:
   AppMenuPage appMenuPage;
-  PokeLookAndFeel lookAndFeel;
   PageStackComponent pageStack;
   LoginPage loginPage;
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainContentComponent)

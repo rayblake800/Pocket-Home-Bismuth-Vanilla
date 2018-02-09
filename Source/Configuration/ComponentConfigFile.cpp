@@ -42,7 +42,8 @@ Array<String> ComponentConfigFile::getBoolKeys() const
 //######################### UI Component Data ##############################
 //Defines all component types managed in the config file
 const String ComponentConfigFile::appMenuButtonKey = "app menu buttons";
-const String ComponentConfigFile::appMenuKey = "app menu";
+const String ComponentConfigFile::scrollingAppMenuKey = "scrolling app menu";
+const String ComponentConfigFile::pagedAppMenuKey = "paged app menu";
 const String ComponentConfigFile::menuFrameKey = "menu frame";
 const String ComponentConfigFile::batteryIconKey = "battery";
 const String ComponentConfigFile::batteryPercentKey = "battery percent text";
@@ -94,7 +95,8 @@ void ComponentConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
 Array<String> ComponentConfigFile::getComponentKeys()
 {
     return {appMenuButtonKey,
-        appMenuKey,
+        scrollingAppMenuKey,
+        pagedAppMenuKey,
         menuFrameKey,
         batteryIconKey,
         batteryPercentKey,

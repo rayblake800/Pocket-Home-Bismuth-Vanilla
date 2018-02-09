@@ -1,6 +1,9 @@
 #include "../Utils.h"
 #include "DrawableImageComponent.h"
 
+const Array<Colour> DrawableImageComponent::defaultColours =
+        DrawableImageComponent::loadDefaultColours();
+
 /**
  * Create a DrawableImageComponent using an asset file.
  */
@@ -69,11 +72,12 @@ void DrawableImageComponent::setImage(File imageFile)
         imageDrawable = Drawable::createFromImageFile(imageFile);
         if (imageDrawable != nullptr)
         {
-            addAndMakeVisible(imageDrawable);
-            imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
-        }else{
+            imageSource = imageFile;
+            initImage();
+        } else
+        {
             DBG(String("DrawableImageComponent::setImage Failed to load")
-            +imageFile.getFullPathName());
+                    + imageFile.getFullPathName());
         }
     }
 }
@@ -86,21 +90,30 @@ void DrawableImageComponent::setImage(Image image)
     DrawableImage * drawable = new DrawableImage();
     drawable->setImage(image);
     imageDrawable = drawable;
-    addAndMakeVisible(imageDrawable);
-    imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
+    initImage();
+}
+
+void DrawableImageComponent::colourChanged()
+{
+    if (imageSource != File::nonexistent)
+    {
+        setImage(imageSource);
+    }
 }
 
 /**
- * Recursively replace an image color
+ * After loading an image through any method, this sets the image colors and
+ * scale.
  */
-bool DrawableImageComponent::replaceColour(Colour originalColour,
-        Colour replacementColour)
+void DrawableImageComponent::initImage()
 {
-    if (imageDrawable == nullptr)
+    addAndMakeVisible(imageDrawable);
+    imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
+    for (int i = 0; i < defaultColours.size(); i++)
     {
-        return false;
+        int colourId = imageColour0 + i;
+        imageDrawable->replaceColour(defaultColours[i], findColour(colourId));
     }
-    return imageDrawable->replaceColour(originalColour, replacementColour);
 }
 
 /**

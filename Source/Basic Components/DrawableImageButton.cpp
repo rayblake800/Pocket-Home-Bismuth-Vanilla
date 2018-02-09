@@ -46,6 +46,7 @@ DrawableImageButton::~DrawableImageButton()
 void DrawableImageButton::setImage(String assetFilename)
 {
     imageComponent->setImage(assetFilename);
+    updateImageColors();
 }
 
 /**
@@ -54,6 +55,7 @@ void DrawableImageButton::setImage(String assetFilename)
 void DrawableImageButton::setImage(File imageFile)
 {
     imageComponent->setImage(imageFile);
+    updateImageColors();
 }
 
 /**
@@ -62,15 +64,27 @@ void DrawableImageButton::setImage(File imageFile)
 void DrawableImageButton::setImage(Image imageObject)
 {
     imageComponent->setImage(imageObject);
+    updateImageColors();
 }
 
-/**
- * Recursively replace an image color
- */
-bool DrawableImageButton::replaceColour
-(Colour originalColour, Colour replacementColour)
+void DrawableImageButton::colourChanged()
 {
-    imageComponent->replaceColour(originalColour, replacementColour);
+    updateImageColors();
+}
+
+void DrawableImageButton::updateImageColors()
+{
+    if (imageComponent != nullptr)
+    {
+        for (int colourId = imageColour0; colourId <= imageColour4; colourId++)
+        {
+            Colour imageColour=imageComponent->findColour(colourId,false);
+            Colour buttonColour=findColour(colourId,false);
+            if(imageColour!=buttonColour){
+                imageComponent->setColour(colourId,buttonColour);
+            }
+        }
+    }
 }
 
 /**
@@ -90,8 +104,7 @@ void DrawableImageButton::paintButton
     if (isMouseOverButton && isButtonDown)
     {
         imageComponent->setAlpha(0.3f);
-    } 
-    else
+    } else
     {
         imageComponent->setAlpha(1.0f);
     }

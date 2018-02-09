@@ -29,7 +29,7 @@
 class AppMenuComponent : public Component,
 public ConfigurableComponent {
 public:
-    AppMenuComponent(AppConfigFile& appConfig);
+    AppMenuComponent(String componentKey,AppConfigFile& appConfig);
     virtual ~AppMenuComponent();
 
     /**
@@ -242,7 +242,7 @@ private:
 
     //Loading spinner overlay to display when loading buttons or launching
     //applications.
-    ScopedPointer<OverlaySpinner> loadingSpinner;
+    OverlaySpinner loadingSpinner;
 
     //Holds any pop-up editors created to edit AppMenuButtons, if
     //showPopupCallback isn't set to handle them in some better way. 

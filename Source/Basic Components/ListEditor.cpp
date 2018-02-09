@@ -16,9 +16,8 @@ listItems(initialList),
 listContainer("ListEditor", nullptr),
 addItemBtn("+")
 {
-    //default colors:
-    setColours(Colours::white,Colours::white,Colours::aqua,::Colours::black);
-    
+    updateColours();
+
     addAndMakeVisible(listContainer);
     addAndMakeVisible(newItemField);
     addAndMakeVisible(addItemBtn);
@@ -35,39 +34,12 @@ addItemBtn("+")
     layoutManager.addComponent(&listContainer, 0, 1);
     layoutManager.addComponent(&newItemField, 1, 4);
     layoutManager.addComponent(&addItemBtn, 1, 1);
-    
-    
+
+
 }
 
 ListEditor::~ListEditor()
 {
-}
-
-/**
- * Set new colour values to use with this list
- * @param backgroundColour fill colour for the listbox background.
- * @param listItemColour fill colour for unselected list items.
- * @param selectedItemColour fill colour for unselected list items.
- * @param textColour text draw color.
- */
-void ListEditor::setColours(Colour backgroundColour, Colour listItemColour,
-        Colour selectedListItemColour, Colour txtColour)
-{
-    bgColour = backgroundColour;
-    itemColour = listItemColour;
-    selectedItemColour = selectedListItemColour;
-    textColour = txtColour;
-
-
-    addItemBtn.setColour(TextButton::textColourOnId, textColour);
-    listContainer.setColour(ListBox::backgroundColourId, bgColour);
-    listContainer.setColour(ListBox::outlineColourId, selectedItemColour);
-
-    ScrollBar* scrollbar = listContainer.getVerticalScrollBar();
-    scrollbar->setColour(ScrollBar::trackColourId, selectedItemColour);
-    scrollbar->setColour(ScrollBar::thumbColourId, textColour);
-    listContainer.updateContent();
-    repaint();
 }
 
 /**
@@ -96,12 +68,34 @@ void ListEditor::setListItems(Array<String> newItems)
     repaint();
 }
 
+void ListEditor::colourChanged()
+{
+    updateColours();
+}
+
+/**
+ * Sets the colors of child components to match ListEditor colors
+ */
+void ListEditor::updateColours()
+{
+    addItemBtn.setColour(TextButton::textColourOnId, findColour(textColour));
+    listContainer.setColour(ListBox::backgroundColourId,
+            findColour(backgroundColour));
+    listContainer.setColour(ListBox::outlineColourId,
+            findColour(selectedListItemColour));
+
+    ScrollBar* scrollbar = listContainer.getVerticalScrollBar();
+    scrollbar->setColour(ScrollBar::trackColourId,
+            findColour(selectedListItemColour));
+    scrollbar->setColour(ScrollBar::thumbColourId, findColour(textColour));
+}
+
 ListEditor::ListItemComponent::ListItemComponent
 (String text, ListEditor * owner) : Label(text),
 delBtn("cancel.svg")
 {
     setJustificationType(Justification::left);
-    setButtonColour(owner->textColour);
+    setButtonColour(owner->findColour(textColour));
     addAndMakeVisible(delBtn);
     delBtn.addListener(owner);
     delBtn.setWantsKeyboardFocus(false);
@@ -119,10 +113,7 @@ void ListEditor::ListItemComponent::setButtonComponentID(String id)
 
 void ListEditor::ListItemComponent::setButtonColour(Colour colour)
 {
-    if(delBtn.replaceColour(Colours::black, colour))
-    {
-        delBtn.repaint();
-    }
+    delBtn.setColour(DrawableImageButton::imageColour0, findColour(textColour));
 }
 
 void ListEditor::ListItemComponent::resized()
@@ -220,15 +211,15 @@ Component * ListEditor::refreshComponentForRow
     }
     rowLabel->setText(listItems[rowNumber],
             NotificationType::dontSendNotification);
-    rowLabel->setColour(Label::textColourId, textColour);
+    rowLabel->setColour(Label::textColourId, findColour(textColour));
     rowLabel->setButtonComponentID(String(rowNumber));
-    rowLabel->setButtonColour(textColour);
+    rowLabel->setButtonColour(findColour(textColour));
 
     rowLabel->setComponentID(String(rowNumber));
 
     rowLabel->setFont(rowLabel->getFont().withHeight(rowLabel->getHeight() - 1));
     rowLabel->setColour(Label::backgroundColourId, isRowSelected ?
-            selectedItemColour : itemColour);
+            findColour(selectedListItemColour) : findColour(listItemColour));
     return rowLabel;
 
 }

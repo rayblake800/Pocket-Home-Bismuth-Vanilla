@@ -1,11 +1,19 @@
 {  
     "use 24h mode": true,
     "show clock": true,
-    "app menu": {
+    "scrolling app menu": {
         "x": 0.25,
         "y": 0.08,
         "width": 0.65,
         "height": 0.85,
+        "colours": [],
+        "asset files": []
+    },
+    "paged app menu": {
+        "x": 0.1,
+        "y": 0.1,
+        "width": 0.8,
+        "height": 0.8,
         "colours": [],
         "asset files": []
     },
