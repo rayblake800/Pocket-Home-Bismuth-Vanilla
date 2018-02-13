@@ -76,7 +76,7 @@ void DrawableImageButton::updateImageColors()
 {
     if (imageComponent != nullptr)
     {
-        for (int colourId = imageColour0; colourId <= imageColour4; colourId++)
+        for (int colourId = imageColour0Id; colourId <= imageColour4Id; colourId++)
         {
             Colour imageColour=imageComponent->findColour(colourId,false);
             Colour buttonColour=findColour(colourId,false);

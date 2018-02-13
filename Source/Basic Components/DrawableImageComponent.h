@@ -64,18 +64,14 @@ public:
     void setImage(Image image);
 
     enum ColourIds {
-        imageColour0 = 0x1900000,
-        imageColour1 = 0x1900001,
-        imageColour2 = 0x1900002,
-        imageColour3 = 0x1900003,
-        imageColour4 = 0x1900004
+        imageColour0Id = 0x1900000,
+        imageColour1Id = 0x1900001,
+        imageColour2Id = 0x1900002,
+        imageColour3Id = 0x1900003,
+        imageColour4Id = 0x1900004
     };
 
     virtual void colourChanged() override;
-
-
-
-
 
 protected:
     /**
@@ -90,13 +86,6 @@ private:
      */
     void initImage();
     
-    /**
-     * Recursively replace an image color
-     * @param originalColour
-     * @param replacementColour
-     * @return true if any instances of originalColour were found.
-     */
-    bool replaceColour(Colour originalColour, Colour replacementColour);
     File imageSource;
     ScopedPointer<Drawable> imageDrawable;
     RectanglePlacement placement;
@@ -105,12 +94,11 @@ private:
 
     static const Array<Colour> loadDefaultColours() {
         Array<Colour> defaults;
-        defaults.add(Colour(0xff, 0xff, 0xff));
-        defaults.add(Colour(0x00, 0x00, 0x00));
-        defaults.add(Colour(0xff, 0x00, 0x00));
-        defaults.add(Colour(0x00, 0xff, 0x00));
-        defaults.add(Colour(0x00, 0x00, 0xff));
-        defaults.add(Colour(0xff, 0x00, 0xff));
+        defaults.add(Colour(0xffffffff));
+        defaults.add(Colour(0xff000000));
+        defaults.add(Colour(0xffff0000));
+        defaults.add(Colour(0xff00ff00));
+        defaults.add(Colour(0xff0000ff));
         return defaults;
     };
 

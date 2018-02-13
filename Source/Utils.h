@@ -1,3 +1,11 @@
+/**
+ * @file Utils.h
+ * 
+ * TODO: work as much of this as possible into distinct modules, having a
+ * random pile of assorted global functions is less than ideal.
+ * also, documentation
+ */
+
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 

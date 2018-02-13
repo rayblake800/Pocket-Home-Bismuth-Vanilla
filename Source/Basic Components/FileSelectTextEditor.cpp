@@ -141,7 +141,8 @@ void FileSelectTextEditor::buttonClicked(Button* button)
             selectionText,
             browser,
             false,
-            Colours::lightgrey);
+            findColour(fileWindowColourId));
+    dialogBox.setColour(FileChooserDialogBox::titleTextColourId,findColour(textColourId));
     Rectangle<int> size = getWindowSize();
     if (dialogBox.show(size.getWidth(), size.getHeight()))
     {

@@ -1,13 +1,8 @@
-/*
-  ==============================================================================
-
-    ComponentConfigFile.h
-    Created: 5 Jan 2018 7:08:00pm
-    Author:  anthony
-
-  ==============================================================================
+/**
+ * @file ConfigFile.h
+ * 
+ * TODO: finish documentation
  */
-
 #pragma once
 #include "ConfigFile.h"
 
@@ -16,14 +11,27 @@ public:
     ComponentConfigFile();
     virtual ~ComponentConfigFile();
 
-
-    Array<String> getStringKeys() const;
+    //######################### String Data ####################################
+    /**
+     * Colour value string keys are stored here along with their corresponding
+     * ColourId values
+     */
+    static const std::map<String,int> colourIds;
+    
+    /**
+     * Find a Component ColourId value from its config key String
+     * @param colourKey the key for a color value in colourIds
+     * @return the corresponding ColourId value, or -1 if colourKey wasn't
+     * found.
+     */
+    int getColourId(String colourKey);
+    virtual Array<String> getStringKeys() const override;
 
     //######################### Boolean Data ###################################
     //boolean value keys
     static const String showClockKey;
     static const String use24HrModeKey;
-    Array<String> getBoolKeys() const;
+    virtual Array<String> getBoolKeys() const override;
 
     //######################### UI Component Data ##############################
     //Defines all component types managed in the config file

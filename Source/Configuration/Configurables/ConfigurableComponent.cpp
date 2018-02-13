@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    ConfigurableComponent.cpp
-    Created: 17 Jan 2018 3:36:42pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "../../PocketHomeApplication.h"
 #include "ConfigurableComponent.h"
 
@@ -53,6 +43,10 @@ void ConfigurableComponent::applyConfigBounds()
     }
     component->setBounds(newBounds);
 }
+
+
+ void ConfigurableComponent::applyConfigAssets(Array<String> assetNames,
+            Array<Colour> colours){}
 
 void ConfigurableComponent::loadConfigProperties
 (ConfigFile * config, String key)

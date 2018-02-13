@@ -1,13 +1,8 @@
-/*
-  ==============================================================================
-
-    ConfigFile.h
-    Created: 26 Dec 2017 10:31:17am
-    Author:  anthony
-
-  ==============================================================================
+/**
+ * @file ConfigFile.h
+ * 
+ * TODO: finish documentation
  */
-
 #pragma once
 #include <map>
 #include "../../JuceLibraryCode/JuceHeader.h"
@@ -108,8 +103,20 @@ public:
      */
     void setConfigBool(String boolKey, bool newValue);
     
+    
+    /**
+     * @return the keys to all string variables tracked in this config file.
+     */
+    virtual Array<String> getStringKeys() const = 0;
+
+    /**
+     * @return the keys to all boolean variables tracked in this config file.
+     */
+    virtual Array<String> getBoolKeys() const = 0;
+    
     //ConfigFiles are equal if they have the same filename.
     bool operator==(const ConfigFile& rhs) const;
+    
 protected:
     /**
      * Read in this object's data from a json config object
@@ -176,15 +183,6 @@ protected:
      */
     void notifyConfigurables(String key);
 
-    /**
-     * @return the keys to all string variables tracked in this config file.
-     */
-    virtual Array<String> getStringKeys() const = 0;
-
-    /**
-     * @return the keys to all boolean variables tracked in this config file.
-     */
-    virtual Array<String> getBoolKeys() const = 0;
     String filename;
     bool changesPending = false;
     std::map<String, String> stringValues;

@@ -1,6 +1,10 @@
 #include "Basic Components/SwitchComponent.h"
 #include "Basic Components/DrawableImageComponent.h"
 #include "Basic Components/ListEditor.h"
+#include "Basic Components/FileSelectTextEditor.h"
+#include "Basic Components/OverlaySpinner.h"
+#include "Pages/AppMenu Page/AppMenuButton/AppMenuButton.h"
+#include "PocketHomeApplication.h"
 #include "PokeLookAndFeel.h"
 
 Colour PokeLookAndFeel::lightGrey = Colour(0xffe1e1e1);
@@ -9,36 +13,11 @@ Colour PokeLookAndFeel::chipPink = Colour(0xffbc3662);
 Colour PokeLookAndFeel::chipLightPink = Colour(0xfff799aa);
 Colour PokeLookAndFeel::chipPurple = Colour(0xffd23c6d);
 
-PokeLookAndFeel::PokeLookAndFeel() :
+PokeLookAndFeel::PokeLookAndFeel(ComponentConfigFile& config) :
+Configurable(&config,config.getStringKeys()),
 cursor(MouseCursor::NoCursor)
 {
-    for(int i = 0; i < DrawableImageComponent::defaultColours.size(); i++){
-        int colourId=DrawableImageComponent::imageColour0+i;
-        setColour(colourId,DrawableImageComponent::defaultColours[i]);
-    }
-    
-    setColour(ListEditor::backgroundColour, Colour(0xffd23c6d));   
-    setColour(ListEditor::listItemColour, Colour(0xffd23c6d));  
-    setColour(ListEditor::selectedListItemColour, Colour(0xff202020));  
-    setColour(ListEditor::textColour, Colour(0xffffffff));
-    
-    setColour(DrawableButton::textColourId, Colours::white);
-    setColour(TextButton::buttonColourId, Colours::white);
-    setColour(TextButton::buttonOnColourId, Colours::white);
-    setColour(TextButton::textColourOnId, Colours::white);
-    setColour(TextButton::textColourOffId, Colours::white);
-    setColour(Label::textColourId, Colours::white);
-    setColour(Slider::backgroundColourId, chipLightPink);
-    setColour(Slider::thumbColourId, Colours::white);
-    setColour(TextEditor::backgroundColourId, chipLightPink);
-    setColour(TextEditor::textColourId, Colours::white);
-    setColour(ListBox::backgroundColourId, Colours::white);
-    setColour(ListBox::textColourId, Colours::white);
-    setColour(SwitchComponent::colorIdBackground, chipLightPink);
-    setColour(SwitchComponent::colorIdHandle, Colours::white);
-    setColour(SwitchComponent::colorIdHandleOff, chipPink);
-
-    seguibl = Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
+    loadAllConfigProperties();seguibl = Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
             BinaryData::LatoRegular_ttfSize);
 }
 
@@ -205,4 +184,21 @@ MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
 {
     return cursor;
     //return LookAndFeel_V3::getMouseCursorFor(component);
+}
+
+/**
+* Reloads and applies object properties defined by a single key in
+* a configuration file
+*/
+void PokeLookAndFeel::loadConfigProperties(ConfigFile * config,String key)
+{
+    ComponentConfigFile* compConf = dynamic_cast<ComponentConfigFile*>(config);
+    if(compConf != nullptr){
+        int colourId = compConf->getColourId(key);
+        if(colourId != -1){
+            Colour confColour = 
+                    Colour(compConf->getConfigString(key).getHexValue32());
+            setColour(colourId,confColour);
+        }
+    }
 }

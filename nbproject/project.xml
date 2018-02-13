@@ -23,12 +23,20 @@
             </formatting>
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>AppMenuButton</word>
             <word>colour</word>
+            <word>ColourId</word>
             <word>colours</word>
             <word>config</word>
             <word>Configurables</word>
+            <word>DrawableImageButton</word>
+            <word>DrawableImageComponent</word>
+            <word>FileSelectTextEditor</word>
             <word>json</word>
+            <word>Juce</word>
             <word>listbox</word>
+            <word>ListEditor</word>
+            <word>OverlaySpinner</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

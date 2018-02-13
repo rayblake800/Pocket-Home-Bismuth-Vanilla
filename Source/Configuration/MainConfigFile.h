@@ -1,13 +1,8 @@
-/*
-  ==============================================================================
-
-    MainConfigFile.h
-    Created: 5 Jan 2018 2:35:02pm
-    Author:  anthony
-
-  ==============================================================================
+/**
+ * @file MainConfigFile.h
+ * 
+ * TODO: finish documentation.
  */
-
 #pragma once
 #include "ConfigFile.h"
 

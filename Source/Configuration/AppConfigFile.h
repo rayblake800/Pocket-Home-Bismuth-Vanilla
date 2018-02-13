@@ -1,13 +1,8 @@
-/*
-  ==============================================================================
-
-    AppConfigFile.h
-    Created: 5 Jan 2018 9:53:32pm
-    Author:  anthony
-
-  ==============================================================================
+/**
+ * @file AppConfigFile.h
+ * 
+ * TODO: finish documentation
  */
-
 #pragma once
 #include "ConfigFile.h"
 

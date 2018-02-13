@@ -1,3 +1,8 @@
+/**
+ * @file WifiStatusJson.h
+ * 
+ * TODO: documentation
+ */
 #pragma once
 
 #include "../Utils.h"

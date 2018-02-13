@@ -1,15 +1,106 @@
-/*
-  ==============================================================================
-
-    ComponentConfigFile.cpp
-    Created: 5 Jan 2018 7:08:00pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
+#include "../Basic Components/DrawableImageComponent.h"
+#include "../Basic Components/ListEditor.h"
+#include "../Basic Components/FileSelectTextEditor.h"
+#include "../Basic Components/OverlaySpinner.h"
+#include "../Basic Components/SwitchComponent.h"
+#include "../Pages/AppMenu Page/AppMenuButton/AppMenuButton.h"
 #include "../Utils.h"
 #include "ComponentConfigFile.h"
+
+const std::map<String,int> ComponentConfigFile::colourIds{
+    {"Image color 0",
+            DrawableImageComponent::imageColour0Id},
+    {"Image color 1",
+            DrawableImageComponent::imageColour1Id},
+    {"Image color 2",
+            DrawableImageComponent::imageColour2Id},
+    {"Image color 3",
+            DrawableImageComponent::imageColour3Id},
+    {"Image color 4",
+            DrawableImageComponent::imageColour4Id},
+            
+    {"List editor text color",
+            ListEditor::textColourId},
+    {"List editor  background color",
+            ListEditor::backgroundColourId},
+    {"List editor list item color",
+            ListEditor::listItemColourId},
+    {"List editor selected item color",
+            ListEditor::selectedListItemColourId},
+            
+    {"AppMenu button text color",
+            AppMenuButton::textColourId},
+    {"AppMenu button background color",
+            AppMenuButton::backgroundColourId},
+    {"AppMenu button selection color", 
+            AppMenuButton::selectionColourId},
+    {"AppMenu button border color",
+            AppMenuButton::borderColourId},
+            
+    {"File picker window color",
+            FileSelectTextEditor::fileWindowColourId},
+    {"File picker text color",
+            FileSelectTextEditor::textColourId},
+            
+    {"Drawable button text color",
+            DrawableButton::textColourId},
+    
+    {"Overlay spinner background color",
+            OverlaySpinner::backgroundColourId},
+    {"Overlay spinner text color",
+            OverlaySpinner::textColourId},
+                    
+    {"Text button(off) color",
+            TextButton::buttonColourId},
+    {"Text button(off) text color",
+            TextButton::textColourOffId},
+    {"Text button(on) color",
+            TextButton::buttonOnColourId},
+    {"Text button(on) text color",
+            TextButton::textColourOnId},
+                    
+    {"Label background color",
+            Label::backgroundColourId},
+    {"Label text color",
+            Label::textColourId},
+    {"Label outline color",
+            Label::outlineColourId},
+    {"Label background color(editing)",
+            Label::backgroundWhenEditingColourId},
+    {"Label text color(editing)",
+            Label::textColourId},
+    {"Label outline color(editing)",
+            Label::outlineWhenEditingColourId},
+                    
+    {"Slider background color",
+            Slider::backgroundColourId},
+    {"Slider thumb color",
+            Slider::thumbColourId},
+    {"Slider track color",
+            Slider::trackColourId},
+                    
+    {"Text editor background color",
+            TextEditor::backgroundColourId},
+    {"Text editor text color",
+            TextEditor::textColourId},
+    {"Text editor highlight color",
+            TextEditor::highlightColourId},
+    {"Text editor highlighted text color",
+            TextEditor::highlightedTextColourId},
+    {"Text editor outline color",
+            TextEditor::outlineColourId},
+    {"Text editor focused outline color",
+            TextEditor::focusedOutlineColourId},
+    {"Text editor shadow color",
+            TextEditor::shadowColourId},
+                    
+    {"Switch background color",
+            SwitchComponent::backgroundColourId},
+    {"Switch handle color",
+            SwitchComponent::handleColourId},
+    {"Switch handle color(off)",
+            SwitchComponent::handleOffColourId},
+};
 
 ComponentConfigFile::ComponentConfigFile() : ConfigFile(filenameConst)
 {
@@ -25,9 +116,28 @@ ComponentConfigFile::~ComponentConfigFile()
 {
 }
 
+/**
+* Find a Component ColourId value from its config key String
+*/
+int ComponentConfigFile::getColourId(String colourKey)
+{
+    std::map<String,int>::const_iterator search = colourIds.find(colourKey);
+    if(search == colourIds.end())
+    {
+        return -1;
+    }
+    return search->second;
+}
+
 Array<String> ComponentConfigFile::getStringKeys() const
 {
-    return Array<String>();
+    Array<String> keys;
+    for(std::map<String,int>::const_iterator it = colourIds.begin();
+            it != colourIds.end(); it++)
+    {
+        keys.add(it->first);
+    }
+    return keys;
 }
 //######################### Boolean Data ###################################
 //boolean value keys

@@ -1,6 +1,6 @@
 /**
  * @File ScalingLabel.h
- * @author Anthony Brown
+ * 
  * ScalingLabel is a basic Juce Label that adjusts its text height to fit its
  * bounds whenever it is resized.
  */

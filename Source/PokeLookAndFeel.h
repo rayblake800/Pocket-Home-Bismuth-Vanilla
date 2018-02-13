@@ -1,10 +1,18 @@
+/**
+ * @file PokeLookAndFeel.h
+ * 
+ * TODO: documentation, organization, better config integration.
+ */
+
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "Configuration/ComponentConfigFile.h"
+#include "Configuration/Configurables/Configurable.h"
 
-class PokeLookAndFeel : public LookAndFeel_V3 {
+class PokeLookAndFeel : public LookAndFeel_V3, public Configurable {
 public:
-    PokeLookAndFeel();
-    ~PokeLookAndFeel();
+    PokeLookAndFeel(ComponentConfigFile& config);
+    virtual ~PokeLookAndFeel();
 
     static float getDrawableButtonTextHeightForBounds
     (const Rectangle<int> &bounds);
@@ -52,6 +60,14 @@ public:
     static Colour chipPurple;
 
 private:
+    /**
+     * Reloads and applies object properties defined by a single key in
+     * a configuration file
+     * @param config the configFile containing the updated data value
+     * @param key the key of property that has changed
+     */
+    virtual void loadConfigProperties(ConfigFile * config,String key);
+    
     Typeface::Ptr seguibl;
     MouseCursor::StandardCursorType cursor;
 };

@@ -17,7 +17,7 @@ OverlaySpinner::OverlaySpinner() : overlaySpinnerTimer(this)
 
     loadingText.setText("", NotificationType::dontSendNotification);
     loadingText.setJustificationType(Justification::centred);
-    loadingText.setColour(Label::textColourId,Colours::black);
+    loadingText.setColour(Label::textColourId,findColour(textColourId));
     addAndMakeVisible(loadingText);
 }
 
@@ -28,7 +28,7 @@ OverlaySpinner::~OverlaySpinner()
 
 void OverlaySpinner::paint(Graphics &g)
 {
-    g.fillAll(Colour((uint8) 254, 255, 255, (uint8) 201));
+    g.fillAll(findColour(backgroundColourId));
 }
 
 void OverlaySpinner::resized()

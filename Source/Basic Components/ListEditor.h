@@ -1,6 +1,5 @@
 /**
  * @file ListEditor.h
- * @author Anthony Brown
  * 
  * ListEditor provides a UI component for editing a list of strings.
  * The user can add new strings, edit existing ones by double clicking them,
@@ -28,10 +27,10 @@ public:
     virtual ~ListEditor();
 
     enum ColourIds {
-        backgroundColour = 0x1900100,
-        listItemColour = 0x1900101,
-        selectedListItemColour = 0x1900102,
-        textColour = 0x1900103
+        backgroundColourId = 0x1900100,
+        listItemColourId = 0x1900101,
+        selectedListItemColourId = 0x1900102,
+        textColourId = 0x1900103
     };
 
     /**

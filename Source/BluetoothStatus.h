@@ -1,13 +1,8 @@
-/*
-  ==============================================================================
-
-    BluetoothStatus.h
-    Created: 3 Jan 2018 1:34:22am
-    Author:  anthony
-
-  ==============================================================================
-*/
-
+/**
+ * @file BluetoothStatus.h
+ * 
+ * TODO: documentation, figure out why bluetooth settings are disabled
+ */
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 

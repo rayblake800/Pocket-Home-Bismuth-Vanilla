@@ -1,10 +1,9 @@
 /**
- * @File ConfigurableImageButton.h
- * @author Anthony Brown
+ * @file ConfigurableImageButton.h
+ * 
  * ConfigurableImageButton is a DrawableImageButton managed by the
  * ComponentConfigFile.
  */
-
 #pragma once
 #include "ConfigurableImageComponent.h"
 #include "../../Basic Components/DrawableImageButton.h"

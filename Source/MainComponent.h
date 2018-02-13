@@ -1,14 +1,15 @@
 /**
  * @file MainComponent.h
+ * 
  * MainContentComponent is the root component in the component display
  * tree. It manages the page stack and initializes look and feel.
  */
 
 #pragma once
-#include "Settings/SettingsPageComponent.h"
-#include "Power/PowerPageComponent.h"
-#include "AppMenu Page/AppMenuPage.h"
-#include "LoginPage.h"
+#include "Pages/Settings Page/SettingsPage.h"
+#include "Pages/PowerPage.h"
+#include "Pages/AppMenu Page/AppMenuPage.h"
+#include "Pages/LoginPage.h"
 #include "PageStackComponent.h"
 
 class MainContentComponent;

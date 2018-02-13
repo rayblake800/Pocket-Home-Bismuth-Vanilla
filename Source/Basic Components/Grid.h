@@ -1,3 +1,8 @@
+/**
+ * @file Grid.h
+ * 
+ * TODO: finish documentation or remove entirely
+ */
 #pragma once
 #include "../../JuceLibraryCode/JuceHeader.h"
 

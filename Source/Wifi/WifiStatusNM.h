@@ -1,5 +1,10 @@
-#pragma once
 
+/**
+ * @file WifiStatusNM.h
+ * 
+ * TODO: documentation
+ */
+#pragma once
 #ifdef LINUX
 
 #include <NetworkManager.h>

@@ -2,6 +2,7 @@
  * @file DrawableImageButton.h
  * 
  * DrawableImageButton is a button drawn using a DrawableImageComponent
+ * TODO: finish documentation.
  */
 #pragma once
 #include "DrawableImageComponent.h"
@@ -55,11 +56,11 @@ public:
     void setImage(Image imageObject);
 
     enum ColourIds {
-        imageColour0 = 0x1900000,
-        imageColour1 = 0x1900001,
-        imageColour2 = 0x1900002,
-        imageColour3 = 0x1900003,
-        imageColour4 = 0x1900004
+        imageColour0Id = 0x1900000,
+        imageColour1Id = 0x1900001,
+        imageColour2Id = 0x1900002,
+        imageColour3Id = 0x1900003,
+        imageColour4Id = 0x1900004
     };
     
     

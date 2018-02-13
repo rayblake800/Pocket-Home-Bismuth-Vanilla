@@ -3526,6 +3526,8 @@
           </df>
         </df>
       </df>
+      <df name="documentation">
+      </df>
       <df name="JuceLibraryCode">
         <in>AppConfig.h</in>
         <in>BinaryData.cpp</in>
@@ -3547,85 +3549,6 @@
         </df>
       </df>
       <df name="Source">
-        <df name="AppMenu Page">
-          <df name="AppMenuButton">
-            <df name="MenuButton Types">
-              <in>PageMenuButton.cpp</in>
-              <in>ScrollingMenuButton.cpp</in>
-            </df>
-            <df name="MenuItem Types">
-              <in>ConfigAppMenuItem.cpp</in>
-              <in>ConfigAppMenuItem.h</in>
-              <in>DesktopEntryMenuItem.cpp</in>
-              <in>DesktopEntryMenuItem.h</in>
-              <in>FolderMenuItem.cpp</in>
-              <in>FolderMenuItem.h</in>
-            </df>
-            <in>AppFolderButton.cpp</in>
-            <in>AppMenuButton.cpp</in>
-            <in>AppMenuButton.h</in>
-            <in>AppMenuButtonFactory.cpp</in>
-            <in>AppMenuButtonFactory.h</in>
-            <in>AppMenuItem.cpp</in>
-            <in>AppMenuItem.h</in>
-            <in>AppMenuItemFactory.cpp</in>
-            <in>AppMenuItemFactory.h</in>
-            <in>ConfigAppButton.cpp</in>
-            <in>DesktopEntryButton.cpp</in>
-          </df>
-          <df name="AppMenuComponents">
-            <in>AppMenuComponent.cpp</in>
-            <in>AppMenuComponent.h</in>
-            <in>PagedAppMenu.cpp</in>
-            <in>PagedAppMenu.h</in>
-            <in>ScrollingAppMenu.cpp</in>
-            <in>ScrollingAppMenu.h</in>
-          </df>
-          <df name="Info Components">
-            <in>BatteryIcon.cpp</in>
-            <in>BatteryIcon.h</in>
-            <in>BatteryMonitor.cpp</in>
-            <in>BatteryMonitor.h</in>
-            <in>ClockLabel.cpp</in>
-            <in>ClockLabel.h</in>
-            <in>ClockMonitor.cpp</in>
-            <in>WifiIcon.cpp</in>
-            <in>WifiIcon.h</in>
-          </df>
-          <df name="Popup Editor Components">
-            <in>AppMenuPopupEditor.cpp</in>
-            <in>AppMenuPopupEditor.h</in>
-            <in>CategoryPopupEditor.cpp</in>
-            <in>CategoryPopupEditor.h</in>
-            <in>DesktopEntryEditorPopup.cpp</in>
-            <in>FavoriteEditorPopup.cpp</in>
-            <in>FolderEditorPopup.cpp</in>
-            <in>NewConfigAppEditor.cpp</in>
-            <in>NewConfigAppEditor.h</in>
-            <in>NewDesktopAppEditor.cpp</in>
-            <in>NewDesktopAppEditor.h</in>
-            <in>NewFolderEditor.cpp</in>
-            <in>NewFolderEditor.h</in>
-            <in>PopupEditorComponent.cpp</in>
-            <in>PopupEditorComponent.h</in>
-          </df>
-          <in>AppEditComponent.cpp</in>
-          <in>AppFolderButton.cpp</in>
-          <in>AppLauncher.cpp</in>
-          <in>AppLauncher.h</in>
-          <in>AppMenuButton.cpp</in>
-          <in>AppMenuComponent.cpp</in>
-          <in>AppMenuPage.cpp</in>
-          <in>AppMenuPage.h</in>
-          <in>ConfigAppButton.cpp</in>
-          <in>DesktopEntries.cpp</in>
-          <in>DesktopEntries.h</in>
-          <in>DesktopEntry.cpp</in>
-          <in>DesktopEntry.h</in>
-          <in>DesktopEntryButton.cpp</in>
-          <in>IconThread.cpp</in>
-          <in>IconThread.h</in>
-        </df>
         <df name="Basic Components">
           <in>DrawableImageButton.cpp</in>
           <in>DrawableImageButton.h</in>
@@ -3637,47 +3560,16 @@
           <in>Grid.h</in>
           <in>IconSliderComponent.cpp</in>
           <in>IconSliderComponent.h</in>
-          <in>ImageComponent.cpp</in>
           <in>ListEditor.cpp</in>
           <in>ListEditor.h</in>
-          <in>MenuItem.cpp</in>
           <in>OverlaySpinner.cpp</in>
           <in>OverlaySpinner.h</in>
+          <in>PopupEditorComponent.cpp</in>
+          <in>PopupEditorComponent.h</in>
           <in>ScalingLabel.cpp</in>
           <in>ScalingLabel.h</in>
           <in>SwitchComponent.cpp</in>
           <in>SwitchComponent.h</in>
-          <in>VectorImageButton.cpp</in>
-        </df>
-        <df name="Components">
-          <df name="Basic">
-            <in>Grid.cpp</in>
-            <in>IconSliderComponent.cpp</in>
-            <in>MenuItem.cpp</in>
-            <in>OverlaySpinner.cpp</in>
-            <in>SwitchComponent.cpp</in>
-            <in>VectorImageButton.cpp</in>
-          </df>
-          <df name="Pages">
-            <in>AdvancedSettingsPage.cpp</in>
-            <in>AppMenuPage.cpp</in>
-            <in>DateTimePage.cpp</in>
-            <in>InputSettingsPage.cpp</in>
-            <in>LauncherComponent.cpp</in>
-            <in>PageStackComponent.cpp</in>
-            <in>PersonalizePageComponent.cpp</in>
-            <in>PowerPageComponent.cpp</in>
-            <in>PowerPageFelComponent.cpp</in>
-            <in>SettingsPageComponent.cpp</in>
-          </df>
-          <in>AppMenuButton.cpp</in>
-          <in>AppMenuComponent.cpp</in>
-          <in>BatteryIcon.cpp</in>
-          <in>MainComponent.cpp</in>
-          <in>SettingsPageBluetoothComponent.cpp</in>
-          <in>SettingsPageLogin.cpp</in>
-          <in>SettingsPageWifiComponent.cpp</in>
-          <in>WifiIcon.cpp</in>
         </df>
         <df name="Configuration">
           <df name="Configurables">
@@ -3698,44 +3590,98 @@
           <in>ComponentConfigFile.h</in>
           <in>ConfigFile.cpp</in>
           <in>ConfigFile.h</in>
-          <in>Configurable.cpp</in>
-          <in>ConfigurableComponent.cpp</in>
-          <in>DateTimePage.cpp</in>
-          <in>DateTimePage.h</in>
           <in>MainConfigFile.cpp</in>
           <in>MainConfigFile.h</in>
-          <in>PersonalizePageComponent.cpp</in>
-          <in>PersonalizePageComponent.h</in>
         </df>
-        <df name="Power">
-          <in>PowerFelPageComponent.cpp</in>
-          <in>PowerFelPageComponent.h</in>
-          <in>PowerPageComponent.cpp</in>
-          <in>PowerPageComponent.h</in>
-          <in>PowerPageFelComponent.cpp</in>
-        </df>
-        <df name="Settings">
+        <df name="Pages">
+          <df name="AppMenu Page">
+            <df name="AppMenuButton">
+              <df name="MenuItem Types">
+                <in>ConfigAppMenuItem.cpp</in>
+                <in>ConfigAppMenuItem.h</in>
+                <in>DesktopEntryMenuItem.cpp</in>
+                <in>DesktopEntryMenuItem.h</in>
+                <in>FolderMenuItem.cpp</in>
+                <in>FolderMenuItem.h</in>
+              </df>
+              <in>AppMenuButton.cpp</in>
+              <in>AppMenuButton.h</in>
+              <in>AppMenuItem.cpp</in>
+              <in>AppMenuItem.h</in>
+              <in>AppMenuItemFactory.cpp</in>
+              <in>AppMenuItemFactory.h</in>
+            </df>
+            <df name="AppMenuComponents">
+              <in>AppMenuComponent.cpp</in>
+              <in>AppMenuComponent.h</in>
+              <in>PagedAppMenu.cpp</in>
+              <in>PagedAppMenu.h</in>
+              <in>ScrollingAppMenu.cpp</in>
+              <in>ScrollingAppMenu.h</in>
+            </df>
+            <df name="Info Components">
+              <in>BatteryIcon.cpp</in>
+              <in>BatteryIcon.h</in>
+              <in>BatteryMonitor.cpp</in>
+              <in>BatteryMonitor.h</in>
+              <in>ClockLabel.cpp</in>
+              <in>ClockLabel.h</in>
+              <in>WifiIcon.cpp</in>
+              <in>WifiIcon.h</in>
+            </df>
+            <df name="Popup Editor Components">
+              <in>AppMenuPopupEditor.cpp</in>
+              <in>AppMenuPopupEditor.h</in>
+              <in>CategoryPopupEditor.cpp</in>
+              <in>CategoryPopupEditor.h</in>
+              <in>NewConfigAppEditor.cpp</in>
+              <in>NewConfigAppEditor.h</in>
+              <in>NewDesktopAppEditor.cpp</in>
+              <in>NewDesktopAppEditor.h</in>
+              <in>NewFolderEditor.cpp</in>
+              <in>NewFolderEditor.h</in>
+            </df>
+            <in>AppMenuPage.cpp</in>
+            <in>AppMenuPage.h</in>
+            <in>DesktopEntries.cpp</in>
+            <in>DesktopEntries.h</in>
+            <in>DesktopEntry.cpp</in>
+            <in>DesktopEntry.h</in>
+            <in>IconThread.cpp</in>
+            <in>IconThread.h</in>
+          </df>
+          <df name="Settings Page">
+            <in>BluetoothCategoryItemComponent.cpp</in>
+            <in>BluetoothCategoryItemComponent.h</in>
+            <in>SettingsCategoryButton.cpp</in>
+            <in>SettingsCategoryButton.h</in>
+            <in>SettingsCategoryItemComponent.cpp</in>
+            <in>SettingsCategoryItemComponent.h</in>
+            <in>SettingsPage.cpp</in>
+            <in>SettingsPage.h</in>
+            <in>SettingsPageBluetoothComponent.cpp</in>
+            <in>SettingsPageBluetoothComponent.h</in>
+            <in>SettingsPageWifiComponent.cpp</in>
+            <in>SettingsPageWifiComponent.h</in>
+            <in>WifiCategoryItemComponent.cpp</in>
+            <in>WifiCategoryItemComponent.h</in>
+          </df>
           <in>AdvancedSettingsPage.cpp</in>
           <in>AdvancedSettingsPage.h</in>
-          <in>BluetoothCategoryItemComponent.cpp</in>
-          <in>BluetoothCategoryItemComponent.h</in>
+          <in>DateTimePage.cpp</in>
+          <in>DateTimePage.h</in>
+          <in>FelPage.cpp</in>
+          <in>FelPage.h</in>
           <in>InputSettingsPage.cpp</in>
           <in>InputSettingsPage.h</in>
+          <in>LoginPage.cpp</in>
+          <in>LoginPage.h</in>
           <in>LoginSettingsPage.cpp</in>
           <in>LoginSettingsPage.h</in>
-          <in>SettingsCategoryButton.cpp</in>
-          <in>SettingsCategoryButton.h</in>
-          <in>SettingsCategoryItemComponent.cpp</in>
-          <in>SettingsCategoryItemComponent.h</in>
-          <in>SettingsPageBluetoothComponent.cpp</in>
-          <in>SettingsPageBluetoothComponent.h</in>
-          <in>SettingsPageComponent.cpp</in>
-          <in>SettingsPageComponent.h</in>
-          <in>SettingsPageLogin.cpp</in>
-          <in>SettingsPageWifiComponent.cpp</in>
-          <in>SettingsPageWifiComponent.h</in>
-          <in>WifiCategoryItemComponent.cpp</in>
-          <in>WifiCategoryItemComponent.h</in>
+          <in>PersonalizePage.cpp</in>
+          <in>PersonalizePage.h</in>
+          <in>PowerPage.cpp</in>
+          <in>PowerPage.h</in>
         </df>
         <df name="Wifi">
           <in>WifiStatus.cpp</in>
@@ -3746,24 +3692,19 @@
           <in>WifiStatusNM.h</in>
           <in>WifiTest.cpp</in>
         </df>
-        <in>BatteryMonitor.cpp</in>
+        <in>AppLauncher.cpp</in>
+        <in>AppLauncher.h</in>
         <in>BluetoothStatus.cpp</in>
         <in>BluetoothStatus.h</in>
-        <in>ClockMonitor.cpp</in>
-        <in>ConfigFile.cpp</in>
-        <in>DesktopEntries.cpp</in>
-        <in>DesktopEntry.cpp</in>
         <in>GridLayoutManager.cpp</in>
         <in>GridLayoutManager.h</in>
         <in>I2CBus.cpp</in>
         <in>I2CBus.h</in>
-        <in>LauncherComponent.cpp</in>
-        <in>LauncherComponent.h</in>
-        <in>LoginPage.cpp</in>
-        <in>LoginPage.h</in>
         <in>Main.cpp</in>
         <in>MainComponent.cpp</in>
         <in>MainComponent.h</in>
+        <in>PageComponent.cpp</in>
+        <in>PageComponent.h</in>
         <in>PageStackComponent.cpp</in>
         <in>PageStackComponent.h</in>
         <in>PocketHomeApplication.cpp</in>
@@ -3772,9 +3713,6 @@
         <in>PokeLookAndFeel.h</in>
         <in>Utils.cpp</in>
         <in>Utils.h</in>
-        <in>WifiStatus.cpp</in>
-        <in>WifiStatusJson.cpp</in>
-        <in>WifiStatusNM.cpp</in>
       </df>
     </df>
     <itemPath>assets/apps.json</itemPath>

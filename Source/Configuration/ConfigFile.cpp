@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    ConfigFile.cpp
-    Created: 26 Dec 2017 10:31:17am
-    Author:  anthony
-  ==============================================================================
- */
-
-
 #include "../Utils.h"
 #include "ConfigFile.h"
 #include "Configurables/Configurable.h"

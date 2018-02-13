@@ -12,9 +12,6 @@ File absoluteFileFromPath(const String &path)
 
 }
 
-
-// TODO: allow user overrides of asset files
-
 File assetFile(const String &fileName)
 {
     auto devFile = absoluteFileFromPath("../../assets/" + fileName);

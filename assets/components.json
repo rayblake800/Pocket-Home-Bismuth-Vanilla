@@ -1,4 +1,46 @@
 {  
+    "AppMenu button background color": "0xffc0c0c0",
+    "AppMenu button border color": "0xff4d4d4d",
+    "AppMenu button selection color": "0xffd23c6d",
+    "AppMenu button text color": "0xffffffff",
+    "Drawable button text color": "0xffffffff",
+    "File picker text color": "0xffffffff",
+    "File picker window color": "0xff7d7d7d",
+    "Image color 0": "0xffffffff",
+    "Image color 1": "0xff000000",
+    "Image color 2": "0xffff0000",
+    "Image color 3": "0xff00ff00",
+    "Image color 4": "0xff0000ff",
+    "Label background color": "0x00000000",
+    "Label background color(editing)": "0xff000000",
+    "Label outline color": "0x00000000",
+    "Label outline color(editing)": "0xffffffff",
+    "Label text color": "0xffffffff",
+    "Label text color(editing)": "0xffffffff",
+    "List editor  background color": "0xff202020",
+    "List editor list item color": "0xff313131",
+    "List editor selected item color": "0xffbc3662",
+    "List editor text color": "0xffffffff",
+    "Overlay spinner background color": "0xeec9c9c9",
+    "Overlay spinner text color": "0xffffffff",
+    "Slider background color": "0xfff799aa",
+    "Slider thumb color": "0xffffffff",
+    "Slider track color": "0xfff799aa",
+    "Switch background color": "0xfff799aa",
+    "Switch handle color": "0xffffffff",
+    "Switch handle color(off)": "0xffbc3662",
+    "Text button(off) color": "0xffbc3662",
+    "Text button(off) text color": "0xffffffff",
+    "Text button(on) color": "0xffd23c6d",
+    "Text button(on) text color": "0xffffffff",
+    "Text editor background color": "0xfff799aa",
+    "Text editor focused outline color": "0x00000000",
+    "Text editor highlight color": "0xffd23c6d",
+    "Text editor highlighted text color": "0xffffffff",
+    "Text editor outline color": "0x00000000",
+    "Text editor shadow color": "0x00000000",
+    "Text editor text color": "0xffffffff",
+
     "use 24h mode": true,
     "show clock": true,
     "scrolling app menu": {
@@ -22,11 +64,7 @@
         "y": -1,
         "width": 0.30,
         "height": 0.14,
-        "colours": [
-            "ffffffff",
-            "ffc0c0c0",
-            "ffd23c6d"
-        ],
+        "colours": [],
         "asset files": []
     },
     "battery": {
@@ -56,9 +94,7 @@
         "y": 0.018,
         "width": 0.15,
         "height": 0.075,
-        "colours": [
-            "ffffffff"
-        ],
+        "colours": [],
         "asset files": []
     },
     "menu frame": {
@@ -79,7 +115,9 @@
         "y": 0.9,
         "width": 0.09,
         "height": 0.09,
-        "colours": [],
+        "colours": [
+            "ffffffff"
+        ],
         "asset files": [
             "powerIcon.svg"
         ]
@@ -89,7 +127,9 @@
         "y": 0.9,
         "width": 0.09,
         "height": 0.09,
-        "colours": [],
+        "colours": [
+            "ffffffff"
+        ],
         "asset files": [
             "settingsIcon.svg"
         ]
@@ -99,9 +139,7 @@
         "y": 0.018,
         "width": 0.15,
         "height": 0.075,
-        "colours": [
-            "ffffffff"
-        ],
+        "colours": [],
         "asset files": []
     },
     "wifi": {
@@ -127,8 +165,7 @@
         "height": 0.7,
         "colours": [
             "ffd23c6d",
-            "ff202020",
-            "ffffffff"
+            "ff202020"
         ],
         "asset files": [
             "popupFrame.svg"

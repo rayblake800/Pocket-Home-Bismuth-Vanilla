@@ -1,3 +1,9 @@
+/**
+ * @file OverlaySpinner.h
+ * 
+ * TODO: finish documentation.
+ */
+
 #pragma once
 #include "../../JuceLibraryCode/JuceHeader.h"
 
@@ -9,14 +15,20 @@ public:
     
     void setVisible(bool shouldBeVisible);
     void setLoadingText(String newText);
+    
+    enum ColourIds{
+        backgroundColourId = 0x1900400,
+        textColourId = 0x1900401
+    };
+private:
     void paint(Graphics &) override;
     void resized() override;
 
-private:
     ScopedPointer<ImageComponent> spinnerImage;
     Array<Image> spinnerImages;
     Label loadingText;
 
+    //TODO:inherit from Timer instead of holding a custom Timer class
     class OverlaySpinnerTimer : public Timer {
     public:
         OverlaySpinnerTimer(OverlaySpinner *os) : overlaySpinner(os){

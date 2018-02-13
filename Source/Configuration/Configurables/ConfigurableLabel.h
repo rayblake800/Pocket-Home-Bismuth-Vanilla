@@ -1,6 +1,6 @@
 /**
  * @File ConfigurableLabel.h
- * @author Anthony Brown
+ * 
  * ConfigurableLabel is a scaling label that sets its properties from the
  * component configuration file.
  */
@@ -26,6 +26,4 @@ public:
     virtual ~ConfigurableLabel();
 
 protected:
-    virtual void applyConfigAssets(Array<String> assetNames,
-            Array<Colour> colours);
 };

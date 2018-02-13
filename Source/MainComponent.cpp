@@ -2,7 +2,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include "LauncherComponent.h"
 #include "Utils.h"
 #include "MainComponent.h"
 

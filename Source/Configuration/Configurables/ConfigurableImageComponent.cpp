@@ -1,16 +1,4 @@
-/*
-  ==============================================================================
-
-    ConfigurableImageComponent.cpp
-    Created: 17 Jan 2018 8:05:30pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "ConfigurableImageComponent.h"
-
-
 
 ConfigurableImageComponent::ConfigurableImageComponent
 (String componentKey, int assetIndex, RectanglePlacement placement) :
@@ -55,7 +43,7 @@ void ConfigurableImageComponent::applyConfigAssets(Array<String> assetNames,
         assetIndex = -1;
     }
     for(int i=0;i<colours.size();i++){
-        int colourId = imageColour0+i;
+        int colourId = imageColour0Id+i;
         setColour(colourId,colours[i]);
     }
     applyConfigBounds();

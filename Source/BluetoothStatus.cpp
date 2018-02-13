@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    BluetoothStatus.cpp
-    Created: 3 Jan 2018 1:34:22am
-    Author:  anthony
-
-  ==============================================================================
-*/
-
 #include "BluetoothStatus.h"
 void BluetoothStatus::populateFromJson(const var &json) {
     devices.clear();

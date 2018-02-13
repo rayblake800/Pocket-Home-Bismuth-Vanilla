@@ -18,7 +18,7 @@ SwitchComponent::~SwitchComponent() {}
 void SwitchComponent::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown) {
   float radius = float(pillBounds.getHeight()) / 2.0f;
 
-  g.setColour(findColour(colorIdBackground));
+  g.setColour(findColour(backgroundColourId));
   g.fillRoundedRectangle(pillBounds.getX(), pillBounds.getY(), pillBounds.getWidth(),
                          pillBounds.getHeight(), radius);
 }
@@ -38,7 +38,7 @@ void SwitchComponent::resized() {
     Path path;
     path.addEllipse(0, 0, d, d);
     handle->setPath(path);
-    handle->setFill(FillType(findColour(getToggleState() ? colorIdHandle : colorIdHandleOff)));
+    handle->setFill(FillType(findColour(getToggleState() ? handleColourId : handleOffColourId)));
 
     handleParent->setBounds(getToggleState() ? handleBoundsOn : handleBoundsOff);
   }
@@ -48,5 +48,5 @@ void SwitchComponent::clicked() {
   auto bounds = getToggleState() ? handleBoundsOn : handleBoundsOff;
   Desktop::getInstance().getAnimator().animateComponent(handleParent, bounds, 1.0f, 150, false, 0.0,
                                                         0.0);
-  handle->setFill(FillType(findColour(getToggleState() ? colorIdHandle : colorIdHandleOff)));                                                        
+  handle->setFill(FillType(findColour(getToggleState() ? handleColourId : handleOffColourId)));                                                        
 }

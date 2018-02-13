@@ -1,15 +1,9 @@
-/*
-  ==============================================================================
-
-    Configurable.h
-    Created: 1 Jan 2018 12:18:07am
-    Author:  anthony
-
-  ==============================================================================
+/**
+ * @file Configurable.h
+ * 
+ * TODO: finish documentation.
  */
-
 #pragma once
-
 #include "../ConfigFile.h"
 #include "../../../JuceLibraryCode/JuceHeader.h"
 

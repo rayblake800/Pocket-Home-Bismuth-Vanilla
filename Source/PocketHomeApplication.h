@@ -1,11 +1,7 @@
-/*
-  ==============================================================================
-
-    PocketHomeApplication.h
-    Created: 3 Jan 2018 1:11:31am
-    Author:  anthony
-
-  ==============================================================================
+/**
+ * @file PocketHomeApplication.h
+ * 
+ * TODO: documentation, organization, combine MainWindow with MainComponent.h
  */
 
 #pragma once
@@ -40,9 +36,9 @@ public:
 
 private:
     bool initAudio();
-    PokeLookAndFeel lookAndFeel;
     MainConfigFile configFile;
     ComponentConfigFile componentConfig;
+    PokeLookAndFeel lookAndFeel;
 #ifdef LINUX
     WifiStatusNM wifiStatusNM;
 #else

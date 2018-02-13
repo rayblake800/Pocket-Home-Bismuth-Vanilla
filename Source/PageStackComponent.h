@@ -1,3 +1,8 @@
+/**
+ * @file PageStackComponent.h
+ * 
+ * TODO: documentation, organization
+ */
 #pragma once
 
 class PageStackComponent : public Component {

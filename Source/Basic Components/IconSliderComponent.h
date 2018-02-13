@@ -1,3 +1,8 @@
+/**
+ * @file IconSliderComponent.h
+ * 
+ * TODO: finish documentation.
+ */
 #pragma once
 #include "../../JuceLibraryCode/JuceHeader.h"
 

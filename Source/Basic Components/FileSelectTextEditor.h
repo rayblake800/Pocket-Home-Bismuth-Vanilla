@@ -10,9 +10,13 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 class FileSelectTextEditor : public Component,
-public TextEditor::Listener,
-public Button::Listener {
+public TextEditor::Listener, public Button::Listener {
 public:
+    
+    enum ColourIds{
+        fileWindowColourId = 0x1900300,
+        textColourId= 0x1900301
+    };
     /**
      * @param selectionTitle the title to display in the file
      * selection window.

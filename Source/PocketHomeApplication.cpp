@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    PocketHomeApplication.cpp
-    Created: 3 Jan 2018 1:11:31am
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "PocketHomeApplication.h"
 #include "Wifi/WifiStatus.h"
 #include "Utils.h"
@@ -23,7 +13,9 @@
 snd_pcm_t *g_alsa_playback_handle = 0;
 #endif
 
-PocketHomeApplication::PocketHomeApplication()
+PocketHomeApplication::PocketHomeApplication() :
+componentConfig(),
+lookAndFeel(componentConfig)
 {
 }
 

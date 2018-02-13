@@ -1,5 +1,4 @@
 #include "../Utils.h"
-#include "../Settings/SettingsPageComponent.h"
 #include "IconSliderComponent.h"
 
 IconSliderComponent::IconSliderComponent(Drawable* low, Drawable* high)

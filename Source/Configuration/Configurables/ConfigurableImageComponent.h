@@ -1,6 +1,5 @@
 /**
  * @file ConfigurableImageComponent
- * @author Anthony Brown
  * 
  * ConfigurableImageComponent defines a DrawableImageComponent with properties
  * set in the ComponentConfigFile.

@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    ListEditor.cpp
-    Created: 14 Jan 2018 12:52:45pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "../Utils.h"
 #include "ListEditor.h"
 
@@ -27,8 +17,7 @@ addItemBtn("+")
     listContainer.addMouseListener(this, true);
 
     addItemBtn.addListener(this);
-
-
+    
     layoutManager.addRow(3);
     layoutManager.addRow(1);
     layoutManager.addComponent(&listContainer, 0, 1);
@@ -78,16 +67,16 @@ void ListEditor::colourChanged()
  */
 void ListEditor::updateColours()
 {
-    addItemBtn.setColour(TextButton::textColourOnId, findColour(textColour));
+    addItemBtn.setColour(TextButton::textColourOnId, findColour(textColourId));
     listContainer.setColour(ListBox::backgroundColourId,
-            findColour(backgroundColour));
+            findColour(backgroundColourId));
     listContainer.setColour(ListBox::outlineColourId,
-            findColour(selectedListItemColour));
+            findColour(selectedListItemColourId));
 
     ScrollBar* scrollbar = listContainer.getVerticalScrollBar();
     scrollbar->setColour(ScrollBar::trackColourId,
-            findColour(selectedListItemColour));
-    scrollbar->setColour(ScrollBar::thumbColourId, findColour(textColour));
+            findColour(listItemColourId));
+    scrollbar->setColour(ScrollBar::thumbColourId, findColour(textColourId));
 }
 
 ListEditor::ListItemComponent::ListItemComponent
@@ -95,7 +84,7 @@ ListEditor::ListItemComponent::ListItemComponent
 delBtn("cancel.svg")
 {
     setJustificationType(Justification::left);
-    setButtonColour(owner->findColour(textColour));
+    setButtonColour(owner->findColour(textColourId));
     addAndMakeVisible(delBtn);
     delBtn.addListener(owner);
     delBtn.setWantsKeyboardFocus(false);
@@ -113,7 +102,7 @@ void ListEditor::ListItemComponent::setButtonComponentID(String id)
 
 void ListEditor::ListItemComponent::setButtonColour(Colour colour)
 {
-    delBtn.setColour(DrawableImageButton::imageColour0, findColour(textColour));
+    delBtn.setColour(DrawableImageButton::imageColour0Id, findColour(textColourId));
 }
 
 void ListEditor::ListItemComponent::resized()
@@ -211,15 +200,15 @@ Component * ListEditor::refreshComponentForRow
     }
     rowLabel->setText(listItems[rowNumber],
             NotificationType::dontSendNotification);
-    rowLabel->setColour(Label::textColourId, findColour(textColour));
+    rowLabel->setColour(Label::textColourId, findColour(textColourId));
     rowLabel->setButtonComponentID(String(rowNumber));
-    rowLabel->setButtonColour(findColour(textColour));
+    rowLabel->setButtonColour(findColour(textColourId));
 
     rowLabel->setComponentID(String(rowNumber));
 
     rowLabel->setFont(rowLabel->getFont().withHeight(rowLabel->getHeight() - 1));
     rowLabel->setColour(Label::backgroundColourId, isRowSelected ?
-            findColour(selectedListItemColour) : findColour(listItemColour));
+            findColour(selectedListItemColourId) : findColour(listItemColourId));
     return rowLabel;
 
 }
