@@ -4,9 +4,10 @@
 #include "../../PocketHomeApplication.h"
 #include "AppMenuComponents/PagedAppMenu.h"
 #include "AppMenuComponents/ScrollingAppMenu.h"
-#include "AppMenuPage.h"
+#include "HomePage.h"
 
-AppMenuPage::AppMenuPage() :
+HomePage::HomePage() :
+PageComponent("HomePage"),
 Configurable(&PocketHomeApplication::getInstance()->getConfig(),
 {
     MainConfigFile::backgroundKey
@@ -42,11 +43,11 @@ appMenu(new ScrollingAppMenu(appConfig))
     settingsPage = new SettingsPage();
 }
 
-AppMenuPage::~AppMenuPage()
+HomePage::~HomePage()
 {
 }
 
-void AppMenuPage::stopWaitingOnLaunch()
+void HomePage::stopWaitingOnLaunch()
 {
     appMenu->stopWaitingForLoading();
 }
@@ -54,7 +55,7 @@ void AppMenuPage::stopWaitingOnLaunch()
 /**
  * Add a pop-up editor window to the page.
  */
-void AppMenuPage::showPopupEditor(AppMenuPopupEditor* editor)
+void HomePage::showPopupEditor(AppMenuPopupEditor* editor)
 {
     popupEditor = editor;
     if (popupEditor != nullptr)
@@ -67,19 +68,21 @@ void AppMenuPage::showPopupEditor(AppMenuPopupEditor* editor)
 
 
 
-void AppMenuPage::loadConfigProperties(ConfigFile * config, String key)
+void HomePage::loadConfigProperties(ConfigFile * config, String key)
 {
     MainConfigFile& mainConf = PocketHomeApplication::getInstance()->getConfig();
     if (mainConf == *config && key == MainConfigFile::backgroundKey)
     {
         String background = mainConf.getConfigString
                 (MainConfigFile::backgroundKey);
-        if (background.containsOnly("0123456789ABCDEF"))
+        if (background.containsOnly("0123456789ABCDEFXabcdefx"))
         {
-            setColorBackground(background);
+            setBackgroundImage(Image::null);
+            Colour bgColour(background.getHexValue32());
+            setColour(backgroundColourId,bgColour.withAlpha(1.0f));
         } else
         {
-            setImageBackground(background);
+            setBackgroundImage(ImageFileFormat::loadFrom(assetFile(background)));
         }
     }
 }
@@ -87,7 +90,7 @@ void AppMenuPage::loadConfigProperties(ConfigFile * config, String key)
 
 //Forward all clicks (except button clicks) to the appMenu 
 
-void AppMenuPage::mouseDown(const MouseEvent &event)
+void HomePage::mouseDown(const MouseEvent &event)
 {
     if(event.mods.isPopupMenu() || event.mods.isCtrlDown())
     {
@@ -95,7 +98,7 @@ void AppMenuPage::mouseDown(const MouseEvent &event)
     }
 }
 
-void AppMenuPage::buttonClicked(Button * button)
+void HomePage::pageButtonClicked(Button * button)
 {
     PageStackComponent& pageStack = PocketHomeApplication::getInstance()
             ->getMainStack();
@@ -110,30 +113,8 @@ void AppMenuPage::buttonClicked(Button * button)
     }
 }
 
-void AppMenuPage::setColorBackground(const String& color)
-{
-    String value = "FF" + color;
-    bgColor = Colour(value.getHexValue32());
-    bgImage = nullptr;
-}
 
-void AppMenuPage::setImageBackground(const String& path)
-{
-    if (path.isEmpty())
-    {
-        return;
-    }
-    File f;
-    if (path[0] == '~' || path[0] == '/') f = File(path);
-    else f = assetFile(path);
-    if (bgImage == nullptr)
-    {
-        bgImage = new Image();
-    }
-    *bgImage = createImageFromFile(f);
-}
-
-bool AppMenuPage::keyPressed(const KeyPress& key)
+bool HomePage::keyPressed(const KeyPress& key)
 {
     //don't interrupt animation or loading
     if (Desktop::getInstance().getAnimator().isAnimating(appMenu)
@@ -144,7 +125,7 @@ bool AppMenuPage::keyPressed(const KeyPress& key)
     else return appMenu->keyPressed(key);
 }
 
-void AppMenuPage::visibilityChanged()
+void HomePage::visibilityChanged()
 {
     if (isVisible())
     {
@@ -152,7 +133,7 @@ void AppMenuPage::visibilityChanged()
     }
 }
 
-void AppMenuPage::resized()
+void HomePage::pageResized()
 {
     appMenu->applyConfigBounds();
     frame.applyConfigBounds();
@@ -166,17 +147,5 @@ void AppMenuPage::resized()
         popupEditor->applyConfigBounds();
         popupEditor->setCentrePosition(getBounds().getCentreX(),
                 getBounds().getCentreY());
-    }
-}
-
-void AppMenuPage::paint(Graphics &g)
-{
-    auto bounds = getLocalBounds();
-    g.fillAll(bgColor);
-    if (bgImage != nullptr)
-    {
-        g.drawImage(*bgImage, bounds.getX(), bounds.getY(),
-                bounds.getWidth(), bounds.getHeight(),
-                0, 0, bgImage->getWidth(), bgImage->getHeight(), false);
     }
 }

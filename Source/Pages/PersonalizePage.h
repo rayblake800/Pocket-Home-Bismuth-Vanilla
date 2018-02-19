@@ -3,25 +3,22 @@
 #include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../Basic Components/FileSelectTextEditor.h"
 #include "../Basic Components/ScalingLabel.h"
-#include "../GridLayoutManager.h"
+#include "../PageComponent.h"
 #include "../Utils.h"
 
-class PersonalizePage : public Component, private Button::Listener, 
-        private ComboBox::Listener, private FileSelectTextEditor::Listener {
+class PersonalizePage : public PageComponent, private ComboBox::Listener
+, private FileSelectTextEditor::Listener {
 public:
   PersonalizePage();
   ~PersonalizePage();
   
-  void paint(Graphics &g) override;
-  void resized() override;
-  void buttonClicked(Button*) override;
+  
+private:
   void comboBoxChanged(ComboBox*) override;
   void fileSelected(FileSelectTextEditor* edited);
   
-private:
   void updateComboBox();
-  GridLayoutManager layoutManager;
-  ConfigurableImageButton backButton;
+  ScalingLabel title;
   Colour bgColor;
   ScalingLabel bgTitle;
   ScalingLabel bgLabel;

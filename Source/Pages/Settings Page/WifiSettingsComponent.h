@@ -1,16 +1,18 @@
 /**
- * @file WifiCategoryItemComponent.h
+ * @file WifiSettingsComponent.h
  * 
  *TODO:document, get rid of all the unnecessary redundancy.
  */
 #pragma once
 
+#include "../../Basic Components/Spinner.h"
 #include "../../Wifi/WifiStatus.h"
-#include "SettingsCategoryItemComponent.h"
-class WifiCategoryItemComponent : public SettingsCategoryItemComponent, 
+#include "ConnectionSettingsComponent.h"
+class WifiSettingsComponent : public ConnectionSettingsComponent, 
         public WifiStatus::Listener {
 public:
-    WifiCategoryItemComponent();
+    WifiSettingsComponent();
+    virtual ~WifiSettingsComponent();
 
     void resized() override;
     void enabledStateChanged(bool enabled) override;
@@ -26,7 +28,7 @@ public:
 private:
     void enableWifiActions();
     void disableWifiActions();
-    ScopedPointer<WifiSpinner> spinner;
+    Spinner spinner;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiCategoryItemComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiSettingsComponent)
 };

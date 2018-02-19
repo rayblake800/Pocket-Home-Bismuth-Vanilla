@@ -1,7 +1,12 @@
 /**
- * @file ConfigFile.h
+ * @file ComponentConfigFile.h
  * 
- * TODO: finish documentation
+ * ComponentConfigFile gets and sets all component settings defined in 
+ * ~/.pocket-home/components.json.
+ * 
+ * This includes component color values, relative component size and position,
+ * image asset filenames, and other miscellaneous data relevant to UI 
+ * components.
  */
 #pragma once
 #include "ConfigFile.h"
@@ -11,27 +16,33 @@ public:
     ComponentConfigFile();
     virtual ~ComponentConfigFile();
 
-    //######################### String Data ####################################
     /**
      * Colour value string keys are stored here along with their corresponding
      * ColourId values
      */
-    static const std::map<String,int> colourIds;
-    
+    static const std::map<String, int> colourIds;
+
     /**
-     * Find a Component ColourId value from its config key String
+     * Find a Component ColourId value from its String key
      * @param colourKey the key for a color value in colourIds
      * @return the corresponding ColourId value, or -1 if colourKey wasn't
      * found.
      */
     int getColourId(String colourKey);
-    virtual Array<String> getStringKeys() const override;
+    
+    /**
+     * @return the keys to all Component color settings stored in
+     * components.json
+     */
+    Array<String> getColourKeys() const;
+    
+    //#### Integer value keys #######
+    static const String maxRowsKey;
+    static const String maxColumnsKey;
 
-    //######################### Boolean Data ###################################
-    //boolean value keys
+    //#### Boolean value keys #######
     static const String showClockKey;
     static const String use24HrModeKey;
-    virtual Array<String> getBoolKeys() const override;
 
     //######################### UI Component Data ##############################
     //Defines all component types managed in the config file
@@ -48,13 +59,21 @@ public:
     static const String popupMenuKey;
     static const String pageLeftKey;
     static const String pageRightKey;
-    
+    static const String smallTextKey;
+    static const String mediumTextKey;
+    static const String largeTextKey;
 
     /**
-     * @return the list of all component keys.
+     * Return the most appropriate font size for drawing text
+     * @param textBounds the area in which the text will be drawn
+     * @param text the actual text being drawn
+     * @return whichever font height (small, medium, or large) defined in 
+     * components.json would best fit this text within its bounds.  If even the
+     * small font size is too big to fit in textBounds, instead return whatever
+     * font height will fit.
      */
-    Array<String> getComponentKeys();
-
+    int getFontHeight(Rectangle <int> textBounds,String text);
+    
     /**
      * Represents a configurable UI element
      */
@@ -66,8 +85,6 @@ public:
          */
         ComponentSettings();
         
-        //copy constructor
-        ComponentSettings(const ComponentSettings& copy);
         /**
          * Initializes from json data
          * @param jsonObj an object var containing json data
@@ -94,11 +111,6 @@ public:
          * @param component an active component
          */
         void applyBounds(Component * component);
-        /**
-         * Use these settings to re-size a component without adjusting position
-         * @param component an active component
-         */
-        void applySize(Component * component);
         bool operator==(const ComponentSettings& rhs) const;
     private:
         //Position and size data is stored in terms of total screen size,
@@ -112,13 +124,37 @@ public:
         Array<String> assetFiles;
     };
 
-
     /**
      * @param componentKey a configurable UI component's key
      * @return properties defined for that component
      */
     ComponentSettings getComponentSettings(String componentKey);
-
+    
+protected:
+        
+    /**
+     * @return the list of all component keys.
+     */
+    Array<String> getComponentKeys();
+    
+    /**
+     * @return the list of key Strings for each integer value tracked in 
+     * components.json
+     */
+    virtual Array<String> getIntKeys() const override;
+    
+    /**
+     * @return the list of key Strings for each String value tracked in 
+     * components.json
+     */
+    virtual Array<String> getStringKeys() const override;
+    
+    /**
+     * @return the list of key Strings for each boolean value tracked in 
+     * components.json
+     */
+    virtual Array<String> getBoolKeys() const override;
+    
 private:
 
     /**

@@ -68,6 +68,13 @@ private:
      */
     virtual void loadConfigProperties(ConfigFile * config,String key);
     
+    ComponentConfigFile& componentConfig;
+    
+    /**
+     * Defines the maximum number of characters that will fit on a text button.
+     */
+    static const int maxButtonStrSize = 30;
+    
     Typeface::Ptr seguibl;
     MouseCursor::StandardCursorType cursor;
 };

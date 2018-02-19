@@ -4,37 +4,63 @@
  * TODO: documentation, organization
  */
 #pragma once
-
+#include "../JuceLibraryCode/JuceHeader.h"
 class PageStackComponent : public Component {
 public:
-  int transitionDurationMillis = 200;
 
-  PageStackComponent();
-  ~PageStackComponent();
+    PageStackComponent();
+    ~PageStackComponent();
 
-  void paint(Graphics &) override;
-  void resized() override;
+    class Page : public Component {
+        friend class PageStackComponent;
+    public:
 
-  enum Transition { kTransitionNone, kTransitionTranslateHorizontal, kTransitionTranslateHorizontalLeft };
+        Page() {
+        };
 
-  void pushPage(Component *page, Transition transition);
-  void swapPage(Component *page, Transition transition);
-  void popPage(Transition transition);
-  void insertPage(Component *page, int idx);
-  void removePage(int idx);
-  void clear(Transition transition);
+        virtual ~Page() {
+        };
+    protected:
 
-  int getDepth() const;
+        virtual void pageAddedToStack() {
+        };
 
-  Component *getCurrentPage();
+        virtual void pageRemovedFromStack() {
+        };
 
+        virtual void pageRevealedOnStack() {
+        };
+
+        virtual void pageCoveredOnStack() {
+        };
+    };
+    
+    enum Transition {
+        kTransitionNone,
+        kTransitionTranslateHorizontal,
+        kTransitionTranslateHorizontalLeft
+    };
+
+    void pushPage(Page* page, Transition transition = kTransitionNone);
+    void swapPage(Page* page, Transition transition = kTransitionNone);
+    void popPage(Transition transition = kTransitionNone);
+    void insertPage(Page* page, int idx);
+    void removePage(int idx);
+    void removePage(Page* page);
+    void clear(Transition transition);
+
+    int getDepth() const;
+
+    Page *getCurrentPage();
 private:
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PageStackComponent)
+    void resized() override;
+    const int transitionDurationMillis = 200;
 
-  Array<Component *> stack;
+    Array<Page *> stack;
 
-  void transitionIn(Component *component, Transition transition, int durationMillis,
-                    bool reverse = false);
-  void transitionOut(Component *component, Transition transition, int durationMillis,
-                     bool reverse = false);
+    void transitionIn(Page *page, Transition transition, int durationMillis,
+            bool reverse = false);
+    void transitionOut(Page *page, Transition transition, int durationMillis,
+            bool reverse = false);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PageStackComponent)
 };

@@ -1,7 +1,7 @@
 /**
- * @file AppMenuPage.h
+ * @file HomePage.h
  * 
- * AppMenuPage is the main page of the application. It displays the app launch
+ * HomePage is the main page of the application. It displays the app launch
  * menu, assorted system information, and navigation controls to access
  * power and settings pages.
  */
@@ -9,6 +9,7 @@
 
 #include "../PowerPage.h"
 #include "../Settings Page/SettingsPage.h"
+#include "../../PageComponent.h"
 #include "../../Configuration/AppConfigFile.h"
 #include "../../Configuration/Configurables/ConfigurableImageButton.h"
 #include "Popup Editor Components/AppMenuPopupEditor.h"
@@ -23,12 +24,10 @@
  *  -Add alternate AppMenu class support
  */
 
-class AppMenuPage : public Component,
-public Configurable,
-private Button::Listener {
+class HomePage : public PageComponent,public Configurable{
 public:
-    AppMenuPage();
-    virtual ~AppMenuPage();
+    HomePage();
+    virtual ~HomePage();
     
     /**
      * 
@@ -69,15 +68,12 @@ private:
      * @param path the path to an image file.
      */
     void setImageBackground(const String& path);
-    void buttonClicked(Button *) override;
+    void pageButtonClicked(Button *) override;
     bool keyPressed(const KeyPress &) override;
     void visibilityChanged() override;
-    void resized() override;
-    void paint(Graphics &) override;
+    void pageResized() override;
 
     AppConfigFile appConfig;
-    
-    Colour bgColor;
     ClockLabel clock;
     ScopedPointer<AppMenuComponent> appMenu;
     BatteryIcon batteryIcon;
@@ -88,11 +84,9 @@ private:
 
     PowerPage powerPage;
     ScopedPointer<SettingsPage> settingsPage;
-
-    ScopedPointer<Image> bgImage;
     ConfigurableImageComponent frame;
     
     ScopedPointer<AppMenuPopupEditor> popupEditor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuPage);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomePage);
 };

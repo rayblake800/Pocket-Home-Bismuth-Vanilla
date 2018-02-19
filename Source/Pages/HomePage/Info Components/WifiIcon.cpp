@@ -32,7 +32,8 @@ void WifiIcon::visibilityChanged()
         {
             startTimer(10);
         }
-    } else
+    }
+    else
     {
         stopTimer();
     }
@@ -43,22 +44,28 @@ void WifiIcon::visibilityChanged()
  */
 void WifiIcon::timerCallback()
 {
-        const WifiStatus& wifiStatus = PocketHomeApplication::getInstance()
-                ->getWifiStatus();
-        WifiIconImage wifiState = wifiOff;
-        ScopedPointer<WifiAccessPoint> accessPoint =
-                wifiStatus.connectedAccessPoint();
-        if (wifiStatus.isConnected() && accessPoint != nullptr)
+    const WifiStatus& wifiStatus = PocketHomeApplication::getInstance()
+            ->getWifiStatus();
+    WifiIconImage wifiState = wifiOff;
+    if (wifiStatus.isConnected())
+    {
+        try
         {
+            WifiAccessPoint accessPoint = wifiStatus.connectedAccessPoint();
             // 0 to 100
             float sigStrength = std::max(0,
-                    std::min(99, accessPoint->signalStrength));
+                    std::min(99, accessPoint.signalStrength));
             wifiState = (WifiIconImage) (2 + (int) (sigStrength * 3 / 100));
-        }// wifi on but no connection
-        else if (wifiStatus.isEnabled())
+        }
+        catch (WifiStatus::MissingAccessPointException e)
         {
             wifiState = wifiStrength0;
-        }// wifi off
-        setStatus(wifiState);
-        startTimer(frequency);
+        }
+    }// wifi on but no connection
+    else if (wifiStatus.isEnabled())
+    {
+        wifiState = wifiStrength0;
+    }// wifi off
+    setStatus(wifiState);
+    startTimer(frequency);
 }

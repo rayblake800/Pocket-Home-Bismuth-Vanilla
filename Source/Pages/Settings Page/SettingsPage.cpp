@@ -4,37 +4,42 @@
 #include "SettingsPage.h"
 
 SettingsPage::SettingsPage() :
-brightnessSliderTimer(this),
-volumeSliderTimer(this),
-backButton(ComponentConfigFile::pageLeftKey)
+PageComponent("SettingsPage",{
+    {1,
+        {
+            {&wifiCategoryItem, 1}
+        }},
+    {1,
+        {
+            {&screenBrightnessSlider, 1}
+        }},
+    {1,
+        {
+            {&volumeSlider, 1}
+        }},
+    {1,
+        {
+            {&advancedPageButton, 1}
+        }}
+}, true),
+wifiCategoryItem(),
+screenBrightnessSlider("brightnessIconLo.svg", "brightnessIconHi.svg"),
+volumeSlider("volumeIconLo.svg", "volumeIconHi.svg"),
+advancedPageButton("Advanced Settings")
 {
-    bgColor = Colour(0xffd23c6d);
-    bgImage = createImageFromFile(assetFile("settingsBackground.png"));
-    mainPage = new Component();
-    addAndMakeVisible(mainPage);
-    mainPage->toBack();
-    ChildProcess child{};
-
-    /* Adding the personalize button */
-    advancedPage = new AdvancedSettingsPage();
-    advanced = new TextButton("Advanced Settings");
-    advanced->addListener(this);
-    addAndMakeVisible(advanced);
-
+    addAndShowLayoutComponents();
+    setColour(backgroundColourId, Colour(0xffd23c6d));
+    advancedPageButton.addListener(this);
     brightness = 8;
+    volume = 90;
 #if JUCE_LINUX
     // Get initial brightness value
+    ChildProcess child;
     if (child.start("cat /sys/class/backlight/backlight/brightness"))
     {
         String result{child.readAllProcessOutput()};
         brightness = result.getIntValue();
     };
-#endif
-
-
-    volume = 90;
-
-#if JUCE_LINUX
     // Get initial volume value
     StringArray cmd{ "amixer", "sget", "Power Amplifier"};
     if (child.start(cmd))
@@ -49,7 +54,8 @@ backButton(ComponentConfigFile::pageLeftKey)
             if (c >= '0' && c <= '9')
             {
                 buff[i] = c;
-            } else
+            }
+            else
             {
                 buff[i] = (char) 0;
             }
@@ -58,107 +64,51 @@ backButton(ComponentConfigFile::pageLeftKey)
         volume = newVol.getIntValue();
     }
 #endif
-    ScopedPointer<Drawable> brightLow = Drawable::createFromImageFile
-            (assetFile("brightnessIconLo.svg"));
-    ScopedPointer<Drawable> brightHigh = Drawable::createFromImageFile
-            (assetFile("brightnessIconHi.svg"));
-    screenBrightnessSlider = new IconSliderComponent(brightLow, brightHigh);
-    screenBrightnessSlider->addListener(this);
-    screenBrightnessSlider->setValue(1 + (brightness - 0.09)*10);
-
-    ScopedPointer<Drawable> volLow = Drawable::createFromImageFile
-            (assetFile("volumeIconLo.svg"));
-    ScopedPointer<Drawable> volHigh = Drawable::createFromImageFile
-            (assetFile("volumeIconHi.svg"));
-    volumeSlider = new IconSliderComponent(volLow, volHigh);
-    volumeSlider->addListener(this);
-    volumeSlider->setValue(volume);
-
-    // create back button
-    backButton.addListener(this);
-    addAndMakeVisible(backButton);
-
-    wifiCategoryItem = new WifiCategoryItemComponent();
-    wifiCategoryItem->button->addListener(this);
-    addAndMakeVisible(wifiCategoryItem);
     PocketHomeApplication::getInstance()
-            ->getWifiStatus().addListener(wifiCategoryItem);
-
-    addAndMakeVisible(screenBrightnessSlider);
-    addAndMakeVisible(volumeSlider);
-
-    wifiPage = new SettingsPageWifiComponent();
+            ->getWifiStatus().addListener(&wifiCategoryItem);
+    screenBrightnessSlider.setValue(brightness);
+    screenBrightnessSlider.addListener(this);
+    volumeSlider.setValue(volume);
+    volumeSlider.addListener(this);
 }
 
-SettingsPage::~SettingsPage()
-{
-}
+SettingsPage::~SettingsPage() { }
 
-void SettingsPage::paint(Graphics &g)
+void SettingsPage::visibilityChanged()
 {
-
-    auto bounds = getLocalBounds();
-    g.fillAll(bgColor);
-    g.drawImage(bgImage, bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), 0, 0, bgImage.getWidth(), bgImage.getHeight(), false);
-}
-
-void SettingsPage::resized()
-{
-    auto bounds = getLocalBounds();
-    int numRows = 4;
-    double rowProp = 0.6 / numRows;
+    if (!isVisible())
     {
-        for (int i = 0, j = 0; i < numRows; ++i)
-        {
-
-            if (i > 0) verticalLayout.setItemLayout(j++, 0, -1, -1);
-            verticalLayout.setItemLayout(j++, -rowProp, -rowProp, -rowProp);
-        }
-
-        Component * settingsItems[] = {
-            wifiCategoryItem, nullptr,
-            screenBrightnessSlider, nullptr,
-            volumeSlider, nullptr,
-            advanced
-        };
-        int numItems = sizeof (settingsItems) / sizeof (Component*);
-
-        auto b = bounds;
-        b.setLeft(60);
-        b.setTop(30);
-        b.setHeight(b.getHeight() - 30);
-        b.setWidth(b.getWidth() - 60);
-        DBG(String("Laying out ") + String(numItems) + String(" items within") + bounds.toString());
-        verticalLayout.layOutComponents(settingsItems, numItems, b.getX(), b.getY(), b.getWidth(),
-                b.getHeight(), true, true);
+        stopTimer();
+        changingSlider = nullptr;
     }
-
-    mainPage->setBounds(bounds);
-
-    backButton.applyConfigBounds();
 }
 
-void SettingsPage::buttonClicked(Button *button)
+void SettingsPage::timerCallback()
 {
-    PageStackComponent& mainStack = PocketHomeApplication::getInstance()
-            ->getMainStack();
-    if (button == &backButton)
+    if (screenBrightnessSlider.ownsSlider(changingSlider))
     {
-        mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == wifiCategoryItem->button)
+        setScreenBrightness();
+    }
+    if (volumeSlider.ownsSlider(changingSlider))
     {
-        wifiPage->updateAccessPoints();
-        mainStack.pushPage(wifiPage, PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == advanced)
-    {
+        setSoundVolume();
+    }
+    changingSlider = nullptr;
+}
 
-        mainStack.pushPage(advancedPage, PageStackComponent::kTransitionTranslateHorizontal);
+void SettingsPage::pageButtonClicked(Button *button)
+{
+    if (button == &advancedPageButton)
+    {
+        PocketHomeApplication::getInstance()->getMainStack().pushPage
+                (&advancedSettingsPage,
+                PageStackComponent::kTransitionTranslateHorizontal);
     }
 }
 
 void SettingsPage::setSoundVolume()
 {
-    volume = volumeSlider->getValue();
+    volume = volumeSlider.getValue();
 #if JUCE_LINUX
     StringArray cmd{"amixer", "sset", "Power Amplifier", (String(volume) + "%").toRawUTF8()};
     ChildProcess child;
@@ -173,7 +123,7 @@ void SettingsPage::setSoundVolume()
 
 void SettingsPage::setScreenBrightness()
 {
-    brightness = 1 + (screenBrightnessSlider->getValue()*0.09);
+    brightness = 1 + (screenBrightnessSlider.getValue()*0.09);
 #if JUCE_LINUX
     ChildProcess child;
     StringArray cmd{"sh", "-c", (String("echo ") + String(brightness) + String(" > /sys/class/backlight/backlight/brightness")).toRawUTF8()};
@@ -186,62 +136,28 @@ void SettingsPage::setScreenBrightness()
 #endif
 }
 
-void SettingsPage::sliderValueChanged(Slider* slider)
-{
-    //
-}
-
 void SettingsPage::sliderDragStarted(Slider* slider)
 {
-    if (screenBrightnessSlider->ownsSlider(slider) && !brightnessSliderTimer.isTimerRunning())
+    if (!isTimerRunning())
     {
-        brightnessSliderTimer.startTimer(200);
-    } else if (volumeSlider->ownsSlider(slider) && !volumeSliderTimer.isTimerRunning())
-    {
-
-        volumeSliderTimer.startTimer(200);
+        changingSlider = slider;
+        startTimer(200);
     }
 }
 
 void SettingsPage::sliderDragEnded(Slider* slider)
 {
-    if (screenBrightnessSlider->ownsSlider(slider)
-            && brightnessSliderTimer.isTimerRunning())
+    if (screenBrightnessSlider.ownsSlider(slider) && isTimerRunning())
     {
-        brightnessSliderTimer.stopTimer();
+        stopTimer();
         setScreenBrightness();
-    } else if (volumeSlider->ownsSlider(slider)
-            && volumeSliderTimer.isTimerRunning())
+    }
+    else if (volumeSlider.ownsSlider(slider) && isTimerRunning())
     {
-
-        volumeSliderTimer.stopTimer();
+        stopTimer();
         setSoundVolume();
     }
+    changingSlider = nullptr;
 }
 
-SettingsPage::BrightnessTimer::BrightnessTimer
-(SettingsPage* settingsPage) : settingsPage(settingsPage)
-{
-}
 
-void SettingsPage::BrightnessTimer::timerCallback()
-{
-    if (settingsPage != nullptr)
-    {
-
-        settingsPage->setScreenBrightness();
-    }
-}
-
-SettingsPage::VolumeTimer::VolumeTimer
-(SettingsPage* settingsPage) : settingsPage(settingsPage)
-{
-}
-
-void SettingsPage::VolumeTimer::timerCallback()
-{
-    if (settingsPage != nullptr)
-    {
-        settingsPage->setSoundVolume();
-    }
-}

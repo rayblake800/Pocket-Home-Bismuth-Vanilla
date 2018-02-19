@@ -22,7 +22,7 @@ loginPage([this] ()
     {
         addAndMakeVisible(pageStack);
     }
-    pageStack.pushPage(&appMenuPage, PageStackComponent::kTransitionNone);
+    pageStack.pushPage(&homePage, PageStackComponent::kTransitionNone);
 #if JUCE_DEBUG
     setSize(480, 272);
 #else
@@ -62,6 +62,6 @@ void MainContentComponent::resized()
 
 void MainContentComponent::handleMainWindowInactive()
 {
-    appMenuPage.stopWaitingOnLaunch();
+    homePage.stopWaitingOnLaunch();
 }
 

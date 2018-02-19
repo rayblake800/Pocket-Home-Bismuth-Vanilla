@@ -7,7 +7,7 @@
  * mode, or close the page.
  */
 #pragma once
-#include "../GridLayoutManager.h"
+#include "../PageComponent.h"
 #include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Basic Components/SwitchComponent.h"
@@ -23,7 +23,7 @@
  * -Make background color configurable.
  */
 
-class PowerPage : public Component, private Button::Listener {
+class PowerPage : public PageComponent {
 public:
     PowerPage();
     ~PowerPage();
@@ -33,37 +33,23 @@ private:
      * The lock screen will be visible when the display turns on again.
      */
     void startSleepMode();
-    
+
     /**
      * If the lock screen is visible, this will remove it from the screen.
      */
     void hideLockscreen();
-    
+
     /**
      * Show the power spinner to indicate to the user that the system is
      * restarting or shutting down.
      */
     void showPowerSpinner();
     /**
-     * Fills in the background with bgColor.
-     */
-    void paint(Graphics &g) override;
-    /**
-     * Resize all child components to fit the page.
-     */
-    void resized() override;
-    /**
-     * Draw buttons differently on mouse-over or button click.
-     */
-    void buttonStateChanged(Button*) override;
-    /**
      * Handles all button clicks.
      */
-    void buttonClicked(Button*) override;
-    //Arranges buttons to fit on the page.
-    GridLayoutManager layoutManager;
-    //Closes this page.
-    ConfigurableImageButton backButton;
+    void pageButtonClicked(Button*) override;
+
+    void pageResized() override;
     //Turns off the system using the shutdown command in the MainConfigFile.
     TextButton powerOffButton;
     //Starts sleep mode with startSleepMode()
@@ -76,12 +62,10 @@ private:
     OverlaySpinner overlaySpinner;
     //Page for showing flashing options, opened by felButton.
     FelPage felPage;
-    //Background fill color
-    Colour bgColor;
     //Used to run shutdown/restart/sleep commands
     //ChildProcess commandProcess;
     //The lock screen is displayed after entering sleep mode.
-    LoginPage lockscreen;    
+    LoginPage lockscreen;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerPage)
 };
 

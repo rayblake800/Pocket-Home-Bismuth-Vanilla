@@ -2,29 +2,43 @@
 #include "PersonalizePage.h"
 
 PersonalizePage::PersonalizePage() :
-bgColor(0xffd23c6d),
-backButton(ComponentConfigFile::pageLeftKey),
-bgTitle("bgTitle", "Background"),
+PageComponent("PersonalizePage",{
+    {
+        { 3,
+            {
+                {&title, 1}
+            }},
+        { 2,
+            {
+                {&bgTitle, 1},
+                {&bgTypePicker, 1}
+            }},
+        { 2,
+            {
+                {&bgLabel, 1},
+                {&bgEditor, 1}
+            }},
+        { 2,
+            {
+                {&menuPickerLabel, 1},
+                {&menuTypePicker, 1}
+            }},
+        { 5,
+            {
+                {nullptr, 1}
+            }}
+    }
+}, true),
+title("personalizeTitle", "Homepage Settings"),
+bgTitle("bgTitle", "Background:"),
 bgTypePicker("bgTypePicker"),
-bgLabel("bgLabel", "", 2),
+bgLabel("bgLabel", ""),
 bgEditor("Choose the new background",
-"Please choose your new background image"),
-menuPickerLabel("menuPickerLabel", "Application menu type:"),
+        "Please choose your new background image"),
+menuPickerLabel("menuPickerLabel", "Application menu:"),
 menuTypePicker("menuTypePicker")
 {
-    std::vector<GridLayoutManager::ComponentLayoutParams> layout = {
-        {&bgTitle, 0, 1},
-        {&bgTypePicker, 0, 1},
-        {&bgLabel, 1, 1},
-        {&bgEditor, 1, 1},
-        {&menuPickerLabel, 2, 1},
-        {&menuTypePicker, 2, 1}
-    };
-    layoutManager.addComponents(layout, this);
-
-    backButton.addListener(this);
-    addAndMakeVisible(backButton);
-
+    title.setJustificationType(Justification::centred);
     bgTypePicker.addItem("Default", 1);
     bgTypePicker.addItem("Color", 2);
     bgTypePicker.addItem("Image", 3);
@@ -39,11 +53,10 @@ menuTypePicker("menuTypePicker")
     menuTypePicker.setSelectedId(1);
     menuTypePicker.addListener(this);
     updateComboBox();
+    addAndShowLayoutComponents();
 }
 
-PersonalizePage::~PersonalizePage()
-{
-}
+PersonalizePage::~PersonalizePage() { }
 
 void PersonalizePage::updateComboBox()
 {
@@ -53,12 +66,13 @@ void PersonalizePage::updateComboBox()
     bool display = false;
     if (background.length() == 0);
     else if (background.length() == 6 &&
-            background.containsOnly("0123456789ABCDEF"))
+             background.containsOnly("0123456789ABCDEF"))
     {
         bgTypePicker.setSelectedItemIndex(1, sendNotificationSync);
         display = true;
         bgEditor.setText(background, false);
-    } else
+    }
+    else
     {
         bgTypePicker.setSelectedItemIndex(2, sendNotificationSync);
         display = true;
@@ -69,35 +83,12 @@ void PersonalizePage::updateComboBox()
     bgLabel.setVisible(display);
 }
 
-void PersonalizePage::paint(Graphics &g)
-{
-    g.fillAll(bgColor);
-}
-
-void PersonalizePage::resized()
-{
-    backButton.applyConfigBounds();
-    Rectangle<int> bounds = getLocalBounds();
-    bounds.reduce(backButton.getBounds().getWidth(), bounds.getHeight()/10);
-    layoutManager.layoutComponents(bounds, bounds.getWidth() / 100,
-            bounds.getWidth() / 20);
-}
-
-void PersonalizePage::buttonClicked(Button* button)
-{
-    if (button == &backButton)
-    {
-        PocketHomeApplication::getInstance()->getMainStack()
-                .popPage(PageStackComponent::kTransitionTranslateHorizontal);
-        updateComboBox();
-    }
-}
-
-void PersonalizePage::comboBoxChanged(ComboBox* box)
+void PersonalizePage::comboBoxChanged(ComboBox * box)
 {
     MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     if (box == &bgTypePicker)
     {
+        bgEditor.setText("",NotificationType::dontSendNotification);
         switch (box->getSelectedId())
         {
             case 1:
@@ -116,12 +107,13 @@ void PersonalizePage::comboBoxChanged(ComboBox* box)
         bgEditor.setVisible(true);
         bgLabel.setVisible(true);
     }
-    else if (box == &menuTypePicker){
-        config.setConfigString(MainConfigFile::menuTypeKey,box->getText());
+    else if (box == &menuTypePicker)
+    {
+        config.setConfigString(MainConfigFile::menuTypeKey, box->getText());
     }
 }
 
-void PersonalizePage::fileSelected(FileSelectTextEditor* edited)
+void PersonalizePage::fileSelected(FileSelectTextEditor * edited)
 {
     MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
     String value = edited->getText();
@@ -135,7 +127,8 @@ void PersonalizePage::fileSelected(FileSelectTextEditor* edited)
         {
             config.setConfigString(MainConfigFile::backgroundKey, value);
         }
-    } else if (bgTypePicker.getSelectedId() == 3)
+    }
+    else if (bgTypePicker.getSelectedId() == 3)
     {
         config.setConfigString(MainConfigFile::backgroundKey, value);
     }

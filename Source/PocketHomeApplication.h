@@ -10,6 +10,8 @@
 #include "Configuration/MainConfigFile.h"
 #include "Configuration/ComponentConfigFile.h"
 #include "Wifi/WifiStatus.h"
+#include "Wifi/WifiStatusJson.h"
+#include "Wifi/WifiStatusNM.h"
 #include "BluetoothStatus.h"
 #include "PokeLookAndFeel.h"
 #include "Utils.h"

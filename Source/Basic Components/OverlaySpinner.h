@@ -1,46 +1,32 @@
 /**
  * @file OverlaySpinner.h
  * 
- * TODO: finish documentation.
+ * OverlaySpinner is a Spinner component that covers the entire window, and
+ * optionally displays loading text.
+ * @see Spinner.h
  */
 
 #pragma once
 #include "../../JuceLibraryCode/JuceHeader.h"
+#include "ScalingLabel.h"
+#include "Spinner.h"
 
-class OverlaySpinner : public Component {
+class OverlaySpinner : public Spinner {
 public:
-
-    OverlaySpinner();
-    ~OverlaySpinner();
-    
-    void setVisible(bool shouldBeVisible);
-    void setLoadingText(String newText);
-    
     enum ColourIds{
         backgroundColourId = 0x1900400,
         textColourId = 0x1900401
     };
+    
+    OverlaySpinner(int secondsToTimeout = -1);
+    ~OverlaySpinner();
+    
+    void setLoadingText(String newText);
+    
 private:
     void paint(Graphics &) override;
     void resized() override;
-
-    ScopedPointer<ImageComponent> spinnerImage;
-    Array<Image> spinnerImages;
-    Label loadingText;
-
-    //TODO:inherit from Timer instead of holding a custom Timer class
-    class OverlaySpinnerTimer : public Timer {
-    public:
-        OverlaySpinnerTimer(OverlaySpinner *os) : overlaySpinner(os){
-        };
-    private:
-        void timerCallback();
-
-        OverlaySpinner* overlaySpinner;
-        int imageIndex = 0;
-        int runtime = 0;
-        const int timeout = 30 * 1000;
-    };
-    OverlaySpinnerTimer overlaySpinnerTimer;
+    
+    ScalingLabel loadingText;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OverlaySpinner)
 };

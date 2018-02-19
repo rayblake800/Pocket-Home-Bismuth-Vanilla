@@ -5,84 +5,67 @@
 #include "FelPage.h"
 
 FelPage::FelPage() :
-bgColor(Colours::black),
+PageComponent("FelPage",{
+    {2,
+        {
+            {&infoLine1, 1}
+        }},
+    {2,
+        {
+            {nullptr, 1},
+            {&yesButton, 2},
+            {nullptr, 1}
+        }},
+    {1,
+        {
+            {nullptr, 1}
+        }},
+    {2,
+        {
+            {nullptr, 1},
+            {&noButton, 2},
+            {nullptr, 1}
+        }},
+    {1,
+        {
+            {nullptr, 1}
+        }},
+    {1,
+        {
+            {&infoLine2, 1}
+        }}
+}),
 debounce(false),
 infoLine1("infoLine1", "Reboot into software flashing mode?"),
 yesButton("Yes"),
 noButton("No"),
 infoLine2("infoLine2", "For instructions, visit pcflash.getchip.com")
 {
+    //TODO: configurable page backgrounds
+    setColour(backgroundColourId,Colours::black);
     infoLine1.setJustificationType(Justification::centred);
     infoLine2.setJustificationType(Justification::centred);
     yesButton.addListener(this);
     noButton.addListener(this);
-
-    std::vector<GridLayoutManager::ComponentLayoutParams> layoutParams = {
-        {&infoLine1, 0, 1},
-        {nullptr, 1, 1},
-        {&yesButton, 1, 2},
-        {nullptr, 1, 1},
-        {nullptr, 2, 1},
-        {nullptr, 3, 1},
-        {&noButton, 3, 2},
-        {nullptr, 3, 1},
-        {nullptr, 4, 1},
-        {&infoLine2, 5, 1},
-    };
-    layoutManager.addComponents(layoutParams, this);
-    layoutManager.setRowWeight(0, 2);
-    layoutManager.setRowWeight(1, 2);
-    layoutManager.setRowWeight(3, 2);
+    addAndShowLayoutComponents();
 }
 
-FelPage::~FelPage()
-{
-}
-
-/**
- * Fills in the background color
- */
-void FelPage::paint(Graphics &g)
-{
-    g.fillAll(bgColor);
-}
-
-/**
- * Reposition child components to fit in the page.
- */
-void FelPage::resized()
-{
-    Rectangle<int> bounds = getLocalBounds();
-    bounds.reduce(bounds.getWidth() / 15, bounds.getHeight() / 15);
-    layoutManager.layoutComponents(bounds, 0, 0);
-}
-
-/**
- * Change button alpha on click.
- */
-void FelPage::buttonStateChanged(Button *btn)
-{
-    if (btn->isMouseButtonDown() && btn->isMouseOver())
-    {
-        btn->setAlpha(0.5f);
-    } else
-    {
-        btn->setAlpha(1.0f);
-    }
-}
+FelPage::~FelPage() { }
 
 /**
  * Handle button clicks, either restarting into Fel mode or closing the 
  * page.
  * @param should be either &yesButton or &noButton
  */
-void FelPage::buttonClicked(Button *button)
+void
+FelPage::pageButtonClicked(Button *button)
 {
     if (button == &noButton)
     {
         PocketHomeApplication::getInstance()->getMainStack().popPage
                 (PageStackComponent::kTransitionTranslateHorizontalLeft);
-    } else if (button == &yesButton && !debounce)
+    }
+    else if (button == &yesButton && !debounce)
     {
         debounce = true;
         try
@@ -94,7 +77,8 @@ void FelPage::buttonClicked(Button *button)
                     .getConfigString(MainConfigFile::restartCommandKey));
             c.waitForProcessToFinish(10000);
 
-        } catch (I2CBus::I2CException e)
+        }
+        catch (I2CBus::I2CException e)
         {
             DBG(e.getErrorMessage());
         }

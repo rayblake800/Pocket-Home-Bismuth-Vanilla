@@ -1,4 +1,4 @@
-/**
+ /**
  * @file GridLayoutManager
  * @author Anthony Brown
  * 
@@ -46,27 +46,42 @@ public:
     void addComponent(Component * comp,int row,int horizWeight,
         Component* parentToInit=nullptr);
     
+    
     //bulk component setup:
     struct ComponentLayoutParams{
-        ComponentLayoutParams(Component* comp,int row, int horizWeight):
+        ComponentLayoutParams(Component* comp, int horizWeight):
         comp(comp),
-        row(row),
         horizWeight(horizWeight){};
         
         Component* comp;
-        int row;
         int horizWeight;
+    };
+    
+    struct RowLayoutParams{
+        RowLayoutParams(int vertWeight,std::vector<ComponentLayoutParams> compRow):
+        vertWeight(vertWeight),
+        compRow(compRow){};
+        
+        int vertWeight;
+        std::vector<ComponentLayoutParams> compRow;
+        
     };
     
     /**
      * Add a list of components to the layout manager
-     * @param components a list of components, with their weights and 
-     * row indexes
+     * @param rows defines the position and weight of all components. Null 
+     * components may be used to define empty spaces. 
      * @param parentToInit if this optional argument is provided, this will add
      * all components as children of parentToInit and make them visible.
      */
-    void addComponents(std::vector<ComponentLayoutParams> components,
+    void addComponents(const std::vector<RowLayoutParams>& rows,
         Component* parentToInit=nullptr);
+    
+    /**
+     * Adds all components in the layout to a parent component, and makes them
+     * all visible.
+     */
+    void addComponentsToParent(Component* parent);
 
     /**
      * Arrange the components within a bounding rectangle

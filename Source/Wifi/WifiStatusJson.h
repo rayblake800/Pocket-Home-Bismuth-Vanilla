@@ -13,8 +13,8 @@ public:
   WifiStatusJson();
   ~WifiStatusJson() override;
   
-  OwnedArray<WifiAccessPoint> nearbyAccessPoints() override;
-  ScopedPointer<WifiAccessPoint> connectedAccessPoint() const override;
+  Array<WifiAccessPoint> nearbyAccessPoints() override;
+  WifiAccessPoint connectedAccessPoint() const override;
   bool isEnabled() const override;
   bool isConnected() const override;
 
@@ -23,14 +23,15 @@ public:
 
   void setEnabled() override;
   void setDisabled() override;
-  void setConnectedAccessPoint(WifiAccessPoint *ap, String psk = String::empty) override;
+  void setConnectedAccessPoint(const WifiAccessPoint& ap,
+          String psk = String::empty) override;
   void setDisconnected() override;
 
   void initializeStatus() override;
 
 private:
   Array<Listener*> listeners;
-  WifiAccessPoint *connectedAP = nullptr;
+  WifiAccessPoint connectedAP;
   bool enabled = false;
   bool connected = false;
 };

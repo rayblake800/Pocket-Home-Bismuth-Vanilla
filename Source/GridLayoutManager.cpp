@@ -1,12 +1,8 @@
 #include "GridLayoutManager.h"
 
-GridLayoutManager::GridLayoutManager()
-{
-}
+GridLayoutManager::GridLayoutManager() { }
 
-GridLayoutManager::~GridLayoutManager()
-{
-}
+GridLayoutManager::~GridLayoutManager() { }
 
 /**
  * add a new (empty) row, assigning it a weight value
@@ -35,7 +31,7 @@ void GridLayoutManager::setRowWeight(int rowIndex, int newWeight)
 {
     if (rowIndex >= 0 && rowIndex < rows.size())
     {
-        std::vector<Row>::iterator rowIter = rows.begin()+rowIndex;
+        std::vector<Row>::iterator rowIter = rows.begin() + rowIndex;
         vertWeightSum -= rowIter->vertWeight;
         rowIter->vertWeight = newWeight;
         vertWeightSum += newWeight;
@@ -59,7 +55,7 @@ void GridLayoutManager::addComponent(Component * addedComp, int rowIndex,
     {
         addRow(1);
     }
-    std::vector<Row>::iterator rowIter = rows.begin()+rowIndex;
+    std::vector<Row>::iterator rowIter = rows.begin() + rowIndex;
     rowIter->columns.push_back(wCompPtr);
     rowIter->horizWeightSum += horizWeight;
     if (addedComp != nullptr && parentToInit != nullptr)
@@ -72,13 +68,31 @@ void GridLayoutManager::addComponent(Component * addedComp, int rowIndex,
  * Add a list of components to the layout manager
  */
 void GridLayoutManager::addComponents
-(std::vector<ComponentLayoutParams> components,
-        Component* parentToInit)
+(const std::vector<RowLayoutParams>& rows, Component* parentToInit)
 {
-    for (const ComponentLayoutParams& compLayout : components)
+    for (int rowNum = 0; rowNum < rows.size(); rowNum++)
     {
-        addComponent(compLayout.comp, compLayout.row,
-                compLayout.horizWeight, parentToInit);
+        addRow(rows[rowNum].vertWeight);
+        for (const ComponentLayoutParams& compLayout : rows[rowNum].compRow)
+        {
+            addComponent(compLayout.comp, rowNum,
+                    compLayout.horizWeight, parentToInit);
+        }
+    }
+}
+
+/**
+ * Adds all components in the layout to a parent component, and makes them
+ * all visible.
+ */
+void GridLayoutManager::addComponentsToParent(Component* parent)
+{
+    for (const Row& row : rows)
+    {
+        for(const WeightedCompPtr& compPtr : row.columns)
+        {
+            parent->addAndMakeVisible(compPtr.component);
+        }
     }
 }
 
@@ -88,21 +102,22 @@ void GridLayoutManager::addComponents
 void GridLayoutManager::layoutComponents(Rectangle<int> bounds, int xPadding,
         int yPadding)
 {
-    int fullWidth = bounds.getWidth() - xPadding;
-    int fullHeight = bounds.getHeight() - yPadding;
-    int xStart = bounds.getX() + xPadding;
-    int yStart = bounds.getY() + yPadding;
+    int usableHeight = bounds.getHeight() - (rows.size() - 1) * yPadding;
+    int xStart = bounds.getX();
+    int yStart = bounds.getY();
 
     int yPos = yStart;
     //DBG(String(rows.size()) + String(":") + String(vertWeightSum));
-    for(const Row& row : rows){
-        int height = fullHeight * row.vertWeight / vertWeightSum - yPadding;
+    for (const Row& row : rows)
+    {
+        int usableWidth = bounds.getWidth() - (row.columns.size() - 1)
+                * xPadding;
+        int height = usableHeight * row.vertWeight / vertWeightSum;
         int xPos = xStart;
         for (int columnInd = 0; columnInd < row.columns.size(); columnInd++)
         {
             WeightedCompPtr compPtr = row.columns[columnInd];
-            int width = fullWidth * compPtr.weight / row.horizWeightSum
-                    - xPadding;
+            int width = usableWidth * compPtr.weight / row.horizWeightSum;
             if (compPtr.component != nullptr)
             {
                 compPtr.component->setBounds(xPos, yPos, width, height);

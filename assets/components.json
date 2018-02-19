@@ -1,4 +1,11 @@
 {  
+    "use 24h mode": true,
+    "show clock": true,
+
+    "max grid row count": 5,
+    "max grid column count": 6,
+
+    "Page background color": "0xffd23c6d",
     "AppMenu button background color": "0xffc0c0c0",
     "AppMenu button border color": "0xff4d4d4d",
     "AppMenu button selection color": "0xffd23c6d",
@@ -41,31 +48,21 @@
     "Text editor shadow color": "0x00000000",
     "Text editor text color": "0xffffffff",
 
-    "use 24h mode": true,
-    "show clock": true,
     "scrolling app menu": {
         "x": 0.25,
         "y": 0.08,
         "width": 0.65,
-        "height": 0.85,
-        "colours": [],
-        "asset files": []
+        "height": 0.85
     },
     "paged app menu": {
         "x": 0.1,
         "y": 0.1,
         "width": 0.8,
-        "height": 0.8,
-        "colours": [],
-        "asset files": []
+        "height": 0.8
     },
     "app menu buttons": {
-        "x": -1,
-        "y": -1,
         "width": 0.30,
-        "height": 0.14,
-        "colours": [],
-        "asset files": []
+        "height": 0.14
     },
     "battery": {
         "x": 0.01,
@@ -93,9 +90,7 @@
         "x": 0.115,
         "y": 0.018,
         "width": 0.15,
-        "height": 0.075,
-        "colours": [],
-        "asset files": []
+        "height": 0.075
     },
     "menu frame": {
         "x": 0,
@@ -138,9 +133,7 @@
         "x": 0.74,
         "y": 0.018,
         "width": 0.15,
-        "height": 0.075,
-        "colours": [],
-        "asset files": []
+        "height": 0.075
     },
     "wifi": {
         "x": 0.91,
@@ -159,8 +152,6 @@
         ]
     },  
     "popup menu": {
-        "x": -1,
-        "y": -1,
         "width": 0.7,
         "height": 0.7,
         "colours": [
@@ -194,5 +185,14 @@
         "asset files": [
             "nextIcon.svg"
         ]
+    },
+    "small text": {
+        "height": 0.05  
+    },
+    "medium text": {
+        "height": 0.073  
+    },
+    "large text": {
+        "height": 0.13
     }
 }

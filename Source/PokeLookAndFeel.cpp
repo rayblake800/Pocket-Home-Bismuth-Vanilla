@@ -3,7 +3,7 @@
 #include "Basic Components/ListEditor.h"
 #include "Basic Components/FileSelectTextEditor.h"
 #include "Basic Components/OverlaySpinner.h"
-#include "Pages/AppMenu Page/AppMenuButton/AppMenuButton.h"
+#include "Pages/HomePage/AppMenuButton/AppMenuButton.h"
 #include "PocketHomeApplication.h"
 #include "PokeLookAndFeel.h"
 
@@ -14,10 +14,12 @@ Colour PokeLookAndFeel::chipLightPink = Colour(0xfff799aa);
 Colour PokeLookAndFeel::chipPurple = Colour(0xffd23c6d);
 
 PokeLookAndFeel::PokeLookAndFeel(ComponentConfigFile& config) :
-Configurable(&config,config.getStringKeys()),
-cursor(MouseCursor::NoCursor)
+Configurable(&config, config.getColourKeys()),
+cursor(MouseCursor::NoCursor),
+componentConfig(config)
 {
-    loadAllConfigProperties();seguibl = Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
+    loadAllConfigProperties();
+    seguibl = Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
             BinaryData::LatoRegular_ttfSize);
 }
 
@@ -27,13 +29,21 @@ PokeLookAndFeel::~PokeLookAndFeel()
 
 float PokeLookAndFeel::getDrawableButtonTextHeightForBounds(const Rectangle<int> &bounds)
 {
-    return jmin(23.0f, bounds.getHeight() * 0.95f);
+    ComponentConfigFile&
+            config = PocketHomeApplication::getInstance()->getComponentConfig();
+    String largestString;
+    for (int i = 0; i < maxButtonStrSize; i++)
+    {
+        largestString += "A";
+    }
+    //return jmin(23.0f, bounds.getHeight() * 0.95f);
+    return config.getFontHeight(bounds, largestString);
 }
 
 float PokeLookAndFeel::getDrawableButtonImageHeightForBounds(const Rectangle<int> &bounds)
 {
     static const float padding = 5.0f;
-    return bounds.getHeight() - (getDrawableButtonTextHeightForBounds(bounds) 
+    return bounds.getHeight() - (getDrawableButtonTextHeightForBounds(bounds)
             + padding);
 }
 
@@ -98,7 +108,7 @@ void PokeLookAndFeel::drawLinearSlider(Graphics &g, int x, int y, int width, int
         float sliderPos, float minSliderPos, float maxSliderPos,
         const Slider::SliderStyle style, Slider &slider)
 {
-    
+
     drawLinearSliderBackground(g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style,
             slider);
     drawLinearSliderThumb(g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style,
@@ -115,11 +125,20 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button, bool isMou
 {
     Font font(getTextButtonFont(button, button.getHeight()));
     font.setExtraKerningFactor(0.06f);
-    font.setHeight(jmin(button.getHeight(),24));
+    font.setHeight(componentConfig.getFontHeight
+            (button.getLocalBounds(),button.getButtonText()));
     g.setFont(font);
-    g.setColour(button.findColour(button.getToggleState() ? TextButton::textColourOnId
-            : TextButton::textColourOffId)
-            .withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f));
+    Colour buttonColour = button.findColour(button.getToggleState() ? 
+        TextButton::textColourOnId : TextButton::textColourOffId);
+    if(!button.isEnabled())
+    {
+        buttonColour = buttonColour.withMultipliedAlpha(0.5f);
+    }
+    if(isButtonDown && isMouseOverButton)
+    {
+        buttonColour = buttonColour.darker();
+    }
+    g.setColour(buttonColour);
 
     const int yIndent = jmin(4, button.proportionOfHeight(0.3f));
     const int cornerSize = jmin(button.getHeight(), button.getWidth()) / 2;
@@ -142,7 +161,14 @@ void PokeLookAndFeel::drawButtonBackground(Graphics &g, Button &button,
 
     auto path = Path();
     path.addRoundedRectangle(0, 0, width, height, 1);
-    g.setColour(chipPink);
+    if(isButtonDown && isMouseOverButton)
+    {
+        g.setColour(chipPink.darker());
+    }
+    else
+    {
+        g.setColour(chipPink);
+    }
     g.fillPath(path);
 }
 
@@ -187,18 +213,20 @@ MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
 }
 
 /**
-* Reloads and applies object properties defined by a single key in
-* a configuration file
-*/
-void PokeLookAndFeel::loadConfigProperties(ConfigFile * config,String key)
+ * Reloads and applies object properties defined by a single key in
+ * a configuration file
+ */
+void PokeLookAndFeel::loadConfigProperties(ConfigFile * config, String key)
 {
-    ComponentConfigFile* compConf = dynamic_cast<ComponentConfigFile*>(config);
-    if(compConf != nullptr){
+    ComponentConfigFile* compConf = dynamic_cast<ComponentConfigFile*> (config);
+    if (compConf != nullptr)
+    {
         int colourId = compConf->getColourId(key);
-        if(colourId != -1){
-            Colour confColour = 
+        if (colourId != -1)
+        {
+            Colour confColour =
                     Colour(compConf->getConfigString(key).getHexValue32());
-            setColour(colourId,confColour);
+            setColour(colourId, confColour);
         }
     }
 }

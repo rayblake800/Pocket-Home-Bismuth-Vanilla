@@ -26,6 +26,7 @@ const String MainConfigFile::termLaunchCommandKey = "terminal launch command";
 Array<String> MainConfigFile::getStringKeys() const
 {
     return {backgroundKey,
+        menuTypeKey,
         shutdownCommandKey,
         restartCommandKey,
         termLaunchCommandKey};

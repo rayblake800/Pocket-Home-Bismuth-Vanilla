@@ -1,23 +1,20 @@
 #include "../Utils.h"
 #include "IconSliderComponent.h"
 
-IconSliderComponent::IconSliderComponent(Drawable* low, Drawable* high)
+IconSliderComponent::IconSliderComponent
+(String lowImgAsset, String highImgAsset) :
+lowIcon(lowImgAsset,RectanglePlacement::stretchToFit),
+highIcon(highImgAsset,RectanglePlacement::stretchToFit)
 {
     slider.setSliderStyle(Slider::LinearHorizontal);
     slider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
     slider.setRange(0, 100);
-    lowIcon=new DrawableButton("low", DrawableButton::ImageFitted);
-    lowIcon->setImages(low);
-    highIcon=new DrawableButton("low", DrawableButton::ImageFitted);
-    highIcon->setImages(high);
     addAndMakeVisible(slider);
     addAndMakeVisible(lowIcon);
     addAndMakeVisible(highIcon);
 }
 
-IconSliderComponent::~IconSliderComponent()
-{
-}
+IconSliderComponent::~IconSliderComponent() { }
 
 void IconSliderComponent::setValue
 (double newValue, NotificationType notification)
@@ -42,14 +39,15 @@ bool IconSliderComponent::ownsSlider(Slider * sliderPtr)
 
 void IconSliderComponent::resized()
 {
-  auto bounds = getLocalBounds();
-  auto bh = bounds.getHeight();
-  auto bw = bounds.getWidth();
-
-  sliderLayout.setItemLayout(0, bh, bh, bh);
-  sliderLayout.setItemLayout(1, 50, -1.0, -1.0);
-  sliderLayout.setItemLayout(2, bh, bh, bh);
-
-  Component *parts[] = { lowIcon, &slider, highIcon };
-  sliderLayout.layOutComponents(parts, 3, bounds.getX(), bounds.getY(), bw, bh, false, true);
+    Rectangle<int> bounds = getLocalBounds();
+    lowIcon.setBounds(bounds.withWidth(bounds.getHeight()));
+    highIcon.setBounds(bounds.withLeft(bounds.getRight()-bounds.getHeight()));
+    slider.setBounds(bounds.reduced(bounds.getHeight(),0));
+//    sliderLayout.setItemLayout(0, height, height, height);
+//    sliderLayout.setItemLayout(1, 50, -1.0, -1.0);
+//    sliderLayout.setItemLayout(2, height, height, height);
+//
+//    Component * parts[] = {&lowIcon, &slider, &highIcon};
+//    sliderLayout.layOutComponents(parts, 3, getX(), getY(),
+//            width, height, false, true);
 }

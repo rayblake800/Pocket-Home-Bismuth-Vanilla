@@ -13,9 +13,6 @@ File absoluteFileFromPath(const String &path);
 File assetFile(const String &path);
 
 Image createImageFromFile(const File &imageFile);
-ImageButton *createImageButton(const String &name, const File &imageFile);
-ImageButton *createImageButton(const String &name, const Image &image);
-ImageButton *createImageButtonFromDrawable(const String &name, const juce::Drawable &drawable);
 
 /**
  * Creates a Drawable object from an svg file

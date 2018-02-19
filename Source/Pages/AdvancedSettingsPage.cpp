@@ -2,7 +2,7 @@
 #include "../PocketHomeApplication.h"
 
 AdvancedSettingsPage::AdvancedSettingsPage() :
-bg_color(0xffd23c6d),
+PageComponent("AdvancedSettingsPage",{},true),
 titleLabel("settings", "Advanced Settings"),
 setPasswordButton("Set your password"),
 removePasswordButton("Remove your password"),
@@ -10,33 +10,31 @@ personalizeButton("Personalize your homepage"),
 dateTimeButton("Date and time"),
 inputOptionsButton("Input settings"),
 personalizePage(),
-backButton(ComponentConfigFile::pageLeftKey),
 prevArrow("pageUpIcon.svg"),
 nextArrow("pageDownIcon.svg")
 {
+    setColour(backgroundColourId,Colour(0xffd23c6d));
     std::vector<Button*> allButtons = getButtonList(true);
     for (Button* button : allButtons)
     {
         button->addListener(this);
     }
     titleLabel.setJustificationType(Justification::centred);
-    addAndMakeVisible(backButton);
     reloadLayout();
 }
 
-AdvancedSettingsPage::~AdvancedSettingsPage()
-{
-}
+AdvancedSettingsPage::~AdvancedSettingsPage() { }
 
 /**
  * Get pointers to all buttons on the page
  */
-std::vector<Button*> AdvancedSettingsPage::getButtonList(bool includeAll)
+std::vector<Button*>
+AdvancedSettingsPage::getButtonList(bool includeAll)
 {
     std::vector<Button*> buttonList;
     buttonList.push_back(&personalizeButton);
     buttonList.push_back(&setPasswordButton);
-    if (loginSettingPage.hasPassword() || includeAll)
+    if (setPasswordPage.hasPassword() || includeAll)
     {
         buttonList.push_back(&removePasswordButton);
     }
@@ -44,7 +42,6 @@ std::vector<Button*> AdvancedSettingsPage::getButtonList(bool includeAll)
     buttonList.push_back(&inputOptionsButton);
     if (includeAll)
     {
-        buttonList.push_back(&backButton);
         buttonList.push_back(&prevArrow);
         buttonList.push_back(&nextArrow);
     }
@@ -54,41 +51,46 @@ std::vector<Button*> AdvancedSettingsPage::getButtonList(bool includeAll)
 /**
  * Reloads the page layout settings.
  */
-void AdvancedSettingsPage::reloadLayout()
+void
+AdvancedSettingsPage::reloadLayout()
 {
-    setPasswordButton.setButtonText(loginSettingPage.hasPassword() ?
+    setPasswordButton.setButtonText(setPasswordPage.hasPassword() ?
             "Change your password" : "Set your password");
     std::vector<Button*> buttons = getButtonList();
     if (buttonIndex >= buttons.size() || buttonIndex < 0)
     {
         buttonIndex = 0;
     }
-    layoutManager.clearLayout(true);
-    layoutManager.addRow(2);
-    layoutManager.addComponent(&titleLabel, 0, 1, this);
-    layoutManager.addComponent((buttonIndex > 0) ?
-            &prevArrow : nullptr,
-            layoutManager.getNumRows(), 1, this);
+    std::vector<GridLayoutManager::RowLayoutParams> layout = {
+        {4,
+            {
+                {&titleLabel, 1}
+            }},
+        {1,
+            {
+                {buttonIndex > 0 ? &prevArrow : nullptr, 1}
+            }}
+    };
+
     for (int i = buttonIndex; i < (buttonIndex + buttonsPerPage); i++)
     {
-        layoutManager.addRow(2);
-        layoutManager.addComponent((i < buttons.size()) ?
-                buttons[i] : nullptr,
-                layoutManager.getNumRows() - 1, 1, this);
+        layout.push_back({3,
+            {
+                {(i < buttons.size()) ? buttons[i] : nullptr, 1}
+            }});
     }
-    layoutManager.addComponent((buttonIndex + buttonsPerPage < buttons.size()) ?
-            &nextArrow : nullptr,
-            layoutManager.getNumRows(), 1, this);
-    if (isVisible())
-    {
-        resized();
-    }
+    layout.push_back({1,
+        {
+            {buttonIndex + buttonsPerPage < buttons.size() ? &nextArrow : nullptr, 1}
+        }});
+    updateLayout(layout);
 }
 
 /**
  * Reloads page layout whenever the page becomes visible.
  */
-void AdvancedSettingsPage::visibilityChanged()
+void
+AdvancedSettingsPage::visibilityChanged()
 {
     if (isVisible())
     {
@@ -100,65 +102,49 @@ void AdvancedSettingsPage::visibilityChanged()
  * Handle button clicks to open menu pages, close this page, or 
  * scroll the list of page buttons.
  */
-void AdvancedSettingsPage::buttonClicked(Button* button)
+void
+AdvancedSettingsPage::pageButtonClicked(Button * button)
 {
     PageStackComponent& mainStack = PocketHomeApplication::getInstance()
             ->getMainStack();
-    if (button == &backButton)
+    if (button == &setPasswordButton)
     {
-        mainStack.popPage(PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == &setPasswordButton)
-    {
-        loginSettingPage.switchToModify();
-        mainStack.pushPage(&loginSettingPage,
+        mainStack.pushPage(&setPasswordPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == &removePasswordButton
-            && loginSettingPage.hasPassword())
+    }
+    else if (button == &removePasswordButton
+             && removePasswordPage.hasPassword())
     {
-        loginSettingPage.switchToRemove();
-        mainStack.pushPage(&loginSettingPage,
+        mainStack.pushPage(&removePasswordPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == &personalizeButton)
+    }
+    else if (button == &personalizeButton)
     {
         mainStack.pushPage(&personalizePage,
                 PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == &nextArrow)
+    }
+    else if (button == &nextArrow)
     {
         buttonIndex += buttonsPerPage;
         reloadLayout();
-    } else if (button == &prevArrow)
+    }
+    else if (button == &prevArrow)
     {
         buttonIndex -= buttonsPerPage;
         reloadLayout();
-    } else if (button == &inputOptionsButton)
+    }
+    else if (button == &inputOptionsButton)
     {
         mainStack.pushPage(&inputPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == &dateTimeButton)
+    }
+    else if (button == &dateTimeButton)
     {
         mainStack.pushPage(&dateTimePage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     }
 }
 
-/**
- * Fills in the background color
- */
-void AdvancedSettingsPage::paint(Graphics& g)
-{
-    g.fillAll(bg_color);
-}
-
-/**
- * Layout child components to fit within the page bounds
- */
-void AdvancedSettingsPage::resized()
-{
-    backButton.applyConfigBounds();
-    Rectangle<int> bounds = getLocalBounds();
-    bounds.reduce(backButton.getWidth(), 0);
-    layoutManager.layoutComponents(bounds, 0, bounds.getHeight() / 20);
-}
 
 
 

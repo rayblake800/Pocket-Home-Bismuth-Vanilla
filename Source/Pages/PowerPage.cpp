@@ -7,8 +7,32 @@
 
 
 PowerPage::PowerPage() :
-bgColor(Colours::black),
-backButton(ComponentConfigFile::pageRightKey),
+PageComponent("PowerPage",{
+    {1,
+        {
+            {nullptr, 1}
+        }},
+    {1,
+        {
+            {&powerOffButton, 1}
+        }},
+    {1,
+        {
+            {&sleepButton, 1}
+        }},
+    {1,
+        {
+            {&rebootButton, 1}
+        }},
+    {1,
+        {
+            {&felButton, 1}
+        }},
+    {1,
+        {
+            {nullptr, 1}
+        }}
+}, true, true),
 powerOffButton("Shutdown"),
 rebootButton("Reboot"),
 sleepButton("Sleep"),
@@ -19,43 +43,23 @@ lockscreen([this]()
     hideLockscreen();
 })
 {
-    std::vector<GridLayoutManager::ComponentLayoutParams> pageLayout = {
-        {nullptr, 0, 1},
-        {&powerOffButton, 1, 6},
-        {&sleepButton, 2, 6},
-        {&rebootButton, 3, 6},
-        {&felButton, 4, 6},
-        {nullptr, 5, 1}
-    };
-    layoutManager.addComponents(pageLayout, this);
-
-    std::vector<Button*> buttons = {
-        &backButton,
-        &powerOffButton,
-        &sleepButton,
-        &rebootButton,
-        &felButton
-    };
-    for (Button* button : buttons)
-    {
-        button->addListener(this);
-    }
-
-    backButton.setAlwaysOnTop(true);
-    addAndMakeVisible(backButton);
+    setColour(backgroundColourId,Colours::black);
+    powerOffButton.addListener(this);
+    sleepButton.addListener(this);
+    rebootButton.addListener(this);
+    felButton.addListener(this);
     addChildComponent(overlaySpinner);
-
+    addAndShowLayoutComponents();
 }
 
-PowerPage::~PowerPage()
-{
-}
+PowerPage::~PowerPage() { }
 
 /**
  * Turns off the display until key or mouse input is detected.
  * The lock screen will be visible when the display turns on again.
  */
-void PowerPage::startSleepMode()
+void
+PowerPage::startSleepMode()
 {
 #if JUCE_LINUX
     ChildProcess commandProcess;
@@ -66,7 +70,8 @@ void PowerPage::startSleepMode()
         if (result == "Monitor is Off")
         {
             commandProcess.start("xset dpms force on");
-        } else
+        }
+        else
         {
             addAndMakeVisible(lockscreen);
             lockscreen.setAlwaysOnTop(true);
@@ -81,7 +86,8 @@ void PowerPage::startSleepMode()
 /**
  * If the lock screen is visible, this will remove it from the screen.
  */
-void PowerPage::hideLockscreen()
+void
+PowerPage::hideLockscreen()
 {
     if (lockscreen.isShowing())
     {
@@ -95,9 +101,9 @@ void PowerPage::hideLockscreen()
  * Show the power spinner to indicate to the user that the system is
  * restarting or shutting down.
  */
-void PowerPage::showPowerSpinner()
+void
+PowerPage::showPowerSpinner()
 {
-    backButton.setVisible(false);
     powerOffButton.setVisible(false);
     sleepButton.setVisible(false);
     rebootButton.setVisible(false);
@@ -106,58 +112,26 @@ void PowerPage::showPowerSpinner()
 }
 
 /**
- * Fills in the background with bgColor.
- */
-void PowerPage::paint(Graphics &g)
-{
-    g.fillAll(bgColor);
-}
-
-/**
  * Resize all child components to fit the page.
  */
-void PowerPage::resized()
+void PowerPage::pageResized()
 {
-    backButton.applyConfigBounds();
-    Rectangle<int> bounds = getLocalBounds();
-    overlaySpinner.setBounds(bounds);
-    lockscreen.setBounds(bounds);
-    bounds.reduce(backButton.getWidth(),0);
-    layoutManager.layoutComponents(bounds, 0, bounds.getHeight() / 20);
-}
-
-/**
- * Draw buttons differently on mouse-over or button click.
- */
-void PowerPage::buttonStateChanged(Button *btn)
-{
-    if (btn->isMouseButtonDown() && btn->isMouseOver())
-    {
-        btn->setAlpha(0.5f);
-    } else
-    {
-        btn->setAlpha(1.0f);
-    }
+    overlaySpinner.setBounds(getLocalBounds());
 }
 
 /**
  * Handles all button clicks.
  */
-void PowerPage::buttonClicked(Button *button)
+void
+PowerPage::pageButtonClicked(Button *button)
 {
-    if (button == &backButton || button == &felButton)
+    if (button == &felButton)
     {
         PageStackComponent& mainStack = PocketHomeApplication::getInstance()
                 ->getMainStack();
-        if (button == &backButton)
-        {
-            mainStack.popPage
-                    (PageStackComponent::kTransitionTranslateHorizontalLeft);
-        } else//button == &felButton
-        {
-            mainStack.pushPage(&felPage,
-                    PageStackComponent::kTransitionTranslateHorizontalLeft);
-        }
+
+        mainStack.pushPage(&felPage,
+                PageStackComponent::kTransitionTranslateHorizontalLeft);
         return;
     }
     if (button == &sleepButton)
@@ -172,7 +146,8 @@ void PowerPage::buttonClicked(Button *button)
         showPowerSpinner();
         commandProcess.start(config.getConfigString
                 (MainConfigFile::shutdownCommandKey));
-    } else if (button == &rebootButton)
+    }
+    else if (button == &rebootButton)
     {
         showPowerSpinner();
         commandProcess.start(config.getConfigString

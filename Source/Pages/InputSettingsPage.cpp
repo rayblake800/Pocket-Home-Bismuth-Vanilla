@@ -3,26 +3,32 @@
 #include "InputSettingsPage.h"
 
 InputSettingsPage::InputSettingsPage() :
-backButton(ComponentConfigFile::pageLeftKey),
-bg_color(0xffd23c6d),
+PageComponent("InputSettingsPage",{
+    {3,
+        {
+            {&title, 1}
+        }},
+    {2,
+        {
+            {&cursorVisible, 5},
+            {&choosemode, 2}
+        }},
+    {2,
+        {
+            {&calibrating, 1}
+        }},
+    {2,
+        {
+            {&fnmapping, 1}
+        }}
+}, true),
 title("settings", "Input settings"),
 choosemode("choosemode"),
 calibrating("Calibrate the screen"),
 fnmapping("Remap keyboard (FN key fix)"),
 cursorVisible("cursorvisible", "Select the visibility of the cursor:")
 {
-    std::vector<GridLayoutManager::ComponentLayoutParams> layoutParams = {
-        {&title,0,1},
-        {&cursorVisible,2,5},
-        {&choosemode,2,2},
-        {&calibrating,3,1},
-        {&fnmapping,4,1}
-    };
     title.setJustificationType(Justification::centred);
-    layoutManager.addComponents(layoutParams,this);
-    //Back button
-    backButton.addListener(this);
-    addAndMakeVisible(backButton);
     //ComboBox
     choosemode.addItem("Not visible", 1);
     choosemode.addItem("Visible", 2);
@@ -31,27 +37,24 @@ cursorVisible("cursorvisible", "Select the visibility of the cursor:")
     if (config.getConfigBool(MainConfigFile::showCursorKey))
     {
         choosemode.setSelectedId(2);
-    } else
+    }
+    else
     {
         choosemode.setSelectedId(1);
     }
     calibrating.addListener(this);
     fnmapping.addListener(this);
+    addAndShowLayoutComponents();
 }
 
-InputSettingsPage::~InputSettingsPage()
-{
-}
+InputSettingsPage::~InputSettingsPage() { }
 
-void InputSettingsPage::buttonClicked(Button* but)
+void InputSettingsPage::pageButtonClicked(Button* button)
 {
-    if (but == &backButton)
-        PocketHomeApplication::getInstance()->getMainStack().popPage
-            (PageStackComponent::kTransitionTranslateHorizontal);
-    else if (but == &calibrating)
+    if (button == &calibrating)
     {
         AppLauncher launcher;
-        launcher.startOrFocusApp("XInput Calibrator","xinput_calibrator");
+        launcher.startOrFocusApp("XInput Calibrator", "xinput_calibrator");
     }
 }
 
@@ -67,16 +70,3 @@ void InputSettingsPage::comboBoxChanged(ComboBox* c)
     mc->setCursorVisible(cursorVisible);
 }
 
-void InputSettingsPage::paint(Graphics& g)
-{
-    auto bounds = getLocalBounds();
-    g.fillAll(bg_color);
-}
-
-void InputSettingsPage::resized()
-{
-    Rectangle<int> bounds = getLocalBounds();
-    backButton.applyConfigBounds();
-    bounds.reduce(backButton.getWidth(),bounds.getHeight()/15);
-    layoutManager.layoutComponents(bounds,bounds.getWidth()/20,bounds.getHeight()/14);
-}

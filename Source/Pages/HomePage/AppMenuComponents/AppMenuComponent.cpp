@@ -4,7 +4,7 @@
 #include "../Popup Editor Components/NewDesktopAppEditor.h"
 #include "../Popup Editor Components/NewFolderEditor.h"
 #include "../AppMenuButton/AppMenuItemFactory.h"
-#include "../AppMenuPage.h"
+#include "../HomePage.h"
 #include "AppMenuComponent.h"
 
 AppMenuComponent::AppMenuComponent

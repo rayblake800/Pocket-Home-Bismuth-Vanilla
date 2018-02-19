@@ -19,56 +19,56 @@ class NMListener;
 
 class WifiStatusNM : public WifiStatus {
 public:
-  WifiStatusNM();
-  ~WifiStatusNM() override;
-  
-  OwnedArray<WifiAccessPoint> nearbyAccessPoints() override;
-  ScopedPointer<WifiAccessPoint> connectedAccessPoint() const override;
-  bool isEnabled() const override;
-  bool isConnected() const override;
+    WifiStatusNM();
+    ~WifiStatusNM() override;
 
-  void addListener(Listener* listener) override;
-  void clearListeners() override;
+    Array<WifiAccessPoint> nearbyAccessPoints() override;
+    WifiAccessPoint connectedAccessPoint() const override;
+    bool isEnabled() const override;
+    bool isConnected() const override;
 
-  void setEnabled() override;
-  void setDisabled() override;
-  void setConnectedAccessPoint(WifiAccessPoint *ap, String psk = String::empty) override;
-  void setDisconnected() override;
+    void addListener(Listener* listener) override;
+    void clearListeners() override;
 
-  void initializeStatus() override;
+    void setEnabled() override;
+    void setDisabled() override;
+    void setConnectedAccessPoint(const WifiAccessPoint& ap,
+            String psk = String::empty) override;
+    void setDisconnected() override;
 
-  void handleWirelessEnabled();
-  void handleWirelessConnected();
-  void handleConnectedAccessPoint();
+    void initializeStatus() override;
+
+    void handleWirelessEnabled();
+    void handleWirelessConnected();
+    void handleConnectedAccessPoint();
 
 private:
-  Array<Listener*> listeners;
-  ScopedPointer<WifiAccessPoint> connectedAP = nullptr;
-  bool enabled = false;
-  bool connected = false;
-  bool connecting = false;
+    Array<Listener*> listeners;
+    WifiAccessPoint connectedAP;
+    bool enabled = false;
+    bool connected = false;
+    bool connecting = false;
 
-  NMClient* connectToNetworkManager();
+    NMClient* connectToNetworkManager();
 
-  NMClient *nmclient = nullptr;
-  NMDevice *nmdevice = nullptr;
+    NMClient *nmclient = nullptr;
+    NMDevice *nmdevice = nullptr;
 
-  ScopedPointer<NMListener> nmlistener = nullptr;
+    ScopedPointer<NMListener> nmlistener = nullptr;
 };
-
 
 class NMListener : public Thread {
 public:
-  NMListener();
-  ~NMListener();
+    NMListener();
+    ~NMListener();
 
-  void initialize(WifiStatusNM* status, NMClient *client);
-  void run() override;
+    void initialize(WifiStatusNM* status, NMClient *client);
+    void run() override;
 private:
-  GMainLoop *loop;
-  GMainContext *context;
-  NMClient *nm;
-  WifiStatusNM *wifiStatus;
+    GMainLoop *loop;
+    GMainContext *context;
+    NMClient *nm;
+    WifiStatusNM *wifiStatus;
 };
 
 #endif // LINUX

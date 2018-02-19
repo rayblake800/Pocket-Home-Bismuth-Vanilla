@@ -8,7 +8,7 @@
 #pragma once
 #include "Pages/Settings Page/SettingsPage.h"
 #include "Pages/PowerPage.h"
-#include "Pages/AppMenu Page/AppMenuPage.h"
+#include "Pages/HomePage/HomePage.h"
 #include "Pages/LoginPage.h"
 #include "PageStackComponent.h"
 
@@ -29,7 +29,7 @@ public:
   void handleMainWindowInactive();
 
 private:
-  AppMenuPage appMenuPage;
+  HomePage homePage;
   PageStackComponent pageStack;
   LoginPage loginPage;
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainContentComponent)

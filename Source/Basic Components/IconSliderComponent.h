@@ -4,11 +4,12 @@
  * TODO: finish documentation.
  */
 #pragma once
+#include "DrawableImageComponent.h"
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 class IconSliderComponent : public Component{
 public:
-  IconSliderComponent(Drawable * low,Drawable * high);
+  IconSliderComponent(String lowImgAsset,String highImgAsset);
   ~IconSliderComponent();
   
   void setValue(double newValue, 
@@ -26,8 +27,8 @@ public:
   bool ownsSlider(Slider * sliderPtr);
 private:
   void resized() override;
-  ScopedPointer<DrawableButton> lowIcon;
-  ScopedPointer<DrawableButton> highIcon;
+  DrawableImageComponent lowIcon;
+  DrawableImageComponent highIcon;
   StretchableLayoutManager sliderLayout;
   Slider slider;
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconSliderComponent)

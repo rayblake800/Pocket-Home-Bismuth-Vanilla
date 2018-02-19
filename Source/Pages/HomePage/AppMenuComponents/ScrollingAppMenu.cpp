@@ -148,7 +148,7 @@ bool ScrollingAppMenu::keyPressed(const KeyPress& key)
             keyCode == KeyPress::spaceKey ||
             keyCode == KeyPress::rightKey)
     {
-        DBG("AppMenuPage:click selected AppMenuButton");
+        DBG("HomePage:click selected AppMenuButton");
         clickSelected();
         return true;
     } else if (key == KeyPress::createFromDescription("CTRL+e"))

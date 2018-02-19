@@ -1,25 +1,27 @@
 #include <numeric>
 #include "../../PocketHomeApplication.h"
 #include "../../Utils.h"
-#include "BluetoothCategoryItemComponent.h"
+#include "BluetoothSettingsPage.h"
+#include "BluetoothSettingsComponent.h"
 
-BluetoothCategoryItemComponent::BluetoothCategoryItemComponent()
-: SettingsCategoryItemComponent("bluetooth")
+BluetoothSettingsComponent::BluetoothSettingsComponent()
+: ConnectionSettingsComponent("bluetooth", new BluetoothSettingsPage())
 {
-    iconDrawable = Drawable::createFromImageFile(assetFile("bluetoothIcon.png"));
-    icon->setImages(iconDrawable);
+    setIcon("bluetoothIcon.png");
     updateButtonText();
 }
 
-void BluetoothCategoryItemComponent::enabledStateChanged(bool enabled)
+BluetoothSettingsComponent::~BluetoothSettingsComponent(){}
+
+void BluetoothSettingsComponent::enabledStateChanged(bool enabled)
 {
     PocketHomeApplication::getInstance()->getBluetoothStatus().enabled 
             = enabled;
-    button->setEnabled(enabled);
+    setPageButtonEnabled(enabled);
     updateButtonText();
 }
 
-void BluetoothCategoryItemComponent::updateButtonText()
+void BluetoothSettingsComponent::updateButtonText()
 {
     const auto &status = PocketHomeApplication::getInstance()
             ->getBluetoothStatus();
@@ -32,13 +34,13 @@ void BluetoothCategoryItemComponent::updateButtonText()
                     return n + d->connected; });
         if (connectedDeviceCount > 0)
         {
-            button->setText(std::to_string(connectedDeviceCount) + " Devices Connected");
+            setPageButtonText(std::to_string(connectedDeviceCount) + " Devices Connected");
         } else
         {
-            button->setText("No Devices Connected");
+            setPageButtonText("No Devices Connected");
         }
     } else
     {
-        button->setText("Bluetooth Off");
+        setPageButtonText("Bluetooth Off");
     }
 }

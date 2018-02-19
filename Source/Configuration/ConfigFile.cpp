@@ -2,6 +2,12 @@
 #include "ConfigFile.h"
 #include "Configurables/Configurable.h"
 
+/**
+ *TODO: There must be a better way to manage types than to have near-identical
+ * getter/setter methods for each type.  See if there's some template trick
+ * to make this a little less repetitive.
+ */
+
 ConfigFile::ConfigFile(String configFilename) : filename(configFilename)
 {
 }
@@ -18,9 +24,6 @@ ConfigFile::~ConfigFile()
 /**
  * Register an object as tracking configuration changes. That object
  * is notified whenever any data it tracks is changed.
- * 
- * @param configurable an object that uses data stored in this ConfigFile 
- * @param keys all data keys that the object needs to track.
  */
 void ConfigFile::registerConfigurable(Configurable * configurable,
         Array<String> keys)
@@ -35,9 +38,6 @@ void ConfigFile::registerConfigurable(Configurable * configurable,
 /**
  * Removes an object from the list of objects to notify when configuration
  * changes.
- * @param configurable a configurable object to be unregistered.  If the
- * object wasn't actually registered, nothing will happen.
- * @param keys all keys that the configurable object will no longer track.
  */
 void ConfigFile::unregisterConfigurable(Configurable * configurable,
         Array<String> keys)
@@ -49,8 +49,56 @@ void ConfigFile::unregisterConfigurable(Configurable * configurable,
     }
 }
 
+//######################### Integer Data ###################################
+
+/**
+ * Gets one of the integer values stored in the json configuration file
+ */
+int ConfigFile::getConfigInt(String intKey)
+{
+    const ScopedLock readLock(lock);
+    try
+    {
+        return intValues.at(intKey);
+    } catch (std::out_of_range e)
+    {
+        DBG(String("getConfigInt: key \"") + intKey
+                + String("\" is not an integer value stored in ") + filename);
+        throw e;
+    }
+}
+
+/**
+ * Sets one of this ConfigFile's integer values, writing it to the config 
+ * file if the value has changed.  
+ */
+void ConfigFile::setConfigInt(String intKey, int newValue)
+{
+    const ScopedLock writeLock(lock);
+    try
+    {
+        if (intValues.at(intKey) != newValue)
+        {
+            changesPending = true;
+            intValues[intKey] = newValue;
+            writeChanges();
+
+            const ScopedUnlock allowDataAccess(lock);
+            notifyConfigurables(intKey);
+        }
+    } catch (std::out_of_range e)
+    {
+        DBG(String("setConfigInt: key ") + intKey
+                + String(" is not a string value stored in ") + filename);
+        throw e;
+    }
+}
+
 //############################ String Data #####################################
 
+/**
+ * Gets one of the string values stored in the json configuration file
+ */
 String ConfigFile::getConfigString(String stringKey)
 {
     const ScopedLock readLock(lock);
@@ -59,11 +107,16 @@ String ConfigFile::getConfigString(String stringKey)
         return stringValues.at(stringKey);
     } catch (std::out_of_range e)
     {
-        DBG("getConfigString:missing key value!");
-        return "";
+        DBG(String("getConfigString: key \"") + stringKey
+                + String("\" is not a string value stored in ") + filename);
+        throw e;
     }
 }
 
+/**
+ * Sets one of this ConfigFile's string values, writing it to the config 
+ * file if the value has changed.  
+ */
 void ConfigFile::setConfigString(String stringKey,
         String newValue)
 {
@@ -81,12 +134,17 @@ void ConfigFile::setConfigString(String stringKey,
         }
     } catch (std::out_of_range e)
     {
-        DBG("setConfigString:missing key value!");
+        DBG(String("setConfigString: key ") + stringKey
+                + String(" is not a string value stored in ") + filename);
+        throw e;
     }
 }
 
 //############################ Boolean Data ####################################
 
+/**
+ * Gets one of the boolean values stored in the json configuration file.
+ */
 bool ConfigFile::getConfigBool(String boolKey)
 {
     const ScopedLock readLock(lock);
@@ -95,12 +153,17 @@ bool ConfigFile::getConfigBool(String boolKey)
         return boolValues.at(boolKey);
     } catch (std::out_of_range e)
     {
-        DBG("setConfigBool:missing key value!");
-        return false;
+        DBG(String("getConfigBool: key ") + boolKey
+                + String(" is not a boolean value stored in ") + filename);
+        throw e;
     }
 
 }
 
+/**
+ * Sets one of this ConfigFile's boolean values, writing it to the config 
+ * file if the value has changed.  
+ */
 void ConfigFile::setConfigBool(String boolKey, bool newValue)
 {
     const ScopedLock writeLock(lock);
@@ -117,17 +180,43 @@ void ConfigFile::setConfigBool(String boolKey, bool newValue)
         }
     } catch (std::out_of_range e)
     {
-        DBG("setConfigBool:missing key value!");
+        DBG(String("setConfigBool: key ") + boolKey
+                + String(" is not a boolean value stored in ") + filename);
+        throw e;
     }
 }
 
-//ConfigFiles are equal if they have the same filename.
-
+/**
+ * @return true iff this ConfigFile and rhs have the same filename.
+ */
 bool ConfigFile::operator==(const ConfigFile& rhs) const
 {
     return filename == rhs.filename;
 }
 
+/**
+ * @return the keys to all integer variables tracked in this config file.
+ */
+Array<String> ConfigFile::getIntKeys() const
+{
+    return {};
+}
+
+/**
+ * @return the keys to all string variables tracked in this config file.
+ */
+Array<String> ConfigFile::getStringKeys() const
+{
+    return {};
+}
+
+/**
+ * @return the keys to all boolean variables tracked in this config file.
+ */
+Array<String> ConfigFile::getBoolKeys() const
+{
+    return {};
+}
 //################################# File IO ####################################
 
 /**
@@ -135,6 +224,13 @@ bool ConfigFile::operator==(const ConfigFile& rhs) const
  */
 void ConfigFile::readDataFromJson(var& config, var& defaultConfig)
 {
+    //load integers
+    Array<String> intKeys = getIntKeys();
+    for (const String& key : intKeys)
+    {
+        intValues[key] = getProperty(config, defaultConfig, key);
+    }
+    
     //load strings
     Array<String> stringKeys = getStringKeys();
     for (const String& key : stringKeys)
@@ -156,6 +252,12 @@ void ConfigFile::readDataFromJson(var& config, var& defaultConfig)
  */
 void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
 {
+    Array<String> intKeys = getIntKeys();
+    for (const String& key : intKeys)
+    {
+        jsonObj->setProperty(key, intValues[key]);
+    }
+    
     Array<String> stringKeys = getStringKeys();
     for (const String& key : stringKeys)
     {
@@ -170,7 +272,8 @@ void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
 }
 
 /**
- * Checks if a property exists in config data
+ * Checks if a property exists in a config data object loaded from a json
+ * file.
  */
 bool ConfigFile::propertyExists(var& config, String propertyKey)
 {

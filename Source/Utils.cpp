@@ -34,9 +34,14 @@ File assetFile(const String &fileName)
 
 Image createImageFromFile(const File &imageFile)
 {
-    auto image = Image(Image::ARGB, 128, 128, true);
+    
+    if (!imageFile.existsAsFile()){
+        return Image::null;
+    }
+    Image image;
     if (imageFile.getFileExtension() == ".svg")
     {
+        image = Image(Image::ARGB, 128, 128, true);
         ScopedPointer<Drawable> svgDrawable = createSVGDrawable(imageFile);
         Graphics g(image);
         svgDrawable->drawWithin(g, Rectangle<float>(0, 0, image.getWidth(), image.getHeight()),
@@ -46,36 +51,6 @@ Image createImageFromFile(const File &imageFile)
         image = ImageFileFormat::loadFrom(imageFile);
     }
     return image;
-}
-
-ImageButton *createImageButton(const String &name, const File &imageFile)
-{
-    auto image = createImageFromFile(imageFile);
-    return createImageButton(name, image);
-}
-
-ImageButton *createImageButton(const String &name, const Image &image)
-{
-    auto imageButton = new ImageButton("Back");
-    // FIXME: to support touch areas of different size from the base image,
-    // we need to explicitly size the images within image buttons when necessary,
-    // rather than relying on the resizing parameters used here in setImages().
-    // Otherwise images are forced to resize whenever we change component size.
-    imageButton->setImages(true, true, true,
-            image, 1.0f, Colours::transparentWhite, // normal
-            image, 1.0f, Colours::transparentWhite, // over
-            image, 0.5f, Colours::transparentWhite, // down
-            0);
-    return imageButton;
-}
-
-ImageButton *createImageButtonFromDrawable(const String &name, const Drawable &drawable)
-{
-    auto image = Image(Image::RGB, 128, 128, true);
-    Graphics g(image);
-    drawable.drawWithin(g, Rectangle<float>(0, 0, image.getWidth(), image.getHeight()),
-            RectanglePlacement::fillDestination, 1.0f);
-    return createImageButton(name, image);
 }
 
 Drawable * createSVGDrawable(const File& svgFile)

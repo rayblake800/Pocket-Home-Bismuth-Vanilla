@@ -3568,6 +3568,8 @@
           <in>PopupEditorComponent.h</in>
           <in>ScalingLabel.cpp</in>
           <in>ScalingLabel.h</in>
+          <in>Spinner.cpp</in>
+          <in>Spinner.h</in>
           <in>SwitchComponent.cpp</in>
           <in>SwitchComponent.h</in>
         </df>
@@ -3594,7 +3596,7 @@
           <in>MainConfigFile.h</in>
         </df>
         <df name="Pages">
-          <df name="AppMenu Page">
+          <df name="HomePage">
             <df name="AppMenuButton">
               <df name="MenuItem Types">
                 <in>ConfigAppMenuItem.cpp</in>
@@ -3641,30 +3643,30 @@
               <in>NewFolderEditor.cpp</in>
               <in>NewFolderEditor.h</in>
             </df>
-            <in>AppMenuPage.cpp</in>
-            <in>AppMenuPage.h</in>
             <in>DesktopEntries.cpp</in>
             <in>DesktopEntries.h</in>
             <in>DesktopEntry.cpp</in>
             <in>DesktopEntry.h</in>
+            <in>HomePage.cpp</in>
+            <in>HomePage.h</in>
             <in>IconThread.cpp</in>
             <in>IconThread.h</in>
           </df>
           <df name="Settings Page">
-            <in>BluetoothCategoryItemComponent.cpp</in>
-            <in>BluetoothCategoryItemComponent.h</in>
-            <in>SettingsCategoryButton.cpp</in>
-            <in>SettingsCategoryButton.h</in>
-            <in>SettingsCategoryItemComponent.cpp</in>
-            <in>SettingsCategoryItemComponent.h</in>
+            <in>BluetoothSettingsComponent.cpp</in>
+            <in>BluetoothSettingsComponent.h</in>
+            <in>BluetoothSettingsPage.cpp</in>
+            <in>BluetoothSettingsPage.h</in>
+            <in>ConnectionSettingsComponent.cpp</in>
+            <in>ConnectionSettingsComponent.h</in>
             <in>SettingsPage.cpp</in>
             <in>SettingsPage.h</in>
-            <in>SettingsPageBluetoothComponent.cpp</in>
-            <in>SettingsPageBluetoothComponent.h</in>
-            <in>SettingsPageWifiComponent.cpp</in>
-            <in>SettingsPageWifiComponent.h</in>
-            <in>WifiCategoryItemComponent.cpp</in>
-            <in>WifiCategoryItemComponent.h</in>
+            <in>WifiAPPage.cpp</in>
+            <in>WifiAPPage.h</in>
+            <in>WifiSettingsComponent.cpp</in>
+            <in>WifiSettingsComponent.h</in>
+            <in>WifiSettingsPage.cpp</in>
+            <in>WifiSettingsPage.h</in>
           </df>
           <in>AdvancedSettingsPage.cpp</in>
           <in>AdvancedSettingsPage.h</in>
@@ -3676,12 +3678,14 @@
           <in>InputSettingsPage.h</in>
           <in>LoginPage.cpp</in>
           <in>LoginPage.h</in>
-          <in>LoginSettingsPage.cpp</in>
-          <in>LoginSettingsPage.h</in>
           <in>PersonalizePage.cpp</in>
           <in>PersonalizePage.h</in>
           <in>PowerPage.cpp</in>
           <in>PowerPage.h</in>
+          <in>RemovePasswordPage.cpp</in>
+          <in>RemovePasswordPage.h</in>
+          <in>SetPasswordPage.cpp</in>
+          <in>SetPasswordPage.h</in>
         </df>
         <df name="Wifi">
           <in>WifiStatus.cpp</in>

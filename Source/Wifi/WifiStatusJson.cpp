@@ -2,129 +2,148 @@
 
 #include "../Utils.h"
 
-#include "WifiStatus.h"
+#include "WifiStatusJson.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
-WifiStatusJson::WifiStatusJson() : listeners() {}
-WifiStatusJson::~WifiStatusJson() {}
+WifiStatusJson::WifiStatusJson() : listeners() { }
 
-OwnedArray<WifiAccessPoint> WifiStatusJson::nearbyAccessPoints() {
-  OwnedArray<WifiAccessPoint> accessPoints;
-  auto json = JSON::parse(assetFile("wifi.json"));
+WifiStatusJson::~WifiStatusJson() { }
 
-  for (const auto &apJson : *json.getArray()) {
-    auto ap = new WifiAccessPoint();
-    ap->ssid = apJson["name"];
-    ap->signalStrength = apJson["strength"];
-    ap->requiresAuth = apJson["auth"];
-    ap->hash = apJson["name"];
-    accessPoints.add(ap);
-  }
-  return accessPoints;
+Array<WifiAccessPoint> WifiStatusJson::nearbyAccessPoints()
+{
+    Array<WifiAccessPoint> accessPoints;
+    auto json = JSON::parse(assetFile("wifi.json"));
+
+    for (const auto &apJson : *json.getArray())
+    {
+        WifiAccessPoint ap;
+        ap.ssid = apJson["name"];
+        ap.signalStrength = apJson["strength"];
+        ap.requiresAuth = apJson["auth"];
+        ap.hash = apJson["name"];
+        accessPoints.add(ap);
+    }
+    return accessPoints;
 }
 
-ScopedPointer<WifiAccessPoint> WifiStatusJson::connectedAccessPoint() const {
-  if (connectedAP == nullptr)
-    return nullptr;
-
-  return ScopedPointer<WifiAccessPoint>{new WifiAccessPoint(*connectedAP)};
+WifiAccessPoint WifiStatusJson::connectedAccessPoint() const
+{
+    if (!connected)
+    {
+        throw new MissingAccessPointException();
+    }
+    return connectedAP;
 }
 
-bool WifiStatusJson::isEnabled() const {
-  return enabled;
+bool WifiStatusJson::isEnabled() const
+{
+    return enabled;
 }
 
-bool WifiStatusJson::isConnected() const {
-  return connected;
+bool WifiStatusJson::isConnected() const
+{
+    return connected;
 }
 
-void WifiStatusJson::addListener(Listener* listener) {
-  listeners.add(listener);
+void WifiStatusJson::addListener(Listener* listener)
+{
+    listeners.add(listener);
 }
 
-void WifiStatusJson::clearListeners() {
-  listeners.clear();
+void WifiStatusJson::clearListeners()
+{
+    listeners.clear();
 }
 
 // TODO: direct action should not be named set, e.g. enable/disable/disconnect
 // otherwise easily confused with setters thats wrap members, which are slightly different idiom
-void WifiStatusJson::setEnabled() {
-  if (!enabled) {
-    for(const auto& listener : listeners) {
-      listener->handleWifiBusy();
+
+void WifiStatusJson::setEnabled()
+{
+    if (!enabled)
+    {
+        for (const auto& listener : listeners)
+        {
+            listener->handleWifiBusy();
+        }
+
+        enabled = true;
+        for (const auto& listener : listeners)
+        {
+            listener->handleWifiEnabled();
+        }
     }
-    
-    enabled = true;
-    for(const auto& listener : listeners) {
-      listener->handleWifiEnabled();
-    }
-  }
 }
 
-void WifiStatusJson::setDisabled() {
-  if (enabled) {
-    for(const auto& listener : listeners) {
-      listener->handleWifiBusy();
+void WifiStatusJson::setDisabled()
+{
+    if (enabled)
+    {
+        for (const auto& listener : listeners)
+        {
+            listener->handleWifiBusy();
+        }
+
+        enabled = false;
+        for (const auto& listener : listeners)
+        {
+            listener->handleWifiDisabled();
+        }
     }
-    
-    enabled = false;
-    for(const auto& listener : listeners) {
-      listener->handleWifiDisabled();
-    }
-  }
 }
 
-void WifiStatusJson::setConnectedAccessPoint(WifiAccessPoint *ap, String psk) {
-  for(const auto& listener : listeners) {
-    listener->handleWifiBusy();
-  }
-  
-  // disconnect if no ap provided
-  if (ap == nullptr) {
-    DBG("WifiStatusJson::setConnectedAccessPoint - disconnect");
+void WifiStatusJson::setConnectedAccessPoint(const WifiAccessPoint& ap, String psk)
+{
+    for (const auto& listener : listeners)
+    {
+        listener->handleWifiBusy();
+    }
+
+    // try to connect to ap, dispatch events on success and failure
+    bool isTestCred = ap.ssid == "MyFi";
+    if (!isTestCred)
+    {
+        DBG("WifiStatusJson::setConnectedAccessPoint - failed ");
+        connected = false;
+        for (const auto& listener : listeners)
+        {
+            listener->handleWifiFailedConnect();
+        }
+        return;
+    }
+
+    if (psk.isEmpty())
+    {
+        DBG("WifiStatusJson::setConnectedAccessPoint - connect with psk");
+        connected = true;
+        connectedAP = ap;
+        for (const auto& listener : listeners)
+        {
+            listener->handleWifiConnected();
+        }
+    }
+    else
+    {
+        DBG("WifiStatusJson::setConnectedAccessPoint - connect");
+        connected = true;
+        connectedAP = ap;
+        for (const auto& listener : listeners)
+        {
+            listener->handleWifiConnected();
+        }
+    }
+}
+
+void WifiStatusJson::setDisconnected()
+{
     connected = false;
-    connectedAP = nullptr;
-    for(const auto& listener : listeners) {
-      listener->handleWifiDisconnected();
+    for (Listener* listener : listeners)
+    {
+        listener->handleWifiDisconnected();
     }
-  }
-  // try to connect to ap, dispatch events on success and failure
-  else {
-    bool isTestCred = ap->ssid == "MyFi";
-    if (!isTestCred) {
-      DBG("WifiStatusJson::setConnectedAccessPoint - failed ");
-      connected = false;
-      connectedAP = nullptr;
-      for(const auto& listener : listeners) {
-        listener->handleWifiFailedConnect();
-      }
-      return;
-    }
-    
-    if (psk.isEmpty()) {
-      DBG("WifiStatusJson::setConnectedAccessPoint - connect with psk");
-      connected = true;
-      connectedAP = ap;
-      for(const auto& listener : listeners) {
-        listener->handleWifiConnected();
-      }
-    }
-    else {
-      DBG("WifiStatusJson::setConnectedAccessPoint - connect");
-      connected = true;
-      connectedAP = ap;
-      for(const auto& listener : listeners) {
-        listener->handleWifiConnected();
-      }
-    }
-  }
 }
 
-void WifiStatusJson::setDisconnected() {
-  setConnectedAccessPoint(nullptr);
-}
-
-void WifiStatusJson::initializeStatus() {
-  connectedAP = nullptr;
-  connected = false;
+void WifiStatusJson::initializeStatus()
+{
+    connected = false;
 }

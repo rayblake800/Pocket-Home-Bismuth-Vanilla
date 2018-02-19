@@ -3,11 +3,15 @@
 #include "../Basic Components/FileSelectTextEditor.h"
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Basic Components/SwitchComponent.h"
-#include "../Pages/AppMenu Page/AppMenuButton/AppMenuButton.h"
+#include "../Pages/HomePage/AppMenuButton/AppMenuButton.h"
+#include "../PageComponent.h"
 #include "../Utils.h"
 #include "ComponentConfigFile.h"
 
 const std::map<String,int> ComponentConfigFile::colourIds{
+    {"Page background color",
+            PageComponent::backgroundColourId},
+            
     {"Image color 0",
             DrawableImageComponent::imageColour0Id},
     {"Image color 1",
@@ -129,7 +133,11 @@ int ComponentConfigFile::getColourId(String colourKey)
     return search->second;
 }
 
-Array<String> ComponentConfigFile::getStringKeys() const
+/**
+* @return the keys to all Component color settings stored in
+* components.json
+*/
+Array<String> ComponentConfigFile::getColourKeys() const
 {
     Array<String> keys;
     for(std::map<String,int>::const_iterator it = colourIds.begin();
@@ -139,15 +147,15 @@ Array<String> ComponentConfigFile::getStringKeys() const
     }
     return keys;
 }
-//######################### Boolean Data ###################################
-//boolean value keys
+
+//#### Integer value keys #######
+const String ComponentConfigFile::maxRowsKey = "max grid row count";
+const String ComponentConfigFile::maxColumnsKey = "max grid column count";
+
+//##### boolean value keys: ######
 const String ComponentConfigFile::showClockKey = "show clock";
 const String ComponentConfigFile::use24HrModeKey = "use 24h mode";
 
-Array<String> ComponentConfigFile::getBoolKeys() const
-{
-    return {showClockKey, use24HrModeKey};
-}
 
 //######################### UI Component Data ##############################
 //Defines all component types managed in the config file
@@ -164,6 +172,50 @@ const String ComponentConfigFile::settingsButtonKey = "settings button";
 const String ComponentConfigFile::popupMenuKey = "popup menu";
 const String ComponentConfigFile::pageLeftKey = "left arrow button";
 const String ComponentConfigFile::pageRightKey = "right arrow button";
+const String ComponentConfigFile::smallTextKey = "small text";
+const String ComponentConfigFile::mediumTextKey = "medium text";
+const String ComponentConfigFile::largeTextKey = "large text";
+
+/**
+* Return the most appropriate font size for drawing text
+*/
+int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds,String text)
+{
+    int heightLarge = getComponentSettings(largeTextKey).getBounds()
+            .getHeight();
+    int heightMedium = getComponentSettings(mediumTextKey).getBounds()
+            .getHeight();
+    int heightSmall = getComponentSettings(smallTextKey).getBounds()
+            .getHeight();
+    int numLines = 1;
+    for (int i = 0; i < text.length(); i++)
+    {
+        if (text[i] == '\n')
+        {
+            numLines++;
+        }
+    }
+    
+    int height = textBounds.getHeight() / numLines;
+    Font defaultFont(height);
+    int width = defaultFont.getStringWidth(text);
+    if (width > textBounds.getWidth())
+    {
+        height = textBounds.getWidth() * height / width;
+    }
+    if(height > heightLarge)
+    {
+        return heightLarge;
+    }
+    else if(height > heightMedium)
+    {
+        return heightMedium;
+    }
+    else if(height > heightSmall){
+        return heightSmall;
+    }
+    return height;
+}
 
 ComponentConfigFile::ComponentSettings ComponentConfigFile::getComponentSettings
 (String componentKey)
@@ -171,6 +223,59 @@ ComponentConfigFile::ComponentSettings ComponentConfigFile::getComponentSettings
     const ScopedLock readLock(lock);
     return components[componentKey];
 }
+
+
+/**
+ * @return the list of all component keys.
+ */
+Array<String> ComponentConfigFile::getComponentKeys()
+{
+    return {appMenuButtonKey,
+        scrollingAppMenuKey,
+        pagedAppMenuKey,
+        menuFrameKey,
+        batteryIconKey,
+        batteryPercentKey,
+        clockLabelKey,
+        wifiIconKey,
+        powerButtonKey,
+        settingsButtonKey,
+        popupMenuKey,
+        pageLeftKey,
+        pageRightKey,
+        smallTextKey,
+        mediumTextKey,
+        largeTextKey
+    };
+}
+
+/**
+* @return the list of key Strings for each integer value tracked in 
+* components.json
+*/
+Array<String> ComponentConfigFile::getIntKeys() const
+{
+    return {maxRowsKey,maxColumnsKey};
+}
+
+/**
+* @return the list of key Strings for each String value tracked in 
+* components.json
+*/
+Array<String> ComponentConfigFile::getStringKeys() const
+{
+    return getColourKeys();
+}
+
+/**
+* @return the list of key Strings for each boolean value tracked in 
+* components.json
+*/
+Array<String> ComponentConfigFile::getBoolKeys() const
+{
+    return {showClockKey, use24HrModeKey};
+}
+
 
 /**
  * Read in this object's data from a json config object
@@ -199,47 +304,19 @@ void ComponentConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
     }
 }
 
-/**
- * @return the list of all component keys.
- */
-Array<String> ComponentConfigFile::getComponentKeys()
-{
-    return {appMenuButtonKey,
-        scrollingAppMenuKey,
-        pagedAppMenuKey,
-        menuFrameKey,
-        batteryIconKey,
-        batteryPercentKey,
-        clockLabelKey,
-        wifiIconKey,
-        powerButtonKey,
-        settingsButtonKey,
-        popupMenuKey,
-        pageLeftKey,
-        pageRightKey};
-}
 
 ComponentConfigFile::ComponentSettings::ComponentSettings() :
 x(0), y(0), width(0), height(0)
 {
 }
 
-//copy constructor
-
-ComponentConfigFile::ComponentSettings::ComponentSettings
-(const ComponentConfigFile::ComponentSettings& copy) :
-x(copy.x), y(copy.y),
-width(copy.width), height(copy.height),
-assetFiles(copy.assetFiles), colours(copy.colours)
-{
-}
 
 ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
 {
-    x = jsonObj.getProperty("x", 0);
-    y = jsonObj.getProperty("y", 0);
-    width = jsonObj.getProperty("width", 0);
-    height = jsonObj.getProperty("height", 0);
+    x = jsonObj.getProperty("x", -1);
+    y = jsonObj.getProperty("y", -1);
+    width = jsonObj.getProperty("width", -1);
+    height = jsonObj.getProperty("height", -1);
 
     var colourList = jsonObj["colours"];
     if (colourList.isArray())
@@ -265,23 +342,41 @@ ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
 DynamicObject * ComponentConfigFile::ComponentSettings::getDynamicObject()
 {
     DynamicObject * componentObject = new DynamicObject();
-    componentObject->setProperty("x", x);
-    componentObject->setProperty("y", y);
-    componentObject->setProperty("width", width);
-    componentObject->setProperty("height", height);
-    Array<var> coloursListed;
-    for (int i = 0; i < colours.size(); i++)
+    if(x != -1)
     {
-        coloursListed.add(var(colours[i].toString()));
+        componentObject->setProperty("x", x);
     }
-    componentObject->setProperty("colours", coloursListed);
+    if(y != -1)
+    {
+        componentObject->setProperty("y", y);
+    }
+    if(width != -1)
+    {
+        componentObject->setProperty("width", width);
+    }
+    if(height != -1)
+    {
+        componentObject->setProperty("height", height);
+    }
+    if(colours.size() > 0)
+    {
+        Array<var> coloursListed;
+        for (int i = 0; i < colours.size(); i++)
+        {
+            coloursListed.add(var(colours[i].toString()));
+        }
+        componentObject->setProperty("colours", coloursListed);
+    }
 
-    Array<var> assetFilesListed;
-    for (int i = 0; i < assetFiles.size(); i++)
+    if(assetFiles.size() > 0)
     {
-        assetFilesListed.add(var(assetFiles[i]));
+        Array<var> assetFilesListed;
+        for (int i = 0; i < assetFiles.size(); i++)
+        {
+            assetFilesListed.add(var(assetFiles[i]));
+        }
+        componentObject->setProperty("asset files", assetFilesListed);
     }
-    componentObject->setProperty("asset files", assetFilesListed);
     return componentObject;
 }
 
@@ -315,12 +410,24 @@ Array<String> ComponentConfigFile::ComponentSettings::getAssetFiles()
 
 void ComponentConfigFile::ComponentSettings::applyBounds(Component * component)
 {
-    component->setBounds(getBounds());
-}
-
-void ComponentConfigFile::ComponentSettings::applySize(Component * component)
-{
-    Rectangle<int>screen = getWindowSize();
-    component->setSize(width * screen.getWidth(), height * screen.getHeight());
+    Rectangle<int> bounds = getBounds();
+    if (x == -1)
+    {
+        bounds.setX(component->getX());
+    }
+    if (y == -1)
+    {
+        bounds.setY(component->getY());
+    }
+    if (width == -1)
+    {
+        bounds.setWidth(component->getWidth());
+    }
+    if (height == -1)
+    {
+        bounds.setHeight(component->getHeight());
+    }
+    
+    component->setBounds(bounds);
 }
 

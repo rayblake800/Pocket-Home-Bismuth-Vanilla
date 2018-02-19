@@ -55,7 +55,7 @@ private:
     //mappings for all icons found on the system.
     std::map<String, String> iconPaths;
     //True iff icon paths have already been mapped
-    bool iconPathsMapped;
+    bool iconPathsMapped = false;
 
     /**
      * Creates the map of all icon file paths.

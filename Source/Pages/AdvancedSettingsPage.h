@@ -5,14 +5,16 @@
  * other settings pages.
  */
 #pragma once
-#include "PersonalizePage.h"
-#include "DateTimePage.h"
+#include "../PageComponent.h"
 #include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../Basic Components/ScalingLabel.h"
+#include "PersonalizePage.h"
+#include "DateTimePage.h"
 #include "InputSettingsPage.h"
-#include "LoginSettingsPage.h"
+#include "SetPasswordPage.h"
+#include "RemovePasswordPage.h"
 
-class AdvancedSettingsPage : public Component, public Button::Listener {
+class AdvancedSettingsPage : public PageComponent{
 public:
     AdvancedSettingsPage();
     ~AdvancedSettingsPage();
@@ -37,28 +39,14 @@ private:
     void visibilityChanged() override;
 
     /**
-     * Handle button clicks to open menu pages, close this page, or 
-     * scroll the list of page buttons.
+     * Handle button clicks to open menu pages or scroll the list of page 
+     * buttons.
      */
-    void buttonClicked(Button*) override;
+    void pageButtonClicked(Button*) override;
 
-    /**
-     * Fills in the background color
-     */
-    void paint(Graphics&) override;
 
-    /**
-     * Layout child components to fit within the page bounds
-     */
-    void resized() override;
-
-    GridLayoutManager layoutManager;
     //Title of the page: "Advanced Settings"
     ScalingLabel titleLabel;
-    //Closes this page
-    ConfigurableImageButton backButton;
-    //Page background color: currently fixed at 0xffd23c6d
-    Colour bg_color;
 
     //Pages with associated buttons
     TextButton personalizeButton;
@@ -66,7 +54,8 @@ private:
     TextButton removePasswordButton;
     TextButton dateTimeButton;
     TextButton inputOptionsButton;
-    LoginSettingsPage loginSettingPage;
+    SetPasswordPage setPasswordPage;
+    RemovePasswordPage removePasswordPage;
     PersonalizePage personalizePage;
     DateTimePage dateTimePage;
     InputSettingsPage inputPage;

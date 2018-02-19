@@ -8,7 +8,7 @@
 #pragma once
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-class ScalingLabel : public Label {
+class ScalingLabel : public Label{
 public:
     
     /**

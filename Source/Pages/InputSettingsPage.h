@@ -5,22 +5,15 @@
  */
 #pragma once
 #include "../Configuration/Configurables/ConfigurableImageButton.h"
-#include "../GridLayoutManager.h"
-class InputSettingsPage: public Component, public Button::Listener, private ComboBox::Listener{
+#include "../PageComponent.h"
+class InputSettingsPage: public PageComponent, private ComboBox::Listener{
 public:
   InputSettingsPage();
   ~InputSettingsPage();
-  void buttonClicked(Button*) override;
-  void paint(Graphics&) override;
-  void resized() override;
+  void pageButtonClicked(Button*) override;
   void comboBoxChanged(ComboBox*) override;
 
 private:
-    GridLayoutManager layoutManager;
-    //BackButton
-    ConfigurableImageButton backButton;
-    //Background color
-    Colour bg_color;
     //Title of the pane
     ScalingLabel title;
     //Combobox
