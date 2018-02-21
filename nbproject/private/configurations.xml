@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -3657,6 +3655,8 @@
             <in>BluetoothSettingsComponent.h</in>
             <in>BluetoothSettingsPage.cpp</in>
             <in>BluetoothSettingsPage.h</in>
+            <in>ConnectionPage.cpp</in>
+            <in>ConnectionPage.h</in>
             <in>ConnectionSettingsComponent.cpp</in>
             <in>ConnectionSettingsComponent.h</in>
             <in>SettingsPage.cpp</in>

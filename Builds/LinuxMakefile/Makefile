@@ -109,6 +109,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/DesktopEntries_fe0bba0b.o \
   $(JUCE_OBJDIR)/DesktopEntry_ed55766d.o \
   $(JUCE_OBJDIR)/IconThread_7d01ee9a.o \
+  $(JUCE_OBJDIR)/ConnectionPage_b3026524.o \
   $(JUCE_OBJDIR)/WifiAPPage_6ef4274a.o \
   $(JUCE_OBJDIR)/SettingsPage_6cfabde9.o \
   $(JUCE_OBJDIR)/WifiSettingsComponent_ad4d3118.o \
@@ -369,6 +370,11 @@ $(JUCE_OBJDIR)/DesktopEntry_ed55766d.o: ../../Source/Pages/HomePage/DesktopEntry
 $(JUCE_OBJDIR)/IconThread_7d01ee9a.o: ../../Source/Pages/HomePage/IconThread.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling IconThread.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConnectionPage_b3026524.o: ../../Source/Pages/Settings\ Page/ConnectionPage.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConnectionPage.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/WifiAPPage_6ef4274a.o: ../../Source/Pages/Settings\ Page/WifiAPPage.cpp

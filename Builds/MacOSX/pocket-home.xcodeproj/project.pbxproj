@@ -56,6 +56,7 @@
 		BA86439BA0F5D9AA5BFC3C1D = {isa = PBXBuildFile; fileRef = 3C575762FF4E78BFA5D8D6D3; };
 		5660560DB37FDF796F3C993E = {isa = PBXBuildFile; fileRef = 72F21C55F7C910FF0C2E4F98; };
 		FE20823D86EB86089D49F02F = {isa = PBXBuildFile; fileRef = 70F614A11D812BD1DF728BA6; };
+		04DB7AE19BCE7D97A420E1FD = {isa = PBXBuildFile; fileRef = E45FE75DBA05E3911D36CE91; };
 		8909B2DADEC904702C66000F = {isa = PBXBuildFile; fileRef = 67EC185746D3B0DB83CBB013; };
 		395F666633E29503D55FDB3C = {isa = PBXBuildFile; fileRef = DFAB7008076B15C9C7CE6D83; };
 		73ECB2B627FF9A2922C1838F = {isa = PBXBuildFile; fileRef = 5D73F24B9F065E0E81F405EB; };
@@ -224,6 +225,7 @@
 		C83D970F65032669DDA5871F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FelPage.cpp; path = ../../Source/Pages/FelPage.cpp; sourceTree = "SOURCE_ROOT"; };
 		CD053589A2351711B21EACAE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_gui_basics.mm"; path = "../../JuceLibraryCode/include_juce_gui_basics.mm"; sourceTree = "SOURCE_ROOT"; };
 		CEA53319CA0D414B4BCDD85F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RemovePasswordPage.h; path = ../../Source/Pages/RemovePasswordPage.h; sourceTree = "SOURCE_ROOT"; };
+		CF228C94BBEE2565CF8D7391 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConnectionPage.h; path = "../../Source/Pages/Settings Page/ConnectionPage.h"; sourceTree = "SOURCE_ROOT"; };
 		CFE8B073434C1B520DAFD52F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NewFolderEditor.cpp; path = "../../Source/Pages/HomePage/Popup Editor Components/NewFolderEditor.cpp"; sourceTree = "SOURCE_ROOT"; };
 		D111CC7FA9832FAB56800ABF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PersonalizePage.h; path = ../../Source/Pages/PersonalizePage.h; sourceTree = "SOURCE_ROOT"; };
 		D1294451B8BD3BB508571129 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurableImageButton.cpp; path = ../../Source/Configuration/Configurables/ConfigurableImageButton.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -239,6 +241,7 @@
 		E13F17AC6B1DF7D374865B44 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurableLabel.cpp; path = ../../Source/Configuration/Configurables/ConfigurableLabel.cpp; sourceTree = "SOURCE_ROOT"; };
 		E1C9B94D00D58D835EB3B370 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwitchComponent.h; path = "../../Source/Basic Components/SwitchComponent.h"; sourceTree = "SOURCE_ROOT"; };
 		E362C2CC66C2C4D646A9AE04 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CategoryPopupEditor.h; path = "../../Source/Pages/HomePage/Popup Editor Components/CategoryPopupEditor.h"; sourceTree = "SOURCE_ROOT"; };
+		E45FE75DBA05E3911D36CE91 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConnectionPage.cpp; path = "../../Source/Pages/Settings Page/ConnectionPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		E64546FAEAC528A38F63AA1C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ListEditor.h; path = "../../Source/Basic Components/ListEditor.h"; sourceTree = "SOURCE_ROOT"; };
 		E6CF5E1B94B172AFBC59D970 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MainConfigFile.cpp; path = ../../Source/Configuration/MainConfigFile.cpp; sourceTree = "SOURCE_ROOT"; };
 		E6D7E8BDA16BCA7B6E02FB13 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = InputSettingsPage.cpp; path = ../../Source/Pages/InputSettingsPage.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -366,6 +369,8 @@
 					70F614A11D812BD1DF728BA6,
 					F150FB0781A84B02056E6DEB, ); name = HomePage; sourceTree = "<group>"; };
 		663A784635D4704F72715384 = {isa = PBXGroup; children = (
+					E45FE75DBA05E3911D36CE91,
+					CF228C94BBEE2565CF8D7391,
 					67EC185746D3B0DB83CBB013,
 					126A8D04F8450CFFD841DAF4,
 					DFAB7008076B15C9C7CE6D83,
@@ -660,6 +665,7 @@
 					E4029ACE1B9F44E372FE1304,
 					5660560DB37FDF796F3C993E,
 					FE20823D86EB86089D49F02F,
+					04DB7AE19BCE7D97A420E1FD,
 					8909B2DADEC904702C66000F,
 					395F666633E29503D55FDB3C,
 					73ECB2B627FF9A2922C1838F,

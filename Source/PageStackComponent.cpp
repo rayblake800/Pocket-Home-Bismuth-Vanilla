@@ -17,10 +17,28 @@ void PageStackComponent::resized()
     }
 }
 
-int PageStackComponent::getDepth() const
-{
-    return stack.size();
+
+bool PageStackComponent::Page::isOnPageStack() {
+    return pageStack != nullptr;
 }
+
+bool PageStackComponent::Page::removeFromStack(Transition transition) {
+    if(isOnPageStack()){
+        if(pageStack->getCurrentPage() == this){
+            pageStack->popPage(transition);
+        }else{
+            pageStack->stack.removeAllInstancesOf(this);
+        }
+    }
+}
+
+void PageStackComponent::Page::pushPageToStack(Page* newPage, Transition transition){
+
+    if(isOnPageStack() && !newPage->isOnPageStack()){
+        pageStack->pushPage(newPage,transition);
+    }
+}
+
 
 void PageStackComponent::pushPage(Page *page, Transition transition)
 {
@@ -28,70 +46,31 @@ void PageStackComponent::pushPage(Page *page, Transition transition)
     if (!stack.isEmpty())
     {
         transitionOut(stack.getLast(), transition, transitionDurationMillis);
+        stack.getLast()->pageCoveredOnStack();
     }
     stack.add(page);
+    page->pageStack = this;
     transitionIn(page, transition, transitionDurationMillis);
 }
 
-void PageStackComponent::swapPage(Page *page, Transition transition)
-{
-    if (!stack.isEmpty())
-    {
-        transitionOut(stack.getLast(), transition, transitionDurationMillis);
-        stack.removeLast();
-    }
-    stack.add(page);
-    transitionIn(page, transition, transitionDurationMillis);
-}
 
 void PageStackComponent::popPage(Transition transition)
 {
     if (!stack.isEmpty())
     {
         transitionOut(stack.getLast(), transition, transitionDurationMillis, true);
+        stack.getLast()->pageRemovedFromStack();
+        stack.getLast()->pageStack = nullptr;
         stack.removeLast();
         if (!stack.isEmpty())
         {
             transitionIn(stack.getLast(), transition, transitionDurationMillis, true);
+            stack.getLast()->pageRevealedOnStack();
         }
     }
 }
 
-void PageStackComponent::insertPage(Page *page, int idx)
-{
-    stack.insert(idx, page);
-}
 
-void PageStackComponent::removePage(int idx)
-{
-    if (idx == stack.size() - 1)
-    {
-        popPage();
-    }
-    else
-    {
-        stack.remove(idx);
-    }
-}
-
-
-void PageStackComponent::removePage(Page* page)
-{
-    int index = stack.indexOf(page);
-    if(index >= 0)
-    {
-        removePage(index);
-    }
-}
-
-void PageStackComponent::clear(Transition transition)
-{
-    if (!stack.isEmpty())
-    {
-        transitionOut(stack.getLast(), transition, transitionDurationMillis, true);
-    }
-    stack.clear();
-}
 
 void PageStackComponent::transitionIn(Page *page, Transition transition,
         int durationMillis, bool reverse)
