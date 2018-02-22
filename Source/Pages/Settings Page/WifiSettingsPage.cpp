@@ -3,17 +3,16 @@
 #include "../../PocketHomeApplication.h"
 #include "WifiSettingsPage.h"
 
-WifiSettingsPage::WifiSettingsPage() :
-PageComponent("WifiSettingsPage",{}, true),
-nextPageBtn("pageDownIcon.svg"),
-prevPageBtn("pageUpIcon.svg"),
-accessPointPage(nullptr)
+static const Array<String> WifiSettingsPage::wifiImageFiles = 
 {
-    prevPageBtn.addListener(this);
-    nextPageBtn.addListener(this);
-    addAndMakeVisible(prevPageBtn);
-    addAndMakeVisible(nextPageBtn);
-    updateAccessPoints();
+	"wifiStrength0.svg", 
+	"wifiStrength1.svg",
+    "wifiStrength2.svg",
+    "wifiStrength3.svg"
+};
+
+WifiSettingsPage::WifiSettingsPage()
+{
     WifiStatus& wifiStatus = PocketHomeApplication::getInstance()
             ->getWifiStatus();
     wifiStatus.addListener(this);
@@ -24,6 +23,203 @@ accessPointPage(nullptr)
 }
 
 WifiSettingsPage::~WifiSettingsPage() { }
+
+/**
+*Returns the list of all access points that should be listed.
+*/
+Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
+{
+	return PocketHomeApplication::getInstance()
+            ->getWifiStatus().nearbyAccessPoints();
+}
+    
+    
+/**
+* Attempts to open a connection, if possible.
+*/
+void WifiSettingsPage::connect(const WifiAccessPoint& connection)
+{
+	WifiStatus& wifiStatus
+            = PocketHomeApplication::getInstance()->getWifiStatus();
+    if (wifiStatus.isConnected())
+	{
+		PocketHomeApplication::getInstance()->getWifiStatus().setDisconnected();
+	}
+	ListItemComponents* apComponents = getAPComponents(connection);
+	if(apComponents != nullptr)
+	{
+		apComponents->errorLabel.setVisible(false);
+        if (connection.requiresAuth)
+        {
+            const auto& psk = apComponents->passwordEditor.getTextValue().toString();
+            status.setConnectedAccessPoint(connection, psk);
+        }
+        else
+        {
+            status.setConnectedAccessPoint(connection);
+        }
+    }
+}
+
+/**
+* Attempts to close a connection, if possible.
+*/
+void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
+{
+	if(isConnected(connection))
+	{
+		PocketHomeApplication::getInstance()->getWifiStatus().setDisconnected();
+	}
+}
+
+/**
+* @return true iff the system is connected to WifiAccessPoint connection.
+*/
+bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection){
+	WifiStatus& wifiStatus
+            = PocketHomeApplication::getInstance()->getWifiStatus();
+	try
+	{
+		WifiAccessPoint connectedAP = status.connectedAccessPoint();
+		return connectedAP.hash == connection.hash;
+	}
+	catch (WifiStatus::MissingAccessPointException e)
+    {
+		return false;
+    }
+}
+
+/**
+* This is called whenever a button other than the navigation buttons
+* is clicked.
+*/
+void WifiSettingsPage::connectionButtonClicked(Button* button)
+{
+	ListItemComponents* selectedAPComps = getSelectedAPComponents();
+	if(selectedAPComps != nullptr && 
+	&selectedAPComps->connectionButton == button)
+	{
+		WifiAccessPoint* selectedAP = getSelectedConnection();
+		if(isConnected(*selectedAP))
+		{
+			disconnect(*selectedAP);
+		}
+		else
+		{
+			connect(*selectedAP);
+		}
+	}
+}
+
+/**
+* Get the layout for a single connection list item.
+*/
+virtual std::vector<GridLayoutManager::RowLayoutParams>
+WifiSettingsPage::getConnectionLayout(WifiAccessPoint* connection)
+{
+	ListItemComponents* apComponents = getAPComponents(connection);
+	if(apComponents == nullptr){
+		apComponents = new ListItemComponents(connection);
+		listItemComponents.add(apComponents);
+		apComponents->connectionButton.addListener(this);
+	}
+	else{
+		apComponents->wifiIcon.setImage(getWifiAssetName());
+	}
+	return {
+		{3,{
+			{&apComponents->connectionLabel,7},
+			{connection.requiresAuth ?
+				&apComponents->lockIcon : nullptr,1},
+			{&apComponents->wifiIcon,1}}}
+	};
+}
+
+/**
+* Get the layout for a connection list item in expanded detail mode.
+* This should include whatever controls are needed to manage the
+* connection.
+*/
+std::vector<GridLayoutManager::RowLayoutParams>
+WifiSettingsPage::getConnectionDetailLayout(WifiAccessPoint* connection)
+{
+	std::vector<GridLayoutManager::RowLayoutParams> layout = 
+		getConnectionLayout(connection);
+	ListItemComponents* apComponents = getAPComponents(connection);
+	layout.push_back({2,{{&apComponents->passwordEditor,1}}});
+	layout.push_back({2,{{&apComponents->connectionButton,1}}});
+	layout.push_back({2,{{&apComponents->errorLabel,1}}});
+	return layout;
+	
+}
+    
+void WifiSettingsPage::setCurrentlyConnecting(bool currentlyConnecting)
+{
+	ListItemComponents* apComponents = getSelectedAPComponents();
+	if(apComponents != nullptr)
+	{
+		WifiAccessPoint* wifiAP = getSelectedConnection();
+		bool wifiEnabled = PocketHomeApplication::getInstance()
+            ->getWifiStatus().isEnabled();
+		apComponents->spinner.setVisible(currentlyConnecting);
+		apComponents->connectionButton.setEnabled(wifiEnabled && !currentlyConnecting);
+		apComponents->passwordEditor.setEnabled(wifiAP->requiresAuth && wifiEnabled
+            && !currentlyConnecting);
+		apComponents->passwordEditor.setVisible(wifiAP->requiresAuth);
+	}
+}
+
+void handleWifiEnabled() override;
+    
+    void handleWifiDisabled() override;
+    
+    void handleWifiConnected() override;
+    
+    void handleWifiDisconnected() override;
+    
+    void handleWifiBusy() override;
+    
+    void handleWifiFailedConnect() override;
+
+void textEditorReturnKeyPressed(TextEditor &)
+{
+}
+
+static String WifiSettingsPage::getWifiAssetName(const WifiAccessPoint& accessPoint)
+{
+    float sigStrength = std::max(0., std::fmin(100, accessPoint.signalStrength));
+    int maxIndex = wifiImageFiles.size() - 1;
+    return wifiImageFiles[round((maxIndex * (sigStrength) / 100.0f))];
+}
+     
+
+WifiSettingsPage::ListItemComponents::ListItemComponents(const WifiAccessPoint& accessPoint):
+accesPoint(accessPoint),
+connectionLabel("connectionLabel",accessPoint.ssid),
+wifiIcon(getWifiAssetName(accessPoint));
+lockIcon("lock.svg"),
+connectionButton("connectionButton", isConnected(accessPoint)?"Disconnect","Connect")
+{
+}
+		
+   
+WifiSettingsPage::ListItemComponents* WifiSettingsPage::getAPComponents(const WifiAccessPoint& accessPoint)
+{
+	for(ListItemComponents* listComp : listItemComponents)
+	{
+		if(listComp->accessPoint.hash == accessPoint.hash)
+		{
+			return listComp;
+		}
+	}
+	return nullptr;
+}
+
+WifiSettingsPage::ListItemComponents* WifiSettingsPage::getSelectedAPComponents()
+{
+	return getAPComponents(*getSelectedConnection());
+}
+    
 
 void WifiSettingsPage::handleWifiDisabled()
 {

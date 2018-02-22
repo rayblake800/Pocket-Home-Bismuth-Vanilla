@@ -66,9 +66,12 @@ protected:
      * connection, and the other connections on the list will be hidden.  When
      * set to nullptr, the full ConnectionPoint list will be shown again.
      */
-    virtual void setSelectedConnection(ConnectionPoint* connection);
+    void setSelectedConnection(ConnectionPoint* connection);
 
-private:
+	ConnectionPoint* getSelectedConnection();
+
+	void clearConnectionList();
+
     /**
      * Reloads the list of connections and updates the page.
      */
@@ -81,26 +84,71 @@ private:
      */
     void layoutConnectionPage();
 
+	virtual void pageAddedToStack() override;
+	
+	virtual void pageRemovedFromStack() override;
+	
+	virtual void pageRevealedOnStack() override;
+	
+	virtual void pageCoveredOnStack() override;
+private:
     /**
      * Handles connection list scrolling and connection selection.
      */
     void pageButtonClicked(Button*) override;
 
+	/**
+	 * Close connection details when esc is pressed.
+	 */
     virtual bool keyPressed(const KeyPress& key) override;
 
-    class ConnectionListItem : public Button {
+    class ConnectionListItem : public Component{
     public:
         ConnectionListItem(ConnectionPoint connection);
         virtual ~ConnectionListItem();
         const ConnectionPoint& getConnection();
-        void setLayout(std::vector<GridLayoutManager::RowLayoutParams> layout);
+        
+        void layoutListItemComponents
+			(std::vector<GridLayoutManager::RowLayoutParams> layout);
+        
+        void setDetailedLayout
+			(std::vector<GridLayoutManager::RowLayoutParams> detailLayout);
+			
+		void setBasicLayout();
+        bool ownsButton(Button* button);
     private:
-        void paintButton(Graphics &g, bool isMouseOverButton,
-                bool isButtonDown) override;
+		std::vector<GridLayoutManager::RowLayoutParams> getBasicLayout();
+        void paint(Graphics &g) override;
         void resized() override;
-
-        GridLayoutManager buttonLayout;
+		
+		class ListItemButton:public Button{
+		public:
+			ListItemButton():Button(String()){};
+			void setLayout(std::vector<GridLayoutManager::RowLayoutParams> layout)
+			{
+				buttonLayout.clearLayout(true);
+				childComponents.clear();
+				buttonLayout.addComponents(layout,this);
+				for(int i = 0; i < getNumChildren(); i++)
+				{
+					childComponents.add(getChildComponent(i));
+				}
+				
+			}
+		private:
+			void paintButton(Graphics &g, 
+				bool isMouseOverButton, bool isButtonDown){};
+			void resized() override
+			{
+				buttonLayout.layoutComponents(getLocalBounds());
+			};
+			GridLayoutManager buttonLayout;
+			OwnedArray<Component> childComponents;
+		}; 
+		ListItemButton listButton;
+        GridLayoutManager listItemLayout;
         ConnectionPoint connection;
+        static const constexpr borderWidth = 4;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionListItem)
     };
 

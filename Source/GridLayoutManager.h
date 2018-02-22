@@ -62,6 +62,16 @@ public:
         vertWeight(vertWeight),
         compRow(compRow){};
         
+        int horizWeightSum(){
+			int sum=0;
+			for(const ComponentLayoutParams& comp : compRow)
+			{
+				sum+=comp.horizWeight;
+			}
+			return sum;
+		}
+		
+		std:vector<Component
         int vertWeight;
         std::vector<ComponentLayoutParams> compRow;
         

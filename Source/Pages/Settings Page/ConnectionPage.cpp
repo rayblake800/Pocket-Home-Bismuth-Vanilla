@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    ConnectionPage.cpp
-    Created: 20 Feb 2018 1:36:21pm
-    Author:  anthony
-
-  ==============================================================================
- */
-
 #include "ConnectionPage.h"
 
 ConnectionPage::ConnectionPage() :
@@ -29,10 +19,25 @@ void ConnectionPage::setSelectedConnection(ConnectionPoint* connection)
     layoutConnectionPage();
 }
 
-void ConnectionPage::updateConnectionList()
+
+ConnectionPoint* ConnectionPage::getSelectedConnection()
 {
+	return selectedConnection;
+}
+
+
+void ConnectionPage::clearConnectionList()
+{
+	selectedConnection=nullptr;	
     removeAllChildren();
     connectionItems.clear();
+    connections.clear();
+    updateLayout({});
+}
+
+void ConnectionPage::updateConnectionList()
+{
+	clearConnectionList()
     connections = loadConnectionList();
     for (const ConnectionPoint& connection : connections)
     {
@@ -65,13 +70,18 @@ void ConnectionPage::layoutConnectionPage()
     for (int i = connectionIndex;
          i < connectionIndex + connectionsPerPage; i++)
     {
-        if (showList || connectionItems[i]->getConnection
+        if (showList || connectionItems[i]->getConnection()
             == *selectedConnection)
         {
+			ConnectionListItem* listItem = (i < connectionItems.size()) ?
+				connectionItems[i] : nullptr;
+            if(listItem != nullptr)
+            {
+				listItem->setLayout((listItem == selectedConnection) ?
+					getConnectionDetailLayout(listItem) : getConnectionLayout(listItem));
+			}
             layout.push_back({rowWeight,
-                {
-                    {(i < connectionItems.size()) ?
-                        connectionItems[i] : nullptr, 1}
+                {{listItem, 1}
                 }});
         }
     }
@@ -81,24 +91,33 @@ void ConnectionPage::layoutConnectionPage()
               && showList) ? &nextPageBtn : nullptr, 1}
         }});
     updateLayout(layout);
-
 }
+
+
+void ConnectionPage::pageAddedToStack()
+{
+	updateConnectionList();
+}
+	
+void ConnectionPage::pageRemovedFromStack()
+{
+	clearConnectionList();
+}
+	
+void ConnectionPage::pageRevealedOnStack()
+{
+	updateConnectionList();
+}
+	
+void ConnectionPage::pageCoveredOnStack()
+{
+	clearConnectionList();
+}
+	
 
 void ConnectionPage::pageButtonClicked(Button*)
 {
-    ConnectionListItem* connButton = dynamic_cast<ConnectionListItem *> (button);
-    if (connButton != nullptr)
-    {
-        if (*selectedConnection != connButton->getConnection)
-        {
-            setSelectedConnection(*connButton->getConnection);
-        }
-        else
-        {
-            setSelectedConnection(nullptr);
-        }
-    }
-    else if (button == &prevPageBtn)
+    if (button == &prevPageBtn)
     {
         if (apIndex > 0)
         {
@@ -121,32 +140,107 @@ void ConnectionPage::pageButtonClicked(Button*)
     }
     else
     {
+		for(ConnectionListItem* listItem : connectionItems)
+		{
+			if(listItem->ownsButton(button))
+			{
+				if (*selectedConnection != listItem->getConnection)
+				{
+					setSelectedConnection(*listItem->getConnection);
+				}
+				else
+				{
+					setSelectedConnection(nullptr);
+				}
+				return;
+			}
+		}
         connectionButtonClicked(button);
     }
 }
 
 bool ConnectionPage::keyPressed(const KeyPress& key) { 
-    
+		if (key == KeyPress::escapeKey)
+		{
+			setSelectedConnection(nullptr);
+		}
 }
 
 ConnectionPage::ConnectionListItem::ConnectionListItem
-(ConnectionPoint connection) : connection(connection) { }
+(ConnectionPoint connection) : connection(connection) 
+{ 
+		listItemLayout.addComponents(
+		{
+			{3,
+				{
+					{&listButton,1}}
+			}
+		},this);
+}
 
 ConnectionPage::ConnectionListItem::~ConnectionListItem() { }
 
 const ConnectionPage::ConnectionListItem::ConnectionPoint& getConnection()
 {
-    return connection
+    return connection;
+}
+
+
+void ConnectionPage::ConnectionListItem::layoutListItemComponents
+(std::vector<GridLayoutManager::RowLayoutParams> layout)
+{
+	listButton.setLayout(layout);
+}
+        
+void ConnectionPage::ConnectionListItem::setDetailedLayout
+(std::vector<GridLayoutManager::RowLayoutParams> detailLayout)
+{
+	detailLayout.insert(0,
+	{3,
+		{
+			{&listButton,1}}
+	});
+	listItemLayout.clearLayout(true);
+	listItemLayout.addComponents(detailLayout,this);
+}
+			
+void ConnectionPage::ConnectionListItem::setBasicLayout()
+{
+	listItemLayout.clearLayout(true);
 }
 
 void ConnectionPage::ConnectionListItem::setLayout
 (std::vector<GridLayoutManager::RowLayoutParams> layout)
 {
-    buttonLayout.clearLayout();
-    buttonLayout.addComponents(layout, this)
+    listItemLayout.clearLayout();
+    int buttonWeight = 2;
+    if(!layout.empty()){
+		std::vector<GridLayoutManager::RowLayoutParams> buttonLayout;
+		buttonLayout.push_back(layout[0]);
+		buttonWeight = layout[0].vertWeight;
+		layout.remove(0);
+		listButton.setLayout(buttonLayout);
+	}
+	layout.insert(0,{buttonWeight,{{&listButton,1}}});
+    listItemLayout.addComponents(layout, this);
+    resized();
 }
 
-void ConnectionPage::ConnectionListItem::paintButton(Graphics &g, bool isMouseOverButton,
-        bool isButtonDown) override;
+bool ConnectionPage::ConnectionListItem::ownsButton(Button* button){
+	return button == &listButton;
+}
 
-void ConnectionPage::ConnectionListItem::resized() { }
+void ConnectionPage::ConnectionListItem::paint(Graphics &g)
+{
+	g.setColour(findColour(ListBox::ColourIds::backgroundColourId));
+    isButtonDown ? setAlpha(0.5f) : setAlpha(1.0f);
+    g.drawRoundedRectangle(getX(), getY(),
+            getWidth(),getHeight(), 1, borderWidth);
+}
+
+void ConnectionPage::ConnectionListItem::resized() 
+{
+	Rectangle<int> bounds = getLocalBounds().reduced(borderWidth,
+	borderWidth);
+	listItemLayout.layoutComponents(bounds);
+}
