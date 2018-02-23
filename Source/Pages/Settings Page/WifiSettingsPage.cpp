@@ -132,7 +132,7 @@ Button* WifiSettingsPage::getConnectionButton
 GridLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
 (const WifiAccessPoint& connection)
 {
-    updateControlComponents(connection);
+    updateConnectionControls(connection);
     return {
         {1,
             {
@@ -158,6 +158,31 @@ GridLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
 }
 
 /**
+ * Update connection control components to match the current Wifi connection
+ * state and the provided Wifi access point.
+ */
+void WifiSettingsPage::updateConnectionControls
+(const WifiAccessPoint& accessPoint)
+{
+    passwordEditor.clear();
+    bool connected = isConnected(accessPoint);
+    bool passwordNeeded = accessPoint.requiresAuth && !connected;
+    passwordEditor.setVisible(passwordNeeded);
+    passwordEditor.setEnabled(passwordNeeded && !wifiBusy);
+    passwordLabel.setVisible(passwordNeeded);
+    String connectionText;
+    if(!wifiBusy)
+    {
+        connectionText = connected ? "Disconnect" : "Connect";
+    }
+    connectionButton.setButtonText(connectionText);
+    connectionButton.setEnabled(!wifiBusy);
+    errorLabel.setText("", NotificationType::dontSendNotification);
+    spinner.setVisible(wifiBusy);
+}
+
+
+/**
  * When currentlyConnecting, disable Wifi controls and show a loading
  * spinner.  Otherwise, enable controls and hide the loading spinner.
  */
@@ -166,7 +191,7 @@ void WifiSettingsPage::setCurrentlyConnecting(bool currentlyConnecting)
     if (currentlyConnecting != wifiBusy)
     {
         wifiBusy = currentlyConnecting;
-        updateControlComponents(getSelectedConnection());
+        updateConnectionControls(getSelectedConnection());
     }
 }
 
@@ -224,7 +249,7 @@ void WifiSettingsPage::handleWifiFailedConnect()
 {
     DBG("WifiSettingsPage::wifiFailedConnect");
     setCurrentlyConnecting(false);
-    updateControlComponents(getSelectedConnection());
+    updateConnectionControls(getSelectedConnection());
     errorLabel.setText(getSelectedConnection().requiresAuth ?
             "Incorrect password." : "Connection failed.",
             NotificationType::dontSendNotification);
@@ -263,24 +288,6 @@ String WifiSettingsPage::getWifiAssetName(const WifiAccessPoint & accessPoint)
 }
 
 /**
- * Update connection control components to match the current Wifi connection
- * state and the provided Wifi access point.
- */
-void WifiSettingsPage::updateControlComponents
-(const WifiAccessPoint& accessPoint)
-{
-    passwordEditor.clear();
-    bool connected = isConnected(accessPoint);
-    bool passwordNeeded = accessPoint.requiresAuth && !connected;
-    passwordEditor.setVisible(passwordNeeded);
-    passwordEditor.setEnabled(passwordNeeded && !wifiBusy);
-    connectionButton.setButtonText(connected ? "Disconnect" : "Connect");
-    connectionButton.setEnabled(!wifiBusy);
-    errorLabel.setText("", NotificationType::dontSendNotification);
-    spinner.setVisible(wifiBusy);
-}
-
-/**
  * Reload the access point list, re-select the selected connection, 
  * update and enable connection controls.
  */
@@ -290,7 +297,7 @@ void WifiSettingsPage::reloadPage()
     updateConnectionList();
     setSelectedConnection(selected);
     setCurrentlyConnecting(false);
-    updateControlComponents(selected);
+    updateConnectionControls(getSelectedConnection());
 }
 
 WifiSettingsPage::WifiAPButton::WifiAPButton

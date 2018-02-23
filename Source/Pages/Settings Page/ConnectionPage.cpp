@@ -44,8 +44,8 @@ void ConnectionPage<ConnectionPoint>::setSelectedConnection
         if (selectedConnection != ConnectionPoint::null)
         {
             selectionChanged = true;
+            selectedConnection = ConnectionPoint::null;
         }
-        selectedConnection = ConnectionPoint::null;
     }
     else if (connection != selectedConnection)
     {
@@ -135,7 +135,8 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
                 if (connection == selectedConnection)
                 {
                     listItem->setControlLayout
-                            (getConnectionControlsLayout(connections[i]));
+                            (getConnectionControlsLayout(connection));
+	            updateConnectionControls(selectedConnection);
                 }
                 else
                 {

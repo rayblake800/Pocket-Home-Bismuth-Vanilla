@@ -76,6 +76,16 @@ private:
     (const WifiAccessPoint& connection);
 
     /**
+     * Update connection control components to match the current Wifi connection
+     * state and the provided Wifi access point.
+     * 
+     * @param accessPoint
+     */
+    virtual void updateConnectionControls
+    (const WifiAccessPoint& accessPoint) override;
+
+
+    /**
      * When currentlyConnecting, disable Wifi controls and show a loading
      * spinner.  Otherwise, enable controls and hide the loading spinner.
      * 
@@ -136,14 +146,6 @@ private:
      * @param accessPoint
      */
     static String getWifiAssetName(const WifiAccessPoint& accessPoint);
-
-    /**
-     * Update connection control components to match the current Wifi connection
-     * state and the provided Wifi access point.
-     * 
-     * @param accessPoint
-     */
-    void updateControlComponents(const WifiAccessPoint& accessPoint);
 
     /**
      * Reload the access point list, re-select the selected connection, 

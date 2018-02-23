@@ -126,6 +126,16 @@ private:
     getConnectionControlsLayout(const ConnectionPoint& connection) = 0;
 
     /**
+     * Update the connection control components for a given connection.
+     * Call this whenever the selected connection changes state or
+     * is replaced.
+     *
+     * @param connection 
+     */
+    virtual void updateConnectionControls
+    (const ConnectionPoint& connection) = 0;
+    
+    /**
      * Update the connection list when the page is first added to the
      * page stack.
      */
