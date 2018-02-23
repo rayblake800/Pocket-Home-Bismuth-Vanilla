@@ -12,6 +12,17 @@ struct WifiAccessPoint {
     int signalStrength; // 0 to 100
     bool requiresAuth;
     String hash;
+
+    /**
+     * Represents an invalid or missing connection point
+     */
+    static const WifiAccessPoint null;
+    bool operator==(const WifiAccessPoint rhs) const {
+        return hash == rhs.hash;
+    };
+    bool operator!=(const WifiAccessPoint rhs) const {
+        return hash != rhs.hash;
+    };
 };
 
 class WifiStatus {
@@ -21,7 +32,7 @@ public:
 
     struct MissingAccessPointException : public std::exception {
 
-        const char * what() const noexcept{
+        const char * what() const noexcept {
             return "WifiAccessPoint not found";
         }
     };

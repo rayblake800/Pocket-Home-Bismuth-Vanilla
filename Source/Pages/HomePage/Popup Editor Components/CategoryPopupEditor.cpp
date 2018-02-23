@@ -15,7 +15,7 @@ categoryList(categories)
     cancelButton.addListener(this);
     confirmButton.addListener(this);
 
-    std::vector<GridLayoutManager::RowLayoutParams> layout = {
+    GridLayoutManager::Layout layout = {
         {1,
             {
                 {&titleLabel, 1}
@@ -31,7 +31,7 @@ categoryList(categories)
             }}
     };
 
-    layoutManager.addComponents(layout, this);
+    layoutManager.setLayout(layout, this);
     resized();
 }
 

@@ -117,7 +117,7 @@ WifiAccessPoint getNMConnectedAP(NMDeviceWifi *wdev)
     if (!wdev || !ap)
     {
         DBG(__func__ << ": no NMAccessPoint found!");
-        throw new WifiStatus::MissingAccessPointException();
+        throw WifiStatus::MissingAccessPointException();
     }
 
     return createNMWifiAccessPoint(ap);
@@ -266,7 +266,7 @@ WifiAccessPoint WifiStatusNM::connectedAccessPoint() const
 {
     if (!connected)
     {
-        throw new MissingAccessPointException();
+        throw MissingAccessPointException();
     }
 
     return connectedAP;

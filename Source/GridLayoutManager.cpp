@@ -65,15 +65,16 @@ void GridLayoutManager::addComponent(Component * addedComp, int rowIndex,
 }
 
 /**
- * Add a list of components to the layout manager
+ * Set a new Component layout, removing all old layout definitions.
  */
-void GridLayoutManager::addComponents
-(const std::vector<RowLayoutParams>& rows, Component* parentToInit)
+void GridLayoutManager::setLayout
+(const Layout& layout, Component* parentToInit)
 {
-    for (int rowNum = 0; rowNum < rows.size(); rowNum++)
+    clearLayout();
+    for (int rowNum = 0; rowNum < layout.size(); rowNum++)
     {
-        addRow(rows[rowNum].vertWeight);
-        for (const ComponentLayoutParams& compLayout : rows[rowNum].compRow)
+        addRow(layout[rowNum].vertWeight);
+        for (const ComponentLayoutParams& compLayout : layout[rowNum].compRow)
         {
             addComponent(compLayout.comp, rowNum,
                     compLayout.horizWeight, parentToInit);
@@ -89,7 +90,7 @@ void GridLayoutManager::addComponentsToParent(Component* parent)
 {
     for (const Row& row : rows)
     {
-        for(const WeightedCompPtr& compPtr : row.columns)
+        for (const WeightedCompPtr& compPtr : row.columns)
         {
             parent->addAndMakeVisible(compPtr.component);
         }

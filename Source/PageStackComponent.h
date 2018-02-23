@@ -29,6 +29,7 @@ public:
 
     class Page : public Component {
     public:
+        friend class PageStackComponent;
 
         Page() {
         };

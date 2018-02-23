@@ -179,12 +179,10 @@
           <FILE id="kTeYJT" name="IconThread.h" compile="0" resource="0" file="Source/Pages/HomePage/IconThread.h"/>
         </GROUP>
         <GROUP id="{FDCEDC91-C32F-38E5-C05D-83F37D382BE5}" name="Settings Page">
-          <FILE id="gZU56m" name="ConnectionPage.cpp" compile="1" resource="0"
+          <FILE id="gZU56m" name="ConnectionPage.cpp" compile="0" resource="0"
                 file="Source/Pages/Settings Page/ConnectionPage.cpp"/>
           <FILE id="suprkG" name="ConnectionPage.h" compile="0" resource="0"
                 file="Source/Pages/Settings Page/ConnectionPage.h"/>
-          <FILE id="lCxjaY" name="WifiAPPage.cpp" compile="1" resource="0" file="Source/Pages/Settings Page/WifiAPPage.cpp"/>
-          <FILE id="tRa95L" name="WifiAPPage.h" compile="0" resource="0" file="Source/Pages/Settings Page/WifiAPPage.h"/>
           <FILE id="W2VIIg" name="SettingsPage.cpp" compile="1" resource="0"
                 file="Source/Pages/Settings Page/SettingsPage.cpp"/>
           <FILE id="H7JAkN" name="SettingsPage.h" compile="0" resource="0" file="Source/Pages/SettingsPage/SettingsPage.h"/>

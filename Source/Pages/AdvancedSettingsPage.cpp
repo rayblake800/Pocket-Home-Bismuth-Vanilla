@@ -2,7 +2,7 @@
 #include "../PocketHomeApplication.h"
 
 AdvancedSettingsPage::AdvancedSettingsPage() :
-PageComponent("AdvancedSettingsPage",{},true),
+PageComponent("AdvancedSettingsPage",{}, true),
 titleLabel("settings", "Advanced Settings"),
 setPasswordButton("Set your password"),
 removePasswordButton("Remove your password"),
@@ -13,7 +13,7 @@ personalizePage(),
 prevArrow("pageUpIcon.svg"),
 nextArrow("pageDownIcon.svg")
 {
-    setColour(backgroundColourId,Colour(0xffd23c6d));
+    setColour(backgroundColourId, Colour(0xffd23c6d));
     std::vector<Button*> allButtons = getButtonList(true);
     for (Button* button : allButtons)
     {
@@ -28,8 +28,7 @@ AdvancedSettingsPage::~AdvancedSettingsPage() { }
 /**
  * Get pointers to all buttons on the page
  */
-std::vector<Button*>
-AdvancedSettingsPage::getButtonList(bool includeAll)
+std::vector<Button*> AdvancedSettingsPage::getButtonList(bool includeAll)
 {
     std::vector<Button*> buttonList;
     buttonList.push_back(&personalizeButton);
@@ -51,8 +50,7 @@ AdvancedSettingsPage::getButtonList(bool includeAll)
 /**
  * Reloads the page layout settings.
  */
-void
-AdvancedSettingsPage::reloadLayout()
+void AdvancedSettingsPage::reloadLayout()
 {
     setPasswordButton.setButtonText(setPasswordPage.hasPassword() ?
             "Change your password" : "Set your password");
@@ -61,7 +59,7 @@ AdvancedSettingsPage::reloadLayout()
     {
         buttonIndex = 0;
     }
-    std::vector<GridLayoutManager::RowLayoutParams> layout = {
+    GridLayoutManager::Layout layout = {
         {4,
             {
                 {&titleLabel, 1}
@@ -89,8 +87,7 @@ AdvancedSettingsPage::reloadLayout()
 /**
  * Reloads page layout whenever the page becomes visible.
  */
-void
-AdvancedSettingsPage::visibilityChanged()
+void AdvancedSettingsPage::visibilityChanged()
 {
     if (isVisible())
     {
@@ -102,8 +99,7 @@ AdvancedSettingsPage::visibilityChanged()
  * Handle button clicks to open menu pages, close this page, or 
  * scroll the list of page buttons.
  */
-void
-AdvancedSettingsPage::pageButtonClicked(Button * button)
+void AdvancedSettingsPage::pageButtonClicked(Button * button)
 {
     PageStackComponent& mainStack = PocketHomeApplication::getInstance()
             ->getMainStack();

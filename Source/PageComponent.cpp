@@ -2,11 +2,11 @@
 #include "PageComponent.h"
 
 PageComponent::PageComponent(const String& name,
-        std::vector<GridLayoutManager::RowLayoutParams> layout,
+        GridLayoutManager::Layout layout,
         bool showBackButton, bool backButtonOnRight) :
 backButtonOnRight(backButtonOnRight)
 {
-    layoutManager.addComponents(layout);
+    layoutManager.setLayout(layout);
     if (showBackButton)
     {
         backButton = new ConfigurableImageButton(backButtonOnRight ?
@@ -30,11 +30,10 @@ void PageComponent::addAndShowLayoutComponents()
     layoutManager.addComponentsToParent(this);
 }
 
-void PageComponent::updateLayout
-(std::vector<GridLayoutManager::RowLayoutParams> layout)
+void PageComponent::updateLayout(GridLayoutManager::Layout layout)
 {
     layoutManager.clearLayout(true);
-    layoutManager.addComponents(layout, this);
+    layoutManager.setLayout(layout, this);
     if (isVisible())
     {
 

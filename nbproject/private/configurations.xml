@@ -11,6 +11,8 @@
         </df>
       </df>
       <df name="build">
+        <df name="Debug">
+        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -3661,8 +3663,6 @@
             <in>ConnectionSettingsComponent.h</in>
             <in>SettingsPage.cpp</in>
             <in>SettingsPage.h</in>
-            <in>WifiAPPage.cpp</in>
-            <in>WifiAPPage.h</in>
             <in>WifiSettingsComponent.cpp</in>
             <in>WifiSettingsComponent.h</in>
             <in>WifiSettingsPage.cpp</in>

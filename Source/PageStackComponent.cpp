@@ -22,7 +22,7 @@ bool PageStackComponent::Page::isOnPageStack() {
     return pageStack != nullptr;
 }
 
-bool PageStackComponent::Page::removeFromStack(Transition transition) {
+void PageStackComponent::Page::removeFromStack(Transition transition) {
     if(isOnPageStack()){
         if(pageStack->getCurrentPage() == this){
             pageStack->popPage(transition);
@@ -50,6 +50,7 @@ void PageStackComponent::pushPage(Page *page, Transition transition)
     }
     stack.add(page);
     page->pageStack = this;
+    page->pageAddedToStack();
     transitionIn(page, transition, transitionDurationMillis);
 }
 

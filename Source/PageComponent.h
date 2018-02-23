@@ -18,7 +18,7 @@ public:
     };
 
     PageComponent(const String& name = String(),
-            std::vector<GridLayoutManager::RowLayoutParams> layout = {},
+            GridLayoutManager::Layout layout = {},
             bool showBackButton = false,
             bool backButtonOnRight = false);
 
@@ -31,7 +31,7 @@ public:
 protected:
     virtual void pageButtonClicked(Button* button){};
     virtual void pageResized(){};
-    void updateLayout(std::vector<GridLayoutManager::RowLayoutParams> layout);
+    void updateLayout(GridLayoutManager::Layout layout);
     void setMarginFraction(float marginFraction);
     void setPadding(float verticalFraction,float horizontalFraction);
 private:
