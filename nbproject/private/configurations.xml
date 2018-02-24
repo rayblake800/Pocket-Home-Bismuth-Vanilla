@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">

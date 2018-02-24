@@ -62,8 +62,7 @@ FelPage::pageButtonClicked(Button *button)
 {
     if (button == &noButton)
     {
-        PocketHomeApplication::getInstance()->getMainStack().popPage
-                (PageStackComponent::kTransitionTranslateHorizontalLeft);
+        removeFromStack(PageStackComponent::kTransitionTranslateHorizontalLeft);
     }
     else if (button == &yesButton && !debounce)
     {

@@ -86,14 +86,12 @@ PowerPage::startSleepMode()
 /**
  * If the lock screen is visible, this will remove it from the screen.
  */
-void
-PowerPage::hideLockscreen()
+void PowerPage::hideLockscreen()
 {
     if (lockscreen.isShowing())
     {
         removeChildComponent(&lockscreen);
-        PocketHomeApplication::getInstance()
-                ->getMainStack().popPage(PageStackComponent::kTransitionNone);
+        removeFromStack(PageStackComponent::kTransitionNone);
     }
 }
 
@@ -127,10 +125,7 @@ PowerPage::pageButtonClicked(Button *button)
 {
     if (button == &felButton)
     {
-        PageStackComponent& mainStack = PocketHomeApplication::getInstance()
-                ->getMainStack();
-
-        mainStack.pushPage(&felPage,
+        pushPageToStack(&felPage,
                 PageStackComponent::kTransitionTranslateHorizontalLeft);
         return;
     }

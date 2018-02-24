@@ -136,7 +136,7 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
                 {
                     listItem->setControlLayout
                             (getConnectionControlsLayout(connection));
-	            updateConnectionControls(selectedConnection);
+                    updateConnectionControls(selectedConnection);
                 }
                 else
                 {
@@ -244,6 +244,24 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
 };
 
 /**
+ * When connection controls are open, override the back button to close
+ * connection controls instead of closing the page.
+ * 
+ * @return true if connection controls were open when the back button was
+ * clicked.
+ */
+template<class ConnectionPoint>
+bool ConnectionPage<ConnectionPoint>::overrideBackButton()
+{
+    if (selectedConnection == ConnectionPoint::null)
+    {
+        return false;
+    }
+    setSelectedConnection(ConnectionPoint::null);
+    return true;
+}
+
+/**
  * Close connection controls when esc is pressed.
  */
 template<class ConnectionPoint>
@@ -293,7 +311,6 @@ setControlLayout
     detailLayout.insert(detailLayout.begin(), getBasicLayout()[0]);
     listItemLayout.clearLayout(true);
     listItemLayout.setLayout(detailLayout, this);
-    controlLayout = true;
 };
 
 /**
@@ -307,7 +324,6 @@ setBasicLayout()
 {
     listItemLayout.clearLayout(true);
     listItemLayout.setLayout(getBasicLayout(), this);
-    controlLayout = false;
 };
 
 /**
@@ -343,16 +359,8 @@ template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::ConnectionListItem::
 paint(Graphics &g)
 {
-    static Image minimize = createImageFromFile(assetFile("pageUpIcon.svg"));
     g.setColour(findColour(ListBox::ColourIds::backgroundColourId));
     g.drawRoundedRectangle(0, 0, getWidth(), getHeight(), 1, borderWidth);
-    if (controlLayout)
-    {
-        int height = connectionButton->getHeight()/2;
-        g.drawImage(minimize,
-                borderWidth*2, borderWidth*2, height, height,
-                0, 0, minimize.getWidth(), minimize.getHeight());
-    }
 }
 
 /**

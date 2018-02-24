@@ -100,15 +100,13 @@ void HomePage::mouseDown(const MouseEvent &event)
 
 void HomePage::pageButtonClicked(Button * button)
 {
-    PageStackComponent& pageStack = PocketHomeApplication::getInstance()
-            ->getMainStack();
     if (button == &settingsButton)
     {
-        pageStack.pushPage(settingsPage,
+        pushPageToStack(settingsPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     } else if (button == &powerButton)
     {
-        pageStack.pushPage(&powerPage,
+        pushPageToStack(&powerPage,
                 PageStackComponent::kTransitionTranslateHorizontalLeft);
     }
 }

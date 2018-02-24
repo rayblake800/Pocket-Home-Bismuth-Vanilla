@@ -11,7 +11,7 @@
 class WifiSettingsComponent : public ConnectionSettingsComponent, 
         public WifiStatus::Listener {
 public:
-    WifiSettingsComponent();
+    WifiSettingsComponent(std::function<void()> openWifiPage);
     virtual ~WifiSettingsComponent();
 
     void resized() override;

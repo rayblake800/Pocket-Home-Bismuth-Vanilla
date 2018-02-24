@@ -13,8 +13,8 @@
 class ConnectionSettingsComponent : public Component,
 private Button::Listener {
 public:
-    ConnectionSettingsComponent(const String& name = String(),
-            PageComponent* connectionSettingsPage = nullptr);
+    ConnectionSettingsComponent(std::function<void()> openConnectionPage,
+            const String& name = String());
 
     virtual ~ConnectionSettingsComponent();
 
@@ -54,6 +54,6 @@ private:
     SwitchComponent toggle;
     ConnectionButton pageButton;
     StretchableLayoutManager layout;
-    ScopedPointer<PageComponent> connectionSettingsPage;
+    std::function<void()> openConnectionPage;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionSettingsComponent)
 };

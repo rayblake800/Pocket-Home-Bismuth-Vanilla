@@ -4,7 +4,8 @@
 PageComponent::PageComponent(const String& name,
         GridLayoutManager::Layout layout,
         bool showBackButton, bool backButtonOnRight) :
-backButtonOnRight(backButtonOnRight)
+backButtonOnRight(backButtonOnRight),
+backgroundImage(Image::null)
 {
     layoutManager.setLayout(layout);
     if (showBackButton)
@@ -19,17 +20,27 @@ backButtonOnRight(backButtonOnRight)
 
 PageComponent::~PageComponent() { }
 
+/**
+ * Sets a background image to draw behind all page components.
+ */
 void PageComponent::setBackgroundImage(Image bgImage)
 {
-
-    backgroundImage = new Image(bgImage);
+    backgroundImage = bgImage;
 }
 
+/**
+ * Adds all components in the layout to the page and makes them visible.
+ */
 void PageComponent::addAndShowLayoutComponents()
 {
     layoutManager.addComponentsToParent(this);
 }
 
+/**
+ * Replaces the page layout.  All components in the old layout will be
+ * removed from the page before setting the new layout.  Components in
+ * the new layout will be added to the page and made visible.
+ */
 void PageComponent::updateLayout(GridLayoutManager::Layout layout)
 {
     layoutManager.clearLayout(true);
@@ -41,12 +52,19 @@ void PageComponent::updateLayout(GridLayoutManager::Layout layout)
     }
 }
 
+/**
+ * Sets the amount of space to leave between page components and the edges
+ * of the page.
+ */
 void PageComponent::setMarginFraction(float marginFraction)
 {
 
     this->marginFraction = marginFraction;
 }
 
+/**
+ * Sets the amount of space to leave between components in the page layout.
+ */
 void PageComponent::setPadding
 (float verticalFraction, float horizontalFraction)
 {
@@ -55,6 +73,23 @@ void PageComponent::setPadding
     horizontalPadding = horizontalFraction;
 }
 
+/**
+ * Inheriting classes can override this method to change the behavior of the
+ * back button. It will be called every time the back button is clicked, and
+ * if it returns true, the back button will not remove the page.
+ * 
+ * @return true if the back button's action was replaced, false to allow
+ * the back button to remove the page as usual.
+ */
+bool PageComponent::overrideBackButton()
+{
+    return false;
+}
+
+/**
+ * Recalculate component layout and back button bounds when the page is
+ * resized.
+ */
 void PageComponent::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
@@ -72,14 +107,17 @@ void PageComponent::resized()
     pageResized();
 }
 
+/**
+ * Closes the page when the back button is clicked, and passes all other
+ * button clicks to the pageButtonClicked method.
+ */
 void PageComponent::buttonClicked(Button* button)
 {
-    if (button == backButton)
+    if (button == backButton && !overrideBackButton())
     {
-        PocketHomeApplication::getInstance()->getMainStack()
-                .popPage(backButtonOnRight ?
-                    PageStackComponent::kTransitionTranslateHorizontalLeft :
-                    PageStackComponent::kTransitionTranslateHorizontal);
+        removeFromStack(backButtonOnRight ?
+                PageStackComponent::kTransitionTranslateHorizontalLeft :
+                PageStackComponent::kTransitionTranslateHorizontal);
     }
     else
     {
@@ -87,11 +125,14 @@ void PageComponent::buttonClicked(Button* button)
     }
 }
 
+/**
+ * Fills the page background with an image or color.
+ */
 void PageComponent::paint(Graphics& g)
 {
-    if (backgroundImage != nullptr && *backgroundImage != Image::null)
+    if (backgroundImage != Image::null)
     {
-        g.drawImage(*backgroundImage, getLocalBounds().toFloat());
+        g.drawImage(backgroundImage, getLocalBounds().toFloat());
     }
     else
     {

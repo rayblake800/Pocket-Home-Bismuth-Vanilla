@@ -22,7 +22,10 @@ PageComponent("SettingsPage",{
             {&advancedPageButton, 1}
         }}
 }, true),
-wifiCategoryItem(),
+wifiCategoryItem([this]{
+    pushPageToStack(&wifiSettingsPage,
+            PageStackComponent::kTransitionTranslateHorizontal);
+}),
 screenBrightnessSlider("brightnessIconLo.svg", "brightnessIconHi.svg"),
 volumeSlider("volumeIconLo.svg", "volumeIconHi.svg"),
 advancedPageButton("Advanced Settings")
@@ -100,8 +103,7 @@ void SettingsPage::pageButtonClicked(Button *button)
 {
     if (button == &advancedPageButton)
     {
-        PocketHomeApplication::getInstance()->getMainStack().pushPage
-                (&advancedSettingsPage,
+        pushPageToStack(&advancedSettingsPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     }
 }

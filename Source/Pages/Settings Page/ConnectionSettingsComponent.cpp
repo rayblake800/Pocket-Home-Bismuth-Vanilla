@@ -1,10 +1,10 @@
 #include "../../PocketHomeApplication.h"
 #include "ConnectionSettingsComponent.h"
 
-ConnectionSettingsComponent::ConnectionSettingsComponent(const String& name,
-        PageComponent* connectionSettingsPage) :
+ConnectionSettingsComponent::ConnectionSettingsComponent
+(std::function<void() > openConnectionPage, const String& name) :
 Component(name),
-connectionSettingsPage(connectionSettingsPage),
+openConnectionPage(openConnectionPage),
 pageButton(name + "Button")
 {
     toggle.addListener(this);
@@ -64,11 +64,9 @@ void ConnectionSettingsComponent::buttonClicked(Button *b)
     {
         enabledStateChanged(toggle.getToggleState());
     }
-    else if (b == &pageButton && connectionSettingsPage != nullptr)
+    else if (b == &pageButton)
     {
-        PocketHomeApplication::getInstance()->getMainStack().pushPage
-                (connectionSettingsPage,
-                PageStackComponent::kTransitionTranslateHorizontal);
+        openConnectionPage();
     }
 }
 

@@ -25,12 +25,6 @@ PocketHomeApplication* PocketHomeApplication::getInstance()
             (JUCEApplication::getInstance());
 }
 
-PageStackComponent& PocketHomeApplication::getMainStack()
-{
-    return dynamic_cast<MainContentComponent *> 
-            (mainWindow->getContentComponent())->getPageStack();
-}
-
 WifiStatus& PocketHomeApplication::getWifiStatus(){
     return *wifiStatus;
 }

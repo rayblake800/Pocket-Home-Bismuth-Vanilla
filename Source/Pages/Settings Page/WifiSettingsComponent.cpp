@@ -1,9 +1,9 @@
 #include "../../PocketHomeApplication.h"
-#include "WifiSettingsPage.h"
 #include "WifiSettingsComponent.h"
 
-WifiSettingsComponent::WifiSettingsComponent() :
-ConnectionSettingsComponent("wifi", new WifiSettingsPage())
+WifiSettingsComponent::WifiSettingsComponent
+(std::function<void()> openWifiPage) :
+ConnectionSettingsComponent(openWifiPage,"wifi")
 {
     setIcon("wifiIcon.svg");
     bool isEnabled = PocketHomeApplication::getInstance()

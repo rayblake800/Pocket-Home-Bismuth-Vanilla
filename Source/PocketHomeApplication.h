@@ -16,17 +16,11 @@
 #include "PokeLookAndFeel.h"
 #include "Utils.h"
 
-
-
-PageStackComponent &getMainStack();
-
 class PocketHomeApplication : public JUCEApplication {
 public:
     PocketHomeApplication();
 
     static PocketHomeApplication* getInstance();
-
-    PageStackComponent& getMainStack();
 
     WifiStatus& getWifiStatus();
 

@@ -11,6 +11,7 @@
 #include "../../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../../PageComponent.h"
 #include "WifiSettingsComponent.h"
+#include "WifiSettingsPage.h"
 #include "../AdvancedSettingsPage.h"
 
 class SettingsPage : public PageComponent, public Timer,
@@ -33,6 +34,8 @@ private:
     void checkSliders();
     Slider* changingSlider;
     
+    
+    WifiSettingsPage wifiSettingsPage;
     WifiSettingsComponent wifiCategoryItem;
     IconSliderComponent screenBrightnessSlider;
     IconSliderComponent volumeSlider;

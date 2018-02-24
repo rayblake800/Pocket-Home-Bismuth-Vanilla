@@ -161,6 +161,16 @@ private:
      * Handles connection list scrolling and connection selection.
      */
     void pageButtonClicked(Button* button) override;
+    
+        
+    /**
+     * When connection controls are open, override the back button to close
+     * connection controls instead of closing the page.
+     * 
+     * @return true if connection controls were open when the back button was
+     * clicked.
+     */
+    bool overrideBackButton() override;
 
     /**
      * Close connection controls when esc is pressed.
@@ -234,7 +244,6 @@ private:
          */
         void resized() override;
         
-        bool controlLayout = false;
         ScopedPointer<Button> connectionButton;
         GridLayoutManager listItemLayout;
         ConnectionPoint connection;

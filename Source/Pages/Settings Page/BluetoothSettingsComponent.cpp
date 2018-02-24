@@ -5,7 +5,7 @@
 #include "BluetoothSettingsComponent.h"
 
 BluetoothSettingsComponent::BluetoothSettingsComponent()
-: ConnectionSettingsComponent("bluetooth", new BluetoothSettingsPage())
+: ConnectionSettingsComponent([](){})
 {
     setIcon("bluetoothIcon.png");
     updateButtonText();

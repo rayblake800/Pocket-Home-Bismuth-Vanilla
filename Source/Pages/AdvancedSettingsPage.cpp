@@ -101,22 +101,20 @@ void AdvancedSettingsPage::visibilityChanged()
  */
 void AdvancedSettingsPage::pageButtonClicked(Button * button)
 {
-    PageStackComponent& mainStack = PocketHomeApplication::getInstance()
-            ->getMainStack();
     if (button == &setPasswordButton)
     {
-        mainStack.pushPage(&setPasswordPage,
+        pushPageToStack(&setPasswordPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     }
     else if (button == &removePasswordButton
              && removePasswordPage.hasPassword())
     {
-        mainStack.pushPage(&removePasswordPage,
+        pushPageToStack(&removePasswordPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     }
     else if (button == &personalizeButton)
     {
-        mainStack.pushPage(&personalizePage,
+        pushPageToStack(&personalizePage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     }
     else if (button == &nextArrow)
@@ -131,12 +129,12 @@ void AdvancedSettingsPage::pageButtonClicked(Button * button)
     }
     else if (button == &inputOptionsButton)
     {
-        mainStack.pushPage(&inputPage,
+        pushPageToStack(&inputPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     }
     else if (button == &dateTimeButton)
     {
-        mainStack.pushPage(&dateTimePage,
+        pushPageToStack(&dateTimePage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     }
 }
