@@ -79,7 +79,7 @@
 		486C0B21F4A62F43F2E9B928 = {isa = PBXBuildFile; fileRef = F2A74CD1DDE7E42A737C2704; };
 		2E5A883499D05ADC17BD8839 = {isa = PBXBuildFile; fileRef = 304D0037736CD6596C168060; };
 		1F4AD938788C2C305A25D230 = {isa = PBXBuildFile; fileRef = 00F169F4F344BBF6892637D1; };
-		83D0C462E1778219B4E547B8 = {isa = PBXBuildFile; fileRef = 52A081DA6CF9C7769D41ABF9; };
+		59B4D55E662E05C510CCFE06 = {isa = PBXBuildFile; fileRef = DACCF769CF15A1E1FF607885; };
 		D02AD5C23CB79DF8134D22CB = {isa = PBXBuildFile; fileRef = 412DA300D2CD7235934E362F; };
 		FD27B591DCB838F9D3453720 = {isa = PBXBuildFile; fileRef = 2E2C7D43326A4B3E097172C2; };
 		F3BD01E8B7DDAE942CAF6612 = {isa = PBXBuildFile; fileRef = 884315C5A1EC8DB03C7B543B; };
@@ -130,7 +130,6 @@
 		35995EEE8F2F47D969CA315F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = I2CBus.h; path = ../../Source/I2CBus.h; sourceTree = "SOURCE_ROOT"; };
 		3AFA5F91734B84670FC9444C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenuItem.h; path = ../../Source/Pages/HomePage/AppMenuButton/AppMenuItem.h; sourceTree = "SOURCE_ROOT"; };
 		3C575762FF4E78BFA5D8D6D3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesktopEntries.h; path = ../../Source/Pages/HomePage/DesktopEntries.h; sourceTree = "SOURCE_ROOT"; };
-		3CC4D037EC314AAA33636672 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MainComponent.h; path = ../../Source/MainComponent.h; sourceTree = "SOURCE_ROOT"; };
 		3D8BA8E1900EE05677B2CC13 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_events.mm"; path = "../../JuceLibraryCode/include_juce_events.mm"; sourceTree = "SOURCE_ROOT"; };
 		409096AF3FAC19F2F082F497 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PocketHomeApplication.h; path = ../../Source/PocketHomeApplication.h; sourceTree = "SOURCE_ROOT"; };
 		4094CC4F575A5FBF8482C862 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OverlaySpinner.cpp; path = "../../Source/Basic Components/OverlaySpinner.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -145,7 +144,6 @@
 		4C17F2022393F135121A935B = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FelPage.h; path = ../../Source/Pages/FelPage.h; sourceTree = "SOURCE_ROOT"; };
 		4C2B033D0DAAA6309E330DE7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_core.mm"; path = "../../JuceLibraryCode/include_juce_core.mm"; sourceTree = "SOURCE_ROOT"; };
 		4C6BF462E6B138240D0A72CA = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ScrollingAppMenu.h; path = ../../Source/Pages/HomePage/AppMenuComponents/ScrollingAppMenu.h; sourceTree = "SOURCE_ROOT"; };
-		52A081DA6CF9C7769D41ABF9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MainComponent.cpp; path = ../../Source/MainComponent.cpp; sourceTree = "SOURCE_ROOT"; };
 		53B62C37D0EB4AFFFEA70E53 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DateTimePage.cpp; path = ../../Source/Pages/DateTimePage.cpp; sourceTree = "SOURCE_ROOT"; };
 		561902FA100E5691DA65D630 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BluetoothSettingsComponent.h; path = "../../Source/Pages/Settings Page/BluetoothSettingsComponent.h"; sourceTree = "SOURCE_ROOT"; };
 		56BBBA941FA9C00E7C4F239C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BatteryIcon.cpp; path = "../../Source/Pages/HomePage/Info Components/BatteryIcon.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -173,6 +171,7 @@
 		79B5989CA1D876FA28A80EA0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Spinner.h; path = "../../Source/Basic Components/Spinner.h"; sourceTree = "SOURCE_ROOT"; };
 		7E9569E7D94AAE9B40A8E9F6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = ../../Source/Utils.h; sourceTree = "SOURCE_ROOT"; };
 		7F3F3575DDDD2E3D2496A5F7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScalingLabel.cpp; path = "../../Source/Basic Components/ScalingLabel.cpp"; sourceTree = "SOURCE_ROOT"; };
+		7FCF04ED02A52FCC74EBCF69 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PocketHomeWindow.h; path = ../../Source/PocketHomeWindow.h; sourceTree = "SOURCE_ROOT"; };
 		81D682238B383EB3D7010236 = {isa = PBXFileReference; lastKnownFileType = file.nib; name = RecentFilesMenuTemplate.nib; path = RecentFilesMenuTemplate.nib; sourceTree = "SOURCE_ROOT"; };
 		82A855E72BA3EE59702E3A46 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DateTimePage.h; path = ../../Source/Pages/DateTimePage.h; sourceTree = "SOURCE_ROOT"; };
 		838A1FDC1A43D1D0D86FFFD8 = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = "Lato-Regular.ttf"; path = "../../assets/fonts/Lato-Regular.ttf"; sourceTree = "SOURCE_ROOT"; };
@@ -233,6 +232,7 @@
 		D730A48F229DCFAF6D90F329 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = InputSettingsPage.h; path = ../../Source/Pages/InputSettingsPage.h; sourceTree = "SOURCE_ROOT"; };
 		D8560E07699CC6FFA71E9D86 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiSettingsPage.cpp; path = "../../Source/Pages/Settings Page/WifiSettingsPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		DA44E0BF8347BDE272FD5F02 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NewDesktopAppEditor.cpp; path = "../../Source/Pages/HomePage/Popup Editor Components/NewDesktopAppEditor.cpp"; sourceTree = "SOURCE_ROOT"; };
+		DACCF769CF15A1E1FF607885 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PocketHomeWindow.cpp; path = ../../Source/PocketHomeWindow.cpp; sourceTree = "SOURCE_ROOT"; };
 		DFAB7008076B15C9C7CE6D83 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SettingsPage.cpp; path = "../../Source/Pages/Settings Page/SettingsPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		E13F17AC6B1DF7D374865B44 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurableLabel.cpp; path = ../../Source/Configuration/Configurables/ConfigurableLabel.cpp; sourceTree = "SOURCE_ROOT"; };
 		E1C9B94D00D58D835EB3B370 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwitchComponent.h; path = "../../Source/Basic Components/SwitchComponent.h"; sourceTree = "SOURCE_ROOT"; };
@@ -421,8 +421,8 @@
 					304D0037736CD6596C168060,
 					35995EEE8F2F47D969CA315F,
 					00F169F4F344BBF6892637D1,
-					52A081DA6CF9C7769D41ABF9,
-					3CC4D037EC314AAA33636672,
+					DACCF769CF15A1E1FF607885,
+					7FCF04ED02A52FCC74EBCF69,
 					412DA300D2CD7235934E362F,
 					A42B8B8E7D0A64AB1ED7A9AA,
 					2E2C7D43326A4B3E097172C2,
@@ -682,7 +682,7 @@
 					486C0B21F4A62F43F2E9B928,
 					2E5A883499D05ADC17BD8839,
 					1F4AD938788C2C305A25D230,
-					83D0C462E1778219B4E547B8,
+					59B4D55E662E05C510CCFE06,
 					D02AD5C23CB79DF8134D22CB,
 					FD27B591DCB838F9D3453720,
 					F3BD01E8B7DDAE942CAF6612,

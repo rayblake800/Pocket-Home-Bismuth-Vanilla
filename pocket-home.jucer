@@ -261,9 +261,10 @@
       <FILE id="Vgvkvg" name="I2CBus.cpp" compile="1" resource="0" file="Source/I2CBus.cpp"/>
       <FILE id="b2jNEM" name="I2CBus.h" compile="0" resource="0" file="Source/I2CBus.h"/>
       <FILE id="GJ9TER" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="i9KuWR" name="MainComponent.cpp" compile="1" resource="0"
-            file="Source/MainComponent.cpp"/>
-      <FILE id="QHVcKo" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="i9KuWR" name="PocketHomeWindow.cpp" compile="1" resource="0"
+            file="Source/PocketHomeWindow.cpp"/>
+      <FILE id="QHVcKo" name="PocketHomeWindow.h" compile="0" resource="0"
+            file="Source/PocketHomeWindow.h"/>
       <FILE id="GuBz6r" name="PageStackComponent.cpp" compile="1" resource="0"
             file="Source/PageStackComponent.cpp"/>
       <FILE id="QBJM6w" name="PageStackComponent.h" compile="0" resource="0"

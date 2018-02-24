@@ -132,7 +132,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/GridLayoutManager_9f53725e.o \
   $(JUCE_OBJDIR)/I2CBus_f247c82f.o \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
-  $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
+  $(JUCE_OBJDIR)/PocketHomeWindow_a3e5f3ee.o \
   $(JUCE_OBJDIR)/PageStackComponent_8da9db4d.o \
   $(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o \
   $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o \
@@ -485,9 +485,9 @@ $(JUCE_OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
 	@echo "Compiling Main.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o: ../../Source/MainComponent.cpp
+$(JUCE_OBJDIR)/PocketHomeWindow_a3e5f3ee.o: ../../Source/PocketHomeWindow.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling MainComponent.cpp"
+	@echo "Compiling PocketHomeWindow.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PageStackComponent_8da9db4d.o: ../../Source/PageStackComponent.cpp

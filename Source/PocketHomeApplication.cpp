@@ -7,17 +7,15 @@
 // FIXME: this is a hack to fix touch screen presses causing buzzing
 // when no application holds alsa open
 #if JUCE_LINUX
-#include <alsa/asoundlib.h>
+#    include <alsa/asoundlib.h>
 
-#define DEFAULT_BUFFER_SIZE 4096 /*in samples*/
+#    define DEFAULT_BUFFER_SIZE 4096 /*in samples*/
 snd_pcm_t *g_alsa_playback_handle = 0;
 #endif
 
 PocketHomeApplication::PocketHomeApplication() :
 componentConfig(),
-lookAndFeel(componentConfig)
-{
-}
+lookAndFeel(componentConfig) { }
 
 PocketHomeApplication* PocketHomeApplication::getInstance()
 {
@@ -25,19 +23,23 @@ PocketHomeApplication* PocketHomeApplication::getInstance()
             (JUCEApplication::getInstance());
 }
 
-WifiStatus& PocketHomeApplication::getWifiStatus(){
+WifiStatus& PocketHomeApplication::getWifiStatus()
+{
     return *wifiStatus;
 }
 
-BluetoothStatus& PocketHomeApplication::getBluetoothStatus(){
+BluetoothStatus& PocketHomeApplication::getBluetoothStatus()
+{
     return bluetoothStatus;
 }
 
-MainConfigFile& PocketHomeApplication::getConfig(){
+MainConfigFile& PocketHomeApplication::getConfig()
+{
     return configFile;
 }
 
-ComponentConfigFile& PocketHomeApplication::getComponentConfig(){
+ComponentConfigFile& PocketHomeApplication::getComponentConfig()
+{
     return componentConfig;
 }
 
@@ -169,63 +171,12 @@ void PocketHomeApplication::initialise(const String &commandLine)
     }
 
     LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
-    mainWindow = new MainWindow(getApplicationName());
+    homeWindow = new PocketHomeWindow(getApplicationName());
 }
 
 void PocketHomeApplication::shutdown()
 {
-    // Add your application's shutdown code here..
-
-    mainWindow = nullptr; // (deletes our window)
+    homeWindow = nullptr;
 }
 
-void PocketHomeApplication::systemRequestedQuit()
-{
-    // This is called when the app is being asked to quit: you can ignore this
-    // request and let the app carry on running, or call quit() to allow the app to close.
-    quit();
-}
-
-void PocketHomeApplication::anotherInstanceStarted(const String &commandLine)
-{
-    // When another instance of the app is launched while this one is running,
-    // this method is invoked, and the commandLine parameter tells you what
-    // the other instance's command-line arguments were.
-}
-
-
-
-PocketHomeApplication::MainWindow::MainWindow(String name)
-: DocumentWindow(name, Colours::darkgrey, DocumentWindow::allButtons)
-{
-    //Rectangle<int>screenSize=Desktop::getInstance().getDisplays().getMainDisplay().userArea;
-    //setBounds(screenSize);
-    setBounds(10, 10, 480, 272);
-    setWantsKeyboardFocus(false);
-    setUsingNativeTitleBar(true);
-    setResizable(true, false);
-    setLookAndFeel(&LookAndFeel::getDefaultLookAndFeel());
-    setContentOwned(new MainContentComponent(), true);
-    setVisible(true);
-}
-
-void PocketHomeApplication::MainWindow::activeWindowStatusChanged()
-{
-    if (!isActiveWindow())
-    {
-        auto contentComponent = getContentComponent();
-        if (contentComponent)
-        {
-            ((MainContentComponent*) contentComponent)->handleMainWindowInactive();
-        }
-    }
-}
-
-void PocketHomeApplication::MainWindow::closeButtonPressed()
-{
-    // This is called when the user tries to close this window. Here, we'll just
-    // ask the app to quit when this happens, but you can change this to do
-    // whatever you need.
-    JUCEApplication::getInstance()->systemRequestedQuit();
-}
 

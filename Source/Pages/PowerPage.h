@@ -11,7 +11,6 @@
 #include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Basic Components/SwitchComponent.h"
-#include "../MainComponent.h"
 #include "LoginPage.h"
 #include "FelPage.h"
 

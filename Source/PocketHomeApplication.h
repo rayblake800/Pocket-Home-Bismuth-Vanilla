@@ -1,12 +1,11 @@
 /**
  * @file PocketHomeApplication.h
  * 
- * TODO: documentation, organization, combine MainWindow with MainComponent.h
+ * TODO: documentation, organization
  */
 
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MainComponent.h"
 #include "Configuration/MainConfigFile.h"
 #include "Configuration/ComponentConfigFile.h"
 #include "Wifi/WifiStatus.h"
@@ -15,6 +14,7 @@
 #include "BluetoothStatus.h"
 #include "PokeLookAndFeel.h"
 #include "Utils.h"
+#include "PocketHomeWindow.h"
 
 class PocketHomeApplication : public JUCEApplication {
 public:
@@ -52,19 +52,6 @@ private:
     void initialise(const String &commandLine) override;
     void shutdown() override;
 
-    void systemRequestedQuit() override;
-    void anotherInstanceStarted(const String &commandLine) override;
-
-    class MainWindow : public DocumentWindow {
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)
-
-    public:
-        MainWindow(String name);
-
-        void activeWindowStatusChanged() override;
-        void closeButtonPressed() override;
-    };
-
 private:
-    ScopedPointer<MainWindow> mainWindow;
+    ScopedPointer<PocketHomeWindow> homeWindow;
 };
