@@ -17,28 +17,34 @@ void PageStackComponent::resized()
     }
 }
 
-
-bool PageStackComponent::Page::isOnPageStack() {
+bool PageStackComponent::Page::isOnPageStack()
+{
     return pageStack != nullptr;
 }
 
-void PageStackComponent::Page::removeFromStack(Transition transition) {
-    if(isOnPageStack()){
-        if(pageStack->getCurrentPage() == this){
+void PageStackComponent::Page::removeFromStack(Transition transition)
+{
+    if (isOnPageStack())
+    {
+        if (pageStack->getCurrentPage() == this)
+        {
             pageStack->popPage(transition);
-        }else{
+        }
+        else
+        {
             pageStack->stack.removeAllInstancesOf(this);
         }
     }
 }
 
-void PageStackComponent::Page::pushPageToStack(Page* newPage, Transition transition){
+void PageStackComponent::Page::pushPageToStack(Page* newPage, Transition transition)
+{
 
-    if(isOnPageStack() && !newPage->isOnPageStack()){
-        pageStack->pushPage(newPage,transition);
+    if (isOnPageStack() && !newPage->isOnPageStack())
+    {
+        pageStack->pushPage(newPage, transition);
     }
 }
-
 
 void PageStackComponent::pushPage(Page *page, Transition transition)
 {
@@ -54,7 +60,9 @@ void PageStackComponent::pushPage(Page *page, Transition transition)
     transitionIn(page, transition, transitionDurationMillis);
 }
 
-
+/**
+ * Removes the top page from the page stack.
+ */
 void PageStackComponent::popPage(Transition transition)
 {
     if (!stack.isEmpty())
@@ -71,7 +79,17 @@ void PageStackComponent::popPage(Transition transition)
     }
 }
 
-
+/**
+ * The PocketHomeWindow that owns this PageStackComponent uses this method
+ * to notify the PageStackComponent when window focus changes, so that
+ * it can pass the notification on to all pages in the page stack.
+ */
+void PageStackComponent::windowFocusChanged(bool windowFocused) {
+    for(Page* page : stack)
+    {
+        page->windowFocusChanged(windowFocused);
+    }
+}
 
 void PageStackComponent::transitionIn(Page *page, Transition transition,
         int durationMillis, bool reverse)
@@ -93,7 +111,7 @@ void PageStackComponent::transitionIn(Page *page, Transition transition,
             page->setBounds(bounds.translated(bounds.getWidth() * dir, 0));
             animateTranslation(page, 0, 0, 1.0f, durationMillis);
         }
-        break;
+            break;
         default:
         {
             page->setBounds(bounds);
@@ -123,7 +141,7 @@ void PageStackComponent::transitionOut(Page *page, Transition transition,
             animateTranslation(page, bounds.getWidth() * dir, 0, 1.0f, durationMillis);
             break;
         }
-        break;
+            break;
         default:
         {
         }

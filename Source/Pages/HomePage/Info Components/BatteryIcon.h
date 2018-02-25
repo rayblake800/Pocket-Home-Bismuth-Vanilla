@@ -11,9 +11,10 @@
 #pragma once
 #include "../../../Configuration/Configurables/ConfigurableImageComponent.h"
 #include "../../../Configuration/Configurables/ConfigurableLabel.h"
+#include "../../../WindowFocusedTimer.h"
 #include "BatteryMonitor.h"
 
-class BatteryIcon : public Component, private Timer {
+class BatteryIcon : public Component, private WindowFocusedTimer {
 public:
     BatteryIcon();
     virtual ~BatteryIcon();

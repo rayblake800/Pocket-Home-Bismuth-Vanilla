@@ -1,7 +1,7 @@
 /**
  * @file BluetoothStatus.h
  * 
- * TODO: documentation, figure out why bluetooth settings are disabled
+ * TODO: Make this actually do something.
  */
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"

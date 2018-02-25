@@ -3,6 +3,8 @@
  * 
  * DateTimePage is a UI page component that allows the user to change
  * the clock display mode and adjust system time.
+ * 
+ * TODO:documentation
  */
 #pragma once
 #include "../Basic Components/DrawableImageButton.h"
@@ -15,8 +17,17 @@ public:
     DateTimePage();
     ~DateTimePage();
 private:
-    void pageButtonClicked(Button*) override;
-    void comboBoxChanged(ComboBox*) override;
+    /**
+     * 
+     * @param button
+     */
+    void pageButtonClicked(Button* button) override;
+    
+    /**
+     * 
+     * @param comboBox
+     */
+    void comboBoxChanged(ComboBox* comboBox) override;
 
     static const Colour bgColour;
     static const String pageTitle;

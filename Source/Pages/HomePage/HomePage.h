@@ -30,11 +30,6 @@ public:
     virtual ~HomePage();
     
     /**
-     * 
-     */
-    void stopWaitingOnLaunch();
-    
-    /**
      * Add a pop-up editor window to the page.
      * @param editor will be added, made visible, and positioned/scaled as
      * needed.
@@ -71,6 +66,7 @@ private:
     void pageButtonClicked(Button *) override;
     bool keyPressed(const KeyPress &) override;
     void visibilityChanged() override;
+    void windowFocusChanged(bool windowFocus) override;
     void pageResized() override;
 
     AppConfigFile appConfig;

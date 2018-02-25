@@ -8,8 +8,7 @@
 
 HomePage::HomePage() :
 PageComponent("HomePage"),
-Configurable(new MainConfigFile(),
-{
+Configurable(new MainConfigFile(),{
     MainConfigFile::backgroundKey
 }),
 frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
@@ -43,14 +42,7 @@ appMenu(new ScrollingAppMenu(appConfig))
     settingsPage = new SettingsPage();
 }
 
-HomePage::~HomePage()
-{
-}
-
-void HomePage::stopWaitingOnLaunch()
-{
-    appMenu->stopWaitingForLoading();
-}
+HomePage::~HomePage() { }
 
 /**
  * Add a pop-up editor window to the page.
@@ -66,8 +58,6 @@ void HomePage::showPopupEditor(AppMenuPopupEditor* editor)
     }
 }
 
-
-
 void HomePage::loadConfigProperties(ConfigFile* config, String key)
 {
     MainConfigFile mainConf = MainConfigFile();
@@ -79,8 +69,9 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
         {
             setBackgroundImage(Image::null);
             Colour bgColour(background.getHexValue32());
-            setColour(backgroundColourId,bgColour.withAlpha(1.0f));
-        } else
+            setColour(backgroundColourId, bgColour.withAlpha(1.0f));
+        }
+        else
         {
             setBackgroundImage(ImageFileFormat::loadFrom(assetFile(background)));
         }
@@ -92,7 +83,7 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
 
 void HomePage::mouseDown(const MouseEvent &event)
 {
-    if(event.mods.isPopupMenu() || event.mods.isCtrlDown())
+    if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
     {
         appMenu->openPopupMenu(false);
     }
@@ -104,19 +95,19 @@ void HomePage::pageButtonClicked(Button * button)
     {
         pushPageToStack(settingsPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
-    } else if (button == &powerButton)
+    }
+    else if (button == &powerButton)
     {
         pushPageToStack(&powerPage,
                 PageStackComponent::kTransitionTranslateHorizontalLeft);
     }
 }
 
-
 bool HomePage::keyPressed(const KeyPress& key)
 {
     //don't interrupt animation or loading
     if (Desktop::getInstance().getAnimator().isAnimating(appMenu)
-            || appMenu->isLoading())
+        || appMenu->isLoading())
     {
         return true;
     }
@@ -128,6 +119,14 @@ void HomePage::visibilityChanged()
     if (isVisible())
     {
         grabKeyboardFocus();
+    }
+}
+
+void HomePage::windowFocusChanged(bool windowFocus)
+{
+    if (!windowFocus)
+    {
+        appMenu->stopWaitingForLoading();
     }
 }
 

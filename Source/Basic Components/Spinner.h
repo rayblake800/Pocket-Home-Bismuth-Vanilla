@@ -8,9 +8,10 @@
 
 #pragma once
 #include "DrawableImageComponent.h"
+#include "../WindowFocusedTimer.h"
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-class Spinner : public Component, private Timer {
+class Spinner : public Component, private WindowFocusedTimer {
 public:
     /**
      * @param secondsToTimeout sets how many seconds should pass after enabling

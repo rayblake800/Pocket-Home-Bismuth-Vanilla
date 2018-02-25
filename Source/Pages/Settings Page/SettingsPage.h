@@ -10,11 +10,12 @@
 #include "../../Configuration/AppConfigFile.h"
 #include "../../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../../PageComponent.h"
+#include "../../WindowFocusedTimer.h"
 #include "WifiSettingsComponent.h"
 #include "WifiSettingsPage.h"
 #include "../AdvancedSettingsPage.h"
 
-class SettingsPage : public PageComponent, public Timer,
+class SettingsPage : public PageComponent, public WindowFocusedTimer,
         private Slider::Listener {
 public:
     SettingsPage();

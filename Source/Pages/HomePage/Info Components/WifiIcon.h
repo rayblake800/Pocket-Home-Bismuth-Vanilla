@@ -6,9 +6,10 @@
  */
 
 #pragma once
+#include "../../../WindowFocusedTimer.h"
 #include "../../../Configuration/Configurables/ConfigurableImageComponent.h"
 
-class WifiIcon : public ConfigurableImageComponent, private Timer {
+class WifiIcon : public ConfigurableImageComponent, private WindowFocusedTimer {
 public:
     WifiIcon();
     virtual ~WifiIcon();

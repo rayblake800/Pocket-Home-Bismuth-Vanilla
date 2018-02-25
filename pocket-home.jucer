@@ -248,6 +248,23 @@
               file="Source/Wifi/WifiStatusNM.cpp"/>
         <FILE id="eWhlRs" name="WifiStatusNM.h" compile="0" resource="0" file="Source/Wifi/WifiStatusNM.h"/>
       </GROUP>
+      <FILE id="GJ9TER" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="rdg6xk" name="PocketHomeApplication.cpp" compile="1" resource="0"
+            file="Source/PocketHomeApplication.cpp"/>
+      <FILE id="cK501J" name="PocketHomeApplication.h" compile="0" resource="0"
+            file="Source/PocketHomeApplication.h"/>
+      <FILE id="i9KuWR" name="PocketHomeWindow.cpp" compile="1" resource="0"
+            file="Source/PocketHomeWindow.cpp"/>
+      <FILE id="QHVcKo" name="PocketHomeWindow.h" compile="0" resource="0"
+            file="Source/PocketHomeWindow.h"/>
+      <FILE id="GuBz6r" name="PageStackComponent.cpp" compile="1" resource="0"
+            file="Source/PageStackComponent.cpp"/>
+      <FILE id="QBJM6w" name="PageStackComponent.h" compile="0" resource="0"
+            file="Source/PageStackComponent.h"/>
+      <FILE id="xoVLAp" name="PokeLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/PokeLookAndFeel.cpp"/>
+      <FILE id="g1eykD" name="PokeLookAndFeel.h" compile="0" resource="0"
+            file="Source/PokeLookAndFeel.h"/>
       <FILE id="zJPlv7" name="AppLauncher.cpp" compile="1" resource="0" file="Source/AppLauncher.cpp"/>
       <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppLauncher.h"/>
       <FILE id="QfgT5g" name="BluetoothStatus.cpp" compile="1" resource="0"
@@ -260,25 +277,12 @@
             file="Source/GridLayoutManager.h"/>
       <FILE id="Vgvkvg" name="I2CBus.cpp" compile="1" resource="0" file="Source/I2CBus.cpp"/>
       <FILE id="b2jNEM" name="I2CBus.h" compile="0" resource="0" file="Source/I2CBus.h"/>
-      <FILE id="GJ9TER" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="i9KuWR" name="PocketHomeWindow.cpp" compile="1" resource="0"
-            file="Source/PocketHomeWindow.cpp"/>
-      <FILE id="QHVcKo" name="PocketHomeWindow.h" compile="0" resource="0"
-            file="Source/PocketHomeWindow.h"/>
-      <FILE id="GuBz6r" name="PageStackComponent.cpp" compile="1" resource="0"
-            file="Source/PageStackComponent.cpp"/>
-      <FILE id="QBJM6w" name="PageStackComponent.h" compile="0" resource="0"
-            file="Source/PageStackComponent.h"/>
-      <FILE id="rdg6xk" name="PocketHomeApplication.cpp" compile="1" resource="0"
-            file="Source/PocketHomeApplication.cpp"/>
-      <FILE id="cK501J" name="PocketHomeApplication.h" compile="0" resource="0"
-            file="Source/PocketHomeApplication.h"/>
-      <FILE id="xoVLAp" name="PokeLookAndFeel.cpp" compile="1" resource="0"
-            file="Source/PokeLookAndFeel.cpp"/>
-      <FILE id="g1eykD" name="PokeLookAndFeel.h" compile="0" resource="0"
-            file="Source/PokeLookAndFeel.h"/>
       <FILE id="Ury6Cc" name="Utils.cpp" compile="1" resource="0" file="Source/Utils.cpp"/>
       <FILE id="AywA6o" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
+      <FILE id="Nv567Q" name="WindowFocusedTimer.cpp" compile="1" resource="0"
+            file="Source/WindowFocusedTimer.cpp"/>
+      <FILE id="dwyuoT" name="WindowFocusedTimer.h" compile="0" resource="0"
+            file="Source/WindowFocusedTimer.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

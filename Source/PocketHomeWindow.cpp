@@ -2,6 +2,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include "WindowFocusedTimer.h"
 #include "Utils.h"
 #include "PocketHomeWindow.h"
 
@@ -42,7 +43,16 @@ loginPage([this] ()
 
 PocketHomeWindow::~PocketHomeWindow() { }
 
-void PocketHomeWindow::activeWindowStatusChanged() { }
+void PocketHomeWindow::activeWindowStatusChanged() { 
+    if(isActiveWindow()){
+        WindowFocusedTimer::windowFocusGained();
+    }
+    else
+    {
+        WindowFocusedTimer::windowFocusLost();
+    }
+    pageStack.windowFocusChanged(isActiveWindow());
+}
 
 void PocketHomeWindow::closeButtonPressed()
 {
@@ -60,9 +70,3 @@ void PocketHomeWindow::resized()
     pageStack.setBounds(bounds);
     loginPage.setBounds(bounds);
 }
-
-void PocketHomeWindow::handleMainWindowInactive()
-{
-    homePage.stopWaitingOnLaunch();
-}
-

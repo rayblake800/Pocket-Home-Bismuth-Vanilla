@@ -4,16 +4,9 @@
 AppLauncher::AppLauncher() :
 launchFailureCallback([]()
 {
-})
+}) { }
 
-,
-launchTimer(this)
-{
-}
-
-AppLauncher::~AppLauncher()
-{
-}
+AppLauncher::~AppLauncher(){ }
 
 /**
  * Assigns a function to call if loading an application fails.
@@ -61,12 +54,14 @@ void AppLauncher::startOrFocusApp(String appTitle, String command)
                 DBG(String("Found window ") + windowId + String(", focusing app"));
                 focusApp(windowId);
 
-            } else
+            }
+            else
             {
                 DBG("Process exists, but has no window to focus.");
             }
             return;
-        } else
+        }
+        else
         {
             if (appProcess != nullptr)
             {
@@ -78,14 +73,6 @@ void AppLauncher::startOrFocusApp(String appTitle, String command)
 }
 
 /**
- * If there is a timer tracking application launching, cancel it.
- */
-void AppLauncher::stopTimer()
-{
-    launchTimer.stopTimer();
-}
-
-/**
  * Attempt to find an open window of a launched application
  */
 String AppLauncher::getWindowId(ProcessInfo processInfo)
@@ -94,7 +81,7 @@ String AppLauncher::getWindowId(ProcessInfo processInfo)
             [this](String searchTerm)->String
             {
                 StringArray findCmd{"xdotool", "search", "--all"
-                    , "--limit", "1", "--class", searchTerm.toRawUTF8()};
+                                    , "--limit", "1", "--class", searchTerm.toRawUTF8()};
                 DBG(String("Running command:")
                         + findCmd.joinIntoString(" ", 0, -1));
                 ChildProcess findWindow;
@@ -135,8 +122,8 @@ void AppLauncher::startApp(ProcessInfo processInfo)
     {
         runningApps.add(launchApp);
         processMap[processInfo] = launchApp;
-        launchTimer.setTrackedProcess(launchApp);
-        launchTimer.startTimer(AppLaunchTimer::frequency);
+        timedProcess = launchApp;
+        startTimer(timerFrequency);
     }
 }
 
@@ -150,9 +137,7 @@ void AppLauncher::focusApp(const String & windowId)
 }
 
 AppLauncher::ProcessInfo::ProcessInfo(String title, String command) :
-title(title), command(command)
-{
-}
+title(title), command(command) { }
 
 bool AppLauncher::ProcessInfo::operator==(const ProcessInfo& rhs) const
 {
@@ -164,61 +149,36 @@ bool AppLauncher::ProcessInfo::operator<(const ProcessInfo& rhs) const
     return title.compare(rhs.title) < 0;
 }
 
-AppLauncher::AppLaunchTimer::AppLaunchTimer(AppLauncher* launcher) :
-launcher(launcher)
-{
-}
-
-AppLauncher::AppLaunchTimer::~AppLaunchTimer()
-{
-    launcher = nullptr;
-    trackedProcess = nullptr;
-    stopTimer();
-}
-
-void AppLauncher::AppLaunchTimer::setTrackedProcess(ChildProcess * trackedProcess)
-{
-    this->trackedProcess = trackedProcess;
-}
-
-void AppLauncher::AppLaunchTimer::stopTimer()
-{
-    trackedProcess = nullptr;
-    this->Timer::stopTimer();
-}
-
-void AppLauncher::AppLaunchTimer::timerCallback()
+void AppLauncher::timerCallback()
 {
     DBG("AppLaunchTimer callback");
-    if (launcher != nullptr)
+    if (timedProcess != nullptr)
     {
-        if (trackedProcess != nullptr)
+        DBG("tracked process is null");
+        if (timedProcess->isRunning())
         {
-            DBG("tracked process is null");
-            if (trackedProcess->isRunning())
-            {
-                //if the process is still going, wait longer for it to take over
-                //if not, stop waiting on it
-                return;
-            } else
-            {
-                DBG("process dies, show message");
-                String output = trackedProcess->readAllProcessOutput();
-                Array<String> lines = split(output, "\n");
-                output = "";
-                for (int i = lines.size() - 1;
-                        i > lines.size() - 6 && i >= 0; i--)
-                {
-                    output = lines[i] + String("\n") + output;
-                }
-                AlertWindow::showMessageBoxAsync
-                        (AlertWindow::AlertIconType::WarningIcon,
-                        "Couldn't open application", output);
-                trackedProcess = nullptr;
-            }
+            //if the process is still going, wait longer for it to take over
+            //if not, stop waiting on it
+            return;
         }
-        launcher->launchFailureCallback();
+        else
+        {
+            DBG("process dies, show message");
+            String output = timedProcess->readAllProcessOutput();
+            Array<String> lines = split(output, "\n");
+            output = "";
+            for (int i = lines.size() - 1;
+                 i > lines.size() - 6 && i >= 0; i--)
+            {
+                output = lines[i] + String("\n") + output;
+            }
+            AlertWindow::showMessageBoxAsync
+                    (AlertWindow::AlertIconType::WarningIcon,
+                    "Couldn't open application", output);
+            timedProcess = nullptr;
+        }
     }
+    launchFailureCallback();
     stopTimer();
 
 }

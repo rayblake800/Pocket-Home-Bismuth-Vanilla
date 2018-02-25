@@ -74,16 +74,17 @@
 		69CB2357ACB7362893D95012 = {isa = PBXBuildFile; fileRef = 6E51E66485321B6DEE04B498; };
 		6D4F4158F2C91DB092D15A4E = {isa = PBXBuildFile; fileRef = B2D10FD1DCA09407DD81E3D9; };
 		E151EAA3C1E3D229E532EBC9 = {isa = PBXBuildFile; fileRef = 489410AB85E2676944BC6849; };
+		1F4AD938788C2C305A25D230 = {isa = PBXBuildFile; fileRef = 00F169F4F344BBF6892637D1; };
+		FD27B591DCB838F9D3453720 = {isa = PBXBuildFile; fileRef = 2E2C7D43326A4B3E097172C2; };
+		59B4D55E662E05C510CCFE06 = {isa = PBXBuildFile; fileRef = DACCF769CF15A1E1FF607885; };
+		D02AD5C23CB79DF8134D22CB = {isa = PBXBuildFile; fileRef = 412DA300D2CD7235934E362F; };
+		F3BD01E8B7DDAE942CAF6612 = {isa = PBXBuildFile; fileRef = 884315C5A1EC8DB03C7B543B; };
 		F56C0B6711CF29FA08BAF22E = {isa = PBXBuildFile; fileRef = A8C6822B1236AE6932C42BCA; };
 		5039A69B37D5916E2CCDFCBB = {isa = PBXBuildFile; fileRef = 02503CFBE0F0106238CEA286; };
 		486C0B21F4A62F43F2E9B928 = {isa = PBXBuildFile; fileRef = F2A74CD1DDE7E42A737C2704; };
 		2E5A883499D05ADC17BD8839 = {isa = PBXBuildFile; fileRef = 304D0037736CD6596C168060; };
-		1F4AD938788C2C305A25D230 = {isa = PBXBuildFile; fileRef = 00F169F4F344BBF6892637D1; };
-		59B4D55E662E05C510CCFE06 = {isa = PBXBuildFile; fileRef = DACCF769CF15A1E1FF607885; };
-		D02AD5C23CB79DF8134D22CB = {isa = PBXBuildFile; fileRef = 412DA300D2CD7235934E362F; };
-		FD27B591DCB838F9D3453720 = {isa = PBXBuildFile; fileRef = 2E2C7D43326A4B3E097172C2; };
-		F3BD01E8B7DDAE942CAF6612 = {isa = PBXBuildFile; fileRef = 884315C5A1EC8DB03C7B543B; };
 		876CD721D4DE614DAB7AF7EF = {isa = PBXBuildFile; fileRef = 973AF63D6A9528AF7BF1D903; };
+		24ACFF74D515C9F6074AF564 = {isa = PBXBuildFile; fileRef = 963E665DE645D2F66DC03F9E; };
 		F64DEA2D8C5CCF23A79B7462 = {isa = PBXBuildFile; fileRef = FE2AD97F03F339F27E32A12D; };
 		FB61B5D8BD56502B3F710F99 = {isa = PBXBuildFile; fileRef = 4C2B033D0DAAA6309E330DE7; };
 		306B1A12D669B20E720BB38E = {isa = PBXBuildFile; fileRef = EF57F8D59B0C326941BD663E; };
@@ -138,6 +139,7 @@
 		4445098A9DEE1074258375F3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuItemFactory.cpp; path = ../../Source/Pages/HomePage/AppMenuButton/AppMenuItemFactory.cpp; sourceTree = "SOURCE_ROOT"; };
 		489410AB85E2676944BC6849 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiStatusNM.cpp; path = ../../Source/Wifi/WifiStatusNM.cpp; sourceTree = "SOURCE_ROOT"; };
 		49A659CB713C5790E90A52B1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppLauncher.h; path = ../../Source/AppLauncher.h; sourceTree = "SOURCE_ROOT"; };
+		4B31B7C2BBE0EFA46B56B8E6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WindowFocusedTimer.h; path = ../../Source/WindowFocusedTimer.h; sourceTree = "SOURCE_ROOT"; };
 		4B5C62E5D7C1FF4E6640B12F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BatteryMonitor.h; path = "../../Source/Pages/HomePage/Info Components/BatteryMonitor.h"; sourceTree = "SOURCE_ROOT"; };
 		4BB769DA994304C755266267 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DrawableImageButton.cpp; path = "../../Source/Basic Components/DrawableImageButton.cpp"; sourceTree = "SOURCE_ROOT"; };
 		4BF38E82A47A4D109F1B3570 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MainConfigFile.h; path = ../../Source/Configuration/MainConfigFile.h; sourceTree = "SOURCE_ROOT"; };
@@ -193,6 +195,7 @@
 		9457D81CA0A18C8F75178298 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PokeLookAndFeel.h; path = ../../Source/PokeLookAndFeel.h; sourceTree = "SOURCE_ROOT"; };
 		95555D20AEA3DFDA9C2F2E1A = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigurableLabel.h; path = ../../Source/Configuration/Configurables/ConfigurableLabel.h; sourceTree = "SOURCE_ROOT"; };
 		958DCF3E55053B1D4051D178 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LoginPage.h; path = ../../Source/Pages/LoginPage.h; sourceTree = "SOURCE_ROOT"; };
+		963E665DE645D2F66DC03F9E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WindowFocusedTimer.cpp; path = ../../Source/WindowFocusedTimer.cpp; sourceTree = "SOURCE_ROOT"; };
 		973AF63D6A9528AF7BF1D903 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Utils.cpp; path = ../../Source/Utils.cpp; sourceTree = "SOURCE_ROOT"; };
 		9EED56C9F5901338525A6D85 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FolderMenuItem.h; path = "../../Source/Pages/HomePage/AppMenuButton/MenuItem Types/FolderMenuItem.h"; sourceTree = "SOURCE_ROOT"; };
 		A160884BC3750646A234AC33 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BluetoothSettingsPage.h; path = "../../Source/Pages/Settings Page/BluetoothSettingsPage.h"; sourceTree = "SOURCE_ROOT"; };
@@ -412,6 +415,15 @@
 					A97F6D4D0C68ACC50A214162,
 					2C6EB5C34648D0ED406443A4,
 					FCAE40D7F9CB5383DE0C8EEB,
+					00F169F4F344BBF6892637D1,
+					2E2C7D43326A4B3E097172C2,
+					409096AF3FAC19F2F082F497,
+					DACCF769CF15A1E1FF607885,
+					7FCF04ED02A52FCC74EBCF69,
+					412DA300D2CD7235934E362F,
+					A42B8B8E7D0A64AB1ED7A9AA,
+					884315C5A1EC8DB03C7B543B,
+					9457D81CA0A18C8F75178298,
 					A8C6822B1236AE6932C42BCA,
 					49A659CB713C5790E90A52B1,
 					02503CFBE0F0106238CEA286,
@@ -420,17 +432,10 @@
 					5F58DE7F81CB571E598BB78B,
 					304D0037736CD6596C168060,
 					35995EEE8F2F47D969CA315F,
-					00F169F4F344BBF6892637D1,
-					DACCF769CF15A1E1FF607885,
-					7FCF04ED02A52FCC74EBCF69,
-					412DA300D2CD7235934E362F,
-					A42B8B8E7D0A64AB1ED7A9AA,
-					2E2C7D43326A4B3E097172C2,
-					409096AF3FAC19F2F082F497,
-					884315C5A1EC8DB03C7B543B,
-					9457D81CA0A18C8F75178298,
 					973AF63D6A9528AF7BF1D903,
-					7E9569E7D94AAE9B40A8E9F6, ); name = Source; sourceTree = "<group>"; };
+					7E9569E7D94AAE9B40A8E9F6,
+					963E665DE645D2F66DC03F9E,
+					4B31B7C2BBE0EFA46B56B8E6, ); name = Source; sourceTree = "<group>"; };
 		724F7C53A0798F4669298BFC = {isa = PBXGroup; children = (
 					8276413844176736FBBD93FD,
 					60F3A7B8686F8757E46AB3EA, ); name = "pocket-home"; sourceTree = "<group>"; };
@@ -677,16 +682,17 @@
 					69CB2357ACB7362893D95012,
 					6D4F4158F2C91DB092D15A4E,
 					E151EAA3C1E3D229E532EBC9,
+					1F4AD938788C2C305A25D230,
+					FD27B591DCB838F9D3453720,
+					59B4D55E662E05C510CCFE06,
+					D02AD5C23CB79DF8134D22CB,
+					F3BD01E8B7DDAE942CAF6612,
 					F56C0B6711CF29FA08BAF22E,
 					5039A69B37D5916E2CCDFCBB,
 					486C0B21F4A62F43F2E9B928,
 					2E5A883499D05ADC17BD8839,
-					1F4AD938788C2C305A25D230,
-					59B4D55E662E05C510CCFE06,
-					D02AD5C23CB79DF8134D22CB,
-					FD27B591DCB838F9D3453720,
-					F3BD01E8B7DDAE942CAF6612,
 					876CD721D4DE614DAB7AF7EF,
+					24ACFF74D515C9F6074AF564,
 					F64DEA2D8C5CCF23A79B7462,
 					FB61B5D8BD56502B3F710F99,
 					306B1A12D669B20E720BB38E,

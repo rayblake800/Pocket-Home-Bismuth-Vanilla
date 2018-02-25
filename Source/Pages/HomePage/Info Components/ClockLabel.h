@@ -7,9 +7,10 @@
 
 #pragma once
 #include "../../../../JuceLibraryCode/JuceHeader.h"
+#include "../../../WindowFocusedTimer.h"
 #include "../../../Configuration/Configurables/ConfigurableLabel.h"
 
-class ClockLabel : public ConfigurableLabel, private Timer{
+class ClockLabel : public ConfigurableLabel, private WindowFocusedTimer{
 public:
     ClockLabel();
     ~ClockLabel();
