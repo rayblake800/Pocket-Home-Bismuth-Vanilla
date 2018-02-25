@@ -1,35 +1,28 @@
 #include "AppConfigFile.h"
 #include "../Utils.h"
 
+Array<AppConfigFile::AppItem> AppConfigFile::favoriteApps;
+Array<AppConfigFile::AppFolder> AppConfigFile::categoryFolders;
+CriticalSection AppConfigFile::appConfigLock;
+
 AppConfigFile::AppConfigFile() : ConfigFile(filenameConst)
 {
-    const ScopedLock readLock(lock);
-    File configFile = File(getHomePath() + String(CONFIG_PATH) + filename);
-    var jsonConfig = JSON::parse(configFile);
-    var defaultConfig = var::null;
-    readDataFromJson(jsonConfig, defaultConfig);
-    writeChanges();
+    if (!fileOpened())
+    {
+        const ScopedLock readLock(appConfigLock);
+        var jsonConfig = openFile();
+        var defaultConfig = var::null;
+        readDataFromJson(jsonConfig, defaultConfig);
+        writeChanges();
+    }
 }
 
-AppConfigFile::~AppConfigFile()
-{
-}
+AppConfigFile::~AppConfigFile() { }
 
-Array<String> AppConfigFile::getStringKeys() const
-{
-    return Array<String>();
-}
-
-Array<String> AppConfigFile::getBoolKeys() const
-{
-    return Array<String>();
-}
 
 //########################### Application Data #################################
 
-AppConfigFile::AppItem::AppItem()
-{
-}
+AppConfigFile::AppItem::AppItem() { }
 
 AppConfigFile::AppItem::AppItem(var jsonObj)
 {
@@ -62,7 +55,7 @@ bool AppConfigFile::AppItem::operator==(const AppItem& rhs) const
  */
 Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 {
-    const ScopedLock readLock(lock);
+    const ScopedLock readLock(appConfigLock);
     return favoriteApps;
 }
 
@@ -72,9 +65,9 @@ Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 void AppConfigFile::addFavoriteApp
 (AppItem newApp, int index, bool writeChangesNow)
 {
-    const ScopedLock changeLock(lock);
+    const ScopedLock changeLock(appConfigLock);
     favoriteApps.insert(index, newApp);
-    changesPending = true;
+    markPendingChanges();
     if (writeChangesNow)
     {
         writeChanges();
@@ -86,11 +79,11 @@ void AppConfigFile::addFavoriteApp
  */
 void AppConfigFile::removeFavoriteApp(int index, bool writeChangesNow)
 {
-    const ScopedLock changeLock(lock);
+    const ScopedLock changeLock(appConfigLock);
     if (index >= 0 && index < favoriteApps.size())
     {
         favoriteApps.remove(index);
-        changesPending = true;
+        markPendingChanges();
         if (writeChangesNow)
         {
             writeChanges();
@@ -108,9 +101,7 @@ int AppConfigFile::getFavoriteIndex(AppItem toFind)
 
 //######################### Folder/Category Data ###############################
 
-AppConfigFile::AppFolder::AppFolder()
-{
-}
+AppConfigFile::AppFolder::AppFolder() { }
 
 AppConfigFile::AppFolder::AppFolder(var jsonObj, int index)
 {
@@ -155,7 +146,7 @@ bool AppConfigFile::AppFolder::operator==(const AppFolder& rhs) const
  */
 Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 {
-    const ScopedLock readLock(lock);
+    const ScopedLock readLock(appConfigLock);
     return categoryFolders;
 }
 
@@ -165,9 +156,9 @@ Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 void AppConfigFile::addAppFolder
 (AppFolder newFolder, int index, bool writeChangesNow)
 {
-    const ScopedLock changeLock(lock);
+    const ScopedLock changeLock(appConfigLock);
     categoryFolders.insert(index, newFolder);
-    changesPending = true;
+    markPendingChanges();
     if (writeChangesNow)
     {
         writeChanges();
@@ -180,9 +171,9 @@ void AppConfigFile::addAppFolder
 void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
 {
     int size = categoryFolders.size();
-    const ScopedLock changeLock(lock);
+    const ScopedLock changeLock(appConfigLock);
     categoryFolders.remove(index);
-    changesPending = true;
+    markPendingChanges();
     if (writeChangesNow)
     {
         writeChanges();
@@ -254,4 +245,9 @@ void AppConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
     }
     jsonObj->setProperty(FAVORITES_KEY, favoriteArray);
     jsonObj->setProperty(FOLDERS_KEY, categoryArray);
+}
+
+std::vector<ConfigFile::DataKey> AppConfigFile::getDataKeys() const
+{
+    return {};
 }

@@ -1,6 +1,6 @@
 #include "../Utils.h"
 #include "../PokeLookAndFeel.h"
-#include "../PocketHomeApplication.h"
+#include "../Configuration/MainConfigFile.h"
 #include "../I2CBus.h"
 #include "FelPage.h"
 
@@ -42,7 +42,7 @@ noButton("No"),
 infoLine2("infoLine2", "For instructions, visit pcflash.getchip.com")
 {
     //TODO: configurable page backgrounds
-    setColour(backgroundColourId,Colours::black);
+    setColour(backgroundColourId, Colours::black);
     infoLine1.setJustificationType(Justification::centred);
     infoLine2.setJustificationType(Justification::centred);
     yesButton.addListener(this);
@@ -72,10 +72,10 @@ FelPage::pageButtonClicked(Button *button)
             I2CBus i2c;
             i2c.enableFelMode();
             ChildProcess c;
-            c.start(PocketHomeApplication::getInstance()->getConfig()
-                    .getConfigString(MainConfigFile::restartCommandKey));
+            MainConfigFile config;
+            c.start(config.getConfigValue<String>
+                    (MainConfigFile::restartCommandKey));
             c.waitForProcessToFinish(10000);
-
         }
         catch (I2CBus::I2CException e)
         {

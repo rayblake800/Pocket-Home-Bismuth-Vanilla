@@ -6,10 +6,11 @@ WifiSettingsComponent::WifiSettingsComponent
 ConnectionSettingsComponent(openWifiPage,"wifi")
 {
     setIcon("wifiIcon.svg");
-    bool isEnabled = PocketHomeApplication::getInstance()
-            ->getWifiStatus().isEnabled();
-    setPageButtonEnabled(isEnabled);
-    setToggleState(isEnabled);
+    WifiStatus& status = 
+    PocketHomeApplication::getInstance()->getWifiStatus();
+    status.addListener(this);
+    setPageButtonEnabled(status.isEnabled());
+    setToggleState(status.isEnabled());
     addChildComponent(spinner);
     updateButtonText();
 }

@@ -1,15 +1,12 @@
 #include "../../../Configuration/ComponentConfigFile.h"
-#include "../../../PocketHomeApplication.h"
 #include "ClockLabel.h"
 
 ClockLabel::ClockLabel() :
-ConfigurableLabel(ComponentConfigFile::clockLabelKey, "clockLabel", "00:00"),
-use24HrMode(false)
+ConfigurableLabel(ComponentConfigFile::clockLabelKey, "clockLabel", "00:00")
 {
-    ComponentConfigFile& config =
-            PocketHomeApplication::getInstance()->getComponentConfig();
-    config.registerConfigurable(this,{
-        ComponentConfigFile::showClockKey, ComponentConfigFile::use24HrModeKey
+    ComponentConfigFile config;
+    addTrackedKeys({
+        ComponentConfigFile::use24HrModeKey, ComponentConfigFile::showClockKey
     });
     setJustificationType(Justification::centredRight);
     loadAllConfigProperties();
@@ -51,47 +48,64 @@ void ClockLabel::visibilityChanged()
 {
     if (isVisible())
     {
-        if (!isTimerRunning())
+        ComponentConfigFile config;
+        if (!config.getConfigValue<bool>(ComponentConfigFile::showClockKey))
+        {
+            setAlpha(0);
+            stopTimer();
+        }
+        else if (!isTimerRunning())
         {
             startTimer(1);
         }
 
-    } else
+    }
+    else
     {
         stopTimer();
     }
 }
 
-
 /**
  * Receives notification whenever clock configuration values change
  */
-void ClockLabel::loadConfigProperties(ConfigFile * config, String key)
+void ClockLabel::loadConfigProperties(ConfigFile* config, String key)
 {
-    ComponentConfigFile * componentConfig =
-            static_cast<ComponentConfigFile*> (config);
-    if (key == ComponentConfigFile::showClockKey)
+    ComponentConfigFile* componentConfig =
+            dynamic_cast<ComponentConfigFile*> (config);
+    if (componentConfig != nullptr)
     {
-        bool visible = componentConfig->getConfigBool
-                (ComponentConfigFile::showClockKey);
-        MessageManager::callAsync([this, visible]
+        if (key == ComponentConfigFile::showClockKey)
         {
-            setAlpha(visible ? 1 : 0);
-            if (visible && !isTimerRunning())
+            bool visible = componentConfig->getConfigValue<bool>
+                    (ComponentConfigFile::showClockKey);
+            MessageManager::callAsync([this, visible]
             {
-                startTimer(1);
-            } else if (!visible && isTimerRunning())
+                setAlpha(visible ? 1 : 0);
+                if (visible && !isTimerRunning())
+                {
+                    startTimer(1);
+                }
+                else if (!visible && isTimerRunning())
+                {
+                    stopTimer();
+                }
+            });
+        }
+        else if (key == ComponentConfigFile::use24HrModeKey)
+        {
+            use24HrMode = componentConfig->getConfigValue<bool>
+                    (ComponentConfigFile::use24HrModeKey);
+            if (isVisible() && getAlpha() != 0)
             {
                 stopTimer();
+                startTimer(1);
             }
-        });
-    } else if (key == ComponentConfigFile::use24HrModeKey)
-    {
-        use24HrMode = componentConfig->getConfigBool
-                (ComponentConfigFile::use24HrModeKey);
-    } else
-    {
-        this->ConfigurableLabel::loadConfigProperties(config, key);
+        }
+        else
+        {
+            ConfigurableLabel::loadConfigProperties(config, key);
+        }
     }
 }
 

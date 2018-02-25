@@ -1,14 +1,14 @@
 #include "../../Configuration/Configurables/ConfigurableImageComponent.h"
+#include "../../Configuration/MainConfigFile.h"
 #include "../../PokeLookAndFeel.h"
 #include "../../Utils.h"
-#include "../../PocketHomeApplication.h"
 #include "AppMenuComponents/PagedAppMenu.h"
 #include "AppMenuComponents/ScrollingAppMenu.h"
 #include "HomePage.h"
 
 HomePage::HomePage() :
 PageComponent("HomePage"),
-Configurable(&PocketHomeApplication::getInstance()->getConfig(),
+Configurable(new MainConfigFile(),
 {
     MainConfigFile::backgroundKey
 }),
@@ -68,12 +68,12 @@ void HomePage::showPopupEditor(AppMenuPopupEditor* editor)
 
 
 
-void HomePage::loadConfigProperties(ConfigFile * config, String key)
+void HomePage::loadConfigProperties(ConfigFile* config, String key)
 {
-    MainConfigFile& mainConf = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile mainConf = MainConfigFile();
     if (mainConf == *config && key == MainConfigFile::backgroundKey)
     {
-        String background = mainConf.getConfigString
+        String background = mainConf.getConfigValue<String>
                 (MainConfigFile::backgroundKey);
         if (background.containsOnly("0123456789ABCDEFXabcdefx"))
         {

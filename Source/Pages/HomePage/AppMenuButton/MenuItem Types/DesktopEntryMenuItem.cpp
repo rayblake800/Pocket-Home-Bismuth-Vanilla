@@ -1,5 +1,5 @@
 #include "../../../../Utils.h"
-#include "../../../../PocketHomeApplication.h"
+#include "../../../../Configuration/MainConfigFile.h"
 #include "DesktopEntryMenuItem.h"
 
 DesktopEntryMenuItem::DesktopEntryMenuItem(DesktopEntry desktopEntry)
@@ -31,9 +31,8 @@ String DesktopEntryMenuItem::getCommand() const
     String command = desktopEntry.getValue(DesktopEntry::exec);
     if (desktopEntry.getValue(DesktopEntry::terminal))
     {
-        MainConfigFile& config = PocketHomeApplication::getInstance()
-                ->getConfig();
-        command = config.getConfigString
+        MainConfigFile config;
+        command = config.getConfigValue<String>
                 (MainConfigFile::termLaunchCommandKey) + String(" ") + command;
     }
     return command;

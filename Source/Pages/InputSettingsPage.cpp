@@ -1,4 +1,5 @@
-#include "../PocketHomeApplication.h"
+#include "../Configuration/MainConfigFile.h"
+#include "../PokeLookAndFeel.h"
 #include "../AppLauncher.h"
 #include "InputSettingsPage.h"
 
@@ -33,8 +34,8 @@ cursorVisible("cursorvisible", "Select the visibility of the cursor:")
     choosemode.addItem("Not visible", 1);
     choosemode.addItem("Visible", 2);
     choosemode.addListener(this);
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
-    if (config.getConfigBool(MainConfigFile::showCursorKey))
+    MainConfigFile config;
+    if (config.getConfigValue<bool>(MainConfigFile::showCursorKey))
     {
         choosemode.setSelectedId(2);
     }
@@ -61,12 +62,16 @@ void InputSettingsPage::pageButtonClicked(Button* button)
 void InputSettingsPage::comboBoxChanged(ComboBox* c)
 {
     if (c != &choosemode) return;
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile config;
     bool cursorVisible = (c->getSelectedId() == 2);
-    config.setConfigBool(MainConfigFile::showCursorKey, cursorVisible);
+    config.setConfigValue<bool>(MainConfigFile::showCursorKey, cursorVisible);
 
-    LookAndFeel& laf = getLookAndFeel();
-    PokeLookAndFeel* mc = (PokeLookAndFeel*) & laf;
-    mc->setCursorVisible(cursorVisible);
+    LookAndFeel& lookAndFeel = getLookAndFeel();
+    PokeLookAndFeel* customLookAndFeel =
+            dynamic_cast<PokeLookAndFeel*> (&lookAndFeel);
+    if (customLookAndFeel != nullptr)
+    {
+        customLookAndFeel->setCursorVisible(cursorVisible);
+    }
 }
 

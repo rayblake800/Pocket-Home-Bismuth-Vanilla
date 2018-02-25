@@ -5,6 +5,7 @@
  */
 #pragma once
 #include "../Configuration/Configurables/ConfigurableImageButton.h"
+#include "../Basic Components/ScalingLabel.h"
 #include "../PageComponent.h"
 class InputSettingsPage: public PageComponent, private ComboBox::Listener{
 public:

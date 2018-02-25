@@ -1,40 +1,40 @@
 #include "MainConfigFile.h"
 #include "../Utils.h"
 
+CriticalSection MainConfigFile::mainConfigLock;
+
 MainConfigFile::MainConfigFile() : ConfigFile(filenameConst)
 {
-    const ScopedLock readLock(lock);
-    File configFile = File(getHomePath() + String(CONFIG_PATH) + filename);
-    var jsonConfig = JSON::parse(configFile);
-    var defaultConfig = var::null;
-    readDataFromJson(jsonConfig, defaultConfig);
-    writeChanges();
+    if (!fileOpened())
+    {
+        const ScopedLock readLock(mainConfigLock);
+        var jsonConfig = openFile();
+        var defaultConfig = var::null;
+        readDataFromJson(jsonConfig, defaultConfig);
+        writeChanges();
+    }
 }
 
-MainConfigFile::~MainConfigFile()
-{
-}
+MainConfigFile::~MainConfigFile() { }
 
-//############################ String Data #####################################
+//string
 const String MainConfigFile::backgroundKey = "background";
 const String MainConfigFile::menuTypeKey = "app menu type";
 const String MainConfigFile::shutdownCommandKey = "shutdown command";
 const String MainConfigFile::restartCommandKey = "restart command";
 const String MainConfigFile::sleepCommandKey = "sleep command";
 const String MainConfigFile::termLaunchCommandKey = "terminal launch command";
-
-Array<String> MainConfigFile::getStringKeys() const
-{
-    return {backgroundKey,
-        menuTypeKey,
-        shutdownCommandKey,
-        restartCommandKey,
-        termLaunchCommandKey};
-}
-//############################ Boolean Data ####################################
+//boolean
 const String MainConfigFile::showCursorKey = "cursor";
 
-Array<String> MainConfigFile::getBoolKeys() const
+std::vector<ConfigFile::DataKey> MainConfigFile::getDataKeys() const
 {
-    return {showCursorKey};
+    return {
+        {backgroundKey, stringType},
+        {menuTypeKey, stringType},
+        {shutdownCommandKey, stringType},
+        {restartCommandKey, stringType},
+        {termLaunchCommandKey, stringType},
+        {showCursorKey, boolType}};
 }
+

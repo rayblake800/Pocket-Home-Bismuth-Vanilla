@@ -13,9 +13,7 @@
 snd_pcm_t *g_alsa_playback_handle = 0;
 #endif
 
-PocketHomeApplication::PocketHomeApplication() :
-componentConfig(),
-lookAndFeel(componentConfig) { }
+PocketHomeApplication::PocketHomeApplication() { }
 
 PocketHomeApplication* PocketHomeApplication::getInstance()
 {
@@ -31,16 +29,6 @@ WifiStatus& PocketHomeApplication::getWifiStatus()
 BluetoothStatus& PocketHomeApplication::getBluetoothStatus()
 {
     return bluetoothStatus;
-}
-
-MainConfigFile& PocketHomeApplication::getConfig()
-{
-    return configFile;
-}
-
-ComponentConfigFile& PocketHomeApplication::getComponentConfig()
-{
-    return componentConfig;
 }
 
 const String PocketHomeApplication::getApplicationName()

@@ -1,7 +1,7 @@
 
 #include <numeric>
+#include "../Configuration/MainConfigFile.h"
 #include "../Utils.h"
-#include "../PocketHomeApplication.h"
 #include "../PokeLookAndFeel.h"
 #include "PowerPage.h"
 
@@ -135,17 +135,17 @@ PowerPage::pageButtonClicked(Button *button)
         return;
     }
     ChildProcess commandProcess;
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile config;
     if (button == &powerOffButton)
     {
         showPowerSpinner();
-        commandProcess.start(config.getConfigString
+        commandProcess.start(config.getConfigValue<String>
                 (MainConfigFile::shutdownCommandKey));
     }
     else if (button == &rebootButton)
     {
         showPowerSpinner();
-        commandProcess.start(config.getConfigString
+        commandProcess.start(config.getConfigValue<String>
                 (MainConfigFile::restartCommandKey));
     }
     commandProcess.waitForProcessToFinish(10000);

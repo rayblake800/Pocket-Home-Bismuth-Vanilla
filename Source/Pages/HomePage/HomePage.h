@@ -48,7 +48,7 @@ protected:
      * @param config should be the MainConfigFile
      * @param key should be the background key
      */
-    void loadConfigProperties(ConfigFile * config, String key);
+    void loadConfigProperties(ConfigFile* config, String key);
 private:    
    
     /**

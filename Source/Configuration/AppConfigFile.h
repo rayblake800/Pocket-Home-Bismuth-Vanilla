@@ -11,8 +11,6 @@ public:
     AppConfigFile();
     virtual ~AppConfigFile();
 
-    Array<String> getStringKeys() const;
-    Array<String> getBoolKeys() const;
     //######################### Application Data ###############################
 
     /**
@@ -122,9 +120,12 @@ private:
      * Copy all config data to a json object
      */
     void copyDataToJson(DynamicObject::Ptr jsonObj) override final;
-
-    Array<AppItem> favoriteApps;
-    Array<AppFolder> categoryFolders;
+    
+    std::vector<DataKey> getDataKeys() const;
+    
+    static Array<AppItem> favoriteApps;
+    static Array<AppFolder> categoryFolders;
+    static CriticalSection appConfigLock;
     static constexpr const char* filenameConst = "apps.json";
     static constexpr const char* FAVORITES_KEY = "favorites";
     static constexpr const char* FOLDERS_KEY = "folders";

@@ -24,6 +24,7 @@ public:
 
     /**
      * Find a Component ColourId value from its String key
+     * 
      * @param colourKey the key for a color value in colourIds
      * @return the corresponding ColourId value, or -1 if colourKey wasn't
      * found.
@@ -79,10 +80,6 @@ public:
      */
     class ComponentSettings {
     public:
-
-        /**
-         * Initializes the object with all empty/zero values
-         */
         ComponentSettings();
         
         /**
@@ -138,22 +135,10 @@ protected:
     Array<String> getComponentKeys();
     
     /**
-     * @return the list of key Strings for each integer value tracked in 
+     * @return the list of key Strings for each basic data value tracked in 
      * components.json
      */
-    virtual Array<String> getIntKeys() const override;
-    
-    /**
-     * @return the list of key Strings for each String value tracked in 
-     * components.json
-     */
-    virtual Array<String> getStringKeys() const override;
-    
-    /**
-     * @return the list of key Strings for each boolean value tracked in 
-     * components.json
-     */
-    virtual Array<String> getBoolKeys() const override;
+    virtual std::vector<DataKey> getDataKeys() const override;
     
 private:
 
@@ -173,7 +158,7 @@ private:
      */
     void copyDataToJson(DynamicObject::Ptr jsonObj) override final;
 
-    std::map<String, ComponentSettings> components;
-
+    static CriticalSection componentLock;
+    static std::map<String, ComponentSettings> components;
     static constexpr const char* filenameConst = "components.json";
 };

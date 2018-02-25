@@ -1,4 +1,4 @@
-#include "PocketHomeApplication.h"
+#include "Configuration/ComponentConfigFile.h"
 #include "PageComponent.h"
 
 PageComponent::PageComponent(const String& name,

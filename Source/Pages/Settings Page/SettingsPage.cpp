@@ -67,8 +67,6 @@ advancedPageButton("Advanced Settings")
         volume = newVol.getIntValue();
     }
 #endif
-    PocketHomeApplication::getInstance()
-            ->getWifiStatus().addListener(&wifiCategoryItem);
     screenBrightnessSlider.setValue(brightness);
     screenBrightnessSlider.addListener(this);
     volumeSlider.setValue(volume);

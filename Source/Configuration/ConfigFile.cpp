@@ -2,14 +2,46 @@
 #include "ConfigFile.h"
 #include "Configurables/Configurable.h"
 
-/**
- *TODO: There must be a better way to manage types than to have near-identical
- * getter/setter methods for each type.  See if there's some template trick
- * to make this a little less repetitive.
- */
+template<> std::map<String, int>& ConfigFile::getMapReference<int>()
+{
+    const ScopedLock lockFileMaps(configLock);
+    return intValues[filename];
+}
+
+template<> std::map<String, String>& ConfigFile::getMapReference<String>()
+{
+    const ScopedLock lockFileMaps(configLock);
+    return stringValues[filename];
+}
+
+template<> std::map<String, bool>& ConfigFile::getMapReference<bool>()
+{
+    const ScopedLock lockFileMaps(configLock);
+    return boolValues[filename];
+}
+
+CriticalSection ConfigFile::configLock;
+std::map<String, CriticalSection> ConfigFile::fileLocks;
+std::map<String, bool> ConfigFile::openFileMap;
+std::map<String, bool> ConfigFile::fileChangesPending;
+std::map<String, std::map<String, int>> ConfigFile::intValues;
+std::map<String, std::map<String, String>> ConfigFile::stringValues;
+std::map<String, std::map<String, bool>> ConfigFile::boolValues;
+std::map<String, std::map<String, Array<Configurable*>>>
+ConfigFile::configured;
 
 ConfigFile::ConfigFile(String configFilename) : filename(configFilename)
 {
+    const ScopedLock changeLock(configLock);
+    if (fileChangesPending.count(filename) == 0)
+    {
+        fileChangesPending[filename] = false;
+    }
+
+    if (fileChangesPending.count(filename) == 0)
+    {
+        openFileMap[filename] = false;
+    }
 }
 
 /**
@@ -17,7 +49,7 @@ ConfigFile::ConfigFile(String configFilename) : filename(configFilename)
  */
 ConfigFile::~ConfigFile()
 {
-    const ScopedLock writeLock(lock);
+    const ScopedLock writeLock(configLock);
     writeChanges();
 }
 
@@ -28,10 +60,10 @@ ConfigFile::~ConfigFile()
 void ConfigFile::registerConfigurable(Configurable * configurable,
         Array<String> keys)
 {
-    const ScopedLock changeLock(lock);
+    const ScopedLock changeLock(configLock);
     for (const String& key : keys)
     {
-        configured[key].add(configurable);
+        configured[filename][key].add(configurable);
     }
 }
 
@@ -42,147 +74,10 @@ void ConfigFile::registerConfigurable(Configurable * configurable,
 void ConfigFile::unregisterConfigurable(Configurable * configurable,
         Array<String> keys)
 {
-    const ScopedLock changeLock(lock);
+    const ScopedLock changeLock(configLock);
     for (const String& key : keys)
     {
-        configured[key].removeAllInstancesOf(configurable);
-    }
-}
-
-//######################### Integer Data ###################################
-
-/**
- * Gets one of the integer values stored in the json configuration file
- */
-int ConfigFile::getConfigInt(String intKey)
-{
-    const ScopedLock readLock(lock);
-    try
-    {
-        return intValues.at(intKey);
-    } catch (std::out_of_range e)
-    {
-        DBG(String("getConfigInt: key \"") + intKey
-                + String("\" is not an integer value stored in ") + filename);
-        throw e;
-    }
-}
-
-/**
- * Sets one of this ConfigFile's integer values, writing it to the config 
- * file if the value has changed.  
- */
-void ConfigFile::setConfigInt(String intKey, int newValue)
-{
-    const ScopedLock writeLock(lock);
-    try
-    {
-        if (intValues.at(intKey) != newValue)
-        {
-            changesPending = true;
-            intValues[intKey] = newValue;
-            writeChanges();
-
-            const ScopedUnlock allowDataAccess(lock);
-            notifyConfigurables(intKey);
-        }
-    } catch (std::out_of_range e)
-    {
-        DBG(String("setConfigInt: key ") + intKey
-                + String(" is not a string value stored in ") + filename);
-        throw e;
-    }
-}
-
-//############################ String Data #####################################
-
-/**
- * Gets one of the string values stored in the json configuration file
- */
-String ConfigFile::getConfigString(String stringKey)
-{
-    const ScopedLock readLock(lock);
-    try
-    {
-        return stringValues.at(stringKey);
-    } catch (std::out_of_range e)
-    {
-        DBG(String("getConfigString: key \"") + stringKey
-                + String("\" is not a string value stored in ") + filename);
-        throw e;
-    }
-}
-
-/**
- * Sets one of this ConfigFile's string values, writing it to the config 
- * file if the value has changed.  
- */
-void ConfigFile::setConfigString(String stringKey,
-        String newValue)
-{
-    const ScopedLock writeLock(lock);
-    try
-    {
-        if (stringValues.at(stringKey) != newValue)
-        {
-            changesPending = true;
-            stringValues[stringKey] = newValue;
-            writeChanges();
-
-            const ScopedUnlock allowDataAccess(lock);
-            notifyConfigurables(stringKey);
-        }
-    } catch (std::out_of_range e)
-    {
-        DBG(String("setConfigString: key ") + stringKey
-                + String(" is not a string value stored in ") + filename);
-        throw e;
-    }
-}
-
-//############################ Boolean Data ####################################
-
-/**
- * Gets one of the boolean values stored in the json configuration file.
- */
-bool ConfigFile::getConfigBool(String boolKey)
-{
-    const ScopedLock readLock(lock);
-    try
-    {
-        return boolValues.at(boolKey);
-    } catch (std::out_of_range e)
-    {
-        DBG(String("getConfigBool: key ") + boolKey
-                + String(" is not a boolean value stored in ") + filename);
-        throw e;
-    }
-
-}
-
-/**
- * Sets one of this ConfigFile's boolean values, writing it to the config 
- * file if the value has changed.  
- */
-void ConfigFile::setConfigBool(String boolKey, bool newValue)
-{
-    const ScopedLock writeLock(lock);
-    try
-    {
-        if (boolValues.at(boolKey) != newValue)
-        {
-            changesPending = true;
-            boolValues[boolKey] = newValue;
-            writeChanges();
-            const ScopedUnlock allowDataAccess(lock);
-            notifyConfigurables(boolKey);
-
-        }
-    } catch (std::out_of_range e)
-    {
-        DBG(String("setConfigBool: key ") + boolKey
-                + String(" is not a boolean value stored in ") + filename);
-        throw e;
+        configured[filename][key].removeAllInstancesOf(configurable);
     }
 }
 
@@ -195,28 +90,55 @@ bool ConfigFile::operator==(const ConfigFile& rhs) const
 }
 
 /**
- * @return the keys to all integer variables tracked in this config file.
+ * @return the CriticalSection shared by all ConfigFile objects that
+ * access the same file as this one.
  */
-Array<String> ConfigFile::getIntKeys() const
+CriticalSection& ConfigFile::getFileLock()
 {
-    return {};
+    const ScopedLock readLock(configLock);
+    return fileLocks[filename];
 }
 
 /**
- * @return the keys to all string variables tracked in this config file.
+ * Opens and reads data from this ConfigFile's json file.  This will mark
+ * the file as opened, so that ConfigFiles can avoid reading in file data
+ * more than once.
  */
-Array<String> ConfigFile::getStringKeys() const
+var ConfigFile::openFile()
 {
-    return {};
+    const ScopedLock readLock(getFileLock());
+    if (fileOpened())
+    {
+        return var::null;
+    }
+    openFileMap[filename] = true;
+    File configFile = File(getHomePath() + String(CONFIG_PATH) + filename);
+    return JSON::parse(configFile);
 }
 
 /**
- * @return the keys to all boolean variables tracked in this config file.
+ * Check to see if this ConfigFile has already read data from its json file.
+ * @return true iff the file has been read.
  */
-Array<String> ConfigFile::getBoolKeys() const
+bool ConfigFile::fileOpened()
 {
-    return {};
+    const ScopedLock lockFileMaps(configLock);
+    const ScopedLock lockFileData(getFileLock());
+    return openFileMap[filename];
 }
+
+/**
+ * Marks the ConfigFile as containing changes that need to be written
+ * back to the object's json file.
+ */
+void ConfigFile::markPendingChanges()
+{
+    const ScopedLock lockFileMaps(configLock);
+    const ScopedLock lockFileData(getFileLock());
+    fileChangesPending[filename] = true;
+}
+
+
 //################################# File IO ####################################
 
 /**
@@ -224,27 +146,27 @@ Array<String> ConfigFile::getBoolKeys() const
  */
 void ConfigFile::readDataFromJson(var& config, var& defaultConfig)
 {
-    //load integers
-    Array<String> intKeys = getIntKeys();
-    for (const String& key : intKeys)
+    std::vector<DataKey> dataKeys = getDataKeys();
+    for (const DataKey& key : dataKeys)
     {
-        intValues[key] = getProperty(config, defaultConfig, key);
-    }
-    
-    //load strings
-    Array<String> stringKeys = getStringKeys();
-    for (const String& key : stringKeys)
-    {
-        stringValues[key] = getProperty(config, defaultConfig, key).toString();
-    }
+        switch (key.dataType)
+        {
+            case stringType:
+                initMapProperty<String>(key.keyString, getProperty
+                        (config, defaultConfig, key.keyString).toString());
+                break;
 
-    //load bools
-    Array<String> boolKeys = getBoolKeys();
-    for (const String& key : boolKeys)
-    {
-        boolValues[key] = getProperty(config, defaultConfig, key);
-    }
+            case intType:
+                initMapProperty<int>(key.keyString,
+                        getProperty(config, defaultConfig, key.keyString));
+                break;
 
+            case boolType:
+                initMapProperty<bool>(key.keyString,
+                        getProperty(config, defaultConfig, key.keyString));
+                break;
+        }
+    }
 }
 
 /**
@@ -252,22 +174,27 @@ void ConfigFile::readDataFromJson(var& config, var& defaultConfig)
  */
 void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
 {
-    Array<String> intKeys = getIntKeys();
-    for (const String& key : intKeys)
-    {
-        jsonObj->setProperty(key, intValues[key]);
-    }
-    
-    Array<String> stringKeys = getStringKeys();
-    for (const String& key : stringKeys)
-    {
-        jsonObj->setProperty(key, stringValues[key]);
-    }
 
-    Array<String> boolKeys = getBoolKeys();
-    for (const String& key : boolKeys)
+    std::vector<DataKey> dataKeys = getDataKeys();
+    for (const DataKey& key : dataKeys)
     {
-        jsonObj->setProperty(key, boolValues[key]);
+        switch (key.dataType)
+        {
+            case stringType:
+                jsonObj->setProperty(key.keyString,
+                        getMapReference<String>()[key.keyString]);
+                break;
+
+            case intType:
+                jsonObj->setProperty(key.keyString,
+                        getMapReference<int>()[key.keyString]);
+                break;
+
+            case boolType:
+                jsonObj->setProperty(key.keyString,
+                        getMapReference<bool>()[key.keyString]);
+                break;
+        }
     }
 }
 
@@ -277,6 +204,7 @@ void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
  */
 bool ConfigFile::propertyExists(var& config, String propertyKey)
 {
+
     var property = config.getProperty(propertyKey, var::null);
     return var::null != property;
 }
@@ -292,13 +220,15 @@ var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
     if (propertyExists(config, key))
     {
         return config.getProperty(key, var::null);
-    } else
+    }
+    else
     {
         if (defaultConfig == var::null)
         {
+
             defaultConfig = JSON::parse(assetFile(filename));
         }
-        changesPending = true;
+        fileChangesPending[filename] = true;
         return defaultConfig.getProperty(key, var::null);
     }
 }
@@ -306,10 +236,14 @@ var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
 /**
  * Re-writes all data back to the config file, as long as there are
  * changes to write.
+ * 
+ * 
+ * @pre any code calling this function is expected to have already
+ * acquired the ConfigFile's lock
  */
 void ConfigFile::writeChanges()
 {
-    if (!changesPending)
+    if (!fileChangesPending[filename])
     {
         return;
     }
@@ -332,9 +266,11 @@ void ConfigFile::writeChanges()
                 AlertWindow::AlertIconType::WarningIcon,
                 "Error saving configuration:",
                 message);
-    } else
+    }
+    else
     {
-        changesPending = false;
+
+        fileChangesPending[filename] = false;
     }
 }
 
@@ -343,8 +279,8 @@ void ConfigFile::writeChanges()
  */
 void ConfigFile::notifyConfigurables(String key)
 {
-    for (Configurable * tracking : configured[key])
+    for (Configurable * tracking : configured[filename][key])
     {
-        tracking->configChanged(key);
+        tracking->loadConfigProperties(this, key);
     }
 }

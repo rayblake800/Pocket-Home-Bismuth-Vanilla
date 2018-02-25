@@ -3703,14 +3703,14 @@
         <in>I2CBus.cpp</in>
         <in>I2CBus.h</in>
         <in>Main.cpp</in>
-        <in>MainComponent.cpp</in>
-        <in>MainComponent.h</in>
         <in>PageComponent.cpp</in>
         <in>PageComponent.h</in>
         <in>PageStackComponent.cpp</in>
         <in>PageStackComponent.h</in>
         <in>PocketHomeApplication.cpp</in>
         <in>PocketHomeApplication.h</in>
+        <in>PocketHomeWindow.cpp</in>
+        <in>PocketHomeWindow.h</in>
         <in>PokeLookAndFeel.cpp</in>
         <in>PokeLookAndFeel.h</in>
         <in>Utils.cpp</in>

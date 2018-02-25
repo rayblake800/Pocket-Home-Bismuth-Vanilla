@@ -11,7 +11,7 @@ public:
     MainConfigFile();
     virtual ~MainConfigFile();
 
-    //######################### String Data ###################################
+    
     //string value keys
     static const String backgroundKey;
     static const String menuTypeKey;
@@ -19,12 +19,11 @@ public:
     static const String restartCommandKey;
     static const String sleepCommandKey;
     static const String termLaunchCommandKey;
-    Array<String> getStringKeys() const;
-    //######################### Boolean Data ###################################
     //boolean value keys
     static const String showCursorKey;
-    Array<String> getBoolKeys() const;
+    std::vector<DataKey> getDataKeys() const;
 
 private:
+    static CriticalSection mainConfigLock;
     static constexpr const char* filenameConst = "config.json";
 };

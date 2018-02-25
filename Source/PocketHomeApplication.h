@@ -26,14 +26,8 @@ public:
 
     BluetoothStatus& getBluetoothStatus();
 
-    MainConfigFile& getConfig();
-    
-    ComponentConfigFile& getComponentConfig();
-
 private:
     bool initAudio();
-    MainConfigFile configFile;
-    ComponentConfigFile componentConfig;
     PokeLookAndFeel lookAndFeel;
 #ifdef LINUX
     WifiStatusNM wifiStatusNM;

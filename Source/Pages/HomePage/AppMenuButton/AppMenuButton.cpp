@@ -1,6 +1,5 @@
 #include "../../../PokeLookAndFeel.h"
 #include "../../../Utils.h"
-#include "../../../PocketHomeApplication.h"
 #include "AppMenuButton.h"
 
 AppMenuButton::AppMenuButton(AppMenuItem* menuItem, IconThread& iconThread,

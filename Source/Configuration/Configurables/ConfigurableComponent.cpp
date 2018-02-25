@@ -1,18 +1,12 @@
-#include "../../PocketHomeApplication.h"
+#include "../ComponentConfigFile.h"
 #include "ConfigurableComponent.h"
 
 ConfigurableComponent::ConfigurableComponent
 (String componentKey) :
-Configurable(static_cast<ConfigFile*>
-(&PocketHomeApplication::getInstance()->getComponentConfig()),{componentKey}),
-componentSettings(PocketHomeApplication::getInstance()->getComponentConfig()
-        .getComponentSettings(componentKey))
-{
-}
+Configurable(new ComponentConfigFile(),{componentKey}),
+componentSettings(ComponentConfigFile().getComponentSettings(componentKey)) { }
 
-ConfigurableComponent::~ConfigurableComponent()
-{
-}
+ConfigurableComponent::~ConfigurableComponent() { }
 
 void ConfigurableComponent::applyConfigBounds()
 {
@@ -44,14 +38,13 @@ void ConfigurableComponent::applyConfigBounds()
     component->setBounds(newBounds);
 }
 
-
- void ConfigurableComponent::applyConfigAssets(Array<String> assetNames,
-            Array<Colour> colours){}
+void ConfigurableComponent::applyConfigAssets(Array<String> assetNames,
+        Array<Colour> colours) { }
 
 void ConfigurableComponent::loadConfigProperties
-(ConfigFile * config, String key)
+(ConfigFile* config, String key)
 {
-    ComponentConfigFile * compConfig
+    ComponentConfigFile* compConfig
             = dynamic_cast<ComponentConfigFile*> (config);
     if (compConfig != nullptr)
     {

@@ -13,24 +13,20 @@ Colour PokeLookAndFeel::chipPink = Colour(0xffbc3662);
 Colour PokeLookAndFeel::chipLightPink = Colour(0xfff799aa);
 Colour PokeLookAndFeel::chipPurple = Colour(0xffd23c6d);
 
-PokeLookAndFeel::PokeLookAndFeel(ComponentConfigFile& config) :
-Configurable(&config, config.getColourKeys()),
-cursor(MouseCursor::NoCursor),
-componentConfig(config)
+PokeLookAndFeel::PokeLookAndFeel() :
+Configurable(new ComponentConfigFile(), componentConfig.getColourKeys()),
+cursor(MouseCursor::NoCursor)
 {
     loadAllConfigProperties();
     seguibl = Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
             BinaryData::LatoRegular_ttfSize);
 }
 
-PokeLookAndFeel::~PokeLookAndFeel()
-{
-};
+PokeLookAndFeel::~PokeLookAndFeel() { };
 
 float PokeLookAndFeel::getDrawableButtonTextHeightForBounds(const Rectangle<int> &bounds)
 {
-    ComponentConfigFile&
-            config = PocketHomeApplication::getInstance()->getComponentConfig();
+    ComponentConfigFile config;
     String largestString;
     for (int i = 0; i < maxButtonStrSize; i++)
     {
@@ -44,7 +40,7 @@ float PokeLookAndFeel::getDrawableButtonImageHeightForBounds(const Rectangle<int
 {
     static const float padding = 5.0f;
     return bounds.getHeight() - (getDrawableButtonTextHeightForBounds(bounds)
-            + padding);
+                                 + padding);
 }
 
 Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const Font &font)
@@ -67,7 +63,8 @@ void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
     {
         kx = x + width * 0.5f;
         ky = sliderPos;
-    } else
+    }
+    else
     {
         kx = sliderPos;
         ky = y + height * 0.5f;
@@ -95,7 +92,8 @@ void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y, int 
     {
         const float iy = y + height * 0.5f - radius;
         indent.addRoundedRectangle(x - radius, iy, width + radius * 2.0f, radius * 2.0f, 1);
-    } else
+    }
+    else
     {
         const float ix = x + width * 0.5f - radius;
         indent.addRoundedRectangle(ix, y - radius, radius * 2.0f, height + radius * 2.0f, 1);
@@ -126,15 +124,15 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button, bool isMou
     Font font(getTextButtonFont(button, button.getHeight()));
     font.setExtraKerningFactor(0.06f);
     font.setHeight(componentConfig.getFontHeight
-            (button.getLocalBounds(),button.getButtonText()));
+            (button.getLocalBounds(), button.getButtonText()));
     g.setFont(font);
-    Colour buttonColour = button.findColour(button.getToggleState() ? 
-        TextButton::textColourOnId : TextButton::textColourOffId);
-    if(!button.isEnabled())
+    Colour buttonColour = button.findColour(button.getToggleState() ?
+            TextButton::textColourOnId : TextButton::textColourOffId);
+    if (!button.isEnabled())
     {
         buttonColour = buttonColour.withMultipliedAlpha(0.5f);
     }
-    if(isButtonDown && isMouseOverButton)
+    if (isButtonDown && isMouseOverButton)
     {
         buttonColour = buttonColour.darker();
     }
@@ -161,7 +159,7 @@ void PokeLookAndFeel::drawButtonBackground(Graphics &g, Button &button,
 
     auto path = Path();
     path.addRoundedRectangle(0, 0, width, height, 1);
-    if(isButtonDown && isMouseOverButton)
+    if (isButtonDown && isMouseOverButton)
     {
         g.setColour(chipPink.darker());
     }
@@ -216,16 +214,15 @@ MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
  * Reloads and applies object properties defined by a single key in
  * a configuration file
  */
-void PokeLookAndFeel::loadConfigProperties(ConfigFile * config, String key)
+void PokeLookAndFeel::loadConfigProperties(ConfigFile* config, String key)
 {
-    ComponentConfigFile* compConf = dynamic_cast<ComponentConfigFile*> (config);
-    if (compConf != nullptr)
+    if (componentConfig == *config)
     {
-        int colourId = compConf->getColourId(key);
+        int colourId = componentConfig.getColourId(key);
         if (colourId != -1)
         {
-            Colour confColour =
-                    Colour(compConf->getConfigString(key).getHexValue32());
+            Colour confColour = Colour(componentConfig.getConfigValue<String>(key)
+                    .getHexValue32());
             setColour(colourId, confColour);
         }
     }

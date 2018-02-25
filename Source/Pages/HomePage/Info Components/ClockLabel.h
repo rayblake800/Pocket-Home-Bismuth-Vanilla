@@ -33,9 +33,9 @@ protected:
      * @param key is the key for the clock visibility setting, the key 
      * for the 12h/24h mode toggle, or the component layout key
      */
-    void loadConfigProperties(ConfigFile * config,String key);
+    void loadConfigProperties(ConfigFile* config,String key) override;
 private:
     //If true, use 24 hour time, if false, use 12 hour AM/PM time.
-    bool use24HrMode;
+    bool use24HrMode = false;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ClockLabel)
 };

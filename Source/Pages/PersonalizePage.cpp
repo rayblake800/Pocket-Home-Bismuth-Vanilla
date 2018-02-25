@@ -1,4 +1,4 @@
-#include "../PocketHomeApplication.h"
+#include "../Configuration/MainConfigFile.h"
 #include "PersonalizePage.h"
 
 PersonalizePage::PersonalizePage() :
@@ -60,9 +60,9 @@ PersonalizePage::~PersonalizePage() { }
 
 void PersonalizePage::updateComboBox()
 {
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile config;
     /* Checking the current configuration */
-    String background = config.getConfigString(MainConfigFile::backgroundKey);
+    String background = config.getConfigValue<String>(MainConfigFile::backgroundKey);
     bool display = false;
     if (background.length() == 0);
     else if (background.length() == 6 &&
@@ -85,14 +85,14 @@ void PersonalizePage::updateComboBox()
 
 void PersonalizePage::comboBoxChanged(ComboBox * box)
 {
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile config;
     if (box == &bgTypePicker)
     {
         bgEditor.setText("",NotificationType::dontSendNotification);
         switch (box->getSelectedId())
         {
             case 1:
-                config.setConfigString(MainConfigFile::backgroundKey, "4D4D4D");
+                config.setConfigValue<String>(MainConfigFile::backgroundKey, "4D4D4D");
                 bgEditor.setVisible(false);
                 bgLabel.setVisible(false);
                 return;
@@ -109,13 +109,13 @@ void PersonalizePage::comboBoxChanged(ComboBox * box)
     }
     else if (box == &menuTypePicker)
     {
-        config.setConfigString(MainConfigFile::menuTypeKey, box->getText());
+        config.setConfigValue<String>(MainConfigFile::menuTypeKey, box->getText());
     }
 }
 
 void PersonalizePage::fileSelected(FileSelectTextEditor * edited)
 {
-    MainConfigFile& config = PocketHomeApplication::getInstance()->getConfig();
+    MainConfigFile config;
     String value = edited->getText();
     //color value
     if (bgTypePicker.getSelectedId() == 2)
@@ -125,11 +125,11 @@ void PersonalizePage::fileSelected(FileSelectTextEditor * edited)
             bgEditor.setText("Invalid color", false);
         else
         {
-            config.setConfigString(MainConfigFile::backgroundKey, value);
+            config.setConfigValue<String>(MainConfigFile::backgroundKey, value);
         }
     }
     else if (bgTypePicker.getSelectedId() == 3)
     {
-        config.setConfigString(MainConfigFile::backgroundKey, value);
+        config.setConfigValue<String>(MainConfigFile::backgroundKey, value);
     }
 }

@@ -11,7 +11,7 @@
 
 class PokeLookAndFeel : public LookAndFeel_V3, public Configurable {
 public:
-    PokeLookAndFeel(ComponentConfigFile& config);
+    PokeLookAndFeel();
     virtual ~PokeLookAndFeel();
 
     static float getDrawableButtonTextHeightForBounds
@@ -66,9 +66,9 @@ private:
      * @param config the configFile containing the updated data value
      * @param key the key of property that has changed
      */
-    virtual void loadConfigProperties(ConfigFile * config,String key);
+    virtual void loadConfigProperties(ConfigFile* config,String key);
     
-    ComponentConfigFile& componentConfig;
+    ComponentConfigFile componentConfig;
     
     /**
      * Defines the maximum number of characters that will fit on a text button.

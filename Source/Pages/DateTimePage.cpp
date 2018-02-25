@@ -55,22 +55,21 @@ clockModeLabel("clockModeLabel", clockModeLabelText)
     setClockMode.addItem(clockModeAmPm, 2);
     setClockMode.addItem(clockModeNoShow, 3);
     setClockMode.addListener(this);
-    ComponentConfigFile& config = PocketHomeApplication::getInstance()
-            ->getComponentConfig();
-    if (config.getConfigBool(ComponentConfigFile::showClockKey))
+    ComponentConfigFile config;
+    if (config.getConfigValue<bool>(ComponentConfigFile::showClockKey))
     {
-        if (config.getConfigBool(ComponentConfigFile::use24HrModeKey))
+        if (config.getConfigValue<bool>(ComponentConfigFile::use24HrModeKey))
         {
-            setClockMode.setSelectedId(1);
+            setClockMode.setSelectedId(1,NotificationType::dontSendNotification);
         }
         else
         {
-            setClockMode.setSelectedId(2);
+            setClockMode.setSelectedId(2,NotificationType::dontSendNotification);
         }
     }
     else
     {
-        setClockMode.setSelectedId(3);
+        setClockMode.setSelectedId(3,NotificationType::dontSendNotification);
     }
 }
 
@@ -81,8 +80,9 @@ DateTimePage::pageButtonClicked(Button* button)
 {
     if (button == &reconfigureBtn)
     {
-        String configureTime = PocketHomeApplication::getInstance()->getConfig()
-                .getConfigString(MainConfigFile::termLaunchCommandKey)
+        MainConfigFile config;
+        String configureTime = config.getConfigValue<String>
+                (MainConfigFile::termLaunchCommandKey)
                 + reconfigureCommand;
         int ret = system(configureTime.toRawUTF8());
         if (ret != 0)
@@ -97,14 +97,14 @@ DateTimePage::pageButtonClicked(Button* button)
 void DateTimePage::comboBoxChanged(ComboBox* c)
 {
     if (c != &setClockMode) return;
-    ComponentConfigFile& config = PocketHomeApplication::getInstance()
-            ->getComponentConfig();
+    ComponentConfigFile config;
     bool showClock = (c->getSelectedId() != 3);
     bool use24HrMode = (c->getSelectedId() == 1);
     if (showClock)
     {
-        config.setConfigBool(ComponentConfigFile::use24HrModeKey, use24HrMode);
+        config.setConfigValue<bool>(ComponentConfigFile::use24HrModeKey, 
+                use24HrMode);
     }
-    config.setConfigBool(ComponentConfigFile::showClockKey, showClock);
+    config.setConfigValue<bool>(ComponentConfigFile::showClockKey, showClock);
 }
 

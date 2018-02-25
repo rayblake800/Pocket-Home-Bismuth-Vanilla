@@ -1,5 +1,5 @@
 #include "../Utils.h"
-#include "../PocketHomeApplication.h"
+#include "../Configuration/ComponentConfigFile.h"
 #include "ScalingLabel.h"
 
 ScalingLabel::ScalingLabel(const String &componentName,
@@ -15,8 +15,7 @@ ScalingLabel::~ScalingLabel()
 
 void ScalingLabel::resized()
 {
-    ComponentConfigFile& config = PocketHomeApplication::getInstance()->
-            getComponentConfig();
+    ComponentConfigFile config;
     setFont(getFont().withHeight(config.getFontHeight
             (getLocalBounds(),getText())));
 }

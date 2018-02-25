@@ -19,18 +19,21 @@ Configurable::~Configurable()
 }
 
 /**
- * Calls loadConfigProperties for every tracked key.
+ * Add to the list of keys tracked by this Configurable
+ * @param newKeys
  */
-void Configurable::loadAllConfigProperties(){
-    for(const String& key : trackedKeys){
-        loadConfigProperties(config,key);
-    }
+void Configurable::addTrackedKeys(Array<String> newKeys) {
+    config->registerConfigurable(this, newKeys);
+    trackedKeys.addArray(newKeys);
 }
 
 /**
- *Receives notifications whenever configuration changes occur. 
+ * Calls loadConfigProperties for every tracked key.
  */
-void Configurable::configChanged(String key)
+void Configurable::loadAllConfigProperties()
 {
-    loadConfigProperties(config, key);
+    for (const String& key : trackedKeys)
+    {
+        loadConfigProperties(config, key);
+    }
 }

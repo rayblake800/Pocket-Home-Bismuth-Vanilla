@@ -31,7 +31,7 @@ protected:
             Array<Colour> colours);
     
     
-    virtual void loadConfigProperties(ConfigFile * config,String key);
+    virtual void loadConfigProperties(ConfigFile* config,String key);
 private:
     Component * component;
     ComponentConfigFile::ComponentSettings componentSettings;

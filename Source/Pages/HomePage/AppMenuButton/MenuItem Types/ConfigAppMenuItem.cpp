@@ -1,5 +1,5 @@
 #include "../../../../Utils.h"
-#include "../../../../PocketHomeApplication.h"
+#include "../../../../Configuration/MainConfigFile.h"
 #include "ConfigAppMenuItem.h"
 
 ConfigAppMenuItem::ConfigAppMenuItem
@@ -34,9 +34,8 @@ String ConfigAppMenuItem::getCommand() const
     String command = appItem.shell;
     if (appItem.launchInTerminal)
     {
-        MainConfigFile& config = PocketHomeApplication::getInstance()
-                ->getConfig();
-        command = config.getConfigString
+        MainConfigFile config;
+        command = config.getConfigValue<String>
                 (MainConfigFile::termLaunchCommandKey) + String(" ") + command;
     }
     return command;

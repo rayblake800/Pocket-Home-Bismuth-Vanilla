@@ -1,4 +1,3 @@
-#include "../../../PocketHomeApplication.h"
 #include "ScrollingAppMenu.h"
 
 ScrollingAppMenu::ScrollingAppMenu(AppConfigFile& appConfig) :
@@ -176,8 +175,7 @@ AppMenuButton::Ptr ScrollingAppMenu::createMenuButton
 void ScrollingAppMenu::resized()
 {
     this->AppMenuComponent::resized();
-    ComponentConfigFile& config = PocketHomeApplication::getInstance()
-            ->getComponentConfig();
+    ComponentConfigFile config;
     ComponentConfigFile::ComponentSettings menuSettings =
             config.getComponentSettings(ComponentConfigFile::scrollingAppMenuKey);
     ComponentConfigFile::ComponentSettings buttonSettings =

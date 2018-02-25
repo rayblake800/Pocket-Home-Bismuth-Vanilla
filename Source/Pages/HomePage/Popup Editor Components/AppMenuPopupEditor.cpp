@@ -1,5 +1,4 @@
 #include "../../../Utils.h"
-#include "../../../PocketHomeApplication.h"
 #include "AppMenuPopupEditor.h"
 
 AppMenuPopupEditor::AppMenuPopupEditor

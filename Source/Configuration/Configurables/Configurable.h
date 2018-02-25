@@ -29,14 +29,11 @@ public:
      */
     virtual ~Configurable();
 protected:
-    ConfigFile * configFile;
     /**
-     * Reloads and applies object properties defined by a single key in
-     * a configuration file
-     * @param config the configFile containing the updated data value
-     * @param key the key of property that has changed
+     * Add to the list of keys tracked by this Configurable
+     * @param newKeys
      */
-    virtual void loadConfigProperties(ConfigFile * config,String key) = 0;
+    void addTrackedKeys(Array<String> newKeys);
     
     /**
      * Calls loadConfigProperties for every tracked key. This is the preferred
@@ -46,13 +43,13 @@ protected:
 
 private:
     /**
-     *Receives notifications whenever configuration changes occur. This should
-     * only be called by the ConfigFile object.
-     * 
-     * @param key: the key string of the changed property.
+     * Reloads and applies object properties defined by a single key in
+     * a configuration file
+     * @param config the configFile containing the updated data value
+     * @param key the key of property that has changed
      */
-    void configChanged(String key);
+    virtual void loadConfigProperties(ConfigFile* config,String key) = 0;
     
-    ConfigFile * config;
+    ScopedPointer<ConfigFile> config;
     Array<String> trackedKeys;
 };

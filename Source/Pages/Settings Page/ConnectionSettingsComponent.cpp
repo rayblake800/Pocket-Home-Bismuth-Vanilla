@@ -1,4 +1,4 @@
-#include "../../PocketHomeApplication.h"
+#include "../../Utils.h"
 #include "ConnectionSettingsComponent.h"
 
 ConnectionSettingsComponent::ConnectionSettingsComponent

@@ -8,125 +8,129 @@
 #include "../Utils.h"
 #include "ComponentConfigFile.h"
 
-const std::map<String,int> ComponentConfigFile::colourIds{
+CriticalSection ComponentConfigFile::componentLock;
+
+std::map<String, ComponentConfigFile::ComponentSettings>
+ComponentConfigFile::components;
+
+const std::map<String, int> ComponentConfigFile::colourIds{
     {"Page background color",
-            PageComponent::backgroundColourId},
-            
+     PageComponent::backgroundColourId},
+
     {"Image color 0",
-            DrawableImageComponent::imageColour0Id},
+     DrawableImageComponent::imageColour0Id},
     {"Image color 1",
-            DrawableImageComponent::imageColour1Id},
+     DrawableImageComponent::imageColour1Id},
     {"Image color 2",
-            DrawableImageComponent::imageColour2Id},
+     DrawableImageComponent::imageColour2Id},
     {"Image color 3",
-            DrawableImageComponent::imageColour3Id},
+     DrawableImageComponent::imageColour3Id},
     {"Image color 4",
-            DrawableImageComponent::imageColour4Id},
-            
+     DrawableImageComponent::imageColour4Id},
+
     {"List editor text color",
-            ListEditor::textColourId},
+     ListEditor::textColourId},
     {"List editor  background color",
-            ListEditor::backgroundColourId},
+     ListEditor::backgroundColourId},
     {"List editor list item color",
-            ListEditor::listItemColourId},
+     ListEditor::listItemColourId},
     {"List editor selected item color",
-            ListEditor::selectedListItemColourId},
-            
+     ListEditor::selectedListItemColourId},
+
     {"AppMenu button text color",
-            AppMenuButton::textColourId},
+     AppMenuButton::textColourId},
     {"AppMenu button background color",
-            AppMenuButton::backgroundColourId},
-    {"AppMenu button selection color", 
-            AppMenuButton::selectionColourId},
+     AppMenuButton::backgroundColourId},
+    {"AppMenu button selection color",
+     AppMenuButton::selectionColourId},
     {"AppMenu button border color",
-            AppMenuButton::borderColourId},
-            
+     AppMenuButton::borderColourId},
+
     {"File picker window color",
-            FileSelectTextEditor::fileWindowColourId},
+     FileSelectTextEditor::fileWindowColourId},
     {"File picker text color",
-            FileSelectTextEditor::textColourId},
-            
+     FileSelectTextEditor::textColourId},
+
     {"Drawable button text color",
-            DrawableButton::textColourId},
-    
+     DrawableButton::textColourId},
+
     {"Overlay spinner background color",
-            OverlaySpinner::backgroundColourId},
+     OverlaySpinner::backgroundColourId},
     {"Overlay spinner text color",
-            OverlaySpinner::textColourId},
-                    
+     OverlaySpinner::textColourId},
+
     {"Text button(off) color",
-            TextButton::buttonColourId},
+     TextButton::buttonColourId},
     {"Text button(off) text color",
-            TextButton::textColourOffId},
+     TextButton::textColourOffId},
     {"Text button(on) color",
-            TextButton::buttonOnColourId},
+     TextButton::buttonOnColourId},
     {"Text button(on) text color",
-            TextButton::textColourOnId},
-                    
+     TextButton::textColourOnId},
+
     {"Label background color",
-            Label::backgroundColourId},
+     Label::backgroundColourId},
     {"Label text color",
-            Label::textColourId},
+     Label::textColourId},
     {"Label outline color",
-            Label::outlineColourId},
+     Label::outlineColourId},
     {"Label background color(editing)",
-            Label::backgroundWhenEditingColourId},
+     Label::backgroundWhenEditingColourId},
     {"Label text color(editing)",
-            Label::textColourId},
+     Label::textColourId},
     {"Label outline color(editing)",
-            Label::outlineWhenEditingColourId},
-                    
+     Label::outlineWhenEditingColourId},
+
     {"Slider background color",
-            Slider::backgroundColourId},
+     Slider::backgroundColourId},
     {"Slider thumb color",
-            Slider::thumbColourId},
+     Slider::thumbColourId},
     {"Slider track color",
-            Slider::trackColourId},
-                    
+     Slider::trackColourId},
+
     {"Text editor background color",
-            TextEditor::backgroundColourId},
+     TextEditor::backgroundColourId},
     {"Text editor text color",
-            TextEditor::textColourId},
+     TextEditor::textColourId},
     {"Text editor highlight color",
-            TextEditor::highlightColourId},
+     TextEditor::highlightColourId},
     {"Text editor highlighted text color",
-            TextEditor::highlightedTextColourId},
+     TextEditor::highlightedTextColourId},
     {"Text editor outline color",
-            TextEditor::outlineColourId},
+     TextEditor::outlineColourId},
     {"Text editor focused outline color",
-            TextEditor::focusedOutlineColourId},
+     TextEditor::focusedOutlineColourId},
     {"Text editor shadow color",
-            TextEditor::shadowColourId},
-                    
+     TextEditor::shadowColourId},
+
     {"Switch background color",
-            SwitchComponent::backgroundColourId},
+     SwitchComponent::backgroundColourId},
     {"Switch handle color",
-            SwitchComponent::handleColourId},
+     SwitchComponent::handleColourId},
     {"Switch handle color(off)",
-            SwitchComponent::handleOffColourId},
-};
+     SwitchComponent::handleOffColourId},};
 
 ComponentConfigFile::ComponentConfigFile() : ConfigFile(filenameConst)
 {
-    const ScopedLock readLock(lock);
-    File configFile = File(getHomePath() + String(CONFIG_PATH) + filename);
-    var jsonConfig = JSON::parse(configFile);
-    var defaultConfig = var::null;
-    readDataFromJson(jsonConfig, defaultConfig);
-    writeChanges();
+    if (!fileOpened())
+    {
+        const ScopedLock readLock(componentLock);
+        var jsonConfig = openFile();
+        var defaultConfig = var::null;
+        readDataFromJson(jsonConfig, defaultConfig);
+        writeChanges();
+    }
 }
 
-ComponentConfigFile::~ComponentConfigFile()
-{
-}
+ComponentConfigFile::~ComponentConfigFile() { }
 
 /**
-* Find a Component ColourId value from its config key String
-*/
+ * Find a Component ColourId value from its config key String
+ */
 int ComponentConfigFile::getColourId(String colourKey)
 {
-    std::map<String,int>::const_iterator search = colourIds.find(colourKey);
-    if(search == colourIds.end())
+    std::map<String, int>::const_iterator search = colourIds.find(colourKey);
+    if (search == colourIds.end())
     {
         return -1;
     }
@@ -134,14 +138,14 @@ int ComponentConfigFile::getColourId(String colourKey)
 }
 
 /**
-* @return the keys to all Component color settings stored in
-* components.json
-*/
+ * @return the keys to all Component color settings stored in
+ * components.json
+ */
 Array<String> ComponentConfigFile::getColourKeys() const
 {
     Array<String> keys;
-    for(std::map<String,int>::const_iterator it = colourIds.begin();
-            it != colourIds.end(); it++)
+    for (std::map<String, int>::const_iterator it = colourIds.begin();
+         it != colourIds.end(); it++)
     {
         keys.add(it->first);
     }
@@ -177,9 +181,9 @@ const String ComponentConfigFile::mediumTextKey = "medium text";
 const String ComponentConfigFile::largeTextKey = "large text";
 
 /**
-* Return the most appropriate font size for drawing text
-*/
-int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds,String text)
+ * Return the most appropriate font size for drawing text
+ */
+int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds, String text)
 {
     int heightLarge = getComponentSettings(largeTextKey).getBounds()
             .getHeight();
@@ -195,7 +199,7 @@ int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds,String text)
             numLines++;
         }
     }
-    
+
     int height = textBounds.getHeight() / numLines;
     Font defaultFont(height);
     int width = defaultFont.getStringWidth(text);
@@ -203,15 +207,16 @@ int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds,String text)
     {
         height = textBounds.getWidth() * height / width;
     }
-    if(height > heightLarge)
+    if (height > heightLarge)
     {
         return heightLarge;
     }
-    else if(height > heightMedium)
+    else if (height > heightMedium)
     {
         return heightMedium;
     }
-    else if(height > heightSmall){
+    else if (height > heightSmall)
+    {
         return heightSmall;
     }
     return height;
@@ -220,10 +225,9 @@ int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds,String text)
 ComponentConfigFile::ComponentSettings ComponentConfigFile::getComponentSettings
 (String componentKey)
 {
-    const ScopedLock readLock(lock);
+    const ScopedLock readLock(componentLock);
     return components[componentKey];
 }
-
 
 /**
  * @return the list of all component keys.
@@ -231,51 +235,41 @@ ComponentConfigFile::ComponentSettings ComponentConfigFile::getComponentSettings
 Array<String> ComponentConfigFile::getComponentKeys()
 {
     return {appMenuButtonKey,
-        scrollingAppMenuKey,
-        pagedAppMenuKey,
-        menuFrameKey,
-        batteryIconKey,
-        batteryPercentKey,
-        clockLabelKey,
-        wifiIconKey,
-        powerButtonKey,
-        settingsButtonKey,
-        popupMenuKey,
-        pageLeftKey,
-        pageRightKey,
-        smallTextKey,
-        mediumTextKey,
-        largeTextKey
+            scrollingAppMenuKey,
+            pagedAppMenuKey,
+            menuFrameKey,
+            batteryIconKey,
+            batteryPercentKey,
+            clockLabelKey,
+            wifiIconKey,
+            powerButtonKey,
+            settingsButtonKey,
+            popupMenuKey,
+            pageLeftKey,
+            pageRightKey,
+            smallTextKey,
+            mediumTextKey,
+            largeTextKey};
+}
+
+/**
+ * @return the list of key Strings for each integer value tracked in 
+ * components.json
+ */
+std::vector<ConfigFile::DataKey> ComponentConfigFile::getDataKeys() const
+{
+    std::vector<DataKey> keys ={
+      {maxRowsKey, intType},
+      {maxColumnsKey, intType},
+      {showClockKey, boolType},
+      {use24HrModeKey, boolType}
     };
+    Array<String> colourKeys = getColourKeys();
+    for(const String& colourKey : colourKeys){
+        keys.push_back({colourKey,stringType});
+    }
+    return keys;
 }
-
-/**
-* @return the list of key Strings for each integer value tracked in 
-* components.json
-*/
-Array<String> ComponentConfigFile::getIntKeys() const
-{
-    return {maxRowsKey,maxColumnsKey};
-}
-
-/**
-* @return the list of key Strings for each String value tracked in 
-* components.json
-*/
-Array<String> ComponentConfigFile::getStringKeys() const
-{
-    return getColourKeys();
-}
-
-/**
-* @return the list of key Strings for each boolean value tracked in 
-* components.json
-*/
-Array<String> ComponentConfigFile::getBoolKeys() const
-{
-    return {showClockKey, use24HrModeKey};
-}
-
 
 /**
  * Read in this object's data from a json config object
@@ -304,12 +298,8 @@ void ComponentConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
     }
 }
 
-
 ComponentConfigFile::ComponentSettings::ComponentSettings() :
-x(0), y(0), width(0), height(0)
-{
-}
-
+x(0), y(0), width(0), height(0) { }
 
 ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
 {
@@ -342,23 +332,23 @@ ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
 DynamicObject * ComponentConfigFile::ComponentSettings::getDynamicObject()
 {
     DynamicObject * componentObject = new DynamicObject();
-    if(x != -1)
+    if (x != -1)
     {
         componentObject->setProperty("x", x);
     }
-    if(y != -1)
+    if (y != -1)
     {
         componentObject->setProperty("y", y);
     }
-    if(width != -1)
+    if (width != -1)
     {
         componentObject->setProperty("width", width);
     }
-    if(height != -1)
+    if (height != -1)
     {
         componentObject->setProperty("height", height);
     }
-    if(colours.size() > 0)
+    if (colours.size() > 0)
     {
         Array<var> coloursListed;
         for (int i = 0; i < colours.size(); i++)
@@ -368,7 +358,7 @@ DynamicObject * ComponentConfigFile::ComponentSettings::getDynamicObject()
         componentObject->setProperty("colours", coloursListed);
     }
 
-    if(assetFiles.size() > 0)
+    if (assetFiles.size() > 0)
     {
         Array<var> assetFilesListed;
         for (int i = 0; i < assetFiles.size(); i++)
@@ -395,7 +385,7 @@ Rectangle<int> ComponentConfigFile::ComponentSettings::getBounds()
 {
     Rectangle<int>window = getWindowSize();
     return Rectangle<int>(x * window.getWidth(), y * window.getHeight(),
-            width * window.getWidth(), height * window.getHeight());
+                          width * window.getWidth(), height * window.getHeight());
 }
 
 Array<Colour> ComponentConfigFile::ComponentSettings::getColours()
@@ -427,7 +417,7 @@ void ComponentConfigFile::ComponentSettings::applyBounds(Component * component)
     {
         bounds.setHeight(component->getHeight());
     }
-    
+
     component->setBounds(bounds);
 }
 

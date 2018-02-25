@@ -1,5 +1,4 @@
 #include <set>
-#include "../../../PocketHomeApplication.h"
 #include "../Popup Editor Components/NewConfigAppEditor.h"
 #include "../Popup Editor Components/NewDesktopAppEditor.h"
 #include "../Popup Editor Components/NewFolderEditor.h"

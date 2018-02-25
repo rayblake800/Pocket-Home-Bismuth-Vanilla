@@ -1,5 +1,4 @@
 #include "BatteryIcon.h"
-#include "../../../PocketHomeApplication.h"
 #include "../../../Utils.h"
 
 BatteryIcon::BatteryIcon() :
