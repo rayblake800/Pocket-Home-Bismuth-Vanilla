@@ -13,9 +13,10 @@
 #include "../IconThread.h"
 #include "../Popup Editor Components/AppMenuPopupEditor.h"
 
-class AppMenuItem {
+class AppMenuItem : public ReferenceCountedObject {
 public:
     friend class AppMenuButton;
+    typedef ReferenceCountedObjectPtr<AppMenuItem> Ptr;
 
     AppMenuItem();
     virtual ~AppMenuItem();
@@ -24,6 +25,13 @@ public:
      * @return true if this menu item is an application folder
      */
     virtual bool isFolder() const = 0;
+
+    /**
+     * @return all menu items in this folder, or an empty array if this isn't
+     * a folder.
+     */
+    virtual Array<AppMenuItem::Ptr> getFolderItems() const {
+    }
 
     /**
      * @return the display name of the associated application
@@ -60,7 +68,7 @@ public:
      */
     virtual bool canChangeIndex(int offset) const = 0;
 protected:
-    
+
     /**
      * Get an appropriate title to use for a deletion confirmation window.
      */
@@ -82,7 +90,7 @@ protected:
      * defaults to false.
      */
     virtual bool hasEditableCommand() const;
-    
+
     /**
      * @return the title to display over an editor for this menu item. 
      */
