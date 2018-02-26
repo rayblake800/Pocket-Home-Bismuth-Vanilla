@@ -87,11 +87,11 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
 			DBG(String("Menu type is ")+menuType);
 			if(menuType == "Scrolling menu")
 			{
-				appMenu = new ScrollingAppMenu(appConfig);
+				appMenu = new ScrollingAppMenu();
 			}
 			else//menuType == "pagedMenu"
 			{
-				appMenu = new PagedAppMenu(appConfig);
+				appMenu = new PagedAppMenu();
 			}
 			appMenu->setPopupCallback(
 			[this](AppMenuPopupEditor * newEditor)

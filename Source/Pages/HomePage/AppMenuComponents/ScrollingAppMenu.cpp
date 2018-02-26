@@ -1,7 +1,7 @@
 #include "ScrollingAppMenu.h"
 
-ScrollingAppMenu::ScrollingAppMenu(AppConfigFile& appConfig) :
-AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey, appConfig)
+ScrollingAppMenu::ScrollingAppMenu() :
+AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey)
 {
     x_origin = getBounds().getX();
     y_origin = getBounds().getY();

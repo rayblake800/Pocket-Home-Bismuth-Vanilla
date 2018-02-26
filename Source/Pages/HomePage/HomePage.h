@@ -69,7 +69,6 @@ private:
     void windowFocusChanged(bool windowFocus) override;
     void pageResized() override;
 
-    AppConfigFile appConfig;
     ClockLabel clock;
     ScopedPointer<AppMenuComponent> appMenu;
     BatteryIcon batteryIcon;

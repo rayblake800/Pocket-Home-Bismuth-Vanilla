@@ -12,8 +12,9 @@
         <group>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/AppLauncher.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PocketHomeWindow.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PageStackComponent.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PocketHomeWindow.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PageStackComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/HomePage/HomePage.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/WindowFocusedTimer.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/WindowFocusedTimer.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/OverlaySpinner.h</file>

@@ -11,10 +11,9 @@ AppMenuItemFactory::~AppMenuItemFactory()
 /**
  * Get an AppMenuItem for an application link provided by the AppConfigFile
  */
-AppMenuItem* AppMenuItemFactory::create
-(AppConfigFile::AppItem appItem, AppConfigFile& config)
+AppMenuItem* AppMenuItemFactory::create(AppConfigFile::AppItem appItem)
 {
-    return new ConfigAppMenuItem(appItem, config);
+    return new ConfigAppMenuItem(appItem);
 }
 
 /**
@@ -30,8 +29,7 @@ AppMenuItem* AppMenuItemFactory::create(DesktopEntry desktopEntry)
  * Get an AppMenuItem for an application folder provided by the 
  * AppConfigFile
  */
-AppMenuItem* AppMenuItemFactory::create
-(AppConfigFile::AppFolder appFolder, AppConfigFile& config)
+AppMenuItem* AppMenuItemFactory::create(AppConfigFile::AppFolder appFolder)
 {
-    return new FolderMenuItem(appFolder, config);
+    return new FolderMenuItem(appFolder);
 }

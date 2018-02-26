@@ -11,7 +11,7 @@
 
 class PagedAppMenu : public AppMenuComponent {
 public:
-    PagedAppMenu(AppConfigFile& appConfig);
+    PagedAppMenu();
     virtual ~PagedAppMenu();
 
     /**

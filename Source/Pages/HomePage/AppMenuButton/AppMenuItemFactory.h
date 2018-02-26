@@ -17,11 +17,9 @@ public:
     /**
      * Get an AppMenuItem for an application link provided by the AppConfigFile
      * @param appItem defines all menu item data
-     * @param config is the object needed to save and load changes to appItem
      * @return a pointer to the new menu item
      */
-    static AppMenuItem* create
-    (AppConfigFile::AppItem appItem, AppConfigFile& config);
+    static AppMenuItem* create(AppConfigFile::AppItem appItem);
 
     /**
      * Get an AppMenuItem for an application link that was read from a desktop
@@ -34,11 +32,9 @@ public:
     /**
      * Get an AppMenuItem for an application folder provided by the AppConfigFile
      * @param appFolder defines all menu item data
-     * @param config is the object needed to save and load changes to appFolder
      * @return a pointer to the new menu item
      */
-    static AppMenuItem* create
-    (AppConfigFile::AppFolder appFolder, AppConfigFile& config);
+    static AppMenuItem* create(AppConfigFile::AppFolder appFolder);
 private:
     AppMenuItemFactory();
     virtual ~AppMenuItemFactory();

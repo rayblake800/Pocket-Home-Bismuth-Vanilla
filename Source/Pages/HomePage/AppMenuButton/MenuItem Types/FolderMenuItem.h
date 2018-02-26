@@ -16,9 +16,8 @@ class FolderMenuItem : public AppMenuItem {
 public:
     /**
      * @param appFolder defines the folder data
-     * @param config the config file used for editing folder data
      */
-    FolderMenuItem(AppConfigFile::AppFolder appFolder, AppConfigFile& config);
+    FolderMenuItem(AppConfigFile::AppFolder appFolder);
 
     /**
      * Check if this button is for an application folder
@@ -119,8 +118,6 @@ protected:
      */
     void editFolder(String name, String icon, Array<String> categories);
 private:
-    //Used for saving changes made in the getEditor() edit window
-    AppConfigFile& config;
     //Source of this button's folder information
     AppConfigFile::AppFolder appFolder;
 };

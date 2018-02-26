@@ -9,7 +9,7 @@
 
 class ScrollingAppMenu : public AppMenuComponent {
 public:
-    ScrollingAppMenu(AppConfigFile& appConfig);
+    ScrollingAppMenu();
     virtual ~ScrollingAppMenu();
 
     /**

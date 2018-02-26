@@ -7,10 +7,9 @@
 #include "AppMenuComponent.h"
 
 AppMenuComponent::AppMenuComponent
-(String componentKey, AppConfigFile& appConfig) :
+(String componentKey) :
 ConfigurableComponent(componentKey),
 loadingAsync(false),
-appConfig(appConfig),
 showPopupCallback([this](AppMenuPopupEditor* newEditor)
 {
 
@@ -46,12 +45,12 @@ void AppMenuComponent::loadButtons()
     buttonColumns.emplace(buttonColumns.begin());
 
     //read in main page apps from config
+    AppConfigFile appConfig;
     Array<AppConfigFile::AppItem> favorites = appConfig.getFavorites();
     for (const AppConfigFile::AppItem& favorite : favorites)
     {
         DBG(String("AppMenu:Found app in config:") + favorite.name);
-        addButton(createMenuButton(AppMenuItemFactory::create
-                (favorite, appConfig),
+        addButton(createMenuButton(AppMenuItemFactory::create(favorite),
                 activeColumn(), buttonColumns[activeColumn()].size()));
     }
 
@@ -59,8 +58,7 @@ void AppMenuComponent::loadButtons()
     Array<AppConfigFile::AppFolder> categories = appConfig.getFolders();
     for (const AppConfigFile::AppFolder& category : categories)
     {
-        addButton(createMenuButton(AppMenuItemFactory::create
-                (category, appConfig),
+        addButton(createMenuButton(AppMenuItemFactory::create(category),
                 activeColumn(), buttonColumns[activeColumn()].size()));
     }
     DBG(String("added ") + String(buttonColumns[activeColumn()].size())
@@ -183,6 +181,7 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
     {
         loadButtons();
     };
+    AppConfigFile appConfig;
     switch (selection)
     {
         case 1://User selects "Edit"
@@ -254,6 +253,7 @@ int AppMenuComponent::activeColumn()
  */
 void AppMenuComponent::openFolder(Array<String> categoryNames)
 {
+    AppConfigFile appConfig;
     int folderIndex = selected[activeColumn()]->getRowIndex() -
             appConfig.getFavorites().size();
     AppConfigFile::AppFolder selectedFolder =

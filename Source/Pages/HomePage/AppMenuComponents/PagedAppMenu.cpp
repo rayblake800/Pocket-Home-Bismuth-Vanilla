@@ -1,8 +1,8 @@
 #include "../../../Utils.h"
 #include "PagedAppMenu.h"
 
-PagedAppMenu::PagedAppMenu(AppConfigFile& appConfig) :
-AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, appConfig)
+PagedAppMenu::PagedAppMenu() :
+AppMenuComponent(ComponentConfigFile::pagedAppMenuKey)
 {
     setBounds(getWindowSize());
     loadButtons();

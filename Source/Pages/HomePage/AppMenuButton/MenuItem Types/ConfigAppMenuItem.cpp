@@ -2,12 +2,8 @@
 #include "../../../../Configuration/MainConfigFile.h"
 #include "ConfigAppMenuItem.h"
 
-ConfigAppMenuItem::ConfigAppMenuItem
-(AppConfigFile::AppItem appItem, AppConfigFile& config) :
-appItem(appItem),
-config(config)
-{
-}
+ConfigAppMenuItem::ConfigAppMenuItem(AppConfigFile::AppItem appItem) :
+appItem(appItem) { }
 
 /**
  * Check if this menu item is an application folder
@@ -77,6 +73,7 @@ String ConfigAppMenuItem::getIconName() const
  */
 bool ConfigAppMenuItem::canChangeIndex(int offset) const
 {
+    AppConfigFile config;
     int newIndex = config.getFavoriteIndex(appItem) + offset;
     return newIndex >= 0 && newIndex < config.getFavorites().size();
 }
@@ -124,6 +121,7 @@ std::function<void(AppMenuPopupEditor*) > ConfigAppMenuItem::getEditorCallback()
 void ConfigAppMenuItem::editApp
 (String name, String icon, String command, bool terminal)
 {
+    AppConfigFile config;
     int index = config.getFavoriteIndex(appItem);
     appItem.name = name;
     appItem.icon = icon;
@@ -138,6 +136,7 @@ void ConfigAppMenuItem::editApp
  */
 void ConfigAppMenuItem::removeMenuItemSource()
 {
+    AppConfigFile config;
     config.removeFavoriteApp(config.getFavoriteIndex(appItem));
 }
 
@@ -149,6 +148,7 @@ bool ConfigAppMenuItem::moveDataIndex(int offset)
 {
     if (canChangeIndex(offset))
     {
+        AppConfigFile config;
         int index = config.getFavoriteIndex(appItem);
         if (index == -1)
         {

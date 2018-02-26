@@ -15,9 +15,8 @@ class ConfigAppMenuItem : public AppMenuItem {
 public:
     /**
      * @param appItem defines all menu item data
-     * @param config is the object needed to save and load changes to appItem
      */
-    ConfigAppMenuItem(AppConfigFile::AppItem appItem, AppConfigFile& config);
+    ConfigAppMenuItem(AppConfigFile::AppItem appItem);
 
     /**
      * Check if this menu item is an application folder
@@ -124,8 +123,6 @@ protected:
     bool moveDataIndex(int offset);
 
 private:
-    //Application config file manager, used to read and write favorite app data
-    AppConfigFile& config;
     //Application information structure
     AppConfigFile::AppItem appItem;
 };

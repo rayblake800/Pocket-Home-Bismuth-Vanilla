@@ -22,7 +22,7 @@
 class AppMenuComponent : public Component,
 public ConfigurableComponent {
 public:
-    AppMenuComponent(String componentKey,AppConfigFile& appConfig);
+    AppMenuComponent(String componentKey);
     virtual ~AppMenuComponent();
 
     /**
@@ -212,10 +212,6 @@ private:
      * if necessary when visibility is gained.
      */
     void visibilityChanged() override;
-
-    //Application configuration object used to fetch folder definitions and
-    //favorites/pinned applications
-    AppConfigFile& appConfig;
 
     //Handles application launching when application buttons are selected and
     //clicked.
