@@ -17,6 +17,13 @@ MainConfigFile::MainConfigFile() : ConfigFile(filenameConst)
 
 MainConfigFile::~MainConfigFile() { }
 
+//menu types
+const Array<String> MainConfigFile::menuTypes = 
+{
+	"Scrolling menu",
+	"Paged menu"
+};
+
 //string
 const String MainConfigFile::backgroundKey = "background";
 const String MainConfigFile::menuTypeKey = "app menu type";

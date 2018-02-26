@@ -49,7 +49,10 @@ menuTypePicker("menuTypePicker")
             Colour::greyLevel(0.f));
     bgEditor.addFileSelectListener(this);
 
-    menuTypePicker.addItem("Scrolling menu", 1);
+	for(int i = 0; i < MainConfigFile::menuTypes.size();i++)
+	{
+		menuTypePicker.addItem(MainConfigFile::menuTypes[i], i+1);
+    }
     menuTypePicker.setSelectedId(1);
     menuTypePicker.addListener(this);
     updateComboBox();
@@ -78,9 +81,19 @@ void PersonalizePage::updateComboBox()
         display = true;
         bgEditor.setText(background, false);
     }
-
     bgEditor.setVisible(display);
     bgLabel.setVisible(display);
+    
+    String menuType = config.getConfigValue<String>(MainConfigFile::menuTypeKey);
+    for(int i = 0; i < MainConfigFile::menuTypes.size();i++)
+    {
+		if(MainConfigFile::menuTypes[i] == menuType 
+				&& menuTypePicker.getSelectedId() != (i+1))
+		{
+			menuTypePicker.setSelectedItemIndex(i+1, sendNotificationSync);
+			break;
+		}
+	}
 }
 
 void PersonalizePage::comboBoxChanged(ComboBox * box)
@@ -109,7 +122,8 @@ void PersonalizePage::comboBoxChanged(ComboBox * box)
     }
     else if (box == &menuTypePicker)
     {
-        config.setConfigValue<String>(MainConfigFile::menuTypeKey, box->getText());
+        config.setConfigValue<String>(MainConfigFile::menuTypeKey,
+				MainConfigFile::menuTypes[box->getSelectedId()-1]);
     }
 }
 

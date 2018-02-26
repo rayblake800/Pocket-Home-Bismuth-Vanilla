@@ -22,6 +22,9 @@ public:
     //boolean value keys
     static const String showCursorKey;
     std::vector<DataKey> getDataKeys() const;
+    
+    //All possible values of menuTypeKey
+    static const Array<String> menuTypes;
 
 private:
     static CriticalSection mainConfigLock;

@@ -1,6 +1,6 @@
 {
     "background": "FF4D4D4D",
-    "app menu type": "scrolling",
+    "app menu type": "Scrolling menu",
     "shutdown command": "systemctl poweroff",
     "restart command": "systemctl reboot",
     "sleep command": "xset dpms force off",

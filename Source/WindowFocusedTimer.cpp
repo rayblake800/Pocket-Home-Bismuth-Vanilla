@@ -69,7 +69,7 @@ void WindowFocusedTimer::windowFocusGained()
             }
             else
             {
-                int timeLeft = (int) (now - timer->suspendedEndTime);
+                uint32 timeLeft = now - timer->suspendedEndTime;
                 DBG(String("Timer resumed with ") + String(timeLeft) + " ms");
                 timer->startTimer(timeLeft);
             }

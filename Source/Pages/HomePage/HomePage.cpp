@@ -9,25 +9,19 @@
 HomePage::HomePage() :
 PageComponent("HomePage"),
 Configurable(new MainConfigFile(),{
-    MainConfigFile::backgroundKey
+    MainConfigFile::backgroundKey,
+    MainConfigFile::menuTypeKey
 }),
 frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
 powerButton(ComponentConfigFile::powerButtonKey),
-settingsButton(ComponentConfigFile::settingsButtonKey),
-appMenu(new ScrollingAppMenu(appConfig))
-{
+settingsButton(ComponentConfigFile::settingsButtonKey)
+{	
     addMouseListener(this, false);
-    appMenu->setPopupCallback([this](AppMenuPopupEditor * newEditor)
-    {
-        showPopupEditor(newEditor);
-    });
     setWantsKeyboardFocus(true);
 
-    addAndMakeVisible(appMenu);
     addAndMakeVisible(frame);
     addAndMakeVisible(clock);
 
-    loadAllConfigProperties();
     addAndMakeVisible(batteryIcon);
     addAndMakeVisible(wifiIcon);
 
@@ -40,6 +34,8 @@ appMenu(new ScrollingAppMenu(appConfig))
     addAndMakeVisible(settingsButton);
 
     settingsPage = new SettingsPage();
+    
+    loadAllConfigProperties();
 }
 
 HomePage::~HomePage() { }
@@ -61,20 +57,50 @@ void HomePage::showPopupEditor(AppMenuPopupEditor* editor)
 void HomePage::loadConfigProperties(ConfigFile* config, String key)
 {
     MainConfigFile mainConf = MainConfigFile();
-    if (mainConf == *config && key == MainConfigFile::backgroundKey)
+    if(mainConf == *config)
     {
-        String background = mainConf.getConfigValue<String>
-                (MainConfigFile::backgroundKey);
-        if (background.containsOnly("0123456789ABCDEFXabcdefx"))
-        {
-            setBackgroundImage(Image::null);
-            Colour bgColour(background.getHexValue32());
-            setColour(backgroundColourId, bgColour.withAlpha(1.0f));
-        }
-        else
-        {
-            setBackgroundImage(ImageFileFormat::loadFrom(assetFile(background)));
-        }
+		if(key == MainConfigFile::backgroundKey)
+		{
+			String background = mainConf.getConfigValue<String>
+					(MainConfigFile::backgroundKey);
+			if (background.containsOnly("0123456789ABCDEFXabcdefx"))
+			{
+				setBackgroundImage(Image::null);
+				Colour bgColour(background.getHexValue32());
+				setColour(backgroundColourId, bgColour.withAlpha(1.0f));
+			}
+			else
+			{
+				setBackgroundImage(ImageFileFormat::loadFrom(assetFile(background)));
+			}
+		}
+		else if(key == MainConfigFile::menuTypeKey)
+		{
+			if(appMenu != nullptr)
+			{
+				removeChildComponent(appMenu);
+				appMenu = nullptr;
+			}
+			
+			String menuType = mainConf.getConfigValue<String>
+					(MainConfigFile::menuTypeKey);
+			DBG(String("Menu type is ")+menuType);
+			if(menuType == "Scrolling menu")
+			{
+				appMenu = new ScrollingAppMenu(appConfig);
+			}
+			else//menuType == "pagedMenu"
+			{
+				appMenu = new PagedAppMenu(appConfig);
+			}
+			appMenu->setPopupCallback(
+			[this](AppMenuPopupEditor * newEditor)
+			{
+				showPopupEditor(newEditor);
+			});
+			addAndMakeVisible(appMenu);
+			pageResized();
+		}
     }
 }
 
