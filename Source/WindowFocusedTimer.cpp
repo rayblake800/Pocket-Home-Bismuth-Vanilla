@@ -25,7 +25,7 @@ WindowFocusedTimer::~WindowFocusedTimer()
 void WindowFocusedTimer::stopTimer()
 {
     Timer::stopTimer();
-    suspendedTime = Time();
+    suspendedEndTime = 0;
 }
 
 /**
@@ -39,10 +39,10 @@ void WindowFocusedTimer::windowFocusLost()
     {
         if (timer->isTimerRunning())
         {
-            Time endTime = Time::getCurrentTime() + 
-                    RelativeTime::milliseconds(timer->getTimerInterval());
+            uint32 endTime = Time::getMillisecondCounter() + 
+                    timer->getTimerInterval();
             timer->stopTimer();
-            timer->suspendedTime = endTime;
+            timer->suspendedEndTime = endTime;
             suspended++;
         }
     }
@@ -59,20 +59,21 @@ void WindowFocusedTimer::windowFocusGained()
     int resumed = 0;
     for (WindowFocusedTimer* timer : allTimers)
     {
-        if (timer->suspendedTime >= 0)
+        if (timer->suspendedEndTime > 0)
         {
-            if (Time::currentTimeMillis() > timer->suspendedTime)
+			uint32 now = Time::getMillisecondCounter();
+            if (now > timer->suspendedEndTime)
             {
                 DBG("Timer resumed and immediately finishes");
                 timer->timerCallback();
             }
             else
             {
-                int64 timeLeft = Time::currentTimeMillis() - timer->suspendedTime;
+                int timeLeft = (int) (now - timer->suspendedEndTime);
                 DBG(String("Timer resumed with ") + String(timeLeft) + " ms");
                 timer->startTimer(timeLeft);
             }
-            timer->suspendedTime = -1;
+            timer->suspendedEndTime = 0;
             resumed++;
         }
     }

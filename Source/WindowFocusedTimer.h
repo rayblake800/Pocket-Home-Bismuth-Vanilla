@@ -56,10 +56,11 @@ private:
     static Array<WindowFocusedTimer*> allTimers;
 
     /**
-     * Next scheduled runtime for a suspended timer.  If set to the epoch,
-     * (suspendedTime = Time()), this indicates that the timer is not suspended.
+     * Next scheduled runtime for a suspended timer, relative to 
+     * Time::getMillisecondCounter. If set to zero, this indicates that 
+     * the timer is not suspended.
      */
-    Time suspendedTime;
+    uint32 suspendedEndTime;
     bool noResume;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WindowFocusedTimer)
