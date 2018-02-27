@@ -35,48 +35,67 @@ protected:
         virtual ~AppFolder();
         
         /**
-         * @return 
+         * @return number of menu buttons in the folder.
          */
         int size();
         
         /**
-         * 
+         * @return The selected menu button in this folder.
+         * This will only return nullptr if there are no buttons in 
+         * this folder.
+         */
+        AppMenuButton::Ptr getSelectedButton();
+
+        /**
+         * Returns a pop-up editor component for updating the selected 
+         * button.
+         */
+        AppMenuPopupEditor* getEditorForSelected();
+        
+        /**
+         * Set this folder's selected menu button
+         * @param index
+         */
+        void selectIndex(int index);
+
+		
+		void insertButton(AppMenuButton::Ptr newButton, int index);
+
+		void removeButton(int index);
+
+		/**
+         * Swap the indices and positions of two buttons in the folder.
          * @param btnIndex1
          * @param btnIndex2
          */
         void swapButtons(int btnIndex1, int btnIndex2);
 
         /**
-         * @return 
-         */
-        AppMenuButton::Ptr getSelectedButton();
-
-        /**
-         * Returns a pop-up editor component for updating the selected button.
-         * @return either an editor component, or nullptr if no button is selected.
-         */
-        AppMenuPopupEditor* getEditorForSelected();
-        
-        /**
-         * Set the selected folder button
-         * @param index
-         */
-        void selectIndex(int index);
-
-        /**
-         * Trigger a click for the selected button.
+         * Trigger a click for this folder's selected button.
          */
         void clickSelected();
     private:
         /**
-         * 
+         * Reposition folder buttons when folder bounds change.
          */
         void resized() override;
 
         /**
-         * 
+         * Clear folderLayout,remove all child components, reload the
+         * button layout, and re-add the layout buttons as child
+         * components.
          */
         virtual void layoutButtons() = 0;
+        
+        /**
+         * Given a list of folder buttons, return an appropriate layout
+         * for positioning them in the folder component.
+         * 
+         * @param buttons
+         * @return a Layout containing all items in the button array.
+         */
+        virtual GridLayoutManager::Layout buildFolderLayout
+				(Array<AppMenuButton::Ptr> buttons) = 0;
         
         GridLayoutManager folderLayout;
         Array<AppMenuButton::Ptr> folderButtons;
