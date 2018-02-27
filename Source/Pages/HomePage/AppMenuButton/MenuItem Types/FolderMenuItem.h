@@ -10,46 +10,44 @@
 #pragma once
 #include "../../../../Configuration/AppConfigFile.h"
 #include "../../IconThread.h"
+#include "../../DesktopEntries.h"
 #include "../AppMenuItem.h"
 
 class FolderMenuItem : public AppMenuItem {
 public:
     /**
      * @param appFolder defines the folder data
+     * @param desktopEntries is used to load folder items.
      */
-    FolderMenuItem(AppConfigFile::AppFolder appFolder);
+    FolderMenuItem(const AppConfigFile::AppFolder& appFolder,
+            const DesktopEntries& desktopEntries);
+    virtual ~FolderMenuItem();
 
     /**
      * Check if this button is for an application folder
      * @return true
      */
-    bool isFolder() const;
+    bool isFolder() const override;
+
+    /**
+     * @return all menu items in this folder
+     */
+    virtual Array<AppMenuItem> getFolderItems() const override;
 
     /**
      * @return the display name of the associated folder
      */
-    String getAppName() const;
-
-    /**
-     * @return the empty string, as FolderMenuItems don't have a command
-     */
-    String getCommand() const;
-
-
-    /**
-     * @return false, as FolderMenuItems aren't apps at all
-     */
-    bool isTerminalApp() const;
+    virtual String getAppName() const override;
 
     /**
      * @return all application categories linked to this folder.
      */
-    Array<String> getCategories() const;
+    virtual Array<String> getCategories() const override;
 
     /**
      * @return the name or path used to load the icon file. 
      */
-    String getIconName() const;
+    virtual String getIconName() const override;
 
     /**
      * Return true if this menu item has an index that can be moved by a given 
@@ -58,7 +56,7 @@ public:
      * @return true if this menu item has an index value i that can be changed 
      * to i+offset 
      */
-    bool canChangeIndex(int offset) const;
+    virtual bool canChangeIndex(int offset) const override;
 protected:
     /**
      * Get an appropriate title to use for a deletion confirmation window.
@@ -93,13 +91,15 @@ protected:
      * Gets a PopupEditorComponent callback function that will apply 
      * changes from an AppMenuPopupEditor to this menu item.
      */
-    std::function<void(AppMenuPopupEditor*) > getEditorCallback();
+    std::function<void(AppMenuPopupEditor*) > getEditorCallback() override;
 
     /**
      * Removes the source of this menu item's data, deleting the folder from
      * apps.json
+     * 
+     * @return true iff the source was removed.
      */
-    void removeMenuItemSource();
+    bool removeMenuItemSource() override;
 
     /**
      * If possible, change the index of this menu item by some
@@ -108,7 +108,7 @@ protected:
      * possible.
      * @return true iff the operation succeeded.
      */
-    bool moveDataIndex(int offset);
+    bool moveDataIndex(int offset) override;
 
     /**
      * Assign new properties to this folder, changing configuration files
@@ -120,6 +120,7 @@ protected:
 private:
     //Source of this button's folder information
     AppConfigFile::AppFolder appFolder;
+    const DesktopEntries& desktopEntries;
 };
 
 

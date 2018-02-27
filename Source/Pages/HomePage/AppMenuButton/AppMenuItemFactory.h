@@ -19,7 +19,7 @@ public:
      * @param appItem defines all menu item data
      * @return a pointer to the new menu item
      */
-    static AppMenuItem* create(AppConfigFile::AppItem appItem);
+    static AppMenuItem* create(const AppConfigFile::AppItem& appItem);
 
     /**
      * Get an AppMenuItem for an application link that was read from a desktop
@@ -27,14 +27,14 @@ public:
      * @param desktopEntry defines the application/directory data
      * @return a pointer to the new menu item
      */
-    static AppMenuItem* create(DesktopEntry desktopEntry);
+    static AppMenuItem* create(const DesktopEntry& desktopEntry);
 
     /**
      * Get an AppMenuItem for an application folder provided by the AppConfigFile
      * @param appFolder defines all menu item data
      * @return a pointer to the new menu item
      */
-    static AppMenuItem* create(AppConfigFile::AppFolder appFolder);
+    static AppMenuItem* create(const AppConfigFile::AppFolder& appFolder);
 private:
     AppMenuItemFactory();
     virtual ~AppMenuItemFactory();

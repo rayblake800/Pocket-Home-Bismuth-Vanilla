@@ -2,10 +2,10 @@
 #include "../../../../Configuration/MainConfigFile.h"
 #include "DesktopEntryMenuItem.h"
 
-DesktopEntryMenuItem::DesktopEntryMenuItem(DesktopEntry desktopEntry)
-: desktopEntry(desktopEntry)
-{
-}
+DesktopEntryMenuItem::DesktopEntryMenuItem(const DesktopEntry& desktopEntry)
+: desktopEntry(desktopEntry) { }
+
+DesktopEntryMenuItem::~DesktopEntryMenuItem() { }
 
 /**
  * @return true if this menu item is an application folder
@@ -101,17 +101,17 @@ std::function<void(AppMenuPopupEditor*) > DesktopEntryMenuItem::getEditorCallbac
     };
 }
 
-
 /**
  * Sets this menu items desktopEntry to not display in pocket-home for the
  * current user.
  */
-void DesktopEntryMenuItem::removeMenuItemSource()
+bool DesktopEntryMenuItem::removeMenuItemSource()
 {
     Array<String> notShowIn = desktopEntry.getValue(DesktopEntry::notShowIn);
     notShowIn.add("pocket-home");
     desktopEntry.setValue(DesktopEntry::notShowIn, notShowIn);
     desktopEntry.writeFile();
+    return true;
 }
 
 /**

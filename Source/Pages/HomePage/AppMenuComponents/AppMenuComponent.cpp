@@ -6,26 +6,126 @@
 #include "../HomePage.h"
 #include "AppMenuComponent.h"
 
-AppMenuComponent::AppMenuComponent
-(String componentKey) :
+AppMenuComponent::AppMenuComponent(String componentKey) :
 ConfigurableComponent(componentKey),
-loadingAsync(false),
-showPopupCallback([this](AppMenuPopupEditor* newEditor)
-{
-
-    buttonEditor = newEditor;
-    addAndMakeVisible(newEditor);
-})
+loadingAsync(false)
 {
     applyConfigBounds();
     setWantsKeyboardFocus(false);
     loadingSpinner.setAlwaysOnTop(true);
 }
 
-AppMenuComponent::~AppMenuComponent()
+AppMenuComponent::~AppMenuComponent() { }
+
+AppMenuComponent::AppFolder::AppFolder
+(Array<AppMenuButton::Ptr> folderButtons) :
+folderButtons(folderButtons)
 {
-    stopWaitingForLoading();
+    layoutButtons();
 }
+
+AppMenuComponent::AppFolder::~AppFolder() { }
+
+/**
+ * @return number of menu buttons in the folder.
+ */
+int AppMenuComponent::AppFolder::size()
+{
+    return folderButtons.size();
+}
+
+/**
+ * @return The selected menu button in this folder.
+ * This will only return nullptr if there are no buttons in 
+ * this folder.
+ */
+AppMenuButton::Ptr AppMenuComponent::AppFolder::getSelectedButton()
+{
+    if (selectedIndex < 0 || selectedIndex >= folderButtons.size())
+    {
+        return nullptr;
+    }
+    return folderButtons[selectedIndex];
+}
+
+/**
+ * Returns a pop-up editor component for updating the selected 
+ * button.
+ */
+AppMenuPopupEditor* AppMenuComponent::AppFolder::getEditorForSelected()
+{
+    if (getSelectedButton() != nullptr)
+    {
+        AppMenuItem * selectedItem = getSelectedButton()->getMenuItem();
+        return getSelectedButton()->getEditor(
+                [this, selectedItem](AppMenuPopupEditor * editor)
+                {
+                    if (editor->getCategories() != selectedItem->getCategories())
+                    {
+                        loadButtons();
+                    }
+                });
+    }
+    return nullptr;
+}
+
+/**
+ * Set this folder's selected menu button
+ * @param index
+ */
+void AppMenuComponent::AppFolder::selectIndex(int index);
+
+/**
+ * @return the index of the selected menu button.
+ */
+int AppMenuComponent::AppFolder::getSelectedIndex() { }
+
+/**
+ * Insert a new button to the folder at a specific index,
+ * shifting forward any buttons at indices equal or greater
+ * than the index. 
+ * 
+ * @param index should be between 0 and appFolder.size(),
+ * inclusive.  Values outside of this range will be rounded to
+ * the nearest valid value.
+ */
+void AppMenuComponent::AppFolder::insertButton(AppMenuButton::Ptr newButton, int index);
+
+/**
+ * Remove the button at a given index, shifting back any buttons
+ * at greater indices to fill the gap
+ */
+void AppMenuComponent::AppFolder::removeButton(int index);
+
+/**
+ * Swap the indices and positions of two buttons in the folder.
+ * Both indices must be valid, or nothing will happen.
+ */
+void AppMenuComponent::AppFolder::swapButtons(int btnIndex1, int btnIndex2);
+
+/**
+ * Trigger a click for this folder's selected button.
+ */
+void AppMenuComponent::AppFolder::clickSelected();
+
+/**
+ * Set the relative spacing of the folder component layout.
+ */
+void AppMenuComponent::AppFolder::setSpacing(float margin, float xPadding, float yPadding);
+
+/**
+ * Reposition folder buttons when folder bounds change.
+ */
+void AppMenuComponent::AppFolder::resized();
+
+/**
+ * Clear folderLayout,remove all child components, reload the
+ * button layout, and re-add the layout buttons as child
+ * components.
+ */
+void AppMenuComponent::AppFolder::layoutButtons();
+
+//OLD:
 
 /**
  * Loads all app menu buttons
@@ -106,7 +206,8 @@ void AppMenuComponent::changeSelection(int indexOffset)
     if (getSelectedButton() == nullptr)
     {
         selectIndex(0);
-    } else
+    }
+    else
     {
         selectIndex(getSelectedButton()->getRowIndex() + indexOffset);
     }
@@ -157,7 +258,8 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
         if (selectedMenuItem->isFolder())
         {
             appMenu.addItem(4, "New application link");
-        } else if (selectedButton->getColumnIndex() != 0)
+        }
+        else if (selectedButton->getColumnIndex() != 0)
         {
             appMenu.addItem(6, "Pin to favorites");
         }
@@ -169,7 +271,8 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
         {
             appMenu.addItem(8, "Move forward");
         }
-    } else
+    }
+    else
     {
         appMenu.addItem(3, "New favorite application link");
         appMenu.addItem(4, "New application link");
@@ -271,17 +374,18 @@ void AppMenuComponent::openFolder(Array<String> categoryNames)
     for (DesktopEntry desktopEntry : folderItems)
     {
         if (!desktopEntry.getValue(DesktopEntry::hidden)
-                && !desktopEntry.getValue(DesktopEntry::hidden))
+            && !desktopEntry.getValue(DesktopEntry::hidden))
         {
             String name = desktopEntry.getValue(DesktopEntry::name);
             AppMenuButton::Ptr addedButton;
             if (buttonNameMap[name].get() != nullptr &&
-                    buttonNameMap[name]->getParentComponent() == nullptr)
+                buttonNameMap[name]->getParentComponent() == nullptr)
             {
                 addedButton = buttonNameMap[name];
                 addedButton->setRowIndex(buttonColumns[activeColumn()].size());
                 addedButton->setColumnIndex(activeColumn());
-            } else
+            }
+            else
             {
                 addedButton = createMenuButton(AppMenuItemFactory::create
                         (desktopEntry), activeColumn(),
@@ -348,7 +452,8 @@ AppMenuButton* AppMenuComponent::getSelectedButton()
     try
     {
         return selected.at(activeColumn());
-    } catch (std::out_of_range e)
+    }
+    catch (std::out_of_range e)
     {
         return nullptr;
     }
@@ -417,13 +522,15 @@ void AppMenuComponent::onButtonClick(AppMenuButton* button)
         if (selectedMenuItem->isFolder())
         {
             openFolder(selectedMenuItem->getCategories());
-        } else
+        }
+        else
         {
             showLoadingSpinner();
             appLauncher.startOrFocusApp(selectedMenuItem->getAppName(),
                     selectedMenuItem->getCommand());
         }
-    } else
+    }
+    else
     {
         selectIndex(button->getRowIndex());
     }
@@ -480,7 +587,7 @@ void AppMenuComponent::selectIndex(int index)
                 buttonColumns.at(activeColumn());
         AppMenuButton* selectedButton = getSelectedButton();
         if (index >= 0 && index < column.size()
-                && column[index].get() != selectedButton)
+            && column[index].get() != selectedButton)
         {
             if (selectedButton != nullptr)
             {
@@ -529,7 +636,8 @@ void AppMenuComponent::swapButtons(AppMenuButton* button1, AppMenuButton* button
         button2->setRowIndex(index);
         buttonColumns[column][index] = button2;
         button2->setBounds(bounds);
-    } else
+    }
+    else
     {
         DBG(String("Cant move index ") + String(index) + String(" by ") + String(button2->getRowIndex() - index));
     }
@@ -542,7 +650,7 @@ void AppMenuComponent::mouseDown(const MouseEvent &event)
 {
     //ignore clicks when loading or when the editor is open
     if (!isLoading() &&
-            (buttonEditor == nullptr || !buttonEditor->isVisible()))
+        (buttonEditor == nullptr || !buttonEditor->isVisible()))
     {
 
         AppMenuButton* appClicked = dynamic_cast<AppMenuButton*>
@@ -552,10 +660,11 @@ void AppMenuComponent::mouseDown(const MouseEvent &event)
         if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
         {
             if (appClicked == nullptr ||
-                    appClicked == getSelectedButton())
+                appClicked == getSelectedButton())
             {
                 openPopupMenu(appClicked == getSelectedButton());
-            } else
+            }
+            else
             {
                 onButtonClick(appClicked);
             }
@@ -577,7 +686,8 @@ void AppMenuComponent::visibilityChanged()
     if (loadingAsync)
     {
         showLoadingSpinner();
-    } else if (!isVisible())
+    }
+    else if (!isVisible())
     {
         stopWaitingForLoading();
     }

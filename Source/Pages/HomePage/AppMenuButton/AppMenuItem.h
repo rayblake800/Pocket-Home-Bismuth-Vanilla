@@ -3,9 +3,13 @@
  *
  *  AppMenuItem handles the menu data for an AppMenuButton.  It provides
  * all custom data displayed by the button, including data needed for
- * handling button clicks and editing this data and its button. Methods that
- * edit this menu data are only accessible to AppMenuButton objects, as each
- * menu item should only be directly modified by its AppMenuButton.
+ * handling button clicks and editing this data and its button. 
+ * 
+ *   Methods that edit this menu data are only accessible to AppMenuButton 
+ * objects, as each menu item should only be directly modified by its 
+ * AppMenuButton.  All methods for getting menu data return false, {}, or
+ * String::empty by default, inheriting classes are responsible for overriding
+ * these to provide accurate data.
  */
 
 #pragma once
@@ -22,42 +26,41 @@ public:
     virtual ~AppMenuItem();
 
     /**
-     * @return true if this menu item is an application folder
+     * @return true if this menu item is an application folder.
      */
-    virtual bool isFolder() const = 0;
+    virtual bool isFolder() const;
 
     /**
      * @return all menu items in this folder, or an empty array if this isn't
      * a folder.
      */
-    virtual Array<AppMenuItem::Ptr> getFolderItems() const {
-    }
+    virtual Array<AppMenuItem> getFolderItems() const;
 
     /**
-     * @return the display name of the associated application
+     * @return the display name of the associated application.
      */
-    virtual String getAppName() const = 0;
+    virtual String getAppName();
 
     /**
      * @return the application shell command or directory path.
      */
-    virtual String getCommand() const = 0;
+    virtual String getCommand() const;
 
     /**
      * @return true iff this menu item is an application that launches in
-     * the terminal.
+     * the terminal. 
      */
-    virtual bool isTerminalApp() const = 0;
+    virtual bool isTerminalApp() const;
 
     /**
      * @return all application categories linked to this menu item.
      */
-    virtual Array<String> getCategories() const = 0;
+    virtual Array<String> getCategories() const;
 
     /**
      * @return the name or path used to load the icon file. 
      */
-    virtual String getIconName() const = 0;
+    virtual String getIconName() const;
 
     /**
      * Return true if this menu item has an index that can be moved by a given 
@@ -66,7 +69,7 @@ public:
      * @return true if this menu item has an index value i that can be changed 
      * to i+offset 
      */
-    virtual bool canChangeIndex(int offset) const = 0;
+    virtual bool canChangeIndex(int offset) const;
 protected:
 
     /**
@@ -100,12 +103,13 @@ protected:
      * Gets a PopupEditorComponent callback function that will apply 
      * changes from an AppMenuPopupEditor to this menu item.
      */
-    virtual std::function<void(AppMenuPopupEditor*) > getEditorCallback() = 0;
+    virtual std::function<void(AppMenuPopupEditor*) > getEditorCallback();
 
     /**
      * Removes the source of this menu item's data
+     * @return true iff the source was removed.
      */
-    virtual void removeMenuItemSource() = 0;
+    virtual bool removeMenuItemSource();
 
     /**
      * If possible, change the index of this menu item by some
@@ -114,6 +118,6 @@ protected:
      * possible.
      * @return true iff the operation succeeded.
      */
-    virtual bool moveDataIndex(int offset) = 0;
+    virtual bool moveDataIndex(int offset);
 
 };

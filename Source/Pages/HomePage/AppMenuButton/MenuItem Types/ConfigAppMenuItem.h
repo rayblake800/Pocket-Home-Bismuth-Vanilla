@@ -16,41 +16,29 @@ public:
     /**
      * @param appItem defines all menu item data
      */
-    ConfigAppMenuItem(AppConfigFile::AppItem appItem);
-
-    /**
-     * Check if this menu item is an application folder
-     * @return false, ConfigAppMenuItems are never folders
-     */
-    bool isFolder() const;
+    ConfigAppMenuItem(const AppConfigFile::AppItem& appItem);
+    virtual ~ConfigAppMenuItem();
 
     /**
      * @return the application's display name
      */
-    String getAppName() const;
+    String getAppName() const override;
 
     /**
      * @return the application's launch command
      */
-    String getCommand() const;
+    String getCommand() const override;
 
     /**
      * @return true iff this menu item is an application that launches in
      * the terminal.
      */
-    bool isTerminalApp() const;
-
-    /**
-     * @return all application categories linked to this menu item.
-     * This will be an empty list, as ConfigAppMenuItems are not associated with
-     * application categories.
-     */
-    Array<String> getCategories() const;
+    bool isTerminalApp() const override;
 
     /**
      * @return the name or path used to load the icon file. 
      */
-    String getIconName() const;
+    String getIconName() const override;
 
     /**
      * Return true if this menu item has an index that can be moved by a given 
@@ -59,7 +47,7 @@ public:
      * @return true if this menu item has an index value i that can be changed 
      * to i+offset 
      */
-    bool canChangeIndex(int offset) const;
+    bool canChangeIndex(int offset) const override;
 
 protected:
     /**
@@ -97,7 +85,7 @@ protected:
      * Gets a PopupEditorComponent callback function that will apply 
      * changes from an AppMenuPopupEditor to this menu item.
      */
-    std::function<void(AppMenuPopupEditor*) > getEditorCallback();
+    std::function<void(AppMenuPopupEditor*) > getEditorCallback() override;
 
     /**
      * Edit this menu item's data in the config file.
@@ -110,8 +98,10 @@ protected:
 
     /**
      * Remove this menu item's application from the config file.
+     * 
+     * @return true iff the source was removed.
      */
-    void removeMenuItemSource();
+    bool removeMenuItemSource() override;
 
     /**
      * If possible, change the index of this menu item by some
@@ -120,7 +110,7 @@ protected:
      * possible.
      * @return true iff the operation succeeded.
      */
-    bool moveDataIndex(int offset);
+    bool moveDataIndex(int offset) override;
 
 private:
     //Application information structure

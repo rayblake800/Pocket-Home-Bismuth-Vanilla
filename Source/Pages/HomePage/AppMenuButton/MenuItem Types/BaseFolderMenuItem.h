@@ -1,0 +1,35 @@
+/**
+ * @file BaseFolderMenuItem.h
+ * 
+ * BaseFolderMenuItem is an AppMenuItem that represents the base list
+ * of favorite application shortcuts and folders defined in AppConfigFile.
+ * 
+ * @see AppMenuItem, AppConfigFile
+ * 
+ */
+#pragma once
+#include "../../../../Configuration/AppConfigFile.h"
+#include "../../DesktopEntries.h"
+#include "../AppMenuItem.h"
+
+class BaseFolderMenuItem : public AppMenuItem {
+public:
+    
+    BaseFolderMenuItem(const DesktopEntries& desktopEntries);
+    virtual ~BaseFolderMenuItem();
+
+    /**
+     * Check if this button is for an application folder
+     * @return true
+     */
+    bool isFolder() const override;
+    
+    /**
+     * @return all menu items in this folder
+     */
+    virtual Array<AppMenuItem> getFolderItems() const override;
+private:
+    const DesktopEntries& desktopEntries;
+};
+
+

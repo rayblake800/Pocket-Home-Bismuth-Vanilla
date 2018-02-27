@@ -3600,6 +3600,8 @@
           <df name="HomePage">
             <df name="AppMenuButton">
               <df name="MenuItem Types">
+                <in>BaseFolderMenuItem.cpp</in>
+                <in>BaseFolderMenuItem.h</in>
                 <in>ConfigAppMenuItem.cpp</in>
                 <in>ConfigAppMenuItem.h</in>
                 <in>DesktopEntryMenuItem.cpp</in>

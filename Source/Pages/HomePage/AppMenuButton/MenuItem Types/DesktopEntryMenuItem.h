@@ -17,48 +17,42 @@ public:
      * Create a new menu item representing a DesktopEntry
      * @param desktopEntry defines the application/directory data
      */
-    DesktopEntryMenuItem(DesktopEntry desktopEntry);
+    DesktopEntryMenuItem(const DesktopEntry& desktopEntry);
+    ~DesktopEntryMenuItem();
 
     /**
      * @return true if this menu item is an application folder
      */
-    bool isFolder() const;
+    bool isFolder() const override;
+    
+    //TODO: load items from .Directory files!
 
     /**
      * @return the display name of the associated application
      */
-    String getAppName() const;
+    String getAppName() const override;
 
     /**
      * @return application shell command or directory path.
      */
-    String getCommand() const;
+    String getCommand() const override;
 
     /**
      * @return true iff this menu item is an application that launches in
      * the terminal.
      */
-    bool isTerminalApp() const;
+    bool isTerminalApp() const override;
 
     /**
      * @return all application categories linked to this menu item.
      */
-    Array<String> getCategories() const;
+    Array<String> getCategories() const override;
 
     /**
      * @return the name or path used to load the icon file. 
      */
-    String getIconName() const;
+    String getIconName() const override;
 
-    /**
-     * Return true if this menu item has an index that can be moved by a given 
-     * amount.
-     * @param offset some value to add to the menu item index
-     * @return false, as DesktopEntry objects don't have a variable order.
-     */
-    bool canChangeIndex(int offset) const{
-        return false;
-    };
 protected:
 
     /**
@@ -94,23 +88,16 @@ protected:
      * Gets a PopupEditorComponent callback function that will apply 
      * changes from an AppMenuPopupEditor to this menu item.
      */
-    std::function<void(AppMenuPopupEditor*) > getEditorCallback();
+    std::function<void(AppMenuPopupEditor*) > getEditorCallback() override;
 
     /**
      * Removes the source of this menu item's data.  This will hide the desktop
      * entry from pocket-home, but leave it otherwise unchanged and accessible
      * to other programs.
+     * 
+     * @return true iff the source was removed.
      */
-    void removeMenuItemSource();
-
-    /**
-     * If possible, change the index of this button's data source by some
-     * offset amount. This only returns false, because DesktopEntryButtons 
-     * don't have changing indices.
-     */
-    bool moveDataIndex(int offset) {
-        return false;
-    };
+    bool removeMenuItemSource() override;
 
     /**
      * Update this button's desktopEntry. This writes to 

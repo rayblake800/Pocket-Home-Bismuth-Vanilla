@@ -1,10 +1,13 @@
 #include "../../../../Utils.h"
+#include "../AppMenuItemFactory.h"
 #include "FolderMenuItem.h"
 
-FolderMenuItem::FolderMenuItem(AppConfigFile::AppFolder appFolder) :
-appFolder(appFolder)
-{
-}
+FolderMenuItem::FolderMenuItem(const AppConfigFile::AppFolder& appFolder,
+        const DesktopEntries& desktopEntries) :
+appFolder(appFolder),
+desktopEntries(desktopEntries) { }
+
+FolderMenuItem::~FolderMenuItem() { }
 
 /**
  * Check if this button is for an application folder
@@ -16,27 +19,26 @@ bool FolderMenuItem::isFolder() const
 }
 
 /**
+ * @return all menu items in this folder
+ */
+Array<AppMenuItem> FolderMenuItem FolderMenuItem::getFolderItems() const
+{
+    std::set<DesktopEntry> folderEntries =
+            desktopEntries.getCategoryListEntries(appFolder.categories);
+    Array<AppMenuItem> folderItems;
+    for (const DesktopEntry& entry : folderEntries)
+    {
+        folderItems.add(AppMenuItemFactory::create(entry));
+    }
+    return folderItems;
+}
+
+/**
  * @return the display name of the associated folder
  */
 String FolderMenuItem::getAppName() const
 {
     return appFolder.name;
-}
-
-/**
- * @return the empty string, as FolderMenuItems don't have a command
- */
-String FolderMenuItem::getCommand() const
-{
-    return "";
-}
-
-/**
- * @return false, as FolderMenuItems aren't apps at all
- */
-bool FolderMenuItem::isTerminalApp() const
-{
-    return false;
 }
 
 /**
@@ -107,10 +109,11 @@ std::function<void(AppMenuPopupEditor*) > FolderMenuItem::getEditorCallback()
  * Removes the source of this menu item's data, deleting the folder from
  * apps.json
  */
-void FolderMenuItem::removeMenuItemSource()
+bool FolderMenuItem::removeMenuItemSource()
 {
     AppConfigFile config;
     config.removeAppFolder(config.getFolderIndex(appFolder));
+    return true;
 }
 
 /**
@@ -123,7 +126,8 @@ bool FolderMenuItem::moveDataIndex(int offset)
     {
         AppConfigFile config;
         int index = config.getFolderIndex(appFolder);
-        if(index < 0){
+        if (index < 0)
+        {
             return false;
         }
         config.removeAppFolder(index, false);

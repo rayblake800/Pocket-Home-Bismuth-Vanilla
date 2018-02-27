@@ -2,17 +2,10 @@
 #include "../../../../Configuration/MainConfigFile.h"
 #include "ConfigAppMenuItem.h"
 
-ConfigAppMenuItem::ConfigAppMenuItem(AppConfigFile::AppItem appItem) :
+ConfigAppMenuItem::ConfigAppMenuItem(const AppConfigFile::AppItem& appItem) :
 appItem(appItem) { }
 
-/**
- * Check if this menu item is an application folder
- * @return false
- */
-bool ConfigAppMenuItem::isFolder() const
-{
-    return false;
-}
+ConfigAppMenuItem::~ConfigAppMenuItem() { }
 
 /**
  * @return the display name of the associated app
@@ -44,16 +37,6 @@ String ConfigAppMenuItem::getCommand() const
 bool ConfigAppMenuItem::isTerminalApp() const
 {
     return appItem.launchInTerminal;
-}
-
-/**
- * @return all application categories linked to this menu item.
- * This will be an empty list, as ConfigAppMenuItems are not associated with
- * application categories.
- */
-Array<String> ConfigAppMenuItem::getCategories() const
-{
-    return Array<String>();
 }
 
 /**
@@ -134,10 +117,11 @@ void ConfigAppMenuItem::editApp
 /**
  * Remove this menu item's application from the config file.
  */
-void ConfigAppMenuItem::removeMenuItemSource()
+bool ConfigAppMenuItem::removeMenuItemSource()
 {
     AppConfigFile config;
     config.removeFavoriteApp(config.getFavoriteIndex(appItem));
+    return true;
 }
 
 /**

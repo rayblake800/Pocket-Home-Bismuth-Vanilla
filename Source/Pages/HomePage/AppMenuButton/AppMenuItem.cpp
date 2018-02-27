@@ -1,11 +1,74 @@
 #include "AppMenuItem.h"
 
-AppMenuItem::AppMenuItem()
+AppMenuItem::AppMenuItem() { }
+
+AppMenuItem::~AppMenuItem() { }
+
+/**
+ * @return true if this menu item is an application folder.
+ */
+bool AppMenuItem::isFolder() const
 {
+    return false;
 }
 
-AppMenuItem::~AppMenuItem()
+/**
+ * @return all menu items in this folder, or an empty array if this isn't
+ * a folder.
+ */
+Array<AppMenuItem> AppMenuItem::getFolderItems() const
 {
+    return {};
+}
+
+/**
+ * @return the display name of the associated application.
+ */
+String AppMenuItem::getAppName() const
+{
+    return String::empty;
+}
+
+/**
+ * @return the application shell command or directory path.
+ */
+String AppMenuItem::getCommand() const
+{
+    return String::empty;
+}
+
+/**
+ * @return true iff this menu item is an application that launches in
+ * the terminal. 
+ */
+bool AppMenuItem::isTerminalApp() const
+{
+    return false;
+}
+
+/**
+ * @return all application categories linked to this menu item.
+ */
+Array<String> AppMenuItem::getCategories() const
+{
+    return {};
+}
+
+/**
+ * @return the name or path used to load the icon file. 
+ */
+String AppMenuItem::getIconName() const
+{
+    return String::empty;
+}
+
+/**
+ * Return true if this menu item has an index that can be moved by a given 
+ * amount.
+ */
+bool AppMenuItem::canChangeIndex(int offset) const
+{
+    return false;
 }
 
 /**
@@ -48,4 +111,36 @@ bool AppMenuItem::hasEditableCommand() const
 String AppMenuItem::getEditorTitle() const
 {
     return "Edit Menu Item";
+}
+
+/**
+ * Gets a PopupEditorComponent callback function that will apply 
+ * changes from an AppMenuPopupEditor to this menu item.
+ */
+std::function<void(AppMenuPopupEditor*) > AppMenuItem::getEditorCallback()
+{
+    return []()
+    {
+    };
+}
+
+/**
+ * Removes the source of this menu item's data
+ * @return true iff the source was removed.
+ */
+bool AppMenuItem::removeMenuItemSource()
+{
+    return false;
+}
+
+/**
+ * If possible, change the index of this menu item by some
+ * offset amount.
+ * @param offset will be added to the menu item's current index, if
+ * possible.
+ * @return true iff the operation succeeded.
+ */
+bool AppMenuItem::moveDataIndex(int offset)
+{
+    return false;
 }

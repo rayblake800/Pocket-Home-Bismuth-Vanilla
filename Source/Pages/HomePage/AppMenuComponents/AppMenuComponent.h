@@ -25,28 +25,31 @@ public ConfigurableComponent {
 public:
     AppMenuComponent(String componentKey);
     virtual ~AppMenuComponent();
-	
-	/**
-	 * Exit the loading state, hiding the spinner and enabling
-	 * user input
-	 */
+
+    /**
+     * Exit the loading state, hiding the spinner and enabling
+     * user input
+     */
     void exitLoadingState();
 protected:
 
     class AppFolder : public Component {
     public:
-		/**
-		 * @param folderButtons these buttons will be added in order
-		 * to the new folder component.
-		 */
-        AppFolder(Array<AppMenuButton::Ptr> folderButtons);
-        virtual ~AppFolder();
+        /**
+         * Creates a new folder component, loading menu buttons from a
+         * folder menu item.
+         * 
+         * @param folderItem 
+         */
+        AppFolder(AppMenuItem folderItem);
         
+        virtual ~AppFolder();
+
         /**
          * @return number of menu buttons in the folder.
          */
         int size();
-        
+
         /**
          * @return The selected menu button in this folder.
          * This will only return nullptr if there are no buttons in 
@@ -59,34 +62,39 @@ protected:
          * button.
          */
         AppMenuPopupEditor* getEditorForSelected();
-        
+
         /**
          * Set this folder's selected menu button
          * @param index
          */
         void selectIndex(int index);
+        
+        /**
+         * @return the index of the selected menu button.
+         */
+        int getSelectedIndex();
 
-		/**
-		 * Insert a new button to the folder at a specific index,
-		 * shifting forward any buttons at indices equal or greater
-		 * than the index. 
-		 * 
-		 * @param index should be between 0 and appFolder.size(),
-		 * inclusive.  Values outside of this range will be rounded to
-		 * the nearest valid value.
-		 */
-		void insertButton(AppMenuButton::Ptr newButton, int index);
+        /**
+         * Insert a new button to the folder at a specific index,
+         * shifting forward any buttons at indices equal or greater
+         * than the index. 
+         * 
+         * @param index should be between 0 and appFolder.size(),
+         * inclusive.  Values outside of this range will be rounded to
+         * the nearest valid value.
+         */
+        void insertButton(AppMenuButton::Ptr newButton, int index);
 
-		/**
-		 * Remove the button at a given index, shifting back any buttons
-		 * at greater indices to fill the gap
-		 * . 
-		 * @param index should be between 0 and appFolder.size(), 
-		 * inclusive, otherwise this method will do nothing.
-		 */
-		void removeButton(int index);
+        /**
+         * Remove the button at a given index, shifting back any buttons
+         * at greater indices to fill the gap.
+         * 
+         * @param index should be between 0 and appFolder.size(), 
+         * inclusive, otherwise this method will do nothing.
+         */
+        void removeButton(int index);
 
-		/**
+        /**
          * Swap the indices and positions of two buttons in the folder.
          * Both indices must be valid, or nothing will happen.
          * @param btnIndex1
@@ -99,19 +107,19 @@ protected:
          */
         void clickSelected();
     protected:
-		/**
-		 * Set the relative spacing of the folder component layout.
-		 * 
-		 * @param margin space between components and the edge of the
-		 * folder component, as a fraction of folder width.
-		 * 
-		 * @param xPadding horizontal space between folder child
-		 * components, as a fraction of folder width.
-		 * 
-		 * @param yPadding vertical space between folder child
-		 * components, as a fraction of folder height..
-		 */
-		void setSpacing(float margin,float xPadding, float yPadding);
+        /**
+         * Set the relative spacing of the folder component layout.
+         * 
+         * @param margin space between components and the edge of the
+         * folder component, as a fraction of folder width.
+         * 
+         * @param xPadding horizontal space between folder child
+         * components, as a fraction of folder width.
+         * 
+         * @param yPadding vertical space between folder child
+         * components, as a fraction of folder height.
+         */
+        void setSpacing(float margin, float xPadding, float yPadding);
     private:
         /**
          * Reposition folder buttons when folder bounds change.
@@ -123,8 +131,8 @@ protected:
          * button layout, and re-add the layout buttons as child
          * components.
          */
-        virtual void layoutButtons() = 0;
-        
+        virtual void layoutButtons();
+
         /**
          * Given a list of folder buttons, return an appropriate layout
          * for positioning them in the folder component.
@@ -133,13 +141,14 @@ protected:
          * @return a Layout containing all items in the button array.
          */
         virtual GridLayoutManager::Layout buildFolderLayout
-				(Array<AppMenuButton::Ptr> buttons) = 0;
-        
+        (Array<AppMenuButton::Ptr> buttons) = 0;
+
+        AppMenuButton::Ptr sourceFolderButton = nullptr;
         GridLayoutManager folderLayout;
         Array<AppMenuButton::Ptr> folderButtons;
-        AppMenuButton::Ptr selected;
+        int selectedIndex = 0;
     };
-    
+
     /**
      * Load and display the base menu folder that contains favorite 
      * application shortcuts and all other folders
@@ -160,7 +169,7 @@ protected:
      * view
      */
     void closeFolder();
-    
+
 private:
     /**
      * Sets what should happen when a button is left clicked.
@@ -168,7 +177,7 @@ private:
      * @param button
      */
     void onButtonClick(AppMenuButton* button);
-    
+
     /**
      * Use keypresses for menu navigation, setting specific
      * controls based on AppMenu type
@@ -176,13 +185,13 @@ private:
      * @return true if the keypress was used.
      */
     virtual bool keyPressed(const KeyPress& key) = 0;
-    
+
     /**
      * 
      * @param event
      */
     virtual void mouseDown(const MouseEvent &event) override;
-    
+
     /**
      * Enter or exit the loading state, where the component shows the
      * loading spinner and disbles user input.
