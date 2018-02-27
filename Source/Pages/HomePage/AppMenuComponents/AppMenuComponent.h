@@ -25,12 +25,20 @@ public ConfigurableComponent {
 public:
     AppMenuComponent(String componentKey);
     virtual ~AppMenuComponent();
-
+	
+	/**
+	 * Exit the loading state, hiding the spinner and enabling
+	 * user input
+	 */
     void exitLoadingState();
 protected:
 
     class AppFolder : public Component {
     public:
+		/**
+		 * @param folderButtons these buttons will be added in order
+		 * to the new folder component.
+		 */
         AppFolder(Array<AppMenuButton::Ptr> folderButtons);
         virtual ~AppFolder();
         
@@ -58,13 +66,29 @@ protected:
          */
         void selectIndex(int index);
 
-		
+		/**
+		 * Insert a new button to the folder at a specific index,
+		 * shifting forward any buttons at indices equal or greater
+		 * than the index. 
+		 * 
+		 * @param index should be between 0 and appFolder.size(),
+		 * inclusive.  Values outside of this range will be rounded to
+		 * the nearest valid value.
+		 */
 		void insertButton(AppMenuButton::Ptr newButton, int index);
 
+		/**
+		 * Remove the button at a given index, shifting back any buttons
+		 * at greater indices to fill the gap
+		 * . 
+		 * @param index should be between 0 and appFolder.size(), 
+		 * inclusive, otherwise this method will do nothing.
+		 */
 		void removeButton(int index);
 
 		/**
          * Swap the indices and positions of two buttons in the folder.
+         * Both indices must be valid, or nothing will happen.
          * @param btnIndex1
          * @param btnIndex2
          */
@@ -74,6 +98,20 @@ protected:
          * Trigger a click for this folder's selected button.
          */
         void clickSelected();
+    protected:
+		/**
+		 * Set the relative spacing of the folder component layout.
+		 * 
+		 * @param margin space between components and the edge of the
+		 * folder component, as a fraction of folder width.
+		 * 
+		 * @param xPadding horizontal space between folder child
+		 * components, as a fraction of folder width.
+		 * 
+		 * @param yPadding vertical space between folder child
+		 * components, as a fraction of folder height..
+		 */
+		void setSpacing(float margin,float xPadding, float yPadding);
     private:
         /**
          * Reposition folder buttons when folder bounds change.
@@ -103,19 +141,22 @@ protected:
     };
     
     /**
-     * 
+     * Load and display the base menu folder that contains favorite 
+     * application shortcuts and all other folders
      */
     void loadRootFolder();
 
     /**
      * Open an application category folder, creating or adding 
-     * AppMenuButtons for all  associated desktop applications.
-     * @param categoryName the categories include in the folder
+     * AppMenuButtons for all associated desktop applications.
+     * 
+     * @param folderButton defines the folder and provides all 
+     * AppMenuItem objects.
      */
     void openFolder(AppMenuButton::Ptr folderButton);
 
     /**
-     * close the topmost open folder, removing all contained buttons from
+     * close the last opened folder, removing all contained buttons from
      * view
      */
     void closeFolder();
@@ -129,9 +170,10 @@ private:
     void onButtonClick(AppMenuButton* button);
     
     /**
-     * 
+     * Use keypresses for menu navigation, setting specific
+     * controls based on AppMenu type
      * @param key
-     * @return 
+     * @return true if the keypress was used.
      */
     virtual bool keyPressed(const KeyPress& key) = 0;
     
@@ -142,7 +184,8 @@ private:
     virtual void mouseDown(const MouseEvent &event) override;
     
     /**
-     * 
+     * Enter or exit the loading state, where the component shows the
+     * loading spinner and disbles user input.
      * @param isLoading
      */
     void setLoadingState(bool isLoading);
