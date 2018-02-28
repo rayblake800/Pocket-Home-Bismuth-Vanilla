@@ -16,7 +16,7 @@ bool AppMenuItem::isFolder() const
  * @return all menu items in this folder, or an empty array if this isn't
  * a folder.
  */
-Array<AppMenuItem> AppMenuItem::getFolderItems() const
+Array<AppMenuItem::Ptr> AppMenuItem::getFolderItems() const
 {
     return {};
 }

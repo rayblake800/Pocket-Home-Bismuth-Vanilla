@@ -41,9 +41,21 @@ protected:
          * 
          * @param folderItem 
          */
-        AppFolder(AppMenuItem folderItem);
+        AppFolder(AppMenuItem::Ptr folderItem);
         
         virtual ~AppFolder();
+        
+        /**
+         * Create AppMenuButton components for a set of AppMenuItems.
+         * @param menuItems
+         */
+        Array<AppMenuButton::Ptr> createMenuButtons
+        (Array<AppMenuItem::Ptr> menuItems) = 0;
+        
+        /**
+         * Reload all folder menu buttons from their source menu item.
+         */
+        void reload();
 
         /**
          * @return number of menu buttons in the folder.
@@ -143,7 +155,7 @@ protected:
         virtual GridLayoutManager::Layout buildFolderLayout
         (Array<AppMenuButton::Ptr> buttons) = 0;
 
-        AppMenuButton::Ptr sourceFolderButton = nullptr;
+        AppMenuItem::Ptr sourceFolderItem = nullptr;
         GridLayoutManager folderLayout;
         Array<AppMenuButton::Ptr> folderButtons;
         int selectedIndex = 0;

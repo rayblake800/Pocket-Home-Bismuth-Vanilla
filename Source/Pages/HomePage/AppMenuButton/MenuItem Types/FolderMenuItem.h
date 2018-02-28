@@ -32,7 +32,7 @@ public:
     /**
      * @return all menu items in this folder
      */
-    virtual Array<AppMenuItem> getFolderItems() const override;
+    virtual Array<AppMenuItem::Ptr> getFolderItems() const override;
 
     /**
      * @return the display name of the associated folder

@@ -34,12 +34,12 @@ public:
      * @return all menu items in this folder, or an empty array if this isn't
      * a folder.
      */
-    virtual Array<AppMenuItem> getFolderItems() const;
+    virtual Array<AppMenuItem::Ptr> getFolderItems() const;
 
     /**
      * @return the display name of the associated application.
      */
-    virtual String getAppName();
+    virtual String getAppName() const;
 
     /**
      * @return the application shell command or directory path.

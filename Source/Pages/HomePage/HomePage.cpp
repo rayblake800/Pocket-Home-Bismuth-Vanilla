@@ -99,6 +99,7 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
 				showPopupEditor(newEditor);
 			});
 			addAndMakeVisible(appMenu);
+			appMenu->toBack();
 			pageResized();
 		}
     }

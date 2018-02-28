@@ -21,11 +21,11 @@ bool FolderMenuItem::isFolder() const
 /**
  * @return all menu items in this folder
  */
-Array<AppMenuItem> FolderMenuItem FolderMenuItem::getFolderItems() const
+Array<AppMenuItem::Ptr> FolderMenuItem::getFolderItems() const
 {
     std::set<DesktopEntry> folderEntries =
             desktopEntries.getCategoryListEntries(appFolder.categories);
-    Array<AppMenuItem> folderItems;
+    Array<AppMenuItem:Ptr> folderItems;
     for (const DesktopEntry& entry : folderEntries)
     {
         folderItems.add(AppMenuItemFactory::create(entry));

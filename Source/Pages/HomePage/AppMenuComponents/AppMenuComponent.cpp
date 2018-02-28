@@ -18,9 +18,10 @@ loadingAsync(false)
 AppMenuComponent::~AppMenuComponent() { }
 
 AppMenuComponent::AppFolder::AppFolder
-(Array<AppMenuButton::Ptr> folderButtons) :
-folderButtons(folderButtons)
+(AppMenuItem::Ptr folderItem) :
+sourceFolderItem(folderItem)
 {
+	folderButtons = createMenuButtons(folderItem->getMenuItems());
     layoutButtons();
 }
 
@@ -71,9 +72,8 @@ AppMenuPopupEditor* AppMenuComponent::AppFolder::getEditorForSelected()
 
 /**
  * Set this folder's selected menu button
- * @param index
  */
-void AppMenuComponent::AppFolder::selectIndex(int index);
+void AppMenuComponent::AppFolder::selectIndex(int index){}
 
 /**
  * @return the index of the selected menu button.
