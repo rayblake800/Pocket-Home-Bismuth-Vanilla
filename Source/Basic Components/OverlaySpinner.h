@@ -18,13 +18,29 @@ public:
         textColourId = 0x1900401
     };
     
+    /**
+     * 
+     * @param secondsToTimeout
+     */
     OverlaySpinner(int secondsToTimeout = -1);
     ~OverlaySpinner();
     
+    /**
+     * 
+     * @param newText
+     */
     void setLoadingText(String newText);
     
 private:
+    /**
+     * 
+     * @param 
+     */
     void paint(Graphics &) override;
+    
+    /**
+     * 
+     */
     void resized() override;
     
     ScalingLabel loadingText;

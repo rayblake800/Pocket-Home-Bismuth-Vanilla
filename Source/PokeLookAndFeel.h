@@ -14,24 +14,41 @@ public:
     PokeLookAndFeel();
     virtual ~PokeLookAndFeel();
 
+    /**
+     * 
+     * @param bounds
+     * @return 
+     */
     static float getDrawableButtonTextHeightForBounds
     (const Rectangle<int> &bounds);
     
+    /**
+     * 
+     * @param bounds
+     * @return 
+     */
     static float getDrawableButtonImageHeightForBounds
     (const Rectangle<int> &bounds);
 
+    /**
+     * 
+     * @param font
+     * @return 
+     */
     Typeface::Ptr getTypefaceForFont(const Font &font) override;
 
+    
     void drawLinearSliderThumb(Graphics &g, int x, int y,
             int width, int height, float sliderPos,
             float minSliderPos, float maxSliderPos,
             const Slider::SliderStyle style, Slider &slider) override;
+
     
     void drawLinearSliderBackground(Graphics &g, int x, int y,
             int width, int height, float sliderPos,
             float minSliderPos, float maxSliderPos,
             const Slider::SliderStyle style, Slider &slider) override;
-    
+
     void drawLinearSlider(Graphics &g, int x, int y,
             int width, int height, float sliderPos,
             float minSliderPos, float maxSliderPos,

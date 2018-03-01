@@ -71,6 +71,9 @@ public:
         imageColour4Id = 0x1900004
     };
 
+    /**
+     * 
+     */
     virtual void colourChanged() override;
 
 protected:

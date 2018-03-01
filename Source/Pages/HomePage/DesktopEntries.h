@@ -73,10 +73,19 @@ private:
         LoadingThread();
         virtual ~LoadingThread();
         
+        /**
+         * 
+         * @param threadOwner
+         * @param notifyCallback
+         * @param onFinish
+         */
         void asyncLoadEntries(DesktopEntries * threadOwner,
                 std::function<void(String) > notifyCallback,
                 std::function<void() > onFinish);
     private:
+        /**
+         * 
+         */
         void run() override;
         DesktopEntries * threadOwner;
         std::function<void(String)> notifyCallback;

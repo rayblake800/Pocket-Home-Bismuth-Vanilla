@@ -63,15 +63,22 @@ public:
         imageColour4Id = 0x1900004
     };
     
-    
+    /**
+     * 
+     */
     virtual void colourChanged() override;
 
 protected:
+    /**
+     * 
+     */
     void updateImageColors();
+    
     /**
      * Resize the image to fit the button.
      */
     void resized() override;
+    
     ScopedPointer<DrawableImageComponent> imageComponent;
 private:
     /**

@@ -52,7 +52,8 @@ public:
      * properties that aren't managed internally, such as button position.
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
-    AppMenuPopupEditor* getEditor(std::function<void(AppMenuPopupEditor*) > onConfirm);
+    AppMenuPopupEditor* getEditor
+    (std::function<void(AppMenuPopupEditor*) > onConfirm);
 
     /**
      * Calling this method will create a message box asking for user 
@@ -96,7 +97,12 @@ protected:
     bool drawBorder=true;
 
 private:
-
+    /**
+     * 
+     * @param g
+     * @param isMouseOverButton
+     * @param isButtonDown
+     */
     void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
     //Menu item data object
     AppMenuItem::Ptr menuItem;

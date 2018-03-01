@@ -57,10 +57,34 @@ private:
      * @param path the path to an image file.
      */
     void setImageBackground(const String& path);
+    
+    /**
+     * 
+     * @param 
+     */
     void pageButtonClicked(Button *) override;
+    
+    /**
+     * 
+     * @param 
+     * @return 
+     */
     bool keyPressed(const KeyPress &) override;
+    
+    /**
+     * 
+     */
     void visibilityChanged() override;
+    
+    /**
+     * 
+     * @param windowFocus
+     */
     void windowFocusChanged(bool windowFocus) override;
+    
+    /**
+     * 
+     */
     void pageResized() override;
 
     OverlaySpinner loadingSpinner;

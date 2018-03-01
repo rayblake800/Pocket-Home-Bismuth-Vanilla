@@ -19,9 +19,23 @@ public:
     ~SwitchComponent();
 
 private:
+    /**
+     * 
+     * @param g
+     * @param isMouseOverButton
+     * @param isButtonDown
+     */
     void paintButton(Graphics &g,
             bool isMouseOverButton, bool isButtonDown) override;
+    
+    /**
+     * 
+     */
     void resized() override;
+    
+    /**
+     * 
+     */
     void clicked() override;
 
     ScopedPointer<DrawablePath> handle;

@@ -21,8 +21,12 @@ public:
     ScalingLabel(const String &componentName = String(),
             const String &labelText = String(),
             const int& fontPadding = 0);
+    
     virtual ~ScalingLabel();
 private:
+    /**
+     * 
+     */
     void resized() override;
     int fontPadding;
     

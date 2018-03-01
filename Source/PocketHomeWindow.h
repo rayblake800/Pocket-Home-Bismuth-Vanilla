@@ -14,14 +14,36 @@
 
 class PocketHomeWindow : public DocumentWindow {
 public:
-
+    /**
+     * 
+     * @param windowName
+     */
     PocketHomeWindow(String windowName);
     ~PocketHomeWindow();
 private:
+    /**
+     * 
+     */
     void activeWindowStatusChanged() override;
+    
+    /**
+     * 
+     */
     void closeButtonPressed() override;
+    
+    /**
+     * 
+     */
     void paint(Graphics &) override;
+    
+    /**
+     * 
+     */
     void resized() override;
+    
+    /**
+     * 
+     */
     void handleMainWindowInactive();
 
     HomePage homePage;

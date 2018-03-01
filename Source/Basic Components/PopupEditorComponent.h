@@ -54,6 +54,9 @@ protected:
      */
     virtual bool keyPressed(const KeyPress & key) override;
   
+    /**
+     * 
+     */
     virtual void resized() override;
     
     //Inheriting classes are responsible for setting the layout of these

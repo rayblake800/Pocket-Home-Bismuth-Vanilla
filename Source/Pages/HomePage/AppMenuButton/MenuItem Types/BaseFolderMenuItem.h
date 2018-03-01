@@ -14,7 +14,10 @@
 
 class BaseFolderMenuItem : public AppMenuItem {
 public:
-    
+    /**
+     * 
+     * @param desktopEntries
+     */
     BaseFolderMenuItem(const DesktopEntries& desktopEntries);
     virtual ~BaseFolderMenuItem();
 

@@ -49,15 +49,18 @@ public:
      */
     void setListItems(Array<String> newItems);
 
+    /**
+     * 
+     */
     void colourChanged() override;
 
 private:
-    
+
     /**
      * Sets the colors of child components to match ListEditor colors
      */
     void updateColours();
-    
+
     /**
      * Receives notifications when ListItemComponent text is changed.
      * These changes are then copied back to the appropriate string in the list
@@ -66,47 +69,99 @@ private:
      */
     void labelTextChanged(Label *source);
 
-    //Clicking a listBoxItem selects it.
+    /**
+     * Clicking a listBoxItem selects it.
+     * @param row
+     * @param mouseEvent
+     */
     void listBoxItemClicked(int row, const MouseEvent& mouseEvent);
 
-    //Double clicking a listBoxItem makes it editable.
+    /**
+     * Double clicking a listBoxItem makes it editable.
+     * @param row
+     * @param mouseEvent
+     */
     virtual void listBoxItemDoubleClicked
     (int row, const MouseEvent & mouseEvent);
 
-    //Pressing the delete key removes the selected row.
+    /**
+     * Pressing the delete key removes the selected row.
+     * @param lastRowSelected
+     */
     void deleteKeyPressed(int lastRowSelected);
 
-    //Remove a string from the list and update the underlying ListBox
+    /**
+     * Remove a string from the list and update the underlying ListBox
+     * @param rowNumber
+     */
     void removeRow(int rowNumber);
 
-    //Custom ListBox item component class, basically just a label with a 
-    //delete button.
-
+    /**
+     * Custom ListBox item component class, basically just a label with a 
+     * delete button.
+     **/
     class ListItemComponent : public Label {
     public:
+        /**
+         * 
+         * @param text
+         * @param owner
+         */
         ListItemComponent(String text, ListEditor * owner);
         virtual ~ListItemComponent();
-        //button component id should be set to String(rowIndex)
+
+        /**
+         * 
+         * @param id should be set to String(rowIndex)
+         */
         void setButtonComponentID(String id);
+
+        /**
+         * 
+         * @param colour
+         */
         void setButtonColour(Colour colour);
+
+        /**
+         * 
+         */
         void resized() override;
     private:
         DrawableImageButton delBtn;
     };
 
-    //Updates ListBox rows
+    /**
+     * 
+     * @param rowNumber
+     * @param isRowSelected
+     * @param existingComponentToUpdate
+     * @return 
+     */
     Component* refreshComponentForRow(int rowNumber,
             bool isRowSelected,
             Component * existingComponentToUpdate);
 
-    //Handles add and delete item buttons
+    /**
+     * Handles add and delete item buttons
+     * @param buttonClicked
+     */
     void buttonClicked(Button* buttonClicked) override;
 
-
+    /**
+     * 
+     * @param rowNumber
+     * @param g
+     * @param width
+     * @param height
+     * @param rowIsSelected
+     */
     void paintListBoxItem(int rowNumber, Graphics&g, int width,
             int height, bool rowIsSelected);
+    
+    /**
+     * 
+     */
     void resized() override;
-
 
     Array<String> listItems;
     GridLayoutManager layoutManager;

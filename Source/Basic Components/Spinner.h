@@ -22,6 +22,10 @@ public:
     Spinner(int secondsToTimeout = -1);
     ~Spinner();
     
+    /**
+     * 
+     * @param spinnerColour
+     */
     void setColour(Colour spinnerColour);
 
 protected:
@@ -37,6 +41,9 @@ private:
      */
     void visibilityChanged() override;
 
+    /**
+     * 
+     */
     void resized() override;
 
     /**

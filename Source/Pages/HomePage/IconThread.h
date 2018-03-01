@@ -26,15 +26,12 @@ public:
      */
     void loadIcon(String icon, std::function<void(Image)> assignImage);
     
-    
-    
     /**
      * While AppMenuButtons still need icons, find them in a
      * separate thread.
      */
     void run() override;
     
-
 private:
     struct QueuedJob{
         String icon;
