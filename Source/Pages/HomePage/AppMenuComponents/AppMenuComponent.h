@@ -8,7 +8,6 @@
  */
 
 #pragma once
-#include <atomic>
 #include <set>
 #include "../../../Basic Components/OverlaySpinner.h"
 #include "../../../Configuration/Configurables/ConfigurableComponent.h"
@@ -20,19 +19,175 @@
 #include "../IconThread.h"
 #include "../DesktopEntries.h"
 
-class AppMenuComponent : public Component,
-public ConfigurableComponent {
+class AppMenuComponent : public Component, public ConfigurableComponent{
 public:
-    AppMenuComponent(String componentKey);
+    /**
+     * 
+     * @param componentKey
+     * @param loadingSpinner
+     */
+    AppMenuComponent(String componentKey,OverlaySpinner& loadingSpinner);
+
     virtual ~AppMenuComponent();
 
+    /**
+     * @return true if the AppMenuComponent is currently in the loading state
+     */
+    bool isLoading();
+    
     /**
      * Exit the loading state, hiding the spinner and enabling
      * user input
      */
     void exitLoadingState();
+    
+    /**
+     * Open the pop-up menu used for editing this object.
+     * @param selectionMenu if true, the pop-up menu contains only options for 
+     * editing the selected menu button.
+     */
+    void openPopupMenu(bool selectionMenu);
+    
+    /**
+     * Use key presses for menu navigation, setting specific controls based on 
+     * AppMenu type. Other classes may call this to pass on or simulate
+     * key events.
+     * @param key
+     * @return true if the key press was used.
+     */
+    virtual bool keyPressed(const KeyPress& key) = 0;
 protected:
 
+    /**
+     * Load and display the base menu folder that contains favorite 
+     * application shortcuts and all other folders. Any existing open folders
+     * will first be closed.  If the base folder was open, its selected 
+     * index will be saved and re-selected.
+     */
+    void loadBaseFolder();
+
+
+    /**
+     * close the last opened folder, removing all contained buttons from
+     * view
+     */
+    void closeFolder();
+
+    /**
+     * Trigger a click for the selected button in the last opened AppFolder
+     */
+    void clickSelected();
+
+    /**
+     * Open a PopupEditorComponent for editing the selected button in the last
+     * opened AppFolder.
+     */
+    void openEditorForSelected();
+    
+    /**
+     * Offset the selected button index in the last opened AppFolder.
+     * @param offset will be added to the index if index + offset is a valid
+     * index.
+     * @return true if the selected button index changed, false if index +
+     * offset was an invalid index and the selection did not change. 
+     */
+    bool changeSelection(int offset);
+
+    /**
+     * Updates the folder component layout, optionally animating the transition.
+     * @param animateTransition if true, animate component changes rather than
+     * immediately updating folder bounds.
+     */
+    virtual void layoutFolders(bool animateTransition) = 0;
+private:
+
+    /**
+     * Create a folder component object from a folder menu item.
+     * @param folderItem
+     */
+    virtual AppFolder* createFolderObject(AppMenuItem::Ptr folderItem) = 0;
+
+    /**
+     * Reposition child components, and update folder layout without animating.
+     */
+    void resized() override;
+
+    /**
+     * @return the selected button in the last opened folder, or nullptr if
+     * the last folder is empty or no folders are open.
+     */
+    AppMenuButton::Ptr getSelectedButton();
+
+    /**
+     * Open an application category folder, creating or adding 
+     * AppMenuButtons for all associated desktop applications.
+     * 
+     * @param folderItem defines the folder and provides all 
+     * AppMenuItem objects.
+     */
+    void openFolder(AppMenuItem::Ptr folderItem);
+
+    /**
+     * Adds and shows a new pop-up editor component, safely removing any previous
+     * editor.
+     * @param editor
+     */
+    void showPopupEditor(PopupEditorComponent* editor);
+    
+    /**
+     * Create and show a pop-up editor component for a button in this menu.
+     * This will only work if the button is in the last opened folder and the 
+     * menu is not in the loading state. 
+     * @param button
+     */
+    void showMenuButtonEditor(AppMenuButton::Ptr button);
+    
+    /**
+     * Sets what should happen when a button is left clicked.
+     * This opens selected buttons, and selects unselected buttons
+     * @param button
+     */
+    void onButtonClick(AppMenuButton::Ptr button);
+
+    /**
+     * Click AppMenuButtons on left click, open the popup menu
+     * on right click or control click.
+     */
+    virtual void mouseDown(const MouseEvent &event) override;
+
+    /**
+     * Enter or exit the loading state, where the component shows the
+     * loading spinner and disables user input.
+     * @param loading
+     */
+    void setLoadingState(bool loading);
+
+    //Launches applications from the menu
+    AppLauncher appLauncher;
+    OverlaySpinner& loadingSpinner;
+    ScopedPointer<AppMenuPopupEditor> buttonEditor;
+    static DesktopEntries desktopEntries;
+    //this gets passed to AppMenuButtons to load button icons.
+    IconThread iconThread;
+    //Tracks if desktop entries are loading or applications are launching in
+    //another thread
+    bool loadingState = false;
+    //Allow for safe asynchronous access to the loading state
+    CriticalSection loadingLock;
+    //Stores each button by name, so buttons don't need to be re-loaded
+    //every time you close a folder and open it again.
+    std::map<String, AppMenuButton::Ptr> buttonNameMap;
+    OwnedArray<AppFolder> openFolders;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
+
+protected:
+    //############################# AppFolder ##################################
+
+    /**
+     * AppMenuComponents divide their menu items into distinct folder
+     * components.  Individual menu buttons are managed through the folder
+     * they're contained within.
+     */
     class AppFolder : public Component {
     public:
         /**
@@ -40,18 +195,20 @@ protected:
          * folder menu item.
          * 
          * @param folderItem 
+         * @param btnListener will be assigned to listen to all folder
+         * menu buttons.
          */
-        AppFolder(AppMenuItem::Ptr folderItem);
-        
+        AppFolder(AppMenuItem::Ptr folderItem, MouseListener* btnListener);
+
         virtual ~AppFolder();
-        
+
         /**
          * Create AppMenuButton components for a set of AppMenuItems.
          * @param menuItems
          */
         Array<AppMenuButton::Ptr> createMenuButtons
         (Array<AppMenuItem::Ptr> menuItems) = 0;
-        
+
         /**
          * Reload all folder menu buttons from their source menu item.
          */
@@ -63,6 +220,15 @@ protected:
         int size();
 
         /**
+         * Find the index of a menu button in this folder
+         * 
+         * @param menuButton
+         * @return the button's index, or -1 if the button is not in this
+         * folder.
+         */
+        bool getButtonIndex(AppMenuButton::Ptr menuButton);
+
+        /**
          * @return The selected menu button in this folder.
          * This will only return nullptr if there are no buttons in 
          * this folder.
@@ -70,17 +236,12 @@ protected:
         AppMenuButton::Ptr getSelectedButton();
 
         /**
-         * Returns a pop-up editor component for updating the selected 
-         * button.
-         */
-        AppMenuPopupEditor* getEditorForSelected();
-
-        /**
          * Set this folder's selected menu button
          * @param index
+         * @return true if index was valid and the selection changed.
          */
-        void selectIndex(int index);
-        
+        bool selectIndex(int index);
+
         /**
          * @return the index of the selected menu button.
          */
@@ -114,10 +275,6 @@ protected:
          */
         void swapButtons(int btnIndex1, int btnIndex2);
 
-        /**
-         * Trigger a click for this folder's selected button.
-         */
-        void clickSelected();
     protected:
         /**
          * Set the relative spacing of the folder component layout.
@@ -154,16 +311,16 @@ protected:
          */
         virtual GridLayoutManager::Layout buildFolderLayout
         (Array<AppMenuButton::Ptr> buttons) = 0;
-        
+
         /**
          * @param index
          * @return true for any valid button index
          */
-        inline bool validBtnIndex(int index) 
-        {
+        inline bool validBtnIndex(int index) {
             return index >= 0 && index < folderButtons.size();
         }
 
+        MouseListener* btnListener = nullptr;
         AppMenuItem::Ptr sourceFolderItem = nullptr;
         GridLayoutManager folderLayout;
         float margin = 0;
@@ -171,303 +328,6 @@ protected:
         float yPadding = 0;
         Array<AppMenuButton::Ptr> folderButtons;
         int selectedIndex = 0;
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppFolder)
     };
-
-    /**
-     * Load and display the base menu folder that contains favorite 
-     * application shortcuts and all other folders
-     */
-    void loadRootFolder();
-
-    /**
-     * Open an application category folder, creating or adding 
-     * AppMenuButtons for all associated desktop applications.
-     * 
-     * @param folderItem defines the folder and provides all 
-     * AppMenuItem objects.
-     */
-    void openFolder(AppMenuItem::Ptr folderItem);
-
-    /**
-     * close the last opened folder, removing all contained buttons from
-     * view
-     */
-    void closeFolder();
-
-private:
-    /**
-     * Sets what should happen when a button is left clicked.
-     * This opens selected buttons, and selects unselected button
-     * @param button
-     */
-    void onButtonClick(AppMenuButton* button);
-
-    /**
-     * Use keypresses for menu navigation, setting specific
-     * controls based on AppMenu type
-     * @param key
-     * @return true if the keypress was used.
-     */
-    virtual bool keyPressed(const KeyPress& key) = 0;
-
-    /**
-     * 
-     * @param event
-     */
-    virtual void mouseDown(const MouseEvent &event) override;
-
-    /**
-     * Enter or exit the loading state, where the component shows the
-     * loading spinner and disbles user input.
-     * @param isLoading
-     */
-    void setLoadingState(bool isLoading);
-
-
-    AppLauncher appLauncher;
-    OverlaySpinner loadingSpinner;
-    ScopedPointer<AppMenuPopupEditor> buttonEditor;
-    static DesktopEntries desktopEntries;
-    //True iff desktopEntries are loading in another thread.
-    std::atomic<bool> loadingAsync;
-    //Stores each button by name, so buttons don't need to be re-loaded
-    //every time you close a folder and open it again.
-    std::map<String, AppMenuButton::Ptr> buttonNameMap;
-    OwnedArray<AppFolder> openFolders;
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
 };
-
-///**
-// * Old interface:
-// *
-//    /**
-//     * Loads all app menu buttons
-//     */
-//    void loadButtons();
-//
-//    /**
-//     * TODO: get rid of this, don't move the entire component, just move 
-//     * items within the component.
-//     * 
-//     * Holding an unmoving pop-up window in a scrolling menu component is
-//     * less than ideal, it's better if a parent component can deal with
-//     * displaying any pop-up editor components.
-//     * 
-//     * If this function is called, when this component would create a pop-up
-//     * editor component, instead of adding it to itself, it will pass the
-//     * editor to this callback function.
-//     * 
-//     * @param callback should pass the editor component to another component
-//     * that is prepared to handle it.
-//     */
-//    void setPopupCallback(std::function<void(AppMenuPopupEditor*) > callback);
-//
-//
-//    /**
-//     * AppMenuComponent should be passed all key events from the page component
-//     * that contains it, as long as the menu isn't either loading or animating.
-//     * AppMenuComponent subclasses are then free to use key events in whatever
-//     * way works best for them.
-//     * @param key
-//     * @return true iff the key press was used by the AppMenu
-//     */
-//    virtual bool keyPressed(const KeyPress& key) = 0;
-//
-//
-//    //################  AppMenuButton Management   #############################
-//
-//    /**
-//     * Select a new AppMenuButton relative to the current selected button.
-//     * If there is no currently selected button, index 0 will be selected.
-//     * 
-//     * @param indexOffset is added to the current selected index to find the
-//     * new selection index.  If this index is invalid, the selection will not
-//     * change.
-//     */
-//    void changeSelection(int indexOffset);
-//
-//    /**
-//     * Trigger a click for the selected button.
-//     */
-//    void clickSelected();
-//
-//    /**
-//     * Open the pop-up menu used for editing this object.
-//     * @param selectionMenu if true, the pop-up menu contains only options for 
-//     * editing the selected menu button.
-//     */
-//    void openPopupMenu(bool selectionMenu);
-//
-//    /**
-//     * @return the index of the active button column.
-//     */
-//    int activeColumn();
-//
-//
-//    //#################### Folder Management  ############################
-//    //TODO: make folders their own components, with their buttons added as
-//    //child components.  Define a generic interface for this folder component
-//
-//    /**
-//     * Open an application category folder, creating AppMenuButtons for all
-//     * associated desktop applications.
-//     * @param categoryName the categories include in the folder
-//     */
-//    void openFolder(Array<String> categoryNames);
-//
-//    /**
-//     * close the topmost open folder, removing all contained buttons
-//     */
-//    void closeFolder();
-//    //######################## App Launching #################################
-//
-//    /**
-//     * @return true if currently loading information or a new child process.
-//     */
-//    bool isLoading();
-//
-//    /**
-//     * Makes the menu stop waiting to load something, re-enabling
-//     * user input.
-//     */
-//    void stopWaitingForLoading();
-//
-//protected:
-//
-//    /**
-//     * Gets the selected button in the active button column.
-//     * @return a pointer to the selected button if one exists, or nullptr
-//     * otherwise.
-//     */
-//    AppMenuButton* getSelectedButton();
-//
-//    /**
-//     * Resize all child components.
-//     */
-//    virtual void resized() override;
-//
-//    //all buttons in each column
-//    std::vector<std::vector<AppMenuButton::Ptr>> buttonColumns;
-//
-//    //current button selection(if any) for each open column
-//    std::vector<AppMenuButton::Ptr> selected;
-//
-//    //this gets passed to AppMenuButtons to load button icons.
-//    IconThread iconThread;
-//private:
-//
-//    /**
-//     * Create a new menu button component.
-//     * @param menuItem menu data to be held by the component
-//     */
-//    virtual AppMenuButton::Ptr createMenuButton
-//    (AppMenuItem* menuItem, int rowIndex, int columnIndex) = 0;
-//    /**
-//     * Display the spinner that indicates application or button loading. This 
-//     * will also disable input.
-//     */
-//    void showLoadingSpinner();
-//
-//    /**
-//     * Hide the loading spinner, re-enabling user input.
-//     */
-//    void hideLoadingSpinner();
-//
-//    /**
-//     * Sets what should happen when a button is left clicked.
-//     * This opens selected buttons, and selects unselected button
-//     * @param button
-//     */
-//    void onButtonClick(AppMenuButton* button);
-//
-//    /**
-//     * Returns a pop-up editor component for updating the selected button.
-//     * @return either an editor component, or nullptr if no button is selected.
-//     */
-//    AppMenuPopupEditor* getEditorForSelected();
-//
-//    /**
-//     * Add a new application button to the active menu column.
-//     * @param appButton will be added to the bottom of the active menu column.
-//     */
-//    virtual void addButton(AppMenuButton::Ptr appButton);
-//
-//    /**
-//     * Handles the placement of new button components in the menu bounds
-//     */
-//    virtual void addButtonComponent(AppMenuButton* appButton) = 0;
-//
-//    /**
-//     * Change which button is selected in the active menu column.
-//     * @param index should correspond to a button in the active menu column.
-//     * If the index is out of bounds, nothing will happen.
-//     */
-//    void selectIndex(int index);
-//
-//    /**
-//     * Swaps the positions of two different buttons in the menu. This updates
-//     * their column and index values, swaps their bounds, and changes their
-//     * placements in the buttonColumns array.
-//     * @param button1
-//     * @param button2
-//     */
-//    void swapButtons(AppMenuButton* button1, AppMenuButton* button2);
-//
-//    /**
-//     * Scroll the menu so that the selected button is centered.
-//     * @param animatedScroll sets if the menu should animate its scrolling,
-//     * or just jump immediately to the destination position.
-//     */
-//    virtual void scrollToSelected(bool animatedScroll = true) = 0;
-//
-//    /**
-//     * handle all AppMenuButton clicks
-//     * @param event
-//     */
-//    virtual void mouseDown(const MouseEvent &event) override;
-//
-//
-//
-//    /**
-//     * Exit the loading state when visibility is lost, enter the loading state
-//     * if necessary when visibility is gained.
-//     */
-//    void visibilityChanged() override;
-//
-//    //Handles application launching when application buttons are selected and
-//    //clicked.
-//    AppLauncher appLauncher;
-//
-//    //Callback function that sets how PopupEditorComponents will be added
-//    //to the screen.
-//    std::function<void(AppMenuPopupEditor*) > showPopupCallback;
-//
-//    //Loading spinner overlay to display when loading buttons or launching
-//    //applications.
-//    OverlaySpinner loadingSpinner;
-//
-//    //Holds any pop-up editors created to edit AppMenuButtons, if
-//    //showPopupCallback isn't set to handle them in some better way. 
-//    ScopedPointer<AppMenuPopupEditor> buttonEditor;
-//
-//    //Loads .desktop application file data from all appropriate locations,
-//    //and grants access to their data so they can be used to create 
-//    //AppMenuButtons
-//    DesktopEntries desktopEntries;
-//
-//    //True iff desktopEntries are loading in another thread.
-//    std::atomic<bool> loadingAsync;
-//
-//
-//    //Stores each button by name, so buttons don't need to be re-loaded
-//    //every time you close a folder and open it again.
-//    std::map<String, AppMenuButton::Ptr> buttonNameMap;
-//
-//
-//
-//
-//
-//    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
-//};
-//
-//

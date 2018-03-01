@@ -32,26 +32,17 @@ public:
      * @param iconThread is needed to load the button icon.
      * @param name sets the button's internal component name
      */
-    AppMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
-            int columnIndex, int rowIndex,
+    AppMenuButton(AppMenuItem::Ptr menuItem, IconThread& iconThread,
             String name = String());
 
     virtual ~AppMenuButton();
-
-    int getColumnIndex();
-
-    int getRowIndex();
-
-    void setColumnIndex(int newColumn);
-
-    void setRowIndex(int newRow);
 
     /**
      * Get this button's menu data.
      * @return A pointer to this button's internal AppMenuItem.  This pointer
      * will be valid as long as this AppMenuButton still exists.
      */
-    AppMenuItem* getMenuItem();
+    AppMenuItem::Ptr getMenuItem();
 
 
     /**
@@ -108,10 +99,7 @@ private:
 
     void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
     //Menu item data object
-    ScopedPointer<AppMenuItem> menuItem;
-
-    int columnIndex;
-    int rowIndex;
+    AppMenuItem::Ptr menuItem;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuButton)
 };

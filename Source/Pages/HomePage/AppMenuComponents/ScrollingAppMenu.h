@@ -9,65 +9,82 @@
 
 class ScrollingAppMenu : public AppMenuComponent {
 public:
-    ScrollingAppMenu();
+    /**
+     *
+     * @param loadingSpinner
+     */
+    ScrollingAppMenu(OverlaySpinner& loadingSpinner);
     virtual ~ScrollingAppMenu();
 
     /**
-     * Add a new application button to the active menu column.
-     * @param appButton will be added to the bottom of the active menu column.
-     */
-    virtual void addButtonComponent(AppMenuButton* appButton) override;
-
-    /**
-     * Scroll the menu so that the selected button is centered.
-     * @param animatedScroll sets if the menu should animate its scrolling,
-     * or just jump immediately to the destination position.
-     */
-    virtual void scrollToSelected(bool animatedScroll = true) override;
-
-    /**
-     * Receives all keyPress events and uses them for page navigation.
+     * Use key presses for menu navigation, setting specific controls based on 
+     * AppMenu type. Other classes may call this to pass on or simulate
+     * key events.
      * @param key
-     * @return true iff the key press was used by the AppMenu
+     * @return true if the key press was used.
      */
-    virtual bool keyPressed(const KeyPress& key) override;
+    bool keyPressed(const KeyPress& key);
+
+protected:
+    /**
+     * Updates the folder component layout, optionally animating the transition.
+     * @param animateTransition if true, animate component changes rather than
+     * immediately updating folder bounds.
+     */
+    void layoutFolders(bool animateTransition);
+
+    /**
+     * Create a folder component object from a folder menu item.
+     * @param folderItem
+     */
+    AppFolder* createFolderObject(AppMenuItem::Ptr folderItem);
 
 private:
-    /**
-     * Create a new menu button component.
-     * @param menuItem menu data to be held by the component
-     */
-    virtual AppMenuButton::Ptr createMenuButton
-    (AppMenuItem* menuItem, int rowIndex, int columnIndex) override;
 
     /**
-     * Resize all child components.
+     *
      */
-    virtual void resized() override;
-
-    //top y-position of each open column
-    std::vector<int> columnTops;
-    //base component position
-    int x_origin;
-    int y_origin;
-
-    /**
-     * ScrollingMenuButton is an AppMenuButton that draws itself appropriately
-     * for a ScrollingAppMenu.
-     */
-    class ScrollingMenuButton : public AppMenuButton{
+    class ScrollingAppFolder : public AppFolder {
     public:
+        ScrollingAppFolder();
+        virtual ~ScrollingAppFolder();
+
+        /**
+         * Create AppMenuButton components for a set of AppMenuItems.
+         * @param menuItems
+         */
+        Array<AppMenuButton::Ptr> createMenuButtons
+        (Array<AppMenuItem::Ptr> menuItems);
+
+        /**
+         * Given a list of folder buttons, return an appropriate layout
+         * for positioning them in the folder component.
+         * 
+         * @param buttons
+         * @return a Layout containing all items in the button array.
+         */
+        virtual GridLayoutManager::Layout buildFolderLayout
+        (Array<AppMenuButton::Ptr> buttons);
+    };
+
+    /**
+     *
+     */
+    class ScrollingMenuButton : public AppMenuButton {
+    public:
+        /**
+         * 
+         * @param menuItem
+         * @param iconThread
+         * @param name
+         */
         ScrollingMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
-                int columnIndex, int rowIndex, String name = String());
+                String name = String());
         virtual ~ScrollingMenuButton();
     private:
         /**
          * Re-calculates draw values whenever the button is resized
          */
         void resized() override;
-
-        
-        int columnIndex;
-        int rowIndex;
     };
 };

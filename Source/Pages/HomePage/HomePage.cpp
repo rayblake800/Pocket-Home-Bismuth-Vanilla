@@ -18,6 +18,7 @@ settingsButton(ComponentConfigFile::settingsButtonKey)
 {	
     addMouseListener(this, false);
     setWantsKeyboardFocus(true);
+    
 
     addAndMakeVisible(frame);
     addAndMakeVisible(clock);
@@ -35,24 +36,13 @@ settingsButton(ComponentConfigFile::settingsButtonKey)
 
     settingsPage = new SettingsPage();
     
+    addChildComponent(loadingSpinner);
+    loadingSpinner.setAlwaysOnTop(true);
+    
     loadAllConfigProperties();
 }
 
 HomePage::~HomePage() { }
-
-/**
- * Add a pop-up editor window to the page.
- */
-void HomePage::showPopupEditor(AppMenuPopupEditor* editor)
-{
-    popupEditor = editor;
-    if (popupEditor != nullptr)
-    {
-        addAndMakeVisible(popupEditor);
-        popupEditor->setCentrePosition(getBounds().getCentreX(),
-                getBounds().getCentreY());
-    }
-}
 
 void HomePage::loadConfigProperties(ConfigFile* config, String key)
 {
@@ -87,17 +77,12 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
 			DBG(String("Menu type is ")+menuType);
 			if(menuType == "Scrolling menu")
 			{
-				appMenu = new ScrollingAppMenu();
+				appMenu = new ScrollingAppMenu(loadingSpinner);
 			}
 			else//menuType == "pagedMenu"
 			{
-				appMenu = new PagedAppMenu();
+				appMenu = new PagedAppMenu(loadingSpinner);
 			}
-			appMenu->setPopupCallback(
-			[this](AppMenuPopupEditor * newEditor)
-			{
-				showPopupEditor(newEditor);
-			});
 			addAndMakeVisible(appMenu);
 			appMenu->toBack();
 			pageResized();
@@ -153,7 +138,7 @@ void HomePage::windowFocusChanged(bool windowFocus)
 {
     if (!windowFocus)
     {
-        appMenu->stopWaitingForLoading();
+        appMenu->exitLoadingState();
     }
 }
 
@@ -166,10 +151,4 @@ void HomePage::pageResized()
     wifiIcon.applyConfigBounds();
     powerButton.applyConfigBounds();
     settingsButton.applyConfigBounds();
-    if (popupEditor != nullptr)
-    {
-        popupEditor->applyConfigBounds();
-        popupEditor->setCentrePosition(getBounds().getCentreX(),
-                getBounds().getCentreY());
-    }
 }

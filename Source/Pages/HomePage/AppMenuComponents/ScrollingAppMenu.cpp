@@ -27,8 +27,8 @@ void ScrollingAppMenu::addButtonComponent(AppMenuButton* appButton)
         scrollButton->applyConfigBounds();
         int buttonWidth = scrollButton->getWidth();
         int buttonHeight = scrollButton->getHeight();
-        int columnIndex = scrollButton->getColumnIndex();
-        int rowIndex = scrollButton->getRowIndex();
+        int columnIndex = scrollButton->getIndexOfFolder();
+        int rowIndex = scrollButton->getIndexWithinFolder();
         if (rowIndex == 0 || columnIndex >= columnTops.size())
         {
             columnTops.resize(columnIndex+1);
@@ -69,8 +69,8 @@ void ScrollingAppMenu::scrollToSelected(bool animatedScroll)
     {
         int buttonWidth = selectedButton->getWidth();
         int buttonHeight = selectedButton->getHeight();
-        int index = selectedButton->getRowIndex();
-        int column = selectedButton->getColumnIndex();
+        int index = selectedButton->getIndexWithinFolder();
+        int column = selectedButton->getIndexOfFolder();
         Rectangle<int> dest = getBounds();
         //calculate y-position
         if (selectedButton->isVisible())

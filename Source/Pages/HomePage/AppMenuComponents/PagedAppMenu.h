@@ -1,52 +1,90 @@
-
 /**
- * @file PagedAppMenu
+ * @file PagedAppMenu.h
  * 
- * TODO: pretty much everything
+ * TODO finish documentation
  */
 
 #pragma once
 #include "AppMenuComponent.h"
 
-
 class PagedAppMenu : public AppMenuComponent {
 public:
-    PagedAppMenu();
+    /**
+     * @param loadingSpinner
+     */
+    PagedAppMenu(OverlaySpinner& loadingSpinner);
     virtual ~PagedAppMenu();
 
     /**
-     * Add a new application button to the active menu column.
-     * @param appButton will be added to the bottom of the active menu column.
+     * Use key presses for menu navigation, setting specific controls based on 
+     * AppMenu type. Other classes may call this to pass on or simulate
+     * key events.
+     * @param key
+     * @return true if the key press was used.
      */
-    virtual void addButtonComponent(AppMenuButton* appButton) override;
+    bool keyPressed(const KeyPress& key);
+
+protected:
+    /**
+     * Updates the folder component layout, optionally animating the transition.
+     * @param animateTransition if true, animate component changes rather than
+     * immediately updating folder bounds.
+     */
+    void layoutFolders(bool animateTransition);
 
     /**
-     * Scroll the menu so that the selected button is centered.
-     * @param animatedScroll sets if the menu should animate its scrolling,
-     * or just jump immediately to the destination position.
+     * Create a folder component object from a folder menu item.
+     * @param folderItem
      */
-    virtual void scrollToSelected(bool animatedScroll = true) override;
-
-    /**
-     * Receives all keyPress events and uses them for page navigation.
-     * @return true iff the key press was used by the AppMenu
-     */
-    virtual bool keyPressed(const KeyPress& key) override;
+    AppFolder* createFolderObject(AppMenuItem::Ptr folderItem);
 
 private:
-    virtual AppMenuButton::Ptr createMenuButton
-    (AppMenuItem* menuItem, int rowIndex, int columnIndex) override;
 
-    virtual void resized() override;
-
-    class PagedMenuButton : public AppMenuButton{
+    /**
+     *
+     */
+    class PageAppFolder : public AppFolder {
     public:
-        PagedMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
-                int columnIndex, int rowIndex, String name = String());
-        virtual ~PagedMenuButton();
+        PageAppFolder();
+        virtual ~PageAppFolder();
+
+        /**
+         * Create AppMenuButton components for a set of AppMenuItems.
+         * @param menuItems
+         */
+        Array<AppMenuButton::Ptr> createMenuButtons
+        (Array<AppMenuItem::Ptr> menuItems);
+
+        /**
+         * Given a list of folder buttons, return an appropriate layout
+         * for positioning them in the folder component.
+         * 
+         * @param buttons
+         * @return a Layout containing all items in the button array.
+         */
+        virtual GridLayoutManager::Layout buildFolderLayout
+        (Array<AppMenuButton::Ptr> buttons);
+    };
+
+    /**
+     *
+     */
+    class PageMenuButton : public AppMenuButton {
+    public:
+        /**
+         * 
+         * @param menuItem
+         * @param iconThread
+         * @param name
+         * @return 
+         */
+        ScrollingMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
+                String name = String());
+        virtual ~ScrollingMenuButton();
     private:
-        virtual void resized() override;
-        int columnIndex;
-        int rowIndex;
+        /**
+         * Re-calculates draw values whenever the button is resized
+         */
+        void resized() override;
     };
 };

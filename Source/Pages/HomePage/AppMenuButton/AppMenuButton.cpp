@@ -2,7 +2,7 @@
 #include "../../../Utils.h"
 #include "AppMenuButton.h"
 
-AppMenuButton::AppMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
+AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem, IconThread& iconThread,
         int columnIndex, int rowIndex, String name) :
 Button(name),
 ConfigurableComponent(ComponentConfigFile::appMenuButtonKey),
@@ -22,27 +22,8 @@ AppMenuButton::~AppMenuButton()
 {
 }
 
-int AppMenuButton::getColumnIndex()
-{
-    return columnIndex;
-};
 
-int AppMenuButton::getRowIndex()
-{
-    return rowIndex;
-};
-
-void AppMenuButton::setColumnIndex(int newColumn)
-{
-    columnIndex = newColumn;
-};
-
-void AppMenuButton::setRowIndex(int newRow)
-{
-    rowIndex = newRow;
-};
-
-AppMenuItem* AppMenuButton::getMenuItem()
+AppMenuItem::Ptr AppMenuButton::getMenuItem()
 {
     return menuItem;
 }

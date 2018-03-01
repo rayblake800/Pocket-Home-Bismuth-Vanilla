@@ -9,6 +9,7 @@
 
 #include "../PowerPage.h"
 #include "../Settings Page/SettingsPage.h"
+#include "../../Basic Components/OverlaySpinner.h"
 #include "../../PageComponent.h"
 #include "../../Configuration/AppConfigFile.h"
 #include "../../Configuration/Configurables/ConfigurableImageButton.h"
@@ -28,13 +29,6 @@ class HomePage : public PageComponent,public Configurable{
 public:
     HomePage();
     virtual ~HomePage();
-    
-    /**
-     * Add a pop-up editor window to the page.
-     * @param editor will be added, made visible, and positioned/scaled as
-     * needed.
-     */
-    void showPopupEditor(AppMenuPopupEditor* editor);
 
 protected:
     /**
@@ -69,6 +63,7 @@ private:
     void windowFocusChanged(bool windowFocus) override;
     void pageResized() override;
 
+    OverlaySpinner loadingSpinner;
     ClockLabel clock;
     ScopedPointer<AppMenuComponent> appMenu;
     BatteryIcon batteryIcon;
@@ -80,8 +75,6 @@ private:
     PowerPage powerPage;
     ScopedPointer<SettingsPage> settingsPage;
     ConfigurableImageComponent frame;
-    
-    ScopedPointer<AppMenuPopupEditor> popupEditor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomePage);
 };

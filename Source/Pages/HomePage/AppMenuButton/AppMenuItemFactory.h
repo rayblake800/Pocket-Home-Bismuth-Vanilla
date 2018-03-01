@@ -6,20 +6,25 @@
  */
 #pragma once
 #include "../../../../JuceLibraryCode/JuceHeader.h"
-#include "MenuItem Types/ConfigAppMenuItem.h"
-#include "MenuItem Types/DesktopEntryMenuItem.h"
-#include "MenuItem Types/FolderMenuItem.h"
 #include "AppMenuItem.h"
 
 class AppMenuItemFactory {
 public:
+    
+    /**
+     * Create the folder menu item that defines the base menu folder
+     * @param desktopEntries
+     * @return 
+     */
+    static AppMenuItem::Ptr createBaseFolderItem
+    (const DesktopEntries& desktopEntries);
 
     /**
      * Get an AppMenuItem for an application link provided by the AppConfigFile
      * @param appItem defines all menu item data
      * @return a pointer to the new menu item
      */
-    static AppMenuItem* create(const AppConfigFile::AppItem& appItem);
+    static AppMenuItem::Ptr create(const AppConfigFile::AppItem& appItem);
 
     /**
      * Get an AppMenuItem for an application link that was read from a desktop
@@ -27,14 +32,14 @@ public:
      * @param desktopEntry defines the application/directory data
      * @return a pointer to the new menu item
      */
-    static AppMenuItem* create(const DesktopEntry& desktopEntry);
+    static AppMenuItem::Ptr create(const DesktopEntry& desktopEntry);
 
     /**
      * Get an AppMenuItem for an application folder provided by the AppConfigFile
      * @param appFolder defines all menu item data
      * @return a pointer to the new menu item
      */
-    static AppMenuItem* create(const AppConfigFile::AppFolder& appFolder);
+    static AppMenuItem::Ptr create(const AppConfigFile::AppFolder& appFolder);
 private:
     AppMenuItemFactory();
     virtual ~AppMenuItemFactory();
