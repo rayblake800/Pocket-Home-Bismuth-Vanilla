@@ -154,9 +154,21 @@ protected:
          */
         virtual GridLayoutManager::Layout buildFolderLayout
         (Array<AppMenuButton::Ptr> buttons) = 0;
+        
+        /**
+         * @param index
+         * @return true for any valid button index
+         */
+        inline bool validBtnIndex(int index) 
+        {
+            return index >= 0 && index < folderButtons.size();
+        }
 
         AppMenuItem::Ptr sourceFolderItem = nullptr;
         GridLayoutManager folderLayout;
+        float margin = 0;
+        float xPadding = 0;
+        float yPadding = 0;
         Array<AppMenuButton::Ptr> folderButtons;
         int selectedIndex = 0;
     };
@@ -171,10 +183,10 @@ protected:
      * Open an application category folder, creating or adding 
      * AppMenuButtons for all associated desktop applications.
      * 
-     * @param folderButton defines the folder and provides all 
+     * @param folderItem defines the folder and provides all 
      * AppMenuItem objects.
      */
-    void openFolder(AppMenuButton::Ptr folderButton);
+    void openFolder(AppMenuItem::Ptr folderItem);
 
     /**
      * close the last opened folder, removing all contained buttons from

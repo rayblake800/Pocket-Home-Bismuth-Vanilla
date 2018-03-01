@@ -21,11 +21,21 @@ AppMenuComponent::AppFolder::AppFolder
 (AppMenuItem::Ptr folderItem) :
 sourceFolderItem(folderItem)
 {
-	folderButtons = createMenuButtons(folderItem->getMenuItems());
-    layoutButtons();
+    reload();
 }
 
 AppMenuComponent::AppFolder::~AppFolder() { }
+
+/**
+* Reload all folder menu buttons from their source menu item. 
+*/
+void AppMenuComponent::AppFolder::reload()
+{
+    removeAllChildComponents();
+    folderButtons = createMenuButtons(sourceFolderItem->getMenuItems());
+    layoutButtons();
+}
+
 
 /**
  * @return number of menu buttons in the folder.
@@ -42,7 +52,7 @@ int AppMenuComponent::AppFolder::size()
  */
 AppMenuButton::Ptr AppMenuComponent::AppFolder::getSelectedButton()
 {
-    if (selectedIndex < 0 || selectedIndex >= folderButtons.size())
+    if (!validBtnIndex(selectedIndex))
     {
         return nullptr;
     }
@@ -63,7 +73,7 @@ AppMenuPopupEditor* AppMenuComponent::AppFolder::getEditorForSelected()
                 {
                     if (editor->getCategories() != selectedItem->getCategories())
                     {
-                        loadButtons();
+                        reload();
                     }
                 });
     }
@@ -73,12 +83,21 @@ AppMenuPopupEditor* AppMenuComponent::AppFolder::getEditorForSelected()
 /**
  * Set this folder's selected menu button
  */
-void AppMenuComponent::AppFolder::selectIndex(int index){}
+void AppMenuComponent::AppFolder::selectIndex(int index)
+{
+    if(validBtnIndex(index))
+    {
+        selectedIndex = index;
+    }
+}
 
 /**
  * @return the index of the selected menu button.
  */
-int AppMenuComponent::AppFolder::getSelectedIndex() { }
+int AppMenuComponent::AppFolder::getSelectedIndex() 
+{ 
+    return selectedIndex;
+}
 
 /**
  * Insert a new button to the folder at a specific index,
@@ -89,41 +108,162 @@ int AppMenuComponent::AppFolder::getSelectedIndex() { }
  * inclusive.  Values outside of this range will be rounded to
  * the nearest valid value.
  */
-void AppMenuComponent::AppFolder::insertButton(AppMenuButton::Ptr newButton, int index);
+void AppMenuComponent::AppFolder::insertButton
+(AppMenuButton::Ptr newButton, int index)
+{
+        if(index < 0)
+        {
+            index=0;
+        }
+        if(index > size())
+        {
+            folderButtons.add(newButton);
+        }
+        else
+        {
+            folderButtons.insert(index,newButton);
+        }
+        if(selectedIndex >= index)
+        {
+            selectedIndex++;
+        }
+        layoutButtons();
+}
 
 /**
  * Remove the button at a given index, shifting back any buttons
  * at greater indices to fill the gap
  */
-void AppMenuComponent::AppFolder::removeButton(int index);
+void AppMenuComponent::AppFolder::removeButton(int index)
+{
+    if(validBtnIndex(index))
+    {
+        folderButtons.remove(index);
+        layoutButtons();
+    }
+}
 
 /**
  * Swap the indices and positions of two buttons in the folder.
  * Both indices must be valid, or nothing will happen.
  */
-void AppMenuComponent::AppFolder::swapButtons(int btnIndex1, int btnIndex2);
+void AppMenuComponent::AppFolder::swapButtons
+(int btnIndex1, int btnIndex2)
+{
+    if(validBtnIndex(btnIndex1) && validBtnIndex(btnIndex2))
+    {
+        AppMenuButton::Ptr btn1 = folderButtons[btnIndex1];
+        folderButtons[btnIndex1] = folderButtons[btnIndex2];
+        folderButtons[btnIndex2] = btn1;
+        if(selectedIndex == btnIndex1)
+        {
+            selectedIndex = btnIndex2;
+        }
+        else if(selectedIndex == btnIndex2)
+        {
+            selectedIndex = btnIndex1;
+        }
+        layoutButtons();
+    }
+}
 
 /**
  * Trigger a click for this folder's selected button.
  */
-void AppMenuComponent::AppFolder::clickSelected();
+void AppMenuComponent::AppFolder::clickSelected()
+{
+    AppMenuButton::Ptr selected = getSelectedButton();
+    if(selected != nullptr)
+    {
+        selected->triggerClick();
+    }
+}
 
 /**
  * Set the relative spacing of the folder component layout.
  */
-void AppMenuComponent::AppFolder::setSpacing(float margin, float xPadding, float yPadding);
+void AppMenuComponent::AppFolder::setSpacing(float margin,
+        float xPadding, float yPadding)
+{
+    this->margin = margin;
+    this->xPadding = xPadding;
+    this->yPadding = yPadding;
+    resized();
+}
 
 /**
  * Reposition folder buttons when folder bounds change.
  */
-void AppMenuComponent::AppFolder::resized();
+void AppMenuComponent::AppFolder::resized()
+{
+    Rectangle<int> bounds = getLocalBounds();
+    bounds.reduce(margin * getWidth(), margin * getWidth());
+    folderLayout.layoutComponents(bounds,getWidth() * xPadding,
+            getWidth() * yPadding);
+}
 
 /**
  * Clear folderLayout,remove all child components, reload the
  * button layout, and re-add the layout buttons as child
  * components.
  */
-void AppMenuComponent::AppFolder::layoutButtons();
+void AppMenuComponent::AppFolder::layoutButtons()
+{
+    while(!validBtnIndex(selectedIndex) && selectedIndex!= 0)
+    {
+        selectedIndex--;
+    }
+    folderLayout.clear(true);
+    folderLayout.setLayout(buildFolderLayout(folderButtons),this);
+}
+
+/**
+* Load and display the base menu folder that contains favorite 
+* application shortcuts and all other folders
+*/
+void AppMenuComponent::loadRootFolder()
+{
+}
+
+/**
+* Open an application category folder, creating or adding 
+* AppMenuButtons for all associated desktop applications.
+*/
+void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
+{
+}
+
+/**
+* close the last opened folder, removing all contained buttons from
+* view
+*/
+void AppMenuComponent::closeFolder()
+{
+}
+
+/**
+* Sets what should happen when a button is left clicked.
+* This opens selected buttons, and selects unselected button
+*/
+void AppMenuComponent::onButtonClick(AppMenuButton* button)
+{
+}
+
+/**
+* 
+*/
+void AppMenuComponent::mouseDown(const MouseEvent &event)
+{
+}
+
+/**
+* Enter or exit the loading state, where the component shows the
+* loading spinner and disbles user input.
+*/
+void AppMenuComponent::setLoadingState(bool isLoading)
+{
+}
+
 
 //OLD:
 
