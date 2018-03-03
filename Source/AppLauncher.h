@@ -79,6 +79,11 @@ private:
 
     //Track application launch success and respond appropriately.
     virtual void timerCallback() override;
+    
+    /**
+     * Stop process tracking if window focus changes and the timer is suspended.
+     */
+    virtual void onSuspend() override;
 
     static const int timerFrequency = 2000;
     ChildProcess * timedProcess = nullptr;

@@ -9,6 +9,8 @@
 
 #pragma once
 #include <set>
+#include <atomic>
+#include "../../../../JuceLibraryCode/JuceHeader.h"
 #include "../../../Basic Components/OverlaySpinner.h"
 #include "../../../Configuration/Configurables/ConfigurableComponent.h"
 #include "../../../AppLauncher.h"
@@ -19,14 +21,14 @@
 #include "../IconThread.h"
 #include "../DesktopEntries.h"
 
-class AppMenuComponent : public Component, public ConfigurableComponent{
+class AppMenuComponent : public Component, public ConfigurableComponent {
 public:
     /**
-     * 
-     * @param componentKey
-     * @param loadingSpinner
+     * @param componentKey loads menu bounds from config
+     * @param loadingSpinner reference to an overlay spinner that sits over
+     * the PageComponent holding this AppMenuComponent.
      */
-    AppMenuComponent(String componentKey,OverlaySpinner& loadingSpinner);
+    AppMenuComponent(String componentKey, OverlaySpinner& loadingSpinner);
 
     virtual ~AppMenuComponent();
 
@@ -34,20 +36,20 @@ public:
      * @return true if the AppMenuComponent is currently in the loading state
      */
     bool isLoading();
-    
+
     /**
      * Exit the loading state, hiding the spinner and enabling
      * user input
      */
     void exitLoadingState();
-    
+
     /**
      * Open the pop-up menu used for editing this object.
      * @param selectionMenu if true, the pop-up menu contains only options for 
      * editing the selected menu button.
      */
     void openPopupMenu(bool selectionMenu);
-    
+
     /**
      * Use key presses for menu navigation, setting specific controls based on 
      * AppMenu type. Other classes may call this to pass on or simulate
@@ -83,7 +85,7 @@ protected:
      * opened AppFolder.
      */
     void openEditorForSelected();
-    
+
     /**
      * Offset the selected button index in the last opened AppFolder.
      * @param offset will be added to the index if index + offset is a valid
@@ -99,6 +101,16 @@ protected:
      * immediately updating folder bounds.
      */
     virtual void layoutFolders(bool animateTransition) = 0;
+
+    class AppFolder;
+    //Holds the AppFolder components that organize the menu buttons.
+    OwnedArray<AppFolder> openFolders;
+    //Stores each button by name, so buttons don't need to be re-loaded
+    //every time you close a folder and open it again.
+    std::map<String, AppMenuButton::Ptr> buttonNameMap;
+    
+    //this gets passed to AppMenuButtons to load button icons.
+    IconThread iconThread;
 private:
 
     /**
@@ -132,8 +144,8 @@ private:
      * editor.
      * @param editor
      */
-    void showPopupEditor(PopupEditorComponent* editor);
-    
+    void showPopupEditor(AppMenuPopupEditor* editor);
+
     /**
      * Create and show a pop-up editor component for a button in this menu.
      * This will only work if the button is in the last opened folder and the 
@@ -141,7 +153,7 @@ private:
      * @param button
      */
     void showMenuButtonEditor(AppMenuButton::Ptr button);
-    
+
     /**
      * Sets what should happen when a button is left clicked.
      * This opens selected buttons, and selects unselected buttons
@@ -164,20 +176,15 @@ private:
 
     //Launches applications from the menu
     AppLauncher appLauncher;
+    //Page lading spinner reference
     OverlaySpinner& loadingSpinner;
+    //Holds the menu editor component that can be accessed via the pop-up menu
     ScopedPointer<AppMenuPopupEditor> buttonEditor;
+    //Loads system applications from .Desktop files
     static DesktopEntries desktopEntries;
-    //this gets passed to AppMenuButtons to load button icons.
-    IconThread iconThread;
     //Tracks if desktop entries are loading or applications are launching in
     //another thread
-    bool loadingState = false;
-    //Allow for safe asynchronous access to the loading state
-    CriticalSection loadingLock;
-    //Stores each button by name, so buttons don't need to be re-loaded
-    //every time you close a folder and open it again.
-    std::map<String, AppMenuButton::Ptr> buttonNameMap;
-    OwnedArray<AppFolder> openFolders;
+    std::atomic<bool> loadingState;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
 
 protected:
@@ -197,17 +204,22 @@ protected:
          * @param folderItem 
          * @param btnListener will be assigned to listen to all folder
          * menu buttons.
+         * @param buttonNameMap stores all menu buttons and re-uses them
+         * when possible.
+         * @param iconThread loads icons for new menu buttons.
          */
-        AppFolder(AppMenuItem::Ptr folderItem, MouseListener* btnListener);
+        AppFolder(AppMenuItem::Ptr folderItem, MouseListener* btnListener,
+                std::map<String, AppMenuButton::Ptr>& buttonNameMap,
+                IconThread& iconThread);
 
         virtual ~AppFolder();
 
         /**
-         * Create AppMenuButton components for a set of AppMenuItems.
-         * @param menuItems
+         * Create an AppMenuButton component for an AppMenuItem.
+         * @param menuItem
          */
-        Array<AppMenuButton::Ptr> createMenuButtons
-        (Array<AppMenuItem::Ptr> menuItems) = 0;
+        virtual AppMenuButton::Ptr createMenuButton
+        (AppMenuItem::Ptr menuItem) = 0;
 
         /**
          * Reload all folder menu buttons from their source menu item.
@@ -226,7 +238,7 @@ protected:
          * @return the button's index, or -1 if the button is not in this
          * folder.
          */
-        bool getButtonIndex(AppMenuButton::Ptr menuButton);
+        int getButtonIndex(AppMenuButton::Ptr menuButton);
 
         /**
          * @return The selected menu button in this folder.
@@ -241,22 +253,34 @@ protected:
          * @return true if index was valid and the selection changed.
          */
         bool selectIndex(int index);
+        
+        /**
+         * Deselects the selected button, if one exists
+         */
+        void deselect();
 
         /**
-         * @return the index of the selected menu button.
+         * @return the index of the selected menu button, or -1 if no button
+         * is selected
          */
         int getSelectedIndex();
 
         /**
-         * Insert a new button to the folder at a specific index,
-         * shifting forward any buttons at indices equal or greater
-         * than the index. 
+         * Creates or reloads a button for a menu item, inserting it into
+         * the folder at a specific index. This shifts forward any buttons at 
+         * indices equal or greater than the index. 
          * 
+         * @param newItem
          * @param index should be between 0 and appFolder.size(),
          * inclusive.  Values outside of this range will be rounded to
          * the nearest valid value.
+         * @param updateLayout if set to true, the button layout will be
+         * reloaded after the new button is inserted.  If inserting many buttons,
+         * it's better to set this to false and update the layout once at the
+         * end.
          */
-        void insertButton(AppMenuButton::Ptr newButton, int index);
+        void insertButton(AppMenuItem::Ptr newItem, int index, 
+                bool updateLayout = true);
 
         /**
          * Remove the button at a given index, shifting back any buttons
@@ -274,10 +298,17 @@ protected:
          * @param btnIndex2
          */
         void swapButtons(int btnIndex1, int btnIndex2);
-
-    protected:
+     
         /**
-         * Set the relative spacing of the folder component layout.
+         * Set the relative placement of folder buttons within the folder.
+         * 
+         * @param margin space between components and the edge of the
+         * folder component, as a fraction of folder width.
+         */
+        void setMargin(float margin);
+             
+        /**
+         * Set the relative space between folder buttons.
          * 
          * @param margin space between components and the edge of the
          * folder component, as a fraction of folder width.
@@ -288,8 +319,9 @@ protected:
          * @param yPadding vertical space between folder child
          * components, as a fraction of folder height.
          */
-        void setSpacing(float margin, float xPadding, float yPadding);
-    private:
+        void setPadding(float xPadding, float yPadding);
+
+        protected:
         /**
          * Reposition folder buttons when folder bounds change.
          */
@@ -301,7 +333,11 @@ protected:
          * components.
          */
         virtual void layoutButtons();
-
+        
+        //New buttons will need this to load their icons.
+        IconThread& iconThread;
+    private:
+        
         /**
          * Given a list of folder buttons, return an appropriate layout
          * for positioning them in the folder component.
@@ -310,7 +346,7 @@ protected:
          * @return a Layout containing all items in the button array.
          */
         virtual GridLayoutManager::Layout buildFolderLayout
-        (Array<AppMenuButton::Ptr> buttons) = 0;
+        (Array<AppMenuButton::Ptr>& buttons) = 0;
 
         /**
          * @param index
@@ -320,14 +356,21 @@ protected:
             return index >= 0 && index < folderButtons.size();
         }
 
+        //Listener to assign to all button components
         MouseListener* btnListener = nullptr;
+        //Reference to the AppMenuComponent's button map
+        std::map<String, AppMenuButton::Ptr>& buttonNameMap;
+        //Holds the folder menu item used to load this folder's menu items
         AppMenuItem::Ptr sourceFolderItem = nullptr;
+        //folder layout manager and relative spacing values.
         GridLayoutManager folderLayout;
         float margin = 0;
         float xPadding = 0;
         float yPadding = 0;
+        //Holds all menu buttons
         Array<AppMenuButton::Ptr> folderButtons;
-        int selectedIndex = 0;
+        //Tracks selected button index
+        int selectedIndex = -1;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppFolder)
     };
 };

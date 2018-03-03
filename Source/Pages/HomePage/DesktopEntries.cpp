@@ -4,9 +4,7 @@
 #include <stdlib.h>
 #include "DesktopEntries.h"
 
-DesktopEntries::DesktopEntries()
-{
-}
+DesktopEntries::DesktopEntries() { }
 
 DesktopEntries::DesktopEntries(const DesktopEntries& orig)
 {
@@ -14,9 +12,7 @@ DesktopEntries::DesktopEntries(const DesktopEntries& orig)
     entries = orig.entries;
 }
 
-DesktopEntries::~DesktopEntries()
-{
-}
+DesktopEntries::~DesktopEntries() { }
 
 //return the number of stored DesktopEntry objects
 
@@ -63,7 +59,7 @@ std::set<String> DesktopEntries::getCategories()
     const ScopedLock readLock(lock);
     std::set<String> categoryNames;
     for (std::map<String, std::set < DesktopEntry>>::iterator it = categories.begin();
-            it != categories.end(); it++)
+         it != categories.end(); it++)
     {
         categoryNames.insert(it->first);
     }
@@ -77,17 +73,22 @@ std::set<String> DesktopEntries::getCategories()
 void DesktopEntries::loadEntries
 (std::function<void(String) > notifyCallback, std::function<void() > onFinish)
 {
+    if (!loadingThread.isThreadRunning())
     {
-        const ScopedLock readLock(lock);
-        entries.clear();
-        categories.clear();
+        {
+            const ScopedTryLock readLock(lock);
+            if(!readLock.isLocked()){
+                DBG("Can't load desktop entries, thread is already locked");
+                return;
+            }
+            entries.clear();
+            categories.clear();
+        }
+        loadingThread.asyncLoadEntries(this, notifyCallback, onFinish);
     }
-    loadingThread.asyncLoadEntries(this, notifyCallback, onFinish);
 }
 
-DesktopEntries::LoadingThread::LoadingThread() : Thread("DesktopEntryLoader")
-{
-}
+DesktopEntries::LoadingThread::LoadingThread() : Thread("DesktopEntryLoader") { }
 
 void DesktopEntries::LoadingThread::asyncLoadEntries
 (DesktopEntries * threadOwner,
@@ -116,9 +117,9 @@ void DesktopEntries::LoadingThread::run()
     //read the contents of all desktop application directories
     DBG("finding desktop entries...");
     std::vector<String> dirs = {
-        getHomePath() + "/.local/share/applications",
-        "/usr/share/applications",
-        "/usr/local/share/applications"
+                                getHomePath() + "/.local/share/applications",
+                                "/usr/share/applications",
+                                "/usr/local/share/applications"
     };
     //track entry names and ignore duplicates
     std::set<String> files;
@@ -155,7 +156,7 @@ void DesktopEntries::LoadingThread::run()
     int fileIndex = 0;
     //read in files as DesktopEntry objects
     for (std::set<String>::iterator it = paths.begin();
-            it != paths.end(); it++)
+         it != paths.end(); it++)
     {
 
         fileIndex++;
@@ -176,14 +177,14 @@ void DesktopEntries::LoadingThread::run()
             this->notify();
         });
         String path = *it;
-        String extension = path.fromLastOccurrenceOf(".",false,true);
+        String extension = path.fromLastOccurrenceOf(".", false, true);
         if (extension == "desktop" || extension == "directory")
         {
             DesktopEntry entry(path);
             if (entry.getValue(DesktopEntry::hidden) ||
-                    entry.getValue(DesktopEntry::noDisplay) ||
-                    entry.getValue(DesktopEntry::notShowIn)
-                    .contains("pocket-home"))
+                entry.getValue(DesktopEntry::noDisplay) ||
+                entry.getValue(DesktopEntry::notShowIn)
+                .contains("pocket-home"))
             {
                 continue;
             }

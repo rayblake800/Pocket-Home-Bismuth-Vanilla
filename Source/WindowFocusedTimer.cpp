@@ -43,6 +43,7 @@ void WindowFocusedTimer::windowFocusLost()
                     timer->getTimerInterval();
             timer->stopTimer();
             timer->suspendedEndTime = endTime;
+            timer->onSuspend();
             suspended++;
         }
     }

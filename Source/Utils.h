@@ -156,4 +156,41 @@ juce::Font fontResizedToFit(juce::Font font, String text, Rectangle<int>containe
  * @param onConfirm if the user presses the "OK" button, this callback
  * function will run.
  */
-void confirmAction(String title,String message,std::function<void()> onConfirm);
+void confirmAction(String title, String message, std::function<void() > onConfirm);
+
+/**
+ * 
+ * @param a
+ * @param b
+ * @param c
+ * @return the median of a, b, and c
+ */
+template<typename T>
+T median(T a, T b, T c) {
+    if (a > b) {
+        if (b > c) {
+            return b;
+        }
+        if (a < c) {
+            return a;
+        }
+        return c;
+    }
+    if (a > c) {
+        return a;
+    }
+    if (b < c) {
+        return b;
+    }
+    return c;
+}
+
+/**
+ * @param checkIfC2 a pointer to an object of type C1
+ * @return true iff the object pointed to by checkIfC2 also has type C2.
+ */
+template<class C1, class C2>
+bool isClass(C1* checkIfC2) {
+    C2* testPtr = dynamic_cast<C2*> (checkIfC2);
+    return testPtr != nullptr;
+}

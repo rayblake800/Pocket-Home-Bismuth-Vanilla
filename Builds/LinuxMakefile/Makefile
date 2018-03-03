@@ -93,7 +93,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/ConfigAppMenuItem_c8dd56a1.o \
   $(JUCE_OBJDIR)/DesktopEntryMenuItem_da016302.o \
   $(JUCE_OBJDIR)/FolderMenuItem_549ca17a.o \
-  $(JUCE_OBJDIR)/RootFolderMenuItem_e8060f7c.o \
+  $(JUCE_OBJDIR)/BaseFolderMenuItem_60d897ab.o \
   $(JUCE_OBJDIR)/AppMenuButton_bf62b868.o \
   $(JUCE_OBJDIR)/AppMenuItem_35832009.o \
   $(JUCE_OBJDIR)/AppMenuItemFactory_cba812cb.o \
@@ -292,9 +292,9 @@ $(JUCE_OBJDIR)/FolderMenuItem_549ca17a.o: ../../Source/Pages/HomePage/AppMenuBut
 	@echo "Compiling FolderMenuItem.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/RootFolderMenuItem_e8060f7c.o: ../../Source/Pages/HomePage/AppMenuButton/MenuItem\ Types/RootFolderMenuItem.cpp
+$(JUCE_OBJDIR)/BaseFolderMenuItem_60d897ab.o: ../../Source/Pages/HomePage/AppMenuButton/MenuItem\ Types/BaseFolderMenuItem.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling RootFolderMenuItem.cpp"
+	@echo "Compiling BaseFolderMenuItem.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AppMenuButton_bf62b868.o: ../../Source/Pages/HomePage/AppMenuButton/AppMenuButton.cpp

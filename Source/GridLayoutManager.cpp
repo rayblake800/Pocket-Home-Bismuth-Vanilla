@@ -155,3 +155,33 @@ void GridLayoutManager::clearLayout(bool removeComponentsFromParent)
     rows.clear();
     vertWeightSum = 0;
 }
+
+/**
+ * Print out the layout to the console for debugging
+ */
+void GridLayoutManager::printLayout()
+{
+    for (Row& row : rows)
+    {
+        DBG(String("Row weight:") + String(row.vertWeight) + String("/")
+                + String(vertWeightSum));
+        String rowStr = "\t";
+        for(WeightedCompPtr comp : row.columns)
+        {
+            if(comp.component == nullptr)
+            {
+                rowStr += "null";
+            }
+            else
+            {
+                rowStr += comp.component->getName();
+            }
+            rowStr += "(";
+            rowStr += String(comp.weight);
+            rowStr += "/";
+            rowStr += String(row.horizWeightSum);
+            rowStr += ") ";
+        }
+        DBG(rowStr);
+    }
+}

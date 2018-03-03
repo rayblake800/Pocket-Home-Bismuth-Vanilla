@@ -20,7 +20,7 @@ public:
      * @param desktopEntries is used to load folder items.
      */
     FolderMenuItem(const AppConfigFile::AppFolder& appFolder,
-            const DesktopEntries& desktopEntries);
+            DesktopEntries& desktopEntries);
     virtual ~FolderMenuItem();
 
     /**
@@ -120,7 +120,7 @@ protected:
 private:
     //Source of this button's folder information
     AppConfigFile::AppFolder appFolder;
-    const DesktopEntries& desktopEntries;
+    DesktopEntries& desktopEntries;
 };
 
 

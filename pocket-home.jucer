@@ -121,10 +121,10 @@
                     file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/FolderMenuItem.cpp"/>
               <FILE id="PaT4m5" name="FolderMenuItem.h" compile="0" resource="0"
                     file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/FolderMenuItem.h"/>
-              <FILE id="f0mUcY" name="RootFolderMenuItem.cpp" compile="1" resource="0"
-                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/RootFolderMenuItem.cpp"/>
-              <FILE id="ZIvJMb" name="RootFolderMenuItem.h" compile="0" resource="0"
-                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/RootFolderMenuItem.h"/>
+              <FILE id="f0mUcY" name="BaseFolderMenuItem.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/BaseFolderMenuItem.cpp"/>
+              <FILE id="ZIvJMb" name="BaseFolderMenuItem.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/BaseFolderMenuItem.h"/>
             </GROUP>
             <FILE id="yT2LgN" name="AppMenuButton.h" compile="0" resource="0" file="Source/Pages/HomePage/AppMenuButton/AppMenuButton.h"/>
             <FILE id="wuxNd9" name="AppMenuButton.cpp" compile="1" resource="0"

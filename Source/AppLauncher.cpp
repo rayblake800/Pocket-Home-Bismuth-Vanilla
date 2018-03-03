@@ -6,7 +6,7 @@ launchFailureCallback([]()
 {
 }) { }
 
-AppLauncher::~AppLauncher(){ }
+AppLauncher::~AppLauncher() { }
 
 /**
  * Assigns a function to call if loading an application fails.
@@ -181,4 +181,12 @@ void AppLauncher::timerCallback()
     launchFailureCallback();
     stopTimer();
 
+}
+
+/**
+ * Stop process tracking if window focus changes and the timer is suspended.
+ */
+void AppLauncher::onSuspend()
+{
+    stopTimer();
 }

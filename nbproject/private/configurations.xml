@@ -3527,7 +3527,6 @@
         </df>
       </df>
       <df name="documentation">
-        <in>TODO.txt</in>
       </df>
       <df name="JuceLibraryCode">
         <in>AppConfig.h</in>

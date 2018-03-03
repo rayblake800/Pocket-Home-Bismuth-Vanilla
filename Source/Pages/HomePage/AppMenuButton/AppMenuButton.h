@@ -18,8 +18,8 @@ class AppMenuButton : public Button, public ReferenceCountedObject,
 public ConfigurableComponent {
 public:
     typedef ReferenceCountedObjectPtr<AppMenuButton> Ptr;
-    
-    enum ColourIds{
+
+    enum ColourIds {
         textColourId = 0x1900200,
         backgroundColourId = 0x1900201,
         selectionColourId = 0x1900202,
@@ -33,7 +33,7 @@ public:
      * @param name sets the button's internal component name
      */
     AppMenuButton(AppMenuItem::Ptr menuItem, IconThread& iconThread,
-            String name = String());
+            String name = String::empty);
 
     virtual ~AppMenuButton();
 
@@ -53,7 +53,7 @@ public:
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
     AppMenuPopupEditor* getEditor
-    (std::function<void(AppMenuPopupEditor*) > onConfirm);
+    (const std::function<void(AppMenuPopupEditor*) >& onConfirm);
 
     /**
      * Calling this method will create a message box asking for user 
@@ -62,7 +62,7 @@ public:
      * @param onRemove callback function that is responsible for removing this
      * button from its parent if the user clicks "OK"
      */
-    void confirmRemoveButtonSource(std::function<void() > onRemove);
+    void confirmRemoveButtonSource(const std::function<void() >& onRemove);
 
     /**
      * If possible, change the index of this button's data source by some
@@ -71,7 +71,25 @@ public:
      * @return true if the operation succeeded.
      */
     virtual bool moveDataIndex(int offset);
+
+    /**
+     * @return true if this button is selected, false otherwise.
+     */
+    bool isSelected() const;
+
+    /**
+     * @param select sets the button as selected if true and unselected if
+     * false.
+     */
+    void setSelected(bool select);
 protected:
+
+    /**
+     * Triggers whenever the button is selected or unselected
+     */
+    virtual void selectionStateChanged() {
+    }
+
     /**
      * Requests an icon from the icon thread.
      * @param icon an icon's full path, or the name of an icon file located
@@ -84,19 +102,76 @@ protected:
      * Reload this button's data from its menu item
      */
     virtual void reloadDataFromSource();
+  
+    /**
+     * @return  the area relative to this button's position where
+     * it will draw its name
+     */
+    const Rectangle<float>& getTextBounds() const;
 
+    /**
+     * @return  the area relative to this button's position where
+     * it will draw its image
+     */
+    const Rectangle<float>& getImageBounds() const;
+    
+    /**
+     * @return the font used to draw this button's title.
+     */
+    const Font& getTitleFont() const;
+    
+    
+    /**
+     * @param textBounds the area relative to this button's position where
+     * it will draw its name
+     */
+    void setTextBounds(const Rectangle<float>& bounds);
+
+    /**
+     * @param bounds the area relative to this button's position where
+     * it will draw its image
+     */
+    void setImageBounds(const Rectangle<float>& bounds);
+    
+    /**
+     * Sets if this button will draw its border
+     * @param shouldDraw
+     */
+    void setDrawBorder(bool shouldDraw);
+    
+    /**
+     * Sets if this button will fill in its background with its background
+     * color.
+     * @param shouldFill
+     */
+    void setFillBackground(bool shouldFill);
+
+    
+    /**
+     * @param font will be used to draw this button's title.
+     */
+    void setTitleFont(const Font& font);
+    
+    /**
+     * @param justification will be used to position button text within
+     * text bounds.
+     */
+    void setTextJustification(Justification justification);
+
+private:
+    
     //Icon image to draw
     Image appIcon;
     //Object used to load icons
     IconThread& iconThread;
 
-    Rectangle<float> textBox;
-    Rectangle<float> imageBox;
+    Rectangle<float> textBounds;
+    Rectangle<float> imageBounds;
     Font titleFont;
-    bool fillInBackground=true;
-    bool drawBorder=true;
+    Justification textJustification = Justification::centredLeft;
+    bool fillBackground = true;
+    bool drawBorder = true;
 
-private:
     /**
      * 
      * @param g

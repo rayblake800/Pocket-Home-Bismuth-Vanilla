@@ -35,6 +35,12 @@ public:
     void stopTimer();
 private:
     /**
+     * Runs whenever the timer is suspended, override this to change
+     * how timers behave when suspended.
+     */
+    virtual void onSuspend() {}
+    
+    /**
      * Called whenever the window loses focus, suspends all active timers.
      */
     static void windowFocusLost();
@@ -60,8 +66,7 @@ private:
      * Time::getMillisecondCounter. If set to zero, this indicates that 
      * the timer is not suspended.
      */
-    uint32 suspendedEndTime;
-    bool noResume;
+    uint32 suspendedEndTime = 0;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WindowFocusedTimer)
 };

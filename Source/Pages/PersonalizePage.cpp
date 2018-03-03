@@ -42,18 +42,16 @@ menuTypePicker("menuTypePicker")
     bgTypePicker.addItem("Default", 1);
     bgTypePicker.addItem("Color", 2);
     bgTypePicker.addItem("Image", 3);
-    bgTypePicker.setSelectedId(1);
     bgTypePicker.addListener(this);
 
     bgEditor.setColour(TextEditor::ColourIds::textColourId,
             Colour::greyLevel(0.f));
     bgEditor.addFileSelectListener(this);
 
-	for(int i = 0; i < MainConfigFile::menuTypes.size();i++)
-	{
-		menuTypePicker.addItem(MainConfigFile::menuTypes[i], i+1);
+    for (int i = 0; i < MainConfigFile::menuTypes.size(); i++)
+    {
+        menuTypePicker.addItem(MainConfigFile::menuTypes[i], i + 1);
     }
-    menuTypePicker.setSelectedId(1);
     menuTypePicker.addListener(this);
     updateComboBox();
     addAndShowLayoutComponents();
@@ -67,33 +65,28 @@ void PersonalizePage::updateComboBox()
     /* Checking the current configuration */
     String background = config.getConfigValue<String>(MainConfigFile::backgroundKey);
     bool display = false;
-    if (background.length() == 0);
-    else if (background.length() == 6 &&
-             background.containsOnly("0123456789ABCDEF"))
+    if (background.length() == 6 &&
+        background.containsOnly("0123456789ABCDEF"))
     {
-        bgTypePicker.setSelectedItemIndex(1, sendNotificationSync);
+        bgTypePicker.setSelectedItemIndex(1, dontSendNotification);
         display = true;
         bgEditor.setText(background, false);
     }
-    else
+    else if (background.length() > 0)
     {
-        bgTypePicker.setSelectedItemIndex(2, sendNotificationSync);
+        bgTypePicker.setSelectedItemIndex(2, dontSendNotification);
         display = true;
         bgEditor.setText(background, false);
     }
     bgEditor.setVisible(display);
     bgLabel.setVisible(display);
-    
+
     String menuType = config.getConfigValue<String>(MainConfigFile::menuTypeKey);
-    for(int i = 0; i < MainConfigFile::menuTypes.size();i++)
+    int menuIndex = MainConfigFile::menuTypes.indexOf(menuType);
+    if (menuIndex != -1)
     {
-		if(MainConfigFile::menuTypes[i] == menuType 
-				&& menuTypePicker.getSelectedId() != (i+1))
-		{
-			menuTypePicker.setSelectedItemIndex(i+1, sendNotificationSync);
-			break;
-		}
-	}
+        menuTypePicker.setSelectedItemIndex(menuIndex, dontSendNotification);
+    }
 }
 
 void PersonalizePage::comboBoxChanged(ComboBox * box)
@@ -101,11 +94,12 @@ void PersonalizePage::comboBoxChanged(ComboBox * box)
     MainConfigFile config;
     if (box == &bgTypePicker)
     {
-        bgEditor.setText("",NotificationType::dontSendNotification);
+        bgEditor.setText("", NotificationType::dontSendNotification);
         switch (box->getSelectedId())
         {
             case 1:
-                config.setConfigValue<String>(MainConfigFile::backgroundKey, "4D4D4D");
+                config.setConfigValue<String>(MainConfigFile::backgroundKey,
+                                              "4D4D4D");
                 bgEditor.setVisible(false);
                 bgLabel.setVisible(false);
                 return;
@@ -120,10 +114,11 @@ void PersonalizePage::comboBoxChanged(ComboBox * box)
         bgEditor.setVisible(true);
         bgLabel.setVisible(true);
     }
-    else if (box == &menuTypePicker)
+    else if (box == &menuTypePicker && box->getSelectedItemIndex() >= 0)
     {
-        config.setConfigValue<String>(MainConfigFile::menuTypeKey,
-				MainConfigFile::menuTypes[box->getSelectedId()-1]);
+        config.setConfigValue<String>
+                (MainConfigFile::menuTypeKey, 
+                MainConfigFile::menuTypes[box->getSelectedItemIndex()]);
     }
 }
 

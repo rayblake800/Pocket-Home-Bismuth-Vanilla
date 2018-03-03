@@ -119,7 +119,7 @@ String AppMenuItem::getEditorTitle() const
  */
 std::function<void(AppMenuPopupEditor*) > AppMenuItem::getEditorCallback()
 {
-    return []()
+    return [](AppMenuPopupEditor*)
     {
     };
 }

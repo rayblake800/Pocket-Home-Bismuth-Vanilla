@@ -15,10 +15,9 @@ Configurable(new MainConfigFile(),{
 frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
 powerButton(ComponentConfigFile::powerButtonKey),
 settingsButton(ComponentConfigFile::settingsButtonKey)
-{	
-    addMouseListener(this, false);
+{
     setWantsKeyboardFocus(true);
-    
+
 
     addAndMakeVisible(frame);
     addAndMakeVisible(clock);
@@ -35,10 +34,10 @@ settingsButton(ComponentConfigFile::settingsButtonKey)
     addAndMakeVisible(settingsButton);
 
     settingsPage = new SettingsPage();
-    
+
     addChildComponent(loadingSpinner);
     loadingSpinner.setAlwaysOnTop(true);
-    
+
     loadAllConfigProperties();
 }
 
@@ -47,46 +46,69 @@ HomePage::~HomePage() { }
 void HomePage::loadConfigProperties(ConfigFile* config, String key)
 {
     MainConfigFile mainConf = MainConfigFile();
-    if(mainConf == *config)
+    if (mainConf == *config)
     {
-		if(key == MainConfigFile::backgroundKey)
-		{
-			String background = mainConf.getConfigValue<String>
-					(MainConfigFile::backgroundKey);
-			if (background.containsOnly("0123456789ABCDEFXabcdefx"))
-			{
-				setBackgroundImage(Image::null);
-				Colour bgColour(background.getHexValue32());
-				setColour(backgroundColourId, bgColour.withAlpha(1.0f));
-			}
-			else
-			{
-				setBackgroundImage(ImageFileFormat::loadFrom(assetFile(background)));
-			}
-		}
-		else if(key == MainConfigFile::menuTypeKey)
-		{
-			if(appMenu != nullptr)
-			{
-				removeChildComponent(appMenu);
-				appMenu = nullptr;
-			}
-			
-			String menuType = mainConf.getConfigValue<String>
-					(MainConfigFile::menuTypeKey);
-			DBG(String("Menu type is ")+menuType);
-			if(menuType == "Scrolling menu")
-			{
-				appMenu = new ScrollingAppMenu(loadingSpinner);
-			}
-			else//menuType == "pagedMenu"
-			{
-				appMenu = new PagedAppMenu(loadingSpinner);
-			}
-			addAndMakeVisible(appMenu);
-			appMenu->toBack();
-			pageResized();
-		}
+        if (key == MainConfigFile::backgroundKey)
+        {
+            String background = mainConf.getConfigValue<String>
+                    (MainConfigFile::backgroundKey);
+            if (background.containsOnly("0123456789ABCDEFXabcdefx"))
+            {
+                setBackgroundImage(Image::null);
+                Colour bgColour(background.getHexValue32());
+                setColour(backgroundColourId, bgColour.withAlpha(1.0f));
+            }
+            else
+            {
+                setBackgroundImage(ImageFileFormat::loadFrom(assetFile(background)));
+            }
+        }
+        else if (key == MainConfigFile::menuTypeKey)
+        {
+            String menuType = mainConf.getConfigValue<String>
+                    (MainConfigFile::menuTypeKey);
+            if (!MainConfigFile::menuTypes.contains(menuType))
+            {
+                DBG("HomePage: Invalid menu type!");
+                return;
+            }
+            if (appMenu != nullptr)
+            {
+                removeChildComponent(appMenu);
+                appMenu = nullptr;
+            }
+
+
+            DBG(String("Menu type is ") + menuType);
+            if (menuType == "Scrolling menu")
+            {
+                if (!isClass<AppMenuComponent, ScrollingAppMenu>(appMenu.get()))
+                {
+                    DBG("Initializing scrolling menu");
+                    appMenu = new ScrollingAppMenu(loadingSpinner);
+                }
+                else
+                {
+                    DBG("Menu was already scrolling, don't recreate");
+                }
+            }
+            else//menuType == "pagedMenu"
+            {
+                if (!isClass<AppMenuComponent, PagedAppMenu>(appMenu.get()))
+                {
+                    DBG("Initializing paged menu");
+                    appMenu = new PagedAppMenu(loadingSpinner);
+                }
+                else
+                {
+                    DBG("Menu was already paged, don't recreate");
+                }
+            }
+            addAndMakeVisible(appMenu);
+            appMenu->toBack();
+            pageResized();
+        }
+
     }
 }
 
@@ -144,7 +166,10 @@ void HomePage::windowFocusChanged(bool windowFocus)
 
 void HomePage::pageResized()
 {
-    appMenu->applyConfigBounds();
+    if (appMenu != nullptr)
+    {
+        appMenu->applyConfigBounds();
+    }
     frame.applyConfigBounds();
     clock.applyConfigBounds();
     batteryIcon.applyConfigBounds();

@@ -18,7 +18,7 @@ public:
      * 
      * @param desktopEntries
      */
-    BaseFolderMenuItem(const DesktopEntries& desktopEntries);
+    BaseFolderMenuItem(DesktopEntries& desktopEntries);
     virtual ~BaseFolderMenuItem();
 
     /**
@@ -32,7 +32,7 @@ public:
      */
     virtual Array<AppMenuItem::Ptr> getFolderItems() const override;
 private:
-    const DesktopEntries& desktopEntries;
+    DesktopEntries& desktopEntries;
 };
 
 

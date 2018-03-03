@@ -6,6 +6,7 @@
  */
 #pragma once
 #include "../../../../JuceLibraryCode/JuceHeader.h"
+#include "../DesktopEntries.h"
 #include "AppMenuItem.h"
 
 class AppMenuItemFactory {
@@ -17,7 +18,7 @@ public:
      * @return 
      */
     static AppMenuItem::Ptr createBaseFolderItem
-    (const DesktopEntries& desktopEntries);
+    (DesktopEntries& desktopEntries);
 
     /**
      * Get an AppMenuItem for an application link provided by the AppConfigFile
@@ -37,9 +38,11 @@ public:
     /**
      * Get an AppMenuItem for an application folder provided by the AppConfigFile
      * @param appFolder defines all menu item data
+     * @param desktopEntries
      * @return a pointer to the new menu item
      */
-    static AppMenuItem::Ptr create(const AppConfigFile::AppFolder& appFolder);
+    static AppMenuItem::Ptr create(const AppConfigFile::AppFolder& appFolder,
+    DesktopEntries& desktopEntries);
 private:
     AppMenuItemFactory();
     virtual ~AppMenuItemFactory();

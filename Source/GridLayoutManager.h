@@ -105,6 +105,11 @@ public:
      * be removed from their parent component.
      */
     void clearLayout(bool removeComponentsFromParent = false);
+    
+    /**
+     * Print out the layout to the console for debugging
+     */
+    void printLayout();
 private:
 
     struct WeightedCompPtr {

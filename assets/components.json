@@ -2,13 +2,13 @@
     "use 24h mode": true,
     "show clock": true,
 
-    "max grid row count": 5,
-    "max grid column count": 6,
+    "max grid row count": 3,
+    "max grid column count": 5,
 
     "Page background color": "0xffd23c6d",
-    "AppMenu button background color": "0xffc0c0c0",
-    "AppMenu button border color": "0xff4d4d4d",
-    "AppMenu button selection color": "0xffd23c6d",
+    "AppMenu button background color": "0x55c0c0c0",
+    "AppMenu button border color": "0x884d4d4d",
+    "AppMenu button selection color": "0x88d23c6d",
     "AppMenu button text color": "0xffffffff",
     "Drawable button text color": "0xffffffff",
     "File picker text color": "0xffffffff",
@@ -55,10 +55,10 @@
         "height": 0.85
     },
     "paged app menu": {
-        "x": 0.1,
-        "y": 0.1,
-        "width": 0.8,
-        "height": 0.8
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
     },
     "app menu buttons": {
         "width": 0.30,

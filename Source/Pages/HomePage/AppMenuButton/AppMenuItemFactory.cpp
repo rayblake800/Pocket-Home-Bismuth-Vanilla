@@ -9,7 +9,7 @@
  * Create the folder menu item that defines the base menu folder
  */
 AppMenuItem::Ptr AppMenuItemFactory::createBaseFolderItem
-(const DesktopEntries& desktopEntries)
+(DesktopEntries& desktopEntries)
 {
     return new BaseFolderMenuItem(desktopEntries);
 }
@@ -35,12 +35,12 @@ AppMenuItem::Ptr AppMenuItemFactory::create(const DesktopEntry& desktopEntry)
  * Get an AppMenuItem for an application folder provided by the 
  * AppConfigFile
  */
-AppMenuItem::Ptr AppMenuItemFactory::create(const AppConfigFile::AppFolder& appFolder)
+AppMenuItem::Ptr AppMenuItemFactory::create
+(const AppConfigFile::AppFolder& appFolder, DesktopEntries& desktopEntries)
 {
-    return new FolderMenuItem(appFolder);
+    return new FolderMenuItem(appFolder,desktopEntries);
 }
 
 AppMenuItemFactory::AppMenuItemFactory() { }
 
 AppMenuItemFactory::~AppMenuItemFactory() { }
-/*

@@ -2,14 +2,12 @@
 #include "../../../Utils.h"
 #include "AppMenuButton.h"
 
-AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem, IconThread& iconThread,
-        int columnIndex, int rowIndex, String name) :
+AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem,
+        IconThread& iconThread, String name) :
 Button(name),
 ConfigurableComponent(ComponentConfigFile::appMenuButtonKey),
 menuItem(menuItem),
-iconThread(iconThread),
-columnIndex(columnIndex),
-rowIndex(rowIndex)
+iconThread(iconThread)
 {
 
     loadAllConfigProperties();
@@ -18,11 +16,11 @@ rowIndex(rowIndex)
     loadIcon(menuItem->getIconName());
 }
 
-AppMenuButton::~AppMenuButton()
-{
-}
+AppMenuButton::~AppMenuButton() { }
 
-
+/**
+ * Get this button's menu data.
+ */
 AppMenuItem::Ptr AppMenuButton::getMenuItem()
 {
     return menuItem;
@@ -31,7 +29,8 @@ AppMenuItem::Ptr AppMenuButton::getMenuItem()
 /**
  * Gets a PopupEditorComponent configured to edit this button's data
  */
-AppMenuPopupEditor* AppMenuButton::getEditor(std::function<void(AppMenuPopupEditor*) > onConfirm)
+AppMenuPopupEditor* AppMenuButton::getEditor
+(const std::function<void(AppMenuPopupEditor*) >& onConfirm)
 {
     AppMenuPopupEditor* editor = new AppMenuPopupEditor
             (menuItem->getEditorTitle(),
@@ -58,7 +57,8 @@ AppMenuPopupEditor* AppMenuButton::getEditor(std::function<void(AppMenuPopupEdit
  * confirmation that this button and its source should be removed.
  * If the user clicks "OK", removeButtonSource is called.
  */
-void AppMenuButton::confirmRemoveButtonSource(std::function<void() > onRemove)
+void AppMenuButton::confirmRemoveButtonSource
+(const std::function<void() >& onRemove)
 {
     confirmAction(menuItem->getConfirmDeleteTitle(),
             menuItem->getConfirmDeleteMessage(),
@@ -76,6 +76,24 @@ void AppMenuButton::confirmRemoveButtonSource(std::function<void() > onRemove)
 bool AppMenuButton::moveDataIndex(int offset)
 {
     return menuItem->moveDataIndex(offset);
+}
+
+/**
+ * @return true if this button is selected, false otherwise.
+ */
+bool AppMenuButton::isSelected() const
+{
+    return getToggleState();
+}
+
+/**
+ * @param select sets the button as selected if true and unselected if
+ * false.
+ */
+void AppMenuButton::setSelected(bool select)
+{
+    setToggleState(select, dontSendNotification);
+    selectionStateChanged();
 }
 
 /**
@@ -99,37 +117,116 @@ void AppMenuButton::reloadDataFromSource()
 }
 
 /**
+ * @return  the area relative to this button's position where
+ * it will draw its name
+ */
+const Rectangle<float>& AppMenuButton::getTextBounds() const
+{
+    return textBounds;
+}
+
+/**
+ * @return  the area relative to this button's position where
+ * it will draw its image
+ */
+const Rectangle<float>& AppMenuButton::getImageBounds() const
+{
+    return imageBounds;
+}
+
+/**
+ * @return the font used to draw this button's title.
+ */
+const Font& AppMenuButton::getTitleFont() const
+{
+    return titleFont;
+}
+
+/**
+ * @param textBounds the area relative to this button's position where
+ * it will draw its name
+ */
+void AppMenuButton::setTextBounds(const Rectangle<float>& bounds)
+{
+    textBounds = bounds;
+}
+
+/**
+ * @param bounds the area relative to this button's position where
+ * it will draw its image
+ */
+void AppMenuButton::setImageBounds(const Rectangle<float>& bounds)
+{
+    imageBounds = bounds;
+}
+
+/**
+ * Sets if this button will draw its border
+ * @param shouldDraw
+ */
+void AppMenuButton::setDrawBorder(bool shouldDraw)
+{
+    drawBorder = shouldDraw;
+}
+
+/**
+ * Sets if this button will fill in its background with its background
+ * color.
+ * @param shouldFill
+ */
+void AppMenuButton::setFillBackground(bool shouldFill)
+{
+    fillBackground = shouldFill;
+}
+
+
+/**
+ * @param font will be used to draw this button's title.
+ */
+void AppMenuButton::setTitleFont(const Font& font)
+{
+    titleFont = font;
+}
+
+/**
+ * @param justification will be used to position button text within
+ * text bounds.
+ */
+void AppMenuButton::setTextJustification(Justification justification)
+{
+    textJustification = justification;
+}
+
+/**
  * Custom button painting method.
  */
 void AppMenuButton::paintButton
 (Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
     Rectangle<int> border = getBounds().withPosition(0, 0);
-    if ((imageBox.isEmpty() || textBox.isEmpty()) && !border.isEmpty())
+    if ((imageBounds.isEmpty() || textBounds.isEmpty()) && !border.isEmpty())
     {
         resized();
     }
-    if (fillInBackground)
+    if (fillBackground)
     {
-        g.setColour(findColour(getToggleState() ? 
-            selectionColourId : backgroundColourId));
-        g.setOpacity(getToggleState() ? .8 : .2);
+        g.setColour(findColour(isSelected() ?
+                selectionColourId : backgroundColourId));
         g.fillRect(border);
-        g.setOpacity(1);
     }
     //app icon
-    g.drawImageWithin(appIcon, imageBox.getX(), imageBox.getY(),
-            imageBox.getWidth(), imageBox.getHeight(),
-            RectanglePlacement::centred, false);
+    g.setOpacity(1);
+    g.drawImageWithin(appIcon, imageBounds.getX(), imageBounds.getY(),
+            imageBounds.getWidth(), imageBounds.getHeight(),
+            RectanglePlacement::xMid | RectanglePlacement::yTop, false);
     //app title
     g.setColour(findColour(textColourId));
     g.setFont(titleFont);
-    g.drawText(getMenuItem()->getAppName(), textBox,
-            Justification::centredLeft, true);
+    g.drawText(getMenuItem()->getAppName(), textBounds, textJustification,
+            true);
     if (drawBorder)
     {
         g.setColour(findColour(borderColourId));
-        g.setOpacity(getToggleState() ? 1.0 : 0.8);
         g.drawRect(border, 2);
     }
 }

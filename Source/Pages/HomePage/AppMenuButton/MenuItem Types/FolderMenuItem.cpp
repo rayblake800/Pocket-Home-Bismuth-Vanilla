@@ -3,7 +3,7 @@
 #include "FolderMenuItem.h"
 
 FolderMenuItem::FolderMenuItem(const AppConfigFile::AppFolder& appFolder,
-        const DesktopEntries& desktopEntries) :
+        DesktopEntries& desktopEntries) :
 appFolder(appFolder),
 desktopEntries(desktopEntries) { }
 
@@ -25,7 +25,7 @@ Array<AppMenuItem::Ptr> FolderMenuItem::getFolderItems() const
 {
     std::set<DesktopEntry> folderEntries =
             desktopEntries.getCategoryListEntries(appFolder.categories);
-    Array<AppMenuItem:Ptr> folderItems;
+    Array<AppMenuItem::Ptr> folderItems;
     for (const DesktopEntry& entry : folderEntries)
     {
         folderItems.add(AppMenuItemFactory::create(entry));

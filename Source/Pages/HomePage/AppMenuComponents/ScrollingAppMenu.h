@@ -46,15 +46,16 @@ private:
      */
     class ScrollingAppFolder : public AppFolder {
     public:
-        ScrollingAppFolder();
+        ScrollingAppFolder(AppMenuItem::Ptr folderItem, MouseListener* btnListener,
+                std::map<String, AppMenuButton::Ptr>& buttonNameMap,
+                IconThread& iconThread);
         virtual ~ScrollingAppFolder();
 
         /**
-         * Create AppMenuButton components for a set of AppMenuItems.
-         * @param menuItems
+         * Create an AppMenuButton component for an AppMenuItem.
+         * @param menuItem
          */
-        Array<AppMenuButton::Ptr> createMenuButtons
-        (Array<AppMenuItem::Ptr> menuItems);
+        AppMenuButton::Ptr createMenuButton(AppMenuItem::Ptr menuItem);
 
         /**
          * Given a list of folder buttons, return an appropriate layout
@@ -64,7 +65,7 @@ private:
          * @return a Layout containing all items in the button array.
          */
         virtual GridLayoutManager::Layout buildFolderLayout
-        (Array<AppMenuButton::Ptr> buttons);
+        (Array<AppMenuButton::Ptr>& buttons);
     };
 
     /**

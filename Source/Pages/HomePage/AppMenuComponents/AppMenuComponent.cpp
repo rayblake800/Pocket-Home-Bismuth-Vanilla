@@ -3,6 +3,7 @@
 #include "../Popup Editor Components/NewDesktopAppEditor.h"
 #include "../Popup Editor Components/NewFolderEditor.h"
 #include "../AppMenuButton/AppMenuItemFactory.h"
+#include "../DesktopEntries.h"
 #include "../HomePage.h"
 #include "AppMenuComponent.h"
 
@@ -10,10 +11,10 @@ DesktopEntries AppMenuComponent::desktopEntries;
 
 AppMenuComponent::AppMenuComponent
 (String componentKey, OverlaySpinner& loadingSpinner) :
+loadingState(false),
 ConfigurableComponent(componentKey),
 loadingSpinner(loadingSpinner)
 {
-    applyConfigBounds();
     setWantsKeyboardFocus(false);
     loadBaseFolder();
 }
@@ -25,7 +26,6 @@ AppMenuComponent::~AppMenuComponent() { }
  */
 bool AppMenuComponent::isLoading()
 {
-    const ScopedLock menuLock(loadingLock);
     return loadingState;
 }
 
@@ -84,7 +84,7 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
         {
             appMenu.addItem(4, "New application link");
         }
-        else if (selectedButton->getIndexOfFolder() != 0)
+        else if (openFolders.size() > 1)
         {
             appMenu.addItem(6, "Pin to favorites");
         }
@@ -106,7 +106,7 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
 
     AppFolder* lastFolder = openFolders.getLast();
     const int selection = appMenu.show();
-    std::function<void() > confirmNew = [lastFolder]()
+    std::function<void() > confirmNew = [this]()
     {
         loadBaseFolder();
     };
@@ -117,7 +117,7 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
             showMenuButtonEditor(lastFolder->getSelectedButton());
             break;
         case 2://User selects "Delete"
-            selectedButton->confirmRemoveButtonSource([this]()
+            selectedButton->confirmRemoveButtonSource([this, lastFolder]()
             {
                 lastFolder->removeButton(lastFolder->getSelectedIndex());
                 layoutFolders(false);
@@ -178,10 +178,13 @@ void AppMenuComponent::loadBaseFolder()
 {
     if (!isLoading())
     {
-        int savedIndex = 0;
+        DBG("loadBaseFolder: started loading");
+        int savedIndex = -1;
         if (!openFolders.isEmpty())
         {
-            savedIndex = openFolders->getFirst()->getSelectedIndex();
+            savedIndex = openFolders.getFirst()->getSelectedIndex();
+            DBG(String("loadBaseFolder: folder exists, saving index")
+                    + String(savedIndex));
         }
         while (openFolders.size() > 0)
         {
@@ -190,13 +193,15 @@ void AppMenuComponent::loadBaseFolder()
         setLoadingState(true);
         desktopEntries.loadEntries([this](String loadingMsg)
         {
+            DBG(String("Loading desktop entries:") + loadingMsg);
             loadingSpinner.setLoadingText(loadingMsg);
         },
         [this, savedIndex]()
         {
+            DBG("Loading desktop entries complete, creating base folder");
             setLoadingState(false);
             openFolder(AppMenuItemFactory::createBaseFolderItem(desktopEntries));
-            openFolders->getFirst()->selectIndex(savedIndex);
+            openFolders.getFirst()->selectIndex(savedIndex);
             layoutFolders(false);
         });
     }
@@ -210,6 +215,7 @@ void AppMenuComponent::closeFolder()
 {
     if (openFolders.size() > 0)
     {
+        DBG(String("Closing folder ") + String(openFolders.size()));
         removeChildComponent(openFolders.getLast());
         openFolders.removeLast();
     }
@@ -256,6 +262,7 @@ bool AppMenuComponent::changeSelection(int offset)
         return false;
     }
     layoutFolders(true);
+    return true;
 }
 
 /**
@@ -277,6 +284,7 @@ AppMenuButton::Ptr AppMenuComponent::getSelectedButton()
  */
 void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
 {
+    DBG("Opening new folder");
     AppFolder* newFolder = createFolderObject(folderItem);
     openFolders.add(newFolder);
     addAndMakeVisible(newFolder);
@@ -288,6 +296,7 @@ void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
 void AppMenuComponent::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
+    DBG(String("AppMenu resized, bounds=") + getScreenBounds().toString());
     loadingSpinner.setBounds(bounds);
     if (buttonEditor != nullptr)
     {
@@ -295,13 +304,14 @@ void AppMenuComponent::resized()
         buttonEditor->setCentrePosition(bounds.getCentreX(),
                 bounds.getCentreY());
     }
+    layoutFolders(false);
 }
 
 /**
  * Adds and shows a new popup editor component, safely removing any previous
  * editor.
  */
-void AppMenuComponent::showPopupEditor(PopupEditorComponent* editor)
+void AppMenuComponent::showPopupEditor(AppMenuPopupEditor* editor)
 {
     if (buttonEditor != nullptr)
     {
@@ -343,6 +353,8 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
     for (int i = 0; i < openFolders.size(); i++)
     {
         int buttonIndex = openFolders[i]->getButtonIndex(button);
+        DBG(String("click button ") + button->getName() + String(", index ")
+                + String(buttonIndex));
         //if button is not in this folder, move to the next one
         if (buttonIndex == -1)
         {
@@ -367,6 +379,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
             if (buttonItem->isFolder())
             {
                 openFolder(buttonItem);
+                layoutFolders(true);
             }
             else
             {
@@ -429,9 +442,10 @@ void AppMenuComponent::mouseDown(const MouseEvent &event)
  */
 void AppMenuComponent::setLoadingState(bool loading)
 {
+    DBG((loading ? String("AppMenuComponent is now loading")
+         : String("AppMenuComponent is now done loading")));
     if (loading != isLoading())
     {
-        const ScopedLock menuLock(loadingLock);
         loadingState = loading;
         loadingSpinner.setVisible(loading);
         if (!loading)
@@ -446,12 +460,14 @@ void AppMenuComponent::setLoadingState(bool loading)
 //#################### Menu Folder Component Class #############################
 
 AppMenuComponent::AppFolder::AppFolder
-(AppMenuItem::Ptr folderItem, MouseListener* btnListener) :
+(AppMenuItem::Ptr folderItem,
+        MouseListener* btnListener,
+        std::map<String, AppMenuButton::Ptr>& buttonNameMap,
+        IconThread& iconThread) :
 sourceFolderItem(folderItem),
-btnListener(btnListener)
-{
-    reload();
-}
+btnListener(btnListener),
+buttonNameMap(buttonNameMap),
+iconThread(iconThread) { }
 
 AppMenuComponent::AppFolder::~AppFolder() { }
 
@@ -461,16 +477,14 @@ AppMenuComponent::AppFolder::~AppFolder() { }
 void AppMenuComponent::AppFolder::reload()
 {
     removeAllChildren();
-    folderButtons = createMenuButtons(sourceFolderItem->getMenuItems());
-    if (btnListener != nullptr && !folderButtons.isEmpty())
+    Array<AppMenuItem::Ptr> menuItems = sourceFolderItem->getFolderItems();
+    for (AppMenuItem::Ptr menuItem : menuItems)
     {
-        for (const AppMenuButton::Ptr& button : folderButtons)
-        {
-            button->addListener(btnListener);
-        }
-        folderButtons[0]->setToggleState
-                (true, NotificationType::sendNotification);
+        insertButton(menuItem, folderButtons.size(), false);
     }
+    DBG(String("AppFolder::reload: added ") + String(folderButtons.size())
+            + String(" Buttons from ") + String(menuItems.size())
+            + String(" menu items"));
     layoutButtons();
 }
 
@@ -485,7 +499,7 @@ int AppMenuComponent::AppFolder::size()
 /**
  * Find the index of a menu button in this folder
  */
-bool AppMenuComponent::AppFolder::getButtonIndex
+int AppMenuComponent::AppFolder::getButtonIndex
 (AppMenuButton::Ptr menuButton)
 {
     return folderButtons.indexOf(menuButton);
@@ -512,17 +526,26 @@ bool AppMenuComponent::AppFolder::selectIndex(int index)
 {
     if (validBtnIndex(index))
     {
-        if (validBtnIndex(selectedIndex))
-        {
-            folderButtons[selectedIndex]->setToggleState
-                    (false, NotificationType::sendNotification);
-        }
+        deselect();
+        DBG(String("Selecting button ") + String(index));
         selectedIndex = index;
-        folderButtons[selectedIndex]->setToggleState
-                (true, NotificationType::sendNotification);
+        folderButtons[selectedIndex]->setSelected(true);
         return true;
     }
+    DBG(String("Failed to select button ") + String(index));
     return false;
+}
+
+/**
+ * Deselects the selected button, if one exists
+ */
+void AppMenuComponent::AppFolder::deselect()
+{
+    if (validBtnIndex(selectedIndex))
+    {
+        folderButtons[selectedIndex]->setSelected(false);
+        selectedIndex = -1;
+    }
 }
 
 /**
@@ -534,38 +557,46 @@ int AppMenuComponent::AppFolder::getSelectedIndex()
 }
 
 /**
- * Insert a new button to the folder at a specific index,
- * shifting forward any buttons at indices equal or greater
- * than the index. 
- * 
- * @param index should be between 0 and appFolder.size(),
- * inclusive.  Values outside of this range will be rounded to
- * the nearest valid value.
+ * Creates or reloads a button for a menu item, inserting it into
+ * the folder at a specific index. This shifts forward any buttons at 
+ * indices equal or greater than the index. 
  */
 void AppMenuComponent::AppFolder::insertButton
-(AppMenuButton::Ptr newButton, int index)
+(AppMenuItem::Ptr newItem, int index, bool updateLayout)
 {
-    if (index < 0)
+    AppMenuButton::Ptr menuButton = nullptr;
+    String buttonName = newItem->getAppName();
+    while (buttonNameMap.count(buttonName) > 0)
     {
-        index = 0;
-    }
-    if (index > size())
-    {
-        folderButtons.add(newButton);
-    }
-    else
-    {
-        folderButtons.insert(index, newButton);
-        if (btnListener != nullptr)
+        AppMenuButton::Ptr mappedButton = buttonNameMap[buttonName];
+        if (mappedButton->getParentComponent() == nullptr)
         {
-            newButton->addListener(btnListener);
+            menuButton = mappedButton;
+            break;
         }
+        buttonName += "_copy";
     }
+    if (menuButton == nullptr)
+    {
+        menuButton = createMenuButton(newItem);
+        buttonNameMap[buttonName] = menuButton;
+    }
+    if (btnListener != nullptr)
+    {
+        menuButton->addMouseListener(btnListener, false);
+    }
+    index = median<int>(0,index,size());
+    folderButtons.insert(index, menuButton);
     if (selectedIndex >= index)
     {
+        DBG(String("index pushed from ")+String(selectedIndex)+String(" to ")
+                +String(selectedIndex+1)+String(" after insert at ")+String(index));
         selectedIndex++;
     }
-    layoutButtons();
+    if (updateLayout)
+    {
+        layoutButtons();
+    }
 }
 
 /**
@@ -576,6 +607,7 @@ void AppMenuComponent::AppFolder::removeButton(int index)
 {
     if (validBtnIndex(index))
     {
+        DBG(String("Removing button at index ") + String(index));
         folderButtons.remove(index);
         layoutButtons();
     }
@@ -606,15 +638,20 @@ void AppMenuComponent::AppFolder::swapButtons
 }
 
 /**
- * Set the relative spacing of the folder component layout.
+ * Set the relative placement of folder buttons within the folder.
  */
-void AppMenuComponent::AppFolder::setSpacing(float margin,
-        float xPadding, float yPadding)
+void AppMenuComponent::AppFolder::setMargin(float margin)
 {
     this->margin = margin;
+}
+
+/**
+ * et the relative space between folder buttons.
+ */
+void AppMenuComponent::AppFolder::setPadding(float xPadding, float yPadding)
+{
     this->xPadding = xPadding;
     this->yPadding = yPadding;
-    resized();
 }
 
 /**
@@ -624,8 +661,10 @@ void AppMenuComponent::AppFolder::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
     bounds.reduce(margin * getWidth(), margin * getWidth());
+    DBG(String("AppFolder resized, layout bounds=")
+            + getScreenBounds().toString());
     folderLayout.layoutComponents(bounds, getWidth() * xPadding,
-            getWidth() * yPadding);
+            getHeight() * yPadding);
 }
 
 /**
@@ -635,12 +674,13 @@ void AppMenuComponent::AppFolder::resized()
  */
 void AppMenuComponent::AppFolder::layoutButtons()
 {
-    while (!validBtnIndex(selectedIndex) && selectedIndex != 0)
+    while (!validBtnIndex(selectedIndex) && selectedIndex != -1)
     {
         selectedIndex--;
     }
     folderLayout.clearLayout(true);
     folderLayout.setLayout(buildFolderLayout(folderButtons), this);
+    folderLayout.printLayout();
 }
 
 
