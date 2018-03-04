@@ -321,36 +321,37 @@ protected:
          */
         void setPadding(float xPadding, float yPadding);
 		
-		/**
-		 * @return margin space between components and the edge of the
+	/**
+	 * @return margin space between components and the edge of the
          * folder component, as a fraction of folder width.
-		 */
-		float getMargin();
+	 */
+	float getMargin();
 		
-		/**
-		 * @return horizontal space between folder child
+	/**
+	 * @return horizontal space between folder child
          * components, as a fraction of folder width.
-		 */
-		float getXPadding();
+	 */
+	float getXPadding();
 		
-		/**
-		 * @return vertical space between folder child
+	/**
+	 * @return vertical space between folder child
          * components, as a fraction of folder height.
-		 */
-		float getYPadding();
-
+	 */
+	float getYPadding();
+        
+	/**
+         * Clear folderLayout,remove all child components, reload the
+         * button layout, and re-add the layout buttons as child
+         * components.
+         */
+        virtual void layoutButtons();
+        
         protected:
         /**
          * Reposition folder buttons when folder bounds change.
          */
         void resized() override;
 
-        /**
-         * Clear folderLayout,remove all child components, reload the
-         * button layout, and re-add the layout buttons as child
-         * components.
-         */
-        virtual void layoutButtons();
         
         //New buttons will need this to load their icons.
         IconThread& iconThread;
