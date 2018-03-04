@@ -57,8 +57,9 @@ private:
     void buttonClicked(Button*) override;
 
     //app grid dimensions, saved from config
-    int maxRows = 0;
-    int maxColumns = 0;
+    int maxRows = 1;
+    int maxColumns = 1;
+	int buttonsPerPage = 1;
 
     //navigation buttons
 
@@ -108,17 +109,10 @@ private:
         int getNumFolderPages();
         
         /**
-         * @return the index of the page that's currently visible, or -1 if 
+         * @return the index of the page that's currently visible, or 0 if 
          * there is no current page. 
          */
-        int getCurrentPage();
-        
-        /**
-         * @return the index of the selected menu button within the current
-         * folder page, or -1 if no buttons are selected on the current folder
-         * page.
-         */
-        int getSelectionPageIndex();
+        int getCurrentFolderPage();
         
         /**
          * Set which folder page should currently be visible.
@@ -126,24 +120,59 @@ private:
          * not change.
          * @return true if the page selection changed.
          */
-        bool setCurrentPage(int pageNum);
+        bool setCurrentFolderPage(int pageNum);
         
-        /**
-         * Select a menu button using its index within the current folder page.
-         * The selection will not change if the index is invalid or there
-         * @param pageIndex
-         * @return 
+		/**
+         * @return the folder page index containing the selected folder 
+		 * button, or -1 if there is no selection.
          */
-        bool setSelectionPageIndex(int pageIndex);
-    private:
+        int getSelectionPage();
+        
+		/**
+		 * @return the index of the selected button within its folder page,
+		 * or -1 if there is no selection.
+		 */
+		int getSelectedIndexInFolderPage();
+		
+		/**
+		 * @return the column index of the selected button within its
+		 * folder page, or -1 if there is no selection.
+		 */
+		int getSelectionColumn();
+		
+		
+		/**
+		 * @return the row index of the selected button within its
+		 * folder page, or -1 if there is no selection.
+		 */
+		int getSelectionRow();
+		
+		/**
+		 * Set the button selection based on its position in the
+		 * folder.  The selection will not change if there isn't
+		 * a button located at the given position.  If necessary,
+		 * the current folder page will change to the one containing
+		 * the new selection.
+		 *
+		 * @param page the new selected button's folder page index
+		 * @param column the new selected button's column number within
+		 * its folder page.
+		 * @param row the new selected button's row number withing
+		 * its folder page.
+		 * @return true if the selection changed, false otherwise.
+		 */
+		bool setSelectedPosition(int page,int column, int row);
+    
+	private:
 
         /**
          * Resizes navigation buttons, then calls AppFolder::resized().
          */
         void resized() override;
-        int maxRowNum = 1;
-        int maxColumnNum = 1;
+        int maxRows = 1;
+        int maxColumns= 1;
         int buttonsPerPage = 1;
+		int currentPage = 0;
     };
 
     //############################  PageMenuButton  ############################
