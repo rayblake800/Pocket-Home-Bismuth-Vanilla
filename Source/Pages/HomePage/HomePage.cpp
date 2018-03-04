@@ -152,7 +152,10 @@ void HomePage::visibilityChanged()
 {
     if (isVisible())
     {
-        grabKeyboardFocus();
+        MessageManager::callAsync([this]()
+        {
+            grabKeyboardFocus();
+        });
     }
 }
 
@@ -161,6 +164,9 @@ void HomePage::windowFocusChanged(bool windowFocus)
     if (!windowFocus)
     {
         appMenu->exitLoadingState();
+    }
+    else if(isVisible()){
+        grabKeyboardFocus();
     }
 }
 

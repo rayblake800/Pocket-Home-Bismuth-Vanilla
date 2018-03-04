@@ -47,6 +47,15 @@ bool AppMenuItem::isTerminalApp() const
 }
 
 /**
+ * @return true iff changing this menu item makes changes to .desktop or
+ * .directory files.
+ */
+bool AppMenuItem::changesDesktopEntries() const
+{
+    return false;
+}
+
+/**
  * @return all application categories linked to this menu item.
  */
 Array<String> AppMenuItem::getCategories() const

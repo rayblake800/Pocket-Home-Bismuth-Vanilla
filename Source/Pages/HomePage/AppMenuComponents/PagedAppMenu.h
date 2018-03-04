@@ -59,7 +59,7 @@ private:
     //app grid dimensions, saved from config
     int maxRows = 1;
     int maxColumns = 1;
-	int buttonsPerPage = 1;
+    int buttonsPerPage = 1;
 
     //navigation buttons
 
@@ -101,19 +101,19 @@ private:
          */
         virtual GridLayoutManager::Layout buildFolderLayout
         (Array<AppMenuButton::Ptr>& buttons);
-        
+
         /**
          * @return the number of pages this folder needs to display all menu
          * buttons.
          */
         int getNumFolderPages();
-        
+
         /**
          * @return the index of the page that's currently visible, or 0 if 
          * there is no current page. 
          */
         int getCurrentFolderPage();
-        
+
         /**
          * Set which folder page should currently be visible.
          * @param pageNum must be a valid page index, or the selection will
@@ -121,58 +121,58 @@ private:
          * @return true if the page selection changed.
          */
         bool setCurrentFolderPage(int pageNum);
-        
-		/**
+
+        /**
          * @return the folder page index containing the selected folder 
-		 * button, or -1 if there is no selection.
+         * button, or -1 if there is no selection.
          */
         int getSelectionPage();
-        
-		/**
-		 * @return the index of the selected button within its folder page,
-		 * or -1 if there is no selection.
-		 */
-		int getSelectedIndexInFolderPage();
-		
-		/**
-		 * @return the column index of the selected button within its
-		 * folder page, or -1 if there is no selection.
-		 */
-		int getSelectionColumn();
-		
-		
-		/**
-		 * @return the row index of the selected button within its
-		 * folder page, or -1 if there is no selection.
-		 */
-		int getSelectionRow();
-		
-		/**
-		 * Set the button selection based on its position in the
-		 * folder.  The selection will not change if there isn't
-		 * a button located at the given position.  If necessary,
-		 * the current folder page will change to the one containing
-		 * the new selection.
-		 *
-		 * @param page the new selected button's folder page index
-		 * @param column the new selected button's column number within
-		 * its folder page.
-		 * @param row the new selected button's row number withing
-		 * its folder page.
-		 * @return true if the selection changed, false otherwise.
-		 */
-		bool setSelectedPosition(int page,int column, int row);
-    
-	private:
+
+        /**
+         * @return the index of the selected button within its folder page,
+         * or -1 if there is no selection.
+         */
+        int getSelectedIndexInFolderPage();
+
+        /**
+         * @return the column index of the selected button within its
+         * folder page, or -1 if there is no selection.
+         */
+        int getSelectionColumn();
+
+
+        /**
+         * @return the row index of the selected button within its
+         * folder page, or -1 if there is no selection.
+         */
+        int getSelectionRow();
+
+        /**
+         * Set the button selection based on its position in the
+         * folder.  The selection will not change if there isn't
+         * a button located at the given position.  If necessary,
+         * the current folder page will change to the one containing
+         * the new selection.
+         *
+         * @param page the new selected button's folder page index
+         * @param column the new selected button's column number within
+         * its folder page.
+         * @param row the new selected button's row number withing
+         * its folder page.
+         * @return true if the selection changed, false otherwise.
+         */
+        bool setSelectedPosition(int page, int column, int row);
+
+    private:
 
         /**
          * Resizes navigation buttons, then calls AppFolder::resized().
          */
         void resized() override;
         int maxRows = 1;
-        int maxColumns= 1;
+        int maxColumns = 1;
         int buttonsPerPage = 1;
-		int currentPage = 0;
+        int currentPage = 0;
     };
 
     //############################  PageMenuButton  ############################

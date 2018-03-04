@@ -108,7 +108,7 @@ protected:
     //Stores each button by name, so buttons don't need to be re-loaded
     //every time you close a folder and open it again.
     std::map<String, AppMenuButton::Ptr> buttonNameMap;
-    
+
     //this gets passed to AppMenuButtons to load button icons.
     IconThread iconThread;
 private:
@@ -253,7 +253,7 @@ protected:
          * @return true if index was valid and the selection changed.
          */
         bool selectIndex(int index);
-        
+
         /**
          * Deselects the selected button, if one exists
          */
@@ -279,7 +279,7 @@ protected:
          * it's better to set this to false and update the layout once at the
          * end.
          */
-        void insertButton(AppMenuItem::Ptr newItem, int index, 
+        void insertButton(AppMenuItem::Ptr newItem, int index,
                 bool updateLayout = true);
 
         /**
@@ -298,7 +298,7 @@ protected:
          * @param btnIndex2
          */
         void swapButtons(int btnIndex1, int btnIndex2);
-     
+
         /**
          * Set the relative placement of folder buttons within the folder.
          * 
@@ -306,7 +306,7 @@ protected:
          * folder component, as a fraction of folder width.
          */
         void setMargin(float margin);
-             
+
         /**
          * Set the relative space between folder buttons.
          * 
@@ -320,43 +320,43 @@ protected:
          * components, as a fraction of folder height.
          */
         void setPadding(float xPadding, float yPadding);
-		
-	/**
-	 * @return margin space between components and the edge of the
+
+        /**
+         * @return margin space between components and the edge of the
          * folder component, as a fraction of folder width.
-	 */
-	float getMargin();
-		
-	/**
-	 * @return horizontal space between folder child
+         */
+        float getMargin();
+
+        /**
+         * @return horizontal space between folder child
          * components, as a fraction of folder width.
-	 */
-	float getXPadding();
-		
-	/**
-	 * @return vertical space between folder child
+         */
+        float getXPadding();
+
+        /**
+         * @return vertical space between folder child
          * components, as a fraction of folder height.
-	 */
-	float getYPadding();
-        
-	/**
+         */
+        float getYPadding();
+
+        /**
          * Clear folderLayout,remove all child components, reload the
          * button layout, and re-add the layout buttons as child
          * components.
          */
         virtual void layoutButtons();
-        
-        protected:
+
+    protected:
         /**
          * Reposition folder buttons when folder bounds change.
          */
         void resized() override;
 
-        
+
         //New buttons will need this to load their icons.
         IconThread& iconThread;
     private:
-        
+
         /**
          * Given a list of folder buttons, return an appropriate layout
          * for positioning them in the folder component.

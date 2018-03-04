@@ -1,8 +1,14 @@
+-Refine the AppMenuComponent interface to allow for more flexible menu variants
+  What's left to fix:
+    Re-implement scrolling menu
+    Desktop entries no longer sorted after name changes
+        DesktopEntryMenuItem isn't marked as a DesktopEntries editor?
+    Paged menu has no page close button
+    Right clicking on page doesn't bring up the generic menu anymore
+    Paged menu animations need some tweaks
+    
 -Make bluetooth work and properly implement the bluetooth page
 
--Refine the AppMenuComponent interface to allow for more flexible menu variants
-
--Paged and tabbed app menu variants
 
 -Re-add the IP label to the Settings Page (or optionally, the homepage)
 

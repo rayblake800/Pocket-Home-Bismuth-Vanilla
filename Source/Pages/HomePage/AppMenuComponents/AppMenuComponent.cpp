@@ -333,9 +333,18 @@ void AppMenuComponent::showMenuButtonEditor(AppMenuButton::Ptr button)
         && openFolders.getLast()->getButtonIndex(button) != -1)
     {
 
-        showPopupEditor(button->getEditor([this](AppMenuPopupEditor * editor)
+        showPopupEditor(button->getEditor([this, button]
+                (AppMenuPopupEditor * editor)
         {
-            openFolders.getLast()->reload();
+            openFolders.getLast()->repaint();
+            if (button->getMenuItem()->changesDesktopEntries())
+            {
+                desktopEntries.loadEntries([](String s)
+                {
+                }, []()
+                {
+                });
+            }
         }));
     }
 }
@@ -585,12 +594,12 @@ void AppMenuComponent::AppFolder::insertButton
     {
         menuButton->addMouseListener(btnListener, false);
     }
-    index = median<int>(0,index,size());
+    index = median<int>(0, index, size());
     folderButtons.insert(index, menuButton);
     if (selectedIndex >= index)
     {
-        DBG(String("index pushed from ")+String(selectedIndex)+String(" to ")
-                +String(selectedIndex+1)+String(" after insert at ")+String(index));
+        DBG(String("index pushed from ") + String(selectedIndex) + String(" to ")
+                + String(selectedIndex + 1) + String(" after insert at ") + String(index));
         selectedIndex++;
     }
     if (updateLayout)
@@ -620,11 +629,12 @@ void AppMenuComponent::AppFolder::removeButton(int index)
 void AppMenuComponent::AppFolder::swapButtons
 (int btnIndex1, int btnIndex2)
 {
-    if (validBtnIndex(btnIndex1) && validBtnIndex(btnIndex2))
+    if (validBtnIndex(btnIndex1) && validBtnIndex(btnIndex2) &&
+        folderButtons[btnIndex1]->moveDataIndex(btnIndex2 - btnIndex1))
     {
         AppMenuButton::Ptr btn1 = folderButtons[btnIndex1];
-        folderButtons[btnIndex1] = folderButtons[btnIndex2];
-        folderButtons[btnIndex2] = btn1;
+        folderButtons.set(btnIndex1, folderButtons[btnIndex2]);
+        folderButtons.set(btnIndex2, btn1);
         if (selectedIndex == btnIndex1)
         {
             selectedIndex = btnIndex2;
@@ -654,14 +664,13 @@ void AppMenuComponent::AppFolder::setPadding(float xPadding, float yPadding)
     this->yPadding = yPadding;
 }
 
-
 /**
  * @return margin space between components and the edge of the
  * folder component, as a fraction of folder width.
  */
 float AppMenuComponent::AppFolder::getMargin()
 {
-	return margin;
+    return margin;
 }
 
 /**
@@ -670,7 +679,7 @@ float AppMenuComponent::AppFolder::getMargin()
  */
 float AppMenuComponent::AppFolder::getXPadding()
 {
-	return xPadding;
+    return xPadding;
 }
 
 /**
@@ -679,9 +688,8 @@ float AppMenuComponent::AppFolder::getXPadding()
  */
 float AppMenuComponent::AppFolder::getYPadding()
 {
-	return yPadding;
+    return yPadding;
 }
-
 
 /**
  * Reposition folder buttons when folder bounds change.
@@ -710,6 +718,10 @@ void AppMenuComponent::AppFolder::layoutButtons()
     folderLayout.clearLayout(true);
     folderLayout.setLayout(buildFolderLayout(folderButtons), this);
     folderLayout.printLayout();
+    if (!getBounds().isEmpty())
+    {
+        resized();
+    }
 }
 
 

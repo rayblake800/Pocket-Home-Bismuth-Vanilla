@@ -15,8 +15,8 @@ pageRight(ComponentConfigFile::pageRightKey)
     ComponentConfigFile config;
     maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
     maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
-	buttonsPerPage = maxRows*maxColumns;
-	
+    buttonsPerPage = maxRows*maxColumns;
+
     pageLeft.addListener(this);
     pageRight.addListener(this);
     addAndMakeVisible(pageLeft);
@@ -37,7 +37,7 @@ PagedAppMenu::~PagedAppMenu() { }
 bool PagedAppMenu::keyPressed(const KeyPress& key)
 {
     if (isLoading() || openFolders.isEmpty()
-		|| Desktop::getInstance().getAnimator().isAnimating())
+        || Desktop::getInstance().getAnimator().isAnimating())
     {
         return true;
     }
@@ -58,105 +58,117 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
             (openFolders.getLast());
     int selectedIndex = folder->getSelectedIndex();
     int currentPage = folder->getCurrentFolderPage();
-    int lastPageRow = maxRows;
-    int lastPageColumn = maxColumns;
-    if(currentPage == folder->getNumFolderPages()-1)
+    if(folder->getSelectionPage() != currentPage)
+    {
+        folder->deselect();
+        selectedIndex = -1;
+    }
+    int lastRowIndex = maxRows-1;
+    int lastColumnIndex = maxColumns-1;
+    if (currentPage == folder->getNumFolderPages() - 1)
     {
         int folderIndex = folder->size() % buttonsPerPage;
-	lastPageRow = folderIndex / maxColumns;
-	lastPageColumn = folderIndex % maxColumns;
+        lastColumnIndex = (folderIndex % maxColumns) -1;
+        lastRowIndex = folderIndex / maxColumns;
+        if(lastColumnIndex == 0)
+        {
+            lastRowIndex--;
+        }
     }
     int newRow = 0;
     int newColumn = 0;
-    if(selectedIndex == -1)
+    DBG(String("On selected index ")+String(selectedIndex)+String(", pressed key ")
+            +key.getTextDescription());
+    if (selectedIndex == -1)
     {
-        if(key.isKeyCode(KeyPress::escapeKey))
-	{
-	    closeNonBaseFolder();
-	    return true;
-	}
-	else if(key.isKeyCode(KeyPress::leftKey)
-	        || key.isKeyCode(KeyPress::upKey))
-	{
-	    newRow = lastPageRow-1;
-	    newColumn = lastPageColumn-1;
-	}
-	else if(!( key.isKeyCode(KeyPress::rightKey)
-	        || key.isKeyCode(KeyPress::returnKey)
-		|| key.isKeyCode(KeyPress::downKey)))
-	{
-	    return false;
-	}
-	if(folder->setSelectedPosition(currentPage,newColumn,newRow))
-	{
-	    folder->repaint();
-	}
-	return true;
+        if (key.isKeyCode(KeyPress::escapeKey))
+        {
+            closeNonBaseFolder();
+            return true;
+        }
+        else if (key.isKeyCode(KeyPress::leftKey)
+                 || key.isKeyCode(KeyPress::upKey))
+        {
+            newRow = lastRowIndex;
+            newColumn = lastColumnIndex;
+        }
+        else if (!(key.isKeyCode(KeyPress::rightKey)
+                   || key.isKeyCode(KeyPress::returnKey)
+                   || key.isKeyCode(KeyPress::downKey)))
+        {
+            return false;
+        }
+        if (folder->setSelectedPosition(currentPage, newColumn, newRow))
+        {
+            folder->repaint();
+        }
+        return true;
     }
     else
     {
-        int pageRow = folder->getSelectionRow();
-	int pageColumn = folder->getSelectionColumn();
-	int newPage = currentPage;
-	if(key.isKeyCode(KeyPress::escapeKey))
-	{
-            folder->deselect();
-	    folder->repaint();
-            return true;
-	}
-	else if(key.isKeyCode(KeyPress::returnKey))
-	{
-            clickSelected();
-	    return true;
-	}
-	else if(key.isKeyCode(KeyPress::leftKey))
-	{
-	    pageColumn--;
-	    if(pageColumn < 0)
-	    {
-	        pageColumn = maxColumns-1;
-		newPage--;
-	    }
-	}
-	else if(key.isKeyCode(KeyPress::rightKey))
-	{
-            pageColumn++;
-            if(pageColumn >= lastPageColumn)
-	    {
-	        pageColumn = 0;
-		newPage++;
-	    }
-	}
-	else if(key.isKeyCode(KeyPress::upKey))
-	{
-            if(pageRow > 0)
-	    {
-	        pageRow--;
-	    }
-	}
-        else if(key.isKeyCode(KeyPress::downKey))
+        newRow = folder->getSelectionRow();
+        newColumn = folder->getSelectionColumn();
+        int newPage = currentPage;
+        if (key.isKeyCode(KeyPress::escapeKey))
         {
-            if(pageRow < lastPageRow-1)
-	    {
-	         pageRow++;
-	     }
+            folder->deselect();
+            folder->repaint();
+            return true;
         }
-	else
-	{
+        else if (key.isKeyCode(KeyPress::returnKey))
+        {
+            clickSelected();
+            return true;
+        }
+        else if (key.isKeyCode(KeyPress::leftKey))
+        {
+            newColumn--;
+            if (newColumn < 0)
+            {
+                newColumn = maxColumns - 1;
+                newPage--;
+            }
+        }
+        else if (key.isKeyCode(KeyPress::rightKey))
+        {
+            newColumn++;
+            if (newColumn >= maxColumns || 
+                (newColumn > lastColumnIndex && newRow >= lastRowIndex))
+            {
+                newColumn = 0;
+                newPage++;
+            }
+        }
+        else if (key.isKeyCode(KeyPress::upKey))
+        {
+            if (newRow > 0)
+            {
+                newRow--;
+            }
+        }
+        else if (key.isKeyCode(KeyPress::downKey))
+        {
+            if (newRow < lastRowIndex)
+            {
+                newRow++;
+            }
+        }
+        else
+        {
             return false;
-	}
-	if(folder->setSelectedPosition(newPage,newColumn,newRow))
-	{
-	    if(newPage != currentPage)
-	    {
-	        layoutFolders(true);
-	    }
-	    else
-	    {
-	        folder->repaint();
-	    }
-	}
-	return true;
+        }
+        if (folder->setSelectedPosition(newPage, newColumn, newRow))
+        {
+            if (newPage != currentPage)
+            {
+                layoutFolders(true);
+            }
+            else
+            {
+                folder->repaint();
+            }
+        }
+        return true;
     }
 }
 
@@ -178,10 +190,10 @@ void PagedAppMenu::layoutFolders(bool animateTransition)
     for (int i = openFolders.size() - 1; i >= 0; i--)
     {
         PageAppFolder* folder = static_cast<PageAppFolder*> (openFolders[i]);
-	int folderPage = folder->getCurrentFolderPage();
-	DBG(String("positioning folder with folderPage ")+String(folderPage));
-	int numFolderPages = folder->getNumFolderPages();
-		
+        int folderPage = folder->getCurrentFolderPage();
+        DBG(String("positioning folder with folderPage ") + String(folderPage));
+        int numFolderPages = folder->getNumFolderPages();
+
         Rectangle<int> bounds = getLocalBounds();
         bounds.setWidth(getWidth() * numFolderPages);
         if (leftEdge > 0)
@@ -193,19 +205,19 @@ void PagedAppMenu::layoutFolders(bool animateTransition)
             bounds.setRight(leftEdge);
         }
         leftEdge = bounds.getX();
-         
-	if(folder->getBounds().isEmpty())
-	{
-	    folder->setBounds(bounds.withX(getRight()));
-	}
-        float margin = (float) pageLeft.getWidth() 
-		/ (float) bounds.getWidth();
-	if(margin != folder->getMargin())
-	{
-	    folder->setMargin(margin);
-	    folder->layoutButtons();
-	}
-	DBG(String("Moving folder to bounds ")+bounds.toString());
+
+        if (folder->getBounds().isEmpty())
+        {
+            folder->setBounds(bounds.withX(getRight()));
+        }
+        float margin = (float) pageLeft.getWidth()
+                / (float) bounds.getWidth();
+        if (margin != folder->getMargin())
+        {
+            folder->setMargin(margin);
+            folder->layoutButtons();
+        }
+        DBG(String("Moving folder to bounds ") + bounds.toString());
         if (animateTransition)
         {
             Desktop::getInstance().getAnimator().animateComponent(folder,
@@ -220,7 +232,7 @@ void PagedAppMenu::layoutFolders(bool animateTransition)
         if (i == openFolders.size() - 1)
         {
             bool showLeft = folderPage > 0;
-            bool showRight = folderPage < (numFolderPages-1);
+            bool showRight = folderPage < (numFolderPages - 1);
             pageLeft.setVisible(showLeft);
             pageLeft.setEnabled(showLeft);
             pageRight.setVisible(showRight);
@@ -277,14 +289,14 @@ void PagedAppMenu::loadConfigProperties(ConfigFile* config, String key)
  */
 void PagedAppMenu::buttonClicked(Button* button)
 {
-    if(openFolders.isEmpty() || 
-            !(button == &pageLeft || button == &pageRight))
+    if (openFolders.isEmpty() ||
+        !(button == &pageLeft || button == &pageRight))
     {
         return;
     }
     PageAppFolder* folder = static_cast<PageAppFolder*>
-	    (openFolders.getLast());
-	
+            (openFolders.getLast());
+
     int targetPage = folder->getCurrentFolderPage();
     if (button == &pageLeft)
     {
@@ -312,7 +324,7 @@ AppFolder(folderItem, btnListener, buttonNameMap, iconThread)
     maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
     maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
     buttonsPerPage = maxRows * maxColumns;
-	reload();
+    reload();
 }
 
 PagedAppMenu::PageAppFolder::~PageAppFolder() { }
@@ -352,7 +364,7 @@ AppMenuButton::Ptr PagedAppMenu::PageAppFolder::createMenuButton
 GridLayoutManager::Layout PagedAppMenu::PageAppFolder::buildFolderLayout
 (Array<AppMenuButton::Ptr>& buttons)
 {
-    if(buttons.isEmpty())
+    if (buttons.isEmpty() || getBounds().isEmpty())
     {
         return {};
     }
@@ -361,69 +373,70 @@ GridLayoutManager::Layout PagedAppMenu::PageAppFolder::buildFolderLayout
     int numSpacers = numPages - 1;
     int numAppColumns = maxColumns*numPages;
     int numPaddingGaps = numAppColumns - 1;
-	
+
     int spacerSize = getMargin() * getWidth();
     int paddingSize = getXPadding() * getWidth();
     //the +2 to numSpacers is to account for the two margins
-    int buttonSize = (getWidth() - (numSpacers+2) * spacerSize 
-			- numPaddingGaps * paddingSize) / numAppColumns;
-			
-    int numLayoutColumns = numAppColumns+numSpacers;
-	
-    std::function<void(Component*,int)> addButton = 
-	[&layout,buttonSize,spacerSize,this]
-	(Component* component,int row)
-	{	
-        layout[row].compRow.push_back({component, buttonSize});
-		if((layout[row].compRow.size()+1) % (maxColumns+1) == 0)
-		{			
-			layout[row].compRow.push_back({nullptr, spacerSize});
-		}
-	};
-	
-	//reserve space
+    int buttonSize = (getWidth() - (numSpacers + 2) * spacerSize
+                      - numPaddingGaps * paddingSize) / numAppColumns;
+
+    int numLayoutColumns = numAppColumns + numSpacers;
+
+    std::function<void(Component*, int) > addButton =
+            [&layout, buttonSize, spacerSize, numLayoutColumns, this]
+            (Component* component, int row)
+            {
+                layout[row].compRow.push_back({component, buttonSize});
+                if ((layout[row].compRow.size() + 1) % (maxColumns + 1) == 0
+                    && layout[row].compRow.size() < numLayoutColumns)
+                {
+                    layout[row].compRow.push_back({nullptr, spacerSize});
+                }
+            };
+
+    //reserve space
     layout.reserve(sizeof (GridLayoutManager::RowLayoutParams)
-			* maxRows);
-	for (int i = 0; i < maxRows; i++)
-	{
-            layout.push_back({1,
-                {}});
-            layout[i].compRow.reserve(sizeof
-                    (GridLayoutManager::ComponentLayoutParams) 
-					* numLayoutColumns);
-	}
-	
-	//place buttons
+            * maxRows);
+    for (int i = 0; i < maxRows; i++)
+    {
+        layout.push_back({1,
+            {}});
+        layout[i].compRow.reserve(sizeof
+                (GridLayoutManager::ComponentLayoutParams)
+                * numLayoutColumns);
+    }
+
+    //place buttons
     for (int i = 0; i < buttons.size(); i++)
     {
         int pageIndex = i % buttonsPerPage;
         int row = pageIndex / maxColumns;
-		addButton(buttons[i],row);
+        addButton(buttons[i], row);
     }
-	
-	//Fill in remaining empty spaces
+
+    //Fill in remaining empty spaces
     for (int row = 0; row < maxRows; row++)
     {
         while (layout[row].compRow.size() < numLayoutColumns)
         {
-			addButton(nullptr,row);
+            addButton(nullptr, row);
         }
     }
     return layout;
 }
 
 /**
-* @return the number of pages this folder needs to display all menu
-* buttons.
-*/
+ * @return the number of pages this folder needs to display all menu
+ * buttons.
+ */
 int PagedAppMenu::PageAppFolder::getNumFolderPages()
 {
-	int numPages = size()/buttonsPerPage;
-	if(size()% buttonsPerPage > 0)
-	{
-		numPages++;
-	}
-	return numPages;
+    int numPages = size() / buttonsPerPage;
+    if (size() % buttonsPerPage > 0)
+    {
+        numPages++;
+    }
+    return numPages;
 }
 
 /**
@@ -432,25 +445,25 @@ int PagedAppMenu::PageAppFolder::getNumFolderPages()
  */
 int PagedAppMenu::PageAppFolder::getCurrentFolderPage()
 {
-	if(currentPage < 0 || currentPage >= getNumFolderPages())
-	{
-		currentPage = std::max(getSelectionPage(),0);
-	}
-	return std::max(currentPage,0);	
+    if (currentPage < 0 || currentPage >= getNumFolderPages())
+    {
+        currentPage = std::max(getSelectionPage(), 0);
+    }
+    return std::max(currentPage, 0);
 }
-
 
 /**
  * Set which folder page should currently be visible.
  */
 bool PagedAppMenu::PageAppFolder::setCurrentFolderPage(int pageNum)
 {
-	if(pageNum < 0 || pageNum >= getNumFolderPages()){
-		return false;
-	}
-	currentPage = pageNum;
-	DBG(String("Moved to folder page ")+String(currentPage));
-	return true;
+    if (pageNum < 0 || pageNum >= getNumFolderPages())
+    {
+        return false;
+    }
+    currentPage = pageNum;
+    DBG(String("Moved to folder page ") + String(currentPage));
+    return true;
 }
 
 /**
@@ -459,14 +472,13 @@ bool PagedAppMenu::PageAppFolder::setCurrentFolderPage(int pageNum)
  */
 int PagedAppMenu::PageAppFolder::getSelectionPage()
 {
-	int selected = getSelectedIndex();
-	if(selected != -1)
-	{	
-		selected /= buttonsPerPage;
-	}
-	return selected;
+    int selected = getSelectedIndex();
+    if (selected != -1)
+    {
+        selected /= buttonsPerPage;
+    }
+    return selected;
 }
-
 
 /**
  * @return the index of the selected button within its folder page,
@@ -474,14 +486,13 @@ int PagedAppMenu::PageAppFolder::getSelectionPage()
  */
 int PagedAppMenu::PageAppFolder::getSelectedIndexInFolderPage()
 {
-	int selected = getSelectedIndex();
-	if(selected != -1)
-	{
-		selected %= buttonsPerPage;
-	}
-	return selected;
+    int selected = getSelectedIndex();
+    if (selected != -1)
+    {
+        selected %= buttonsPerPage;
+    }
+    return selected;
 }
-		
 
 /**
  * @return the column index of the selected button within its
@@ -489,14 +500,13 @@ int PagedAppMenu::PageAppFolder::getSelectedIndexInFolderPage()
  */
 int PagedAppMenu::PageAppFolder::getSelectionColumn()
 {
-	int selected = getSelectedIndexInFolderPage();
-	if(selected != -1)
-	{
-		selected %= maxColumns;
-	}
-	return selected;
+    int selected = getSelectedIndexInFolderPage();
+    if (selected != -1)
+    {
+        selected %= maxColumns;
+    }
+    return selected;
 }
-
 
 /**
  * @return the row index of the selected button within its
@@ -504,12 +514,12 @@ int PagedAppMenu::PageAppFolder::getSelectionColumn()
  */
 int PagedAppMenu::PageAppFolder::getSelectionRow()
 {
-	int selected = getSelectedIndexInFolderPage();
-	if(selected != -1)
-	{
-		selected /= maxColumns;
-	}
-	return selected;
+    int selected = getSelectedIndexInFolderPage();
+    if (selected != -1)
+    {
+        selected /= maxColumns;
+    }
+    return selected;
 }
 
 /**
@@ -526,21 +536,22 @@ int PagedAppMenu::PageAppFolder::getSelectionRow()
  * its folder page.
  * @return true if the selection changed, false otherwise.
  */
-bool PagedAppMenu::PageAppFolder::setSelectedPosition(int page,int column, int row){
-	DBG(String("Setting selected page=")+String(page)+String(" column=")+
-			String(column)+String(" row=")+String(row));
-	if(page < 0 || column < 0 || row < 0 ||
-		page >= getNumFolderPages() 
-		|| column >= maxColumns
-		|| row >= maxRows)
-	{
-		DBG("Failed; invalid index");
-		return false;
-	}
-	int newIndex = page * maxColumns * maxRows
-		+ row * maxColumns + column;
-	DBG(String("button index selecting=")+String(newIndex));
-	return selectIndex(newIndex) && setCurrentFolderPage(page);
+bool PagedAppMenu::PageAppFolder::setSelectedPosition(int page, int column, int row)
+{
+    DBG(String("Setting selected page=") + String(page) + String(" column=") +
+            String(column) + String(" row=") + String(row));
+    if (page < 0 || column < 0 || row < 0 ||
+        page >= getNumFolderPages()
+        || column >= maxColumns
+        || row >= maxRows)
+    {
+        DBG("Failed; invalid index");
+        return false;
+    }
+    int newIndex = page * maxColumns * maxRows
+            + row * maxColumns + column;
+    DBG(String("button index selecting=") + String(newIndex));
+    return selectIndex(newIndex) && setCurrentFolderPage(page);
 }
 
 /**
@@ -581,6 +592,7 @@ PagedAppMenu::PageMenuButton::~PageMenuButton() { }
 void PagedAppMenu::PageMenuButton::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
+    DBG(getName()+String(" bounds:")+bounds.toString());
     if (bounds.isEmpty())
     {
         return;

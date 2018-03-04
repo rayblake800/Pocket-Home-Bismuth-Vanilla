@@ -51,6 +51,12 @@ public:
      * the terminal. 
      */
     virtual bool isTerminalApp() const;
+    
+    /**
+     * @return true iff changing this menu item makes changes to .desktop or
+     * .directory files.
+     */
+    virtual bool changesDesktopEntries() const;
 
     /**
      * @return all application categories linked to this menu item.
