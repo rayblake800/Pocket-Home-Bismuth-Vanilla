@@ -9,15 +9,6 @@ pageLeft(ComponentConfigFile::pageLeftKey),
 pageRight(ComponentConfigFile::pageRightKey),
 closeFolderBtn(ComponentConfigFile::pageUpKey)
 {
-    addTrackedKeys({
-        ComponentConfigFile::maxRowsKey,
-        ComponentConfigFile::maxColumnsKey
-    });
-    ComponentConfigFile config;
-    maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
-    maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
-    buttonsPerPage = maxRows*maxColumns;
-
     addAndMakeVisible(pageLeft);
     pageLeft.setWantsKeyboardFocus(false);
     pageLeft.setAlwaysOnTop(true);
@@ -64,7 +55,7 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
     };
 
     PageAppFolder* folder = static_cast<PageAppFolder*>
-            (openFolders.getLast());
+            (openFolders[getActiveFolderIndex()]);
     int selectedIndex = folder->getSelectedIndex();
     int currentPage = folder->getCurrentFolderPage();
     if (folder->getSelectionPage() != currentPage)
@@ -191,14 +182,23 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
  */
 void PagedAppMenu::layoutFolders(bool animateTransition)
 {
-    if (openFolders.isEmpty())
+    static int lastFolder = -1;
+    static int lastPage = -1;
+    if (openFolders.isEmpty() || 
+            (lastFolder == getActiveFolderIndex() &&
+            lastPage == static_cast<PageAppFolder*>
+            (openFolders[getActiveFolderIndex()])
+            ->getCurrentFolderPage()))
     {
         return;
     }
+    lastFolder = getActiveFolderIndex();
+    lastPage =  static_cast<PageAppFolder*>
+            (openFolders[getActiveFolderIndex()])
+            ->getCurrentFolderPage();
     pageLeft.applyConfigBounds();
     pageRight.applyConfigBounds();
     closeFolderBtn.applyConfigBounds();
-    int topEdge = 1;
     for (int i = openFolders.size() - 1; i >= 0; i--)
     {
         PageAppFolder* folder = static_cast<PageAppFolder*> (openFolders[i]);
@@ -209,12 +209,7 @@ void PagedAppMenu::layoutFolders(bool animateTransition)
         Rectangle<int> bounds = getLocalBounds();
         bounds.setWidth(getWidth() * numFolderPages);
         bounds.setX(-getWidth() * folderPage);
-        if (topEdge < 1)
-        {
-            bounds.setY(topEdge - getHeight());
-        }
-        topEdge = bounds.getY();
-
+        bounds.setY(getHeight() * (getActiveFolderIndex()-i));
         if (folder->getBounds().isEmpty())
         {
             folder->setBounds(bounds.withY(getBottom()));
@@ -238,7 +233,7 @@ void PagedAppMenu::layoutFolders(bool animateTransition)
         }
 
         //update navigation buttons after changing last open folder bounds
-        if (i == openFolders.size() - 1)
+        if (i == getActiveFolderIndex())
         {
             bool showLeft = folderPage > 0;
             bool showRight = folderPage < (numFolderPages - 1);
@@ -264,39 +259,6 @@ AppMenuComponent::AppFolder* PagedAppMenu::createFolderObject
 }
 
 /**
- * Updates the layout if row/column size changes, otherwise handle
- * changes like any other ConfigurableComponent.
- * @param config the configFile containing the updated data value
- * @param key the key of property that has changed
- */
-void PagedAppMenu::loadConfigProperties(ConfigFile* config, String key)
-{
-    ComponentConfigFile* compConf = dynamic_cast<ComponentConfigFile*> (config);
-    if (compConf != nullptr)
-    {
-        if (key == ComponentConfigFile::maxColumnsKey)
-        {
-            maxColumns = compConf->getConfigValue<int>(key);
-        }
-        else if (key == ComponentConfigFile::maxRowsKey)
-        {
-            maxRows = compConf->getConfigValue<int>(key);
-        }
-        else
-        {
-            ConfigurableComponent::loadConfigProperties(config, key);
-            return;
-        }
-        for (AppFolder* folder : openFolders)
-        {
-            PageAppFolder* pageFolder = static_cast<PageAppFolder*> (folder);
-            pageFolder->updateGridSize(maxRows, maxColumns);
-        }
-        layoutFolders(false);
-    }
-}
-
-/**
  * Handles navigation button controls
  */
 void PagedAppMenu::buttonClicked(Button* button)
@@ -315,7 +277,7 @@ void PagedAppMenu::buttonClicked(Button* button)
         return;
     }
     PageAppFolder* folder = static_cast<PageAppFolder*>
-            (openFolders.getLast());
+            (openFolders[getActiveFolderIndex()]);
 
     int targetPage = folder->getCurrentFolderPage();
     if (button == &pageLeft)
@@ -340,32 +302,10 @@ PagedAppMenu::PageAppFolder::PageAppFolder(AppMenuItem::Ptr folderItem,
         IconThread& iconThread) :
 AppFolder(folderItem, btnListener, buttonNameMap, iconThread)
 {
-    ComponentConfigFile config;
-    maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
-    maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
-    buttonsPerPage = maxRows * maxColumns;
     reload();
 }
 
 PagedAppMenu::PageAppFolder::~PageAppFolder() { }
-
-/**
- * Sets the button grid row and column sizes, updating button layout
- * if the values change
- */
-void PagedAppMenu::PageAppFolder::updateGridSize(int maxRows, int maxColumns)
-{
-    if (maxRows != this->maxRows || maxColumns != this->maxColumns)
-    {
-        this->maxRows = std::max<int>(maxRows, 1);
-        this->maxColumns = std::max<int>(maxColumns, 1);
-        DBG(String("PagedAppMenu: setting grid size of ") + String(maxRows)
-                + String(" rows, ") + String(maxColumns) + String(" columns"));
-        buttonsPerPage = maxRows * maxColumns;
-        layoutButtons();
-        resized();
-    }
-}
 
 /**
  * Create an AppMenuButton component for an AppMenuItem.

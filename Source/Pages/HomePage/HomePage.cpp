@@ -176,6 +176,7 @@ void HomePage::pageResized()
     {
         appMenu->applyConfigBounds();
     }
+    loadingSpinner.setBounds(getLocalBounds());
     frame.applyConfigBounds();
     clock.applyConfigBounds();
     batteryIcon.applyConfigBounds();

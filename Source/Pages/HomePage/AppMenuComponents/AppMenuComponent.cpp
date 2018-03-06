@@ -14,7 +14,16 @@ AppMenuComponent::AppMenuComponent
 loadingState(false),
 ConfigurableComponent(componentKey),
 loadingSpinner(loadingSpinner)
-{
+{   
+    addTrackedKeys({
+        ComponentConfigFile::maxRowsKey,
+        ComponentConfigFile::maxColumnsKey
+    });
+    ComponentConfigFile config;
+    maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
+    maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
+    buttonsPerPage = maxRows*maxColumns;
+
     setWantsKeyboardFocus(false);
     loadBaseFolder();
 }
@@ -281,6 +290,40 @@ void AppMenuComponent::openEditorForSelected()
     }
 }
 
+
+/**
+ * Updates the layout if row/column size changes, otherwise handle
+ * changes like any other ConfigurableComponent.
+ * @param config the configFile containing the updated data value
+ * @param key the key of property that has changed
+ */
+void AppMenuComponent::loadConfigProperties(ConfigFile* config, String key)
+{
+    ComponentConfigFile* compConf = dynamic_cast<ComponentConfigFile*> (config);
+    if (compConf != nullptr)
+    {
+        if (key == ComponentConfigFile::maxColumnsKey)
+        {
+            maxColumns = compConf->getConfigValue<int>(key);
+        }
+        else if (key == ComponentConfigFile::maxRowsKey)
+        {
+            maxRows = compConf->getConfigValue<int>(key);
+        }
+        else
+        {
+            ConfigurableComponent::loadConfigProperties(config, key);
+            return;
+        }
+        for (AppFolder* folder : openFolders)
+        {
+            folder->updateGridSize(maxRows, maxColumns);
+        }
+        layoutFolders(false);
+    }
+}
+
+
 /**
  * Reposition child components, and update folder layout without animating.
  */
@@ -288,7 +331,6 @@ void AppMenuComponent::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
     DBG(String("AppMenu resized, bounds=") + getScreenBounds().toString());
-    loadingSpinner.setBounds(bounds);
     if (buttonEditor != nullptr)
     {
         buttonEditor->applyConfigBounds();
@@ -428,6 +470,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
         else
         {
             openFolders[i]->selectIndex(buttonIndex);
+            layoutFolders(true);
         }
         return;
     }
@@ -502,9 +545,34 @@ AppMenuComponent::AppFolder::AppFolder
 sourceFolderItem(folderItem),
 btnListener(btnListener),
 buttonNameMap(buttonNameMap),
-iconThread(iconThread) { }
+iconThread(iconThread) 
+{     
+    ComponentConfigFile config;
+    maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
+    maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
+    buttonsPerPage = maxRows * maxColumns;
+}
 
 AppMenuComponent::AppFolder::~AppFolder() { }
+
+
+/**
+ * Sets the button grid row and column sizes, updating button layout
+ * if the values change
+ */
+void AppMenuComponent::AppFolder::updateGridSize(int maxRows, int maxColumns)
+{
+    if (maxRows != this->maxRows || maxColumns != this->maxColumns)
+    {
+        this->maxRows = std::max<int>(maxRows, 1);
+        this->maxColumns = std::max<int>(maxColumns, 1);
+        DBG(String("AppFolder: setting grid size of ") + String(maxRows)
+                + String(" rows, ") + String(maxColumns) + String(" columns"));
+        buttonsPerPage = maxRows * maxColumns;
+        layoutButtons();
+        resized();
+    }
+}
 
 /**
  * Reload all folder menu buttons from their source menu item. 

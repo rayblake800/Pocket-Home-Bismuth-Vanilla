@@ -24,9 +24,8 @@ long_line_column=72
 
 [files]
 current_page=1
-FILE_NAME_0=6442;C++;0;EUTF-8;1;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FPages%2FHomePage%2FAppMenuComponents%2FAppMenuComponent.cpp;0;4
-FILE_NAME_1=6049;C;0;EUTF-8;1;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FPages%2FHomePage%2FAppMenuComponents%2FAppMenuComponent.h;0;4
-FILE_NAME_2=2510;C;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FGridLayoutManager.h;0;4
+FILE_NAME_0=13783;C++;0;EUTF-8;1;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FPages%2FHomePage%2FAppMenuComponents%2FAppMenuComponent.cpp;0;4
+FILE_NAME_1=12324;C++;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FPages%2FHomePage%2FAppMenuComponents%2FPagedAppMenu.cpp;0;4
 
 [VTE]
 last_dir=/home/chip

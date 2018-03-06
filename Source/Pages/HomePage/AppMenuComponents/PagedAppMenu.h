@@ -40,26 +40,11 @@ protected:
     AppFolder* createFolderObject(AppMenuItem::Ptr folderItem) override;
 
 private:
-
-    /**
-     * Updates the layout if row/column size changes, otherwise handle
-     * changes like any other ConfigurableComponent.
-     * @param config the configFile containing the updated data value
-     * @param key the key of property that has changed
-     */
-    void loadConfigProperties(ConfigFile* config, String key);
-
-
     /**
      * Handles navigation button controls
      * @param 
      */
     void buttonClicked(Button*) override;
-
-    //app grid dimensions, saved from config
-    int maxRows = 1;
-    int maxColumns = 1;
-    int buttonsPerPage = 1;
 
     //navigation buttons
     ConfigurableImageButton closeFolderBtn;
@@ -78,12 +63,6 @@ private:
                 std::map<String, AppMenuButton::Ptr>& buttonNameMap,
                 IconThread& iconThread);
         virtual ~PageAppFolder();
-
-        /**
-         * Sets the button grid row and column sizes, updating button layout
-         * if the values change
-         */
-        void updateGridSize(int maxRows, int maxColumns);
 
         /**
          * Create an AppMenuButton component for an AppMenuItem.
@@ -180,9 +159,6 @@ private:
          * Resizes navigation buttons, then calls AppFolder::resized().
          */
         void resized() override;
-        int maxRows = 1;
-        int maxColumns = 1;
-        int buttonsPerPage = 1;
         int currentPage = 0;
     };
 

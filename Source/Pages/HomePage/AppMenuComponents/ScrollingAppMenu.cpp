@@ -18,7 +18,57 @@ bool ScrollingAppMenu::keyPressed(const KeyPress& key)
 /**
  * Updates the folder component layout, optionally animating the transition.
  */
-void ScrollingAppMenu::layoutFolders(bool animateTransition) { }
+void ScrollingAppMenu::layoutFolders(bool animateTransition) 
+{ 
+    if(openFolders.isEmpty() || getBounds().isEmpty())
+    {
+        return;
+    }
+    int xPos=0;
+    int yPos=0;
+    int buttonHeight = getHeight()/maxRows;
+    DBG(String("Button height is ")+String(buttonHeight));
+    Array<Rectangle<int>> folderBounds;
+    for(AppFolder* folder: openFolders)
+    {
+        folderBounds.add(Rectangle<int>
+                (xPos,yPos,getWidth()/maxColumns,
+                buttonHeight * folder->size()));
+        xPos += folderBounds.getLast().getWidth();
+        int selected = folder->getSelectedIndex();
+        if(selected > 0)
+        {
+            yPos += selected  * buttonHeight;
+        }
+    }
+    AppFolder* activeFolder = openFolders[getActiveFolderIndex()];
+    int selected = std::max<int>(0,activeFolder->getSelectedIndex());
+    Rectangle<int> bounds = getLocalBounds();
+    Rectangle<int> selectionBounds = folderBounds[selected];
+    
+    int selXCenter = selectionBounds.getCentreX();
+    int selYCenter = selectionBounds.getY() + selected * buttonHeight
+            + buttonHeight/2;
+    int xOffset = bounds.getCentreX() - selXCenter;
+    int yOffset = bounds.getCentreY() - selYCenter;
+    
+    for(int i = 0; i < openFolders.size(); i++)
+    {
+        AppFolder* folder = openFolders[i];
+        Rectangle<int> movedBounds = folderBounds[i].translated
+                (xOffset,yOffset);
+        DBG(String("Moving folder to ")+movedBounds.toString());
+        if (animateTransition)
+        {
+            Desktop::getInstance().getAnimator().animateComponent(folder,
+                    movedBounds, 1, 250, true, 1, 1);
+        }
+        else
+        {
+            folder->setBounds(movedBounds);
+        }
+    }
+}
 
 /**
  * Create a folder component object from a folder menu item.
@@ -27,14 +77,20 @@ void ScrollingAppMenu::layoutFolders(bool animateTransition) { }
 AppMenuComponent::AppFolder* ScrollingAppMenu::createFolderObject
 (AppMenuItem::Ptr folderItem)
 {
-    return new ScrollingAppFolder(folderItem, this, buttonNameMap, iconThread);
+    return new ScrollingAppFolder(folderItem, this, buttonNameMap, 
+            iconThread);
 }
 
 ScrollingAppMenu::ScrollingAppFolder::ScrollingAppFolder
 (AppMenuItem::Ptr folderItem, MouseListener* btnListener,
         std::map<String, AppMenuButton::Ptr>& buttonNameMap,
         IconThread& iconThread) :
-AppFolder(folderItem, btnListener, buttonNameMap, iconThread) { }
+AppFolder(folderItem, btnListener, buttonNameMap, iconThread) 
+{ 
+    setMargin(0);
+    setPadding(0,0);
+    reload();
+}
 
 ScrollingAppMenu::ScrollingAppFolder::~ScrollingAppFolder() { }
 
@@ -58,8 +114,14 @@ AppMenuButton::Ptr ScrollingAppMenu::ScrollingAppFolder::createMenuButton
  */
 GridLayoutManager::Layout
 ScrollingAppMenu::ScrollingAppFolder::buildFolderLayout
-(Array<AppMenuButton::Ptr>& buttons){
-    return {};
+(Array<AppMenuButton::Ptr>& buttons)
+{
+    GridLayoutManager::Layout layout;
+    for(AppMenuButton::Ptr button : buttons)
+    {
+        layout.push_back({1,{{button,1}}});
+    }
+    return layout;
 }
 
 /**
@@ -74,7 +136,14 @@ ScrollingAppMenu::ScrollingMenuButton::~ScrollingMenuButton() { }
 /**
  * Re-calculates draw values whenever the button is resized
  */
-void ScrollingAppMenu::ScrollingMenuButton::resized() { }
+void ScrollingAppMenu::ScrollingMenuButton::resized() { 
+    Rectangle<int> bounds = getLocalBounds();
+    Rectangle<float> imageBounds = bounds.toFloat();
+    imageBounds.setWidth(imageBounds.getHeight());
+    float padding = imageBounds.getWidth()/20;
+    imageBounds.reduce(padding,padding);
+    setImageBounds(imageBounds);
+}
 
 
 //OLD CODE

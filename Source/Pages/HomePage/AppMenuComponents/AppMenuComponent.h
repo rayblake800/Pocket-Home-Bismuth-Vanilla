@@ -122,6 +122,11 @@ protected:
 
     //this gets passed to AppMenuButtons to load button icons.
     IconThread iconThread;
+    
+    //app grid dimensions, saved from config
+    int maxRows = 1;
+    int maxColumns = 1;
+    int buttonsPerPage = 1;
 private:
 
     /**
@@ -129,6 +134,16 @@ private:
      * @param folderItem
      */
     virtual AppFolder* createFolderObject(AppMenuItem::Ptr folderItem) = 0;
+
+
+    /**
+     * Updates the layout if row/column size changes, otherwise handle
+     * changes like any other ConfigurableComponent.
+     * @param config the configFile containing the updated data value
+     * @param key the key of property that has changed
+     */
+    void loadConfigProperties(ConfigFile* config, String key);
+
 
     /**
      * Reposition child components, and update folder layout without animating.
@@ -235,6 +250,13 @@ protected:
          */
         virtual AppMenuButton::Ptr createMenuButton
         (AppMenuItem::Ptr menuItem) = 0;
+
+
+        /**
+         * Sets the button grid row and column sizes, updating button layout
+         * if the values change
+         */
+        void updateGridSize(int maxRows, int maxColumns);
 
         /**
          * Reload all folder menu buttons from their source menu item.
@@ -370,6 +392,10 @@ protected:
 
         //New buttons will need this to load their icons.
         IconThread& iconThread;
+        
+        int maxRows = 1;
+        int maxColumns = 1;
+        int buttonsPerPage = 1;
     private:
 
         /**

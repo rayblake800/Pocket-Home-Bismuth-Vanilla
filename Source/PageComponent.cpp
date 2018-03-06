@@ -100,10 +100,13 @@ void PageComponent::layoutComponents()
         bounds.reduce(xMargin, (int) bounds.getHeight() * verticalMargin);
         if(backButton != nullptr)
         {
-            int overlap = backButton->getRight() - bounds.getX();
+            
+            int overlap = std::min<int>
+                    (backButton->getRight() - bounds.getX(),
+                     bounds.getRight() - backButton->getX());
             if(overlap > 0)
             {
-            bounds.reduce(overlap,0);
+                bounds.reduce(overlap,0);
             }
         }
         layoutManager.layoutComponents(bounds,
