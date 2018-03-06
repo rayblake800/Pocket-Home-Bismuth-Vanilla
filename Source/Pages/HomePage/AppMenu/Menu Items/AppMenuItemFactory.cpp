@@ -1,8 +1,8 @@
 
-#include "MenuItem Types/ConfigAppMenuItem.h"
-#include "MenuItem Types/DesktopEntryMenuItem.h"
-#include "MenuItem Types/FolderMenuItem.h"
-#include "MenuItem Types/BaseFolderMenuItem.h"
+#include "ConfigAppMenuItem.h"
+#include "DesktopEntryMenuItem.h"
+#include "FolderMenuItem.h"
+#include "BaseFolderMenuItem.h"
 #include "AppMenuItemFactory.h"
 
 /**

@@ -2,8 +2,8 @@
 #include "../../Configuration/MainConfigFile.h"
 #include "../../PokeLookAndFeel.h"
 #include "../../Utils.h"
-#include "AppMenuComponents/PagedAppMenu.h"
-#include "AppMenuComponents/ScrollingAppMenu.h"
+#include "AppMenu/Menu Types/PagedAppMenu.h"
+#include "AppMenu/Menu Types/ScrollingAppMenu.h"
 #include "HomePage.h"
 
 HomePage::HomePage() :

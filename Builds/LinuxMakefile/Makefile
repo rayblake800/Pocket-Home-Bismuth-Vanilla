@@ -87,25 +87,28 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/AppConfigFile_8463bec7.o \
   $(JUCE_OBJDIR)/ComponentConfigFile_28621e63.o \
   $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o \
-  $(JUCE_OBJDIR)/AppMenuComponent_e0303fad.o \
-  $(JUCE_OBJDIR)/PagedAppMenu_a60f861b.o \
-  $(JUCE_OBJDIR)/ScrollingAppMenu_43f0565b.o \
-  $(JUCE_OBJDIR)/ConfigAppMenuItem_c8dd56a1.o \
-  $(JUCE_OBJDIR)/DesktopEntryMenuItem_da016302.o \
-  $(JUCE_OBJDIR)/FolderMenuItem_549ca17a.o \
-  $(JUCE_OBJDIR)/BaseFolderMenuItem_60d897ab.o \
-  $(JUCE_OBJDIR)/AppMenuButton_bf62b868.o \
-  $(JUCE_OBJDIR)/AppMenuItem_35832009.o \
-  $(JUCE_OBJDIR)/AppMenuItemFactory_cba812cb.o \
+  $(JUCE_OBJDIR)/AppMenuComponent_ca3893a3.o \
+  $(JUCE_OBJDIR)/AppMenuFolder_e6b14b52.o \
+  $(JUCE_OBJDIR)/AppMenuButton_2d6b5416.o \
+  $(JUCE_OBJDIR)/PagedAppMenu_6af92b06.o \
+  $(JUCE_OBJDIR)/ScrollingAppMenu_80578dc6.o \
+  $(JUCE_OBJDIR)/AppMenuItem_ecdff7e9.o \
+  $(JUCE_OBJDIR)/AppMenuItemFactory_56829eeb.o \
+  $(JUCE_OBJDIR)/ConfigAppMenuItem_f2c17387.o \
+  $(JUCE_OBJDIR)/DesktopEntryMenuItem_c2c0545c.o \
+  $(JUCE_OBJDIR)/FolderMenuItem_ae5a1e54.o \
+  $(JUCE_OBJDIR)/BaseFolderMenuItem_73781785.o \
+  $(JUCE_OBJDIR)/ScrollingAppFolder_22f99609.o \
+  $(JUCE_OBJDIR)/PageAppFolder_a19e1dbb.o \
+  $(JUCE_OBJDIR)/NewFolderEditor_e08b037.o \
+  $(JUCE_OBJDIR)/NewDesktopAppEditor_dd6a5bee.o \
+  $(JUCE_OBJDIR)/NewConfigAppEditor_3410199a.o \
+  $(JUCE_OBJDIR)/CategoryPopupEditor_9be604d7.o \
+  $(JUCE_OBJDIR)/AppMenuPopupEditor_5ff3a507.o \
   $(JUCE_OBJDIR)/BatteryIcon_c9e0d452.o \
   $(JUCE_OBJDIR)/BatteryMonitor_816bc6eb.o \
   $(JUCE_OBJDIR)/ClockLabel_ca8dfbe4.o \
   $(JUCE_OBJDIR)/WifiIcon_c3abbfcc.o \
-  $(JUCE_OBJDIR)/NewFolderEditor_a0914c34.o \
-  $(JUCE_OBJDIR)/NewDesktopAppEditor_821ab16b.o \
-  $(JUCE_OBJDIR)/NewConfigAppEditor_7b70a07d.o \
-  $(JUCE_OBJDIR)/CategoryPopupEditor_40965a54.o \
-  $(JUCE_OBJDIR)/AppMenuPopupEditor_a7542bea.o \
   $(JUCE_OBJDIR)/HomePage_2cb465c5.o \
   $(JUCE_OBJDIR)/DesktopEntries_fe0bba0b.o \
   $(JUCE_OBJDIR)/DesktopEntry_ed55766d.o \
@@ -262,54 +265,94 @@ $(JUCE_OBJDIR)/MainConfigFile_4ee1f959.o: ../../Source/Configuration/MainConfigF
 	@echo "Compiling MainConfigFile.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/AppMenuComponent_e0303fad.o: ../../Source/Pages/HomePage/AppMenuComponents/AppMenuComponent.cpp
+$(JUCE_OBJDIR)/AppMenuComponent_ca3893a3.o: ../../Source/Pages/HomePage/AppMenu/AppMenuComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppMenuComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/PagedAppMenu_a60f861b.o: ../../Source/Pages/HomePage/AppMenuComponents/PagedAppMenu.cpp
+$(JUCE_OBJDIR)/AppMenuFolder_e6b14b52.o: ../../Source/Pages/HomePage/AppMenu/AppMenuFolder.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling PagedAppMenu.cpp"
+	@echo "Compiling AppMenuFolder.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/ScrollingAppMenu_43f0565b.o: ../../Source/Pages/HomePage/AppMenuComponents/ScrollingAppMenu.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ScrollingAppMenu.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/ConfigAppMenuItem_c8dd56a1.o: ../../Source/Pages/HomePage/AppMenuButton/MenuItem\ Types/ConfigAppMenuItem.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ConfigAppMenuItem.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/DesktopEntryMenuItem_da016302.o: ../../Source/Pages/HomePage/AppMenuButton/MenuItem\ Types/DesktopEntryMenuItem.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling DesktopEntryMenuItem.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/FolderMenuItem_549ca17a.o: ../../Source/Pages/HomePage/AppMenuButton/MenuItem\ Types/FolderMenuItem.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling FolderMenuItem.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/BaseFolderMenuItem_60d897ab.o: ../../Source/Pages/HomePage/AppMenuButton/MenuItem\ Types/BaseFolderMenuItem.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling BaseFolderMenuItem.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/AppMenuButton_bf62b868.o: ../../Source/Pages/HomePage/AppMenuButton/AppMenuButton.cpp
+$(JUCE_OBJDIR)/AppMenuButton_2d6b5416.o: ../../Source/Pages/HomePage/AppMenu/AppMenuButton.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppMenuButton.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/AppMenuItem_35832009.o: ../../Source/Pages/HomePage/AppMenuButton/AppMenuItem.cpp
+$(JUCE_OBJDIR)/PagedAppMenu_6af92b06.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Types/PagedAppMenu.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling PagedAppMenu.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ScrollingAppMenu_80578dc6.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Types/ScrollingAppMenu.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ScrollingAppMenu.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AppMenuItem_ecdff7e9.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Items/AppMenuItem.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppMenuItem.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/AppMenuItemFactory_cba812cb.o: ../../Source/Pages/HomePage/AppMenuButton/AppMenuItemFactory.cpp
+$(JUCE_OBJDIR)/AppMenuItemFactory_56829eeb.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Items/AppMenuItemFactory.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppMenuItemFactory.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigAppMenuItem_f2c17387.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Items/ConfigAppMenuItem.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigAppMenuItem.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/DesktopEntryMenuItem_c2c0545c.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Items/DesktopEntryMenuItem.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling DesktopEntryMenuItem.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/FolderMenuItem_ae5a1e54.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Items/FolderMenuItem.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling FolderMenuItem.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/BaseFolderMenuItem_73781785.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Items/BaseFolderMenuItem.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling BaseFolderMenuItem.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ScrollingAppFolder_22f99609.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Folders/ScrollingAppFolder.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ScrollingAppFolder.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/PageAppFolder_a19e1dbb.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Folders/PageAppFolder.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling PageAppFolder.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NewFolderEditor_e08b037.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Editors/NewFolderEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NewFolderEditor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NewDesktopAppEditor_dd6a5bee.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Editors/NewDesktopAppEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NewDesktopAppEditor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NewConfigAppEditor_3410199a.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Editors/NewConfigAppEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NewConfigAppEditor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/CategoryPopupEditor_9be604d7.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Editors/CategoryPopupEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling CategoryPopupEditor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AppMenuPopupEditor_5ff3a507.o: ../../Source/Pages/HomePage/AppMenu/Menu\ Editors/AppMenuPopupEditor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AppMenuPopupEditor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/BatteryIcon_c9e0d452.o: ../../Source/Pages/HomePage/Info\ Components/BatteryIcon.cpp
@@ -330,31 +373,6 @@ $(JUCE_OBJDIR)/ClockLabel_ca8dfbe4.o: ../../Source/Pages/HomePage/Info\ Componen
 $(JUCE_OBJDIR)/WifiIcon_c3abbfcc.o: ../../Source/Pages/HomePage/Info\ Components/WifiIcon.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling WifiIcon.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/NewFolderEditor_a0914c34.o: ../../Source/Pages/HomePage/Popup\ Editor\ Components/NewFolderEditor.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling NewFolderEditor.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/NewDesktopAppEditor_821ab16b.o: ../../Source/Pages/HomePage/Popup\ Editor\ Components/NewDesktopAppEditor.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling NewDesktopAppEditor.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/NewConfigAppEditor_7b70a07d.o: ../../Source/Pages/HomePage/Popup\ Editor\ Components/NewConfigAppEditor.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling NewConfigAppEditor.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/CategoryPopupEditor_40965a54.o: ../../Source/Pages/HomePage/Popup\ Editor\ Components/CategoryPopupEditor.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling CategoryPopupEditor.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/AppMenuPopupEditor_a7542bea.o: ../../Source/Pages/HomePage/Popup\ Editor\ Components/AppMenuPopupEditor.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling AppMenuPopupEditor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/HomePage_2cb465c5.o: ../../Source/Pages/HomePage/HomePage.cpp

@@ -1,4 +1,4 @@
-#include "../AppMenuItemFactory.h"
+#include "AppMenuItemFactory.h"
 #include "BaseFolderMenuItem.h"
 
 BaseFolderMenuItem::BaseFolderMenuItem(DesktopEntries& desktopEntries) :

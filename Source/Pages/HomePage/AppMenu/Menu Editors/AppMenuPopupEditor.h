@@ -5,12 +5,12 @@
  * editing application and folder data.
  */
 #pragma once
-#include "../../../GridLayoutManager.h"
-#include "../IconThread.h"
-#include "../../../Basic Components/ListEditor.h"
-#include "../../../Basic Components/FileSelectTextEditor.h"
+#include "../../../../GridLayoutManager.h"
+#include "../../../../Basic Components/ListEditor.h"
+#include "../../../../Basic Components/FileSelectTextEditor.h"
+#include "../../../../Basic Components/PopupEditorComponent.h"
+#include "../../IconThread.h"
 #include "CategoryPopupEditor.h"
-#include "../../../Basic Components/PopupEditorComponent.h"
 
 /**
  * TODO:

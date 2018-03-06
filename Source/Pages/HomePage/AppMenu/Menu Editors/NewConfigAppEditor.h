@@ -9,7 +9,7 @@
  *
 */
 #pragma once
-#include "../../../Configuration/AppConfigFile.h"
+#include "../../../../Configuration/AppConfigFile.h"
 #include "AppMenuPopupEditor.h"
 
 class NewConfigAppEditor : public AppMenuPopupEditor {

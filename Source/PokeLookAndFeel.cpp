@@ -3,7 +3,7 @@
 #include "Basic Components/ListEditor.h"
 #include "Basic Components/FileSelectTextEditor.h"
 #include "Basic Components/OverlaySpinner.h"
-#include "Pages/HomePage/AppMenuButton/AppMenuButton.h"
+#include "Pages/HomePage/AppMenu/AppMenuButton.h"
 #include "PocketHomeApplication.h"
 #include "PokeLookAndFeel.h"
 

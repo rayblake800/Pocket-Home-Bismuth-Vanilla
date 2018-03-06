@@ -5,8 +5,8 @@
  * AppMenuItem of the appropriate derived class.
  */
 #pragma once
-#include "../../../../JuceLibraryCode/JuceHeader.h"
-#include "../DesktopEntries.h"
+#include "../../../../../JuceLibraryCode/JuceHeader.h"
+#include "../../DesktopEntries.h"
 #include "AppMenuItem.h"
 
 class AppMenuItemFactory {

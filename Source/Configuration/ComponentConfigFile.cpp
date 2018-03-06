@@ -3,7 +3,7 @@
 #include "../Basic Components/FileSelectTextEditor.h"
 #include "../Basic Components/OverlaySpinner.h"
 #include "../Basic Components/SwitchComponent.h"
-#include "../Pages/HomePage/AppMenuButton/AppMenuButton.h"
+#include "../Pages/HomePage/AppMenu/AppMenuButton.h"
 #include "../PageComponent.h"
 #include "../Utils.h"
 #include "ComponentConfigFile.h"

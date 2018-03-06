@@ -1,5 +1,5 @@
 #include "../../../../Utils.h"
-#include "../AppMenuItemFactory.h"
+#include "AppMenuItemFactory.h"
 #include "FolderMenuItem.h"
 
 FolderMenuItem::FolderMenuItem(const AppConfigFile::AppFolder& appFolder,

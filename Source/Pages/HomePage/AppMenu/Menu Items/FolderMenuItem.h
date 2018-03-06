@@ -11,7 +11,7 @@
 #include "../../../../Configuration/AppConfigFile.h"
 #include "../../IconThread.h"
 #include "../../DesktopEntries.h"
-#include "../AppMenuItem.h"
+#include "AppMenuItem.h"
 
 class FolderMenuItem : public AppMenuItem {
 public:

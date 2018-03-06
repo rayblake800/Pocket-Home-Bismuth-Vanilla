@@ -3597,8 +3597,30 @@
         </df>
         <df name="Pages">
           <df name="HomePage">
-            <df name="AppMenuButton">
-              <df name="MenuItem Types">
+            <df name="AppMenu">
+              <df name="Menu Editors">
+                <in>AppMenuPopupEditor.cpp</in>
+                <in>AppMenuPopupEditor.h</in>
+                <in>CategoryPopupEditor.cpp</in>
+                <in>CategoryPopupEditor.h</in>
+                <in>NewConfigAppEditor.cpp</in>
+                <in>NewConfigAppEditor.h</in>
+                <in>NewDesktopAppEditor.cpp</in>
+                <in>NewDesktopAppEditor.h</in>
+                <in>NewFolderEditor.cpp</in>
+                <in>NewFolderEditor.h</in>
+              </df>
+              <df name="Menu Folders">
+                <in>PageAppFolder.cpp</in>
+                <in>PageAppFolder.h</in>
+                <in>ScrollingAppFolder.cpp</in>
+                <in>ScrollingAppFolder.h</in>
+              </df>
+              <df name="Menu Items">
+                <in>AppMenuItem.cpp</in>
+                <in>AppMenuItem.h</in>
+                <in>AppMenuItemFactory.cpp</in>
+                <in>AppMenuItemFactory.h</in>
                 <in>BaseFolderMenuItem.cpp</in>
                 <in>BaseFolderMenuItem.h</in>
                 <in>ConfigAppMenuItem.cpp</in>
@@ -3608,20 +3630,18 @@
                 <in>FolderMenuItem.cpp</in>
                 <in>FolderMenuItem.h</in>
               </df>
+              <df name="Menu Types">
+                <in>PagedAppMenu.cpp</in>
+                <in>PagedAppMenu.h</in>
+                <in>ScrollingAppMenu.cpp</in>
+                <in>ScrollingAppMenu.h</in>
+              </df>
               <in>AppMenuButton.cpp</in>
               <in>AppMenuButton.h</in>
-              <in>AppMenuItem.cpp</in>
-              <in>AppMenuItem.h</in>
-              <in>AppMenuItemFactory.cpp</in>
-              <in>AppMenuItemFactory.h</in>
-            </df>
-            <df name="AppMenuComponents">
               <in>AppMenuComponent.cpp</in>
               <in>AppMenuComponent.h</in>
-              <in>PagedAppMenu.cpp</in>
-              <in>PagedAppMenu.h</in>
-              <in>ScrollingAppMenu.cpp</in>
-              <in>ScrollingAppMenu.h</in>
+              <in>AppMenuFolder.cpp</in>
+              <in>AppMenuFolder.h</in>
             </df>
             <df name="Info Components">
               <in>BatteryIcon.cpp</in>
@@ -3632,18 +3652,6 @@
               <in>ClockLabel.h</in>
               <in>WifiIcon.cpp</in>
               <in>WifiIcon.h</in>
-            </df>
-            <df name="Popup Editor Components">
-              <in>AppMenuPopupEditor.cpp</in>
-              <in>AppMenuPopupEditor.h</in>
-              <in>CategoryPopupEditor.cpp</in>
-              <in>CategoryPopupEditor.h</in>
-              <in>NewConfigAppEditor.cpp</in>
-              <in>NewConfigAppEditor.h</in>
-              <in>NewDesktopAppEditor.cpp</in>
-              <in>NewDesktopAppEditor.h</in>
-              <in>NewFolderEditor.cpp</in>
-              <in>NewFolderEditor.h</in>
             </df>
             <in>DesktopEntries.cpp</in>
             <in>DesktopEntries.h</in>

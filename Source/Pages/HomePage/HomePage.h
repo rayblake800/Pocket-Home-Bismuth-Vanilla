@@ -13,11 +13,11 @@
 #include "../../PageComponent.h"
 #include "../../Configuration/AppConfigFile.h"
 #include "../../Configuration/Configurables/ConfigurableImageButton.h"
-#include "Popup Editor Components/AppMenuPopupEditor.h"
 #include "Info Components/ClockLabel.h"
 #include "Info Components/BatteryIcon.h"
 #include "Info Components/WifiIcon.h"
-#include "AppMenuComponents/AppMenuComponent.h"
+#include "AppMenu/Menu Editors/AppMenuPopupEditor.h"
+#include "AppMenu/AppMenuComponent.h"
 
 /**
  * TODO:

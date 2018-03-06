@@ -9,7 +9,7 @@
 #pragma once
 #include "../../../../Configuration/AppConfigFile.h"
 #include "../../IconThread.h"
-#include "../AppMenuItem.h"
+#include "AppMenuItem.h"
 
 class ConfigAppMenuItem : public AppMenuItem {
 public:

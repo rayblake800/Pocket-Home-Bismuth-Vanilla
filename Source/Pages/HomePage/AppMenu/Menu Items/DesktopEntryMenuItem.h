@@ -9,7 +9,7 @@
 #pragma once
 #include "../../DesktopEntry.h"
 #include "../../IconThread.h"
-#include "../AppMenuItem.h"
+#include "AppMenuItem.h"
 
 class DesktopEntryMenuItem : public AppMenuItem {
 public:

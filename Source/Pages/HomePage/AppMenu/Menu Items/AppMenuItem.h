@@ -13,9 +13,9 @@
  */
 
 #pragma once
-#include "../../../Configuration/Configurables/ConfigurableComponent.h"
-#include "../IconThread.h"
-#include "../Popup Editor Components/AppMenuPopupEditor.h"
+#include "../../../../Configuration/Configurables/ConfigurableComponent.h"
+#include "../../IconThread.h"
+#include "../Menu Editors/AppMenuPopupEditor.h"
 
 class AppMenuItem : public ReferenceCountedObject {
 public:

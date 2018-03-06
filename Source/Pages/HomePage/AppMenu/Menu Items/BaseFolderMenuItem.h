@@ -10,7 +10,7 @@
 #pragma once
 #include "../../../../Configuration/AppConfigFile.h"
 #include "../../DesktopEntries.h"
-#include "../AppMenuItem.h"
+#include "AppMenuItem.h"
 
 class BaseFolderMenuItem : public AppMenuItem {
 public:

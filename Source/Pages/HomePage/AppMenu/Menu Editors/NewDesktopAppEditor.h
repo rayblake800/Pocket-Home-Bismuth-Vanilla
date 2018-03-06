@@ -8,7 +8,7 @@
  *
 */
 #pragma once
-#include "../DesktopEntry.h"
+#include "../../DesktopEntry.h"
 #include "AppMenuPopupEditor.h"
 
 class NewDesktopAppEditor : public AppMenuPopupEditor {

@@ -6,8 +6,8 @@
  */
 
 #pragma once
-#include "../../../Basic Components/ListEditor.h"
-#include "../../../Basic Components/PopupEditorComponent.h"
+#include "../../../../Basic Components/ListEditor.h"
+#include "../../../../Basic Components/PopupEditorComponent.h"
 
 
 class CategoryPopupEditor : public PopupEditorComponent{

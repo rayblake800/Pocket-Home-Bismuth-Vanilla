@@ -94,47 +94,81 @@
       </GROUP>
       <GROUP id="{784530F1-5C98-43D9-7726-F997AD12D9F5}" name="Pages">
         <GROUP id="{E5D177ED-F000-E2C8-AB9E-11F897C0E250}" name="HomePage">
-          <GROUP id="{801FBCFD-9C32-24E0-456F-A5D2AA7B6689}" name="AppMenuComponents">
+          <GROUP id="{E7E990F1-7C96-A39F-60D1-722F584F3B95}" name="AppMenu">
             <FILE id="uoTYvl" name="AppMenuComponent.cpp" compile="1" resource="0"
-                  file="Source/Pages/HomePage/AppMenuComponents/AppMenuComponent.cpp"/>
+                  file="Source/Pages/HomePage/AppMenu/AppMenuComponent.cpp"/>
             <FILE id="ZRD8T3" name="AppMenuComponent.h" compile="0" resource="0"
-                  file="Source/Pages/HomePage/AppMenuComponents/AppMenuComponent.h"/>
-            <FILE id="MtwNPT" name="PagedAppMenu.cpp" compile="1" resource="0"
-                  file="Source/Pages/HomePage/AppMenuComponents/PagedAppMenu.cpp"/>
-            <FILE id="IENsPc" name="PagedAppMenu.h" compile="0" resource="0" file="Source/HomePage/AppMenuComponents/PagedAppMenu.h"/>
-            <FILE id="lpC4Pr" name="ScrollingAppMenu.cpp" compile="1" resource="0"
-                  file="Source/Pages/HomePage/AppMenuComponents/ScrollingAppMenu.cpp"/>
-            <FILE id="Zzogft" name="ScrollingAppMenu.h" compile="0" resource="0"
-                  file="Source/Pages/HomePage/AppMenuComponents/ScrollingAppMenu.h"/>
-          </GROUP>
-          <GROUP id="{14A7C029-841F-00F9-4B37-871CD7FA6F85}" name="AppMenuButton">
-            <GROUP id="{F0050C6F-21EC-3DB6-D68D-70EBDB7844E2}" name="MenuItem Types">
-              <FILE id="k18rAG" name="ConfigAppMenuItem.cpp" compile="1" resource="0"
-                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/ConfigAppMenuItem.cpp"/>
-              <FILE id="Utiaa0" name="ConfigAppMenuItem.h" compile="0" resource="0"
-                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/ConfigAppMenuItem.h"/>
-              <FILE id="q2Br7X" name="DesktopEntryMenuItem.cpp" compile="1" resource="0"
-                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/DesktopEntryMenuItem.cpp"/>
-              <FILE id="TCWtEN" name="DesktopEntryMenuItem.h" compile="0" resource="0"
-                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/DesktopEntryMenuItem.h"/>
-              <FILE id="jdofoH" name="FolderMenuItem.cpp" compile="1" resource="0"
-                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/FolderMenuItem.cpp"/>
-              <FILE id="PaT4m5" name="FolderMenuItem.h" compile="0" resource="0"
-                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/FolderMenuItem.h"/>
-              <FILE id="f0mUcY" name="BaseFolderMenuItem.cpp" compile="1" resource="0"
-                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/BaseFolderMenuItem.cpp"/>
-              <FILE id="ZIvJMb" name="BaseFolderMenuItem.h" compile="0" resource="0"
-                    file="Source/Pages/HomePage/AppMenuButton/MenuItem Types/BaseFolderMenuItem.h"/>
-            </GROUP>
-            <FILE id="yT2LgN" name="AppMenuButton.h" compile="0" resource="0" file="Source/Pages/HomePage/AppMenuButton/AppMenuButton.h"/>
+                  file="Source/Pages/HomePage/AppMenu/AppMenuComponent.h"/>
+            <FILE id="URHujG" name="AppMenuFolder.h" compile="0" resource="0" file="Source/Pages/HomePage/AppMenu//AppMenuFolder.h"/>
+            <FILE id="mwwMrB" name="AppMenuFolder.cpp" compile="1" resource="0"
+                  file="Source/Pages/HomePage/AppMenu/AppMenuFolder.cpp"/>
+            <FILE id="yT2LgN" name="AppMenuButton.h" compile="0" resource="0" file="Source/Pages/HomePage/AppMenu/AppMenuButton.h"/>
             <FILE id="wuxNd9" name="AppMenuButton.cpp" compile="1" resource="0"
-                  file="Source/Pages/HomePage/AppMenuButton/AppMenuButton.cpp"/>
-            <FILE id="qQ1gT2" name="AppMenuItem.cpp" compile="1" resource="0" file="Source/Pages/HomePage/AppMenuButton/AppMenuItem.cpp"/>
-            <FILE id="sNu85i" name="AppMenuItem.h" compile="0" resource="0" file="Source/Pages/HomePage/AppMenuButton/AppMenuItem.h"/>
-            <FILE id="gqK6ot" name="AppMenuItemFactory.cpp" compile="1" resource="0"
-                  file="Source/Pages/HomePage/AppMenuButton/AppMenuItemFactory.cpp"/>
-            <FILE id="aPbzXv" name="AppMenuItemFactory.h" compile="0" resource="0"
-                  file="Source/Pages/HomePage/AppMenuButton/AppMenuItemFactory.h"/>
+                  file="Source/Pages/HomePage/AppMenu/AppMenuButton.cpp"/>
+            <GROUP id="{3FBA29F4-96A1-6621-B813-CEA7AE161BA0}" name="Menu Types">
+              <FILE id="MtwNPT" name="PagedAppMenu.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Types/PagedAppMenu.cpp"/>
+              <FILE id="IENsPc" name="PagedAppMenu.h" compile="0" resource="0" file="Source/HomePage/AppMenu/Menu Types/PagedAppMenu.h"/>
+              <FILE id="lpC4Pr" name="ScrollingAppMenu.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Types/ScrollingAppMenu.cpp"/>
+              <FILE id="Zzogft" name="ScrollingAppMenu.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Types/ScrollingAppMenu.h"/>
+            </GROUP>
+            <GROUP id="{0999720F-DD6B-E080-5269-A32810E91F5C}" name="Menu Items">
+              <FILE id="qQ1gT2" name="AppMenuItem.cpp" compile="1" resource="0" file="Source/Pages/HomePage/AppMenu/Menu Items/AppMenuItem.cpp"/>
+              <FILE id="sNu85i" name="AppMenuItem.h" compile="0" resource="0" file="Source/Pages/HomePage/AppMenu/Menu Items/AppMenuItem.h"/>
+              <FILE id="gqK6ot" name="AppMenuItemFactory.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Items/AppMenuItemFactory.cpp"/>
+              <FILE id="aPbzXv" name="AppMenuItemFactory.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Items/AppMenuItemFactory.h"/>
+              <FILE id="k18rAG" name="ConfigAppMenuItem.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Items/ConfigAppMenuItem.cpp"/>
+              <FILE id="Utiaa0" name="ConfigAppMenuItem.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Items/ConfigAppMenuItem.h"/>
+              <FILE id="q2Br7X" name="DesktopEntryMenuItem.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Items/DesktopEntryMenuItem.cpp"/>
+              <FILE id="TCWtEN" name="DesktopEntryMenuItem.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Items/DesktopEntryMenuItem.h"/>
+              <FILE id="jdofoH" name="FolderMenuItem.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Items/FolderMenuItem.cpp"/>
+              <FILE id="PaT4m5" name="FolderMenuItem.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Items/FolderMenuItem.h"/>
+              <FILE id="f0mUcY" name="BaseFolderMenuItem.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Items/BaseFolderMenuItem.cpp"/>
+              <FILE id="ZIvJMb" name="BaseFolderMenuItem.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Items/BaseFolderMenuItem.h"/>
+            </GROUP>
+            <GROUP id="{9EC3D895-A892-D227-F8FC-77E119666DC6}" name="Menu Folders">
+              <FILE id="vJakyl" name="ScrollingAppFolder.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Folders/ScrollingAppFolder.cpp"/>
+              <FILE id="GrAj69" name="ScrollingAppFolder.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Folders/ScrollingAppFolder.h"/>
+              <FILE id="xYFQkV" name="PageAppFolder.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Folders/PageAppFolder.cpp"/>
+              <FILE id="DOhJt0" name="PageAppFolder.h" compile="0" resource="0" file="Source/Pages/HomePage/AppMenu/Menu Folders/PageAppFolder.h"/>
+            </GROUP>
+            <GROUP id="{A49BAA90-8955-9E45-DAB3-EAE88CC60FE2}" name="Menu Editors">
+              <FILE id="AimLwj" name="NewFolderEditor.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Editors/NewFolderEditor.cpp"/>
+              <FILE id="EsBVn7" name="NewFolderEditor.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Editors/NewFolderEditor.h"/>
+              <FILE id="z7Dxt8" name="NewDesktopAppEditor.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Editors/NewDesktopAppEditor.cpp"/>
+              <FILE id="u89zv6" name="NewDesktopAppEditor.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Editors/NewDesktopAppEditor.h"/>
+              <FILE id="N0cdoz" name="NewConfigAppEditor.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Editors/NewConfigAppEditor.cpp"/>
+              <FILE id="L9Vs3E" name="NewConfigAppEditor.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Editors/NewConfigAppEditor.h"/>
+              <FILE id="fVMrlC" name="CategoryPopupEditor.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Editors/CategoryPopupEditor.cpp"/>
+              <FILE id="y8b34O" name="CategoryPopupEditor.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Editors/CategoryPopupEditor.h"/>
+              <FILE id="uKPVyL" name="AppMenuPopupEditor.cpp" compile="1" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Editors/AppMenuPopupEditor.cpp"/>
+              <FILE id="JY94pZ" name="AppMenuPopupEditor.h" compile="0" resource="0"
+                    file="Source/Pages/HomePage/AppMenu/Menu Editors/AppMenuPopupEditor.h"/>
+            </GROUP>
           </GROUP>
           <GROUP id="{559D4599-2DCA-D578-255D-9A50712E8E88}" name="Info Components">
             <FILE id="r72J8h" name="BatteryIcon.cpp" compile="1" resource="0" file="Source/Pages/HomePage/Info Components/BatteryIcon.cpp"/>
@@ -147,28 +181,6 @@
             <FILE id="andbx8" name="ClockLabel.h" compile="0" resource="0" file="Source/Pages/HomePage/Info Components/ClockLabel.h"/>
             <FILE id="TnTmFi" name="WifiIcon.cpp" compile="1" resource="0" file="Source/Pages/HomePage/Info Components/WifiIcon.cpp"/>
             <FILE id="BIw8ef" name="WifiIcon.h" compile="0" resource="0" file="Source/Pages/HomePage/Info Components/WifiIcon.h"/>
-          </GROUP>
-          <GROUP id="{33D902E9-E269-A70A-90A9-B34BDE5E4635}" name="PopupEditorComponent">
-            <FILE id="AimLwj" name="NewFolderEditor.cpp" compile="1" resource="0"
-                  file="Source/Pages/HomePage/Popup Editor Components/NewFolderEditor.cpp"/>
-            <FILE id="EsBVn7" name="NewFolderEditor.h" compile="0" resource="0"
-                  file="Source/Pages/HomePage/Popup Editor Components/NewFolderEditor.h"/>
-            <FILE id="z7Dxt8" name="NewDesktopAppEditor.cpp" compile="1" resource="0"
-                  file="Source/Pages/HomePage/Popup Editor Components/NewDesktopAppEditor.cpp"/>
-            <FILE id="u89zv6" name="NewDesktopAppEditor.h" compile="0" resource="0"
-                  file="Source/Pages/HomePage/Popup Editor Components/NewDesktopAppEditor.h"/>
-            <FILE id="N0cdoz" name="NewConfigAppEditor.cpp" compile="1" resource="0"
-                  file="Source/Pages/HomePage/Popup Editor Components/NewConfigAppEditor.cpp"/>
-            <FILE id="L9Vs3E" name="NewConfigAppEditor.h" compile="0" resource="0"
-                  file="Source/Pages/HomePage/Popup Editor Components/NewConfigAppEditor.h"/>
-            <FILE id="fVMrlC" name="CategoryPopupEditor.cpp" compile="1" resource="0"
-                  file="Source/Pages/HomePage/Popup Editor Components/CategoryPopupEditor.cpp"/>
-            <FILE id="y8b34O" name="CategoryPopupEditor.h" compile="0" resource="0"
-                  file="Source/Pages/HomePage/Popup Editor Components/CategoryPopupEditor.h"/>
-            <FILE id="uKPVyL" name="AppMenuPopupEditor.cpp" compile="1" resource="0"
-                  file="Source/Pages/HomePage/Popup Editor Components/AppMenuPopupEditor.cpp"/>
-            <FILE id="JY94pZ" name="AppMenuPopupEditor.h" compile="0" resource="0"
-                  file="Source/Pages/HomePage/Popup Editor Components/AppMenuPopupEditor.h"/>
           </GROUP>
           <FILE id="e0rlnj" name="HomePage.cpp" compile="1" resource="0" file="Source/Pages/HomePage/HomePage.cpp"/>
           <FILE id="NstX3c" name="HomePage.h" compile="0" resource="0" file="Source/Pages/HomePage/HomePage.h"/>
