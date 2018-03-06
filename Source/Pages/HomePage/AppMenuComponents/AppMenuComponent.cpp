@@ -225,15 +225,16 @@ void AppMenuComponent::closeFolder()
 {
     if (openFolders.size() > 0)
     {
-        DBG(String("Closing folder ") + String(openFolders.size()));
-        if (getActiveFolderIndex() == openFolders.size() - 1)
+        int targetFolderCount = getActiveFolderIndex();
+        DBG(String("Closing folder ") + String(openFolders.size()-1));
+        if (getActiveFolderIndex() > 0)
         {
             setActiveFolderIndex(getActiveFolderIndex() - 1);
             layoutFolders(true);
         }
-        while (!openFolders.isEmpty()
-               && getActiveFolderIndex() < openFolders.size() - 1)
+        while (openFolders.size() > targetFolderCount)
         {
+            openFolders.getLast()->deselect();
             removeChildComponent(openFolders.getLast());
             openFolders.removeLast();
         }

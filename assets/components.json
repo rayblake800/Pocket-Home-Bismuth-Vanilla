@@ -49,10 +49,10 @@
     "Text editor text color": "0xffffffff",
 
     "scrolling app menu": {
-        "x": 0.25,
-        "y": 0.08,
-        "width": 0.65,
-        "height": 0.85
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
     },
     "paged app menu": {
         "x": 0,

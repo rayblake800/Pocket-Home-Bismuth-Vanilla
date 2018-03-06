@@ -91,10 +91,9 @@ void animateTranslation(Component *component, int x, int y, float alpha, int dur
  */
 Array<String> split(const String &orig, const String &delim);
 
-//get the user's home path
+
 /**
- * 
- * @return 
+ * @return the user's home path
  */
 String getHomePath();
 
@@ -108,40 +107,37 @@ void foreachFile(const String& path, std::function<void(struct dirent*) > fn);
 
 
 static DrawableRectangle highlightFocus;
-//Print debug info about the component tree
+
 /**
- * 
+ * Print debug info about the component tree
  */
 void componentTrace();
 
-//List all non-directory files in path
 /**
- * 
+ * List all non-directory files in path
  * @param path
  * @return 
  */
 std::vector<String> listFiles(const String& path);
 
-//list all directory files in path, ignoring ./ and ../
 /**
- * 
+ * list all directory files in path, ignoring ./ and ../
  * @param path
  * @return 
  */
 std::vector<String> listDirectoryFiles(const String& path);
 
-//get the size of the active window
 /**
  * 
- * @return 
+ * @return the size of the active window
  */
 Rectangle<int> getWindowSize();
 
-//resizes a font to fit in a containing rectangle.
-//If fitting it in would require mangling the font size too much, the
-//font gets set to size zero.
+
 /**
- * 
+ * resizes a font to fit in a containing rectangle.
+ * If fitting it in would require mangling the font size too much, the
+ * font gets set to size zero.
  * @param font
  * @param text
  * @param container

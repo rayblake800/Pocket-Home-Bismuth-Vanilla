@@ -66,6 +66,14 @@ private:
          */
         virtual GridLayoutManager::Layout buildFolderLayout
         (Array<AppMenuButton::Ptr>& buttons);
+        
+        /**
+         * @return the width in pixels of the longest menu item title in
+         * the folder.
+         */
+        int getTextWidth();
+    private:
+        int maxTextWidth = 0;
     };
 
     /**
@@ -82,6 +90,12 @@ private:
         ScrollingMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
                 String name = String());
         virtual ~ScrollingMenuButton();
+
+/**
+         * @return the width in pixels of this button's title
+         */
+        int getTitleWidth();
+
     private:
         /**
          * Re-calculates draw values whenever the button is resized

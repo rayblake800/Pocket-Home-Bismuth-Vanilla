@@ -43,7 +43,7 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
     }
     std::function<void() > closeNonBaseFolder = [this]()
     {
-        if (openFolders.size() > 1)
+        if (getActiveFolderIndex() > 0)
         {
             closeFolder();
             layoutFolders(true);
