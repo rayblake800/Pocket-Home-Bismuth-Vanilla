@@ -47,7 +47,6 @@ public:
 
     //######################### UI Component Data ##############################
     //Defines all component types managed in the config file
-    static const String appMenuButtonKey;
     static const String scrollingAppMenuKey;
     static const String pagedAppMenuKey;
     static const String menuFrameKey;
@@ -60,6 +59,8 @@ public:
     static const String popupMenuKey;
     static const String pageLeftKey;
     static const String pageRightKey;
+    static const String pageUpKey;
+    static const String pageDownKey;
     static const String smallTextKey;
     static const String mediumTextKey;
     static const String largeTextKey;

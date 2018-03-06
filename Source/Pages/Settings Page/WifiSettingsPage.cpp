@@ -267,7 +267,7 @@ void WifiSettingsPage::textEditorReturnKeyPressed(TextEditor & editor)
 /**
  * Set the spinner's bounds within the connection button
  */
-void WifiSettingsPage::pageResized()
+void WifiSettingsPage::connectionPageResized()
 {
     int spinnerSize = connectionButton.getHeight();
 

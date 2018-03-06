@@ -59,7 +59,8 @@ void PageComponent::updateLayout(GridLayoutManager::Layout layout)
 void PageComponent::setMarginFraction(float marginFraction)
 {
 
-    this->marginFraction = marginFraction;
+    horizontalMargin = marginFraction;
+    verticalMargin = marginFraction;
 }
 
 /**
@@ -87,23 +88,42 @@ bool PageComponent::overrideBackButton()
 }
 
 /**
+ * Repositions all page components using the layout manager along with
+ * the margin and padding values.
+ */
+void PageComponent::layoutComponents()
+{
+    Rectangle<int> bounds = getLocalBounds();
+    if (!bounds.isEmpty())
+    {
+        int xMargin = (int) (bounds.getHeight() * horizontalMargin);
+        bounds.reduce(xMargin, (int) bounds.getHeight() * verticalMargin);
+        if(backButton != nullptr)
+        {
+            int overlap = backButton->getRight() - bounds.getX();
+            if(overlap > 0)
+            {
+            bounds.reduce(overlap,0);
+            }
+        }
+        layoutManager.layoutComponents(bounds,
+                (int) bounds.getWidth() * horizontalPadding,
+                (int) bounds.getHeight() * verticalPadding);
+    }
+
+}
+
+/**
  * Recalculate component layout and back button bounds when the page is
  * resized.
  */
 void PageComponent::resized()
 {
-    Rectangle<int> bounds = getLocalBounds();
-    int horizontalMargin = (int) (bounds.getHeight() * marginFraction);
     if (backButton != nullptr)
     {
-
         backButton->applyConfigBounds();
-        horizontalMargin = backButton->getWidth();
     }
-    bounds.reduce(horizontalMargin, (int) bounds.getHeight() * marginFraction);
-    layoutManager.layoutComponents(bounds,
-            (int) bounds.getWidth() * horizontalPadding,
-            (int) bounds.getHeight() * verticalPadding);
+    layoutComponents();
     pageResized();
 }
 

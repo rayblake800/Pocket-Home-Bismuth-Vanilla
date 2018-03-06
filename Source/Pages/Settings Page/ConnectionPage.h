@@ -12,7 +12,7 @@
 #pragma once
 #include "../../Basic Components/ScalingLabel.h"
 #include "../../Basic Components/SwitchComponent.h"
-#include "../../Basic Components/DrawableImageButton.h"
+#include "../../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../../GridLayoutManager.h"
 #include "../../PageComponent.h"
 #include "../../PageStackComponent.h"
@@ -61,6 +61,12 @@ protected:
      * connection details.
      */
     void layoutConnectionPage();
+    
+    /**
+     * Replaces pageResized as the method inheriting classes should override
+     * to execute code whenever the page bounds change.
+     */
+    virtual void connectionPageResized() {}
 
 private:
     /**
@@ -178,6 +184,12 @@ private:
      * @param key
      */
     virtual bool keyPressed(const KeyPress& key) override;
+    
+    /**
+     * Update list navigation buttons to fit the page.
+     */
+    void pageResized() final override;
+
 
     /**
      * Holds the connection button and connection controls for a single
@@ -251,8 +263,8 @@ private:
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionListItem)
     };
 
-    DrawableImageButton nextPageBtn;
-    DrawableImageButton prevPageBtn;
+    ConfigurableImageButton prevPageBtn;
+    ConfigurableImageButton nextPageBtn;
     static const constexpr int connectionsPerPage = 4;
     int connectionIndex = 0;
     OwnedArray<ConnectionListItem> connectionItems;

@@ -10,8 +10,8 @@ personalizeButton("Personalize your homepage"),
 dateTimeButton("Date and time"),
 inputOptionsButton("Input settings"),
 personalizePage(),
-prevArrow("pageUpIcon.svg"),
-nextArrow("pageDownIcon.svg")
+prevArrow(ComponentConfigFile::pageUpKey),
+nextArrow(ComponentConfigFile::pageDownKey)
 {
     setColour(backgroundColourId, Colour(0xffd23c6d));
     std::vector<Button*> allButtons = getButtonList(true);
@@ -19,6 +19,8 @@ nextArrow("pageDownIcon.svg")
     {
         button->addListener(this);
     }
+    addAndMakeVisible(prevArrow);
+    addAndMakeVisible(nextArrow);
     titleLabel.setJustificationType(Justification::centred);
     reloadLayout();
 }
@@ -55,6 +57,8 @@ void AdvancedSettingsPage::reloadLayout()
     setPasswordButton.setButtonText(setPasswordPage.hasPassword() ?
             "Change your password" : "Set your password");
     std::vector<Button*> buttons = getButtonList();
+    prevArrow.setVisible(buttonIndex > 0);
+    nextArrow.setVisible(buttonIndex + buttonsPerPage < buttons.size());
     if (buttonIndex >= buttons.size() || buttonIndex < 0)
     {
         buttonIndex = 0;
@@ -62,11 +66,7 @@ void AdvancedSettingsPage::reloadLayout()
     GridLayoutManager::Layout layout = {
         {4,
             {
-                {&titleLabel, 1}
-            }},
-        {1,
-            {
-                {buttonIndex > 0 ? &prevArrow : nullptr, 1}
+                {buttonIndex > 0 ? nullptr : &titleLabel, 1}
             }}
     };
 
@@ -79,7 +79,7 @@ void AdvancedSettingsPage::reloadLayout()
     }
     layout.push_back({1,
         {
-            {buttonIndex + buttonsPerPage < buttons.size() ? &nextArrow : nullptr, 1}
+            {nullptr, 1}
         }});
     updateLayout(layout);
 }
@@ -138,6 +138,16 @@ void AdvancedSettingsPage::pageButtonClicked(Button * button)
                 PageStackComponent::kTransitionTranslateHorizontal);
     }
 }
+
+/**
+ * Updates the up/down navigation buttons to fit when the page changes
+ * size.
+ */
+void AdvancedSettingsPage::pageResized() {
+    prevArrow.applyConfigBounds();
+    nextArrow.applyConfigBounds();
+ }
+
 
 
 

@@ -163,7 +163,6 @@ const String ComponentConfigFile::use24HrModeKey = "use 24h mode";
 
 //######################### UI Component Data ##############################
 //Defines all component types managed in the config file
-const String ComponentConfigFile::appMenuButtonKey = "app menu buttons";
 const String ComponentConfigFile::scrollingAppMenuKey = "scrolling app menu";
 const String ComponentConfigFile::pagedAppMenuKey = "paged app menu";
 const String ComponentConfigFile::menuFrameKey = "menu frame";
@@ -176,6 +175,8 @@ const String ComponentConfigFile::settingsButtonKey = "settings button";
 const String ComponentConfigFile::popupMenuKey = "popup menu";
 const String ComponentConfigFile::pageLeftKey = "left arrow button";
 const String ComponentConfigFile::pageRightKey = "right arrow button";
+const String ComponentConfigFile::pageUpKey = "up arrow button";
+const String ComponentConfigFile::pageDownKey = "down arrow button";
 const String ComponentConfigFile::smallTextKey = "small text";
 const String ComponentConfigFile::mediumTextKey = "medium text";
 const String ComponentConfigFile::largeTextKey = "large text";
@@ -234,7 +235,7 @@ ComponentConfigFile::ComponentSettings ComponentConfigFile::getComponentSettings
  */
 Array<String> ComponentConfigFile::getComponentKeys()
 {
-    return {appMenuButtonKey,
+    return {
             scrollingAppMenuKey,
             pagedAppMenuKey,
             menuFrameKey,
@@ -247,6 +248,8 @@ Array<String> ComponentConfigFile::getComponentKeys()
             popupMenuKey,
             pageLeftKey,
             pageRightKey,
+            pageUpKey,
+            pageDownKey,
             smallTextKey,
             mediumTextKey,
             largeTextKey};
@@ -258,15 +261,16 @@ Array<String> ComponentConfigFile::getComponentKeys()
  */
 std::vector<ConfigFile::DataKey> ComponentConfigFile::getDataKeys() const
 {
-    std::vector<DataKey> keys ={
-      {maxRowsKey, intType},
-      {maxColumnsKey, intType},
-      {showClockKey, boolType},
-      {use24HrModeKey, boolType}
+    std::vector<DataKey> keys = {
+        {maxRowsKey, intType},
+        {maxColumnsKey, intType},
+        {showClockKey, boolType},
+        {use24HrModeKey, boolType}
     };
     Array<String> colourKeys = getColourKeys();
-    for(const String& colourKey : colourKeys){
-        keys.push_back({colourKey,stringType});
+    for (const String& colourKey : colourKeys)
+    {
+        keys.push_back({colourKey, stringType});
     }
     return keys;
 }

@@ -134,7 +134,7 @@ private:
     /**
      * Set the spinner's bounds within the connection button
      */
-    void pageResized() override;
+    void connectionPageResized() override;
 
     //Wifi icons for all signal strengths
     static const Array<String> wifiImageFiles;

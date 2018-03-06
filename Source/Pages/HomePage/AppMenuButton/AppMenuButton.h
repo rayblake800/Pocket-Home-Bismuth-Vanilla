@@ -14,8 +14,7 @@
 #include "../Popup Editor Components/AppMenuPopupEditor.h"
 #include "AppMenuItem.h"
 
-class AppMenuButton : public Button, public ReferenceCountedObject,
-public ConfigurableComponent {
+class AppMenuButton : public Button, public ReferenceCountedObject{
 public:
     typedef ReferenceCountedObjectPtr<AppMenuButton> Ptr;
 

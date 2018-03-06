@@ -6,7 +6,8 @@
 PagedAppMenu::PagedAppMenu(OverlaySpinner& loadingSpinner) :
 AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
 pageLeft(ComponentConfigFile::pageLeftKey),
-pageRight(ComponentConfigFile::pageRightKey)
+pageRight(ComponentConfigFile::pageRightKey),
+closeFolderBtn(ComponentConfigFile::pageUpKey)
 {
     addTrackedKeys({
         ComponentConfigFile::maxRowsKey,
@@ -17,12 +18,20 @@ pageRight(ComponentConfigFile::pageRightKey)
     maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
     buttonsPerPage = maxRows*maxColumns;
 
-    pageLeft.addListener(this);
-    pageRight.addListener(this);
     addAndMakeVisible(pageLeft);
-    addAndMakeVisible(pageRight);
+    pageLeft.setWantsKeyboardFocus(false);
     pageLeft.setAlwaysOnTop(true);
+    pageLeft.addListener(this);
+
+    addAndMakeVisible(pageRight);
+    pageRight.setWantsKeyboardFocus(false);
     pageRight.setAlwaysOnTop(true);
+    pageRight.addListener(this);
+
+    addAndMakeVisible(closeFolderBtn);
+    closeFolderBtn.setWantsKeyboardFocus(false);
+    closeFolderBtn.setAlwaysOnTop(true);
+    closeFolderBtn.addListener(this);
 }
 
 PagedAppMenu::~PagedAppMenu() { }
@@ -58,27 +67,15 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
             (openFolders.getLast());
     int selectedIndex = folder->getSelectedIndex();
     int currentPage = folder->getCurrentFolderPage();
-    if(folder->getSelectionPage() != currentPage)
+    if (folder->getSelectionPage() != currentPage)
     {
         folder->deselect();
         selectedIndex = -1;
     }
-    int lastRowIndex = maxRows-1;
-    int lastColumnIndex = maxColumns-1;
-    if (currentPage == folder->getNumFolderPages() - 1)
-    {
-        int folderIndex = folder->size() % buttonsPerPage;
-        lastColumnIndex = (folderIndex % maxColumns) -1;
-        lastRowIndex = folderIndex / maxColumns;
-        if(lastColumnIndex == 0)
-        {
-            lastRowIndex--;
-        }
-    }
     int newRow = 0;
     int newColumn = 0;
-    DBG(String("On selected index ")+String(selectedIndex)+String(", pressed key ")
-            +key.getTextDescription());
+    DBG(String("On selected index ") + String(selectedIndex) + String(", pressed key ")
+            + key.getTextDescription());
     if (selectedIndex == -1)
     {
         if (key.isKeyCode(KeyPress::escapeKey))
@@ -89,8 +86,13 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
         else if (key.isKeyCode(KeyPress::leftKey)
                  || key.isKeyCode(KeyPress::upKey))
         {
-            newRow = lastRowIndex;
-            newColumn = lastColumnIndex;
+            int targetIndex = std::min((currentPage + 1) * buttonsPerPage - 1,
+                    folder->size() - 1);
+            if (folder->selectIndex(targetIndex))
+            {
+                folder->repaint();
+            }
+            return true;
         }
         else if (!(key.isKeyCode(KeyPress::rightKey)
                    || key.isKeyCode(KeyPress::returnKey)
@@ -132,11 +134,15 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
         else if (key.isKeyCode(KeyPress::rightKey))
         {
             newColumn++;
-            if (newColumn >= maxColumns || 
-                (newColumn > lastColumnIndex && newRow >= lastRowIndex))
+            if (newColumn >= maxColumns)
             {
                 newColumn = 0;
                 newPage++;
+                while (folder->positionIndex(newPage, newColumn, newRow) >=
+                       folder->size() && newRow > 0)
+                {
+                    newRow--;
+                }
             }
         }
         else if (key.isKeyCode(KeyPress::upKey))
@@ -148,9 +154,15 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
         }
         else if (key.isKeyCode(KeyPress::downKey))
         {
-            if (newRow < lastRowIndex)
+            if (newRow < (maxRows - 1))
             {
                 newRow++;
+            }
+
+            while (folder->positionIndex(newPage, newColumn, newRow) >=
+                   folder->size() && newColumn > 0)
+            {
+                newColumn--;
             }
         }
         else
@@ -183,10 +195,10 @@ void PagedAppMenu::layoutFolders(bool animateTransition)
     {
         return;
     }
-
     pageLeft.applyConfigBounds();
     pageRight.applyConfigBounds();
-    int leftEdge = 1;
+    closeFolderBtn.applyConfigBounds();
+    int topEdge = 1;
     for (int i = openFolders.size() - 1; i >= 0; i--)
     {
         PageAppFolder* folder = static_cast<PageAppFolder*> (openFolders[i]);
@@ -196,19 +208,16 @@ void PagedAppMenu::layoutFolders(bool animateTransition)
 
         Rectangle<int> bounds = getLocalBounds();
         bounds.setWidth(getWidth() * numFolderPages);
-        if (leftEdge > 0)
+        bounds.setX(-getWidth() * folderPage);
+        if (topEdge < 1)
         {
-            bounds.setX(-getWidth() * folderPage);
+            bounds.setY(topEdge - getHeight());
         }
-        else
-        {
-            bounds.setRight(leftEdge);
-        }
-        leftEdge = bounds.getX();
+        topEdge = bounds.getY();
 
         if (folder->getBounds().isEmpty())
         {
-            folder->setBounds(bounds.withX(getRight()));
+            folder->setBounds(bounds.withY(getBottom()));
         }
         float margin = (float) pageLeft.getWidth()
                 / (float) bounds.getWidth();
@@ -221,7 +230,7 @@ void PagedAppMenu::layoutFolders(bool animateTransition)
         if (animateTransition)
         {
             Desktop::getInstance().getAnimator().animateComponent(folder,
-                    bounds, 1, 500, true, 1, 1);
+                    bounds, 1, 250, true, 1, 1);
         }
         else
         {
@@ -233,10 +242,13 @@ void PagedAppMenu::layoutFolders(bool animateTransition)
         {
             bool showLeft = folderPage > 0;
             bool showRight = folderPage < (numFolderPages - 1);
+            bool showUp = openFolders.size() > 1;
             pageLeft.setVisible(showLeft);
             pageLeft.setEnabled(showLeft);
             pageRight.setVisible(showRight);
             pageRight.setEnabled(showRight);
+            closeFolderBtn.setVisible(showUp);
+            closeFolderBtn.setEnabled(showUp);
         }
     }
 }
@@ -290,8 +302,16 @@ void PagedAppMenu::loadConfigProperties(ConfigFile* config, String key)
 void PagedAppMenu::buttonClicked(Button* button)
 {
     if (openFolders.isEmpty() ||
-        !(button == &pageLeft || button == &pageRight))
+        !(button == &pageLeft 
+          || button == &pageRight
+          || button == &closeFolderBtn))
     {
+        return;
+    }
+    if(button == &closeFolderBtn && openFolders.size() > 1)
+    {
+        closeFolder();
+        layoutFolders(true);
         return;
     }
     PageAppFolder* folder = static_cast<PageAppFolder*>
@@ -374,7 +394,7 @@ GridLayoutManager::Layout PagedAppMenu::PageAppFolder::buildFolderLayout
     int numAppColumns = maxColumns*numPages;
     int numPaddingGaps = numAppColumns - 1;
 
-    int spacerSize = getMargin() * getWidth();
+    int spacerSize = getMargin() * getWidth() * 2;
     int paddingSize = getXPadding() * getWidth();
     //the +2 to numSpacers is to account for the two margins
     int buttonSize = (getWidth() - (numSpacers + 2) * spacerSize
@@ -523,6 +543,23 @@ int PagedAppMenu::PageAppFolder::getSelectionRow()
 }
 
 /**
+ * Finds what index value a button would have at a particular
+ * position within the folder.
+ */
+int PagedAppMenu::PageAppFolder::positionIndex(int page, int column, int row)
+{
+    if (page < 0 || column < 0 || row < 0 ||
+        page >= getNumFolderPages()
+        || column >= maxColumns
+        || row >= maxRows)
+    {
+        return -1;
+    }
+    return page * maxColumns * maxRows
+            + row * maxColumns + column;
+}
+
+/**
  * Set the button selection based on its position in the
  * folder.  The selection will not change if there isn't
  * a button located at the given position.  If necessary,
@@ -540,18 +577,8 @@ bool PagedAppMenu::PageAppFolder::setSelectedPosition(int page, int column, int 
 {
     DBG(String("Setting selected page=") + String(page) + String(" column=") +
             String(column) + String(" row=") + String(row));
-    if (page < 0 || column < 0 || row < 0 ||
-        page >= getNumFolderPages()
-        || column >= maxColumns
-        || row >= maxRows)
-    {
-        DBG("Failed; invalid index");
-        return false;
-    }
-    int newIndex = page * maxColumns * maxRows
-            + row * maxColumns + column;
-    DBG(String("button index selecting=") + String(newIndex));
-    return selectIndex(newIndex) && setCurrentFolderPage(page);
+    return selectIndex(positionIndex(page, column, row))
+            && setCurrentFolderPage(page);
 }
 
 /**
@@ -566,7 +593,7 @@ void PagedAppMenu::PageAppFolder::resized()
         Rectangle<int> parentBounds = parent->getLocalBounds();
         if (bounds.getWidth() > 0)
         {
-            setPadding(0.5 / (maxColumns * 2) * parentBounds.getWidth()
+            setPadding(0.5 / (maxColumns * 20) * parentBounds.getWidth()
                     / bounds.getWidth(),
                     0.5 / (maxRows * 2) * parentBounds.getHeight()
                     / bounds.getHeight());
@@ -592,7 +619,7 @@ PagedAppMenu::PageMenuButton::~PageMenuButton() { }
 void PagedAppMenu::PageMenuButton::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
-    DBG(getName()+String(" bounds:")+bounds.toString());
+    DBG(getName() + String(" bounds:") + bounds.toString());
     if (bounds.isEmpty())
     {
         return;
@@ -602,30 +629,18 @@ void PagedAppMenu::PageMenuButton::resized()
     Font titleFont = fontResizedToFit(getTitleFont(),
             getMenuItem()->getAppName(), textBounds.toNearestInt());
     ComponentConfigFile config;
-    int minTextHeight = config.getComponentSettings
+    int textHeight = config.getComponentSettings
             (ComponentConfigFile::smallTextKey).getBounds().getHeight();
-    int maxTextHeight = config.getComponentSettings
-            (ComponentConfigFile::mediumTextKey).getBounds().getHeight();
-    if (bounds.getAspectRatio() < 2)
+
+    imageBounds.setHeight(imageBounds.getWidth());
+    textBounds.setTop(imageBounds.getBottom());
+    if (textBounds.getHeight() < textHeight + 4)
     {
-        imageBounds.setHeight(imageBounds.getWidth());
-        textBounds.setTop(imageBounds.getBottom());
-        if (textBounds.getHeight() < minTextHeight + 2)
-        {
-            textBounds.setTop(bounds.getBottom()-(minTextHeight + 2));
-            imageBounds.setBottom(textBounds.getY());
-        }
+        textBounds.setTop(bounds.getBottom()-(textHeight + 4));
+        imageBounds.setBottom(textBounds.getY());
     }
-    else
-    {
-        int textLeft = bounds.getX() + bounds.getHeight();
-        textBounds.setLeft(textLeft);
-        imageBounds.setRight(textLeft);
-    }
-    int textHeight = config.getFontHeight(textBounds.toNearestInt(),
-            getMenuItem()->getAppName());
-    jassert(textHeight <= textBounds.getHeight());
-    titleFont.setHeight(std::min(textHeight, minTextHeight));
+
+    titleFont.setHeight(textHeight);
     setTextBounds(textBounds);
     setImageBounds(imageBounds);
     setTitleFont(titleFont);

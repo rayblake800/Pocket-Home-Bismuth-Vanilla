@@ -43,6 +43,12 @@ private:
      * buttons.
      */
     void pageButtonClicked(Button*) override;
+    
+    /**
+     * Updates the up/down navigation buttons to fit when the page changes
+     * size.
+     */
+    void pageResized();
 
 
     //Title of the page: "Advanced Settings"
@@ -61,8 +67,8 @@ private:
     InputSettingsPage inputPage;
 
     //Next and previous buttons for scrolling page buttons
-    DrawableImageButton prevArrow;
-    DrawableImageButton nextArrow;
+    ConfigurableImageButton prevArrow;
+    ConfigurableImageButton nextArrow;
 
     //Number of page buttons to show on the screen at a time
     static const int buttonsPerPage = 4;

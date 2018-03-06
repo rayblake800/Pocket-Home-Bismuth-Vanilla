@@ -3,8 +3,11 @@
  *
  * AppMenuComponent is a scrolling application menu that loads its
  * contents from system .Desktop files and an AppConfigFile object.
- * It provides user interface tools for launching applications, and for
- * editing its own menu entries.
+ * The menu is divided into folders, which can contain different sets of menu 
+ * buttons to launch applications or open sub-folders.  The user can navigate
+ * through these folders and select menu items to launch applications or open
+ * new folders.  The menu also provides controls for adding, editing, and 
+ * deleting menu entries.
  */
 
 #pragma once
@@ -46,7 +49,7 @@ public:
     /**
      * Open the pop-up menu used for editing this object.
      * @param selectionMenu if true, the pop-up menu contains only options for 
-     * editing the selected menu button.
+     * editing the selected menu button in the active folder.
      */
     void openPopupMenu(bool selectionMenu);
 
@@ -70,30 +73,38 @@ protected:
 
 
     /**
-     * close the last opened folder, removing all contained buttons from
-     * view
+     * Close the active folder, removing it and all folders after it from
+     * the menu component.
      */
     void closeFolder();
+    
+    /**
+     * Sets which open folder is currently focused.  This value will change to
+     * the index of the last open folder whenever a folder opens or closes.
+     * @param folder must be a valid folder index, or the active folder index
+     * will not change.
+     */
+    void setActiveFolderIndex(int folder);
+    
+    /**
+     * Get the index of the active folder.  AppMenuComponents should center the
+     * folder layout on the active folder, and apply key controls to that
+     * folder's menu items.
+     * @return The active folder index, usually the last open folder.
+     * Returns 0 if no folders are open.
+     */
+    int getActiveFolderIndex();
 
     /**
-     * Trigger a click for the selected button in the last opened AppFolder
+     * Trigger a click for the selected button in the active AppFolder
      */
     void clickSelected();
 
     /**
-     * Open a PopupEditorComponent for editing the selected button in the last
-     * opened AppFolder.
+     * Open a PopupEditorComponent for editing the selected button in the active
+     * AppFolder.
      */
     void openEditorForSelected();
-
-    /**
-     * Offset the selected button index in the last opened AppFolder.
-     * @param offset will be added to the index if index + offset is a valid
-     * index.
-     * @return true if the selected button index changed, false if index +
-     * offset was an invalid index and the selection did not change. 
-     */
-    bool changeSelection(int offset);
 
     /**
      * Updates the folder component layout, optionally animating the transition.
@@ -125,19 +136,21 @@ private:
     void resized() override;
 
     /**
-     * @return the selected button in the last opened folder, or nullptr if
-     * the last folder is empty or no folders are open.
-     */
-    AppMenuButton::Ptr getSelectedButton();
-
-    /**
      * Open an application category folder, creating or adding 
      * AppMenuButtons for all associated desktop applications.
+     * If any folders after the active folder are already open, they
+     * will first be closed.
      * 
      * @param folderItem defines the folder and provides all 
      * AppMenuItem objects.
      */
     void openFolder(AppMenuItem::Ptr folderItem);
+
+    /**
+     * @return the selected button in the active folder, or nullptr if
+     * the active folder is empty or no folders are open.
+     */
+    AppMenuButton::Ptr getSelectedButton();
 
     /**
      * Adds and shows a new pop-up editor component, safely removing any previous
@@ -174,6 +187,8 @@ private:
      */
     void setLoadingState(bool loading);
 
+    //currently focused folder index
+    int activeFolderIndex = 0;
     //Launches applications from the menu
     AppLauncher appLauncher;
     //Page lading spinner reference

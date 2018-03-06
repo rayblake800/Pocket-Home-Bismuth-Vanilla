@@ -41,17 +41,17 @@ void AppMenuComponent::exitLoadingState()
 /**
  * Open the pop-up menu used for editing this object.
  * @param selectionMenu if true, the pop-up menu contains only options for 
- * editing the selected menu button.
+ * editing the selected menu button in the active folder.
  */
 void AppMenuComponent::openPopupMenu(bool selectionMenu)
 {
-    if (isLoading())
+    if (openFolders.isEmpty() || isLoading())
     {
         return;
     }
     PopupMenu appMenu;
     AppMenuButton::Ptr selectedButton = selectionMenu ?
-            openFolders.getLast()->getSelectedButton() : nullptr;
+            openFolders[getActiveFolderIndex()]->getSelectedButton() : nullptr;
 
     AppMenuItem::Ptr selectedMenuItem = selectedButton == nullptr ?
             nullptr : selectedButton->getMenuItem();
@@ -84,7 +84,7 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
         {
             appMenu.addItem(4, "New application link");
         }
-        else if (openFolders.size() > 1)
+        else if (getActiveFolderIndex() > 0)
         {
             appMenu.addItem(6, "Pin to favorites");
         }
@@ -104,7 +104,7 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
         appMenu.addItem(5, "New folder");
     }
 
-    AppFolder* lastFolder = openFolders.getLast();
+    AppFolder* activeFolder = openFolders[getActiveFolderIndex()];
     const int selection = appMenu.show();
     std::function<void() > confirmNew = [this]()
     {
@@ -114,12 +114,12 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
     switch (selection)
     {
         case 1://User selects "Edit"
-            showMenuButtonEditor(lastFolder->getSelectedButton());
+            showMenuButtonEditor(activeFolder->getSelectedButton());
             break;
         case 2://User selects "Delete"
-            selectedButton->confirmRemoveButtonSource([this, lastFolder]()
+            selectedButton->confirmRemoveButtonSource([this, activeFolder]()
             {
-                lastFolder->removeButton(lastFolder->getSelectedIndex());
+                activeFolder->removeButton(activeFolder->getSelectedIndex());
                 layoutFolders(false);
             });
             break;
@@ -159,12 +159,12 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
             break;
         }
         case 7://User selects "Move back"
-            lastFolder->swapButtons(lastFolder->getSelectedIndex(),
-                    lastFolder->getSelectedIndex() - 1);
+            activeFolder->swapButtons(activeFolder->getSelectedIndex(),
+                    activeFolder->getSelectedIndex() - 1);
             break;
         case 8://User selects "Move forward"
-            lastFolder->swapButtons(lastFolder->getSelectedIndex(),
-                    lastFolder->getSelectedIndex() + 1);
+            activeFolder->swapButtons(activeFolder->getSelectedIndex(),
+                    activeFolder->getSelectedIndex() + 1);
     }
 }
 
@@ -200,7 +200,8 @@ void AppMenuComponent::loadBaseFolder()
         {
             DBG("Loading desktop entries complete, creating base folder");
             setLoadingState(false);
-            openFolder(AppMenuItemFactory::createBaseFolderItem(desktopEntries));
+            openFolder(AppMenuItemFactory::createBaseFolderItem
+                    (desktopEntries));
             openFolders.getFirst()->selectIndex(savedIndex);
             layoutFolders(false);
         });
@@ -208,21 +209,55 @@ void AppMenuComponent::loadBaseFolder()
 }
 
 /**
- * close the last opened folder, removing all contained buttons from
- * view
+ * Close the active folder, removing it and all folders after it from
+ * the menu component.
  */
 void AppMenuComponent::closeFolder()
 {
     if (openFolders.size() > 0)
     {
         DBG(String("Closing folder ") + String(openFolders.size()));
-        removeChildComponent(openFolders.getLast());
-        openFolders.removeLast();
+        if (getActiveFolderIndex() == openFolders.size() - 1)
+        {
+            setActiveFolderIndex(getActiveFolderIndex() - 1);
+            layoutFolders(true);
+        }
+        while (!openFolders.isEmpty()
+               && getActiveFolderIndex() < openFolders.size() - 1)
+        {
+            removeChildComponent(openFolders.getLast());
+            openFolders.removeLast();
+        }
     }
 }
 
 /**
- * Trigger a click for the selected button in the last opened AppFolder
+ * Sets which open folder is currently focused.  This value will change to
+ * the index of the last open folder whenever a folder opens or closes.
+ */
+void AppMenuComponent::setActiveFolderIndex(int folder)
+{
+    if (folder >= 0 && folder < openFolders.size())
+    {
+        activeFolderIndex = folder;
+    }
+}
+
+/**
+ * Get the index of the active folder.  AppMenuComponents should center the
+ * folder layout on the active folder, and apply key controls to that
+ * folder's menu items.
+ */
+int AppMenuComponent::getActiveFolderIndex()
+{
+    activeFolderIndex = median<int>(0,
+                                    activeFolderIndex,
+                                    openFolders.size() - 1);
+    return activeFolderIndex;
+}
+
+/**
+ * Trigger a click for the selected button in the active AppFolder
  */
 void AppMenuComponent::clickSelected()
 {
@@ -234,8 +269,8 @@ void AppMenuComponent::clickSelected()
 }
 
 /**
- * Open a PopupEditorComponent for editing the selected button in the last
- * opened AppFolder.
+ * Open a PopupEditorComponent for editing the selected button in the active 
+ * AppFolder.
  */
 void AppMenuComponent::openEditorForSelected()
 {
@@ -244,50 +279,6 @@ void AppMenuComponent::openEditorForSelected()
     {
         showMenuButtonEditor(selected);
     }
-}
-
-/**
- * Offset the selected button index in the last opened AppFolder.
- * @param offset will be added to the index if index + offset is a valid
- * index.
- * @return true if the selected button index changed, false if index +
- * offset was an invalid index and the selection did not change. 
- */
-bool AppMenuComponent::changeSelection(int offset)
-{
-    AppFolder * lastFolder = openFolders.getLast();
-    if (lastFolder == nullptr ||
-        !lastFolder->selectIndex(lastFolder->getSelectedIndex() + offset))
-    {
-        return false;
-    }
-    layoutFolders(true);
-    return true;
-}
-
-/**
- * @return the selected button in the last opened folder, or nullptr if
- * the last folder is empty or no folders are open.
- */
-AppMenuButton::Ptr AppMenuComponent::getSelectedButton()
-{
-    if (!openFolders.isEmpty() && openFolders.getLast()->size() > 0)
-    {
-        return openFolders.getLast()->getSelectedButton();
-    }
-    return nullptr;
-}
-
-/**
- * Open an application category folder, creating or adding 
- * AppMenuButtons for all associated desktop applications.
- */
-void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
-{
-    DBG("Opening new folder");
-    AppFolder* newFolder = createFolderObject(folderItem);
-    openFolders.add(newFolder);
-    addAndMakeVisible(newFolder);
 }
 
 /**
@@ -305,6 +296,41 @@ void AppMenuComponent::resized()
                 bounds.getCentreY());
     }
     layoutFolders(false);
+}
+
+/**
+ * Open an application category folder, creating or adding 
+ * AppMenuButtons for all associated desktop applications.
+ * If any folders after the active folder are already open, they
+ * will first be closed.
+ */
+void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
+{
+    DBG("Opening new folder");
+
+    while (getActiveFolderIndex() < openFolders.size() - 1)
+    {
+        removeChildComponent(openFolders.getLast());
+        openFolders.removeLast();
+    }
+    AppFolder* newFolder = createFolderObject(folderItem);
+
+    openFolders.add(newFolder);
+    setActiveFolderIndex(openFolders.size() - 1);
+    addAndMakeVisible(newFolder);
+}
+
+/**
+ * @return the selected button in the active folder, or nullptr if
+ * the active folder is empty or no folders are open.
+ */
+AppMenuButton::Ptr AppMenuComponent::getSelectedButton()
+{
+    if (!openFolders.isEmpty())
+    {
+        return openFolders[getActiveFolderIndex()]->getSelectedButton();
+    }
+    return nullptr;
 }
 
 /**
@@ -371,7 +397,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
         }
         //if the button is not in the last opened folder, close folders until
         //the button's folder is the last one.  Then, select the button.
-        while (i < openFolders.size() - 1)
+        while (i < getActiveFolderIndex())
         {
             closeFolder();
             if (i == openFolders.size() - 1)
@@ -598,8 +624,9 @@ void AppMenuComponent::AppFolder::insertButton
     folderButtons.insert(index, menuButton);
     if (selectedIndex >= index)
     {
-        DBG(String("index pushed from ") + String(selectedIndex) + String(" to ")
-                + String(selectedIndex + 1) + String(" after insert at ") + String(index));
+        DBG(String("index pushed from ") + String(selectedIndex)
+                + String(" to ") + String(selectedIndex + 1)
+                + String(" after insert at ") + String(index));
         selectedIndex++;
     }
     if (updateLayout)
@@ -723,6 +750,3 @@ void AppMenuComponent::AppFolder::layoutButtons()
         resized();
     }
 }
-
-
-

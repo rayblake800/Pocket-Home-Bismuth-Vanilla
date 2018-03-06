@@ -79,7 +79,8 @@ protected:
     
     /**
      * Sets the amount of space to leave between page components and the edges
-     * of the page.
+     * of the page.  Note that margins don't affect the back button, and if
+     * necessary they will be expanded to make room for the back button.
      * 
      * @param marginFraction this value is multiplied by the page height to
      * get the margin size in pixels.
@@ -97,7 +98,13 @@ protected:
      * find the amount of horizontal empty space (in pixels) to leave between 
      * components.
      */
-    void setPadding(float verticalFraction,float horizontalFraction);
+    void setPadding(float verticalFraction,float horizontalFraction);  
+    
+    /**
+     * Repositions all page components using the layout manager along with
+     * the margin and padding values.
+     */
+    void layoutComponents();
 private:
     /**
      * Inheriting classes can override this method to change the behavior of the
@@ -108,6 +115,7 @@ private:
      * the back button to remove the page as usual.
      */
     virtual bool overrideBackButton(); 
+ 
     
     /**
      * Recalculate component layout and back button bounds when the page is
@@ -129,7 +137,8 @@ private:
     
     bool backButtonOnRight;
     GridLayoutManager layoutManager;
-    float marginFraction = 0.05;
+    float horizontalMargin = 0.05;
+    float verticalMargin = 0.05;
     float verticalPadding = 0.05;
     float horizontalPadding = 0.05;
     ScopedPointer<ConfigurableImageButton> backButton = nullptr;

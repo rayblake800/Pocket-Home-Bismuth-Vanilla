@@ -5,12 +5,10 @@
 AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem,
         IconThread& iconThread, String name) :
 Button(name),
-ConfigurableComponent(ComponentConfigFile::appMenuButtonKey),
 menuItem(menuItem),
 iconThread(iconThread)
 {
 
-    loadAllConfigProperties();
     setName(name);
     setWantsKeyboardFocus(false);
     loadIcon(menuItem->getIconName());

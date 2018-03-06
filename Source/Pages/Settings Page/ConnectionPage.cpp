@@ -5,12 +5,14 @@
 template<class ConnectionPoint>
 ConnectionPage<ConnectionPoint>::ConnectionPage() :
 PageComponent("ConnectionPage",{}, true),
-nextPageBtn("pageDownIcon.svg"),
-prevPageBtn("pageUpIcon.svg"),
+prevPageBtn(ComponentConfigFile::pageUpKey),
+nextPageBtn(ComponentConfigFile::pageDownKey),
 selectedConnection(ConnectionPoint::null)
 {
-    nextPageBtn.addListener(this);
     prevPageBtn.addListener(this);
+    nextPageBtn.addListener(this);
+    addAndMakeVisible(prevPageBtn);
+    addAndMakeVisible(nextPageBtn);
 }
 
 template<class ConnectionPoint>
@@ -112,10 +114,9 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
 {
     GridLayoutManager::Layout layout;
     bool showList = (selectedConnection == ConnectionPoint::null);
-    layout.push_back({1,
-        {
-            {(connectionIndex > 0 && showList) ? &prevPageBtn : nullptr, 1}
-        }});
+    prevPageBtn.setVisible(connectionIndex > 0 && showList);
+    nextPageBtn.setVisible(connectionItems.size() > connectionIndex
+            + connectionsPerPage && showList);
     int rowWeight = 2;
     if (!showList)
     {
@@ -149,11 +150,6 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
                 }});
         }
     }
-    layout.push_back({1,
-        {
-            {(connectionItems.size() > connectionIndex + connectionsPerPage
-              && showList) ? &nextPageBtn : nullptr, 1}
-        }});
     updateLayout(layout);
 }
 
@@ -210,6 +206,9 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
             {
                 connectionIndex = 0;
             }
+
+            DBG(String("Connection index set to ") + String(connectionIndex)
+                    + String(" of ") + String(connections.size()));
             layoutConnectionPage();
         }
     }
@@ -219,6 +218,9 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
         {
 
             connectionIndex += connectionsPerPage;
+
+            DBG(String("Connection index set to ") + String(connectionIndex)
+                    + String(" of ") + String(connections.size()));
             layoutConnectionPage();
         }
     }
@@ -272,6 +274,23 @@ bool ConnectionPage<ConnectionPoint>::keyPressed(const KeyPress& key)
         setSelectedConnection(ConnectionPoint::null);
     }
 };
+
+/**
+ * Update list navigation buttons to fit the page.
+ */
+template<class ConnectionPoint>
+void ConnectionPage<ConnectionPoint>::pageResized()
+{
+    if (!getBounds().isEmpty())
+    {
+        prevPageBtn.applyConfigBounds();
+        nextPageBtn.applyConfigBounds();
+        setMarginFraction((float) (prevPageBtn.getBottom() + getWidth() / 50)
+                / (float) getHeight());
+        layoutComponents();
+    }
+    connectionPageResized();
+}
 
 /**
  * Create a new ConnectionListItem representing a ConnectionPoint

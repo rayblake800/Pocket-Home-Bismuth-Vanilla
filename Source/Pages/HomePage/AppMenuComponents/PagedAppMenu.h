@@ -62,7 +62,7 @@ private:
     int buttonsPerPage = 1;
 
     //navigation buttons
-
+    ConfigurableImageButton closeFolderBtn;
     ConfigurableImageButton pageLeft;
     ConfigurableImageButton pageRight;
 
@@ -146,6 +146,17 @@ private:
          * folder page, or -1 if there is no selection.
          */
         int getSelectionRow();
+        
+        /**
+         * Finds what index value a button would have at a particular
+         * position within the folder.
+         * @param page folder page index
+         * @param column folder page column index
+         * @param row folder page row index
+         * @return button index value, or -1 for invalid
+         *  positions
+         */
+        int positionIndex(int page, int column, int row);
 
         /**
          * Set the button selection based on its position in the
