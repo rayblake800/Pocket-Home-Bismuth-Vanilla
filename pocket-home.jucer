@@ -27,8 +27,6 @@
               file="Source/Basic Components/FileSelectTextEditor.cpp"/>
         <FILE id="NCotgj" name="FileSelectTextEditor.h" compile="0" resource="0"
               file="Source/Basic Components/FileSelectTextEditor.h"/>
-        <FILE id="CHuJ0i" name="Grid.cpp" compile="1" resource="0" file="Source/Basic Components/Grid.cpp"/>
-        <FILE id="HWGQHF" name="Grid.h" compile="0" resource="0" file="Source/Basic Components/Grid.h"/>
         <FILE id="GudXZR" name="IconSliderComponent.cpp" compile="1" resource="0"
               file="Source/Basic Components/IconSliderComponent.cpp"/>
         <FILE id="KKwMqh" name="IconSliderComponent.h" compile="0" resource="0"

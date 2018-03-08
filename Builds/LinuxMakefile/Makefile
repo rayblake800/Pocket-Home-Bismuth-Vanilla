@@ -69,7 +69,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/DrawableImageButton_3a059f31.o \
   $(JUCE_OBJDIR)/DrawableImageComponent_6182aea8.o \
   $(JUCE_OBJDIR)/FileSelectTextEditor_3a9868fa.o \
-  $(JUCE_OBJDIR)/Grid_db974b8e.o \
   $(JUCE_OBJDIR)/IconSliderComponent_1c60ba5.o \
   $(JUCE_OBJDIR)/ListEditor_42725b33.o \
   $(JUCE_OBJDIR)/OverlaySpinner_eb9f06b1.o \
@@ -173,11 +172,6 @@ $(JUCE_OBJDIR)/DrawableImageComponent_6182aea8.o: ../../Source/Basic\ Components
 $(JUCE_OBJDIR)/FileSelectTextEditor_3a9868fa.o: ../../Source/Basic\ Components/FileSelectTextEditor.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling FileSelectTextEditor.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/Grid_db974b8e.o: ../../Source/Basic\ Components/Grid.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling Grid.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/IconSliderComponent_1c60ba5.o: ../../Source/Basic\ Components/IconSliderComponent.cpp

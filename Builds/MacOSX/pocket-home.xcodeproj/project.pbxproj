@@ -15,7 +15,6 @@
 		269595AEBD81E104ADA4B657 = {isa = PBXBuildFile; fileRef = 4BB769DA994304C755266267; };
 		A0AE5B77AD8C7BE370B6C3D6 = {isa = PBXBuildFile; fileRef = D4282739BFD2B90CD80F616E; };
 		32650F706B688C1458F19860 = {isa = PBXBuildFile; fileRef = 6C236952145F806DB0A83B29; };
-		F5739E8B1092BA7644E6A153 = {isa = PBXBuildFile; fileRef = D464520A570FD77CFE0F189B; };
 		14E20475B0860978B8579431 = {isa = PBXBuildFile; fileRef = E890A15341BD2069C3332D04; };
 		D1B2B435ED732169EB7A2929 = {isa = PBXBuildFile; fileRef = 1DF9FBDA1153F68D874DF332; };
 		A3EF6D62D441B569D56DDF1E = {isa = PBXBuildFile; fileRef = 4094CC4F575A5FBF8482C862; };
@@ -220,7 +219,6 @@
 		B2D10FD1DCA09407DD81E3D9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiStatusJson.cpp; path = ../../Source/Wifi/WifiStatusJson.cpp; sourceTree = "SOURCE_ROOT"; };
 		B304BC7BACFAEF95CA04D016 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiStatus.h; path = ../../Source/Wifi/WifiStatus.h; sourceTree = "SOURCE_ROOT"; };
 		B5DCAF01E0490D7413E9E85F = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		B8C5B7D70115A28F84F95E15 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Grid.h; path = "../../Source/Basic Components/Grid.h"; sourceTree = "SOURCE_ROOT"; };
 		B94C2F923BB6221709D9433F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuItem.cpp; path = "../../Source/Pages/HomePage/AppMenu/Menu Items/AppMenuItem.cpp"; sourceTree = "SOURCE_ROOT"; };
 		B9E340EA9A956BD2BA09D533 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SetPasswordPage.cpp; path = ../../Source/Pages/SetPasswordPage.cpp; sourceTree = "SOURCE_ROOT"; };
 		BA409328FD5046C2FF2B99EB = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NewConfigAppEditor.cpp; path = "../../Source/Pages/HomePage/AppMenu/Menu Editors/NewConfigAppEditor.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -240,7 +238,6 @@
 		D321A2A7F3902A6E3E8EE5B6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesktopEntry.h; path = ../../Source/Pages/HomePage/DesktopEntry.h; sourceTree = "SOURCE_ROOT"; };
 		D330FC789139FBBF1E05AFD8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesktopEntryMenuItem.h; path = "../../Source/Pages/HomePage/AppMenu/Menu Items/DesktopEntryMenuItem.h"; sourceTree = "SOURCE_ROOT"; };
 		D4282739BFD2B90CD80F616E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DrawableImageComponent.cpp; path = "../../Source/Basic Components/DrawableImageComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
-		D464520A570FD77CFE0F189B = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Grid.cpp; path = "../../Source/Basic Components/Grid.cpp"; sourceTree = "SOURCE_ROOT"; };
 		D65C4BB2BB7FF0F9581BFC86 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PopupEditorComponent.cpp; path = "../../Source/Basic Components/PopupEditorComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		D730A48F229DCFAF6D90F329 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = InputSettingsPage.h; path = ../../Source/Pages/InputSettingsPage.h; sourceTree = "SOURCE_ROOT"; };
 		D8560E07699CC6FFA71E9D86 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiSettingsPage.cpp; path = "../../Source/Pages/Settings Page/WifiSettingsPage.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -285,8 +282,6 @@
 					EE780BD61AFA4B57438287D8,
 					6C236952145F806DB0A83B29,
 					FDD101150218A66EAB09948D,
-					D464520A570FD77CFE0F189B,
-					B8C5B7D70115A28F84F95E15,
 					E890A15341BD2069C3332D04,
 					884B6D2E2F6E9C771B088554,
 					1DF9FBDA1153F68D874DF332,
@@ -646,7 +641,6 @@
 					269595AEBD81E104ADA4B657,
 					A0AE5B77AD8C7BE370B6C3D6,
 					32650F706B688C1458F19860,
-					F5739E8B1092BA7644E6A153,
 					14E20475B0860978B8579431,
 					D1B2B435ED732169EB7A2929,
 					A3EF6D62D441B569D56DDF1E,

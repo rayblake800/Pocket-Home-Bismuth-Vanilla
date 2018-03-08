@@ -3550,14 +3550,14 @@
       </df>
       <df name="Source">
         <df name="Basic Components">
+          <in>CounterComponent.cpp</in>
+          <in>CounterComponent.h</in>
           <in>DrawableImageButton.cpp</in>
           <in>DrawableImageButton.h</in>
           <in>DrawableImageComponent.cpp</in>
           <in>DrawableImageComponent.h</in>
           <in>FileSelectTextEditor.cpp</in>
           <in>FileSelectTextEditor.h</in>
-          <in>Grid.cpp</in>
-          <in>Grid.h</in>
           <in>IconSliderComponent.cpp</in>
           <in>IconSliderComponent.h</in>
           <in>ListEditor.cpp</in>
