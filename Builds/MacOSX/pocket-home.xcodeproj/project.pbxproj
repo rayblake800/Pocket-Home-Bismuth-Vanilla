@@ -12,6 +12,7 @@
 		7FF75E28BA5CA892192A3B8F = {isa = PBXBuildFile; fileRef = 793D45A4A9D717F9F0133903; };
 		B97B8F50999FAC525F837AEC = {isa = PBXBuildFile; fileRef = B5DCAF01E0490D7413E9E85F; };
 		B60DD03FE5B471BE4AFBF56B = {isa = PBXBuildFile; fileRef = 81D682238B383EB3D7010236; };
+		277E30C6F96F10BA976E04B0 = {isa = PBXBuildFile; fileRef = 0049C3F3ED5E5F5F0E5A1620; };
 		269595AEBD81E104ADA4B657 = {isa = PBXBuildFile; fileRef = 4BB769DA994304C755266267; };
 		A0AE5B77AD8C7BE370B6C3D6 = {isa = PBXBuildFile; fileRef = D4282739BFD2B90CD80F616E; };
 		32650F706B688C1458F19860 = {isa = PBXBuildFile; fileRef = 6C236952145F806DB0A83B29; };
@@ -94,6 +95,7 @@
 		79D08123397EB7193AD84374 = {isa = PBXBuildFile; fileRef = 3D8BA8E1900EE05677B2CC13; };
 		C6E9B15140A2E1B45ACCBEF5 = {isa = PBXBuildFile; fileRef = 0D6AC4CD1AB952DA99E28B23; };
 		C05ED6CFEAE6927FBFFFB07E = {isa = PBXBuildFile; fileRef = CD053589A2351711B21EACAE; };
+		0049C3F3ED5E5F5F0E5A1620 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CounterComponent.cpp; path = "../../Source/Basic Components/CounterComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		00F169F4F344BBF6892637D1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Source/Main.cpp; sourceTree = "SOURCE_ROOT"; };
 		02503CFBE0F0106238CEA286 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BluetoothStatus.cpp; path = ../../Source/BluetoothStatus.cpp; sourceTree = "SOURCE_ROOT"; };
 		0417407B0A67DC4B35ACA63F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurableImageComponent.cpp; path = ../../Source/Configuration/Configurables/ConfigurableImageComponent.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -193,6 +195,7 @@
 		884315C5A1EC8DB03C7B543B = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PokeLookAndFeel.cpp; path = ../../Source/PokeLookAndFeel.cpp; sourceTree = "SOURCE_ROOT"; };
 		884B6D2E2F6E9C771B088554 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IconSliderComponent.h; path = "../../Source/Basic Components/IconSliderComponent.h"; sourceTree = "SOURCE_ROOT"; };
 		88799591F12AF8E0A60DF286 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConnectionSettingsComponent.h; path = "../../Source/Pages/Settings Page/ConnectionSettingsComponent.h"; sourceTree = "SOURCE_ROOT"; };
+		8A12AAC628F234CDFC66BCCB = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CounterComponent.h; path = "../../Source/Basic Components/CounterComponent.h"; sourceTree = "SOURCE_ROOT"; };
 		8A714A4B71665A82950C5367 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OverlaySpinner.h; path = "../../Source/Basic Components/OverlaySpinner.h"; sourceTree = "SOURCE_ROOT"; };
 		8E2B96F64C259EA9F567D0AC = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HomePage.cpp; path = ../../Source/Pages/HomePage/HomePage.cpp; sourceTree = "SOURCE_ROOT"; };
 		8E3625F05457CFC994C388E5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuButton.cpp; path = ../../Source/Pages/HomePage/AppMenu/AppMenuButton.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -276,6 +279,8 @@
 					838A1FDC1A43D1D0D86FFFD8,
 					BEA73F0F044F15F4ECD6275B, ); name = assets; sourceTree = "<group>"; };
 		FE8CAAF1F4599E1506C8A569 = {isa = PBXGroup; children = (
+					0049C3F3ED5E5F5F0E5A1620,
+					8A12AAC628F234CDFC66BCCB,
 					4BB769DA994304C755266267,
 					16F66C9A5F33F159CC0ECCD2,
 					D4282739BFD2B90CD80F616E,
@@ -638,6 +643,7 @@
 					B60DD03FE5B471BE4AFBF56B,
 					BA86439BA0F5D9AA5BFC3C1D, ); runOnlyForDeploymentPostprocessing = 0; };
 		467462E1976B8F50EA1165E3 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+					277E30C6F96F10BA976E04B0,
 					269595AEBD81E104ADA4B657,
 					A0AE5B77AD8C7BE370B6C3D6,
 					32650F706B688C1458F19860,

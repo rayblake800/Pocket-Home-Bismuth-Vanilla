@@ -15,6 +15,10 @@
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
       <GROUP id="{185415EC-B399-8F03-8F25-DEE2244D2B03}" name="Basic Components">
+        <FILE id="It5e7i" name="CounterComponent.cpp" compile="1" resource="0"
+              file="Source/Basic Components/CounterComponent.cpp"/>
+        <FILE id="f6udrf" name="CounterComponent.h" compile="0" resource="0"
+              file="Source/Basic Components/CounterComponent.h"/>
         <FILE id="lsHR0C" name="DrawableImageButton.cpp" compile="1" resource="0"
               file="Source/Basic Components/DrawableImageButton.cpp"/>
         <FILE id="MFPfd5" name="DrawableImageButton.h" compile="0" resource="0"
