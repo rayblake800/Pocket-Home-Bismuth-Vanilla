@@ -15,6 +15,10 @@ WifiSettingsPage::WifiSettingsPage() :
 ConnectionPage<WifiAccessPoint>(),
 passwordLabel("passwordLabel", "Password:")
 {
+    
+#if JUCE_DEBUG
+    setName("WifiSettingsPage");
+#endif
     WifiStatus& wifiStatus = PocketHomeApplication::getInstance()
             ->getWifiStatus();
     wifiStatus.addListener(this);

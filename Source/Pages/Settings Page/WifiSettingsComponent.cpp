@@ -5,6 +5,10 @@ WifiSettingsComponent::WifiSettingsComponent
 (std::function<void()> openWifiPage) :
 ConnectionSettingsComponent(openWifiPage,"wifi")
 {
+    
+#if JUCE_DEBUG
+    setName("WifiSettingsComponent");
+#endif
     setIcon("wifiIcon.svg");
     WifiStatus& status = 
     PocketHomeApplication::getInstance()->getWifiStatus();

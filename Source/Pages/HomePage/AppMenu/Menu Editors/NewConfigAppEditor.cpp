@@ -16,4 +16,8 @@ AppMenuPopupEditor("New favorite application link", iconThread,
 }
 , false, true)
 {
+    
+#if JUCE_DEBUG
+    setName("NewConfigAppEditor");
+#endif
 }

@@ -17,6 +17,7 @@ struct WifiAccessPoint {
      * Represents an invalid or missing connection point
      */
     static const WifiAccessPoint null;
+    
     bool operator==(const WifiAccessPoint rhs) const {
         return hash == rhs.hash;
     };

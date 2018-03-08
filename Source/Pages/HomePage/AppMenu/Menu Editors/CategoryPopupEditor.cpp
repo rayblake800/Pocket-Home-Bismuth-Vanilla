@@ -9,7 +9,11 @@ PopupEditorComponent("Edit Categories",
 }),
 categoryList(categories)
 {
+    
+#if JUCE_DEBUG
     setName("categoryEditor");
+#endif
+    
     loadAllConfigProperties();
 
     cancelButton.addListener(this);

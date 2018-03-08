@@ -43,6 +43,10 @@ lockscreen([this]()
     hideLockscreen();
 })
 {
+    
+#if JUCE_DEBUG
+    setName("PowerPage");
+#endif
     setColour(backgroundColourId,Colours::black);
     powerOffButton.addListener(this);
     sleepButton.addListener(this);

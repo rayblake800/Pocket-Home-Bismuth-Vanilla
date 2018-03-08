@@ -6,6 +6,10 @@ listItems(initialList),
 listContainer("ListEditor", nullptr),
 addItemBtn("+")
 {
+    
+#if JUCE_DEBUG
+    setName("ListEditor");
+#endif
     updateColours();
 
     addAndMakeVisible(listContainer);

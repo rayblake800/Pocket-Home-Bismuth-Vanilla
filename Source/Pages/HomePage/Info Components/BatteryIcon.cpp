@@ -5,6 +5,10 @@ BatteryIcon::BatteryIcon() :
 batteryImage(ComponentConfigFile::batteryIconKey),
 batteryPercent(ComponentConfigFile::batteryPercentKey)
 {
+    
+#if JUCE_DEBUG
+    setName("BatteryIcon");
+#endif
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
     batteryPercent.setJustificationType(Justification::centredLeft);

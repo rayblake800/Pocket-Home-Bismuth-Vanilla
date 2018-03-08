@@ -39,6 +39,10 @@ hashedPassword("none"),
 loginCallback(loginCallback),
 foundPassword(false)
 {
+    
+#if JUCE_DEBUG
+    setName("LoginPage");
+#endif
     setBackgroundImage(createImageFromFile(assetFile("login/background.png")));
     loginButton.addListener(this);
     passwordField.addListener(this);

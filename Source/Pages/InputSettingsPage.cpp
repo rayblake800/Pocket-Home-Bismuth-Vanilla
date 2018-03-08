@@ -29,6 +29,10 @@ calibrating("Calibrate the screen"),
 fnmapping("Remap keyboard (FN key fix)"),
 cursorVisible("cursorvisible", "Select the visibility of the cursor:")
 {
+    
+#if JUCE_DEBUG
+    setName("InputSettingsPage");
+#endif
     title.setJustificationType(Justification::centred);
     //ComboBox
     choosemode.addItem("Not visible", 1);

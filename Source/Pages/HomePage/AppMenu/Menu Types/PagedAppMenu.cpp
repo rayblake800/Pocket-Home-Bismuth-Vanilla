@@ -10,7 +10,8 @@ const String PagedAppMenu::pageRightBinding = "shift + cursor right";
  * @param loadingSpinner
  */
 PagedAppMenu::PagedAppMenu(OverlaySpinner& loadingSpinner) :
-AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
+AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, loadingSpinner,
+pageAnimationDuration),
 pageLeft(ComponentConfigFile::pageLeftKey),
 pageRight(ComponentConfigFile::pageRightKey),
 closeFolderBtn(ComponentConfigFile::pageUpKey)

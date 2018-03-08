@@ -20,6 +20,10 @@ filePath(componentName),
 fileSelectButton("..."),
 showButton(true)
 {
+        
+#if JUCE_DEBUG
+    setName("FileSelectTextEditor");
+#endif
     fileSelectButton.addListener(this);
     filePath.addListener(this);
     addAndMakeVisible(filePath);

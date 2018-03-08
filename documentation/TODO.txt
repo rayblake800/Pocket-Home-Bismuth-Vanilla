@@ -1,4 +1,3 @@
--ScrollingAppMenu should have faster animation times than PagedAppMenu
 
 -Design and implement TabbedAppMenu
 

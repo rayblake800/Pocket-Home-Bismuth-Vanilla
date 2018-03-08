@@ -30,6 +30,10 @@ cur_label("CurLabel", "Current password"), cur_password("Current", 0x2022),
 title("Title", "Remove your password"),
  has_file(false), has_password(false)
 {
+    
+#if JUCE_DEBUG
+    setName("RemovePasswordPage");
+#endif
     title.setJustificationType(Justification::centred);
     //Load the password if existing
     loadPassword();

@@ -16,4 +16,8 @@ AppMenuPopupEditor("New desktop application", iconThread,
 },
  true, true)
 {
+    
+#if JUCE_DEBUG
+    setName("NewDesktopAppEditor");
+#endif
 }

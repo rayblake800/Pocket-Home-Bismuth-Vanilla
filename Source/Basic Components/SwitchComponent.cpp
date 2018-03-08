@@ -3,6 +3,10 @@
 
 
 SwitchComponent::SwitchComponent() {
+#if JUCE_DEBUG
+    setName("Switch Component");
+#endif
+    
   handleParent = new Component();
   handleParent->setInterceptsMouseClicks(false, false);
   addAndMakeVisible(handleParent);

@@ -4,6 +4,10 @@
 ClockLabel::ClockLabel() :
 ConfigurableLabel(ComponentConfigFile::clockLabelKey, "clockLabel", "00:00")
 {
+    
+#if JUCE_DEBUG
+    setName("ClockLabel");
+#endif
     ComponentConfigFile config;
     addTrackedKeys({
         ComponentConfigFile::use24HrModeKey, ComponentConfigFile::showClockKey

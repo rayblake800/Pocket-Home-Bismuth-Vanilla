@@ -3,7 +3,8 @@
 #include "ScrollingAppMenu.h"
 
 ScrollingAppMenu::ScrollingAppMenu(OverlaySpinner& loadingSpinner) :
-AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey, loadingSpinner) { }
+AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey, loadingSpinner,
+scrollingAnimationDuration) { }
 
 ScrollingAppMenu::~ScrollingAppMenu() { }
 

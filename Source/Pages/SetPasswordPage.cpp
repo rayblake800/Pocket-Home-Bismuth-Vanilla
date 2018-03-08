@@ -40,6 +40,10 @@ ret_label("ConfLabel", "Retype password"), ret_password("Confirmation", 0x2022),
 title("Title", "Change your password"),
 has_file(false), has_password(false)
 {
+    
+#if JUCE_DEBUG
+    setName("SetPasswordPage");
+#endif
     title.setJustificationType(Justification::centred);
     //Load the password if existing
     loadPassword();

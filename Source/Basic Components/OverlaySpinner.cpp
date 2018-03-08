@@ -4,6 +4,10 @@
 OverlaySpinner::OverlaySpinner(int secondsToTimeout) :
 Spinner(secondsToTimeout)
 {
+    
+#if JUCE_DEBUG
+    setName("OverlaySpinner");
+#endif
     loadingText.setText("", NotificationType::dontSendNotification);
     loadingText.setJustificationType(Justification::centred);
     loadingText.setColour(Label::textColourId, findColour(textColourId));

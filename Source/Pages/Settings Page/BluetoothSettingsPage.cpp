@@ -1,98 +1,113 @@
 #include "../../Utils.h"
-#include "../../PocketHomeApplication.h"
 #include "BluetoothSettingsPage.h"
 
-
 BluetoothSettingsPage::BluetoothSettingsPage() :
-PageComponent("BluetoothSettingsPage",{}, true),
-checkIcon("confirm.svg"),
-btIcon("bluetoothIcon.svg"),
-deviceListPage(1, 4),
-connectionLabel("Connected", "Connection Label"),
-connectionButton("Connection Button", "Connect")
-{
-    addAndMakeVisible(pageStack);
-
-    // create device list "page"
-    BluetoothStatus& status = PocketHomeApplication::getInstance()
-            ->getBluetoothStatus();
-    for (auto btDevice : status.devices)
-    {
-        auto item = new BluetoothDeviceListItem(btDevice);
-        item->addListener(this);
-        deviceListItems.add(item);
-        deviceListPage.addItem(item);
-    }
-    connectionLabel.setJustificationType(juce::Justification::centred);
-    addAndMakeVisible(connectionLabel);
-
-    connectionButton.addListener(this);
-    addAndMakeVisible(connectionButton);
-    //pageStack.pushPage(&deviceListPage, PageStackComponent::kTransitionNone);
-}
+ConnectionPage<BluetoothDevice>() { }
 
 BluetoothSettingsPage::~BluetoothSettingsPage() { }
 
-void BluetoothSettingsPage::pageResized()
+/**
+ * @return the list of all visible bluetooth devices
+ */
+Array<BluetoothDevice> BluetoothSettingsPage::loadConnectionList()
 {
-    auto bounds = getLocalBounds();
-    auto pageBounds = Rectangle<int>(120, 0, bounds.getWidth() - 120, bounds.getHeight());
-
-    pageStack.setBounds(pageBounds);
-    connectionLabel.setBounds(10, 70, pageBounds.getWidth() - 20, 60);
-    connectionButton.setBounds(90, 160, pageBounds.getWidth() - 180, 50);
-    btIcon.setBounds(-10, 0, 80, 80);
+    return {};
 }
 
-void BluetoothSettingsPage::pageButtonClicked(Button *button)
+/**
+ * Attempts to connect to a Bluetooth device.
+ *
+ *  @param device
+ */
+void BluetoothSettingsPage::connect(const BluetoothDevice& device) { }
+
+/**
+ * @param device if the system is currently connected to this
+ * bluetooth device, this method closes that connection.
+ *  
+ * @param connection
+ */
+void BluetoothSettingsPage::disconnect(const BluetoothDevice& device) { }
+
+/**
+ * @param connection
+ * @return true iff the system is connected to this bluetooth device.
+ */
+bool BluetoothSettingsPage::isConnected(const BluetoothDevice& device)
 {
-    if (button == &connectionButton && selectedDevice)
-    {
-        selectedDevice->connected = !selectedDevice->connected;
-        pageStack.popPage(PageStackComponent::kTransitionTranslateHorizontal);
-    }
-
-
-    auto btButton = dynamic_cast<BluetoothDeviceListItem *> (button);
-    if (btButton)
-    {
-        selectedDevice = btButton->device;
-        connectionButton.setButtonText(selectedDevice->connected
-                ? "Disconnect" : "Connect");
-        connectionLabel.setText(selectedDevice->name + "\n"
-                + selectedDevice->macAddress,
-                juce::NotificationType::dontSendNotification);
-    }
+    return device.connected;
 }
 
+/**
+ * @param button
+ * This is called whenever a button other than the navigation buttons
+ * is clicked.
+ */
+void BluetoothSettingsPage::connectionButtonClicked(Button* button) { }
 
-BluetoothSettingsPage::BluetoothDeviceListItem::BluetoothDeviceListItem
-(BluetoothStatus::BluetoothDevice *device)
-: Button(device->name), device(device){ }
-
-void BluetoothSettingsPage::BluetoothDeviceListItem::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown)
+/**
+ * Construct a button component to represent a bluetooth device.
+ * This button will display the device name:
+ * TODO: design connection button
+ * 
+ * @param device
+ */
+Button* BluetoothSettingsPage::getConnectionButton
+(const BluetoothDevice& device)
 {
-    auto bounds = getLocalBounds();
-    auto inset = bounds.reduced(6, 4);
-    auto w = bounds.getWidth(), h = bounds.getHeight();
-    auto iconBounds = Rectangle<float>(w - h, h / 5.0, h * 0.6, h * 0.6);
-
-    auto listOutline = Path();
-    listOutline.addRoundedRectangle(inset.toFloat(), 10.0f);
-    g.setColour(findColour(ListBox::ColourIds::backgroundColourId));
-    g.fillPath(listOutline);
-
-//    if (device->connected)
-//    {
-//        icons->checkIcon->setSize(h, h);
-//        icons->checkIcon->drawWithin(g, iconBounds, RectanglePlacement::fillDestination, 1.0f);
-//    }
-
-    //  icons->arrowIcon->setSize(h, h);
-    //  icons->arrowIcon->drawWithin(g, Rectangle<float>(w - (h/8), contentHeight + 8, contentHeight, contentHeight),
-    //                               RectanglePlacement::fillDestination, 1.0f);
-
-    g.setFont(h * 0.5);
-    g.setColour(findColour(ListBox::ColourIds::textColourId));
-    g.drawText(getName(), inset.reduced(h * 0.2, 0), Justification::centredLeft, true);
+    return new BTDeviceButton(device, isConnected(device));
 }
+
+/**
+ * Get the layout for the Bluetooth device controls.
+ * @param connection the control components will be updated to suit
+ * this bluetooth device.
+ */
+GridLayoutManager::Layout BluetoothSettingsPage::getConnectionControlsLayout
+(const BluetoothDevice& device)
+{
+    return {};
+}
+
+/**
+ * Update connection control components to match the current bluetooth
+ * device connection state and the provided Bluetooth device.
+ * 
+ * @param BluetoothDevice
+ */
+void BluetoothSettingsPage::updateConnectionControls
+(const BluetoothDevice& device) { }
+
+/**
+ * When currentlyConnecting, disable bluetooth controls and show a loading
+ * spinner.  Otherwise, enable controls and hide the loading spinner.
+ * 
+ * @param currentlyConnecting indicates if bluetooth is trying to connect 
+ * to a device, or is otherwise busy.
+ */
+void BluetoothSettingsPage::setCurrentlyConnecting
+(bool currentlyConnecting) { }
+
+/**
+ * Attempt to connect if return is pressed
+ * @param editor
+ */
+void BluetoothSettingsPage::textEditorReturnKeyPressed(TextEditor& editor) { }
+
+/**
+ * Set the spinner's bounds within the connection button
+ */
+void BluetoothSettingsPage::connectionPageResized() { }
+
+/**
+ * Reload the device list, re-select the selected connection, 
+ * update and enable connection controls.
+ */
+void BluetoothSettingsPage::reloadPage() { }
+
+BluetoothSettingsPage::BTDeviceButton::BTDeviceButton
+(const BluetoothDevice& connection, bool isConnected) :
+Button(connection.name + String("Button")),
+deviceLabel("deviceLabel", connection.name) { }
+
+void BluetoothSettingsPage::BTDeviceButton::resized() { }

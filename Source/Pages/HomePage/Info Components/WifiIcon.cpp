@@ -5,6 +5,10 @@
 WifiIcon::WifiIcon() :
 ConfigurableImageComponent(ComponentConfigFile::wifiIconKey)
 {
+    
+#if JUCE_DEBUG
+    setName("WifiIcon");
+#endif
     startTimer(1);
 }
 

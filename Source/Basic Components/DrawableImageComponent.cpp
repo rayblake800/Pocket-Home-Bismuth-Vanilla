@@ -12,6 +12,10 @@ DrawableImageComponent::DrawableImageComponent
 (String assetFilename, RectanglePlacement placement) :
 placement(placement)
 {
+    
+#if JUCE_DEBUG
+    setName(String("DrawableImageComponent:")+assetFilename);
+#endif
     setImage(assetFilename);
     setInterceptsMouseClicks(false, false);
 }
@@ -22,7 +26,10 @@ placement(placement)
 DrawableImageComponent::DrawableImageComponent
 (File imageFile, RectanglePlacement placement) :
 placement(placement)
-{
+{    
+#if JUCE_DEBUG
+    setName(String("DrawableImageComponent:")+imageFile.getFileName());
+#endif
     setImage(imageFile);
     setInterceptsMouseClicks(false, false);
 }
@@ -34,6 +41,10 @@ DrawableImageComponent::DrawableImageComponent(Image image,
         RectanglePlacement placement) :
 placement(placement)
 {
+        
+#if JUCE_DEBUG
+    setName("DrawableImageComponent");
+#endif
     setImage(image);
     setInterceptsMouseClicks(false, false);
 }
@@ -44,7 +55,10 @@ placement(placement)
 DrawableImageComponent::DrawableImageComponent
 (RectanglePlacement placement) :
 placement(placement)
-{
+{    
+#if JUCE_DEBUG
+    setName("DrawableImageComponent");
+#endif
     setInterceptsMouseClicks(false, false);
 }
 

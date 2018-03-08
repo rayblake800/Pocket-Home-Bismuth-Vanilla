@@ -55,4 +55,7 @@ private:
     (AppMenuItem::Ptr folderItem,
             std::map<String, AppMenuButton::Ptr>& buttonMap,
             IconThread& iconThread) override;
+    
+    //Define animation duration for scrolling appMenus
+    const int scrollingAnimationDuration = 100;
 };

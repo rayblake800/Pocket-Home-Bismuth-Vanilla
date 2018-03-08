@@ -13,6 +13,8 @@
 #include "../../WindowFocusedTimer.h"
 #include "WifiSettingsComponent.h"
 #include "WifiSettingsPage.h"
+//#include "BluetoothSettingsComponent.h"
+//#include "BluetoothSettingsPage.h"
 #include "../AdvancedSettingsPage.h"
 
 class SettingsPage : public PageComponent, public WindowFocusedTimer,
@@ -37,7 +39,9 @@ private:
     
     
     WifiSettingsPage wifiSettingsPage;
-    WifiSettingsComponent wifiCategoryItem;
+    WifiSettingsComponent wifiComponent;
+//    BluetoothSettingsPage bluetoothSettingsPage;
+//    BluetoothSettingsComponent bluetoothComponent;
     IconSliderComponent screenBrightnessSlider;
     IconSliderComponent volumeSlider;
     TextButton advancedPageButton;

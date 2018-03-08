@@ -13,6 +13,10 @@ personalizePage(),
 prevArrow(ComponentConfigFile::pageUpKey),
 nextArrow(ComponentConfigFile::pageDownKey)
 {
+    
+#if JUCE_DEBUG
+    setName("AdvancedSettingsPage");
+#endif
     setColour(backgroundColourId, Colour(0xffd23c6d));
     std::vector<Button*> allButtons = getButtonList(true);
     for (Button* button : allButtons)

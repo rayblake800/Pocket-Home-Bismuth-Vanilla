@@ -14,11 +14,16 @@ const String AppMenuComponent::reloadMenuBinding = "TAB";
 DesktopEntries AppMenuComponent::desktopEntries;
 
 AppMenuComponent::AppMenuComponent
-(String componentKey, OverlaySpinner& loadingSpinner) :
+(String componentKey, OverlaySpinner& loadingSpinner, int animationDuration) :
 loadingState(false),
 ConfigurableComponent(componentKey),
-loadingSpinner(loadingSpinner)
+loadingSpinner(loadingSpinner),
+animationDuration(animationDuration)
 {
+    
+#if JUCE_DEBUG
+    setName("AppMenuComponent");
+#endif
     addTrackedKeys({
         ComponentConfigFile::maxRowsKey,
         ComponentConfigFile::maxColumnsKey
@@ -26,7 +31,6 @@ loadingSpinner(loadingSpinner)
     ComponentConfigFile config;
     maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
     maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
-
     setWantsKeyboardFocus(false);
     loadBaseFolder();
 }
@@ -684,7 +688,7 @@ void AppMenuComponent::setLoadingState(bool loading)
  */
 bool AppMenuComponent::ignoringInput() const
 {
-    return openFolders.isEmpty() || isLoading() 
+    return openFolders.isEmpty() || isLoading()
             || Desktop::getInstance()
             .getAnimator().isAnimating(openFolders[getActiveFolderIndex()])
             || (buttonEditor != nullptr && buttonEditor->isVisible());

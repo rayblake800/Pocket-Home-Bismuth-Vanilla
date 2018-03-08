@@ -47,6 +47,10 @@ setClockMode("setClockMode"),
 reconfigureBtn(reconfigureBtnText),
 clockModeLabel("clockModeLabel", clockModeLabelText)
 {
+    
+#if JUCE_DEBUG
+    setName("DateTimePage");
+#endif
     addAndShowLayoutComponents();
     reconfigureBtn.addListener(this);
     titleLabel.setJustificationType(Justification::centred);

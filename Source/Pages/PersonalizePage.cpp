@@ -38,6 +38,10 @@ bgEditor("Choose the new background",
 menuPickerLabel("menuPickerLabel", "Application menu:"),
 menuTypePicker("menuTypePicker")
 {
+    
+#if JUCE_DEBUG
+    setName("PersonalizePage");
+#endif
     title.setJustificationType(Justification::centred);
     bgTypePicker.addItem("Default", 1);
     bgTypePicker.addItem("Color", 2);

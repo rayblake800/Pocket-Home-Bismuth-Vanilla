@@ -7,7 +7,7 @@
 #include "ConnectionSettingsComponent.h"
 class BluetoothSettingsComponent : public ConnectionSettingsComponent {
 public:
-    BluetoothSettingsComponent();
+    BluetoothSettingsComponent(std::function<void()> openBluetoothPage);
     virtual ~BluetoothSettingsComponent();
 
     void enabledStateChanged(bool enabled) override;

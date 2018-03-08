@@ -24,7 +24,7 @@ private:
     /**
      * @return the list of all visible Wifi access points.
      */
-    virtual Array<WifiAccessPoint> loadConnectionList();
+    Array<WifiAccessPoint> loadConnectionList();
 
 
     /**
@@ -33,7 +33,7 @@ private:
      *
      *  @param connection
      */
-    virtual void connect(const WifiAccessPoint& connection);
+    void connect(const WifiAccessPoint& connection);
 
     /**
      * @param connection if the system is currently connected to this
@@ -41,20 +41,20 @@ private:
      *  
      * @param connection
      */
-    virtual void disconnect(const WifiAccessPoint& connection);
+    void disconnect(const WifiAccessPoint& connection);
 
     /**
      * @param connection
      * @return true iff the system is connected to WifiAccessPoint connection.
      */
-    virtual bool isConnected(const WifiAccessPoint& connection);
+    bool isConnected(const WifiAccessPoint& connection);
 
     /**
      * @param button
      * This is called whenever a button other than the navigation buttons
      * is clicked.
      */
-    virtual void connectionButtonClicked(Button* button);
+    void connectionButtonClicked(Button* button);
 
     /**
      * Construct a button component to represent a wifi access point.
@@ -65,14 +65,14 @@ private:
      * TODO: come up with some sort of indicator to mark the connected access
      * point.
      */
-    virtual Button* getConnectionButton(const WifiAccessPoint& connection);
+    Button* getConnectionButton(const WifiAccessPoint& connection);
 
     /**
      * Get the layout for the Wifi access point controls.
      * @param connection the control components will be updated to suit
      * this access point.
      */
-    virtual GridLayoutManager::Layout getConnectionControlsLayout
+    GridLayoutManager::Layout getConnectionControlsLayout
     (const WifiAccessPoint& connection);
 
     /**
@@ -164,7 +164,6 @@ private:
 
         void paintButton(Graphics& g, bool isMouseOverButton,
                 bool isButtonDown) {
-            //g.fillAll(findColour(backgroundColourId));
         }
         ScalingLabel apLabel;
         DrawableImageComponent wifiIcon;

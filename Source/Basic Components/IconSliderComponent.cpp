@@ -6,6 +6,10 @@ IconSliderComponent::IconSliderComponent
 lowIcon(lowImgAsset,RectanglePlacement::stretchToFit),
 highIcon(highImgAsset,RectanglePlacement::stretchToFit)
 {
+    
+#if JUCE_DEBUG
+    setName("IconSliderComponent");
+#endif
     slider.setSliderStyle(Slider::LinearHorizontal);
     slider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
     slider.setRange(0, 100);

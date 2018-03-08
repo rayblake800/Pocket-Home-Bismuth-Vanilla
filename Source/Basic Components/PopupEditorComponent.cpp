@@ -10,7 +10,9 @@ cancelButton("cancel.svg"),
 confirmButton("confirm.svg")
 {
     setWantsKeyboardFocus(true);
+#if JUCE_DEBUG
     setName(title + String("popupEditor"));
+#endif
     loadAllConfigProperties();
 
     titleLabel.setJustificationType(Justification::centred);

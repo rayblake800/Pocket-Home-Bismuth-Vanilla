@@ -41,6 +41,10 @@ yesButton("Yes"),
 noButton("No"),
 infoLine2("infoLine2", "For instructions, visit pcflash.getchip.com")
 {
+    
+#if JUCE_DEBUG
+    setName("FelPage");
+#endif
     //TODO: configurable page backgrounds
     setColour(backgroundColourId, Colours::black);
     infoLine1.setJustificationType(Justification::centred);

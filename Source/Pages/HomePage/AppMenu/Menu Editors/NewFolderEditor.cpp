@@ -15,4 +15,8 @@ AppMenuPopupEditor("New folder", iconThread,
 },
 true, false)
 {
+    
+#if JUCE_DEBUG
+    setName("NewFolderEditor");
+#endif
 }

@@ -5,6 +5,9 @@ PageStackComponent::PageStackComponent()
 {
     setInterceptsMouseClicks(false, true);
     setWantsKeyboardFocus(false);
+#if JUCE_DEBUG
+    setName("PageStackComponent");
+#endif
 }
 
 PageStackComponent::~PageStackComponent() { }
@@ -84,8 +87,9 @@ void PageStackComponent::popPage(Transition transition)
  * to notify the PageStackComponent when window focus changes, so that
  * it can pass the notification on to all pages in the page stack.
  */
-void PageStackComponent::windowFocusChanged(bool windowFocused) {
-    for(Page* page : stack)
+void PageStackComponent::windowFocusChanged(bool windowFocused)
+{
+    for (Page* page : stack)
     {
         page->windowFocusChanged(windowFocused);
     }

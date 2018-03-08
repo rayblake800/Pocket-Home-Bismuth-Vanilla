@@ -14,6 +14,9 @@ iconThread(iconThread)
     ComponentConfigFile config;
     maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
     maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
+#if JUCE_DEBUG
+    setName(String("AppMenuFolder")+folderItem->getAppName());
+#endif
 }
 
 AppMenuFolder::~AppMenuFolder() { }

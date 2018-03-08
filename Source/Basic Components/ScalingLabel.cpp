@@ -7,6 +7,10 @@ ScalingLabel::ScalingLabel(const String &componentName,
 : Label(componentName, labelText),
 fontPadding(fontPadding)
 {
+    
+#if JUCE_DEBUG
+    setName(String("ScalingLabel:")+labelText);
+#endif
 }
 
 ScalingLabel::~ScalingLabel()

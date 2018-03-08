@@ -16,9 +16,11 @@ frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
 powerButton(ComponentConfigFile::powerButtonKey),
 settingsButton(ComponentConfigFile::settingsButtonKey)
 {
+#if JUCE_DEBUG
+    setName("HomePage");
+#endif
+    
     setWantsKeyboardFocus(true);
-
-
     addAndMakeVisible(frame);
     addAndMakeVisible(clock);
 
@@ -165,8 +167,11 @@ void HomePage::windowFocusChanged(bool windowFocus)
     {
         appMenu->exitLoadingState();
     }
-    else if(isVisible()){
-        grabKeyboardFocus();
+    else{
+        MessageManager::callAsync([this]()
+        {
+            grabKeyboardFocus();
+        });
     }
 }
 

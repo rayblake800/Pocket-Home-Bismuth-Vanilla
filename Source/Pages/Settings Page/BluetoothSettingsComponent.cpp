@@ -4,18 +4,23 @@
 #include "BluetoothSettingsPage.h"
 #include "BluetoothSettingsComponent.h"
 
-BluetoothSettingsComponent::BluetoothSettingsComponent()
-: ConnectionSettingsComponent([](){})
+BluetoothSettingsComponent::BluetoothSettingsComponent
+(std::function<void() > openBluetoothPage) :
+ConnectionSettingsComponent(openBluetoothPage)
 {
+
+#if JUCE_DEBUG
+    setName("BluetoothSettingsComponent");
+#endif
     setIcon("bluetoothIcon.png");
     updateButtonText();
 }
 
-BluetoothSettingsComponent::~BluetoothSettingsComponent(){}
+BluetoothSettingsComponent::~BluetoothSettingsComponent() { }
 
 void BluetoothSettingsComponent::enabledStateChanged(bool enabled)
 {
-    PocketHomeApplication::getInstance()->getBluetoothStatus().enabled 
+    PocketHomeApplication::getInstance()->getBluetoothStatus().enabled
             = enabled;
     setPageButtonEnabled(enabled);
     updateButtonText();
@@ -29,17 +34,19 @@ void BluetoothSettingsComponent::updateButtonText()
     {
         int connectedDeviceCount =
                 std::accumulate(status.devices.begin(), status.devices.end(), 0,
-                [](int n, BluetoothStatus::BluetoothDevice * d)
+                [](int n, BluetoothDevice * d)
                 {
                     return n + d->connected; });
         if (connectedDeviceCount > 0)
         {
             setPageButtonText(std::to_string(connectedDeviceCount) + " Devices Connected");
-        } else
+        }
+        else
         {
             setPageButtonText("No Devices Connected");
         }
-    } else
+    }
+    else
     {
         setPageButtonText("Bluetooth Off");
     }

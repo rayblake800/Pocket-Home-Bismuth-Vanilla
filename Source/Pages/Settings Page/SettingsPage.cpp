@@ -7,8 +7,12 @@ SettingsPage::SettingsPage() :
 PageComponent("SettingsPage",{
     {1,
         {
-            {&wifiCategoryItem, 1}
+            {&wifiComponent, 1}
         }},
+//    {1,
+//        {
+//            {&bluetoothComponent, 1}
+//        }},
     {1,
         {
             {&screenBrightnessSlider, 1}
@@ -22,14 +26,26 @@ PageComponent("SettingsPage",{
             {&advancedPageButton, 1}
         }}
 }, true),
-wifiCategoryItem([this]{
+wifiComponent([this]
+{
     pushPageToStack(&wifiSettingsPage,
             PageStackComponent::kTransitionTranslateHorizontal);
 }),
+//bluetoothComponent([this]
+//{
+//
+//    pushPageToStack(&bluetoothSettingsPage,
+//            PageStackComponent::kTransitionTranslateHorizontal);
+//}),
 screenBrightnessSlider("brightnessIconLo.svg", "brightnessIconHi.svg"),
 volumeSlider("volumeIconLo.svg", "volumeIconHi.svg"),
 advancedPageButton("Advanced Settings")
 {
+
+#if JUCE_DEBUG
+    setName("SettingsPage");
+#endif
+
     addAndShowLayoutComponents();
     setColour(backgroundColourId, Colour(0xffd23c6d));
     advancedPageButton.addListener(this);

@@ -32,8 +32,11 @@ public:
      * @param componentKey loads menu bounds from config
      * @param loadingSpinner reference to an overlay spinner that sits over
      * the PageComponent holding this AppMenuComponent.
+     * @param animationDuration sets the duration in milliseconds of menu
+     * transitions
      */
-    AppMenuComponent(String componentKey, OverlaySpinner& loadingSpinner);
+    AppMenuComponent(String componentKey, OverlaySpinner& loadingSpinner,
+            int animationDuration);
 
     virtual ~AppMenuComponent();
 
@@ -307,7 +310,7 @@ private:
     int maxRows = 1;
     int maxColumns = 1;
     //folder animation duration in milliseconds
-    const int animationDuration = 250;
+    int animationDuration;
     //currently focused folder index
     int activeFolderIndex = 0;
     //Launches applications from the menu
