@@ -18,7 +18,8 @@ public:
      * Create an AppMenuButton component for an AppMenuItem.
      * @param menuItem
      */
-    AppMenuButton::Ptr createMenuButton(AppMenuItem::Ptr menuItem);
+    virtual AppMenuButton::Ptr createMenuButton
+    (AppMenuItem::Ptr menuItem, IconThread& iconThread) override;
 
     /**
      * Given a list of folder buttons, return an appropriate layout
@@ -29,18 +30,20 @@ public:
      */
     virtual GridLayoutManager::Layout buildFolderLayout
     (Array<AppMenuButton::Ptr>& buttons);
-
+    
+        
     /**
-     * @return the width in pixels of the longest menu item title in
-     * the folder.
+     * @return the minimum width, in pixels, needed by this folder to
+     * display its contents properly. 
      */
-    int getTextWidth();
+    int getMinimumWidth() override;
+
 private:
-    int maxTextWidth = 0;
-
     /**
-     *
+     * Get the font used by all buttons in this menu type.
      */
+    static Font getButtonFont();
+
     class ScrollingMenuButton : public AppMenuButton {
     public:
         /**

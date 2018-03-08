@@ -18,15 +18,8 @@ ScrollingAppFolder::~ScrollingAppFolder() { }
  * @param menuItem
  */
 AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
-(AppMenuItem::Ptr menuItem)
+(AppMenuItem::Ptr menuItem, IconThread& iconThread)
 {
-    ComponentConfigFile config;
-    Font measuringFont(config.getComponentSettings
-            (ComponentConfigFile::smallTextKey).getBounds().getHeight());
-    maxTextWidth = std::max<int>
-            (maxTextWidth,
-             measuringFont.getStringWidth(menuItem->getAppName()));
-    
     return new ScrollingMenuButton(menuItem, iconThread,
             menuItem->getAppName() + String("Button"));
 }
@@ -38,8 +31,7 @@ AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
  * @param buttons
  * @return a Layout containing all items in the button array.
  */
-GridLayoutManager::Layout
-ScrollingAppFolder::buildFolderLayout
+GridLayoutManager::Layout ScrollingAppFolder::buildFolderLayout
 (Array<AppMenuButton::Ptr>& buttons)
 {
     GridLayoutManager::Layout layout;
@@ -54,13 +46,31 @@ ScrollingAppFolder::buildFolderLayout
 }
 
 /**
- * @return the width in pixels of the longest menu item title in
- * the folder.
+ * @return the minimum width, in pixels, needed by this folder to
+ * display its contents properly. 
  */
-int ScrollingAppFolder::getTextWidth()
+int ScrollingAppFolder::getMinimumWidth() 
 {
-    return maxTextWidth;
+    int iconSize = getParentHeight() / getMaxRows();
+    int maxTextWidth = 0;
+    Font measureFont = getButtonFont();
+    for(int i = 0; i < getButtonCount(); i++){
+        maxTextWidth = std::max<int> (maxTextWidth,
+                measureFont.getStringWidth(getMenuButtonName(i)));
+    }
+    return maxTextWidth + iconSize;
 }
+
+/**
+ * Get the font used by all buttons in this menu type.
+ */
+Font ScrollingAppFolder::getButtonFont()
+{
+    ComponentConfigFile config;
+    return Font(config.getComponentSettings
+            (ComponentConfigFile::smallTextKey).getBounds().getHeight());
+}
+
 
 /**
  *
@@ -69,10 +79,7 @@ ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton
 (AppMenuItem* menuItem, IconThread& iconThread, String name) :
 AppMenuButton(menuItem, iconThread, name)
 {
-    ComponentConfigFile config;
-    int textHeight = config.getComponentSettings
-            (ComponentConfigFile::smallTextKey).getBounds().getHeight();
-    setTitleFont(getTitleFont().withHeight(textHeight));
+    setTitleFont(ScrollingAppFolder::getButtonFont());
     setTextJustification(Justification::centredLeft);
 }
 
@@ -96,15 +103,15 @@ void ScrollingAppFolder::ScrollingMenuButton::resized()
     Rectangle<int> bounds = getLocalBounds();
     Rectangle<float> imageBounds = bounds.toFloat();
     Rectangle<float> textBounds = imageBounds;
-    
+
     imageBounds.setWidth(imageBounds.getHeight());
     textBounds.setLeft(imageBounds.getRight());
     float padding = imageBounds.getWidth() / 20;
     int titleWidth = getTitleWidth();
     textBounds.reduce(padding, padding);
-    if(textBounds.getWidth() < titleWidth)
+    if (textBounds.getWidth() < titleWidth)
     {
-        textBounds.setLeft(bounds.getRight() - (titleWidth+padding));
+        textBounds.setLeft(bounds.getRight() - (titleWidth + padding));
         imageBounds.setRight(textBounds.getX());
     }
     imageBounds.reduce(padding, padding);

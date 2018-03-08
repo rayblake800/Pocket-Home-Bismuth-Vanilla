@@ -9,16 +9,14 @@ AppMenuFolder::AppMenuFolder
 sourceFolderItem(folderItem),
 btnListener(btnListener),
 buttonNameMap(buttonNameMap),
-iconThread(iconThread) 
-{     
+iconThread(iconThread)
+{
     ComponentConfigFile config;
     maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
     maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
-    buttonsPerPage = maxRows * maxColumns;
 }
 
 AppMenuFolder::~AppMenuFolder() { }
-
 
 /**
  * Sets the button grid row and column sizes, updating button layout
@@ -32,9 +30,7 @@ void AppMenuFolder::updateGridSize(int maxRows, int maxColumns)
         this->maxColumns = std::max<int>(maxColumns, 1);
         DBG(String("AppFolder: setting grid size of ") + String(maxRows)
                 + String(" rows, ") + String(maxColumns) + String(" columns"));
-        buttonsPerPage = maxRows * maxColumns;
         layoutButtons();
-        resized();
     }
 }
 
@@ -53,37 +49,6 @@ void AppMenuFolder::reload()
             + String(" Buttons from ") + String(menuItems.size())
             + String(" menu items"));
     layoutButtons();
-}
-
-/**
- * @return number of menu buttons in the folder.
- */
-int AppMenuFolder::size()
-{
-    return folderButtons.size();
-}
-
-/**
- * Find the index of a menu button in this folder
- */
-int AppMenuFolder::getButtonIndex
-(AppMenuButton::Ptr menuButton)
-{
-    return folderButtons.indexOf(menuButton);
-}
-
-/**
- * @return The selected menu button in this folder.
- * This will only return nullptr if there are no buttons in 
- * this folder.
- */
-AppMenuButton::Ptr AppMenuFolder::getSelectedButton()
-{
-    if (!validBtnIndex(selectedIndex))
-    {
-        return nullptr;
-    }
-    return folderButtons[selectedIndex];
 }
 
 /**
@@ -116,14 +81,6 @@ void AppMenuFolder::deselect()
 }
 
 /**
- * @return the index of the selected menu button.
- */
-int AppMenuFolder::getSelectedIndex()
-{
-    return selectedIndex;
-}
-
-/**
  * Creates or reloads a button for a menu item, inserting it into
  * the folder at a specific index. This shifts forward any buttons at 
  * indices equal or greater than the index. 
@@ -136,7 +93,8 @@ void AppMenuFolder::insertButton
     while (buttonNameMap.count(buttonName) > 0)
     {
         AppMenuButton::Ptr mappedButton = buttonNameMap[buttonName];
-        if (mappedButton->getParentComponent() == nullptr)
+        if (mappedButton->getParentComponent() == nullptr &&
+            *mappedButton->getMenuItem() == *newItem)
         {
             menuButton = mappedButton;
             break;
@@ -145,14 +103,14 @@ void AppMenuFolder::insertButton
     }
     if (menuButton == nullptr)
     {
-        menuButton = createMenuButton(newItem);
+        menuButton = createMenuButton(newItem, iconThread);
         buttonNameMap[buttonName] = menuButton;
     }
     if (btnListener != nullptr)
     {
         menuButton->addMouseListener(btnListener, false);
     }
-    index = median<int>(0, index, size());
+    index = median<int>(0, index, getButtonCount());
     folderButtons.insert(index, menuButton);
     if (selectedIndex >= index)
     {
@@ -224,10 +182,85 @@ void AppMenuFolder::setPadding(float xPadding, float yPadding)
 }
 
 /**
+ * Clear folderLayout,remove all child components, reload the
+ * button layout, and re-add the layout buttons as child
+ * components at their new positions.
+ */
+void AppMenuFolder::layoutButtons()
+{
+    while (!validBtnIndex(selectedIndex) && selectedIndex != -1)
+    {
+        selectedIndex--;
+    }
+    folderLayout.clearLayout(true);
+    folderLayout.setLayout(buildFolderLayout(folderButtons), this);
+#ifdef JUCE_DEBUG
+    folderLayout.printLayout();
+#endif
+    Rectangle<int> bounds = getLocalBounds();
+    bounds.reduce(margin * getWidth(), margin * getWidth());
+    if (!bounds.isEmpty())
+    {
+        folderLayout.layoutComponents(bounds, getWidth() * xPadding,
+                getHeight() * yPadding);
+    }
+}
+
+/**
+ * @return number of menu buttons in the folder.
+ */
+int AppMenuFolder::getButtonCount() const
+{
+    return folderButtons.size();
+}
+
+/**
+ * Find the index of a menu button in this folder
+ */
+int AppMenuFolder::getButtonIndex
+(AppMenuButton::Ptr menuButton) const
+{
+    return folderButtons.indexOf(menuButton);
+}
+
+/**
+ * Get the display name of a menu button
+ */
+String AppMenuFolder::getMenuButtonName(int index) const
+{
+    if (index < 0 || index >= folderButtons.size())
+    {
+        return String::empty;
+    }
+    return folderButtons.getUnchecked(index)->getMenuItem()->getAppName();
+}
+
+/**
+ * @return the index of the selected menu button.
+ */
+int AppMenuFolder::getSelectedIndex() const
+{
+    return selectedIndex;
+}
+
+/**
+ * @return the selected button in this folder, or nullptr if there
+ * is no selected button.
+ */
+AppMenuButton::Ptr AppMenuFolder::getSelectedButton()
+{
+    if (!validBtnIndex(selectedIndex))
+    {
+        return nullptr;
+    }
+    return folderButtons[selectedIndex];
+}
+
+/**
  * @return margin space between components and the edge of the
  * folder component, as a fraction of folder width.
  */
-float AppMenuFolder::getMargin()
+float AppMenuFolder::getMargin() const
 {
     return margin;
 }
@@ -236,7 +269,7 @@ float AppMenuFolder::getMargin()
  * @return horizontal space between folder child
  * components, as a fraction of folder width.
  */
-float AppMenuFolder::getXPadding()
+float AppMenuFolder::getXPadding() const
 {
     return xPadding;
 }
@@ -245,9 +278,18 @@ float AppMenuFolder::getXPadding()
  * @return vertical space between folder child
  * components, as a fraction of folder height.
  */
-float AppMenuFolder::getYPadding()
+float AppMenuFolder::getYPadding() const
 {
     return yPadding;
+}
+
+/**
+ * @return the minimum width, in pixels, needed by this folder to
+ * display its contents properly. 
+ */
+int AppMenuFolder::getMinimumWidth()
+{
+    return 0;
 }
 
 /**
@@ -264,21 +306,30 @@ void AppMenuFolder::resized()
 }
 
 /**
- * Clear folderLayout,remove all child components, reload the
- * button layout, and re-add the layout buttons as child
- * components.
+ * @return the title of the menu button at this index, or String::empty
+ * if there is no button at this index.
  */
-void AppMenuFolder::layoutButtons()
+String AppMenuFolder::getButtonTitle(int index)
 {
-    while (!validBtnIndex(selectedIndex) && selectedIndex != -1)
+    if (index < 0 || index >= folderButtons.size())
     {
-        selectedIndex--;
+        return String::empty;
     }
-    folderLayout.clearLayout(true);
-    folderLayout.setLayout(buildFolderLayout(folderButtons), this);
-    folderLayout.printLayout();
-    if (!getBounds().isEmpty())
-    {
-        resized();
-    }
+    return folderButtons.getUnchecked(index)->getMenuItem()->getAppName();
+}
+
+/**
+ * @return the maximum number of menu item rows to show on screen
+ */
+int AppMenuFolder::getMaxRows() const
+{
+    return maxRows;
+}
+
+/**
+ * @return the maximum number of menu item columns to show on screen
+ */
+int AppMenuFolder::getMaxColumns() const
+{
+    return maxColumns;
 }

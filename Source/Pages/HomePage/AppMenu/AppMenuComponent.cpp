@@ -7,6 +7,10 @@
 
 #include "AppMenuComponent.h"
 
+
+//TODO: load these from config, set on input page
+const String AppMenuComponent::openPopupMenuBinding = "CTRL + e";
+const String AppMenuComponent::reloadMenuBinding = "TAB";
 DesktopEntries AppMenuComponent::desktopEntries;
 
 AppMenuComponent::AppMenuComponent
@@ -14,7 +18,7 @@ AppMenuComponent::AppMenuComponent
 loadingState(false),
 ConfigurableComponent(componentKey),
 loadingSpinner(loadingSpinner)
-{   
+{
     addTrackedKeys({
         ComponentConfigFile::maxRowsKey,
         ComponentConfigFile::maxColumnsKey
@@ -22,7 +26,6 @@ loadingSpinner(loadingSpinner)
     ComponentConfigFile config;
     maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
     maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
-    buttonsPerPage = maxRows*maxColumns;
 
     setWantsKeyboardFocus(false);
     loadBaseFolder();
@@ -33,7 +36,7 @@ AppMenuComponent::~AppMenuComponent() { }
 /**
  * @return true if the AppMenuComponent is currently in the loading state
  */
-bool AppMenuComponent::isLoading()
+bool AppMenuComponent::isLoading() const
 {
     return loadingState;
 }
@@ -48,26 +51,22 @@ void AppMenuComponent::exitLoadingState()
 }
 
 /**
- * Open the pop-up menu used for editing this object.
- * @param selectionMenu if true, the pop-up menu contains only options for 
- * editing the selected menu button in the active folder.
+ * Open the pop-up menu used for editing menu items.
  */
-void AppMenuComponent::openPopupMenu(bool selectionMenu)
+void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
 {
-    if (openFolders.isEmpty() || isLoading())
+    if (ignoringInput())
     {
         return;
     }
-    PopupMenu appMenu;
-    AppMenuButton::Ptr selectedButton = selectionMenu ?
-            openFolders[getActiveFolderIndex()]->getSelectedButton() : nullptr;
+    PopupMenu editMenu;
 
     AppMenuItem::Ptr selectedMenuItem = selectedButton == nullptr ?
             nullptr : selectedButton->getMenuItem();
 
     /**
-     * The popup menu really shouldn't be appearing when the button editor
-     * is visible, if it still is, close and remove it.
+     * The pop-up menu really shouldn't be appearing when the button editor
+     * is visible, but if it still is, close and remove the editor.
      */
     if (buttonEditor != nullptr)
     {
@@ -87,34 +86,34 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
      */
     if (selectedButton != nullptr)
     {
-        appMenu.addItem(1, "Edit");
-        appMenu.addItem(2, "Delete");
+        editMenu.addItem(1, "Edit");
+        editMenu.addItem(2, "Delete");
         if (selectedMenuItem->isFolder())
         {
-            appMenu.addItem(4, "New application link");
+            editMenu.addItem(4, "New application link");
         }
         else if (getActiveFolderIndex() > 0)
         {
-            appMenu.addItem(6, "Pin to favorites");
+            editMenu.addItem(6, "Pin to favorites");
         }
         if (selectedMenuItem->canChangeIndex(-1))
         {
-            appMenu.addItem(7, "Move back");
+            editMenu.addItem(7, "Move back");
         }
         if (selectedMenuItem->canChangeIndex(1))
         {
-            appMenu.addItem(8, "Move forward");
+            editMenu.addItem(8, "Move forward");
         }
     }
     else
     {
-        appMenu.addItem(3, "New favorite application link");
-        appMenu.addItem(4, "New application link");
-        appMenu.addItem(5, "New folder");
+        editMenu.addItem(3, "New favorite application link");
+        editMenu.addItem(4, "New application link");
+        editMenu.addItem(5, "New folder");
     }
 
     AppMenuFolder* activeFolder = openFolders[getActiveFolderIndex()];
-    const int selection = appMenu.show();
+    const int selection = editMenu.show();
     std::function<void() > confirmNew = [this]()
     {
         loadBaseFolder();
@@ -123,7 +122,7 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
     switch (selection)
     {
         case 1://User selects "Edit"
-            showMenuButtonEditor(activeFolder->getSelectedButton());
+            showMenuButtonEditor(selectedButton);
             break;
         case 2://User selects "Delete"
             selectedButton->confirmRemoveButtonSource([this, activeFolder]()
@@ -133,8 +132,7 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
             });
             break;
         case 3://User selects "New favorite application"
-            showPopupEditor(new NewConfigAppEditor(appConfig, iconThread,
-                    confirmNew));
+            showPopupEditor(new NewConfigAppEditor(iconThread, confirmNew));
             break;
         case 4://User selects "New application link"
         {
@@ -151,7 +149,7 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
         case 5://User selects "New folder"
         {
             AppMenuPopupEditor* newFolderEditor = new NewFolderEditor
-                    (appConfig, iconThread, confirmNew);
+                    (iconThread, confirmNew);
             showPopupEditor(newFolderEditor);
             break;
         }
@@ -175,6 +173,32 @@ void AppMenuComponent::openPopupMenu(bool selectionMenu)
             activeFolder->swapButtons(activeFolder->getSelectedIndex(),
                     activeFolder->getSelectedIndex() + 1);
     }
+}
+
+/**
+ * Pass on key events to the AppMenu from its containing page.
+ * Opens the pop-up menu or reloads the AppMenu if the correct shortcuts
+ * are detected, otherwise let the AppMenuComponent's subclass determine
+ * how to handle the key event.
+ */
+bool AppMenuComponent::keyPressed(const KeyPress& key)
+{
+    if (ignoringInput())
+    {
+        return false;
+    }
+    if (key == KeyPress::createFromDescription(openPopupMenuBinding))
+    {
+        openPopupMenu(getSelectedButton());
+        return true;
+    }
+    if (key == KeyPress::createFromDescription(reloadMenuBinding))
+    {
+        loadBaseFolder();
+        return true;
+    }
+    return folderKeyPressed(key, openFolders.isEmpty()
+            ? nullptr : openFolders[getActiveFolderIndex()]);
 }
 
 /**
@@ -208,11 +232,11 @@ void AppMenuComponent::loadBaseFolder()
         [this, savedIndex]()
         {
             DBG("Loading desktop entries complete, creating base folder");
-            setLoadingState(false);
             openFolder(AppMenuItemFactory::createBaseFolderItem
                     (desktopEntries));
             openFolders.getFirst()->selectIndex(savedIndex);
             layoutFolders(false);
+            setLoadingState(false);
         });
     }
 }
@@ -226,7 +250,7 @@ void AppMenuComponent::closeFolder()
     if (openFolders.size() > 0)
     {
         int targetFolderCount = getActiveFolderIndex();
-        DBG(String("Closing folder ") + String(openFolders.size()-1));
+        DBG(String("Closing folder ") + String(openFolders.size() - 1));
         if (getActiveFolderIndex() > 0)
         {
             setActiveFolderIndex(getActiveFolderIndex() - 1);
@@ -237,6 +261,25 @@ void AppMenuComponent::closeFolder()
             openFolders.getLast()->deselect();
             removeChildComponent(openFolders.getLast());
             openFolders.removeLast();
+        }
+    }
+}
+
+/**
+ * Closes the active folder, unless the active folder is at index 0,
+ * in which case it will reload the folder.
+ */
+void AppMenuComponent::closeNonBaseFolder()
+{
+    if (openFolders.size() > 0)
+    {
+        if (getActiveFolderIndex() > 0)
+        {
+            closeFolder();
+        }
+        else
+        {
+            loadBaseFolder();
         }
     }
 }
@@ -258,12 +301,9 @@ void AppMenuComponent::setActiveFolderIndex(int folder)
  * folder layout on the active folder, and apply key controls to that
  * folder's menu items.
  */
-int AppMenuComponent::getActiveFolderIndex()
+int AppMenuComponent::getActiveFolderIndex() const
 {
-    activeFolderIndex = median<int>(0,
-                                    activeFolderIndex,
-                                    openFolders.size() - 1);
-    return activeFolderIndex;
+    return median<int>(0, activeFolderIndex, openFolders.size() - 1);
 }
 
 /**
@@ -291,6 +331,111 @@ void AppMenuComponent::openEditorForSelected()
     }
 }
 
+/**
+ * @return the number of currently open folder components
+ */
+int AppMenuComponent::getNumFolders() const
+{
+    return openFolders.size();
+}
+
+/**
+ * @return the number of buttons in the folder at this index, or -1
+ * if there is no folder at this index.
+ */
+int AppMenuComponent::getFolderSize(int index)
+{
+    if (index < 0 || index >= openFolders.size())
+    {
+        return -1;
+    }
+    return openFolders.getUnchecked(index)->getButtonCount();
+}
+
+/**
+ * @param index
+ * @return the minimum width, in pixels, that the folder at this index
+ * should have, or -1 if there is no folder at this index.
+ */
+int AppMenuComponent::getMinimumFolderWidth(int index)
+{
+    if (index < 0 || index >= openFolders.size())
+    {
+        return -1;
+    }
+    return openFolders.getUnchecked(index)->getMinimumWidth();
+}
+
+/**
+ * @param index the index of one of this menu's AppMenuFolders
+ * @return the selected menu button index for the folder, or -1 if
+ * the folder at the index parameter doesn't exist or has no selected menu
+ * button.
+ */
+int AppMenuComponent::getFolderSelectedIndex(int index) const
+{
+    if (index < 0 || index > openFolders.size())
+    {
+        return -1;
+    }
+    return openFolders.getUnchecked(index)->getSelectedIndex();
+}
+
+/**
+ * Updates the folder component layout, optionally animating the transition.
+ */
+void AppMenuComponent::layoutFolders(bool animateTransition)
+{
+    if (getBounds().isEmpty())
+    {
+        return;
+    }
+    static bool initialLayout = true;
+    static Rectangle<int> lastBounds = getBounds();
+    static int lastFolderCount = openFolders.size();
+    static int lastActiveFolder = getActiveFolderIndex();
+    if (initialLayout || lastBounds != getBounds() || isLoading()
+        || lastFolderCount != openFolders.size()
+        || lastActiveFolder != getActiveFolderIndex()
+        || layoutChanged(openFolders[getActiveFolderIndex()]))
+    {
+        initialLayout = false;
+        lastBounds = getBounds();
+        lastFolderCount = openFolders.size();
+        lastActiveFolder = getActiveFolderIndex();
+        DBG("Updating folder layouts");
+        for (int i = 0; i < openFolders.size(); i++)
+        {
+            Rectangle<int> folderBounds = updateFolderBounds(openFolders[i], i);
+            if (animateTransition)
+            {
+                Desktop::getInstance().getAnimator().
+                        animateComponent(openFolders[i], folderBounds, 1,
+                        animationDuration, true, 1, 1);
+            }
+            else
+            {
+                openFolders[i]->setBounds(folderBounds);
+            }
+        }
+    }
+}
+
+/**
+ * @return the maximum number of menu item columns to show on screen
+ */
+int AppMenuComponent::getMaxColumns() const
+{
+    return maxColumns;
+}
+
+/**
+ * @return the maximum number of menu item rows to show on screen
+ */
+int AppMenuComponent::getMaxRows() const
+{
+    return maxRows;
+}
 
 /**
  * Updates the layout if row/column size changes, otherwise handle
@@ -324,12 +469,12 @@ void AppMenuComponent::loadConfigProperties(ConfigFile* config, String key)
     }
 }
 
-
 /**
  * Reposition child components, and update folder layout without animating.
  */
 void AppMenuComponent::resized()
 {
+    menuResized();
     Rectangle<int> bounds = getLocalBounds();
     DBG(String("AppMenu resized, bounds=") + getScreenBounds().toString());
     if (buttonEditor != nullptr)
@@ -356,9 +501,11 @@ void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
         removeChildComponent(openFolders.getLast());
         openFolders.removeLast();
     }
-    AppMenuFolder* newFolder = createFolderObject(folderItem);
+    AppMenuFolder* newFolder = createFolderObject
+            (folderItem, buttonNameMap, iconThread);
 
     openFolders.add(newFolder);
+    newFolder->addMouseListener(this, false);
     setActiveFolderIndex(openFolders.size() - 1);
     addAndMakeVisible(newFolder);
 }
@@ -371,13 +518,14 @@ AppMenuButton::Ptr AppMenuComponent::getSelectedButton()
 {
     if (!openFolders.isEmpty())
     {
-        return openFolders[getActiveFolderIndex()]->getSelectedButton();
+        AppMenuFolder* folder = openFolders[getActiveFolderIndex()];
+        return folder->getSelectedButton();
     }
     return nullptr;
 }
 
 /**
- * Adds and shows a new popup editor component, safely removing any previous
+ * Adds and shows a new pop-up editor component, safely removing any previous
  * editor.
  */
 void AppMenuComponent::showPopupEditor(AppMenuPopupEditor* editor)
@@ -392,30 +540,31 @@ void AppMenuComponent::showPopupEditor(AppMenuPopupEditor* editor)
 }
 
 /**
- * Create and show a popup editor component for a button in this menu.
- * This will only work if the button is in the last opened folder and the menu 
- * is not in the loading state. 
+ * Create and show a pop-up editor component for a button in this menu.
+ * This will only work if the button is in the active folder and the menu 
+ * is not ignoring input.
  */
 void AppMenuComponent::showMenuButtonEditor(AppMenuButton::Ptr button)
 {
-    if (!isLoading()
-        && openFolders.getLast()->getButtonIndex(button) != -1)
+    if (ignoringInput() ||
+        openFolders[getActiveFolderIndex()]->getButtonIndex(button) == -1)
     {
-
-        showPopupEditor(button->getEditor([this, button]
-                (AppMenuPopupEditor * editor)
-        {
-            openFolders.getLast()->repaint();
-            if (button->getMenuItem()->changesDesktopEntries())
-            {
-                desktopEntries.loadEntries([](String s)
-                {
-                }, []()
-                {
-                });
-            }
-        }));
+        return;
     }
+
+    showPopupEditor(button->getEditor([this, button]
+            (AppMenuPopupEditor * editor)
+    {
+        openFolders[getActiveFolderIndex()]->repaint();
+        if (button->getMenuItem()->changesDesktopEntries())
+        {
+            desktopEntries.loadEntries([](String s)
+            {
+            }, []()
+            {
+            });
+        }
+    }));
 }
 
 /**
@@ -424,7 +573,7 @@ void AppMenuComponent::showMenuButtonEditor(AppMenuButton::Ptr button)
  */
 void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
 {
-    if (isLoading())
+    if (ignoringInput())
     {
         return;
     }
@@ -478,40 +627,35 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
 }
 
 /**
- * Click AppMenuButtons on left click, open the popup menu
+ * Click AppMenuButtons on left click, open the pop-up menu
  * on right click or control click.
  */
 void AppMenuComponent::mouseDown(const MouseEvent &event)
 {
-    //ignore clicks when loading or when the editor is open
-    if (!isLoading() &&
-        (buttonEditor == nullptr || !buttonEditor->isVisible()))
+    if (ignoringInput())
     {
+        return;
+    }
 
-        AppMenuButton* appClicked = dynamic_cast<AppMenuButton*>
-                (event.originalComponent);
-        if (appClicked == nullptr)
+    AppMenuButton* appClicked = dynamic_cast<AppMenuButton*>
+            (event.originalComponent);
+    //handle right clicks/ctrl-clicks
+    if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
+    {
+        if (appClicked == nullptr ||
+            appClicked == getSelectedButton())
         {
-            return;
+            openPopupMenu(appClicked);
         }
-        //handle right clicks/ctrl-clicks
-        if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
-        {
-            if (appClicked == nullptr ||
-                appClicked == getSelectedButton())
-            {
-                openPopupMenu(appClicked == getSelectedButton());
-            }
-            else
-            {
-                onButtonClick(appClicked);
-            }
-
-        }//handle regular clicks
-        else if (event.mods.isLeftButtonDown() && appClicked != nullptr)
+        else
         {
             onButtonClick(appClicked);
         }
+
+    }//handle regular clicks
+    else if (event.mods.isLeftButtonDown() && appClicked != nullptr)
+    {
+        onButtonClick(appClicked);
     }
 }
 
@@ -532,4 +676,16 @@ void AppMenuComponent::setLoadingState(bool loading)
             loadingSpinner.setLoadingText("");
         }
     }
+}
+
+/**
+ * @return true iff the menu is loading, empty, animating, or otherwise
+ * in a state where user input should be ignored.
+ */
+bool AppMenuComponent::ignoringInput() const
+{
+    return openFolders.isEmpty() || isLoading() 
+            || Desktop::getInstance()
+            .getAnimator().isAnimating(openFolders[getActiveFolderIndex()])
+            || (buttonEditor != nullptr && buttonEditor->isVisible());
 }

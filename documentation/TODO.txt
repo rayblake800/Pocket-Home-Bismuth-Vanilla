@@ -1,18 +1,16 @@
--Refine the AppMenuComponent interface to allow for more flexible menu variants
-  What's left to fix:
-    Desktop entries no longer sorted after name changes
-        DesktopEntryMenuItem isn't marked as a DesktopEntries editor?
-    Right clicking on page doesn't bring up the generic menu anymore
-    Scrolling menu doesn't correctly scale text when recycling menu buttons
-    Scrolling menu fails to automatically select index 0 when opening a new 
-        folder.
--Decrease coupling between AppMenuComponent and subclasses
-    AppMenuComponent subclasses shouldn't need direct access to all
-    AppMenuFolders
+-ScrollingAppMenu should have faster animation times than PagedAppMenu
 
+-Design and implement TabbedAppMenu
+
+-AppMenu still isn't acquiring keyboard focus immediately
+
+-Wifi scanning keeps running in the background even when the window isn't focused
+
+-prevent battery widget from showing percentages over 100
+    -perhaps run battery.sh in these cases?
 
 -Make bluetooth work and properly implement the bluetooth page
-    -Strip down the bluetooth settings classes to the bare minumum
+    -Strip down the bluetooth settings classes to the bare minimum
     -Adapt bluetooth code from 
         https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/client/main.c
         

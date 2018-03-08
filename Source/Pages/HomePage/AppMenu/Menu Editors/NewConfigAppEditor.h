@@ -21,7 +21,7 @@ public:
      * @onConfirm is an optional callback routine to run after creating the
      * new application entry
      */
-    NewConfigAppEditor(AppConfigFile& config, IconThread& iconThread,
+    NewConfigAppEditor(IconThread& iconThread,
             std::function<void() > onConfirm = []() {
             });
 };

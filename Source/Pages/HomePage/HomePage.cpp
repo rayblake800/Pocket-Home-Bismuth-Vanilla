@@ -119,7 +119,7 @@ void HomePage::mouseDown(const MouseEvent &event)
 {
     if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
     {
-        appMenu->openPopupMenu(false);
+        appMenu->openPopupMenu(nullptr);
     }
 }
 

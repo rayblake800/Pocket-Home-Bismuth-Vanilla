@@ -81,6 +81,20 @@ bool AppMenuItem::canChangeIndex(int offset) const
 }
 
 /**
+ * @return true iff this menu item and another share the same
+ * properties
+ */
+bool AppMenuItem::operator==(const AppMenuItem& toCompare) const {
+    return getAppName() == toCompare.getAppName()
+            && getCategories() == toCompare.getCategories()
+            && getCommand() == toCompare.getCommand()
+            && isFolder() == toCompare.isFolder()
+            && isTerminalApp() == toCompare.isTerminalApp()
+            && getIconName() == toCompare.getIconName()
+            && changesDesktopEntries() == toCompare.changesDesktopEntries();
+ }
+
+/**
  * Get an appropriate title to use for a deletion confirmation window.
  */
 String AppMenuItem::getConfirmDeleteTitle() const

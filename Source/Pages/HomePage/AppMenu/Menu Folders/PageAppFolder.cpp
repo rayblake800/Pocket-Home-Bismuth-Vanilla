@@ -1,3 +1,4 @@
+#include "../../../../Utils.h"
 #include "PageAppFolder.h"
 
 PageAppFolder::PageAppFolder(AppMenuItem::Ptr folderItem,
@@ -15,7 +16,7 @@ PageAppFolder::~PageAppFolder() { }
  * Create an AppMenuButton component for an AppMenuItem.
  */
 AppMenuButton::Ptr PageAppFolder::createMenuButton
-(AppMenuItem::Ptr menuItem)
+(AppMenuItem::Ptr menuItem, IconThread& iconThread)
 {
     return new PageMenuButton(menuItem, iconThread,
             menuItem->getAppName() + String("Button"));
@@ -35,7 +36,7 @@ GridLayoutManager::Layout PageAppFolder::buildFolderLayout
     GridLayoutManager::Layout layout;
     int numPages = getNumFolderPages();
     int numSpacers = numPages - 1;
-    int numAppColumns = maxColumns*numPages;
+    int numAppColumns = getMaxColumns() * numPages;
     int numPaddingGaps = numAppColumns - 1;
 
     int spacerSize = getMargin() * getWidth() * 2;
@@ -51,7 +52,8 @@ GridLayoutManager::Layout PageAppFolder::buildFolderLayout
             (Component* component, int row)
             {
                 layout[row].compRow.push_back({component, buttonSize});
-                if ((layout[row].compRow.size() + 1) % (maxColumns + 1) == 0
+                int rowSize= layout[row].compRow.size();
+                if ((rowSize + 1) % (getMaxColumns() + 1) == 0
                     && layout[row].compRow.size() < numLayoutColumns)
                 {
                     layout[row].compRow.push_back({nullptr, spacerSize});
@@ -60,8 +62,8 @@ GridLayoutManager::Layout PageAppFolder::buildFolderLayout
 
     //reserve space
     layout.reserve(sizeof (GridLayoutManager::RowLayoutParams)
-            * maxRows);
-    for (int i = 0; i < maxRows; i++)
+            * getMaxRows());
+    for (int i = 0; i < getMaxRows(); i++)
     {
         layout.push_back({1,
             {}});
@@ -73,13 +75,13 @@ GridLayoutManager::Layout PageAppFolder::buildFolderLayout
     //place buttons
     for (int i = 0; i < buttons.size(); i++)
     {
-        int pageIndex = i % buttonsPerPage;
-        int row = pageIndex / maxColumns;
+        int pageIndex = i % getButtonsPerPage();
+        int row = pageIndex / getMaxColumns();
         addButton(buttons[i], row);
     }
 
     //Fill in remaining empty spaces
-    for (int row = 0; row < maxRows; row++)
+    for (int row = 0; row < getMaxRows(); row++)
     {
         while (layout[row].compRow.size() < numLayoutColumns)
         {
@@ -93,10 +95,10 @@ GridLayoutManager::Layout PageAppFolder::buildFolderLayout
  * @return the number of pages this folder needs to display all menu
  * buttons.
  */
-int PageAppFolder::getNumFolderPages()
+int PageAppFolder::getNumFolderPages() const
 {
-    int numPages = size() / buttonsPerPage;
-    if (size() % buttonsPerPage > 0)
+    int numPages = getButtonCount() / getButtonsPerPage();
+    if (getButtonCount() % getButtonsPerPage() > 0)
     {
         numPages++;
     }
@@ -107,13 +109,9 @@ int PageAppFolder::getNumFolderPages()
  * @return the index of the page that's currently visible, or -1 if 
  * there is no current page. 
  */
-int PageAppFolder::getCurrentFolderPage()
+int PageAppFolder::getCurrentFolderPage() const
 {
-    if (currentPage < 0 || currentPage >= getNumFolderPages())
-    {
-        currentPage = std::max(getSelectionPage(), 0);
-    }
-    return std::max(currentPage, 0);
+    return median<int>(0,currentPage,getNumFolderPages()-1);
 }
 
 /**
@@ -134,12 +132,12 @@ bool PageAppFolder::setCurrentFolderPage(int pageNum)
  * @return the folder page index containing the selected folder 
  * button, or -1 if there is no selection.
  */
-int PageAppFolder::getSelectionPage()
+int PageAppFolder::getSelectionPage() const
 {
     int selected = getSelectedIndex();
     if (selected != -1)
     {
-        selected /= buttonsPerPage;
+        selected /= getButtonsPerPage();
     }
     return selected;
 }
@@ -148,12 +146,12 @@ int PageAppFolder::getSelectionPage()
  * @return the index of the selected button within its folder page,
  * or -1 if there is no selection.
  */
-int PageAppFolder::getSelectedIndexInFolderPage()
+int PageAppFolder::getSelectedIndexInFolderPage() const
 {
     int selected = getSelectedIndex();
     if (selected != -1)
     {
-        selected %= buttonsPerPage;
+        selected %= getButtonsPerPage();
     }
     return selected;
 }
@@ -162,12 +160,12 @@ int PageAppFolder::getSelectedIndexInFolderPage()
  * @return the column index of the selected button within its
  * folder page, or -1 if there is no selection.
  */
-int PageAppFolder::getSelectionColumn()
+int PageAppFolder::getSelectionColumn() const
 {
     int selected = getSelectedIndexInFolderPage();
     if (selected != -1)
     {
-        selected %= maxColumns;
+        selected %= getMaxColumns();
     }
     return selected;
 }
@@ -176,12 +174,12 @@ int PageAppFolder::getSelectionColumn()
  * @return the row index of the selected button within its
  * folder page, or -1 if there is no selection.
  */
-int PageAppFolder::getSelectionRow()
+int PageAppFolder::getSelectionRow() const
 {
     int selected = getSelectedIndexInFolderPage();
     if (selected != -1)
     {
-        selected /= maxColumns;
+        selected /= getMaxColumns();
     }
     return selected;
 }
@@ -190,17 +188,17 @@ int PageAppFolder::getSelectionRow()
  * Finds what index value a button would have at a particular
  * position within the folder.
  */
-int PageAppFolder::positionIndex(int page, int column, int row)
+int PageAppFolder::positionIndex(int page, int column, int row) const
 {
     if (page < 0 || column < 0 || row < 0 ||
         page >= getNumFolderPages()
-        || column >= maxColumns
-        || row >= maxRows)
+        || column >= getMaxColumns()
+        || row >= getMaxRows())
     {
         return -1;
     }
-    return page * maxColumns * maxRows
-            + row * maxColumns + column;
+    return page * getMaxColumns() * getMaxRows()
+            + row * getMaxColumns() + column;
 }
 
 /**
@@ -226,7 +224,7 @@ bool PageAppFolder::setSelectedPosition(int page, int column, int row)
 }
 
 /**
- * Resizes navigation buttons, then calls AppFolder::resized()
+ * Resizes padding, then calls AppFolder::resized()
  */
 void PageAppFolder::resized()
 {
@@ -237,12 +235,14 @@ void PageAppFolder::resized()
         Rectangle<int> parentBounds = parent->getLocalBounds();
         if (bounds.getWidth() > 0)
         {
-            setPadding(0.5 / (maxColumns * 20) * parentBounds.getWidth()
+            setPadding(0.5 / (getMaxColumns() * 20) * parentBounds.getWidth()
                     / bounds.getWidth(),
-                    0.5 / (maxRows * 2) * parentBounds.getHeight()
+                    0.5 / (getMaxRows() * 2) * parentBounds.getHeight()
                     / bounds.getHeight());
+            setMargin(getMargin() * parentBounds.getWidth() / bounds.getWidth());
         }
     }
+    layoutButtons();
     AppMenuFolder::resized();
 }
 
@@ -263,7 +263,6 @@ PageAppFolder::PageMenuButton::~PageMenuButton() { }
 void PageAppFolder::PageMenuButton::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
-    DBG(getName() + String(" bounds:") + bounds.toString());
     if (bounds.isEmpty())
     {
         return;
@@ -282,8 +281,8 @@ void PageAppFolder::PageMenuButton::resized()
         textBounds.setTop(bounds.getBottom()-(textHeight + 4));
         imageBounds.setBottom(textBounds.getY());
     }
-    
-    if(textHeight != titleFont.getHeight())
+
+    if (textHeight != titleFont.getHeight())
     {
         setTitleFont(titleFont.withHeight(textHeight));
     }

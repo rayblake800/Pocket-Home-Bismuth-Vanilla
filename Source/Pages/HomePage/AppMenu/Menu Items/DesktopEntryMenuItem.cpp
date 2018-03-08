@@ -64,6 +64,15 @@ String DesktopEntryMenuItem::getIconName() const
 }
 
 /**
+ * @return true, changes to this menu item change the current user's
+ * .Desktop files
+ */
+bool DesktopEntryMenuItem::changesDesktopEntries() const
+{
+    return true;
+}
+
+/**
  * Get an appropriate title to use for a deletion confirmation window.
  */
 String DesktopEntryMenuItem::getConfirmDeleteTitle() const

@@ -1,6 +1,11 @@
 #include "../Menu Folders/PageAppFolder.h"
 #include "PagedAppMenu.h"
 
+//folder navigation key bindings
+//TODO: set these in config
+const String PagedAppMenu::pageLeftBinding = "shift + cursor left";
+const String PagedAppMenu::pageRightBinding = "shift + cursor right";
+
 /**
  * @param loadingSpinner
  */
@@ -10,53 +15,36 @@ pageLeft(ComponentConfigFile::pageLeftKey),
 pageRight(ComponentConfigFile::pageRightKey),
 closeFolderBtn(ComponentConfigFile::pageUpKey)
 {
-    addAndMakeVisible(pageLeft);
-    pageLeft.setWantsKeyboardFocus(false);
-    pageLeft.setAlwaysOnTop(true);
-    pageLeft.addListener(this);
+    Array<Button*> buttons = {&pageLeft, &pageRight, &closeFolderBtn};
 
-    addAndMakeVisible(pageRight);
-    pageRight.setWantsKeyboardFocus(false);
-    pageRight.setAlwaysOnTop(true);
-    pageRight.addListener(this);
-
-    addAndMakeVisible(closeFolderBtn);
-    closeFolderBtn.setWantsKeyboardFocus(false);
-    closeFolderBtn.setAlwaysOnTop(true);
-    closeFolderBtn.addListener(this);
+    for (Button* button : buttons)
+    {
+        addAndMakeVisible(button);
+        button->setWantsKeyboardFocus(false);
+        button->setAlwaysOnTop(true);
+        button->addListener(this);
+    }
 }
 
 PagedAppMenu::~PagedAppMenu() { }
 
 /**
- * Use key presses for menu navigation, setting specific controls based on 
- * AppMenu type. Other classes may call this to pass on or simulate
- * key events.
- * @param key
- * @return true if the key press was used.
+ * Update navigation buttons when the menu changes size.
  */
-bool PagedAppMenu::keyPressed(const KeyPress& key)
+void PagedAppMenu::menuResized()
 {
-    if (isLoading() || openFolders.isEmpty()
-        || Desktop::getInstance().getAnimator().isAnimating())
-    {
-        return true;
-    }
-    std::function<void() > closeNonBaseFolder = [this]()
-    {
-        if (getActiveFolderIndex() > 0)
-        {
-            closeFolder();
-            layoutFolders(true);
-        }
-        else
-        {
-            loadBaseFolder();
-        }
-    };
+    pageLeft.applyConfigBounds();
+    pageRight.applyConfigBounds();
+    closeFolderBtn.applyConfigBounds();
+}
 
-    PageAppFolder* folder = static_cast<PageAppFolder*>
-            (openFolders[getActiveFolderIndex()]);
+/**
+ * Uses key events to navigate through the menu.
+ */
+bool PagedAppMenu::folderKeyPressed(const KeyPress& key, AppMenuFolder* activeFolder)
+{
+    DBG(String("Active folder index ") + String(getActiveFolderIndex()));
+    PageAppFolder* folder = static_cast<PageAppFolder*> (activeFolder);
     int selectedIndex = folder->getSelectedIndex();
     int currentPage = folder->getCurrentFolderPage();
     if (folder->getSelectionPage() != currentPage)
@@ -64,10 +52,21 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
         folder->deselect();
         selectedIndex = -1;
     }
+    KeyPress pageLeftKey = KeyPress::createFromDescription(pageLeftBinding);
+    KeyPress pageRightKey = KeyPress::createFromDescription(pageRightBinding);
+    if (key == pageLeftKey || key == pageRightKey)
+    {
+        int newPage = currentPage + (key == pageLeftKey ? -1 : 1);
+        if (folder->setCurrentFolderPage(newPage))
+        {
+            layoutFolders(true);
+        }
+        return true;
+    }
     int newRow = 0;
     int newColumn = 0;
-    DBG(String("On selected index ") + String(selectedIndex) + String(", pressed key ")
-            + key.getTextDescription());
+    DBG(String("On selected index ") + String(selectedIndex)
+            + String(", pressed key ") + key.getTextDescription());
     if (selectedIndex == -1)
     {
         if (key.isKeyCode(KeyPress::escapeKey))
@@ -78,8 +77,8 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
         else if (key.isKeyCode(KeyPress::leftKey)
                  || key.isKeyCode(KeyPress::upKey))
         {
-            int targetIndex = std::min((currentPage + 1) * buttonsPerPage - 1,
-                    folder->size() - 1);
+            int targetIndex = std::min((currentPage + 1) * buttonsPerPage() - 1,
+                    folder->getButtonCount() - 1);
             if (folder->selectIndex(targetIndex))
             {
                 folder->repaint();
@@ -119,19 +118,19 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
             newColumn--;
             if (newColumn < 0)
             {
-                newColumn = maxColumns - 1;
+                newColumn = getMaxColumns() - 1;
                 newPage--;
             }
         }
         else if (key.isKeyCode(KeyPress::rightKey))
         {
             newColumn++;
-            if (newColumn >= maxColumns)
+            if (newColumn >= getMaxColumns())
             {
                 newColumn = 0;
                 newPage++;
                 while (folder->positionIndex(newPage, newColumn, newRow) >=
-                       folder->size() && newRow > 0)
+                       folder->getButtonCount() && newRow > 0)
                 {
                     newRow--;
                 }
@@ -146,13 +145,13 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
         }
         else if (key.isKeyCode(KeyPress::downKey))
         {
-            if (newRow < (maxRows - 1))
+            if (newRow < (getMaxRows() - 1))
             {
                 newRow++;
             }
 
             while (folder->positionIndex(newPage, newColumn, newRow) >=
-                   folder->size() && newColumn > 0)
+                   folder->getButtonCount() && newColumn > 0)
             {
                 newColumn--;
             }
@@ -177,86 +176,67 @@ bool PagedAppMenu::keyPressed(const KeyPress& key)
 }
 
 /**
- * Updates the folder component layout, optionally animating the transition.
- * @param animateTransition if true, animate component changes rather than
- * immediately updating folder bounds.
+ * Check to see if any changes have occurred that justifies changing
+ * folder layout.
  */
-void PagedAppMenu::layoutFolders(bool animateTransition)
+bool PagedAppMenu::layoutChanged(const AppMenuFolder* activeFolder)
 {
-    static int lastFolder = -1;
-    static int lastPage = -1;
-    if (openFolders.isEmpty() || 
-            (lastFolder == getActiveFolderIndex() &&
-            lastPage == static_cast<PageAppFolder*>
-            (openFolders[getActiveFolderIndex()])
-            ->getCurrentFolderPage()))
+    const PageAppFolder* folder =
+            static_cast<const PageAppFolder*> (activeFolder);
+    static int lastFolderPage = folder->getCurrentFolderPage();
+    if (lastFolderPage != folder->getCurrentFolderPage())
     {
-        return;
+        lastFolderPage = folder->getCurrentFolderPage();
+        return true;
     }
-    lastFolder = getActiveFolderIndex();
-    lastPage =  static_cast<PageAppFolder*>
-            (openFolders[getActiveFolderIndex()])
-            ->getCurrentFolderPage();
-    pageLeft.applyConfigBounds();
-    pageRight.applyConfigBounds();
-    closeFolderBtn.applyConfigBounds();
-    for (int i = openFolders.size() - 1; i >= 0; i--)
+    lastFolderPage = folder->getCurrentFolderPage();
+    return false;
+}
+
+/**
+ * Return the bounds where the given folder should be placed in the menu.
+ */
+Rectangle<int> PagedAppMenu::updateFolderBounds(const AppMenuFolder* folder,
+        int folderIndex)
+{
+    const PageAppFolder* pageFolder =
+            static_cast<const PageAppFolder*> (folder);
+    int folderPage = pageFolder->getCurrentFolderPage();
+    int numFolderPages = pageFolder->getNumFolderPages();
+    int folderWidth = getWidth() - pageLeft.getWidth()*2;
+
+    Rectangle <int> bounds = getLocalBounds();
+    bounds.setWidth(getWidth() * numFolderPages);
+    bounds.setY(-getHeight() * (getActiveFolderIndex() - folderIndex));
+    bounds.setX(-getWidth() * folderPage);
+    if (folderIndex == getActiveFolderIndex())
     {
-        PageAppFolder* folder = static_cast<PageAppFolder*> (openFolders[i]);
-        int folderPage = folder->getCurrentFolderPage();
-        DBG(String("positioning folder with folderPage ") + String(folderPage));
-        int numFolderPages = folder->getNumFolderPages();
-
-        Rectangle<int> bounds = getLocalBounds();
-        bounds.setWidth(getWidth() * numFolderPages);
-        bounds.setX(-getWidth() * folderPage);
-        bounds.setY(getHeight() * (getActiveFolderIndex()-i));
-        if (folder->getBounds().isEmpty())
-        {
-            folder->setBounds(bounds.withY(getBottom()));
-        }
-        float margin = (float) pageLeft.getWidth()
-                / (float) bounds.getWidth();
-        if (margin != folder->getMargin())
-        {
-            folder->setMargin(margin);
-            folder->layoutButtons();
-        }
-        DBG(String("Moving folder to bounds ") + bounds.toString());
-        if (animateTransition)
-        {
-            Desktop::getInstance().getAnimator().animateComponent(folder,
-                    bounds, 1, 250, true, 1, 1);
-        }
-        else
-        {
-            folder->setBounds(bounds);
-        }
-
-        //update navigation buttons after changing last open folder bounds
-        if (i == getActiveFolderIndex())
-        {
-            bool showLeft = folderPage > 0;
-            bool showRight = folderPage < (numFolderPages - 1);
-            bool showUp = openFolders.size() > 1;
-            pageLeft.setVisible(showLeft);
-            pageLeft.setEnabled(showLeft);
-            pageRight.setVisible(showRight);
-            pageRight.setEnabled(showRight);
-            closeFolderBtn.setVisible(showUp);
-            closeFolderBtn.setEnabled(showUp);
-        }
+        bool showLeft = folderPage > 0;
+        bool showRight = folderPage < (numFolderPages - 1);
+        bool showUp = getActiveFolderIndex() > 0;
+        pageLeft.setVisible(showLeft);
+        pageLeft.setEnabled(showLeft);
+        pageRight.setVisible(showRight);
+        pageRight.setEnabled(showRight);
+        closeFolderBtn.setVisible(showUp);
+        closeFolderBtn.setEnabled(showUp);
     }
+    DBG(String("folder ") + String(folderIndex) + String(" is at ") + bounds.toString());
+    return bounds;
 }
 
 /**
  * Create a folder component object from a folder menu item.
  * @param folderItem
  */
-AppMenuFolder* PagedAppMenu::createFolderObject
-(AppMenuItem::Ptr folderItem)
+AppMenuFolder* PagedAppMenu::createFolderObject(AppMenuItem::Ptr folderItem,
+        std::map<String, AppMenuButton::Ptr>& buttonMap,
+        IconThread& iconThread)
 {
-    return new PageAppFolder(folderItem, this, buttonNameMap, iconThread);
+    PageAppFolder* folder = new PageAppFolder
+            (folderItem, this, buttonMap, iconThread);
+    folder->setMargin((float) pageLeft.getWidth() / (float) getWidth());
+    return folder;
 }
 
 /**
@@ -264,33 +244,16 @@ AppMenuFolder* PagedAppMenu::createFolderObject
  */
 void PagedAppMenu::buttonClicked(Button* button)
 {
-    if (openFolders.isEmpty() ||
-        !(button == &pageLeft 
-          || button == &pageRight
-          || button == &closeFolderBtn))
-    {
-        return;
-    }
-    if(button == &closeFolderBtn && openFolders.size() > 1)
+    if (button == &closeFolderBtn && getNumFolders() > 1)
     {
         closeFolder();
-        layoutFolders(true);
-        return;
     }
-    PageAppFolder* folder = static_cast<PageAppFolder*>
-            (openFolders[getActiveFolderIndex()]);
-
-    int targetPage = folder->getCurrentFolderPage();
-    if (button == &pageLeft)
+    else if (button == &pageLeft)
     {
-        targetPage--;
+        keyPressed(KeyPress::createFromDescription(pageLeftBinding));
     }
     else if (button == &pageRight)
     {
-        targetPage++;
-    }
-    if (folder->setCurrentFolderPage(targetPage))
-    {
-        layoutFolders(true);
+        keyPressed(KeyPress::createFromDescription(pageRightBinding));
     }
 }

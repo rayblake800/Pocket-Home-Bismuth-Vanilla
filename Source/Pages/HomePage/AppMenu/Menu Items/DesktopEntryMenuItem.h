@@ -52,6 +52,13 @@ public:
      * @return the name or path used to load the icon file. 
      */
     String getIconName() const override;
+    
+    /**
+     * @return true, changes to this menu item change the current user's
+     * .Desktop files
+     */
+    bool changesDesktopEntries() const override;
+
 
 protected:
 

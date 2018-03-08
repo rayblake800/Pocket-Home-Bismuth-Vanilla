@@ -33,9 +33,11 @@ public:
     /**
      * Create an AppMenuButton component for an AppMenuItem.
      * @param menuItem
+     * @param iconThread will be used by the button to load
+     * its icon.
      */
     virtual AppMenuButton::Ptr createMenuButton
-    (AppMenuItem::Ptr menuItem) = 0;
+    (AppMenuItem::Ptr menuItem, IconThread& iconThread) = 0;
 
 
     /**
@@ -49,26 +51,6 @@ public:
      */
     void reload();
 
-    /**
-     * @return number of menu buttons in the folder.
-     */
-    int size();
-
-    /**
-     * Find the index of a menu button in this folder
-     * 
-     * @param menuButton
-     * @return the button's index, or -1 if the button is not in this
-     * folder.
-     */
-    int getButtonIndex(AppMenuButton::Ptr menuButton);
-
-    /**
-     * @return The selected menu button in this folder.
-     * This will only return nullptr if there are no buttons in 
-     * this folder.
-     */
-    AppMenuButton::Ptr getSelectedButton();
 
     /**
      * Set this folder's selected menu button
@@ -81,12 +63,6 @@ public:
      * Deselects the selected button, if one exists
      */
     void deselect();
-
-    /**
-     * @return the index of the selected menu button, or -1 if no button
-     * is selected
-     */
-    int getSelectedIndex();
 
     /**
      * Creates or reloads a button for a menu item, inserting it into
@@ -144,30 +120,73 @@ public:
      */
     void setPadding(float xPadding, float yPadding);
 
+
+    /**
+     * Clear folderLayout,remove all child components, reload the
+     * button layout, and re-add the layout buttons as child
+     * components at their new positions.
+     */
+    void layoutButtons();
+
+    /**
+     * @return number of menu buttons in the folder.
+     */
+    int getButtonCount() const;
+
+    /**
+     * Find the index of a menu button in this folder
+     * 
+     * @param menuButton
+     * @return the button's index, or -1 if the button is not in this
+     * folder.
+     */
+    int getButtonIndex(AppMenuButton::Ptr menuButton) const;
+
+    /**
+     * Get the display name of a menu button
+     * @param index
+     * @return the button title at this index, or the empty string
+     * if index does not correspond to a menu button.
+     */
+    String getMenuButtonName(int index) const;
+
+    /**
+     * @return the index of the selected menu button, or -1 if no button
+     * is selected
+     */
+    int getSelectedIndex() const;
+
+    /**
+     * @return the selected button in this folder, or nullptr if there
+     * is no selected button.
+     */
+    AppMenuButton::Ptr getSelectedButton();
+
+
     /**
      * @return margin space between components and the edge of the
      * folder component, as a fraction of folder width.
      */
-    float getMargin();
+    float getMargin() const;
 
     /**
      * @return horizontal space between folder child
      * components, as a fraction of folder width.
      */
-    float getXPadding();
+    float getXPadding() const;
 
     /**
      * @return vertical space between folder child
      * components, as a fraction of folder height.
      */
-    float getYPadding();
+    float getYPadding() const;
 
     /**
-     * Clear folderLayout,remove all child components, reload the
-     * button layout, and re-add the layout buttons as child
-     * components.
+     * @return the minimum width, in pixels, needed by this folder to
+     * display its contents properly. By default this returns 0.
      */
-    virtual void layoutButtons();
+    virtual int getMinimumWidth();
+
 
 protected:
     /**
@@ -175,13 +194,30 @@ protected:
      */
     void resized() override;
 
+    /**
+     * @param index
+     * @return the title of the menu button at this index, or String::empty
+     * if there is no button at this index.
+     */
+    String getButtonTitle(int index);
+    
+    /**
+     * @return the maximum number of menu item rows to show on screen
+     */
+    int getMaxRows() const;
 
-    //New buttons will need this to load their icons.
-    IconThread& iconThread;
+    /**
+     * @return the maximum number of menu item columns to show on screen
+     */
+    int getMaxColumns() const;
 
-    int maxRows = 1;
-    int maxColumns = 1;
-    int buttonsPerPage = 1;
+    
+    /**
+     * @return the maximum number of menu items to show on screen
+     */
+    inline int getButtonsPerPage() const {
+        return getMaxRows() * getMaxColumns();
+    }
 private:
 
     /**
@@ -202,6 +238,9 @@ private:
         return index >= 0 && index < folderButtons.size();
     }
 
+
+    //New buttons will need this to load their icons.
+    IconThread& iconThread;
     //Listener to assign to all button components
     MouseListener* btnListener = nullptr;
     //Reference to the AppMenuComponent's button map
@@ -213,6 +252,8 @@ private:
     float margin = 0;
     float xPadding = 0;
     float yPadding = 0;
+    int maxRows = 1;
+    int maxColumns = 1;
     //Holds all menu buttons
     Array<AppMenuButton::Ptr> folderButtons;
     //Tracks selected button index

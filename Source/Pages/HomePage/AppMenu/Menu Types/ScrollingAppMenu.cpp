@@ -12,34 +12,17 @@ ScrollingAppMenu::~ScrollingAppMenu() { }
  * AppMenu type. Other classes may call this to pass on or simulate
  * key events.
  */
-bool ScrollingAppMenu::keyPressed(const KeyPress& key)
+bool ScrollingAppMenu::folderKeyPressed(const KeyPress& key,
+        AppMenuFolder* activeFolder)
 {
-    if (isLoading() || openFolders.isEmpty()
-        || Desktop::getInstance().getAnimator().isAnimating())
-    {
-        return true;
-    }
-    std::function<void() > closeNonBaseFolder = [this]()
-    {
-        if (getActiveFolderIndex() > 0)
-        {
-            closeFolder();
-            layoutFolders(true);
-        }
-        else
-        {
-            loadBaseFolder();
-        }
-    };
-
-    AppMenuFolder* folder = openFolders[getActiveFolderIndex()];
-    int selectedIndex = folder->getSelectedIndex();
+    int selectedIndex = activeFolder->getSelectedIndex();
     if (selectedIndex == -1 && getActiveFolderIndex() > 0)
     {
-        folder->selectIndex(0);
+        activeFolder->selectIndex(0);
     }
     int newIndex = selectedIndex;
-    DBG(String("On selected index ") + String(selectedIndex) + String(", pressed key ")
+    DBG(String("On selected index ") + String(selectedIndex)
+            + String(", pressed key ")
             + key.getTextDescription());
     if (selectedIndex == -1)
     {
@@ -60,15 +43,15 @@ bool ScrollingAppMenu::keyPressed(const KeyPress& key)
         {
             return false;
         }
-        folder->selectIndex(newIndex);
+        activeFolder->selectIndex(newIndex);
         return true;
     }
     else
     {
         if (key.isKeyCode(KeyPress::escapeKey))
         {
-            folder->deselect();
-            folder->repaint();
+            activeFolder->deselect();
+            activeFolder->repaint();
             return true;
         }
         else if (key.isKeyCode(KeyPress::returnKey) ||
@@ -94,7 +77,7 @@ bool ScrollingAppMenu::keyPressed(const KeyPress& key)
         {
             return false;
         }
-        if (folder->selectIndex(newIndex))
+        if (activeFolder->selectIndex(newIndex))
         {
             layoutFolders(true);
         }
@@ -103,62 +86,64 @@ bool ScrollingAppMenu::keyPressed(const KeyPress& key)
 }
 
 /**
- * Updates the folder component layout, optionally animating the transition.
+ * Check to see if any changes have occurred that justifies changing
+ * folder layout.  This does not need to account for the initial layout,
+ * changes to menu bounds, folders opening and closing, and selection
+ * of a new active folder, as all those events will update folder layout
+ * without checking this value.
  */
-void ScrollingAppMenu::layoutFolders(bool animateTransition)
+bool ScrollingAppMenu::layoutChanged(const AppMenuFolder* activeFolder)
 {
-    if (openFolders.isEmpty() || getBounds().isEmpty())
+    static int lastSelectedIndex = activeFolder->getSelectedIndex();
+    if (lastSelectedIndex != activeFolder->getSelectedIndex())
     {
-        return;
+        lastSelectedIndex = activeFolder->getSelectedIndex();
+        return true;
     }
-    int xPos = 0;
-    int yPos = 0;
-    int buttonHeight = getHeight() / maxRows;
-    DBG(String("Button height is ") + String(buttonHeight));
-    Array<Rectangle<int>> folderBounds;
-    for (AppMenuFolder* folder : openFolders)
-    {
-        ScrollingAppFolder* scrollingFolder =
-                static_cast<ScrollingAppFolder*>(folder);
-        folderBounds.add(Rectangle<int>
-                (xPos, yPos, 
-                buttonHeight + scrollingFolder->getTextWidth(),
-                 buttonHeight * scrollingFolder->size()));
-        xPos += folderBounds.getLast().getWidth();
-        int selected = folder->getSelectedIndex();
-        if (selected > 0)
-        {
-            yPos += selected * buttonHeight;
-        }
-    }
-    AppMenuFolder* activeFolder = openFolders[getActiveFolderIndex()];
-    int selected = std::max<int>(0, activeFolder->getSelectedIndex());
-    Rectangle<int> bounds = getLocalBounds();
-    Rectangle<int> selectionBounds = folderBounds[getActiveFolderIndex()];
-    DBG(String("Centering on folder ") + String(getActiveFolderIndex())
-            + String(" index ") + String(selected));
-    int selXCenter = selectionBounds.getCentreX();
-    int selYCenter = selectionBounds.getY() + selected * buttonHeight
-            + buttonHeight / 2;
-    int xOffset = bounds.getCentreX() - selXCenter;
-    int yOffset = bounds.getCentreY() - selYCenter;
+    return false;
+}
 
-    for (int i = 0; i < openFolders.size(); i++)
+/**
+ * Return the bounds where the given folder should be placed in the menu.
+ * @param folder
+ * @param folderIndex
+ * @return 
+ */
+Rectangle<int> ScrollingAppMenu::updateFolderBounds(const AppMenuFolder* folder,
+        int folderIndex)
+{
+    int activeFolder = getActiveFolderIndex();
+    static Array<int> folderWidths;
+    while (folderWidths.size() >= getNumFolders())
     {
-        AppMenuFolder* folder = openFolders[i];
-        Rectangle<int> movedBounds = folderBounds[i].translated
-                (xOffset, yOffset);
-        DBG(String("Moving folder to ") + movedBounds.toString());
-        if (animateTransition)
+        folderWidths.removeLast();
+    }
+    int buttonHeight = getHeight() / getMaxRows();
+    while (folderWidths.size() < getNumFolders())
+    {
+        int folderIndex = folderWidths.size();
+        folderWidths.add(getMinimumFolderWidth(folderIndex));
+    }
+
+    Point<int> selection;
+    Point<int> folderPosition;
+    for (int i = 0; i <= std::max<int>(activeFolder, folderIndex - 1); i++)
+    {
+        int yOff = std::max<int>(0, getFolderSelectedIndex(i) * buttonHeight);
+        if (i <= activeFolder)
         {
-            Desktop::getInstance().getAnimator().animateComponent(folder,
-                    movedBounds, 1, 250, true, 1, 1);
+            selection.addXY(folderWidths[i], yOff);
         }
-        else
+        if (i < folderIndex)
         {
-            folder->setBounds(movedBounds);
+            folderPosition.addXY(folderWidths[i], yOff);
         }
     }
+    selection.addXY(-folderWidths[activeFolder] / 2, buttonHeight / 2);
+    folderPosition += (getLocalBounds().getCentre() - selection);
+    Point<int> folderSize(folderWidths[folderIndex],
+            folder->getButtonCount() * buttonHeight);
+    return Rectangle<int>(folderPosition, folderPosition + folderSize);
 }
 
 /**
@@ -166,8 +151,12 @@ void ScrollingAppMenu::layoutFolders(bool animateTransition)
  * @param folderItem
  */
 AppMenuFolder* ScrollingAppMenu::createFolderObject
-(AppMenuItem::Ptr folderItem)
+(AppMenuItem::Ptr folderItem,
+        std::map<String, AppMenuButton::Ptr>& buttonMap,
+        IconThread& iconThread)
 {
-    return new ScrollingAppFolder(folderItem, this, buttonNameMap,
-            iconThread);
+    ScrollingAppFolder* folder = new ScrollingAppFolder
+            (folderItem, this, buttonMap, iconThread);
+    folder->selectIndex(0);
+    return folder;
 }

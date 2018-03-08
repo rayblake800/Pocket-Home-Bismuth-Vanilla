@@ -20,7 +20,7 @@ public:
      * @param menuItem
      */
     virtual AppMenuButton::Ptr createMenuButton
-    (AppMenuItem::Ptr menuItem) override;
+    (AppMenuItem::Ptr menuItem, IconThread& iconThread) override;
 
     /**
      * Given a list of folder buttons, return an appropriate layout
@@ -36,13 +36,13 @@ public:
      * @return the number of pages this folder needs to display all menu
      * buttons.
      */
-    int getNumFolderPages();
+    int getNumFolderPages() const;
 
     /**
      * @return the index of the page that's currently visible, or 0 if 
      * there is no current page. 
      */
-    int getCurrentFolderPage();
+    int getCurrentFolderPage() const;
 
     /**
      * Set which folder page should currently be visible.
@@ -56,26 +56,26 @@ public:
      * @return the folder page index containing the selected folder 
      * button, or -1 if there is no selection.
      */
-    int getSelectionPage();
+    int getSelectionPage() const;
 
     /**
      * @return the index of the selected button within its folder page,
      * or -1 if there is no selection.
      */
-    int getSelectedIndexInFolderPage();
+    int getSelectedIndexInFolderPage() const;
 
     /**
      * @return the column index of the selected button within its
      * folder page, or -1 if there is no selection.
      */
-    int getSelectionColumn();
+    int getSelectionColumn() const;
 
 
     /**
      * @return the row index of the selected button within its
      * folder page, or -1 if there is no selection.
      */
-    int getSelectionRow();
+    int getSelectionRow() const;
 
     /**
      * Finds what index value a button would have at a particular
@@ -86,7 +86,7 @@ public:
      * @return button index value, or -1 for invalid
      *  positions
      */
-    int positionIndex(int page, int column, int row);
+    int positionIndex(int page, int column, int row) const;
 
     /**
      * Set the button selection based on its position in the
@@ -107,7 +107,7 @@ public:
 private:
 
     /**
-     * Resizes navigation buttons, then calls AppFolder::resized().
+     * Resizes padding, then calls AppFolder::resized().
      */
     void resized() override;
     int currentPage = 0;

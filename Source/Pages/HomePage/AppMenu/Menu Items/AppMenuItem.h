@@ -76,6 +76,13 @@ public:
      * to i+offset 
      */
     virtual bool canChangeIndex(int offset) const;
+    
+    /**
+     * @param toCompare
+     * @return true iff this menu item and another share the same
+     * properties
+     */
+    bool operator==(const AppMenuItem& toCompare) const;
 protected:
 
     /**
