@@ -16,11 +16,26 @@ Spinner(secondsToTimeout)
 
 OverlaySpinner::~OverlaySpinner() { }
 
+/**
+ * Sets text to display below the spinner
+ */
+void OverlaySpinner::setLoadingText(String newText)
+{
+    loadingText.setText(newText, NotificationType::dontSendNotification);
+}
+
+/**
+ * Fills in the overlay background.
+ */
 void OverlaySpinner::paint(Graphics &g)
 {
     g.fillAll(findColour(backgroundColourId));
 }
 
+
+/**
+ * Update the spinner and loading text to fit overlay bounds.
+ */
 void OverlaySpinner::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
@@ -29,12 +44,6 @@ void OverlaySpinner::resized()
     Rectangle<int> textBounds = bounds.withHeight(spinnerSize)
             .withY(bounds.getX() + bounds.getHeight()*2 / 3);
     loadingText.setBounds(textBounds);
-}
-
-
-void OverlaySpinner::setLoadingText(String newText)
-{
-    loadingText.setText(newText, NotificationType::dontSendNotification);
 }
 
 

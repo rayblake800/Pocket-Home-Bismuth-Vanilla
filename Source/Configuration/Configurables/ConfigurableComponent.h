@@ -1,7 +1,7 @@
 /**
  *  @file ConfigurableComponent.h
  * 
- *  ConfigurableComponent applies properties set in a ComponentConfigFile
+ * ConfigurableComponent applies properties set in a ComponentConfigFile
  * to a component, updating those properties as necessary.
  */
 #pragma once
@@ -12,7 +12,11 @@ class ConfigurableComponent : public Configurable {
 public:
     ConfigurableComponent(String componentKey);
     virtual ~ConfigurableComponent();
-    virtual void applyConfigBounds();
+    
+    /**
+     * Load and apply this component's relative bounds from config.
+     */
+    void applyConfigBounds();
 protected:
     /**
      * This method passes in asset file names and asset color values
@@ -30,9 +34,11 @@ protected:
     virtual void applyConfigAssets(Array<String> assetNames,
             Array<Colour> colours);
     
-    
-    virtual void loadConfigProperties(ConfigFile* config,String key);
+    /**
+     * Load and apply all component data from the ComponentConfigFile
+     * @param key selects the correct component data from config.
+     */
+    void loadConfigProperties(ConfigFile* config,String key);
 private:
-    Component * component;
     ComponentConfigFile::ComponentSettings componentSettings;
 };

@@ -8,6 +8,9 @@ componentSettings(ComponentConfigFile().getComponentSettings(componentKey)) { }
 
 ConfigurableComponent::~ConfigurableComponent() { }
 
+/**
+ * Load and apply this component's relative bounds from config.
+ */
 void ConfigurableComponent::applyConfigBounds()
 {
     Component * component = dynamic_cast<Component*> (this);
@@ -38,23 +41,27 @@ void ConfigurableComponent::applyConfigBounds()
     component->setBounds(newBounds);
 }
 
+/**
+ * This method passes in asset file names and asset color values
+ * when the component is created, and whenever those values change
+ * in configuration.
+ */
 void ConfigurableComponent::applyConfigAssets(Array<String> assetNames,
         Array<Colour> colours) { }
 
-void ConfigurableComponent::loadConfigProperties
-(ConfigFile* config, String key)
+/**
+ * Load and apply all component data from the ComponentConfigFile
+ * @param key selects the correct component data from config.
+ */
+void ConfigurableComponent::loadConfigProperties(String key)
 {
-    ComponentConfigFile* compConfig
-            = dynamic_cast<ComponentConfigFile*> (config);
-    if (compConfig != nullptr)
+    ComponentConfigFile config;
+    ComponentConfigFile::ComponentSettings oldSettings = componentSettings;
+    componentSettings = config.getComponentSettings(key);
+    if (componentSettings.getBounds() != oldSettings.getBounds())
     {
-        ComponentConfigFile::ComponentSettings oldSettings = componentSettings;
-        componentSettings = compConfig->getComponentSettings(key);
-        if (componentSettings.getBounds() != oldSettings.getBounds())
-        {
-            applyConfigBounds();
-        }
-        applyConfigAssets(componentSettings.getAssetFiles(),
-                componentSettings.getColours());
+        applyConfigBounds();
     }
+    applyConfigAssets(componentSettings.getAssetFiles(),
+            componentSettings.getColours());
 }

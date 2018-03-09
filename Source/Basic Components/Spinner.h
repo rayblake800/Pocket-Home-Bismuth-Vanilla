@@ -22,10 +22,6 @@ public:
     Spinner(int secondsToTimeout = -1);
     ~Spinner();
     
-    /**
-     * 
-     * @param spinnerColour
-     */
     void setColour(Colour spinnerColour);
 
 protected:
@@ -42,7 +38,7 @@ private:
     void visibilityChanged() override;
 
     /**
-     * 
+     * Set spinner image bounds to match the component.
      */
     void resized() override;
 

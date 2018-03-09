@@ -1,7 +1,8 @@
 /**
  * @file MainConfigFile.h
  * 
- * TODO: finish documentation.
+ * MainConfigFile loads general application settings from
+ * the config.json file.
  */
 #pragma once
 #include "ConfigFile.h"

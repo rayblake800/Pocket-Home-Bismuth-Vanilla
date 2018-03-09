@@ -66,7 +66,7 @@ private:
     CriticalSection lock;
 
     /**
-     *Asynchronously load DesktopEntry objects from files
+     *Asynchronously loads DesktopEntry objects from files
      */
     class LoadingThread : public Thread{
     public:
@@ -74,25 +74,23 @@ private:
         virtual ~LoadingThread();
         
         /**
-         * 
+         * Reload all desktop entries in a seperate thread.
          * @param threadOwner
-         * @param notifyCallback
-         * @param onFinish
+         * @param notifyCallback this callback runs periodically to pass back
+         * loading progress strings, so progress can be shown in the UI.
+         * @param onFinish This callback runs when all data finishes
+         *  loading.
          */
         void asyncLoadEntries(DesktopEntries * threadOwner,
                 std::function<void(String) > notifyCallback,
                 std::function<void() > onFinish);
     private:
-        /**
-         * 
-         */
         void run() override;
         DesktopEntries * threadOwner;
         std::function<void(String)> notifyCallback;
         std::function<void() > onFinish;
     };
     LoadingThread loadingThread;
-
 };
 
 

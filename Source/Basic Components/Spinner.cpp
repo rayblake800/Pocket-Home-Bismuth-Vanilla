@@ -60,6 +60,9 @@ void Spinner::visibilityChanged()
     }
 }
 
+/**
+ * Set spinner image bounds to match the component.
+ */
 void Spinner::resized()
 {
     spinnerImage.setBounds(getLocalBounds());

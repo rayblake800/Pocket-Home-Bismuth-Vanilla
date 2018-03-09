@@ -29,3 +29,8 @@
 -More thorough implementation of the Desktop entry standard
 
 -Add an icon selection page that uses IconThread's index of icon files
+
+-SwitchComponent needs an update and documentation. Consider using svg
+assets to define it.
+
+-PopupEditorComponent subclasses shouldn't need to directly access its data members.

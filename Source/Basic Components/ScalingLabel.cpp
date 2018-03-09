@@ -17,6 +17,9 @@ ScalingLabel::~ScalingLabel()
 {
 }
 
+/**
+ * Update font size when label bounds change.
+ */
 void ScalingLabel::resized()
 {
     ComponentConfigFile config;

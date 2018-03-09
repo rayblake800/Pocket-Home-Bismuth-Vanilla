@@ -55,7 +55,7 @@ protected:
     virtual bool keyPressed(const KeyPress & key) override;
   
     /**
-     * 
+     * Re-apply the layout to fit the new bounds.
      */
     virtual void resized() override;
     

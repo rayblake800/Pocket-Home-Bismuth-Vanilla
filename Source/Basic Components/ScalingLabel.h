@@ -12,7 +12,6 @@ class ScalingLabel : public Label{
 public:
     
     /**
-     * 
      * @param componentName component's internal name value 
      * @param labelText initial label display text
      * @param fontPadding font height will be kept at this many pixels
@@ -23,11 +22,12 @@ public:
             const int& fontPadding = 0);
     
     virtual ~ScalingLabel();
-private:
+private
     /**
-     * 
+     * Update font size when label bounds change.
      */
     void resized() override;
+    
     int fontPadding;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ScalingLabel)

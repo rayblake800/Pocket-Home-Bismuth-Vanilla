@@ -30,9 +30,7 @@ confirmButton("confirm.svg")
     });
 }
 
-PopupEditorComponent::~PopupEditorComponent()
-{
-}
+PopupEditorComponent::~PopupEditorComponent() { }
 
 /**
  * Removes this component from the window.
@@ -43,6 +41,11 @@ void PopupEditorComponent::closePopup()
     getParentComponent()->removeChildComponent(this);
 }
 
+/**
+ * Manages the cancel and confirm buttons. Inherited classes should either
+ * call this method if they're handling button clicks, or handle clicks
+ * on the cancel/confirm buttons themselves.
+ */
 void PopupEditorComponent::buttonClicked(Button* buttonClicked)
 {
     if (buttonClicked == &cancelButton)
@@ -56,6 +59,11 @@ void PopupEditorComponent::buttonClicked(Button* buttonClicked)
     }
 }
 
+
+/**
+ * The escape and return keys work the same
+ * as pressing the cancel and confirm buttons, respectively.
+ */
 bool PopupEditorComponent::keyPressed(const KeyPress & key)
 {
     DBG("PopupEditorComponent:key clicked");
@@ -70,12 +78,12 @@ bool PopupEditorComponent::keyPressed(const KeyPress & key)
     return true;
 }
 
+/**
+ * Re-apply the layout to fit the new bounds.
+ */
 void PopupEditorComponent::resized()
 {
     this->ConfigurableImageComponent::resized();
     layoutManager.layoutComponents(getLocalBounds().reduced(marginPixels),
             xPaddingPixels, yPaddingPixels);
 }
-
-
-

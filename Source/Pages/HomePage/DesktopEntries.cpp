@@ -14,8 +14,9 @@ DesktopEntries::DesktopEntries(const DesktopEntries& orig)
 
 DesktopEntries::~DesktopEntries() { }
 
-//return the number of stored DesktopEntry objects
-
+/**
+ * return the number of stored DesktopEntry objects 
+ */
 int DesktopEntries::size()
 {
 
@@ -23,9 +24,9 @@ int DesktopEntries::size()
     return entries.size();
 }
 
-
-//Get a list of all DesktopEntry objects within several categories
-
+/**
+ * Get a list of all DesktopEntry objects within several categories
+ */
 std::set<DesktopEntry> DesktopEntries::getCategoryListEntries
 (Array<String> categoryList)
 {
@@ -43,8 +44,9 @@ std::set<DesktopEntry> DesktopEntries::getCategoryListEntries
     return categoryEntries;
 }
 
-//Get all DesktopEntries with a given category name
-
+/**
+ * Get all DesktopEntries with a given category name
+ */
 std::set<DesktopEntry> DesktopEntries::getCategoryEntries(String category)
 {
 
@@ -52,8 +54,9 @@ std::set<DesktopEntry> DesktopEntries::getCategoryEntries(String category)
     return categories[category];
 }
 
-//Get the list of all categories found in all desktop entries.
-
+/**
+ * Get the list of all categories found in all desktop entries. 
+ */
 std::set<String> DesktopEntries::getCategories()
 {
     const ScopedLock readLock(lock);
@@ -90,6 +93,9 @@ void DesktopEntries::loadEntries
 
 DesktopEntries::LoadingThread::LoadingThread() : Thread("DesktopEntryLoader") { }
 
+/**
+ * Reload all desktop entries in a seperate thread.
+ */
 void DesktopEntries::LoadingThread::asyncLoadEntries
 (DesktopEntries * threadOwner,
         std::function<void(String) > notifyCallback,

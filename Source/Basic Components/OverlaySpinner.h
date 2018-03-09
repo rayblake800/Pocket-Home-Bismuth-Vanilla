@@ -19,27 +19,29 @@ public:
     };
     
     /**
-     * 
-     * @param secondsToTimeout
+     * @param secondsToTimeout sets how long the spinner will show
+     * itself before timing out. If this value is negative, the spinner
+     * will never time out.
      */
     OverlaySpinner(int secondsToTimeout = -1);
     ~OverlaySpinner();
     
     /**
-     * 
+     * Sets text to display below the spinner
      * @param newText
      */
     void setLoadingText(String newText);
     
 private:
+
     /**
-     * 
-     * @param 
+     * Fills in the overlay background.
+     * @param g
      */
-    void paint(Graphics &) override;
+    void paint(Graphics & g) override;
     
     /**
-     * 
+     * Update the spinner and loading text to fit overlay bounds.
      */
     void resized() override;
     

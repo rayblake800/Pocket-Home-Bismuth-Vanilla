@@ -1,7 +1,8 @@
 /**
  * @file AppConfigFile.h
  * 
- * TODO: finish documentation
+ * AppConfigFile loads the pinned application links and folders displayed
+ * in the AppMenu.
  */
 #pragma once
 #include "ConfigFile.h"
