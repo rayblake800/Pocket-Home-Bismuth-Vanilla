@@ -3,6 +3,7 @@
 #include "../Configuration/Configurables/ConfigurableImageButton.h"
 #include "../Basic Components/FileSelectTextEditor.h"
 #include "../Basic Components/ScalingLabel.h"
+#include "../Basic Components/CounterComponent.h"
 #include "../PageComponent.h"
 #include "../Utils.h"
 
@@ -11,10 +12,14 @@ class PersonalizePage : public PageComponent, private ComboBox::Listener
 public:
   PersonalizePage();
   ~PersonalizePage();
-  
-  
 private:
+  /**
+   * Update AppMenu dimensions when the page closes.
+   */
+  void pageRemovedFromStack() override;
+
   void comboBoxChanged(ComboBox*) override;
+  
   void fileSelected(FileSelectTextEditor* edited);
   
   void updateComboBox();
@@ -27,5 +32,11 @@ private:
   
   ScalingLabel menuPickerLabel;
   ComboBox menuTypePicker;
+  
+  ScalingLabel columnCountLabel;
+  CounterComponent columnCounter;
+  
+  ScalingLabel rowCountLabel;
+  CounterComponent rowCounter;
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PersonalizePage)
 };

@@ -23,7 +23,17 @@ PageComponent("PersonalizePage",{
                 {&menuPickerLabel, 1},
                 {&menuTypePicker, 1}
             }},
-        { 5,
+        { 2,
+            {
+                {&columnCountLabel, 2},
+                {&columnCounter, 1}
+            }},
+        { 2,
+            {
+                {&rowCountLabel, 2},
+                {&rowCounter, 1}
+            }},
+        { 3,
             {
                 {nullptr, 1}
             }}
@@ -36,7 +46,11 @@ bgLabel("bgLabel", ""),
 bgEditor("Choose the new background",
         "Please choose your new background image"),
 menuPickerLabel("menuPickerLabel", "Application menu:"),
-menuTypePicker("menuTypePicker")
+menuTypePicker("menuTypePicker"),
+columnCountLabel("columnCountLabel","Menu columns:"),
+rowCountLabel("rowCountLabel","Menu rows:"),
+columnCounter(1,1,9),
+rowCounter(1,1,9)
 {
     
 #if JUCE_DEBUG
@@ -57,11 +71,31 @@ menuTypePicker("menuTypePicker")
         menuTypePicker.addItem(MainConfigFile::menuTypes[i], i + 1);
     }
     menuTypePicker.addListener(this);
+    
+    ComponentConfigFile config;
+    rowCounter.setValue(config.getConfigValue<int>
+            (ComponentConfigFile::maxRowsKey));
+            
+    columnCounter.setValue(config.getConfigValue<int>
+            (ComponentConfigFile::maxColumnsKey));
     updateComboBox();
     addAndShowLayoutComponents();
 }
 
 PersonalizePage::~PersonalizePage() { }
+
+/**
+* Update AppMenu dimensions when the page closes.
+*/
+void PersonalizePage::pageRemovedFromStack()
+{
+    ComponentConfigFile config;
+    config.setConfigValue<int>(ComponentConfigFile::maxRowsKey,
+            rowCounter.getValue());
+    config.setConfigValue<int>(ComponentConfigFile::maxColumnsKey,
+            columnCounter.getValue());
+}
+
 
 void PersonalizePage::updateComboBox()
 {

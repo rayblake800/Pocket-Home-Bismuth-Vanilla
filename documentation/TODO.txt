@@ -1,7 +1,12 @@
+-Upgrade to new Juce library version
 
--Design and implement TabbedAppMenu
+-Changing appMenu grid size causes unusual behavior
+
+-AppMenu scrolling is sluggish
 
 -AppMenu still isn't acquiring keyboard focus immediately
+
+-Design and implement TabbedAppMenu
 
 -Wifi scanning keeps running in the background even when the window isn't focused
 
@@ -9,7 +14,6 @@
     -perhaps run battery.sh in these cases?
 
 -Make bluetooth work and properly implement the bluetooth page
-    -Strip down the bluetooth settings classes to the bare minimum
     -Adapt bluetooth code from 
         https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/client/main.c
         
@@ -18,11 +22,10 @@
 -Define page background color/image in config
 
 -more options for updating the config within the UI
-    -Add menu grid size controls to PersonalizePage
-    
+
 -localization support
 
--configurable keyboard shortcuts
+-configurable keyboard shortcuts on input page
 
 -More thorough implementation of the Desktop entry standard
 
