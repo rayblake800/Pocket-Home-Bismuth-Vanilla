@@ -14,11 +14,10 @@ const String AppMenuComponent::reloadMenuBinding = "TAB";
 DesktopEntries AppMenuComponent::desktopEntries;
 
 AppMenuComponent::AppMenuComponent
-(String componentKey, OverlaySpinner& loadingSpinner, int animationDuration) :
+(String componentKey, OverlaySpinner& loadingSpinner) :
 loadingState(false),
 ConfigurableComponent(componentKey),
-loadingSpinner(loadingSpinner),
-animationDuration(animationDuration)
+loadingSpinner(loadingSpinner)
 {
     
 #if JUCE_DEBUG
@@ -132,7 +131,7 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
             selectedButton->confirmRemoveButtonSource([this, activeFolder]()
             {
                 activeFolder->removeButton(activeFolder->getSelectedIndex());
-                layoutFolders(false);
+                layoutFolders();
             });
             break;
         case 3://User selects "New favorite application"
@@ -189,7 +188,7 @@ bool AppMenuComponent::keyPressed(const KeyPress& key)
 {
     if (ignoringInput())
     {
-        return false;
+        return true;
     }
     if (key == KeyPress::createFromDescription(openPopupMenuBinding))
     {
@@ -239,7 +238,7 @@ void AppMenuComponent::loadBaseFolder()
             openFolder(AppMenuItemFactory::createBaseFolderItem
                     (desktopEntries));
             openFolders.getFirst()->selectIndex(savedIndex);
-            layoutFolders(false);
+            layoutFolders();
             setLoadingState(false);
         });
     }
@@ -258,7 +257,7 @@ void AppMenuComponent::closeFolder()
         if (getActiveFolderIndex() > 0)
         {
             setActiveFolderIndex(getActiveFolderIndex() - 1);
-            layoutFolders(true);
+            layoutFolders();
         }
         while (openFolders.size() > targetFolderCount)
         {
@@ -388,22 +387,20 @@ int AppMenuComponent::getFolderSelectedIndex(int index) const
 /**
  * Updates the folder component layout, optionally animating the transition.
  */
-void AppMenuComponent::layoutFolders(bool animateTransition)
+void AppMenuComponent::layoutFolders()
 {
     if (getBounds().isEmpty())
     {
         return;
     }
-    static bool initialLayout = true;
-    static Rectangle<int> lastBounds = getBounds();
-    static int lastFolderCount = openFolders.size();
-    static int lastActiveFolder = getActiveFolderIndex();
-    if (initialLayout || lastBounds != getBounds() || isLoading()
+    static Rectangle<int> lastBounds;
+    static int lastFolderCount = -1;
+    static int lastActiveFolder = -1;
+    if (lastBounds != getBounds() || isLoading()
         || lastFolderCount != openFolders.size()
         || lastActiveFolder != getActiveFolderIndex()
         || layoutChanged(openFolders[getActiveFolderIndex()]))
     {
-        initialLayout = false;
         lastBounds = getBounds();
         lastFolderCount = openFolders.size();
         lastActiveFolder = getActiveFolderIndex();
@@ -411,16 +408,7 @@ void AppMenuComponent::layoutFolders(bool animateTransition)
         for (int i = 0; i < openFolders.size(); i++)
         {
             Rectangle<int> folderBounds = updateFolderBounds(openFolders[i], i);
-            if (animateTransition)
-            {
-                Desktop::getInstance().getAnimator().
-                        animateComponent(openFolders[i], folderBounds, 1,
-                        animationDuration, true, 1, 1);
-            }
-            else
-            {
-                openFolders[i]->setBounds(folderBounds);
-            }
+            openFolders[i]->setBounds(folderBounds);
         }
     }
 }
@@ -469,7 +457,7 @@ void AppMenuComponent::loadConfigProperties(ConfigFile* config, String key)
         {
             folder->updateGridSize(maxRows, maxColumns);
         }
-        layoutFolders(false);
+        layoutFolders();
     }
 }
 
@@ -487,7 +475,7 @@ void AppMenuComponent::resized()
         buttonEditor->setCentrePosition(bounds.getCentreX(),
                 bounds.getCentreY());
     }
-    layoutFolders(false);
+    layoutFolders();
 }
 
 /**
@@ -610,7 +598,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
             if (buttonItem->isFolder())
             {
                 openFolder(buttonItem);
-                layoutFolders(true);
+                layoutFolders();
             }
             else
             {
@@ -624,7 +612,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
         else
         {
             openFolders[i]->selectIndex(buttonIndex);
-            layoutFolders(true);
+            layoutFolders();
         }
         return;
     }
@@ -689,7 +677,5 @@ void AppMenuComponent::setLoadingState(bool loading)
 bool AppMenuComponent::ignoringInput() const
 {
     return openFolders.isEmpty() || isLoading()
-            || Desktop::getInstance()
-            .getAnimator().isAnimating(openFolders[getActiveFolderIndex()])
             || (buttonEditor != nullptr && buttonEditor->isVisible());
 }

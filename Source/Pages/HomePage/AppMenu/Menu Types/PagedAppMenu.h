@@ -75,6 +75,4 @@ private:
     ConfigurableImageButton closeFolderBtn;
     ConfigurableImageButton pageLeft;
     ConfigurableImageButton pageRight;
-    //Define animation duration for paged appMenus
-    const int pageAnimationDuration = 500;
 };

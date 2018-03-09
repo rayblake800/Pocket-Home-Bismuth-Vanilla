@@ -3,8 +3,8 @@
 #include "ScrollingAppMenu.h"
 
 ScrollingAppMenu::ScrollingAppMenu(OverlaySpinner& loadingSpinner) :
-AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey, loadingSpinner,
-scrollingAnimationDuration) { }
+AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey,
+loadingSpinner) { }
 
 ScrollingAppMenu::~ScrollingAppMenu() { }
 
@@ -80,7 +80,7 @@ bool ScrollingAppMenu::folderKeyPressed(const KeyPress& key,
         }
         if (activeFolder->selectIndex(newIndex))
         {
-            layoutFolders(true);
+            layoutFolders();
         }
         return true;
     }
@@ -95,7 +95,7 @@ bool ScrollingAppMenu::folderKeyPressed(const KeyPress& key,
  */
 bool ScrollingAppMenu::layoutChanged(const AppMenuFolder* activeFolder)
 {
-    static int lastSelectedIndex = activeFolder->getSelectedIndex();
+    static int lastSelectedIndex = -1;
     if (lastSelectedIndex != activeFolder->getSelectedIndex())
     {
         lastSelectedIndex = activeFolder->getSelectedIndex();

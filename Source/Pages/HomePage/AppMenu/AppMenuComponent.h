@@ -32,11 +32,9 @@ public:
      * @param componentKey loads menu bounds from config
      * @param loadingSpinner reference to an overlay spinner that sits over
      * the PageComponent holding this AppMenuComponent.
-     * @param animationDuration sets the duration in milliseconds of menu
-     * transitions
      */
-    AppMenuComponent(String componentKey, OverlaySpinner& loadingSpinner,
-            int animationDuration);
+    AppMenuComponent(String componentKey,
+            OverlaySpinner& loadingSpinner);
 
     virtual ~AppMenuComponent();
 
@@ -156,10 +154,8 @@ protected:
 
     /**
      * Updates the folder component layout, optionally animating the transition.
-     * @param animateTransition if true, animate component changes rather than
-     * immediately updating folder bounds.
      */
-    void layoutFolders(bool animateTransition);
+    void layoutFolders();
 
     /**
      * @return the maximum number of menu item columns to show on screen
@@ -309,8 +305,6 @@ private:
     //app grid dimensions, saved from config
     int maxRows = 1;
     int maxColumns = 1;
-    //folder animation duration in milliseconds
-    int animationDuration;
     //currently focused folder index
     int activeFolderIndex = 0;
     //Launches applications from the menu

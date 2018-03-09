@@ -10,8 +10,7 @@ const String PagedAppMenu::pageRightBinding = "shift + cursor right";
  * @param loadingSpinner
  */
 PagedAppMenu::PagedAppMenu(OverlaySpinner& loadingSpinner) :
-AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, loadingSpinner,
-pageAnimationDuration),
+AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
 pageLeft(ComponentConfigFile::pageLeftKey),
 pageRight(ComponentConfigFile::pageRightKey),
 closeFolderBtn(ComponentConfigFile::pageUpKey)
@@ -20,7 +19,7 @@ closeFolderBtn(ComponentConfigFile::pageUpKey)
 
     for (Button* button : buttons)
     {
-        addAndMakeVisible(button);
+        addChildComponent(button);
         button->setWantsKeyboardFocus(false);
         button->setAlwaysOnTop(true);
         button->addListener(this);
@@ -60,7 +59,7 @@ bool PagedAppMenu::folderKeyPressed(const KeyPress& key, AppMenuFolder* activeFo
         int newPage = currentPage + (key == pageLeftKey ? -1 : 1);
         if (folder->setCurrentFolderPage(newPage))
         {
-            layoutFolders(true);
+            layoutFolders();
         }
         return true;
     }
@@ -165,7 +164,7 @@ bool PagedAppMenu::folderKeyPressed(const KeyPress& key, AppMenuFolder* activeFo
         {
             if (newPage != currentPage)
             {
-                layoutFolders(true);
+                layoutFolders();
             }
             else
             {
@@ -184,7 +183,7 @@ bool PagedAppMenu::layoutChanged(const AppMenuFolder* activeFolder)
 {
     const PageAppFolder* folder =
             static_cast<const PageAppFolder*> (activeFolder);
-    static int lastFolderPage = folder->getCurrentFolderPage();
+    static int lastFolderPage = -1;
     if (lastFolderPage != folder->getCurrentFolderPage())
     {
         lastFolderPage = folder->getCurrentFolderPage();
