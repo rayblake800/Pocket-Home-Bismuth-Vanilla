@@ -174,6 +174,14 @@ protected:
         return getMaxColumns() * getMaxRows();
     }
 
+    /**
+     * @param newVal if set to true, clicking unselected menu buttons 
+     * only selects them. If set to false, clicking them also
+     * immediately launches their application or opens their folder.
+     * This is set to true by default.
+     */
+    void setOnlyTriggerSelected(bool newVal);
+    
 private:
     /**
      * Create a folder component object from a folder menu item.
@@ -302,6 +310,9 @@ private:
     //keyboard shortcuts
     static const String openPopupMenuBinding;
     static const String reloadMenuBinding;
+    //Sets if clicking unselected buttons immediately triggers
+    //their action, or if it just selects them.
+    bool onlyTriggerSelected = true;
     //app grid dimensions, saved from config
     int maxRows = 1;
     int maxColumns = 1;

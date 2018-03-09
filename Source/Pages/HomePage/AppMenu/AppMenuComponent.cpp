@@ -429,6 +429,19 @@ int AppMenuComponent::getMaxRows() const
     return maxRows;
 }
 
+
+/**
+ * @param newVal if set to true, clicking unselected menu buttons 
+ * only selects them. If set to false, clicking them also
+ * immediately launches their application or opens their folder.
+ * This is set to true by default.
+ */
+void AppMenuComponent::setOnlyTriggerSelected(bool newVal)
+{
+    onlyTriggerSelected = newVal;
+}
+
+
 /**
  * Updates the layout if row/column size changes, otherwise handle
  * changes like any other ConfigurableComponent.
@@ -590,31 +603,30 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
                 return;
             }
         }
-        //If the button is the selected button in the last opened folder,
-        //open its folder or launch its application.
-        if (buttonIndex == openFolders[i]->getSelectedIndex())
-        {
-            AppMenuItem::Ptr buttonItem = button->getMenuItem();
-            if (buttonItem->isFolder())
-            {
-                openFolder(buttonItem);
-                layoutFolders();
-            }
-            else
-            {
-                setLoadingState(true);
-                loadingSpinner.setLoadingText(String("Launching ")
-                        + buttonItem->getAppName());
-                appLauncher.startOrFocusApp(buttonItem->getAppName(),
-                        buttonItem->getCommand());
-            }
-        }
-        else
+        if (buttonIndex != openFolders[i]->getSelectedIndex())
         {
             openFolders[i]->selectIndex(buttonIndex);
             layoutFolders();
+            if(onlyTriggerSelected)
+            {
+                return;
+            }
         }
-        return;
+        AppMenuItem::Ptr buttonItem = button->getMenuItem();
+        if (buttonItem->isFolder())
+        {
+            openFolder(buttonItem);
+            layoutFolders();
+        }
+        else
+        {
+            setLoadingState(true);
+            loadingSpinner.setLoadingText(String("Launching ")
+                    + buttonItem->getAppName());
+            appLauncher.startOrFocusApp(buttonItem->getAppName(),
+                    buttonItem->getCommand());
+        }
+    
     }
 }
 
@@ -634,14 +646,20 @@ void AppMenuComponent::mouseDown(const MouseEvent &event)
     //handle right clicks/ctrl-clicks
     if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
     {
-        if (appClicked == nullptr ||
-            appClicked == getSelectedButton())
+        if (appClicked == nullptr
+            || appClicked == getSelectedButton())
         {
             openPopupMenu(appClicked);
         }
         else
         {
+            //On right click/ctrl-click, clicking an unselected
+            //button should never do anything other than change
+            //the selection
+            bool selectOnly = onlyTriggerSelected;
+            onlyTriggerSelected = true;
             onButtonClick(appClicked);
+            onlyTriggerSelected = selectOnly;
         }
 
     }//handle regular clicks

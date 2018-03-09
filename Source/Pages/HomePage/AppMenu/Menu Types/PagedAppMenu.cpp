@@ -15,6 +15,7 @@ pageLeft(ComponentConfigFile::pageLeftKey),
 pageRight(ComponentConfigFile::pageRightKey),
 closeFolderBtn(ComponentConfigFile::pageUpKey)
 {
+    setOnlyTriggerSelected(false);
     Array<Button*> buttons = {&pageLeft, &pageRight, &closeFolderBtn};
 
     for (Button* button : buttons)
