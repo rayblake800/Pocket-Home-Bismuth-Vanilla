@@ -2,11 +2,10 @@
 
 -Changing appMenu grid size causes unusual behavior
 
--AppMenu scrolling is sluggish
-
 -AppMenu still isn't acquiring keyboard focus immediately
 
 -Design and implement TabbedAppMenu
+	wait on this until nested folders are implemented and tested.
 
 -Wifi scanning keeps running in the background even when the window isn't focused
 

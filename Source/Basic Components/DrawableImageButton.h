@@ -1,8 +1,7 @@
 /**
  * @file DrawableImageButton.h
  * 
- * DrawableImageButton is a button drawn using a DrawableImageComponent
- * TODO: finish documentation.
+ * DrawableImageButton is a button drawn using a DrawableImageComponent.
  */
 #pragma once
 #include "DrawableImageComponent.h"
@@ -64,13 +63,13 @@ public:
     };
     
     /**
-     * 
+     * Update the image colors if UI color values are changed.
      */
     virtual void colourChanged() override;
 
 protected:
     /**
-     * 
+     * Load and apply component colors to the button image.
      */
     void updateImageColors();
     

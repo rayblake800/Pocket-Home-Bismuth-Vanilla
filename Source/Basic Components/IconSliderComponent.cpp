@@ -20,38 +20,48 @@ highIcon(highImgAsset,RectanglePlacement::stretchToFit)
 
 IconSliderComponent::~IconSliderComponent() { }
 
+/**
+ * Change the slider's stored value
+ */
 void IconSliderComponent::setValue
 (double newValue, NotificationType notification)
 {
     slider.setValue(newValue, notification);
 }
 
+/**
+ * @return the current slider position value, between 0 and 100.
+ */
 double IconSliderComponent::getValue() const
 {
     return slider.getValue();
 }
 
+/**
+ * @param listener will receive updates whenever the slider value
+ * changes.
+ */
 void IconSliderComponent::addListener(Slider::Listener* listener)
 {
     slider.addListener(listener);
 }
 
+/**
+ * Use this to determine which IconSliderComponent is responsible for
+ * a slider callback.
+ */
 bool IconSliderComponent::ownsSlider(Slider * sliderPtr)
 {
     return sliderPtr == &slider;
 }
 
+/**
+ * Update the icons and slider to fit the component bounds.
+ */
 void IconSliderComponent::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
     lowIcon.setBounds(bounds.withWidth(bounds.getHeight()));
     highIcon.setBounds(bounds.withLeft(bounds.getRight()-bounds.getHeight()));
     slider.setBounds(bounds.reduced(bounds.getHeight(),0));
-//    sliderLayout.setItemLayout(0, height, height, height);
-//    sliderLayout.setItemLayout(1, 50, -1.0, -1.0);
-//    sliderLayout.setItemLayout(2, height, height, height);
-//
-//    Component * parts[] = {&lowIcon, &slider, &highIcon};
-//    sliderLayout.layOutComponents(parts, 3, getX(), getY(),
-//            width, height, false, true);
 }

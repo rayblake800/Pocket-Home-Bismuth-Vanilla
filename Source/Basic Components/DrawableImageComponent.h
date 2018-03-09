@@ -72,7 +72,7 @@ public:
     };
 
     /**
-     * 
+     * Apply component colors to the image.
      */
     virtual void colourChanged() override;
 

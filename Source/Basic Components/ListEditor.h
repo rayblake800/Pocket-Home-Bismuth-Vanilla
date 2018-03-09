@@ -4,7 +4,7 @@
  * ListEditor provides a UI component for editing a list of strings.
  * The user can add new strings, edit existing ones by double clicking them,
  * and delete list items.  These changes are copied into the underlying String
- * Array, which can be obtained using 
+ * Array, which can be obtained using getListItems(),
  */
 
 #pragma once
@@ -50,7 +50,7 @@ public:
     void setListItems(Array<String> newItems);
 
     /**
-     * 
+     * Calls updateColours whenever component color values are changed. 
      */
     void colourChanged() override;
 
@@ -103,35 +103,36 @@ private:
     class ListItemComponent : public Label {
     public:
         /**
-         * 
-         * @param text
-         * @param owner
+         * @param text initial list item text
+         * @param owner ListEditor containing this list item
          */
         ListItemComponent(String text, ListEditor * owner);
         virtual ~ListItemComponent();
 
         /**
-         * 
-         * @param id should be set to String(rowIndex)
+         * @param id should be set to String(rowIndex) by the
+         * ListEditor.
          */
         void setButtonComponentID(String id);
 
         /**
-         * 
+         * Sets button colour, used by the ListEditor to apply
+         * its color scheme to all list items
          * @param colour
          */
         void setButtonColour(Colour colour);
 
         /**
-         * 
+         * Update the font and delete button to fit new bounds.
          */
         void resized() override;
+        
     private:
         DrawableImageButton delBtn;
     };
 
     /**
-     * 
+     * Create or recycle a list component to fit a list row.
      * @param rowNumber
      * @param isRowSelected
      * @param existingComponentToUpdate
@@ -148,18 +149,15 @@ private:
     void buttonClicked(Button* buttonClicked) override;
 
     /**
-     * 
-     * @param rowNumber
-     * @param g
-     * @param width
-     * @param height
-     * @param rowIsSelected
+     * Implemented as an empty function, as the list item component
+     * handles its own draw operations.
      */
     void paintListBoxItem(int rowNumber, Graphics&g, int width,
             int height, bool rowIsSelected);
     
     /**
-     * 
+     * Re-apply the layout and adjust list item height to fit the new
+     * bounds.
      */
     void resized() override;
 

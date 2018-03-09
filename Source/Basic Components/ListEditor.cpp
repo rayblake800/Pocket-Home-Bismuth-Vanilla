@@ -61,6 +61,9 @@ void ListEditor::setListItems(Array<String> newItems)
     repaint();
 }
 
+/**
+ * Calls updateColours whenever component color values are changed. 
+ */
 void ListEditor::colourChanged()
 {
     updateColours();
@@ -83,84 +86,6 @@ void ListEditor::updateColours()
     scrollbar->setColour(ScrollBar::thumbColourId, findColour(textColourId));
 }
 
-ListEditor::ListItemComponent::ListItemComponent
-(String text, ListEditor * owner) : Label(text),
-delBtn("cancel.svg")
-{
-    setJustificationType(Justification::left);
-    setButtonColour(owner->findColour(textColourId));
-    addAndMakeVisible(delBtn);
-    delBtn.addListener(owner);
-    delBtn.setWantsKeyboardFocus(false);
-    setInterceptsMouseClicks(false, true);
-}
-
-ListEditor::ListItemComponent::~ListItemComponent()
-{
-}
-
-void ListEditor::ListItemComponent::setButtonComponentID(String id)
-{
-    delBtn.setComponentID(id);
-}
-
-void ListEditor::ListItemComponent::setButtonColour(Colour colour)
-{
-    delBtn.setColour(DrawableImageButton::imageColour0Id, findColour(textColourId));
-}
-
-void ListEditor::ListItemComponent::resized()
-{
-    setFont(getFont().withHeight(getHeight() - 1));
-
-    delBtn.setBounds(getLocalBounds()
-            .withWidth(getHeight()).withX(getRight() - getHeight())
-            .reduced(2));
-
-}
-
-void ListEditor::buttonClicked(Button* buttonClicked)
-{
-    if (buttonClicked == &addItemBtn)
-    {
-        String newListItem = newItemField.getText();
-        if (newListItem.isNotEmpty())
-        {
-            listItems.add(newListItem);
-            newItemField.clear();
-            listContainer.updateContent();
-            listContainer.repaint();
-        }
-    }//otherwise it's a delete button
-    else
-    {
-        int buttonRow = buttonClicked->getComponentID().getIntValue();
-        removeRow(buttonRow);
-    }
-}
-
-void ListEditor::listBoxItemDoubleClicked
-(int row, const MouseEvent & mouseEvent)
-{
-    DBG("Double Clicked");
-    Label * rowClicked =
-            static_cast<Label*> (listContainer.getComponentForRowNumber(row));
-    rowClicked->showEditor();
-    TextEditor * editor = rowClicked->getCurrentTextEditor();
-    if (editor != nullptr)
-    {
-        editor->setBounds(rowClicked->getBounds());
-    }
-}
-
-void ListEditor::resized()
-{
-    layoutManager.layoutComponents(getLocalBounds(), 0, 2);
-    listContainer.setRowHeight(newItemField.getHeight());
-    ScrollBar* scrollbar = listContainer.getVerticalScrollBar();
-
-    DBG(String("Scrollbar:") + scrollbar->getBounds().toString());
-}
 
 /**
  * Receives notifications when ListItemComponent text is changed.
@@ -178,12 +103,102 @@ void ListEditor::labelTextChanged(Label *source)
     listContainer.repaint();
 }
 
-void ListEditor::paintListBoxItem
-(int rowNumber, Graphics&g, int width, int height, bool rowIsSelected)
+/**
+ * Clicking a listBoxItem selects it.
+ */
+void ListEditor::listBoxItemClicked
+(int row, const MouseEvent & mouseEvent)
 {
+    DBG(String("Clicked ") + String(row));
+    listContainer.selectRow(row);
+}
+
+/**
+ * Double clicking a listBoxItem makes it editable.
+ */
+void ListEditor::listBoxItemDoubleClicked
+(int row, const MouseEvent & mouseEvent)
+{
+    DBG("Double Clicked");
+    Label * rowClicked =
+            static_cast<Label*> (listContainer.getComponentForRowNumber(row));
+    rowClicked->showEditor();
+    TextEditor * editor = rowClicked->getCurrentTextEditor();
+    if (editor != nullptr)
+    {
+        editor->setBounds(rowClicked->getBounds());
+    }
+}
+
+/**
+ * Pressing the delete key removes the selected row.
+ */
+void ListEditor::deleteKeyPressed(int lastRowSelected)
+{
+    int selected = listContainer.getSelectedRow(0);
+    removeRow(selected);
 
 }
 
+/**
+ * Remove a string from the list and update the underlying ListBox
+ */
+void ListEditor::removeRow(int rowNumber)
+{
+    listItems.remove(rowNumber);
+    listContainer.updateContent();
+
+}
+
+ListEditor::ListItemComponent::ListItemComponent
+(String text, ListEditor * owner) : Label(text),
+delBtn("cancel.svg")
+{
+    setJustificationType(Justification::left);
+    setButtonColour(owner->findColour(textColourId));
+    addAndMakeVisible(delBtn);
+    delBtn.addListener(owner);
+    delBtn.setWantsKeyboardFocus(false);
+    setInterceptsMouseClicks(false, true);
+}
+
+ListEditor::ListItemComponent::~ListItemComponent()
+{
+}
+
+/**
+ * @param id should be set to String(rowIndex) by the
+ * ListEditor.
+ */
+void ListEditor::ListItemComponent::setButtonComponentID(String id)
+{
+    delBtn.setComponentID(id);
+}
+
+/**
+ * Sets button colour, used by the ListEditor to apply
+ * its color scheme to all list item.
+ */
+void ListEditor::ListItemComponent::setButtonColour(Colour colour)
+{
+    delBtn.setColour(DrawableImageButton::imageColour0Id, findColour(textColourId));
+}
+
+/**
+ * Update the font and delete button to fit new bounds.
+ */
+void ListEditor::ListItemComponent::resized()
+{
+    setFont(getFont().withHeight(getHeight() - 1));
+
+    delBtn.setBounds(getLocalBounds()
+            .withWidth(getHeight()).withX(getRight() - getHeight())
+            .reduced(2));
+}
+
+/**
+ * Create or recycle a list component to fit a list row.
+ */
 Component * ListEditor::refreshComponentForRow
 (int rowNumber, bool isRowSelected, Component * existingComponent)
 {
@@ -214,26 +229,46 @@ Component * ListEditor::refreshComponentForRow
     rowLabel->setColour(Label::backgroundColourId, isRowSelected ?
             findColour(selectedListItemColourId) : findColour(listItemColourId));
     return rowLabel;
-
 }
 
-void ListEditor::listBoxItemClicked
-(int row, const MouseEvent & mouseEvent)
+/**
+ * Handles add and delete item buttons
+ * @param buttonClicked
+ */
+void ListEditor::buttonClicked(Button* buttonClicked)
 {
-    DBG(String("Clicked ") + String(row));
-    listContainer.selectRow(row);
+    if (buttonClicked == &addItemBtn)
+    {
+        String newListItem = newItemField.getText();
+        if (newListItem.isNotEmpty())
+        {
+            listItems.add(newListItem);
+            newItemField.clear();
+            listContainer.updateContent();
+            listContainer.repaint();
+        }
+    }//otherwise it's a delete button
+    else
+    {
+        int buttonRow = buttonClicked->getComponentID().getIntValue();
+        removeRow(buttonRow);
+    }
 }
 
-void ListEditor::deleteKeyPressed(int lastRowSelected)
+
+/**
+ * Implemented as an empty function, as the list item component
+ * handles its own draw operations.
+ */
+void ListEditor::paintListBoxItem
+(int rowNumber, Graphics&g, int width, int height, bool rowIsSelected){}
+
+/**
+ * Re-apply the layout and adjust list item height to fit the new
+ * bounds.
+ */
+void ListEditor::resized()
 {
-    int selected = listContainer.getSelectedRow(0);
-    removeRow(selected);
-
-}
-
-void ListEditor::removeRow(int rowNumber)
-{
-    listItems.remove(rowNumber);
-    listContainer.updateContent();
-
+    layoutManager.layoutComponents(getLocalBounds(), 0, 2);
+    listContainer.setRowHeight(newItemField.getHeight());
 }
