@@ -28,7 +28,7 @@ public:
     /**
      *Adjust bounds based on config settings
      */
-    void applyConfigBounds() override;
+    void applyConfigBounds();
     
 private:
     /**

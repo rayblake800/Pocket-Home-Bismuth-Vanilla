@@ -15,8 +15,7 @@ public:
     ClockLabel();
     ~ClockLabel();
 
-protected:
-    
+private:
     /**
      * Updates the displayed time each minute.
      */
@@ -31,11 +30,11 @@ protected:
     /**
      * Receives notification whenever clock configuration values change
      * @param config the main config file
-     * @param key is the key for the clock visibility setting, the key 
-     * for the 12h/24h mode toggle, or the component layout key
+     * @param key is the key for the clock visibility setting or
+     * for the 12h/24h mode toggle
      */
-    void loadConfigProperties(ConfigFile* config,String key) override;
-private:
+    void loadExtraConfigProperties(ConfigFile* config,String key) override;
+    
     //If true, use 24 hour time, if false, use 12 hour AM/PM time.
     bool use24HrMode = false;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ClockLabel)

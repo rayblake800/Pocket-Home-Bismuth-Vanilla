@@ -41,19 +41,6 @@ private:
             IconThread& iconThread) override;
 
     /**
-     * Check to see if any changes have occurred that justifies changing
-     * folder layout.  This does not need to account for the initial layout,
-     * changes to menu bounds, folders opening and closing, and selection
-     * of a new active folder, as all those events will update folder layout
-     * without checking this value.
-     * 
-     * 
-     * @param activeFolder
-     * @return true whenever the active folder's page changes.
-     */
-    virtual bool layoutChanged(const AppMenuFolder* activeFolder) override;
-
-    /**
      * Return the bounds where the given folder should be placed in the menu.
      * @param folder
      * @param folderIndex

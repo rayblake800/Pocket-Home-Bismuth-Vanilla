@@ -177,24 +177,6 @@ bool PagedAppMenu::folderKeyPressed(const KeyPress& key, AppMenuFolder* activeFo
 }
 
 /**
- * Check to see if any changes have occurred that justifies changing
- * folder layout.
- */
-bool PagedAppMenu::layoutChanged(const AppMenuFolder* activeFolder)
-{
-    const PageAppFolder* folder =
-            static_cast<const PageAppFolder*> (activeFolder);
-    static int lastFolderPage = -1;
-    if (lastFolderPage != folder->getCurrentFolderPage())
-    {
-        lastFolderPage = folder->getCurrentFolderPage();
-        return true;
-    }
-    lastFolderPage = folder->getCurrentFolderPage();
-    return false;
-}
-
-/**
  * Return the bounds where the given folder should be placed in the menu.
  */
 Rectangle<int> PagedAppMenu::updateFolderBounds(const AppMenuFolder* folder,

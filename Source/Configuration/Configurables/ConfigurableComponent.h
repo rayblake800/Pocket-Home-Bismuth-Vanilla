@@ -33,12 +33,24 @@ protected:
      */
     virtual void applyConfigAssets(Array<String> assetNames,
             Array<Colour> colours);
-    
+
+    /**
+     * Handles updates to any tracked config key values other than the 
+     * one defining the component. Inheriting classes should override 
+     * this instead of loadConfigProperties.
+     * @param config the updated configuration object.
+     * @param key the updated data value's key
+     */
+    virtual void loadExtraConfigProperties(ConfigFile* config,String key) {}
+
+private:    
     /**
      * Load and apply all component data from the ComponentConfigFile
+     * @param config should be the componentConfigFile
      * @param key selects the correct component data from config.
      */
-    void loadConfigProperties(ConfigFile* config,String key);
-private:
+    void loadConfigProperties(ConfigFile* config,String key) final override;
+
     ComponentConfigFile::ComponentSettings componentSettings;
+    const String componentKey;
 };

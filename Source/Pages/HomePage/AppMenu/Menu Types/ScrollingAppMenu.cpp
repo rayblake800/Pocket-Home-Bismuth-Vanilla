@@ -87,24 +87,6 @@ bool ScrollingAppMenu::folderKeyPressed(const KeyPress& key,
 }
 
 /**
- * Check to see if any changes have occurred that justifies changing
- * folder layout.  This does not need to account for the initial layout,
- * changes to menu bounds, folders opening and closing, and selection
- * of a new active folder, as all those events will update folder layout
- * without checking this value.
- */
-bool ScrollingAppMenu::layoutChanged(const AppMenuFolder* activeFolder)
-{
-    static int lastSelectedIndex = -1;
-    if (lastSelectedIndex != activeFolder->getSelectedIndex())
-    {
-        lastSelectedIndex = activeFolder->getSelectedIndex();
-        return true;
-    }
-    return false;
-}
-
-/**
  * Return the bounds where the given folder should be placed in the menu.
  * @param folder
  * @param folderIndex

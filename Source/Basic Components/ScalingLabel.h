@@ -22,7 +22,7 @@ public:
             const int& fontPadding = 0);
     
     virtual ~ScalingLabel();
-private
+private:
     /**
      * Update font size when label bounds change.
      */

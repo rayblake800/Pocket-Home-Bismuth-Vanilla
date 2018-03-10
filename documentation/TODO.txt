@@ -34,3 +34,6 @@
 assets to define it.
 
 -PopupEditorComponent subclasses shouldn't need to directly access its data members.
+
+-ConfigurableImageButton shouldn't need to access the DrawableImageButton's
+ internal image component.

@@ -1,8 +1,10 @@
+#include "../../Utils.h"
 #include "../ComponentConfigFile.h"
 #include "ConfigurableComponent.h"
 
 ConfigurableComponent::ConfigurableComponent
 (String componentKey) :
+componentKey(componentKey),
 Configurable(new ComponentConfigFile(),{componentKey}),
 componentSettings(ComponentConfigFile().getComponentSettings(componentKey)) { }
 
@@ -51,17 +53,26 @@ void ConfigurableComponent::applyConfigAssets(Array<String> assetNames,
 
 /**
  * Load and apply all component data from the ComponentConfigFile
- * @param key selects the correct component data from config.
  */
-void ConfigurableComponent::loadConfigProperties(String key)
+void ConfigurableComponent::loadConfigProperties
+(ConfigFile* config,String key)
 {
-    ComponentConfigFile config;
-    ComponentConfigFile::ComponentSettings oldSettings = componentSettings;
-    componentSettings = config.getComponentSettings(key);
-    if (componentSettings.getBounds() != oldSettings.getBounds())
+    ComponentConfigFile* componentConf = 
+            dynamic_cast<ComponentConfigFile*>(config);
+    if(key != componentKey || componentConf == nullptr)
     {
-        applyConfigBounds();
+        loadExtraConfigProperties(config,key);
     }
-    applyConfigAssets(componentSettings.getAssetFiles(),
-            componentSettings.getColours());
+    else
+    {
+        ComponentConfigFile::ComponentSettings oldSettings 
+                = componentSettings;
+        componentSettings = componentConf->getComponentSettings(key);
+        if (componentSettings.getBounds() != oldSettings.getBounds())
+        {
+            applyConfigBounds();
+        }
+        applyConfigAssets(componentSettings.getAssetFiles(),
+                componentSettings.getColours());
+    }
 }

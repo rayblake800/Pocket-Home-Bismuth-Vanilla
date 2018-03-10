@@ -195,19 +195,6 @@ private:
             IconThread& iconThread) = 0;
 
     /**
-     * Check to see if any changes have occurred that justifies changing
-     * folder layout.  This does not need to account for the initial layout,
-     * changes to menu bounds, folders opening and closing, and selection
-     * of a new active folder, as all those events will update folder layout
-     * without checking this value.
-     * 
-     * @param activeFolder may be needed to determine if folder layouts should
-     * change.
-     * @return true to regenerate the layout, false to leave it as it is.
-     */
-    virtual bool layoutChanged(const AppMenuFolder* activeFolder) = 0;
-
-    /**
      * Return the bounds where the given folder should be placed in the menu.
      * @param folder
      * @param folderIndex
@@ -227,12 +214,12 @@ private:
     (const KeyPress& key, AppMenuFolder* activeFolder) = 0;
 
     /**
-     * Updates the layout if row/column size changes, otherwise handle
-     * changes like any other ConfigurableComponent.
+     * Updates the layout if row/column size changes
      * @param config the configFile containing the updated data value
      * @param key the key of property that has changed
      */
-    void loadConfigProperties(ConfigFile* config, String key);
+    void loadExtraConfigProperties(ConfigFile* config,
+            String key) final override;
 
     /**
      * Reposition child components, and update folder layout without animating.

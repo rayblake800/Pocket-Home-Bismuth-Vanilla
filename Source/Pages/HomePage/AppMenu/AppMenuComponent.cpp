@@ -393,23 +393,11 @@ void AppMenuComponent::layoutFolders()
     {
         return;
     }
-    static Rectangle<int> lastBounds;
-    static int lastFolderCount = -1;
-    static int lastActiveFolder = -1;
-    if (lastBounds != getBounds() || isLoading()
-        || lastFolderCount != openFolders.size()
-        || lastActiveFolder != getActiveFolderIndex()
-        || layoutChanged(openFolders[getActiveFolderIndex()]))
+   DBG("Updating folder layouts");
+    for (int i = 0; i < openFolders.size(); i++)
     {
-        lastBounds = getBounds();
-        lastFolderCount = openFolders.size();
-        lastActiveFolder = getActiveFolderIndex();
-        DBG("Updating folder layouts");
-        for (int i = 0; i < openFolders.size(); i++)
-        {
-            Rectangle<int> folderBounds = updateFolderBounds(openFolders[i], i);
-            openFolders[i]->setBounds(folderBounds);
-        }
+        Rectangle<int> folderBounds = updateFolderBounds(openFolders[i], i);
+        openFolders[i]->setBounds(folderBounds);
     }
 }
 
@@ -443,12 +431,12 @@ void AppMenuComponent::setOnlyTriggerSelected(bool newVal)
 
 
 /**
- * Updates the layout if row/column size changes, otherwise handle
- * changes like any other ConfigurableComponent.
+ * Updates the layout if row/column size changes.
  * @param config the configFile containing the updated data value
  * @param key the key of property that has changed
  */
-void AppMenuComponent::loadConfigProperties(ConfigFile* config, String key)
+void AppMenuComponent::loadExtraConfigProperties
+        (ConfigFile* config, String key)
 {
     ComponentConfigFile* compConf = dynamic_cast<ComponentConfigFile*> (config);
     if (compConf != nullptr)
@@ -460,11 +448,6 @@ void AppMenuComponent::loadConfigProperties(ConfigFile* config, String key)
         else if (key == ComponentConfigFile::maxRowsKey)
         {
             maxRows = compConf->getConfigValue<int>(key);
-        }
-        else
-        {
-            ConfigurableComponent::loadConfigProperties(config, key);
-            return;
         }
         for (AppMenuFolder* folder : openFolders)
         {

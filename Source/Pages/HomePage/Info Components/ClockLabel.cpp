@@ -73,7 +73,8 @@ void ClockLabel::visibilityChanged()
 /**
  * Receives notification whenever clock configuration values change
  */
-void ClockLabel::loadConfigProperties(ConfigFile* config, String key)
+void ClockLabel::loadExtraConfigProperties
+(ConfigFile* config, String key)
 {
     ComponentConfigFile* componentConfig =
             dynamic_cast<ComponentConfigFile*> (config);
@@ -105,10 +106,6 @@ void ClockLabel::loadConfigProperties(ConfigFile* config, String key)
                 stopTimer();
                 startTimer(1);
             }
-        }
-        else
-        {
-            ConfigurableLabel::loadConfigProperties(config, key);
         }
     }
 }
