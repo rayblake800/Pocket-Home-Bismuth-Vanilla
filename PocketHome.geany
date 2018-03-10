@@ -23,11 +23,8 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=2761;C;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FBasic%20Components%2FCounterComponent.h;0;4
-FILE_NAME_1=574;C++;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FBasic%20Components%2FCounterComponent.cpp;0;2
-FILE_NAME_2=895;C;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FPages%2FPersonalizePage.h;0;2
-FILE_NAME_3=1746;C++;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FPages%2FPersonalizePage.cpp;0;4
+current_page=0
+FILE_NAME_0=3043;C++;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FPages%2FPersonalizePage.cpp;0;4
 
 [VTE]
 last_dir=/home/chip

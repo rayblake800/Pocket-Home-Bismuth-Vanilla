@@ -1,7 +1,5 @@
 -Upgrade to new Juce library version
 
--Changing appMenu grid size causes unusual behavior
-
 -AppMenu still isn't acquiring keyboard focus immediately
 
 -Design and implement TabbedAppMenu

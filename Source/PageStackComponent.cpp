@@ -59,8 +59,8 @@ void PageStackComponent::pushPage(Page *page, Transition transition)
     }
     stack.add(page);
     page->pageStack = this;
-    page->pageAddedToStack();
     transitionIn(page, transition, transitionDurationMillis);
+    page->pageAddedToStack();
 }
 
 /**

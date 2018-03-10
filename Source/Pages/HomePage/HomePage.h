@@ -22,7 +22,7 @@
 /**
  * TODO:
  *  -Add configurable key shortcuts
- *  -Add alternate AppMenu class support
+ *  -Complete documentation
  */
 
 class HomePage : public PageComponent,public Configurable{
@@ -81,6 +81,8 @@ private:
      * @param windowFocus
      */
     void windowFocusChanged(bool windowFocus) override;
+    
+    
     
     /**
      * 

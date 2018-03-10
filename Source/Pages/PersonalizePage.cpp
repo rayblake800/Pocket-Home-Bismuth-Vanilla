@@ -103,8 +103,9 @@ void PersonalizePage::updateComboBox()
     /* Checking the current configuration */
     String background = config.getConfigValue<String>(MainConfigFile::backgroundKey);
     bool display = false;
-    if (background.length() == 6 &&
-        background.containsOnly("0123456789ABCDEF"))
+    if ((background.length() == 6 
+            || background.length() == 8)
+        && background.containsOnly("0123456789ABCDEF"))
     {
         bgTypePicker.setSelectedItemIndex(1, dontSendNotification);
         display = true;
