@@ -91,14 +91,7 @@ bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection)
     }
     WifiStatus& wifiStatus
             = PocketHomeApplication::getInstance()->getWifiStatus();
-    try
-    {
-        return wifiStatus.connectedAccessPoint() == connection;
-    }
-    catch (WifiStatus::MissingAccessPointException e)
-    {
-        return false;
-    }
+    return wifiStatus.connectedAccessPoint() == connection;
 }
 
 /**

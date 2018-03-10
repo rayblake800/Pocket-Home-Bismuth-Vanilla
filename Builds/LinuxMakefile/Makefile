@@ -23,6 +23,8 @@ ifndef CONFIG
   CONFIG=Debug
 endif
 
+JUCE_ARCH_LABEL := $(shell uname -m)
+
 ifeq ($(CONFIG),Debug)
   JUCE_BINDIR := build
   JUCE_LIBDIR := build
@@ -33,13 +35,13 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Basic $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Basic $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
   JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 $(CFLAGS)
-  JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=gnu++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs NetworkManager libnm-glib alsa freetype2 libssl) -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt $(LDFLAGS)
+  JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=gnu++14 $(CXXFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs NetworkManager libnm-glib alsa freetype2 libssl x11 xext xinerama) -ldl -lpthread -lrt $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
@@ -54,13 +56,13 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Basic $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages -I/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Basic $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
   JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -O3 $(CFLAGS)
-  JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=gnu++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs NetworkManager libnm-glib alsa freetype2 libssl) -fvisibility=hidden -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt $(LDFLAGS)
+  JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=gnu++14 $(CXXFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/X11R6/lib/ $(shell pkg-config --libs NetworkManager libnm-glib alsa freetype2 libssl x11 xext xinerama) -fvisibility=hidden -ldl -lpthread -lrt $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
@@ -74,6 +76,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/ListEditor_42725b33.o \
   $(JUCE_OBJDIR)/OverlaySpinner_eb9f06b1.o \
   $(JUCE_OBJDIR)/PageComponent_f47a638f.o \
+  $(JUCE_OBJDIR)/PopupColorPicker_6dcf65cd.o \
   $(JUCE_OBJDIR)/PopupEditorComponent_59ad8b0c.o \
   $(JUCE_OBJDIR)/ScalingLabel_5d9da175.o \
   $(JUCE_OBJDIR)/Spinner_694ad2db.o \
@@ -148,6 +151,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/include_juce_events_fd7d695.o \
   $(JUCE_OBJDIR)/include_juce_graphics_f817e147.o \
   $(JUCE_OBJDIR)/include_juce_gui_basics_e3f79785.o \
+  $(JUCE_OBJDIR)/include_juce_gui_extra_6dee1c1a.o \
 
 .PHONY: clean all
 
@@ -158,7 +162,7 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_BINDIR)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
-	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
+	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
 
 $(JUCE_OBJDIR)/CounterComponent_97e558a9.o: ../../Source/Basic\ Components/CounterComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
@@ -198,6 +202,11 @@ $(JUCE_OBJDIR)/OverlaySpinner_eb9f06b1.o: ../../Source/Basic\ Components/Overlay
 $(JUCE_OBJDIR)/PageComponent_f47a638f.o: ../../Source/PageComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PageComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/PopupColorPicker_6dcf65cd.o: ../../Source/Basic\ Components/PopupColorPicker.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling PopupColorPicker.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PopupEditorComponent_59ad8b0c.o: ../../Source/Basic\ Components/PopupEditorComponent.cpp
@@ -570,9 +579,14 @@ $(JUCE_OBJDIR)/include_juce_gui_basics_e3f79785.o: ../../JuceLibraryCode/include
 	@echo "Compiling include_juce_gui_basics.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/include_juce_gui_extra_6dee1c1a.o: ../../JuceLibraryCode/include_juce_gui_extra.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling include_juce_gui_extra.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 check-pkg-config:
 	@command -v pkg-config >/dev/null 2>&1 || { echo >&2 "pkg-config not installed. Please, install it."; exit 1; }
-	@pkg-config --print-errors NetworkManager libnm-glib alsa freetype2 libssl
+	@pkg-config --print-errors NetworkManager libnm-glib alsa freetype2 libssl x11 xext xinerama
 
 clean:
 	@echo Cleaning pocket-home

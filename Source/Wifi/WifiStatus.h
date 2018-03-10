@@ -31,12 +31,6 @@ public:
     WifiStatus();
     virtual ~WifiStatus();
 
-    struct MissingAccessPointException : public std::exception {
-
-        const char * what() const noexcept {
-            return "WifiAccessPoint not found";
-        }
-    };
 
     class Listener {
     public:

@@ -80,10 +80,10 @@ void ListEditor::updateColours()
     listContainer.setColour(ListBox::outlineColourId,
             findColour(selectedListItemColourId));
 
-    ScrollBar* scrollbar = listContainer.getVerticalScrollBar();
-    scrollbar->setColour(ScrollBar::trackColourId,
+    ScrollBar& scrollbar = listContainer.getVerticalScrollBar();
+    scrollbar.setColour(ScrollBar::trackColourId,
             findColour(listItemColourId));
-    scrollbar->setColour(ScrollBar::thumbColourId, findColour(textColourId));
+    scrollbar.setColour(ScrollBar::thumbColourId, findColour(textColourId));
 }
 
 

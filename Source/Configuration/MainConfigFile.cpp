@@ -25,12 +25,12 @@ const Array<String> MainConfigFile::menuTypes =
 };
 
 //string
-const String MainConfigFile::backgroundKey = "background";
 const String MainConfigFile::menuTypeKey = "app menu type";
 const String MainConfigFile::shutdownCommandKey = "shutdown command";
 const String MainConfigFile::restartCommandKey = "restart command";
 const String MainConfigFile::sleepCommandKey = "sleep command";
 const String MainConfigFile::termLaunchCommandKey = "terminal launch command";
+const String MainConfigFile::backgroundKey = "background";
 //boolean
 const String MainConfigFile::showCursorKey = "cursor";
 

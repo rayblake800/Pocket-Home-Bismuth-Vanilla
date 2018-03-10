@@ -2,9 +2,9 @@
 
 <JUCERPROJECT id="EFuQKG" name="pocket-home" projectType="guiapp" version="0.0.1"
               bundleIdentifier="co.nextthing.PokeLaunch" includeBinaryInAppConfig="1"
-              jucerVersion="5.2.0" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
+              jucerVersion="5.2.1" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
               displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
-              cppLanguageStandard="11" companyCopyright="Next Thing Co." headerPath="/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi;&#10;/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components;&#10;/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages;&#10;/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Basic&#10;">
+              companyCopyright="Next Thing Co." headerPath="/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi;&#10;/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components;&#10;/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages;&#10;/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Basic&#10;">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
       <FILE id="lJvIsl" name="bluetooth.json" compile="0" resource="1" file="assets/bluetooth.json"/>
@@ -44,6 +44,10 @@
         <FILE id="QzBmfL" name="PageComponent.cpp" compile="1" resource="0"
               file="Source/PageComponent.cpp"/>
         <FILE id="bFrJLt" name="PageComponent.h" compile="0" resource="0" file="Source/PageComponent.h"/>
+        <FILE id="CgROr5" name="PopupColorPicker.cpp" compile="1" resource="0"
+              file="Source/Basic Components/PopupColorPicker.cpp"/>
+        <FILE id="XSbui9" name="PopupColorPicker.h" compile="0" resource="0"
+              file="Source/Basic Components/PopupColorPicker.h"/>
         <FILE id="JajILW" name="PopupEditorComponent.cpp" compile="1" resource="0"
               file="Source/Basic Components/PopupEditorComponent.cpp"/>
         <FILE id="PieSFW" name="PopupEditorComponent.h" compile="0" resource="0"
@@ -306,19 +310,20 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="10.10 SDK" osxArchitecture="default"
-                       isDebug="1" optimisation="1" targetName="pocket-home" cppLanguageStandard="c++11"
-                       binaryPath="build" enablePluginBinaryCopyStep="1"/>
-        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="10.10 SDK"
-                       osxArchitecture="default" isDebug="0" optimisation="3" targetName="pocket-home"
-                       cppLanguageStandard="c++11" binaryPath="build" enablePluginBinaryCopyStep="1"/>
+        <CONFIGURATION name="Debug" osxCompatibility="10.10 SDK" isDebug="1" optimisation="1"
+                       targetName="pocket-home" cppLanguageStandard="c++11" binaryPath="build"
+                       enablePluginBinaryCopyStep="1"/>
+        <CONFIGURATION name="Release" osxCompatibility="10.10 SDK" isDebug="0" optimisation="3"
+                       targetName="pocket-home" cppLanguageStandard="c++11" binaryPath="build"
+                       enablePluginBinaryCopyStep="1"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="deps/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="deps/JUCE/modules"/>
         <MODULEPATH id="juce_events" path="deps/JUCE/modules"/>
         <MODULEPATH id="juce_graphics" path="deps/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="deps/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="deps/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="deps/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile" cppLanguageStandard="-std=c++11"
@@ -333,19 +338,21 @@
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="deps/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="deps/JUCE/modules"/>
         <MODULEPATH id="juce_events" path="deps/JUCE/modules"/>
         <MODULEPATH id="juce_graphics" path="deps/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="deps/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="deps/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="deps/JUCE/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
   </EXPORTFORMATS>
   <MODULES>
-    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
   </MODULES>
-  <JUCEOPTIONS/>
+  <JUCEOPTIONS JUCE_WEB_BROWSER="0" JUCE_USE_CURL="0"/>
 </JUCERPROJECT>

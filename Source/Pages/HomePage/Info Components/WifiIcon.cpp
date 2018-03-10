@@ -5,7 +5,7 @@
 WifiIcon::WifiIcon() :
 ConfigurableImageComponent(ComponentConfigFile::wifiIconKey)
 {
-    
+
 #if JUCE_DEBUG
     setName("WifiIcon");
 #endif
@@ -53,17 +53,13 @@ void WifiIcon::timerCallback()
     WifiIconImage wifiState = wifiOff;
     if (wifiStatus.isConnected())
     {
-        try
+        WifiAccessPoint accessPoint = wifiStatus.connectedAccessPoint();
+        if (accessPoint != WifiAccessPoint::null)
         {
-            WifiAccessPoint accessPoint = wifiStatus.connectedAccessPoint();
             // 0 to 100
             float sigStrength = std::max(0,
                     std::min(99, accessPoint.signalStrength));
             wifiState = (WifiIconImage) (2 + (int) (sigStrength * 3 / 100));
-        }
-        catch (WifiStatus::MissingAccessPointException e)
-        {
-            wifiState = wifiStrength0;
         }
     }// wifi on but no connection
     else if (wifiStatus.isEnabled())

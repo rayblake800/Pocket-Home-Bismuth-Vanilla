@@ -97,16 +97,10 @@ void WifiSettingsComponent::updateButtonText()
             ->getWifiStatus();
     if (status.isEnabled())
     {
-        if (status.isConnected())
+        WifiAccessPoint wifiAP = status.connectedAccessPoint();
+        if (wifiAP != WifiAccessPoint::null)
         {
-            try
-            {
-                setPageButtonText(status.connectedAccessPoint().ssid);
-            }
-            catch (WifiStatus::MissingAccessPointException e)
-            {
-                setPageButtonText("Not Connected");
-            }
+            setPageButtonText(wifiAP.ssid);
         }
         else
         {

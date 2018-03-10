@@ -117,7 +117,7 @@ WifiAccessPoint getNMConnectedAP(NMDeviceWifi *wdev)
     if (!wdev || !ap)
     {
         DBG(__func__ << ": no NMAccessPoint found!");
-        throw WifiStatus::MissingAccessPointException();
+        return WifiAccessPoint::null;
     }
 
     return createNMWifiAccessPoint(ap);
@@ -266,7 +266,7 @@ WifiAccessPoint WifiStatusNM::connectedAccessPoint() const
 {
     if (!connected)
     {
-        throw MissingAccessPointException();
+        return WifiAccessPoint::null;
     }
 
     return connectedAP;
@@ -285,13 +285,15 @@ bool WifiStatusNM::isConnected() const
 void WifiStatusNM::addListener(Listener* listener)
 {
     listeners.add(listener);
-    DBG("WifiStatusNM::" << __func__ << " numListeners = " << listeners.size());
+    DBG(String("WifiStatusNM::") + __func__ +String(" numListeners = ")
+            + String(listeners.size()));
 }
 
 void WifiStatusNM::clearListeners()
 {
     listeners.clear();
-    DBG("WifiStatusNM::" << __func__ << " numListeners = " << listeners.size());
+    DBG(String("WifiStatusNM::") + __func__ +String(" numListeners = ")
+            + String(listeners.size()));
 }
 
 // TODO: direct action should not be named set, e.g. enable/disable/disconnect
@@ -320,7 +322,8 @@ void WifiStatusNM::setDisabled()
 void WifiStatusNM::handleWirelessEnabled()
 {
     enabled = nm_client_wireless_get_enabled(nmclient);
-    DBG("WifiStatusNM::" << __func__ << " changed to " << enabled);
+    DBG(String("WifiStatusNM::") + __func__ + String(" changed to ")
+            + String(enabled?"enabled":"disabled"));
 
     //FIXME: Force and wait for a scan after enable
     if (enabled)
@@ -350,7 +353,8 @@ void removeNMConnection(NMDevice *nmdevice, NMActiveConnection *conn)
                 if (err)
                 {
                     DBG("WifiStatusNM: failed to remove active connection!");
-                    DBG("WifiStatusNM::" << __func__ << ": " << err->message);
+                    DBG(String("WifiStatusNM::") + __func__ +String(": ")
+                            + String(err->message));
                     g_error_free(err);
                 }
                 break;
@@ -362,8 +366,9 @@ void removeNMConnection(NMDevice *nmdevice, NMActiveConnection *conn)
 void WifiStatusNM::handleWirelessConnected()
 {
     NMDeviceState state = nm_device_get_state(nmdevice);
-    DBG("WifiStatusNM::" << __func__ << " changed to " << state
-            << " while connecting = " << connecting);
+    DBG(String("WifiStatusNM::") + __func__ +String(" changed to ")
+            + String(state) + String(" while connecting = ")
+            + String(connecting?"true":"false"));
 
     switch (state)
     {
@@ -374,7 +379,7 @@ void WifiStatusNM::handleWirelessConnected()
             handle_active_access_point(this);
             connected = true;
             connecting = false;
-            DBG("WifiStatus::" << __func__ << " - connected");
+            DBG(String("WifiStatus::") + __func__ +String(" - connected"));
             for (const auto& listener : listeners)
                 listener->handleWifiConnected();
             break;
@@ -403,7 +408,7 @@ void WifiStatusNM::handleWirelessConnected()
             {
                 connected = false;
                 connecting = false;
-                DBG("WifiStatus::" << __func__ << " - failed");
+                DBG(String("WifiStatus::") + __func__ +String(" - failed"));
                 for (const auto& listener : listeners)
                     listener->handleWifiFailedConnect();
                 break;
@@ -438,16 +443,16 @@ void WifiStatusNM::handleWirelessConnected()
 
 void WifiStatusNM::handleConnectedAccessPoint()
 {
-    DBG("WifiStatusNM::" << __func__ << " changed active AP");
-    try
+    DBG(String("WifiStatusNM::") + __func__ +String(" changed active AP"));
+    connectedAP = getNMConnectedAP(NM_DEVICE_WIFI(nmdevice));
+    if (connectedAP == WifiAccessPoint::null)
     {
-        connectedAP = getNMConnectedAP(NM_DEVICE_WIFI(nmdevice));
-        DBG("WifiStatusNM::" << __func__ << " ssid = " << connectedAP.ssid);
+        DBG(String("WifiStatusNM::") + __func__ +String("no connectedAP "));
     }
-    catch (WifiStatus::MissingAccessPointException e)
+    else
     {
-
-        DBG("WifiStatusNM::" << __func__ << "no connectedAP ");
+        DBG(String("WifiStatusNM::") + __func__ +String(" ssid = ")
+                + connectedAP.ssid);
     }
 }
 
@@ -527,8 +532,8 @@ void WifiStatusNM::setConnectedAccessPoint(const WifiAccessPoint& ap, String psk
                 g_object_set(G_OBJECT(s_wsec), NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
                     NM_WEP_KEY_TYPE_PASSPHRASE, nullptr);
             else
-                DBG("User input invalid WEP Key type, psk.length() = " << psk.length()
-                    << ", not in [5,10,13,26]");
+                DBG(String("User input invalid WEP Key type, psk.length() = ") 
+                + String(psk.length()) + String(", not in [5,10,13,26]"));
         }
         else
         {
@@ -573,14 +578,7 @@ void WifiStatusNM::initializeStatus()
 
     if (connected)
     {
-        try
-        {
-            connectedAP = getNMConnectedAP(NM_DEVICE_WIFI(nmdevice));
-        }
-        catch (WifiStatus::MissingAccessPointException e)
-        {
-            DBG("WifiStatusNM: failed to get access point from connection");
-        }
+        connectedAP = getNMConnectedAP(NM_DEVICE_WIFI(nmdevice));
     }
 }
 

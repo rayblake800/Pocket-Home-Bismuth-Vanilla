@@ -11,8 +11,7 @@ plusButton("+")
   minusButton.addListener(this);
   plusButton.addListener(this);
   textField.addListener(this);
-  //TODO: upgrade JUCE library, the new version allows this
-  //textField.setJustification(Justification::centred);
+  textField.setJustification(Justification::centred);
   textField.setInputFilter
       (new TextEditor::LengthAndCharacterRestriction(-1,"1234567890"), 
       true);

@@ -42,7 +42,7 @@ void PopupEditorComponent::closePopup()
 }
 
 /**
- * Manages the cancel and confirm buttons. Inherited classes should either
+ * Manages the cancel and confirm buttons. Inheriting classes should either
  * call this method if they're handling button clicks, or handle clicks
  * on the cancel/confirm buttons themselves.
  */
