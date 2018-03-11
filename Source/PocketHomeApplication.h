@@ -9,8 +9,6 @@
 #include "Configuration/MainConfigFile.h"
 #include "Configuration/ComponentConfigFile.h"
 #include "Wifi/WifiStatus.h"
-#include "Wifi/WifiStatusJson.h"
-#include "Wifi/WifiStatusNM.h"
 #include "BluetoothStatus.h"
 #include "PokeLookAndFeel.h"
 #include "Utils.h"
@@ -29,14 +27,7 @@ public:
 private:
     bool initAudio();
     PokeLookAndFeel lookAndFeel;
-#ifdef LINUX
-    WifiStatusNM wifiStatusNM;
-#else
-    WifiStatusJson wifiStatusNM;
-#endif //LINUX
-
-    WifiStatusJson wifiStatusJson;
-    WifiStatus *wifiStatus;
+    ScopedPointer<WifiStatus> wifiStatus;
 
     BluetoothStatus bluetoothStatus;
     const String getApplicationName() override;

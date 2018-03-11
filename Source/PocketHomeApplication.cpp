@@ -1,5 +1,6 @@
 #include "PocketHomeApplication.h"
-#include "Wifi/WifiStatus.h"
+#include "Wifi/WifiStatusJson.h"
+#include "Wifi/WifiStatusNM.h"
 #include "Utils.h"
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -148,12 +149,17 @@ void PocketHomeApplication::initialise(const String &commandLine)
     // Populate with dummy data
     {
         if (args.contains("--fakewifi"))
-            wifiStatus = &wifiStatusJson;
+        {
+            wifiStatus = new WifiStatusJson();
+        }
         else
-            wifiStatus = &wifiStatusNM;
-
-        wifiStatus->initializeStatus();
-
+        {
+#ifdef JUCE_LINUX
+            wifiStatus = new WifiStatusNM();
+#else          
+            wifiStatus = new WifiStatusJson();
+#endif
+        }
         auto deviceListFile = assetFile("bluetooth.json");
         bluetoothStatus.populateFromJson(JSON::parse(deviceListFile));
     }

@@ -53,7 +53,7 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
             = PocketHomeApplication::getInstance()->getWifiStatus();
     if (wifiStatus.isConnected())
     {
-        PocketHomeApplication::getInstance()->getWifiStatus().setDisconnected();
+        PocketHomeApplication::getInstance()->getWifiStatus().disconnect();
     }
     setCurrentlyConnecting(true);
     errorLabel.setVisible(false);
@@ -76,7 +76,7 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
 {
     if (isConnected(connection))
     {
-        PocketHomeApplication::getInstance()->getWifiStatus().setDisconnected();
+        PocketHomeApplication::getInstance()->getWifiStatus().disconnect();
     }
 }
 

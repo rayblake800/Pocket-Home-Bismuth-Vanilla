@@ -1,5 +1,3 @@
--Upgrade to new Juce library version
-
 -AppMenu still isn't acquiring keyboard focus immediately
 
 -Design and implement TabbedAppMenu

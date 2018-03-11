@@ -17,10 +17,11 @@ struct WifiAccessPoint {
      * Represents an invalid or missing connection point
      */
     static const WifiAccessPoint null;
-    
+
     bool operator==(const WifiAccessPoint rhs) const {
         return hash == rhs.hash;
     };
+
     bool operator!=(const WifiAccessPoint rhs) const {
         return hash != rhs.hash;
     };
@@ -30,7 +31,6 @@ class WifiStatus {
 public:
     WifiStatus();
     virtual ~WifiStatus();
-
 
     class Listener {
     public:
@@ -64,13 +64,11 @@ public:
     virtual void addListener(Listener* listener) = 0;
     virtual void clearListeners() = 0;
 
-    virtual void setEnabled() = 0;
-    virtual void setDisabled() = 0;
+    virtual void enableWifi() = 0;
+    virtual void disableWifi() = 0;
     virtual void setConnectedAccessPoint(const WifiAccessPoint& ap,
             String psk = String::empty) = 0;
-    virtual void setDisconnected() = 0;
-
-    virtual void initializeStatus() = 0;
+    virtual void disconnect() = 0;
 };
 
 

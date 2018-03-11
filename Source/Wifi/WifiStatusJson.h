@@ -21,13 +21,11 @@ public:
   void addListener(Listener* listener) override;
   void clearListeners() override;
 
-  void setEnabled() override;
-  void setDisabled() override;
+  void enableWifi() override;
+  void disableWifi() override;
   void setConnectedAccessPoint(const WifiAccessPoint& ap,
           String psk = String::empty) override;
-  void setDisconnected() override;
-
-  void initializeStatus() override;
+  void disconnect() override;
 
 private:
   Array<Listener*> listeners;

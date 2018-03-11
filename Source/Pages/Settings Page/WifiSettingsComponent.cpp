@@ -35,7 +35,7 @@ void WifiSettingsComponent::enabledStateChanged(bool enabled)
     WifiStatus& wifiStatus = PocketHomeApplication::getInstance()
             ->getWifiStatus();
 
-    enabled ? wifiStatus.setEnabled() : wifiStatus.setDisabled();
+    enabled ? wifiStatus.enableWifi() : wifiStatus.disableWifi();
 }
 
 void WifiSettingsComponent::handleWifiEnabled()

@@ -58,7 +58,7 @@ void WifiStatusJson::clearListeners()
 // TODO: direct action should not be named set, e.g. enable/disable/disconnect
 // otherwise easily confused with setters thats wrap members, which are slightly different idiom
 
-void WifiStatusJson::setEnabled()
+void WifiStatusJson::enableWifi()
 {
     if (!enabled)
     {
@@ -75,7 +75,7 @@ void WifiStatusJson::setEnabled()
     }
 }
 
-void WifiStatusJson::setDisabled()
+void WifiStatusJson::disableWifi()
 {
     if (enabled)
     {
@@ -134,16 +134,11 @@ void WifiStatusJson::setConnectedAccessPoint(const WifiAccessPoint& ap, String p
     }
 }
 
-void WifiStatusJson::setDisconnected()
+void WifiStatusJson::disconnect()
 {
     connected = false;
     for (Listener* listener : listeners)
     {
         listener->handleWifiDisconnected();
     }
-}
-
-void WifiStatusJson::initializeStatus()
-{
-    connected = false;
 }

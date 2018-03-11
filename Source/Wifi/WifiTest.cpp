@@ -154,7 +154,7 @@ void WifiTestApplication::initialise(const String &commandLine) {
         listener->expectConnected = false;
         wifiStatus->addListener(listener);
 
-        wifiStatus->setEnabled();
+        wifiStatus->enableWifi();
     };
 
     auto test_set_disabled = [this](WifiStatus * wifiStatus) {
@@ -165,12 +165,7 @@ void WifiTestApplication::initialise(const String &commandLine) {
         listener->expectConnected = false;
         wifiStatus->addListener(listener);
 
-        wifiStatus->setDisabled();
-    };
-
-    auto test_initialize = [](WifiStatus * wifiStatus) {
-        std::cout << "Initializing wifiStatus ..." << std::endl;
-        wifiStatus->initializeStatus();
+        wifiStatus->disableWifi();
     };
 
     auto test_ap_list = [](WifiStatus * wifiStatus) {
@@ -223,10 +218,9 @@ void WifiTestApplication::initialise(const String &commandLine) {
         listener->expectConnected = false;
         wifiStatus->addListener(listener);
 
-        wifiStatus->setDisconnected();
+        wifiStatus->disconnect();
     };
 
-    testSteps.add(test_initialize);
     testSteps.add(test_enabled);
     testSteps.add(test_connected);
     testSteps.add(test_set_enabled);
