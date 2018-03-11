@@ -45,7 +45,7 @@ void PageComponent::updateLayout(GridLayoutManager::Layout layout)
 {
     layoutManager.clearLayout(true);
     layoutManager.setLayout(layout, this);
-    if (isVisible())
+    if (!getBounds().isEmpty())
     {
 
         resized();
