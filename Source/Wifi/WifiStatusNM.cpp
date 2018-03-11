@@ -162,8 +162,6 @@ void WifiStatusNM::disableWifi()
             listener->handleWifiBusy();
         }
         nm_client_wireless_set_enabled(nmClient, false);
-        signalThreadShouldExit();
-        notify();
     }
 }
 
@@ -303,7 +301,9 @@ void WifiStatusNM::handleWirelessEnabled()
         for (const auto& listener : listeners)
         {
             listener->handleWifiDisabled();
-        }
+        }     
+        signalThreadShouldExit();
+        notify();
     }
 }
 
