@@ -3,7 +3,9 @@
 -Design and implement TabbedAppMenu
 	wait on this until nested folders are implemented and tested.
 
--Wifi scanning keeps running in the background even when the window isn't focused
+-code in PocketHomeWindow for pausing/resuming the wifi thread on window focus
+    change is a messy temporary hack that should be replaced with something
+    cleaner.
 
 -prevent battery widget from showing percentages over 100
     -perhaps run battery.sh in these cases?
