@@ -448,8 +448,8 @@ bool WifiStatusNM::connectToNetworkManager()
 void WifiStatusNM::run()
 {
     NMDevice *dev = nm_client_get_device_by_iface(nmClient, "wlan0");
-    context = g_main_context_default();
-    //context = g_main_context_new();
+    context = g_main_context_new();
+    g_main_context_push_thread_default(context);
     loop = g_main_loop_new(context, false);
     //g_main_context_invoke(context, initialize_in_context, status);
 
@@ -478,6 +478,7 @@ void WifiStatusNM::run()
     }
 
     g_main_loop_unref(loop);
+    g_main_context_pop_thread_default(context);
     g_main_context_unref(context);
 }
 
