@@ -6,7 +6,7 @@
 #    include "../JuceLibraryCode/JuceHeader.h"
 #    define LIBNM_ITERATION_PERIOD 100 // milliseconds
 
-WifiStatusNM::WifiStatusNM() : Thread("NMListener Thread")
+WifiStatusNM::WifiStatusNM() : connectedAP(WifiAccessPoint::null())
 {
     if (!connectToNetworkManager())
     {
@@ -53,24 +53,27 @@ Array<WifiAccessPoint> WifiStatusNM::nearbyAccessPoints()
             WifiAccessPoint createdAP = createNMWifiAccessPoint(ap);
 
             /*FIXME: dropping hidden (no ssid) networks until gui supports it*/
-            if (createdAP.ssid.length() == 0)
+            if (createdAP.getSSID().length() == 0)
             {
                 continue;
             }
 
-            if (uniqueAPs.find(createdAP.hash) == uniqueAPs.end())
+            if (uniqueAPs.count(createdAP.getHash()) == 0)
             {
-                uniqueAPs[createdAP.hash] = createdAP;
+                uniqueAPs[createdAP.getHash()] = createdAP;
             }
-            else if (uniqueAPs[createdAP.hash].signalStrength
-                     < createdAP.signalStrength)
+            else
             {
-                uniqueAPs[createdAP.hash] = createdAP;
+                if (createdAP.getSignalStrength() <
+                    uniqueAPs[createdAP.getHash()].getSignalStrength())
+                {
+                    uniqueAPs[createdAP.getHash()] = createdAP;
+                }
             }
         }
-        for (const auto entry : uniqueAPs)
+        for (const auto ap : uniqueAPs)
         {
-            accessPoints.add(entry.second);
+            accessPoints.add(ap.second);
         }
     }
 
@@ -109,39 +112,13 @@ bool WifiStatusNM::isConnected() const
 }
 
 /**
- * Add a listener to the list of objects receiving updates on wifi state
- * changes.
- * @param listener
- */
-void WifiStatusNM::addListener(WifiStatus::Listener* listener)
-{
-    listeners.add(listener);
-    DBG(String("WifiStatusNM::") + __func__ +String(" numListeners = ")
-            + String(listeners.size()));
-}
-
-/**
- * Remove all listeners from the list of objects receiving updates on wifi 
- * state changes.
- */
-void WifiStatusNM::clearListeners()
-{
-    listeners.clear();
-    DBG(String("WifiStatusNM::") + __func__ +String(" numListeners = ")
-            + String(listeners.size()));
-}
-
-/**
  * Turns on the wifi radio.
  */
 void WifiStatusNM::enableWifi()
 {
     if (!enabled)
     {
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiBusy();
-        }
+        notifyListenersWifiBusy();
         nm_client_wireless_set_enabled(nmClient, true);
         if (!isThreadRunning())
         {
@@ -157,10 +134,7 @@ void WifiStatusNM::disableWifi()
 {
     if (enabled)
     {
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiBusy();
-        }
+        notifyListenersWifiBusy();
         nm_client_wireless_set_enabled(nmClient, false);
     }
 }
@@ -171,10 +145,7 @@ void WifiStatusNM::disableWifi()
 void WifiStatusNM::setConnectedAccessPoint
 (const WifiAccessPoint& ap, String psk)
 {
-    for (const auto& listener : listeners)
-    {
-        listener->handleWifiBusy();
-    }
+    notifyListenersWifiBusy();
     const char* apPath = nullptr;
     //FIXME: expand WifiAccessPoint struct to know which NMAccessPoint it is
     const GPtrArray* apList = nm_device_wifi_get_access_points
@@ -188,7 +159,7 @@ void WifiStatusNM::setConnectedAccessPoint
     {
         candidateAP = (NMAccessPoint*) g_ptr_array_index(apList, i);
         const char* candidateHash = hashAP(candidateAP);
-        if (ap.hash == candidateHash)
+        if (ap.getHash() == candidateHash)
         {
             apPath = nm_object_get_path(NM_OBJECT(candidateAP));
             break;
@@ -213,7 +184,7 @@ void WifiStatusNM::setConnectedAccessPoint
 
     if (!psk.isEmpty())
     {
-        NMSettingWirelessSecurity* settingWifiSecurity = 
+        NMSettingWirelessSecurity* settingWifiSecurity =
                 (NMSettingWirelessSecurity*)
                 nm_setting_wireless_security_new();
         nm_connection_add_setting(connection, NM_SETTING(settingWifiSecurity));
@@ -272,10 +243,7 @@ void WifiStatusNM::disconnect()
         jassert(nmDevice != nullptr);
         nm_device_disconnect(nmDevice, nullptr, nullptr);
         connected = false;
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiDisconnected();
-        }
+        notifyListenersWifiDisconnected();
     }
 }
 
@@ -291,17 +259,11 @@ void WifiStatusNM::handleWirelessEnabled()
     //FIXME: Force and wait for a scan after enable
     if (enabled)
     {
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiEnabled();
-        }
+        notifyListenersWifiEnabled();
     }
     else
     {
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiDisabled();
-        }     
+        notifyListenersWifiDisabled();
         signalThreadShouldExit();
         notify();
     }
@@ -329,10 +291,7 @@ void WifiStatusNM::handleWirelessConnected()
             connected = true;
             connecting = false;
             DBG(String("WifiStatus::") + __func__ +String(" - connected"));
-            for (const auto& listener : listeners)
-            {
-                listener->handleWifiConnected();
-            }
+            notifyListenersWifiConnected();
             break;
         case NM_DEVICE_STATE_PREPARE:
         case NM_DEVICE_STATE_CONFIG:
@@ -359,10 +318,7 @@ void WifiStatusNM::handleWirelessConnected()
                 connected = false;
                 connecting = false;
                 DBG(String("WifiStatus::") + __func__ +String(" - failed"));
-                for (const auto& listener : listeners)
-                {
-                    listener->handleWifiFailedConnect();
-                }
+                notifyListenersWifiFailedConnect();
                 break;
             }
 
@@ -372,11 +328,7 @@ void WifiStatusNM::handleWirelessConnected()
             }
             handle_active_access_point(this);
             connected = false;
-
-            for (const auto& listener : listeners)
-            {
-                listener->handleWifiDisconnected();
-            }
+            notifyListenersWifiDisconnected();
             break;
 
         case NM_DEVICE_STATE_UNKNOWN:
@@ -390,10 +342,7 @@ void WifiStatusNM::handleWirelessConnected()
                 handle_active_access_point(this);
                 connected = false;
                 connecting = false;
-                for (const auto& listener : listeners)
-                {
-                    listener->handleWifiDisconnected();
-                }
+                notifyListenersWifiDisconnected();
             }
     }
 }
@@ -412,7 +361,7 @@ void WifiStatusNM::handleConnectedAccessPoint()
     else
     {
         DBG(String("WifiStatusNM::") + __func__ +String(" ssid = ")
-                + connectedAP.ssid);
+                + connectedAP.getSSID());
     }
 }
 
@@ -447,7 +396,17 @@ bool WifiStatusNM::connectToNetworkManager()
  */
 void WifiStatusNM::run()
 {
-    NMDevice *dev = nm_client_get_device_by_iface(nmClient, "wlan0");
+    if (nmClient == nullptr)
+    {
+        DBG(__func__ << ":NetworkManager client is null, exiting wifi thread");
+        return;
+    }
+    NMDevice* dev = nm_client_get_device_by_iface(nmClient, "wlan0");
+    if (dev == nullptr)
+    {
+        DBG(__func__ << ":device wlan0 is null, exiting wifi thread");
+        return;
+    }
     context = g_main_context_new();
     g_main_context_push_thread_default(context);
     loop = g_main_loop_new(context, false);
@@ -579,11 +538,10 @@ WifiAccessPoint WifiStatusNM::createNMWifiAccessPoint(NMAccessPoint *ap)
     if (!ssid_str || !ssid)
         DBG("libnm conversion of ssid to utf8 failed, using empty string");
 
-    return {
-            !ssid_str ? "" : ssid_str,
+    return WifiAccessPoint(!ssid_str ? "" : ssid_str,
             nm_access_point_get_strength(ap),
             security,
-            hashAP(ap)};
+            hashAP(ap));
 }
 
 /**

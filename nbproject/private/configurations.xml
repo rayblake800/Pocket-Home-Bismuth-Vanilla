@@ -4963,6 +4963,8 @@
           <in>SetPasswordPage.h</in>
         </df>
         <df name="Wifi">
+          <in>WifiAccessPoint.cpp</in>
+          <in>WifiAccessPoint.h</in>
           <in>WifiStatus.cpp</in>
           <in>WifiStatus.h</in>
           <in>WifiStatusJson.cpp</in>

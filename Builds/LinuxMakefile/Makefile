@@ -131,6 +131,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/PowerPage_f46abc6a.o \
   $(JUCE_OBJDIR)/RemovePasswordPage_50db00c2.o \
   $(JUCE_OBJDIR)/SetPasswordPage_d2a64fc2.o \
+  $(JUCE_OBJDIR)/WifiAccessPoint_affc3726.o \
   $(JUCE_OBJDIR)/WifiStatus_22bcd2a2.o \
   $(JUCE_OBJDIR)/WifiStatusJson_a638b12a.o \
   $(JUCE_OBJDIR)/WifiStatusNM_9c199da1.o \
@@ -477,6 +478,11 @@ $(JUCE_OBJDIR)/RemovePasswordPage_50db00c2.o: ../../Source/Pages/RemovePasswordP
 $(JUCE_OBJDIR)/SetPasswordPage_d2a64fc2.o: ../../Source/Pages/SetPasswordPage.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling SetPasswordPage.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/WifiAccessPoint_affc3726.o: ../../Source/Wifi/WifiAccessPoint.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling WifiAccessPoint.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/WifiStatus_22bcd2a2.o: ../../Source/Wifi/WifiStatus.cpp

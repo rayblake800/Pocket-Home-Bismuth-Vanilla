@@ -1,6 +1,5 @@
 #include "../../PokeLookAndFeel.h"
 #include "../../Utils.h"
-#include "../../PocketHomeApplication.h"
 #include "WifiSettingsPage.h"
 
 const Array<String>
@@ -15,20 +14,25 @@ WifiSettingsPage::WifiSettingsPage() :
 ConnectionPage<WifiAccessPoint>(),
 passwordLabel("passwordLabel", "Password:")
 {
-    
+
 #if JUCE_DEBUG
     setName("WifiSettingsPage");
 #endif
-    WifiStatus& wifiStatus = PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-    wifiStatus.addListener(this);
     passwordEditor.addListener(this);
     connectionButton.addChildComponent(spinner);
     connectionButton.addListener(this);
     errorLabel.setJustificationType(Justification::centred);
-    if (wifiStatus.isConnected())
+    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    if (wifiStatus != nullptr)
     {
-        handleWifiConnected();
+        wifiStatus->addListener(this);
+        if (wifiStatus->isConnected())
+        {
+            handleWifiConnected();
+        }
+    }
+    else{
+        DBG(__func__<<":WifiStatus is null!");
     }
 }
 
@@ -39,8 +43,13 @@ WifiSettingsPage::~WifiSettingsPage() { }
  */
 Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
 {
-    return PocketHomeApplication::getInstance()
-            ->getWifiStatus().nearbyAccessPoints();
+    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    if(wifiStatus == nullptr)
+    {
+        DBG(__func__<<":WifiStatus is null!");
+        return {};  
+    }
+    return wifiStatus->nearbyAccessPoints();
 }
 
 /**
@@ -49,22 +58,26 @@ Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
  */
 void WifiSettingsPage::connect(const WifiAccessPoint& connection)
 {
-    WifiStatus& wifiStatus
-            = PocketHomeApplication::getInstance()->getWifiStatus();
-    if (wifiStatus.isConnected())
+    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    if(wifiStatus == nullptr)
     {
-        PocketHomeApplication::getInstance()->getWifiStatus().disconnect();
+        DBG(__func__<<":WifiStatus is null!");
+        return;       
+    }
+    if (wifiStatus->isConnected())
+    {
+        wifiStatus->disconnect();
     }
     setCurrentlyConnecting(true);
     errorLabel.setVisible(false);
-    if (connection.requiresAuth)
+    if (connection.getRequiresAuth())
     {
         const auto& psk = passwordEditor.getTextValue().toString();
-        wifiStatus.setConnectedAccessPoint(connection, psk);
+        wifiStatus->setConnectedAccessPoint(connection, psk);
     }
     else
     {
-        wifiStatus.setConnectedAccessPoint(connection);
+        wifiStatus->setConnectedAccessPoint(connection);
     }
 }
 
@@ -74,9 +87,10 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
  */
 void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
 {
-    if (isConnected(connection))
+    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    if (wifiStatus != nullptr && isConnected(connection))
     {
-        PocketHomeApplication::getInstance()->getWifiStatus().disconnect();
+        wifiStatus->disconnect();
     }
 }
 
@@ -85,13 +99,12 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
  */
 bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection)
 {
-    if (connection.isNull())
+    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    if (connection.isNull() || wifiStatus == nullptr)
     {
         return false;
     }
-    WifiStatus& wifiStatus
-            = PocketHomeApplication::getInstance()->getWifiStatus();
-    return wifiStatus.connectedAccessPoint() == connection;
+    return wifiStatus->connectedAccessPoint() == connection;
 }
 
 /**
@@ -138,8 +151,8 @@ GridLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
         {2,
             {
                 {nullptr, 1},
-                {connection.requiresAuth ? &passwordLabel : nullptr, 2},
-                {connection.requiresAuth ? &passwordEditor : nullptr, 4},
+                {connection.getRequiresAuth() ? &passwordLabel : nullptr, 2},
+                {connection.getRequiresAuth() ? &passwordEditor : nullptr, 4},
                 {nullptr, 1}
             }},
         {2,
@@ -163,12 +176,12 @@ void WifiSettingsPage::updateConnectionControls
 {
     passwordEditor.clear();
     bool connected = isConnected(accessPoint);
-    bool passwordNeeded = accessPoint.requiresAuth && !connected;
+    bool passwordNeeded = accessPoint.getRequiresAuth() && !connected;
     passwordEditor.setVisible(passwordNeeded);
     passwordEditor.setEnabled(passwordNeeded && !wifiBusy);
     passwordLabel.setVisible(passwordNeeded);
     String connectionText;
-    if(!wifiBusy)
+    if (!wifiBusy)
     {
         connectionText = connected ? "Disconnect" : "Connect";
     }
@@ -177,7 +190,6 @@ void WifiSettingsPage::updateConnectionControls
     errorLabel.setText("", NotificationType::dontSendNotification);
     spinner.setVisible(wifiBusy);
 }
-
 
 /**
  * When currentlyConnecting, disable Wifi controls and show a loading
@@ -247,7 +259,7 @@ void WifiSettingsPage::handleWifiFailedConnect()
     DBG("WifiSettingsPage::wifiFailedConnect");
     setCurrentlyConnecting(false);
     updateConnectionControls(getSelectedConnection());
-    errorLabel.setText(getSelectedConnection().requiresAuth ?
+    errorLabel.setText(getSelectedConnection().getRequiresAuth() ?
             "Incorrect password." : "Connection failed.",
             NotificationType::dontSendNotification);
     errorLabel.setVisible(true);
@@ -278,7 +290,7 @@ void WifiSettingsPage::connectionPageResized()
  */
 String WifiSettingsPage::getWifiAssetName(const WifiAccessPoint & accessPoint)
 {
-    float sigStrength = std::max(0., std::fmin(100, accessPoint.signalStrength));
+    float sigStrength = accessPoint.getSignalStrength();
     int maxIndex = wifiImageFiles.size() - 1;
 
     return wifiImageFiles[round((maxIndex * (sigStrength) / 100.0f))];
@@ -299,16 +311,15 @@ void WifiSettingsPage::reloadPage()
 
 WifiSettingsPage::WifiAPButton::WifiAPButton
 (const WifiAccessPoint& connection, bool isConnected) :
-Button(connection.ssid + "Button"),
-apLabel("apLabel", isConnected ?
-connection.ssid + " (Connected)" : connection.ssid),
+Button(connection.getSSID() + "Button"),
+apLabel("apLabel", connection.getSSID() + (isConnected ? " (Connected)" : "")),
 wifiIcon(getWifiAssetName(connection))
 {
     addAndMakeVisible(apLabel);
     addAndMakeVisible(wifiIcon);
     apLabel.setJustificationType(Justification::centred);
     apLabel.setInterceptsMouseClicks(false, false);
-    if (connection.requiresAuth)
+    if (connection.getRequiresAuth())
     {
 
         lockIcon = new DrawableImageComponent("lock.svg");

@@ -77,6 +77,7 @@
 		E09CB8FC7FAA515D6B41AF1C = {isa = PBXBuildFile; fileRef = 74A9469A1150F5BDC5ACD5C9; };
 		DD6EF758834C7EFBE72912FF = {isa = PBXBuildFile; fileRef = 083AAE968647DE628FEAF332; };
 		726939D96A89F26A365909F8 = {isa = PBXBuildFile; fileRef = B9E340EA9A956BD2BA09D533; };
+		0B2FA9F4783CA0BF98755E46 = {isa = PBXBuildFile; fileRef = 99C39A195AEEFAFD28FE50BA; };
 		69CB2357ACB7362893D95012 = {isa = PBXBuildFile; fileRef = 6E51E66485321B6DEE04B498; };
 		6D4F4158F2C91DB092D15A4E = {isa = PBXBuildFile; fileRef = B2D10FD1DCA09407DD81E3D9; };
 		E151EAA3C1E3D229E532EBC9 = {isa = PBXBuildFile; fileRef = 489410AB85E2676944BC6849; };
@@ -140,6 +141,7 @@
 		32BBF97C6A01F3FA28B69121 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigFile.h; path = ../../Source/Configuration/ConfigFile.h; sourceTree = "SOURCE_ROOT"; };
 		35995EEE8F2F47D969CA315F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = I2CBus.h; path = ../../Source/I2CBus.h; sourceTree = "SOURCE_ROOT"; };
 		3884E25E5AE14B1201EA4A9A = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigAppMenuItem.h; path = "../../Source/Pages/HomePage/AppMenu/Menu Items/ConfigAppMenuItem.h"; sourceTree = "SOURCE_ROOT"; };
+		39CD3A3E5D0528ADA343E886 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiAccessPoint.h; path = ../../Source/Wifi/WifiAccessPoint.h; sourceTree = "SOURCE_ROOT"; };
 		3A14550D020C855BE26684BD = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScrollingAppFolder.cpp; path = "../../Source/Pages/HomePage/AppMenu/Menu Folders/ScrollingAppFolder.cpp"; sourceTree = "SOURCE_ROOT"; };
 		3C575762FF4E78BFA5D8D6D3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesktopEntries.h; path = ../../Source/Pages/HomePage/DesktopEntries.h; sourceTree = "SOURCE_ROOT"; };
 		3D8BA8E1900EE05677B2CC13 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_events.mm"; path = "../../JuceLibraryCode/include_juce_events.mm"; sourceTree = "SOURCE_ROOT"; };
@@ -218,6 +220,7 @@
 		963E665DE645D2F66DC03F9E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WindowFocusedTimer.cpp; path = ../../Source/WindowFocusedTimer.cpp; sourceTree = "SOURCE_ROOT"; };
 		973AF63D6A9528AF7BF1D903 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Utils.cpp; path = ../../Source/Utils.cpp; sourceTree = "SOURCE_ROOT"; };
 		979A6C464924EBEA52EA51C1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenuComponent.h; path = ../../Source/Pages/HomePage/AppMenu/AppMenuComponent.h; sourceTree = "SOURCE_ROOT"; };
+		99C39A195AEEFAFD28FE50BA = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiAccessPoint.cpp; path = ../../Source/Wifi/WifiAccessPoint.cpp; sourceTree = "SOURCE_ROOT"; };
 		9A46C157274D31A6D71FBFAA = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PopupColorPicker.h; path = "../../Source/Basic Components/PopupColorPicker.h"; sourceTree = "SOURCE_ROOT"; };
 		9C5D7A6B7043E95516F38803 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BaseFolderMenuItem.cpp; path = "../../Source/Pages/HomePage/AppMenu/Menu Items/BaseFolderMenuItem.cpp"; sourceTree = "SOURCE_ROOT"; };
 		A160884BC3750646A234AC33 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BluetoothSettingsPage.h; path = "../../Source/Pages/Settings Page/BluetoothSettingsPage.h"; sourceTree = "SOURCE_ROOT"; };
@@ -436,6 +439,8 @@
 					B9E340EA9A956BD2BA09D533,
 					0520BB346652D63ACFF4FF6C, ); name = Pages; sourceTree = "<group>"; };
 		FCAE40D7F9CB5383DE0C8EEB = {isa = PBXGroup; children = (
+					99C39A195AEEFAFD28FE50BA,
+					39CD3A3E5D0528ADA343E886,
 					6E51E66485321B6DEE04B498,
 					B304BC7BACFAEF95CA04D016,
 					B2D10FD1DCA09407DD81E3D9,
@@ -720,6 +725,7 @@
 					E09CB8FC7FAA515D6B41AF1C,
 					DD6EF758834C7EFBE72912FF,
 					726939D96A89F26A365909F8,
+					0B2FA9F4783CA0BF98755E46,
 					69CB2357ACB7362893D95012,
 					6D4F4158F2C91DB092D15A4E,
 					E151EAA3C1E3D229E532EBC9,

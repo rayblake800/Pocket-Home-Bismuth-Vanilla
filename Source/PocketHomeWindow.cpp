@@ -46,29 +46,24 @@ PocketHomeWindow::~PocketHomeWindow() { }
 
 void PocketHomeWindow::activeWindowStatusChanged()
 {
-    WifiStatus& wifiStatus =
-            PocketHomeApplication::getInstance()->getWifiStatus();
+    WifiStatus* wifiStatus = WifiStatus::getInstance();
     if (isActiveWindow())
     {
         WindowFocusedTimer::windowFocusGained();
-        if (wifiStatus.isEnabled())
+        if (wifiStatus != nullptr && wifiStatus->isEnabled()
+            && !wifiStatus->isThreadRunning())
         {
-            Thread* wifiThread = dynamic_cast<Thread*> (&wifiStatus);
-            if (wifiThread != nullptr && !wifiThread->isThreadRunning())
-            {
-                DBG(__func__ << "starting wifi thread");
-                wifiThread->startThread();
-            }
+            DBG(__func__ << "starting wifi thread");
+            wifiStatus->startThread();
         }
     }
     else
     {
-        Thread* wifiThread = dynamic_cast<Thread*> (&wifiStatus);
-        if (wifiThread != nullptr && wifiThread->isThreadRunning())
+        if (wifiStatus != nullptr && wifiStatus->isThreadRunning())
         {
             DBG(__func__ << ":stopping wifi thread");
-            wifiThread->signalThreadShouldExit();
-            wifiThread->notify();
+            wifiStatus->signalThreadShouldExit();
+            wifiStatus->notify();
         }
         WindowFocusedTimer::windowFocusLost();
     }

@@ -29,6 +29,12 @@ private:
     void enableWifiActions();
     void disableWifiActions();
     Spinner spinner;
+    
+    /**
+     * @return true if wifi is enabled, false if wifi is disabled or
+     * the wifi thread hasn't been created.
+     */
+    bool wifiEnabled();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiSettingsComponent)
 };

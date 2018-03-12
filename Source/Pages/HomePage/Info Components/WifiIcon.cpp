@@ -1,6 +1,7 @@
 #include "WifiIcon.h"
 #include "../../../Wifi/WifiStatus.h"
-#include "../../../PocketHomeApplication.h"
+#include "../../../Wifi/WifiAccessPoint.h"
+#include "../../../Utils.h"
 
 WifiIcon::WifiIcon() :
 ConfigurableImageComponent(ComponentConfigFile::wifiIconKey)
@@ -48,21 +49,20 @@ void WifiIcon::visibilityChanged()
  */
 void WifiIcon::timerCallback()
 {
-    const WifiStatus& wifiStatus = PocketHomeApplication::getInstance()
-            ->getWifiStatus();
+    WifiStatus* wifiStatus = WifiStatus::getInstance();
     WifiIconImage wifiState = wifiOff;
-    if (wifiStatus.isConnected())
+    if (wifiStatus->isConnected())
     {
-        WifiAccessPoint accessPoint = wifiStatus.connectedAccessPoint();
+        WifiAccessPoint accessPoint = wifiStatus->connectedAccessPoint();
         if (!accessPoint.isNull())
         {
             // 0 to 100
-            float sigStrength = std::max(0,
-                    std::min(99, accessPoint.signalStrength));
+            float sigStrength =
+                    median<float>(0, accessPoint.getSignalStrength(), 100);
             wifiState = (WifiIconImage) (2 + (int) (sigStrength * 3 / 100));
         }
     }// wifi on but no connection
-    else if (wifiStatus.isEnabled())
+    else if (wifiStatus->isEnabled())
     {
         wifiState = wifiStrength0;
     }// wifi off

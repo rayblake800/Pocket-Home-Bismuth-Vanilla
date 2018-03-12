@@ -22,11 +22,6 @@ PocketHomeApplication* PocketHomeApplication::getInstance()
             (JUCEApplication::getInstance());
 }
 
-WifiStatus& PocketHomeApplication::getWifiStatus()
-{
-    return *wifiStatus;
-}
-
 BluetoothStatus& PocketHomeApplication::getBluetoothStatus()
 {
     return bluetoothStatus;
@@ -150,14 +145,14 @@ void PocketHomeApplication::initialise(const String &commandLine)
     {
         if (args.contains("--fakewifi"))
         {
-            wifiStatus = new WifiStatusJson();
+            WifiStatus::setInstance(new WifiStatusJson());
         }
         else
         {
 #ifdef JUCE_LINUX
-            wifiStatus = new WifiStatusNM();
+            WifiStatus::setInstance(new WifiStatusNM());
 #else          
-            wifiStatus = new WifiStatusJson();
+            WifiStatus::setInstance(new WifiStatusJson());
 #endif
         }
         auto deviceListFile = assetFile("bluetooth.json");

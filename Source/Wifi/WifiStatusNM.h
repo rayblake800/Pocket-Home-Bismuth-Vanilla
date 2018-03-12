@@ -13,7 +13,7 @@
 #include <nm-device-wifi.h>
 #include "WifiStatus.h"
 
-class WifiStatusNM : public WifiStatus, public Thread {
+class WifiStatusNM : public WifiStatus {
 public:
     WifiStatusNM();
     virtual ~WifiStatusNM() override;
@@ -39,19 +39,6 @@ public:
      * point.
      */
     bool isConnected() const override;
-
-    /**
-     * Add a listener to the list of objects receiving updates on wifi state
-     * changes.
-     * @param listener
-     */
-    void addListener(WifiStatus::Listener* listener) override;
-
-    /**
-     * Remove all listeners from the list of objects receiving updates on wifi 
-     * state changes.
-     */
-    void clearListeners() override;
 
     /**
      * Turns on the wifi radio.

@@ -7,6 +7,7 @@
 
 #pragma once
 #include "../../Wifi/WifiStatus.h"
+#include "../../Basic Components/Spinner.h"
 #include "../../Basic Components/ScalingLabel.h"
 #include "../../Basic Components/SwitchComponent.h"
 #include "../../Basic Components/DrawableImageComponent.h"

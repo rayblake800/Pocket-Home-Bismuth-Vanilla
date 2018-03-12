@@ -20,14 +20,11 @@ public:
 
     static PocketHomeApplication* getInstance();
 
-    WifiStatus& getWifiStatus();
-
     BluetoothStatus& getBluetoothStatus();
 
 private:
     bool initAudio();
     PokeLookAndFeel lookAndFeel;
-    ScopedPointer<WifiStatus> wifiStatus;
 
     BluetoothStatus bluetoothStatus;
     const String getApplicationName() override;

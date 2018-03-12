@@ -5,7 +5,7 @@
 #include "WifiStatusJson.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
-WifiStatusJson::WifiStatusJson() : listeners() { }
+WifiStatusJson::WifiStatusJson() : connectedAP(WifiAccessPoint::null()){ }
 
 WifiStatusJson::~WifiStatusJson() { }
 
@@ -16,11 +16,10 @@ Array<WifiAccessPoint> WifiStatusJson::nearbyAccessPoints()
 
     for (const auto &apJson : *json.getArray())
     {
-        WifiAccessPoint ap;
-        ap.ssid = apJson["name"];
-        ap.signalStrength = apJson["strength"];
-        ap.requiresAuth = apJson["auth"];
-        ap.hash = apJson["name"];
+        WifiAccessPoint ap(apJson["name"],
+                apJson["strength"],
+                apJson["auth"],
+                apJson["name"]);
         accessPoints.add(ap);
     }
     return accessPoints;
@@ -45,33 +44,12 @@ bool WifiStatusJson::isConnected() const
     return connected;
 }
 
-void WifiStatusJson::addListener(Listener* listener)
-{
-    listeners.add(listener);
-}
-
-void WifiStatusJson::clearListeners()
-{
-    listeners.clear();
-}
-
-// TODO: direct action should not be named set, e.g. enable/disable/disconnect
-// otherwise easily confused with setters thats wrap members, which are slightly different idiom
-
 void WifiStatusJson::enableWifi()
 {
     if (!enabled)
     {
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiBusy();
-        }
-
-        enabled = true;
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiEnabled();
-        }
+        notifyListenersWifiBusy();
+        notifyListenersWifiEnabled();
     }
 }
 
@@ -79,36 +57,23 @@ void WifiStatusJson::disableWifi()
 {
     if (enabled)
     {
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiBusy();
-        }
-
+        notifyListenersWifiBusy();
         enabled = false;
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiDisabled();
-        }
+        notifyListenersWifiDisabled();
     }
 }
 
 void WifiStatusJson::setConnectedAccessPoint(const WifiAccessPoint& ap, String psk)
 {
-    for (const auto& listener : listeners)
-    {
-        listener->handleWifiBusy();
-    }
+    notifyListenersWifiBusy();
 
     // try to connect to ap, dispatch events on success and failure
-    bool isTestCred = ap.ssid == "MyFi";
+    bool isTestCred = (ap.getSSID() == "MyFi");
     if (!isTestCred)
     {
         DBG("WifiStatusJson::setConnectedAccessPoint - failed ");
         connected = false;
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiFailedConnect();
-        }
+        notifyListenersWifiFailedConnect();
         return;
     }
 
@@ -117,28 +82,19 @@ void WifiStatusJson::setConnectedAccessPoint(const WifiAccessPoint& ap, String p
         DBG("WifiStatusJson::setConnectedAccessPoint - connect with psk");
         connected = true;
         connectedAP = ap;
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiConnected();
-        }
+        notifyListenersWifiConnected();
     }
     else
     {
         DBG("WifiStatusJson::setConnectedAccessPoint - connect");
         connected = true;
         connectedAP = ap;
-        for (const auto& listener : listeners)
-        {
-            listener->handleWifiConnected();
-        }
+        notifyListenersWifiConnected();
     }
 }
 
 void WifiStatusJson::disconnect()
 {
     connected = false;
-    for (Listener* listener : listeners)
-    {
-        listener->handleWifiDisconnected();
-    }
+    notifyListenersWifiDisconnected();
 }
