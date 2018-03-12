@@ -98,7 +98,7 @@ void WifiSettingsComponent::updateButtonText()
     if (status.isEnabled())
     {
         WifiAccessPoint wifiAP = status.connectedAccessPoint();
-        if (wifiAP != WifiAccessPoint::null)
+        if (!wifiAP.isNull())
         {
             setPageButtonText(wifiAP.ssid);
         }

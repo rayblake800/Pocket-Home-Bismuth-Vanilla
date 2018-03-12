@@ -149,7 +149,7 @@ private:
      * @param config json data from ~/.pocket-home/filename.json
      * 
      * @param defaultConfig default json config data from the filename.json
-     * in assets. If this value is var::null and default data is needed, this 
+     * in assets. If this value is void and default data is needed, this 
      * method will open it as the appropriate default config file from assets
      */
     void readDataFromJson(var& config, var& defaultConfig) override final;

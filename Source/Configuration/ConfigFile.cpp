@@ -109,7 +109,7 @@ var ConfigFile::openFile()
     const ScopedLock readLock(getFileLock());
     if (fileOpened())
     {
-        return var::null;
+        return var();
     }
     openFileMap[filename] = true;
     File configFile = File(getHomePath() + String(CONFIG_PATH) + filename);
@@ -205,8 +205,8 @@ void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
 bool ConfigFile::propertyExists(var& config, String propertyKey)
 {
 
-    var property = config.getProperty(propertyKey, var::null);
-    return var::null != property;
+    var property = config.getProperty(propertyKey, var());
+    return !property.isVoid();
 }
 
 /**
@@ -219,17 +219,17 @@ var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
     DBG(key + (exists ? String(" exists") : String(" doesn't exist")));
     if (propertyExists(config, key))
     {
-        return config.getProperty(key, var::null);
+        return config.getProperty(key, var());
     }
     else
     {
-        if (defaultConfig == var::null)
+        if (defaultConfig.isVoid())
         {
 
             defaultConfig = JSON::parse(assetFile(filename));
         }
         fileChangesPending[filename] = true;
-        return defaultConfig.getProperty(key, var::null);
+        return defaultConfig.getProperty(key, var());
     }
 }
 

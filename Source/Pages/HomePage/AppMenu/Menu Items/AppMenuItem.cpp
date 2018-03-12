@@ -26,7 +26,7 @@ Array<AppMenuItem::Ptr> AppMenuItem::getFolderItems() const
  */
 String AppMenuItem::getAppName() const
 {
-    return String::empty;
+    return String();
 }
 
 /**
@@ -34,7 +34,7 @@ String AppMenuItem::getAppName() const
  */
 String AppMenuItem::getCommand() const
 {
-    return String::empty;
+    return String();
 }
 
 /**
@@ -68,7 +68,7 @@ Array<String> AppMenuItem::getCategories() const
  */
 String AppMenuItem::getIconName() const
 {
-    return String::empty;
+    return String();
 }
 
 /**

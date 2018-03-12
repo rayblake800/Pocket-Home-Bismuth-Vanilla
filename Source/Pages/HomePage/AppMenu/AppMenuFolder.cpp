@@ -233,7 +233,7 @@ String AppMenuFolder::getMenuButtonName(int index) const
 {
     if (index < 0 || index >= folderButtons.size())
     {
-        return String::empty;
+        return String();
     }
     return folderButtons.getUnchecked(index)->getMenuItem()->getAppName();
 }
@@ -316,7 +316,7 @@ String AppMenuFolder::getButtonTitle(int index)
 {
     if (index < 0 || index >= folderButtons.size())
     {
-        return String::empty;
+        return String();
     }
     return folderButtons.getUnchecked(index)->getMenuItem()->getAppName();
 }

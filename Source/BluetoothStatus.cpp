@@ -1,6 +1,5 @@
 #include "BluetoothStatus.h"
 
-const BluetoothDevice BluetoothDevice::null = {"","null",false,false};
 
 void BluetoothStatus::populateFromJson(const var &json) {
     devices.clear();

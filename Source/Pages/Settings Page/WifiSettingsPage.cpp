@@ -85,7 +85,7 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
  */
 bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection)
 {
-    if (connection == WifiAccessPoint::null)
+    if (connection.isNull())
     {
         return false;
     }

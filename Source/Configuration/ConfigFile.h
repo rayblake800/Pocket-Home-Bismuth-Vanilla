@@ -151,7 +151,7 @@ protected:
      * Opens and reads data from this ConfigFile's json file.  This will mark
      * the file as opened, so that ConfigFiles can avoid reading in file data
      * more than once.
-     * @return the file's json data packaged as a var object, or var::null
+     * @return the file's json data packaged as a var object, or a void var
      * if the file was opened already.
      */
     var openFile();
@@ -180,7 +180,7 @@ protected:
      * ~/.pocket-home/<filename>.json
      * 
      * @param defaultConfig should be either json data from the default config 
-     * file in the assets folder, or a var object set to var::null. 
+     * file in the assets folder, or a void var. 
      * If defaultConfig is null and data is missing from the configuration file,
      * this method will open <filename>.json and load all data into 
      * defaultConfig. 
@@ -215,12 +215,12 @@ protected:
      * ~/.pocket-home/<filename>.json
      * 
      * @param defaultConfig should be either json data from the default config 
-     * file in the assets folder, or a var object set to var::null. 
+     * file in the assets folder, or a void var. 
      * If defaultConfig is null and data is missing from the configuration file,
      * this method will open <filename>.json and load all data into 
      * defaultConfig. 
      * 
-     * @return the value read from config/defaultConfig at [key], or var::null
+     * @return the value read from config/defaultConfig at [key], or a void var
      * if nothing was found in either var object.
      */
     var getProperty(var& config, var& defaultConfig, String key);

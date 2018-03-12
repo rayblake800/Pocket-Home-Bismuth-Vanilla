@@ -11,4 +11,3 @@ WifiStatus::Listener::Listener() { }
 
 WifiStatus::Listener::~Listener() { }
 
-const WifiAccessPoint WifiAccessPoint::null = {"", -1, false, ""};

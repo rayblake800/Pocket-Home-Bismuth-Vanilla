@@ -54,7 +54,7 @@ void WifiIcon::timerCallback()
     if (wifiStatus.isConnected())
     {
         WifiAccessPoint accessPoint = wifiStatus.connectedAccessPoint();
-        if (accessPoint != WifiAccessPoint::null)
+        if (!accessPoint.isNull())
         {
             // 0 to 100
             float sigStrength = std::max(0,

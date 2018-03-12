@@ -10,40 +10,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/PopupColorPicker.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/IconSliderComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/SettingsPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/BluetoothSettingsPage.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/WifiSettingsPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/PopupEditorComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/BluetoothSettingsComponent.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/documentation/TODO.txt</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiStatusNM.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/WifiSettingsComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiStatusJson.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/IconSliderComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/HomePage/Info%20Components/WifiIcon.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Configuration/MainConfigFile.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/WifiSettingsComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/WifiSettingsPage.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/BluetoothSettingsPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiStatus.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/BluetoothStatus.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/HomePage/DesktopEntries.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Configuration/ComponentConfigFile.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Configuration/ComponentConfigFile.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Configuration/MainConfigFile.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/HomePage/DesktopEntries.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/PopupColorPicker.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/CounterComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/ListEditor.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/ScalingLabel.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/PopupEditorComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/pocket-home.jucer</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/BluetoothSettingsComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/BluetoothStatus.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Basic%20Components/CounterComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiStatus.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/SettingsPage.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiStatusNM.cpp</file>
         </group>
     </open-files>

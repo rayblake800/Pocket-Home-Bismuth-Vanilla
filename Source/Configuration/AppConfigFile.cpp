@@ -11,7 +11,7 @@ AppConfigFile::AppConfigFile() : ConfigFile(filenameConst)
     {
         const ScopedLock readLock(appConfigLock);
         var jsonConfig = openFile();
-        var defaultConfig = var::null;
+        var defaultConfig = var();
         readDataFromJson(jsonConfig, defaultConfig);
         writeChanges();
     }

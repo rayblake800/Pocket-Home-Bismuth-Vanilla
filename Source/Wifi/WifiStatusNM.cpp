@@ -86,7 +86,7 @@ WifiAccessPoint WifiStatusNM::connectedAccessPoint() const
 {
     if (!connected)
     {
-        return WifiAccessPoint::null;
+        return WifiAccessPoint::null();
     }
     return connectedAP;
 }
@@ -405,7 +405,7 @@ void WifiStatusNM::handleConnectedAccessPoint()
 {
     DBG(String("WifiStatusNM::") + __func__ +String(" changed active AP"));
     connectedAP = getNMConnectedAP(NM_DEVICE_WIFI(nmDevice));
-    if (connectedAP == WifiAccessPoint::null)
+    if (connectedAP.isNull())
     {
         DBG(String("WifiStatusNM::") + __func__ +String("no connectedAP "));
     }
@@ -451,7 +451,6 @@ void WifiStatusNM::run()
     context = g_main_context_new();
     g_main_context_push_thread_default(context);
     loop = g_main_loop_new(context, false);
-    //g_main_context_invoke(context, initialize_in_context, status);
 
     g_signal_connect_swapped(nmClient, "notify::" NM_CLIENT_WIRELESS_ENABLED,
             G_CALLBACK(handle_wireless_enabled), this);
@@ -598,7 +597,7 @@ WifiAccessPoint WifiStatusNM::getNMConnectedAP(NMDeviceWifi *wdev)
     if (!wdev || !ap)
     {
         DBG(__func__ << ": no NMAccessPoint found!");
-        return WifiAccessPoint::null;
+        return WifiAccessPoint::null();
     }
 
     return createNMWifiAccessPoint(ap);

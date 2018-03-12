@@ -116,7 +116,7 @@ ComponentConfigFile::ComponentConfigFile() : ConfigFile(filenameConst)
     {
         const ScopedLock readLock(componentLock);
         var jsonConfig = openFile();
-        var defaultConfig = var::null;
+        var defaultConfig = var();
         readDataFromJson(jsonConfig, defaultConfig);
         writeChanges();
     }

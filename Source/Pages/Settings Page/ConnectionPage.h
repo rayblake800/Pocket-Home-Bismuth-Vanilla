@@ -5,8 +5,9 @@
  * show a list of connections and allow the user to connect or disconnect
  * from connections in the list.
  * 
- * ConnectionPoint must have a static member ConnectionPoint::null representing
- * an invalid or missing object.
+ * ConnectionPoint must have a static method ConnectionPoint null() returning
+ * an object representing an absent connection, and a method bool isNull()
+ * that returns true if the connection is a null connection. 
  */
 
 #pragma once
@@ -36,8 +37,8 @@ protected:
      * Sets ConnectionPoint connection as the selected connection.  When a
      * connection is selected, this page will show details and controls for that
      * connection, and the other connections on the list will be hidden.  When
-     * set to ConnectionPoint::null, the full ConnectionPoint list will be shown 
-     * again.
+     * set to ConnectionPoint::null(), the full ConnectionPoint list will be 
+     * shown again.
      * 
      * @param connection must be null or equal to one of the connections in the
      * connection list.

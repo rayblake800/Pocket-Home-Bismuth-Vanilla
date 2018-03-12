@@ -32,7 +32,7 @@ public:
      * @param name sets the button's internal component name
      */
     AppMenuButton(AppMenuItem::Ptr menuItem, IconThread& iconThread,
-            String name = String::empty);
+            String name = String());
 
     virtual ~AppMenuButton();
 

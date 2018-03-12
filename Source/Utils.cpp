@@ -36,7 +36,7 @@ Image createImageFromFile(const File &imageFile)
 {
     
     if (!imageFile.existsAsFile()){
-        return Image::null;
+        return Image();
     }
     Image image;
     if (imageFile.getFileExtension() == ".svg")

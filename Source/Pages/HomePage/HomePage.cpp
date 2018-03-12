@@ -56,7 +56,7 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
                     (MainConfigFile::backgroundKey);
             if (background.containsOnly("0123456789ABCDEFXabcdefx"))
             {
-                setBackgroundImage(Image::null);
+                setBackgroundImage(Image());
                 Colour bgColour(background.getHexValue32());
                 setColour(backgroundColourId, bgColour.withAlpha(1.0f));
             }

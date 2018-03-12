@@ -5,7 +5,7 @@ PageComponent::PageComponent(const String& name,
         GridLayoutManager::Layout layout,
         bool showBackButton, bool backButtonOnRight) :
 backButtonOnRight(backButtonOnRight),
-backgroundImage(Image::null)
+backgroundImage(Image())
 {
     layoutManager.setLayout(layout);
     if (showBackButton)
@@ -153,7 +153,7 @@ void PageComponent::buttonClicked(Button* button)
  */
 void PageComponent::paint(Graphics& g)
 {
-    if (backgroundImage != Image::null)
+    if (backgroundImage.isValid())
     {
         g.drawImage(backgroundImage, getLocalBounds().toFloat());
     }

@@ -30,7 +30,7 @@ WifiAccessPoint WifiStatusJson::connectedAccessPoint() const
 {
     if (!connected)
     {
-        return WifiAccessPoint::null;
+        return WifiAccessPoint::null();
     }
     return connectedAP;
 }

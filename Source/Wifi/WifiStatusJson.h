@@ -24,7 +24,7 @@ public:
   void enableWifi() override;
   void disableWifi() override;
   void setConnectedAccessPoint(const WifiAccessPoint& ap,
-          String psk = String::empty) override;
+          String psk = String()) override;
   void disconnect() override;
 
 private:

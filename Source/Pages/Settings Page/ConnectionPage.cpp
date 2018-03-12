@@ -7,7 +7,7 @@ ConnectionPage<ConnectionPoint>::ConnectionPage() :
 PageComponent("ConnectionPage",{}, true),
 prevPageBtn(ComponentConfigFile::pageUpKey),
 nextPageBtn(ComponentConfigFile::pageDownKey),
-selectedConnection(ConnectionPoint::null)
+selectedConnection(ConnectionPoint::null())
 {
     prevPageBtn.addListener(this);
     nextPageBtn.addListener(this);
@@ -32,7 +32,7 @@ getSelectedConnection()
  * Sets ConnectionPoint connection as the selected connection.  When a
  * connection is selected, this page will show details and controls for that
  * connection, and the other connections on the list will be hidden.  When
- * set to ConnectionPoint::null, the full ConnectionPoint list will be shown 
+ * set to ConnectionPoint::null(), the full ConnectionPoint list will be shown 
  * again.
  */
 template<class ConnectionPoint>
@@ -40,13 +40,13 @@ void ConnectionPage<ConnectionPoint>::setSelectedConnection
 (const ConnectionPoint& connection)
 {
     bool selectionChanged = false;
-    if (connection == ConnectionPoint::null
+    if (connection.isNull()
         || !connections.contains(connection))
     {
-        if (selectedConnection != ConnectionPoint::null)
+        if (!selectedConnection.isNull())
         {
             selectionChanged = true;
-            selectedConnection = ConnectionPoint::null;
+            selectedConnection = ConnectionPoint::null();
         }
     }
     else if (connection != selectedConnection)
@@ -68,7 +68,7 @@ template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::clearConnectionList()
 {
     connectionIndex = 0;
-    selectedConnection = ConnectionPoint::null;
+    selectedConnection = ConnectionPoint::null();
     for (ConnectionListItem* listItem : connectionItems)
     {
         removeChildComponent(listItem);
@@ -113,7 +113,7 @@ template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
 {
     GridLayoutManager::Layout layout;
-    bool showList = (selectedConnection == ConnectionPoint::null);
+    bool showList = (selectedConnection.isNull());
     prevPageBtn.setVisible(connectionIndex > 0 && showList);
     nextPageBtn.setVisible(connectionItems.size() > connectionIndex
             + connectionsPerPage && showList);
@@ -126,7 +126,7 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
          i < connectionIndex + connectionsPerPage; i++)
     {
         ConnectionPoint connection = (i < connectionItems.size() && i >= 0) ?
-                connectionItems[i]->getConnection() : ConnectionPoint::null;
+                connectionItems[i]->getConnection() : ConnectionPoint::null();
         if (showList || connection == selectedConnection)
         {
             ConnectionListItem* listItem = (i < connectionItems.size()) ?
@@ -236,7 +236,7 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
                 }
                 else
                 {
-                    setSelectedConnection(ConnectionPoint::null);
+                    setSelectedConnection(ConnectionPoint::null());
                 }
                 return;
             }
@@ -255,11 +255,11 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
 template<class ConnectionPoint>
 bool ConnectionPage<ConnectionPoint>::overrideBackButton()
 {
-    if (selectedConnection == ConnectionPoint::null)
+    if (selectedConnection.isNull())
     {
         return false;
     }
-    setSelectedConnection(ConnectionPoint::null);
+    setSelectedConnection(ConnectionPoint::null());
     return true;
 }
 
@@ -271,7 +271,7 @@ bool ConnectionPage<ConnectionPoint>::keyPressed(const KeyPress& key)
 {
     if (key == KeyPress::escapeKey)
     {
-        setSelectedConnection(ConnectionPoint::null);
+        setSelectedConnection(ConnectionPoint::null());
     }
 };
 

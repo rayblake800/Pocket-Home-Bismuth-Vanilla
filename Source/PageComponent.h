@@ -42,7 +42,7 @@ public:
     /**
      * Sets a background image to draw behind all page components.
      * 
-     * @param bgImage the image to draw, or Image::null.  If the null
+     * @param bgImage the image to draw, or a null Image().  If a null
      * image is used, the background will be filled with the background color
      * instead of an image.
      */

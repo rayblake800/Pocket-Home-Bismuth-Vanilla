@@ -14,9 +14,21 @@ struct WifiAccessPoint {
     String hash;
 
     /**
-     * Represents an invalid or missing connection point
+     * Represents a missing connection point
      */
-    static const WifiAccessPoint null;
+    static const WifiAccessPoint null() {
+        return {"", -1, false, ""};
+    }
+
+    /**
+     * @return true iff this WifiAccessPoint is null.
+     */
+    bool isNull() const{
+        return ssid.isEmpty()
+                && signalStrength == -1
+                && !requiresAuth
+                && hash.isEmpty();
+    }
 
     bool operator==(const WifiAccessPoint rhs) const {
         return hash == rhs.hash;
@@ -67,7 +79,7 @@ public:
     virtual void enableWifi() = 0;
     virtual void disableWifi() = 0;
     virtual void setConnectedAccessPoint(const WifiAccessPoint& ap,
-            String psk = String::empty) = 0;
+            String psk = String()) = 0;
     virtual void disconnect() = 0;
 };
 

@@ -110,7 +110,7 @@ void DrawableImageComponent::setImage(Image image)
 
 void DrawableImageComponent::colourChanged()
 {
-    if (imageSource != File::nonexistent)
+    if (imageSource.existsAsFile())
     {
         setImage(imageSource);
     }

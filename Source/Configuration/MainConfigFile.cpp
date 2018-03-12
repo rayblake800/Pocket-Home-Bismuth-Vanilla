@@ -9,7 +9,7 @@ MainConfigFile::MainConfigFile() : ConfigFile(filenameConst)
     {
         const ScopedLock readLock(mainConfigLock);
         var jsonConfig = openFile();
-        var defaultConfig = var::null;
+        var defaultConfig = var();
         readDataFromJson(jsonConfig, defaultConfig);
         writeChanges();
     }

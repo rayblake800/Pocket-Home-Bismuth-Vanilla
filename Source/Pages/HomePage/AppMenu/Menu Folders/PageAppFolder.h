@@ -127,7 +127,7 @@ private:
          * @param name
          */
         PageMenuButton(AppMenuItem::Ptr menuItem, IconThread& iconThread,
-                String name = String::empty);
+                String name = String());
         virtual ~PageMenuButton();
     private:
 

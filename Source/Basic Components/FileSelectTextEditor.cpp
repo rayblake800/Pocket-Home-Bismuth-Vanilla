@@ -138,7 +138,7 @@ void FileSelectTextEditor::buttonClicked(Button* button)
 {
     FileBrowserComponent browser(FileBrowserComponent::canSelectFiles |
             FileBrowserComponent::openMode,
-            File::nonexistent,
+            File(),
             &fileFilter,
             &imagePreview);
     FileChooserDialogBox dialogBox(selectionTitle,
