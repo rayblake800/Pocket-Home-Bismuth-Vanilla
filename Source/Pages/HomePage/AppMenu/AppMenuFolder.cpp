@@ -1,3 +1,4 @@
+#include "../../../Configuration/MainConfigFile.h"
 #include "../../../Utils.h"
 #include "AppMenuFolder.h"
 
@@ -11,9 +12,9 @@ btnListener(btnListener),
 buttonNameMap(buttonNameMap),
 iconThread(iconThread)
 {
-    ComponentConfigFile config;
-    maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
-    maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
+    MainConfigFile config;
+    maxRows = config.getConfigValue<int>(MainConfigFile::maxRowsKey);
+    maxColumns = config.getConfigValue<int>(MainConfigFile::maxColumnsKey);
 #if JUCE_DEBUG
     setName(String("AppMenuFolder")+folderItem->getAppName());
 #endif

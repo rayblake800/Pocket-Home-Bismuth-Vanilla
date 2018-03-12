@@ -2,8 +2,6 @@
     "use 24h mode": true,
     "show clock": true,
 
-    "max grid row count": 3,
-    "max grid column count": 5,
 
     "Page background color": "0xffd23c6d",
     "AppMenu button background color": "0x55c0c0c0",

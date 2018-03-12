@@ -1,5 +1,6 @@
 #include <set>
 #include "../DesktopEntries.h"
+#include "../../../Configuration/MainConfigFile.h"
 #include "Menu Editors/NewConfigAppEditor.h"
 #include "Menu Editors/NewDesktopAppEditor.h"
 #include "Menu Editors/NewFolderEditor.h"
@@ -23,13 +24,13 @@ loadingSpinner(loadingSpinner)
 #if JUCE_DEBUG
     setName("AppMenuComponent");
 #endif
-    addTrackedKeys({
-        ComponentConfigFile::maxRowsKey,
-        ComponentConfigFile::maxColumnsKey
+    MainConfigFile config;
+    config.registerConfigurable(this,{
+        MainConfigFile::maxRowsKey,
+        MainConfigFile::maxColumnsKey
     });
-    ComponentConfigFile config;
-    maxRows = config.getConfigValue<int>(ComponentConfigFile::maxRowsKey);
-    maxColumns = config.getConfigValue<int>(ComponentConfigFile::maxColumnsKey);
+    maxRows = config.getConfigValue<int>(MainConfigFile::maxRowsKey);
+    maxColumns = config.getConfigValue<int>(MainConfigFile::maxColumnsKey);
     setWantsKeyboardFocus(false);
     loadBaseFolder();
 }
@@ -438,16 +439,16 @@ void AppMenuComponent::setOnlyTriggerSelected(bool newVal)
 void AppMenuComponent::loadExtraConfigProperties
         (ConfigFile* config, String key)
 {
-    ComponentConfigFile* compConf = dynamic_cast<ComponentConfigFile*> (config);
-    if (compConf != nullptr)
+    MainConfigFile* mainConfig = dynamic_cast<MainConfigFile*> (config);
+    if (mainConfig != nullptr)
     {
-        if (key == ComponentConfigFile::maxColumnsKey)
+        if (key == MainConfigFile::maxColumnsKey)
         {
-            maxColumns = compConf->getConfigValue<int>(key);
+            maxColumns = mainConfig->getConfigValue<int>(key);
         }
-        else if (key == ComponentConfigFile::maxRowsKey)
+        else if (key == MainConfigFile::maxRowsKey)
         {
-            maxRows = compConf->getConfigValue<int>(key);
+            maxRows = mainConfig->getConfigValue<int>(key);
         }
         for (AppMenuFolder* folder : openFolders)
         {

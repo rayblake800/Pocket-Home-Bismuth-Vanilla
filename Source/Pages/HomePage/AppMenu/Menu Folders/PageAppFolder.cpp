@@ -52,7 +52,7 @@ GridLayoutManager::Layout PageAppFolder::buildFolderLayout
             (Component* component, int row)
             {
                 layout[row].compRow.push_back({component, buttonSize});
-                int rowSize= layout[row].compRow.size();
+                int rowSize = layout[row].compRow.size();
                 if ((rowSize + 1) % (getMaxColumns() + 1) == 0
                     && layout[row].compRow.size() < numLayoutColumns)
                 {
@@ -111,7 +111,7 @@ int PageAppFolder::getNumFolderPages() const
  */
 int PageAppFolder::getCurrentFolderPage() const
 {
-    return median<int>(0,currentPage,getNumFolderPages()-1);
+    return median<int>(0, currentPage, getNumFolderPages() - 1);
 }
 
 /**
@@ -224,6 +224,16 @@ bool PageAppFolder::setSelectedPosition(int page, int column, int row)
 }
 
 /**
+ * Sets the margin width relative to the parent component width, rather than
+ * relative to folder width.  The actual margin will be calculated using
+ * this value whenever the folder's size changes.
+ */
+void PageAppFolder::setParentRelativeMargin(float margin)
+{
+    parentRelativeMargin = margin;
+}
+
+/**
  * Resizes padding, then calls AppFolder::resized()
  */
 void PageAppFolder::resized()
@@ -239,7 +249,13 @@ void PageAppFolder::resized()
                     / bounds.getWidth(),
                     0.5 / (getMaxRows() * 2) * parentBounds.getHeight()
                     / bounds.getHeight());
-            setMargin(getMargin() * parentBounds.getWidth() / bounds.getWidth());
+            if (parentRelativeMargin > 0)
+            {
+                DBG("Margin being updated from " << getMargin());
+                setMargin(parentRelativeMargin * parentBounds.getWidth()
+                        / bounds.getWidth());
+                DBG("Margin now set to " << getMargin());
+            }
         }
     }
     layoutButtons();

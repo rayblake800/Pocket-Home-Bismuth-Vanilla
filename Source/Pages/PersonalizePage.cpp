@@ -72,12 +72,12 @@ rowCounter(1,1,9)
     }
     menuTypePicker.addListener(this);
     
-    ComponentConfigFile config;
+    MainConfigFile config;
     rowCounter.setValue(config.getConfigValue<int>
-            (ComponentConfigFile::maxRowsKey));
+            (MainConfigFile::maxRowsKey));
             
     columnCounter.setValue(config.getConfigValue<int>
-            (ComponentConfigFile::maxColumnsKey));
+            (MainConfigFile::maxColumnsKey));
     updateComboBox();
     addAndShowLayoutComponents();
 }
@@ -89,10 +89,10 @@ PersonalizePage::~PersonalizePage() { }
 */
 void PersonalizePage::pageRemovedFromStack()
 {
-    ComponentConfigFile config;
-    config.setConfigValue<int>(ComponentConfigFile::maxRowsKey,
+    MainConfigFile config;
+    config.setConfigValue<int>(MainConfigFile::maxRowsKey,
             rowCounter.getValue());
-    config.setConfigValue<int>(ComponentConfigFile::maxColumnsKey,
+    config.setConfigValue<int>(MainConfigFile::maxColumnsKey,
             columnCounter.getValue());
 }
 

@@ -37,9 +37,6 @@ public:
      */
     Array<String> getColourKeys() const;
     
-    //#### Integer value keys #######
-    static const String maxRowsKey;
-    static const String maxColumnsKey;
 
     //#### Boolean value keys #######
     static const String showClockKey;

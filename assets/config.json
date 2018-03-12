@@ -1,4 +1,7 @@
 {
+    
+    "max menu row count": 3,
+    "max menu column count": 5,
     "background": "FF4D4D4D",
     "app menu type": "Scrolling menu",
     "shutdown command": "systemctl poweroff",

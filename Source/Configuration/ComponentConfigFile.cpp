@@ -152,9 +152,6 @@ Array<String> ComponentConfigFile::getColourKeys() const
     return keys;
 }
 
-//#### Integer value keys #######
-const String ComponentConfigFile::maxRowsKey = "max grid row count";
-const String ComponentConfigFile::maxColumnsKey = "max grid column count";
 
 //##### boolean value keys: ######
 const String ComponentConfigFile::showClockKey = "show clock";
@@ -262,8 +259,6 @@ Array<String> ComponentConfigFile::getComponentKeys()
 std::vector<ConfigFile::DataKey> ComponentConfigFile::getDataKeys() const
 {
     std::vector<DataKey> keys = {
-        {maxRowsKey, intType},
-        {maxColumnsKey, intType},
         {showClockKey, boolType},
         {use24HrModeKey, boolType}
     };

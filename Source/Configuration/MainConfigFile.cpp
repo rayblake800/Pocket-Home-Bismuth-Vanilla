@@ -24,6 +24,10 @@ const Array<String> MainConfigFile::menuTypes =
 	"Paged menu"
 };
 
+
+//#### Integer value keys #######
+const String MainConfigFile::maxRowsKey = "max menu row count";
+const String MainConfigFile::maxColumnsKey = "max menu column count";
 //string
 const String MainConfigFile::menuTypeKey = "app menu type";
 const String MainConfigFile::shutdownCommandKey = "shutdown command";
@@ -37,6 +41,8 @@ const String MainConfigFile::showCursorKey = "cursor";
 std::vector<ConfigFile::DataKey> MainConfigFile::getDataKeys() const
 {
     return {
+        {maxRowsKey,intType},
+        {maxColumnsKey,intType},
         {backgroundKey, stringType},
         {menuTypeKey, stringType},
         {shutdownCommandKey, stringType},

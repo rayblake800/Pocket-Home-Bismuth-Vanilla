@@ -13,6 +13,9 @@ public:
     virtual ~MainConfigFile();
 
     
+    //#### Integer value keys #######
+    static const String maxRowsKey;
+    static const String maxColumnsKey;
     //string value keys
     static const String backgroundKey;
     static const String menuTypeKey;

@@ -103,6 +103,15 @@ public:
      * @return true if the selection changed, false otherwise.
      */
     bool setSelectedPosition(int page, int column, int row);
+    
+    /**
+     * Sets the margin width relative to the parent component width, rather than
+     * relative to folder width.  The actual margin will be calculated using
+     * this value whenever the folder's size changes.
+     * @param margin if this value is negative, folder margins will not scale
+     * based on the size of the parent component.
+     */
+    void setParentRelativeMargin(float margin);
 
 private:
 
@@ -110,7 +119,9 @@ private:
      * Resizes padding, then calls AppFolder::resized().
      */
     void resized() override;
+    
     int currentPage = 0;
+    float parentRelativeMargin = -1;
 
 
     //############################  PageMenuButton  ############################
@@ -130,7 +141,7 @@ private:
                 String name = String());
         virtual ~PageMenuButton();
     private:
-
+        
         /**
          * Re-calculates draw values whenever the button is resized
          */

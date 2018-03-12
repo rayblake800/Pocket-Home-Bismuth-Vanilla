@@ -218,7 +218,8 @@ AppMenuFolder* PagedAppMenu::createFolderObject(AppMenuItem::Ptr folderItem,
 {
     PageAppFolder* folder = new PageAppFolder
             (folderItem, this, buttonMap, iconThread);
-    folder->setMargin((float) pageLeft.getWidth() / (float) getWidth());
+    folder->setParentRelativeMargin((float) pageLeft.getWidth()
+            / (float) getWidth());
     return folder;
 }
 
