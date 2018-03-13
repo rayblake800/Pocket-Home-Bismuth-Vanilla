@@ -2,6 +2,7 @@
 #include "ClockLabel.h"
 
 ClockLabel::ClockLabel() :
+WindowFocusedTimer("ClockLabel"),
 ConfigurableLabel(ComponentConfigFile::clockLabelKey, "clockLabel", "00:00")
 {
     

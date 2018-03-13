@@ -8,24 +8,19 @@
  * runtime, not the amount of time left on the timer, so timers that would
  * have ended while suspended will immediately call their timerCallback when
  * resumed.
- * 
- * The PocketHomeWindow class is responsible for passing window state changes
- * on to this class by calling windowFocusGained() and windowFocusLost()
  */
-#include "../JuceLibraryCode/JuceHeader.h"
 #pragma once
+#include "../JuceLibraryCode/JuceHeader.h"
+#include "WindowFocus.h"
 
-class WindowFocusedTimer : public Timer {
-    friend class PocketHomeWindow;
+class PocketHomeWindow;
+class WindowFocusedTimer : public Timer, private WindowFocus::Listener {
 public:
     /**
-     * Adds the timer to the list of all timers.
+     * @param name identifies the timer for debug purposes
      */
-    WindowFocusedTimer();
+    WindowFocusedTimer(String name);
 
-    /**
-     * Removes the timer from the list of all timers.
-     */
     virtual ~WindowFocusedTimer();
     
     /**
@@ -41,25 +36,14 @@ private:
     virtual void onSuspend() {}
     
     /**
-     * Called whenever the window loses focus, suspends all active timers.
+     * Suspends the timer when the window loses focus.
      */
-    static void windowFocusLost();
+    void windowFocusLost() override;
 
     /**
-     * Called whenever the window gains focus, resumes all suspended timers.
+     * Resumes the timer when the window gains focus.
      */
-    static void windowFocusGained();
-
-    /**
-     * Protects the time list from concurrent modification.
-     */
-    static CriticalSection timerListLock;
-
-    /**
-     * Tracks all WindowFocusedTimers to ensure each one is notified when 
-     * window focus changes.
-     */
-    static Array<WindowFocusedTimer*> allTimers;
+    void windowFocusGained() override;
 
     /**
      * Next scheduled runtime for a suspended timer, relative to 
@@ -67,6 +51,8 @@ private:
      * the timer is not suspended.
      */
     uint32 suspendedEndTime = 0;
+    
+    String name;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WindowFocusedTimer)
 };

@@ -28,7 +28,12 @@ void ConnectionSettingsComponent::setIconVisible(bool visible)
 
 void ConnectionSettingsComponent::setToggleState(bool toggleState)
 {
-    toggle.setToggleState(toggleState, NotificationType::dontSendNotification);
+    if (toggle.getToggleState() != toggleState)
+    {
+        DBG("ConnectionSettingsComponent::" <<__func__<< " turning "
+                <<(toggleState? "on" : "off"));
+        toggle.setToggleState(toggleState, NotificationType::sendNotification);
+    }
 }
 
 void ConnectionSettingsComponent::setPageButtonEnabled(bool isEnabled)

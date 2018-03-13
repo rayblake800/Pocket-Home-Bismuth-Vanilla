@@ -57,13 +57,13 @@ Drawable * createSVGDrawable(const File& svgFile)
 {
     if (!svgFile.existsAsFile())
     {
-        DBG(String("createSVGDrawable:") + svgFile.getFileName() + " not found!");
+        DBG(__func__ << ": " << svgFile.getFileName() << " not found!");
         return nullptr;
     }
     ScopedPointer<XmlElement> svgElement = XmlDocument::parse(svgFile);
     if (svgElement == nullptr)
     {
-        DBG(String("createSVGDrawable:") + svgFile.getFileName() + " not a valid svg!");
+        DBG(__func__ << ": " << svgFile.getFileName() << " not a valid svg!");
         return nullptr;
     }
     return Drawable::createFromSVG(*svgElement);
@@ -212,8 +212,8 @@ std::vector<String> listDirectoryFiles(const String& path)
     return directories;
 }
 
+#if JUCE_DEBUG
 //Print debug info about the component tree
-
 void componentTrace()
 {
     highlightFocus.setFill(FillType(Colour(0x0)));
@@ -259,6 +259,7 @@ void componentTrace()
     recursiveInfo(rootComponent, 0);
     rootComponent->addAndMakeVisible(highlightFocus);
 }
+#endif
 
 Rectangle<int> getWindowSize()
 {
@@ -282,7 +283,6 @@ Font fontResizedToFit(Font font, String text, Rectangle<int>container)
     {
         newHeight = container.getHeight();
     }
-    //DBG(String("setting font height to ")+String(newHeight));
     font.setHeight(newHeight);
     return font;
 }

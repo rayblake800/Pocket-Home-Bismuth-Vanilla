@@ -11,41 +11,34 @@
 #include "Pages/HomePage/HomePage.h"
 #include "Pages/LoginPage.h"
 #include "PageStackComponent.h"
+#include "WindowFocus.h"
 
-class PocketHomeWindow : public DocumentWindow {
+class PocketHomeWindow : public WindowFocus::BroadcastWindow {
 public:
     /**
-     * 
-     * @param windowName
+     * @param windowName sets the text of the window title bar
      */
     PocketHomeWindow(String windowName);
-    ~PocketHomeWindow();
+    
+    ~PocketHomeWindow();    
+
+    
 private:
-    /**
-     * 
-     */
-    void activeWindowStatusChanged() override;
     
     /**
-     * 
+     * closes the application normally.
      */
     void closeButtonPressed() override;
+
+    
+    //void paint(Graphics &) override;
     
     /**
-     * 
-     */
-    void paint(Graphics &) override;
-    
-    /**
-     * 
+     * Resize page content to match window size.
      */
     void resized() override;
-    
-    /**
-     * 
-     */
-    void handleMainWindowInactive();
 
+    
     HomePage homePage;
     PageStackComponent pageStack;
     LoginPage loginPage;

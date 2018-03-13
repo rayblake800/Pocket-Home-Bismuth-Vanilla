@@ -25,7 +25,7 @@
  *  -Complete documentation
  */
 
-class HomePage : public PageComponent,public Configurable{
+class HomePage : public PageComponent, public Configurable{
 public:
     HomePage();
     virtual ~HomePage();
@@ -38,52 +38,47 @@ protected:
      * @param key should be the background key
      */
     void loadConfigProperties(ConfigFile* config, String key);
-private:    
-   
+private:
+
     /**
      * Forward all clicks (except button clicks) to the appMenu so that it can 
      * potentially create a pop-up menu
      */
     virtual void mouseDown(const MouseEvent &event) override;
-    
+
     /**
      * Set the page background as a solid color.
      * @param color a six-digit hex color string
      */
     void setColorBackground(const String& color);
-    
+
     /**
      * Set the page background to a background image.
      * @param path the path to an image file.
      */
     void setImageBackground(const String& path);
-    
+
     /**
      * 
      * @param 
      */
     void pageButtonClicked(Button *) override;
-    
+
     /**
      * 
      * @param 
      * @return 
      */
     bool keyPressed(const KeyPress &) override;
-    
+
     /**
      * 
      */
     void visibilityChanged() override;
-    
-    /**
-     * 
-     * @param windowFocus
-     */
-    void windowFocusChanged(bool windowFocus) override;
-    
-    
-    
+
+
+
+
     /**
      * 
      */
@@ -94,7 +89,7 @@ private:
     ScopedPointer<AppMenuComponent> appMenu;
     BatteryIcon batteryIcon;
     WifiIcon wifiIcon;
-    
+
     ConfigurableImageButton powerButton;
     ConfigurableImageButton settingsButton;
 

@@ -246,7 +246,8 @@ void IconThread::mapIcons()
             file.close();
         } catch (std::ifstream::failure f)
         {
-            DBG("DesktopEntry:failed to read icon theme from .gtkrc-2.0");
+            DBG("IconThread::" << __func__ 
+                    << ": failed to read icon theme from .gtkrc-2.0");
         }
     }
     if (iconTheme.isNotEmpty())
@@ -271,10 +272,12 @@ void IconThread::mapIcons()
     //run recursive mapping for all subdirectories
     for (int i = 0; i < checkPaths.size(); i++)
     {
-        //DBG(String("Mapping icon files under ") + checkPaths[i]);
+        DBG("IconThread::" << __func__ << ":Mapping icon files under " 
+                << checkPaths[i]);
         findSearchPaths(checkPaths[i]);
     }
-    DBG(String("Searching ") + String(searchPaths.size()) + " icon paths:");
+    DBG("IconThread::" << __func__ << ":Searching " << searchPaths.size() 
+            << " icon paths:");
     //finally, find and map icon files
     for (const String& path : searchPaths)
     {
@@ -294,5 +297,6 @@ void IconThread::mapIcons()
             }
         }
     }
-    DBG(String("Mapped ") + String(iconPaths.size()) + String(" icon files."));
+    DBG("IconThread::" << __func__ << ": Mapped " << iconPaths.size() 
+            << " icon files.");
 }

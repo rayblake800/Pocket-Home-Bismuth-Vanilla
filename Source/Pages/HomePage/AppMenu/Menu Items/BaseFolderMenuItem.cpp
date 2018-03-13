@@ -34,7 +34,7 @@ Array<AppMenuItem::Ptr> BaseFolderMenuItem::getFolderItems() const
     {
         folderItems.add(AppMenuItemFactory::create(folder, desktopEntries));
     }
-    DBG(String("BaseFolderMenuItem:Created ")+String(folderItems.size())
-            +String(" folder items."));
+    DBG("BaseFolderMenuItem::" << __func__ << ": created " << folderItems.size()
+            << " folder items.");
     return folderItems;
 }

@@ -207,8 +207,8 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
                 connectionIndex = 0;
             }
 
-            DBG(String("Connection index set to ") + String(connectionIndex)
-                    + String(" of ") + String(connections.size()));
+            DBG("ConnectionPage::" << __func__ << ": Connection index set to "
+                    << connectionIndex << " of " << connections.size());
             layoutConnectionPage();
         }
     }
@@ -219,8 +219,8 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
 
             connectionIndex += connectionsPerPage;
 
-            DBG(String("Connection index set to ") + String(connectionIndex)
-                    + String(" of ") + String(connections.size()));
+            DBG("ConnectionPage::" << __func__ << ": Connection index set to "
+                    << connectionIndex << " of " << connections.size());
             layoutConnectionPage();
         }
     }
@@ -259,6 +259,8 @@ bool ConnectionPage<ConnectionPoint>::overrideBackButton()
     {
         return false;
     }
+    DBG("ConnectionPage::"<<__func__<<": deselecting connection "
+            <<selectedConnection.toString());
     setSelectedConnection(ConnectionPoint::null());
     return true;
 }

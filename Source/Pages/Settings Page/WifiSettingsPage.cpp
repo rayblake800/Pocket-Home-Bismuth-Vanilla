@@ -28,11 +28,12 @@ passwordLabel("passwordLabel", "Password:")
         wifiStatus->addListener(this);
         if (wifiStatus->isConnected())
         {
-            handleWifiConnected();
+            handleWifiEvent(WifiStatus::wifiConnected);
         }
     }
-    else{
-        DBG(__func__<<":WifiStatus is null!");
+    else
+    {
+        DBG("WifiSettingsPage::" << __func__ << ": WifiStatus is null!");
     }
 }
 
@@ -44,10 +45,10 @@ WifiSettingsPage::~WifiSettingsPage() { }
 Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
 {
     WifiStatus* wifiStatus = WifiStatus::getInstance();
-    if(wifiStatus == nullptr)
+    if (wifiStatus == nullptr)
     {
-        DBG(__func__<<":WifiStatus is null!");
-        return {};  
+        DBG("WifiSettingsPage::" << __func__ << ": WifiStatus is null!");
+        return {};
     }
     return wifiStatus->nearbyAccessPoints();
 }
@@ -59,10 +60,10 @@ Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
 void WifiSettingsPage::connect(const WifiAccessPoint& connection)
 {
     WifiStatus* wifiStatus = WifiStatus::getInstance();
-    if(wifiStatus == nullptr)
+    if (wifiStatus == nullptr)
     {
-        DBG(__func__<<":WifiStatus is null!");
-        return;       
+        DBG("WifiSettingsPage::" << __func__ << ": WifiStatus is null!");
+        return;
     }
     if (wifiStatus->isConnected())
     {
@@ -205,65 +206,39 @@ void WifiSettingsPage::setCurrentlyConnecting(bool currentlyConnecting)
 }
 
 /**
- * When wifi is enabled, reload page contents.
- */
-void WifiSettingsPage::handleWifiEnabled()
-{
-    DBG("WifiSettingsPage::wifiEnabled");
-    reloadPage();
-}
-
-/**
+ * When wifi is enabled, connects, or disconnects, reload page contents.
  * When wifi is disabled, close this page.
- */
-void WifiSettingsPage::handleWifiDisabled()
-{
-    DBG("WifiSettingsPage::wifiDisabled");
-    removeFromStack
-            (PageStackComponent::Transition::kTransitionTranslateHorizontal);
-}
-
-/**
- * When Wifi disconnects, reload page contents.
- */
-void WifiSettingsPage::handleWifiConnected()
-{
-    DBG("WifiSettingsPage::wifiConnected");
-    reloadPage();
-}
-
-/**
- * When Wifi disconnects, reload page contents.
- */
-void WifiSettingsPage::handleWifiDisconnected()
-{
-    DBG("WifiSettingsPage::wifiDisconnected");
-    reloadPage();
-}
-
-/**
- * Disable connection controls when Wifi is busy.
- */
-void WifiSettingsPage::handleWifiBusy()
-{
-    DBG("WifiSettingsPage::wifiBusy");
-    setCurrentlyConnecting(true);
-}
-
-/**
- * When connecting fails, show the error label and enable connection
+ * When wifi is busy, disable connection controls.
+ * When wifi fails to connect, show the error label and enable connection
  * controls.
  */
-void WifiSettingsPage::handleWifiFailedConnect()
+void WifiSettingsPage::handleWifiEvent(WifiStatus::WifiEvent event)
 {
-    DBG("WifiSettingsPage::wifiFailedConnect");
-    setCurrentlyConnecting(false);
-    updateConnectionControls(getSelectedConnection());
-    errorLabel.setText(getSelectedConnection().getRequiresAuth() ?
-            "Incorrect password." : "Connection failed.",
-            NotificationType::dontSendNotification);
-    errorLabel.setVisible(true);
+    DBG("WifiSettingsPage::" << __func__ << ": handling wifi event");
+    switch (event)
+    {
+        case WifiStatus::wifiEnabled:
+        case WifiStatus::wifiConnected:
+        case WifiStatus::wifiDisconnected:
+            reloadPage();
+            break;
+        case WifiStatus::wifiDisabled:
+            removeFromStack(PageStackComponent::Transition
+                    ::kTransitionTranslateHorizontal);
+            break;
+        case WifiStatus::wifiBusy:
+            setCurrentlyConnecting(true);
+            break;
+        case WifiStatus::wifiConnectionFailed:
+            setCurrentlyConnecting(false);
+            updateConnectionControls(getSelectedConnection());
+            errorLabel.setText(getSelectedConnection().getRequiresAuth() ?
+                    "Incorrect password." : "Connection failed.",
+                    NotificationType::dontSendNotification);
+            errorLabel.setVisible(true);
+    }
 }
+
 
 /**
  * Attempt to connect if return is pressed after entering a password.

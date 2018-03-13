@@ -19,6 +19,7 @@
 #include "../../../Configuration/Configurables/ConfigurableComponent.h"
 #include "../../../AppLauncher.h"
 #include "../../../GridLayoutManager.h"
+#include "../../../WindowFocus.h"
 #include "../IconThread.h"
 #include "../DesktopEntries.h"
 #include "Menu Editors/AppMenuPopupEditor.h"
@@ -26,7 +27,8 @@
 #include "AppMenuFolder.h"
 #include "AppMenuButton.h"
 
-class AppMenuComponent : public Component, public ConfigurableComponent {
+class AppMenuComponent : public Component, public ConfigurableComponent,
+private WindowFocus::Listener {
 public:
     /**
      * @param componentKey loads menu bounds from config
@@ -181,7 +183,7 @@ protected:
      * This is set to true by default.
      */
     void setOnlyTriggerSelected(bool newVal);
-    
+
 private:
     /**
      * Create a folder component object from a folder menu item.
@@ -212,6 +214,11 @@ private:
      */
     virtual bool folderKeyPressed
     (const KeyPress& key, AppMenuFolder* activeFolder) = 0;
+
+    /**
+     * Exit the loading state if the window loses focus.
+     */
+    void windowFocusLost() override;
 
     /**
      * Updates the layout if row/column size changes

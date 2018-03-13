@@ -24,7 +24,7 @@ entrypath(path)
         if (line.substring(0, 1) == "#")continue; //skip comments
         LineValues lineData = getLineData(line);
         if (lineData.key.isNotEmpty() &&
-                (lineData.locale.isEmpty() || lineData.locale == locale))
+            (lineData.locale.isEmpty() || lineData.locale == locale))
         {
             dataStrings[lineData.key] = lineData.value;
         }
@@ -37,9 +37,7 @@ DesktopEntry::DesktopEntry(const DesktopEntry& orig)
     dataStrings = orig.dataStrings;
 }
 
-DesktopEntry::~DesktopEntry()
-{
-}
+DesktopEntry::~DesktopEntry() { }
 
 /**
  * Creates a new desktop entry from parameter data.
@@ -47,22 +45,23 @@ DesktopEntry::~DesktopEntry()
 DesktopEntry::DesktopEntry(String title, String icon, String command,
         Array<String> categories, bool launchInTerminal)
 {
-    dataStrings[typeKey]="Application";
-    setValue(StringValue::name,title);
-    setValue(StringValue::icon,icon);
-    setValue(StringValue::exec,command);
-    setValue(ListValue::categories,categories);
-    setValue(BoolValue::terminal,launchInTerminal);
-    int filesFound=0;
-    File newFile(localEntryPath+title+String(".desktop"));
-    while(newFile.exists()){
+    dataStrings[typeKey] = "Application";
+    setValue(StringValue::name, title);
+    setValue(StringValue::icon, icon);
+    setValue(StringValue::exec, command);
+    setValue(ListValue::categories, categories);
+    setValue(BoolValue::terminal, launchInTerminal);
+    int filesFound = 0;
+    File newFile(localEntryPath + title + String(".desktop"));
+    while (newFile.exists())
+    {
         filesFound++;
-        newFile=File(localEntryPath+title
-                +String(filesFound)+String(".desktop"));
+        newFile = File(localEntryPath + title
+                + String(filesFound) + String(".desktop"));
     }
     newFile.create();
     newFile.appendText("[Desktop Entry]");
-    entrypath=newFile.getFullPathName();
+    entrypath = newFile.getFullPathName();
     writeFile();
 }
 
@@ -76,7 +75,8 @@ DesktopEntry::Type DesktopEntry::getType() const
     if (type == "Link") return link;
     if (type == "Directory") return directory;
 
-    DBG(String("DesktopEntry::getType():invalid type:") + type);
+    DBG("DesktopEntry::" << __func__
+            << ": invalid type:" << type);
     return application;
 }
 
@@ -87,7 +87,7 @@ bool DesktopEntry::operator==(const DesktopEntry toCompare) const
 {
     String file1 = entrypath.fromLastOccurrenceOf("/", false, false);
     String file2 = toCompare.entrypath.fromLastOccurrenceOf("/", false, false);
-    DBG(file1 + String("==") + file2 + "?");
+    DBG("DesktopEntry::" << __func__ << file1 << "==" << "?");
     return file1 == file2 && file1.isNotEmpty();
 }
 
@@ -107,7 +107,8 @@ String DesktopEntry::getValue(StringValue valueType) const
     try
     {
         return dataStrings.at(getKey(valueType));
-    } catch (std::out_of_range e)
+    }
+    catch (std::out_of_range e)
     {
         return "";
     }
@@ -121,7 +122,8 @@ bool DesktopEntry::getValue(BoolValue valueType) const
     try
     {
         return dataStrings.at(getKey(valueType)) == "true";
-    } catch (std::out_of_range e)
+    }
+    catch (std::out_of_range e)
     {
         return false;
     }
@@ -135,7 +137,8 @@ Array<String> DesktopEntry::getValue(ListValue valueType) const
     try
     {
         return split(dataStrings.at(getKey(valueType)), ";");
-    } catch (std::out_of_range e)
+    }
+    catch (std::out_of_range e)
     {
         return Array<String>();
     }
@@ -198,7 +201,7 @@ void DesktopEntry::writeFile()
         }
         LineValues lineData = getLineData(line);
         if (lineData.key.isNotEmpty()
-                && (lineData.locale.isEmpty() || lineData.locale == locale))
+            && (lineData.locale.isEmpty() || lineData.locale == locale))
         {
             foundKeys.add(lineData.key);
             outFileText += lineData.key;
@@ -218,7 +221,7 @@ void DesktopEntry::writeFile()
     }
     //copy keys not found in the original file
     for (std::map<String, String>::iterator it = dataStrings.begin();
-            it != dataStrings.end(); it++)
+         it != dataStrings.end(); it++)
     {
         String key = it->first;
         String value = it->second;

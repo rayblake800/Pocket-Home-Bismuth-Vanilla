@@ -132,8 +132,9 @@ bool FolderMenuItem::moveDataIndex(int offset)
         }
         config.removeAppFolder(index, false);
         config.addAppFolder(appFolder, index + offset);
-        DBG(String("Moved ") + appFolder.name + String(" from ") + String(index) +
-                String(" to ") + String(config.getFolderIndex(appFolder)));
+        DBG("FolderMenuItem::" << __func__ << ": Moved " << appFolder.name
+                << " from " << index << " to "
+                << config.getFolderIndex(appFolder));
         return true;
     }
     return false;

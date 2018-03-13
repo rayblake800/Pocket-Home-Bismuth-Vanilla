@@ -20,7 +20,7 @@ loadingState(false),
 ConfigurableComponent(componentKey),
 loadingSpinner(loadingSpinner)
 {
-    
+
 #if JUCE_DEBUG
     setName("AppMenuComponent");
 #endif
@@ -215,13 +215,13 @@ void AppMenuComponent::loadBaseFolder()
 {
     if (!isLoading())
     {
-        DBG("loadBaseFolder: started loading");
+        DBG("AppMenuComponent::" << __func__ << ":started loading AppMenu");
         int savedIndex = -1;
         if (!openFolders.isEmpty())
         {
             savedIndex = openFolders.getFirst()->getSelectedIndex();
-            DBG(String("loadBaseFolder: folder exists, saving index")
-                    + String(savedIndex));
+            DBG("AppMenuComponent::" << __func__
+                    << ":folder exists, saving index" << savedIndex);
         }
         while (openFolders.size() > 0)
         {
@@ -230,12 +230,13 @@ void AppMenuComponent::loadBaseFolder()
         setLoadingState(true);
         desktopEntries.loadEntries([this](String loadingMsg)
         {
-            DBG(String("Loading desktop entries:") + loadingMsg);
             loadingSpinner.setLoadingText(loadingMsg);
         },
         [this, savedIndex]()
         {
-            DBG("Loading desktop entries complete, creating base folder");
+            DBG("AppMenuComponent::" << __func__
+                    << ": Loading desktop entries complete,"
+                    << " creating base folder");
             openFolder(AppMenuItemFactory::createBaseFolderItem
                     (desktopEntries));
             openFolders.getFirst()->selectIndex(savedIndex);
@@ -254,7 +255,8 @@ void AppMenuComponent::closeFolder()
     if (openFolders.size() > 0)
     {
         int targetFolderCount = getActiveFolderIndex();
-        DBG(String("Closing folder ") + String(openFolders.size() - 1));
+        DBG("AppMenuComponent::" << __func__ << ": Closing folder "
+                << String(openFolders.size() - 1));
         if (getActiveFolderIndex() > 0)
         {
             setActiveFolderIndex(getActiveFolderIndex() - 1);
@@ -394,7 +396,8 @@ void AppMenuComponent::layoutFolders()
     {
         return;
     }
-   DBG("Updating folder layouts");
+    DBG("AppMenuComponent::" << __func__
+            << ": Updating all AppMenuFolder bounds");
     for (int i = 0; i < openFolders.size(); i++)
     {
         Rectangle<int> folderBounds = updateFolderBounds(openFolders[i], i);
@@ -418,7 +421,6 @@ int AppMenuComponent::getMaxRows() const
     return maxRows;
 }
 
-
 /**
  * @param newVal if set to true, clicking unselected menu buttons 
  * only selects them. If set to false, clicking them also
@@ -430,6 +432,13 @@ void AppMenuComponent::setOnlyTriggerSelected(bool newVal)
     onlyTriggerSelected = newVal;
 }
 
+/**
+ * Exit the loading state if the window loses focus.
+ */
+void AppMenuComponent::windowFocusLost()
+{
+    setLoadingState(false);
+}
 
 /**
  * Updates the layout if row/column size changes.
@@ -437,7 +446,7 @@ void AppMenuComponent::setOnlyTriggerSelected(bool newVal)
  * @param key the key of property that has changed
  */
 void AppMenuComponent::loadExtraConfigProperties
-        (ConfigFile* config, String key)
+(ConfigFile* config, String key)
 {
     MainConfigFile* mainConfig = dynamic_cast<MainConfigFile*> (config);
     if (mainConfig != nullptr)
@@ -465,7 +474,8 @@ void AppMenuComponent::resized()
 {
     menuResized();
     Rectangle<int> bounds = getLocalBounds();
-    DBG(String("AppMenu resized, bounds=") + getScreenBounds().toString());
+    DBG("AppMenuComponent::" << __func__ << ": bounds set to "
+            << getScreenBounds().toString());
     if (buttonEditor != nullptr)
     {
         buttonEditor->applyConfigBounds();
@@ -483,8 +493,6 @@ void AppMenuComponent::resized()
  */
 void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
 {
-    DBG("Opening new folder");
-
     while (getActiveFolderIndex() < openFolders.size() - 1)
     {
         removeChildComponent(openFolders.getLast());
@@ -569,8 +577,6 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
     for (int i = 0; i < openFolders.size(); i++)
     {
         int buttonIndex = openFolders[i]->getButtonIndex(button);
-        DBG(String("click button ") + button->getName() + String(", index ")
-                + String(buttonIndex));
         //if button is not in this folder, move to the next one
         if (buttonIndex == -1)
         {
@@ -591,7 +597,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
         {
             openFolders[i]->selectIndex(buttonIndex);
             layoutFolders();
-            if(onlyTriggerSelected)
+            if (onlyTriggerSelected)
             {
                 return;
             }
@@ -610,7 +616,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
             appLauncher.startOrFocusApp(buttonItem->getAppName(),
                     buttonItem->getCommand());
         }
-    
+
     }
 }
 
@@ -659,8 +665,8 @@ void AppMenuComponent::mouseDown(const MouseEvent &event)
  */
 void AppMenuComponent::setLoadingState(bool loading)
 {
-    DBG((loading ? String("AppMenuComponent is now loading")
-         : String("AppMenuComponent is now done loading")));
+    DBG("AppMenuComponent::" << __func__
+            << (loading ? ": started loading" : ": stopped loading"));
     if (loading != isLoading())
     {
         loadingState = loading;

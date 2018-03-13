@@ -96,35 +96,14 @@ private:
     void setCurrentlyConnecting(bool currentlyConnecting);
 
     /**
-     * When wifi is enabled, reload page contents.
-     */
-    void handleWifiEnabled() override;
-
-    /**
+     * When wifi is enabled, connects, or disconnects, reload page contents.
      * When wifi is disabled, close this page.
-     */
-    void handleWifiDisabled() override;
-
-    /**
-     * When Wifi connects, reload page contents.
-     */
-    void handleWifiConnected() override;
-
-    /**
-     * When Wifi disconnects, reload page contents.
-     */
-    void handleWifiDisconnected() override;
-
-    /**
-     * Disable connection controls when Wifi is busy.
-     */
-    void handleWifiBusy() override;
-
-    /**
-     * When connecting fails, show the error label and enable connection
+     * When wifi is busy, disable connection controls.
+     * When wifi fails to connect, show the error label and enable connection
      * controls.
      */
-    void handleWifiFailedConnect() override;
+    void handleWifiEvent(WifiStatus::WifiEvent event) override;
+
 
     /**
      * Attempt to connect if return is pressed after entering a password.

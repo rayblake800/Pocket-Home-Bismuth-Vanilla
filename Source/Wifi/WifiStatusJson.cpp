@@ -5,7 +5,7 @@
 #include "WifiStatusJson.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
-WifiStatusJson::WifiStatusJson() : connectedAP(WifiAccessPoint::null()){ }
+WifiStatusJson::WifiStatusJson() : connectedAP(WifiAccessPoint::null()) { }
 
 WifiStatusJson::~WifiStatusJson() { }
 
@@ -48,8 +48,9 @@ void WifiStatusJson::enableWifi()
 {
     if (!enabled)
     {
-        notifyListenersWifiBusy();
-        notifyListenersWifiEnabled();
+        notifyListeners(wifiBusy);
+        enabled = true;
+        notifyListeners(wifiEnabled);
     }
 }
 
@@ -57,44 +58,43 @@ void WifiStatusJson::disableWifi()
 {
     if (enabled)
     {
-        notifyListenersWifiBusy();
+        notifyListeners(wifiBusy);
         enabled = false;
-        notifyListenersWifiDisabled();
+        notifyListeners(wifiDisabled);
     }
 }
 
 void WifiStatusJson::setConnectedAccessPoint(const WifiAccessPoint& ap, String psk)
 {
-    notifyListenersWifiBusy();
-
+    notifyListeners(wifiBusy);
     // try to connect to ap, dispatch events on success and failure
     bool isTestCred = (ap.getSSID() == "MyFi");
     if (!isTestCred)
     {
-        DBG("WifiStatusJson::setConnectedAccessPoint - failed ");
+        DBG("WifiStatusJson::" << __func__ << ": failed to connect");
         connected = false;
-        notifyListenersWifiFailedConnect();
+        notifyListeners(wifiConnectionFailed);
         return;
     }
 
     if (psk.isEmpty())
     {
-        DBG("WifiStatusJson::setConnectedAccessPoint - connect with psk");
+        DBG("WifiStatusJson::" << __func__ << ": connected with psk");
         connected = true;
         connectedAP = ap;
-        notifyListenersWifiConnected();
+        notifyListeners(wifiConnected);
     }
     else
     {
-        DBG("WifiStatusJson::setConnectedAccessPoint - connect");
+        DBG("WifiStatusJson::" << __func__ << ": connected");
         connected = true;
         connectedAP = ap;
-        notifyListenersWifiConnected();
+        notifyListeners(wifiConnected);
     }
 }
 
 void WifiStatusJson::disconnect()
 {
     connected = false;
-    notifyListenersWifiDisconnected();
+        notifyListeners(wifiDisconnected);
 }

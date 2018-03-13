@@ -83,7 +83,7 @@ FelPage::pageButtonClicked(Button *button)
         }
         catch (I2CBus::I2CException e)
         {
-            DBG(e.getErrorMessage());
+            DBG("FelPage::" << __func__ << e.getErrorMessage());
         }
     }
 }

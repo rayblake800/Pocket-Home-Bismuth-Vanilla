@@ -140,8 +140,9 @@ bool ConfigAppMenuItem::moveDataIndex(int offset)
         }
         config.removeFavoriteApp(index, false);
         config.addFavoriteApp(appItem, index + offset);
-        DBG(String("Moved ") + appItem.name + String(" from ") + String(index) +
-                String(" to ") + String(config.getFavoriteIndex(appItem)));
+        DBG("ConfigAppMenuItem::" << __func__ << ": Moved " << appItem.name
+                << " from " << index << " to "
+                << config.getFavoriteIndex(appItem));
         return true;
     }
     return false;

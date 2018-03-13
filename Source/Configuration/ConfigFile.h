@@ -74,8 +74,8 @@ public:
         try {
             return fileDataMap.at(key);
         } catch (std::out_of_range e) {
-            DBG(String("getConfigValue: key \"") + key
-                    + String("\" is not value of this type stored in ") + filename);
+            DBG("ConfigFile::" << __func__ << ": key \"" << key
+                    << "\" is not value of this type stored in " << filename);
             throw e;
         }
     }
@@ -103,8 +103,9 @@ public:
                 notifyConfigurables(key);
             }
         } catch (std::out_of_range e) {
-            DBG(String("setConfigValue: key ") + key
-                    + String(" is not a value of this type stored in ") + filename);
+            DBG(__PRETTY_FUNCTION__ << ":");
+            DBG("\tkey " << key << " is not a value of this type stored in " 
+                    << filename);
             throw e;
         }
     }

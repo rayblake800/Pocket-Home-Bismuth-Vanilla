@@ -31,6 +31,10 @@ struct BluetoothDevice {
     bool operator!=(const BluetoothDevice rhs) const {
         return macAddress != rhs.macAddress;
     };
+    
+    String toString() const{
+        return name;
+    }
 
 };
 

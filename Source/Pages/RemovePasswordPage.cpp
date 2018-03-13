@@ -73,7 +73,8 @@ void RemovePasswordPage::loadPassword()
             Result makeFile = passwordFile.create();
             if (makeFile.failed())
             {
-                DBG("Failed to create password file!");
+                DBG("RemovePasswordPage::" << __func__ 
+                        << ": Failed to create password file!");
                 return;
             }
             passwordFile.appendText("none\n");

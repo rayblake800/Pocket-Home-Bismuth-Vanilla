@@ -124,7 +124,7 @@ bool PageAppFolder::setCurrentFolderPage(int pageNum)
         return false;
     }
     currentPage = pageNum;
-    DBG(String("Moved to folder page ") + String(currentPage));
+    DBG("PageAppFolder::" << __func__ << ": Moved to page " << currentPage);
     return true;
 }
 
@@ -217,8 +217,8 @@ int PageAppFolder::positionIndex(int page, int column, int row) const
  */
 bool PageAppFolder::setSelectedPosition(int page, int column, int row)
 {
-    DBG(String("Setting selected page=") + String(page) + String(" column=") +
-            String(column) + String(" row=") + String(row));
+    DBG("PageAppFolder::" << __func__ << ": Setting selected page=" << page 
+            << " column=" << column << " row=" << row);
     return selectIndex(positionIndex(page, column, row))
             && setCurrentFolderPage(page);
 }
@@ -251,10 +251,8 @@ void PageAppFolder::resized()
                     / bounds.getHeight());
             if (parentRelativeMargin > 0)
             {
-                DBG("Margin being updated from " << getMargin());
                 setMargin(parentRelativeMargin * parentBounds.getWidth()
                         / bounds.getWidth());
-                DBG("Margin now set to " << getMargin());
             }
         }
     }

@@ -54,6 +54,8 @@ public:
     bool getRequiresAuth() const;
     
     const String& getHash() const;
+    
+    String toString() const;
 private:
     String ssid;
     int signalStrength;

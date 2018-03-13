@@ -2,6 +2,7 @@
 #include "Spinner.h"
 
 Spinner::Spinner(int secondsToTimeout) :
+WindowFocusedTimer("SpinnerFrame"),
 spinnerImage(RectanglePlacement::fillDestination),
 timeout(secondsToTimeout)
 {

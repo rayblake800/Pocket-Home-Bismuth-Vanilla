@@ -2,6 +2,7 @@
 #include "AppLauncher.h"
 
 AppLauncher::AppLauncher() :
+WindowFocusedTimer("AppLauncher"),
 launchFailureCallback([]()
 {
 }) { }
@@ -23,7 +24,8 @@ void AppLauncher::setLaunchFailureCallback
  */
 void AppLauncher::startOrFocusApp(String appTitle, String command)
 {
-    DBG(String("Attempting to launch ") + appTitle);
+    DBG("AppLauncher::" << __func__ << ": title = " << appTitle 
+            << ", command = " << command);
     //before adding another process to the list, clean out any old dead ones,
     //so they don't start piling up
     std::vector<ChildProcess*>toRemove;
@@ -46,18 +48,22 @@ void AppLauncher::startOrFocusApp(String appTitle, String command)
     {
         if (appProcess->isRunning())
         {
-            DBG("app is already running, attempting to find the window id");
+            DBG("AppLauncher::" << __func__ 
+                    << ": app is already running,"
+                    << " attempting to find the window id");
             String windowId = getWindowId(processInfo);
 
             if (!windowId.isEmpty())
             {
-                DBG(String("Found window ") + windowId + String(", focusing app"));
+                DBG("AppLauncher::" << __func__ << ": Found window "
+                        << windowId << ", focusing app");
                 focusApp(windowId);
 
             }
             else
             {
-                DBG("Process exists, but has no window to focus.");
+                DBG("AppLauncher::" << __func__ 
+                        << ": Process exists, but has no window to focus.");
             }
             return;
         }
@@ -65,7 +71,8 @@ void AppLauncher::startOrFocusApp(String appTitle, String command)
         {
             if (appProcess != nullptr)
             {
-                DBG("Old process is dead, we're good to launch");
+                DBG("AppLauncher::" << __func__ 
+                        << ": Old process is dead, re-launching");
             }
         }
     }
@@ -82,8 +89,8 @@ String AppLauncher::getWindowId(ProcessInfo processInfo)
             {
                 StringArray findCmd{"xdotool", "search", "--all"
                                     , "--limit", "1", "--class", searchTerm.toRawUTF8()};
-                DBG(String("Running command:")
-                        + findCmd.joinIntoString(" ", 0, -1));
+                DBG("AppLauncher::" << __func__ << ": Running command:"
+                        << findCmd.joinIntoString(" ", 0, -1));
                 ChildProcess findWindow;
                 findWindow.start(findCmd);
                 String windowId = findWindow.readAllProcessOutput();
@@ -151,10 +158,10 @@ bool AppLauncher::ProcessInfo::operator<(const ProcessInfo& rhs) const
 
 void AppLauncher::timerCallback()
 {
-    DBG("AppLaunchTimer callback");
+    DBG("AppLauncher::" << __func__ << ": timer finished");
     if (timedProcess != nullptr)
     {
-        DBG("tracked process is null");
+        DBG("AppLauncher::" << __func__ << ": tracked process is null");
         if (timedProcess->isRunning())
         {
             //if the process is still going, wait longer for it to take over
@@ -163,7 +170,7 @@ void AppLauncher::timerCallback()
         }
         else
         {
-            DBG("process dies, show message");
+            DBG("AppLauncher::" << __func__ << ": process died, show message");
             String output = timedProcess->readAllProcessOutput();
             Array<String> lines = split(output, "\n");
             output = "";

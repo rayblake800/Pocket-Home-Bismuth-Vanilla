@@ -106,10 +106,13 @@ public:
      */
     void clearLayout(bool removeComponentsFromParent = false);
     
+#if JUCE_DEBUG
     /**
      * Print out the layout to the console for debugging
      */
     void printLayout();
+#endif
+    
 private:
 
     struct WeightedCompPtr {

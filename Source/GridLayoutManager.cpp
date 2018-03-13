@@ -108,7 +108,6 @@ void GridLayoutManager::layoutComponents(Rectangle<int> bounds, int xPadding,
     int yStart = bounds.getY();
 
     int yPos = yStart;
-    //DBG(String(rows.size()) + String(":") + String(vertWeightSum));
     for (const Row& row : rows)
     {
         int usableWidth = bounds.getWidth() - (row.columns.size() - 1)
@@ -156,6 +155,8 @@ void GridLayoutManager::clearLayout(bool removeComponentsFromParent)
     vertWeightSum = 0;
 }
 
+#if JUCE_DEBUG
+
 /**
  * Print out the layout to the console for debugging
  */
@@ -163,6 +164,7 @@ void GridLayoutManager::printLayout()
 {
     for (Row& row : rows)
     {
+        DBG("GridLayoutManager::" << __func__ << ":");
         DBG(String("Row weight:") + String(row.vertWeight) + String("/")
                 + String(vertWeightSum));
         String rowStr = "\t";
@@ -184,4 +186,7 @@ void GridLayoutManager::printLayout()
         }
         DBG(rowStr);
     }
+    DBG("");
 }
+
+#endif

@@ -12,9 +12,9 @@ DrawableImageComponent::DrawableImageComponent
 (String assetFilename, RectanglePlacement placement) :
 placement(placement)
 {
-    
+
 #if JUCE_DEBUG
-    setName(String("DrawableImageComponent:")+assetFilename);
+    setName(String("DrawableImageComponent:") + assetFilename);
 #endif
     setImage(assetFilename);
     setInterceptsMouseClicks(false, false);
@@ -26,9 +26,9 @@ placement(placement)
 DrawableImageComponent::DrawableImageComponent
 (File imageFile, RectanglePlacement placement) :
 placement(placement)
-{    
+{
 #if JUCE_DEBUG
-    setName(String("DrawableImageComponent:")+imageFile.getFileName());
+    setName(String("DrawableImageComponent:") + imageFile.getFileName());
 #endif
     setImage(imageFile);
     setInterceptsMouseClicks(false, false);
@@ -41,7 +41,7 @@ DrawableImageComponent::DrawableImageComponent(Image image,
         RectanglePlacement placement) :
 placement(placement)
 {
-        
+
 #if JUCE_DEBUG
     setName("DrawableImageComponent");
 #endif
@@ -55,16 +55,14 @@ placement(placement)
 DrawableImageComponent::DrawableImageComponent
 (RectanglePlacement placement) :
 placement(placement)
-{    
+{
 #if JUCE_DEBUG
     setName("DrawableImageComponent");
 #endif
     setInterceptsMouseClicks(false, false);
 }
 
-DrawableImageComponent::~DrawableImageComponent()
-{
-}
+DrawableImageComponent::~DrawableImageComponent() { }
 
 /**
  * Change the image drawn by this component
@@ -89,10 +87,11 @@ void DrawableImageComponent::setImage(File imageFile)
         {
             imageSource = imageFile;
             initImage();
-        } else
+        }
+        else
         {
-            DBG(String("DrawableImageComponent::setImage Failed to load")
-                    + imageFile.getFullPathName());
+            DBG("DrawableImageComponent::" << __func__ << ": Failed to load " 
+                    << imageFile.getFullPathName());
         }
     }
 }
@@ -145,28 +144,30 @@ void DrawableImageComponent::initImage()
             //Color conflict doesn't exist, or involves a color that has
             //already been changed, so direct replacement is possible.
             imageDrawable->replaceColour(defaultColours[i], imageColours[i]);
-        } else if (existingIndex > i)
+        }
+        else if (existingIndex > i)
         {
             //Color conflict exists, replace the color with a temporary color
             //that's not already used.
             Colour tempColour = Colours::aqua;
             Random randGen;
             while (defaultColours.contains(tempColour) ||
-                    imageColours.contains(tempColour) ||
-                    tempColours.find(tempColour.getARGB()) != tempColours.end())
+                   imageColours.contains(tempColour) ||
+                   tempColours.find(tempColour.getARGB()) != tempColours.end())
             {
-                tempColour = Colour(0xff000000 
+                tempColour = Colour(0xff000000
                         + randGen.nextInt(Range<int>::between(0, 0xffffff)));
             }
-            tempColours[tempColour.getARGB()]=imageColours[i].getARGB();
-            imageDrawable->replaceColour(defaultColours[i], tempColour);  
+            tempColours[tempColour.getARGB()] = imageColours[i].getARGB();
+            imageDrawable->replaceColour(defaultColours[i], tempColour);
         }
         //if existingIndex == i, the color doesn't change, so no action needed.
     }
     //temporary colors can now be safely replaced with their actual values
-    for(std::map<uint32,uint32>::iterator it = tempColours.begin();
-            it != tempColours.end(); it++){
-        imageDrawable->replaceColour(Colour(it->first),Colour(it->second));
+    for (std::map<uint32, uint32>::iterator it = tempColours.begin();
+         it != tempColours.end(); it++)
+    {
+        imageDrawable->replaceColour(Colour(it->first), Colour(it->second));
     }
 }
 

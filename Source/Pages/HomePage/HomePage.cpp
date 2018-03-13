@@ -19,7 +19,7 @@ settingsButton(ComponentConfigFile::settingsButtonKey)
 #if JUCE_DEBUG
     setName("HomePage");
 #endif
-    
+
     setWantsKeyboardFocus(true);
     addAndMakeVisible(frame);
     addAndMakeVisible(clock);
@@ -71,7 +71,7 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
                     (MainConfigFile::menuTypeKey);
             if (!MainConfigFile::menuTypes.contains(menuType))
             {
-                DBG("HomePage: Invalid menu type!");
+                DBG("HomePage::" << __func__ << ": Invalid menu type!");
                 return;
             }
             if (appMenu != nullptr)
@@ -81,29 +81,33 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
             }
 
 
-            DBG(String("Menu type is ") + menuType);
+            DBG("HomePage::" << __func__ << ": Menu type is " << menuType);
             if (menuType == "Scrolling menu")
             {
                 if (!isClass<AppMenuComponent, ScrollingAppMenu>(appMenu.get()))
                 {
-                    DBG("Initializing scrolling menu");
+                    DBG("HomePage::" << __func__
+                            << ": Initializing scrolling menu");
                     appMenu = new ScrollingAppMenu(loadingSpinner);
                 }
                 else
                 {
-                    DBG("Menu was already scrolling, don't recreate");
+                    DBG("HomePage::" << __func__
+                            << ": Menu was already scrolling, don't recreate");
                 }
             }
             else//menuType == "pagedMenu"
             {
                 if (!isClass<AppMenuComponent, PagedAppMenu>(appMenu.get()))
                 {
-                    DBG("Initializing paged menu");
+                    DBG("HomePage::" << __func__
+                            << ": Initializing paged menu");
                     appMenu = new PagedAppMenu(loadingSpinner);
                 }
                 else
                 {
-                    DBG("Menu was already paged, don't recreate");
+                    DBG("HomePage::" << __func__ <<
+                            ": Menu was already paged, don't recreate");
                 }
             }
             addAndMakeVisible(appMenu);
@@ -116,7 +120,6 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
 
 
 //Forward all clicks (except button clicks) to the appMenu 
-
 void HomePage::mouseDown(const MouseEvent &event)
 {
     if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
@@ -152,7 +155,7 @@ bool HomePage::keyPressed(const KeyPress& key)
 
 void HomePage::visibilityChanged()
 {
-    if (isVisible())
+    if (isShowing())
     {
         MessageManager::callAsync([this]()
         {
@@ -161,19 +164,6 @@ void HomePage::visibilityChanged()
     }
 }
 
-void HomePage::windowFocusChanged(bool windowFocus)
-{
-    if (!windowFocus)
-    {
-        appMenu->exitLoadingState();
-    }
-    else{
-        MessageManager::callAsync([this]()
-        {
-            grabKeyboardFocus();
-        });
-    }
-}
 
 void HomePage::pageResized()
 {

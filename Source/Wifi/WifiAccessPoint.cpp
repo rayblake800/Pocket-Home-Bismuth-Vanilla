@@ -18,7 +18,7 @@ signalStrength(-1),
 requiresAuth(false),
 hash(String()) { }
 
-WifiAccessPoint::~WifiAccessPoint() {}
+WifiAccessPoint::~WifiAccessPoint() { }
 
 /**
  * @return a WifiAccessPoint object that represents the absence of a
@@ -26,7 +26,7 @@ WifiAccessPoint::~WifiAccessPoint() {}
  */
 const WifiAccessPoint WifiAccessPoint::null()
 {
-    return {"", -1, false, ""};
+    return WifiAccessPoint();
 }
 
 /**
@@ -58,4 +58,9 @@ bool WifiAccessPoint::getRequiresAuth() const
 const String& WifiAccessPoint::getHash() const
 {
     return hash;
+}
+
+String WifiAccessPoint::toString() const 
+{
+    return ssid;
 }

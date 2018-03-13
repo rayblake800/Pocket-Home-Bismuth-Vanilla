@@ -81,7 +81,8 @@ void DesktopEntries::loadEntries
         {
             const ScopedTryLock readLock(lock);
             if(!readLock.isLocked()){
-                DBG("Can't load desktop entries, thread is already locked");
+                DBG("DesktopEntries::" << __func__ 
+                    << ": Can't load desktop entries, thread is already locked");
                 return;
             }
             entries.clear();
@@ -121,7 +122,7 @@ void DesktopEntries::LoadingThread::run()
     std::atomic<bool> uiCallPending;
     uiCallPending = false;
     //read the contents of all desktop application directories
-    DBG("finding desktop entries...");
+    DBG("DesktopEntries::" << __func__  << ": finding desktop entries...");
     std::vector<String> dirs = {
                                 getHomePath() + "/.local/share/applications",
                                 "/usr/share/applications",
@@ -218,7 +219,8 @@ void DesktopEntries::LoadingThread::run()
     uiCallPending = true;
     MessageManager::callAsync([&uiCallPending, this]
     {
-        DBG("All desktop entries loaded.");
+        DBG("DesktopEntries::" << __func__ 
+                    << ": All desktop entries loaded.");
         onFinish();
         uiCallPending = false;
         this->notify();

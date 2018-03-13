@@ -18,12 +18,7 @@ public:
     void enabledStateChanged(bool enabled) override;
     void updateButtonText() override;
 
-    void handleWifiEnabled() override;
-    void handleWifiDisabled() override;
-    void handleWifiConnected() override;
-    void handleWifiDisconnected() override;
-    void handleWifiFailedConnect() override;
-    void handleWifiBusy() override;
+    void handleWifiEvent(WifiStatus::WifiEvent event) override;
 
 private:
     void enableWifiActions();

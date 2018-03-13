@@ -2,13 +2,13 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include "WindowFocusedTimer.h"
 #include "Utils.h"
-#include "PocketHomeWindow.h"
 #include "PocketHomeApplication.h"
+#include "PocketHomeWindow.h"
 
 PocketHomeWindow::PocketHomeWindow(String windowName) :
-DocumentWindow(windowName, Colours::darkgrey, DocumentWindow::allButtons),
+WindowFocus::BroadcastWindow(windowName, Colours::darkgrey,
+DocumentWindow::allButtons),
 loginPage([this] ()
 {
 
@@ -44,45 +44,26 @@ loginPage([this] ()
 
 PocketHomeWindow::~PocketHomeWindow() { }
 
-void PocketHomeWindow::activeWindowStatusChanged()
-{
-    WifiStatus* wifiStatus = WifiStatus::getInstance();
-    if (isActiveWindow())
-    {
-        WindowFocusedTimer::windowFocusGained();
-        if (wifiStatus != nullptr && wifiStatus->isEnabled()
-            && !wifiStatus->isThreadRunning())
-        {
-            DBG(__func__ << "starting wifi thread");
-            wifiStatus->startThread();
-        }
-    }
-    else
-    {
-        if (wifiStatus != nullptr && wifiStatus->isThreadRunning())
-        {
-            DBG(__func__ << ":stopping wifi thread");
-            wifiStatus->signalThreadShouldExit();
-            wifiStatus->notify();
-        }
-        WindowFocusedTimer::windowFocusLost();
-    }
-    pageStack.windowFocusChanged(isActiveWindow());
-}
-
+/**
+ * closes the application normally.
+ */
 void PocketHomeWindow::closeButtonPressed()
 {
     JUCEApplication::getInstance()->systemRequestedQuit();
 }
 
-void PocketHomeWindow::paint(Graphics &g)
-{
-    g.fillAll(Colours::white);
-}
+//void PocketHomeWindow::paint(Graphics &g)
+//{
+//    g.fillAll(Colours::white);
+//}
 
+/**
+ * Resize page content to match window size.
+ */
 void PocketHomeWindow::resized()
 {
-    auto bounds = getLocalBounds();
+    Rectangle<int> bounds = getLocalBounds();
     pageStack.setBounds(bounds);
     loginPage.setBounds(bounds);
 }
+

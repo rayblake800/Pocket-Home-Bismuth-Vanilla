@@ -97,7 +97,7 @@ void ListEditor::labelTextChanged(Label *source)
     {
         int rowNum = listItem->getComponentID().getIntValue();
         listItems.getReference(rowNum) = listItem->getText(true);
-        DBG(String("Text set to ") + listItem->getText(true));
+        DBG("ListEditor::" << __func__ << ": Text set to " << listItem->getText(true));
     }
     listContainer.updateContent();
     listContainer.repaint();
@@ -109,7 +109,6 @@ void ListEditor::labelTextChanged(Label *source)
 void ListEditor::listBoxItemClicked
 (int row, const MouseEvent & mouseEvent)
 {
-    DBG(String("Clicked ") + String(row));
     listContainer.selectRow(row);
 }
 
@@ -119,7 +118,6 @@ void ListEditor::listBoxItemClicked
 void ListEditor::listBoxItemDoubleClicked
 (int row, const MouseEvent & mouseEvent)
 {
-    DBG("Double Clicked");
     Label * rowClicked =
             static_cast<Label*> (listContainer.getComponentForRowNumber(row));
     rowClicked->showEditor();

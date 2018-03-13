@@ -22,7 +22,7 @@ confirmButton("confirm.svg")
 
     confirmButton.setWantsKeyboardFocus(false);
     confirmButton.addListener(this);
-    
+
     setInterceptsMouseClicks(true, true);
     MessageManager::callAsync([this]
     {
@@ -59,18 +59,19 @@ void PopupEditorComponent::buttonClicked(Button* buttonClicked)
     }
 }
 
-
 /**
  * The escape and return keys work the same
  * as pressing the cancel and confirm buttons, respectively.
  */
 bool PopupEditorComponent::keyPressed(const KeyPress & key)
 {
-    DBG("PopupEditorComponent:key clicked");
+    DBG("PopupEditorComponent::" << __func__ << ": "
+            << key.getTextDescription());
     if (key == KeyPress::escapeKey)
     {
         closePopup();
-    } else if (key == KeyPress::returnKey)
+    }
+    else if (key == KeyPress::returnKey)
     {
         onConfirm(this);
         closePopup();

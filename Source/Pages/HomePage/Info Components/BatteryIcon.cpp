@@ -2,6 +2,7 @@
 #include "../../../Utils.h"
 
 BatteryIcon::BatteryIcon() :
+WindowFocusedTimer("BatteryIcon"),
 batteryImage(ComponentConfigFile::batteryIconKey),
 batteryPercent(ComponentConfigFile::batteryPercentKey)
 {

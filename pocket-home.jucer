@@ -14,6 +14,8 @@
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
+      <FILE id="i1c7QE" name="WindowFocus.cpp" compile="1" resource="0" file="Source/WindowFocus.cpp"/>
+      <FILE id="mwPW4z" name="WindowFocus.h" compile="0" resource="0" file="Source/WindowFocus.h"/>
       <GROUP id="{185415EC-B399-8F03-8F25-DEE2244D2B03}" name="Basic Components">
         <FILE id="It5e7i" name="CounterComponent.cpp" compile="1" resource="0"
               file="Source/Basic Components/CounterComponent.cpp"/>
@@ -287,10 +289,6 @@
             file="Source/PageStackComponent.cpp"/>
       <FILE id="QBJM6w" name="PageStackComponent.h" compile="0" resource="0"
             file="Source/PageStackComponent.h"/>
-      <FILE id="xoVLAp" name="PokeLookAndFeel.cpp" compile="1" resource="0"
-            file="Source/PokeLookAndFeel.cpp"/>
-      <FILE id="g1eykD" name="PokeLookAndFeel.h" compile="0" resource="0"
-            file="Source/PokeLookAndFeel.h"/>
       <FILE id="zJPlv7" name="AppLauncher.cpp" compile="1" resource="0" file="Source/AppLauncher.cpp"/>
       <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppLauncher.h"/>
       <FILE id="QfgT5g" name="BluetoothStatus.cpp" compile="1" resource="0"
@@ -303,12 +301,16 @@
             file="Source/GridLayoutManager.h"/>
       <FILE id="Vgvkvg" name="I2CBus.cpp" compile="1" resource="0" file="Source/I2CBus.cpp"/>
       <FILE id="b2jNEM" name="I2CBus.h" compile="0" resource="0" file="Source/I2CBus.h"/>
-      <FILE id="Ury6Cc" name="Utils.cpp" compile="1" resource="0" file="Source/Utils.cpp"/>
-      <FILE id="AywA6o" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
+      <FILE id="xoVLAp" name="PokeLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/PokeLookAndFeel.cpp"/>
+      <FILE id="g1eykD" name="PokeLookAndFeel.h" compile="0" resource="0"
+            file="Source/PokeLookAndFeel.h"/>
       <FILE id="Nv567Q" name="WindowFocusedTimer.cpp" compile="1" resource="0"
             file="Source/WindowFocusedTimer.cpp"/>
       <FILE id="dwyuoT" name="WindowFocusedTimer.h" compile="0" resource="0"
             file="Source/WindowFocusedTimer.h"/>
+      <FILE id="Ury6Cc" name="Utils.cpp" compile="1" resource="0" file="Source/Utils.cpp"/>
+      <FILE id="AywA6o" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

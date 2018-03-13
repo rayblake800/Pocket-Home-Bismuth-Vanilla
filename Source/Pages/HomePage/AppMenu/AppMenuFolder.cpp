@@ -16,7 +16,7 @@ iconThread(iconThread)
     maxRows = config.getConfigValue<int>(MainConfigFile::maxRowsKey);
     maxColumns = config.getConfigValue<int>(MainConfigFile::maxColumnsKey);
 #if JUCE_DEBUG
-    setName(String("AppMenuFolder")+folderItem->getAppName());
+    setName(String("AppMenuFolder") + folderItem->getAppName());
 #endif
 }
 
@@ -32,8 +32,8 @@ void AppMenuFolder::updateGridSize(int maxRows, int maxColumns)
     {
         this->maxRows = std::max<int>(maxRows, 1);
         this->maxColumns = std::max<int>(maxColumns, 1);
-        DBG(String("AppFolder: setting grid size of ") + String(maxRows)
-                + String(" rows, ") + String(maxColumns) + String(" columns"));
+        DBG("AppMenuFolder::" << __func__ << ": grid size set to " << maxRows
+                << " rows, " << maxColumns << " columns");
         layoutButtons();
     }
 }
@@ -49,9 +49,8 @@ void AppMenuFolder::reload()
     {
         insertButton(menuItem, folderButtons.size(), false);
     }
-    DBG(String("AppFolder::reload: added ") + String(folderButtons.size())
-            + String(" Buttons from ") + String(menuItems.size())
-            + String(" menu items"));
+    DBG("AppMenuFolder::" << __func__ << ": added " << folderButtons.size() 
+            << " buttons from " << menuItems.size() << " menu items");
     layoutButtons();
 }
 
@@ -63,12 +62,12 @@ bool AppMenuFolder::selectIndex(int index)
     if (validBtnIndex(index))
     {
         deselect();
-        DBG(String("Selecting button ") + String(index));
+        DBG("AppMenuFolder::" << __func__  << ": selecting button " << index);
         selectedIndex = index;
         folderButtons[selectedIndex]->setSelected(true);
         return true;
     }
-    DBG(String("Failed to select button ") + String(index));
+    DBG("AppMenuFolder::" << __func__ << ": Failed to select button " << index);
     return false;
 }
 
@@ -118,9 +117,9 @@ void AppMenuFolder::insertButton
     folderButtons.insert(index, menuButton);
     if (selectedIndex >= index)
     {
-        DBG(String("index pushed from ") + String(selectedIndex)
-                + String(" to ") + String(selectedIndex + 1)
-                + String(" after insert at ") + String(index));
+        DBG("AppMenuFolder::" << __func__  << ": index pushed from " 
+                << selectedIndex << " to " << (selectedIndex + 1)
+                << " after insert at " << index);
         selectedIndex++;
     }
     if (updateLayout)
@@ -137,7 +136,8 @@ void AppMenuFolder::removeButton(int index)
 {
     if (validBtnIndex(index))
     {
-        DBG(String("Removing button at index ") + String(index));
+        DBG("AppMenuFolder::" << __func__  << ": Removing button at index "
+                << index);
         folderButtons.remove(index);
         layoutButtons();
     }
@@ -303,8 +303,9 @@ void AppMenuFolder::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
     bounds.reduce(margin * getWidth(), margin * getWidth());
-    DBG(String("AppFolder resized, layout bounds=")
-            + getScreenBounds().toString());
+    DBG("AppMenuFolder::" << __func__  << ": bounds="
+            << getScreenBounds().toString() << " layoutBounds=" 
+            <<bounds.toString());
     folderLayout.layoutComponents(bounds, getWidth() * xPadding,
             getHeight() * yPadding);
 }

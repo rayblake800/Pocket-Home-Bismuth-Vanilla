@@ -1,22 +1,8 @@
 #include "WindowFocusedTimer.h"
 
-/**
- * Adds the timer to the list of all timers.
- */
-WindowFocusedTimer::WindowFocusedTimer()
-{
-    const ScopedLock listLock(timerListLock);
-    allTimers.add(this);
-}
+WindowFocusedTimer::WindowFocusedTimer(String name) : name(name) { }
 
-/**
- * Removes the timer from the list of all timers.
- */
-WindowFocusedTimer::~WindowFocusedTimer()
-{
-    const ScopedLock listLock(timerListLock);
-    allTimers.removeFirstMatchingValue(this);
-}
+WindowFocusedTimer::~WindowFocusedTimer() { }
 
 /**
  * Calling this on an active timer will stop the timer.  Calling it on 
@@ -33,22 +19,14 @@ void WindowFocusedTimer::stopTimer()
  */
 void WindowFocusedTimer::windowFocusLost()
 {
-    const ScopedLock listLock(timerListLock);
-    int suspended = 0;
-    for (WindowFocusedTimer* timer : allTimers)
+    if (isTimerRunning())
     {
-        if (timer->isTimerRunning())
-        {
-            uint32 endTime = Time::getMillisecondCounter() + 
-                    timer->getTimerInterval();
-            timer->stopTimer();
-            timer->suspendedEndTime = endTime;
-            timer->onSuspend();
-            suspended++;
-        }
+        uint32 endTime = Time::getMillisecondCounter() + getTimerInterval();
+        stopTimer();
+        suspendedEndTime = endTime;
+        onSuspend();
+        DBG("WindowFocusedTimer::" << __func__ << ": Suspended timer " << name);
     }
-    DBG(String("WindowFocusedTimer: Suspended ") + String(suspended) + String("/") +
-            String(allTimers.size()) + String(" timers."));
 }
 
 /**
@@ -56,40 +34,24 @@ void WindowFocusedTimer::windowFocusLost()
  */
 void WindowFocusedTimer::windowFocusGained()
 {
-    const ScopedLock listLock(timerListLock);
-    int resumed = 0;
-    for (WindowFocusedTimer* timer : allTimers)
+    if (suspendedEndTime > 0)
     {
-        if (timer->suspendedEndTime > 0)
+        uint32 now = Time::getMillisecondCounter();
+        if (now > suspendedEndTime)
         {
-			uint32 now = Time::getMillisecondCounter();
-            if (now > timer->suspendedEndTime)
-            {
-                DBG("Timer resumed and immediately finishes");
-                timer->timerCallback();
-            }
-            else
-            {
-                uint32 timeLeft = now - timer->suspendedEndTime;
-                DBG(String("Timer resumed with ") + String(timeLeft) + " ms");
-                timer->startTimer(timeLeft);
-            }
-            timer->suspendedEndTime = 0;
-            resumed++;
+            DBG("WindowFocusedTimer::" << __func__ << ": Timer " << name
+                    << " resumed and immediately finishes");
+            timerCallback();
         }
+        else
+        {
+            uint32 timeLeft = suspendedEndTime - now;
+            DBG("WindowFocusedTimer::" << __func__ << ": Timer " << name 
+                    << " resumed at " << String(timeLeft) << " milliseconds");
+            startTimer(timeLeft);
+        }
+        suspendedEndTime = 0;
     }
-    DBG(String("WindowFocusedTimer: Resumed ") + String(resumed) + String("/") +
-            String(allTimers.size()) + String(" timers."));
 }
 
-/**
- * Protects the time list from concurrent modification.
- */
-CriticalSection WindowFocusedTimer::timerListLock;
-
-/**
- * Tracks all WindowFocusedTimers to ensure each one is notified when 
- * window focus changes.
- */
-Array<WindowFocusedTimer*> WindowFocusedTimer::allTimers;
 

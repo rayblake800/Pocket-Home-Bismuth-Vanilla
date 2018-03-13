@@ -35,13 +35,40 @@ WifiStatus::Listener::Listener() { }
 
 WifiStatus::Listener::~Listener() { }
 
+#if JUCE_DEBUG
+
+/**
+ * @param event
+ * @return a string representation of event for debugging purposes
+ */
+String WifiStatus::wifiEventString(WifiEvent event)
+{
+    switch (event)
+    {
+        case wifiEnabled:
+            return "wifiEnabled";
+        case wifiDisabled:
+            return "wifiDisabled";
+        case wifiConnected:
+            return "wifiConnected";
+        case wifiDisconnected:
+            return "wifiDisconnected";
+        case wifiConnectionFailed:
+            return "wifiConnectionFailed";
+        case wifiBusy:
+            return "wifiBusy";
+    }
+}
+#endif
+
 /**
  * Add a listener to the list of objects receiving updates on wifi state
  * changes.
  */
 void WifiStatus::addListener(WifiStatus::Listener* listener)
 {
-    if (listeners.contains(listener))
+    const ScopedLock lock(listenerLock);
+    if (!listeners.contains(listener))
     {
         listeners.add(listener);
     }
@@ -53,6 +80,7 @@ void WifiStatus::addListener(WifiStatus::Listener* listener)
  */
 void WifiStatus::removeListener(WifiStatus::Listener* listener)
 {
+    const ScopedLock lock(listenerLock);
     listeners.removeAllInstancesOf(listener);
 }
 
@@ -62,6 +90,7 @@ void WifiStatus::removeListener(WifiStatus::Listener* listener)
  */
 void WifiStatus::clearListeners()
 {
+    const ScopedLock lock(listenerLock);
     listeners.clear();
 }
 
@@ -77,69 +106,46 @@ WifiStatus::WifiStatus() : Thread("WifiStatusThread")
 }
 
 /**
- * call listener->handleWifiEnabled() for each registered listener object.
+ * call listener->handleWifiEvent(event) for each registered listener object.
  */
-void WifiStatus::notifyListenersWifiEnabled()
+void WifiStatus::notifyListeners(WifiEvent event)
 {
-    for (WifiStatus::Listener* listener : listeners)
+    MessageManager::callAsync([this, event]()
     {
-        listener->handleWifiEnabled();
-    }
+        const ScopedLock lock(listenerLock);
+        DBG("WifiStatus::" << __func__ << ":" << wifiEventString(event)
+                << ": notifying " << listeners.size() << " listeners.");
+        for (WifiStatus::Listener* listener : listeners)
+        {
+            listener->handleWifiEvent(event);
+        }
+    });
 }
 
 /**
- * call listener->handleWifiDisabled() for each registered listener object.
+ * Shut down the WifiStatus thread when the application window loses
+ * focus.
  */
-void WifiStatus::notifyListenersWifiDisabled()
+void WifiStatus::windowFocusLost()
 {
-    for (WifiStatus::Listener* listener : listeners)
-    {
-        listener->handleWifiDisabled();
-    }
+    DBG("WifiStatus::" << __func__ << ": wifi thread is "
+            << (isThreadRunning() ? "running, stopping thread" : "not running"));
+    signalThreadShouldExit();
 }
 
 /**
- * call listener->handleWifiConnected() for each registered listener object.
+ * If wifi is enabled, restart the WifiStatus thread.
  */
-void WifiStatus::notifyListenersWifiConnected()
+void WifiStatus::windowFocusGained()
 {
-    for (WifiStatus::Listener* listener : listeners)
+    if (isEnabled())
     {
-        listener->handleWifiConnected();
+        DBG("WifiStatus::" << __func__ << ": restarting wifi thread");
+        startThread();
     }
-}
-
-/**
- * call listener->handleWifiDisconnected() for each registered listener 
- * object.
- */
-void WifiStatus::notifyListenersWifiDisconnected()
-{
-    for (WifiStatus::Listener* listener : listeners)
+    else
     {
-        listener->handleWifiDisconnected();
-    }
-}
-
-/**
- * call listener->handleWifiFailedConnect() for each registered listener 
- * object.
- */
-void WifiStatus::notifyListenersWifiFailedConnect()
-{
-    for (WifiStatus::Listener* listener : listeners)
-    {
-        listener->handleWifiFailedConnect();
-    }
-}
-
-/**
- * call listener->handleWifiBusy() for each registered listener object.
- */
-void WifiStatus::notifyListenersWifiBusy()
-{
-    for (WifiStatus::Listener* listener : listeners)
-    {
-        listener->handleWifiBusy();
+        DBG("WifiStatus::" << __func__
+                << ": wifi disabled, skipping wifi thread start");
     }
 }

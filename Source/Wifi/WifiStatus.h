@@ -7,9 +7,11 @@
 #pragma once
 #include <exception>
 #include "../../JuceLibraryCode/JuceHeader.h"
+#include "../WindowFocus.h"
 #include "WifiAccessPoint.h"
 
-class WifiStatus : public Thread {
+class PocketHomeWindow;
+class WifiStatus : protected Thread, private WindowFocus::Listener {
 public:
     virtual ~WifiStatus();
 
@@ -29,7 +31,19 @@ public:
      * been set.
      */
     static void setInstance(WifiStatus* wifiStatus);
+    
+    /**
+     * If the wifi status thread is not running, it will be started, as long
+     * as NetworkManager and wlan0 are functioning normally and wifi is not
+     * disabled.
+     */
+    void startWifiThread();
 
+    /**
+     * If the wifi status thread is running, this will stop it.
+     */
+    void stopWifiThread();
+    
     /**
      * @return the list of all Wifi access points close enough to detect.
      */
@@ -76,18 +90,32 @@ public:
     virtual void disconnect() = 0;
 
     /**
+     * All wifi state changes that should be shared with listeners
+     */
+    enum WifiEvent{
+        wifiEnabled,
+        wifiDisabled,
+        wifiConnected,
+        wifiDisconnected,
+        wifiConnectionFailed,
+        wifiBusy
+    };
+    
+#if JUCE_DEBUG
+    /**
+     * @param event
+     * @return a string representation of event for debugging purposes
+     */
+    String wifiEventString(WifiEvent event);
+#endif
+    /**
      *registered Listener objects receive updates whenever wifi status changes.
      */
     class Listener {
     public:
         Listener();
         virtual ~Listener();
-        virtual void handleWifiEnabled() { }
-        virtual void handleWifiDisabled() { }
-        virtual void handleWifiConnected() { }
-        virtual void handleWifiDisconnected() { }
-        virtual void handleWifiFailedConnect() { }
-        virtual void handleWifiBusy() { }
+        virtual void handleWifiEvent(WifiEvent event) { }
     };
     
     /**
@@ -127,37 +155,25 @@ protected:
     WifiStatus();
 
     /**
-     * call listener->handleWifiEnabled() for each registered listener object.
-     */
-    void notifyListenersWifiEnabled();
-
-    /**
-     * call listener->handleWifiDisabled() for each registered listener object.
-     */
-    void notifyListenersWifiDisabled();
-
-    /**
-     * call listener->handleWifiConnected() for each registered listener object.
-     */
-    void notifyListenersWifiConnected();
-
-    /**
-     * call listener->handleWifiDisconnected() for each registered listener 
+     * call listener->handleWifiEvent(event) for each registered listener 
      * object.
      */
-    void notifyListenersWifiDisconnected();
+    void notifyListeners(WifiEvent event);
 
-    /**
-     * call listener->handleWifiFailedConnect() for each registered listener 
-     * object.
-     */
-    void notifyListenersWifiFailedConnect();
-
-    /**
-     * call listener->handleWifiBusy() for each registered listener object.
-     */
-    void notifyListenersWifiBusy();
 private:
+    
+    /**
+     * Shut down the WifiStatus thread when the application window loses
+     * focus.
+     */
+    void windowFocusLost() override;
+
+    /**
+     * If wifi is enabled, restart the WifiStatus thread.
+     */
+    void windowFocusGained() override;
+
+    CriticalSection listenerLock;
     Array<WifiStatus::Listener*> listeners;
     static ScopedPointer<WifiStatus> instance;
 };

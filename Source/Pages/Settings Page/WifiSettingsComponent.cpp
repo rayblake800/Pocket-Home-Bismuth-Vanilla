@@ -13,7 +13,7 @@ ConnectionSettingsComponent(openWifiPage, "wifi")
     WifiStatus* wifiStatus = WifiStatus::getInstance();
     if (wifiStatus == nullptr)
     {
-        DBG(__func__ << ":wifi thread is null!");
+        DBG("WifiSettingsComponent::" << __func__ << ": wifi thread is null!");
         setPageButtonEnabled(false);
         setToggleState(false);
     }
@@ -43,39 +43,38 @@ void WifiSettingsComponent::enabledStateChanged(bool enabled)
     WifiStatus* wifiStatus = WifiStatus::getInstance();
     if (wifiStatus != nullptr)
     {
-        wifiStatus->isEnabled() ? wifiStatus->enableWifi()
-                : wifiStatus->disableWifi();
+        if(!enabled && wifiStatus->isEnabled())
+        { 
+            wifiStatus->disableWifi();
+        }
+        else if(enabled && !wifiStatus->isEnabled())
+        {
+             wifiStatus->enableWifi();
+        }
+    }
+    else
+    {
+        DBG("WifiSettingsComponent::" << __func__ << ": wifiStatus is null!");
+        setToggleState(false);
     }
 }
 
-void WifiSettingsComponent::handleWifiEnabled()
+void WifiSettingsComponent::handleWifiEvent(WifiStatus::WifiEvent event)
 {
-    enableWifiActions();
-}
-
-void WifiSettingsComponent::handleWifiDisabled()
-{
-    enableWifiActions();
-}
-
-void WifiSettingsComponent::handleWifiConnected()
-{
-    enableWifiActions();
-}
-
-void WifiSettingsComponent::handleWifiDisconnected()
-{
-    enableWifiActions();
-}
-
-void WifiSettingsComponent::handleWifiFailedConnect()
-{
-    enableWifiActions();
-}
-
-void WifiSettingsComponent::handleWifiBusy()
-{
-    disableWifiActions();
+    DBG("WifiSettingsComponent::" << __func__ << ": handling event");
+    switch (event)
+    {
+        case WifiStatus::wifiDisabled:
+            setToggleState(false);
+        case WifiStatus::wifiEnabled:
+        case WifiStatus::wifiConnected:
+        case WifiStatus::wifiDisconnected:
+        case WifiStatus::wifiConnectionFailed:
+            enableWifiActions();
+            break;
+        case WifiStatus::wifiBusy:
+            disableWifiActions();
+    }
 }
 
 void WifiSettingsComponent::enableWifiActions()

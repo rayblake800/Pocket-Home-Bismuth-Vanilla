@@ -108,10 +108,12 @@ void foreachFile(const String& path, std::function<void(struct dirent*) > fn);
 
 static DrawableRectangle highlightFocus;
 
+#if JUCE_DEBUG
 /**
  * Print debug info about the component tree
  */
 void componentTrace();
+#endif
 
 /**
  * List all non-directory files in path

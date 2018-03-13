@@ -4,6 +4,7 @@
 #include "../../../Utils.h"
 
 WifiIcon::WifiIcon() :
+WindowFocusedTimer("WifiIcon"),
 ConfigurableImageComponent(ComponentConfigFile::wifiIconKey)
 {
 

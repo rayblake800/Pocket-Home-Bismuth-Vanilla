@@ -215,17 +215,16 @@ bool ConfigFile::propertyExists(var& config, String propertyKey)
  */
 var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
 {
-    bool exists = propertyExists(config, key);
-    DBG(key + (exists ? String(" exists") : String(" doesn't exist")));
     if (propertyExists(config, key))
     {
         return config.getProperty(key, var());
     }
     else
     {
+        DBG("ConfigFile::" << __func__ << ": key " << key 
+                << " doesn't exist in " << filename);
         if (defaultConfig.isVoid())
         {
-
             defaultConfig = JSON::parse(assetFile(filename));
         }
         fileChangesPending[filename] = true;

@@ -4,6 +4,7 @@
 #include "SettingsPage.h"
 
 SettingsPage::SettingsPage() :
+WindowFocusedTimer("SettingsPage"),
 PageComponent("SettingsPage",{
     {1,
         {
@@ -147,7 +148,7 @@ void SettingsPage::setScreenBrightness()
     {
 
         String result{child.readAllProcessOutput()};
-        DBG(result);
+        DBG("SettingsPage::" << __func__ << ": " << result);
     }
 #endif
 }

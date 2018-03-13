@@ -82,19 +82,6 @@ void PageStackComponent::popPage(Transition transition)
     }
 }
 
-/**
- * The PocketHomeWindow that owns this PageStackComponent uses this method
- * to notify the PageStackComponent when window focus changes, so that
- * it can pass the notification on to all pages in the page stack.
- */
-void PageStackComponent::windowFocusChanged(bool windowFocused)
-{
-    for (Page* page : stack)
-    {
-        page->windowFocusChanged(windowFocused);
-    }
-}
-
 void PageStackComponent::transitionIn(Page *page, Transition transition,
         int durationMillis, bool reverse)
 {

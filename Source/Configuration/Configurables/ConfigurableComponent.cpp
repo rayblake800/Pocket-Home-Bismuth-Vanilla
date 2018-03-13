@@ -19,7 +19,8 @@ void ConfigurableComponent::applyConfigBounds()
 
     if (component == nullptr)
     {
-        DBG("Error: non-component class trying to inherit ConfigurableComponent");
+        DBG("ConfigurableComponent::" << __func__ 
+                << ": this object is not a component!");
         return;
     }
 
