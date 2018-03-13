@@ -15,10 +15,13 @@
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiAccessPoint.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/WifiSettingsPage.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiAccessPoint.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/ConnectionPage.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/ConnectionPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/HomePage/IconThread.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/WifiSettingsComponent.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiStatusJson.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/ConnectionSettingsComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiStatusNM.cpp</file>
         </group>
     </open-files>
 </project-private>

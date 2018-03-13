@@ -59,7 +59,7 @@ void WifiIcon::timerCallback()
         {
             // 0 to 100
             float sigStrength =
-                    median<float>(0, accessPoint.getSignalStrength(), 100);
+                    median<float>(0, accessPoint.getSignalStrength(), 99);
             wifiState = (WifiIconImage) (2 + (int) (sigStrength * 3 / 100));
         }
     }// wifi on but no connection

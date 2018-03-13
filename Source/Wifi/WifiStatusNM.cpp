@@ -250,6 +250,11 @@ void WifiStatusNM::setConnectedAccessPoint
                     psk.toRawUTF8(), nullptr);
         }
     }
+    {
+        DBG("WifiStatusNM::" << __func__ << " no psk provided, and access point"
+                << (ap.getRequiresAuth() ? " needs " : " doesn't need ")
+                << "authentication.");
+    }
 
     nm_client_add_and_activate_connection(nmClient,
             connection,
