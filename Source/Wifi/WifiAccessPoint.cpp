@@ -21,15 +21,6 @@ hash(String()) { }
 WifiAccessPoint::~WifiAccessPoint() { }
 
 /**
- * @return a WifiAccessPoint object that represents the absence of a
- * wifi access point.
- */
-const WifiAccessPoint WifiAccessPoint::null()
-{
-    return WifiAccessPoint();
-}
-
-/**
  * @return true iff this WifiAccessPoint is null.
  */
 bool WifiAccessPoint::isNull() const

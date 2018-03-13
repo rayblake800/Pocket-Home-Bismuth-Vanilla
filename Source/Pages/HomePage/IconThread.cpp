@@ -297,6 +297,6 @@ void IconThread::mapIcons()
             }
         }
     }
-    DBG("IconThread::" << __func__ << ": Mapped " << iconPaths.size() 
+    DBG("IconThread::" << __func__ << ": Mapped " << String(iconPaths.size())
             << " icon files.");
 }

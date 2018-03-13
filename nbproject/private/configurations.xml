@@ -4994,6 +4994,8 @@
         <in>PokeLookAndFeel.h</in>
         <in>Utils.cpp</in>
         <in>Utils.h</in>
+        <in>WindowFocus.cpp</in>
+        <in>WindowFocus.h</in>
         <in>WindowFocusedTimer.cpp</in>
         <in>WindowFocusedTimer.h</in>
       </df>

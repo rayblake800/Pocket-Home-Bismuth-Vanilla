@@ -6,7 +6,7 @@
 #    include "../JuceLibraryCode/JuceHeader.h"
 #    define LIBNM_ITERATION_PERIOD 100 // milliseconds
 
-WifiStatusNM::WifiStatusNM() : connectedAP(WifiAccessPoint::null())
+WifiStatusNM::WifiStatusNM() : connectedAP(WifiAccessPoint())
 {
     if (!connectToNetworkManager())
     {
@@ -86,15 +86,18 @@ Array<WifiAccessPoint> WifiStatusNM::nearbyAccessPoints()
 }
 
 /**
- * @return the currently connected access point, or WifiAccessPoint::null()
+ * @return the currently connected access point, or WifiAccessPoint()
  * if no access point is connected. 
  */
 WifiAccessPoint WifiStatusNM::connectedAccessPoint() const
 {
     if (!connected)
     {
-        return WifiAccessPoint::null();
+        DBG("WifiStatusNM::" << __func__ < ": not connected, returning null");
+        return WifiAccessPoint();
     }
+    DBG("WifiStatusNM::" << __func__ << ": returning connected access point "
+            << connectedAP.getSSID());
     return connectedAP;
 }
 
@@ -122,12 +125,17 @@ void WifiStatusNM::enableWifi()
 {
     if (!enabled)
     {
+        DBG("WifiStatusNM::" << __func__ << ": enabling wifi connections");
         notifyListeners(wifiBusy);
         nm_client_wireless_set_enabled(nmClient, true);
         if (!isThreadRunning())
         {
             startThread();
         }
+    }
+    else
+    {
+        DBG("WifiStatusNM::" << __func__ << ": wifi is already enabled!");
     }
 }
 
@@ -138,8 +146,13 @@ void WifiStatusNM::disableWifi()
 {
     if (enabled)
     {
+        DBG("WifiStatusNM::" << __func__ << ": disabling wifi connections");
         notifyListeners(wifiBusy);
         nm_client_wireless_set_enabled(nmClient, false);
+    }
+    else
+    {
+        DBG("WifiStatusNM::" << __func__ << ": wifi is already disabled!");
     }
 }
 
@@ -149,6 +162,8 @@ void WifiStatusNM::disableWifi()
 void WifiStatusNM::setConnectedAccessPoint
 (const WifiAccessPoint& ap, String psk)
 {
+    DBG("WifiStatusNM::" << __func__ << ": trying to connect to "
+            << ap.getSSID());
     notifyListeners(wifiBusy);
     const char* apPath = nullptr;
     //FIXME: expand WifiAccessPoint struct to know which NMAccessPoint it is
@@ -156,6 +171,8 @@ void WifiStatusNM::setConnectedAccessPoint
             (NM_DEVICE_WIFI(nmDevice));
     if (apList == nullptr)
     {
+        DBG("WifiStatusNM::" << __func__
+                << ": can't connect, no access points found.");
         return;
     }
     NMAccessPoint* candidateAP = nullptr;
@@ -171,10 +188,13 @@ void WifiStatusNM::setConnectedAccessPoint
     }
     if (!apPath)
     {
+        DBG("WifiStatusNM::" << __func__
+                << ": no matching access point in list of length "
+                << String(apList->len));
         return;
     }
     connecting = true;
-
+    DBG("WifiStatusNM::" << __func__ << ": matching NMAccessPoint found");
     NMConnection* connection = nm_connection_new();
     NMSettingWireless* settingWifi = (NMSettingWireless*)
             nm_setting_wireless_new();
@@ -198,6 +218,8 @@ void WifiStatusNM::setConnectedAccessPoint
             && nm_access_point_get_rsn_flags(candidateAP)
             == NM_802_11_AP_SEC_NONE)
         {
+            DBG("WifiStatusNM::" << __func__
+                    << ": access point has WEP security");
             /* WEP */
             nm_setting_wireless_security_set_wep_key(settingWifiSecurity,
                     0, psk.toRawUTF8());
@@ -222,6 +244,8 @@ void WifiStatusNM::setConnectedAccessPoint
         }
         else
         {
+            DBG("WifiStatusNM::" << __func__
+                    << ": access point has WPA security");
             g_object_set(settingWifiSecurity, NM_SETTING_WIRELESS_SECURITY_PSK,
                     psk.toRawUTF8(), nullptr);
         }
@@ -242,13 +266,22 @@ void WifiStatusNM::disconnect()
 {
     if (connected)
     {
+        DBG("WifiStatusNM::" << __func__ << " disconnecting from "
+                << connectedAP.getSSID());
         //TODO: test that this doesn't do something unpleasant, there was
         //probably a reason why this method originally did nothing to actually
         //disconnect
+
         jassert(nmDevice != nullptr);
         nm_device_disconnect(nmDevice, nullptr, nullptr);
         connected = false;
         notifyListeners(wifiDisconnected);
+    }
+    else
+    {
+
+        DBG("WifiStatusNM::" << __func__
+                << " trying to disconnect, but there is no connection.");
     }
 }
 
@@ -268,6 +301,7 @@ void WifiStatusNM::handleWirelessEnabled()
     }
     else
     {
+
         notifyListeners(wifiDisabled);
         signalThreadShouldExit();
         notify();
@@ -307,6 +341,9 @@ void WifiStatusNM::handleWirelessConnected()
         case NM_DEVICE_STATE_NEED_AUTH:
             if (connecting)
             {
+
+                DBG("WifiStatusNM::" << __func__ 
+                        << " missing auth, cancelling connection.");
                 NMActiveConnection *conn =
                         nm_client_get_activating_connection(nmClient);
                 removeNMConnection(nmDevice, conn);
@@ -341,6 +378,7 @@ void WifiStatusNM::handleWirelessConnected()
         default:
             if (connecting || connected)
             {
+
                 DBG("WifiStatusNM::" << __func__
                         << ": wlan0 device entered unmanaged state: " << state);
                 handle_active_access_point(this);
@@ -364,6 +402,7 @@ void WifiStatusNM::handleConnectedAccessPoint()
     }
     else
     {
+
         DBG("WifiStatusNM::" << __func__ << ":  ssid = "
                 << connectedAP.getSSID());
     }
@@ -390,6 +429,7 @@ bool WifiStatusNM::connectToNetworkManager()
     }
     if (!nmDevice || !NM_IS_DEVICE(nmDevice))
     {
+
         DBG("WifiStatusNM::" << __func__ <<
                 ":  failed to connect to nmdevice wlan0 over dbus");
     }
@@ -441,6 +481,7 @@ void WifiStatusNM::run()
     while (!threadShouldExit())
     {
         {
+
             const MessageManagerLock mmLock;
             bool dispatched = g_main_context_iteration(context, false);
         }
@@ -511,6 +552,7 @@ char* WifiStatusNM::hashAP(NMAccessPoint* ap)
 
     /* duplicate it */
     memcpy(&input[33], &input[0], 32);
+
     return g_compute_checksum_for_data(G_CHECKSUM_MD5, input, sizeof (input));
 }
 
@@ -520,6 +562,7 @@ char* WifiStatusNM::hashAP(NMAccessPoint* ap)
 bool WifiStatusNM::resolveAPSecurity(NMAccessPoint *ap)
 {
     //FIXME: Assumes all security types equal
+
     return (
             nm_access_point_get_flags(ap) == NM_802_11_AP_FLAGS_PRIVACY ||
             nm_access_point_get_wpa_flags(ap) != NM_802_11_AP_SEC_NONE ||
@@ -548,8 +591,10 @@ WifiAccessPoint WifiStatusNM::createNMWifiAccessPoint(NMAccessPoint *ap)
     }
 
     if (!ssid_str || !ssid)
+    {
         DBG("WifiStatusNM::" << __func__
             << ": libnm conversion of ssid to utf8 failed, using empty string");
+    }
 
     return WifiAccessPoint(!ssid_str ? "" : ssid_str,
             nm_access_point_get_strength(ap),
@@ -559,7 +604,7 @@ WifiAccessPoint WifiStatusNM::createNMWifiAccessPoint(NMAccessPoint *ap)
 
 /**
  * @return WifiAccessPoint data of the access point connected to wdev, or
- * WifiAccessPoint::null() if no connection is found.
+ * WifiAccessPoint() if no connection is found.
  */
 WifiAccessPoint WifiStatusNM::getNMConnectedAP(NMDeviceWifi *wdev)
 {
@@ -568,7 +613,8 @@ WifiAccessPoint WifiStatusNM::getNMConnectedAP(NMDeviceWifi *wdev)
     if (!wdev || !ap)
     {
         DBG("WifiStatusNM::" << __func__ << ": no NMAccessPoint found!");
-        return WifiAccessPoint::null();
+
+        return WifiAccessPoint();
     }
 
     return createNMWifiAccessPoint(ap);
@@ -600,6 +646,7 @@ void WifiStatusNM::removeNMConnection(NMDevice *nmdevice,
                 nm_remote_connection_delete(candidate, nullptr, &err);
                 if (err)
                 {
+
                     DBG("WifiStatusNM::" << __func__
                             << ": failed to remove active connection!");
                     DBG("WifiStatusNM::" << __func__ << ": "
@@ -618,6 +665,7 @@ void WifiStatusNM::removeNMConnection(NMDevice *nmdevice,
  */
 bool WifiStatusNM::isValidWEPKeyFormat(String key)
 {
+
     return (key.length() == 10) || (key.length() == 26);
 }
 
@@ -627,6 +675,7 @@ bool WifiStatusNM::isValidWEPKeyFormat(String key)
  */
 bool WifiStatusNM::isValidWEPPassphraseFormat(String phrase)
 {
+
     return (phrase.length() == 5) || (phrase.length() == 13);
 }
 
@@ -642,6 +691,7 @@ void WifiStatusNM::handle_add_and_activate_finish(NMClient *client,
     WifiStatusNM *wifiStatus = (WifiStatusNM *) user_data;
     if (err)
     {
+
         DBG("WifiStatusNM::" << __func__
                 << ": failed to add/activate connection!");
         DBG("WifiStatusNM::" << __func__ << ": " << err->message);
@@ -655,12 +705,14 @@ void WifiStatusNM::handle_wireless_enabled(WifiStatusNM *wifiStatus)
             << NM_CLIENT_WIRELESS_ENABLED << ": changed! ");
     if (wifiStatus->isEnabled())
     {
+
         wifiStatus->handleWirelessEnabled();
     }
 }
 
 void WifiStatusNM::handle_wireless_connected(WifiStatusNM *wifiStatus)
 {
+
     DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
             << NM_DEVICE_STATE << ": changed! ");
     wifiStatus->handleWirelessConnected();
@@ -668,6 +720,7 @@ void WifiStatusNM::handle_wireless_connected(WifiStatusNM *wifiStatus)
 
 void WifiStatusNM::handle_active_access_point(WifiStatusNM *wifiStatus)
 {
+
     DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
             << NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT << ": changed! ");
     wifiStatus->handleConnectedAccessPoint();

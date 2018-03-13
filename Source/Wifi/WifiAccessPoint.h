@@ -28,12 +28,6 @@ public:
     virtual ~WifiAccessPoint();
 
     /**
-     * @return a WifiAccessPoint object that represents the absence of a
-     * wifi access point.
-     */
-    static const WifiAccessPoint null();
-
-    /**
      * @return true iff this WifiAccessPoint is null.  All WifiAccessPoint
      * objects created with the default constructor will be null.
      */

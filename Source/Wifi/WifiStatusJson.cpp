@@ -5,7 +5,7 @@
 #include "WifiStatusJson.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
-WifiStatusJson::WifiStatusJson() : connectedAP(WifiAccessPoint::null()) { }
+WifiStatusJson::WifiStatusJson() : connectedAP(WifiAccessPoint()) { }
 
 WifiStatusJson::~WifiStatusJson() { }
 
@@ -29,7 +29,7 @@ WifiAccessPoint WifiStatusJson::connectedAccessPoint() const
 {
     if (!connected)
     {
-        return WifiAccessPoint::null();
+        return WifiAccessPoint();
     }
     return connectedAP;
 }

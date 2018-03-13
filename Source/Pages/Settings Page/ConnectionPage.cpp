@@ -7,7 +7,7 @@ ConnectionPage<ConnectionPoint>::ConnectionPage() :
 PageComponent("ConnectionPage",{}, true),
 prevPageBtn(ComponentConfigFile::pageUpKey),
 nextPageBtn(ComponentConfigFile::pageDownKey),
-selectedConnection(ConnectionPoint::null())
+selectedConnection(ConnectionPoint())
 {
     prevPageBtn.addListener(this);
     nextPageBtn.addListener(this);
@@ -32,7 +32,7 @@ getSelectedConnection()
  * Sets ConnectionPoint connection as the selected connection.  When a
  * connection is selected, this page will show details and controls for that
  * connection, and the other connections on the list will be hidden.  When
- * set to ConnectionPoint::null(), the full ConnectionPoint list will be shown 
+ * set to ConnectionPoint(), the full ConnectionPoint list will be shown 
  * again.
  */
 template<class ConnectionPoint>
@@ -46,7 +46,7 @@ void ConnectionPage<ConnectionPoint>::setSelectedConnection
         if (!selectedConnection.isNull())
         {
             selectionChanged = true;
-            selectedConnection = ConnectionPoint::null();
+            selectedConnection = ConnectionPoint();
         }
     }
     else if (connection != selectedConnection)
@@ -68,7 +68,7 @@ template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::clearConnectionList()
 {
     connectionIndex = 0;
-    selectedConnection = ConnectionPoint::null();
+    selectedConnection = ConnectionPoint();
     for (ConnectionListItem* listItem : connectionItems)
     {
         removeChildComponent(listItem);
@@ -126,7 +126,7 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
          i < connectionIndex + connectionsPerPage; i++)
     {
         ConnectionPoint connection = (i < connectionItems.size() && i >= 0) ?
-                connectionItems[i]->getConnection() : ConnectionPoint::null();
+                connectionItems[i]->getConnection() : ConnectionPoint();
         if (showList || connection == selectedConnection)
         {
             ConnectionListItem* listItem = (i < connectionItems.size()) ?
@@ -236,7 +236,7 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
                 }
                 else
                 {
-                    setSelectedConnection(ConnectionPoint::null());
+                    setSelectedConnection(ConnectionPoint());
                 }
                 return;
             }
@@ -261,7 +261,7 @@ bool ConnectionPage<ConnectionPoint>::overrideBackButton()
     }
     DBG("ConnectionPage::"<<__func__<<": deselecting connection "
             <<selectedConnection.toString());
-    setSelectedConnection(ConnectionPoint::null());
+    setSelectedConnection(ConnectionPoint());
     return true;
 }
 
@@ -273,7 +273,7 @@ bool ConnectionPage<ConnectionPoint>::keyPressed(const KeyPress& key)
 {
     if (key == KeyPress::escapeKey)
     {
-        setSelectedConnection(ConnectionPoint::null());
+        setSelectedConnection(ConnectionPoint());
     }
 };
 

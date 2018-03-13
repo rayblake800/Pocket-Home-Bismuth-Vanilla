@@ -5,9 +5,10 @@
  * show a list of connections and allow the user to connect or disconnect
  * from connections in the list.
  * 
- * ConnectionPoint must have a static method ConnectionPoint null() returning
- * an object representing an absent connection, and a method bool isNull()
- * that returns true if the connection is a null connection. 
+ * ConnectionPoint must have a default constructor that returns
+ * an immutable object representing an absent connection, and a method 
+ * bool isNull() that returns true if the connectionPoint is one of these
+ * default ConnectionPoint objects. 
  */
 
 #pragma once
