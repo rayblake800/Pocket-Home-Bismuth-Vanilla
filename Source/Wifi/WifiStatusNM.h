@@ -137,17 +137,7 @@ private:
      * @return true iff phrase has the correct format for a WEP passphrase.
      */
     bool isValidWEPPassphraseFormat(String phrase);
-
-    //##############  NetworkManager callback functions ###########################
-    // These are called by the NetworkManager after wifi state changes.
-    static void handle_add_and_activate_finish(NMClient *client,
-        NMActiveConnection *active, const char* path, GError *err, 
-            gpointer user_data);
-    static void handle_wireless_enabled(WifiStatusNM *wifiStatus);
-    static void handle_wireless_connected(WifiStatusNM *wifiStatus);
-    static void handle_active_access_point(WifiStatusNM *wifiStatus);
-    static void handle_changed_access_points(WifiStatusNM *wifiStatus);
-    
+  
     Array<WifiStatus::Listener*> listeners;
     WifiAccessPoint connectedAP;
     bool enabled = false;
