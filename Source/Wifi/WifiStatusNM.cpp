@@ -8,13 +8,60 @@
 
 //##############  NetworkManager callback functions ###########################
 // These are called by the NetworkManager after wifi state changes.
+
 static void handle_add_and_activate_finish(NMClient *client,
-        NMActiveConnection *active, const char* path, GError *err,
-        gpointer user_data);
-static void handle_wireless_enabled(WifiStatusNM *wifiStatus);
-static void handle_wireless_connected(WifiStatusNM *wifiStatus);
-static void handle_active_access_point(WifiStatusNM *wifiStatus);
-static void handle_changed_access_points(WifiStatusNM *wifiStatus);
+        NMActiveConnection *active,
+        const char* path,
+        GError *err,
+        gpointer user_data)
+{
+    WifiStatusNM *wifiStatus = (WifiStatusNM *) user_data;
+    if (err)
+    {
+
+        DBG("WifiStatusNM::" << __func__
+                << ": failed to add/activate connection!");
+        DBG("WifiStatusNM::" << __func__ << ": " << err->message);
+        wifiStatus->handleWirelessConnected();
+    }
+}
+
+static void handle_wireless_enabled(WifiStatusNM *wifiStatus)
+{
+    DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
+            << NM_CLIENT_WIRELESS_ENABLED << ": changed! ");
+    if (wifiStatus->isEnabled())
+    {
+
+        wifiStatus->handleWirelessEnabled();
+    }
+}
+
+static void handle_wireless_connected(WifiStatusNM *wifiStatus)
+{
+
+    DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
+            << NM_DEVICE_STATE << ": changed! ");
+    wifiStatus->handleWirelessConnected();
+}
+
+static void handle_active_access_point(WifiStatusNM *wifiStatus)
+{
+
+    DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
+            << NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT << ": changed! ");
+    wifiStatus->handleConnectedAccessPoint();
+}
+
+static void handle_changed_access_points(WifiStatusNM *wifiStatus)
+{
+    DBG("WifiStatusNM::" << __func__
+            << ": SIGNAL: access-point-added | access-point-removed: changed! ");
+    if (!wifiStatus->isEnabled())
+    {
+        wifiStatus->handleWirelessEnabled();
+    }
+}
 
 WifiStatusNM::WifiStatusNM() : connectedAP(WifiAccessPoint())
 {
@@ -695,60 +742,5 @@ bool WifiStatusNM::isValidWEPPassphraseFormat(String phrase)
     return (phrase.length() == 5) || (phrase.length() == 13);
 }
 
-//##############  NetworkManager callback functions ###########################
-// These are called by the NetworkManager after wifi state changes.
 
-void handle_add_and_activate_finish(NMClient *client,
-        NMActiveConnection *active,
-        const char* path,
-        GError *err,
-        gpointer user_data)
-{
-    WifiStatusNM *wifiStatus = (WifiStatusNM *) user_data;
-    if (err)
-    {
-
-        DBG("WifiStatusNM::" << __func__
-                << ": failed to add/activate connection!");
-        DBG("WifiStatusNM::" << __func__ << ": " << err->message);
-        wifiStatus->handleWirelessConnected();
-    }
-}
-
-void handle_wireless_enabled(WifiStatusNM *wifiStatus)
-{
-    DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
-            << NM_CLIENT_WIRELESS_ENABLED << ": changed! ");
-    if (wifiStatus->isEnabled())
-    {
-
-        wifiStatus->handleWirelessEnabled();
-    }
-}
-
-void handle_wireless_connected(WifiStatusNM *wifiStatus)
-{
-
-    DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
-            << NM_DEVICE_STATE << ": changed! ");
-    wifiStatus->handleWirelessConnected();
-}
-
-void handle_active_access_point(WifiStatusNM *wifiStatus)
-{
-
-    DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
-            << NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT << ": changed! ");
-    wifiStatus->handleConnectedAccessPoint();
-}
-
-void handle_changed_access_points(WifiStatusNM *wifiStatus)
-{
-    DBG("WifiStatusNM::" << __func__
-            << ": SIGNAL: access-point-added | access-point-removed: changed! ");
-    if (!wifiStatus->isEnabled())
-    {
-        wifiStatus->handleWirelessEnabled();
-    }
-}
 #endif // LINUX
