@@ -71,11 +71,16 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
     }
     if (connection.getRequiresAuth())
     {
-        const auto& psk = passwordEditor.getTextValue().toString();
+        const String& psk = passwordEditor.getText();
+        DBG("WifiSettingsPage::" << __func__ << ": connecting to " 
+                << connection.getSSID() << " with psk of length "
+                << psk.length());
         wifiStatus->setConnectedAccessPoint(connection, psk);
     }
     else
     {
+        DBG("WifiSettingsPage::" << __func__ << ": connecting to " 
+                << connection.getSSID() << " with no psk required.");
         wifiStatus->setConnectedAccessPoint(connection);
     }
     setCurrentlyConnecting(true);
