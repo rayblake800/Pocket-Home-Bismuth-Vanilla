@@ -230,6 +230,10 @@ void AppMenuComponent::loadBaseFolder()
         setLoadingState(true);
         desktopEntries.loadEntries([this](String loadingMsg)
         {
+	    if(!isLoading())
+	    {
+	        setLoadingState(true);
+	    }
             loadingSpinner.setLoadingText(loadingMsg);
         },
         [this, savedIndex]()
@@ -240,8 +244,12 @@ void AppMenuComponent::loadBaseFolder()
             openFolder(AppMenuItemFactory::createBaseFolderItem
                     (desktopEntries));
             openFolders.getFirst()->selectIndex(savedIndex);
-            layoutFolders();
-            setLoadingState(false);
+            loadingSpinner.setLoadingText("Building folder layout:");
+	    MessageManager::callAsync([this]()
+            {
+                layoutFolders();
+                setLoadingState(false);
+            });
         });
     }
 }

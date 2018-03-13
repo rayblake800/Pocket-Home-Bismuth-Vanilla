@@ -36,8 +36,8 @@ void ConfigurableImageComponent::applyConfigAssets(Array<String> assetNames,
     else
     {
         DBG("ConfigurableImageComponent::" << __func__
-                << ": couldn't load asset " << assetIndex
-                << ", file not found");
+                << ": couldn't load asset index " << assetIndex
+                << ", asset count is " << assetNames.size());
         assetIndex = -1;
     }
     for (int i = 0; i < colours.size(); i++)
