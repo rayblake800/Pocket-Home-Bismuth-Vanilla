@@ -69,8 +69,6 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
     {
         wifiStatus->disconnect();
     }
-    setCurrentlyConnecting(true);
-    errorLabel.setVisible(false);
     if (connection.getRequiresAuth())
     {
         const auto& psk = passwordEditor.getTextValue().toString();
@@ -80,6 +78,8 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
     {
         wifiStatus->setConnectedAccessPoint(connection);
     }
+    setCurrentlyConnecting(true);
+    errorLabel.setVisible(false);
 }
 
 /**
