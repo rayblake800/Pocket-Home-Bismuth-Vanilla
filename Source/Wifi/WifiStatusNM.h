@@ -120,11 +120,10 @@ private:
     WifiAccessPoint getNMConnectedAP(NMDeviceWifi *wdev);
     
     /**
-     * Close a specific connection on a specific wireless device.
-     * @param nmdevice
-     * @param conn
+     * Close a specific wifi connection
+     * @param conn the connection to close
      */
-    void removeNMConnection(NMDevice *nmdevice, NMActiveConnection *conn);
+    void removeNMConnection(NMActiveConnection* conn = nullptr);
     
     /**
      * @param key
@@ -143,9 +142,8 @@ private:
     bool enabled = false;
     bool connected = false;
     bool connecting = false;
-    NMClient *nmClient = nullptr;
+    NMClient* nmClient = nullptr;
     NMDevice* nmDevice = nullptr;
-    GMainLoop *loop;
     GMainContext *context;
 };
 #endif // LINUX

@@ -61,7 +61,6 @@ void WifiSettingsComponent::enabledStateChanged(bool enabled)
 
 void WifiSettingsComponent::handleWifiEvent(WifiStatus::WifiEvent event)
 {
-    DBG("WifiSettingsComponent::" << __func__ << ": handling event");
     switch (event)
     {
         case WifiStatus::wifiDisabled:

@@ -219,7 +219,6 @@ void WifiSettingsPage::setCurrentlyConnecting(bool currentlyConnecting)
  */
 void WifiSettingsPage::handleWifiEvent(WifiStatus::WifiEvent event)
 {
-    DBG("WifiSettingsPage::" << __func__ << ": handling wifi event");
     switch (event)
     {
         case WifiStatus::wifiEnabled:

@@ -18,7 +18,6 @@ static void handle_add_and_activate_finish(NMClient *client,
     WifiStatusNM *wifiStatus = (WifiStatusNM *) user_data;
     if (err)
     {
-
         DBG("WifiStatusNM::" << __func__
                 << ": failed to add/activate connection!");
         DBG("WifiStatusNM::" << __func__ << ": " << err->message);
@@ -32,14 +31,12 @@ static void handle_wireless_enabled(WifiStatusNM *wifiStatus)
             << NM_CLIENT_WIRELESS_ENABLED << ": changed! ");
     if (wifiStatus->isEnabled())
     {
-
         wifiStatus->handleWirelessEnabled();
     }
 }
 
 static void handle_wireless_connected(WifiStatusNM *wifiStatus)
 {
-
     DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
             << NM_DEVICE_STATE << ": changed! ");
     wifiStatus->handleWirelessConnected();
@@ -47,7 +44,6 @@ static void handle_wireless_connected(WifiStatusNM *wifiStatus)
 
 static void handle_active_access_point(WifiStatusNM *wifiStatus)
 {
-
     DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
             << NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT << ": changed! ");
     wifiStatus->handleConnectedAccessPoint();
@@ -72,6 +68,23 @@ WifiStatusNM::WifiStatusNM() : connectedAP(WifiAccessPoint())
         enabled = false;
         return;
     }
+    context = g_main_context_default();
+    
+    g_signal_connect_swapped(nmClient, "notify::" NM_CLIENT_WIRELESS_ENABLED,
+        G_CALLBACK(handle_wireless_enabled), this);
+
+    g_signal_connect_swapped(nmDevice, "notify::" NM_DEVICE_STATE,
+        G_CALLBACK(handle_wireless_connected), this);
+
+    g_signal_connect_swapped(NM_DEVICE_WIFI(nmDevice), "notify::" NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT,
+        G_CALLBACK(handle_active_access_point), this);
+
+    g_signal_connect_swapped(NM_DEVICE_WIFI(nmDevice), "access-point-added",
+        G_CALLBACK(handle_changed_access_points), this);
+
+    g_signal_connect_swapped(NM_DEVICE_WIFI(nmDevice), "access-point-removed",
+        G_CALLBACK(handle_changed_access_points), this);
+
     enabled = nm_client_wireless_get_enabled(nmClient);
     if (enabled)
     {
@@ -90,7 +103,6 @@ WifiStatusNM::~WifiStatusNM()
     {
         DBG("WifiStatusNM::" << __func__ << ": shutting down thread");
         signalThreadShouldExit();
-        notify();
         stopThread(2000);
     }
 }
@@ -150,11 +162,8 @@ WifiAccessPoint WifiStatusNM::connectedAccessPoint() const
 {
     if (!connected)
     {
-        DBG("WifiStatusNM::" << __func__ < ": not connected, returning null");
         return WifiAccessPoint();
     }
-    DBG("WifiStatusNM::" << __func__ << ": returning connected access point "
-            << connectedAP.getSSID());
     return connectedAP;
 }
 
@@ -223,7 +232,6 @@ void WifiStatusNM::setConnectedAccessPoint
             << ap.getSSID());
     notifyListeners(wifiBusy);
     const char* apPath = nullptr;
-    //FIXME: expand WifiAccessPoint struct to know which NMAccessPoint it is
     const GPtrArray* apList = nm_device_wifi_get_access_points
             (NM_DEVICE_WIFI(nmDevice));
     if (apList == nullptr)
@@ -307,13 +315,6 @@ void WifiStatusNM::setConnectedAccessPoint
                     psk.toRawUTF8(), nullptr);
         }
     }
-    else
-    {
-        DBG("WifiStatusNM::" << __func__ << " no psk provided, and access point"
-                << (ap.getRequiresAuth() ? " needs " : " doesn't need ")
-                << "authentication.");
-    }
-
     nm_client_add_and_activate_connection(nmClient,
             connection,
             nmDevice,
@@ -331,18 +332,11 @@ void WifiStatusNM::disconnect()
     {
         DBG("WifiStatusNM::" << __func__ << " disconnecting from "
                 << connectedAP.getSSID());
-        //TODO: test that this doesn't do something unpleasant, there was
-        //probably a reason why this method originally did nothing to actually
-        //disconnect
-
-        jassert(nmDevice != nullptr);
-        nm_device_disconnect(nmDevice, nullptr, nullptr);
-        connected = false;
-        notifyListeners(wifiDisconnected);
+        nm_device_disconnect(nmDevice,nullptr,nullptr);
+        notifyListeners(wifiBusy);
     }
     else
     {
-
         DBG("WifiStatusNM::" << __func__
                 << " trying to disconnect, but there is no connection.");
     }
@@ -356,7 +350,6 @@ void WifiStatusNM::handleWirelessEnabled()
     enabled = nm_client_wireless_get_enabled(nmClient);
     DBG("WifiStatusNM::" << __func__ << ":  changed to "
             << (enabled ? "enabled" : "disabled"));
-
     //FIXME: Force and wait for a scan after enable
     if (enabled)
     {
@@ -364,7 +357,6 @@ void WifiStatusNM::handleWirelessEnabled()
     }
     else
     {
-
         notifyListeners(wifiDisabled);
         signalThreadShouldExit();
         notify();
@@ -380,7 +372,6 @@ void WifiStatusNM::handleWirelessConnected()
     NMDeviceState state = nm_device_get_state(nmDevice);
     DBG("WifiStatusNM::" << __func__ << ":  changed to " << String(state)
             << " while connecting = " << (connecting ? "true" : "false"));
-
     switch (state)
     {
         case NM_DEVICE_STATE_ACTIVATED:
@@ -404,12 +395,11 @@ void WifiStatusNM::handleWirelessConnected()
         case NM_DEVICE_STATE_NEED_AUTH:
             if (connecting)
             {
-
                 DBG("WifiStatusNM::" << __func__
                         << " missing auth, cancelling connection.");
                 NMActiveConnection *conn =
                         nm_client_get_activating_connection(nmClient);
-                removeNMConnection(nmDevice, conn);
+                removeNMConnection(conn);
             }
             /* FIXME: let this drop into the general failed case for now
              *        eventually this should prompt the user
@@ -425,7 +415,6 @@ void WifiStatusNM::handleWirelessConnected()
                 notifyListeners(wifiConnectionFailed);
                 break;
             }
-
             if (!connected)
             {
                 break;
@@ -434,14 +423,12 @@ void WifiStatusNM::handleWirelessConnected()
             connected = false;
             notifyListeners(wifiDisconnected);
             break;
-
         case NM_DEVICE_STATE_UNKNOWN:
         case NM_DEVICE_STATE_UNMANAGED:
         case NM_DEVICE_STATE_UNAVAILABLE:
         default:
             if (connecting || connected)
             {
-
                 DBG("WifiStatusNM::" << __func__
                         << ": wlan0 device entered unmanaged state: " << state);
                 handle_active_access_point(this);
@@ -462,10 +449,11 @@ void WifiStatusNM::handleConnectedAccessPoint()
     if (connectedAP.isNull())
     {
         DBG("WifiStatusNM::" << __func__ << ": no connected AP");
+        connected = false;
+        notifyListeners(wifiDisconnected);
     }
     else
     {
-
         DBG("WifiStatusNM::" << __func__ << ":  ssid = "
                 << connectedAP.getSSID());
     }
@@ -522,38 +510,14 @@ void WifiStatusNM::run()
         notifyListeners(wifiDisabled);
         return;
     }
-    context = g_main_context_new();
-    g_main_context_push_thread_default(context);
-    loop = g_main_loop_new(context, false);
-
-    g_signal_connect_swapped(nmClient, "notify::" NM_CLIENT_WIRELESS_ENABLED,
-            G_CALLBACK(handle_wireless_enabled), this);
-
-    g_signal_connect_swapped(nmDevice, "notify::" NM_DEVICE_STATE,
-            G_CALLBACK(handle_wireless_connected), this);
-
-    g_signal_connect_swapped(NM_DEVICE_WIFI(nmDevice), "notify::" NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT,
-            G_CALLBACK(handle_active_access_point), this);
-
-    g_signal_connect_swapped(NM_DEVICE_WIFI(nmDevice), "access-point-added",
-            G_CALLBACK(handle_changed_access_points), this);
-
-    g_signal_connect_swapped(NM_DEVICE_WIFI(nmDevice), "access-point-removed",
-            G_CALLBACK(handle_changed_access_points), this);
-
     while (!threadShouldExit())
     {
         {
-
             const MessageManagerLock mmLock;
             bool dispatched = g_main_context_iteration(context, false);
         }
         wait(LIBNM_ITERATION_PERIOD);
     }
-
-    g_main_loop_unref(loop);
-    g_main_context_pop_thread_default(context);
-    g_main_context_unref(context);
 }
 
 /**
@@ -684,42 +648,45 @@ WifiAccessPoint WifiStatusNM::getNMConnectedAP(NMDeviceWifi *wdev)
 }
 
 /**
- * Close a specific connection on a specific wireless device.
+ * Close all connections on wifi device wlan0.
  */
-void WifiStatusNM::removeNMConnection(NMDevice *nmdevice,
-        NMActiveConnection *conn)
+void WifiStatusNM::removeNMConnection(NMActiveConnection *conn)
 {
-    if (conn != nullptr)
+    if(nmDevice == nullptr)
     {
-        const char *ac_uuid = nm_active_connection_get_uuid(conn);
-        const GPtrArray *avail_cons = nm_device_get_available_connections
-                (nmdevice);
-
-        for (int i = 0; avail_cons && (i < avail_cons->len); i++)
-        {
-            NMRemoteConnection* candidate =
-                    static_cast<NMRemoteConnection*>
-                    (g_ptr_array_index(avail_cons, i));
-            const char* test_uuid = nm_connection_get_uuid
-                    (NM_CONNECTION(candidate));
-
-            if (g_strcmp0(ac_uuid, test_uuid) == 0)
-            {
-                GError *err = nullptr;
-                nm_remote_connection_delete(candidate, nullptr, &err);
-                if (err)
-                {
-
-                    DBG("WifiStatusNM::" << __func__
-                            << ": failed to remove active connection!");
-                    DBG("WifiStatusNM::" << __func__ << ": "
-                            << err->message);
-                    g_error_free(err);
-                }
-                break;
-            }
-        }
+        DBG("WifiStatusNM::" << __func__ << ": wlan0 is missing!");
+        return;
     }
+    if(conn == nullptr)
+    {
+        DBG("WifiStatusNM::" << __func__ << ": connection is null!");
+        return;
+    }
+    const char *ac_uuid = nm_active_connection_get_uuid(conn);
+    const GPtrArray *avail_cons = nm_device_get_available_connections
+            (nmDevice);
+    for (int i = 0; avail_cons && (i < avail_cons->len); i++)
+    {
+        NMRemoteConnection* candidate = (NMRemoteConnection*)
+                g_ptr_array_index(avail_cons, i);
+        const char* test_uuid = nm_connection_get_uuid
+                (NM_CONNECTION(candidate));
+
+        if (g_strcmp0(ac_uuid, test_uuid) == 0)
+        {
+            GError *err = nullptr;
+            nm_remote_connection_delete(candidate, nullptr, &err);
+            if (err)
+            {
+                DBG("WifiStatusNM::" << __func__
+                        << ": failed to remove active connection!");
+                DBG("WifiStatusNM::" << __func__ << ": "
+                        << err->message);
+                g_error_free(err);
+            }
+            break;
+        }
+    }   
 }
 
 /**
