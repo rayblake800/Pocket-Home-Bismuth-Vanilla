@@ -35,7 +35,10 @@ loadingSpinner(loadingSpinner)
     loadBaseFolder();
 }
 
-AppMenuComponent::~AppMenuComponent() { }
+AppMenuComponent::~AppMenuComponent() 
+{ 
+    desktopEntries.stopLoading();
+}
 
 /**
  * @return true if the AppMenuComponent is currently in the loading state

@@ -27,25 +27,32 @@ WindowFocus::BroadcastWindow::~BroadcastWindow() { }
  */
 void WindowFocus::BroadcastWindow::activeWindowStatusChanged()
 {
-    bool focused = isActiveWindow();
-    accessListeners([this, focused](Array<Listener*>& listeners)
+    //TODO: find out why the window system triggers a bunch of repeated 
+    //focus loss effects on program start.  For now, use a static value to
+    //prevent repeats of the same focus event type.
+    static bool focused = !isActiveWindow();
+    if (focused != isActiveWindow())
     {
-        DBG("WindowFocus::activeWindowStatusChanged: notifying "
-                << listeners.size() << " listeners that window focus was "
-                << (focused ? "gained" : "lost"));
-        for (Listener* listener : listeners)
+        focused = !focused;
+        accessListeners([this, focused](Array<Listener*>& listeners)
         {
-            if (focused)
+            DBG("WindowFocus::activeWindowStatusChanged: notifying "
+                    << listeners.size() << " listeners that window focus was "
+                    << (focused ? "gained" : "lost"));
+            for (Listener* listener : listeners)
             {
-                listener->windowFocusGained();
-            }
-            else
-            {
-                listener->windowFocusLost();
+                if (focused)
+                {
+                    listener->windowFocusGained();
+                }
+                else
+                {
+                    listener->windowFocusLost();
 
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 WindowFocus::Listener::Listener()

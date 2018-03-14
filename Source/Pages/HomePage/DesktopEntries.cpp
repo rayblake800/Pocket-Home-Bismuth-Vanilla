@@ -4,15 +4,22 @@
 #include <stdlib.h>
 #include "DesktopEntries.h"
 
-DesktopEntries::DesktopEntries() { }
+DesktopEntries::DesktopEntries() : Thread("DesktopEntries") { }
 
-DesktopEntries::DesktopEntries(const DesktopEntries& orig)
+DesktopEntries::DesktopEntries(const DesktopEntries& orig) :
+Thread("DesktopEntries")
 {
     const ScopedLock readLock(orig.lock);
     entries = orig.entries;
 }
 
-DesktopEntries::~DesktopEntries() { }
+DesktopEntries::~DesktopEntries()
+{
+    if (isThreadRunning())
+    {
+        stopThread(1000);
+    }
+}
 
 /**
  * return the number of stored DesktopEntry objects 
@@ -76,53 +83,41 @@ std::set<String> DesktopEntries::getCategories()
 void DesktopEntries::loadEntries
 (std::function<void(String) > notifyCallback, std::function<void() > onFinish)
 {
-    if (!loadingThread.isThreadRunning())
+    if (!isThreadRunning())
     {
         {
             const ScopedTryLock readLock(lock);
-            if(!readLock.isLocked()){
-                DBG("DesktopEntries::" << __func__ 
-                    << ": Can't load desktop entries, thread is already locked");
+            if (!readLock.isLocked())
+            {
+                DBG("DesktopEntries::" << __func__
+                        << ": Can't load desktop entries, thread is already locked");
                 return;
             }
             entries.clear();
             categories.clear();
+            this->notifyCallback = notifyCallback;
+            this->onFinish = onFinish;
         }
-        loadingThread.asyncLoadEntries(this, notifyCallback, onFinish);
+        startThread();
     }
 }
-
-DesktopEntries::LoadingThread::LoadingThread() : Thread("DesktopEntryLoader") { }
 
 /**
- * Reload all desktop entries in a seperate thread.
+ * If entries are currently loading asynchronously, this will signal for
+ * them to stop. Unless loading finishes on its own before this has a chance to
+ * stop it, the onFinish callback to loadEntries will not be called.
  */
-void DesktopEntries::LoadingThread::asyncLoadEntries
-(DesktopEntries * threadOwner,
-        std::function<void(String) > notifyCallback,
-        std::function<void() > onFinish)
-{
-    this->threadOwner = threadOwner;
-    this->notifyCallback = notifyCallback;
-    this->onFinish = onFinish;
-    startThread();
+void DesktopEntries::stopLoading() {
+    signalThreadShouldExit();
 }
 
-DesktopEntries::LoadingThread::~LoadingThread()
+void DesktopEntries::run()
 {
-    if (isThreadRunning())
-    {
-        stopThread(1000);
-    }
-}
-
-void DesktopEntries::LoadingThread::run()
-{
-    const ScopedLock loadingLock(threadOwner->lock);
+    const ScopedLock loadingLock(lock);
     std::atomic<bool> uiCallPending;
     uiCallPending = false;
     //read the contents of all desktop application directories
-    DBG("DesktopEntries::" << __func__  << ": finding desktop entries...");
+    DBG("DesktopEntries::" << __func__ << ": finding desktop entries...");
     std::vector<String> dirs = {
                                 getHomePath() + "/.local/share/applications",
                                 "/usr/share/applications",
@@ -133,7 +128,6 @@ void DesktopEntries::LoadingThread::run()
     std::set<String> paths;
     for (int i = 0; i < dirs.size(); i++)
     {
-
         while (uiCallPending)
         {
             if (threadShouldExit())
@@ -203,9 +197,9 @@ void DesktopEntries::LoadingThread::run()
             deCategories.add("All");
             for (String category : deCategories)
             {
-                threadOwner->categories[category].insert(entry);
+                categories[category].insert(entry);
             }
-            threadOwner->entries.insert(entry);
+            entries.insert(entry);
         }
     }
     while (uiCallPending)
@@ -219,8 +213,8 @@ void DesktopEntries::LoadingThread::run()
     uiCallPending = true;
     MessageManager::callAsync([&uiCallPending, this]
     {
-        DBG("DesktopEntries::" << __func__ 
-                    << ": All desktop entries loaded.");
+        DBG("DesktopEntries::" << __func__
+                << ": All desktop entries loaded.");
         onFinish();
         uiCallPending = false;
         this->notify();

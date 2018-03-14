@@ -1,8 +1,9 @@
 /* 
  * @file   DesktopEntries.h
  *
- * Finds all .Desktop and .Directory files in the system,
- * and stores and sorts them as DesktopEntry objects.
+ * Finds all .Desktop and .Directory files in the system, and stores and sorts 
+ * them as DesktopEntry objects.   Desktop entry file indexing occurs within
+ * its own thread.
  */
 
 #pragma once
@@ -12,7 +13,7 @@
 #include "../../Utils.h"
 #include "DesktopEntry.h"
 
-class DesktopEntries {
+class DesktopEntries : private Thread {
 public:
     DesktopEntries();
     DesktopEntries(const DesktopEntries& orig);
@@ -45,8 +46,9 @@ public:
     std::set<String> getCategories();
 
     /**
-     * Discards any existing entry data and reloads all desktop entries
-     * from the file system.
+     * Discards any existing entry data and asynchronously reload all desktop 
+     * entries from the file system.
+     * 
      * @param notifyCallback optional callback function to send loading
      * progress update strings.  This will be called asynchronously on the
      * message thread.
@@ -57,40 +59,23 @@ public:
     (std::function<void(String) > notifyCallback = std::function<void(String)>(),
             std::function<void() > onFinish = std::function<void()>());
 
+    /**
+     * If entries are currently loading asynchronously, this will signal for
+     * them to stop. Unless loading finishes on its own before this has a chance to
+     * stop it, the onFinish callback to loadEntries will not be called.
+     */
+    void stopLoading();
+
 private:
+    void run() override;
+
     //list of all entries
     std::set<DesktopEntry> entries;
     //maps category names to lists of entries
     std::map<String, std::set<DesktopEntry>> categories;
-
     CriticalSection lock;
-
-    /**
-     *Asynchronously loads DesktopEntry objects from files
-     */
-    class LoadingThread : public Thread{
-    public:
-        LoadingThread();
-        virtual ~LoadingThread();
-        
-        /**
-         * Reload all desktop entries in a seperate thread.
-         * @param threadOwner
-         * @param notifyCallback this callback runs periodically to pass back
-         * loading progress strings, so progress can be shown in the UI.
-         * @param onFinish This callback runs when all data finishes
-         *  loading.
-         */
-        void asyncLoadEntries(DesktopEntries * threadOwner,
-                std::function<void(String) > notifyCallback,
-                std::function<void() > onFinish);
-    private:
-        void run() override;
-        DesktopEntries * threadOwner;
-        std::function<void(String)> notifyCallback;
-        std::function<void() > onFinish;
-    };
-    LoadingThread loadingThread;
+    std::function<void(String) > notifyCallback;
+    std::function<void() > onFinish;
 };
 
 
