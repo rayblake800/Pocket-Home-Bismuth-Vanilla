@@ -84,7 +84,7 @@ advancedPageButton("Advanced Settings")
         volume = newVol.getIntValue();
     }
 #endif
-    screenBrightnessSlider.setValue(brightness);
+    screenBrightnessSlider.setValue(brightness * 10);
     screenBrightnessSlider.addListener(this);
     volumeSlider.setValue(volume);
     volumeSlider.addListener(this);

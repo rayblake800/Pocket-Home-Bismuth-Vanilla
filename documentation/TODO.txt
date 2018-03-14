@@ -1,33 +1,14 @@
 -Wifi thread upgrades:
-    Wifi page behaves strangely when WifiStatusNM can't find wlan0
-    WifiStatus should be a private thread with methods to start and stop the
-        thread.
-    Replace WifiAccessPoint::null() with the default constructor.
-    WifiStatus needs access control ScopedLocks
+    WifiStatus should have access control ScopedLocks
 
--IconThread should be globally available and protected with ScopedLocks.
-Alternatively, generating the icon map isn't as slow as it used to be, consider
-regenerating it occasionally rather than adding another global resource.
+-WifiComponent doesn't turn on properly right away when wifi is enabled. 
+
 -Add an icon selection page that uses IconThread's index of icon files
 
 -AppMenu still isn't acquiring keyboard focus immediately
-    track down and remove all the places where keyboard focus is requested
-    inappropriately, see juce_Component.cpp:2766
-
--Acquiring global resources from PocketHomeApplication doesn't make them any less
-global, it just adds an unnecessary extra dependency.  Just make properly
-thread-safe singleton classes to handle shared resources that are too expensive
-to generate more than once.
-
--Window focus management needs a clean interface that can be reused, that works
-even if the PocketHomeWindow isn't initialized.
 
 -Design and implement TabbedAppMenu
 	wait on this until nested folders are implemented and tested.
-
-
--prevent battery widget from showing percentages over 100
-    -perhaps run battery.sh in these cases?
 
 -Make bluetooth work and properly implement the bluetooth page
     -Adapt bluetooth code from 
@@ -44,7 +25,6 @@ even if the PocketHomeWindow isn't initialized.
 -configurable keyboard shortcuts on input page
 
 -More thorough implementation of the Desktop entry standard
-
 
 -SwitchComponent needs an update and documentation. Consider using svg
 assets to define it.

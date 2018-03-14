@@ -93,5 +93,6 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
                     File(gaugePath).loadFileAsString().getIntValue();
         }
     }
+    currentStatus.percent = median<int>(0,currentStatus.percent,100);
     return currentStatus;
 }
