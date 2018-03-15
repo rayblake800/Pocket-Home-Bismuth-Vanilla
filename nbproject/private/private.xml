@@ -10,10 +10,24 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Configuration/ComponentConfigFile.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Configuration/ComponentConfigFile.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/PersonalizePage/ColourPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/PersonalizePage/ColourPage.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStatus.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStatusNM.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/deps/JUCE/modules/juce_gui_basics/widgets/juce_Slider.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/IconSliderComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/SettingsPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/WindowFocus.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/deps/JUCE/modules/juce_gui_basics/widgets/juce_Slider.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/documentation/TODO.txt</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/IconSliderComponent.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStatus.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Audio.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Audio.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/WindowFocusedTimer.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Home%20Page/Widgets/WifiIcon.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Display.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PocketHomeApplication.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/SettingsPage.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Display.h</file>
         </group>
     </open-files>
 </project-private>

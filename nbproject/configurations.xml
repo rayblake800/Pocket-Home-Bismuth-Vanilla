@@ -60,6 +60,9 @@
           <in>I2CBus.cpp</in>
         </df>
         <df name="Pages">
+          <df name="Input Settings Page">
+            <in>InputSettingsPage.cpp</in>
+          </df>
           <df name="Settings Page">
             <in>BluetoothSettingsComponent.cpp</in>
             <in>BluetoothSettingsPage.cpp</in>
@@ -71,7 +74,6 @@
           </df>
           <in>AdvancedSettingsPage.cpp</in>
           <in>DateTimePage.cpp</in>
-          <in>InputSettingsPage.cpp</in>
           <in>LoginPage.cpp</in>
         </df>
         <in>AppLauncher.cpp</in>
@@ -657,7 +659,10 @@
         <ccTool flags="1">
         </ccTool>
       </item>
-      <item path="Source/Pages/InputSettingsPage.cpp" ex="false" tool="1" flavor2="8">
+      <item path="Source/Pages/Input Settings Page/InputSettingsPage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="8">
         <ccTool flags="1">
         </ccTool>
       </item>

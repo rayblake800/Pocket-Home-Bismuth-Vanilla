@@ -11,6 +11,8 @@
         </df>
       </df>
       <df name="build">
+        <df name="Debug">
+        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -4957,6 +4959,8 @@
             <in>IconThread.h</in>
           </df>
           <df name="Input Settings Page">
+            <in>InputSettingsPage.cpp</in>
+            <in>InputSettingsPage.h</in>
             <in>KeybindingPage.cpp</in>
             <in>KeybindingPage.h</in>
           </df>
@@ -5002,8 +5006,6 @@
           <in>DateTimePage.h</in>
           <in>HomeSettingsPage.cpp</in>
           <in>HomeSettingsPage.h</in>
-          <in>InputSettingsPage.cpp</in>
-          <in>InputSettingsPage.h</in>
           <in>LoginPage.cpp</in>
           <in>LoginPage.h</in>
         </df>

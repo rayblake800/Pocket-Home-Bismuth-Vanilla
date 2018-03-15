@@ -1,33 +1,3 @@
--WifiComponent doesn't turn on properly right away when wifi is enabled. 
-
--Move volume control/access to Audio.h
-
--Move brightness control/access to Audio.h
-
--Move asset handling to AssetFile.h 
-
--Add an icon selection page that uses IconThread's index of icon files
-
--Design and implement TabbedAppMenu
-	wait on this until nested folders are implemented and tested.
-
--Make bluetooth work and properly implement the bluetooth page
-    -Adapt bluetooth code from 
-        https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/client/main.c
-        
--Re-add the IP label to the Settings Page (or optionally, the homepage)
-
--Define page background color/image in config
-
--implement UI settings page
-
--more options for updating the config within the UI
-
--localization support
-
--configurable keyboard shortcuts on input page
-
--More thorough implementation of the Desktop entry standard
 
 -SwitchComponent needs an update and documentation. Consider using svg
 assets to define it.
@@ -39,3 +9,34 @@ assets to define it.
 
 -ConfigurableImageButton shouldn't need to access the DrawableImageButton's
  internal image component.
+ 
+-Move asset handling to AssetFile.h 
+
+-Re-add the IP label to the Settings Page
+    -Add option to display the ip label on the home page
+
+-localization support    
+    
+-implement UI settings page
+
+-Define page background color/image in config
+
+-configurable keyboard shortcuts on input page
+
+-WifiComponent toggle behavior needs to be tweaked
+
+-WifiStatus should detect it when wifi starts to auto-connect
+
+-Add an icon selection page that uses IconThread's index of icon files
+
+-Make bluetooth work and properly implement the bluetooth page
+    -Adapt bluetooth code from 
+        https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/client/main.c
+
+-Add support for nested folders
+
+-Design and implement TabbedAppMenu
+
+-Implement ConfigurableComponent editing page  
+
+-More thorough implementation of the Desktop entry standard
