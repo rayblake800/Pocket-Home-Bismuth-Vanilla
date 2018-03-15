@@ -7,6 +7,7 @@
 
 #include "JuceHeader.h"
 #include "PageComponent.h"
+#include "RelativeLayoutManager.h"
 #include "SwitchComponent.h"
 #include "DrawableImageComponent.h"
 
@@ -53,7 +54,6 @@ private:
     DrawableImageComponent icon;
     SwitchComponent toggle;
     ConnectionButton pageButton;
-    StretchableLayoutManager layout;
     std::function<void()> openConnectionPage;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionSettingsComponent)
 };

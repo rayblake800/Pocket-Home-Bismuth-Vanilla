@@ -75,7 +75,6 @@ void fitRectInRect(Rectangle<int> &rect, int x, int y, int width, int height,
     // it's no good calling this method unless both the component and
     // target rectangle have a finite size.
     jassert(rect.getWidth() > 0 && rect.getHeight() > 0 && width > 0 && height > 0);
-
     if (rect.getWidth() > 0 && rect.getHeight() > 0 && width > 0 && height > 0)
     {
         int newW, newH;

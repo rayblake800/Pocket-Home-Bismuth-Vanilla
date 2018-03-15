@@ -4,21 +4,23 @@
 #pragma once
 #include "Configurable.h"
 #include "PageComponent.h"
+#include "SwitchComponent.h"
 
-class ColourPage : public PageComponent {
+class ColourPage : public PageComponent
+{
 public:
     ColourPage();
     virtual ~ColourPage();
 private:
-    
     void pageResized() override;
-    
-    class ColourListModel : public ListBoxModel, public Configurable {
+
+    class ColourListModel : public ListBoxModel, public Configurable
+    {
     public:
         ColourListModel();
         virtual ~ColourListModel();
         int getNumRows() override;
-        
+
         void listResized(ListBox& list);
 
         void paintListBoxItem(int rowNumber, Graphics& g, int width, int height,
@@ -28,7 +30,8 @@ private:
                 Component* toUpdate) override;
 
         void selectedRowsChanged(int lastRowSelected) override;
-        
+
+
     private:
 
         void loadConfigProperties(ConfigFile* config, String key) override;
@@ -37,9 +40,10 @@ private:
         Array<Colour> colours;
     };
 
-    
+
     ColourListModel listModel;
     ListBox colourList;
+    SwitchComponent testSwitch;
 
 };
 

@@ -1,11 +1,17 @@
+#include "TempTimer.h"
 #include "ColourPage.h"
 
 ColourPage::ColourPage() :
 PageComponent("ColourPage",{
-    {1,
+    {4,
         {
             {&colourList, 1}
+        }},
+    {1,
+        {
+            {&testSwitch, 1}
         }}
+
 },
 true),
 colourList("colourList", &listModel)
@@ -22,6 +28,7 @@ void ColourPage::pageResized()
     colourList.updateContent();
     colourList.repaint();
 }
+
 
 ColourPage::ColourListModel::ColourListModel() :
 Configurable(new ComponentConfigFile(),{})
@@ -45,7 +52,7 @@ int ColourPage::ColourListModel::getNumRows()
     return colourKeys.size();
 }
 
-void ColourPage::ColourListModel:: listResized(ListBox& list)
+void ColourPage::ColourListModel::listResized(ListBox& list)
 {
     ComponentConfigFile config;
     textHeight = config.getComponentSettings(ComponentConfigFile::mediumTextKey)
@@ -60,13 +67,13 @@ void ColourPage::ColourListModel::paintListBoxItem(int rowNumber, Graphics& g,
 {
     Rectangle<int> fillArea(0, 0, width, height);
     float checkSize = fillArea.getHeight() / 4;
-    g.fillCheckerBoard(fillArea.toFloat(), checkSize,checkSize,
-            Colours::dimgrey,Colours::grey);
+    g.fillCheckerBoard(fillArea.toFloat(), checkSize, checkSize,
+            Colours::dimgrey, Colours::grey);
     g.setColour(colours[rowNumber]);
     g.fillRect(fillArea);
     fillArea.reduce(height / 5, height / 5);
     g.setColour((colours[rowNumber].getAlpha() < 0x88) ?
-        Colours::white : colours[rowNumber].contrasting());
+            Colours::white : colours[rowNumber].contrasting());
     if (rowIsSelected)
     {
         g.fillRoundedRectangle(fillArea.toFloat(), textHeight / 5);

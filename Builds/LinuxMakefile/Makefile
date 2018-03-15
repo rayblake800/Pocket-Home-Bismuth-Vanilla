@@ -68,6 +68,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/TempTimer_66895cb2.o \
   $(JUCE_OBJDIR)/ColourPicker_b22d9d54.o \
   $(JUCE_OBJDIR)/CounterComponent_e2edf03b.o \
   $(JUCE_OBJDIR)/DrawableImageButton_f6e4065f.o \
@@ -172,6 +173,11 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
+
+$(JUCE_OBJDIR)/TempTimer_66895cb2.o: ../../Source/TempTimer.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling TempTimer.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ColourPicker_b22d9d54.o: ../../Source/Components/Widgets/ColourPicker.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)

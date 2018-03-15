@@ -14,6 +14,8 @@
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
+      <FILE id="VTewwc" name="TempTimer.cpp" compile="1" resource="0" file="Source/TempTimer.cpp"/>
+      <FILE id="idqyCx" name="TempTimer.h" compile="0" resource="0" file="Source/TempTimer.h"/>
       <GROUP id="{185415EC-B399-8F03-8F25-DEE2244D2B03}" name="Components">
         <GROUP id="{6D4C4A1E-8E24-8D6C-5A9B-840CFA0F9A73}" name="Widgets">
           <FILE id="kzte4q" name="ColourPicker.cpp" compile="1" resource="0"

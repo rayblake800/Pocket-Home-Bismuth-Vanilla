@@ -30,8 +30,8 @@ void ConnectionSettingsComponent::setToggleState(bool toggleState)
 {
     if (toggle.getToggleState() != toggleState)
     {
-        DBG("ConnectionSettingsComponent::" <<__func__<< " turning "
-                <<(toggleState? "on" : "off"));
+        DBG("ConnectionSettingsComponent::" << __func__ << " turning "
+                << (toggleState ? "on" : "off"));
         toggle.setToggleState(toggleState, NotificationType::sendNotification);
     }
 }
@@ -49,18 +49,18 @@ void ConnectionSettingsComponent::setPageButtonText(String text)
 void ConnectionSettingsComponent::resized()
 {
     int height = getHeight();
-
-    int spacing = 10;
-    int togWidth = height * 1.1f;
-
-    layout.setItemLayout(0, height, height, height);
-    layout.setItemLayout(1, spacing, spacing, spacing);
-    layout.setItemLayout(2, togWidth, togWidth, togWidth);
-    layout.setItemLayout(3, spacing, spacing, spacing);
-    layout.setItemLayout(4, height, -1, -1);
-
-    Component * comps[] = {&icon, nullptr, &toggle, nullptr, &pageButton};
-    layout.layOutComponents(comps, 5, 0, 0, getWidth(), height, false, true);
+    int spacing = height/10;
+    icon.setBounds(0, 0, height, height);
+    toggle.setBounds(
+            icon.getRight() + spacing,
+            0,
+            height * 1.1f,
+            height);
+    pageButton.setBounds(
+            toggle.getRight() + spacing,
+            0,
+            getWidth() - toggle.getRight(),
+            height);
 }
 
 void ConnectionSettingsComponent::buttonClicked(Button *b)
@@ -89,7 +89,7 @@ ConnectionSettingsComponent::ConnectionButton::~ConnectionButton() { }
 void ConnectionSettingsComponent::ConnectionButton::paintButton
 (Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
-    const auto& bounds = pillBounds;
+    const auto& bounds = getLocalBounds();
     float borderThick = 4.0f;
 
     g.setColour(Colours::white);

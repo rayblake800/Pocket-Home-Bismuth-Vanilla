@@ -16,7 +16,7 @@ public:
     };
 
     SwitchComponent();
-    ~SwitchComponent();
+    virtual ~SwitchComponent() {}
 
 private:
     /**
@@ -37,11 +37,16 @@ private:
      * 
      */
     void clicked() override;
-
-    ScopedPointer<DrawablePath> handle;
-    ScopedPointer<Component> handleParent;
+    
+    /**
+     * 
+     */
+    void updateHandlePath();
+    
+    
+    float widthByHeight = 1.5;
+    DrawablePath handle;
     Rectangle<int> handleBoundsOff, handleBoundsOn;
-
     Rectangle<int> pillBounds;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SwitchComponent)

@@ -5020,6 +5020,8 @@
         <in>PokeLookAndFeel.h</in>
         <in>RelativeLayoutManager.cpp</in>
         <in>RelativeLayoutManager.h</in>
+        <in>TempTimer.cpp</in>
+        <in>TempTimer.h</in>
         <in>Utils.cpp</in>
         <in>Utils.h</in>
         <in>WindowFocus.cpp</in>
