@@ -5,11 +5,11 @@
  */
 #pragma once
 
-#include "../../Basic Components/SwitchComponent.h"
-#include "../../Basic Components/DrawableImageComponent.h"
-#include "../../Basic Components/ScalingLabel.h"
-#include "../../Basic Components/Spinner.h"
-#include "../../BluetoothStatus.h"
+#include "SwitchComponent.h"
+#include "DrawableImageComponent.h"
+#include "ScalingLabel.h"
+#include "Spinner.h"
+#include "BluetoothStatus.h"
 #include "ConnectionPage.h"
 
 class BluetoothSettingsPage :
@@ -68,7 +68,7 @@ private:
      * @param connection the control components will be updated to suit
      * this bluetooth device.
      */
-    GridLayoutManager::Layout getConnectionControlsLayout
+    RelativeLayoutManager::Layout getConnectionControlsLayout
     (const BluetoothDevice& device);
 
     /**

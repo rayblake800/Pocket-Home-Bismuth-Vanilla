@@ -12,12 +12,12 @@
  */
 
 #pragma once
-#include "../../Basic Components/ScalingLabel.h"
-#include "../../Basic Components/SwitchComponent.h"
-#include "../../Configuration/Configurables/ConfigurableImageButton.h"
-#include "../../GridLayoutManager.h"
-#include "../../PageComponent.h"
-#include "../../PageStackComponent.h"
+#include "ScalingLabel.h"
+#include "SwitchComponent.h"
+#include "Configuration/Configurables/ConfigurableImageButton.h"
+#include "RelativeLayoutManager.h"
+#include "PageComponent.h"
+#include "PageStackComponent.h"
 
 template<class ConnectionPoint>
 class ConnectionPage : public PageComponent {
@@ -130,7 +130,7 @@ private:
      * 
      * @param connection
      */
-    virtual GridLayoutManager::Layout
+    virtual RelativeLayoutManager::Layout
     getConnectionControlsLayout(const ConnectionPoint& connection) = 0;
 
     /**
@@ -223,7 +223,7 @@ private:
          * @param detailLayout contains the layout and component pointers to
          * add and show on this list item.
          */
-        void setControlLayout(GridLayoutManager::Layout detailLayout);
+        void setControlLayout(RelativeLayoutManager::Layout detailLayout);
 
         /**
          * Load the basic layout, which only shows the connectionButton.
@@ -241,7 +241,7 @@ private:
         /**
          * @return the component's layout when not showing connection controls.
          */
-        GridLayoutManager::Layout getBasicLayout();
+        RelativeLayoutManager::Layout getBasicLayout();
 
         /**
          * Draws an outline around the entire component, with a width of 
@@ -259,7 +259,7 @@ private:
         void resized() override;
         
         ScopedPointer<Button> connectionButton;
-        GridLayoutManager listItemLayout;
+        RelativeLayoutManager listItemLayout;
         ConnectionPoint connection;
         static const constexpr int borderWidth = 4;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionListItem)

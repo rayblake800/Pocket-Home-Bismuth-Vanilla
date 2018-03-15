@@ -1,4 +1,4 @@
-#include "../../PocketHomeApplication.h"
+#include "PocketHomeApplication.h"
 #include "WifiSettingsComponent.h"
 
 WifiSettingsComponent::WifiSettingsComponent
@@ -6,11 +6,12 @@ WifiSettingsComponent::WifiSettingsComponent
 ConnectionSettingsComponent(openWifiPage, "wifi")
 {
 
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("WifiSettingsComponent");
-#endif
+#    endif
     setIcon("wifiIcon.svg");
-    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    WifiStatus* wifiStatus = PocketHomeApplication::getInstance()
+            ->getWifiStatus();
     if (wifiStatus == nullptr)
     {
         DBG("WifiSettingsComponent::" << __func__ << ": wifi thread is null!");
@@ -40,16 +41,17 @@ void WifiSettingsComponent::resized()
 void WifiSettingsComponent::enabledStateChanged(bool enabled)
 {
     updateButtonText();
-    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
+            ->getWifiStatus();
     if (wifiStatus != nullptr)
     {
-        if(!enabled && wifiStatus->isEnabled())
-        { 
+        if (!enabled && wifiStatus->isEnabled())
+        {
             wifiStatus->disableWifi();
         }
-        else if(enabled && !wifiStatus->isEnabled())
+        else if (enabled && !wifiStatus->isEnabled())
         {
-             wifiStatus->enableWifi();
+            wifiStatus->enableWifi();
         }
     }
     else
@@ -100,8 +102,9 @@ void WifiSettingsComponent::updateButtonText()
 {
     if (wifiEnabled())
     {
-        WifiStatus* status = WifiStatus::getInstance();
-        WifiAccessPoint wifiAP = status->connectedAccessPoint();
+        WifiStatus* status =  PocketHomeApplication::getInstance()
+            ->getWifiStatus();
+        WifiAccessPoint wifiAP = status->getConnectedAccessPoint();
         if (!wifiAP.isNull())
         {
             setPageButtonText(wifiAP.getSSID());
@@ -123,7 +126,8 @@ void WifiSettingsComponent::updateButtonText()
  */
 bool WifiSettingsComponent::wifiEnabled()
 {
-    WifiStatus* status = WifiStatus::getInstance();
+    WifiStatus* status =  PocketHomeApplication::getInstance()
+            ->getWifiStatus();
     if (status == nullptr)
     {
         return false;

@@ -1,6 +1,6 @@
-#include "../Utils.h"
+#include "Utils.h"
+#include "Configurable.h"
 #include "ConfigFile.h"
-#include "Configurables/Configurable.h"
 
 template<> std::map<String, int>& ConfigFile::getMapReference<int>()
 {

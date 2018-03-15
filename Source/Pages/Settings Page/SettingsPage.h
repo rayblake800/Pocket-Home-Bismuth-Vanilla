@@ -5,17 +5,17 @@
  */
 #pragma once
 
-#include "../../Basic Components/IconSliderComponent.h"
-#include "../../Basic Components/SwitchComponent.h"
-#include "../../Configuration/AppConfigFile.h"
-#include "../../Configuration/Configurables/ConfigurableImageButton.h"
-#include "../../PageComponent.h"
-#include "../../WindowFocusedTimer.h"
+#include "IconSliderComponent.h"
+#include "SwitchComponent.h"
+#include "AppConfigFile.h"
+#include "ConfigurableImageButton.h"
+#include "PageComponent.h"
+#include "WindowFocusedTimer.h"
 #include "WifiSettingsComponent.h"
 #include "WifiSettingsPage.h"
 //#include "BluetoothSettingsComponent.h"
 //#include "BluetoothSettingsPage.h"
-#include "../AdvancedSettingsPage.h"
+#include "AdvancedSettingsPage.h"
 
 class SettingsPage : public PageComponent, public WindowFocusedTimer,
         private Slider::Listener {
@@ -26,9 +26,6 @@ private:
     virtual void visibilityChanged() override;
     virtual void timerCallback() override;
     void pageButtonClicked(Button *b) override;
-
-    void setSoundVolume();
-    void setScreenBrightness();
 
     void sliderValueChanged(Slider* slider){};
     void sliderDragStarted(Slider* slider);

@@ -53,7 +53,6 @@
 #define JUCE_MODULE_AVAILABLE_juce_events               1
 #define JUCE_MODULE_AVAILABLE_juce_graphics             1
 #define JUCE_MODULE_AVAILABLE_juce_gui_basics           1
-#define JUCE_MODULE_AVAILABLE_juce_gui_extra            1
 
 #define JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED 1
 
@@ -135,17 +134,6 @@
 
 #ifndef    JUCE_USE_XCURSOR
  //#define JUCE_USE_XCURSOR 1
-#endif
-
-//==============================================================================
-// juce_gui_extra flags:
-
-#ifndef    JUCE_WEB_BROWSER
- #define   JUCE_WEB_BROWSER 0
-#endif
-
-#ifndef    JUCE_ENABLE_LIVE_CONSTANT_EDITOR
- //#define JUCE_ENABLE_LIVE_CONSTANT_EDITOR 0
 #endif
 //==============================================================================
 #ifndef    JUCE_STANDALONE_APPLICATION

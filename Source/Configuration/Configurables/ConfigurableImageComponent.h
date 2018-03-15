@@ -7,7 +7,7 @@
 
 #pragma once
 #include "ConfigurableComponent.h"
-#include "../../Basic Components/DrawableImageComponent.h"
+#include "DrawableImageComponent.h"
 
 class ConfigurableImageComponent : public DrawableImageComponent,
 public ConfigurableComponent {

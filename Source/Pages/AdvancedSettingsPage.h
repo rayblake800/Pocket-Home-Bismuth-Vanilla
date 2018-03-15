@@ -5,10 +5,10 @@
  * other settings pages.
  */
 #pragma once
-#include "../PageComponent.h"
-#include "../Configuration/Configurables/ConfigurableImageButton.h"
-#include "../Basic Components/ScalingLabel.h"
-#include "PersonalizePage.h"
+#include "PageComponent.h"
+#include "ConfigurableImageButton.h"
+#include "ScalingLabel.h"
+#include "HomeSettingsPage.h"
 #include "DateTimePage.h"
 #include "InputSettingsPage.h"
 #include "SetPasswordPage.h"
@@ -62,7 +62,7 @@ private:
     TextButton inputOptionsButton;
     SetPasswordPage setPasswordPage;
     RemovePasswordPage removePasswordPage;
-    PersonalizePage personalizePage;
+    HomeSettingsPage homeSettingsPage;
     DateTimePage dateTimePage;
     InputSettingsPage inputPage;
 

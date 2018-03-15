@@ -1,5 +1,6 @@
-#include "../PocketHomeApplication.h"
+#include "MainConfigFile.h"
 #include "DateTimePage.h"
+
 
 const Colour DateTimePage::bgColour = Colour(0xffd23c6d);
 const String DateTimePage::pageTitle = "Date and time settings";

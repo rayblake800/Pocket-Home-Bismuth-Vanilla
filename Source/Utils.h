@@ -7,7 +7,7 @@
  */
 
 #pragma once
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
 
 File absoluteFileFromPath(const String &path);
 File assetFile(const String &path);

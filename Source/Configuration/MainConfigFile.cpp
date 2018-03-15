@@ -1,5 +1,5 @@
+#include "Utils.h"
 #include "MainConfigFile.h"
-#include "../Utils.h"
 
 CriticalSection MainConfigFile::mainConfigLock;
 

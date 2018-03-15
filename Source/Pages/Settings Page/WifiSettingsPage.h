@@ -6,14 +6,14 @@
  */
 
 #pragma once
-#include "../../Wifi/WifiStatus.h"
-#include "../../Basic Components/Spinner.h"
-#include "../../Basic Components/ScalingLabel.h"
-#include "../../Basic Components/SwitchComponent.h"
-#include "../../Basic Components/DrawableImageComponent.h"
-#include "../../Basic Components/DrawableImageButton.h"
-#include "../../PageComponent.h"
-#include "../../PageStackComponent.h"
+#include "WifiStatus.h"
+#include "Spinner.h"
+#include "ScalingLabel.h"
+#include "SwitchComponent.h"
+#include "DrawableImageComponent.h"
+#include "DrawableImageButton.h"
+#include "PageComponent.h"
+#include "PageStackComponent.h"
 #include "ConnectionPage.h"
 
 class WifiSettingsPage : public ConnectionPage<WifiAccessPoint>,
@@ -73,7 +73,7 @@ private:
      * @param connection the control components will be updated to suit
      * this access point.
      */
-    GridLayoutManager::Layout getConnectionControlsLayout
+    RelativeLayoutManager::Layout getConnectionControlsLayout
     (const WifiAccessPoint& connection);
 
     /**

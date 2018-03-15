@@ -5,9 +5,9 @@
  * ComponentConfigFile.
  */
 #pragma once
+#include "JuceHeader.h"
 #include "ConfigurableImageComponent.h"
-#include "../../Basic Components/DrawableImageButton.h"
-#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "DrawableImageButton.h"
 
 class ConfigurableImageButton : public DrawableImageButton,
 public ConfigurableComponent {

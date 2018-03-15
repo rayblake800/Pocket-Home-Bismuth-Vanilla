@@ -8,8 +8,8 @@
  */
  
 #pragma once
-#include "../ConfigFile.h"
-#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
+#include "ConfigFile.h"
 
 class Configurable{
 public:

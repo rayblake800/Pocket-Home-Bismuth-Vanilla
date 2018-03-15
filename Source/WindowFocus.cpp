@@ -34,24 +34,31 @@ void WindowFocus::BroadcastWindow::activeWindowStatusChanged()
     if (focused != isActiveWindow())
     {
         focused = !focused;
-        accessListeners([this, focused](Array<Listener*>& listeners)
+        if (focused)
         {
-            DBG("WindowFocus::activeWindowStatusChanged: notifying "
-                    << listeners.size() << " listeners that window focus was "
-                    << (focused ? "gained" : "lost"));
-            for (Listener* listener : listeners)
+            accessListeners([this](Array<Listener*>& listeners)
             {
-                if (focused)
+                DBG("WindowFocus::activeWindowStatusChanged: gained focus,"
+                        << " notifying " << listeners.size() << " listeners.");
+                for (Listener* listener : listeners)
                 {
                     listener->windowFocusGained();
                 }
-                else
+            });
+        }
+        else{
+            accessListeners([this](Array<Listener*>& listeners)
+            {
+                DBG("WindowFocus::activeWindowStatusChanged: lost focus,"
+                        << " notifying " << listeners.size() << " listeners.");
+                for (Listener* listener : listeners)
                 {
                     listener->windowFocusLost();
-
                 }
-            }
-        });
+            });
+            
+        }
+
     }
 }
 

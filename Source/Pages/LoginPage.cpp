@@ -1,5 +1,5 @@
-#include "../PocketHomeApplication.h"
 #include "SetPasswordPage.h"
+#include "Utils.h"
 #include "LoginPage.h"
 
 LoginPage::LoginPage(std::function<void () > loginCallback) :

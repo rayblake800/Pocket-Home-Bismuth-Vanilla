@@ -6,7 +6,7 @@
  */
 #pragma once
 #include "Configurable.h"
-#include "../ComponentConfigFile.h"
+#include "ComponentConfigFile.h"
 
 class ConfigurableComponent : public Configurable {
 public:

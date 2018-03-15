@@ -1,5 +1,5 @@
-#include "../../PokeLookAndFeel.h"
-#include "../../Utils.h"
+#include "Utils.h"
+#include "PocketHomeApplication.h"
 #include "WifiSettingsPage.h"
 
 const Array<String>
@@ -22,7 +22,8 @@ passwordLabel("passwordLabel", "Password:")
     connectionButton.addChildComponent(spinner);
     connectionButton.addListener(this);
     errorLabel.setJustificationType(Justification::centred);
-    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
+            ->getWifiStatus();
     if (wifiStatus != nullptr)
     {
         wifiStatus->addListener(this);
@@ -44,7 +45,8 @@ WifiSettingsPage::~WifiSettingsPage() { }
  */
 Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
 {
-    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
+            ->getWifiStatus();
     if (wifiStatus == nullptr)
     {
         DBG("WifiSettingsPage::" << __func__ << ": WifiStatus is null!");
@@ -59,7 +61,8 @@ Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
  */
 void WifiSettingsPage::connect(const WifiAccessPoint& connection)
 {
-    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
+            ->getWifiStatus();
     if (wifiStatus == nullptr)
     {
         DBG("WifiSettingsPage::" << __func__ << ": WifiStatus is null!");
@@ -93,7 +96,8 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
  */
 void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
 {
-    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
+            ->getWifiStatus();
     if (wifiStatus != nullptr && isConnected(connection))
     {
         wifiStatus->disconnect();
@@ -105,12 +109,13 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
  */
 bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection)
 {
-    WifiStatus* wifiStatus = WifiStatus::getInstance();
+    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
+            ->getWifiStatus();
     if (connection.isNull() || wifiStatus == nullptr)
     {
         return false;
     }
-    return wifiStatus->connectedAccessPoint() == connection;
+    return wifiStatus->getConnectedAccessPoint() == connection;
 }
 
 /**
@@ -145,7 +150,7 @@ Button* WifiSettingsPage::getConnectionButton
 /**
  * Get the layout for the Wifi access point controls.
  */
-GridLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
+RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
 (const WifiAccessPoint& connection)
 {
     updateConnectionControls(connection);

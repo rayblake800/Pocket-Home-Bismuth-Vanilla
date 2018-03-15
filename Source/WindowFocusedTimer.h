@@ -10,7 +10,7 @@
  * resumed.
  */
 #pragma once
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
 #include "WindowFocus.h"
 
 class PocketHomeWindow;

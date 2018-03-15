@@ -12,7 +12,7 @@
  * destruction.
  */
 #pragma once
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
 namespace WindowFocus {
 
     class BroadcastWindow : public DocumentWindow {

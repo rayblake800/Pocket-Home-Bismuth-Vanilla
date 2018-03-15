@@ -5,10 +5,10 @@
  */
 #pragma once
 
-#include "../../PageComponent.h"
-#include "../../Basic Components/SwitchComponent.h"
-#include "../../Basic Components/DrawableImageComponent.h"
-#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
+#include "PageComponent.h"
+#include "SwitchComponent.h"
+#include "DrawableImageComponent.h"
 
 class ConnectionSettingsComponent : public Component,
 private Button::Listener {

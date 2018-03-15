@@ -1,4 +1,4 @@
-#include "../../Utils.h"
+#include "Utils.h"
 #include "BluetoothSettingsPage.h"
 
 BluetoothSettingsPage::BluetoothSettingsPage() :
@@ -63,7 +63,7 @@ Button* BluetoothSettingsPage::getConnectionButton
  * @param connection the control components will be updated to suit
  * this bluetooth device.
  */
-GridLayoutManager::Layout BluetoothSettingsPage::getConnectionControlsLayout
+RelativeLayoutManager::Layout BluetoothSettingsPage::getConnectionControlsLayout
 (const BluetoothDevice& device)
 {
     return {};

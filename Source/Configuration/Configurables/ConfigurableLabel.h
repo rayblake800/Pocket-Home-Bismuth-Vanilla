@@ -6,7 +6,7 @@
  */
 
 #pragma once
-#include "../../Basic Components/ScalingLabel.h"
+#include "ScalingLabel.h"
 #include "ConfigurableComponent.h"
 
 class ConfigurableLabel : public ScalingLabel, public ConfigurableComponent {

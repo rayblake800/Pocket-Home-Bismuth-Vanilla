@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -4804,39 +4802,45 @@
         <in>include_juce_graphics.mm</in>
         <in>include_juce_gui_basics.cpp</in>
         <in>include_juce_gui_basics.mm</in>
-        <in>include_juce_gui_extra.cpp</in>
-        <in>include_juce_gui_extra.mm</in>
       </df>
       <df name="pack-debian">
         <df name="DEBIAN">
         </df>
       </df>
       <df name="Source">
-        <df name="Basic Components">
-          <in>CounterComponent.cpp</in>
-          <in>CounterComponent.h</in>
-          <in>DrawableImageButton.cpp</in>
-          <in>DrawableImageButton.h</in>
-          <in>DrawableImageComponent.cpp</in>
-          <in>DrawableImageComponent.h</in>
-          <in>FileSelectTextEditor.cpp</in>
-          <in>FileSelectTextEditor.h</in>
-          <in>IconSliderComponent.cpp</in>
-          <in>IconSliderComponent.h</in>
-          <in>ListEditor.cpp</in>
-          <in>ListEditor.h</in>
-          <in>OverlaySpinner.cpp</in>
-          <in>OverlaySpinner.h</in>
-          <in>PopupColorPicker.cpp</in>
-          <in>PopupColorPicker.h</in>
-          <in>PopupEditorComponent.cpp</in>
-          <in>PopupEditorComponent.h</in>
-          <in>ScalingLabel.cpp</in>
-          <in>ScalingLabel.h</in>
-          <in>Spinner.cpp</in>
-          <in>Spinner.h</in>
-          <in>SwitchComponent.cpp</in>
-          <in>SwitchComponent.h</in>
+        <df name="Components">
+          <df name="Widgets">
+            <in>ColourPicker.cpp</in>
+            <in>ColourPicker.h</in>
+            <in>CounterComponent.cpp</in>
+            <in>CounterComponent.h</in>
+            <in>DrawableImageButton.cpp</in>
+            <in>DrawableImageButton.h</in>
+            <in>DrawableImageComponent.cpp</in>
+            <in>DrawableImageComponent.h</in>
+            <in>FileSelectTextEditor.cpp</in>
+            <in>FileSelectTextEditor.h</in>
+            <in>IconSliderComponent.cpp</in>
+            <in>IconSliderComponent.h</in>
+            <in>ListEditor.cpp</in>
+            <in>ListEditor.h</in>
+            <in>OverlaySpinner.cpp</in>
+            <in>OverlaySpinner.h</in>
+            <in>PopupEditorComponent.cpp</in>
+            <in>PopupEditorComponent.h</in>
+            <in>ScalingLabel.cpp</in>
+            <in>ScalingLabel.h</in>
+            <in>Spinner.cpp</in>
+            <in>Spinner.h</in>
+            <in>SwitchComponent.cpp</in>
+            <in>SwitchComponent.h</in>
+          </df>
+          <in>PageComponent.cpp</in>
+          <in>PageComponent.h</in>
+          <in>PageStackComponent.cpp</in>
+          <in>PageStackComponent.h</in>
+          <in>PocketHomeWindow.cpp</in>
+          <in>PocketHomeWindow.h</in>
         </df>
         <df name="Configuration">
           <df name="Configurables">
@@ -4860,8 +4864,35 @@
           <in>MainConfigFile.cpp</in>
           <in>MainConfigFile.h</in>
         </df>
+        <df name="Hardware">
+          <df name="Bluetooth">
+            <in>BluetoothDevice.cpp</in>
+            <in>BluetoothDevice.h</in>
+            <in>BluetoothStatus.cpp</in>
+            <in>BluetoothStatus.h</in>
+          </df>
+          <df name="Wifi">
+            <in>WifiAccessPoint.cpp</in>
+            <in>WifiAccessPoint.h</in>
+            <in>WifiStatus.cpp</in>
+            <in>WifiStatus.h</in>
+            <in>WifiStatusJson.cpp</in>
+            <in>WifiStatusJson.h</in>
+            <in>WifiStatusNM.cpp</in>
+            <in>WifiStatusNM.h</in>
+            <in>WifiTest.cpp</in>
+          </df>
+          <in>Audio.cpp</in>
+          <in>Audio.h</in>
+          <in>BatteryMonitor.cpp</in>
+          <in>BatteryMonitor.h</in>
+          <in>Display.cpp</in>
+          <in>Display.h</in>
+          <in>I2CBus.cpp</in>
+          <in>I2CBus.h</in>
+        </df>
         <df name="Pages">
-          <df name="HomePage">
+          <df name="Home Page">
             <df name="AppMenu">
               <df name="Menu Editors">
                 <in>AppMenuPopupEditor.cpp</in>
@@ -4908,11 +4939,9 @@
               <in>AppMenuFolder.cpp</in>
               <in>AppMenuFolder.h</in>
             </df>
-            <df name="Info Components">
+            <df name="Widgets">
               <in>BatteryIcon.cpp</in>
               <in>BatteryIcon.h</in>
-              <in>BatteryMonitor.cpp</in>
-              <in>BatteryMonitor.h</in>
               <in>ClockLabel.cpp</in>
               <in>ClockLabel.h</in>
               <in>WifiIcon.cpp</in>
@@ -4926,6 +4955,22 @@
             <in>HomePage.h</in>
             <in>IconThread.cpp</in>
             <in>IconThread.h</in>
+          </df>
+          <df name="Input Settings Page">
+            <in>KeybindingPage.cpp</in>
+            <in>KeybindingPage.h</in>
+          </df>
+          <df name="Password Pages">
+            <in>RemovePasswordPage.cpp</in>
+            <in>RemovePasswordPage.h</in>
+            <in>SetPasswordPage.cpp</in>
+            <in>SetPasswordPage.h</in>
+          </df>
+          <df name="Power Page">
+            <in>FelPage.cpp</in>
+            <in>FelPage.h</in>
+            <in>PowerPage.cpp</in>
+            <in>PowerPage.h</in>
           </df>
           <df name="Settings Page">
             <in>BluetoothSettingsComponent.cpp</in>
@@ -4943,55 +4988,36 @@
             <in>WifiSettingsPage.cpp</in>
             <in>WifiSettingsPage.h</in>
           </df>
+          <df name="UI Page">
+            <in>ColourPage.cpp</in>
+            <in>ColourPage.h</in>
+            <in>ComponentEditorPage.cpp</in>
+            <in>ComponentEditorPage.h</in>
+            <in>UIPage.cpp</in>
+            <in>UIPage.h</in>
+          </df>
           <in>AdvancedSettingsPage.cpp</in>
           <in>AdvancedSettingsPage.h</in>
           <in>DateTimePage.cpp</in>
           <in>DateTimePage.h</in>
-          <in>FelPage.cpp</in>
-          <in>FelPage.h</in>
+          <in>HomeSettingsPage.cpp</in>
+          <in>HomeSettingsPage.h</in>
           <in>InputSettingsPage.cpp</in>
           <in>InputSettingsPage.h</in>
           <in>LoginPage.cpp</in>
           <in>LoginPage.h</in>
-          <in>PersonalizePage.cpp</in>
-          <in>PersonalizePage.h</in>
-          <in>PowerPage.cpp</in>
-          <in>PowerPage.h</in>
-          <in>RemovePasswordPage.cpp</in>
-          <in>RemovePasswordPage.h</in>
-          <in>SetPasswordPage.cpp</in>
-          <in>SetPasswordPage.h</in>
-        </df>
-        <df name="Wifi">
-          <in>WifiAccessPoint.cpp</in>
-          <in>WifiAccessPoint.h</in>
-          <in>WifiStatus.cpp</in>
-          <in>WifiStatus.h</in>
-          <in>WifiStatusJson.cpp</in>
-          <in>WifiStatusJson.h</in>
-          <in>WifiStatusNM.cpp</in>
-          <in>WifiStatusNM.h</in>
-          <in>WifiTest.cpp</in>
         </df>
         <in>AppLauncher.cpp</in>
         <in>AppLauncher.h</in>
-        <in>BluetoothStatus.cpp</in>
-        <in>BluetoothStatus.h</in>
-        <in>GridLayoutManager.cpp</in>
-        <in>GridLayoutManager.h</in>
-        <in>I2CBus.cpp</in>
-        <in>I2CBus.h</in>
+        <in>AssetFiles.cpp</in>
+        <in>AssetFiles.h</in>
         <in>Main.cpp</in>
-        <in>PageComponent.cpp</in>
-        <in>PageComponent.h</in>
-        <in>PageStackComponent.cpp</in>
-        <in>PageStackComponent.h</in>
         <in>PocketHomeApplication.cpp</in>
         <in>PocketHomeApplication.h</in>
-        <in>PocketHomeWindow.cpp</in>
-        <in>PocketHomeWindow.h</in>
         <in>PokeLookAndFeel.cpp</in>
         <in>PokeLookAndFeel.h</in>
+        <in>RelativeLayoutManager.cpp</in>
+        <in>RelativeLayoutManager.h</in>
         <in>Utils.cpp</in>
         <in>Utils.h</in>
         <in>WindowFocus.cpp</in>

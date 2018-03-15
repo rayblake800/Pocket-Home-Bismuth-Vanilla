@@ -3,10 +3,10 @@
  * 
  * TODO: Documentation
  */
-#include "../Basic Components/ScalingLabel.h"
-#include "../Basic Components/DrawableImageComponent.h"
-#include "../PageComponent.h"
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
+#include "ScalingLabel.h"
+#include "DrawableImageComponent.h"
+#include "PageComponent.h"
 #pragma once
 class LoginPage : public PageComponent, public TextEditor::Listener{
 public:

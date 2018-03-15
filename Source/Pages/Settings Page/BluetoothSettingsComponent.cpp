@@ -1,6 +1,5 @@
 #include <numeric>
-#include "../../PocketHomeApplication.h"
-#include "../../Utils.h"
+#include "Utils.h"
 #include "BluetoothSettingsPage.h"
 #include "BluetoothSettingsComponent.h"
 
@@ -12,7 +11,7 @@ ConnectionSettingsComponent(openBluetoothPage)
 #if JUCE_DEBUG
     setName("BluetoothSettingsComponent");
 #endif
-    setIcon("bluetoothIcon.png");
+    setIcon("bluetoothIcon.svg");
     updateButtonText();
 }
 
@@ -20,26 +19,26 @@ BluetoothSettingsComponent::~BluetoothSettingsComponent() { }
 
 void BluetoothSettingsComponent::enabledStateChanged(bool enabled)
 {
-    PocketHomeApplication::getInstance()->getBluetoothStatus().enabled
-            = enabled;
+    bluetoothStatus.enabled  = enabled;
     setPageButtonEnabled(enabled);
     updateButtonText();
 }
 
 void BluetoothSettingsComponent::updateButtonText()
 {
-    const auto &status = PocketHomeApplication::getInstance()
-            ->getBluetoothStatus();
-    if (status.enabled)
+    
+    if (bluetoothStatus.enabled)
     {
         int connectedDeviceCount =
-                std::accumulate(status.devices.begin(), status.devices.end(), 0,
+                std::accumulate(bluetoothStatus.devices.begin(),
+                bluetoothStatus.devices.end(), 0,
                 [](int n, BluetoothDevice * d)
                 {
                     return n + d->connected; });
         if (connectedDeviceCount > 0)
         {
-            setPageButtonText(std::to_string(connectedDeviceCount) + " Devices Connected");
+            setPageButtonText(std::to_string(connectedDeviceCount) 
+                    + " Devices Connected");
         }
         else
         {

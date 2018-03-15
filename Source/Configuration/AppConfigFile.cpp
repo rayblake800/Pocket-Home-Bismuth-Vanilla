@@ -1,5 +1,5 @@
+#include "Utils.h"
 #include "AppConfigFile.h"
-#include "../Utils.h"
 
 Array<AppConfigFile::AppItem> AppConfigFile::favoriteApps;
 Array<AppConfigFile::AppFolder> AppConfigFile::categoryFolders;

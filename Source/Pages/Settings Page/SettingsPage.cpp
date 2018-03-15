@@ -1,6 +1,7 @@
-#include "../../PocketHomeApplication.h"
-#include "../../Utils.h"
-#include "../../PokeLookAndFeel.h"
+#include "Utils.h"
+#include "Audio.h"
+#include "Display.h"
+#include "PokeLookAndFeel.h"
 #include "SettingsPage.h"
 
 SettingsPage::SettingsPage() :
@@ -10,10 +11,10 @@ PageComponent("SettingsPage",{
         {
             {&wifiComponent, 1}
         }},
-//    {1,
-//        {
-//            {&bluetoothComponent, 1}
-//        }},
+    //    {1,
+    //        {
+    //            {&bluetoothComponent, 1}
+    //        }},
     {1,
         {
             {&screenBrightnessSlider, 1}
@@ -29,6 +30,7 @@ PageComponent("SettingsPage",{
 }, true),
 wifiComponent([this]
 {
+
     pushPageToStack(&wifiSettingsPage,
             PageStackComponent::kTransitionTranslateHorizontal);
 }),
@@ -43,49 +45,19 @@ volumeSlider("volumeIconLo.svg", "volumeIconHi.svg"),
 advancedPageButton("Advanced Settings")
 {
 
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("SettingsPage");
-#endif
+#    endif
 
     addAndShowLayoutComponents();
     setColour(backgroundColourId, Colour(0xffd23c6d));
     advancedPageButton.addListener(this);
-    brightness = 8;
-    volume = 90;
-#if JUCE_LINUX
-    // Get initial brightness value
-    ChildProcess child;
-    if (child.start("cat /sys/class/backlight/backlight/brightness"))
-    {
-        String result{child.readAllProcessOutput()};
-        brightness = result.getIntValue();
-    };
-    // Get initial volume value
-    StringArray cmd{ "amixer", "sget", "Power Amplifier"};
-    if (child.start(cmd))
-    {
-        const String result(child.readAllProcessOutput());
-        int resultIndex = result.indexOf("[") + 1;
-        child.waitForProcessToFinish(5 * 1000);
-        char buff[4];
-        for (int i = 0; i < 4; i++)
-        {
-            char c = result[resultIndex + i];
-            if (c >= '0' && c <= '9')
-            {
-                buff[i] = c;
-            }
-            else
-            {
-                buff[i] = (char) 0;
-            }
-        }
-        String newVol = String(buff);
-        volume = newVol.getIntValue();
-    }
-#endif
-    screenBrightnessSlider.setValue(brightness * 10);
-    screenBrightnessSlider.addListener(this);
+    brightness = Display::getBrightness();
+    volume = Audio::getVolumePercent();
+    screenBrightnessSlider.setRange(0,10,1);
+    screenBrightnessSlider.setValue(brightness);
+    screenBrightnessSlider.addListener(this);   
+    volumeSlider.setRange(0,100,1);
     volumeSlider.setValue(volume);
     volumeSlider.addListener(this);
 }
@@ -105,13 +77,13 @@ void SettingsPage::timerCallback()
 {
     if (screenBrightnessSlider.ownsSlider(changingSlider))
     {
-        setScreenBrightness();
+        Display::setBrightness(changingSlider->getValue());
     }
     if (volumeSlider.ownsSlider(changingSlider))
     {
-        setSoundVolume();
+        Audio::setVolume(changingSlider->getValue());
     }
-    changingSlider = nullptr;
+    startTimer(200);
 }
 
 void SettingsPage::pageButtonClicked(Button *button)
@@ -121,36 +93,6 @@ void SettingsPage::pageButtonClicked(Button *button)
         pushPageToStack(&advancedSettingsPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     }
-}
-
-void SettingsPage::setSoundVolume()
-{
-    volume = volumeSlider.getValue();
-#if JUCE_LINUX
-    StringArray cmd{"amixer", "sset", "Power Amplifier", (String(volume) + "%").toRawUTF8()};
-    ChildProcess child;
-    if (child.start(cmd))
-    {
-
-        String result{child.readAllProcessOutput()};
-    }
-
-#endif
-}
-
-void SettingsPage::setScreenBrightness()
-{
-    brightness = 1 + (screenBrightnessSlider.getValue()*0.09);
-#if JUCE_LINUX
-    ChildProcess child;
-    StringArray cmd{"sh", "-c", (String("echo ") + String(brightness) + String(" > /sys/class/backlight/backlight/brightness")).toRawUTF8()};
-    if (child.start(cmd))
-    {
-
-        String result{child.readAllProcessOutput()};
-        DBG("SettingsPage::" << __func__ << ": " << result);
-    }
-#endif
 }
 
 void SettingsPage::sliderDragStarted(Slider* slider)
@@ -164,16 +106,9 @@ void SettingsPage::sliderDragStarted(Slider* slider)
 
 void SettingsPage::sliderDragEnded(Slider* slider)
 {
-    if (screenBrightnessSlider.ownsSlider(slider) && isTimerRunning())
-    {
-        stopTimer();
-        setScreenBrightness();
-    }
-    else if (volumeSlider.ownsSlider(slider) && isTimerRunning())
-    {
-        stopTimer();
-        setSoundVolume();
-    }
+    changingSlider = slider;
+    timerCallback();
+    stopTimer();
     changingSlider = nullptr;
 }
 

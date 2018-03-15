@@ -1,5 +1,4 @@
 #include "AdvancedSettingsPage.h"
-#include "../PocketHomeApplication.h"
 
 AdvancedSettingsPage::AdvancedSettingsPage() :
 PageComponent("AdvancedSettingsPage",{}, true),
@@ -9,7 +8,6 @@ removePasswordButton("Remove your password"),
 personalizeButton("Personalize your homepage"),
 dateTimeButton("Date and time"),
 inputOptionsButton("Input settings"),
-personalizePage(),
 prevArrow(ComponentConfigFile::pageUpKey),
 nextArrow(ComponentConfigFile::pageDownKey)
 {
@@ -67,7 +65,7 @@ void AdvancedSettingsPage::reloadLayout()
     {
         buttonIndex = 0;
     }
-    GridLayoutManager::Layout layout = {
+    RelativeLayoutManager::Layout layout = {
         {4,
             {
                 {buttonIndex > 0 ? nullptr : &titleLabel, 1}
@@ -118,7 +116,7 @@ void AdvancedSettingsPage::pageButtonClicked(Button * button)
     }
     else if (button == &personalizeButton)
     {
-        pushPageToStack(&personalizePage,
+        pushPageToStack(&homeSettingsPage,
                 PageStackComponent::kTransitionTranslateHorizontal);
     }
     else if (button == &nextArrow)

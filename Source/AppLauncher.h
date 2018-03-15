@@ -1,32 +1,39 @@
 /**
  * @file AppLauncher.h
  * 
- * AppLauncher launches and tracks new application processes. 
+ * AppLauncher launches and tracks new application processes, automatically
+ * switching window focus to the new application.
  */
 #pragma once
 #include <functional>
 #include <map>
+#include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
-#include "../JuceLibraryCode/JuceHeader.h"
 
 /**
  * TODO:
  *  -Test to see if it's really necessary to reload xmodmap every time an 
  *   application launches
- *  -Instead of holding a single instance of a custom Timer subclass, this
- *   class should just inherit from Timer
  */
 
-class AppLauncher : public WindowFocusedTimer {
+class AppLauncher : public WindowFocusedTimer
+{
 public:
-    AppLauncher();
-    virtual ~AppLauncher();
+    AppLauncher() : WindowFocusedTimer("AppLauncher"),
+    launchFailureCallback([]()
+    {
+    }) { }
+
+    virtual ~AppLauncher() { }
 
     /**
      * Assigns a function to call if loading an application fails.
      * @param failureCallback will run if an app fails to launch.
      */
-    void setLaunchFailureCallback(std::function<void() > failureCallback);
+    void setLaunchFailureCallback(std::function<void() > failureCallback)
+    {
+        launchFailureCallback = failureCallback;
+    }
 
     /**
      * Launch a new application, or focus its window if the application is
@@ -36,9 +43,12 @@ public:
      */
     void startOrFocusApp(String appTitle, String command);
 private:
-    //Stores information on launched processes
 
-    struct ProcessInfo {
+    /**
+     * Stores information on launched processes
+     */
+    struct ProcessInfo
+    {
         ProcessInfo(String title, String command);
         //Application title
         String title;
@@ -68,6 +78,14 @@ private:
      */
     String getWindowId(ProcessInfo processInfo);
 
+    //Track application launch success and respond appropriately.
+    virtual void timerCallback() override;
+
+    /**
+     * Stop process tracking if window focus changes and the timer is suspended.
+     */
+    virtual void onSuspend() override;
+
     //function to run if application launching fails
     std::function<void() > launchFailureCallback;
 
@@ -77,15 +95,10 @@ private:
     //store child process launch information
     std::map<ProcessInfo, ChildProcess*> processMap;
 
-    //Track application launch success and respond appropriately.
-    virtual void timerCallback() override;
-    
-    /**
-     * Stop process tracking if window focus changes and the timer is suspended.
-     */
-    virtual void onSuspend() override;
-
+    //timer interval in milliseconds
     static const int timerFrequency = 2000;
+
+    //Process to check up on when the timer finishes
     ChildProcess * timedProcess = nullptr;
 
 };

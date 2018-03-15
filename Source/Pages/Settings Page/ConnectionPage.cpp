@@ -1,5 +1,5 @@
-#include "../../Utils.h"
-#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
+#include "Utils.h"
 #include "ConnectionPage.h"
 
 template<class ConnectionPoint>
@@ -112,7 +112,7 @@ void ConnectionPage<ConnectionPoint>::updateConnectionList()
 template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
 {
-    GridLayoutManager::Layout layout;
+    RelativeLayoutManager::Layout layout;
     bool showList = (selectedConnection.isNull());
     prevPageBtn.setVisible(connectionIndex > 0 && showList);
     nextPageBtn.setVisible(connectionItems.size() > connectionIndex
@@ -327,7 +327,7 @@ getConnection()
 template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::ConnectionListItem::
 setControlLayout
-(GridLayoutManager::Layout detailLayout)
+(RelativeLayoutManager::Layout detailLayout)
 {
     detailLayout.insert(detailLayout.begin(), getBasicLayout()[0]);
     listItemLayout.clearLayout(true);
@@ -361,7 +361,7 @@ ownsButton(Button* button)
  * @return the component's layout when not showing connection controls.
  */
 template<class ConnectionPoint>
-GridLayoutManager::Layout ConnectionPage<ConnectionPoint>::ConnectionListItem::
+RelativeLayoutManager::Layout ConnectionPage<ConnectionPoint>::ConnectionListItem::
 getBasicLayout()
 {
     return {

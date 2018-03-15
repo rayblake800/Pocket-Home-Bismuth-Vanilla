@@ -7,10 +7,10 @@
  * TODO:documentation
  */
 #pragma once
-#include "../Basic Components/DrawableImageButton.h"
-#include "../Basic Components/ScalingLabel.h"
-#include "../PageComponent.h"
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
+#include "DrawableImageButton.h"
+#include "ScalingLabel.h"
+#include "PageComponent.h"
 
 class DateTimePage : public PageComponent, private ComboBox::Listener {
 public:

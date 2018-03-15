@@ -5,8 +5,8 @@
  */
 #pragma once
 
-#include "../../Basic Components/Spinner.h"
-#include "../../Wifi/WifiStatus.h"
+#include "Spinner.h"
+#include "WifiStatus.h"
 #include "ConnectionSettingsComponent.h"
 class WifiSettingsComponent : public ConnectionSettingsComponent, 
         public WifiStatus::Listener {

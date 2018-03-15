@@ -1,5 +1,5 @@
-#include "../../Utils.h"
-#include "../ComponentConfigFile.h"
+#include "Utils.h"
+#include "ComponentConfigFile.h"
 #include "ConfigurableComponent.h"
 
 ConfigurableComponent::ConfigurableComponent

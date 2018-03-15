@@ -1,30 +1,13 @@
 #include "Utils.h"
 #include "AppLauncher.h"
 
-AppLauncher::AppLauncher() :
-WindowFocusedTimer("AppLauncher"),
-launchFailureCallback([]()
-{
-}) { }
-
-AppLauncher::~AppLauncher() { }
-
-/**
- * Assigns a function to call if loading an application fails.
- */
-void AppLauncher::setLaunchFailureCallback
-(std::function<void() > failureCallback)
-{
-    launchFailureCallback = failureCallback;
-}
-
 /**
  * Launch a new application, or focus its window if the application is
  * already running
  */
 void AppLauncher::startOrFocusApp(String appTitle, String command)
 {
-    DBG("AppLauncher::" << __func__ << ": title = " << appTitle 
+    DBG("AppLauncher::" << __func__ << ": title = " << appTitle
             << ", command = " << command);
     //before adding another process to the list, clean out any old dead ones,
     //so they don't start piling up
@@ -48,7 +31,7 @@ void AppLauncher::startOrFocusApp(String appTitle, String command)
     {
         if (appProcess->isRunning())
         {
-            DBG("AppLauncher::" << __func__ 
+            DBG("AppLauncher::" << __func__
                     << ": app is already running,"
                     << " attempting to find the window id");
             String windowId = getWindowId(processInfo);
@@ -58,11 +41,10 @@ void AppLauncher::startOrFocusApp(String appTitle, String command)
                 DBG("AppLauncher::" << __func__ << ": Found window "
                         << windowId << ", focusing app");
                 focusApp(windowId);
-
             }
             else
             {
-                DBG("AppLauncher::" << __func__ 
+                DBG("AppLauncher::" << __func__
                         << ": Process exists, but has no window to focus.");
             }
             return;
@@ -71,12 +53,69 @@ void AppLauncher::startOrFocusApp(String appTitle, String command)
         {
             if (appProcess != nullptr)
             {
-                DBG("AppLauncher::" << __func__ 
+                DBG("AppLauncher::" << __func__
                         << ": Old process is dead, re-launching");
             }
         }
     }
     startApp(processInfo);
+}
+
+AppLauncher::ProcessInfo::ProcessInfo(String title, String command) :
+title(title), command(command) { }
+
+bool AppLauncher::ProcessInfo::operator==(const ProcessInfo& rhs) const
+{
+    return title == rhs.title && command == rhs.command;
+}
+
+bool AppLauncher::ProcessInfo::operator<(const ProcessInfo& rhs) const
+{
+    return title.compare(rhs.title) < 0;
+}
+
+/**
+ * Start a new instance of an application process
+ */
+void AppLauncher::startApp(ProcessInfo processInfo)
+{
+    String command = processInfo.command;
+    DBG("AppsPageComponent::startApp - " << processInfo.command);
+    String testExistance = String("command -v ") + processInfo.command;
+    if (system(testExistance.toRawUTF8()) != 0)
+    {
+        AlertWindow::showMessageBoxAsync
+                (AlertWindow::AlertIconType::WarningIcon,
+                "Couldn't open application", String("\"") + processInfo.command
+                + String("\" is not a valid command."));
+        launchFailureCallback();
+        return;
+
+    }
+    ChildProcess* launchApp = new ChildProcess();
+    // Reload xmodmap to ensure it's running
+    // Commented for testing, remember to clean this out if it turns out to
+    // be unneeded
+    //launchApp->start("xmodmap ${HOME}/.Xmodmap");
+    if (launchApp->start(processInfo.command))
+    {
+        runningApps.add(launchApp);
+        processMap[processInfo] = launchApp;
+        timedProcess = launchApp;
+        startTimer(timerFrequency);
+    }
+}
+
+/**
+ * Focus the window of a running app
+ */
+void AppLauncher::focusApp(const String & windowId)
+{
+    String focusShell = "echo 'focus_client_by_window_id(" + windowId
+            + ")' | awesome-client";
+    StringArray focusCmd{"sh", "-c", focusShell.toRawUTF8()};
+    ChildProcess focusWindow;
+    focusWindow.start(focusCmd);
 }
 
 /**
@@ -105,55 +144,6 @@ String AppLauncher::getWindowId(ProcessInfo processInfo)
                 .upToFirstOccurrenceOf(" ", false, true));
     }
     return result;
-}
-
-void AppLauncher::startApp(ProcessInfo processInfo)
-{
-    String command = processInfo.command;
-    DBG("AppsPageComponent::startApp - " << processInfo.command);
-    String testExistance = String("command -v ") + processInfo.command;
-    if (system(testExistance.toRawUTF8()) != 0)
-    {
-        AlertWindow::showMessageBoxAsync
-                (AlertWindow::AlertIconType::WarningIcon,
-                "Couldn't open application", String("\"") + processInfo.command
-                + String("\" is not a valid command."));
-        launchFailureCallback();
-        return;
-
-    }
-    ChildProcess* launchApp = new ChildProcess();
-    // Reload xmodmap to ensure it's running
-    launchApp->start("xmodmap ${HOME}/.Xmodmap");
-    if (launchApp->start(processInfo.command))
-    {
-        runningApps.add(launchApp);
-        processMap[processInfo] = launchApp;
-        timedProcess = launchApp;
-        startTimer(timerFrequency);
-    }
-}
-
-void AppLauncher::focusApp(const String & windowId)
-{
-    String focusShell = "echo 'focus_client_by_window_id(" + windowId
-            + ")' | awesome-client";
-    StringArray focusCmd{"sh", "-c", focusShell.toRawUTF8()};
-    ChildProcess focusWindow;
-    focusWindow.start(focusCmd);
-}
-
-AppLauncher::ProcessInfo::ProcessInfo(String title, String command) :
-title(title), command(command) { }
-
-bool AppLauncher::ProcessInfo::operator==(const ProcessInfo& rhs) const
-{
-    return title == rhs.title && command == rhs.command;
-}
-
-bool AppLauncher::ProcessInfo::operator<(const ProcessInfo& rhs) const
-{
-    return title.compare(rhs.title) < 0;
 }
 
 void AppLauncher::timerCallback()

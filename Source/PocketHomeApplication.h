@@ -1,39 +1,59 @@
 /**
  * @file PocketHomeApplication.h
  * 
- * TODO: documentation, organization
+ * PocketHomeApplication is the base application class that initializes and
+ * shuts down the program
  */
 
 #pragma once
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "Configuration/MainConfigFile.h"
-#include "Configuration/ComponentConfigFile.h"
-#include "Wifi/WifiStatus.h"
-#include "BluetoothStatus.h"
+#include "JuceHeader.h"
 #include "PokeLookAndFeel.h"
-#include "Utils.h"
 #include "PocketHomeWindow.h"
+#include "WifiStatus.h"
+#include "BluetoothStatus.h"
 
-class PocketHomeApplication : public JUCEApplication {
+class PocketHomeApplication : public JUCEApplication
+{
 public:
-    PocketHomeApplication();
-
+    PocketHomeApplication() { }
+    virtual ~PocketHomeApplication() { }
+    
     static PocketHomeApplication* getInstance();
-
-    BluetoothStatus& getBluetoothStatus();
-
+    
+    /**
+     * @return a pointer to the wifi status monitoring object. 
+     */
+    WifiStatus* getWifiStatus();
+    
+    /**
+     * @return a pointer to the bluetooth status monitoring object. 
+     */
+    BluetoothStatus* getBluetoothStatus();
+    
 private:
-    bool initAudio();
-    PokeLookAndFeel lookAndFeel;
-
-    BluetoothStatus bluetoothStatus;
-    const String getApplicationName() override;
-    const String getApplicationVersion() override;
-    bool moreThanOneInstanceAllowed() override;
-
+    
     void initialise(const String &commandLine) override;
+
     void shutdown() override;
 
-private:
+    const String getApplicationName() override
+    {
+        return ProjectInfo::projectName;
+    }
+
+    const String getApplicationVersion() override
+    {
+        return ProjectInfo::versionString;
+    }
+
+    bool moreThanOneInstanceAllowed() override
+    {
+        return false;
+    }
+
+    PokeLookAndFeel lookAndFeel;
+
     ScopedPointer<PocketHomeWindow> homeWindow;
+    ScopedPointer<WifiStatus> wifiStatus;
+    ScopedPointer<BluetoothStatus> bluetoothStatus;
 };

@@ -1,30 +1,39 @@
-#include "Basic Components/SwitchComponent.h"
-#include "Basic Components/DrawableImageComponent.h"
-#include "Basic Components/ListEditor.h"
-#include "Basic Components/FileSelectTextEditor.h"
-#include "Basic Components/OverlaySpinner.h"
-#include "Pages/HomePage/AppMenu/AppMenuButton.h"
-#include "PocketHomeApplication.h"
+#include "ComponentConfigFile.h"
+#include "MainConfigFile.h"
+#include "SwitchComponent.h"
+#include "DrawableImageComponent.h"
+#include "ListEditor.h"
+#include "FileSelectTextEditor.h"
+#include "OverlaySpinner.h"
+#include "AppMenuButton.h"
 #include "PokeLookAndFeel.h"
 
-Colour PokeLookAndFeel::lightGrey = Colour(0xffe1e1e1);
-Colour PokeLookAndFeel::medGrey = Colour(0xffc0c0c0);
-Colour PokeLookAndFeel::chipPink = Colour(0xffbc3662);
-Colour PokeLookAndFeel::chipLightPink = Colour(0xfff799aa);
-Colour PokeLookAndFeel::chipPurple = Colour(0xffd23c6d);
-
 PokeLookAndFeel::PokeLookAndFeel() :
-Configurable(new ComponentConfigFile(), componentConfig.getColourKeys()),
+Configurable(new ComponentConfigFile(),{}),
+seguibl(Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
+        BinaryData::LatoRegular_ttfSize)),
 cursor(MouseCursor::NoCursor)
 {
+    ComponentConfigFile componentConfig;
+    MainConfigFile mainConfig;
+    addTrackedKeys(componentConfig.getColourKeys());
+    mainConfig.registerConfigurable(this,{MainConfigFile::showCursorKey});
+    loadConfigProperties(&mainConfig,MainConfigFile::showCursorKey);
     loadAllConfigProperties();
-    seguibl = Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
-            BinaryData::LatoRegular_ttfSize);
 }
 
-PokeLookAndFeel::~PokeLookAndFeel() { };
+PokeLookAndFeel::~PokeLookAndFeel()
+{
+    MainConfigFile config;
+    config.unregisterConfigurable(this,{MainConfigFile::showCursorKey});
+}
 
-float PokeLookAndFeel::getDrawableButtonTextHeightForBounds(const Rectangle<int> &bounds)
+/**
+ * @return the most appropriate text height for a  DrawableButton with the
+ * given bounds.
+ */
+float PokeLookAndFeel::getDrawableButtonTextHeightForBounds
+(const Rectangle<int>& bounds)
 {
     ComponentConfigFile config;
     String largestString;
@@ -32,33 +41,72 @@ float PokeLookAndFeel::getDrawableButtonTextHeightForBounds(const Rectangle<int>
     {
         largestString += "A";
     }
-    //return jmin(23.0f, bounds.getHeight() * 0.95f);
     return config.getFontHeight(bounds, largestString);
 }
 
-float PokeLookAndFeel::getDrawableButtonImageHeightForBounds(const Rectangle<int> &bounds)
+/**
+ * @return the most appropriate image height for a DrawableButton with the
+ * given bounds.
+ */
+float PokeLookAndFeel::getDrawableButtonImageHeightForBounds
+(const Rectangle<int>& bounds)
 {
-    static const float padding = 5.0f;
+    static const float padding = bounds.getHeight() / 20 + 1;
     return bounds.getHeight() - (getDrawableButtonTextHeightForBounds(bounds)
                                  + padding);
 }
 
+/**
+ * Draws a DrawableButton component.
+ */
+void PokeLookAndFeel::drawDrawableButton(Graphics &g, DrawableButton &button,
+        bool isMouseOverButton, bool isButtonDown)
+{
+    bool toggleState = button.getToggleState();
+
+    g.fillAll(button.findColour(toggleState ?
+            DrawableButton::backgroundOnColourId
+            : DrawableButton::backgroundColourId));
+
+    const int textH = (button.getStyle() == DrawableButton::ImageAboveTextLabel)
+            ? getDrawableButtonTextHeightForBounds(button.getLocalBounds())
+
+            : 0;
+
+    Font font(18);
+    font.setExtraKerningFactor(0.06f);
+    if (textH > 0)
+    {
+        g.setFont(font);
+        g.setColour(button.findColour(toggleState ?
+                DrawableButton::textColourOnId
+                : DrawableButton::textColourId)
+                .withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.4f));
+
+        g.drawFittedText(button.getButtonText(), 2, button.getHeight() - textH - 1,
+                button.getWidth() - 4, textH, Justification::centred, 1);
+    }
+}
+
+/**
+ * Get the appropriate typeface for the given font.
+ */
 Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const Font &font)
 {
     return seguibl;
 }
 
+/**
+ * Draws the thumb portion of a linear slider
+ */
 void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
         int width, int height,
         float sliderPos, float minSliderPos, float maxSliderPos,
         const Slider::SliderStyle style, Slider &slider)
 {
     const float radius = getSliderThumbRadius(slider);
-
     g.setColour(slider.findColour(Slider::thumbColourId));
-
     float kx, ky;
-
     if (style == Slider::LinearVertical)
     {
         kx = x + width * 0.5f;
@@ -73,21 +121,21 @@ void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
     Path circle;
     circle.addCentredArc(kx, ky, radius, radius, 0.0f, 0.0f, M_PI * 2.0f);
     circle.closeSubPath();
-
     g.fillPath(circle);
 }
 
-void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y, int width, int height,
+/**
+ * Draw the background of a linear slider
+ */
+void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y,
+        int width, int height,
         float sliderPos, float minSliderPos,
         float maxSliderPos,
         const Slider::SliderStyle style, Slider &slider)
 {
     const float radius = std::floor(getSliderThumbRadius(slider) * 0.333f);
-
     g.setColour(slider.findColour(Slider::backgroundColourId));
-
     Path indent;
-
     if (slider.isHorizontal())
     {
         const float iy = y + height * 0.5f - radius;
@@ -98,10 +146,12 @@ void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y, int 
         const float ix = x + width * 0.5f - radius;
         indent.addRoundedRectangle(ix, y - radius, radius * 2.0f, height + radius * 2.0f, 1);
     }
-
     g.fillPath(indent);
 }
 
+/**
+ * Draws the entire linear slider component.
+ */
 void PokeLookAndFeel::drawLinearSlider(Graphics &g, int x, int y, int width, int height,
         float sliderPos, float minSliderPos, float maxSliderPos,
         const Slider::SliderStyle style, Slider &slider)
@@ -113,14 +163,21 @@ void PokeLookAndFeel::drawLinearSlider(Graphics &g, int x, int y, int width, int
             slider);
 }
 
+/**
+ * Defines the radius in pixels of the slider thumb.
+ */
 int PokeLookAndFeel::getSliderThumbRadius(Slider &slider)
 {
     return jmin(14, slider.getHeight() / 2, slider.getWidth() / 2);
 }
 
-void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button, bool isMouseOverButton,
-        bool isButtonDown)
+/**
+ * Draws the text onto a TextButton.
+ */
+void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
+        bool isMouseOverButton, bool isButtonDown)
 {
+    ComponentConfigFile componentConfig;
     Font font(getTextButtonFont(button, button.getHeight()));
     font.setExtraKerningFactor(0.06f);
     font.setHeight(componentConfig.getFontHeight
@@ -150,6 +207,9 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button, bool isMou
             Justification::centred, 2);
 }
 
+/**
+ * Draws the background of a Button component.
+ */
 void PokeLookAndFeel::drawButtonBackground(Graphics &g, Button &button,
         const Colour &backgroundColour, bool isMouseOverButton,
         bool isButtonDown)
@@ -159,71 +219,49 @@ void PokeLookAndFeel::drawButtonBackground(Graphics &g, Button &button,
 
     auto path = Path();
     path.addRoundedRectangle(0, 0, width, height, 1);
+    Colour buttonColour = (button.getToggleState() ?
+                           findColour(TextButton::ColourIds::buttonOnColourId) :
+                           findColour(TextButton::ColourIds::buttonColourId));
     if (isButtonDown && isMouseOverButton)
     {
-        g.setColour(chipPink.darker());
+        buttonColour = buttonColour.darker();
     }
-    else
-    {
-        g.setColour(chipPink);
-    }
+    g.setColour(buttonColour);
     g.fillPath(path);
 }
 
-void PokeLookAndFeel::drawDrawableButton(Graphics &g, DrawableButton &button,
-        bool isMouseOverButton, bool isButtonDown)
-{
-    bool toggleState = button.getToggleState();
-
-    g.fillAll(button.findColour(toggleState ? DrawableButton::backgroundOnColourId
-            : DrawableButton::backgroundColourId));
-
-    const int textH = (button.getStyle() == DrawableButton::ImageAboveTextLabel)
-            ? getDrawableButtonTextHeightForBounds(button.getLocalBounds())
-
-            : 0;
-
-    Font font(18);
-    font.setExtraKerningFactor(0.06f);
-    if (textH > 0)
-    {
-        g.setFont(font);
-        //g.setFont(textH);
-        g.setColour(button.findColour(toggleState ? DrawableButton::textColourOnId
-                : DrawableButton::textColourId)
-                .withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.4f));
-
-        g.drawFittedText(button.getButtonText(), 2, button.getHeight() - textH - 1,
-                button.getWidth() - 4, textH, Justification::centred, 1);
-    }
-}
-
-void PokeLookAndFeel::setCursorVisible(bool visible)
-{
-    if (visible) cursor = MouseCursor::ParentCursor;
-    else cursor = MouseCursor::NoCursor;
-}
-
+/**
+ * Get the cursor to display over a given component.
+ */
 MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
 {
     return cursor;
-    //return LookAndFeel_V3::getMouseCursorFor(component);
 }
 
 /**
- * Reloads and applies object properties defined by a single key in
- * a configuration file
+ * Loads and applies component colors from components.json, and updates
+ * cursor visibility.
  */
 void PokeLookAndFeel::loadConfigProperties(ConfigFile* config, String key)
 {
-    if (componentConfig == *config)
+    ComponentConfigFile* componentConfig =
+            dynamic_cast<ComponentConfigFile*> (config);
+    if (componentConfig != nullptr)
     {
-        int colourId = componentConfig.getColourId(key);
+        int colourId = componentConfig->getColourId(key);
         if (colourId != -1)
         {
-            Colour confColour = Colour(componentConfig.getConfigValue<String>(key)
-                    .getHexValue32());
+            Colour confColour = Colour(componentConfig->getConfigValue<String>
+                    (key).getHexValue32());
             setColour(colourId, confColour);
+        }
+    }
+    else
+    {
+        if (key == MainConfigFile::showCursorKey)
+        {
+            cursor = (config->getConfigValue<bool>(key) ?
+                      MouseCursor::ParentCursor : MouseCursor::NoCursor);
         }
     }
 }
