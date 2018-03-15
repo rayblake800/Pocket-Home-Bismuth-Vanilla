@@ -22,11 +22,11 @@ int Display::getBrightness()
  */
 void Display::setBrightness(int brightness)
 {
-    brightness = median<int>(0, brightness, 10);
+    brightness = median<int>(1, brightness, 10);
 
     File brightnessFile("/sys/class/backlight/backlight/brightness");
     if (brightnessFile.existsAsFile())
     {
-        brightnessFile.replaceWithText(String(brightness));
+        brightnessFile.appendText(String(brightness));
     }
 }

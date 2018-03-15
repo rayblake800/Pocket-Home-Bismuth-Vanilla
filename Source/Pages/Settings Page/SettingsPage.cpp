@@ -54,7 +54,7 @@ advancedPageButton("Advanced Settings")
     advancedPageButton.addListener(this);
     brightness = Display::getBrightness();
     volume = Audio::getVolumePercent();
-    screenBrightnessSlider.setRange(0,10,1);
+    screenBrightnessSlider.setRange(1,10,1);
     screenBrightnessSlider.setValue(brightness);
     screenBrightnessSlider.addListener(this);   
     volumeSlider.setRange(0,100,1);
