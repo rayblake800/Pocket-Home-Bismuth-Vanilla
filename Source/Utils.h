@@ -21,28 +21,6 @@ Image createImageFromFile(const File &imageFile);
  */
 Drawable * createSVGDrawable(const File& svgFile);
 
-/**
- * 
- * @param rect
- * @param x
- * @param y
- * @param width
- * @param height
- * @param justification
- * @param onlyReduceInSize
- */
-void fitRectInRect(Rectangle<int> &rect, int x, int y, int width, int height,
-        Justification justification, const bool onlyReduceInSize);
-
-/**
- * 
- * @param rect
- * @param container
- * @param justification
- * @param onlyReduceInSize
- */
-void fitRectInRect(Rectangle<int> &rect, const Rectangle<int> &container,
-        Justification justification, const bool onlyReduceInSize);
 
 /**
  * 

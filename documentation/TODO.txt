@@ -1,6 +1,4 @@
 
--SwitchComponent needs an update and documentation. Consider using svg
-assets to define it.
 
 -PopupEditorComponent subclasses shouldn't need to directly access its data members.
 
@@ -24,6 +22,9 @@ assets to define it.
     -possibly use a Factory design pattern? Page creation and resource allocation doesn't need to be tied directly to
         the PageStack
     
+-Figure out why the edge of the connection widget on the settings page is getting
+ clipped. 
+
 -implement UI settings page
 
 -Define page background color/image in config

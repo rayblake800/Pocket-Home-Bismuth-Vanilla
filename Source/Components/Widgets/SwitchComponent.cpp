@@ -10,41 +10,53 @@ SwitchComponent::SwitchComponent()
     addAndMakeVisible(handle);
 }
 
-void SwitchComponent::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown)
+/**
+ * Draws the switch background as a rounded rectangle.
+ */
+void SwitchComponent::paintButton
+(Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
-    float radius = float(pillBounds.getHeight()) / 2.0f;
+    float radius = float(backgroundShape.getHeight()) / 2.0f;
 
     g.setColour(findColour(backgroundColourId));
-    g.fillRoundedRectangle(pillBounds.getX(), pillBounds.getY(), pillBounds.getWidth(),
-            pillBounds.getHeight(), radius);
+    g.fillRoundedRectangle(backgroundShape.getX(),
+            backgroundShape.getY(),
+            backgroundShape.getWidth(),
+            backgroundShape.getHeight(),
+            radius);
 }
 
+/**
+ * Update the switch background and handle shapes to the new bounds,
+ * without changing their aspect ratios.
+ */
 void SwitchComponent::resized()
 {
-    DBG("switch resized");
-    pillBounds = getLocalBounds();
-    float ratio = (float) pillBounds.getWidth() / (float) pillBounds.getHeight();
+    backgroundShape = getLocalBounds();
+    float ratio = (float) backgroundShape.getWidth()
+            / (float) backgroundShape.getHeight();
     if (ratio > widthByHeight) // too wide, reduce width
     {
-        pillBounds.reduce((pillBounds.getWidth()
-                           - (pillBounds.getHeight() * widthByHeight)) / 2, 0);
+        backgroundShape.reduce((backgroundShape.getWidth()
+                                - (backgroundShape.getHeight()
+                                   * widthByHeight)) / 2, 0);
     }
     else if (ratio < widthByHeight)// too tall, reduce height
     {
-        pillBounds.reduce(0,
-                (pillBounds.getHeight() - pillBounds.getWidth()
+        backgroundShape.reduce(0,
+                (backgroundShape.getHeight() - backgroundShape.getWidth()
                  / widthByHeight) / 2);
     }
-    DBG("local bounds " << getLocalBounds().toString() << ", pill bounds"
-            << pillBounds.toString() << ", ratio = " << ratio);
-    int handleMargin = std::max(pillBounds.getHeight() * 0.04, 2.0);
-    int handleSize = std::max(pillBounds.getHeight() - handleMargin * 2, 2);
+    int handleMargin = std::max(backgroundShape.getHeight() * 0.04, 2.0);
+    int handleSize = std::max(backgroundShape.getHeight()
+            - handleMargin * 2, 2);
     handleBoundsOff.setBounds(
-            pillBounds.getX() + handleMargin,
-            pillBounds.getY() + handleMargin,
+            backgroundShape.getX() + handleMargin,
+            backgroundShape.getY() + handleMargin,
             handleSize,
             handleSize);
-    handleBoundsOn = handleBoundsOff.withRightX(pillBounds.getRight() - handleMargin);
+    handleBoundsOn = handleBoundsOff.withRightX
+            (backgroundShape.getRight() - handleMargin);
     Colour handleColour;
     Rectangle<int>& handleBounds = handleBoundsOff;
     if (getToggleState())
@@ -61,6 +73,10 @@ void SwitchComponent::resized()
     updateHandlePath();
 }
 
+/**
+ * Animates the transition between on and off states, moving the handle
+ * left or right as appropriate.
+ */
 void SwitchComponent::clicked()
 {
     DBG("switch clicked");
@@ -72,9 +88,10 @@ void SwitchComponent::clicked()
             handleColourId : handleOffColourId)));
     /*
      * DrawablePath paths don't move relative to their component bounds.
-     * They animate correctly, but on the next redraw they snap back to
-     * their old location.  Until the Juce library fixes that, the path will
-     * just have to be updated to match the bounds after the animation finishes.
+     * They animate correctly, but the next time the page changes they snap back
+     * to their old location.  Updating the path fixes this problem.  
+     * TODO: look into the page stack animation code, see if that has anything 
+     * to do with this problem.
      */
     TempTimer::initTimer(200, [this]()
     {
@@ -82,7 +99,11 @@ void SwitchComponent::clicked()
     });
 }
 
-
+/**
+ * Updates the DrawablePath handle's internal path to fit the current
+ * bounds and switch position.  This needs to be called whenever the switch
+ * changes position or resizes.
+ */
 void SwitchComponent::updateHandlePath()
 {
     DBG("Handle resized");

@@ -113,8 +113,8 @@ void ConnectionSettingsComponent::ConnectionButton::paintButton
 
 void ConnectionSettingsComponent::ConnectionButton::resized()
 {
-    pillBounds.setSize(getLocalBounds().getWidth(), 42);
-    fitRectInRect(pillBounds, getLocalBounds(), Justification::centred, false);
+    //pillBounds.setSize(getLocalBounds().getWidth(), 42);
+    //fitRectInRect(pillBounds, getLocalBounds(), Justification::centred, false);
 }
 
 void ConnectionSettingsComponent::ConnectionButton::setText(const String &text)
