@@ -16,7 +16,7 @@ public:
     /**
      * Load and apply this component's relative bounds from config.
      */
-    void applyConfigBounds();
+    virtual void applyConfigBounds();
 protected:
     /**
      * This method passes in asset file names and asset color values

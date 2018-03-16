@@ -8,6 +8,43 @@ SwitchComponent::SwitchComponent()
     setName("Switch Component");
 #    endif
     addAndMakeVisible(handle);
+    handle.setInterceptsMouseClicks(false,false);
+}
+
+/**
+ * Behaves exactly like the same method in ToggleButton, except it also
+ * updates the button handle.
+ */
+void SwitchComponent::setToggleState(bool shouldBeOn,
+        NotificationType notification, bool animate)
+{
+    if (shouldBeOn != getToggleState())
+    {
+        if (animate)
+        {
+            ComponentAnimator& animator = Desktop::getInstance().getAnimator();
+            if (animator.isAnimating(&handle))
+            {
+                TempTimer::initTimer(animationDuration,
+                        [this, shouldBeOn, notification]()
+                        {
+                            clicked();
+                            ToggleButton::setToggleState
+                                    (shouldBeOn, notification);
+                        });
+            }
+            else
+            {
+                clicked();
+                ToggleButton::setToggleState(shouldBeOn, notification);
+            }
+        }
+        else
+        {
+            ToggleButton::setToggleState(shouldBeOn, notification);
+            resized();
+        }
+    }
 }
 
 /**
@@ -68,9 +105,8 @@ void SwitchComponent::resized()
     {
         handleColour = findColour(handleOffColourId);
     }
-    handle.setFill(FillType(handleColour));
+    handle.setColour(handleColour);
     handle.setBounds(handleBounds);
-    updateHandlePath();
 }
 
 /**
@@ -79,38 +115,18 @@ void SwitchComponent::resized()
  */
 void SwitchComponent::clicked()
 {
-    DBG("switch clicked");
     const Rectangle<int>& bounds = getToggleState() ?
             handleBoundsOn : handleBoundsOff;
     Desktop::getInstance().getAnimator().animateComponent(&handle, bounds, 1.0f,
-            150, false, 0.0, 0.0);
-    handle.setFill(FillType(findColour(getToggleState() ?
-            handleColourId : handleOffColourId)));
-    /*
-     * DrawablePath paths don't move relative to their component bounds.
-     * They animate correctly, but the next time the page changes they snap back
-     * to their old location.  Updating the path fixes this problem.  
-     * TODO: look into the page stack animation code, see if that has anything 
-     * to do with this problem.
-     */
-    TempTimer::initTimer(200, [this]()
-    {
-        updateHandlePath();
-    });
+            animationDuration, false, 0.0, 0.0);
+    handle.setColour(findColour(getToggleState() ?
+            handleColourId : handleOffColourId));
+
 }
 
-/**
- * Updates the DrawablePath handle's internal path to fit the current
- * bounds and switch position.  This needs to be called whenever the switch
- * changes position or resizes.
- */
-void SwitchComponent::updateHandlePath()
+void SwitchComponent::SwitchHandle::paint(Graphics& g)
 {
-    DBG("Handle resized");
-    Path path;
-    path.addEllipse(handle.getX(),
-            handle.getY(),
-            handle.getWidth(),
-            handle.getHeight());
-    handle.setPath(path);
+    g.setColour(colour);
+    g.fillEllipse(getLocalBounds().toFloat());
 }
+

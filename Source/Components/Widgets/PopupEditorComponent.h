@@ -36,33 +36,70 @@ protected:
             std::function<void(PopupEditorComponent*)> onConfirm);
     
     /**
-     * Manages the cancel and confirm buttons. Inheriting classes should either
-     * call this method if they're handling button clicks, or handle clicks
-     * on the cancel/confirm buttons themselves.
-     * @param buttonClicked is the button that was clicked by the user.
+     * Add, make visible, and set the layout of components below the title
+     * label and above the cancel and confirm buttons.
+     * @param layout defines component layout. The title row will be added
+     * to the beginning and the cancel/confirm row will be added to the end.
+     * Each of these rows will have a vertical weight of 1.
      */
-    virtual void buttonClicked(Button* buttonClicked) override;
+    void setLayout(RelativeLayoutManager::Layout layout);
+    
+    /**
+     * Button click events for any buttons other than the cancel and confirm
+     * buttons will be passed to this method.
+     * @param button
+     */
+    virtual void editorButtonClicked(Button * button) {}
+    
+    /**
+     * Set the space in pixels to leave between child components and outer 
+     * component bounds
+     * @param margin
+     */
+    void setMargin(int margin)
+    {
+        marginPixels = margin;
+    }
+    
+    /**
+     * Set the space in pixels to leave between child components.
+     * @param xPadding
+     * @param yPadding
+     */
+    void setPadding(int xPadding, int yPadding)
+    {
+        xPaddingPixels = xPadding;
+        yPaddingPixels = yPadding;
+    }
+    
+private:
+    /**
+     * Manages the cancel and confirm buttons.
+     * @param buttonClicked
+     */
+     void buttonClicked(Button* buttonClicked) final override;
     
     /**
      * The escape and return keys work the same
      * as pressing the cancel and confirm buttons, respectively.
-     * When this component is open, it should not let any button presses through
+     * When this component is open, it won't let any button presses through
      * to the components beneath it. 
-     * @param key is the key pressed by the user.
-     * @return true always to indicate to the key manager that key presses
-     * should not be passed on to the components beneath it.
+     * @param key
+     * @return
      */
-    virtual bool keyPressed(const KeyPress & key) override;
+    virtual bool keyPressed(const KeyPress & key) final override;
   
     /**
      * Re-apply the layout to fit the new bounds.
      */
-    virtual void resized() override;
+    virtual void resized() final override;
     
-    //Inheriting classes are responsible for setting the layout of these
-    //child components
+    /**
+     * Grab keyboard focus when the component becomes visible.
+     */
+    void visibilityChanged() override;
+
     
-    //Window title, text must be set by the inheriting class.
     ScalingLabel titleLabel;
     //Closes the editor without saving changes.
     DrawableImageButton cancelButton;
@@ -70,11 +107,10 @@ protected:
     DrawableImageButton confirmButton;
     RelativeLayoutManager layoutManager;
     //default layout margin/padding values
-    int marginPixels=2;
+    int marginPixels=6;
     int xPaddingPixels=3;
     int yPaddingPixels=4;
     
-private:
     //Callback function to run when confirm is pressed, passes "this" as 
     //the sole parameter.
     std::function<void(PopupEditorComponent*) > onConfirm;

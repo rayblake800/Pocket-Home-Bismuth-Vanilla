@@ -13,30 +13,13 @@ categoryList(categories)
 #if JUCE_DEBUG
     setName("categoryEditor");
 #endif
-    
-    loadAllConfigProperties();
-
-    cancelButton.addListener(this);
-    confirmButton.addListener(this);
-
     RelativeLayoutManager::Layout layout = {
-        {1,
-            {
-                {&titleLabel, 1}
-            }},
         {4,
             {
                 {&categoryList, 1}
             }},
-        {1,
-            {
-                {&cancelButton, 1},
-                {&confirmButton, 1}
-            }}
     };
-
-    layoutManager.setLayout(layout, this);
-    resized();
+    setLayout(layout);
 }
 
 CategoryPopupEditor::~CategoryPopupEditor() { }

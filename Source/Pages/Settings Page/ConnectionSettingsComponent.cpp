@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "ComponentConfigFile.h"
 #include "ConnectionSettingsComponent.h"
 
 ConnectionSettingsComponent::ConnectionSettingsComponent
@@ -14,43 +15,37 @@ pageButton(name + "Button")
     addAndMakeVisible(pageButton);
 }
 
-ConnectionSettingsComponent::~ConnectionSettingsComponent() { }
-
-void ConnectionSettingsComponent::setIcon(String iconAsset)
+/**
+ * Updates the icon, switch, and connection button based on current
+ * connection status.
+ */
+void ConnectionSettingsComponent::refresh()
 {
-    icon.setImage(iconAsset);
-}
-
-void ConnectionSettingsComponent::setIconVisible(bool visible)
-{
-    icon.setVisible(visible);
-}
-
-void ConnectionSettingsComponent::setToggleState(bool toggleState)
-{
-    if (toggle.getToggleState() != toggleState)
+    bool busy = isBusy();
+    bool enabled = connectionEnabled();
+    icon.setVisible(!busy);
+    spinner.setVisible(busy);
+    if (!busy)
     {
-        DBG("ConnectionSettingsComponent::" << __func__ << " turning "
-                << (toggleState ? "on" : "off"));
-        toggle.setToggleState(toggleState, NotificationType::sendNotification);
+        icon.setImage(getIconAsset());
+        toggle.setToggleState(enabled, NotificationType::dontSendNotification,
+                true);
     }
+    toggle.setEnabled(!busy);
+    pageButton.setText(updateButtonText());
+    pageButton.setEnabled(enabled && !busy);
+    resized();
 }
 
-void ConnectionSettingsComponent::setPageButtonEnabled(bool isEnabled)
-{
-    pageButton.setEnabled(isEnabled);
-}
-
-void ConnectionSettingsComponent::setPageButtonText(String text)
-{
-    pageButton.setText(text);
-}
-
+/**
+ * Arranges child components to fit within bounds.
+ */
 void ConnectionSettingsComponent::resized()
 {
     int height = getHeight();
-    int spacing = height/10;
+    int spacing = height / 10;
     icon.setBounds(0, 0, height, height);
+    spinner.setBounds(0, 0, height, height);
     toggle.setBounds(
             icon.getRight() + spacing,
             0,
@@ -59,15 +54,21 @@ void ConnectionSettingsComponent::resized()
     pageButton.setBounds(
             toggle.getRight() + spacing,
             0,
-            getWidth() - toggle.getRight(),
+            getWidth() - toggle.getRight() - spacing,
             height);
 }
 
+/**
+ * If the connection button is clicked this will run openConnectionPage(). 
+ * If the switch is clicked, this will call  enabledStateChanged(), passing
+ * it the switch toggle state.
+ */
 void ConnectionSettingsComponent::buttonClicked(Button *b)
 {
     if (b == &toggle)
     {
         enabledStateChanged(toggle.getToggleState());
+        refresh();
     }
     else if (b == &pageButton)
     {
@@ -75,50 +76,62 @@ void ConnectionSettingsComponent::buttonClicked(Button *b)
     }
 }
 
-void ConnectionSettingsComponent::enablementChanged()
+/**
+ * Run refresh() when the component regains visibility.
+ */
+void ConnectionSettingsComponent::visibilityChanged()
 {
-    updateButtonText();
+    if (isShowing())
+    {
+        refresh();
+    }
 }
 
 ConnectionSettingsComponent::ConnectionButton::ConnectionButton
-(const String &name) : Button(name),
-displayText(name) { }
+(const String &name) : Button(name) { }
 
-ConnectionSettingsComponent::ConnectionButton::~ConnectionButton() { }
+/**
+ * Sets the text that will be printed on the button.
+ */
+void ConnectionSettingsComponent::ConnectionButton::setText(const String &text)
+{
+    displayText = text;
+    resized();
+}
 
+/**
+ * Draws the connection button outline and prints the button text
+ */
 void ConnectionSettingsComponent::ConnectionButton::paintButton
 (Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
-    const auto& bounds = getLocalBounds();
-    float borderThick = 4.0f;
+    const Rectangle<int>& bounds = getLocalBounds();
 
-    g.setColour(Colours::white);
+    g.setColour(findColour(TextButton::textColourOnId));
     isButtonDown ? setAlpha(0.5f) : setAlpha(1.0f);
 
     if (isEnabled())
     {
-        g.drawRoundedRectangle(bounds.getX() + borderThick,
-                bounds.getY() + borderThick,
-                bounds.getWidth() - 2 * borderThick,
-                bounds.getHeight() - 2 * borderThick,
-                1, borderThick);
+        g.drawRoundedRectangle(bounds.getX() + borderSize,
+                bounds.getY() + borderSize,
+                bounds.getWidth() - 2 * borderSize,
+                bounds.getHeight() - 2 * borderSize,
+                1, borderSize);
     }
 
-    // TODO: write button text as grey if choice is completely unset?
-    g.setFont(20);
+    g.setFont(textHeight);
     g.drawText(displayText, bounds.getX(), bounds.getY(),
             bounds.getWidth(), bounds.getHeight(),
             Justification::centred);
 }
 
+/**
+ * Calculates button text height based on button size.
+ */
 void ConnectionSettingsComponent::ConnectionButton::resized()
 {
-    //pillBounds.setSize(getLocalBounds().getWidth(), 42);
-    //fitRectInRect(pillBounds, getLocalBounds(), Justification::centred, false);
-}
-
-void ConnectionSettingsComponent::ConnectionButton::setText(const String &text)
-{
-    displayText = text;
-    repaint();
+    borderSize = getHeight() / 10;
+    ComponentConfigFile config;
+    textHeight = config.getFontHeight(getLocalBounds().reduced(borderSize * 2),
+            displayText);
 }

@@ -9,8 +9,9 @@
 #include "ConfigurableImageComponent.h"
 #include "DrawableImageButton.h"
 
-class ConfigurableImageButton : public DrawableImageButton,
-public ConfigurableComponent {
+class ConfigurableImageButton : public Button,
+public ConfigurableComponent
+{
 public:
 
     /**
@@ -26,16 +27,27 @@ public:
     virtual ~ConfigurableImageButton();
 
     /**
-     *Adjust bounds based on config settings
+     * Load a new image from a different asset file
+     * @param index the index of an asset file defined for this component in
+     * the ComponentConfigFile.  If index is out of bounds or it equals the
+     * current loaded index, nothing will happen. 
      */
-    void applyConfigBounds();
-    
+    void setImageAssetIndex(int index);
 private:
+    
     /**
-     * No action needed, asset management is handled by the internal
-     * ConfigurableImageComponent
+     * Keeps the image set to component bounds.
      */
+    void resized() override;
+
+    //Handles asset management and drawing the component.
+    ConfigurableImageComponent buttonImage;
+    
     void applyConfigAssets(Array<String> assetNames,
-            Array<Colour> colours) {
-    }
+            Array<Colour> colours) { }
+
+    void paintButton(Graphics& g, bool isMouseOverButton, bool isButtonDown)
+    override { }
+
+
 };

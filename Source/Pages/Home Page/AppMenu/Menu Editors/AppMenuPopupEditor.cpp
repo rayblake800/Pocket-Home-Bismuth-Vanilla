@@ -23,49 +23,53 @@ terminalCheckboxLabel("runInTermLabel", "Run in terminal:")
     categoryEditButton.addListener(this);
     iconPathEditor.addFileSelectListener(this);
 
-    //build component layout
-    int currentRow = -1;
-    std::function<void(int) > addRow = [this, &currentRow](int rowWeight)
-    {
-        layoutManager.addRow(rowWeight);
-        currentRow++;
-    };
-    //title row:
-    addRow(1);
-    layoutManager.addComponent(&titleLabel, currentRow, 1, this);
-    //name row:
-    addRow(1);
-    layoutManager.addComponent(&nameLabel, currentRow, 1, this);
-    layoutManager.addComponent(&nameEditor, currentRow, 2, this);
-    //icon row:
-    addRow(1);
-    layoutManager.addComponent(&iconLabel, currentRow, 2, this);
-    layoutManager.addComponent(&iconPathEditor, currentRow, 3, this);
-    layoutManager.addComponent(&iconPreview, currentRow, 1, this);
+    RelativeLayoutManager::Layout layout = {
+        {1,
+            {
+                {&nameLabel,1},
+                {&nameEditor,2}
+            }
+        },
+        {1,
+            {
+                {&iconLabel,2},
+                {&iconPathEditor,3},
+                {&iconPreview,1}
+            }    
+        }
+    };  
     //launch command row
     if (showCommandField)
     {
-        addRow(1);
-        layoutManager.addComponent(&commandLabel, currentRow, 1, this);
-        layoutManager.addComponent(&commandEditor, currentRow, 2, this);
-        addRow(1);
-        layoutManager.addComponent(&terminalCheckboxLabel, currentRow, 6, this);
-        layoutManager.addComponent(&terminalCheckbox, currentRow, 1, this);
+        layout.push_back(
+        {1,
+            {
+                {&commandLabel,1},
+                {&commandEditor,2}
+            }
+        });
+        layout.push_back(
+        {1,
+            {
+                {&terminalCheckboxLabel,6},
+                {&terminalCheckbox,1}
+            }
+        });
     }
     //category list rows:
     if (showCategoryList)
     {
-        addRow(1);
-        layoutManager.addComponent(nullptr, currentRow, 1, this);
-        layoutManager.addComponent(&categoryEditButton, currentRow, 4, this);
-        layoutManager.addComponent(nullptr, currentRow, 1, this);
+        
+        layout.push_back(
+        {1,
+            {
+                {nullptr,1},
+                {&categoryEditButton,4},
+                {nullptr,1}
+            }
+        });
     }
-    //confirm/cancel buttons
-    addRow(1);
-    layoutManager.addComponent(&cancelButton, currentRow, 1, this);
-    layoutManager.addComponent(&confirmButton, currentRow, 1, this);
-
-    resized();
+    setLayout(layout);
 }
 
 AppMenuPopupEditor::~AppMenuPopupEditor()
@@ -155,11 +159,11 @@ void AppMenuPopupEditor::setTerminalCheckbox(bool launchInTerm)
 }
 
 /**
- * Handles the delete, confirm, and cancel buttons.
+ * Handles the category editor button.
  */
-void AppMenuPopupEditor::buttonClicked(Button* buttonClicked)
+void AppMenuPopupEditor::editorButtonClicked(Button* button)
 {
-    if (buttonClicked == &categoryEditButton)
+    if (button == &categoryEditButton)
     {
         categoryEditor = new CategoryPopupEditor(categories,
                 [this](Array<String> newCategories)
@@ -167,9 +171,6 @@ void AppMenuPopupEditor::buttonClicked(Button* buttonClicked)
                     categories = newCategories;
                 });
         addAndMakeVisible(categoryEditor);
-    } else
-    {
-        this->PopupEditorComponent::buttonClicked(buttonClicked);
     }
 }
 

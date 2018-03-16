@@ -1,30 +1,30 @@
 #include "Utils.h"
+#include "TempTimer.h"
 #include "PageStackComponent.h"
 
 PageStackComponent::PageStackComponent()
 {
     setInterceptsMouseClicks(false, true);
     setWantsKeyboardFocus(false);
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("PageStackComponent");
-#endif
+#    endif
 }
 
 PageStackComponent::~PageStackComponent() { }
 
-void PageStackComponent::resized()
-{
-    if (!stack.isEmpty())
-    {
-        stack.getLast()->setBounds(getBounds());
-    }
-}
-
+/**
+ * @return true iff the page is currently on a page stack.
+ */
 bool PageStackComponent::Page::isOnPageStack()
 {
     return pageStack != nullptr;
 }
 
+/**
+ * If this page is currently on a page stack, this will remove it from
+ * the stack.
+ */
 void PageStackComponent::Page::removeFromStack(Transition transition)
 {
     if (isOnPageStack())
@@ -40,6 +40,10 @@ void PageStackComponent::Page::removeFromStack(Transition transition)
     }
 }
 
+/**
+ * If this page is on a page stack, this will push a new page
+ * on top of the stack.
+ */
 void PageStackComponent::Page::pushPageToStack(Page* newPage, Transition transition)
 {
 
@@ -49,6 +53,9 @@ void PageStackComponent::Page::pushPageToStack(Page* newPage, Transition transit
     }
 }
 
+/**
+ * Add a page to the page stack.
+ */
 void PageStackComponent::pushPage(Page *page, Transition transition)
 {
     auto bounds = getLocalBounds();
@@ -68,81 +75,99 @@ void PageStackComponent::pushPage(Page *page, Transition transition)
  */
 void PageStackComponent::popPage(Transition transition)
 {
+    const ScopedLock lock(stackLock);
     if (!stack.isEmpty())
     {
-        transitionOut(stack.getLast(), transition, transitionDurationMillis, true);
+        transitionOut(stack.getLast(), transition, transitionDurationMillis,
+                true);
         stack.getLast()->pageRemovedFromStack();
         stack.getLast()->pageStack = nullptr;
         stack.removeLast();
         if (!stack.isEmpty())
         {
-            transitionIn(stack.getLast(), transition, transitionDurationMillis, true);
+            transitionIn(stack.getLast(), transition, transitionDurationMillis,
+                    true);
             stack.getLast()->pageRevealedOnStack();
         }
     }
 }
 
+/**
+ * @return a pointer to the top page on the stack, or nullptr if the stack
+ * is empty.
+ */
+PageStackComponent::Page *PageStackComponent::getCurrentPage()
+{
+    const ScopedLock lock(stackLock);
+    return stack.getLast();
+}
+
+/**
+ * Sets the current Page bounds to match the page stack.
+ */
+void PageStackComponent::resized()
+{
+    const ScopedLock lock(stackLock);
+    if (!stack.isEmpty())
+    {
+        stack.getLast()->setBounds(getBounds());
+    }
+}
+
+/**
+ * Animate a page as it is added to the stack.
+ */
 void PageStackComponent::transitionIn(Page *page, Transition transition,
         int durationMillis, bool reverse)
 {
     addAndMakeVisible(page);
-    auto bounds = getLocalBounds();
+    int dir = reverse ? -1 : 1;
+    const Rectangle<int>& bounds = getLocalBounds();
     switch (transition)
     {
-        case kTransitionTranslateHorizontal:
-        {
-            float dir = reverse ? -1.0f : 1.0f;
-            page->setBounds(bounds.translated(bounds.getWidth() * dir, 0));
-            animateTranslation(page, 0, 0, 1.0f, durationMillis);
-            break;
-        }
         case kTransitionTranslateHorizontalLeft:
-        {
-            float dir = reverse ? 1.0f : -1.0f;
+            dir *= -1;
+        case kTransitionTranslateHorizontal:
+
             page->setBounds(bounds.translated(bounds.getWidth() * dir, 0));
-            animateTranslation(page, 0, 0, 1.0f, durationMillis);
-        }
+            animateTranslation(page, 0, 0, durationMillis);
             break;
+
         default:
-        {
             page->setBounds(bounds);
             page->setVisible(true);
-        }
     }
-
     page->setEnabled(true);
 }
 
 void PageStackComponent::transitionOut(Page *page, Transition transition,
         int durationMillis, bool reverse)
 {
+    int dir = reverse ? 1 : -1;
     switch (transition)
     {
-        case kTransitionTranslateHorizontal:
-        {
-            auto bounds = getLocalBounds();
-            float dir = reverse ? 1.0f : -1.0f;
-            animateTranslation(page, bounds.getWidth() * dir, 0, 1.0f, durationMillis);
-            break;
-        }
         case kTransitionTranslateHorizontalLeft:
-        {
-            auto bounds = getLocalBounds();
-            float dir = reverse ? -1.0f : 1.0f;
-            animateTranslation(page, bounds.getWidth() * dir, 0, 1.0f, durationMillis);
-            break;
-        }
-            break;
-        default:
-        {
-        }
+            dir *= -1;
+        case kTransitionTranslateHorizontal:
+            animateTranslation(page, getWidth() * dir, 0,
+                    durationMillis);
     }
-
     page->setEnabled(false);
-    removeChildComponent(page);
+    TempTimer::initTimer(durationMillis, [this, page]()
+    {
+        removeChildComponent(page);
+    });
 }
 
-PageStackComponent::Page *PageStackComponent::getCurrentPage()
+/**
+ * Animate any page translation
+ */
+void PageStackComponent::animateTranslation(Page* page, int startX,
+        int startY, int durationMillis)
 {
-    return stack.getLast();
+    const Rectangle<int>& bounds = page->getBounds();
+    auto destBounds = bounds.translated(startX - bounds.getX(),
+            startY - bounds.getY());
+    Desktop::getInstance().getAnimator().animateComponent(page, destBounds,
+            1, durationMillis, true, 0, 0);
 }

@@ -15,26 +15,28 @@
 #pragma once
 #include "JuceHeader.h"
 
-class PageStackComponent : public Component {
+class PageStackComponent : public Component
+{
 public:
     PageStackComponent();
     ~PageStackComponent();
 
-    enum Transition {
+    enum Transition
+    {
         kTransitionNone,
         kTransitionTranslateHorizontal,
         kTransitionTranslateHorizontalLeft
     };
 
-    class Page : public Component {
+    class Page : public Component
+    {
     public:
         friend class PageStackComponent;
 
-        Page() {
-        }
+        Page() { }
 
-        virtual ~Page() {
-        }
+        virtual ~Page() { }
+        
         /**
          * @return true iff the page is currently on a page stack.
          */
@@ -45,29 +47,25 @@ public:
          * Whenever this page is added to a page stack, the PageStackComponent
          * will call this method. 
          */
-        virtual void pageAddedToStack() {
-        }
+        virtual void pageAddedToStack() { }
 
         /**
          * Whenever this page is removed a page stack, the PageStackComponent
          * will call this method. 
          */
-        virtual void pageRemovedFromStack() {
-        }
+        virtual void pageRemovedFromStack() { }
 
         /**
          * Whenever this page becomes the top page on the page stack, the 
          * PageStackComponent will call this method. 
          */
-        virtual void pageRevealedOnStack() {
-        }
+        virtual void pageRevealedOnStack() { }
 
         /**
          * When this page is on the top of the stack and a new page is added
          * above it, PageStackComponent will call this method.
          */
-        virtual void pageCoveredOnStack() {
-        }
+        virtual void pageCoveredOnStack() { }
 
         /**
          * If this page is currently on a page stack, this will remove it from
@@ -114,14 +112,34 @@ public:
 
 private:
 
+    /**
+     * Sets the current Page bounds to match the page stack.
+     */
     void resized() override;
+
+    /**
+     * Animate a page as it is added to the stack.
+     */
+    void transitionIn(Page* page, Transition transition, int durationMillis,
+            bool reverse = false);
+
+    /**
+     * Animate a page as it is removed from the stack.
+     */
+    void transitionOut(Page* page, Transition transition, int durationMillis,
+            bool reverse = false);
+
+    /**
+     * Animate any page translation
+     */
+    void animateTranslation(Page* page, int startX, int startY,
+            int durationMillis);
+
     const int transitionDurationMillis = 200;
 
     Array<Page *> stack;
+    //Prevent simultaneous access to the stack.
+    CriticalSection stackLock;
 
-    void transitionIn(Page *page, Transition transition, int durationMillis,
-            bool reverse = false);
-    void transitionOut(Page *page, Transition transition, int durationMillis,
-            bool reverse = false);
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PageStackComponent)
 };

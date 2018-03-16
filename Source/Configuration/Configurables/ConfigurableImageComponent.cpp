@@ -14,7 +14,7 @@ ConfigurableImageComponent::~ConfigurableImageComponent() { }
 /**
  * Load a new image from a different asset file
  */
-int ConfigurableImageComponent::setImageAssetIndex(int index)
+void ConfigurableImageComponent::setImageAssetIndex(int index)
 {
     if (index >= 0 && assetIndex != index)
     {

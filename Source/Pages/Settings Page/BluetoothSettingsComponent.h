@@ -1,6 +1,7 @@
 /**
  * @file BluetoothSettingsComponent.h
  * 
+ * Bluetooth is not yet implemented, for now this does pretty much nothing.
  * TODO: documentation
  */
 #pragma once
@@ -10,12 +11,34 @@
 class BluetoothSettingsComponent : public ConnectionSettingsComponent {
 public:
     BluetoothSettingsComponent(std::function<void()> openBluetoothPage);
-    virtual ~BluetoothSettingsComponent();
-
-    void enabledStateChanged(bool enabled) override;
-    void updateButtonText() override;
+    virtual ~BluetoothSettingsComponent() {}
 
 private:
-    BluetoothStatus bluetoothStatus;
+    /**
+     * @return true iff bluetooth is turned on
+     */
+    bool connectionEnabled() override;
+
+    /**
+     * @return true iff bluetooth is connecting
+     */
+    bool isBusy() override;
+
+    /**
+     * @return the bluetooth icon asset name
+     */
+    String getIconAsset() override;
+
+    /**
+     * Enable/disable bluetooth, once this program can actually do that.
+     * @param enabled
+     */
+    void enabledStateChanged(bool enabled) override;
+    
+    /**
+     * @return "coming soon!"
+     */
+    String updateButtonText() override;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BluetoothSettingsComponent)
 };

@@ -24,45 +24,6 @@ Drawable * createSVGDrawable(const File& svgFile);
 
 /**
  * 
- * @param edge0
- * @param edge1
- * @param x
- * @return 
- */
-float smoothstep(float edge0, float edge1, float x);
-
-/**
- * 
- * @param a
- * @param b
- * @param t
- * @return 
- */
-float mix(float a, float b, float t);
-
-/**
- * 
- * @param x
- * @param imin
- * @param imax
- * @param omin
- * @param omax
- * @return 
- */
-float mapLinear(float x, float imin, float imax, float omin, float omax);
-
-/**
- * 
- * @param component
- * @param x
- * @param y
- * @param alpha
- * @param durationMillis
- */
-void animateTranslation(Component *component, int x, int y, float alpha, int durationMillis);
-
-/**
- * 
  * @param orig
  * @param delim
  * @return 

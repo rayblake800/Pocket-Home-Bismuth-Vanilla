@@ -8,45 +8,46 @@ BluetoothSettingsComponent::BluetoothSettingsComponent
 ConnectionSettingsComponent(openBluetoothPage)
 {
 
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("BluetoothSettingsComponent");
-#endif
-    setIcon("bluetoothIcon.svg");
-    updateButtonText();
+#    endif
+    refresh();
 }
 
-BluetoothSettingsComponent::~BluetoothSettingsComponent() { }
+    /**
+     * @return true iff bluetooth is turned on
+     */
+    bool BluetoothSettingsComponent::connectionEnabled()
+    {
+        return false;
+    }
 
-void BluetoothSettingsComponent::enabledStateChanged(bool enabled)
-{
-    bluetoothStatus.enabled  = enabled;
-    setPageButtonEnabled(enabled);
-    updateButtonText();
-}
+    /**
+     * @return true iff bluetooth is connecting
+     */
+    bool BluetoothSettingsComponent::isBusy()
+    {
+        return false;
+    }
 
-void BluetoothSettingsComponent::updateButtonText()
-{
+    /**
+     * @return the bluetooth icon asset name
+     */
+    String BluetoothSettingsComponent::getIconAsset()
+    {
+        return "bluetoothIcon.svg";
+    }
+
+    /**
+     * Enable/disable bluetooth, once this program can actually do that.
+     * @param enabled
+     */
+    void BluetoothSettingsComponent::enabledStateChanged(bool enabled){}
     
-    if (bluetoothStatus.enabled)
+    /**
+     * @return "coming soon!"
+     */
+    String BluetoothSettingsComponent::updateButtonText()
     {
-        int connectedDeviceCount =
-                std::accumulate(bluetoothStatus.devices.begin(),
-                bluetoothStatus.devices.end(), 0,
-                [](int n, BluetoothDevice * d)
-                {
-                    return n + d->connected; });
-        if (connectedDeviceCount > 0)
-        {
-            setPageButtonText(std::to_string(connectedDeviceCount) 
-                    + " Devices Connected");
-        }
-        else
-        {
-            setPageButtonText("No Devices Connected");
-        }
+        return "coming soon!";
     }
-    else
-    {
-        setPageButtonText("Bluetooth Off");
-    }
-}

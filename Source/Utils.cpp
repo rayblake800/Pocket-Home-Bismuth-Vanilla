@@ -69,30 +69,6 @@ Drawable * createSVGDrawable(const File& svgFile)
     return Drawable::createFromSVG(*svgElement);
 }
 
-float smoothstep(float edge0, float edge1, float x)
-{
-    x = std::min(std::max((x - edge0) / (edge1 - edge0), 0.0f), 1.0f);
-    return x * x * (3.0f - 2.0f * x);
-}
-
-float mix(float a, float b, float t)
-{
-    return t * (b - a) + a;
-}
-
-float mapLinear(float x, float imin, float imax, float omin, float omax)
-{
-    return mix(omin, omax, (x - imin) / (imax - imin));
-}
-
-void animateTranslation(Component *component, int x, int y, float alpha, int durationMillis)
-{
-    const auto &bounds = component->getBounds();
-    auto destBounds = bounds.translated(x - bounds.getX(), y - bounds.getY());
-    Desktop::getInstance().getAnimator().animateComponent(component, destBounds, alpha,
-            durationMillis, true, 0, 0);
-}
-
 Array<String> split(const String &orig, const String &delim)
 {
     Array<String> elems;

@@ -11,6 +11,7 @@
 #include "PopupEditorComponent.h"
 #include "IconThread.h"
 #include "CategoryPopupEditor.h"
+#include "SwitchComponent.h"
 
 /**
  * TODO:
@@ -103,11 +104,12 @@ private:
      * @param edited
      */
     void fileSelected(FileSelectTextEditor* edited);
+    
     /**
-     * Handles the delete, confirm, and cancel buttons.
-     * @param buttonClicked
+     * Handles the category editor button.
+     * @param button
      */
-    void buttonClicked(Button* buttonClicked) override;
+    void editorButtonClicked(Button* button) override;
 
 
     //Used for loading icon previews.
@@ -136,6 +138,6 @@ private:
     //Labels the terminal check
     ScalingLabel terminalCheckboxLabel;//text:"Run in terminal:"
     //Sets if this application launches as a terminal application
-    ToggleButton terminalCheckbox;
+    SwitchComponent terminalCheckbox;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuPopupEditor)
 };

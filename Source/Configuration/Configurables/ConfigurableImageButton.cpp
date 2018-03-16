@@ -2,31 +2,29 @@
 
 ConfigurableImageButton::ConfigurableImageButton
 (String componentKey, int assetIndex, RectanglePlacement placement) :
+buttonImage(componentKey, assetIndex, placement),
 ConfigurableComponent(componentKey),
-DrawableImageButton("", placement)
+Button(componentKey + "Button")
 {
-    imageComponent = new ConfigurableImageComponent
-            (componentKey, assetIndex, placement);
-    addAndMakeVisible(imageComponent);
+    addAndMakeVisible(buttonImage);
 }
 
-ConfigurableImageButton::~ConfigurableImageButton()
+ConfigurableImageButton::~ConfigurableImageButton() { }
+
+/**
+ * Load a new image from a different asset file
+ */
+void ConfigurableImageButton::setImageAssetIndex(int index)
 {
+    buttonImage.setImageAssetIndex(index);
 }
 
 /**
- *Adjust bounds based on config settings
+ * Keeps the image set to component bounds.
  */
-void ConfigurableImageButton::applyConfigBounds()
+void ConfigurableImageButton::resized()
 {
-    ConfigurableImageComponent * image =
-            dynamic_cast<ConfigurableImageComponent *> (imageComponent.get());
-    if (image != nullptr)
-    {
-        image->applyConfigBounds();
-        Rectangle<int> bounds = image->getBounds();
-        setBounds(bounds);
-        image->setBounds(bounds.withPosition(0, 0));
-    }
+    buttonImage.setBounds(getLocalBounds());
 }
+
 

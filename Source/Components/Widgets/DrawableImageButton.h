@@ -78,10 +78,11 @@ protected:
      */
     void resized() override;
     
-    ScopedPointer<DrawableImageComponent> imageComponent;
 private:
     /**
      * Change button alpha on click.
      */
     void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
+    
+    ScopedPointer<DrawableImageComponent> imageComponent;
 };

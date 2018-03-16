@@ -10,9 +10,9 @@ cancelButton("cancel.svg"),
 confirmButton("confirm.svg")
 {
     setWantsKeyboardFocus(true);
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName(title + String("popupEditor"));
-#endif
+#    endif
     loadAllConfigProperties();
 
     titleLabel.setJustificationType(Justification::centred);
@@ -24,10 +24,6 @@ confirmButton("confirm.svg")
     confirmButton.addListener(this);
 
     setInterceptsMouseClicks(true, true);
-    MessageManager::callAsync([this]
-    {
-        this->grabKeyboardFocus();
-    });
 }
 
 PopupEditorComponent::~PopupEditorComponent() { }
@@ -38,7 +34,38 @@ PopupEditorComponent::~PopupEditorComponent() { }
 void PopupEditorComponent::closePopup()
 {
     setVisible(false);
-    getParentComponent()->removeChildComponent(this);
+    Component* parent = getParentComponent();
+    if (parent != nullptr)
+    {
+        parent->removeChildComponent(this);
+    }
+}
+
+/**
+ * Add, make visible, and set the layout of components below the title
+ * label and above the cancel and confirm buttons.
+ */
+void PopupEditorComponent::setLayout(RelativeLayoutManager::Layout layout)
+{
+    layout.insert(layout.begin(),
+    {1,
+        {
+            {&titleLabel, 1}
+        }
+    });
+            
+    layout.push_back(
+    {1,
+        {
+            {&cancelButton,1},
+            {&confirmButton,1}
+        }
+    });
+    layoutManager.setLayout(layout, this);
+    if(!getBounds().isEmpty())
+    {
+        resized();
+    }
 }
 
 /**
@@ -52,10 +79,13 @@ void PopupEditorComponent::buttonClicked(Button* buttonClicked)
     {
         closePopup();
     }
-    if (buttonClicked == &confirmButton)
+    else if (buttonClicked == &confirmButton)
     {
         onConfirm(this);
         closePopup();
+    }
+    else{
+        editorButtonClicked(buttonClicked);
     }
 }
 
@@ -87,4 +117,15 @@ void PopupEditorComponent::resized()
     this->ConfigurableImageComponent::resized();
     layoutManager.layoutComponents(getLocalBounds().reduced(marginPixels),
             xPaddingPixels, yPaddingPixels);
+}
+
+/**
+ * Grab keyboard focus when the component becomes visible.
+ */
+void PopupEditorComponent::visibilityChanged()
+{
+    if (isShowing())
+    {
+        grabKeyboardFocus();
+    }
 }

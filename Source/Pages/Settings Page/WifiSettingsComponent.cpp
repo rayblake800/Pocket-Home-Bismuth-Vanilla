@@ -1,4 +1,5 @@
 #include "PocketHomeApplication.h"
+#include "ComponentConfigFile.h"
 #include "WifiSettingsComponent.h"
 
 WifiSettingsComponent::WifiSettingsComponent
@@ -9,39 +10,53 @@ ConnectionSettingsComponent(openWifiPage, "wifi")
 #    if JUCE_DEBUG
     setName("WifiSettingsComponent");
 #    endif
-    setIcon("wifiIcon.svg");
+    WifiStatus* wifiStatus = PocketHomeApplication::getInstance()
+            ->getWifiStatus();
+    if (wifiStatus != nullptr)
+    {
+        wifiStatus->addListener(this);
+    }
+    refresh();
+}
+
+/**
+ * @return true if wifi is enabled, false if disabled
+ */
+bool WifiSettingsComponent::connectionEnabled()
+{
+
     WifiStatus* wifiStatus = PocketHomeApplication::getInstance()
             ->getWifiStatus();
     if (wifiStatus == nullptr)
     {
-        DBG("WifiSettingsComponent::" << __func__ << ": wifi thread is null!");
-        setPageButtonEnabled(false);
-        setToggleState(false);
+        return false;
     }
-    else
-    {
-        wifiStatus->addListener(this);
-        setPageButtonEnabled(wifiStatus->isEnabled());
-        setToggleState(wifiStatus->isEnabled());
-    }
-    addChildComponent(spinner);
-    updateButtonText();
+    return wifiStatus->isEnabled();
 }
 
-WifiSettingsComponent::~WifiSettingsComponent() { }
-
-void WifiSettingsComponent::resized()
+/**
+ * @return true iff wifi is connecting, disconnecting, turning on, or
+ * turning off.
+ */
+bool WifiSettingsComponent::isBusy()
 {
-    ConnectionSettingsComponent::resized();
-    Rectangle<int> spinnerBounds = getLocalBounds();
-    spinnerBounds.setWidth(spinnerBounds.getHeight());
-    spinner.setBounds(spinnerBounds);
+    return wifiBusy;
 }
 
+/**
+ * @return the wifi icon
+ */
+String WifiSettingsComponent::getIconAsset()
+{
+    return "wifiIcon.svg";
+}
+
+/**
+ * Enable or disable the wifi radio.
+ */
 void WifiSettingsComponent::enabledStateChanged(bool enabled)
 {
-    updateButtonText();
-    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
+    WifiStatus* wifiStatus = PocketHomeApplication::getInstance()
             ->getWifiStatus();
     if (wifiStatus != nullptr)
     {
@@ -57,80 +72,36 @@ void WifiSettingsComponent::enabledStateChanged(bool enabled)
     else
     {
         DBG("WifiSettingsComponent::" << __func__ << ": wifiStatus is null!");
-        setToggleState(false);
-    }
-}
-
-void WifiSettingsComponent::handleWifiEvent(WifiStatus::WifiEvent event)
-{
-    switch (event)
-    {
-        case WifiStatus::wifiDisabled:
-            setToggleState(false);
-        case WifiStatus::wifiEnabled:
-        case WifiStatus::wifiConnected:
-        case WifiStatus::wifiDisconnected:
-        case WifiStatus::wifiConnectionFailed:
-            enableWifiActions();
-            break;
-        case WifiStatus::wifiBusy:
-            disableWifiActions();
-    }
-}
-
-void WifiSettingsComponent::enableWifiActions()
-{
-    bool enabled = wifiEnabled();
-    spinner.setVisible(false);
-    setIconVisible(true);
-    setPageButtonEnabled(enabled);
-    updateButtonText();
-    setToggleState(enabled);
-}
-
-void WifiSettingsComponent::disableWifiActions()
-{
-    bool enabled = wifiEnabled();
-    spinner.setVisible(true);
-    setIconVisible(false);
-    setPageButtonEnabled(enabled);
-    updateButtonText();
-    setToggleState(enabled);
-}
-
-void WifiSettingsComponent::updateButtonText()
-{
-    if (wifiEnabled())
-    {
-        WifiStatus* status =  PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-        WifiAccessPoint wifiAP = status->getConnectedAccessPoint();
-        if (!wifiAP.isNull())
-        {
-            setPageButtonText(wifiAP.getSSID());
-        }
-        else
-        {
-            setPageButtonText("Not Connected");
-        }
-    }
-    else
-    {
-        setPageButtonText("WiFi Off");
     }
 }
 
 /**
- * @return true if wifi is enabled, false if wifi is disabled or
- * the wifi thread hasn't been created.
+ * Use wifi status updates to keep the component updated.
  */
-bool WifiSettingsComponent::wifiEnabled()
+void WifiSettingsComponent::handleWifiEvent(WifiStatus::WifiEvent event)
 {
-    WifiStatus* status =  PocketHomeApplication::getInstance()
+    wifiBusy = (event == WifiStatus::wifiBusy);
+    refresh();
+}
+
+/**
+ * @return Wifi on, Wifi off, or the active connection name. 
+ */
+String WifiSettingsComponent::updateButtonText()
+{
+    WifiStatus* status = PocketHomeApplication::getInstance()
             ->getWifiStatus();
-    if (status == nullptr)
+    if (status == nullptr || !status->isEnabled())
     {
-        return false;
+        return "WiFi Off";
     }
-    return status->isEnabled();
+    WifiAccessPoint wifiAP = status->getConnectedAccessPoint();
+    if (!wifiAP.isNull())
+    {
+        return wifiAP.getSSID();
+    }
+    else
+    {
+        return "Not Connected";
+    }
 }

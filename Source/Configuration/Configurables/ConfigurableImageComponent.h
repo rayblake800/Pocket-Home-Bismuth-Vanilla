@@ -29,7 +29,7 @@ public:
      * the ComponentConfigFile.  If index is out of bounds or it equals the
      * current loaded index, nothing will happen. 
      */
-    int setImageAssetIndex(int index);
+    void setImageAssetIndex(int index);
     
 protected:
     /**
