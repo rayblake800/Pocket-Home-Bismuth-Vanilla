@@ -1,6 +1,6 @@
 #include <map>
 #include "JuceHeader.h"
-#include "Utils.h"
+#include "AssetFiles.h"
 #include "WifiStatusJson.h"
 
 WifiStatusJson::WifiStatusJson() : connectedAP(WifiAccessPoint()) { }
@@ -10,7 +10,7 @@ WifiStatusJson::~WifiStatusJson() { }
 Array<WifiAccessPoint> WifiStatusJson::nearbyAccessPoints()
 {
     Array<WifiAccessPoint> accessPoints;
-    auto json = JSON::parse(assetFile("wifi.json"));
+    auto json = JSON::parse(AssetFiles::findAssetFile("wifi.json"));
 
     for (const auto &apJson : *json.getArray())
     {

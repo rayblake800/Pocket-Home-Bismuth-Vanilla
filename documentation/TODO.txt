@@ -1,7 +1,3 @@
-Fetching categories is broken now, fix ASAP 
-
--Move asset handling to AssetFile.h 
-
 -Re-add the IP label to the Settings Page
     -Add option to display the IP label on the home page
 

@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "AssetFiles.h"
 #include "Spinner.h"
 
 Spinner::Spinner(int secondsToTimeout) :
@@ -21,7 +21,7 @@ timeout(secondsToTimeout)
     };
     for (const String& path : spinnerImgPaths)
     {
-        spinnerImages.add(createImageFromFile(assetFile(path)));
+        spinnerImages.add(AssetFiles::createImageAsset(path));
     }
     spinnerImage.setImage(spinnerImages[0]);
     addAndMakeVisible(spinnerImage);

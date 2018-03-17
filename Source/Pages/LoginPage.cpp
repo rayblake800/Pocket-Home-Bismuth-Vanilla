@@ -1,5 +1,5 @@
 #include "SetPasswordPage.h"
-#include "Utils.h"
+#include "AssetFiles.h"
 #include "LoginPage.h"
 
 LoginPage::LoginPage(std::function<void () > loginCallback) :
@@ -43,7 +43,7 @@ foundPassword(false)
 #if JUCE_DEBUG
     setName("LoginPage");
 #endif
-    setBackgroundImage(createImageFromFile(assetFile("login/background.png")));
+    setBackgroundImage(AssetFiles::createImageAsset("login/background.png"));
     loginButton.addListener(this);
     passwordField.addListener(this);
     addAndShowLayoutComponents();

@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "AssetFiles.h"
 #include "IconThread.h"
 
 const String IconThread::defaultIconPath =
@@ -6,7 +6,7 @@ const String IconThread::defaultIconPath =
 
 IconThread::IconThread() : Thread("IconThread")
 {
-    defaultIcon = createImageFromFile(File(defaultIconPath));
+    defaultIcon = AssetFiles::createImageAsset(defaultIconPath);
 }
 
 IconThread::~IconThread() { }
@@ -19,7 +19,7 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
     //if the icon variable is a full path, return that
     if (icon.substring(0, 1) == "/")
     {
-        assignImage(createImageFromFile(File(icon)));
+        assignImage(AssetFiles::createImageAsset(icon));
     }
     else
     {
@@ -30,7 +30,7 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
         }
         if (iconPaths.count(icon) > 0)
         {
-            assignImage(createImageFromFile(File(iconPaths[icon])));
+            assignImage(AssetFiles::createImageAsset(iconPaths[icon]));
         }
         else
         {
@@ -97,18 +97,17 @@ void IconThread::run()
         }
         if (icon.isNotEmpty())
         {
-            File iconFile(icon);
             Image iconImg;
             {
                 const ScopedUnlock imageLoadUnlock(lock);
                 const MessageManagerLock lock;
-                iconImg = createImageFromFile(iconFile);
+                iconImg = AssetFiles::createImageAsset(icon);
             }
             if (iconImg.isNull())
             {
                 DBG("Removing unloadable icon " << icon);
                 auto iconIter = iconPaths.find
-                        (iconFile.getFileNameWithoutExtension());
+                        (File(icon).getFileNameWithoutExtension());
                 iconPaths.erase(iconIter);
             }
             else

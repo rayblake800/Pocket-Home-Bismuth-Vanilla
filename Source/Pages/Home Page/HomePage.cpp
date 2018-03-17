@@ -1,7 +1,7 @@
 #include "ConfigurableImageComponent.h"
 #include "MainConfigFile.h"
 #include "PokeLookAndFeel.h"
-#include "Utils.h"
+#include "AssetFiles.h"
 #include "PagedAppMenu.h"
 #include "ScrollingAppMenu.h"
 #include "HomePage.h"
@@ -62,7 +62,7 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
             }
             else
             {
-                setBackgroundImage(ImageFileFormat::loadFrom(assetFile(background)));
+                setBackgroundImage(AssetFiles::createImageAsset(background));
             }
         }
         else if (key == MainConfigFile::menuTypeKey)

@@ -9,18 +9,6 @@
 #pragma once
 #include "JuceHeader.h"
 
-File absoluteFileFromPath(const String &path);
-File assetFile(const String &path);
-
-Image createImageFromFile(const File &imageFile);
-
-/**
- * Creates a Drawable object from an svg file
- * @param svgFile a valid svg file.
- * @return A drawable if the file was valid, nullptr otherwise
- */
-Drawable * createSVGDrawable(const File& svgFile);
-
 #if JUCE_DEBUG
 /**
  * Print debug info about the component tree
@@ -45,7 +33,7 @@ Rectangle<int> getWindowSize();
 void confirmAction(String title, String message, std::function<void() > onConfirm);
 
 /**
- * 
+ * Find the median of three values.
  * @param a
  * @param b
  * @param c

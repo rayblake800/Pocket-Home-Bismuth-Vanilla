@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "AssetFiles.h"
 #include "Configurable.h"
 #include "ConfigFile.h"
 
@@ -225,7 +225,7 @@ var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
                 << " doesn't exist in " << filename);
         if (defaultConfig.isVoid())
         {
-            defaultConfig = JSON::parse(assetFile(filename));
+            defaultConfig = JSON::parse(AssetFiles::findAssetFile(filename));
         }
         fileChangesPending[filename] = true;
         return defaultConfig.getProperty(key, var());

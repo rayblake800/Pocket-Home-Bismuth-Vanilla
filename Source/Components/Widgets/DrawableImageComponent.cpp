@@ -1,5 +1,5 @@
 #include <map>
-#include "Utils.h"
+#include "AssetFiles.h"
 #include "DrawableImageComponent.h"
 
 const Array<Colour> DrawableImageComponent::defaultColours =
@@ -71,7 +71,7 @@ void DrawableImageComponent::setImage(String assetFilename)
 {
     if (assetFilename.isNotEmpty())
     {
-        setImage(assetFile(assetFilename));
+        setImage(AssetFiles::findAssetFile(assetFilename));
     }
 }
 
