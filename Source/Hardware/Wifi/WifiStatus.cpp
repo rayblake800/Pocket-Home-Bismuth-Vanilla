@@ -114,14 +114,6 @@ void WifiStatus::windowFocusLost()
  */
 void WifiStatus::windowFocusGained()
 {
-    if (isEnabled())
-    {
-        DBG("WifiStatus::" << __func__ << ": restarting wifi thread");
+    DBG("WifiStatus::" << __func__ << ": restarting wifi thread");
         startThread();
-    }
-    else
-    {
-        DBG("WifiStatus::" << __func__
-                << ": wifi disabled, skipping wifi thread start");
-    }
 }

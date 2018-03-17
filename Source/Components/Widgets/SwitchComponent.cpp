@@ -20,30 +20,8 @@ void SwitchComponent::setToggleState(bool shouldBeOn,
 {
     if (shouldBeOn != getToggleState())
     {
-        if (animate)
-        {
-            ComponentAnimator& animator = Desktop::getInstance().getAnimator();
-            if (animator.isAnimating(&handle))
-            {
-                TempTimer::initTimer(animationDuration,
-                        [this, shouldBeOn, notification]()
-                        {
-                            clicked();
-                            ToggleButton::setToggleState
-                                    (shouldBeOn, notification);
-                        });
-            }
-            else
-            {
-                clicked();
-                ToggleButton::setToggleState(shouldBeOn, notification);
-            }
-        }
-        else
-        {
-            ToggleButton::setToggleState(shouldBeOn, notification);
-            resized();
-        }
+        ToggleButton::setToggleState(shouldBeOn, notification);
+        clicked();
     }
 }
 
@@ -115,13 +93,24 @@ void SwitchComponent::resized()
  */
 void SwitchComponent::clicked()
 {
-    const Rectangle<int>& bounds = getToggleState() ?
-            handleBoundsOn : handleBoundsOff;
-    Desktop::getInstance().getAnimator().animateComponent(&handle, bounds, 1.0f,
-            animationDuration, false, 0.0, 0.0);
-    handle.setColour(findColour(getToggleState() ?
+    if(Desktop::getInstance().getAnimator().isAnimating(&handle)){
+        TempTimer::initTimer(animationDuration,[this]
+        {
+            clicked();
+        });
+    }
+    else
+    {
+        const Rectangle<int>& bounds = getToggleState() ?
+                handleBoundsOn : handleBoundsOff;
+        if(bounds != handle.getBounds())
+        {
+            Desktop::getInstance().getAnimator().animateComponent(&handle, bounds, 1.0f,
+                    animationDuration, false, 0.0, 0.0);
+        }
+        handle.setColour(findColour(getToggleState() ?
             handleColourId : handleOffColourId));
-
+    }
 }
 
 void SwitchComponent::SwitchHandle::paint(Graphics& g)

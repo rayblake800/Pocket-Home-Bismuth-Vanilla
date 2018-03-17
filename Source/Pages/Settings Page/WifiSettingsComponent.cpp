@@ -62,10 +62,12 @@ void WifiSettingsComponent::enabledStateChanged(bool enabled)
     {
         if (!enabled && wifiStatus->isEnabled())
         {
+            wifiBusy = true;
             wifiStatus->disableWifi();
         }
         else if (enabled && !wifiStatus->isEnabled())
         {
+            wifiBusy = true;
             wifiStatus->enableWifi();
         }
     }

@@ -283,6 +283,7 @@ void WifiStatusNM::disconnect()
                 << connectedAP.getSSID());
         nm_device_disconnect(nmDevice, nullptr, nullptr);
         notifyListeners(wifiBusy);
+        connected = false;
     }
     else
     {
