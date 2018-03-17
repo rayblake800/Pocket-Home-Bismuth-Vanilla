@@ -50,7 +50,7 @@ bool DesktopEntryMenuItem::isTerminalApp() const
 /**
  * @return all application categories linked to this menu item.
  */
-Array<String> DesktopEntryMenuItem::getCategories() const
+StringArray DesktopEntryMenuItem::getCategories() const
 {
     return desktopEntry.getValue(DesktopEntry::categories);
 }
@@ -116,7 +116,7 @@ std::function<void(AppMenuPopupEditor*) > DesktopEntryMenuItem::getEditorCallbac
  */
 bool DesktopEntryMenuItem::removeMenuItemSource()
 {
-    Array<String> notShowIn = desktopEntry.getValue(DesktopEntry::notShowIn);
+    StringArray notShowIn = desktopEntry.getValue(DesktopEntry::notShowIn);
     notShowIn.add("pocket-home");
     desktopEntry.setValue(DesktopEntry::notShowIn, notShowIn);
     desktopEntry.writeFile();
@@ -133,7 +133,7 @@ bool DesktopEntryMenuItem::removeMenuItemSource()
  * @param useTerminal sets if this launches in a terminal window
  */
 void DesktopEntryMenuItem::editEntry(String name, String icon,
-        Array<String> categories,
+        StringArray categories,
         String command, bool useTerminal)
 {
     desktopEntry.setValue(DesktopEntry::name, name);

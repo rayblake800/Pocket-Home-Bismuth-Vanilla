@@ -19,7 +19,7 @@ class PageStackComponent : public Component
 {
 public:
     PageStackComponent();
-    ~PageStackComponent();
+    ~PageStackComponent() {}
 
     enum Transition
     {

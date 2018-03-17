@@ -31,7 +31,7 @@ protected:
      * the component's LookAndFeel, not through here.
      * @see PokeLookAndFeel
      */
-    virtual void applyConfigAssets(Array<String> assetNames,
+    virtual void applyConfigAssets(StringArray assetNames,
             Array<Colour> colours);
 
     /**

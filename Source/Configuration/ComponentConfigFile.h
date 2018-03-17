@@ -35,7 +35,7 @@ public:
      * @return the keys to all Component color settings stored in
      * components.json
      */
-    Array<String> getColourKeys() const;
+    StringArray getColourKeys() const;
     
 
     //#### Boolean value keys #######
@@ -100,7 +100,7 @@ public:
         /**
          * @return the list of component asset files.
          */
-        Array<String> getAssetFiles();
+        StringArray getAssetFiles();
         /**
          * Use these settings to position and size a component
          * @param component an active component
@@ -116,7 +116,7 @@ public:
         float width;
         float height;
         Array<Colour> colours;
-        Array<String> assetFiles;
+        StringArray assetFiles;
     };
 
     /**
@@ -130,7 +130,7 @@ protected:
     /**
      * @return the list of all component keys.
      */
-    Array<String> getComponentKeys();
+    StringArray getComponentKeys();
     
     /**
      * @return the list of key Strings for each basic data value tracked in 

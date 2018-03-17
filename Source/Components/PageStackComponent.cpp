@@ -11,8 +11,6 @@ PageStackComponent::PageStackComponent()
 #    endif
 }
 
-PageStackComponent::~PageStackComponent() { }
-
 /**
  * @return true iff the page is currently on a page stack.
  */

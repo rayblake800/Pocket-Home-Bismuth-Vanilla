@@ -141,9 +141,9 @@ int ComponentConfigFile::getColourId(String colourKey)
  * @return the keys to all Component color settings stored in
  * components.json
  */
-Array<String> ComponentConfigFile::getColourKeys() const
+StringArray ComponentConfigFile::getColourKeys() const
 {
-    Array<String> keys;
+    StringArray keys;
     for (std::map<String, int>::const_iterator it = colourIds.begin();
          it != colourIds.end(); it++)
     {
@@ -230,7 +230,7 @@ ComponentConfigFile::ComponentSettings ComponentConfigFile::getComponentSettings
 /**
  * @return the list of all component keys.
  */
-Array<String> ComponentConfigFile::getComponentKeys()
+StringArray ComponentConfigFile::getComponentKeys()
 {
     return {
             scrollingAppMenuKey,
@@ -262,7 +262,7 @@ std::vector<ConfigFile::DataKey> ComponentConfigFile::getDataKeys() const
         {showClockKey, boolType},
         {use24HrModeKey, boolType}
     };
-    Array<String> colourKeys = getColourKeys();
+    StringArray colourKeys = getColourKeys();
     for (const String& colourKey : colourKeys)
     {
         keys.push_back({colourKey, stringType});
@@ -276,7 +276,7 @@ std::vector<ConfigFile::DataKey> ComponentConfigFile::getDataKeys() const
 void ComponentConfigFile::readDataFromJson(var& config, var& defaultConfig)
 {
     ConfigFile::readDataFromJson(config, defaultConfig);
-    Array<String> keys = getComponentKeys();
+    StringArray keys = getComponentKeys();
     for (const String& key : keys)
     {
         var componentData = getProperty(config, defaultConfig, key);
@@ -290,7 +290,7 @@ void ComponentConfigFile::readDataFromJson(var& config, var& defaultConfig)
 void ComponentConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
 {
     ConfigFile::copyDataToJson(jsonObj);
-    Array<String> keys = getComponentKeys();
+    StringArray keys = getComponentKeys();
     for (const String& key : keys)
     {
         jsonObj->setProperty(key, components[key].getDynamicObject());
@@ -392,7 +392,7 @@ Array<Colour> ComponentConfigFile::ComponentSettings::getColours()
     return colours;
 }
 
-Array<String> ComponentConfigFile::ComponentSettings::getAssetFiles()
+StringArray ComponentConfigFile::ComponentSettings::getAssetFiles()
 {
     return assetFiles;
 }

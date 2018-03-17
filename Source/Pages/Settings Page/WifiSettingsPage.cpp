@@ -2,8 +2,8 @@
 #include "PocketHomeApplication.h"
 #include "WifiSettingsPage.h"
 
-const Array<String>
-        WifiSettingsPage::wifiImageFiles = {
+const StringArray WifiSettingsPage::wifiImageFiles = 
+{
                                             "wifiStrength0.svg",
                                             "wifiStrength1.svg",
                                             "wifiStrength2.svg",

@@ -95,7 +95,7 @@ String AppMenuPopupEditor::getIconField()
 /**
  * @return the contents of the editable category list. 
  */
-Array<String> AppMenuPopupEditor::getCategories()
+StringArray AppMenuPopupEditor::getCategories()
 {
     return categories;
 }
@@ -136,7 +136,7 @@ void AppMenuPopupEditor::setIconField(String icon)
 /**
  * Set the values stored in the editable category list.
  */
-void AppMenuPopupEditor::setCategories(Array<String> categories)
+void AppMenuPopupEditor::setCategories(StringArray categories)
 {
     this->categories = categories;
 }
@@ -166,7 +166,7 @@ void AppMenuPopupEditor::editorButtonClicked(Button* button)
     if (button == &categoryEditButton)
     {
         categoryEditor = new CategoryPopupEditor(categories,
-                [this](Array<String> newCategories)
+                [this](StringArray newCategories)
                 {
                     categories = newCategories;
                 });

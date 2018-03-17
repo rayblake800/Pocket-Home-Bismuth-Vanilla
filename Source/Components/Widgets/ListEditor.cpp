@@ -1,7 +1,7 @@
 #include "Utils.h"
 #include "ListEditor.h"
 
-ListEditor::ListEditor(Array<String> initialList) :
+ListEditor::ListEditor(StringArray initialList) :
 listItems(initialList),
 listContainer("ListEditor", nullptr),
 addItemBtn("+")
@@ -46,7 +46,7 @@ int ListEditor::getNumRows()
 /**
  * @return all list row strings.
  */
-Array<String> ListEditor::getListItems() const
+StringArray ListEditor::getListItems() const
 {
     return listItems;
 }
@@ -54,7 +54,7 @@ Array<String> ListEditor::getListItems() const
 /**
  * Replace the existing item list entries with new ones.
  */
-void ListEditor::setListItems(Array<String> newItems)
+void ListEditor::setListItems(StringArray newItems)
 {
     listItems = newItems;
     listContainer.updateContent();

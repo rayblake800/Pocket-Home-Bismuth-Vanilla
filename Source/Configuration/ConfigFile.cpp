@@ -58,7 +58,7 @@ ConfigFile::~ConfigFile()
  * is notified whenever any data it tracks is changed.
  */
 void ConfigFile::registerConfigurable(Configurable * configurable,
-        Array<String> keys)
+        StringArray keys)
 {
     const ScopedLock changeLock(configLock);
     for (const String& key : keys)
@@ -72,7 +72,7 @@ void ConfigFile::registerConfigurable(Configurable * configurable,
  * changes.
  */
 void ConfigFile::unregisterConfigurable(Configurable * configurable,
-        Array<String> keys)
+        StringArray keys)
 {
     const ScopedLock changeLock(configLock);
     for (const String& key : keys)
@@ -112,7 +112,7 @@ var ConfigFile::openFile()
         return var();
     }
     openFileMap[filename] = true;
-    File configFile = File(getHomePath() + String(CONFIG_PATH) + filename);
+    File configFile = File("~" + String(CONFIG_PATH) + filename);
     return JSON::parse(configFile);
 }
 
@@ -251,7 +251,7 @@ void ConfigFile::writeChanges()
 
     //convert to JSON string, write to config.json
     String jsonText = JSON::toString(jsonBuilder.get());
-    File configFile = File(getHomePath() + String(CONFIG_PATH) + filename);
+    File configFile = File("~" + String(CONFIG_PATH) + filename);
     if (!configFile.exists())
     {
         configFile.create();

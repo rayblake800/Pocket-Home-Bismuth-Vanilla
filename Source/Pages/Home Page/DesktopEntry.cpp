@@ -2,18 +2,16 @@
 #include "Utils.h"
 #include "DesktopEntry.h"
 
-const String DesktopEntry::localEntryPath =
-        getHomePath() + "/.local/share/applications/";
+const String DesktopEntry::localEntryPath = "/~.local/share/applications/";
 
 /**
  * Load DesktopEntry data from a .desktop or .directory file
  */
-DesktopEntry::DesktopEntry(String path) :
-entrypath(path)
+DesktopEntry::DesktopEntry(File entryFile) :
+entrypath(entryFile.getFullPathName())
 {
-    File entryFile(path);
     ScopedPointer<FileInputStream> in = entryFile.createInputStream();
-    Array<String> lines;
+    StringArray lines;
     while (!in->isExhausted())
     {
         lines.add(in->readNextLine());
@@ -31,19 +29,13 @@ entrypath(path)
     }
 }
 
-DesktopEntry::DesktopEntry(const DesktopEntry& orig)
-{
-    entrypath = orig.entrypath;
-    dataStrings = orig.dataStrings;
-}
-
 DesktopEntry::~DesktopEntry() { }
 
 /**
  * Creates a new desktop entry from parameter data.
  */
 DesktopEntry::DesktopEntry(String title, String icon, String command,
-        Array<String> categories, bool launchInTerminal)
+        StringArray categories, bool launchInTerminal)
 {
     dataStrings[typeKey] = "Application";
     setValue(StringValue::name, title);
@@ -132,15 +124,16 @@ bool DesktopEntry::getValue(BoolValue valueType) const
 /**
  * Get stored list data.
  */
-Array<String> DesktopEntry::getValue(ListValue valueType) const
+StringArray DesktopEntry::getValue(ListValue valueType) const
 {
     try
     {
-        return split(dataStrings.at(getKey(valueType)), ";");
+        return StringArray::fromTokens(dataStrings.at(getKey(valueType)),
+                ";", "");
     }
     catch (std::out_of_range e)
     {
-        return Array<String>();
+        return StringArray();
     }
 }
 
@@ -163,7 +156,7 @@ void DesktopEntry::setValue(BoolValue valueType, bool newValue)
 /**
  * Changes the value of stored list data.
  */
-void DesktopEntry::setValue(ListValue valueType, Array<String> newValue)
+void DesktopEntry::setValue(ListValue valueType, StringArray newValue)
 {
     String joinedList = "";
     for (const String& listItem : newValue)
@@ -184,9 +177,10 @@ void DesktopEntry::writeFile()
 {
     String outFileText = "";
     String locale = getLocale();
-    Array<String> foundKeys;
+    StringArray foundKeys;
     //Reload the source file to preserve comments and alternate locale data
-    Array<String> lines = split(File(entrypath).loadFileAsString(), "\n");
+    StringArray lines = StringArray::fromLines
+            (File(entrypath).loadFileAsString());
     for (const String& line : lines)
     {
         if (outFileText.isNotEmpty())

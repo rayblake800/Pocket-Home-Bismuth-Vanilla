@@ -56,9 +56,7 @@ SetPasswordPage::~SetPasswordPage() { }
 
 void SetPasswordPage::loadPassword()
 {
-    char* home_str = getenv("HOME");
-    String home(home_str);
-    File passwd(home + "/.pocket-home/.passwd/passwd");
+    File passwd("~/.pocket-home/.passwd/passwd");
     if (passwd.exists())
     {
         String content = passwd.loadFileAsString();
@@ -77,7 +75,7 @@ void SetPasswordPage::loadPassword()
     }
     else
     {
-        File passwordFile(getHomePath() + String("/.pocket-home/.passwd"));
+        File passwordFile("~/.pocket-home/.passwd");
         if (!passwordFile.existsAsFile())
         {
             Result makeFile = passwordFile.create();

@@ -42,7 +42,7 @@ public:
      * of the data mapped to key.
      */
     void registerConfigurable(Configurable * configurable,
-            Array<String> keys);
+            StringArray keys);
 
     /**
      * Removes an object from the list of objects to notify when configuration
@@ -56,7 +56,7 @@ public:
      * this list.
      */
     void unregisterConfigurable(Configurable * configurable,
-            Array<String> keys);
+            StringArray keys);
 
     /**
      * Gets one of the values stored in the json configuration file

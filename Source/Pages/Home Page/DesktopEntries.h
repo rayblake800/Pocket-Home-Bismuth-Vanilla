@@ -37,7 +37,7 @@ public:
      * @return all DesktopEntry objects with at least one of the category values
      * in categories
      */
-    std::set<DesktopEntry> getCategoryListEntries(Array<String> categoryList);
+    std::set<DesktopEntry> getCategoryListEntries(StringArray categoryList);
 
     /**
      * Get the list of all categories found in all desktop entries.
@@ -60,11 +60,12 @@ public:
             std::function<void() > onFinish = std::function<void()>());
 
     /**
-     * If entries are currently loading asynchronously, this will signal for
-     * them to stop. Unless loading finishes on its own before this has a chance to
-     * stop it, the onFinish callback to loadEntries will not be called.
+     * This removes the notifyCallback and onFinish callback functions that
+     * are currently set to run when the thread finishes loading.  This should
+     * be called whenever it's necessary to delete an object referenced in the
+     * callbacks while desktop entries are still loading.
      */
-    void stopLoading();
+    void clearCallbacks();
 
 private:
     void run() override;

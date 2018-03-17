@@ -1,4 +1,5 @@
- 
+Fetching categories is broken now, fix ASAP 
+
 -Move asset handling to AssetFile.h 
 
 -Re-add the IP label to the Settings Page
@@ -18,6 +19,8 @@ accessible from the top page
 
 -Configurables in general could use an overhaul, they need more safeguards to
  ensure they're removed from their ConfigFiles if deleted. 
+
+-Define spinner images in ComponentConfig
 
 -implement UI settings page
 

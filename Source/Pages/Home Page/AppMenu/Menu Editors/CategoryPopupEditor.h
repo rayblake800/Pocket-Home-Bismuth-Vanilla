@@ -18,8 +18,8 @@ public:
      * final list of edited categories will be passed to it as its only 
      * parameter.
      */
-    CategoryPopupEditor(Array<String>categories,
-            std::function<void(Array<String>) > onConfirm);
+    CategoryPopupEditor(StringArray categories,
+            std::function<void(StringArray) > onConfirm);
     virtual ~CategoryPopupEditor();
 
 private:

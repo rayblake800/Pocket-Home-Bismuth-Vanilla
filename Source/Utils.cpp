@@ -69,85 +69,11 @@ Drawable * createSVGDrawable(const File& svgFile)
     return Drawable::createFromSVG(*svgElement);
 }
 
-Array<String> split(const String &orig, const String &delim)
-{
-    Array<String> elems;
-    String remainder = orig;
-    while (remainder.isNotEmpty())
-    {
-        int index = remainder.indexOf(delim);
-        if (index == -1)
-        {
-            elems.add(remainder);
-            break;
-        }
-        elems.add(remainder.substring(0, index));
-        remainder = remainder.substring(index + 1);
-    }
-    return elems;
-};
-
-String getHomePath()
-{
-    return String(std::getenv("HOME"));
-}
-
-//perform function(struct dirent*) on all files in path
-
-void foreachFile(const String& path, std::function<void(struct dirent*) > fn)
-{
-    DIR * dir = opendir(path.toRawUTF8());
-    if (dir != nullptr)
-    {
-        struct dirent *dirdata = nullptr;
-        do
-        {
-            dirdata = readdir(dir);
-            if (dirdata != nullptr)
-            {
-                fn(dirdata);
-            }
-        } while (dirdata != nullptr);
-        closedir(dir);
-    }
-}
-
-//List all non-directory files in path
-
-std::vector<String> listFiles(const String& path)
-{
-    std::vector<String> files;
-    foreachFile(path, [&files](struct dirent * dirdata)
-    {
-        if (dirdata->d_type != DT_DIR && dirdata->d_name != "")
-        {
-            files.push_back(dirdata->d_name);
-        }
-    });
-    return files;
-}
-
-//list all directory files in path, ignoring ./ and ../
-
-std::vector<String> listDirectoryFiles(const String& path)
-{
-    std::vector<String> directories;
-    foreachFile(path, [&directories](struct dirent * dirdata)
-    {
-        String name = dirdata->d_name;
-        if (dirdata->d_type == DT_DIR
-                && name != "." && name != ".." && !name.isEmpty())
-        {
-            directories.push_back(name);
-        }
-    });
-    return directories;
-}
-
 #if JUCE_DEBUG
 //Print debug info about the component tree
 void componentTrace()
 {
+    static DrawableRectangle highlightFocus;
     highlightFocus.setFill(FillType(Colour(0x0)));
     highlightFocus.setStrokeFill(FillType(Colour(0xff00ff00)));
     highlightFocus.setStrokeType(PathStrokeType(4));
@@ -173,7 +99,7 @@ void componentTrace()
         if (component->hasKeyboardFocus(false))
         {
             properties += "hasKeyFocus,";
-            highlightFocus.setBounds(component->getBounds());
+            highlightFocus.setBounds(component->getScreenBounds());
         }
         properties += component->isShowing() ? "showing" : "not showing";
         DBG(indent + properties);
@@ -202,22 +128,6 @@ Rectangle<int> getWindowSize()
     return windowComp->getLocalBounds();
 }
 
-//resizes a font to fit in a containing rectangle.
-//If fitting it in would require mangling the font size too much, the
-//font gets set to size zero.
-
-Font fontResizedToFit(Font font, String text, Rectangle<int>container)
-{
-    float currentHeight = font.getHeight();
-    float currentWidth = font.getStringWidth(text);
-    int newHeight = currentHeight * container.getWidth() / currentWidth;
-    if (newHeight > container.getHeight())
-    {
-        newHeight = container.getHeight();
-    }
-    font.setHeight(newHeight);
-    return font;
-}
 
 /**
  * Requests user confirmation before performing some action

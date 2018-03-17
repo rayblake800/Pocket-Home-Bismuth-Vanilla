@@ -26,7 +26,7 @@ void ConfigurableImageComponent::setImageAssetIndex(int index)
 /**
  * reload all image files
  */
-void ConfigurableImageComponent::applyConfigAssets(Array<String> assetNames,
+void ConfigurableImageComponent::applyConfigAssets(StringArray assetNames,
         Array<Colour> colours)
 {
     if (assetIndex >= 0 && assetIndex < assetNames.size())

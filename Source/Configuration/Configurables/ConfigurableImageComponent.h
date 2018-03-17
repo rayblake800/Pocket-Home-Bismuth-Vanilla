@@ -38,7 +38,7 @@ protected:
      * component
      * @param colours custom colour values used to replace default colours.
      */
-    virtual void applyConfigAssets(Array<String> assetNames,
+    virtual void applyConfigAssets(StringArray assetNames,
             Array<Colour> colours);
 
 private:

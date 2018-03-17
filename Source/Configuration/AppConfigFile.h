@@ -68,7 +68,7 @@ public:
         AppFolder();
         AppFolder(var jsonObj,int index);
         String name;
-        Array<String> categories;
+        StringArray categories;
         String icon;
         DynamicObject * getDynamicObject();
         bool operator==(const AppFolder& rhs) const;

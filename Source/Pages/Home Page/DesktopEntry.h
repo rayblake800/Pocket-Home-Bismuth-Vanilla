@@ -14,12 +14,9 @@ class DesktopEntry {
 public:
     /**
      * Load DesktopEntry data from a .desktop or .directory file
-     * @param path absolute path of the source file
+     * @param entryFile
      */
-    DesktopEntry(String path);
-
-    //Copy constructor
-    DesktopEntry(const DesktopEntry& orig);
+    DesktopEntry(File entryFile);
     
     /**
      * Creates a new desktop entry from parameter data.
@@ -34,7 +31,7 @@ public:
      *  terminal window.
      */
     DesktopEntry(String title,String icon,String command,
-    Array<String> categories,
+    StringArray categories,
     bool launchInTerminal);
     
     virtual ~DesktopEntry();
@@ -113,7 +110,7 @@ public:
      * @param valueType the desired list variable
      * @return the stored value, or false if not found.
      */
-    Array<String> getValue(ListValue valueType) const;
+    StringArray getValue(ListValue valueType) const;
 
     /**
      * Changes the value of stored string data.
@@ -134,7 +131,7 @@ public:
      * @param valueType the StringValue to change
      * @param newValue the new value for valueType
      */
-    void setValue(ListValue valueType, Array<String> newValue);
+    void setValue(ListValue valueType, StringArray newValue);
 
     /**
      * Exports this entry to a .Desktop file.  This creates or

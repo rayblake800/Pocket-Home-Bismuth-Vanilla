@@ -9,7 +9,7 @@ timeout(secondsToTimeout)
 #if JUCE_DEBUG
     setName("spinner");
 #endif
-    Array<String> spinnerImgPaths = {
+    StringArray spinnerImgPaths = {
                                      "spinner0.svg",
                                      "spinner1.svg",
                                      "spinner2.svg",

@@ -28,7 +28,7 @@ public:
     std::vector<DataKey> getDataKeys() const;
     
     //All possible values of menuTypeKey
-    static const Array<String> menuTypes;
+    static const StringArray menuTypes;
 
 private:
     static CriticalSection mainConfigLock;

@@ -61,7 +61,7 @@ public:
     /**
      * @return all application categories linked to this menu item.
      */
-    virtual Array<String> getCategories() const;
+    virtual StringArray getCategories() const;
 
     /**
      * @return the name or path used to load the icon file. 

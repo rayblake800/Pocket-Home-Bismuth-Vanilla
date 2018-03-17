@@ -117,7 +117,7 @@ private:
     void connectionPageResized() override;
 
     //Wifi icons for all signal strengths
-    static const Array<String> wifiImageFiles;
+    static const StringArray wifiImageFiles;
 
     /**
      * Get the asset name for the icon that best represents accessPoint's 

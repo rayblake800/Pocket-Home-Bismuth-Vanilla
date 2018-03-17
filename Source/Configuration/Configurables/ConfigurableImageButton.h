@@ -43,7 +43,7 @@ private:
     //Handles asset management and drawing the component.
     ConfigurableImageComponent buttonImage;
     
-    void applyConfigAssets(Array<String> assetNames,
+    void applyConfigAssets(StringArray assetNames,
             Array<Colour> colours) { }
 
     void paintButton(Graphics& g, bool isMouseOverButton, bool isButtonDown)

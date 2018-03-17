@@ -58,7 +58,7 @@ bool AppMenuItem::changesDesktopEntries() const
 /**
  * @return all application categories linked to this menu item.
  */
-Array<String> AppMenuItem::getCategories() const
+StringArray AppMenuItem::getCategories() const
 {
     return {};
 }

@@ -3,7 +3,7 @@
 /**
  *Registers this object with the ConfigFile.
  */
-Configurable::Configurable(ConfigFile* configFile, Array<String> trackedKeys) :
+Configurable::Configurable(ConfigFile* configFile, StringArray trackedKeys) :
 config(configFile),
 trackedKeys(trackedKeys)
 {
@@ -22,7 +22,7 @@ Configurable::~Configurable()
  * Add to the list of keys tracked by this Configurable
  * @param newKeys
  */
-void Configurable::addTrackedKeys(Array<String> newKeys) {
+void Configurable::addTrackedKeys(StringArray newKeys) {
     config->registerConfigurable(this, newKeys);
     trackedKeys.addArray(newKeys);
 }

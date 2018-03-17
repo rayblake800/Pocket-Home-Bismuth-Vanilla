@@ -22,7 +22,7 @@ public:
      * Create a new ListEditor component
      * @param initialList the list begins with these list items
      */
-    ListEditor(Array<String> initialList);
+    ListEditor(StringArray initialList);
 
     virtual ~ListEditor();
 
@@ -41,13 +41,13 @@ public:
     /**
      * @return all list row strings.
      */
-    Array<String> getListItems() const;
+    StringArray getListItems() const;
 
     /**
      * Replace the existing item list entries with new ones.
      * @param newItems replacement list of Strings
      */
-    void setListItems(Array<String> newItems);
+    void setListItems(StringArray newItems);
 
     /**
      * Calls updateColours whenever component color values are changed. 
@@ -161,7 +161,7 @@ private:
      */
     void resized() override;
 
-    Array<String> listItems;
+    StringArray listItems;
     RelativeLayoutManager layoutManager;
     ListBox listContainer;
     TextEditor newItemField;

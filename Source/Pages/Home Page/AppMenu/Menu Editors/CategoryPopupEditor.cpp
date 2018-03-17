@@ -1,7 +1,7 @@
 #include "CategoryPopupEditor.h"
 
-CategoryPopupEditor::CategoryPopupEditor(Array<String> categories,
-        std::function<void(Array<String>) > onConfirm) :
+CategoryPopupEditor::CategoryPopupEditor(StringArray categories,
+        std::function<void(StringArray) > onConfirm) :
 PopupEditorComponent("Edit Categories",
 [this, onConfirm](PopupEditorComponent* thisPopup)
 {

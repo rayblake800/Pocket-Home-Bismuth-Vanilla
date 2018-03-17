@@ -21,32 +21,6 @@ Image createImageFromFile(const File &imageFile);
  */
 Drawable * createSVGDrawable(const File& svgFile);
 
-
-/**
- * 
- * @param orig
- * @param delim
- * @return 
- */
-Array<String> split(const String &orig, const String &delim);
-
-
-/**
- * @return the user's home path
- */
-String getHomePath();
-
-//perform function(struct dirent*) on all files in path
-/**
- * 
- * @param path
- * @param fn
- */
-void foreachFile(const String& path, std::function<void(struct dirent*) > fn);
-
-
-static DrawableRectangle highlightFocus;
-
 #if JUCE_DEBUG
 /**
  * Print debug info about the component tree
@@ -54,37 +28,12 @@ static DrawableRectangle highlightFocus;
 void componentTrace();
 #endif
 
-/**
- * List all non-directory files in path
- * @param path
- * @return 
- */
-std::vector<String> listFiles(const String& path);
-
-/**
- * list all directory files in path, ignoring ./ and ../
- * @param path
- * @return 
- */
-std::vector<String> listDirectoryFiles(const String& path);
 
 /**
  * 
  * @return the size of the active window
  */
 Rectangle<int> getWindowSize();
-
-
-/**
- * resizes a font to fit in a containing rectangle.
- * If fitting it in would require mangling the font size too much, the
- * font gets set to size zero.
- * @param font
- * @param text
- * @param container
- * @return 
- */
-juce::Font fontResizedToFit(juce::Font font, String text, Rectangle<int>container);
 
 /**
  * Requests user confirmation before performing some action

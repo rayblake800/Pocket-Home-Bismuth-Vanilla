@@ -1,9 +1,5 @@
-#include <regex>
-#include <fstream>
-#include <set>
 #include "Utils.h"
 #include "IconThread.h"
-
 
 const String IconThread::defaultIconPath =
         "/usr/share/pocket-home/appIcons/default.png";
@@ -13,39 +9,30 @@ IconThread::IconThread() : Thread("IconThread")
     defaultIcon = createImageFromFile(File(defaultIconPath));
 }
 
-IconThread::~IconThread()
-{
-}
+IconThread::~IconThread() { }
 
 /**
  * Queues up an icon request.  
  */
 void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
 {
-
     //if the icon variable is a full path, return that
     if (icon.substring(0, 1) == "/")
     {
         assignImage(createImageFromFile(File(icon)));
-    } else
+    }
+    else
     {
         //if icon is a partial path, trim it
         if (icon.contains("/"))
         {
             icon = icon.substring(1 + icon.lastIndexOf("/"));
         }
-        String mappedPath;
-        try
+        if (iconPaths.count(icon) > 0)
         {
-            mappedPath = iconPaths.at(icon);
-        }        catch (std::out_of_range e)
-        {
-            mappedPath = "";
+            assignImage(createImageFromFile(File(iconPaths[icon])));
         }
-        if (mappedPath.isNotEmpty())
-        {
-            assignImage(createImageFromFile(File(mappedPath)));
-        } else
+        else
         {
             assignImage(defaultIcon);
             const ScopedLock queueLock(lock);
@@ -63,12 +50,11 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
 }
 
 /**
- * Searches for and returns an icon path.
+ * Searches for and returns an icon.
  */
 String IconThread::getIconPath(String icon)
 {
     const ScopedLock iconLock(lock);
-    String fullPath;
 
     //if it hasn't happened already, build the icon path map
     if (!iconPathsMapped)
@@ -76,29 +62,24 @@ String IconThread::getIconPath(String icon)
         const ScopedUnlock mapUnlock(lock);
         mapIcons();
     }
-    fullPath = iconPaths[icon];
-
-    // If the icon isn't in the map, look for one with a similar name
-    if (fullPath.isEmpty())
+    if (iconPaths.count(icon) > 0)
+    {
+        return iconPaths[icon];
+    }
+        // If the icon isn't in the map, look for one with a similar name
+    else
     {
         for (std::map<String, String>::iterator it = iconPaths.begin();
-                it != iconPaths.end(); it++)
+             it != iconPaths.end(); it++)
         {
             String iconCandidate = it->first;
             if (!it->second.isEmpty() &&
-                    (iconCandidate.containsIgnoreCase(icon) ||
-                    icon.containsIgnoreCase(iconCandidate)))
+                (iconCandidate.containsIgnoreCase(icon) ||
+                 icon.containsIgnoreCase(iconCandidate)))
             {
-                iconPaths[icon] = it->second;
-                fullPath = it->second;
-                break;
+                return it->second;
             }
         }
-    }
-
-    if (fullPath.isNotEmpty())
-    {
-        return fullPath;
     }
     return String();
 }
@@ -109,7 +90,6 @@ void IconThread::run()
     while (!threadShouldExit() && queuedJobs.size() > 0)
     {
         QueuedJob activeJob = queuedJobs[0];
-        queuedJobs.remove(0);
         String icon = activeJob.icon;
         {
             const ScopedUnlock getIconWillRelock(lock);
@@ -117,18 +97,70 @@ void IconThread::run()
         }
         if (icon.isNotEmpty())
         {
-            MessageManager::callAsync([icon, activeJob]
+            File iconFile(icon);
+            Image iconImg;
             {
-                activeJob.callback(createImageFromFile(File(icon)));
-            });
+                const ScopedUnlock imageLoadUnlock(lock);
+                const MessageManagerLock lock;
+                iconImg = createImageFromFile(iconFile);
+            }
+            if (iconImg.isNull())
+            {
+                DBG("Removing unloadable icon " << icon);
+                auto iconIter = iconPaths.find
+                        (iconFile.getFileNameWithoutExtension());
+                iconPaths.erase(iconIter);
+            }
+            else
+            {
+                queuedJobs.remove(0);
+                const ScopedUnlock imageLoadUnlock(lock);
+                const MessageManagerLock lock;
+                activeJob.callback(iconImg);
+            }
         }
-
+        else
+        {
+            queuedJobs.remove(0);
+        }
         //Allow other threads to run
         {
             const ScopedUnlock yieldUnlock(lock);
             Thread::yield();
         }
     }
+}
+
+/**
+ * Assign an integer value to an icon file for sorting purposes.
+ */
+static int iconDirValue(const File& file)
+{
+    String filename = file.getFileName();
+    const String numeric = "0123456789";
+    if (filename.containsAnyOf(numeric))
+    {
+        int value = filename.substring(filename.indexOfAnyOf(numeric))
+                .initialSectionContainingOnly(numeric)
+                .getIntValue();
+        //higher numbers first, until after 128px
+        if (value > 128)
+        {
+            value = 128 / value;
+        }
+        return value;
+    }
+    return 0;
+}
+
+int IconThread::IconFileComparator::compareElements
+(File first, File second)
+{
+    if (first == second)
+    {
+        return 0;
+    }
+    return iconDirValue(second) - iconDirValue(first);
 }
 
 /**
@@ -139,164 +171,125 @@ void IconThread::mapIcons()
     const ScopedLock mapLock(lock);
     //Subdirectories with these names are likely to appear, but should
     //not be searched for icons.
-    std::set<String> ignore = {
-        "actions",
-        "applets",
-        "cursors",
-        "devices",
-        "emblems",
-        "emotes",
-        "mimetypes",
-        "places",
-        "status",
-        "stock",
-        "symbolic"
+    const StringArray ignore = {
+                                "actions",
+                                "applets",
+                                "cursors",
+                                "devices",
+                                "emblems",
+                                "emotes",
+                                "mimetypes",
+                                "places",
+                                "status",
+                                "stock",
+                                "symbolic"
     };
-    Array<String> searchPaths;
-    //check user and pocket-home directories before all else
-    searchPaths.add("/usr/share/pocket-home/appIcons/");
-    searchPaths.add(getHomePath() + "/.icons/");
-    searchPaths.add(getHomePath() + "/.local/share/icons");
+    Array<File> searchDirs;
     //Recursively traverse all subdirectories at a given path, and add all valid
     //ones to the list of paths to search
-    std::function<void(String) > findSearchPaths;
-    findSearchPaths = [&findSearchPaths, &ignore, &searchPaths, this]
-            (String path)
-    {
-        std::vector<String> dirs = listDirectoryFiles(path);
-        if (dirs.empty())return;
-        //sort icon size directories, if found
-        std::regex sizePattern("^([0-9]+)");
-        std::smatch sizeMatch;
-        std::sort(dirs.begin(), dirs.end(), [&sizeMatch, &sizePattern]
-                (const String& a, const String & b)->bool
-                {
-                    std::string a_str = a.toStdString();
-                    std::string b_str = b.toStdString();
-                    if (a == b)return false;
-                            int aVal = 0;
-                            int bVal = 0;
-                        if (std::regex_search(a_str, sizeMatch, sizePattern))
-                        {
-                            sscanf(sizeMatch.str(1).c_str(), "%d", &aVal);
-                        }
-                    if (std::regex_search(b_str, sizeMatch, sizePattern))
-                    {
-                        sscanf(sizeMatch.str(1).c_str(), "%d", &bVal);
-                    }
-                    if (aVal != bVal)
-                    {
-                        //higher numbers first, until after 128px
-                        if (aVal > 128 && aVal < 999)aVal = 1 + 128 / aVal;
-                            if (bVal > 128 && bVal < 999)bVal = 1 + 128 / bVal;
-                                return aVal > bVal;
-                            }
-                    return false;
-                });
-        for (const String& subDir : dirs)
-        {
-            //only add directories outside of the ignore set
-            if (ignore.find(subDir) == ignore.end())
+    std::function<void(const File&) > findSearchPaths;
+    findSearchPaths =
+            [&findSearchPaths, &ignore, &searchDirs, this]
+            (const File & directory)
             {
-                String subPath = path + subDir + "/";
-                if (!searchPaths.contains(subPath))
+                searchDirs.add(directory);
+                Array<File> searchResults = directory.findChildFiles
+                        (File::findDirectories, false);
+                if (searchResults.isEmpty()) return;
+                Array<File> subDirs;
+                for (const File& directory : searchResults)
                 {
-                    searchPaths.add(subPath);
-                    findSearchPaths(subPath);
+                    if (!ignore.contains(directory.getFileName(), true))
+                    {
+                        subDirs.add(directory);
+                    }
                 }
-            }
-        };
-        iconPathsMapped = true;
-
-    };
-
+                IconFileComparator comp;
+                subDirs.sort(comp);
+                for (const File& directory : subDirs)
+                {
+                    if (!searchDirs.contains(directory))
+                    {
+                        findSearchPaths(directory);
+                    }
+                }
+            };
+    //check user and pocket-home directories before all else
+    findSearchPaths(File("/usr/share/pocket-home/appIcons/"));
+    findSearchPaths(File("~/.icons/"));
+    findSearchPaths(File("~/.local/share/icons"));
     //build a list of primary search directories
-    std::vector<String> checkPaths;
-    std::vector<String> basePaths = {
-        "/usr/share/icons/",
-        "/usr/local/icons/",
-        "/usr/share/pixmaps/"
+    const StringArray basePaths = {
+                                   "/usr/share/icons/",
+                                   "/usr/local/icons/",
+                                   "/usr/share/pixmaps/"
     };
     //search for icon theme directories, prioritize them if found
     String iconTheme;
     String fallbackIconTheme;
-    std::string configPath = getHomePath().toStdString() + "/.gtkrc-2.0";
-    if (File(configPath).existsAsFile())
+    File configPath("~/.gtkrc-2.0");
+    if (configPath.existsAsFile())
     {
-        std::regex themeMatch("gtk-icon-theme-name=\"(.+)\"");
-        std::regex fallbackThemeMatch("gtk-fallback=icon-theme=\"(.+)\"");
-        try
+        String themeLine("gtk-icon-theme-name=\"");
+        String fallbackThemeLine("gtk-fallback=icon-theme=\"");
+        StringArray lines;
+        configPath.readLines(lines);
+        for (const String& line : lines)
         {
-            std::ifstream file(configPath);
-            std::smatch match;
-            for (std::string line; getline(file, line);)
+            if (iconTheme.isNotEmpty() && line.contains(themeLine))
             {
-                if (std::regex_search(line, match, themeMatch))
-                {
-                    themeMatch = (match.str(1));
-                } else if (std::regex_search(line, match, fallbackThemeMatch))
-                {
-                    fallbackIconTheme = (match.str(1));
-                }
-                if (iconTheme.isNotEmpty() && fallbackIconTheme.isNotEmpty())
-                {
-                    break;
-                }
+                iconTheme = line.fromFirstOccurrenceOf("\"", false, false)
+                        .upToLastOccurrenceOf("\"", false, false);
             }
-            file.close();
-        } catch (std::ifstream::failure f)
-        {
-            DBG("IconThread::" << __func__ 
-                    << ": failed to read icon theme from .gtkrc-2.0");
+            if (fallbackIconTheme.isNotEmpty() && line.contains
+                (fallbackThemeLine))
+            {
+                fallbackIconTheme = line
+                        .fromFirstOccurrenceOf("\"", false, false)
+                        .upToLastOccurrenceOf("\"", false, false);
+            }
+            if (iconTheme.isNotEmpty() && fallbackIconTheme.isNotEmpty())
+            {
+                break;
+            }
         }
     }
     if (iconTheme.isNotEmpty())
     {
-        for (int i = 0; i < basePaths.size(); i++)
+        for (const String& path : basePaths)
         {
-            checkPaths.push_back(basePaths[i] + iconTheme + "/");
+            findSearchPaths(File(path + iconTheme + "/"));
         }
     }
-    if (!fallbackIconTheme.isEmpty())
+    if (fallbackIconTheme.isNotEmpty())
     {
-        for (int i = 0; i < basePaths.size(); i++)
+        for (const String& path : basePaths)
         {
-            checkPaths.push_back(basePaths[i] + fallbackIconTheme + "/");
+            findSearchPaths(File(path + fallbackIconTheme + "/"));
         }
     }
-    for (int i = 0; i < basePaths.size(); i++)
+    for (const String& path : basePaths)
     {
-        checkPaths.push_back(basePaths[i]);
+        findSearchPaths(File(path));
     }
 
-    //run recursive mapping for all subdirectories
-    for (int i = 0; i < checkPaths.size(); i++)
-    {
-        DBG("IconThread::" << __func__ << ":Mapping icon files under " 
-                << checkPaths[i]);
-        findSearchPaths(checkPaths[i]);
-    }
-    DBG("IconThread::" << __func__ << ":Searching " << searchPaths.size() 
-            << " icon paths:");
+    DBG("IconThread::" << __func__ << ":Searching " << searchDirs.size()
+            << " icon directories:");
     //finally, find and map icon files
-    for (const String& path : searchPaths)
+    for (const File& directory : searchDirs)
     {
-        std::vector<String> files = listFiles(path);
-        for (const String& file : files)
+        Array<File> iconFiles = directory.findChildFiles(File::findFiles, false,
+                "*.png;*.svg;*.xpm;*.jpg");
+        for (const File& file : iconFiles)
         {
-            String extension = file.fromLastOccurrenceOf(".", false, false);
-
-            if (extension == "png" || extension == "svg" ||
-                    extension == "xpm" || extension == "jpg")
+            String filename = file.getFileNameWithoutExtension();
+            if (iconPaths[filename].isEmpty())
             {
-                String filename = file.dropLastCharacters(4);
-                if (this->iconPaths[filename].isEmpty())
-                {
-                    this->iconPaths[filename] = path + file;
-                }
+                iconPaths[filename] = file.getFullPathName();
             }
         }
     }
     DBG("IconThread::" << __func__ << ": Mapped " << String(iconPaths.size())
             << " icon files.");
+    iconPathsMapped = true;
 }

@@ -47,7 +47,7 @@ private:
 
     /**
      * Next scheduled runtime for a suspended timer, relative to 
-     * Time::getMillisecondCounter. If set to zero, this indicates that 
+     * Time::getMillisecondCounter(). If set to zero, this indicates that 
      * the timer is not suspended.
      */
     uint32 suspendedEndTime = 0;

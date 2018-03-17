@@ -18,7 +18,7 @@ MainConfigFile::MainConfigFile() : ConfigFile(filenameConst)
 MainConfigFile::~MainConfigFile() { }
 
 //menu types
-const Array<String> MainConfigFile::menuTypes = 
+const StringArray MainConfigFile::menuTypes = 
 {
 	"Scrolling menu",
 	"Paged menu"

@@ -44,7 +44,7 @@ String FolderMenuItem::getAppName() const
 /**
  * @return all application categories linked to this folder.
  */
-Array<String> FolderMenuItem::getCategories() const
+StringArray FolderMenuItem::getCategories() const
 {
     return appFolder.categories;
 }
@@ -147,7 +147,7 @@ bool FolderMenuItem::moveDataIndex(int offset)
  * @param categories list of folder application categories
  */
 void FolderMenuItem::editFolder
-(String name, String icon, Array<String> categories)
+(String name, String icon, StringArray categories)
 {
     AppConfigFile config;
     int index = config.getFolderIndex(appFolder);

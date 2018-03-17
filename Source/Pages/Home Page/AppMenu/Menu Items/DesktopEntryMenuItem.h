@@ -46,7 +46,7 @@ public:
     /**
      * @return all application categories linked to this menu item.
      */
-    Array<String> getCategories() const override;
+    StringArray getCategories() const override;
 
     /**
      * @return the name or path used to load the icon file. 
@@ -115,7 +115,7 @@ protected:
      * @param command application launch command
      * @param useTerminal sets if this launches in a terminal window
      */
-    void editEntry(String name, String icon, Array<String> categories,
+    void editEntry(String name, String icon, StringArray categories,
             String command, bool useTerminal);
 
 private:

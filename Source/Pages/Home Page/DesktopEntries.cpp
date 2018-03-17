@@ -35,7 +35,7 @@ int DesktopEntries::size()
  * Get a list of all DesktopEntry objects within several categories
  */
 std::set<DesktopEntry> DesktopEntries::getCategoryListEntries
-(Array<String> categoryList)
+(StringArray categoryList)
 {
 
     const ScopedLock readLock(lock);
@@ -107,8 +107,15 @@ void DesktopEntries::loadEntries
  * them to stop. Unless loading finishes on its own before this has a chance to
  * stop it, the onFinish callback to loadEntries will not be called.
  */
-void DesktopEntries::stopLoading() {
-    signalThreadShouldExit();
+void DesktopEntries::clearCallbacks()
+{
+    const ScopedLock loadingLock(lock);
+    notifyCallback = [](String s)
+    {
+    };
+    onFinish = []()
+    {
+    };
 }
 
 void DesktopEntries::run()
@@ -119,13 +126,13 @@ void DesktopEntries::run()
     //read the contents of all desktop application directories
     DBG("DesktopEntries::" << __func__ << ": finding desktop entries...");
     std::vector<String> dirs = {
-                                getHomePath() + "/.local/share/applications",
+                                "~/.local/share/applications",
                                 "/usr/share/applications",
                                 "/usr/local/share/applications"
     };
     //track entry names and ignore duplicates
     std::set<String> files;
-    std::set<String> paths;
+    Array<File> allEntries;
     for (int i = 0; i < dirs.size(); i++)
     {
         while (uiCallPending)
@@ -145,21 +152,24 @@ void DesktopEntries::run()
             uiCallPending = false;
             this->notify();
         });
-        std::vector<String> dfiles = listFiles(dirs[i]);
-        for (int i2 = 0; i2 < dfiles.size(); i2++)
+        File directory(dirs[i]);
+        if (directory.isDirectory())
         {
-            if (files.insert(dfiles[i2]).second)
+            Array<File> entries = directory.findChildFiles(File::findFiles,
+                    true, "*.directory;*.desktop");
+            for (File& file : entries)
             {
-                paths.insert(dirs[i] + "/" + dfiles[i2]);
+                if (files.insert(file.getFileName()).second)
+                {
+                    allEntries.add(file);
+                }
             }
         }
     }
     int fileIndex = 0;
     //read in files as DesktopEntry objects
-    for (std::set<String>::iterator it = paths.begin();
-         it != paths.end(); it++)
+    for (File& file : allEntries)
     {
-
         fileIndex++;
         while (uiCallPending)
         {
@@ -177,30 +187,28 @@ void DesktopEntries::run()
             uiCallPending = false;
             this->notify();
         });
-        String path = *it;
-        String extension = path.fromLastOccurrenceOf(".", false, true);
-        if (extension == "desktop" || extension == "directory")
+        DesktopEntry entry(file);
+        StringArray onlyShowIn = entry.getValue(DesktopEntry::onlyShowIn);
+        if (entry.getValue(DesktopEntry::hidden)
+            || entry.getValue(DesktopEntry::noDisplay)
+            || entry.getValue(DesktopEntry::notShowIn).contains("pocket-home")
+            || (!onlyShowIn.isEmpty() && !onlyShowIn.contains("pocket-home")))
         {
-            DesktopEntry entry(path);
-            if (entry.getValue(DesktopEntry::hidden) ||
-                entry.getValue(DesktopEntry::noDisplay) ||
-                entry.getValue(DesktopEntry::notShowIn)
-                .contains("pocket-home"))
-            {
-                continue;
-            }
-            Array<String> deCategories = entry.getValue(DesktopEntry::categories);
-            if (deCategories.isEmpty())
-            {
-                deCategories.add("Other");
-            }
-            deCategories.add("All");
-            for (String category : deCategories)
-            {
-                categories[category].insert(entry);
-            }
-            entries.insert(entry);
+            continue;
         }
+        
+        StringArray deCategories = entry.getValue(DesktopEntry::categories);
+        if (deCategories.isEmpty())
+        {
+            deCategories.add("Other");
+        }
+        deCategories.add("All");
+        for (const String& category : deCategories)
+        {
+            categories[category].insert(entry);
+        }
+        entries.insert(entry);
+
     }
     while (uiCallPending)
     {
@@ -213,6 +221,7 @@ void DesktopEntries::run()
     uiCallPending = true;
     MessageManager::callAsync([&uiCallPending, this]
     {
+        const ScopedLock loadingLock(lock);
         DBG("DesktopEntries::" << __func__
                 << ": All desktop entries loaded.");
         onFinish();

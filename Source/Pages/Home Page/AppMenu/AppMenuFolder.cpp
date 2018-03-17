@@ -67,7 +67,6 @@ bool AppMenuFolder::selectIndex(int index)
         folderButtons[selectedIndex]->setSelected(true);
         return true;
     }
-    DBG("AppMenuFolder::" << __func__ << ": Failed to select button " << index);
     return false;
 }
 
@@ -199,7 +198,7 @@ void AppMenuFolder::layoutButtons()
     folderLayout.clearLayout(true);
     folderLayout.setLayout(buildFolderLayout(folderButtons), this);
 #ifdef JUCE_DEBUG
-    folderLayout.printLayout();
+    //folderLayout.printLayout();
 #endif
     Rectangle<int> bounds = getLocalBounds();
     bounds.reduce(margin * getWidth(), margin * getWidth());

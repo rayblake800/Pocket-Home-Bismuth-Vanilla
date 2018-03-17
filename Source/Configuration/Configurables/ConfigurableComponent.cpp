@@ -49,7 +49,7 @@ void ConfigurableComponent::applyConfigBounds()
  * when the component is created, and whenever those values change
  * in configuration.
  */
-void ConfigurableComponent::applyConfigAssets(Array<String> assetNames,
+void ConfigurableComponent::applyConfigAssets(StringArray assetNames,
         Array<Colour> colours) { }
 
 /**

@@ -22,7 +22,7 @@ public:
      * @param trackedKeys the keys of all variables in configFile this
      * object will track.
      */
-    Configurable(ConfigFile* configFile,Array<String> trackedKeys);
+    Configurable(ConfigFile* configFile,StringArray trackedKeys);
     
     /**
      *Unregisters this listener with the ConfigFile.
@@ -33,7 +33,7 @@ protected:
      * Add to the list of keys tracked by this Configurable
      * @param newKeys
      */
-    void addTrackedKeys(Array<String> newKeys);
+    void addTrackedKeys(StringArray newKeys);
     
     /**
      * Calls loadConfigProperties for every tracked key. This is the preferred
@@ -51,5 +51,5 @@ private:
     virtual void loadConfigProperties(ConfigFile* config,String key) = 0;
     
     ScopedPointer<ConfigFile> config;
-    Array<String> trackedKeys;
+    StringArray trackedKeys;
 };

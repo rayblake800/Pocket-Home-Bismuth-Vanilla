@@ -42,7 +42,7 @@ public:
     /**
      * @return all application categories linked to this folder.
      */
-    virtual Array<String> getCategories() const override;
+    virtual StringArray getCategories() const override;
 
     /**
      * @return the name or path used to load the icon file. 
@@ -116,7 +116,7 @@ protected:
      * @param icon folder icon image name/path
      * @param categories list of folder application categories
      */
-    void editFolder(String name, String icon, Array<String> categories);
+    void editFolder(String name, String icon, StringArray categories);
 private:
     //Source of this button's folder information
     AppConfigFile::AppFolder appFolder;

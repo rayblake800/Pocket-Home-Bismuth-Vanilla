@@ -97,8 +97,16 @@ private:
 
     //timer interval in milliseconds
     static const int timerFrequency = 2000;
+    
+    //milliseconds to wait before giving up on a launch
+    
+    static const int timeout = 15000;
+    
+    //last launch time from Time::getMillisecondCounter()
+    uint32 lastLaunch = 0;
 
     //Process to check up on when the timer finishes
     ChildProcess * timedProcess = nullptr;
+    
 
 };

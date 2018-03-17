@@ -57,7 +57,7 @@ public:
     /**
      * @return the contents of the editable category list. 
      */
-    Array<String> getCategories();
+    StringArray getCategories();
 
     /**
      * @return the contents of the editable launch command field.
@@ -84,7 +84,7 @@ public:
     /**
      * Set the values stored in the editable category list.
      */
-    void setCategories(Array<String> categories);
+    void setCategories(StringArray categories);
 
     /**
      * Set the value displayed in the editable launch command field.
@@ -130,7 +130,7 @@ private:
     //Holds the category editor when it's launched.
     ScopedPointer<CategoryPopupEditor> categoryEditor;
     //List of editable categories associated with this application/folder
-    Array<String> categories;
+    StringArray categories;
 
     ScalingLabel commandLabel;//text:"Command"
     //Edits the application launch command

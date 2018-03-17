@@ -19,9 +19,9 @@ ConfigurableComponent(componentKey),
 loadingSpinner(loadingSpinner)
 {
 
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("AppMenuComponent");
-#endif
+#    endif
     MainConfigFile config;
     config.registerConfigurable(this,{
         MainConfigFile::maxRowsKey,
@@ -30,12 +30,16 @@ loadingSpinner(loadingSpinner)
     maxRows = config.getConfigValue<int>(MainConfigFile::maxRowsKey);
     maxColumns = config.getConfigValue<int>(MainConfigFile::maxColumnsKey);
     setWantsKeyboardFocus(false);
+    appLauncher.setLaunchFailureCallback([this]()
+    {
+        setLoadingState(false);
+    });
     loadBaseFolder();
 }
 
-AppMenuComponent::~AppMenuComponent() 
-{ 
-    desktopEntries.stopLoading();
+AppMenuComponent::~AppMenuComponent()
+{
+    desktopEntries.clearCallbacks();
 }
 
 /**
@@ -231,10 +235,10 @@ void AppMenuComponent::loadBaseFolder()
         setLoadingState(true);
         desktopEntries.loadEntries([this](String loadingMsg)
         {
-	    if(!isLoading())
-	    {
-	        setLoadingState(true);
-	    }
+            if (!isLoading())
+            {
+                setLoadingState(true);
+            }
             loadingSpinner.setLoadingText(loadingMsg);
         },
         [this, savedIndex]()
@@ -246,7 +250,7 @@ void AppMenuComponent::loadBaseFolder()
                     (desktopEntries));
             openFolders.getFirst()->selectIndex(savedIndex);
             loadingSpinner.setLoadingText("Building folder layout:");
-	    MessageManager::callAsync([this]()
+            MessageManager::callAsync([this]()
             {
                 layoutFolders();
                 setLoadingState(false);

@@ -36,7 +36,7 @@ private:
 
         void loadConfigProperties(ConfigFile* config, String key) override;
         int textHeight;
-        Array<String> colourKeys;
+        StringArray colourKeys;
         Array<Colour> colours;
     };
 

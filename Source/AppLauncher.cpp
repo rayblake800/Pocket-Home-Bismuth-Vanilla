@@ -102,6 +102,7 @@ void AppLauncher::startApp(ProcessInfo processInfo)
         runningApps.add(launchApp);
         processMap[processInfo] = launchApp;
         timedProcess = launchApp;
+        lastLaunch = Time::getMillisecondCounter();
         startTimer(timerFrequency);
     }
 }
@@ -148,21 +149,26 @@ String AppLauncher::getWindowId(ProcessInfo processInfo)
 
 void AppLauncher::timerCallback()
 {
-    DBG("AppLauncher::" << __func__ << ": timer finished");
     if (timedProcess != nullptr)
     {
-        DBG("AppLauncher::" << __func__ << ": tracked process is null");
         if (timedProcess->isRunning())
         {
-            //if the process is still going, wait longer for it to take over
-            //if not, stop waiting on it
-            return;
+            //if the process is still going and we have yet to reach timeout,
+            //wait longer
+            if (Time::getMillisecondCounter() - lastLaunch < timeout)
+            {
+                return;
+            }
+            else
+            {
+                DBG("AppLauncher::" << __func__ << ": launch timed out");
+            }
         }
         else
         {
             DBG("AppLauncher::" << __func__ << ": process died, show message");
             String output = timedProcess->readAllProcessOutput();
-            Array<String> lines = split(output, "\n");
+            StringArray lines = StringArray::fromLines(output);
             output = "";
             for (int i = lines.size() - 1;
                  i > lines.size() - 6 && i >= 0; i--)
