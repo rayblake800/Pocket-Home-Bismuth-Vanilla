@@ -50,6 +50,26 @@ public:
      * point.
      */
     virtual bool isConnected() const = 0;
+    
+    /**
+     * @return true iff wifi is currently being enabled.
+     */
+    virtual bool isTurningOn() const = 0;
+    
+    /**
+     * @return true iff wifi is currently being disabled.
+     */
+    virtual bool isTurningOff() const = 0;
+    
+    /**
+     * @return true iff wifi is attempting to connect to an access point.
+     */
+    virtual bool isConnecting() const = 0;
+    
+    /**
+     * @return true iff wifi is attempting to disconnect from an access point. 
+     */
+    virtual bool isDisconnecting() const = 0;
 
     /**
      * Turns on the wifi radio.
@@ -84,7 +104,10 @@ public:
         wifiConnected,
         wifiDisconnected,
         wifiConnectionFailed,
-        wifiBusy
+        wifiTurningOn,
+        wifiTurningOff,
+        wifiConnecting,
+        wifiDisconnecting
     };
 
 #if JUCE_DEBUG

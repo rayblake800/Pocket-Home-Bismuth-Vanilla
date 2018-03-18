@@ -39,7 +39,27 @@ public:
      * point.
      */
     bool isConnected() const override;
-
+        
+    /**
+     * @return true iff wifi is currently being enabled.
+     */
+    bool isTurningOn() const override;
+    
+    /**
+     * @return true iff wifi is currently being disabled.
+     */
+    isTurningOff() const override;
+    
+    /**
+     * @return true iff wifi is attempting to connect to an access point.
+     */
+    bool isConnecting() const override;
+    
+    /**
+     * @return true iff wifi is attempting to disconnect from an access point. 
+     */
+    bool isDisconnecting() const override;
+    
     /**
      * Turns on the wifi radio.
      */
