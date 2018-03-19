@@ -55,6 +55,38 @@ public:
         //WifiStateManager not available.
         noStateManager
     };
+    
+#ifdef JUCE_DEBUG    
+    /**
+     * Convert a WifiState to a string for debugging.
+     */ 
+    String wifiStateString(WifiState state)
+    {
+        switch (wifiState)
+        {
+             case missingNetworkInterface:
+                 return "missingNetworkInterface";
+             case disabled:
+                 return "disabled";
+             case turningOn:
+                 return "turningOn";
+             case enabled:
+                 return "enabled";
+             case turningOff:
+                 return "turningOff";
+             case connecting:
+                 return "connecting";
+             case connected:
+                 return "connected";
+             case disconnecting:
+                 return "disconnecting";
+             case switchingConnection:
+                 return "switchingConnection";
+             case noStateManager:
+                 return "noStateManager";
+        };
+    }
+#endif
 
     /**
      * Assigns a WifiNetworkInterface to this WifiStateManager.
@@ -306,6 +338,13 @@ public:
          * This method acquires the WifiStateManager's stateLock.
          */
         void signalWifiDisabled();
+        
+        /**
+         * @return true if the state manager is missing or in
+         * an invalid state.  This method may indirectly acquire
+         * the WifiStateManager's stateLock
+         */
+        bool invalidWifiState();
     private:
         WifiStateManager* stateManager = nullptr;
     }
