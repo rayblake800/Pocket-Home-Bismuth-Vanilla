@@ -41,8 +41,6 @@ String WifiStatus::wifiEventString(WifiEvent event)
             return "wifiDisconnected";
         case wifiConnectionFailed:
             return "wifiConnectionFailed";
-        case wifiBusy:
-            return "wifiBusy";
     }
 }
 #endif

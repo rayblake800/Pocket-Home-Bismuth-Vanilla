@@ -2,12 +2,11 @@
 #include "PocketHomeApplication.h"
 #include "WifiSettingsPage.h"
 
-const StringArray WifiSettingsPage::wifiImageFiles = 
-{
-                                            "wifiStrength0.svg",
-                                            "wifiStrength1.svg",
-                                            "wifiStrength2.svg",
-                                            "wifiStrength3.svg"
+const StringArray WifiSettingsPage::wifiImageFiles = {
+                                                      "wifiStrength0.svg",
+                                                      "wifiStrength1.svg",
+                                                      "wifiStrength2.svg",
+                                                      "wifiStrength3.svg"
 };
 
 WifiSettingsPage::WifiSettingsPage() :
@@ -15,27 +14,17 @@ ConnectionPage<WifiAccessPoint>(),
 passwordLabel("passwordLabel", "Password:")
 {
 
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("WifiSettingsPage");
-#endif
+#    endif
     passwordEditor.addListener(this);
     connectionButton.addChildComponent(spinner);
     connectionButton.addListener(this);
     errorLabel.setJustificationType(Justification::centred);
-    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-    if (wifiStatus != nullptr)
-    {
-        wifiStatus->addListener(this);
-        if (wifiStatus->isConnected())
-        {
-            handleWifiEvent(WifiStatus::wifiConnected);
-        }
-    }
-    else
-    {
-        DBG("WifiSettingsPage::" << __func__ << ": WifiStatus is null!");
-    }
+    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
+            ->getWifiManager();
+    wifiManager.addListener(this);
+    updateConnectionList();
 }
 
 WifiSettingsPage::~WifiSettingsPage() { }
@@ -45,14 +34,9 @@ WifiSettingsPage::~WifiSettingsPage() { }
  */
 Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
 {
-    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-    if (wifiStatus == nullptr)
-    {
-        DBG("WifiSettingsPage::" << __func__ << ": WifiStatus is null!");
-        return {};
-    }
-    return wifiStatus->nearbyAccessPoints();
+    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
+            ->getWifiManager();
+    return wifiManager.getVisibleAPs();
 }
 
 /**
@@ -61,30 +45,21 @@ Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
  */
 void WifiSettingsPage::connect(const WifiAccessPoint& connection)
 {
-    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-    if (wifiStatus == nullptr)
-    {
-        DBG("WifiSettingsPage::" << __func__ << ": WifiStatus is null!");
-        return;
-    }
-    if (wifiStatus->isConnected())
-    {
-        wifiStatus->disconnect();
-    }
+    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
+            ->getWifiManager();
     if (connection.getRequiresAuth())
     {
         const String& psk = passwordEditor.getText();
-        DBG("WifiSettingsPage::" << __func__ << ": connecting to " 
+        DBG("WifiSettingsPage::" << __func__ << ": connecting to "
                 << connection.getSSID() << " with psk of length "
                 << psk.length());
-        wifiStatus->setConnectedAccessPoint(connection, psk);
+        wifiManager.connectToAccessPoint(connection, psk);
     }
     else
     {
-        DBG("WifiSettingsPage::" << __func__ << ": connecting to " 
+        DBG("WifiSettingsPage::" << __func__ << ": connecting to "
                 << connection.getSSID() << " with no psk required.");
-        wifiStatus->setConnectedAccessPoint(connection);
+        wifiManager.connectToAccessPoint(connection);
     }
     setCurrentlyConnecting(true);
     errorLabel.setVisible(false);
@@ -96,12 +71,9 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
  */
 void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
 {
-    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-    if (wifiStatus != nullptr && isConnected(connection))
-    {
-        wifiStatus->disconnect();
-    }
+    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
+            ->getWifiManager();
+    wifiManager.disconnect(connection);
 }
 
 /**
@@ -109,13 +81,13 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
  */
 bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection)
 {
-    WifiStatus* wifiStatus =  PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-    if (connection.isNull() || wifiStatus == nullptr)
+    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
+            ->getWifiManager();
+    if (connection.isNull())
     {
         return false;
     }
-    return wifiStatus->getConnectedAccessPoint() == connection;
+    return wifiManager.getConnectedAP() == connection;
 }
 
 /**
@@ -189,17 +161,17 @@ void WifiSettingsPage::updateConnectionControls
     bool connected = isConnected(accessPoint);
     bool passwordNeeded = accessPoint.getRequiresAuth() && !connected;
     passwordEditor.setVisible(passwordNeeded);
-    passwordEditor.setEnabled(passwordNeeded && !wifiBusy);
+    passwordEditor.setEnabled(passwordNeeded && !connectionChanging);
     passwordLabel.setVisible(passwordNeeded);
     String connectionText;
-    if (!wifiBusy)
+    if (!connectionChanging)
     {
         connectionText = connected ? "Disconnect" : "Connect";
     }
     connectionButton.setButtonText(connectionText);
-    connectionButton.setEnabled(!wifiBusy);
+    connectionButton.setEnabled(!connectionChanging);
     errorLabel.setText("", NotificationType::dontSendNotification);
-    spinner.setVisible(wifiBusy);
+    spinner.setVisible(connectionChanging);
 }
 
 /**
@@ -208,46 +180,55 @@ void WifiSettingsPage::updateConnectionControls
  */
 void WifiSettingsPage::setCurrentlyConnecting(bool currentlyConnecting)
 {
-    if (currentlyConnecting != wifiBusy)
+    if (currentlyConnecting != connectionChanging)
     {
-        wifiBusy = currentlyConnecting;
+        connectionChanging = currentlyConnecting;
         updateConnectionControls(getSelectedConnection());
     }
 }
 
 /**
- * When wifi is enabled, connects, or disconnects, reload page contents.
- * When wifi is disabled, close this page.
- * When wifi is busy, disable connection controls.
- * When wifi fails to connect, show the error label and enable connection
- * controls.
  */
-void WifiSettingsPage::handleWifiEvent(WifiStatus::WifiEvent event)
+void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
 {
-    switch (event)
+    MessageManager::callAsync([this,state]()
     {
-        case WifiStatus::wifiEnabled:
-        case WifiStatus::wifiConnected:
-        case WifiStatus::wifiDisconnected:
-            reloadPage();
-            break;
-        case WifiStatus::wifiDisabled:
-            removeFromStack(PageStackComponent::Transition
-                    ::kTransitionTranslateHorizontal);
-            break;
-        case WifiStatus::wifiBusy:
-            setCurrentlyConnecting(true);
-            break;
-        case WifiStatus::wifiConnectionFailed:
-            setCurrentlyConnecting(false);
-            updateConnectionControls(getSelectedConnection());
-            errorLabel.setText(getSelectedConnection().getRequiresAuth() ?
-                    "Incorrect password." : "Connection failed.",
-                    NotificationType::dontSendNotification);
-            errorLabel.setVisible(true);
-    }
+        switch (state)
+        {
+            case WifiStateManager::missingNetworkInterface:
+            case WifiStateManager::noStateManager:
+            case WifiStateManager::turningOn:
+            case WifiStateManager::turningOff:
+            case WifiStateManager::disabled:
+                removeFromStack(PageStackComponent::Transition
+                        ::kTransitionTranslateHorizontal);
+                break;
+            case WifiStateManager::connected:
+                reloadPage();
+                break;
+            case WifiStateManager::enabled:
+                if (connectionChanging)
+                {
+                    setCurrentlyConnecting(false);
+                    updateConnectionControls(getSelectedConnection());
+                    errorLabel.setText(getSelectedConnection().getRequiresAuth() ?
+                            "Incorrect password." : "Connection failed.",
+                            NotificationType::dontSendNotification);
+                    errorLabel.setVisible(true);
+                }
+                else
+                {
+                    reloadPage();
+                }
+                break;
+            case WifiStateManager::connecting:
+            case WifiStateManager::disconnecting:
+            case WifiStateManager::switchingConnection:
+                setCurrentlyConnecting(true);
+                break;
+        }
+    });
 }
-
 
 /**
  * Attempt to connect if return is pressed after entering a password.

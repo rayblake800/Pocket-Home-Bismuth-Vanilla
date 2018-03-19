@@ -10,12 +10,9 @@ ConnectionSettingsComponent(openWifiPage, "wifi")
 #    if JUCE_DEBUG
     setName("WifiSettingsComponent");
 #    endif
-    WifiStatus* wifiStatus = PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-    if (wifiStatus != nullptr)
-    {
-        wifiStatus->addListener(this);
-    }
+    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
+            ->getWifiManager();
+    wifiManager.addListener(this);
     refresh();
 }
 
@@ -24,14 +21,10 @@ ConnectionSettingsComponent(openWifiPage, "wifi")
  */
 bool WifiSettingsComponent::connectionEnabled()
 {
-
-    WifiStatus* wifiStatus = PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-    if (wifiStatus == nullptr)
-    {
-        return false;
-    }
-    return wifiStatus->isEnabled();
+    
+    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
+            ->getWifiManager();
+    return wifiManager.isEnabled();
 }
 
 /**
@@ -40,7 +33,16 @@ bool WifiSettingsComponent::connectionEnabled()
  */
 bool WifiSettingsComponent::isBusy()
 {
-    return wifiBusy;
+    switch (getWifiState())
+    {
+        case WifiStateManager::turningOn:
+        case WifiStateManager::turningOff:
+        case WifiStateManager::connecting:
+        case WifiStateManager::disconnecting:
+        case WifiStateManager::switchingConnection:
+            return true;
+    }
+    return false;
 }
 
 /**
@@ -56,34 +58,27 @@ String WifiSettingsComponent::getIconAsset()
  */
 void WifiSettingsComponent::enabledStateChanged(bool enabled)
 {
-    WifiStatus* wifiStatus = PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-    if (wifiStatus != nullptr)
+    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
+            ->getWifiManager();
+    if (enabled)
     {
-        if (!enabled && wifiStatus->isEnabled())
-        {
-            wifiBusy = true;
-            wifiStatus->disableWifi();
-        }
-        else if (enabled && !wifiStatus->isEnabled())
-        {
-            wifiBusy = true;
-            wifiStatus->enableWifi();
-        }
+        wifiManager.enableWifi();
     }
     else
     {
-        DBG("WifiSettingsComponent::" << __func__ << ": wifiStatus is null!");
+        wifiManager.disableWifi();
     }
 }
 
 /**
  * Use wifi status updates to keep the component updated.
  */
-void WifiSettingsComponent::handleWifiEvent(WifiStatus::WifiEvent event)
+void WifiSettingsComponent::wifiStateChanged(WifiStateManager::WifiState state)
 {
-    wifiBusy = (event == WifiStatus::wifiBusy);
-    refresh();
+    MessageManager::callAsync([this]()
+    {
+        refresh();
+    });
 }
 
 /**
@@ -91,19 +86,33 @@ void WifiSettingsComponent::handleWifiEvent(WifiStatus::WifiEvent event)
  */
 String WifiSettingsComponent::updateButtonText()
 {
-    WifiStatus* status = PocketHomeApplication::getInstance()
-            ->getWifiStatus();
-    if (status == nullptr || !status->isEnabled())
+    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
+            ->getWifiManager();
+    switch (wifiManager.getWifiState())
     {
-        return "WiFi Off";
-    }
-    WifiAccessPoint wifiAP = status->getConnectedAccessPoint();
-    if (!wifiAP.isNull())
-    {
-        return wifiAP.getSSID();
-    }
-    else
-    {
-        return "Not Connected";
+        case WifiStateManager::noStateManager:
+        case WifiStateManager::missingNetworkInterface:
+            return "WiFi Not Found";
+        case WifiStateManager::disabled:
+            return "WiFi Disabled";
+        case WifiStateManager::turningOn:
+            return "WiFi Turning On...";
+        case WifiStateManager::enabled:
+            return "Not Connected";
+        case WifiStateManager::turningOff:
+            return "WiFi Turning Off..";
+        case WifiStateManager::connecting:
+        case WifiStateManager::switchingConnection:
+        {
+            WifiAccessPoint ap = wifiManager.getConnectingAP();
+            return String("Connecting to ") + ap.getSSID();
+        }
+        case WifiStateManager::connected:
+        {
+            WifiAccessPoint ap = wifiManager.getConnectedAP();
+            return ap.getSSID();
+        }
+        case WifiStateManager::disconnecting:
+            return "Disconnecting..";
     }
 }

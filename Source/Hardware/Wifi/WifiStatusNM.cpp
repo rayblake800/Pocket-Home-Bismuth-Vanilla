@@ -7,7 +7,6 @@
 
 #define LIBNM_ITERATION_PERIOD 100 // milliseconds
 
-
 WifiStatusNM::WifiStatusNM() : connectedAP(WifiAccessPoint())
 {
     if (!connectToNetworkManager())
@@ -19,13 +18,15 @@ WifiStatusNM::WifiStatusNM() : connectedAP(WifiAccessPoint())
     }
     context = g_main_context_default();
 
-    g_signal_connect_swapped(nmClient, "notify::" NM_CLIENT_WIRELESS_ENABLED,
+    g_signal_connect_swapped(nmClient,
+            "notify::" NM_CLIENT_WIRELESS_ENABLED,
             G_CALLBACK(handle_wireless_enabled), this);
 
     g_signal_connect_swapped(nmDevice, "notify::" NM_DEVICE_STATE,
             G_CALLBACK(handle_wireless_connected), this);
 
-    g_signal_connect_swapped(NM_DEVICE_WIFI(nmDevice), "notify::" NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT,
+    g_signal_connect_swapped(NM_DEVICE_WIFI(nmDevice),
+            "notify::" NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT,
             G_CALLBACK(handle_active_access_point), this);
 
     g_signal_connect_swapped(NM_DEVICE_WIFI(nmDevice), "access-point-added",
@@ -45,6 +46,107 @@ WifiStatusNM::WifiStatusNM() : connectedAP(WifiAccessPoint())
         startThread();
     }
 }
+
+/**
+ */
+bool WifiStatusNM::isWifiDeviceEnabled()
+{
+    const ScopedLock lock(wifiLock);
+    if (nmDevice != nullptr)
+    {
+        switch (nm_device_get_state(nmDevice))
+        {
+            case NM_DEVICE_STATE_UNMANAGED:
+            case NM_DEVICE_STATE_DISCONNECTED:
+            case NM_DEVICE_STATE_PREPARE:
+            case NM_DEVICE_STATE_CONFIG:
+            case NM_DEVICE_STATE_NEED_AUTH:
+            case NM_DEVICE_STATE_IP_CONFIG:
+            case NM_DEVICE_STATE_IP_CHECK:
+            case NM_DEVICE_STATE_SECONDARIES:
+            case NM_DEVICE_STATE_ACTIVATED:
+            case NM_DEVICE_STATE_DEACTIVATING:
+            case NM_DEVICE_STATE_FAILED:
+                return true;
+        }
+    }
+    return false;
+}
+
+/**
+ */
+bool WifiStatusNM::isWifiConnecting()
+{
+    const ScopedLock lock(wifiLock);
+    if (nmDevice != nullptr)
+    {
+        switch (nm_device_get_state(nmDevice))
+        {
+            case NM_DEVICE_STATE_PREPARE:
+            case NM_DEVICE_STATE_CONFIG:
+            case NM_DEVICE_STATE_NEED_AUTH:
+            case NM_DEVICE_STATE_IP_CONFIG:
+            case NM_DEVICE_STATE_IP_CHECK:
+            case NM_DEVICE_STATE_SECONDARIES:
+                return true;
+        }
+    }
+    return false;
+}
+
+/**
+ */
+bool WifiStatusNM::isWifiConnected()
+{
+    const ScopedLock lock(wifiLock);
+    if (nmDevice != nullptr)
+    {
+        if (nm_device_get_state(nmDevice) == NM_DEVICE_STATE_ACTIVATED)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ */
+WifiAccessPoint WifiStatusNM::getConnectedAP()
+{
+    const ScopedLock lock(wifiLock);
+
+    if (nmDevice != nullptr)
+    {
+
+    }
+    NMDeviceWifi* wifiDevice = NM_DEVICE_WIFI(nmDevice);
+    return getNMConnectedAP(wifiDevice);
+}
+
+/**
+ */
+WifiAccessPoint WifiStatusNM::getConnectingAP() { }
+
+/**
+ */
+Array<WifiAccessPoint> WifiStatusNM::getVisibleAPs() { }
+
+/**
+ */
+void WifiStatusNM::connectToAccessPoint(WifiAccessPoint toConnect,
+        String psk = String()) { }
+
+/**
+ */
+void WifiStatusNM::disconnect() { }
+
+/**
+ */
+void WifiStatusNM::enableWifi() { }
+
+/**
+ */
+void WifiStatusNM::disableWifi() { }
 
 WifiStatusNM::~WifiStatusNM() { }
 
@@ -101,7 +203,7 @@ Array<WifiAccessPoint> WifiStatusNM::nearbyAccessPoints()
  * if no access point is connected. 
  */
 WifiAccessPoint WifiStatusNM::getConnectedAccessPoint() const
-{ 
+{
     const ScopedLock lock(wifiLock);
     if (!connected)
     {
@@ -691,7 +793,7 @@ void WifiStatusNM::handle_wireless_enabled(WifiStatusNM *wifiStatus)
     }
 }
 
-void  WifiStatusNM::handle_wireless_connected(WifiStatusNM *wifiStatus)
+void WifiStatusNM::handle_wireless_connected(WifiStatusNM *wifiStatus)
 {
     const ScopedLock lock(wifiStatus->wifiLock);
     DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
@@ -699,7 +801,7 @@ void  WifiStatusNM::handle_wireless_connected(WifiStatusNM *wifiStatus)
     wifiStatus->handleWirelessConnected();
 }
 
-void  WifiStatusNM::handle_active_access_point(WifiStatusNM *wifiStatus)
+void WifiStatusNM::handle_active_access_point(WifiStatusNM *wifiStatus)
 {
     const ScopedLock lock(wifiStatus->wifiLock);
     DBG("WifiStatusNM::" << __func__ << ": SIGNAL: "
@@ -707,7 +809,7 @@ void  WifiStatusNM::handle_active_access_point(WifiStatusNM *wifiStatus)
     wifiStatus->handleConnectedAccessPoint();
 }
 
-void  WifiStatusNM::handle_changed_access_points(WifiStatusNM *wifiStatus)
+void WifiStatusNM::handle_changed_access_points(WifiStatusNM *wifiStatus)
 {
     const ScopedLock lock(wifiStatus->wifiLock);
     DBG("WifiStatusNM::" << __func__

@@ -11,7 +11,7 @@ WifiStateManager::WifiStateManager() { }
 WifiStateManager::~WifiStateManager()
 {
     ScopedLock wifiStateLock(stateLock);
-    for (Listener* listener : wifiListeners)
+    for (Listener* listener : listeners)
     {
         listener->stateManager = nullptr;
     }
@@ -39,6 +39,8 @@ void WifiStateManager::setNetworkInterface(WifiNetworkInterface* interface)
         networkInterface->stateManager = nullptr;
     }
     networkInterface = interface;
+    networkInterface->stateManager = this;
+    networkInterface->confirmWifiState();
 }
 
 /**
@@ -47,7 +49,7 @@ void WifiStateManager::setNetworkInterface(WifiNetworkInterface* interface)
  * hasn`t been set.
  * This method acquires the WifiStateManager's stateLock.
  */
-WifiState WifiStateManager::getWifiState()
+WifiStateManager::WifiState WifiStateManager::getWifiState()
 {
     ScopedLock wifiStateLock(stateLock);
     return wifiState;
@@ -148,7 +150,31 @@ Array<WifiAccessPoint> WifiStateManager::getVisibleAPs()
                 << "access points, no network interface assigned.");
         return {};
     }
-    return networkInterface->getConnectedAP();
+    return networkInterface->getVisibleAPs();
+}
+
+/**
+ * @return true iff the wifi device is currently enabled.
+ */
+bool WifiStateManager::isEnabled()
+{
+    if (networkInterface == nullptr)
+    {
+        return false;
+    }
+    return networkInterface->isWifiDeviceEnabled();
+}
+
+/**
+ * @return true iff the wifi device is currently connected.
+ */
+bool WifiStateManager::isConnected()
+{
+    if (networkInterface == nullptr)
+    {
+        return false;
+    }
+    return networkInterface->isWifiConnected();
 }
 
 /**
@@ -163,80 +189,82 @@ Array<WifiAccessPoint> WifiStateManager::getVisibleAPs()
  * if toConnect isn't secured.
  */
 void WifiStateManager::connectToAccessPoint(WifiAccessPoint toConnect,
-        String psk = String())
+        String psk)
 {
-   ScopedLock wifiStateLock(stateLock);
-   if(invalidWifiState())
-   {
-	   DBG("WifiStateManager::" << __func__ << ": invalid wifi state:"
-			   << wifiStateString(wifiState));
-	   return;
-   }
-   if (cancelledConnection == toConnect)
-   {
+    ScopedLock wifiStateLock(stateLock);
+    if (invalidWifiState())
+    {
+        DBG("WifiStateManager::" << __func__ << ": invalid wifi state:"
+                << wifiStateString(wifiState));
+        return;
+    }
+    if (toConnect.isNull())
+    {
+        DBG("WifiStateManager::" << __func__
+                << ": Tried to connect to null access point!");
+        return;
+    }
+    if (cancelledConnection == toConnect)
+    {
 
-       DBG("WifiStateManager::" << __func__ << ": Connecting to "
-               << toConnect.getSSID << " was recently canceled, attempting to"
-               << " resume connection attempt");
-       cancelledConnection = WifiAccessPoint();
-   }
-   switch (wifiState)
-   {
-       //start connecting:
-       case enabled:
-           DBG("WifiStateManager::" << __func__ << ": Connecting to access "
-                   << "point " << toConnect.getSSID());
-           pendingConnection.ap = toConnect;
-           pendingConnection.psk = psk;
-           setWifiState(connecting);
-           networkInterface->connectToAccessPoint(toConnect, psk);
-           break;
-       //start switching access point:
-       case connected:
-           if (networkInterface->getConnectedAP() == toConnect)
-           {
-               DBG("WifiStateManager::" << __func__ << ": Trying to open "
+        DBG("WifiStateManager::" << __func__ << ": Connecting to "
+                << toConnect.getSSID() << " was recently canceled, attempting to"
+                << " resume connection attempt");
+        cancelledConnection = WifiAccessPoint();
+    }
+    switch (wifiState)
+    {
+            //start connecting:
+        case enabled:
+            DBG("WifiStateManager::" << __func__ << ": Connecting to access "
+                    << "point " << toConnect.getSSID());
+            pendingConnection.ap = toConnect;
+            pendingConnection.psk = psk;
+            setWifiState(connecting);
+            networkInterface->connectToAccessPoint(toConnect, psk);
+            break;
+            //start switching access point:
+        case connected:
+            if (networkInterface->getConnectedAP() == toConnect)
+            {
+                DBG("WifiStateManager::" << __func__ << ": Trying to open "
                         << " connection to access point " << toConnect.getSSID()
                         << "but that access point is already connected");
-               return;
-           }
-           networkInterface->disconnect();
-           startTimer(wifiConnectionTimeout);
-       case connecting:
-       case switchingConnection:
-           if (pendingConnection.ap == toConnect)
-           {
-               DBG("WifiStateManager::" << __func__ << ": Trying to open "
-                       << " connection to access point " << toConnect.getSSID()
-                       << "but that access point is already connecting");
-               return;
-           }
-           DBG("WifiStateManager::" << __func__ << ": Switching to access "
-                   << "point " << toConnect.getSSID());
-       case disconnecting:
-           pendingConnection.ap = toConnect;
-           pendingConnection.psk = psk;
-           setWifiState(switchingConnection);
-           break;
+                return;
+            }
+            networkInterface->disconnect();
+            startTimer(wifiConnectionTimeout);
+        case connecting:
+        case switchingConnection:
+            if (pendingConnection.ap == toConnect)
+            {
+                DBG("WifiStateManager::" << __func__ << ": Trying to open "
+                        << " connection to access point " << toConnect.getSSID()
+                        << "but that access point is already connecting");
+                return;
+            }
+            DBG("WifiStateManager::" << __func__ << ": Switching to access "
+                    << "point " << toConnect.getSSID());
+        case disconnecting:
+            pendingConnection.ap = toConnect;
+            pendingConnection.psk = psk;
+            setWifiState(switchingConnection);
+            break;
 
-           //can't connect
-       case missingNetworkInterface:
-           DBG("WifiStateManager::" << __func__ << ": Can't connect to "
-                   << toConnect.getSSID << " no network interface assigned.");
-           break;
-       case disabled:
-           DBG("WifiStateManager::" << __func__ << ": Can't connect to "
-                   << toConnect.getSSID << " wifi is disabled.");
-           break;
-       case turningOn:
-           DBG("WifiStateManager::" << __func__ << ": Can't connect to "
-                   << toConnect.getSSID << " wifi is still turning on.");
-           break;
-       case turningOff:
-           DBG("WifiStateManager::" << __func__ << ": Can't connect to "
-                   << toConnect.getSSID << " wifi is still turning off.");
-           break;
-    };
+            //can't connect
+        case disabled:
+            DBG("WifiStateManager::" << __func__ << ": Can't connect to "
+                    << toConnect.getSSID() << " wifi is disabled.");
+            break;
+        case turningOn:
+            DBG("WifiStateManager::" << __func__ << ": Can't connect to "
+                    << toConnect.getSSID() << " wifi is still turning on.");
+            break;
+        case turningOff:
+            DBG("WifiStateManager::" << __func__ << ": Can't connect to "
+                    << toConnect.getSSID() << " wifi is still turning off.");
+            break;
+    }
 }
 
 /**
@@ -249,11 +277,11 @@ void WifiStateManager::connectToAccessPoint(WifiAccessPoint toConnect,
 void WifiStateManager::disconnect(WifiAccessPoint toDisconnect)
 {
     ScopedLock wifiStateLock(stateLock);
-    if(invalidWifiState())
+    if (invalidWifiState())
     {
-	   DBG("WifiStateManager::" << __func__ << ": invalid wifi state:"
-			   << wifiStateString(wifiState));
-	   return;
+        DBG("WifiStateManager::" << __func__ << ": invalid wifi state:"
+                << wifiStateString(wifiState));
+        return;
     }
     switch (wifiState)
     {
@@ -263,13 +291,13 @@ void WifiStateManager::disconnect(WifiAccessPoint toDisconnect)
             {
                 jassert(pendingConnection.ap.isNull());
                 DBG("WifiStateManager::" << __func__
-                        << ": Can't disconnect from " << toConnect.getSSID()
+                        << ": Can't disconnect from " << toDisconnect.getSSID()
                         << ", wifi is connected to a different access point.");
             }
             else
             {
                 DBG("WifiStateManager::" << __func__ << ": Disconnecting from "
-                        << toConnect.getSSID());
+                        << toDisconnect.getSSID());
                 networkInterface->disconnect();
                 startTimer(wifiConnectionTimeout);
                 setWifiState(disconnecting);
@@ -283,13 +311,13 @@ void WifiStateManager::disconnect(WifiAccessPoint toDisconnect)
             if (pendingConnection.ap != toDisconnect)
             {
                 DBG("WifiStateManager::" << __func__
-                        << ": Can't disconnect from " << toConnect.getSSID()
+                        << ": Can't disconnect from " << toDisconnect.getSSID()
                         << ", already connecting to a different access point.");
             }
             else
             {
                 DBG("WifiStateManager::" << __func__
-                        << ": Canceling connection to " << toConnect.getSSID());
+                        << ": Canceling connection to " << toDisconnect.getSSID());
                 pendingConnection = {};
                 cancelledConnection = toDisconnect;
                 //state change will occur on networkInterface signal/timeout
@@ -300,24 +328,102 @@ void WifiStateManager::disconnect(WifiAccessPoint toDisconnect)
         case turningOff:
             DBG("WifiStateManager::" << __func__
                     << ": Wifi is turning off, no need to disconnect from "
-                    << toConnect.getSSID());
+                    << toDisconnect.getSSID());
             break;
         case disconnecting:
             jassert(pendingConnection.ap.isNull());
             DBG("WifiStateManager::" << __func__ << ": Wifi is already "
-                    << "disconnecting with no pending connection."
+                    << "disconnecting with no pending connection.");
             break;
         case disabled:
             DBG("WifiStateManager::" << __func__ << ": Can't disconnect "
-                    << " from " << toConnect.getSSID()
+                    << " from " << toDisconnect.getSSID()
                     << ", wifi is disabled.");
+
             break;
         case turningOn:
         case enabled:
             DBG("WifiStateManager::" << __func__ << ": Can't disconnect "
-                    << " from " << toConnect.getSSID()
+                    << " from " << toDisconnect.getSSID()
                     << ", network interface is missing");
-    };
+    }
+}
+
+/**
+ * If wifi is currently disabled, this will enable it.  Otherwise,
+ * nothing will happen.  This method acquires the WifiStateManager's 
+ * stateLock.
+ */
+void WifiStateManager::enableWifi()
+{
+    ScopedLock wifiStateLock(stateLock);
+    if (invalidWifiState())
+    {
+        DBG("WifiStateManager::" << __func__ << ": invalid wifi state:"
+                << wifiStateString(wifiState));
+        return;
+    }
+    switch (wifiState)
+    {
+        case disabled:
+            DBG("WifiStateManager::" << __func__ << ": enabling wifi");
+            networkInterface->enableWifi();
+            startTimer(wifiEnabledChangeTimeout);
+            setWifiState(turningOn);
+            return;
+        case turningOn:
+            DBG("WifiStateManager::" << __func__
+                    << ": wifi is already being enabled");
+
+            return;
+        case enabled:
+        case turningOff:
+        case connecting:
+        case connected:
+        case disconnecting:
+        case switchingConnection:
+            DBG("WifiStateManager::" << __func__ << ": wifi is already on");
+    }
+}
+
+/**
+ * If wifi is currently enabled, this will disable it.  Otherwise,
+ * nothing will happen.  This method acquires the WifiStateManager's 
+ * stateLock.
+ */
+void WifiStateManager::disableWifi()
+{
+    ScopedLock wifiStateLock(stateLock);
+    if (invalidWifiState())
+    {
+        DBG("WifiStateManager::" << __func__ << ": invalid wifi state:"
+                << wifiStateString(wifiState));
+        return;
+    }
+    switch (wifiState)
+    {
+        case switchingConnection:
+            pendingConnection = {};
+        case turningOn:
+        case enabled:
+        case connecting:
+        case connected:
+        case disconnecting:
+            DBG("WifiStateManager::" << __func__ << ": disabling wifi");
+            networkInterface->disableWifi();
+            startTimer(wifiEnabledChangeTimeout);
+            setWifiState(turningOff);
+            return;
+        case turningOff:
+            DBG("WifiStateManager::" << __func__
+                    << ": wifi is already turning off.");
+            return;
+        case disabled:
+            DBG("WifiStateManager::" << __func__
+                    << ": wifi is already disabled");
+
+            return;
+    }
 }
 
 WifiStateManager::Listener::Listener() { }
@@ -342,7 +448,7 @@ WifiStateManager::Listener::~Listener()
  * If the listener was added to a state manager, this method 
  * indirectly acquires the WifiStateManager's stateLock.
  */
-WifiState WifiStateManager::Listener::getWifiState()
+WifiStateManager::WifiState WifiStateManager::Listener::getWifiState()
 {
     if (stateManager == nullptr)
     {
@@ -360,7 +466,7 @@ WifiStateManager::WifiNetworkInterface::WifiNetworkInterface() { }
  * references to itself from the WifiStateManager.
  * This method acquires the WifiStateManager's stateLock.
  */
-~WifiStateManager::WifiNetworkInterface::WifiNetworkInterface()
+WifiStateManager::WifiNetworkInterface::~WifiNetworkInterface()
 {
     if (stateManager != nullptr)
     {
@@ -369,59 +475,214 @@ WifiStateManager::WifiNetworkInterface::WifiNetworkInterface() { }
         {
 
             DBG(__func__ << ": removing network interface from state manager.");
-                    stateManager->networkInterface.release();
+            stateManager->networkInterface.release();
         }
     }
 }
 
-
 /**
- * Whenever the wifi device establishes a new connection,
- * the WifiNetworkInterface should call this to notify
- * its WifiStateManager.
+ * This method queries the wifi device to ensure that the current 
+ * tracked wifi state actually matches the device state.  If necessary,
+ * this will update the WifiStateManager's current state.  The
+ * WifiNetworkInterface should call this method whenever it has reason
+ * to believe the wifi state may be out of date.  
+ * 
  * This method acquires the WifiStateManager's stateLock.
- *
- * @param connected the newly connected access point
  */
-void WifiStateManager::WifiNetworkInterface::signalWifiConnected
-        (WifiAccessPoint connected) { }
-
-/**
- * Whenever the wifi device establishes a new connection,
- * the WifiNetworkInterface should call this to notify
- * its WifiStateManager.
- * This method acquires the WifiStateManager's stateLock.
- *
- * @param connected the newly connected access point
- */
-void WifiStateManager::WifiNetworkInterface::signalWifiConnected
-        (WifiAccessPoint connected)
+void WifiStateManager::WifiNetworkInterface::confirmWifiState()
 {
     if (stateManager == nullptr)
     {
-        DBG("WifiNetworkInterface::" << __func__ << ": no state manager.");
+        DBG("WifiNetworkInterface::" << __func__ << ": wifi state manager is "
+                << "missing");
         return;
     }
-    WifiState wifiState = stateManager->getWifiState();
-            ScopedLock wifiStateLock(stateManager->stateLock);
-    switch (wifiState)
+    bool wifiConnecting = isConnecting();
+    bool wifiConnected = isConnected();
+    TODO: UPDATE BEFORE ALL ELSE
+    ScopedLock wifiStateLock(stateManager->stateLock);
+    WifiState state = stateManager->wifiState;
+    if (!isWifiDeviceEnabled())
     {
-        case disabled:
-        case turningOn:
-        case enabled:
-        case turningOff:
-        case connecting:
-        case connected:
-        case disconnecting:
-        case switchingConnection:
-        case noStateManager:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "noStateManager!");
+        if (state != turningOn)
+        {
+            DBG("WifiNetworkInterface::" << __func__ << ": state was "
+                    << wifiStateString(state)
+                    << ", but wifi is actually disabled.");
+            stateManager->setWifiState(disabled);
+            return;
+        }
+    }
+    if (!connectingAP.isNull() && !connectedAP.isNull())
+    {
+        if (state != switchingConnection && state != turningOff)
+        {
+            DBG("WifiNetworkInterface::" << __func__ << ": state was "
+                    << wifiStateString(state)
+                    << ", but wifi is actually switching connections.");
+            stateManager->setWifiState(switchingConnection);
+            if (!stateManager->isTimerRunning())
+            {
+                stateManager->startTimer
+                        (stateManager->wifiConnectionTimeout);
+            }
+            return;
+        }
+    }
+    else if (connectingAP.isNull() && connectedAP.isNull())
+    {
+        if (state != enabled && state != turningOff)
+        {
+            DBG("WifiNetworkInterface::" << __func__ << ": state was "
+                    << wifiStateString(state)
+                    << ", but wifi is enabled/not connected.");
+            stateManager->setWifiState(enabled);
+            return;
+        }
+    }
+    else if (!connectingAP.isNull() && connectedAP.isNull())
+    {
+        if (state != connecting && state != turningOff)
+        {
 
-        case missingNetworkInterface:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "missingNetworkInterface!");
-    };
+            DBG("WifiNetworkInterface::" << __func__ << ": state was "
+                    << wifiStateString(state)
+                    << ", but wifi is connecting.");
+            stateManager->setWifiState(connecting);
+            if (!stateManager->isTimerRunning())
+            {
+                stateManager->startTimer
+                        (stateManager->wifiConnectionTimeout);
+            }
+            return;
+        }
+    }
+    else if (connectingAP.isNull() && !connectedAP.isNull())
+    {
+        if (state != connected && state != disconnecting)
+        {
+
+            DBG("WifiNetworkInterface::" << __func__ << ": state was "
+                    << wifiStateString(state)
+                    << ", but wifi is connected.");
+            stateManager->setWifiState(connected);
+            if (!stateManager->isTimerRunning())
+            {
+                stateManager->startTimer
+                        (stateManager->wifiConnectionTimeout);
+            }
+            return;
+        }
+    }
+    if (!stateManager->isTimerRunning())
+    {
+        DBG("WifiNetworkInterface::" << __func__ << ": state was "
+                << wifiStateString(state)
+                << ", but the timer isn't running.");
+        if (state == connecting || switchingConnection)
+        {
+            stateManager->setWifiState(enabled);
+            return;
+        }
+        else if (state == disconnecting)
+        {
+            stateManager->setWifiState(connected);
+            return;
+        }
+        else if (state == turningOff)
+        {
+            stateManager->setWifiState(enabled);
+            return;
+        }
+        else if (state == turningOn)
+        {
+            stateManager->setWifiState(disabled);
+            return;
+        }
+    }
+
+    DBG("WifiNetworkInterface::" << __func__ << ": wifi state "
+            << wifiStateString(state) << " appears to be valid.");
+}
+
+/**
+ * Whenever the wifi device detects a connection being established, the 
+ * WifiNetworkInterface should call this to notify its WifiStateManager. 
+ * This is intended to notify the state manager of unexpected
+ * connections, so it's not necessary to call this for connections
+ * opened by the state manager, but extra calls shouldn't cause any
+ * real problems.
+ * This method acquires the WifiStateManager's stateLock.
+ *
+ * @param connectedAP the newly connected access point
+ */
+void signalWifiConnecting()
+{
+    if (invalidWifiState())
+    {
+        DBG("WifiNetworkInterface::" << __func__ << ": wifi state manager is "
+                << " missing or in an invalid state.");
+        return;
+    }
+    ScopedLock wifiStateLock(stateManager->stateLock);
+    WifiState wifiState = stateManager->wifiState;
+    if (wifiState != turningOff && wifiState != connecting
+        && wifiState != changingConnection)
+    {
+
+        DBG("WifiNetworkInterface::" << __func__
+                << ": started to connect during state "
+                << wifiStateString(wifiState));
+        stateManager->startTimer(stateManager->wifiConnectionTimeout);
+        stateManager->setWifiState(connecting);
+
+    }
+}
+
+/**
+ * Whenever the wifi device establishes a new connection,
+ * the WifiNetworkInterface should call this to notify
+ * its WifiStateManager.
+ * This method acquires the WifiStateManager's stateLock.
+ *
+ * @param connectedAP the newly connected access point
+ */
+void WifiStateManager::WifiNetworkInterface::signalWifiConnected
+(WifiAccessPoint connectedAP)
+{
+    if (invalidWifiState())
+    {
+        DBG("WifiNetworkInterface::" << __func__ << ": wifi state manager is "
+                << " missing or in an invalid state.");
+        return;
+    }
+    ScopedLock wifiStateLock(stateManager->stateLock);
+    WifiState wifiState = stateManager->wifiState;
+    if (stateManager->cancelledConnection == connectedAP
+        || (!stateManager->pendingConnection.ap.isNull() &&
+            stateManager->pendingConnection.ap != connectedAP))
+    {
+        jassert(wifiState == disconnecting || wifiState == switchingConnection);
+        DBG("WifiNetworkInterface::" << __func__ << ": connected to "
+                << connectedAP.getSSID() << "but that connection was canceled.");
+        DBG("WifiNetworkInterface::" << __func__ << ": disconnecting...");
+        if (wifiState != switchingConnection)
+        {
+            stateManager->setWifiState(disconnecting);
+        }
+        disconnect();
+        return;
+    }
+    else
+    {
+
+        stateManager->pendingConnection = {};
+        stateManager->cancelledConnection = WifiAccessPoint();
+    }
+    DBG("WifiNetworkInterface::" << __func__ << ": connected to "
+            << connectedAP.getSSID() << " during state "
+            << wifiStateString(wifiState));
+    stateManager->setWifiState(connected);
 }
 
 /**
@@ -432,32 +693,35 @@ void WifiStateManager::WifiNetworkInterface::signalWifiConnected
  */
 void WifiStateManager::WifiNetworkInterface::signalConnectionFailed()
 {
-
-    if (stateManager == nullptr)
+    if (invalidWifiState())
     {
-        DBG("WifiNetworkInterface::" << __func__ << ": no state manager.");
+        DBG("WifiNetworkInterface::" << __func__ << ": wifi state manager is "
+                << " missing or in an invalid state.");
         return;
     }
-    WifiState wifiState = stateManager->getWifiState();
-            ScopedLock wifiStateLock(stateManager->stateLock);
-    switch (wifiState)
+    ScopedLock wifiStateLock(stateManager->stateLock);
+    switch (stateManager->wifiState)
     {
+
+        case switchingConnection:
+        case connecting:
+            DBG("WifiNetworkInterface::" << __func__ << ": connection failed.");
+            stateManager->pendingConnection = {};
+            stateManager->cancelledConnection = WifiAccessPoint();
+            stateManager->setWifiState(enabled);
+            stateManager->stopTimer();
+
+            return;
         case disabled:
         case turningOn:
         case enabled:
         case turningOff:
-        case connecting:
         case connected:
         case disconnecting:
-        case switchingConnection:
-        case noStateManager:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "noStateManager!");
-
-        case missingNetworkInterface:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "missingNetworkInterface!");
-    };
+            DBG("WifiNetworkInterface::" << __func__
+                    << ": unexpected connection failure from state "
+                    << wifiStateString(stateManager->wifiState));
+    }
 }
 
 /**
@@ -468,31 +732,42 @@ void WifiStateManager::WifiNetworkInterface::signalConnectionFailed()
  */
 void WifiStateManager::WifiNetworkInterface::signalWifiDisconnected()
 {
-    if (stateManager == nullptr)
+    if (invalidWifiState())
     {
-        DBG("WifiNetworkInterface::" << __func__ << ": no state manager.");
+        DBG("WifiNetworkInterface::" << __func__ << ": wifi state manager is "
+                << " missing or in an invalid state.");
         return;
     }
-    WifiState wifiState = stateManager->getWifiState();
-            ScopedLock wifiStateLock(stateManager->stateLock);
-    switch (wifiState)
+    ScopedLock wifiStateLock(stateManager->stateLock);
+    DBG("WifiNetworkInterface::" << __func__ << ": wifi disconnected");
+    stateManager->stopTimer();
+    switch (stateManager->wifiState)
     {
+
+        case switchingConnection:
+            jassert(!stateManager->pendingConnection.ap.isNull());
+            DBG("WifiNetworkInterface::" << __func__
+                    << ": old connection closed, opening connection to "
+                    << stateManager->pendingConnection.ap.getSSID());
+            connectToAccessPoint(stateManager->pendingConnection.ap,
+                    stateManager->pendingConnection.psk);
+            stateManager->setWifiState(connecting);
+            stateManager->startTimer(stateManager->wifiConnectionTimeout);
+        case connecting:
+        case disconnecting:
+        case connected:
+            stateManager->setWifiState(enabled);
+
+            return;
+        case turningOff:
+            return;
         case disabled:
         case turningOn:
         case enabled:
-        case turningOff:
-        case connecting:
-        case connected:
-        case disconnecting:
-        case switchingConnection:
-        case noStateManager:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "noStateManager!");
-
-        case missingNetworkInterface:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "missingNetworkInterface!");
-    };
+            DBG("WifiNetworkInterface::" << __func__
+                    << ": unexpected disconnect from state "
+                    << wifiStateString(stateManager->wifiState));
+    }
 }
 
 /**
@@ -503,31 +778,18 @@ void WifiStateManager::WifiNetworkInterface::signalWifiDisconnected()
  */
 void WifiStateManager::WifiNetworkInterface::signalWifiEnabled()
 {
-    if (stateManager == nullptr)
+    if (invalidWifiState())
     {
-        DBG("WifiNetworkInterface::" << __func__ << ": no state manager.");
+
+        DBG("WifiNetworkInterface::" << __func__ << ": wifi state manager is "
+                << " missing or in an invalid state.");
+
         return;
     }
-    WifiState wifiState = stateManager->getWifiState();
-            ScopedLock wifiStateLock(stateManager->stateLock);
-    switch (wifiState)
-    {
-        case disabled:
-        case turningOn:
-        case enabled:
-        case turningOff:
-        case connecting:
-        case connected:
-        case disconnecting:
-        case switchingConnection:
-        case noStateManager:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "noStateManager!");
-
-        case missingNetworkInterface:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "missingNetworkInterface!");
-    };
+    ScopedLock wifiStateLock(stateManager->stateLock);
+    DBG("WifiNetworkInterface::" << __func__ << ": wifi enabled");
+    stateManager->stopTimer();
+    stateManager->setWifiState(enabled);
 }
 
 /**
@@ -538,44 +800,32 @@ void WifiStateManager::WifiNetworkInterface::signalWifiEnabled()
  */
 void WifiStateManager::WifiNetworkInterface::signalWifiDisabled()
 {
-    if (stateManager == nullptr)
+    if (invalidWifiState())
     {
-        DBG("WifiNetworkInterface::" << __func__ << ": no state manager.");
+
+        DBG("WifiNetworkInterface::" << __func__ << ": wifi state manager is "
+                << " missing or in an invalid state.");
+
         return;
     }
-    WifiState wifiState = stateManager->getWifiState();
-            ScopedLock wifiStateLock(stateManager->stateLock);
-    switch (wifiState)
-    {
-        case disabled:
-        case turningOn:
-        case enabled:
-        case turningOff:
-        case connecting:
-        case connected:
-        case disconnecting:
-        case switchingConnection:
-        case noStateManager:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "noStateManager!");
-
-        case missingNetworkInterface:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "missingNetworkInterface!");
-    };
+    ScopedLock wifiStateLock(stateManager->stateLock);
+    DBG("WifiNetworkInterface::" << __func__ << ": wifi disabled");
+    stateManager->stopTimer();
+    stateManager->setWifiState(disabled);
 }
 
 /**
  * @return true if the state manager is missing or in
- * an invalid state.  This method may indirectly acquire the
- * WifiStateManager's stateLock
+ * an invalid state.
  */
 bool WifiStateManager::WifiNetworkInterface::invalidWifiState()
 {
-    if(stateManager != nullptr)
+    if (stateManager != nullptr)
     {
-        WifiState state = stateManager->getWifiState();
-        return state == noStateManager 
+
+        WifiState state = stateManager->wifiState;
+
+        return state == noStateManager
                 || state == missingNetworkInterface;
     }
     return true;
@@ -589,69 +839,97 @@ bool WifiStateManager::WifiNetworkInterface::invalidWifiState()
  * This method acquires the WifiStateManager's stateLock.
 
  */
-void WifiStateManager::timerCallback() override
+void WifiStateManager::timerCallback()
 {
-    if (stateManager == nullptr)
+    ScopedLock wifiStateLock(stateLock);
+    stopTimer();
+    if (invalidWifiState())
     {
-        DBG("WifiNetworkInterface::" << __func__ << ": no state manager.");
+        DBG("WifiStateManager::" << __func__ << ": invalid wifi state:"
+                << wifiStateString(wifiState));
         return;
     }
-    WifiState wifiState = stateManager->getWifiState();
-            ScopedLock wifiStateLock(stateManager->stateLock);
+    pendingConnection = {};
+    cancelledConnection = WifiAccessPoint();
     switch (wifiState)
     {
-        case disabled:
-        case turningOn:
-        case enabled:
-        case turningOff:
         case connecting:
-        case connected:
-        case disconnecting:
         case switchingConnection:
-        case noStateManager:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "noStateManager!");
+            DBG("WifiStateManager::" << __func__
+                    << ": wifi connection timed out.");
+            setWifiState(enabled);
+            return;
+        case disconnecting:
+            if (networkInterface->isWifiConnected())
+            {
+                DBG("WifiStateManager::" << __func__
+                        << ": disconnecting failed, this shouldn't be possible!");
+            }
+            else
+            {
+                DBG("WifiStateManager::" << __func__
+                        << ": finished disconnecting, but no signal was received");
+                setWifiState(enabled);
+            }
+            return;
+        case turningOn:
+            if (networkInterface->isWifiDeviceEnabled())
+            {
+                DBG("WifiStateManager::" << __func__
+                        << ": failed to enable wifi!");
+            }
+            else
+            {
+                DBG("WifiStateManager::" << __func__
+                        << ": finished turning on wifi, but no signal was received");
+                setWifiState(enabled);
+            }
+            return;
+        case turningOff:
+            if (!networkInterface->isWifiDeviceEnabled())
+            {
+                DBG("WifiStateManager::" << __func__
+                        << ": failed to disable wifi!");
+            }
+            else
+            {
 
-            break;
-        case missingNetworkInterface:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "missingNetworkInterface!");
+                DBG("WifiStateManager::" << __func__
+                        << ": finished turning off wifi, but no signal was received");
+                setWifiState(disabled);
+            }
+            return;
+        case disabled:
+        case enabled:
+        case connected:
+
+            DBG("WifiNetworkInterface::" << __func__
+                    << ": unexpected timeout from state "
+                    << wifiStateString(wifiState));
     };
 }
 
 /**
  * Update the current wifi state and notify all listeners.
- * This method acquires the WifiStateManager's stateLock.
+ * This method should only be called after acquiring the WifiStateManager's
+ * stateLock
  */
 void WifiStateManager::setWifiState(WifiState state)
 {
-    if (stateManager == nullptr)
+    if (networkInterface == nullptr)
     {
-        DBG("WifiNetworkInterface::" << __func__ << ": no state manager.");
-        return;
+        state = missingNetworkInterface;
     }
-    WifiState wifiState = stateManager->getWifiState();
-            ScopedLock wifiStateLock(stateManager->stateLock);
-    switch (wifiState)
+    //if (state != wifiState)
+    //{
+    wifiState = state;
+    for (Listener* listener : listeners)
     {
-        case disabled:
-        case turningOn:
-        case enabled:
-        case turningOff:
-        case connecting:
-        case connected:
-        case disconnecting:
-        case switchingConnection:
-        case noStateManager:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "noStateManager!");
 
-        case missingNetworkInterface:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "missingNetworkInterface!");
-    };
+        listener->wifiStateChanged(wifiState);
+    }
+    //}
 }
-
 
 /**
  * Checks the validity of the current wifi state, possibly changing the
@@ -661,34 +939,17 @@ void WifiStateManager::setWifiState(WifiState state)
  * @return true iff the current wifi state is noStateManager or 
  * missingNetworkInterface
  */
-bool WifiStateManager::invalidWifiState() 
+bool WifiStateManager::invalidWifiState()
 {
-    if(networkInterface == nullptr)
+    if (networkInterface == nullptr)
     {
-        if(wifiState != missingNetworkInterface)
+        if (wifiState != missingNetworkInterface)
         {
             setWifiState(missingNetworkInterface);
-	}
-	return true;
+        }
+        return true;
     }
-    return state == noStateManager 
-            || state == missingNetworkInterface;
+    return wifiState == noStateManager
+            || wifiState == missingNetworkInterface;
 }
 
-/*
-switch (wifiState)
-{
- case missingNetworkInterface:
- case disabled:
- case turningOn:
-        case enabled:
-        case turningOff:
-        case connecting:
-        case connected:
-        case disconnecting:
-        case switchingConnection:
-        case noStateManager:
-            DBG("WifiStateManager::" << __func__ << " ERROR: invalid state"
-                    << "noStateManager!");
-    };
- */

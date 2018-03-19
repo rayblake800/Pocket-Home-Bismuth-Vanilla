@@ -21,6 +21,8 @@ class WifiStateManager : private Timer
 {
 public:
     WifiStateManager();
+    class NetworkInterface;
+    class Listener;
 
     /**
      * On destruction, the WifiStateManager removes all references
@@ -55,36 +57,37 @@ public:
         //WifiStateManager not available.
         noStateManager
     };
-    
+
 #ifdef JUCE_DEBUG    
+
     /**
      * Convert a WifiState to a string for debugging.
-     */ 
-    String wifiStateString(WifiState state)
+     */
+    static String wifiStateString(WifiState state)
     {
-        switch (wifiState)
+        switch (state)
         {
-             case missingNetworkInterface:
-                 return "missingNetworkInterface";
-             case disabled:
-                 return "disabled";
-             case turningOn:
-                 return "turningOn";
-             case enabled:
-                 return "enabled";
-             case turningOff:
-                 return "turningOff";
-             case connecting:
-                 return "connecting";
-             case connected:
-                 return "connected";
-             case disconnecting:
-                 return "disconnecting";
-             case switchingConnection:
-                 return "switchingConnection";
-             case noStateManager:
-                 return "noStateManager";
-        };
+            case missingNetworkInterface:
+                return "missingNetworkInterface";
+            case disabled:
+                return "disabled";
+            case turningOn:
+                return "turningOn";
+            case enabled:
+                return "enabled";
+            case turningOff:
+                return "turningOff";
+            case connecting:
+                return "connecting";
+            case connected:
+                return "connected";
+            case disconnecting:
+                return "disconnecting";
+            case switchingConnection:
+                return "switchingConnection";
+            case noStateManager:
+                return "noStateManager";
+        }
     }
 #endif
 
@@ -98,7 +101,7 @@ public:
      * @param interface takes responsibility for communicating
      * with the Wifi device.
      */
-    void setNetworkInterface(WifiNetworkInterface* interface);
+    void setNetworkInterface(NetworkInterface* interface);
 
     /**
      * @return the current state of the wifi device, or
@@ -150,6 +153,16 @@ public:
     Array<WifiAccessPoint> getVisibleAPs();
 
     /**
+     * @return true iff the wifi device is currently enabled.
+     */
+    bool isEnabled();
+
+    /**
+     * @return true iff the wifi device is currently connected.
+     */
+    bool isConnected();
+
+    /**
      * Attempt to open a connection to a wifi access point.
      * This will fail if wifi is disabled, the access point is
      * invalid, or the psk is wrong.
@@ -171,6 +184,20 @@ public:
      * @param toDisconnect should be the connected or connecting access point.
      */
     void disconnect(WifiAccessPoint toDisconnect);
+
+    /**
+     * If wifi is currently disabled, this will enable it.  Otherwise,
+     * nothing will happen.  This method acquires the WifiStateManager's 
+     * stateLock.
+     */
+    void enableWifi();
+
+    /**
+     * If wifi is currently enabled, this will disable it.  Otherwise,
+     * nothing will happen.  This method acquires the WifiStateManager's 
+     * stateLock.
+     */
+    void disableWifi();
 
     /**
      * Listener objects can be added to a WifiStateManager to receive
@@ -201,36 +228,39 @@ public:
         WifiState getWifiState();
 
     private:
+
         /**
-         * When added to a WifiStateManager, it will call this
-         * method whenever the wifi state changes.  When this callback runs,
-         * the state manager's stateLock will be locked.  This method is
-         * not guaranteed to run on the message thread.
+         * When added to a WifiStateManager, it will call this method whenever 
+         * the wifi state changes.  When this callback runs, the state manager's
+         * stateLock will be locked.  This method is not guaranteed to run on 
+         * the message thread.
          *
          * @param state new wifi device state
          */
-        virtual void wifiStateChanged(WifiState state) = 0;
-        WifiStateManager * const stateManager = nullptr;
+        virtual void wifiStateChanged(WifiState state) { };
+        WifiStateManager * stateManager = nullptr;
     };
 
     /**
-     * WifiNetworkInterface is an abstract interface for 
-     * communication between the WifiStateManager and whatever
-     * object handles direct interaction with the wifi device.
+     * WifiNetworkInterface is an abstract interface for communication between 
+     * the WifiStateManager and whatever object handles direct interaction with
+     *  the wifi device.
      */
-    class WifiNetworkInterface
+    class NetworkInterface
     {
-        friend class WifiStateManager
-    protected:
-        WifiNetworkInterface();
+    public:
+        friend class WifiStateManager;
+
+        NetworkInterface();
 
         /**
-         * If the WifiNetworkInterface belongs to a WifiStateManager
-         * and it's destroyed early, it will safely remove all
-         * references to itself from the WifiStateManager.
-         * This method acquires the WifiStateManager's stateLock.
+         * If the WifiNetworkInterface belongs to a WifiStateManager and it's 
+         * destroyed early, it will safely remove all references to itself from
+         * the WifiStateManager. This method acquires the WifiStateManager's 
+         * stateLock.
          */
-        virtual ~WifiNetworkInterface();
+        virtual ~NetworkInterface();
+    protected:
 
         /**
          * Access the wifi device to check if wifi is enabled.
@@ -238,6 +268,14 @@ public:
          * @return true iff wifi is enabled
          */
         virtual bool isWifiDeviceEnabled() = 0;
+
+        /**
+         * Access the wifi device to check if it's attempting to create a wifi
+         * connection.
+         * 
+         * @return true iff currently connecting.
+         */
+        virtual bool isWifiConnecting() = 0;
 
         /**
          * Access the wifi device to check if an active wifi connection
@@ -269,13 +307,14 @@ public:
 
 
         /**
-         * Attempt to open a connection to a wifi access point.
-         * This will fail if wifi is disabled, the access point is
-         * invalid, or the psk is wrong.
+         * Attempt to open a connection to a wifi access point. This will fail 
+         * if wifi is disabled, the access point is invalid, or the psk is 
+         * wrong.
+         * 
          * @param toConnect should be a valid nearby access point
          *
-         * @param psk wifi key for toConnect, or the empty string
-         * if toConnect isn't secured.
+         * @param psk wifi key for toConnect, or the empty string if toConnect 
+         * isn't secured.
          */
         virtual void connectToAccessPoint(WifiAccessPoint toConnect,
                 String psk = String()) = 0;
@@ -285,6 +324,18 @@ public:
          * from that access point.
          */
         virtual void disconnect() = 0;
+
+        /**
+         * If wifi is currently disabled, this will enable it.  Otherwise,
+         * nothing will happen.
+         */
+        virtual void enableWifi() = 0;
+
+        /**
+         * If wifi is currently enabled, this will disable it.  Otherwise,
+         * nothing will happen.
+         */
+        virtual void disableWifi() = 0;
 
         /**
          * This method queries the wifi device to ensure that the current 
@@ -298,28 +349,39 @@ public:
         void confirmWifiState();
 
         /**
-         * Whenever the wifi device establishes a new connection,
-         * the WifiNetworkInterface should call this to notify
-         * its WifiStateManager.
+         * Whenever the wifi device detects a connection being established, the 
+         * WifiNetworkInterface should call this to notify its WifiStateManager. 
+         * This is intended to notify the state manager of unexpected
+         * connections, so it's not necessary to call this for connections
+         * opened by the state manager, but extra calls shouldn't cause any
+         * real problems.
          * This method acquires the WifiStateManager's stateLock.
          *
-         * @param connected the newly connected access point
+         * @param connectedAP the newly connected access point
          */
-        void signalWifiConnected(WifiAccessPoint connected);
+        void signalWifiConnecting();
 
         /**
-         * Whenever the wifi device fails to connect to an access
-         * point, the WifiNetworkInterface should call this to
-         * notify its WifiStateManager.
+         * Whenever the wifi device establishes a new connection, the 
+         * WifiNetworkInterface should call this to notify its WifiStateManager.
+         * This method acquires the WifiStateManager's stateLock.
+         *
+         * @param connectedAP the newly connected access point
+         */
+        void signalWifiConnected(WifiAccessPoint connectedAP);
+
+        /**
+         * Whenever the wifi device fails to connect to an access point, the 
+         * WifiNetworkInterface should call this to notify its WifiStateManager.
          * This method acquires the WifiStateManager's stateLock.
          */
         void signalConnectionFailed();
 
         /**
-         * Whenever the wifi device disconnects from a wifi access
-         * point, the WifiNetworkInterface should call this to
-         * notify its WifiStateManager.
-         * This method acquires the WifiStateManager's stateLock.
+         * Whenever the wifi device disconnects from a wifi access  point, the 
+         * WifiNetworkInterface should call this to  notify its 
+         * WifiStateManager.  This method acquires the WifiStateManager's 
+         * stateLock.
          */
         void signalWifiDisconnected();
 
@@ -338,16 +400,15 @@ public:
          * This method acquires the WifiStateManager's stateLock.
          */
         void signalWifiDisabled();
-        
+
         /**
          * @return true if the state manager is missing or in
-         * an invalid state.  This method may indirectly acquire
-         * the WifiStateManager's stateLock
+         * an invalid state.
          */
         bool invalidWifiState();
     private:
         WifiStateManager* stateManager = nullptr;
-    }
+    };
 private:
     //Milliseconds to wait before assuming that enabling or
     //disabling wifi has failed.
@@ -397,8 +458,9 @@ private:
     WifiAccessPoint cancelledConnection;
 
     WifiState wifiState = missingNetworkInterface;
-    ScopedPointer<WifiNetworkInterface> networkInterface = nullptr;
-    Array<Listener> wifiListeners;
+    ScopedPointer<NetworkInterface> networkInterface = nullptr;
+    Array<Listener*> listeners;
     CriticalSection stateLock;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiStateManager)
 };
 

@@ -11,93 +11,57 @@
 #include <nm-client.h>
 #include <nm-device.h>
 #include <nm-device-wifi.h>
-#include "WifiStatus.h"
+#include "WifiStateManager.h"
 
-class WifiStatusNM : public WifiStatus {
+class WifiStatusNM : public WifiStateManager::NetworkInterface,
+private Thread, private WindowFocus::Listener
+{
 public:
     WifiStatusNM();
-    virtual ~WifiStatusNM() override;
+    virtual ~WifiStatusNM();
 
     /**
-     * @return the list of all Wifi access points close enough to detect.
      */
-    Array<WifiAccessPoint> nearbyAccessPoints() override;
+    bool isWifiDeviceEnabled() override;
 
     /**
-     * @return the currently connected access point, or WifiAccessPoint()
-     * if no access point is connected. 
      */
-    WifiAccessPoint getConnectedAccessPoint() const override;
+    bool isWifiConnecting() override;
 
     /**
-     * @return true iff wifi is currently turned on.
      */
-    bool isEnabled() const override;
+    bool isWifiConnected() override;
 
     /**
-     * @return true iff the system is currently connected to a wifi access
-     * point.
      */
-    bool isConnected() const override;
-        
-    /**
-     * @return true iff wifi is currently being enabled.
-     */
-    bool isTurningOn() const override;
-    
-    /**
-     * @return true iff wifi is currently being disabled.
-     */
-    isTurningOff() const override;
-    
-    /**
-     * @return true iff wifi is attempting to connect to an access point.
-     */
-    bool isConnecting() const override;
-    
-    /**
-     * @return true iff wifi is attempting to disconnect from an access point. 
-     */
-    bool isDisconnecting() const override;
-    
-    /**
-     * Turns on the wifi radio.
-     */
-    void enableWifi() override;
+    WifiAccessPoint getConnectedAP() override;
 
     /**
-     * Turns off the wifi radio.
      */
-    void disableWifi() override;
+    WifiAccessPoint getConnectingAP() override;
 
     /**
-     * Attempts to connect to a wifi access point.
-     * @param ap defines the wifi access point to connect to.
-     * @param psk wifi access point key, if ap is a secure connection.
      */
-    void setConnectedAccessPoint
-    (const WifiAccessPoint& ap, String psk = String()) override;
+    Array<WifiAccessPoint> getVisibleAPs() override;
+
 
     /**
-     * If connected to a wifi access point, this will close that connection.
+     */
+    void connectToAccessPoint(WifiAccessPoint toConnect,
+            String psk = String()) override;
+
+    /**
      */
     void disconnect() override;
 
     /**
-     * Inform all listeners when wifi is enabled or disabled
      */
-    void handleWirelessEnabled();
+    void enableWifi() override;
 
     /**
-     * Inform all listeners when a wifi connection is created or fails
-     * to be created.
      */
-    void handleWirelessConnected();
+    void disableWifi() override;
 
-    /**
-     * Save access point data after connecting to an access point.
-     */
-    void handleConnectedAccessPoint();
 private:
 
     /**
@@ -138,26 +102,26 @@ private:
      * WifiAccessPoint::null() if no connection is found.
      */
     WifiAccessPoint getNMConnectedAP(NMDeviceWifi *wdev);
-    
+
     /**
      * Close a specific wifi connection
      * @param conn the connection to close
      */
     void removeNMConnection(NMActiveConnection* conn = nullptr);
-    
+
     /**
      * @param key
      * @return true iff key has the correct format for a WEP key.
      */
     bool isValidWEPKeyFormat(String key);
-    
+
     /**
      * @param phrase
      * @return true iff phrase has the correct format for a WEP passphrase.
      */
     bool isValidWEPPassphraseFormat(String phrase);
-    
-    
+
+
     //##############  NetworkManager callback functions ###########################
     // These are called by the NetworkManager after wifi state changes.
     static void handle_add_and_activate_finish(NMClient *client,
@@ -169,7 +133,7 @@ private:
     static void handle_wireless_connected(WifiStatusNM *wifiStatus);
     static void handle_active_access_point(WifiStatusNM *wifiStatus);
     static void handle_changed_access_points(WifiStatusNM *wifiStatus);
-  
+
     CriticalSection wifiLock;
     Array<WifiStatus::Listener*> listeners;
     WifiAccessPoint connectedAP;

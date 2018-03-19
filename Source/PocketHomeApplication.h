@@ -9,7 +9,7 @@
 #include "JuceHeader.h"
 #include "PokeLookAndFeel.h"
 #include "PocketHomeWindow.h"
-#include "WifiStatus.h"
+#include "WifiStateManager.h"
 #include "BluetoothStatus.h"
 
 class PocketHomeApplication : public JUCEApplication
@@ -21,9 +21,9 @@ public:
     static PocketHomeApplication* getInstance();
     
     /**
-     * @return a pointer to the wifi status monitoring object. 
+     * @return a reference to the wifi manager.
      */
-    WifiStatus* getWifiStatus();
+    WifiStateManager& getWifiManager();
     
     /**
      * @return a pointer to the bluetooth status monitoring object. 
@@ -52,8 +52,8 @@ private:
     }
 
     PokeLookAndFeel lookAndFeel;
+    WifiStateManager wifiManager;
 
     ScopedPointer<PocketHomeWindow> homeWindow;
-    ScopedPointer<WifiStatus> wifiStatus;
     ScopedPointer<BluetoothStatus> bluetoothStatus;
 };

@@ -4,11 +4,11 @@
  *TODO:document, get rid of all the unnecessary redundancy.
  */
 #pragma once
-#include "WifiStatus.h"
+#include "WifiStateManager.h"
 #include "ConnectionSettingsComponent.h"
 
 class WifiSettingsComponent : public ConnectionSettingsComponent, 
-        public WifiStatus::Listener {
+        public WifiStateManager::Listener {
 public:
     WifiSettingsComponent(std::function<void()> openWifiPage);
     virtual ~WifiSettingsComponent() {}
@@ -37,7 +37,6 @@ private:
     void enabledStateChanged(bool enabled) override;
     
     /**
-     * @return Not Connected, Wifi Off, or the active connection name. 
      */
     String updateButtonText() override;
 
@@ -45,7 +44,7 @@ private:
      * Use wifi status updates to keep the component updated.
      * @param event
      */
-    void handleWifiEvent(WifiStatus::WifiEvent event) override;
+    void wifiStateChanged(WifiStateManager::WifiState state) override;
 
     bool wifiBusy = false;
 

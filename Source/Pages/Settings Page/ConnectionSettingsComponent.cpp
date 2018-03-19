@@ -36,6 +36,7 @@ void ConnectionSettingsComponent::refresh()
     pageButton.setText(updateButtonText());
     pageButton.setEnabled(enabled && !busy);
     resized();
+    repaint();
 }
 
 /**

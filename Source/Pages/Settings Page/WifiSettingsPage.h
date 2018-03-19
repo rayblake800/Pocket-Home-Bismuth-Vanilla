@@ -6,7 +6,7 @@
  */
 
 #pragma once
-#include "WifiStatus.h"
+#include "WifiStateManager.h"
 #include "Spinner.h"
 #include "ScalingLabel.h"
 #include "SwitchComponent.h"
@@ -17,7 +17,7 @@
 #include "ConnectionPage.h"
 
 class WifiSettingsPage : public ConnectionPage<WifiAccessPoint>,
-public WifiStatus::Listener, public TextEditor::Listener {
+public WifiStateManager::Listener, public TextEditor::Listener {
 public:
     WifiSettingsPage();
     ~WifiSettingsPage();
@@ -96,13 +96,8 @@ private:
     void setCurrentlyConnecting(bool currentlyConnecting);
 
     /**
-     * When wifi is enabled, connects, or disconnects, reload page contents.
-     * When wifi is disabled, close this page.
-     * When wifi is busy, disable connection controls.
-     * When wifi fails to connect, show the error label and enable connection
-     * controls.
      */
-    void handleWifiEvent(WifiStatus::WifiEvent event) override;
+    void wifiStateChanged(WifiStateManager::WifiState state) override;
 
 
     /**
@@ -151,7 +146,7 @@ private:
 
     };
 
-    bool wifiBusy = false;
+    bool connectionChanging = false;
     ScalingLabel passwordLabel;
     TextEditor passwordEditor;
     TextButton connectionButton;
