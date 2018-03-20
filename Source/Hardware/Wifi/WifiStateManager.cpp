@@ -556,7 +556,7 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
             return;
         }
     }
-    else if (wifiConnecting && !wifiConnected)
+    else if (!wifiConnecting && wifiConnected)
     {
         if (state != connected && state != disconnecting)
         {
