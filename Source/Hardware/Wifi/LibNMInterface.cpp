@@ -9,11 +9,12 @@
 #define LIBNM_ITERATION_PERIOD 100 // milliseconds
 
 #if JUCE_DEBUG
+
 /**
  * Converts a NMDeviceState to a String for debug output.
  */
 String deviceStateString(NMDeviceState state)
-{ 
+{
     switch (state)
     {
         case NM_DEVICE_STATE_ACTIVATED:
@@ -137,6 +138,8 @@ bool LibNMInterface::isWifiConnected()
     const ScopedLock lock(wifiLock);
     if (nmDevice != nullptr)
     {
+        DBG("LibNMInterface::" << __func__ << ": state is "
+                << deviceStateString(nm_device_get_state(nmDevice)));
         if (nm_device_get_state(nmDevice) == NM_DEVICE_STATE_ACTIVATED)
         {
             return true;
@@ -431,7 +434,7 @@ void LibNMInterface::handleWifiEnabledChange(LibNMInterface* wifiStatus)
 void LibNMInterface::handleConnectionEvent(LibNMInterface* wifiStatus)
 {
     NMDeviceState state = nm_device_get_state(wifiStatus->nmDevice);
-    DBG("LibNMInterface::" << __func__ << ":  changed to " 
+    DBG("LibNMInterface::" << __func__ << ":  changed to "
             << deviceStateString(state));
     switch (state)
     {
@@ -469,7 +472,7 @@ void LibNMInterface::handleConnectionEvent(LibNMInterface* wifiStatus)
         case NM_DEVICE_STATE_UNAVAILABLE:
         default:
             DBG("LibNMInterface::" << __func__
-                    << ": wlan0 device entered unmanaged state: " 
+                    << ": wlan0 device entered unmanaged state: "
                     << deviceStateString(state));
             wifiStatus->signalWifiDisconnected();
     }
@@ -525,7 +528,7 @@ void LibNMInterface::run()
             const MessageManagerLock mmLock(this);
             if (mmLock.lockWasGained())
             {
-                if(isWifiConnecting())
+                if (isWifiConnecting())
                 {
                     signalWifiConnecting();
                 }

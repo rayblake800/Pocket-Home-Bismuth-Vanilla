@@ -503,14 +503,14 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
     WifiState state = stateManager->wifiState;
     if (!isWifiEnabled())
     {
-        if (state != turningOn)
+        if (state != turningOn && state != disabled)
         {
             DBG("NetworkInterface::" << __func__ << ": state was "
                     << wifiStateString(state)
                     << ", but wifi is actually disabled.");
             stateManager->setWifiState(disabled);
-            return;
         }
+        return;
     }
     if (wifiConnecting && wifiConnected)
     {
@@ -525,8 +525,8 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
                 stateManager->startTimer
                         (stateManager->wifiConnectionTimeout);
             }
-            return;
         }
+        return;
     }
     else if (!wifiConnecting && !wifiConnected)
     {
@@ -536,8 +536,8 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
                     << wifiStateString(state)
                     << ", but wifi is enabled/not connected.");
             stateManager->setWifiState(enabled);
-            return;
         }
+        return;
     }
     else if (wifiConnecting && !wifiConnected)
     {
@@ -570,37 +570,9 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
                 stateManager->startTimer
                         (stateManager->wifiConnectionTimeout);
             }
-            return;
         }
+        return;
     }
-    if (!stateManager->isTimerRunning())
-    {
-        DBG("NetworkInterface::" << __func__ << ": state was "
-                << wifiStateString(state)
-                << ", but the timer isn't running.");
-        if (state == connecting || switchingConnection)
-        {
-            stateManager->setWifiState(enabled);
-            return;
-        }
-        else if (state == disconnecting)
-        {
-            stateManager->setWifiState(connected);
-            return;
-        }
-        else if (state == turningOff)
-        {
-            stateManager->setWifiState(enabled);
-            return;
-        }
-        else if (state == turningOn)
-        {
-            stateManager->setWifiState(disabled);
-            return;
-        }
-    }
-    DBG("WifiNetworkInterface::" << __func__ << ": wifi state "
-            << wifiStateString(state) << " appears to be valid.");
 }
 
 /**
