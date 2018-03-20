@@ -48,6 +48,7 @@ WifiStatusNM::WifiStatusNM() : connectedAP(WifiAccessPoint())
 }
 
 /**
+ * @return true iff wifi is currently turned on.
  */
 bool WifiStatusNM::isWifiDeviceEnabled()
 {
@@ -125,36 +126,14 @@ WifiAccessPoint WifiStatusNM::getConnectedAP()
 
 /**
  */
-WifiAccessPoint WifiStatusNM::getConnectingAP() { }
+WifiAccessPoint WifiStatusNM::getConnectingAP() {
+	//NMActiveConnection *conn =
+        //        nm_client_get_activating_connection(nmClient);
+  }
 
 /**
  */
-Array<WifiAccessPoint> WifiStatusNM::getVisibleAPs() { }
-
-/**
- */
-void WifiStatusNM::connectToAccessPoint(WifiAccessPoint toConnect,
-        String psk = String()) { }
-
-/**
- */
-void WifiStatusNM::disconnect() { }
-
-/**
- */
-void WifiStatusNM::enableWifi() { }
-
-/**
- */
-void WifiStatusNM::disableWifi() { }
-
-WifiStatusNM::~WifiStatusNM() { }
-
-/**
- * @return the list of all Wifi access points close enough to detect.
- */
-Array<WifiAccessPoint> WifiStatusNM::nearbyAccessPoints()
-{
+Array<WifiAccessPoint> WifiStatusNM::getVisibleAPs() {
     const ScopedLock lock(wifiLock);
     NMDeviceWifi* wifiDevice = NM_DEVICE_WIFI(nmDevice);
     const GPtrArray* apList = nm_device_wifi_get_access_points(wifiDevice);
@@ -192,44 +171,19 @@ Array<WifiAccessPoint> WifiStatusNM::nearbyAccessPoints()
             accessPoints.add(ap.second);
         }
     }
-
     DBG("WifiStatusNM::" << __func__ << ": found " << accessPoints.size()
             << " AccessPoints");
     return accessPoints;
 }
 
 /**
- * @return the currently connected access point, or WifiAccessPoint()
- * if no access point is connected. 
  */
-WifiAccessPoint WifiStatusNM::getConnectedAccessPoint() const
-{
-    const ScopedLock lock(wifiLock);
-    if (!connected)
-    {
-        return WifiAccessPoint();
-    }
-    return connectedAP;
-}
+void WifiStatusNM::connectToAccessPoint(WifiAccessPoint toConnect,
+        String psk = String()) { }
 
 /**
- * @return true iff wifi is currently turned on.
  */
-bool WifiStatusNM::isEnabled() const
-{
-    const ScopedLock lock(wifiLock);
-    return enabled;
-}
-
-/**
- * @return true iff the system is currently connected to a wifi access
- * point.
- */
-bool WifiStatusNM::isConnected() const
-{
-    const ScopedLock lock(wifiLock);
-    return connected;
-}
+void WifiStatusNM::disconnect() { }
 
 /**
  * Turns on the wifi radio.
@@ -237,10 +191,9 @@ bool WifiStatusNM::isConnected() const
 void WifiStatusNM::enableWifi()
 {
     const ScopedLock lock(wifiLock);
-    if (!enabled)
+    if (!isWifiDeviceEnabled())
     {
         DBG("WifiStatusNM::" << __func__ << ": enabling wifi connections");
-        notifyListeners(wifiBusy);
         nm_client_wireless_set_enabled(nmClient, true);
         if (!isThreadRunning())
         {
@@ -259,10 +212,9 @@ void WifiStatusNM::enableWifi()
 void WifiStatusNM::disableWifi()
 {
     const ScopedLock lock(wifiLock);
-    if (enabled)
+    if (isWifiDeviceEnabled())
     {
         DBG("WifiStatusNM::" << __func__ << ": disabling wifi connections");
-        notifyListeners(wifiBusy);
         nm_client_wireless_set_enabled(nmClient, false);
     }
     else
@@ -271,6 +223,13 @@ void WifiStatusNM::disableWifi()
     }
 }
 
+WifiStatusNM::~WifiStatusNM() { }
+
+bool WifiStatusNM::isEnabled() const
+{
+    const ScopedLock lock(wifiLock);
+    return enabled;
+}
 /**
  * Attempts to connect to a wifi access point.
  */
