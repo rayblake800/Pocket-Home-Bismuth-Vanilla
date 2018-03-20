@@ -73,18 +73,12 @@ void SwitchComponent::resized()
     handleBoundsOn = handleBoundsOff.withRightX
             (backgroundShape.getRight() - handleMargin);
     Colour handleColour;
-    Rectangle<int>& handleBounds = handleBoundsOff;
-    if (getToggleState())
+    Rectangle<int>& handleBounds = getToggleState() ?
+        handleBoundsOn : handleBoundsOff;
+    if (handle.getBounds() != handleBounds) 
     {
-        handleColour = findColour(handleColourId);
-        handleBounds = handleBoundsOn;
+        clicked();
     }
-    else
-    {
-        handleColour = findColour(handleOffColourId);
-    }
-    handle.setColour(handleColour);
-    handle.setBounds(handleBounds);
 }
 
 /**
@@ -105,8 +99,8 @@ void SwitchComponent::clicked()
                 handleBoundsOn : handleBoundsOff;
         if(bounds != handle.getBounds())
         {
-            Desktop::getInstance().getAnimator().animateComponent(&handle, bounds, 1.0f,
-                    animationDuration, false, 0.0, 0.0);
+            Desktop::getInstance().getAnimator().animateComponent(&handle, 
+                    bounds, 1.0f, animationDuration, false, 0.0, 0.0);
         }
         handle.setColour(findColour(getToggleState() ?
             handleColourId : handleOffColourId));

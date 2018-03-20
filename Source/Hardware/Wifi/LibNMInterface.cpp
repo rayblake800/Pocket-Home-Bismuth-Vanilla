@@ -174,7 +174,9 @@ WifiAccessPoint LibNMInterface::getConnectingAP()
             nm_client_get_activating_connection(nmClient);
     if (conn == nullptr)
     {
-        return WifiAccessPoint();
+        DBG("LibNMInterface::" << __func__ << ": no connecting AP found, "
+                << "returning the connected AP, if any");
+        return getConnectedAP();
     }
     NMDeviceWifi* wifiDevice = NM_DEVICE_WIFI(nmDevice);
     NMAccessPoint* connectingAP = nm_device_wifi_get_access_point_by_path

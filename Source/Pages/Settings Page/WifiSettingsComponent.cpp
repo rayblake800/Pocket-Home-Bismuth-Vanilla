@@ -21,7 +21,7 @@ ConnectionSettingsComponent(openWifiPage, "wifi")
  */
 bool WifiSettingsComponent::connectionEnabled()
 {
-    
+
     WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
             ->getWifiManager();
     return wifiManager.isEnabled();
@@ -100,11 +100,17 @@ String WifiSettingsComponent::updateButtonText()
         case WifiStateManager::enabled:
             return "Not Connected";
         case WifiStateManager::turningOff:
-            return "WiFi Turning Off..";
+            return "WiFi Turning Off...";
         case WifiStateManager::connecting:
         case WifiStateManager::switchingConnection:
         {
             WifiAccessPoint ap = wifiManager.getConnectingAP();
+            if (ap.isNull())
+            {
+                DBG("WifiSettingsComponent::" << __func__ << ": wifi is "
+                        << "connecting, but can't get the connecting AP.");
+                return "Connecting...";
+            }
             return String("Connecting to ") + ap.getSSID();
         }
         case WifiStateManager::connected:
@@ -113,6 +119,6 @@ String WifiSettingsComponent::updateButtonText()
             return ap.getSSID();
         }
         case WifiStateManager::disconnecting:
-            return "Disconnecting..";
+            return "Disconnecting...";
     }
 }
