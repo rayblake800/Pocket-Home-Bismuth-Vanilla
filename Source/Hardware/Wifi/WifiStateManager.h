@@ -15,9 +15,10 @@
 
 #pragma once
 #include "JuceHeader.h"
+#include "WindowFocus.h"
 #include "WifiAccessPoint.h"
 
-class WifiStateManager : protected Timer
+class WifiStateManager : protected Timer, private WindowFocus::Listener
 {
 public:
     WifiStateManager();
@@ -427,6 +428,17 @@ private:
 
      */
     void timerCallback() override;
+    
+    /**
+     * When window focus is lost, the timer will be canceled.  
+     */
+    void windowFocusLost() override;
+    
+    /**
+     * When window focus is gained, if the network interface has been assigned,
+     * the wifi state will be updated.
+     */
+    void windowFocusGained() override;
 
     /**
      * Update the current wifi state and notify all listeners.

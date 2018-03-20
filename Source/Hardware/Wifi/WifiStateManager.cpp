@@ -908,6 +908,26 @@ void WifiStateManager::timerCallback()
 }
 
 /**
+ * When window focus is lost, the timer will be canceled.  
+ */
+void WifiStateManager::windowFocusLost()
+{
+    stopTimer();
+}
+
+/**
+ * When window focus is gained, if the network interface has been assigned,
+ * the wifi state will be updated.
+ */
+void WifiStateManager::windowFocusGained()
+{
+    if (networkInterface != nullptr)
+    {
+        networkInterface->confirmWifiState();
+    }
+}
+
+/**
  * Update the current wifi state and notify all listeners.
  * This method should only be called after acquiring the WifiStateManager's
  * stateLock
@@ -933,9 +953,6 @@ void WifiStateManager::setWifiState(WifiState state)
  * Checks the validity of the current wifi state, possibly changing the
  * state to missingNetworkInterface if necessary.  This method should only 
  * be called after acquiring the WifiStateManager's stateLock.
- * 
- * @return true iff the current wifi state is noStateManager or 
- * missingNetworkInterface
  */
 bool WifiStateManager::invalidWifiState()
 {

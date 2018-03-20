@@ -4874,16 +4874,14 @@
             <in>BluetoothStatus.h</in>
           </df>
           <df name="Wifi">
+            <in>JsonWifiInterface.cpp</in>
+            <in>JsonWifiInterface.h</in>
+            <in>LibNMInterface.cpp</in>
+            <in>LibNMInterface.h</in>
             <in>WifiAccessPoint.cpp</in>
             <in>WifiAccessPoint.h</in>
             <in>WifiStateManager.cpp</in>
             <in>WifiStateManager.h</in>
-            <in>WifiStatus.cpp</in>
-            <in>WifiStatus.h</in>
-            <in>WifiStatusJson.cpp</in>
-            <in>WifiStatusJson.h</in>
-            <in>WifiStatusNM.cpp</in>
-            <in>WifiStatusNM.h</in>
             <in>WifiTest.cpp</in>
           </df>
           <in>Audio.cpp</in>

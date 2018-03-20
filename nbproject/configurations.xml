@@ -51,9 +51,6 @@
           <df name="Wifi">
             <in>WifiAccessPoint.cpp</in>
             <in>WifiStateManager.cpp</in>
-            <in>WifiStatus.cpp</in>
-            <in>WifiStatusJson.cpp</in>
-            <in>WifiStatusNM.cpp</in>
           </df>
           <in>Audio.cpp</in>
           <in>BatteryMonitor.cpp</in>
@@ -601,27 +598,6 @@
           <preprocessorList>
             <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
           </preprocessorList>
-        </ccTool>
-      </item>
-      <item path="Source/Hardware/Wifi/WifiStatus.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="Source/Hardware/Wifi/WifiStatusJson.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="Source/Hardware/Wifi/WifiStatusNM.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
         </ccTool>
       </item>
       <item path="Source/Main.cpp" ex="false" tool="1" flavor2="8">
