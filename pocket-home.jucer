@@ -130,15 +130,14 @@
                 file="Source/Hardware/Wifi/WifiStateManager.cpp"/>
           <FILE id="e1CJwp" name="WifiStateManager.h" compile="0" resource="0"
                 file="Source/Hardware/Wifi/WifiStateManager.h"/>
-          <FILE id="AXlA2k" name="WifiStatus.cpp" compile="1" resource="0" file="Source/Hardware/Wifi/WifiStatus.cpp"/>
-          <FILE id="P1KEyx" name="WifiStatus.h" compile="0" resource="0" file="Source/Hardware/Wifi/WifiStatus.h"/>
-          <FILE id="gnqOio" name="WifiStatusJson.cpp" compile="1" resource="0"
-                file="Source/Hardware/Wifi/WifiStatusJson.cpp"/>
-          <FILE id="obCnmM" name="WifiStatusJson.h" compile="0" resource="0"
-                file="Source/Hardware/Wifi/WifiStatusJson.h"/>
-          <FILE id="oqvpyg" name="WifiStatusNM.cpp" compile="1" resource="0"
-                file="Source/Hardware/Wifi/WifiStatusNM.cpp"/>
-          <FILE id="eWhlRs" name="WifiStatusNM.h" compile="0" resource="0" file="Source/Hardware/Wifi/WifiStatusNM.h"/>
+          <FILE id="gnqOio" name="JsonWifiInterface.cpp" compile="1" resource="0"
+                file="Source/Hardware/Wifi/JsonWifiInterface.cpp"/>
+          <FILE id="obCnmM" name="JsonWifiInterface.h" compile="0" resource="0"
+                file="Source/Hardware/Wifi/JsonWifiInterface.h"/>
+          <FILE id="oqvpyg" name="LibNMInterface.cpp" compile="1" resource="0"
+                file="Source/Hardware/Wifi/LibNMInterface.cpp"/>
+          <FILE id="eWhlRs" name="LibNMInterface.h" compile="0" resource="0"
+                file="Source/Hardware/Wifi/LibNMInterface.h"/>
         </GROUP>
         <FILE id="XvLxag" name="Audio.cpp" compile="1" resource="0" file="Source/Hardware/Audio.cpp"/>
         <FILE id="rBZLpt" name="Audio.h" compile="0" resource="0" file="Source/Hardware/Audio.h"/>

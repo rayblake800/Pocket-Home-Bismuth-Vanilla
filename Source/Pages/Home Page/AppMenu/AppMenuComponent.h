@@ -156,8 +156,10 @@ protected:
 
     /**
      * Updates the folder component layout, optionally animating the transition.
+     * 
+     * @param animate  iff true, the folder transition will be animated.
      */
-    void layoutFolders();
+    void layoutFolders(bool animate = false);
 
     /**
      * @return the maximum number of menu item columns to show on screen
@@ -291,7 +293,7 @@ private:
      */
     bool ignoringInput() const;
 
-
+    const int animationDuration = 400;
     //Holds the AppFolder components that organize the menu buttons.
     OwnedArray<AppMenuFolder> openFolders;
 

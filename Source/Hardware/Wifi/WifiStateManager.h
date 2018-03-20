@@ -17,7 +17,7 @@
 #include "JuceHeader.h"
 #include "WifiAccessPoint.h"
 
-class WifiStateManager : private Timer
+class WifiStateManager : protected Timer
 {
 public:
     WifiStateManager();
@@ -173,7 +173,7 @@ public:
      * @param psk wifi key for toConnect, or the empty string
      * if toConnect isn't secured.
      */
-    void connectToAccessPoint(WifiAccessPoint toConnect,
+    void connectToAccessPoint(const WifiAccessPoint& toConnect,
             String psk = String());
 
     /**
@@ -183,7 +183,7 @@ public:
      * 
      * @param toDisconnect should be the connected or connecting access point.
      */
-    void disconnect(WifiAccessPoint toDisconnect);
+    void disconnect(const WifiAccessPoint& toDisconnect);
 
     /**
      * If wifi is currently disabled, this will enable it.  Otherwise,
@@ -267,7 +267,7 @@ public:
          * 
          * @return true iff wifi is enabled
          */
-        virtual bool isWifiDeviceEnabled() = 0;
+        virtual bool isWifiEnabled() = 0;
 
         /**
          * Access the wifi device to check if it's attempting to create a wifi
@@ -316,7 +316,7 @@ public:
          * @param psk wifi key for toConnect, or the empty string if toConnect 
          * isn't secured.
          */
-        virtual void connectToAccessPoint(WifiAccessPoint toConnect,
+        virtual void connectToAccessPoint(const WifiAccessPoint& toConnect,
                 String psk = String()) = 0;
 
         /**
@@ -368,7 +368,7 @@ public:
          *
          * @param connectedAP the newly connected access point
          */
-        void signalWifiConnected(WifiAccessPoint connectedAP);
+        void signalWifiConnected(const WifiAccessPoint& connectedAP);
 
         /**
          * Whenever the wifi device fails to connect to an access point, the 

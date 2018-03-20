@@ -41,6 +41,7 @@
             <word>Homepage</word>
             <word>json</word>
             <word>Juce</word>
+            <word>libnm</word>
             <word>listbox</word>
             <word>ListEditor</word>
             <word>OverlaySpinner</word>
@@ -49,6 +50,7 @@
             <word>PersonalizePage</word>
             <word>ScrollingAppMenu</word>
             <word>WifiStatus</word>
+            <word>wlan</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

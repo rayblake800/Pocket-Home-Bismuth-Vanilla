@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
-#include "WifiStatusJson.h"
+#include "JsonWifiInterface.h"
+#include "LibNMInterface.h"
 #include "Utils.h"
 #include "Audio.h"
 #include "PocketHomeApplication.h"
@@ -10,7 +11,6 @@ PocketHomeApplication* PocketHomeApplication::getInstance()
     return dynamic_cast<PocketHomeApplication *>
             (JUCEApplication::getInstance());
 }
-
 
 WifiStateManager& PocketHomeApplication::getWifiManager()
 {
@@ -42,23 +42,22 @@ void PocketHomeApplication::initialise(const String &commandLine)
                 << ": Sound failed to initialize");
     }
 
-//    if (!args.contains("--noWifi"))
-//    {
-//        //Initialize wifi status thread
-//        if (args.contains("--fakewifi"))
-//        {
-//            wifiStatus = new WifiStatusJson();
-//        }
-//        else
-//        {
-//#            ifdef JUCE_LINUX
-//            wifiStatus = new WifiStatusNM();
-//#            else          
-//            wifiStatus = new WifiStatusJson();
-//#            endif
-//        }
-//    }
-    wifiManager.setNetworkInterface(new WifiStatusJson());
+    if (!args.contains("--noWifi"))
+    {
+        //Initialize wifi status thread
+        if (args.contains("--fakewifi"))
+        {
+            wifiManager.setNetworkInterface(new JsonWifiInterface());
+        }
+        else
+        {
+#            ifdef JUCE_LINUX
+            wifiManager.setNetworkInterface(new LibNMInterface());
+#            else          
+            wifiManager.setNetworkInterface(new JsonWifiInterface());
+#            endif
+        }
+    }
     bluetoothStatus = new BluetoothStatus();
     LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
     homeWindow = new PocketHomeWindow(getApplicationName());

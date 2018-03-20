@@ -29,8 +29,8 @@ void ConnectionSettingsComponent::refresh()
     if (!busy)
     {
         icon.setImage(getIconAsset());
-        //toggle.setToggleState(enabled, NotificationType::dontSendNotification,
-        //        true);
+        toggle.setToggleState(enabled, NotificationType::dontSendNotification,
+                true);
     }
     toggle.setEnabled(!busy);
     pageButton.setText(updateButtonText());

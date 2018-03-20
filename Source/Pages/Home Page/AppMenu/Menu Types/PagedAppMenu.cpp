@@ -59,7 +59,7 @@ bool PagedAppMenu::folderKeyPressed(const KeyPress& key, AppMenuFolder* activeFo
         int newPage = currentPage + (key == pageLeftKey ? -1 : 1);
         if (folder->setCurrentFolderPage(newPage))
         {
-            layoutFolders();
+            layoutFolders(true);
         }
         return true;
     }
@@ -164,7 +164,7 @@ bool PagedAppMenu::folderKeyPressed(const KeyPress& key, AppMenuFolder* activeFo
         {
             if (newPage != currentPage)
             {
-                layoutFolders();
+                layoutFolders(true);
             }
             else
             {

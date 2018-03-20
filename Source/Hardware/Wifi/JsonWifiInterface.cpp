@@ -1,43 +1,44 @@
 #include <map>
 #include "JuceHeader.h"
 #include "AssetFiles.h"
-#include "WifiStatusJson.h"
+#include "JsonWifiInterface.h"
 #include "TempTimer.h"
 
-WifiStatusJson::WifiStatusJson() : connectedAP(WifiAccessPoint()) { }
+JsonWifiInterface::JsonWifiInterface() : connectedAP(WifiAccessPoint()) { }
 
-WifiStatusJson::~WifiStatusJson() { }
+JsonWifiInterface::~JsonWifiInterface() { }
 
 /**
- * 
+ * Checks if the simulated wifi device is enabled.
  */
-bool WifiStatusJson::isWifiDeviceEnabled()
+bool JsonWifiInterface::isWifiEnabled()
 {
     ScopedLock lock(wifiLock);
     return enabled;
 }
 
 /**
+ * Checks if a connection event is currently being simulated.
  */
-bool WifiStatusJson::isWifiConnecting()
+bool JsonWifiInterface::isWifiConnecting()
 {
     ScopedLock lock(wifiLock);
     return !waitingToConnect.isNull();
 }
 
 /**
- * 
+ *  Checks if a simulated connection has been created.
  */
-bool WifiStatusJson::isWifiConnected()
+bool JsonWifiInterface::isWifiConnected()
 {
     ScopedLock lock(wifiLock);
     return connected;
 }
 
 /**
- * 
+ *  Returns the connected access point.
  */
-WifiAccessPoint WifiStatusJson::getConnectedAP()
+WifiAccessPoint JsonWifiInterface::getConnectedAP()
 {
     ScopedLock lock(wifiLock);
     if (!connected)
@@ -48,74 +49,80 @@ WifiAccessPoint WifiStatusJson::getConnectedAP()
 }
 
 /**
- * 
+ * Returns the connecting access point.
  */
-WifiAccessPoint WifiStatusJson::getConnectingAP()
+WifiAccessPoint JsonWifiInterface::getConnectingAP()
 {
     ScopedLock lock(wifiLock);
     return waitingToConnect;
 }
 
 /**
- * 
+ * Returns the entire list of access points defined in wifi.json.
  */
-Array<WifiAccessPoint> WifiStatusJson::getVisibleAPs()
+Array<WifiAccessPoint> JsonWifiInterface::getVisibleAPs()
 {
     Array<WifiAccessPoint> accessPoints;
-    auto json = JSON::parse(AssetFiles::findAssetFile("wifi.json"));
-
-    for (const auto &apJson : *json.getArray())
+    if (isWifiEnabled())
     {
-        WifiAccessPoint ap(apJson["name"],
-                apJson["strength"],
-                apJson["auth"],
-                apJson["name"]);
-        accessPoints.add(ap);
+        auto json = JSON::parse(AssetFiles::findAssetFile("wifi.json"));
+
+        for (const auto &apJson : *json.getArray())
+        {
+            WifiAccessPoint ap(apJson["name"],
+                    apJson["strength"],
+                    apJson["auth"],
+                    apJson["name"]);
+            accessPoints.add(ap);
+        }
     }
-    DBG("WifiStatusJson::" << __func__ << ": APs found:" << accessPoints.size());
+    DBG("JsonWifiInterface::" << __func__ << ": APs found:"
+            << accessPoints.size());
     return accessPoints;
 }
 
 /**
- * 
+ * Triggers a wifi connection event.  This will set a timer to simulate
+ * the connection's success or failure after a randomized delay of nine to
+ * twenty-four seconds.
  */
-void WifiStatusJson::connectToAccessPoint(WifiAccessPoint toConnect,
+void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
 {
     ScopedLock lock(wifiLock);
-    DBG("WifiStatusJson::" << __func__ << ": trying to connect to "
+    DBG("JsonWifiInterface::" << __func__ << ": trying to connect to "
             << toConnect.getSSID());
     if (turningOff)
     {
-        DBG("WifiStatusJson::" << __func__
+        DBG("JsonWifiInterface::" << __func__
                 << ": can't connect, wifi is turning off");
     }
     else if (turningOn)
     {
-        DBG("WifiStatusJson::" << __func__
+        DBG("JsonWifiInterface::" << __func__
                 << ": can't connect, wifi still turning on");
     }
     else if (!enabled)
     {
-        DBG("WifiStatusJson::" << __func__ << ": can't connect, wifi isn't on");
+        DBG("JsonWifiInterface::" << __func__ << ": can't connect, wifi isn't on");
     }
     else if (!waitingToConnect.isNull())
     {
         if (waitingToConnect != toConnect)
         {
-            DBG("WifiStatusJson::" << __func__
+            DBG("JsonWifiInterface::" << __func__
                     << ": canceling, a connection to " <<
                     waitingToConnect.getSSID() << " is pending ");
         }
         else
         {
-            DBG("WifiStatusJson::" << __func__ << ": already connecting to "
+            DBG("JsonWifiInterface::" << __func__ << ": already connecting to "
                     << toConnect.getSSID());
         }
     }
     else if (connected)
     {
-        DBG("WifiStatusJson::" << __func__ << ": already connected to "
+        DBG("JsonWifiInterface::" << __func__ << ": already connected to "
                 << toConnect.getSSID());
     }
     else
@@ -129,7 +136,7 @@ void WifiStatusJson::connectToAccessPoint(WifiAccessPoint toConnect,
                     bool isTestCred = (waitingToConnect.getSSID() == "MyFi");
                     if (!isTestCred)
                     {
-                        DBG("WifiStatusJson::" << __func__
+                        DBG("JsonWifiInterface::" << __func__
                                 << ": failed to connect");
                                 connected = false;
                                 waitingToConnect = WifiAccessPoint();
@@ -139,12 +146,12 @@ void WifiStatusJson::connectToAccessPoint(WifiAccessPoint toConnect,
 
                     if (!psk.isEmpty())
                     {
-                        DBG("WifiStatusJson::" << __func__
+                        DBG("JsonWifiInterface::" << __func__
                                 << ": connected with psk");
                     }
                     else
                     {
-                        DBG("WifiStatusJson::" << __func__ << ": connected");
+                        DBG("JsonWifiInterface::" << __func__ << ": connected");
                     }
                     connected = true;
                     connectedAP = waitingToConnect;
@@ -155,19 +162,24 @@ void WifiStatusJson::connectToAccessPoint(WifiAccessPoint toConnect,
     }
 }
 
-void WifiStatusJson::disconnect()
+/**
+ * Triggers a simulated wifi disconnection event.  If a simulated connection
+ * exists, after a randomized delay of no more than six seconds, a 
+ * disconnection event will trigger.
+ */
+void JsonWifiInterface::disconnect()
 {
     ScopedLock lock(wifiLock);
     if (!connected)
     {
-        DBG("WifiStatusJson::" << __func__ << ": no connection to kill");
+        DBG("JsonWifiInterface::" << __func__ << ": no connection to kill");
     }
     else
     {
         TempTimer::initTimer(Random().nextInt(6000), [this]()
         {
             ScopedLock lock(wifiLock);
-            DBG("WifiStatusJson::" << __func__ << ": wifi disconnected");
+            DBG("JsonWifiInterface::" << __func__ << ": wifi disconnected");
             connectedAP = WifiAccessPoint();
             connected = false;
             signalWifiDisconnected();
@@ -176,23 +188,27 @@ void WifiStatusJson::disconnect()
     }
 }
 
-void WifiStatusJson::enableWifi()
+/**
+ * Turns on the simulated wifi device.  This will trigger a wifi enabled
+ * event after a randomized delay of no more than six seconds.
+ */
+void JsonWifiInterface::enableWifi()
 {
 
     ScopedLock lock(wifiLock);
     if (turningOn)
     {
-        DBG("WifiStatusJson::" << __func__ << ": already enabling wifi!");
+        DBG("JsonWifiInterface::" << __func__ << ": already enabling wifi!");
     }
     else if (turningOff)
     {
-        DBG("WifiStatusJson::" << __func__
+        DBG("JsonWifiInterface::" << __func__
                 << ": can't enable wifi, busy disabling");
     }
     else if (!enabled)
     {
 
-        DBG("WifiStatusJson::" << __func__ << ": enabling wifi...");
+        DBG("JsonWifiInterface::" << __func__ << ": enabling wifi...");
         turningOn = true;
         turningOff = false;
         TempTimer::initTimer(Random().nextInt(6000), [this]()
@@ -200,7 +216,7 @@ void WifiStatusJson::enableWifi()
             ScopedLock lock(wifiLock);
             if (turningOn)
             {
-                DBG("WifiStatusJson::" << __func__ << ": wifi enabled");
+                DBG("JsonWifiInterface::" << __func__ << ": wifi enabled");
                         turningOn = false;
                         enabled = true;
                         signalWifiEnabled();
@@ -209,16 +225,20 @@ void WifiStatusJson::enableWifi()
     }
 }
 
-void WifiStatusJson::disableWifi()
+/**
+ * Turns off the simulated wifi device.  This will trigger a wifi disabled
+ * event after a randomized delay of no more than six seconds.
+ */
+void JsonWifiInterface::disableWifi()
 {
     if (turningOff)
     {
-        DBG("WifiStatusJson::" << __func__ << ": already disabling wifi!");
+        DBG("JsonWifiInterface::" << __func__ << ": already disabling wifi!");
     }
     else if (enabled)
     {
 
-        DBG("WifiStatusJson::" << __func__ << ": disabling wifi...");
+        DBG("JsonWifiInterface::" << __func__ << ": disabling wifi...");
         turningOn = false;
         turningOff = true;
         TempTimer::initTimer(Random().nextInt(6000), [this]()
@@ -226,7 +246,7 @@ void WifiStatusJson::disableWifi()
             ScopedLock lock(wifiLock);
             if (turningOff)
             {
-                DBG("WifiStatusJson::" << __func__ << ": wifi disabled");
+                DBG("JsonWifiInterface::" << __func__ << ": wifi disabled");
                         turningOff = false;
                         enabled = false;
                         signalWifiDisabled();

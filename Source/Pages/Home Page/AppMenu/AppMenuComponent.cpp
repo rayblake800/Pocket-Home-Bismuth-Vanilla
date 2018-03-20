@@ -273,7 +273,7 @@ void AppMenuComponent::closeFolder()
         if (getActiveFolderIndex() > 0)
         {
             setActiveFolderIndex(getActiveFolderIndex() - 1);
-            layoutFolders();
+            layoutFolders(true);
         }
         while (openFolders.size() > targetFolderCount)
         {
@@ -403,7 +403,7 @@ int AppMenuComponent::getFolderSelectedIndex(int index) const
 /**
  * Updates the folder component layout, optionally animating the transition.
  */
-void AppMenuComponent::layoutFolders()
+void AppMenuComponent::layoutFolders(bool animate)
 {
     if (getBounds().isEmpty())
     {
@@ -414,7 +414,15 @@ void AppMenuComponent::layoutFolders()
     for (int i = 0; i < openFolders.size(); i++)
     {
         Rectangle<int> folderBounds = updateFolderBounds(openFolders[i], i);
+        if(animate)
+        {
+           Desktop::getInstance().getAnimator().animateComponent(openFolders[i], 
+                   folderBounds, 1.0f, animationDuration, true, 0.0, 0.0); 
+        }
+        else
+        {
         openFolders[i]->setBounds(folderBounds);
+        }
     }
 }
 
@@ -619,7 +627,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
         if (buttonItem->isFolder())
         {
             openFolder(buttonItem);
-            layoutFolders();
+            layoutFolders(true);
         }
         else
         {
@@ -698,5 +706,7 @@ void AppMenuComponent::setLoadingState(bool loading)
 bool AppMenuComponent::ignoringInput() const
 {
     return openFolders.isEmpty() || isLoading()
-            || (buttonEditor != nullptr && buttonEditor->isVisible());
+            || (buttonEditor != nullptr && buttonEditor->isVisible())
+            || Desktop::getInstance().getAnimator().isAnimating
+            (openFolders[getActiveFolderIndex()]);
 }

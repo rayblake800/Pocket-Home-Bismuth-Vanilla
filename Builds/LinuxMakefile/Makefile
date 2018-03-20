@@ -97,9 +97,8 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/BluetoothStatus_c0d8d2c1.o \
   $(JUCE_OBJDIR)/WifiAccessPoint_9918f865.o \
   $(JUCE_OBJDIR)/WifiStateManager_eb7649ed.o \
-  $(JUCE_OBJDIR)/WifiStatus_9cee0603.o \
-  $(JUCE_OBJDIR)/WifiStatusJson_73ef4c0b.o \
-  $(JUCE_OBJDIR)/WifiStatusNM_4ecb7cc2.o \
+  $(JUCE_OBJDIR)/JsonWifiInterface_80394d0a.o \
+  $(JUCE_OBJDIR)/LibNMInterface_c0abbeb1.o \
   $(JUCE_OBJDIR)/Audio_9f9a54d8.o \
   $(JUCE_OBJDIR)/BatteryMonitor_e04a8815.o \
   $(JUCE_OBJDIR)/Display_ae2c5c84.o \
@@ -320,19 +319,14 @@ $(JUCE_OBJDIR)/WifiStateManager_eb7649ed.o: ../../Source/Hardware/Wifi/WifiState
 	@echo "Compiling WifiStateManager.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/WifiStatus_9cee0603.o: ../../Source/Hardware/Wifi/WifiStatus.cpp
+$(JUCE_OBJDIR)/JsonWifiInterface_80394d0a.o: ../../Source/Hardware/Wifi/JsonWifiInterface.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling WifiStatus.cpp"
+	@echo "Compiling JsonWifiInterface.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/WifiStatusJson_73ef4c0b.o: ../../Source/Hardware/Wifi/WifiStatusJson.cpp
+$(JUCE_OBJDIR)/LibNMInterface_c0abbeb1.o: ../../Source/Hardware/Wifi/LibNMInterface.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling WifiStatusJson.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/WifiStatusNM_4ecb7cc2.o: ../../Source/Hardware/Wifi/WifiStatusNM.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling WifiStatusNM.cpp"
+	@echo "Compiling LibNMInterface.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Audio_9f9a54d8.o: ../../Source/Hardware/Audio.cpp

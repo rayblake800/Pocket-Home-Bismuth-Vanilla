@@ -7,22 +7,30 @@
 
 #pragma once
 #include "WindowFocusedTimer.h"
+#include "WifiStateManager.h"
 #include "ConfigurableImageComponent.h"
 
-class WifiIcon : public ConfigurableImageComponent, private WindowFocusedTimer {
+class WifiIcon : public ConfigurableImageComponent, private WindowFocusedTimer,
+private WifiStateManager::Listener
+{
 public:
     WifiIcon();
     virtual ~WifiIcon();
 
 private:
-    //
-    //defined in config.json
+
+    /**
+     * When the wifi state changes, set the timer to go off after a very short
+     * delay so that the icon state will update.
+     */
+    void wifiStateChanged(WifiStateManager::WifiState state) override;
 
     /**
      * All tracked WiFi states.  Each corresponds to an image asset file
      * defined in components.json
      */
-    enum WifiIconImage {
+    enum WifiIconImage
+    {
         wifiOff,
         wifiStrength0,
         wifiStrength1,
