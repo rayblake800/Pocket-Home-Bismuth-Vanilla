@@ -941,6 +941,8 @@ void WifiStateManager::setWifiState(WifiState state)
     if (state != wifiState)
     {
         wifiState = state;
+        DBG("WifiStateManager::" << __func__ << ": Setting wifi state to "
+                << wifiStateString(wifiState));
         for (Listener* listener : listeners)
         {
 
