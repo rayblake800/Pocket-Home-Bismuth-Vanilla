@@ -23,13 +23,9 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=4
-FILE_NAME_0=809;C++;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FHardware%2FDisplay.cpp;0;4
-FILE_NAME_1=636;C++;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FComponents%2FWidgets%2FSwitchComponent.cpp;0;4
-FILE_NAME_2=2827;C++;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FPages%2FSettings%20Page%2FConnectionSettingsComponent.cpp;0;4
-FILE_NAME_3=1219;C++;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FPages%2FSettings%20Page%2FWifiSettingsComponent.cpp;0;4
-FILE_NAME_4=12074;C++;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FHardware%2FWifi%2FWifiStatusNM.cpp;0;4
-FILE_NAME_5=2913;C++;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FHardware%2FWifi%2FWifiStatus.cpp;0;4
+current_page=0
+FILE_NAME_0=2546;C;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FComponents%2FPageComponent.h;0;4
+FILE_NAME_1=754;C;0;EUTF-8;0;1;0;%2Fhome%2Fchip%2FPocketCHIP-pocket-home%2FSource%2FPageFactory.h;0;4
 
 [VTE]
 last_dir=/home/chip

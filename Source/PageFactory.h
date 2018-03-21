@@ -6,6 +6,7 @@
 #include "MainConfigFile.h"
 #include "WifiStateManager.h"
 #include "BluetoothStatus.h"
+#include "PageStackComponent.h"
 #include "JuceHeader.h"
 
 class PageFactory
@@ -35,6 +36,8 @@ public:
         HomeSettings,
         Login
     };
+
+    PageStackComponent::Page* createPage(PageType pageType);
 private:
     ComponentConfigFile componentConfig;
     MainConfigFile mainConfig;
