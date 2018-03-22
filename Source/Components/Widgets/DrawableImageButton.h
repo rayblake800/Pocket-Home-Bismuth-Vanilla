@@ -6,30 +6,34 @@
 #pragma once
 #include "DrawableImageComponent.h"
 
-/**
- * TODO: test replaceColour() with non-svg image files
- */
 
 class DrawableImageButton : public Button {
 public:
 
     /**
-     * @param imageFile the button image will be loaded from this file.
-     * @param placement defines how the image will be scaled
+     * @param imageFile  The button image will be loaded from this file.
+     * 
+     * @param placement  Defines how the image will be scaled to fit the button
+     *                    bounds.
      */
     DrawableImageButton(File imageFile,
             RectanglePlacement placement = RectanglePlacement::centred);
 
     /**
-     * @param assetName the button image will be loaded from this asset file.
-     * @param placement defines how the image will be scaled
+     * @param assetName  The button image will be loaded from the file with 
+     *                    this name in the asset folder.
+     * 
+     * @param placement  Defines how the image will be scaled to fit the button
+     *                    bounds.
      */
     DrawableImageButton(String assetName,
             RectanglePlacement placement = RectanglePlacement::centred);
 
     /**
-     * @param imageObject the button image will be loaded from this image.
-     * @param placement defines how the image will be scaled
+     * @param imageObject This will be set as the button's image.
+     * 
+     * @param placement   Defines how the image will be scaled to fit the 
+     *                     button bounds.
      */
     DrawableImageButton(Image imageObject,
             RectanglePlacement placement = RectanglePlacement::centred);
@@ -37,20 +41,23 @@ public:
     virtual ~DrawableImageButton();
 
     /**
-     * Change the image drawn by this component
-     * @param assetFilename the filename of an image in assets
+     * Changes the image drawn by this component.
+     * 
+     * @param assetFilename The filename of an image in the asset folder.
      */
     void setImage(String assetFilename);
 
     /**
-     * Change the image drawn by this component
-     * @param imageFile an image file
+     * Changes the image drawn by this component.
+     * 
+     * @param imageFile  Any image file.
      */
     void setImage(File imageFile);
     
     /**
-     * Change the image drawn by this component
-     * @param image an image object
+     * Changes the image drawn by this component.
+     * 
+     * @param image  An image object.
      */
     void setImage(Image imageObject);
 
@@ -63,26 +70,30 @@ public:
     };
     
     /**
-     * Update the image colors if UI color values are changed.
+     * Updates the image colors if UI color values are changed.
      */
     virtual void colourChanged() override;
 
 protected:
     /**
-     * Load and apply component colors to the button image.
+     * Loads and applies component colors to the button image.
      */
     void updateImageColors();
     
     /**
-     * Resize the image to fit the button.
+     * Resizes the image to fit the button.
      */
     void resized() override;
     
 private:
     /**
-     * Change button alpha on click.
+     * Changes button alpha on click.
      */
     void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
     
+    //Internal button image component.
     ScopedPointer<DrawableImageComponent> imageComponent;
+    
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DrawableImageButton)
 };

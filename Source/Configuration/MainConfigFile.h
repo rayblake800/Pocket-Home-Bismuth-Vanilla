@@ -10,7 +10,8 @@
 class MainConfigFile : public ConfigFile {
 public:
     MainConfigFile();
-    virtual ~MainConfigFile();
+    
+    virtual ~MainConfigFile() { }
 
     
     //#### Integer value keys #######

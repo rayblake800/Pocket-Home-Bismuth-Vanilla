@@ -10,37 +10,56 @@
 #include "PowerPage.h"
 #include "HomePage.h"
 #include "LoginPage.h"
+#include "PageFactory.h"
+#include "PokeLookAndFeel.h"
+#include "MainConfigFile.h"
+#include "ComponentConfigFile.h"
 #include "PageStackComponent.h"
 #include "WindowFocus.h"
 
-class PocketHomeWindow : public WindowFocus::BroadcastWindow {
+class PocketHomeWindow : public WindowFocus::BroadcastWindow
+{
 public:
     /**
-     * @param windowName sets the text of the window title bar
+     * @param windowName  Sets the text of the window title bar.
+     * 
+     * @param fakeWifi    If true, wifi-using components in this window will
+     *                     get all their wifi data from a simulated wifi device.
      */
-    PocketHomeWindow(String windowName);
-    
-    ~PocketHomeWindow();    
+    PocketHomeWindow(String windowName, bool fakeWifi);
 
-    
+    virtual ~PocketHomeWindow() { }
+
 private:
-    
     /**
      * closes the application normally.
      */
     void closeButtonPressed() override;
 
-    
-    //void paint(Graphics &) override;
-    
     /**
      * Resize page content to match window size.
      */
     void resized() override;
 
     
-    HomePage homePage;
+    //Factory object for creating all UI pages
+    PageFactory pageFactory;
+    
+    //Holds all page components, besides the login page
     PageStackComponent pageStack;
-    LoginPage loginPage;
+    
+    //LoginPage will be initially shown instead of the pageStack if a password
+    //has been set.
+    ScopedPointer<LoginPage> loginPage;
+    
+    //Controls default component appearances.
+    PokeLookAndFeel lookAndFeel;
+    
+    //Loads config data from the config.json file
+    MainConfigFile mainConfig;
+    
+    //Loads component settings from the components.json file
+    ComponentConfigFile componentConfig;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PocketHomeWindow)
 };

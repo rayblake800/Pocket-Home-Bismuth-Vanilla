@@ -8,24 +8,17 @@
 #include "AppMenuButton.h"
 #include "PokeLookAndFeel.h"
 
-PokeLookAndFeel::PokeLookAndFeel() :
-Configurable(new ComponentConfigFile(),{}),
+PokeLookAndFeel::PokeLookAndFeel(MainConfigFile& mainConfig, 
+        ComponentConfigFile& componentConfig) :
 seguibl(Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
-        BinaryData::LatoRegular_ttfSize)),
-cursor(MouseCursor::NoCursor)
+BinaryData::LatoRegular_ttfSize)),
+cursor(MouseCursor::NoCursor),
+mainConfig(mainConfig)
+componentConfig(componentConfig),
 {
-    ComponentConfigFile componentConfig;
-    MainConfigFile mainConfig;
-    addTrackedKeys(componentConfig.getColourKeys());
-    mainConfig.registerConfigurable(this,{MainConfigFile::showCursorKey});
-    loadConfigProperties(&mainConfig,MainConfigFile::showCursorKey);
+    componentConfig.addListener(this,componentConfig.getColourKeys());
+    mainConfig.addListener(this,{MainConfigFile::showCursorKey});
     loadAllConfigProperties();
-}
-
-PokeLookAndFeel::~PokeLookAndFeel()
-{
-    MainConfigFile config;
-    config.unregisterConfigurable(this,{MainConfigFile::showCursorKey});
 }
 
 /**
@@ -242,7 +235,7 @@ MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
  * Loads and applies component colors from components.json, and updates
  * cursor visibility.
  */
-void PokeLookAndFeel::loadConfigProperties(ConfigFile* config, String key)
+void PokeLookAndFeel::configValueChanged(ConfigFile* config, String key)
 {
     ComponentConfigFile* componentConfig =
             dynamic_cast<ComponentConfigFile*> (config);

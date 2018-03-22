@@ -3,12 +3,12 @@
 #include "ConfigurableComponent.h"
 
 ConfigurableComponent::ConfigurableComponent
-(String componentKey) :
+(ComponentConfigFile& config, const String& componentKey) :
 componentKey(componentKey),
-Configurable(new ComponentConfigFile(),{componentKey}),
-componentSettings(ComponentConfigFile().getComponentSettings(componentKey)) { }
-
-ConfigurableComponent::~ConfigurableComponent() { }
+componentSettings(config.getComponentSettings(componentKey)) 
+{ 
+    config.addListener(this,{componentKey});
+}
 
 /**
  * Load and apply this component's relative bounds from config.
@@ -44,25 +44,18 @@ void ConfigurableComponent::applyConfigBounds()
     component->setBounds(newBounds);
 }
 
-/**
- * This method passes in asset file names and asset color values
- * when the component is created, and whenever those values change
- * in configuration.
- */
-void ConfigurableComponent::applyConfigAssets(StringArray assetNames,
-        Array<Colour> colours) { }
 
 /**
- * Load and apply all component data from the ComponentConfigFile
+ * Load and apply all component data from the ComponentConfigFile.
  */
-void ConfigurableComponent::loadConfigProperties
+void ConfigurableComponent::configValueChanged
 (ConfigFile* config,String key)
 {
     ComponentConfigFile* componentConf = 
             dynamic_cast<ComponentConfigFile*>(config);
     if(key != componentKey || componentConf == nullptr)
     {
-        loadExtraConfigProperties(config,key);
+        extraConfigValueChanged(config,key);
     }
     else
     {

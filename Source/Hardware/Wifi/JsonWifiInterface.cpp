@@ -104,7 +104,8 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
     }
     else if (!enabled)
     {
-        DBG("JsonWifiInterface::" << __func__ << ": can't connect, wifi isn't on");
+        DBG("JsonWifiInterface::" << __func__ 
+                << ": can't connect, wifi isn't on");
     }
     else if (!waitingToConnect.isNull())
     {

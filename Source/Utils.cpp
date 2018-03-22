@@ -50,14 +50,6 @@ void componentTrace()
 }
 #endif
 
-Rectangle<int> getWindowSize()
-{
-    Component * windowComp = Desktop::getInstance().getComponent(0);
-    if(windowComp == nullptr){
-        return Rectangle<int>();
-    }
-    return windowComp->getLocalBounds();
-}
 
 
 /**

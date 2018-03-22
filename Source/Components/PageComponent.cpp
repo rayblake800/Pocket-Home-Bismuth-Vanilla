@@ -1,24 +1,26 @@
 #include "ComponentConfigFile.h"
 #include "PageComponent.h"
 
-PageComponent::PageComponent(const String& name,
+PageComponent::PageComponent(PageFactoryInterface& pageFactory,
+        ComponentConfigFile& config,
+        const String& name,
         RelativeLayoutManager::Layout layout,
         bool showBackButton, bool backButtonOnRight) :
-backButtonOnRight(backButtonOnRight),
-backgroundImage(Image())
+Component(name),
+pageFactory(pageFactory),
+backButtonOnRight(backButtonOnRight)
 {
     layoutManager.setLayout(layout);
     if (showBackButton)
     {
-        backButton = new ConfigurableImageButton(backButtonOnRight ?
+        backButton = new ConfigurableImageButton(config,
+                backButtonOnRight ?
                 ComponentConfigFile::pageRightKey
                 : ComponentConfigFile::pageLeftKey);
         backButton->addListener(this);
         addAndMakeVisible(backButton);
     }
 }
-
-PageComponent::~PageComponent() { }
 
 /**
  * Sets a background image to draw behind all page components.
@@ -37,6 +39,25 @@ void PageComponent::addAndShowLayoutComponents()
 }
 
 /**
+ * The PageStack should call this to notify a PageComponent after 
+ * pushing it on top of the page stack.
+ */
+void PageComponent::PageStackInterface::signalPageAdded(PageComponent* page)
+{
+    page->pageAddedToStack();
+}
+
+/**
+ * When the top page is popped from the stack, the PageStack should
+ * call this to notify the next page down that it's now the top page.
+ */
+void PageComponent::PageStackInterface::signalPageRevealed
+(PageComponent* page)
+{
+    page->pageRevealedOnStack();
+}
+
+/**
  * Replaces the page layout.  All components in the old layout will be
  * removed from the page before setting the new layout.  Components in
  * the new layout will be added to the page and made visible.
@@ -47,7 +68,6 @@ void PageComponent::updateLayout(RelativeLayoutManager::Layout layout)
     layoutManager.setLayout(layout, this);
     if (!getBounds().isEmpty())
     {
-
         resized();
     }
 }
@@ -75,19 +95,6 @@ void PageComponent::setPadding
 }
 
 /**
- * Inheriting classes can override this method to change the behavior of the
- * back button. It will be called every time the back button is clicked, and
- * if it returns true, the back button will not remove the page.
- * 
- * @return true if the back button's action was replaced, false to allow
- * the back button to remove the page as usual.
- */
-bool PageComponent::overrideBackButton()
-{
-    return false;
-}
-
-/**
  * Repositions all page components using the layout manager along with
  * the margin and padding values.
  */
@@ -98,15 +105,15 @@ void PageComponent::layoutComponents()
     {
         int xMargin = (int) (bounds.getHeight() * horizontalMargin);
         bounds.reduce(xMargin, (int) bounds.getHeight() * verticalMargin);
-        if(backButton != nullptr)
+        if (backButton != nullptr)
         {
-            
+
             int overlap = std::min<int>
                     (backButton->getRight() - bounds.getX(),
                      bounds.getRight() - backButton->getX());
-            if(overlap > 0)
+            if (overlap > 0)
             {
-                bounds.reduce(overlap,0);
+                bounds.reduce(overlap, 0);
             }
         }
         layoutManager.layoutComponents(bounds,
@@ -114,6 +121,51 @@ void PageComponent::layoutComponents()
                 (int) bounds.getHeight() * verticalPadding);
     }
 
+}
+
+/**
+ * @return true iff the page is currently on the top of a page stack.
+ */
+bool PageComponent::isStackTop()
+{
+    return pageStack != nullptr && pageStack->isTopPage(this);
+}
+
+/**
+ * If this page is currently on top of a page stack, this will remove it 
+ * from the stack and destroy it.
+ */
+void PageComponent::removeFromStack(PageComponent::Animation animation)
+{
+    if (isStackTop())
+    {
+        pageStack->popPage(animation);
+        pageStack = nullptr;
+    }
+}
+
+/**
+ * Creates and pushes a new page on top of the stack.
+ */
+void PageComponent::pushPageToStack(PageComponent::PageType pageType,
+        PageComponent::Animation animation)
+{
+    if (isStackTop())
+    {
+        PageComponent* newPage = pageFactory.createPage(pageType);
+        newPage->pageStack = pageStack;
+        pageStack->pushPage(newPage, animation);
+    }
+}
+
+/**
+ * Inheriting classes can override this method to change the behavior of the
+ * back button. It will be called every time the back button is clicked, and
+ * if it returns true, the back button will not remove the page.
+ */
+bool PageComponent::overrideBackButton()
+{
+    return false;
 }
 
 /**
@@ -138,9 +190,7 @@ void PageComponent::buttonClicked(Button* button)
 {
     if (button == backButton && !overrideBackButton())
     {
-        removeFromStack(backButtonOnRight ?
-                PageStackComponent::kTransitionTranslateHorizontalLeft :
-                PageStackComponent::kTransitionTranslateHorizontal);
+        removeFromStack();
     }
     else
     {

@@ -18,10 +18,8 @@ highIcon(highImgAsset, RectanglePlacement::stretchToFit)
     addAndMakeVisible(highIcon);
 }
 
-IconSliderComponent::~IconSliderComponent() { }
-
 /**
- * Change the slider's stored value
+ * Changes the slider's stored value.
  */
 void IconSliderComponent::setValue
 (double newValue, NotificationType notification)
@@ -38,8 +36,8 @@ double IconSliderComponent::getValue() const
 }
 
 /**
- * @param listener will receive updates whenever the slider value
- * changes.
+ * @param listener   This will receive updates whenever the slider value
+ *                    changes.
  */
 void IconSliderComponent::addListener(Slider::Listener* listener)
 {
@@ -56,11 +54,6 @@ bool IconSliderComponent::ownsSlider(Slider * sliderPtr)
 }
 
 /** Sets the limits that the slider's value can take.
- * @param newMinimum the lowest value allowed
- * @param newMaximum the highest value allowed
- * @param newInterval the steps in which the value is allowed to increase 
- * - if this is not zero, the value will always be (newMinimum + 
- * (newInterval * an integer)).
  */
 void IconSliderComponent::setRange(double newMinimum,
         double newMaximum,

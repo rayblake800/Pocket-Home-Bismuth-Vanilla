@@ -1,10 +1,13 @@
 #include "AppMenuItemFactory.h"
 #include "BaseFolderMenuItem.h"
 
-BaseFolderMenuItem::BaseFolderMenuItem(DesktopEntries& desktopEntries) :
-desktopEntries(desktopEntries) { }
-
-BaseFolderMenuItem::~BaseFolderMenuItem() { }
+BaseFolderMenuItem::BaseFolderMenuItem
+(AppConfigFile& config,
+        MainConfigFile& mainConfig,
+        AppMenuItemFactory& menuItemFactory) :
+AppMenuItem(mainConfig),
+config(config),
+menuItemFactory(menuItemFactory) { }
 
 /**
  * Check if this button is for an application folder
@@ -20,19 +23,18 @@ bool BaseFolderMenuItem::isFolder() const
  */
 Array<AppMenuItem::Ptr> BaseFolderMenuItem::getFolderItems() const
 {
-    AppConfigFile config;
     Array<AppMenuItem::Ptr> folderItems;
 
     Array<AppConfigFile::AppItem> favorites = config.getFavorites();
     for (const AppConfigFile::AppItem& app : favorites)
     {
-        folderItems.add(AppMenuItemFactory::create(app));
+        folderItems.add(menuItemFactory.create(app));
     }
 
     Array<AppConfigFile::AppFolder> folders = config.getFolders();
     for (const AppConfigFile::AppFolder& folder : folders)
     {
-        folderItems.add(AppMenuItemFactory::create(folder, desktopEntries));
+        folderItems.add(menuItemFactory.create(folder));
     }
     DBG("BaseFolderMenuItem::" << __func__ << ": created " << folderItems.size()
             << " folder items.");

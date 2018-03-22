@@ -19,7 +19,9 @@
 class WifiSettingsPage : public ConnectionPage<WifiAccessPoint>,
 public WifiStateManager::Listener, public TextEditor::Listener {
 public:
-    WifiSettingsPage();
+    WifiSettingsPage(PageFactoryInterface& pageFactory, 
+            WifiStateManager& wifiManager);
+    
     ~WifiSettingsPage();
 private:
     /**
@@ -145,7 +147,8 @@ private:
         ScopedPointer<DrawableImageComponent> lockIcon;
 
     };
-
+    
+    WifiStateManager& wifiManager;
     bool connectionChanging = false;
     ScalingLabel passwordLabel;
     TextEditor passwordEditor;

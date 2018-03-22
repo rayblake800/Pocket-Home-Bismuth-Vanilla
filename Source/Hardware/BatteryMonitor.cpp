@@ -76,7 +76,7 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
         }
         else
         {
-            DBG("BatteryMonitor::" << __func__ 
+            DBG("BatteryMonitor::" << __func__
                     << ": Failed to read charging file");
         }
         if (dataSource == voltageFile)
@@ -93,6 +93,6 @@ BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
                     File(gaugePath).loadFileAsString().getIntValue();
         }
     }
-    currentStatus.percent = median<int>(0,currentStatus.percent,100);
+    currentStatus.percent = median<int>(0, currentStatus.percent, 100);
     return currentStatus;
 }

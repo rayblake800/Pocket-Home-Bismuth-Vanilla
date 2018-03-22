@@ -1,25 +1,24 @@
 /**
  * @file PageStackComponent.h
  * 
- * The UI of this program is organized into distinct 'pages', each managing some
- * subset of program behavior.  At any one time, only one page is visible to the
- * user.  Pages are arranged in a stack, so that whenever a new page is added
- * the previous page is hidden,  and whenever that page is removed the previous
- * page becomes visible again.
+ * PageStackComponent implements PageComponent::PageStackInterface to manage
+ * the stack of open pages.  It takes ownership of new pages, and allows them
+ * to add new pages above themselves or remove and delete themselves from the
+ * stack.
  * 
- * PageStackComponent manages this stack of pages, providing methods to add
- * and remove pages.  It notifies pages whenever their state on the stack
- * changes. It also allows any page  on the stack to remove itself or add a new
- * page to the stack top.  
+ * @see PageComponent.h
  */
 #pragma once
+#include "PageComponent.h"
 #include "JuceHeader.h"
 
-class PageStackComponent : public Component
+class PageStackComponent : public PageComponent::PageStackInterface,
+public Component
 {
 public:
     PageStackComponent();
-    ~PageStackComponent() {}
+
+    virtual ~PageStackComponent() { }
 
     enum Transition
     {
@@ -28,87 +27,36 @@ public:
         kTransitionTranslateHorizontalLeft
     };
 
-    class Page : public Component
-    {
-    public:
-        friend class PageStackComponent;
-
-        Page() { }
-
-        virtual ~Page() { }
-        
-        /**
-         * @return true iff the page is currently on a page stack.
-         */
-        bool isOnPageStack();
-    protected:
-
-        /**
-         * Whenever this page is added to a page stack, the PageStackComponent
-         * will call this method. 
-         */
-        virtual void pageAddedToStack() { }
-
-        /**
-         * Whenever this page is removed a page stack, the PageStackComponent
-         * will call this method. 
-         */
-        virtual void pageRemovedFromStack() { }
-
-        /**
-         * Whenever this page becomes the top page on the page stack, the 
-         * PageStackComponent will call this method. 
-         */
-        virtual void pageRevealedOnStack() { }
-
-        /**
-         * When this page is on the top of the stack and a new page is added
-         * above it, PageStackComponent will call this method.
-         */
-        virtual void pageCoveredOnStack() { }
-
-        /**
-         * If this page is currently on a page stack, this will remove it from
-         * the stack
-         * @param transition this animation will run if the page was on top
-         * of the stack and was removed successfully.
-         */
-        void removeFromStack(Transition transition = kTransitionNone);
-
-        /**
-         * If this page is on a page stack, this will push a new page
-         * on top of the stack.
-         * @param newPage will be added to the top of the stack if it isn't
-         * already on a page stack.
-         * @param transition this animation will run if the page is successfully
-         * added to the stack.
-         */
-        void pushPageToStack(Page* newPage, Transition transition = kTransitionNone);
-    private:
-        PageStackComponent* pageStack = nullptr;
-    };
+    /**
+     * Pushes a new PageComponent on top of the stack, optionally animating
+     * the transition. 
+     * 
+     * @param page
+     * 
+     * @param animation
+     */
+    void pushPage(PageComponent* page,
+            PageComponent::Animation animation
+            = PageComponent::slideInFromLeft) override;
 
     /**
-     * Add a page to the page stack.
-     * @param page will be added to the top of the stack, as long as it's not
-     * already on a page stack.
-     * @param transition this animation will run if the page is successfully
-     * added to the stack.
+     * Removes the top page from the stack, optionally animating the 
+     * transition.  This will not remove the last page from the stack.
+     * 
+     * @param animation
      */
-    void pushPage(Page* page, Transition transition = kTransitionNone);
+    void popPage(PageComponent::Animation animation
+            = PageComponent::slideInFromLeft) override;
+
 
     /**
-     * Removes the top page from the page stack.
-     * @param transition this animation will run if a page is successfully
-     * removed from the stack.
+     * Checks if a page is the top page on the stack.
+     * 
+     * @param  page
+     * 
+     * @return true iff page is displayed on top of the page stack.
      */
-    void popPage(Transition transition = kTransitionNone);
-
-    /**
-     * @return a pointer to the top page on the stack, or nullptr if the stack
-     * is empty.
-     */
-    Page *getCurrentPage();
+    bool isTopPage(PageComponent* page) override;
 
 private:
 
@@ -118,28 +66,34 @@ private:
     void resized() override;
 
     /**
-     * Animate a page as it is added to the stack.
+     * Animate a page as it is added to or removed from the stack.  If the page
+     * is being added, this will add it to the PageStackComponent, make it 
+     * visible, and set its initial bounds.  The page will be disabled while
+     * animating, and re-enabled once animation finishes.
+     * 
+     * @param page           The pageComponent being added or removed.
+     * 
+     * @param animation      Type of animation to show.
+     * 
+     * @param duration       Animation duration in milliseconds.
+     * 
+     * @param postAnimation  Callback function to run when animation finishes.
+     * 
+     * @param addingPage     True if the page is being added, false if it's 
+     *                        being removed.  Animation direction is reversed 
+     *                        when pages are removed.
      */
-    void transitionIn(Page* page, Transition transition, int durationMillis,
-            bool reverse = false);
+    void transitionPage(PageComponent* page,
+            PageComponent::Animation animation,
+            int duration,
+            std::function<void(PageComponent*) > postAnimation = {},
+    bool addingPage = true);
 
-    /**
-     * Animate a page as it is removed from the stack.
-     */
-    void transitionOut(Page* page, Transition transition, int durationMillis,
-            bool reverse = false);
+    //page transition animation duration in milliseconds
+    const int transitionDurationMS = 200;
 
-    /**
-     * Animate any page translation
-     */
-    void animateTranslation(Page* page, int startX, int startY,
-            int durationMillis);
-
-    const int transitionDurationMillis = 200;
-
-    Array<Page *> stack;
-    //Prevent simultaneous access to the stack.
-    CriticalSection stackLock;
+    //holds all pages in order
+    OwnedArray<PageComponent> stack;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PageStackComponent)
 };

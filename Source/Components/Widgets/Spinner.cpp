@@ -21,7 +21,7 @@ timeout(secondsToTimeout)
     };
     for (const String& path : spinnerImgPaths)
     {
-        spinnerImages.add(AssetFiles::createImageAsset(path));
+        spinnerImages.add(AssetFiles::loadImageAsset(path));
     }
     spinnerImage.setImage(spinnerImages[0]);
     addAndMakeVisible(spinnerImage);
@@ -34,11 +34,12 @@ Spinner::~Spinner()
 
 void Spinner::setColour(Colour spinnerColour)
 {
-    spinnerImage.setColour(DrawableImageComponent::imageColour0Id, spinnerColour);
+    spinnerImage.setColour(DrawableImageComponent::imageColour0Id,
+            spinnerColour);
 }
 
 /**
- * Set the internal image component's bounds within the Spinner
+ * Sets the internal image component's bounds within the Spinner.
  */
 void Spinner::setImageBounds(Rectangle<int> imageBounds)
 {
@@ -46,7 +47,7 @@ void Spinner::setImageBounds(Rectangle<int> imageBounds)
 }
 
 /**
- * Disable animation when losing visibility, enable animation when
+ * Disables animation when losing visibility, enables animation when
  * gaining visibility.
  */
 void Spinner::visibilityChanged()
@@ -62,7 +63,7 @@ void Spinner::visibilityChanged()
 }
 
 /**
- * Set spinner image bounds to match the component.
+ * Sets spinner image bounds to match the component.
  */
 void Spinner::resized()
 {
@@ -70,8 +71,8 @@ void Spinner::resized()
 }
 
 /**
- * Show the next frame of the spinner animation, and disable if runtime 
- * exceeds the timeout period.
+ * Shows the next frame of the spinner animation, and disables the spinner if
+ * runtime exceeds the timeout period.
  */
 void Spinner::timerCallback()
 {

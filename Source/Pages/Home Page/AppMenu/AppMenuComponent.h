@@ -21,9 +21,11 @@
 #include "RelativeLayoutManager.h"
 #include "WindowFocus.h"
 #include "IconThread.h"
+#include "MainConfigFile.h"
+#include "AppConfigFile.h"
 #include "DesktopEntries.h"
 #include "AppMenuPopupEditor.h"
-#include "AppMenuItem.h"
+#include "AppMenuItemFactory.h"
 #include "AppMenuFolder.h"
 #include "AppMenuButton.h"
 
@@ -31,11 +33,21 @@ class AppMenuComponent : public Component, public ConfigurableComponent,
 private WindowFocus::Listener {
 public:
     /**
-     * @param componentKey loads menu bounds from config
-     * @param loadingSpinner reference to an overlay spinner that sits over
-     * the PageComponent holding this AppMenuComponent.
+     * @param mainConfig       A reference to the MainConfigFile.
+     * 
+     * @param componentConfig  A reference to the ComponentConfigFile.
+     * 
+     * @param appConfig        A reference to the AppConfigFile.
+     * 
+     * @param componentKey     Loads menu bounds from config.
+     * 
+     * @param loadingSpinner   Reference to an overlay spinner that sits over
+     *                         the PageComponent holding this AppMenuComponent.
      */
-    AppMenuComponent(String componentKey,
+    AppMenuComponent(MainConfigFile& mainConfig,
+            ComponentConfigFile& componentConfig,
+            AppConfigFile& appConfig,
+            String componentKey,
             OverlaySpinner& loadingSpinner);
 
     virtual ~AppMenuComponent();
@@ -227,7 +239,7 @@ private:
      * @param config the configFile containing the updated data value
      * @param key the key of property that has changed
      */
-    void loadExtraConfigProperties(ConfigFile* config,
+    void extraConfigValueChanged(ConfigFile* config,
             String key) final override;
 
     /**
@@ -294,6 +306,12 @@ private:
     bool ignoringInput() const;
 
     const int animationDuration = 400;
+    
+    //Loads folder and application shortcut configuration
+    AppConfigFile& appConfig;
+    
+    ComponentConfigFile& componentConfig;
+
     //Holds the AppFolder components that organize the menu buttons.
     OwnedArray<AppMenuFolder> openFolders;
 
@@ -303,6 +321,10 @@ private:
 
     //this gets passed to AppMenuButtons to load button icons.
     IconThread iconThread;
+
+    //creates all menu items
+    AppMenuItemFactory menuItemFactory;
+    
     //keyboard shortcuts
     static const String openPopupMenuBinding;
     static const String reloadMenuBinding;

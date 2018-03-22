@@ -11,8 +11,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -4846,8 +4844,6 @@
         </df>
         <df name="Configuration">
           <df name="Configurables">
-            <in>Configurable.cpp</in>
-            <in>Configurable.h</in>
             <in>ConfigurableComponent.cpp</in>
             <in>ConfigurableComponent.h</in>
             <in>ConfigurableImageButton.cpp</in>
@@ -4882,7 +4878,6 @@
             <in>WifiAccessPoint.h</in>
             <in>WifiStateManager.cpp</in>
             <in>WifiStateManager.h</in>
-            <in>WifiTest.cpp</in>
           </df>
           <in>Audio.cpp</in>
           <in>Audio.h</in>
@@ -5013,7 +5008,11 @@
         <in>AppLauncher.h</in>
         <in>AssetFiles.cpp</in>
         <in>AssetFiles.h</in>
+        <in>LocaleText.cpp</in>
+        <in>LocaleText.h</in>
         <in>Main.cpp</in>
+        <in>PageFactory.cpp</in>
+        <in>PageFactory.h</in>
         <in>PocketHomeApplication.cpp</in>
         <in>PocketHomeApplication.h</in>
         <in>PokeLookAndFeel.cpp</in>

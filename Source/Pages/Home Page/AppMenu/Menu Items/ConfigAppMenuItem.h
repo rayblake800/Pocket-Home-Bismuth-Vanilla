@@ -4,20 +4,29 @@
  * ConfigAppMenuItem is an AppMenuItem that gets its data from a 
  * AppConfigFile::AppItem structure. It represents an application link that
  * was read from the apps.json config file.
+ * 
  * @see AppMenuItem, AppMenuComponent, AppConfigFile
  */
 #pragma once
 #include "AppConfigFile.h"
+#include "MainConfigFile.h"
 #include "IconThread.h"
 #include "AppMenuItem.h"
 
 class ConfigAppMenuItem : public AppMenuItem {
 public:
     /**
+     * @param appConfig    A reference to the AppConfigFile, the data source 
+     *                      for the menu item.
+     * 
+     * @param mainConfig  Needed to load the terminal launch command.
+     * 
      * @param appItem defines all menu item data
      */
-    ConfigAppMenuItem(const AppConfigFile::AppItem& appItem);
-    virtual ~ConfigAppMenuItem();
+    ConfigAppMenuItem(AppConfigFile& config, MainConfigFile& mainConfig,
+            const AppConfigFile::AppItem& appItem);
+    
+    virtual ~ConfigAppMenuItem() { }
 
     /**
      * @return the application's display name
@@ -115,6 +124,8 @@ protected:
 private:
     //Application information structure
     AppConfigFile::AppItem appItem;
+    //Menu item data source
+    AppConfigFile& appConfig;
 };
 
 

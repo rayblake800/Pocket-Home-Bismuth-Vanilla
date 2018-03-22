@@ -2,19 +2,20 @@
  * @file ColorPage.h
  */
 #pragma once
-#include "Configurable.h"
+#include "ConfigFile.h"
 #include "PageComponent.h"
 #include "SwitchComponent.h"
 
 class ColourPage : public PageComponent
 {
 public:
-    ColourPage();
+    ColourPage(PageComponent::PageFactoryInterface& pageFactory,
+            ComponentConfigFile& config);
     virtual ~ColourPage();
 private:
     void pageResized() override;
 
-    class ColourListModel : public ListBoxModel, public Configurable
+    class ColourListModel : public ListBoxModel, public ConfigFile::Listener
     {
     public:
         ColourListModel();
@@ -40,6 +41,7 @@ private:
         Array<Colour> colours;
     };
 
+    ComponentConfigFile& config;
 
     ColourListModel listModel;
     ListBox colourList;

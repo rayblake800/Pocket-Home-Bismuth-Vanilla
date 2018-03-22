@@ -14,11 +14,15 @@
 class NewFolderEditor : public AppMenuPopupEditor {
 public:
     /**
+     * @param appConfig
+     * @param componentConfig
      * @param iconThread will be used to load icon previews.
      * @onConfirm is an optional callback routine to run after creating the
      * new application entry
      */
-    NewFolderEditor(IconThread& iconThread,
+    NewFolderEditor(AppConfigFile& appConfig,
+            ComponentConfigFile& componentConfig,
+            IconThread& iconThread,
             std::function<void() > onConfirm = []() {
             });
 };

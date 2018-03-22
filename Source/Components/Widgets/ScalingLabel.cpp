@@ -7,22 +7,20 @@ ScalingLabel::ScalingLabel(const String &componentName,
 : Label(componentName, labelText),
 fontPadding(fontPadding)
 {
-    
-#if JUCE_DEBUG
-    setName(String("ScalingLabel:")+labelText);
-#endif
+
+#    if JUCE_DEBUG
+    setName(String("ScalingLabel:") + labelText);
+#    endif
 }
 
-ScalingLabel::~ScalingLabel()
-{
-}
+ScalingLabel::~ScalingLabel() { }
 
 /**
- * Update font size when label bounds change.
+ * Updates font size when label bounds change.
  */
 void ScalingLabel::resized()
 {
     ComponentConfigFile config;
     setFont(getFont().withHeight(config.getFontHeight
-            (getLocalBounds(),getText())));
+            (getLocalBounds(), getText())));
 }

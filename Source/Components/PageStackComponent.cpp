@@ -12,92 +12,43 @@ PageStackComponent::PageStackComponent()
 }
 
 /**
- * @return true iff the page is currently on a page stack.
+ * Pushes a new PageComponent on top of the stack, optionally animating
+ * the transition. 
  */
-bool PageStackComponent::Page::isOnPageStack()
+void PageStackComponent::pushPage(PageComponent* page,
+        PageComponent::Animation animation)
 {
-    return pageStack != nullptr;
-}
-
-/**
- * If this page is currently on a page stack, this will remove it from
- * the stack.
- */
-void PageStackComponent::Page::removeFromStack(Transition transition)
-{
-    if (isOnPageStack())
-    {
-        if (pageStack->getCurrentPage() == this)
-        {
-            pageStack->popPage(transition);
-        }
-        else
-        {
-            pageStack->stack.removeAllInstancesOf(this);
-        }
-    }
-}
-
-/**
- * If this page is on a page stack, this will push a new page
- * on top of the stack.
- */
-void PageStackComponent::Page::pushPageToStack(Page* newPage, Transition transition)
-{
-
-    if (isOnPageStack() && !newPage->isOnPageStack())
-    {
-        pageStack->pushPage(newPage, transition);
-    }
-}
-
-/**
- * Add a page to the page stack.
- */
-void PageStackComponent::pushPage(Page *page, Transition transition)
-{
-    auto bounds = getLocalBounds();
-    if (!stack.isEmpty())
-    {
-        transitionOut(stack.getLast(), transition, transitionDurationMillis);
-        stack.getLast()->pageCoveredOnStack();
-    }
     stack.add(page);
-    page->pageStack = this;
-    transitionIn(page, transition, transitionDurationMillis);
-    page->pageAddedToStack();
+    transitionPage(page, animation, transitionDurationMS);
 }
 
 /**
- * Removes the top page from the page stack.
+ * Removes the top page from the stack, optionally animating the 
+ * transition.  This will not remove the last page from the stack.
  */
-void PageStackComponent::popPage(Transition transition)
+void PageStackComponent::popPage(PageComponent::Animation animation)
 {
-    const ScopedLock lock(stackLock);
-    if (!stack.isEmpty())
+    if (stack.size() > 1)
     {
-        transitionOut(stack.getLast(), transition, transitionDurationMillis,
-                true);
-        stack.getLast()->pageRemovedFromStack();
-        stack.getLast()->pageStack = nullptr;
-        stack.removeLast();
-        if (!stack.isEmpty())
-        {
-            transitionIn(stack.getLast(), transition, transitionDurationMillis,
-                    true);
-            stack.getLast()->pageRevealedOnStack();
-        }
+        PageComponent* page = stack.getLast();
+        page->setEnabled(false);
+
+        transitionPage(page, animation, transitionDurationMS,
+                [this](PageComponent * page)
+                {
+                    removeChildComponent(page);
+                    stack.removeObject(page);
+                },
+        false);
     }
 }
 
 /**
- * @return a pointer to the top page on the stack, or nullptr if the stack
- * is empty.
+ * Checks if a page is the top page on the stack.
  */
-PageStackComponent::Page *PageStackComponent::getCurrentPage()
+bool PageStackComponent::isTopPage(PageComponent* page)
 {
-    const ScopedLock lock(stackLock);
-    return stack.getLast();
+    return page == stack.getLast();
 }
 
 /**
@@ -105,7 +56,6 @@ PageStackComponent::Page *PageStackComponent::getCurrentPage()
  */
 void PageStackComponent::resized()
 {
-    const ScopedLock lock(stackLock);
     if (!stack.isEmpty())
     {
         stack.getLast()->setBounds(getBounds());
@@ -113,59 +63,49 @@ void PageStackComponent::resized()
 }
 
 /**
- * Animate a page as it is added to the stack.
+ * Animate a page as it is added to or removed from the stack.  If the page
+ * is being added, this will add it to the PageStackComponent, make it 
+ * visible, and set its initial bounds.  The page will be disabled while
+ * animating, and re-enabled once animation finishes.
  */
-void PageStackComponent::transitionIn(Page *page, Transition transition,
-        int durationMillis, bool reverse)
+void PageStackComponent::transitionPage(PageComponent* page,
+        PageComponent::Animation animation,
+        int duration,
+        std::function<void(PageComponent*) > postAnimation,
+        bool addingPage)
 {
-    addAndMakeVisible(page);
-    int dir = reverse ? -1 : 1;
-    const Rectangle<int>& bounds = getLocalBounds();
-    switch (transition)
+    if (addingPage)
     {
-        case kTransitionTranslateHorizontalLeft:
-            dir *= -1;
-        case kTransitionTranslateHorizontal:
-
-            page->setBounds(bounds.translated(bounds.getWidth() * dir, 0));
-            animateTranslation(page, 0, 0, durationMillis);
-            break;
-
-        default:
-            page->setBounds(bounds);
-            page->setVisible(true);
+        addAndMakeVisible(page);
     }
-    page->setEnabled(true);
-}
-
-void PageStackComponent::transitionOut(Page *page, Transition transition,
-        int durationMillis, bool reverse)
-{
-    int dir = reverse ? 1 : -1;
-    switch (transition)
-    {
-        case kTransitionTranslateHorizontalLeft:
-            dir *= -1;
-        case kTransitionTranslateHorizontal:
-            animateTranslation(page, getWidth() * dir, 0,
-                    durationMillis);
-    }
+    Rectangle<int> translatedBounds;
     page->setEnabled(false);
-    TempTimer::initTimer(durationMillis, [this, page]()
+    int dir = addingPage ? -1 : 1;
+    switch (animation)
     {
-        removeChildComponent(page);
+        case PageComponent::Animation::none:
+            if (addingPage)
+            {
+                page->setBounds(getLocalBounds());
+            }
+            page->setEnabled(true);
+            postAnimation(page);
+            return;
+        case PageComponent::Animation::slideInFromLeft:
+            dir *= -1;
+        case PageComponent::Animation::slideInFromRight:
+            translatedBounds = getLocalBounds().translated(getWidth() * dir, 0);
+    }
+    if (addingPage)
+    {
+        page->setBounds(translatedBounds);
+    }
+    Desktop::getInstance().getAnimator().animateComponent(page,
+            addingPage ? getLocalBounds() : translatedBounds,
+            1, duration, true, 0, 0);
+    TempTimer::initTimer(duration * 1.2, [this, postAnimation, page]()
+    {
+        page->setEnabled(true);
+        postAnimation(page);
     });
-}
-
-/**
- * Animate any page translation
- */
-void PageStackComponent::animateTranslation(Page* page, int startX,
-        int startY, int durationMillis)
-{
-    const Rectangle<int>& bounds = page->getBounds();
-    auto destBounds = bounds.translated(startX - bounds.getX(),
-            startY - bounds.getY());
-    Desktop::getInstance().getAnimator().animateComponent(page, destBounds,
-            1, durationMillis, true, 0, 0);
 }

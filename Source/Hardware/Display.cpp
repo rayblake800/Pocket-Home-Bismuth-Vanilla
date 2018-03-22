@@ -3,7 +3,7 @@
 #include "Display.h"
 
 /**
- * @return display brightness, as an integer between 0 and 10
+ * Gets the current display brightness level.
  */
 int Display::getBrightness()
 {
@@ -16,17 +16,36 @@ int Display::getBrightness()
 }
 
 /**
- * Set display brightness
- * @param brightness should be an integer between 0 and 10. Values outside
- * of this range will be rounded to the closest valid integer.
+ * Sets the display brightness level.
  */
-void Display::setBrightness(int brightness)
+void Display::setBrightness(const int& brightness)
 {
-    brightness = median<int>(1, brightness, 10);
-
     File brightnessFile("/sys/class/backlight/backlight/brightness");
     if (brightnessFile.existsAsFile())
     {
-        brightnessFile.appendText(String(brightness));
+        brightnessFile.appendText(String(median<int>(1, brightness, 10)));
     }
 }
+
+/**
+ * Gets the size of the active display.
+ * 
+ * @return the size of the display, measured in pixels.
+ */
+Rectangle<int> Display::getDisplaySize(){
+    return Desktop::getInstance().getDisplays().getMainDisplay().userArea;
+}
+
+/**
+ * Gets the size of the single application window.
+ */
+Rectangle<int> Display::getWindowSize()
+{
+    Component * windowComp = Desktop::getInstance().getComponent(0);
+    if (windowComp == nullptr)
+    {
+        return Rectangle<int>();
+    }
+    return windowComp->getLocalBounds();
+}
+

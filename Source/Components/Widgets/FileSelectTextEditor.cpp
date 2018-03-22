@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "Display.h"
 #include "FileSelectTextEditor.h"
 
 const WildcardFileFilter FileSelectTextEditor::imageFilter
@@ -20,22 +20,20 @@ filePath(componentName),
 fileSelectButton("..."),
 showButton(true)
 {
-        
-#if JUCE_DEBUG
+
+#    if JUCE_DEBUG
     setName("FileSelectTextEditor");
-#endif
+#    endif
     fileSelectButton.addListener(this);
     filePath.addListener(this);
     addAndMakeVisible(filePath);
     addAndMakeVisible(fileSelectButton);
 }
 
-FileSelectTextEditor::~FileSelectTextEditor()
-{
-}
+FileSelectTextEditor::~FileSelectTextEditor() { }
 
 /**
- * Set the initial text value for the file selection text editor
+ * Set the initial text value for the file selection text editor.
  */
 void FileSelectTextEditor::setText(String path, bool shouldNotify)
 {
@@ -54,11 +52,12 @@ String FileSelectTextEditor::getText()
     return filePath.getText();
 }
 
-/**
- * @param shouldShow sets the file selection button next to the text editor
- * box to be either visible, or transparent.  By default, the button will
- * be shown.
- */
+
+    /**
+     * @param shouldShow Sets the file selection button next to the text editor
+     *                    box to be either visible or hidden. By default, the 
+     *                    button will be shown.
+     */
 void FileSelectTextEditor::showFileSelectButton(bool shouldShow)
 {
     if (shouldShow == showButton)
@@ -69,7 +68,8 @@ void FileSelectTextEditor::showFileSelectButton(bool shouldShow)
     if (shouldShow)
     {
         addAndMakeVisible(fileSelectButton);
-    } else
+    }
+    else
     {
         removeChildComponent(&fileSelectButton);
     }
@@ -77,19 +77,9 @@ void FileSelectTextEditor::showFileSelectButton(bool shouldShow)
     resized();
 }
 
-FileSelectTextEditor::Listener::Listener()
-{
-}
-
-FileSelectTextEditor::Listener::~Listener()
-{
-}
-
 /**
  * Adds a Listener to the list of Listeners that will be notified
  * of changes.
- * @param listener some object that needs to track the contents of this
- * editor
  */
 void FileSelectTextEditor::addFileSelectListener(Listener * listener)
 {
@@ -102,14 +92,14 @@ void FileSelectTextEditor::addFileSelectListener(Listener * listener)
 void FileSelectTextEditor::notifyListeners()
 {
     for (std::set<Listener*>::iterator it = listeners.begin();
-            it != listeners.end(); it++)
+         it != listeners.end(); it++)
     {
         (*it)->fileSelected(this);
     }
 }
 
 /**
- * Runs notifyListeners when the editor loses focus
+ * Runs notifyListeners when the editor loses focus.
  */
 void FileSelectTextEditor::textEditorFocusLost(TextEditor& editor)
 {
@@ -121,7 +111,7 @@ void FileSelectTextEditor::textEditorFocusLost(TextEditor& editor)
 
 /**
  * Runs notifyListeners when the editor is focused and the return key
- * is pressed
+ * is pressed.
  */
 void FileSelectTextEditor::textEditorReturnKeyPressed(TextEditor & editor)
 {
@@ -146,8 +136,8 @@ void FileSelectTextEditor::buttonClicked(Button* button)
             browser,
             false,
             findColour(fileWindowColourId));
-    dialogBox.setColour(FileChooserDialogBox::titleTextColourId,findColour(textColourId));
-    Rectangle<int> size = getWindowSize();
+    dialogBox.setColour(FileChooserDialogBox::titleTextColourId, findColour(textColourId));
+    Rectangle<int> size = Display::getWindowSize();
     if (dialogBox.show(size.getWidth(), size.getHeight()))
     {
         File selectedFile = browser.getSelectedFile(0);

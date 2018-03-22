@@ -1,18 +1,17 @@
 #include "ConfigurableImageComponent.h"
 
 ConfigurableImageComponent::ConfigurableImageComponent
-(String componentKey, int assetIndex, RectanglePlacement placement) :
-ConfigurableComponent(componentKey),
+(ComponentConfigFile& config, String componentKey, int assetIndex,
+        RectanglePlacement placement) :
+ConfigurableComponent(config, componentKey),
 DrawableImageComponent(placement),
 assetIndex(assetIndex)
 {
     loadAllConfigProperties();
 }
 
-ConfigurableImageComponent::~ConfigurableImageComponent() { }
-
 /**
- * Load a new image from a different asset file
+ * Load a new image from a different asset file.
  */
 void ConfigurableImageComponent::setImageAssetIndex(int index)
 {
@@ -24,7 +23,7 @@ void ConfigurableImageComponent::setImageAssetIndex(int index)
 }
 
 /**
- * reload all image files
+ * (re)load the image file and set the colors.
  */
 void ConfigurableImageComponent::applyConfigAssets(StringArray assetNames,
         Array<Colour> colours)

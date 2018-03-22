@@ -6,33 +6,31 @@ listItems(initialList),
 listContainer("ListEditor", nullptr),
 addItemBtn("+")
 {
-    
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("ListEditor");
-#endif
-    updateColours();
+#    endif
 
-    addAndMakeVisible(listContainer);
-    addAndMakeVisible(newItemField);
-    addAndMakeVisible(addItemBtn);
+    RelativeLayoutManager::Layout layout = {
+        {3,
+            {
+                {&listContainer, 1}
+            }},
+        {1,
+            {
+                {&newItemField, 4},
+                {&addItemBtn, 1}
+            }}
+    };
+
+    layoutManager.setLayout(layout, this);
+
+    updateColours();
 
     listContainer.setModel(this);
     listContainer.setOutlineThickness(1);
     listContainer.addMouseListener(this, true);
 
     addItemBtn.addListener(this);
-    
-    layoutManager.addRow(3);
-    layoutManager.addRow(1);
-    layoutManager.addComponent(&listContainer, 0, 1);
-    layoutManager.addComponent(&newItemField, 1, 4);
-    layoutManager.addComponent(&addItemBtn, 1, 1);
-
-
-}
-
-ListEditor::~ListEditor()
-{
 }
 
 /**
@@ -85,7 +83,6 @@ void ListEditor::updateColours()
             findColour(listItemColourId));
     scrollbar.setColour(ScrollBar::thumbColourId, findColour(textColourId));
 }
-
 
 /**
  * Receives notifications when ListItemComponent text is changed.
@@ -160,13 +157,11 @@ delBtn("cancel.svg")
     setInterceptsMouseClicks(false, true);
 }
 
-ListEditor::ListItemComponent::~ListItemComponent()
-{
-}
+ListEditor::ListItemComponent::~ListItemComponent() { }
 
 /**
- * @param id should be set to String(rowIndex) by the
- * ListEditor.
+ * @param id  This should be set to String(rowIndex) by the
+ *             ListEditor.
  */
 void ListEditor::ListItemComponent::setButtonComponentID(String id)
 {
@@ -175,7 +170,7 @@ void ListEditor::ListItemComponent::setButtonComponentID(String id)
 
 /**
  * Sets button colour, used by the ListEditor to apply
- * its color scheme to all list item.
+ * its color scheme to all list items.
  */
 void ListEditor::ListItemComponent::setButtonColour(Colour colour)
 {
@@ -195,7 +190,7 @@ void ListEditor::ListItemComponent::resized()
 }
 
 /**
- * Create or recycle a list component to fit a list row.
+ * Creates or recycles a list component to fit a list row.
  */
 Component * ListEditor::refreshComponentForRow
 (int rowNumber, bool isRowSelected, Component * existingComponent)
@@ -230,8 +225,7 @@ Component * ListEditor::refreshComponentForRow
 }
 
 /**
- * Handles add and delete item buttons
- * @param buttonClicked
+ * Handles the add and delete item buttons.
  */
 void ListEditor::buttonClicked(Button* buttonClicked)
 {
@@ -253,16 +247,8 @@ void ListEditor::buttonClicked(Button* buttonClicked)
     }
 }
 
-
 /**
- * Implemented as an empty function, as the list item component
- * handles its own draw operations.
- */
-void ListEditor::paintListBoxItem
-(int rowNumber, Graphics&g, int width, int height, bool rowIsSelected){}
-
-/**
- * Re-apply the layout and adjust list item height to fit the new
+ * Re-applies the layout and adjusts list item height to fit the new
  * bounds.
  */
 void ListEditor::resized()

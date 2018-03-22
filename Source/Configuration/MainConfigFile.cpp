@@ -1,27 +1,22 @@
-#include "Utils.h"
+#include "AssetFiles.h"
 #include "MainConfigFile.h"
 
 CriticalSection MainConfigFile::mainConfigLock;
 
 MainConfigFile::MainConfigFile() : ConfigFile(filenameConst)
 {
-    if (!fileOpened())
-    {
-        const ScopedLock readLock(mainConfigLock);
-        var jsonConfig = openFile();
-        var defaultConfig = var();
-        readDataFromJson(jsonConfig, defaultConfig);
-        writeChanges();
-    }
+    const ScopedLock readLock(mainConfigLock);
+    var jsonConfig = AssetFiles::loadJSONAsset
+            (String(CONFIG_PATH) + filenameConst, true);
+    var defaultConfig = var();
+    readDataFromJson(jsonConfig, defaultConfig);
+    writeChanges();
 }
 
-MainConfigFile::~MainConfigFile() { }
-
 //menu types
-const StringArray MainConfigFile::menuTypes = 
-{
-	"Scrolling menu",
-	"Paged menu"
+const StringArray MainConfigFile::menuTypes ={
+                                              "Scrolling menu",
+                                              "Paged menu"
 };
 
 
@@ -41,8 +36,8 @@ const String MainConfigFile::showCursorKey = "cursor";
 std::vector<ConfigFile::DataKey> MainConfigFile::getDataKeys() const
 {
     return {
-        {maxRowsKey,intType},
-        {maxColumnsKey,intType},
+        {maxRowsKey, intType},
+        {maxColumnsKey, intType},
         {backgroundKey, stringType},
         {menuTypeKey, stringType},
         {shutdownCommandKey, stringType},

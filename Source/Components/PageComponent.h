@@ -21,41 +21,49 @@
  */
 #pragma once
 
-#include "PageStackComponent.h"
 #include "RelativeLayoutManager.h"
 #include "ConfigurableImageButton.h"
 #include "JuceHeader.h"
 
-class PageComponent : public PageStackComponent::Page, public Button::Listener 
+class PageComponent : public Component, public Button::Listener
 {
 public:
+    class PageFactoryInterface;
 
-    enum ColourIds 
+    enum ColourIds
     {
         backgroundColourId = 0x1900500
     };
 
     /**
+     * @param pageFactory        The factory object needed by this page to 
+     *                            create new pages.
+     * 
+     * @param config             A reference to the ComponentConfigFile, which
+     *                            defines the page navigation button properties.
+     * 
      * @param name               The internal component name
      * 
      * @param layout             Defines the layout of all page components.  
-     *                           This layout will be saved, but components will
-     *                           not be added to the page until 
-     *                           addAndShowLayoutComponents is called.
+     *                            This layout will be saved, but components will
+     *                            not be added to the page until 
+     *                            addAndShowLayoutComponents is called.
      * 
      * @param showBackButton     If true, add a back button on this page.
      * 
      * @param backButtonOnRight  If true, the back button will be on the right
-     *                           side of the page. Otherwise, it will be on the
-     *                           left.
+     *                            side of the page. Otherwise, it will be on the
+     *                            left.
      */
-    PageComponent(const String& name = String(),
+    PageComponent(PageFactoryInterface& pageFactory,
+            ComponentConfigFile& config,
+            const String& name = String(),
             RelativeLayoutManager::Layout layout = {},
-            bool showBackButton = false,
+    bool showBackButton = false,
             bool backButtonOnRight = false);
 
-    virtual ~PageComponent();
-    
+    virtual ~PageComponent() { }
+
     /**
      * Sets a background image to draw behind all page components.
      * 
@@ -64,7 +72,7 @@ public:
      *                  background color instead of an image.
      */
     void setBackgroundImage(Image bgImage);
-    
+
     /**
      * Adds all components in the layout to the page and makes them visible.
      */
@@ -92,52 +100,74 @@ public:
     };
 
     /**
+     * Defines all possible page transition animations.
+     */
+    enum Animation
+    {
+        slideInFromLeft,
+        slideInFromRight,
+        none
+    };
+
+    /**
      * Defines the interface between individual PageComponents and the page
      * stack.  
      */
     class PageStackInterface
     {
-    friend class PageComponent;
-    public:	
-    	
-    	virtual ~PageStackInterface() { }
-	
-	/**
-	 * Defines all possible page transition animations.
-	 */
-	enum Animation
-	{
-	    slideInLeft,
-	    slideInRight,
-	    none
-	};
+        friend class PageComponent;
+    public:
+
+        virtual ~PageStackInterface() { }
+
     protected:
 
         PageStackInterface() { }
 
-	/**
-	 * The PageStack should call this to notify a PageComponent after 
-	 * pushing it on top of the page stack.
-	 *
-	 * @param page  The new top page on the stack.
-	 */
-	void signalPageAdded(PageComponent* page);
+        /**
+         * The PageStack should call this to notify a PageComponent after 
+         * pushing it on top of the page stack.
+         *
+         * @param page  The new top page on the stack.
+         */
+        void signalPageAdded(PageComponent* page);
 
-	/**
-	 * When the top page is popped from the stack, the PageStack should
-	 * call this to notify the next page down that it's now the top page.
-	 *
-	 * @param page The new top page on the stack.
-	 */
-	void signalPageRevealed(PageComponent* page);
+        /**
+         * When the top page is popped from the stack, the PageStack should
+         * call this to notify the next page down that it's now the top page.
+         *
+         * @param page The new top page on the stack.
+         */
+        void signalPageRevealed(PageComponent* page);
 
     private:
-	virtual void pushPage
-		(PageComponent* page, Animation animation = none) = 0;
+        /**
+         * Pushes a new PageComponent on top of the stack, optionally animating
+         * the transition. 
+         * 
+         * @param page
+         * 
+         * @param animation
+         */
+        virtual void pushPage
+        (PageComponent* page, Animation animation = slideInFromLeft) = 0;
 
-        virtual void popPage(Animation animation = none) = 0;
+        /**
+         * Removes the top page from the stack, optionally animating the 
+         * transition.
+         * 
+         * @param animation
+         */
+        virtual void popPage(Animation animation = slideInFromLeft) = 0;
 
-	virtual bool isTopPage(PageComponent* page) = 0;
+        /**
+         * Checks if a page is the top page on the stack.
+         * 
+         * @param  page
+         * 
+         * @return true iff page is displayed on top of the page stack.
+         */
+        virtual bool isTopPage(PageComponent* page) = 0;
     };
 
     /**
@@ -148,18 +178,34 @@ public:
     {
     public:
         friend class PageComponent;
-	
-	virtual ~PageFactoryInterface() { }
+
+        virtual ~PageFactoryInterface() { }
+
     protected:
-	PageFactoryInterface() { }
+
+        PageFactoryInterface() { }
+
     private:
-	/**
-	 * Create a new page to
-	 */
-	virtual PageComponent* createPage(PageType type) = 0;
+        /**
+         * Create a new page to push on top of the page stack.
+         */
+        virtual PageComponent* createPage(PageType type) = 0;
     };
 
 protected:
+
+    /**
+     * Whenever this page is added to a page stack, the PageStack
+     * will call this method. 
+     */
+    virtual void pageAddedToStack() { }
+
+    /**
+     * Whenever this page becomes the top page on the page stack, the 
+     * PageStackComponent will call this method. 
+     */
+    virtual void pageRevealedOnStack() { }
+
     /**
      * Handles any buttons besides the back button.  Inheriting classes
      * should override this instead of buttonClicked(Button*) to handle their 
@@ -169,14 +215,14 @@ protected:
      *                PageComponent as a listener.
      */
     virtual void pageButtonClicked(Button* button) { }
-    
+
     /**
      * Handles any actions necessary whenever the page is resized, besides
      * updating the layout manager and back button.  Inheriting classes should
      * override this instead of resized() to handle page resizing.
      */
     virtual void pageResized() { }
-    
+
     /**
      * Replaces the page layout.  All components in the old layout will be
      * removed from the page before setting the new layout.  Components in
@@ -185,7 +231,7 @@ protected:
      * @param layout
      */
     void updateLayout(RelativeLayoutManager::Layout layout);
-    
+
     /**
      * Sets the amount of space to leave between page components and the edges
      * of the page.  Note that margins don't affect the back button, and if
@@ -195,7 +241,7 @@ protected:
      *                       get the margin size in pixels.
      */
     void setMarginFraction(float marginFraction);
-    
+
     /**
      * Sets the amount of space to leave between components in the page layout.
      *
@@ -207,8 +253,8 @@ protected:
      *                            find the amount of horizontal empty space (in
      *                            pixels) to leave between components.
      */
-    void setPadding(float verticalFraction,float horizontalFraction);  
-    
+    void setPadding(float verticalFraction, float horizontalFraction);
+
     /**
      * Repositions all page components using the layout manager along with
      * the margin and padding values.
@@ -216,49 +262,30 @@ protected:
     void layoutComponents();
 
     /**
-     * @return true iff the page is currently on a page stack.
+     * @return true iff the page is currently on the top of a page stack.
      */
-     bool isOnPageStack();
+    bool isStackTop();
 
     /**
-     * Whenever this page is added to a page stack, the PageStack
-     * will call this method. 
-     */
-     virtual void pageAddedToStack() { }
-
-    /**
-     * Whenever this page becomes the top page on the page stack, the 
-     * PageStackComponent will call this method. 
-     */
-     virtual void pageRevealedOnStack() { }
-
-    /**
-     * When this page is on the top of the stack and a new page is added
-     * above it, PageStackComponent will call this method.
-     */
-     virtual void pageCoveredOnStack() { }
-
-    /**
-     * If this page is currently on a page stack, this will remove it from
-     * the stack.
+     * If this page is currently on top of a page stack, this will remove it 
+     * from the stack and destroy it.
      *
-     * @param transition   This animation will run if the page was on top
+     * @param animation   This animation will run if the page was on top
      *                     of the stack and was removed successfully.
      */
-     void removeFromStack(Transition transition = kTransitionNone);
+    void removeFromStack(Animation animation = slideInFromLeft);
 
     /**
-     * If this page is on a page stack, this will push a new page
-     * on top of the stack.
+     * Creates and pushes a new page on top of the stack.
      *
-     * @param newPage     This page will be added to the top of the stack if it 
-     *                    isn't already on a page stack.
+     * @param pageType   The type of page to create and add.
     
-     * @param transition  This animation will run if the page is successfully
-     *                    added to the stack.
+     * @param animation  This animation will run if the page is successfully
+     *                     added to the stack.
      */
-     void pushPageToStack(Page* newPage, 
-             Transition transition = kTransitionNone);
+    void pushPageToStack(PageType pageType, Animation animation
+            = slideInFromLeft);
+
 private:
     /**
      * Inheriting classes can override this method to change the behavior of the
@@ -268,15 +295,15 @@ private:
      * @return true if the back button's action was replaced, false to allow
      *         the back button to remove the page as usual.
      */
-    virtual bool overrideBackButton(); 
- 
-    
+    virtual bool overrideBackButton();
+
+
     /**
      * Recalculate component layout and back button bounds when the page is
      * resized.
      */
     void resized() final override;
-    
+
     /**
      * Closes the page when the back button is clicked, and passes all other
      * button clicks to the pageButtonClicked method.
@@ -284,22 +311,32 @@ private:
      * @param button
      */
     void buttonClicked(Button* button) final override;
-    
+
     /**
      * Fills the page background with an image or color.
      *
      * @param g
      */
     virtual void paint(Graphics& g) override;
-    
+
+    //A button that removes the page from the page stack may be held here.
+    ScopedPointer<ConfigurableImageButton> backButton = nullptr;
+    //If the page contains a back button, this sets the side it appears on.
     bool backButtonOnRight;
+
+    //Layout manager and component margin/padding values.
     RelativeLayoutManager layoutManager;
     float horizontalMargin = 0.05;
     float verticalMargin = 0.05;
     float verticalPadding = 0.05;
     float horizontalPadding = 0.05;
-    ScopedPointer<ConfigurableImageButton> backButton = nullptr;
+
+    //Optional page background image.
     Image backgroundImage;
+
+    //Used by the page to create additional pages to display.
     PageFactoryInterface& pageFactory;
-    PageStackInterface* pageStack;
+
+    //Points to the page stack this page is on, if any.
+    PageStackInterface* pageStack = nullptr;
 };

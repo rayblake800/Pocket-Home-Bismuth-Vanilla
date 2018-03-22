@@ -14,10 +14,11 @@
 class Spinner : public Component, private WindowFocusedTimer {
 public:
     /**
-     * @param secondsToTimeout sets how many seconds should pass after enabling
-     * the spinner before the spinner is automatically disabled.  If this value
-     * is negative, the spinner will keep running until destroyed or turned off
-     * with setEnabled()
+     * @param secondsToTimeout Sets how many seconds should pass after enabling
+     *                          the spinner before the spinner is automatically 
+     *                          disabled.  If this value is negative, the 
+     *                          spinner will keep running until destroyed or 
+     *                          turned off with setEnabled().
      */
     Spinner(int secondsToTimeout = -1);
     ~Spinner();
@@ -26,25 +27,27 @@ public:
 
 protected:
     /**
-     * Set the internal image component's bounds within the Spinner
+     * Sets the internal image component's bounds within the Spinner.
+     * 
+     * @param imageBounds
      */
     void setImageBounds(Rectangle<int> imageBounds);
     
 private:
     /**
-     * Disable animation when losing visibility, enable animation when
+     * Disables animation when losing visibility, enables animation when
      * gaining visibility.
      */
     void visibilityChanged() override;
 
     /**
-     * Set spinner image bounds to match the component.
+     * Sets spinner image bounds to match the component.
      */
     void resized() override;
 
     /**
-     * Show the next frame of the spinner animation, and disable if runtime 
-     * exceeds the timeout period.
+     * Shows the next frame of the spinner animation, and disables the spinner
+     * if runtime exceeds the timeout period.
      */
     void timerCallback();
 

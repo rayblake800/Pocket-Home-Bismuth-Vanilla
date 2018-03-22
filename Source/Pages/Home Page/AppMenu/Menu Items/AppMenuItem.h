@@ -8,22 +8,28 @@
  *   Methods that edit this menu data are only accessible to AppMenuButton 
  * objects, as each menu item should only be directly modified by its 
  * AppMenuButton.  All methods for getting menu data return false, {}, or
- * String::empty by default, inheriting classes are responsible for overriding
+ * String::empty by default. Inheriting classes are responsible for overriding
  * these to provide accurate data.
  */
 
 #pragma once
-#include "ConfigurableComponent.h"
+#include "MainConfigFile.h"
 #include "IconThread.h"
 #include "AppMenuPopupEditor.h"
 
-class AppMenuItem : public ReferenceCountedObject {
+class AppMenuItem : public ReferenceCountedObject,
+public ConfigFile::Listener
+{
 public:
     friend class AppMenuButton;
     typedef ReferenceCountedObjectPtr<AppMenuItem> Ptr;
 
-    AppMenuItem();
-    virtual ~AppMenuItem();
+    /**
+     * @param mainConfig  Needed for loading the terminal launch command.
+     */
+    AppMenuItem(MainConfigFile& mainConfig);
+
+    virtual ~AppMenuItem() { }
 
     /**
      * @return true if this menu item is an application folder.
@@ -51,7 +57,7 @@ public:
      * the terminal. 
      */
     virtual bool isTerminalApp() const;
-    
+
     /**
      * @return true iff changing this menu item makes changes to .desktop or
      * .directory files.
@@ -76,7 +82,7 @@ public:
      * to i+offset 
      */
     virtual bool canChangeIndex(int offset) const;
-    
+
     /**
      * @param toCompare
      * @return true iff this menu item and another share the same
@@ -132,5 +138,23 @@ protected:
      * @return true iff the operation succeeded.
      */
     virtual bool moveDataIndex(int offset);
+
+    /**
+     * Gets the string to add before a launch command to make it launch in the
+     * terminal.
+     */
+    String getTermLaunchPrefix() const;
+
+private:
+
+    /**
+     * Updates the termLaunchPrefix if it's changed in configuration.
+     * 
+     * @param config
+     * @param propertyKey
+     */
+    void configValueChanged(ConfigFile* config, String propertyKey);
+
+    String termLaunchPrefix;
 
 };

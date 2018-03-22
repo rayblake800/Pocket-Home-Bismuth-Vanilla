@@ -13,14 +13,16 @@
 
 #pragma once
 #include "JuceHeader.h"
-#include "Configurable.h"
+#include "MainConfigFile.h"
+#include "ComponentConfigFile.h"
 
-class PokeLookAndFeel : public LookAndFeel_V3, public Configurable
+class PokeLookAndFeel : public LookAndFeel_V3, public ConfigFile::Listener
 {
 public:
-    PokeLookAndFeel();
+    PokeLookAndFeel(MainConfigFile& mainConfig,
+            ComponentConfigFile& componentConfig);
 
-    virtual ~PokeLookAndFeel();
+    virtual ~PokeLookAndFeel() {}
 
     /**
      * @return the most appropriate text height for a DrawableButton with the
@@ -105,7 +107,11 @@ private:
      * @param config
      * @param key
      */
-    virtual void loadConfigProperties(ConfigFile* config, String key);
+    void configValueChanged(ConfigFile* config, String key) override;
+    
+    //reference to configuration files
+    MainConfigFile& mainConfig;
+    ComponentConfigFile& componentConfig;
 
     //Defines the maximum number of characters that will fit on a text button.
     static const int maxButtonStrSize = 30;

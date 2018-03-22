@@ -74,9 +74,6 @@
       </GROUP>
       <GROUP id="{85D01745-B7AD-BE3B-8D28-80F47A0AA8BA}" name="Configuration">
         <GROUP id="{0620BF40-B02B-426D-C70D-993F44358C78}" name="Configurables">
-          <FILE id="zxMEf3" name="Configurable.cpp" compile="1" resource="0"
-                file="Source/Configuration/Configurables/Configurable.cpp"/>
-          <FILE id="xL6pBS" name="Configurable.h" compile="0" resource="0" file="Source/Configuration/Configurables/Configurable.h"/>
           <FILE id="g1W6SX" name="ConfigurableComponent.cpp" compile="1" resource="0"
                 file="Source/Configuration/Configurables/ConfigurableComponent.cpp"/>
           <FILE id="OBFKiD" name="ConfigurableComponent.h" compile="0" resource="0"
@@ -336,8 +333,8 @@
       <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppLauncher.h"/>
       <FILE id="U4ygJ9" name="AssetFiles.cpp" compile="1" resource="0" file="Source/AssetFiles.cpp"/>
       <FILE id="cXrxti" name="AssetFiles.h" compile="0" resource="0" file="Source/AssetFiles.h"/>
-      <FILE id="ec2YX8" name="Locale.cpp" compile="1" resource="0" file="Source/Locale.cpp"/>
-      <FILE id="IG78EN" name="Locale.h" compile="0" resource="0" file="Source/Locale.h"/>
+      <FILE id="ec2YX8" name="LocaleText.cpp" compile="1" resource="0" file="Source/LocaleText.cpp"/>
+      <FILE id="IG78EN" name="LocaleText.h" compile="0" resource="0" file="Source/LocaleText.h"/>
       <FILE id="OP9h3M" name="PageFactory.cpp" compile="1" resource="0" file="Source/PageFactory.cpp"/>
       <FILE id="HpTag6" name="PageFactory.h" compile="0" resource="0" file="Source/PageFactory.h"/>
       <FILE id="xoVLAp" name="PokeLookAndFeel.cpp" compile="1" resource="0"

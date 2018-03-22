@@ -3,7 +3,6 @@
 #include "NewConfigAppEditor.h"
 #include "NewDesktopAppEditor.h"
 #include "NewFolderEditor.h"
-#include "AppMenuItemFactory.h"
 #include "AppMenuComponent.h"
 
 
@@ -12,23 +11,27 @@ const String AppMenuComponent::openPopupMenuBinding = "CTRL + e";
 const String AppMenuComponent::reloadMenuBinding = "TAB";
 DesktopEntries AppMenuComponent::desktopEntries;
 
-AppMenuComponent::AppMenuComponent
-(String componentKey, OverlaySpinner& loadingSpinner) :
+AppMenuComponent::AppMenuComponent(MainConfigFile& mainConfig,
+        ComponentConfigFile& componentConfig,
+        AppConfigFile& appConfig,
+        String componentKey,
+        OverlaySpinner& loadingSpinner) :
 loadingState(false),
-ConfigurableComponent(componentKey),
-loadingSpinner(loadingSpinner)
+appConfig(appConfig),
+componentConfig(componentConfig),
+ConfigurableComponent(componentConfig, componentKey),
+loadingSpinner(loadingSpinner),
+menuItemFactory(appConfig, mainConfig, desktopEntries)
 {
-
 #    if JUCE_DEBUG
     setName("AppMenuComponent");
 #    endif
-    MainConfigFile config;
-    config.registerConfigurable(this,{
+    mainConfig.addListener(this,{
         MainConfigFile::maxRowsKey,
         MainConfigFile::maxColumnsKey
     });
-    maxRows = config.getConfigValue<int>(MainConfigFile::maxRowsKey);
-    maxColumns = config.getConfigValue<int>(MainConfigFile::maxColumnsKey);
+    maxRows = mainConfig.getConfigValue<int>(MainConfigFile::maxRowsKey);
+    maxColumns = mainConfig.getConfigValue<int>(MainConfigFile::maxColumnsKey);
     setWantsKeyboardFocus(false);
     appLauncher.setLaunchFailureCallback([this]()
     {
@@ -127,7 +130,6 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
     {
         loadBaseFolder();
     };
-    AppConfigFile appConfig;
     switch (selection)
     {
         case 1://User selects "Edit"
@@ -141,12 +143,17 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
             });
             break;
         case 3://User selects "New favorite application"
-            showPopupEditor(new NewConfigAppEditor(iconThread, confirmNew));
+            showPopupEditor(new NewConfigAppEditor(appConfig,
+                    componentConfig,
+                    iconThread,
+                    confirmNew));
             break;
         case 4://User selects "New application link"
         {
-            AppMenuPopupEditor* newAppEditor = new NewDesktopAppEditor
-                    (iconThread, confirmNew);
+            AppMenuPopupEditor* newAppEditor
+                    = new NewDesktopAppEditor(componentConfig,
+                    iconThread,
+                    confirmNew);
             if (selectedButton != nullptr)
             {
                 newAppEditor->setCategories
@@ -157,8 +164,11 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         }
         case 5://User selects "New folder"
         {
-            AppMenuPopupEditor* newFolderEditor = new NewFolderEditor
-                    (iconThread, confirmNew);
+            AppMenuPopupEditor* newFolderEditor
+                    = new NewFolderEditor(appConfig,
+                    componentConfig,
+                    iconThread,
+                    confirmNew);
             showPopupEditor(newFolderEditor);
             break;
         }
@@ -246,8 +256,7 @@ void AppMenuComponent::loadBaseFolder()
             DBG("AppMenuComponent::" << __func__
                     << ": Loading desktop entries complete,"
                     << " creating base folder");
-            openFolder(AppMenuItemFactory::createBaseFolderItem
-                    (desktopEntries));
+            openFolder(menuItemFactory.createBaseFolderItem());
             openFolders.getFirst()->selectIndex(savedIndex);
             loadingSpinner.setLoadingText("Building folder layout:");
             MessageManager::callAsync([this]()
@@ -414,14 +423,14 @@ void AppMenuComponent::layoutFolders(bool animate)
     for (int i = 0; i < openFolders.size(); i++)
     {
         Rectangle<int> folderBounds = updateFolderBounds(openFolders[i], i);
-        if(animate)
+        if (animate)
         {
-           Desktop::getInstance().getAnimator().animateComponent(openFolders[i], 
-                   folderBounds, 1.0f, animationDuration, true, 0.0, 0.0); 
+            Desktop::getInstance().getAnimator().animateComponent(openFolders[i],
+                    folderBounds, 1.0f, animationDuration, true, 0.0, 0.0);
         }
         else
         {
-        openFolders[i]->setBounds(folderBounds);
+            openFolders[i]->setBounds(folderBounds);
         }
     }
 }
@@ -463,10 +472,8 @@ void AppMenuComponent::windowFocusLost()
 
 /**
  * Updates the layout if row/column size changes.
- * @param config the configFile containing the updated data value
- * @param key the key of property that has changed
  */
-void AppMenuComponent::loadExtraConfigProperties
+void AppMenuComponent::extraConfigValueChanged
 (ConfigFile* config, String key)
 {
     MainConfigFile* mainConfig = dynamic_cast<MainConfigFile*> (config);
@@ -524,6 +531,7 @@ void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
 
     openFolders.add(newFolder);
     newFolder->addMouseListener(this, false);
+    newFolder->updateGridSize(maxRows, maxColumns);
     setActiveFolderIndex(openFolders.size() - 1);
     addAndMakeVisible(newFolder);
 }

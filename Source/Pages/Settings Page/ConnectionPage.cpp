@@ -3,8 +3,9 @@
 #include "ConnectionPage.h"
 
 template<class ConnectionPoint>
-ConnectionPage<ConnectionPoint>::ConnectionPage() :
-PageComponent("ConnectionPage",{}, true),
+ConnectionPage<ConnectionPoint>::ConnectionPage
+(PageFactoryInterface& pageFactory) :
+PageComponent(pageFactory, "ConnectionPage",{}, true),
 prevPageBtn(ComponentConfigFile::pageUpKey),
 nextPageBtn(ComponentConfigFile::pageDownKey),
 selectedConnection(ConnectionPoint())

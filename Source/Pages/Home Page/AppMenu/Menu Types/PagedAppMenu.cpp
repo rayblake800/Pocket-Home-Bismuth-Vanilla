@@ -6,14 +6,15 @@
 const String PagedAppMenu::pageLeftBinding = "shift + cursor left";
 const String PagedAppMenu::pageRightBinding = "shift + cursor right";
 
-/**
- * @param loadingSpinner
- */
-PagedAppMenu::PagedAppMenu(OverlaySpinner& loadingSpinner) :
-AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
-pageLeft(ComponentConfigFile::pageLeftKey),
-pageRight(ComponentConfigFile::pageRightKey),
-closeFolderBtn(ComponentConfigFile::pageUpKey)
+PagedAppMenu::PagedAppMenu(MainConfigFile& mainConfig,
+        ComponentConfigFile& componentConfig,
+        AppConfigFile& appConfig,
+        OverlaySpinner& loadingSpinner) :
+AppMenuComponent(mainConfig, componentConfig, appConfig,
+ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
+pageLeft(componentConfig, ComponentConfigFile::pageLeftKey),
+pageRight(componentConfig, ComponentConfigFile::pageRightKey),
+closeFolderBtn(componentConfig, ComponentConfigFile::pageUpKey)
 {
     setOnlyTriggerSelected(false);
     Array<Button*> buttons = {&pageLeft, &pageRight, &closeFolderBtn};
@@ -26,8 +27,6 @@ closeFolderBtn(ComponentConfigFile::pageUpKey)
         button->addListener(this);
     }
 }
-
-PagedAppMenu::~PagedAppMenu() { }
 
 /**
  * Update navigation buttons when the menu changes size.
@@ -65,7 +64,7 @@ bool PagedAppMenu::folderKeyPressed(const KeyPress& key, AppMenuFolder* activeFo
     }
     int newRow = 0;
     int newColumn = 0;
-    DBG("PagedAppMenu::" << __func__ << ": On selected index " << selectedIndex 
+    DBG("PagedAppMenu::" << __func__ << ": On selected index " << selectedIndex
             << ", pressed key " << key.getTextDescription());
     if (selectedIndex == -1)
     {
@@ -203,7 +202,7 @@ Rectangle<int> PagedAppMenu::updateFolderBounds(const AppMenuFolder* folder,
         closeFolderBtn.setVisible(showUp);
         closeFolderBtn.setEnabled(showUp);
     }
-    DBG("PagedAppMenu::" << __func__ << ": folder " << folderIndex << " is at " 
+    DBG("PagedAppMenu::" << __func__ << ": folder " << folderIndex << " is at "
             << bounds.toString());
     return bounds;
 }

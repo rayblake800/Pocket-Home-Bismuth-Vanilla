@@ -1,22 +1,23 @@
 #include "NewFolderEditor.h"
 
-NewFolderEditor::NewFolderEditor(IconThread& iconThread,
+NewFolderEditor::NewFolderEditor(AppConfigFile& appConfig,
+        ComponentConfigFile& componentConfig,
+        IconThread& iconThread,
         std::function<void() > onConfirm) :
-AppMenuPopupEditor("New folder", iconThread,
-[this, onConfirm](AppMenuPopupEditor* editor)
+AppMenuPopupEditor("New folder", componentConfig, iconThread,
+[this, &appConfig, onConfirm](AppMenuPopupEditor* editor)
 {
-    AppConfigFile config;
     AppConfigFile::AppFolder newFolder;
     newFolder.name = editor->getNameField();
     newFolder.icon = editor->getIconField();
     newFolder.categories = editor->getCategories();
-    config.addAppFolder(newFolder, config.getFolders().size());
+    appConfig.addAppFolder(newFolder, appConfig.getFolders().size());
     onConfirm();
 },
 true, false)
 {
-    
-#if JUCE_DEBUG
+
+#    if JUCE_DEBUG
     setName("NewFolderEditor");
-#endif
+#    endif
 }

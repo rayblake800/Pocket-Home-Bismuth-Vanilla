@@ -1,8 +1,9 @@
 #include "PopupEditorComponent.h"
 
 PopupEditorComponent::PopupEditorComponent(String title,
+        ComponentConfigFile& config,
         std::function<void(PopupEditorComponent*) > onConfirm) :
-ConfigurableImageComponent(ComponentConfigFile::popupMenuKey,
+ConfigurableImageComponent(config,ComponentConfigFile::popupMenuKey,
 0, RectanglePlacement::stretchToFit),
 onConfirm(onConfirm),
 titleLabel("EditorTitle", title, 2),
@@ -47,31 +48,26 @@ void PopupEditorComponent::closePopup()
  */
 void PopupEditorComponent::setLayout(RelativeLayoutManager::Layout layout)
 {
-    layout.insert(layout.begin(),
-    {1,
+    layout.insert(layout.begin(),{1,
         {
             {&titleLabel, 1}
-        }
-    });
-            
-    layout.push_back(
-    {1,
+        }});
+
+    layout.push_back({1,
         {
-            {&cancelButton,1},
-            {&confirmButton,1}
-        }
-    });
+            {&cancelButton, 1},
+            {&confirmButton, 1}
+        }});
     layoutManager.setLayout(layout, this);
-    if(!getBounds().isEmpty())
+    if (!getBounds().isEmpty())
     {
         resized();
     }
 }
 
 /**
- * Manages the cancel and confirm buttons. Inheriting classes should either
- * call this method if they're handling button clicks, or handle clicks
- * on the cancel/confirm buttons themselves.
+ * Manages the cancel and confirm buttons passing all other button events
+ * to editorButtonClicked().
  */
 void PopupEditorComponent::buttonClicked(Button* buttonClicked)
 {
@@ -84,14 +80,15 @@ void PopupEditorComponent::buttonClicked(Button* buttonClicked)
         onConfirm(this);
         closePopup();
     }
-    else{
+    else
+    {
         editorButtonClicked(buttonClicked);
     }
 }
 
 /**
- * The escape and return keys work the same
- * as pressing the cancel and confirm buttons, respectively.
+ * The escape and return keys work the same as pressing the cancel and confirm 
+ * buttons, respectively.
  */
 bool PopupEditorComponent::keyPressed(const KeyPress & key)
 {

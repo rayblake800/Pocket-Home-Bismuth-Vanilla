@@ -1,7 +1,8 @@
 #include "AdvancedSettingsPage.h"
 
-AdvancedSettingsPage::AdvancedSettingsPage() :
-PageComponent("AdvancedSettingsPage",{}, true),
+AdvancedSettingsPage::AdvancedSettingsPage
+(PageComponent::PageFactoryInterface& pageFactory) :
+PageComponent(pageFactory, "AdvancedSettingsPage",{}, true),
 titleLabel("settings", "Advanced Settings"),
 setPasswordButton("Set your password"),
 removePasswordButton("Remove your password"),
@@ -11,10 +12,10 @@ inputOptionsButton("Input settings"),
 prevArrow(ComponentConfigFile::pageUpKey),
 nextArrow(ComponentConfigFile::pageDownKey)
 {
-    
-#if JUCE_DEBUG
+
+#    if JUCE_DEBUG
     setName("AdvancedSettingsPage");
-#endif
+#    endif
     setColour(backgroundColourId, Colour(0xffd23c6d));
     std::vector<Button*> allButtons = getButtonList(true);
     for (Button* button : allButtons)
@@ -26,8 +27,6 @@ nextArrow(ComponentConfigFile::pageDownKey)
     titleLabel.setJustificationType(Justification::centred);
     reloadLayout();
 }
-
-AdvancedSettingsPage::~AdvancedSettingsPage() { }
 
 /**
  * Get pointers to all buttons on the page
@@ -103,21 +102,30 @@ void AdvancedSettingsPage::visibilityChanged()
  */
 void AdvancedSettingsPage::pageButtonClicked(Button * button)
 {
+    PageComponent::PageType pageType = 
+            PageComponent::PageType::AdvancedSettings;
     if (button == &setPasswordButton)
     {
-        pushPageToStack(&setPasswordPage,
-                PageStackComponent::kTransitionTranslateHorizontal);
+        pageType = PageComponent::PageType::SetPassword;
     }
-    else if (button == &removePasswordButton
-             && removePasswordPage.hasPassword())
+    //TODO: add a password handling class that can be checked before
+    //adding the remove password page and reused by both password pages for
+    //password functions.
+    else if (button == &removePasswordButton)
     {
-        pushPageToStack(&removePasswordPage,
-                PageStackComponent::kTransitionTranslateHorizontal);
+        pageType = PageComponent::PageType::RemovePassword;
     }
     else if (button == &personalizeButton)
     {
-        pushPageToStack(&homeSettingsPage,
-                PageStackComponent::kTransitionTranslateHorizontal);
+        pageType = PageComponent::PageType::HomeSettings;
+    }
+    else if (button == &inputOptionsButton)
+    {
+        pageType = PageComponent::PageType::InputSettings;
+    }
+    else if (button == &dateTimeButton)
+    {
+        pageType = PageComponent::PageType::DateTime;
     }
     else if (button == &nextArrow)
     {
@@ -129,15 +137,9 @@ void AdvancedSettingsPage::pageButtonClicked(Button * button)
         buttonIndex -= buttonsPerPage;
         reloadLayout();
     }
-    else if (button == &inputOptionsButton)
-    {
-        pushPageToStack(&inputPage,
-                PageStackComponent::kTransitionTranslateHorizontal);
-    }
-    else if (button == &dateTimeButton)
-    {
-        pushPageToStack(&dateTimePage,
-                PageStackComponent::kTransitionTranslateHorizontal);
+    if(pageType != PageComponent::PageType::AdvancedSettings)
+    {      
+        pushPageToStack(pageType);
     }
 }
 
@@ -145,10 +147,11 @@ void AdvancedSettingsPage::pageButtonClicked(Button * button)
  * Updates the up/down navigation buttons to fit when the page changes
  * size.
  */
-void AdvancedSettingsPage::pageResized() {
+void AdvancedSettingsPage::pageResized()
+{
     prevArrow.applyConfigBounds();
     nextArrow.applyConfigBounds();
- }
+}
 
 
 

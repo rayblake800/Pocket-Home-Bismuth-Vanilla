@@ -8,14 +8,26 @@
 #include "ConfigurableImageButton.h"
 #include "AppMenuComponent.h"
 
-class PagedAppMenu : public AppMenuComponent, public Button::Listener {
+class PagedAppMenu : public AppMenuComponent, public Button::Listener
+{
 public:
     /**
-     * @param loadingSpinner
+     * @param mainConfig       A reference to the MainConfigFile.
+     * 
+     * @param componentConfig  A reference to the ComponentConfigFile.
+     * 
+     * @param appConfig        A reference to the AppConfigFile.
+     * 
+     * @param loadingSpinner   Reference to an overlay spinner that sits over
+     *                         the PageComponent holding this AppMenuComponent.
      */
-    PagedAppMenu(OverlaySpinner& loadingSpinner);
-    virtual ~PagedAppMenu();
-    
+    PagedAppMenu(MainConfigFile& mainConfig,
+            ComponentConfigFile& componentConfig,
+            AppConfigFile& appConfig,
+            OverlaySpinner& loadingSpinner);
+
+    virtual ~PagedAppMenu() { }
+
     /**
      * Update navigation buttons when the menu changes size.
      */

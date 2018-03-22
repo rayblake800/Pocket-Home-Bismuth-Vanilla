@@ -11,20 +11,24 @@
 #include "IconThread.h"
 #include "AppMenuItem.h"
 
-class DesktopEntryMenuItem : public AppMenuItem {
+class DesktopEntryMenuItem : public AppMenuItem
+{
 public:
     /**
      * Create a new menu item representing a DesktopEntry
+     * @param config
      * @param desktopEntry defines the application/directory data
      */
-    DesktopEntryMenuItem(const DesktopEntry& desktopEntry);
-    ~DesktopEntryMenuItem();
+    DesktopEntryMenuItem(MainConfigFile& config,
+            const DesktopEntry& desktopEntry);
+
+    ~DesktopEntryMenuItem() { }
 
     /**
      * @return true if this menu item is an application folder
      */
     bool isFolder() const override;
-    
+
     //TODO: load items from .Directory files!
 
     /**
@@ -52,7 +56,7 @@ public:
      * @return the name or path used to load the icon file. 
      */
     String getIconName() const override;
-    
+
     /**
      * @return true, changes to this menu item change the current user's
      * .Desktop files
@@ -75,14 +79,16 @@ protected:
     /**
      * @return true iff this menu item has categories that can be edited.
      */
-    virtual bool hasEditableCategories() const override {
+    virtual bool hasEditableCategories() const override
+    {
         return true;
     };
 
     /**
      * @return true iff this menu item has a command that can be edited.
      */
-    virtual bool hasEditableCommand() const override {
+    virtual bool hasEditableCommand() const override
+    {
         return true;
     };
 

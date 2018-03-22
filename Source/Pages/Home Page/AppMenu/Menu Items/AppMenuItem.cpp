@@ -1,8 +1,10 @@
 #include "AppMenuItem.h"
 
-AppMenuItem::AppMenuItem() { }
-
-AppMenuItem::~AppMenuItem() { }
+AppMenuItem::AppMenuItem(MainConfigFile& config)
+{
+    config.addListener(this,{MainConfigFile::termLaunchCommandKey});
+    loadAllConfigProperties();
+}
 
 /**
  * @return true if this menu item is an application folder.
@@ -84,7 +86,8 @@ bool AppMenuItem::canChangeIndex(int offset) const
  * @return true iff this menu item and another share the same
  * properties
  */
-bool AppMenuItem::operator==(const AppMenuItem& toCompare) const {
+bool AppMenuItem::operator==(const AppMenuItem& toCompare) const
+{
     return getAppName() == toCompare.getAppName()
             && getCategories() == toCompare.getCategories()
             && getCommand() == toCompare.getCommand()
@@ -92,7 +95,7 @@ bool AppMenuItem::operator==(const AppMenuItem& toCompare) const {
             && isTerminalApp() == toCompare.isTerminalApp()
             && getIconName() == toCompare.getIconName()
             && changesDesktopEntries() == toCompare.changesDesktopEntries();
- }
+}
 
 /**
  * Get an appropriate title to use for a deletion confirmation window.
@@ -166,4 +169,29 @@ bool AppMenuItem::removeMenuItemSource()
 bool AppMenuItem::moveDataIndex(int offset)
 {
     return false;
+}
+
+
+/**
+ * Gets the string to add before a launch command to make it launch in the
+ * terminal.
+ */
+String AppMenuItem::getTermLaunchPrefix() const
+{
+    return termLaunchPrefix;
+}
+
+/**
+ * Updates the termLaunchPrefix if it's changed in configuration.
+ */
+void AppMenuItem::configValueChanged(ConfigFile* config, String propertyKey)
+{
+    if (propertyKey == MainConfigFile::termLaunchCommandKey)
+    {
+        MainConfigFile* mainConfig = dynamic_cast<MainConfigFile*> (config);
+        if (mainConfig != nullptr)
+        {
+            termLaunchPrefix = mainConfig->getConfigValue<String>(propertyKey);
+        }
+    }
 }

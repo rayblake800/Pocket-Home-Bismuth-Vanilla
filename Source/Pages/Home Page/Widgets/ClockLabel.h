@@ -33,7 +33,7 @@ private:
      * @param key is the key for the clock visibility setting or
      * for the 12h/24h mode toggle
      */
-    void loadExtraConfigProperties(ConfigFile* config,String key) override;
+    void extraConfigValueChanged(ConfigFile* config,String key) override;
     
     //If true, use 24 hour time, if false, use 12 hour AM/PM time.
     bool use24HrMode = false;

@@ -6,14 +6,13 @@ File absoluteFileFromPath(const String& path)
             : File::getCurrentWorkingDirectory().getChildFile(path);
 }
 
-/**
- * Load an asset file using its asset name.
- * @param file the name of a file in assets, or an absolute path.
+/**     
+ * Loads an asset file using its asset name.
  */
-File AssetFiles::findAssetFile(const String& assetName)
+File AssetFiles::findAssetFile(const String& assetName, bool lookOutsideAssets)
 {
     File assetFile = absoluteFileFromPath(String(assetFolder) + assetName);
-    if (!assetFile.existsAsFile())
+    if (!assetFile.existsAsFile() && lookOutsideAssets)
     {
         assetFile = absoluteFileFromPath(assetName);
     }
@@ -21,11 +20,12 @@ File AssetFiles::findAssetFile(const String& assetName)
 }
 
 /**
- * Create an Image object from an asset file
+ * Create an Image object from an asset file.
  */
-Image AssetFiles::createImageAsset(const String& assetName)
+Image AssetFiles::loadImageAsset(const String& assetName,
+        bool lookOutsideAssets)
 {
-    File imageFile = findAssetFile(assetName);
+    File imageFile = findAssetFile(assetName, lookOutsideAssets);
     if (!imageFile.existsAsFile())
     {
         return Image();
@@ -48,11 +48,13 @@ Image AssetFiles::createImageAsset(const String& assetName)
 }
 
 /**
- * Creates a Drawable object from an svg asset file
+ * Creates a Drawable object from an svg asset file.
  */
-Drawable * AssetFiles::createSVGDrawable(const File& svgFile)
+Drawable * AssetFiles::loadSVGDrawable(const String& assetName,
+        bool lookOutsideAssets)
 {
-    if (!svgFile.existsAsFile())
+    File svgFile = findAssetFile(assetName,lookOutsideAssets);
+    if (!svgFile.existsAsFile() || svgFile.getFileExtension() != ".svg")
     {
         DBG(__func__ << ": " << svgFile.getFileName() << " not found!");
         return nullptr;
@@ -64,4 +66,19 @@ Drawable * AssetFiles::createSVGDrawable(const File& svgFile)
         return nullptr;
     }
     return Drawable::createFromSVG(*svgElement);
+}
+
+/**
+ * Loads JSON data from an asset file.
+ */
+var AssetFiles::loadJSONAsset(const String& assetName,
+        bool lookOutsideAssets)
+        {
+    File jsonFile = findAssetFile(assetName,lookOutsideAssets);
+    if (!jsonFile.existsAsFile() || svgFile.getFileExtension() != ".json")
+    {
+        DBG(__func__ << ": " << jsonFile.getFileName() << " not found!");
+        return var();
+    }
+    return JSON::parse(jsonFile);
 }

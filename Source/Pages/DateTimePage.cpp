@@ -1,6 +1,4 @@
-#include "MainConfigFile.h"
 #include "DateTimePage.h"
-
 
 const Colour DateTimePage::bgColour = Colour(0xffd23c6d);
 const String DateTimePage::pageTitle = "Date and time settings";
@@ -19,8 +17,9 @@ const String DateTimePage::reconfErrorPreCmd = "Running '";
 const String DateTimePage::reconfErrorPostCmd
         = "' failed.\nIs the terminal launch command set correctly?";
 
-DateTimePage::DateTimePage() :
-PageComponent("DateTimePage",{
+DateTimePage::DateTimePage(PageComponent::PageFactoryInterface& pageFactory,
+        MainConfigFile& mainConfig, ComponentConfigFile& componentConfig) :
+PageComponent(pageFactory, "DateTimePage",{
     {3,
         {
             {&titleLabel, 1}
@@ -43,15 +42,17 @@ PageComponent("DateTimePage",{
             {nullptr, 1}
         }}
 }, true),
+mainConfig(mainConfig),
+componentConfig(componentConfig),
 titleLabel("dateTimeTitleLabel", pageTitle),
 setClockMode("setClockMode"),
 reconfigureBtn(reconfigureBtnText),
 clockModeLabel("clockModeLabel", clockModeLabelText)
 {
-    
-#if JUCE_DEBUG
+
+#    if JUCE_DEBUG
     setName("DateTimePage");
-#endif
+#    endif
     addAndShowLayoutComponents();
     reconfigureBtn.addListener(this);
     titleLabel.setJustificationType(Justification::centred);
@@ -60,33 +61,32 @@ clockModeLabel("clockModeLabel", clockModeLabelText)
     setClockMode.addItem(clockModeAmPm, 2);
     setClockMode.addItem(clockModeNoShow, 3);
     setClockMode.addListener(this);
-    ComponentConfigFile config;
-    if (config.getConfigValue<bool>(ComponentConfigFile::showClockKey))
+    if (componentConfig.getConfigValue<bool>(ComponentConfigFile::showClockKey))
     {
-        if (config.getConfigValue<bool>(ComponentConfigFile::use24HrModeKey))
+        if (componentConfig.getConfigValue<bool>
+            (ComponentConfigFile::use24HrModeKey))
         {
-            setClockMode.setSelectedId(1,NotificationType::dontSendNotification);
+            setClockMode.setSelectedId(1,
+                    NotificationType::dontSendNotification);
         }
         else
         {
-            setClockMode.setSelectedId(2,NotificationType::dontSendNotification);
+            setClockMode.setSelectedId(2,
+                    NotificationType::dontSendNotification);
         }
     }
     else
     {
-        setClockMode.setSelectedId(3,NotificationType::dontSendNotification);
+        setClockMode.setSelectedId(3, NotificationType::dontSendNotification);
     }
 }
-
-DateTimePage::~DateTimePage() { }
 
 void
 DateTimePage::pageButtonClicked(Button* button)
 {
     if (button == &reconfigureBtn)
     {
-        MainConfigFile config;
-        String configureTime = config.getConfigValue<String>
+        String configureTime = mainConfig.getConfigValue<String>
                 (MainConfigFile::termLaunchCommandKey)
                 + reconfigureCommand;
         int ret = system(configureTime.toRawUTF8());
@@ -102,14 +102,14 @@ DateTimePage::pageButtonClicked(Button* button)
 void DateTimePage::comboBoxChanged(ComboBox* c)
 {
     if (c != &setClockMode) return;
-    ComponentConfigFile config;
     bool showClock = (c->getSelectedId() != 3);
     bool use24HrMode = (c->getSelectedId() == 1);
     if (showClock)
     {
-        config.setConfigValue<bool>(ComponentConfigFile::use24HrModeKey, 
-                use24HrMode);
+        componentConfig.setConfigValue<bool>
+                (ComponentConfigFile::use24HrModeKey, use24HrMode);
     }
-    config.setConfigValue<bool>(ComponentConfigFile::showClockKey, showClock);
+    componentConfig.setConfigValue<bool>
+            (ComponentConfigFile::showClockKey, showClock);
 }
 

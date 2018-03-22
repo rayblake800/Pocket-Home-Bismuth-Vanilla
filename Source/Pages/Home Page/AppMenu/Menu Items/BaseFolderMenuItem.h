@@ -9,30 +9,34 @@
  */
 #pragma once
 #include "AppConfigFile.h"
-#include "DesktopEntries.h"
+#include "AppMenuItemFactory.h"
 #include "AppMenuItem.h"
 
-class BaseFolderMenuItem : public AppMenuItem {
+class BaseFolderMenuItem : public AppMenuItem
+{
 public:
     /**
-     * 
-     * @param desktopEntries
      */
-    BaseFolderMenuItem(DesktopEntries& desktopEntries);
-    virtual ~BaseFolderMenuItem();
+    BaseFolderMenuItem(AppConfigFile& config,
+            MainConfigFile& mainConfig,
+            AppMenuItemFactory& menuItemFactory);
+
+    virtual ~BaseFolderMenuItem() { }
 
     /**
      * Check if this button is for an application folder
      * @return true
      */
     bool isFolder() const override;
-    
+
     /**
      * @return all menu items in this folder
      */
     virtual Array<AppMenuItem::Ptr> getFolderItems() const override;
 private:
-    DesktopEntries& desktopEntries;
+    AppMenuItemFactory& menuItemFactory;
+    
+    AppConfigFile& config;
 };
 
 

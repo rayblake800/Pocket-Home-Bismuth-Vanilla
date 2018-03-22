@@ -11,10 +11,6 @@ const std::vector<std::pair<uint8_t, char>> I2CBus::felModeSequence = {
     {0x7, 0x0}
 };
 
-I2CBus::I2CBus()
-{
-}
-
 /**
  * If the i2c bus file is still open at this point, it will be closed.
  */
@@ -24,7 +20,7 @@ I2CBus::~I2CBus()
 }
 
 /**
- * Read battery charge state from the i2c bus
+ * Reads the battery charge state from the i2c bus.
  */
 bool I2CBus::batteryIsCharging()
 {
@@ -34,7 +30,7 @@ bool I2CBus::batteryIsCharging()
 }
 
 /**
- * Read battery charge percentage from the i2c bus
+ * Reads the battery charge percentage from the i2c bus.
  */
 int I2CBus::batteryGaugePercent()
 {
@@ -55,12 +51,23 @@ void I2CBus::enableFelMode()
 }
 
 /**
- * Throw I2C exceptions when i2c bus access fails
+ * If the i2c bus file was opened, this will close it. Otherwise, nothing
+ * will happen.
+ */
+void I2CBus::i2cClose()
+{
+    if (i2cFileDescriptor > 0)
+    {
+        close(i2cFileDescriptor);
+        i2cFileDescriptor = -1;
+    }
+}
+
+/**
+ * Throw I2C exceptions when i2c bus access fails.
  */
 I2CBus::I2CException::I2CException(String errorMessage)
-: errorMessage(errorMessage)
-{
-}
+: errorMessage(errorMessage) { }
 
 /**
  * @return a short message explaining the i2c bus access failure.
@@ -71,10 +78,7 @@ String I2CBus::I2CException::getErrorMessage()
 }
 
 /**
- * Opens access to the i2c bus file
- * @post i2cFileDescriptor will be set to a valid file descriptor, if
- * the file could be opened.
- * @throws I2CException if unable to access the i2c bus
+ * Opens access to the i2c bus file.
  */
 void I2CBus::i2cOpen()
 {
@@ -86,19 +90,6 @@ void I2CBus::i2cOpen()
     if (ioctl(i2cFileDescriptor, I2C_SLAVE_FORCE, 0x34) < 0)
     {
         throw I2CException("Failed to set slave address");
-    }
-}
-
-/**
- * If the i2c bus file was opened, this will close it. Otherwise, nothing
- * will happen.
- */
-void I2CBus::i2cClose()
-{
-    if (i2cFileDescriptor > 0)
-    {
-        close(i2cFileDescriptor);
-        i2cFileDescriptor = -1;
     }
 }
 

@@ -3,9 +3,8 @@
 WifiStateManager::WifiStateManager() { }
 
 /**
- * On destruction, the WifiStateManager removes all references
- * to itself from its Listener objects, and destroys its
- * NetworkInterface.
+ * On destruction, the WifiStateManager removes all references to itself from 
+ * its Listener objects, and destroys its NetworkInterface.
  * This method acquires the WifiStateManager's stateLock.
  */
 WifiStateManager::~WifiStateManager()
@@ -22,14 +21,10 @@ WifiStateManager::~WifiStateManager()
 }
 
 /**
- * Assigns a NetworkInterface to this WifiStateManager.
- * The state manager will take ownership of the network
- * interface, deleting it on destruction or when a new
- * interface is provided through setNetworkInterface.
+ * Assigns a NetworkInterface to this WifiStateManager. The state manager will 
+ * take ownership of the network  interface, deleting it on destruction or when 
+ * a new interface is provided through setNetworkInterface.
  * This method acquires the WifiStateManager's stateLock.
- *
- * @param interface takes responsibility for communicating
- * with the Wifi device.
  */
 void WifiStateManager::setNetworkInterface(NetworkInterface* interface)
 {
@@ -44,9 +39,7 @@ void WifiStateManager::setNetworkInterface(NetworkInterface* interface)
 }
 
 /**
- * @return the current state of the wifi device, or
- * missingNetworkInterface if the NetworkInterface
- * hasn`t been set.
+ * Gets the current state of the wifi device.
  * This method acquires the WifiStateManager's stateLock.
  */
 WifiStateManager::WifiState WifiStateManager::getWifiState()
@@ -56,17 +49,8 @@ WifiStateManager::WifiState WifiStateManager::getWifiState()
 }
 
 /**
- * Add a listener to the list of objects receiving updates
- * whenever Wifi state changes.
- * This method acquires the WifiStateManager's stateLock.
- *
- * If the listener had already been added to another
- * WifiStateManager, it will be removed from that state manager
- * before it's added to this one.  In debug builds this will
- * also print a warning and fail an assertion, as there really
- * shouldn`t be more than one WifiStateManager.
- *
- * @param listener will be subscribed to state updates
+ * Add a listener to the list of objects receiving updates whenever Wifi state 
+ * changes. This method acquires the WifiStateManager's stateLock.
  */
 void WifiStateManager::addListener(Listener* listener)
 {
@@ -93,10 +77,8 @@ void WifiStateManager::addListener(Listener* listener)
 }
 
 /**
- * Search the list of registered listeners for a particular one,
- * and remove it if it's found.
- *  This method acquires the WifiStateManager's stateLock.
- * @param listener will be unsubscribed from state updates.
+ * Searches the list of registered listeners for a particular one, and removes
+ * it if it's found.  This method acquires the WifiStateManager's stateLock.
  */
 void WifiStateManager::removeListener(Listener* listener)
 {
@@ -109,8 +91,7 @@ void WifiStateManager::removeListener(Listener* listener)
 }
 
 /**
- * @return the current connected Wifi access point, or
- * a null WifiAccessPoint if there is no connection.
+ * Gets the connected wifi access point, if one exists.
  */
 WifiAccessPoint WifiStateManager::getConnectedAP()
 {
@@ -124,8 +105,7 @@ WifiAccessPoint WifiStateManager::getConnectedAP()
 }
 
 /**
- * @return the current connecting WifiAccessPoint if one
- * is found, or a null WifiAccessPoint if not connecting.
+ * Gets the connecting wifi access point, if one exists.
  */
 WifiAccessPoint WifiStateManager::getConnectingAP()
 {
@@ -139,8 +119,7 @@ WifiAccessPoint WifiStateManager::getConnectingAP()
 }
 
 /**
- * @return all wifi access points currently detected.
- * If wifi is disabled, this will return an empty list.
+ * Gets all access points visible to the wifi device.
  */
 Array<WifiAccessPoint> WifiStateManager::getVisibleAPs()
 {
@@ -154,7 +133,7 @@ Array<WifiAccessPoint> WifiStateManager::getVisibleAPs()
 }
 
 /**
- * @return true iff the wifi device is currently enabled.
+ * Checks if wifi is enabled.
  */
 bool WifiStateManager::isEnabled()
 {
@@ -166,7 +145,7 @@ bool WifiStateManager::isEnabled()
 }
 
 /**
- * @return true iff the wifi device is currently connected.
+ * Checks if the wifi device is connected to an access point.
  */
 bool WifiStateManager::isConnected()
 {
@@ -178,15 +157,9 @@ bool WifiStateManager::isConnected()
 }
 
 /**
- * Attempt to open a connection to a wifi access point.
- * This will fail if wifi is disabled, the access point is
- * invalid, or the psk is wrong.
+ * Attempts to open a connection to a wifi access point. This will fail if 
+ * wifi is disabled, the access point is invalid, or the psk is wrong.
  * This method acquires the WifiStateManager's stateLock.
- *
- * @param toConnect should be a valid nearby access point
- *
- * @param psk wifi key for toConnect, or the empty string
- * if toConnect isn't secured.
  */
 void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
@@ -271,8 +244,6 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
  * If currently connected to or trying to connect to a particular
  * access point, that connection will be closed or canceled.  This method
  * acquires the WifiStateManager's stateLock.
- * 
- * @param toDisconnect should be the connected or connecting access point.
  */
 void WifiStateManager::disconnect(const WifiAccessPoint& toDisconnect)
 {
@@ -350,9 +321,8 @@ void WifiStateManager::disconnect(const WifiAccessPoint& toDisconnect)
 }
 
 /**
- * If wifi is currently disabled, this will enable it.  Otherwise,
- * nothing will happen.  This method acquires the WifiStateManager's 
- * stateLock.
+ * If wifi is currently disabled, this will enable it.  Otherwise, nothing 
+ * will happen. This method acquires the WifiStateManager's stateLock.
  */
 void WifiStateManager::enableWifi()
 {
@@ -387,9 +357,8 @@ void WifiStateManager::enableWifi()
 }
 
 /**
- * If wifi is currently enabled, this will disable it.  Otherwise,
- * nothing will happen.  This method acquires the WifiStateManager's 
- * stateLock.
+ * If wifi is currently enabled, this will disable it. Otherwise, nothing 
+ * will happen. This method acquires the WifiStateManager's stateLock.
  */
 void WifiStateManager::disableWifi()
 {
@@ -426,7 +395,6 @@ void WifiStateManager::disableWifi()
     }
 }
 
-WifiStateManager::Listener::Listener() { }
 
 /**
  * On destruction, listeners will remove themselves from
@@ -443,10 +411,9 @@ WifiStateManager::Listener::~Listener()
 }
 
 /**
- * @return the current wifi state if the listener was added
- * to a WifiStateManager.  Otherwise, returns noStateManager.
- * If the listener was added to a state manager, this method 
- * indirectly acquires the WifiStateManager's stateLock.
+ * Gets the current wifi device state, if listening to a WifiStateManager. 
+ * If the listener was added to a state manager, this methods indirectly 
+ * acquires the WifiStateManager's stateLock.
  */
 WifiStateManager::WifiState WifiStateManager::Listener::getWifiState()
 {
@@ -458,13 +425,11 @@ WifiStateManager::WifiState WifiStateManager::Listener::getWifiState()
     return stateManager->getWifiState();
 }
 
-WifiStateManager::NetworkInterface::NetworkInterface() { }
 
 /**
- * If the NetworkInterface belongs to a WifiStateManager
- * and it's destroyed early, it will safely remove all
- * references to itself from the WifiStateManager.
- * This method acquires the WifiStateManager's stateLock.
+ * If the NetworkInterface belongs to a WifiStateManager and it's destroyed 
+ * early, it will safely remove all  references to itself from the 
+ * WifiStateManager.  This method acquires the WifiStateManager's stateLock.
  */
 WifiStateManager::NetworkInterface::~NetworkInterface()
 {
@@ -481,11 +446,10 @@ WifiStateManager::NetworkInterface::~NetworkInterface()
 }
 
 /**
- * This method queries the wifi device to ensure that the current 
- * tracked wifi state actually matches the device state.  If necessary,
- * this will update the WifiStateManager's current state.  The
- * NetworkInterface should call this method whenever it has reason
- * to believe the wifi state may be out of date.  
+ * This method queries the wifi device to ensure that the current tracked wifi 
+ * state actually matches the device state.  If necessary, this will update the 
+ * WifiStateManager's current state.  The NetworkInterface should call this 
+ * method whenever it has reason to believe the wifi state may be out of date.  
  * 
  * This method acquires the WifiStateManager's stateLock.
  */
@@ -577,14 +541,11 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
 
 /**
  * Whenever the wifi device detects a connection being established, the 
- * WifiNetworkInterface should call this to notify its WifiStateManager. 
- * This is intended to notify the state manager of unexpected
- * connections, so it's not necessary to call this for connections
- * opened by the state manager, but extra calls shouldn't cause any
- * real problems.
- * This method acquires the WifiStateManager's stateLock.
- *
- * @param connectedAP the newly connected access point
+ * NetworkInterface should call this to notify its WifiStateManager. This is 
+ * intended to notify the state manager of unexpected connections, so it's not 
+ * necessary to call this for connections opened by the state manager. Calls for
+ * known connection attempts will just be ignored.  This method acquires the 
+ * WifiStateManager's stateLock.
  */
 void WifiStateManager::NetworkInterface::signalWifiConnecting()
 {
@@ -610,12 +571,9 @@ void WifiStateManager::NetworkInterface::signalWifiConnecting()
 }
 
 /**
- * Whenever the wifi device establishes a new connection,
- * the NetworkInterface should call this to notify
- * its WifiStateManager.
- * This method acquires the WifiStateManager's stateLock.
- *
- * @param connectedAP the newly connected access point
+ * Whenever the wifi device establishes a new connection, the NetworkInterface 
+ * should call this to notify its WifiStateManager. This method acquires the 
+ * WifiStateManager's stateLock.
  */
 void WifiStateManager::NetworkInterface::signalWifiConnected
 (const WifiAccessPoint& connectedAP)
@@ -656,10 +614,9 @@ void WifiStateManager::NetworkInterface::signalWifiConnected
 }
 
 /**
- * Whenever the wifi device fails to connect to an access
- * point, the NetworkInterface should call this to
- * notify its WifiStateManager.
- * This method acquires the WifiStateManager's stateLock.
+ * Whenever the wifi device fails to connect to an access point, the 
+ * NetworkInterface should call this to  notify its WifiStateManager. This 
+ * method acquires the WifiStateManager's stateLock.
  */
 void WifiStateManager::NetworkInterface::signalConnectionFailed()
 {
@@ -695,9 +652,8 @@ void WifiStateManager::NetworkInterface::signalConnectionFailed()
 }
 
 /**
- * Whenever the wifi device disconnects from a wifi access
- * point, the NetworkInterface should call this to
- * notify its WifiStateManager.
+ * Whenever the wifi device disconnects from a wifi access point, the 
+ * NetworkInterface should call this to notify its WifiStateManager.
  * This method acquires the WifiStateManager's stateLock.
  */
 void WifiStateManager::NetworkInterface::signalWifiDisconnected()
@@ -741,10 +697,9 @@ void WifiStateManager::NetworkInterface::signalWifiDisconnected()
 }
 
 /**
- * Whenever the wifi device is turned on, the 
- * NetworkInterface should call this to
- * notify its WifiStateManager.
- * This method acquires the WifiStateManager's stateLock.
+ * Whenever the wifi device is turned on, the NetworkInterface should call this
+ * to notify its WifiStateManager. This method acquires the WifiStateManager's 
+ * stateLock.
  */
 void WifiStateManager::NetworkInterface::signalWifiEnabled()
 {
@@ -763,10 +718,9 @@ void WifiStateManager::NetworkInterface::signalWifiEnabled()
 }
 
 /**
- * Whenever the wifi device is turned off, the 
- * NetworkInterface should call this to
- * notify its WifiStateManager.
- * This method acquires the WifiStateManager's stateLock.
+ * Whenever the wifi device is turned off, the NetworkInterface should call this
+ * to notify its WifiStateManager. This method acquires the WifiStateManager's 
+ * stateLock.
  */
 void WifiStateManager::NetworkInterface::signalWifiDisabled()
 {
@@ -785,8 +739,7 @@ void WifiStateManager::NetworkInterface::signalWifiDisabled()
 }
 
 /**
- * @return true if the state manager is missing or in
- * an invalid state.
+ * @return true if the state manager is missing or in an invalid state.
  */
 bool WifiStateManager::NetworkInterface::invalidWifiState()
 {
@@ -807,7 +760,6 @@ bool WifiStateManager::NetworkInterface::invalidWifiState()
  * the NetworkInterface responds, the WifiStateManager will
  * assume that the wifi operation failed.
  * This method acquires the WifiStateManager's stateLock.
-
  */
 void WifiStateManager::timerCallback()
 {

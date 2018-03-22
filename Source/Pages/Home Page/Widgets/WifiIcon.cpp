@@ -1,17 +1,17 @@
-#include "PocketHomeApplication.h"
 #include "WifiAccessPoint.h"
 #include "Utils.h"
 #include "WifiIcon.h"
 
-WifiIcon::WifiIcon() :
+WifiIcon::WifiIcon(WifiStateManager& wifiManager) :
 WindowFocusedTimer("WifiIcon"),
-ConfigurableImageComponent(ComponentConfigFile::wifiIconKey)
+ConfigurableImageComponent(ComponentConfigFile::wifiIconKey),
+wifiManager(wifiManager)
 {
 
 #    if JUCE_DEBUG
     setName("WifiIcon");
 #    endif
-    PocketHomeApplication::getInstance()->getWifiManager().addListener(this);
+    wifiManager.addListener(this);
     startTimer(100);
 }
 
@@ -80,8 +80,6 @@ void WifiIcon::timerCallback()
             return;
     }
     //wifi connected
-    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
-            ->getWifiManager();
     WifiAccessPoint accessPoint = wifiManager.getConnectedAP();
     WifiIconImage wifiState = wifiOff;
     if (!accessPoint.isNull())

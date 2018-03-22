@@ -1,23 +1,19 @@
 /**
  * @file AdvancedSettingsPage.h
  * 
- * AdvancedSettingsPage is a navigation page containing buttons that open all
+ * AdvancedSettingsPage is a navigation page containing buttons that open
  * other settings pages.
  */
 #pragma once
 #include "PageComponent.h"
 #include "ConfigurableImageButton.h"
 #include "ScalingLabel.h"
-#include "HomeSettingsPage.h"
-#include "DateTimePage.h"
-#include "InputSettingsPage.h"
-#include "SetPasswordPage.h"
-#include "RemovePasswordPage.h"
 
 class AdvancedSettingsPage : public PageComponent{
 public:
-    AdvancedSettingsPage();
-    ~AdvancedSettingsPage();
+    AdvancedSettingsPage(PageComponent::PageFactoryInterface& pageFactory);
+    
+    ~AdvancedSettingsPage() {}
 
 private:
     /**

@@ -1,27 +1,23 @@
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <fcntl.h>
+#include "Display.h"
 #include "Utils.h"
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
 
-PocketHomeWindow::PocketHomeWindow(String windowName) :
+PocketHomeWindow::PocketHomeWindow(String windowName, bool fakeWifi) :
 WindowFocus::BroadcastWindow(windowName, Colours::darkgrey,
 DocumentWindow::allButtons),
-loginPage([this] ()
+lookAndFeel(mainConfig, componentConfig),
+pageFactory(mainConfig, componentConfig, fakeWifi)
 {
+    LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
 
-    setContentNonOwned(&pageStack, true);
-})
-{
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setBounds(10, 10, 480, 272);
-#else
-    Rectangle<int> screenSize =
-            Desktop::getInstance().getDisplays().getMainDisplay().userArea;
+#    else
+    Rectangle<int> screenSize = Display::getDisplaySize();
+
     setBounds(0, 0, screenSize.getWidth(), screenSize.getHeight());
-#endif
+#    endif
     setWantsKeyboardFocus(false);
     setUsingNativeTitleBar(true);
     setResizable(true, false);
@@ -29,20 +25,25 @@ loginPage([this] ()
     setVisible(true);
     setWantsKeyboardFocus(false);
 
-    if (loginPage.hasPassword())
+    loginPage = static_cast<LoginPage*>
+            (pageFactory.createLoginPage([this]()
+            {
+
+                setContentNonOwned(&pageStack, true);
+            }));
+
+    if (loginPage->hasPassword())
     {
-        setContentNonOwned(&loginPage, true);
-        loginPage.textFocus();
+        setContentNonOwned(loginPage, true);
+        loginPage->textFocus();
     }
     else
     {
         setContentNonOwned(&pageStack, true);
     }
-    pageStack.pushPage(&homePage, PageStackComponent::kTransitionNone);
-
+    pageStack.pushPage(pageFactory.createHomePage(),
+            PageComponent::Animation::none);
 }
-
-PocketHomeWindow::~PocketHomeWindow() { }
 
 /**
  * closes the application normally.
@@ -52,18 +53,13 @@ void PocketHomeWindow::closeButtonPressed()
     JUCEApplication::getInstance()->systemRequestedQuit();
 }
 
-//void PocketHomeWindow::paint(Graphics &g)
-//{
-//    g.fillAll(Colours::white);
-//}
-
 /**
  * Resize page content to match window size.
  */
 void PocketHomeWindow::resized()
 {
-    Rectangle<int> bounds = getLocalBounds();
+    const Rectangle<int>& bounds = getLocalBounds();
     pageStack.setBounds(bounds);
-    loginPage.setBounds(bounds);
+    loginPage->setBounds(bounds);
 }
 

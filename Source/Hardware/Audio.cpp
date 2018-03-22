@@ -118,13 +118,12 @@ bool Audio::initAudio()
 }
 
 /**
- * @return system audio volume level, as a percentage of the maximum
- *  volume.
+ * Gets the system's volume level.
  */
 int Audio::getVolumePercent()
-{ 
+{
     int volume = 0;
-#if JUCE_LINUX
+#    if JUCE_LINUX
     // Get initial brightness value
     ChildProcess child;
     // Get initial volume value
@@ -132,26 +131,26 @@ int Audio::getVolumePercent()
     if (child.start(cmd))
     {
         String result(child.readAllProcessOutput());
-        result = result.fromFirstOccurrenceOf("[",false,false);
+        result = result.fromFirstOccurrenceOf("[", false, false);
         result = result.initialSectionContainingOnly("0123456789");
         volume = result.getIntValue();
     }
-#endif
+#    endif
     return volume;
- }
+}
 
 /**
- * Change the system audio volume.
- * @param volumePercent volume level, from 0 to 100
+ * Changes the system audio volume level.
  */
-void Audio::setVolume(int volumePercent) {
-#if JUCE_LINUX
-    StringArray cmd{"amixer", "sset", "Power Amplifier", 
-            (String(volumePercent) + "%").toRawUTF8()};
+void Audio::setVolume(int volumePercent)
+{
+#    if JUCE_LINUX
+    StringArray cmd{"amixer", "sset", "Power Amplifier",
+                    (String(volumePercent) + "%").toRawUTF8()};
     ChildProcess child;
     if (child.start(cmd))
     {
-            String result(child.readAllProcessOutput());
+        String result(child.readAllProcessOutput());
     }
-#endif
+#    endif
 }

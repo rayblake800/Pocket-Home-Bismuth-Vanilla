@@ -1,13 +1,16 @@
 #include "Utils.h"
-#include "AppMenuItemFactory.h"
 #include "FolderMenuItem.h"
 
-FolderMenuItem::FolderMenuItem(const AppConfigFile::AppFolder& appFolder,
+FolderMenuItem::FolderMenuItem(AppConfigFile& appConfig,
+        MainConfigFile& mainConfig,
+        const AppConfigFile::AppFolder& appFolder,
+        AppMenuItemFactory& menuItemFactory,
         DesktopEntries& desktopEntries) :
+AppMenuItem(mainConfig),
+config(appConfig),
 appFolder(appFolder),
+menuItemFactory(menuItemFactory),
 desktopEntries(desktopEntries) { }
-
-FolderMenuItem::~FolderMenuItem() { }
 
 /**
  * Check if this button is for an application folder
@@ -28,7 +31,7 @@ Array<AppMenuItem::Ptr> FolderMenuItem::getFolderItems() const
     Array<AppMenuItem::Ptr> folderItems;
     for (const DesktopEntry& entry : folderEntries)
     {
-        folderItems.add(AppMenuItemFactory::create(entry));
+        folderItems.add(menuItemFactory.create(entry));
     }
     return folderItems;
 }
@@ -63,7 +66,6 @@ String FolderMenuItem::getIconName() const
  */
 bool FolderMenuItem::canChangeIndex(int offset) const
 {
-    AppConfigFile config;
     int newIndex = config.getFolderIndex(appFolder) + offset;
     return newIndex >= 0 && newIndex < config.getFolders().size();
 }
@@ -111,7 +113,6 @@ std::function<void(AppMenuPopupEditor*) > FolderMenuItem::getEditorCallback()
  */
 bool FolderMenuItem::removeMenuItemSource()
 {
-    AppConfigFile config;
     config.removeAppFolder(config.getFolderIndex(appFolder));
     return true;
 }
@@ -124,7 +125,6 @@ bool FolderMenuItem::moveDataIndex(int offset)
 {
     if (canChangeIndex(offset))
     {
-        AppConfigFile config;
         int index = config.getFolderIndex(appFolder);
         if (index < 0)
         {
@@ -149,7 +149,6 @@ bool FolderMenuItem::moveDataIndex(int offset)
 void FolderMenuItem::editFolder
 (String name, String icon, StringArray categories)
 {
-    AppConfigFile config;
     int index = config.getFolderIndex(appFolder);
     appFolder.name = name;
     appFolder.icon = icon;

@@ -69,10 +69,11 @@ protected:
      * the connection's success or failure after a randomized delay of nine to
      * twenty-four seconds.
      * 
-     * @param toConnect If this has the SSID "MyFi", a successful connection
+     * @param toConnect  If this has the SSID "MyFi", a successful connection
      *                    will be simulated.  For all other access points, a
      *                    failed connection will be simulated.
-     * @param psk       The security key for WifiAccessPoint toConnect, or the
+     * 
+     * @param psk        The security key for WifiAccessPoint toConnect, or the
      *                    empty string if the connection is not secured. This
      *                    value will be noted in debug output, but otherwise
      *                    is ignored.
@@ -100,6 +101,7 @@ protected:
     void disableWifi() override;
 
 private:
+    //Simulated wifi state variables.
     WifiAccessPoint connectedAP;
     WifiAccessPoint waitingToConnect;
     bool enabled = false;
@@ -107,5 +109,7 @@ private:
     bool disconnecting = false;
     bool turningOn = false;
     bool turningOff = false;
+    
+    //Disallows concurrent modification
     CriticalSection wifiLock;
 };

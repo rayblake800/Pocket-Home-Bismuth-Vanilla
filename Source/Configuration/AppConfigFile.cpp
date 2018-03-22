@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "AssetFiles.h"
 #include "AppConfigFile.h"
 
 Array<AppConfigFile::AppItem> AppConfigFile::favoriteApps;
@@ -7,14 +7,12 @@ CriticalSection AppConfigFile::appConfigLock;
 
 AppConfigFile::AppConfigFile() : ConfigFile(filenameConst)
 {
-    if (!fileOpened())
-    {
-        const ScopedLock readLock(appConfigLock);
-        var jsonConfig = openFile();
-        var defaultConfig = var();
-        readDataFromJson(jsonConfig, defaultConfig);
-        writeChanges();
-    }
+    const ScopedLock readLock(appConfigLock);
+    var jsonConfig = AssetFiles::loadJSONAsset
+            (String(CONFIG_PATH) + filenameConst, true);
+    var defaultConfig = var();
+    readDataFromJson(jsonConfig, defaultConfig);
+    writeChanges();
 }
 
 AppConfigFile::~AppConfigFile() { }

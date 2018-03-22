@@ -13,9 +13,9 @@ DrawableImageComponent::DrawableImageComponent
 placement(placement)
 {
 
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName(String("DrawableImageComponent:") + assetFilename);
-#endif
+#    endif
     setImage(assetFilename);
     setInterceptsMouseClicks(false, false);
 }
@@ -27,9 +27,9 @@ DrawableImageComponent::DrawableImageComponent
 (File imageFile, RectanglePlacement placement) :
 placement(placement)
 {
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName(String("DrawableImageComponent:") + imageFile.getFileName());
-#endif
+#    endif
     setImage(imageFile);
     setInterceptsMouseClicks(false, false);
 }
@@ -42,9 +42,9 @@ DrawableImageComponent::DrawableImageComponent(Image image,
 placement(placement)
 {
 
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("DrawableImageComponent");
-#endif
+#    endif
     setImage(image);
     setInterceptsMouseClicks(false, false);
 }
@@ -56,16 +56,14 @@ DrawableImageComponent::DrawableImageComponent
 (RectanglePlacement placement) :
 placement(placement)
 {
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("DrawableImageComponent");
-#endif
+#    endif
     setInterceptsMouseClicks(false, false);
 }
 
-DrawableImageComponent::~DrawableImageComponent() { }
-
 /**
- * Change the image drawn by this component
+ * Changes the image drawn by this component.
  */
 void DrawableImageComponent::setImage(String assetFilename)
 {
@@ -76,7 +74,7 @@ void DrawableImageComponent::setImage(String assetFilename)
 }
 
 /**
- * Change the image drawn by this component
+ * Changes the image drawn by this component.
  */
 void DrawableImageComponent::setImage(File imageFile)
 {
@@ -90,14 +88,14 @@ void DrawableImageComponent::setImage(File imageFile)
         }
         else
         {
-            DBG("DrawableImageComponent::" << __func__ << ": Failed to load " 
+            DBG("DrawableImageComponent::" << __func__ << ": Failed to load "
                     << imageFile.getFullPathName());
         }
     }
 }
 
 /**
- * Change the image drawn by this component
+ * Changes the image drawn by this component.
  */
 void DrawableImageComponent::setImage(Image image)
 {
@@ -107,11 +105,25 @@ void DrawableImageComponent::setImage(Image image)
     initImage();
 }
 
+/**
+ * Apply component colors to the image.
+ */
 void DrawableImageComponent::colourChanged()
 {
     if (imageSource.existsAsFile())
     {
         setImage(imageSource);
+    }
+}
+
+/**
+ * Adjust image size and placement whenever component size changes.
+ */
+void DrawableImageComponent::resized()
+{
+    if (imageDrawable != nullptr)
+    {
+        imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
     }
 }
 
@@ -168,16 +180,5 @@ void DrawableImageComponent::initImage()
          it != tempColours.end(); it++)
     {
         imageDrawable->replaceColour(Colour(it->first), Colour(it->second));
-    }
-}
-
-/**
- * Adjust image size and placement to match whenever component size changes.
- */
-void DrawableImageComponent::resized()
-{
-    if (imageDrawable != nullptr)
-    {
-        imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
     }
 }

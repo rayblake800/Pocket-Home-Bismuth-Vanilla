@@ -17,7 +17,8 @@ public ConnectionPage<BluetoothDevice>,
         public TextEditor::Listener  {
 public:
     
-    BluetoothSettingsPage();
+    BluetoothSettingsPage(PageFactoryInterface& pageFactory,
+            BluetoothStatus& bluetoothStatus);
     ~BluetoothSettingsPage();
 private:
     /**
@@ -127,6 +128,8 @@ private:
         ScopedPointer<DrawableImageComponent> lockIcon;
 
     };
+    
+    BluetoothStatus& bluetoothStatus;
 
     TextButton connectionButton;
     ScalingLabel errorLabel;

@@ -13,17 +13,17 @@
  * ConfigFile reads from each json file only once per program instance, so any 
  * external changes to the file that occur after that will be ignored and 
  * overwritten.  To reduce file IO and prevent concurrent file modification,
- * ConfigFile data is shared between ConfigFile instances.  ConfigFile objects
- * should be threadsafe.
- * @see Configurable.h
+ * only one ConfigFile object should exist for each json configuration file.  
+ * ConfigFile objects should be thread safe.
  */
 #pragma once
 #include <map>
 #include "JuceHeader.h"
 
-class Configurable;
+#define CONFIG_PATH "~/.pocket-home/"
 
-class ConfigFile {
+class ConfigFile
+{
 public:
 
     /**
@@ -32,48 +32,26 @@ public:
     virtual ~ConfigFile();
 
     /**
-     * Register an object as tracking configuration changes. That object
-     * is notified whenever any data it tracks is changed.
+     * Gets one of the values stored in the json configuration file.
      * 
-     * @param configurable
-     * @param keys defines all data keys that configurable is tracking.
-     * For each String key in keys, this ConfigFile will call 
-     * configurable->configChanged(key) every time it changes the value 
-     * of the data mapped to key.
-     */
-    void registerConfigurable(Configurable * configurable,
-            StringArray keys);
-
-    /**
-     * Removes an object from the list of objects to notify when configuration
-     * changes.
+     * @param   key The key string that maps to the desired value.
      * 
-     * @param configurable a configurable object to be unregistered.  If the
-     * object wasn't actually registered, nothing will happen.
+     * @throws  std::out_of_range if key does not map to a value of type T
+     *           in this config file
      * 
-     * @param keys all keys that the configurable object will no longer track.
-     * configurable will not be unregistered from any keys not contained in
-     * this list.
-     */
-    void unregisterConfigurable(Configurable * configurable,
-            StringArray keys);
-
-    /**
-     * Gets one of the values stored in the json configuration file
-     * 
-     * @param key
-     * @throws std::out_of_range if key does not map to a value of type T
-     * in this config file
-     * 
-     * @return the value from the config file
+     * @return  the value read from the config file.
      */
     template<typename T>
-    T getConfigValue(String key) {
+    T getConfigValue(String key)
+    {
         std::map<String, T>& fileDataMap = getMapReference<T>();
-        const ScopedLock readLock(getFileLock());
-        try {
+        const ScopedLock readLock(configLock);
+        try
+        {
             return fileDataMap.at(key);
-        } catch (std::out_of_range e) {
+        }
+        catch (std::out_of_range e)
+        {
             DBG("ConfigFile::" << __func__ << ": key \"" << key
                     << "\" is not value of this type stored in " << filename);
             throw e;
@@ -84,107 +62,161 @@ public:
      * Sets one of this ConfigFile's values, writing it to the config 
      * file if the value has changed.  
      * 
-     * @param key
-     * @param newValue
-     * @throws std::out_of_range if key does not map to a value of type T
-     * in this config file
+     * @param key        The key string that maps to the value being updated.
+     * 
+     * @param newValue   The new value to save to the file.
+     * 
+     * @throws           std::out_of_range if key does not map to a value of 
+     *                    type T in this config file
      */
     template<typename T>
-    void setConfigValue(String key, T newValue) {
+    void setConfigValue(String key, T newValue)
+    {
         std::map<String, T>& fileDataMap = getMapReference<T>();
-        const ScopedLock writeLock(getFileLock());
-        try {
-            if (fileDataMap.at(key) != newValue) {
-                fileChangesPending[filename] = true;
+        const ScopedLock writeLock(configLock);
+        try
+        {
+            if (fileDataMap.at(key) != newValue)
+            {
+                fileChangesPending = true;
                 fileDataMap[key] = newValue;
                 writeChanges();
 
-                const ScopedUnlock allowDataAccess(getFileLock());
-                notifyConfigurables(key);
+                const ScopedUnlock allowDataAccess(configLock);
+                notifyListeners(key);
             }
-        } catch (std::out_of_range e) {
+        }
+        catch (std::out_of_range e)
+        {
             DBG(__PRETTY_FUNCTION__ << ":");
-            DBG("\tkey " << key << " is not a value of this type stored in " 
+            DBG("\tkey " << key << " is not a value of this type stored in "
                     << filename);
             throw e;
         }
     }
-    
+
     /**
      * @return true iff this ConfigFile and rhs have the same filename.
      */
     bool operator==(const ConfigFile& rhs) const;
 
-protected:
+    /**
+     * Listeners receive updates whenever key values they track are updated in
+     * a config file.  Listeners may track any number of keys in any number of
+     * ConfigFile objects.
+     */
+    class Listener
+    {
+    protected:
+        friend class ConfigFile;
+
+        Listener() { }
+        
+        /**
+         * Listeners safely remove themselves from all tracked ConfigFiles when
+         * they are destroyed.
+         */
+        virtual ~Listener();
+        
+        /**
+         * Calls configValueChanged() for every key tracked by this listener.
+         */
+        void loadAllConfigProperties();
+        
+    private:
+        /**
+         * Called whenever a key tracked by this listener changes in the config
+         * file, listeners should override this to react to config changes.
+         * 
+         * @param config        A reference to the updated ConfigFile object.
+         * 
+         * @param propertyKey   Passes in the updated value's key.
+         */
+        virtual void configValueChanged
+        (ConfigFile* config, String propertyKey) = 0;
+        
+        //holds references to all ConfigFiles this listener follows.
+        Array<ConfigFile*> configFiles; 
+    };
     
+    /**
+     * Adds a listener to the list of objects to notify when config values
+     * change.
+     * 
+     * @param listener      The object that will be notified.
+     * 
+     * @param trackedKeys   The set of keys that the listener wants to track.
+     */
+    void addListener(Listener* listener, StringArray trackedKeys);
+    
+    /**
+     * Removes a listener from this ConfigFile.
+     * 
+     * @param listener  This will no longer receive updates on any changes to
+     *                   this ConfigFile.
+     */
+    void removeListener(Listener* listener);
+    
+    /**
+     * Announce new changes to each object tracking a particular key.
+     * 
+     * @param key maps to a value that has changed in this ConfigFile. 
+     * 
+     * @pre make sure the lock is not held when calling this, so that
+     *       the Configurable objects can read the property changes.
+     */
+    void notifyListeners(String key);
+
+protected:
+
     /**
      * Defines the basic data types that can be stored in all ConfigFile
      * objects.
      */
-    enum SupportedDataType{
+    enum SupportedDataType
+    {
         stringType,
         intType,
         boolType
     };
-    
-    struct DataKey{
-      String keyString;  
-      SupportedDataType dataType;
+
+    /**
+     * Used for tracking which data type is associated with a key.
+     */
+    struct DataKey
+    {
+        String keyString;
+        SupportedDataType dataType;
     };
-    
+
     /**
      * This constructor should only be called when constructing ConfigFile
      * subclasses.
      * 
-     * @param configFilename the name of a json file to be read or created in
-     * ~/.pocket-home/. There should be a file with the same name in the asset
-     * folder filled with default values.
+     * @param configFilename The name of a json file to be read or created in
+     *                        ~/.pocket-home/. There should be a file with the 
+     *                        same name in the asset folder filled with default 
+     *                        values.
      */
     ConfigFile(String configFilename);
 
     /**
-     * @return the CriticalSection shared by all ConfigFile objects that
-     * access the same file as this one.
-     */
-    CriticalSection& getFileLock();
-
-    /**
-     * Opens and reads data from this ConfigFile's json file.  This will mark
-     * the file as opened, so that ConfigFiles can avoid reading in file data
-     * more than once.
-     * @return the file's json data packaged as a var object, or a void var
-     * if the file was opened already.
-     */
-    var openFile();
-
-    /**
-     * Check to see if this ConfigFile has already read data from its json file.
-     * @return true iff the file has been read.
-     */
-    bool fileOpened();
-
-    /**
-     * Marks the ConfigFile as containing changes that need to be written
-     * back to the object's json file.
-     */
-    void markPendingChanges();
-
-    /**
-     * @return the keys to all integer variables tracked in this config file.
+     * @return the keys to all variables tracked in this config file.
      */
     virtual std::vector<DataKey> getDataKeys() const = 0;
 
     /**
      * Read in this object's data from a json config object
      * 
-     * @param config should pass in json configuration data from 
-     * ~/.pocket-home/<filename>.json
+     * @param config         This should pass in json configuration data from 
+     *                        ~/.pocket-home/<filename>.json.
      * 
-     * @param defaultConfig should be either json data from the default config 
-     * file in the assets folder, or a void var. 
-     * If defaultConfig is null and data is missing from the configuration file,
-     * this method will open <filename>.json and load all data into 
-     * defaultConfig. 
+     * @param defaultConfig  This should be either json data from the default 
+     *                        config file in the assets folder, or a void var. 
+     *                        If defaultConfig is null and data is missing from 
+     *                        the configuration file, this method will open 
+     *                        <filename>.json and load all data into 
+     *                        defaultConfig. 
      */
     virtual void readDataFromJson(var& config, var& defaultConfig);
 
@@ -225,6 +257,12 @@ protected:
      * if nothing was found in either var object.
      */
     var getProperty(var& config, var& defaultConfig, String key);
+    
+    /**
+     * Marks this ConfigFile as containing changes that need to be written to
+     * the underlying .json file.
+     */
+    void markPendingChanges();
 
     /**
      * Re-writes all data back to the config file, as long as there are
@@ -235,18 +273,6 @@ protected:
      */
     void writeChanges();
 
-    /**
-     * Announce new changes to each object tracking a particular key.
-     * 
-     * @param key maps to a value that has changed in this ConfigFile. 
-     * 
-     * @pre make sure the lock is not held when calling this, so that
-     * the Configurable objects can read the property changes.
-     */
-    void notifyConfigurables(String key);
-
-    String filename;
-    static constexpr const char* CONFIG_PATH = "/.pocket-home/";
 private:
 
     /**
@@ -254,7 +280,7 @@ private:
      * ConfigFiles with this object's filename.
      */
     template <class T> std::map<String, T>& getMapReference();
-    
+
     /**
      * Sets a property in the appropriate data map.  This does not notify
      * Configurables or mark the value as a change waiting to be written to the
@@ -263,20 +289,23 @@ private:
      * @param key
      * @param newValue
      */
-    template <class T> void initMapProperty(String key, T newValue) {
+    template <class T> void initMapProperty(String key, T newValue)
+    {
         std::map<String, T>& fileDataMap = getMapReference<T>();
-        const ScopedLock writeLock(getFileLock());
+        const ScopedLock writeLock(configLock);
         fileDataMap[key] = newValue;
     }
-    
 
-    static CriticalSection configLock;
-    static std::map<String, CriticalSection> fileLocks;
-    static std::map<String, bool> openFileMap;
-    static std::map<String, bool> fileChangesPending;
-    static std::map<String, std::map<String, int>> intValues;
-    static std::map<String, std::map<String, String>> stringValues;
-    static std::map<String, std::map<String, bool>> boolValues;
-    static std::map<String, std::map<String, Array<Configurable*>>> configured;
+    CriticalSection configLock;
+     
+    String filename;
+    
+    
+    bool fileChangesPending = false;
+    std::map<String, int> intValues;
+    std::map<String, String> stringValues;
+    std::map<String, bool> boolValues;
+    std::map<Listener*, StringArray> listenerKeys;
+    std::map<String, Array<Listener*>> keyListeners;
 
 };

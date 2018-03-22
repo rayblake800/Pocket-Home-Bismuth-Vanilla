@@ -24,6 +24,7 @@ class AppMenuPopupEditor : public PopupEditorComponent,
 public FileSelectTextEditor::Listener {
 public:
     /**
+     * @param config
      * @param title is printed at the top of the pop-up editor window
      * @param iconThread is used for loading preview icons
      * @param onConfirm is the callback function to run when the confirm button
@@ -36,7 +37,8 @@ public:
      * command field and an "open in terminal" check box.
      * @param showDeleteButton sets if the editor will contain a delete button.
      */
-    AppMenuPopupEditor(String title, IconThread& iconThread,
+    AppMenuPopupEditor(ComponentConfigFile& config,
+            String title, IconThread& iconThread,
             std::function<void(AppMenuPopupEditor*) > onConfirm,
             bool showCategoryList = true,
             bool showCommandField = true);

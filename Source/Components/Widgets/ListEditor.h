@@ -3,8 +3,8 @@
  * 
  * ListEditor provides a UI component for editing a list of strings.
  * The user can add new strings, edit existing ones by double clicking them,
- * and delete list items.  These changes are copied into the underlying String
- * Array, which can be obtained using getListItems(),
+ * and delete list items.  The edited list of strings can then be obtained with
+ * getListItems().
  */
 
 #pragma once
@@ -12,21 +12,20 @@
 #include "DrawableImageButton.h"
 #include "JuceHeader.h"
 
-class ListEditor : public Component,
-private Button::Listener,
-private Label::Listener,
-private ListBoxModel {
+class ListEditor : public Component, private Button::Listener,
+private Label::Listener, private ListBoxModel
+{
 public:
 
     /**
-     * Create a new ListEditor component
-     * @param initialList the list begins with these list items
+     * @param initialList  Sets the initial contents of the list.
      */
     ListEditor(StringArray initialList);
 
-    virtual ~ListEditor();
+    virtual ~ListEditor() { }
 
-    enum ColourIds {
+    enum ColourIds
+    {
         backgroundColourId = 0x1900100,
         listItemColourId = 0x1900101,
         selectedListItemColourId = 0x1900102,
@@ -45,7 +44,8 @@ public:
 
     /**
      * Replace the existing item list entries with new ones.
-     * @param newItems replacement list of Strings
+     * 
+     * @param newItems  The replacement list of strings.
      */
     void setListItems(StringArray newItems);
 
@@ -65,20 +65,25 @@ private:
      * Receives notifications when ListItemComponent text is changed.
      * These changes are then copied back to the appropriate string in the list
      * items.
-     * @param source the label component for one of the list rows.
+     * 
+     * @param source  The label component for one of the list rows.
      */
     void labelTextChanged(Label *source);
 
     /**
      * Clicking a listBoxItem selects it.
+     * 
      * @param row
+     * 
      * @param mouseEvent
      */
     void listBoxItemClicked(int row, const MouseEvent& mouseEvent);
 
     /**
      * Double clicking a listBoxItem makes it editable.
+     * 
      * @param row
+     * 
      * @param mouseEvent
      */
     virtual void listBoxItemDoubleClicked
@@ -86,12 +91,14 @@ private:
 
     /**
      * Pressing the delete key removes the selected row.
+     * 
      * @param lastRowSelected
      */
     void deleteKeyPressed(int lastRowSelected);
 
     /**
-     * Remove a string from the list and update the underlying ListBox
+     * Removes a string from the list, and updates the underlying ListBox.
+     * 
      * @param rowNumber
      */
     void removeRow(int rowNumber);
@@ -100,24 +107,27 @@ private:
      * Custom ListBox item component class, basically just a label with a 
      * delete button.
      **/
-    class ListItemComponent : public Label {
+    class ListItemComponent : public Label
+    {
     public:
         /**
-         * @param text initial list item text
-         * @param owner ListEditor containing this list item
+         * @param text  The initial list item text.
+         * 
+         * @param owner The ListEditor containing this list item.
          */
         ListItemComponent(String text, ListEditor * owner);
         virtual ~ListItemComponent();
 
         /**
-         * @param id should be set to String(rowIndex) by the
-         * ListEditor.
+         * @param id  This should be set to String(rowIndex) by the
+         *             ListEditor.
          */
         void setButtonComponentID(String id);
 
         /**
          * Sets button colour, used by the ListEditor to apply
-         * its color scheme to all list items
+         * its color scheme to all list items.
+         * 
          * @param colour
          */
         void setButtonColour(Colour colour);
@@ -126,24 +136,32 @@ private:
          * Update the font and delete button to fit new bounds.
          */
         void resized() override;
-        
+
     private:
         DrawableImageButton delBtn;
     };
 
     /**
-     * Create or recycle a list component to fit a list row.
-     * @param rowNumber
-     * @param isRowSelected
-     * @param existingComponentToUpdate
-     * @return 
+     * Creates or recycles a list component to fit a list row.
+     * 
+     * @param rowNumber                 Sets which list item the component will
+     *                                   represent.
+     * 
+     * @param isRowSelected             True iff the list row is selected.
+     * 
+     * @param existingComponentToUpdate Either an old list component to update,
+     *                                   or nullptr if a new component should be
+     *                                   created.
+     * 
+     * @return                          The created/updated list component.
      */
     Component* refreshComponentForRow(int rowNumber,
             bool isRowSelected,
             Component * existingComponentToUpdate);
 
     /**
-     * Handles add and delete item buttons
+     * Handles the add and delete item buttons.
+     * 
      * @param buttonClicked
      */
     void buttonClicked(Button* buttonClicked) override;
@@ -153,18 +171,27 @@ private:
      * handles its own draw operations.
      */
     void paintListBoxItem(int rowNumber, Graphics&g, int width,
-            int height, bool rowIsSelected);
-    
+            int height, bool rowIsSelected) override { }
+
     /**
-     * Re-apply the layout and adjust list item height to fit the new
+     * Re-applies the layout and adjusts list item height to fit the new
      * bounds.
      */
     void resized() override;
 
+    //Holds all list strings.
     StringArray listItems;
+
+    //Handles the layout of the list and the editor components.
     RelativeLayoutManager layoutManager;
+
+    //The component displaying all list items.
     ListBox listContainer;
+
+    //Text field for entering new list item text.
     TextEditor newItemField;
+
+    //Button for adding the contents of newItemField to the list.
     TextButton addItemBtn;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ListEditor)

@@ -1,15 +1,14 @@
 #include "ConfigurableImageButton.h"
 
 ConfigurableImageButton::ConfigurableImageButton
-(String componentKey, int assetIndex, RectanglePlacement placement) :
-buttonImage(componentKey, assetIndex, placement),
-ConfigurableComponent(componentKey),
+(ComponentConfigFile& config, String componentKey, int assetIndex, 
+        RectanglePlacement placement) :
+buttonImage(config, componentKey, assetIndex, placement),
+ConfigurableComponent(config, componentKey),
 Button(componentKey + "Button")
 {
     addAndMakeVisible(buttonImage);
 }
-
-ConfigurableImageButton::~ConfigurableImageButton() { }
 
 /**
  * Load a new image from a different asset file

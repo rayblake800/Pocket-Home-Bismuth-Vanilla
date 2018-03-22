@@ -7,11 +7,12 @@
  */
 #pragma once
 
-#include "PowerPage.h"
-#include "SettingsPage.h"
 #include "OverlaySpinner.h"
+#include "WifiStateManager.h"
 #include "PageComponent.h"
 #include "AppConfigFile.h"
+#include "ComponentConfigFile.h"
+#include "MainConfigFile.h"
 #include "ConfigurableImageButton.h"
 #include "ClockLabel.h"
 #include "BatteryIcon.h"
@@ -25,9 +26,13 @@
  *  -Complete documentation
  */
 
-class HomePage : public PageComponent, public Configurable{
+class HomePage : public PageComponent, public ConfigFile::Listener{
 public:
-    HomePage();
+    HomePage(PageFactoryInterface& pageFactory, 
+            WifiStateManager& wifiState,
+            MainConfigFile& mainConfig,
+            ComponentConfigFile& componentConfig);
+    
     virtual ~HomePage();
 
 protected:
@@ -76,14 +81,15 @@ private:
      */
     void visibilityChanged() override;
 
-
-
-
     /**
      * 
      */
     void pageResized() override;
 
+    AppConfigFile appConfig;
+    MainConfigFile& mainConfig;
+    ComponentConfigFile& componentConfig;
+    
     OverlaySpinner loadingSpinner;
     ClockLabel clock;
     ScopedPointer<AppMenuComponent> appMenu;
@@ -92,9 +98,7 @@ private:
 
     ConfigurableImageButton powerButton;
     ConfigurableImageButton settingsButton;
-
-    PowerPage powerPage;
-    ScopedPointer<SettingsPage> settingsPage;
+    
     ConfigurableImageComponent frame;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomePage);

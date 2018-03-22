@@ -1,8 +1,8 @@
-#include "MainConfigFile.h"
 #include "HomeSettingsPage.h"
 
-HomeSettingsPage::HomeSettingsPage() :
-PageComponent("HomeSettingsPage",{
+HomeSettingsPage::HomeSettingsPage
+(PageFactoryInterface& pageFactory, ainConfigFile& mainConfig) :
+PageComponent(pageFactory, "HomeSettingsPage",{
     {
         { 3,
             {
@@ -39,6 +39,7 @@ PageComponent("HomeSettingsPage",{
             }}
     }
 }, true),
+config(config),
 title("personalizeTitle", "Homepage Settings"),
 bgTitle("bgTitle", "Background:"),
 bgTypePicker("bgTypePicker"),
@@ -54,9 +55,9 @@ rowCounter(1, 1, 9),
 colourPageBtn("Set colors")
 {
 
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("HomeSettingsPage");
-#endif
+#    endif
     title.setJustificationType(Justification::centred);
     bgTypePicker.addItem("Default", 1);
     bgTypePicker.addItem("Color", 2);
@@ -72,28 +73,25 @@ colourPageBtn("Set colors")
         menuTypePicker.addItem(MainConfigFile::menuTypes[i], i + 1);
     }
     menuTypePicker.addListener(this);
-
-    MainConfigFile config;
+    
     rowCounter.setValue(config.getConfigValue<int>
             (MainConfigFile::maxRowsKey));
 
     columnCounter.setValue(config.getConfigValue<int>
             (MainConfigFile::maxColumnsKey));
-    
+
     colourPageBtn.addListener(this);
-    
+
     updateComboBox();
     addAndShowLayoutComponents();
 }
-
-HomeSettingsPage::~HomeSettingsPage() { }
 
 /**
  * Update AppMenu dimensions when the page closes.
  */
 void HomeSettingsPage::pageRemovedFromStack()
 {
-    MainConfigFile config;
+    
     config.setConfigValue<int>(MainConfigFile::maxRowsKey,
                                rowCounter.getValue());
     config.setConfigValue<int>(MainConfigFile::maxColumnsKey,
@@ -102,7 +100,7 @@ void HomeSettingsPage::pageRemovedFromStack()
 
 void HomeSettingsPage::updateComboBox()
 {
-    MainConfigFile config;
+    
     /* Checking the current configuration */
     String background = config.getConfigValue<String>(MainConfigFile::backgroundKey);
     bool display = false;
@@ -133,7 +131,6 @@ void HomeSettingsPage::updateComboBox()
 
 void HomeSettingsPage::comboBoxChanged(ComboBox * box)
 {
-    MainConfigFile config;
     if (box == &bgTypePicker)
     {
         bgEditor.setText("", NotificationType::dontSendNotification);
@@ -168,14 +165,12 @@ void HomeSettingsPage::pageButtonClicked(Button* button)
 {
     if (button == &colourPageBtn)
     {
-        pushPageToStack(&colourPage,
-                PageStackComponent::kTransitionTranslateHorizontal);
+        pushPageToStack(PageComponent::PageType::Colour);
     }
 }
 
 void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
 {
-    MainConfigFile config;
     String value = edited->getText();
     //color value
     if (bgTypePicker.getSelectedId() == 2)

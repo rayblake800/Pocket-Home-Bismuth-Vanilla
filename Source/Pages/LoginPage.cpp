@@ -43,7 +43,7 @@ foundPassword(false)
 #if JUCE_DEBUG
     setName("LoginPage");
 #endif
-    setBackgroundImage(AssetFiles::createImageAsset("login/background.png"));
+    setBackgroundImage(AssetFiles::loadImageAsset("login/background.png"));
     loginButton.addListener(this);
     passwordField.addListener(this);
     addAndShowLayoutComponents();

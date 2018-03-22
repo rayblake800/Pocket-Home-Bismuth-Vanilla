@@ -2,11 +2,12 @@
 #include "ScrollingAppFolder.h"
 #include "ScrollingAppMenu.h"
 
-ScrollingAppMenu::ScrollingAppMenu(OverlaySpinner& loadingSpinner) :
-AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey,
-loadingSpinner) { }
-
-ScrollingAppMenu::~ScrollingAppMenu() { }
+ScrollingAppMenu::ScrollingAppMenu(MainConfigFile& mainConfig,
+        ComponentConfigFile& componentConfig,
+        AppConfigFile& appConfig,
+        OverlaySpinner& loadingSpinner) :
+AppMenuComponent(mainConfig, componentConfig, appConfig,
+ComponentConfigFile::scrollingAppMenuKey, loadingSpinner) { }
 
 /**
  * Use key presses for menu navigation, setting specific controls based on 
@@ -22,7 +23,7 @@ bool ScrollingAppMenu::folderKeyPressed(const KeyPress& key,
         activeFolder->selectIndex(0);
     }
     int newIndex = selectedIndex;
-    DBG("ScrollingAppMenu::" << __func__ << ":On selected index " 
+    DBG("ScrollingAppMenu::" << __func__ << ":On selected index "
             << selectedIndex << ", pressed key " << key.getTextDescription());
     if (selectedIndex == -1)
     {

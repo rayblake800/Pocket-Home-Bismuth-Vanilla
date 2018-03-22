@@ -14,11 +14,12 @@
 class NewDesktopAppEditor : public AppMenuPopupEditor {
 public:
     /**
-     * 
+     * @param config
      * @param iconThread
      * @param onConfirm
      */
-    NewDesktopAppEditor(IconThread& iconThread,
+    NewDesktopAppEditor(ComponentConfigFile& config,
+            IconThread& iconThread,
             std::function<void() > onConfirm = []() {
             });
 };

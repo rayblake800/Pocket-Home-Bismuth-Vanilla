@@ -76,10 +76,10 @@ protected:
     /**
      * Attempt to connect to a wifi access point.
      * 
-     * @param toConnect This defines the access point that should be connected
-     *                    to. 
-     * @param psk       This is the access point's security key, or the empty 
-     *                   string if toConnect is unsecured.
+     * @param toConnect  The access point that should be connected to. 
+     * 
+     * @param psk       The access point's security key, or the empty string if
+     *                   toConnect is unsecured.
      */
     void connectToAccessPoint(const WifiAccessPoint& toConnect,
             String psk = String()) override;
@@ -108,12 +108,16 @@ private:
      * signalConnectionFailed()
      * 
      * @param client     The network manager client object.
+     * 
      * @param active     The attempted wifi connection.
+     * 
      * @param path       The device path for the wifi access point.
+     * 
      * @param err        This will hold error data if the connection attempt 
-     *                     failed.
+     *                    failed.
+     * 
      * @param user_data  A pointer to the LibNMInterface object. This can be
-     *                     directly typecast to LibNMInterface*
+     *                    directly typecast to LibNMInterface*
      */
     static void handleConnectionAttempt(NMClient* client,
             NMActiveConnection* active,
@@ -169,43 +173,59 @@ private:
     /**
      * Generate a unique hash string identifying a wifi access point.
      * Adapted from network-manager-applet src/utils/utils.c 
+     * 
      * @param ap
      */
     char* hashAP(NMAccessPoint* ap);
 
     /**
-     * @param ap
+     * Checks the security on a libnm access point object.
+     * 
+     * @param  ap
+     * 
      * @return true iff ap is a secure access point.
      */
     bool resolveAPSecurity(NMAccessPoint* ap);
 
     /**
-     * @param ap
+     * Creates a WifiAccessPoint from a libnm access point object.
+     * 
+     * @param  ap
+     * 
      * @return WifiAccessPoint data read from a NMAccessPoint
      */
     WifiAccessPoint createNMWifiAccessPoint(NMAccessPoint* ap);
 
 
     /**
-     * Close a specific wifi connection on wifi device wlan0.
+     * Closes a specific wifi connection on wifi device wlan0.
      * 
-     * @param conn the connection to close
+     * @param conn  the connection to close
      */
     void removeNMConnection(NMActiveConnection* conn = nullptr);
 
     /**
-     * @param key
+     * Checks the validity of a potential WEP access point key string.
+     * 
+     * @param  key
+     * 
      * @return true iff key has the correct format for a WEP key.
      */
     bool isValidWEPKeyFormat(String key);
 
     /**
+     * Checks the validity of a potential WEP passphrase.
+     * 
      * @param phrase
+     * 
      * @return true iff phrase has the correct format for a WEP passphrase.
      */
     bool isValidWEPPassphraseFormat(String phrase);
 
+    //Prevent concurrent access to the wifi device.
     CriticalSection wifiLock;
+    
+    //libnm network manager objects
     NMClient* nmClient = nullptr;
     NMDevice* nmDevice = nullptr;
     GMainContext *context;

@@ -2,10 +2,10 @@
 #include "MainConfigFile.h"
 #include "DesktopEntryMenuItem.h"
 
-DesktopEntryMenuItem::DesktopEntryMenuItem(const DesktopEntry& desktopEntry)
-: desktopEntry(desktopEntry) { }
-
-DesktopEntryMenuItem::~DesktopEntryMenuItem() { }
+DesktopEntryMenuItem::DesktopEntryMenuItem(MainConfigFile& config,
+            const DesktopEntry& desktopEntry)
+: AppMenuItem(config),
+        desktopEntry(desktopEntry) { }
 
 /**
  * @return true if this menu item is an application folder
@@ -31,9 +31,7 @@ String DesktopEntryMenuItem::getCommand() const
     String command = desktopEntry.getValue(DesktopEntry::exec);
     if (desktopEntry.getValue(DesktopEntry::terminal))
     {
-        MainConfigFile config;
-        command = config.getConfigValue<String>
-                (MainConfigFile::termLaunchCommandKey) + String(" ") + command;
+        command = getTermLaunchPrefix() + String(" ") + command;
     }
     return command;
 }

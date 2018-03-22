@@ -6,19 +6,26 @@
 #include "ScrollingAppMenu.h"
 #include "HomePage.h"
 
-HomePage::HomePage() :
-PageComponent("HomePage"),
-Configurable(new MainConfigFile(),{
-    MainConfigFile::backgroundKey,
-    MainConfigFile::menuTypeKey
-}),
+HomePage::HomePage(PageFactoryInterface& pageFactory,
+        WifiStateManager& wifiState,
+        MainConfigFile& mainConfig,
+        ComponentConfigFile& componentConfig) :
+PageComponent(pageFactory, "HomePage"),
 frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
+wifiIcon(wifiState),
+mainConfig(mainConfig),
+componentConfig(componentConfig),
 powerButton(ComponentConfigFile::powerButtonKey),
 settingsButton(ComponentConfigFile::settingsButtonKey)
 {
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("HomePage");
-#endif
+#    endif
+
+    mainConfig.addListener(this,{
+        MainConfigFile::backgroundKey,
+        MainConfigFile::menuTypeKey
+    });
 
     setWantsKeyboardFocus(true);
     addAndMakeVisible(frame);
@@ -88,7 +95,10 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
                 {
                     DBG("HomePage::" << __func__
                             << ": Initializing scrolling menu");
-                    appMenu = new ScrollingAppMenu(loadingSpinner);
+                    appMenu = new ScrollingAppMenu(mainConfig,
+                            componentConfig,
+                            appConfig,
+                            loadingSpinner);
                 }
                 else
                 {
@@ -102,7 +112,10 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
                 {
                     DBG("HomePage::" << __func__
                             << ": Initializing paged menu");
-                    appMenu = new PagedAppMenu(loadingSpinner);
+                    appMenu = new PagedAppMenu(mainConfig,
+                            componentConfig,
+                            appConfig,
+                            loadingSpinner);
                 }
                 else
                 {
@@ -120,6 +133,7 @@ void HomePage::loadConfigProperties(ConfigFile* config, String key)
 
 
 //Forward all clicks (except button clicks) to the appMenu 
+
 void HomePage::mouseDown(const MouseEvent &event)
 {
     if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
@@ -132,13 +146,12 @@ void HomePage::pageButtonClicked(Button * button)
 {
     if (button == &settingsButton)
     {
-        pushPageToStack(settingsPage,
-                PageStackComponent::kTransitionTranslateHorizontal);
+        pushPageToStack(PageComponent::PageType::Settings);
     }
     else if (button == &powerButton)
     {
-        pushPageToStack(&powerPage,
-                PageStackComponent::kTransitionTranslateHorizontalLeft);
+        pushPageToStack(PageComponent::PageType::Power,
+                PageComponent::Animation::slideInFromRight);
     }
 }
 
@@ -163,7 +176,6 @@ void HomePage::visibilityChanged()
         });
     }
 }
-
 
 void HomePage::pageResized()
 {

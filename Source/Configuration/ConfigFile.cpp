@@ -1,48 +1,25 @@
 #include "AssetFiles.h"
-#include "Configurable.h"
 #include "ConfigFile.h"
 
 template<> std::map<String, int>& ConfigFile::getMapReference<int>()
 {
     const ScopedLock lockFileMaps(configLock);
-    return intValues[filename];
+    return intValues;
 }
 
 template<> std::map<String, String>& ConfigFile::getMapReference<String>()
 {
     const ScopedLock lockFileMaps(configLock);
-    return stringValues[filename];
+    return stringValues;
 }
 
 template<> std::map<String, bool>& ConfigFile::getMapReference<bool>()
 {
     const ScopedLock lockFileMaps(configLock);
-    return boolValues[filename];
+    return boolValues;
 }
 
-CriticalSection ConfigFile::configLock;
-std::map<String, CriticalSection> ConfigFile::fileLocks;
-std::map<String, bool> ConfigFile::openFileMap;
-std::map<String, bool> ConfigFile::fileChangesPending;
-std::map<String, std::map<String, int>> ConfigFile::intValues;
-std::map<String, std::map<String, String>> ConfigFile::stringValues;
-std::map<String, std::map<String, bool>> ConfigFile::boolValues;
-std::map<String, std::map<String, Array<Configurable*>>>
-ConfigFile::configured;
-
-ConfigFile::ConfigFile(String configFilename) : filename(configFilename)
-{
-    const ScopedLock changeLock(configLock);
-    if (fileChangesPending.count(filename) == 0)
-    {
-        fileChangesPending[filename] = false;
-    }
-
-    if (fileChangesPending.count(filename) == 0)
-    {
-        openFileMap[filename] = false;
-    }
-}
+ConfigFile::ConfigFile(String configFilename) : filename(configFilename) { }
 
 /**
  * Writes any pending changes to the file before destruction.
@@ -54,34 +31,6 @@ ConfigFile::~ConfigFile()
 }
 
 /**
- * Register an object as tracking configuration changes. That object
- * is notified whenever any data it tracks is changed.
- */
-void ConfigFile::registerConfigurable(Configurable * configurable,
-        StringArray keys)
-{
-    const ScopedLock changeLock(configLock);
-    for (const String& key : keys)
-    {
-        configured[filename][key].add(configurable);
-    }
-}
-
-/**
- * Removes an object from the list of objects to notify when configuration
- * changes.
- */
-void ConfigFile::unregisterConfigurable(Configurable * configurable,
-        StringArray keys)
-{
-    const ScopedLock changeLock(configLock);
-    for (const String& key : keys)
-    {
-        configured[filename][key].removeAllInstancesOf(configurable);
-    }
-}
-
-/**
  * @return true iff this ConfigFile and rhs have the same filename.
  */
 bool ConfigFile::operator==(const ConfigFile& rhs) const
@@ -90,54 +39,77 @@ bool ConfigFile::operator==(const ConfigFile& rhs) const
 }
 
 /**
- * @return the CriticalSection shared by all ConfigFile objects that
- * access the same file as this one.
+ * Listeners safely remove themselves from all tracked ConfigFiles when
+ * they are destroyed.
  */
-CriticalSection& ConfigFile::getFileLock()
+ConfigFile::Listener::~Listener()
 {
-    const ScopedLock readLock(configLock);
-    return fileLocks[filename];
-}
-
-/**
- * Opens and reads data from this ConfigFile's json file.  This will mark
- * the file as opened, so that ConfigFiles can avoid reading in file data
- * more than once.
- */
-var ConfigFile::openFile()
-{
-    const ScopedLock readLock(getFileLock());
-    if (fileOpened())
+    for (ConfigFile* config : configFiles)
     {
-        return var();
+        config->removeListener(this);
     }
-    openFileMap[filename] = true;
-    File configFile = File("~" + String(CONFIG_PATH) + filename);
-    return JSON::parse(configFile);
 }
 
 /**
- * Check to see if this ConfigFile has already read data from its json file.
- * @return true iff the file has been read.
+ * Calls configValueChanged() for every key tracked by this listener.
  */
-bool ConfigFile::fileOpened()
+void ConfigFile::Listener::loadAllConfigProperties()
 {
-    const ScopedLock lockFileMaps(configLock);
-    const ScopedLock lockFileData(getFileLock());
-    return openFileMap[filename];
+    for (ConfigFile* config : configFiles)
+    {
+        for (const String& key : config->listenerKeys[this])
+        {
+            configValueChanged(config, key);
+        }
+    }
 }
 
 /**
- * Marks the ConfigFile as containing changes that need to be written
- * back to the object's json file.
+ * Adds a listener to the list of objects to notify when config values
+ * change.
  */
-void ConfigFile::markPendingChanges()
+void ConfigFile::addListener(ConfigFile::Listener* listener,
+        StringArray trackedKeys)
 {
-    const ScopedLock lockFileMaps(configLock);
-    const ScopedLock lockFileData(getFileLock());
-    fileChangesPending[filename] = true;
+    const ScopedLock writeLock(configLock);
+    listener->configFiles.addIfNotAlreadyThere(this);
+    listenerKeys[listener].addArray(trackedKeys);
+    listenerKeys[listener].removeDuplicates(false);
+    for (const String& key : trackedKeys)
+    {
+        keyListeners[key].addIfNotAlreadyThere(listener);
+    }
 }
 
+/**
+ * Removes a listener from this ConfigFile.
+ */
+void ConfigFile::removeListener(ConfigFile::Listener* listener)
+{
+    const ScopedLock writeLock(configLock);
+    for (const String& key : listenerKeys[listener])
+    {
+        keyListeners[key].removeAllInstancesOf(listener);
+    }
+    listenerKeys[listener].clear();
+    listener->configFiles.removeAllInstancesOf(this);
+}
+
+/**
+ * Announce new changes to each object tracking a particular key.
+ * 
+ * @param key maps to a value that has changed in this ConfigFile. 
+ * 
+ * @pre make sure the lock is not held when calling this, so that
+ *       the Configurable objects can read the property changes.
+ */
+void ConfigFile::notifyListeners(String key)
+{
+    for (Listener* listener : keyListeners[key])
+    {
+        listener->configValueChanged(this, key);
+    }
+}
 
 //################################# File IO ####################################
 
@@ -153,17 +125,20 @@ void ConfigFile::readDataFromJson(var& config, var& defaultConfig)
         {
             case stringType:
                 initMapProperty<String>(key.keyString, getProperty
-                        (config, defaultConfig, key.keyString).toString());
+                                        (config, defaultConfig, key.keyString)
+                                        .toString());
                 break;
 
             case intType:
                 initMapProperty<int>(key.keyString,
-                        getProperty(config, defaultConfig, key.keyString));
+                                     getProperty(config, defaultConfig,
+                                     key.keyString));
                 break;
 
             case boolType:
                 initMapProperty<bool>(key.keyString,
-                        getProperty(config, defaultConfig, key.keyString));
+                                      getProperty(config, defaultConfig,
+                                      key.keyString));
                 break;
         }
     }
@@ -221,15 +196,24 @@ var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
     }
     else
     {
-        DBG("ConfigFile::" << __func__ << ": key " << key 
+        DBG("ConfigFile::" << __func__ << ": key " << key
                 << " doesn't exist in " << filename);
         if (defaultConfig.isVoid())
         {
-            defaultConfig = JSON::parse(AssetFiles::findAssetFile(filename));
+            defaultConfig = AssetFiles::loadJSONAsset(filename, false);
         }
-        fileChangesPending[filename] = true;
+        fileChangesPending = true;
         return defaultConfig.getProperty(key, var());
     }
+}
+
+/**
+ * Marks this ConfigFile as containing changes that need to be written to
+ * the underlying .json file.
+ */
+void ConfigFile::markPendingChanges()
+{
+    fileChangesPending = true;
 }
 
 /**
@@ -242,7 +226,7 @@ var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
  */
 void ConfigFile::writeChanges()
 {
-    if (!fileChangesPending[filename])
+    if (!fileChangesPending)
     {
         return;
     }
@@ -251,7 +235,7 @@ void ConfigFile::writeChanges()
 
     //convert to JSON string, write to config.json
     String jsonText = JSON::toString(jsonBuilder.get());
-    File configFile = File("~" + String(CONFIG_PATH) + filename);
+    File configFile = File(String(CONFIG_PATH) + filename);
     if (!configFile.exists())
     {
         configFile.create();
@@ -268,18 +252,6 @@ void ConfigFile::writeChanges()
     }
     else
     {
-
-        fileChangesPending[filename] = false;
-    }
-}
-
-/**
- * Announce new changes to each object tracking a particular key.
- */
-void ConfigFile::notifyConfigurables(String key)
-{
-    for (Configurable * tracking : configured[filename][key])
-    {
-        tracking->loadConfigProperties(this, key);
+        fileChangesPending = false;
     }
 }

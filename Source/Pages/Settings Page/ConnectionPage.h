@@ -23,7 +23,7 @@ template<class ConnectionPoint>
 class ConnectionPage : public PageComponent {
 public:
 
-    ConnectionPage();
+    ConnectionPage(PageFactoryInterface& pageFactory);
 
     virtual ~ConnectionPage();
 

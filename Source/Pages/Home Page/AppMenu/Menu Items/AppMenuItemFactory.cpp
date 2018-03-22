@@ -4,21 +4,30 @@
 #include "BaseFolderMenuItem.h"
 #include "AppMenuItemFactory.h"
 
+AppMenuItemFactory::AppMenuItemFactory(AppConfigFile& appConfig,
+        MainConfigFile& mainConfig,
+        DesktopEntries& desktopEntries) :
+appConfig(appConfig),
+mainConfig(mainConfig),
+desktopEntries(desktopEntries) { }
+
 /**
  * Create the folder menu item that defines the base menu folder
  */
-AppMenuItem::Ptr AppMenuItemFactory::createBaseFolderItem
-(DesktopEntries& desktopEntries)
+AppMenuItem::Ptr AppMenuItemFactory::createBaseFolderItem()
 {
-    return new BaseFolderMenuItem(desktopEntries);
+    return new BaseFolderMenuItem(appConfig,
+            mainConfig,
+            *this);
 }
 
 /**
  * Get an AppMenuItem for an application link provided by the AppConfigFile
  */
-AppMenuItem::Ptr AppMenuItemFactory::create(const AppConfigFile::AppItem& appItem)
+AppMenuItem::Ptr AppMenuItemFactory::create
+(const AppConfigFile::AppItem& appItem)
 {
-    return new ConfigAppMenuItem(appItem);
+    return new ConfigAppMenuItem(appConfig, mainConfig, appItem);
 }
 
 /**
@@ -27,7 +36,7 @@ AppMenuItem::Ptr AppMenuItemFactory::create(const AppConfigFile::AppItem& appIte
  */
 AppMenuItem::Ptr AppMenuItemFactory::create(const DesktopEntry& desktopEntry)
 {
-    return new DesktopEntryMenuItem(desktopEntry);
+    return new DesktopEntryMenuItem(mainConfig, desktopEntry);
 }
 
 /**
@@ -35,11 +44,12 @@ AppMenuItem::Ptr AppMenuItemFactory::create(const DesktopEntry& desktopEntry)
  * AppConfigFile
  */
 AppMenuItem::Ptr AppMenuItemFactory::create
-(const AppConfigFile::AppFolder& appFolder, DesktopEntries& desktopEntries)
+(const AppConfigFile::AppFolder& appFolder)
 {
-    return new FolderMenuItem(appFolder,desktopEntries);
+    return new FolderMenuItem(appConfig,
+            mainConfig,
+            appFolder,
+            *this,
+            desktopEntries);
 }
 
-AppMenuItemFactory::AppMenuItemFactory() { }
-
-AppMenuItemFactory::~AppMenuItemFactory() { }

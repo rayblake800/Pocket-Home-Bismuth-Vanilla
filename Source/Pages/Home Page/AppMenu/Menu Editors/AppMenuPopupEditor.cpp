@@ -1,11 +1,14 @@
 #include "Utils.h"
 #include "AppMenuPopupEditor.h"
 
-AppMenuPopupEditor::AppMenuPopupEditor
-(String title, IconThread& iconThread,
+AppMenuPopupEditor::AppMenuPopupEditor(ComponentConfigFile& config,
+        String title,
+        IconThread& iconThread,
         std::function<void(AppMenuPopupEditor*) > onConfirm,
-        bool showCategoryList, bool showCommandField) :
-PopupEditorComponent(title, [this, onConfirm](PopupEditorComponent* thisPopup)
+        bool showCategoryList,
+        bool showCommandField) :
+PopupEditorComponent(title, config,
+[this, onConfirm](PopupEditorComponent* thisPopup)
 {
 
     onConfirm(this);
@@ -26,55 +29,45 @@ terminalCheckboxLabel("runInTermLabel", "Run in terminal:")
     RelativeLayoutManager::Layout layout = {
         {1,
             {
-                {&nameLabel,1},
-                {&nameEditor,2}
-            }
-        },
+                {&nameLabel, 1},
+                {&nameEditor, 2}
+            }},
         {1,
             {
-                {&iconLabel,2},
-                {&iconPathEditor,3},
-                {&iconPreview,1}
-            }    
-        }
-    };  
+                {&iconLabel, 2},
+                {&iconPathEditor, 3},
+                {&iconPreview, 1}
+            }}
+    };
     //launch command row
     if (showCommandField)
     {
-        layout.push_back(
-        {1,
+        layout.push_back({1,
             {
-                {&commandLabel,1},
-                {&commandEditor,2}
-            }
-        });
-        layout.push_back(
-        {1,
+                {&commandLabel, 1},
+                {&commandEditor, 2}
+            }});
+        layout.push_back({1,
             {
-                {&terminalCheckboxLabel,6},
-                {&terminalCheckbox,1}
-            }
-        });
+                {&terminalCheckboxLabel, 6},
+                {&terminalCheckbox, 1}
+            }});
     }
     //category list rows:
     if (showCategoryList)
     {
-        
-        layout.push_back(
-        {1,
+
+        layout.push_back({1,
             {
-                {nullptr,1},
-                {&categoryEditButton,4},
-                {nullptr,1}
-            }
-        });
+                {nullptr, 1},
+                {&categoryEditButton, 4},
+                {nullptr, 1}
+            }});
     }
     setLayout(layout);
 }
 
-AppMenuPopupEditor::~AppMenuPopupEditor()
-{
-}
+AppMenuPopupEditor::~AppMenuPopupEditor() { }
 
 /**
  * @return the contents of the editable name field 

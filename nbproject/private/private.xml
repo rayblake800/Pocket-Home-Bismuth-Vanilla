@@ -10,18 +10,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStatusNM.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStatusJson.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/WifiSettingsPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/TempTimer.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/PocketHomeWindow.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStatusJson.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/JsonWifiInterface.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PageFactory.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/LibNMInterface.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/documentation/TODO.txt</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/WifiSettingsComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStatusNM.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Home%20Page/Widgets/WifiIcon.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStateManager.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Home%20Page/AppMenu/AppMenuComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Home%20Page/Widgets/WifiIcon.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/SwitchComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/JsonWifiInterface.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStateManager.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/WifiSettingsPage.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStateManager.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/LibNMInterface.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PocketHomeApplication.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Settings%20Page/ConnectionSettingsComponent.cpp</file>
         </group>

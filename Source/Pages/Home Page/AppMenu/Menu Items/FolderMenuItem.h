@@ -8,20 +8,24 @@
  * 
  */
 #pragma once
+#include "AppMenuItemFactory.h"
 #include "AppConfigFile.h"
 #include "IconThread.h"
 #include "DesktopEntries.h"
 #include "AppMenuItem.h"
 
-class FolderMenuItem : public AppMenuItem {
+class FolderMenuItem : public AppMenuItem
+{
 public:
     /**
-     * @param appFolder defines the folder data
-     * @param desktopEntries is used to load folder items.
      */
-    FolderMenuItem(const AppConfigFile::AppFolder& appFolder,
+    FolderMenuItem(AppConfigFile& appConfig,
+            MainConfigFile& mainConfig,
+            const AppConfigFile::AppFolder& appFolder,
+            AppMenuItemFactory& menuItemFactory,
             DesktopEntries& desktopEntries);
-    virtual ~FolderMenuItem();
+
+    virtual ~FolderMenuItem() { }
 
     /**
      * Check if this button is for an application folder
@@ -71,14 +75,16 @@ protected:
     /**
      * @return true, as folder categories can be edited.
      */
-    virtual bool hasEditableCategories() const override {
+    virtual bool hasEditableCategories() const override
+    {
         return true;
     };
 
     /**
      * @return false, as folders have no command.
      */
-    virtual bool hasEditableCommand() const override {
+    virtual bool hasEditableCommand() const override
+    {
         return false;
     };
 
@@ -119,7 +125,9 @@ protected:
     void editFolder(String name, String icon, StringArray categories);
 private:
     //Source of this button's folder information
+    AppConfigFile& config;
     AppConfigFile::AppFolder appFolder;
+    AppMenuItemFactory& menuItemFactory;
     DesktopEntries& desktopEntries;
 };
 

@@ -13,24 +13,33 @@ public:
     friend class PokeLookAndFeel;
     /**
      * Create a DrawableImageComponent using an asset file.
-     * @param assetFilename the filename of an image in assets
-     * @param placement defines how the image will be scaled
+     * 
+     * @param assetFilename  The filename of an image in the asset folder.
+     * 
+     * @param placement      Defines how the image will be scaled to fit the
+     *                        component.
      */
     DrawableImageComponent(String assetFilename,
             RectanglePlacement placement = RectanglePlacement::centred);
 
     /**
      * Create a DrawableImageComponent using any image file.
-     * @param imageFile an image file
-     * @param placement defines how the image will be scaled
+     * 
+     * @param imageFile  Any image file.
+     * 
+     * @param placement  Defines how the image will be scaled to fit the
+     *                    component.
      */
     DrawableImageComponent(File imageFile,
             RectanglePlacement placement = RectanglePlacement::centred);
 
     /**
      * Create a DrawableImageComponent using an image object.
-     * @param image an image object
-     * @param placement defines how the image will be scaled
+     * 
+     * @param image      Any image object.
+     * 
+     * @param placement  Defines how the image will be scaled to fit the
+     *                    component.
      */
     DrawableImageComponent(Image image,
             RectanglePlacement placement = RectanglePlacement::centred);
@@ -38,28 +47,33 @@ public:
 
     /**
      * Create a DrawableImageComponent without an initial image.
-     * @param placement defines how the image will be scaled
+     * 
+     * @param placement  Defines how the image will be scaled to fit the
+     *                    component.
      */
     DrawableImageComponent
     (RectanglePlacement placement = RectanglePlacement::centred);
 
-    ~DrawableImageComponent();
+    virtual ~DrawableImageComponent() { }
 
     /**
-     * Change the image drawn by this component
-     * @param assetFilename the filename of an image in assets
+     * Changes the image drawn by this component.
+     * 
+     * @param assetFilename The filename of an image in the asset folder.
      */
     void setImage(String assetFilename);
 
     /**
-     * Change the image drawn by this component
-     * @param imageFile an image file
+     * Changes the image drawn by this component.
+     * 
+     * @param imageFile  Any image file.
      */
     void setImage(File imageFile);
 
     /**
-     * Change the image drawn by this component
-     * @param image an image object
+     * Changes the image drawn by this component.
+     * 
+     * @param image  Any image object.
      */
     void setImage(Image image);
 
@@ -77,10 +91,12 @@ public:
     virtual void colourChanged() override;
 
 protected:
+    
     /**
-     * Adjust image size and placement to match whenever component size changes.
+     * Adjust image size and placement whenever component size changes.
      */
     void resized() override;
+    
 private:
     
     /**
@@ -89,10 +105,16 @@ private:
      */
     void initImage();
     
+    //Image source file, if one is provided.
     File imageSource;
+    
+    //Internal image component.
     ScopedPointer<Drawable> imageDrawable;
+    
+    //Image placement setting.
     RectanglePlacement placement;
 
+    //Default image colors, to be replaced by the actual image colors.
     static const Array<Colour> defaultColours;
 
     static const Array<Colour> loadDefaultColours() {

@@ -1,8 +1,11 @@
 #include "Utils.h"
 #include "BluetoothSettingsPage.h"
 
-BluetoothSettingsPage::BluetoothSettingsPage() :
-ConnectionPage<BluetoothDevice>() { }
+BluetoothSettingsPage::BluetoothSettingsPage
+(PageComponent::PageFactoryInterface& pageFactory, 
+        BluetoothStatus& bluetoothStatus) :
+ConnectionPage<BluetoothDevice>(pageFactory),
+bluetoothStatus(bluetoothStatus) { }
 
 BluetoothSettingsPage::~BluetoothSettingsPage() { }
 

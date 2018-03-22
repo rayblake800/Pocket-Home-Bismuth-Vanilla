@@ -25,11 +25,14 @@ public:
     /**
      * Behaves exactly like the same method in ToggleButton, except it also
      * updates the button handle.
-     * @param shouldBeOn
-     * @param notification
-     * @param animate if true, this will animate a change in toggle state.
-     * This may briefly delay the change in toggle state if the switch is 
-     * currently animating.
+     * 
+     * @param shouldBeOn     Sets the button toggle state.
+     * 
+     * @param notification   Determines if listeners will be notified.
+     * 
+     * @param animate        If true, this will animate a change in toggle 
+     *                        state. This may briefly delay the change in toggle 
+     *                        state if the switch is currently animating.
      */
     void setToggleState(bool shouldBeOn, NotificationType notification =
             NotificationType::dontSendNotification, bool animate = false);
@@ -37,9 +40,13 @@ public:
 private:
 
     /**
-     * Draws the switch background as a rounded rectangle.
+     * Draws the switch background as a rounded rectangle.  This should only be
+     * called by Juce library code.
+     * 
      * @param g
+     * 
      * @param isMouseOverButton
+     * 
      * @param isButtonDown
      */
     void paintButton(Graphics &g,
@@ -65,23 +72,38 @@ private:
 
         virtual ~SwitchHandle() { }
 
-        Colour setColour(Colour colour)
+        /**
+         * Sets the switch fill color.
+         * 
+         * @param colour
+         */
+        void setColour(Colour colour)
         {
             this->colour = colour;
         }
     private:
+        /**
+         * Draws a filled circle using the color provided through setColour().
+         * 
+         * @param g
+         */
         void paint(Graphics& g) override;
+        //fill colour
         Colour colour;
     };
 
     //defines the background width:height ratio as 1.5:1
     float widthByHeight = 1.5;
+    
     //switch animation duration in milliseconds
     int animationDuration = 150;
-    //draws the switch handle as a simple filled circle. 
+    
+    //draws the switch handle as a filled circle. 
     SwitchHandle handle;
+    
     //defines the bounds of the switch handle in both button states
     Rectangle<int> handleBoundsOff, handleBoundsOn;
+    
     //defines the switch's rounded rectangle background
     Rectangle<int> backgroundShape;
 

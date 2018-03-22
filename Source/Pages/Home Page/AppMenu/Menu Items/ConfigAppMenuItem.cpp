@@ -1,11 +1,12 @@
 #include "Utils.h"
-#include "MainConfigFile.h"
 #include "ConfigAppMenuItem.h"
 
-ConfigAppMenuItem::ConfigAppMenuItem(const AppConfigFile::AppItem& appItem) :
+ConfigAppMenuItem::ConfigAppMenuItem(AppConfigFile& config,
+        MainConfigFile& mainConfig,
+        const AppConfigFile::AppItem& appItem) :
+AppMenuItem(mainConfig),
+appConfig(appConfig),
 appItem(appItem) { }
-
-ConfigAppMenuItem::~ConfigAppMenuItem() { }
 
 /**
  * @return the display name of the associated app
@@ -23,9 +24,7 @@ String ConfigAppMenuItem::getCommand() const
     String command = appItem.shell;
     if (appItem.launchInTerminal)
     {
-        MainConfigFile config;
-        command = config.getConfigValue<String>
-                (MainConfigFile::termLaunchCommandKey) + String(" ") + command;
+        command = getTermLaunchPrefix() + String(" ") + command;
     }
     return command;
 }

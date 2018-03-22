@@ -14,7 +14,7 @@ class WifiIcon : public ConfigurableImageComponent, private WindowFocusedTimer,
 private WifiStateManager::Listener
 {
 public:
-    WifiIcon();
+    WifiIcon(WifiStateManager& wifiManager);
     virtual ~WifiIcon();
 
 private:
@@ -56,4 +56,6 @@ private:
     void timerCallback();
     //timer frequency in ms
     const static int frequency = 2000;
+    
+    WifiStateManager& wifiManager;
 };

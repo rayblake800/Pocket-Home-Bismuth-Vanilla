@@ -83,7 +83,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/PageComponent_39f003de.o \
   $(JUCE_OBJDIR)/PageStackComponent_f787145e.o \
   $(JUCE_OBJDIR)/PocketHomeWindow_b7303d3f.o \
-  $(JUCE_OBJDIR)/Configurable_d79d2ed0.o \
   $(JUCE_OBJDIR)/ConfigurableComponent_d2d89b57.o \
   $(JUCE_OBJDIR)/ConfigurableImageButton_b88c5d87.o \
   $(JUCE_OBJDIR)/ConfigurableImageComponent_63c24892.o \
@@ -151,7 +150,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o \
   $(JUCE_OBJDIR)/AppLauncher_be937ec2.o \
   $(JUCE_OBJDIR)/AssetFiles_7ecbbf70.o \
-  $(JUCE_OBJDIR)/Locale_775870e3.o \
+  $(JUCE_OBJDIR)/LocaleText_254df4b0.o \
   $(JUCE_OBJDIR)/PageFactory_6a329c5c.o \
   $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o \
   $(JUCE_OBJDIR)/RelativeLayoutManager_c0c10998.o \
@@ -249,11 +248,6 @@ $(JUCE_OBJDIR)/PageStackComponent_f787145e.o: ../../Source/Components/PageStackC
 $(JUCE_OBJDIR)/PocketHomeWindow_b7303d3f.o: ../../Source/Components/PocketHomeWindow.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PocketHomeWindow.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/Configurable_d79d2ed0.o: ../../Source/Configuration/Configurables/Configurable.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling Configurable.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigurableComponent_d2d89b57.o: ../../Source/Configuration/Configurables/ConfigurableComponent.cpp
@@ -591,9 +585,9 @@ $(JUCE_OBJDIR)/AssetFiles_7ecbbf70.o: ../../Source/AssetFiles.cpp
 	@echo "Compiling AssetFiles.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/Locale_775870e3.o: ../../Source/Locale.cpp
+$(JUCE_OBJDIR)/LocaleText_254df4b0.o: ../../Source/LocaleText.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling Locale.cpp"
+	@echo "Compiling LocaleText.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PageFactory_6a329c5c.o: ../../Source/PageFactory.cpp

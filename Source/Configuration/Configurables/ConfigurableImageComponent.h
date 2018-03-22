@@ -13,34 +13,45 @@ class ConfigurableImageComponent : public DrawableImageComponent,
 public ConfigurableComponent {
 public:
     /**
-     * @param componentKey one of the component keys defined by the 
-     *  ComponentConfigFile
-     * @param assetIndex selects which component asset file should be loaded
-     *  on initialization.
-     * @param placement defines how the image will be scaled
+     * @param config        A reference to the ComponentConfigFile.
+     * 
+     * @param componentKey  One of the component keys defined by the 
+     *                       ComponentConfigFile.
+     * 
+     * @param assetIndex     Selects which component asset file should be 
+     *                        loaded on initialization.
+     * 
+     * @param placement      Defines how the image will be scaled.
      */
-    ConfigurableImageComponent(String componentKey, int assetIndex = 0,
+    ConfigurableImageComponent(ComponentConfigFile& config,
+            String componentKey, int assetIndex = 0,
             RectanglePlacement placement=RectanglePlacement::centred);
-    ~ConfigurableImageComponent();
+    
+    ~ConfigurableImageComponent() { }
 
     /**
-     * Load a new image from a different asset file
-     * @param index the index of an asset file defined for this component in
-     * the ComponentConfigFile.  If index is out of bounds or it equals the
-     * current loaded index, nothing will happen. 
+     * Load a new image from a different asset file.
+     * 
+     * @param index  The index of an asset file defined for this component in
+     *                the ComponentConfigFile.  If index is out of bounds or it 
+     *                equals the current loaded index, nothing will happen. 
      */
     void setImageAssetIndex(int index);
     
 protected:
     /**
      * (re)load the image file and set the colors.
-     * @param assetNames the list of all asset files associated with this
-     * component
-     * @param colours custom colour values used to replace default colours.
+     * 
+     * @param assetNames  The list of all asset files associated with this
+     *                     component.
+     * 
+     * @param colours      Custom colour values used to replace the default 
+     *                      image colours.
      */
     virtual void applyConfigAssets(StringArray assetNames,
             Array<Colour> colours);
 
 private:
+    //current selected image asset.
     int assetIndex=0;
 };

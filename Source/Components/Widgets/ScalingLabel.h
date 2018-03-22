@@ -8,27 +8,28 @@
 #pragma once
 #include "JuceHeader.h"
 
-class ScalingLabel : public Label{
+class ScalingLabel : public Label
+{
 public:
-    
+
     /**
-     * @param componentName component's internal name value 
-     * @param labelText initial label display text
-     * @param fontPadding font height will be kept at this many pixels
-     * less than the component height.
+     * @param componentName  Sets the component's internal name value. 
+     * @param labelText      Sets the initial label display text.
+     * @param fontPadding    Sets the minimum number of pixels to leave between
+     *                        the text top and bottom and the label edges.
      */
-    ScalingLabel(const String &componentName = String(),
-            const String &labelText = String(),
+    ScalingLabel(const String& componentName = String(),
+            const String& labelText = String(),
             const int& fontPadding = 0);
-    
+
     virtual ~ScalingLabel();
 private:
     /**
-     * Update font size when label bounds change.
+     * Updates font size when label bounds change.
      */
     void resized() override;
-    
-    int fontPadding;
-    
+
+    int fontPadding = 0;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ScalingLabel)
 };

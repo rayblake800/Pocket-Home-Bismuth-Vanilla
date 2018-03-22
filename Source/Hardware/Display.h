@@ -1,20 +1,41 @@
 /**
  * @file Display.h
  * 
- * Gets and sets display brightness.
+ * Display contains functions related to display management and properties.
  */
 
 #pragma once
-namespace Display{
+#include "JuceHeader.h"
+namespace Display
+{
+
     /**
-     * @return display brightness, as an integer between 1 and 10
+     * Gets the current display brightness level.
+     * 
+     * @return display brightness, as an integer between 1 and 10.
      */
     int getBrightness();
+
+    /**
+     * Sets the display brightness level.
+     * 
+     * @param brightness   This should be an integer between 1 and 10. Values 
+     *                      outside of this range will be rounded to the closest
+     *                      valid integer.
+     */
+    void setBrightness(const int& brightness);
     
     /**
-     * Set display brightness
-     * @param brightness should be an integer between 1 and 10. Values outside
-     * of this range will be rounded to the closest valid integer.
+     * Gets the size of the active display.
+     * 
+     * @return the size of the display, measured in pixels.
      */
-    void setBrightness(int brightness);
+    Rectangle<int> getDisplaySize();
+
+    /**
+     * Gets the size of the single application window.
+     * 
+     * @return the size of the active window, measured in pixels.
+     */
+    Rectangle<int> getWindowSize();
 }

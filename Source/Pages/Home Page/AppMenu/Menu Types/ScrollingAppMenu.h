@@ -8,14 +8,25 @@
 #pragma once
 #include "AppMenuComponent.h"
 
-class ScrollingAppMenu : public AppMenuComponent {
+class ScrollingAppMenu : public AppMenuComponent
+{
 public:
     /**
-     *
-     * @param loadingSpinner
+     * @param mainConfig       A reference to the MainConfigFile.
+     * 
+     * @param componentConfig  A reference to the ComponentConfigFile.
+     * 
+     * @param appConfig        A reference to the AppConfigFile.
+     * 
+     * @param loadingSpinner   Reference to an overlay spinner that sits over
+     *                         the PageComponent holding this AppMenuComponent.
      */
-    ScrollingAppMenu(OverlaySpinner& loadingSpinner);
-    virtual ~ScrollingAppMenu();
+    ScrollingAppMenu(MainConfigFile& mainConfig,
+            ComponentConfigFile& componentConfig,
+            AppConfigFile& appConfig,
+            OverlaySpinner& loadingSpinner);
+
+    virtual ~ScrollingAppMenu() { }
 
 private:
     /**

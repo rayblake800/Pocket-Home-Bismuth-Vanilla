@@ -1,8 +1,9 @@
 #include "TempTimer.h"
 #include "ColourPage.h"
 
-ColourPage::ColourPage() :
-PageComponent("ColourPage",{
+ColourPage::ColourPage(PageComponent::PageFactoryInterface& pageFactory,
+        ComponentConfigFile& config) :
+PageComponent(pageFactory, "ColourPage",{
     {4,
         {
             {&colourList, 1}
@@ -14,6 +15,7 @@ PageComponent("ColourPage",{
 
 },
 true),
+config(config),
 colourList("colourList", &listModel)
 {
     addAndShowLayoutComponents();
@@ -29,11 +31,9 @@ void ColourPage::pageResized()
     colourList.repaint();
 }
 
-
 ColourPage::ColourListModel::ColourListModel() :
 Configurable(new ComponentConfigFile(),{})
 {
-    ComponentConfigFile config;
     colourKeys = config.getColourKeys();
     addTrackedKeys(colourKeys);
     DBG(__func__ << ": adding " << colourKeys.size() << " colors");
@@ -54,7 +54,6 @@ int ColourPage::ColourListModel::getNumRows()
 
 void ColourPage::ColourListModel::listResized(ListBox& list)
 {
-    ComponentConfigFile config;
     textHeight = config.getComponentSettings(ComponentConfigFile::mediumTextKey)
             .getBounds().getHeight();
     list.setRowHeight(textHeight * 1.5);

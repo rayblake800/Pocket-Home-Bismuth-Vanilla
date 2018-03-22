@@ -1,5 +1,4 @@
 #include "Utils.h"
-#include "PocketHomeApplication.h"
 #include "WifiSettingsPage.h"
 
 const StringArray WifiSettingsPage::wifiImageFiles = {
@@ -9,8 +8,10 @@ const StringArray WifiSettingsPage::wifiImageFiles = {
                                                       "wifiStrength3.svg"
 };
 
-WifiSettingsPage::WifiSettingsPage() :
-ConnectionPage<WifiAccessPoint>(),
+WifiSettingsPage::WifiSettingsPage(PageFactoryInterface& pageFactory,
+        WifiStateManager& wifiManager) :
+ConnectionPage<WifiAccessPoint>(pageFactory),
+wifiManager(wifiManager),
 passwordLabel("passwordLabel", "Password:")
 {
 
@@ -21,8 +22,6 @@ passwordLabel("passwordLabel", "Password:")
     connectionButton.addChildComponent(spinner);
     connectionButton.addListener(this);
     errorLabel.setJustificationType(Justification::centred);
-    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
-            ->getWifiManager();
     wifiManager.addListener(this);
     updateConnectionList();
 }
@@ -34,8 +33,6 @@ WifiSettingsPage::~WifiSettingsPage() { }
  */
 Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
 {
-    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
-            ->getWifiManager();
     return wifiManager.getVisibleAPs();
 }
 
@@ -45,8 +42,6 @@ Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
  */
 void WifiSettingsPage::connect(const WifiAccessPoint& connection)
 {
-    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
-            ->getWifiManager();
     if (connection.getRequiresAuth())
     {
         const String& psk = passwordEditor.getText();
@@ -71,8 +66,6 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
  */
 void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
 {
-    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
-            ->getWifiManager();
     wifiManager.disconnect(connection);
 }
 
@@ -81,8 +74,6 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
  */
 bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection)
 {
-    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
-            ->getWifiManager();
     if (connection.isNull())
     {
         return false;
@@ -191,7 +182,7 @@ void WifiSettingsPage::setCurrentlyConnecting(bool currentlyConnecting)
  */
 void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
 {
-    MessageManager::callAsync([this,state]()
+    MessageManager::callAsync([this, state]()
     {
         switch (state)
         {

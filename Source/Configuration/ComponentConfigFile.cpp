@@ -5,8 +5,9 @@
 #include "SwitchComponent.h"
 #include "AppMenuButton.h"
 #include "PageComponent.h"
-#include "Utils.h"
+#include "Display.h"
 #include "ComponentConfigFile.h"
+#include "AssetFiles.h"
 
 CriticalSection ComponentConfigFile::componentLock;
 
@@ -112,14 +113,12 @@ const std::map<String, int> ComponentConfigFile::colourIds{
 
 ComponentConfigFile::ComponentConfigFile() : ConfigFile(filenameConst)
 {
-    if (!fileOpened())
-    {
         const ScopedLock readLock(componentLock);
-        var jsonConfig = openFile();
+    var jsonConfig = AssetFiles::loadJSONAsset
+            (String(CONFIG_PATH) + filenameConst, true);
         var defaultConfig = var();
         readDataFromJson(jsonConfig, defaultConfig);
         writeChanges();
-    }
 }
 
 ComponentConfigFile::~ComponentConfigFile() { }
@@ -382,7 +381,7 @@ bool ComponentConfigFile::ComponentSettings::operator==
 
 Rectangle<int> ComponentConfigFile::ComponentSettings::getBounds()
 {
-    Rectangle<int>window = getWindowSize();
+    Rectangle<int> window = Display::getWindowSize();
     return Rectangle<int>(x * window.getWidth(), y * window.getHeight(),
                           width * window.getWidth(), height * window.getHeight());
 }
