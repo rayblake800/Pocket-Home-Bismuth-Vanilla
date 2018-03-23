@@ -95,7 +95,7 @@ private:
     bool addingPage = true);
 
     //page transition animation duration in milliseconds
-    const int transitionDurationMS = 200;
+    const int transitionDurationMS = 500;
 
     //holds all pages in order
     OwnedArray<PageComponent> stack;

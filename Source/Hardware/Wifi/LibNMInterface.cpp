@@ -6,7 +6,7 @@
 #include "JuceHeader.h"
 #include "LibNMInterface.h"
 
-#define LIBNM_ITERATION_PERIOD 100 // milliseconds
+#define LIBNM_ITERATION_PERIOD 300 // milliseconds
 
 #if JUCE_DEBUG
 

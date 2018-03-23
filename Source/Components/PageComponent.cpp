@@ -170,7 +170,6 @@ void PageComponent::pushPageToStack(PageComponent::PageType pageType,
         pageStack->pushPage(newPage, animation);
     }
 }
-
 /**
  * Inheriting classes can override this method to change the behavior of the
  * back button. It will be called every time the back button is clicked, and

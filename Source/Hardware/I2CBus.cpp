@@ -4,7 +4,7 @@
 #include <linux/i2c-dev.h>
 #include "I2CBus.h"
 
-#define DISABLE_I2C
+//#define DISABLE_I2C
 #ifdef DISABLE_I2C
 int i2c_smbus_read_byte_data(int a, int b) { return 0; }
 int i2c_smbus_write_byte_data(int a, int b, int c) { return 0; }
