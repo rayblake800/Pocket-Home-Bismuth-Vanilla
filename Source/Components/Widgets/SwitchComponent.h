@@ -7,7 +7,7 @@
 #pragma once
 #include "JuceHeader.h"
 
-class SwitchComponent : public ToggleButton
+class SwitchComponent : public ToggleButton, private Timer
 {
 public:
 
@@ -91,6 +91,11 @@ private:
         //fill colour
         Colour colour;
     };
+
+    /**
+     * Handles switch transitions delayed by waiting for wifi.
+     */
+    void timerCallback() override;
 
     //defines the background width:height ratio as 1.5:1
     float widthByHeight = 1.5;

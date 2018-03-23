@@ -88,10 +88,7 @@ void SwitchComponent::resized()
 void SwitchComponent::clicked()
 {
     if(Desktop::getInstance().getAnimator().isAnimating(&handle)){
-        TempTimer::initTimer(animationDuration,[this]
-        {
-            clicked();
-        });
+        startTimer(animationDuration);
     }
     else
     {
@@ -111,5 +108,14 @@ void SwitchComponent::SwitchHandle::paint(Graphics& g)
 {
     g.setColour(colour);
     g.fillEllipse(getLocalBounds().toFloat());
+}
+
+/**
+ * Handles switch transitions delayed by waiting for wifi.
+ */
+void SwitchComponent::timerCallback()
+{
+    clicked();
+    stopTimer();
 }
 
