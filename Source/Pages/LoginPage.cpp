@@ -49,10 +49,10 @@ foundPassword(false)
     loginButton.addListener(this);
     passwordField.addListener(this);
     addAndShowLayoutComponents();
-    if (hasPassword())
+    if (!hasPassword())
     {
-        passwordLabel.setVisible(true);
-        passwordField.setVisible(true);
+        passwordLabel.setVisible(false);
+        passwordField.setVisible(false);
     }
 }
 
