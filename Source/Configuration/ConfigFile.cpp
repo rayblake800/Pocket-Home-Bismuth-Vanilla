@@ -19,7 +19,8 @@ template<> std::map<String, bool>& ConfigFile::getMapReference<bool>()
     return boolValues;
 }
 
-ConfigFile::ConfigFile(String configFilename) : filename(configFilename) { }
+ConfigFile::ConfigFile(String configFilename) : Localized("ConfigFile"), 
+        filename(configFilename) { }
 
 /**
  * Writes any pending changes to the file before destruction.
@@ -207,7 +208,8 @@ var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
                 << " doesn't exist in " << filename);
         if (defaultConfig.isVoid())
         {
-            defaultConfig = AssetFiles::loadJSONAsset(filename, false);
+            defaultConfig = AssetFiles::loadJSONAsset
+                    ("configuration/" + filename, false);
         }
         fileChangesPending = true;
         return defaultConfig.getProperty(key, var());
@@ -242,19 +244,19 @@ void ConfigFile::writeChanges()
 
     //convert to JSON string, write to config.json
     String jsonText = JSON::toString(jsonBuilder.get());
-    File configFile = File(String(CONFIG_PATH) + filename);
+    File configFile = File(String(configPath) + filename);
     if (!configFile.exists())
     {
         configFile.create();
     }
     if (!configFile.replaceWithText(jsonText))
     {
-        String message = String("Failed to save changes to ~")
-                + String(CONFIG_PATH) + filename
-                + String("\nMake sure you have permission to write to this file.");
+        String message = localeText(failed_saving_to_FILE)
+                + String(configPath) + filename + "\n"
+                + localeText(check_permissions);
         AlertWindow::showMessageBox(
                 AlertWindow::AlertIconType::WarningIcon,
-                "Error saving configuration:",
+                localeText(save_error),
                 message);
     }
     else

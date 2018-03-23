@@ -86,8 +86,9 @@ void AppLauncher::startApp(ProcessInfo processInfo)
     {
         AlertWindow::showMessageBoxAsync
                 (AlertWindow::AlertIconType::WarningIcon,
-                "Couldn't open application", String("\"") + processInfo.command
-                + String("\" is not a valid command."));
+                localeText(could_not_open),
+                String("\"") + processInfo.command + String("\"")
+                + localeText(not_valid_command));
         launchFailureCallback();
         return;
 
@@ -177,7 +178,7 @@ void AppLauncher::timerCallback()
             }
             AlertWindow::showMessageBoxAsync
                     (AlertWindow::AlertIconType::WarningIcon,
-                    "Couldn't open application", output);
+                    localeText(could_not_open), output);
             timedProcess = nullptr;
         }
     }

@@ -21,16 +21,19 @@ class PocketHomeWindow : public WindowFocus::BroadcastWindow
 {
 public:
     /**
-     * @param windowName  Sets the text of the window title bar.
+     * @param windowName         Sets the text of the window title bar.
      * 
-     * @param fakeWifi    If true, wifi-using components in this window will
-     *                     get all their wifi data from a simulated wifi device.
+     * @param fakeWifi           If true, wifi-using components in this window
+     *                            will get all their wifi data from a simulated 
+     *                            wifi device.
      * 
-     * @param mainConfig
+     * @param mainConfig         Holds shared configuration data.
      * 
-     * @param componentConfig
+     * @param componentConfig    Holds shared UI component configuration data.
      */
-    PocketHomeWindow(String windowName, bool fakeWifi,
+    PocketHomeWindow(
+            String windowName, 
+            bool fakeWifi,
             MainConfigFile& mainConfig,
             ComponentConfigFile& componentConfig);
 
@@ -46,9 +49,7 @@ private:
      * Resize page content to match window size.
      */
     void resized() override;
-
-    
-    
+   
     //Loads config data from the config.json file
     MainConfigFile& mainConfig;
     

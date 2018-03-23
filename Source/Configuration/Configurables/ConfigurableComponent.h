@@ -3,10 +3,10 @@
  * 
  * ConfigurableComponent applies properties set in a ComponentConfigFile
  * to a component, updating those properties as necessary.  This may set the
- * component size and position relative to the window, component asset files,
- * and/or component color values.
+ * component size and position relative to the window, change component asset 
+ * files, and/or change image color values.
  * 
- * @see ConfigFile.h
+ * @see ComponentConfigFile.h
  */
 #pragma once
 #include "ComponentConfigFile.h"
@@ -14,7 +14,6 @@
 class ConfigurableComponent : public ConfigFile::Listener
 {
 public:
-
     /**
      * @param componentKey  Sets the componentKey that defines this component's
      *                       bounds and asset files.
@@ -28,12 +27,14 @@ public:
     virtual ~ConfigurableComponent() { }
 
     /**
-     * Load and apply this component's relative bounds from config.
+     * Load and apply this component's relative bounds from config.  All
+     * sizes and coordinates are relative to the application window size.
+     * Any coordinates or dimensions that are not defined in config will remain
+     * unchanged.
      */
     virtual void applyConfigBounds();
 
 protected:
-
     /**
      * This method passes in asset file names and asset color values
      * when the component is created, and whenever those values change

@@ -68,25 +68,8 @@ static const unsigned char temp_binary_data_0[] =
 
 const char* bluetooth_json = (const char*) temp_binary_data_0;
 
-//================== config.json ==================
-static const unsigned char temp_binary_data_1[] =
-"{\r\n"
-"    \r\n"
-"    \"max menu row count\": 3,\r\n"
-"    \"max menu column count\": 5,\r\n"
-"    \"background\": \"FF4D4D4D\",\r\n"
-"    \"app menu type\": \"Scrolling menu\",\r\n"
-"    \"shutdown command\": \"systemctl poweroff\",\r\n"
-"    \"restart command\": \"systemctl reboot\",\r\n"
-"    \"sleep command\": \"xset dpms force off\",\r\n"
-"    \"terminal launch command\": \"vala-terminal -e\",\r\n"
-"    \"cursor\": true\r\n"
-"}\r\n";
-
-const char* config_json = (const char*) temp_binary_data_1;
-
 //================== Lato-Regular.ttf ==================
-static const unsigned char temp_binary_data_2[] =
+static const unsigned char temp_binary_data_1[] =
 { 0,1,0,0,0,18,1,0,0,4,0,32,68,83,73,71,0,0,0,1,0,1,213,124,0,0,0,8,71,80,79,83,182,209,29,16,0,1,136,184,0,0,75,180,71,83,85,66,86,46,84,5,0,1,212,108,0,0,1,14,79,83,47,50,217,174,170,105,0,0,1,168,0,0,0,96,99,109,97,112,82,212,159,215,0,0,6,92,0,0,4,
 230,99,118,116,32,6,247,24,163,0,0,18,120,0,0,0,46,102,112,103,109,114,90,114,64,0,0,11,68,0,0,6,229,103,97,115,112,0,18,0,24,0,1,136,172,0,0,0,12,103,108,121,102,95,10,85,18,0,0,20,212,0,0,241,224,104,101,97,100,252,156,242,35,0,0,1,44,0,0,0,54,104,
 104,101,97,15,182,7,177,0,0,1,100,0,0,0,36,104,109,116,120,91,216,96,189,0,0,2,8,0,0,4,84,107,101,114,110,108,66,106,84,0,1,6,180,0,0,108,228,108,111,99,97,71,141,136,10,0,0,18,168,0,0,2,44,109,97,120,112,2,14,7,249,0,0,1,136,0,0,0,32,110,97,109,101,
@@ -1463,10 +1446,10 @@ static const unsigned char temp_binary_data_2[] =
 0,11,1,9,1,10,1,11,1,12,1,13,1,14,1,15,1,16,1,17,1,18,1,19,0,1,0,64,0,1,0,8,0,2,0,6,0,12,1,6,0,2,0,76,1,7,0,2,0,79,0,2,0,44,0,3,0,123,0,116,0,117,0,1,0,11,0,67,0,106,0,113,0,118,0,219,0,220,0,222,0,223,0,224,0,226,0,227,0,1,0,1,0,73,0,2,0,1,0,20,0,22,
 0,0,0,0,0,0,0,1,0,0,0,0,0,0 };
 
-const char* LatoRegular_ttf = (const char*) temp_binary_data_2;
+const char* LatoRegular_ttf = (const char*) temp_binary_data_1;
 
 //================== wifi.json ==================
-static const unsigned char temp_binary_data_3[] =
+static const unsigned char temp_binary_data_2[] =
 "[\r\n"
 "  {\r\n"
 "    \"name\" : \"MyFi\",\r\n"
@@ -1545,7 +1528,7 @@ static const unsigned char temp_binary_data_3[] =
 "  }\r\n"
 "]";
 
-const char* wifi_json = (const char*) temp_binary_data_3;
+const char* wifi_json = (const char*) temp_binary_data_2;
 
 
 const char* getNamedResource (const char*, int&) throw();
@@ -1559,7 +1542,6 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
     switch (hash)
     {
         case 0x0d665fd9:  numBytes = 1119; return bluetooth_json;
-        case 0x0106dbc5:  numBytes = 354; return config_json;
         case 0xdc5a21d3:  numBytes = 120196; return LatoRegular_ttf;
         case 0x53801bd2:  numBytes = 1167; return wifi_json;
         default: break;
@@ -1572,7 +1554,6 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
 const char* namedResourceList[] =
 {
     "bluetooth_json",
-    "config_json",
     "LatoRegular_ttf",
     "wifi_json"
 };

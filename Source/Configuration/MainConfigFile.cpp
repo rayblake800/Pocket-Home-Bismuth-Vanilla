@@ -9,7 +9,7 @@ MainConfigFile::MainConfigFile() : ConfigFile(filenameConst)
     ASSERT_SINGULAR;
     const ScopedLock readLock(mainConfigLock);
     var jsonConfig = AssetFiles::loadJSONAsset
-            (String(CONFIG_PATH) + filenameConst, true);
+            (String(configPath) + filenameConst, true);
     var defaultConfig = var();
     readDataFromJson(jsonConfig, defaultConfig);
     writeChanges();

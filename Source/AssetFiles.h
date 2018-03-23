@@ -81,8 +81,8 @@ namespace AssetFiles
 
 #if JUCE_LINUX
     // FIXME: don't hardcode this, maybe find it via .deb configuration
-    const constexpr char* assetFolder = "/usr/share/pocket-home/";
+    static const constexpr char* assetFolder = "/usr/share/pocket-home/";
 #else
-    const constexpr char* assetFolder = "../../assets/";
+    static const constexpr char* assetFolder = "../../assets/";
 #endif
 }

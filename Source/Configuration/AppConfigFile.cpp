@@ -11,7 +11,7 @@ AppConfigFile::AppConfigFile() : ConfigFile(filenameConst)
     ASSERT_SINGULAR;
     const ScopedLock readLock(appConfigLock);
     var jsonConfig = AssetFiles::loadJSONAsset
-            (String(CONFIG_PATH) + filenameConst, true);
+            (String(configPath) + filenameConst, true);
     var defaultConfig = var();
     readDataFromJson(jsonConfig, defaultConfig);
     writeChanges();

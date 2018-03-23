@@ -1,8 +1,3 @@
-#include <sys/types.h>
-#include <sys/wait.h>
-#include "JsonWifiInterface.h"
-#include "LibNMInterface.h"
-#include "Utils.h"
 #include "Audio.h"
 #include "PocketHomeApplication.h"
 

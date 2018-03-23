@@ -2,7 +2,7 @@
  * @file SwitchComponent.h
  * 
  * SwitchComponent is a ToggleButton drawn as a round handle that switches
- * left/off or right/on in front of a rounded rectangle.
+ * off(left) or on(right) in front of a rounded rectangle.
  */
 #pragma once
 #include "JuceHeader.h"
@@ -64,6 +64,11 @@ private:
      */
     void clicked() override;
 
+    /**
+     * Used for drawing the circular switch handle.  This exists as a separate
+     * component because Juce library animation only works through changing
+     * component bounds or transparency.
+     */
     class SwitchHandle : public Component
     {
     public:

@@ -5,12 +5,18 @@
       <df name="assets">
         <df name="appIcons">
         </df>
+        <df name="configuration">
+        </df>
         <df name="fonts">
+        </df>
+        <df name="locale">
         </df>
         <df name="login">
         </df>
       </df>
       <df name="build">
+        <df name="Debug">
+        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -4960,6 +4966,8 @@
             <in>KeybindingPage.h</in>
           </df>
           <df name="Password Pages">
+            <in>Password.cpp</in>
+            <in>Password.h</in>
             <in>RemovePasswordPage.cpp</in>
             <in>RemovePasswordPage.h</in>
             <in>SetPasswordPage.cpp</in>
@@ -5009,7 +5017,8 @@
         <in>AssetFiles.cpp</in>
         <in>AssetFiles.h</in>
         <in>LocaleText.cpp</in>
-        <in>LocaleText.h</in>
+        <in>Localized.cpp</in>
+        <in>Localized.h</in>
         <in>Main.cpp</in>
         <in>PageFactory.cpp</in>
         <in>PageFactory.h</in>
@@ -5029,8 +5038,9 @@
         <in>WindowFocusedTimer.h</in>
       </df>
     </df>
-    <itemPath>assets/apps.json</itemPath>
-    <itemPath>assets/components.json</itemPath>
+    <itemPath>assets/configuration/apps.json</itemPath>
+    <itemPath>assets/configuration/components.json</itemPath>
+    <itemPath>assets/locale/enUS.json</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

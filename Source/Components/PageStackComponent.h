@@ -4,7 +4,7 @@
  * PageStackComponent implements PageComponent::PageStackInterface to manage
  * the stack of open pages.  It takes ownership of new pages, and allows them
  * to add new pages above themselves or remove and delete themselves from the
- * stack.
+ * top of the stack.
  * 
  * @see PageComponent.h
  */
@@ -20,13 +20,6 @@ public:
 
     virtual ~PageStackComponent() { }
 
-    enum Transition
-    {
-        kTransitionNone,
-        kTransitionTranslateHorizontal,
-        kTransitionTranslateHorizontalLeft
-    };
-
 private:
 
     /**
@@ -37,8 +30,7 @@ private:
      * 
      * @param animation
      */
-    void pushPage(PageComponent* page,
-            PageComponent::Animation animation
+    void pushPage(PageComponent* page, PageComponent::Animation animation
             = PageComponent::slideInFromLeft) override;
 
     /**
@@ -63,7 +55,7 @@ private:
 private:
 
     /**
-     * Sets the current Page bounds to match the page stack.
+     * Sets the current Page bounds to match the page stack component.
      */
     void resized() override;
 

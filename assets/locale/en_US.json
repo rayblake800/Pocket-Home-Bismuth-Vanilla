@@ -1,0 +1,11 @@
+{
+    "AppLauncher": {
+        "could_not_open": "Couldn't open application",
+        "not_valid_command": " is not a valid command."
+    },
+    "ConfigFile": {
+        "failed_saving_to_FILE": "Failed to save changes to ",
+        "check_permissions": "Make sure you have permission to write to this file.",
+        "save_error":"Error saving configuration:"
+    }
+}

@@ -6,18 +6,18 @@ WindowFocusedTimer("SpinnerFrame"),
 spinnerImage(RectanglePlacement::fillDestination),
 timeout(secondsToTimeout)
 {
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("spinner");
-#endif
+#    endif
     StringArray spinnerImgPaths = {
-                                     "spinner0.svg",
-                                     "spinner1.svg",
-                                     "spinner2.svg",
-                                     "spinner3.svg",
-                                     "spinner4.svg",
-                                     "spinner5.svg",
-                                     "spinner6.svg",
-                                     "spinner7.svg"
+                                   "spinner0.svg",
+                                   "spinner1.svg",
+                                   "spinner2.svg",
+                                   "spinner3.svg",
+                                   "spinner4.svg",
+                                   "spinner5.svg",
+                                   "spinner6.svg",
+                                   "spinner7.svg"
     };
     for (const String& path : spinnerImgPaths)
     {
@@ -32,6 +32,9 @@ Spinner::~Spinner()
     stopTimer();
 }
 
+/**
+ * Changes the color of the spinner icon.
+ */
 void Spinner::setColour(Colour spinnerColour)
 {
     spinnerImage.setColour(DrawableImageComponent::imageColour0Id,

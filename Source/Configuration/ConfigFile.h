@@ -4,7 +4,8 @@
  * ConfigFile reads and writes data from a json configuration file. ConfigFile
  * itself is abstract, each configuration file should have its own ConfigFile
  * subclass.  Each ConfigFile should provide access to a set of key Strings
- * for accessing its specific data. 
+ * for accessing its specific data.  A default version of each ConfigFile should
+ * be placed in the configuration subdirectory of the asset folder.
  *
  * Along with reading and writing data, ConfigFile objects allow Configurable
  * objects to register to receive notification whenever particular data keys
@@ -18,13 +19,12 @@
  */
 #pragma once
 #include <map>
+#include "Localized.h"
 #include "JuceHeader.h"
 
-#define CONFIG_PATH "~/.pocket-home/"
-
-class ConfigFile
+class ConfigFile : private Localized
 {
-public:
+    public:
 
     /**
      * Writes any pending changes to the file before destruction.
@@ -41,8 +41,8 @@ public:
      * 
      * @return  the value read from the config file.
      */
-    template<typename T>
-    T getConfigValue(String key)
+    template<typename T >
+            T getConfigValue(String key)
     {
         std::map<String, T>& fileDataMap = getMapReference<T>();
         const ScopedLock readLock(configLock);
@@ -70,7 +70,7 @@ public:
      *                    type T in this config file
      */
     template<typename T>
-    void setConfigValue(String key, T newValue)
+            void setConfigValue(String key, T newValue)
     {
         std::map<String, T>& fileDataMap = getMapReference<T>();
         const ScopedLock writeLock(configLock);
@@ -98,7 +98,7 @@ public:
     /**
      * @return true iff this ConfigFile and rhs have the same filename.
      */
-    bool operator==(const ConfigFile& rhs) const;
+    bool operator==(const ConfigFile & rhs) const;
 
     /**
      * Listeners receive updates whenever key values they track are updated in
@@ -111,18 +111,18 @@ public:
         friend class ConfigFile;
 
         Listener() { }
-        
+
         /**
          * Listeners safely remove themselves from all tracked ConfigFiles when
          * they are destroyed.
          */
         virtual ~Listener();
-        
+
         /**
          * Calls configValueChanged() for every key tracked by this listener.
          */
         void loadAllConfigProperties();
-        
+
     private:
         /**
          * Called whenever a key tracked by this listener changes in the config
@@ -134,11 +134,11 @@ public:
          */
         virtual void configValueChanged
         (ConfigFile* config, String propertyKey) = 0;
-        
+
         //holds references to all ConfigFiles this listener follows.
-        Array<ConfigFile*> configFiles; 
+        Array<ConfigFile*> configFiles;
     };
-    
+
     /**
      * Adds a listener to the list of objects to notify when config values
      * change.
@@ -148,15 +148,15 @@ public:
      * @param trackedKeys   The set of keys that the listener wants to track.
      */
     void addListener(Listener* listener, StringArray trackedKeys);
-    
+
     /**
      * Removes a listener from this ConfigFile.
      * 
      * @param listener  This will no longer receive updates on any changes to
      *                   this ConfigFile.
      */
-    void removeListener(Listener* listener);
-    
+    void removeListener(Listener * listener);
+
     /**
      * Announce new changes to each object tracking a particular key.
      * 
@@ -167,7 +167,7 @@ public:
      */
     void notifyListeners(String key);
 
-protected:
+    protected:
 
     /**
      * Defines the basic data types that can be stored in all ConfigFile
@@ -218,7 +218,7 @@ protected:
      *                        <filename>.json and load all data into 
      *                        defaultConfig. 
      */
-    virtual void readDataFromJson(var& config, var& defaultConfig);
+    virtual void readDataFromJson(var& config, var & defaultConfig);
 
     /**
      * Copy all config data to a json object.
@@ -250,14 +250,14 @@ protected:
      * @param defaultConfig should be either json data from the default config 
      * file in the assets folder, or a void var. 
      * If defaultConfig is null and data is missing from the configuration file,
-     * this method will open <filename>.json and load all data into 
-     * defaultConfig. 
+     * this method will open configuration/<filename>.json from the asset
+     * folder and load all data into defaultConfig. 
      * 
      * @return the value read from config/defaultConfig at [key], or a void var
      * if nothing was found in either var object.
      */
     var getProperty(var& config, var& defaultConfig, String key);
-    
+
     /**
      * Marks this ConfigFile as containing changes that need to be written to
      * the underlying .json file.
@@ -273,13 +273,16 @@ protected:
      */
     void writeChanges();
 
-private:
+    //The directory all config files will use
+    static const constexpr char* configPath = "~/.pocket-home/";
+
+    private:
 
     /**
      * @return a reference to the map that stores data values of type T for
      * ConfigFiles with this object's filename.
      */
-    template <class T> std::map<String, T>& getMapReference();
+    template <class T > std::map<String, T>& getMapReference();
 
     /**
      * Sets a property in the appropriate data map.  This does not notify
@@ -297,16 +300,23 @@ private:
     }
 
     CriticalSection configLock;
-     
+
     String filename;
-    
-    
+
+
     bool fileChangesPending = false;
     std::map<String, int> intValues;
     std::map<String, String> stringValues;
     std::map<String, bool> boolValues;
     std::map<Listener*, StringArray> listenerKeys;
-    std::map<String, Array<Listener*>> keyListeners;
-    
+    std::map<String, Array < Listener*>> keyListeners;
+
+
+    //localized text keys;
+    static const constexpr char * failed_saving_to_FILE =
+            "failed_saving_to_FILE";
+    static const constexpr char * check_permissions = "check_permissions";
+    static const constexpr char * save_error = "save_error";
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConfigFile)
 };

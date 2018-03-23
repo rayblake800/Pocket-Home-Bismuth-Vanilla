@@ -1,4 +1,5 @@
 #include <set>
+#include "Localized.h"
 #include "Utils.h"
 #include "DesktopEntry.h"
 
@@ -16,7 +17,7 @@ entrypath(entryFile.getFullPathName())
     {
         lines.add(in->readNextLine());
     }
-    String locale = getLocale();
+    String locale = Localized::getLocaleName();
     for (const String& line : lines)
     {
         if (line.substring(0, 1) == "#")continue; //skip comments
@@ -176,7 +177,7 @@ void DesktopEntry::setValue(ListValue valueType, StringArray newValue)
 void DesktopEntry::writeFile()
 {
     String outFileText = "";
-    String locale = getLocale();
+    String locale = Localized::getLocaleName();
     StringArray foundKeys;
     //Reload the source file to preserve comments and alternate locale data
     StringArray lines = StringArray::fromLines
@@ -282,15 +283,6 @@ String DesktopEntry::getKey(ListValue valueType) const
         case implements: return "Implements";
         case keywords: return "Keywords";
     }
-}
-
-/**
- * @return the locale name as it would appear in .desktop files
- */
-String DesktopEntry::getLocale()
-{
-    std::locale l("");
-    return String(l.name()).initialSectionNotContaining(".");
 }
 
 /**

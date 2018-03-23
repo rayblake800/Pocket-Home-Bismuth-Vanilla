@@ -1,7 +1,8 @@
 #include "ComponentConfigFile.h"
 #include "PageComponent.h"
 
-PageComponent::PageComponent(ComponentConfigFile& config,
+PageComponent::PageComponent(
+        ComponentConfigFile& config,
         const String& name,
         RelativeLayoutManager::Layout layout,
         PageFactoryInterface* pageFactory,
@@ -170,6 +171,7 @@ void PageComponent::pushPageToStack(PageComponent::PageType pageType,
         pageStack->pushPage(newPage, animation);
     }
 }
+
 /**
  * Inheriting classes can override this method to change the behavior of the
  * back button. It will be called every time the back button is clicked, and

@@ -3,7 +3,8 @@
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
 
-PocketHomeWindow::PocketHomeWindow(String windowName,
+PocketHomeWindow::PocketHomeWindow(
+        String windowName,
         bool fakeWifi,
         MainConfigFile& mainConfig,
         ComponentConfigFile& componentConfig) :
@@ -30,6 +31,7 @@ pageFactory(mainConfig, componentConfig, fakeWifi)
     setLookAndFeel(&LookAndFeel::getDefaultLookAndFeel());
     setVisible(true);
     setWantsKeyboardFocus(false);
+    
     loginPage = static_cast<LoginPage*>
             (pageFactory.createLoginPage([this]()
             {

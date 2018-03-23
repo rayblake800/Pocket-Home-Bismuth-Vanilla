@@ -168,11 +168,6 @@ private:
 
     static constexpr const char* typeKey = "Type";
 
-    /**
-     * @return the locale name as it would appear in .desktop files
-     */
-    String getLocale();
-
     struct LineValues {
         String key;
         String locale;

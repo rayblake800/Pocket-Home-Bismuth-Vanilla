@@ -9,7 +9,6 @@
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
       <FILE id="lJvIsl" name="bluetooth.json" compile="0" resource="1" file="assets/bluetooth.json"/>
-      <FILE id="FHWvCu" name="config.json" compile="0" resource="1" file="assets/config.json"/>
       <FILE id="P08AkY" name="Lato-Regular.ttf" compile="0" resource="1"
             file="assets/fonts/Lato-Regular.ttf"/>
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
@@ -335,8 +334,8 @@
       <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppLauncher.h"/>
       <FILE id="U4ygJ9" name="AssetFiles.cpp" compile="1" resource="0" file="Source/AssetFiles.cpp"/>
       <FILE id="cXrxti" name="AssetFiles.h" compile="0" resource="0" file="Source/AssetFiles.h"/>
-      <FILE id="ec2YX8" name="LocaleText.cpp" compile="1" resource="0" file="Source/LocaleText.cpp"/>
-      <FILE id="IG78EN" name="LocaleText.h" compile="0" resource="0" file="Source/LocaleText.h"/>
+      <FILE id="ec2YX8" name="Localized.cpp" compile="1" resource="0" file="Source/Localized.cpp"/>
+      <FILE id="IG78EN" name="Localized.h" compile="0" resource="0" file="Source/Localized.h"/>
       <FILE id="OP9h3M" name="PageFactory.cpp" compile="1" resource="0" file="Source/PageFactory.cpp"/>
       <FILE id="HpTag6" name="PageFactory.h" compile="0" resource="0" file="Source/PageFactory.h"/>
       <FILE id="xoVLAp" name="PokeLookAndFeel.cpp" compile="1" resource="0"

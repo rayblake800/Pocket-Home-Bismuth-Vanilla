@@ -7,6 +7,7 @@
 #pragma once
 #include <functional>
 #include <map>
+#include "Localized.h"
 #include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
 
@@ -16,10 +17,11 @@
  *   application launches
  */
 
-class AppLauncher : public WindowFocusedTimer
+class AppLauncher : public WindowFocusedTimer, private Localized
 {
 public:
     AppLauncher() : WindowFocusedTimer("AppLauncher"),
+    Localized("AppLauncher"),
     launchFailureCallback([]()
     {
     }) { }
@@ -97,16 +99,20 @@ private:
 
     //timer interval in milliseconds
     static const int timerFrequency = 2000;
-    
+
     //milliseconds to wait before giving up on a launch
-    
+
     static const int timeout = 15000;
-    
+
     //last launch time from Time::getMillisecondCounter()
     uint32 lastLaunch = 0;
 
     //Process to check up on when the timer finishes
     ChildProcess * timedProcess = nullptr;
-    
+
+    //localized text keys;
+    static const constexpr char * could_not_open = "could_not_open";
+    static const constexpr char * not_valid_command = "not_valid_command";
+
 
 };

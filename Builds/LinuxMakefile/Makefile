@@ -151,7 +151,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o \
   $(JUCE_OBJDIR)/AppLauncher_be937ec2.o \
   $(JUCE_OBJDIR)/AssetFiles_7ecbbf70.o \
-  $(JUCE_OBJDIR)/LocaleText_254df4b0.o \
+  $(JUCE_OBJDIR)/Localized_b37b235c.o \
   $(JUCE_OBJDIR)/PageFactory_6a329c5c.o \
   $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o \
   $(JUCE_OBJDIR)/RelativeLayoutManager_c0c10998.o \
@@ -591,9 +591,9 @@ $(JUCE_OBJDIR)/AssetFiles_7ecbbf70.o: ../../Source/AssetFiles.cpp
 	@echo "Compiling AssetFiles.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/LocaleText_254df4b0.o: ../../Source/LocaleText.cpp
+$(JUCE_OBJDIR)/Localized_b37b235c.o: ../../Source/Localized.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling LocaleText.cpp"
+	@echo "Compiling Localized.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PageFactory_6a329c5c.o: ../../Source/PageFactory.cpp

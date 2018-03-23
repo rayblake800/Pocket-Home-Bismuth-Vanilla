@@ -85,7 +85,7 @@ void PageStackComponent::transitionPage(PageComponent* page,
     }
     Rectangle<int> translatedBounds;
     page->setEnabled(false);
-    int dir = -1;//addingPage ? -1 : 1;
+    int dir = -1;
     switch (animation)
     {
         case PageComponent::Animation::none:
