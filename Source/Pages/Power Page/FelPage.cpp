@@ -4,8 +4,8 @@
 #include "I2CBus.h"
 #include "FelPage.h"
 
-FelPage::FelPage() :
-PageComponent("FelPage",{
+FelPage::FelPage(ComponentConfigFile& config) :
+PageComponent(config,"FelPage",{
     {2,
         {
             {&infoLine1, 1}
@@ -34,17 +34,17 @@ PageComponent("FelPage",{
         {
             {&infoLine2, 1}
         }}
-}),
+},nullptr,false),
 debounce(false),
-infoLine1("infoLine1", "Reboot into software flashing mode?"),
+infoLine1(config,"infoLine1", "Reboot into software flashing mode?"),
 yesButton("Yes"),
 noButton("No"),
-infoLine2("infoLine2", "For instructions, visit pcflash.getchip.com")
+infoLine2(config,"infoLine2", "For instructions, visit pcflash.getchip.com")
 {
-    
-#if JUCE_DEBUG
+
+#    if JUCE_DEBUG
     setName("FelPage");
-#endif
+#    endif
     //TODO: configurable page backgrounds
     setColour(backgroundColourId, Colours::black);
     infoLine1.setJustificationType(Justification::centred);
@@ -53,8 +53,6 @@ infoLine2("infoLine2", "For instructions, visit pcflash.getchip.com")
     noButton.addListener(this);
     addAndShowLayoutComponents();
 }
-
-FelPage::~FelPage() { }
 
 /**
  * Handle button clicks, either restarting into Fel mode or closing the 
@@ -66,7 +64,7 @@ FelPage::pageButtonClicked(Button *button)
 {
     if (button == &noButton)
     {
-        removeFromStack(PageStackComponent::kTransitionTranslateHorizontalLeft);
+        removeFromStack(Animation::slideInFromLeft);
     }
     else if (button == &yesButton && !debounce)
     {

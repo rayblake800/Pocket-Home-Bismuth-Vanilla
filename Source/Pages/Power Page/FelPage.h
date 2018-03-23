@@ -13,8 +13,9 @@
 
 class FelPage : public PageComponent{
 public:
-    FelPage();
-    ~FelPage();
+    FelPage(ComponentConfigFile& config);
+    
+    ~FelPage() { }
 private:
     
     /**

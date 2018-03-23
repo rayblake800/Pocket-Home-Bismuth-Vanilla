@@ -16,14 +16,14 @@ class ConfigurableComponent : public ConfigFile::Listener
 public:
 
     /**
-     * @param config        A reference to the ComponentConfigFile used to load
-     *                       component properties.
-     * 
      * @param componentKey  Sets the componentKey that defines this component's
      *                       bounds and asset files.
+     * 
+     * @param config        A reference to the ComponentConfigFile used to load
+     *                       component properties.
      */
-    ConfigurableComponent(ComponentConfigFile& config,
-            const String& componentKey);
+    ConfigurableComponent(const String& componentKey,
+            ComponentConfigFile& config);
 
     virtual ~ConfigurableComponent() { }
 

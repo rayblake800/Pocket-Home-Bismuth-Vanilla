@@ -11,7 +11,8 @@
 
 class AdvancedSettingsPage : public PageComponent{
 public:
-    AdvancedSettingsPage(PageComponent::PageFactoryInterface& pageFactory);
+    AdvancedSettingsPage(PageComponent::PageFactoryInterface* pageFactory,
+            ComponentConfigFile& config);
     
     ~AdvancedSettingsPage() {}
 
@@ -56,11 +57,6 @@ private:
     TextButton removePasswordButton;
     TextButton dateTimeButton;
     TextButton inputOptionsButton;
-    SetPasswordPage setPasswordPage;
-    RemovePasswordPage removePasswordPage;
-    HomeSettingsPage homeSettingsPage;
-    DateTimePage dateTimePage;
-    InputSettingsPage inputPage;
 
     //Next and previous buttons for scrolling page buttons
     ConfigurableImageButton prevArrow;

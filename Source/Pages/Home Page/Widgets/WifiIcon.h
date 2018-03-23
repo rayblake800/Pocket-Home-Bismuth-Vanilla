@@ -14,7 +14,7 @@ class WifiIcon : public ConfigurableImageComponent, private WindowFocusedTimer,
 private WifiStateManager::Listener
 {
 public:
-    WifiIcon(WifiStateManager& wifiManager);
+    WifiIcon(WifiStateManager& wifiManager,ComponentConfigFile& config);
     virtual ~WifiIcon();
 
 private:

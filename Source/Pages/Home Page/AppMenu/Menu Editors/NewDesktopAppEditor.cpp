@@ -3,7 +3,9 @@
 NewDesktopAppEditor::NewDesktopAppEditor(ComponentConfigFile& config,
         IconThread& iconThread,
         std::function<void() > onConfirm) :
-AppMenuPopupEditor("New desktop application", config, iconThread,
+AppMenuPopupEditor("New desktop application",
+config,
+iconThread,
 [this, onConfirm](AppMenuPopupEditor* editor)
 {
     String entryName = editor->getNameField();

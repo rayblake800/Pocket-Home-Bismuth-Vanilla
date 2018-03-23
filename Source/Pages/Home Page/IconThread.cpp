@@ -6,7 +6,7 @@ const String IconThread::defaultIconPath =
 
 IconThread::IconThread() : Thread("IconThread")
 {
-    defaultIcon = AssetFiles::createImageAsset(defaultIconPath);
+    defaultIcon = AssetFiles::loadImageAsset(defaultIconPath);
 }
 
 IconThread::~IconThread() { }
@@ -19,7 +19,7 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
     //if the icon variable is a full path, return that
     if (icon.substring(0, 1) == "/")
     {
-        assignImage(AssetFiles::createImageAsset(icon));
+        assignImage(AssetFiles::loadImageAsset(icon));
     }
     else
     {
@@ -30,7 +30,7 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
         }
         if (iconPaths.count(icon) > 0)
         {
-            assignImage(AssetFiles::createImageAsset(iconPaths[icon]));
+            assignImage(AssetFiles::loadImageAsset(iconPaths[icon]));
         }
         else
         {
@@ -101,7 +101,7 @@ void IconThread::run()
             {
                 const ScopedUnlock imageLoadUnlock(lock);
                 const MessageManagerLock lock;
-                iconImg = AssetFiles::createImageAsset(icon);
+                iconImg = AssetFiles::loadImageAsset(icon);
             }
             if (iconImg.isNull())
             {

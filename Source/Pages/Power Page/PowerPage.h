@@ -12,7 +12,7 @@
 #include "OverlaySpinner.h"
 #include "SwitchComponent.h"
 #include "LoginPage.h"
-#include "FelPage.h"
+#include "MainConfigFile.h"
 
 /**
  * TODO:
@@ -24,8 +24,11 @@
 
 class PowerPage : public PageComponent {
 public:
-    PowerPage();
-    ~PowerPage();
+    PowerPage(PageFactoryInterface* pageFactory,
+            MainConfigFile& mainConfig,
+            ComponentConfigFile& componentConfig);
+    
+    ~PowerPage() { }
 private:
     /**
      * Turns off the display until key or mouse input is detected.
@@ -49,6 +52,8 @@ private:
     void pageButtonClicked(Button*) override;
 
     void pageResized() override;
+    
+    MainConfigFile& mainConfig;
     //Turns off the system using the shutdown command in the MainConfigFile.
     TextButton powerOffButton;
     //Starts sleep mode with startSleepMode()
@@ -59,8 +64,6 @@ private:
     TextButton felButton;
     //Spinner to indicate that the system is rebooting/shutting down
     OverlaySpinner overlaySpinner;
-    //Page for showing flashing options, opened by felButton.
-    FelPage felPage;
     //Used to run shutdown/restart/sleep commands
     //ChildProcess commandProcess;
     //The lock screen is displayed after entering sleep mode.

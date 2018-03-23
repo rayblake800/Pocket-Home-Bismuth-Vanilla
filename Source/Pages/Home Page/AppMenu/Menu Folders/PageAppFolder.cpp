@@ -1,16 +1,17 @@
 #include "Utils.h"
 #include "PageAppFolder.h"
 
-PageAppFolder::PageAppFolder(AppMenuItem::Ptr folderItem,
+PageAppFolder::PageAppFolder(
+        AppMenuItem::Ptr folderItem,
         MouseListener* btnListener,
         std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-        IconThread& iconThread) :
-AppMenuFolder(folderItem, btnListener, buttonNameMap, iconThread)
+        IconThread& iconThread,
+        ComponentConfigFile& config) :
+AppMenuFolder(folderItem, btnListener, buttonNameMap, iconThread),
+config(config)
 {
     reload();
 }
-
-PageAppFolder::~PageAppFolder() { }
 
 /**
  * Create an AppMenuButton component for an AppMenuItem.
@@ -18,8 +19,11 @@ PageAppFolder::~PageAppFolder() { }
 AppMenuButton::Ptr PageAppFolder::createMenuButton
 (AppMenuItem::Ptr menuItem, IconThread& iconThread)
 {
-    return new PageMenuButton(menuItem, iconThread,
-            menuItem->getAppName() + String("Button"));
+    return new PageMenuButton(
+            menuItem,
+            iconThread,
+            menuItem->getAppName() + String("Button"),
+            config);
 }
 
 /**
@@ -217,7 +221,7 @@ int PageAppFolder::positionIndex(int page, int column, int row) const
  */
 bool PageAppFolder::setSelectedPosition(int page, int column, int row)
 {
-    DBG("PageAppFolder::" << __func__ << ": Setting selected page=" << page 
+    DBG("PageAppFolder::" << __func__ << ": Setting selected page=" << page
             << " column=" << column << " row=" << row);
     return selectIndex(positionIndex(page, column, row))
             && setCurrentFolderPage(page);
@@ -262,17 +266,18 @@ void PageAppFolder::resized()
 
 //############################  PageMenuButton  ################################
 
-PageAppFolder::PageMenuButton::PageMenuButton
-(AppMenuItem::Ptr menuItem, IconThread& iconThread, String name) :
-AppMenuButton(menuItem, iconThread, name)
+PageAppFolder::PageMenuButton::PageMenuButton(
+        AppMenuItem::Ptr menuItem,
+        IconThread& iconThread,
+        String name,
+        ComponentConfigFile& config) :
+AppMenuButton(menuItem, iconThread, name),
+config(config)
 {
-
     setFillBackground(false);
     setDrawBorder(false);
     setTextJustification(Justification::centredTop);
 }
-
-PageAppFolder::PageMenuButton::~PageMenuButton() { }
 
 void PageAppFolder::PageMenuButton::resized()
 {
@@ -284,7 +289,6 @@ void PageAppFolder::PageMenuButton::resized()
     Rectangle<float> textBounds = bounds.toFloat();
     Rectangle<float> imageBounds = bounds.toFloat();
     const Font& titleFont = getTitleFont();
-    ComponentConfigFile config;
     int textHeight = config.getComponentSettings
             (ComponentConfigFile::smallTextKey).getBounds().getHeight();
 

@@ -92,7 +92,8 @@ bool ScrollingAppMenu::folderKeyPressed(const KeyPress& key,
  * @param folderIndex
  * @return 
  */
-Rectangle<int> ScrollingAppMenu::updateFolderBounds(const AppMenuFolder* folder,
+Rectangle<int> ScrollingAppMenu::updateFolderBounds(
+        const AppMenuFolder* folder,
         int folderIndex)
 {
     int activeFolder = getActiveFolderIndex();
@@ -133,13 +134,14 @@ Rectangle<int> ScrollingAppMenu::updateFolderBounds(const AppMenuFolder* folder,
  * Create a folder component object from a folder menu item.
  * @param folderItem
  */
-AppMenuFolder* ScrollingAppMenu::createFolderObject
-(AppMenuItem::Ptr folderItem,
+AppMenuFolder* ScrollingAppMenu::createFolderObject(
+        AppMenuItem::Ptr folderItem,
         std::map<String, AppMenuButton::Ptr>& buttonMap,
-        IconThread& iconThread)
+        IconThread& iconThread,
+        ComponentConfigFile& config)
 {
-    ScrollingAppFolder* folder = new ScrollingAppFolder
-            (folderItem, this, buttonMap, iconThread);
+    ScrollingAppFolder* folder = new ScrollingAppFolder(
+            folderItem, this, buttonMap, iconThread, config);
     folder->selectIndex(0);
     return folder;
 }

@@ -73,7 +73,14 @@ void ConfigFile::addListener(ConfigFile::Listener* listener,
 {
     const ScopedLock writeLock(configLock);
     listener->configFiles.addIfNotAlreadyThere(this);
-    listenerKeys[listener].addArray(trackedKeys);
+    if (listenerKeys.count(listener) == 0)
+    {
+        listenerKeys[listener] = trackedKeys;
+    }
+    else
+    {
+        listenerKeys[listener].addArray(trackedKeys);
+    }
     listenerKeys[listener].removeDuplicates(false);
     for (const String& key : trackedKeys)
     {

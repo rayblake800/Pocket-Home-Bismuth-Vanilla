@@ -1,16 +1,18 @@
 #include "AdvancedSettingsPage.h"
+#include "Password.h"
 
 AdvancedSettingsPage::AdvancedSettingsPage
-(PageComponent::PageFactoryInterface& pageFactory) :
-PageComponent(pageFactory, "AdvancedSettingsPage",{}, true),
-titleLabel("settings", "Advanced Settings"),
+(PageComponent::PageFactoryInterface* pageFactory,
+        ComponentConfigFile& config) :
+PageComponent(config, "AdvancedSettingsPage",{}, pageFactory),
+titleLabel(config, "settings", "Advanced Settings"),
 setPasswordButton("Set your password"),
 removePasswordButton("Remove your password"),
 personalizeButton("Personalize your homepage"),
 dateTimeButton("Date and time"),
 inputOptionsButton("Input settings"),
-prevArrow(ComponentConfigFile::pageUpKey),
-nextArrow(ComponentConfigFile::pageDownKey)
+prevArrow(ComponentConfigFile::pageUpKey, config),
+nextArrow(ComponentConfigFile::pageDownKey, config)
 {
 
 #    if JUCE_DEBUG
@@ -36,9 +38,9 @@ std::vector<Button*> AdvancedSettingsPage::getButtonList(bool includeAll)
     std::vector<Button*> buttonList;
     buttonList.push_back(&personalizeButton);
     buttonList.push_back(&setPasswordButton);
-    if (setPasswordPage.hasPassword() || includeAll)
+    if (Password::isPasswordSet() || includeAll)
     {
-        buttonList.push_back(&removePasswordButton);
+    buttonList.push_back(&removePasswordButton);
     }
     buttonList.push_back(&dateTimeButton);
     buttonList.push_back(&inputOptionsButton);
@@ -55,7 +57,7 @@ std::vector<Button*> AdvancedSettingsPage::getButtonList(bool includeAll)
  */
 void AdvancedSettingsPage::reloadLayout()
 {
-    setPasswordButton.setButtonText(setPasswordPage.hasPassword() ?
+    setPasswordButton.setButtonText(Password::isPasswordSet() ?
             "Change your password" : "Set your password");
     std::vector<Button*> buttons = getButtonList();
     prevArrow.setVisible(buttonIndex > 0);
@@ -102,15 +104,12 @@ void AdvancedSettingsPage::visibilityChanged()
  */
 void AdvancedSettingsPage::pageButtonClicked(Button * button)
 {
-    PageComponent::PageType pageType = 
+    PageComponent::PageType pageType =
             PageComponent::PageType::AdvancedSettings;
     if (button == &setPasswordButton)
     {
         pageType = PageComponent::PageType::SetPassword;
     }
-    //TODO: add a password handling class that can be checked before
-    //adding the remove password page and reused by both password pages for
-    //password functions.
     else if (button == &removePasswordButton)
     {
         pageType = PageComponent::PageType::RemovePassword;
@@ -137,8 +136,8 @@ void AdvancedSettingsPage::pageButtonClicked(Button * button)
         buttonIndex -= buttonsPerPage;
         reloadLayout();
     }
-    if(pageType != PageComponent::PageType::AdvancedSettings)
-    {      
+    if (pageType != PageComponent::PageType::AdvancedSettings)
+    {
         pushPageToStack(pageType);
     }
 }

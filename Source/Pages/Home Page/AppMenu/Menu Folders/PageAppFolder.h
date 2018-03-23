@@ -8,12 +8,16 @@
 #pragma once
 #include "AppMenuFolder.h"
 
-class PageAppFolder : public AppMenuFolder {
+class PageAppFolder : public AppMenuFolder
+{
 public:
-    PageAppFolder(AppMenuItem::Ptr folderItem, MouseListener* btnListener,
+    PageAppFolder(AppMenuItem::Ptr folderItem,
+            MouseListener* btnListener,
             std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-            IconThread& iconThread);
-    virtual ~PageAppFolder();
+            IconThread& iconThread,
+            ComponentConfigFile& config);
+
+    virtual ~PageAppFolder() { }
 
     /**
      * Create an AppMenuButton component for an AppMenuItem.
@@ -103,7 +107,7 @@ public:
      * @return true if the selection changed, false otherwise.
      */
     bool setSelectedPosition(int page, int column, int row);
-    
+
     /**
      * Sets the margin width relative to the parent component width, rather than
      * relative to folder width.  The actual margin will be calculated using
@@ -119,17 +123,20 @@ private:
      * Resizes padding, then calls AppFolder::resized().
      */
     void resized() override;
-    
+
     int currentPage = 0;
+
     float parentRelativeMargin = -1;
 
+    ComponentConfigFile& config;
 
     //############################  PageMenuButton  ############################
 
     /**
      *
      */
-    class PageMenuButton : public AppMenuButton {
+    class PageMenuButton : public AppMenuButton
+    {
     public:
         /**
          * 
@@ -137,11 +144,15 @@ private:
          * @param iconThread
          * @param name
          */
-        PageMenuButton(AppMenuItem::Ptr menuItem, IconThread& iconThread,
-                String name = String());
-        virtual ~PageMenuButton();
+        PageMenuButton(
+                AppMenuItem::Ptr menuItem,
+                IconThread& iconThread,
+                String name,
+                ComponentConfigFile& config);
+
+        virtual ~PageMenuButton() { }
     private:
-        
+
         /**
          * Re-calculates draw values whenever the button is resized
          */
@@ -151,6 +162,9 @@ private:
          * Set the background and border to only draw for selected buttons.
          */
         void selectionStateChanged() override;
+
+        ComponentConfigFile& config;
+
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PageMenuButton)
     };
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PageAppFolder)

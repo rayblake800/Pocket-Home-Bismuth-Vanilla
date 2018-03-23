@@ -229,5 +229,7 @@ private:
     NMClient* nmClient = nullptr;
     NMDevice* nmDevice = nullptr;
     GMainContext *context;
+      
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LibNMInterface)
 };
 #endif // LINUX

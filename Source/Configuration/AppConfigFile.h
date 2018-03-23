@@ -131,4 +131,6 @@ private:
     static constexpr const char* FAVORITES_KEY = "favorites";
     static constexpr const char* FOLDERS_KEY = "folders";
 
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppConfigFile)
 };

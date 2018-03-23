@@ -17,11 +17,13 @@
 #include "ConnectionPage.h"
 
 class WifiSettingsPage : public ConnectionPage<WifiAccessPoint>,
-public WifiStateManager::Listener, public TextEditor::Listener {
+public WifiStateManager::Listener, public TextEditor::Listener
+{
 public:
-    WifiSettingsPage(PageFactoryInterface& pageFactory, 
+    WifiSettingsPage(
+            ComponentConfigFile& config,
             WifiStateManager& wifiManager);
-    
+
     ~WifiSettingsPage();
 private:
     /**
@@ -133,22 +135,29 @@ private:
     /**
      * Custom button type to use for getConnectionButton
      */
-    class WifiAPButton : public Button {
+    class WifiAPButton : public Button
+    {
     public:
-        WifiAPButton(const WifiAccessPoint& connection, bool isConnected);
+        WifiAPButton(
+                const WifiAccessPoint& connection,
+                bool isConnected,
+                ComponentConfigFile& config);
     private:
         void resized() override;
 
-        void paintButton(Graphics& g, bool isMouseOverButton,
-                bool isButtonDown) {
-        }
+        void paintButton(
+                Graphics& g,
+                bool isMouseOverButton,
+                bool isButtonDown) { }
+
         ScalingLabel apLabel;
         DrawableImageComponent wifiIcon;
         ScopedPointer<DrawableImageComponent> lockIcon;
 
     };
-    
+
     WifiStateManager& wifiManager;
+    ComponentConfigFile& config;
     bool connectionChanging = false;
     ScalingLabel passwordLabel;
     TextEditor passwordEditor;

@@ -4,6 +4,12 @@
 #include <linux/i2c-dev.h>
 #include "I2CBus.h"
 
+#define DISABLE_I2C
+#ifdef DISABLE_I2C
+int i2c_smbus_read_byte_data(int a, int b) { return 0; }
+int i2c_smbus_write_byte_data(int a, int b, int c) { return 0; }
+#endif
+
 const std::vector<std::pair<uint8_t, char>> I2CBus::felModeSequence = {
     {0x4, 'f'},
     {0x5, 'b'},
@@ -120,7 +126,7 @@ void I2CBus::i2cWriteByte(uint8_t regAddr, uint8_t byte)
     {
         i2cOpen();
     }
-    uint8_t res = i2c_smbus_write_byte_data(i2cFileDescriptor, regAddr, byte);
+    int res = i2c_smbus_write_byte_data(i2cFileDescriptor, regAddr, byte);
     if (res < 0)
     {
         throw I2CException(String("Failed to write to register ")

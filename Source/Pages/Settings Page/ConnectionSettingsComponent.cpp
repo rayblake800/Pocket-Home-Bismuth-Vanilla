@@ -1,12 +1,14 @@
 #include "Utils.h"
-#include "ComponentConfigFile.h"
 #include "ConnectionSettingsComponent.h"
 
-ConnectionSettingsComponent::ConnectionSettingsComponent
-(std::function<void() > openConnectionPage, const String& name) :
+ConnectionSettingsComponent::ConnectionSettingsComponent(
+        std::function<void() > openConnectionPage,
+        ComponentConfigFile& config,
+        const String& name) :
 Component(name),
+config(config),
 openConnectionPage(openConnectionPage),
-pageButton(name + "Button")
+pageButton(config, name + "Button")
 {
     toggle.addListener(this);
     pageButton.addListener(this);
@@ -89,13 +91,19 @@ void ConnectionSettingsComponent::visibilityChanged()
     }
 }
 
-ConnectionSettingsComponent::ConnectionButton::ConnectionButton
-(const String &name) : Button(name) { }
+/**
+ * @param name internal component name
+ */
+ConnectionSettingsComponent::ConnectionButton::ConnectionButton(
+        ComponentConfigFile& config,
+        const String& name) : Button(name), config(config) {
+ }
 
 /**
  * Sets the text that will be printed on the button.
  */
-void ConnectionSettingsComponent::ConnectionButton::setText(const String &text)
+void ConnectionSettingsComponent::ConnectionButton::setText
+(const String &text)
 {
     displayText = text;
     resized();
@@ -133,7 +141,6 @@ void ConnectionSettingsComponent::ConnectionButton::paintButton
 void ConnectionSettingsComponent::ConnectionButton::resized()
 {
     borderSize = getHeight() / 10;
-    ComponentConfigFile config;
     textHeight = config.getFontHeight(getLocalBounds().reduced(borderSize * 2),
             displayText);
 }

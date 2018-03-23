@@ -3,12 +3,18 @@
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
 
-PocketHomeWindow::PocketHomeWindow(String windowName, bool fakeWifi) :
+PocketHomeWindow::PocketHomeWindow(String windowName,
+        bool fakeWifi,
+        MainConfigFile& mainConfig,
+        ComponentConfigFile& componentConfig) :
 WindowFocus::BroadcastWindow(windowName, Colours::darkgrey,
 DocumentWindow::allButtons),
+mainConfig(mainConfig),
+componentConfig(componentConfig),
 lookAndFeel(mainConfig, componentConfig),
 pageFactory(mainConfig, componentConfig, fakeWifi)
 {
+    ASSERT_SINGULAR;
     LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
 
 #    if JUCE_DEBUG
@@ -24,14 +30,13 @@ pageFactory(mainConfig, componentConfig, fakeWifi)
     setLookAndFeel(&LookAndFeel::getDefaultLookAndFeel());
     setVisible(true);
     setWantsKeyboardFocus(false);
-
     loginPage = static_cast<LoginPage*>
             (pageFactory.createLoginPage([this]()
             {
 
                 setContentNonOwned(&pageStack, true);
             }));
-
+    loginPage->setBounds(getBounds());
     if (loginPage->hasPassword())
     {
         setContentNonOwned(loginPage, true);
@@ -41,8 +46,7 @@ pageFactory(mainConfig, componentConfig, fakeWifi)
     {
         setContentNonOwned(&pageStack, true);
     }
-    pageStack.pushPage(pageFactory.createHomePage(),
-            PageComponent::Animation::none);
+    pageStack.setRootPage(pageFactory.createHomePage());
 }
 
 /**
@@ -60,6 +64,9 @@ void PocketHomeWindow::resized()
 {
     const Rectangle<int>& bounds = getLocalBounds();
     pageStack.setBounds(bounds);
-    loginPage->setBounds(bounds);
+    if (loginPage != nullptr)
+    {
+        loginPage->setBounds(bounds);
+    }
 }
 

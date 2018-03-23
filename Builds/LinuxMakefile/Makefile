@@ -136,6 +136,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/KeybindingPage_4bb22002.o \
   $(JUCE_OBJDIR)/FelPage_8ba5194b.o \
   $(JUCE_OBJDIR)/PowerPage_55a65043.o \
+  $(JUCE_OBJDIR)/Password_70723ae1.o \
   $(JUCE_OBJDIR)/RemovePasswordPage_b8a8eff4.o \
   $(JUCE_OBJDIR)/SetPasswordPage_1057fdd0.o \
   $(JUCE_OBJDIR)/UIPage_185e644b.o \
@@ -513,6 +514,11 @@ $(JUCE_OBJDIR)/FelPage_8ba5194b.o: ../../Source/Pages/Power\ Page/FelPage.cpp
 $(JUCE_OBJDIR)/PowerPage_55a65043.o: ../../Source/Pages/Power\ Page/PowerPage.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PowerPage.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/Password_70723ae1.o: ../../Source/Pages/Password\ Pages/Password.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling Password.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/RemovePasswordPage_b8a8eff4.o: ../../Source/Pages/Password\ Pages/RemovePasswordPage.cpp

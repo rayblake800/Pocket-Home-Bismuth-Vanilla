@@ -10,23 +10,25 @@
 #include "DrawableImageComponent.h"
 
 class ConfigurableImageComponent : public DrawableImageComponent,
-public ConfigurableComponent {
+public ConfigurableComponent
+{
 public:
     /**
-     * @param config        A reference to the ComponentConfigFile.
-     * 
      * @param componentKey  One of the component keys defined by the 
      *                       ComponentConfigFile.
+     * 
+     * @param config        A reference to the ComponentConfigFile.
      * 
      * @param assetIndex     Selects which component asset file should be 
      *                        loaded on initialization.
      * 
      * @param placement      Defines how the image will be scaled.
      */
-    ConfigurableImageComponent(ComponentConfigFile& config,
-            String componentKey, int assetIndex = 0,
-            RectanglePlacement placement=RectanglePlacement::centred);
-    
+    ConfigurableImageComponent(String componentKey,
+            ComponentConfigFile& config,
+            int assetIndex = 0,
+            RectanglePlacement placement = RectanglePlacement::centred);
+
     ~ConfigurableImageComponent() { }
 
     /**
@@ -37,7 +39,7 @@ public:
      *                equals the current loaded index, nothing will happen. 
      */
     void setImageAssetIndex(int index);
-    
+
 protected:
     /**
      * (re)load the image file and set the colors.
@@ -53,5 +55,5 @@ protected:
 
 private:
     //current selected image asset.
-    int assetIndex=0;
+    int assetIndex = 0;
 };

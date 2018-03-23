@@ -1,17 +1,18 @@
 #include "ComponentConfigFile.h"
 #include "ClockLabel.h"
 
-ClockLabel::ClockLabel() :
+ClockLabel::ClockLabel(ComponentConfigFile& config) :
 WindowFocusedTimer("ClockLabel"),
-ConfigurableLabel(ComponentConfigFile::clockLabelKey, "clockLabel", "00:00")
+ConfigurableLabel(ComponentConfigFile::clockLabelKey, config,
+"clockLabel", "00:00"),
+config(config)
 {
-    
-#if JUCE_DEBUG
+#    if JUCE_DEBUG
     setName("ClockLabel");
-#endif
-    ComponentConfigFile config;
-    addTrackedKeys({
-        ComponentConfigFile::use24HrModeKey, ComponentConfigFile::showClockKey
+#    endif
+    config.addListener(this,{
+        ComponentConfigFile::use24HrModeKey,
+        ComponentConfigFile::showClockKey
     });
     setJustificationType(Justification::centredRight);
     loadAllConfigProperties();
@@ -53,7 +54,6 @@ void ClockLabel::visibilityChanged()
 {
     if (isVisible())
     {
-        ComponentConfigFile config;
         if (!config.getConfigValue<bool>(ComponentConfigFile::showClockKey))
         {
             setAlpha(0);
@@ -74,7 +74,7 @@ void ClockLabel::visibilityChanged()
 /**
  * Receives notification whenever clock configuration values change
  */
-void ClockLabel::loadExtraConfigProperties
+void ClockLabel::extraConfigValueChanged
 (ConfigFile* config, String key)
 {
     ComponentConfigFile* componentConfig =

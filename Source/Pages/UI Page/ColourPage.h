@@ -9,16 +9,15 @@
 class ColourPage : public PageComponent
 {
 public:
-    ColourPage(PageComponent::PageFactoryInterface& pageFactory,
-            ComponentConfigFile& config);
-    virtual ~ColourPage();
+    ColourPage(ComponentConfigFile& config);
+    virtual ~ColourPage() {}
 private:
     void pageResized() override;
 
     class ColourListModel : public ListBoxModel, public ConfigFile::Listener
     {
     public:
-        ColourListModel();
+        ColourListModel(ComponentConfigFile& config);
         virtual ~ColourListModel();
         int getNumRows() override;
 
@@ -34,8 +33,8 @@ private:
 
 
     private:
-
-        void loadConfigProperties(ConfigFile* config, String key) override;
+        ComponentConfigFile& config;
+        void configValueChanged(ConfigFile* config, String key) override;
         int textHeight;
         StringArray colourKeys;
         Array<Colour> colours;

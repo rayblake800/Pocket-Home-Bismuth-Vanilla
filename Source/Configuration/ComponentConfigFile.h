@@ -159,4 +159,7 @@ private:
     static CriticalSection componentLock;
     static std::map<String, ComponentSettings> components;
     static constexpr const char* filenameConst = "components.json";
+    
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ComponentConfigFile)
 };

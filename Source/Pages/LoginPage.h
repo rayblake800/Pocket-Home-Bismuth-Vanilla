@@ -10,8 +10,9 @@
 #pragma once
 class LoginPage : public PageComponent, public TextEditor::Listener{
 public:
-  LoginPage(std::function<void ()> loginCallback);
-  ~LoginPage();
+  LoginPage(ComponentConfigFile& config,std::function<void ()> loginCallback);
+  
+  ~LoginPage() { }
 
   virtual bool hasPassword();
   virtual void textFocus();

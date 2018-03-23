@@ -1,17 +1,18 @@
 #include "ScrollingAppFolder.h"
 
-ScrollingAppFolder::ScrollingAppFolder
-(AppMenuItem::Ptr folderItem, MouseListener* btnListener,
+ScrollingAppFolder::ScrollingAppFolder(
+        AppMenuItem::Ptr folderItem,
+        MouseListener* btnListener,
         std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-        IconThread& iconThread) :
-AppMenuFolder(folderItem, btnListener, buttonNameMap, iconThread)
+        IconThread& iconThread,
+        ComponentConfigFile& config) :
+AppMenuFolder(folderItem, btnListener, buttonNameMap, iconThread),
+config(config)
 {
     setMargin(0);
     setPadding(0, 0);
     reload();
 }
-
-ScrollingAppFolder::~ScrollingAppFolder() { }
 
 /**
  * Create an AppMenuButton component for an AppMenuItem.
@@ -20,8 +21,11 @@ ScrollingAppFolder::~ScrollingAppFolder() { }
 AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
 (AppMenuItem::Ptr menuItem, IconThread& iconThread)
 {
-    return new ScrollingMenuButton(menuItem, iconThread,
-            menuItem->getAppName() + String("Button"));
+    return new ScrollingMenuButton(
+            menuItem,
+            iconThread,
+            menuItem->getAppName() + String("Button"),
+            config);
 }
 
 /**
@@ -49,14 +53,15 @@ RelativeLayoutManager::Layout ScrollingAppFolder::buildFolderLayout
  * @return the minimum width, in pixels, needed by this folder to
  * display its contents properly. 
  */
-int ScrollingAppFolder::getMinimumWidth() 
+int ScrollingAppFolder::getMinimumWidth()
 {
     int iconSize = getParentHeight() / getMaxRows();
     int maxTextWidth = 0;
-    Font measureFont = getButtonFont();
-    for(int i = 0; i < getButtonCount(); i++){
+    Font measureFont = getButtonFont(config);
+    for (int i = 0; i < getButtonCount(); i++)
+    {
         maxTextWidth = std::max<int> (maxTextWidth,
-                measureFont.getStringWidth(getMenuButtonName(i)));
+                                      measureFont.getStringWidth(getMenuButtonName(i)));
     }
     return maxTextWidth + iconSize;
 }
@@ -64,22 +69,24 @@ int ScrollingAppFolder::getMinimumWidth()
 /**
  * Get the font used by all buttons in this menu type.
  */
-Font ScrollingAppFolder::getButtonFont()
+Font ScrollingAppFolder::getButtonFont(ComponentConfigFile& config)
 {
-    ComponentConfigFile config;
     return Font(config.getComponentSettings
             (ComponentConfigFile::smallTextKey).getBounds().getHeight());
 }
 
-
 /**
  *
  */
-ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton
-(AppMenuItem* menuItem, IconThread& iconThread, String name) :
-AppMenuButton(menuItem, iconThread, name)
+ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton(
+        AppMenuItem* menuItem,
+        IconThread& iconThread,
+        String name,
+        ComponentConfigFile& config) :
+AppMenuButton(menuItem, iconThread, name),
+config(config)
 {
-    setTitleFont(ScrollingAppFolder::getButtonFont());
+    setTitleFont(ScrollingAppFolder::getButtonFont(config));
     setTextJustification(Justification::centredLeft);
 }
 

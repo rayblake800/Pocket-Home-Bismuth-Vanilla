@@ -12,7 +12,7 @@
 
 class ClockLabel : public ConfigurableLabel, private WindowFocusedTimer{
 public:
-    ClockLabel();
+    ClockLabel(ComponentConfigFile& config);
     ~ClockLabel();
 
 private:
@@ -34,6 +34,8 @@ private:
      * for the 12h/24h mode toggle
      */
     void extraConfigValueChanged(ConfigFile* config,String key) override;
+    
+    ComponentConfigFile& config;
     
     //If true, use 24 hour time, if false, use 12 hour AM/PM time.
     bool use24HrMode = false;

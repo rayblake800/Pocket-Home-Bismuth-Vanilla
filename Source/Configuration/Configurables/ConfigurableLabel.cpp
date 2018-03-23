@@ -1,12 +1,12 @@
 #include "ConfigurableLabel.h"
 
-ConfigurableLabel::ConfigurableLabel(ComponentConfigFile& config,
-        String componentKey,
+ConfigurableLabel::ConfigurableLabel(String componentKey,
+        ComponentConfigFile& config,   
         const String &componentName,
         const String &labelText,
         const int& fontPadding) :
-ScalingLabel(componentName, labelText, fontPadding),
-ConfigurableComponent(config,componentKey)
+ScalingLabel(config, componentName, labelText, fontPadding),
+ConfigurableComponent(componentKey, config)
 {
     loadAllConfigProperties();
 }

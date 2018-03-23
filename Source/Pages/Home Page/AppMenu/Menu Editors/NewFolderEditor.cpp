@@ -4,9 +4,12 @@ NewFolderEditor::NewFolderEditor(AppConfigFile& appConfig,
         ComponentConfigFile& componentConfig,
         IconThread& iconThread,
         std::function<void() > onConfirm) :
-AppMenuPopupEditor("New folder", componentConfig, iconThread,
+AppMenuPopupEditor("New folder",
+componentConfig,
+iconThread,
 [this, &appConfig, onConfirm](AppMenuPopupEditor* editor)
 {
+
     AppConfigFile::AppFolder newFolder;
     newFolder.name = editor->getNameField();
     newFolder.icon = editor->getIconField();

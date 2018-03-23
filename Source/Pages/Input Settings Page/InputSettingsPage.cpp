@@ -2,8 +2,10 @@
 #include "AppLauncher.h"
 #include "InputSettingsPage.h"
 
-InputSettingsPage::InputSettingsPage() :
-PageComponent("InputSettingsPage",{
+InputSettingsPage::InputSettingsPage(PageFactoryInterface* pageFactory,
+        MainConfigFile& mainConfig,
+        ComponentConfigFile& componentConfig) :
+PageComponent(componentConfig, "InputSettingsPage",{
     {3,
         {
             {&title, 1}
@@ -21,24 +23,25 @@ PageComponent("InputSettingsPage",{
         {
             {&fnmapping, 1}
         }}
-}, true),
-title("settings", "Input settings"),
+}, pageFactory),
+mainConfig(mainConfig),
+title(componentConfig,"settings", "Input settings"),
 chooseMode("chooseMode"),
 calibrating("Calibrate the screen"),
 fnmapping("Remap keyboard (FN key fix)"),
-cursorVisible("cursorVisible", "Select the visibility of the cursor:")
+cursorVisible(componentConfig,"cursorVisible", 
+        "Select the visibility of the cursor:")
 {
-    
-#if JUCE_DEBUG
+
+#    if JUCE_DEBUG
     setName("InputSettingsPage");
-#endif
+#    endif
     title.setJustificationType(Justification::centred);
     //ComboBox
     chooseMode.addItem("Not visible", 1);
     chooseMode.addItem("Visible", 2);
     chooseMode.addListener(this);
-    MainConfigFile config;
-    if (config.getConfigValue<bool>(MainConfigFile::showCursorKey))
+    if (mainConfig.getConfigValue<bool>(MainConfigFile::showCursorKey))
     {
         chooseMode.setSelectedId(2);
     }
@@ -50,8 +53,6 @@ cursorVisible("cursorVisible", "Select the visibility of the cursor:")
     fnmapping.addListener(this);
     addAndShowLayoutComponents();
 }
-
-InputSettingsPage::~InputSettingsPage() { }
 
 void InputSettingsPage::pageButtonClicked(Button* button)
 {
@@ -65,8 +66,7 @@ void InputSettingsPage::pageButtonClicked(Button* button)
 void InputSettingsPage::comboBoxChanged(ComboBox* c)
 {
     if (c != &chooseMode) return;
-    MainConfigFile config;
     bool cursorVisible = (c->getSelectedId() == 2);
-    config.setConfigValue<bool>(MainConfigFile::showCursorKey, cursorVisible);
+    mainConfig.setConfigValue<bool>(MainConfigFile::showCursorKey, cursorVisible);
 }
 

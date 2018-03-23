@@ -1,9 +1,8 @@
 #include "TempTimer.h"
 #include "ColourPage.h"
 
-ColourPage::ColourPage(PageComponent::PageFactoryInterface& pageFactory,
-        ComponentConfigFile& config) :
-PageComponent(pageFactory, "ColourPage",{
+ColourPage::ColourPage(ComponentConfigFile& config) :
+PageComponent(config,"ColourPage",{
     {4,
         {
             {&colourList, 1}
@@ -13,16 +12,14 @@ PageComponent(pageFactory, "ColourPage",{
             {&testSwitch, 1}
         }}
 
-},
-true),
+}),
 config(config),
+        listModel(config),
 colourList("colourList", &listModel)
 {
     addAndShowLayoutComponents();
     colourList.setOutlineThickness(2);
 }
-
-ColourPage::~ColourPage() { }
 
 void ColourPage::pageResized()
 {
@@ -31,11 +28,11 @@ void ColourPage::pageResized()
     colourList.repaint();
 }
 
-ColourPage::ColourListModel::ColourListModel() :
-Configurable(new ComponentConfigFile(),{})
+ColourPage::ColourListModel::ColourListModel(ComponentConfigFile& config) :
+config(config)
 {
     colourKeys = config.getColourKeys();
-    addTrackedKeys(colourKeys);
+    config.addListener(this, colourKeys);
     DBG(__func__ << ": adding " << colourKeys.size() << " colors");
     for (const String& key : colourKeys)
     {
@@ -95,7 +92,7 @@ Component* ColourPage::ColourListModel::refreshComponentForRow(int rowNumber,
 
 void ColourPage::ColourListModel::selectedRowsChanged(int lastRowSelected) { }
 
-void ColourPage::ColourListModel::loadConfigProperties(ConfigFile* config,
+void ColourPage::ColourListModel::configValueChanged(ConfigFile* config,
         String key)
 {
     int colourIndex = colourKeys.indexOf(key);

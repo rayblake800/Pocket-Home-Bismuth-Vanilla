@@ -1,13 +1,16 @@
 #include "Utils.h"
 #include "BluetoothSettingsPage.h"
 
-BluetoothSettingsPage::BluetoothSettingsPage
-(PageComponent::PageFactoryInterface& pageFactory, 
+BluetoothSettingsPage::BluetoothSettingsPage(
+        ComponentConfigFile& config,
         BluetoothStatus& bluetoothStatus) :
-ConnectionPage<BluetoothDevice>(pageFactory),
-bluetoothStatus(bluetoothStatus) { }
-
-BluetoothSettingsPage::~BluetoothSettingsPage() { }
+ConnectionPage<BluetoothDevice>(config),
+config(config),
+errorLabel(config),
+bluetoothStatus(bluetoothStatus)
+{
+    ASSERT_SINGULAR;
+}
 
 /**
  * @return the list of all visible bluetooth devices
@@ -58,7 +61,7 @@ void BluetoothSettingsPage::connectionButtonClicked(Button* button) { }
 Button* BluetoothSettingsPage::getConnectionButton
 (const BluetoothDevice& device)
 {
-    return new BTDeviceButton(device, isConnected(device));
+    return new BTDeviceButton(device, isConnected(device), config);
 }
 
 /**
@@ -66,7 +69,8 @@ Button* BluetoothSettingsPage::getConnectionButton
  * @param connection the control components will be updated to suit
  * this bluetooth device.
  */
-RelativeLayoutManager::Layout BluetoothSettingsPage::getConnectionControlsLayout
+RelativeLayoutManager::Layout
+BluetoothSettingsPage::getConnectionControlsLayout
 (const BluetoothDevice& device)
 {
     return {};
@@ -95,7 +99,8 @@ void BluetoothSettingsPage::setCurrentlyConnecting
  * Attempt to connect if return is pressed
  * @param editor
  */
-void BluetoothSettingsPage::textEditorReturnKeyPressed(TextEditor& editor) { }
+void BluetoothSettingsPage::textEditorReturnKeyPressed
+(TextEditor& editor) { }
 
 /**
  * Set the spinner's bounds within the connection button
@@ -108,9 +113,11 @@ void BluetoothSettingsPage::connectionPageResized() { }
  */
 void BluetoothSettingsPage::reloadPage() { }
 
-BluetoothSettingsPage::BTDeviceButton::BTDeviceButton
-(const BluetoothDevice& connection, bool isConnected) :
+BluetoothSettingsPage::BTDeviceButton::BTDeviceButton(
+        const BluetoothDevice& connection,
+        bool isConnected,
+        ComponentConfigFile& config) :
 Button(connection.name + String("Button")),
-deviceLabel("deviceLabel", connection.name) { }
+deviceLabel(config, "deviceLabel", connection.name) { }
 
 void BluetoothSettingsPage::BTDeviceButton::resized() { }

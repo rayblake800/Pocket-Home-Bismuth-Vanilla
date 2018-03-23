@@ -1,13 +1,5 @@
-
--Centralize Page management in the PageStack, loading pages dynamically shortly 
-    before they're needed
-    -Save memory by only allocating pages when they're on the stack or 
-     accessible from the top page
-    -Finally eliminate the need for most global resources by allowing resources 
-        to be passed directly to where they're needed, instead of through a 
-        chain of pages that only need them in order to pass them on.
-    -possibly use a Factory design pattern? Page creation and resource 
-        allocation doesn't need to be tied directly to the PageStack
+-Use an interface to get rid of the circular dependency between AppMenuItems
+ and the AppMenuItemFactory
 
 -Re-add the IP label to the Settings Page
     -Add option to display the IP label on the home page

@@ -8,13 +8,15 @@ const StringArray WifiSettingsPage::wifiImageFiles = {
                                                       "wifiStrength3.svg"
 };
 
-WifiSettingsPage::WifiSettingsPage(PageFactoryInterface& pageFactory,
+WifiSettingsPage::WifiSettingsPage(ComponentConfigFile& config,
         WifiStateManager& wifiManager) :
-ConnectionPage<WifiAccessPoint>(pageFactory),
+ConnectionPage<WifiAccessPoint>(config),
+config(config),
 wifiManager(wifiManager),
-passwordLabel("passwordLabel", "Password:")
+passwordLabel(config, "passwordLabel", "Password:"),
+errorLabel(config)
 {
-
+    ASSERT_SINGULAR;
 #    if JUCE_DEBUG
     setName("WifiSettingsPage");
 #    endif
@@ -107,7 +109,7 @@ void WifiSettingsPage::connectionButtonClicked(Button* button)
 Button* WifiSettingsPage::getConnectionButton
 (const WifiAccessPoint& connection)
 {
-    return new WifiAPButton(connection, isConnected(connection));
+    return new WifiAPButton(connection, isConnected(connection), config);
 }
 
 /**
@@ -191,8 +193,7 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
             case WifiStateManager::turningOn:
             case WifiStateManager::turningOff:
             case WifiStateManager::disabled:
-                removeFromStack(PageStackComponent::Transition
-                        ::kTransitionTranslateHorizontal);
+                removeFromStack();
                 break;
             case WifiStateManager::connected:
                 reloadPage();
@@ -265,10 +266,13 @@ void WifiSettingsPage::reloadPage()
     updateConnectionControls(getSelectedConnection());
 }
 
-WifiSettingsPage::WifiAPButton::WifiAPButton
-(const WifiAccessPoint& connection, bool isConnected) :
+WifiSettingsPage::WifiAPButton::WifiAPButton(
+        const WifiAccessPoint& connection,
+        bool isConnected,
+        ComponentConfigFile& config) :
 Button(connection.getSSID() + "Button"),
-apLabel("apLabel", connection.getSSID() + (isConnected ? " (Connected)" : "")),
+apLabel(config, "apLabel", connection.getSSID()
++ (isConnected ? " (Connected)" : "")),
 wifiIcon(getWifiAssetName(connection))
 {
     addAndMakeVisible(apLabel);

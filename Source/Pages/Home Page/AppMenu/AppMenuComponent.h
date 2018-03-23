@@ -30,7 +30,8 @@
 #include "AppMenuButton.h"
 
 class AppMenuComponent : public Component, public ConfigurableComponent,
-private WindowFocus::Listener {
+private WindowFocus::Listener
+{
 public:
     /**
      * @param mainConfig       A reference to the MainConfigFile.
@@ -87,8 +88,7 @@ public:
      * void resized(). This method will run before the menu folders are updated
      * for the new bounds.
      */
-    virtual void menuResized() {
-    }
+    virtual void menuResized() { }
 
 protected:
     /**
@@ -139,6 +139,7 @@ protected:
      */
     void openEditorForSelected();
 
+
     /**
      * @return the number of currently open folder components
      */
@@ -186,7 +187,8 @@ protected:
     /**
      * @return the maximum number of menu items to show on screen
      */
-    inline int buttonsPerPage() const {
+    inline int buttonsPerPage() const
+    {
         return getMaxColumns() * getMaxRows();
     }
 
@@ -197,6 +199,13 @@ protected:
      * This is set to true by default.
      */
     void setOnlyTriggerSelected(bool newVal);
+    
+    
+    /**
+     * @return true iff the menu is loading, empty, animating, or otherwise
+     * in a state where user input should be ignored.
+     */
+    bool ignoringInput() const;
 
 private:
     /**
@@ -205,10 +214,11 @@ private:
      * @param buttonMap is used by the folder to recycle menu buttons
      * @param iconThread is used by the folder to load button icons
      */
-    virtual AppMenuFolder* createFolderObject
-    (AppMenuItem::Ptr folderItem,
+    virtual AppMenuFolder* createFolderObject(
+            AppMenuItem::Ptr folderItem,
             std::map<String, AppMenuButton::Ptr>& buttonMap,
-            IconThread& iconThread) = 0;
+            IconThread& iconThread,
+            ComponentConfigFile& config) = 0;
 
     /**
      * Return the bounds where the given folder should be placed in the menu.
@@ -299,17 +309,12 @@ private:
      */
     void setLoadingState(bool loading);
 
-    /**
-     * @return true iff the menu is loading, empty, animating, or otherwise
-     * in a state where user input should be ignored.
-     */
-    bool ignoringInput() const;
 
     const int animationDuration = 400;
-    
+
     //Loads folder and application shortcut configuration
     AppConfigFile& appConfig;
-    
+
     ComponentConfigFile& componentConfig;
 
     //Holds the AppFolder components that organize the menu buttons.
@@ -324,7 +329,7 @@ private:
 
     //creates all menu items
     AppMenuItemFactory menuItemFactory;
-    
+
     //keyboard shortcuts
     static const String openPopupMenuBinding;
     static const String reloadMenuBinding;

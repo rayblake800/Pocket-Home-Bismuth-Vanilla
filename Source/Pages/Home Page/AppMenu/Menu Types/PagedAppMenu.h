@@ -48,9 +48,11 @@ private:
      * @param buttonMap is used by the folder to recycle menu buttons
      * @param iconThread is used by the folder to load button icons
      */
-    AppMenuFolder* createFolderObject(AppMenuItem::Ptr folderItem,
+    AppMenuFolder* createFolderObject(
+            AppMenuItem::Ptr folderItem,
             std::map<String, AppMenuButton::Ptr>& buttonMap,
-            IconThread& iconThread) override;
+            IconThread& iconThread,
+            ComponentConfigFile& config) override;
 
     /**
      * Return the bounds where the given folder should be placed in the menu.

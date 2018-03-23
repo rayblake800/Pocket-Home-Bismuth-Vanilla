@@ -3,9 +3,10 @@
 #include "BluetoothSettingsPage.h"
 #include "BluetoothSettingsComponent.h"
 
-BluetoothSettingsComponent::BluetoothSettingsComponent
-(std::function<void() > openBluetoothPage) :
-ConnectionSettingsComponent(openBluetoothPage)
+BluetoothSettingsComponent::BluetoothSettingsComponent(
+        std::function<void() > openBluetoothPage,
+        ComponentConfigFile& config) :
+ConnectionSettingsComponent(openBluetoothPage, config)
 {
 
 #    if JUCE_DEBUG
@@ -14,40 +15,40 @@ ConnectionSettingsComponent(openBluetoothPage)
     refresh();
 }
 
-    /**
-     * @return true iff bluetooth is turned on
-     */
-    bool BluetoothSettingsComponent::connectionEnabled()
-    {
-        return false;
-    }
+/**
+ * @return true iff bluetooth is turned on
+ */
+bool BluetoothSettingsComponent::connectionEnabled()
+{
+    return false;
+}
 
-    /**
-     * @return true iff bluetooth is connecting
-     */
-    bool BluetoothSettingsComponent::isBusy()
-    {
-        return false;
-    }
+/**
+ * @return true iff bluetooth is connecting
+ */
+bool BluetoothSettingsComponent::isBusy()
+{
+    return false;
+}
 
-    /**
-     * @return the bluetooth icon asset name
-     */
-    String BluetoothSettingsComponent::getIconAsset()
-    {
-        return "bluetoothIcon.svg";
-    }
+/**
+ * @return the bluetooth icon asset name
+ */
+String BluetoothSettingsComponent::getIconAsset()
+{
+    return "bluetoothIcon.svg";
+}
 
-    /**
-     * Enable/disable bluetooth, once this program can actually do that.
-     * @param enabled
-     */
-    void BluetoothSettingsComponent::enabledStateChanged(bool enabled){}
-    
-    /**
-     * @return "coming soon!"
-     */
-    String BluetoothSettingsComponent::updateButtonText()
-    {
-        return "coming soon!";
-    }
+/**
+ * Enable/disable bluetooth, once this program can actually do that.
+ * @param enabled
+ */
+void BluetoothSettingsComponent::enabledStateChanged(bool enabled) { }
+
+/**
+ * @return "coming soon!"
+ */
+String BluetoothSettingsComponent::updateButtonText()
+{
+    return "coming soon!";
+}

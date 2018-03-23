@@ -11,7 +11,8 @@ const String AppMenuComponent::openPopupMenuBinding = "CTRL + e";
 const String AppMenuComponent::reloadMenuBinding = "TAB";
 DesktopEntries AppMenuComponent::desktopEntries;
 
-AppMenuComponent::AppMenuComponent(MainConfigFile& mainConfig,
+AppMenuComponent::AppMenuComponent(
+        MainConfigFile& mainConfig,
         ComponentConfigFile& componentConfig,
         AppConfigFile& appConfig,
         String componentKey,
@@ -19,7 +20,7 @@ AppMenuComponent::AppMenuComponent(MainConfigFile& mainConfig,
 loadingState(false),
 appConfig(appConfig),
 componentConfig(componentConfig),
-ConfigurableComponent(componentConfig, componentKey),
+ConfigurableComponent(componentKey, componentConfig),
 loadingSpinner(loadingSpinner),
 menuItemFactory(appConfig, mainConfig, desktopEntries)
 {
@@ -462,6 +463,19 @@ void AppMenuComponent::setOnlyTriggerSelected(bool newVal)
     onlyTriggerSelected = newVal;
 }
 
+
+/**
+ * @return true iff the menu is loading, empty, animating, or otherwise
+ * in a state where user input should be ignored.
+ */
+bool AppMenuComponent::ignoringInput() const
+{
+    return openFolders.isEmpty() || isLoading()
+            || (buttonEditor != nullptr && buttonEditor->isVisible())
+            || Desktop::getInstance().getAnimator().isAnimating
+            (openFolders[getActiveFolderIndex()]);
+}
+
 /**
  * Exit the loading state if the window loses focus.
  */
@@ -526,14 +540,15 @@ void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
         removeChildComponent(openFolders.getLast());
         openFolders.removeLast();
     }
-    AppMenuFolder* newFolder = createFolderObject
-            (folderItem, buttonNameMap, iconThread);
+    AppMenuFolder* newFolder = createFolderObject(
+            folderItem, buttonNameMap,  iconThread,  componentConfig);
 
     openFolders.add(newFolder);
     newFolder->addMouseListener(this, false);
     newFolder->updateGridSize(maxRows, maxColumns);
-    setActiveFolderIndex(openFolders.size() - 1);
     addAndMakeVisible(newFolder);
+    layoutFolders();
+    setActiveFolderIndex(openFolders.size() - 1);
 }
 
 /**
@@ -562,6 +577,7 @@ void AppMenuComponent::showPopupEditor(AppMenuPopupEditor* editor)
     }
     buttonEditor = editor;
     addAndMakeVisible(buttonEditor);
+    buttonEditor->setAlwaysOnTop(true);
     resized();
 }
 
@@ -578,19 +594,20 @@ void AppMenuComponent::showMenuButtonEditor(AppMenuButton::Ptr button)
         return;
     }
 
-    showPopupEditor(button->getEditor([this, button]
+    showPopupEditor(button->getEditor(componentConfig,
+            [this, button]
             (AppMenuPopupEditor * editor)
-    {
-        openFolders[getActiveFolderIndex()]->repaint();
-        if (button->getMenuItem()->changesDesktopEntries())
-        {
-            desktopEntries.loadEntries([](String s)
             {
-            }, []()
-            {
-            });
-        }
-    }));
+                openFolders[getActiveFolderIndex()]->repaint();
+                if (button->getMenuItem()->changesDesktopEntries())
+                {
+                    desktopEntries.loadEntries([](String s)
+                    {
+                    }, []()
+                    {
+                    });
+                }
+            }));
 }
 
 /**
@@ -707,14 +724,3 @@ void AppMenuComponent::setLoadingState(bool loading)
     }
 }
 
-/**
- * @return true iff the menu is loading, empty, animating, or otherwise
- * in a state where user input should be ignored.
- */
-bool AppMenuComponent::ignoringInput() const
-{
-    return openFolders.isEmpty() || isLoading()
-            || (buttonEditor != nullptr && buttonEditor->isVisible())
-            || Desktop::getInstance().getAnimator().isAnimating
-            (openFolders[getActiveFolderIndex()]);
-}

@@ -2,9 +2,11 @@
 #include "ComponentConfigFile.h"
 #include "ScalingLabel.h"
 
-ScalingLabel::ScalingLabel(const String &componentName,
+ScalingLabel::ScalingLabel(ComponentConfigFile& config,
+        const String &componentName,
         const String &labelText, const int& fontPadding)
 : Label(componentName, labelText),
+config(config),
 fontPadding(fontPadding)
 {
 
@@ -13,14 +15,11 @@ fontPadding(fontPadding)
 #    endif
 }
 
-ScalingLabel::~ScalingLabel() { }
-
 /**
  * Updates font size when label bounds change.
  */
 void ScalingLabel::resized()
 {
-    ComponentConfigFile config;
     setFont(getFont().withHeight(config.getFontHeight
             (getLocalBounds(), getText())));
 }

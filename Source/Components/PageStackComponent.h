@@ -27,6 +27,8 @@ public:
         kTransitionTranslateHorizontalLeft
     };
 
+private:
+
     /**
      * Pushes a new PageComponent on top of the stack, optionally animating
      * the transition. 
@@ -86,7 +88,10 @@ private:
     void transitionPage(PageComponent* page,
             PageComponent::Animation animation,
             int duration,
-            std::function<void(PageComponent*) > postAnimation = {},
+            std::function<void(PageComponent*) > postAnimation = []
+            (PageComponent* page)
+            {
+            },
     bool addingPage = true);
 
     //page transition animation duration in milliseconds

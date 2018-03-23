@@ -34,4 +34,7 @@ public:
 private:
     static CriticalSection mainConfigLock;
     static constexpr const char* filenameConst = "config.json";
+    
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainConfigFile)
 };

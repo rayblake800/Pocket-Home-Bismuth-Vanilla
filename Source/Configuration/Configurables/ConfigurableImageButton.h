@@ -15,17 +15,17 @@ public ConfigurableComponent
 public:
 
     /**
-     * @param config        A reference to the ComponentConfigFile.
-     * 
      * @param componentKey  One of the component keys defined by the 
      *                       ComponentConfigFile.
+     * 
+     * @param config        A reference to the ComponentConfigFile.
      * 
      * @param assetIndex    Selects which component asset file should be loaded
      *                       by the image on initialization.
      * 
      * @param placement     Defines how the image will be scaled
      */
-    ConfigurableImageButton(ComponentConfigFile& config, String componentKey, 
+    ConfigurableImageButton(String componentKey, ComponentConfigFile& config, 
             int assetIndex = 0,
             RectanglePlacement placement = RectanglePlacement::centred);
 

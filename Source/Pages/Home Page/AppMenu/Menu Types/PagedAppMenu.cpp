@@ -12,9 +12,9 @@ PagedAppMenu::PagedAppMenu(MainConfigFile& mainConfig,
         OverlaySpinner& loadingSpinner) :
 AppMenuComponent(mainConfig, componentConfig, appConfig,
 ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
-pageLeft(componentConfig, ComponentConfigFile::pageLeftKey),
-pageRight(componentConfig, ComponentConfigFile::pageRightKey),
-closeFolderBtn(componentConfig, ComponentConfigFile::pageUpKey)
+pageLeft(ComponentConfigFile::pageLeftKey, componentConfig),
+pageRight(ComponentConfigFile::pageRightKey, componentConfig),
+closeFolderBtn(ComponentConfigFile::pageUpKey, componentConfig)
 {
     setOnlyTriggerSelected(false);
     Array<Button*> buttons = {&pageLeft, &pageRight, &closeFolderBtn};
@@ -211,14 +211,20 @@ Rectangle<int> PagedAppMenu::updateFolderBounds(const AppMenuFolder* folder,
  * Create a folder component object from a folder menu item.
  * @param folderItem
  */
-AppMenuFolder* PagedAppMenu::createFolderObject(AppMenuItem::Ptr folderItem,
+AppMenuFolder* PagedAppMenu::createFolderObject(
+        AppMenuItem::Ptr folderItem,
         std::map<String, AppMenuButton::Ptr>& buttonMap,
-        IconThread& iconThread)
+        IconThread& iconThread,
+        ComponentConfigFile& config)
 {
-    PageAppFolder* folder = new PageAppFolder
-            (folderItem, this, buttonMap, iconThread);
-    folder->setParentRelativeMargin((float) pageLeft.getWidth()
-            / (float) getWidth());
+    PageAppFolder* folder = new PageAppFolder(
+            folderItem,
+            this,
+            buttonMap,
+            iconThread,
+            config);
+    folder->setParentRelativeMargin(
+            (float) pageLeft.getWidth() / (float) getWidth());
     return folder;
 }
 
@@ -227,16 +233,19 @@ AppMenuFolder* PagedAppMenu::createFolderObject(AppMenuItem::Ptr folderItem,
  */
 void PagedAppMenu::buttonClicked(Button* button)
 {
-    if (button == &closeFolderBtn && getNumFolders() > 1)
+    if (!ignoringInput())
     {
-        closeFolder();
-    }
-    else if (button == &pageLeft)
-    {
-        keyPressed(KeyPress::createFromDescription(pageLeftBinding));
-    }
-    else if (button == &pageRight)
-    {
-        keyPressed(KeyPress::createFromDescription(pageRightBinding));
+        if (button == &closeFolderBtn && getNumFolders() > 1)
+        {
+            closeFolder();
+        }
+        else if (button == &pageLeft)
+        {
+            keyPressed(KeyPress::createFromDescription(pageLeftBinding));
+        }
+        else if (button == &pageRight)
+        {
+            keyPressed(KeyPress::createFromDescription(pageRightBinding));
+        }
     }
 }

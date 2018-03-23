@@ -14,10 +14,11 @@
  * the PageComponent after the page is added to the stack.
  * 
  * All pages are aware of all other page types that they can create through the 
- * PageComponent::PageType enum.  The page on the top of the page stack can
+ * PageComponent::PageType enum.  To be able to create pages, a page must have
+ * a pointer to a PageFactoryInterface object assigned to it on construction.  
+ * If it has a PageFactoryInterface, the page on the top of the page stack can
  * create any other page type to add to the stack, without needing to know
- * anything about the created page.  This is managed by an object implementing
- * PageFactoryInterface, which must be passed in on page creation.
+ * anything about the created page.
  */
 #pragma once
 
@@ -36,18 +37,19 @@ public:
     };
 
     /**
-     * @param pageFactory        The factory object needed by this page to 
-     *                            create new pages.
-     * 
      * @param config             A reference to the ComponentConfigFile, which
      *                            defines the page navigation button properties.
      * 
-     * @param name               The internal component name
+     * @param name               The internal component name.
      * 
      * @param layout             Defines the layout of all page components.  
      *                            This layout will be saved, but components will
      *                            not be added to the page until 
      *                            addAndShowLayoutComponents is called.
+     * 
+     * @param pageFactory        The factory object needed by this page to 
+     *                            create new pages. This can be set to nullptr
+     *                            in pages that don't need to create more pages.
      * 
      * @param showBackButton     If true, add a back button on this page.
      * 
@@ -55,11 +57,11 @@ public:
      *                            side of the page. Otherwise, it will be on the
      *                            left.
      */
-    PageComponent(PageFactoryInterface& pageFactory,
-            ComponentConfigFile& config,
+    PageComponent(ComponentConfigFile& config,
             const String& name = String(),
             RelativeLayoutManager::Layout layout = {},
-    bool showBackButton = false,
+            PageFactoryInterface* pageFactory = nullptr,
+    bool showBackButton = true,
             bool backButtonOnRight = false);
 
     virtual ~PageComponent() { }
@@ -93,10 +95,10 @@ public:
         BluetoothSettings,
         WifiSettings,
         UI,
-        Colour,
+        ColourSettings,
         AdvancedSettings,
         DateTime,
-        HomeSettings,
+        HomeSettings
     };
 
     /**
@@ -119,6 +121,14 @@ public:
     public:
 
         virtual ~PageStackInterface() { }
+        
+        /**
+         * Sets the initial page of the page stack, which will remain on the
+         * stack until the stack is destroyed.
+         * 
+         * @param page
+         */
+        void setRootPage(PageComponent* page);
 
     protected:
 
@@ -150,7 +160,7 @@ public:
          * @param animation
          */
         virtual void pushPage
-        (PageComponent* page, Animation animation = slideInFromLeft) = 0;
+        (PageComponent* page, Animation animation = slideInFromRight) = 0;
 
         /**
          * Removes the top page from the stack, optionally animating the 
@@ -158,7 +168,7 @@ public:
          * 
          * @param animation
          */
-        virtual void popPage(Animation animation = slideInFromLeft) = 0;
+        virtual void popPage(Animation animation = slideInFromRight) = 0;
 
         /**
          * Checks if a page is the top page on the stack.
@@ -205,6 +215,13 @@ protected:
      * PageStackComponent will call this method. 
      */
     virtual void pageRevealedOnStack() { }
+    
+    
+    /**
+     * Whenever this page is removed from the stack, the 
+     * PageStackComponent will call this method. 
+     */
+    virtual void pageRemovedFromStack() { }
 
     /**
      * Handles any buttons besides the back button.  Inheriting classes
@@ -273,7 +290,7 @@ protected:
      * @param animation   This animation will run if the page was on top
      *                     of the stack and was removed successfully.
      */
-    void removeFromStack(Animation animation = slideInFromLeft);
+    void removeFromStack(Animation animation = slideInFromRight);
 
     /**
      * Creates and pushes a new page on top of the stack.
@@ -284,7 +301,7 @@ protected:
      *                     added to the stack.
      */
     void pushPageToStack(PageType pageType, Animation animation
-            = slideInFromLeft);
+            = slideInFromRight);
 
 private:
     /**
@@ -335,7 +352,7 @@ private:
     Image backgroundImage;
 
     //Used by the page to create additional pages to display.
-    PageFactoryInterface& pageFactory;
+    PageFactoryInterface* pageFactory = nullptr;
 
     //Points to the page stack this page is on, if any.
     PageStackInterface* pageStack = nullptr;

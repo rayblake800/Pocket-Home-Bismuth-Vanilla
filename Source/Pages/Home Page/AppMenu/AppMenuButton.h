@@ -46,13 +46,14 @@ public:
 
     /**
      * Gets a PopupEditorComponent configured to edit this button's data
+     * @param config
      * @param onConfirm callback function that will run if changes are made and
      * confirmed in the new editor.  This should be used for updating button
      * properties that aren't managed internally, such as button position.
      * @return a new PopupEditorComponent, ready to be added to the screen.
      */
-    AppMenuPopupEditor* getEditor
-    (const std::function<void(AppMenuPopupEditor*) >& onConfirm);
+    AppMenuPopupEditor* getEditor(ComponentConfigFile& config,
+            const std::function<void(AppMenuPopupEditor*) >& onConfirm);
 
     /**
      * Calling this method will create a message box asking for user 

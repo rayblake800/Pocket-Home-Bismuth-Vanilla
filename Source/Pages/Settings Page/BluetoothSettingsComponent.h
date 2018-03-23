@@ -8,10 +8,14 @@
 #include "BluetoothStatus.h"
 #include "ConnectionSettingsComponent.h"
 
-class BluetoothSettingsComponent : public ConnectionSettingsComponent {
+class BluetoothSettingsComponent : public ConnectionSettingsComponent
+{
 public:
-    BluetoothSettingsComponent(std::function<void()> openBluetoothPage);
-    virtual ~BluetoothSettingsComponent() {}
+    BluetoothSettingsComponent(
+            std::function<void() > openBluetoothPage,
+            ComponentConfigFile& config);
+
+    virtual ~BluetoothSettingsComponent() { }
 
 private:
     /**
@@ -34,7 +38,7 @@ private:
      * @param enabled
      */
     void enabledStateChanged(bool enabled) override;
-    
+
     /**
      * @return "coming soon!"
      */

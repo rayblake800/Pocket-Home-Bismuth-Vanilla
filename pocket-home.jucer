@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="EFuQKG" name="pocket-home" projectType="guiapp" version="0.0.1"
               bundleIdentifier="co.nextthing.PokeLaunch" includeBinaryInAppConfig="1"
-              jucerVersion="5.2.1" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
+              jucerVersion="5.3.0" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
               displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
               companyCopyright="Next Thing Co." headerPath="../../Source&#10;../../Source/Components&#10;../../Source/Components/Widgets&#10;../../Source/Configuration&#10;../../Source/Configuration/Configurables&#10;../../Source/Hardware&#10;../../Source/Hardware/Bluetooth&#10;../../Source/Hardware/Wifi&#10;../../Source/Pages&#10;../../Source/Pages/Home Page&#10;../../Source/Pages/Home Page/Widgets&#10;../../Source/Pages/Home Page/AppMenu&#10;../../Source/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/Pages/Input Settings Page&#10;../../Source/Pages/Password Pages&#10;../../Source/Pages/Power Page&#10;../../Source/Pages/Settings Page&#10;../../Source/Pages/UI Page"
               defines="JUCE_LOG_ASSERTIONS=1">
@@ -289,6 +289,8 @@
           <FILE id="xYpw8n" name="PowerPage.h" compile="0" resource="0" file="Source/Pages/Power Page/PowerPage.h"/>
         </GROUP>
         <GROUP id="{DA0FC550-71F8-DA3A-3590-10149A6CBFF7}" name="Password Pages">
+          <FILE id="gtrGWD" name="Password.cpp" compile="1" resource="0" file="Source/Pages/Password Pages/Password.cpp"/>
+          <FILE id="Do3x3Q" name="Password.h" compile="0" resource="0" file="Source/Pages/Password Pages/Password.h"/>
           <FILE id="Dvyqrf" name="RemovePasswordPage.cpp" compile="1" resource="0"
                 file="Source/Pages/Password Pages/RemovePasswordPage.cpp"/>
           <FILE id="ZqU26x" name="RemovePasswordPage.h" compile="0" resource="0"

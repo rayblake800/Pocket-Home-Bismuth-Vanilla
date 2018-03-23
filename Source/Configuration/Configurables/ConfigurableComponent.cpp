@@ -3,7 +3,7 @@
 #include "ConfigurableComponent.h"
 
 ConfigurableComponent::ConfigurableComponent
-(ComponentConfigFile& config, const String& componentKey) :
+(const String& componentKey, ComponentConfigFile& config) :
 componentKey(componentKey),
 componentSettings(config.getComponentSettings(componentKey)) 
 { 

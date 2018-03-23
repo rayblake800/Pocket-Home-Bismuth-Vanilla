@@ -81,6 +81,7 @@
 		CF49E635EEA0FC51384CB95E = {isa = PBXBuildFile; fileRef = AC46DD44C5C0F845ADC4436C; };
 		E7703670E50C41EE87D7AF16 = {isa = PBXBuildFile; fileRef = 57659D23D03F4EFB03BE51DB; };
 		EFA02448BDB2E4EC104DBDC6 = {isa = PBXBuildFile; fileRef = DDC1FF818B15E0369A3F360E; };
+		C8F0912FE2C2F613F26FA339 = {isa = PBXBuildFile; fileRef = 0435754A49BBF397D104ED34; };
 		22DCF11AFFE93332557904AC = {isa = PBXBuildFile; fileRef = 4B223841D4C931712C838302; };
 		EE164E0DDB7DF01D704C3230 = {isa = PBXBuildFile; fileRef = 5D25EB11F338505ADE81799D; };
 		345461914D4E4F07F0D548D7 = {isa = PBXBuildFile; fileRef = 3379C30F97E578DAFB7BB2BF; };
@@ -112,6 +113,7 @@
 		00F169F4F344BBF6892637D1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Source/Main.cpp; sourceTree = "SOURCE_ROOT"; };
 		03B199F254A33BC958ADCCB3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiAccessPoint.h; path = ../../Source/Hardware/Wifi/WifiAccessPoint.h; sourceTree = "SOURCE_ROOT"; };
 		0417407B0A67DC4B35ACA63F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurableImageComponent.cpp; path = ../../Source/Configuration/Configurables/ConfigurableImageComponent.cpp; sourceTree = "SOURCE_ROOT"; };
+		0435754A49BBF397D104ED34 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Password.cpp; path = "../../Source/Pages/Password Pages/Password.cpp"; sourceTree = "SOURCE_ROOT"; };
 		046C580CAE38B6EA5D85FF85 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwitchComponent.h; path = ../../Source/Components/Widgets/SwitchComponent.h; sourceTree = "SOURCE_ROOT"; };
 		0483B6886B8AF1E5DC9625C8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigurableImageButton.h; path = ../../Source/Configuration/Configurables/ConfigurableImageButton.h; sourceTree = "SOURCE_ROOT"; };
 		054FB207E09A6AD28B81F890 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuItem.cpp; path = "../../Source/Pages/Home Page/AppMenu/Menu Items/AppMenuItem.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -162,6 +164,7 @@
 		45FBF674A8792286C21C4E1B = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentEditorPage.cpp; path = "../../Source/Pages/UI Page/ComponentEditorPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		475FC4F5631972844640A9DB = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CounterComponent.h; path = ../../Source/Components/Widgets/CounterComponent.h; sourceTree = "SOURCE_ROOT"; };
 		4794C5E96614B9F6C77FF900 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OverlaySpinner.cpp; path = ../../Source/Components/Widgets/OverlaySpinner.cpp; sourceTree = "SOURCE_ROOT"; };
+		481CEA5C77AE4DFD00BD1DF7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Password.h; path = "../../Source/Pages/Password Pages/Password.h"; sourceTree = "SOURCE_ROOT"; };
 		49A659CB713C5790E90A52B1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppLauncher.h; path = ../../Source/AppLauncher.h; sourceTree = "SOURCE_ROOT"; };
 		4A55C90CE2A613853C7B2F56 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuButton.cpp; path = "../../Source/Pages/Home Page/AppMenu/AppMenuButton.cpp"; sourceTree = "SOURCE_ROOT"; };
 		4B223841D4C931712C838302 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RemovePasswordPage.cpp; path = "../../Source/Pages/Password Pages/RemovePasswordPage.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -483,6 +486,8 @@
 					DDC1FF818B15E0369A3F360E,
 					893E19CF0DE58C577C004390, ); name = "Power Page"; sourceTree = "<group>"; };
 		FBA33BDA53A4981E5DE53410 = {isa = PBXGroup; children = (
+					0435754A49BBF397D104ED34,
+					481CEA5C77AE4DFD00BD1DF7,
 					4B223841D4C931712C838302,
 					F512B9BE38C425A85878EFF5,
 					5D25EB11F338505ADE81799D,
@@ -793,6 +798,7 @@
 					CF49E635EEA0FC51384CB95E,
 					E7703670E50C41EE87D7AF16,
 					EFA02448BDB2E4EC104DBDC6,
+					C8F0912FE2C2F613F26FA339,
 					22DCF11AFFE93332557904AC,
 					EE164E0DDB7DF01D704C3230,
 					345461914D4E4F07F0D548D7,

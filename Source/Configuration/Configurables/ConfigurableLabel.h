@@ -12,9 +12,9 @@
 class ConfigurableLabel : public ScalingLabel, public ConfigurableComponent {
 public:
     /**
-     * @param config        A reference to the ComponentConfigFile.
-     * 
      * @param componentKey  The label's key in the ComponentConfigFile.
+     * 
+     * @param config        A reference to the ComponentConfigFile.
      * 
      * @param componentName The component's internal name value.
      *  
@@ -23,8 +23,8 @@ public:
      *  @param fontPadding  The font height will not exceed 
      *                       (getHeight() - fontPadding).
      */
-    ConfigurableLabel(ComponentConfigFile& config,
-            String componentKey,
+    ConfigurableLabel(String componentKey,
+            ComponentConfigFile& config,
             const String &componentName = String(),
             const String &labelText = String(),
             const int& fontPadding = 0);

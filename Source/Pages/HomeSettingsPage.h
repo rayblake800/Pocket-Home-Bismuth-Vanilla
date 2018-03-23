@@ -13,23 +13,19 @@
 #include "CounterComponent.h"
 #include "PageComponent.h"
 #include "Utils.h"
-#include "ColourPage.h"
 #include "MainConfigFile.h"
 
 class HomeSettingsPage : public PageComponent, private ComboBox::Listener,
 private FileSelectTextEditor::Listener
 {
 public:
-    HomeSettingsPage(PageFactoryInterface& pageFactory, 
-            MainConfigFile& config);
+    HomeSettingsPage(PageFactoryInterface* pageFactory,
+            MainConfigFile& mainConfig,
+            ComponentConfigFile& componentConfig);
 
-    ~HomeSettingsPage() { }
+    virtual ~HomeSettingsPage();
 
 private:
-    /**
-     * Update AppMenu dimensions when the page closes.
-     */
-    void pageRemovedFromStack() override;
 
     void comboBoxChanged(ComboBox*) override;
 
@@ -39,8 +35,8 @@ private:
     void fileSelected(FileSelectTextEditor* edited);
 
     void updateComboBox();
-    MainConfigFile& config;
-    
+    MainConfigFile& mainConfig;
+
     ScalingLabel title;
     Colour bgColor;
     ScalingLabel bgTitle;
@@ -57,6 +53,5 @@ private:
     ScalingLabel rowCountLabel;
     CounterComponent rowCounter;
     TextButton colourPageBtn;
-    ColourPage colourPage;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomeSettingsPage)
 };

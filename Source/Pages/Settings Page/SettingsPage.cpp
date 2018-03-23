@@ -4,9 +4,12 @@
 #include "PokeLookAndFeel.h"
 #include "SettingsPage.h"
 
-SettingsPage::SettingsPage() :
+SettingsPage::SettingsPage(PageFactoryInterface* pageFactory,
+        ComponentConfigFile& config,
+        WifiStateManager& wifiManager) :
 WindowFocusedTimer("SettingsPage"),
-PageComponent("SettingsPage",{
+PageComponent(config,
+"SettingsPage",{
     {1,
         {
             {&wifiComponent, 1}
@@ -27,19 +30,19 @@ PageComponent("SettingsPage",{
         {
             {&advancedPageButton, 1}
         }}
-}, true),
-wifiComponent([this]
-{
+},
+pageFactory, true),
+wifiComponent(wifiManager,
+        [this]()
+        {
 
-    pushPageToStack(&wifiSettingsPage,
-            PageStackComponent::kTransitionTranslateHorizontal);
-}),
+            pushPageToStack(PageType::WifiSettings);
+        }, config),
 //bluetoothComponent([this]
 //{
 //
-//    pushPageToStack(&bluetoothSettingsPage,
-//            PageStackComponent::kTransitionTranslateHorizontal);
-//}),
+//    pushPageToStack(PageType::BluetoothSettings);
+//}, config),
 screenBrightnessSlider("brightnessIconLo.svg", "brightnessIconHi.svg"),
 volumeSlider("volumeIconLo.svg", "volumeIconHi.svg"),
 advancedPageButton("Advanced Settings")
@@ -54,15 +57,13 @@ advancedPageButton("Advanced Settings")
     advancedPageButton.addListener(this);
     brightness = Display::getBrightness();
     volume = Audio::getVolumePercent();
-    screenBrightnessSlider.setRange(1,10,1);
+    screenBrightnessSlider.setRange(1, 10, 1);
     screenBrightnessSlider.setValue(brightness);
-    screenBrightnessSlider.addListener(this);   
-    volumeSlider.setRange(0,100,1);
+    screenBrightnessSlider.addListener(this);
+    volumeSlider.setRange(0, 100, 1);
     volumeSlider.setValue(volume);
     volumeSlider.addListener(this);
 }
-
-SettingsPage::~SettingsPage() { }
 
 void SettingsPage::visibilityChanged()
 {
@@ -90,8 +91,7 @@ void SettingsPage::pageButtonClicked(Button *button)
 {
     if (button == &advancedPageButton)
     {
-        pushPageToStack(&advancedSettingsPage,
-                PageStackComponent::kTransitionTranslateHorizontal);
+        pushPageToStack(PageType::AdvancedSettings);
     }
 }
 

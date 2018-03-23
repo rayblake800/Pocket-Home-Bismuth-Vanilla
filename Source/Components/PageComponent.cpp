@@ -1,11 +1,12 @@
 #include "ComponentConfigFile.h"
 #include "PageComponent.h"
 
-PageComponent::PageComponent(PageFactoryInterface& pageFactory,
-        ComponentConfigFile& config,
+PageComponent::PageComponent(ComponentConfigFile& config,
         const String& name,
         RelativeLayoutManager::Layout layout,
-        bool showBackButton, bool backButtonOnRight) :
+        PageFactoryInterface* pageFactory,
+        bool showBackButton,
+        bool backButtonOnRight) :
 Component(name),
 pageFactory(pageFactory),
 backButtonOnRight(backButtonOnRight)
@@ -13,10 +14,11 @@ backButtonOnRight(backButtonOnRight)
     layoutManager.setLayout(layout);
     if (showBackButton)
     {
-        backButton = new ConfigurableImageButton(config,
+        backButton = new ConfigurableImageButton(
                 backButtonOnRight ?
                 ComponentConfigFile::pageRightKey
-                : ComponentConfigFile::pageLeftKey);
+                : ComponentConfigFile::pageLeftKey,
+                config);
         backButton->addListener(this);
         addAndMakeVisible(backButton);
     }
@@ -36,6 +38,16 @@ void PageComponent::setBackgroundImage(Image bgImage)
 void PageComponent::addAndShowLayoutComponents()
 {
     layoutManager.addComponentsToParent(this);
+}
+
+/**
+ * Sets the initial page of the page stack, which will remain on the
+ * stack until the stack is destroyed.
+ */
+void PageComponent::PageStackInterface::setRootPage(PageComponent* page)
+{
+    page->pageStack = this;
+    pushPage(page, Animation::none);
 }
 
 /**
@@ -150,9 +162,10 @@ void PageComponent::removeFromStack(PageComponent::Animation animation)
 void PageComponent::pushPageToStack(PageComponent::PageType pageType,
         PageComponent::Animation animation)
 {
-    if (isStackTop())
+    if (isStackTop() && pageFactory != nullptr)
     {
-        PageComponent* newPage = pageFactory.createPage(pageType);
+        DBG(getName() << " pushing new page ");
+        PageComponent* newPage = pageFactory->createPage(pageType);
         newPage->pageStack = pageStack;
         pageStack->pushPage(newPage, animation);
     }
@@ -190,7 +203,8 @@ void PageComponent::buttonClicked(Button* button)
 {
     if (button == backButton && !overrideBackButton())
     {
-        removeFromStack();
+        removeFromStack(backButtonOnRight ?
+                slideInFromLeft : slideInFromRight);
     }
     else
     {

@@ -28,7 +28,9 @@ void PocketHomeApplication::initialise(const String &commandLine)
 
     
     homeWindow = new PocketHomeWindow(getApplicationName(), 
-            args.contains("--fakewifi"));
+            args.contains("--fakewifi"),
+            mainConfig,
+            componentConfig);
 }
 
 void PocketHomeApplication::shutdown()

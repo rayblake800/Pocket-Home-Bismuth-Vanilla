@@ -3,8 +3,10 @@
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
 
-PowerPage::PowerPage() :
-PageComponent("PowerPage",{
+PowerPage::PowerPage(PageFactoryInterface* pageFactory,
+        MainConfigFile& mainConfig,
+        ComponentConfigFile& componentConfig) :
+PageComponent(componentConfig, "PowerPage",{
     {1,
         {
             {nullptr, 1}
@@ -29,22 +31,24 @@ PageComponent("PowerPage",{
         {
             {nullptr, 1}
         }}
-}, true, true),
+}, pageFactory, true, true),
+mainConfig(mainConfig),
 powerOffButton("Shutdown"),
 rebootButton("Reboot"),
 sleepButton("Sleep"),
 felButton("Flash Software"),
-lockscreen([this]()
+overlaySpinner(componentConfig),
+lockscreen(componentConfig, [this]()
 {
 
     hideLockscreen();
 })
 {
-    
-#if JUCE_DEBUG
+
+#    if JUCE_DEBUG
     setName("PowerPage");
-#endif
-    setColour(backgroundColourId,Colours::black);
+#    endif
+    setColour(backgroundColourId, Colours::black);
     powerOffButton.addListener(this);
     sleepButton.addListener(this);
     rebootButton.addListener(this);
@@ -53,8 +57,6 @@ lockscreen([this]()
     addAndShowLayoutComponents();
 }
 
-PowerPage::~PowerPage() { }
-
 /**
  * Turns off the display until key or mouse input is detected.
  * The lock screen will be visible when the display turns on again.
@@ -62,7 +64,7 @@ PowerPage::~PowerPage() { }
 void
 PowerPage::startSleepMode()
 {
-#if JUCE_LINUX
+#    if JUCE_LINUX
     ChildProcess commandProcess;
     StringArray cmd{ "xset", "q", "|", "grep", "is O"};
     if (commandProcess.start(cmd))
@@ -75,13 +77,14 @@ PowerPage::startSleepMode()
         else
         {
             addAndMakeVisible(lockscreen);
+            lockscreen.setBounds(getLocalBounds());
             lockscreen.setAlwaysOnTop(true);
             //Turn off the screen
             commandProcess.start("xset dpms force off");
         }
     }
     commandProcess.waitForProcessToFinish(10000);
-#endif
+#    endif
 }
 
 /**
@@ -92,7 +95,7 @@ void PowerPage::hideLockscreen()
     if (lockscreen.isShowing())
     {
         removeChildComponent(&lockscreen);
-        removeFromStack(PageStackComponent::kTransitionNone);
+        removeFromStack(Animation::slideInFromLeft);
     }
 }
 
@@ -115,6 +118,7 @@ PowerPage::showPowerSpinner()
  */
 void PowerPage::pageResized()
 {
+    lockscreen.setBounds(getLocalBounds());
     overlaySpinner.setBounds(getLocalBounds());
 }
 
@@ -126,8 +130,7 @@ PowerPage::pageButtonClicked(Button *button)
 {
     if (button == &felButton)
     {
-        pushPageToStack(&felPage,
-                PageStackComponent::kTransitionTranslateHorizontalLeft);
+        pushPageToStack(PageType::Fel, Animation::slideInFromLeft);
         return;
     }
     if (button == &sleepButton)
@@ -136,17 +139,16 @@ PowerPage::pageButtonClicked(Button *button)
         return;
     }
     ChildProcess commandProcess;
-    MainConfigFile config;
     if (button == &powerOffButton)
     {
         showPowerSpinner();
-        commandProcess.start(config.getConfigValue<String>
+        commandProcess.start(mainConfig.getConfigValue<String>
                 (MainConfigFile::shutdownCommandKey));
     }
     else if (button == &rebootButton)
     {
         showPowerSpinner();
-        commandProcess.start(config.getConfigValue<String>
+        commandProcess.start(mainConfig.getConfigValue<String>
                 (MainConfigFile::restartCommandKey));
     }
     commandProcess.waitForProcessToFinish(10000);

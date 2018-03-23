@@ -14,6 +14,7 @@
 #include "SwitchComponent.h"
 #include "Spinner.h"
 #include "DrawableImageComponent.h"
+#include "ComponentConfigFile.h"
 
 class ConnectionSettingsComponent : public Component,
 private Button::Listener
@@ -24,7 +25,9 @@ public:
      * This should be a function that opens a connection settings page.
      * @param name internal component name.
      */
-    ConnectionSettingsComponent(std::function<void() > openConnectionPage,
+    ConnectionSettingsComponent(
+            std::function<void() > openConnectionPage,
+            ComponentConfigFile& config,
             const String& name = String());
 
     virtual ~ConnectionSettingsComponent() { }
@@ -87,7 +90,7 @@ private:
      * @param b
      */
     void buttonClicked(Button *b) override;
-    
+
     /**
      * Run refresh() when the component regains visibility.
      */
@@ -103,7 +106,9 @@ private:
         /**
          * @param name internal component name
          */
-        ConnectionButton(const String& name = String());
+        ConnectionButton(
+                ComponentConfigFile& config,
+                const String& name = String());
 
         virtual ~ConnectionButton() { }
 
@@ -128,12 +133,13 @@ private:
          */
         void resized() override;
 
+        ComponentConfigFile& config;
         int textHeight;
         int borderSize;
         String displayText;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionButton)
     };
-
+    ComponentConfigFile& config;
     DrawableImageComponent icon;
     Spinner spinner;
     SwitchComponent toggle;

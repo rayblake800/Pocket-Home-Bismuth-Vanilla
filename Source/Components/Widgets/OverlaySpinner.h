@@ -23,11 +23,13 @@ public:
     };
 
     /**
+     * @param config
      * @param secondsToTimeout   Sets how long the spinner will show itself 
      *                            before timing out. If this value is negative, 
      *                            the spinner will never time out.
      */
-    OverlaySpinner(int secondsToTimeout = -1);
+    OverlaySpinner(ComponentConfigFile& config,
+            int secondsToTimeout = -1);
     ~OverlaySpinner();
 
     /**

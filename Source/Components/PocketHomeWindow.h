@@ -25,8 +25,14 @@ public:
      * 
      * @param fakeWifi    If true, wifi-using components in this window will
      *                     get all their wifi data from a simulated wifi device.
+     * 
+     * @param mainConfig
+     * 
+     * @param componentConfig
      */
-    PocketHomeWindow(String windowName, bool fakeWifi);
+    PocketHomeWindow(String windowName, bool fakeWifi,
+            MainConfigFile& mainConfig,
+            ComponentConfigFile& componentConfig);
 
     virtual ~PocketHomeWindow() { }
 
@@ -42,24 +48,25 @@ private:
     void resized() override;
 
     
+    
+    //Loads config data from the config.json file
+    MainConfigFile& mainConfig;
+    
+    //Loads component settings from the components.json file
+    ComponentConfigFile& componentConfig;
+
     //Factory object for creating all UI pages
     PageFactory pageFactory;
-    
+
     //Holds all page components, besides the login page
     PageStackComponent pageStack;
-    
+
     //LoginPage will be initially shown instead of the pageStack if a password
     //has been set.
     ScopedPointer<LoginPage> loginPage;
-    
+
     //Controls default component appearances.
     PokeLookAndFeel lookAndFeel;
-    
-    //Loads config data from the config.json file
-    MainConfigFile mainConfig;
-    
-    //Loads component settings from the components.json file
-    ComponentConfigFile componentConfig;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PocketHomeWindow)
 };

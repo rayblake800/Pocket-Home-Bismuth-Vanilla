@@ -8,6 +8,8 @@
 #pragma once
 #include "JuceHeader.h"
 #include "PocketHomeWindow.h"
+#include "MainConfigFile.h"
+#include "ComponentConfigFile.h"
 
 class PocketHomeApplication : public JUCEApplication
 {
@@ -36,4 +38,8 @@ private:
         return false;
     }
     ScopedPointer<PocketHomeWindow> homeWindow;
+    
+    MainConfigFile mainConfig;
+   
+    ComponentConfigFile componentConfig;
 };

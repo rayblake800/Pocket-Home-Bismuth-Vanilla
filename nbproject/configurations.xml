@@ -59,8 +59,56 @@
           <in>I2CBus.cpp</in>
         </df>
         <df name="Pages">
+          <df name="Home Page">
+            <df name="AppMenu">
+              <df name="Menu Editors">
+                <in>AppMenuPopupEditor.cpp</in>
+                <in>CategoryPopupEditor.cpp</in>
+                <in>NewConfigAppEditor.cpp</in>
+                <in>NewDesktopAppEditor.cpp</in>
+                <in>NewFolderEditor.cpp</in>
+              </df>
+              <df name="Menu Folders">
+                <in>PageAppFolder.cpp</in>
+                <in>ScrollingAppFolder.cpp</in>
+              </df>
+              <df name="Menu Items">
+                <in>AppMenuItem.cpp</in>
+                <in>AppMenuItemFactory.cpp</in>
+                <in>BaseFolderMenuItem.cpp</in>
+                <in>ConfigAppMenuItem.cpp</in>
+                <in>DesktopEntryMenuItem.cpp</in>
+                <in>FolderMenuItem.cpp</in>
+              </df>
+              <df name="Menu Types">
+                <in>PagedAppMenu.cpp</in>
+                <in>ScrollingAppMenu.cpp</in>
+              </df>
+              <in>AppMenuButton.cpp</in>
+              <in>AppMenuComponent.cpp</in>
+              <in>AppMenuFolder.cpp</in>
+            </df>
+            <df name="Widgets">
+              <in>BatteryIcon.cpp</in>
+              <in>ClockLabel.cpp</in>
+              <in>WifiIcon.cpp</in>
+            </df>
+            <in>DesktopEntries.cpp</in>
+            <in>DesktopEntry.cpp</in>
+            <in>HomePage.cpp</in>
+            <in>IconThread.cpp</in>
+          </df>
           <df name="Input Settings Page">
             <in>InputSettingsPage.cpp</in>
+            <in>KeybindingPage.cpp</in>
+          </df>
+          <df name="Password Pages">
+            <in>RemovePasswordPage.cpp</in>
+            <in>SetPasswordPage.cpp</in>
+          </df>
+          <df name="Power Page">
+            <in>FelPage.cpp</in>
+            <in>PowerPage.cpp</in>
           </df>
           <df name="Settings Page">
             <in>BluetoothSettingsComponent.cpp</in>
@@ -71,15 +119,28 @@
             <in>WifiSettingsComponent.cpp</in>
             <in>WifiSettingsPage.cpp</in>
           </df>
+          <df name="UI Page">
+            <in>ColourPage.cpp</in>
+            <in>ComponentEditorPage.cpp</in>
+            <in>UIPage.cpp</in>
+          </df>
           <in>AdvancedSettingsPage.cpp</in>
           <in>DateTimePage.cpp</in>
+          <in>HomeSettingsPage.cpp</in>
           <in>LoginPage.cpp</in>
         </df>
         <in>AppLauncher.cpp</in>
+        <in>AssetFiles.cpp</in>
+        <in>LocaleText.cpp</in>
         <in>Main.cpp</in>
+        <in>PageFactory.cpp</in>
         <in>PocketHomeApplication.cpp</in>
         <in>PokeLookAndFeel.cpp</in>
+        <in>RelativeLayoutManager.cpp</in>
+        <in>TempTimer.cpp</in>
         <in>Utils.cpp</in>
+        <in>WindowFocus.cpp</in>
+        <in>WindowFocusedTimer.cpp</in>
       </df>
     </df>
     <logicalFolder name="ExternalFiles"
@@ -105,10 +166,8 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <flagsDictionary>
-        <element flagsID="0"
-                 commonFlags="-march=haswell -msse3 -mssse3 -mcx16 -maes -mpclmul -mpopcnt -mabm -mavx -mavx2 -msse4.2 -msse4.1 -mlzcnt -mrdrnd -mxsave -mtune=haswell -std=gnu++11"/>
-        <element flagsID="1" commonFlags="-march=native -std=gnu++11"/>
-        <element flagsID="2" commonFlags="-march=native -std=gnu++14"/>
+        <element flagsID="0" commonFlags="-march=native -std=gnu++11"/>
+        <element flagsID="1" commonFlags="-march=native -std=gnu++14"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -118,265 +177,141 @@
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
           <executablePath></executablePath>
+          <ccTool>
+            <incDir>
+              <pElem>/usr/include/libnm-glib</pElem>
+              <pElem>/usr/include/NetworkManager</pElem>
+              <pElem>/usr/include/dbus-1.0</pElem>
+              <pElem>/usr/lib/dbus-1.0/include</pElem>
+              <pElem>/usr/include/alsa</pElem>
+              <pElem>/usr/include/freetype2</pElem>
+              <pElem>/usr/include/libpng16</pElem>
+              <pElem>/usr/include/harfbuzz</pElem>
+              <pElem>/usr/include/glib-2.0</pElem>
+              <pElem>/usr/lib/glib-2.0/include</pElem>
+              <pElem>JuceLibraryCode</pElem>
+              <pElem>deps/JUCE/modules</pElem>
+            </incDir>
+            <preprocessorList>
+              <Elem>DEBUG=1</Elem>
+              <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
+              <Elem>JUCE_APP_VERSION=0.0.1</Elem>
+              <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
+              <Elem>JucePlugin_Build_AAX=0</Elem>
+              <Elem>JucePlugin_Build_AU=0</Elem>
+              <Elem>JucePlugin_Build_AUv3=0</Elem>
+              <Elem>JucePlugin_Build_RTAS=0</Elem>
+              <Elem>JucePlugin_Build_Standalone=0</Elem>
+              <Elem>JucePlugin_Build_VST3=0</Elem>
+              <Elem>JucePlugin_Build_VST=0</Elem>
+              <Elem>LINUX=1</Elem>
+              <Elem>_DEBUG=1</Elem>
+            </preprocessorList>
+          </ccTool>
         </makeTool>
         <preBuild>
           <preBuildCommandWorkingDir>.</preBuildCommandWorkingDir>
           <preBuildCommand></preBuildCommand>
         </preBuild>
       </makefileType>
-      <item path="JuceLibraryCode/BinaryData.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
+      <item path="JuceLibraryCode/BinaryData.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="JuceLibraryCode/include_juce_core.cpp"
             ex="false"
             tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
-            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
-            <pElem>deps/JUCE/modules/juce_core/text</pElem>
-            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
-            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
-            <pElem>deps/JUCE/modules/juce_core/misc</pElem>
-            <pElem>deps/JUCE/modules/juce_core/time</pElem>
-            <pElem>deps/JUCE/modules/juce_core/streams</pElem>
-            <pElem>deps/JUCE/modules/juce_core/files</pElem>
-            <pElem>deps/JUCE/modules/juce_core/logging</pElem>
-            <pElem>deps/JUCE/modules/juce_core/javascript</pElem>
-            <pElem>deps/JUCE/modules/juce_core/network</pElem>
-            <pElem>deps/JUCE/modules/juce_core/unit_tests</pElem>
-            <pElem>deps/JUCE/modules/juce_core/xml</pElem>
-            <pElem>deps/JUCE/modules/juce_core/zip</pElem>
-            <pElem>deps/JUCE/modules/juce_core/system</pElem>
-            <pElem>deps/JUCE/modules/juce_core/zip/zlib</pElem>
-            <pElem>deps/JUCE/modules/juce_core/native</pElem>
-            <pElem>deps/JUCE/modules/juce_core</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
+            flavor2="11">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="JuceLibraryCode/include_juce_data_structures.cpp"
             ex="false"
             tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
-            <pElem>deps/JUCE/modules/juce_core/text</pElem>
-            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
-            <pElem>deps/JUCE/modules/juce_core/misc</pElem>
-            <pElem>deps/JUCE/modules/juce_core/streams</pElem>
-            <pElem>deps/JUCE/modules/juce_core/files</pElem>
-            <pElem>deps/JUCE/modules/juce_core/xml</pElem>
-            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
-            <pElem>deps/JUCE/modules/juce_data_structures/undomanager</pElem>
-            <pElem>deps/JUCE/modules/juce_data_structures/values</pElem>
-            <pElem>deps/JUCE/modules/juce_data_structures/app_properties</pElem>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>deps/JUCE/modules/juce_data_structures</pElem>
-            <pElem>deps/JUCE/modules/juce_core</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
-            <pElem>deps/JUCE/modules/juce_core/time</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
+            flavor2="11">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="JuceLibraryCode/include_juce_events.cpp"
             ex="false"
             tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
-            <pElem>deps/JUCE/modules/juce_core/text</pElem>
-            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
-            <pElem>deps/JUCE/modules/juce_core/files</pElem>
-            <pElem>deps/JUCE/modules/juce_core/network</pElem>
-            <pElem>deps/JUCE/modules/juce_events/messages</pElem>
-            <pElem>deps/JUCE/modules/juce_events/broadcasters</pElem>
-            <pElem>deps/JUCE/modules/juce_events/timers</pElem>
-            <pElem>deps/JUCE/modules/juce_events/interprocess</pElem>
-            <pElem>deps/JUCE/modules/juce_events/native</pElem>
-            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>deps/JUCE/modules/juce_events</pElem>
-            <pElem>deps/JUCE/modules/juce_core</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>deps/JUCE/modules/juce_core/misc</pElem>
-            <pElem>deps/JUCE/modules/juce_core/time</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
+            flavor2="11">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="JuceLibraryCode/include_juce_graphics.cpp"
             ex="false"
             tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
-            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
-            <pElem>deps/JUCE/modules/juce_core/text</pElem>
-            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
-            <pElem>deps/JUCE/modules/juce_core/streams</pElem>
-            <pElem>deps/JUCE/modules/juce_core/files</pElem>
-            <pElem>deps/JUCE/modules/juce_events/timers</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/placement</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/colour</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/images</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/fonts</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/contexts</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/effects</pElem>
-            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/image_formats</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/image_formats/jpglib</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/image_formats/pnglib</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics</pElem>
-            <pElem>deps/JUCE/modules/juce_core</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>deps/JUCE/modules/juce_core/misc</pElem>
-            <pElem>deps/JUCE/modules/juce_core/xml</pElem>
-            <pElem>deps/JUCE/modules/juce_core/time</pElem>
-            <pElem>deps/JUCE/modules/juce_core/zip/zlib</pElem>
-            <pElem>/usr/include/freetype2/config</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
+            flavor2="11">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="JuceLibraryCode/include_juce_gui_basics.cpp"
             ex="false"
             tool="1"
-            flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
-            <pElem>deps/JUCE/modules/juce_core/text</pElem>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
-            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
-            <pElem>deps/JUCE/modules/juce_core/misc</pElem>
-            <pElem>deps/JUCE/modules/juce_core/time</pElem>
-            <pElem>deps/JUCE/modules/juce_core/streams</pElem>
-            <pElem>deps/JUCE/modules/juce_core/files</pElem>
-            <pElem>deps/JUCE/modules/juce_core/xml</pElem>
-            <pElem>deps/JUCE/modules/juce_events/messages</pElem>
-            <pElem>deps/JUCE/modules/juce_events/broadcasters</pElem>
-            <pElem>deps/JUCE/modules/juce_events/timers</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/placement</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/colour</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/fonts</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/contexts</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/images</pElem>
-            <pElem>deps/JUCE/modules/juce_data_structures/undomanager</pElem>
-            <pElem>deps/JUCE/modules/juce_data_structures/values</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/mouse</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/keyboard</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/buttons</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/menus</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/positioning</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/drawables</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/widgets</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/misc</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/windows</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/filebrowser</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/properties</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/lookandfeel</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/effects</pElem>
-            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/application</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/native</pElem>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics</pElem>
-            <pElem>deps/JUCE/modules/juce_core</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>deps/JUCE/modules/juce_core/network</pElem>
-            <pElem>deps/JUCE/modules/juce_events/native</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
+            flavor2="11">
+        <ccTool flags="1">
         </ccTool>
       </item>
-      <item path="Source/AppLauncher.cpp" ex="false" tool="1" flavor2="8">
+      <item path="Source/AppLauncher.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="1">
           <incDir>
-            <pElem>/usr/include/libnm-glib</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
-            <pElem>/usr/include/dbus-1.0</pElem>
-            <pElem>/usr/lib/dbus-1.0/include</pElem>
-            <pElem>/usr/include/alsa</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>/usr/include/libpng16</pElem>
-            <pElem>/usr/include/harfbuzz</pElem>
-            <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/glib-2.0/include</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>deps/JUCE/modules</pElem>
-            <pElem>Source/Wifi</pElem>
+            <pElem>Source</pElem>
             <pElem>Source/Components</pElem>
-            <pElem>Source/Components/Pages</pElem>
-            <pElem>Source/Components/Basic</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
           <preprocessorList>
-            <Elem>DEBUG=1</Elem>
-            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
-            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
-            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
-            <Elem>JucePlugin_Build_AAX=0</Elem>
-            <Elem>JucePlugin_Build_AU=0</Elem>
-            <Elem>JucePlugin_Build_AUv3=0</Elem>
-            <Elem>JucePlugin_Build_RTAS=0</Elem>
-            <Elem>JucePlugin_Build_Standalone=0</Elem>
-            <Elem>JucePlugin_Build_VST3=0</Elem>
-            <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
-            <Elem>_DEBUG=1</Elem>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/AssetFiles.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
           </preprocessorList>
         </ccTool>
       </item>
@@ -384,460 +319,749 @@
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/PageStackComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/PocketHomeWindow.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/ColourPicker.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/CounterComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/DrawableImageButton.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/DrawableImageComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/FileSelectTextEditor.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/IconSliderComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/ListEditor.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/OverlaySpinner.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/PopupEditorComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/ScalingLabel.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/Spinner.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/SwitchComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Configuration/AppConfigFile.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Configuration/ComponentConfigFile.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Configuration/ConfigFile.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Configuration/Configurables/ConfigurableComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Configuration/Configurables/ConfigurableImageButton.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Configuration/Configurables/ConfigurableImageComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Configuration/Configurables/ConfigurableLabel.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Configuration/MainConfigFile.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Hardware/Audio.cpp" ex="false" tool="1" flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Hardware/BatteryMonitor.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Hardware/Bluetooth/BluetoothDevice.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Hardware/Bluetooth/BluetoothStatus.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Hardware/Display.cpp" ex="false" tool="1" flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Hardware/I2CBus.cpp" ex="false" tool="1" flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Hardware/Wifi/JsonWifiInterface.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Hardware/Wifi/LibNMInterface.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Hardware/Wifi/WifiAccessPoint.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Hardware/Wifi/WifiStateManager.cpp"
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
-      <item path="Source/Main.cpp" ex="false" tool="1" flavor2="8">
+      <item path="Source/LocaleText.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="1">
           <incDir>
-            <pElem>/usr/include/libnm-glib</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
-            <pElem>/usr/include/dbus-1.0</pElem>
-            <pElem>/usr/lib/dbus-1.0/include</pElem>
-            <pElem>/usr/include/alsa</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>/usr/include/libpng16</pElem>
-            <pElem>/usr/include/harfbuzz</pElem>
-            <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/glib-2.0/include</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>deps/JUCE/modules</pElem>
-            <pElem>Source/Wifi</pElem>
+            <pElem>Source</pElem>
             <pElem>Source/Components</pElem>
-            <pElem>Source/Components/Pages</pElem>
-            <pElem>Source/Components/Basic</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
           <preprocessorList>
-            <Elem>DEBUG=1</Elem>
-            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
-            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
-            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
-            <Elem>JucePlugin_Build_AAX=0</Elem>
-            <Elem>JucePlugin_Build_AU=0</Elem>
-            <Elem>JucePlugin_Build_AUv3=0</Elem>
-            <Elem>JucePlugin_Build_RTAS=0</Elem>
-            <Elem>JucePlugin_Build_Standalone=0</Elem>
-            <Elem>JucePlugin_Build_VST3=0</Elem>
-            <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
-            <Elem>_DEBUG=1</Elem>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/Main.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/PageFactory.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
           </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Pages/AdvancedSettingsPage.cpp"
             ex="false"
             tool="1"
-            flavor2="8">
+            flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/Pages/DateTimePage.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/AppMenuButton.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
         <ccTool flags="1">
         </ccTool>
       </item>
-      <item path="Source/Pages/DateTimePage.cpp" ex="false" tool="1" flavor2="8">
+      <item path="Source/Pages/Home Page/AppMenu/AppMenuComponent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
         <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/AppMenuFolder.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Editors/AppMenuPopupEditor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Editors/CategoryPopupEditor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Editors/NewConfigAppEditor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Editors/NewDesktopAppEditor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Editors/NewFolderEditor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Folders/PageAppFolder.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Folders/ScrollingAppFolder.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Items/AppMenuItem.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Items/AppMenuItemFactory.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Items/BaseFolderMenuItem.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Items/ConfigAppMenuItem.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Items/DesktopEntryMenuItem.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Items/FolderMenuItem.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Types/PagedAppMenu.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/AppMenu/Menu Types/ScrollingAppMenu.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/DesktopEntries.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/DesktopEntry.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/HomePage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/IconThread.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/Widgets/BatteryIcon.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/Widgets/ClockLabel.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Home Page/Widgets/WifiIcon.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/HomeSettingsPage.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Pages/Input Settings Page/InputSettingsPage.cpp"
             ex="false"
             tool="1"
-            flavor2="8">
+            flavor2="11">
         <ccTool flags="1">
         </ccTool>
       </item>
-      <item path="Source/Pages/LoginPage.cpp" ex="false" tool="1" flavor2="8">
+      <item path="Source/Pages/Input Settings Page/KeybindingPage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/LoginPage.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Password Pages/RemovePasswordPage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Password Pages/SetPasswordPage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Power Page/FelPage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Power Page/PowerPage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
         <ccTool flags="1">
         </ccTool>
       </item>
       <item path="Source/Pages/Settings Page/BluetoothSettingsComponent.cpp"
             ex="false"
             tool="1"
-            flavor2="8">
+            flavor2="11">
         <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Pages/Settings Page/BluetoothSettingsPage.cpp"
             ex="false"
             tool="1"
-            flavor2="8">
+            flavor2="11">
         <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Pages/Settings Page/ConnectionPage.cpp"
             ex="false"
             tool="1"
             flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>Source/Wifi</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Pages</pElem>
+            <pElem>Source/Components/Basic</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
         </ccTool>
       </item>
       <item path="Source/Pages/Settings Page/ConnectionSettingsComponent.cpp"
             ex="false"
             tool="1"
-            flavor2="8">
-        <ccTool flags="1">
-        </ccTool>
-      </item>
-      <item path="Source/Pages/Settings Page/SettingsPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="1">
-        </ccTool>
-      </item>
-      <item path="Source/Pages/Settings Page/WifiSettingsComponent.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="1">
-        </ccTool>
-      </item>
-      <item path="Source/Pages/Settings Page/WifiSettingsPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="8">
-        <ccTool flags="1">
-        </ccTool>
-      </item>
-      <item path="Source/PocketHomeApplication.cpp" ex="false" tool="1" flavor2="8">
+            flavor2="11">
         <ccTool flags="1">
           <incDir>
-            <pElem>/usr/include/libnm-glib</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
-            <pElem>/usr/include/dbus-1.0</pElem>
-            <pElem>/usr/lib/dbus-1.0/include</pElem>
-            <pElem>/usr/include/alsa</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>/usr/include/libpng16</pElem>
-            <pElem>/usr/include/harfbuzz</pElem>
-            <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/glib-2.0/include</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>deps/JUCE/modules</pElem>
-            <pElem>Source/Wifi</pElem>
-            <pElem>Source/Components</pElem>
-            <pElem>Source/Components/Pages</pElem>
-            <pElem>Source/Components/Basic</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
-          <preprocessorList>
-            <Elem>DEBUG=1</Elem>
-            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
-            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
-            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
-            <Elem>JucePlugin_Build_AAX=0</Elem>
-            <Elem>JucePlugin_Build_AU=0</Elem>
-            <Elem>JucePlugin_Build_AUv3=0</Elem>
-            <Elem>JucePlugin_Build_RTAS=0</Elem>
-            <Elem>JucePlugin_Build_Standalone=0</Elem>
-            <Elem>JucePlugin_Build_VST3=0</Elem>
-            <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
-            <Elem>_DEBUG=1</Elem>
-          </preprocessorList>
-        </ccTool>
-      </item>
-      <item path="Source/PokeLookAndFeel.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
-          <incDir>
-            <pElem>/usr/include/libnm-glib</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
-            <pElem>/usr/include/dbus-1.0</pElem>
-            <pElem>/usr/lib/dbus-1.0/include</pElem>
-            <pElem>/usr/include/alsa</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>/usr/include/libpng16</pElem>
-            <pElem>/usr/include/harfbuzz</pElem>
-            <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/glib-2.0/include</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>deps/JUCE/modules</pElem>
-            <pElem>Source/Wifi</pElem>
-            <pElem>Source/Components</pElem>
-            <pElem>Source/Components/Pages</pElem>
-            <pElem>Source/Components/Basic</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
-          <preprocessorList>
-            <Elem>DEBUG=1</Elem>
-            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
-            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
-            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
-            <Elem>JucePlugin_Build_AAX=0</Elem>
-            <Elem>JucePlugin_Build_AU=0</Elem>
-            <Elem>JucePlugin_Build_AUv3=0</Elem>
-            <Elem>JucePlugin_Build_RTAS=0</Elem>
-            <Elem>JucePlugin_Build_Standalone=0</Elem>
-            <Elem>JucePlugin_Build_VST3=0</Elem>
-            <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
-            <Elem>_DEBUG=1</Elem>
-          </preprocessorList>
-        </ccTool>
-      </item>
-      <item path="Source/Utils.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>deps/JUCE/modules/juce_core/text</pElem>
-            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
-            <pElem>deps/JUCE/modules/juce_core/files</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/placement</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
-            <pElem>Source</pElem>
-            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
-            <pElem>deps/JUCE/modules/juce_core</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
-            <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>deps/JUCE/modules/juce_core/misc</pElem>
-            <pElem>deps/JUCE/modules/juce_core/xml</pElem>
-            <pElem>deps/JUCE/modules/juce_core/time</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/colour</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/images</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/fonts</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/contexts</pElem>
-            <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
-            <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
-        </ccTool>
-      </item>
-      <folder path="0/Source/Components">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/libnm-glib</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
-            <pElem>/usr/include/dbus-1.0</pElem>
-            <pElem>/usr/lib/dbus-1.0/include</pElem>
-            <pElem>/usr/include/alsa</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>/usr/include/libpng16</pElem>
-            <pElem>/usr/include/harfbuzz</pElem>
-            <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/glib-2.0/include</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>deps/JUCE/modules</pElem>
             <pElem>Source</pElem>
             <pElem>Source/Components</pElem>
             <pElem>Source/Components/Widgets</pElem>
@@ -862,38 +1086,412 @@
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
           <preprocessorList>
-            <Elem>DEBUG=1</Elem>
-            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
-            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
-            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
             <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
-            <Elem>JucePlugin_Build_AAX=0</Elem>
-            <Elem>JucePlugin_Build_AU=0</Elem>
-            <Elem>JucePlugin_Build_AUv3=0</Elem>
-            <Elem>JucePlugin_Build_RTAS=0</Elem>
-            <Elem>JucePlugin_Build_Standalone=0</Elem>
-            <Elem>JucePlugin_Build_VST3=0</Elem>
-            <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
-            <Elem>_DEBUG=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Settings Page/SettingsPage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Settings Page/WifiSettingsComponent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/Pages/Settings Page/WifiSettingsPage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/Pages/UI Page/ColourPage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/UI Page/ComponentEditorPage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/Pages/UI Page/UIPage.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="Source/PocketHomeApplication.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/PokeLookAndFeel.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/RelativeLayoutManager.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/TempTimer.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/Utils.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/WindowFocus.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/WindowFocusedTimer.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <folder path="0/JuceLibraryCode">
+        <ccTool>
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/Source/Components">
+        <ccTool>
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
           </preprocessorList>
         </ccTool>
       </folder>
       <folder path="0/Source/Configuration">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/libnm-glib</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
-            <pElem>/usr/include/dbus-1.0</pElem>
-            <pElem>/usr/lib/dbus-1.0/include</pElem>
-            <pElem>/usr/include/alsa</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>/usr/include/libpng16</pElem>
-            <pElem>/usr/include/harfbuzz</pElem>
-            <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/glib-2.0/include</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>deps/JUCE/modules</pElem>
             <pElem>Source</pElem>
             <pElem>Source/Components</pElem>
             <pElem>Source/Components/Widgets</pElem>
@@ -918,38 +1516,13 @@
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
           <preprocessorList>
-            <Elem>DEBUG=1</Elem>
-            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
-            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
-            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
             <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
-            <Elem>JucePlugin_Build_AAX=0</Elem>
-            <Elem>JucePlugin_Build_AU=0</Elem>
-            <Elem>JucePlugin_Build_AUv3=0</Elem>
-            <Elem>JucePlugin_Build_RTAS=0</Elem>
-            <Elem>JucePlugin_Build_Standalone=0</Elem>
-            <Elem>JucePlugin_Build_VST3=0</Elem>
-            <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
-            <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
       </folder>
       <folder path="0/Source/Hardware">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/libnm-glib</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
-            <pElem>/usr/include/dbus-1.0</pElem>
-            <pElem>/usr/lib/dbus-1.0/include</pElem>
-            <pElem>/usr/include/alsa</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>/usr/include/libpng16</pElem>
-            <pElem>/usr/include/harfbuzz</pElem>
-            <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/glib-2.0/include</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>deps/JUCE/modules</pElem>
             <pElem>Source</pElem>
             <pElem>Source/Components</pElem>
             <pElem>Source/Components/Widgets</pElem>
@@ -974,58 +1547,162 @@
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
           <preprocessorList>
-            <Elem>DEBUG=1</Elem>
-            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
-            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
-            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
             <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
-            <Elem>JucePlugin_Build_AAX=0</Elem>
-            <Elem>JucePlugin_Build_AU=0</Elem>
-            <Elem>JucePlugin_Build_AUv3=0</Elem>
-            <Elem>JucePlugin_Build_RTAS=0</Elem>
-            <Elem>JucePlugin_Build_Standalone=0</Elem>
-            <Elem>JucePlugin_Build_VST3=0</Elem>
-            <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
-            <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
       </folder>
-      <folder path="0/Source/Pages">
+      <folder path="0/Source/Pages/Home Page">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/libnm-glib</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
-            <pElem>/usr/include/dbus-1.0</pElem>
-            <pElem>/usr/lib/dbus-1.0/include</pElem>
-            <pElem>/usr/include/alsa</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>/usr/include/libpng16</pElem>
-            <pElem>/usr/include/harfbuzz</pElem>
-            <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/glib-2.0/include</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>deps/JUCE/modules</pElem>
-            <pElem>Source/Wifi</pElem>
+            <pElem>Source</pElem>
             <pElem>Source/Components</pElem>
-            <pElem>Source/Components/Pages</pElem>
-            <pElem>Source/Components/Basic</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
           <preprocessorList>
-            <Elem>DEBUG=1</Elem>
-            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
-            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
-            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
-            <Elem>JucePlugin_Build_AAX=0</Elem>
-            <Elem>JucePlugin_Build_AU=0</Elem>
-            <Elem>JucePlugin_Build_AUv3=0</Elem>
-            <Elem>JucePlugin_Build_RTAS=0</Elem>
-            <Elem>JucePlugin_Build_Standalone=0</Elem>
-            <Elem>JucePlugin_Build_VST3=0</Elem>
-            <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
-            <Elem>_DEBUG=1</Elem>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/Source/Pages/Input Settings Page">
+        <ccTool>
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/Source/Pages/Password Pages">
+        <ccTool>
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/Source/Pages/Power Page">
+        <ccTool>
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/Source/Pages/UI Page">
+        <ccTool>
+          <incDir>
+            <pElem>Source</pElem>
+            <pElem>Source/Components</pElem>
+            <pElem>Source/Components/Widgets</pElem>
+            <pElem>Source/Configuration</pElem>
+            <pElem>Source/Configuration/Configurables</pElem>
+            <pElem>Source/Hardware</pElem>
+            <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Pages</pElem>
+            <pElem>Source/Pages/Home Page</pElem>
+            <pElem>Source/Pages/Home Page/Widgets</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Editors</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Folders</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Items</pElem>
+            <pElem>Source/Pages/Home Page/AppMenu/Menu Types</pElem>
+            <pElem>Source/Pages/Input Settings Page</pElem>
+            <pElem>Source/Pages/Password Pages</pElem>
+            <pElem>Source/Pages/Power Page</pElem>
+            <pElem>Source/Pages/Settings Page</pElem>
+            <pElem>Source/Pages/UI Page</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>JUCE_LOG_ASSERTIONS=1</Elem>
           </preprocessorList>
         </ccTool>
       </folder>

@@ -8,6 +8,7 @@
 #include "Display.h"
 #include "ComponentConfigFile.h"
 #include "AssetFiles.h"
+#include "Utils.h"
 
 CriticalSection ComponentConfigFile::componentLock;
 
@@ -113,12 +114,13 @@ const std::map<String, int> ComponentConfigFile::colourIds{
 
 ComponentConfigFile::ComponentConfigFile() : ConfigFile(filenameConst)
 {
-        const ScopedLock readLock(componentLock);
+    ASSERT_SINGULAR;
+    const ScopedLock readLock(componentLock);
     var jsonConfig = AssetFiles::loadJSONAsset
             (String(CONFIG_PATH) + filenameConst, true);
-        var defaultConfig = var();
-        readDataFromJson(jsonConfig, defaultConfig);
-        writeChanges();
+    var defaultConfig = var();
+    readDataFromJson(jsonConfig, defaultConfig);
+    writeChanges();
 }
 
 ComponentConfigFile::~ComponentConfigFile() { }

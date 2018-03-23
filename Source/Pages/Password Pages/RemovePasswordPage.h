@@ -1,7 +1,9 @@
 /**
  * @file RemovePasswordPage.h
  * 
- * TODO: documentation, relative layout management
+ * This page allows the user to remove the Pocket-Home password.  To do so, the
+ * user must enter in the existing Pocket-Home password, along with their root
+ * password.
  */
 #pragma once
 #include "JuceHeader.h"
@@ -9,34 +11,39 @@
 #include "PageComponent.h"
 
 class RemovePasswordPage : public PageComponent{
-public:
-  RemovePasswordPage();
-  ~RemovePasswordPage();
-  static String hashString(const String&);
-  bool hasPassword();
+public: 
+  RemovePasswordPage(ComponentConfigFile& config);
+  
+  ~RemovePasswordPage() {}
   
 private:
-  void pageButtonClicked(Button*) override;
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RemovePasswordPage)
-  //Title of the pane
-  ScalingLabel title;
-  //Does the home have a password ?
-  bool has_password;
-  bool has_file;
-  //Current hashed password
-  String cur_hashed;
+    
+  /**
+   * Attempts to delete the Pocket-Home password when deleteButton is pressed.
+   * If this succeeds, the page will close after showing an AlertWindow.
+   * 
+   * @param button  This should always be deleteButton
+   */
+  void pageButtonClicked(Button* button) override;
   
+  /**
+   * Clears all TextEditor fields on the page.
+   */
   void clearAllFields();
-  void loadPassword();
-  bool isPasswordCorrect(const String&);
-  void deletePassword();
+  
+  //Title of the page
+  ScalingLabel titleLabel;
   
   //Text field for the root password
-  ScalingLabel root_label;
-  TextEditor root_password;
-  //Text field for the current password (if there is)
-  ScalingLabel cur_label;
-  TextEditor cur_password;
-  //Button for applying the settings
-  TextButton apply;
+  ScalingLabel rootLabel;
+  TextEditor rootPassword;
+  
+  //Text field for the current password
+  ScalingLabel curPwdLabel;
+  TextEditor curPassword;
+  
+  //Triggers the attempted password removal
+  TextButton deleteButton;
+  
+  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RemovePasswordPage)
 };

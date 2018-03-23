@@ -6,6 +6,7 @@
  */
 
 #pragma once
+#include "ComponentConfigFile.h"
 #include "JuceHeader.h"
 
 class ScalingLabel : public Label
@@ -13,16 +14,18 @@ class ScalingLabel : public Label
 public:
 
     /**
+     * @param config
      * @param componentName  Sets the component's internal name value. 
      * @param labelText      Sets the initial label display text.
      * @param fontPadding    Sets the minimum number of pixels to leave between
      *                        the text top and bottom and the label edges.
      */
-    ScalingLabel(const String& componentName = String(),
+    ScalingLabel(ComponentConfigFile& config,
+            const String& componentName = String(),
             const String& labelText = String(),
             const int& fontPadding = 0);
 
-    virtual ~ScalingLabel();
+    virtual ~ScalingLabel() { }
 private:
     /**
      * Updates font size when label bounds change.
@@ -30,6 +33,8 @@ private:
     void resized() override;
 
     int fontPadding = 0;
+    
+    ComponentConfigFile& config;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ScalingLabel)
 };

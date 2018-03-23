@@ -13,73 +13,14 @@ PokeLookAndFeel::PokeLookAndFeel(MainConfigFile& mainConfig,
 seguibl(Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
 BinaryData::LatoRegular_ttfSize)),
 cursor(MouseCursor::NoCursor),
-mainConfig(mainConfig)
-componentConfig(componentConfig),
+mainConfig(mainConfig),
+componentConfig(componentConfig)
 {
     componentConfig.addListener(this,componentConfig.getColourKeys());
     mainConfig.addListener(this,{MainConfigFile::showCursorKey});
     loadAllConfigProperties();
 }
 
-/**
- * @return the most appropriate text height for a  DrawableButton with the
- * given bounds.
- */
-float PokeLookAndFeel::getDrawableButtonTextHeightForBounds
-(const Rectangle<int>& bounds)
-{
-    ComponentConfigFile config;
-    String largestString;
-    for (int i = 0; i < maxButtonStrSize; i++)
-    {
-        largestString += "A";
-    }
-    return config.getFontHeight(bounds, largestString);
-}
-
-/**
- * @return the most appropriate image height for a DrawableButton with the
- * given bounds.
- */
-float PokeLookAndFeel::getDrawableButtonImageHeightForBounds
-(const Rectangle<int>& bounds)
-{
-    static const float padding = bounds.getHeight() / 20 + 1;
-    return bounds.getHeight() - (getDrawableButtonTextHeightForBounds(bounds)
-                                 + padding);
-}
-
-/**
- * Draws a DrawableButton component.
- */
-void PokeLookAndFeel::drawDrawableButton(Graphics &g, DrawableButton &button,
-        bool isMouseOverButton, bool isButtonDown)
-{
-    bool toggleState = button.getToggleState();
-
-    g.fillAll(button.findColour(toggleState ?
-            DrawableButton::backgroundOnColourId
-            : DrawableButton::backgroundColourId));
-
-    const int textH = (button.getStyle() == DrawableButton::ImageAboveTextLabel)
-            ? getDrawableButtonTextHeightForBounds(button.getLocalBounds())
-
-            : 0;
-
-    Font font(18);
-    font.setExtraKerningFactor(0.06f);
-    if (textH > 0)
-    {
-        g.setFont(font);
-        g.setColour(button.findColour(toggleState ?
-                DrawableButton::textColourOnId
-                : DrawableButton::textColourId)
-                .withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.4f));
-
-        g.drawFittedText(button.getButtonText(), 2, button.getHeight() - textH - 1,
-                button.getWidth() - 4, textH, Justification::centred, 1);
-    }
-}
 
 /**
  * Get the appropriate typeface for the given font.
@@ -170,7 +111,6 @@ int PokeLookAndFeel::getSliderThumbRadius(Slider &slider)
 void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
         bool isMouseOverButton, bool isButtonDown)
 {
-    ComponentConfigFile componentConfig;
     Font font(getTextButtonFont(button, button.getHeight()));
     font.setExtraKerningFactor(0.06f);
     font.setHeight(componentConfig.getFontHeight

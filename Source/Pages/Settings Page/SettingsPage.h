@@ -18,9 +18,11 @@
 class SettingsPage : public PageComponent, public WindowFocusedTimer,
         private Slider::Listener {
 public:
-    SettingsPage(PageFactoryInterface& pageFactory,
+    SettingsPage(PageFactoryInterface* pageFactory,
+            ComponentConfigFile& config,
             WifiStateManager& wifiManager);
-    ~SettingsPage(); 
+    
+    ~SettingsPage() { }
 private:
     virtual void visibilityChanged() override;
     virtual void timerCallback() override;

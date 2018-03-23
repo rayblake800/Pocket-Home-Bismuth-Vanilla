@@ -307,5 +307,6 @@ private:
     std::map<String, bool> boolValues;
     std::map<Listener*, StringArray> listenerKeys;
     std::map<String, Array<Listener*>> keyListeners;
-
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConfigFile)
 };

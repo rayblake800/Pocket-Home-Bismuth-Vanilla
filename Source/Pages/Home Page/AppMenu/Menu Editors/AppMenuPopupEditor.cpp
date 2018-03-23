@@ -1,8 +1,8 @@
 #include "Utils.h"
 #include "AppMenuPopupEditor.h"
 
-AppMenuPopupEditor::AppMenuPopupEditor(ComponentConfigFile& config,
-        String title,
+AppMenuPopupEditor::AppMenuPopupEditor(String title,
+        ComponentConfigFile& config,
         IconThread& iconThread,
         std::function<void(AppMenuPopupEditor*) > onConfirm,
         bool showCategoryList,
@@ -13,15 +13,16 @@ PopupEditorComponent(title, config,
 
     onConfirm(this);
 }),
+config(config),
 iconThread(iconThread),
-nameLabel("nameLabel", "Name:"),
+nameLabel(config,"nameLabel", "Name:"),
 nameEditor("nameEditor"),
-iconLabel("iconLabel", "Icon path:"),
+iconLabel(config,"iconLabel", "Icon path:"),
 iconPathEditor("Select Icon"),
 categoryEditButton("Edit categories"),
-commandLabel("commandLabel", "Command:"),
+commandLabel(config,"commandLabel", "Command:"),
 commandEditor("commandEditor"),
-terminalCheckboxLabel("runInTermLabel", "Run in terminal:")
+terminalCheckboxLabel(config,"runInTermLabel", "Run in terminal:")
 {
     categoryEditButton.addListener(this);
     iconPathEditor.addFileSelectListener(this);
@@ -158,7 +159,7 @@ void AppMenuPopupEditor::editorButtonClicked(Button* button)
 {
     if (button == &categoryEditButton)
     {
-        categoryEditor = new CategoryPopupEditor(categories,
+        categoryEditor = new CategoryPopupEditor(config,categories,
                 [this](StringArray newCategories)
                 {
                     categories = newCategories;

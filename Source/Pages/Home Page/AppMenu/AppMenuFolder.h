@@ -24,7 +24,8 @@ public:
      * when possible.
      * @param iconThread loads icons for new menu buttons.
      */
-    AppMenuFolder(AppMenuItem::Ptr folderItem, MouseListener* btnListener,
+    AppMenuFolder(AppMenuItem::Ptr folderItem, 
+            MouseListener* btnListener,
             std::map<String, AppMenuButton::Ptr>& buttonNameMap,
             IconThread& iconThread);
 

@@ -1,10 +1,10 @@
 #include "BatteryIcon.h"
 #include "Utils.h"
 
-BatteryIcon::BatteryIcon() :
+BatteryIcon::BatteryIcon(ComponentConfigFile& config) :
 WindowFocusedTimer("BatteryIcon"),
-batteryImage(ComponentConfigFile::batteryIconKey),
-batteryPercent(ComponentConfigFile::batteryPercentKey)
+batteryImage(ComponentConfigFile::batteryIconKey, config),
+batteryPercent(ComponentConfigFile::batteryPercentKey, config)
 {
     
 #if JUCE_DEBUG

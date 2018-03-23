@@ -25,26 +25,6 @@ public:
     virtual ~PokeLookAndFeel() {}
 
     /**
-     * @return the most appropriate text height for a DrawableButton with the
-     * given bounds.
-     */
-    static float getDrawableButtonTextHeightForBounds
-    (const Rectangle<int>& bounds);
-
-    /**
-     * @return the most appropriate image height for a DrawableButton with the
-     * given bounds.
-     */
-    static float getDrawableButtonImageHeightForBounds
-    (const Rectangle<int> &bounds);
-
-    /**
-     * Draws a DrawableButton component.
-     */
-    void drawDrawableButton(Graphics &g, DrawableButton &button,
-            bool isMouseOverButton, bool isButtonDown) override;
-
-    /**
      * Get the appropriate typeface for the given Font.
      * @return seguibl, no other typeface is used.
      */

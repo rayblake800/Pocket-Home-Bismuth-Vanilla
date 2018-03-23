@@ -3,11 +3,10 @@
 #include "ConnectionPage.h"
 
 template<class ConnectionPoint>
-ConnectionPage<ConnectionPoint>::ConnectionPage
-(PageFactoryInterface& pageFactory) :
-PageComponent(pageFactory, "ConnectionPage",{}, true),
-prevPageBtn(ComponentConfigFile::pageUpKey),
-nextPageBtn(ComponentConfigFile::pageDownKey),
+ConnectionPage<ConnectionPoint>::ConnectionPage(ComponentConfigFile& config) :
+PageComponent(config, "ConnectionPage",{}, nullptr, true),
+prevPageBtn(ComponentConfigFile::pageUpKey, config),
+nextPageBtn(ComponentConfigFile::pageDownKey, config),
 selectedConnection(ConnectionPoint())
 {
     prevPageBtn.addListener(this);
@@ -16,8 +15,6 @@ selectedConnection(ConnectionPoint())
     addAndMakeVisible(nextPageBtn);
 }
 
-template<class ConnectionPoint>
-ConnectionPage<ConnectionPoint>::~ConnectionPage() { }
 
 /**
  * @return the selected connection's reference
@@ -165,15 +162,6 @@ void ConnectionPage<ConnectionPoint>::pageAddedToStack()
 };
 
 /**
- * Clear the connection list when the page is removed from the page stack.
- */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::pageRemovedFromStack()
-{
-    clearConnectionList();
-};
-
-/**
  * Update the connection list when the page is revealed on the page stack.
  */
 template<class ConnectionPoint>
@@ -182,15 +170,6 @@ void ConnectionPage<ConnectionPoint>::pageRevealedOnStack()
     updateConnectionList();
 };
 
-/**
- * Clear the connection list when the page is no longer on top of the page
- * stack.
- */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::pageCoveredOnStack()
-{
-    clearConnectionList();
-};
 
 /**
  * Handles connection list scrolling and connection selection.
@@ -260,8 +239,8 @@ bool ConnectionPage<ConnectionPoint>::overrideBackButton()
     {
         return false;
     }
-    DBG("ConnectionPage::"<<__func__<<": deselecting connection "
-            <<selectedConnection.toString());
+    DBG("ConnectionPage::" << __func__ << ": deselecting connection "
+            << selectedConnection.toString());
     setSelectedConnection(ConnectionPoint());
     return true;
 }

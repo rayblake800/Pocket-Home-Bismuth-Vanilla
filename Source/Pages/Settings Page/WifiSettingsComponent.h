@@ -10,7 +10,11 @@
 class WifiSettingsComponent : public ConnectionSettingsComponent, 
         public WifiStateManager::Listener {
 public:
-    WifiSettingsComponent(std::function<void()> openWifiPage);
+    WifiSettingsComponent(
+            WifiStateManager& wifiManager, 
+            std::function<void()> openWifiPage,
+            ComponentConfigFile& config);
+    
     virtual ~WifiSettingsComponent() {}
 private:
     /**
@@ -47,6 +51,8 @@ private:
     void wifiStateChanged(WifiStateManager::WifiState state) override;
 
     bool wifiBusy = false;
+    
+    WifiStateManager& wifiManager;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiSettingsComponent)
 };

@@ -17,10 +17,10 @@
 class DateTimePage : public PageComponent, private ComboBox::Listener
 {
 public:
-    DateTimePage(PageComponent::PageFactoryInterface& pageFactory,
-            MainConfigFile& mainConfig, ComponentConfigFile& componentConfig);
+    DateTimePage(MainConfigFile& mainConfig, 
+            ComponentConfigFile& componentConfig);
 
-    ~DateTimePage() { }
+    virtual ~DateTimePage() { }
 
 private:
     /**

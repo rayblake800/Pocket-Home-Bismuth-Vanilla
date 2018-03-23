@@ -1,9 +1,11 @@
 #include "SetPasswordPage.h"
 #include "AssetFiles.h"
 #include "LoginPage.h"
+#include "Password.h"
 
-LoginPage::LoginPage(std::function<void () > loginCallback) :
-PageComponent("LoginPage",{
+LoginPage::LoginPage(ComponentConfigFile& config,
+        std::function<void () > loginCallback) :
+PageComponent(config, "LoginPage",{
     {7,
         {
             {&ntcIcon, 1}
@@ -30,54 +32,35 @@ PageComponent("LoginPage",{
             {&loginButton, 1},
             {nullptr, 1}
         }}
-}),
+},nullptr,false),
 ntcIcon("login/ntcbanner.png"),
-passwordLabel("pass", "Password :"),
+passwordLabel(config, "pass", "Password :"),
 passwordField("passwordField", 0x2022),
 loginButton("login", "Log In"),
 hashedPassword("none"),
 loginCallback(loginCallback),
 foundPassword(false)
 {
-    
-#if JUCE_DEBUG
+
+#    if JUCE_DEBUG
     setName("LoginPage");
-#endif
+#    endif
     setBackgroundImage(AssetFiles::loadImageAsset("login/background.png"));
     loginButton.addListener(this);
     passwordField.addListener(this);
     addAndShowLayoutComponents();
-    checkForPassword();
+    if (hasPassword())
+    {
+        passwordLabel.setVisible(true);
+        passwordField.setVisible(true);
+    }
 }
-
-LoginPage::~LoginPage() { }
 
 bool LoginPage::hasPassword()
 {
-    checkForPassword();
-    return foundPassword;
+    return Password::isPasswordSet();
 }
 
-void LoginPage::checkForPassword()
-{
-    char* home_str = getenv("HOME");
-    String home(home_str);
-    File passwd(home + "/.pocket-home/.passwd/passwd");
-    foundPassword = false;
-    if (passwd.exists())
-    {
-        String content = passwd.loadFileAsString();
-        content = content.removeCharacters("\n");
-        if (content != String("none"))
-        {
-            hashedPassword = content;
-            foundPassword = true;
-        }
-    }
-    passwordLabel.setVisible(foundPassword);
-    passwordField.setVisible(foundPassword);
-
-}
 
 void LoginPage::displayError()
 {
@@ -95,9 +78,7 @@ void LoginPage::textFocus()
 
 void LoginPage::pageButtonClicked(Button *button)
 {
-    String pass_tmp = passwordField.getText();
-    String hashed = SetPasswordPage::hashString(pass_tmp);
-    if (hashedPassword == "none" || hashed == hashedPassword)
+    if (Password::checkPassword(Password::hashString(passwordField.getText())))
     {
         passwordField.setText("");
         loginCallback();

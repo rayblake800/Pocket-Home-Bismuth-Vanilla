@@ -2,16 +2,17 @@
 #include "ComponentConfigFile.h"
 #include "WifiSettingsComponent.h"
 
-WifiSettingsComponent::WifiSettingsComponent
-(std::function<void() > openWifiPage) :
-ConnectionSettingsComponent(openWifiPage, "wifi")
+WifiSettingsComponent::WifiSettingsComponent(
+        WifiStateManager& wifiManager,
+        std::function<void() > openWifiPage,
+        ComponentConfigFile& config) :
+ConnectionSettingsComponent(openWifiPage, config, "wifi"),
+wifiManager(wifiManager)
 {
 
 #    if JUCE_DEBUG
     setName("WifiSettingsComponent");
 #    endif
-    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
-            ->getWifiManager();
     wifiManager.addListener(this);
     refresh();
 }
@@ -21,9 +22,6 @@ ConnectionSettingsComponent(openWifiPage, "wifi")
  */
 bool WifiSettingsComponent::connectionEnabled()
 {
-
-    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
-            ->getWifiManager();
     return wifiManager.isEnabled();
 }
 
@@ -58,8 +56,6 @@ String WifiSettingsComponent::getIconAsset()
  */
 void WifiSettingsComponent::enabledStateChanged(bool enabled)
 {
-    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
-            ->getWifiManager();
     if (enabled)
     {
         wifiManager.enableWifi();
@@ -86,8 +82,6 @@ void WifiSettingsComponent::wifiStateChanged(WifiStateManager::WifiState state)
  */
 String WifiSettingsComponent::updateButtonText()
 {
-    WifiStateManager& wifiManager = PocketHomeApplication::getInstance()
-            ->getWifiManager();
     switch (wifiManager.getWifiState())
     {
         case WifiStateManager::noStateManager:

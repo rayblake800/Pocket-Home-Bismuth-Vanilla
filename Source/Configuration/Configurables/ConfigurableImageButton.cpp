@@ -1,10 +1,10 @@
 #include "ConfigurableImageButton.h"
 
 ConfigurableImageButton::ConfigurableImageButton
-(ComponentConfigFile& config, String componentKey, int assetIndex, 
+(String componentKey, ComponentConfigFile& config, int assetIndex, 
         RectanglePlacement placement) :
-buttonImage(config, componentKey, assetIndex, placement),
-ConfigurableComponent(config, componentKey),
+buttonImage(componentKey, config, assetIndex, placement),
+ConfigurableComponent(componentKey, config),
 Button(componentKey + "Button")
 {
     addAndMakeVisible(buttonImage);

@@ -16,7 +16,7 @@
 
 class BatteryIcon : public Component, private WindowFocusedTimer {
 public:
-    BatteryIcon();
+    BatteryIcon(ComponentConfigFile& config);
     virtual ~BatteryIcon();
 
     /**

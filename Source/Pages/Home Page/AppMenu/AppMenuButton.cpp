@@ -27,11 +27,12 @@ AppMenuItem::Ptr AppMenuButton::getMenuItem()
 /**
  * Gets a PopupEditorComponent configured to edit this button's data
  */
-AppMenuPopupEditor* AppMenuButton::getEditor
-(const std::function<void(AppMenuPopupEditor*) >& onConfirm)
+AppMenuPopupEditor* AppMenuButton::getEditor(ComponentConfigFile& config,
+        const std::function<void(AppMenuPopupEditor*) >& onConfirm)
 {
     AppMenuPopupEditor* editor = new AppMenuPopupEditor
             (menuItem->getEditorTitle(),
+            config,
             iconThread,
             [this, onConfirm](AppMenuPopupEditor * editor)
             {
@@ -41,7 +42,7 @@ AppMenuPopupEditor* AppMenuButton::getEditor
             },
     menuItem->hasEditableCategories(),
             menuItem->hasEditableCommand());
-
+            File file;
     editor->setNameField(menuItem->getAppName());
     editor->setIconField(menuItem->getIconName());
     editor->setCategories(menuItem->getCategories());
@@ -176,7 +177,6 @@ void AppMenuButton::setFillBackground(bool shouldFill)
 {
     fillBackground = shouldFill;
 }
-
 
 /**
  * @param font will be used to draw this button's title.

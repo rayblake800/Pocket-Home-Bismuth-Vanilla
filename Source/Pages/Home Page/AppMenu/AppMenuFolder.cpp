@@ -45,8 +45,8 @@ void AppMenuFolder::reload()
     {
         insertButton(menuItem, folderButtons.size(), false);
     }
-    DBG("AppMenuFolder::" << __func__ << ": added " << folderButtons.size() 
-            << " buttons from " << menuItems.size() << " menu items");
+    //DBG("AppMenuFolder::" << __func__ << ": added " << folderButtons.size() 
+    //       << " buttons from " << menuItems.size() << " menu items");
     layoutButtons();
 }
 
@@ -58,7 +58,7 @@ bool AppMenuFolder::selectIndex(int index)
     if (validBtnIndex(index))
     {
         deselect();
-        DBG("AppMenuFolder::" << __func__  << ": selecting button " << index);
+        //DBG("AppMenuFolder::" << __func__  << ": selecting button " << index);
         selectedIndex = index;
         folderButtons[selectedIndex]->setSelected(true);
         return true;
@@ -112,9 +112,9 @@ void AppMenuFolder::insertButton
     folderButtons.insert(index, menuButton);
     if (selectedIndex >= index)
     {
-        DBG("AppMenuFolder::" << __func__  << ": index pushed from " 
-                << selectedIndex << " to " << (selectedIndex + 1)
-                << " after insert at " << index);
+//        DBG("AppMenuFolder::" << __func__  << ": index pushed from " 
+//                << selectedIndex << " to " << (selectedIndex + 1)
+//                << " after insert at " << index);
         selectedIndex++;
     }
     if (updateLayout)
@@ -298,9 +298,9 @@ void AppMenuFolder::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
     bounds.reduce(margin * getWidth(), margin * getWidth());
-    DBG("AppMenuFolder::" << __func__  << ": bounds="
-            << getScreenBounds().toString() << " layoutBounds=" 
-            <<bounds.toString());
+//    DBG("AppMenuFolder::" << __func__  << ": bounds="
+//            << getScreenBounds().toString() << " layoutBounds=" 
+//            <<bounds.toString());
     folderLayout.layoutComponents(bounds, getWidth() * xPadding,
             getHeight() * yPadding);
 }

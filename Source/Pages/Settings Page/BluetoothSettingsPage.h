@@ -17,9 +17,10 @@ public ConnectionPage<BluetoothDevice>,
         public TextEditor::Listener  {
 public:
     
-    BluetoothSettingsPage(PageFactoryInterface& pageFactory,
+    BluetoothSettingsPage(ComponentConfigFile& config,
             BluetoothStatus& bluetoothStatus);
-    ~BluetoothSettingsPage();
+    
+    ~BluetoothSettingsPage() { }
 private:
     /**
      * @return the list of all visible bluetooth devices
@@ -116,7 +117,9 @@ private:
      */
     class BTDeviceButton : public Button{
     public:
-        BTDeviceButton(const BluetoothDevice& connection, bool isConnected);
+        BTDeviceButton(const BluetoothDevice& connection, 
+                bool isConnected,
+                ComponentConfigFile& config);
     private:
         void resized() override;
 
@@ -130,7 +133,7 @@ private:
     };
     
     BluetoothStatus& bluetoothStatus;
-
+    ComponentConfigFile& config;
     TextButton connectionButton;
     ScalingLabel errorLabel;
     Spinner spinner;

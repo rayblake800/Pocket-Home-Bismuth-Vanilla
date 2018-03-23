@@ -6,17 +6,21 @@
 #include "ScrollingAppMenu.h"
 #include "HomePage.h"
 
-HomePage::HomePage(PageFactoryInterface& pageFactory,
+HomePage::HomePage(PageFactoryInterface* pageFactory,
         WifiStateManager& wifiState,
         MainConfigFile& mainConfig,
         ComponentConfigFile& componentConfig) :
-PageComponent(pageFactory, "HomePage"),
-frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
-wifiIcon(wifiState),
+PageComponent(componentConfig, "HomePage",{}, pageFactory, false),
+loadingSpinner(componentConfig),
+frame(ComponentConfigFile::menuFrameKey, componentConfig,
+        0, RectanglePlacement::stretchToFit),
+batteryIcon(componentConfig),
+wifiIcon(wifiState, componentConfig),
+clock(componentConfig),
 mainConfig(mainConfig),
 componentConfig(componentConfig),
-powerButton(ComponentConfigFile::powerButtonKey),
-settingsButton(ComponentConfigFile::settingsButtonKey)
+powerButton(ComponentConfigFile::powerButtonKey, componentConfig),
+settingsButton(ComponentConfigFile::settingsButtonKey, componentConfig)
 {
 #    if JUCE_DEBUG
     setName("HomePage");
@@ -42,39 +46,34 @@ settingsButton(ComponentConfigFile::settingsButtonKey)
     settingsButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(settingsButton);
 
-    settingsPage = new SettingsPage();
-
     addChildComponent(loadingSpinner);
     loadingSpinner.setAlwaysOnTop(true);
 
     loadAllConfigProperties();
 }
 
-HomePage::~HomePage() { }
-
-void HomePage::loadConfigProperties(ConfigFile* config, String key)
+void HomePage::configValueChanged(ConfigFile* config, String key)
 {
-    MainConfigFile mainConf = MainConfigFile();
-    if (mainConf == *config)
+    if (mainConfig == *config)
     {
         if (key == MainConfigFile::backgroundKey)
         {
-            String background = mainConf.getConfigValue<String>
+            String background = mainConfig.getConfigValue<String>
                     (MainConfigFile::backgroundKey);
             if (background.containsOnly("0123456789ABCDEFXabcdefx"))
             {
                 setBackgroundImage(Image());
-                Colour bgColour(background.getHexValue32());
-                setColour(backgroundColourId, bgColour.withAlpha(1.0f));
+                Colour bgFill(background.getHexValue32());
+                setColour(backgroundColourId, bgFill.withAlpha(1.0f));
             }
             else
             {
-                setBackgroundImage(AssetFiles::createImageAsset(background));
+                setBackgroundImage(AssetFiles::loadImageAsset(background));
             }
         }
         else if (key == MainConfigFile::menuTypeKey)
         {
-            String menuType = mainConf.getConfigValue<String>
+            String menuType = mainConfig.getConfigValue<String>
                     (MainConfigFile::menuTypeKey);
             if (!MainConfigFile::menuTypes.contains(menuType))
             {
@@ -151,7 +150,7 @@ void HomePage::pageButtonClicked(Button * button)
     else if (button == &powerButton)
     {
         pushPageToStack(PageComponent::PageType::Power,
-                PageComponent::Animation::slideInFromRight);
+                PageComponent::Animation::slideInFromLeft);
     }
 }
 

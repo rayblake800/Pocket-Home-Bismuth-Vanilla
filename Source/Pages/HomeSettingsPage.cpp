@@ -1,8 +1,10 @@
 #include "HomeSettingsPage.h"
 
 HomeSettingsPage::HomeSettingsPage
-(PageFactoryInterface& pageFactory, ainConfigFile& mainConfig) :
-PageComponent(pageFactory, "HomeSettingsPage",{
+(PageFactoryInterface* pageFactory,
+            MainConfigFile& mainConfig,
+            ComponentConfigFile& componentConfig) :
+PageComponent(componentConfig, "HomeSettingsPage",{
     {
         { 3,
             {
@@ -38,18 +40,18 @@ PageComponent(pageFactory, "HomeSettingsPage",{
                 {&colourPageBtn, 1}
             }}
     }
-}, true),
-config(config),
-title("personalizeTitle", "Homepage Settings"),
-bgTitle("bgTitle", "Background:"),
+},pageFactory),
+mainConfig(mainConfig),
+title(componentConfig,"personalizeTitle", "Homepage Settings"),
+bgTitle(componentConfig,"bgTitle", "Background:"),
 bgTypePicker("bgTypePicker"),
-bgLabel("bgLabel", ""),
+bgLabel(componentConfig,"bgLabel", ""),
 bgEditor("Choose the new background",
         "Please choose your new background image"),
-menuPickerLabel("menuPickerLabel", "Application menu:"),
+menuPickerLabel(componentConfig,"menuPickerLabel", "Application menu:"),
 menuTypePicker("menuTypePicker"),
-columnCountLabel("columnCountLabel", "Menu columns:"),
-rowCountLabel("rowCountLabel", "Menu rows:"),
+columnCountLabel(componentConfig,"columnCountLabel", "Menu columns:"),
+rowCountLabel(componentConfig,"rowCountLabel", "Menu rows:"),
 columnCounter(1, 1, 9),
 rowCounter(1, 1, 9),
 colourPageBtn("Set colors")
@@ -74,10 +76,10 @@ colourPageBtn("Set colors")
     }
     menuTypePicker.addListener(this);
     
-    rowCounter.setValue(config.getConfigValue<int>
+    rowCounter.setValue(mainConfig.getConfigValue<int>
             (MainConfigFile::maxRowsKey));
 
-    columnCounter.setValue(config.getConfigValue<int>
+    columnCounter.setValue(mainConfig.getConfigValue<int>
             (MainConfigFile::maxColumnsKey));
 
     colourPageBtn.addListener(this);
@@ -86,15 +88,15 @@ colourPageBtn("Set colors")
     addAndShowLayoutComponents();
 }
 
+HomeSettingsPage::~HomeSettingsPage()
+{
+    
 /**
  * Update AppMenu dimensions when the page closes.
  */
-void HomeSettingsPage::pageRemovedFromStack()
-{
-    
-    config.setConfigValue<int>(MainConfigFile::maxRowsKey,
+    mainConfig.setConfigValue<int>(MainConfigFile::maxRowsKey,
                                rowCounter.getValue());
-    config.setConfigValue<int>(MainConfigFile::maxColumnsKey,
+    mainConfig.setConfigValue<int>(MainConfigFile::maxColumnsKey,
                                columnCounter.getValue());
 }
 
@@ -102,7 +104,7 @@ void HomeSettingsPage::updateComboBox()
 {
     
     /* Checking the current configuration */
-    String background = config.getConfigValue<String>(MainConfigFile::backgroundKey);
+    String background = mainConfig.getConfigValue<String>(MainConfigFile::backgroundKey);
     bool display = false;
     if ((background.length() == 6
          || background.length() == 8)
@@ -121,7 +123,7 @@ void HomeSettingsPage::updateComboBox()
     bgEditor.setVisible(display);
     bgLabel.setVisible(display);
 
-    String menuType = config.getConfigValue<String>(MainConfigFile::menuTypeKey);
+    String menuType = mainConfig.getConfigValue<String>(MainConfigFile::menuTypeKey);
     int menuIndex = MainConfigFile::menuTypes.indexOf(menuType);
     if (menuIndex != -1)
     {
@@ -137,7 +139,7 @@ void HomeSettingsPage::comboBoxChanged(ComboBox * box)
         switch (box->getSelectedId())
         {
             case 1:
-                config.setConfigValue<String>(MainConfigFile::backgroundKey,
+                mainConfig.setConfigValue<String>(MainConfigFile::backgroundKey,
                                               "4D4D4D");
                 bgEditor.setVisible(false);
                 bgLabel.setVisible(false);
@@ -155,7 +157,7 @@ void HomeSettingsPage::comboBoxChanged(ComboBox * box)
     }
     else if (box == &menuTypePicker && box->getSelectedItemIndex() >= 0)
     {
-        config.setConfigValue<String>
+        mainConfig.setConfigValue<String>
                 (MainConfigFile::menuTypeKey,
                  MainConfigFile::menuTypes[box->getSelectedItemIndex()]);
     }
@@ -165,7 +167,7 @@ void HomeSettingsPage::pageButtonClicked(Button* button)
 {
     if (button == &colourPageBtn)
     {
-        pushPageToStack(PageComponent::PageType::Colour);
+        pushPageToStack(PageType::ColourSettings);
     }
 }
 
@@ -180,11 +182,13 @@ void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
             bgEditor.setText("Invalid color", false);
         else
         {
-            config.setConfigValue<String>(MainConfigFile::backgroundKey, value);
+            mainConfig.setConfigValue<String>
+            (MainConfigFile::backgroundKey, value);
         }
     }
     else if (bgTypePicker.getSelectedId() == 3)
     {
-        config.setConfigValue<String>(MainConfigFile::backgroundKey, value);
+        mainConfig.setConfigValue<String>
+        (MainConfigFile::backgroundKey, value);
     }
 }

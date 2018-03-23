@@ -9,10 +9,14 @@
 
 class ScrollingAppFolder : public AppMenuFolder {
 public:
-    ScrollingAppFolder(AppMenuItem::Ptr folderItem, MouseListener* btnListener,
+    ScrollingAppFolder(
+            AppMenuItem::Ptr folderItem, 
+            MouseListener* btnListener,
             std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-            IconThread& iconThread);
-    virtual ~ScrollingAppFolder();
+            IconThread& iconThread,
+            ComponentConfigFile& config);
+    
+    virtual ~ScrollingAppFolder() { }
 
     /**
      * Create an AppMenuButton component for an AppMenuItem.
@@ -42,7 +46,9 @@ private:
     /**
      * Get the font used by all buttons in this menu type.
      */
-    static Font getButtonFont();
+    static Font getButtonFont(ComponentConfigFile& config);
+    
+    ComponentConfigFile& config;
 
     class ScrollingMenuButton : public AppMenuButton {
     public:
@@ -52,8 +58,11 @@ private:
          * @param iconThread
          * @param name
          */
-        ScrollingMenuButton(AppMenuItem* menuItem, IconThread& iconThread,
-                String name = String());
+        ScrollingMenuButton(
+                AppMenuItem* menuItem, 
+                IconThread& iconThread,
+                String name,
+                ComponentConfigFile& config);
         virtual ~ScrollingMenuButton();
 
         /**
@@ -66,6 +75,8 @@ private:
          * Re-calculates draw values whenever the button is resized
          */
         void resized() override;
+        
+        ComponentConfigFile& config;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ScrollingMenuButton)
     };

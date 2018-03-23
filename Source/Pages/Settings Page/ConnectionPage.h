@@ -23,9 +23,9 @@ template<class ConnectionPoint>
 class ConnectionPage : public PageComponent {
 public:
 
-    ConnectionPage(PageFactoryInterface& pageFactory);
+    ConnectionPage(ComponentConfigFile& config);
 
-    virtual ~ConnectionPage();
+    virtual ~ConnectionPage() { }
 
 protected:
     /**
@@ -150,20 +150,9 @@ private:
     virtual void pageAddedToStack() override;
 
     /**
-     * Clear the connection list when the page is removed from the page stack.
-     */
-    virtual void pageRemovedFromStack() override;
-
-    /**
      * Update the connection list when the page is revealed on the page stack.
      */
     virtual void pageRevealedOnStack() override;
-
-    /**
-     * Clear the connection list when the page is no longer on top of the page
-     * stack.
-     */
-    virtual void pageCoveredOnStack() override;
 
     /**
      * Handles connection list scrolling and connection selection.

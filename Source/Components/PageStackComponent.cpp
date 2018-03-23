@@ -4,6 +4,7 @@
 
 PageStackComponent::PageStackComponent()
 {
+    ASSERT_SINGULAR;
     setInterceptsMouseClicks(false, true);
     setWantsKeyboardFocus(false);
 #    if JUCE_DEBUG
@@ -18,6 +19,7 @@ PageStackComponent::PageStackComponent()
 void PageStackComponent::pushPage(PageComponent* page,
         PageComponent::Animation animation)
 {
+    DBG("PageStackComponent::" << __func__ << ": pushing " << page->getName());
     stack.add(page);
     transitionPage(page, animation, transitionDurationMS);
 }
@@ -48,6 +50,9 @@ void PageStackComponent::popPage(PageComponent::Animation animation)
  */
 bool PageStackComponent::isTopPage(PageComponent* page)
 {
+    int i = stack.indexOf(page);
+    DBG("PageStackComponent::" << __func__ << ": checking page " << i
+            << " of " << stack.size());
     return page == stack.getLast();
 }
 
@@ -80,7 +85,7 @@ void PageStackComponent::transitionPage(PageComponent* page,
     }
     Rectangle<int> translatedBounds;
     page->setEnabled(false);
-    int dir = addingPage ? -1 : 1;
+    int dir = -1;//addingPage ? -1 : 1;
     switch (animation)
     {
         case PageComponent::Animation::none:
@@ -91,9 +96,9 @@ void PageStackComponent::transitionPage(PageComponent* page,
             page->setEnabled(true);
             postAnimation(page);
             return;
-        case PageComponent::Animation::slideInFromLeft:
-            dir *= -1;
         case PageComponent::Animation::slideInFromRight:
+            dir *= -1;
+        case PageComponent::Animation::slideInFromLeft:
             translatedBounds = getLocalBounds().translated(getWidth() * dir, 0);
     }
     if (addingPage)

@@ -1,5 +1,6 @@
 #include "AssetFiles.h"
 #include "AppConfigFile.h"
+#include "Utils.h"
 
 Array<AppConfigFile::AppItem> AppConfigFile::favoriteApps;
 Array<AppConfigFile::AppFolder> AppConfigFile::categoryFolders;
@@ -7,6 +8,7 @@ CriticalSection AppConfigFile::appConfigLock;
 
 AppConfigFile::AppConfigFile() : ConfigFile(filenameConst)
 {
+    ASSERT_SINGULAR;
     const ScopedLock readLock(appConfigLock);
     var jsonConfig = AssetFiles::loadJSONAsset
             (String(CONFIG_PATH) + filenameConst, true);

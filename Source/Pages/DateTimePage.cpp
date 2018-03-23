@@ -17,9 +17,9 @@ const String DateTimePage::reconfErrorPreCmd = "Running '";
 const String DateTimePage::reconfErrorPostCmd
         = "' failed.\nIs the terminal launch command set correctly?";
 
-DateTimePage::DateTimePage(PageComponent::PageFactoryInterface& pageFactory,
-        MainConfigFile& mainConfig, ComponentConfigFile& componentConfig) :
-PageComponent(pageFactory, "DateTimePage",{
+DateTimePage::DateTimePage(MainConfigFile& mainConfig,
+        ComponentConfigFile& componentConfig) :
+PageComponent(componentConfig, "DateTimePage",{
     {3,
         {
             {&titleLabel, 1}
@@ -41,13 +41,13 @@ PageComponent(pageFactory, "DateTimePage",{
         {
             {nullptr, 1}
         }}
-}, true),
+}),
 mainConfig(mainConfig),
 componentConfig(componentConfig),
-titleLabel("dateTimeTitleLabel", pageTitle),
+titleLabel(componentConfig,"dateTimeTitleLabel", pageTitle),
 setClockMode("setClockMode"),
 reconfigureBtn(reconfigureBtnText),
-clockModeLabel("clockModeLabel", clockModeLabelText)
+clockModeLabel(componentConfig, "clockModeLabel", clockModeLabelText)
 {
 
 #    if JUCE_DEBUG

@@ -28,12 +28,12 @@
 
 class HomePage : public PageComponent, public ConfigFile::Listener{
 public:
-    HomePage(PageFactoryInterface& pageFactory, 
+    HomePage(PageFactoryInterface* pageFactory, 
             WifiStateManager& wifiState,
             MainConfigFile& mainConfig,
             ComponentConfigFile& componentConfig);
     
-    virtual ~HomePage();
+    virtual ~HomePage() { }
 
 protected:
     /**
@@ -42,7 +42,7 @@ protected:
      * @param config should be the MainConfigFile
      * @param key should be the background key
      */
-    void loadConfigProperties(ConfigFile* config, String key);
+    void configValueChanged(ConfigFile* config, String key);
 private:
 
     /**
