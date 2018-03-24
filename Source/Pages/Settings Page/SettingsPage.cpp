@@ -4,9 +4,11 @@
 #include "PokeLookAndFeel.h"
 #include "SettingsPage.h"
 
-SettingsPage::SettingsPage(PageFactoryInterface* pageFactory,
+SettingsPage::SettingsPage(
+        PageFactoryInterface* pageFactory,
         ComponentConfigFile& config,
         WifiStateManager& wifiManager) :
+Localized("SettingsPage"),
 WindowFocusedTimer("SettingsPage"),
 PageComponent(config,
 "SettingsPage",{
@@ -32,12 +34,10 @@ PageComponent(config,
         }}
 },
 pageFactory, true),
-wifiComponent(wifiManager,
-        [this]()
-        {
-
-            pushPageToStack(PageType::WifiSettings);
-        }, config),
+wifiComponent(wifiManager, [this]()
+{
+    pushPageToStack(PageType::WifiSettings);
+}, config),
 //bluetoothComponent([this]
 //{
 //
@@ -45,7 +45,7 @@ wifiComponent(wifiManager,
 //}, config),
 screenBrightnessSlider("brightnessIconLo.svg", "brightnessIconHi.svg"),
 volumeSlider("volumeIconLo.svg", "volumeIconHi.svg"),
-advancedPageButton("Advanced Settings")
+advancedPageButton(localeText(advanced_settings))
 {
 
 #    if JUCE_DEBUG
@@ -53,18 +53,18 @@ advancedPageButton("Advanced Settings")
 #    endif
 
     addAndShowLayoutComponents();
-    setColour(backgroundColourId, Colour(0xffd23c6d));
     advancedPageButton.addListener(this);
-    brightness = Display::getBrightness();
-    volume = Audio::getVolumePercent();
     screenBrightnessSlider.setRange(1, 10, 1);
-    screenBrightnessSlider.setValue(brightness);
+    screenBrightnessSlider.setValue(Display::getBrightness());
     screenBrightnessSlider.addListener(this);
     volumeSlider.setRange(0, 100, 1);
-    volumeSlider.setValue(volume);
+    volumeSlider.setValue(Audio::getVolumePercent());
     volumeSlider.addListener(this);
 }
 
+/**
+ * Cancels the slider timer when visibility is lost.
+ */
 void SettingsPage::visibilityChanged()
 {
     if (!isVisible())
@@ -74,6 +74,9 @@ void SettingsPage::visibilityChanged()
     }
 }
 
+/**
+ * Used to update the sliders while they're being dragged.
+ */
 void SettingsPage::timerCallback()
 {
     if (screenBrightnessSlider.ownsSlider(changingSlider))
@@ -87,6 +90,9 @@ void SettingsPage::timerCallback()
     startTimer(200);
 }
 
+/**
+ * Opens the advanced settings page when its button is clicked.
+ */
 void SettingsPage::pageButtonClicked(Button *button)
 {
     if (button == &advancedPageButton)
@@ -95,6 +101,9 @@ void SettingsPage::pageButtonClicked(Button *button)
     }
 }
 
+/**
+ * Starts a timer to update the slider values as its being dragged.
+ */
 void SettingsPage::sliderDragStarted(Slider* slider)
 {
     if (!isTimerRunning())
@@ -104,6 +113,9 @@ void SettingsPage::sliderDragStarted(Slider* slider)
     }
 }
 
+/**
+ * Stops the timer and immediately updates slider values.
+ */
 void SettingsPage::sliderDragEnded(Slider* slider)
 {
     changingSlider = slider;

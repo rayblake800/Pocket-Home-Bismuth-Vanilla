@@ -63,5 +63,8 @@
     },
     "WifiAPButton" : {
         "connected_ap" : " (Connected)"
+    },
+    "SettingsPage" : {
+        "advanced_settings" : "Advanced Settings Page"
     }
 }
