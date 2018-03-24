@@ -40,9 +40,9 @@ private:
      */
     void comboBoxChanged(ComboBox* comboBox) override;
 
-    //used to set clock visibility
+    //used to load the terminal launch command
     MainConfigFile& mainConfig;
-    //used to set 12/24 hour mode
+    //used to set clock visibility and 12/24 hour mode
     ComponentConfigFile& componentConfig;
 
     //page title label

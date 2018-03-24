@@ -2,9 +2,9 @@
 #include "Utils.h"
 #include "WifiIcon.h"
 
-WifiIcon::WifiIcon(WifiStateManager& wifiManager,ComponentConfigFile& config) :
+WifiIcon::WifiIcon(WifiStateManager& wifiManager, ComponentConfigFile& config) :
 WindowFocusedTimer("WifiIcon"),
-ConfigurableImageComponent(ComponentConfigFile::wifiIconKey,config),
+ConfigurableImageComponent(ComponentConfigFile::wifiIconKey, config),
 wifiManager(wifiManager)
 {
 
@@ -15,14 +15,9 @@ wifiManager(wifiManager)
     startTimer(100);
 }
 
-WifiIcon::~WifiIcon()
-{
-    stopTimer();
-}
-
 /**
  * When the wifi state changes, set the timer to go off after a very short
- * delay so that the icon state will update.
+ * delay so that the icon will update.
  */
 void WifiIcon::wifiStateChanged(WifiStateManager::WifiState state)
 {
@@ -38,7 +33,7 @@ void WifiIcon::setStatus(WifiIconImage wifiState)
 }
 
 /**
- * Enable/disable the WiFi checking timer based on component visibility
+ * Enable/disable the WiFi checking timer based on component visibility.
  */
 void WifiIcon::visibilityChanged()
 {
@@ -56,7 +51,8 @@ void WifiIcon::visibilityChanged()
 }
 
 /**
- * Check WiFi state and update the image.
+ * Periodically checks the current WiFi connection state, and
+ * updates the WiFi icon.
  */
 void WifiIcon::timerCallback()
 {
@@ -70,7 +66,7 @@ void WifiIcon::timerCallback()
             stopTimer();
             setStatus(wifiOff);
             return;
-            
+
             //wifi disconnected
         case WifiStateManager::enabled:
         case WifiStateManager::turningOff:

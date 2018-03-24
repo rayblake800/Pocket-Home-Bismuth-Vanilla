@@ -1,5 +1,8 @@
 -Replace all hard-coded text with locale strings.
 
+-Add an optional WifiStateManager::Listener callback specifically for connections
+ failed due to an incorrect password.
+
 -Use an interface to get rid of the circular dependency between AppMenuItems
  and the AppMenuItemFactory
 

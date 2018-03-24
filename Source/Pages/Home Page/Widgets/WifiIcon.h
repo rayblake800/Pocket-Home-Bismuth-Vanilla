@@ -14,19 +14,27 @@ class WifiIcon : public ConfigurableImageComponent, private WindowFocusedTimer,
 private WifiStateManager::Listener
 {
 public:
+    /**
+     * @param wifiManager  Shared wifiManager, needed to track wifi state.
+     * 
+     * @param config       Used to load component properties
+     */
     WifiIcon(WifiStateManager& wifiManager,ComponentConfigFile& config);
-    virtual ~WifiIcon();
+    
+    virtual ~WifiIcon() { }
 
 private:
 
     /**
      * When the wifi state changes, set the timer to go off after a very short
-     * delay so that the icon state will update.
+     * delay so that the icon will update.
+     * 
+     * @param state   New wifi state sent by the wifi manager.
      */
     void wifiStateChanged(WifiStateManager::WifiState state) override;
 
     /**
-     * All tracked WiFi states.  Each corresponds to an image asset file
+     * All wifi icon states.  Each corresponds to an image asset file
      * defined in components.json
      */
     enum WifiIconImage
@@ -40,20 +48,23 @@ private:
 
     /**
      * Set the WiFi connection status image.
-     * @param wifiState the last discovered state of the WiFi connection.
+     * 
+     * @param wifiState   The wifi icon that matches the current connection
+     *                     state.
      */
     void setStatus(WifiIconImage wifiState);
 
     /**
-     * Enable/disable the WiFi checking timer based on component visibility
+     * Enable/disable the WiFi checking timer based on component visibility.
      */
     void visibilityChanged() override;
 
     /**
-     * periodically checks the current WiFi connection state, and
+     * Periodically checks the current WiFi connection state, and
      * updates the WiFi icon.
      */
     void timerCallback();
+    
     //timer frequency in ms
     const static int frequency = 2000;
     

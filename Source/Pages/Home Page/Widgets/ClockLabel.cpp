@@ -4,8 +4,7 @@
 ClockLabel::ClockLabel(ComponentConfigFile& config) :
 WindowFocusedTimer("ClockLabel"),
 ConfigurableLabel(ComponentConfigFile::clockLabelKey, config,
-"clockLabel", "00:00"),
-config(config)
+"clockLabel", "00:00")
 {
 #    if JUCE_DEBUG
     setName("ClockLabel");
@@ -54,7 +53,7 @@ void ClockLabel::visibilityChanged()
 {
     if (isVisible())
     {
-        if (!config.getConfigValue<bool>(ComponentConfigFile::showClockKey))
+        if (!showClock)
         {
             setAlpha(0);
             stopTimer();
@@ -83,16 +82,16 @@ void ClockLabel::extraConfigValueChanged
     {
         if (key == ComponentConfigFile::showClockKey)
         {
-            bool visible = componentConfig->getConfigValue<bool>
+            showClock = componentConfig->getConfigValue<bool>
                     (ComponentConfigFile::showClockKey);
-            MessageManager::callAsync([this, visible]
+            MessageManager::callAsync([this]
             {
-                setAlpha(visible ? 1 : 0);
-                if (visible && !isTimerRunning())
+                setAlpha(showClock ? 1 : 0);
+                if (showClock && !isTimerRunning())
                 {
                     startTimer(1);
                 }
-                else if (!visible && isTimerRunning())
+                else if (!showClock && isTimerRunning())
                 {
                     stopTimer();
                 }

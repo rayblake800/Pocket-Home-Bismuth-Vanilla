@@ -1,20 +1,23 @@
 #include "Utils.h"
 #include "WifiSettingsPage.h"
 
-const StringArray WifiSettingsPage::wifiImageFiles = {
-                                                      "wifiStrength0.svg",
-                                                      "wifiStrength1.svg",
-                                                      "wifiStrength2.svg",
-                                                      "wifiStrength3.svg"
+const StringArray WifiSettingsPage::wifiImageFiles
+        = {
+           "wifiStrength0.svg",
+           "wifiStrength1.svg",
+           "wifiStrength2.svg",
+           "wifiStrength3.svg"
 };
 
-WifiSettingsPage::WifiSettingsPage(ComponentConfigFile& config,
+WifiSettingsPage::WifiSettingsPage(
+        ComponentConfigFile& config,
         WifiStateManager& wifiManager) :
 ConnectionPage<WifiAccessPoint>(config),
 config(config),
 wifiManager(wifiManager),
-passwordLabel(config, "passwordLabel", "Password:"),
-errorLabel(config)
+passwordLabel(config, "passwordLabel", localeText(password_field)),
+errorLabel(config),
+Localized("WifiSettingsPage")
 {
     ASSERT_SINGULAR;
 #    if JUCE_DEBUG
@@ -28,10 +31,8 @@ errorLabel(config)
     updateConnectionList();
 }
 
-WifiSettingsPage::~WifiSettingsPage() { }
-
 /**
- * @return the list of all visible Wifi access points.
+ * Finds all wifi access points within range of the wifi device.
  */
 Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
 {
@@ -63,8 +64,7 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
 }
 
 /**
- * @param connection if the system is currently connected to this
- * connection, this method closes that connection.
+ * Tries to disconnect from a specific wifi access point.
  */
 void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
 {
@@ -84,8 +84,8 @@ bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection)
 }
 
 /**
- * This is called whenever a button other than the navigation buttons
- * is clicked.
+ * Attempt to connect or disconnect from the current selected access point
+ * when the connection button is clicked.
  */
 void WifiSettingsPage::connectionButtonClicked(Button* button)
 {
@@ -159,7 +159,8 @@ void WifiSettingsPage::updateConnectionControls
     String connectionText;
     if (!connectionChanging)
     {
-        connectionText = connected ? "Disconnect" : "Connect";
+        connectionText = connected
+                ? localeText(btn_disconnect) : localeText(btn_connect);
     }
     connectionButton.setButtonText(connectionText);
     connectionButton.setEnabled(!connectionChanging);
@@ -181,6 +182,7 @@ void WifiSettingsPage::setCurrentlyConnecting(bool currentlyConnecting)
 }
 
 /**
+ * Keeps the page updated when wifi state changes.
  */
 void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
 {
@@ -203,8 +205,9 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
                 {
                     setCurrentlyConnecting(false);
                     updateConnectionControls(getSelectedConnection());
-                    errorLabel.setText(getSelectedConnection().getRequiresAuth() ?
-                            "Incorrect password." : "Connection failed.",
+                    errorLabel.setText(getSelectedConnection().getRequiresAuth()
+                            ? localeText(wrong_password)
+                            : localeText(connection_failed),
                             NotificationType::dontSendNotification);
                     errorLabel.setVisible(true);
                 }
@@ -214,7 +217,6 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
                 }
                 break;
             case WifiStateManager::connecting:
-            case WifiStateManager::disconnecting:
             case WifiStateManager::switchingConnection:
                 setCurrentlyConnecting(true);
                 break;
@@ -271,8 +273,9 @@ WifiSettingsPage::WifiAPButton::WifiAPButton(
         bool isConnected,
         ComponentConfigFile& config) :
 Button(connection.getSSID() + "Button"),
+Localized("WifiAPButton"),
 apLabel(config, "apLabel", connection.getSSID()
-+ (isConnected ? " (Connected)" : "")),
++ (isConnected ? localeText(connected_ap) : String())),
 wifiIcon(getWifiAssetName(connection))
 {
     addAndMakeVisible(apLabel);
@@ -287,6 +290,9 @@ wifiIcon(getWifiAssetName(connection))
     }
 }
 
+/**
+ * Update icon and label bounds to fit button bounds.
+ */
 void WifiSettingsPage::WifiAPButton::resized()
 {
     Rectangle<int> bounds = getLocalBounds();

@@ -53,6 +53,15 @@
         "personalize_homepage" : "Personalize your homepage",
         "date_and_time" : "Date and Time",
         "input_settings" : "Input settings"
-        
+    },
+    "WifiSettingsPage" : {
+        "password_field" : "Password:",
+        "btn_connect" : "Connect",
+        "btn_disconnect" : "Disconnect",
+        "wrong_password" : "Incorrect password",
+        "connection_failed" : "Connection failed."  
+    },
+    "WifiAPButton" : {
+        "connected_ap" : " (Connected)"
     }
 }
