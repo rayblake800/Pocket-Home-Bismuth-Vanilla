@@ -9,6 +9,7 @@
 #include "Password.h"
 
 SetPasswordPage::SetPasswordPage(ComponentConfigFile& config) :
+Localized("SetPasswordPage"),
 PageComponent(config, "SetPasswordPage",{
     {2,
         {
@@ -39,26 +40,32 @@ PageComponent(config, "SetPasswordPage",{
             {&setPassword, 1}
         }}
 }),
-rootLabel(config, "RootLab", "Sudo password"),
+title(config, "Title", localeText(change_password)),
+rootLabel(config, "RootLab", localeText(root_password)),
 rootPassword("Root", 0x2022),
-curLabel(config, "CurLabel", "Current password"),
+curLabel(config, "CurLabel", localeText(current_password)),
 curPassword("Current", 0x2022),
-newLabel(config, "NewLabel", "New password"),
+newLabel(config, "NewLabel", localeText(new_password)),
 newPassword("New", 0x2022),
-confirmLabel(config, "ConfLabel", "Retype password"),
-confirmPassword("Confirmation", 0x2022),
-title(config, "Title", "Change your password")
+confirmLabel(config, "ConfLabel", localeText(retype_password)),
+confirmPassword("Confirmation", 0x2022)
 {
 
 #    if JUCE_DEBUG
     setName("SetPasswordPage");
 #    endif
     title.setJustificationType(Justification::centred);
-    setPassword.setButtonText("Apply");
+    setPassword.setButtonText(localeText(apply));
     setPassword.addListener(this);
     addAndShowLayoutComponents();
 }
 
+/**
+ * If the setPassword button is clicked, attempts to set a new application
+ * password.  The result of this operation will be displayed in a message box,
+ * and all text fields on the page will be cleared.  If the password was
+ * set successfully, the page will be closed.
+ */
 void SetPasswordPage::pageButtonClicked(Button* button)
 {
     if (button != &setPassword)
@@ -70,19 +77,19 @@ void SetPasswordPage::pageButtonClicked(Button* button)
     }
     if (newPassword.isEmpty())
     {
-        showErrorMessage("Missing password",
-                "Please enter a new password.");
+        showErrorMessage(localeText(missing_password),
+                localeText(ask_to_enter_new));
     }
     else if (newPassword.getText() != confirmPassword.getText())
     {
-        showErrorMessage("Password confirmation failed",
-                "The new password fields don't match, try again.");
+        showErrorMessage(localeText(confirmation_failed),
+                localeText(fields_dont_match));
     }
     else if (!Password::checkPassword(
              Password::hashString(curPassword.getText())))
     {
-        showErrorMessage("Wrong password",
-                "The existing Pocket-Home password was incorrect.");
+        showErrorMessage(localeText(wrong_password),
+                localeText(incorrect_app_password));
     }
     else
     {
@@ -101,8 +108,9 @@ void SetPasswordPage::pageButtonClicked(Button* button)
 
             if (system(unlockPwdDir) != 0)
             {
-                showErrorMessage("Wrong password",
-                        "Can't update your password,\n make sure your root password is correct.");
+                showErrorMessage(localeText(wrong_password),
+                        localeText(cant_update) + "\n"
+                        + localeText(check_root_password));
                 return;
             }
         }
@@ -120,19 +128,18 @@ void SetPasswordPage::pageButtonClicked(Button* button)
 
         if (system(lockPwdDir) != 0 || passwordDir.hasWriteAccess())
         {
-            showErrorMessage("Error",
-                    "Failed to lock the password directory!");
+            showErrorMessage(localeText(error),
+                    localeText(cant_lock_dir));
             passwordFile.deleteFile();
             return;
         }
         AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::InfoIcon,
-                "Success",
-                "The Pocket-Home password has been updated.",
-                "Ok",
+                localeText(success),
+                localeText(password_updated),
+                localeText(confirm_btn),
                 nullptr,
                 ModalCallbackFunction::create([this](int i)
                 {
-
                     removeFromStack();
                 }));
 
@@ -142,16 +149,13 @@ void SetPasswordPage::pageButtonClicked(Button* button)
 /**
  * Opens a message box to display an error message, and clears all text entry
  * fields on the page.
- * 
- * @param title  The title to print on the message box.
- * 
- * @param error  The error message to print in the message box.
  */
 void SetPasswordPage::showErrorMessage(String title, String error)
 {
 
     AlertWindow::showMessageBoxAsync
-            (AlertWindow::AlertIconType::WarningIcon, title, error, "Ok");
+            (AlertWindow::AlertIconType::WarningIcon, title, error,
+            localeText(confirm_btn));
     clearAllFields();
 }
 

@@ -88,5 +88,26 @@
         "yes_btn" : "Yes",
         "no_btn" : "No",
         "flashing_info" : "For instructions, visit pcflash.getchip.com" 
+    },
+    "SetPasswordPage" : {
+        "change_password" : "Change your password",
+        "root_password" : "Sudo password",
+        "current_password" : "Current password",
+        "new_password" : "New password",
+        "retype_password" : "Retype password",
+        "apply" : "Apply",
+        "missing_password" : "Missing password",
+        "ask_to_enter_new" : "Please enter a new password.",
+        "confirmation_failed" : "Password confirmation failed",
+        "fields_dont_match" : "The new password fields don't match, try again.",
+        "wrong_password" : "Wrong password",
+        "incorrect_app_password" : "The existing Pocket-Home password was incorrect.",
+        "cant_update" : "Can't update your password,",
+        "check_root_password" : "make sure your root password is correct.",
+        "error" : "Error",
+        "cant_lock_dir" : "Failed to lock the password directory!",
+        "success" : "Success",
+        "password_updated" : "The Pocket-Home password has been updated.",
+        "confirm_btn" : "Ok"
     }
 }

@@ -80,8 +80,7 @@ private:
     //Spinner to indicate that the system is rebooting/shutting down
     OverlaySpinner overlaySpinner;
     //The lock screen is displayed after entering sleep mode.
-    LoginPage lockscreen;
-    
+    LoginPage lockscreen;   
     
     //localized text keys;
     static const constexpr char * shutdown = "shutdown";
