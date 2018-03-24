@@ -106,8 +106,23 @@
         "check_root_password" : "make sure your root password is correct.",
         "error" : "Error",
         "cant_lock_dir" : "Failed to lock the password directory!",
+        "password_removed" : "The Pocket-Home password is not set.",
         "success" : "Success",
         "password_updated" : "The Pocket-Home password has been updated.",
         "confirm_btn" : "Ok"
+    },
+    "RemovePasswordPage" : {
+        "root_password" : "Sudo password",
+        "current_password" : "Current password",
+        "remove_password" : "Remove your password",
+        "apply" : "Apply",
+        "wrong_password" : "Wrong password",
+        "try_again" : "Incorrect Pocket-Home password, try again.",
+        "confirm_btn" : "Ok",
+        "cant_change_password" : "Impossible to modify the password, check your root password",
+        "error" : "Error",
+        "cant_remove_password" : "Failed to remove password directory!",
+        "success" : "Success",
+        "password_removed" : "Your Pocket-Home password has been removed."
     }
 }

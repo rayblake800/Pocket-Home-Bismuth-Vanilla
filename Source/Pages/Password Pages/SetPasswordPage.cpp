@@ -17,22 +17,22 @@ PageComponent(config, "SetPasswordPage",{
         }},
     {1,
         {
-            {&rootLabel, 1},
+            {&rootLabel, 2},
             {&rootPassword, 3}
         }},
     {1,
         {
-            {&curLabel, 1},
+            {&curLabel, 2},
             {&curPassword, 3}
         }},
     {1,
         {
-            {&newLabel, 1},
+            {&newLabel, 2},
             {&newPassword, 3}
         }},
     {1,
         {
-            {&confirmLabel, 1},
+            {&confirmLabel, 2},
             {&confirmPassword, 3}
         }},
     {1,
@@ -129,7 +129,8 @@ void SetPasswordPage::pageButtonClicked(Button* button)
         if (system(lockPwdDir) != 0 || passwordDir.hasWriteAccess())
         {
             showErrorMessage(localeText(error),
-                    localeText(cant_lock_dir));
+                    localeText(cant_lock_dir) + "\n"
+                    + localeText(password_removed));
             passwordFile.deleteFile();
             return;
         }

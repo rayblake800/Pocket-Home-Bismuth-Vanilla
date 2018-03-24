@@ -5,6 +5,7 @@
 #include "Password.h"
 
 RemovePasswordPage::RemovePasswordPage(ComponentConfigFile& config) :
+Localized("RemovePasswordPage"),
 PageComponent(config, "RemovePasswordPage",{
     {2,
         {
@@ -12,12 +13,12 @@ PageComponent(config, "RemovePasswordPage",{
         }},
     {1,
         {
-            {&rootLabel, 1},
+            {&rootLabel, 2},
             {&rootPassword, 3}
         }},
     {1,
         {
-            {&curPwdLabel, 1},
+            {&curPwdLabel, 2},
             {&curPassword, 3}
         }},
     {1,
@@ -25,18 +26,18 @@ PageComponent(config, "RemovePasswordPage",{
             {&deleteButton, 1}
         }}
 }),
-rootLabel(config, "RootLab", "Sudo password"),
+rootLabel(config, "RootLab", localeText(root_password)),
 rootPassword("Root", 0x2022),
-curPwdLabel(config, "CurLabel", "Current password"),
+curPwdLabel(config, "CurLabel", localeText(current_password)),
 curPassword("Current", 0x2022),
-titleLabel(config, "Title", "Remove your password")
+titleLabel(config, "Title", localeText(remove_password))
 {
 
 #    if JUCE_DEBUG
     setName("RemovePasswordPage");
 #    endif
     titleLabel.setJustificationType(Justification::centred);
-    deleteButton.setButtonText("Apply");
+    deleteButton.setButtonText(localeText(apply));
     deleteButton.addListener(this);
     addAndShowLayoutComponents();
 }
@@ -49,7 +50,8 @@ void RemovePasswordPage::pageButtonClicked(Button* button)
 {
     if (button != &deleteButton)
     {
-        DBG("RemovePasswordPage::" << __func__ << ": button " << button->getName()
+        DBG("RemovePasswordPage::" << __func__ << ": button " 
+                << button->getName()
                 << " should not be triggering this function!");
         clearAllFields();
         return;
@@ -58,9 +60,9 @@ void RemovePasswordPage::pageButtonClicked(Button* button)
     {
         AlertWindow::showMessageBoxAsync(
                 AlertWindow::AlertIconType::WarningIcon,
-                "Wrong password",
-                "Incorrect Pocket-Home password, try again.",
-                "Ok");
+                localeText(wrong_password),
+                localeText(try_again),
+                localeText(confirm_btn));
         clearAllFields();
         return;
     }
@@ -79,24 +81,24 @@ void RemovePasswordPage::pageButtonClicked(Button* button)
     {
         AlertWindow::showMessageBoxAsync(
                 AlertWindow::AlertIconType::WarningIcon,
-                "Wrong password",
-                "Impossible to modify the password, check your root password",
-                "Ok");
+                localeText(wrong_password),
+                localeText(cant_change_password),
+                localeText(confirm_btn));
         return;
     }
     if(!passwordDir.deleteFile())
     {
         AlertWindow::showMessageBoxAsync(
                 AlertWindow::AlertIconType::WarningIcon,
-                "Error",
-                "Failed to remove password directory!",
-                "Ok");
+                localeText(error),
+                localeText(cant_remove_password),
+                localeText(confirm_btn));
         return;
     }
     AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::InfoIcon,
-            "Success",
-            "Your Pocket-Home password has been removed.",
-            "Ok",
+            localeText(success),
+            localeText(password_removed),
+            localeText(confirm_btn),
             nullptr,
             ModalCallbackFunction::create([this](int i)
             {
