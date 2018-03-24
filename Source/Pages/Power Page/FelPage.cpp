@@ -1,10 +1,10 @@
-#include "Utils.h"
 #include "PokeLookAndFeel.h"
 #include "MainConfigFile.h"
 #include "I2CBus.h"
 #include "FelPage.h"
 
 FelPage::FelPage(ComponentConfigFile& config) :
+Localized("FelPage"),
 PageComponent(config,"FelPage",{
     {2,
         {
@@ -36,10 +36,10 @@ PageComponent(config,"FelPage",{
         }}
 },nullptr,false),
 debounce(false),
-infoLine1(config,"infoLine1", "Reboot into software flashing mode?"),
-yesButton("Yes"),
-noButton("No"),
-infoLine2(config,"infoLine2", "For instructions, visit pcflash.getchip.com")
+infoLine1(config,"infoLine1", localeText(ask_to_reboot)),
+yesButton(localeText(yes_btn)),
+noButton(localeText(no_btn)),
+infoLine2(config,"infoLine2", localeText(flashing_info))
 {
 
 #    if JUCE_DEBUG
@@ -57,10 +57,8 @@ infoLine2(config,"infoLine2", "For instructions, visit pcflash.getchip.com")
 /**
  * Handle button clicks, either restarting into Fel mode or closing the 
  * page.
- * @param should be either &yesButton or &noButton
  */
-void
-FelPage::pageButtonClicked(Button *button)
+void FelPage::pageButtonClicked(Button* button)
 {
     if (button == &noButton)
     {

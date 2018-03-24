@@ -82,5 +82,11 @@
         "reboot" : "Reboot",
         "sleep" : "Sleep",
         "flash_software" : "Flash Software" 
+    },
+    "FelPage" : {
+        "ask_to_reboot" : "Reboot into software flashing mode?",
+        "yes_btn" : "Yes",
+        "no_btn" : "No",
+        "flashing_info" : "For instructions, visit pcflash.getchip.com" 
     }
 }

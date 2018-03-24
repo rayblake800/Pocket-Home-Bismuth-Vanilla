@@ -76,7 +76,6 @@ private:
     String hashedPassword;
     DrawableImageComponent ntcIcon;
 
-
     //localized text keys;
     static const constexpr char * password_label = "password_label";
     static const constexpr char * log_in = "log_in";
