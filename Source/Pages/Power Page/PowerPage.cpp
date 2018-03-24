@@ -3,9 +3,11 @@
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
 
-PowerPage::PowerPage(PageFactoryInterface* pageFactory,
+PowerPage::PowerPage(
+        PageFactoryInterface* pageFactory,
         MainConfigFile& mainConfig,
         ComponentConfigFile& componentConfig) :
+Localized("PowerPage"),
 PageComponent(componentConfig, "PowerPage",{
     {1,
         {
@@ -33,14 +35,13 @@ PageComponent(componentConfig, "PowerPage",{
         }}
 }, pageFactory, true, true),
 mainConfig(mainConfig),
-powerOffButton("Shutdown"),
-rebootButton("Reboot"),
-sleepButton("Sleep"),
-felButton("Flash Software"),
+powerOffButton(localeText(shutdown)),
+rebootButton(localeText(reboot)),
+sleepButton(localeText(sleep)),
+felButton(localeText(flash_software)),
 overlaySpinner(componentConfig),
 lockscreen(componentConfig, [this]()
 {
-
     hideLockscreen();
 })
 {
@@ -114,7 +115,7 @@ PowerPage::showPowerSpinner()
 }
 
 /**
- * Resize all child components to fit the page.
+ * Resize the lock screen and overlay spinner to fit the page.
  */
 void PowerPage::pageResized()
 {

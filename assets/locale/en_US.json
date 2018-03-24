@@ -76,5 +76,11 @@
         "connecting_to_ap" : "Connecting to ",
         "connecting_to_unknown" : "Connecting...",
         "disconnecting" : "Disconnecting..."   
+    },
+    "PowerPage" : {
+        "shutdown" : "Shutdown",
+        "reboot" : "Reboot",
+        "sleep" : "Sleep",
+        "flash_software" : "Flash Software" 
     }
 }

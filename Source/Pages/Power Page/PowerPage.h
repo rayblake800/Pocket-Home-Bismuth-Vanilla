@@ -3,8 +3,8 @@
  * 
  * PowerPageComponent is a UI menu page that shows buttons that perform actions
  * related to system power state.  From this page, the user can shut down the
- * system, reboot the system, turn off the display, enter PocketCHIP flashing
- * mode, or close the page.
+ * system, reboot the system, turn off the display, or enter PocketCHIP flashing
+ * mode.
  */
 #pragma once
 #include "PageComponent.h"
@@ -12,6 +12,7 @@
 #include "OverlaySpinner.h"
 #include "SwitchComponent.h"
 #include "LoginPage.h"
+#include "Localized.h"
 #include "MainConfigFile.h"
 
 /**
@@ -22,13 +23,22 @@
  * -Make background color configurable.
  */
 
-class PowerPage : public PageComponent {
+class PowerPage : public PageComponent, private Localized
+{
 public:
+    /**
+     * @param pageFactory        Needed to open the flashing page.
+     * 
+     * @param mainConfig         Shared config data where power commands are
+     *                            stored.
+     * 
+     * @param componentConfig    Shared UI component preferences. 
+     */
     PowerPage(PageFactoryInterface* pageFactory,
             MainConfigFile& mainConfig,
             ComponentConfigFile& componentConfig);
-    
-    ~PowerPage() { }
+
+    virtual ~PowerPage() { }
 private:
     /**
      * Turns off the display until key or mouse input is detected.
@@ -46,13 +56,18 @@ private:
      * restarting or shutting down.
      */
     void showPowerSpinner();
+    
     /**
      * Handles all button clicks.
      */
     void pageButtonClicked(Button*) override;
 
+    /**
+     * Resize the lock screen and overlay spinner to fit the page.
+     */
     void pageResized() override;
-    
+
+    //Used to load power commands
     MainConfigFile& mainConfig;
     //Turns off the system using the shutdown command in the MainConfigFile.
     TextButton powerOffButton;
@@ -64,10 +79,16 @@ private:
     TextButton felButton;
     //Spinner to indicate that the system is rebooting/shutting down
     OverlaySpinner overlaySpinner;
-    //Used to run shutdown/restart/sleep commands
-    //ChildProcess commandProcess;
     //The lock screen is displayed after entering sleep mode.
     LoginPage lockscreen;
+    
+    
+    //localized text keys;
+    static const constexpr char * shutdown = "shutdown";
+    static const constexpr char * reboot = "reboot";
+    static const constexpr char * sleep = "sleep";
+    static const constexpr char * flash_software = "flash_software";
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerPage)
 };
 
