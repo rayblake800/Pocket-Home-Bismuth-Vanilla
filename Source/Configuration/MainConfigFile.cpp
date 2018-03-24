@@ -2,12 +2,10 @@
 #include "MainConfigFile.h"
 #include "Utils.h"
 
-CriticalSection MainConfigFile::mainConfigLock;
-
 MainConfigFile::MainConfigFile() : ConfigFile(filenameConst)
 {
     ASSERT_SINGULAR;
-    const ScopedLock readLock(mainConfigLock);
+    const ScopedLock readLock(getConfigLock());
     var jsonConfig = AssetFiles::loadJSONAsset
             (String(configPath) + filenameConst, true);
     var defaultConfig = var();

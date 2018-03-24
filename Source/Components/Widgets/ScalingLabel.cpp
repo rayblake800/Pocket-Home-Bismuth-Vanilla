@@ -2,9 +2,11 @@
 #include "ComponentConfigFile.h"
 #include "ScalingLabel.h"
 
-ScalingLabel::ScalingLabel(ComponentConfigFile& config,
+ScalingLabel::ScalingLabel(
+        ComponentConfigFile& config,
         const String &componentName,
-        const String &labelText, const int& fontPadding)
+        const String &labelText,
+        const int& fontPadding)
 : Label(componentName, labelText),
 config(config),
 fontPadding(fontPadding)

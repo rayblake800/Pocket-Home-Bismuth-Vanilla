@@ -1,8 +1,9 @@
 /**
  * @file DrawableImageComponent.h
  * 
- * DrawableImageComponent is a component that draws a scaled image.
- * TODO: test this with non-svg image files
+ * DrawableImageComponent is a component that draws a scaled image. Unlike 
+ * Juce DrawableImage objects, this component's image will resize itself
+ * whenever the component bounds change.
  */
 
 #pragma once
@@ -10,11 +11,33 @@
 
 class DrawableImageComponent : public Component {
 public:
+    /**
+     * These ColourId values correspond to the colors set in loadDefaultColours.
+     * By using setColour(imageColour<i>Id, newColor), any part of the image
+     * with the same color as defaultColors[i] will have its color changed to
+     * newColor.  
+     * 
+     * When changing colors, potential color conflicts are checked
+     * for and averted, so you can safely do things like set imageColour0Id
+     * to defaultColors[3], and then set imageColour3Id to some new color
+     * without also changing the areas set by imageColour0Id.
+     * 
+     * TODO: check if this works with images not loaded from .svg files
+     */
+    enum ColourIds {
+        imageColour0Id = 0x1900000,
+        imageColour1Id = 0x1900001,
+        imageColour2Id = 0x1900002,
+        imageColour3Id = 0x1900003,
+        imageColour4Id = 0x1900004
+    };
+    
     friend class PokeLookAndFeel;
     /**
-     * Create a DrawableImageComponent using an asset file.
+     * Create a DrawableImageComponent using an image file.
      * 
-     * @param assetFilename  The filename of an image in the asset folder.
+     * @param assetFilename  The filename of an image in the asset folder, or
+     *                        a full image path.
      * 
      * @param placement      Defines how the image will be scaled to fit the
      *                        component.
@@ -49,7 +72,7 @@ public:
      * Create a DrawableImageComponent without an initial image.
      * 
      * @param placement  Defines how the image will be scaled to fit the
-     *                    component.
+     *                    component, once it is added.
      */
     DrawableImageComponent
     (RectanglePlacement placement = RectanglePlacement::centred);
@@ -59,7 +82,8 @@ public:
     /**
      * Changes the image drawn by this component.
      * 
-     * @param assetFilename The filename of an image in the asset folder.
+     * @param assetFilename  The filename of an image in the asset folder, or
+     *                        a full image path.
      */
     void setImage(String assetFilename);
 
@@ -77,13 +101,6 @@ public:
      */
     void setImage(Image image);
 
-    enum ColourIds {
-        imageColour0Id = 0x1900000,
-        imageColour1Id = 0x1900001,
-        imageColour2Id = 0x1900002,
-        imageColour3Id = 0x1900003,
-        imageColour4Id = 0x1900004
-    };
 
     /**
      * Apply component colors to the image.
@@ -117,6 +134,12 @@ private:
     //Default image colors, to be replaced by the actual image colors.
     static const Array<Colour> defaultColours;
 
+    /**
+     * This gets the list of default image colors, which can be changed through
+     * setColour().  
+     * 
+     * @return the default colors 
+     */
     static const Array<Colour> loadDefaultColours() {
         Array<Colour> defaults;
         defaults.add(Colour(0xffffffff));

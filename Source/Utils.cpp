@@ -50,12 +50,11 @@ void componentTrace()
 }
 #endif
 
-
-
 /**
  * Requests user confirmation before performing some action
  */
-void confirmAction(String title, String message, std::function<void() > onConfirm)
+void confirmAction
+(String title, String message, std::function<void() > onConfirm)
 {
     NativeMessageBox::showOkCancelBox(AlertWindow::QuestionIcon,
             title, message, nullptr,

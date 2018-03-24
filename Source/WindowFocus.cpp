@@ -4,8 +4,9 @@
  * Access the listener array through a callback function that will receive
  * the listener array reference as a parameter.  
  * 
- * @param listenerAction must not create or destroy any listeners or 
- * call accessListeners itself or the application will deadlock.
+ * @param listenerAction  This must not create or destroy any listeners, or 
+ *                         call accessListeners itself.  If it does, the 
+ *                         application will deadlock.
  */
 static void accessListeners(std::function
         <void(Array<WindowFocus::Listener*>&) > listenerAction)
@@ -16,20 +17,15 @@ static void accessListeners(std::function
     listenerAction(listeners);
 }
 
-WindowFocus::BroadcastWindow::BroadcastWindow(const String& title,
-        Colour backgroundColour, int requiredButtons) :
+WindowFocus::BroadcastWindow::BroadcastWindow
+(const String& title, Colour backgroundColour, int requiredButtons) :
 DocumentWindow(title, backgroundColour, requiredButtons) { }
-
-WindowFocus::BroadcastWindow::~BroadcastWindow() { }
 
 /**
  * Ensure all listeners are notified when window state changes.
  */
 void WindowFocus::BroadcastWindow::activeWindowStatusChanged()
 {
-    //TODO: find out why the window system triggers a bunch of repeated 
-    //focus loss effects on program start.  For now, use a static value to
-    //prevent repeats of the same focus event type.
     static bool focused = !isActiveWindow();
     if (focused != isActiveWindow())
     {
@@ -46,7 +42,8 @@ void WindowFocus::BroadcastWindow::activeWindowStatusChanged()
                 }
             });
         }
-        else{
+        else
+        {
             accessListeners([this](Array<Listener*>& listeners)
             {
                 DBG("WindowFocus::activeWindowStatusChanged: lost focus,"
@@ -56,12 +53,15 @@ void WindowFocus::BroadcastWindow::activeWindowStatusChanged()
                     listener->windowFocusLost();
                 }
             });
-            
+
         }
 
     }
 }
 
+/**
+ * Adds itself to the Listener list on creation.
+ */
 WindowFocus::Listener::Listener()
 {
     accessListeners([this] (Array<Listener*>& listeners)
@@ -70,6 +70,9 @@ WindowFocus::Listener::Listener()
     });
 }
 
+/**
+ * Removes itself from the listener list on destruction.
+ */
 WindowFocus::Listener::~Listener()
 {
     accessListeners([this] (Array<Listener*>& listeners)

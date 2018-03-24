@@ -18,14 +18,17 @@ public:
      * @param componentKey  One of the component keys defined by the 
      *                       ComponentConfigFile.
      * 
-     * @param config        A reference to the ComponentConfigFile.
+     * @param config        A reference to the ComponentConfigFile, where this
+     *                       component bounds, images, and colors are set.
      * 
      * @param assetIndex    Selects which component asset file should be loaded
      *                       by the image on initialization.
      * 
-     * @param placement     Defines how the image will be scaled
+     * @param placement     Defines how the image will be scaled.
      */
-    ConfigurableImageButton(String componentKey, ComponentConfigFile& config, 
+    ConfigurableImageButton(
+            String componentKey, 
+            ComponentConfigFile& config, 
             int assetIndex = 0,
             RectanglePlacement placement = RectanglePlacement::centred);
 
@@ -39,8 +42,8 @@ public:
      *                 equals the current loaded index, nothing will happen. 
      */
     void setImageAssetIndex(int index);
-private:
     
+private:
     /**
      * Keeps the image set to component bounds.
      */

@@ -19,6 +19,13 @@
 class PokeLookAndFeel : public LookAndFeel_V3, public ConfigFile::Listener
 {
 public:
+    /**
+     * @param mainConfig        Main configuration file, used to decide when to
+     *                           show or hide the cursor.
+     * 
+     * @param componentConfig   Component configuration file, used to load
+     *                           default component colors.
+     */
     PokeLookAndFeel(MainConfigFile& mainConfig,
             ComponentConfigFile& componentConfig);
 
@@ -26,12 +33,13 @@ public:
 
     /**
      * Get the appropriate typeface for the given Font.
+     * 
      * @return seguibl, no other typeface is used.
      */
     Typeface::Ptr getTypefaceForFont(const Font &font) override;
 
     /**
-     * Draws the thumb portion of a linear Slider
+     * Draws the thumb portion of a linear Slider.
      */
     void drawLinearSliderThumb(Graphics &g, int x, int y,
             int width, int height, float sliderPos,
@@ -39,7 +47,7 @@ public:
             const Slider::SliderStyle style, Slider &slider) override;
 
     /**
-     * Draws the background of a linear Slider
+     * Draws the background of a linear slider.
      */
     void drawLinearSliderBackground(Graphics &g, int x, int y,
             int width, int height, float sliderPos,
@@ -47,7 +55,7 @@ public:
             const Slider::SliderStyle style, Slider &slider) override;
 
     /**
-     * Draws the entire linear Slider component.
+     * Draws the entire linear slider component.  
      */
     void drawLinearSlider(Graphics &g, int x, int y,
             int width, int height, float sliderPos,
@@ -74,9 +82,11 @@ public:
 
     /**
      * Get the cursor to display over a given component.
+     * 
      * @param component
+     * 
      * @return the same cursor for all components, this application doesn't
-     * need different cursors for different components.
+     *          need different cursors for different components.
      */
     MouseCursor getMouseCursorFor(Component &component) override;
 
@@ -84,18 +94,22 @@ private:
     /**
      * Loads and applies component colors from components.json, and updates
      * cursor visibility.
+     * 
      * @param config
+     * 
      * @param key
      */
     void configValueChanged(ConfigFile* config, String key) override;
     
-    //reference to configuration files
+    //references to configuration files
     MainConfigFile& mainConfig;
     ComponentConfigFile& componentConfig;
 
     //Defines the maximum number of characters that will fit on a text button.
     static const int maxButtonStrSize = 30;
 
+    //application font
     Typeface::Ptr seguibl;
+    //application cursor
     MouseCursor::StandardCursorType cursor;
 };

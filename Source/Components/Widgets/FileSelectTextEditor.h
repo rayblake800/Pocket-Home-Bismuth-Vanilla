@@ -7,10 +7,11 @@
 
 #pragma once
 #include <set>
+#include "Localized.h"
 #include "JuceHeader.h"
 
 class FileSelectTextEditor : public Component,
-public TextEditor::Listener, public Button::Listener
+public TextEditor::Listener, public Button::Listener, private Localized
 {
 public:
 
@@ -19,22 +20,27 @@ public:
         fileWindowColourId = 0x1900300,
         textColourId = 0x1900301
     };
+    
     /**
      * @param selectionTitle Sets the title displayed in the file selection 
-     *                        window.
+     *                        window.  If left empty, this will use the default
+     *                        image selection title.
      * 
      * @param selectionText  Sets the short description displayed in the file
-     *                        selection window.
+     *                        selection window.  If left empty, this will use
+     *                        the default image selection text.
      * 
      * @param fileFilter     Used to set what types of files may be selected.
      * 
      * @param componentName  Sets the component name value
      */
-    FileSelectTextEditor(const String& selectionTitle = imgSelectTitle,
-            const String& selectionText = imgSelectText,
+    FileSelectTextEditor(
+            const String& selectionTitle = String(),
+            const String& selectionText = String(),
             WildcardFileFilter fileFilter = imageFilter,
             const String& componentName = String("fileSelectTextEditor"));
-    virtual ~FileSelectTextEditor();
+    
+    virtual ~FileSelectTextEditor() { }
 
     /**
      * Set the initial text value for the file selection text editor.
@@ -152,8 +158,8 @@ private:
 
     //Default selection properties for selecting images.
     static const WildcardFileFilter imageFilter;
-    static const String imgSelectTitle;
-    static const String imgSelectText;
+    static const constexpr char * img_select_title = "img_select_title";
+    static const constexpr char * img_select_text = "img_select_text";
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FileSelectTextEditor)
 };

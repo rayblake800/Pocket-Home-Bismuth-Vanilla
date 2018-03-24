@@ -1,30 +1,28 @@
 #include "DrawableImageButton.h"
 
-DrawableImageButton::DrawableImageButton(File imageFile,
-        RectanglePlacement placement) :
+DrawableImageButton::DrawableImageButton
+(File imageFile, RectanglePlacement placement) :
 Button(imageFile.getFileName() + String("ImageButton")),
 imageComponent(new DrawableImageComponent(imageFile, placement))
 {
     addAndMakeVisible(imageComponent);
 }
 
-DrawableImageButton::DrawableImageButton(String assetName,
-        RectanglePlacement placement) :
+DrawableImageButton::DrawableImageButton
+(String assetName, RectanglePlacement placement) :
 Button(assetName + String("ImageButton")),
 imageComponent(new DrawableImageComponent(assetName, placement))
 {
     addAndMakeVisible(imageComponent);
 }
 
-DrawableImageButton::DrawableImageButton(Image imageObject,
-        RectanglePlacement placement) :
+DrawableImageButton::DrawableImageButton
+(Image imageObject, RectanglePlacement placement) :
 Button("DrawableImageButton"),
 imageComponent(new DrawableImageComponent(imageObject, placement))
 {
     addAndMakeVisible(imageComponent);
 }
-
-DrawableImageButton::~DrawableImageButton() { }
 
 /**
  * Changed the image drawn by this component.
@@ -68,7 +66,9 @@ void DrawableImageButton::updateImageColors()
 {
     if (imageComponent != nullptr)
     {
-        for (int colourId = imageColour0Id; colourId <= imageColour4Id; colourId++)
+        for (int colourId = imageColour0Id; 
+             colourId <= imageColour4Id; 
+             colourId++)
         {
             Colour imageColour = imageComponent->findColour(colourId, false);
             Colour buttonColour = findColour(colourId, false);

@@ -1,7 +1,9 @@
 #include "ConfigurableImageButton.h"
 
-ConfigurableImageButton::ConfigurableImageButton
-(String componentKey, ComponentConfigFile& config, int assetIndex, 
+ConfigurableImageButton::ConfigurableImageButton(
+        String componentKey,
+        ComponentConfigFile& config,
+        int assetIndex,
         RectanglePlacement placement) :
 buttonImage(componentKey, config, assetIndex, placement),
 ConfigurableComponent(componentKey, config),

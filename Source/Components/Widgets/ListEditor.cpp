@@ -1,4 +1,3 @@
-#include "Utils.h"
 #include "ListEditor.h"
 
 ListEditor::ListEditor(StringArray initialList) :
@@ -94,7 +93,8 @@ void ListEditor::labelTextChanged(Label *source)
     {
         int rowNum = listItem->getComponentID().getIntValue();
         listItems.getReference(rowNum) = listItem->getText(true);
-        DBG("ListEditor::" << __func__ << ": Text set to " << listItem->getText(true));
+        DBG("ListEditor::" << __func__ << ": Text set to " 
+                << listItem->getText(true));
     }
     listContainer.updateContent();
     listContainer.repaint();
@@ -157,8 +157,6 @@ delBtn("cancel.svg")
     setInterceptsMouseClicks(false, true);
 }
 
-ListEditor::ListItemComponent::~ListItemComponent() { }
-
 /**
  * @param id  This should be set to String(rowIndex) by the
  *             ListEditor.
@@ -218,9 +216,11 @@ Component * ListEditor::refreshComponentForRow
 
     rowLabel->setComponentID(String(rowNumber));
 
-    rowLabel->setFont(rowLabel->getFont().withHeight(rowLabel->getHeight() - 1));
+    rowLabel->setFont(rowLabel->getFont()
+            .withHeight(rowLabel->getHeight() - 1));
     rowLabel->setColour(Label::backgroundColourId, isRowSelected ?
-            findColour(selectedListItemColourId) : findColour(listItemColourId));
+            findColour(selectedListItemColourId) 
+            : findColour(listItemColourId));
     return rowLabel;
 }
 

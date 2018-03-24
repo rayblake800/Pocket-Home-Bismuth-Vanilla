@@ -14,8 +14,10 @@
  * ConfigFile reads from each json file only once per program instance, so any 
  * external changes to the file that occur after that will be ignored and 
  * overwritten.  To reduce file IO and prevent concurrent file modification,
- * only one ConfigFile object should exist for each json configuration file.  
- * ConfigFile objects should be thread safe.
+ * only one ConfigFile object should exist for each json configuration file.
+ *   
+ * ConfigFile objects should lock themselves with the CriticalSection avaliable
+ * through getConfigLock() whenever reading or writing data.
  */
 #pragma once
 #include <map>
@@ -24,8 +26,7 @@
 
 class ConfigFile : private Localized
 {
-    public:
-
+public:
     /**
      * Writes any pending changes to the file before destruction.
      */
@@ -36,13 +37,14 @@ class ConfigFile : private Localized
      * 
      * @param   key The key string that maps to the desired value.
      * 
+     * @tparam  T   The value data type. This can be int, String, or bool.
+     * 
      * @throws  std::out_of_range if key does not map to a value of type T
      *           in this config file
      * 
      * @return  the value read from the config file.
      */
-    template<typename T >
-            T getConfigValue(String key)
+    template<typename T > T getConfigValue(String key)
     {
         std::map<String, T>& fileDataMap = getMapReference<T>();
         const ScopedLock readLock(configLock);
@@ -66,11 +68,13 @@ class ConfigFile : private Localized
      * 
      * @param newValue   The new value to save to the file.
      * 
+     * @tparam T         The value data type. This can be int, String, or bool.
+     * 
      * @throws           std::out_of_range if key does not map to a value of 
      *                    type T in this config file
      */
     template<typename T>
-            void setConfigValue(String key, T newValue)
+    void setConfigValue(String key, T newValue)
     {
         std::map<String, T>& fileDataMap = getMapReference<T>();
         const ScopedLock writeLock(configLock);
@@ -98,7 +102,7 @@ class ConfigFile : private Localized
     /**
      * @return true iff this ConfigFile and rhs have the same filename.
      */
-    bool operator==(const ConfigFile & rhs) const;
+    bool operator==(const ConfigFile& rhs) const;
 
     /**
      * Listeners receive updates whenever key values they track are updated in
@@ -126,7 +130,7 @@ class ConfigFile : private Localized
     private:
         /**
          * Called whenever a key tracked by this listener changes in the config
-         * file, listeners should override this to react to config changes.
+         * file. Listeners should override this to react to config changes.
          * 
          * @param config        A reference to the updated ConfigFile object.
          * 
@@ -167,8 +171,7 @@ class ConfigFile : private Localized
      */
     void notifyListeners(String key);
 
-    protected:
-
+protected:
     /**
      * Defines the basic data types that can be stored in all ConfigFile
      * objects.
@@ -188,6 +191,16 @@ class ConfigFile : private Localized
         String keyString;
         SupportedDataType dataType;
     };
+
+    /**
+     * Get a reference to the ConfigFile critical section.
+     * 
+     * @return  a reference to configLock.
+     */
+    CriticalSection& getConfigLock()
+    {
+        return configLock;
+    }
 
     /**
      * This constructor should only be called when constructing ConfigFile
@@ -223,11 +236,11 @@ class ConfigFile : private Localized
     /**
      * Copy all config data to a json object.
      * 
-     * @param jsonObj a dynamicObject that can later be
-     * written to a json file.
+     * @param jsonObj  A dynamicObject that can later be
+     *                 written to a json file.
      * 
-     * @pre any code calling this function is expected to have already
-     * acquired the object's lock.
+     * @pre   Any code calling this function is expected to have already
+     *         acquired the object's lock.
      */
     virtual void copyDataToJson(DynamicObject::Ptr jsonObj);
 
@@ -244,17 +257,18 @@ class ConfigFile : private Localized
      * Gets a property from json configuration data, or from default
      * configuration data if necessary
      * 
-     * @param config should pass in json configuration data from 
-     * ~/.pocket-home/<filename>.json
+     * @param config          This should pass in json configuration data from 
+     *                         ~/.pocket-home/<filename>.json
      * 
-     * @param defaultConfig should be either json data from the default config 
-     * file in the assets folder, or a void var. 
-     * If defaultConfig is null and data is missing from the configuration file,
-     * this method will open configuration/<filename>.json from the asset
-     * folder and load all data into defaultConfig. 
+     * @param defaultConfig   This should be either json data from the default 
+     *                         config file in the assets folder, or a void var. 
+     *                         If defaultConfig is void and data is missing from
+     *                         the configuration file, this method will open 
+     *                         configuration/<filename>.json from the asset
+     *                         folder and load all data into defaultConfig. 
      * 
      * @return the value read from config/defaultConfig at [key], or a void var
-     * if nothing was found in either var object.
+     *          if nothing was found in either var object.
      */
     var getProperty(var& config, var& defaultConfig, String key);
 
@@ -276,11 +290,13 @@ class ConfigFile : private Localized
     //The directory all config files will use
     static const constexpr char* configPath = "~/.pocket-home/";
 
-    private:
+private:
 
     /**
      * @return a reference to the map that stores data values of type T for
-     * ConfigFiles with this object's filename.
+     *          ConfigFiles with this object's filename.  This needs to be
+     *          explicitly defined for each type supported by getConfigValue()
+     *          and setConfigValue()
      */
     template <class T > std::map<String, T>& getMapReference();
 
@@ -290,6 +306,7 @@ class ConfigFile : private Localized
      * file.
      * 
      * @param key
+     * 
      * @param newValue
      */
     template <class T> void initMapProperty(String key, T newValue)
@@ -299,15 +316,28 @@ class ConfigFile : private Localized
         fileDataMap[key] = newValue;
     }
 
+    //Locks the object to prevent concurrent file modifications.
     CriticalSection configLock;
 
+    //Stores the name of the .json config file.
     String filename;
 
-
+    //Indicates if changes need to be written to the file.
     bool fileChangesPending = false;
+
+    //Holds configuration values read from the file.
     std::map<String, int> intValues;
     std::map<String, String> stringValues;
     std::map<String, bool> boolValues;
+
+    /*
+     * Map listeners to their tracked keys and tracked keys to their listeners.
+     * Data is tracked both ways because the decreased search time is worth
+     * the increased memory use.
+     * 
+     * Realistically though, it probably doesn't make much of a difference
+     * either way, so if there is ever any real version to change this, go ahead.
+     */
     std::map<Listener*, StringArray> listenerKeys;
     std::map<String, Array < Listener*>> keyListeners;
 

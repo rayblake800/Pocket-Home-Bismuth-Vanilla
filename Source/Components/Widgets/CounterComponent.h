@@ -13,8 +13,7 @@
 class CounterComponent : public Component, private Button::Listener,
 private TextEditor::Listener
 {
-public:
-    
+public: 
     /**
      * @param initialValue  Sets the initial value of the counter.
      * 
@@ -26,7 +25,7 @@ public:
      */
     CounterComponent(int initialValue = 0, int minimum = 0, int maximum = 9);
 
-    virtual~CounterComponent() { }
+    virtual ~CounterComponent() { }
 
     /**
      * @return the integer value held by the counter.
@@ -57,8 +56,7 @@ public:
      */
     void setMaximum(int newMax);
 
-private:
-    
+private:   
     /**
      * Increments or decrements the counter value when the plus or minus 
      * buttons are pressed.
@@ -75,19 +73,26 @@ private:
     void updateNumberField();
 
     /**
-     * Updates the number field when it loses focus.
+     * Updates the number field when it loses focus. This should not be called
+     * directly.
+     * 
+     * @param editor
      */
     void textEditorFocusLost(TextEditor& editor);
 
     /**
      * Updates the number field if it's focused and the user presses the return 
-     * key.
+     * key. This should not be called directly.
+     * 
+     * @param editor
      */
     void textEditorReturnKeyPressed(TextEditor& editor) override;
 
     /**
      * Updates the number field if it's focused and the user presses the escape 
-     * key.
+     * key. This should not be called directly.
+     * 
+     * @param editor
      */
     void textEditorEscapeKeyPressed(TextEditor& editor) override;
 

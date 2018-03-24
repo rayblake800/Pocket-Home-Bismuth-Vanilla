@@ -1,18 +1,30 @@
 #include "AssetFiles.h"
 #include "ConfigFile.h"
 
+/**
+ * @return a std::map of String keys mapped to integers, so getConfigValue()
+ *          and setConfigValue() can use int as a template type. 
+ */
 template<> std::map<String, int>& ConfigFile::getMapReference<int>()
 {
     const ScopedLock lockFileMaps(configLock);
     return intValues;
 }
 
+/**
+ * @return a std::map of String keys mapped to strings, so getConfigValue()
+ *          and setConfigValue() can use String as a template type. 
+ */
 template<> std::map<String, String>& ConfigFile::getMapReference<String>()
 {
     const ScopedLock lockFileMaps(configLock);
     return stringValues;
 }
 
+/**
+ * @return a std::map of String keys mapped to booleans, so getConfigValue()
+ *          and setConfigValue() can use bool as a template type. 
+ */
 template<> std::map<String, bool>& ConfigFile::getMapReference<bool>()
 {
     const ScopedLock lockFileMaps(configLock);
@@ -105,11 +117,6 @@ void ConfigFile::removeListener(ConfigFile::Listener* listener)
 
 /**
  * Announce new changes to each object tracking a particular key.
- * 
- * @param key maps to a value that has changed in this ConfigFile. 
- * 
- * @pre make sure the lock is not held when calling this, so that
- *       the Configurable objects can read the property changes.
  */
 void ConfigFile::notifyListeners(String key)
 {
@@ -120,7 +127,6 @@ void ConfigFile::notifyListeners(String key)
 }
 
 //################################# File IO ####################################
-
 /**
  * Read in this object's data from a json config object
  */
@@ -228,10 +234,6 @@ void ConfigFile::markPendingChanges()
 /**
  * Re-writes all data back to the config file, as long as there are
  * changes to write.
- * 
- * 
- * @pre any code calling this function is expected to have already
- * acquired the ConfigFile's lock
  */
 void ConfigFile::writeChanges()
 {

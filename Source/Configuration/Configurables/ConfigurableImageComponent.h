@@ -19,10 +19,10 @@ public:
      * 
      * @param config        A reference to the ComponentConfigFile.
      * 
-     * @param assetIndex     Selects which component asset file should be 
-     *                        loaded on initialization.
+     * @param assetIndex    Selects which component asset file should be 
+     *                       loaded on initialization.
      * 
-     * @param placement      Defines how the image will be scaled.
+     * @param placement     Defines how the image will be scaled.
      */
     ConfigurableImageComponent(String componentKey,
             ComponentConfigFile& config,
@@ -47,8 +47,8 @@ protected:
      * @param assetNames  The list of all asset files associated with this
      *                     component.
      * 
-     * @param colours      Custom colour values used to replace the default 
-     *                      image colours.
+     * @param colours     Custom colour values used to replace the default 
+     *                     image colours.
      */
     virtual void applyConfigAssets(StringArray assetNames,
             Array<Colour> colours);

@@ -38,7 +38,7 @@ public:
     DrawableImageButton(Image imageObject,
             RectanglePlacement placement = RectanglePlacement::centred);
 
-    virtual ~DrawableImageButton();
+    virtual ~DrawableImageButton() { }
 
     /**
      * Changes the image drawn by this component.

@@ -23,7 +23,7 @@ public:
      * 
      * @param appItem defines all menu item data
      */
-    ConfigAppMenuItem(AppConfigFile& config, MainConfigFile& mainConfig,
+    ConfigAppMenuItem(AppConfigFile& appConfig, MainConfigFile& mainConfig,
             const AppConfigFile::AppItem& appItem);
     
     virtual ~ConfigAppMenuItem() { }

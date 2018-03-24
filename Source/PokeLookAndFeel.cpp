@@ -8,7 +8,8 @@
 #include "AppMenuButton.h"
 #include "PokeLookAndFeel.h"
 
-PokeLookAndFeel::PokeLookAndFeel(MainConfigFile& mainConfig, 
+PokeLookAndFeel::PokeLookAndFeel(
+        MainConfigFile& mainConfig,
         ComponentConfigFile& componentConfig) :
 seguibl(Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
 BinaryData::LatoRegular_ttfSize)),
@@ -16,11 +17,10 @@ cursor(MouseCursor::NoCursor),
 mainConfig(mainConfig),
 componentConfig(componentConfig)
 {
-    componentConfig.addListener(this,componentConfig.getColourKeys());
+    componentConfig.addListener(this, componentConfig.getColourKeys());
     mainConfig.addListener(this,{MainConfigFile::showCursorKey});
     loadAllConfigProperties();
 }
-
 
 /**
  * Get the appropriate typeface for the given font.
@@ -31,7 +31,7 @@ Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const Font &font)
 }
 
 /**
- * Draws the thumb portion of a linear slider
+ * Draws the background of a linear slider. 
  */
 void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
         int width, int height,
@@ -59,7 +59,7 @@ void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
 }
 
 /**
- * Draw the background of a linear slider
+ * Draws the entire linear slider component.
  */
 void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y,
         int width, int height,
@@ -73,12 +73,21 @@ void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y,
     if (slider.isHorizontal())
     {
         const float iy = y + height * 0.5f - radius;
-        indent.addRoundedRectangle(x - radius, iy, width + radius * 2.0f, radius * 2.0f, 1);
+        indent.addRoundedRectangle(
+                x - radius,
+                iy,
+                width + radius * 2.0f,
+                radius * 2.0f, 1);
     }
     else
     {
         const float ix = x + width * 0.5f - radius;
-        indent.addRoundedRectangle(ix, y - radius, radius * 2.0f, height + radius * 2.0f, 1);
+        indent.addRoundedRectangle(
+                ix,
+                y - radius,
+                radius * 2.0f,
+                height + radius * 2.0f,
+                1);
     }
     g.fillPath(indent);
 }
@@ -86,14 +95,17 @@ void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y,
 /**
  * Draws the entire linear slider component.
  */
-void PokeLookAndFeel::drawLinearSlider(Graphics &g, int x, int y, int width, int height,
+void PokeLookAndFeel::drawLinearSlider(Graphics &g, int x, int y,
+        int width, int height,
         float sliderPos, float minSliderPos, float maxSliderPos,
         const Slider::SliderStyle style, Slider &slider)
 {
 
-    drawLinearSliderBackground(g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style,
+    drawLinearSliderBackground(g, x, y, width, height,
+            sliderPos, minSliderPos, maxSliderPos, style,
             slider);
-    drawLinearSliderThumb(g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style,
+    drawLinearSliderThumb(g, x, y, width, height, sliderPos,
+            minSliderPos, maxSliderPos, style,
             slider);
 }
 
@@ -132,11 +144,14 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
     const int cornerSize = jmin(button.getHeight(), button.getWidth()) / 2;
 
     const int fontHeight = roundToInt(font.getHeight() * 0.6f);
-    const int leftIndent = jmin(fontHeight, 2 + cornerSize / (button.isConnectedOnLeft() ? 4 : 2));
-    const int rightIndent = jmin(fontHeight, 2 + cornerSize / (button.isConnectedOnRight() ? 4 : 2));
+    const int leftIndent = jmin(fontHeight,
+            2 + cornerSize / (button.isConnectedOnLeft() ? 4 : 2));
+    const int rightIndent = jmin(fontHeight,
+            2 + cornerSize / (button.isConnectedOnRight() ? 4 : 2));
 
     g.drawFittedText(button.getButtonText(), leftIndent, yIndent,
-            button.getWidth() - leftIndent - rightIndent, button.getHeight() - yIndent * 2,
+            button.getWidth() - leftIndent - rightIndent, 
+            button.getHeight() - yIndent * 2,
             Justification::centred, 2);
 }
 

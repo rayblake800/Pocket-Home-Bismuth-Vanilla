@@ -16,7 +16,6 @@ class ListEditor : public Component, private Button::Listener,
 private Label::Listener, private ListBoxModel
 {
 public:
-
     /**
      * @param initialList  Sets the initial contents of the list.
      */
@@ -55,7 +54,6 @@ public:
     void colourChanged() override;
 
 private:
-
     /**
      * Sets the colors of child components to match ListEditor colors
      */
@@ -71,7 +69,7 @@ private:
     void labelTextChanged(Label *source);
 
     /**
-     * Clicking a listBoxItem selects it.
+     * Clicking a listBoxItem selects it.  This should not be called directly.
      * 
      * @param row
      * 
@@ -80,7 +78,8 @@ private:
     void listBoxItemClicked(int row, const MouseEvent& mouseEvent);
 
     /**
-     * Double clicking a listBoxItem makes it editable.
+     * Double clicking a listBoxItem makes it editable.  This should not be
+     * called directly.
      * 
      * @param row
      * 
@@ -90,7 +89,8 @@ private:
     (int row, const MouseEvent & mouseEvent);
 
     /**
-     * Pressing the delete key removes the selected row.
+     * Pressing the delete key removes the selected row.  This should not be
+     * called directly.
      * 
      * @param lastRowSelected
      */
@@ -116,7 +116,8 @@ private:
          * @param owner The ListEditor containing this list item.
          */
         ListItemComponent(String text, ListEditor * owner);
-        virtual ~ListItemComponent();
+        
+        virtual ~ListItemComponent() { }
 
         /**
          * @param id  This should be set to String(rowIndex) by the
@@ -138,6 +139,7 @@ private:
         void resized() override;
 
     private:
+        //the list item's delete button
         DrawableImageButton delBtn;
     };
 
@@ -155,7 +157,8 @@ private:
      * 
      * @return                          The created/updated list component.
      */
-    Component* refreshComponentForRow(int rowNumber,
+    Component* refreshComponentForRow(
+            int rowNumber,
             bool isRowSelected,
             Component * existingComponentToUpdate);
 

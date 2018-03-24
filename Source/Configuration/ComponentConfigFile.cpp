@@ -10,8 +10,6 @@
 #include "AssetFiles.h"
 #include "Utils.h"
 
-CriticalSection ComponentConfigFile::componentLock;
-
 std::map<String, ComponentConfigFile::ComponentSettings>
 ComponentConfigFile::components;
 
@@ -115,15 +113,13 @@ const std::map<String, int> ComponentConfigFile::colourIds{
 ComponentConfigFile::ComponentConfigFile() : ConfigFile(filenameConst)
 {
     ASSERT_SINGULAR;
-    const ScopedLock readLock(componentLock);
+    const ScopedLock readLock(getConfigLock());
     var jsonConfig = AssetFiles::loadJSONAsset
             (String(configPath) + filenameConst, true);
     var defaultConfig = var();
     readDataFromJson(jsonConfig, defaultConfig);
     writeChanges();
 }
-
-ComponentConfigFile::~ComponentConfigFile() { }
 
 /**
  * Find a Component ColourId value from its config key String
@@ -140,7 +136,7 @@ int ComponentConfigFile::getColourId(String colourKey)
 
 /**
  * @return the keys to all Component color settings stored in
- * components.json
+ *          components.json
  */
 StringArray ComponentConfigFile::getColourKeys() const
 {
@@ -221,10 +217,13 @@ int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds, String text)
     return height;
 }
 
-ComponentConfigFile::ComponentSettings ComponentConfigFile::getComponentSettings
-(String componentKey)
+/**
+ * Gets the configured settings for a particular component.
+ */
+ComponentConfigFile::ComponentSettings
+ComponentConfigFile::getComponentSettings(String componentKey)
 {
-    const ScopedLock readLock(componentLock);
+    const ScopedLock readLock(getConfigLock());
     return components[componentKey];
 }
 
@@ -301,6 +300,9 @@ void ComponentConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
 ComponentConfigFile::ComponentSettings::ComponentSettings() :
 x(0), y(0), width(0), height(0) { }
 
+/**
+ * Initializes from json data.
+ */
 ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
 {
     x = jsonObj.getProperty("x", -1);
@@ -329,6 +331,10 @@ ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
     }
 }
 
+/**
+ * Packages the object into a DynamicObject that can be written to a
+ * json file.
+ */
 DynamicObject * ComponentConfigFile::ComponentSettings::getDynamicObject()
 {
     DynamicObject * componentObject = new DynamicObject();
@@ -381,23 +387,39 @@ bool ComponentConfigFile::ComponentSettings::operator==
             assetFiles == rhs.assetFiles;
 }
 
+/**
+ * @return the bounds of the component relative to the window,
+ * measured in pixels.
+ */
 Rectangle<int> ComponentConfigFile::ComponentSettings::getBounds()
 {
     Rectangle<int> window = Display::getWindowSize();
-    return Rectangle<int>(x * window.getWidth(), y * window.getHeight(),
-                          width * window.getWidth(), height * window.getHeight());
+    return Rectangle<int>(
+                          x * window.getWidth(),
+                          y * window.getHeight(),
+                          width * window.getWidth(),
+                          height * window.getHeight());
 }
 
+/**
+ * @return the list of configurable colors.
+ */
 Array<Colour> ComponentConfigFile::ComponentSettings::getColours()
 {
     return colours;
 }
 
+/**
+ * @return the list of component asset files.
+ */
 StringArray ComponentConfigFile::ComponentSettings::getAssetFiles()
 {
     return assetFiles;
 }
 
+/**
+ * Use these settings to position and size a component.
+ */
 void ComponentConfigFile::ComponentSettings::applyBounds(Component * component)
 {
     Rectangle<int> bounds = getBounds();
@@ -417,7 +439,6 @@ void ComponentConfigFile::ComponentSettings::applyBounds(Component * component)
     {
         bounds.setHeight(component->getHeight());
     }
-
     component->setBounds(bounds);
 }
 

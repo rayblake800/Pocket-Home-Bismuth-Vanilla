@@ -1,7 +1,7 @@
 #include "Utils.h"
 #include "ConfigAppMenuItem.h"
 
-ConfigAppMenuItem::ConfigAppMenuItem(AppConfigFile& config,
+ConfigAppMenuItem::ConfigAppMenuItem(AppConfigFile& appConfig,
         MainConfigFile& mainConfig,
         const AppConfigFile::AppItem& appItem) :
 AppMenuItem(mainConfig),
@@ -55,9 +55,8 @@ String ConfigAppMenuItem::getIconName() const
  */
 bool ConfigAppMenuItem::canChangeIndex(int offset) const
 {
-    AppConfigFile config;
-    int newIndex = config.getFavoriteIndex(appItem) + offset;
-    return newIndex >= 0 && newIndex < config.getFavorites().size();
+    int newIndex = appConfig.getFavoriteIndex(appItem) + offset;
+    return newIndex >= 0 && newIndex < appConfig.getFavorites().size();
 }
 
 /**
@@ -103,14 +102,13 @@ std::function<void(AppMenuPopupEditor*) > ConfigAppMenuItem::getEditorCallback()
 void ConfigAppMenuItem::editApp
 (String name, String icon, String command, bool terminal)
 {
-    AppConfigFile config;
-    int index = config.getFavoriteIndex(appItem);
+    int index = appConfig.getFavoriteIndex(appItem);
     appItem.name = name;
     appItem.icon = icon;
     appItem.shell = command;
     appItem.launchInTerminal = terminal;
-    config.removeFavoriteApp(index, false);
-    config.addFavoriteApp(appItem, index);
+    appConfig.removeFavoriteApp(index, false);
+    appConfig.addFavoriteApp(appItem, index);
 }
 
 /**
@@ -118,8 +116,7 @@ void ConfigAppMenuItem::editApp
  */
 bool ConfigAppMenuItem::removeMenuItemSource()
 {
-    AppConfigFile config;
-    config.removeFavoriteApp(config.getFavoriteIndex(appItem));
+    appConfig.removeFavoriteApp(appConfig.getFavoriteIndex(appItem));
     return true;
 }
 
@@ -131,17 +128,16 @@ bool ConfigAppMenuItem::moveDataIndex(int offset)
 {
     if (canChangeIndex(offset))
     {
-        AppConfigFile config;
-        int index = config.getFavoriteIndex(appItem);
+        int index = appConfig.getFavoriteIndex(appItem);
         if (index == -1)
         {
             return false;
         }
-        config.removeFavoriteApp(index, false);
-        config.addFavoriteApp(appItem, index + offset);
+        appConfig.removeFavoriteApp(index, false);
+        appConfig.addFavoriteApp(appItem, index + offset);
         DBG("ConfigAppMenuItem::" << __func__ << ": Moved " << appItem.name
                 << " from " << index << " to "
-                << config.getFavoriteIndex(appItem));
+                << appConfig.getFavoriteIndex(appItem));
         return true;
     }
     return false;

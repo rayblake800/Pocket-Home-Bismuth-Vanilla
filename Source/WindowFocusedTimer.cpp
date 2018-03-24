@@ -1,9 +1,5 @@
 #include "WindowFocusedTimer.h"
 
-WindowFocusedTimer::WindowFocusedTimer(String name) : name(name) { }
-
-WindowFocusedTimer::~WindowFocusedTimer() { }
-
 /**
  * Calling this on an active timer will stop the timer.  Calling it on 
  * a suspended timer will prevent it from resuming.
@@ -15,7 +11,7 @@ void WindowFocusedTimer::stopTimer()
 }
 
 /**
- * Called whenever the window loses focus, suspends all active timers.
+ * Suspends the timer when the window loses focus.
  */
 void WindowFocusedTimer::windowFocusLost()
 {
@@ -25,12 +21,11 @@ void WindowFocusedTimer::windowFocusLost()
         stopTimer();
         suspendedEndTime = endTime;
         onSuspend();
-        DBG("WindowFocusedTimer::" << __func__ << ": Suspended timer " << name);
     }
 }
 
 /**
- * Called whenever the window gains focus, resumes all suspended timers.
+ * Resumes the timer when the window gains focus.
  */
 void WindowFocusedTimer::windowFocusGained()
 {
@@ -46,7 +41,7 @@ void WindowFocusedTimer::windowFocusGained()
         else
         {
             uint32 timeLeft = suspendedEndTime - now;
-            DBG("WindowFocusedTimer::" << __func__ << ": Timer " << name 
+            DBG("WindowFocusedTimer::" << __func__ << ": Timer " << name
                     << " resumed at " << String(timeLeft) << " milliseconds");
             startTimer(timeLeft);
         }

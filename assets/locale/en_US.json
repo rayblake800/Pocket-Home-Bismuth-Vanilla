@@ -7,5 +7,9 @@
         "failed_saving_to_FILE": "Failed to save changes to ",
         "check_permissions": "Make sure you have permission to write to this file.",
         "save_error":"Error saving configuration:"
+    },
+    "FileSelectTextEditor": {
+        "img_select_title" : "Select an image file",
+        "img_select_text" :"Please select an image file"
     }
 }

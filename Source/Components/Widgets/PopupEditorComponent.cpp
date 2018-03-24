@@ -1,6 +1,7 @@
 #include "PopupEditorComponent.h"
 
-PopupEditorComponent::PopupEditorComponent(String title,
+PopupEditorComponent::PopupEditorComponent(
+        String title,
         ComponentConfigFile& config,
         std::function<void(PopupEditorComponent*) > onConfirm) :
 ConfigurableImageComponent(ComponentConfigFile::popupMenuKey,
@@ -27,7 +28,6 @@ confirmButton("confirm.svg")
     setInterceptsMouseClicks(true, true);
 }
 
-PopupEditorComponent::~PopupEditorComponent() { }
 
 /**
  * Removes this component from the window.

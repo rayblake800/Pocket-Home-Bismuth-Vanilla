@@ -7,7 +7,7 @@
 Localized::Localized(String className, String localeName)
 {
     var localeFile;
-    if (localeName.isNotEmpty)
+    if (localeName.isNotEmpty())
     {
         localeFile = AssetFiles::loadJSONAsset
                 (String("locale/") + localeName + ".json", false);

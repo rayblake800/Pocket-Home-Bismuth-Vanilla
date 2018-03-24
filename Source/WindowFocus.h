@@ -18,15 +18,22 @@ namespace WindowFocus {
     class BroadcastWindow : public DocumentWindow {
     public:
         /**
-         * @param title
-         * @param backgroundColour
-         * @param requiredButtons
-         * @see juce_DocumentWindow.h:72 for information on parameters.
+         * @param title              Sets the window's title as printed on the 
+         *                            title bar.
+         * 
+         * @param backgroundColour   The background color to draw behind window
+         *                            components.
+         * 
+         * @param requiredButtons    Sets which title bar buttons will be
+         *                            shown.
+         * 
+         * @see juce_DocumentWindow.h
          */
         BroadcastWindow(const String& title, Colour backgroundColour,
                 int requiredButtons);
 
-        virtual ~BroadcastWindow();
+        virtual ~BroadcastWindow() { }
+        
     private:
         /**
          * Ensure all listeners are notified when window state changes.
@@ -37,19 +44,29 @@ namespace WindowFocus {
     class Listener {
     public:
         friend class BroadcastWindow;
-        friend void accessListeners(std::function
-        <void(Array<WindowFocus::Listener*>&) > listenerAction);
+        friend void accessListeners
+        (std::function<void(Array<WindowFocus::Listener*>&) > listenerAction);
+        
+        /**
+         * Adds itself to the Listener list on creation.
+         */
         Listener();
+        
+        /**
+         * Removes itself from the listener list on destruction.
+         */
         virtual ~Listener();
 
     private:
         /**
-         * called whenever the application window gains focus.
+         * Called whenever the application window gains focus, override to
+         * trigger actions when window focus is gained.
          */
         virtual void windowFocusGained() { }
 
         /**
-         * called whenever the application window loses focus.
+         * Called whenever the application window loses focus, override to
+         * trigger actions when window focus is lost.
          */
         virtual void windowFocusLost() { }
     };

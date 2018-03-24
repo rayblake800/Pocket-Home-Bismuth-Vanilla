@@ -4,15 +4,12 @@
 const WildcardFileFilter FileSelectTextEditor::imageFilter
 ("*.png;*.jpg;*.jpeg;*.svg;*.gif;*.xpm", "", "Image files");
 
-const String FileSelectTextEditor::imgSelectTitle =
-        "Select an image file";
-const String FileSelectTextEditor::imgSelectText =
-        "Please select an image file";
-
-FileSelectTextEditor::FileSelectTextEditor(const String& selectionTitle,
+FileSelectTextEditor::FileSelectTextEditor(
+        const String& selectionTitle,
         const String& selectionText,
         WildcardFileFilter fileFilter,
         const String& componentName) :
+Localized("FileSelectTextEditor"),
 fileFilter(fileFilter),
 selectionTitle(selectionTitle),
 selectionText(selectionText),
@@ -24,13 +21,20 @@ showButton(true)
 #    if JUCE_DEBUG
     setName("FileSelectTextEditor");
 #    endif
+    if(selectionTitle.isEmpty())
+    {
+        this->selectionTitle = localeText(img_select_title);
+    }
+    if(selectionText.isEmpty())
+    {
+        this->selectionText = localeText(img_select_text);
+        
+    }
     fileSelectButton.addListener(this);
     filePath.addListener(this);
     addAndMakeVisible(filePath);
     addAndMakeVisible(fileSelectButton);
 }
-
-FileSelectTextEditor::~FileSelectTextEditor() { }
 
 /**
  * Set the initial text value for the file selection text editor.
@@ -52,12 +56,11 @@ String FileSelectTextEditor::getText()
     return filePath.getText();
 }
 
-
-    /**
-     * @param shouldShow Sets the file selection button next to the text editor
-     *                    box to be either visible or hidden. By default, the 
-     *                    button will be shown.
-     */
+/**
+ * @param shouldShow Sets the file selection button next to the text editor
+ *                    box to be either visible or hidden. By default, the 
+ *                    button will be shown.
+ */
 void FileSelectTextEditor::showFileSelectButton(bool shouldShow)
 {
     if (shouldShow == showButton)

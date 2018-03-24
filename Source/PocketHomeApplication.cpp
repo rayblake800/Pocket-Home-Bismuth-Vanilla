@@ -1,6 +1,10 @@
 #include "Audio.h"
 #include "PocketHomeApplication.h"
 
+/**
+ * This is called by the Juce framework to initialize the program.
+ * This will initialize audio and create the program window.
+ */
 void PocketHomeApplication::initialise(const String &commandLine)
 {
     StringArray args;
@@ -10,7 +14,7 @@ void PocketHomeApplication::initialise(const String &commandLine)
     {
         std::cerr << "arguments:" << std::endl;
         std::cerr << "  --help:	Print usage help" << std::endl;
-        std::cerr << "  --fakewifi:	Use fake WifiStatus" << std::endl;
+        std::cerr << "  --fakeWifi:	Use fake WifiStatus" << std::endl;
         quit();
     }
 
@@ -21,13 +25,16 @@ void PocketHomeApplication::initialise(const String &commandLine)
                 << ": Sound failed to initialize");
     }
 
-    
-    homeWindow = new PocketHomeWindow(getApplicationName(), 
-            args.contains("--fakewifi"),
+
+    homeWindow = new PocketHomeWindow(getApplicationName(),
+            args.contains("--fakeWifi"),
             mainConfig,
             componentConfig);
 }
 
+/**
+ * This is called by the Juce framework to safely shut down the application.
+ */
 void PocketHomeApplication::shutdown()
 {
     homeWindow = nullptr;

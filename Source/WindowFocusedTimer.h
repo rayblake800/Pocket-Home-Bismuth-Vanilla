@@ -4,10 +4,11 @@
  * WindowFocusedTimer is a Juce timer that is guaranteed to stop whenever 
  * PocketHomeWindow loses focus, and resume whenever it regains focus.
  * This should reduce the amount that this application wastes CPU cycles while
- * it's running in the background.  Suspended timers save their next scheduled
- * runtime, not the amount of time left on the timer, so timers that would
- * have ended while suspended will immediately call their timerCallback when
- * resumed.
+ * it's running in the background.  
+ * 
+ * Suspended timers save their next scheduled runtime, not the amount of time 
+ * left on the timer, so timers that would have ended while suspended will 
+ * immediately call their timerCallback when resumed.
  */
 #pragma once
 #include "JuceHeader.h"
@@ -17,20 +18,21 @@ class PocketHomeWindow;
 class WindowFocusedTimer : public Timer, private WindowFocus::Listener {
 public:
     /**
-     * @param name identifies the timer for debug purposes
+     * @param name  This identifies the timer for debug purposes.
      */
-    WindowFocusedTimer(String name);
+    WindowFocusedTimer(String name) : name(name) { }
 
-    virtual ~WindowFocusedTimer();
+    virtual ~WindowFocusedTimer() { }
     
     /**
      * Calling this on an active timer will stop the timer.  Calling it on 
      * a suspended timer will prevent it from resuming.
      */
     void stopTimer();
+    
 private:
     /**
-     * Runs whenever the timer is suspended, override this to change
+     * Runs whenever the timer is suspended. Override this to change
      * how timers behave when suspended.
      */
     virtual void onSuspend() {}
@@ -52,6 +54,8 @@ private:
      */
     uint32 suspendedEndTime = 0;
     
+    //Timer name, set to better track the behavior of specific timers while
+    //debugging.
     String name;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WindowFocusedTimer)

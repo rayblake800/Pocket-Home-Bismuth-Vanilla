@@ -2,7 +2,9 @@
  * @file AppConfigFile.h
  * 
  * AppConfigFile loads the pinned application links and folders displayed
- * in the AppMenu.
+ * in the AppMenuComponent.
+ * 
+ * @see AppMenuComponent.h
  */
 #pragma once
 #include "ConfigFile.h"
@@ -10,22 +12,39 @@
 class AppConfigFile : public ConfigFile {
 public:
     AppConfigFile();
-    virtual ~AppConfigFile();
+    
+    virtual ~AppConfigFile() { }
 
     //######################### Application Data ###############################
-
     /**
      *Represents an application pinned to the main menu
      */
     struct AppItem {
-        AppItem();
+        AppItem() { };
+        
+        /**
+         * Load an AppItem from json file data.
+         * 
+         * @param jsonObj
+         */
         AppItem(var jsonObj);
-        String name;
-        String icon;
-        String shell;
-        bool launchInTerminal=false;
-        DynamicObject * getDynamicObject();
+        
+        /**
+         * @return AppItem data stored as a DynamicObject* that can be written
+         *          to json.
+         */
+        DynamicObject* getDynamicObject();
+        
         bool operator==(const AppItem& rhs)const;
+        
+        //Application display name
+        String name;
+        //Application icon name or path
+        String icon;
+        //Application launch command
+        String shell;
+        //Sets if the application launches in a terminal window
+        bool launchInTerminal=false;
     };
     
     /**
@@ -35,102 +54,142 @@ public:
     Array<AppItem> getFavorites();
 
     /**
-     * Add a new app to the list of pinned favorite apps in the config file
-     * @param newApp new application information
-     * @param index position to insert the new application
-     * @param writeChangesNow sets if the change should be written to the 
-     * config file immediately.
+     * Add a new app to the list of pinned favorite apps in the config file.
+     * 
+     * @param newApp            The new application data object.
+     * 
+     * @param index             The position to insert the new application.
+     * 
+     * @param writeChangesNow   Sets if the change should be written to the 
+     *                           config file immediately.
      */
     void addFavoriteApp(AppItem newApp, int index,bool writeChangesNow=true);
 
     /**
      * Remove an app from the list of favorite applications
-     * @param index position of the app to remove
-     * @param writeChangesNow sets if the change should be written to the 
-     * config file immediately.
+     * 
+     * @param index            The position of the app to remove.
+     * 
+     * @param writeChangesNow  Sets if the change should be written to the 
+     *                          config file immediately.
      */
     void removeFavoriteApp(int index,bool writeChangesNow=true);
     
     /**
      * Find the index of an AppItem in favorites.
-     * @param toFind will be searched for in the favorites list
+     * 
+     * @param toFind  will be searched for in the favorites list
+     * 
      * @return the index of toFind, or -1 if it isn't in the list.
      */
     int getFavoriteIndex(AppItem toFind);
 
     //######################### Folder/Category Data ###########################
-
     /**
      * Represents an application folder
      * TODO:add sub-folders
      */
     struct AppFolder {
-        AppFolder();
-        AppFolder(var jsonObj,int index);
-        String name;
-        StringArray categories;
-        String icon;
+        AppFolder() { };
+        
+        /**
+         * Load folder information from json data.
+         * 
+         * @param jsonObj
+         */
+        AppFolder(var jsonObj);
+        
+        /**
+         * @return folder data as a DynamicObject* ready to be written to a 
+         *          json file.
+         */
         DynamicObject * getDynamicObject();
+        
+        //Folder display name
+        String name;
+        //Application categories held in the folder.
+        StringArray categories;
+        //The application icon path or file name
+        String icon;
+        
         bool operator==(const AppFolder& rhs) const;
     };
     
     /**
-     * @return A list of folders to display in the AppMenu 
+     * @return A list of folders to display in the AppMenu.
      */
     Array<AppFolder> getFolders();
 
     /**
-     * Add a new folder to the list of AppFolders in the config file
-     * @param newFolder defines the new folder
-     * @param index where to insert the new folder
-     * @param writeChangesNow sets if the change should be written to the 
-     * config file immediately.
+     * Add a new folder to the list of AppFolders in the config file.
+     * 
+     * @param newFolder        Defines the new folder.
+     * 
+     * @param index            Where to insert the new folder.
+     * 
+     * @param writeChangesNow  Sets if the change should be written to the 
+     *                          config file immediately.
      */
     void addAppFolder
     (AppFolder newFolder, int index,bool writeChangesNow=true);
     
     /**
-     * Remove a folder from the list of AppFolders
-     * @param index position of the folder to remove
-     * @param writeChangesNow sets if the change should be written to the 
-     * config file immediately.
+     * Remove a folder from the list of AppFolders.
+     * 
+     * @param index            The position of the folder to remove.
+     * 
+     * @param writeChangesNow  Sets if the change should be written to the 
+     *                          config file immediately.
      */
     void removeAppFolder(int index,bool writeChangesNow=true);
     
     /**
      * Find the index of an AppFolder in the list of folders.
-     * @param toFind will be searched for in the folder list
+     * 
+     * @param toFind   This will be searched for in the folder list.
+     * 
      * @return the index of toFind, or -1 if it isn't in the list.
      */
     int getFolderIndex(AppFolder toFind);
 
 private:
-
     /**
      * Read in this object's data from a json config object
      * 
-     * @param config json data from ~/.pocket-home/filename.json
+     * @param config         json data from ~/.pocket-home/filename.json.
      * 
-     * @param defaultConfig default json config data from the filename.json
-     * in assets. If this value is void and default data is needed, this 
-     * method will open it as the appropriate default config file from assets
+     * @param defaultConfig  Default json config data from the filename.json
+     *                        in assets. If this value is void and default data 
+     *                        is needed, this method will open it as the 
+     *                        appropriate default config file from assets.
      */
     void readDataFromJson(var& config, var& defaultConfig) override final;
 
     /**
      * Copy all config data to a json object
+     * 
+     * @param jsonObj
      */
     void copyDataToJson(DynamicObject::Ptr jsonObj) override final;
     
+    /**
+     * @return the empty list, as AppConfigFile doesn't track any DataKey
+     * variables, only its own custom data structures.
+     */
     std::vector<DataKey> getDataKeys() const;
     
+    //Stores application shortcuts
     static Array<AppItem> favoriteApps;
-    static Array<AppFolder> categoryFolders;
-    static CriticalSection appConfigLock;
-    static constexpr const char* filenameConst = "apps.json";
-    static constexpr const char* FAVORITES_KEY = "favorites";
-    static constexpr const char* FOLDERS_KEY = "folders";
-
     
+    //Stores application folders
+    static Array<AppFolder> categoryFolders;
+    
+    //Application configuration file name
+    static constexpr const char* filenameConst = "apps.json";
+    //json key holding application shortcuts
+    static constexpr const char* favoritesKey = "favorites";
+    //json key holding application folders
+    static constexpr const char* foldersKey = "folders";
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppConfigFile)
 };

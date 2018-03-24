@@ -3,8 +3,10 @@
  * 
  * PopupEditorComponent shows a small pop-up panel containing a title,
  * some type of content editing components, a cancel button, and a confirm 
- * button. Inheriting classes are responsible for adding all other controls
- * and for registering all components with the layout manager.
+ * button. Both buttons will remove the component, and the confirm button will
+ * also run a callback function to save all changes.  Inheriting classes are 
+ * responsible for adding all other controls
+ * to the component layout.
  */
 
 #pragma once
@@ -18,7 +20,7 @@ class PopupEditorComponent : public ConfigurableImageComponent,
 public Button::Listener
 {
 public:
-    virtual ~PopupEditorComponent();
+    virtual ~PopupEditorComponent() { }
 
     /**
      * Removes this component from the window.
@@ -51,7 +53,8 @@ protected:
 
     /**
      * Button click events for any buttons other than the cancel and confirm
-     * buttons will be passed to this method.
+     * buttons will be passed to this method.  Inheriting classes should
+     * override this instead of buttonClicked()
      * 
      * @param button
      */

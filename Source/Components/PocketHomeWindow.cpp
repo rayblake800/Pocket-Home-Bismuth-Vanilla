@@ -31,7 +31,7 @@ pageFactory(mainConfig, componentConfig, fakeWifi)
     setLookAndFeel(&LookAndFeel::getDefaultLookAndFeel());
     setVisible(true);
     setWantsKeyboardFocus(false);
-    
+
     loginPage = static_cast<LoginPage*>
             (pageFactory.createLoginPage([this]()
             {

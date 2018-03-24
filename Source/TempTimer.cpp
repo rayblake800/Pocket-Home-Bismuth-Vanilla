@@ -1,14 +1,16 @@
 #include "TempTimer.h"
 
+/**
+ * Start a new timer.
+ */
 void TempTimer::initTimer(int runTimeMS, std::function<void() > callback)
 {
     new TempTimer(runTimeMS, callback);
 }
 
-TempTimer::~TempTimer()
-{
-}
-
+/**
+ * This should only be called by initTimer().
+ */
 TempTimer::TempTimer(int runTimeMS, std::function<void() > callback) :
 callback(callback)
 {
@@ -16,6 +18,9 @@ callback(callback)
     startTimer(runTimeMS);
 }
 
+/**
+ * Runs the timer callback function, and asynchronously deletes the timer.
+ */
 void TempTimer::timerCallback()
 {
     callback();

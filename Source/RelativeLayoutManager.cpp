@@ -1,79 +1,24 @@
 #include "RelativeLayoutManager.h"
 
 /**
- * add a new (empty) row, assigning it a weight value
- */
-void RelativeLayoutManager::addRow(int vertWeight)
-{
-    Row newRow;
-    newRow.vertWeight = vertWeight;
-    vertWeightSum += vertWeight;
-    rows.push_back(newRow);
-}
-
-/**
- * @return the number of rows in the layout.  This may include empty rows.
- */
-int RelativeLayoutManager::getNumRows()
-{
-    return rows.size();
-}
-
-/**
- * Updates the vertical weight value of a row. If the row doesn't exist,
- * nothing will happen.
- */
-void RelativeLayoutManager::setRowWeight(int rowIndex, int newWeight)
-{
-    if (rowIndex >= 0 && rowIndex < rows.size())
-    {
-        std::vector<Row>::iterator rowIter = rows.begin() + rowIndex;
-        vertWeightSum -= rowIter->vertWeight;
-        rowIter->vertWeight = newWeight;
-        vertWeightSum += newWeight;
-    }
-}
-
-/**
- * Add a new component to a grid row.
- */
-void RelativeLayoutManager::addComponent(Component * addedComp, int rowIndex,
-        int horizWeight, Component* parentToInit)
-{
-    WeightedCompPtr wCompPtr;
-    wCompPtr.component = addedComp;
-    wCompPtr.weight = horizWeight;
-    if (rowIndex < 0)
-    {
-        rowIndex = 0;
-    }
-    while (rowIndex >= rows.size())
-    {
-        addRow(1);
-    }
-    std::vector<Row>::iterator rowIter = rows.begin() + rowIndex;
-    rowIter->columns.push_back(wCompPtr);
-    rowIter->horizWeightSum += horizWeight;
-    if (addedComp != nullptr && parentToInit != nullptr)
-    {
-        parentToInit->addAndMakeVisible(addedComp);
-    }
-}
-
-/**
  * Set a new Component layout, removing all old layout definitions.
  */
 void RelativeLayoutManager::setLayout
 (const Layout& layout, Component* parentToInit)
 {
     clearLayout();
+    this->layout = layout;
     for (int rowNum = 0; rowNum < layout.size(); rowNum++)
     {
-        addRow(layout[rowNum].vertWeight);
-        for (const ComponentLayoutParams& compLayout : layout[rowNum].compRow)
+        vertWeightSum += layout[rowNum].vertWeight;
+        horizWeightSums.set(rowNum, 0);
+        for (const ComponentLayout& compLayout : layout[rowNum].components)
         {
-            addComponent(compLayout.comp, rowNum,
-                    compLayout.horizWeight, parentToInit);
+            horizWeightSums.getReference(rowNum) += compLayout.horizWeight;
+            if (parentToInit != nullptr)
+            {
+                parentToInit->addAndMakeVisible(compLayout.component);
+            }
         }
     }
 }
@@ -84,9 +29,9 @@ void RelativeLayoutManager::setLayout
  */
 void RelativeLayoutManager::addComponentsToParent(Component* parent)
 {
-    for (const Row& row : rows)
+    for (RowLayout& row : layout)
     {
-        for (const WeightedCompPtr& compPtr : row.columns)
+        for (ComponentLayout& compPtr : row.components)
         {
             parent->addAndMakeVisible(compPtr.component);
         }
@@ -94,26 +39,38 @@ void RelativeLayoutManager::addComponentsToParent(Component* parent)
 }
 
 /**
- * Arrange the components within a bounding rectangle
+ * Arranges the components within a bounding rectangle.
  */
-void RelativeLayoutManager::layoutComponents(Rectangle<int> bounds, int xPadding,
+void RelativeLayoutManager::layoutComponents(
+        Rectangle<int> bounds,
+        int xPadding,
         int yPadding)
 {
-    int usableHeight = bounds.getHeight() - (rows.size() - 1) * yPadding;
+    int usableHeight = bounds.getHeight() - (layout.size() - 1) * yPadding;
     int xStart = bounds.getX();
     int yStart = bounds.getY();
 
     int yPos = yStart;
-    for (const Row& row : rows)
+    for (int rowNum = 0; rowNum < layout.size(); rowNum++)
     {
-        int usableWidth = bounds.getWidth() - (row.columns.size() - 1)
+        RowLayout& row = layout[rowNum];
+        int usableWidth = bounds.getWidth() - (row.components.size() - 1)
                 * xPadding;
-        int height = usableHeight * row.vertWeight / vertWeightSum;
-        int xPos = xStart;
-        for (int columnInd = 0; columnInd < row.columns.size(); columnInd++)
+        int height = 0;
+        if (vertWeightSum > 0)
         {
-            WeightedCompPtr compPtr = row.columns[columnInd];
-            int width = usableWidth * compPtr.weight / row.horizWeightSum;
+            height = usableHeight * row.vertWeight / vertWeightSum;
+        }
+        int xPos = xStart;
+        for (int columnNum = 0; columnNum < row.components.size(); columnNum++)
+        {
+            const ComponentLayout& compPtr = row.components[columnNum];
+            int width = 0;
+            if (horizWeightSums[rowNum] > 0)
+            {
+                width = usableWidth * compPtr.horizWeight
+                        / horizWeightSums[rowNum];
+            }
             if (compPtr.component != nullptr)
             {
                 compPtr.component->setBounds(xPos, yPos, width, height);
@@ -131,9 +88,9 @@ void RelativeLayoutManager::clearLayout(bool removeComponentsFromParent)
 {
     if (removeComponentsFromParent)
     {
-        for (const Row& row : rows)
+        for (RowLayout& row : layout)
         {
-            for (const WeightedCompPtr& componentData : row.columns)
+            for (ComponentLayout& componentData : row.components)
             {
                 if (componentData.component != nullptr)
                 {
@@ -147,7 +104,8 @@ void RelativeLayoutManager::clearLayout(bool removeComponentsFromParent)
             }
         }
     }
-    rows.clear();
+    layout.clear();
+    horizWeightSums.clear();
     vertWeightSum = 0;
 }
 
@@ -158,15 +116,16 @@ void RelativeLayoutManager::clearLayout(bool removeComponentsFromParent)
  */
 void RelativeLayoutManager::printLayout()
 {
-    for (Row& row : rows)
+    int rowNum = 0;
+    for (RowLayout& row : layout)
     {
         DBG("RelativeLayoutManager::" << __func__ << ":");
         DBG(String("Row weight:") + String(row.vertWeight) + String("/")
                 + String(vertWeightSum));
         String rowStr = "\t";
-        for(WeightedCompPtr comp : row.columns)
+        for (ComponentLayout& comp : row.components)
         {
-            if(comp.component == nullptr)
+            if (comp.component == nullptr)
             {
                 rowStr += "null";
             }
@@ -175,12 +134,13 @@ void RelativeLayoutManager::printLayout()
                 rowStr += comp.component->getName();
             }
             rowStr += "(";
-            rowStr += String(comp.weight);
+            rowStr += String(comp.horizWeight);
             rowStr += "/";
-            rowStr += String(row.horizWeightSum);
+            rowStr += String(horizWeightSums[rowNum]);
             rowStr += ") ";
         }
         DBG(rowStr);
+        rowNum++;
     }
     DBG("");
 }

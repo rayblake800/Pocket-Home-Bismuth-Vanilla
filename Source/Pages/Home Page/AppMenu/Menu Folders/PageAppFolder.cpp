@@ -55,24 +55,24 @@ RelativeLayoutManager::Layout PageAppFolder::buildFolderLayout
             [&layout, buttonSize, spacerSize, numLayoutColumns, this]
             (Component* component, int row)
             {
-                layout[row].compRow.push_back({component, buttonSize});
-                int rowSize = layout[row].compRow.size();
+                layout[row].components.push_back({component, buttonSize});
+                int rowSize = layout[row].components.size();
                 if ((rowSize + 1) % (getMaxColumns() + 1) == 0
-                    && layout[row].compRow.size() < numLayoutColumns)
+                    && layout[row].components.size() < numLayoutColumns)
                 {
-                    layout[row].compRow.push_back({nullptr, spacerSize});
+                    layout[row].components.push_back({nullptr, spacerSize});
                 }
             };
 
     //reserve space
-    layout.reserve(sizeof (RelativeLayoutManager::RowLayoutParams)
+    layout.reserve(sizeof (RelativeLayoutManager::RowLayout)
             * getMaxRows());
     for (int i = 0; i < getMaxRows(); i++)
     {
         layout.push_back({1,
             {}});
-        layout[i].compRow.reserve(sizeof
-                (RelativeLayoutManager::ComponentLayoutParams)
+        layout[i].components.reserve(sizeof
+                (RelativeLayoutManager::ComponentLayout)
                 * numLayoutColumns);
     }
 
@@ -87,7 +87,7 @@ RelativeLayoutManager::Layout PageAppFolder::buildFolderLayout
     //Fill in remaining empty spaces
     for (int row = 0; row < getMaxRows(); row++)
     {
-        while (layout[row].compRow.size() < numLayoutColumns)
+        while (layout[row].components.size() < numLayoutColumns)
         {
             addButton(nullptr, row);
         }

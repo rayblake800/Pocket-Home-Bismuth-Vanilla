@@ -4,12 +4,11 @@
 
 Array<AppConfigFile::AppItem> AppConfigFile::favoriteApps;
 Array<AppConfigFile::AppFolder> AppConfigFile::categoryFolders;
-CriticalSection AppConfigFile::appConfigLock;
 
 AppConfigFile::AppConfigFile() : ConfigFile(filenameConst)
 {
     ASSERT_SINGULAR;
-    const ScopedLock readLock(appConfigLock);
+    const ScopedLock readLock(getConfigLock());
     var jsonConfig = AssetFiles::loadJSONAsset
             (String(configPath) + filenameConst, true);
     var defaultConfig = var();
@@ -17,13 +16,11 @@ AppConfigFile::AppConfigFile() : ConfigFile(filenameConst)
     writeChanges();
 }
 
-AppConfigFile::~AppConfigFile() { }
-
-
 //########################### Application Data #################################
 
-AppConfigFile::AppItem::AppItem() { }
-
+/**
+ * Load an AppItem from json file data.
+ */
 AppConfigFile::AppItem::AppItem(var jsonObj)
 {
     name = jsonObj.getProperty("name", "");
@@ -32,6 +29,10 @@ AppConfigFile::AppItem::AppItem(var jsonObj)
     launchInTerminal = jsonObj.getProperty("launch in terminal", false);
 }
 
+/**
+ * @return AppItem data stored as a DynamicObject* that can be written
+ *          to json.
+ */
 DynamicObject* AppConfigFile::AppItem::getDynamicObject()
 {
     DynamicObject * appObject = new DynamicObject();
@@ -55,7 +56,7 @@ bool AppConfigFile::AppItem::operator==(const AppItem& rhs) const
  */
 Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 {
-    const ScopedLock readLock(appConfigLock);
+    const ScopedLock readLock(getConfigLock());
     return favoriteApps;
 }
 
@@ -65,7 +66,7 @@ Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 void AppConfigFile::addFavoriteApp
 (AppItem newApp, int index, bool writeChangesNow)
 {
-    const ScopedLock changeLock(appConfigLock);
+    const ScopedLock changeLock(getConfigLock());
     favoriteApps.insert(index, newApp);
     markPendingChanges();
     if (writeChangesNow)
@@ -79,7 +80,7 @@ void AppConfigFile::addFavoriteApp
  */
 void AppConfigFile::removeFavoriteApp(int index, bool writeChangesNow)
 {
-    const ScopedLock changeLock(appConfigLock);
+    const ScopedLock changeLock(getConfigLock());
     if (index >= 0 && index < favoriteApps.size())
     {
         favoriteApps.remove(index);
@@ -101,9 +102,10 @@ int AppConfigFile::getFavoriteIndex(AppItem toFind)
 
 //######################### Folder/Category Data ###############################
 
-AppConfigFile::AppFolder::AppFolder() { }
-
-AppConfigFile::AppFolder::AppFolder(var jsonObj, int index)
+/**
+ * Load folder information from json data.
+ */
+AppConfigFile::AppFolder::AppFolder(var jsonObj)
 {
     name = jsonObj.getProperty("name", "");
     icon = jsonObj.getProperty("icon", "");
@@ -119,6 +121,10 @@ AppConfigFile::AppFolder::AppFolder(var jsonObj, int index)
     }
 }
 
+/**
+ * @return folder data as a DynamicObject* ready to be written to a 
+ *          json file.
+ */
 DynamicObject* AppConfigFile::AppFolder::getDynamicObject()
 {
     DynamicObject * folderObject = new DynamicObject();
@@ -142,21 +148,21 @@ bool AppConfigFile::AppFolder::operator==(const AppFolder& rhs) const
 }
 
 /**
- * @return A list of folders to display in the AppMenu 
+ * @return A list of folders to display in the AppMenu.
  */
 Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 {
-    const ScopedLock readLock(appConfigLock);
+    const ScopedLock readLock(getConfigLock());
     return categoryFolders;
 }
 
 /**
- * Add a new folder to the list of AppFolders in the config file
+ * Add a new folder to the list of AppFolders in the config file.
  */
 void AppConfigFile::addAppFolder
 (AppFolder newFolder, int index, bool writeChangesNow)
 {
-    const ScopedLock changeLock(appConfigLock);
+    const ScopedLock changeLock(getConfigLock());
     categoryFolders.insert(index, newFolder);
     markPendingChanges();
     if (writeChangesNow)
@@ -166,12 +172,12 @@ void AppConfigFile::addAppFolder
 }
 
 /**
- * Remove a folder from the list of AppFolders
+ * Remove a folder from the list of AppFolders.
  */
 void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
 {
     int size = categoryFolders.size();
-    const ScopedLock changeLock(appConfigLock);
+    const ScopedLock changeLock(getConfigLock());
     categoryFolders.remove(index);
     markPendingChanges();
     if (writeChangesNow)
@@ -197,7 +203,7 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
 {
     ConfigFile::readDataFromJson(config, defaultConfig);
     //load favorites
-    var favoriteList = getProperty(config, defaultConfig, FAVORITES_KEY);
+    var favoriteList = getProperty(config, defaultConfig, favoritesKey);
     if (favoriteList.isArray())
     {
         for (const var& app : *favoriteList.getArray())
@@ -210,12 +216,12 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
         }
     }
     //load categories
-    var categoryList = getProperty(config, defaultConfig, FOLDERS_KEY);
+    var categoryList = getProperty(config, defaultConfig, foldersKey);
     if (categoryList.isArray())
     {
         for (const var& folder : *categoryList.getArray())
         {
-            AppFolder menuFolder = AppFolder(folder, categoryFolders.size());
+            AppFolder menuFolder = AppFolder(folder);
             if (!categoryFolders.contains(menuFolder))
             {
                 categoryFolders.add(menuFolder);
@@ -225,7 +231,7 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
 }
 
 /**
- * Copy all config data to a json object
+ * Copy all config data to a json object.
  */
 void AppConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
 {
@@ -243,10 +249,14 @@ void AppConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
     {
         categoryArray.add(var(categoryFolders[i].getDynamicObject()));
     }
-    jsonObj->setProperty(FAVORITES_KEY, favoriteArray);
-    jsonObj->setProperty(FOLDERS_KEY, categoryArray);
+    jsonObj->setProperty(favoritesKey, favoriteArray);
+    jsonObj->setProperty(foldersKey, categoryArray);
 }
 
+/**
+ * @return the empty list, as AppConfigFile doesn't track any DataKey
+ * variables, only its own custom data structures.
+ */
 std::vector<ConfigFile::DataKey> AppConfigFile::getDataKeys() const
 {
     return {};

@@ -1,9 +1,8 @@
 /**
  * @file Utils.h
  * 
- * TODO: work as much of this as possible into distinct modules, having a
- * random pile of assorted global functions is less than ideal.
- * also, documentation
+ * Utils defines a few useful general purpose functions and debugging functions
+ * that are useful to have throughout this project.
  */
 
 #pragma once
@@ -74,7 +73,8 @@ struct DuplicateInstanceException: public std::exception{
  * @param onConfirm  If the user presses the "OK" button, this callback
  *                    function will run.
  */
-void confirmAction(String title, String message, std::function<void() > onConfirm);
+void confirmAction
+(String title, String message, std::function<void() > onConfirm);
 
 /**
  * Find the median of three values.
@@ -116,7 +116,8 @@ T median(T a, T b, T c)
 /**
  * Determine if a pointer has a particular type.
  * 
- * @param  checkIfC2 a pointer to an object of type C1
+ * @param  checkIfC2  A pointer to an object of type C1.
+ * 
  * @return true iff the object pointed to by checkIfC2 also has type C2.
  */
 template<class C1, class C2>

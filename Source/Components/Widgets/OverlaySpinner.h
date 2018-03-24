@@ -23,17 +23,19 @@ public:
     };
 
     /**
-     * @param config
+     * @param config             Shared component configuration object needed 
+     *                            by the loading text label.
+     * 
      * @param secondsToTimeout   Sets how long the spinner will show itself 
      *                            before timing out. If this value is negative, 
      *                            the spinner will never time out.
      */
-    OverlaySpinner(ComponentConfigFile& config,
-            int secondsToTimeout = -1);
-    ~OverlaySpinner();
+    OverlaySpinner(ComponentConfigFile& config, int secondsToTimeout = -1);
+    
+    virtual ~OverlaySpinner() { }
 
     /**
-     * Sets text to display below the spinner
+     * Sets text to display below the spinner.
      * 
      * @param newText
      */
@@ -42,7 +44,8 @@ public:
 private:
 
     /**
-     * Fills in the overlay background.
+     * Fills in the overlay background.  This method should never be called
+     * directly.
      * 
      * @param g
      */
@@ -55,5 +58,6 @@ private:
 
     //Displays optional loading text below the spinner.
     ScalingLabel loadingText;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OverlaySpinner)
 };

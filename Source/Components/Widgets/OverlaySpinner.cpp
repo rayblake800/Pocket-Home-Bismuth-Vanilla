@@ -1,8 +1,8 @@
 #include "Utils.h"
 #include "OverlaySpinner.h"
 
-OverlaySpinner::OverlaySpinner(ComponentConfigFile& config,
-        int secondsToTimeout) :
+OverlaySpinner::OverlaySpinner
+(ComponentConfigFile& config, int secondsToTimeout) :
 Spinner(secondsToTimeout),
 loadingText(config)
 {
@@ -15,8 +15,6 @@ loadingText(config)
     loadingText.setColour(Label::textColourId, findColour(textColourId));
     addAndMakeVisible(loadingText);
 }
-
-OverlaySpinner::~OverlaySpinner() { }
 
 /**
  * Sets text to display below the spinner

@@ -6,9 +6,6 @@
  */
 
 #pragma once
-#include "SettingsPage.h"
-#include "PowerPage.h"
-#include "HomePage.h"
 #include "LoginPage.h"
 #include "PageFactory.h"
 #include "PokeLookAndFeel.h"

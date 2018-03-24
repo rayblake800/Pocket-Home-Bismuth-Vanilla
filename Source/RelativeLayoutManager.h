@@ -1,6 +1,5 @@
 /**
- * @file RelativeLayoutManager
- * @author Anthony Brown
+ * @file RelativeLayoutManager.h
  * 
  * RelativeLayoutManager arranges components in an arbitrary bounding rectangle.
  * Components are arranged into rows and resized to fit the available space,
@@ -9,77 +8,71 @@
 #pragma once
 #include "JuceHeader.h"
 
-class RelativeLayoutManager {
+class RelativeLayoutManager
+{
 public:
-    RelativeLayoutManager() {}
-    virtual ~RelativeLayoutManager() {}
+
+    RelativeLayoutManager() { }
+
+    virtual ~RelativeLayoutManager() { }
 
     /**
-     * add a new (empty) row, assigning it a weight value
-     * @param vertWeight determines the relative height of the row
+     * Defines one component's space in a RelativeLayout row.
      */
-    void addRow(int vertWeight);
-
-    /**
-     * @return the number of rows in the layout.  This may include empty rows.
-     */
-    int getNumRows();
-
-    /**
-     * Updates the vertical weight value of a row. If the row doesn't exist,
-     * nothing will happen.
-     * @param rowIndex the row to update.
-     * @param newWeight the new weight value to set.
-     */
-    void setRowWeight(int rowIndex, int newWeight);
-
-    /**
-     * Add a new component to a grid row.
-     * @param comp any UI component
-     * @param row index of the component's row. The component will be added
-     * to the end of the row.  If the row index does not exist yet, rows with
-     * a vertical weight of 1 will be added until it does exist. If the index is
-     * less than zero, it is rounded up to zero.
-     * @param horizWeight determines the relative width of the component.
-     * @param parentToInit if this optional argument is provided, this will add
-     * comp as a child of parentToInit and make it visible.
-     */
-    void addComponent(Component * comp, int row, int horizWeight,
-            Component* parentToInit = nullptr);
-
-
-    //bulk component setup:
-
-    struct ComponentLayoutParams {
-
-        ComponentLayoutParams(Component* comp, int horizWeight) :
-        comp(comp),
-        horizWeight(horizWeight) {
-        };
-
-        Component* comp;
+    struct ComponentLayout
+    {
+        /**
+         * @param component     Either a valid component pointer, or nullptr to
+         *                       specify an area of empty space.
+         * 
+         * @param horizWeight   The amount of horizontal space to give this
+         *                       component, relative to the other components in
+         *                       the row.
+         */
+        ComponentLayout(Component* component, int horizWeight) :
+        component(component),
+        horizWeight(horizWeight) { };
+        
+        Component* component;
         int horizWeight;
     };
 
-    struct RowLayoutParams {
-
-        RowLayoutParams
-        (int vertWeight, std::vector<ComponentLayoutParams> compRow) :
+    /**
+     * Defines one row in a RelativeLayout
+     */
+    struct RowLayout
+    {
+        /**
+         * @param vertWeight  The amount of vertical space to give this row,
+         *                     relative to the other rows in the layout.
+         * 
+         * @param components  The layout of all components in the row. An empty
+         *                     component list may be used to specify an empty
+         *                     space.
+         */
+        RowLayout (int vertWeight, std::vector<ComponentLayout> components) :
         vertWeight(vertWeight),
-        compRow(compRow) {
-        };
+        components(components) { };
+        
         int vertWeight;
-        std::vector<ComponentLayoutParams> compRow;
+        std::vector<ComponentLayout> components;
     };
 
-    typedef std::vector<RowLayoutParams> Layout;
+    /**
+     * This type allows an entire layout to be declared at once in a
+     * brace enclosed initializer list.
+     */
+    typedef std::vector<RowLayout> Layout;
 
     /**
      * Set a new Component layout, removing all old layout definitions.
-     * @param rows defines the position and weight of all components. Null 
-     * components may be used to define empty spaces. 
-     * @param parentToInit if this optional argument is provided, this will add
-     * all components as children of parentToInit and make them visible.
+     * 
+     * @param rows          Defines the position and weight of all components. 
+     *                       Null components may be used to define empty spaces. 
+     * 
+     * @param parentToInit  If a non-null component pointer is provided, This 
+     *                       will add all components in the layout as children 
+     *                       of parentToInit and make them visible.
      */
     void setLayout(const Layout& layout, Component* parentToInit = nullptr);
 
@@ -90,41 +83,40 @@ public:
     void addComponentsToParent(Component* parent);
 
     /**
-     * Arrange the components within a bounding rectangle
-     * @param bounds the rectangle containing the components
-     * @param xPadding space in pixels to leave between components in a row
-     * and between components and the left and right edges of the bounds
-     * @param yPadding space in pixels to leave between rows and between
-     * rows and the top and bottom edges of the bounds.
+     * Arranges the components within a bounding rectangle.
+     * 
+     * @param bounds    The rectangle components will be positioned within.
+     * 
+     * @param xPadding  The space in pixels to leave between components in a 
+     *                   row, and between components and the left and right 
+     *                   edges of the bounds.
+     * 
+     * @param yPadding  The space in pixels to leave between rows, and between
+     *                   the rows and the top and bottom edges of the bounds.
      */
     void layoutComponents(Rectangle<int> bounds, int xPadding, int yPadding);
 
     /**
-     * Remove all saved component layout parameters
-     * @param removeComponentsFromParent if true, all components will also
-     * be removed from their parent component.
+     * Remove all saved component layout parameters.
+     * 
+     * @param removeComponentsFromParent  If true, all components will also
+     *                                     be removed from their parent 
+     *                                     component.
      */
     void clearLayout(bool removeComponentsFromParent = false);
-    
+
 #if JUCE_DEBUG
     /**
      * Print out the layout to the console for debugging
      */
     void printLayout();
 #endif
-    
+
 private:
-
-    struct WeightedCompPtr {
-        Component* component;
-        int weight = 0;
-    };
-
-    struct Row {
-        std::vector<WeightedCompPtr> columns;
-        int horizWeightSum = 0;
-        int vertWeight = 0;
-    };
+    //Current layout definition
+    Layout layout;
+    //Holds the sum of component weights for each row
+    Array<int> horizWeightSums;
+    //holds the sum of component row weights.
     int vertWeightSum = 0;
-    std::vector<Row> rows;
 };

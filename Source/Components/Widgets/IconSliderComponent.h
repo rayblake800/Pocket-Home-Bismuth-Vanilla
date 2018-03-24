@@ -68,9 +68,11 @@ public:
      *                     If this is not zero, the value will always be 
      *                     (newMinimum + (newInterval * an integer)).
      */
-    void setRange(double newMinimum,
+    void setRange(
+            double newMinimum,
             double newMaximum,
             double newInterval = 0);
+    
 private:
     /**
      * Update the icons and slider to fit the component bounds.
