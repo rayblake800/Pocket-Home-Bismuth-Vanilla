@@ -33,5 +33,16 @@
         "menu_type_text" : "Application menu:",
         "menu_columns" : "Menu columns:",
         "menu_rows" : "Menu rows:"
+    },
+    "DateTimePage" : {
+        "date_time_settings" : "Date and time settings",
+        "select_clock_mode" : "Select the display mode for the clock:",
+        "mode_24h" : "24h mode",
+        "mode_am_pm" : "AM/PM mode",
+        "hide_clock" : "Don't show clock",
+        "set_system_clock" : "Reconfigure system clock",
+        "failed_launch" : "Failed to launch terminal:",
+        "failed_to_run" : "Failed command:",
+        "check_term_cmd" : "Is the terminal launch command set correctly?"     
     }
 }

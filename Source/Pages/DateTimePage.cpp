@@ -1,24 +1,9 @@
 #include "DateTimePage.h"
 
-const Colour DateTimePage::bgColour = Colour(0xffd23c6d);
-const String DateTimePage::pageTitle = "Date and time settings";
-
-const String DateTimePage::clockModeLabelText
-        = "Select the display mode for the clock:";
-const String DateTimePage::clockMode24h = "24h mode";
-const String DateTimePage::clockModeAmPm = "AM/PM mode";
-const String DateTimePage::clockModeNoShow = "Don't show clock";
-
-const String DateTimePage::reconfigureBtnText = "Reconfigure system clock";
-const String DateTimePage::reconfigureCommand
-        = " 'sudo dpkg-reconfigure tzdata ; exit'";
-const String DateTimePage::reconfErrorTitle = "Failed to launch terminal:";
-const String DateTimePage::reconfErrorPreCmd = "Running '";
-const String DateTimePage::reconfErrorPostCmd
-        = "' failed.\nIs the terminal launch command set correctly?";
-
-DateTimePage::DateTimePage(MainConfigFile& mainConfig,
+DateTimePage::DateTimePage(
+        MainConfigFile& mainConfig,
         ComponentConfigFile& componentConfig) :
+Localized("DateTimePage"),
 PageComponent(componentConfig, "DateTimePage",{
     {3,
         {
@@ -44,10 +29,10 @@ PageComponent(componentConfig, "DateTimePage",{
 }),
 mainConfig(mainConfig),
 componentConfig(componentConfig),
-titleLabel(componentConfig,"dateTimeTitleLabel", pageTitle),
+titleLabel(componentConfig, "dateTimeTitle", localeText(date_time_settings)),
 setClockMode("setClockMode"),
-reconfigureBtn(reconfigureBtnText),
-clockModeLabel(componentConfig, "clockModeLabel", clockModeLabelText)
+reconfigureBtn(localeText(set_system_clock)),
+clockModeLabel(componentConfig, "modeLabel", localeText(select_clock_mode))
 {
 
 #    if JUCE_DEBUG
@@ -57,9 +42,9 @@ clockModeLabel(componentConfig, "clockModeLabel", clockModeLabelText)
     reconfigureBtn.addListener(this);
     titleLabel.setJustificationType(Justification::centred);
 
-    setClockMode.addItem(clockMode24h, 1);
-    setClockMode.addItem(clockModeAmPm, 2);
-    setClockMode.addItem(clockModeNoShow, 3);
+    setClockMode.addItem(localeText(mode_24h), 1);
+    setClockMode.addItem(localeText(mode_am_pm), 2);
+    setClockMode.addItem(localeText(hide_clock), 3);
     setClockMode.addListener(this);
     if (componentConfig.getConfigValue<bool>(ComponentConfigFile::showClockKey))
     {
@@ -81,8 +66,11 @@ clockModeLabel(componentConfig, "clockModeLabel", clockModeLabelText)
     }
 }
 
-void
-DateTimePage::pageButtonClicked(Button* button)
+/**
+ * Runs reconfigureCommand in the terminal to update system time when
+ * the user presses the reconfigure button.
+ */
+void DateTimePage::pageButtonClicked(Button* button)
 {
     if (button == &reconfigureBtn)
     {
@@ -93,17 +81,28 @@ DateTimePage::pageButtonClicked(Button* button)
         if (ret != 0)
         {
             AlertWindow::showMessageBox(AlertWindow::WarningIcon,
-                    reconfErrorTitle,
-                    reconfErrorPreCmd + configureTime + reconfErrorPostCmd);
+                    localeText(failed_launch),
+                    localeText(failed_to_run)
+                    + "\n" + configureTime + "\n"
+                    + localeText(check_term_cmd));
         }
     }
 }
 
-void DateTimePage::comboBoxChanged(ComboBox* c)
+/**
+ * Changes the clock mode saved in the ComponentConfigFile when the
+ * user selects a new mode with the setClockMode combo box.
+ */
+void DateTimePage::comboBoxChanged(ComboBox* comboBox)
 {
-    if (c != &setClockMode) return;
-    bool showClock = (c->getSelectedId() != 3);
-    bool use24HrMode = (c->getSelectedId() == 1);
+    if (comboBox != &setClockMode)
+    {
+        DBG("DateTimePage::" << __func__ << ": responding to ComboBox "
+                << comboBox->getName() << ", this should not happen!")
+        return;
+    }
+    bool showClock = (comboBox->getSelectedId() != 3);
+    bool use24HrMode = (comboBox->getSelectedId() == 1);
     if (showClock)
     {
         componentConfig.setConfigValue<bool>

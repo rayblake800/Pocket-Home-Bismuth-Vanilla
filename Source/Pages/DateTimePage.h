@@ -3,61 +3,72 @@
  * 
  * DateTimePage is a UI page component that allows the user to change
  * the clock display mode and adjust system time.
- * 
- * TODO:documentation
  */
 #pragma once
 #include "JuceHeader.h"
+#include "Localized.h"
 #include "DrawableImageButton.h"
 #include "ScalingLabel.h"
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
 #include "PageComponent.h"
 
-class DateTimePage : public PageComponent, private ComboBox::Listener
+class DateTimePage : public PageComponent, private ComboBox::Listener,
+private Localized
 {
 public:
-    DateTimePage(MainConfigFile& mainConfig, 
+    DateTimePage(
+            MainConfigFile& mainConfig, 
             ComponentConfigFile& componentConfig);
 
     virtual ~DateTimePage() { }
 
 private:
     /**
+     * Runs reconfigureCommand in the terminal to update system time when
+     * the user presses the reconfigure button.
      * 
      * @param button
      */
     void pageButtonClicked(Button* button) override;
 
     /**
+     * Changes the clock mode saved in the ComponentConfigFile when the
+     * user selects a new mode with the setClockMode combo box.
      * 
      * @param comboBox
      */
     void comboBoxChanged(ComboBox* comboBox) override;
 
-    static const Colour bgColour;
-    static const String pageTitle;
-
-    static const String clockModeLabelText;
-    static const String clockMode24h;
-    static const String clockModeAmPm;
-    static const String clockModeNoShow;
-
-    static const String reconfigureBtnText;
-    static const String reconfigureCommand;
-    static const String reconfErrorTitle;
-    static const String reconfErrorPreCmd;
-    static const String reconfErrorPostCmd;
-
+    //used to set clock visibility
     MainConfigFile& mainConfig;
+    //used to set 12/24 hour mode
     ComponentConfigFile& componentConfig;
 
+    //page title label
     ScalingLabel titleLabel;
+    
+    //set the clock mode
     ScalingLabel clockModeLabel;
     ComboBox setClockMode;
 
     //Button for setting system time
     TextButton reconfigureBtn;
-    
+
+    //Command for changing system time
+    static const constexpr char * reconfigureCommand
+            = " 'sudo dpkg-reconfigure tzdata ; exit'";
+
+    //localized text keys;
+    static const constexpr char * date_time_settings = "date_time_settings";
+    static const constexpr char * select_clock_mode = "select_clock_mode";
+    static const constexpr char * mode_24h = "mode_24h";
+    static const constexpr char * mode_am_pm = "mode_am_pm";
+    static const constexpr char * hide_clock = "hide_clock";
+    static const constexpr char * set_system_clock = "set_system_clock";
+    static const constexpr char * failed_launch = "failed_launch";
+    static const constexpr char * failed_to_run = "failed_to_run";
+    static const constexpr char * check_term_cmd = "check_term_cmd";
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DateTimePage)
 };

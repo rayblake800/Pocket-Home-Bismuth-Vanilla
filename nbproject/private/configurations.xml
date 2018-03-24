@@ -5040,7 +5040,7 @@
     </df>
     <itemPath>assets/configuration/apps.json</itemPath>
     <itemPath>assets/configuration/components.json</itemPath>
-    <itemPath>assets/locale/enUS.json</itemPath>
+    <itemPath>assets/locale/en_US.json</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
