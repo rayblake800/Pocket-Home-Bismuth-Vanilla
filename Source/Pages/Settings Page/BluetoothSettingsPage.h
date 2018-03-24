@@ -36,8 +36,8 @@ private:
     void connect(const BluetoothDevice& device);
 
     /**
-     * @param device if the system is currently connected to this
-     * bluetooth device, this method closes that connection.
+     * @param device  If the system is currently connected to this
+     *                 bluetooth device, this method closes that connection.
      *  
      * @param connection
      */
@@ -45,6 +45,7 @@ private:
 
     /**
      * @param connection
+     * 
      * @return true iff the system is connected to this bluetooth device.
      */
     bool isConnected(const BluetoothDevice& device);
@@ -87,21 +88,22 @@ private:
      * When currentlyConnecting, disable bluetooth controls and show a loading
      * spinner.  Otherwise, enable controls and hide the loading spinner.
      * 
-     * @param currentlyConnecting indicates if bluetooth is trying to connect 
-     * to a device, or is otherwise busy.
+     * @param currentlyConnecting Indicates if bluetooth is trying to connect 
+     *                             to a device, or is otherwise busy.
      */
     void setCurrentlyConnecting(bool currentlyConnecting);
 
 
 
     /**
-     * Attempt to connect if return is pressed
+     * Attempt to connect if return is pressed.
+     * 
      * @param editor
      */
     void textEditorReturnKeyPressed(TextEditor& editor) override;
 
     /**
-     * Set the spinner's bounds within the connection button
+     * Set the spinner's bounds within the connection button.
      */
     void connectionPageResized() override;
 

@@ -37,6 +37,7 @@ void BluetoothSettingsPage::disconnect(const BluetoothDevice& device) { }
 
 /**
  * @param connection
+ * 
  * @return true iff the system is connected to this bluetooth device.
  */
 bool BluetoothSettingsPage::isConnected(const BluetoothDevice& device)
@@ -46,6 +47,7 @@ bool BluetoothSettingsPage::isConnected(const BluetoothDevice& device)
 
 /**
  * @param button
+ * 
  * This is called whenever a button other than the navigation buttons
  * is clicked.
  */
@@ -66,8 +68,9 @@ Button* BluetoothSettingsPage::getConnectionButton
 
 /**
  * Get the layout for the Bluetooth device controls.
- * @param connection the control components will be updated to suit
- * this bluetooth device.
+ * 
+ * @param connection The control components will be updated to suit
+ *                    this bluetooth device.
  */
 RelativeLayoutManager::Layout
 BluetoothSettingsPage::getConnectionControlsLayout
@@ -89,21 +92,22 @@ void BluetoothSettingsPage::updateConnectionControls
  * When currentlyConnecting, disable bluetooth controls and show a loading
  * spinner.  Otherwise, enable controls and hide the loading spinner.
  * 
- * @param currentlyConnecting indicates if bluetooth is trying to connect 
- * to a device, or is otherwise busy.
+ * @param currentlyConnecting Indicates if bluetooth is trying to connect 
+ *                             to a device, or is otherwise busy.
  */
 void BluetoothSettingsPage::setCurrentlyConnecting
 (bool currentlyConnecting) { }
 
 /**
- * Attempt to connect if return is pressed
+ * Attempts to connect if return is pressed.
+ * 
  * @param editor
  */
 void BluetoothSettingsPage::textEditorReturnKeyPressed
 (TextEditor& editor) { }
 
 /**
- * Set the spinner's bounds within the connection button
+ * Set the spinner's bounds within the connection button.
  */
 void BluetoothSettingsPage::connectionPageResized() { }
 
