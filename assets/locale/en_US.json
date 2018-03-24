@@ -66,5 +66,15 @@
     },
     "SettingsPage" : {
         "advanced_settings" : "Advanced Settings Page"
+    },
+    "WifiSettingsComponent" : {
+        "wifi_not_found" : "WiFi Not Found",
+        "wifi_disabled" : "WiFi Disabled",
+        "wifi_turning_on" : "WiFi Turning On...",
+        "not_connected" : "Not Connected",
+        "wifi_turning_off" : "WiFi Turning Off...",
+        "connecting_to_ap" : "Connecting to ",
+        "connecting_to_unknown" : "Connecting...",
+        "disconnecting" : "Disconnecting..."   
     }
 }

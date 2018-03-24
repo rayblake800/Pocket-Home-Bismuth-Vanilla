@@ -7,9 +7,9 @@ WifiSettingsComponent::WifiSettingsComponent(
         std::function<void() > openWifiPage,
         ComponentConfigFile& config) :
 ConnectionSettingsComponent(openWifiPage, config, "wifi"),
+Localized("WifiSettingsComponent"),
 wifiManager(wifiManager)
 {
-
 #    if JUCE_DEBUG
     setName("WifiSettingsComponent");
 #    endif
@@ -18,7 +18,7 @@ wifiManager(wifiManager)
 }
 
 /**
- * @return true if wifi is enabled, false if disabled
+ * Checks if wifi is currently turned on.
  */
 bool WifiSettingsComponent::connectionEnabled()
 {
@@ -26,8 +26,7 @@ bool WifiSettingsComponent::connectionEnabled()
 }
 
 /**
- * @return true iff wifi is connecting, disconnecting, turning on, or
- * turning off.
+ * Checks if the wifi device is currently busy.
  */
 bool WifiSettingsComponent::isBusy()
 {
@@ -67,18 +66,7 @@ void WifiSettingsComponent::enabledStateChanged(bool enabled)
 }
 
 /**
- * Use wifi status updates to keep the component updated.
- */
-void WifiSettingsComponent::wifiStateChanged(WifiStateManager::WifiState state)
-{
-    MessageManager::callAsync([this]()
-    {
-        refresh();
-    });
-}
-
-/**
- * @return Wifi on, Wifi off, or the active connection name. 
+ * Sets the wifi button text based on the current wifi state.
  */
 String WifiSettingsComponent::updateButtonText()
 {
@@ -86,15 +74,15 @@ String WifiSettingsComponent::updateButtonText()
     {
         case WifiStateManager::noStateManager:
         case WifiStateManager::missingNetworkInterface:
-            return "WiFi Not Found";
+            return localeText(wifi_not_found);
         case WifiStateManager::disabled:
-            return "WiFi Disabled";
+            return localeText(wifi_disabled);
         case WifiStateManager::turningOn:
-            return "WiFi Turning On...";
+            return localeText(wifi_turning_on);
         case WifiStateManager::enabled:
-            return "Not Connected";
+            return localeText(not_connected);
         case WifiStateManager::turningOff:
-            return "WiFi Turning Off...";
+            return localeText(wifi_turning_off);
         case WifiStateManager::connecting:
         case WifiStateManager::switchingConnection:
         {
@@ -103,9 +91,9 @@ String WifiSettingsComponent::updateButtonText()
             {
                 DBG("WifiSettingsComponent::" << __func__ << ": wifi is "
                         << "connecting, but can't get the connecting AP.");
-                return "Connecting...";
+                return localeText(connecting_to_unknown);
             }
-            return String("Connecting to ") + ap.getSSID();
+            return String(localeText(connecting_to_ap)) + ap.getSSID();
         }
         case WifiStateManager::connected:
         {
@@ -113,6 +101,19 @@ String WifiSettingsComponent::updateButtonText()
             return ap.getSSID();
         }
         case WifiStateManager::disconnecting:
-            return "Disconnecting...";
+            return localeText(disconnecting);
     }
 }
+
+/**
+ * Use wifi status updates to keep the component updated.
+ */
+void WifiSettingsComponent::wifiStateChanged
+(WifiStateManager::WifiState state)
+{
+    MessageManager::callAsync([this]()
+    {
+        refresh();
+    });
+}
+
