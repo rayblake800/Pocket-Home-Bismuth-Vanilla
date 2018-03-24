@@ -30,8 +30,6 @@ entrypath(entryFile.getFullPathName())
     }
 }
 
-DesktopEntry::~DesktopEntry() { }
-
 /**
  * Creates a new desktop entry from parameter data.
  */
@@ -59,7 +57,7 @@ DesktopEntry::DesktopEntry(String title, String icon, String command,
 }
 
 /**
- * get the file type for this entry
+ * Gets the file type for this entry.
  */
 DesktopEntry::Type DesktopEntry::getType() const
 {
