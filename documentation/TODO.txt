@@ -1,7 +1,10 @@
+-Replace all hard-coded text with locale strings.
+
 -Use an interface to get rid of the circular dependency between AppMenuItems
  and the AppMenuItemFactory
 
--Replace all hard-coded text with locale strings.
+-Define page background color/image in config
+     Replace the background selector on HomePageSettings 
 
 -Text height shouldn't be in configuration as a component.
 
@@ -10,15 +13,9 @@
 -Re-add the IP label to the Settings Page
     -Add option to display the IP label on the home page
 
-
--Configurables in general could use an overhaul, they need more safeguards to
- ensure they're removed from their ConfigFiles if deleted. 
-
 -Define spinner images in ComponentConfig
 
 -implement UI settings page
-
--Define page background color/image in config
 
 -configurable keyboard shortcuts on input page
 
@@ -28,10 +25,8 @@
     -Adapt bluetooth code from 
         https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/client/main.c
 
+-More thorough implementation of the Desktop entry standard
 -Add support for nested folders
 
 -Design and implement TabbedAppMenu
 
--Implement ConfigurableComponent editing page  
-
--More thorough implementation of the Desktop entry standard

@@ -18,5 +18,20 @@
         "wrong_password" : "Wrong password",
         "wrong_password_retry" : "Wrong password, try again",
         "close_button_text" : "Ok"
+    },
+    "HomeSettingsPage" : {
+        "title_text" : "Homepage Settings",
+        "background_text" : "Background:",
+        "default_bg" : "Default",
+        "color_bg" : "Color",
+        "image_bg" : "Image",
+        "bg_color_hex_value" : "Hex value:",
+        "bg_image_path" : "Image path:",
+        "invalid_color" : "Invalid color",
+        "choose_background" : "Choose the new background",
+        "choose_bg_image" : "Please choose your new background image",
+        "menu_type_text" : "Application menu:",
+        "menu_columns" : "Menu columns:",
+        "menu_rows" : "Menu rows:"
     }
 }

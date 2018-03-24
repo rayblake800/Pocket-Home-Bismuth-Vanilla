@@ -1,9 +1,9 @@
 #include "HomeSettingsPage.h"
 
-HomeSettingsPage::HomeSettingsPage
-(PageFactoryInterface* pageFactory,
-            MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig) :
+HomeSettingsPage::HomeSettingsPage(
+        MainConfigFile& mainConfig,
+        ComponentConfigFile& componentConfig) :
+Localized("HomeSettingsPage"),
 PageComponent(componentConfig, "HomeSettingsPage",{
     {
         { 3,
@@ -12,7 +12,7 @@ PageComponent(componentConfig, "HomeSettingsPage",{
             }},
         { 2,
             {
-                {&bgTitle, 1},
+                {&bgTypeLabel, 1},
                 {&bgTypePicker, 1}
             }},
         { 2,
@@ -34,36 +34,30 @@ PageComponent(componentConfig, "HomeSettingsPage",{
             {
                 {&rowCountLabel, 2},
                 {&rowCounter, 1}
-            }},
-        { 3,
-            {
-                {&colourPageBtn, 1}
             }}
     }
-},pageFactory),
+}),
 mainConfig(mainConfig),
-title(componentConfig,"personalizeTitle", "Homepage Settings"),
-bgTitle(componentConfig,"bgTitle", "Background:"),
+title(componentConfig, "personalizeTitle", localeText(title_text)),
+bgTypeLabel(componentConfig, "bgLabel", localeText(background_text)),
 bgTypePicker("bgTypePicker"),
-bgLabel(componentConfig,"bgLabel", ""),
-bgEditor("Choose the new background",
-        "Please choose your new background image"),
-menuPickerLabel(componentConfig,"menuPickerLabel", "Application menu:"),
+bgLabel(componentConfig, "bgTitle", ""),
+bgEditor(localeText(choose_background), localeText(choose_bg_image)),
+menuPickerLabel(componentConfig, "menuPickerLabel", localeText(menu_type_text)),
 menuTypePicker("menuTypePicker"),
-columnCountLabel(componentConfig,"columnCountLabel", "Menu columns:"),
-rowCountLabel(componentConfig,"rowCountLabel", "Menu rows:"),
+columnCountLabel(componentConfig, "columnCountLabel", localeText(menu_columns)),
+rowCountLabel(componentConfig, "rowCountLabel", localeText(menu_rows)),
 columnCounter(1, 1, 9),
-rowCounter(1, 1, 9),
-colourPageBtn("Set colors")
+rowCounter(1, 1, 9)
 {
 
 #    if JUCE_DEBUG
     setName("HomeSettingsPage");
 #    endif
     title.setJustificationType(Justification::centred);
-    bgTypePicker.addItem("Default", 1);
-    bgTypePicker.addItem("Color", 2);
-    bgTypePicker.addItem("Image", 3);
+    bgTypePicker.addItem(localeText(default_bg), 1);
+    bgTypePicker.addItem(localeText(color_bg), 2);
+    bgTypePicker.addItem(localeText(image_bg), 3);
     bgTypePicker.addListener(this);
 
     bgEditor.setColour(TextEditor::ColourIds::textColourId,
@@ -75,36 +69,37 @@ colourPageBtn("Set colors")
         menuTypePicker.addItem(MainConfigFile::menuTypes[i], i + 1);
     }
     menuTypePicker.addListener(this);
-    
+
     rowCounter.setValue(mainConfig.getConfigValue<int>
             (MainConfigFile::maxRowsKey));
 
     columnCounter.setValue(mainConfig.getConfigValue<int>
             (MainConfigFile::maxColumnsKey));
 
-    colourPageBtn.addListener(this);
-
     updateComboBox();
     addAndShowLayoutComponents();
 }
 
-HomeSettingsPage::~HomeSettingsPage()
-{
-    
 /**
  * Update AppMenu dimensions when the page closes.
  */
+HomeSettingsPage::~HomeSettingsPage()
+{
     mainConfig.setConfigValue<int>(MainConfigFile::maxRowsKey,
-                               rowCounter.getValue());
+                                   rowCounter.getValue());
     mainConfig.setConfigValue<int>(MainConfigFile::maxColumnsKey,
-                               columnCounter.getValue());
+                                   columnCounter.getValue());
 }
 
+/**
+ * Initializes the background and AppMenuType combo boxes with values
+ * loaded from the MainConfigFile, and updates their labels to match.
+ */
 void HomeSettingsPage::updateComboBox()
 {
-    
     /* Checking the current configuration */
-    String background = mainConfig.getConfigValue<String>(MainConfigFile::backgroundKey);
+    String background
+            = mainConfig.getConfigValue<String>(MainConfigFile::backgroundKey);
     bool display = false;
     if ((background.length() == 6
          || background.length() == 8)
@@ -123,7 +118,8 @@ void HomeSettingsPage::updateComboBox()
     bgEditor.setVisible(display);
     bgLabel.setVisible(display);
 
-    String menuType = mainConfig.getConfigValue<String>(MainConfigFile::menuTypeKey);
+    String menuType
+            = mainConfig.getConfigValue<String>(MainConfigFile::menuTypeKey);
     int menuIndex = MainConfigFile::menuTypes.indexOf(menuType);
     if (menuIndex != -1)
     {
@@ -131,7 +127,12 @@ void HomeSettingsPage::updateComboBox()
     }
 }
 
-void HomeSettingsPage::comboBoxChanged(ComboBox * box)
+/**
+ * If the background type ComboBox is updated, clear the background text
+ * field, and update its labels. If the menu type ComboBox is updated,
+ * save the changed value to the MainConfigFile
+ */
+void HomeSettingsPage::comboBoxChanged(ComboBox* box)
 {
     if (box == &bgTypePicker)
     {
@@ -140,20 +141,26 @@ void HomeSettingsPage::comboBoxChanged(ComboBox * box)
         {
             case 1:
                 mainConfig.setConfigValue<String>(MainConfigFile::backgroundKey,
-                                              "4D4D4D");
+                                                  "4D4D4D");
                 bgEditor.setVisible(false);
                 bgLabel.setVisible(false);
                 return;
             case 2:
-                bgLabel.setText("Hex value:", dontSendNotification);
+                bgLabel.setVisible(true);
+                bgLabel.setText(
+                        localeText(bg_color_hex_value),
+                        dontSendNotification);
                 bgEditor.showFileSelectButton(false);
                 break;
             case 3:
-                bgLabel.setText("Image path:", dontSendNotification);
+                bgLabel.setVisible(true);
+                bgLabel.setText(
+                        localeText(bg_image_path),
+                        dontSendNotification);
                 bgEditor.showFileSelectButton(true);
         }
         bgEditor.setVisible(true);
-        bgLabel.setVisible(true);
+        bgTypeLabel.setVisible(true);
     }
     else if (box == &menuTypePicker && box->getSelectedItemIndex() >= 0)
     {
@@ -163,14 +170,11 @@ void HomeSettingsPage::comboBoxChanged(ComboBox * box)
     }
 }
 
-void HomeSettingsPage::pageButtonClicked(Button* button)
-{
-    if (button == &colourPageBtn)
-    {
-        pushPageToStack(PageType::ColourSettings);
-    }
-}
-
+/**
+ * When a value is set in the background editor, attempt to set a new
+ * color or image value for the background, depending on the state of
+ * bgTypePicker.
+ */
 void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
 {
     String value = edited->getText();
@@ -179,16 +183,16 @@ void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
     {
         value = value.toUpperCase();
         if (value.length() != 6 || !value.containsOnly("0123456789ABCDEF"))
-            bgEditor.setText("Invalid color", false);
+            bgEditor.setText(localeText(invalid_color), false);
         else
         {
             mainConfig.setConfigValue<String>
-            (MainConfigFile::backgroundKey, value);
+                    (MainConfigFile::backgroundKey, value);
         }
     }
     else if (bgTypePicker.getSelectedId() == 3)
     {
         mainConfig.setConfigValue<String>
-        (MainConfigFile::backgroundKey, value);
+                (MainConfigFile::backgroundKey, value);
     }
 }

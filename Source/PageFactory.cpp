@@ -91,7 +91,7 @@ PageComponent* PageFactory::createPage(PageComponent::PageType type)
         case PageComponent::DateTime:
             return new DateTimePage(mainConfig, componentConfig);
         case PageComponent::HomeSettings:
-            return new HomeSettingsPage(this, mainConfig, componentConfig);
+            return new HomeSettingsPage(mainConfig, componentConfig);
     }
     return nullptr;
 }
