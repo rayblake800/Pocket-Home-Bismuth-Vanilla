@@ -52,6 +52,11 @@ settingsButton(ComponentConfigFile::settingsButtonKey, componentConfig)
     loadAllConfigProperties();
 }
 
+/**
+ * Tracks page background and menu type changes. Only the MainConfigFile 
+ * should be calling this.  Depending on the key provided, this will update
+ * the page background or recreate the AppMenu.
+ */
 void HomePage::configValueChanged(ConfigFile* config, String key)
 {
     if (mainConfig == *config)
@@ -130,9 +135,10 @@ void HomePage::configValueChanged(ConfigFile* config, String key)
     }
 }
 
-
-//Forward all clicks (except button clicks) to the appMenu 
-
+/**
+ * Forward all clicks (except button clicks) to the appMenu so that it can 
+ * potentially create a pop-up menu
+ */
 void HomePage::mouseDown(const MouseEvent &event)
 {
     if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
@@ -141,6 +147,12 @@ void HomePage::mouseDown(const MouseEvent &event)
     }
 }
 
+/**
+ * Opens the power page or the settings page, depending on which button
+ * was clicked.
+ * 
+ * @param button
+ */
 void HomePage::pageButtonClicked(Button * button)
 {
     if (button == &settingsButton)
@@ -154,6 +166,9 @@ void HomePage::pageButtonClicked(Button * button)
     }
 }
 
+/**
+ * Forwards all key events to the AppMenu.
+ */
 bool HomePage::keyPressed(const KeyPress& key)
 {
     //don't interrupt animation or loading
@@ -165,6 +180,9 @@ bool HomePage::keyPressed(const KeyPress& key)
     else return appMenu->keyPressed(key);
 }
 
+/**
+ * Grab keyboard focus when the page becomes visible.
+ */
 void HomePage::visibilityChanged()
 {
     if (isShowing())
@@ -176,6 +194,9 @@ void HomePage::visibilityChanged()
     }
 }
 
+/**
+ * Update all child component bounds when the page is resized.
+ */
 void HomePage::pageResized()
 {
     if (appMenu != nullptr)

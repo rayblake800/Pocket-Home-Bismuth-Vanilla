@@ -1,7 +1,9 @@
 /**
  * @File IconThread.h
  * 
- * Loads application and directory icons asynchronously.
+ * Loads application and directory icons asynchronously. All icons in typical
+ * icon directories are mapped, attempting to avoid duplicates.  This map is
+ * then used to quickly locate icon files by name as they are needed.
  */
 
 #pragma once
@@ -13,27 +15,36 @@ class IconThread : public Thread
 {
 public:
     IconThread();
-    virtual ~IconThread();
+
+    virtual ~IconThread() { }
 
     /**
      * Queues up an icon request.  
-     * @param icon either a full icon file path, or the filename(without
-     * extension) of an icon in one of the system icon directories.
-     * @param assignImage a callback function to asynchronously use the
-     * image found by the thread.  
-     * Unless the icon can be immediately located without searching,
-     * It will be called twice, once to immediately
-     * apply a default image, and again when the requested image has been found.
+     * 
+     * @param icon          This should be either a full icon file path, or the 
+     *                       filename(without extension) of an icon in one of 
+     *                       the system icon directories.  If no direct match
+     *                       is found, the icon thread will attempt to find and
+     *                       use an icon with a name partially matching this
+     *                       string.
+     * 
+     * @param assignImage   A callback function to asynchronously use the
+     *                       image found by the thread. Unless the icon can be 
+     *                       immediately located without searching, It will be 
+     *                       called twice, once to immediately apply a default 
+     *                       image, and again when the requested image has been
+     *                       found.
      */
     void loadIcon(String icon, std::function<void(Image) > assignImage);
 
     /**
-     * While AppMenuButtons still need icons, find them in a
-     * separate thread.
+     * While AppMenuButtons still need icons, this finds them in a separate 
+     * thread.
      */
     void run() override;
 
 private:
+    //Queued icon requests waiting for the icon thread.
 
     struct QueuedJob
     {
@@ -41,7 +52,6 @@ private:
         std::function<void(Image) > callback;
     };
     Array<QueuedJob> queuedJobs;
-
 
     /**
      * Compares icon directories for IconThread::mapIcons, prioritizing ones 
@@ -55,9 +65,12 @@ private:
 
     /**
      * Searches for and returns an icon's full path. 
-     * @param icon either a full icon file path, or the filename(without
-     * extension) of an icon in one of the system icon directories.
-     * @return an icon Image
+     * 
+     * @param icon  Either a full icon file path, or the filename(without
+     *               extension) of an icon in one of the system icon 
+     *               directories.
+     * 
+     * @return     The closest matching icon image available 
      */
     String getIconPath(String icon);
 

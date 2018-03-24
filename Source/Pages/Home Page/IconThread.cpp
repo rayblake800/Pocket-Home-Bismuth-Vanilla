@@ -9,8 +9,6 @@ IconThread::IconThread() : Thread("IconThread")
     defaultIcon = AssetFiles::loadImageAsset(defaultIconPath);
 }
 
-IconThread::~IconThread() { }
-
 /**
  * Queues up an icon request.  
  */
@@ -84,6 +82,10 @@ String IconThread::getIconPath(String icon)
     return String();
 }
 
+/**
+ * While AppMenuButtons still need icons, this finds them in a separate 
+ * thread.
+ */
 void IconThread::run()
 {
     const ScopedLock queueLock(lock);

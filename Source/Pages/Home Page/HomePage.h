@@ -26,79 +26,104 @@
  *  -Complete documentation
  */
 
-class HomePage : public PageComponent, public ConfigFile::Listener{
+class HomePage : public PageComponent, public ConfigFile::Listener
+{
 public:
-    HomePage(PageFactoryInterface* pageFactory, 
+    /**
+     * @param pageFactory       This is used by the page to open the settings
+     *                           and power pages.
+     * 
+     * @param wifiState         Wifi state manager, needed for the wifi icon.
+     * 
+     * @param mainConfig        Shared user preferences object used to load
+     *                           application menu settings.
+     * 
+     * @param componentConfig   Shared UI component settings.
+     */
+    HomePage(
+            PageFactoryInterface* pageFactory,
             WifiStateManager& wifiState,
             MainConfigFile& mainConfig,
             ComponentConfigFile& componentConfig);
-    
+
     virtual ~HomePage() { }
 
 protected:
     /**
-     * Tracks page background changes. Only the MainConfigFile should be
-     * calling this.
-     * @param config should be the MainConfigFile
-     * @param key should be the background key
+     * Tracks page background and menu type changes. Only the MainConfigFile 
+     * should be calling this.  Depending on the key provided, this will update
+     * the page background or recreate the AppMenu.
+     * 
+     * @param config  This should be the MainConfigFile.
+     * 
+     * @param key     This should be the background key or the menu type key.
      */
     void configValueChanged(ConfigFile* config, String key);
-private:
 
+private:
     /**
      * Forward all clicks (except button clicks) to the appMenu so that it can 
      * potentially create a pop-up menu
-     */
-    virtual void mouseDown(const MouseEvent &event) override;
-
-    /**
-     * Set the page background as a solid color.
-     * @param color a six-digit hex color string
-     */
-    void setColorBackground(const String& color);
-
-    /**
-     * Set the page background to a background image.
-     * @param path the path to an image file.
-     */
-    void setImageBackground(const String& path);
-
-    /**
      * 
-     * @param 
+     * @param event
      */
-    void pageButtonClicked(Button *) override;
+    virtual void mouseDown(const MouseEvent& event) override;
 
     /**
+     * Opens the power page or the settings page, depending on which button
+     * was clicked.
      * 
-     * @param 
-     * @return 
+     * @param button
+     */
+    void pageButtonClicked(Button* button) override;
+
+    /**
+     * Forwards all key events to the AppMenu.
      */
     bool keyPressed(const KeyPress &) override;
 
     /**
-     * 
+     * Grab keyboard focus when the page becomes visible.
      */
     void visibilityChanged() override;
 
     /**
-     * 
+     * Update all child component bounds when the page is resized.
      */
     void pageResized() override;
 
+    //Loads AppMenu shortcuts and folder definitions.  Initialized here so it
+    //can be passed to the AppMenuComponent each time it is recreated.
     AppConfigFile appConfig;
+    //Loads general user settings, only needed to pass on to child components.
     MainConfigFile& mainConfig;
+    //UI component settings, needed by the page and by child components.
     ComponentConfigFile& componentConfig;
-    
+
+    //This spinner activates when the AppMenu is loading.  The AppMenu controls
+    //it through a reference passed in on menu creation.
     OverlaySpinner loadingSpinner;
+    
+    //Displays the time.
     ClockLabel clock;
+    
+    //The application menu.  This is recreated whenever the menu type preference
+    //changes in MainConfigFile
     ScopedPointer<AppMenuComponent> appMenu;
+    
+    //On pocketChip this displays the current battery status.
     BatteryIcon batteryIcon;
+    
+    //Displays the current wifi status.
     WifiIcon wifiIcon;
 
+    //Click to this open the power page
     ConfigurableImageButton powerButton;
-    ConfigurableImageButton settingsButton;
     
+    //Click this to open the settings page
+    ConfigurableImageButton settingsButton;
+
+    //Page frame image.  This component is entirely decorative.
     ConfigurableImageComponent frame;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomePage);
