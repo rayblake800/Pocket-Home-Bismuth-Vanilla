@@ -2,9 +2,11 @@
 #include "AppLauncher.h"
 #include "InputSettingsPage.h"
 
-InputSettingsPage::InputSettingsPage(PageFactoryInterface* pageFactory,
+InputSettingsPage::InputSettingsPage(
+        PageFactoryInterface* pageFactory,
         MainConfigFile& mainConfig,
         ComponentConfigFile& componentConfig) :
+Localized("InputSettingsPage"),
 PageComponent(componentConfig, "InputSettingsPage",{
     {3,
         {
@@ -14,6 +16,10 @@ PageComponent(componentConfig, "InputSettingsPage",{
         {
             {&cursorVisible, 5},
             {&chooseMode, 2}
+        }},
+    {4,
+        {
+            {nullptr, 1}
         }},
     {2,
         {
@@ -25,12 +31,12 @@ PageComponent(componentConfig, "InputSettingsPage",{
         }}
 }, pageFactory),
 mainConfig(mainConfig),
-title(componentConfig,"settings", "Input settings"),
+title(componentConfig, "settings", localeText(input_settings)),
 chooseMode("chooseMode"),
-calibrating("Calibrate the screen"),
-fnmapping("Remap keyboard (FN key fix)"),
-cursorVisible(componentConfig,"cursorVisible", 
-        "Select the visibility of the cursor:")
+calibrating(localeText(calibrate_screen)),
+fnmapping(localeText(remap_keybord)),
+cursorVisible(componentConfig, "cursorVisible",
+        localeText(select_cursor_visible))
 {
 
 #    if JUCE_DEBUG
@@ -38,8 +44,8 @@ cursorVisible(componentConfig,"cursorVisible",
 #    endif
     title.setJustificationType(Justification::centred);
     //ComboBox
-    chooseMode.addItem("Not visible", 1);
-    chooseMode.addItem("Visible", 2);
+    chooseMode.addItem(localeText(not_visible), 1);
+    chooseMode.addItem(localeText(visible), 2);
     chooseMode.addListener(this);
     if (mainConfig.getConfigValue<bool>(MainConfigFile::showCursorKey))
     {
@@ -54,19 +60,33 @@ cursorVisible(componentConfig,"cursorVisible",
     addAndShowLayoutComponents();
 }
 
+/**
+ * Re-applies the Xmodmap file or runs Xinput Calibrator, depending on 
+ * which button was pressed.
+ */
 void InputSettingsPage::pageButtonClicked(Button* button)
 {
     if (button == &calibrating)
     {
         AppLauncher launcher;
-        launcher.startOrFocusApp("XInput Calibrator", "xinput_calibrator");
+        launcher.startOrFocusApp("XInput Calibrator", calibrationCommand);
+    }
+    if (button == &fnmapping)
+    {
+        ScopedPointer<ChildProcess> launchApp = new ChildProcess();
+        launchApp->start(keyFixCommand);
+        launchApp->waitForProcessToFinish(-1);
     }
 }
 
-void InputSettingsPage::comboBoxChanged(ComboBox* c)
+/**
+ * Changes the cursor visibility settings.
+ */
+void InputSettingsPage::comboBoxChanged(ComboBox* box)
 {
-    if (c != &chooseMode) return;
-    bool cursorVisible = (c->getSelectedId() == 2);
-    mainConfig.setConfigValue<bool>(MainConfigFile::showCursorKey, cursorVisible);
+    if (box != &chooseMode) return;
+    bool cursorVisible = (box->getSelectedId() == 2);
+    mainConfig.setConfigValue<bool>(MainConfigFile::showCursorKey,
+                                    cursorVisible);
 }
 

@@ -3,6 +3,11 @@
 -Add an optional WifiStateManager::Listener callback specifically for connections
  failed due to an incorrect password.
 
+-Look into PolicyKit api for requesting privileges 
+
+-Figure out a way to save calibration data and write it to the right file
+ automatically
+
 -Use an interface to get rid of the circular dependency between AppMenuItems
  and the AppMenuItemFactory
 

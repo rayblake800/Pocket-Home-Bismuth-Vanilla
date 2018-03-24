@@ -124,5 +124,13 @@
         "cant_remove_password" : "Failed to remove password directory!",
         "success" : "Success",
         "password_removed" : "Your Pocket-Home password has been removed."
+    },
+    "InputSettingsPage" : {
+        "input_settings" : "Input settings",
+        "calibrate_screen" : "Calibrate the screen",
+        "remap_keybord" : "Remap keyboard (FN key fix)",
+        "select_cursor_visible" : "Select the visibility of the cursor:",
+        "not_visible" : "Not visible",
+        "visible" : "Visible"
     }
 }
