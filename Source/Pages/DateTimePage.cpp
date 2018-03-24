@@ -98,7 +98,7 @@ void DateTimePage::comboBoxChanged(ComboBox* comboBox)
     if (comboBox != &setClockMode)
     {
         DBG("DateTimePage::" << __func__ << ": responding to ComboBox "
-                << comboBox->getName() << ", this should not happen!")
+                << comboBox->getName() << ", this should not happen!");
         return;
     }
     bool showClock = (comboBox->getSelectedId() != 3);

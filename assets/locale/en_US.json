@@ -44,5 +44,15 @@
         "failed_launch" : "Failed to launch terminal:",
         "failed_to_run" : "Failed command:",
         "check_term_cmd" : "Is the terminal launch command set correctly?"     
+    },
+    "AdvancedSettingsPage" : {
+        "advanced_settings" : "Advanced Settings",
+        "set_password" : "Set your password",
+        "change_password" : "Change your password",
+        "remove_password" : "Remove your password",
+        "personalize_homepage" : "Personalize your homepage",
+        "date_and_time" : "Date and Time",
+        "input_settings" : "Input settings"
+        
     }
 }

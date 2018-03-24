@@ -1,16 +1,17 @@
 #include "AdvancedSettingsPage.h"
 #include "Password.h"
 
-AdvancedSettingsPage::AdvancedSettingsPage
-(PageComponent::PageFactoryInterface* pageFactory,
+AdvancedSettingsPage::AdvancedSettingsPage(
+        PageComponent::PageFactoryInterface* pageFactory,
         ComponentConfigFile& config) :
+Localized("AdvancedSettingsPage"),
 PageComponent(config, "AdvancedSettingsPage",{}, pageFactory),
-titleLabel(config, "settings", "Advanced Settings"),
-setPasswordButton("Set your password"),
-removePasswordButton("Remove your password"),
-personalizeButton("Personalize your homepage"),
-dateTimeButton("Date and time"),
-inputOptionsButton("Input settings"),
+titleLabel(config, "settings", localeText(advanced_settings)),
+setPasswordButton(localeText(set_password)),
+removePasswordButton(localeText(remove_password)),
+personalizeButton(localeText(personalize_homepage)),
+dateTimeButton(localeText(date_and_time)),
+inputOptionsButton(localeText(input_settings)),
 prevArrow(ComponentConfigFile::pageUpKey, config),
 nextArrow(ComponentConfigFile::pageDownKey, config)
 {
@@ -40,7 +41,7 @@ std::vector<Button*> AdvancedSettingsPage::getButtonList(bool includeAll)
     buttonList.push_back(&setPasswordButton);
     if (Password::isPasswordSet() || includeAll)
     {
-    buttonList.push_back(&removePasswordButton);
+        buttonList.push_back(&removePasswordButton);
     }
     buttonList.push_back(&dateTimeButton);
     buttonList.push_back(&inputOptionsButton);
@@ -58,7 +59,7 @@ std::vector<Button*> AdvancedSettingsPage::getButtonList(bool includeAll)
 void AdvancedSettingsPage::reloadLayout()
 {
     setPasswordButton.setButtonText(Password::isPasswordSet() ?
-            "Change your password" : "Set your password");
+            localeText(change_password) : localeText(set_password));
     std::vector<Button*> buttons = getButtonList();
     prevArrow.setVisible(buttonIndex > 0);
     nextArrow.setVisible(buttonIndex + buttonsPerPage < buttons.size());

@@ -6,22 +6,33 @@
  */
 #pragma once
 #include "PageComponent.h"
+#include "Localized.h"
 #include "ConfigurableImageButton.h"
 #include "ScalingLabel.h"
 
-class AdvancedSettingsPage : public PageComponent{
+class AdvancedSettingsPage : public PageComponent, private Localized
+{
 public:
-    AdvancedSettingsPage(PageComponent::PageFactoryInterface* pageFactory,
+    /**
+     * @param pageFactory  Allows this page to open new pages.
+     * 
+     * @param config       Used to load page navigation buttons.
+     */
+    AdvancedSettingsPage(
+            PageComponent::PageFactoryInterface* pageFactory,
             ComponentConfigFile& config);
-    
-    ~AdvancedSettingsPage() {}
+
+    virtual ~AdvancedSettingsPage() { }
 
 private:
     /**
      * Get pointers to all buttons on the page
-     * @param includeAll if false, only get pointers to page buttons
-     * and exclude ones not relevant to the current program state.
-     * @return pointers to all page buttons, in order.
+     * 
+     * @param includeAll  If false, only get pointers to page buttons
+     *                     and exclude ones not relevant to the current program 
+     *                     state.
+     
+     * @return            pointers to all page buttons, in order.
      */
     std::vector<Button*> getButtonList(bool includeAll = false);
 
@@ -40,7 +51,7 @@ private:
      * buttons.
      */
     void pageButtonClicked(Button*) override;
-    
+
     /**
      * Updates the up/down navigation buttons to fit when the page changes
      * size.
@@ -67,5 +78,15 @@ private:
     //Current topmost page button index, corresponding to button index
     //in the vector returned by getButtonList() 
     int buttonIndex = 0;
+
+    //localized text keys;
+    static const constexpr char * advanced_settings = "advanced_settings";
+    static const constexpr char * set_password = "set_password";
+    static const constexpr char * change_password = "change_password";
+    static const constexpr char * remove_password = "remove_password";
+    static const constexpr char * personalize_homepage = "personalize_homepage";
+    static const constexpr char * date_and_time = "date_and_time";
+    static const constexpr char * input_settings = "input_settings";
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AdvancedSettingsPage)
 };
