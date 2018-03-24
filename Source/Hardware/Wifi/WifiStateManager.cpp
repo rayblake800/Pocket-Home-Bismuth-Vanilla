@@ -541,11 +541,7 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
 
 /**
  * Whenever the wifi device detects a connection being established, the 
- * NetworkInterface should call this to notify its WifiStateManager. This is 
- * intended to notify the state manager of unexpected connections, so it's not 
- * necessary to call this for connections opened by the state manager. Calls for
- * known connection attempts will just be ignored.  This method acquires the 
- * WifiStateManager's stateLock.
+ * NetworkInterface should call this to notify its WifiStateManager.
  */
 void WifiStateManager::NetworkInterface::signalWifiConnecting()
 {

@@ -5,6 +5,7 @@
 
 LoginPage::LoginPage(ComponentConfigFile& config,
         std::function<void () > loginCallback) :
+Localized("LoginPage"),
 PageComponent(config, "LoginPage",{
     {7,
         {
@@ -32,11 +33,11 @@ PageComponent(config, "LoginPage",{
             {&loginButton, 1},
             {nullptr, 1}
         }}
-},nullptr,false),
+}, nullptr, false),
 ntcIcon("login/ntcbanner.png"),
-passwordLabel(config, "pass", "Password :"),
+passwordLabel(config, "pass", localeText(password_label)),
 passwordField("passwordField", 0x2022),
-loginButton("login", "Log In"),
+loginButton(localeText(log_in), "loginButton"),
 hashedPassword("none"),
 loginCallback(loginCallback),
 foundPassword(false)
@@ -56,26 +57,28 @@ foundPassword(false)
     }
 }
 
+/**
+ * Checks if an application password was set.
+ * 
+ */
 bool LoginPage::hasPassword()
 {
     return Password::isPasswordSet();
 }
 
-
-void LoginPage::displayError()
-{
-    AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,
-            "Wrong password",
-            "Wrong password, try again",
-            "Ok");
-}
-
+/**
+ * Grants keyboard focus to the password field, so it doesn't need to be
+ * clicked before the user can start typing their password.
+ */
 void LoginPage::textFocus()
 {
     passwordField.grabKeyboardFocus();
     passwordField.setWantsKeyboardFocus(true);
 }
 
+/**
+ * Attempts to login when the user clicks the login button.
+ */
 void LoginPage::pageButtonClicked(Button *button)
 {
     if (Password::checkPassword(Password::hashString(passwordField.getText())))
@@ -86,8 +89,22 @@ void LoginPage::pageButtonClicked(Button *button)
     else displayError();
 }
 
-void LoginPage::textEditorReturnKeyPressed(TextEditor& te)
+/**
+ * If the return key is pressed, handle it the same as clicking the login
+ * button.
+ */
+void LoginPage::textEditorReturnKeyPressed(TextEditor& editor)
 {
     pageButtonClicked(&loginButton);
 }
 
+/**
+ * Show an error message in a message box if logging in fails.
+ */
+void LoginPage::displayError()
+{
+    AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,
+            localeText(wrong_password),
+            localeText(wrong_password_retry),
+            localeText(close_button_text));
+}

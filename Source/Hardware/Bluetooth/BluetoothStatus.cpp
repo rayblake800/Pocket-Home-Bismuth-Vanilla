@@ -1,6 +1,5 @@
 #include "BluetoothStatus.h"
 
-
 void BluetoothStatus::populateFromJson(const var &json) {
     devices.clear();
 

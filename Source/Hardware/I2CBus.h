@@ -79,7 +79,7 @@ private:
      * Opens access to the i2c bus file
      * 
      * @post i2cFileDescriptor will be set to a valid file descriptor, if
-     * the file could be opened.
+     *       the file could be opened.
      * 
      * @throws I2CException if unable to access the i2c bus
      */
@@ -92,9 +92,9 @@ private:
      * 
      * @param buf      A buffer to hold data copied from the register.
      * 
-     * @return        the byte read from the register.
+     * @return         The byte read from the register.
      * 
-     * @throws        I2CException if unable to access the i2c bus
+     * @throws         I2CException if unable to access the i2c bus
      */
     uint8_t i2cReadByte(uint8_t regAddr);
 

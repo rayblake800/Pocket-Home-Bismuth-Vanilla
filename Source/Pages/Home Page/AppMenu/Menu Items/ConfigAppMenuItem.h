@@ -19,9 +19,9 @@ public:
      * @param appConfig    A reference to the AppConfigFile, the data source 
      *                      for the menu item.
      * 
-     * @param mainConfig  Needed to load the terminal launch command.
+     * @param mainConfig   Needed to load the terminal launch command.
      * 
-     * @param appItem defines all menu item data
+     * @param appItem      Defines all menu item data.
      */
     ConfigAppMenuItem(AppConfigFile& appConfig, MainConfigFile& mainConfig,
             const AppConfigFile::AppItem& appItem);

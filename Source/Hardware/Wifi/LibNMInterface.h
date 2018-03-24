@@ -78,7 +78,7 @@ protected:
      * 
      * @param toConnect  The access point that should be connected to. 
      * 
-     * @param psk       The access point's security key, or the empty string if
+     * @param psk        The access point's security key, or the empty string if
      *                   toConnect is unsecured.
      */
     void connectToAccessPoint(const WifiAccessPoint& toConnect,
@@ -114,10 +114,10 @@ private:
      * @param path       The device path for the wifi access point.
      * 
      * @param err        This will hold error data if the connection attempt 
-     *                    failed.
+     *                   failed.
      * 
      * @param user_data  A pointer to the LibNMInterface object. This can be
-     *                    directly typecast to LibNMInterface*
+     *                   directly typecast to LibNMInterface*
      */
     static void handleConnectionAttempt(NMClient* client,
             NMActiveConnection* active,

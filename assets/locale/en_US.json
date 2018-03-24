@@ -11,5 +11,12 @@
     "FileSelectTextEditor": {
         "img_select_title" : "Select an image file",
         "img_select_text" :"Please select an image file"
+    },
+    "LoginPage": {
+        "password_label" : "Password:",
+        "log_in" : "Log In",
+        "wrong_password" : "Wrong password",
+        "wrong_password_retry" : "Wrong password, try again",
+        "close_button_text" : "Ok"
     }
 }

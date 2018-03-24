@@ -113,6 +113,4 @@ private:
     //localized text keys;
     static const constexpr char * could_not_open = "could_not_open";
     static const constexpr char * not_valid_command = "not_valid_command";
-
-
 };

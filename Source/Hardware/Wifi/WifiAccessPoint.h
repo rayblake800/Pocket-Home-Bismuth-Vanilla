@@ -38,29 +38,48 @@ public:
      */
     bool isNull() const;
 
+    /**
+     * Compares two WifiAccessPoint objects using their hash values.
+     */
     bool operator==(const WifiAccessPoint rhs) const {
         return hash == rhs.hash;
     };
 
+    /**
+     * Compares two WifiAccessPoint objects using their hash values.
+     */
     bool operator!=(const WifiAccessPoint rhs) const {
         return hash != rhs.hash;
     };
 
+    /**
+     * @return the SSID identifying the access point. 
+     */
     const String& getSSID() const
     {
         return ssid;
     }
 
+    /**
+     * @return the wifi signal strength, between 0 and 100 
+     */
     int getSignalStrength() const
     {
         return signalStrength;
     }
     
+    /**
+     * @return true iff this access point requires a security key. 
+     */
     bool getRequiresAuth() const
     {
         return requiresAuth;
     }
     
+    /**
+     * @return a unique hash value that can be used to identify this access
+     *          point.
+     */
     const String& getHash() const
     {
         return hash;
