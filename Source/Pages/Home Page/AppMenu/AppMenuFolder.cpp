@@ -49,7 +49,7 @@ void AppMenuFolder::reload()
 }
 
 /**
- * Set this folder's selected menu button
+ * Set this folder's selected menu button.
  */
 bool AppMenuFolder::selectIndex(int index)
 {
@@ -65,7 +65,7 @@ bool AppMenuFolder::selectIndex(int index)
 }
 
 /**
- * Deselects the selected button, if one exists
+ * Deselects the selected button, if one exists.
  */
 void AppMenuFolder::deselect()
 {
@@ -123,7 +123,7 @@ void AppMenuFolder::insertButton
 
 /**
  * Remove the button at a given index, shifting back any buttons
- * at greater indices to fill the gap
+ * at greater indices to fill the gap.
  */
 void AppMenuFolder::removeButton(int index)
 {
@@ -212,7 +212,7 @@ int AppMenuFolder::getButtonCount() const
 }
 
 /**
- * Find the index of a menu button in this folder
+ * Find the index of a menu button in this folder.
  */
 int AppMenuFolder::getButtonIndex
 (AppMenuButton::Ptr menuButton) const
@@ -221,7 +221,7 @@ int AppMenuFolder::getButtonIndex
 }
 
 /**
- * Get the display name of a menu button
+ * Get the display name of a menu button.
  */
 String AppMenuFolder::getMenuButtonName(int index) const
 {

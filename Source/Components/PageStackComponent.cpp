@@ -107,7 +107,7 @@ void PageStackComponent::transitionPage(PageComponent* page,
     }
     Desktop::getInstance().getAnimator().animateComponent(page,
             addingPage ? getLocalBounds() : translatedBounds,
-            1, duration, true, 0, 0);
+            1, duration, true, 0.2, 1);
     TempTimer::initTimer(duration * 1.2, [this, postAnimation, page]()
     {
         page->setEnabled(true);

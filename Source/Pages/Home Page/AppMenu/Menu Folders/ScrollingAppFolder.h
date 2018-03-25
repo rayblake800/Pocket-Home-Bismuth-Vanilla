@@ -9,6 +9,19 @@
 
 class ScrollingAppFolder : public AppMenuFolder {
 public:
+    /**
+     * @param folderItem     Menu item used to load all of this folder's menu
+     *                        items.
+     * 
+     * @param btnListener    A listener to assign to all menu buttons.
+     * 
+     * @param buttonNameMap  Shared button map used to recycle menu buttons.
+     * 
+     * @param iconThread     Loads menu button icons.
+     * 
+     * @param config         Component settings needed to setup folder 
+     *                        components.
+     */
     ScrollingAppFolder(
             AppMenuItem::Ptr folderItem, 
             MouseListener* btnListener,
@@ -20,6 +33,7 @@ public:
 
     /**
      * Create an AppMenuButton component for an AppMenuItem.
+     * 
      * @param menuItem
      */
     virtual AppMenuButton::Ptr createMenuButton
@@ -30,6 +44,7 @@ public:
      * for positioning them in the folder component.
      * 
      * @param buttons
+     * 
      * @return a Layout containing all items in the button array.
      */
     virtual RelativeLayoutManager::Layout buildFolderLayout
@@ -38,7 +53,7 @@ public:
         
     /**
      * @return the minimum width, in pixels, needed by this folder to
-     * display its contents properly. 
+     *          display its contents properly. 
      */
     int getMinimumWidth() override;
 
@@ -50,20 +65,27 @@ private:
     
     ComponentConfigFile& config;
 
+    /**
+     * Custom AppMenuButton proportioned correctly for a scrolling menu.
+     */
     class ScrollingMenuButton : public AppMenuButton {
     public:
         /**
+         * @param menuItem     Provides the button's menu data.
          * 
-         * @param menuItem
-         * @param iconThread
-         * @param name
+         * @param iconThread   Used to load the button icon.
+         *  
+         * @param name         Internal component name
+         * 
+         * @param config       
          */
         ScrollingMenuButton(
                 AppMenuItem* menuItem, 
                 IconThread& iconThread,
                 String name,
                 ComponentConfigFile& config);
-        virtual ~ScrollingMenuButton();
+        
+        virtual ~ScrollingMenuButton() { }
 
         /**
          * @return the width in pixels of this button's title

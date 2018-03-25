@@ -1,15 +1,15 @@
 #include "Utils.h"
 #include "FolderMenuItem.h"
 
-FolderMenuItem::FolderMenuItem(AppConfigFile& appConfig,
+FolderMenuItem::FolderMenuItem(
+        AppConfigFile& appConfig,
         MainConfigFile& mainConfig,
         const AppConfigFile::AppFolder& appFolder,
-        AppMenuItemFactory& menuItemFactory,
         DesktopEntries& desktopEntries) :
 AppMenuItem(mainConfig),
+Localized("FolderMenuItem"),
 config(appConfig),
 appFolder(appFolder),
-menuItemFactory(menuItemFactory),
 desktopEntries(desktopEntries) { }
 
 /**
@@ -31,7 +31,7 @@ Array<AppMenuItem::Ptr> FolderMenuItem::getFolderItems() const
     Array<AppMenuItem::Ptr> folderItems;
     for (const DesktopEntry& entry : folderEntries)
     {
-        folderItems.add(menuItemFactory.create(entry));
+        folderItems.add(create(entry));
     }
     return folderItems;
 }
@@ -75,7 +75,8 @@ bool FolderMenuItem::canChangeIndex(int offset) const
  */
 String FolderMenuItem::getConfirmDeleteTitle() const
 {
-    return String("Delete \"") + appFolder.name + String("\" folder?");
+    return localeText(delete_NAME) + appFolder.name 
+            + localeText(folder);
 }
 
 /**
@@ -83,7 +84,7 @@ String FolderMenuItem::getConfirmDeleteTitle() const
  */
 String FolderMenuItem::getConfirmDeleteMessage() const
 {
-    return "This will permanently remove this folder from the menu.";
+    return localeText(will_remove_folder);
 }
 
 /**
@@ -91,7 +92,7 @@ String FolderMenuItem::getConfirmDeleteMessage() const
  */
 String FolderMenuItem::getEditorTitle() const
 {
-    return "Edit folder";
+    return localeText(edit_folder);
 }
 
 /**

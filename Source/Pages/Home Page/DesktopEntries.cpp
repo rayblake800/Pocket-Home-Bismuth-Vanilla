@@ -6,13 +6,6 @@
 
 DesktopEntries::DesktopEntries() : Thread("DesktopEntries") { }
 
-DesktopEntries::DesktopEntries(const DesktopEntries& orig) :
-Thread("DesktopEntries")
-{
-    const ScopedLock readLock(orig.lock);
-    entries = orig.entries;
-}
-
 DesktopEntries::~DesktopEntries()
 {
     if (isThreadRunning())

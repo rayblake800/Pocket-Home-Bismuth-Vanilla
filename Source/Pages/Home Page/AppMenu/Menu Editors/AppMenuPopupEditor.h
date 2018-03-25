@@ -7,6 +7,7 @@
 #pragma once
 #include "RelativeLayoutManager.h"
 #include "ListEditor.h"
+#include "Localized.h"
 #include "FileSelectTextEditor.h"
 #include "PopupEditorComponent.h"
 #include "IconThread.h"
@@ -21,22 +22,33 @@
 class IconThread;
 
 class AppMenuPopupEditor : public PopupEditorComponent,
-public FileSelectTextEditor::Listener
+public FileSelectTextEditor::Listener, private Localized
 {
 public:
     /**
-     * @param title is printed at the top of the pop-up editor window
-     * @param config
-     * @param iconThread is used for loading preview icons
-     * @param onConfirm is the callback function to run when the confirm button
-     * is pressed.
-     * @param onDelete is the callback function to run when the delete button 
-     * is pressed.
-     * @param showCategoryList sets if the editor will contain button that
-     * shows the category list.
-     * @param showCommandField sets if the editor will contain a terminal
-     * command field and an "open in terminal" check box.
-     * @param showDeleteButton sets if the editor will contain a delete button.
+     * @param title             Text to print at the top of the pop-up editor 
+     *                           window.
+     * 
+     * @param config            Component settings needed to setup the editor
+     *                           component.
+     * 
+     * @param iconThread        Used to load preview icons.
+     * 
+     * @param onConfirm         A callback function to run when the confirm 
+     *                           button is pressed.
+     * 
+     * @param onDelete          A callback function to run when the delete 
+     *                           button is pressed.
+     * 
+     * @param showCategoryList  Sets if the editor will contain button that
+     *                           shows the category list.
+     * 
+     * @param showCommandField  Sets if the editor will contain a terminal
+     *                           command field and an "open in terminal" check 
+     *                           box.
+     * 
+     * @param showDeleteButton  Sets if the editor will contain a delete 
+     *                           button.
      */
     AppMenuPopupEditor(String title,
             ComponentConfigFile& config,
@@ -105,12 +117,14 @@ private:
 
     /**
      * Triggers whenever the icon field is set to a new value.
+     * 
      * @param edited
      */
     void fileSelected(FileSelectTextEditor* edited);
 
     /**
      * Handles the category editor button.
+     * 
      * @param button
      */
     void editorButtonClicked(Button* button) override;
@@ -132,7 +146,7 @@ private:
     FileSelectTextEditor iconPathEditor;
 
     //Launches a category editor pop-up
-    TextButton categoryEditButton; //
+    TextButton categoryEditButton; 
     //Holds the category editor when it's launched.
     ScopedPointer<CategoryPopupEditor> categoryEditor;
     //List of editable categories associated with this application/folder
@@ -145,5 +159,14 @@ private:
     ScalingLabel terminalCheckboxLabel; //text:"Run in terminal:"
     //Sets if this application launches as a terminal application
     SwitchComponent terminalCheckbox;
+      
+    //localized text keys;
+    static const constexpr char * name = "name";
+    static const constexpr char * icon_path = "icon_path";
+    static const constexpr char * select_icon = "select_icon";
+    static const constexpr char * edit_categories = "edit_categories";
+    static const constexpr char * command = "command";
+    static const constexpr char * run_in_terminal = "run_in_terminal";
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuPopupEditor)
 };

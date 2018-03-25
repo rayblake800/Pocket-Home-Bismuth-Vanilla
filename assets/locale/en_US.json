@@ -132,5 +132,37 @@
         "select_cursor_visible" : "Select the visibility of the cursor:",
         "not_visible" : "Not visible",
         "visible" : "Visible"
+    },
+    "AppMenuPopupEditor" : {
+        "name" : "Name:",
+        "icon_path" : "Icon path:",
+        "select_icon" : "Select Icon",
+        "edit_categories" : "Edit categories",
+        "command" : "Command:",
+        "run_in_terminal" : "Run in terminal:"
+    },
+    "AppMenuItem" : {
+        "delete_APP" : "Delete ",
+        "question_mark" : "?",
+        "really_delete" : "Really delete this menu item?",
+        "edit_menu_item" : "Edit Menu Item"
+    },
+    "DesktopEntryMenuItem" : {
+        "remove_link_to" : "Remove link to ",
+        "question_mark" : "?",
+        "will_hide" : "This application will be hidden from pocket-home.",
+        "edit_app" : "Edit Menu Item"
+    },
+    "ConfigAppMenuItem" : {
+        "remove_APP" : "Remove \"",
+        "from_favorites" : "\" from favorites?",
+        "will_remove_link" : "This will permanently remove this link from the list of favorite applications.",
+        "edit_app" : "Edit Application"
+    },
+    "FolderMenuItem" : {
+        "delete_NAME" : "Delete \"",
+        "folder" : "\" folder?",
+        "will_remove_folder" : "This will permanently remove this folder from the menu.",
+        "edit_folder" : "Edit Folder"
     }
 }

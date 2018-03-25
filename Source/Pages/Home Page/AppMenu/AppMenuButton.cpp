@@ -40,7 +40,7 @@ AppMenuPopupEditor* AppMenuButton::getEditor(ComponentConfigFile& config,
             },
     menuItem->hasEditableCategories(),
             menuItem->hasEditableCommand());
-            File file;
+    File file;
     editor->setNameField(menuItem->getAppName());
     editor->setIconField(menuItem->getIconName());
     editor->setCategories(menuItem->getCategories());
@@ -115,7 +115,7 @@ void AppMenuButton::reloadDataFromSource()
 
 /**
  * @return  the area relative to this button's position where
- * it will draw its name
+ *           it will draw its name.
  */
 const Rectangle<float>& AppMenuButton::getTextBounds() const
 {
@@ -124,7 +124,7 @@ const Rectangle<float>& AppMenuButton::getTextBounds() const
 
 /**
  * @return  the area relative to this button's position where
- * it will draw its image
+ *           it will draw its image.
  */
 const Rectangle<float>& AppMenuButton::getImageBounds() const
 {
@@ -140,8 +140,7 @@ const Font& AppMenuButton::getTitleFont() const
 }
 
 /**
- * @param textBounds the area relative to this button's position where
- * it will draw its name
+ * Set new bounds to draw the button title within.
  */
 void AppMenuButton::setTextBounds(const Rectangle<float>& bounds)
 {
@@ -149,8 +148,7 @@ void AppMenuButton::setTextBounds(const Rectangle<float>& bounds)
 }
 
 /**
- * @param bounds the area relative to this button's position where
- * it will draw its image
+ * Set new bounds to draw the button icon within.
  */
 void AppMenuButton::setImageBounds(const Rectangle<float>& bounds)
 {
@@ -158,8 +156,7 @@ void AppMenuButton::setImageBounds(const Rectangle<float>& bounds)
 }
 
 /**
- * Sets if this button will draw its border
- * @param shouldDraw
+ * Sets if this button will draw an outline around its border.
  */
 void AppMenuButton::setDrawBorder(bool shouldDraw)
 {
@@ -169,7 +166,6 @@ void AppMenuButton::setDrawBorder(bool shouldDraw)
 /**
  * Sets if this button will fill in its background with its background
  * color.
- * @param shouldFill
  */
 void AppMenuButton::setFillBackground(bool shouldFill)
 {
@@ -177,7 +173,7 @@ void AppMenuButton::setFillBackground(bool shouldFill)
 }
 
 /**
- * @param font will be used to draw this button's title.
+ * Sets the button's title font.
  */
 void AppMenuButton::setTitleFont(const Font& font)
 {
@@ -185,8 +181,7 @@ void AppMenuButton::setTitleFont(const Font& font)
 }
 
 /**
- * @param justification will be used to position button text within
- * text bounds.
+ * Set the text justification of the button title.
  */
 void AppMenuButton::setTextJustification(Justification justification)
 {

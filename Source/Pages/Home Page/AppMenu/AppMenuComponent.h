@@ -42,7 +42,7 @@ public:
      * @param componentKey     Loads menu bounds from config.
      * 
      * @param loadingSpinner   Reference to an overlay spinner that sits over
-     *                         the PageComponent holding this AppMenuComponent.
+     *                          the PageComponent holding this AppMenuComponent.
      */
     AppMenuComponent(MainConfigFile& mainConfig,
             ComponentConfigFile& componentConfig,
@@ -67,8 +67,8 @@ public:
      * Open the pop-up menu used for editing menu items.
      *
      * @param selectedButton  If null, open a generic folder editing
-     *                        menu. otherwise, open the menu for editing this 
-     *                        particular menu button.
+     *                         menu. otherwise, open the menu for editing this 
+     *                         particular menu button.
      */
     void openPopupMenu(AppMenuButton::Ptr selectedButton);
 
@@ -118,7 +118,7 @@ protected:
      * the index of the last open folder whenever a folder opens or closes.
      *
      * @param folder  This must be a valid folder index, or the active folder 
-     *                index will not change.
+     *                 index will not change.
      */
     void setActiveFolderIndex(int folder);
 
@@ -128,7 +128,7 @@ protected:
      * folder's menu items.
      *
      * @return the active folder index, usually the last open folder.
-     *         Returns 0 if no folders are open.
+     *          Returns 0 if no folders are open.
      */
     int getActiveFolderIndex() const;
 
@@ -155,7 +155,7 @@ protected:
      * @param index  The folder index.
      *
      * @return the number of buttons in the folder at this index, or -1
-     *         if there is no folder at this index.
+     *          if there is no folder at this index.
      */
     int getFolderSize(int index);
 
@@ -165,7 +165,7 @@ protected:
      * @param index  The folder index.
      * 
      * @return the minimum width, in pixels, that the folder at this index
-     *         should have, or -1 if there is no folder at this index.
+     *          should have, or -1 if there is no folder at this index.
      */
     int getMinimumFolderWidth(int index);
 
@@ -175,8 +175,8 @@ protected:
      * @param index  The folder index.
      *
      * @return  the selected menu button index for the folder, or -1 if
-     *          the folder at the index parameter doesn't exist or has no 
-     *          selected menu button.
+     *           the folder at the index parameter doesn't exist or has no 
+     *           selected menu button.
      */
     int getFolderSelectedIndex(int index) const;
 
@@ -209,9 +209,9 @@ protected:
      * Sets how unselected menu buttons respond to clicks.
      *
      * @param newVal if set to true, clicking unselected menu buttons 
-     *        only selects them. If set to false, clicking them also
-     *        immediately launches their application or opens their folder.
-     *        This is set to true by default.
+     *         only selects them. If set to false, clicking them also
+     *         immediately launches their application or opens their folder.
+     *         This is set to true by default.
      */
     void setOnlyTriggerSelected(bool newVal);
     
@@ -220,7 +220,7 @@ protected:
      * Check if input should be ignored.
      *
      * @return true iff the menu is loading, empty, animating, or otherwise
-     *         in a state where user input should be ignored.
+     *          in a state where user input should be ignored.
      */
     bool ignoringInput() const;
 
@@ -231,10 +231,10 @@ private:
      * @param folderItem  Provides all folder menu items.
      *
      * @param buttonMap   A map of all created buttons by name. This is used 
-     *                    by the folder to recycle menu buttons.
+     *                     by the folder to recycle menu buttons.
      * 
      * @param iconThread  The shared menu icon thread, used by the folder to 
-     *                    load button icons.
+     *                     load button icons.
      */
     virtual AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
@@ -262,7 +262,7 @@ private:
      * 
      * @param activeFolder  The current active folder component.
      * 
-     * @return true iff the key press was used.
+     * @return  true iff the key press was used.
      */
     virtual bool folderKeyPressed
     (const KeyPress& key, AppMenuFolder* activeFolder) = 0;
@@ -294,13 +294,13 @@ private:
      * will first be closed.
      * 
      * @param folderItem  This defines the folder and provides all 
-     *                    AppMenuItem objects.
+     *                     AppMenuItem objects.
      */
     void openFolder(AppMenuItem::Ptr folderItem);
 
     /**
      * @return the selected button in the active folder, or nullptr if
-     *         the active folder is empty or no folders are open.
+     *          the active folder is empty or no folders are open.
      */
     AppMenuButton::Ptr getSelectedButton();
 

@@ -1,6 +1,7 @@
 #include "CategoryPopupEditor.h"
 
-CategoryPopupEditor::CategoryPopupEditor(ComponentConfigFile& config,
+CategoryPopupEditor::CategoryPopupEditor(
+ComponentConfigFile& config,
         StringArray categories,
         std::function<void(StringArray) > onConfirm) :
 PopupEditorComponent("Edit Categories",
@@ -24,6 +25,4 @@ categoryList(categories)
     };
     setLayout(layout);
 }
-
-CategoryPopupEditor::~CategoryPopupEditor() { }
 

@@ -37,13 +37,13 @@ public:
     AppMenuButton(AppMenuItem::Ptr menuItem, IconThread& iconThread,
             String name = String());
 
-    virtual ~AppMenuButton();
+    virtual ~AppMenuButton() { }
 
     /**
      * Get this button's menu data.
      * 
      * @return  a pointer to this button's internal AppMenuItem.  This pointer
-     *          will be valid as long as this AppMenuButton still exists.
+     *           will be valid as long as this AppMenuButton still exists.
      */
     AppMenuItem::Ptr getMenuItem();
 
@@ -54,9 +54,9 @@ public:
      * @param config     UI component settings needed to create the editor.
      *
      * @param onConfirm  A callback function that will run if changes are made 
-     *                   and confirmed in the new editor.  This should be used
-     *                   for updating button properties that aren't managed 
-     *                   internally (e.g., button icon, but not button bounds).
+     *                    and confirmed in the new editor.  This should be used
+     *                    for updating button properties that aren't managed 
+     *                    internally (e.g., button icon, but not button bounds).
      *
      * @return  a new PopupEditorComponent, ready to be added to the screen.
      */
@@ -70,7 +70,7 @@ public:
      * If the user clicks "OK", removeButtonSource is called.
      *
      * @param onRemove  A callback function that is responsible for removing
-     *                  this button from its parent if the user clicks "OK".
+     *                   his button from its parent if the user clicks "OK".
      */
     void confirmRemoveButtonSource(const std::function<void() >& onRemove);
 
@@ -79,7 +79,7 @@ public:
      * offset amount.
      *
      * @param offset  This will be added to the button's current index, if 
-     *                possible.
+     *                 possible.
      *
      * @return true iff the operation succeeded.
      */
@@ -91,10 +91,10 @@ public:
     bool isSelected() const;
 
     /**
-     * Select or unselect this button.
+     * Select or un-select this button.
      *
      * @param select  Sets the button as selected if true and unselected if
-     *                false.
+     *                 false.
      */
     void setSelected(bool select);
 protected:
@@ -108,7 +108,7 @@ protected:
      * Requests an icon from the icon thread.
      *
      * @param icon  An icon's full path, or the name of an icon file located
-     *              in common icon directories.
+     *               in common icon directories.
      */
     void loadIcon(String icon);
 
@@ -122,7 +122,7 @@ protected:
      * Gets the button's text bounds.
      *
      * @return  the area relative to this button's position where
-     *          it will draw its name.
+     *           it will draw its name.
      */
     const Rectangle<float>& getTextBounds() const;
 
@@ -130,7 +130,7 @@ protected:
      * Gets the button's image bounds.
      *
      * @return  the area relative to this button's position where
-     *          it will draw its image.
+     *           it will draw its image.
      */
     const Rectangle<float>& getImageBounds() const;
     
@@ -145,7 +145,7 @@ protected:
      * Set new bounds to draw the button title within.
      *
      * @param textBounds  The area relative to this button's position where
-     *                    it will draw its name.
+     *                     it will draw its name.
      */
     void setTextBounds(const Rectangle<float>& bounds);
 
@@ -153,7 +153,7 @@ protected:
      * Set new bounds to draw the button icon within.
      *
      * @param bounds  The area relative to this button's position where
-     *                it will draw its icon.
+     *                 it will draw its icon.
      */
     void setImageBounds(const Rectangle<float>& bounds);
     
@@ -184,7 +184,7 @@ protected:
      * Set the text justification of the button title.
      *
      * @param justification  This will be used to position button title within
-     *                       the text bounds.
+     *                        the text bounds.
      */
     void setTextJustification(Justification justification);
 

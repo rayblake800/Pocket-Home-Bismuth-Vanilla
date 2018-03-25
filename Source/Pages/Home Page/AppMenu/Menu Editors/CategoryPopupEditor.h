@@ -13,16 +13,21 @@
 class CategoryPopupEditor : public PopupEditorComponent{
 public:
     /**
-     * @param config
-     * @param categories initial list of editable category strings
-     * @param onConfirm runs when the user presses the confirm button. The
-     * final list of edited categories will be passed to it as its only 
-     * parameter.
+     * @param config      Component settings needed to setup the editor
+     *                     component.
+     * 
+     * @param categories  An initial list of editable category strings to show.
+     * 
+     * @param onConfirm   This runs when the user presses the confirm button. 
+     *                     The final list of edited categories will be passed 
+     *                     to it as its only parameter.
      */
-    CategoryPopupEditor(ComponentConfigFile& config,
+    CategoryPopupEditor(
+            ComponentConfigFile& config,
             StringArray categories,
             std::function<void(StringArray) > onConfirm);
-    virtual ~CategoryPopupEditor();
+    
+    virtual ~CategoryPopupEditor() { }
 
 private:
     //Holds and allows updates to the list of categories 

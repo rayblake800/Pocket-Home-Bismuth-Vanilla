@@ -97,7 +97,7 @@ RelativeLayoutManager::Layout PageAppFolder::buildFolderLayout
 
 /**
  * @return the number of pages this folder needs to display all menu
- * buttons.
+ *          buttons.
  */
 int PageAppFolder::getNumFolderPages() const
 {
@@ -111,7 +111,7 @@ int PageAppFolder::getNumFolderPages() const
 
 /**
  * @return the index of the page that's currently visible, or -1 if 
- * there is no current page. 
+ *          there is no current page. 
  */
 int PageAppFolder::getCurrentFolderPage() const
 {
@@ -134,7 +134,7 @@ bool PageAppFolder::setCurrentFolderPage(int pageNum)
 
 /**
  * @return the folder page index containing the selected folder 
- * button, or -1 if there is no selection.
+ *          button, or -1 if there is no selection.
  */
 int PageAppFolder::getSelectionPage() const
 {
@@ -148,7 +148,7 @@ int PageAppFolder::getSelectionPage() const
 
 /**
  * @return the index of the selected button within its folder page,
- * or -1 if there is no selection.
+ *          or -1 if there is no selection.
  */
 int PageAppFolder::getSelectedIndexInFolderPage() const
 {
@@ -162,7 +162,7 @@ int PageAppFolder::getSelectedIndexInFolderPage() const
 
 /**
  * @return the column index of the selected button within its
- * folder page, or -1 if there is no selection.
+ *          folder page, or -1 if there is no selection.
  */
 int PageAppFolder::getSelectionColumn() const
 {
@@ -176,7 +176,7 @@ int PageAppFolder::getSelectionColumn() const
 
 /**
  * @return the row index of the selected button within its
- * folder page, or -1 if there is no selection.
+ *          folder page, or -1 if there is no selection.
  */
 int PageAppFolder::getSelectionRow() const
 {
@@ -211,13 +211,6 @@ int PageAppFolder::positionIndex(int page, int column, int row) const
  * a button located at the given position.  If necessary,
  * the current folder page will change to the one containing
  * the new selection.
- *
- * @param page the new selected button's folder page index
- * @param column the new selected button's column number within
- * its folder page.
- * @param row the new selected button's row number withing
- * its folder page.
- * @return true if the selection changed, false otherwise.
  */
 bool PageAppFolder::setSelectedPosition(int page, int column, int row)
 {
@@ -265,7 +258,6 @@ void PageAppFolder::resized()
 }
 
 //############################  PageMenuButton  ################################
-
 PageAppFolder::PageMenuButton::PageMenuButton(
         AppMenuItem::Ptr menuItem,
         IconThread& iconThread,

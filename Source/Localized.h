@@ -38,7 +38,6 @@ public:
      */
     static String getLocaleName();
 
-protected:
     /**
      * Look up a piece of text for the current locale.
      * 

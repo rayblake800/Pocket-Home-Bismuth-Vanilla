@@ -1,16 +1,15 @@
 #include "AppMenuItemFactory.h"
 #include "BaseFolderMenuItem.h"
 
-BaseFolderMenuItem::BaseFolderMenuItem
-(AppConfigFile& config,
-        MainConfigFile& mainConfig,
-        AppMenuItemFactory& menuItemFactory) :
+BaseFolderMenuItem::BaseFolderMenuItem(
+        AppConfigFile& config,
+        MainConfigFile& mainConfig) :
 AppMenuItem(mainConfig),
-config(config),
-menuItemFactory(menuItemFactory) { }
+config(config) { }
 
 /**
  * Check if this button is for an application folder
+ * 
  * @return true
  */
 bool BaseFolderMenuItem::isFolder() const
@@ -28,13 +27,13 @@ Array<AppMenuItem::Ptr> BaseFolderMenuItem::getFolderItems() const
     Array<AppConfigFile::AppItem> favorites = config.getFavorites();
     for (const AppConfigFile::AppItem& app : favorites)
     {
-        folderItems.add(menuItemFactory.create(app));
+        folderItems.add(create(app));
     }
 
     Array<AppConfigFile::AppFolder> folders = config.getFolders();
     for (const AppConfigFile::AppFolder& folder : folders)
     {
-        folderItems.add(menuItemFactory.create(folder));
+        folderItems.add(create(folder));
     }
     DBG("BaseFolderMenuItem::" << __func__ << ": created " << folderItems.size()
             << " folder items.");

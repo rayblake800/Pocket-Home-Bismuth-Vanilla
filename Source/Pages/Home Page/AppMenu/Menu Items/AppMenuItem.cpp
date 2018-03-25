@@ -1,6 +1,6 @@
 #include "AppMenuItem.h"
 
-AppMenuItem::AppMenuItem(MainConfigFile& config)
+AppMenuItem::AppMenuItem(MainConfigFile& config) 
 {
     config.addListener(this,{MainConfigFile::termLaunchCommandKey});
     loadAllConfigProperties();
@@ -16,7 +16,7 @@ bool AppMenuItem::isFolder() const
 
 /**
  * @return all menu items in this folder, or an empty array if this isn't
- * a folder.
+ *          a folder.
  */
 Array<AppMenuItem::Ptr> AppMenuItem::getFolderItems() const
 {
@@ -41,7 +41,7 @@ String AppMenuItem::getCommand() const
 
 /**
  * @return true iff this menu item is an application that launches in
- * the terminal. 
+ *          the terminal. 
  */
 bool AppMenuItem::isTerminalApp() const
 {
@@ -50,7 +50,7 @@ bool AppMenuItem::isTerminalApp() const
 
 /**
  * @return true iff changing this menu item makes changes to .desktop or
- * .directory files.
+ *          .directory files.
  */
 bool AppMenuItem::changesDesktopEntries() const
 {
@@ -74,8 +74,8 @@ String AppMenuItem::getIconName() const
 }
 
 /**
- * Return true if this menu item has an index that can be moved by a given 
- * amount.
+ * @return true iff this menu item has an index that can be moved by a given 
+ *          amount.
  */
 bool AppMenuItem::canChangeIndex(int offset) const
 {
@@ -84,7 +84,7 @@ bool AppMenuItem::canChangeIndex(int offset) const
 
 /**
  * @return true iff this menu item and another share the same
- * properties
+ *          properties.
  */
 bool AppMenuItem::operator==(const AppMenuItem& toCompare) const
 {
@@ -98,11 +98,26 @@ bool AppMenuItem::operator==(const AppMenuItem& toCompare) const
 }
 
 /**
+ * Assigns this FactoryInterface to a folder menu item.  This does nothing if 
+ * the menu item is not a folder.
+ */
+AppMenuItem::Ptr AppMenuItem::FactoryInterface::setFactory
+(AppMenuItem::Ptr menuItem)
+{
+    if(menuItem->isFolder())
+    {
+        menuItem->factoryInterface = this;
+    }
+    return menuItem;
+}
+
+/**
  * Get an appropriate title to use for a deletion confirmation window.
  */
 String AppMenuItem::getConfirmDeleteTitle() const
 {
-    return String("Delete ") + getAppName() + String("?");
+    return txt.localeText(delete_APP) + getAppName() 
+            + txt.localeText(question_mark);
 }
 
 /**
@@ -110,12 +125,12 @@ String AppMenuItem::getConfirmDeleteTitle() const
  */
 String AppMenuItem::getConfirmDeleteMessage() const
 {
-    return "Really delete this menu item?";
+    return txt.localeText(really_delete);
 }
 
 /**
  * @return true iff this menu item has categories that can be edited,
- * defaults to false.
+ *          defaults to false.
  */
 bool AppMenuItem::hasEditableCategories() const
 {
@@ -124,7 +139,7 @@ bool AppMenuItem::hasEditableCategories() const
 
 /**
  * @return true iff this menu item has a command that can be edited,
- * defaults to false.
+ *          defaults to false.
  */
 bool AppMenuItem::hasEditableCommand() const
 {
@@ -136,7 +151,7 @@ bool AppMenuItem::hasEditableCommand() const
  */
 String AppMenuItem::getEditorTitle() const
 {
-    return "Edit Menu Item";
+    return txt.localeText(edit_menu_item);
 }
 
 /**
@@ -152,6 +167,7 @@ std::function<void(AppMenuPopupEditor*) > AppMenuItem::getEditorCallback()
 
 /**
  * Removes the source of this menu item's data
+ * 
  * @return true iff the source was removed.
  */
 bool AppMenuItem::removeMenuItemSource()
@@ -162,15 +178,11 @@ bool AppMenuItem::removeMenuItemSource()
 /**
  * If possible, change the index of this menu item by some
  * offset amount.
- * @param offset will be added to the menu item's current index, if
- * possible.
- * @return true iff the operation succeeded.
  */
 bool AppMenuItem::moveDataIndex(int offset)
 {
     return false;
 }
-
 
 /**
  * Gets the string to add before a launch command to make it launch in the
@@ -179,6 +191,48 @@ bool AppMenuItem::moveDataIndex(int offset)
 String AppMenuItem::getTermLaunchPrefix() const
 {
     return termLaunchPrefix;
+}
+
+
+/**
+ * Get an AppMenuItem for an application link provided by the 
+ * AppConfigFile.
+ */
+AppMenuItem::Ptr AppMenuItem::create
+(const AppConfigFile::AppItem& appItem) const
+{
+    if (factoryInterface == nullptr)
+    {
+        return nullptr;
+    }
+    return factoryInterface->create(appItem);
+}
+
+/**
+ * Get an AppMenuItem for an application link that was read from a 
+ * desktop entry file.
+ */
+AppMenuItem::Ptr AppMenuItem::create(const DesktopEntry& desktopEntry) const
+{
+    if (factoryInterface == nullptr)
+    {
+        return nullptr;
+    }
+    return factoryInterface->create(desktopEntry);
+}
+
+/**
+ * Get an AppMenuItem for an application folder provided by the 
+ * AppConfigFile. 
+ */
+AppMenuItem::Ptr AppMenuItem::create
+(const AppConfigFile::AppFolder& appFolder) const
+{
+    if (factoryInterface == nullptr)
+    {
+        return nullptr;
+    }
+    return factoryInterface->create(appFolder);
 }
 
 /**

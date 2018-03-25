@@ -1,9 +1,9 @@
--Replace all hard-coded text with locale strings.
+-Finish documenting and formatting AppMenu helper classes.
+
+-Look into PolicyKit api for requesting privileges 
 
 -Add an optional WifiStateManager::Listener callback specifically for connections
  failed due to an incorrect password.
-
--Look into PolicyKit api for requesting privileges 
 
 -Figure out a way to save calibration data and write it to the right file
  automatically

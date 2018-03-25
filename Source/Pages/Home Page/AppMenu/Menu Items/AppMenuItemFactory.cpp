@@ -16,9 +16,8 @@ desktopEntries(desktopEntries) { }
  */
 AppMenuItem::Ptr AppMenuItemFactory::createBaseFolderItem()
 {
-    return new BaseFolderMenuItem(appConfig,
-            mainConfig,
-            *this);
+    return setFactory
+            (new BaseFolderMenuItem(appConfig,mainConfig));
 }
 
 /**
@@ -27,7 +26,7 @@ AppMenuItem::Ptr AppMenuItemFactory::createBaseFolderItem()
 AppMenuItem::Ptr AppMenuItemFactory::create
 (const AppConfigFile::AppItem& appItem)
 {
-    return new ConfigAppMenuItem(appConfig, mainConfig, appItem);
+    return setFactory(new ConfigAppMenuItem(appConfig, mainConfig, appItem));
 }
 
 /**
@@ -36,7 +35,7 @@ AppMenuItem::Ptr AppMenuItemFactory::create
  */
 AppMenuItem::Ptr AppMenuItemFactory::create(const DesktopEntry& desktopEntry)
 {
-    return new DesktopEntryMenuItem(mainConfig, desktopEntry);
+    return setFactory(new DesktopEntryMenuItem(mainConfig, desktopEntry));
 }
 
 /**
@@ -46,10 +45,7 @@ AppMenuItem::Ptr AppMenuItemFactory::create(const DesktopEntry& desktopEntry)
 AppMenuItem::Ptr AppMenuItemFactory::create
 (const AppConfigFile::AppFolder& appFolder)
 {
-    return new FolderMenuItem(appConfig,
-            mainConfig,
-            appFolder,
-            *this,
-            desktopEntries);
+    return setFactory(new FolderMenuItem
+            (appConfig, mainConfig, appFolder, desktopEntries));
 }
 

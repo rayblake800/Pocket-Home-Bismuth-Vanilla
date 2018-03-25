@@ -1,0 +1,168 @@
+{
+    "AppLauncher": {
+        "could_not_open": "",
+        "not_valid_command": ""
+    },
+    "ConfigFile": {
+        "failed_saving_to_FILE": "",
+        "check_permissions": "",
+        "save_error": ""
+    },
+    "FileSelectTextEditor": {
+        "img_select_title": "",
+        "img_select_text": ""
+    },
+    "LoginPage": {
+        "password_label": "",
+        "log_in": "",
+        "wrong_password": "",
+        "wrong_password_retry": "",
+        "close_button_text": ""
+    },
+    "HomeSettingsPage": {
+        "title_text": "",
+        "background_text": "",
+        "default_bg": "",
+        "color_bg": "",
+        "image_bg": "",
+        "bg_color_hex_value": "",
+        "bg_image_path": "",
+        "invalid_color": "",
+        "choose_background": "",
+        "choose_bg_image": "",
+        "menu_type_text": "",
+        "menu_columns": "",
+        "menu_rows": ""
+    },
+    "DateTimePage": {
+        "date_time_settings": "",
+        "select_clock_mode": "",
+        "mode_24h": "",
+        "mode_am_pm": "",
+        "hide_clock": "",
+        "set_system_clock": "",
+        "failed_launch": "",
+        "failed_to_run": "",
+        "check_term_cmd": ""  
+    },
+    "AdvancedSettingsPage": {
+        "advanced_settings": "",
+        "set_password": "",
+        "change_password": "",
+        "remove_password": "",
+        "personalize_homepage": "",
+        "date_and_time": "",
+        "input_settings": ""
+    },
+    "WifiSettingsPage": {
+        "password_field": "",
+        "btn_connect": "",
+        "btn_disconnect": "",
+        "wrong_password": "",
+        "connection_failed": ""
+    },
+    "WifiAPButton": {
+        "connected_ap": ""
+    },
+    "SettingsPage": {
+        "advanced_settings": ""
+    },
+    "WifiSettingsComponent": {
+        "wifi_not_found": "",
+        "wifi_disabled": "",
+        "wifi_turning_on": "",
+        "not_connected": "",
+        "wifi_turning_off": "",
+        "connecting_to_ap": "",
+        "connecting_to_unknown": "",
+        "disconnecting": ""
+    },
+    "PowerPage": {
+        "shutdown": "",
+        "reboot": "",
+        "sleep": "",
+        "flash_software": ""
+    },
+    "FelPage": {
+        "ask_to_reboot": "",
+        "yes_btn": "",
+        "no_btn": "",
+        "flashing_info": ""
+    },
+    "SetPasswordPage": {
+        "change_password": "",
+        "root_password": "",
+        "current_password": "",
+        "new_password": "",
+        "retype_password": "",
+        "apply": "",
+        "missing_password": "",
+        "ask_to_enter_new": "",
+        "confirmation_failed": "",
+        "fields_dont_match": "",
+        "wrong_password": "",
+        "incorrect_app_password": "",
+        "cant_update": "",
+        "check_root_password": "",
+        "error": "",
+        "cant_lock_dir": "",
+        "password_removed": "",
+        "success": "",
+        "password_updated": "",
+        "confirm_btn": ""
+    },
+    "RemovePasswordPage": {
+        "root_password": "",
+        "current_password": "",
+        "remove_password": "",
+        "apply": "",
+        "wrong_password": "",
+        "try_again": "",
+        "confirm_btn": "",
+        "cant_change_password": "",
+        "error": "",
+        "cant_remove_password": "",
+        "success": "",
+        "password_removed": ""
+    },
+    "InputSettingsPage": {
+        "input_settings": "",
+        "calibrate_screen": "",
+        "remap_keybord": "",
+        "select_cursor_visible": "",
+        "not_visible": "",
+        "visible": ""
+    },
+    "AppMenuPopupEditor": {
+        "name": "",
+        "icon_path": "",
+        "select_icon": "",
+        "edit_categories": "",
+        "command": "",
+        "run_in_terminal": ""
+    },
+    "AppMenuItem": {
+        "delete_APP": "",
+        "question_mark": "",
+        "really_delete": "",
+        "edit_menu_item": ""
+    },
+    "DesktopEntryMenuItem": {
+        "remove_link_to": "",
+        "question_mark": "",
+        "will_hide": "",
+        "edit_app": ""
+    },
+    "ConfigAppMenuItem": {
+        "remove_APP": "",
+        "from_favorites": "",
+        "will_remove_link": "",
+        "edit_app": ""
+    },
+    "FolderMenuItem": {
+        "delete_NAME": "",
+        "folder": "",
+        "will_remove_folder": "",
+        "edit_folder": ""
+    }
+}

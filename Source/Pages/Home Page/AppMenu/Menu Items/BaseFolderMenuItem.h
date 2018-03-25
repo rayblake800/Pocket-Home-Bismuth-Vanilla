@@ -18,8 +18,7 @@ public:
     /**
      */
     BaseFolderMenuItem(AppConfigFile& config,
-            MainConfigFile& mainConfig,
-            AppMenuItemFactory& menuItemFactory);
+            MainConfigFile& mainConfig);
 
     virtual ~BaseFolderMenuItem() { }
 
@@ -34,7 +33,6 @@ public:
      */
     virtual Array<AppMenuItem::Ptr> getFolderItems() const override;
 private:
-    AppMenuItemFactory& menuItemFactory;
     
     AppConfigFile& config;
 };

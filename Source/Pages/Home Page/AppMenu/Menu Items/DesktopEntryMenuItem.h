@@ -8,10 +8,11 @@
  */
 #pragma once
 #include "DesktopEntry.h"
+#include "Localized.h"
 #include "IconThread.h"
 #include "AppMenuItem.h"
 
-class DesktopEntryMenuItem : public AppMenuItem
+class DesktopEntryMenuItem : public AppMenuItem, private Localized
 {
 public:
     /**
@@ -22,7 +23,7 @@ public:
     DesktopEntryMenuItem(MainConfigFile& config,
             const DesktopEntry& desktopEntry);
 
-    ~DesktopEntryMenuItem() { }
+    virtual ~DesktopEntryMenuItem() { }
 
     /**
      * @return true if this menu item is an application folder
@@ -125,6 +126,12 @@ protected:
             String command, bool useTerminal);
 
 private:
+    //localized text keys: 
+    static const constexpr char * remove_link_to = "remove_link_to";
+    static const constexpr char * question_mark = "question_mark";
+    static const constexpr char * will_hide = "will_hide";
+    static const constexpr char * edit_app = "edit_app";
+    
     //application data source, set on construction
     DesktopEntry desktopEntry;
 };

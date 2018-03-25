@@ -11,7 +11,7 @@
 #include "MainConfigFile.h"
 #include "AppMenuItem.h"
 
-class AppMenuItemFactory {
+class AppMenuItemFactory : public AppMenuItem::FactoryInterface{
 public:
     
     AppMenuItemFactory(AppConfigFile& appConfigFile,
@@ -27,26 +27,33 @@ public:
     AppMenuItem::Ptr createBaseFolderItem();
 
     /**
-     * Get an AppMenuItem for an application link provided by the AppConfigFile
-     * @param appItem defines all menu item data
-     * @return a pointer to the new menu item
+     * Get an AppMenuItem for an application link provided by the AppConfigFile.
+     * 
+     * @param appItem  Defines all menu item data.
+     * 
+     * @return a pointer to the new menu item.
      */
-    AppMenuItem::Ptr create(const AppConfigFile::AppItem& appItem);
+    AppMenuItem::Ptr create(const AppConfigFile::AppItem& appItem) override;
 
     /**
      * Get an AppMenuItem for an application link that was read from a desktop
-     * entry file
-     * @param desktopEntry defines the application/directory data
-     * @return a pointer to the new menu item
+     * entry file/
+     * 
+     * @param desktopEntry   This defines the application/directory data.
+     * 
+     * @return  a pointer to the new menu item.
      */
-    AppMenuItem::Ptr create(const DesktopEntry& desktopEntry);
+    AppMenuItem::Ptr create(const DesktopEntry& desktopEntry) override;
 
     /**
-     * Get an AppMenuItem for an application folder provided by the AppConfigFile
-     * @param appFolder defines all menu item data
-     * @return a pointer to the new menu item
+     * Get an AppMenuItem for an application folder provided by the 
+     * AppConfigFile.
+     * 
+     * @param appFolder  This defines all menu item data.
+     * 
+     * @return a pointer to the new menu item.
      */
-    AppMenuItem::Ptr create(const AppConfigFile::AppFolder& appFolder);
+    AppMenuItem::Ptr create(const AppConfigFile::AppFolder& appFolder) override;
 private:
     AppConfigFile& appConfig;
     MainConfigFile& mainConfig;

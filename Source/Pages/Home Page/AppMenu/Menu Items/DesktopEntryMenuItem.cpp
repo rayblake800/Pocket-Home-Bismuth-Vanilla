@@ -2,10 +2,12 @@
 #include "MainConfigFile.h"
 #include "DesktopEntryMenuItem.h"
 
-DesktopEntryMenuItem::DesktopEntryMenuItem(MainConfigFile& config,
-            const DesktopEntry& desktopEntry)
+DesktopEntryMenuItem::DesktopEntryMenuItem(
+        MainConfigFile& config,
+        const DesktopEntry& desktopEntry)
 : AppMenuItem(config),
-        desktopEntry(desktopEntry) { }
+Localized("DesktopEntryMenuItem"),
+desktopEntry(desktopEntry) { }
 
 /**
  * @return true if this menu item is an application folder
@@ -75,7 +77,8 @@ bool DesktopEntryMenuItem::changesDesktopEntries() const
  */
 String DesktopEntryMenuItem::getConfirmDeleteTitle() const
 {
-    return String("Remove link to ") + getAppName() + String("?");
+    return localeText(remove_link_to) + getAppName()
+            + localeText(question_mark);
 }
 
 /**
@@ -83,7 +86,7 @@ String DesktopEntryMenuItem::getConfirmDeleteTitle() const
  */
 String DesktopEntryMenuItem::getConfirmDeleteMessage() const
 {
-    return "This application will be hidden from pocket-home.";
+    return localeText(will_hide);
 }
 
 /**
@@ -91,7 +94,7 @@ String DesktopEntryMenuItem::getConfirmDeleteMessage() const
  */
 String DesktopEntryMenuItem::getEditorTitle() const
 {
-    return "Edit Application";
+    return localeText(edit_app);
 }
 
 /**

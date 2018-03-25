@@ -1,7 +1,8 @@
 #include "Utils.h"
 #include "AppMenuPopupEditor.h"
 
-AppMenuPopupEditor::AppMenuPopupEditor(String title,
+AppMenuPopupEditor::AppMenuPopupEditor(
+        String title,
         ComponentConfigFile& config,
         IconThread& iconThread,
         std::function<void(AppMenuPopupEditor*) > onConfirm,
@@ -13,16 +14,17 @@ PopupEditorComponent(title, config,
 
     onConfirm(this);
 }),
+Localized("AppMenuPopupEditor"),
 config(config),
 iconThread(iconThread),
-nameLabel(config,"nameLabel", "Name:"),
+nameLabel(config, "nameLabel", localeText(name)),
 nameEditor("nameEditor"),
-iconLabel(config,"iconLabel", "Icon path:"),
-iconPathEditor("Select Icon"),
-categoryEditButton("Edit categories"),
-commandLabel(config,"commandLabel", "Command:"),
+iconLabel(config, "iconLabel", localeText(icon_path)),
+iconPathEditor(localeText(select_icon)),
+categoryEditButton(localeText(edit_categories)),
+commandLabel(config, "commandLabel", localeText(command)),
 commandEditor("commandEditor"),
-terminalCheckboxLabel(config,"runInTermLabel", "Run in terminal:")
+terminalCheckboxLabel(config, "runInTermLabel", localeText(run_in_terminal))
 {
     categoryEditButton.addListener(this);
     iconPathEditor.addFileSelectListener(this);
@@ -159,7 +161,7 @@ void AppMenuPopupEditor::editorButtonClicked(Button* button)
 {
     if (button == &categoryEditButton)
     {
-        categoryEditor = new CategoryPopupEditor(config,categories,
+        categoryEditor = new CategoryPopupEditor(config, categories,
                 [this](StringArray newCategories)
                 {
                     categories = newCategories;

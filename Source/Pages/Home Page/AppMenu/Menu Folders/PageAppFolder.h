@@ -21,6 +21,7 @@ public:
 
     /**
      * Create an AppMenuButton component for an AppMenuItem.
+     * 
      * @param menuItem
      */
     virtual AppMenuButton::Ptr createMenuButton
@@ -31,6 +32,7 @@ public:
      * for positioning them in the folder component.
      * 
      * @param buttons
+     * 
      * @return a Layout containing all items in the button array.
      */
     virtual RelativeLayoutManager::Layout buildFolderLayout
@@ -38,57 +40,63 @@ public:
 
     /**
      * @return the number of pages this folder needs to display all menu
-     * buttons.
+     *          buttons.
      */
     int getNumFolderPages() const;
 
     /**
      * @return the index of the page that's currently visible, or 0 if 
-     * there is no current page. 
+     *          there is no current page. 
      */
     int getCurrentFolderPage() const;
 
     /**
      * Set which folder page should currently be visible.
-     * @param pageNum must be a valid page index, or the selection will
-     * not change.
-     * @return true if the page selection changed.
+     * 
+     * @param pageNum  This must be a valid page index, or the selection will
+     *                  not change.
+     * 
+     * @return true iff the page selection changed.
      */
     bool setCurrentFolderPage(int pageNum);
 
     /**
      * @return the folder page index containing the selected folder 
-     * button, or -1 if there is no selection.
+     *          button, or -1 if there is no selection.
      */
     int getSelectionPage() const;
 
     /**
      * @return the index of the selected button within its folder page,
-     * or -1 if there is no selection.
+     *          or -1 if there is no selection.
      */
     int getSelectedIndexInFolderPage() const;
 
     /**
      * @return the column index of the selected button within its
-     * folder page, or -1 if there is no selection.
+     *          folder page, or -1 if there is no selection.
      */
     int getSelectionColumn() const;
 
 
     /**
      * @return the row index of the selected button within its
-     * folder page, or -1 if there is no selection.
+     *          folder page, or -1 if there is no selection.
      */
     int getSelectionRow() const;
 
     /**
      * Finds what index value a button would have at a particular
      * position within the folder.
-     * @param page folder page index
-     * @param column folder page column index
-     * @param row folder page row index
-     * @return button index value, or -1 for invalid
-     *  positions
+     * 
+     * @param page    The folder page's index.
+     * 
+     * @param column  The button's column index in the page.
+     * 
+     * @param row     The button's row index in the page.
+     * 
+     * @return   the button's index within the entire folder, or -1 for invalid
+     *            positions.
      */
     int positionIndex(int page, int column, int row) const;
 
@@ -99,11 +107,14 @@ public:
      * the current folder page will change to the one containing
      * the new selection.
      *
-     * @param page the new selected button's folder page index
-     * @param column the new selected button's column number within
-     * its folder page.
-     * @param row the new selected button's row number withing
-     * its folder page.
+     * @param page    The index of the button's folder page.
+     * 
+     * @param column  The new selected button's column number within
+     *                 its folder page.
+     * 
+     * @param row     The new selected button's row number within
+     *                 its folder page.
+     * 
      * @return true if the selection changed, false otherwise.
      */
     bool setSelectedPosition(int page, int column, int row);
@@ -112,8 +123,9 @@ public:
      * Sets the margin width relative to the parent component width, rather than
      * relative to folder width.  The actual margin will be calculated using
      * this value whenever the folder's size changes.
-     * @param margin if this value is negative, folder margins will not scale
-     * based on the size of the parent component.
+     * 
+     * @param margin  If this value is negative, folder margins will not scale
+     *                 based on the size of the parent component.
      */
     void setParentRelativeMargin(float margin);
 
@@ -130,19 +142,21 @@ private:
 
     ComponentConfigFile& config;
 
-    //############################  PageMenuButton  ############################
-
+    //############################  PageMenuButton  ###########################
     /**
-     *
+     * Custom menu button for paged folders.
      */
     class PageMenuButton : public AppMenuButton
     {
     public:
         /**
+         * @param menuItem    This sets the button's menu data.
          * 
-         * @param menuItem
-         * @param iconThread
-         * @param name
+         * @param iconThread  Needed to load the button icon.
+         * 
+         * @param name        Sets the internal component name.
+         *  
+         * @param config      Loads component properties from user preferences.
          */
         PageMenuButton(
                 AppMenuItem::Ptr menuItem,

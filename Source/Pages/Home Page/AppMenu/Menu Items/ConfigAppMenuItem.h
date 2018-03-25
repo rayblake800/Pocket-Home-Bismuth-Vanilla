@@ -10,10 +10,11 @@
 #pragma once
 #include "AppConfigFile.h"
 #include "MainConfigFile.h"
+#include "Localized.h"
 #include "IconThread.h"
 #include "AppMenuItem.h"
 
-class ConfigAppMenuItem : public AppMenuItem {
+class ConfigAppMenuItem : public AppMenuItem, private Localized {
 public:
     /**
      * @param appConfig    A reference to the AppConfigFile, the data source 
@@ -125,7 +126,13 @@ private:
     //Application information structure
     AppConfigFile::AppItem appItem;
     //Menu item data source
-    AppConfigFile& appConfig;
+    AppConfigFile& appConfig;  
+    
+    //localized text keys: 
+    static const constexpr char * remove_APP = "remove_APP";
+    static const constexpr char * from_favorites = "from_favorites";
+    static const constexpr char * will_remove_link = "will_remove_link";
+    static const constexpr char * edit_app = "edit_app";
 };
 
 

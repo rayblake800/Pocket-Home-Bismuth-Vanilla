@@ -4,6 +4,7 @@
  * FolderMenuItem is an AppMenuItem that gets its data from a 
  * AppConfigFile::AppFolder structure, representing a set of application 
  * categories.
+ * 
  * @see AppMenuItem, AppConfigFile, AppMenuComponent
  * 
  */
@@ -11,18 +12,19 @@
 #include "AppMenuItemFactory.h"
 #include "AppConfigFile.h"
 #include "IconThread.h"
+#include "Localized.h"
 #include "DesktopEntries.h"
 #include "AppMenuItem.h"
 
-class FolderMenuItem : public AppMenuItem
+class FolderMenuItem : public AppMenuItem, private Localized
 {
 public:
     /**
      */
-    FolderMenuItem(AppConfigFile& appConfig,
+    FolderMenuItem(
+            AppConfigFile& appConfig,
             MainConfigFile& mainConfig,
             const AppConfigFile::AppFolder& appFolder,
-            AppMenuItemFactory& menuItemFactory,
             DesktopEntries& desktopEntries);
 
     virtual ~FolderMenuItem() { }
@@ -127,8 +129,13 @@ private:
     //Source of this button's folder information
     AppConfigFile& config;
     AppConfigFile::AppFolder appFolder;
-    AppMenuItemFactory& menuItemFactory;
     DesktopEntries& desktopEntries;
+    
+    //localized text keys: 
+    static const constexpr char * delete_NAME = "delete_NAME";
+    static const constexpr char * folder = "folder";
+    static const constexpr char * will_remove_folder = "will_remove_folder";
+    static const constexpr char * edit_folder = "edit_folder";
 };
 
 

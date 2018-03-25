@@ -16,7 +16,6 @@ config(config)
 
 /**
  * Create an AppMenuButton component for an AppMenuItem.
- * @param menuItem
  */
 AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
 (AppMenuItem::Ptr menuItem, IconThread& iconThread)
@@ -31,9 +30,6 @@ AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
 /**
  * Given a list of folder buttons, return an appropriate layout
  * for positioning them in the folder component.
- * 
- * @param buttons
- * @return a Layout containing all items in the button array.
  */
 RelativeLayoutManager::Layout ScrollingAppFolder::buildFolderLayout
 (Array<AppMenuButton::Ptr>& buttons)
@@ -51,7 +47,7 @@ RelativeLayoutManager::Layout ScrollingAppFolder::buildFolderLayout
 
 /**
  * @return the minimum width, in pixels, needed by this folder to
- * display its contents properly. 
+ *          display its contents properly. 
  */
 int ScrollingAppFolder::getMinimumWidth()
 {
@@ -75,9 +71,6 @@ Font ScrollingAppFolder::getButtonFont(ComponentConfigFile& config)
             (ComponentConfigFile::smallTextKey).getBounds().getHeight());
 }
 
-/**
- *
- */
 ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton(
         AppMenuItem* menuItem,
         IconThread& iconThread,
@@ -89,8 +82,6 @@ config(config)
     setTitleFont(ScrollingAppFolder::getButtonFont(config));
     setTextJustification(Justification::centredLeft);
 }
-
-ScrollingAppFolder::ScrollingMenuButton::~ScrollingMenuButton() { }
 
 /**
  * @return the width in pixels of this button's title

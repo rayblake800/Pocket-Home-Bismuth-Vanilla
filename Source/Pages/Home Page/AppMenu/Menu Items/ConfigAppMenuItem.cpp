@@ -1,9 +1,11 @@
 #include "Utils.h"
 #include "ConfigAppMenuItem.h"
 
-ConfigAppMenuItem::ConfigAppMenuItem(AppConfigFile& appConfig,
+ConfigAppMenuItem::ConfigAppMenuItem(
+        AppConfigFile& appConfig,
         MainConfigFile& mainConfig,
         const AppConfigFile::AppItem& appItem) :
+Localized("ConfigAppMenuItem"),
 AppMenuItem(mainConfig),
 appConfig(appConfig),
 appItem(appItem) { }
@@ -64,7 +66,8 @@ bool ConfigAppMenuItem::canChangeIndex(int offset) const
  */
 String ConfigAppMenuItem::getConfirmDeleteTitle() const
 {
-    return String("Remove \"") + getAppName() + String("\" from favorites?");
+    return localeText(remove_APP) 
+            + getAppName() + localeText(from_favorites);
 }
 
 /**
@@ -72,7 +75,7 @@ String ConfigAppMenuItem::getConfirmDeleteTitle() const
  */
 String ConfigAppMenuItem::getConfirmDeleteMessage() const
 {
-    return "This will permanently remove this link from the list of favorite applications.";
+    return localeText(will_remove_link);
 }
 
 /**
@@ -80,7 +83,7 @@ String ConfigAppMenuItem::getConfirmDeleteMessage() const
  */
 String ConfigAppMenuItem::getEditorTitle() const
 {
-    return "Edit Application";
+    return localeText(edit_app);
 }
 
 /**

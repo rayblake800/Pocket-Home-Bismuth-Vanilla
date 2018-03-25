@@ -4,7 +4,8 @@
  * NewConfigAppEditor creates a pop-up editor component that allows the user
  * to create a new application link as a local .desktop file.  After entering 
  * data and pressing the confirm button, the new favorite application link is 
- * added to the menu, and the .desktop file is written.
+ * added to the menu, and the .desktop file is written.  These files will be 
+ * saved to the current user folder.
  *
 */
 #pragma once
@@ -14,12 +15,15 @@
 class NewDesktopAppEditor : public AppMenuPopupEditor {
 public:
     /**
-     * @param config
-     * @param iconThread
-     * @param onConfirm
+     * @param config      Component settings used to load the pop-up editor.
+     * 
+     * @param iconThread  Used to find and load icon previews.
+     * 
+     * @param onConfirm   A callback function to run after the user presses the
+     *                     confirm button.
      */
-    NewDesktopAppEditor(ComponentConfigFile& config,
+    NewDesktopAppEditor(
+            ComponentConfigFile& config,
             IconThread& iconThread,
-            std::function<void() > onConfirm = []() {
-            });
+            std::function<void() > onConfirm = []() {});
 };

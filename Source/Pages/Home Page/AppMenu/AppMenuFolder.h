@@ -20,10 +20,10 @@ public:
      * @param folderItem     Provides all menu items for this folder.
      *
      * @param btnListener    This will be assigned to listen to all folder menu 
-     *                       buttons.
+     *                        buttons.
      *
      * @param buttonNameMap  This stores all menu buttons and re-uses them
-     *                       when possible.
+     *                        when possible.
      *                       
      * @param iconThread     Loads icons for new menu buttons.
      */
@@ -52,7 +52,7 @@ public:
      * @param maxRows     Maximum number of menu item rows to display on screen.
      *
      * @param maxColumns  Maximum number of menu item columns to display on
-     *                    screen.
+     *                     screen.
      */
     void updateGridSize(int maxRows, int maxColumns);
 
@@ -72,7 +72,7 @@ public:
     bool selectIndex(int index);
 
     /**
-     * Deselects the selected button, if one exists
+     * Deselects the selected button, if one exists.
      */
     void deselect();
 
@@ -85,14 +85,14 @@ public:
      *                 button.
      *
      * @param index         The new button's index, which should be between 0 
-     *                      and appFolder.size(), inclusive. Values outside of 
-     *                      this range will be rounded to the nearest valid 
-     *                      value.
+     *                       and appFolder.size(), inclusive. Values outside of 
+     *                       this range will be rounded to the nearest valid 
+     *                       value.
      *
      * @param updateLayout  If set to true, the button layout will be
-     *                      reloaded after the new button is inserted.  If 
-     *                      inserting many buttons, it's better to set this to 
-     *                      false and update the layout once at the end.
+     *                       reloaded after the new button is inserted.  If 
+     *                       inserting many buttons, it's better to set this to 
+     *                       false and update the layout once at the end.
      */
     void insertButton(AppMenuItem::Ptr newItem, int index,
             bool updateLayout = true);
@@ -102,8 +102,8 @@ public:
      * at greater indices to fill the gap.
      * 
      * @param index   The index to remove. This should be between 0 and 
-     *                appFolder.size(),  inclusive, otherwise this method will 
-     *                do nothing.
+     *                 appFolder.size(),  inclusive, otherwise this method will 
+     *                 do nothing.
      */
     void removeButton(int index);
 
@@ -121,7 +121,7 @@ public:
      * Set the relative placement of folder buttons within the folder.
      * 
      * @param margin  The space between components and the edge of the
-     *                folder component, as a fraction of folder width.
+     *                 folder component, as a fraction of folder width.
      */
     void setMargin(float margin);
 
@@ -129,13 +129,13 @@ public:
      * Set the relative space between folder buttons.
      * 
      * @param margin   The space between button components and the edge of the
-     *                 folder component, as a fraction of folder width.
+     *                  folder component, as a fraction of folder width.
      * 
      * @param xPadding The horizontal space between folder child components, 
-     *                 as a fraction of folder width.
+     *                  as a fraction of folder width.
      * 
      * @param yPadding The vertical space between folder child components, as 
-     *                 a fraction of folder height.
+     *                  a fraction of folder height.
      */
     void setPadding(float xPadding, float yPadding);
 
@@ -153,59 +153,59 @@ public:
     int getButtonCount() const;
 
     /**
-     * Find the index of a menu button in this folder
+     * Find the index of a menu button in this folder.
      * 
      * @param menuButton  A button to search for in the folder.
      * 
      * @return the button's index, or -1 if the button is not in this
-     *         folder.
+     *          folder.
      */
     int getButtonIndex(AppMenuButton::Ptr menuButton) const;
 
     /**
-     * Get the display name of a menu button
+     * Get the display name of a menu button.
      * 
      * @param index  
      * 
      * @return the button title at this index, or the empty string
-     *         if index does not correspond to a menu button.
+     *          if index does not correspond to a menu button.
      */
     String getMenuButtonName(int index) const;
 
     /**
      * @return the index of the selected menu button, or -1 if no button
-     *         is selected.
+     *          is selected.
      */
     int getSelectedIndex() const;
 
     /**
      * @return the selected button in this folder, or nullptr if there
-     *         is no selected button.
+     *          is no selected button.
      */
     AppMenuButton::Ptr getSelectedButton();
 
 
     /**
      * @return margin space between components and the edge of the
-     *         folder component, as a fraction of folder width.
+     *          folder component, as a fraction of folder width.
      */
     float getMargin() const;
 
     /**
      * @return horizontal space between folder child  components, as a 
-     *         fraction of folder width.
+     *          fraction of folder width.
      */
     float getXPadding() const;
 
     /**
      * @return vertical space between folder child components, as a fraction of
-     *         folder height.
+     *          folder height.
      */
     float getYPadding() const;
 
     /**
      * @return the minimum width, in pixels, needed by this folder to display 
-     *         its contents properly. By default this returns 0.
+     *          its contents properly. By default this returns 0.
      */
     virtual int getMinimumWidth();
 
@@ -219,7 +219,7 @@ protected:
      * @param index
      * 
      * @return the title of the menu button at this index, or String()
-     *         if there is no button at this index.
+     *          if there is no button at this index.
      */
     String getButtonTitle(int index);
     

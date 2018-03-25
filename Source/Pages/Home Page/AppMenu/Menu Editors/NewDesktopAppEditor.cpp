@@ -1,6 +1,7 @@
 #include "NewDesktopAppEditor.h"
 
-NewDesktopAppEditor::NewDesktopAppEditor(ComponentConfigFile& config,
+NewDesktopAppEditor::NewDesktopAppEditor(
+        ComponentConfigFile& config,
         IconThread& iconThread,
         std::function<void() > onConfirm) :
 AppMenuPopupEditor("New desktop application",
