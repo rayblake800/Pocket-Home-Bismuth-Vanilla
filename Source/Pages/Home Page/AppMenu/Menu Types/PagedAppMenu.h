@@ -1,7 +1,10 @@
 /**
  * @file PagedAppMenu.h
  * 
- * TODO finish documentation
+ * PagedAppMenu displays all applications in a grid, spreading them across
+ * multiple pages.  Only one page of one folder is visible at once. Touch
+ * navigation buttons or hardware keys can be used to open or close folders,
+ * and switch between folder pages.
  */
 
 #pragma once

@@ -16,8 +16,6 @@ iconThread(iconThread)
 #endif
 }
 
-AppMenuFolder::~AppMenuFolder() { }
-
 /**
  * Sets the button grid row and column sizes, updating button layout
  * if the values change

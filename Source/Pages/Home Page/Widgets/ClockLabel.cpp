@@ -18,11 +18,6 @@ ConfigurableLabel(ComponentConfigFile::clockLabelKey, config,
     startTimer(1);
 }
 
-ClockLabel::~ClockLabel()
-{
-    stopTimer();
-}
-
 /**
  * Updates the displayed time each minute.
  */

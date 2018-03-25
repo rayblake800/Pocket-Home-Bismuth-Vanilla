@@ -17,33 +17,42 @@ public:
      * Creates a new folder component, loading menu buttons from a
      * folder menu item.
      * 
-     * @param folderItem 
-     * @param btnListener will be assigned to listen to all folder
-     * menu buttons.
-     * @param buttonNameMap stores all menu buttons and re-uses them
-     * when possible.
-     * @param iconThread loads icons for new menu buttons.
+     * @param folderItem     Provides all menu items for this folder.
+     *
+     * @param btnListener    This will be assigned to listen to all folder menu 
+     *                       buttons.
+     *
+     * @param buttonNameMap  This stores all menu buttons and re-uses them
+     *                       when possible.
+     *                       
+     * @param iconThread     Loads icons for new menu buttons.
      */
-    AppMenuFolder(AppMenuItem::Ptr folderItem, 
+    AppMenuFolder(
+            AppMenuItem::Ptr folderItem, 
             MouseListener* btnListener,
             std::map<String, AppMenuButton::Ptr>& buttonNameMap,
             IconThread& iconThread);
 
-    virtual ~AppMenuFolder();
+    virtual ~AppMenuFolder() { }
 
     /**
      * Create an AppMenuButton component for an AppMenuItem.
-     * @param menuItem
-     * @param iconThread will be used by the button to load
-     * its icon.
+     * 
+     * @param menuItem    The menu item to assign to the new button.
+     *
+     * @param iconThread  The shared icon cache used to find icon files.
      */
     virtual AppMenuButton::Ptr createMenuButton
     (AppMenuItem::Ptr menuItem, IconThread& iconThread) = 0;
 
-
     /**
      * Sets the button grid row and column sizes, updating button layout
-     * if the values change
+     * if the values change.
+     *
+     * @param maxRows     Maximum number of menu item rows to display on screen.
+     *
+     * @param maxColumns  Maximum number of menu item columns to display on
+     *                    screen.
      */
     void updateGridSize(int maxRows, int maxColumns);
 
@@ -54,9 +63,11 @@ public:
 
 
     /**
-     * Set this folder's selected menu button
-     * @param index
-     * @return true if index was valid and the selection changed.
+     * Sets this folder's selected menu button.
+     *
+     * @param index  The menu button index to select.
+     *
+     * @return true iff index was valid and the selection changed.
      */
     bool selectIndex(int index);
 
@@ -70,14 +81,18 @@ public:
      * the folder at a specific index. This shifts forward any buttons at 
      * indices equal or greater than the index. 
      * 
-     * @param newItem
-     * @param index should be between 0 and appFolder.size(),
-     * inclusive.  Values outside of this range will be rounded to
-     * the nearest valid value.
-     * @param updateLayout if set to true, the button layout will be
-     * reloaded after the new button is inserted.  If inserting many buttons,
-     * it's better to set this to false and update the layout once at the
-     * end.
+     * @param newItem  The menu item to add to a new button or find in a cached
+     *                 button.
+     *
+     * @param index         The new button's index, which should be between 0 
+     *                      and appFolder.size(), inclusive. Values outside of 
+     *                      this range will be rounded to the nearest valid 
+     *                      value.
+     *
+     * @param updateLayout  If set to true, the button layout will be
+     *                      reloaded after the new button is inserted.  If 
+     *                      inserting many buttons, it's better to set this to 
+     *                      false and update the layout once at the end.
      */
     void insertButton(AppMenuItem::Ptr newItem, int index,
             bool updateLayout = true);
@@ -86,38 +101,41 @@ public:
      * Remove the button at a given index, shifting back any buttons
      * at greater indices to fill the gap.
      * 
-     * @param index should be between 0 and appFolder.size(), 
-     * inclusive, otherwise this method will do nothing.
+     * @param index   The index to remove. This should be between 0 and 
+     *                appFolder.size(),  inclusive, otherwise this method will 
+     *                do nothing.
      */
     void removeButton(int index);
 
     /**
      * Swap the indices and positions of two buttons in the folder.
      * Both indices must be valid, or nothing will happen.
-     * @param btnIndex1
-     * @param btnIndex2
+     *
+     * @param btnIndex1  First button index.
+     *
+     * @param btnIndex2  Second button index.
      */
     void swapButtons(int btnIndex1, int btnIndex2);
 
     /**
      * Set the relative placement of folder buttons within the folder.
      * 
-     * @param margin space between components and the edge of the
-     * folder component, as a fraction of folder width.
+     * @param margin  The space between components and the edge of the
+     *                folder component, as a fraction of folder width.
      */
     void setMargin(float margin);
 
     /**
      * Set the relative space between folder buttons.
      * 
-     * @param margin space between components and the edge of the
-     * folder component, as a fraction of folder width.
+     * @param margin   The space between button components and the edge of the
+     *                 folder component, as a fraction of folder width.
      * 
-     * @param xPadding horizontal space between folder child
-     * components, as a fraction of folder width.
+     * @param xPadding The horizontal space between folder child components, 
+     *                 as a fraction of folder width.
      * 
-     * @param yPadding vertical space between folder child
-     * components, as a fraction of folder height.
+     * @param yPadding The vertical space between folder child components, as 
+     *                 a fraction of folder height.
      */
     void setPadding(float xPadding, float yPadding);
 
@@ -137,57 +155,59 @@ public:
     /**
      * Find the index of a menu button in this folder
      * 
-     * @param menuButton
+     * @param menuButton  A button to search for in the folder.
+     * 
      * @return the button's index, or -1 if the button is not in this
-     * folder.
+     *         folder.
      */
     int getButtonIndex(AppMenuButton::Ptr menuButton) const;
 
     /**
      * Get the display name of a menu button
-     * @param index
+     * 
+     * @param index  
+     * 
      * @return the button title at this index, or the empty string
-     * if index does not correspond to a menu button.
+     *         if index does not correspond to a menu button.
      */
     String getMenuButtonName(int index) const;
 
     /**
      * @return the index of the selected menu button, or -1 if no button
-     * is selected
+     *         is selected.
      */
     int getSelectedIndex() const;
 
     /**
      * @return the selected button in this folder, or nullptr if there
-     * is no selected button.
+     *         is no selected button.
      */
     AppMenuButton::Ptr getSelectedButton();
 
 
     /**
      * @return margin space between components and the edge of the
-     * folder component, as a fraction of folder width.
+     *         folder component, as a fraction of folder width.
      */
     float getMargin() const;
 
     /**
-     * @return horizontal space between folder child
-     * components, as a fraction of folder width.
+     * @return horizontal space between folder child  components, as a 
+     *         fraction of folder width.
      */
     float getXPadding() const;
 
     /**
-     * @return vertical space between folder child
-     * components, as a fraction of folder height.
+     * @return vertical space between folder child components, as a fraction of
+     *         folder height.
      */
     float getYPadding() const;
 
     /**
-     * @return the minimum width, in pixels, needed by this folder to
-     * display its contents properly. By default this returns 0.
+     * @return the minimum width, in pixels, needed by this folder to display 
+     *         its contents properly. By default this returns 0.
      */
     virtual int getMinimumWidth();
-
 
 protected:
     /**
@@ -197,24 +217,25 @@ protected:
 
     /**
      * @param index
-     * @return the title of the menu button at this index, or String::empty
-     * if there is no button at this index.
+     * 
+     * @return the title of the menu button at this index, or String()
+     *         if there is no button at this index.
      */
     String getButtonTitle(int index);
     
     /**
-     * @return the maximum number of menu item rows to show on screen
+     * @return the maximum number of menu item rows to show on screen.
      */
     int getMaxRows() const;
 
     /**
-     * @return the maximum number of menu item columns to show on screen
+     * @return the maximum number of menu item columns to show on screen.
      */
     int getMaxColumns() const;
 
     
     /**
-     * @return the maximum number of menu items to show on screen
+     * @return the maximum number of menu items to show on screen.
      */
     inline int getButtonsPerPage() const {
         return getMaxRows() * getMaxColumns();
@@ -226,19 +247,22 @@ private:
      * for positioning them in the folder component.
      * 
      * @param buttons
+     * 
      * @return a Layout containing all items in the button array.
      */
     virtual RelativeLayoutManager::Layout buildFolderLayout
     (Array<AppMenuButton::Ptr>& buttons) = 0;
 
     /**
+     * Checks if a number is a valid button index.
+     *
      * @param index
-     * @return true for any valid button index
+     *
+     * @return true  iff the folder has a menu button with this index.
      */
     inline bool validBtnIndex(int index) {
         return index >= 0 && index < folderButtons.size();
     }
-
 
     //New buttons will need this to load their icons.
     IconThread& iconThread;
@@ -259,5 +283,6 @@ private:
     Array<AppMenuButton::Ptr> folderButtons;
     //Tracks selected button index
     int selectedIndex = -1;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuFolder)
 };

@@ -10,7 +10,6 @@
  * deleting menu entries.
  */
 
-
 #pragma once
 #include <set>
 #include <atomic>
@@ -66,9 +65,10 @@ public:
 
     /**
      * Open the pop-up menu used for editing menu items.
-     * @param selectedButton if null, open a generic folder editing
-     * menu. otherwise, open the menu for editing this particular menu
-     * button.
+     *
+     * @param selectedButton  If null, open a generic folder editing
+     *                        menu. otherwise, open the menu for editing this 
+     *                        particular menu button.
      */
     void openPopupMenu(AppMenuButton::Ptr selectedButton);
 
@@ -77,7 +77,9 @@ public:
      * This opens the pop-up menu or reloads the AppMenu if the correct 
      * shortcuts are detected, otherwise it lets the AppMenuComponent's subclass
      * determine how to handle the key event.
+     *
      * @param key
+     * 
      * @return true if the keyPress is handled by the menu, false otherwise.
      */
     bool keyPressed(const KeyPress& key) override;
@@ -114,8 +116,9 @@ protected:
     /**
      * Sets which open folder is currently focused.  This value will change to
      * the index of the last open folder whenever a folder opens or closes.
-     * @param folder must be a valid folder index, or the active folder index
-     * will not change.
+     *
+     * @param folder  This must be a valid folder index, or the active folder 
+     *                index will not change.
      */
     void setActiveFolderIndex(int folder);
 
@@ -123,8 +126,9 @@ protected:
      * Get the index of the active folder.  AppMenuComponents should center the
      * folder layout on the active folder, and apply key controls to that
      * folder's menu items.
-     * @return The active folder index, usually the last open folder.
-     * Returns 0 if no folders are open.
+     *
+     * @return the active folder index, usually the last open folder.
+     *         Returns 0 if no folders are open.
      */
     int getActiveFolderIndex() const;
 
@@ -146,41 +150,50 @@ protected:
     int getNumFolders() const;
 
     /**
-     * @param index
+     * Gets the menu size of an open folder.
+     *
+     * @param index  The folder index.
+     *
      * @return the number of buttons in the folder at this index, or -1
-     * if there is no folder at this index.
+     *         if there is no folder at this index.
      */
     int getFolderSize(int index);
 
     /**
-     * @param index
+     * Get the minimum permitted component width of an open folder.
+     *
+     * @param index  The folder index.
+     * 
      * @return the minimum width, in pixels, that the folder at this index
-     * should have, or -1 if there is no folder at this index.
+     *         should have, or -1 if there is no folder at this index.
      */
     int getMinimumFolderWidth(int index);
 
     /**
-     * @param index the index of one of this menu's AppMenuFolders
-     * @return the selected menu button index for the folder, or -1 if
-     * the folder at the index parameter doesn't exist or has no selected menu
-     * button.
+     * Gets the selected menu index of an open folder.
+     *
+     * @param index  The folder index.
+     *
+     * @return  the selected menu button index for the folder, or -1 if
+     *          the folder at the index parameter doesn't exist or has no 
+     *          selected menu button.
      */
     int getFolderSelectedIndex(int index) const;
 
     /**
      * Updates the folder component layout, optionally animating the transition.
      * 
-     * @param animate  iff true, the folder transition will be animated.
+     * @param animate  Iff true, the folder transition will be animated.
      */
     void layoutFolders(bool animate = false);
 
     /**
-     * @return the maximum number of menu item columns to show on screen
+     * @return the maximum number of menu item columns to show on screen.
      */
     int getMaxColumns() const;
 
     /**
-     * @return the maximum number of menu item rows to show on screen
+     * @return the maximum number of menu item rows to show on screen.
      */
     int getMaxRows() const;
 
@@ -193,26 +206,35 @@ protected:
     }
 
     /**
+     * Sets how unselected menu buttons respond to clicks.
+     *
      * @param newVal if set to true, clicking unselected menu buttons 
-     * only selects them. If set to false, clicking them also
-     * immediately launches their application or opens their folder.
-     * This is set to true by default.
+     *        only selects them. If set to false, clicking them also
+     *        immediately launches their application or opens their folder.
+     *        This is set to true by default.
      */
     void setOnlyTriggerSelected(bool newVal);
     
     
     /**
+     * Check if input should be ignored.
+     *
      * @return true iff the menu is loading, empty, animating, or otherwise
-     * in a state where user input should be ignored.
+     *         in a state where user input should be ignored.
      */
     bool ignoringInput() const;
 
 private:
     /**
      * Create a folder component object from a folder menu item.
-     * @param folderItem provides folder menu items
-     * @param buttonMap is used by the folder to recycle menu buttons
-     * @param iconThread is used by the folder to load button icons
+     *
+     * @param folderItem  Provides all folder menu items.
+     *
+     * @param buttonMap   A map of all created buttons by name. This is used 
+     *                    by the folder to recycle menu buttons.
+     * 
+     * @param iconThread  The shared menu icon thread, used by the folder to 
+     *                    load button icons.
      */
     virtual AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
@@ -222,9 +244,12 @@ private:
 
     /**
      * Return the bounds where the given folder should be placed in the menu.
-     * @param folder
-     * @param folderIndex
-     * @return 
+     *
+     * @param folder       One of the AppMenu folder components.
+     *
+     * @param folderIndex  The folder's index in the AppMenu.
+     *
+     * @return  updated folder bounds to apply.
      */
     virtual Rectangle<int> updateFolderBounds(const AppMenuFolder* folder,
             int folderIndex) = 0;
@@ -232,22 +257,27 @@ private:
     /**
      * Uses key events to control the menu in whatever way is appropriate
      * for the specific AppMenuComponent.
+     *
      * @param key
-     * @param activeFolder
+     * 
+     * @param activeFolder  The current active folder component.
+     * 
      * @return true iff the key press was used.
      */
     virtual bool folderKeyPressed
     (const KeyPress& key, AppMenuFolder* activeFolder) = 0;
 
     /**
-     * Exit the loading state if the window loses focus.
+     * Exits the loading state if the window loses focus.
      */
     void windowFocusLost() override;
 
     /**
-     * Updates the layout if row/column size changes
-     * @param config the configFile containing the updated data value
-     * @param key the key of property that has changed
+     * Updates the layout if row/column size changes.
+     *
+     * @param config  This should point to the MainConfigFile instance.
+     *
+     * @param key     the key of property that has changed
      */
     void extraConfigValueChanged(ConfigFile* config,
             String key) final override;
@@ -263,20 +293,21 @@ private:
      * If any folders after the active folder are already open, they
      * will first be closed.
      * 
-     * @param folderItem defines the folder and provides all 
-     * AppMenuItem objects.
+     * @param folderItem  This defines the folder and provides all 
+     *                    AppMenuItem objects.
      */
     void openFolder(AppMenuItem::Ptr folderItem);
 
     /**
      * @return the selected button in the active folder, or nullptr if
-     * the active folder is empty or no folders are open.
+     *         the active folder is empty or no folders are open.
      */
     AppMenuButton::Ptr getSelectedButton();
 
     /**
      * Adds and shows a new pop-up editor component, safely removing any
      * previous editor.
+     *
      * @param editor
      */
     void showPopupEditor(AppMenuPopupEditor* editor);
@@ -285,6 +316,7 @@ private:
      * Create and show a pop-up editor component for a button in this menu.
      * This will only work if the button is in the active folder and the 
      * menu is not in the loading state. 
+     *
      * @param button
      */
     void showMenuButtonEditor(AppMenuButton::Ptr button);
@@ -292,6 +324,7 @@ private:
     /**
      * Sets what should happen when a button is left clicked.
      * This opens selected buttons, and selects unselected buttons
+     *
      * @param button
      */
     void onButtonClick(AppMenuButton::Ptr button);
@@ -299,22 +332,26 @@ private:
     /**
      * Click AppMenuButtons on left click, open the pop-up menu
      * on right click or control click.
+     *
+     * @paeam event
      */
-    virtual void mouseDown(const MouseEvent &event) override;
+    virtual void mouseDown(const MouseEvent& event) override;
 
     /**
      * Enter or exit the loading state, where the component shows the
      * loading spinner and disables user input.
+     * 
      * @param loading
      */
     void setLoadingState(bool loading);
 
-
-    const int animationDuration = 400;
+    //Folder transition animation duration, in milliseconds.
+    const int animationDuration = 350;
 
     //Loads folder and application shortcut configuration
     AppConfigFile& appConfig;
 
+    //Provides component settings
     ComponentConfigFile& componentConfig;
 
     //Holds the AppFolder components that organize the menu buttons.
@@ -352,5 +389,6 @@ private:
     //Tracks if desktop entries are loading or applications are launching in
     //another thread
     std::atomic<bool> loadingState;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
 };

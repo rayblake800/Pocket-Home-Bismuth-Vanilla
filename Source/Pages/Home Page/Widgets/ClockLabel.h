@@ -12,8 +12,14 @@
 
 class ClockLabel : public ConfigurableLabel, private WindowFocusedTimer{
 public:
+
+   /**
+    * @param config  Shared component settings that define the label's bounds
+    *                and behavior.
+    */
     ClockLabel(ComponentConfigFile& config);
-    ~ClockLabel();
+    
+    virtual ~ClockLabel() { }
 
 private:
     /**
@@ -33,7 +39,7 @@ private:
      * @param config  The main config file object.
      * 
      * @param key     This should be either the key for the clock visibility 
-     *                 setting, or for the 12h/24h mode toggle
+     *                setting, or for the 12h/24h mode toggle
      */
     void extraConfigValueChanged(ConfigFile* config,String key) override;
     
@@ -41,5 +47,6 @@ private:
     bool use24HrMode = false;
     //Indicates if the time should be shown at all.
     bool showClock = true;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ClockLabel)
 };

@@ -4,7 +4,7 @@
  * BatteryIcon displays the current charge level and charging state of 
  * the PocketCHIP battery as a component icon, and writes the battery percentage
  * as text. While this icon is visible, it will periodically check battery state
- *  and update itself accordingly.
+ * and update itself accordingly.
  *
  */
 
@@ -28,7 +28,6 @@ public:
 private:
     //All tracked battery states.  Each corresponds with an image asset file
     //defined in config.json
-
     enum BatteryIconImage {
         battery0,
         battery1,
@@ -40,11 +39,14 @@ private:
         charging3,
         noBattery
     };
+
     /**
      * Set the icon's new display status.
-     * @param batteryImage one of the battery resource files defined in
-     * config.json
-     * @param percent battery charge percentage
+     * 
+     * @param batteryImage  One of the battery resource files loaded from
+     *                      the ComponentConfigFile.
+     *
+     * @param percent       The battery charge percentage.
      */
     void setStatus(BatteryIconImage imageSelection, String percent);
 
@@ -67,5 +69,6 @@ private:
     const static int frequency = 2000;
     //Use a rolling average for the battery percentage
     Array<int> batteryPercents;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BatteryIcon)
 };

@@ -14,8 +14,6 @@ iconThread(iconThread)
     loadIcon(menuItem->getIconName());
 }
 
-AppMenuButton::~AppMenuButton() { }
-
 /**
  * Get this button's menu data.
  */
