@@ -28,17 +28,8 @@ private:
      */
     void pageButtonClicked(Button* button) override;
 
-    /**
-     * Clears all TextEditor fields on the page.
-     */
-    void clearAllFields();
-
     //Title of the page
     ScalingLabel titleLabel;
-
-    //Text field for the root password
-    ScalingLabel rootLabel;
-    TextEditor rootPassword;
 
     //Text field for the current password
     ScalingLabel curPwdLabel;

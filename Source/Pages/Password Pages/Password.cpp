@@ -1,5 +1,9 @@
 #include <openssl/sha.h>
+#include <unistd.h>
+#include "AssetFiles.h"
 #include "Password.h"
+
+static const constexpr char * passwordScript = "scripts/passwordManager.sh";
 
 /**
  * Gets the SHA1 hashed value of a string.
@@ -44,4 +48,38 @@ bool Password::isPasswordSet()
 {
     File pwd(passwordPath);
     return pwd.existsAsFile() && pwd.loadFileAsString() != "none\n";
+}
+
+/**
+ * Attempts to set, change, or remove the current pocket-home password, if
+ * possible.
+ */
+bool Password::changePassword
+(const String& currentPass, const String& newPass)
+{
+    if (!checkPassword(currentPass))
+    {
+        DBG("Password::" << __func__ << ": wrong password!");
+        return false;
+    }
+    else
+    {
+        File pwdScriptFile = AssetFiles::findAssetFile(passwordScript, false);
+        if (!pwdScriptFile.existsAsFile())
+        {
+            DBG("Password::" << __func__
+                    << ": password update script is missing!");
+            return false;
+        }
+        String commandStr("pkexec " + pwdScriptFile.getFullPathName() + " "
+                + String(getlogin()));
+        if(newPass.containsNonWhitespaceChars())
+        {
+            commandStr += " \"" + hashString(newPass) + "\"";
+        }
+        DBG("Running:"<<commandStr<<", newpass="<<newPass);
+        int scriptResult = system(commandStr.toRawUTF8());
+        DBG("Password::" << __func__ << "Script returned " << scriptResult);
+        return scriptResult == 0 && checkPassword(newPass);
+    }
 }

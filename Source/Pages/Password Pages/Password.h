@@ -35,5 +35,19 @@ namespace Password
      */
     bool isPasswordSet();
     
+    /**
+     * Attempts to set, change, or remove the current pocket-home password, if
+     * possible.
+     * 
+     * @param currentPass  If a password is set, this must match the current
+     *                      password, or the operation will fail.
+     * 
+     * @param newPass      The new password to set.  If this is the empty
+     *                      string, the password will be removed entirely.
+     * 
+     * @return  true iff the requested password change succeeded.
+     */
+    bool changePassword(const String& currentPass, const String& newPass);
+    
     const constexpr char * passwordPath = "~/.pocket-home/.passwd/passwd";
 }

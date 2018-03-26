@@ -17,11 +17,6 @@ PageComponent(config, "SetPasswordPage",{
         }},
     {1,
         {
-            {&rootLabel, 2},
-            {&rootPassword, 3}
-        }},
-    {1,
-        {
             {&curLabel, 2},
             {&curPassword, 3}
         }},
@@ -41,8 +36,6 @@ PageComponent(config, "SetPasswordPage",{
         }}
 }),
 title(config, "Title", localeText(change_password)),
-rootLabel(config, "RootLab", localeText(root_password)),
-rootPassword("Root", 0x2022),
 curLabel(config, "CurLabel", localeText(current_password)),
 curPassword("Current", 0x2022),
 newLabel(config, "NewLabel", localeText(new_password)),
@@ -92,47 +85,12 @@ void SetPasswordPage::pageButtonClicked(Button* button)
     }
     else
     {
-        File passwordFile(Password::passwordPath);
-        File passwordDir = passwordFile.getParentDirectory();
-        String cmd_passwd = "echo \"" + rootPassword.getText() + "\" |";
-        if (passwordFile.existsAsFile())
+        if(!Password::changePassword(curPassword.getText(),
+                newPassword.getText()))
         {
-            //Changing the owner of the password file (to be able to write inside)
-            String user(getlogin());
-
-
-            const char* unlockPwdDir
-                    = (cmd_passwd + "sudo -kS chown -R " + user + ":" + user
-                       + " " + passwordDir.getFullPathName()).toRawUTF8();
-
-            if (system(unlockPwdDir) != 0)
-            {
-                showErrorMessage(localeText(wrong_password),
-                        localeText(cant_update) + "\n"
-                        + localeText(check_root_password));
-                return;
-            }
+            DBG("SetPasswordPage::" << __func__ << " failed to set password!");
         }
-        else
-        {
-            passwordFile.create();
-        }
-        passwordFile.replaceWithText(
-                Password::hashString(newPassword.getText()), false);
-
-        //After writing, we put back the owner (root)
-        const char* lockPwdDir
-                = (cmd_passwd + "sudo -kS chown -R root:root "
-                   + passwordDir.getFullPathName()).toRawUTF8();
-
-        if (system(lockPwdDir) != 0 || passwordDir.hasWriteAccess())
-        {
-            showErrorMessage(localeText(error),
-                    localeText(cant_lock_dir) + "\n"
-                    + localeText(password_removed));
-            passwordFile.deleteFile();
-            return;
-        }
+        
         AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::InfoIcon,
                 localeText(success),
                 localeText(password_updated),
@@ -164,7 +122,6 @@ void SetPasswordPage::showErrorMessage(String title, String error)
  */
 void SetPasswordPage::clearAllFields()
 {
-    rootPassword.clear();
     curPassword.clear();
     newPassword.clear();
     confirmPassword.clear();

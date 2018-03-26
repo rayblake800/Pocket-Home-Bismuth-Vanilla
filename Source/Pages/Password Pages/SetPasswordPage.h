@@ -46,11 +46,7 @@ private:
 
     //Page title
     ScalingLabel title;
-
-    //Text field for the root password
-    ScalingLabel rootLabel;
-    TextEditor rootPassword;
-
+    
     //Text field for the current password (if there is one)
     ScalingLabel curLabel;
     TextEditor curPassword;

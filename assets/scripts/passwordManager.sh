@@ -9,12 +9,8 @@
 # ./passwordManager.sh [User]
 #
 # This needs to be run as root, to ensure the password file/folder
-# are secured.  Pocket-home will attempt to use a PolicyKit action 
-# to run this script as root.  
-#
-# TODO: -Figure out what PolicyKit action can actually do that.
-#       -Find out how to connect with PolicyKit through DBus (using glib/gio?).
-#       -Look up where files like this should be installed.
+# are secured.  Pocket-home will attempt to use pkexec to run this script as 
+# root.  
 #
 
 #return values
@@ -46,7 +42,7 @@ fi
 
 homedir="/home/$targetUser/.pocket-home"
 if [ ! -d "$homedir" ]; then 
-    #echo "missing pocket home directory $passdir"
+    echo "missing pocket home directory $passdir"
     exit $MISSING_APP_DIR
 fi
 
@@ -55,35 +51,35 @@ if [ "$USER" = "root" ]; then
     passdir="$homedir/.passwd"
     if [ ! -d "$passdir" ]; then
         mkdir "$passdir"
-        #echo "created password directory $passdir"
+        echo "created password directory $passdir"
     fi
-    passfile="$passdir/.passwd"
-    if [ "$newValue" = "" ]; then
+    passfile="$passdir/passwd"
+    if [[ ${newValue} =~ ^\s*$ ]]; then
         rm "$passfile"
         
         if [ -f "$passfile" ]; then
-            #echo "Couldn't remove password!"
+            echo "Couldn't remove password!"
             exit $FAILED_TO_REMOVE_PASSWORD
         else
-            #echo "Removed password file."
+            echo "Removed password file."
             exit $ACTION_SUCCEEDED
         fi
     else
         echo "$newValue" >| "$passfile"
         writtenFile=$(cat "$passfile") 
         if [ ! -f "$passfile" ]; then
-            #echo "Couldn't create password file!"
+            echo "Couldn't create password file!"
             exit $FAILED_TO_SET_PASSWORD
         fi
         if [ "$newValue" != "$writtenFile" ]; then
-            #echo "Couldn't change password!"            
+            echo "Couldn't change password!"            
             exit $FAILED_TO_SET_PASSWORD
         fi
-        #echo "Updated the password file correctly."
+        echo "Updated the password file correctly."
         exit $ACTION_SUCCEEDED
         
     fi
 else
-    #echo "You need to be running this as root."
+    echo "You need to be running this as root."
     exit $NOT_ROOT
 fi
