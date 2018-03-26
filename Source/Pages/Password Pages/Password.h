@@ -19,14 +19,14 @@ namespace Password
     String hashString(const String& string);
     
     /**
-     * Checks if a hashed string value matches the save password.
+     * Checks if a string matches the existing password.
      * 
-     * @param hashStr  A hashed string value to check against the password.
+     * @param password  A string value to check against the password.
      * 
      * @return        True iff the hashed string matches the saved password
      *                 hash value, or if there is no password set.
      */
-    bool checkPassword(const String& hashStr);
+    bool checkPassword(const String& password);
     
     /**
      * Checks if a password has been set for the application.

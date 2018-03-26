@@ -85,8 +85,7 @@ void SetPasswordPage::pageButtonClicked(Button* button)
         showErrorMessage(localeText(confirmation_failed),
                 localeText(fields_dont_match));
     }
-    else if (!Password::checkPassword(
-             Password::hashString(curPassword.getText())))
+    else if (!Password::checkPassword(curPassword.getText()))
     {
         showErrorMessage(localeText(wrong_password),
                 localeText(incorrect_app_password));

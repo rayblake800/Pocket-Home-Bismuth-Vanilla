@@ -22,9 +22,9 @@ String Password::hashString(const String& string)
 }
 
 /**
- * Checks if a hashed string value matches the save password.
+ * Checks if a string value matches the saved password.
  */
-bool Password::checkPassword(const String& hashStr)
+bool Password::checkPassword(const String& password)
 {
 
     File passFile(passwordPath);
@@ -34,8 +34,7 @@ bool Password::checkPassword(const String& hashStr)
     }
     String savedHash = File(passwordPath).loadFileAsString()
             .removeCharacters("\n");
-    DBG("Checking \""<<hashStr<<"\" against \"" << savedHash << "\"");
-    return savedHash == hashStr;
+    return savedHash == hashString(password);
 }
 
 /**

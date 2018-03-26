@@ -56,7 +56,7 @@ void RemovePasswordPage::pageButtonClicked(Button* button)
         clearAllFields();
         return;
     }
-    if (!Password::checkPassword(Password::hashString(curPassword.getText())))
+    if (!Password::checkPassword(curPassword.getText()))
     {
         AlertWindow::showMessageBoxAsync(
                 AlertWindow::AlertIconType::WarningIcon,
