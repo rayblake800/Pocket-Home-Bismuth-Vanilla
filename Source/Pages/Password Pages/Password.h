@@ -23,8 +23,8 @@ namespace Password
      * 
      * @param password  A string value to check against the password.
      * 
-     * @return        True iff the hashed string matches the saved password
-     *                 hash value, or if there is no password set.
+     * @return         True iff the hashed string matches the saved password
+     *                 hash value.
      */
     bool checkPassword(const String& password);
     
@@ -34,20 +34,65 @@ namespace Password
      * @return  true iff a password has been set.
      */
     bool isPasswordSet();
+
+    /**
+     * Checks if the password file and folder exist and are secure.
+     *
+     * @return  true iff the password directory and file exists, and both
+     *          are locked so that only root can modify them.
+     */
+    bool securePasswordFileExists();
+
+    /**
+     * This covers all possible results of an attempt to change/remove
+     * a password.
+     */
+    enum ChangeResult
+    {
+	    wrongPasswordError,
+	    missingNewPassword,
+	    noPasswordScript,
+	    noPKExec,
+	    noPolkitAgent,
+            agentPromptClosed,
+	    wrongAdminPass,
+	    noRootAccess,
+	    appDirNotFound,
+	    fileWriteFailed,
+	    fileCreateFailed,
+	    fileDeleteFailed,
+	    fileSecureFailed,
+	    paswordSetSuccess,
+	    passwordRemoveSuccess,
+    };
     
     /**
-     * Attempts to set, change, or remove the current pocket-home password, if
-     * possible.
+     * Attempts to set or change the current pocket-home password, if possible.
      * 
      * @param currentPass  If a password is set, this must match the current
      *                      password, or the operation will fail.
      * 
      * @param newPass      The new password to set.  If this is the empty
-     *                      string, the password will be removed entirely.
+     *                     string, the operation will fail.
      * 
-     * @return  true iff the requested password change succeeded.
+     * @return  the ChangeResult that best describes the outcome of this
+     *          operation.
      */
-    bool changePassword(const String& currentPass, const String& newPass);
+    ChangeResult changePassword
+	    (const String& currentPass, const String& newPass);
     
+    /**
+     * Attempts to remove the current pocket-home password.
+     *
+     * 
+     * @param currentPass  If a password is set, this must match the current
+     *                      password, or the operation will fail.
+     *  
+     * @return  the ChangeResult that best describes the outcome of this
+     *          operation.
+     *
+     */
+    ChangeResult removePassword(const String& currentPass);
+
     const constexpr char * passwordPath = "~/.pocket-home/.passwd/passwd";
 }
