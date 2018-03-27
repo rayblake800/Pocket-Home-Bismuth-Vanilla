@@ -16,7 +16,7 @@
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
 
-class PokeLookAndFeel : public LookAndFeel_V3, public ConfigFile::Listener
+class PokeLookAndFeel : public LookAndFeel_V4, public ConfigFile::Listener
 {
 public:
     /**
@@ -29,7 +29,7 @@ public:
     PokeLookAndFeel(MainConfigFile& mainConfig,
             ComponentConfigFile& componentConfig);
 
-    virtual ~PokeLookAndFeel() {}
+    virtual ~PokeLookAndFeel() { }
 
     /**
      * Get the appropriate typeface for the given Font.
@@ -90,6 +90,15 @@ public:
      */
     MouseCursor getMouseCursorFor(Component &component) override;
 
+//    /**
+//     * Ensures AlertWindows don't extend beyond the window bounds. 
+//     */
+//    static AlertWindow* createAlertWindow(
+//            const String& title, const String& message,
+//            const String& button1, const String& button2, const String& button3,
+//            AlertWindow::AlertIconType iconType,
+//            int numButtons, Component* associatedComponent) override;
+
 private:
     /**
      * Loads and applies component colors from components.json, and updates
@@ -100,7 +109,7 @@ private:
      * @param key
      */
     void configValueChanged(ConfigFile* config, String key) override;
-    
+
     //references to configuration files
     MainConfigFile& mainConfig;
     ComponentConfigFile& componentConfig;

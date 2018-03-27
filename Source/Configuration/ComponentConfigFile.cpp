@@ -28,6 +28,9 @@ const std::map<String, int> ComponentConfigFile::colourIds{
     {"Image color 4",
      DrawableImageComponent::imageColour4Id},
 
+    {"Image color 4",
+     DrawableImageComponent::imageColour4Id},
+
     {"List editor text color",
      ListEditor::textColourId},
     {"List editor  background color",
@@ -108,7 +111,36 @@ const std::map<String, int> ComponentConfigFile::colourIds{
     {"Switch handle color",
      SwitchComponent::handleColourId},
     {"Switch handle color(off)",
-     SwitchComponent::handleOffColourId},};
+     SwitchComponent::handleOffColourId},
+
+    {"Pop-up menu text color",
+     PopupMenu::textColourId},
+    {"Pop-up menu header text color",
+     PopupMenu::headerTextColourId},
+    {"Pop-up menu background color",
+     PopupMenu::backgroundColourId},
+    {"Pop-up menu highlighted text color",
+     PopupMenu::highlightedTextColourId},
+
+
+    {"Combo box text color",
+     ComboBox::textColourId},
+    {"Combo box background color",
+     ComboBox::backgroundColourId},
+    {"Combo box outline color",
+     ComboBox::outlineColourId},
+    {"Combo box button color",
+     ComboBox::buttonColourId},
+    {"Combo box arrow color",
+     ComboBox::arrowColourId},
+
+    
+    {"Alert window background color",
+     AlertWindow::backgroundColourId},
+     {"Alert window text color",
+     AlertWindow::textColourId},
+     {"Alert window outline color",
+     AlertWindow::outlineColourId}};
 
 ComponentConfigFile::ComponentConfigFile() : ConfigFile(filenameConst)
 {

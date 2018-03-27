@@ -6,163 +6,161 @@
     "ConfigFile": {
         "failed_saving_to_FILE": "Failed to save changes to ",
         "check_permissions": "Make sure you have permission to write to this file.",
-        "save_error":"Error saving configuration:"
+        "save_error": "Error saving configuration:"
     },
     "FileSelectTextEditor": {
-        "img_select_title" : "Select an image file",
-        "img_select_text" :"Please select an image file"
+        "img_select_title": "Select an image file",
+        "img_select_text": "Please select an image file"
     },
     "LoginPage": {
-        "password_label" : "Password:",
-        "log_in" : "Log In",
-        "wrong_password" : "Wrong password",
-        "wrong_password_retry" : "Wrong password, try again",
-        "close_button_text" : "Ok"
+        "password_label": "Password:",
+        "log_in": "Log In",
+        "wrong_password": "Wrong password",
+        "wrong_password_retry": "Wrong password, try again",
+        "close_button_text": "Ok"
     },
-    "HomeSettingsPage" : {
-        "title_text" : "Homepage Settings",
-        "background_text" : "Background:",
-        "default_bg" : "Default",
-        "color_bg" : "Color",
-        "image_bg" : "Image",
-        "bg_color_hex_value" : "Hex value:",
-        "bg_image_path" : "Image path:",
-        "invalid_color" : "Invalid color",
-        "choose_background" : "Choose the new background",
-        "choose_bg_image" : "Please choose your new background image",
-        "menu_type_text" : "Application menu:",
-        "menu_columns" : "Menu columns:",
-        "menu_rows" : "Menu rows:"
+    "HomeSettingsPage": {
+        "title_text": "Homepage Settings",
+        "background_text": "Background:",
+        "default_bg": "Default",
+        "color_bg": "Color",
+        "image_bg": "Image",
+        "bg_color_hex_value": "Hex value:",
+        "bg_image_path": "Image path:",
+        "invalid_color": "Invalid color",
+        "choose_background": "Choose the new background",
+        "choose_bg_image": "Please choose your new background image",
+        "menu_type_text": "Application menu:",
+        "menu_columns": "Menu columns:",
+        "menu_rows": "Menu rows:"
     },
-    "DateTimePage" : {
-        "date_time_settings" : "Date and time settings",
-        "select_clock_mode" : "Select the display mode for the clock:",
-        "mode_24h" : "24h mode",
-        "mode_am_pm" : "AM/PM mode",
-        "hide_clock" : "Don't show clock",
-        "set_system_clock" : "Reconfigure system clock",
-        "failed_launch" : "Failed to launch terminal:",
-        "failed_to_run" : "Failed command:",
-        "check_term_cmd" : "Is the terminal launch command set correctly?"     
+    "DateTimePage": {
+        "date_time_settings": "Date and time settings",
+        "select_clock_mode": "Select the display mode for the clock:",
+        "mode_24h": "24h mode",
+        "mode_am_pm": "AM/PM mode",
+        "hide_clock": "Don't show clock",
+        "set_system_clock": "Reconfigure system clock",
+        "failed_launch": "Failed to launch terminal:",
+        "failed_to_run": "Failed command:",
+        "check_term_cmd": "Is the terminal launch command set correctly?"     
     },
-    "AdvancedSettingsPage" : {
-        "advanced_settings" : "Advanced Settings",
-        "set_password" : "Set your password",
-        "change_password" : "Change your password",
-        "remove_password" : "Remove your password",
-        "personalize_homepage" : "Personalize your homepage",
-        "date_and_time" : "Date and Time",
-        "input_settings" : "Input settings"
+    "AdvancedSettingsPage": {
+        "advanced_settings": "Advanced Settings",
+        "set_password": "Set your password",
+        "change_password": "Change your password",
+        "remove_password": "Remove your password",
+        "personalize_homepage": "Personalize your homepage",
+        "date_and_time": "Date and Time",
+        "input_settings": "Input settings"
     },
-    "WifiSettingsPage" : {
-        "password_field" : "Password:",
-        "btn_connect" : "Connect",
-        "btn_disconnect" : "Disconnect",
-        "wrong_password" : "Incorrect password",
-        "connection_failed" : "Connection failed."  
+    "WifiSettingsPage": {
+        "password_field": "Password:",
+        "btn_connect": "Connect",
+        "btn_disconnect": "Disconnect",
+        "wrong_password": "Incorrect password",
+        "connection_failed": "Connection failed."  
     },
-    "WifiAPButton" : {
-        "connected_ap" : " (Connected)"
+    "WifiAPButton": {
+        "connected_ap": " (Connected)"
     },
-    "SettingsPage" : {
-        "advanced_settings" : "Advanced Settings Page"
+    "SettingsPage": {
+        "advanced_settings": "Advanced Settings Page"
     },
-    "WifiSettingsComponent" : {
-        "wifi_not_found" : "WiFi Not Found",
-        "wifi_disabled" : "WiFi Disabled",
-        "wifi_turning_on" : "WiFi Turning On...",
-        "not_connected" : "Not Connected",
-        "wifi_turning_off" : "WiFi Turning Off...",
-        "connecting_to_ap" : "Connecting to ",
-        "connecting_to_unknown" : "Connecting...",
-        "disconnecting" : "Disconnecting..."   
+    "WifiSettingsComponent": {
+        "wifi_not_found": "WiFi Not Found",
+        "wifi_disabled": "WiFi Disabled",
+        "wifi_turning_on": "WiFi Turning On...",
+        "not_connected": "Not Connected",
+        "wifi_turning_off": "WiFi Turning Off...",
+        "connecting_to_ap": "Connecting to ",
+        "connecting_to_unknown": "Connecting...",
+        "disconnecting": "Disconnecting..."   
     },
-    "PowerPage" : {
-        "shutdown" : "Shutdown",
-        "reboot" : "Reboot",
-        "sleep" : "Sleep",
-        "flash_software" : "Flash Software" 
+    "PowerPage": {
+        "shutdown": "Shutdown",
+        "reboot": "Reboot",
+        "sleep": "Sleep",
+        "flash_software": "Flash Software" 
     },
-    "FelPage" : {
-        "ask_to_reboot" : "Reboot into software flashing mode?",
-        "yes_btn" : "Yes",
-        "no_btn" : "No",
-        "flashing_info" : "For instructions, visit pcflash.getchip.com" 
+    "FelPage": {
+        "ask_to_reboot": "Reboot into software flashing mode?",
+        "yes_btn": "Yes",
+        "no_btn": "No",
+        "flashing_info": "For instructions, visit pcflash.getchip.com" 
     },
-    "SetPasswordPage" : {
-        "change_password" : "Change your password",
-        "root_password" : "Sudo password",
-        "current_password" : "Current password",
-        "new_password" : "New password",
-        "retype_password" : "Retype password",
-        "apply" : "Apply",
-        "missing_password" : "Missing password",
-        "ask_to_enter_new" : "Please enter a new password.",
-        "confirmation_failed" : "Password confirmation failed",
-        "fields_dont_match" : "The new password fields don't match, try again.",
-        "wrong_password" : "Wrong password",
-        "incorrect_app_password" : "The existing Pocket-Home password was incorrect.",
-        "cant_update" : "Can't update your password,",
-        "check_root_password" : "make sure your root password is correct.",
-        "error" : "Error",
-        "cant_lock_dir" : "Failed to lock the password directory!",
-        "password_removed" : "The Pocket-Home password is not set.",
-        "success" : "Success",
-        "password_updated" : "The Pocket-Home password has been updated.",
-        "confirm_btn" : "Ok"
+    "SetPasswordPage": {
+        "change_password": "Change your password",
+        "current_password": "Current password",
+        "new_password": "New password",
+        "retype_password": "Retype password",
+        "apply": "Apply",
+        "confirmation_failed": "Password confirmation failed",
+        "fields_dont_match": "The new password fields don't match, try again.",
+        "success": "Success",
+        "password_updated": "The Pocket-Home password has been updated.",
+        "missing_password": "Missing password",
+        "ask_to_enter_new": "Please enter a new password.",
+        "failed_set": "Failed to set your password",
+        "failed_update": "Failed to update your password",
+        "wrong_password": "The existing Pocket-Home password was incorrect.",
+        "check_agent_and_root": "The current password was correct, but the action failed. Most likely, either your root password was incorrect, or no PolicyKit authentication agent is running.",
+        "error": "Error",
+        "securing_failed": "Failed to lock the password directory!  The pocket-home password has been removed. Make sure you aren't running pocket-home as root.",
+        "files_missing": "Important application files are missing! Please reinstall pocket-home.",
+        "polkit_missing": "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
     },
-    "RemovePasswordPage" : {
-        "root_password" : "Sudo password",
-        "current_password" : "Current password",
-        "remove_password" : "Remove your password",
-        "apply" : "Apply",
-        "wrong_password" : "Wrong password",
-        "try_again" : "Incorrect Pocket-Home password, try again.",
-        "confirm_btn" : "Ok",
-        "cant_change_password" : "Impossible to modify the password, check your root password",
-        "error" : "Error",
-        "cant_remove_password" : "Failed to remove password directory!",
-        "success" : "Success",
-        "password_removed" : "Your Pocket-Home password has been removed."
+    "RemovePasswordPage": {
+        "current_password": "Current password",
+        "remove_password": "Remove your password",
+        "apply": "Apply",
+        "success": "Success",
+        "password_removed": "Your Pocket-Home password has been removed.",
+        "cant_remove_password": "Removing password failed",
+        "wrong_password": "The current Pocket-Home password was incorrect.",
+        "check_agent_and_root": "The current password was correct, but the action failed. Most likely, either your root password was incorrect, or no PolicyKit authentication agent is running.",
+        "error": "Error",
+        "files_missing": "Important application files are missing! Please reinstall pocket-home.",
+        "polkit_missing": "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
     },
-    "InputSettingsPage" : {
-        "input_settings" : "Input settings",
-        "calibrate_screen" : "Calibrate the screen",
-        "remap_keybord" : "Remap keyboard (FN key fix)",
-        "select_cursor_visible" : "Select the visibility of the cursor:",
-        "not_visible" : "Not visible",
-        "visible" : "Visible"
+    "InputSettingsPage": {
+        "input_settings": "Input settings",
+        "calibrate_screen": "Calibrate the screen",
+        "remap_keybord": "Remap keyboard (FN key fix)",
+        "select_cursor_visible": "Select the visibility of the cursor:",
+        "not_visible": "Not visible",
+        "visible": "Visible"
     },
-    "AppMenuPopupEditor" : {
-        "name" : "Name:",
-        "icon_path" : "Icon path:",
-        "select_icon" : "Select Icon",
-        "edit_categories" : "Edit categories",
-        "command" : "Command:",
-        "run_in_terminal" : "Run in terminal:"
+    "AppMenuPopupEditor": {
+        "name": "Name:",
+        "icon_path": "Icon path:",
+        "select_icon": "Select Icon",
+        "edit_categories": "Edit categories",
+        "command": "Command:",
+        "run_in_terminal": "Run in terminal:"
     },
-    "AppMenuItem" : {
-        "delete_APP" : "Delete ",
-        "question_mark" : "?",
-        "really_delete" : "Really delete this menu item?",
-        "edit_menu_item" : "Edit Menu Item"
+    "AppMenuItem": {
+        "delete_APP": "Delete ",
+        "question_mark": "?",
+        "really_delete": "Really delete this menu item?",
+        "edit_menu_item": "Edit Menu Item"
     },
-    "DesktopEntryMenuItem" : {
-        "remove_link_to" : "Remove link to ",
-        "question_mark" : "?",
-        "will_hide" : "This application will be hidden from pocket-home.",
-        "edit_app" : "Edit Menu Item"
+    "DesktopEntryMenuItem": {
+        "remove_link_to": "Remove link to ",
+        "question_mark": "?",
+        "will_hide": "This application will be hidden from pocket-home.",
+        "edit_app": "Edit Menu Item"
     },
-    "ConfigAppMenuItem" : {
-        "remove_APP" : "Remove \"",
-        "from_favorites" : "\" from favorites?",
-        "will_remove_link" : "This will permanently remove this link from the list of favorite applications.",
-        "edit_app" : "Edit Application"
+    "ConfigAppMenuItem": {
+        "remove_APP": "Remove \"",
+        "from_favorites": "\" from favorites?",
+        "will_remove_link": "This will permanently remove this link from the list of favorite applications.",
+        "edit_app": "Edit Application"
     },
-    "FolderMenuItem" : {
-        "delete_NAME" : "Delete \"",
-        "folder" : "\" folder?",
-        "will_remove_folder" : "This will permanently remove this folder from the menu.",
-        "edit_folder" : "Edit Folder"
+    "FolderMenuItem": {
+        "delete_NAME": "Delete \"",
+        "folder": "\" folder?",
+        "will_remove_folder": "This will permanently remove this folder from the menu.",
+        "edit_folder": "Edit Folder"
     }
 }

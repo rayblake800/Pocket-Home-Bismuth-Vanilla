@@ -2,49 +2,74 @@
     "use 24h mode": true,
     "show clock": true,
 
-
     "Page background color": "0xffd23c6d",
+
     "AppMenu button background color": "0x55c0c0c0",
     "AppMenu button border color": "0x884d4d4d",
     "AppMenu button selection color": "0x88d23c6d",
     "AppMenu button text color": "0xffffffff",
+
     "Drawable button text color": "0xffffffff",
+
     "File picker text color": "0xffffffff",
-    "File picker window color": "0xff7d7d7d",
+    "File picker window color": "0xff4d4d4d",
+
     "Image color 0": "0xffffffff",
     "Image color 1": "0xff000000",
     "Image color 2": "0xffff0000",
     "Image color 3": "0xff00ff00",
     "Image color 4": "0xff0000ff",
+
     "Label background color": "0x00000000",
     "Label background color(editing)": "0xff000000",
     "Label outline color": "0x00000000",
     "Label outline color(editing)": "0xffffffff",
     "Label text color": "0xffffffff",
     "Label text color(editing)": "0xffffffff",
-    "List editor  background color": "0xff202020",
-    "List editor list item color": "0xff313131",
+
+    "List editor background color": "0xffc0c0c0",
+    "List editor list item color": "0xff4d4d4d",
     "List editor selected item color": "0xffbc3662",
     "List editor text color": "0xffffffff",
+
     "Overlay spinner background color": "0xeec9c9c9",
     "Overlay spinner text color": "0xffffffff",
-    "Slider background color": "0xfff799aa",
+
+    "Slider background color": "0xffffffff",
     "Slider thumb color": "0xffffffff",
     "Slider track color": "0xfff799aa",
+
+    "Text button(off) color": "0xfff799aa",
+    "Text button(off) text color": "0xffffffff",
+    "Text button(on) color": "0xffbc3662",
+    "Text button(on) text color": "0xffffffff",
+
+    "Text editor background color": "0xfff799aa",
+    "Text editor focused outline color": "0x00000000",
+    "Text editor highlight color": "0xff4d4d4d",
+    "Text editor highlighted text color": "0xffffffff",
+    "Text editor outline color": "0xff4d4d4d",
+    "Text editor shadow color": "0x00000000",
+    "Text editor text color": "0xffd23c6d",
+
     "Switch background color": "0xfff799aa",
     "Switch handle color": "0xffffffff",
     "Switch handle color(off)": "0xffbc3662",
-    "Text button(off) color": "0xffbc3662",
-    "Text button(off) text color": "0xffffffff",
-    "Text button(on) color": "0xffd23c6d",
-    "Text button(on) text color": "0xffffffff",
-    "Text editor background color": "0xfff799aa",
-    "Text editor focused outline color": "0x00000000",
-    "Text editor highlight color": "0xffd23c6d",
-    "Text editor highlighted text color": "0xffffffff",
-    "Text editor outline color": "0x00000000",
-    "Text editor shadow color": "0x00000000",
-    "Text editor text color": "0xffffffff",
+
+    "Pop-up menu text color": "0xffffffff",
+    "Pop-up menu header text color": "0x55c0c0c0",
+    "Pop-up menu background color": "0xffd23c6d",
+    "Pop-up menu highlighted text color": "0xffffffff",
+
+    "Combo box text color": "0xffffffff",
+    "Combo box background color": "0xffd23c6d",
+    "Combo box outline color": "0xff4d4d4d",
+    "Combo box button color": "0xffffffff",
+    "Combo box arrow color": "0xffffffff",
+
+    "Alert window text color": "0xffffffff",
+    "Alert window outline color": "0xffd23c6d",
+    "Alert window background color": "0xff4d4d4d",
 
     "scrolling app menu": {
         "x": 0,

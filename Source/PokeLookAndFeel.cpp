@@ -150,7 +150,7 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
             2 + cornerSize / (button.isConnectedOnRight() ? 4 : 2));
 
     g.drawFittedText(button.getButtonText(), leftIndent, yIndent,
-            button.getWidth() - leftIndent - rightIndent, 
+            button.getWidth() - leftIndent - rightIndent,
             button.getHeight() - yIndent * 2,
             Justification::centred, 2);
 }
@@ -185,6 +185,18 @@ MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
 {
     return cursor;
 }
+//
+///**
+// * Ensures AlertWindows don't extend beyond the window bounds. 
+// */
+//AlertWindow* PokeLookAndFeel::createAlertWindow(
+//        const String& title, const String& message,
+//        const String& button1, const String& button2, const String& button3,
+//        AlertWindow::AlertIconType iconType,
+//        int numButtons, Component* associatedComponent)
+//{
+//    AlertWindow* window = 
+//}
 
 /**
  * Loads and applies component colors from components.json, and updates

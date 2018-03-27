@@ -1,6 +1,14 @@
 This list documents all component ColourId values.  When assigning ColourId
 values for new component classes, use this list to make sure they don't conflict
-with other Ids.  Use findcolorid.py to rebuild the list after adding new Ids.
+with other Ids.  Use findcolorid.py to rebuild the list after adding new IDs.
+
+Default color reference:
+    lightGrey      : 0xffe1e1e1
+    medGrey        : 0xffc0c0c0
+    darkGrey       : 0xff4d4d4d
+    chipPink       : 0xffbc3662
+    chipLightPink  : 0xfff799aa
+    chipPurple     : 0xffd23c6d
 
 juce_TextButton.h
 	0x1000100 = buttonColourId
