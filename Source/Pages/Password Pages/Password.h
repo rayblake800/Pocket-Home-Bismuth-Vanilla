@@ -9,15 +9,7 @@
 
 namespace Password
 {
-    /**
-     * Gets the SHA1 hashed value of a string.
-     * 
-     * @param string   The string to encrypt.
-     * 
-     * @return         the hashed string value.
-     */
-    String hashString(const String& string);
-    
+   
     /**
      * Checks if a string matches the existing password.
      * 
@@ -36,27 +28,15 @@ namespace Password
     bool isPasswordSet();
 
     /**
-     * Checks if the password file and folder exist and are secure.
-     *
-     * @return  true iff the password directory and file exists, and both
-     *          are locked so that only root can modify them.
-     */
-    bool securePasswordFileExists();
-
-    /**
      * This covers all possible results of an attempt to change/remove
      * a password.
      */
     enum ChangeResult
     {
-	    wrongPasswordError,
 	    missingNewPassword,
+	    wrongPasswordError,
 	    noPasswordScript,
 	    noPKExec,
-	    noPolkitAgent,
-            agentPromptClosed,
-	    wrongAdminPass,
-	    noRootAccess,
 	    appDirNotFound,
 	    fileWriteFailed,
 	    fileCreateFailed,
@@ -73,10 +53,10 @@ namespace Password
      *                      password, or the operation will fail.
      * 
      * @param newPass      The new password to set.  If this is the empty
-     *                     string, the operation will fail.
+     *                      string, the operation will fail.
      * 
-     * @return  the ChangeResult that best describes the outcome of this
-     *          operation.
+     * @return  the ChangeResult that best describes the result of this
+     *           operation.
      */
     ChangeResult changePassword
 	    (const String& currentPass, const String& newPass);
@@ -88,11 +68,11 @@ namespace Password
      * @param currentPass  If a password is set, this must match the current
      *                      password, or the operation will fail.
      *  
-     * @return  the ChangeResult that best describes the outcome of this
-     *          operation.
-     *
+     * @return  the ChangeResult that best describes the result of this
+     *           operation.
      */
     ChangeResult removePassword(const String& currentPass);
+    
+    String checksum();
 
-    const constexpr char * passwordPath = "~/.pocket-home/.passwd/passwd";
 }

@@ -49,34 +49,46 @@ void RemovePasswordPage::pageButtonClicked(Button* button)
         curPassword.clear();
         return;
     }
-    if (!Password::checkPassword(curPassword.getText()))
+    switch (Password::removePassword(curPassword.getText()))
     {
-        AlertWindow::showMessageBoxAsync(
-                AlertWindow::AlertIconType::WarningIcon,
-                localeText(wrong_password),
-                localeText(try_again),
-                localeText(confirm_btn));
-        curPassword.clear();
-        return;
+        case Password::wrongPasswordError:
+            AlertWindow::showMessageBoxAsync(
+                    AlertWindow::AlertIconType::WarningIcon,
+                    localeText(wrong_password),
+                    localeText(try_again),
+                    localeText(confirm_btn));
+            curPassword.clear();
+            return;
+        case Password::missingNewPassword:
+        case Password::noPasswordScript:
+        case Password::noPKExec:
+        case Password::noPolkitAgent:
+        case Password::agentPromptClosed:
+        case Password::wrongAdminPass:
+        case Password::noRootAccess:
+        case Password::appDirNotFound:
+        case Password::fileWriteFailed:
+        case Password::fileCreateFailed:
+        case Password::fileDeleteFailed:
+        case Password::fileSecureFailed:
+        case Password::paswordSetSuccess:
+            AlertWindow::showMessageBoxAsync(
+                    AlertWindow::AlertIconType::WarningIcon,
+                    localeText(error),
+                    localeText(cant_remove_password),
+                    localeText(confirm_btn));
+            return;
+        case Password::passwordRemoveSuccess:
+            AlertWindow::showMessageBoxAsync(
+                    AlertWindow::AlertIconType::InfoIcon,
+                    localeText(success),
+                    localeText(password_removed),
+                    localeText(confirm_btn),
+                    nullptr,
+                    ModalCallbackFunction::create([this](int i)
+                    {
+                        removeFromStack();
+                    }));
+            curPassword.clear();
     }
-
-    if (!Password::changePassword(curPassword.getText(),""));
-    {
-        AlertWindow::showMessageBoxAsync(
-                AlertWindow::AlertIconType::WarningIcon,
-                localeText(error),
-                localeText(cant_remove_password),
-                localeText(confirm_btn));
-        return;
-    }
-    AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::InfoIcon,
-            localeText(success),
-            localeText(password_removed),
-            localeText(confirm_btn),
-            nullptr,
-            ModalCallbackFunction::create([this](int i)
-            {
-                removeFromStack();
-            }));
-    curPassword.clear();
 }
