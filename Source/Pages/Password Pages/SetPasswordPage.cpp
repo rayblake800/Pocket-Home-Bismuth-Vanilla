@@ -50,6 +50,9 @@ confirmPassword("Confirmation", 0x2022)
     title.setJustificationType(Justification::centred);
     setPassword.setButtonText(localeText(apply));
     setPassword.addListener(this);
+    bool passwordSet = Password::isPasswordSet();
+    curLabel.setVisible(passwordSet);
+    curPassword.setVisible(passwordSet);
     addAndShowLayoutComponents();
 }
 
@@ -68,39 +71,69 @@ void SetPasswordPage::pageButtonClicked(Button* button)
         clearAllFields();
         return;
     }
-    if (newPassword.isEmpty())
-    {
-        showErrorMessage(localeText(missing_password),
-                localeText(ask_to_enter_new));
-    }
     else if (newPassword.getText() != confirmPassword.getText())
     {
         showErrorMessage(localeText(confirmation_failed),
                 localeText(fields_dont_match));
     }
-    else if (!Password::checkPassword(curPassword.getText()))
-    {
-        showErrorMessage(localeText(wrong_password),
-                localeText(incorrect_app_password));
-    }
     else
     {
-        if(!Password::changePassword(curPassword.getText(),
+        String title, message;
+        switch (Password::changePassword(curPassword.getText(),
                 newPassword.getText()))
         {
-            DBG("SetPasswordPage::" << __func__ << " failed to set password!");
+            case Password::passwordRemoveSuccess:
+            case Password::fileDeleteFailed:
+                DBG("SetPasswordPage::" << __func__
+                        << ": Illegal result returned!");
+                jassertfalse;
+                return;
+            case Password::paswordSetSuccess:
+                AlertWindow::showMessageBoxAsync(
+                        AlertWindow::AlertIconType::InfoIcon,
+                        localeText(success),
+                        localeText(password_updated),
+                        "",
+                        nullptr,
+                        ModalCallbackFunction::create([this](int i)
+                        {
+                            removeFromStack();
+                        }));
+                clearAllFields();
+                return;
+            case Password::missingNewPassword:
+                title = localeText(missing_password);
+                message = localeText(ask_to_enter_new);
+                break;
+            case Password::wrongPasswordError:
+                title = localeText(Password::isPasswordSet() ? 
+                    failed_set : failed_update);
+                message = localeText(wrong_password);
+                break;
+            case Password::fileCreateFailed:
+                title = localeText(failed_set);
+                message = localeText(check_agent_and_root);
+                break;
+            case Password::fileWriteFailed:
+                title = localeText(failed_update);
+                message = localeText(check_agent_and_root);
+                break;
+            case Password::fileSecureFailed:
+                title = localeText(error);
+                message = localeText(securing_failed);
+                break;
+            case Password::noPasswordScript:
+                title = localeText(error);
+                message = localeText(files_missing);
+                break;
+            case Password::noPKExec:
+                title = localeText(error);
+                message = localeText(polkit_missing);
+                break;
         }
-        
-        AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::InfoIcon,
-                localeText(success),
-                localeText(password_updated),
-                localeText(confirm_btn),
-                nullptr,
-                ModalCallbackFunction::create([this](int i)
-                {
-                    removeFromStack();
-                }));
-
+        AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,
+                title, message, "", nullptr);
+        clearAllFields();
     }
 }
 
@@ -112,8 +145,7 @@ void SetPasswordPage::showErrorMessage(String title, String error)
 {
 
     AlertWindow::showMessageBoxAsync
-            (AlertWindow::AlertIconType::WarningIcon, title, error,
-            localeText(confirm_btn));
+            (AlertWindow::AlertIconType::WarningIcon, title, error, "");
     clearAllFields();
 }
 

@@ -49,46 +49,48 @@ void RemovePasswordPage::pageButtonClicked(Button* button)
         curPassword.clear();
         return;
     }
+    String title, message;
     switch (Password::removePassword(curPassword.getText()))
     {
-        case Password::wrongPasswordError:
-            AlertWindow::showMessageBoxAsync(
-                    AlertWindow::AlertIconType::WarningIcon,
-                    localeText(wrong_password),
-                    localeText(try_again),
-                    localeText(confirm_btn));
-            curPassword.clear();
-            return;
         case Password::missingNewPassword:
-        case Password::noPasswordScript:
-        case Password::noPKExec:
-        case Password::noPolkitAgent:
-        case Password::agentPromptClosed:
-        case Password::wrongAdminPass:
-        case Password::noRootAccess:
-        case Password::appDirNotFound:
-        case Password::fileWriteFailed:
-        case Password::fileCreateFailed:
-        case Password::fileDeleteFailed:
-        case Password::fileSecureFailed:
         case Password::paswordSetSuccess:
-            AlertWindow::showMessageBoxAsync(
-                    AlertWindow::AlertIconType::WarningIcon,
-                    localeText(error),
-                    localeText(cant_remove_password),
-                    localeText(confirm_btn));
+        case Password::fileCreateFailed:
+        case Password::fileWriteFailed:
+        case Password::fileSecureFailed:
+            DBG("RemovePasswordPage::" << __func__
+                    << ": Illegal result returned!");
+            jassertfalse;
             return;
         case Password::passwordRemoveSuccess:
             AlertWindow::showMessageBoxAsync(
                     AlertWindow::AlertIconType::InfoIcon,
                     localeText(success),
                     localeText(password_removed),
-                    localeText(confirm_btn),
+                    "",
                     nullptr,
                     ModalCallbackFunction::create([this](int i)
                     {
                         removeFromStack();
                     }));
             curPassword.clear();
+            return;
+        case Password::wrongPasswordError:
+            title = localeText(cant_remove_password);
+            message = localeText(wrong_password);
+            break;
+        case Password::fileDeleteFailed:
+            title = localeText(cant_remove_password);
+            message = localeText(check_agent_and_root);
+            break;
+        case Password::noPasswordScript:
+            title = localeText(error);
+            message = localeText(files_missing);
+            break;
+        case Password::noPKExec:
+            title = localeText(error);
+            message = localeText(polkit_missing);
+            break;
     }
+    AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,
+            title, message, "", nullptr);
 }

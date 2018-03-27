@@ -43,7 +43,9 @@ static bool passwordFileProtected()
 
 static bool pkexecInstalled()
 {
-    return system("command -v pkexec") != 0;
+    ChildProcess checkCmd;
+    checkCmd.start("command -v pkexec");
+    return checkCmd.readAllProcessOutput().containsNonWhitespaceChars();
 }
 
 /**
@@ -149,14 +151,3 @@ Password::ChangeResult Password::removePassword(const String& currentPass)
     }
     return pkexecInstalled() ? result : noPKExec;  
 }
-#if JUCE_DEBUG
-void Password::scriptChecksum()
-{
-    File scriptFile = AssetFiles::findAssetFile(passwordScript, false);
-    if(!scriptFile.existsAsFile())
-    {
-        //Finish tomorrow
-        DBG("");
-    }
-}
-#endif

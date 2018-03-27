@@ -9,7 +9,7 @@
 
 namespace Password
 {
-   
+
     /**
      * Checks if a string matches the existing password.
      * 
@@ -19,7 +19,7 @@ namespace Password
      *                 hash value.
      */
     bool checkPassword(const String& password);
-    
+
     /**
      * Checks if a password has been set for the application.
      * 
@@ -33,19 +33,18 @@ namespace Password
      */
     enum ChangeResult
     {
-	    missingNewPassword,
-	    wrongPasswordError,
-	    noPasswordScript,
-	    noPKExec,
-	    appDirNotFound,
-	    fileWriteFailed,
-	    fileCreateFailed,
-	    fileDeleteFailed,
-	    fileSecureFailed,
-	    paswordSetSuccess,
-	    passwordRemoveSuccess,
+        missingNewPassword,
+        wrongPasswordError,
+        noPasswordScript,
+        noPKExec,
+        fileWriteFailed,
+        fileCreateFailed,
+        fileDeleteFailed,
+        fileSecureFailed,
+        paswordSetSuccess,
+        passwordRemoveSuccess,
     };
-    
+
     /**
      * Attempts to set or change the current pocket-home password, if possible.
      * 
@@ -59,8 +58,8 @@ namespace Password
      *           operation.
      */
     ChangeResult changePassword
-	    (const String& currentPass, const String& newPass);
-    
+    (const String& currentPass, const String& newPass);
+
     /**
      * Attempts to remove the current pocket-home password.
      *
@@ -72,7 +71,5 @@ namespace Password
      *           operation.
      */
     ChangeResult removePassword(const String& currentPass);
-    
-    String checksum();
 
 }
