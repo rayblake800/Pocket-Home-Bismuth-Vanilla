@@ -45,8 +45,6 @@ infoLine2(config,"infoLine2", localeText(flashing_info))
 #    if JUCE_DEBUG
     setName("FelPage");
 #    endif
-    //TODO: configurable page backgrounds
-    setColour(backgroundColourId, Colours::black);
     infoLine1.setJustificationType(Justification::centred);
     infoLine2.setJustificationType(Justification::centred);
     yesButton.addListener(this);

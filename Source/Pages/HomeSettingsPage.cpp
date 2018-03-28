@@ -140,8 +140,10 @@ void HomeSettingsPage::comboBoxChanged(ComboBox* box)
         switch (box->getSelectedId())
         {
             case 1:
-                mainConfig.setConfigValue<String>(MainConfigFile::backgroundKey,
-                                                  "4D4D4D");
+                mainConfig.setConfigValue<String>
+                        (MainConfigFile::backgroundKey,
+                         findColour(PageComponent::backgroundColourId)
+                         .toString());
                 bgEditor.setVisible(false);
                 bgLabel.setVisible(false);
                 return;

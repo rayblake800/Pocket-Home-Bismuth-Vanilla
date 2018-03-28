@@ -130,6 +130,7 @@ void ConnectionSettingsComponent::ConnectionButton::paintButton
     }
 
     g.setFont(textHeight);
+    g.setColour(findColour(Label::textColourId));
     g.drawText(displayText, bounds.getX(), bounds.getY(),
             bounds.getWidth(), bounds.getHeight(),
             Justification::centred);

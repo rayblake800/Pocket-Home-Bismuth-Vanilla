@@ -10,18 +10,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/assets/scripts/passwordManager.sh</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/LibNMInterface.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/documentation/TODO.txt</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Password%20Pages/Password.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Password%20Pages/SetPasswordPage.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/PageStackComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Password%20Pages/Password.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/LoginPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/documentation/colorids.txt</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Password%20Pages/SetPasswordPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Password%20Pages/RemovePasswordPage.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Builds/LinuxMakefile/Makefile</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/LibNMInterface.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Configuration/ComponentConfigFile.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/HomeSettingsPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/AdvancedSettingsPage.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Password%20Pages/Password.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PokeLookAndFeel.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/assets/configuration/components.json</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Pages/Password%20Pages/RemovePasswordPage.cpp</file>
         </group>
     </open-files>

@@ -31,5 +31,17 @@ public:
 
     virtual ~ConfigurableLabel() { }
 
-protected:
+private:
+    /**
+     * Applies text color settings to a configurable label.
+     * 
+     * @param assetNames   This should be empty, and will be ignored.
+     * 
+     * @param colours      If this list has a color at index 0, it will be 
+     *                      applied to the label text.  If it has a color at
+     *                      index 1, that will be applied to the label
+     *                      background.
+     */
+    void applyConfigAssets(StringArray assetNames,
+            Array<Colour> colours) override;
 };
