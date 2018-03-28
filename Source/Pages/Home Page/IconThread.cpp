@@ -4,7 +4,17 @@
 const String IconThread::defaultIconPath =
         "/usr/share/pocket-home/appIcons/default.png";
 
-IconThread::IconThread() : Thread("IconThread")
+
+ScopedPointer<RAIISingleton::SharedResource> IconThread::sharedResource
+        = nullptr;
+
+IconThread::IconThread() :
+RAIISingleton(sharedResource, iconLock, []()->RAIISingleton::SharedResource*
+{
+
+    return new IconResource();
+}),
+Thread("IconThread")
 {
     defaultIcon = AssetFiles::loadImageAsset(defaultIconPath);
 }
@@ -26,49 +36,69 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
         {
             icon = icon.substring(1 + icon.lastIndexOf("/"));
         }
-        if (iconPaths.count(icon) > 0)
+        assignImage(defaultIcon);
+        const ScopedLock queueLock(iconLock);
+        IconResource::QueuedJob iconRequest;
+        IconResource* iconResource
+                = dynamic_cast<IconResource*> (sharedResource.get());
+        iconRequest.icon = icon;
+        iconRequest.callback = assignImage;
+        iconResource->addQueuedJob(iconRequest);
+        if (!isThreadRunning())
         {
-            assignImage(AssetFiles::loadImageAsset(iconPaths[icon]));
+            startThread();
         }
-        else
-        {
-            assignImage(defaultIcon);
-            const ScopedLock queueLock(lock);
-            QueuedJob iconRequest;
-            iconRequest.icon = icon;
-            iconRequest.callback = assignImage;
-            queuedJobs.add(iconRequest);
-            if (!isThreadRunning())
-            {
-                startThread();
-            }
-        }
-
     }
+}
+
+/**
+ * Returns the number of pending icon requests. 
+ */
+int IconThread::IconResource::numJobsQueued()
+{
+    return queuedJobs.size();
+}
+
+/**
+ * Adds another job request to the queue.
+ * 
+ * @param newJob
+ */
+void IconThread::IconResource::addQueuedJob
+(IconThread::IconResource::QueuedJob newJob)
+{
+    queuedJobs.add(newJob);
+}
+
+/**
+ * Removes and returns the last job from the list.
+ */
+IconThread::IconResource::QueuedJob
+IconThread::IconResource::getQueuedJob()
+{
+    QueuedJob lastJob = queuedJobs.getLast();
+    queuedJobs.removeLast();
+    return lastJob;
 }
 
 /**
  * Searches for and returns an icon.
  */
-String IconThread::getIconPath(String icon)
+String IconThread::IconResource::getIconPath(String icon)
 {
-    const ScopedLock iconLock(lock);
-
     //if it hasn't happened already, build the icon path map
     if (!iconPathsMapped)
     {
-        const ScopedUnlock mapUnlock(lock);
         mapIcons();
     }
     if (iconPaths.count(icon) > 0)
     {
         return iconPaths[icon];
     }
-        // If the icon isn't in the map, look for one with a similar name
     else
     {
-        for (std::map<String, String>::iterator it = iconPaths.begin();
-             it != iconPaths.end(); it++)
+        // If the icon isn't in the map, look for one with a similar name
+        for (auto it = iconPaths.begin(); it != iconPaths.end(); it++)
         {
             String iconCandidate = it->first;
             if (!it->second.isEmpty() &&
@@ -83,50 +113,55 @@ String IconThread::getIconPath(String icon)
 }
 
 /**
+ * Removes an icon from the icon path map.
+ * 
+ * @param iconName  If an icon with this key is in the list of mapped
+ *                   icons, it will be removed.
+ */
+void IconThread::IconResource::removeIcon(String iconName)
+{
+    auto iconIter = iconPaths.find(iconName);
+    iconPaths.erase(iconIter);
+}
+
+/**
  * While AppMenuButtons still need icons, this finds them in a separate 
  * thread.
  */
 void IconThread::run()
 {
-    const ScopedLock queueLock(lock);
-    while (!threadShouldExit() && queuedJobs.size() > 0)
+    const ScopedLock queueLock(iconLock);
+    IconResource* iconResource
+            = dynamic_cast<IconResource*> (sharedResource.get());
+    while (!threadShouldExit() && iconResource->numJobsQueued() > 0)
     {
-        QueuedJob activeJob = queuedJobs[0];
-        String icon = activeJob.icon;
-        {
-            const ScopedUnlock getIconWillRelock(lock);
-            icon = getIconPath(icon);
-        }
+        IconResource::QueuedJob activeJob = iconResource->getQueuedJob();
+        String icon = iconResource->getIconPath(activeJob.icon);
         if (icon.isNotEmpty())
         {
             Image iconImg;
             {
-                const ScopedUnlock imageLoadUnlock(lock);
+                const ScopedUnlock imageLoadUnlock(iconLock);
                 const MessageManagerLock lock;
                 iconImg = AssetFiles::loadImageAsset(icon);
             }
             if (iconImg.isNull())
             {
                 DBG("Removing unloadable icon " << icon);
-                auto iconIter = iconPaths.find
+                iconResource->removeIcon
                         (File(icon).getFileNameWithoutExtension());
-                iconPaths.erase(iconIter);
+                iconResource->addQueuedJob(activeJob);
             }
             else
             {
-                queuedJobs.remove(0);
-                const ScopedUnlock imageLoadUnlock(lock);
+                const ScopedUnlock imageLoadUnlock(iconLock);
                 const MessageManagerLock lock;
                 activeJob.callback(iconImg);
             }
         }
-        else
-        {
-            queuedJobs.remove(0);
-        }
         //Allow other threads to run
         {
-            const ScopedUnlock yieldUnlock(lock);
+            const ScopedUnlock yieldUnlock(iconLock);
             Thread::yield();
         }
     }
@@ -154,7 +189,7 @@ static int iconDirValue(const File& file)
     return 0;
 }
 
-int IconThread::IconFileComparator::compareElements
+int IconThread::IconResource::IconFileComparator::compareElements
 (File first, File second)
 {
     if (first == second)
@@ -167,9 +202,8 @@ int IconThread::IconFileComparator::compareElements
 /**
  * Creates the map of all icon file paths.
  */
-void IconThread::mapIcons()
+void IconThread::IconResource::mapIcons()
 {
-    const ScopedLock mapLock(lock);
     //Subdirectories with these names are likely to appear, but should
     //not be searched for icons.
     const StringArray ignore = {

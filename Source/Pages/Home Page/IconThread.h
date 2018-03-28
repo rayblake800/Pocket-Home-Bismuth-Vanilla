@@ -9,9 +9,10 @@
 #pragma once
 #include <map>
 #include <functional>
+#include "RAIISingleton.h"
 #include "JuceHeader.h"
 
-class IconThread : public Thread
+class IconThread : public Thread, private RAIISingleton
 {
 public:
     IconThread();
@@ -37,65 +38,111 @@ public:
      */
     void loadIcon(String icon, std::function<void(Image) > assignImage);
 
+
+private:
     /**
      * While AppMenuButtons still need icons, this finds them in a separate 
      * thread.
      */
     void run() override;
 
-private:
-    //Queued icon requests waiting for the icon thread.
-
-    struct QueuedJob
-    {
-        String icon;
-        std::function<void(Image) > callback;
-    };
-    Array<QueuedJob> queuedJobs;
-
     /**
-     * Compares icon directories for IconThread::mapIcons, prioritizing ones 
-     * with resolution numbers closer to 128
+     * Shares access to the icon map and the job queue.
      */
-    class IconFileComparator
+    class IconResource : public RAIISingleton::SharedResource
     {
     public:
-        static int compareElements(File first, File second);
+
+        IconResource() { }
+
+        virtual ~IconResource() { }
+
+        struct QueuedJob
+        {
+            String icon;
+            std::function<void(Image) > callback;
+        };
+
+        /**
+         * Returns the number of pending icon requests. 
+         */
+        int numJobsQueued();
+
+        /**
+         * Adds another job request to the queue.
+         * 
+         * @param newJob
+         */
+        void addQueuedJob(QueuedJob newJob);
+
+        /**
+         * Removes and returns the last job from the list.
+         * 
+         * @return the last job, or a QueuedJob with an empty icon string and
+         *          callback function if the queue is empty.
+         */
+        QueuedJob getQueuedJob();
+
+        /**
+         * Searches for and returns an icon's full path. 
+         * 
+         * @param icon  Either a full icon file path, or the filename(without
+         *               extension) of an icon in one of the system icon 
+         *               directories.
+         * 
+         * @return     The closest matching icon image available 
+         */
+        String getIconPath(String icon);
+        
+        /**
+         * Removes an icon from the icon path map.
+         * 
+         * @param iconName  If an icon with this key is in the list of mapped
+         *                   icons, it will be removed.
+         */
+        void removeIcon(String iconName);
+        
+    private:
+        /**
+         * Creates the map of all icon file paths.
+         */
+        void mapIcons();
+
+        //Prioritize icon directories with listed resolutions closest to 
+        //this value.
+        const int idealIconResolution = 128;
+
+        /**
+         * Compares icon directories for icon mapping, prioritizing ones 
+         * with resolution numbers closer to 128
+         */
+        class IconFileComparator
+        {
+        public:
+            static int compareElements(File first, File second);
+        };
+
+        //Queued icon requests waiting for the icon thread.
+        Array<QueuedJob> queuedJobs;
+
+        //Contains <filename(no extention),fullpath/filename.extension>
+        //mappings for all icons found on the system.
+        std::map<String, String> iconPaths;
+
+        //True iff icon paths have already been mapped
+        bool iconPathsMapped = false;
+
     };
-
-    /**
-     * Searches for and returns an icon's full path. 
-     * 
-     * @param icon  Either a full icon file path, or the filename(without
-     *               extension) of an icon in one of the system icon 
-     *               directories.
-     * 
-     * @return     The closest matching icon image available 
-     */
-    String getIconPath(String icon);
-
-    //Contains <filename(no extention),fullpath/filename.extension>
-    //mappings for all icons found on the system.
-    std::map<String, String> iconPaths;
-    //True iff icon paths have already been mapped
-    bool iconPathsMapped = false;
-
-    /**
-     * Creates the map of all icon file paths.
-     */
-    void mapIcons();
-
-    //Prioritize icon directories with listed resolutions closest to this value.
-    const int idealIconResolution = 128;
-
-    //Prevent concurrent modification of icon maps/queuedJobs
-    CriticalSection lock;
 
     //Default image icons to copy into AppMenuButtons
     Image defaultIcon;
 
     //default icon path definitions
     static const String defaultIconPath;
+
+    //RAIISingleton shared object and lock;
+    static ScopedPointer<RAIISingleton::SharedResource> sharedResource;
+    CriticalSection iconLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconThread)
 };
