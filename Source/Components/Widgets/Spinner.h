@@ -7,11 +7,11 @@
  */
 
 #pragma once
-#include "DrawableImageComponent.h"
+#include "ConfigurableImageComponent.h"
 #include "WindowFocusedTimer.h"
 #include "JuceHeader.h"
 
-class Spinner : public Component, private WindowFocusedTimer {
+class Spinner : public ConfigurableImageComponent, private WindowFocusedTimer {
 public:
     /**
      * @param secondsToTimeout Sets how many seconds should pass after enabling
@@ -20,25 +20,10 @@ public:
      *                          spinner will keep running until destroyed or 
      *                          turned off with setEnabled().
      */
-    Spinner(int secondsToTimeout = -1);
+    Spinner(ComponentConfigFile& config,int secondsToTimeout = -1);
     
-    ~Spinner();
+    virtual ~Spinner() {}
     
-    /**
-     * Changes the color of the spinner icon.
-     * 
-     * @param spinnerColour  A new color to apply in place of the default
-     *                        white.
-     */
-    void setColour(Colour spinnerColour);
-
-protected:
-    /**
-     * Sets the internal image component's bounds within the Spinner.
-     * 
-     * @param imageBounds
-     */
-    void setImageBounds(Rectangle<int> imageBounds);
     
 private:
     /**
@@ -48,24 +33,16 @@ private:
     void visibilityChanged() override;
 
     /**
-     * Sets spinner image bounds to match the component.
-     */
-    void resized() override;
-
-    /**
      * Shows the next frame of the spinner animation, and disables the spinner
      * if runtime exceeds the timeout period.
      */
     void timerCallback();
-
-    //current shown spinner image
-    DrawableImageComponent spinnerImage;
-    
-    //the spinner cycles through these images to display a simple animation
-    Array<Image> spinnerImages;
     
     //the current spinnerImages index loaded into spinnerImage
     int imageIndex = 0;
+    
+    //number of image assets, read from config
+    int numImages = 0;
     
     //The amount of time, in milliseconds, that the spinner has been visible
     int runtime = 0;

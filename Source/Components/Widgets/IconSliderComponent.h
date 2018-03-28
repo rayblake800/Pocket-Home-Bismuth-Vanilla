@@ -78,6 +78,12 @@ private:
      * Update the icons and slider to fit the component bounds.
      */
     void resized() override;
+    
+    /**
+     * Update the icon color if slider color changes
+     */
+    void colourChanged() override;
+
 
     //Icon displayed to the left of the slider.
     DrawableImageComponent lowIcon;

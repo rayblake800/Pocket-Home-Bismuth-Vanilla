@@ -14,12 +14,12 @@ WifiSettingsPage::WifiSettingsPage(
         WifiStateManager& wifiManager) :
 ConnectionPage<WifiAccessPoint>(config),
 config(config),
+spinner(config),
 wifiManager(wifiManager),
 passwordLabel(config, "passwordLabel", localeText(password_field)),
 errorLabel(config),
 Localized("WifiSettingsPage")
 {
-    ASSERT_SINGULAR;
 #    if JUCE_DEBUG
     setName("WifiSettingsPage");
 #    endif
@@ -278,6 +278,8 @@ apLabel(config, "apLabel", connection.getSSID()
 + (isConnected ? localeText(connected_ap) : String())),
 wifiIcon(getWifiAssetName(connection))
 {
+    Colour iconColour = findColour(Label::textColourId);
+    wifiIcon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
     addAndMakeVisible(apLabel);
     addAndMakeVisible(wifiIcon);
     apLabel.setJustificationType(Justification::centred);
@@ -286,6 +288,7 @@ wifiIcon(getWifiAssetName(connection))
     {
 
         lockIcon = new DrawableImageComponent("lock.svg");
+        lockIcon->setColour(DrawableImageComponent::imageColour0Id, iconColour);
         addAndMakeVisible(lockIcon);
     }
 }

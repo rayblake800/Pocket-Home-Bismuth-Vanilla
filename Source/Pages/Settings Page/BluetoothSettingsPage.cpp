@@ -6,6 +6,7 @@ BluetoothSettingsPage::BluetoothSettingsPage(
         BluetoothStatus& bluetoothStatus) :
 ConnectionPage<BluetoothDevice>(config),
 config(config),
+spinner(config),
 errorLabel(config),
 bluetoothStatus(bluetoothStatus)
 {

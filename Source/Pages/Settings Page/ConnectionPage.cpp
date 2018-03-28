@@ -360,7 +360,7 @@ template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::ConnectionListItem::
 paint(Graphics &g)
 {
-    g.setColour(findColour(ListBox::ColourIds::backgroundColourId));
+    g.setColour(findColour(Label::ColourIds::textColourId));
     g.drawRoundedRectangle(0, 0, getWidth(), getHeight(), 1, borderWidth);
 }
 

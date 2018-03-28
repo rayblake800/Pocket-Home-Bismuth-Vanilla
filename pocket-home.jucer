@@ -322,29 +322,32 @@
         <FILE id="LxVUAo" name="LoginPage.cpp" compile="1" resource="0" file="Source/Pages/LoginPage.cpp"/>
         <FILE id="ecOl3Y" name="LoginPage.h" compile="0" resource="0" file="Source/Pages/LoginPage.h"/>
       </GROUP>
-      <FILE id="VTewwc" name="TempTimer.cpp" compile="1" resource="0" file="Source/TempTimer.cpp"/>
-      <FILE id="idqyCx" name="TempTimer.h" compile="0" resource="0" file="Source/TempTimer.h"/>
-      <FILE id="GJ9TER" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="rdg6xk" name="PocketHomeApplication.cpp" compile="1" resource="0"
-            file="Source/PocketHomeApplication.cpp"/>
-      <FILE id="cK501J" name="PocketHomeApplication.h" compile="0" resource="0"
-            file="Source/PocketHomeApplication.h"/>
       <FILE id="zJPlv7" name="AppLauncher.cpp" compile="1" resource="0" file="Source/AppLauncher.cpp"/>
       <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppLauncher.h"/>
       <FILE id="U4ygJ9" name="AssetFiles.cpp" compile="1" resource="0" file="Source/AssetFiles.cpp"/>
       <FILE id="cXrxti" name="AssetFiles.h" compile="0" resource="0" file="Source/AssetFiles.h"/>
       <FILE id="ec2YX8" name="Localized.cpp" compile="1" resource="0" file="Source/Localized.cpp"/>
       <FILE id="IG78EN" name="Localized.h" compile="0" resource="0" file="Source/Localized.h"/>
+      <FILE id="GJ9TER" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="OP9h3M" name="PageFactory.cpp" compile="1" resource="0" file="Source/PageFactory.cpp"/>
       <FILE id="HpTag6" name="PageFactory.h" compile="0" resource="0" file="Source/PageFactory.h"/>
+      <FILE id="rdg6xk" name="PocketHomeApplication.cpp" compile="1" resource="0"
+            file="Source/PocketHomeApplication.cpp"/>
+      <FILE id="cK501J" name="PocketHomeApplication.h" compile="0" resource="0"
+            file="Source/PocketHomeApplication.h"/>
       <FILE id="xoVLAp" name="PokeLookAndFeel.cpp" compile="1" resource="0"
             file="Source/PokeLookAndFeel.cpp"/>
       <FILE id="g1eykD" name="PokeLookAndFeel.h" compile="0" resource="0"
             file="Source/PokeLookAndFeel.h"/>
+      <FILE id="Yl2sdL" name="RAIISingleton.cpp" compile="1" resource="0"
+            file="Source/RAIISingleton.cpp"/>
+      <FILE id="WuV2YN" name="RAIISingleton.h" compile="0" resource="0" file="Source/RAIISingleton.h"/>
       <FILE id="X7wz2M" name="RelativeLayoutManager.cpp" compile="1" resource="0"
             file="Source/RelativeLayoutManager.cpp"/>
       <FILE id="r4oAKB" name="RelativeLayoutManager.h" compile="0" resource="0"
             file="Source/RelativeLayoutManager.h"/>
+      <FILE id="VTewwc" name="TempTimer.cpp" compile="1" resource="0" file="Source/TempTimer.cpp"/>
+      <FILE id="idqyCx" name="TempTimer.h" compile="0" resource="0" file="Source/TempTimer.h"/>
       <FILE id="Ury6Cc" name="Utils.cpp" compile="1" resource="0" file="Source/Utils.cpp"/>
       <FILE id="AywA6o" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
       <FILE id="i1c7QE" name="WindowFocus.cpp" compile="1" resource="0" file="Source/WindowFocus.cpp"/>

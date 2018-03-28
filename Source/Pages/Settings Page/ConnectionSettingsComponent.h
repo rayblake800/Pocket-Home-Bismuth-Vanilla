@@ -89,6 +89,11 @@ private:
     void resized() override;
 
     /**
+     * Update the icon color if text color changes.
+     */
+    void colourChanged() override;
+
+    /**
      * If the connection button is clicked this will run openConnectionPage(). 
      * If the switch is clicked, this will call enabledStateChanged(), passing
      * it the switch toggle state.
@@ -141,7 +146,7 @@ private:
          * Calculates button text height based on button size.
          */
         void resized() override;
-        
+
         //used for finding text height when the component is resized
         ComponentConfigFile& config;
         //last calculated text height
@@ -151,7 +156,7 @@ private:
         int borderSize;
         //Connection information text
         String displayText;
-        
+
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionButton)
     };
     //Shared UI component preferences
@@ -166,6 +171,6 @@ private:
     ConnectionButton pageButton;
     //Callback function that opens the connection page
     std::function<void() > openConnectionPage;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionSettingsComponent)
 };

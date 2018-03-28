@@ -7,6 +7,7 @@ ConnectionSettingsComponent::ConnectionSettingsComponent(
         const String& name) :
 Component(name),
 config(config),
+spinner(config),
 openConnectionPage(openConnectionPage),
 pageButton(config, name + "Button")
 {
@@ -16,6 +17,8 @@ pageButton(config, name + "Button")
     addAndMakeVisible(toggle);
     addAndMakeVisible(pageButton);
     addChildComponent(spinner);
+    Colour iconColour = findColour(Label::textColourId);
+    icon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
 }
 
 /**
@@ -63,6 +66,15 @@ void ConnectionSettingsComponent::resized()
 }
 
 /**
+ * Update the icon color if text color changes.
+ */
+void ConnectionSettingsComponent::colourChanged()
+{
+    Colour iconColour = findColour(Label::textColourId);
+    icon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
+}
+
+/**
  * If the connection button is clicked this will run openConnectionPage(). 
  * If the switch is clicked, this will call  enabledStateChanged(), passing
  * it the switch toggle state.
@@ -96,8 +108,7 @@ void ConnectionSettingsComponent::visibilityChanged()
  */
 ConnectionSettingsComponent::ConnectionButton::ConnectionButton(
         ComponentConfigFile& config,
-        const String& name) : Button(name), config(config) {
- }
+        const String& name) : Button(name), config(config) { }
 
 /**
  * Sets the text that will be printed on the button.

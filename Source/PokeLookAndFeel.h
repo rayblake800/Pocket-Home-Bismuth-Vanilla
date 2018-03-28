@@ -46,6 +46,8 @@ public:
             float minSliderPos, float maxSliderPos,
             const Slider::SliderStyle style, Slider &slider) override;
 
+    
+    
     /**
      * Draws the background of a linear slider.
      */
@@ -90,14 +92,6 @@ public:
      */
     MouseCursor getMouseCursorFor(Component &component) override;
 
-//    /**
-//     * Ensures AlertWindows don't extend beyond the window bounds. 
-//     */
-//    static AlertWindow* createAlertWindow(
-//            const String& title, const String& message,
-//            const String& button1, const String& button2, const String& button3,
-//            AlertWindow::AlertIconType iconType,
-//            int numButtons, Component* associatedComponent) override;
 
 private:
     /**

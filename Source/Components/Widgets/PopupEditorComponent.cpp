@@ -18,6 +18,10 @@ confirmButton("confirm.svg")
     loadAllConfigProperties();
 
     titleLabel.setJustificationType(Justification::centred);
+    
+    Colour btnColour = findColour(Label::textColourId);
+    cancelButton.setColour(DrawableImageComponent::imageColour0Id,btnColour);
+    confirmButton.setColour(DrawableImageComponent::imageColour0Id,btnColour);
 
     cancelButton.setWantsKeyboardFocus(false);
     cancelButton.addListener(this);

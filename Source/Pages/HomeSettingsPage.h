@@ -98,8 +98,8 @@ private:
     static const constexpr char * choose_background = "choose_background";
     static const constexpr char * choose_bg_image = "choose_bg_image";
     static const constexpr char * menu_type_text = "menu_type_text";
-    static const constexpr char * menu_columns = "menu_type_text";
-    static const constexpr char * menu_rows = "menu_type_text";
+    static const constexpr char * menu_columns = "menu_columns";
+    static const constexpr char * menu_rows = "menu_rows";
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomeSettingsPage)
 };

@@ -1,18 +1,31 @@
 {  
     "use 24h mode": true,
     "show clock": true,
+    
+    "Page background color": "0xffe9e9e9",
+    
+    "DEFAULT COLORS":"TODO: use these, remove most other color ids",
+    "window background color"      : "0xffe9e9e9",
+    "widget background color"      : "0xffb8b8b8",
+    "widget color (off)"           : "0xff393939",
+    "widget color (on)"            : "0xffbc3662",
+    "menu background color"        : "0xffe9e9e9",
+    "outline color"                : "0xffb8b8b8",
+    "focused outline color"        : "0xffb88e47",
+    "text field color"             : "0xffe9e9e9",
+    "text color"                   : "0xffb8b8b8",
+    "highlighted text field color" : "0xff393939",
+    "highlighted text color"       : "0xffeb008b",
 
-    "Page background color": "0xff393939",
-
-    "AppMenu button background color": "0x55e9e9e9",
+    "AppMenu button background color": "0xffb8b8b8",
     "AppMenu button border color": "0xffb88e47",
-    "AppMenu button selection color": "0xff393939",
-    "AppMenu button text color": "0xffffffff",
+    "AppMenu button selection color": "0xfff799aa",
+    "AppMenu button text color": "0xffbc3662",
 
-    "Drawable button text color": "0xffffffff",
+    "Drawable button text color": "0xffbc3662",
 
-    "File picker text color": "0xffffffff",
-    "File picker window color": "0xff393939",
+    "File picker text color": "0xffbc3662",
+    "File picker window color": "0xffe9e9e9",
 
     "Image color 0": "0xffffffff",
     "Image color 1": "0xff000000",
@@ -24,24 +37,24 @@
     "Label background color(editing)": "0xff393939",
     "Label outline color": "0x00000000",
     "Label outline color(editing)": "0xffb88e47",
-    "Label text color": "0xfff799aa",
-    "Label text color(editing)": "0xfff799aa",
+    "Label text color": "0xffbc3662",
+    "Label text color(editing)": "0xffbc3662",
 
-    "List editor background color": "0xffb88e47",
+    "List editor background color": "0xffb8b8b8",
     "List editor list item color": "0xffe9e9e9",
     "List editor selected item color": "0xff393939",
     "List editor text color": "0xffbc3662",
 
     "Overlay spinner background color": "0xeec9c9c9",
-    "Overlay spinner text color": "0xffffffff",
+    "Overlay spinner text color": "0xffbc3662",
 
-    "Slider background color": "0xffffffff",
-    "Slider thumb color": "0xffffffff",
-    "Slider track color": "0xfff799aa",
+    "Slider background color": "0xffaa98a6",
+    "Slider thumb color": "0xffbc3662",
+    "Slider track color": "0xff393939",
 
-    "Text button(off) color": "0xffe9e9e9",
+    "Text button(off) color": "0xffb8b8b8",
     "Text button(off) text color": "0xffbc3662",
-    "Text button(on) color": "0xffe9e9e9",
+    "Text button(on) color": "0xffb8b8b8",
     "Text button(on) text color": "0xffbc3662",
 
     "Text editor background color": "0xffe9e9e9",
@@ -52,14 +65,14 @@
     "Text editor outline color": "0xffb8b8b8",
     "Text editor shadow color": "0x00000000",
 
-    "Switch background color": "0xffffffff",
+    "Switch background color": "0xffb8b8b8",
     "Switch handle color": "0xffbc3662",
-    "Switch handle color(off)": "0xfff799aa",
+    "Switch handle color(off)": "0xff393939",
 
     "Pop-up menu text color": "0xffbc3662",
-    "Pop-up menu header text color": "0xffffffff",
+    "Pop-up menu header text color": "0xffbc3662",
     "Pop-up menu background color": "0xffe9e9e9",
-    "Pop-up menu highlighted text color": "0xffffffff",
+    "Pop-up menu highlighted text color": "0xfff799aa",
 
     "Combo box text color": "0xffbc3662",
     "Combo box background color": "0xffe9e9e9",
@@ -67,9 +80,9 @@
     "Combo box button color": "0xffbc3662",
     "Combo box arrow color": "0xffbc3662",
 
-    "Alert window text color": "0xffeb008b",
-    "Alert window outline color": "0xffd23c6d",
-    "Alert window background color": "0xff393939",
+    "Alert window text color": "0xffbc3662",
+    "Alert window outline color": "0xffb88e47",
+    "Alert window background color": "0xffe9e9e9",
 
     "scrolling app menu": {
         "x": 0,
@@ -89,7 +102,7 @@
         "width": 0.085,
         "height": 0.075,
         "colours": [
-            "0xffb88e47",
+            "0xffeb008b",
             "fffa9622",
             "ffff0000"
         ],
@@ -111,7 +124,7 @@
         "width": 0.15,
         "height": 0.075,
         "colours": [
-            "0xffffffff"
+            "0xffeb008b"
         ]
     },
     "menu frame": {
@@ -120,8 +133,8 @@
         "width": 1,
         "height": 1,
         "colours": [
-            "0xffbc3662",
-            "0xffe9e9e9"
+            "0xffb88e47",
+            "0xffb8b8b8"
         ],
         "asset files": [
             "frame.svg"
@@ -133,7 +146,7 @@
         "width": 0.09,
         "height": 0.09,
         "colours": [
-            "0xffb88e47"
+            "0xffeb008b"
         ],
         "asset files": [
             "powerIcon.svg"
@@ -145,7 +158,7 @@
         "width": 0.09,
         "height": 0.09,
         "colours": [
-            "0xffb88e47"
+            "0xffeb008b"
         ],
         "asset files": [
             "settingsIcon.svg"
@@ -166,7 +179,7 @@
         "width": 0.085,
         "height": 0.085,
         "colours": [
-            "0xffb88e47"
+            "0xffeb008b"
         ],
         "asset files": [
             "wifiOff.svg",
@@ -180,8 +193,8 @@
         "width": 0.7,
         "height": 0.7,
         "colours": [
-            "ffd23c6d",
-            "ff202020"
+            "0xffb88e47",
+            "0xffe9e9e9"
         ],
         "asset files": [
             "popupFrame.svg"
@@ -193,7 +206,7 @@
         "width": 0.1,
         "height": 0.2,
         "colours": [
-            "0xffb88e47"
+            "0xffeb008b"
         ],
         "asset files": [
             "backIcon.svg"
@@ -205,7 +218,7 @@
         "width": 0.1,
         "height": 0.2,
         "colours": [
-            "0xffb88e47"
+            "0xffeb008b"
         ],
         "asset files": [
             "nextIcon.svg"
@@ -217,7 +230,7 @@
         "width": 0.18,
         "height": 0.08,
         "colours": [
-            "0xffb88e47"
+            "0xffeb008b"
         ],
         "asset files": [
             "pageUpIcon.svg"
@@ -229,10 +242,25 @@
         "width": 0.18,
         "height": 0.08,
         "colours": [
-            "0xffb88e47"
+            "0xffeb008b"
         ],
         "asset files": [
             "pageDownIcon.svg"
+        ]
+    },
+    "loading spinner": {
+        "colours": [
+            "0xffeb008b"
+        ],
+        "asset files": [
+            "spinner0.svg",
+            "spinner1.svg",
+            "spinner2.svg",
+            "spinner3.svg",
+            "spinner4.svg",
+            "spinner5.svg",
+            "spinner6.svg",
+            "spinner7.svg"
         ]
     },
     "small text": {

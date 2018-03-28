@@ -3,7 +3,7 @@
 
 OverlaySpinner::OverlaySpinner
 (ComponentConfigFile& config, int secondsToTimeout) :
-Spinner(secondsToTimeout),
+spinner(config,secondsToTimeout),
 loadingText(config)
 {
 
@@ -39,7 +39,7 @@ void OverlaySpinner::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
     int spinnerSize = bounds.getHeight() / 10;
-    setImageBounds(bounds.withSizeKeepingCentre(spinnerSize, spinnerSize));
+    spinner.setBounds(bounds.withSizeKeepingCentre(spinnerSize, spinnerSize));
     Rectangle<int> textBounds = bounds.withHeight(spinnerSize)
             .withY(bounds.getX() + bounds.getHeight()*2 / 3);
     loadingText.setBounds(textBounds);

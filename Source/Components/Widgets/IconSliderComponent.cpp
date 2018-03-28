@@ -10,6 +10,9 @@ highIcon(highImgAsset, RectanglePlacement::stretchToFit)
 #    if JUCE_DEBUG
     setName("IconSliderComponent");
 #    endif
+    Colour imageColour = findColour(Slider::trackColourId);
+    lowIcon.setColour(DrawableImageComponent::imageColour0Id, imageColour);
+    highIcon.setColour(DrawableImageComponent::imageColour0Id, imageColour);
     slider.setSliderStyle(Slider::LinearHorizontal);
     slider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
     slider.setRange(0, 100);
@@ -71,4 +74,14 @@ void IconSliderComponent::resized()
     lowIcon.setBounds(bounds.withWidth(bounds.getHeight()));
     highIcon.setBounds(bounds.withLeft(bounds.getRight() - bounds.getHeight()));
     slider.setBounds(bounds.reduced(bounds.getHeight(), 0));
+}
+
+/**
+ * Update the icon color if slider color changes
+ */
+void IconSliderComponent::colourChanged()
+{
+    Colour imageColour = findColour(Slider::trackColourId);
+    lowIcon.setColour(DrawableImageComponent::imageColour0Id, imageColour);
+    highIcon.setColour(DrawableImageComponent::imageColour0Id, imageColour);
 }

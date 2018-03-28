@@ -59,6 +59,7 @@ public:
     static const String pageRightKey;
     static const String pageUpKey;
     static const String pageDownKey;
+    static const String spinnerKey;
     static const String smallTextKey;
     static const String mediumTextKey;
     static const String largeTextKey;

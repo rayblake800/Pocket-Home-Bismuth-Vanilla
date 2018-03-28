@@ -1,8 +1,8 @@
 /**
  * @file OverlaySpinner.h
  * 
- * OverlaySpinner is a Spinner component that covers the entire window, and
- * optionally displays loading text.
+ * OverlaySpinner shows a Spinner component and optional loading text over
+ * a full-screen overlay.
  * 
  * @see Spinner.h
  */
@@ -12,7 +12,7 @@
 #include "ScalingLabel.h"
 #include "Spinner.h"
 
-class OverlaySpinner : public Spinner
+class OverlaySpinner : public Component
 {
 public:
 
@@ -58,6 +58,8 @@ private:
 
     //Displays optional loading text below the spinner.
     ScalingLabel loadingText;
+    
+    Spinner spinner;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OverlaySpinner)
 };

@@ -50,6 +50,21 @@ placement(placement)
 }
 
 /**
+ * Create a DrawableImageComponent using a Drawable object.
+ */
+DrawableImageComponent::DrawableImageComponent
+(Drawable* drawable, RectanglePlacement placement) :
+placement(placement)
+{
+#    if JUCE_DEBUG
+    setName("DrawableImageComponent");
+#    endif
+    setImage(drawable);
+    setInterceptsMouseClicks(false, false);
+
+}
+
+/**
  * Create a DrawableImageComponent without an initial image.
  */
 DrawableImageComponent::DrawableImageComponent
@@ -101,6 +116,15 @@ void DrawableImageComponent::setImage(Image image)
 {
     DrawableImage * drawable = new DrawableImage();
     drawable->setImage(image);
+    imageDrawable = drawable;
+    initImage();
+}
+
+/**
+ * Changes the image drawn by this component.
+ */
+void DrawableImageComponent::setImage(Drawable* drawable)
+{
     imageDrawable = drawable;
     initImage();
 }

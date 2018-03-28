@@ -67,6 +67,17 @@ public:
     DrawableImageComponent(Image image,
             RectanglePlacement placement = RectanglePlacement::centred);
 
+    /**
+     * Create a DrawableImageComponent using a Drawable object.
+     * 
+     * @param drawable   Any non-null drawable object.
+     * 
+     * @param placement  Defines how the image will be scaled to fit the
+     *                    component.
+     */
+    DrawableImageComponent(Drawable* drawable,
+            RectanglePlacement placement = RectanglePlacement::centred);
+
 
     /**
      * Create a DrawableImageComponent without an initial image.
@@ -100,6 +111,13 @@ public:
      * @param image  Any image object.
      */
     void setImage(Image image);
+
+    /**
+     * Changes the image drawn by this component.
+     * 
+     * @param drawable  Any drawable object.
+     */
+    void setImage(Drawable* drawable);
 
 
     /**

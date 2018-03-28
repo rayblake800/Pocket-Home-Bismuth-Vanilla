@@ -146,15 +146,16 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/AdvancedSettingsPage_cdfb4228.o \
   $(JUCE_OBJDIR)/DateTimePage_e779e45e.o \
   $(JUCE_OBJDIR)/LoginPage_6c277ece.o \
-  $(JUCE_OBJDIR)/TempTimer_66895cb2.o \
-  $(JUCE_OBJDIR)/Main_90ebc5c2.o \
-  $(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o \
   $(JUCE_OBJDIR)/AppLauncher_be937ec2.o \
   $(JUCE_OBJDIR)/AssetFiles_7ecbbf70.o \
   $(JUCE_OBJDIR)/Localized_b37b235c.o \
+  $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/PageFactory_6a329c5c.o \
+  $(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o \
   $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o \
+  $(JUCE_OBJDIR)/RAIISingleton_971606bd.o \
   $(JUCE_OBJDIR)/RelativeLayoutManager_c0c10998.o \
+  $(JUCE_OBJDIR)/TempTimer_66895cb2.o \
   $(JUCE_OBJDIR)/Utils_e4b11b92.o \
   $(JUCE_OBJDIR)/WindowFocus_f9cd7529.o \
   $(JUCE_OBJDIR)/WindowFocusedTimer_7daa28a7.o \
@@ -566,21 +567,6 @@ $(JUCE_OBJDIR)/LoginPage_6c277ece.o: ../../Source/Pages/LoginPage.cpp
 	@echo "Compiling LoginPage.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/TempTimer_66895cb2.o: ../../Source/TempTimer.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling TempTimer.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling Main.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o: ../../Source/PocketHomeApplication.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling PocketHomeApplication.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/AppLauncher_be937ec2.o: ../../Source/AppLauncher.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppLauncher.cpp"
@@ -596,9 +582,19 @@ $(JUCE_OBJDIR)/Localized_b37b235c.o: ../../Source/Localized.cpp
 	@echo "Compiling Localized.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling Main.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/PageFactory_6a329c5c.o: ../../Source/PageFactory.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PageFactory.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o: ../../Source/PocketHomeApplication.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling PocketHomeApplication.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o: ../../Source/PokeLookAndFeel.cpp
@@ -606,9 +602,19 @@ $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o: ../../Source/PokeLookAndFeel.cpp
 	@echo "Compiling PokeLookAndFeel.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/RAIISingleton_971606bd.o: ../../Source/RAIISingleton.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling RAIISingleton.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/RelativeLayoutManager_c0c10998.o: ../../Source/RelativeLayoutManager.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling RelativeLayoutManager.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/TempTimer_66895cb2.o: ../../Source/TempTimer.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling TempTimer.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Utils_e4b11b92.o: ../../Source/Utils.cpp

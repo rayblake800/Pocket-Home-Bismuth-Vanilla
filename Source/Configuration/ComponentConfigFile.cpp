@@ -134,12 +134,12 @@ const std::map<String, int> ComponentConfigFile::colourIds{
     {"Combo box arrow color",
      ComboBox::arrowColourId},
 
-    
+
     {"Alert window background color",
      AlertWindow::backgroundColourId},
-     {"Alert window text color",
+    {"Alert window text color",
      AlertWindow::textColourId},
-     {"Alert window outline color",
+    {"Alert window outline color",
      AlertWindow::outlineColourId}};
 
 ComponentConfigFile::ComponentConfigFile() : ConfigFile(filenameConst)
@@ -203,6 +203,7 @@ const String ComponentConfigFile::pageLeftKey = "left arrow button";
 const String ComponentConfigFile::pageRightKey = "right arrow button";
 const String ComponentConfigFile::pageUpKey = "up arrow button";
 const String ComponentConfigFile::pageDownKey = "down arrow button";
+const String ComponentConfigFile::spinnerKey = "loading spinner";
 const String ComponentConfigFile::smallTextKey = "small text";
 const String ComponentConfigFile::mediumTextKey = "medium text";
 const String ComponentConfigFile::largeTextKey = "large text";
@@ -279,6 +280,7 @@ StringArray ComponentConfigFile::getComponentKeys()
             pageRightKey,
             pageUpKey,
             pageDownKey,
+            spinnerKey,
             smallTextKey,
             mediumTextKey,
             largeTextKey};
