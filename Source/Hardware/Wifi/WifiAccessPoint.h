@@ -7,7 +7,7 @@
 #pragma once
 #include "JuceHeader.h"
 
-class WifiAccessPoint {
+class WifiAccessPoint{
 public:
     /**
      * @param ssid            The access point name.

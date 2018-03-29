@@ -1,10 +1,10 @@
+#include "LibNMInterface.h"
 #ifdef LINUX
 #include <map>
 #include <nm-remote-connection.h>
 #include <nm-active-connection.h>
 #include <nm-utils.h>
 #include "JuceHeader.h"
-#include "LibNMInterface.h"
 
 #define LIBNM_ITERATION_PERIOD 300 // milliseconds
 
@@ -527,15 +527,18 @@ void LibNMInterface::run()
     while (!threadShouldExit())
     {
         {
-            const MessageManagerLock mmLock(this);
-            if (mmLock.lockWasGained())
+            const ScopedLock lock(wifiLock);
+            switch (nm_device_get_state(nmDevice))
             {
-                if (isWifiConnecting())
-                {
+                case NM_DEVICE_STATE_PREPARE:
+                case NM_DEVICE_STATE_CONFIG:
+                case NM_DEVICE_STATE_NEED_AUTH:
+                case NM_DEVICE_STATE_IP_CONFIG:
+                case NM_DEVICE_STATE_IP_CHECK:
+                case NM_DEVICE_STATE_SECONDARIES:
                     signalWifiConnecting();
-                }
-                bool dispatched = g_main_context_iteration(context, false);
             }
+            bool dispatched = g_main_context_iteration(context, false);
         }
         wait(LIBNM_ITERATION_PERIOD);
     }
