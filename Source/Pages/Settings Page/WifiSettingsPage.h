@@ -22,11 +22,7 @@ public WifiStateManager::Listener, public TextEditor::Listener,
 private Localized
 {
 public:
-    
-    /**
-     * @param wifiManager   Tracks the current wifi state.
-     */
-    WifiSettingsPage(WifiStateManager& wifiManager);
+    WifiSettingsPage();
 
     virtual ~WifiSettingsPage() { }
 
@@ -183,9 +179,6 @@ private:
 
     //Wifi icons for all signal strengths
     static const StringArray wifiImageFiles;
-
-    //Provides up to date wifi data
-    WifiStateManager& wifiManager;
 
     //Set to true when wifi state is changing, used to determine if wifi
     //controls should be enabled

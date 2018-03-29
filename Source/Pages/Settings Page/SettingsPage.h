@@ -13,22 +13,13 @@
 #include "PageComponent.h"
 #include "WindowFocusedTimer.h"
 #include "WifiSettingsComponent.h"
-#include "WifiStateManager.h"
 //#include "BluetoothSettingsComponent.h"
 
 class SettingsPage : public PageComponent, public WindowFocusedTimer,
 private Slider::Listener, private Localized
 {
 public:
-    /**
-     * @param pageFactory  Page creator needed to open the advanced settings
-     *                      page.
-     * 
-     * @param wifiManager  Wifi state manager needed by the wifiComponent.
-     */
-    SettingsPage(
-            PageFactoryInterface* pageFactory,
-            WifiStateManager& wifiManager);
+    SettingsPage();
 
     virtual ~SettingsPage() { }
 

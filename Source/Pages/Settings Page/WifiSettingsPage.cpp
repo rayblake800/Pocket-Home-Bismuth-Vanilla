@@ -9,10 +9,8 @@ const StringArray WifiSettingsPage::wifiImageFiles
            "wifiStrength3.svg"
 };
 
-WifiSettingsPage::WifiSettingsPage(
-        WifiStateManager& wifiManager) :
+WifiSettingsPage::WifiSettingsPage() :
 ConnectionPage<WifiAccessPoint>(),
-wifiManager(wifiManager),
 passwordLabel("passwordLabel", localeText(password_field)),
 Localized("WifiSettingsPage")
 {
@@ -23,6 +21,7 @@ Localized("WifiSettingsPage")
     connectionButton.addChildComponent(spinner);
     connectionButton.addListener(this);
     errorLabel.setJustificationType(Justification::centred);
+    WifiStateManager wifiManager;
     wifiManager.addListener(this);
     updateConnectionList();
 }
@@ -32,6 +31,7 @@ Localized("WifiSettingsPage")
  */
 Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
 {
+    WifiStateManager wifiManager;
     return wifiManager.getVisibleAPs();
 }
 
@@ -41,6 +41,7 @@ Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
  */
 void WifiSettingsPage::connect(const WifiAccessPoint& connection)
 {
+    WifiStateManager wifiManager;
     if (connection.getRequiresAuth())
     {
         const String& psk = passwordEditor.getText();
@@ -64,6 +65,7 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
  */
 void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
 {
+    WifiStateManager wifiManager;
     wifiManager.disconnect(connection);
 }
 
@@ -72,6 +74,7 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
  */
 bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection)
 {
+    WifiStateManager wifiManager;
     if (connection.isNull())
     {
         return false;

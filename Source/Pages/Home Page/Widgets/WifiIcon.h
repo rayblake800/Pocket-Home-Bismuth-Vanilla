@@ -14,10 +14,7 @@ class WifiIcon : public ConfigurableImageComponent, private WindowFocusedTimer,
 private WifiStateManager::Listener
 {
 public:
-    /**
-     * @param wifiManager  Shared wifiManager, needed to track wifi state.
-     */
-    WifiIcon(WifiStateManager& wifiManager);
+    WifiIcon();
     
     virtual ~WifiIcon() { }
 
@@ -65,6 +62,4 @@ private:
     
     //timer frequency in ms
     const static int frequency = 2000;
-    
-    WifiStateManager& wifiManager;
 };

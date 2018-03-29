@@ -9,10 +9,10 @@
 #pragma once
 #include <map>
 #include <functional>
-#include "RAIISingleton.h"
+#include "ResourceManager.h"
 #include "JuceHeader.h"
 
-class IconThread : private RAIISingleton
+class IconThread : private ResourceManager
 {
 public:
     IconThread();
@@ -44,12 +44,12 @@ private:
     /**
      * Shares access to the icon map and the job queue.
      */
-    class IconResource : public Thread, public RAIISingleton::SharedResource
+    class IconResource : public Thread, public ResourceManager::SharedResource
     {
     public:
 
         /**
-         * @param threadLock  The RAIISingleton resource lock, which needs to 
+         * @param threadLock  The ResourceManager resource lock, which needs to 
          *                     be held by the thread loop while it accesses
          *                     icon data. 
          */
@@ -152,8 +152,8 @@ private:
     //default icon path definitions
     static const String defaultIconPath;
 
-    //RAIISingleton shared object and lock;
-    static ScopedPointer<RAIISingleton::SharedResource> sharedResource;
+    //ResourceManager shared object and lock;
+    static ScopedPointer<ResourceManager::SharedResource> sharedResource;
     static CriticalSection iconLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconThread)

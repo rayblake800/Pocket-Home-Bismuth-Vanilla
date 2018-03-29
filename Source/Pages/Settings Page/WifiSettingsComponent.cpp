@@ -1,16 +1,14 @@
 #include "PocketHomeApplication.h"
 #include "WifiSettingsComponent.h"
 
-WifiSettingsComponent::WifiSettingsComponent(
-        WifiStateManager& wifiManager,
-        std::function<void() > openWifiPage) :
+WifiSettingsComponent::WifiSettingsComponent(std::function<void() > openWifiPage) :
 ConnectionSettingsComponent(openWifiPage, "wifi"),
-Localized("WifiSettingsComponent"),
-wifiManager(wifiManager)
+Localized("WifiSettingsComponent")
 {
 #    if JUCE_DEBUG
     setName("WifiSettingsComponent");
 #    endif
+    WifiStateManager wifiManager;
     wifiManager.addListener(this);
     refresh();
 }
@@ -20,6 +18,7 @@ wifiManager(wifiManager)
  */
 bool WifiSettingsComponent::connectionEnabled()
 {
+    WifiStateManager wifiManager;
     return wifiManager.isEnabled();
 }
 
@@ -28,7 +27,8 @@ bool WifiSettingsComponent::connectionEnabled()
  */
 bool WifiSettingsComponent::isBusy()
 {
-    switch (getWifiState())
+    WifiStateManager wifiManager;
+    switch (wifiManager.getWifiState())
     {
         case WifiStateManager::turningOn:
         case WifiStateManager::turningOff:
@@ -53,6 +53,7 @@ String WifiSettingsComponent::getIconAsset()
  */
 void WifiSettingsComponent::enabledStateChanged(bool enabled)
 {
+    WifiStateManager wifiManager;
     if (enabled)
     {
         wifiManager.enableWifi();
@@ -68,6 +69,7 @@ void WifiSettingsComponent::enabledStateChanged(bool enabled)
  */
 String WifiSettingsComponent::updateButtonText()
 {
+    WifiStateManager wifiManager;
     switch (wifiManager.getWifiState())
     {
         case WifiStateManager::noStateManager:

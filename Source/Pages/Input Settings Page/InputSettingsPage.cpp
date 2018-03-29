@@ -2,7 +2,7 @@
 #include "AppLauncher.h"
 #include "InputSettingsPage.h"
 
-InputSettingsPage::InputSettingsPage(PageFactoryInterface* pageFactory) :
+InputSettingsPage::InputSettingsPage() :
 Localized("InputSettingsPage"),
 PageComponent("InputSettingsPage",{
     {3,
@@ -26,7 +26,7 @@ PageComponent("InputSettingsPage",{
         {
             {&fnmapping, 1}
         }}
-}, pageFactory),
+}),
 title("settings", localeText(input_settings)),
 chooseMode("chooseMode"),
 calibrating(localeText(calibrate_screen)),

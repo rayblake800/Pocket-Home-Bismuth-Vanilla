@@ -25,10 +25,8 @@
 class PowerPage : public PageComponent, private Localized
 {
 public:
-    /**
-     * @param pageFactory        Needed to open the flashing page. 
-     */
-    PowerPage(PageFactoryInterface* pageFactory);
+    
+    PowerPage();
 
     virtual ~PowerPage() { }
 private:

@@ -8,7 +8,6 @@
 #pragma once
 
 #include "OverlaySpinner.h"
-#include "WifiStateManager.h"
 #include "PageComponent.h"
 #include "AppConfigFile.h"
 #include "ComponentConfigFile.h"
@@ -29,13 +28,7 @@
 class HomePage : public PageComponent, public ConfigFile::Listener
 {
 public:
-    /**
-     * @param pageFactory       This is used by the page to open the settings
-     *                           and power pages.
-     * 
-     * @param wifiState         Wifi state manager, needed for the wifi icon.
-     */
-    HomePage(PageFactoryInterface* pageFactory, WifiStateManager& wifiState);
+    HomePage();
 
     virtual ~HomePage() { }
 

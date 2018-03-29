@@ -13,10 +13,7 @@
 class AdvancedSettingsPage : public PageComponent, private Localized
 {
 public:
-    /**
-     * @param pageFactory  Allows this page to open new pages.
-     */
-    AdvancedSettingsPage(PageComponent::PageFactoryInterface* pageFactory);
+    AdvancedSettingsPage();
 
     virtual ~AdvancedSettingsPage() { }
 

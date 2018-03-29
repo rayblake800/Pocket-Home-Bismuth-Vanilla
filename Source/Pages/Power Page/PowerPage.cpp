@@ -3,8 +3,7 @@
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
 
-PowerPage::PowerPage(PageFactoryInterface* pageFactory) :
-Localized("PowerPage"),
+PowerPage::PowerPage() :Localized("PowerPage"),
 PageComponent("PowerPage",{
     {1,
         {
@@ -30,7 +29,7 @@ PageComponent("PowerPage",{
         {
             {nullptr, 1}
         }}
-}, pageFactory, true, true),
+}, true, true),
 powerOffButton(localeText(shutdown)),
 rebootButton(localeText(reboot)),
 sleepButton(localeText(sleep)),

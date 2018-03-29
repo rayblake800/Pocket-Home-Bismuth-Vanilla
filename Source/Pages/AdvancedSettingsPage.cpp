@@ -1,10 +1,9 @@
 #include "AdvancedSettingsPage.h"
 #include "Password.h"
 
-AdvancedSettingsPage::AdvancedSettingsPage
-(PageComponent::PageFactoryInterface* pageFactory) :
+AdvancedSettingsPage::AdvancedSettingsPage() :
 Localized("AdvancedSettingsPage"),
-PageComponent("AdvancedSettingsPage",{}, pageFactory),
+PageComponent("AdvancedSettingsPage"),
 titleLabel("settings", localeText(advanced_settings)),
 setPasswordButton(localeText(set_password)),
 removePasswordButton(localeText(remove_password)),

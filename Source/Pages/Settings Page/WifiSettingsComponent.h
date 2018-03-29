@@ -14,14 +14,9 @@ public WifiStateManager::Listener, private Localized
 {
 public:
     /**
-     * @param wifiManager    The component's source of wifi data, shared
-     *                        between all objects tracking wifi.
-     * 
      * @param openWifiPage   Callback function that opens the wifi page.
      */
-    WifiSettingsComponent(
-            WifiStateManager& wifiManager,
-            std::function<void() > openWifiPage);
+    WifiSettingsComponent(std::function<void() > openWifiPage);
 
     virtual ~WifiSettingsComponent() { }
 private:
@@ -66,8 +61,6 @@ private:
 
     //if true, show the loading spinner and disable controls.
     bool wifiBusy = false;
-    //Used to enable and disable wifi
-    WifiStateManager& wifiManager;
 
 
     //localized text keys

@@ -6,11 +6,11 @@ const String IconThread::defaultIconPath =
 
 CriticalSection IconThread::iconLock;
 
-ScopedPointer<RAIISingleton::SharedResource> IconThread::sharedResource
+ScopedPointer<ResourceManager::SharedResource> IconThread::sharedResource
         = nullptr;
 
 IconThread::IconThread() :
-RAIISingleton(sharedResource, iconLock, [this]()->RAIISingleton::SharedResource*
+ResourceManager(sharedResource, iconLock, [this]()->ResourceManager::SharedResource*
 {
 
     return new IconResource(iconLock);

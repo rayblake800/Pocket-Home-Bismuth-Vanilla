@@ -6,11 +6,9 @@
 #include "ScrollingAppMenu.h"
 #include "HomePage.h"
 
-HomePage::HomePage(PageFactoryInterface* pageFactory,
-        WifiStateManager& wifiState) :
-PageComponent("HomePage",{}, pageFactory, false),
+HomePage::HomePage() :
+PageComponent("HomePage",{}, false),
 frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
-wifiIcon(wifiState),
 powerButton(ComponentConfigFile::powerButtonKey),
 settingsButton(ComponentConfigFile::settingsButtonKey)
 {

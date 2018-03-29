@@ -32,7 +32,7 @@ PageComponent("LoginPage",{
             {&loginButton, 1},
             {nullptr, 1}
         }}
-}, nullptr, false),
+}, false),
 ntcIcon("login/ntcbanner.png"),
 passwordLabel("pass", localeText(password_label)),
 passwordField("passwordField", 0x2022),

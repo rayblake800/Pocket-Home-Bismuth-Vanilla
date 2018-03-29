@@ -4,9 +4,7 @@
 #include "PokeLookAndFeel.h"
 #include "SettingsPage.h"
 
-SettingsPage::SettingsPage(
-        PageFactoryInterface* pageFactory,
-        WifiStateManager& wifiManager) :
+SettingsPage::SettingsPage() :
 Localized("SettingsPage"),
 WindowFocusedTimer("SettingsPage"),
 PageComponent("SettingsPage",{
@@ -30,9 +28,8 @@ PageComponent("SettingsPage",{
         {
             {&advancedPageButton, 1}
         }}
-},
-pageFactory, true),
-wifiComponent(wifiManager, [this]()
+},true),
+wifiComponent([this]()
 {
     pushPageToStack(PageType::WifiSettings);
 }),

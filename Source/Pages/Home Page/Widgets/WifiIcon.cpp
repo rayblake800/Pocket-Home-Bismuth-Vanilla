@@ -1,16 +1,14 @@
-#include "WifiAccessPoint.h"
 #include "Utils.h"
 #include "WifiIcon.h"
 
-WifiIcon::WifiIcon(WifiStateManager& wifiManager) :
+WifiIcon::WifiIcon() :
 WindowFocusedTimer("WifiIcon"),
-ConfigurableImageComponent(ComponentConfigFile::wifiIconKey),
-wifiManager(wifiManager)
+ConfigurableImageComponent(ComponentConfigFile::wifiIconKey)
 {
-
 #    if JUCE_DEBUG
     setName("WifiIcon");
 #    endif
+    WifiStateManager wifiManager;
     wifiManager.addListener(this);
     startTimer(100);
 }
@@ -56,7 +54,8 @@ void WifiIcon::visibilityChanged()
  */
 void WifiIcon::timerCallback()
 {
-    switch (getWifiState())
+    WifiStateManager wifiManager;
+    switch (wifiManager.getWifiState())
     {
             //wifi disabled
         case WifiStateManager::missingNetworkInterface:

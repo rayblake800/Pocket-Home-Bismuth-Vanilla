@@ -14,11 +14,7 @@ class InputSettingsPage : public PageComponent, private ComboBox::Listener,
 private Localized
 {
 public:
-    /**
-     * @param pageFactory      This will be needed to launch the key binding 
-     *                          page, once it is implemented.
-     */
-    InputSettingsPage(PageFactoryInterface* pageFactory);
+    InputSettingsPage();
 
     virtual ~InputSettingsPage() { }
 
