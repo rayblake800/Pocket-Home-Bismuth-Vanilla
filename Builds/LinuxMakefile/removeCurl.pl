@@ -6,6 +6,7 @@ use warnings;
 # disabled.  This will remove all instances of the string " libcurl" from the
 # makefile.
 
+chdir "/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Builds/LinuxMakefile";
 open(my $makefile, "<", "Makefile") or die "Can't read from makefile!";
 
 my $file = "";

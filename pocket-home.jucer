@@ -339,9 +339,10 @@
             file="Source/PokeLookAndFeel.cpp"/>
       <FILE id="g1eykD" name="PokeLookAndFeel.h" compile="0" resource="0"
             file="Source/PokeLookAndFeel.h"/>
-      <FILE id="Yl2sdL" name="RAIISingleton.cpp" compile="1" resource="0"
-            file="Source/RAIISingleton.cpp"/>
-      <FILE id="WuV2YN" name="RAIISingleton.h" compile="0" resource="0" file="Source/RAIISingleton.h"/>
+      <FILE id="Yl2sdL" name="ResourceManager.cpp" compile="1" resource="0"
+            file="Source/ResourceManager.cpp"/>
+      <FILE id="WuV2YN" name="ResourceManager.h" compile="0" resource="0"
+            file="Source/ResourceManager.h"/>
       <FILE id="X7wz2M" name="RelativeLayoutManager.cpp" compile="1" resource="0"
             file="Source/RelativeLayoutManager.cpp"/>
       <FILE id="r4oAKB" name="RelativeLayoutManager.h" compile="0" resource="0"
