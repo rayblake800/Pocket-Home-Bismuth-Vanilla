@@ -41,7 +41,7 @@ PageFactory::PageFactory(bool fakeWifi)
  */
 PageComponent* PageFactory::createHomePage()
 {
-    return new HomePage(this, wifiManager);
+    return setPageFactory(new HomePage());
 }
 
 /**
@@ -61,7 +61,7 @@ PageComponent* PageFactory::createPage(PageComponent::PageType type)
     switch (type)
     {
         case PageComponent::InputSettings:
-            return new InputSettingsPage(this);
+            return setPageFactory(new InputSettingsPage());
         case PageComponent::Keybinding:
             return nullptr;
         case PageComponent::SetPassword:
@@ -69,21 +69,21 @@ PageComponent* PageFactory::createPage(PageComponent::PageType type)
         case PageComponent::RemovePassword:
             return new RemovePasswordPage();
         case PageComponent::Power:
-            return new PowerPage(this);
+            return setPageFactory(new PowerPage());
         case PageComponent::Fel:
             return new FelPage();
         case PageComponent::Settings:
-            return new SettingsPage(this,wifiManager);
+            return setPageFactory(new SettingsPage());
         case PageComponent::BluetoothSettings:
-            return new BluetoothSettingsPage( bluetoothStatus);
+            return new BluetoothSettingsPage(bluetoothStatus);
         case PageComponent::WifiSettings:
-            return new WifiSettingsPage(wifiManager);
+            return new WifiSettingsPage();
         case PageComponent::UI:
             return nullptr;
         case PageComponent::ColourSettings:
             return new ColourPage();
         case PageComponent::AdvancedSettings:
-            return new AdvancedSettingsPage(this);
+            return setPageFactory(new AdvancedSettingsPage());
         case PageComponent::DateTime:
             return new DateTimePage();
         case PageComponent::HomeSettings:

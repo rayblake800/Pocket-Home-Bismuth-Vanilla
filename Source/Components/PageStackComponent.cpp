@@ -51,8 +51,6 @@ void PageStackComponent::popPage(PageComponent::Animation animation)
 bool PageStackComponent::isTopPage(PageComponent* page)
 {
     int i = stack.indexOf(page);
-    DBG("PageStackComponent::" << __func__ << ": checking page " << i
-            << " of " << stack.size());
     return page == stack.getLast();
 }
 

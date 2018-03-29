@@ -44,10 +44,6 @@ public:
      *                            not be added to the page until 
      *                            addAndShowLayoutComponents is called.
      * 
-     * @param pageFactory        The factory object needed by this page to 
-     *                            create new pages. This can be set to nullptr
-     *                            in pages that don't need to create more pages.
-     * 
      * @param showBackButton     If true, add a back button on this page.
      * 
      * @param backButtonOnRight  If true, the back button will be on the right
@@ -59,7 +55,6 @@ public:
     PageComponent(
             const String& name = String(),
             RelativeLayoutManager::Layout layout = {},
-            PageFactoryInterface* pageFactory = nullptr,
             bool showBackButton = true,
             bool backButtonOnRight = false);
 
@@ -193,6 +188,17 @@ public:
     protected:
 
         PageFactoryInterface() { }
+        
+        /**
+         * Assigns this PageFactory to a PageComponent.  The PageFactory should 
+         * call this on every page it creates that should be allowed to open 
+         * other pages.
+         * 
+         * @param page
+         * 
+         * @return page
+         */
+        PageComponent* setPageFactory(PageComponent* page);
 
     private:
         /**

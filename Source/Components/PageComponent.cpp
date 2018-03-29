@@ -4,11 +4,9 @@
 PageComponent::PageComponent(
         const String& name,
         RelativeLayoutManager::Layout layout,
-        PageFactoryInterface* pageFactory,
         bool showBackButton,
         bool backButtonOnRight) :
 Component(name),
-pageFactory(pageFactory),
 backButtonOnRight(backButtonOnRight)
 {
     layoutManager.setLayout(layout);
@@ -66,6 +64,16 @@ void PageComponent::PageStackInterface::signalPageRevealed
 (PageComponent* page)
 {
     page->pageRevealedOnStack();
+}
+
+/**
+ * Assigns this PageFactory to a PageComponent.  
+ */
+PageComponent*
+PageComponent::PageFactoryInterface::setPageFactory(PageComponent* page)
+{
+    page->pageFactory = this;
+    return page;
 }
 
 /**
