@@ -4,7 +4,7 @@
 
 template<class ConnectionPoint>
 ConnectionPage<ConnectionPoint>::ConnectionPage() :
-PageComponent("ConnectionPage",{}, nullptr, true),
+PageComponent("ConnectionPage",{}, true),
 prevPageBtn(ComponentConfigFile::pageUpKey),
 nextPageBtn(ComponentConfigFile::pageDownKey),
 selectedConnection(ConnectionPoint())
