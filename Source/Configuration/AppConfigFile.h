@@ -9,7 +9,7 @@
 #pragma once
 #include "ConfigFile.h"
 
-class AppConfigFile : public RAIISingleton
+class AppConfigFile : public ResourceManager
 {
 public:
     AppConfigFile();
@@ -263,8 +263,8 @@ private:
         static constexpr const char* foldersKey = "folders";
     };
 
-    //RAIISingleton shared object and lock;
-    static ScopedPointer<RAIISingleton::SharedResource> sharedResource;
+    //ResourceManager shared object and lock;
+    static ScopedPointer<ResourceManager::SharedResource> sharedResource;
     static CriticalSection configLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppConfigFile)

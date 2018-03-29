@@ -10,7 +10,7 @@
 #include "AssetFiles.h"
 #include "Utils.h"
 
-ScopedPointer<RAIISingleton::SharedResource>
+ScopedPointer<ResourceManager::SharedResource>
         ComponentConfigFile::sharedResource = nullptr;
 
 CriticalSection ComponentConfigFile::configLock;
@@ -256,8 +256,8 @@ const std::map<String, int> ComponentConfigFile::colourIds
     }};
 
 ComponentConfigFile::ComponentConfigFile() :
-RAIISingleton(sharedResource, configLock,
-[this]()->RAIISingleton::SharedResource*
+ResourceManager(sharedResource, configLock,
+[this]()->ResourceManager::SharedResource*
 {
 
     return new ConfigJson();

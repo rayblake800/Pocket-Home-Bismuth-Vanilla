@@ -3,14 +3,14 @@
 #include "Utils.h"
 
 
-ScopedPointer<RAIISingleton::SharedResource>
+ScopedPointer<ResourceManager::SharedResource>
         MainConfigFile::sharedResource = nullptr;
 
 CriticalSection MainConfigFile::configLock;
 
 MainConfigFile::MainConfigFile() : 
-RAIISingleton(sharedResource,configLock,
-[this]()->RAIISingleton::SharedResource*
+ResourceManager(sharedResource,configLock,
+[this]()->ResourceManager::SharedResource*
 {
     return new MainJson();
 }) { }

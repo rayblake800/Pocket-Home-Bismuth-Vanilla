@@ -10,9 +10,9 @@
  */
 #pragma once
 #include "ConfigFile.h"
-#include "RAIISingleton.h"
+#include "ResourceManager.h"
 
-class ComponentConfigFile : public RAIISingleton
+class ComponentConfigFile : public ResourceManager
 {
 public:
     ComponentConfigFile();
@@ -231,8 +231,8 @@ private:
     //Defines the component config file's name
     static constexpr const char * filenameConst = "components.json";
 
-    //RAIISingleton shared object and lock;
-    static ScopedPointer<RAIISingleton::SharedResource> sharedResource;
+    //ResourceManager shared object and lock;
+    static ScopedPointer<ResourceManager::SharedResource> sharedResource;
     static CriticalSection configLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ComponentConfigFile)

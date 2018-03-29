@@ -36,7 +36,6 @@ filename(configFilename) { }
  */
 ConfigFile::~ConfigFile()
 {
-    const ScopedLock writeLock(configLock);
     writeChanges();
 }
 
@@ -81,7 +80,7 @@ void ConfigFile::Listener::loadAllConfigProperties()
 void ConfigFile::addListener(ConfigFile::Listener* listener,
         StringArray trackedKeys)
 {
-    const ScopedLock writeLock(configLock);
+    const ScopedLock lock(listenerLock);
     listener->configFiles.addIfNotAlreadyThere(this);
     if (listenerKeys.count(listener) == 0)
     {
@@ -98,11 +97,13 @@ void ConfigFile::addListener(ConfigFile::Listener* listener,
     }
 }
 
+
 /**
  * Removes a listener from this ConfigFile.
  */
 void ConfigFile::removeListener(ConfigFile::Listener* listener)
 {
+    const ScopedLock lock(listenerLock);
     for (const String& key : listenerKeys[listener])
     {
         keyListeners[key].removeAllInstancesOf(listener);
@@ -116,6 +117,7 @@ void ConfigFile::removeListener(ConfigFile::Listener* listener)
  */
 void ConfigFile::notifyListeners(String key)
 {
+    const ScopedLock lock(listenerLock);
     for (Listener* listener : keyListeners[key])
     {
         listener->configValueChanged(key);

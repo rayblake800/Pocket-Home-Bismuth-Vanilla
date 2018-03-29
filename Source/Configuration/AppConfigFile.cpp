@@ -3,14 +3,14 @@
 #include "Utils.h"
 
 
-ScopedPointer<RAIISingleton::SharedResource>
+ScopedPointer<ResourceManager::SharedResource>
         AppConfigFile::sharedResource = nullptr;
 
 CriticalSection AppConfigFile::configLock;
 
 AppConfigFile::AppConfigFile() :
-RAIISingleton(sharedResource, configLock,
-[this]()->RAIISingleton::SharedResource*
+ResourceManager(sharedResource, configLock,
+[this]()->ResourceManager::SharedResource*
 {
 
     return new AppJson();
@@ -192,7 +192,6 @@ bool AppConfigFile::AppFolder::operator==(const AppFolder& rhs) const
  */
 Array<AppConfigFile::AppItem> AppConfigFile::AppJson::getFavorites()
 {
-    const ScopedLock readLock(getConfigLock());
     return favoriteApps;
 }
 
@@ -202,7 +201,6 @@ Array<AppConfigFile::AppItem> AppConfigFile::AppJson::getFavorites()
 void AppConfigFile::AppJson::addFavoriteApp
 (AppItem newApp, int index, bool writeChangesNow)
 {
-    const ScopedLock changeLock(getConfigLock());
     favoriteApps.insert(index, newApp);
     markPendingChanges();
     if (writeChangesNow)
@@ -216,7 +214,6 @@ void AppConfigFile::AppJson::addFavoriteApp
  */
 void AppConfigFile::AppJson::removeFavoriteApp(int index, bool writeChangesNow)
 {
-    const ScopedLock changeLock(getConfigLock());
     if (index >= 0 && index < favoriteApps.size())
     {
         favoriteApps.remove(index);

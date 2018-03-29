@@ -5,10 +5,10 @@
  * the config.json file.
  */
 #pragma once
-#include "RAIISingleton.h"
+#include "ResourceManager.h"
 #include "ConfigFile.h"
 
-class MainConfigFile : public RAIISingleton
+class MainConfigFile : public ResourceManager
 {
 public:
     MainConfigFile();
@@ -98,8 +98,8 @@ private:
     //filename to use for reading/storing MainConfigFile data
     static constexpr const char* filenameConst = "config.json";
 
-    //RAIISingleton shared object and lock;
-    static ScopedPointer<RAIISingleton::SharedResource> sharedResource;
+    //ResourceManager shared object and lock;
+    static ScopedPointer<ResourceManager::SharedResource> sharedResource;
     static CriticalSection configLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainConfigFile)

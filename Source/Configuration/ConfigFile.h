@@ -3,7 +3,7 @@
  * 
  * @brief ConfigFile reads and writes data from a json configuration file. 
  * 
- * ConfigFile provides an abstract basis for RAIISingleton sharedResources that
+ * ConfigFile provides an abstract basis for ResourceManager sharedResources that
  * access .json file data.  Each ConfigFile should provide access to a set of 
  * key Strings for accessing its specific data.  A default version of each 
  * ConfigFile's .json resource should be placed in the configuration 
@@ -20,11 +20,11 @@
  */
 #pragma once
 #include <map>
-#include "RAIISingleton.h"
+#include "ResourceManager.h"
 #include "Localized.h"
 #include "JuceHeader.h"
 
-class ConfigFile : public RAIISingleton::SharedResource, private Localized
+class ConfigFile : public ResourceManager::SharedResource, private Localized
 {
 public:
     /**
@@ -159,9 +159,6 @@ public:
      * Announce new changes to each object tracking a particular key.
      * 
      * @param key maps to a value that has changed in this ConfigFile. 
-     * 
-     * @pre make sure the lock is not held when calling this, so that
-     *       the Configurable objects can read the property changes.
      */
     void notifyListeners(String key);
 
@@ -186,15 +183,6 @@ protected:
         SupportedDataType dataType;
     };
 
-    /**
-     * Get a reference to the ConfigFile critical section.
-     * 
-     * @return  a reference to configLock.
-     */
-    CriticalSection& getConfigLock()
-    {
-        return configLock;
-    }
 
     /**
      * This constructor should only be called when constructing ConfigFile
@@ -306,12 +294,9 @@ private:
     template <class T> void initMapProperty(String key, T newValue)
     {
         std::map<String, T>& fileDataMap = getMapReference<T>();
-        const ScopedLock writeLock(configLock);
         fileDataMap[key] = newValue;
     }
 
-    //Locks the object to prevent concurrent file modifications.
-    CriticalSection configLock;
 
     //Stores the name of the .json config file.
     String filename;
@@ -335,6 +320,8 @@ private:
     std::map<Listener*, StringArray> listenerKeys;
     std::map<String, Array < Listener*>> keyListeners;
 
+    //prevents concurrent access to listeners.
+    CriticalSection listenerLock;
 
     //localized text keys;
     static const constexpr char * failed_saving_to_FILE =
