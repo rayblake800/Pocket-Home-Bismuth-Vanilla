@@ -21,14 +21,11 @@ public:
      * @param componentConfig   Component settings used to setup the editor
      *                           component.
      * 
-     * @param iconThread        This will be used to load icon previews.
-     * 
      * @onConfirm               An optional callback routine to run after 
      *                           creating the new application entry.
      */
     NewConfigAppEditor(AppConfigFile& appConfig,
             ComponentConfigFile& componentConfig,
-            IconThread& iconThread,
             std::function<void() > onConfirm = []() {
             });
 };

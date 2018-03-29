@@ -58,6 +58,5 @@ private:
     AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
             std::map<String, AppMenuButton::Ptr>& buttonMap,
-            IconThread& iconThread,
             ComponentConfigFile& config) override;
 };

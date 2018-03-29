@@ -17,13 +17,10 @@ public:
     /**
      * @param config      Component settings used to load the pop-up editor.
      * 
-     * @param iconThread  Used to find and load icon previews.
-     * 
      * @param onConfirm   A callback function to run after the user presses the
      *                     confirm button.
      */
     NewDesktopAppEditor(
             ComponentConfigFile& config,
-            IconThread& iconThread,
             std::function<void() > onConfirm = []() {});
 };

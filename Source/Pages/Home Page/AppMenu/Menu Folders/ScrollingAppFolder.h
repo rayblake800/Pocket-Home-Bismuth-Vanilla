@@ -7,7 +7,8 @@
 #pragma once
 #include "AppMenuFolder.h"
 
-class ScrollingAppFolder : public AppMenuFolder {
+class ScrollingAppFolder : public AppMenuFolder
+{
 public:
     /**
      * @param folderItem     Menu item used to load all of this folder's menu
@@ -17,18 +18,15 @@ public:
      * 
      * @param buttonNameMap  Shared button map used to recycle menu buttons.
      * 
-     * @param iconThread     Loads menu button icons.
-     * 
      * @param config         Component settings needed to setup folder 
      *                        components.
      */
     ScrollingAppFolder(
-            AppMenuItem::Ptr folderItem, 
+            AppMenuItem::Ptr folderItem,
             MouseListener* btnListener,
             std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-            IconThread& iconThread,
             ComponentConfigFile& config);
-    
+
     virtual ~ScrollingAppFolder() { }
 
     /**
@@ -37,7 +35,7 @@ public:
      * @param menuItem
      */
     virtual AppMenuButton::Ptr createMenuButton
-    (AppMenuItem::Ptr menuItem, IconThread& iconThread) override;
+    (AppMenuItem::Ptr menuItem) override;
 
     /**
      * Given a list of folder buttons, return an appropriate layout
@@ -49,8 +47,8 @@ public:
      */
     virtual RelativeLayoutManager::Layout buildFolderLayout
     (Array<AppMenuButton::Ptr>& buttons);
-    
-        
+
+
     /**
      * @return the minimum width, in pixels, needed by this folder to
      *          display its contents properly. 
@@ -62,29 +60,27 @@ private:
      * Get the font used by all buttons in this menu type.
      */
     static Font getButtonFont(ComponentConfigFile& config);
-    
+
     ComponentConfigFile& config;
 
     /**
      * Custom AppMenuButton proportioned correctly for a scrolling menu.
      */
-    class ScrollingMenuButton : public AppMenuButton {
+    class ScrollingMenuButton : public AppMenuButton
+    {
     public:
         /**
          * @param menuItem     Provides the button's menu data.
-         * 
-         * @param iconThread   Used to load the button icon.
          *  
          * @param name         Internal component name
          * 
          * @param config       
          */
         ScrollingMenuButton(
-                AppMenuItem* menuItem, 
-                IconThread& iconThread,
+                AppMenuItem* menuItem,
                 String name,
                 ComponentConfigFile& config);
-        
+
         virtual ~ScrollingMenuButton() { }
 
         /**
@@ -97,7 +93,7 @@ private:
          * Re-calculates draw values whenever the button is resized
          */
         void resized() override;
-        
+
         ComponentConfigFile& config;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ScrollingMenuButton)

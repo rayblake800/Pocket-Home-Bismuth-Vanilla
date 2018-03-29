@@ -49,12 +49,10 @@ private:
      * Create a folder component object from a folder menu item.
      * @param folderItem provides folder menu items
      * @param buttonMap is used by the folder to recycle menu buttons
-     * @param iconThread is used by the folder to load button icons
      */
     AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
             std::map<String, AppMenuButton::Ptr>& buttonMap,
-            IconThread& iconThread,
             ComponentConfigFile& config) override;
 
     /**

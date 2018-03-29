@@ -214,14 +214,12 @@ Rectangle<int> PagedAppMenu::updateFolderBounds(const AppMenuFolder* folder,
 AppMenuFolder* PagedAppMenu::createFolderObject(
         AppMenuItem::Ptr folderItem,
         std::map<String, AppMenuButton::Ptr>& buttonMap,
-        IconThread& iconThread,
         ComponentConfigFile& config)
 {
     PageAppFolder* folder = new PageAppFolder(
             folderItem,
             this,
             buttonMap,
-            iconThread,
             config);
     folder->setParentRelativeMargin(
             (float) pageLeft.getWidth() / (float) getWidth());

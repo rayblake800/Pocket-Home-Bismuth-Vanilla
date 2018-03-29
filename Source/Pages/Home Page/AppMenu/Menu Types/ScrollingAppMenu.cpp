@@ -137,11 +137,10 @@ Rectangle<int> ScrollingAppMenu::updateFolderBounds(
 AppMenuFolder* ScrollingAppMenu::createFolderObject(
         AppMenuItem::Ptr folderItem,
         std::map<String, AppMenuButton::Ptr>& buttonMap,
-        IconThread& iconThread,
         ComponentConfigFile& config)
 {
     ScrollingAppFolder* folder = new ScrollingAppFolder(
-            folderItem, this, buttonMap, iconThread, config);
+            folderItem, this, buttonMap, config);
     folder->selectIndex(0);
     return folder;
 }

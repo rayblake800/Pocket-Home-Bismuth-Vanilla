@@ -232,14 +232,10 @@ private:
      *
      * @param buttonMap   A map of all created buttons by name. This is used 
      *                     by the folder to recycle menu buttons.
-     * 
-     * @param iconThread  The shared menu icon thread, used by the folder to 
-     *                     load button icons.
      */
     virtual AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
             std::map<String, AppMenuButton::Ptr>& buttonMap,
-            IconThread& iconThread,
             ComponentConfigFile& config) = 0;
 
     /**
@@ -361,15 +357,14 @@ private:
     //every time you close a folder and open it again.
     std::map<String, AppMenuButton::Ptr> buttonNameMap;
 
-    //this gets passed to AppMenuButtons to load button icons.
-    IconThread iconThread;
-
     //creates all menu items
     AppMenuItemFactory menuItemFactory;
 
     //keyboard shortcuts
     static const String openPopupMenuBinding;
     static const String reloadMenuBinding;
+    //The shared iconThread should exist as long as the AppMenu does.
+    IconThread iconThread;
     //Sets if clicking unselected buttons immediately triggers
     //their action, or if it just selects them.
     bool onlyTriggerSelected = true;

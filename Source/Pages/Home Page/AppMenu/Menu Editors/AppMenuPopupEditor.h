@@ -32,8 +32,6 @@ public:
      * @param config            Component settings needed to setup the editor
      *                           component.
      * 
-     * @param iconThread        Used to load preview icons.
-     * 
      * @param onConfirm         A callback function to run when the confirm 
      *                           button is pressed.
      * 
@@ -52,7 +50,6 @@ public:
      */
     AppMenuPopupEditor(String title,
             ComponentConfigFile& config,
-            IconThread& iconThread,
             std::function<void(AppMenuPopupEditor*) > onConfirm,
             bool showCategoryList = true,
             bool showCommandField = true);
@@ -128,10 +125,6 @@ private:
      * @param button
      */
     void editorButtonClicked(Button* button) override;
-
-
-    //Used for loading icon previews.
-    IconThread& iconThread;
     
     ComponentConfigFile& config;
 

@@ -12,7 +12,7 @@
 #include "RAIISingleton.h"
 #include "JuceHeader.h"
 
-class IconThread : public Thread, private RAIISingleton
+class IconThread : private RAIISingleton
 {
 public:
     IconThread();
@@ -40,22 +40,25 @@ public:
 
 
 private:
-    /**
-     * While AppMenuButtons still need icons, this finds them in a separate 
-     * thread.
-     */
-    void run() override;
 
     /**
      * Shares access to the icon map and the job queue.
      */
-    class IconResource : public RAIISingleton::SharedResource
+    class IconResource : public Thread, public RAIISingleton::SharedResource
     {
     public:
 
-        IconResource() { }
+        /**
+         * @param threadLock  The RAIISingleton resource lock, which needs to 
+         *                     be held by the thread loop while it accesses
+         *                     icon data. 
+         */
+        IconResource(CriticalSection& threadLock);
 
-        virtual ~IconResource() { }
+        /**
+         * Make sure the thread exits before destroying this object.
+         */
+        virtual ~IconResource();
 
         struct QueuedJob
         {
@@ -93,7 +96,7 @@ private:
          * @return     The closest matching icon image available 
          */
         String getIconPath(String icon);
-        
+
         /**
          * Removes an icon from the icon path map.
          * 
@@ -101,8 +104,14 @@ private:
          *                   icons, it will be removed.
          */
         void removeIcon(String iconName);
-        
+
     private:
+        /**
+         * While AppMenuButtons still need icons, this finds them in a separate 
+         * thread.
+         */
+        void run() override;
+
         /**
          * Creates the map of all icon file paths.
          */
@@ -132,6 +141,9 @@ private:
         //True iff icon paths have already been mapped
         bool iconPathsMapped = false;
 
+        //needed by the run() method only.
+        CriticalSection& threadLock;
+
     };
 
     //Default image icons to copy into AppMenuButtons
@@ -142,7 +154,7 @@ private:
 
     //RAIISingleton shared object and lock;
     static ScopedPointer<RAIISingleton::SharedResource> sharedResource;
-    CriticalSection iconLock;
+    static CriticalSection iconLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconThread)
 };

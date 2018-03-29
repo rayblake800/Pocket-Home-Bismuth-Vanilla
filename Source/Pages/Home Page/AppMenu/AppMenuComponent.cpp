@@ -146,14 +146,12 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         case 3://User selects "New favorite application"
             showPopupEditor(new NewConfigAppEditor(appConfig,
                     componentConfig,
-                    iconThread,
                     confirmNew));
             break;
         case 4://User selects "New application link"
         {
             AppMenuPopupEditor* newAppEditor
                     = new NewDesktopAppEditor(componentConfig,
-                    iconThread,
                     confirmNew);
             if (selectedButton != nullptr)
             {
@@ -168,7 +166,6 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
             AppMenuPopupEditor* newFolderEditor
                     = new NewFolderEditor(appConfig,
                     componentConfig,
-                    iconThread,
                     confirmNew);
             showPopupEditor(newFolderEditor);
             break;
@@ -463,7 +460,6 @@ void AppMenuComponent::setOnlyTriggerSelected(bool newVal)
     onlyTriggerSelected = newVal;
 }
 
-
 /**
  * @return true iff the menu is loading, empty, animating, or otherwise
  * in a state where user input should be ignored.
@@ -540,8 +536,8 @@ void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
         removeChildComponent(openFolders.getLast());
         openFolders.removeLast();
     }
-    AppMenuFolder* newFolder = createFolderObject(
-            folderItem, buttonNameMap,  iconThread,  componentConfig);
+    AppMenuFolder* newFolder = createFolderObject
+            (folderItem, buttonNameMap, componentConfig);
 
     openFolders.add(newFolder);
     newFolder->addMouseListener(this, false);

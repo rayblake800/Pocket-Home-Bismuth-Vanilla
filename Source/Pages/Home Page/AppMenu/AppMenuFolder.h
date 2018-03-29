@@ -11,7 +11,8 @@
 #include "AppMenuItem.h"
 #include "AppMenuButton.h"
 
-class AppMenuFolder : public Component {
+class AppMenuFolder : public Component
+{
 public:
     /**
      * Creates a new folder component, loading menu buttons from a
@@ -24,14 +25,11 @@ public:
      *
      * @param buttonNameMap  This stores all menu buttons and re-uses them
      *                        when possible.
-     *                       
-     * @param iconThread     Loads icons for new menu buttons.
      */
     AppMenuFolder(
-            AppMenuItem::Ptr folderItem, 
+            AppMenuItem::Ptr folderItem,
             MouseListener* btnListener,
-            std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-            IconThread& iconThread);
+            std::map<String, AppMenuButton::Ptr>& buttonNameMap);
 
     virtual ~AppMenuFolder() { }
 
@@ -39,11 +37,9 @@ public:
      * Create an AppMenuButton component for an AppMenuItem.
      * 
      * @param menuItem    The menu item to assign to the new button.
-     *
-     * @param iconThread  The shared icon cache used to find icon files.
      */
     virtual AppMenuButton::Ptr createMenuButton
-    (AppMenuItem::Ptr menuItem, IconThread& iconThread) = 0;
+    (AppMenuItem::Ptr menuItem) = 0;
 
     /**
      * Sets the button grid row and column sizes, updating button layout
@@ -222,7 +218,7 @@ protected:
      *          if there is no button at this index.
      */
     String getButtonTitle(int index);
-    
+
     /**
      * @return the maximum number of menu item rows to show on screen.
      */
@@ -233,11 +229,11 @@ protected:
      */
     int getMaxColumns() const;
 
-    
     /**
      * @return the maximum number of menu items to show on screen.
      */
-    inline int getButtonsPerPage() const {
+    inline int getButtonsPerPage() const
+    {
         return getMaxRows() * getMaxColumns();
     }
 private:
@@ -260,12 +256,11 @@ private:
      *
      * @return true  iff the folder has a menu button with this index.
      */
-    inline bool validBtnIndex(int index) {
+    inline bool validBtnIndex(int index)
+    {
         return index >= 0 && index < folderButtons.size();
     }
 
-    //New buttons will need this to load their icons.
-    IconThread& iconThread;
     //Listener to assign to all button components
     MouseListener* btnListener = nullptr;
     //Reference to the AppMenuComponent's button map

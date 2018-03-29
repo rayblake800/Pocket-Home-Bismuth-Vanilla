@@ -1,12 +1,11 @@
 #include "PokeLookAndFeel.h"
 #include "Utils.h"
+#include "IconThread.h"
 #include "AppMenuButton.h"
 
-AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem,
-        IconThread& iconThread, String name) :
+AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem, String name) :
 Button(name),
-menuItem(menuItem),
-iconThread(iconThread)
+menuItem(menuItem)
 {
 
     setName(name);
@@ -31,7 +30,6 @@ AppMenuPopupEditor* AppMenuButton::getEditor(ComponentConfigFile& config,
     AppMenuPopupEditor* editor = new AppMenuPopupEditor
             (menuItem->getEditorTitle(),
             config,
-            iconThread,
             [this, onConfirm](AppMenuPopupEditor * editor)
             {
                 onConfirm(editor);
@@ -98,6 +96,7 @@ void AppMenuButton::setSelected(bool select)
  */
 void AppMenuButton::loadIcon(String icon)
 {
+    IconThread iconThread;
     iconThread.loadIcon(icon, [this](Image iconImg)
     {
         appIcon = iconImg;

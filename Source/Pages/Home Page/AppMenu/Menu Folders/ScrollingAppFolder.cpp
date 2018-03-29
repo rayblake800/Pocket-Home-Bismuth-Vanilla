@@ -4,9 +4,8 @@ ScrollingAppFolder::ScrollingAppFolder(
         AppMenuItem::Ptr folderItem,
         MouseListener* btnListener,
         std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-        IconThread& iconThread,
         ComponentConfigFile& config) :
-AppMenuFolder(folderItem, btnListener, buttonNameMap, iconThread),
+AppMenuFolder(folderItem, btnListener, buttonNameMap),
 config(config)
 {
     setMargin(0);
@@ -18,11 +17,10 @@ config(config)
  * Create an AppMenuButton component for an AppMenuItem.
  */
 AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
-(AppMenuItem::Ptr menuItem, IconThread& iconThread)
+(AppMenuItem::Ptr menuItem)
 {
     return new ScrollingMenuButton(
             menuItem,
-            iconThread,
             menuItem->getAppName() + String("Button"),
             config);
 }
@@ -73,10 +71,9 @@ Font ScrollingAppFolder::getButtonFont(ComponentConfigFile& config)
 
 ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton(
         AppMenuItem* menuItem,
-        IconThread& iconThread,
         String name,
         ComponentConfigFile& config) :
-AppMenuButton(menuItem, iconThread, name),
+AppMenuButton(menuItem, name),
 config(config)
 {
     setTitleFont(ScrollingAppFolder::getButtonFont(config));

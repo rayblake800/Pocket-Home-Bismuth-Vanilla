@@ -5,9 +5,8 @@ PageAppFolder::PageAppFolder(
         AppMenuItem::Ptr folderItem,
         MouseListener* btnListener,
         std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-        IconThread& iconThread,
         ComponentConfigFile& config) :
-AppMenuFolder(folderItem, btnListener, buttonNameMap, iconThread),
+AppMenuFolder(folderItem, btnListener, buttonNameMap),
 config(config)
 {
     reload();
@@ -16,12 +15,10 @@ config(config)
 /**
  * Create an AppMenuButton component for an AppMenuItem.
  */
-AppMenuButton::Ptr PageAppFolder::createMenuButton
-(AppMenuItem::Ptr menuItem, IconThread& iconThread)
+AppMenuButton::Ptr PageAppFolder::createMenuButton(AppMenuItem::Ptr menuItem)
 {
     return new PageMenuButton(
             menuItem,
-            iconThread,
             menuItem->getAppName() + String("Button"),
             config);
 }
@@ -258,12 +255,12 @@ void PageAppFolder::resized()
 }
 
 //############################  PageMenuButton  ################################
+
 PageAppFolder::PageMenuButton::PageMenuButton(
         AppMenuItem::Ptr menuItem,
-        IconThread& iconThread,
         String name,
         ComponentConfigFile& config) :
-AppMenuButton(menuItem, iconThread, name),
+AppMenuButton(menuItem, name),
 config(config)
 {
     setFillBackground(false);

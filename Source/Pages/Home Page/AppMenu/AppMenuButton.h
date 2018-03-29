@@ -10,7 +10,6 @@
 
 #pragma once
 #include "ConfigurableComponent.h"
-#include "IconThread.h"
 #include "AppMenuPopupEditor.h"
 #include "AppMenuItem.h"
 
@@ -30,12 +29,9 @@ public:
      *
      * @param menuItem    This is set as the button's menu data source.
      *
-     * @param iconThread  Loads the button icon.
-     *
      * @param name        Sets the button's internal component name.
      */
-    AppMenuButton(AppMenuItem::Ptr menuItem, IconThread& iconThread,
-            String name = String());
+    AppMenuButton(AppMenuItem::Ptr menuItem, String name = String());
 
     virtual ~AppMenuButton() { }
 
@@ -202,8 +198,6 @@ private:
     
     //Icon image to draw
     Image appIcon;
-    //Object used to load icons
-    IconThread& iconThread;
 	
     //bounds used to position and scale the button title and icon
     Rectangle<float> textBounds;

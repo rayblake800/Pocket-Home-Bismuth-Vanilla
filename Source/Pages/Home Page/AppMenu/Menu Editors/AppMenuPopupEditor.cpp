@@ -4,7 +4,6 @@
 AppMenuPopupEditor::AppMenuPopupEditor(
         String title,
         ComponentConfigFile& config,
-        IconThread& iconThread,
         std::function<void(AppMenuPopupEditor*) > onConfirm,
         bool showCategoryList,
         bool showCommandField) :
@@ -16,7 +15,6 @@ PopupEditorComponent(title, config,
 }),
 Localized("AppMenuPopupEditor"),
 config(config),
-iconThread(iconThread),
 nameLabel(config, "nameLabel", localeText(name)),
 nameEditor("nameEditor"),
 iconLabel(config, "iconLabel", localeText(icon_path)),
@@ -176,6 +174,7 @@ void AppMenuPopupEditor::editorButtonClicked(Button* button)
 void AppMenuPopupEditor::fileSelected(FileSelectTextEditor* edited)
 {
     String newIcon = getIconField();
+    IconThread iconThread;
     iconThread.loadIcon(newIcon, [this](Image iconImg)
     {
         iconPreview.setImage(iconImg);

@@ -14,7 +14,6 @@ public:
     PageAppFolder(AppMenuItem::Ptr folderItem,
             MouseListener* btnListener,
             std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-            IconThread& iconThread,
             ComponentConfigFile& config);
 
     virtual ~PageAppFolder() { }
@@ -25,7 +24,7 @@ public:
      * @param menuItem
      */
     virtual AppMenuButton::Ptr createMenuButton
-    (AppMenuItem::Ptr menuItem, IconThread& iconThread) override;
+    (AppMenuItem::Ptr menuItem) override;
 
     /**
      * Given a list of folder buttons, return an appropriate layout
@@ -152,15 +151,12 @@ private:
         /**
          * @param menuItem    This sets the button's menu data.
          * 
-         * @param iconThread  Needed to load the button icon.
-         * 
          * @param name        Sets the internal component name.
          *  
          * @param config      Loads component properties from user preferences.
          */
         PageMenuButton(
                 AppMenuItem::Ptr menuItem,
-                IconThread& iconThread,
                 String name,
                 ComponentConfigFile& config);
 

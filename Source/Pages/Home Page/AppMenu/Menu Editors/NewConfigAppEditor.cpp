@@ -2,11 +2,9 @@
 
 NewConfigAppEditor::NewConfigAppEditor(AppConfigFile& appConfig,
         ComponentConfigFile& componentConfig,
-        IconThread& iconThread,
         std::function<void() > onConfirm) :
 AppMenuPopupEditor("New favorite application link",
         componentConfig,
-        iconThread,
 [this, &appConfig, onConfirm](AppMenuPopupEditor* editor)
 {
 

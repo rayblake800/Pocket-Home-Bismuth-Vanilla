@@ -4,17 +4,17 @@
 const String IconThread::defaultIconPath =
         "/usr/share/pocket-home/appIcons/default.png";
 
+CriticalSection IconThread::iconLock;
 
 ScopedPointer<RAIISingleton::SharedResource> IconThread::sharedResource
         = nullptr;
 
 IconThread::IconThread() :
-RAIISingleton(sharedResource, iconLock, []()->RAIISingleton::SharedResource*
+RAIISingleton(sharedResource, iconLock, [this]()->RAIISingleton::SharedResource*
 {
 
-    return new IconResource();
-}),
-Thread("IconThread")
+    return new IconResource(iconLock);
+})
 {
     defaultIcon = AssetFiles::loadImageAsset(defaultIconPath);
 }
@@ -44,11 +44,20 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
         iconRequest.icon = icon;
         iconRequest.callback = assignImage;
         iconResource->addQueuedJob(iconRequest);
-        if (!isThreadRunning())
+        if (!iconResource->isThreadRunning())
         {
-            startThread();
+            iconResource->startThread();
         }
     }
+}
+
+IconThread::IconResource::IconResource(CriticalSection& threadLock) :
+Thread("IconThread"), threadLock(threadLock) { }
+
+IconThread::IconResource::~IconResource()
+{
+    signalThreadShouldExit();
+    waitForThreadToExit(-1);
 }
 
 /**
@@ -125,49 +134,6 @@ void IconThread::IconResource::removeIcon(String iconName)
 }
 
 /**
- * While AppMenuButtons still need icons, this finds them in a separate 
- * thread.
- */
-void IconThread::run()
-{
-    const ScopedLock queueLock(iconLock);
-    IconResource* iconResource
-            = dynamic_cast<IconResource*> (sharedResource.get());
-    while (!threadShouldExit() && iconResource->numJobsQueued() > 0)
-    {
-        IconResource::QueuedJob activeJob = iconResource->getQueuedJob();
-        String icon = iconResource->getIconPath(activeJob.icon);
-        if (icon.isNotEmpty())
-        {
-            Image iconImg;
-            {
-                const ScopedUnlock imageLoadUnlock(iconLock);
-                const MessageManagerLock lock;
-                iconImg = AssetFiles::loadImageAsset(icon);
-            }
-            if (iconImg.isNull())
-            {
-                DBG("Removing unloadable icon " << icon);
-                iconResource->removeIcon
-                        (File(icon).getFileNameWithoutExtension());
-                iconResource->addQueuedJob(activeJob);
-            }
-            else
-            {
-                const ScopedUnlock imageLoadUnlock(iconLock);
-                const MessageManagerLock lock;
-                activeJob.callback(iconImg);
-            }
-        }
-        //Allow other threads to run
-        {
-            const ScopedUnlock yieldUnlock(iconLock);
-            Thread::yield();
-        }
-    }
-}
-
-/**
  * Assign an integer value to an icon file for sorting purposes.
  */
 static int iconDirValue(const File& file)
@@ -197,6 +163,46 @@ int IconThread::IconResource::IconFileComparator::compareElements
         return 0;
     }
     return iconDirValue(second) - iconDirValue(first);
+}
+
+/**
+ * While AppMenuButtons still need icons, this finds them in a separate 
+ * thread.
+ */
+void IconThread::IconResource::run()
+{
+    const ScopedLock queueLock(threadLock);
+    while (!threadShouldExit() && numJobsQueued() > 0)
+    {
+        IconResource::QueuedJob activeJob = getQueuedJob();
+        String icon = getIconPath(activeJob.icon);
+        if (icon.isNotEmpty())
+        {
+            Image iconImg;
+            {
+                const ScopedUnlock imageLoadUnlock(threadLock);
+                const MessageManagerLock lock;
+                iconImg = AssetFiles::loadImageAsset(icon);
+            }
+            if (iconImg.isNull())
+            {
+                DBG("Removing unloadable icon " << icon);
+                removeIcon(File(icon).getFileNameWithoutExtension());
+                addQueuedJob(activeJob);
+            }
+            else
+            {
+                const ScopedUnlock imageLoadUnlock(threadLock);
+                const MessageManagerLock lock;
+                activeJob.callback(iconImg);
+            }
+        }
+        //Allow other threads to run
+        {
+            const ScopedUnlock yieldUnlock(threadLock);
+            Thread::yield();
+        }
+    }
 }
 
 /**

@@ -4,12 +4,10 @@
 AppMenuFolder::AppMenuFolder
 (AppMenuItem::Ptr folderItem,
         MouseListener* btnListener,
-        std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-        IconThread& iconThread) :
+        std::map<String, AppMenuButton::Ptr>& buttonNameMap) :
 sourceFolderItem(folderItem),
 btnListener(btnListener),
-buttonNameMap(buttonNameMap),
-iconThread(iconThread)
+buttonNameMap(buttonNameMap)
 {
 #if JUCE_DEBUG
     setName(String("AppMenuFolder") + folderItem->getAppName());
@@ -99,7 +97,7 @@ void AppMenuFolder::insertButton
     }
     if (menuButton == nullptr)
     {
-        menuButton = createMenuButton(newItem, iconThread);
+        menuButton = createMenuButton(newItem);
         buttonNameMap[buttonName] = menuButton;
     }
     if (btnListener != nullptr)
