@@ -12,6 +12,7 @@ spinner(secondsToTimeout)
     loadingText.setJustificationType(Justification::centred);
     loadingText.setColour(Label::textColourId, findColour(textColourId));
     addAndMakeVisible(loadingText);
+    addAndMakeVisible(spinner);
 }
 
 /**
