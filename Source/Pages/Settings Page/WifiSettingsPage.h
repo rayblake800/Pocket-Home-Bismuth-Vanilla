@@ -24,13 +24,9 @@ private Localized
 public:
     
     /**
-     * @param config        Shared UI preference data.
-     * 
      * @param wifiManager   Tracks the current wifi state.
      */
-    WifiSettingsPage(
-            ComponentConfigFile& config,
-            WifiStateManager& wifiManager);
+    WifiSettingsPage(WifiStateManager& wifiManager);
 
     virtual ~WifiSettingsPage() { }
 
@@ -160,14 +156,8 @@ private:
          * 
          * @param isConnected   Should be true if wifi is connected to the 
          *                       connection access point parameter.
-         *                      
-         * @param config        Shared component configuration data, needed
-         *                       for loading text size preferences.
          */
-        WifiAPButton(
-                const WifiAccessPoint& connection,
-                bool isConnected,
-                ComponentConfigFile& config);
+        WifiAPButton(const WifiAccessPoint& connection, bool isConnected);
     private:
 
         /**
@@ -196,9 +186,6 @@ private:
 
     //Provides up to date wifi data
     WifiStateManager& wifiManager;
-
-    //Used for wifi button text sizing
-    ComponentConfigFile& config;
 
     //Set to true when wifi state is changing, used to determine if wifi
     //controls should be enabled

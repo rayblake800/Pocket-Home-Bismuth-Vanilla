@@ -15,12 +15,8 @@
 class NewDesktopAppEditor : public AppMenuPopupEditor {
 public:
     /**
-     * @param config      Component settings used to load the pop-up editor.
-     * 
      * @param onConfirm   A callback function to run after the user presses the
      *                     confirm button.
      */
-    NewDesktopAppEditor(
-            ComponentConfigFile& config,
-            std::function<void() > onConfirm = []() {});
+    NewDesktopAppEditor(std::function<void() > onConfirm = [](){});
 };

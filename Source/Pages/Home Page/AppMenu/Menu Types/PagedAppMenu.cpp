@@ -6,15 +6,11 @@
 const String PagedAppMenu::pageLeftBinding = "shift + cursor left";
 const String PagedAppMenu::pageRightBinding = "shift + cursor right";
 
-PagedAppMenu::PagedAppMenu(MainConfigFile& mainConfig,
-        ComponentConfigFile& componentConfig,
-        AppConfigFile& appConfig,
-        OverlaySpinner& loadingSpinner) :
-AppMenuComponent(mainConfig, componentConfig, appConfig,
-ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
-pageLeft(ComponentConfigFile::pageLeftKey, componentConfig),
-pageRight(ComponentConfigFile::pageRightKey, componentConfig),
-closeFolderBtn(ComponentConfigFile::pageUpKey, componentConfig)
+PagedAppMenu::PagedAppMenu(OverlaySpinner& loadingSpinner) :
+AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
+pageLeft(ComponentConfigFile::pageLeftKey),
+pageRight(ComponentConfigFile::pageRightKey),
+closeFolderBtn(ComponentConfigFile::pageUpKey)
 {
     setOnlyTriggerSelected(false);
     Array<Button*> buttons = {&pageLeft, &pageRight, &closeFolderBtn};
@@ -213,14 +209,9 @@ Rectangle<int> PagedAppMenu::updateFolderBounds(const AppMenuFolder* folder,
  */
 AppMenuFolder* PagedAppMenu::createFolderObject(
         AppMenuItem::Ptr folderItem,
-        std::map<String, AppMenuButton::Ptr>& buttonMap,
-        ComponentConfigFile& config)
+        std::map<String, AppMenuButton::Ptr>& buttonMap)
 {
-    PageAppFolder* folder = new PageAppFolder(
-            folderItem,
-            this,
-            buttonMap,
-            config);
+    PageAppFolder* folder = new PageAppFolder(folderItem, this, buttonMap);
     folder->setParentRelativeMargin(
             (float) pageLeft.getWidth() / (float) getWidth());
     return folder;

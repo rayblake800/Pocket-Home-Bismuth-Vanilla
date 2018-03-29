@@ -8,8 +8,6 @@
  * @see AppMenuItem, AppMenuComponent, AppConfigFile
  */
 #pragma once
-#include "AppConfigFile.h"
-#include "MainConfigFile.h"
 #include "Localized.h"
 #include "IconThread.h"
 #include "AppMenuItem.h"
@@ -17,15 +15,9 @@
 class ConfigAppMenuItem : public AppMenuItem, private Localized {
 public:
     /**
-     * @param appConfig    A reference to the AppConfigFile, the data source 
-     *                      for the menu item.
-     * 
-     * @param mainConfig   Needed to load the terminal launch command.
-     * 
      * @param appItem      Defines all menu item data.
      */
-    ConfigAppMenuItem(AppConfigFile& appConfig, MainConfigFile& mainConfig,
-            const AppConfigFile::AppItem& appItem);
+    ConfigAppMenuItem(const AppConfigFile::AppItem& appItem);
     
     virtual ~ConfigAppMenuItem() { }
 
@@ -125,8 +117,6 @@ protected:
 private:
     //Application information structure
     AppConfigFile::AppItem appItem;
-    //Menu item data source
-    AppConfigFile& appConfig;  
     
     //localized text keys: 
     static const constexpr char * remove_APP = "remove_APP";

@@ -3,17 +3,10 @@
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
 
-PocketHomeWindow::PocketHomeWindow(
-        String windowName,
-        bool fakeWifi,
-        MainConfigFile& mainConfig,
-        ComponentConfigFile& componentConfig) :
+PocketHomeWindow::PocketHomeWindow(String windowName, bool fakeWifi) :
 WindowFocus::BroadcastWindow(windowName, Colours::darkgrey,
-DocumentWindow::allButtons),
-mainConfig(mainConfig),
-componentConfig(componentConfig),
-lookAndFeel(mainConfig, componentConfig),
-pageFactory(mainConfig, componentConfig, fakeWifi)
+        DocumentWindow::allButtons),
+pageFactory(fakeWifi)
 {
     ASSERT_SINGULAR;
     LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);

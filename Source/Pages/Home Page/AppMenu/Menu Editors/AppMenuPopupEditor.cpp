@@ -3,26 +3,24 @@
 
 AppMenuPopupEditor::AppMenuPopupEditor(
         String title,
-        ComponentConfigFile& config,
         std::function<void(AppMenuPopupEditor*) > onConfirm,
         bool showCategoryList,
         bool showCommandField) :
-PopupEditorComponent(title, config,
+PopupEditorComponent(title,
 [this, onConfirm](PopupEditorComponent* thisPopup)
 {
 
     onConfirm(this);
 }),
 Localized("AppMenuPopupEditor"),
-config(config),
-nameLabel(config, "nameLabel", localeText(name)),
+nameLabel("nameLabel", localeText(name)),
 nameEditor("nameEditor"),
-iconLabel(config, "iconLabel", localeText(icon_path)),
+iconLabel("iconLabel", localeText(icon_path)),
 iconPathEditor(localeText(select_icon)),
 categoryEditButton(localeText(edit_categories)),
-commandLabel(config, "commandLabel", localeText(command)),
+commandLabel("commandLabel", localeText(command)),
 commandEditor("commandEditor"),
-terminalCheckboxLabel(config, "runInTermLabel", localeText(run_in_terminal))
+terminalCheckboxLabel("runInTermLabel", localeText(run_in_terminal))
 {
     categoryEditButton.addListener(this);
     iconPathEditor.addFileSelectListener(this);
@@ -159,7 +157,7 @@ void AppMenuPopupEditor::editorButtonClicked(Button* button)
 {
     if (button == &categoryEditButton)
     {
-        categoryEditor = new CategoryPopupEditor(config, categories,
+        categoryEditor = new CategoryPopupEditor(categories,
                 [this](StringArray newCategories)
                 {
                     categories = newCategories;

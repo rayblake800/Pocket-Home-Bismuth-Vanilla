@@ -14,7 +14,7 @@
 class RemovePasswordPage : public PageComponent, private Localized
 {
 public:
-    RemovePasswordPage(ComponentConfigFile& config);
+    RemovePasswordPage();
 
     virtual ~RemovePasswordPage() { }
 

@@ -14,10 +14,12 @@
 #include "WindowFocusedTimer.h"
 #include "BatteryMonitor.h"
 
-class BatteryIcon : public Component, private WindowFocusedTimer {
+class BatteryIcon : public Component, private WindowFocusedTimer
+{
 public:
-    BatteryIcon(ComponentConfigFile& config);
-    virtual ~BatteryIcon();
+    BatteryIcon();
+
+    virtual ~BatteryIcon() { }
 
     /**
      * Run applyConfigBounds on all child components, and update bounds to
@@ -28,7 +30,9 @@ public:
 private:
     //All tracked battery states.  Each corresponds with an image asset file
     //defined in config.json
-    enum BatteryIconImage {
+
+    enum BatteryIconImage
+    {
         battery0,
         battery1,
         battery2,

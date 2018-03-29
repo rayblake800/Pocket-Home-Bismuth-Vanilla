@@ -1,16 +1,9 @@
-#include <openssl/sha.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include "Utils.h"
 #include "SetPasswordPage.h"
 #include "Password.h"
 
-SetPasswordPage::SetPasswordPage(ComponentConfigFile& config) :
+SetPasswordPage::SetPasswordPage() :
 Localized("SetPasswordPage"),
-PageComponent(config, "SetPasswordPage",{
+PageComponent("SetPasswordPage",{
     {2,
         {
             {&title, 1}
@@ -35,12 +28,12 @@ PageComponent(config, "SetPasswordPage",{
             {&setPassword, 1}
         }}
 }),
-title(config, "Title", localeText(change_password)),
-curLabel(config, "CurLabel", localeText(current_password)),
+title("Title", localeText(change_password)),
+curLabel("CurLabel", localeText(current_password)),
 curPassword("Current", 0x2022),
-newLabel(config, "NewLabel", localeText(new_password)),
+newLabel("NewLabel", localeText(new_password)),
 newPassword("New", 0x2022),
-confirmLabel(config, "ConfLabel", localeText(retype_password)),
+confirmLabel("ConfLabel", localeText(retype_password)),
 confirmPassword("Confirmation", 0x2022)
 {
 

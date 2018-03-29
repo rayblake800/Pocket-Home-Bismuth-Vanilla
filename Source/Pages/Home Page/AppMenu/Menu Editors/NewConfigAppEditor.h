@@ -15,17 +15,8 @@
 class NewConfigAppEditor : public AppMenuPopupEditor {
 public:
     /**
-     * @param appConfig         Needed so the editor can save the new item to
-     *                           the apps.json file.
-     * 
-     * @param componentConfig   Component settings used to setup the editor
-     *                           component.
-     * 
      * @onConfirm               An optional callback routine to run after 
      *                           creating the new application entry.
      */
-    NewConfigAppEditor(AppConfigFile& appConfig,
-            ComponentConfigFile& componentConfig,
-            std::function<void() > onConfirm = []() {
-            });
+    NewConfigAppEditor(std::function<void() > onConfirm = [](){});
 };

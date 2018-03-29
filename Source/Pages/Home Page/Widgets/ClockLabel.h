@@ -17,7 +17,7 @@ public:
     * @param config  Shared component settings that define the label's bounds
     *                and behavior.
     */
-    ClockLabel(ComponentConfigFile& config);
+    ClockLabel();
     
     virtual ~ClockLabel() { }
 
@@ -36,12 +36,10 @@ private:
     /**
      * Receives notification whenever clock configuration values change.
      * 
-     * @param config  The main config file object.
-     * 
      * @param key     This should be either the key for the clock visibility 
      *                setting, or for the 12h/24h mode toggle
      */
-    void extraConfigValueChanged(ConfigFile* config,String key) override;
+    void extraConfigValueChanged(String key) override;
     
     //If true, use 24 hour time, if false, use 12 hour AM/PM time.
     bool use24HrMode = false;

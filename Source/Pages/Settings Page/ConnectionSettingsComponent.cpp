@@ -3,13 +3,10 @@
 
 ConnectionSettingsComponent::ConnectionSettingsComponent(
         std::function<void() > openConnectionPage,
-        ComponentConfigFile& config,
         const String& name) :
 Component(name),
-config(config),
-spinner(config),
 openConnectionPage(openConnectionPage),
-pageButton(config, name + "Button")
+pageButton(name + "Button")
 {
     toggle.addListener(this);
     pageButton.addListener(this);
@@ -106,9 +103,8 @@ void ConnectionSettingsComponent::visibilityChanged()
 /**
  * @param name internal component name
  */
-ConnectionSettingsComponent::ConnectionButton::ConnectionButton(
-        ComponentConfigFile& config,
-        const String& name) : Button(name), config(config) { }
+ConnectionSettingsComponent::ConnectionButton::ConnectionButton
+(const String& name) : Button(name){ }
 
 /**
  * Sets the text that will be printed on the button.
@@ -153,6 +149,7 @@ void ConnectionSettingsComponent::ConnectionButton::paintButton
 void ConnectionSettingsComponent::ConnectionButton::resized()
 {
     borderSize = getHeight() / 10;
+    ComponentConfigFile config;
     textHeight = config.getFontHeight(getLocalBounds().reduced(borderSize * 2),
             displayText);
 }

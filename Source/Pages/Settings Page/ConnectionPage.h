@@ -24,7 +24,7 @@ template<class ConnectionPoint>
 class ConnectionPage : public PageComponent {
 public:
 
-    ConnectionPage(ComponentConfigFile& config);
+    ConnectionPage();
 
     virtual ~ConnectionPage() { }
 

@@ -12,21 +12,17 @@ const String AppMenuComponent::reloadMenuBinding = "TAB";
 DesktopEntries AppMenuComponent::desktopEntries;
 
 AppMenuComponent::AppMenuComponent(
-        MainConfigFile& mainConfig,
-        ComponentConfigFile& componentConfig,
-        AppConfigFile& appConfig,
         String componentKey,
         OverlaySpinner& loadingSpinner) :
 loadingState(false),
-appConfig(appConfig),
-componentConfig(componentConfig),
-ConfigurableComponent(componentKey, componentConfig),
+ConfigurableComponent(componentKey),
 loadingSpinner(loadingSpinner),
-menuItemFactory(appConfig, mainConfig, desktopEntries)
+menuItemFactory(desktopEntries)
 {
 #    if JUCE_DEBUG
     setName("AppMenuComponent");
 #    endif
+    MainConfigFile mainConfig;
     mainConfig.addListener(this,{
         MainConfigFile::maxRowsKey,
         MainConfigFile::maxColumnsKey
@@ -144,15 +140,12 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
             });
             break;
         case 3://User selects "New favorite application"
-            showPopupEditor(new NewConfigAppEditor(appConfig,
-                    componentConfig,
-                    confirmNew));
+            showPopupEditor(new NewConfigAppEditor(confirmNew));
             break;
         case 4://User selects "New application link"
         {
             AppMenuPopupEditor* newAppEditor
-                    = new NewDesktopAppEditor(componentConfig,
-                    confirmNew);
+                    = new NewDesktopAppEditor(confirmNew);
             if (selectedButton != nullptr)
             {
                 newAppEditor->setCategories
@@ -164,14 +157,13 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         case 5://User selects "New folder"
         {
             AppMenuPopupEditor* newFolderEditor
-                    = new NewFolderEditor(appConfig,
-                    componentConfig,
-                    confirmNew);
+                    = new NewFolderEditor(confirmNew);
             showPopupEditor(newFolderEditor);
             break;
         }
         case 6://User selects "Pin to favorites"
         {
+            AppConfigFile appConfig;
             AppConfigFile::AppItem newFavorite;
             newFavorite.name = selectedMenuItem->getAppName();
             newFavorite.icon = selectedMenuItem->getIconName();
@@ -483,26 +475,23 @@ void AppMenuComponent::windowFocusLost()
 /**
  * Updates the layout if row/column size changes.
  */
-void AppMenuComponent::extraConfigValueChanged
-(ConfigFile* config, String key)
+void AppMenuComponent::extraConfigValueChanged(String key)
 {
-    MainConfigFile* mainConfig = dynamic_cast<MainConfigFile*> (config);
-    if (mainConfig != nullptr)
+    MainConfigFile mainConfig;
+
+    if (key == MainConfigFile::maxColumnsKey)
     {
-        if (key == MainConfigFile::maxColumnsKey)
-        {
-            maxColumns = mainConfig->getConfigValue<int>(key);
-        }
-        else if (key == MainConfigFile::maxRowsKey)
-        {
-            maxRows = mainConfig->getConfigValue<int>(key);
-        }
-        for (AppMenuFolder* folder : openFolders)
-        {
-            folder->updateGridSize(maxRows, maxColumns);
-        }
-        layoutFolders();
+        maxColumns = mainConfig.getConfigValue<int>(key);
     }
+    else if (key == MainConfigFile::maxRowsKey)
+    {
+        maxRows = mainConfig.getConfigValue<int>(key);
+    }
+    for (AppMenuFolder* folder : openFolders)
+    {
+        folder->updateGridSize(maxRows, maxColumns);
+    }
+    layoutFolders();
 }
 
 /**
@@ -536,8 +525,7 @@ void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
         removeChildComponent(openFolders.getLast());
         openFolders.removeLast();
     }
-    AppMenuFolder* newFolder = createFolderObject
-            (folderItem, buttonNameMap, componentConfig);
+    AppMenuFolder* newFolder = createFolderObject(folderItem, buttonNameMap);
 
     openFolders.add(newFolder);
     newFolder->addMouseListener(this, false);
@@ -565,7 +553,7 @@ AppMenuButton::Ptr AppMenuComponent::getSelectedButton()
  * Adds and shows a new pop-up editor component, safely removing any previous
  * editor.
  */
-void AppMenuComponent::showPopupEditor(AppMenuPopupEditor* editor)
+void AppMenuComponent::showPopupEditor(AppMenuPopupEditor * editor)
 {
     if (buttonEditor != nullptr)
     {
@@ -590,7 +578,7 @@ void AppMenuComponent::showMenuButtonEditor(AppMenuButton::Ptr button)
         return;
     }
 
-    showPopupEditor(button->getEditor(componentConfig,
+    showPopupEditor(button->getEditor(
             [this, button]
             (AppMenuPopupEditor * editor)
             {
@@ -666,7 +654,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
  * Click AppMenuButtons on left click, open the pop-up menu
  * on right click or control click.
  */
-void AppMenuComponent::mouseDown(const MouseEvent &event)
+void AppMenuComponent::mouseDown(const MouseEvent & event)
 {
     if (ignoringInput())
     {

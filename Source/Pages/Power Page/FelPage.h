@@ -15,7 +15,7 @@
 class FelPage : public PageComponent, private Localized
 {
 public:
-    FelPage(ComponentConfigFile& config);
+    FelPage();
 
     ~FelPage() { }
 private:

@@ -3,10 +3,8 @@
 ScrollingAppFolder::ScrollingAppFolder(
         AppMenuItem::Ptr folderItem,
         MouseListener* btnListener,
-        std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-        ComponentConfigFile& config) :
-AppMenuFolder(folderItem, btnListener, buttonNameMap),
-config(config)
+        std::map<String, AppMenuButton::Ptr>& buttonNameMap) :
+AppMenuFolder(folderItem, btnListener, buttonNameMap)
 {
     setMargin(0);
     setPadding(0, 0);
@@ -21,8 +19,7 @@ AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
 {
     return new ScrollingMenuButton(
             menuItem,
-            menuItem->getAppName() + String("Button"),
-            config);
+            menuItem->getAppName() + String("Button"));
 }
 
 /**
@@ -51,7 +48,7 @@ int ScrollingAppFolder::getMinimumWidth()
 {
     int iconSize = getParentHeight() / getMaxRows();
     int maxTextWidth = 0;
-    Font measureFont = getButtonFont(config);
+    Font measureFont = getButtonFont();
     for (int i = 0; i < getButtonCount(); i++)
     {
         maxTextWidth = std::max<int> (maxTextWidth,
@@ -63,20 +60,18 @@ int ScrollingAppFolder::getMinimumWidth()
 /**
  * Get the font used by all buttons in this menu type.
  */
-Font ScrollingAppFolder::getButtonFont(ComponentConfigFile& config)
+Font ScrollingAppFolder::getButtonFont()
 {
+    ComponentConfigFile config;
     return Font(config.getComponentSettings
             (ComponentConfigFile::smallTextKey).getBounds().getHeight());
 }
 
-ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton(
-        AppMenuItem* menuItem,
-        String name,
-        ComponentConfigFile& config) :
-AppMenuButton(menuItem, name),
-config(config)
+ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton
+(AppMenuItem* menuItem, String name) :
+AppMenuButton(menuItem, name)
 {
-    setTitleFont(ScrollingAppFolder::getButtonFont(config));
+    setTitleFont(ScrollingAppFolder::getButtonFont());
     setTextJustification(Justification::centredLeft);
 }
 

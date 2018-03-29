@@ -2,11 +2,11 @@
 #include "ComponentConfigFile.h"
 #include "ConfigurableComponent.h"
 
-ConfigurableComponent::ConfigurableComponent
-(const String& componentKey, ComponentConfigFile& config) :
-componentKey(componentKey),
-componentSettings(config.getComponentSettings(componentKey)) 
+ConfigurableComponent::ConfigurableComponent(const String& componentKey) :
+componentKey(componentKey)
 { 
+    ComponentConfigFile config;
+    componentSettings = config.getComponentSettings(componentKey);
     config.addListener(this,{componentKey});
 }
 
@@ -48,20 +48,18 @@ void ConfigurableComponent::applyConfigBounds()
 /**
  * Load and apply all component data from the ComponentConfigFile.
  */
-void ConfigurableComponent::configValueChanged
-(ConfigFile* config,String key)
+void ConfigurableComponent::configValueChanged(String key)
 {
-    ComponentConfigFile* componentConf = 
-            dynamic_cast<ComponentConfigFile*>(config);
-    if(key != componentKey || componentConf == nullptr)
+    ComponentConfigFile config;
+    if(key != componentKey)
     {
-        extraConfigValueChanged(config,key);
+        extraConfigValueChanged(key);
     }
     else
     {
         ComponentConfigFile::ComponentSettings oldSettings 
                 = componentSettings;
-        componentSettings = componentConf->getComponentSettings(key);
+        componentSettings = config.getComponentSettings(key);
         if (componentSettings.getBounds() != oldSettings.getBounds())
         {
             applyConfigBounds();

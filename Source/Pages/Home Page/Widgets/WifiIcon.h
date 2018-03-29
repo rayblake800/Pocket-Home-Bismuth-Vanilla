@@ -16,10 +16,8 @@ private WifiStateManager::Listener
 public:
     /**
      * @param wifiManager  Shared wifiManager, needed to track wifi state.
-     * 
-     * @param config       Used to load component properties
      */
-    WifiIcon(WifiStateManager& wifiManager,ComponentConfigFile& config);
+    WifiIcon(WifiStateManager& wifiManager);
     
     virtual ~WifiIcon() { }
 

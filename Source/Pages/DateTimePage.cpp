@@ -1,10 +1,8 @@
 #include "DateTimePage.h"
 
-DateTimePage::DateTimePage(
-        MainConfigFile& mainConfig,
-        ComponentConfigFile& componentConfig) :
+DateTimePage::DateTimePage() :
 Localized("DateTimePage"),
-PageComponent(componentConfig, "DateTimePage",{
+PageComponent("DateTimePage",{
     {3,
         {
             {&titleLabel, 1}
@@ -27,12 +25,10 @@ PageComponent(componentConfig, "DateTimePage",{
             {nullptr, 1}
         }}
 }),
-mainConfig(mainConfig),
-componentConfig(componentConfig),
-titleLabel(componentConfig, "dateTimeTitle", localeText(date_time_settings)),
+titleLabel("dateTimeTitle", localeText(date_time_settings)),
 setClockMode("setClockMode"),
 reconfigureBtn(localeText(set_system_clock)),
-clockModeLabel(componentConfig, "modeLabel", localeText(select_clock_mode))
+clockModeLabel("modeLabel", localeText(select_clock_mode))
 {
 
 #    if JUCE_DEBUG
@@ -46,10 +42,11 @@ clockModeLabel(componentConfig, "modeLabel", localeText(select_clock_mode))
     setClockMode.addItem(localeText(mode_am_pm), 2);
     setClockMode.addItem(localeText(hide_clock), 3);
     setClockMode.addListener(this);
-    if (componentConfig.getConfigValue<bool>(ComponentConfigFile::showClockKey))
+    MainConfigFile mainConfig;
+    if (mainConfig.getConfigValue<bool>(MainConfigFile::showClockKey))
     {
-        if (componentConfig.getConfigValue<bool>
-            (ComponentConfigFile::use24HrModeKey))
+        if (mainConfig.getConfigValue<bool>
+            (MainConfigFile::use24HrModeKey))
         {
             setClockMode.setSelectedId(1,
                     NotificationType::dontSendNotification);
@@ -74,6 +71,7 @@ void DateTimePage::pageButtonClicked(Button* button)
 {
     if (button == &reconfigureBtn)
     {
+        MainConfigFile mainConfig;
         String configureTime = mainConfig.getConfigValue<String>
                 (MainConfigFile::termLaunchCommandKey)
                 + reconfigureCommand;
@@ -103,12 +101,13 @@ void DateTimePage::comboBoxChanged(ComboBox* comboBox)
     }
     bool showClock = (comboBox->getSelectedId() != 3);
     bool use24HrMode = (comboBox->getSelectedId() == 1);
+    MainConfigFile mainConfig;
     if (showClock)
     {
-        componentConfig.setConfigValue<bool>
-                (ComponentConfigFile::use24HrModeKey, use24HrMode);
+        mainConfig.setConfigValue<bool>
+                (MainConfigFile::use24HrModeKey, use24HrMode);
     }
-    componentConfig.setConfigValue<bool>
-            (ComponentConfigFile::showClockKey, showClock);
+    mainConfig.setConfigValue<bool>
+            (MainConfigFile::showClockKey, showClock);
 }
 

@@ -1,12 +1,10 @@
 #include "PocketHomeApplication.h"
-#include "ComponentConfigFile.h"
 #include "WifiSettingsComponent.h"
 
 WifiSettingsComponent::WifiSettingsComponent(
         WifiStateManager& wifiManager,
-        std::function<void() > openWifiPage,
-        ComponentConfigFile& config) :
-ConnectionSettingsComponent(openWifiPage, config, "wifi"),
+        std::function<void() > openWifiPage) :
+ConnectionSettingsComponent(openWifiPage, "wifi"),
 Localized("WifiSettingsComponent"),
 wifiManager(wifiManager)
 {

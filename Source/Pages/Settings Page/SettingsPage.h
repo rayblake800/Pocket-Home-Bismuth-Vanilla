@@ -9,7 +9,6 @@
 #include "IconSliderComponent.h"
 #include "Localized.h"
 #include "SwitchComponent.h"
-#include "AppConfigFile.h"
 #include "ConfigurableImageButton.h"
 #include "PageComponent.h"
 #include "WindowFocusedTimer.h"
@@ -25,14 +24,10 @@ public:
      * @param pageFactory  Page creator needed to open the advanced settings
      *                      page.
      * 
-     * @param config       Shared UI component preferences, needed to load
-     *                      page navigation buttons and set text size.
-     * 
      * @param wifiManager  Wifi state manager needed by the wifiComponent.
      */
     SettingsPage(
             PageFactoryInterface* pageFactory,
-            ComponentConfigFile& config,
             WifiStateManager& wifiManager);
 
     virtual ~SettingsPage() { }

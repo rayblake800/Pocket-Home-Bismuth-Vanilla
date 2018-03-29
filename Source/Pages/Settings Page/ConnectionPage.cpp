@@ -3,10 +3,10 @@
 #include "ConnectionPage.h"
 
 template<class ConnectionPoint>
-ConnectionPage<ConnectionPoint>::ConnectionPage(ComponentConfigFile& config) :
-PageComponent(config, "ConnectionPage",{}, nullptr, true),
-prevPageBtn(ComponentConfigFile::pageUpKey, config),
-nextPageBtn(ComponentConfigFile::pageDownKey, config),
+ConnectionPage<ConnectionPoint>::ConnectionPage() :
+PageComponent("ConnectionPage",{}, nullptr, true),
+prevPageBtn(ComponentConfigFile::pageUpKey),
+nextPageBtn(ComponentConfigFile::pageDownKey),
 selectedConnection(ConnectionPoint())
 {
     prevPageBtn.addListener(this);

@@ -26,7 +26,7 @@
  * 4. RAIISingletons and SharedResources must never have any circular 
  *    dependencies.
  */
-
+#pragma once
 #include "JuceHeader.h"
 
 class RAIISingleton

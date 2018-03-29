@@ -1,14 +1,11 @@
 #include "CategoryPopupEditor.h"
 
 CategoryPopupEditor::CategoryPopupEditor(
-ComponentConfigFile& config,
         StringArray categories,
         std::function<void(StringArray) > onConfirm) :
 PopupEditorComponent("Edit Categories",
-config,
 [this, onConfirm](PopupEditorComponent* thisPopup)
 {
-
     onConfirm(categoryList.getListItems());
 }),
 categoryList(categories)

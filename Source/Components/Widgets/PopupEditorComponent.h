@@ -13,7 +13,7 @@
 #include "ScalingLabel.h"
 #include "DrawableImageButton.h"
 #include "RelativeLayoutManager.h"
-#include "Configuration/Configurables/ConfigurableImageComponent.h"
+#include "ConfigurableImageComponent.h"
 #include "JuceHeader.h"
 
 class PopupEditorComponent : public ConfigurableImageComponent,
@@ -31,13 +31,11 @@ protected:
     /**
      * @param title      Text to print across the top of the component.
      * 
-     * @param config      A reference to the ComponentConfigFile.
-     * 
      * @param onConfirm  The callback function to run when the confirm
      *                    button is pressed.  When called, this editor passes 
      *                    in a reference to itself as the only argument.
      */
-    PopupEditorComponent(String title, ComponentConfigFile& config,
+    PopupEditorComponent(String title,
             std::function<void(PopupEditorComponent*) > onConfirm);
 
     /**

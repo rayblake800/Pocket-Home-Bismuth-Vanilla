@@ -3,10 +3,9 @@
 #include "BluetoothSettingsPage.h"
 #include "BluetoothSettingsComponent.h"
 
-BluetoothSettingsComponent::BluetoothSettingsComponent(
-        std::function<void() > openBluetoothPage,
-        ComponentConfigFile& config) :
-ConnectionSettingsComponent(openBluetoothPage, config)
+BluetoothSettingsComponent::BluetoothSettingsComponent
+(std::function<void() > openBluetoothPage) :
+ConnectionSettingsComponent(openBluetoothPage)
 {
 
 #    if JUCE_DEBUG

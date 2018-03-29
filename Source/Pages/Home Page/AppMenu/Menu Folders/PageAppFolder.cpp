@@ -4,10 +4,8 @@
 PageAppFolder::PageAppFolder(
         AppMenuItem::Ptr folderItem,
         MouseListener* btnListener,
-        std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-        ComponentConfigFile& config) :
-AppMenuFolder(folderItem, btnListener, buttonNameMap),
-config(config)
+        std::map<String, AppMenuButton::Ptr>& buttonNameMap) :
+AppMenuFolder(folderItem, btnListener, buttonNameMap)
 {
     reload();
 }
@@ -19,8 +17,7 @@ AppMenuButton::Ptr PageAppFolder::createMenuButton(AppMenuItem::Ptr menuItem)
 {
     return new PageMenuButton(
             menuItem,
-            menuItem->getAppName() + String("Button"),
-            config);
+            menuItem->getAppName() + String("Button"));
 }
 
 /**
@@ -256,12 +253,9 @@ void PageAppFolder::resized()
 
 //############################  PageMenuButton  ################################
 
-PageAppFolder::PageMenuButton::PageMenuButton(
-        AppMenuItem::Ptr menuItem,
-        String name,
-        ComponentConfigFile& config) :
-AppMenuButton(menuItem, name),
-config(config)
+PageAppFolder::PageMenuButton::PageMenuButton
+(AppMenuItem::Ptr menuItem, String name) :
+AppMenuButton(menuItem, name)
 {
     setFillBackground(false);
     setDrawBorder(false);
@@ -278,6 +272,7 @@ void PageAppFolder::PageMenuButton::resized()
     Rectangle<float> textBounds = bounds.toFloat();
     Rectangle<float> imageBounds = bounds.toFloat();
     const Font& titleFont = getTitleFont();
+    ComponentConfigFile config;
     int textHeight = config.getComponentSettings
             (ComponentConfigFile::smallTextKey).getBounds().getHeight();
 

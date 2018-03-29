@@ -1,17 +1,18 @@
 #include "AssetFiles.h"
 #include "Spinner.h"
-#include "Configuration/ComponentConfigFile.h"
+#include "ComponentConfigFile.h"
 
-Spinner::Spinner(ComponentConfigFile& config, int secondsToTimeout) :
+Spinner::Spinner(int secondsToTimeout) :
 WindowFocusedTimer("SpinnerFrame"),
 ConfigurableImageComponent(
 ComponentConfigFile::spinnerKey,
-config,0,RectanglePlacement::fillDestination),
+0,RectanglePlacement::fillDestination),
 timeout(secondsToTimeout)
 {
 #    if JUCE_DEBUG
     setName("spinner");
 #    endif
+    ComponentConfigFile config;
     numImages = config.getComponentSettings(ComponentConfigFile::spinnerKey)
             .getAssetFiles().size();
 }

@@ -14,8 +14,6 @@ public:
     /**
      * @param componentKey  The label's key in the ComponentConfigFile.
      * 
-     * @param config        A reference to the ComponentConfigFile.
-     * 
      * @param componentName The component's internal name value.
      *  
      * @param labelText     The initial label display text.
@@ -24,7 +22,6 @@ public:
      *                       (getHeight() - fontPadding).
      */
     ConfigurableLabel(String componentKey,
-            ComponentConfigFile& config,
             const String &componentName = String(),
             const String &labelText = String(),
             const int& fontPadding = 0);

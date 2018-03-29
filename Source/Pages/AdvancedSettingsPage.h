@@ -15,12 +15,8 @@ class AdvancedSettingsPage : public PageComponent, private Localized
 public:
     /**
      * @param pageFactory  Allows this page to open new pages.
-     * 
-     * @param config       Used to load page navigation buttons.
      */
-    AdvancedSettingsPage(
-            PageComponent::PageFactoryInterface* pageFactory,
-            ComponentConfigFile& config);
+    AdvancedSettingsPage(PageComponent::PageFactoryInterface* pageFactory);
 
     virtual ~AdvancedSettingsPage() { }
 

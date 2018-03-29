@@ -1,13 +1,10 @@
 #include "NewConfigAppEditor.h"
 
-NewConfigAppEditor::NewConfigAppEditor(AppConfigFile& appConfig,
-        ComponentConfigFile& componentConfig,
-        std::function<void() > onConfirm) :
+NewConfigAppEditor::NewConfigAppEditor(std::function<void() > onConfirm) :
 AppMenuPopupEditor("New favorite application link",
-        componentConfig,
-[this, &appConfig, onConfirm](AppMenuPopupEditor* editor)
+[this, onConfirm](AppMenuPopupEditor* editor)
 {
-
+    AppConfigFile appConfig;
     AppConfigFile::AppItem newApp;
     newApp.name = editor->getNameField();
     newApp.icon = editor->getIconField();

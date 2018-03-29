@@ -1,11 +1,10 @@
 #include "ConfigurableImageComponent.h"
 
-ConfigurableImageComponent::ConfigurableImageComponent
-(String componentKey,
-        ComponentConfigFile& config,
+ConfigurableImageComponent::ConfigurableImageComponent(
+        String componentKey,
         int assetIndex,
         RectanglePlacement placement) :
-ConfigurableComponent(componentKey, config),
+ConfigurableComponent(componentKey),
 DrawableImageComponent(placement),
 assetIndex(assetIndex)
 {

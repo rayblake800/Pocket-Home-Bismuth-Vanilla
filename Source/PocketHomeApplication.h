@@ -10,6 +10,7 @@
 #include "PocketHomeWindow.h"
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
+#include "ComponentConfigFile.h"
 
 class PocketHomeApplication : public JUCEApplication
 {

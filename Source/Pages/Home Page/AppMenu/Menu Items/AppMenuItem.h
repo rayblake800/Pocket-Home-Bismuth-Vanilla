@@ -13,8 +13,6 @@
  */
 
 #pragma once
-#include "MainConfigFile.h"
-#include "AppConfigFile.h"
 #include "DesktopEntry.h"
 #include "IconThread.h"
 #include "Localized.h"
@@ -27,10 +25,7 @@ public:
     friend class AppMenuButton;
     typedef ReferenceCountedObjectPtr<AppMenuItem> Ptr;
 
-    /**
-     * @param mainConfig  Needed for loading the terminal launch command.
-     */
-    AppMenuItem(MainConfigFile& mainConfig);
+    AppMenuItem();
 
     virtual ~AppMenuItem() { }
 
@@ -259,11 +254,9 @@ private:
     /**
      * Updates the termLaunchPrefix if it's changed in configuration.
      * 
-     * @param config
-     * 
      * @param propertyKey
      */
-    void configValueChanged(ConfigFile* config, String propertyKey);
+    void configValueChanged(String propertyKey);
 
 
 

@@ -37,9 +37,6 @@ public:
     };
 
     /**
-     * @param config             A reference to the ComponentConfigFile, which
-     *                            defines the page navigation button properties.
-     * 
      * @param name               The internal component name.
      * 
      * @param layout             Defines the layout of all page components.  
@@ -60,7 +57,6 @@ public:
      *                            a back button. 
      */
     PageComponent(
-            ComponentConfigFile& config,
             const String& name = String(),
             RelativeLayoutManager::Layout layout = {},
             PageFactoryInterface* pageFactory = nullptr,

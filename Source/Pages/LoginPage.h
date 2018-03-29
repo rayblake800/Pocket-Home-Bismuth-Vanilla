@@ -22,15 +22,11 @@ private Localized
 public:
 
     /**
-     * @param config         ComponentConfigFile reference required by all 
-     *                        PageComponents.
-     * 
      * @param loginCallback  A callback function to run when the user logs in
      *                        successfully.  This should close the LoginPage
      *                        and show normal application content.
      */
-    LoginPage(ComponentConfigFile& config, 
-            std::function<void () > loginCallback);
+    LoginPage(std::function<void () > loginCallback);
 
     virtual ~LoginPage() { }
 

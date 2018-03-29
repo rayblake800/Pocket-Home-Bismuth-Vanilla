@@ -13,7 +13,6 @@
 #include "SwitchComponent.h"
 #include "LoginPage.h"
 #include "Localized.h"
-#include "MainConfigFile.h"
 
 /**
  * TODO:
@@ -27,16 +26,9 @@ class PowerPage : public PageComponent, private Localized
 {
 public:
     /**
-     * @param pageFactory        Needed to open the flashing page.
-     * 
-     * @param mainConfig         Shared config data where power commands are
-     *                            stored.
-     * 
-     * @param componentConfig    Shared UI component preferences. 
+     * @param pageFactory        Needed to open the flashing page. 
      */
-    PowerPage(PageFactoryInterface* pageFactory,
-            MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig);
+    PowerPage(PageFactoryInterface* pageFactory);
 
     virtual ~PowerPage() { }
 private:
@@ -67,8 +59,7 @@ private:
      */
     void pageResized() override;
 
-    //Used to load power commands
-    MainConfigFile& mainConfig;
+    
     //Turns off the system using the shutdown command in the MainConfigFile.
     TextButton powerOffButton;
     //Starts sleep mode with startSleepMode()

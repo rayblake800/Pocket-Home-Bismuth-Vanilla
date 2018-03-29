@@ -33,22 +33,12 @@ private WindowFocus::Listener
 {
 public:
     /**
-     * @param mainConfig       A reference to the MainConfigFile.
-     * 
-     * @param componentConfig  A reference to the ComponentConfigFile.
-     * 
-     * @param appConfig        A reference to the AppConfigFile.
-     * 
      * @param componentKey     Loads menu bounds from config.
      * 
      * @param loadingSpinner   Reference to an overlay spinner that sits over
      *                          the PageComponent holding this AppMenuComponent.
      */
-    AppMenuComponent(MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig,
-            AppConfigFile& appConfig,
-            String componentKey,
-            OverlaySpinner& loadingSpinner);
+    AppMenuComponent(String componentKey, OverlaySpinner& loadingSpinner);
 
     virtual ~AppMenuComponent();
 
@@ -235,8 +225,7 @@ private:
      */
     virtual AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
-            std::map<String, AppMenuButton::Ptr>& buttonMap,
-            ComponentConfigFile& config) = 0;
+            std::map<String, AppMenuButton::Ptr>& buttonMap) = 0;
 
     /**
      * Return the bounds where the given folder should be placed in the menu.
@@ -271,12 +260,9 @@ private:
     /**
      * Updates the layout if row/column size changes.
      *
-     * @param config  This should point to the MainConfigFile instance.
-     *
      * @param key     the key of property that has changed
      */
-    void extraConfigValueChanged(ConfigFile* config,
-            String key) final override;
+    void extraConfigValueChanged(String key) final override;
 
     /**
      * Reposition child components, and update folder layout without animating.
@@ -343,12 +329,6 @@ private:
 
     //Folder transition animation duration, in milliseconds.
     const int animationDuration = 350;
-
-    //Loads folder and application shortcut configuration
-    AppConfigFile& appConfig;
-
-    //Provides component settings
-    ComponentConfigFile& componentConfig;
 
     //Holds the AppFolder components that organize the menu buttons.
     OwnedArray<AppMenuFolder> openFolders;

@@ -1,8 +1,8 @@
 #include "TempTimer.h"
 #include "ColourPage.h"
 
-ColourPage::ColourPage(ComponentConfigFile& config) :
-PageComponent(config,"ColourPage",{
+ColourPage::ColourPage() :
+PageComponent("ColourPage",{
     {4,
         {
             {&colourList, 1}
@@ -13,8 +13,7 @@ PageComponent(config,"ColourPage",{
         }}
 
 }),
-config(config),
-        listModel(config),
+listModel(),
 colourList("colourList", &listModel)
 {
     addAndShowLayoutComponents();
@@ -28,15 +27,15 @@ void ColourPage::pageResized()
     colourList.repaint();
 }
 
-ColourPage::ColourListModel::ColourListModel(ComponentConfigFile& config) :
-config(config)
+ColourPage::ColourListModel::ColourListModel()
 {
+    ComponentConfigFile config;
     colourKeys = config.getColourKeys();
     config.addListener(this, colourKeys);
     DBG(__func__ << ": adding " << colourKeys.size() << " colors");
     for (const String& key : colourKeys)
     {
-        colours.add(Colour(config.getConfigValue<String>(key).getHexValue32()));
+        colours.add(config.getColour(key));
     }
 
     DBG(__func__ << ": found " << colours.size() << " colors");
@@ -51,6 +50,7 @@ int ColourPage::ColourListModel::getNumRows()
 
 void ColourPage::ColourListModel::listResized(ListBox& list)
 {
+    ComponentConfigFile config;
     textHeight = config.getComponentSettings(ComponentConfigFile::mediumTextKey)
             .getBounds().getHeight();
     list.setRowHeight(textHeight * 1.5);
@@ -92,13 +92,12 @@ Component* ColourPage::ColourListModel::refreshComponentForRow(int rowNumber,
 
 void ColourPage::ColourListModel::selectedRowsChanged(int lastRowSelected) { }
 
-void ColourPage::ColourListModel::configValueChanged(ConfigFile* config,
-        String key)
+void ColourPage::ColourListModel::configValueChanged(String key)
 {
+    ComponentConfigFile config;
     int colourIndex = colourKeys.indexOf(key);
     if (colourIndex >= 0)
     {
-        colours[colourIndex] =
-                Colour(config->getConfigValue<String>(key).getHexValue32());
+        colours[colourIndex] = config.getColour(key);
     }
 }

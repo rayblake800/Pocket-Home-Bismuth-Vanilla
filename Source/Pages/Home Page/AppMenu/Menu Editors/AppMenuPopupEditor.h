@@ -29,9 +29,6 @@ public:
      * @param title             Text to print at the top of the pop-up editor 
      *                           window.
      * 
-     * @param config            Component settings needed to setup the editor
-     *                           component.
-     * 
      * @param onConfirm         A callback function to run when the confirm 
      *                           button is pressed.
      * 
@@ -49,7 +46,6 @@ public:
      *                           button.
      */
     AppMenuPopupEditor(String title,
-            ComponentConfigFile& config,
             std::function<void(AppMenuPopupEditor*) > onConfirm,
             bool showCategoryList = true,
             bool showCommandField = true);
@@ -125,8 +121,6 @@ private:
      * @param button
      */
     void editorButtonClicked(Button* button) override;
-    
-    ComponentConfigFile& config;
 
     ScalingLabel nameLabel; //text:"Name:"
     //Edits an application/folder display name

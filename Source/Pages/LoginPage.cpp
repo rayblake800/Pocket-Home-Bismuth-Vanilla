@@ -3,10 +3,9 @@
 #include "LoginPage.h"
 #include "Password.h"
 
-LoginPage::LoginPage(ComponentConfigFile& config,
-        std::function<void () > loginCallback) :
+LoginPage::LoginPage(std::function<void () > loginCallback) :
 Localized("LoginPage"),
-PageComponent(config, "LoginPage",{
+PageComponent("LoginPage",{
     {7,
         {
             {&ntcIcon, 1}
@@ -35,7 +34,7 @@ PageComponent(config, "LoginPage",{
         }}
 }, nullptr, false),
 ntcIcon("login/ntcbanner.png"),
-passwordLabel(config, "pass", localeText(password_label)),
+passwordLabel("pass", localeText(password_label)),
 passwordField("passwordField", 0x2022),
 loginButton(localeText(log_in), "loginButton"),
 hashedPassword("none"),

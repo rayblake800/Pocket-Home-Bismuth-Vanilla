@@ -20,7 +20,7 @@ public:
      *                          spinner will keep running until destroyed or 
      *                          turned off with setEnabled().
      */
-    Spinner(ComponentConfigFile& config,int secondsToTimeout = -1);
+    Spinner(int secondsToTimeout = -1);
     
     virtual ~Spinner() {}
     

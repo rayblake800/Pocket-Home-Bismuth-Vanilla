@@ -2,7 +2,6 @@
 #include "PageComponent.h"
 
 PageComponent::PageComponent(
-        ComponentConfigFile& config,
         const String& name,
         RelativeLayoutManager::Layout layout,
         PageFactoryInterface* pageFactory,
@@ -18,8 +17,7 @@ backButtonOnRight(backButtonOnRight)
         backButton = new ConfigurableImageButton(
                 backButtonOnRight ?
                 ComponentConfigFile::pageRightKey
-                : ComponentConfigFile::pageLeftKey,
-                config);
+                : ComponentConfigFile::pageLeftKey);
         backButton->addListener(this);
         addAndMakeVisible(backButton);
     }

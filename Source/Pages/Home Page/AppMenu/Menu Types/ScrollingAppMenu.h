@@ -12,20 +12,10 @@ class ScrollingAppMenu : public AppMenuComponent
 {
 public:
     /**
-     * @param mainConfig       A reference to the MainConfigFile.
-     * 
-     * @param componentConfig  A reference to the ComponentConfigFile.
-     * 
-     * @param appConfig        A reference to the AppConfigFile.
-     * 
      * @param loadingSpinner   Reference to an overlay spinner that sits over
      *                         the PageComponent holding this AppMenuComponent.
      */
-    ScrollingAppMenu(
-            MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig,
-            AppConfigFile& appConfig,
-            OverlaySpinner& loadingSpinner);
+    ScrollingAppMenu(OverlaySpinner& loadingSpinner);
 
     virtual ~ScrollingAppMenu() { }
 
@@ -57,6 +47,5 @@ private:
      */
     AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
-            std::map<String, AppMenuButton::Ptr>& buttonMap,
-            ComponentConfigFile& config) override;
+            std::map<String, AppMenuButton::Ptr>& buttonMap) override;
 };

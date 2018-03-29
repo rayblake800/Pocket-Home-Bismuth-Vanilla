@@ -1,12 +1,9 @@
-#include <stdlib.h>
-#include <unistd.h>
-#include "Utils.h"
 #include "RemovePasswordPage.h"
 #include "Password.h"
 
-RemovePasswordPage::RemovePasswordPage(ComponentConfigFile& config) :
+RemovePasswordPage::RemovePasswordPage() :
 Localized("RemovePasswordPage"),
-PageComponent(config, "RemovePasswordPage",{
+PageComponent("RemovePasswordPage",{
     {2,
         {
             {&titleLabel, 1}
@@ -21,9 +18,9 @@ PageComponent(config, "RemovePasswordPage",{
             {&deleteButton, 1}
         }}
 }),
-curPwdLabel(config, "CurLabel", localeText(current_password)),
+curPwdLabel("CurLabel", localeText(current_password)),
 curPassword("Current", 0x2022),
-titleLabel(config, "Title", localeText(remove_password))
+titleLabel("Title", localeText(remove_password))
 {
 
 #    if JUCE_DEBUG

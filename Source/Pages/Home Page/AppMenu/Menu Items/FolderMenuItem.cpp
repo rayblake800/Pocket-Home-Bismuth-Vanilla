@@ -2,13 +2,9 @@
 #include "FolderMenuItem.h"
 
 FolderMenuItem::FolderMenuItem(
-        AppConfigFile& appConfig,
-        MainConfigFile& mainConfig,
         const AppConfigFile::AppFolder& appFolder,
         DesktopEntries& desktopEntries) :
-AppMenuItem(mainConfig),
 Localized("FolderMenuItem"),
-config(appConfig),
 appFolder(appFolder),
 desktopEntries(desktopEntries) { }
 
@@ -66,6 +62,7 @@ String FolderMenuItem::getIconName() const
  */
 bool FolderMenuItem::canChangeIndex(int offset) const
 {
+    AppConfigFile config;
     int newIndex = config.getFolderIndex(appFolder) + offset;
     return newIndex >= 0 && newIndex < config.getFolders().size();
 }
@@ -114,6 +111,7 @@ std::function<void(AppMenuPopupEditor*) > FolderMenuItem::getEditorCallback()
  */
 bool FolderMenuItem::removeMenuItemSource()
 {
+    AppConfigFile config;
     config.removeAppFolder(config.getFolderIndex(appFolder));
     return true;
 }
@@ -126,6 +124,7 @@ bool FolderMenuItem::moveDataIndex(int offset)
 {
     if (canChangeIndex(offset))
     {
+        AppConfigFile config;
         int index = config.getFolderIndex(appFolder);
         if (index < 0)
         {
@@ -150,6 +149,7 @@ bool FolderMenuItem::moveDataIndex(int offset)
 void FolderMenuItem::editFolder
 (String name, String icon, StringArray categories)
 {
+    AppConfigFile config;
     int index = config.getFolderIndex(appFolder);
     appFolder.name = name;
     appFolder.icon = icon;

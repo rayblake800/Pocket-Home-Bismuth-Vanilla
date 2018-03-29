@@ -2,10 +2,34 @@
 #include "MainConfigFile.h"
 #include "Utils.h"
 
-MainConfigFile::MainConfigFile() : ConfigFile(filenameConst)
+
+ScopedPointer<RAIISingleton::SharedResource>
+        MainConfigFile::sharedResource = nullptr;
+
+CriticalSection MainConfigFile::configLock;
+
+MainConfigFile::MainConfigFile() : 
+RAIISingleton(sharedResource,configLock,
+[this]()->RAIISingleton::SharedResource*
 {
-    ASSERT_SINGULAR;
-    const ScopedLock readLock(getConfigLock());
+    return new MainJson();
+}) { }
+
+
+/**
+ * Add a listener to track component setting changes.
+ */
+void MainConfigFile::addListener(ConfigFile::Listener* listener,
+        StringArray trackedKeys)
+{
+    const ScopedLock readLock(configLock);
+    MainJson* config = static_cast<MainJson*> (sharedResource.get());
+    config->addListener(listener, trackedKeys);
+}
+
+MainConfigFile::MainJson::MainJson() :
+ConfigFile(filenameConst)
+{
     var jsonConfig = AssetFiles::loadJSONAsset
             (String(configPath) + filenameConst, true);
     var defaultConfig = var();
@@ -32,8 +56,10 @@ const String MainConfigFile::termLaunchCommandKey = "terminal launch command";
 const String MainConfigFile::backgroundKey = "background";
 //boolean
 const String MainConfigFile::showCursorKey = "cursor";
+const String MainConfigFile::showClockKey = "show clock";
+const String MainConfigFile::use24HrModeKey = "use 24h mode";
 
-std::vector<ConfigFile::DataKey> MainConfigFile::getDataKeys() const
+std::vector<ConfigFile::DataKey> MainConfigFile::MainJson::getDataKeys() const
 {
     return {
         {maxRowsKey, intType},
@@ -43,6 +69,8 @@ std::vector<ConfigFile::DataKey> MainConfigFile::getDataKeys() const
         {shutdownCommandKey, stringType},
         {restartCommandKey, stringType},
         {termLaunchCommandKey, stringType},
-        {showCursorKey, boolType}};
+        {showCursorKey, boolType},
+        {showClockKey, boolType},
+        {use24HrModeKey, boolType}};
 }
 

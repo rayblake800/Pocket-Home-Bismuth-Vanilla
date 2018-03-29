@@ -2,9 +2,9 @@
 #include "Utils.h"
 #include "WifiIcon.h"
 
-WifiIcon::WifiIcon(WifiStateManager& wifiManager, ComponentConfigFile& config) :
+WifiIcon::WifiIcon(WifiStateManager& wifiManager) :
 WindowFocusedTimer("WifiIcon"),
-ConfigurableImageComponent(ComponentConfigFile::wifiIconKey, config),
+ConfigurableImageComponent(ComponentConfigFile::wifiIconKey),
 wifiManager(wifiManager)
 {
 

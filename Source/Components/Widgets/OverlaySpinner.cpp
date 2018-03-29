@@ -1,10 +1,8 @@
 #include "Utils.h"
 #include "OverlaySpinner.h"
 
-OverlaySpinner::OverlaySpinner
-(ComponentConfigFile& config, int secondsToTimeout) :
-spinner(config,secondsToTimeout),
-loadingText(config)
+OverlaySpinner::OverlaySpinner(int secondsToTimeout) :
+spinner(secondsToTimeout)
 {
 
 #    if JUCE_DEBUG

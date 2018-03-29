@@ -17,9 +17,7 @@ class DateTimePage : public PageComponent, private ComboBox::Listener,
 private Localized
 {
 public:
-    DateTimePage(
-            MainConfigFile& mainConfig, 
-            ComponentConfigFile& componentConfig);
+    DateTimePage();
 
     virtual ~DateTimePage() { }
 
@@ -39,11 +37,6 @@ private:
      * @param comboBox
      */
     void comboBoxChanged(ComboBox* comboBox) override;
-
-    //used to load the terminal launch command
-    MainConfigFile& mainConfig;
-    //used to set clock visibility and 12/24 hour mode
-    ComponentConfigFile& componentConfig;
 
     //page title label
     ScalingLabel titleLabel;

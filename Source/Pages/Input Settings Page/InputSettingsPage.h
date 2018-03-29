@@ -17,17 +17,8 @@ public:
     /**
      * @param pageFactory      This will be needed to launch the key binding 
      *                          page, once it is implemented.
-     * 
-     * @param mainConfig       Shared user preferences object, needed to 
-     *                          read/write cursor settings.
-     * 
-     * @param componentConfig  Shared UI component preferences, used to set up
-     *                          page components.
      */
-    InputSettingsPage(
-            PageFactoryInterface* pageFactory,
-            MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig);
+    InputSettingsPage(PageFactoryInterface* pageFactory);
 
     virtual ~InputSettingsPage() { }
 
@@ -47,9 +38,6 @@ public:
     void comboBoxChanged(ComboBox* box) override;
 
 private:
-    //read/write cursor preferences
-    MainConfigFile& mainConfig;
-
     //Title of the page
     ScalingLabel title;
 

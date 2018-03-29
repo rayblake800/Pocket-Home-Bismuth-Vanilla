@@ -24,12 +24,11 @@ AppMenuItem::Ptr AppMenuButton::getMenuItem()
 /**
  * Gets a PopupEditorComponent configured to edit this button's data
  */
-AppMenuPopupEditor* AppMenuButton::getEditor(ComponentConfigFile& config,
-        const std::function<void(AppMenuPopupEditor*) >& onConfirm)
+AppMenuPopupEditor* AppMenuButton::getEditor
+(const std::function<void(AppMenuPopupEditor*) >& onConfirm)
 {
     AppMenuPopupEditor* editor = new AppMenuPopupEditor
             (menuItem->getEditorTitle(),
-            config,
             [this, onConfirm](AppMenuPopupEditor * editor)
             {
                 onConfirm(editor);

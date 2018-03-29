@@ -8,5 +8,7 @@
     "restart command": "systemctl reboot",
     "sleep command": "xset dpms force off",
     "terminal launch command": "vala-terminal -e",
-    "cursor": true
+    "cursor": true,
+    "use 24h mode": true,
+    "show clock": true
 }

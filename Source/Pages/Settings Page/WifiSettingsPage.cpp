@@ -10,14 +10,10 @@ const StringArray WifiSettingsPage::wifiImageFiles
 };
 
 WifiSettingsPage::WifiSettingsPage(
-        ComponentConfigFile& config,
         WifiStateManager& wifiManager) :
-ConnectionPage<WifiAccessPoint>(config),
-config(config),
-spinner(config),
+ConnectionPage<WifiAccessPoint>(),
 wifiManager(wifiManager),
-passwordLabel(config, "passwordLabel", localeText(password_field)),
-errorLabel(config),
+passwordLabel("passwordLabel", localeText(password_field)),
 Localized("WifiSettingsPage")
 {
 #    if JUCE_DEBUG
@@ -109,7 +105,7 @@ void WifiSettingsPage::connectionButtonClicked(Button* button)
 Button* WifiSettingsPage::getConnectionButton
 (const WifiAccessPoint& connection)
 {
-    return new WifiAPButton(connection, isConnected(connection), config);
+    return new WifiAPButton(connection, isConnected(connection));
 }
 
 /**
@@ -270,11 +266,10 @@ void WifiSettingsPage::reloadPage()
 
 WifiSettingsPage::WifiAPButton::WifiAPButton(
         const WifiAccessPoint& connection,
-        bool isConnected,
-        ComponentConfigFile& config) :
+        bool isConnected) :
 Button(connection.getSSID() + "Button"),
 Localized("WifiAPButton"),
-apLabel(config, "apLabel", connection.getSSID()
+apLabel("apLabel", connection.getSSID() \
 + (isConnected ? localeText(connected_ap) : String())),
 wifiIcon(getWifiAssetName(connection))
 {

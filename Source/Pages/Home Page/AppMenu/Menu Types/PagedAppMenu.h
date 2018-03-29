@@ -15,19 +15,10 @@ class PagedAppMenu : public AppMenuComponent, public Button::Listener
 {
 public:
     /**
-     * @param mainConfig       A reference to the MainConfigFile.
-     * 
-     * @param componentConfig  A reference to the ComponentConfigFile.
-     * 
-     * @param appConfig        A reference to the AppConfigFile.
-     * 
      * @param loadingSpinner   Reference to an overlay spinner that sits over
      *                         the PageComponent holding this AppMenuComponent.
      */
-    PagedAppMenu(MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig,
-            AppConfigFile& appConfig,
-            OverlaySpinner& loadingSpinner);
+    PagedAppMenu(OverlaySpinner& loadingSpinner);
 
     virtual ~PagedAppMenu() { }
 
@@ -43,7 +34,8 @@ private:
      * @param activeFolder
      * @return true iff the key press was used.
      */
-    bool folderKeyPressed(const KeyPress& key, AppMenuFolder* activeFolder) override;
+    bool folderKeyPressed
+    (const KeyPress& key, AppMenuFolder* activeFolder) override;
 
     /**
      * Create a folder component object from a folder menu item.
@@ -52,8 +44,7 @@ private:
      */
     AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
-            std::map<String, AppMenuButton::Ptr>& buttonMap,
-            ComponentConfigFile& config) override;
+            std::map<String, AppMenuButton::Ptr>& buttonMap) override;
 
     /**
      * Return the bounds where the given folder should be placed in the menu.
@@ -61,8 +52,8 @@ private:
      * @param folderIndex
      * @return 
      */
-    virtual Rectangle<int> updateFolderBounds(const AppMenuFolder* folder,
-            int folderIndex) override;
+    virtual Rectangle<int> updateFolderBounds
+    (const AppMenuFolder* folder, int folderIndex) override;
 
     /**
      * Handles navigation button controls

@@ -16,17 +16,8 @@ class NewFolderEditor : public AppMenuPopupEditor
 {
 public:
     /**
-     * @param appConfig          Needed to save the new folder to the apps.json
-     *                            config file.
-     * 
-     * @param componentConfig    Component settings used to setup the editor
-     *                            component.
-     * 
      * @onConfirm                An optional callback routine to run after 
      *                            creating the new application entry.
      */
-    NewFolderEditor(
-            AppConfigFile& appConfig,
-            ComponentConfigFile& componentConfig,
-            std::function<void() > onConfirm = [](){});
+    NewFolderEditor(std::function<void() > onConfirm = [](){});
 };

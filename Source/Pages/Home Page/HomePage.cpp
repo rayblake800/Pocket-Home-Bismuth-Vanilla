@@ -7,25 +7,17 @@
 #include "HomePage.h"
 
 HomePage::HomePage(PageFactoryInterface* pageFactory,
-        WifiStateManager& wifiState,
-        MainConfigFile& mainConfig,
-        ComponentConfigFile& componentConfig) :
-PageComponent(componentConfig, "HomePage",{}, pageFactory, false),
-loadingSpinner(componentConfig),
-frame(ComponentConfigFile::menuFrameKey, componentConfig,
-        0, RectanglePlacement::stretchToFit),
-batteryIcon(componentConfig),
-wifiIcon(wifiState, componentConfig),
-clock(componentConfig),
-mainConfig(mainConfig),
-componentConfig(componentConfig),
-powerButton(ComponentConfigFile::powerButtonKey, componentConfig),
-settingsButton(ComponentConfigFile::settingsButtonKey, componentConfig)
+        WifiStateManager& wifiState) :
+PageComponent("HomePage",{}, pageFactory, false),
+frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
+wifiIcon(wifiState),
+powerButton(ComponentConfigFile::powerButtonKey),
+settingsButton(ComponentConfigFile::settingsButtonKey)
 {
 #    if JUCE_DEBUG
     setName("HomePage");
 #    endif
-
+    MainConfigFile mainConfig;
     mainConfig.addListener(this,{
         MainConfigFile::backgroundKey,
         MainConfigFile::menuTypeKey
@@ -57,80 +49,72 @@ settingsButton(ComponentConfigFile::settingsButtonKey, componentConfig)
  * should be calling this.  Depending on the key provided, this will update
  * the page background or recreate the AppMenu.
  */
-void HomePage::configValueChanged(ConfigFile* config, String key)
+void HomePage::configValueChanged(String key)
 {
-    if (mainConfig == *config)
+    MainConfigFile mainConfig;
+    if (key == MainConfigFile::backgroundKey)
     {
-        if (key == MainConfigFile::backgroundKey)
+        String background = mainConfig.getConfigValue<String>
+                (MainConfigFile::backgroundKey);
+        if (background.containsOnly("0123456789ABCDEFXabcdefx"))
         {
-            String background = mainConfig.getConfigValue<String>
-                    (MainConfigFile::backgroundKey);
-            if (background.containsOnly("0123456789ABCDEFXabcdefx"))
+            setBackgroundImage(Image());
+            Colour bgFill(background.getHexValue32());
+            setColour(backgroundColourId, bgFill.withAlpha(1.0f));
+        }
+        else
+        {
+            setBackgroundImage(AssetFiles::loadImageAsset(background));
+        }
+    }
+    else if (key == MainConfigFile::menuTypeKey)
+    {
+        String menuType = mainConfig.getConfigValue<String>
+                (MainConfigFile::menuTypeKey);
+        if (!MainConfigFile::menuTypes.contains(menuType))
+        {
+            DBG("HomePage::" << __func__ << ": Invalid menu type!");
+            return;
+        }
+        if (appMenu != nullptr)
+        {
+            removeChildComponent(appMenu);
+            appMenu = nullptr;
+        }
+
+
+        DBG("HomePage::" << __func__ << ": Menu type is " << menuType);
+        if (menuType == "Scrolling menu")
+        {
+            if (!isClass<AppMenuComponent, ScrollingAppMenu>(appMenu.get()))
             {
-                setBackgroundImage(Image());
-                Colour bgFill(background.getHexValue32());
-                setColour(backgroundColourId, bgFill.withAlpha(1.0f));
+                DBG("HomePage::" << __func__
+                        << ": Initializing scrolling menu");
+                appMenu = new ScrollingAppMenu(loadingSpinner);
             }
             else
             {
-                setBackgroundImage(AssetFiles::loadImageAsset(background));
+                DBG("HomePage::" << __func__
+                        << ": Menu was already scrolling, don't recreate");
             }
         }
-        else if (key == MainConfigFile::menuTypeKey)
+        else//menuType == "pagedMenu"
         {
-            String menuType = mainConfig.getConfigValue<String>
-                    (MainConfigFile::menuTypeKey);
-            if (!MainConfigFile::menuTypes.contains(menuType))
+            if (!isClass<AppMenuComponent, PagedAppMenu>(appMenu.get()))
             {
-                DBG("HomePage::" << __func__ << ": Invalid menu type!");
-                return;
+                DBG("HomePage::" << __func__
+                        << ": Initializing paged menu");
+                appMenu = new PagedAppMenu(loadingSpinner);
             }
-            if (appMenu != nullptr)
+            else
             {
-                removeChildComponent(appMenu);
-                appMenu = nullptr;
+                DBG("HomePage::" << __func__ <<
+                        ": Menu was already paged, don't recreate");
             }
-
-
-            DBG("HomePage::" << __func__ << ": Menu type is " << menuType);
-            if (menuType == "Scrolling menu")
-            {
-                if (!isClass<AppMenuComponent, ScrollingAppMenu>(appMenu.get()))
-                {
-                    DBG("HomePage::" << __func__
-                            << ": Initializing scrolling menu");
-                    appMenu = new ScrollingAppMenu(mainConfig,
-                            componentConfig,
-                            appConfig,
-                            loadingSpinner);
-                }
-                else
-                {
-                    DBG("HomePage::" << __func__
-                            << ": Menu was already scrolling, don't recreate");
-                }
-            }
-            else//menuType == "pagedMenu"
-            {
-                if (!isClass<AppMenuComponent, PagedAppMenu>(appMenu.get()))
-                {
-                    DBG("HomePage::" << __func__
-                            << ": Initializing paged menu");
-                    appMenu = new PagedAppMenu(mainConfig,
-                            componentConfig,
-                            appConfig,
-                            loadingSpinner);
-                }
-                else
-                {
-                    DBG("HomePage::" << __func__ <<
-                            ": Menu was already paged, don't recreate");
-                }
-            }
-            addAndMakeVisible(appMenu);
-            appMenu->toBack();
-            pageResized();
         }
+        addAndMakeVisible(appMenu);
+        appMenu->toBack();
+        pageResized();
 
     }
 }

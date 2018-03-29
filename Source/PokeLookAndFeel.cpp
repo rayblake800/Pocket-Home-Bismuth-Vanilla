@@ -8,15 +8,13 @@
 #include "AppMenuButton.h"
 #include "PokeLookAndFeel.h"
 
-PokeLookAndFeel::PokeLookAndFeel(
-        MainConfigFile& mainConfig,
-        ComponentConfigFile& componentConfig) :
+PokeLookAndFeel::PokeLookAndFeel() :
 seguibl(Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
 BinaryData::LatoRegular_ttfSize)),
-cursor(MouseCursor::NoCursor),
-mainConfig(mainConfig),
-componentConfig(componentConfig)
+cursor(MouseCursor::NoCursor)
 {
+    ComponentConfigFile componentConfig;
+    MainConfigFile mainConfig;
     componentConfig.addListener(this, componentConfig.getColourKeys());
     mainConfig.addListener(this,{MainConfigFile::showCursorKey});
     loadAllConfigProperties();
@@ -125,6 +123,7 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
 {
     Font font(getTextButtonFont(button, button.getHeight()));
     font.setExtraKerningFactor(0.06f);
+    ComponentConfigFile componentConfig;
     font.setHeight(componentConfig.getFontHeight
             (button.getLocalBounds(), button.getButtonText()));
     g.setFont(font);
@@ -185,43 +184,28 @@ MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
 {
     return cursor;
 }
-//
-///**
-// * Ensures AlertWindows don't extend beyond the window bounds. 
-// */
-//AlertWindow* PokeLookAndFeel::createAlertWindow(
-//        const String& title, const String& message,
-//        const String& button1, const String& button2, const String& button3,
-//        AlertWindow::AlertIconType iconType,
-//        int numButtons, Component* associatedComponent)
-//{
-//    AlertWindow* window = 
-//}
 
 /**
  * Loads and applies component colors from components.json, and updates
  * cursor visibility.
  */
-void PokeLookAndFeel::configValueChanged(ConfigFile* config, String key)
+void PokeLookAndFeel::configValueChanged(String key)
 {
-    ComponentConfigFile* componentConfig =
-            dynamic_cast<ComponentConfigFile*> (config);
-    if (componentConfig != nullptr)
+    if (key == MainConfigFile::showCursorKey)
     {
-        int colourId = componentConfig->getColourId(key);
-        if (colourId != -1)
-        {
-            Colour confColour = Colour(componentConfig->getConfigValue<String>
-                    (key).getHexValue32());
-            setColour(colourId, confColour);
-        }
+        MainConfigFile config;
+        cursor = (config.getConfigValue<bool>(key) ?
+                  MouseCursor::ParentCursor : MouseCursor::NoCursor);
     }
     else
     {
-        if (key == MainConfigFile::showCursorKey)
+        ComponentConfigFile componentConfig;
+        int colourId = componentConfig.getColourId(key);
+        if (colourId != -1)
         {
-            cursor = (config->getConfigValue<bool>(key) ?
-                      MouseCursor::ParentCursor : MouseCursor::NoCursor);
+            Colour confColour = componentConfig.getColour(key);
+            setColour(colourId, confColour);
         }
+
     }
 }

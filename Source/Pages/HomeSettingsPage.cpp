@@ -1,10 +1,9 @@
+#include "MainConfigFile.h"
 #include "HomeSettingsPage.h"
 
-HomeSettingsPage::HomeSettingsPage(
-        MainConfigFile& mainConfig,
-        ComponentConfigFile& componentConfig) :
+HomeSettingsPage::HomeSettingsPage() :
 Localized("HomeSettingsPage"),
-PageComponent(componentConfig, "HomeSettingsPage",{
+PageComponent("HomeSettingsPage",{
     {
         { 3,
             {
@@ -37,16 +36,15 @@ PageComponent(componentConfig, "HomeSettingsPage",{
             }}
     }
 }),
-mainConfig(mainConfig),
-title(componentConfig, "personalizeTitle", localeText(title_text)),
-bgTypeLabel(componentConfig, "bgLabel", localeText(background_text)),
+title("personalizeTitle", localeText(title_text)),
+bgTypeLabel("bgLabel", localeText(background_text)),
 bgTypePicker("bgTypePicker"),
-bgLabel(componentConfig, "bgTitle", ""),
+bgLabel("bgTitle", ""),
 bgEditor(localeText(choose_background), localeText(choose_bg_image)),
-menuPickerLabel(componentConfig, "menuPickerLabel", localeText(menu_type_text)),
+menuPickerLabel("menuPickerLabel", localeText(menu_type_text)),
 menuTypePicker("menuTypePicker"),
-columnCountLabel(componentConfig, "columnCountLabel", localeText(menu_columns)),
-rowCountLabel(componentConfig, "rowCountLabel", localeText(menu_rows)),
+columnCountLabel("columnCountLabel", localeText(menu_columns)),
+rowCountLabel("rowCountLabel", localeText(menu_rows)),
 columnCounter(1, 1, 9),
 rowCounter(1, 1, 9)
 {
@@ -69,7 +67,7 @@ rowCounter(1, 1, 9)
         menuTypePicker.addItem(MainConfigFile::menuTypes[i], i + 1);
     }
     menuTypePicker.addListener(this);
-
+    MainConfigFile mainConfig;
     rowCounter.setValue(mainConfig.getConfigValue<int>
             (MainConfigFile::maxRowsKey));
 
@@ -85,6 +83,7 @@ rowCounter(1, 1, 9)
  */
 HomeSettingsPage::~HomeSettingsPage()
 {
+    MainConfigFile mainConfig;
     mainConfig.setConfigValue<int>(MainConfigFile::maxRowsKey,
                                    rowCounter.getValue());
     mainConfig.setConfigValue<int>(MainConfigFile::maxColumnsKey,
@@ -98,6 +97,7 @@ HomeSettingsPage::~HomeSettingsPage()
 void HomeSettingsPage::updateComboBox()
 {
     /* Checking the current configuration */
+    MainConfigFile mainConfig;
     String background
             = mainConfig.getConfigValue<String>(MainConfigFile::backgroundKey);
     bool display = false;
@@ -134,6 +134,7 @@ void HomeSettingsPage::updateComboBox()
  */
 void HomeSettingsPage::comboBoxChanged(ComboBox* box)
 {
+    MainConfigFile mainConfig;
     if (box == &bgTypePicker)
     {
         bgEditor.setText("", NotificationType::dontSendNotification);
@@ -180,6 +181,7 @@ void HomeSettingsPage::comboBoxChanged(ComboBox* box)
 void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
 {
     String value = edited->getText();
+    MainConfigFile mainConfig;
     //color value
     if (bgTypePicker.getSelectedId() == 2)
     {

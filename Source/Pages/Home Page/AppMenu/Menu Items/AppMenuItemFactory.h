@@ -7,16 +7,12 @@
 #pragma once
 #include "JuceHeader.h"
 #include "DesktopEntries.h"
-#include "AppConfigFile.h"
-#include "MainConfigFile.h"
 #include "AppMenuItem.h"
 
 class AppMenuItemFactory : public AppMenuItem::FactoryInterface{
 public:
     
-    AppMenuItemFactory(AppConfigFile& appConfigFile,
-            MainConfigFile& mainConfigFile,
-            DesktopEntries& desktopEntries);
+    AppMenuItemFactory(DesktopEntries& desktopEntries);
     
     virtual ~AppMenuItemFactory() {}
     
@@ -55,7 +51,5 @@ public:
      */
     AppMenuItem::Ptr create(const AppConfigFile::AppFolder& appFolder) override;
 private:
-    AppConfigFile& appConfig;
-    MainConfigFile& mainConfig;
     DesktopEntries& desktopEntries;
 };

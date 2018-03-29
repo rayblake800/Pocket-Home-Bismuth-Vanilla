@@ -8,17 +8,14 @@
  * 
  */
 #pragma once
-#include "AppConfigFile.h"
 #include "AppMenuItemFactory.h"
 #include "AppMenuItem.h"
 
 class BaseFolderMenuItem : public AppMenuItem
 {
 public:
-    /**
-     */
-    BaseFolderMenuItem(AppConfigFile& config,
-            MainConfigFile& mainConfig);
+    
+    BaseFolderMenuItem() { }
 
     virtual ~BaseFolderMenuItem() { }
 
@@ -33,8 +30,6 @@ public:
      */
     virtual Array<AppMenuItem::Ptr> getFolderItems() const override;
 private:
-    
-    AppConfigFile& config;
 };
 
 

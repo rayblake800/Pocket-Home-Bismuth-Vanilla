@@ -1,19 +1,18 @@
 #include "AdvancedSettingsPage.h"
 #include "Password.h"
 
-AdvancedSettingsPage::AdvancedSettingsPage(
-        PageComponent::PageFactoryInterface* pageFactory,
-        ComponentConfigFile& config) :
+AdvancedSettingsPage::AdvancedSettingsPage
+(PageComponent::PageFactoryInterface* pageFactory) :
 Localized("AdvancedSettingsPage"),
-PageComponent(config, "AdvancedSettingsPage",{}, pageFactory),
-titleLabel(config, "settings", localeText(advanced_settings)),
+PageComponent("AdvancedSettingsPage",{}, pageFactory),
+titleLabel("settings", localeText(advanced_settings)),
 setPasswordButton(localeText(set_password)),
 removePasswordButton(localeText(remove_password)),
 personalizeButton(localeText(personalize_homepage)),
 dateTimeButton(localeText(date_and_time)),
 inputOptionsButton(localeText(input_settings)),
-prevArrow(ComponentConfigFile::pageUpKey, config),
-nextArrow(ComponentConfigFile::pageDownKey, config)
+prevArrow(ComponentConfigFile::pageUpKey),
+nextArrow(ComponentConfigFile::pageDownKey)
 {
 
 #    if JUCE_DEBUG

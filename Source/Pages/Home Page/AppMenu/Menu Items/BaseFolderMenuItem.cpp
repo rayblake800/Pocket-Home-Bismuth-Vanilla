@@ -1,11 +1,6 @@
 #include "AppMenuItemFactory.h"
 #include "BaseFolderMenuItem.h"
 
-BaseFolderMenuItem::BaseFolderMenuItem(
-        AppConfigFile& config,
-        MainConfigFile& mainConfig) :
-AppMenuItem(mainConfig),
-config(config) { }
 
 /**
  * Check if this button is for an application folder
@@ -22,6 +17,7 @@ bool BaseFolderMenuItem::isFolder() const
  */
 Array<AppMenuItem::Ptr> BaseFolderMenuItem::getFolderItems() const
 {
+    AppConfigFile config;
     Array<AppMenuItem::Ptr> folderItems;
 
     Array<AppConfigFile::AppItem> favorites = config.getFavorites();

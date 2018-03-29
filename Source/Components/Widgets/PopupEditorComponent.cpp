@@ -2,12 +2,11 @@
 
 PopupEditorComponent::PopupEditorComponent(
         String title,
-        ComponentConfigFile& config,
         std::function<void(PopupEditorComponent*) > onConfirm) :
 ConfigurableImageComponent(ComponentConfigFile::popupMenuKey,
-config, 0, RectanglePlacement::stretchToFit),
+0, RectanglePlacement::stretchToFit),
 onConfirm(onConfirm),
-titleLabel(config, "EditorTitle", title, 2),
+titleLabel("EditorTitle", title, 2),
 cancelButton("cancel.svg"),
 confirmButton("confirm.svg")
 {

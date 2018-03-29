@@ -8,8 +8,8 @@
 -Figure out a way to save calibration data and write it to the right file
  automatically
 
--Use an interface to get rid of the circular dependency between AppMenuItems
- and the AppMenuItemFactory
+-Use an interface to get rid of the circular dependency between PageComponents
+ and the PageFactory
 
 -Define page background color/image in config
      Replace the background selector on HomePageSettings 
@@ -20,8 +20,6 @@
 
 -Re-add the IP label to the Settings Page
     -Add option to display the IP label on the home page
-
--Define spinner images in ComponentConfig
 
 -implement UI settings page
 

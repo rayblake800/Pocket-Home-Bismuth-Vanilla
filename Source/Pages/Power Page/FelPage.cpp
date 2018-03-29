@@ -3,9 +3,9 @@
 #include "I2CBus.h"
 #include "FelPage.h"
 
-FelPage::FelPage(ComponentConfigFile& config) :
+FelPage::FelPage() :
 Localized("FelPage"),
-PageComponent(config,"FelPage",{
+PageComponent("FelPage",{
     {2,
         {
             {&infoLine1, 1}
@@ -36,10 +36,10 @@ PageComponent(config,"FelPage",{
         }}
 },nullptr,false),
 debounce(false),
-infoLine1(config,"infoLine1", localeText(ask_to_reboot)),
+infoLine1("infoLine1", localeText(ask_to_reboot)),
 yesButton(localeText(yes_btn)),
 noButton(localeText(no_btn)),
-infoLine2(config,"infoLine2", localeText(flashing_info))
+infoLine2("infoLine2", localeText(flashing_info))
 {
 
 #    if JUCE_DEBUG

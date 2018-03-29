@@ -34,17 +34,8 @@ public:
      *                           and power pages.
      * 
      * @param wifiState         Wifi state manager, needed for the wifi icon.
-     * 
-     * @param mainConfig        Shared user preferences object used to load
-     *                           application menu settings.
-     * 
-     * @param componentConfig   Shared UI component settings.
      */
-    HomePage(
-            PageFactoryInterface* pageFactory,
-            WifiStateManager& wifiState,
-            MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig);
+    HomePage(PageFactoryInterface* pageFactory, WifiStateManager& wifiState);
 
     virtual ~HomePage() { }
 
@@ -54,11 +45,10 @@ protected:
      * should be calling this.  Depending on the key provided, this will update
      * the page background or recreate the AppMenu.
      * 
-     * @param config  This should be the MainConfigFile.
      * 
      * @param key     This should be the background key or the menu type key.
      */
-    void configValueChanged(ConfigFile* config, String key);
+    void configValueChanged(String key);
 
 private:
     /**
@@ -92,13 +82,9 @@ private:
      */
     void pageResized() override;
 
-    //Loads AppMenu shortcuts and folder definitions.  Initialized here so it
-    //can be passed to the AppMenuComponent each time it is recreated.
+    //Loads AppMenu shortcuts and folder definitions.  This resource should
+    //exist as long as the home page exists.
     AppConfigFile appConfig;
-    //Loads general user settings, only needed to pass on to child components.
-    MainConfigFile& mainConfig;
-    //UI component settings, needed by the page and by child components.
-    ComponentConfigFile& componentConfig;
 
     //This spinner activates when the AppMenu is loading.  The AppMenu controls
     //it through a reference passed in on menu creation.

@@ -1,11 +1,13 @@
 /**
  * @file ConfigFile.h
  * 
- * ConfigFile reads and writes data from a json configuration file. ConfigFile
- * itself is abstract, each configuration file should have its own ConfigFile
- * subclass.  Each ConfigFile should provide access to a set of key Strings
- * for accessing its specific data.  A default version of each ConfigFile should
- * be placed in the configuration subdirectory of the asset folder.
+ * @brief ConfigFile reads and writes data from a json configuration file. 
+ * 
+ * ConfigFile provides an abstract basis for RAIISingleton sharedResources that
+ * access .json file data.  Each ConfigFile should provide access to a set of 
+ * key Strings for accessing its specific data.  A default version of each 
+ * ConfigFile's .json resource should be placed in the configuration 
+ * subdirectory of the asset folder.
  *
  * Along with reading and writing data, ConfigFile objects allow Configurable
  * objects to register to receive notification whenever particular data keys
@@ -15,16 +17,14 @@
  * external changes to the file that occur after that will be ignored and 
  * overwritten.  To reduce file IO and prevent concurrent file modification,
  * only one ConfigFile object should exist for each json configuration file.
- *   
- * ConfigFile objects should lock themselves with the CriticalSection avaliable
- * through getConfigLock() whenever reading or writing data.
  */
 #pragma once
 #include <map>
+#include "RAIISingleton.h"
 #include "Localized.h"
 #include "JuceHeader.h"
 
-class ConfigFile : private Localized
+class ConfigFile : public RAIISingleton::SharedResource, private Localized
 {
 public:
     /**
@@ -47,7 +47,6 @@ public:
     template<typename T > T getConfigValue(String key)
     {
         std::map<String, T>& fileDataMap = getMapReference<T>();
-        const ScopedLock readLock(configLock);
         try
         {
             return fileDataMap.at(key);
@@ -77,7 +76,6 @@ public:
     void setConfigValue(String key, T newValue)
     {
         std::map<String, T>& fileDataMap = getMapReference<T>();
-        const ScopedLock writeLock(configLock);
         try
         {
             if (fileDataMap.at(key) != newValue)
@@ -86,7 +84,6 @@ public:
                 fileDataMap[key] = newValue;
                 writeChanges();
 
-                const ScopedUnlock allowDataAccess(configLock);
                 notifyListeners(key);
             }
         }
@@ -132,12 +129,9 @@ public:
          * Called whenever a key tracked by this listener changes in the config
          * file. Listeners should override this to react to config changes.
          * 
-         * @param config        A reference to the updated ConfigFile object.
-         * 
          * @param propertyKey   Passes in the updated value's key.
          */
-        virtual void configValueChanged
-        (ConfigFile* config, String propertyKey) = 0;
+        virtual void configValueChanged(String propertyKey) = 0;
 
         //holds references to all ConfigFiles this listener follows.
         Array<ConfigFile*> configFiles;

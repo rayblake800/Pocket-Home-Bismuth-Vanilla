@@ -5028,6 +5028,8 @@
         <in>PocketHomeApplication.h</in>
         <in>PokeLookAndFeel.cpp</in>
         <in>PokeLookAndFeel.h</in>
+        <in>RAIISingleton.cpp</in>
+        <in>RAIISingleton.h</in>
         <in>RelativeLayoutManager.cpp</in>
         <in>RelativeLayoutManager.h</in>
         <in>TempTimer.cpp</in>
@@ -5039,6 +5041,7 @@
         <in>WindowFocusedTimer.cpp</in>
         <in>WindowFocusedTimer.h</in>
       </df>
+      <in>RAIISingleton.h</in>
     </df>
     <itemPath>assets/configuration/apps.json</itemPath>
     <itemPath>assets/configuration/components.json</itemPath>

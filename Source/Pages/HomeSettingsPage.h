@@ -14,21 +14,12 @@
 #include "PageComponent.h"
 #include "Utils.h"
 #include "Localized.h"
-#include "MainConfigFile.h"
 
 class HomeSettingsPage : public PageComponent, private ComboBox::Listener,
 private FileSelectTextEditor::Listener, private Localized
 {
 public:
-    /**
-     * @param mainConfig        Used for loading and setting AppMenu setup.
-     * 
-     * @param componentConfig   Component settings needed to initialize the 
-     *                           PageComponent.
-     */
-    HomeSettingsPage(
-            MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig);
+    HomeSettingsPage();
 
     /**
      * Update AppMenu dimensions when the page closes.
@@ -58,10 +49,6 @@ private:
      * @param edited
      */
     void fileSelected(FileSelectTextEditor* edited);
-
-    //config reference used for setting background, AppMenu type, and AppMenu
-    //grid size
-    MainConfigFile& mainConfig;
 
     //page title label
     ScalingLabel title;

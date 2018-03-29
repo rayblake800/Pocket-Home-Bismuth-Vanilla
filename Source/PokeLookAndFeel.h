@@ -19,15 +19,7 @@
 class PokeLookAndFeel : public LookAndFeel_V4, public ConfigFile::Listener
 {
 public:
-    /**
-     * @param mainConfig        Main configuration file, used to decide when to
-     *                           show or hide the cursor.
-     * 
-     * @param componentConfig   Component configuration file, used to load
-     *                           default component colors.
-     */
-    PokeLookAndFeel(MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig);
+    PokeLookAndFeel();
 
     virtual ~PokeLookAndFeel() { }
 
@@ -98,15 +90,9 @@ private:
      * Loads and applies component colors from components.json, and updates
      * cursor visibility.
      * 
-     * @param config
-     * 
      * @param key
      */
-    void configValueChanged(ConfigFile* config, String key) override;
-
-    //references to configuration files
-    MainConfigFile& mainConfig;
-    ComponentConfigFile& componentConfig;
+    void configValueChanged(String key) override;
 
     //Defines the maximum number of characters that will fit on a text button.
     static const int maxButtonStrSize = 30;

@@ -2,12 +2,8 @@
 #include "ScrollingAppFolder.h"
 #include "ScrollingAppMenu.h"
 
-ScrollingAppMenu::ScrollingAppMenu(MainConfigFile& mainConfig,
-        ComponentConfigFile& componentConfig,
-        AppConfigFile& appConfig,
-        OverlaySpinner& loadingSpinner) :
-AppMenuComponent(mainConfig, componentConfig, appConfig,
-ComponentConfigFile::scrollingAppMenuKey, loadingSpinner) { }
+ScrollingAppMenu::ScrollingAppMenu(OverlaySpinner& loadingSpinner) :
+AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey, loadingSpinner) { }
 
 /**
  * Use key presses for menu navigation, setting specific controls based on 
@@ -136,11 +132,10 @@ Rectangle<int> ScrollingAppMenu::updateFolderBounds(
  */
 AppMenuFolder* ScrollingAppMenu::createFolderObject(
         AppMenuItem::Ptr folderItem,
-        std::map<String, AppMenuButton::Ptr>& buttonMap,
-        ComponentConfigFile& config)
+        std::map<String, AppMenuButton::Ptr>& buttonMap)
 {
-    ScrollingAppFolder* folder = new ScrollingAppFolder(
-            folderItem, this, buttonMap, config);
+    ScrollingAppFolder* folder = new ScrollingAppFolder
+            (folderItem, this, buttonMap);
     folder->selectIndex(0);
     return folder;
 }

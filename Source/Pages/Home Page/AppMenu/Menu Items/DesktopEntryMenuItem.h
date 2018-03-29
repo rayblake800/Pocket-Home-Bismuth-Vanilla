@@ -17,11 +17,9 @@ class DesktopEntryMenuItem : public AppMenuItem, private Localized
 public:
     /**
      * Create a new menu item representing a DesktopEntry
-     * @param config
      * @param desktopEntry defines the application/directory data
      */
-    DesktopEntryMenuItem(MainConfigFile& config,
-            const DesktopEntry& desktopEntry);
+    DesktopEntryMenuItem(const DesktopEntry& desktopEntry);
 
     virtual ~DesktopEntryMenuItem() { }
 

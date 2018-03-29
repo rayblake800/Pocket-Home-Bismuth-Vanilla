@@ -1,17 +1,17 @@
-#include "ComponentConfigFile.h"
+#include "MainConfigFile.h"
 #include "ClockLabel.h"
 
-ClockLabel::ClockLabel(ComponentConfigFile& config) :
+ClockLabel::ClockLabel() :
 WindowFocusedTimer("ClockLabel"),
-ConfigurableLabel(ComponentConfigFile::clockLabelKey, config,
-"clockLabel", "00:00")
+ConfigurableLabel(ComponentConfigFile::clockLabelKey, "clockLabel", "00:00")
 {
 #    if JUCE_DEBUG
     setName("ClockLabel");
 #    endif
+    MainConfigFile config;
     config.addListener(this,{
-        ComponentConfigFile::use24HrModeKey,
-        ComponentConfigFile::showClockKey
+        MainConfigFile::use24HrModeKey,
+        MainConfigFile::showClockKey
     });
     setJustificationType(Justification::centredRight);
     loadAllConfigProperties();
@@ -68,39 +68,34 @@ void ClockLabel::visibilityChanged()
 /**
  * Receives notification whenever clock configuration values change
  */
-void ClockLabel::extraConfigValueChanged
-(ConfigFile* config, String key)
+void ClockLabel::extraConfigValueChanged(String key)
 {
-    ComponentConfigFile* componentConfig =
-            dynamic_cast<ComponentConfigFile*> (config);
-    if (componentConfig != nullptr)
+    MainConfigFile config;
+    if (key == MainConfigFile::showClockKey)
     {
-        if (key == ComponentConfigFile::showClockKey)
+        showClock = config.getConfigValue<bool>
+                (MainConfigFile::showClockKey);
+        MessageManager::callAsync([this]
         {
-            showClock = componentConfig->getConfigValue<bool>
-                    (ComponentConfigFile::showClockKey);
-            MessageManager::callAsync([this]
+            setAlpha(showClock ? 1 : 0);
+            if (showClock && !isTimerRunning())
             {
-                setAlpha(showClock ? 1 : 0);
-                if (showClock && !isTimerRunning())
-                {
-                    startTimer(1);
-                }
-                else if (!showClock && isTimerRunning())
-                {
-                    stopTimer();
-                }
-            });
-        }
-        else if (key == ComponentConfigFile::use24HrModeKey)
-        {
-            use24HrMode = componentConfig->getConfigValue<bool>
-                    (ComponentConfigFile::use24HrModeKey);
-            if (isVisible() && getAlpha() != 0)
-            {
-                stopTimer();
                 startTimer(1);
             }
+            else if (!showClock && isTimerRunning())
+            {
+                stopTimer();
+            }
+        });
+    }
+    else if (key == MainConfigFile::use24HrModeKey)
+    {
+        use24HrMode = config.getConfigValue<bool>
+                (MainConfigFile::use24HrModeKey);
+        if (isVisible() && getAlpha() != 0)
+        {
+            stopTimer();
+            startTimer(1);
         }
     }
 }

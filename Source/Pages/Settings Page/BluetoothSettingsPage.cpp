@@ -1,17 +1,10 @@
 #include "Utils.h"
 #include "BluetoothSettingsPage.h"
 
-BluetoothSettingsPage::BluetoothSettingsPage(
-        ComponentConfigFile& config,
-        BluetoothStatus& bluetoothStatus) :
-ConnectionPage<BluetoothDevice>(config),
-config(config),
-spinner(config),
-errorLabel(config),
-bluetoothStatus(bluetoothStatus)
-{
-    ASSERT_SINGULAR;
-}
+BluetoothSettingsPage::BluetoothSettingsPage
+(BluetoothStatus& bluetoothStatus) :
+ConnectionPage<BluetoothDevice>(),
+bluetoothStatus(bluetoothStatus) { }
 
 /**
  * @return the list of all visible bluetooth devices
@@ -64,7 +57,7 @@ void BluetoothSettingsPage::connectionButtonClicked(Button* button) { }
 Button* BluetoothSettingsPage::getConnectionButton
 (const BluetoothDevice& device)
 {
-    return new BTDeviceButton(device, isConnected(device), config);
+    return new BTDeviceButton(device, isConnected(device));
 }
 
 /**
@@ -120,9 +113,8 @@ void BluetoothSettingsPage::reloadPage() { }
 
 BluetoothSettingsPage::BTDeviceButton::BTDeviceButton(
         const BluetoothDevice& connection,
-        bool isConnected,
-        ComponentConfigFile& config) :
+        bool isConnected) :
 Button(connection.name + String("Button")),
-deviceLabel(config, "deviceLabel", connection.name) { }
+deviceLabel("deviceLabel", connection.name) { }
 
 void BluetoothSettingsPage::BTDeviceButton::resized() { }

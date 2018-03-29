@@ -7,7 +7,6 @@
  */
 template<> std::map<String, int>& ConfigFile::getMapReference<int>()
 {
-    const ScopedLock lockFileMaps(configLock);
     return intValues;
 }
 
@@ -17,7 +16,6 @@ template<> std::map<String, int>& ConfigFile::getMapReference<int>()
  */
 template<> std::map<String, String>& ConfigFile::getMapReference<String>()
 {
-    const ScopedLock lockFileMaps(configLock);
     return stringValues;
 }
 
@@ -27,12 +25,11 @@ template<> std::map<String, String>& ConfigFile::getMapReference<String>()
  */
 template<> std::map<String, bool>& ConfigFile::getMapReference<bool>()
 {
-    const ScopedLock lockFileMaps(configLock);
     return boolValues;
 }
 
-ConfigFile::ConfigFile(String configFilename) : Localized("ConfigFile"), 
-        filename(configFilename) { }
+ConfigFile::ConfigFile(String configFilename) : Localized("ConfigFile"),
+filename(configFilename) { }
 
 /**
  * Writes any pending changes to the file before destruction.
@@ -72,7 +69,7 @@ void ConfigFile::Listener::loadAllConfigProperties()
     {
         for (const String& key : config->listenerKeys[this])
         {
-            configValueChanged(config, key);
+            configValueChanged(key);
         }
     }
 }
@@ -106,7 +103,6 @@ void ConfigFile::addListener(ConfigFile::Listener* listener,
  */
 void ConfigFile::removeListener(ConfigFile::Listener* listener)
 {
-    const ScopedLock writeLock(configLock);
     for (const String& key : listenerKeys[listener])
     {
         keyListeners[key].removeAllInstancesOf(listener);
@@ -122,15 +118,16 @@ void ConfigFile::notifyListeners(String key)
 {
     for (Listener* listener : keyListeners[key])
     {
-        listener->configValueChanged(this, key);
+        listener->configValueChanged(key);
     }
 }
 
 //################################# File IO ####################################
+
 /**
  * Read in this object's data from a json config object
  */
-void ConfigFile::readDataFromJson(var& config, var& defaultConfig)
+void ConfigFile::readDataFromJson(var& config, var & defaultConfig)
 {
     std::vector<DataKey> dataKeys = getDataKeys();
     for (const DataKey& key : dataKeys)
@@ -153,6 +150,7 @@ void ConfigFile::readDataFromJson(var& config, var& defaultConfig)
                 initMapProperty<bool>(key.keyString,
                                       getProperty(config, defaultConfig,
                                       key.keyString));
+
                 break;
         }
     }
@@ -182,6 +180,7 @@ void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
             case boolType:
                 jsonObj->setProperty(key.keyString,
                         getMapReference<bool>()[key.keyString]);
+
                 break;
         }
     }
@@ -195,6 +194,7 @@ bool ConfigFile::propertyExists(var& config, String propertyKey)
 {
 
     var property = config.getProperty(propertyKey, var());
+
     return !property.isVoid();
 }
 
@@ -218,6 +218,7 @@ var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
                     ("configuration/" + filename, false);
         }
         fileChangesPending = true;
+
         return defaultConfig.getProperty(key, var());
     }
 }
@@ -228,6 +229,7 @@ var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
  */
 void ConfigFile::markPendingChanges()
 {
+
     fileChangesPending = true;
 }
 

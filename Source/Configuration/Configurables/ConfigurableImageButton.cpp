@@ -2,11 +2,10 @@
 
 ConfigurableImageButton::ConfigurableImageButton(
         String componentKey,
-        ComponentConfigFile& config,
         int assetIndex,
         RectanglePlacement placement) :
-buttonImage(componentKey, config, assetIndex, placement),
-ConfigurableComponent(componentKey, config),
+buttonImage(componentKey, assetIndex, placement),
+ConfigurableComponent(componentKey),
 Button(componentKey + "Button")
 {
     addAndMakeVisible(buttonImage);

@@ -17,15 +17,11 @@ public:
      * @param btnListener    A listener to assign to all menu buttons.
      * 
      * @param buttonNameMap  Shared button map used to recycle menu buttons.
-     * 
-     * @param config         Component settings needed to setup folder 
-     *                        components.
      */
     ScrollingAppFolder(
             AppMenuItem::Ptr folderItem,
             MouseListener* btnListener,
-            std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-            ComponentConfigFile& config);
+            std::map<String, AppMenuButton::Ptr>& buttonNameMap);
 
     virtual ~ScrollingAppFolder() { }
 
@@ -59,9 +55,7 @@ private:
     /**
      * Get the font used by all buttons in this menu type.
      */
-    static Font getButtonFont(ComponentConfigFile& config);
-
-    ComponentConfigFile& config;
+    static Font getButtonFont();
 
     /**
      * Custom AppMenuButton proportioned correctly for a scrolling menu.
@@ -72,14 +66,11 @@ private:
         /**
          * @param menuItem     Provides the button's menu data.
          *  
-         * @param name         Internal component name
-         * 
-         * @param config       
+         * @param name         Internal component name    
          */
         ScrollingMenuButton(
                 AppMenuItem* menuItem,
-                String name,
-                ComponentConfigFile& config);
+                String name);
 
         virtual ~ScrollingMenuButton() { }
 
@@ -93,8 +84,6 @@ private:
          * Re-calculates draw values whenever the button is resized
          */
         void resized() override;
-
-        ComponentConfigFile& config;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ScrollingMenuButton)
     };

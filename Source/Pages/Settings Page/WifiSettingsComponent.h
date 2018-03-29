@@ -18,13 +18,10 @@ public:
      *                        between all objects tracking wifi.
      * 
      * @param openWifiPage   Callback function that opens the wifi page.
-     * 
-     * @param config         Shared UI component preference data.
      */
     WifiSettingsComponent(
             WifiStateManager& wifiManager,
-            std::function<void() > openWifiPage,
-            ComponentConfigFile& config);
+            std::function<void() > openWifiPage);
 
     virtual ~WifiSettingsComponent() { }
 private:

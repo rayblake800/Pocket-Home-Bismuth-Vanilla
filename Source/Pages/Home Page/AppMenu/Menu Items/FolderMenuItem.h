@@ -10,7 +10,6 @@
  */
 #pragma once
 #include "AppMenuItemFactory.h"
-#include "AppConfigFile.h"
 #include "IconThread.h"
 #include "Localized.h"
 #include "DesktopEntries.h"
@@ -21,11 +20,8 @@ class FolderMenuItem : public AppMenuItem, private Localized
 public:
     /**
      */
-    FolderMenuItem(
-            AppConfigFile& appConfig,
-            MainConfigFile& mainConfig,
-            const AppConfigFile::AppFolder& appFolder,
-            DesktopEntries& desktopEntries);
+    FolderMenuItem
+    (const AppConfigFile::AppFolder& appFolder, DesktopEntries& desktopEntries);
 
     virtual ~FolderMenuItem() { }
 
@@ -126,11 +122,10 @@ protected:
      */
     void editFolder(String name, String icon, StringArray categories);
 private:
-    //Source of this button's folder information
-    AppConfigFile& config;
+    
     AppConfigFile::AppFolder appFolder;
     DesktopEntries& desktopEntries;
-    
+
     //localized text keys: 
     static const constexpr char * delete_NAME = "delete_NAME";
     static const constexpr char * folder = "folder";

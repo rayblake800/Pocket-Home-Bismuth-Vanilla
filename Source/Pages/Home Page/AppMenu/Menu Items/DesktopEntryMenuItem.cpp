@@ -2,11 +2,8 @@
 #include "MainConfigFile.h"
 #include "DesktopEntryMenuItem.h"
 
-DesktopEntryMenuItem::DesktopEntryMenuItem(
-        MainConfigFile& config,
-        const DesktopEntry& desktopEntry)
-: AppMenuItem(config),
-Localized("DesktopEntryMenuItem"),
+DesktopEntryMenuItem::DesktopEntryMenuItem(const DesktopEntry& desktopEntry)
+: Localized("DesktopEntryMenuItem"),
 desktopEntry(desktopEntry) { }
 
 /**
@@ -101,7 +98,8 @@ String DesktopEntryMenuItem::getEditorTitle() const
  * Gets a PopupEditorComponent callback function that will apply 
  * changes from an AppMenuPopupEditor to this menu item.
  */
-std::function<void(AppMenuPopupEditor*) > DesktopEntryMenuItem::getEditorCallback()
+std::function<void(AppMenuPopupEditor*) >
+DesktopEntryMenuItem::getEditorCallback()
 {
     return [this](AppMenuPopupEditor * editor)
     {
@@ -140,6 +138,11 @@ void DesktopEntryMenuItem::editEntry(String name, String icon,
     desktopEntry.setValue(DesktopEntry::name, name);
     desktopEntry.setValue(DesktopEntry::icon, icon);
     desktopEntry.setValue(DesktopEntry::categories, categories);
+    if (useTerminal)
+    {
+        command = command.fromLastOccurrenceOf
+                (getTermLaunchPrefix(), false, false);
+    }
     desktopEntry.setValue(DesktopEntry::exec, command);
     desktopEntry.setValue(DesktopEntry::terminal, useTerminal);
     desktopEntry.writeFile();

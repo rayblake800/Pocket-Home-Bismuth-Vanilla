@@ -23,14 +23,11 @@ public:
     };
 
     /**
-     * @param config             Shared component configuration object needed 
-     *                            by the loading text label.
-     * 
      * @param secondsToTimeout   Sets how long the spinner will show itself 
      *                            before timing out. If this value is negative, 
      *                            the spinner will never time out.
      */
-    OverlaySpinner(ComponentConfigFile& config, int secondsToTimeout = -1);
+    OverlaySpinner(int secondsToTimeout = -1);
     
     virtual ~OverlaySpinner() { }
 

@@ -6,12 +6,10 @@
 
 SettingsPage::SettingsPage(
         PageFactoryInterface* pageFactory,
-        ComponentConfigFile& config,
         WifiStateManager& wifiManager) :
 Localized("SettingsPage"),
 WindowFocusedTimer("SettingsPage"),
-PageComponent(config,
-"SettingsPage",{
+PageComponent("SettingsPage",{
     {1,
         {
             {&wifiComponent, 1}
@@ -37,12 +35,12 @@ pageFactory, true),
 wifiComponent(wifiManager, [this]()
 {
     pushPageToStack(PageType::WifiSettings);
-}, config),
+}),
 //bluetoothComponent([this]
 //{
 //
 //    pushPageToStack(PageType::BluetoothSettings);
-//}, config),
+//}),
 screenBrightnessSlider("brightnessIconLo.svg", "brightnessIconHi.svg"),
 volumeSlider("volumeIconLo.svg", "volumeIconHi.svg"),
 advancedPageButton(localeText(advanced_settings))

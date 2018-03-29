@@ -14,7 +14,7 @@
 class SetPasswordPage : public PageComponent, private Localized
 {
 public:
-    SetPasswordPage(ComponentConfigFile& config);
+    SetPasswordPage();
 
     virtual ~SetPasswordPage() { }
 

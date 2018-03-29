@@ -17,12 +17,8 @@ public:
     /**
      * @param componentKey  Sets the componentKey that defines this component's
      *                       bounds and asset files.
-     * 
-     * @param config        A reference to the ComponentConfigFile used to load
-     *                       component properties.
      */
-    ConfigurableComponent(const String& componentKey,
-            ComponentConfigFile& config);
+    ConfigurableComponent(const String& componentKey);
 
     virtual ~ConfigurableComponent() { }
 
@@ -61,22 +57,17 @@ protected:
      * one defining the component. Inheriting classes should override 
      * this instead of loadConfigProperties.
      * 
-     * @param config  The updated ConfigFile object.
-     * 
      * @param key     The updated data value's key.
      */
-    virtual void extraConfigValueChanged(ConfigFile* config,
-            String key) { }
+    virtual void extraConfigValueChanged(String key) { }
 
 private:
     /**
      * Load and apply all component data from the ComponentConfigFile
      * 
-     * @param config  This should be the ComponentConfigFile.
-     * 
      * @param key     This selects the correct component data from config.
      */
-    void configValueChanged(ConfigFile* config, String key) final override;
+    void configValueChanged(String key) final override;
 
     //Component properties loaded from config
     ComponentConfigFile::ComponentSettings componentSettings;

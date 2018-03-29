@@ -16,19 +16,11 @@ class PageFactory : public PageComponent::PageFactoryInterface
 {
 public:
     /**
-     * @param mainConfig       A reference to the MainConfigFile to share with
-     *                          pages that require it.
-     * 
-     * @param componentConfig  A reference to the ComponentConfigFile to share
-     *                          with pages that require it.
-     * 
      * @param fakeWifi          If true, the wifiManager shared by all pages 
      *                           will use simulated wifi data, rather than 
      *                           trying to connect to a real wifi device.
      */
-    PageFactory(MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig,
-            bool fakeWifi);
+    PageFactory(bool fakeWifi);
 
     virtual ~PageFactory() { }
 
@@ -53,8 +45,6 @@ private:
     PageComponent* createPage(PageComponent::PageType type) override;
 
     //shared page resources
-    MainConfigFile& mainConfig;
-    ComponentConfigFile& componentConfig;
     WifiStateManager wifiManager;
     BluetoothStatus bluetoothStatus;
 };

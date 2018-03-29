@@ -18,11 +18,7 @@
 #include "LoginPage.h"
 #include "PageFactory.h"
 
-PageFactory::PageFactory(MainConfigFile& mainConfig,
-        ComponentConfigFile& componentConfig,
-        bool fakeWifi) :
-mainConfig(mainConfig),
-componentConfig(componentConfig)
+PageFactory::PageFactory(bool fakeWifi)
 {
     //Initialize wifi status thread
     if (fakeWifi)
@@ -45,7 +41,7 @@ componentConfig(componentConfig)
  */
 PageComponent* PageFactory::createHomePage()
 {
-    return new HomePage(this, wifiManager, mainConfig, componentConfig);
+    return new HomePage(this, wifiManager);
 }
 
 /**
@@ -54,7 +50,7 @@ PageComponent* PageFactory::createHomePage()
 PageComponent* PageFactory::createLoginPage
 (std::function<void () > loginCallback)
 {
-    return new LoginPage(componentConfig, loginCallback);
+    return new LoginPage(loginCallback);
 }
 
 /**
@@ -65,33 +61,33 @@ PageComponent* PageFactory::createPage(PageComponent::PageType type)
     switch (type)
     {
         case PageComponent::InputSettings:
-            return new InputSettingsPage(this, mainConfig, componentConfig);
+            return new InputSettingsPage(this);
         case PageComponent::Keybinding:
             return nullptr;
         case PageComponent::SetPassword:
-            return new SetPasswordPage(componentConfig);
+            return new SetPasswordPage();
         case PageComponent::RemovePassword:
-            return new RemovePasswordPage(componentConfig);
+            return new RemovePasswordPage();
         case PageComponent::Power:
-            return new PowerPage(this, mainConfig, componentConfig);
+            return new PowerPage(this);
         case PageComponent::Fel:
-            return new FelPage(componentConfig);
+            return new FelPage();
         case PageComponent::Settings:
-            return new SettingsPage(this, componentConfig, wifiManager);
+            return new SettingsPage(this,wifiManager);
         case PageComponent::BluetoothSettings:
-            return new BluetoothSettingsPage(componentConfig, bluetoothStatus);
+            return new BluetoothSettingsPage( bluetoothStatus);
         case PageComponent::WifiSettings:
-            return new WifiSettingsPage(componentConfig, wifiManager);
+            return new WifiSettingsPage(wifiManager);
         case PageComponent::UI:
             return nullptr;
         case PageComponent::ColourSettings:
-            return new ColourPage(componentConfig);
+            return new ColourPage();
         case PageComponent::AdvancedSettings:
-            return new AdvancedSettingsPage(this, componentConfig);
+            return new AdvancedSettingsPage(this);
         case PageComponent::DateTime:
-            return new DateTimePage(mainConfig, componentConfig);
+            return new DateTimePage();
         case PageComponent::HomeSettings:
-            return new HomeSettingsPage(mainConfig, componentConfig);
+            return new HomeSettingsPage();
     }
     return nullptr;
 }

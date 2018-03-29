@@ -26,10 +26,8 @@ void PocketHomeApplication::initialise(const String &commandLine)
     }
 
 
-    homeWindow = new PocketHomeWindow(getApplicationName(),
-            args.contains("--fakeWifi"),
-            mainConfig,
-            componentConfig);
+    homeWindow = new PocketHomeWindow
+            (getApplicationName(), args.contains("--fakeWifi"));
 }
 
 /**

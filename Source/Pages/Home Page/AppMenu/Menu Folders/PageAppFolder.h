@@ -11,10 +11,10 @@
 class PageAppFolder : public AppMenuFolder
 {
 public:
-    PageAppFolder(AppMenuItem::Ptr folderItem,
+    PageAppFolder(
+            AppMenuItem::Ptr folderItem,
             MouseListener* btnListener,
-            std::map<String, AppMenuButton::Ptr>& buttonNameMap,
-            ComponentConfigFile& config);
+            std::map<String, AppMenuButton::Ptr>& buttonNameMap);
 
     virtual ~PageAppFolder() { }
 
@@ -139,8 +139,6 @@ private:
 
     float parentRelativeMargin = -1;
 
-    ComponentConfigFile& config;
-
     //############################  PageMenuButton  ###########################
     /**
      * Custom menu button for paged folders.
@@ -152,13 +150,10 @@ private:
          * @param menuItem    This sets the button's menu data.
          * 
          * @param name        Sets the internal component name.
-         *  
-         * @param config      Loads component properties from user preferences.
          */
         PageMenuButton(
                 AppMenuItem::Ptr menuItem,
-                String name,
-                ComponentConfigFile& config);
+                String name);
 
         virtual ~PageMenuButton() { }
     private:
@@ -172,8 +167,6 @@ private:
          * Set the background and border to only draw for selected buttons.
          */
         void selectionStateChanged() override;
-
-        ComponentConfigFile& config;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PageMenuButton)
     };

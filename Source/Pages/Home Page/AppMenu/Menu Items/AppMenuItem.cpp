@@ -1,7 +1,9 @@
+#include "MainConfigFile.h"
 #include "AppMenuItem.h"
 
-AppMenuItem::AppMenuItem(MainConfigFile& config) 
+AppMenuItem::AppMenuItem()
 {
+    MainConfigFile config;
     config.addListener(this,{MainConfigFile::termLaunchCommandKey});
     loadAllConfigProperties();
 }
@@ -104,7 +106,7 @@ bool AppMenuItem::operator==(const AppMenuItem& toCompare) const
 AppMenuItem::Ptr AppMenuItem::FactoryInterface::setFactory
 (AppMenuItem::Ptr menuItem)
 {
-    if(menuItem->isFolder())
+    if (menuItem->isFolder())
     {
         menuItem->factoryInterface = this;
     }
@@ -116,7 +118,7 @@ AppMenuItem::Ptr AppMenuItem::FactoryInterface::setFactory
  */
 String AppMenuItem::getConfirmDeleteTitle() const
 {
-    return txt.localeText(delete_APP) + getAppName() 
+    return txt.localeText(delete_APP) + getAppName()
             + txt.localeText(question_mark);
 }
 
@@ -193,7 +195,6 @@ String AppMenuItem::getTermLaunchPrefix() const
     return termLaunchPrefix;
 }
 
-
 /**
  * Get an AppMenuItem for an application link provided by the 
  * AppConfigFile.
@@ -238,14 +239,11 @@ AppMenuItem::Ptr AppMenuItem::create
 /**
  * Updates the termLaunchPrefix if it's changed in configuration.
  */
-void AppMenuItem::configValueChanged(ConfigFile* config, String propertyKey)
+void AppMenuItem::configValueChanged(String propertyKey)
 {
     if (propertyKey == MainConfigFile::termLaunchCommandKey)
     {
-        MainConfigFile* mainConfig = dynamic_cast<MainConfigFile*> (config);
-        if (mainConfig != nullptr)
-        {
-            termLaunchPrefix = mainConfig->getConfigValue<String>(propertyKey);
-        }
+        MainConfigFile mainConfig;
+        termLaunchPrefix = mainConfig.getConfigValue<String>(propertyKey);
     }
 }

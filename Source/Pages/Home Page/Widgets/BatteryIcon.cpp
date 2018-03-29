@@ -1,10 +1,9 @@
 #include "BatteryIcon.h"
 #include "Utils.h"
 
-BatteryIcon::BatteryIcon(ComponentConfigFile& config) :
-WindowFocusedTimer("BatteryIcon"),
-batteryImage(ComponentConfigFile::batteryIconKey, config),
-batteryPercent(ComponentConfigFile::batteryPercentKey, config)
+BatteryIcon::BatteryIcon() : WindowFocusedTimer("BatteryIcon"),
+batteryImage(ComponentConfigFile::batteryIconKey),
+batteryPercent(ComponentConfigFile::batteryPercentKey)
 {
     
 #if JUCE_DEBUG
@@ -18,10 +17,6 @@ batteryPercent(ComponentConfigFile::batteryPercentKey, config)
     startTimer(1);
 }
 
-BatteryIcon::~BatteryIcon()
-{
-    stopTimer();
-}
 
 /**
  * Run applyConfigBounds on all child components, and update bounds to

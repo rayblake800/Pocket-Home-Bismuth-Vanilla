@@ -11,9 +11,7 @@
 class BluetoothSettingsComponent : public ConnectionSettingsComponent
 {
 public:
-    BluetoothSettingsComponent(
-            std::function<void() > openBluetoothPage,
-            ComponentConfigFile& config);
+    BluetoothSettingsComponent(std::function<void() > openBluetoothPage);
 
     virtual ~BluetoothSettingsComponent() { }
 

@@ -14,7 +14,6 @@
 #include "SwitchComponent.h"
 #include "Spinner.h"
 #include "DrawableImageComponent.h"
-#include "ComponentConfigFile.h"
 
 class ConnectionSettingsComponent : public Component,
 private Button::Listener
@@ -29,7 +28,6 @@ public:
      */
     ConnectionSettingsComponent(
             std::function<void() > openConnectionPage,
-            ComponentConfigFile& config,
             const String& name = String());
 
     virtual ~ConnectionSettingsComponent() { }
@@ -115,13 +113,9 @@ private:
     {
     public:
         /**
-         * @param config  Shared UI preferences, needed for text rendering.
-         * 
          * @param name    The internal component name
          */
-        ConnectionButton(
-                ComponentConfigFile& config,
-                const String& name = String());
+        ConnectionButton(const String& name = String());
 
         virtual ~ConnectionButton() { }
 
@@ -147,8 +141,6 @@ private:
          */
         void resized() override;
 
-        //used for finding text height when the component is resized
-        ComponentConfigFile& config;
         //last calculated text height
         int textHeight;
         //calculated when the component is resized, set to a tenth of component
@@ -159,8 +151,6 @@ private:
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionButton)
     };
-    //Shared UI component preferences
-    ComponentConfigFile& config;
     //Icon indicating the connection type and/or status
     DrawableImageComponent icon;
     //Shown when the connection is busy updating

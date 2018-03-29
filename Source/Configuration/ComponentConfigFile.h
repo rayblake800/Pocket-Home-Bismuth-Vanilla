@@ -10,18 +10,28 @@
  */
 #pragma once
 #include "ConfigFile.h"
+#include "RAIISingleton.h"
 
-class ComponentConfigFile : public ConfigFile {
+class ComponentConfigFile : public RAIISingleton
+{
 public:
     ComponentConfigFile();
-    
+
     virtual ~ComponentConfigFile() { }
+
+    class ComponentSettings;
 
     /**
      * Colour value string keys are stored here along with their corresponding
      * ColourId values
      */
     static const std::map<String, int> colourIds;
+
+    /**
+     * @return the keys to all Component color settings stored in
+     * components.json
+     */
+    StringArray getColourKeys() const;
 
     /**
      * Find a Component ColourId value from its String key
@@ -31,17 +41,30 @@ public:
      * found.
      */
     int getColourId(String colourKey);
-    
-    /**
-     * @return the keys to all Component color settings stored in
-     * components.json
-     */
-    StringArray getColourKeys() const;
-    
 
-    //#### Boolean value keys #######
-    static const String showClockKey;
-    static const String use24HrModeKey;
+    /**
+     * Get a color value from its String key.
+     *  
+     * @param colourKey the key for a color value in colourIds
+     * @return the corresponding Colour value, or Colour() if colourKey wasn't
+     * found.
+     */
+    Colour getColour(String colourKey);
+
+    /**
+     * Gets configured component settings from shared .json file data.
+     * 
+     * @param componentKey  A configurable UI component's key string.
+     * 
+     * @return              the properties defined for that component.
+     */
+    ComponentSettings getComponentSettings(String componentKey);
+
+    /**
+     * Add a listener to track component setting changes.
+     * @see ConfigFile.h
+     */
+    void addListener(ConfigFile::Listener* listener, StringArray trackedKeys);
 
     //######################### UI Component Data ##############################
     //Defines all component types managed in the config file
@@ -77,22 +100,23 @@ public:
      *                     too big to fit in textBounds, instead return whatever 
      *                     font height is small enough to fit.
      */
-    int getFontHeight(Rectangle <int> textBounds,String text);
-    
+    int getFontHeight(Rectangle <int> textBounds, String text);
+
     /**
      * Represents a configurable UI element
      */
-    class ComponentSettings {
+    class ComponentSettings
+    {
     public:
         ComponentSettings();
-        
+
         /**
          * Initializes from json data.
          * 
          * @param jsonObj  An object var containing json data.
          */
         ComponentSettings(var jsonObj);
-        
+
         /**
          * Packages the object into a DynamicObject that can be written to a
          * json file.
@@ -111,20 +135,20 @@ public:
          * @return the list of configurable colors.
          */
         Array<Colour> getColours();
-        
+
         /**
          * @return the list of component asset files.
          */
         StringArray getAssetFiles();
-        
+
         /**
          * Use these settings to position and size a component.
          * 
          * @param component  Any component object.
          */
         void applyBounds(Component * component);
-        
-        
+
+
         bool operator==(const ComponentSettings& rhs) const;
     private:
         /*
@@ -136,64 +160,80 @@ public:
         float y;
         float width;
         float height;
-        
+
         //Custom colors for component image assets.
         Array<Colour> colours;
-        
+
         //Component asset files.  This is mostly intended to define image 
         //assets, but there's no reason it couldn't be used to define other
         //assets.
         StringArray assetFiles;
     };
 
-    /**
-     * Gets the configured settings for a particular component.
-     * 
-     * @param componentKey  A configurable UI component's key string.
-     * 
-     * @return              the properties defined for that component.
-     */
-    ComponentSettings getComponentSettings(String componentKey);
-    
+
 protected:
-        
+
     /**
      * @return the list of all component keys.
      */
-    StringArray getComponentKeys();
-    
-    /**
-     * @return the list of key Strings for each basic data value tracked in 
-     * components.json
-     */
-    virtual std::vector<DataKey> getDataKeys() const override;
-    
+    static StringArray getComponentKeys();
+
+
 private:
 
-    /**
-     * Read in this object's data from a json config object.
-     * 
-     * @param config         json data from ~/.pocket-home/filename.json.
-     * 
-     * @param defaultConfig  Default json config data from the filename.json
-     *                        in assets. If this value is void and default data 
-     *                        is needed, this  method will open it as the 
-     *                        appropriate default config file from assets.
-     */
-    void readDataFromJson(var& config, var& defaultConfig) override final;
+    class ConfigJson : public ConfigFile
+    {
+    public:
+        ConfigJson();
 
-    /**
-     * Copy all config data to a json object
-     * 
-     * @param jsonObj
-     */
-    void copyDataToJson(DynamicObject::Ptr jsonObj) override final;
+        virtual ~ConfigJson() { }
 
-    //Stores all component settings loaded from the component config file
-    static std::map<String, ComponentSettings> components;
-    
+        /**
+         * Gets the configured settings for a particular component.
+         * 
+         * @param componentKey  A configurable UI component's key string.
+         * 
+         * @return              the properties defined for that component.
+         */
+        ComponentSettings getComponentSettings(String componentKey);
+
+    private:
+        /**
+         * Read in this object's data from a json config object.
+         * 
+         * @param config         json data from ~/.pocket-home/filename.json.
+         * 
+         * @param defaultConfig  Default json config data from the 
+         *                        filename.json in assets. If this value is void
+         *                        and default data is needed, this  method will 
+         *                        open it as the appropriate default config file
+         *                        from assets.
+         */
+        void readDataFromJson(var& config, var& defaultConfig) override final;
+
+        /**
+         * Copy all config data to a json object
+         * 
+         * @param jsonObj
+         */
+        void copyDataToJson(DynamicObject::Ptr jsonObj) override final;
+
+        //Stores all component settings loaded from the component config file
+        std::map<String, ComponentSettings> components;
+
+        /**
+         * @return the list of key Strings for each basic data value tracked in 
+         * components.json
+         */
+        virtual std::vector<DataKey> getDataKeys() const override;
+    };
+
     //Defines the component config file's name
-    static constexpr const char* filenameConst = "components.json";
-    
+    static constexpr const char * filenameConst = "components.json";
+
+    //RAIISingleton shared object and lock;
+    static ScopedPointer<RAIISingleton::SharedResource> sharedResource;
+    static CriticalSection configLock;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ComponentConfigFile)
 };

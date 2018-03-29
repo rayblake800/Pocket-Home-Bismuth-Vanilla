@@ -2,21 +2,107 @@
 #include "AppConfigFile.h"
 #include "Utils.h"
 
-Array<AppConfigFile::AppItem> AppConfigFile::favoriteApps;
-Array<AppConfigFile::AppFolder> AppConfigFile::categoryFolders;
 
-AppConfigFile::AppConfigFile() : ConfigFile(filenameConst)
+ScopedPointer<RAIISingleton::SharedResource>
+        AppConfigFile::sharedResource = nullptr;
+
+CriticalSection AppConfigFile::configLock;
+
+AppConfigFile::AppConfigFile() :
+RAIISingleton(sharedResource, configLock,
+[this]()->RAIISingleton::SharedResource*
 {
-    ASSERT_SINGULAR;
-    const ScopedLock readLock(getConfigLock());
-    var jsonConfig = AssetFiles::loadJSONAsset
-            (String(configPath) + filenameConst, true);
-    var defaultConfig = var();
-    readDataFromJson(jsonConfig, defaultConfig);
-    writeChanges();
+
+    return new AppJson();
+}) { }
+
+
+//############ Application Shortcut Methods: ############
+
+/**
+ * @return a list of AppItems to be pinned to the main column 
+ * of the AppMenu
+ */
+Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
+{
+    const ScopedLock readLock(configLock);
+    AppJson* config = static_cast<AppJson*> (sharedResource.get());
+    return config->getFavorites();
 }
 
-//########################### Application Data #################################
+/**
+ * Add a new app to the list of pinned favorite apps in the config file.
+ */
+void AppConfigFile::addFavoriteApp
+(AppConfigFile::AppItem newApp, int index, bool writeChangesNow)
+{
+    const ScopedLock readLock(configLock);
+    AppJson* config = static_cast<AppJson*> (sharedResource.get());
+    config->addFavoriteApp(newApp,index,writeChangesNow);
+}
+
+/**
+ * Remove an app from the list of favorite applications
+ */
+void AppConfigFile::removeFavoriteApp(int index, bool writeChangesNow)
+{
+    const ScopedLock readLock(configLock);
+    AppJson* config = static_cast<AppJson*> (sharedResource.get());
+    config->removeFavoriteApp(index,writeChangesNow);
+}
+
+/**
+ * Find the index of an AppItem in favorites.
+ */
+int AppConfigFile::getFavoriteIndex(AppConfigFile::AppItem toFind)
+{
+    const ScopedLock readLock(configLock);
+    AppJson* config = static_cast<AppJson*> (sharedResource.get());
+    return config->getFavoriteIndex(toFind);
+}
+
+
+//############ Application Folder Methods: ############
+/**
+ * @return A list of folders to display in the AppMenu.
+ */
+Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
+{
+    const ScopedLock readLock(configLock);
+    AppJson* config = static_cast<AppJson*> (sharedResource.get());
+    return config->getFolders();
+}
+
+/**
+ * Add a new folder to the list of AppFolders in the config file.
+ */
+void AppConfigFile::addAppFolder
+(AppConfigFile::AppFolder newFolder, int index, bool writeChangesNow)
+{
+    const ScopedLock readLock(configLock);
+    AppJson* config = static_cast<AppJson*> (sharedResource.get());
+    config->addAppFolder(newFolder,index,writeChangesNow);
+}
+
+/**
+ * Remove a folder from the list of AppFolders.
+ */
+void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
+{
+    const ScopedLock readLock(configLock);
+    AppJson* config = static_cast<AppJson*> (sharedResource.get());
+    config->removeAppFolder(index,writeChangesNow);
+}
+
+/**
+ * Find the index of an AppFolder in the list of folders.
+ */
+int AppConfigFile::getFolderIndex(AppConfigFile::AppFolder toFind)
+{
+    const ScopedLock readLock(configLock);
+    AppJson* config = static_cast<AppJson*> (sharedResource.get());
+    return config->getFolderIndex(toFind);
+}
 
 /**
  * Load an AppItem from json file data.
@@ -50,55 +136,6 @@ bool AppConfigFile::AppItem::operator==(const AppItem& rhs) const
             shell == rhs.shell;
 }
 
-/**
- * @return a list of AppItems to be pinned to the main column 
- * of the AppMenu
- */
-Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
-{
-    const ScopedLock readLock(getConfigLock());
-    return favoriteApps;
-}
-
-/**
- * Add a new app to the list of pinned favorite apps in the config file
- */
-void AppConfigFile::addFavoriteApp
-(AppItem newApp, int index, bool writeChangesNow)
-{
-    const ScopedLock changeLock(getConfigLock());
-    favoriteApps.insert(index, newApp);
-    markPendingChanges();
-    if (writeChangesNow)
-    {
-        writeChanges();
-    }
-}
-
-/**
- * Remove an app from the list of favorite applications
- */
-void AppConfigFile::removeFavoriteApp(int index, bool writeChangesNow)
-{
-    const ScopedLock changeLock(getConfigLock());
-    if (index >= 0 && index < favoriteApps.size())
-    {
-        favoriteApps.remove(index);
-        markPendingChanges();
-        if (writeChangesNow)
-        {
-            writeChanges();
-        }
-    }
-}
-
-/**
- * Find the index of an AppItem in favorites.
- */
-int AppConfigFile::getFavoriteIndex(AppItem toFind)
-{
-    return favoriteApps.indexOf(toFind);
-}
 
 //######################### Folder/Category Data ###############################
 
@@ -147,22 +184,72 @@ bool AppConfigFile::AppFolder::operator==(const AppFolder& rhs) const
             categories == rhs.categories;
 }
 
+
+//############################### JSON Data Access #############################
+/**
+ * @return a list of AppItems to be pinned to the main column 
+ * of the AppMenu
+ */
+Array<AppConfigFile::AppItem> AppConfigFile::AppJson::getFavorites()
+{
+    const ScopedLock readLock(getConfigLock());
+    return favoriteApps;
+}
+
+/**
+ * Add a new app to the list of pinned favorite apps in the config file
+ */
+void AppConfigFile::AppJson::addFavoriteApp
+(AppItem newApp, int index, bool writeChangesNow)
+{
+    const ScopedLock changeLock(getConfigLock());
+    favoriteApps.insert(index, newApp);
+    markPendingChanges();
+    if (writeChangesNow)
+    {
+        writeChanges();
+    }
+}
+
+/**
+ * Remove an app from the list of favorite applications
+ */
+void AppConfigFile::AppJson::removeFavoriteApp(int index, bool writeChangesNow)
+{
+    const ScopedLock changeLock(getConfigLock());
+    if (index >= 0 && index < favoriteApps.size())
+    {
+        favoriteApps.remove(index);
+        markPendingChanges();
+        if (writeChangesNow)
+        {
+            writeChanges();
+        }
+    }
+}
+
+/**
+ * Find the index of an AppItem in favorites.
+ */
+int AppConfigFile::AppJson::getFavoriteIndex(AppItem toFind)
+{
+    return favoriteApps.indexOf(toFind);
+}
+
 /**
  * @return A list of folders to display in the AppMenu.
  */
-Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
+Array<AppConfigFile::AppFolder> AppConfigFile::AppJson::getFolders()
 {
-    const ScopedLock readLock(getConfigLock());
     return categoryFolders;
 }
 
 /**
  * Add a new folder to the list of AppFolders in the config file.
  */
-void AppConfigFile::addAppFolder
+void AppConfigFile::AppJson::addAppFolder
 (AppFolder newFolder, int index, bool writeChangesNow)
 {
-    const ScopedLock changeLock(getConfigLock());
     categoryFolders.insert(index, newFolder);
     markPendingChanges();
     if (writeChangesNow)
@@ -174,10 +261,9 @@ void AppConfigFile::addAppFolder
 /**
  * Remove a folder from the list of AppFolders.
  */
-void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
+void AppConfigFile::AppJson::removeAppFolder(int index, bool writeChangesNow)
 {
     int size = categoryFolders.size();
-    const ScopedLock changeLock(getConfigLock());
     categoryFolders.remove(index);
     markPendingChanges();
     if (writeChangesNow)
@@ -189,17 +275,25 @@ void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
 /**
  * Find the index of an AppFolder in the list of folders.
  */
-int AppConfigFile::getFolderIndex(AppFolder toFind)
+int AppConfigFile::AppJson::getFolderIndex(AppFolder toFind)
 {
     return categoryFolders.indexOf(toFind);
 }
 
-//################################# File IO ####################################
+AppConfigFile::AppJson::AppJson() : ConfigFile(filenameConst)
+{
+    var jsonConfig = AssetFiles::loadJSONAsset
+            (String(configPath) + filenameConst, true);
+    var defaultConfig = var();
+    readDataFromJson(jsonConfig, defaultConfig);
+    writeChanges();
+}
+
 
 /**
  * Read in this object's data from a json config object
  */
-void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
+void AppConfigFile::AppJson::readDataFromJson(var& config, var& defaultConfig)
 {
     ConfigFile::readDataFromJson(config, defaultConfig);
     //load favorites
@@ -233,7 +327,7 @@ void AppConfigFile::readDataFromJson(var& config, var& defaultConfig)
 /**
  * Copy all config data to a json object.
  */
-void AppConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
+void AppConfigFile::AppJson::copyDataToJson(DynamicObject::Ptr jsonObj)
 {
     ConfigFile::copyDataToJson(jsonObj);
     //set favorites
@@ -251,13 +345,4 @@ void AppConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
     }
     jsonObj->setProperty(favoritesKey, favoriteArray);
     jsonObj->setProperty(foldersKey, categoryArray);
-}
-
-/**
- * @return the empty list, as AppConfigFile doesn't track any DataKey
- * variables, only its own custom data structures.
- */
-std::vector<ConfigFile::DataKey> AppConfigFile::getDataKeys() const
-{
-    return {};
 }

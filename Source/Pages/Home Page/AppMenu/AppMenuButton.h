@@ -13,11 +13,13 @@
 #include "AppMenuPopupEditor.h"
 #include "AppMenuItem.h"
 
-class AppMenuButton : public Button, public ReferenceCountedObject{
+class AppMenuButton : public Button, public ReferenceCountedObject
+{
 public:
     typedef ReferenceCountedObjectPtr<AppMenuButton> Ptr;
 
-    enum ColourIds {
+    enum ColourIds
+    {
         textColourId = 0x1900200,
         backgroundColourId = 0x1900201,
         selectionColourId = 0x1900202,
@@ -46,8 +48,6 @@ public:
 
     /**
      * Gets a PopupEditorComponent configured to edit this button's data.
-     * 
-     * @param config     UI component settings needed to create the editor.
      *
      * @param onConfirm  A callback function that will run if changes are made 
      *                    and confirmed in the new editor.  This should be used
@@ -56,9 +56,8 @@ public:
      *
      * @return  a new PopupEditorComponent, ready to be added to the screen.
      */
-    AppMenuPopupEditor* getEditor(
-	    ComponentConfigFile& config,
-            const std::function<void(AppMenuPopupEditor*) >& onConfirm);
+    AppMenuPopupEditor* getEditor
+    (const std::function<void(AppMenuPopupEditor*) >& onConfirm);
 
     /**
      * Calling this method will create a message box asking for user 
@@ -94,11 +93,11 @@ public:
      */
     void setSelected(bool select);
 protected:
+
     /**
      * Triggers whenever the button is selected or unselected.
      */
-    virtual void selectionStateChanged() {
-    }
+    virtual void selectionStateChanged() { }
 
     /**
      * Requests an icon from the icon thread.
@@ -113,7 +112,7 @@ protected:
      * Reload this button's data from its menu item
      */
     virtual void reloadDataFromSource();
-  
+
     /**
      * Gets the button's text bounds.
      *
@@ -129,14 +128,14 @@ protected:
      *           it will draw its image.
      */
     const Rectangle<float>& getImageBounds() const;
-    
+
     /**
      * Gets the button's title font.
      *
      * @return the font used to draw this button's title.
      */
     const Font& getTitleFont() const;
-    
+
     /**
      * Set new bounds to draw the button title within.
      *
@@ -152,14 +151,14 @@ protected:
      *                 it will draw its icon.
      */
     void setImageBounds(const Rectangle<float>& bounds);
-    
+
     /**
      * Sets if this button will draw an outline around its border.
      *
      * @param shouldDraw
      */
     void setDrawBorder(bool shouldDraw);
-    
+
     /**
      * Sets if this button will fill in its background with its background
      * color.
@@ -168,14 +167,14 @@ protected:
      */
     void setFillBackground(bool shouldFill);
 
-    
+
     /**
      * Sets the button's title font.
      *
      * @param font will be used to draw this button's title.
      */
     void setTitleFont(const Font& font);
-    
+
     /**
      * Set the text justification of the button title.
      *
@@ -195,10 +194,10 @@ private:
      * @param isButtonDown
      */
     void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
-    
+
     //Icon image to draw
     Image appIcon;
-	
+
     //bounds used to position and scale the button title and icon
     Rectangle<float> textBounds;
     Rectangle<float> imageBounds;

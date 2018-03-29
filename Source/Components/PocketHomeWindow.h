@@ -9,8 +9,6 @@
 #include "LoginPage.h"
 #include "PageFactory.h"
 #include "PokeLookAndFeel.h"
-#include "MainConfigFile.h"
-#include "ComponentConfigFile.h"
 #include "PageStackComponent.h"
 #include "WindowFocus.h"
 
@@ -23,16 +21,10 @@ public:
      * @param fakeWifi           If true, wifi-using components in this window
      *                            will get all their wifi data from a simulated 
      *                            wifi device.
-     * 
-     * @param mainConfig         Holds shared configuration data.
-     * 
-     * @param componentConfig    Holds shared UI component configuration data.
      */
     PocketHomeWindow(
             String windowName, 
-            bool fakeWifi,
-            MainConfigFile& mainConfig,
-            ComponentConfigFile& componentConfig);
+            bool fakeWifi);
 
     virtual ~PocketHomeWindow() { }
 
@@ -46,12 +38,6 @@ private:
      * Resize page content to match window size.
      */
     void resized() override;
-   
-    //Loads config data from the config.json file
-    MainConfigFile& mainConfig;
-    
-    //Loads component settings from the components.json file
-    ComponentConfigFile& componentConfig;
 
     //Factory object for creating all UI pages
     PageFactory pageFactory;

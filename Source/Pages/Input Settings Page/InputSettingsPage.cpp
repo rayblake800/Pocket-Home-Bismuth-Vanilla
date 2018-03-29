@@ -2,12 +2,9 @@
 #include "AppLauncher.h"
 #include "InputSettingsPage.h"
 
-InputSettingsPage::InputSettingsPage(
-        PageFactoryInterface* pageFactory,
-        MainConfigFile& mainConfig,
-        ComponentConfigFile& componentConfig) :
+InputSettingsPage::InputSettingsPage(PageFactoryInterface* pageFactory) :
 Localized("InputSettingsPage"),
-PageComponent(componentConfig, "InputSettingsPage",{
+PageComponent("InputSettingsPage",{
     {3,
         {
             {&title, 1}
@@ -30,13 +27,11 @@ PageComponent(componentConfig, "InputSettingsPage",{
             {&fnmapping, 1}
         }}
 }, pageFactory),
-mainConfig(mainConfig),
-title(componentConfig, "settings", localeText(input_settings)),
+title("settings", localeText(input_settings)),
 chooseMode("chooseMode"),
 calibrating(localeText(calibrate_screen)),
 fnmapping(localeText(remap_keybord)),
-cursorVisible(componentConfig, "cursorVisible",
-        localeText(select_cursor_visible))
+cursorVisible("cursorVisible", localeText(select_cursor_visible))
 {
 
 #    if JUCE_DEBUG
@@ -47,6 +42,7 @@ cursorVisible(componentConfig, "cursorVisible",
     chooseMode.addItem(localeText(not_visible), 1);
     chooseMode.addItem(localeText(visible), 2);
     chooseMode.addListener(this);
+    MainConfigFile mainConfig;
     if (mainConfig.getConfigValue<bool>(MainConfigFile::showCursorKey))
     {
         chooseMode.setSelectedId(2);
@@ -84,6 +80,7 @@ void InputSettingsPage::pageButtonClicked(Button* button)
  */
 void InputSettingsPage::comboBoxChanged(ComboBox* box)
 {
+    MainConfigFile mainConfig;
     if (box != &chooseMode) return;
     bool cursorVisible = (box->getSelectedId() == 2);
     mainConfig.setConfigValue<bool>(MainConfigFile::showCursorKey,
