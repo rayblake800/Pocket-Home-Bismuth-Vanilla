@@ -10,6 +10,7 @@
 #pragma once
 #include "ScalingLabel.h"
 #include "Localized.h"
+#include "ColourPicker.h"
 #include "PageComponent.h"
 
 class FelPage : public PageComponent, private Localized
@@ -37,6 +38,7 @@ private:
     //Cancel, and close this page
     TextButton noButton;
 
+    ColourPicker colourPicker;
     //If true, the yes button was clicked already and further clicks should
     //be ignored
     bool debounce = false;

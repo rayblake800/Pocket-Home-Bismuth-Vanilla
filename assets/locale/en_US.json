@@ -162,5 +162,9 @@
         "folder": "\" folder?",
         "will_remove_folder": "This will permanently remove this folder from the menu.",
         "edit_folder": "Edit Folder"
+    },
+    "ColourPicker" : {
+	    "set_colour" : "Set Color"
     }
-}
+
+    }

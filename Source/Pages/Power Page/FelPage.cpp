@@ -6,7 +6,7 @@
 FelPage::FelPage() :
 Localized("FelPage"),
 PageComponent("FelPage",{
-    {2,
+/*    {2,
         {
             {&infoLine1, 1}
         }},
@@ -20,12 +20,15 @@ PageComponent("FelPage",{
         {
             {nullptr, 1}
         }},
+*/
     {2,
         {
+	    {&colourPicker,7},
             {nullptr, 1},
             {&noButton, 2},
             {nullptr, 1}
-        }},
+        }}
+  /*,
     {1,
         {
             {nullptr, 1}
@@ -34,6 +37,7 @@ PageComponent("FelPage",{
         {
             {&infoLine2, 1}
         }}
+	*/
 },nullptr,false),
 debounce(false),
 infoLine1("infoLine1", localeText(ask_to_reboot)),
