@@ -21,11 +21,38 @@ public:
 
     class ComponentSettings;
 
+    static const StringArray defaultColourKeys;
     /**
      * Colour value string keys are stored here along with their corresponding
      * ColourId values
      */
     static const std::map<String, int> colourIds;
+
+    enum DefaultColour
+    {
+        windowBackground = 0,
+	widgetBackground,
+	widgetColorOff,
+	widgetColorOn,
+	menuBackground,
+	outline,
+	focusedOutline,
+	textField,
+	text,
+	highlightedTextField,
+	highlightedText,
+	none
+    };
+
+    DefaultColour getColourType(String colorKey);
+
+    String getColourKey(DefaultColour colour);
+
+    Colour getColour(DefaultColour colourType);
+
+    void setColour(DefaultColour colourType, Colour newColour);
+
+    void setColour(String key, Colour newColour);
 
     /**
      * @return the keys to all Component color settings stored in

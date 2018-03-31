@@ -15,7 +15,9 @@ cursor(MouseCursor::NoCursor)
 {
     ComponentConfigFile componentConfig;
     MainConfigFile mainConfig;
-    componentConfig.addListener(this, componentConfig.getColourKeys());
+    StringArray keys = ComponentConfigFile::defaultColourKeys;
+    keys.addArray(componentConfig.getColourKeys());
+    componentConfig.addListener(this, keys);
     mainConfig.addListener(this,{MainConfigFile::showCursorKey});
     loadAllConfigProperties();
 }

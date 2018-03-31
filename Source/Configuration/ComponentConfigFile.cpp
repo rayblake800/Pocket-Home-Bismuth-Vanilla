@@ -15,6 +15,21 @@ ScopedPointer<ResourceManager::SharedResource>
 
 CriticalSection ComponentConfigFile::configLock;
 
+const StringArray ComponentConfigFile::defaultColourKeys = 
+{
+    "window background color",
+    "widget background color",
+    "widget color (off)",
+    "widget color (on)",
+    "menu background color",
+    "outline color",
+    "focused outline color",
+    "text field color",
+    "text color",
+    "highlighted text field color",
+    "highlighted text color"
+};
+
 const std::map<String, int> ComponentConfigFile::colourIds
 {
     {
@@ -259,9 +274,58 @@ ComponentConfigFile::ComponentConfigFile() :
 ResourceManager(sharedResource, configLock,
 [this]()->ResourceManager::SharedResource*
 {
-
     return new ConfigJson();
 }) { }
+
+ComponentConfigFile::DefaultColour ComponentConfigFile::getColourType
+(String colorKey)
+{
+    int enumVal = defaultColourKeys.indexOf(colorkey);
+    if(enumVal < 0)
+    {
+        return none;
+    }
+    return (DefaultColour) enumVal; 
+}
+
+String ComponentConfigFile::getColourKey(DefaultColour colour)
+{
+    if(colour == none)
+    {
+        return String();
+    }
+    return defaultColourKeys[(int) colour];
+}
+
+Colour ComponentConfigFile::getColour(DefaultColour colourType)
+{
+    if(colourType == none)
+    {
+        return Colour();
+    }
+    const ScopedLock readLock(configLock);
+    ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
+    return config->getConfigValue<String>(getColourKey(colourType));
+}
+
+void ComponentConfigFile::setColour
+(DefaultColour colourType, Colour newColour)
+{
+    if(colourType != none)
+    {
+        const ScopedLock readLock(configLock);
+        ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
+	config->setConfigValue<String>
+		(getColourKey(colourType),newColour.toString());
+    }
+}
+
+void ComponentConfigFile::setColour(String key, Colour newColour)
+{
+    const ScopedLock readLock(configLock);
+    ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
+    config->setConfigValue<String>(key,newColour.toString());
+}
 
 /**
  * @return the keys to all Component color settings stored in
@@ -445,6 +509,10 @@ std::vector<ConfigFile::DataKey> ComponentConfigFile::ConfigJson
 {
     std::vector<DataKey> keys = {
     };
+    for(const String& key : defaultColourKeys)
+    {
+        keys.push_back({key,StringType});
+    }
     for (auto it = colourIds.begin(); it != colourIds.end(); it++)
     {
         keys.push_back({it->first, stringType});
