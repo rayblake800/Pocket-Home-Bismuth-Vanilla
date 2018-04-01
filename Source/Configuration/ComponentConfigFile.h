@@ -32,8 +32,8 @@ public:
     {
         windowBackground = 0,
 	widgetBackground,
-	widgetColorOff,
-	widgetColorOn,
+	widgetOff,
+	widgetOn,
 	menuBackground,
 	outline,
 	focusedOutline,
@@ -49,6 +49,8 @@ public:
     String getColourKey(DefaultColour colour);
 
     Colour getColour(DefaultColour colourType);
+
+    Array<int> getColourIds(DefaultColour colourType);
 
     void setColour(DefaultColour colourType, Colour newColour);
 

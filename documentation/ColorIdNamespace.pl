@@ -33,7 +33,8 @@ sub headers{
 		$class = lc(substr($class,0,1)).substr($class,1);
 		if($text =~ /enum\s+ColourIds\s*\{(.*?)\}/gs)
 		{
-			$colourIds=$colourIds. "    enum $class\n    {\n";
+			$colourIds=$colourIds."    namespace $class\n    {\n";
+		        $colourIds=$colourIds."        enum\n        {\n";
 			my @names;
 			my @ids;
 			my @comments;
@@ -60,7 +61,7 @@ sub headers{
 				push(@ids,$id);
 				if(defined($comment))
 				{
-					push(@comments,"        $comment\n");
+					push(@comments,"            $comment\n");
 				}
 				else
 				{
@@ -71,7 +72,7 @@ sub headers{
 			my $nColors = @names;
 			for(my $i = 0; $i < $nColors; $i++)
 			{
-				my $line = $comments[$i]."        ";
+				my $line = $comments[$i]."            ";
 				while(length($names[$i]) < $longest)
 				{
 					$names[$i]=$names[$i]." ";
@@ -83,7 +84,7 @@ sub headers{
 				}
 				$colourIds=$colourIds. "$line\n";
 			}
-			$colourIds=$colourIds."    };\n\n";
+			$colourIds=$colourIds."        };\n    };\n\n";
 		}
 	}
 }

@@ -208,6 +208,16 @@ void PokeLookAndFeel::configValueChanged(String key)
             Colour confColour = componentConfig.getColour(key);
             setColour(colourId, confColour);
         }
-
+	else
+	{
+	    ComponentConfigFile::DefaultColour colourType =
+	    	componentConfig.getColourType(key);
+            Array<int> colourIds = componentConfig.getColourIds(colourType);
+            Colour colour = componentConfig.getColour(colourType);
+            for(const int& id : colourIds)
+            {
+                 setColour(id,colour);
+            }
+	}
     }
 }

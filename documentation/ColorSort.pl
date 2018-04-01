@@ -22,8 +22,8 @@ my @defaults =
 (
 	"windowBackground",
 	"widgetBackground",
-	"widgetColorOff",
-	"widgetColorOn",
+	"widgetOff",
+	"widgetOn",
 	"menuBackground",
 	"outline",
 	"focusedOutline",
@@ -125,6 +125,6 @@ for(my $i = 0; $i < (scalar @defaults - 1); $i++)
 	}
 	print(IDLIST "$list\n        };\n\n");
 }
-print(IDLIST "    case default:\n        return {};");
+print(IDLIST "    default:\n        return {};");
 print(IDLIST "\n    }\n}");
 close IDLIST;

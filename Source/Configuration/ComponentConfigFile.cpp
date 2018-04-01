@@ -1,10 +1,4 @@
-#include "DrawableImageComponent.h"
-#include "ListEditor.h"
-#include "FileSelectTextEditor.h"
-#include "OverlaySpinner.h"
-#include "SwitchComponent.h"
-#include "AppMenuButton.h"
-#include "PageComponent.h"
+#include "ColourIds.h"
 #include "Display.h"
 #include "ComponentConfigFile.h"
 #include "AssetFiles.h"
@@ -17,257 +11,148 @@ CriticalSection ComponentConfigFile::configLock;
 
 const StringArray ComponentConfigFile::defaultColourKeys = 
 {
-    "window background color",
-    "widget background color",
-    "widget color (off)",
-    "widget color (on)",
-    "menu background color",
-    "outline color",
-    "focused outline color",
-    "text field color",
-    "text color",
-    "highlighted text field color",
-    "highlighted text color"
+    "window background",
+    "widget background",
+    "widget(off)",
+    "widget(on)",
+    "menu background",
+    "outline",
+    "focused outline",
+    "text field",
+    "text",
+    "highlighted text field",
+    "highlighted text"
 };
 
 const std::map<String, int> ComponentConfigFile::colourIds
 {
     {
-     "Page background color",
-     PageComponent::backgroundColourId
-    },
-
-    {
-     "Image color 0",
-     DrawableImageComponent::imageColour0Id
+     "Page background",
+     ColourIds::pageComponent::background
     },
     {
-     "Image color 1",
-     DrawableImageComponent::imageColour1Id
+     "Image0",
+     ColourIds::drawableImageComponent::image0
     },
     {
-     "Image color 2",
-     DrawableImageComponent::imageColour2Id
+     "Image1",
+     ColourIds::drawableImageComponent::image1
     },
     {
-     "Image color 3",
-     DrawableImageComponent::imageColour3Id
+     "Image2",
+     ColourIds::drawableImageComponent::image2
     },
     {
-     "Image color 4",
-     DrawableImageComponent::imageColour4Id
-    },
-
-    {
-     "Image color 4",
-     DrawableImageComponent::imageColour4Id
-    },
-
-    {
-     "List editor text color",
-     ListEditor::textColourId
+     "Image3",
+     ColourIds::drawableImageComponent::image3
     },
     {
-     "List editor  background color",
-     ListEditor::backgroundColourId
+     "Image4",
+     ColourIds::drawableImageComponent::image4
     },
     {
-     "List editor list item color",
-     ListEditor::listItemColourId
+     "AppMenu button text",
+     ColourIds::appMenuButton::text
     },
     {
-     "List editor selected item color",
-     ListEditor::selectedListItemColourId
-    },
-
-    {
-     "AppMenu button text color",
-     AppMenuButton::textColourId
+     "AppMenu button background",
+     ColourIds::appMenuButton::background
     },
     {
-     "AppMenu button background color",
-     AppMenuButton::backgroundColourId
+     "AppMenu button selection",
+     ColourIds::appMenuButton::selection
     },
     {
-     "AppMenu button selection color",
-     AppMenuButton::selectionColourId
+     "AppMenu button border",
+     ColourIds::appMenuButton::border
     },
     {
-     "AppMenu button border color",
-     AppMenuButton::borderColourId
-    },
-
-    {
-     "File picker window color",
-     FileSelectTextEditor::fileWindowColourId
+     "File picker window",
+     ColourIds::fileSelectTextEditor::fileWindow
     },
     {
-     "File picker text color",
-     FileSelectTextEditor::textColourId
-    },
-
-    {
-     "Drawable button text color",
-     DrawableButton::textColourId
-    },
-
-    {
-     "Overlay spinner background color",
-     OverlaySpinner::backgroundColourId
+     "File picker text",
+     ColourIds::fileSelectTextEditor::text
     },
     {
-     "Overlay spinner text color",
-     OverlaySpinner::textColourId
-    },
-
-    {
-     "Text button(off) color",
-     TextButton::buttonColourId
+     "Overlay spinner background",
+     ColourIds::overlaySpinner::background
     },
     {
-     "Text button(off) text color",
-     TextButton::textColourOffId
+     "Overlay spinner text",
+     ColourIds::overlaySpinner::text
     },
     {
-     "Text button(on) color",
-     TextButton::buttonOnColourId
+     "Text button(off)",
+     ColourIds::textButton::button
     },
     {
-     "Text button(on) text color",
-     TextButton::textColourOnId
-    },
-
-    {
-     "Label background color",
-     Label::backgroundColourId
+     "Text button(off) text",
+     ColourIds::textButton::textOff
     },
     {
-     "Label text color",
-     Label::textColourId
+     "Text button(on)",
+     ColourIds::textButton::buttonOn
     },
     {
-     "Label outline color",
-     Label::outlineColourId
+     "Text button(on) text",
+     ColourIds::textButton::textOn
     },
     {
-     "Label background color(editing)",
-     Label::backgroundWhenEditingColourId
+     "Slider background",
+     ColourIds::slider::background
     },
     {
-     "Label text color(editing)",
-     Label::textColourId
+     "Slider thumb",
+     ColourIds::slider::thumb
     },
     {
-     "Label outline color(editing)",
-     Label::outlineWhenEditingColourId
-    },
-
-    {
-     "Slider background color",
-     Slider::backgroundColourId
+     "Slider track",
+     ColourIds::slider::track
     },
     {
-     "Slider thumb color",
-     Slider::thumbColourId
+     "Switch background",
+     ColourIds::switchComponent::background
     },
     {
-     "Slider track color",
-     Slider::trackColourId
-    },
-
-    {
-     "Text editor background color",
-     TextEditor::backgroundColourId
+     "Switch handle",
+     ColourIds::switchComponent::handle
     },
     {
-     "Text editor text color",
-     TextEditor::textColourId
+     "Switch handle(off)",
+     ColourIds::switchComponent::handleOff
     },
     {
-     "Text editor highlight color",
-     TextEditor::highlightColourId
+     "Combo box text",
+     ColourIds::comboBox::text
     },
     {
-     "Text editor highlighted text color",
-     TextEditor::highlightedTextColourId
+     "Combo box background",
+     ColourIds::comboBox::background
     },
     {
-     "Text editor outline color",
-     TextEditor::outlineColourId
+     "Combo box outline",
+     ColourIds::comboBox::outline
     },
     {
-     "Text editor focused outline color",
-     TextEditor::focusedOutlineColourId
+     "Combo box button",
+     ColourIds::comboBox::button
     },
     {
-     "Text editor shadow color",
-     TextEditor::shadowColourId
-    },
-
-    {
-     "Switch background color",
-     SwitchComponent::backgroundColourId
+     "Combo box arrow",
+     ColourIds::comboBox::arrow
     },
     {
-     "Switch handle color",
-     SwitchComponent::handleColourId
+     "Alert window background",
+     ColourIds::alertWindow::background
     },
     {
-     "Switch handle color(off)",
-     SwitchComponent::handleOffColourId
-    },
-
-    {
-     "Pop-up menu text color",
-     PopupMenu::textColourId
+     "Alert window text",
+     ColourIds::alertWindow::text
     },
     {
-     "Pop-up menu header text color",
-     PopupMenu::headerTextColourId
-    },
-    {
-     "Pop-up menu background color",
-     PopupMenu::backgroundColourId
-    },
-    {
-     "Pop-up menu highlighted text color",
-     PopupMenu::highlightedTextColourId
-    },
-
-
-    {
-     "Combo box text color",
-     ComboBox::textColourId
-    },
-    {
-     "Combo box background color",
-     ComboBox::backgroundColourId
-    },
-    {
-     "Combo box outline color",
-     ComboBox::outlineColourId
-    },
-    {
-     "Combo box button color",
-     ComboBox::buttonColourId
-    },
-    {
-     "Combo box arrow color",
-     ComboBox::arrowColourId
-    },
-
-
-    {
-     "Alert window background color",
-     AlertWindow::backgroundColourId
-    },
-    {
-     "Alert window text color",
-     AlertWindow::textColourId
-    },
-    {
-     "Alert window outline color",
-     AlertWindow::outlineColourId
+     "Alert window outline",
+     ColourIds::alertWindow::outline
     }};
 
 ComponentConfigFile::ComponentConfigFile() :
@@ -278,9 +163,9 @@ ResourceManager(sharedResource, configLock,
 }) { }
 
 ComponentConfigFile::DefaultColour ComponentConfigFile::getColourType
-(String colorKey)
+(String colourKey)
 {
-    int enumVal = defaultColourKeys.indexOf(colorkey);
+    int enumVal = defaultColourKeys.indexOf(colourKey);
     if(enumVal < 0)
     {
         return none;
@@ -305,8 +190,228 @@ Colour ComponentConfigFile::getColour(DefaultColour colourType)
     }
     const ScopedLock readLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
-    return config->getConfigValue<String>(getColourKey(colourType));
+    return Colour(config->getConfigValue<String>(getColourKey(colourType))
+		    .getHexValue32());
 }
+
+Array<int> ComponentConfigFile::getColourIds
+(ComponentConfigFile::DefaultColour colourType)
+{
+    using namespace ColourIds;
+    switch(colourType)
+    {
+    case windowBackground:
+        return
+        {
+            tabbedComponent::background,
+            sidePanel::background,
+            treeView::background,
+            tooltipWindow::background,
+            alertWindow::background,
+            resizableWindow::background,
+            colourSelector::background,
+            keyMappingEditorComponent::background,
+            jucer_CommonHeaders::background,
+            pageComponent::background,
+            jucer_CommonHeaders::contentHeaderBackground,
+            fileSelectTextEditor::fileWindow,
+            jucer_CommonHeaders::inactiveTabBackground
+        };
+
+    case widgetBackground:
+        return
+        {
+            scrollBar::background,
+            progressBar::background,
+            slider::background,
+            drawableButton::background,
+            overlaySpinner::background,
+            switchComponent::background,
+            appMenuButton::background,
+            drawableButton::backgroundOn,
+            textButton::button,
+            toolbar::buttonMouseOverBackground,
+            fileBrowserComponent::currentPathBoxBackground,
+            jucer_CommonHeaders::defaultButtonBackground,
+            jucer_CommonHeaders::secondaryBackground,
+            jucer_CommonHeaders::userButtonBackground,
+            jucer_CommonHeaders::widgetBackground
+        };
+
+    case widgetOff:
+        return
+        {
+            comboBox::button,
+            jucer_CommonHeaders::defaultIcon,
+            sidePanel::dismissButtonDown,
+            switchComponent::handleOff,
+            jucer_CommonHeaders::inactiveTabIcon,
+            toggleButton::tickDisabled,
+            scrollBar::track,
+            slider::track
+        };
+
+    case widgetOn:
+        return
+        {
+            jucer_CommonHeaders::activeTabIcon,
+            toolbar::buttonMouseDownBackground,
+            sidePanel::dismissButtonNormal,
+            sidePanel::dismissButtonOver,
+            progressBar::foreground,
+            switchComponent::handle,
+            slider::rotarySliderFill,
+            scrollBar::thumb,
+            slider::thumb,
+            toggleButton::tick,
+            jucer_CommonHeaders::treeIcon
+        };
+
+    case menuBackground:
+        return
+        {
+            bubbleComponent::background,
+            fileSearchPathListComponent::background,
+            propertyComponent::background,
+            comboBox::background,
+            tableHeaderComponent::background,
+            listBox::background,
+            toolbar::background,
+            popupMenu::background,
+            listEditor::background,
+            jucer_CommonHeaders::secondaryButtonBackground
+        };
+
+    case outline:
+        return
+        {
+            appMenuButton::border,
+            toolbar::editingModeOutline,
+            tabbedButtonBar::frontOutline,
+            lassoComponent::lassoOutline,
+            bubbleComponent::outline,
+            textPropertyComponent::outline,
+            booleanPropertyComponent::outline,
+            groupComponent::outline,
+            tabbedComponent::outline,
+            comboBox::outline,
+            textEditor::outline,
+            tableHeaderComponent::outline,
+            listBox::outline,
+            tooltipWindow::outline,
+            alertWindow::outline,
+            slider::rotarySliderOutline,
+            tabbedButtonBar::tabOutline,
+            slider::textBoxOutline
+        };
+
+    case focusedOutline:
+        return
+        {
+            comboBox::focusedOutline,
+            textEditor::focusedOutline,
+            label::outlineWhenEditing,
+            toolbar::separator
+        };
+
+    case textField:
+        return
+        {
+            textPropertyComponent::background,
+            booleanPropertyComponent::background,
+            textEditor::background,
+            codeEditorComponent::background,
+            label::backgroundWhenEditing,
+            fileBrowserComponent::filenameBoxBackground,
+            listEditor::listItem,
+            jucer_CommonHeaders::secondaryWidgetBackground,
+            slider::textBoxBackground
+        };
+
+    case text:
+        return
+        {
+            comboBox::arrow,
+            fileBrowserComponent::currentPathBoxArrow,
+            fileBrowserComponent::currentPathBoxText,
+            codeEditorComponent::defaultText,
+            jucer_CommonHeaders::defaultText,
+            treeView::dragAndDropIndicator,
+            treeView::evenItems,
+            fileBrowserComponent::filenameBoxText,
+            tabbedButtonBar::frontText,
+            popupMenu::headerText,
+            propertyComponent::labelText,
+            toolbar::labelText,
+            colourSelector::labelText,
+            lassoComponent::lassoFill,
+            treeView::lines,
+            treeView::oddItems,
+            tabbedButtonBar::tabText,
+            directoryContentsDisplayComponent::text,
+            textPropertyComponent::text,
+            groupComponent::text,
+            comboBox::text,
+            textEditor::text,
+            label::text,
+            tableHeaderComponent::text,
+            listBox::text,
+            tooltipWindow::text,
+            alertWindow::text,
+            documentWindow::text,
+            popupMenu::text,
+            toggleButton::text,
+            hyperlinkButton::text,
+            drawableButton::text,
+            keyMappingEditorComponent::text,
+            overlaySpinner::text,
+            fileSelectTextEditor::text,
+            listEditor::text,
+            appMenuButton::text,
+            slider::textBoxText,
+            textButton::textOff,
+            textButton::textOn,
+            drawableButton::textOn,
+            label::textWhenEditing,
+            fileChooserDialogBox::titleText,
+            sidePanel::titleText,
+            jucer_CommonHeaders::widgetText
+        };
+
+    case highlightedTextField:
+        return
+        {
+            textButton::buttonOn,
+            jucer_CommonHeaders::defaultHighlight,
+            directoryContentsDisplayComponent::highlight,
+            textEditor::highlight,
+            tableHeaderComponent::highlight,
+            codeEditorComponent::highlight,
+            popupMenu::highlightedBackground,
+            codeEditorComponent::lineNumberBackground,
+            treeView::selectedItemBackground,
+            listEditor::selectedListItem,
+            appMenuButton::selection,
+            slider::textBoxHighlight
+        };
+
+    case highlightedText:
+        return
+        {
+            caretComponent::caret,
+            jucer_CommonHeaders::codeEditorLineNumber,
+            jucer_CommonHeaders::defaultHighlightedText,
+            directoryContentsDisplayComponent::highlightedText,
+            textEditor::highlightedText,
+            popupMenu::highlightedText,
+            codeEditorComponent::lineNumberText
+        };
+    default:
+        return {};
+    }
+
+}
+
 
 void ComponentConfigFile::setColour
 (DefaultColour colourType, Colour newColour)
@@ -511,7 +616,7 @@ std::vector<ConfigFile::DataKey> ComponentConfigFile::ConfigJson
     };
     for(const String& key : defaultColourKeys)
     {
-        keys.push_back({key,StringType});
+        keys.push_back({key,stringType});
     }
     for (auto it = colourIds.begin(); it != colourIds.end(); it++)
     {

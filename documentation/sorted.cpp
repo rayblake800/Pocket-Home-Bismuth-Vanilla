@@ -41,7 +41,7 @@ Array<int> getIdsForDefault(ComponentConfigFile::DefaultColors defaultColor)
             jucer_CommonHeaders::widgetBackground
         };
 
-    case widgetColorOff:
+    case widgetOff:
         return
         {
             comboBox::button,
@@ -54,7 +54,7 @@ Array<int> getIdsForDefault(ComponentConfigFile::DefaultColors defaultColor)
             slider::track
         };
 
-    case widgetColorOn:
+    case widgetOn:
         return
         {
             jucer_CommonHeaders::activeTabIcon,
@@ -211,7 +211,7 @@ Array<int> getIdsForDefault(ComponentConfigFile::DefaultColors defaultColor)
             codeEditorComponent::lineNumberText
         };
 
-    case default:
+    default:
         return {};
     }
 }
