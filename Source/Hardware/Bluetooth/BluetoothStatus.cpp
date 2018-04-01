@@ -7,16 +7,16 @@ String getPropStr(const gchar* name)
 {
     GVariant* var = g_dbus_proxy_get_cached_property(bluezProxy, name);
     const GVariantType* type = g_variant_get_type(var);
-    if (type == G_VARIANT_TYPE_STRING)
+    if (*type == *G_VARIANT_TYPE_STRING)
     {
         gsize length;
         return String(g_variant_get_string(var, &length));
     }
-    if (type == G_VARIANT_TYPE_UINT32)
+    if (*type == *G_VARIANT_TYPE_UINT32)
     {
         return String(g_variant_get_uint32(var));
     }
-    if (type == G_VARIANT_TYPE_BOOLEAN)
+    if (*type == *G_VARIANT_TYPE_BOOLEAN)
     {
         return String(g_variant_get_boolean(var) ? "true" : "false");
     }
