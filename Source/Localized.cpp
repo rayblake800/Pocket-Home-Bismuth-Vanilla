@@ -6,21 +6,21 @@
  */
 Localized::Localized(String className, String localeName)
 {
+    StringArray filesToTry = {localeName, getLocaleName(), defaultLocale};
     var localeFile;
-    if (localeName.isNotEmpty())
+    for(const String& filename : filesToTry)
     {
+        //don't bother checking empty strings or the default (unset) locale
+        if(filename.isEmpty() || filename == "C")
+        {
+            continue;
+        }
         localeFile = AssetFiles::loadJSONAsset
-                (String("locale/") + localeName + ".json", false);
-    }
-    if (localeFile.isVoid())
-    {
-        localeFile = AssetFiles::loadJSONAsset
-                (String("locale/") + getLocaleName() + ".json", false);
-    }
-    if (localeFile.isVoid())
-    {
-        localeFile = AssetFiles::loadJSONAsset
-                (String("locale/") + defaultLocale + ".json", false);
+                (String("locale/")+filename+".json",false);
+        if(!localeFile.isVoid())
+        {
+            break;
+        }
     }
     jassert(!localeFile.isVoid());
     var classText = localeFile.getProperty(className, var());

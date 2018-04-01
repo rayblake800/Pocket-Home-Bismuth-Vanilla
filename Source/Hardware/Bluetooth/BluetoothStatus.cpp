@@ -6,6 +6,10 @@ static GDBusProxy* bluezProxy = nullptr;
 String getPropStr(const gchar* name)
 {
     GVariant* var = g_dbus_proxy_get_cached_property(bluezProxy, name);
+    if(var == nullptr)
+    {
+        return "null";
+    }
     if (g_variant_is_of_type(var,G_VARIANT_TYPE_STRING))
     {
         gsize length;
