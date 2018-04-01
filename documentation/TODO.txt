@@ -8,9 +8,6 @@
 -Figure out a way to save calibration data and write it to the right file
  automatically
 
--Use an interface to get rid of the circular dependency between PageComponents
- and the PageFactory
-
 -Define page background color/image in config
      Replace the background selector on HomePageSettings 
 
