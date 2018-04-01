@@ -28,7 +28,7 @@ BluetoothStatus::BluetoothStatus()
     }
     else
     {
-        for (gchar* prop = properties[0]; prop != nullptr; prop++)
+        for (gchar* prop = properties[0]; prop != NULL; prop++)
         {
             DBG("Property="<<String(prop));
         }
