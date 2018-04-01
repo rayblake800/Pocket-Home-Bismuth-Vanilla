@@ -16,12 +16,11 @@ String getPropStr(const gchar* name)
     {
         return String(g_variant_get_uint32(var));
     }
-    if (type ==  G_VARIANT_TYPE_BOOLEAN)
+    if (type == G_VARIANT_TYPE_BOOLEAN)
     {
         return String(g_variant_get_boolean(var) ? "true" : "false");
-        default:
-        return String("unhandled type ") + String(g_variant_get_type_string(var));
     }
+    return String("unhandled type ") + String(g_variant_get_type_string(var));
 }
 
 BluetoothStatus::BluetoothStatus()
