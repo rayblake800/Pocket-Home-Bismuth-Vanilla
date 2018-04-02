@@ -5,10 +5,10 @@ BatteryIcon::BatteryIcon() : WindowFocusedTimer("BatteryIcon"),
 batteryImage(ComponentConfigFile::batteryIconKey),
 batteryPercent(ComponentConfigFile::batteryPercentKey)
 {
-    
-#if JUCE_DEBUG
+
+#    if JUCE_DEBUG
     setName("BatteryIcon");
-#endif
+#    endif
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
     batteryPercent.setJustificationType(Justification::centredLeft);
@@ -16,7 +16,6 @@ batteryPercent(ComponentConfigFile::batteryPercentKey)
     addAndMakeVisible(batteryImage);
     startTimer(1);
 }
-
 
 /**
  * Run applyConfigBounds on all child components, and update bounds to
@@ -57,10 +56,20 @@ void BatteryIcon::visibilityChanged()
         {
             startTimer(1);
         }
-    } else
+    }
+    else
     {
         stopTimer();
     }
+}
+
+/**
+ * Clear cached battery percentages when the timer is disabled, so that
+ * the values will catch up more quickly on resume.
+ */
+void BatteryIcon::onSuspend()
+{
+    batteryPercents.clear();
 }
 
 void BatteryIcon::timerCallback()
@@ -71,7 +80,8 @@ void BatteryIcon::timerCallback()
     if (batteryPercent < 0)
     {//no battery info loaded
         setStatus(noBattery, "");
-    } else
+    }
+    else
     {
         batteryPercents.add(batteryPercent);
         batteryPercent = 0;

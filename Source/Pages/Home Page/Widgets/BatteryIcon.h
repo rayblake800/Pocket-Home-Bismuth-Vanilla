@@ -59,6 +59,12 @@ private:
      * when it's hidden.
      */
     void visibilityChanged() override;
+    
+    /**
+     * Clear cached battery percentages when the timer is disabled, so that
+     * the values will catch up more quickly on resume.
+     */
+    void onSuspend() override;
 
     //Shows the battery icon
     ConfigurableImageComponent batteryImage;
