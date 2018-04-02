@@ -113,6 +113,17 @@
                 file="Source/Hardware/Bluetooth/BluetoothStatus.cpp"/>
           <FILE id="cpqm4n" name="BluetoothStatus.h" compile="0" resource="0"
                 file="Source/Hardware/Bluetooth/BluetoothStatus.h"/>
+          <FILE id="E78zcr" name="BluezAdapter.cpp" compile="1" resource="0"
+                file="Source/Hardware/Bluetooth/BluezAdapter.cpp"/>
+          <FILE id="SEXHIm" name="BluezAdapter.h" compile="0" resource="0" file="Source/Hardware/Bluetooth/BluezAdapter.h"/>
+          <FILE id="sMlaSb" name="GDBusProxyObject.cpp" compile="1" resource="0"
+                file="Source/Hardware/Bluetooth/GDBusProxyObject.cpp"/>
+          <FILE id="nN1gji" name="GDBusProxyObject.h" compile="0" resource="0"
+                file="Source/Hardware/Bluetooth/GDBusProxyObject.h"/>
+          <FILE id="xI5msA" name="GVariantConverter.cpp" compile="1" resource="0"
+                file="Source/Hardware/Bluetooth/GVariantConverter.cpp"/>
+          <FILE id="r2Ef0a" name="GVariantConverter.h" compile="0" resource="0"
+                file="Source/Hardware/Bluetooth/GVariantConverter.h"/>
         </GROUP>
         <GROUP id="{E98D5B9C-4E34-6090-B2F4-D1F92AFB0C81}" name="Wifi">
           <FILE id="oVu111" name="WifiAccessPoint.cpp" compile="1" resource="0"

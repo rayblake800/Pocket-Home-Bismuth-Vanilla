@@ -1,75 +1,17 @@
 #include "BluetoothStatus.h"
-#include "gio/gio.h"
-
-static GDBusProxy* bluezProxy = nullptr;
-
-String getPropStr(const gchar* name)
-{
-    GVariant* var = g_dbus_proxy_get_cached_property(bluezProxy, name);
-    if (var == nullptr)
-    {
-        return "null";
-    }
-    if (g_variant_is_of_type(var, G_VARIANT_TYPE_STRING))
-    {
-        gsize length;
-        return String(g_variant_get_string(var, &length));
-    }
-    if (g_variant_is_of_type(var, G_VARIANT_TYPE_UINT32))
-    {
-        return String(g_variant_get_uint32(var));
-    }
-    if (g_variant_is_of_type(var, G_VARIANT_TYPE_BOOLEAN))
-    {
-        return String(g_variant_get_boolean(var) ? "true" : "false");
-    }
-    return String("unhandled type ") + String(g_variant_get_type_string(var));
-}
+#include "BluezAdapter.h"
 
 BluetoothStatus::BluetoothStatus()
 {
-
-    const gchar* name = "org.bluez";
-    const gchar* path = "/org/bluez/hci0";
-    const gchar* interfaceName = "org.bluez.Adapter1";
-    GError * error = nullptr;
-    bluezProxy = g_dbus_proxy_new_for_bus_sync(
-            G_BUS_TYPE_SYSTEM,
-            G_DBUS_PROXY_FLAGS_NONE,
-            nullptr,
-            name,
-            path,
-            interfaceName,
-            nullptr,
-            &error);
-    DBG("Proxy Name=" << String(g_dbus_proxy_get_name(bluezProxy)));
-    DBG("Proxy Owner=" << String(g_dbus_proxy_get_name_owner(bluezProxy)));
-    DBG("Proxy Path=" << String(g_dbus_proxy_get_object_path(bluezProxy)));
-    DBG("Proxy Interface=" << String(g_dbus_proxy_get_interface_name(bluezProxy)));
-    DBG("Proxy Timeout=" << String(g_dbus_proxy_get_default_timeout(bluezProxy)));
-
-    DBG("Address=" << getPropStr("Address"));
-    DBG("AddressType=" << getPropStr("AddressType"));
-    DBG("Name=" << getPropStr("Name"));
-    DBG("Alias=" << getPropStr("Alias"));
-    DBG("Class=" << getPropStr("Class"));
-    DBG("Name=" << getPropStr("Name"));
-    DBG("Powered=" << getPropStr("Powered"));
-    DBG("Discoverable=" << getPropStr("Discoverable"));
-    DBG("Pairable=" << getPropStr("Pairable"));
-    DBG("PairableTimeout=" << getPropStr("PairableTimeout"));
-    DBG("DiscoverableTimeout=" << getPropStr("DiscoverableTimeout"));
-    DBG("Discovering=" << getPropStr("Discovering"));
-    gsize numUUID = 0;
-    const gchar ** uuids = g_variant_get_strv(
-            g_dbus_proxy_get_cached_property(bluezProxy, "UUIDs"), &numUUID);
-    DBG(String(numUUID) << " UUIDs");
-    for (int i = 0; i < numUUID; i++)
-    {
-        DBG("\tUUID: " << String(uuids[i]));
-    }
-    free(uuids);
-    uuids = nullptr;
+#    ifdef JUCE_DEBUG
+    BluezAdapter bluetoothAdapter;
+    bluetoothAdapter.printDebug();
+    
+    DBG("Setting discoverable:");
+    bluetoothAdapter.setDiscoverable(true);
+    bluetoothAdapter.printDebug();
+    
+#    endif
 
 }
 
