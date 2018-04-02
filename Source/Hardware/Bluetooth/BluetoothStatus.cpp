@@ -60,7 +60,7 @@ BluetoothStatus::BluetoothStatus()
     DBG("PairableTimeout=" << getPropStr("PairableTimeout"));
     DBG("DiscoverableTimeout=" << getPropStr("DiscoverableTimeout"));
     DBG("Discovering=" << getPropStr("Discovering"));
-    gsize numUUID = 0
+    gsize numUUID = 0;
     const gchar ** uuids = g_variant_get_bytestring_array(
             g_dbus_proxy_get_cached_property(bluezProxy,"UUIDs"));
     DBG(String(numUUID) << " UUIDs");
