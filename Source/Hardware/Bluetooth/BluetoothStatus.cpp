@@ -60,6 +60,7 @@ BluetoothStatus::BluetoothStatus()
     DBG("PairableTimeout=" << getPropStr("PairableTimeout"));
     DBG("DiscoverableTimeout=" << getPropStr("DiscoverableTimeout"));
     DBG("Discovering=" << getPropStr("Discovering"));
+    DBG("UUIDs=" << getPropStr("UUIDs"));
 
 }
 
