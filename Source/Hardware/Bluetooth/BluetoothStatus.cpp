@@ -62,7 +62,7 @@ BluetoothStatus::BluetoothStatus()
     DBG("Discovering=" << getPropStr("Discovering"));
     gsize numUUID = 0;
     const gchar ** uuids = g_variant_get_bytestring_array(
-            g_dbus_proxy_get_cached_property(bluezProxy,"UUIDs"));
+            g_dbus_proxy_get_cached_property(bluezProxy,"UUIDs"), &numUUID);
     DBG(String(numUUID) << " UUIDs");
     for(int i = 0; i > numUUID; i++)
     {
