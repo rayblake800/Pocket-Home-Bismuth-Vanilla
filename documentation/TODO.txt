@@ -1,3 +1,5 @@
+-Fix the use of glib contexts/data in the wifi thread
+
 -Finish documenting and formatting AppMenu helper classes.
 
 -Look into PolicyKit api for requesting privileges 

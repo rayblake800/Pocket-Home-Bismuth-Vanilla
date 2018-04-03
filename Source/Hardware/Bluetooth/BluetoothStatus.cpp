@@ -1,17 +1,9 @@
 #include "BluetoothStatus.h"
-#include "BluezAdapter.h"
+#include "glib.h"
+#include "gio/gio.h"
 
 BluetoothStatus::BluetoothStatus()
 {
-#    ifdef JUCE_DEBUG
-    BluezAdapter bluetoothAdapter;
-    bluetoothAdapter.printDebug();
-    
-    DBG("Setting discoverable:");
-    bluetoothAdapter.setDiscoverable(true);
-    bluetoothAdapter.printDebug();
-    
-#    endif
 
 }
 

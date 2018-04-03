@@ -2,7 +2,7 @@
  * @file WifiAccessPoint
  * 
  * WifiAccessPoint stores all relevant data about a single wifi access point.
- * Once created, access point data cannot be changed.
+ * Signal strength can be updated, but all other data is immutable
  */
 #pragma once
 #include "JuceHeader.h"
@@ -69,6 +69,16 @@ public:
     }
     
     /**
+     * Update the access point signal strength
+     * 
+     * @param strength   the new signal strength, between 0 and 100.
+     */
+    void setSignalStrength(int strength)
+    {
+        signalStrength = strength;
+    }
+    
+    /**
      * @return true iff this access point requires a security key. 
      */
     bool getRequiresAuth() const
@@ -95,7 +105,8 @@ public:
     
 private:
     String ssid;
-    int signalStrength;
     bool requiresAuth;
     String hash;
+    
+    int signalStrength;
 };

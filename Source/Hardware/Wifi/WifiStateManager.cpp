@@ -545,7 +545,8 @@ void WifiStateManager::WifiResource::timerCallback()
             {
                 DBG("WifiStateManager::" << __func__
                         << ": finished turning on wifi, but no signal was received");
-                setWifiState(enabled);
+                setWifiState(networkInterface->isWifiEnabled() ?
+                    enabled : disabled);
             }
             return;
         case turningOff:
@@ -559,7 +560,8 @@ void WifiStateManager::WifiResource::timerCallback()
 
                 DBG("WifiStateManager::" << __func__
                         << ": finished turning off wifi, but no signal was received");
-                setWifiState(disabled);
+                setWifiState(networkInterface->isWifiEnabled() ?
+                    enabled : disabled);
             }
             return;
         case disabled:
