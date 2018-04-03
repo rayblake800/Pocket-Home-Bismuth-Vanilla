@@ -17,8 +17,8 @@
  * 1. ResourceManager may only interact with the shared resource after acquiring
  *    the resource lock.  
  * 
- * 2. While it holds the resource lock, the ResourceManager cannot call any other
- *    method that interacts with the shared resource.
+ * 2. While it holds the resource lock, the ResourceManager cannot call any 
+ *    other method that interacts with the shared resource.
  * 
  * 3. SharedResource should never share references or pointers to its internal
  *    data with any other object.

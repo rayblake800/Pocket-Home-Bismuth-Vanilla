@@ -2,6 +2,7 @@
 #include <map>
 #include <nm-utils.h>
 #include <nm-remote-connection.h>
+#include "GLibEventHandler.h"
 #include "JuceHeader.h"
 
 #if JUCE_DEBUG
@@ -447,7 +448,7 @@ WifiAccessPoint LibNMInterface::createNMWifiAccessPoint(NMAccessPoint *ap)
  */
 void LibNMInterface::removeNMConnection(NMActiveConnection *conn)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     if (nmDevice == nullptr)
     {
         DBG("LibNMInterface::" << __func__ << ": wlan0 is missing!");
@@ -511,7 +512,7 @@ bool LibNMInterface::isValidWEPPassphraseFormat(String phrase)
  */
 NMAccessPoint* LibNMInterface::getConnectingNmAp()
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     NMActiveConnection* conn =
             nm_client_get_activating_connection
             (nmClient);
@@ -532,7 +533,7 @@ NMAccessPoint* LibNMInterface::getConnectingNmAp()
  */
 NMAccessPoint* LibNMInterface::getConnectedNmAp()
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     return nm_device_wifi_get_active_access_point(nmWifiDevice);
 }
 
@@ -542,7 +543,7 @@ NMAccessPoint* LibNMInterface::getConnectedNmAp()
  */
 Array<NMAccessPoint*> LibNMInterface::getVisibleNmAps()
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     Array<NMAccessPoint*> accessPoints;
     const GPtrArray* apList = nm_device_wifi_get_access_points(nmWifiDevice);
     if (apList != nullptr)
@@ -569,7 +570,7 @@ void LibNMInterface::handleConnectionAttempt(
         GError *err,
         LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     NMAccessPoint* ap =
             nm_device_wifi_get_access_point_by_path(
             nmInterface->nmWifiDevice,
@@ -599,7 +600,7 @@ void LibNMInterface::handleWifiEnabledChange(
         NMClient* client,
         LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     bool enabled = nm_client_wireless_get_enabled(client);
     DBG("LibNMInterface::" << __func__ << ":  changed to "
             << (enabled ? "enabled" : "disabled"));
@@ -623,7 +624,7 @@ void LibNMInterface::handleStateChange(
         NMDevice* nmDevice,
         LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     ScopedLock updateLock(nmInterface->wifiLock);
     NMDeviceState oldState = nmInterface->lastNMState;
     nmInterface->lastNMState = nm_device_get_state(nmDevice);
@@ -706,7 +707,7 @@ void LibNMInterface::handleConnectionChange(
         NMDeviceWifi* wifiDevice,
         LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     ScopedLock updateLock(nmInterface->wifiLock);
     NMAccessPoint* nmConnected = nmInterface->getConnectedNmAp();
     if (nmConnected == nullptr)
@@ -733,7 +734,7 @@ void LibNMInterface::handleApChange(
         NMDeviceWifi* wifiDevice,
         LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     ScopedLock updateLock(nmInterface->wifiLock);
     nmInterface->visibleAPs.clearQuick();
     StringArray processedAPHashes;
@@ -758,7 +759,7 @@ void LibNMInterface::handleApChange(
  */
 bool LibNMInterface::asyncEnable(LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     nm_client_wireless_set_enabled(nmInterface->nmClient, true);
     return true;
 }
@@ -768,7 +769,7 @@ bool LibNMInterface::asyncEnable(LibNMInterface* nmInterface)
  */
 bool LibNMInterface::asyncDisable(LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     nm_client_wireless_set_enabled(nmInterface->nmClient, false);
     return true;
 }
@@ -778,7 +779,7 @@ bool LibNMInterface::asyncDisable(LibNMInterface* nmInterface)
  */
 bool LibNMInterface::asyncConnect(LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     const ScopedLock lock(nmInterface->wifiLock);
     WifiAccessPoint pendingAP = nmInterface->pendingConnect;
     String psk = nmInterface->pendingPsk;
@@ -875,7 +876,7 @@ bool LibNMInterface::asyncConnect(LibNMInterface* nmInterface)
  */
 bool LibNMInterface::asyncDisconnect(LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     nm_device_disconnect(nmInterface->nmDevice, nullptr, nullptr);
     return true;
 }
@@ -886,7 +887,7 @@ bool LibNMInterface::asyncDisconnect(LibNMInterface* nmInterface)
  */
 bool LibNMInterface::asyncSignalCheckConnected(LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     ScopedLock updateLock(nmInterface->wifiLock);
     NMAccessPoint* connectedAP = nmInterface->getConnectedNmAp();
     nmInterface->connectedAP.setSignalStrength
@@ -900,7 +901,7 @@ bool LibNMInterface::asyncSignalCheckConnected(LibNMInterface* nmInterface)
  */
 bool LibNMInterface::asyncSignalCheckAll(LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     handleApChange(nmInterface->nmWifiDevice, nmInterface);
     asyncSignalCheckConnected(nmInterface);
     return true;
@@ -911,7 +912,7 @@ bool LibNMInterface::asyncSignalCheckAll(LibNMInterface* nmInterface)
  */
 bool LibNMInterface::asyncUpdateAll(LibNMInterface* nmInterface)
 {
-    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
     ScopedLock updateLock(nmInterface->wifiLock);
     nmInterface->connectedAP = createNMWifiAccessPoint
             (nmInterface->getConnectedNmAp());

@@ -4794,6 +4794,8 @@
         </df>
       </df>
       <df name="documentation">
+        <in>ColourIds.h</in>
+        <in>sorted.cpp</in>
       </df>
       <df name="JuceLibraryCode">
         <in>AppConfig.h</in>
@@ -4876,6 +4878,12 @@
             <in>BluetoothDevice.h</in>
             <in>BluetoothStatus.cpp</in>
             <in>BluetoothStatus.h</in>
+            <in>BluezAdapter.cpp</in>
+            <in>BluezAdapter.h</in>
+            <in>GDBusProxyObject.cpp</in>
+            <in>GDBusProxyObject.h</in>
+            <in>GVariantConverter.cpp</in>
+            <in>GVariantConverter.h</in>
           </df>
           <df name="Wifi">
             <in>JsonWifiInterface.cpp</in>
@@ -5018,6 +5026,7 @@
         <in>AppLauncher.h</in>
         <in>AssetFiles.cpp</in>
         <in>AssetFiles.h</in>
+        <in>ColourIds.h</in>
         <in>LocaleText.cpp</in>
         <in>Localized.cpp</in>
         <in>Localized.h</in>

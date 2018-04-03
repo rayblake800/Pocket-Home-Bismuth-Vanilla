@@ -337,6 +337,10 @@
       <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppLauncher.h"/>
       <FILE id="U4ygJ9" name="AssetFiles.cpp" compile="1" resource="0" file="Source/AssetFiles.cpp"/>
       <FILE id="cXrxti" name="AssetFiles.h" compile="0" resource="0" file="Source/AssetFiles.h"/>
+      <FILE id="enqIe3" name="GLibEventHandler.cpp" compile="1" resource="0"
+            file="Source/GLibEventHandler.cpp"/>
+      <FILE id="JxYitG" name="GLibEventHandler.h" compile="0" resource="0"
+            file="Source/GLibEventHandler.h"/>
       <FILE id="ec2YX8" name="Localized.cpp" compile="1" resource="0" file="Source/Localized.cpp"/>
       <FILE id="IG78EN" name="Localized.h" compile="0" resource="0" file="Source/Localized.h"/>
       <FILE id="GJ9TER" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
@@ -350,14 +354,14 @@
             file="Source/PokeLookAndFeel.cpp"/>
       <FILE id="g1eykD" name="PokeLookAndFeel.h" compile="0" resource="0"
             file="Source/PokeLookAndFeel.h"/>
-      <FILE id="Yl2sdL" name="ResourceManager.cpp" compile="1" resource="0"
-            file="Source/ResourceManager.cpp"/>
-      <FILE id="WuV2YN" name="ResourceManager.h" compile="0" resource="0"
-            file="Source/ResourceManager.h"/>
       <FILE id="X7wz2M" name="RelativeLayoutManager.cpp" compile="1" resource="0"
             file="Source/RelativeLayoutManager.cpp"/>
       <FILE id="r4oAKB" name="RelativeLayoutManager.h" compile="0" resource="0"
             file="Source/RelativeLayoutManager.h"/>
+      <FILE id="Yl2sdL" name="ResourceManager.cpp" compile="1" resource="0"
+            file="Source/ResourceManager.cpp"/>
+      <FILE id="WuV2YN" name="ResourceManager.h" compile="0" resource="0"
+            file="Source/ResourceManager.h"/>
       <FILE id="VTewwc" name="TempTimer.cpp" compile="1" resource="0" file="Source/TempTimer.cpp"/>
       <FILE id="idqyCx" name="TempTimer.h" compile="0" resource="0" file="Source/TempTimer.h"/>
       <FILE id="Ury6Cc" name="Utils.cpp" compile="1" resource="0" file="Source/Utils.cpp"/>
