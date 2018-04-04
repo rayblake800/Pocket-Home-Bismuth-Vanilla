@@ -1,8 +1,8 @@
 /**
  * @file WifiEventHandler
  * 
- * @brief WifiEventHandler runs a GLib event loop used for interacting with
- *         the wifi network manager.
+ * @brief WifiEventHandler interacts with LibNM and the GLib event loop
+ *         to simplify the use of LibNM functionality.
  */
 #pragma once
 #include "GLibEventHandler.h"
@@ -15,12 +15,12 @@ class WifiEventHandler : public GLibEventHandler
 {
 public:
     /**
-     * Loads client and device objects, and starts the signal thread.
+     * Initializes LibNM functionality.
      */
     WifiEventHandler();
 
     /**
-     * Shuts down the signal thread, removing all signal handlers.
+     * Shuts LibNM functionality and removes all callback functions.
      */
     virtual ~WifiEventHandler();
 

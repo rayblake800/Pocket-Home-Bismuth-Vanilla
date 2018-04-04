@@ -174,6 +174,9 @@
         <element flagsID="2" commonFlags="-march=native -std=gnu++14"/>
       </flagsDictionary>
       <codeAssistance>
+        <transientMacros>
+          <Elem>LINUX=true</Elem>
+        </transientMacros>
       </codeAssistance>
       <makefileType>
         <makeTool>
@@ -525,7 +528,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -674,7 +677,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -1004,7 +1007,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -1062,7 +1065,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -1120,7 +1123,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -1178,7 +1181,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -1659,7 +1662,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -1951,7 +1954,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -3262,7 +3265,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -3675,7 +3678,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -3984,7 +3987,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>
@@ -4040,7 +4043,7 @@
             <Elem>JucePlugin_Build_Standalone=0</Elem>
             <Elem>JucePlugin_Build_VST3=0</Elem>
             <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=1</Elem>
+            <Elem>LINUX=true</Elem>
             <Elem>_DEBUG=1</Elem>
           </preprocessorList>
         </ccTool>

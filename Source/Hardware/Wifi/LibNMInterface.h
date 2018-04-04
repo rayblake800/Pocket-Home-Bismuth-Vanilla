@@ -13,7 +13,6 @@
 #include <nm-device.h>
 #include <nm-device-wifi.h>
 #include "WindowFocus.h"
-#include "WifiEventHandler.h"
 #include "WifiStateManager.h"
 
 class LibNMInterface : public WifiStateManager::NetworkInterface,

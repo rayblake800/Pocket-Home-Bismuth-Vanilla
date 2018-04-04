@@ -40,7 +40,7 @@
 		B348CBF81B271A6CD2086679 = {isa = PBXBuildFile; fileRef = B6F8190575C8F212449D8A4D; };
 		53ABC72156245976545D2DB1 = {isa = PBXBuildFile; fileRef = FC878DBC8B2956374943DFE4; };
 		14959F2CC2268E31BF4D5E05 = {isa = PBXBuildFile; fileRef = F5295A9FB74112D39967B9FE; };
-		BD05C083375E0DFB4058E3DC = {isa = PBXBuildFile; fileRef = D12399FE6463311DBEEC06B5; };
+		C40609296853661FA8474AF7 = {isa = PBXBuildFile; fileRef = 55FB232EDA1450C232B65FFE; };
 		F0E77AC31120CDDC5B9A110D = {isa = PBXBuildFile; fileRef = 9430064C1E372F7949061BB6; };
 		FB42D550D6134B5788239E93 = {isa = PBXBuildFile; fileRef = D1232B45052DF74E9F94FBEF; };
 		7593A587F1D039E505260F05 = {isa = PBXBuildFile; fileRef = DD2505E3F0EAFCF94A273BDB; };
@@ -97,7 +97,7 @@
 		91B3DEFDD3AC1F3509E6445C = {isa = PBXBuildFile; fileRef = 270CF4846AB1D86C6AE5034E; };
 		F56C0B6711CF29FA08BAF22E = {isa = PBXBuildFile; fileRef = A8C6822B1236AE6932C42BCA; };
 		814FB17C46A3C37292ACE0AE = {isa = PBXBuildFile; fileRef = CD70F037EAD968658A93B899; };
-		125AD0B3688DCD5FA4CA7539 = {isa = PBXBuildFile; fileRef = F3FD572250ED83BA55B91618; };
+		783E8565C3FBB658039CC984 = {isa = PBXBuildFile; fileRef = A75250E08104A263AC3BADD2; };
 		E661B3DB62D36786E567D68D = {isa = PBXBuildFile; fileRef = EEB8695D07E2FB33041EB6F7; };
 		1F4AD938788C2C305A25D230 = {isa = PBXBuildFile; fileRef = 00F169F4F344BBF6892637D1; };
 		B83E850F0C89C1DEFE2BA229 = {isa = PBXBuildFile; fileRef = D4C397278DEABA5F2E9F78DC; };
@@ -119,6 +119,7 @@
 		00F169F4F344BBF6892637D1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Source/Main.cpp; sourceTree = "SOURCE_ROOT"; };
 		029C63E05534E967F4EF0E66 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GDBusProxyObject.h; path = ../../Source/Hardware/Bluetooth/GDBusProxyObject.h; sourceTree = "SOURCE_ROOT"; };
 		03B199F254A33BC958ADCCB3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiAccessPoint.h; path = ../../Source/Hardware/Wifi/WifiAccessPoint.h; sourceTree = "SOURCE_ROOT"; };
+		03D6C04565CB9E3587DE89FF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LibNMHandler.h; path = ../../Source/Hardware/Wifi/LibNMHandler.h; sourceTree = "SOURCE_ROOT"; };
 		0417407B0A67DC4B35ACA63F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurableImageComponent.cpp; path = ../../Source/Configuration/Configurables/ConfigurableImageComponent.cpp; sourceTree = "SOURCE_ROOT"; };
 		0435754A49BBF397D104ED34 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Password.cpp; path = "../../Source/Pages/Password Pages/Password.cpp"; sourceTree = "SOURCE_ROOT"; };
 		046C580CAE38B6EA5D85FF85 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwitchComponent.h; path = ../../Source/Components/Widgets/SwitchComponent.h; sourceTree = "SOURCE_ROOT"; };
@@ -136,7 +137,6 @@
 		1D8162A752D1787B242CCBD8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppConfigFile.cpp; path = ../../Source/Configuration/AppConfigFile.cpp; sourceTree = "SOURCE_ROOT"; };
 		2325077490EB21F07B037BDA = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScrollingAppMenu.cpp; path = "../../Source/Pages/Home Page/AppMenu/Menu Types/ScrollingAppMenu.cpp"; sourceTree = "SOURCE_ROOT"; };
 		243FA0B57C56989919E43EF7 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-App.plist"; path = "Info-App.plist"; sourceTree = "SOURCE_ROOT"; };
-		2485D3B847458DF677BB883E = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiEventHandler.h; path = ../../Source/Hardware/Wifi/WifiEventHandler.h; sourceTree = "SOURCE_ROOT"; };
 		25A4A344048C511FDA2BB59D = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigurableImageComponent.h; path = ../../Source/Configuration/Configurables/ConfigurableImageComponent.h; sourceTree = "SOURCE_ROOT"; };
 		25C5392C32076B1A62B3A0F9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BluezAdapter.h; path = ../../Source/Hardware/Bluetooth/BluezAdapter.h; sourceTree = "SOURCE_ROOT"; };
 		268002476783FE4870678DF8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BinaryData.h; path = ../../JuceLibraryCode/BinaryData.h; sourceTree = "SOURCE_ROOT"; };
@@ -185,6 +185,7 @@
 		53555E68B86BAA3CBA7202AE = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NewDesktopAppEditor.h; path = "../../Source/Pages/Home Page/AppMenu/Menu Editors/NewDesktopAppEditor.h"; sourceTree = "SOURCE_ROOT"; };
 		53B62C37D0EB4AFFFEA70E53 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DateTimePage.cpp; path = ../../Source/Pages/DateTimePage.cpp; sourceTree = "SOURCE_ROOT"; };
 		547633A7F2EFE7E83E0A1439 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FolderMenuItem.h; path = "../../Source/Pages/Home Page/AppMenu/Menu Items/FolderMenuItem.h"; sourceTree = "SOURCE_ROOT"; };
+		55FB232EDA1450C232B65FFE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LibNMHandler.cpp; path = ../../Source/Hardware/Wifi/LibNMHandler.cpp; sourceTree = "SOURCE_ROOT"; };
 		561902FA100E5691DA65D630 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BluetoothSettingsComponent.h; path = "../../Source/Pages/Settings Page/BluetoothSettingsComponent.h"; sourceTree = "SOURCE_ROOT"; };
 		57659D23D03F4EFB03BE51DB = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FelPage.cpp; path = "../../Source/Pages/Power Page/FelPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		57B06866F00441615DF61BE2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigurableComponent.h; path = ../../Source/Configuration/Configurables/ConfigurableComponent.h; sourceTree = "SOURCE_ROOT"; };
@@ -192,7 +193,6 @@
 		5AF909B236E2870810538A2B = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AssetFiles.h; path = ../../Source/AssetFiles.h; sourceTree = "SOURCE_ROOT"; };
 		5D25EB11F338505ADE81799D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SetPasswordPage.cpp; path = "../../Source/Pages/Password Pages/SetPasswordPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		5D73F24B9F065E0E81F405EB = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiSettingsComponent.cpp; path = "../../Source/Pages/Settings Page/WifiSettingsComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
-		5E2C2E9342D72BCAE98D61BA = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GLibEventHandler.h; path = ../../Source/GLibEventHandler.h; sourceTree = "SOURCE_ROOT"; };
 		5F465EF5D7C4E41ED0240D5D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LibNMInterface.cpp; path = ../../Source/Hardware/Wifi/LibNMInterface.cpp; sourceTree = "SOURCE_ROOT"; };
 		5F90177A91406782A4A735B5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GVariantConverter.h; path = ../../Source/Hardware/Bluetooth/GVariantConverter.h; sourceTree = "SOURCE_ROOT"; };
 		63F235E0AED98F95153223EA = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SwitchComponent.cpp; path = ../../Source/Components/Widgets/SwitchComponent.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -246,6 +246,7 @@
 		A48FC99C55DE91D21FB248AC = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Localized.h; path = ../../Source/Localized.h; sourceTree = "SOURCE_ROOT"; };
 		A5C3550050B49313DB2BD1D2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = InputSettingsPage.h; path = "../../Source/Pages/Input Settings Page/InputSettingsPage.h"; sourceTree = "SOURCE_ROOT"; };
 		A5EFBD60F0B80DD35AE13D0C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PageAppFolder.h; path = "../../Source/Pages/Home Page/AppMenu/Menu Folders/PageAppFolder.h"; sourceTree = "SOURCE_ROOT"; };
+		A75250E08104A263AC3BADD2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GLibSignalHandler.cpp; path = ../../Source/GLibSignalHandler.cpp; sourceTree = "SOURCE_ROOT"; };
 		A8C6822B1236AE6932C42BCA = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppLauncher.cpp; path = ../../Source/AppLauncher.cpp; sourceTree = "SOURCE_ROOT"; };
 		A932C608F3FBD298688AA45B = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CategoryPopupEditor.h; path = "../../Source/Pages/Home Page/AppMenu/Menu Editors/CategoryPopupEditor.h"; sourceTree = "SOURCE_ROOT"; };
 		AC46DD44C5C0F845ADC4436C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KeybindingPage.cpp; path = "../../Source/Pages/Input Settings Page/KeybindingPage.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -284,7 +285,6 @@
 		CF228C94BBEE2565CF8D7391 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConnectionPage.h; path = "../../Source/Pages/Settings Page/ConnectionPage.h"; sourceTree = "SOURCE_ROOT"; };
 		D0D6C84698A73DBD8D8BF6C4 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BluetoothStatus.cpp; path = ../../Source/Hardware/Bluetooth/BluetoothStatus.cpp; sourceTree = "SOURCE_ROOT"; };
 		D1232B45052DF74E9F94FBEF = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiStateManager.cpp; path = ../../Source/Hardware/Wifi/WifiStateManager.cpp; sourceTree = "SOURCE_ROOT"; };
-		D12399FE6463311DBEEC06B5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiEventHandler.cpp; path = ../../Source/Hardware/Wifi/WifiEventHandler.cpp; sourceTree = "SOURCE_ROOT"; };
 		D1294451B8BD3BB508571129 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurableImageButton.cpp; path = ../../Source/Configuration/Configurables/ConfigurableImageButton.cpp; sourceTree = "SOURCE_ROOT"; };
 		D4C397278DEABA5F2E9F78DC = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PageFactory.cpp; path = ../../Source/PageFactory.cpp; sourceTree = "SOURCE_ROOT"; };
 		D6C2C672B5DB42B341217F92 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuPopupEditor.cpp; path = "../../Source/Pages/Home Page/AppMenu/Menu Editors/AppMenuPopupEditor.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -293,6 +293,7 @@
 		D8560E07699CC6FFA71E9D86 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiSettingsPage.cpp; path = "../../Source/Pages/Settings Page/WifiSettingsPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		D917274C77AE3409DB48F152 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HomePage.cpp; path = "../../Source/Pages/Home Page/HomePage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		DA4E58E9574DC56015EEA841 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DrawableImageButton.cpp; path = ../../Source/Components/Widgets/DrawableImageButton.cpp; sourceTree = "SOURCE_ROOT"; };
+		DAE3B1D37437305C2B7645B8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GLibSignalHandler.h; path = ../../Source/GLibSignalHandler.h; sourceTree = "SOURCE_ROOT"; };
 		DD2505E3F0EAFCF94A273BDB = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = JsonWifiInterface.cpp; path = ../../Source/Hardware/Wifi/JsonWifiInterface.cpp; sourceTree = "SOURCE_ROOT"; };
 		DD68F762B06896E2F16739B2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ClockLabel.h; path = "../../Source/Pages/Home Page/Widgets/ClockLabel.h"; sourceTree = "SOURCE_ROOT"; };
 		DDC1FF818B15E0369A3F360E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PowerPage.cpp; path = "../../Source/Pages/Power Page/PowerPage.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -318,7 +319,6 @@
 		F105F43920807C7BCB20B876 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AdvancedSettingsPage.cpp; path = ../../Source/Pages/AdvancedSettingsPage.cpp; sourceTree = "SOURCE_ROOT"; };
 		F14144CF97951CF23EEDECB1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesktopEntries.h; path = "../../Source/Pages/Home Page/DesktopEntries.h"; sourceTree = "SOURCE_ROOT"; };
 		F1E10BDDEA371EA541611756 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SettingsPage.h; path = ../../Source/Pages/SettingsPage/SettingsPage.h; sourceTree = "SOURCE_ROOT"; };
-		F3FD572250ED83BA55B91618 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GLibEventHandler.cpp; path = ../../Source/GLibEventHandler.cpp; sourceTree = "SOURCE_ROOT"; };
 		F512B9BE38C425A85878EFF5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RemovePasswordPage.h; path = "../../Source/Pages/Password Pages/RemovePasswordPage.h"; sourceTree = "SOURCE_ROOT"; };
 		F5295A9FB74112D39967B9FE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GVariantConverter.cpp; path = ../../Source/Hardware/Bluetooth/GVariantConverter.cpp; sourceTree = "SOURCE_ROOT"; };
 		F6611C402BB2F3A63AC2C0CD = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PocketHomeWindow.h; path = ../../Source/Components/PocketHomeWindow.h; sourceTree = "SOURCE_ROOT"; };
@@ -400,8 +400,8 @@
 					F5295A9FB74112D39967B9FE,
 					5F90177A91406782A4A735B5, ); name = Bluetooth; sourceTree = "<group>"; };
 		FCAE40D7F9CB5383DE0C8EEB = {isa = PBXGroup; children = (
-					D12399FE6463311DBEEC06B5,
-					2485D3B847458DF677BB883E,
+					55FB232EDA1450C232B65FFE,
+					03D6C04565CB9E3587DE89FF,
 					9430064C1E372F7949061BB6,
 					03B199F254A33BC958ADCCB3,
 					D1232B45052DF74E9F94FBEF,
@@ -547,8 +547,8 @@
 					49A659CB713C5790E90A52B1,
 					CD70F037EAD968658A93B899,
 					5AF909B236E2870810538A2B,
-					F3FD572250ED83BA55B91618,
-					5E2C2E9342D72BCAE98D61BA,
+					A75250E08104A263AC3BADD2,
+					DAE3B1D37437305C2B7645B8,
 					EEB8695D07E2FB33041EB6F7,
 					A48FC99C55DE91D21FB248AC,
 					00F169F4F344BBF6892637D1,
@@ -784,7 +784,7 @@
 					B348CBF81B271A6CD2086679,
 					53ABC72156245976545D2DB1,
 					14959F2CC2268E31BF4D5E05,
-					BD05C083375E0DFB4058E3DC,
+					C40609296853661FA8474AF7,
 					F0E77AC31120CDDC5B9A110D,
 					FB42D550D6134B5788239E93,
 					7593A587F1D039E505260F05,
@@ -840,7 +840,7 @@
 					91B3DEFDD3AC1F3509E6445C,
 					F56C0B6711CF29FA08BAF22E,
 					814FB17C46A3C37292ACE0AE,
-					125AD0B3688DCD5FA4CA7539,
+					783E8565C3FBB658039CC984,
 					E661B3DB62D36786E567D68D,
 					1F4AD938788C2C305A25D230,
 					B83E850F0C89C1DEFE2BA229,

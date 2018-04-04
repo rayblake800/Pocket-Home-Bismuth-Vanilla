@@ -126,10 +126,9 @@
                 file="Source/Hardware/Bluetooth/GVariantConverter.h"/>
         </GROUP>
         <GROUP id="{E98D5B9C-4E34-6090-B2F4-D1F92AFB0C81}" name="Wifi">
-          <FILE id="qADzaR" name="WifiEventHandler.cpp" compile="1" resource="0"
-                file="Source/Hardware/Wifi/WifiEventHandler.cpp"/>
-          <FILE id="LGedGN" name="WifiEventHandler.h" compile="0" resource="0"
-                file="Source/Hardware/Wifi/WifiEventHandler.h"/>
+          <FILE id="qADzaR" name="LibNMHandler.cpp" compile="1" resource="0"
+                file="Source/Hardware/Wifi/LibNMHandler.cpp"/>
+          <FILE id="LGedGN" name="LibNMHandler.h" compile="0" resource="0" file="Source/Hardware/Wifi/LibNMHandler.h"/>
           <FILE id="oVu111" name="WifiAccessPoint.cpp" compile="1" resource="0"
                 file="Source/Hardware/Wifi/WifiAccessPoint.cpp"/>
           <FILE id="Oipn2r" name="WifiAccessPoint.h" compile="0" resource="0"
@@ -341,10 +340,10 @@
       <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppLauncher.h"/>
       <FILE id="U4ygJ9" name="AssetFiles.cpp" compile="1" resource="0" file="Source/AssetFiles.cpp"/>
       <FILE id="cXrxti" name="AssetFiles.h" compile="0" resource="0" file="Source/AssetFiles.h"/>
-      <FILE id="enqIe3" name="GLibEventHandler.cpp" compile="1" resource="0"
-            file="Source/GLibEventHandler.cpp"/>
-      <FILE id="JxYitG" name="GLibEventHandler.h" compile="0" resource="0"
-            file="Source/GLibEventHandler.h"/>
+      <FILE id="enqIe3" name="GLibSignalHandler.cpp" compile="1" resource="0"
+            file="Source/GLibSignalHandler.cpp"/>
+      <FILE id="JxYitG" name="GLibSignalHandler.h" compile="0" resource="0"
+            file="Source/GLibSignalHandler.h"/>
       <FILE id="ec2YX8" name="Localized.cpp" compile="1" resource="0" file="Source/Localized.cpp"/>
       <FILE id="IG78EN" name="Localized.h" compile="0" resource="0" file="Source/Localized.h"/>
       <FILE id="GJ9TER" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
