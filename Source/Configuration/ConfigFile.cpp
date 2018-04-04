@@ -53,9 +53,12 @@ bool ConfigFile::operator==(const ConfigFile& rhs) const
  */
 ConfigFile::Listener::~Listener()
 {
-    for (ConfigFile* config : configFiles)
+    const ScopedLock removalLock(configKeyAccess);
+    while (configKeyMap.begin() != configKeyMap.end())
     {
-        config->removeListener(this);
+        ConfigFile* trackedConfig = configKeyMap.begin()->first;
+        const ScopedUnlock removeUnlock(configKeyAccess);
+        trackedConfig->removeListener(this);
     }
 }
 
@@ -64,10 +67,12 @@ ConfigFile::Listener::~Listener()
  */
 void ConfigFile::Listener::loadAllConfigProperties()
 {
-    for (ConfigFile* config : configFiles)
+    const ScopedLock updateLock(configKeyAccess);
+    for (auto it = configKeyMap.begin(); it != configKeyMap.end(); it++)
     {
-        for (const String& key : config->listenerKeys[this])
+        for (const String& key : it->second)
         {
+            const ScopedUnlock notifyUnlock(configKeyAccess);
             configValueChanged(key);
         }
     }
@@ -80,36 +85,31 @@ void ConfigFile::Listener::loadAllConfigProperties()
 void ConfigFile::addListener(ConfigFile::Listener* listener,
         StringArray trackedKeys)
 {
-    const ScopedLock lock(listenerLock);
-    listener->configFiles.addIfNotAlreadyThere(this);
-    if (listenerKeys.count(listener) == 0)
-    {
-        listenerKeys[listener] = trackedKeys;
-    }
-    else
-    {
-        listenerKeys[listener].addArray(trackedKeys);
-    }
-    listenerKeys[listener].removeDuplicates(false);
+    const ScopedLock keyMapLock(listener->configKeyAccess);
+    listener->configKeyMap[this].mergeArray(trackedKeys,false);
+    const ScopedUnlock keyMapUnlock(listener->configKeyAccess);
     for (const String& key : trackedKeys)
     {
         keyListeners[key].addIfNotAlreadyThere(listener);
     }
 }
 
-
 /**
  * Removes a listener from this ConfigFile.
  */
 void ConfigFile::removeListener(ConfigFile::Listener* listener)
 {
+    
+    const ScopedLock keyMapLock(listener->configKeyAccess);
+    StringArray trackedKeys = listener->configKeyMap[this];
+    listener->configKeyMap.erase(this);
+    const ScopedUnlock keyMapUnlock(listener->configKeyAccess);
     const ScopedLock lock(listenerLock);
-    for (const String& key : listenerKeys[listener])
+    for (const String& key : trackedKeys)
     {
         keyListeners[key].removeAllInstancesOf(listener);
+        notificationQueue[key].removeAllInstancesOf(listener);
     }
-    listenerKeys[listener].clear();
-    listener->configFiles.removeAllInstancesOf(this);
 }
 
 /**
@@ -118,9 +118,17 @@ void ConfigFile::removeListener(ConfigFile::Listener* listener)
 void ConfigFile::notifyListeners(String key)
 {
     const ScopedLock lock(listenerLock);
-    for (Listener* listener : keyListeners[key])
+    //since notifications are separated by key, and no variation exists between
+    //key notifications, there's no need to make sure the queue is starting out
+    //empty.
+    notificationQueue[key].addArray(keyListeners[key]);
+    while(!notificationQueue[key].isEmpty())
     {
-        listener->configValueChanged(key);
+        Listener* toNotify = notificationQueue[key].removeAndReturn(
+                notificationQueue[key].size() - 1);
+        const ScopedUnlock signalUnlock(listenerLock);
+        const MessageManagerLock mmLock;
+        toNotify->configValueChanged(key);
     }
 }
 

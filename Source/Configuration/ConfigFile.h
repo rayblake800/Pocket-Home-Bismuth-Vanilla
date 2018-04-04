@@ -134,7 +134,8 @@ public:
         virtual void configValueChanged(String propertyKey) = 0;
 
         //holds references to all ConfigFiles this listener follows.
-        Array<ConfigFile*> configFiles;
+        CriticalSection configKeyAccess; 
+        std::map<ConfigFile*, StringArray> configKeyMap;
     };
 
     /**
@@ -309,16 +310,9 @@ private:
     std::map<String, String> stringValues;
     std::map<String, bool> boolValues;
 
-    /*
-     * Map listeners to their tracked keys and tracked keys to their listeners.
-     * Data is tracked both ways because the decreased search time is worth
-     * the increased memory use.
-     * 
-     * Realistically though, it probably doesn't make much of a difference
-     * either way, so if there is ever any real version to change this, go ahead.
-     */
-    std::map<Listener*, StringArray> listenerKeys;
+    
     std::map<String, Array < Listener*>> keyListeners;
+    std::map<String, Array < Listener*>> notificationQueue;
 
     //prevents concurrent access to listeners.
     CriticalSection listenerLock;
