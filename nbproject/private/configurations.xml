@@ -4892,6 +4892,8 @@
             <in>LibNMInterface.h</in>
             <in>WifiAccessPoint.cpp</in>
             <in>WifiAccessPoint.h</in>
+            <in>WifiEventHandler.cpp</in>
+            <in>WifiEventHandler.h</in>
             <in>WifiStateManager.cpp</in>
             <in>WifiStateManager.h</in>
           </df>
@@ -5027,6 +5029,8 @@
         <in>AssetFiles.cpp</in>
         <in>AssetFiles.h</in>
         <in>ColourIds.h</in>
+        <in>GLibEventHandler.cpp</in>
+        <in>GLibEventHandler.h</in>
         <in>LocaleText.cpp</in>
         <in>Localized.cpp</in>
         <in>Localized.h</in>
@@ -5041,6 +5045,8 @@
         <in>RelativeLayoutManager.h</in>
         <in>ResourceManager.cpp</in>
         <in>ResourceManager.h</in>
+        <in>SafeSignaler.cpp</in>
+        <in>SafeSignaler.h</in>
         <in>TempTimer.cpp</in>
         <in>TempTimer.h</in>
         <in>Utils.cpp</in>

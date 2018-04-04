@@ -13,10 +13,11 @@
 #include <nm-device.h>
 #include <nm-device-wifi.h>
 #include "WindowFocus.h"
+#include "WifiEventHandler.h"
 #include "WifiStateManager.h"
 
 class LibNMInterface : public WifiStateManager::NetworkInterface,
-private WindowFocus::Listener
+private WindowFocus::Listener, private WifiEventHandler
 {
 public:
     LibNMInterface();
@@ -84,16 +85,6 @@ protected:
             String psk = String()) override;
 
     /**
-     * Asynchronously checks the signal strength of the connected access point.
-     */
-    void updateConnectedSignalStrength();
-
-    /**
-     * Asynchronously checks the signal strength of all visible access points.
-     */
-    void updateVisibleSignalStrengths();
-
-    /**
      * Asynchronously checks the wifi device list, connection state, and 
      * active and pending connections.
      */
@@ -121,11 +112,6 @@ private:
      */
     void nmSignalSubscribe();
 
-    /**
-     * Remove all subscribed LibNMInterface callback functions from the
-     * network manager client and the wifi device.
-     */
-    void nmSignalUnsubscribe();
 
     /**
      * Called whenever the application window gains focus in order to subscribe
@@ -292,8 +278,8 @@ private:
 
     /**
      * This callback runs when device wlan0 signals that a new wifi access point
-     * is visible or an old one has been lost.  This will update the nmInterface's 
-     * record of visible access points.
+     * is visible or an old one has been lost.  This will update the 
+     * nmInterface's record of visible access points.
      * 
      * @param wifiDevice    The wifi device wlan0.
      * 
@@ -303,94 +289,11 @@ private:
             NMDeviceWifi* wifiDevice,
             LibNMInterface* nmInterface);
 
-    /**
-     * Runs on the GLib main event loop to turn on wifi.
-     * 
-     * @param nmInterface  The nmInterface that scheduled this action.
-     * 
-     * @return true to remove this callback from the GLib main event loop.
-     */
-    static bool asyncEnable(LibNMInterface* nmInterface);
-
-    /**
-     * Runs on the GLib main event loop to turn off wifi.
-     * 
-     * @param nmInterface  The nmInterface that scheduled this action.
-     * 
-     * @return true to remove this callback from the GLib main event loop.
-     */
-    static bool asyncDisable(LibNMInterface* nmInterface);
-
-    /**
-     * Runs on the GLib main event loop to initiate a wifi connection.
-     * 
-     * @param nmInterface  The nmInterface that scheduled this action.
-     * 
-     * @return true to remove this callback from the GLib main event loop.
-     */
-    static bool asyncConnect(LibNMInterface* nmInterface);
-
-    /**
-     * Runs on the GLib main event loop to remove a wifi connection.
-     * 
-     * @param nmInterface  The nmInterface that scheduled this action.
-     * 
-     * @return true to remove this callback from the GLib main event loop.
-     */
-    static bool asyncDisconnect(LibNMInterface* nmInterface);
-
-    /**
-     * Runs on the GLib main event loop to update the connected access point's
-     * signal strength.
-     * 
-     * @param nmInterface  The nmInterface that scheduled this action.
-     * 
-     * @return true to remove this callback from the GLib main event loop.
-     */
-    static bool asyncSignalCheckConnected(LibNMInterface* nmInterface);
-
-    /**
-     * Runs on the GLib main event loop to update all access point signal 
-     * strengths.
-     * 
-     * @param nmInterface  The nmInterface that scheduled this action.
-     * 
-     * @return true to remove this callback from the GLib main event loop.
-     */
-    static bool asyncSignalCheckAll(LibNMInterface* nmInterface);
-
-    /**
-     * Runs on the GLib main event loop to update all wifi data.
-     * 
-     * @param nmInterface  The nmInterface that scheduled this action.
-     * 
-     * @return true to remove this callback from the GLib main event loop.
-     */
-    static bool asyncUpdateAll(LibNMInterface* nmInterface);
-
-
     //Prevent concurrent access to the wifi data.  This should be locked
     //any time any of the data members listed beneath it is accessed.
     CriticalSection wifiLock;
 
-    //These saved NetworkManager pointers should not be used outside of GLib
-    //callbacks except to add and remove GSignal sources and handlers.
-    NMClient* nmClient = nullptr;
-    NMDevice* nmDevice = nullptr;
-    NMDeviceWifi* nmWifiDevice = nullptr;
-
-    //Holds the IDs of signal handlers attached to nmClient
-    Array<gulong, CriticalSection> clientSignalHandlers;
-    //Holds the IDs of signal handlers attached to nmDevice
-    Array<gulong, CriticalSection> deviceSignalHandlers;
-    //Holds the IDs of signal handlers attached to nmWifiDevice
-    Array<gulong, CriticalSection> wifiSignalHandlers;
-
     NMDeviceState lastNMState = NM_DEVICE_STATE_UNKNOWN;
-
-    WifiAccessPoint pendingConnect;
-    String pendingPsk;
-    WifiAccessPoint pendingDisconnect;
 
     WifiAccessPoint connectedAP;
     WifiAccessPoint connectingAP;

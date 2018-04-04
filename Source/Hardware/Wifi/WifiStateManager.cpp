@@ -9,7 +9,6 @@ WifiStateManager::WifiStateManager() :
 ResourceManager(sharedResource, stateLock,
 [this]()->ResourceManager::SharedResource*
 {
-
     return new WifiResource(stateLock);
 }) { }
 

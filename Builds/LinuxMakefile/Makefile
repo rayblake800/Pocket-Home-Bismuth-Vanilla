@@ -96,6 +96,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/BluezAdapter_15dceeb8.o \
   $(JUCE_OBJDIR)/GDBusProxyObject_3f38de33.o \
   $(JUCE_OBJDIR)/GVariantConverter_9ef27fa3.o \
+  $(JUCE_OBJDIR)/WifiEventHandler_4abdd61.o \
   $(JUCE_OBJDIR)/WifiAccessPoint_9918f865.o \
   $(JUCE_OBJDIR)/WifiStateManager_eb7649ed.o \
   $(JUCE_OBJDIR)/JsonWifiInterface_80394d0a.o \
@@ -319,6 +320,11 @@ $(JUCE_OBJDIR)/GDBusProxyObject_3f38de33.o: ../../Source/Hardware/Bluetooth/GDBu
 $(JUCE_OBJDIR)/GVariantConverter_9ef27fa3.o: ../../Source/Hardware/Bluetooth/GVariantConverter.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling GVariantConverter.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/WifiEventHandler_4abdd61.o: ../../Source/Hardware/Wifi/WifiEventHandler.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling WifiEventHandler.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/WifiAccessPoint_9918f865.o: ../../Source/Hardware/Wifi/WifiAccessPoint.cpp

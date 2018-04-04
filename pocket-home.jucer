@@ -126,6 +126,10 @@
                 file="Source/Hardware/Bluetooth/GVariantConverter.h"/>
         </GROUP>
         <GROUP id="{E98D5B9C-4E34-6090-B2F4-D1F92AFB0C81}" name="Wifi">
+          <FILE id="qADzaR" name="WifiEventHandler.cpp" compile="1" resource="0"
+                file="Source/Hardware/Wifi/WifiEventHandler.cpp"/>
+          <FILE id="LGedGN" name="WifiEventHandler.h" compile="0" resource="0"
+                file="Source/Hardware/Wifi/WifiEventHandler.h"/>
           <FILE id="oVu111" name="WifiAccessPoint.cpp" compile="1" resource="0"
                 file="Source/Hardware/Wifi/WifiAccessPoint.cpp"/>
           <FILE id="Oipn2r" name="WifiAccessPoint.h" compile="0" resource="0"

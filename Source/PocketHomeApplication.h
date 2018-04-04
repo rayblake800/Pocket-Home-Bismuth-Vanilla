@@ -7,7 +7,6 @@
 
 #pragma once
 #include "JuceHeader.h"
-#include "GLibEventHandler.h"
 #include "PocketHomeWindow.h"
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
@@ -74,9 +73,4 @@ private:
     //only ComponentConfigFile object, to be passed by reference to any objects 
     //that depend on it.
     ComponentConfigFile componentConfig;
-    
-    /**
-     * Asynchronously handles glib events for the entire program instance.
-     */
-    GLibEventHandler glibThread;
 };

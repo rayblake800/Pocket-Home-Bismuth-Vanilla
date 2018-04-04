@@ -40,6 +40,7 @@
 		B348CBF81B271A6CD2086679 = {isa = PBXBuildFile; fileRef = B6F8190575C8F212449D8A4D; };
 		53ABC72156245976545D2DB1 = {isa = PBXBuildFile; fileRef = FC878DBC8B2956374943DFE4; };
 		14959F2CC2268E31BF4D5E05 = {isa = PBXBuildFile; fileRef = F5295A9FB74112D39967B9FE; };
+		BD05C083375E0DFB4058E3DC = {isa = PBXBuildFile; fileRef = D12399FE6463311DBEEC06B5; };
 		F0E77AC31120CDDC5B9A110D = {isa = PBXBuildFile; fileRef = 9430064C1E372F7949061BB6; };
 		FB42D550D6134B5788239E93 = {isa = PBXBuildFile; fileRef = D1232B45052DF74E9F94FBEF; };
 		7593A587F1D039E505260F05 = {isa = PBXBuildFile; fileRef = DD2505E3F0EAFCF94A273BDB; };
@@ -135,6 +136,7 @@
 		1D8162A752D1787B242CCBD8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppConfigFile.cpp; path = ../../Source/Configuration/AppConfigFile.cpp; sourceTree = "SOURCE_ROOT"; };
 		2325077490EB21F07B037BDA = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScrollingAppMenu.cpp; path = "../../Source/Pages/Home Page/AppMenu/Menu Types/ScrollingAppMenu.cpp"; sourceTree = "SOURCE_ROOT"; };
 		243FA0B57C56989919E43EF7 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-App.plist"; path = "Info-App.plist"; sourceTree = "SOURCE_ROOT"; };
+		2485D3B847458DF677BB883E = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiEventHandler.h; path = ../../Source/Hardware/Wifi/WifiEventHandler.h; sourceTree = "SOURCE_ROOT"; };
 		25A4A344048C511FDA2BB59D = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigurableImageComponent.h; path = ../../Source/Configuration/Configurables/ConfigurableImageComponent.h; sourceTree = "SOURCE_ROOT"; };
 		25C5392C32076B1A62B3A0F9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BluezAdapter.h; path = ../../Source/Hardware/Bluetooth/BluezAdapter.h; sourceTree = "SOURCE_ROOT"; };
 		268002476783FE4870678DF8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BinaryData.h; path = ../../JuceLibraryCode/BinaryData.h; sourceTree = "SOURCE_ROOT"; };
@@ -282,6 +284,7 @@
 		CF228C94BBEE2565CF8D7391 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConnectionPage.h; path = "../../Source/Pages/Settings Page/ConnectionPage.h"; sourceTree = "SOURCE_ROOT"; };
 		D0D6C84698A73DBD8D8BF6C4 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BluetoothStatus.cpp; path = ../../Source/Hardware/Bluetooth/BluetoothStatus.cpp; sourceTree = "SOURCE_ROOT"; };
 		D1232B45052DF74E9F94FBEF = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiStateManager.cpp; path = ../../Source/Hardware/Wifi/WifiStateManager.cpp; sourceTree = "SOURCE_ROOT"; };
+		D12399FE6463311DBEEC06B5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiEventHandler.cpp; path = ../../Source/Hardware/Wifi/WifiEventHandler.cpp; sourceTree = "SOURCE_ROOT"; };
 		D1294451B8BD3BB508571129 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurableImageButton.cpp; path = ../../Source/Configuration/Configurables/ConfigurableImageButton.cpp; sourceTree = "SOURCE_ROOT"; };
 		D4C397278DEABA5F2E9F78DC = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PageFactory.cpp; path = ../../Source/PageFactory.cpp; sourceTree = "SOURCE_ROOT"; };
 		D6C2C672B5DB42B341217F92 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuPopupEditor.cpp; path = "../../Source/Pages/Home Page/AppMenu/Menu Editors/AppMenuPopupEditor.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -397,6 +400,8 @@
 					F5295A9FB74112D39967B9FE,
 					5F90177A91406782A4A735B5, ); name = Bluetooth; sourceTree = "<group>"; };
 		FCAE40D7F9CB5383DE0C8EEB = {isa = PBXGroup; children = (
+					D12399FE6463311DBEEC06B5,
+					2485D3B847458DF677BB883E,
 					9430064C1E372F7949061BB6,
 					03B199F254A33BC958ADCCB3,
 					D1232B45052DF74E9F94FBEF,
@@ -779,6 +784,7 @@
 					B348CBF81B271A6CD2086679,
 					53ABC72156245976545D2DB1,
 					14959F2CC2268E31BF4D5E05,
+					BD05C083375E0DFB4058E3DC,
 					F0E77AC31120CDDC5B9A110D,
 					FB42D550D6134B5788239E93,
 					7593A587F1D039E505260F05,

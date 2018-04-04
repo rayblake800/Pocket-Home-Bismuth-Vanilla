@@ -1,50 +1,13 @@
 #include "GLibEventHandler.h"
 
-
-ScopedPointer<ResourceManager::SharedResource> GLibEventHandler::threadResource;
-CriticalSection GLibEventHandler::threadLock;
-
-GLibEventHandler::GLibEventHandler()
-: ResourceManager(threadResource, threadLock, [this]()
-{
-
-    return new GLibThread();
-}) { }
-
-/**
- * Asynchronously run a function once on the GLib event loop.
- */
-void GLibEventHandler::callAsyncGLib(std::function<void() > fn)
-{
-    ScopedLock accessLock(threadLock);
-    GLibThread* thread = static_cast<GLibThread*> (threadResource.get());
-    thread->addAndInitCall(fn);
-}
-
-/**
- * Run a function on the GLib event loop, blocking until the function
- * finishes.
- */
-void GLibEventHandler::callGLib(std::function<void() > fn)
-{
-    ScopedLock accessLock(threadLock);
-    GLibThread* thread = static_cast<GLibThread*> (threadResource.get());
-    GSource* trackedSource = thread->addAndInitCall(fn);
-    while (thread->callIsPending(trackedSource))
-    {
-        ScopedUnlock yieldUnlock(threadLock);
-        Thread::yield();
-    }
-}
-
-GLibEventHandler::GLibThread::GLibThread() : Thread("GLibThread")
+GLibEventHandler::GLibEventHandler() : Thread("GLibEventHandler")
 {
     context = g_main_context_new();
-    mainLoop = g_main_loop_new(context,false);
+    mainLoop = g_main_loop_new(context, false);
     startThread();
 }
 
-GLibEventHandler::GLibThread::~GLibThread()
+GLibEventHandler::~GLibEventHandler()
 {
     g_main_loop_quit(mainLoop);
     signalThreadShouldExit();
@@ -55,10 +18,37 @@ GLibEventHandler::GLibThread::~GLibThread()
     context = nullptr;
 }
 
-GSource* GLibEventHandler::GLibThread::addAndInitCall
+/**
+ * Asynchronously run a function once on the GLib event loop.
+ */
+void GLibEventHandler::gLibCallAsync(std::function<void() > fn)
+{
+    addAndInitCall(fn);
+}
+
+/**
+ * Run a function on the GLib event loop, yielding until the function
+ * has finished.
+ */
+void GLibEventHandler::gLibCall(std::function<void() > fn)
+{
+    GSource* trackedSource = addAndInitCall(fn);
+    //this should never be called from within the event thread!
+    jassert(Thread::getCurrentThreadId != getThreadId());
+    while (gSourceTracker.contains(trackedSource))
+    {
+        Thread::yield();
+    }
+}
+
+/**
+ * Adds a function to the GMainContext so it will execute on the event
+ * thread.
+ */
+GSource* GLibEventHandler::addAndInitCall
 (std::function<void() > call)
 {
-    CallbackData* callData = new CallbackData;
+    CallData* callData = new CallData;
     callData->call = call;
     callData->callSource = g_idle_source_new();
     callData->sourceTracker = &gSourceTracker;
@@ -71,21 +61,29 @@ GSource* GLibEventHandler::GLibThread::addAndInitCall
     return callData->callSource;
 }
 
-gboolean GLibEventHandler::GLibThread::runAsync
-(GLibEventHandler::GLibThread::CallbackData* runData)
-{
-    runData->call();
-    runData->sourceTracker->removeAllInstancesOf(runData->callSource);
-    g_source_destroy(runData->callSource);
-    delete runData;
-    return true;
-}
-
-void GLibEventHandler::GLibThread::run()
+/**
+ * Runs the GLib main loop.
+ */
+void GLibEventHandler::run()
 {
     if (context != nullptr)
     {
         g_main_context_push_thread_default(context);
         g_main_loop_run(mainLoop);
     }
+}
+
+/**
+ * Callback function used to execute arbitrary functions on the 
+ * GMainLoop.
+ */
+gboolean GLibEventHandler::runAsync
+(GLibEventHandler::CallData* runData)
+{
+    g_assert(g_main_context_is_owner(g_main_context_get_thread_default()));
+    runData->call();
+    runData->sourceTracker->removeAllInstancesOf(runData->callSource);
+    g_source_destroy(runData->callSource);
+    delete runData;
+    return true;
 }
