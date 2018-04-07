@@ -17,8 +17,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -4893,6 +4891,7 @@
             <in>LibNMHandler.h</in>
             <in>LibNMInterface.cpp</in>
             <in>LibNMInterface.h</in>
+            <in>ManagedNMAccessPoint.cpp</in>
             <in>WifiAccessPoint.cpp</in>
             <in>WifiAccessPoint.h</in>
             <in>WifiStateManager.cpp</in>

@@ -1,7 +1,7 @@
 #include "GLibSignalHandler.h"
 
 
-ScopedPointer<SharedResource> GLibSignalHandler::globalThread;
+ScopedPointer<ResourceManager::SharedResource> GLibSignalHandler::globalThread;
 CriticalSection GLibSignalHandler::threadLock;
 
 GLibSignalHandler::GLibSignalHandler()
@@ -17,7 +17,7 @@ GLibSignalHandler::GLibSignalHandler()
 bool GLibSignalHandler::runningOnGLibThread()
 {
     const ScopedLock accessLock(threadLock);
-    GLibThread* thread = static_cast<GLibThread*> (globalThread);
+    GLibThread* thread = static_cast<GLibThread*> (globalThread.get());
     return Thread::getCurrentThreadId == thread->getThreadId();
 }
 
@@ -27,7 +27,7 @@ bool GLibSignalHandler::runningOnGLibThread()
 void GLibSignalHandler::gLibCallAsync(std::function<void() > fn)
 {
     const ScopedLock accessLock(threadLock);
-    GLibThread* thread = static_cast<GLibThread*> (globalThread);
+    GLibThread* thread = static_cast<GLibThread*> (globalThread.get());
     thread->addAndInitCall(fn);
 }
 
@@ -45,9 +45,9 @@ void GLibSignalHandler::gLibCall(std::function<void() > fn)
     else
     {
         const ScopedLock accessLock(threadLock);
-        GLibThread* thread = static_cast<GLibThread*> (globalThread);
-        GSource* trackedSource = addAndInitCall(fn);
-        while (thread.callPending(trackedSource))
+        GLibThread* thread = static_cast<GLibThread*> (globalThread.get());
+        GSource* trackedSource = thread->addAndInitCall(fn);
+        while (thread->callPending(trackedSource))
         {
             const ScopedUnlock threadUnlock(threadLock);
             Thread::yield();
@@ -58,7 +58,7 @@ void GLibSignalHandler::gLibCall(std::function<void() > fn)
 /**
  * Initializes and starts the main GLib event loop on its own thread.
  */
-GLibSignalHandler::GLibThread::GLibThread()
+GLibSignalHandler::GLibThread::GLibThread() : Thread("GLibThread")
 {
     mainLoop = g_main_loop_new(g_main_context_default(), false);
     startThread();
@@ -67,10 +67,12 @@ GLibSignalHandler::GLibThread::GLibThread()
 /**
  * Stops the event loop thread and cleans up all GLib resources.
  */
-GLibSignalHandler::GlibThread::~GLibThread()
+GLibSignalHandler::GLibThread::~GLibThread()
 {
-    g_main_context_wakeup(g_main_context_default());
-    g_main_loop_quit(mainLoop);
+    addAndInitCall([this]()
+    {
+        g_main_loop_quit(mainLoop);
+    });
     signalThreadShouldExit();
     waitForThreadToExit(-1);
     g_main_loop_unref(mainLoop);
@@ -93,7 +95,7 @@ GSource* GLibSignalHandler::GLibThread::addAndInitCall
             (GSourceFunc) runAsync,
             callData,
             nullptr);
-    g_source_attach(callData->callSource, context);
+    g_source_attach(callData->callSource, g_main_context_default());
     return callData->callSource;
 }
 
@@ -102,7 +104,7 @@ GSource* GLibSignalHandler::GLibThread::addAndInitCall
  */
 bool GLibSignalHandler::GLibThread::callPending(GSource* callSource)
 {
-    return sourceTracker.contains(callSource);
+    return gSourceTracker.contains(callSource);
 }
 
 /**
@@ -110,7 +112,7 @@ bool GLibSignalHandler::GLibThread::callPending(GSource* callSource)
  */
 void GLibSignalHandler::GLibThread::run()
 {
-    if (context != nullptr)
+    if (g_main_context_default() != nullptr)
     {
         g_main_loop_run(mainLoop);
     }
@@ -121,7 +123,7 @@ void GLibSignalHandler::GLibThread::run()
  * GMainLoop.
  */
 gboolean GLibSignalHandler::GLibThread::runAsync
-(GLibEventHandler::CallData* runData)
+(GLibSignalHandler::GLibThread::CallData* runData)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
     runData->call();

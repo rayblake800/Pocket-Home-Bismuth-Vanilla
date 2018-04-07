@@ -55,14 +55,14 @@ public:
 
 private:
 
-    class GLibThread : public SharedResource, private Thread
+    class GLibThread : public SharedResource, public Thread
     {
     public:
 
         /**
          * Initializes and starts the main GLib event loop on its own thread.
          */
-        GlibThread();
+        GLibThread();
 
         /**
          * Stops the event loop thread and cleans up all GLib resources.

@@ -38,10 +38,10 @@ void ConnectionPage<ConnectionPoint>::setSelectedConnection
 (const ConnectionPoint& connection)
 {
     bool selectionChanged = false;
-    if (connection.isNull()
+    if (connection.isVoid()
         || !connections.contains(connection))
     {
-        if (!selectedConnection.isNull())
+        if (!selectedConnection.isVoid())
         {
             selectionChanged = true;
             selectedConnection = ConnectionPoint();
@@ -111,7 +111,7 @@ template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
 {
     RelativeLayoutManager::Layout layout;
-    bool showList = (selectedConnection.isNull());
+    bool showList = (selectedConnection.isVoid());
     prevPageBtn.setVisible(connectionIndex > 0 && showList);
     nextPageBtn.setVisible(connectionItems.size() > connectionIndex
             + connectionsPerPage && showList);
@@ -235,7 +235,7 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
 template<class ConnectionPoint>
 bool ConnectionPage<ConnectionPoint>::overrideBackButton()
 {
-    if (selectedConnection.isNull())
+    if (selectedConnection.isVoid())
     {
         return false;
     }

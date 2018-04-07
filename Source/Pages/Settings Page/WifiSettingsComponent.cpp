@@ -73,7 +73,7 @@ String WifiSettingsComponent::updateButtonText()
     switch (wifiManager.getWifiState())
     {
         case WifiStateManager::noStateManager:
-        case WifiStateManager::missingNetworkInterface:
+        case WifiStateManager::missingNetworkDevice:
             return localeText(wifi_not_found);
         case WifiStateManager::disabled:
             return localeText(wifi_disabled);
@@ -87,7 +87,7 @@ String WifiSettingsComponent::updateButtonText()
         case WifiStateManager::switchingConnection:
         {
             WifiAccessPoint ap = wifiManager.getConnectingAP();
-            if (ap.isNull())
+            if (ap.isVoid())
             {
                 DBG("WifiSettingsComponent::" << __func__ << ": wifi is "
                         << "connecting, but can't get the connecting AP.");

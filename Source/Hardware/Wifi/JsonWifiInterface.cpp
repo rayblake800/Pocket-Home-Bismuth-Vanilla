@@ -23,7 +23,7 @@ bool JsonWifiInterface::isWifiEnabled()
 bool JsonWifiInterface::isWifiConnecting()
 {
     ScopedLock lock(wifiLock);
-    return !waitingToConnect.isNull();
+    return !waitingToConnect.isVoid();
 }
 
 /**
@@ -107,7 +107,7 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         DBG("JsonWifiInterface::" << __func__ 
                 << ": can't connect, wifi isn't on");
     }
-    else if (!waitingToConnect.isNull())
+    else if (!waitingToConnect.isVoid())
     {
         if (waitingToConnect != toConnect)
         {
@@ -157,7 +157,7 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                     connected = true;
                     connectedAP = waitingToConnect;
                     waitingToConnect = WifiAccessPoint();
-                    jassert(!connectedAP.isNull());
+                    jassert(!connectedAP.isVoid());
                     signalWifiConnected(connectedAP);
                 });
     }

@@ -14,7 +14,7 @@ struct BluetoothDevice {
         return {"","null",false,false};
     }
     
-    bool isNull() const{
+    bool isVoid() const{
         return name.isEmpty() && macAddress == "null" 
                 && !connected && !paired;
     }

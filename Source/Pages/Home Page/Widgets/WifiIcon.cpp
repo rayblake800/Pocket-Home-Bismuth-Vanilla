@@ -58,7 +58,7 @@ void WifiIcon::timerCallback()
     switch (wifiManager.getWifiState())
     {
             //wifi disabled
-        case WifiStateManager::missingNetworkInterface:
+        case WifiStateManager::missingNetworkDevice:
         case WifiStateManager::disabled:
         case WifiStateManager::turningOn:
         case WifiStateManager::noStateManager:
@@ -77,7 +77,7 @@ void WifiIcon::timerCallback()
     //wifi connected
     WifiAccessPoint accessPoint = wifiManager.getConnectedAP();
     WifiIconImage wifiState = wifiOff;
-    if (!accessPoint.isNull())
+    if (!accessPoint.isVoid())
     {
         // 0 to 100
         float sigStrength =

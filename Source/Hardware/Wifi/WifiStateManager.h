@@ -17,6 +17,7 @@
 #include "JuceHeader.h"
 #include "WindowFocus.h"
 #include "ResourceManager.h"
+#include "WindowFocusedTimer.h"
 #include "WifiAccessPoint.h"
 
 class WifiStateManager : private ResourceManager
@@ -25,15 +26,15 @@ public:
     class Listener;
     class NetworkInterface;
 
-    WifiStateManager();
+    WifiStateManager
+    (std::function<ResourceManager::SharedResource()> createWifiResource);
 
     virtual ~WifiStateManager() { }
 
     enum WifiState
     {
-        //Wifi state unknown, WifiNetworkInterface needs to be assigned with 
-        //setNetworkManager.
-        missingNetworkInterface,
+        //no wifi device found
+        missingNetworkDevice,
         //Wifi device is disabled.
         disabled,
         //Wifi device is being turned on.
@@ -64,8 +65,8 @@ public:
     {
         switch (state)
         {
-            case missingNetworkInterface:
-                return "missingNetworkInterface";
+            case missingNetworkDevice:
+                return "missingNetworkDevice";
             case disabled:
                 return "disabled";
             case turningOn:
@@ -87,17 +88,6 @@ public:
         }
     }
 #endif
-
-    /**
-     * Assigns a WifiNetworkInterface to this WifiStateManager. The state 
-     * manager will take ownership of the network  interface, deleting it on 
-     * destruction or when a new  interface is provided through 
-     * setNetworkInterface.
-     *
-     * @param interface  Takes responsibility for communicating with the Wifi 
-     *                    device.
-     */
-    void setNetworkInterface(NetworkInterface* interface);
 
     /**
      * Gets the current state of the wifi device.
@@ -199,36 +189,19 @@ public:
      */
     void disableWifi();
 
-
-
 private:
-
-    class WifiResource : public ResourceManager::SharedResource, public Timer,
-    private WindowFocus::Listener
+    class NetworkInterface : public ResourceManager::SharedResource, 
+    public WindowFocusedTimer
     {
     public:
         /**
-         * @param timerLock  The static resource lock used to control access to
-         *                    the WifiResource instance.  This object should
-         *                    only use this in the timer callback, anywhere
-         *                    else it will cause a deadlock.
+         * @param wifiLock    The static resource lock used to control access to
+         *                    the NetworkInterface.  This should only be used
+         *                    in protected or private methods
          */
-        WifiResource(CriticalSection& timerLock);
+        NetworkInterface(CriticalSection& wifiLock);
 
-        /**
-         * On destruction, the WifiResource removes all references to itself 
-         * from its Listener objects, and destroys its WifiNetworkInterface.
-         */
-        virtual ~WifiResource();
-
-        /**
-         * Assigns a WifiNetworkInterface to this WifiStateManager. The state 
-         * manager will take ownership of the network  interface, deleting it on 
-         * destruction or when a new  interface is provided through 
-         * setNetworkInterface. 
-         * @see WifiStateManager::setNetworkInterface()
-         */
-        void setNetworkInterface(NetworkInterface* interface);
+        virtual ~NetworkInterface() { }
 
         /**
          * Gets the current state of the wifi device.
@@ -256,225 +229,6 @@ private:
         void removeListener(WifiStateManager::Listener* listener);
 
         /**
-         * Gets the connected wifi access point, if one exists. 
-         * @see WifiStateManager::getConnectedAP()
-         */
-        WifiAccessPoint getConnectedAP();
-
-        /**
-         * Gets the connecting wifi access point, if one exists. 
-         * @see WifiStateManager::getConnectingAP()
-         */
-        WifiAccessPoint getConnectingAP();
-
-        /**
-         * Gets all access points visible to the wifi device. 
-         * @see WifiStateManager::getVisibleAPs()
-         */
-        Array<WifiAccessPoint> getVisibleAPs();
-
-        /**
-         * Checks if wifi is enabled. 
-         * @see WifiStateManager::isEnabled()
-         */
-        bool isEnabled();
-
-        /**
-         * Checks if the wifi device is connected to an access point. 
-         * @see WifiStateManager::isConnected()
-         */
-        bool isConnected();
-
-        /**
-         * Attempts to open a connection to a wifi access point. This will fail 
-         * if wifi is disabled, the access point is invalid, or the psk is 
-         * wrong. 
-         * @see WifiStateManager::connectToAccessPoint()
-         */
-        void connectToAccessPoint(const WifiAccessPoint& toConnect, String psk);
-
-        /**
-         * If currently connected to or trying to connect to a particular access 
-         * point, that connection will be closed or canceled.
-         * @see WifiStateManager::disconnect()
-         */
-        void disconnect(const WifiAccessPoint& toDisconnect);
-
-        /**
-         * If wifi is currently disabled, this will enable it.  
-         * @see WifiStateManager::enableWifi()
-         */
-        void enableWifi();
-
-        /**
-         * If wifi is currently enabled, this will disable it. 
-         * @see WifiStateManager::disableWifi()
-         */
-        void disableWifi();
-
-        /**
-         * Checks the validity of the current wifi state, possibly changing the
-         * state to missingNetworkInterface if necessary.
-         * 
-         * @return true iff the current wifi state is noStateManager or 
-         * missingNetworkInterface
-         */
-        bool invalidWifiState();
-
-        //Milliseconds to wait before assuming that enabling or
-        //disabling wifi has failed.
-        static const constexpr int wifiEnabledChangeTimeout = 10000;
-
-        //Milliseconds to wait before assuming that connecting to
-        //or disconnecting from a wifi access point has failed.
-        static const constexpr int wifiConnectionTimeout = 35000;
-
-        WifiAccessPoint getPendingAp()
-        {
-            return pendingConnection.ap;
-        }
-
-        String getPendingPsk()
-        {
-            return pendingConnection.psk;
-        }
-
-        void setPendingConnection(WifiAccessPoint ap, String psk)
-        {
-            pendingConnection.ap = ap;
-            pendingConnection.psk = psk;
-        }
-
-        WifiAccessPoint getCancelledConnection()
-        {
-            return cancelledConnection;
-        }
-
-        void setCancelledConnection(WifiAccessPoint ap)
-        {
-            cancelledConnection = ap;
-        }
-
-    private:
-        /**
-         * Whenever a wifi operation is attempted, the timer is set to
-         * the appropriate timeout period. If the timer goes off before 
-         * the WifiNetworkInterface responds, the WifiStateManager will
-         * assume that the wifi operation failed.
-         * This method acquires the WifiStateManager's stateLock.
-         */
-        void timerCallback() override;
-
-        /**
-         * When window focus is lost, the timer will be canceled.  
-         */
-        void windowFocusLost() override;
-
-        /**
-         * When window focus is gained, if the network interface has been assigned,
-         * the wifi state will be updated.
-         */
-        void windowFocusGained() override;
-
-        /**
-         * holds any pending connection data
-         */
-        struct
-        {
-            WifiAccessPoint ap;
-            String psk;
-        } pendingConnection;
-
-        CriticalSection& timerLock;
-
-        //Holds the last canceled connection, so the state manager knows to 
-        //immediately disconnect if the networkInterface announces a connection to
-        //this access point.
-        WifiAccessPoint cancelledConnection;
-
-        //Holds the last known state of the wifi device.
-        WifiState wifiState = missingNetworkInterface;
-
-        //Holds the NetworkInterface responsible for communicating with the wifi
-        //device
-        ScopedPointer<NetworkInterface> networkInterface = nullptr;
-
-        //All objects tracking the current wifi state.
-        Array<WifiStateManager::Listener*> listeners;
-    };
-
-public:
-
-    /**
-     * Listener objects can be added to a WifiStateManager to receive wifi state
-     * updates. Once added to a WifiStateManager, Listener objects can get the 
-     * current wifi state at any time until they're removed from the state 
-     * manager.
-     */
-    class Listener
-    {
-    public:
-        friend class WifiResource;
-
-        Listener() { }
-
-        /**
-         * On destruction, listeners will remove themselves from their 
-         * WifiStateManager if necessary.
-         */
-        virtual ~Listener();
-
-    private:
-
-        /**
-         * When added to a WifiStateManager, it will call this method whenever 
-         * the wifi state changes.
-         *
-         * @param state new wifi device state
-         */
-        virtual void wifiStateChanged(WifiState state) { };
-    };
-
-    /**
-     * WifiNetworkInterface is an abstract interface for communication between 
-     * the WifiStateManager and whatever object handles direct interaction with
-     * the wifi device.
-     */
-    class NetworkInterface
-    {
-    public:
-        friend class WifiStateManager;
-
-        NetworkInterface() { }
-
-        virtual ~NetworkInterface() { }
-
-    protected:
-
-        /**
-         * Accesses the wifi device to check if wifi is enabled.
-         * 
-         * @return true iff wifi is enabled
-         */
-        virtual bool isWifiEnabled() = 0;
-
-        /**
-         * Accesses the wifi device to check if it's attempting to create a wifi
-         * connection.
-         * 
-         * @return true iff currently connecting.
-         */
-        virtual bool isWifiConnecting() = 0;
-
-        /**
-         * Accesses the wifi device to check if an active wifi connection
-         * exists.
-         * 
-         * @return true iff a connection is found.
-         */
-        virtual bool isWifiConnected() = 0;
-
-        /**
          * Gets the connected wifi access point, if one exists.
          * 
          * @return the current connected WifiAccessPoint if one is found, or a 
@@ -497,6 +251,33 @@ public:
          */
         virtual Array<WifiAccessPoint> getVisibleAPs() = 0;
 
+        /**
+         * Accesses the wifi device to check if wifi is enabled.
+         * 
+         * @return true iff wifi is enabled
+         */
+        virtual bool isWifiEnabled() = 0;
+
+        /**
+         * Accesses the wifi device to check if it's attempting to create a wifi
+         * connection.
+         * 
+         * @return true iff currently connecting.
+         */
+        virtual bool isWifiConnecting() = 0;
+               
+        /**
+         * Accesses the wifi device to check if an active wifi connection
+         * exists.
+         * 
+         * @return true iff a connection is found.
+         */
+        virtual bool isWifiConnected() = 0;
+        
+        /**
+         * @return true iff a wifi device was successfully found. 
+         */
+        virtual bool wifiDeviceFound() = 0;
 
         /**
          * Attempts to open a connection to a wifi access point. This will fail 
@@ -530,6 +311,15 @@ public:
          */
         virtual void disableWifi() = 0;
 
+        //Milliseconds to wait before assuming that enabling or
+        //disabling wifi has failed.
+        static const constexpr int wifiEnabledChangeTimeout = 10000;
+
+        //Milliseconds to wait before assuming that connecting to
+        //or disconnecting from a wifi access point has failed.
+        static const constexpr int wifiConnectionTimeout = 35000;
+    
+    protected:           
         /**
          * This method queries the wifi device to ensure that the current 
          * tracked wifi state actually matches the device state.  If necessary,
@@ -582,13 +372,54 @@ public:
          */
         void signalWifiDisabled();
 
-        /**
-         * @return true if the state manager is missing or in an invalid state.
-         */
-        bool invalidWifiState();
     private:
-        WifiStateManager::WifiResource* wifiResource = nullptr;
-        CriticalSection* wifiLock = nullptr;
+        /**
+         * Whenever a wifi operation is attempted, the timer is set to
+         * the appropriate timeout period. If the timer goes off before 
+         * the WifiNetworkInterface responds, the WifiStateManager will
+         * assume that the wifi operation failed.
+         * This method acquires the WifiStateManager's stateLock.
+         */
+        void timerCallback() override;
+        
+        WifiState wifiState;
+        CriticalSection& wifiLock;
+        //All objects tracking the current wifi state.
+        Array<WifiStateManager::Listener*> listeners;
+        //Listeners waiting for a pending notification.
+        Array<WifiStateManager::Listener*> notifyQueue;
+    };
+
+public:
+
+    /**
+     * Listener objects can be added to a WifiStateManager to receive wifi state
+     * updates. Once added to a WifiStateManager, Listener objects can get the 
+     * current wifi state at any time until they're removed from the state 
+     * manager.
+     */
+    class Listener
+    {
+    public:
+        friend class NetworkInterface;
+
+        Listener() { }
+
+        /**
+         * On destruction, listeners will remove themselves from their 
+         * WifiStateManager if necessary.
+         */
+        virtual ~Listener();
+
+    private:
+
+        /**
+         * When added to a WifiStateManager, it will call this method whenever 
+         * the wifi state changes.
+         *
+         * @param state new wifi device state
+         */
+        virtual void wifiStateChanged(WifiState state) { };
     };
 
 private:

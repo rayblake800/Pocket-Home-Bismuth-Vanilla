@@ -75,7 +75,7 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
 bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection)
 {
     WifiStateManager wifiManager;
-    if (connection.isNull())
+    if (connection.isVoid())
     {
         return false;
     }
@@ -189,7 +189,7 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
     {
         switch (state)
         {
-            case WifiStateManager::missingNetworkInterface:
+            case WifiStateManager::missingNetworkDevice:
             case WifiStateManager::noStateManager:
             case WifiStateManager::turningOn:
             case WifiStateManager::turningOff:
