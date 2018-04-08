@@ -7,10 +7,8 @@
  * interface for requesting Wifi connections or other changes in Wifi
  * state.
  *
- * WifiStateManager::WifiNetworkInterface is responsible for all direct
- * communication with the Wifi device.  In order for a WifiStateManager
- * object to function correctly, an object implementing WifiNetworkInterface
- * must be assigned to it with setNetworkInterface.
+ * WifiStateManager::NetworkInterface is responsible for all direct
+ * communication with the Wifi device.
  */
 
 #pragma once
@@ -24,10 +22,9 @@ class WifiStateManager : private ResourceManager
 {
 public:
     class Listener;
-    class NetworkInterface;
 
     WifiStateManager
-    (std::function<ResourceManager::SharedResource()> createWifiResource);
+    (std::function<ResourceManager::SharedResource*()> createWifiResource);
 
     virtual ~WifiStateManager() { }
 
@@ -48,12 +45,7 @@ public:
         //Wifi device is connected to an access point.
         connected,
         //Wifi device is closing its connection to an access point.
-        disconnecting,
-        //Wifi is disconnecting from one access point in order to connect to 
-        //another.
-        switchingConnection,
-        //WifiStateManager not available.
-        noStateManager
+        disconnecting
     };
 
 #ifdef JUCE_DEBUG    
@@ -81,10 +73,6 @@ public:
                 return "connected";
             case disconnecting:
                 return "disconnecting";
-            case switchingConnection:
-                return "switchingConnection";
-            case noStateManager:
-                return "noStateManager";
         }
     }
 #endif
@@ -92,19 +80,13 @@ public:
     /**
      * Gets the current state of the wifi device.
      * 
-     * @return the current state of the wifi device, or missingNetworkInterface
-     *          if the WifiNetworkInterface hasn`t been set.
+     * @return the current state of the wifi device
      */
     WifiState getWifiState();
 
     /**
      * Add a listener to the list of objects receiving updates whenever Wifi 
      * state changes.
-     *
-     * If the listener has already been added to another  WifiStateManager, it 
-     * will be removed from that state manager  before it's added to this one.  
-     * In debug builds this will also print a warning and fail an assertion, as 
-     * there really  shouldn`t be more than one WifiStateManager.
      *
      * @param listener  This object will be subscribed to state updates.
      */
@@ -122,7 +104,7 @@ public:
      * Gets the connected wifi access point, if one exists.
      * 
      * @return the current connected Wifi access point, or a null 
-     *          WifiAccessPoint if there is no connection.
+     *         WifiAccessPoint if there is no connection.
      */
     WifiAccessPoint getConnectedAP();
 
@@ -130,7 +112,7 @@ public:
      * Gets the connecting wifi access point, if one exists.
      * 
      * @return the current connecting WifiAccessPoint if one is found, or a 
-     *          null WifiAccessPoint if wifi is not connecting.
+     *         null WifiAccessPoint if wifi is not connecting.
      */
     WifiAccessPoint getConnectingAP();
 
@@ -138,7 +120,7 @@ public:
      * Gets all access points visible to the wifi device.
      * 
      * @return all wifi access points currently detected. If wifi is disabled, 
-     *          this will return an empty list.
+     *         this will return an empty list.
      */
     Array<WifiAccessPoint> getVisibleAPs();
 
@@ -162,20 +144,16 @@ public:
      *
      * @param toConnect  Specifies which access point should be connected to.
      *
-     * @param psk        The wifi key for toConnect, or the empty string
-     *                    if toConnect isn't secured.
+     * @param psk        The wifi key for toConnect. This parameter will be
+     *                   ignored if toConnect isn't secured.
      */
     void connectToAccessPoint(const WifiAccessPoint& toConnect,
             String psk = String());
 
     /**
-     * If currently connected to or trying to connect to a particular access 
-     * point, that connection will be closed or canceled.
-     * 
-     * @param toDisconnect  Specifies the access point that should not be 
-     *                       connected.
+     * If wifi is connected, this will close the active connection.
      */
-    void disconnect(const WifiAccessPoint& toDisconnect);
+    void disconnect();
 
     /**
      * If wifi is currently disabled, this will enable it.  Otherwise, nothing 
@@ -189,7 +167,6 @@ public:
      */
     void disableWifi();
 
-private:
     class NetworkInterface : public ResourceManager::SharedResource, 
     public WindowFocusedTimer
     {
@@ -197,7 +174,9 @@ private:
         /**
          * @param wifiLock    The static resource lock used to control access to
          *                    the NetworkInterface.  This should only be used
-         *                    in protected or private methods
+         *                    for methods triggered by the timer or by wifi
+	 *                    device signals.  In any other case, it is assumed
+	 *                    that the caller acquired the lock already.
          */
         NetworkInterface(CriticalSection& wifiLock);
 
@@ -210,7 +189,8 @@ private:
         WifiState getWifiState();
 
         /**
-         * Updates the current wifi state and notify all listeners.
+         * Updates the current wifi state and notifies all listeners. 
+	 * This method acquires the wifi lock.
          */
         void setWifiState(WifiState state);
 

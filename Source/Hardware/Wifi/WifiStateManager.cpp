@@ -6,7 +6,7 @@ ScopedPointer<ResourceManager::SharedResource>
 CriticalSection WifiStateManager::stateLock;
 
 WifiStateManager::WifiStateManager
-(std::function<ResourceManager::SharedResource()> createWifiResource):
+(std::function<ResourceManager::SharedResource*()> createWifiResource):
 ResourceManager(sharedResource, stateLock,createWifiResource) { }
 
 /**
@@ -116,16 +116,13 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
 /**
  * If currently connected to or trying to connect to a particular access 
  * point, that connection will be closed or canceled.
- * 
- * @param toDisconnect  Specifies the access point that should not be 
- *                       connected.
  */
-void WifiStateManager::disconnect(const WifiAccessPoint& toDisconnect)
+void WifiStateManager::disconnect()
 {
     const ScopedLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
-    wifiResource->disconnect(toDisconnect);
+    wifiResource->disconnect();
 }
 
 /**
@@ -571,14 +568,6 @@ void WifiStateManager::NetworkInterface::connectToAccessPoint
             }
             startTimer(wifiConnectionTimeout);
         case connecting:
-        case switchingConnection:
-            if (pendingConnection.ap == toConnect)
-            {
-                DBG("WifiStateManager::" << __func__ << ": Trying to open "
-                        << " connection to access point " << toConnect.getSSID()
-                        << "but that access point is already connecting");
-                return;
-            }
             DBG("WifiStateManager::" << __func__ << ": Switching to access "
                     << "point " << toConnect.getSSID());
         case disconnecting:
