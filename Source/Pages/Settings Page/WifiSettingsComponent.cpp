@@ -1,7 +1,8 @@
 #include "PocketHomeApplication.h"
 #include "WifiSettingsComponent.h"
 
-WifiSettingsComponent::WifiSettingsComponent(std::function<void() > openWifiPage) :
+WifiSettingsComponent::WifiSettingsComponent
+(std::function<void() > openWifiPage) :
 ConnectionSettingsComponent(openWifiPage, "wifi"),
 Localized("WifiSettingsComponent")
 {
@@ -34,7 +35,6 @@ bool WifiSettingsComponent::isBusy()
         case WifiStateManager::turningOff:
         case WifiStateManager::connecting:
         case WifiStateManager::disconnecting:
-        case WifiStateManager::switchingConnection:
             return true;
     }
     return false;
@@ -72,7 +72,6 @@ String WifiSettingsComponent::updateButtonText()
     WifiStateManager wifiManager;
     switch (wifiManager.getWifiState())
     {
-        case WifiStateManager::noStateManager:
         case WifiStateManager::missingNetworkDevice:
             return localeText(wifi_not_found);
         case WifiStateManager::disabled:
@@ -84,7 +83,6 @@ String WifiSettingsComponent::updateButtonText()
         case WifiStateManager::turningOff:
             return localeText(wifi_turning_off);
         case WifiStateManager::connecting:
-        case WifiStateManager::switchingConnection:
         {
             WifiAccessPoint ap = wifiManager.getConnectingAP();
             if (ap.isVoid())
@@ -102,6 +100,8 @@ String WifiSettingsComponent::updateButtonText()
         }
         case WifiStateManager::disconnecting:
             return localeText(disconnecting);
+        default:
+            return "Unknown State";
     }
 }
 

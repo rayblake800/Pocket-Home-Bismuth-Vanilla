@@ -64,13 +64,9 @@ private:
     //Holds the single application window.
     ScopedPointer<PocketHomeWindow> homeWindow;
     
-    //Holds general user-set program configuration data.  This should be the 
-    //only MainConfigFile object, to be passed by reference to any objects that
-    //depend on it.
+    //Holds general user-set program configuration data.
     MainConfigFile mainConfig;
     
-    //Holds user-set UI component configuration data.  This should be the 
-    //only ComponentConfigFile object, to be passed by reference to any objects 
-    //that depend on it.
+    //Holds user-set UI component configuration data.
     ComponentConfigFile componentConfig;
 };

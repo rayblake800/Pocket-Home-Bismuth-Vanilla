@@ -66,7 +66,14 @@ void WifiSettingsPage::connect(const WifiAccessPoint& connection)
 void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
 {
     WifiStateManager wifiManager;
-    wifiManager.disconnect(connection);
+    if(connection == wifiManager.getConnectingAP())
+    {
+        wifiManager.stopConnecting();
+    }
+    else if(connection == wifiManager.getConnectedAP())
+    {
+        wifiManager.disconnect();
+    }
 }
 
 /**
@@ -190,7 +197,6 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
         switch (state)
         {
             case WifiStateManager::missingNetworkDevice:
-            case WifiStateManager::noStateManager:
             case WifiStateManager::turningOn:
             case WifiStateManager::turningOff:
             case WifiStateManager::disabled:
@@ -216,7 +222,6 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
                 }
                 break;
             case WifiStateManager::connecting:
-            case WifiStateManager::switchingConnection:
                 setCurrentlyConnecting(true);
                 break;
         }

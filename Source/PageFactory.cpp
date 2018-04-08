@@ -18,21 +18,20 @@
 #include "LoginPage.h"
 #include "PageFactory.h"
 
-PageFactory::PageFactory(bool fakeWifi)
+PageFactory::PageFactory(bool fakeWifi) :
+wifiManager([fakeWifi]
+(CriticalSection& lock)->WifiStateManager::NetworkInterface*
 {
-    //Initialize wifi status thread
-    if (fakeWifi)
+    if(fakeWifi)
     {
-        wifiManager.setNetworkInterface(new JsonWifiInterface());
+        return new JsonWifiInterface(lock);
     }
     else
     {
-#        ifdef JUCE_LINUX
-        wifiManager.setNetworkInterface(new LibNMInterface());
-#        else          
-        wifiManager.setNetworkInterface(new JsonWifiInterface());
-#        endif
+        return new LibNMInterface(lock);
     }
+})
+{
 }
 
 /**

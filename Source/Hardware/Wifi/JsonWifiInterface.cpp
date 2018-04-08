@@ -4,7 +4,9 @@
 #include "JsonWifiInterface.h"
 #include "TempTimer.h"
 
-JsonWifiInterface::JsonWifiInterface() : connectedAP(WifiAccessPoint()) { }
+JsonWifiInterface::JsonWifiInterface(CriticalSection& wifiLock) : 
+WifiStateManager::NetworkInterface(wifiLock),
+wifiLock(wifiLock) { }
 
 JsonWifiInterface::~JsonWifiInterface() { }
 
@@ -157,9 +159,32 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                     connected = true;
                     connectedAP = waitingToConnect;
                     waitingToConnect = WifiAccessPoint();
-                    jassert(!connectedAP.isVoid());
-                    signalWifiConnected(connectedAP);
+                    if(connectedAP.isVoid())
+                    {
+                        signalWifiDisconnected();
+                    }
+                    else
+                    {
+                        signalWifiConnected(connectedAP);
+                    }                
                 });
+    }
+}
+
+
+/**
+ * If a connection is pending, cancel it.
+ */
+void JsonWifiInterface::stopConnecting()
+{
+    ScopedLock lock(wifiLock);
+    if(waitingToConnect.isVoid())
+    {
+         DBG("JsonWifiInterface::" << __func__ << ": no connection to cancel");
+    }
+    else
+    {
+        waitingToConnect = WifiAccessPoint();
     }
 }
 

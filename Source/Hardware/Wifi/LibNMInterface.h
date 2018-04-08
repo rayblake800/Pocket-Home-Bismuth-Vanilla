@@ -20,31 +20,28 @@ class LibNMInterface : public WifiStateManager::NetworkInterface,
 public LibNMHandler, private WindowFocus::Listener 
 {
 public:
-    LibNMInterface();
+    LibNMInterface(CriticalSection& wifiLock);
 
     virtual ~LibNMInterface() { }
 
 protected:
     /**
+     * Check if the network manager found a valid wifi device.
+     */
+    bool wifiDeviceFound() override;
+    
+    /**
      * Check the NMDevice state to see if wifi is enabled.
-     * 
-     * @return true iff the wifi device is currently turned on.
      */
     bool isWifiEnabled() override;
 
     /**
-     * Check the NMDevice state to see if wifi is connecting.
-     * 
-     * @return true iff the wifi device is currently connecting to an access 
-     *          point.
+     * Check the NMDevice state to see if wifi is connecting to an access point.
      */
     bool isWifiConnecting() override;
 
     /**
-     * Check the NMDevice state to see if wifi is connected.
-     * 
-     * @return true iff the wifi device is currently connected to an access 
-     *          point.
+     * Check the NMDevice state to see if wifi is connected to an access point.
      */
     bool isWifiConnected() override;
 
@@ -59,7 +56,7 @@ protected:
     /**
      * Request information on the connecting access point from the NMDevice.
      * 
-     * @return a WifiAccessPoint object representing the access point 
+     * @return  a WifiAccessPoint object representing the access point 
      *          connecting to the wifi device, or WifiAccessPoint() if not 
      *          connecting.
      */
@@ -68,32 +65,38 @@ protected:
     /**
      * Request information on all wifi access points detected by the NMDevice.
      * 
-     * @return a list of all visible access points within range of the wifi
+     * @return  a list of all visible access points within range of the wifi
      *          device, or an empty list if wifi is disabled.
      */
     Array<WifiAccessPoint> getVisibleAPs() override;
 
     /**
-     * Asynchronously attempt to connect to a wifi access point.
+     * Begin opening a connection to a wifi access point.
      * 
      * @param toConnect  The access point that should be connected to. 
      * 
-     * @param psk        The access point's security key, or the empty string 
-     *                    if toConnect is unsecured.
+     * @param psk        The access point's security key. This will be ignored
+     *                   if the access point is unsecured.
      */
     void connectToAccessPoint(const WifiAccessPoint& toConnect,
             String psk = String()) override;
 
+
     /**
-     * Asynchronously checks the wifi device list, connection state, and 
-     * active and pending connections.
+     * Checks the wifi device list, connection state, and active and pending 
+     * connections.
      */
     void updateAllWifiData();
 
     /**
-     * Asynchronously close the currently active connection, if one exists.
+     * Close the currently active connection, if one exists.
      */
     void disconnect() override;
+    
+    /**
+     * Cancel any activating wifi connection.
+     */
+    void stopConnecting() override;
 
     /**
      * Asynchronously turns on the wifi radio.
@@ -127,7 +130,7 @@ private:
     
     //Prevent concurrent access to the wifi data.  This should be locked
     //any time any of the data members listed beneath it is accessed.
-    CriticalSection wifiLock;
+    CriticalSection& wifiLock;
 
     NMDeviceState lastNMState = NM_DEVICE_STATE_UNKNOWN;
 

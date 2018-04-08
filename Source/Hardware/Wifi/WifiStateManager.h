@@ -24,7 +24,11 @@ public:
     class Listener;
 
     WifiStateManager
-    (std::function<ResourceManager::SharedResource*()> createWifiResource);
+    (std::function<ResourceManager::SharedResource*(CriticalSection&)> 
+            createWifiResource = [](CriticalSection& c)
+            {
+                return nullptr;
+            });
 
     virtual ~WifiStateManager() { }
 
@@ -156,11 +160,17 @@ public:
     void disconnect();
 
     /**
+     * If attempting to connect to a wifi access point, that attempted
+     * connection will be canceled.
+     */
+    void stopConnecting();
+            
+    /**
      * If wifi is currently disabled, this will enable it.  Otherwise, nothing 
      * will happen.
      */
     void enableWifi();
-
+   
     /**
      * If wifi is currently enabled, this will disable it. Otherwise, nothing 
      * will happen.
@@ -168,7 +178,7 @@ public:
     void disableWifi();
 
     class NetworkInterface : public ResourceManager::SharedResource, 
-    public WindowFocusedTimer
+    public Timer
     {
     public:
         /**
@@ -278,6 +288,12 @@ public:
          * from that access point.
          */
         virtual void disconnect() = 0;
+        
+        /**
+         * If attempting to connect to a wifi access point, that attempted
+         * connection will be canceled.
+         */
+        virtual void stopConnecting() = 0;
 
         /**
          * If wifi is currently disabled, this will enable it.  Otherwise,
@@ -403,15 +419,6 @@ public:
     };
 
 private:
-
-    /**
-     * Checks the validity of the current wifi state, possibly changing the
-     * state to missingNetworkInterface if necessary.
-     * 
-     * @return true iff the current wifi state is noStateManager or 
-     * missingNetworkInterface
-     */
-    bool invalidWifiState();
 
     //ResourceManager shared object and lock;
     static ScopedPointer<ResourceManager::SharedResource> sharedResource;

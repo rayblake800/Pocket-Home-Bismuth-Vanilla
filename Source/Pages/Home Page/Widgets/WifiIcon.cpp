@@ -61,7 +61,6 @@ void WifiIcon::timerCallback()
         case WifiStateManager::missingNetworkDevice:
         case WifiStateManager::disabled:
         case WifiStateManager::turningOn:
-        case WifiStateManager::noStateManager:
             stopTimer();
             setStatus(wifiOff);
             return;

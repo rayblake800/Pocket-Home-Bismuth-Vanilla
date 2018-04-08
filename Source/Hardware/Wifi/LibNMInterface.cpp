@@ -45,13 +45,23 @@ String deviceStateString(NMDeviceState state)
 }
 #endif
 
-LibNMInterface::LibNMInterface()
+LibNMInterface::LibNMInterface(CriticalSection& wifiLock) :
+NetworkInterface(wifiLock),
+wifiLock(wifiLock)
 {
     setNMCallbacks();
     connectSignalHandlers();
     updateAllWifiData();
 }
 
+
+/**
+ * Check if the network manager found a valid wifi device.
+ */
+bool LibNMInterface::wifiDeviceFound()
+{
+    return isWifiAvailable();
+}
 
 /**
  * Check the NMDevice state to see if wifi is enabled.
@@ -77,7 +87,7 @@ bool LibNMInterface::isWifiEnabled()
 }
 
 /**
- * @return true iff the wifi device is currently connecting to an access point.
+ * Check the NMDevice state to see if wifi is connecting.
  */
 bool LibNMInterface::isWifiConnecting()
 {
@@ -138,7 +148,7 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 }
 
 /**
- * Asynchronously attempt to connect to a wifi access point.
+ * Begin opening a connection to a wifi access point.
  */
 void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
@@ -157,8 +167,8 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
 }
 
 /**
- * Asynchronously checks the wifi device list, connection state, and 
- * active and pending connections.
+ * Checks the wifi device list, connection state, and active and pending 
+ * connections.
  */
 void LibNMInterface::updateAllWifiData()
 {
@@ -171,12 +181,21 @@ void LibNMInterface::updateAllWifiData()
     confirmWifiState();
 }
 
+
 /**
- * Removes the active wifi connection
+ * Close the currently active connection, if one exists.
  */
 void LibNMInterface::disconnect()
 {
     closeActiveConnection();
+}
+
+/**
+ * Cancel any activating wifi connection.
+ */
+void LibNMInterface::stopConnecting()
+{
+    closeActivatingConnection();
 }
 
 /**
@@ -332,4 +351,5 @@ void LibNMInterface::windowFocusGained()
 void LibNMInterface::windowFocusLost()
 {
     disconnectSignalHandlers();
+    stopTimer();
 }

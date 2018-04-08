@@ -13,10 +13,15 @@
 class JsonWifiInterface : public WifiStateManager::NetworkInterface
 {
 public:
-    JsonWifiInterface();
+    JsonWifiInterface(CriticalSection& wifiLock);
     virtual ~JsonWifiInterface();
 
 protected:
+    bool wifiDeviceFound() override
+    {
+        return true;
+    }
+    
     /**
      * Checks if the simulated wifi device is enabled.
      * 
@@ -82,6 +87,11 @@ protected:
             String psk = String()) override;
 
     /**
+     * If a connection is pending, cancel it.
+     */
+    void stopConnecting() override;
+    
+    /**
      * Triggers a simulated wifi disconnection event.  If a simulated connection
      * exists, after a randomized delay of no more than six seconds, a 
      * disconnection event will trigger.
@@ -111,7 +121,7 @@ private:
     bool turningOff = false;
     
     //Disallows concurrent modification
-    CriticalSection wifiLock;
+    CriticalSection& wifiLock;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(JsonWifiInterface)
