@@ -12,46 +12,42 @@ stateUpdateCallback([](NMDeviceState s){}),
 connectionUpdateCallback([](WifiAccessPoint w){})        
 {
     DBG("NMHandler init:");
-    GLibSignalHandler signalHandler;
-    signalHandler.gLibCall([this]()
+    nmClient = nm_client_new();
+    if (nmClient == nullptr || !NM_IS_CLIENT(nmClient))
     {
-        nmClient = nm_client_new();
-        if (nmClient == nullptr || !NM_IS_CLIENT(nmClient))
-        {
-            DBG("WifiEventHandler::" << __func__
-                    << ": failed to connect to nmclient over dbus");
-                    nmClient = nullptr;
-            return;
-        }
+        DBG("WifiEventHandler::" << __func__
+                << ": failed to connect to nmclient over dbus");
+                nmClient = nullptr;
+        return;
+    }
 
-        //find wifi device
-        const GPtrArray* allDevices = nm_client_get_devices(nmClient);
-        for (int i = 0; i < allDevices->len; i++)
+    //find wifi device
+    const GPtrArray* allDevices = nm_client_get_devices(nmClient);
+    for (int i = 0; i < allDevices->len; i++)
+    {
+        const char* path = nm_object_get_path
+                (NM_OBJECT(allDevices->pdata[i]));
+        if (NM_IS_DEVICE_WIFI(allDevices->pdata[i]))
         {
-	    const char* path = nm_object_get_path
-	            (NM_OBJECT(allDevices->pdata[i]));
-            if (NM_IS_DEVICE_WIFI(allDevices->pdata[i]))
-            {
-	        DBG(path << " is the system wifi device.");	
-                nmDevice = (NMDevice*) allDevices->pdata[i];
-                        nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
-                break;
-            }
-	    else
-	    {
-	        DBG(path << " is not a wifi device.");	
-            }
+            DBG(path << " is the system wifi device.");	
+            nmDevice = (NMDevice*) allDevices->pdata[i];
+                    nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
+            break;
         }
-        //nmDevice = nm_client_get_device_by_iface(nmClient, "wlan0");
-        if (nmDevice == nullptr || !NM_IS_DEVICE_WIFI(nmDevice))
+        else
         {
-            DBG("WifiEventHandler::" << __func__ <<
-                    ":  failed to find a wifi device!");
-                    nmClient = nullptr;
-                    nmDevice = nullptr;
-                    nmWifiDevice = nullptr;
+            DBG(path << " is not a wifi device.");	
         }
-    });
+    }
+    if (nmDevice == nullptr || !NM_IS_DEVICE_WIFI(nmDevice))
+    {
+        DBG("WifiEventHandler::" << __func__ <<
+                ":  failed to find a wifi device!");
+                nmClient = nullptr;
+                nmDevice = nullptr;
+                nmWifiDevice = nullptr;
+    }
+    connectSignalHandlers();
 }
 
 /**
@@ -774,6 +770,8 @@ gulong LibNMHandler::nmClientSignalConnect(
     }
     gulong handlerId = g_signal_connect
             (nmClient, signal, signalHandler, callbackData);
+    DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
+            << "with ID " << handlerId);
     clientSignalHandlers.add(handlerId);
     return handlerId;
 }
