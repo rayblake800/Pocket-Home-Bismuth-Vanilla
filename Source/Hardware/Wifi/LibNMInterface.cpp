@@ -172,6 +172,7 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
  */
 void LibNMInterface::updateAllWifiData()
 {
+    DBG("LibNMInterface::updateAllWifiData reloading data");
     ScopedLock updateLock(wifiLock);
     connectedAP = findConnectedAP();
     connectingAP = findConnectingAP();

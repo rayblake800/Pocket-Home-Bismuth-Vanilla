@@ -88,15 +88,17 @@ GSource* GLibSignalHandler::GLibThread::addAndInitCall
 {
     CallData* callData = new CallData;
     callData->call = call;
-    callData->callSource = g_idle_source_new();
+    GSource* callSource = g_idle_source_new();
+    callData->callSource = callSource;
     callData->sourceTracker = &gSourceTracker;
+    gSourceTracker.add(callSource);
     g_source_set_callback(
-            callData->callSource,
+            callSource,
             (GSourceFunc) runAsync,
             callData,
             nullptr);
-    g_source_attach(callData->callSource, g_main_context_default());
-    return callData->callSource;
+    g_source_attach(callSource, g_main_context_default());
+    return callSource;
 }
 
 /**
@@ -115,6 +117,7 @@ void GLibSignalHandler::GLibThread::run()
     if (g_main_context_default() != nullptr)
     {
         g_main_loop_run(mainLoop);
+	DBG("GLibSignalHandler: exiting GLib main loop");
     }
 }
 

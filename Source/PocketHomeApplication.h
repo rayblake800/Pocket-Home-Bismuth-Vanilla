@@ -10,7 +10,7 @@
 #include "PocketHomeWindow.h"
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
-#include "ComponentConfigFile.h"
+#include "GLibSignalHandler.h"
 
 class PocketHomeApplication : public JUCEApplication
 {
@@ -64,9 +64,17 @@ private:
     //Holds the single application window.
     ScopedPointer<PocketHomeWindow> homeWindow;
     
+    //SharedResource objects:
+    //These objects remain allocated as long as one instance of them exists
+    //somewhere.  Declaring them here ensures that they will remain allocated
+    //as long as the application is running.
+
     //Holds general user-set program configuration data.
     MainConfigFile mainConfig;
     
     //Holds user-set UI component configuration data.
     ComponentConfigFile componentConfig;
+
+    //Runs the GLib event loop
+    GLibSignalHandler gLibThread;
 };

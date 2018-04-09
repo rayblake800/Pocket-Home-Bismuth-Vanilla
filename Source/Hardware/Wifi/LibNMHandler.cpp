@@ -11,6 +11,7 @@ apUpdateCallback([](Array<WifiAccessPoint> aps){}),
 stateUpdateCallback([](NMDeviceState s){}),
 connectionUpdateCallback([](WifiAccessPoint w){})        
 {
+    DBG("NMHandler init:");
     GLibSignalHandler signalHandler;
     signalHandler.gLibCall([this]()
     {
@@ -27,14 +28,21 @@ connectionUpdateCallback([](WifiAccessPoint w){})
         const GPtrArray* allDevices = nm_client_get_devices(nmClient);
         for (int i = 0; i < allDevices->len; i++)
         {
+	    const char* path = nm_object_get_path
+	            (NM_OBJECT(allDevices->pdata[i]));
             if (NM_IS_DEVICE_WIFI(allDevices->pdata[i]))
             {
+	        DBG(path << " is the system wifi device.");	
                 nmDevice = (NMDevice*) allDevices->pdata[i];
                         nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
                 break;
             }
+	    else
+	    {
+	        DBG(path << " is not a wifi device.");	
+            }
         }
-        nmDevice = nm_client_get_device_by_iface(nmClient, "wlan0");
+        //nmDevice = nm_client_get_device_by_iface(nmClient, "wlan0");
         if (nmDevice == nullptr || !NM_IS_DEVICE_WIFI(nmDevice))
         {
             DBG("WifiEventHandler::" << __func__ <<
@@ -59,9 +67,19 @@ LibNMHandler::~LibNMHandler()
  */
 bool LibNMHandler::isWifiAvailable()
 {
-    return nmClient != nullptr
-            && nmDevice != nullptr
-            && nmWifiDevice != nullptr;
+    if(nmClient == nullptr
+            || nmDevice == nullptr
+            || nmWifiDevice == nullptr)
+    {
+        return false;
+    }
+    if(!NM_IS_CLIENT(nmClient))
+    {
+        DBG("LibNMHandler::"<<__func__<< ": client is non-null but invalid!");
+        DBG("LibNMHandler::"<<__func__<< ": attempting to recreate client...");
+        nmClient = nm_client_new();
+    }
+    return true;
 }
 
     
@@ -699,6 +717,10 @@ void LibNMHandler::buildAPMap()
             const GPtrArray* wifiConns = nm_device_get_available_connections
                     (nmDevice);
             
+            if(visibleAPs == nullptr)
+	    {
+	        return;
+	    }
             for(int apNum = 0; apNum < visibleAPs->len; apNum++)
             {
                 NMAccessPoint* nmAP = (NMAccessPoint*) visibleAPs->pdata[apNum];

@@ -378,7 +378,7 @@ public:
          */
         void timerCallback() override;
         
-        WifiState wifiState;
+        WifiState wifiState = missingNetworkDevice;
         CriticalSection& wifiLock;
         //All objects tracking the current wifi state.
         Array<WifiStateManager::Listener*> listeners;
