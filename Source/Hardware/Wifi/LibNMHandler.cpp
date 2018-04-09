@@ -89,14 +89,14 @@ bool LibNMHandler::isWifiAvailable()
 bool LibNMHandler::checkWifiEnabled()
 {
     bool enabled = false;
-    if(isWifiAvailable())
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this, &enabled]()
     {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this, &enabled]()
+        if(isWifiAvailable())
         {
             enabled = nm_client_wireless_get_enabled(nmClient);
-        });
-    }
+        }
+    });
     return enabled;
 }
 
@@ -107,15 +107,15 @@ bool LibNMHandler::checkWifiEnabled()
 bool LibNMHandler::checkWifiConnecting()
 {
     bool connecting = false;
-    if(isWifiAvailable())
-    {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this, &connecting]()
-        {  
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this, &connecting]()
+    {  
+        if(isWifiAvailable())
+        {
             connecting = isWifiConnection
                 (nm_client_get_activating_connection(nmClient));
-        });
-    }
+        }
+    });
     return connecting;
 }
 
@@ -125,15 +125,15 @@ bool LibNMHandler::checkWifiConnecting()
 bool LibNMHandler::checkWifiConnected()
 {
     bool connected = false;
-    if(isWifiAvailable())
-    {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this, &connected]()
-        {  
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this, &connected]()
+    {  
+        if(isWifiAvailable())
+        {
             connected = isWifiConnection
                 (nm_client_get_primary_connection(nmClient));
-        });
-    }
+        }
+    });
     return connected;
 }
 
@@ -147,10 +147,10 @@ bool LibNMHandler::checkWifiConnected()
 WifiAccessPoint LibNMHandler::findConnectedAP()
 {
     WifiAccessPoint ap;
-    if(isWifiAvailable())
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this, &ap]()
     {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this, &ap]()
+        if(isWifiAvailable())
         {
             NMAccessPoint* nmAP = nm_device_wifi_get_active_access_point
                     (nmWifiDevice);
@@ -158,8 +158,8 @@ WifiAccessPoint LibNMHandler::findConnectedAP()
             {
                 ap = WifiAccessPoint(nmAP);
             }
-        });
-    }
+        }
+    });
     return ap;
 }
 
@@ -174,10 +174,10 @@ WifiAccessPoint LibNMHandler::findConnectedAP()
 WifiAccessPoint LibNMHandler::findConnectingAP()
 {
     WifiAccessPoint ap;
-    if(isWifiAvailable())
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this, &ap]()
     {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this, &ap]()
+        if(isWifiAvailable())
         {
             NMActiveConnection* conn = nm_client_get_activating_connection
                     (nmClient);
@@ -192,8 +192,8 @@ WifiAccessPoint LibNMHandler::findConnectingAP()
                     ap = WifiAccessPoint(connectingAP);
                 }
             }
-        });
-    }
+        }
+    });
     return ap;
 }
 
@@ -203,12 +203,12 @@ WifiAccessPoint LibNMHandler::findConnectingAP()
 Array<WifiAccessPoint> LibNMHandler::updatedVisibleAPs()
 {
     Array<WifiAccessPoint> visibleAPs;
-    if(isWifiAvailable())
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this, &visibleAPs]()
     {
-        buildAPMap();
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this, &visibleAPs]()
+        if(isWifiAvailable())
         {
+            buildAPMap();
             for(auto it = accessPointMap.begin();
                 it != accessPointMap.end(); it++)
             {
@@ -229,8 +229,8 @@ Array<WifiAccessPoint> LibNMHandler::updatedVisibleAPs()
                     visibleAPs.add(wifiAP);
                 }
             }
-        });
-    }
+        }
+    });
     return visibleAPs;
 }
 
@@ -242,14 +242,14 @@ Array<WifiAccessPoint> LibNMHandler::updatedVisibleAPs()
  */
 void LibNMHandler::setWifiEnabled(bool wifiEnabled)
 {
-    if(isWifiAvailable())
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this, wifiEnabled]()
     {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this, wifiEnabled]()
+        if(isWifiAvailable())
         {
             nm_client_wireless_set_enabled(nmClient, wifiEnabled);
-        });
-    }
+        }
+    });
 }
 
 /**
@@ -257,10 +257,10 @@ void LibNMHandler::setWifiEnabled(bool wifiEnabled)
  */
 void LibNMHandler::requestScan()
 {
-    if(isWifiAvailable())
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCallAsync([this]()
     {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCallAsync([this]()
+        if(isWifiAvailable())
         {
             GError* error = nullptr;
             nm_device_wifi_request_scan_simple(nmWifiDevice,nullptr,error);
@@ -270,8 +270,8 @@ void LibNMHandler::requestScan()
                         << String(error->message));
                 g_error_free(error);
             }
-        });
-    }
+        }
+    });
 }
 
     
@@ -281,14 +281,14 @@ void LibNMHandler::requestScan()
 NMDeviceState LibNMHandler::findWifiState()
 {
     NMDeviceState state = NM_DEVICE_STATE_UNAVAILABLE;
-    if(isWifiAvailable())
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this, &state]()
     {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this, &state]()
+        if(isWifiAvailable())
         {
             state = nm_device_get_state(nmDevice);
-        });
-    }
+        }
+    });
     return state;
 }
 
@@ -506,14 +506,14 @@ void LibNMHandler::initConnection(
  */
 void LibNMHandler::closeActiveConnection()
 {  
-    if(isWifiAvailable())
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this]()
     {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this]()
+        if(isWifiAvailable())
         {
                 nm_device_disconnect(nmDevice, nullptr, nullptr);
-        });
-    }
+        }
+    });
 }
 
 
@@ -523,10 +523,10 @@ void LibNMHandler::closeActiveConnection()
  */
 void LibNMHandler::closeActivatingConnection()
 {  
-    if(isWifiAvailable())
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this]()
     {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this]()
+        if(isWifiAvailable())
         {
             NMActiveConnection *conn = nm_client_get_activating_connection
                     (nmClient);
@@ -557,8 +557,8 @@ void LibNMHandler::closeActivatingConnection()
                     }
                 }        
             }
-        });
-    }
+        }
+    });
 }
 
     
@@ -707,10 +707,10 @@ bool LibNMHandler::isWifiConnection(NMActiveConnection* connection)
  */
 void LibNMHandler::buildAPMap()
 {
-    if(isWifiAvailable())
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this]()
     {
-        GLibSignalHandler signalHandler;
-        signalHandler.gLibCall([this]()
+        if(isWifiAvailable())
         {
             const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
                     (nmWifiDevice);
@@ -756,8 +756,8 @@ void LibNMHandler::buildAPMap()
                 WifiAccessPoint wifiAP(nmAP, apSavedConn);
                 accessPointMap[wifiAP].addIfNotAlreadyThere(nmAP);
             }
-        });
-    }
+        }
+    });
 }
 
 /**
