@@ -18,7 +18,7 @@ bool GLibSignalHandler::runningOnGLibThread()
 {
     const ScopedLock accessLock(threadLock);
     GLibThread* thread = static_cast<GLibThread*> (globalThread.get());
-    return Thread::getCurrentThreadId == thread->getThreadId();
+    return Thread::getCurrentThreadId() == thread->getThreadId();
 }
 
 /**
@@ -60,7 +60,6 @@ void GLibSignalHandler::gLibCall(std::function<void() > fn)
  */
 GLibSignalHandler::GLibThread::GLibThread() : Thread("GLibThread")
 {
-    dbus
     mainLoop = g_main_loop_new(g_main_context_default(), false);
     startThread();
 }
