@@ -50,7 +50,6 @@ NetworkInterface(wifiLock),
 wifiLock(wifiLock)
 {
     setNMCallbacks();
-    connectSignalHandlers();
     updateAllWifiData();
 }
 

@@ -6,11 +6,7 @@
 /**
  * Loads client and device objects, and starts the signal thread.
  */
-LibNMHandler::LibNMHandler() : 
-enabledChangeCallback([](bool enabled){}),
-apUpdateCallback([](Array<WifiAccessPoint> aps){}),
-stateUpdateCallback([](NMDeviceState s){}),
-connectionUpdateCallback([](WifiAccessPoint w){})        
+LibNMHandler::LibNMHandler()    
 {
     nmClient = nm_client_new();
     if (nmClient == nullptr || !NM_IS_CLIENT(nmClient))
@@ -60,19 +56,9 @@ LibNMHandler::~LibNMHandler()
  */
 bool LibNMHandler::isWifiAvailable()
 {
-    if(nmClient == nullptr
-            || nmDevice == nullptr
-            || nmWifiDevice == nullptr)
-    {
-        return false;
-    }
-    if(!NM_IS_CLIENT(nmClient))
-    {
-        DBG("LibNMHandler::"<<__func__<< ": client is non-null but invalid!");
-        DBG("LibNMHandler::"<<__func__<< ": attempting to recreate client...");
-        nmClient = nm_client_new();
-    }
-    return true;
+    return nmClient != nullptr
+            && nmDevice != nullptr
+            && nmWifiDevice != nullptr;
 }
 
     
@@ -645,8 +631,7 @@ void LibNMHandler::handleWifiEnabledChange
 	}
 	else
 	{
-            DBG("LibNMHandler::handleWifiEnabledChange"
-			    <<": no valid callback found.");
+            DBG("LibNMHandler::handleWifiEnabledChange: no valid callback found.");
 	}
     }); 
     

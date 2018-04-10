@@ -7,6 +7,7 @@
 #pragma once
 #include <NetworkManager.h>
 #include <map>
+#include <functional>
 #include <nm-client.h>
 #include <nm-device.h>
 #include <nm-device-wifi.h>
@@ -320,7 +321,7 @@ private:
     NMDevice* nmDevice = nullptr;
     NMDeviceWifi* nmWifiDevice = nullptr;
     
-     std::function<void(bool)> enabledChangeCallback;
+    std::function<void(bool)> enabledChangeCallback;
     std::function<void(Array<WifiAccessPoint>)> apUpdateCallback;
     std::function<void(NMDeviceState)> stateUpdateCallback;
     std::function<void(WifiAccessPoint)> connectionUpdateCallback;
