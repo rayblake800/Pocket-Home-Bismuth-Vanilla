@@ -623,11 +623,7 @@ void LibNMHandler::handleWifiEnabledChange
 (NMClient* client, LibNMHandler* nmHandler)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    MessageManager::callAsync([nmHandler]()
-    {
-        nmHandler->wifiEnablementChangeCallback(nmHandler->checkWifiEnabled());
-    }); 
-    
+    nmHandler->wifiEnablementChangeCallback(nmHandler->checkWifiEnabled());
 }
 
 void LibNMHandler::handleStateChange
@@ -635,42 +631,62 @@ void LibNMHandler::handleStateChange
 {   
     g_assert(g_main_context_is_owner(g_main_context_default()));
     NMDeviceState state = nm_device_get_state(device);
-    MessageManager::callAsync([nmHandler,state]()
-    {
-        nmHandler->stateUpdateCallback(state);
-    });  
+    nmHandler->stateUpdateCallback(state);
 }
 
 void LibNMHandler::handleApAdded
 (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
 {   
+    DBG("LibNMHandler::"<<__func__<<": finding new access points:");
     g_assert(g_main_context_is_owner(g_main_context_default()));
     nmHandler->buildAPMap(); 
-    MessageManager::callAsync([nmHandler]()
-    {
-        nmHandler->apUpdateCallback(nmHandler->updatedVisibleAPs());
-    }); 
-    
+    nmHandler->apUpdateCallback(nmHandler->updatedVisibleAPs());
 }
 
 void LibNMHandler::handleApRemoved
 (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
 {    
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    nmHandler->accessPointMap.clear();
-    nmHandler->handleApAdded(wifiDevice,nmHandler);
-    
+    DBG("LibNMHandler::"<<__func__<<": finding removed access points:");
+    const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
+                    (nmHandler->nmWifiDevice);
+    int removed = 0;
+    for(auto it = nmHandler->accessPointMap.begin();
+        it != nmHandler->accessPointMap.end();
+        it++)
+    {
+        Array<NMAccessPoint*> toRemove;
+        for(NMAccessPoint* searchAP : it->second)
+        {
+            bool remove = true;
+            for(int i = 0; i < visibleAPs->len; i++)
+            {
+                if(visibleAPs->pdata[i] == searchAP)
+                {
+                    remove = false;
+                    break;
+                }
+            }
+            if(remove)
+            {
+                toRemove.add(searchAP);
+                removed++;
+            }
+        }
+        it->second.removeValuesIn(toRemove);
+    }
+    DBG("LibNMHandler::"<<__func__<<": removed " << removed 
+            << " NMAccessPoints");
+    nmHandler->handleApAdded(wifiDevice,nmHandler); 
 }
 
 void LibNMHandler::handleConnectionChange
 (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
 { 
     g_assert(g_main_context_is_owner(g_main_context_default()));
+    DBG("LibNMHandler::"<<__func__<<": updating connected access point:");
     WifiAccessPoint connected = nmHandler->findConnectedAP();
-    MessageManager::callAsync([nmHandler, connected]()
-    {
-        nmHandler->connectionUpdateCallback(connected);
-    }); 
+    nmHandler->connectionUpdateCallback(connected);
 }
 
 /**
@@ -703,6 +719,7 @@ void LibNMHandler::buildAPMap()
     GLibSignalHandler signalHandler;
     signalHandler.gLibCall([this]()
     {
+        DBG("LibNMHandler::buildAPMap: Mapping all visible APs");
         if(isWifiAvailable())
         {
             const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
@@ -710,6 +727,9 @@ void LibNMHandler::buildAPMap()
             const GPtrArray* wifiConns = nm_device_get_available_connections
                     (nmDevice);
             
+            DBG("LibNMHandler::buildAPMap: found " << visibleAPs->len
+                    << " NMAccessPoints, and " << wifiConns->len
+                    << " saved wifi connections");
             if(visibleAPs == nullptr)
 	    {
 	        return;
@@ -748,6 +768,9 @@ void LibNMHandler::buildAPMap()
                 g_slist_free(matchingConns);
                 WifiAccessPoint wifiAP(nmAP, apSavedConn);
                 accessPointMap[wifiAP].addIfNotAlreadyThere(nmAP);
+                DBG("LibNMHandler::buildAPMap: Added AP #" 
+                        << accessPointMap[wifiAP].size() << " for SSID "
+                        << wifiAP.getSSID());
             }
         }
     });
