@@ -1,5 +1,6 @@
 #include "LibNMHandler.h"
 #include <nm-remote-connection.h>
+#include "nm-device.h"
 #include "WifiAccessPoint.h"
 
 /**
@@ -11,7 +12,6 @@ apUpdateCallback([](Array<WifiAccessPoint> aps){}),
 stateUpdateCallback([](NMDeviceState s){}),
 connectionUpdateCallback([](WifiAccessPoint w){})        
 {
-    DBG("NMHandler init:");
     nmClient = nm_client_new();
     if (nmClient == nullptr || !NM_IS_CLIENT(nmClient))
     {
@@ -25,24 +25,21 @@ connectionUpdateCallback([](WifiAccessPoint w){})
     const GPtrArray* allDevices = nm_client_get_devices(nmClient);
     for (int i = 0; i < allDevices->len; i++)
     {
-        const char* path = nm_object_get_path
-                (NM_OBJECT(allDevices->pdata[i]));
-        if (NM_IS_DEVICE_WIFI(allDevices->pdata[i]))
+	NMDevice* testDev =     
+                NM_DEVICE(allDevices->pdata[i]);
+	if (NM_IS_DEVICE_WIFI(testDev) &&
+			nm_device_get_managed(testDev))
         {
-            DBG(path << " is the system wifi device.");	
-            nmDevice = (NMDevice*) allDevices->pdata[i];
-                    nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
+            nmDevice = (NMDevice*) testDev;
+            nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
+	    DBG("Using wifi device " << nm_device_get_iface(testDev));
             break;
-        }
-        else
-        {
-            DBG(path << " is not a wifi device.");	
         }
     }
     if (nmDevice == nullptr || !NM_IS_DEVICE_WIFI(nmDevice))
     {
         DBG("WifiEventHandler::" << __func__ <<
-                ":  failed to find a wifi device!");
+                ":  failed to find a libNM managed wifi device!");
                 nmClient = nullptr;
                 nmDevice = nullptr;
                 nmWifiDevice = nullptr;
@@ -312,12 +309,26 @@ static void handleConnectionAttempt(
             nm_active_connection_get_specific_object(active));
     if (err != nullptr || ap == nullptr)
     {
-        callbackData->failureCallback();
+        if(callbackData->failureCallback)
+        {
+            callbackData->failureCallback();
+	}
+	else
+	{
+	    DBG("LibNMHandler::"<<__func__<<": no valid failure callback");
+	}
         g_error_free(err);
     }
     else
     {
-        callbackData->connectingCallback(WifiAccessPoint(ap));
+        if(callbackData->connectingCallback)
+	{
+            callbackData->connectingCallback(WifiAccessPoint(ap));
+	}
+	else
+	{
+	    DBG("LibNMHandler::"<<__func__<<": no valid connecting callback");
+	}
     }
 }
 //libNM callback run after attempting to re-open a known connection
@@ -628,7 +639,15 @@ void LibNMHandler::handleWifiEnabledChange
     g_assert(g_main_context_is_owner(g_main_context_default()));
     MessageManager::callAsync([nmHandler]()
     {
-        nmHandler->enabledChangeCallback(nmHandler->checkWifiEnabled());
+    	if(nmHandler->enabledChangeCallback)
+	{
+            nmHandler->enabledChangeCallback(nmHandler->checkWifiEnabled());
+	}
+	else
+	{
+            DBG("LibNMHandler::handleWifiEnabledChange"
+			    <<": no valid callback found.");
+	}
     }); 
     
 }
@@ -640,7 +659,14 @@ void LibNMHandler::handleStateChange
     NMDeviceState state = nm_device_get_state(device);
     MessageManager::callAsync([nmHandler,state]()
     {
-        nmHandler->stateUpdateCallback(state);
+        if(nmHandler->stateUpdateCallback)
+	{
+            nmHandler->stateUpdateCallback(state);
+	}
+	else
+	{
+            DBG("LibNMHandler::handleStateChange: no valid callback found.");
+	}
     });  
 }
 
@@ -651,7 +677,14 @@ void LibNMHandler::handleApAdded
     nmHandler->buildAPMap(); 
     MessageManager::callAsync([nmHandler]()
     {
-        nmHandler->apUpdateCallback(nmHandler->updatedVisibleAPs());
+        if(nmHandler->apUpdateCallback)
+	{
+            nmHandler->apUpdateCallback(nmHandler->updatedVisibleAPs());
+	}
+	else
+	{
+            DBG("LibNMHandler::handleApAdded: no callback found.");
+	}
     }); 
     
 }
@@ -672,7 +705,14 @@ void LibNMHandler::handleConnectionChange
     WifiAccessPoint connected = nmHandler->findConnectedAP();
     MessageManager::callAsync([nmHandler, connected]()
     {
-        nmHandler->connectionUpdateCallback(connected);
+        if(nmHandler->connectionUpdateCallback)
+        {
+            nmHandler->connectionUpdateCallback(connected);
+	}
+	else
+	{
+            DBG("LibNMHandler::handleConnectionChange: no valid callback found.");
+	}
     }); 
 }
 
