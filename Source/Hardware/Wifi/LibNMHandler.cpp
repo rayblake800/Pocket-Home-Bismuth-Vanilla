@@ -727,8 +727,8 @@ void LibNMHandler::buildAPMap()
             const GPtrArray* wifiConns = nm_device_get_available_connections
                     (nmDevice);
             
-            DBG("LibNMHandler::buildAPMap: found " << visibleAPs->len
-                    << " NMAccessPoints, and " << wifiConns->len
+            DBG("LibNMHandler::buildAPMap: found " << String(visibleAPs->len)
+                    << " NMAccessPoints, and " << String(wifiConns->len)
                     << " saved wifi connections");
             if(visibleAPs == nullptr)
 	    {
