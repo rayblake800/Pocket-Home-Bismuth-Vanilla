@@ -66,6 +66,9 @@ public:
     //Sets the string prefix to put before commands in order to launch them
     //from the terminal
     static const String termLaunchCommandKey;
+    
+    //Sets the name of the wifi interface
+    static const String wifiInterfaceKey;
 
     // ### Boolean value keys: ###
     //Sets if the cursor should be shown

@@ -1,7 +1,8 @@
-#include "LibNMHandler.h"
 #include <nm-remote-connection.h>
-#include "nm-device.h"
+#include <nm-device.h>
+#include "MainConfigFile.h"
 #include "WifiAccessPoint.h"
+#include "LibNMHandler.h"
 
 /**
  * Loads client and device objects, and starts the signal thread.
@@ -17,21 +18,12 @@ LibNMHandler::LibNMHandler()
         return;
     }
 
-    //find wifi device
-    const GPtrArray* allDevices = nm_client_get_devices(nmClient);
-    for (int i = 0; i < allDevices->len; i++)
-    {
-	NMDevice* testDev =     
-                NM_DEVICE(allDevices->pdata[i]);
-	if (NM_IS_DEVICE_WIFI(testDev) &&
-			nm_device_get_managed(testDev))
-        {
-            nmDevice = (NMDevice*) testDev;
-            nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
-	    DBG("Using wifi device " << nm_device_get_iface(testDev));
-            break;
-        }
-    }
+    MainConfigFile config;
+    String iface = config.getConfigValue<String>
+            (MainConfigFile::wifiInterfaceKey);
+    DBG("Using wifi device " << iface);
+    nmDevice = nm_client_get_device_by_path(nmClient,iface.toRawUTF8());
+    nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
     if (nmDevice == nullptr || !NM_IS_DEVICE_WIFI(nmDevice))
     {
         DBG("WifiEventHandler::" << __func__ <<

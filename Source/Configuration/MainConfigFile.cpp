@@ -54,6 +54,7 @@ const String MainConfigFile::restartCommandKey = "restart command";
 const String MainConfigFile::sleepCommandKey = "sleep command";
 const String MainConfigFile::termLaunchCommandKey = "terminal launch command";
 const String MainConfigFile::backgroundKey = "background";
+const String MainConfigFile::wifiInterfaceKey = "Wifi interface";
 //boolean
 const String MainConfigFile::showCursorKey = "cursor";
 const String MainConfigFile::showClockKey = "show clock";
@@ -69,6 +70,7 @@ std::vector<ConfigFile::DataKey> MainConfigFile::MainJson::getDataKeys() const
         {shutdownCommandKey, stringType},
         {restartCommandKey, stringType},
         {termLaunchCommandKey, stringType},
+        {wifiInterfaceKey, stringType},
         {showCursorKey, boolType},
         {showClockKey, boolType},
         {use24HrModeKey, boolType}};

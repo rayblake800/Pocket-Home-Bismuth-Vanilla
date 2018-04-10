@@ -8,6 +8,7 @@
     "restart command": "systemctl reboot",
     "sleep command": "xset dpms force off",
     "terminal launch command": "vala-terminal -e",
+    "Wifi interface" : "wlan0",
     "cursor": true,
     "use 24h mode": true,
     "show clock": true
