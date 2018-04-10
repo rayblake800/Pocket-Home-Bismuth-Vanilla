@@ -125,59 +125,36 @@ protected:
     void closeActivatingConnection();
     
     /**
-     * Register a callback function to run whenever the wifi device is enabled
+     * A callback function to run whenever the wifi device is enabled
      * or disabled.
      * 
-     * @param callback  The callback function, which will be passed true if wifi
-     *                  is enabled and false if its disabled.
+     * @param isEnabled  Indicates if the wifi device is on or off.
      */
-    void setWifiEnablementChangeCallback
-    (std::function<void(bool)> callback)
-    {
-        enabledChangeCallback = callback;
-    }
+    virtual void wifiEnablementChangeCallback(bool isEnabled) = 0;
     
     /**
-     * Register a callback function to run whenever the list of wifi access
-     * points is updated.
+     * A callback function to run whenever the list of wifi access points is 
+     * updated.
      * 
-     * @param callback  An AP update callback function, which will be passed the
-     *                  updated array of all visible wifi access points.
+     * @param visibleAPs  The updated visible access point list.
      */
-    void setAPUpdateCallback
-    (std::function<void(Array<WifiAccessPoint>)> callback)
-    {
-        apUpdateCallback = callback;
-    }
+    virtual void apUpdateCallback(Array<WifiAccessPoint> visibleAPs) = 0;
     
     /**
-     * Register a callback function to run whenever the wifi device state
-     * changes.
+     * A callback function to run whenever the wifi device state changes.
      * 
-     * @param callback  A state update callback function, which will be called
-     *                  and passed the new wifi state whenever wifi state
-     *                  changes.
+     * @param newState   The updated wifi device state.
      */
-    void setStateUpdateCallback
-    (std::function<void(NMDeviceState)> callback)
-    {
-        stateUpdateCallback = callback;
-    }
+    virtual void stateUpdateCallback(NMDeviceState newState) = 0;
     
         
     /**
-     * Register a callback function to run whenever the wifi connection
-     * changes.
+     * A callback function to run whenever the wifi connection changes.
      * 
-     * @param callback  A connection update callback function, which will be 
-     *                  called and passed the new active wifi connection
-     *                  whenever the active connection changes.
+     * @param connected  The newly connected access point, or the void access
+     *                   point if wifi just disconnected.
      */
-    void setConnectionUpdateCallback
-    (std::function<void(WifiAccessPoint)> callback)
-    {
-        connectionUpdateCallback = callback;
-    }
+    virtual void connectionUpdateCallback (WifiAccessPoint connected) = 0;
     
     /**
      * Attach all signal handlers to the wifi thread, so that they are run
@@ -320,11 +297,6 @@ private:
     NMClient* nmClient = nullptr;
     NMDevice* nmDevice = nullptr;
     NMDeviceWifi* nmWifiDevice = nullptr;
-    
-    std::function<void(bool)> enabledChangeCallback;
-    std::function<void(Array<WifiAccessPoint>)> apUpdateCallback;
-    std::function<void(NMDeviceState)> stateUpdateCallback;
-    std::function<void(WifiAccessPoint)> connectionUpdateCallback;
     
     std::map<WifiAccessPoint,Array<NMAccessPoint*>> accessPointMap;
 

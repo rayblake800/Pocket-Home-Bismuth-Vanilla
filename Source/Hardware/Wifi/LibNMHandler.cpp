@@ -625,14 +625,7 @@ void LibNMHandler::handleWifiEnabledChange
     g_assert(g_main_context_is_owner(g_main_context_default()));
     MessageManager::callAsync([nmHandler]()
     {
-    	if(nmHandler->enabledChangeCallback)
-	{
-            nmHandler->enabledChangeCallback(nmHandler->checkWifiEnabled());
-	}
-	else
-	{
-            DBG("LibNMHandler::handleWifiEnabledChange: no valid callback found.");
-	}
+        nmHandler->wifiEnablementChangeCallback(nmHandler->checkWifiEnabled());
     }); 
     
 }
@@ -644,14 +637,7 @@ void LibNMHandler::handleStateChange
     NMDeviceState state = nm_device_get_state(device);
     MessageManager::callAsync([nmHandler,state]()
     {
-        if(nmHandler->stateUpdateCallback)
-	{
-            nmHandler->stateUpdateCallback(state);
-	}
-	else
-	{
-            DBG("LibNMHandler::handleStateChange: no valid callback found.");
-	}
+        nmHandler->stateUpdateCallback(state);
     });  
 }
 
@@ -662,14 +648,7 @@ void LibNMHandler::handleApAdded
     nmHandler->buildAPMap(); 
     MessageManager::callAsync([nmHandler]()
     {
-        if(nmHandler->apUpdateCallback)
-	{
-            nmHandler->apUpdateCallback(nmHandler->updatedVisibleAPs());
-	}
-	else
-	{
-            DBG("LibNMHandler::handleApAdded: no callback found.");
-	}
+        nmHandler->apUpdateCallback(nmHandler->updatedVisibleAPs());
     }); 
     
 }
@@ -690,14 +669,7 @@ void LibNMHandler::handleConnectionChange
     WifiAccessPoint connected = nmHandler->findConnectedAP();
     MessageManager::callAsync([nmHandler, connected]()
     {
-        if(nmHandler->connectionUpdateCallback)
-        {
-            nmHandler->connectionUpdateCallback(connected);
-	}
-	else
-	{
-            DBG("LibNMHandler::handleConnectionChange: no valid callback found.");
-	}
+        nmHandler->connectionUpdateCallback(connected);
     }); 
 }
 

@@ -110,10 +110,35 @@ protected:
 
 private:
     /**
-     * Attaches LibNMInterface callback functions to the network manager client
-     * and wifi device in order to receive updates when wifi actions occur.
+     * Notifies listeners when wifi turns on or off.
+     * 
+     * @param isEnabled  Indicates if the wifi device is on or off.
      */
-    void setNMCallbacks();
+    void wifiEnablementChangeCallback(bool isEnabled);
+    
+    /**
+     * Updates the list of visible access points whenever the network manager
+     * reports a change.
+     * 
+     * @param visibleAPs  The updated visible access point list.
+     */
+    void apUpdateCallback(Array<WifiAccessPoint> visibleAPs);
+    
+    /**
+     * Registers updates to the wifi device when the NetworkManager device state
+     * changes.
+     * 
+     * @param newState   The updated wifi device state.
+     */
+    void stateUpdateCallback(NMDeviceState newState);
+          
+    /**
+     * Notifies listeners when the active access point changes.
+     * 
+     * @param connected  The newly connected access point, or the void access
+     *                   point if wifi just disconnected.
+     */
+    void connectionUpdateCallback (WifiAccessPoint connected);
 
 
     /**

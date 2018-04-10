@@ -49,10 +49,8 @@ LibNMInterface::LibNMInterface(CriticalSection& wifiLock) :
 NetworkInterface(wifiLock),
 wifiLock(wifiLock)
 {
-    setNMCallbacks();
     updateAllWifiData();
 }
-
 
 /**
  * Check if the network manager found a valid wifi device.
@@ -152,17 +150,17 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
 {
-    initConnection(toConnect,psk,
+    initConnection(toConnect, psk,
             [this](WifiAccessPoint ap)
             {
                 connectingAP = ap;
                 signalWifiConnecting();
             },
-            [this]()
-            {
-                connectingAP = WifiAccessPoint();
-                signalConnectionFailed();
-            });
+    [this]()
+    {
+        connectingAP = WifiAccessPoint();
+        signalConnectionFailed();
+    });
 }
 
 /**
@@ -180,7 +178,6 @@ void LibNMInterface::updateAllWifiData()
     ScopedUnlock confirmUnlock(wifiLock);
     confirmWifiState();
 }
-
 
 /**
  * Close the currently active connection, if one exists.
@@ -202,7 +199,7 @@ void LibNMInterface::stopConnecting()
  * Asynchronously turns on the wifi radio.
  */
 void LibNMInterface::enableWifi()
-{ 
+{
     if (!isWifiAvailable())
     {
         signalWifiDisabled();
@@ -215,7 +212,7 @@ void LibNMInterface::enableWifi()
  * Asynchronously turns off the wifi radio.
  */
 void LibNMInterface::disableWifi()
-{ 
+{
     if (!isWifiAvailable())
     {
         signalWifiDisabled();
@@ -225,39 +222,49 @@ void LibNMInterface::disableWifi()
 }
 
 /**
- * Attaches LibNMInterface callback functions to the network manager client
- * and wifi device in order to receive updates when wifi actions occur.
+ * Notifies listeners when wifi turns on or off.
  */
-void LibNMInterface::setNMCallbacks()
+void LibNMInterface::wifiEnablementChangeCallback(bool isEnabled)
 {
-    ScopedLock initLock(wifiLock);
-    //Signal: notifies that wifi has turned on or off
-    setWifiEnablementChangeCallback([this](bool enabled)
+    if (isEnabled)
     {
-        if(enabled)
-        {
-            requestScan();
-            signalWifiEnabled();
-        }
-        else
-        {
-            signalWifiDisabled();
-        }
-    });
+        requestScan();
+        signalWifiEnabled();
+    }
+    else
+    {
+        signalWifiDisabled();
+    }
+}
 
-    //Signal: notifies that wifi state has changed
-    setStateUpdateCallback([this](NMDeviceState newState)
+/**
+ * A callback function to run whenever the list of wifi access points is 
+ * updated.
+ */
+void LibNMInterface::apUpdateCallback(Array<WifiAccessPoint> visibleAPs) 
+{
+    ScopedLock updateLock(wifiLock);
+    this->visibleAPs = visibleAPs;
+    DBG("LibNMInterface::" << __func__ << ": found "
+            << visibleAPs.size() << " AccessPoints");
+ }
+
+/**
+ * Registers updates to the wifi device when the NetworkManager device state
+ * changes.
+ */
+void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
+{
+    ScopedLock updateLock(wifiLock);
+    lastNMState = newState;
+    DBG("LibNMInterface::" << __func__ << ":  changed to "
+            << deviceStateString(newState));
+    switch (newState)
     {
-        ScopedLock updateLock(wifiLock);
-        lastNMState = newState;
-        DBG("LibNMInterface::" << __func__ << ":  changed to "
-                << deviceStateString(newState));
-        switch (newState)
+        case NM_DEVICE_STATE_ACTIVATED:
         {
-            case NM_DEVICE_STATE_ACTIVATED:
-            {
-                ScopedUnlock unlockForUpdate(wifiLock);
-                signalWifiConnected(findConnectedAP());
+            ScopedUnlock unlockForUpdate(wifiLock);
+            signalWifiConnected(findConnectedAP());
             break;
         }
         case NM_DEVICE_STATE_PREPARE:
@@ -309,33 +316,26 @@ void LibNMInterface::setNMCallbacks()
             signalWifiDisconnected();
         }
     }
-    });
-
-    //Signal: notifies that the active access point has changed
-    setConnectionUpdateCallback([this](WifiAccessPoint connection)
-    {
-        ScopedLock updateLock(wifiLock);
-        connectedAP = connection;
-        ScopedUnlock notifyUnlock(wifiLock);
-        if(connection.isVoid())
-        {
-            signalWifiDisconnected();
-        }
-        else
-        {
-            signalWifiConnected(connection);
-        }
-    });
-
-    //Signal: notifies that the visible access point list changed.
-    setConnectionUpdateCallback([this](Array<WifiAccessPoint> visible)
-    {
-        ScopedLock updateLock(wifiLock);
-        visibleAPs = visible;
-        DBG("LibNMInterface::" << __func__ << ": found "
-                << visibleAPs.size() << " AccessPoints");
-    });
 }
+
+/**
+ * Notifies listeners when the active access point changes.
+ */
+void LibNMInterface::connectionUpdateCallback(WifiAccessPoint connected)
+{
+    ScopedLock updateLock(wifiLock);
+    connectedAP = connected;
+    ScopedUnlock notifyUnlock(wifiLock);
+    if (connected.isVoid())
+    {
+        signalWifiDisconnected();
+    }
+    else
+    {
+        signalWifiConnected(connected);
+    }
+}
+
 
 /**
  * called whenever the application window gains focus.
