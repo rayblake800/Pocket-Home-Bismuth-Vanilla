@@ -48,16 +48,33 @@ private:
      * @return true if connections are enabled, false if disabled.
      */
     virtual bool connectionEnabled() = 0;
+    
+    /**
+     * This method is used by the component to determine if it should show the
+     * loading spinner.
+     * 
+     * @return true if the loading spinner should be visible, false if it should
+     *         be hidden.
+     */
+    virtual bool shouldShowSpinner() = 0;
 
     /**
-     * This is used to determine when the component should show a loading
-     * spinner and disable all input.
+     * This method is used by the component to determine if the connection 
+     * switch should be enabled.
      * 
-     * @return true if connection status is busy, false if it's ready for
-     *          input.
+     * @return true iff the connection state can be changed.
      */
-    virtual bool isBusy() = 0;
+    virtual bool allowConnectionToggle() = 0;
 
+    
+    /**
+     * This method is used by the component to determine if the connection 
+     * page should be accessible.
+     * 
+     * @return true iff the connection button should open the connection page.
+     */
+    virtual bool connectionPageAvailable() = 0;
+    
     /**
      * @return an appropriate asset file name for the connection type and
      *          status.

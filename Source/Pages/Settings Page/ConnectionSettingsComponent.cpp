@@ -24,7 +24,7 @@ pageButton(name + "Button")
  */
 void ConnectionSettingsComponent::refresh()
 {
-    bool busy = isBusy();
+    bool busy = shouldShowSpinner();
     bool enabled = connectionEnabled();
     icon.setVisible(!busy);
     spinner.setVisible(busy);
@@ -34,9 +34,9 @@ void ConnectionSettingsComponent::refresh()
         toggle.setToggleState(enabled, NotificationType::dontSendNotification,
                 true);
     }
-    toggle.setEnabled(!busy);
+    toggle.setEnabled(allowConnectionToggle());
     pageButton.setText(updateButtonText());
-    pageButton.setEnabled(enabled && !busy);
+    pageButton.setEnabled(connectionPageAvailable());
     resized();
     repaint();
 }

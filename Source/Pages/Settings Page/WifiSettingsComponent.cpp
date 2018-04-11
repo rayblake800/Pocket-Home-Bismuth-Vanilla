@@ -23,10 +23,13 @@ bool WifiSettingsComponent::connectionEnabled()
     return wifiManager.isEnabled();
 }
 
+
+
 /**
- * Checks if the wifi device is currently busy.
+ * This method is used by the component to determine if it should show the
+ * loading spinner.
  */
-bool WifiSettingsComponent::isBusy()
+bool WifiSettingsComponent::shouldShowSpinner() 
 {
     WifiStateManager wifiManager;
     switch (wifiManager.getWifiState())
@@ -39,6 +42,44 @@ bool WifiSettingsComponent::isBusy()
     }
     return false;
 }
+
+/**
+ * This method is used by the component to determine if the connection 
+ * switch should be enabled.
+ */
+bool WifiSettingsComponent::allowConnectionToggle()
+{
+    WifiStateManager wifiManager;
+    switch (wifiManager.getWifiState())
+    {
+        case WifiStateManager::turningOn:
+        case WifiStateManager::turningOff:
+        case WifiStateManager::missingNetworkDevice:
+            return false;
+    }
+    return true;
+}
+
+/**
+ * This method is used by the component to determine if the connection 
+ * page should be accessible.
+ * 
+ * @return true whenever wifi is enabled and not being disabled.
+ */
+bool WifiSettingsComponent::connectionPageAvailable() 
+{
+    WifiStateManager wifiManager;
+    switch (wifiManager.getWifiState())
+    {
+        case WifiStateManager::turningOn:
+        case WifiStateManager::turningOff:
+        case WifiStateManager::missingNetworkDevice:
+        case WifiStateManager::disabled:
+            return false;
+    }
+    return true;
+}
+
 
 /**
  * @return the wifi icon

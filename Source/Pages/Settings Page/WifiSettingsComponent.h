@@ -26,14 +26,33 @@ private:
      * @return true if wifi is enabled, false if disabled.
      */
     bool connectionEnabled() override;
+       
+    /**
+     * This method is used by the component to determine if it should show the
+     * loading spinner.
+     * 
+     * @return true whenever wifi is in a transition state (connecting,
+     *         disconnecting, etc.).
+     */
+    bool shouldShowSpinner() override;
 
     /**
-     * Checks if the wifi device is currently busy.
+     * This method is used by the component to determine if the connection 
+     * switch should be enabled.
      * 
-     * @return true iff wifi is connecting, disconnecting, turning on, or
-     *          turning off.
+     * @return true iff the wifi device is present and isn't being turned on or
+     *         off.
      */
-    bool isBusy() override;
+    bool allowConnectionToggle() override;
+
+    
+    /**
+     * This method is used by the component to determine if the connection 
+     * page should be accessible.
+     * 
+     * @return true whenever wifi is enabled and not being disabled.
+     */
+    bool connectionPageAvailable() override;
 
     /**
      * @return the wifi icon
