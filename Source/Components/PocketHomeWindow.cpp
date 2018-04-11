@@ -1,12 +1,25 @@
 #include "Display.h"
 #include "Utils.h"
+#include "JsonWifiInterface.h"
+#include "LibNMInterface.h"
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
 
 PocketHomeWindow::PocketHomeWindow(String windowName, bool fakeWifi) :
 WindowFocus::BroadcastWindow(windowName, Colours::darkgrey,
         DocumentWindow::allButtons),
-pageFactory(fakeWifi)
+wifiManager([fakeWifi]
+(CriticalSection& lock)->WifiStateManager::NetworkInterface*
+{
+    if(fakeWifi)
+    {
+        return new JsonWifiInterface(lock);
+    }
+    else
+    {
+        return new LibNMInterface(lock);
+    }
+})
 {
     ASSERT_SINGULAR;
     LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);

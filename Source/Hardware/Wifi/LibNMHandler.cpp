@@ -1,3 +1,4 @@
+
 #include <nm-remote-connection.h>
 #include <nm-device.h>
 #include "MainConfigFile.h"
@@ -8,59 +9,67 @@
  * Loads client and device objects, and starts the signal thread.
  */
 LibNMHandler::LibNMHandler()
-{
-    nmClient = nm_client_new();
-    
-    if (nmClient == nullptr || !NM_IS_CLIENT(nmClient))
+{   
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this]()
     {
-        DBG("WifiEventHandler::" << __func__
-                << ": failed to connect to nmclient over dbus");
-        nmClient = nullptr;
-        return;
-    }
-    MainConfigFile config;
-    String iface = config.getConfigValue<String>
-            (MainConfigFile::wifiInterfaceKey);
-    if(iface.isNotEmpty())
-    {
-        DBG("WifiEventHandler::" << __func__ << ": Using wifi device " 
-                << iface);
-        nmDevice = nm_client_get_device_by_iface(nmClient, iface.toRawUTF8());
-    }
-    else
-    {
-        DBG("WifiEventHandler::" << __func__ << ": No wifi device defined in "
-                << "config.json, scanning for the first managed wifi device");
-        const GPtrArray* allDevices = nm_client_get_devices(nmClient);
-        for (int i = 0; allDevices && (i < allDevices->len); i++)
+        DBG("Client creating");
+        GQuark errorQuark = nm_client_error_quark();
+        nmClient = nm_client_new();
+        if (nmClient == nullptr || !NM_IS_CLIENT(nmClient))
         {
-            NMDevice* testDev = NM_DEVICE(allDevices->pdata[i]);
-            if (testDev != nullptr
-                && NM_IS_DEVICE_WIFI(testDev) 
-                && nm_device_get_managed(testDev))
+            DBG("WifiEventHandler::" << __func__
+                    << ": failed to connect to nmclient over dbus");
+            DBG("Error: " << String(g_quark_to_string(errorQuark)));
+            nmClient = nullptr;
+            return;
+        }
+        MainConfigFile config;
+        String iface = config.getConfigValue<String>
+                (MainConfigFile::wifiInterfaceKey);
+        if(iface.isNotEmpty())
+        {
+            DBG("WifiEventHandler::" << __func__ << ": Using wifi device " 
+                    << iface);
+            nmDevice = nm_client_get_device_by_iface(nmClient, 
+                    iface.toRawUTF8());
+        }
+        else
+        {
+            DBG("WifiEventHandler::" << __func__ << ": No wifi device defined"
+                    << "in config.json, scanning for the first"
+                    << " managed wifi device");
+            const GPtrArray* allDevices = nm_client_get_devices(nmClient);
+            for (int i = 0; allDevices && (i < allDevices->len); i++)
             {
-                nmDevice = (NMDevice*) testDev;
-                nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
-                DBG("Using wifi device " << nm_device_get_iface(testDev));
-                break;
+                NMDevice* testDev = NM_DEVICE(allDevices->pdata[i]);
+                if (testDev != nullptr
+                    && NM_IS_DEVICE_WIFI(testDev) 
+                    && nm_device_get_managed(testDev))
+                {
+                    nmDevice = (NMDevice*) testDev;
+                    nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
+                    DBG("Using wifi device " << nm_device_get_iface(testDev));
+                    break;
+                }
             }
         }
-    }
-    nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
-    if (nmDevice == nullptr || !NM_IS_DEVICE_WIFI(nmDevice))
-    {
-        DBG("WifiEventHandler::" << __func__ <<
-                ":  failed to find a libNM managed wifi device!");
-        nmClient = nullptr;
-        nmDevice = nullptr;
-        nmWifiDevice = nullptr;
-    }
-    else
-    {   
-        g_source_attach((GSource*)nmClient,nullptr);
-        g_source_attach((GSource*)nmWifiDevice,nullptr);
-        connectSignalHandlers();
-    }
+        nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
+        if (nmDevice == nullptr || !NM_IS_DEVICE_WIFI(nmDevice))
+        {
+            DBG("WifiEventHandler::" << __func__ <<
+                    ":  failed to find a libNM managed wifi device!");
+            nmClient = nullptr;
+            nmDevice = nullptr;
+            nmWifiDevice = nullptr;
+        }
+        else
+        {   
+            g_source_attach((GSource*)nmClient,nullptr);
+            g_source_attach((GSource*)nmWifiDevice,nullptr);
+            connectSignalHandlers();
+        }
+    });
 }
 
 /**

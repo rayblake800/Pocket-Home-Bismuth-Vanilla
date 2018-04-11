@@ -10,6 +10,7 @@
 #include "PageFactory.h"
 #include "PokeLookAndFeel.h"
 #include "PageStackComponent.h"
+#include "WifiStateManager.h"
 #include "WindowFocus.h"
 
 class PocketHomeWindow : public WindowFocus::BroadcastWindow
@@ -41,6 +42,8 @@ private:
 
     //Factory object for creating all UI pages
     PageFactory pageFactory;
+    
+    WifiStateManager wifiManager;
 
     //Holds all page components, besides the login page
     PageStackComponent pageStack;

@@ -1,5 +1,4 @@
-#include "JsonWifiInterface.h"
-#include "LibNMInterface.h"
+
 #include "HomePage.h"
 #include "InputSettingsPage.h"
 #include "KeybindingPage.h"
@@ -18,21 +17,6 @@
 #include "LoginPage.h"
 #include "PageFactory.h"
 
-PageFactory::PageFactory(bool fakeWifi) :
-wifiManager([fakeWifi]
-(CriticalSection& lock)->WifiStateManager::NetworkInterface*
-{
-    if(fakeWifi)
-    {
-        return new JsonWifiInterface(lock);
-    }
-    else
-    {
-        return new LibNMInterface(lock);
-    }
-})
-{
-}
 
 /**
  * Initializes a HomePage instance to use as the root page of the page 

@@ -7,7 +7,6 @@
 #pragma once
 #include "ComponentConfigFile.h"
 #include "MainConfigFile.h"
-#include "WifiStateManager.h"
 #include "BluetoothStatus.h"
 #include "PageComponent.h"
 #include "JuceHeader.h"
@@ -15,12 +14,7 @@
 class PageFactory : public PageComponent::PageFactoryInterface
 {
 public:
-    /**
-     * @param fakeWifi          If true, the wifiManager shared by all pages 
-     *                           will use simulated wifi data, rather than 
-     *                           trying to connect to a real wifi device.
-     */
-    PageFactory(bool fakeWifi);
+    PageFactory() { }
 
     virtual ~PageFactory() { }
 
@@ -45,6 +39,5 @@ private:
     PageComponent* createPage(PageComponent::PageType type) override;
 
     //shared page resources
-    WifiStateManager wifiManager;
     BluetoothStatus bluetoothStatus;
 };
