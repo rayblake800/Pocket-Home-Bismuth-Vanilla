@@ -189,20 +189,15 @@ private:
         GError *err,
         LibNMHandler* nmHandler);
     
-    static void handleWifiEnabledChange
-    (NMClient* client, LibNMHandler* nmHandler);
+    static void handleWifiEnabledChange(LibNMHandler* nmHandler);
     
-    static void handleStateChange
-    (NMDevice* device, LibNMHandler* nmHandler);
+    static void handleStateChange(LibNMHandler* nmHandler);
     
-    static void handleApAdded
-    (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler);
+    static void handleApAdded(LibNMHandler* nmHandler);
     
-    static void handleApRemoved
-    (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler);
+    static void handleApRemoved(LibNMHandler* nmHandler);
     
-    static void handleConnectionChange
-    (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler);
+    static void handleConnectionChange(LibNMHandler* nmHandler);
     
     /**
      * Checks if a connection belongs to the wifi device.  This function should

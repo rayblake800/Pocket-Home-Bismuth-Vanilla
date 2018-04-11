@@ -13,7 +13,6 @@ LibNMHandler::LibNMHandler()
     GLibSignalHandler signalHandler;
     signalHandler.gLibCall([this]()
     {
-        DBG("Client creating");
         GQuark errorQuark = nm_client_error_quark();
         nmClient = nm_client_new();
         if (nmClient == nullptr || !NM_IS_CLIENT(nmClient))
@@ -627,8 +626,7 @@ void LibNMHandler::disconnectSignalHandlers()
 
 //Internal signal handlers:
 
-void LibNMHandler::handleWifiEnabledChange
-(NMClient* client, LibNMHandler* nmHandler)
+void LibNMHandler::handleWifiEnabledChange(LibNMHandler* nmHandler)
 {
     DBG("LibNMHandler::"<<__func__ << ": data=0x"
                 << String::toHexString((unsigned long) nmHandler));
@@ -637,8 +635,7 @@ void LibNMHandler::handleWifiEnabledChange
     nmHandler->wifiEnablementChangeCallback(nmHandler->checkWifiEnabled());
 }
 
-void LibNMHandler::handleStateChange
-(NMDevice* device, LibNMHandler* nmHandler)
+void LibNMHandler::handleStateChange(LibNMHandler* nmHandler)
 {
     DBG("LibNMHandler::"<<__func__ << ": data=0x"
                 << String::toHexString((unsigned long) nmHandler));
@@ -648,8 +645,7 @@ void LibNMHandler::handleStateChange
     nmHandler->stateUpdateCallback(state);
 }
 
-void LibNMHandler::handleApAdded
-(NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
+void LibNMHandler::handleApAdded(LibNMHandler* nmHandler)
 {
     DBG("LibNMHandler::" << __func__ << ": data=0x"
                 << String::toHexString((unsigned long) nmHandler));
@@ -714,8 +710,7 @@ void LibNMHandler::handleApRemoved
     nmHandler->handleApAdded(wifiDevice, nmHandler);
 }
 
-void LibNMHandler::handleConnectionChange
-(NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
+void LibNMHandler::handleConnectionChange(LibNMHandler* nmHandler)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
     jassert(wifiDevice == nmHandler->nmWifiDevice);
@@ -835,7 +830,7 @@ gulong LibNMHandler::nmClientSignalConnect(
     {
         return 0;
     }
-    gulong handlerId = g_signal_connect
+    gulong handlerId = g_signal_connect_swapped
             (nmClient, signal, signalHandler, callbackData);
     if(handlerId > 0)
     {
@@ -864,7 +859,7 @@ gulong LibNMHandler::nmDeviceSignalConnect(
     {
         return 0;
     }
-    gulong handlerId = g_signal_connect 
+    gulong handlerId = g_signal_connect_swapped 
             (nmDevice, signal, signalHandler, callbackData);
     if(handlerId > 0)
     {
@@ -893,7 +888,7 @@ gulong LibNMHandler::nmWifiDeviceSignalConnect(
     {
         return 0;
     }
-    gulong handlerId = g_signal_connect
+    gulong handlerId = g_signal_connect_swapped
             (nmWifiDevice, signal, signalHandler, callbackData);
     if(handlerId > 0)
     {
