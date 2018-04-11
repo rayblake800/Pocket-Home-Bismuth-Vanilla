@@ -275,7 +275,7 @@ void LibNMHandler::requestScan()
         {
             GError* error = nullptr;
             nm_device_wifi_request_scan_simple(nmWifiDevice, nullptr, error);
-            if (error != nullptr);
+            if (error != nullptr)
             {
                 DBG("LibNMHandler::requestScan: error requesting scan: "
                         << String(error->message));
