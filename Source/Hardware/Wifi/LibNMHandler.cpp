@@ -631,7 +631,6 @@ void LibNMHandler::handleWifiEnabledChange(LibNMHandler* nmHandler)
     DBG("LibNMHandler::"<<__func__ << ": data=0x"
                 << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    jassert(client == nmHandler->nmClient);
     nmHandler->wifiEnablementChangeCallback(nmHandler->checkWifiEnabled());
 }
 
@@ -640,8 +639,7 @@ void LibNMHandler::handleStateChange(LibNMHandler* nmHandler)
     DBG("LibNMHandler::"<<__func__ << ": data=0x"
                 << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    jassert(device == nmHandler->nmDevice);
-    NMDeviceState state = nm_device_get_state(device);
+    NMDeviceState state = nm_device_get_state(nmHandler->nmDevice);
     nmHandler->stateUpdateCallback(state);
 }
 
@@ -654,13 +652,11 @@ void LibNMHandler::handleApAdded(LibNMHandler* nmHandler)
     nmHandler->apUpdateCallback(nmHandler->updatedVisibleAPs());
 }
 
-void LibNMHandler::handleApRemoved
-(NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
+void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)
 {
     DBG("LibNMHandler::"<<__func__ << ": data=0x"
                 << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    jassert(wifiDevice == nmHandler->nmWifiDevice);
     if (nm_client_wireless_get_enabled(nmHandler->nmClient))
     {
         DBG("LibNMHandler::" << __func__ << ": finding removed access points:");
@@ -707,13 +703,11 @@ void LibNMHandler::handleApRemoved
                 << ": wifi disabled, clearing AP list");
         nmHandler->accessPointMap.clear();
     }
-    nmHandler->handleApAdded(wifiDevice, nmHandler);
 }
 
 void LibNMHandler::handleConnectionChange(LibNMHandler* nmHandler)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    jassert(wifiDevice == nmHandler->nmWifiDevice);
     DBG("LibNMHandler::" << __func__ << ": data=0x"
                 << String::toHexString((unsigned long) nmHandler));
     WifiAccessPoint connected = nmHandler->findConnectedAP();
