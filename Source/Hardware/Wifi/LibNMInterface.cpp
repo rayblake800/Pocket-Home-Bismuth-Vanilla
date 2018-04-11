@@ -316,7 +316,15 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
         case NM_DEVICE_STATE_DISCONNECTED:
         {
             ScopedUnlock unlockForUpdate(wifiLock);
-            signalConnectionFailed();
+            if(connectingAP.isVoid())
+            {
+                signalWifiDisconnected();
+            }
+            else
+            {
+                connectingAP = WifiAccessPoint();
+                signalConnectionFailed();
+            }
             break;
         }
         case NM_DEVICE_STATE_DEACTIVATING:

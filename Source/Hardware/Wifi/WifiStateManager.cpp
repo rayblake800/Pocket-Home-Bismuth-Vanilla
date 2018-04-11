@@ -139,9 +139,13 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
     {
         //start connecting:
         case connecting:
+            DBG("WifiStateManager::" << __func__
+                    << ": canceling former pending connection");
             stopConnecting();
             break;
         case connected:
+            DBG("WifiStateManager::" << __func__
+                    << ": closing previous connection");
             disconnect();
             break;
         case disconnecting:

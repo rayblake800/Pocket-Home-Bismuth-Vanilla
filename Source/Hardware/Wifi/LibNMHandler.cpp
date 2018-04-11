@@ -387,24 +387,32 @@ void LibNMHandler::initConnection(const WifiAccessPoint& toConnect, String psk)
         }
 
         //Check for existing connections:
-        const GPtrArray* wifiConnections = nm_device_get_available_connections
-                (nmDevice);
-        if(wifiConnections != nullptr)
+        if(toConnect.isSavedConnection())
         {
-            GSList* wifiConnList = nullptr;
-            for (int i = 0; i < wifiConnections->len; i++)
+            const GPtrArray* wifiConnections 
+                    = nm_device_get_available_connections(nmDevice);
+            if(wifiConnections != nullptr)
             {
-                wifiConnList = g_slist_prepend(wifiConnList,
-                        wifiConnections->pdata[i]);
+                GSList* wifiConnList = nullptr;
+                for (int i = 0; i < wifiConnections->len; i++)
+                {
+                    wifiConnList = g_slist_prepend(wifiConnList,
+                            wifiConnections->pdata[i]);
+                }
+                GSList* matchingConnections = nm_access_point_filter_connections
+                        (matchingAP, wifiConnList);
+                if (matchingConnections != nullptr)
+                {
+                    connection = (NMConnection*) matchingConnections->data;
+                }
+                g_slist_free(wifiConnList);
+                g_slist_free(matchingConnections);
+                if (connection == nullptr)
+                {
+                    DBG("LibNMHandler::" << __func__ 
+                            << ": saved connection not found!");
+                }
             }
-            GSList* matchingConnections = nm_access_point_filter_connections
-                    (matchingAP, wifiConnList);
-            if (matchingConnections != nullptr)
-            {
-                connection = (NMConnection*) matchingConnections->data;
-            }
-            g_slist_free(wifiConnList);
-            g_slist_free(matchingConnections);
         }
 
         //Create a new connection if no existing one was found:
@@ -718,8 +726,8 @@ void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)
 void LibNMHandler::handleConnectionChange(LibNMHandler* nmHandler)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    DBG("LibNMHandler::" << __func__ << ": data=0x"
-                << String::toHexString((unsigned long) nmHandler));
+    //DBG("LibNMHandler::" << __func__ << ": data=0x"
+    //            << String::toHexString((unsigned long) nmHandler));
     WifiAccessPoint connected = nmHandler->findConnectedAP();
     nmHandler->connectionUpdateCallback(connected);
 }
@@ -817,7 +825,7 @@ void LibNMHandler::buildAPMap()
                             << accessPointMap[wifiAP].size() << " for SSID "
                             << wifiAP.getSSID()
                             << (wifiAP.isSavedConnection() ? " (saved)"
-                            : " (new"));
+                            : " (new)"));
                 }
             }
         }
