@@ -616,6 +616,7 @@ void LibNMHandler::handleWifiEnabledChange
 (NMClient* client, LibNMHandler* nmHandler)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
+    jassert(client == nmHandler->nmClient);
     nmHandler->wifiEnablementChangeCallback(nmHandler->checkWifiEnabled());
 }
 
@@ -623,6 +624,7 @@ void LibNMHandler::handleStateChange
 (NMDevice* device, LibNMHandler* nmHandler)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
+    jassert(device == nmHandler->nmDevice);
     NMDeviceState state = nm_device_get_state(device);
     nmHandler->stateUpdateCallback(state);
 }
@@ -640,6 +642,7 @@ void LibNMHandler::handleApRemoved
 (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
+    jassert(wifiDevice == nmHandler->wifiDevice);
     if (nm_client_wireless_get_enabled(nmHandler->nmClient))
     {
         DBG("LibNMHandler::" << __func__ << ": finding removed access points:");
@@ -693,6 +696,7 @@ void LibNMHandler::handleConnectionChange
 (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
+    jassert(wifiDevice == nmHandler->wifiDevice);
     DBG("LibNMHandler::" << __func__ << ": updating connected access point:");
     WifiAccessPoint connected = nmHandler->findConnectedAP();
     nmHandler->connectionUpdateCallback(connected);
