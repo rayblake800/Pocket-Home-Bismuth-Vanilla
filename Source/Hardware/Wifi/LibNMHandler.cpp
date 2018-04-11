@@ -57,8 +57,8 @@ LibNMHandler::LibNMHandler()
     }
     else
     {   
-        g_source_attach(nmClient,nullptr);
-        g_source_attach(nmWifiDevice,nullptr);
+        g_source_attach((GSource*)nmClient,nullptr);
+        g_source_attach((GSource*)nmWifiDevice,nullptr);
         connectSignalHandlers();
     }
 }
