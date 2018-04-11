@@ -620,6 +620,8 @@ void LibNMHandler::disconnectSignalHandlers()
     {
         for (gulong& signalHandlerId : wifiDeviceSignalHandlers)
         {
+            DBG("LibNMHandler::"<<__func__ << ": removing wifi device handler "
+                    << String(signalHandlerId));
             g_signal_handler_disconnect(nmWifiDevice, signalHandlerId);
         }
     }
@@ -629,6 +631,8 @@ void LibNMHandler::disconnectSignalHandlers()
     {
         for (gulong& signalHandlerId : deviceSignalHandlers)
         {
+            DBG("LibNMHandler::"<<__func__ << ": removing network device handler "
+                    << String(signalHandlerId));
             g_signal_handler_disconnect(nmDevice, signalHandlerId);
         }
     }
@@ -638,6 +642,8 @@ void LibNMHandler::disconnectSignalHandlers()
     {
         for (gulong& signalHandlerId : clientSignalHandlers)
         {
+            DBG("LibNMHandler::"<<__func__ << ": removing NM client handler "
+                    << String(signalHandlerId));
             g_signal_handler_disconnect(nmClient, signalHandlerId);
         }
         clientSignalHandlers.clear();
