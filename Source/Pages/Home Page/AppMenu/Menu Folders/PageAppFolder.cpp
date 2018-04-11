@@ -208,8 +208,8 @@ int PageAppFolder::positionIndex(int page, int column, int row) const
  */
 bool PageAppFolder::setSelectedPosition(int page, int column, int row)
 {
-    DBG("PageAppFolder::" << __func__ << ": Setting selected page=" << page
-            << " column=" << column << " row=" << row);
+    //DBG("PageAppFolder::" << __func__ << ": Setting selected page=" << page
+    //        << " column=" << column << " row=" << row);
     return selectIndex(positionIndex(page, column, row))
             && setCurrentFolderPage(page);
 }

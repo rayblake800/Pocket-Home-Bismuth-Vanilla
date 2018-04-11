@@ -24,8 +24,8 @@ void AppMenuFolder::updateGridSize(int maxRows, int maxColumns)
     {
         this->maxRows = std::max<int>(maxRows, 1);
         this->maxColumns = std::max<int>(maxColumns, 1);
-        DBG("AppMenuFolder::" << __func__ << ": grid size set to " << maxRows
-                << " rows, " << maxColumns << " columns");
+        //DBG("AppMenuFolder::" << __func__ << ": grid size set to " << maxRows
+        //        << " rows, " << maxColumns << " columns");
         layoutButtons();
     }
 }
@@ -108,9 +108,9 @@ void AppMenuFolder::insertButton
     folderButtons.insert(index, menuButton);
     if (selectedIndex >= index)
     {
-//        DBG("AppMenuFolder::" << __func__  << ": index pushed from " 
-//                << selectedIndex << " to " << (selectedIndex + 1)
-//                << " after insert at " << index);
+        //DBG("AppMenuFolder::" << __func__  << ": index pushed from " 
+        //        << selectedIndex << " to " << (selectedIndex + 1)
+        //        << " after insert at " << index);
         selectedIndex++;
     }
     if (updateLayout)
@@ -127,8 +127,8 @@ void AppMenuFolder::removeButton(int index)
 {
     if (validBtnIndex(index))
     {
-        DBG("AppMenuFolder::" << __func__  << ": Removing button at index "
-                << index);
+        //DBG("AppMenuFolder::" << __func__  << ": Removing button at index "
+        //        << index);
         folderButtons.remove(index);
         layoutButtons();
     }
@@ -294,9 +294,9 @@ void AppMenuFolder::resized()
 {
     Rectangle<int> bounds = getLocalBounds();
     bounds.reduce(margin * getWidth(), margin * getWidth());
-//    DBG("AppMenuFolder::" << __func__  << ": bounds="
-//            << getScreenBounds().toString() << " layoutBounds=" 
-//            <<bounds.toString());
+    //DBG("AppMenuFolder::" << __func__  << ": bounds="
+    //        << getScreenBounds().toString() << " layoutBounds=" 
+    //        <<bounds.toString());
     folderLayout.layoutComponents(bounds, getWidth() * xPadding,
             getHeight() * yPadding);
 }

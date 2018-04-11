@@ -443,7 +443,7 @@ StringArray ComponentConfigFile::getColourKeys() const
     {
         keys.add(it->first);
     }
-    DBG("Found "<<keys.size()<<" color keys");
+    //DBG("Found "<<keys.size()<<" color keys");
     return keys;
 }
 

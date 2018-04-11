@@ -694,8 +694,8 @@ void AppMenuComponent::mouseDown(const MouseEvent & event)
  */
 void AppMenuComponent::setLoadingState(bool loading)
 {
-//    DBG("AppMenuComponent::" << __func__
-//            << (loading ? ": started loading" : ": stopped loading"));
+    //DBG("AppMenuComponent::" << __func__
+    //        << (loading ? ": started loading" : ": stopped loading"));
     if (loading != isLoading())
     {
         loadingState = loading;

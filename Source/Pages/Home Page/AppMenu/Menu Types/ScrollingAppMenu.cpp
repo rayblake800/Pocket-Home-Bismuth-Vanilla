@@ -19,8 +19,8 @@ bool ScrollingAppMenu::folderKeyPressed(const KeyPress& key,
         activeFolder->selectIndex(0);
     }
     int newIndex = selectedIndex;
-    DBG("ScrollingAppMenu::" << __func__ << ":On selected index "
-            << selectedIndex << ", pressed key " << key.getTextDescription());
+    //DBG("ScrollingAppMenu::" << __func__ << ":On selected index "
+    //        << selectedIndex << ", pressed key " << key.getTextDescription());
     if (selectedIndex == -1)
     {
         if (key.isKeyCode(KeyPress::escapeKey)

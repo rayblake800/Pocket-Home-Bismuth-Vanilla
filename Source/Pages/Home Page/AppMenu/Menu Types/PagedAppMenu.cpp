@@ -60,8 +60,8 @@ bool PagedAppMenu::folderKeyPressed(const KeyPress& key, AppMenuFolder* activeFo
     }
     int newRow = 0;
     int newColumn = 0;
-    DBG("PagedAppMenu::" << __func__ << ": On selected index " << selectedIndex
-            << ", pressed key " << key.getTextDescription());
+    //DBG("PagedAppMenu::" << __func__ << ": On selected index " << selectedIndex
+    //        << ", pressed key " << key.getTextDescription());
     if (selectedIndex == -1)
     {
         if (key.isKeyCode(KeyPress::escapeKey))
@@ -198,8 +198,8 @@ Rectangle<int> PagedAppMenu::updateFolderBounds(const AppMenuFolder* folder,
         closeFolderBtn.setVisible(showUp);
         closeFolderBtn.setEnabled(showUp);
     }
-    DBG("PagedAppMenu::" << __func__ << ": folder " << folderIndex << " is at "
-            << bounds.toString());
+    //DBG("PagedAppMenu::" << __func__ << ": folder " << folderIndex << " is at "
+    //        << bounds.toString());
     return bounds;
 }
 

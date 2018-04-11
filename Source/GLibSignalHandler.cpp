@@ -115,18 +115,9 @@ bool GLibSignalHandler::GLibThread::callPending(GSource* callSource)
 void GLibSignalHandler::GLibThread::run()
 {
     g_main_context_acquire(g_main_context_default());
-    if(!g_main_context_is_owner(g_main_context_default()))
-    {
-        DBG("CONTEXT_NOT_OWNED_PRELOOP");
-    }
     if (g_main_context_default() != nullptr)
     {
         g_main_loop_run(mainLoop);
-        
-        if(!g_main_context_is_owner(g_main_context_default()))
-        {
-            DBG("CONTEXT_NOT_OWNED_POSTLOOP");
-        }
 	DBG("GLibSignalHandler: exiting GLib main loop");
     }
 }
