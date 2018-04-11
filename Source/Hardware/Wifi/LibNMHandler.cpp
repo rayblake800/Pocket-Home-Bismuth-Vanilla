@@ -547,25 +547,29 @@ void LibNMHandler::closeActivatingConnection()
  */
 void LibNMHandler::connectSignalHandlers()
 {
-    //Signal: notifies that wifi has turned on or off
-    nmClientSignalConnect("notify::" NM_CLIENT_WIRELESS_ENABLED,
-            G_CALLBACK(handleWifiEnabledChange), this);
+    GLibSignalHandler signalHandler;
+    signalHandler.gLibCall([this]()
+    {
+        //Signal: notifies that wifi has turned on or off
+        nmClientSignalConnect("notify::" NM_CLIENT_WIRELESS_ENABLED,
+                G_CALLBACK(handleWifiEnabledChange), this);
 
-    //Signal: notifies that wifi state has changed
-    nmDeviceSignalConnect("notify::" NM_DEVICE_STATE,
-            G_CALLBACK(handleStateChange), this);
+        //Signal: notifies that wifi state has changed
+        nmDeviceSignalConnect("notify::" NM_DEVICE_STATE,
+                G_CALLBACK(handleStateChange), this);
 
-    //Signal: notifies that the active access point has changed
-    nmWifiDeviceSignalConnect("notify::" NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT,
-            G_CALLBACK(handleConnectionChange), this);
+        //Signal: notifies that the active access point has changed
+        nmWifiDeviceSignalConnect("notify::" NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT,
+                G_CALLBACK(handleConnectionChange), this);
 
-    //Signal: notifies that a new wifi access point is visible.
-    nmWifiDeviceSignalConnect("access-point-added",
-            G_CALLBACK(handleApAdded), this);
+        //Signal: notifies that a new wifi access point is visible.
+        nmWifiDeviceSignalConnect("access-point-added",
+                G_CALLBACK(handleApAdded), this);
 
-    //Signal: notifies that a wifi access point is no longer visible.
-    nmWifiDeviceSignalConnect("access-point-removed",
-            G_CALLBACK(handleApRemoved), this);
+        //Signal: notifies that a wifi access point is no longer visible.
+        nmWifiDeviceSignalConnect("access-point-removed",
+                G_CALLBACK(handleApRemoved), this);
+    });
 }
 
 /**
@@ -615,6 +619,7 @@ void LibNMHandler::disconnectSignalHandlers()
 void LibNMHandler::handleWifiEnabledChange
 (NMClient* client, LibNMHandler* nmHandler)
 {
+    DBG("LibNMHandler::"<<__func__);
     g_assert(g_main_context_is_owner(g_main_context_default()));
     jassert(client == nmHandler->nmClient);
     nmHandler->wifiEnablementChangeCallback(nmHandler->checkWifiEnabled());
@@ -623,6 +628,7 @@ void LibNMHandler::handleWifiEnabledChange
 void LibNMHandler::handleStateChange
 (NMDevice* device, LibNMHandler* nmHandler)
 {
+    DBG("LibNMHandler::"<<__func__);
     g_assert(g_main_context_is_owner(g_main_context_default()));
     jassert(device == nmHandler->nmDevice);
     NMDeviceState state = nm_device_get_state(device);
@@ -641,6 +647,7 @@ void LibNMHandler::handleApAdded
 void LibNMHandler::handleApRemoved
 (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
 {
+    DBG("LibNMHandler::"<<__func__);
     g_assert(g_main_context_is_owner(g_main_context_default()));
     jassert(wifiDevice == nmHandler->nmWifiDevice);
     if (nm_client_wireless_get_enabled(nmHandler->nmClient))
@@ -817,7 +824,7 @@ gulong LibNMHandler::nmClientSignalConnect(
     if(handlerId > 0)
     {
         DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
-                << "with ID " << handlerId);
+                << " with ID " << handlerId);
         clientSignalHandlers.add(handlerId);
     }
     else

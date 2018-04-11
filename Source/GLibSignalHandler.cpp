@@ -133,5 +133,5 @@ gboolean GLibSignalHandler::GLibThread::runAsync
     runData->sourceTracker->removeAllInstancesOf(runData->callSource);
     g_source_destroy(runData->callSource);
     delete runData;
-    return true;
+    return false;
 }
