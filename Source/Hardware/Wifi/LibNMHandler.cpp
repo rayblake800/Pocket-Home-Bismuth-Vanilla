@@ -64,9 +64,8 @@ LibNMHandler::LibNMHandler()
         }
         else
         {   
-            g_source_attach((GSource*)nmClient,nullptr);
-            g_source_attach((GSource*)nmWifiDevice,nullptr);
-            connectSignalHandlers();
+            jassert(g_source_get_context((GSource*)nmClient) == g_main_context_default());
+            jassert(g_source_get_context((GSource*)nmWifiDevice) == g_main_context_default());
         }
     });
 }
@@ -560,25 +559,29 @@ void LibNMHandler::connectSignalHandlers()
     GLibSignalHandler signalHandler;
     signalHandler.gLibCall([this]()
     {
-        //Signal: notifies that wifi has turned on or off
-        nmClientSignalConnect("notify::" NM_CLIENT_WIRELESS_ENABLED,
-                G_CALLBACK(handleWifiEnabledChange), this);
+        if (isWifiAvailable())
+        {
+            //Signal: notifies that wifi has turned on or off
+            nmClientSignalConnect("notify::" NM_CLIENT_WIRELESS_ENABLED,
+                    G_CALLBACK(handleWifiEnabledChange), this);
 
-        //Signal: notifies that wifi state has changed
-        nmDeviceSignalConnect("notify::" NM_DEVICE_STATE,
-                G_CALLBACK(handleStateChange), this);
+            //Signal: notifies that wifi state has changed
+            nmDeviceSignalConnect("notify::" NM_DEVICE_STATE,
+                    G_CALLBACK(handleStateChange), this);
 
-        //Signal: notifies that the active access point has changed
-        nmWifiDeviceSignalConnect("notify::" NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT,
-                G_CALLBACK(handleConnectionChange), this);
+            //Signal: notifies that the active access point has changed
+            nmWifiDeviceSignalConnect
+                    ("notify::" NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT,
+                    G_CALLBACK(handleConnectionChange), this);
 
-        //Signal: notifies that a new wifi access point is visible.
-        nmWifiDeviceSignalConnect("access-point-added",
-                G_CALLBACK(handleApAdded), this);
+            //Signal: notifies that a new wifi access point is visible.
+            nmWifiDeviceSignalConnect("access-point-added",
+                    G_CALLBACK(handleApAdded), this);
 
-        //Signal: notifies that a wifi access point is no longer visible.
-        nmWifiDeviceSignalConnect("access-point-removed",
-                G_CALLBACK(handleApRemoved), this);
+            //Signal: notifies that a wifi access point is no longer visible.
+            nmWifiDeviceSignalConnect("access-point-removed",
+                    G_CALLBACK(handleApRemoved), this);
+        }
     });
 }
 

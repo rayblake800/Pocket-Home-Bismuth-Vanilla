@@ -49,7 +49,14 @@ LibNMInterface::LibNMInterface(CriticalSection& wifiLock) :
 NetworkInterface(wifiLock),
 wifiLock(wifiLock)
 {
-    updateAllWifiData();
+    //connect signal handlers and update wifi data asynchronously outside of the
+    //constructor
+    GLibSignalHandler* handler;
+    handler->gLibCallAsync([this]()
+    {
+        connectSignalHandlers();
+        updateAllWifiData();
+    });
 }
 
 /**
