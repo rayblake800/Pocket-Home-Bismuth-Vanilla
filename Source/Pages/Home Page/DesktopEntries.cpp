@@ -143,7 +143,7 @@ void DesktopEntries::run()
             {
                 return;
             }
-            sleep(-1);
+            wait(-1);
         }
         File directory(dirs[i]);
         if (directory.isDirectory())
@@ -178,7 +178,7 @@ void DesktopEntries::run()
             {
                 return;
             }
-            sleep(-1);
+            wait(-1);
         }
         DesktopEntry entry(file);
         StringArray onlyShowIn = entry.getValue(DesktopEntry::onlyShowIn);
@@ -220,6 +220,6 @@ void DesktopEntries::run()
         {
             return;
         }
-        sleep(-1);
+        wait(-1);
     }
 }
