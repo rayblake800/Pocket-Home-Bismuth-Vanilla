@@ -116,19 +116,19 @@ private:
      * 
      * @param connectingAP
      */
-    void connectingCallback(WifiAccessPoint connectingAP);
+    void connectingCallback(WifiAccessPoint connectingAP) override;
     
     /**
      * Notify listeners that a connection attempt failed.
      */
-    void connectionFailureCallback();
+    void connectionFailureCallback() override;
     
     /**
      * Notifies listeners when wifi turns on or off.
      * 
      * @param isEnabled  Indicates if the wifi device is on or off.
      */
-    void wifiEnablementChangeCallback(bool isEnabled);
+    void wifiEnablementChangeCallback(bool isEnabled) override;
     
     /**
      * Updates the list of visible access points whenever the network manager
@@ -136,7 +136,7 @@ private:
      * 
      * @param visibleAPs  The updated visible access point list.
      */
-    void apUpdateCallback(Array<WifiAccessPoint> visibleAPs);
+    void apUpdateCallback(Array<WifiAccessPoint> visibleAPs) override;
     
     /**
      * Registers updates to the wifi device when the NetworkManager device state
@@ -144,7 +144,7 @@ private:
      * 
      * @param newState   The updated wifi device state.
      */
-    void stateUpdateCallback(NMDeviceState newState);
+    void stateUpdateCallback(NMDeviceState newState) override;
           
     /**
      * Notifies listeners when the active access point changes.
@@ -152,7 +152,7 @@ private:
      * @param connected  The newly connected access point, or the void access
      *                   point if wifi just disconnected.
      */
-    void connectionUpdateCallback (WifiAccessPoint connected);
+    void connectionUpdateCallback (WifiAccessPoint connected) override;
 
 
     /**
