@@ -150,17 +150,7 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
 {
-    initConnection(toConnect, psk,
-            [this](WifiAccessPoint ap)
-            {
-                connectingAP = ap;
-                signalWifiConnecting();
-            },
-    [this]()
-    {
-        connectingAP = WifiAccessPoint();
-        signalConnectionFailed();
-    });
+    initConnection(toConnect, psk);
 }
 
 /**
@@ -219,6 +209,31 @@ void LibNMInterface::disableWifi()
         return;
     }
     setWifiEnabled(false);
+}
+
+/**
+ * Notify listeners and save the connecting access point if starting to
+ * connect.
+ * 
+ * @param connectingAP
+ */
+void LibNMInterface::connectingCallback(WifiAccessPoint connectingAP)
+{  
+    ScopedLock updateLock(wifiLock);
+    this->connectingAP = connectingAP;
+    ScopedUnlock confirmUnlock(wifiLock);
+    signalWifiConnecting();
+}
+
+/**
+ * Notify listeners that a connection attempt failed.
+ */
+void LibNMInterface::connectionFailureCallback()
+{   
+    ScopedLock updateLock(wifiLock);
+    connectingAP = WifiAccessPoint();
+    ScopedUnlock confirmUnlock(wifiLock);
+    signalConnectionFailed();
 }
 
 /**

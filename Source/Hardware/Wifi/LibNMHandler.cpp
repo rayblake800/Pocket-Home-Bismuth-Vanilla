@@ -295,26 +295,25 @@ NMDeviceState LibNMHandler::findWifiState()
 
 //##### Static data for LibNMHandler::initConnection: ########
 
-struct ConnectingCallbackData
-{
-    std::function<void(WifiAccessPoint) > connectingCallback;
-    std::function<void() > failureCallback;
-    NMDeviceWifi* wifiDevice;
-};
+
 
 //libNM callback to run after attempting to open a new connection
 
-static void handleConnectionAttempt(
+void LibNMHandler::handleConnectionAttempt(
         NMClient *client,
         NMActiveConnection *active,
         const char* path,
         GError *err,
-        ConnectingCallbackData* callbackData)
+        LibNMHandler* nmHandler)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
+    if(nmHandler == nullptr)
+    {
+        return;
+    }
     NMAccessPoint* ap =
             nm_device_wifi_get_access_point_by_path(
-            callbackData->wifiDevice,
+            nmHandler->nmWifiDevice,
             nm_active_connection_get_specific_object(active));
     if (err != nullptr || ap == nullptr)
     {
@@ -324,77 +323,36 @@ static void handleConnectionAttempt(
                     << ": Error=" << String(err->message));
             g_error_free(err);
         }
-        if (callbackData->failureCallback)
-        {
-            callbackData->failureCallback();
-        }
-        else
-        {
-            DBG("LibNMHandler::" << __func__ << ": no valid failure callback");
-        }
+        nmHandler->connectionFailureCallback();
     }
     else
     {
-        if (callbackData->connectingCallback)
-        {
-            callbackData->connectingCallback(WifiAccessPoint(ap));
-        }
-        else
-        {
-            DBG("LibNMHandler::" << __func__ 
-                    << ": no valid connecting callback");
-        }
+        nmHandler->connectingCallback(ap);
     }
 }
 //libNM callback run after attempting to re-open a known connection
 
-static void handleKnownConnectionAttempt(
+void LibNMHandler::handleKnownConnectionAttempt(
         NMClient *client,
         NMActiveConnection *active,
         GError *err,
-        ConnectingCallbackData* callbackData)
+        LibNMHandler* nmHandler)
 {
-    handleConnectionAttempt(client, active, nullptr, err, callbackData);
+    handleConnectionAttempt(client, active, nullptr, err, nmHandler);
 }
 
 /**
  * Attempts to open a connection to an access point.
  */
-void LibNMHandler::initConnection(
-        const WifiAccessPoint& toConnect,
-        String psk,
-        std::function<void(WifiAccessPoint) > connectingCallback,
-        std::function<void() > failureCallback)
+void LibNMHandler::initConnection(const WifiAccessPoint& toConnect, String psk)
 {
-    //Set callback functions to run asynchronously on the message thread and 
-    //then delete callback data.
-    ConnectingCallbackData* callbackData = new ConnectingCallbackData;
-    callbackData->connectingCallback = [connectingCallback, callbackData]
-            (WifiAccessPoint ap)
-    {
-        MessageManager::callAsync([callbackData, &ap]
-        {
-            callbackData->connectingCallback(ap);
-            delete callbackData;
-        });
-    };
-    callbackData->failureCallback = [failureCallback, callbackData]()
-    {
-        MessageManager::callAsync([callbackData]
-        {
-            callbackData->failureCallback();
-            delete callbackData;
-        });
-    };
-    callbackData->wifiDevice = nmWifiDevice;
-
     if (!isWifiAvailable())
     {
-        callbackData->failureCallback();
+        connectionFailureCallback();
         return;
     }
     GLibSignalHandler signalHandler;
-    signalHandler.gLibCall([this, &toConnect, &psk, &callbackData]()
+    signalHandler.gLibCall([this, &toConnect, &psk]()
     {
         g_assert(g_main_context_is_owner(g_main_context_default()));
         NMConnection * connection = nullptr;
@@ -414,7 +372,7 @@ void LibNMHandler::initConnection(
         }
         if (matchingAP == nullptr)
         {
-            callbackData->failureCallback();
+            connectionFailureCallback();
             return;
         }
 
@@ -511,7 +469,7 @@ void LibNMHandler::initConnection(
                     nmDevice,
                     nm_object_get_path(NM_OBJECT(matchingAP)),
                     (NMClientActivateFn) handleKnownConnectionAttempt,
-                    callbackData);
+                    this);
         }
         else
         {
@@ -520,7 +478,7 @@ void LibNMHandler::initConnection(
                     nmDevice,
                     nm_object_get_path(NM_OBJECT(matchingAP)),
                     (NMClientAddActivateFn) handleConnectionAttempt,
-                    callbackData);
+                    this);
         }
     });
 }

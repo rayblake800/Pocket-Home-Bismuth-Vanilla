@@ -102,17 +102,8 @@ protected:
      * @param psk                  The access point security key. This parameter
      *                             will be ignored if the access point is
      *                             unsecured.
-     * 
-     * @param connectingCallback   A callback function to run if connecting
-     *                             starts successfully. 
-     *
-     *  @param failureCallback     A callback function to run if connecting
-     *                             fails immediately.
      */
-    void initConnection(const WifiAccessPoint& toConnect,
-            String psk,
-            std::function<void(WifiAccessPoint) > connectingCallback,
-            std::function<void() > failureCallback);
+    void initConnection(const WifiAccessPoint& toConnect, String psk);
     
     /**
      * Shuts down the active wifi connection.
@@ -123,6 +114,20 @@ protected:
      * Shuts down any wifi connection currently being activated.
      */
     void closeActivatingConnection();
+    
+    /**
+     * A callback function to run whenever initConnection successfully starts
+     * opening a connection.
+     * 
+     * @param connectingAP
+     */
+    virtual void connectingCallback(WifiAccessPoint connectingAP) = 0;
+    
+    /**
+     * A callback function to run whenever initConnection fails to open a new
+     * connection.
+     */
+    virtual void connectionFailureCallback() = 0;
     
     /**
      * A callback function to run whenever the wifi device is enabled
@@ -170,6 +175,20 @@ protected:
 
 private:
     //Internal signal handlers:
+    
+    static void handleConnectionAttempt(
+        NMClient *client,
+        NMActiveConnection *active,
+        const char* path,
+        GError *err,
+        LibNMHandler* nmHandler);
+    
+    static void handleKnownConnectionAttempt(
+        NMClient *client,
+        NMActiveConnection *active,
+        GError *err,
+        LibNMHandler* nmHandler);
+    
     static void handleWifiEnabledChange
     (NMClient* client, LibNMHandler* nmHandler);
     

@@ -109,6 +109,20 @@ protected:
     void disableWifi() override;
 
 private:
+        
+    /**
+     * Notify listeners and save the connecting access point if starting to
+     * connect.
+     * 
+     * @param connectingAP
+     */
+    void connectingCallback(WifiAccessPoint connectingAP);
+    
+    /**
+     * Notify listeners that a connection attempt failed.
+     */
+    void connectionFailureCallback();
+    
     /**
      * Notifies listeners when wifi turns on or off.
      * 
