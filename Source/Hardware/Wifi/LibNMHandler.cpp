@@ -409,6 +409,7 @@ void LibNMHandler::initConnection(const WifiAccessPoint& toConnect, String psk)
         //Create a new connection if no existing one was found:
         if (connection == nullptr)
         {
+            DBG("LibNMHandler::" << __func__ << ": creating new connection");
             connection = nm_connection_new();
             NMSettingWireless* wifiSettings
                     = (NMSettingWireless*) nm_setting_wireless_new();
@@ -419,6 +420,10 @@ void LibNMHandler::initConnection(const WifiAccessPoint& toConnect, String psk)
                     NM_SETTING_WIRELESS_HIDDEN,
                     false,
                     nullptr);
+        }
+        else
+        {
+            DBG("LibNMHandler::" << __func__ << ": opening existing connection");
         }
 
         //If a password is provided, save it to the connection.
@@ -482,6 +487,7 @@ void LibNMHandler::initConnection(const WifiAccessPoint& toConnect, String psk)
         }
         else
         {
+            jassert(connection == nullptr);
             nm_client_add_and_activate_connection(nmClient,
                     connection,
                     nmDevice,
