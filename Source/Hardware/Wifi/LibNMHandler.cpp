@@ -815,7 +815,9 @@ void LibNMHandler::buildAPMap()
                     accessPointMap[wifiAP].addIfNotAlreadyThere(nmAP);
                     DBG("LibNMHandler::buildAPMap: Added AP #"
                             << accessPointMap[wifiAP].size() << " for SSID "
-                            << wifiAP.getSSID());
+                            << wifiAP.getSSID()
+                            << (wifiAP.isSavedConnection() ? " (saved)"
+                            : " (new"));
                 }
             }
         }
