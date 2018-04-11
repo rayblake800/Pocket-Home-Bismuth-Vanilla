@@ -127,15 +127,7 @@ void DesktopEntries::run()
     std::set<String> files;
     Array<File> allEntries;
     for (int i = 0; i < dirs.size(); i++)
-    {
-        while (uiCallPending)
-        {
-            if (threadShouldExit())
-            {
-                return;
-            }
-            sleep(-1);
-        }
+    {   
         uiCallPending = true;
         MessageManager::callAsync([&i, &dirs, &uiCallPending, this]
         {
@@ -145,6 +137,14 @@ void DesktopEntries::run()
             uiCallPending = false;
             this->notify();
         });
+        while (uiCallPending)
+        {
+            if (threadShouldExit())
+            {
+                return;
+            }
+            sleep(-1);
+        }
         File directory(dirs[i]);
         if (directory.isDirectory())
         {
@@ -164,6 +164,14 @@ void DesktopEntries::run()
     for (File& file : allEntries)
     {
         fileIndex++;
+        uiCallPending = true;
+        MessageManager::callAsync([&fileIndex, &files, &uiCallPending, this]
+        {
+            notifyCallback(String("Reading file ") + String(fileIndex) +
+                    String("/") + String(files.size()));
+            uiCallPending = false;
+            this->notify();
+        });   
         while (uiCallPending)
         {
             if (threadShouldExit())
@@ -172,14 +180,6 @@ void DesktopEntries::run()
             }
             sleep(-1);
         }
-        uiCallPending = true;
-        MessageManager::callAsync([&fileIndex, &files, &uiCallPending, this]
-        {
-            notifyCallback(String("Reading file ") + String(fileIndex) +
-                    String("/") + String(files.size()));
-            uiCallPending = false;
-            this->notify();
-        });
         DesktopEntry entry(file);
         StringArray onlyShowIn = entry.getValue(DesktopEntry::onlyShowIn);
         if (entry.getValue(DesktopEntry::hidden)
