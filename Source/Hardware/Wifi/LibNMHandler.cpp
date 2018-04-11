@@ -10,6 +10,7 @@
 LibNMHandler::LibNMHandler()
 {
     nmClient = nm_client_new();
+    
     if (nmClient == nullptr || !NM_IS_CLIENT(nmClient))
     {
         DBG("WifiEventHandler::" << __func__
@@ -17,12 +18,34 @@ LibNMHandler::LibNMHandler()
         nmClient = nullptr;
         return;
     }
-
     MainConfigFile config;
     String iface = config.getConfigValue<String>
             (MainConfigFile::wifiInterfaceKey);
-    DBG("Using wifi device " << iface);
-    nmDevice = nm_client_get_device_by_path(nmClient, iface.toRawUTF8());
+    if(iface.isNotEmpty())
+    {
+        DBG("WifiEventHandler::" << __func__ << ": Using wifi device " 
+                << iface);
+        nmDevice = nm_client_get_device_by_path(nmClient, iface.toRawUTF8());
+    }
+    else
+    {
+        DBG("WifiEventHandler::" << __func__ << ": No wifi device defined in "
+                << "config.json, scanning for the first managed wifi device");
+        const GPtrArray* allDevices = nm_client_get_devices(nmClient);
+        for (int i = 0; allDevices && (i < allDevices->len); i++)
+        {
+            NMDevice* testDev = NM_DEVICE(allDevices->pdata[i]);
+            if (testDev != nullptr
+                && NM_IS_DEVICE_WIFI(testDev) 
+                && nm_device_get_managed(testDev))
+            {
+                nmDevice = (NMDevice*) testDev;
+                nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
+                DBG("Using wifi device " << nm_device_get_iface(testDev));
+                break;
+            }
+        }
+    }
     nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
     if (nmDevice == nullptr || !NM_IS_DEVICE_WIFI(nmDevice))
     {
@@ -32,7 +55,10 @@ LibNMHandler::LibNMHandler()
         nmDevice = nullptr;
         nmWifiDevice = nullptr;
     }
-    connectSignalHandlers();
+    else
+    {
+        connectSignalHandlers();
+    }
 }
 
 /**
@@ -81,8 +107,12 @@ bool LibNMHandler::checkWifiConnecting()
     {
         if (isWifiAvailable())
         {
-            connecting = isWifiConnection
-                    (nm_client_get_activating_connection(nmClient));
+            NMActiveConnection* activatingConn
+                    = nm_client_get_activating_connection(nmClient);
+            if(activatingConn != nullptr)
+            {
+            connecting = isWifiConnection(activatingConn);
+            }
         }
     });
     return connecting;
@@ -99,8 +129,12 @@ bool LibNMHandler::checkWifiConnected()
     {
         if (isWifiAvailable())
         {
-            connected = isWifiConnection
-                    (nm_client_get_primary_connection(nmClient));
+            NMActiveConnection* activeConn 
+                    = nm_client_get_primary_connection(nmClient);
+            if(activeConn != nullptr)
+            {
+                connected = isWifiConnection(activeConn);
+            }
         }
     });
     return connected;
@@ -284,6 +318,12 @@ static void handleConnectionAttempt(
             nm_active_connection_get_specific_object(active));
     if (err != nullptr || ap == nullptr)
     {
+        if(err != nullptr)
+        {
+            DBG("LibNMHandler::" << __func__ 
+                    << ": Error=" << String(err->message));
+            g_error_free(err);
+        }
         if (callbackData->failureCallback)
         {
             callbackData->failureCallback();
@@ -292,7 +332,6 @@ static void handleConnectionAttempt(
         {
             DBG("LibNMHandler::" << __func__ << ": no valid failure callback");
         }
-        g_error_free(err);
     }
     else
     {
@@ -302,7 +341,8 @@ static void handleConnectionAttempt(
         }
         else
         {
-            DBG("LibNMHandler::" << __func__ << ": no valid connecting callback");
+            DBG("LibNMHandler::" << __func__ 
+                    << ": no valid connecting callback");
         }
     }
 }
@@ -381,30 +421,32 @@ void LibNMHandler::initConnection(
         //Check for existing connections:
         const GPtrArray* wifiConnections = nm_device_get_available_connections
                 (nmDevice);
-        GSList* wifiConnList = nullptr;
-        for (int i = 0; i < wifiConnections->len; i++)
+        if(wifiConnections != nullptr)
         {
-            wifiConnList = g_slist_prepend(wifiConnList,
-                    wifiConnections->pdata[i]);
+            GSList* wifiConnList = nullptr;
+            for (int i = 0; i < wifiConnections->len; i++)
+            {
+                wifiConnList = g_slist_prepend(wifiConnList,
+                        wifiConnections->pdata[i]);
+            }
+            GSList* matchingConnections = nm_access_point_filter_connections
+                    (matchingAP, wifiConnList);
+            if (matchingConnections != nullptr)
+            {
+                connection = (NMConnection*) matchingConnections->data;
+            }
+            g_slist_free(wifiConnList);
+            g_slist_free(matchingConnections);
         }
-        GSList* matchingConnections = nm_access_point_filter_connections
-                (matchingAP, wifiConnList);
-        if (matchingConnections != nullptr)
-        {
-            connection = (NMConnection*) matchingConnections->data;
-        }
-        g_slist_free(wifiConnList);
-        g_slist_free(matchingConnections);
-        matchingConnections = nullptr;
 
         //Create a new connection if no existing one was found:
         if (connection == nullptr)
         {
             connection = nm_connection_new();
-                    NMSettingWireless* wifiSettings
+            NMSettingWireless* wifiSettings
                     = (NMSettingWireless*) nm_setting_wireless_new();
-                    nm_connection_add_setting(connection, NM_SETTING(wifiSettings));
-                    g_object_set(wifiSettings,
+            nm_connection_add_setting(connection, NM_SETTING(wifiSettings));
+            g_object_set(wifiSettings,
                     NM_SETTING_WIRELESS_SSID,
                     nm_access_point_get_ssid(matchingAP),
                     NM_SETTING_WIRELESS_HIDDEN,
@@ -413,8 +455,7 @@ void LibNMHandler::initConnection(
         }
 
         //If a password is provided, save it to the connection.
-        if (!psk.isEmpty() && (!toConnect.isSavedConnection()
-                               || !toConnect.hasSavedPsk()))
+        if (!psk.isEmpty())
         {
             NMSettingWirelessSecurity* settingWifiSecurity
                     = (NMSettingWirelessSecurity*)
@@ -429,17 +470,17 @@ void LibNMHandler::initConnection(
             {
                 DBG("LibNMHandler::" << __func__
                         << ": access point has WEP security");
-                        /* WEP */
-                        nm_setting_wireless_security_set_wep_key
+                /* WEP */
+                nm_setting_wireless_security_set_wep_key
                         (settingWifiSecurity, 0, psk.toRawUTF8());
-                        //valid key format: length 10 or length 26
+                //valid key format: length 10 or length 26
                 if (psk.length() == 10 || psk.length() == 26)
                 {
                     g_object_set(G_OBJECT(settingWifiSecurity),
                             NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
                             NM_WEP_KEY_TYPE_KEY, nullptr);
                 }
-                    //valid passphrase format: length 5 or length 14
+                //valid passphrase format: length 5 or length 14
                 else if (psk.length() == 5 || psk.length() == 13)
                 {
                     g_object_set(G_OBJECT(settingWifiSecurity),
@@ -458,7 +499,7 @@ void LibNMHandler::initConnection(
             {
                 DBG("LibNMHandler::" << __func__
                         << ": access point has WPA security");
-                        g_object_set(settingWifiSecurity,
+                g_object_set(settingWifiSecurity,
                         NM_SETTING_WIRELESS_SECURITY_PSK,
                         psk.toRawUTF8(), nullptr);
             }
@@ -640,6 +681,13 @@ void LibNMHandler::handleApRemoved
         DBG("LibNMHandler::" << __func__ << ": finding removed access points:");
         const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
                 (nmHandler->nmWifiDevice);
+        if(visibleAPs == nullptr)
+        {
+            DBG("LibNMHandler::" << __func__ 
+                    << ": NMAccessPoint list is null, clearing AP list");
+            nmHandler->accessPointMap.clear();
+            return;
+        }
         int removed = 0;
         for (auto it = nmHandler->accessPointMap.begin();
              it != nmHandler->accessPointMap.end();
@@ -695,6 +743,10 @@ bool LibNMHandler::isWifiConnection(NMActiveConnection* connection)
     if (connection != nullptr)
     {
         const GPtrArray* devices = nm_active_connection_get_devices(connection);
+        if(devices == nullptr)
+        {
+            return false;
+        }
         for (int i = 0; i < devices->len; i++)
         {
             if (devices->pdata[i] == nmDevice)
@@ -720,11 +772,13 @@ void LibNMHandler::buildAPMap()
         {
             const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
                     (nmWifiDevice);
-                    const GPtrArray* wifiConns = nm_device_get_available_connections
+            const GPtrArray* wifiConns = nm_device_get_available_connections
                     (nmDevice);
 
-                    DBG("LibNMHandler::buildAPMap: found " << String(visibleAPs->len)
-                    << " NMAccessPoints, and " << String(wifiConns->len)
+            DBG("LibNMHandler::buildAPMap: found " 
+                    << String(visibleAPs ? visibleAPs->len : 0)
+                    << " NMAccessPoints, and " 
+                    << String(wifiConns ? wifiConns->len : 0)
                     << " saved wifi connections");
             if (visibleAPs == nullptr)
             {
@@ -733,40 +787,46 @@ void LibNMHandler::buildAPMap()
             for (int apNum = 0; apNum < visibleAPs->len; apNum++)
             {
                 NMAccessPoint* nmAP = (NMAccessPoint*) visibleAPs->pdata[apNum];
-                        NMConnection* apSavedConn = nullptr;
-                        GSList* wifiConnList = nullptr;
-                for (int i = 0; i < wifiConns->len; i++)
+                NMConnection* apSavedConn = nullptr;
+                if(wifiConns != nullptr)
                 {
-                    wifiConnList = g_slist_prepend(wifiConnList,
-                            wifiConns->pdata[i]);
+                    GSList* wifiConnList = nullptr;
+                    for (int i = 0; i < wifiConns->len; i++)
+                    {
+                        wifiConnList = g_slist_prepend(wifiConnList,
+                                wifiConns->pdata[i]);
+                    }
+                    GSList* matchingConns = nm_access_point_filter_connections
+                            (nmAP, wifiConnList);
+                            g_slist_free(wifiConnList);
+                    for (GSList* iter = matchingConns; iter != nullptr;
+                         iter = iter->next)
+                    {
+                        NMConnection* conn
+                                = (NMConnection*) iter->data;
+                                GError * error = nullptr;
+                        if (nm_connection_verify(conn, &error))
+                        {
+                            apSavedConn = conn;
+                            break;
+                        }
+                        else if (error != nullptr)
+                        {
+                            DBG("LibNMHandler: invalid connection: "
+                                    << String(error->message));
+                                    g_error_free(error);
+                        }
+                    }
+                    g_slist_free(matchingConns);
                 }
-                GSList* matchingConns = nm_access_point_filter_connections
-                        (nmAP, wifiConnList);
-                        g_slist_free(wifiConnList);
-                for (GSList* iter = matchingConns; iter != nullptr;
-                     iter = iter->next)
+                WifiAccessPoint wifiAP(nmAP, apSavedConn);
+                if(!wifiAP.isVoid())
                 {
-                    NMConnection* conn
-                            = (NMConnection*) iter->data;
-                            GError * error = nullptr;
-                    if (nm_connection_verify(conn, &error))
-                    {
-                        apSavedConn = conn;
-                        break;
-                    }
-                    else if (error != nullptr)
-                    {
-                        DBG("LibNMHandler: invalid connection: "
-                                << String(error->message));
-                                g_error_free(error);
-                    }
+                    accessPointMap[wifiAP].addIfNotAlreadyThere(nmAP);
+                    DBG("LibNMHandler::buildAPMap: Added AP #"
+                            << accessPointMap[wifiAP].size() << " for SSID "
+                            << wifiAP.getSSID());
                 }
-                g_slist_free(matchingConns);
-                        WifiAccessPoint wifiAP(nmAP, apSavedConn);
-                        accessPointMap[wifiAP].addIfNotAlreadyThere(nmAP);
-                        DBG("LibNMHandler::buildAPMap: Added AP #"
-                        << accessPointMap[wifiAP].size() << " for SSID "
-                        << wifiAP.getSSID());
             }
         }
     });
@@ -786,9 +846,17 @@ gulong LibNMHandler::nmClientSignalConnect(
     }
     gulong handlerId = g_signal_connect
             (nmClient, signal, signalHandler, callbackData);
-    DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
-            << "with ID " << handlerId);
-    clientSignalHandlers.add(handlerId);
+    if(handlerId > 0)
+    {
+        DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
+                << "with ID " << handlerId);
+        clientSignalHandlers.add(handlerId);
+    }
+    else
+    {
+        DBG("LibNMHandler::" << __func__ << " : failed to connect signal " 
+                << signal);
+    }
     return handlerId;
 }
 
@@ -804,9 +872,19 @@ gulong LibNMHandler::nmDeviceSignalConnect(
     {
         return 0;
     }
-    gulong handlerId = g_signal_connect
+    gulong handlerId = g_signal_connect 
             (nmDevice, signal, signalHandler, callbackData);
-    deviceSignalHandlers.add(handlerId);
+    if(handlerId > 0)
+    {
+        DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
+                << "with ID " << handlerId);
+        deviceSignalHandlers.add(handlerId);
+    }
+    else
+    {
+        DBG("LibNMHandler::" << __func__ << " : failed to connect signal " 
+                << signal);
+    }
     return handlerId;
 }
 
@@ -824,7 +902,17 @@ gulong LibNMHandler::nmWifiDeviceSignalConnect(
     }
     gulong handlerId = g_signal_connect
             (nmWifiDevice, signal, signalHandler, callbackData);
-    wifiDeviceSignalHandlers.add(handlerId);
+    if(handlerId > 0)
+    {
+        DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
+                << "with ID " << handlerId);
+        wifiDeviceSignalHandlers.add(handlerId);
+    }
+    else
+    {
+        DBG("LibNMHandler::" << __func__ << " : failed to connect signal " 
+                << signal);
+    }
     return handlerId;
 }
 
