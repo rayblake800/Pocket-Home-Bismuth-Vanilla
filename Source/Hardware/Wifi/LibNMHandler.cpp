@@ -631,7 +631,7 @@ void LibNMHandler::handleWifiEnabledChange
 (NMClient* client, LibNMHandler* nmHandler)
 {
     DBG("LibNMHandler::"<<__func__ << ": data=0x"
-                << String::toHexString((int) callbackData));
+                << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
     jassert(client == nmHandler->nmClient);
     nmHandler->wifiEnablementChangeCallback(nmHandler->checkWifiEnabled());
@@ -641,7 +641,7 @@ void LibNMHandler::handleStateChange
 (NMDevice* device, LibNMHandler* nmHandler)
 {
     DBG("LibNMHandler::"<<__func__ << ": data=0x"
-                << String::toHexString((int) callbackData));
+                << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
     jassert(device == nmHandler->nmDevice);
     NMDeviceState state = nm_device_get_state(device);
@@ -652,7 +652,7 @@ void LibNMHandler::handleApAdded
 (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
 {
     DBG("LibNMHandler::" << __func__ << ": data=0x"
-                << String::toHexString((int) callbackData));
+                << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
     nmHandler->buildAPMap();
     nmHandler->apUpdateCallback(nmHandler->updatedVisibleAPs());
@@ -662,7 +662,7 @@ void LibNMHandler::handleApRemoved
 (NMDeviceWifi* wifiDevice, LibNMHandler* nmHandler)
 {
     DBG("LibNMHandler::"<<__func__ << ": data=0x"
-                << String::toHexString((int) callbackData));
+                << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
     jassert(wifiDevice == nmHandler->nmWifiDevice);
     if (nm_client_wireless_get_enabled(nmHandler->nmClient))
@@ -720,7 +720,7 @@ void LibNMHandler::handleConnectionChange
     g_assert(g_main_context_is_owner(g_main_context_default()));
     jassert(wifiDevice == nmHandler->nmWifiDevice);
     DBG("LibNMHandler::" << __func__ << ": data=0x"
-                << String::toHexString((int) callbackData));
+                << String::toHexString((unsigned long) nmHandler));
     WifiAccessPoint connected = nmHandler->findConnectedAP();
     nmHandler->connectionUpdateCallback(connected);
 }
@@ -841,7 +841,7 @@ gulong LibNMHandler::nmClientSignalConnect(
     {
         DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
                 << " with ID " << handlerId << "and data=0x"
-                << String::toHexString((int) callbackData));
+                << String::toHexString((unsigned long) callbackData));
         clientSignalHandlers.add(handlerId);
     }
     else
@@ -870,7 +870,7 @@ gulong LibNMHandler::nmDeviceSignalConnect(
     {
         DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
                 << " with ID " << handlerId << "and data=0x"
-                << String::toHexString((int) callbackData));
+                << String::toHexString((unsigned long) callbackData));
         deviceSignalHandlers.add(handlerId);
     }
     else
@@ -899,7 +899,7 @@ gulong LibNMHandler::nmWifiDeviceSignalConnect(
     {
         DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
                 << " with ID " << handlerId << "and data=0x"
-                << String::toHexString((int) callbackData));
+                << String::toHexString((unsigned long) callbackData));
         wifiDeviceSignalHandlers.add(handlerId);
     }
     else
