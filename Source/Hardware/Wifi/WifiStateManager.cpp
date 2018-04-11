@@ -376,9 +376,9 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
     bool wifiConnected = isWifiConnected();
     WifiState state = getWifiState();
     const ScopedUnlock wifiStateUnlock(wifiLock);
-    DBG("NetworkInterface::" << __func__ << ": state was "
-            << wifiStateString(state)
-            << ", checking if that is still accurate");
+//    DBG("NetworkInterface::" << __func__ << ": state was "
+//            << wifiStateString(state)
+//            << ", checking if that is still accurate");
     
     if(!wifiDeviceFound())
     {

@@ -80,8 +80,6 @@ void HomePage::configValueChanged(String key)
             appMenu = nullptr;
         }
 
-
-        DBG("HomePage::" << __func__ << ": Menu type is " << menuType);
         if (menuType == "Scrolling menu")
         {
             if (!isClass<AppMenuComponent, ScrollingAppMenu>(appMenu.get()))

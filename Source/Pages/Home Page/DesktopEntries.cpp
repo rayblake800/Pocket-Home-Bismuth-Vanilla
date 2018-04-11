@@ -203,22 +203,23 @@ void DesktopEntries::run()
         entries.insert(entry);
 
     }
-    while (uiCallPending)
-    {
-        if (threadShouldExit())
-        {
-            return;
-        }
-        wait(-1);
-    }
     uiCallPending = true;
     MessageManager::callAsync([&uiCallPending, this]
     {
         const ScopedLock loadingLock(lock);
+        notifyCallback("Finished loading applications.");
         DBG("DesktopEntries::" << __func__
                 << ": All desktop entries loaded.");
         onFinish();
         uiCallPending = false;
         this->notify();
     });
+    while (uiCallPending)
+    {
+        if (threadShouldExit())
+        {
+            return;
+        }
+        Thread::yield();
+    }
 }

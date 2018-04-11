@@ -220,7 +220,6 @@ void AppMenuComponent::loadBaseFolder()
 {
     if (!isLoading())
     {
-        DBG("AppMenuComponent::" << __func__ << ":started loading AppMenu");
         int savedIndex = -1;
         if (!openFolders.isEmpty())
         {
@@ -501,8 +500,8 @@ void AppMenuComponent::resized()
 {
     menuResized();
     Rectangle<int> bounds = getLocalBounds();
-    DBG("AppMenuComponent::" << __func__ << ": bounds set to "
-            << getScreenBounds().toString());
+//    DBG("AppMenuComponent::" << __func__ << ": bounds set to "
+//            << getScreenBounds().toString());
     if (buttonEditor != nullptr)
     {
         buttonEditor->applyConfigBounds();
@@ -695,8 +694,8 @@ void AppMenuComponent::mouseDown(const MouseEvent & event)
  */
 void AppMenuComponent::setLoadingState(bool loading)
 {
-    DBG("AppMenuComponent::" << __func__
-            << (loading ? ": started loading" : ": stopped loading"));
+//    DBG("AppMenuComponent::" << __func__
+//            << (loading ? ": started loading" : ": stopped loading"));
     if (loading != isLoading())
     {
         loadingState = loading;
