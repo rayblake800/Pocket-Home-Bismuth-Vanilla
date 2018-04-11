@@ -127,7 +127,7 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
                 << ": already connected to " << toConnect.getSSID());
         return;
     }
-    else if(toConnect == getConnectingAP())
+    else if(toConnect == getConnectingAP()  && !wifiResource->isPSKNeeded())
     {
         DBG("WifiStateManager::" << __func__
                 << ": already connecting to " << toConnect.getSSID());
@@ -139,8 +139,6 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
     {
         //start connecting:
         case connecting:
-            DBG("WifiStateManager::" << __func__
-                    << ": canceling former pending connection");
             stopConnecting();
             break;
         case connected:
@@ -159,13 +157,14 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
     }
     DBG("WifiStateManager::" << __func__ << ": Connecting to access "
             << "point " << toConnect.getSSID());
+    wifiResource->setWifiState(connecting);
     wifiResource->connectToAccessPoint(toConnect, psk);
     wifiResource->startTimer(wifiResource->wifiConnectionTimeout);
 }
 
 /**
- * If currently connected to or trying to connect to a particular access 
- * point, that connection will be closed or canceled.
+ * If currently connected to an access point, that connection will be closed or 
+ * canceled.
  */
 void WifiStateManager::disconnect()
 {
@@ -177,9 +176,9 @@ void WifiStateManager::disconnect()
     {
         case connected:
             DBG("WifiStateManager::" << __func__ << ": Disconnecting... ");
-            wifiResource->disconnect();
-            wifiResource->startTimer(wifiResource->wifiConnectionTimeout);
             wifiResource->setWifiState(disconnecting);
+            wifiResource->startTimer(wifiResource->wifiConnectionTimeout);
+            wifiResource->disconnect();
             return;
         default:
             DBG("WifiStateManager::" << __func__
@@ -202,10 +201,11 @@ void WifiStateManager::stopConnecting()
     switch (wifiState)
     {
         case connecting:
+        case missingPassword:
             DBG("WifiStateManager::" << __func__ << ": Disconnecting... ");
-            wifiResource->stopConnecting();
-            wifiResource->startTimer(wifiResource->wifiConnectionTimeout);
             wifiResource->setWifiState(disconnecting);
+            wifiResource->startTimer(wifiResource->wifiConnectionTimeout);
+            wifiResource->stopConnecting();
             return;
         default:
             DBG("WifiStateManager::" << __func__
@@ -231,25 +231,21 @@ void WifiStateManager::enableWifi()
             case disabled:
                 DBG("WifiStateManager::WifiResource::" << __func__ 
                         << ": enabling wifi");
-                wifiResource->enableWifi();
-                wifiResource->startTimer
-                (wifiResource->wifiEnabledChangeTimeout);
                 wifiResource->setWifiState(turningOn);
+                wifiResource->startTimer
+                        (wifiResource->wifiEnabledChangeTimeout);
+                wifiResource->enableWifi();
                 return;
             case turningOn:
                 DBG("WifiStateManager::" << __func__
                         << ": wifi is already being enabled");
                 return;
-            case enabled:
-            case turningOff:
-            case connecting:
-            case connected:
-            case disconnecting:
-                DBG("WifiStateManager::" << __func__ << ": wifi is already on");
-                return;
             case missingNetworkDevice:
                 DBG("WifiStateManager::" << __func__ 
                         << ": wifi device is missing");
+            default:
+                DBG("WifiStateManager::" << __func__ << ": wifi is already on");
+                return;
         }
     }
 }
@@ -266,16 +262,6 @@ void WifiStateManager::disableWifi()
     WifiState wifiState = wifiResource->getWifiState();
     switch (wifiState)
     {
-        case turningOn:
-        case enabled:
-        case connecting:
-        case connected:
-        case disconnecting:
-            DBG("WifiStateManager::" << __func__ << ": disabling wifi");
-            wifiResource->disableWifi();
-            wifiResource->startTimer(wifiResource->wifiEnabledChangeTimeout);
-            wifiResource->setWifiState(turningOff);
-            return;
         case turningOff:
             DBG("WifiStateManager::" << __func__
                     << ": wifi is already turning off.");
@@ -284,8 +270,12 @@ void WifiStateManager::disableWifi()
         case missingNetworkDevice:
             DBG("WifiStateManager::" << __func__
                     << ": wifi is already disabled");
-
             return;
+        default:
+            DBG("WifiStateManager::" << __func__ << ": disabling wifi");
+            wifiResource->setWifiState(turningOff);
+            wifiResource->startTimer(wifiResource->wifiEnabledChangeTimeout);
+            wifiResource->disableWifi();
     }
 }
 
@@ -341,7 +331,6 @@ void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
 void WifiStateManager::NetworkInterface::addListener
 (WifiStateManager::Listener* listener)
 {
-
     listeners.add(listener);
 }
 
@@ -380,9 +369,9 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
     bool wifiConnected = isWifiConnected();
     WifiState state = getWifiState();
     const ScopedUnlock wifiStateUnlock(wifiLock);
-//    DBG("NetworkInterface::" << __func__ << ": state was "
-//            << wifiStateString(state)
-//            << ", checking if that is still accurate");
+    //DBG("NetworkInterface::" << __func__ << ": state was "
+    //        << wifiStateString(state)
+    //        << ", checking if that is still accurate");
     
     if(!wifiDeviceFound())
     {
@@ -525,6 +514,7 @@ void WifiStateManager::NetworkInterface::signalWifiDisconnected()
         case connecting:
         case disconnecting:
         case connected:
+        case missingPassword:
             setWifiState(enabled);
             return;
         case turningOff:
@@ -577,14 +567,24 @@ void WifiStateManager::NetworkInterface::timerCallback()
     stopTimer();
     bool wifiEnabled = isWifiEnabled();
     bool wifiConnected = isWifiConnected();
+    bool needsPSK = isPSKNeeded(); 
     WifiState currentState = wifiState;
     const ScopedUnlock stateUpdateUnlock(wifiLock);
     switch (currentState)
     {
         case connecting:
-            DBG("WifiStateManager::" << __func__
-                    << ": wifi connection timed out.");
-            setWifiState(enabled);
+            if(needsPSK)
+            {
+                DBG("WifiStateManager::" << __func__
+                        << ": wifi connection missing correct password.");
+                setWifiState(missingPassword);
+            }
+            else
+            {
+                DBG("WifiStateManager::" << __func__
+                        << ": wifi connection timed out.");
+                setWifiState(enabled);
+            }
             return;
         case disconnecting:
             if (wifiConnected)

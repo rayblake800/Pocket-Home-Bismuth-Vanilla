@@ -38,6 +38,7 @@ bool WifiSettingsComponent::shouldShowSpinner()
         case WifiStateManager::turningOff:
         case WifiStateManager::connecting:
         case WifiStateManager::disconnecting:
+        case WifiStateManager::missingPassword:
             return true;
     }
     return false;
@@ -134,6 +135,8 @@ String WifiSettingsComponent::updateButtonText()
             }
             return String(localeText(connecting_to_ap)) + ap.getSSID();
         }
+        case WifiStateManager::missingPassword:
+            return localeText(missing_psk);
         case WifiStateManager::connected:
         {
             WifiAccessPoint ap = wifiManager.getConnectedAP();

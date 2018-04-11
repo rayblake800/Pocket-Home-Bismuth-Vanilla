@@ -74,6 +74,7 @@
         "not_connected": "Not Connected",
         "wifi_turning_off": "WiFi Turning Off...",
         "connecting_to_ap": "Connecting to ",
+        "missing_psk" : "Incorrect Password",
         "connecting_to_unknown": "Connecting...",
         "disconnecting": "Disconnecting..."   
     },

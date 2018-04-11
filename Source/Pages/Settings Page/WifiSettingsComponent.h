@@ -90,7 +90,8 @@ private:
     static const constexpr char * wifi_turning_off = "wifi_turning_off";
     static const constexpr char * connecting_to_ap = "connecting_to_ap";
     static const constexpr char * connecting_to_unknown
-            = "connecting_to_unknown";
+            = "connecting_to_unknown";   
+    static const constexpr char * missing_psk = "missing_psk";
     static const constexpr char * disconnecting = "disconnecting";
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiSettingsComponent)

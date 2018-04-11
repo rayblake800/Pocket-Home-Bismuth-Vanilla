@@ -46,6 +46,8 @@ public:
         turningOff,
         //Wifi device is connecting to an access point.
         connecting,
+        //Connecting access point needs a password.
+        missingPassword,
         //Wifi device is connected to an access point.
         connected,
         //Wifi device is closing its connection to an access point.
@@ -73,6 +75,8 @@ public:
                 return "turningOff";
             case connecting:
                 return "connecting";
+            case missingPassword:
+                return "missingPassword";
             case connected:
                 return "connected";
             case disconnecting:
@@ -268,6 +272,12 @@ public:
          * @return true iff a wifi device was successfully found. 
          */
         virtual bool wifiDeviceFound() = 0;
+        
+        /**
+         * @return true iff connecting to a wifi access point without the
+         *         required psk. 
+         */
+        virtual bool isPSKNeeded() = 0;
 
         /**
          * Attempts to open a connection to a wifi access point. This will fail 
@@ -313,7 +323,7 @@ public:
 
         //Milliseconds to wait before assuming that connecting to
         //or disconnecting from a wifi access point has failed.
-        static const constexpr int wifiConnectionTimeout = 35000;
+        static const constexpr int wifiConnectionTimeout = 25000;
     
     protected:           
         /**
