@@ -216,6 +216,7 @@ void DesktopEntries::run()
     });
     while (uiCallPending)
     {
+        const ScopedUnlock unlockToFinish(lock);
         if (threadShouldExit())
         {
             return;
