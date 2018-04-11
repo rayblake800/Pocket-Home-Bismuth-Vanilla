@@ -25,7 +25,7 @@ LibNMHandler::LibNMHandler()
     {
         DBG("WifiEventHandler::" << __func__ << ": Using wifi device " 
                 << iface);
-        nmDevice = nm_client_get_device_by_path(nmClient, iface.toRawUTF8());
+        nmDevice = nm_client_get_device_by_iface(nmClient, iface.toRawUTF8());
     }
     else
     {
