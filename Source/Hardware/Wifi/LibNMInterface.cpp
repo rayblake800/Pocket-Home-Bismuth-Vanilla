@@ -364,8 +364,8 @@ void LibNMInterface::connectionUpdateCallback(WifiAccessPoint connected)
  */
 void LibNMInterface::windowFocusGained()
 {
-//    connectSignalHandlers();
-//    updateAllWifiData();
+    connectSignalHandlers();
+    updateAllWifiData();
 }
 
 /**
@@ -373,6 +373,6 @@ void LibNMInterface::windowFocusGained()
  */
 void LibNMInterface::windowFocusLost()
 {
-//    disconnectSignalHandlers();
+    disconnectSignalHandlers();
     stopTimer();
 }

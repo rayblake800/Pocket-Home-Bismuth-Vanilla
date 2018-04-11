@@ -192,16 +192,22 @@ WifiAccessPoint LibNMHandler::findConnectingAP()
         {
             NMActiveConnection* conn = nm_client_get_activating_connection
                     (nmClient);
-            if (conn != nullptr)
+            if (conn == nullptr)
             {
-                NMAccessPoint* connectingAP =
-                        nm_device_wifi_get_access_point_by_path(
-                        nmWifiDevice,
-                        nm_active_connection_get_specific_object(conn));
-                if (connectingAP != nullptr)
-                {
-                    ap = WifiAccessPoint(connectingAP);
-                }
+                return;
+            }
+            const char* path = nm_active_connection_get_specific_object(conn);
+            if(path == nullptr)
+            {
+                return;
+            }
+            NMAccessPoint* connectingAP =
+                    nm_device_wifi_get_access_point_by_path(
+                    nmWifiDevice,
+                    path);
+            if (connectingAP != nullptr)
+            {
+                ap = WifiAccessPoint(connectingAP);
             }
         }
     });
