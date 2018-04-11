@@ -22,10 +22,36 @@ bool BluetoothSettingsComponent::connectionEnabled()
     return false;
 }
 
+
 /**
- * @return true iff bluetooth is connecting
+ * This method is used by the component to determine if it should show the
+ * loading spinner.
+ * 
+ * @return false
  */
-bool BluetoothSettingsComponent::isBusy()
+bool BluetoothSettingsComponent::shouldShowSpinner()
+{
+    return false;
+}
+
+/**
+ * This method is used by the component to determine if the connection 
+ * switch should be enabled.
+ * 
+ * @return false
+ */
+bool BluetoothSettingsComponent::allowConnectionToggle()
+{
+    return false;
+}
+
+/**
+ * This method is used by the component to determine if the connection 
+ * page should be accessible.
+ * 
+ * @return false
+ */
+bool BluetoothSettingsComponent::connectionPageAvailable()
 {
     return false;
 }

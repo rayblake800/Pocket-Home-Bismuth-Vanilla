@@ -22,10 +22,29 @@ private:
     bool connectionEnabled() override;
 
     /**
-     * @return true iff bluetooth is connecting
+     * This method is used by the component to determine if it should show the
+     * loading spinner.
+     * 
+     * @return false
      */
-    bool isBusy() override;
+    bool shouldShowSpinner() override;
 
+    /**
+     * This method is used by the component to determine if the connection 
+     * switch should be enabled.
+     * 
+     * @return false
+     */
+    bool allowConnectionToggle() override;
+  
+    /**
+     * This method is used by the component to determine if the connection 
+     * page should be accessible.
+     * 
+     * @return false
+     */
+    bool connectionPageAvailable() override;
+    
     /**
      * @return the bluetooth icon asset name
      */

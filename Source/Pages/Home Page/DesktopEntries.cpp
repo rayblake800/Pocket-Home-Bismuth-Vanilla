@@ -134,7 +134,7 @@ void DesktopEntries::run()
             {
                 return;
             }
-            Thread::yield();
+            sleep(-1);
         }
         uiCallPending = true;
         MessageManager::callAsync([&i, &dirs, &uiCallPending, this]
@@ -170,7 +170,7 @@ void DesktopEntries::run()
             {
                 return;
             }
-            Thread::yield();
+            sleep(-1);
         }
         uiCallPending = true;
         MessageManager::callAsync([&fileIndex, &files, &uiCallPending, this]
@@ -220,6 +220,6 @@ void DesktopEntries::run()
         {
             return;
         }
-        Thread::yield();
+        sleep(-1);
     }
 }
