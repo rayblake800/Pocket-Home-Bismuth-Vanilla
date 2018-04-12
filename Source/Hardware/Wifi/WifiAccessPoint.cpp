@@ -25,15 +25,15 @@ WifiAccessPoint::WifiAccessPoint
     {
         return;
     }
+    g_signal_connect_swapped(
+            accessPoint,
+            "notify::" NM_ACCESS_POINT_STRENGTH,
+            G_CALLBACK(strengthUpdateCallback),
+            (gpointer)this);
+    nmAP = accessPoint;
     GLibSignalHandler glibHandler;
     glibHandler.gLibCall([this, accessPoint, savedConnection]()
     {;
-        g_signal_connect_swapped(
-                accessPoint,
-                "notify::" NM_ACCESS_POINT_STRENGTH,
-                G_CALLBACK(strengthUpdateCallback),
-                (gpointer)this);
-        nmAP = accessPoint;
         const GByteArray* ssidBytes = getSSIDBytes(accessPoint, savedConnection);
         if(ssidBytes != nullptr)
         {
