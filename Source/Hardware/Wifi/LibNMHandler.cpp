@@ -321,10 +321,13 @@ void LibNMHandler::handleConnectionAttempt(
     {
         return;
     }
-    NMAccessPoint* ap =
-            nm_device_wifi_get_access_point_by_path(
-            nmHandler->nmWifiDevice,
-            nm_active_connection_get_specific_object(active));
+    NMAccessPoint* ap = nullptr;
+    char* path = nm_active_connection_get_specific_object(active);
+    if(path != nullptr)
+    {
+        ap = nm_device_wifi_get_access_point_by_path
+                (nmHandler->nmWifiDevice,path);
+    }
     if (err != nullptr || ap == nullptr)
     {
         if(err != nullptr)
