@@ -30,7 +30,7 @@ WifiAccessPoint::WifiAccessPoint
     {;
         g_signal_connect_swapped(
                 accessPoint,
-                "Notify::" NM_ACCESS_POINT_STRENGTH,
+                "notify::" NM_ACCESS_POINT_STRENGTH,
                 G_CALLBACK(strengthUpdateCallback),
                 (gpointer)this);
         nmAP = accessPoint;
