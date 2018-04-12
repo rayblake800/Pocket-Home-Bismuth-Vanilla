@@ -17,7 +17,6 @@ hash(hash)
 }
 
 #ifdef LINUX
-
 WifiAccessPoint::WifiAccessPoint
 (NMAccessPoint* accessPoint, NMConnection* savedConnection)
 {
@@ -25,30 +24,6 @@ WifiAccessPoint::WifiAccessPoint
     {
         return;
     }
-    guint notifySignal = g_signal_lookup
-            ("notify::" NM_ACCESS_POINT_STRENGTH,
-            G_TYPE_FROM_INSTANCE(accessPoint));
-    DBG("The notify signal id is " << String(notifySignal));
-    GSignalQuery sQuery;
-    g_signal_query(notifySignal, &sQuery);
-    DBG("Signal name:" << String(sQuery.signal_name));
-    DBG("Signal src type:" << String(g_type_name(sQuery.itype)));
-    DBG("Callback return type:" << String(g_type_name(sQuery.return_type)));
-    guint numParam = sQuery.n_params;
-    DBG("Callback param count:" <<String(numParam));
-    if(numParam > 0)
-    {
-        for(int i = 0; i < numParam; i++)
-        {
-            DBG("Param " << i << ": type = " << g_type_name(sQuery.param_types[i]));
-        }
-    }
-    
-    g_signal_connect_swapped(
-            accessPoint,
-            "notify::" NM_ACCESS_POINT_STRENGTH,
-            G_CALLBACK(strengthUpdateCallback),
-            (gpointer)this);
     nmAP = accessPoint;
     GLibSignalHandler glibHandler;
     glibHandler.gLibCall([this, accessPoint, savedConnection]()
@@ -64,6 +39,17 @@ WifiAccessPoint::WifiAccessPoint
                 utfSSID = nullptr;
             }
         }
+        
+        
+    
+        DBG("Registering signal for " <<ssid);
+        DBG("AP=" << String::toHexString((unsigned int) accessPoint
+                << " this=" << String::toHexString((unsigned int) accessPoint);
+        g_signal_connect_swapped(
+            accessPoint,
+            "notify::" NM_ACCESS_POINT_STRENGTH,
+            G_CALLBACK(strengthUpdateCallback),
+            (gpointer)this);
         
         if(savedConnection != nullptr)
         {
@@ -116,7 +102,8 @@ WifiAccessPoint::WifiAccessPoint
  */
 WifiAccessPoint::WifiAccessPoint() :
 signalStrength(-1),
-security(none) { }
+security(none) 
+{ }
 
 /**
  * @return true iff this WifiAccessPoint is void.
@@ -241,11 +228,13 @@ String WifiAccessPoint::generateHash(NMAccessPoint* ap, NMConnection* conn)
 }
 
 
-void WifiAccessPoint::strengthUpdateCallback(WifiAccessPoint* self)
+void WifiAccessPoint::strengthUpdateCallback(gpointer p1, gpointer p2, gpointer p3)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    DBG(self->ssid << " strength is now " 
-            << String(nm_access_point_get_strength(self->nmAP)));
+    DBG("Wifi AP strength update:");
+    DBG("\tParam 1:" << String::toHexString((unsigned int) p1));
+    DBG("\tParam 2:" << String::toHexString((unsigned int) p2));
+    DBG("\tParam 3:" << String::toHexString((unsigned int) p3));
 }
 
 #endif  

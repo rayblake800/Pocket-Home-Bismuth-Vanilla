@@ -304,7 +304,7 @@ private:
     NM80211ApSecurityFlags wpaFlags;
     NM80211ApSecurityFlags rsnFlags;
     
-    static void strengthUpdateCallback(WifiAccessPoint* self);
+    static void strengthUpdateCallback(gpointer p1, gpointer p2, gpointer p3);
     
     NMAccessPoint* nmAP = nullptr;
 #endif
