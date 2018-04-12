@@ -26,7 +26,21 @@ public:
      *                         access point, or nullptr if none is available.
      */
     WifiAccessPoint(NMAccessPoint* accessPoint,
-            NMConnection* savedConnection = nullptr);
+            NMConnection* savedConnection = nullptr);    
+    
+    /**
+     * Copies an existing access point object, registering a new signal 
+     * handler for the new access point instance.
+     * 
+     * @param toCopy
+     */
+    WifiAccessPoint(const WifiAccessPoint& toCopy);
+    
+    
+    /**
+     * Unregisters the signal handler, if one exists
+     */
+    virtual ~WifiAccessPoint();
 #endif  
 
     /**
@@ -44,14 +58,12 @@ public:
     WifiAccessPoint(String ssid, int signalStrength, bool requiresAuth,
             String hash);
 
-
     /**
      * Creates a void WifiAccessPoint, representing the absence of a 
      * wifi access point.
      */
     WifiAccessPoint();
 
-    virtual ~WifiAccessPoint() { }
 
     enum SecurityType
     {
@@ -304,8 +316,8 @@ private:
     NM80211ApSecurityFlags wpaFlags;
     NM80211ApSecurityFlags rsnFlags;
     
-    static void strengthUpdateCallback(gpointer p1, gpointer p2, gpointer p3);
-    
+    static void strengthUpdateCallback(WifiAccessPoint* toUpdate);
+    gulong updateSignalId = 0;
     NMAccessPoint* nmAP = nullptr;
 #endif
 

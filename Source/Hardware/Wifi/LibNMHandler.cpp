@@ -944,7 +944,7 @@ void LibNMHandler::nmDeviceSignalDisconnect(gulong toDisconnect)
 {
     if (nmDevice != nullptr)
     {
-        g_signal_handler_disconnect(nmDevice, toDisconnect);
+        (nmDevice, toDisconnect);
         deviceSignalHandlers.removeAllInstancesOf(toDisconnect);
     }
 }

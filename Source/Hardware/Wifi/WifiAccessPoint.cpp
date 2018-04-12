@@ -28,7 +28,12 @@ WifiAccessPoint::WifiAccessPoint
     DBG("Registering signal for " <<ssid);
     DBG("AP=" << String::toHexString((unsigned long) accessPoint)
             << " this=" << String::toHexString((unsigned long) this));
-        
+    updateSignalId = g_signal_connect_swapped(
+            accessPoint,
+            "notify::" NM_ACCESS_POINT_STRENGTH,
+            G_CALLBACK(strengthUpdateCallback),
+            this);
+    
     GLibSignalHandler glibHandler;
     glibHandler.gLibCall([this, accessPoint, savedConnection]()
     {;
@@ -43,14 +48,6 @@ WifiAccessPoint::WifiAccessPoint
                 utfSSID = nullptr;
             }
         }
-        
-        
-    
-        g_signal_connect_swapped(
-            accessPoint,
-            "notify::" NM_ACCESS_POINT_STRENGTH,
-            G_CALLBACK(strengthUpdateCallback),
-            (gpointer)this);
         
         if(savedConnection != nullptr)
         {
@@ -94,7 +91,48 @@ WifiAccessPoint::WifiAccessPoint
     });
 }
 
+    
+/**
+ * Copies an existing access point object, registering a new signal 
+ * handler for the new access point instance.
+ */
+WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy):
+ssid(toCopy.ssid),
+bssid(toCopy.bssid),
+security(toCopy.security),
+hash(toCopy.hash),
+signalStrength(toCopy.signalStrength),
+frequency(toCopy.frequency),
+maxBitrate(toCopy.maxBitrate),
+connectionSaved(toCopy.connectionSaved),
+pskSaved(toCopy.pskSaved),
+apMode(toCopy.apMode),
+apFlags(toCopy.apFlags),
+rsnFlags(toCopy.rsnFlags),
+nmAP(toCopy.nmAP)
+{
+    if(nmAP != nullptr)
+    {
+    updateSignalId = g_signal_connect_swapped(
+            nmAP,
+            "notify::" NM_ACCESS_POINT_STRENGTH,
+            G_CALLBACK(strengthUpdateCallback),
+            this);
+        
+    }
+}
 
+    
+/**
+ * Unregisters the signal handler, if one exists
+ */
+WifiAccessPoint::~WifiAccessPoint()
+{
+    if(updateSignalId > 0)
+    {
+        g_signal_handler_disconnect(nmAP,updateSignalId);
+    }
+}
 #endif  
 
 /**
@@ -229,15 +267,10 @@ String WifiAccessPoint::generateHash(NMAccessPoint* ap, NMConnection* conn)
 }
 
 
-void WifiAccessPoint::strengthUpdateCallback(gpointer p1, gpointer p2, gpointer p3)
+void WifiAccessPoint::strengthUpdateCallback(WifiAccessPoint* toUpdate)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    DBG("Wifi AP strength update:");
-    DBG("\tParam 1:" << String::toHexString((unsigned long) p1));
-    DBG("\tParam 2:" << String::toHexString((unsigned long) p2));
-    DBG("\tParam 3:" << String::toHexString((unsigned long) p3));
-    WifiAccessPoint * ap = (WifiAccessPoint *) p1;
-    DBG(ap->ssid);
+    DBG("Wifi AP strength update: for " << toUpdate->ssid);
 }
 
 #endif  
