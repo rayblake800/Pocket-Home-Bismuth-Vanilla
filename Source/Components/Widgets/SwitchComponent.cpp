@@ -111,11 +111,14 @@ void SwitchComponent::SwitchHandle::paint(Graphics& g)
 }
 
 /**
- * Handles switch transitions delayed by waiting for wifi.
+ * Handles switch transitions delayed by waiting for animation.
  */
 void SwitchComponent::timerCallback()
 {
-    clicked();
-    stopTimer();
+    MessageManager::callAsync([this]()
+    {
+        clicked();
+        stopTimer();
+    });
 }
 

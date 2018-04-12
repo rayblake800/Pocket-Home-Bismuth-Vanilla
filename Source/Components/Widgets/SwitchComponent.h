@@ -98,7 +98,7 @@ private:
     };
 
     /**
-     * Handles switch transitions delayed by waiting for wifi.
+     * Handles switch transitions delayed by waiting for animation.
      */
     void timerCallback() override;
 
