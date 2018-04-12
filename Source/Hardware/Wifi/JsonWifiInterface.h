@@ -17,10 +17,7 @@ public:
     virtual ~JsonWifiInterface();
 
 protected:
-    bool wifiDeviceFound() override
-    {
-        return true;
-    }
+    bool wifiDeviceFound() override;
     
     /**
      * Checks if the simulated wifi device is enabled.
@@ -44,6 +41,11 @@ protected:
      * @return true iff a connected WifiAccessPoint has been set.
      */
     bool isWifiConnected() override;
+        
+    /**
+     * Checks if the simulated connection requires a psk
+     */
+    bool isPSKNeeded() override;
 
     /**
      * Returns the connected access point.

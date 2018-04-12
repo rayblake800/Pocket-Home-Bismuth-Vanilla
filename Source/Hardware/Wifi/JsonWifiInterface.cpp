@@ -6,9 +6,18 @@
 
 JsonWifiInterface::JsonWifiInterface(CriticalSection& wifiLock) : 
 WifiStateManager::NetworkInterface(wifiLock),
-wifiLock(wifiLock) { }
+wifiLock(wifiLock) 
+{
+    confirmWifiState();
+}
 
 JsonWifiInterface::~JsonWifiInterface() { }
+
+
+bool JsonWifiInterface::wifiDeviceFound()
+{
+    return true;
+}
 
 /**
  * Checks if the simulated wifi device is enabled.
@@ -35,6 +44,16 @@ bool JsonWifiInterface::isWifiConnected()
 {
     ScopedLock lock(wifiLock);
     return connected;
+}
+
+        
+/**
+ * Checks if the simulated connection requires a psk
+ */
+bool JsonWifiInterface::isPSKNeeded()
+{ 
+    ScopedLock lock(wifiLock);
+    return waitingToConnect.getRequiresAuth();
 }
 
 /**
@@ -154,7 +173,9 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                     }
                     else
                     {
-                        DBG("JsonWifiInterface::" << __func__ << ": connected");
+                        DBG("JsonWifiInterface::" << __func__ 
+                                << ": missing psk! (any is valid)");
+                        return;
                     }
                     connected = true;
                     connectedAP = waitingToConnect;
