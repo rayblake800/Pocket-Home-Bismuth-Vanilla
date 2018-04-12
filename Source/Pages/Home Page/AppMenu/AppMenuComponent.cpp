@@ -407,8 +407,8 @@ void AppMenuComponent::layoutFolders(bool animate)
     {
         return;
     }
-    DBG("AppMenuComponent::" << __func__
-            << ": Updating all AppMenuFolder bounds");
+    //DBG("AppMenuComponent::" << __func__
+    //        << ": Updating all AppMenuFolder bounds");
     for (int i = 0; i < openFolders.size(); i++)
     {
         Rectangle<int> folderBounds = updateFolderBounds(openFolders[i], i);

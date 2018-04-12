@@ -29,10 +29,10 @@ WifiAccessPoint::WifiAccessPoint
     glibHandler.gLibCall([this, accessPoint, savedConnection]()
     {;
         g_signal_connect_swapped(
-                G_OBJECT(accessPoint),
+                accessPoint,
                 "Notify::" NM_ACCESS_POINT_STRENGTH,
                 G_CALLBACK(strengthUpdateCallback),
-                this);
+                (gpointer)this);
         nmAP = accessPoint;
         const GByteArray* ssidBytes = getSSIDBytes(accessPoint, savedConnection);
         if(ssidBytes != nullptr)
