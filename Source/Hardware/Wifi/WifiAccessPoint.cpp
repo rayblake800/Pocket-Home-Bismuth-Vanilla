@@ -24,15 +24,16 @@ WifiAccessPoint::WifiAccessPoint
     {
         return;
     }
-    nmAP = accessPoint;
-    DBG("Registering signal for " <<ssid);
-    DBG("AP=" << String::toHexString((unsigned long) accessPoint)
-            << " this=" << String::toHexString((unsigned long) this));
     updateSignalId = g_signal_connect_swapped(
             accessPoint,
             "notify::" NM_ACCESS_POINT_STRENGTH,
             G_CALLBACK(strengthUpdateCallback),
             this);
+    g_object_weak_ref(G_OBJECT(savedConnection),
+            (GWeakNotify) apDestroyedCallback, this);
+    nmAP = accessPoint;
+    DBG("AP=" << String::toHexString((unsigned long) accessPoint)
+            << " signal handler=" << String(updateSignalId));
     
     GLibSignalHandler glibHandler;
     glibHandler.gLibCall([this, accessPoint, savedConnection]()
@@ -113,12 +114,16 @@ nmAP(toCopy.nmAP)
 {
     if(nmAP != nullptr)
     {
-    updateSignalId = g_signal_connect_swapped(
-            nmAP,
-            "notify::" NM_ACCESS_POINT_STRENGTH,
-            G_CALLBACK(strengthUpdateCallback),
-            this);
+        updateSignalId = g_signal_connect_swapped(
+                nmAP,
+                "notify::" NM_ACCESS_POINT_STRENGTH,
+                G_CALLBACK(strengthUpdateCallback),
+                this);
+        g_object_weak_ref(G_OBJECT(nmAP),
+                (GWeakNotify) apDestroyedCallback, this);
         
+        DBG("AP=" << String::toHexString((unsigned long) nmAP)
+                << " signal handler=" << String(updateSignalId));
     }
 }
 
@@ -131,6 +136,11 @@ WifiAccessPoint::~WifiAccessPoint()
     if(updateSignalId > 0)
     {
         g_signal_handler_disconnect(nmAP,updateSignalId);
+    }
+    if(nmAP != nullptr)
+    {
+        g_object_weak_unref(G_OBJECT(nmAP), (GWeakNotify) apDestroyedCallback,
+                this);
     }
 }
 #endif  
@@ -266,6 +276,14 @@ String WifiAccessPoint::generateHash(NMAccessPoint* ap, NMConnection* conn)
     return hash;
 }
 
+void WifiAccessPoint::apDestroyedCallback(WifiAccessPoint* toUpdate,
+        GObject* removed)
+{
+    jassert((NMAccessPoint*) removed == toUpdate->nmAP);
+    DBG("AP " << toUpdate->ssid << " destroyed");
+    toUpdate->nmAP = nullptr;
+    toUpdate->updateSignalId = 0;
+}
 
 void WifiAccessPoint::strengthUpdateCallback(WifiAccessPoint* toUpdate)
 {

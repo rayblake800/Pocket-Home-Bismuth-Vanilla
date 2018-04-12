@@ -316,6 +316,8 @@ private:
     NM80211ApSecurityFlags wpaFlags;
     NM80211ApSecurityFlags rsnFlags;
     
+    static void apDestroyedCallback(WifiAccessPoint* toUpdate, GObject* removed);
+    
     static void strengthUpdateCallback(WifiAccessPoint* toUpdate);
     gulong updateSignalId = 0;
     NMAccessPoint* nmAP = nullptr;
