@@ -26,8 +26,8 @@ WifiAccessPoint::WifiAccessPoint
     }
     nmAP = accessPoint;
     DBG("Registering signal for " <<ssid);
-    DBG("AP=" << String::toHexString((unsigned int) accessPoint)
-            << " this=" << String::toHexString((unsigned int) this));
+    DBG("AP=" << String::toHexString((unsigned long) accessPoint)
+            << " this=" << String::toHexString((unsigned long) this));
         
     GLibSignalHandler glibHandler;
     glibHandler.gLibCall([this, accessPoint, savedConnection]()
@@ -233,9 +233,11 @@ void WifiAccessPoint::strengthUpdateCallback(gpointer p1, gpointer p2, gpointer 
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
     DBG("Wifi AP strength update:");
-    DBG("\tParam 1:" << String::toHexString((unsigned int) p1));
-    DBG("\tParam 2:" << String::toHexString((unsigned int) p2));
-    DBG("\tParam 3:" << String::toHexString((unsigned int) p3));
+    DBG("\tParam 1:" << String::toHexString((unsigned long) p1));
+    DBG("\tParam 2:" << String::toHexString((unsigned long) p2));
+    DBG("\tParam 3:" << String::toHexString((unsigned long) p3));
+    WifiAccessPoint * ap = (WifiAccessPoint *) p1;
+    DBG(ap->ssid);
 }
 
 #endif  
