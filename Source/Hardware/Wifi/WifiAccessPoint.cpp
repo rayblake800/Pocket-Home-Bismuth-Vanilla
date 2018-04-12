@@ -25,6 +25,25 @@ WifiAccessPoint::WifiAccessPoint
     {
         return;
     }
+    guint notifySignal = g_signal_lookup
+            ("notify::" NM_ACCESS_POINT_STRENGTH,
+            G_TYPE_FROM_INSTANCE(accessPoint));
+    DBG("The notify signal id is " << String(notifySignal));
+    GSignalQuery sQuery;
+    g_signal_query(notifySignal, &sQuery);
+    DBG("Signal name:" << String(sQuery->signal_name));
+    DBG("Signal src type:" << String(g_type_name(sQuery->itype)));
+    DBG("Callback return type:" << String(g_type_name(sQuery->return_type)));
+    guint numParam = sQuery->n_params;
+    DBG("Callback param count:" <<String(numParam));
+    if(numParam > 0)
+    {
+        for(int i = 0; i < numParam; i++)
+        {
+            DBG("Param " << i << ": type = " << g_type_name(sQuery->param_types[i]));
+        }
+    }
+    
     g_signal_connect_swapped(
             accessPoint,
             "notify::" NM_ACCESS_POINT_STRENGTH,
