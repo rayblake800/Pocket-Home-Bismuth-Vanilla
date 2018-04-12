@@ -36,6 +36,47 @@ Array<WifiAccessPoint> WifiSettingsPage::loadConnectionList()
 }
 
 /**
+ * Attempts to connect to a Wifi access point.  This will close any
+ * connections to other access points.
+ */
+void WifiSettingsPage::connect(const WifiAccessPoint& connection)
+{
+    WifiStateManager wifiManager;
+    if (connection.getRequiresAuth())
+    {
+        const String& psk = passwordEditor.getText();
+        DBG("WifiSettingsPage::" << __func__ << ": connecting to "
+                << connection.getSSID() << " with psk of length "
+                << psk.length());
+        wifiManager.connectToAccessPoint(connection, psk);
+    }
+    else
+    {
+        DBG("WifiSettingsPage::" << __func__ << ": connecting to "
+                << connection.getSSID() << " with no psk required.");
+        wifiManager.connectToAccessPoint(connection);
+    }
+    setCurrentlyConnecting(true);
+    errorLabel.setVisible(false);
+}
+
+/**
+ * Tries to disconnect from a specific wifi access point.
+ */
+void WifiSettingsPage::disconnect(const WifiAccessPoint& connection)
+{
+    WifiStateManager wifiManager;
+    if(connection == wifiManager.getConnectingAP())
+    {
+        wifiManager.stopConnecting();
+    }
+    else if(connection == wifiManager.getConnectedAP())
+    {
+        wifiManager.disconnect();
+    }
+}
+
+/**
  * @return true iff the system is connected to WifiAccessPoint connection.
  */
 bool WifiSettingsPage::isConnected(const WifiAccessPoint& connection)
@@ -57,15 +98,13 @@ void WifiSettingsPage::connectionButtonClicked(Button* button)
     if (&connectionButton == button)
     {
         const WifiAccessPoint& selectedAP = getSelectedConnection();
-        WifiStateManager wifiManager;
         if (isConnected(selectedAP))
         {
-            wifiManager.disconnect();
+            disconnect(selectedAP);
         }
         else
         {
-            wifiManager.connectToAccessPoint(selectedAP,
-                    passwordEditor.getText());
+            connect(selectedAP);
         }
     }
 }
@@ -94,8 +133,8 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
         {2,
             {
                 {nullptr, 1},
-                {&passwordLabel, 2},
-                {&passwordEditor, 4},
+                {connection.getRequiresAuth() ? &passwordLabel : nullptr, 2},
+                {connection.getRequiresAuth() ? &passwordEditor : nullptr, 4},
                 {nullptr, 1}
             }},
         {2,
@@ -117,8 +156,6 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
 void WifiSettingsPage::updateConnectionControls
 (const WifiAccessPoint& accessPoint)
 {
-    WifiStateManager stateManager;
-    
     passwordEditor.clear();
     bool connected = isConnected(accessPoint);
     bool passwordNeeded = accessPoint.getRequiresAuth() && !connected;
@@ -137,6 +174,18 @@ void WifiSettingsPage::updateConnectionControls
     spinner.setVisible(connectionChanging);
 }
 
+/**
+ * When currentlyConnecting, disable Wifi controls and show a loading
+ * spinner.  Otherwise, enable controls and hide the loading spinner.
+ */
+void WifiSettingsPage::setCurrentlyConnecting(bool currentlyConnecting)
+{
+    if (currentlyConnecting != connectionChanging)
+    {
+        connectionChanging = currentlyConnecting;
+        updateConnectionControls(getSelectedConnection());
+    }
+}
 
 /**
  * Keeps the page updated when wifi state changes.

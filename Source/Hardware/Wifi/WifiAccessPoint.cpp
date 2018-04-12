@@ -27,11 +27,12 @@ WifiAccessPoint::WifiAccessPoint
     }
     GLibSignalHandler glibHandler;
     glibHandler.gLibCall([this, accessPoint, savedConnection]()
-    {
-        g_signal_connect_object(
-                accessPoint,
-                "Notify::"NM_ACCESS_POINT_STRENGTH,
-                GCALLBACK())
+    {;
+        g_signal_connect_swapped(
+                G_OBJECT(accessPoint),
+                "Notify::" NM_ACCESS_POINT_STRENGTH,
+                G_CALLBACK(strengthUpdateCallback),
+                this);
         nmAP = accessPoint;
         const GByteArray* ssidBytes = getSSIDBytes(accessPoint, savedConnection);
         if(ssidBytes != nullptr)
@@ -218,6 +219,14 @@ String WifiAccessPoint::generateHash(NMAccessPoint* ap, NMConnection* conn)
         }
     });
     return hash;
+}
+
+
+void WifiAccessPoint::strengthUpdateCallback(WifiAccessPoint* self)
+{
+    g_assert(g_main_context_is_owner(g_main_context_default()));
+    DBG(self->ssid << " strength is now " 
+            << String(nm_access_point_get_strength(self->nmAP)));
 }
 
 #endif  
