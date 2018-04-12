@@ -281,6 +281,7 @@ void LibNMHandler::requestScan()
                 DBG("LibNMHandler::requestScan: error requesting scan: "
                         << String(error->message));
                 g_error_free(error);
+                error = nullptr;
             }
         }
     });
@@ -335,6 +336,7 @@ void LibNMHandler::handleConnectionAttempt(
             DBG("LibNMHandler::" << __func__ 
                     << ": Error=" << String(err->message));
             g_error_free(err);
+            err = nullptr;
         }
         nmHandler->connectionFailureCallback();
     }
@@ -552,13 +554,14 @@ void LibNMHandler::closeActivatingConnection()
                     {
                         GError *err = nullptr;
                         nm_remote_connection_delete(candidate, nullptr, &err);
-                        if (err)
+                        if (err != nullptr)
                         {
                             DBG("LibNMInterface::" << __func__
                                     << ": failed to remove active connection!");
                             DBG("LibNMInterface::" << __func__ << ": "
                                     << err->message);
                             g_error_free(err);
+                            err = nullptr;
                         }
                         break;
                     }
@@ -816,6 +819,7 @@ void LibNMHandler::buildAPMap()
                             DBG("LibNMHandler: invalid connection: "
                                     << String(error->message));
                                     g_error_free(error);
+                                    error = nullptr;
                         }
                     }
                     g_slist_free(matchingConns);
