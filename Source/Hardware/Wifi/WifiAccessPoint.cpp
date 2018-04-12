@@ -43,8 +43,8 @@ WifiAccessPoint::WifiAccessPoint
         
     
         DBG("Registering signal for " <<ssid);
-        DBG("AP=" << String::toHexString((unsigned int) accessPoint
-                << " this=" << String::toHexString((unsigned int) accessPoint);
+        DBG("AP=" << String::toHexString((unsigned int) accessPoint)
+                << " this=" << String::toHexString((unsigned int) accessPoint));
         g_signal_connect_swapped(
             accessPoint,
             "notify::" NM_ACCESS_POINT_STRENGTH,
