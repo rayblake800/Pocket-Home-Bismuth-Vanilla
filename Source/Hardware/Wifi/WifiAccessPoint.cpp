@@ -21,9 +21,18 @@ hash(hash)
 WifiAccessPoint::WifiAccessPoint
 (NMAccessPoint* accessPoint, NMConnection* savedConnection)
 {
+    if(accessPoint == nullptr)
+    {
+        return;
+    }
     GLibSignalHandler glibHandler;
     glibHandler.gLibCall([this, accessPoint, savedConnection]()
     {
+        g_signal_connect_object(
+                accessPoint,
+                "Notify::"NM_ACCESS_POINT_STRENGTH,
+                GCALLBACK())
+        nmAP = accessPoint;
         const GByteArray* ssidBytes = getSSIDBytes(accessPoint, savedConnection);
         if(ssidBytes != nullptr)
         {

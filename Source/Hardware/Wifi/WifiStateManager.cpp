@@ -504,7 +504,7 @@ void WifiStateManager::NetworkInterface::signalConnectionFailed()
 void WifiStateManager::NetworkInterface::signalWifiDisconnected()
 {
     const ScopedLock wifiStateLock(wifiLock);
-    DBG("NetworkInterface::" << __func__ << ": wifi disconnected");
+    //DBG("NetworkInterface::" << __func__ << ": wifi disconnected");
     stopTimer();
     WifiState currentState = getWifiState();
     const ScopedUnlock stateUnlock(wifiLock);
@@ -534,7 +534,7 @@ void WifiStateManager::NetworkInterface::signalWifiDisconnected()
 void WifiStateManager::NetworkInterface::signalWifiEnabled()
 {
 
-    DBG("NetworkInterface::" << __func__ << ": wifi enabled");
+    //DBG("NetworkInterface::" << __func__ << ": wifi enabled");
     setWifiState(enabled);
     const ScopedLock timerLock(wifiLock);
     stopTimer();
@@ -547,13 +547,25 @@ void WifiStateManager::NetworkInterface::signalWifiEnabled()
  */
 void WifiStateManager::NetworkInterface::signalWifiDisabled()
 {
-    DBG("NetworkInterface::" << __func__ << ": wifi disabled");
+    //DBG("NetworkInterface::" << __func__ << ": wifi disabled");
     setWifiState(disabled);
     const ScopedLock timerLock(wifiLock);
     stopTimer();
 }
 
-
+        
+/**
+ * When wifi is connecting and a missing psk is required, the 
+ * NetworkInterface should call this to notify its WifiStateManager.
+ */
+void WifiStateManager::NetworkInterface::signalPskNeeded()
+{
+    //DBG("NetworkInterface::" << __func__ << ": missing password");
+    setWifiState(missingPassword);
+    const ScopedLock timerLock(wifiLock);
+    stopTimer();
+    
+}
 
 /**
  * Whenever a wifi operation is attempted, the timer is set to

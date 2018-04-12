@@ -32,25 +32,7 @@ private:
      * 
      * @return the list of all visible Wifi access points.
      */
-    Array<WifiAccessPoint> loadConnectionList();
-
-
-    /**
-     * Attempts to connect to a Wifi access point.  This will close any
-     * connections to other access points.
-     *
-     *  @param connection  The wifi device will attempt to find and connect
-     *                      to this access point.
-     */
-    void connect(const WifiAccessPoint& connection);
-
-    /**
-     * Tries to disconnect from a specific wifi access point.
-     * 
-     * @param connection   If the system is currently connected to this
-     *                      connection, this method closes that connection.
-     */
-    void disconnect(const WifiAccessPoint& connection);
+    Array<WifiAccessPoint> loadConnectionList() override;
 
     /**
      * Checks if wifi is connected to a specific access point.
@@ -59,7 +41,7 @@ private:
      * 
      * @return true iff the system is connected to WifiAccessPoint connection.
      */
-    bool isConnected(const WifiAccessPoint& connection);
+    bool isConnected(const WifiAccessPoint& connection) override;
 
     /**
      * Attempt to connect or disconnect from the current selected access point
@@ -86,7 +68,7 @@ private:
      */
     RelativeLayoutManager::Layout getConnectionControlsLayout
     (const WifiAccessPoint& connection);
-
+    
     /**
      * Update connection control components to match the current Wifi connection
      * state and the provided Wifi access point.
@@ -95,16 +77,6 @@ private:
      */
     virtual void updateConnectionControls
     (const WifiAccessPoint& accessPoint) override;
-
-
-    /**
-     * When currentlyConnecting, disable Wifi controls and show a loading
-     * spinner. Otherwise, enable controls and hide the loading spinner.
-     * 
-     * @param currentlyConnecting  Indicates if Wifi is trying to connect to
-     *                              an access point, or is otherwise busy.
-     */
-    void setCurrentlyConnecting(bool currentlyConnecting);
 
     /**
      * Keeps the page updated when wifi state changes.
@@ -180,10 +152,8 @@ private:
     //Wifi icons for all signal strengths
     static const StringArray wifiImageFiles;
 
-    //Set to true when wifi state is changing, used to determine if wifi
-    //controls should be enabled
-    bool connectionChanging = false;
-
+    
+    
     //Used for entering a password for a secured access point.
     ScalingLabel passwordLabel;
     TextEditor passwordEditor;
@@ -194,6 +164,9 @@ private:
     //displays over the connection button while connecting to indicate that
     //wifi is busy
     Spinner spinner;
+    //holds the last known wifi state
+    WifiStateManager::WifiState lastState;
+    
     
     
     //localized text keys;

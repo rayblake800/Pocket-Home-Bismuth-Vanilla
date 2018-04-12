@@ -322,13 +322,11 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
             break;
         case NM_DEVICE_STATE_NEED_AUTH:
         {
-            /* FIXME: let this drop into the general failed case for now
-             *        eventually this should prompt the user
-             */
             DBG("LibNMInterface::" << __func__
-                    << " missing auth, canceling connection.");
+                    << " missing auth, requesting PSK.");
             ScopedUnlock unlockForUpdate(wifiLock);
-            closeActivatingConnection();
+            signalPskNeeded();
+            break;
         }
         case NM_DEVICE_STATE_DISCONNECTED:
         {

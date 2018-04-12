@@ -78,20 +78,6 @@ private:
     virtual Array<ConnectionPoint> loadConnectionList() = 0;
 
     /**
-     * Attempts to open a connection, if possible.
-     * 
-     * @param connection
-     */
-    virtual void connect(const ConnectionPoint& connection) = 0;
-
-    /**
-     * Attempts to close a connection, if possible.
-     * 
-     * @param connection
-     */
-    virtual void disconnect(const ConnectionPoint& connection) = 0;
-
-    /**
      * @return true iff the system is connected to ConnectionPoint connection.
      * 
      * @param connection

@@ -501,7 +501,6 @@ void LibNMHandler::initConnection(const WifiAccessPoint& toConnect, String psk)
         }
         else
         {
-            jassert(connection == nullptr);
             nm_client_add_and_activate_connection(nmClient,
                     connection,
                     nmDevice,
@@ -825,9 +824,9 @@ void LibNMHandler::buildAPMap()
                     g_slist_free(matchingConns);
                 }
                 WifiAccessPoint wifiAP(nmAP, apSavedConn);
-                if(!wifiAP.isVoid())
+                if(!wifiAP.isVoid() && !accessPointMap[wifiAP].contains(nmAP))
                 {
-                    accessPointMap[wifiAP].addIfNotAlreadyThere(nmAP);
+                    accessPointMap[wifiAP].add(nmAP);
                     DBG("LibNMHandler::buildAPMap: Added AP #"
                             << accessPointMap[wifiAP].size() << " for SSID "
                             << wifiAP.getSSID()

@@ -377,6 +377,12 @@ public:
          * call this to notify its WifiStateManager.
          */
         void signalWifiDisabled();
+        
+        /**
+         * When wifi is connecting and a missing psk is required, the 
+         * NetworkInterface should call this to notify its WifiStateManager.
+         */
+        void signalPskNeeded();
 
     private:
         /**
