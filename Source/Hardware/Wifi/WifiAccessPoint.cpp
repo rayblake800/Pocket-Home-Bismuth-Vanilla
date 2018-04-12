@@ -25,6 +25,10 @@ WifiAccessPoint::WifiAccessPoint
         return;
     }
     nmAP = accessPoint;
+    DBG("Registering signal for " <<ssid);
+    DBG("AP=" << String::toHexString((unsigned int) accessPoint)
+            << " this=" << String::toHexString((unsigned int) this));
+        
     GLibSignalHandler glibHandler;
     glibHandler.gLibCall([this, accessPoint, savedConnection]()
     {;
@@ -42,9 +46,6 @@ WifiAccessPoint::WifiAccessPoint
         
         
     
-        DBG("Registering signal for " <<ssid);
-        DBG("AP=" << String::toHexString((unsigned int) accessPoint)
-                << " this=" << String::toHexString((unsigned int) this));
         g_signal_connect_swapped(
             accessPoint,
             "notify::" NM_ACCESS_POINT_STRENGTH,
