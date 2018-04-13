@@ -79,10 +79,7 @@ namespace AssetFiles
     var loadJSONAsset(const String& assetName, 
             bool lookOutsideAssets = true);
 
-#if JUCE_LINUX
     // FIXME: don't hardcode this, maybe find it via .deb configuration
     static const constexpr char* assetFolder = "/usr/share/pocket-home/";
-#else
-    static const constexpr char* assetFolder = "../../assets/";
-#endif
+
 }

@@ -4,12 +4,9 @@
  * WifiAccessPoint stores all relevant data about a single wifi access point.
  */
 #pragma once
-
-#ifdef LINUX
 #include <NetworkManager.h>
 #include <nm-access-point.h>
 #include <nm-connection.h>
-#endif
 
 #include "JuceHeader.h"
 
@@ -17,8 +14,6 @@ class WifiAccessPoint
 {
 public:
 
-
-#ifdef LINUX
     /**
      * @param accessPoint     A LibNM access point object.
      * 
@@ -41,7 +36,6 @@ public:
      * Unregisters the signal handler, if one exists
      */
     virtual ~WifiAccessPoint();
-#endif  
 
     /**
      * @param ssid            The access point name.
@@ -222,8 +216,6 @@ public:
         signalStrength = strength;
     }
 
-#ifdef LINUX
-
     /**
      * Compares two WifiAccessPoint objects using their hash values.
      */
@@ -259,7 +251,6 @@ public:
     {
         return rsnFlags;
     }
-#endif
 
 private:
     String ssid;
@@ -274,7 +265,6 @@ private:
     bool connectionSaved = false;
     bool pskSaved = false;
 
-#ifdef LINUX
 
     /**
      * Gets an SSID byte array from a saved connection or access point.  If
@@ -321,6 +311,5 @@ private:
     static void strengthUpdateCallback(WifiAccessPoint* toUpdate);
     gulong updateSignalId = 0;
     NMAccessPoint* nmAP = nullptr;
-#endif
 
 };

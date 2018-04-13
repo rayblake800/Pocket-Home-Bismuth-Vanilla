@@ -2,11 +2,9 @@
 #include "Utils.h"
 #include "WifiAccessPoint.h"
 
-#define LINUX
-#ifdef LINUX
+
 #include "GLibSignalHandler.h"
 #include "nm-utils.h"
-#endif
 
 WifiAccessPoint::WifiAccessPoint
 (String ssid, int signalStrength, bool requiresAuth, String hash) :
@@ -17,7 +15,6 @@ hash(hash)
     security = requiresAuth ? securedWPA : none;
 }
 
-#ifdef LINUX
 WifiAccessPoint::WifiAccessPoint
 (NMAccessPoint* accessPoint, NMConnection* savedConnection)
 {
@@ -144,8 +141,6 @@ WifiAccessPoint::~WifiAccessPoint()
                 this);
     }
 }
-#endif  
-
 /**
  * Creates a void WifiAccessPoint, representing the absence of a wifi access 
  * point.
@@ -164,8 +159,6 @@ bool WifiAccessPoint::isVoid() const
             && signalStrength == -1
             && hash.isEmpty();
 }
-
-#ifdef LINUX
 
 /**
  * Generates a hash value for a list of access point parameters that will
@@ -292,5 +285,3 @@ void WifiAccessPoint::strengthUpdateCallback(WifiAccessPoint* toUpdate)
     g_assert(g_main_context_is_owner(g_main_context_default()));
     DBG("Wifi AP strength update: for " << toUpdate->ssid);
 }
-
-#endif  

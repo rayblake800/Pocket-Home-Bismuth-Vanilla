@@ -58,7 +58,6 @@ lockscreen([this]()
 void
 PowerPage::startSleepMode()
 {
-#    if JUCE_LINUX
     ChildProcess commandProcess;
     StringArray cmd{ "xset", "q", "|", "grep", "is O"};
     if (commandProcess.start(cmd))
@@ -78,7 +77,6 @@ PowerPage::startSleepMode()
         }
     }
     commandProcess.waitForProcessToFinish(10000);
-#    endif
 }
 
 /**

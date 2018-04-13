@@ -1,11 +1,9 @@
 #include "JuceHeader.h"
 #include "Audio.h"
-#if JUCE_LINUX
 #include <alsa/asoundlib.h>
 
 #define DEFAULT_BUFFER_SIZE 4096 /*in samples*/
 snd_pcm_t *g_alsa_playback_handle = 0;
-#endif
 
 /**
  * Initializes system audio.
@@ -14,7 +12,6 @@ bool Audio::initAudio()
 {
     // FIXME: this is a hack to fix touch screen presses causing buzzing
     // when no application holds alsa open
-#    if JUCE_LINUX
     int err;
     int freq = 44100, channels = 2;
     snd_pcm_hw_params_t *hw_params;
@@ -113,7 +110,6 @@ bool Audio::initAudio()
 
     /* Stop PCM device and drop pending frames */
     snd_pcm_drain(g_alsa_playback_handle);
-#    endif
     return true;
 }
 
@@ -123,7 +119,6 @@ bool Audio::initAudio()
 int Audio::getVolumePercent()
 {
     int volume = 0;
-#    if JUCE_LINUX
     // Get initial brightness value
     ChildProcess child;
     // Get initial volume value
@@ -135,7 +130,6 @@ int Audio::getVolumePercent()
         result = result.initialSectionContainingOnly("0123456789");
         volume = result.getIntValue();
     }
-#    endif
     return volume;
 }
 
@@ -144,7 +138,6 @@ int Audio::getVolumePercent()
  */
 void Audio::setVolume(int volumePercent)
 {
-#    if JUCE_LINUX
     StringArray cmd{"amixer", "sset", "Power Amplifier",
                     (String(volumePercent) + "%").toRawUTF8()};
     ChildProcess child;
@@ -152,5 +145,4 @@ void Audio::setVolume(int volumePercent)
     {
         String result(child.readAllProcessOutput());
     }
-#    endif
 }
