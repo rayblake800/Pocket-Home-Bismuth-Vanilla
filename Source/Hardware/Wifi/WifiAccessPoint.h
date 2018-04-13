@@ -21,8 +21,8 @@ public:
      *                         access point, or nullptr if none is available.
      */
     WifiAccessPoint(NMAccessPoint* accessPoint,
-            NMConnection* savedConnection = nullptr);    
-    
+            NMConnection* savedConnection = nullptr);
+
     /**
      * Copies an existing access point object, registering a new signal 
      * handler for the new access point instance.
@@ -30,8 +30,8 @@ public:
      * @param toCopy
      */
     WifiAccessPoint(const WifiAccessPoint& toCopy);
-    
-    
+
+
     /**
      * Unregisters the signal handler, if one exists
      */
@@ -58,7 +58,6 @@ public:
      */
     WifiAccessPoint();
 
-
     enum SecurityType
     {
         none,
@@ -74,44 +73,11 @@ public:
     bool isVoid() const;
 
     /**
-     * @return  the wifi access point frequency.
-     */
-    unsigned long getFrequency();
-
-    /**
-     * @return  the maximum access point bitrate in kb/s
-     */
-    unsigned long getMaxBitrate();
-
-    /**
-     * Compares two WifiAccessPoint objects using their hash values.
-     */
-    bool operator==(const WifiAccessPoint rhs) const
-    {
-        return hash == rhs.hash;
-    };
-
-    /**
-     * Compares two WifiAccessPoint objects using their hash values.
-     */
-    bool operator!=(const WifiAccessPoint rhs) const
-    {
-        return hash != rhs.hash;
-    };
-
-    /**
-     * Compares two WifiAccessPoint objects using their hash values.
-     */
-    bool operator<(const WifiAccessPoint rhs) const
-    {
-        return hash.compare(rhs.hash) < 0;
-    }
-
-    /**
      * @return the SSID identifying the access point. 
      */
     const String& getSSID() const
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return ssid;
     }
 
@@ -120,6 +86,7 @@ public:
      */
     const String& getBSSID() const
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return bssid;
     }
 
@@ -128,6 +95,7 @@ public:
      */
     int getSignalStrength() const
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return signalStrength;
     }
 
@@ -136,6 +104,7 @@ public:
      */
     unsigned long getFrequency() const
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return frequency;
     }
 
@@ -144,6 +113,7 @@ public:
      */
     unsigned long getMaxBitrate() const
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return maxBitrate;
     }
 
@@ -152,6 +122,7 @@ public:
      */
     bool getRequiresAuth() const
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return security != none;
     }
 
@@ -161,6 +132,7 @@ public:
      */
     const String& getHash() const
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return hash;
     }
 
@@ -169,6 +141,7 @@ public:
      */
     const String& toString() const
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return ssid;
     }
 
@@ -177,6 +150,7 @@ public:
      */
     bool isSavedConnection() const
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return connectionSaved;
     }
 
@@ -186,6 +160,7 @@ public:
      */
     bool hasSavedPsk() const
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return pskSaved;
     }
 
@@ -194,6 +169,7 @@ public:
      */
     void setSaved(bool isSaved)
     {
+        const ScopedWriteLock updateLock(networkUpdateLock);
         connectionSaved = isSaved;
     }
 
@@ -203,25 +179,37 @@ public:
      */
     bool setPskSaved(bool hasPsk)
     {
+        const ScopedWriteLock updateLock(networkUpdateLock);
         pskSaved = hasPsk;
     }
-    
+
     /**
      * Updates the access point signal strength.
      *  
      * @param strength  This should be between 0 and 100, read from the network
      *                  manager.
      */
-    void setSignalStrength(int strength){
+    void setSignalStrength(int strength)
+    {
+        const ScopedReadLock readLock(networkUpdateLock);
         signalStrength = strength;
     }
+    
+    /**
+     * Copies over all data from rhs, creating new NMAccessPoint signal 
+     * handlers if necessary. 
+     * 
+     * @param rhs
+     */
+    void operator=(const WifiAccessPoint& rhs);
 
     /**
      * Compares two WifiAccessPoint objects using their hash values.
      */
     bool operator==(NMAccessPoint* rhs) const
     {
-        return hash == generateHash(rhs);
+        const ScopedReadLock readLock(networkUpdateLock);
+        return nmAP == rhs || hash == generateHash(rhs);
     };
 
     /**
@@ -229,43 +217,76 @@ public:
      */
     bool operator!=(NMAccessPoint* rhs) const
     {
-        return hash != generateHash(rhs);
+        const ScopedReadLock readLock(networkUpdateLock);
+        return nmAP != rhs || hash != generateHash(rhs);
     };
+
+    /**
+     * Compares two WifiAccessPoint objects using their hash values.
+     */
+    bool operator==(const WifiAccessPoint& rhs) const
+    {
+        const ScopedReadLock readLock(networkUpdateLock);
+        return nmAP == rhs.nmAP || hash == rhs.hash;
+    };
+
+    /**
+     * Compares two WifiAccessPoint objects using their hash values.
+     */
+    bool operator!=(const WifiAccessPoint& rhs) const
+    {
+        const ScopedReadLock readLock(networkUpdateLock);
+        return hash != rhs.hash;
+    };
+    
+    /**
+     * Checks if this access point is compatible with a network connection.
+     */
+    bool operator==(NMConnection* rhs) const
+    {
+        const ScopedReadLock readLock(networkUpdateLock);
+        return nmAP != nullptr && nm_access_point_connection_valid(nmAP,rhs);
+    }
+     bool operator!=(NMConnection* rhs) const
+    {
+        const ScopedReadLock readLock(networkUpdateLock);
+        return nmAP == nullptr || !nm_access_point_connection_valid(nmAP,rhs);
+    }
+
+    /**
+     * Compares two WifiAccessPoint objects using their hash values.
+     */
+    bool operator<(const WifiAccessPoint rhs) const
+    {
+        const ScopedReadLock readLock(networkUpdateLock);
+        return hash.compare(rhs.hash) < 0;
+    }
 
     NM80211Mode getMode()
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return apMode;
     }
 
     NM80211ApFlags getFlags()
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return apFlags;
     }
 
     NM80211ApSecurityFlags getWPAFlags()
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return wpaFlags;
     }
 
     NM80211ApSecurityFlags getRSNFlags()
     {
+        const ScopedReadLock readLock(networkUpdateLock);
         return rsnFlags;
     }
 
 private:
-    String ssid;
-    String bssid;
-    SecurityType security;
-    String hash;
-
-    int signalStrength;
-    unsigned long frequency;
-    unsigned long maxBitrate;
-
-    bool connectionSaved = false;
-    bool pskSaved = false;
-
-
     /**
      * Gets an SSID byte array from a saved connection or access point.  If
      * possible, the value from the saved connection will be used first.
@@ -279,7 +300,7 @@ private:
      */
     static const GByteArray* getSSIDBytes
     (NMAccessPoint* ap, NMConnection* conn = nullptr);
-    
+
     /**
      * Generates a hash value for a list of access point parameters that will
      * be unique to that access point's connection.
@@ -301,14 +322,49 @@ private:
      *               nullptr if no such connection is known.
      */
     static String generateHash(NMAccessPoint* ap, NMConnection* conn = nullptr);
+
+    /**
+     * A callback to remove the stored NMAccessPoint if it is destroyed.  This
+     * should only be called on the GLib event loop by GLib library code.
+     * 
+     * @param toUpdate
+     * @param removed
+     */
+    static void apDestroyedCallback
+    (WifiAccessPoint* toUpdate, GObject* removed);
+
+    /**
+     * A callback to update signal strength whenever NMAccessPoint strength
+     * changes.  This should only be called on the GLib event loop by GLib 
+     * library code.
+     * 
+     * @param toUpdate
+     */
+    static void strengthUpdateCallback(WifiAccessPoint* toUpdate);
+
+    //Prevent concurrent access when being updated with new network data
+    ReadWriteLock networkUpdateLock;
+
+    //Access point name
+    String ssid;
+    //Access point hardware ID string
+    String bssid;
+    //Access point security strength
+    SecurityType security;
+    //Identifying hash unique to this APs connection
+    String hash;
+
+    int signalStrength;
+    unsigned long frequency;
+    unsigned long maxBitrate;
+
+    bool connectionSaved = false;
+    bool pskSaved = false;
+
     NM80211Mode apMode;
     NM80211ApFlags apFlags;
     NM80211ApSecurityFlags wpaFlags;
     NM80211ApSecurityFlags rsnFlags;
-    
-    static void apDestroyedCallback(WifiAccessPoint* toUpdate, GObject* removed);
-    
-    static void strengthUpdateCallback(WifiAccessPoint* toUpdate);
     gulong updateSignalId = 0;
     NMAccessPoint* nmAP = nullptr;
 
