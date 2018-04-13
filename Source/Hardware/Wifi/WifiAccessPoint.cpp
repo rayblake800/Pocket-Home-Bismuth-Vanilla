@@ -118,8 +118,8 @@ nmAP(toCopy.nmAP)
         g_object_weak_ref(G_OBJECT(nmAP),
                 (GWeakNotify) apDestroyedCallback, this);
         
-        DBG("AP=" << String::toHexString((unsigned long) nmAP)
-                << " signal handler=" << String(updateSignalId));
+        //DBG("AP=" << String::toHexString((unsigned long) nmAP)
+        //        << " signal handler=" << String(updateSignalId));
     }
 }
 
@@ -191,8 +191,8 @@ void WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
         g_object_weak_ref(G_OBJECT(nmAP),
                 (GWeakNotify) apDestroyedCallback, this);
         
-        DBG("AP=" << String::toHexString((unsigned long) nmAP)
-                << " signal handler=" << String(updateSignalId));
+        //DBG("AP=" << String::toHexString((unsigned long) nmAP)
+        //        << " signal handler=" << String(updateSignalId));
     }
 }
 
@@ -310,11 +310,20 @@ String WifiAccessPoint::generateHash(NMAccessPoint* ap, NMConnection* conn)
 void WifiAccessPoint::apDestroyedCallback(WifiAccessPoint* toUpdate,
         GObject* removed)
 {
-    jassert((NMAccessPoint*) removed == toUpdate->nmAP);
-    const ScopedWriteLock destroyLock(toUpdate->networkUpdateLock);
-    toUpdate->nmAP = nullptr;
-    toUpdate->signalStrength = 0;
-    toUpdate->updateSignalId = 0;
+    if((NMAccessPoint*) removed == toUpdate->nmAP)
+    {
+        const ScopedWriteLock destroyLock(toUpdate->networkUpdateLock);
+        toUpdate->nmAP = nullptr;
+        toUpdate->signalStrength = 0;
+        toUpdate->updateSignalId = 0;
+    }
+    else
+    {
+        DBG("WifiAccessPoint::"<<__func__<<": destroyed AP=0x"
+                << String::toHexString((unsigned long) removed)
+                << " but saved AP=0x"
+                << String::toHexString((unsigned long) toUpdate->nmAP));
+    }
     //TODO: implement listeners, notify of AP loss
 }
 

@@ -628,8 +628,8 @@ void LibNMHandler::disconnectSignalHandlers()
     {
         for (gulong& signalHandlerId : wifiDeviceSignalHandlers)
         {
-            DBG("LibNMHandler::"<<__func__ << ": removing wifi device handler "
-                    << String(signalHandlerId));
+            //DBG("LibNMHandler::"<<__func__ << ": removing wifi device handler "
+            //        << String(signalHandlerId));
             g_signal_handler_disconnect(nmDevice, signalHandlerId);
         }
     }
@@ -639,8 +639,8 @@ void LibNMHandler::disconnectSignalHandlers()
     {
         for (gulong& signalHandlerId : deviceSignalHandlers)
         {
-            DBG("LibNMHandler::"<<__func__ << ": removing network device handler "
-                    << String(signalHandlerId));
+            //DBG("LibNMHandler::"<<__func__ << ": removing network device handler "
+            //        << String(signalHandlerId));
             g_signal_handler_disconnect(nmDevice, signalHandlerId);
         }
     }
@@ -650,8 +650,8 @@ void LibNMHandler::disconnectSignalHandlers()
     {
         for (gulong& signalHandlerId : clientSignalHandlers)
         {
-            DBG("LibNMHandler::"<<__func__ << ": removing NM client handler "
-                    << String(signalHandlerId));
+            //DBG("LibNMHandler::"<<__func__ << ": removing NM client handler "
+            //        << String(signalHandlerId));
             g_signal_handler_disconnect(nmClient, signalHandlerId);
         }
         clientSignalHandlers.clear();
@@ -713,9 +713,10 @@ void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)
 //    DBG("LibNMHandler::"<<__func__ << ": data=0x"
 //                << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    if (nm_client_wireless_get_enabled(nmHandler->nmClient))
+    if (!nmHandler->accessPointMap.empty 
+            && nm_client_wireless_get_enabled(nmHandler->nmClient))
     {
-        DBG("LibNMHandler::" << __func__ << ": finding removed access points:");
+        //DBG("LibNMHandler::" << __func__ << ": finding removed access points:");
         const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
                 (NM_DEVICE_WIFI(nmHandler->nmDevice));
         if(visibleAPs == nullptr)
@@ -750,8 +751,8 @@ void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)
             }
             it->second.removeValuesIn(toRemove);
         }
-        DBG("LibNMHandler::" << __func__ << ": removed " << removed
-                << " NMAccessPoints");
+        //DBG("LibNMHandler::" << __func__ << ": removed " << removed
+        //        << " NMAccessPoints");
     }
     else
     {
@@ -822,7 +823,7 @@ void LibNMHandler::buildAPMap()
     GLibSignalHandler signalHandler;
     signalHandler.gLibCall([this]()
     {
-        DBG("LibNMHandler::buildAPMap: Mapping all visible APs");
+        //DBG("LibNMHandler::buildAPMap: Mapping all visible APs");
         if (isWifiAvailable())
         {
             const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
@@ -830,11 +831,11 @@ void LibNMHandler::buildAPMap()
             const GPtrArray* wifiConns = nm_device_get_available_connections
                     (nmDevice);
 
-            DBG("LibNMHandler::buildAPMap: found " 
-                    << String(visibleAPs ? visibleAPs->len : 0)
-                    << " NMAccessPoints, and " 
-                    << String(wifiConns ? wifiConns->len : 0)
-                    << " saved wifi connections");
+            //DBG("LibNMHandler::buildAPMap: found " 
+            //        << String(visibleAPs ? visibleAPs->len : 0)
+            //        << " NMAccessPoints, and " 
+            //        << String(wifiConns ? wifiConns->len : 0)
+            //        << " saved wifi connections");
             if (visibleAPs == nullptr)
             {
                 return;
