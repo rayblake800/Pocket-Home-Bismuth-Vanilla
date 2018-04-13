@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "WifiAccessPoint.h"
 
+#define LINUX
 #ifdef LINUX
 #include "GLibSignalHandler.h"
 #include "nm-utils.h"
@@ -29,7 +30,7 @@ WifiAccessPoint::WifiAccessPoint
             "notify::" NM_ACCESS_POINT_STRENGTH,
             G_CALLBACK(strengthUpdateCallback),
             this);
-    g_object_weak_ref(G_OBJECT(savedConnection),
+    g_object_weak_ref(G_OBJECT(accessPoint),
             (GWeakNotify) apDestroyedCallback, this);
     nmAP = accessPoint;
     DBG("AP=" << String::toHexString((unsigned long) accessPoint)
@@ -282,6 +283,7 @@ void WifiAccessPoint::apDestroyedCallback(WifiAccessPoint* toUpdate,
     jassert((NMAccessPoint*) removed == toUpdate->nmAP);
     DBG("AP " << toUpdate->ssid << " destroyed");
     toUpdate->nmAP = nullptr;
+    toUpdate->signalStrength = 0;
     toUpdate->updateSignalId = 0;
 }
 
