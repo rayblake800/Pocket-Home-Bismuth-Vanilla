@@ -199,6 +199,10 @@ private:
     
     static void handleConnectionChange(LibNMHandler* nmHandler);
     
+    static void handleClientRemoved(LibNMHandler* self, GObject* client);
+    
+    static void handleDeviceRemoved(LibNMHandler* self, GObject* device);
+    
     /**
      * Checks if a connection belongs to the wifi device.  This function should
      * be called from the GLib event thread.
@@ -282,35 +286,11 @@ private:
             GCallback signalHandler,
             gpointer callbackData);
 
-    /**
-     * Disconnects a signal handler from the network manager client.
-     * 
-     * @toDisconnect   A signal handler ID previously returned by 
-     *                 nmClientSignalConnect
-     */
-    void nmClientSignalDisconnect(gulong toDisconnect);
-
-    /**
-     * Disconnects a signal handler from the generic wlan0 device
-     * 
-     * @toDisconnect   A signal handler ID previously returned by 
-     *                 nmDeviceSignalConnect
-     */
-    void nmDeviceSignalDisconnect(gulong toDisconnect);
-    
-    /**
-     * Disconnects a signal handler from the wifi device wlan0
-     * 
-     * @toDisconnect   A signal handler ID previously returned by 
-     *                 nmWifiDeviceSignalConnect
-     */
-    void nmWifiSignalDisconnect(gulong toDisconnect);
-
-private:
-
     NMClient* nmClient = nullptr;
     NMDevice* nmDevice = nullptr;
-    NMDeviceWifi* nmWifiDevice = nullptr;
+    
+    NMActiveConnection* activatingConn = nullptr;
+    
     
     std::map<WifiAccessPoint,Array<NMAccessPoint*>> accessPointMap;
 

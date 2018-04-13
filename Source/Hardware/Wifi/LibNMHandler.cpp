@@ -23,6 +23,9 @@ LibNMHandler::LibNMHandler()
             nmClient = nullptr;
             return;
         }
+        g_object_weak_ref(G_OBJECT(nmClient), 
+                (GWeakNotify) handleClientRemoved, this);
+        
         MainConfigFile config;
         String iface = config.getConfigValue<String>
                 (MainConfigFile::wifiInterfaceKey);
@@ -47,21 +50,22 @@ LibNMHandler::LibNMHandler()
                     && nm_device_get_managed(testDev))
                 {
                     nmDevice = (NMDevice*) testDev;
-                    nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
                     DBG("Using wifi device " << nm_device_get_iface(testDev));
                     break;
                 }
             }
         }
-        nmWifiDevice = NM_DEVICE_WIFI(nmDevice);
         if (nmDevice == nullptr || !NM_IS_DEVICE_WIFI(nmDevice))
         {
             DBG("WifiEventHandler::" << __func__ <<
                     ":  failed to find a libNM managed wifi device!");
+            g_object_weak_unref(G_OBJECT(nmClient), 
+                    (GWeakNotify) handleClientRemoved, this);
             nmClient = nullptr;
             nmDevice = nullptr;
-            nmWifiDevice = nullptr;
-        }
+        }      
+        g_object_weak_ref(G_OBJECT(nmDevice), 
+                (GWeakNotify) handleDeviceRemoved, this);
     });
 }
 
@@ -70,6 +74,16 @@ LibNMHandler::LibNMHandler()
  */
 LibNMHandler::~LibNMHandler()
 {
+    if(nmClient != nullptr)
+    {
+        g_object_weak_unref(G_OBJECT(nmClient), 
+                (GWeakNotify) handleClientRemoved, this);
+    }
+   if(nmDevice != nullptr)
+    {
+        g_object_weak_unref(G_OBJECT(nmDevice), 
+                (GWeakNotify) handleDeviceRemoved, this);
+    }
     disconnectSignalHandlers();
 }
 
@@ -79,8 +93,7 @@ LibNMHandler::~LibNMHandler()
 bool LibNMHandler::isWifiAvailable()
 {
     return nmClient != nullptr
-            && nmDevice != nullptr
-            && nmWifiDevice != nullptr;
+            && nmDevice != nullptr;
 }
 
 /**
@@ -160,7 +173,7 @@ WifiAccessPoint LibNMHandler::findConnectedAP()
         if (isWifiAvailable())
         {
             NMAccessPoint* nmAP = nm_device_wifi_get_active_access_point
-                    (nmWifiDevice);
+                    (NM_DEVICE_WIFI(nmDevice));
             if (nmAP != nullptr)
             {
                 ap = WifiAccessPoint(nmAP);
@@ -185,20 +198,19 @@ WifiAccessPoint LibNMHandler::findConnectingAP()
     {
         if (isWifiAvailable())
         {
-            NMActiveConnection* conn = nm_client_get_activating_connection
-                    (nmClient);
-            if (conn == nullptr)
+            if (activatingConn == nullptr)
             {
                 return;
             }
-            const char* path = nm_active_connection_get_specific_object(conn);
+            const char* path = nm_active_connection_get_specific_object
+            (activatingConn);
             if(path == nullptr)
             {
                 return;
             }
             NMAccessPoint* connectingAP =
                     nm_device_wifi_get_access_point_by_path(
-                    nmWifiDevice,
+                    NM_DEVICE_WIFI(nmDevice),
                     path);
             if (connectingAP != nullptr)
             {
@@ -275,7 +287,8 @@ void LibNMHandler::requestScan()
         if (isWifiAvailable())
         {
             GError* error = nullptr;
-            nm_device_wifi_request_scan_simple(nmWifiDevice, nullptr, error);
+            nm_device_wifi_request_scan_simple(NM_DEVICE_WIFI(nmDevice),
+                    nullptr, error);
             if (error != nullptr)
             {
                 DBG("LibNMHandler::requestScan: error requesting scan: "
@@ -327,7 +340,7 @@ void LibNMHandler::handleConnectionAttempt(
     if(apPath != nullptr)
     {
         ap = nm_device_wifi_get_access_point_by_path
-                (nmHandler->nmWifiDevice,apPath);
+                (NM_DEVICE_WIFI(nmHandler->nmDevice),apPath);
     }
     if (err != nullptr || ap == nullptr)
     {
@@ -342,6 +355,7 @@ void LibNMHandler::handleConnectionAttempt(
     }
     else
     {
+        nmHandler->activatingConn = active;
         nmHandler->connectingCallback(ap);
     }
 }
@@ -536,11 +550,10 @@ void LibNMHandler::closeActivatingConnection()
     {
         if (isWifiAvailable())
         {
-            NMActiveConnection *conn = nm_client_get_activating_connection
-                    (nmClient);
-            if (conn != nullptr)
+            if (activatingConn != nullptr)
             {
-                const char *ac_uuid = nm_active_connection_get_uuid(conn);
+                const char *ac_uuid = nm_active_connection_get_uuid
+                (activatingConn);
                 const GPtrArray* avail_cons =
                         nm_device_get_available_connections(nmDevice);
                 for (int i = 0; avail_cons && (i < avail_cons->len); i++)
@@ -611,13 +624,13 @@ void LibNMHandler::connectSignalHandlers()
  */
 void LibNMHandler::disconnectSignalHandlers()
 {
-    if (nmWifiDevice != nullptr && NM_IS_DEVICE_WIFI(nmWifiDevice))
+    if (nmDevice != nullptr && NM_IS_DEVICE_WIFI(nmDevice))
     {
         for (gulong& signalHandlerId : wifiDeviceSignalHandlers)
         {
             DBG("LibNMHandler::"<<__func__ << ": removing wifi device handler "
                     << String(signalHandlerId));
-            g_signal_handler_disconnect(nmWifiDevice, signalHandlerId);
+            g_signal_handler_disconnect(nmDevice, signalHandlerId);
         }
     }
     wifiDeviceSignalHandlers.clear();
@@ -663,6 +676,26 @@ void LibNMHandler::handleStateChange(LibNMHandler* nmHandler)
 //                << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
     NMDeviceState state = nm_device_get_state(nmHandler->nmDevice);
+    switch (state)
+    {
+        case NM_DEVICE_STATE_PREPARE:
+        case NM_DEVICE_STATE_CONFIG:
+        case NM_DEVICE_STATE_IP_CONFIG:
+        case NM_DEVICE_STATE_IP_CHECK:
+        case NM_DEVICE_STATE_SECONDARIES:
+        case NM_DEVICE_STATE_NEED_AUTH:
+        {
+            NMActiveConnection* newConnection = 
+                    nm_client_get_activating_connection(nmHandler->nmClient);
+            if(newConnection != nullptr)
+            {
+                nmHandler->activatingConn = newConnection;
+            }
+            break;
+        }
+        default:
+            nmHandler->activatingConn = nullptr;
+    }
     nmHandler->stateUpdateCallback(state);
 }
 
@@ -684,7 +717,7 @@ void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)
     {
         DBG("LibNMHandler::" << __func__ << ": finding removed access points:");
         const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
-                (nmHandler->nmWifiDevice);
+                (NM_DEVICE_WIFI(nmHandler->nmDevice));
         if(visibleAPs == nullptr)
         {
             DBG("LibNMHandler::" << __func__ 
@@ -737,6 +770,25 @@ void LibNMHandler::handleConnectionChange(LibNMHandler* nmHandler)
     nmHandler->connectionUpdateCallback(connected);
 }
 
+
+    
+void LibNMHandler::handleClientRemoved(LibNMHandler* self, GObject* client)
+{
+    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(client == (GObject*) self->nmClient);
+    self->nmClient = nullptr;
+    self->clientSignalHandlers.clear();
+}
+
+void LibNMHandler::handleDeviceRemoved(LibNMHandler* self, GObject* device)
+{
+    g_assert(g_main_context_is_owner(g_main_context_default()));
+    g_assert(device == (GObject*) self->nmDevice);
+    self->nmDevice = nullptr;
+    self->deviceSignalHandlers.clear();
+    self->wifiDeviceSignalHandlers.clear(); 
+}
+
 /**
  * Checks if a connection belongs to the wifi device.  This function should
  * be called from the GLib event thread.
@@ -774,7 +826,7 @@ void LibNMHandler::buildAPMap()
         if (isWifiAvailable())
         {
             const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
-                    (nmWifiDevice);
+                    (NM_DEVICE_WIFI(nmDevice));
             const GPtrArray* wifiConns = nm_device_get_available_connections
                     (nmDevice);
 
@@ -854,9 +906,9 @@ gulong LibNMHandler::nmClientSignalConnect(
             (nmClient, signal, signalHandler, callbackData);
     if(handlerId > 0)
     {
-//        DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
-//                << " with ID " << handlerId << "and data=0x"
-//                << String::toHexString((unsigned long) callbackData));
+    //    DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
+    //            << " with ID " << handlerId << "and data=0x"
+    //            << String::toHexString((unsigned long) callbackData));
         clientSignalHandlers.add(handlerId);
     }
     else
@@ -904,17 +956,17 @@ gulong LibNMHandler::nmWifiDeviceSignalConnect(
         GCallback signalHandler,
         gpointer callbackData)
 {
-    if (nmWifiDevice == nullptr)
+    if (nmDevice == nullptr)
     {
         return 0;
     }
     gulong handlerId = g_signal_connect_swapped
-            (nmWifiDevice, signal, signalHandler, callbackData);
+            (NM_DEVICE_WIFI(nmDevice), signal, signalHandler, callbackData);
     if(handlerId > 0)
     {
-//        DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
-//                << " with ID " << handlerId << "and data=0x"
-//                << String::toHexString((unsigned long) callbackData));
+    //    DBG("LibNMHandler::" << __func__ << " : connected signal " << signal
+    //            << " with ID " << handlerId << "and data=0x"
+    //            << String::toHexString((unsigned long) callbackData));
         wifiDeviceSignalHandlers.add(handlerId);
     }
     else
@@ -923,40 +975,4 @@ gulong LibNMHandler::nmWifiDeviceSignalConnect(
                 << signal);
     }
     return handlerId;
-}
-
-/**
- * Disconnects a signal handler from the network manager client.
- */
-void LibNMHandler::nmClientSignalDisconnect(gulong toDisconnect)
-{
-    if (nmClient != nullptr)
-    {
-        g_signal_handler_disconnect(nmClient, toDisconnect);
-        clientSignalHandlers.removeAllInstancesOf(toDisconnect);
-    }
-}
-
-/**
- * Disconnects a signal handler from the generic wlan0 device
- */
-void LibNMHandler::nmDeviceSignalDisconnect(gulong toDisconnect)
-{
-    if (nmDevice != nullptr)
-    {
-        (nmDevice, toDisconnect);
-        deviceSignalHandlers.removeAllInstancesOf(toDisconnect);
-    }
-}
-
-/**
- * Disconnects a signal handler from the wifi device wlan0
- */
-void LibNMHandler::nmWifiSignalDisconnect(gulong toDisconnect)
-{
-    if (nmWifiDevice != nullptr)
-    {
-        g_signal_handler_disconnect(nmWifiDevice, toDisconnect);
-        wifiDeviceSignalHandlers.removeAllInstancesOf(toDisconnect);
-    }
 }
