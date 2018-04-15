@@ -226,7 +226,7 @@ WifiAccessPoint::Ptr LibNMHandler::findConnectingAP()
 /**
  * Returns the list of visible wifi access points.
  */
-Array<WifiAccessPoint::Ptr> LibNMHandler::getVisibleAPs()
+Array<WifiAccessPoint::Ptr> LibNMHandler::findVisibleAPs()
 {
     Array<WifiAccessPoint::Ptr> returnedAPs;
     GLibSignalHandler signalHandler;
@@ -623,7 +623,7 @@ void LibNMHandler::handleApAdded(LibNMHandler* nmHandler)
 //                << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
     nmHandler->buildAPMap();
-    nmHandler->apUpdateCallback(nmHandler->getVisibleAPs());
+    nmHandler->apUpdateCallback(nmHandler->findVisibleAPs());
 }
 
 void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)

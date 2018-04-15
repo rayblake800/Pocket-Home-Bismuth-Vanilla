@@ -75,7 +75,7 @@ protected:
      * strength.  Hidden access points with no saved connection will also not be
      * included in the list.
      */
-    Array<WifiAccessPoint::Ptr> getVisibleAPs();
+    Array<WifiAccessPoint::Ptr> findVisibleAPs();
     
     /**
      * Turns the wifi device on or off.

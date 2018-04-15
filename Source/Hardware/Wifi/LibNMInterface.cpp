@@ -188,7 +188,7 @@ void LibNMInterface::updateAllWifiData()
     connectedAP = findConnectedAP();
     connectingAP = findConnectingAP();
     lastNMState = findWifiState();
-    visibleAPs = getVisibleAPs();
+    visibleAPs = findVisibleAPs();
     ScopedUnlock confirmUnlock(wifiLock);
     confirmWifiState();
 }
