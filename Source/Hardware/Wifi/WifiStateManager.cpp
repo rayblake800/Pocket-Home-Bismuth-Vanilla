@@ -148,6 +148,7 @@ void WifiStateManager::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
             disconnect();
             break;
         case disconnecting:
+        case missingPassword:
         case enabled:
             break;
         default:
