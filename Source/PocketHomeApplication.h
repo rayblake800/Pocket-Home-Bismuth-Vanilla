@@ -8,6 +8,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "PocketHomeWindow.h"
+#include "PokeLookAndFeel.h"
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
 #include "GLibSignalHandler.h"
@@ -61,10 +62,7 @@ private:
         return false;
     }
     
-    //Holds the single application window.
-    ScopedPointer<PocketHomeWindow> homeWindow;
-    
-    //SharedResource objects:
+    //global resource objects:
     //These objects remain allocated as long as one instance of them exists
     //somewhere.  Declaring them here ensures that they will remain allocated
     //as long as the application is running.
@@ -77,4 +75,12 @@ private:
 
     //Runs the GLib event loop
     GLibSignalHandler gLibThread;
+    
+    //The program appearance man ager.  This is dynamically allocated because it
+    //should be created after/destroyed before all of the above resources.
+    ScopedPointer<PokeLookAndFeel> lookAndFeel = nullptr;
+    
+    //The single program window.  This is dynamically allocated because it
+    //should be created after/destroyed before all of the above resources.
+    ScopedPointer<PocketHomeWindow> homeWindow = nullptr;
 };

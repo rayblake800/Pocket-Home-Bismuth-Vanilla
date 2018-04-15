@@ -22,7 +22,6 @@ wifiManager([fakeWifi]
 })
 {
     ASSERT_SINGULAR;
-    LookAndFeel::setDefaultLookAndFeel(&lookAndFeel);
 
 #    if JUCE_DEBUG
     setBounds(10, 10, 480, 272);

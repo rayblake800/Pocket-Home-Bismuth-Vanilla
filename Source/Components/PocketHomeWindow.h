@@ -8,7 +8,6 @@
 #pragma once
 #include "LoginPage.h"
 #include "PageFactory.h"
-#include "PokeLookAndFeel.h"
 #include "PageStackComponent.h"
 #include "WifiStateManager.h"
 #include "WindowFocus.h"
@@ -51,9 +50,6 @@ private:
     //LoginPage will be initially shown instead of the pageStack if a password
     //has been set.
     ScopedPointer<LoginPage> loginPage;
-
-    //Controls default component appearances.
-    PokeLookAndFeel lookAndFeel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PocketHomeWindow)
 };

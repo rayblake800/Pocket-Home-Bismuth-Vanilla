@@ -25,6 +25,8 @@ void PocketHomeApplication::initialise(const String &commandLine)
                 << ": Sound failed to initialize");
     }
 
+    lookAndFeel = new PokeLookAndFeel();
+    LookAndFeel::setDefaultLookAndFeel(lookAndFeel);
 
     homeWindow = new PocketHomeWindow
             (getApplicationName(), args.contains("--fakeWifi"));
@@ -36,4 +38,6 @@ void PocketHomeApplication::initialise(const String &commandLine)
 void PocketHomeApplication::shutdown()
 {
     homeWindow = nullptr;
+    LookAndFeel::setDefaultLookAndFeel(nullptr);
+    lookAndFeel = nullptr;
 }
