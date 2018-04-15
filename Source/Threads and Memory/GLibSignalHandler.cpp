@@ -25,7 +25,7 @@ bool GLibSignalHandler::runningOnGLibThread()
  * Returns true if the message thread is waiting on a GLib thread
  * call. 
  */
-bool GLibSignalHandler::messageThreadWaiting();
+bool GLibSignalHandler::messageThreadWaiting()
 {
     const ScopedLock accessLock(threadLock);
     GLibThread* thread = static_cast<GLibThread*> (globalThread.get());
@@ -104,7 +104,7 @@ GSource* GLibSignalHandler::GLibThread::addAndInitCall
 {
     if(MessageManager::getInstance()->isThisTheMessageThread())
     {
-        messageThreadWaiting = true;
+        messageThreadWaiting.set(true);
     }
     CallData* callData = new CallData;
     callData->call = call;
@@ -136,7 +136,7 @@ bool GLibSignalHandler::GLibThread::callPending(GSource* callSource)
  */
 void GLibSignalHandler::GLibThread::messageThreadDoneWaiting()
 {
-    messageThreadWaiting = false;
+    messageThreadWaiting.set(false);
 }
 
 /**
@@ -144,7 +144,7 @@ void GLibSignalHandler::GLibThread::messageThreadDoneWaiting()
  */
 bool GLibSignalHandler::GLibThread::isMessageThreadWaiting()
 {
-    return messageThreadWaiting;
+    return messageThreadWaiting.get();
 }
         
 /**
