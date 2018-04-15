@@ -66,6 +66,8 @@ LibNMHandler::LibNMHandler()
         }      
         g_object_weak_ref(G_OBJECT(nmDevice), 
                 (GWeakNotify) handleDeviceRemoved, this);
+        
+        buildAPMap();
     });
 }
 
