@@ -733,7 +733,7 @@ void LibNMHandler::buildAPMap()
     GLibSignalHandler signalHandler;
     signalHandler.gLibCall([this]()
     {
-        //DBG("LibNMHandler::buildAPMap: Mapping all visible APs");
+        DBG("LibNMHandler::buildAPMap: Mapping all visible APs");
         if (isWifiAvailable())
         {
             return;
@@ -743,11 +743,11 @@ void LibNMHandler::buildAPMap()
         const GPtrArray* wifiConns = nm_device_get_available_connections
                 (nmDevice);
 
-        //DBG("LibNMHandler::buildAPMap: found " 
-        //        << String(visibleAPs ? visibleAPs->len : 0)
-        //        << " NMAccessPoints, and " 
-        //        << String(wifiConns ? wifiConns->len : 0)
-        //        << " saved wifi connections");
+        DBG("LibNMHandler::buildAPMap: found " 
+                << String(visibleAPs ? visibleAPs->len : 0)
+                << " NMAccessPoints, and " 
+                << String(wifiConns ? wifiConns->len : 0)
+                << " saved wifi connections");
         if (visibleNMAPs == nullptr)
         {
             return;
