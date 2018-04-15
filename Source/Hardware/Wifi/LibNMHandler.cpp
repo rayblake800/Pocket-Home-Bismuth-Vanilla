@@ -64,6 +64,7 @@ LibNMHandler::LibNMHandler()
                     (GWeakNotify) handleClientRemoved, this);
             nmClient = nullptr;
             nmDevice = nullptr;
+            return;
         }      
         g_object_weak_ref(G_OBJECT(nmDevice), 
                 (GWeakNotify) handleDeviceRemoved, this);
