@@ -744,7 +744,7 @@ void LibNMHandler::buildAPMap()
                 (nmDevice);
 
         DBG("LibNMHandler::buildAPMap: found " 
-                << String(visibleAPs ? visibleAPs->len : 0)
+                << String(visibleNMAPs ? visibleNMAPs->len : 0)
                 << " NMAccessPoints, and " 
                 << String(wifiConns ? wifiConns->len : 0)
                 << " saved wifi connections");
