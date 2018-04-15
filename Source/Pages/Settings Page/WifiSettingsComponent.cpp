@@ -20,7 +20,17 @@ Localized("WifiSettingsComponent")
 bool WifiSettingsComponent::connectionEnabled()
 {
     WifiStateManager wifiManager;
-    return wifiManager.isEnabled();
+    switch (wifiManager.getWifiState())
+    {
+        case WifiStateManager::turningOn:
+        case WifiStateManager::enabled:
+        case WifiStateManager::connecting:
+        case WifiStateManager::missingPassword:
+        case WifiStateManager::connected:
+        case WifiStateManager::disconnecting:
+            return true;
+    }
+    return false;
 }
 
 
