@@ -311,7 +311,7 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
             }
             else
             {
-                signalWifiConnected(findConnectedAP());
+                signalWifiConnected(connected);
             }
             break;
         }
