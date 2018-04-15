@@ -357,6 +357,7 @@ void LibNMHandler::handleConnectionAttempt(
         nmHandler->connectionFailureCallback();
         return;
     }
+    nmHandler->activatingConn = active;
     for(WifiAccessPoint::Ptr knownAP : nmHandler->visibleAPs)
     {
         if(*knownAP == nmAP)
@@ -604,11 +605,15 @@ void LibNMHandler::handleStateChange(LibNMHandler* nmHandler)
         case NM_DEVICE_STATE_SECONDARIES:
         case NM_DEVICE_STATE_NEED_AUTH:
         {
-            NMActiveConnection* newConnection = 
-                    nm_client_get_activating_connection(nmHandler->nmClient);
-            if(newConnection != nullptr)
+            if(nmHandler->activatingConn == nullptr)
             {
-                nmHandler->activatingConn = newConnection;
+                NMActiveConnection* newConnection = 
+                        nm_client_get_activating_connection
+                        (nmHandler->nmClient);
+                if(newConnection != nullptr)
+                {
+                    nmHandler->activatingConn = newConnection;
+                }
             }
             break;
         }

@@ -371,6 +371,7 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
         case NM_DEVICE_STATE_FAILED:
         {
             ScopedUnlock unlockForUpdate(wifiLock);
+            //TODO: check for authorization here
             signalWifiDisconnected();
             break;
         }
