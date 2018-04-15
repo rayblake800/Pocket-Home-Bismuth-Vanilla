@@ -1,6 +1,7 @@
 
 #include <nm-remote-connection.h>
 #include <nm-device.h>
+#include <nm-errors.h>
 #include <glib-2.0/glib/gerror.h>
 #include "MainConfigFile.h"
 #include "WifiAccessPoint.h"
