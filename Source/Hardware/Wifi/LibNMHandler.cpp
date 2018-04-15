@@ -158,7 +158,8 @@ WifiAccessPoint::Ptr LibNMHandler::findConnectedAP()
     GLibSignalHandler signalHandler;
     signalHandler.gLibCall([this, &ap]()
     {
-        if (isWifiAvailable())
+        if (isWifiAvailable() && 
+            findWifiState() == NM_DEVICE_STATE_ACTIVATED)
         {
             NMAccessPoint* nmAP = nm_device_wifi_get_active_access_point
                     (NM_DEVICE_WIFI(nmDevice));
