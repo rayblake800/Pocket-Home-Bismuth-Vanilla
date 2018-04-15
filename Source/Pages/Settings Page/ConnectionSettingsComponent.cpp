@@ -24,8 +24,12 @@ pageButton(name + "Button")
  */
 void ConnectionSettingsComponent::refresh()
 {
+    DBG("ConnectionSettingsComponent::refresh()");
     bool busy = shouldShowSpinner();
     bool enabled = connectionEnabled();
+    
+    DBG("ConnectionSettingsComponent::toggle should be "
+            << (enabled ? "on" : "off"));
     icon.setVisible(!busy);
     spinner.setVisible(busy);
     if (!busy)
