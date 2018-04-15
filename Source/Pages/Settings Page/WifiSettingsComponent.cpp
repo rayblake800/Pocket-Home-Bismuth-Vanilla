@@ -65,7 +65,6 @@ bool WifiSettingsComponent::allowConnectionToggle()
     {
         case WifiStateManager::turningOn:
         case WifiStateManager::turningOff:
-        case WifiStateManager::missingNetworkDevice:
             return false;
     }
     return true;
