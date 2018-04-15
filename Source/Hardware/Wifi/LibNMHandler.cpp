@@ -255,6 +255,8 @@ Array<WifiAccessPoint::Ptr> LibNMHandler::getVisibleAPs()
             }
         }
     });
+    DBG("LibNMHandler::" << __func__ << ": returning " << returnedAPs.size()
+            << " APs out of " << visibleAPs.size());
     return returnedAPs;
 }
 
