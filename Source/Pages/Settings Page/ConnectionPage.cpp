@@ -140,7 +140,7 @@ void ConnectionPage<ConnectionPtr>::layoutConnectionPage()
                 }
                 else
                 {
-                    listItem->setBasicLayout();
+                    listItem->setListItemLayout();
                 }
             }
             layout.push_back({rowWeight,
@@ -284,7 +284,7 @@ ConnectionPage<ConnectionPtr>::ConnectionListItem::ConnectionListItem
 connection(connection),
 connectionButton(connectionButton)
 {
-    setBasicLayout();
+    setListItemLayout();
 };
 
 template<class ConnectionPtr>
@@ -307,7 +307,7 @@ template<class ConnectionPtr>
 void ConnectionPage<ConnectionPtr>::ConnectionListItem::setControlLayout
 (RelativeLayoutManager::Layout detailLayout)
 {
-    detailLayout.insert(detailLayout.begin(), getBasicLayout()[0]);
+    detailLayout.insert(detailLayout.begin(), getListItemLayout()[0]);
     listItemLayout.clearLayout(true);
     listItemLayout.setLayout(detailLayout, this);
 };
@@ -318,10 +318,10 @@ void ConnectionPage<ConnectionPtr>::ConnectionListItem::setControlLayout
  * connection controls.
  */
 template<class ConnectionPtr>
-void ConnectionPage<ConnectionPtr>::ConnectionListItem::setBasicLayout()
+void ConnectionPage<ConnectionPtr>::ConnectionListItem::setListItemLayout()
 {
     listItemLayout.clearLayout(true);
-    listItemLayout.setLayout(getBasicLayout(), this);
+    listItemLayout.setLayout(getListItemLayout(), this);
 };
 
 /**
@@ -339,7 +339,7 @@ bool ConnectionPage<ConnectionPtr>::ConnectionListItem::ownsButton
  */
 template<class ConnectionPtr>
 RelativeLayoutManager::Layout 
-ConnectionPage<ConnectionPtr>::ConnectionListItem::getBasicLayout()
+ConnectionPage<ConnectionPtr>::ConnectionListItem::getListItemLayout()
 {
     return {
         { 3,
@@ -365,8 +365,7 @@ paint(Graphics &g)
  * Scale the layout to fit the new bounds.
  */
 template<class ConnectionPtr>
-void ConnectionPage<ConnectionPtr>::ConnectionListItem::
-resized()
+void ConnectionPage<ConnectionPtr>::ConnectionListItem::resized()
 {
     Rectangle<int> bounds = getLocalBounds().reduced(borderWidth,
             borderWidth);

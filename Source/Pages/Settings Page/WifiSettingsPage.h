@@ -96,16 +96,6 @@ private:
     virtual void updateConnectionControls
     (WifiAccessPoint::Ptr accessPoint) override;
 
-
-    /**
-     * When currentlyConnecting, disable Wifi controls and show a loading
-     * spinner. Otherwise, enable controls and hide the loading spinner.
-     * 
-     * @param currentlyConnecting  Indicates if Wifi is trying to connect to
-     *                              an access point, or is otherwise busy.
-     */
-    void setCurrentlyConnecting(bool currentlyConnecting);
-
     /**
      * Keeps the page updated when wifi state changes.
      * 
@@ -179,10 +169,9 @@ private:
 
     //Wifi icons for all signal strengths
     static const StringArray wifiImageFiles;
-
-    //Set to true when wifi state is changing, used to determine if wifi
-    //controls should be enabled
-    bool connectionChanging = false;
+    
+    WifiAccessPoint::Ptr lastConnecting = nullptr;
+    WifiAccessPoint::Ptr lastDisconnecting = nullptr;
 
     //Used for entering a password for a secured access point.
     ScalingLabel passwordLabel;

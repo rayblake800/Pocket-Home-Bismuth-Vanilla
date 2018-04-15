@@ -41,12 +41,13 @@ Array<WifiAccessPoint::Ptr> WifiSettingsPage::loadConnectionList()
  */
 void WifiSettingsPage::connect(WifiAccessPoint::Ptr connection)
 {
-    WifiStateManager wifiManager;
     if (connection == nullptr)
     {
         DBG("WifiSettingsPage::" << __func__ << ": ap is null!");
         return;
     }
+    WifiStateManager wifiManager;
+    lastConnecting = connection;
     if (connection->getRequiresAuth())
     {
         const String& psk = passwordEditor.getText();
@@ -61,7 +62,6 @@ void WifiSettingsPage::connect(WifiAccessPoint::Ptr connection)
                 << connection->getSSID() << " with no psk required.");
         wifiManager.connectToAccessPoint(connection);
     }
-    setCurrentlyConnecting(true);
     errorLabel.setVisible(false);
 }
 
@@ -73,11 +73,18 @@ void WifiSettingsPage::disconnect(WifiAccessPoint::Ptr connection)
     WifiStateManager wifiManager;
     if(connection == wifiManager.getConnectingAP())
     {
+        lastDisconnecting = connection;
         wifiManager.stopConnecting();
     }
     else if(connection == wifiManager.getConnectedAP())
     {
+        lastDisconnecting = connection;
         wifiManager.disconnect();
+    }
+    else
+    {
+        DBG("WifiSettingsPage::" << __func__ 
+                << ": ap is not connected/connecting!");
     }
 }
 
@@ -169,36 +176,81 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
 void WifiSettingsPage::updateConnectionControls
 (WifiAccessPoint::Ptr accessPoint)
 {
-    passwordEditor.clear();
-    bool connected = isConnected(accessPoint);
-    bool passwordNeeded = accessPoint->getRequiresAuth() && !connected;
-    passwordEditor.setVisible(passwordNeeded);
-    passwordEditor.setEnabled(passwordNeeded && !connectionChanging);
-    passwordLabel.setVisible(passwordNeeded);
-    String connectionText;
-    if (!connectionChanging)
+    if(accessPoint == nullptr)
     {
-        connectionText = connected
-                ? localeText(btn_disconnect) : localeText(btn_connect);
+        DBG("WifiSettingsPage::" << __func__ << ": null AP selected");
+        return;
     }
-    connectionButton.setButtonText(connectionText);
-    connectionButton.setEnabled(!connectionChanging);
-    errorLabel.setText("", NotificationType::dontSendNotification);
-    spinner.setVisible(connectionChanging);
+    bool showPasswordEntry = false;
+    String connectionBtnText = localeText(btn_connect);
+    bool showButtonSpinner = false;
+    String errorMessage = "";
+    bool apConnected = isConnected(accessPoint);
+    if(!apConnected && lastConnecting != accessPoint 
+            && lastDisconnecting != accessPoint)
+    {
+        showPasswordEntry = accessPoint->getRequiresAuth()
+                && !accessPoint->hasSavedPsk();
+    }
+    else
+    {
+        WifiStateManager wifiManager;
+        switch(wifiManager.getWifiState())
+        {
+            case WifiStateManager::connecting:
+                if(lastConnecting == accessPoint)
+                {
+                    showButtonSpinner = true;
+                }
+                break;
+            case WifiStateManager::missingPassword:
+                showPasswordEntry = accessPoint->getRequiresAuth();
+                if(accessPoint == lastConnecting)
+                {
+                    errorMessage = localeText(wrong_password);
+                }
+                break;
+            case WifiStateManager::connected:
+                if(apConnected)
+                {
+                    connectionBtnText = localeText(btn_disconnect);
+                    break;
+                }    
+            case WifiStateManager::enabled:
+                if(lastConnecting == accessPoint 
+                   && lastDisconnecting != accessPoint)
+                {
+                    errorMessage = localeText(connection_failed);
+                }
+                showPasswordEntry = accessPoint->getRequiresAuth()
+                        && !accessPoint->hasSavedPsk();
+                break;
+            case WifiStateManager::disconnecting:
+                if(lastDisconnecting == accessPoint)
+                {
+                    showButtonSpinner = true;
+                }
+            default:
+                DBG("WifiSettingsPage::" << __func__ << ": page should be closed!");
+        };
+    }
+    if(showPasswordEntry != passwordEditor.isVisible())
+    {
+        passwordEditor.clear();
+        passwordEditor.setEnabled(showPasswordEntry);
+        passwordEditor.setVisible(showPasswordEntry);
+        passwordLabel.setVisible(showPasswordEntry);
+    }
+    if(showButtonSpinner)
+    {
+        connectionBtnText = String();
+    }
+    connectionButton.setButtonText(connectionBtnText);
+    connectionButton.setEnabled(!showButtonSpinner);
+    spinner.setVisible(showButtonSpinner);
+    errorLabel.setText(errorMessage, NotificationType::dontSendNotification);
 }
 
-/**
- * When currentlyConnecting, disable Wifi controls and show a loading
- * spinner.  Otherwise, enable controls and hide the loading spinner.
- */
-void WifiSettingsPage::setCurrentlyConnecting(bool currentlyConnecting)
-{
-    if (currentlyConnecting != connectionChanging)
-    {
-        connectionChanging = currentlyConnecting;
-        updateConnectionControls(getSelectedConnection());
-    }
-}
 
 /**
  * Keeps the page updated when wifi state changes.
@@ -216,28 +268,9 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
                 removeFromStack();
                 break;
             case WifiStateManager::connected:
+                lastConnecting = nullptr;
+            default:
                 reloadPage();
-                break;
-            case WifiStateManager::enabled:
-                if (connectionChanging)
-                {
-                    setCurrentlyConnecting(false);
-                    updateConnectionControls(getSelectedConnection());
-                    errorLabel.setText(getSelectedConnection()
-                            ->getRequiresAuth()     
-                            ? localeText(wrong_password)
-                            : localeText(connection_failed),
-                            NotificationType::dontSendNotification);
-                    errorLabel.setVisible(true);
-                }
-                else
-                {
-                    reloadPage();
-                }
-                break;
-            case WifiStateManager::connecting:
-                setCurrentlyConnecting(true);
-                break;
         }
     });
 }
@@ -282,7 +315,8 @@ void WifiSettingsPage::reloadPage()
     WifiAccessPoint::Ptr selected = getSelectedConnection();
     updateConnectionList();
     setSelectedConnection(selected);
-    setCurrentlyConnecting(false);
+    lastConnecting = nullptr;
+    lastDisconnecting = nullptr;
     updateConnectionControls(getSelectedConnection());
 }
 

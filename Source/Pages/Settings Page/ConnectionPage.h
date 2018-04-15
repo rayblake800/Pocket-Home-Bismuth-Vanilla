@@ -76,20 +76,6 @@ private:
     virtual Array<ConnectionPtr> loadConnectionList() = 0;
 
     /**
-     * Attempts to open a connection, if possible.
-     * 
-     * @param connection
-     */
-    virtual void connect(ConnectionPtr connection) = 0;
-
-    /**
-     * Attempts to close a connection, if possible.
-     * 
-     * @param connection
-     */
-    virtual void disconnect(ConnectionPtr connection) = 0;
-
-    /**
      * @return true iff the system is connected to ConnectionPtr's connection.
      * 
      * @param connection
@@ -207,7 +193,8 @@ private:
         ConnectionPtr getConnection();
 
         /**
-         * Switch to connection point control mode.
+         * Switch to connection point control mode, showing only the selected
+         * connection.
          * 
          * @param detailLayout Contains the layout and component pointers to
          *                      add and show on this list item.
@@ -215,11 +202,11 @@ private:
         void setControlLayout(RelativeLayoutManager::Layout detailLayout);
 
         /**
-         * Load the basic layout, which only shows the connectionButton.
+         * Load the basic button layout used when showing the entire list.
          * This loads the initial layout, and restores it when closing
          * connection controls.
          */
-        void setBasicLayout();
+        void setListItemLayout();
 
         /**
          * Checks if a button is the one attached to this list item.
@@ -235,12 +222,12 @@ private:
         /**
          * @return the component's layout when not showing connection controls.
          */
-        RelativeLayoutManager::Layout getBasicLayout();
+        RelativeLayoutManager::Layout getListItemLayout();
 
         /**
          * Draws an outline around the entire component, with a width of 
          * ConnectionPage<ConnectionPoint>::ConnectionListItem::borderWidth
-         * and color set by the ListBox backgroundColourId
+         * and color set by the ListBox backgroundColourId.
          * TODO: define a unique ColourId for the outline.
          * 
          * @param g
