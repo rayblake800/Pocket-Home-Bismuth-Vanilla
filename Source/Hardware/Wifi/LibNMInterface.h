@@ -177,8 +177,6 @@ private:
     //any time any of the data members listed beneath it is accessed.
     CriticalSection& wifiLock;
 
-    NMDeviceState lastNMState = NM_DEVICE_STATE_UNKNOWN;
-
     WifiAccessPoint::Ptr connectedAP = nullptr;
     WifiAccessPoint::Ptr connectingAP = nullptr;
     Array<WifiAccessPoint::Ptr> visibleAPs;

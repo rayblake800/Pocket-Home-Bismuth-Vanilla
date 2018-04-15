@@ -295,6 +295,10 @@ void LibNMInterface::apUpdateCallback(Array<WifiAccessPoint::Ptr> visibleAPs)
 void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
 {
     ScopedLock updateLock(wifiLock);
+    if(lastNMState == newState)//duplicate callback, ignore
+    {
+        return;
+    }
     lastNMState = newState;
     DBG("LibNMInterface::" << __func__ << ":  changed to "
             << deviceStateString(newState));
