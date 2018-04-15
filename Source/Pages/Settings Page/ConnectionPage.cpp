@@ -2,12 +2,12 @@
 #include "Utils.h"
 #include "ConnectionPage.h"
 
-template<class ConnectionPoint>
-ConnectionPage<ConnectionPoint>::ConnectionPage() :
+template<class ConnectionPtr>
+ConnectionPage<ConnectionPtr>::ConnectionPage() :
 PageComponent("ConnectionPage",{}, true),
 prevPageBtn(ComponentConfigFile::pageUpKey),
 nextPageBtn(ComponentConfigFile::pageDownKey),
-selectedConnection(ConnectionPoint())
+selectedConnection(nullptr)
 {
     prevPageBtn.addListener(this);
     nextPageBtn.addListener(this);
@@ -19,32 +19,31 @@ selectedConnection(ConnectionPoint())
 /**
  * @return the selected connection's reference
  */
-template<class ConnectionPoint>
-const ConnectionPoint& ConnectionPage<ConnectionPoint>::
-getSelectedConnection()
+template<class ConnectionPtr>
+ConnectionPtr ConnectionPage<ConnectionPtr>::getSelectedConnection()
 {
     return selectedConnection;
 };
 
 /**
- * Sets ConnectionPoint connection as the selected connection.  When a
+ * Sets ConnectionPtr's connection as the selected connection.  When a
  * connection is selected, this page will show details and controls for that
  * connection, and the other connections on the list will be hidden.  When
- * set to ConnectionPoint(), the full ConnectionPoint list will be shown 
+ * set to nullptr, the full ConnectionPoint list will be shown 
  * again.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::setSelectedConnection
-(const ConnectionPoint& connection)
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::setSelectedConnection
+(ConnectionPtr connection)
 {
     bool selectionChanged = false;
-    if (connection.isVoid()
+    if (connection == nullptr
         || !connections.contains(connection))
     {
-        if (!selectedConnection.isVoid())
+        if (selectedConnection != nullptr)
         {
             selectionChanged = true;
-            selectedConnection = ConnectionPoint();
+            selectedConnection = nullptr;
         }
     }
     else if (connection != selectedConnection)
@@ -62,11 +61,11 @@ void ConnectionPage<ConnectionPoint>::setSelectedConnection
 /**
  * Remove all items from the connection list, and clear the page layout.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::clearConnectionList()
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::clearConnectionList()
 {
     connectionIndex = 0;
-    selectedConnection = ConnectionPoint();
+    selectedConnection = nullptr;
     for (ConnectionListItem* listItem : connectionItems)
     {
         removeChildComponent(listItem);
@@ -79,12 +78,12 @@ void ConnectionPage<ConnectionPoint>::clearConnectionList()
 /**
  * Reloads the list of connections and updates the page.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::updateConnectionList()
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::updateConnectionList()
 {
     clearConnectionList();
     connections = loadConnectionList();
-    for (const ConnectionPoint& connection : connections)
+    for (ConnectionPtr connection : connections)
     {
         Button * connectionButton = getConnectionButton(connection);
         connectionButton->addListener(this);
@@ -107,11 +106,11 @@ void ConnectionPage<ConnectionPoint>::updateConnectionList()
  * page when scrolling through the connection list or opening/closing 
  * connection details.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::layoutConnectionPage()
 {
     RelativeLayoutManager::Layout layout;
-    bool showList = (selectedConnection.isVoid());
+    bool showList = (selectedConnection == nullptr);
     prevPageBtn.setVisible(connectionIndex > 0 && showList);
     nextPageBtn.setVisible(connectionItems.size() > connectionIndex
             + connectionsPerPage && showList);
@@ -123,15 +122,17 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
     for (int i = connectionIndex;
          i < connectionIndex + connectionsPerPage; i++)
     {
-        ConnectionPoint connection = (i < connectionItems.size() && i >= 0) ?
-                connectionItems[i]->getConnection() : ConnectionPoint();
+        ConnectionPtr connection 
+                = (i < connectionItems.size() && i >= 0) ?
+                connectionItems[i]->getConnection() : nullptr;
         if (showList || connection == selectedConnection)
         {
             ConnectionListItem* listItem = (i < connectionItems.size()) ?
                     connectionItems[i] : nullptr;
             if (listItem != nullptr)
             {
-                if (connection == selectedConnection)
+                if (connection == selectedConnection
+                    && connection != nullptr)
                 {
                     listItem->setControlLayout
                             (getConnectionControlsLayout(connection));
@@ -155,8 +156,8 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
  * Update the connection list when the page is first added to the
  * page stack.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::pageAddedToStack()
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::pageAddedToStack()
 {
     updateConnectionList();
 };
@@ -164,8 +165,8 @@ void ConnectionPage<ConnectionPoint>::pageAddedToStack()
 /**
  * Update the connection list when the page is revealed on the page stack.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::pageRevealedOnStack()
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::pageRevealedOnStack()
 {
     updateConnectionList();
 };
@@ -174,8 +175,8 @@ void ConnectionPage<ConnectionPoint>::pageRevealedOnStack()
 /**
  * Handles connection list scrolling and connection selection.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::pageButtonClicked(Button* button)
 {
     if (button == &prevPageBtn)
     {
@@ -216,7 +217,7 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
                 }
                 else
                 {
-                    setSelectedConnection(ConnectionPoint());
+                    setSelectedConnection(nullptr);
                 }
                 return;
             }
@@ -232,36 +233,36 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
  * @return true if connection controls were open when the back button was
  * clicked.
  */
-template<class ConnectionPoint>
-bool ConnectionPage<ConnectionPoint>::overrideBackButton()
+template<class ConnectionPtr>
+bool ConnectionPage<ConnectionPtr>::overrideBackButton()
 {
-    if (selectedConnection.isVoid())
+    if (selectedConnection == nullptr)
     {
         return false;
     }
     DBG("ConnectionPage::" << __func__ << ": deselecting connection "
-            << selectedConnection.toString());
-    setSelectedConnection(ConnectionPoint());
+            << selectedConnection->toString());
+    setSelectedConnection(nullptr);
     return true;
 }
 
 /**
  * Close connection controls when esc is pressed.
  */
-template<class ConnectionPoint>
-bool ConnectionPage<ConnectionPoint>::keyPressed(const KeyPress& key)
+template<class ConnectionPtr>
+bool ConnectionPage<ConnectionPtr>::keyPressed(const KeyPress& key)
 {
     if (key == KeyPress::escapeKey)
     {
-        setSelectedConnection(ConnectionPoint());
+        setSelectedConnection(nullptr);
     }
 };
 
 /**
  * Update list navigation buttons to fit the page.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::pageResized()
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::pageResized()
 {
     if (!getBounds().isEmpty())
     {
@@ -275,27 +276,25 @@ void ConnectionPage<ConnectionPoint>::pageResized()
 }
 
 /**
- * Create a new ConnectionListItem representing a ConnectionPoint
+ * Create a new ConnectionListItem representing a ConnectionPtr
  */
-template<class ConnectionPoint>
-ConnectionPage<ConnectionPoint>::ConnectionListItem::
-ConnectionListItem
-(const ConnectionPoint& connection, Button* connectionButton) :
+template<class ConnectionPtr>
+ConnectionPage<ConnectionPtr>::ConnectionListItem::ConnectionListItem
+(ConnectionPtr connection, Button* connectionButton) :
 connection(connection),
 connectionButton(connectionButton)
 {
     setBasicLayout();
 };
 
-template<class ConnectionPoint>
-ConnectionPage<ConnectionPoint>::ConnectionListItem::
-~ConnectionListItem() { };
+template<class ConnectionPtr>
+ConnectionPage<ConnectionPtr>::ConnectionListItem::~ConnectionListItem() { }
 
 /**
  * @return the connection represented by this component.
  */
-template<class ConnectionPoint>
-const ConnectionPoint& ConnectionPage<ConnectionPoint>::ConnectionListItem::
+template<class ConnectionPtr>
+ConnectionPtr ConnectionPage<ConnectionPtr>::ConnectionListItem::
 getConnection()
 {
     return connection;
@@ -304,9 +303,8 @@ getConnection()
 /**
  * Switch to connection point control mode.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::ConnectionListItem::
-setControlLayout
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::ConnectionListItem::setControlLayout
 (RelativeLayoutManager::Layout detailLayout)
 {
     detailLayout.insert(detailLayout.begin(), getBasicLayout()[0]);
@@ -319,9 +317,8 @@ setControlLayout
  * This loads the initial layout, and restores it when closing
  * connection controls.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::ConnectionListItem::
-setBasicLayout()
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::ConnectionListItem::setBasicLayout()
 {
     listItemLayout.clearLayout(true);
     listItemLayout.setLayout(getBasicLayout(), this);
@@ -330,9 +327,9 @@ setBasicLayout()
 /**
  * @return true iff Button* button is this list item's connectionButton.
  */
-template<class ConnectionPoint>
-bool ConnectionPage<ConnectionPoint>::ConnectionListItem::
-ownsButton(Button* button)
+template<class ConnectionPtr>
+bool ConnectionPage<ConnectionPtr>::ConnectionListItem::ownsButton
+(Button* button)
 {
     return button == connectionButton;
 };
@@ -340,9 +337,9 @@ ownsButton(Button* button)
 /**
  * @return the component's layout when not showing connection controls.
  */
-template<class ConnectionPoint>
-RelativeLayoutManager::Layout ConnectionPage<ConnectionPoint>::ConnectionListItem::
-getBasicLayout()
+template<class ConnectionPtr>
+RelativeLayoutManager::Layout 
+ConnectionPage<ConnectionPtr>::ConnectionListItem::getBasicLayout()
 {
     return {
         { 3,
@@ -356,8 +353,8 @@ getBasicLayout()
  * ConnectionPage<ConnectionPoint>::ConnectionListItem::borderWidth
  * and color set by the ListBox backgroundColourId
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::ConnectionListItem::
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::ConnectionListItem::
 paint(Graphics &g)
 {
     g.setColour(findColour(Label::ColourIds::textColourId));
@@ -367,8 +364,8 @@ paint(Graphics &g)
 /**
  * Scale the layout to fit the new bounds.
  */
-template<class ConnectionPoint>
-void ConnectionPage<ConnectionPoint>::ConnectionListItem::
+template<class ConnectionPtr>
+void ConnectionPage<ConnectionPtr>::ConnectionListItem::
 resized()
 {
     Rectangle<int> bounds = getLocalBounds().reduced(borderWidth,

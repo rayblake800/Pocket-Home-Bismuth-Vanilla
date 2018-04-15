@@ -13,7 +13,7 @@
 #include "ConnectionPage.h"
 
 class BluetoothSettingsPage :
-public ConnectionPage<BluetoothDevice>, 
+public ConnectionPage<BluetoothDevice::Ptr>, 
         public TextEditor::Listener  {
 public:
     
@@ -24,7 +24,7 @@ private:
     /**
      * @return the list of all visible bluetooth devices
      */
-    Array<BluetoothDevice> loadConnectionList();
+    Array<BluetoothDevice::Ptr> loadConnectionList();
 
 
     /**
@@ -32,7 +32,7 @@ private:
      *
      *  @param device
      */
-    void connect(const BluetoothDevice& device);
+    void connect(BluetoothDevice::Ptr device);
 
     /**
      * @param device  If the system is currently connected to this
@@ -40,14 +40,14 @@ private:
      *  
      * @param connection
      */
-    void disconnect(const BluetoothDevice& device);
+    void disconnect(BluetoothDevice::Ptr device);
 
     /**
      * @param connection
      * 
      * @return true iff the system is connected to this bluetooth device.
      */
-    bool isConnected(const BluetoothDevice& device);
+    bool isConnected(BluetoothDevice::Ptr device);
 
     /**
      * @param button
@@ -63,7 +63,7 @@ private:
      * 
      * @param device
      */
-    Button* getConnectionButton(const BluetoothDevice& device);
+    Button* getConnectionButton(BluetoothDevice::Ptr device);
 
     /**
      * Get the layout for the Bluetooth device controls.
@@ -71,7 +71,7 @@ private:
      * this bluetooth device.
      */
     RelativeLayoutManager::Layout getConnectionControlsLayout
-    (const BluetoothDevice& device);
+    (BluetoothDevice::Ptr device);
 
     /**
      * Update connection control components to match the current bluetooth
@@ -80,7 +80,7 @@ private:
      * @param BluetoothDevice
      */
     virtual void updateConnectionControls
-    (const BluetoothDevice& device) override;
+    (BluetoothDevice::Ptr device) override;
 
 
     /**
@@ -118,7 +118,7 @@ private:
      */
     class BTDeviceButton : public Button{
     public:
-        BTDeviceButton(const BluetoothDevice& connection, 
+        BTDeviceButton(BluetoothDevice::Ptr connection, 
                 bool isConnected);
     private:
         void resized() override;

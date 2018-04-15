@@ -118,21 +118,7 @@ bool LibNMHandler::checkWifiEnabled()
  */
 bool LibNMHandler::checkWifiConnecting()
 {
-    bool connecting = false;
-    GLibSignalHandler signalHandler;
-    signalHandler.gLibCall([this, &connecting]()
-    {
-        if (isWifiAvailable())
-        {
-            NMActiveConnection* activatingConn
-                    = nm_client_get_activating_connection(nmClient);
-            if(activatingConn != nullptr)
-            {
-            connecting = isWifiConnection(activatingConn);
-            }
-        }
-    });
-    return connecting;
+    return activatingConn != nullptr;
 }
 
 /**
@@ -164,9 +150,9 @@ bool LibNMHandler::checkWifiConnected()
  * @return the current connected access point, or the void access point if
  *         none is found.
  */
-WifiAccessPoint LibNMHandler::findConnectedAP()
+WifiAccessPoint::Ptr LibNMHandler::findConnectedAP()
 {
-    WifiAccessPoint ap;
+    WifiAccessPoint::Ptr ap = nullptr;
     GLibSignalHandler signalHandler;
     signalHandler.gLibCall([this, &ap]()
     {
@@ -174,9 +160,17 @@ WifiAccessPoint LibNMHandler::findConnectedAP()
         {
             NMAccessPoint* nmAP = nm_device_wifi_get_active_access_point
                     (NM_DEVICE_WIFI(nmDevice));
-            if (nmAP != nullptr)
+            if (nmAP == nullptr)
             {
-                ap = WifiAccessPoint(nmAP);
+                return;
+            }
+            for(WifiAccessPoint::Ptr knownAP : visibleAPs)
+            {
+                if(*knownAP == nmAP)
+                {
+                    ap = knownAP;
+                    return;
+                }
             }
         }
     });
@@ -187,14 +181,13 @@ WifiAccessPoint LibNMHandler::findConnectedAP()
  * Gets the current connecting access point from the network manager wifi
  * device.
  * 
- * @return the current connecting access point, or the void access point if
- *         none is found.
+ * @return the current connecting access point, or nullptr if none is found.
  */
-WifiAccessPoint LibNMHandler::findConnectingAP()
+WifiAccessPoint::Ptr LibNMHandler::findConnectingAP()
 {
-    WifiAccessPoint ap;
+    WifiAccessPoint::Ptr connectingAP = nullptr;
     GLibSignalHandler signalHandler;
-    signalHandler.gLibCall([this, &ap]()
+    signalHandler.gLibCall([this, &connectingAP]()
     {
         if (isWifiAvailable())
         {
@@ -208,54 +201,57 @@ WifiAccessPoint LibNMHandler::findConnectingAP()
             {
                 return;
             }
-            NMAccessPoint* connectingAP =
+            NMAccessPoint* connectionNMAP =
                     nm_device_wifi_get_access_point_by_path(
                     NM_DEVICE_WIFI(nmDevice),
                     path);
-            if (connectingAP != nullptr)
+            
+            for(WifiAccessPoint::Ptr knownAP : visibleAPs)
             {
-                ap = WifiAccessPoint(connectingAP);
+                if(*knownAP == connectionNMAP)
+                {
+                    connectingAP = knownAP;
+                    return;
+                }
             }
         }
     });
-    return ap;
+    return connectingAP;
 }
 
 /**
- * Updates and returns the list of visible wifi access points.
+ * Returns the list of visible wifi access points.
  */
-Array<WifiAccessPoint> LibNMHandler::updatedVisibleAPs()
+Array<WifiAccessPoint::Ptr> LibNMHandler::getVisibleAPs()
 {
-    Array<WifiAccessPoint> visibleAPs;
+    Array<WifiAccessPoint::Ptr> returnedAPs;
     GLibSignalHandler signalHandler;
-    signalHandler.gLibCall([this, &visibleAPs]()
+    signalHandler.gLibCall([this, &returnedAPs]()
     {
         if (isWifiAvailable())
         {
-            buildAPMap();
-            for (auto it = accessPointMap.begin();
-                 it != accessPointMap.end(); it++)
+            for(WifiAccessPoint::Ptr knownAP : visibleAPs)
             {
-                WifiAccessPoint wifiAP = it->first;
-                Array<NMAccessPoint*> nmAPs = it->second;
-                int bestStrength = -1;
-                for (NMAccessPoint* nmAP : nmAPs)
+                if(knownAP->getSSID().isNotEmpty()
+                         && knownAP->getNMAccessPoint() != nullptr)
                 {
-                    int strength = nm_access_point_get_strength(nmAP);
-                    if (strength > bestStrength)
+                    returnedAPs.add(knownAP);
+                    for(int i = 0; i < returnedAPs.size() - 1; i++)
                     {
-                        bestStrength = strength;
+                        if(knownAP->sharesConnectionWith(returnedAPs[i])
+                                && knownAP->getSignalStrength() 
+                                > returnedAPs[i]->getSignalStrength())
+                        {
+                            returnedAPs[i] = knownAP;
+                            returnedAPs.remove(returnedAPs.size() - 1);
+                            break;
+                        }
                     }
-                }
-                if (bestStrength >= 0)
-                {
-                    wifiAP.setSignalStrength(bestStrength);
-                    visibleAPs.add(wifiAP);
                 }
             }
         }
     });
-    return visibleAPs;
+    return returnedAPs;
 }
 
 /**
@@ -335,14 +331,14 @@ void LibNMHandler::handleConnectionAttempt(
     {
         return;
     }
-    NMAccessPoint* ap = nullptr;
+    NMAccessPoint* nmAP = nullptr;
     const char* apPath = nm_active_connection_get_specific_object(active);
     if(apPath != nullptr)
     {
-        ap = nm_device_wifi_get_access_point_by_path
+        nmAP = nm_device_wifi_get_access_point_by_path
                 (NM_DEVICE_WIFI(nmHandler->nmDevice),apPath);
     }
-    if (err != nullptr || ap == nullptr)
+    if (err != nullptr || nmAP == nullptr)
     {
         if(err != nullptr)
         {
@@ -352,12 +348,16 @@ void LibNMHandler::handleConnectionAttempt(
             err = nullptr;
         }
         nmHandler->connectionFailureCallback();
+        return;
     }
-    else
+    for(WifiAccessPoint::Ptr knownAP : nmHandler->visibleAPs)
     {
-        nmHandler->activatingConn = active;
-        nmHandler->connectingCallback(ap);
+        if(*knownAP == nmAP)
+        nmHandler->connectingCallback(knownAP);
+        return;
     }
+    DBG("LibNMHandler::" << __func__ 
+            << ": connecting AP matches no known access point!");
 }
 //libNM callback run after attempting to re-open a known connection
 
@@ -373,9 +373,9 @@ void LibNMHandler::handleKnownConnectionAttempt(
 /**
  * Attempts to open a connection to an access point.
  */
-void LibNMHandler::initConnection(const WifiAccessPoint& toConnect, String psk)
+void LibNMHandler::initConnection(WifiAccessPoint::Ptr toConnect, String psk)
 {
-    if (!isWifiAvailable())
+    if (!isWifiAvailable() || toConnect == nullptr)
     {
         connectionFailureCallback();
         return;
@@ -384,144 +384,56 @@ void LibNMHandler::initConnection(const WifiAccessPoint& toConnect, String psk)
     signalHandler.gLibCall([this, &toConnect, &psk]()
     {
         g_assert(g_main_context_is_owner(g_main_context_default()));
-        NMConnection * connection = nullptr;
-
-        //find the best matching access point for the connection.
-        NMAccessPoint* matchingAP = nullptr;
-        int bestSignalStrength = -1;
-        Array<NMAccessPoint*>& matches = accessPointMap[toConnect];
-        for (NMAccessPoint* candidate : matches)
+        toConnect->setPsk(psk);
+        NMConnection* connection = toConnect->getNMConnection();
+        if(connection == nullptr)
         {
-            int signalStrength = nm_access_point_get_strength(candidate);
-            if (signalStrength > bestSignalStrength)
-            {
-                bestSignalStrength = signalStrength;
-                        matchingAP = candidate;
-            }
-        }
-        if (matchingAP == nullptr)
-        {
-            connectionFailureCallback();
+            DBG("LibNMHandler::" << __func__ << ": connection was null!");
+            connectionFailureCallback(); 
             return;
         }
 
-        //Check for existing connections:
-        if(toConnect.isSavedConnection())
-        {
-            const GPtrArray* wifiConnections 
+        //Check if the connection has been added already:
+        const GPtrArray* wifiConnections 
                     = nm_device_get_available_connections(nmDevice);
-            if(wifiConnections != nullptr)
+        for (int i = 0; i < wifiConnections->len; i++)
+        {
+            if(connection == wifiConnections->pdata[i])
             {
-                GSList* wifiConnList = nullptr;
-                for (int i = 0; i < wifiConnections->len; i++)
-                {
-                    wifiConnList = g_slist_prepend(wifiConnList,
-                            wifiConnections->pdata[i]);
-                }
-                GSList* matchingConnections = nm_access_point_filter_connections
-                        (matchingAP, wifiConnList);
-                if (matchingConnections != nullptr)
-                {
-                    connection = (NMConnection*) matchingConnections->data;
-                }
-                g_slist_free(wifiConnList);
-                g_slist_free(matchingConnections);
-                if (connection == nullptr)
-                {
-                    DBG("LibNMHandler::" << __func__ 
-                            << ": saved connection not found!");
-                }
+                nm_client_activate_connection(nmClient,
+                        connection,
+                        nmDevice,
+                        nm_object_get_path
+                        (NM_OBJECT(toConnect->getNMAccessPoint())),
+                        (NMClientActivateFn) handleKnownConnectionAttempt,
+                        this);
+                return;
             }
         }
-
-        //Create a new connection if no existing one was found:
-        if (connection == nullptr)
+        nm_client_add_and_activate_connection(nmClient,
+                connection,
+                nmDevice,
+                nm_object_get_path
+                (NM_OBJECT(toConnect->getNMAccessPoint())),
+                (NMClientAddActivateFn) handleConnectionAttempt,
+                this);
+        
+        //see if the new connection can be applied to any of the other access
+        //points
+        int connectionsAdded = 0;
+        for(WifiAccessPoint::Ptr knownAP : visibleAPs)
         {
-            DBG("LibNMHandler::" << __func__ << ": creating new connection");
-            connection = nm_connection_new();
-            NMSettingWireless* wifiSettings
-                    = (NMSettingWireless*) nm_setting_wireless_new();
-            nm_connection_add_setting(connection, NM_SETTING(wifiSettings));
-            g_object_set(wifiSettings,
-                    NM_SETTING_WIRELESS_SSID,
-                    nm_access_point_get_ssid(matchingAP),
-                    NM_SETTING_WIRELESS_HIDDEN,
-                    false,
-                    nullptr);
-        }
-        else
-        {
-            DBG("LibNMHandler::" << __func__ << ": opening existing connection");
-        }
-
-        //If a password is provided, save it to the connection.
-        if (!psk.isEmpty())
-        {
-            NMSettingWirelessSecurity* settingWifiSecurity
-                    = (NMSettingWirelessSecurity*)
-                    nm_setting_wireless_security_new();
-                    nm_connection_add_setting(connection,
-                    NM_SETTING(settingWifiSecurity));
-
-            if (nm_access_point_get_wpa_flags(matchingAP)
-                == NM_802_11_AP_SEC_NONE
-                && nm_access_point_get_rsn_flags(matchingAP)
-                == NM_802_11_AP_SEC_NONE)
+            if(knownAP != toConnect && knownAP->setNMConnection(connection))
             {
-                DBG("LibNMHandler::" << __func__
-                        << ": access point has WEP security");
-                /* WEP */
-                nm_setting_wireless_security_set_wep_key
-                        (settingWifiSecurity, 0, psk.toRawUTF8());
-                //valid key format: length 10 or length 26
-                if (psk.length() == 10 || psk.length() == 26)
-                {
-                    g_object_set(G_OBJECT(settingWifiSecurity),
-                            NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
-                            NM_WEP_KEY_TYPE_KEY, nullptr);
-                }
-                //valid passphrase format: length 5 or length 14
-                else if (psk.length() == 5 || psk.length() == 13)
-                {
-                    g_object_set(G_OBJECT(settingWifiSecurity),
-                            NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
-                            NM_WEP_KEY_TYPE_PASSPHRASE, nullptr);
-                }
-                else
-                {
-                    DBG("LibNMHandler::" << __func__
-                            << ": User input invalid WEP Key type, "
-                            << "psk.length() = " << psk.length()
-                            << ", not in [5,10,13,26]");
-                }
-            }
-            else
-            {
-                DBG("LibNMHandler::" << __func__
-                        << ": access point has WPA security");
-                g_object_set(settingWifiSecurity,
-                        NM_SETTING_WIRELESS_SECURITY_PSK,
-                        psk.toRawUTF8(), nullptr);
+                connectionsAdded++;
             }
         }
-        if (toConnect.isSavedConnection())
+        if(connectionsAdded > 0)
         {
-            nm_client_activate_connection(nmClient,
-                    connection,
-                    nmDevice,
-                    nm_object_get_path(NM_OBJECT(matchingAP)),
-                    (NMClientActivateFn) handleKnownConnectionAttempt,
-                    this);
+            DBG("LibNMHandler::" << __func__ << ": shared new connection with "
+                    << connectionsAdded << " saved access points.");
         }
-        else
-        {
-            nm_client_add_and_activate_connection(nmClient,
-                    connection,
-                    nmDevice,
-                    nm_object_get_path(NM_OBJECT(matchingAP)),
-                    (NMClientAddActivateFn) handleConnectionAttempt,
-                    this);
-        }
+        
     });
 }
 
@@ -705,7 +617,7 @@ void LibNMHandler::handleApAdded(LibNMHandler* nmHandler)
 //                << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
     nmHandler->buildAPMap();
-    nmHandler->apUpdateCallback(nmHandler->updatedVisibleAPs());
+    nmHandler->apUpdateCallback(nmHandler->getVisibleAPs());
 }
 
 void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)
@@ -713,7 +625,7 @@ void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)
 //    DBG("LibNMHandler::"<<__func__ << ": data=0x"
 //                << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    if (!nmHandler->accessPointMap.empty 
+    if (!nmHandler->visibleAPs.isEmpty()
             && nm_client_wireless_get_enabled(nmHandler->nmClient))
     {
         //DBG("LibNMHandler::" << __func__ << ": finding removed access points:");
@@ -723,34 +635,32 @@ void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)
         {
             DBG("LibNMHandler::" << __func__ 
                     << ": NMAccessPoint list is null, clearing AP list");
-            nmHandler->accessPointMap.clear();
+            nmHandler->visibleAPs.clear();
             return;
         }
         int removed = 0;
-        for (auto it = nmHandler->accessPointMap.begin();
-             it != nmHandler->accessPointMap.end();
-             it++)
+        Array<WifiAccessPoint::Ptr, CriticalSection> toRemove;
+        for (WifiAccessPoint::Ptr savedAP : nmHandler->visibleAPs)
         {
-            Array<NMAccessPoint*> toRemove;
-            for (NMAccessPoint* searchAP : it->second)
+            bool remove = true;
+            if(savedAP->getNMAccessPoint() != nullptr)
             {
-                bool remove = true;
                 for (int i = 0; i < visibleAPs->len; i++)
                 {
-                    if (visibleAPs->pdata[i] == searchAP)
+                    if (*savedAP == (NMAccessPoint*) visibleAPs->pdata[i])
                     {
                         remove = false;
                         break;
                     }
                 }
-                if (remove)
-                {
-                    toRemove.add(searchAP);
-                    removed++;
-                }
             }
-            it->second.removeValuesIn(toRemove);
+            if (remove)
+            {
+                toRemove.add(savedAP);
+                removed++;
+            }
         }
+        nmHandler->visibleAPs.removeValuesIn(toRemove);
         //DBG("LibNMHandler::" << __func__ << ": removed " << removed
         //        << " NMAccessPoints");
     }
@@ -758,7 +668,7 @@ void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)
     {
         DBG("LibNMHandler::" << __func__ 
                 << ": wifi disabled, clearing AP list");
-        nmHandler->accessPointMap.clear();
+        nmHandler->visibleAPs.clear();
     }
 }
 
@@ -767,7 +677,7 @@ void LibNMHandler::handleConnectionChange(LibNMHandler* nmHandler)
     g_assert(g_main_context_is_owner(g_main_context_default()));
     //DBG("LibNMHandler::" << __func__ << ": data=0x"
     //            << String::toHexString((unsigned long) nmHandler));
-    WifiAccessPoint connected = nmHandler->findConnectedAP();
+    WifiAccessPoint::Ptr connected = nmHandler->findConnectedAP();
     nmHandler->connectionUpdateCallback(connected);
 }
 
@@ -826,67 +736,84 @@ void LibNMHandler::buildAPMap()
         //DBG("LibNMHandler::buildAPMap: Mapping all visible APs");
         if (isWifiAvailable())
         {
-            const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
-                    (NM_DEVICE_WIFI(nmDevice));
-            const GPtrArray* wifiConns = nm_device_get_available_connections
-                    (nmDevice);
+            return;
+        }   
+        const GPtrArray* visibleNMAPs = nm_device_wifi_get_access_points
+                (NM_DEVICE_WIFI(nmDevice));
+        const GPtrArray* wifiConns = nm_device_get_available_connections
+                (nmDevice);
 
-            //DBG("LibNMHandler::buildAPMap: found " 
-            //        << String(visibleAPs ? visibleAPs->len : 0)
-            //        << " NMAccessPoints, and " 
-            //        << String(wifiConns ? wifiConns->len : 0)
-            //        << " saved wifi connections");
-            if (visibleAPs == nullptr)
+        //DBG("LibNMHandler::buildAPMap: found " 
+        //        << String(visibleAPs ? visibleAPs->len : 0)
+        //        << " NMAccessPoints, and " 
+        //        << String(wifiConns ? wifiConns->len : 0)
+        //        << " saved wifi connections");
+        if (visibleNMAPs == nullptr)
+        {
+            return;
+        }
+        for (int apNum = 0; apNum < visibleNMAPs->len; apNum++)
+        {
+            NMAccessPoint* nmAP = 
+                    (NMAccessPoint*) visibleNMAPs->pdata[apNum];
+            
+            //Skip NMAccessPoints that are already saved
+            bool matchingNMAP = false;
+            for(WifiAccessPoint::Ptr knownAP : visibleAPs)
             {
-                return;
-            }
-            for (int apNum = 0; apNum < visibleAPs->len; apNum++)
-            {
-                NMAccessPoint* nmAP = (NMAccessPoint*) visibleAPs->pdata[apNum];
-                NMConnection* apSavedConn = nullptr;
-                if(wifiConns != nullptr)
+                if(*knownAP == nmAP)
                 {
-                    GSList* wifiConnList = nullptr;
-                    for (int i = 0; i < wifiConns->len; i++)
-                    {
-                        wifiConnList = g_slist_prepend(wifiConnList,
-                                wifiConns->pdata[i]);
-                    }
-                    GSList* matchingConns = nm_access_point_filter_connections
-                            (nmAP, wifiConnList);
-                            g_slist_free(wifiConnList);
-                    for (GSList* iter = matchingConns; iter != nullptr;
-                         iter = iter->next)
-                    {
-                        NMConnection* conn
-                                = (NMConnection*) iter->data;
-                                GError * error = nullptr;
-                        if (nm_connection_verify(conn, &error))
-                        {
-                            apSavedConn = conn;
-                            break;
-                        }
-                        else if (error != nullptr)
-                        {
-                            DBG("LibNMHandler: invalid connection: "
-                                    << String(error->message));
-                                    g_error_free(error);
-                                    error = nullptr;
-                        }
-                    }
-                    g_slist_free(matchingConns);
-                }
-                WifiAccessPoint wifiAP(nmAP, apSavedConn);
-                if(!wifiAP.isVoid() && !accessPointMap[wifiAP].contains(nmAP))
-                {
-                    accessPointMap[wifiAP].add(nmAP);
-                    DBG("LibNMHandler::buildAPMap: Added AP #"
-                            << accessPointMap[wifiAP].size() << " for SSID "
-                            << wifiAP.getSSID()
-                            << (wifiAP.isSavedConnection() ? " (saved)"
-                            : " (new)"));
+                    matchingNMAP = true;
+                    break;
                 }
             }
+            if(matchingNMAP)
+            {
+                break;
+            }
+            
+            //look for a matching valid connection
+            NMConnection* apSavedConn = nullptr;
+            if(wifiConns != nullptr)
+            {
+                GSList* wifiConnList = nullptr;
+                for (int i = 0; i < wifiConns->len; i++)
+                {
+                    wifiConnList = g_slist_prepend(wifiConnList,
+                            wifiConns->pdata[i]);
+                }
+                GSList* matchingConns = nm_access_point_filter_connections
+                        (nmAP, wifiConnList);
+                        g_slist_free(wifiConnList);
+                for (GSList* iter = matchingConns; iter != nullptr;
+                     iter = iter->next)
+                {
+                    NMConnection* conn
+                            = (NMConnection*) iter->data;
+                            GError * error = nullptr;
+                    if (nm_connection_verify(conn, &error))
+                    {
+                        apSavedConn = conn;
+                        break;
+                    }
+                    else if (error != nullptr)
+                    {
+                        DBG("LibNMHandler: invalid connection: "
+                                << String(error->message));
+                                g_error_free(error);
+                                error = nullptr;
+                    }
+                }
+                g_slist_free(matchingConns);
+            }
+            WifiAccessPoint::Ptr wifiAP 
+                    = new WifiAccessPoint(nmAP, apSavedConn);
+            visibleAPs.add(wifiAP);
+            DBG("LibNMHandler::buildAPMap: Added AP #"
+                    << visibleAPs.size() << " with SSID "
+                    << wifiAP->getSSID()
+                    << (wifiAP->hasSavedConnection() ? " (saved)"
+                    : " (new)"));
         }
     });
 }

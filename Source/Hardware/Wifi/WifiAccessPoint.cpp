@@ -1,40 +1,29 @@
+#include "nm-utils.h"
 #include "JuceHeader.h"
 #include "Utils.h"
-#include "WifiAccessPoint.h"
-
-
 #include "GLibSignalHandler.h"
-#include "nm-utils.h"
-
+#include "WifiAccessPoint.h"
+    
+/**
+ * Create an access point object using LibNM access point data and optional
+ * saved connection data.
+ */
 WifiAccessPoint::WifiAccessPoint
-(String ssid, int signalStrength, bool requiresAuth, String hash) :
-ssid(ssid),
-signalStrength(median<int>(0, signalStrength, 100)),
-hash(hash)
+(NMAccessPoint* accessPoint, NMConnection* savedConnection) : 
+nmAccessPoint(accessPoint),
+networkConnection(savedConnection)
 {
-    security = requiresAuth ? securedWPA : none;
-}
-
-WifiAccessPoint::WifiAccessPoint
-(NMAccessPoint* accessPoint, NMConnection* savedConnection) : nmAP(accessPoint)
-{
-    if(nmAP == nullptr)
+    if(nmAccessPoint == nullptr)
     {
         return;
     }
-    updateSignalId = g_signal_connect_swapped(
-            nmAP,
-            "notify::" NM_ACCESS_POINT_STRENGTH,
-            G_CALLBACK(strengthUpdateCallback),
-            this);
-    g_object_weak_ref(G_OBJECT(nmAP),
-            (GWeakNotify) apDestroyedCallback, this);
-    
+    registerSignalHandlers();
     GLibSignalHandler glibHandler;
-    glibHandler.gLibCall([this, savedConnection]()
+    glibHandler.gLibCall([this]()
     {
         const ScopedWriteLock initLock(networkUpdateLock);
-        const GByteArray* ssidBytes = getSSIDBytes(nmAP, savedConnection);
+        const GByteArray* ssidBytes = getSSIDBytes(nmAccessPoint,
+                networkConnection);
         if(ssidBytes != nullptr)
         {
             char* utfSSID = nm_utils_ssid_to_utf8(ssidBytes);
@@ -44,26 +33,12 @@ WifiAccessPoint::WifiAccessPoint
                 g_free(utfSSID);
                 utfSSID = nullptr;
             }
-        }
-        
-        if(savedConnection != nullptr)
-        {
-            connectionSaved = true;
-            NMSettingWirelessSecurity* securitySettings =
-                    nm_connection_get_setting_wireless_security
-                    (savedConnection);
-            if(securitySettings != nullptr 
-               && nm_setting_wireless_security_get_psk(securitySettings) 
-                                                       != nullptr)
-            {
-                pskSaved = true;
-            }
-        }  
-        bssid = nm_access_point_get_bssid(nmAP);
-        apMode = nm_access_point_get_mode(nmAP);
-        apFlags = nm_access_point_get_flags(nmAP);
-        wpaFlags = nm_access_point_get_wpa_flags(nmAP);
-        rsnFlags = nm_access_point_get_rsn_flags(nmAP);
+        } 
+        bssid = nm_access_point_get_bssid(nmAccessPoint);
+        apMode = nm_access_point_get_mode(nmAccessPoint);
+        apFlags = nm_access_point_get_flags(nmAccessPoint);
+        wpaFlags = nm_access_point_get_wpa_flags(nmAccessPoint);
+        rsnFlags = nm_access_point_get_rsn_flags(nmAccessPoint);
         hash = generateHash(ssidBytes,apMode,apFlags,wpaFlags,rsnFlags);
 
         //get security type
@@ -81,57 +56,27 @@ WifiAccessPoint::WifiAccessPoint
                     none : securedWEP;
         }
 
-        signalStrength = nm_access_point_get_strength(nmAP);
-        frequency = nm_access_point_get_frequency(nmAP);
-        maxBitrate = nm_access_point_get_max_bitrate(nmAP);
+        signalStrength = nm_access_point_get_strength(nmAccessPoint);
+        frequency = nm_access_point_get_frequency(nmAccessPoint);
+        maxBitrate = nm_access_point_get_max_bitrate(nmAccessPoint);
     });
 }
 
     
 /**
- * Copies an existing access point object, registering a new signal 
- * handler for the new access point instance.
+ *
+ * Create a wifi access point from pre-generated data.  This is intended for
+ * debugging purposes only.
  */
-WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy):
-ssid(toCopy.ssid),
-bssid(toCopy.bssid),
-security(toCopy.security),
-hash(toCopy.hash),
-signalStrength(toCopy.signalStrength),
-frequency(toCopy.frequency),
-maxBitrate(toCopy.maxBitrate),
-connectionSaved(toCopy.connectionSaved),
-pskSaved(toCopy.pskSaved),
-apMode(toCopy.apMode),
-apFlags(toCopy.apFlags),
-rsnFlags(toCopy.rsnFlags),
-nmAP(toCopy.nmAP)
+WifiAccessPoint::WifiAccessPoint
+(String ssid, int signalStrength, bool requiresAuth, String hash) :
+ssid(ssid),
+signalStrength(median<int>(0, signalStrength, 100)),
+hash(hash)
 {
-    if(nmAP != nullptr)
-    {
-        const ScopedWriteLock initLock(networkUpdateLock);
-        updateSignalId = g_signal_connect_swapped(
-                nmAP,
-                "notify::" NM_ACCESS_POINT_STRENGTH,
-                G_CALLBACK(strengthUpdateCallback),
-                this);
-        g_object_weak_ref(G_OBJECT(nmAP),
-                (GWeakNotify) apDestroyedCallback, this);
-        
-        //DBG("AP=" << String::toHexString((unsigned long) nmAP)
-        //        << " signal handler=" << String(updateSignalId));
-    }
+    security = requiresAuth ? securedWPA : none;
 }
 
-/**
- * Creates a void WifiAccessPoint, representing the absence of a wifi access 
- * point.
- */
-WifiAccessPoint::WifiAccessPoint() :
-signalStrength(-1),
-security(none) 
-{ }
-    
 /**
  * Unregisters the signal handler, if one exists
  */
@@ -140,62 +85,436 @@ WifiAccessPoint::~WifiAccessPoint()
     const ScopedWriteLock destroyLock(networkUpdateLock);
     if(updateSignalId > 0)
     {
-        g_signal_handler_disconnect(nmAP,updateSignalId);
+        g_signal_handler_disconnect(nmAccessPoint,updateSignalId);
     }
-    if(nmAP != nullptr)
+    if(nmAccessPoint != nullptr)
     {
-        g_object_weak_unref(G_OBJECT(nmAP), (GWeakNotify) apDestroyedCallback,
+        g_object_weak_unref(G_OBJECT(nmAccessPoint),
+                (GWeakNotify) apDestroyedCallback,
+                this);
+    }
+    if(networkConnection != nullptr)
+    {
+        g_object_weak_unref(G_OBJECT(networkConnection),
+                (GWeakNotify) apDestroyedCallback,
                 this);
     }
 }
 
 /**
- * @return true iff this WifiAccessPoint is void.
+ * Gets the access point's service set identifier, its primary name.
  */
-bool WifiAccessPoint::isVoid() const
+const String& WifiAccessPoint::getSSID() const
 {
     const ScopedReadLock readLock(networkUpdateLock);
-    return ssid.isEmpty()
-            && signalStrength == -1
-            && hash.isEmpty();
+    return ssid;
 }
 
 /**
- * Copies over all data from rhs, creating new NMAccessPoint signal 
- * handlers if necessary. 
+ * Gets the MAC address of the wifi access point.
  */
-void WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
+const String& WifiAccessPoint::getBSSID() const
 {
-    const ScopedWriteLock initLock(networkUpdateLock);
-    const ScopedReadLock copyLock(rhs.networkUpdateLock);
-    ssid = rhs.ssid;
-    bssid = rhs.bssid;
-    security = rhs.security;
-    hash = rhs.hash;
-    signalStrength = rhs.signalStrength;
-    frequency = rhs.frequency;
-    maxBitrate = rhs.maxBitrate;
-    connectionSaved = rhs.connectionSaved;
-    pskSaved = rhs.pskSaved;
-    apMode = rhs.apMode;
-    apFlags = rhs.apFlags;
-    rsnFlags = rhs.rsnFlags;
-    nmAP = rhs.nmAP;
-    if(nmAP != nullptr)
+    const ScopedReadLock readLock(networkUpdateLock);
+    return bssid;
+}
+
+/**
+ * Gets the signal strength of the wifi access point.
+ */
+int WifiAccessPoint::getSignalStrength() const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return signalStrength;
+}
+
+/**
+ * Gets the wifi access point frequency in (TODO: what format? MHz? 
+ * documentation is unclear, do some tests and figure it out.)
+ */
+unsigned long WifiAccessPoint::getFrequency() const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return frequency;
+}
+
+/**
+ * Gets the access point's maximum data transfer bit rate.
+ */
+unsigned long WifiAccessPoint::getMaxBitrate() const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return maxBitrate;
+}
+ 
+/**
+ * Checks if this access point requires a security key.
+ */
+bool WifiAccessPoint::getRequiresAuth() const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return security != none;
+}
+
+/**
+ * Checks if this access point corresponds to a saved network connection.
+ */
+bool WifiAccessPoint::hasSavedConnection() const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return networkConnection != nullptr;
+}
+
+/**
+ * Checks if there is a psk for this connection saved by the network
+ * manager.
+ */
+bool WifiAccessPoint::hasSavedPsk() const
+{
+    bool pskFound = false;
+    if(hasSavedConnection() && getRequiresAuth())
+    {
+        const ScopedReadLock readLock(networkUpdateLock);
+        GLibSignalHandler glibHandler;
+        glibHandler.gLibCall([this, &pskFound]()
+        {
+            NMSettingWirelessSecurity * securitySettings =
+                    nm_connection_get_setting_wireless_security(
+                    networkConnection);
+            if(securitySettings != nullptr)
+            {
+                const char* key = nullptr;
+                if(security == securedWEP)
+                {
+                    guint32 keyIndex = 
+                            nm_setting_wireless_security_get_wep_tx_keyidx(
+                            securitySettings);
+                    key = nm_setting_wireless_security_get_wep_key(
+                            securitySettings, keyIndex);
+                }
+                else
+                {
+                    key = nm_setting_wireless_security_get_psk
+                            (securitySettings);
+                }
+                pskFound = (key != nullptr);            
+            }
+        });
+    }
+    return pskFound;
+}
+
+
+/**
+ * Returns a string identifying this object for debug purposes.
+ */
+const String& WifiAccessPoint::toString() const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return ssid;
+}
+
+        
+/**
+ * Checks if this access point is compatible with a given connection.
+ * 
+ * @return  true iff the connection is compatible, and the WifiAccessPoint
+ *          doesn't have a different non-null saved connection.  
+ */
+bool WifiAccessPoint::isConnectionCompatible(NMConnection* connection) const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    if(nmAccessPoint == nullptr)
+    {
+        return false;
+    }
+    if(networkConnection == connection)
+    {
+        return true;
+    }
+    if((networkConnection != nullptr && connection != nullptr)
+        && networkConnection != connection)
+    {
+        return false;
+    }
+    bool isValid = false;
+    GLibSignalHandler glibHandler;
+    glibHandler.gLibCall([this, &isValid, &connection]()
+    {
+        isValid = nm_access_point_connection_valid(nmAccessPoint, connection);
+    });
+    return isValid;
+}
+    
+/**
+ * Checks if this access point and another both share a network
+ */
+bool WifiAccessPoint::sharesConnectionWith(WifiAccessPoint::Ptr otherAP) const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    if(this == otherAP)
+    {
+        return true;
+    }
+    NMConnection* otherConnection = otherAP->getNMConnection();
+    if(networkConnection == nullptr || otherConnection == nullptr)
+    {
+        return hash == otherAP->hash;
+    }
+    return isConnectionCompatible(otherConnection);
+}
+
+
+/**
+ * @return the access point device mode 
+ */
+NM80211Mode WifiAccessPoint::getMode() const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return apMode;
+}
+
+/**
+ * @return basic Wifi security flags 
+ */
+NM80211ApFlags WifiAccessPoint::getFlags() const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return apFlags;
+}
+
+/**
+ * @return all WPA security flags. 
+ */
+NM80211ApSecurityFlags WifiAccessPoint::getWPAFlags() const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return wpaFlags;
+}
+
+/**
+ * @return all RSN security flags 
+ */
+NM80211ApSecurityFlags WifiAccessPoint::getRSNFlags() const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return rsnFlags;
+}
+
+    
+/**
+ * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.
+ */
+bool WifiAccessPoint::operator==(NMAccessPoint* rhs) const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return nmAccessPoint == rhs;
+}
+
+/**
+ * Returns true iff this WifiAccessPoint does not have rhs as its 
+ * nmAccessPoint.
+ */
+bool WifiAccessPoint::operator!=(NMAccessPoint* rhs) const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return nmAccessPoint != rhs;
+}
+
+
+/**
+ * Returns true iff this access point and rhs share a nmAccessPoint.
+ */
+bool WifiAccessPoint::operator==(const WifiAccessPoint& rhs) const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return nmAccessPoint == rhs.nmAccessPoint;
+}
+
+/**
+ * Returns true iff this access point and rhs do not share a nmAccessPoint.
+ */
+bool WifiAccessPoint::operator!=(const WifiAccessPoint& rhs) const
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    return nmAccessPoint != rhs.nmAccessPoint;
+}
+
+/**
+ * @return this access point's LibNM access point object 
+ */
+NMAccessPoint* WifiAccessPoint::getNMAccessPoint()
+{
+    return nmAccessPoint;
+}
+
+/**
+ * Gets this access point's connection object.  If it has no connection
+ * object, a new one will be created and returned.
+ * 
+ * @return this access point's connection object.
+ */
+NMConnection* WifiAccessPoint::getNMConnection()
+{
+    if(!hasSavedConnection() && *this != nullptr)
+    {
+        const ScopedWriteLock updateLock(networkUpdateLock);
+        networkConnection = nm_connection_new();
+        NMSettingWireless* wifiSettings
+                = (NMSettingWireless*) nm_setting_wireless_new();
+        nm_connection_add_setting(networkConnection, NM_SETTING(wifiSettings));
+        g_object_set(wifiSettings,
+                NM_SETTING_WIRELESS_SSID,
+                nm_access_point_get_ssid(nmAccessPoint),
+                NM_SETTING_WIRELESS_HIDDEN,
+                false,
+                nullptr);
+        registerSignalHandlers();
+    }
+    const ScopedReadLock readLock(networkUpdateLock);
+    return networkConnection;
+}
+
+    
+/**
+ * Assigns a new connection to this access point. This will fail if a valid
+ * connection is already assigned, or if the new connection is not valid
+ * for this access point.
+ */
+bool WifiAccessPoint::setNMConnection(NMConnection* newConnection)
+{
+    const ScopedWriteLock updateLock(networkUpdateLock);
+    if(isConnectionCompatible(newConnection))
+    {
+        networkConnection = newConnection;
+        registerSignalHandlers();
+        return true;
+    }
+    return false;
+}
+ 
+/**
+ * Saves a new security key for this access point's connection.
+ * 
+ * @param psk  The new security key.  This key will only be saved if it is
+ *             valid for the access point's security type.
+ */
+void WifiAccessPoint::setPsk(String psk)
+{
+    if(*this == nullptr)
+    {
+        DBG("WifiAccessPoint::" << __func__ << ": NMAccessPoint is null!");
+        return;
+    }
+    else if(psk.isEmpty())
+    {
+        DBG("WifiAccessPoint::" << __func__ << ": psk is empty!");
+        return;
+    }
+    else if(!getRequiresAuth())
+    {
+        DBG("WifiAccessPoint::" << __func__ << ": AP is unsecured!");
+        return;
+    }
+    if(!hasSavedConnection())
+    {
+        getNMConnection();
+    }
+    
+    GLibSignalHandler glibHandler;
+    glibHandler.gLibCall([this, &psk]()
+    {
+        const ScopedWriteLock updateLock(networkUpdateLock);
+        NMSettingWirelessSecurity* securitySettings
+                    = (NMSettingWirelessSecurity*)
+                    nm_setting_wireless_security_new();
+        nm_connection_add_setting(networkConnection,
+                    NM_SETTING(securitySettings));
+        if(security == securedWEP)
+        {
+            DBG("WifiAccessPoint::" << __func__
+                    << ": access point has WEP security");
+            /* WEP */
+            nm_setting_wireless_security_set_wep_key
+                    (securitySettings, 0, psk.toRawUTF8());
+            //valid key format: length 10 or length 26
+            if (psk.length() == 10 || psk.length() == 26)
+            {
+                g_object_set(G_OBJECT(securitySettings),
+                        NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
+                        NM_WEP_KEY_TYPE_KEY, nullptr);
+            }
+            //valid passphrase format: length 5 or length 14
+            else if (psk.length() == 5 || psk.length() == 13)
+            {
+                g_object_set(G_OBJECT(securitySettings),
+                        NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
+                        NM_WEP_KEY_TYPE_PASSPHRASE, nullptr);
+            }
+            else
+            {
+                DBG("WifiAccessPoint::" << __func__
+                        << ": User input invalid WEP Key type, "
+                        << "psk.length() = " << psk.length()
+                        << ", not in [5,10,13,26]");
+            }
+        }
+        else
+        {
+            DBG("LibNMHandler::" << __func__
+                    << ": access point has WPA security");
+            g_object_set(G_OBJECT(securitySettings),
+                    NM_SETTING_WIRELESS_SECURITY_PSK,
+                    psk.toRawUTF8(), nullptr);
+        }
+    });
+    
+}
+ 
+/**
+ * Removes the security key saved for this access point.  This should only 
+ * be done when the saved key turns out to be invalid. 
+ */
+void WifiAccessPoint::removePsk()
+{
+    if(hasSavedConnection())
+    {
+        GLibSignalHandler glibHandler;
+        glibHandler.gLibCall([this]()
+        {
+            const ScopedWriteLock updateLock(networkUpdateLock);
+            nm_connection_remove_setting(networkConnection,
+                        NM_TYPE_SETTING_WIRELESS_SECURITY);
+
+        });
+    }
+}
+
+/**
+ * If the NMAccessPoint is non-null and signal handlers aren't already
+ * registered, this will register this object to receive updates when
+ * access point signal strength changes or the NMAccessPoint is destroyed.
+ */
+void WifiAccessPoint::registerSignalHandlers()
+{
+    if(nmAccessPoint != nullptr && updateSignalId == 0)
     {
         updateSignalId = g_signal_connect_swapped(
-                nmAP,
+                nmAccessPoint,
                 "notify::" NM_ACCESS_POINT_STRENGTH,
                 G_CALLBACK(strengthUpdateCallback),
                 this);
-        g_object_weak_ref(G_OBJECT(nmAP),
-                (GWeakNotify) apDestroyedCallback, this);
-        
+        g_object_weak_ref(G_OBJECT(nmAccessPoint),
+                (GWeakNotify) apDestroyedCallback, this);  
         //DBG("AP=" << String::toHexString((unsigned long) nmAP)
         //        << " signal handler=" << String(updateSignalId));
     }
+    if(networkConnection != nullptr)
+    {
+        g_object_weak_ref(G_OBJECT(networkConnection),
+                (GWeakNotify) apDestroyedCallback, this);  
+    }
 }
-
 
 /**
  * Generates a hash value for a list of access point parameters that will
@@ -260,7 +579,8 @@ String WifiAccessPoint::generateHash(
  * Gets an SSID byte array from a saved connection or access point.  If
  * possible, the value from the saved connection will be used first.
  */
-const GByteArray* WifiAccessPoint::getSSIDBytes(NMAccessPoint* ap, NMConnection* conn)
+const GByteArray* WifiAccessPoint::getSSIDBytes(NMAccessPoint* ap,
+        NMConnection* conn)
 {
     const GByteArray* ssidBytes = nullptr;
     GLibSignalHandler glibHandler;
@@ -283,55 +603,48 @@ const GByteArray* WifiAccessPoint::getSSIDBytes(NMAccessPoint* ap, NMConnection*
     return ssidBytes;
 }
 
-
 /**
- * Generates a hash value for a NMAccessPoint that will be unique to that
- * access point's connection.
+ * If this object's NMAccessPoint or NMConnection is deleted, this will 
+ * remove the pointer to the deleted object and set it to null.  This should
+ * only be called on the GLib event loop by GLib library code.
  */
-String WifiAccessPoint::generateHash(NMAccessPoint* ap, NMConnection* conn)
-{
-    GLibSignalHandler glibHandler;
-    String hash;
-    glibHandler.gLibCall([ap, conn, &hash]()
-    {
-        const GByteArray* rawSSID = getSSIDBytes(ap, conn);
-        if(rawSSID != nullptr)
-        {
-            NM80211Mode mode = nm_access_point_get_mode(ap);
-            guint32 flags = nm_access_point_get_flags(ap);
-            guint32 wpa_flags = nm_access_point_get_wpa_flags(ap);
-            guint32 rsn_flags = nm_access_point_get_rsn_flags(ap);
-            hash = generateHash(rawSSID, mode, flags, wpa_flags, rsn_flags);
-        }
-    });
-    return hash;
-}
-
 void WifiAccessPoint::apDestroyedCallback(WifiAccessPoint* toUpdate,
         GObject* removed)
 {
-    if((NMAccessPoint*) removed == toUpdate->nmAP)
+    if((NMAccessPoint*) removed == toUpdate->nmAccessPoint)
     {
         const ScopedWriteLock destroyLock(toUpdate->networkUpdateLock);
-        toUpdate->nmAP = nullptr;
+        toUpdate->nmAccessPoint = nullptr;
         toUpdate->signalStrength = 0;
         toUpdate->updateSignalId = 0;
     }
+    else if((NMConnection*) removed == toUpdate->networkConnection)
+    {
+        toUpdate->networkConnection = nullptr;
+    }
     else
     {
-        DBG("WifiAccessPoint::"<<__func__<<": destroyed AP=0x"
+        DBG("WifiAccessPoint::"<<__func__<<": destroyed object=0x"
                 << String::toHexString((unsigned long) removed)
                 << " but saved AP=0x"
-                << String::toHexString((unsigned long) toUpdate->nmAP));
+                << String::toHexString((unsigned long) toUpdate->nmAccessPoint)         
+                << " and saved connection=0x"
+                << String::toHexString((unsigned long) toUpdate->networkConnection));
     }
     //TODO: implement listeners, notify of AP loss
 }
 
+
+/**
+ * A callback to update signal strength whenever NMAccessPoint strength
+ * changes.  This should only be called on the GLib event loop by GLib 
+ * library code.
+ */
 void WifiAccessPoint::strengthUpdateCallback(WifiAccessPoint* toUpdate)
 {
     const ScopedWriteLock updateLock(toUpdate->networkUpdateLock);
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    int strength = nm_access_point_get_strength(toUpdate->nmAP);
+    int strength = nm_access_point_get_strength(toUpdate->nmAccessPoint);
     if(strength != toUpdate->signalStrength)
     {
         toUpdate->signalStrength = strength;

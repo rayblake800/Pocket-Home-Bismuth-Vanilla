@@ -17,7 +17,7 @@
 #include "PageStackComponent.h"
 #include "ConnectionPage.h"
 
-class WifiSettingsPage : public ConnectionPage<WifiAccessPoint>,
+class WifiSettingsPage : public ConnectionPage<WifiAccessPoint::Ptr>,
 public WifiStateManager::Listener, public TextEditor::Listener,
 private Localized
 {
@@ -32,7 +32,7 @@ private:
      * 
      * @return the list of all visible Wifi access points.
      */
-    Array<WifiAccessPoint> loadConnectionList();
+    Array<WifiAccessPoint::Ptr> loadConnectionList();
 
 
     /**
@@ -42,7 +42,7 @@ private:
      *  @param connection  The wifi device will attempt to find and connect
      *                      to this access point.
      */
-    void connect(const WifiAccessPoint& connection);
+    void connect(WifiAccessPoint::Ptr connection);
 
     /**
      * Tries to disconnect from a specific wifi access point.
@@ -50,7 +50,7 @@ private:
      * @param connection   If the system is currently connected to this
      *                      connection, this method closes that connection.
      */
-    void disconnect(const WifiAccessPoint& connection);
+    void disconnect(WifiAccessPoint::Ptr connection);
 
     /**
      * Checks if wifi is connected to a specific access point.
@@ -59,7 +59,7 @@ private:
      * 
      * @return true iff the system is connected to WifiAccessPoint connection.
      */
-    bool isConnected(const WifiAccessPoint& connection);
+    bool isConnected(WifiAccessPoint::Ptr connection);
 
     /**
      * Attempt to connect or disconnect from the current selected access point
@@ -76,7 +76,7 @@ private:
      * 
      * @param connection
      */
-    Button* getConnectionButton(const WifiAccessPoint& connection);
+    Button* getConnectionButton(WifiAccessPoint::Ptr connection);
 
     /**
      * Get the layout for the Wifi access point controls.
@@ -85,7 +85,7 @@ private:
      *                      this access point.
      */
     RelativeLayoutManager::Layout getConnectionControlsLayout
-    (const WifiAccessPoint& connection);
+    (WifiAccessPoint::Ptr connection);
 
     /**
      * Update connection control components to match the current Wifi connection
@@ -94,7 +94,7 @@ private:
      * @param accessPoint
      */
     virtual void updateConnectionControls
-    (const WifiAccessPoint& accessPoint) override;
+    (WifiAccessPoint::Ptr accessPoint) override;
 
 
     /**
@@ -133,7 +133,7 @@ private:
      * 
      * @param accessPoint
      */
-    static String getWifiAssetName(const WifiAccessPoint& accessPoint);
+    static String getWifiAssetName(WifiAccessPoint::Ptr accessPoint);
 
     /**
      * Reload the access point list, re-select the selected connection, 
@@ -153,7 +153,7 @@ private:
          * @param isConnected   Should be true if wifi is connected to the 
          *                       connection access point parameter.
          */
-        WifiAPButton(const WifiAccessPoint& connection, bool isConnected);
+        WifiAPButton(WifiAccessPoint::Ptr connection, bool isConnected);
     private:
 
         /**

@@ -74,13 +74,13 @@ void WifiIcon::timerCallback()
             return;
     }
     //wifi connected
-    WifiAccessPoint accessPoint = wifiManager.getConnectedAP();
+    WifiAccessPoint::Ptr accessPoint = wifiManager.getConnectedAP();
     WifiIconImage wifiState = wifiOff;
-    if (!accessPoint.isVoid())
+    if (accessPoint != nullptr)
     {
         // 0 to 100
         float sigStrength =
-                median<float>(0, accessPoint.getSignalStrength(), 99);
+                median<float>(0, accessPoint->getSignalStrength(), 99);
         wifiState = (WifiIconImage) (2 + (int) (sigStrength * 3 / 100));
     }
     else

@@ -114,7 +114,7 @@ public:
      * @return the current connected Wifi access point, or a null 
      *         WifiAccessPoint if there is no connection.
      */
-    WifiAccessPoint getConnectedAP();
+    WifiAccessPoint::Ptr getConnectedAP();
 
     /**
      * Gets the connecting wifi access point, if one exists.
@@ -122,7 +122,7 @@ public:
      * @return the current connecting WifiAccessPoint if one is found, or a 
      *         null WifiAccessPoint if wifi is not connecting.
      */
-    WifiAccessPoint getConnectingAP();
+    WifiAccessPoint::Ptr getConnectingAP();
 
     /**
      * Gets all access points visible to the wifi device.
@@ -130,7 +130,7 @@ public:
      * @return all wifi access points currently detected. If wifi is disabled, 
      *         this will return an empty list.
      */
-    Array<WifiAccessPoint> getVisibleAPs();
+    Array<WifiAccessPoint::Ptr> getVisibleAPs();
 
     /**
      * Checks if wifi is enabled.
@@ -155,7 +155,7 @@ public:
      * @param psk        The wifi key for toConnect. This parameter will be
      *                   ignored if toConnect isn't secured.
      */
-    void connectToAccessPoint(const WifiAccessPoint& toConnect,
+    void connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
             String psk = String());
 
     /**
@@ -228,7 +228,7 @@ public:
          * @return the current connected WifiAccessPoint if one is found, or a 
          *          null WifiAccessPoint if not connected.
          */
-        virtual WifiAccessPoint getConnectedAP() = 0;
+        virtual WifiAccessPoint::Ptr getConnectedAP() = 0;
 
         /**
          * Gets the connecting wifi access point, if one exists.
@@ -236,14 +236,14 @@ public:
          * @return the current connecting WifiAccessPoint if one is found, or a
          *          null WifiAccessPoint if not connecting.
          */
-        virtual WifiAccessPoint getConnectingAP() = 0;
+        virtual WifiAccessPoint::Ptr getConnectingAP() = 0;
 
         /**
          * Scans for and returns nearby wifi access points.
          * 
          * @return the list of all wifi access points close enough to detect.
          */
-        virtual Array<WifiAccessPoint> getVisibleAPs() = 0;
+        virtual Array<WifiAccessPoint::Ptr> getVisibleAPs() = 0;
 
         /**
          * Accesses the wifi device to check if wifi is enabled.
@@ -290,7 +290,7 @@ public:
          * @param psk        The wifi key for toConnect, or the empty string if
          *                    toConnect isn't secured.
          */
-        virtual void connectToAccessPoint(const WifiAccessPoint& toConnect,
+        virtual void connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
                 String psk = String()) = 0;
 
         /**
@@ -352,7 +352,7 @@ public:
          *
          * @param connectedAP the newly connected access point
          */
-        void signalWifiConnected(const WifiAccessPoint& connectedAP);
+        void signalWifiConnected(WifiAccessPoint::Ptr connectedAP);
 
         /**
          * Whenever the wifi device fails to connect to an access point, the 

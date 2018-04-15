@@ -117,7 +117,7 @@ bool LibNMInterface::isWifiConnected()
     const ScopedLock lock(wifiLock);
     DBG("LibNMInterface::" << __func__ << ": state is "
             << deviceStateString(lastNMState));
-    if (lastNMState == NM_DEVICE_STATE_ACTIVATED && !connectedAP.isVoid())
+    if (lastNMState == NM_DEVICE_STATE_ACTIVATED && connectedAP != nullptr)
     {
         return true;
     }
@@ -134,7 +134,7 @@ bool LibNMInterface::isPSKNeeded()
     const ScopedLock lock(wifiLock);
     DBG("LibNMInterface::" << __func__ << ": state is "
             << deviceStateString(lastNMState));
-    if (lastNMState == NM_DEVICE_STATE_NEED_AUTH && !connectingAP.isVoid())
+    if (lastNMState == NM_DEVICE_STATE_NEED_AUTH && connectingAP != nullptr)
     {
         return true;
     }
@@ -144,7 +144,7 @@ bool LibNMInterface::isPSKNeeded()
 /**
  * Request information on the connected access point from the NMDevice.
  */
-WifiAccessPoint LibNMInterface::getConnectedAP()
+WifiAccessPoint::Ptr LibNMInterface::getConnectedAP()
 {
     const ScopedLock lock(wifiLock);
     return connectedAP;
@@ -153,7 +153,7 @@ WifiAccessPoint LibNMInterface::getConnectedAP()
 /**
  * Request information on the connecting access point from the NMDevice.
  */
-WifiAccessPoint LibNMInterface::getConnectingAP()
+WifiAccessPoint::Ptr LibNMInterface::getConnectingAP()
 {
     const ScopedLock lock(wifiLock);
     return connectingAP;
@@ -162,7 +162,7 @@ WifiAccessPoint LibNMInterface::getConnectingAP()
 /**
  * Request information on all wifi access points detected by the NMDevice.
  */
-Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
+Array<WifiAccessPoint::Ptr> LibNMInterface::getVisibleAPs()
 {
     const ScopedLock lock(wifiLock);
     return visibleAPs;
@@ -171,7 +171,7 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 /**
  * Begin opening a connection to a wifi access point.
  */
-void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
+void LibNMInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
         String psk)
 {
     initConnection(toConnect, psk);
@@ -188,7 +188,7 @@ void LibNMInterface::updateAllWifiData()
     connectedAP = findConnectedAP();
     connectingAP = findConnectingAP();
     lastNMState = findWifiState();
-    visibleAPs = updatedVisibleAPs();
+    visibleAPs = getVisibleAPs();
     ScopedUnlock confirmUnlock(wifiLock);
     confirmWifiState();
 }
@@ -241,7 +241,7 @@ void LibNMInterface::disableWifi()
  * 
  * @param connectingAP
  */
-void LibNMInterface::connectingCallback(WifiAccessPoint connectingAP)
+void LibNMInterface::connectingCallback(WifiAccessPoint::Ptr connectingAP)
 {  
     ScopedLock updateLock(wifiLock);
     this->connectingAP = connectingAP;
@@ -255,7 +255,7 @@ void LibNMInterface::connectingCallback(WifiAccessPoint connectingAP)
 void LibNMInterface::connectionFailureCallback()
 {   
     ScopedLock updateLock(wifiLock);
-    connectingAP = WifiAccessPoint();
+    connectingAP = nullptr;
     ScopedUnlock confirmUnlock(wifiLock);
     signalConnectionFailed();
 }
@@ -280,7 +280,7 @@ void LibNMInterface::wifiEnablementChangeCallback(bool isEnabled)
  * A callback function to run whenever the list of wifi access points is 
  * updated.
  */
-void LibNMInterface::apUpdateCallback(Array<WifiAccessPoint> visibleAPs) 
+void LibNMInterface::apUpdateCallback(Array<WifiAccessPoint::Ptr> visibleAPs) 
 {
     ScopedLock updateLock(wifiLock);
     this->visibleAPs = visibleAPs;
@@ -313,7 +313,7 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
         case NM_DEVICE_STATE_SECONDARIES:
             /* No state change for now, wait for connection to complete/fail */
             //ensure the pending connection is registered
-            if (connectingAP.isVoid())
+            if (connectingAP == nullptr)
             {
                 connectingAP = findConnectingAP();
                 ScopedUnlock unlockForUpdate(wifiLock);
@@ -331,13 +331,13 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
         case NM_DEVICE_STATE_DISCONNECTED:
         {
             ScopedUnlock unlockForUpdate(wifiLock);
-            if(connectingAP.isVoid())
+            if(connectingAP == nullptr)
             {
                 signalWifiDisconnected();
             }
             else
             {
-                connectingAP = WifiAccessPoint();
+                connectingAP = nullptr;
                 signalConnectionFailed();
             }
             break;
@@ -366,12 +366,12 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
 /**
  * Notifies listeners when the active access point changes.
  */
-void LibNMInterface::connectionUpdateCallback(WifiAccessPoint connected)
+void LibNMInterface::connectionUpdateCallback(WifiAccessPoint::Ptr connected)
 {
     ScopedLock updateLock(wifiLock);
     connectedAP = connected;
     ScopedUnlock notifyUnlock(wifiLock);
-    if (connected.isVoid())
+    if (connected == nullptr)
     {
         signalWifiDisconnected();
     }

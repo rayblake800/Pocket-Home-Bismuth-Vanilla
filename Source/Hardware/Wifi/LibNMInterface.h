@@ -57,7 +57,7 @@ protected:
      * @return a WifiAccessPoint object representing the access point connected
      *          to the wifi device, or WifiAccessPoint() if not connected.
      */
-    WifiAccessPoint getConnectedAP() override;
+    WifiAccessPoint::Ptr getConnectedAP() override;
 
     /**
      * Request information on the connecting access point from the NMDevice.
@@ -66,7 +66,7 @@ protected:
      *          connecting to the wifi device, or WifiAccessPoint() if not 
      *          connecting.
      */
-    WifiAccessPoint getConnectingAP() override;
+    WifiAccessPoint::Ptr getConnectingAP() override;
 
     /**
      * Request information on all wifi access points detected by the NMDevice.
@@ -74,7 +74,7 @@ protected:
      * @return  a list of all visible access points within range of the wifi
      *          device, or an empty list if wifi is disabled.
      */
-    Array<WifiAccessPoint> getVisibleAPs() override;
+    Array<WifiAccessPoint::Ptr> getVisibleAPs() override;
 
     /**
      * Begin opening a connection to a wifi access point.
@@ -84,7 +84,7 @@ protected:
      * @param psk        The access point's security key. This will be ignored
      *                   if the access point is unsecured.
      */
-    void connectToAccessPoint(const WifiAccessPoint& toConnect,
+    void connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
             String psk = String()) override;
 
 
@@ -122,7 +122,7 @@ private:
      * 
      * @param connectingAP
      */
-    void connectingCallback(WifiAccessPoint connectingAP) override;
+    void connectingCallback(WifiAccessPoint::Ptr connectingAP) override;
     
     /**
      * Notify listeners that a connection attempt failed.
@@ -142,7 +142,7 @@ private:
      * 
      * @param visibleAPs  The updated visible access point list.
      */
-    void apUpdateCallback(Array<WifiAccessPoint> visibleAPs) override;
+    void apUpdateCallback(Array<WifiAccessPoint::Ptr> visibleAPs) override;
     
     /**
      * Registers updates to the wifi device when the NetworkManager device state
@@ -158,7 +158,7 @@ private:
      * @param connected  The newly connected access point, or the void access
      *                   point if wifi just disconnected.
      */
-    void connectionUpdateCallback (WifiAccessPoint connected) override;
+    void connectionUpdateCallback (WifiAccessPoint::Ptr connected) override;
 
 
     /**
@@ -179,9 +179,9 @@ private:
 
     NMDeviceState lastNMState = NM_DEVICE_STATE_UNKNOWN;
 
-    WifiAccessPoint connectedAP;
-    WifiAccessPoint connectingAP;
-    Array<WifiAccessPoint> visibleAPs;
+    WifiAccessPoint::Ptr connectedAP = nullptr;
+    WifiAccessPoint::Ptr connectingAP = nullptr;
+    Array<WifiAccessPoint::Ptr> visibleAPs;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LibNMInterface)
 };

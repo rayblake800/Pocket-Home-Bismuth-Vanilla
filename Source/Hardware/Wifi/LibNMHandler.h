@@ -6,8 +6,6 @@
  */
 #pragma once
 #include <NetworkManager.h>
-#include <map>
-#include <functional>
 #include <nm-client.h>
 #include <nm-device.h>
 #include <nm-device-wifi.h>
@@ -59,7 +57,7 @@ protected:
      * @return the current connected access point, or the void access point if
      *         none is found.
      */
-    WifiAccessPoint findConnectedAP();
+    WifiAccessPoint::Ptr findConnectedAP();
     
         
     /**
@@ -69,12 +67,15 @@ protected:
      * @return the current connecting access point, or the void access point if
      *         none is found.
      */
-    WifiAccessPoint findConnectingAP();
+    WifiAccessPoint::Ptr findConnectingAP();
     
     /**
-     * Updates and returns the list of visible wifi access points.
+     * Returns the list of visible wifi access points. If multiple access points
+     * share a connection, this will only return the one with the best signal
+     * strength.  Hidden access points with no saved connection will also not be
+     * included in the list.
      */
-    Array<WifiAccessPoint> updatedVisibleAPs();
+    Array<WifiAccessPoint::Ptr> getVisibleAPs();
     
     /**
      * Turns the wifi device on or off.
@@ -103,7 +104,7 @@ protected:
      *                             will be ignored if the access point is
      *                             unsecured.
      */
-    void initConnection(const WifiAccessPoint& toConnect, String psk);
+    void initConnection(WifiAccessPoint::Ptr toConnect, String psk);
     
     /**
      * Shuts down the active wifi connection.
@@ -121,7 +122,7 @@ protected:
      * 
      * @param connectingAP
      */
-    virtual void connectingCallback(WifiAccessPoint connectingAP) = 0;
+    virtual void connectingCallback(WifiAccessPoint::Ptr connectingAP) = 0;
     
     /**
      * A callback function to run whenever initConnection fails to open a new
@@ -143,7 +144,7 @@ protected:
      * 
      * @param visibleAPs  The updated visible access point list.
      */
-    virtual void apUpdateCallback(Array<WifiAccessPoint> visibleAPs) = 0;
+    virtual void apUpdateCallback(Array<WifiAccessPoint::Ptr> visibleAPs) = 0;
     
     /**
      * A callback function to run whenever the wifi device state changes.
@@ -159,7 +160,7 @@ protected:
      * @param connected  The newly connected access point, or the void access
      *                   point if wifi just disconnected.
      */
-    virtual void connectionUpdateCallback (WifiAccessPoint connected) = 0;
+    virtual void connectionUpdateCallback (WifiAccessPoint::Ptr connected) = 0;
     
     /**
      * Attach all signal handlers to the wifi thread, so that they are run
@@ -292,7 +293,7 @@ private:
     NMActiveConnection* activatingConn = nullptr;
     
     
-    std::map<WifiAccessPoint,Array<NMAccessPoint*>> accessPointMap;
+    Array<WifiAccessPoint::Ptr, CriticalSection> visibleAPs;
 
     Array<gulong, CriticalSection> clientSignalHandlers;
     Array<gulong, CriticalSection> deviceSignalHandlers;

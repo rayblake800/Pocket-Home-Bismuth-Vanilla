@@ -5,11 +5,10 @@
  * show a list of connections and allow the user to connect or disconnect
  * from connections in the list.
  * 
- * ConnectionPoint must have a default constructor that returns
- * an immutable object representing an absent connection, and a method 
- * bool isNull() that returns true if the connectionPoint is one of these
- * default ConnectionPoint objects.  In debug builds, it should also have a
- * toString() method returning some sort of identifying string for debug output.
+ * ConnectionPtr must be a ReferenceCountedObjectPtr for a class inheriting from
+ * juce::ReferenceCountedObject. In debug builds, the ReferenceCountedObject
+ * inheriting class should also have a toString() method that returns some sort 
+ * of identifying string for debug output.
  */
 
 #pragma once
@@ -20,7 +19,7 @@
 #include "PageComponent.h"
 #include "PageStackComponent.h"
 
-template<class ConnectionPoint>
+template<class ConnectionPtr>
 class ConnectionPage : public PageComponent {
 public:
 
@@ -30,22 +29,21 @@ public:
 
 protected:
     /**
-     * @return the selected connection's reference
+     * @return the selected connection pointer
      */
-    const ConnectionPoint& getSelectedConnection();
+    ConnectionPtr getSelectedConnection();
 
 
     /**
-     * Sets ConnectionPoint connection as the selected connection.  When a
+     * Sets ConnectionPtr's connection as the selected connection.  When a
      * connection is selected, this page will show details and controls for that
      * connection, and the other connections on the list will be hidden.  When
-     * set to ConnectionPoint::null(), the full ConnectionPoint list will be 
-     * shown again.
+     * set to nullptr, the full ConnectionPoint list will be shown again.
      * 
      * @param connection   This must be null, or equal to one of the 
-     *                      connections in the connection list.
+     *                     connections in the connection list.
      */
-    void setSelectedConnection(const ConnectionPoint& connection);
+    void setSelectedConnection(ConnectionPtr connection);
 
 
     /**
@@ -75,45 +73,44 @@ private:
     /**
      *Returns the list of all connection objects that should be listed.
      */
-    virtual Array<ConnectionPoint> loadConnectionList() = 0;
+    virtual Array<ConnectionPtr> loadConnectionList() = 0;
 
     /**
      * Attempts to open a connection, if possible.
      * 
      * @param connection
      */
-    virtual void connect(const ConnectionPoint& connection) = 0;
+    virtual void connect(ConnectionPtr connection) = 0;
 
     /**
      * Attempts to close a connection, if possible.
      * 
      * @param connection
      */
-    virtual void disconnect(const ConnectionPoint& connection) = 0;
+    virtual void disconnect(ConnectionPtr connection) = 0;
 
     /**
-     * @return true iff the system is connected to ConnectionPoint connection.
+     * @return true iff the system is connected to ConnectionPtr's connection.
      * 
      * @param connection
      */
-    virtual bool isConnected(const ConnectionPoint& connection) = 0;
+    virtual bool isConnected(ConnectionPtr connection) = 0;
 
     /**
      * Construct a button component to represent a network connection point.
-     * The generic ConnectionPage class will handle  listening to button events,
-     *  and deallocating the button when it is no longer needed.
+     * The generic ConnectionPage class will handle listening to button events,
+     * and deallocating the button when it is no longer needed.
      * 
      * This button will be displayed in a list with other connection buttons, 
      * and when clicked, it will toggle the visibility of the connection 
      * controls.  
      * 
-     * @param connection  One of the connection points listed on this page.
+     * @param connection  One of the connection pointers listed on this page.
      * 
      * @return           a dynamically allocated Button component that displays
      *                    basic connection information.  
      */
-    virtual Button* getConnectionButton
-    (const ConnectionPoint& connection) = 0;
+    virtual Button* getConnectionButton(ConnectionPtr connection) = 0;
 
     /**
      * This is called whenever a button other than the navigation buttons
@@ -132,7 +129,7 @@ private:
      * @param connection
      */
     virtual RelativeLayoutManager::Layout
-    getConnectionControlsLayout(const ConnectionPoint& connection) = 0;
+    getConnectionControlsLayout(ConnectionPtr connection) = 0;
 
     /**
      * Update the connection control components for a given connection.
@@ -141,8 +138,7 @@ private:
      *
      * @param connection 
      */
-    virtual void updateConnectionControls
-    (const ConnectionPoint& connection) = 0;
+    virtual void updateConnectionControls(ConnectionPtr connection) = 0;
     
     /**
      * Update the connection list when the page is first added to the
@@ -192,7 +188,7 @@ private:
     public:
 
         /**
-         * Create a new ConnectionListItem representing a ConnectionPoint.
+         * Create a new ConnectionListItem representing a ConnectionPtr.
          * 
          * @param connection        The represented connection.
          * 
@@ -201,14 +197,14 @@ private:
          *                           using the connection.
          */
         ConnectionListItem
-        (const ConnectionPoint& connection, Button* connectionButton);
+        (ConnectionPtr connection, Button* connectionButton);
 
         virtual ~ConnectionListItem();
 
         /**
          * @return the connection represented by this component.
          */
-        const ConnectionPoint& getConnection();
+        ConnectionPtr getConnection();
 
         /**
          * Switch to connection point control mode.
@@ -259,7 +255,7 @@ private:
         //Clicked to select this ConnectionPoint
         ScopedPointer<Button> connectionButton;
         RelativeLayoutManager listItemLayout;
-        ConnectionPoint connection;
+        ConnectionPtr connection = nullptr;
         static const constexpr int borderWidth = 4;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionListItem)
     };
@@ -270,8 +266,8 @@ private:
     int connectionIndex = 0;
     
     OwnedArray<ConnectionListItem> connectionItems;
-    Array<ConnectionPoint> connections;
-    ConnectionPoint selectedConnection;
+    Array<ConnectionPtr> connections;
+    ConnectionPtr selectedConnection;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionPage)
 };

@@ -34,7 +34,7 @@ bool JsonWifiInterface::isWifiEnabled()
 bool JsonWifiInterface::isWifiConnecting()
 {
     ScopedLock lock(wifiLock);
-    return !waitingToConnect.isVoid();
+    return waitingToConnect != nullptr;
 }
 
 /**
@@ -53,18 +53,18 @@ bool JsonWifiInterface::isWifiConnected()
 bool JsonWifiInterface::isPSKNeeded()
 { 
     ScopedLock lock(wifiLock);
-    return waitingToConnect.getRequiresAuth();
+    return waitingToConnect->getRequiresAuth();
 }
 
 /**
  *  Returns the connected access point.
  */
-WifiAccessPoint JsonWifiInterface::getConnectedAP()
+WifiAccessPoint::Ptr JsonWifiInterface::getConnectedAP()
 {
     ScopedLock lock(wifiLock);
     if (!connected)
     {
-        return WifiAccessPoint();
+        return nullptr;
     }
     return connectedAP;
 }
@@ -72,7 +72,7 @@ WifiAccessPoint JsonWifiInterface::getConnectedAP()
 /**
  * Returns the connecting access point.
  */
-WifiAccessPoint JsonWifiInterface::getConnectingAP()
+WifiAccessPoint::Ptr JsonWifiInterface::getConnectingAP()
 {
     ScopedLock lock(wifiLock);
     return waitingToConnect;
@@ -81,20 +81,20 @@ WifiAccessPoint JsonWifiInterface::getConnectingAP()
 /**
  * Returns the entire list of access points defined in wifi.json.
  */
-Array<WifiAccessPoint> JsonWifiInterface::getVisibleAPs()
+Array<WifiAccessPoint::Ptr> JsonWifiInterface::getVisibleAPs()
 {
-    Array<WifiAccessPoint> accessPoints;
+    Array<WifiAccessPoint::Ptr> accessPoints;
     if (isWifiEnabled())
     {
         auto json = JSON::parse(AssetFiles::findAssetFile("wifi.json"));
 
         for (const auto &apJson : *json.getArray())
         {
-            WifiAccessPoint ap(apJson["name"],
+            accessPoints.add(new WifiAccessPoint(
+                    apJson["name"],
                     apJson["strength"],
                     apJson["auth"],
-                    apJson["name"]);
-            accessPoints.add(ap);
+                    apJson["name"]));
         }
     }
     DBG("JsonWifiInterface::" << __func__ << ": APs found:"
@@ -107,12 +107,12 @@ Array<WifiAccessPoint> JsonWifiInterface::getVisibleAPs()
  * the connection's success or failure after a randomized delay of nine to
  * twenty-four seconds.
  */
-void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
+void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
         String psk)
 {
     ScopedLock lock(wifiLock);
     DBG("JsonWifiInterface::" << __func__ << ": trying to connect to "
-            << toConnect.getSSID());
+            << toConnect->getSSID());
     if (turningOff)
     {
         DBG("JsonWifiInterface::" << __func__
@@ -128,24 +128,24 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         DBG("JsonWifiInterface::" << __func__ 
                 << ": can't connect, wifi isn't on");
     }
-    else if (!waitingToConnect.isVoid())
+    else if (waitingToConnect != nullptr)
     {
         if (waitingToConnect != toConnect)
         {
             DBG("JsonWifiInterface::" << __func__
                     << ": canceling, a connection to " <<
-                    waitingToConnect.getSSID() << " is pending ");
+                    waitingToConnect->getSSID() << " is pending ");
         }
         else
         {
             DBG("JsonWifiInterface::" << __func__ << ": already connecting to "
-                    << toConnect.getSSID());
+                    << toConnect->getSSID());
         }
     }
     else if (connected)
     {
         DBG("JsonWifiInterface::" << __func__ << ": already connected to "
-                << toConnect.getSSID());
+                << toConnect->getSSID());
     }
     else
     {
@@ -155,13 +155,13 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                 [this, psk]()
                 {
                     ScopedLock lock(wifiLock);
-                    bool isTestCred = (waitingToConnect.getSSID() == "MyFi");
+                    bool isTestCred = (waitingToConnect->getSSID() == "MyFi");
                     if (!isTestCred)
                     {
                         DBG("JsonWifiInterface::" << __func__
                                 << ": failed to connect");
                                 connected = false;
-                                waitingToConnect = WifiAccessPoint();
+                                waitingToConnect = nullptr;
                                 signalConnectionFailed();
                         return;
                     }
@@ -179,8 +179,8 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                     }
                     connected = true;
                     connectedAP = waitingToConnect;
-                    waitingToConnect = WifiAccessPoint();
-                    if(connectedAP.isVoid())
+                    waitingToConnect = nullptr;
+                    if(connectedAP == nullptr)
                     {
                         signalWifiDisconnected();
                     }
@@ -199,13 +199,13 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
 void JsonWifiInterface::stopConnecting()
 {
     ScopedLock lock(wifiLock);
-    if(waitingToConnect.isVoid())
+    if(waitingToConnect == nullptr)
     {
          DBG("JsonWifiInterface::" << __func__ << ": no connection to cancel");
     }
     else
     {
-        waitingToConnect = WifiAccessPoint();
+        waitingToConnect = nullptr;
     }
 }
 
@@ -227,7 +227,7 @@ void JsonWifiInterface::disconnect()
         {
             ScopedLock lock(wifiLock);
             DBG("JsonWifiInterface::" << __func__ << ": wifi disconnected");
-            connectedAP = WifiAccessPoint();
+            connectedAP = nullptr;
             connected = false;
             signalWifiDisconnected();
         });

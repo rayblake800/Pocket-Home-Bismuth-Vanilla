@@ -52,7 +52,7 @@ protected:
      * 
      * @return the access point, or WifiAccessPoint() if not connected.
      */
-    WifiAccessPoint getConnectedAP() override;
+    WifiAccessPoint::Ptr getConnectedAP() override;
 
     /**
      * Returns the connecting access point.
@@ -60,7 +60,7 @@ protected:
      * @return the access point, or WifiAccessPoint() if wifi is not 
      *          connecting.
      */
-    WifiAccessPoint getConnectingAP() override;
+    WifiAccessPoint::Ptr getConnectingAP() override;
 
     /**
      * Returns the entire list of access points defined in wifi.json.
@@ -68,7 +68,7 @@ protected:
      * @return the list of fake access points, or the empty list if the 
      *          simulated wifi device is disabled.
      */
-    Array<WifiAccessPoint> getVisibleAPs() override;
+    Array<WifiAccessPoint::Ptr> getVisibleAPs() override;
 
 
     /**
@@ -85,7 +85,7 @@ protected:
      *                    value will be noted in debug output, but otherwise
      *                    is ignored.
      */
-    void connectToAccessPoint(const WifiAccessPoint& toConnect,
+    void connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
             String psk = String()) override;
 
     /**
@@ -114,8 +114,8 @@ protected:
 
 private:
     //Simulated wifi state variables.
-    WifiAccessPoint connectedAP;
-    WifiAccessPoint waitingToConnect;
+    WifiAccessPoint::Ptr connectedAP = nullptr;
+    WifiAccessPoint::Ptr waitingToConnect = nullptr;
     bool enabled = false;
     bool connected = false;
     bool disconnecting = false;

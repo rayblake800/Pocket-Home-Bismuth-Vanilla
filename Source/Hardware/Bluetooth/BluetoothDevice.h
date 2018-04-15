@@ -1,33 +1,27 @@
 #pragma once
 #include "JuceHeader.h"
 
-struct BluetoothDevice {
+class BluetoothDevice : public ReferenceCountedObject
+{
+public:
+    typedef ReferenceCountedObjectPtr<BluetoothDevice> Ptr;
     String name;
     String macAddress;
     bool connected;
     bool paired;
 
-    /**
-     * Represents a missing connection point
-     */
-    static const BluetoothDevice null(){
-        return {"","null",false,false};
-    }
-    
-    bool isVoid() const{
-        return name.isEmpty() && macAddress == "null" 
-                && !connected && !paired;
-    }
-
-    bool operator==(const BluetoothDevice rhs) const {
+    bool operator==(const BluetoothDevice rhs) const
+    {
         return macAddress == rhs.macAddress;
     };
 
-    bool operator!=(const BluetoothDevice rhs) const {
+    bool operator!=(const BluetoothDevice rhs) const
+    {
         return macAddress != rhs.macAddress;
     };
-    
-    String toString() const{
+
+    String toString() const
+    {
         return name;
     }
 
