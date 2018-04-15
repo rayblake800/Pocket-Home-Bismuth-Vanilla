@@ -1,6 +1,7 @@
 
 #include <nm-remote-connection.h>
 #include <nm-device.h>
+#include <glib-2.0/glib/gerror.h>
 #include "MainConfigFile.h"
 #include "WifiAccessPoint.h"
 #include "LibNMHandler.h"
@@ -350,10 +351,16 @@ void LibNMHandler::handleConnectionAttempt(
     {
         if(err != nullptr)
         {
+            gint errorCode = err->code;
             DBG("LibNMHandler::" << __func__ 
                     << ": Error=" << String(err->message));
             g_error_free(err);
             err = nullptr;
+            if(errorCode == NM_CONNECTION_ERROR_INVALID_PROPERTY)
+            {
+                nmHandler->invalidSecurityCallback();
+                return;
+            }
         }
         nmHandler->connectionFailureCallback();
         return;

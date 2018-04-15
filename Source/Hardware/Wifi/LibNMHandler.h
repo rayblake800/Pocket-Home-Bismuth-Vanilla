@@ -131,6 +131,12 @@ protected:
     virtual void connectionFailureCallback() = 0;
     
     /**
+     * A callback function to run whenever a connection fails due to invalid
+     * security settings.
+     */
+    virtual void invalidSecurityCallback() = 0;
+    
+    /**
      * A callback function to run whenever the wifi device is enabled
      * or disabled.
      * 
@@ -161,6 +167,7 @@ protected:
      *                   point if wifi just disconnected.
      */
     virtual void connectionUpdateCallback (WifiAccessPoint::Ptr connected) = 0;
+    
     
     /**
      * Attach all signal handlers to the wifi thread, so that they are run

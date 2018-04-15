@@ -266,6 +266,22 @@ void LibNMInterface::connectionFailureCallback()
     }
 }
 
+    
+/**
+ * Notify listeners that connection security settings were invalid.
+ */
+void LibNMInterface::invalidSecurityCallback()
+{   
+    ScopedLock updateLock(wifiLock);
+    if(connectingAP != nullptr)
+    {
+        connectingAP->removePsk();
+        connectingAP = nullptr;
+        ScopedUnlock confirmUnlock(wifiLock);
+        signalPskNeeded();
+    }
+}
+
 /**
  * Notifies listeners when wifi turns on or off.
  */

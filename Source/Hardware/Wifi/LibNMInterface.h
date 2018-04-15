@@ -130,6 +130,11 @@ private:
     void connectionFailureCallback() override;
     
     /**
+     * Notify listeners that connection security settings were invalid.
+     */
+    void invalidSecurityCallback() override;
+    
+    /**
      * Notifies listeners when wifi turns on or off.
      * 
      * @param isEnabled  Indicates if the wifi device is on or off.
