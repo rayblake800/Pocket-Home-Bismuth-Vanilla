@@ -122,7 +122,8 @@ bool LibNMHandler::checkWifiEnabled()
  */
 bool LibNMHandler::checkWifiConnecting()
 {
-    return activatingConn != nullptr;
+    return activatingConn != nullptr
+            && findWifiState() != NM_DEVICE_STATE_ACTIVATED;
 }
 
 /**
@@ -198,7 +199,7 @@ WifiAccessPoint::Ptr LibNMHandler::findConnectingAP()
     {
         if (isWifiAvailable())
         {
-            if (activatingConn == nullptr)
+            if (!checkWifiConnecting())
             {
                 return;
             }
