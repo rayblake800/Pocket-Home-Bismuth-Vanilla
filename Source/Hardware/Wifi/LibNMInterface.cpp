@@ -320,6 +320,7 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
         case NM_DEVICE_STATE_IP_CONFIG:
         case NM_DEVICE_STATE_IP_CHECK:
         case NM_DEVICE_STATE_SECONDARIES:
+        case NM_DEVICE_STATE_NEED_AUTH:
             /* No state change for now, wait for connection to complete/fail */
             //ensure the pending connection is registered
             if (connectingAP == nullptr)
@@ -336,15 +337,9 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
                     signalWifiConnecting();
                 }
             }
+            stopTimer();
+            startTimer(wifiConnectionTimeout);
             break;
-        case NM_DEVICE_STATE_NEED_AUTH:
-        {
-            DBG("LibNMInterface::" << __func__
-                    << " missing auth, requesting PSK.");
-            ScopedUnlock unlockForUpdate(wifiLock);
-            signalPskNeeded();
-            break;
-        }
         case NM_DEVICE_STATE_DISCONNECTED:
         {
             ScopedUnlock unlockForUpdate(wifiLock);

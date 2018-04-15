@@ -322,8 +322,9 @@ public:
         static const constexpr int wifiEnabledChangeTimeout = 10000;
 
         //Milliseconds to wait before assuming that connecting to
-        //or disconnecting from a wifi access point has failed.
-        static const constexpr int wifiConnectionTimeout = 25000;
+        //or disconnecting from a wifi access point has failed.  This will
+        //be reset whenever wifi enters a new connection step.
+        static const constexpr int wifiConnectionTimeout = 5000;
     
     protected:           
         /**

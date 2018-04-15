@@ -156,6 +156,9 @@ void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
     }
     else
     {
+        //stop the connection timeout timer, since there are no simulated
+        //connection steps generated to reset it
+        stopTimer();
         waitingToConnect = toConnect;
         // try to connect to ap, dispatch events on success and failure
         TempTimer::initTimer(Random().nextInt(15000) + 9000,
