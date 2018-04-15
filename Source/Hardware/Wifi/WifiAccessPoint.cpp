@@ -1,3 +1,5 @@
+#include <glib-2.0/glib/gerror.h>
+
 #include "nm-utils.h"
 #include "JuceHeader.h"
 #include "Utils.h"
@@ -241,7 +243,22 @@ bool WifiAccessPoint::isConnectionCompatible(NMConnection* connection) const
     GLibSignalHandler glibHandler;
     glibHandler.gLibCall([this, &isValid, connection]()
     {
-        isValid = nm_access_point_connection_valid(nmAccessPoint, connection);
+        GError* error = nullptr;
+        if(nm_connection_verify(connection, &error))
+        {
+            isValid = nm_access_point_connection_valid(nmAccessPoint, 
+                    connection);
+        }
+        else
+        {
+            DBG("WifiAccessPoint::isConnectionCompatible: invalid connection!");
+            if(error != nullptr)
+            {
+                DBG("Error: " << String(error->message));
+                g_error_free(error);
+            }
+                   
+        }
     });
     return isValid;
 }
