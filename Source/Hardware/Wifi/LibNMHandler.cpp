@@ -734,7 +734,7 @@ void LibNMHandler::buildAPMap()
     signalHandler.gLibCall([this]()
     {
         DBG("LibNMHandler::buildAPMap: Mapping all visible APs");
-        if (isWifiAvailable())
+        if (!isWifiAvailable())
         {
             return;
         }   
