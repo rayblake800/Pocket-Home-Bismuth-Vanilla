@@ -244,9 +244,12 @@ void LibNMInterface::disableWifi()
 void LibNMInterface::connectingCallback(WifiAccessPoint::Ptr connectingAP)
 {  
     ScopedLock updateLock(wifiLock);
-    this->connectingAP = connectingAP;
-    ScopedUnlock confirmUnlock(wifiLock);
-    signalWifiConnecting();
+    if(this->connectingAP != connectingAP)
+    {
+        this->connectingAP = connectingAP;
+        ScopedUnlock confirmUnlock(wifiLock);
+        signalWifiConnecting();
+    }
 }
 
 /**
@@ -255,9 +258,12 @@ void LibNMInterface::connectingCallback(WifiAccessPoint::Ptr connectingAP)
 void LibNMInterface::connectionFailureCallback()
 {   
     ScopedLock updateLock(wifiLock);
-    connectingAP = nullptr;
-    ScopedUnlock confirmUnlock(wifiLock);
-    signalConnectionFailed();
+    if(connectingAP != nullptr)
+    {
+        connectingAP = nullptr;
+        ScopedUnlock confirmUnlock(wifiLock);
+        signalConnectionFailed();
+    }
 }
 
 /**
@@ -283,9 +289,12 @@ void LibNMInterface::wifiEnablementChangeCallback(bool isEnabled)
 void LibNMInterface::apUpdateCallback(Array<WifiAccessPoint::Ptr> visibleAPs) 
 {
     ScopedLock updateLock(wifiLock);
-    this->visibleAPs = visibleAPs;
-    DBG("LibNMInterface::" << __func__ << ": found "
-            << visibleAPs.size() << " AccessPoints");
+    if(this->visibleAPs != visibleAPs)
+    {
+        this->visibleAPs = visibleAPs;
+        DBG("LibNMInterface::" << __func__ << ": found "
+                << visibleAPs.size() << " AccessPoints");
+    }
  }
 
 /**
@@ -385,15 +394,18 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
 void LibNMInterface::connectionUpdateCallback(WifiAccessPoint::Ptr connected)
 {
     ScopedLock updateLock(wifiLock);
-    connectedAP = connected;
-    ScopedUnlock notifyUnlock(wifiLock);
-    if (connected == nullptr)
+    if(connectedAP != connected)
     {
-        signalWifiDisconnected();
-    }
-    else
-    {
-        signalWifiConnected(connected);
+        connectedAP = connected;
+        ScopedUnlock notifyUnlock(wifiLock);
+        if (connected == nullptr)
+        {
+            signalWifiDisconnected();
+        }
+        else
+        {
+            signalWifiConnected(connected);
+        }
     }
 }
 
