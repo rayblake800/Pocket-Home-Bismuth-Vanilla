@@ -319,8 +319,8 @@ void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
                     = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
             const ScopedUnlock signalUnlock(wifiLock);
             GLibSignalHandler glibThread;
-            if(glibThread->runningOnGLibThread()
-                    && glibThread->messageThreadWaiting())
+            if(glibThread.runningOnGLibThread()
+                    && glibThread.messageThreadWaiting())
             {
                 //Locking the message manager is unnecessary and
                 //will deadlock
