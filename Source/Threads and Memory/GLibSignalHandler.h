@@ -35,6 +35,12 @@ public:
      * Returns true if it's being executed on the GLib event thread.
      */
     bool runningOnGLibThread();
+    
+    /**
+     * Returns true if the message thread is waiting on a GLib thread
+     * call. 
+     */
+    bool messageThreadWaiting();
 
     /**
      * Asynchronously run a function once on the GLib event loop.
@@ -91,18 +97,32 @@ private:
          *                      finished running.
          */
         bool callPending(GSource* callSource);
+        
+        /**
+         * When a synchronous GLib call is finishing and it's running on the 
+         * message thread, it must call this to signal that it's no longer
+         * waiting.
+         */
+        void messageThreadDoneWaiting();
+
+        /**
+         * Checks if the message thread is waiting for a GLib call. 
+         */
+        bool isMessageThreadWaiting();
 
         /**
          * Runs the GLib main loop.
          */
         void run() override;
-
+        
         struct CallData
         {
             std::function<void() > call;
             GSource* callSource;
             Array<GSource*, CriticalSection>* sourceTracker;
         };
+        
+    private:
 
         /**
          * Callback function used to execute arbitrary functions on the 
@@ -113,6 +133,8 @@ private:
         GMainLoop* mainLoop = nullptr;
 
         Array<GSource*, CriticalSection> gSourceTracker;
+        
+        Atomic<bool> messageThreadWaiting;
     };
 
     static ScopedPointer<SharedResource> globalThread;

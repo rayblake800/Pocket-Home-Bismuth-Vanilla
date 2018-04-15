@@ -20,7 +20,18 @@ bool GLibSignalHandler::runningOnGLibThread()
     GLibThread* thread = static_cast<GLibThread*> (globalThread.get());
     return Thread::getCurrentThreadId() == thread->getThreadId();
 }
-
+    
+/**
+ * Returns true if the message thread is waiting on a GLib thread
+ * call. 
+ */
+bool GLibSignalHandler::messageThreadWaiting();
+{
+    const ScopedLock accessLock(threadLock);
+    GLibThread* thread = static_cast<GLibThread*> (globalThread.get());
+    return thread->isMessageThreadWaiting();
+}
+   
 /**
  * Asynchronously run a function once on the GLib event loop.
  */
@@ -52,13 +63,18 @@ void GLibSignalHandler::gLibCall(std::function<void() > fn)
             const ScopedUnlock threadUnlock(threadLock);
             Thread::yield();
         }
+        if(MessageManager::getInstance()->isThisTheMessageThread())
+        {
+            thread->messageThreadDoneWaiting();
+        }
     }
 }
 
 /**
  * Initializes and starts the main GLib event loop on its own thread.
  */
-GLibSignalHandler::GLibThread::GLibThread() : Thread("GLibThread")
+GLibSignalHandler::GLibThread::GLibThread() : Thread("GLibThread"),
+messageThreadWaiting(false)
 {
     mainLoop = g_main_loop_new(g_main_context_default(), false);
     startThread();
@@ -86,6 +102,10 @@ GLibSignalHandler::GLibThread::~GLibThread()
 GSource* GLibSignalHandler::GLibThread::addAndInitCall
 (std::function<void() > call)
 {
+    if(MessageManager::getInstance()->isThisTheMessageThread())
+    {
+        messageThreadWaiting = true;
+    }
     CallData* callData = new CallData;
     callData->call = call;
     GSource* callSource = g_idle_source_new();
@@ -108,7 +128,25 @@ bool GLibSignalHandler::GLibThread::callPending(GSource* callSource)
 {
     return gSourceTracker.contains(callSource);
 }
+     
+/**
+ * When a synchronous GLib call is finishing and it's running on the 
+ * message thread, it must call this to signal that it's no longer
+ * waiting.
+ */
+void GLibSignalHandler::GLibThread::messageThreadDoneWaiting()
+{
+    messageThreadWaiting = false;
+}
 
+/**
+ * Checks if the message thread is waiting for a GLib call. 
+ */
+bool GLibSignalHandler::GLibThread::isMessageThreadWaiting()
+{
+    return messageThreadWaiting;
+}
+        
 /**
  * Runs the GLib main loop.
  */

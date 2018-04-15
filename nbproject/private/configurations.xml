@@ -5026,14 +5026,13 @@
           <in>LoginPage.cpp</in>
           <in>LoginPage.h</in>
         </df>
+        <df name="Threads and Memory">
+        </df>
         <in>AppLauncher.cpp</in>
         <in>AppLauncher.h</in>
         <in>AssetFiles.cpp</in>
         <in>AssetFiles.h</in>
         <in>ColourIds.h</in>
-        <in>GLibSignalHandler.cpp</in>
-        <in>GLibSignalHandler.h</in>
-        <in>LocaleText.cpp</in>
         <in>Localized.cpp</in>
         <in>Localized.h</in>
         <in>Main.cpp</in>
@@ -5045,8 +5044,6 @@
         <in>PokeLookAndFeel.h</in>
         <in>RelativeLayoutManager.cpp</in>
         <in>RelativeLayoutManager.h</in>
-        <in>ResourceManager.cpp</in>
-        <in>ResourceManager.h</in>
         <in>TempTimer.cpp</in>
         <in>TempTimer.h</in>
         <in>Utils.cpp</in>

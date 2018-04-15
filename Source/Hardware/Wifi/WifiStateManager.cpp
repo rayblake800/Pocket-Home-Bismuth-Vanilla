@@ -1,4 +1,5 @@
 #include "WifiStateManager.h"
+#include "Threads and Memory/GLibSignalHandler.h"
 
 ScopedPointer<ResourceManager::SharedResource>
         WifiStateManager::sharedResource = nullptr;
@@ -317,8 +318,19 @@ void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
             WifiStateManager::Listener* toNotify
                     = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
             const ScopedUnlock signalUnlock(wifiLock);
-            const MessageManagerLock mmLock;
-            toNotify->wifiStateChanged(state);
+            GLibSignalHandler glibThread;
+            if(glibThread->runningOnGLibThread()
+                    && glibThread->messageThreadWaiting())
+            {
+                //Locking the message manager is unnecessary and
+                //will deadlock
+                toNotify->wifiStateChanged(state);
+            }
+            else
+            {
+                const MessageManagerLock mmLock;
+                toNotify->wifiStateChanged(state);
+            }
         }
     }
 }

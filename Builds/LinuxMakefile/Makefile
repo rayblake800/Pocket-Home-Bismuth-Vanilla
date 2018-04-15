@@ -35,7 +35,7 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source -I../../Source/Components -I../../Source/Components/Widgets -I../../Source/Configuration -I../../Source/Configuration/Configurables -I../../Source/Hardware -I../../Source/Hardware/Bluetooth -I../../Source/Hardware/Wifi -I../../Source/Pages -I../../Source/Pages/Home\ Page -I../../Source/Pages/Home\ Page/Widgets -I../../Source/Pages/Home\ Page/AppMenu -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Folders -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Types -I../../Source/Pages/Input\ Settings\ Page -I../../Source/Pages/Password\ Pages -I../../Source/Pages/Power\ Page -I../../Source/Pages/Settings\ Page -I../../Source/Pages/UI\ Page $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source -I../../Source/Components -I../../Source/Components/Widgets -I../../Source/Configuration -I../../Source/Configuration/Configurables -I../../Source/Hardware -I../../Source/Hardware/Bluetooth -I../../Source/Hardware/Wifi -I../../Source/Pages -I../../Source/Pages/Home\ Page -I../../Source/Pages/Home\ Page/Widgets -I../../Source/Pages/Home\ Page/AppMenu -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Folders -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Types -I../../Source/Pages/Input\ Settings\ Page -I../../Source/Pages/Password\ Pages -I../../Source/Pages/Power\ Page -I../../Source/Pages/Settings\ Page -I../../Source/Pages/UI\ Page -I../../Source/Threads\ and\ Memory $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
@@ -56,7 +56,7 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source -I../../Source/Components -I../../Source/Components/Widgets -I../../Source/Configuration -I../../Source/Configuration/Configurables -I../../Source/Hardware -I../../Source/Hardware/Bluetooth -I../../Source/Hardware/Wifi -I../../Source/Pages -I../../Source/Pages/Home\ Page -I../../Source/Pages/Home\ Page/Widgets -I../../Source/Pages/Home\ Page/AppMenu -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Folders -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Types -I../../Source/Pages/Input\ Settings\ Page -I../../Source/Pages/Password\ Pages -I../../Source/Pages/Power\ Page -I../../Source/Pages/Settings\ Page -I../../Source/Pages/UI\ Page $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source -I../../Source/Components -I../../Source/Components/Widgets -I../../Source/Configuration -I../../Source/Configuration/Configurables -I../../Source/Hardware -I../../Source/Hardware/Bluetooth -I../../Source/Hardware/Wifi -I../../Source/Pages -I../../Source/Pages/Home\ Page -I../../Source/Pages/Home\ Page/Widgets -I../../Source/Pages/Home\ Page/AppMenu -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Folders -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Pages/Home\ Page/AppMenu/Menu\ Types -I../../Source/Pages/Input\ Settings\ Page -I../../Source/Pages/Password\ Pages -I../../Source/Pages/Power\ Page -I../../Source/Pages/Settings\ Page -I../../Source/Pages/UI\ Page -I../../Source/Threads\ and\ Memory $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
@@ -68,6 +68,8 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/GLibSignalHandler_55b5a6bf.o \
+  $(JUCE_OBJDIR)/ResourceManager_5c7b7afa.o \
   $(JUCE_OBJDIR)/ColourPicker_b22d9d54.o \
   $(JUCE_OBJDIR)/CounterComponent_e2edf03b.o \
   $(JUCE_OBJDIR)/DrawableImageButton_f6e4065f.o \
@@ -152,14 +154,12 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/LoginPage_6c277ece.o \
   $(JUCE_OBJDIR)/AppLauncher_be937ec2.o \
   $(JUCE_OBJDIR)/AssetFiles_7ecbbf70.o \
-  $(JUCE_OBJDIR)/GLibSignalHandler_39f41ee5.o \
   $(JUCE_OBJDIR)/Localized_b37b235c.o \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/PageFactory_6a329c5c.o \
   $(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o \
   $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o \
   $(JUCE_OBJDIR)/RelativeLayoutManager_c0c10998.o \
-  $(JUCE_OBJDIR)/ResourceManager_225c4a0.o \
   $(JUCE_OBJDIR)/TempTimer_66895cb2.o \
   $(JUCE_OBJDIR)/Utils_e4b11b92.o \
   $(JUCE_OBJDIR)/WindowFocus_f9cd7529.o \
@@ -181,6 +181,16 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
+
+$(JUCE_OBJDIR)/GLibSignalHandler_55b5a6bf.o: ../../Source/Threads\ and\ Memory/GLibSignalHandler.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling GLibSignalHandler.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ResourceManager_5c7b7afa.o: ../../Source/Threads\ and\ Memory/ResourceManager.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ResourceManager.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ColourPicker_b22d9d54.o: ../../Source/Components/Widgets/ColourPicker.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
@@ -602,11 +612,6 @@ $(JUCE_OBJDIR)/AssetFiles_7ecbbf70.o: ../../Source/AssetFiles.cpp
 	@echo "Compiling AssetFiles.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/GLibSignalHandler_39f41ee5.o: ../../Source/GLibSignalHandler.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling GLibSignalHandler.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/Localized_b37b235c.o: ../../Source/Localized.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling Localized.cpp"
@@ -635,11 +640,6 @@ $(JUCE_OBJDIR)/PokeLookAndFeel_55885106.o: ../../Source/PokeLookAndFeel.cpp
 $(JUCE_OBJDIR)/RelativeLayoutManager_c0c10998.o: ../../Source/RelativeLayoutManager.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling RelativeLayoutManager.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/ResourceManager_225c4a0.o: ../../Source/ResourceManager.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ResourceManager.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/TempTimer_66895cb2.o: ../../Source/TempTimer.cpp

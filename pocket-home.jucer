@@ -4,7 +4,7 @@
               bundleIdentifier="co.nextthing.PokeLaunch" includeBinaryInAppConfig="1"
               jucerVersion="5.3.0" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
               displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
-              companyCopyright="Next Thing Co." headerPath="../../Source&#10;../../Source/Components&#10;../../Source/Components/Widgets&#10;../../Source/Configuration&#10;../../Source/Configuration/Configurables&#10;../../Source/Hardware&#10;../../Source/Hardware/Bluetooth&#10;../../Source/Hardware/Wifi&#10;../../Source/Pages&#10;../../Source/Pages/Home Page&#10;../../Source/Pages/Home Page/Widgets&#10;../../Source/Pages/Home Page/AppMenu&#10;../../Source/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/Pages/Input Settings Page&#10;../../Source/Pages/Password Pages&#10;../../Source/Pages/Power Page&#10;../../Source/Pages/Settings Page&#10;../../Source/Pages/UI Page">
+              companyCopyright="Next Thing Co." headerPath="../../Source&#10;../../Source/Components&#10;../../Source/Components/Widgets&#10;../../Source/Configuration&#10;../../Source/Configuration/Configurables&#10;../../Source/Hardware&#10;../../Source/Hardware/Bluetooth&#10;../../Source/Hardware/Wifi&#10;../../Source/Pages&#10;../../Source/Pages/Home Page&#10;../../Source/Pages/Home Page/Widgets&#10;../../Source/Pages/Home Page/AppMenu&#10;../../Source/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/Pages/Input Settings Page&#10;../../Source/Pages/Password Pages&#10;../../Source/Pages/Power Page&#10;../../Source/Pages/Settings Page&#10;../../Source/Pages/UI Page&#10;../../Source/Threads and Memory">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
       <FILE id="lJvIsl" name="bluetooth.json" compile="0" resource="1" file="assets/bluetooth.json"/>
@@ -13,6 +13,16 @@
       <FILE id="e8kBas" name="wifi.json" compile="0" resource="1" file="assets/wifi.json"/>
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
+      <GROUP id="{A7E7A929-6942-F1C2-FAC5-FC3AF0D2442B}" name="Threads and Memory">
+        <FILE id="enqIe3" name="GLibSignalHandler.cpp" compile="1" resource="0"
+              file="Source/Threads and Memory/GLibSignalHandler.cpp"/>
+        <FILE id="JxYitG" name="GLibSignalHandler.h" compile="0" resource="0"
+              file="Source/Threads and Memory/GLibSignalHandler.h"/>
+        <FILE id="Yl2sdL" name="ResourceManager.cpp" compile="1" resource="0"
+              file="Source/Threads and Memory/ResourceManager.cpp"/>
+        <FILE id="WuV2YN" name="ResourceManager.h" compile="0" resource="0"
+              file="Source/Threads and Memory/ResourceManager.h"/>
+      </GROUP>
       <GROUP id="{185415EC-B399-8F03-8F25-DEE2244D2B03}" name="Components">
         <GROUP id="{6D4C4A1E-8E24-8D6C-5A9B-840CFA0F9A73}" name="Widgets">
           <FILE id="kzte4q" name="ColourPicker.cpp" compile="1" resource="0"
@@ -340,10 +350,6 @@
       <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/AppLauncher.h"/>
       <FILE id="U4ygJ9" name="AssetFiles.cpp" compile="1" resource="0" file="Source/AssetFiles.cpp"/>
       <FILE id="cXrxti" name="AssetFiles.h" compile="0" resource="0" file="Source/AssetFiles.h"/>
-      <FILE id="enqIe3" name="GLibSignalHandler.cpp" compile="1" resource="0"
-            file="Source/GLibSignalHandler.cpp"/>
-      <FILE id="JxYitG" name="GLibSignalHandler.h" compile="0" resource="0"
-            file="Source/GLibSignalHandler.h"/>
       <FILE id="ec2YX8" name="Localized.cpp" compile="1" resource="0" file="Source/Localized.cpp"/>
       <FILE id="IG78EN" name="Localized.h" compile="0" resource="0" file="Source/Localized.h"/>
       <FILE id="GJ9TER" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
@@ -361,10 +367,6 @@
             file="Source/RelativeLayoutManager.cpp"/>
       <FILE id="r4oAKB" name="RelativeLayoutManager.h" compile="0" resource="0"
             file="Source/RelativeLayoutManager.h"/>
-      <FILE id="Yl2sdL" name="ResourceManager.cpp" compile="1" resource="0"
-            file="Source/ResourceManager.cpp"/>
-      <FILE id="WuV2YN" name="ResourceManager.h" compile="0" resource="0"
-            file="Source/ResourceManager.h"/>
       <FILE id="VTewwc" name="TempTimer.cpp" compile="1" resource="0" file="Source/TempTimer.cpp"/>
       <FILE id="idqyCx" name="TempTimer.h" compile="0" resource="0" file="Source/TempTimer.h"/>
       <FILE id="Ury6Cc" name="Utils.cpp" compile="1" resource="0" file="Source/Utils.cpp"/>
