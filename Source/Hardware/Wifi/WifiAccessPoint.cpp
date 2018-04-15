@@ -239,7 +239,7 @@ bool WifiAccessPoint::isConnectionCompatible(NMConnection* connection) const
     }
     bool isValid = false;
     GLibSignalHandler glibHandler;
-    glibHandler.gLibCall([this, &isValid, &connection]()
+    glibHandler.gLibCall([this, &isValid, connection]()
     {
         isValid = nm_access_point_connection_valid(nmAccessPoint, connection);
     });
@@ -362,13 +362,13 @@ NMConnection* WifiAccessPoint::getNMConnection()
         networkConnection = nm_connection_new();
         NMSettingWireless* wifiSettings
                 = (NMSettingWireless*) nm_setting_wireless_new();
-        nm_connection_add_setting(networkConnection, NM_SETTING(wifiSettings));
         g_object_set(wifiSettings,
                 NM_SETTING_WIRELESS_SSID,
                 nm_access_point_get_ssid(nmAccessPoint),
                 NM_SETTING_WIRELESS_HIDDEN,
                 false,
                 nullptr);
+        nm_connection_add_setting(networkConnection, NM_SETTING(wifiSettings));
         registerSignalHandlers();
     }
     const ScopedReadLock readLock(networkUpdateLock);
