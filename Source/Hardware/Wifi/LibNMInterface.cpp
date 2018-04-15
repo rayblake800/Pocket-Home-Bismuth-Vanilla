@@ -275,10 +275,21 @@ void LibNMInterface::invalidSecurityCallback()
     ScopedLock updateLock(wifiLock);
     if(connectingAP != nullptr)
     {
-        connectingAP->removePsk();
-        connectingAP = nullptr;
-        ScopedUnlock confirmUnlock(wifiLock);
-        signalPskNeeded();
+        if(connectingAP->getRequiresAuth())
+        {
+            connectingAP->removePsk();
+            connectingAP = nullptr;
+            ScopedUnlock confirmUnlock(wifiLock);
+            signalPskNeeded();
+        }
+        else
+        {
+            DBG("LibNMInterface::" << __func__ 
+                    << ": access point does not actually require security");
+            connectingAP = nullptr;
+            ScopedUnlock confirmUnlock(wifiLock);
+            signalConnectionFailed();
+        }
     }
 }
 
