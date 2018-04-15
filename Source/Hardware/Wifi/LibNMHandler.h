@@ -290,7 +290,6 @@ private:
     NMClient* nmClient = nullptr;
     NMDevice* nmDevice = nullptr;
     
-    NMDeviceState lastKnownState = 
     NMActiveConnection* activatingConn = nullptr;
     
     
