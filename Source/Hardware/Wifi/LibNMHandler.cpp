@@ -405,18 +405,21 @@ void LibNMHandler::initConnection(WifiAccessPoint::Ptr toConnect, String psk)
         //Check if the connection has been added already:
         const GPtrArray* wifiConnections 
                     = nm_device_get_available_connections(nmDevice);
-        for (int i = 0; i < wifiConnections->len; i++)
+        if(wifiConnections != nullptr)
         {
-            if(connection == wifiConnections->pdata[i])
+            for (int i = 0; i < wifiConnections->len; i++)
             {
-                nm_client_activate_connection(nmClient,
-                        connection,
-                        nmDevice,
-                        nm_object_get_path
-                        (NM_OBJECT(toConnect->getNMAccessPoint())),
-                        (NMClientActivateFn) handleKnownConnectionAttempt,
-                        this);
-                return;
+                if(connection == wifiConnections->pdata[i])
+                {
+                    nm_client_activate_connection(nmClient,
+                            connection,
+                            nmDevice,
+                            nm_object_get_path
+                            (NM_OBJECT(toConnect->getNMAccessPoint())),
+                            (NMClientActivateFn) handleKnownConnectionAttempt,
+                            this);
+                    return;
+                }
             }
         }
         nm_client_add_and_activate_connection(nmClient,

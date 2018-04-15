@@ -308,6 +308,7 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
     {
         return;
     }
+    
     lastNMState = newState;
     DBG("LibNMInterface::" << __func__ << ":  changed to "
             << deviceStateString(newState));
