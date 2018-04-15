@@ -42,6 +42,11 @@ Array<WifiAccessPoint::Ptr> WifiSettingsPage::loadConnectionList()
 void WifiSettingsPage::connect(WifiAccessPoint::Ptr connection)
 {
     WifiStateManager wifiManager;
+    if (connection == nullptr)
+    {
+        DBG("WifiSettingsPage::" << __func__ << ": ap is null!");
+        return;
+    }
     if (connection->getRequiresAuth())
     {
         const String& psk = passwordEditor.getText();
@@ -115,7 +120,15 @@ void WifiSettingsPage::connectionButtonClicked(Button* button)
 Button* WifiSettingsPage::getConnectionButton
 (WifiAccessPoint::Ptr connection)
 {
-    return new WifiAPButton(connection, isConnected(connection));
+    if(connection != nullptr)
+    {
+        return new WifiAPButton(connection, isConnected(connection));
+    }
+    else
+    {
+        DBG("WifiSettingsPage::" << __func__ << ": connection is null!");
+        return nullptr;
+    }
 }
 
 /**

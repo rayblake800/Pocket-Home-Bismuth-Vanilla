@@ -303,15 +303,15 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
         case NM_DEVICE_STATE_ACTIVATED:
         {
             ScopedUnlock unlockForUpdate(wifiLock);
-            WifiAccessPoint::Ptr connected = findConnectedAP();
-            if(connected == nullptr)
+            connectedAP = findConnectedAP();
+            if(connectedAP == nullptr)
             {
                 DBG("LibNMInterface::" << __func__ 
                         << ":  AP connected but not found!");
             }
             else
             {
-                signalWifiConnected(connected);
+                signalWifiConnected(connectedAP);
             }
             break;
         }

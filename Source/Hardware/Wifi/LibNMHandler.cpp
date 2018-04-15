@@ -236,8 +236,9 @@ Array<WifiAccessPoint::Ptr> LibNMHandler::findVisibleAPs()
         {
             for(WifiAccessPoint::Ptr knownAP : visibleAPs)
             {
-                if(knownAP->getSSID().isNotEmpty()
-                         && knownAP->getNMAccessPoint() != nullptr)
+                if(knownAP != nullptr
+                        && knownAP->getSSID().isNotEmpty()
+                        && knownAP->getNMAccessPoint() != nullptr)
                 {
                     returnedAPs.add(knownAP);
                     for(int i = 0; i < returnedAPs.size() - 1; i++)
@@ -814,12 +815,19 @@ void LibNMHandler::buildAPMap()
             }
             WifiAccessPoint::Ptr wifiAP 
                     = new WifiAccessPoint(nmAP, apSavedConn);
-            visibleAPs.add(wifiAP);
-            DBG("LibNMHandler::buildAPMap: Added AP #"
-                    << visibleAPs.size() << " with SSID "
-                    << wifiAP->getSSID()
-                    << (wifiAP->hasSavedConnection() ? " (saved)"
-                    : " (new)"));
+            if(wifiAP == nullptr)
+            {
+                DBG("LibNMHandler::buildAPMap: failed to create wifi AP!");
+            }
+            else
+            {
+                visibleAPs.add(wifiAP);
+                DBG("LibNMHandler::buildAPMap: Added AP #"
+                        << visibleAPs.size() << " with SSID "
+                        << wifiAP->getSSID()
+                        << (wifiAP->hasSavedConnection() ? " (saved)"
+                        : " (new)"));
+            }
         }
     });
 }

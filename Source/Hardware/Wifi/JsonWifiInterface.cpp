@@ -111,15 +111,16 @@ void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
         String psk)
 {
     ScopedLock lock(wifiLock);
-    DBG("JsonWifiInterface::" << __func__ << ": trying to connect to "
-            << toConnect->getSSID());
     if(toConnect == nullptr)
     {
         DBG("JsonWifiInterface::" << __func__
                 << ": can't connect to null access point");
+        return;
         
     }
-    else if (turningOff)
+    DBG("JsonWifiInterface::" << __func__ << ": trying to connect to "
+            << toConnect->getSSID());
+    if (turningOff)
     {
         DBG("JsonWifiInterface::" << __func__
                 << ": can't connect, wifi is turning off");
