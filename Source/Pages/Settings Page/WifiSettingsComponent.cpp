@@ -140,6 +140,10 @@ String WifiSettingsComponent::updateButtonText()
         case WifiStateManager::connected:
         {
             WifiAccessPoint::Ptr ap = wifiManager.getConnectedAP();
+            if(ap == nullptr)
+            {
+                return "Error: connected AP missing!";
+            }
             return ap->getSSID();
         }
         case WifiStateManager::disconnecting:

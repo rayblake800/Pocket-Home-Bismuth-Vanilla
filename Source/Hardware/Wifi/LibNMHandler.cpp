@@ -175,7 +175,7 @@ WifiAccessPoint::Ptr LibNMHandler::findConnectedAP()
                 }
             }
             DBG("LibnmHandler::" << __func__ 
-                    << ": Connected AP not found in visible AP list!")
+                    << ": Connected AP not found in visible AP list!");
         }
     });
     return ap;
