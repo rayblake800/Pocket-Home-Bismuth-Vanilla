@@ -645,8 +645,12 @@ void LibNMHandler::handleApRemoved(LibNMHandler* nmHandler)
 //    DBG("LibNMHandler::"<<__func__ << ": data=0x"
 //                << String::toHexString((unsigned long) nmHandler));
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    if (!nmHandler->visibleAPs.isEmpty()
-            && nm_client_wireless_get_enabled(nmHandler->nmClient))
+    if(nmHandler->visibleAPs.isEmpty())
+    {
+        //no APs to remove, do nothing
+        return;
+    }
+    if (nm_client_wireless_get_enabled(nmHandler->nmClient))
     {
         //DBG("LibNMHandler::" << __func__ << ": finding removed access points:");
         const GPtrArray* visibleAPs = nm_device_wifi_get_access_points
