@@ -150,6 +150,10 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
             {
                 {nullptr, 1}
             }},
+        {1,
+            {
+                {&debugLabel, 1}
+            }},
         {2,
             {
                 {nullptr, 1},
@@ -186,6 +190,12 @@ void WifiSettingsPage::updateConnectionControls
     bool showButtonSpinner = false;
     String errorMessage = "";
     bool apConnected = isConnected(accessPoint);
+    //debug text
+    String debug = "Saved=";
+    debug += (accessPoint->hasSavedConnection() ? "yes " : "no ");
+    debug += "   SavedPsk="
+    debug += (accessPoint->hasSavedPsk() ? "yes " : "no ");
+    debugLabel.setText(debug);
     if(!apConnected && lastConnecting != accessPoint 
             && lastDisconnecting != accessPoint)
     {

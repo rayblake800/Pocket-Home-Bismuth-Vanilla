@@ -173,6 +173,8 @@ private:
     WifiAccessPoint::Ptr lastConnecting = nullptr;
     WifiAccessPoint::Ptr lastDisconnecting = nullptr;
 
+    
+    ScalingLabel debugLabel;
     //Used for entering a password for a secured access point.
     ScalingLabel passwordLabel;
     TextEditor passwordEditor;
