@@ -195,7 +195,7 @@ void WifiSettingsPage::updateConnectionControls
     debug += (accessPoint->hasSavedConnection() ? "yes " : "no ");
     debug += "   SavedPsk="
     debug += (accessPoint->hasSavedPsk() ? "yes " : "no ");
-    debugLabel.setText(debug);
+    debugLabel.setText(debug,NotificationType::dontSendNotification);
     if(!apConnected && lastConnecting != accessPoint 
             && lastDisconnecting != accessPoint)
     {
