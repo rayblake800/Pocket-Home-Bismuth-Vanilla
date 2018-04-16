@@ -124,7 +124,8 @@ void WifiStateManager::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
     }
     else if(toConnect == getConnectedAP())
     {
-        DBG("WifiStateManager::" << __func__
+        DBG("WifiStat"
+                "eManager::" << __func__
                 << ": already connected to " << toConnect->getSSID());
         return;
     }
@@ -319,19 +320,8 @@ void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
             WifiStateManager::Listener* toNotify
                     = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
             const ScopedUnlock signalUnlock(wifiLock);
-            GLibSignalHandler glibThread;
-            if(glibThread.runningOnGLibThread()
-                    && glibThread.messageThreadWaiting())
-            {
-                //Locking the message manager is unnecessary and
-                //will deadlock
-                toNotify->wifiStateChanged(state);
-            }
-            else
-            {
-                const MessageManagerLock mmLock;
-                toNotify->wifiStateChanged(state);
-            }
+            const MessageManagerLock mmLock;
+            toNotify->wifiStateChanged(state);
         }
     }
 }

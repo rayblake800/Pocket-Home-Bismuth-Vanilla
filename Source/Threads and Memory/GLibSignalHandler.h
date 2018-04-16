@@ -20,9 +20,16 @@
  * MessageManager.
  */
 #pragma once
+//Since the main UI/message thread isn't a Juce thread, standard C++ thread
+// libraries need to be used to wait/notify
+#include <mutex>
+#include <condition_variable>
+
 #include "gio/gio.h"
 #include "ResourceManager.h"
 #include "JuceHeader.h"
+
+
 
 class GLibSignalHandler : private ResourceManager
 {
@@ -35,12 +42,6 @@ public:
      * Returns true if it's being executed on the GLib event thread.
      */
     bool runningOnGLibThread();
-    
-    /**
-     * Returns true if the message thread is waiting on a GLib thread
-     * call. 
-     */
-    bool messageThreadWaiting();
 
     /**
      * Asynchronously run a function once on the GLib event loop.
@@ -79,36 +80,18 @@ private:
          * Adds a function to the GMainContext so it will execute on the event
          * thread.
          * 
-         * @param call  The function to run.
+         * @param call         The function to run.
          * 
-         * @return      the GSource pointer for the pending function call.  
-         *               This can be used to check if the function is still 
-         *               waiting to run.
-         */
-        GSource* addAndInitCall(std::function<void() > call);
-
-        /**
-         * Checks if a pending function is still waiting to execute.
+         * @param callerMutex  If this value is non-null, the event thread will
+         *                     lock it while running this call.
          * 
-         * @param callSource   A pending call pointer returned by 
-         *                      addAndInitCall.
-         * 
-         * @return             True iff the pending function has not yet
-         *                      finished running.
+         * @param callPending  If this value is non-null, the event thread will
+         *                     use it and callerMutex to wake up the calling
+         *                     thread after running the call.
          */
-        bool callPending(GSource* callSource);
-        
-        /**
-         * When a synchronous GLib call is finishing and it's running on the 
-         * message thread, it must call this to signal that it's no longer
-         * waiting.
-         */
-        void messageThreadDoneWaiting();
-
-        /**
-         * Checks if the message thread is waiting for a GLib call. 
-         */
-        bool isMessageThreadWaiting();
+        void addAndInitCall(std::function<void() > call,
+                std::mutex* callerMutex = nullptr,
+                std::condition_variable* callPending = nullptr);
 
         /**
          * Runs the GLib main loop.
@@ -119,7 +102,8 @@ private:
         {
             std::function<void() > call;
             GSource* callSource;
-            Array<GSource*, CriticalSection>* sourceTracker;
+            std::mutex* callerMutex;
+            std::condition_variable* callPending;
         };
         
     private:
@@ -131,10 +115,6 @@ private:
         static gboolean runAsync(CallData* runData);
 
         GMainLoop* mainLoop = nullptr;
-
-        Array<GSource*, CriticalSection> gSourceTracker;
-        
-        Atomic<bool> messageThreadWaiting;
     };
 
     static ScopedPointer<SharedResource> globalThread;

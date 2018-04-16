@@ -20,17 +20,6 @@ bool GLibSignalHandler::runningOnGLibThread()
     GLibThread* thread = static_cast<GLibThread*> (globalThread.get());
     return Thread::getCurrentThreadId() == thread->getThreadId();
 }
-    
-/**
- * Returns true if the message thread is waiting on a GLib thread
- * call. 
- */
-bool GLibSignalHandler::messageThreadWaiting()
-{
-    const ScopedLock accessLock(threadLock);
-    GLibThread* thread = static_cast<GLibThread*> (globalThread.get());
-    return thread->isMessageThreadWaiting();
-}
    
 /**
  * Asynchronously run a function once on the GLib event loop.
@@ -57,24 +46,19 @@ void GLibSignalHandler::gLibCall(std::function<void() > fn)
     {
         const ScopedLock accessLock(threadLock);
         GLibThread* thread = static_cast<GLibThread*> (globalThread.get());
-        GSource* trackedSource = thread->addAndInitCall(fn);
-        while (thread->callPending(trackedSource))
-        {
-            const ScopedUnlock threadUnlock(threadLock);
-            Thread::yield();
-        }
-        if(MessageManager::getInstance()->isThisTheMessageThread())
-        {
-            thread->messageThreadDoneWaiting();
-        }
+        std::mutex callMutex;
+        std::condition_variable callPending;
+        std::unique_lock<std::mutex> callLock(callMutex);
+        thread->addAndInitCall(fn, &callMutex, &callPending);
+        const ScopedUnlock threadUnlock(threadLock);
+        callPending.wait(callLock);
     }
 }
 
 /**
  * Initializes and starts the main GLib event loop on its own thread.
  */
-GLibSignalHandler::GLibThread::GLibThread() : Thread("GLibThread"),
-messageThreadWaiting(false)
+GLibSignalHandler::GLibThread::GLibThread() : Thread("GLibThread")
 {
     mainLoop = g_main_loop_new(g_main_context_default(), false);
     startThread();
@@ -99,52 +83,24 @@ GLibSignalHandler::GLibThread::~GLibThread()
  * Adds a function to the GMainContext so it will execute on the event
  * thread.
  */
-GSource* GLibSignalHandler::GLibThread::addAndInitCall
-(std::function<void() > call)
+void GLibSignalHandler::GLibThread::addAndInitCall
+(std::function<void() > call, std::mutex* callerMutex,
+        std::condition_variable* callPending)
 {
-    if(MessageManager::getInstance()->isThisTheMessageThread())
-    {
-        messageThreadWaiting.set(true);
-    }
+    jassert((callerMutex == nullptr && callPending == nullptr)
+            || (callerMutex != nullptr && callPending != nullptr));
     CallData* callData = new CallData;
     callData->call = call;
     GSource* callSource = g_idle_source_new();
     callData->callSource = callSource;
-    callData->sourceTracker = &gSourceTracker;
-    gSourceTracker.add(callSource);
+    callData->callerMutex = callerMutex;
+    callData->callPending = callPending;
     g_source_set_callback(
             callSource,
             (GSourceFunc) runAsync,
             callData,
             nullptr);
     g_source_attach(callSource, g_main_context_default());
-    return callSource;
-}
-
-/**
- * Checks if a pending function is still waiting to execute.
- */
-bool GLibSignalHandler::GLibThread::callPending(GSource* callSource)
-{
-    return gSourceTracker.contains(callSource);
-}
-     
-/**
- * When a synchronous GLib call is finishing and it's running on the 
- * message thread, it must call this to signal that it's no longer
- * waiting.
- */
-void GLibSignalHandler::GLibThread::messageThreadDoneWaiting()
-{
-    messageThreadWaiting.set(false);
-}
-
-/**
- * Checks if the message thread is waiting for a GLib call. 
- */
-bool GLibSignalHandler::GLibThread::isMessageThreadWaiting()
-{
-    return messageThreadWaiting.get();
 }
         
 /**
@@ -168,8 +124,16 @@ gboolean GLibSignalHandler::GLibThread::runAsync
 (GLibSignalHandler::GLibThread::CallData* runData)
 {
     g_assert(g_main_context_is_owner(g_main_context_default()));
-    runData->call();
-    runData->sourceTracker->removeAllInstancesOf(runData->callSource);
+    if(runData->callerMutex != nullptr)
+    {
+        std::unique_lock<std::mutex> lock(*runData->callerMutex);
+        runData->call();
+        runData->callPending->notify_one();
+    }
+    else
+    {
+        runData->call();
+    }
     g_source_destroy(runData->callSource);
     delete runData;
     return false;
