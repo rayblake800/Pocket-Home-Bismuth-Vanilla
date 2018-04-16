@@ -41,11 +41,6 @@ protected:
      * @return true iff a connected WifiAccessPoint has been set.
      */
     bool isWifiConnected() override;
-        
-    /**
-     * Checks if the simulated connection requires a psk
-     */
-    bool isPSKNeeded() override;
 
     /**
      * Returns the connected access point.
@@ -73,8 +68,8 @@ protected:
 
     /**
      * Triggers a wifi connection event.  This will set a timer to simulate
-     * the connection's success or failure after a randomized delay of nine to
-     * twenty-four seconds.
+     * the connection's success or failure after a randomized delay of two to
+     * four seconds.
      * 
      * @param toConnect  If this has the SSID "MyFi", a successful connection
      *                    will be simulated.  For all other access points, a
@@ -95,20 +90,20 @@ protected:
     
     /**
      * Triggers a simulated wifi disconnection event.  If a simulated connection
-     * exists, after a randomized delay of no more than six seconds, a 
+     * exists, after a randomized delay of no more than two seconds, a 
      * disconnection event will trigger.
      */
     void disconnect() override;
 
     /**
      * Turns on the simulated wifi device.  This will trigger a wifi enabled
-     * event after a randomized delay of no more than six seconds.
+     * event after a randomized delay of no more than two seconds.
      */
     void enableWifi() override;
 
     /**
      * Turns off the simulated wifi device.  This will trigger a wifi disabled
-     * event after a randomized delay of no more than six seconds.
+     * event after a randomized delay of no more than two seconds.
      */
     void disableWifi() override;
 

@@ -129,7 +129,7 @@ void WifiStateManager::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
                 << ": already connected to " << toConnect->getSSID());
         return;
     }
-    else if(toConnect == getConnectingAP()  && !wifiResource->isPSKNeeded())
+    else if(toConnect == getConnectingAP())
     {
         DBG("WifiStateManager::" << __func__
                 << ": already connecting to " << toConnect->getSSID());
@@ -567,7 +567,6 @@ void WifiStateManager::NetworkInterface::signalPskNeeded()
     setWifiState(missingPassword);
     const ScopedLock timerLock(wifiLock);
     stopTimer();
-    
 }
 
 /**
@@ -582,24 +581,14 @@ void WifiStateManager::NetworkInterface::timerCallback()
     stopTimer();
     bool wifiEnabled = isWifiEnabled();
     bool wifiConnected = isWifiConnected();
-    bool needsPSK = isPSKNeeded(); 
     WifiState currentState = wifiState;
     const ScopedUnlock stateUpdateUnlock(wifiLock);
     switch (currentState)
     {
         case connecting:
-            if(needsPSK)
-            {
-                DBG("WifiStateManager::" << __func__
-                        << ": wifi connection missing correct password.");
-                setWifiState(missingPassword);
-            }
-            else
-            {
-                DBG("WifiStateManager::" << __func__
-                        << ": wifi connection timed out.");
-                setWifiState(enabled);
-            }
+            DBG("WifiStateManager::" << __func__
+                    << ": wifi connection timed out.");
+            setWifiState(enabled);
             return;
         case disconnecting:
             if (wifiConnected)

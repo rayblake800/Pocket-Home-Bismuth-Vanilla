@@ -56,15 +56,6 @@ bool JsonWifiInterface::isWifiConnected()
     return connected;
 }
 
-        
-/**
- * Checks if the simulated connection requires a psk
- */
-bool JsonWifiInterface::isPSKNeeded()
-{ 
-    ScopedLock lock(wifiLock);
-    return waitingToConnect->getRequiresAuth();
-}
 
 /**
  *  Returns the connected access point.
@@ -103,8 +94,8 @@ Array<WifiAccessPoint::Ptr> JsonWifiInterface::getVisibleAPs()
 
 /**
  * Triggers a wifi connection event.  This will set a timer to simulate
- * the connection's success or failure after a randomized delay of nine to
- * twenty-four seconds.
+ * the connection's success or failure after a randomized delay of two to
+ * four seconds.
  */
 void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
         String psk)
@@ -119,6 +110,7 @@ void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
     }
     DBG("JsonWifiInterface::" << __func__ << ": trying to connect to "
             << toConnect->getSSID());
+    
     if (turningOff)
     {
         DBG("JsonWifiInterface::" << __func__
@@ -160,7 +152,7 @@ void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
         stopTimer();
         waitingToConnect = toConnect;
         // try to connect to ap, dispatch events on success and failure
-        TempTimer::initTimer(Random().nextInt(15000) + 9000,
+        TempTimer::initTimer(Random().nextInt(2000) + 2000,
                 [this, psk]()
                 {
                     ScopedLock lock(wifiLock);
@@ -184,6 +176,8 @@ void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
                     {
                         DBG("JsonWifiInterface::" << __func__ 
                                 << ": missing psk! (any is valid)");
+                        connected = false;
+                        waitingToConnect = nullptr;
                         signalPskNeeded();
                         return;
                     }
@@ -221,7 +215,7 @@ void JsonWifiInterface::stopConnecting()
 
 /**
  * Triggers a simulated wifi disconnection event.  If a simulated connection
- * exists, after a randomized delay of no more than six seconds, a 
+ * exists, after a randomized delay of no more than two seconds, a 
  * disconnection event will trigger.
  */
 void JsonWifiInterface::disconnect()
@@ -233,7 +227,7 @@ void JsonWifiInterface::disconnect()
     }
     else
     {
-        TempTimer::initTimer(Random().nextInt(6000), [this]()
+        TempTimer::initTimer(Random().nextInt(2000), [this]()
         {
             ScopedLock lock(wifiLock);
             DBG("JsonWifiInterface::" << __func__ << ": wifi disconnected");
@@ -247,7 +241,7 @@ void JsonWifiInterface::disconnect()
 
 /**
  * Turns on the simulated wifi device.  This will trigger a wifi enabled
- * event after a randomized delay of no more than six seconds.
+ * event after a randomized delay of no more than two seconds.
  */
 void JsonWifiInterface::enableWifi()
 {
@@ -268,7 +262,7 @@ void JsonWifiInterface::enableWifi()
         DBG("JsonWifiInterface::" << __func__ << ": enabling wifi...");
         turningOn = true;
         turningOff = false;
-        TempTimer::initTimer(Random().nextInt(6000), [this]()
+        TempTimer::initTimer(Random().nextInt(2000), [this]()
         {
             ScopedLock lock(wifiLock);
             if (turningOn)
@@ -284,7 +278,7 @@ void JsonWifiInterface::enableWifi()
 
 /**
  * Turns off the simulated wifi device.  This will trigger a wifi disabled
- * event after a randomized delay of no more than six seconds.
+ * event after a randomized delay of no more than two seconds.
  */
 void JsonWifiInterface::disableWifi()
 {
@@ -298,7 +292,7 @@ void JsonWifiInterface::disableWifi()
         DBG("JsonWifiInterface::" << __func__ << ": disabling wifi...");
         turningOn = false;
         turningOff = true;
-        TempTimer::initTimer(Random().nextInt(6000), [this]()
+        TempTimer::initTimer(Random().nextInt(2000), [this]()
         {
             ScopedLock lock(wifiLock);
             if (turningOff)

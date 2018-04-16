@@ -272,12 +272,6 @@ public:
          * @return true iff a wifi device was successfully found. 
          */
         virtual bool wifiDeviceFound() = 0;
-        
-        /**
-         * @return true iff connecting to a wifi access point without the
-         *         required psk. 
-         */
-        virtual bool isPSKNeeded() = 0;
 
         /**
          * Attempts to open a connection to a wifi access point. This will fail 

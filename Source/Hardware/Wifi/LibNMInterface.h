@@ -44,12 +44,6 @@ protected:
      * Check the NMDevice state to see if wifi is connected to an access point.
      */
     bool isWifiConnected() override;
-             
-    /**
-     * Check if the wifi device is connecting but is missing the required 
-     * security key.
-     */
-    bool isPSKNeeded() override;
 
     /**
      * Request information on the connected access point from the NMDevice.

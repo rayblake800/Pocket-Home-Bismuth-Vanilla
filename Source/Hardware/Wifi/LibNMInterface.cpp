@@ -124,23 +124,6 @@ bool LibNMInterface::isWifiConnected()
     return false;
 }
 
-             
-/**
- * Check if the wifi device is connecting but is missing the required 
- * security key.
- */
-bool LibNMInterface::isPSKNeeded()
-{
-    const ScopedLock lock(wifiLock);
-    DBG("LibNMInterface::" << __func__ << ": state is "
-            << deviceStateString(lastNMState));
-    if (lastNMState == NM_DEVICE_STATE_NEED_AUTH && connectingAP != nullptr)
-    {
-        return true;
-    }
-    return false;
-}
-
 /**
  * Request information on the connected access point from the NMDevice.
  */
