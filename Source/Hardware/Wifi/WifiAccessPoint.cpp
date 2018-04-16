@@ -343,6 +343,11 @@ bool WifiAccessPoint::operator!=(NMAccessPoint* rhs) const
 bool WifiAccessPoint::operator==(const WifiAccessPoint& rhs) const
 {
     const ScopedReadLock readLock(networkUpdateLock);
+    const ScopedReadLock rhsLock(rhs.networkUpdateLock);
+    if(nmAccessPoint == nullptr && rhs.nmAccessPoint == nullptr)
+    {
+        return hash == rhs.hash;
+    }
     return nmAccessPoint == rhs.nmAccessPoint;
 }
 
@@ -351,8 +356,7 @@ bool WifiAccessPoint::operator==(const WifiAccessPoint& rhs) const
  */
 bool WifiAccessPoint::operator!=(const WifiAccessPoint& rhs) const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
-    return nmAccessPoint != rhs.nmAccessPoint;
+    return !(*this == rhs);
 }
 
 /**

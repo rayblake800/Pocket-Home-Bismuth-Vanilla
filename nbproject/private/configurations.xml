@@ -4893,7 +4893,6 @@
             <in>LibNMHandler.h</in>
             <in>LibNMInterface.cpp</in>
             <in>LibNMInterface.h</in>
-            <in>ManagedNMAccessPoint.cpp</in>
             <in>WifiAccessPoint.cpp</in>
             <in>WifiAccessPoint.h</in>
             <in>WifiStateManager.cpp</in>
@@ -5027,6 +5026,10 @@
           <in>LoginPage.h</in>
         </df>
         <df name="Threads and Memory">
+          <in>GLibSignalHandler.cpp</in>
+          <in>GLibSignalHandler.h</in>
+          <in>ResourceManager.cpp</in>
+          <in>ResourceManager.h</in>
         </df>
         <in>AppLauncher.cpp</in>
         <in>AppLauncher.h</in>

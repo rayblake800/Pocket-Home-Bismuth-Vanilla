@@ -116,6 +116,7 @@ private:
     //Simulated wifi state variables.
     WifiAccessPoint::Ptr connectedAP = nullptr;
     WifiAccessPoint::Ptr waitingToConnect = nullptr;
+    Array<WifiAccessPoint::Ptr> visibleAPs;
     bool enabled = false;
     bool connected = false;
     bool disconnecting = false;

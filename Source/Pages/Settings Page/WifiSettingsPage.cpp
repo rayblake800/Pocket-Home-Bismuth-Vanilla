@@ -315,8 +315,6 @@ void WifiSettingsPage::reloadPage()
     WifiAccessPoint::Ptr selected = getSelectedConnection();
     updateConnectionList();
     setSelectedConnection(selected);
-    lastConnecting = nullptr;
-    lastDisconnecting = nullptr;
     updateConnectionControls(getSelectedConnection());
 }
 

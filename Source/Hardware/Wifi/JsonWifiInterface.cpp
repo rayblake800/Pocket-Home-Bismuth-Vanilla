@@ -8,6 +8,16 @@ JsonWifiInterface::JsonWifiInterface(CriticalSection& wifiLock) :
 WifiStateManager::NetworkInterface(wifiLock),
 wifiLock(wifiLock) 
 {
+    auto json = JSON::parse(AssetFiles::findAssetFile("wifi.json"));
+
+    for (const auto &apJson : *json.getArray())
+    {
+        visibleAPs.add(new WifiAccessPoint(
+                apJson["name"],
+                apJson["strength"],
+                apJson["auth"],
+                apJson["name"]));
+    }
     confirmWifiState();
 }
 
@@ -86,20 +96,9 @@ Array<WifiAccessPoint::Ptr> JsonWifiInterface::getVisibleAPs()
     Array<WifiAccessPoint::Ptr> accessPoints;
     if (isWifiEnabled())
     {
-        auto json = JSON::parse(AssetFiles::findAssetFile("wifi.json"));
-
-        for (const auto &apJson : *json.getArray())
-        {
-            accessPoints.add(new WifiAccessPoint(
-                    apJson["name"],
-                    apJson["strength"],
-                    apJson["auth"],
-                    apJson["name"]));
-        }
+        return visibleAPs;
     }
-    DBG("JsonWifiInterface::" << __func__ << ": APs found:"
-            << accessPoints.size());
-    return accessPoints;
+    return {};
 }
 
 /**
@@ -185,6 +184,7 @@ void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
                     {
                         DBG("JsonWifiInterface::" << __func__ 
                                 << ": missing psk! (any is valid)");
+                        signalPskNeeded();
                         return;
                     }
                     connected = true;
