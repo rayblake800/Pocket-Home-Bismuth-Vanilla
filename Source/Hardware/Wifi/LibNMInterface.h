@@ -147,9 +147,12 @@ private:
      * Registers updates to the wifi device when the NetworkManager device state
      * changes.
      * 
-     * @param newState   The updated wifi device state.
+     * @param newState     The updated wifi device state.
+     * 
+     * @param stateReason  The reason for the change in device state.
      */
-    void stateUpdateCallback(NMDeviceState newState) override;
+    void stateUpdateCallback
+    (NMDeviceState newState, NMDeviceStateReason stateReason) override;
           
     /**
      * Notifies listeners when the active access point changes.

@@ -3,46 +3,8 @@
 #include <nm-utils.h>
 #include <nm-remote-connection.h>
 #include "JuceHeader.h"
-
 #if JUCE_DEBUG
-
-/**
- * Converts a NMDeviceState to a String for debug output.
- */
-String deviceStateString(NMDeviceState state)
-{
-    switch (state)
-    {
-        case NM_DEVICE_STATE_ACTIVATED:
-            return "NM_DEVICE_STATE_ACTIVATED";
-        case NM_DEVICE_STATE_PREPARE:
-            return "NM_DEVICE_STATE_PREPARE";
-        case NM_DEVICE_STATE_CONFIG:
-            return "NM_DEVICE_STATE_CONFIG";
-        case NM_DEVICE_STATE_IP_CONFIG:
-            return "NM_DEVICE_STATE_IP_CONFIG";
-        case NM_DEVICE_STATE_IP_CHECK:
-            return "NM_DEVICE_STATE_IP_CHECK";
-        case NM_DEVICE_STATE_SECONDARIES:
-            return "NM_DEVICE_STATE_SECONDARIES";
-        case NM_DEVICE_STATE_NEED_AUTH:
-            return "NM_DEVICE_STATE_NEED_AUTH";
-        case NM_DEVICE_STATE_DISCONNECTED:
-            return "NM_DEVICE_STATE_DISCONNECTED";
-        case NM_DEVICE_STATE_DEACTIVATING:
-            return "NM_DEVICE_STATE_DEACTIVATING";
-        case NM_DEVICE_STATE_FAILED:
-            return "NM_DEVICE_STATE_FAILED";
-        case NM_DEVICE_STATE_UNKNOWN:
-            return "NM_DEVICE_STATE_UNKNOWN";
-        case NM_DEVICE_STATE_UNMANAGED:
-            return "NM_DEVICE_STATE_UNMANAGED";
-        case NM_DEVICE_STATE_UNAVAILABLE:
-            return "NM_DEVICE_STATE_UNAVAILABLE";
-        default:
-            return "Invalid state!";
-    }
-}
+#include "WifiDebugOutput.h"
 #endif
 
 LibNMInterface::LibNMInterface(CriticalSection& wifiLock) :
@@ -311,7 +273,8 @@ void LibNMInterface::apUpdateCallback(Array<WifiAccessPoint::Ptr> visibleAPs)
  * Registers updates to the wifi device when the NetworkManager device state
  * changes.
  */
-void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
+void LibNMInterface::stateUpdateCallback(NMDeviceState newState,
+        NMDeviceStateReason stateReason)
 {
     ScopedLock updateLock(wifiLock);
     if(lastNMState == newState)//duplicate callback, ignore
@@ -322,6 +285,8 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState)
     lastNMState = newState;
     DBG("LibNMInterface::" << __func__ << ":  changed to "
             << deviceStateString(newState));
+    DBG("LibNMInterface::" << __func__ << ":  reason="
+            << deviceStateReasonString(stateReason));
     switch (newState)
     {
         case NM_DEVICE_STATE_ACTIVATED:

@@ -155,9 +155,12 @@ protected:
     /**
      * A callback function to run whenever the wifi device state changes.
      * 
-     * @param newState   The updated wifi device state.
+     * @param newState     The updated wifi device state.
+     * 
+     * @param stateReason  The reason for the device state change.
      */
-    virtual void stateUpdateCallback(NMDeviceState newState) = 0;
+    virtual void stateUpdateCallback
+    (NMDeviceState newState, NMDeviceStateReason stateReason) = 0;
     
         
     /**

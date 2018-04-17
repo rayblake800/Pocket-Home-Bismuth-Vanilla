@@ -4895,6 +4895,7 @@
             <in>LibNMInterface.h</in>
             <in>WifiAccessPoint.cpp</in>
             <in>WifiAccessPoint.h</in>
+            <in>WifiDebugOutput.h</in>
             <in>WifiStateManager.cpp</in>
             <in>WifiStateManager.h</in>
           </df>

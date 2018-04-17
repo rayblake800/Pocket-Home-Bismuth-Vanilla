@@ -55,6 +55,7 @@
             <in>LibNMHandler.cpp</in>
             <in>LibNMInterface.cpp</in>
             <in>WifiAccessPoint.cpp</in>
+            <in>WifiDebugOutput.h</in>
             <in>WifiStateManager.cpp</in>
           </df>
           <in>Audio.cpp</in>
@@ -1913,6 +1914,11 @@
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
         </ccTool>
+      </item>
+      <item path="Source/Hardware/Wifi/WifiDebugOutput.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Source/Hardware/Wifi/WifiStateManager.cpp"
             ex="false"
