@@ -75,55 +75,55 @@ LibNMHandler::LibNMHandler()
                 (GWeakNotify) handleDeviceRemoved, this);
         
         buildAPMap();
-        
-        //check saved connections
-            GError* err = nullptr;
-        DBusGConnection* bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
-        if(err != nullptr)
-        {
-            DBG("DBus connection error: " << err->message);
-            g_error_free(err);
-            err = nullptr;
-        }
-        if(!bus)
-        {
-            DBG("Unable to open DBus connection!");
-            return;
-        }
-        NMRemoteSettings* settings = nm_remote_settings_new (bus);
-        if(!settings)
-        {
-            DBG("Unable to access remote connection settings!");
-            return;
-        }
-
-        DBG("Reloading connections "
-                  << (nm_remote_settings_reload_connections(settings,&err) 
-                            ? "succeeded.\n" : "failed"));
-
-        if(err != nullptr)
-        {
-            DBG("Error reloading connections: " << err->message);
-            g_error_free(err);
-            err = nullptr;
-        }
-        GSList* connections = nm_remote_settings_list_connections(settings);
-        if(!connections)
-        {
-            DBG("Found no saved connections!");
-            return;
-        }
-        int savedCons = 0;
-        for(GSList* iter = connections; iter != nullptr; iter=iter->next)
-        {
-            savedCons++;
-            DBG("Connection " << savedCons << ":";
-            nm_connection_dump((NMConnection*) iter->data));
-        }
-        DBG("Found " << savedCons << " saved connection(s)");
-        g_slist_free(connections);
-        connections = nullptr;
     });
+    
+    //check saved connections
+    GError* err = nullptr;
+    DBusGConnection* bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
+    if(err != nullptr)
+    {
+        DBG("DBus connection error: " << err->message);
+        g_error_free(err);
+        err = nullptr;
+    }
+    if(!bus)
+    {
+        DBG("Unable to open DBus connection!");
+        return;
+    }
+    NMRemoteSettings* settings = nm_remote_settings_new (bus);
+    if(!settings)
+    {
+        DBG("Unable to access remote connection settings!");
+        return;
+    }
+
+    DBG("Reloading connections "
+              << (nm_remote_settings_reload_connections(settings,&err) 
+                        ? "succeeded.\n" : "failed"));
+
+    if(err != nullptr)
+    {
+        DBG("Error reloading connections: " << err->message);
+        g_error_free(err);
+        err = nullptr;
+    }
+    GSList* connections = nm_remote_settings_list_connections(settings);
+    if(!connections)
+    {
+        DBG("Found no saved connections!");
+        return;
+    }
+    int savedCons = 0;
+    for(GSList* iter = connections; iter != nullptr; iter=iter->next)
+    {
+        savedCons++;
+        DBG("Connection " << savedCons << ":";
+        nm_connection_dump((NMConnection*) iter->data));
+    }
+    DBG("Found " << savedCons << " saved connection(s)");
+    g_slist_free(connections);
+    connections = nullptr;
 }
 
 /**
