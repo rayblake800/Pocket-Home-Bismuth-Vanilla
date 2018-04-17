@@ -15,7 +15,7 @@
 
 class LibNMHandler
 {
-public:
+public:  
     /**
      * Initializes LibNM functionality.
      */

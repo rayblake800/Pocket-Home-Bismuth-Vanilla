@@ -2,15 +2,509 @@
 #include <nm-remote-connection.h>
 #include <nm-device.h>
 #include <glib-2.0/glib/gerror.h>
+#include <glib-2.0/glib/garray.h>
 #include "MainConfigFile.h"
 #include "WifiAccessPoint.h"
 #include "LibNMHandler.h"
+#include <libnm-glib/nm-remote-settings.h>
+#include <nm-connection.h>
+#include <glib-2.0/glib/gslist.h>
+
+
+static const char* nmStateStr(NMState state)
+{
+    switch(state)
+    {
+        case NM_STATE_UNKNOWN:
+            return "NM_STATE_UNKNOWN";
+        case NM_STATE_ASLEEP:
+            return "NM_STATE_ASLEEP";
+        case NM_STATE_DISCONNECTED:
+            return "NM_STATE_DISCONNECTED";
+        case NM_STATE_DISCONNECTING:
+            return "NM_STATE_DISCONNECTING";
+        case NM_STATE_CONNECTING:
+            return "NM_STATE_CONNECTING";
+        case NM_STATE_CONNECTED_LOCAL:
+            return "NM_STATE_CONNECTED_LOCAL";
+        case NM_STATE_CONNECTED_SITE:
+            return "NM_STATE_CONNECTED_SITE";
+        case NM_STATE_CONNECTED_GLOBAL:
+            return "NM_STATE_CONNECTED_GLOBAL";
+    }
+}
+
+static const char* nmConnectivityStateStr(NMConnectivityState state)
+{
+    switch(state)
+    {
+        case NM_CONNECTIVITY_UNKNOWN:
+            return "NM_CONNECTIVITY_UNKNOWN";
+        case NM_CONNECTIVITY_NONE:
+            return "NM_CONNECTIVITY_NONE";
+        case NM_CONNECTIVITY_PORTAL:
+            return "NM_CONNECTIVITY_PORTAL";
+        case NM_CONNECTIVITY_LIMITED:
+            return "NM_CONNECTIVITY_LIMITED";
+        case NM_CONNECTIVITY_FULL:
+            return "NM_CONNECTIVITY_FULL";
+    }
+}
+
+static void nmClientPrint(NMClient* nmClient)
+{
+    std::cout << "\tClient version : " << nm_client_get_version(nmClient) << "\n"
+              << "\tClient state   : " << nmStateStr(nm_client_get_state(nmClient)) << "\n"
+              << "\tStartup        : " << (nm_client_get_startup(nmClient) ? "yes\n" : "no\n")
+              << "\tDaemon running : " << (nm_client_get_manager_running(nmClient) ? "yes\n" : "no\n")
+              << "\tConnectivity   : " << nmConnectivityStateStr(nm_client_get_connectivity(nmClient)) << "\n";
+    
+    std::cout << "\n\tNetworking enabled : " 
+              <<  (nm_client_networking_get_enabled(nmClient) ? "yes\n" : "no\n");
+
+              
+    std::cout << "\tWireless enabled   : " 
+              <<  (nm_client_wireless_get_enabled(nmClient) ? "yes " : "no  ")
+              << "\thardware support: " 
+              <<  (nm_client_wireless_hardware_get_enabled(nmClient) ? "yes\n" : "no\n");  
+    
+    std::cout << "\tWWAN enabled       : " 
+              <<  (nm_client_wwan_get_enabled(nmClient) ? "yes " : "no  ")
+              << "\thardware support: " 
+              <<  (nm_client_wwan_hardware_get_enabled(nmClient) ? "yes\n" : "no\n"); 
+
+
+    std::cout << "\tWIMAX enabled      : " 
+              <<  (nm_client_wimax_get_enabled(nmClient) ? "yes " : "no  ")
+              << "\thardware support: " 
+              <<  (nm_client_wimax_hardware_get_enabled(nmClient) ? "yes\n" : "no\n");  
+              
+    std::cout << "\n\tClient logging info:\n";
+    
+    //check logging
+    char* level = nullptr;
+    char* domains = nullptr;
+    GError* error = nullptr;
+    if(nm_client_get_logging(nmClient, &level, &domains, &error))
+    {
+        std::cout << "\t\tLogging level: " << level << "\n";
+        std::cout << "\t\tLogging domains: " << domains << "\n";
+    }
+    else
+    {
+        std::cout << "\t\tFailed to get client logging info.\n";
+        if(error != nullptr)
+        {
+            std::cout << "\t\tError:" << error->message << "\n";
+            g_error_free(error);
+            error = nullptr;
+        }
+    }
+}
+
+static void nmDevicePrint(NMDevice* nmDevice)
+{
+    const char* type       = nm_device_get_type_description(nmDevice);
+    const char* descriptn  = nm_device_get_description(nmDevice);
+    const char* iface      = nm_device_get_iface(nmDevice);
+    const char* setType    = g_type_name(nm_device_get_setting_type(nmDevice));
+    const char* ip_iface   = nm_device_get_ip_iface(nmDevice);
+    const char* udi        = nm_device_get_udi(nmDevice);
+    const char* driver     = nm_device_get_driver(nmDevice);
+    const char* driver_vsn = nm_device_get_driver_version(nmDevice);
+    const char* fw_vsn     = nm_device_get_firmware_version(nmDevice);
+    const char* mac_addr   = nm_device_get_hw_address(nmDevice);
+    const char* port_id    = nm_device_get_physical_port_id(nmDevice);
+    const char* product    = nm_device_get_product(nmDevice);
+    const char* vendor     = nm_device_get_vendor(nmDevice);
+    
+    bool fw_missing        =  nm_device_get_firmware_missing(nmDevice);
+    bool autoconnect       =  nm_device_get_firmware_missing(nmDevice);
+    
+    
+    guint32 mtu = nm_device_get_mtu(nmDevice);
+    
+    NMDeviceCapabilities capabilities = nm_device_get_capabilities(nmDevice);
+    NMDeviceStateReason stateReason;
+    NMDeviceState device_state = nm_device_get_state_reason(nmDevice, &stateReason);
+    
+    std::cout << "\tType             : " << (type       ? type       : "unknown") << "\n"
+              << "\tDescription      : " << (descriptn  ? descriptn  : "unknown") << "\n"
+              << "\tInterface        : " << (iface      ? iface      : "unknown") << "\n"
+              << "\tSetting Type     : " << (setType    ? setType    : "unknown") << "\n"
+              << "\tIP Interface     : " << (ip_iface   ? ip_iface   : "unknown") << "\n"
+              << "\tUDI              : " << (udi        ? udi        : "unknown") << "\n"
+              << "\tDriver           : " << (driver     ? driver     : "unknown") << "\n"
+              << "\tDriver Version   : " << (driver_vsn ? driver_vsn : "unknown") << "\n"
+              << "\tFirmware Version : " << (fw_vsn     ? fw_vsn     : "unknown") << "\n"
+              << "\tHardware Address : " << (mac_addr   ? mac_addr   : "unknown") << "\n"
+              << "\tPort ID          : " << (port_id    ? port_id    : "unknown") << "\n"
+              << "\tProduct          : " << (product    ? product    : "unknown") << "\n"
+              << "\tVendor           : " << (vendor     ? vendor     : "unknown") << "\n";
+              
+    std::cout << "\tMTU              : " << mtu << "\n";
+              
+    std::cout << "\tFirmware found   : " << (fw_missing  ? "no"  : "yes" ) << "\n"
+              << "\tAutoconnect      : " << (autoconnect ? "yes" : "no"  ) << "\n\n";
+              
+    std::cout << "\tDevice Capabilities : (" << (int) capabilities << ")\n";
+    if(capabilities == NM_DEVICE_CAP_NONE)
+    {
+        std::cout << "\t\tnone\n";
+    }
+    if((capabilities & NM_DEVICE_CAP_NM_SUPPORTED) == NM_DEVICE_CAP_NM_SUPPORTED)
+    {
+        std::cout << "\t\tDevice is NetworkManager Supported\n";
+    }
+    if((capabilities & NM_DEVICE_CAP_CARRIER_DETECT) == NM_DEVICE_CAP_CARRIER_DETECT)
+    {
+        std::cout << "\t\tDevice can indicate carrier status\n";
+    }
+    /*
+    if((capabilities & NM_DEVICE_CAP_IS_SOFTWARE) == NM_DEVICE_CAP_IS_SOFTWARE)
+    {
+        std::cout << "\t\tDevice is software\n";
+    }
+    */
+    
+    std::cout << "\tDevice State        : ";
+    switch(device_state)
+    {
+        case NM_DEVICE_STATE_UNKNOWN:
+            std::cout << "NM_DEVICE_STATE_UNKNOWN\n";
+            break;
+        case NM_DEVICE_STATE_UNMANAGED:
+            std::cout << "NM_DEVICE_STATE_UNMANAGED\n";
+            break;
+        case NM_DEVICE_STATE_UNAVAILABLE:
+            std::cout << "NM_DEVICE_STATE_UNAVAILABLE\n";
+            break;
+        case NM_DEVICE_STATE_DISCONNECTED:
+            std::cout << "NM_DEVICE_STATE_DISCONNECTED\n";
+            break;
+        case NM_DEVICE_STATE_PREPARE:
+            std::cout << "NM_DEVICE_STATE_PREPARE\n";
+            break;
+        case NM_DEVICE_STATE_CONFIG:
+            std::cout << "NM_DEVICE_STATE_CONFIG\n";
+            break;
+        case NM_DEVICE_STATE_NEED_AUTH:
+            std::cout << "NM_DEVICE_STATE_NEED_AUTH\n";
+            break;
+        case NM_DEVICE_STATE_IP_CONFIG:
+            std::cout << "NM_DEVICE_STATE_IP_CONFIG\n";
+            break;
+        case NM_DEVICE_STATE_SECONDARIES:
+            std::cout << "NM_DEVICE_STATE_SECONDARIES\n";
+            break;
+        case NM_DEVICE_STATE_ACTIVATED:
+            std::cout << "NM_DEVICE_STATE_ACTIVATED\n";
+            break;
+        case NM_DEVICE_STATE_DEACTIVATING:
+            std::cout << "NM_DEVICE_STATE_DEACTIVATING\n";
+            break;
+        case NM_DEVICE_STATE_FAILED:
+            std::cout << "NM_DEVICE_STATE_FAILED\n";
+            break;
+    }
+    
+    std::cout << "\tDevice State Reason : ";
+    switch(stateReason)
+    {
+        case NM_DEVICE_STATE_REASON_NONE:
+            std::cout << "NM_DEVICE_STATE_REASON_NONE\n";
+            break;
+        case NM_DEVICE_STATE_REASON_UNKNOWN:
+            std::cout << "NM_DEVICE_STATE_REASON_UNKNOWN\n";
+            break;
+        case NM_DEVICE_STATE_REASON_NOW_MANAGED:
+            std::cout << "NM_DEVICE_STATE_REASON_NOW_MANAGED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_NOW_UNMANAGED:
+            std::cout << "NM_DEVICE_STATE_REASON_NOW_UNMANAGED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_CONFIG_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_CONFIG_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_IP_CONFIG_UNAVAILABLE:
+            std::cout << "NM_DEVICE_STATE_REASON_IP_CONFIG_UNAVAILABLE\n";
+            break;
+        case NM_DEVICE_STATE_REASON_IP_CONFIG_EXPIRED:
+            std::cout << "NM_DEVICE_STATE_REASON_IP_CONFIG_EXPIRED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_NO_SECRETS:
+            std::cout << "NM_DEVICE_STATE_REASON_NO_SECRETS\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT:
+            std::cout << "NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SUPPLICANT_CONFIG_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_SUPPLICANT_CONFIG_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SUPPLICANT_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_SUPPLICANT_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SUPPLICANT_TIMEOUT:
+            std::cout << "NM_DEVICE_STATE_REASON_SUPPLICANT_TIMEOUT\n";
+            break;
+        case NM_DEVICE_STATE_REASON_PPP_START_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_PPP_START_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_PPP_DISCONNECT:
+            std::cout << "NM_DEVICE_STATE_REASON_PPP_DISCONNECT\n";
+            break;
+        case NM_DEVICE_STATE_REASON_PPP_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_PPP_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_DHCP_START_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_DHCP_START_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_DHCP_ERROR:
+            std::cout << "NM_DEVICE_STATE_REASON_DHCP_ERROR\n";
+            break;
+        case NM_DEVICE_STATE_REASON_DHCP_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_DHCP_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SHARED_START_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_SHARED_START_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SHARED_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_SHARED_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_AUTOIP_START_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_AUTOIP_START_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_AUTOIP_ERROR:
+            std::cout << "NM_DEVICE_STATE_REASON_AUTOIP_ERROR\n";
+            break;
+        case NM_DEVICE_STATE_REASON_AUTOIP_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_AUTOIP_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_MODEM_BUSY:
+            std::cout << "NM_DEVICE_STATE_REASON_MODEM_BUSY\n";
+            break;
+        case NM_DEVICE_STATE_REASON_MODEM_NO_DIAL_TONE:
+            std::cout << "NM_DEVICE_STATE_REASON_MODEM_NO_DIAL_TONE\n";
+            break;
+        case NM_DEVICE_STATE_REASON_MODEM_NO_CARRIER:
+            std::cout << "NM_DEVICE_STATE_REASON_MODEM_NO_CARRIER\n";
+            break;
+        case NM_DEVICE_STATE_REASON_MODEM_DIAL_TIMEOUT:
+            std::cout << "NM_DEVICE_STATE_REASON_MODEM_DIAL_TIMEOUT\n";
+            break;
+        case NM_DEVICE_STATE_REASON_MODEM_DIAL_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_MODEM_DIAL_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_MODEM_INIT_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_MODEM_INIT_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_GSM_APN_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_GSM_APN_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_GSM_REGISTRATION_NOT_SEARCHING:
+            std::cout << "NM_DEVICE_STATE_REASON_GSM_REGISTRATION_NOT_SEARCHING\n";
+            break;
+        case NM_DEVICE_STATE_REASON_GSM_REGISTRATION_DENIED:
+            std::cout << "NM_DEVICE_STATE_REASON_GSM_REGISTRATION_DENIED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_GSM_REGISTRATION_TIMEOUT:
+            std::cout << "NM_DEVICE_STATE_REASON_GSM_REGISTRATION_TIMEOUT\n";
+            break;
+        case NM_DEVICE_STATE_REASON_GSM_REGISTRATION_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_GSM_REGISTRATION_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_FIRMWARE_MISSING:
+            std::cout << "NM_DEVICE_STATE_REASON_FIRMWARE_MISSING\n";
+            break;
+        case NM_DEVICE_STATE_REASON_REMOVED:
+            std::cout << "NM_DEVICE_STATE_REASON_REMOVED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SLEEPING:
+            std::cout << "NM_DEVICE_STATE_REASON_SLEEPING\n";
+            break;
+        case NM_DEVICE_STATE_REASON_CONNECTION_REMOVED:
+            std::cout << "NM_DEVICE_STATE_REASON_CONNECTION_REMOVED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_USER_REQUESTED:
+            std::cout << "NM_DEVICE_STATE_REASON_USER_REQUESTED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_CARRIER:
+            std::cout << "NM_DEVICE_STATE_REASON_CARRIER\n";
+            break;
+        case NM_DEVICE_STATE_REASON_CONNECTION_ASSUMED:
+            std::cout << "NM_DEVICE_STATE_REASON_CONNECTION_ASSUMED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE:
+            std::cout << "NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE\n";
+            break;
+        case NM_DEVICE_STATE_REASON_MODEM_NOT_FOUND:
+            std::cout << "NM_DEVICE_STATE_REASON_MODEM_NOT_FOUND\n";
+            break;
+        case NM_DEVICE_STATE_REASON_BT_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_BT_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_GSM_SIM_NOT_INSERTED:
+            std::cout << "NM_DEVICE_STATE_REASON_GSM_SIM_NOT_INSERTED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_GSM_SIM_PIN_REQUIRED:
+            std::cout << "NM_DEVICE_STATE_REASON_GSM_SIM_PIN_REQUIRED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_GSM_SIM_PUK_REQUIRED:
+            std::cout << "NM_DEVICE_STATE_REASON_GSM_SIM_PUK_REQUIRED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_GSM_SIM_WRONG:
+            std::cout << "NM_DEVICE_STATE_REASON_GSM_SIM_WRONG\n";
+            break;
+        case NM_DEVICE_STATE_REASON_INFINIBAND_MODE:
+            std::cout << "NM_DEVICE_STATE_REASON_INFINIBAND_MODE\n";
+            break;
+        case NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_BR2684_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_BR2684_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_MODEM_MANAGER_UNAVAILABLE:
+            std::cout << "NM_DEVICE_STATE_REASON_MODEM_MANAGER_UNAVAILABLE\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SSID_NOT_FOUND:
+            std::cout << "NM_DEVICE_STATE_REASON_SSID_NOT_FOUND\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_DCB_FCOE_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_DCB_FCOE_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_MODEM_FAILED:
+            std::cout << "NM_DEVICE_STATE_REASON_MODEM_FAILED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_MODEM_AVAILABLE:
+            std::cout << "NM_DEVICE_STATE_REASON_MODEM_AVAILABLE\n";
+            break;
+        case NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT:
+            std::cout << "NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT\n";
+            break;
+            /*
+        case NM_DEVICE_STATE_REASON_NEW_ACTIVATION:
+            std::cout << "NM_DEVICE_STATE_REASON_NEW_ACTIVATION\n";
+            break;
+        case NM_DEVICE_STATE_REASON_PARENT_CHANGED:
+            std::cout << "NM_DEVICE_STATE_REASON_PARENT_CHANGED\n";
+            break;
+        case NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED:
+            std::cout << "NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED\n";
+            break;
+            */
+    }
+
+}
+
+static void nmConnectionPrint(NMConnection* con)
+{   
+    nm_connection_dump(con);
+    /* 
+    GPtrArray* hints = nullptr;
+    const char* path        = nm_connection_get_path(con);
+    const char* iface       = nm_connection_get_virtual_iface_name(con);
+    const char* needSecrets = nm_connection_need_secrets(con, &hints);
+    
+    GError err;
+    */
+}
+
+static int nmInfo()
+{
+    std::cout << "LibNM Testing:\n\n";
+    //##########################  NMClient #############################
+    NMClient* nmClient = nm_client_new();
+    if(nmClient == nullptr)
+    {
+        std::cout << "Unable to create NMClient!\n";
+        return -1;
+    }
+    std::cout << "NMClient:\n";
+    nmClientPrint(nmClient);
+    
+    const GPtrArray * devices = nm_client_get_devices(nmClient);
+    std::cout << "\nNMDevices:\n\tFound " << (devices ? devices->len : 0) << " network devices.\n";
+    for(int i = 0; devices && i < devices->len; i++)
+    {
+        std::cout << "\nDevice " << (i + 1) << ":\n";
+        NMDevice * dev = (NMDevice*) devices->pdata[i];
+        if(dev != nullptr)
+        {
+            nmDevicePrint(dev);
+            
+            const GPtrArray* cons = nm_device_get_available_connections(dev);
+            std::cout << "\n\t" << (cons ? cons->len : 0) << " available connections:\n";
+            for(int cNum = 0; cons && cNum < cons->len; cNum++)
+            {
+                std::cout << "\nConnection "<< (cNum + 1) << ": ";
+                nmConnectionPrint((NMConnection*) cons->pdata[cNum]);
+            }
+        }
+    }
+    GError* err = nullptr;
+    DBusGConnection* bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
+    if(err != nullptr)
+    {
+        std::cout<<"DBus connection error: " << err->message << "\n";
+        g_error_free(err);
+        err = nullptr;
+    }
+    if(!bus)
+    {
+        std::cout << "Unable to open DBus connection!\n";
+        return -1;
+    }
+    NMRemoteSettings* settings = nm_remote_settings_new (bus);
+    if(!settings)
+    {
+        std::cout << "Unable to access remote connection settings!\n";
+        return -1;
+    }
+    
+    std::cout << "Reloading connections "
+              << (nm_remote_settings_reload_connections(settings,&err) 
+                        ? "succeeded.\n" : "failed\n");
+
+    if(err != nullptr)
+    {
+        std::cout<<"Error reloading connections: " << err->message << "\n";
+        g_error_free(err);
+        err = nullptr;
+    }
+    GSList* connections = nm_remote_settings_list_connections(settings);
+    if(!connections)
+    {
+        std::cout << "Found no saved connections!\n";
+        return -1;
+    }
+    int savedCons = 0;
+    for(GSList* iter = connections; iter != nullptr; iter=iter->next)
+    {
+        savedCons++;
+        std::cout << "\nConnection " << savedCons << ":";
+        nmConnectionPrint((NMConnection*) iter->data);
+    }
+    std::cout << "\nFound " << savedCons << " saved connection(s)\n";
+    g_slist_free(connections);
+    connections = nullptr;
+}
 
 /**
  * Loads client and device objects, and starts the signal thread.
  */
 LibNMHandler::LibNMHandler()
 {   
+    nmInfo();
     GLibSignalHandler signalHandler;
     signalHandler.gLibCall([this]()
     {
