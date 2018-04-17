@@ -1,11 +1,28 @@
--Fix the use of glib contexts/data in the wifi thread
+-Build libNM method analysis test code as a minimal second application.
+
+-Research NMRemoteConnection and all connection settings to properly handle 
+ saving and loading wifi connections.
+
+-Remove disconnection signal call from the wifi state manager, instead try
+  only calling it when the active connection changes to null.
+
+-Remove connection signal 
+
+-Add detailed AP info to the connections page.
+
+-Animate connection page transitions.
+
+-Update the HomePage wifi icon to better use new wifi features.
+
+-Build a fully threadsafe signaller/listener pattern for SharedResource objects.
 
 -Finish documenting and formatting AppMenu helper classes.
 
--Look into PolicyKit api for requesting privileges 
-
--Add an optional WifiStateManager::Listener callback specifically for connections
- failed due to an incorrect password.
+-Set password page isn`t hiding the current password field!
+ new password isn't being set either...
+ 
+-Look into PolicyKit api for requesting privileges, add application specific
+  policies for bluetooth and the password file.
 
 -Figure out a way to save calibration data and write it to the right file
  automatically
