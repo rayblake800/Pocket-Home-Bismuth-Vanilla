@@ -17,6 +17,59 @@
 LibNMHandler::LibNMHandler()
 {   
     GLibSignalHandler signalHandler;
+//    Thread::launch([]()
+//    {
+//        GLibSignalHandler signalHandler;
+//        GError* err = nullptr;
+//        DBusGConnection* bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
+//        if(err != nullptr)
+//        {
+//            std::cout<<"DBus connection error: " << err->message << "\n";
+//            g_error_free(err);
+//            err = nullptr;
+//        }
+//        if(!bus)
+//        {
+//            std::cout << "Unable to open DBus connection!\n";
+//        }
+//        NMRemoteSettings* settings = nm_remote_settings_new (bus);
+//        if(!settings)
+//        {
+//            std::cout << "Unable to access remote connection settings!\n";
+//        }
+//
+//        GSList* connections = nullptr;
+//
+//        for(int i = 0; i < 5; i++)
+//        {
+//            signalHandler.gLibCall([&connections, &settings, &err]
+//            {
+//                connections = nm_remote_settings_list_connections(settings);
+//            });
+//            if(connections != nullptr)
+//            {
+//                std::cout << "found connections on attempt " << (i+1) << "\n";
+//                break;
+//            }
+//            sleep(2);
+//        }
+//        if(connections == nullptr)
+//        {
+//            std::cout << "Found no saved connections!\n";
+//        }
+//        int savedCons = 0;
+//        for(GSList* iter = connections; iter != nullptr; iter=iter->next)
+//        {
+//            savedCons++;
+//            std::cout << "\nConnection " << savedCons << ":";
+//            nm_connection_dump((NMConnection*) iter->data);
+//        }
+//        std::cout << "\nFound " << savedCons << " saved connection(s)\n";
+//        g_slist_free(connections);
+//        connections = nullptr;
+//    });
+//    
+//    
     signalHandler.gLibCall([this]()
     {
         GQuark errorQuark = nm_client_error_quark();
@@ -76,54 +129,6 @@ LibNMHandler::LibNMHandler()
         
         buildAPMap();
     });
-    
-    //check saved connections
-    GError* err = nullptr;
-    DBusGConnection* bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
-    if(err != nullptr)
-    {
-        DBG("DBus connection error: " << err->message);
-        g_error_free(err);
-        err = nullptr;
-    }
-    if(!bus)
-    {
-        DBG("Unable to open DBus connection!");
-        return;
-    }
-    NMRemoteSettings* settings = nm_remote_settings_new (bus);
-    if(!settings)
-    {
-        DBG("Unable to access remote connection settings!");
-        return;
-    }
-
-    DBG("Reloading connections "
-              << (nm_remote_settings_reload_connections(settings,&err) 
-                        ? "succeeded.\n" : "failed"));
-
-    if(err != nullptr)
-    {
-        DBG("Error reloading connections: " << err->message);
-        g_error_free(err);
-        err = nullptr;
-    }
-    GSList* connections = nm_remote_settings_list_connections(settings);
-    if(!connections)
-    {
-        DBG("Found no saved connections!");
-        return;
-    }
-    int savedCons = 0;
-    for(GSList* iter = connections; iter != nullptr; iter=iter->next)
-    {
-        savedCons++;
-        DBG("Connection " << savedCons << ":";
-        nm_connection_dump((NMConnection*) iter->data));
-    }
-    DBG("Found " << savedCons << " saved connection(s)");
-    g_slist_free(connections);
-    connections = nullptr;
 }
 
 /**

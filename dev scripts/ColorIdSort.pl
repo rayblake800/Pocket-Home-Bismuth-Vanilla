@@ -15,7 +15,7 @@ use File::Slurp;
 
 if(!defined($ARGV[0]) || !defined($ARGV[1]))
 {
-    die "usage: perl ColourSort.pl [input file] [output file]\n";
+    die "usage: perl ColourIdSort.pl [input file] [output file]\n";
 }
 
 my @defaults = 
