@@ -4793,7 +4793,9 @@
           </df>
         </df>
       </df>
-      <df name="documentation">
+      <df name="dev scripts">
+      </df>
+      <df name="docs">
         <in>ColourIds.h</in>
         <in>SafeSignaler.h</in>
         <in>sorted.cpp</in>
@@ -4820,6 +4822,148 @@
       </df>
       <df name="Source">
         <df name="Components">
+          <df name="Configurable">
+            <in>ConfigurableComponent.cpp</in>
+            <in>ConfigurableComponent.h</in>
+            <in>ConfigurableImageButton.cpp</in>
+            <in>ConfigurableImageButton.h</in>
+            <in>ConfigurableImageComponent.cpp</in>
+            <in>ConfigurableImageComponent.h</in>
+            <in>ConfigurableLabel.cpp</in>
+            <in>ConfigurableLabel.h</in>
+          </df>
+          <df name="Pages">
+            <df name="Advanced Settings Page">
+              <in>AdvancedSettingsPage.cpp</in>
+              <in>AdvancedSettingsPage.h</in>
+            </df>
+            <df name="DateTime Page">
+              <in>DateTimePage.cpp</in>
+              <in>DateTimePage.h</in>
+            </df>
+            <df name="Home Page">
+              <df name="AppMenu">
+                <df name="Menu Editors">
+                  <in>AppMenuPopupEditor.cpp</in>
+                  <in>AppMenuPopupEditor.h</in>
+                  <in>CategoryPopupEditor.cpp</in>
+                  <in>CategoryPopupEditor.h</in>
+                  <in>NewConfigAppEditor.cpp</in>
+                  <in>NewConfigAppEditor.h</in>
+                  <in>NewDesktopAppEditor.cpp</in>
+                  <in>NewDesktopAppEditor.h</in>
+                  <in>NewFolderEditor.cpp</in>
+                  <in>NewFolderEditor.h</in>
+                </df>
+                <df name="Menu Folders">
+                  <in>PageAppFolder.cpp</in>
+                  <in>PageAppFolder.h</in>
+                  <in>ScrollingAppFolder.cpp</in>
+                  <in>ScrollingAppFolder.h</in>
+                </df>
+                <df name="Menu Items">
+                  <in>AppMenuItem.cpp</in>
+                  <in>AppMenuItem.h</in>
+                  <in>AppMenuItemFactory.cpp</in>
+                  <in>AppMenuItemFactory.h</in>
+                  <in>BaseFolderMenuItem.cpp</in>
+                  <in>BaseFolderMenuItem.h</in>
+                  <in>ConfigAppMenuItem.cpp</in>
+                  <in>ConfigAppMenuItem.h</in>
+                  <in>DesktopEntryMenuItem.cpp</in>
+                  <in>DesktopEntryMenuItem.h</in>
+                  <in>FolderMenuItem.cpp</in>
+                  <in>FolderMenuItem.h</in>
+                </df>
+                <df name="Menu Types">
+                  <in>PagedAppMenu.cpp</in>
+                  <in>PagedAppMenu.h</in>
+                  <in>ScrollingAppMenu.cpp</in>
+                  <in>ScrollingAppMenu.h</in>
+                </df>
+                <in>AppMenuButton.cpp</in>
+                <in>AppMenuButton.h</in>
+                <in>AppMenuComponent.cpp</in>
+                <in>AppMenuComponent.h</in>
+                <in>AppMenuFolder.cpp</in>
+                <in>AppMenuFolder.h</in>
+              </df>
+              <df name="Widgets">
+                <in>BatteryIcon.cpp</in>
+                <in>BatteryIcon.h</in>
+                <in>ClockLabel.cpp</in>
+                <in>ClockLabel.h</in>
+                <in>WifiIcon.cpp</in>
+                <in>WifiIcon.h</in>
+              </df>
+              <in>DesktopEntries.cpp</in>
+              <in>DesktopEntries.h</in>
+              <in>DesktopEntry.cpp</in>
+              <in>DesktopEntry.h</in>
+              <in>HomePage.cpp</in>
+              <in>HomePage.h</in>
+              <in>IconThread.cpp</in>
+              <in>IconThread.h</in>
+            </df>
+            <df name="Home Settings Page">
+              <in>HomeSettingsPage.cpp</in>
+              <in>HomeSettingsPage.h</in>
+            </df>
+            <df name="Input Settings Page">
+              <in>InputSettingsPage.cpp</in>
+              <in>InputSettingsPage.h</in>
+              <in>KeybindingPage.cpp</in>
+              <in>KeybindingPage.h</in>
+            </df>
+            <df name="Login Page">
+              <in>LoginPage.cpp</in>
+              <in>LoginPage.h</in>
+            </df>
+            <df name="Password Pages">
+              <in>Password.cpp</in>
+              <in>Password.h</in>
+              <in>RemovePasswordPage.cpp</in>
+              <in>RemovePasswordPage.h</in>
+              <in>SetPasswordPage.cpp</in>
+              <in>SetPasswordPage.h</in>
+            </df>
+            <df name="Power Page">
+              <in>FelPage.cpp</in>
+              <in>FelPage.h</in>
+              <in>PowerPage.cpp</in>
+              <in>PowerPage.h</in>
+            </df>
+            <df name="Settings Page">
+              <in>BluetoothSettingsComponent.cpp</in>
+              <in>BluetoothSettingsComponent.h</in>
+              <in>BluetoothSettingsPage.cpp</in>
+              <in>BluetoothSettingsPage.h</in>
+              <in>ConnectionPage.cpp</in>
+              <in>ConnectionPage.h</in>
+              <in>ConnectionSettingsComponent.cpp</in>
+              <in>ConnectionSettingsComponent.h</in>
+              <in>SettingsPage.cpp</in>
+              <in>SettingsPage.h</in>
+              <in>WifiSettingsComponent.cpp</in>
+              <in>WifiSettingsComponent.h</in>
+              <in>WifiSettingsPage.cpp</in>
+              <in>WifiSettingsPage.h</in>
+            </df>
+            <df name="UI Page">
+              <in>ColourPage.cpp</in>
+              <in>ColourPage.h</in>
+              <in>ComponentEditorPage.cpp</in>
+              <in>ComponentEditorPage.h</in>
+              <in>UIPage.cpp</in>
+              <in>UIPage.h</in>
+            </df>
+            <in>PageComponent.cpp</in>
+            <in>PageComponent.h</in>
+            <in>PageFactory.cpp</in>
+            <in>PageFactory.h</in>
+            <in>PageStackComponent.cpp</in>
+            <in>PageStackComponent.h</in>
+          </df>
           <df name="Widgets">
             <in>ColourPicker.cpp</in>
             <in>ColourPicker.h</in>
@@ -4846,32 +4990,27 @@
             <in>SwitchComponent.cpp</in>
             <in>SwitchComponent.h</in>
           </df>
+          <in>ColourIds.h</in>
           <in>PageComponent.cpp</in>
-          <in>PageComponent.h</in>
           <in>PageStackComponent.cpp</in>
-          <in>PageStackComponent.h</in>
           <in>PocketHomeWindow.cpp</in>
           <in>PocketHomeWindow.h</in>
+          <in>PokeLookAndFeel.cpp</in>
+          <in>PokeLookAndFeel.h</in>
+          <in>RelativeLayoutManager.cpp</in>
+          <in>RelativeLayoutManager.h</in>
         </df>
         <df name="Configuration">
           <df name="Configurables">
             <in>ConfigurableComponent.cpp</in>
-            <in>ConfigurableComponent.h</in>
             <in>ConfigurableImageButton.cpp</in>
-            <in>ConfigurableImageButton.h</in>
             <in>ConfigurableImageComponent.cpp</in>
-            <in>ConfigurableImageComponent.h</in>
             <in>ConfigurableLabel.cpp</in>
-            <in>ConfigurableLabel.h</in>
           </df>
           <in>AppConfigFile.cpp</in>
-          <in>AppConfigFile.h</in>
           <in>ComponentConfigFile.cpp</in>
-          <in>ComponentConfigFile.h</in>
           <in>ConfigFile.cpp</in>
-          <in>ConfigFile.h</in>
           <in>MainConfigFile.cpp</in>
-          <in>MainConfigFile.h</in>
         </df>
         <df name="Hardware">
           <df name="Bluetooth">
@@ -4913,149 +5052,124 @@
             <df name="AppMenu">
               <df name="Menu Editors">
                 <in>AppMenuPopupEditor.cpp</in>
-                <in>AppMenuPopupEditor.h</in>
                 <in>CategoryPopupEditor.cpp</in>
-                <in>CategoryPopupEditor.h</in>
                 <in>NewConfigAppEditor.cpp</in>
-                <in>NewConfigAppEditor.h</in>
                 <in>NewDesktopAppEditor.cpp</in>
-                <in>NewDesktopAppEditor.h</in>
                 <in>NewFolderEditor.cpp</in>
-                <in>NewFolderEditor.h</in>
               </df>
               <df name="Menu Folders">
                 <in>PageAppFolder.cpp</in>
-                <in>PageAppFolder.h</in>
                 <in>ScrollingAppFolder.cpp</in>
-                <in>ScrollingAppFolder.h</in>
               </df>
               <df name="Menu Items">
                 <in>AppMenuItem.cpp</in>
-                <in>AppMenuItem.h</in>
                 <in>AppMenuItemFactory.cpp</in>
-                <in>AppMenuItemFactory.h</in>
                 <in>BaseFolderMenuItem.cpp</in>
-                <in>BaseFolderMenuItem.h</in>
                 <in>ConfigAppMenuItem.cpp</in>
-                <in>ConfigAppMenuItem.h</in>
                 <in>DesktopEntryMenuItem.cpp</in>
-                <in>DesktopEntryMenuItem.h</in>
                 <in>FolderMenuItem.cpp</in>
-                <in>FolderMenuItem.h</in>
               </df>
               <df name="Menu Types">
                 <in>PagedAppMenu.cpp</in>
-                <in>PagedAppMenu.h</in>
                 <in>ScrollingAppMenu.cpp</in>
-                <in>ScrollingAppMenu.h</in>
               </df>
               <in>AppMenuButton.cpp</in>
-              <in>AppMenuButton.h</in>
               <in>AppMenuComponent.cpp</in>
-              <in>AppMenuComponent.h</in>
               <in>AppMenuFolder.cpp</in>
-              <in>AppMenuFolder.h</in>
             </df>
             <df name="Widgets">
               <in>BatteryIcon.cpp</in>
-              <in>BatteryIcon.h</in>
               <in>ClockLabel.cpp</in>
-              <in>ClockLabel.h</in>
               <in>WifiIcon.cpp</in>
-              <in>WifiIcon.h</in>
             </df>
             <in>DesktopEntries.cpp</in>
-            <in>DesktopEntries.h</in>
             <in>DesktopEntry.cpp</in>
-            <in>DesktopEntry.h</in>
             <in>HomePage.cpp</in>
-            <in>HomePage.h</in>
             <in>IconThread.cpp</in>
-            <in>IconThread.h</in>
           </df>
           <df name="Input Settings Page">
             <in>InputSettingsPage.cpp</in>
-            <in>InputSettingsPage.h</in>
             <in>KeybindingPage.cpp</in>
-            <in>KeybindingPage.h</in>
           </df>
           <df name="Password Pages">
             <in>Password.cpp</in>
-            <in>Password.h</in>
             <in>RemovePasswordPage.cpp</in>
-            <in>RemovePasswordPage.h</in>
             <in>SetPasswordPage.cpp</in>
-            <in>SetPasswordPage.h</in>
           </df>
           <df name="Power Page">
             <in>FelPage.cpp</in>
-            <in>FelPage.h</in>
             <in>PowerPage.cpp</in>
-            <in>PowerPage.h</in>
           </df>
           <df name="Settings Page">
             <in>BluetoothSettingsComponent.cpp</in>
-            <in>BluetoothSettingsComponent.h</in>
             <in>BluetoothSettingsPage.cpp</in>
-            <in>BluetoothSettingsPage.h</in>
             <in>ConnectionPage.cpp</in>
-            <in>ConnectionPage.h</in>
             <in>ConnectionSettingsComponent.cpp</in>
-            <in>ConnectionSettingsComponent.h</in>
             <in>SettingsPage.cpp</in>
-            <in>SettingsPage.h</in>
             <in>WifiSettingsComponent.cpp</in>
-            <in>WifiSettingsComponent.h</in>
             <in>WifiSettingsPage.cpp</in>
-            <in>WifiSettingsPage.h</in>
           </df>
           <df name="UI Page">
             <in>ColourPage.cpp</in>
-            <in>ColourPage.h</in>
             <in>ComponentEditorPage.cpp</in>
-            <in>ComponentEditorPage.h</in>
             <in>UIPage.cpp</in>
-            <in>UIPage.h</in>
           </df>
           <in>AdvancedSettingsPage.cpp</in>
-          <in>AdvancedSettingsPage.h</in>
           <in>DateTimePage.cpp</in>
-          <in>DateTimePage.h</in>
           <in>HomeSettingsPage.cpp</in>
-          <in>HomeSettingsPage.h</in>
           <in>LoginPage.cpp</in>
-          <in>LoginPage.h</in>
         </df>
-        <df name="Threads and Memory">
+        <df name="Shared Resources">
+          <df name="Config Files">
+            <in>AppConfigFile.cpp</in>
+            <in>AppConfigFile.h</in>
+            <in>ComponentConfigFile.cpp</in>
+            <in>ComponentConfigFile.h</in>
+            <in>ConfigFile.cpp</in>
+            <in>ConfigFile.h</in>
+            <in>MainConfigFile.cpp</in>
+            <in>MainConfigFile.h</in>
+          </df>
+          <in>AssetFiles.cpp</in>
+          <in>AssetFiles.h</in>
           <in>GLibSignalHandler.cpp</in>
           <in>GLibSignalHandler.h</in>
+          <in>GLibThread.cpp</in>
+          <in>GLibThread.h</in>
           <in>ResourceManager.cpp</in>
           <in>ResourceManager.h</in>
         </df>
+        <df name="Threads and Memory">
+          <in>GLibSignalHandler.cpp</in>
+          <in>ResourceManager.cpp</in>
+        </df>
+        <df name="Util">
+          <in>AppLauncher.cpp</in>
+          <in>AppLauncher.h</in>
+          <in>Localized.cpp</in>
+          <in>Localized.h</in>
+          <in>TempTimer.cpp</in>
+          <in>TempTimer.h</in>
+          <in>Utils.cpp</in>
+          <in>Utils.h</in>
+          <in>WindowFocus.cpp</in>
+          <in>WindowFocus.h</in>
+          <in>WindowFocusedTimer.cpp</in>
+          <in>WindowFocusedTimer.h</in>
+        </df>
         <in>AppLauncher.cpp</in>
-        <in>AppLauncher.h</in>
         <in>AssetFiles.cpp</in>
-        <in>AssetFiles.h</in>
-        <in>ColourIds.h</in>
         <in>Localized.cpp</in>
-        <in>Localized.h</in>
         <in>Main.cpp</in>
         <in>PageFactory.cpp</in>
-        <in>PageFactory.h</in>
         <in>PocketHomeApplication.cpp</in>
         <in>PocketHomeApplication.h</in>
         <in>PokeLookAndFeel.cpp</in>
-        <in>PokeLookAndFeel.h</in>
         <in>RelativeLayoutManager.cpp</in>
-        <in>RelativeLayoutManager.h</in>
         <in>TempTimer.cpp</in>
-        <in>TempTimer.h</in>
         <in>Utils.cpp</in>
-        <in>Utils.h</in>
         <in>WindowFocus.cpp</in>
-        <in>WindowFocus.h</in>
         <in>WindowFocusedTimer.cpp</in>
-        <in>WindowFocusedTimer.h</in>
       </df>
     </df>
     <itemPath>assets/configuration/apps.json</itemPath>

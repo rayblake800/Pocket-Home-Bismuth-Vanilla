@@ -9,6 +9,7 @@
 #include <nm-client.h>
 #include <nm-device.h>
 #include <nm-device-wifi.h>
+#include <nm-remote-connection.h>
 #include "JuceHeader.h"
 #include "WifiAccessPoint.h"
 #include "GLibSignalHandler.h"
@@ -184,7 +185,16 @@ protected:
      */
     void disconnectSignalHandlers();
 
-private:
+private:  
+    /**
+     * Loads the list of all saved network connections as a GSList* of 
+     * NMRemoteConnection* objects.
+     * 
+     * @return  the list of saved connections. The list object will need to be
+     *          freed with g_slist_free.
+     */
+    GSList* getSavedConnections();
+    
     //Internal signal handlers:
     
     static void handleConnectionAttempt(
@@ -302,6 +312,7 @@ private:
     
     NMActiveConnection* activatingConn = nullptr;
     
+    Array<NMRemoteConnection*> savedConnections;
     
     Array<WifiAccessPoint::Ptr, CriticalSection> visibleAPs;
 
