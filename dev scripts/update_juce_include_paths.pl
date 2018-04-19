@@ -1,4 +1,4 @@
-#!usr/bin/perl
+#!/usr/bin/perl
 use strict;
 use warnings;
 use File::Find;
@@ -59,8 +59,8 @@ my $juceFile = read_file($juceFileName);
 $juceFile =~ s/headerPath=".*?"/$headerPath/;
 foreach my $codeFile(keys %codeFiles)
 {
-    my $fileMatch = "file=\".*?$codeFile\"";
-    $juceFile =~ s/$fileMatch/file="$codeFiles{$codeFile}"/;
+    my $fileMatch = "file=\".*?\/$codeFile\"";
+    $juceFile =~ s/$fileMatch/file="$codeFiles{$codeFile}"/g;
 }
 
 write_file($juceFileName, $juceFile);

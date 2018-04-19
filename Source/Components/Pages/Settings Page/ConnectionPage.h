@@ -14,7 +14,7 @@
 #pragma once
 #include "ScalingLabel.h"
 #include "SwitchComponent.h"
-#include "Configuration/Configurables/ConfigurableImageButton.h"
+#include "ConfigurableImageButton.h"
 #include "RelativeLayoutManager.h"
 #include "PageComponent.h"
 #include "PageStackComponent.h"

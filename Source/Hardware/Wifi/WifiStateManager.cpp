@@ -1,5 +1,5 @@
 #include "WifiStateManager.h"
-#include "Threads and Memory/GLibSignalHandler.h"
+#include "GLibSignalHandler.h"
 
 ScopedPointer<ResourceManager::SharedResource>
         WifiStateManager::sharedResource = nullptr;

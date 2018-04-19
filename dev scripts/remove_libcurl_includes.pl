@@ -11,4 +11,4 @@ use File::Slurp;
 chdir("../Builds/LinuxMakefile");
 my $file = read_file("./Makefile") or die "Can't read from makefile!";
 $file =~ s/\s?libcurl//g;
-write_file("./Makefile", $file_);
+write_file("./Makefile", $file);

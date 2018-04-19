@@ -4,7 +4,7 @@
               bundleIdentifier="co.nextthing.PokeLaunch" includeBinaryInAppConfig="1"
               jucerVersion="5.3.0" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
               displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
-              companyCopyright="Next Thing Co." headerPath="../../Source/Components/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Components/Pages/Home Settings Page&#10;../../Source/Components/Pages/DateTime Page&#10;../../Source/Components/Pages/Input Settings Page&#10;../../Source/Components/Pages/Power Page&#10;../../Source/Hardware&#10;../../Source/Hardware/Bluetooth&#10;../../Source&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Components/Pages/Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Components&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components/Configurable&#10;../../Source/Components/Pages&#10;../../Source/Shared Resources/Config Files&#10;../../Source/Hardware/Wifi&#10;../../Source/Components/Pages/Advanced Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Pages/UI Page&#10;../../Source/Components/Pages/Password Pages&#10;../../Source/Components/Widgets&#10;../../Source/Util&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Shared Resources">
+              companyCopyright="Next Thing Co." headerPath="../../Source/Components/Pages/Power Page&#10;../../Source/Shared Resources/Config Files&#10;../../Source/Hardware/Bluetooth&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Hardware/Wifi&#10;../../Source/Components/Pages/UI Page&#10;../../Source/Components/Pages&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/Components/Pages/Settings Page&#10;../../Source/Components/Pages/Password Pages&#10;../../Source/Components/Widgets&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Shared Resources&#10;../../Source/Components/Pages/Advanced Settings Page&#10;../../Source&#10;../../Source/Hardware&#10;../../Source/Components/Pages/Home Settings Page&#10;../../Source/Components&#10;../../Source/Components/Pages/DateTime Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Configurable&#10;../../Source/Components/Pages/Input Settings Page&#10;../../Source/Util&#10;../../Source/Components/Pages/Home Page/Widgets">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
       <FILE id="lJvIsl" name="bluetooth.json" compile="0" resource="1" file="assets/bluetooth.json"/>
@@ -56,9 +56,10 @@
           <FILE id="QBJM6w" name="PageStackComponent.h" compile="0" resource="0"
                 file="Source/Components/Pages/PageStackComponent.h"/>
           <GROUP id="{B5396474-9A96-3F76-A4DD-245BBA9C9B71}" name="Advanced Settings Page">
-            <FILE id="zZK08d" name="SettingsPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Settings Page/SettingsPage.cpp"/>
-            <FILE id="wdC2BA" name="SettingsPage.h" compile="0" resource="0" file="Source/Components/Pages/Settings Page/SettingsPage.h"/>
+            <FILE id="zZK08d" name="AdvancedSettingsPage.cpp" compile="1" resource="0"
+                  file="Source/Components/Pages/Advanced Settings Page/AdvancedSettingsPage.cpp"/>
+            <FILE id="wdC2BA" name="AdvancedSettingsPage.h" compile="0" resource="0"
+                  file="Source/Components/Pages/Advanced Settings Page/AdvancedSettingsPage.h"/>
           </GROUP>
           <GROUP id="{E702239B-7008-C6A8-2BDF-F6378B0C9C21}" name="DateTime Page">
             <FILE id="Fu5GTF" name="DateTimePage.cpp" compile="1" resource="0"
@@ -206,8 +207,8 @@
             <FILE id="suprkG" name="ConnectionPage.h" compile="0" resource="0"
                   file="Source/Components/Pages/Settings Page/ConnectionPage.h"/>
             <FILE id="W2VIIg" name="SettingsPage.cpp" compile="1" resource="0"
-                  file="Source/Pages/Settings Page/SettingsPage.cpp"/>
-            <FILE id="H7JAkN" name="SettingsPage.h" compile="0" resource="0" file="Source/Pages/SettingsPage/SettingsPage.h"/>
+                  file="Source/Components/Pages/Settings Page/SettingsPage.cpp"/>
+            <FILE id="H7JAkN" name="SettingsPage.h" compile="0" resource="0" file="Source/Components/Pages/Settings Page/SettingsPage.h"/>
             <FILE id="ZVuYHM" name="WifiSettingsComponent.cpp" compile="1" resource="0"
                   file="Source/Components/Pages/Settings Page/WifiSettingsComponent.cpp"/>
             <FILE id="geUCyF" name="WifiSettingsComponent.h" compile="0" resource="0"
@@ -284,8 +285,10 @@
                 file="Source/Components/Widgets/IconSliderComponent.h"/>
           <FILE id="GfQ0Qz" name="ListEditor.cpp" compile="1" resource="0" file="Source/Components/Widgets/ListEditor.cpp"/>
           <FILE id="YGFPYR" name="ListEditor.h" compile="0" resource="0" file="Source/Components/Widgets/ListEditor.h"/>
-          <FILE id="O5mqRG" name="Spinner.cpp" compile="1" resource="0" file="Source/Components/Widgets/Spinner.cpp"/>
-          <FILE id="MSrLBn" name="Spinner.h" compile="0" resource="0" file="Source/Components/Widgets/Spinner.h"/>
+          <FILE id="NV9tl6" name="OverlaySpinner.cpp" compile="1" resource="0"
+                file="Source/Components/Widgets/OverlaySpinner.cpp"/>
+          <FILE id="aDFc9T" name="OverlaySpinner.h" compile="0" resource="0"
+                file="Source/Components/Widgets/OverlaySpinner.h"/>
           <FILE id="JajILW" name="PopupEditorComponent.cpp" compile="1" resource="0"
                 file="Source/Components/Widgets/PopupEditorComponent.cpp"/>
           <FILE id="PieSFW" name="PopupEditorComponent.h" compile="0" resource="0"
@@ -410,7 +413,7 @@
     </XCODE_MAC>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile" cppLanguageStandard="-std=c++11"
                 extraDefs="" extraLinkerFlags="" externalLibraries="" extraCompilerFlags=""
-                linuxExtraPkgConfig="NetworkManager libnm-glib alsa freetype2 libssl gio-2.0"
+                linuxExtraPkgConfig="NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 dbus-1"
                 enableGNUExtensions="1">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
