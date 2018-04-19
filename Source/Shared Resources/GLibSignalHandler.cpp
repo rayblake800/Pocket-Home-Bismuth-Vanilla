@@ -42,6 +42,8 @@ void GLibSignalHandler::gLibCall(std::function<void() > fn)
     const ScopedLock accessLock(threadLock);
     GLibDefaultThread* thread 
             = static_cast<GLibDefaultThread*> (globalThread.get());
+    //synchronous calls will lock the thread themselves
+    const ScopedUnlock callUnlock(threadLock);
     thread->call(fn);
 }
 
