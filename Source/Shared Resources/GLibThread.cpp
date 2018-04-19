@@ -98,7 +98,7 @@ void GLibThread::run()
     if (context != nullptr)
     {
         mainLoop = g_main_loop_new(context, false);
-        g_main_context_acquire(context);
+        g_main_context_push_thread_default(context);
                
         g_main_loop_run(mainLoop);
         

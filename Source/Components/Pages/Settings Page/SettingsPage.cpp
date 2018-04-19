@@ -4,15 +4,6 @@
 #include "PokeLookAndFeel.h"
 #include "SettingsPage.h"
 
-
-#include <nm-remote-connection.h>
-#include <glib-2.0/glib/gerror.h>
-#include <glib-2.0/glib/garray.h>
-#include "LibNMHandler.h"
-#include <libnm-glib/nm-remote-settings.h>
-#include <nm-connection.h>
-#include <glib-2.0/glib/gslist.h>
-
 SettingsPage::SettingsPage() :
 Localized("SettingsPage"),
 WindowFocusedTimer("SettingsPage"),
