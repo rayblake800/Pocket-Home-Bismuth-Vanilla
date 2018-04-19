@@ -1,8 +1,8 @@
 /**
  * @file GLibSignalHandler.h
  * 
- * @brief GLibSignalHandler runs the event loop used to send and receive GLib 
- *         signals.
+ * @brief GLibSignalHandler runs the main event loop used to send and receive 
+ *        GLib signals.
  * 
  * On creation, this starts up a GLib event thread to handle events on the
  * global-default GMainContext, where libNM and other GLib libraries send
@@ -26,6 +26,7 @@
 #include <condition_variable>
 
 #include "gio/gio.h"
+#include "GLibThread.h"
 #include "ResourceManager.h"
 #include "JuceHeader.h"
 
@@ -39,12 +40,12 @@ public:
     virtual ~GLibSignalHandler() { }
     
     /**
-     * Returns true if it's being executed on the GLib event thread.
+     * Returns true if it's being executed on the GLib default event thread.
      */
     bool runningOnGLibThread();
 
     /**
-     * Asynchronously run a function once on the GLib event loop.
+     * Asynchronously run a function once on the default GLib event loop.
      * 
      * @param fn   A function that needs to run on the GLib event loop.
      */
@@ -52,7 +53,7 @@ public:
 
 
     /**
-     * Run a function on the GLib event loop, yielding until the function
+     * Run a function on the GLib event loop, waiting until the function
      * has finished.
      * 
      * @param fn  A function that needs to run on the GLib event loop.
@@ -62,59 +63,16 @@ public:
 
 private:
 
-    class GLibThread : public SharedResource, public Thread
+    class GLibDefaultThread : public SharedResource, public GLibThread
     {
     public:
 
         /**
          * Initializes and starts the main GLib event loop on its own thread.
          */
-        GLibThread();
-
-        /**
-         * Stops the event loop thread and cleans up all GLib resources.
-         */
-        virtual ~GLibThread();
-
-        /**
-         * Adds a function to the GMainContext so it will execute on the event
-         * thread.
-         * 
-         * @param call         The function to run.
-         * 
-         * @param callerMutex  If this value is non-null, the event thread will
-         *                     lock it while running this call.
-         * 
-         * @param callPending  If this value is non-null, the event thread will
-         *                     use it and callerMutex to wake up the calling
-         *                     thread after running the call.
-         */
-        void addAndInitCall(std::function<void() > call,
-                std::mutex* callerMutex = nullptr,
-                std::condition_variable* callPending = nullptr);
-
-        /**
-         * Runs the GLib main loop.
-         */
-        void run() override;
+        GLibDefaultThread();
         
-        struct CallData
-        {
-            std::function<void() > call;
-            GSource* callSource;
-            std::mutex* callerMutex;
-            std::condition_variable* callPending;
-        };
-        
-    private:
-
-        /**
-         * Callback function used to execute arbitrary functions on the 
-         * GMainLoop.
-         */
-        static gboolean runAsync(CallData* runData);
-
-        GMainLoop* mainLoop = nullptr;
+        virtual ~GLibDefaultThread() { }
     };
 
     static ScopedPointer<SharedResource> globalThread;
