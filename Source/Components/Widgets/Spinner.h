@@ -1,15 +1,17 @@
-/**
- * @file Spinner.h
- * 
- * Spinner is a Component that shows a small spinning circle animation meant to
- * be used as a loading indicator.  Spinner only animates while visible, and
- * can be set to automatically lose visibility after a set amount of time.
- */
-
 #pragma once
 #include "ConfigurableImageComponent.h"
 #include "WindowFocusedTimer.h"
 #include "JuceHeader.h"
+
+/**
+ * @file Spinner.h
+ * 
+ * @brief A Component that shows a small spinning circle animation meant to
+ * be used as a loading indicator.  
+ * 
+ * Spinner only animates while visible, and
+ * can be set to automatically lose visibility after a set amount of time.
+ */
 
 class Spinner : public ConfigurableImageComponent, private WindowFocusedTimer {
 public:

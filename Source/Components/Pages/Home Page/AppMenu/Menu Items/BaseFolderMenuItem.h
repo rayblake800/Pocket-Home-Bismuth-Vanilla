@@ -1,15 +1,16 @@
+#pragma once
+#include "AppMenuItemFactory.h"
+#include "AppMenuItem.h"
+
 /**
  * @file BaseFolderMenuItem.h
  * 
- * BaseFolderMenuItem is an AppMenuItem that represents the base list
+ * @brief BaseFolderMenuItem is an AppMenuItem that represents the base list
  * of favorite application shortcuts and folders defined in AppConfigFile.
  * 
  * @see AppMenuItem, AppConfigFile
  * 
  */
-#pragma once
-#include "AppMenuItemFactory.h"
-#include "AppMenuItem.h"
 
 class BaseFolderMenuItem : public AppMenuItem
 {

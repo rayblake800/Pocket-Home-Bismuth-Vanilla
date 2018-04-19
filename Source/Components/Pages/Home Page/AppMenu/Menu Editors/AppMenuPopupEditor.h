@@ -1,9 +1,3 @@
-/**
- * @file AppMenuPopupEditor.h
- * 
- * AppMenuPopupEditor is a pop-up editor that provides a user interface for
- * editing application and folder data.
- */
 #pragma once
 #include "RelativeLayoutManager.h"
 #include "ListEditor.h"
@@ -15,8 +9,12 @@
 #include "SwitchComponent.h"
 
 /**
- * TODO:
- * - Consider adding a description TextEdit field
+ * @file AppMenuPopupEditor.h
+ * 
+ * @brief AppMenuPopupEditor is a pop-up editor that provides a user interface 
+ * for editing application and folder data.
+ *
+ * TODO Consider adding a description TextEdit field
  */
 
 class IconThread;

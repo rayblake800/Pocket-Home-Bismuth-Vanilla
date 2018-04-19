@@ -1,15 +1,17 @@
+#pragma once
+#include "ComponentConfigFile.h"
+
 /**
  * @file ConfigurableComponent.h
  * 
- * ConfigurableComponent applies properties set in a ComponentConfigFile
- * to a component, updating those properties as necessary.  This may set the
- * component size and position relative to the window, change component asset 
- * files, and/or change image color values.
+ * @brief ConfigurableComponent applies properties set in a ComponentConfigFile
+ * to a component, updating those properties as necessary.  
+ * 
+ * This may set the component size and position relative to the window, change 
+ * component asset files, and/or change image color values.
  * 
  * @see ComponentConfigFile.h
  */
-#pragma once
-#include "ComponentConfigFile.h"
 
 class ConfigurableComponent : public ConfigFile::Listener
 {

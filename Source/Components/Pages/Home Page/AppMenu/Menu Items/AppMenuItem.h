@@ -1,9 +1,16 @@
-/* 
+#pragma once
+#include "DesktopEntry.h"
+#include "IconThread.h"
+#include "Localized.h"
+#include "AppMenuPopupEditor.h"
+
+/**
  * @file AppMenuItem.h
  *
- *  AppMenuItem handles the menu data for an AppMenuButton.  It provides
- * all custom data displayed by the button, including data needed for
- * handling button clicks and editing this data and its button. 
+ * @brief AppMenuItem handles the menu data for an AppMenuButton.  
+ * 
+ * It provides all custom data displayed by the button, including data needed 
+ * for handling button clicks and editing this data and its button. 
  * 
  *  Methods that edit this menu data are only accessible to AppMenuButton 
  * objects, as each menu item should only be directly modified by its 
@@ -11,12 +18,6 @@
  * String::empty by default. Inheriting classes are responsible for overriding
  * these to provide accurate data.
  */
-
-#pragma once
-#include "DesktopEntry.h"
-#include "IconThread.h"
-#include "Localized.h"
-#include "AppMenuPopupEditor.h"
 
 class AppMenuItem : public ReferenceCountedObject,
 public ConfigFile::Listener

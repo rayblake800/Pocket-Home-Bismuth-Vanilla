@@ -1,3 +1,6 @@
+#pragma once
+#include "JuceHeader.h"
+
 /**
  * @file ResourceManager.h
  *
@@ -26,8 +29,6 @@
  * 4. ResourceManagers and SharedResources must never have any circular 
  *    dependencies.
  */
-#pragma once
-#include "JuceHeader.h"
 
 class ResourceManager
 {

@@ -1,10 +1,3 @@
-/**
- * @file PocketHomeApplication.h
- * 
- * PocketHomeApplication is the base application class that initializes and
- * shuts down the program.
- */
-
 #pragma once
 #include "JuceHeader.h"
 #include "PocketHomeWindow.h"
@@ -12,6 +5,13 @@
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
 #include "GLibSignalHandler.h"
+
+/**
+ * @file PocketHomeApplication.h
+ * 
+ * PocketHomeApplication is the base application class that initializes and
+ * shuts down the program.
+ */
 
 class PocketHomeApplication : public JUCEApplication
 {
@@ -76,7 +76,7 @@ private:
     //Runs the GLib event loop
     GLibSignalHandler gLibThread;
     
-    //The program appearance man ager.  This is dynamically allocated because it
+    //The program appearance manager.  This is dynamically allocated because it
     //should be created after/destroyed before all of the above resources.
     ScopedPointer<PokeLookAndFeel> lookAndFeel = nullptr;
     

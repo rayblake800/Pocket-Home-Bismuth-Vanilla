@@ -1,13 +1,14 @@
-/*
- * @file AppMenuItemFactory
- * 
- * Given a data source, AppMenuItemFactory will initialize and return an
- * AppMenuItem of the appropriate derived class.
- */
 #pragma once
 #include "JuceHeader.h"
 #include "DesktopEntries.h"
 #include "AppMenuItem.h"
+
+/**
+ * @file AppMenuItemFactory
+ * 
+ * @brief Given a data source, AppMenuItemFactory will initialize and return an
+ * AppMenuItem of the appropriate derived class.
+ */
 
 class AppMenuItemFactory : public AppMenuItem::FactoryInterface{
 public:

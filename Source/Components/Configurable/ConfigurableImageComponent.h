@@ -1,13 +1,13 @@
-/**
- * @file ConfigurableImageComponent
- * 
- * ConfigurableImageComponent defines a DrawableImageComponent with properties
- * set in the ComponentConfigFile.
- */
-
 #pragma once
 #include "ConfigurableComponent.h"
 #include "DrawableImageComponent.h"
+
+/**
+ * @file ConfigurableImageComponent
+ * 
+ * @brief ConfigurableImageComponent defines a DrawableImageComponent with 
+ * properties set in the ComponentConfigFile.
+ */
 
 class ConfigurableImageComponent : public DrawableImageComponent,
 public ConfigurableComponent

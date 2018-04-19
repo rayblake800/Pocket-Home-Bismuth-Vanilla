@@ -1,7 +1,7 @@
 /**
  * @file PageAppFolder.h
  * 
- * PageAppFolder organizes one folder of an application menu as 
+ * @brief PageAppFolder organizes one folder of an application menu as 
  * a grid of menu icons, divided into horizontal scrolling pages.
  */
 

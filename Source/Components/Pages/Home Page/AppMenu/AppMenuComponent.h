@@ -1,15 +1,3 @@
-/* 
- * @file   AppMenuComponent.h
- *
- * AppMenuComponent is a scrolling application menu that loads its
- * contents from system .Desktop files and an AppConfigFile object.
- * The menu is divided into folders, which can contain different sets of menu 
- * buttons to launch applications or open sub-folders.  The user can navigate
- * through these folders and select menu items to launch applications or open
- * new folders.  The menu also provides controls for adding, editing, and 
- * deleting menu entries.
- */
-
 #pragma once
 #include <set>
 #include <atomic>
@@ -27,6 +15,20 @@
 #include "AppMenuItemFactory.h"
 #include "AppMenuFolder.h"
 #include "AppMenuButton.h"
+
+/** 
+ * @file   AppMenuComponent.h
+ *
+ * @brief AppMenuComponent is a scrolling application menu that loads its
+ * contents from system .Desktop files and an AppConfigFile object.
+ * 
+ * The menu is divided into folders, which can contain different sets of menu 
+ * buttons to launch applications or open sub-folders.  The user can navigate
+ * through these folders and select menu items to launch applications or open
+ * new folders.  The menu also provides controls for adding, editing, and 
+ * deleting menu entries.
+ */
+
 
 class AppMenuComponent : public Component, public ConfigurableComponent,
 private WindowFocus::Listener

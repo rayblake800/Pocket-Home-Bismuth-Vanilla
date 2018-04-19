@@ -1,13 +1,13 @@
-/**
- * @file CategoryPopupEditor.h
- * 
- * CategoryPopupEditor provides a user interface for editing a list of category
- * strings.
- */
-
 #pragma once
 #include "ListEditor.h"
 #include "PopupEditorComponent.h"
+
+/**
+ * @file CategoryPopupEditor.h
+ * 
+ * @brief CategoryPopupEditor provides a user interface for editing a list of 
+ * category strings.
+ */
 
 class CategoryPopupEditor : public PopupEditorComponent
 {

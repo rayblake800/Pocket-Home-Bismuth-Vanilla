@@ -1,17 +1,20 @@
-/* 
- * @file AppMenuButton.h
- * 
- * AppMenuButton is a custom button type for launching applications and 
- * opening application directories. Each button displays an icon and a title.
- * Each button has an associated AppMenuItem that can be used for accessing and 
- * modifying the button's menu data.  
- * @see AppMenuComponent, AppMenuItem
- */
-
 #pragma once
 #include "ConfigurableComponent.h"
 #include "AppMenuPopupEditor.h"
 #include "AppMenuItem.h"
+
+/** 
+ * @file AppMenuButton.h
+ * 
+ * @brief AppMenuButton is a custom button type for launching applications and 
+ * opening application directories. 
+ * 
+ * Each button displays an icon and a title.
+ * Each button has an associated AppMenuItem that can be used for accessing and 
+ * modifying the button's menu data.  
+ * 
+ * @see AppMenuComponent, AppMenuItem
+ */
 
 class AppMenuButton : public Button, public ReferenceCountedObject
 {

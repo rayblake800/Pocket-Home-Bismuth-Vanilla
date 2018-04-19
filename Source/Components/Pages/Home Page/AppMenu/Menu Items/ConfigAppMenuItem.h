@@ -1,16 +1,19 @@
-/**
- * @file ConfigAppMenuItem.h
- * 
- * ConfigAppMenuItem is an AppMenuItem that gets its data from a 
- * AppConfigFile::AppItem structure. It represents an application link that
- * was read from the apps.json config file.
- * 
- * @see AppMenuItem, AppMenuComponent, AppConfigFile
- */
 #pragma once
 #include "Localized.h"
 #include "IconThread.h"
 #include "AppMenuItem.h"
+
+/**
+ * @file ConfigAppMenuItem.h
+ * 
+ * @brief ConfigAppMenuItem is an AppMenuItem that gets its data from a 
+ * AppConfigFile::AppItem structure. 
+ * 
+ * It represents an application link that
+ * was read from the apps.json config file.
+ * 
+ * @see AppMenuItem, AppMenuComponent, AppConfigFile
+ */
 
 class ConfigAppMenuItem : public AppMenuItem, private Localized {
 public:

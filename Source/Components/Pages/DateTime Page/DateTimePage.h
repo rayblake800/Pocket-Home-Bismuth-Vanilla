@@ -1,9 +1,3 @@
-/**
- * @file DateTimePage.h
- * 
- * DateTimePage is a UI page component that allows the user to change
- * the clock display mode and adjust system time.
- */
 #pragma once
 #include "JuceHeader.h"
 #include "Localized.h"
@@ -12,6 +6,13 @@
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
 #include "PageComponent.h"
+
+/**
+ * @file DateTimePage.h
+ * 
+ * @brief DateTimePage is a UI page component that allows the user to change
+ * the clock display mode and adjust system time.
+ */
 
 class DateTimePage : public PageComponent, private ComboBox::Listener,
 private Localized

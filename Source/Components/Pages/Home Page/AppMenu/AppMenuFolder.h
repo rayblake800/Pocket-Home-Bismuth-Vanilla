@@ -1,15 +1,15 @@
-/**
- * @file AppMenuFolder.h 
- * 
- * AppMenuFolder components organize and manage one folder in an
- * AppMenuComponent.
- */
-
 #pragma once
 #include "JuceHeader.h"
 #include "RelativeLayoutManager.h"
 #include "AppMenuItem.h"
 #include "AppMenuButton.h"
+
+/**
+ * @file AppMenuFolder.h 
+ * 
+ * @brief AppMenuFolder components organize and manage one folder in an
+ * AppMenuComponent.
+ */
 
 class AppMenuFolder : public Component
 {

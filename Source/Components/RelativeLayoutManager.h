@@ -1,12 +1,14 @@
+#pragma once
+#include "JuceHeader.h"
+
 /**
  * @file RelativeLayoutManager.h
  * 
- * RelativeLayoutManager arranges components in an arbitrary bounding rectangle.
+ * @brief Arranges components in an arbitrary bounding rectangle.
+ * 
  * Components are arranged into rows and resized to fit the available space,
  * with weight values determining their sizes in proportion to each other.
  */
-#pragma once
-#include "JuceHeader.h"
 
 class RelativeLayoutManager
 {

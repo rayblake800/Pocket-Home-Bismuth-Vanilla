@@ -1,11 +1,12 @@
-/*
- * @file ScrollingAppFolder.h
- * 
- * ScrollingAppFolder is a menu folder component that arranges menu buttons
- * into a vertical scrolling list.
- */
 #pragma once
 #include "AppMenuFolder.h"
+
+/**
+ * @file ScrollingAppFolder.h
+ * 
+ * @brief ScrollingAppFolder is a menu folder component that arranges menu 
+ * buttons into a vertical scrolling list.
+ */
 
 class ScrollingAppFolder : public AppMenuFolder
 {

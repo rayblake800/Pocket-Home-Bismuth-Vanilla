@@ -643,7 +643,7 @@ GSList* LibNMHandler::getSavedConnections()
     }
     connThread.call([&savedConnections, &settings, &err]
     {
-        DBG("Loading saved connections");
+        //DBG("Loading saved connections");
         savedConnections = nm_remote_settings_list_connections(settings);
     });
     if(savedConnections == nullptr)

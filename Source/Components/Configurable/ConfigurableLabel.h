@@ -1,13 +1,13 @@
-/**
- * @File ConfigurableLabel.h
- * 
- * ConfigurableLabel is a scaling label that sets its properties from the
- * component configuration file.
- */
-
 #pragma once
 #include "ScalingLabel.h"
 #include "ConfigurableComponent.h"
+
+/**
+ * @file ConfigurableLabel.h
+ * 
+ * @brief ConfigurableLabel is a scaling label that sets its properties from the
+ * component configuration file.
+ */
 
 class ConfigurableLabel : public ScalingLabel, public ConfigurableComponent {
 public:
@@ -18,7 +18,7 @@ public:
      *  
      * @param labelText     The initial label display text.
      *
-     *  @param fontPadding  The font height will not exceed 
+     * @param fontPadding  The font height will not exceed 
      *                       (getHeight() - fontPadding).
      */
     ConfigurableLabel(String componentKey,

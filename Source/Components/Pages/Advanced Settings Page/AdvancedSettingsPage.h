@@ -1,14 +1,15 @@
-/**
- * @file AdvancedSettingsPage.h
- * 
- * AdvancedSettingsPage is a navigation page containing buttons that open
- * other settings pages.
- */
 #pragma once
 #include "PageComponent.h"
 #include "Localized.h"
 #include "ConfigurableImageButton.h"
 #include "ScalingLabel.h"
+
+/**
+ * @file AdvancedSettingsPage.h
+ * 
+ * @brief AdvancedSettingsPage is a navigation page containing buttons that open
+ * other settings pages.
+ */
 
 class AdvancedSettingsPage : public PageComponent, private Localized
 {

@@ -1,11 +1,12 @@
+#pragma once
+#include "JuceHeader.h"
+
 /**
  * @file SwitchComponent.h
  * 
- * SwitchComponent is a ToggleButton drawn as a round handle that switches
- * off(left) or on(right) in front of a rounded rectangle.
+ * @brief SwitchComponent is a ToggleButton drawn as a round handle that 
+ * switches off(left) or on(right) in front of a rounded rectangle.
  */
-#pragma once
-#include "JuceHeader.h"
 
 class SwitchComponent : public ToggleButton, private Timer
 {

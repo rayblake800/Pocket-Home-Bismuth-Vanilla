@@ -1,19 +1,19 @@
-/**
- * @file FolderMenuItem.h
- * 
- * FolderMenuItem is an AppMenuItem that gets its data from a 
- * AppConfigFile::AppFolder structure, representing a set of application 
- * categories.
- * 
- * @see AppMenuItem, AppConfigFile, AppMenuComponent
- * 
- */
 #pragma once
 #include "AppMenuItemFactory.h"
 #include "IconThread.h"
 #include "Localized.h"
 #include "DesktopEntries.h"
 #include "AppMenuItem.h"
+
+/**
+ * @file FolderMenuItem.h
+ * 
+ * @brief FolderMenuItem is an AppMenuItem that gets its data from a 
+ * AppConfigFile::AppFolder structure, representing a set of application 
+ * categories.
+ * 
+ * @see AppMenuItem, AppConfigFile, AppMenuComponent
+ */
 
 class FolderMenuItem : public AppMenuItem, private Localized
 {

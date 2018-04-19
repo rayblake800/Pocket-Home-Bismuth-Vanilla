@@ -1,15 +1,17 @@
-/**
- * @file PagedAppMenu.h
- * 
- * PagedAppMenu displays all applications in a grid, spreading them across
- * multiple pages.  Only one page of one folder is visible at once. Touch
- * navigation buttons or hardware keys can be used to open or close folders,
- * and switch between folder pages.
- */
-
 #pragma once
 #include "ConfigurableImageButton.h"
 #include "AppMenuComponent.h"
+
+/**
+ * @file PagedAppMenu.h
+ * 
+ * @brief PagedAppMenu displays all applications in a grid, spreading them across
+ * multiple pages.  
+ * 
+ * Only one page of one folder is visible at once. Touch
+ * navigation buttons or hardware keys can be used to open or close folders,
+ * and switch between folder pages.
+ */
 
 class PagedAppMenu : public AppMenuComponent, public Button::Listener
 {

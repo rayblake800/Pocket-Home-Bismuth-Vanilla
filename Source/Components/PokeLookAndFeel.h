@@ -1,8 +1,14 @@
+#pragma once
+#include "JuceHeader.h"
+#include "MainConfigFile.h"
+#include "ComponentConfigFile.h"
+
 /**
  * @file PokeLookAndFeel.h
  * 
- * PokeLookAndFeel sets the default appearance and behavior of all UI component
- * objects.  It sets UI values and defines custom draw routines for Juce
+ * @brief sets the default appearance and behavior of all UI component objects. 
+ * 
+ * It sets UI values and defines custom draw routines for Juce
  * sliders and buttons. It also passes default component colors from 
  * ComponentConfigFile to all components.
  * 
@@ -11,10 +17,6 @@
  * PokeLookAndFeel object as the default.
  */
 
-#pragma once
-#include "JuceHeader.h"
-#include "MainConfigFile.h"
-#include "ComponentConfigFile.h"
 
 class PokeLookAndFeel : public LookAndFeel_V4, public ConfigFile::Listener
 {

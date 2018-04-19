@@ -1,3 +1,12 @@
+#pragma once
+
+/**
+ * @file ColourIds.h
+ * 
+ * @brief Provides a centralized location for accessing all project ColourId
+ *        values.
+ */
+
 namespace ColourIds
 {
     namespace midiKeyboardComponent

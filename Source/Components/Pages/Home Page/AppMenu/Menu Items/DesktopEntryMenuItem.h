@@ -1,16 +1,18 @@
-/**
- * @file DesktopEntryMenuItem.h
- * 
- * DesktopEntryMenuItem is an AppMenuItem that gets its data from a 
- * DesktopEntry object, loaded from a .desktop file. It represents a shortcut
- * to an installed application.
- * @see AppMenuItem, AppMenuComponent, DesktopEntry
- */
 #pragma once
 #include "DesktopEntry.h"
 #include "Localized.h"
 #include "IconThread.h"
 #include "AppMenuItem.h"
+
+/**
+ * @file DesktopEntryMenuItem.h
+ * 
+ * @brief DesktopEntryMenuItem is an AppMenuItem that gets its data from a 
+ * DesktopEntry object, loaded from a .desktop file. It represents a shortcut
+ * to an installed application.
+ * 
+ * @see AppMenuItem, AppMenuComponent, DesktopEntry
+ */
 
 class DesktopEntryMenuItem : public AppMenuItem, private Localized
 {

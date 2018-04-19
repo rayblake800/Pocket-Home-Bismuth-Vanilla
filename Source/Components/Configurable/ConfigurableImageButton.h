@@ -1,13 +1,14 @@
-/**
- * @file ConfigurableImageButton.h
- * 
- * ConfigurableImageButton is a DrawableImageButton managed by the
- * ComponentConfigFile.
- */
 #pragma once
 #include "JuceHeader.h"
 #include "ConfigurableImageComponent.h"
 #include "DrawableImageButton.h"
+
+/**
+ * @file ConfigurableImageButton.h
+ * 
+ * @brief ConfigurableImageButton is a DrawableImageButton managed by the
+ * ComponentConfigFile.
+ */
 
 class ConfigurableImageButton : public Button,
 public ConfigurableComponent

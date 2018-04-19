@@ -1,16 +1,16 @@
-/**
- * @file PocketHomeWindow.h
- * 
- * PocketHomeWindow is the application window object and the root component in 
- * the component display tree. 
- */
-
 #pragma once
 #include "LoginPage.h"
 #include "PageFactory.h"
 #include "PageStackComponent.h"
 #include "WifiStateManager.h"
 #include "WindowFocus.h"
+
+/**
+ * @file PocketHomeWindow.h
+ * 
+ * @brief PocketHomeWindow is the application window object and the root 
+ * component in the component display tree. 
+ */
 
 class PocketHomeWindow : public WindowFocus::BroadcastWindow
 {

@@ -1,12 +1,12 @@
+#pragma once
+#include "AppMenuComponent.h"
+
 /**
  * @file ScrollingAppMenu.h
  * 
- * ScrollingAppMenu displays an application menu as scrolling vertical
+ * @brief ScrollingAppMenu displays an application menu as scrolling vertical
  * lists of menu items.
  */
-
-#pragma once
-#include "AppMenuComponent.h"
 
 class ScrollingAppMenu : public AppMenuComponent
 {
