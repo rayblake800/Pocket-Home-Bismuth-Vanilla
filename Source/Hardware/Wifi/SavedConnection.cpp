@@ -8,7 +8,8 @@ SavedConnection::SavedConnection(const char * path) :
 GDBusProxyInterface(BUS_NAME, path, INTERFACE)
 {
     GVariant* settings = callMethod("GetSettings");
-    GVariant* secrets = callMethod("GetSecrets");
+    GVariant* secrets = callMethod("GetSecrets",
+            GVariantConverter::getVariant<String>(String()));
     
     std::cout << "\nConnection " << path << " Settings:\n" 
             << GVariantConverter::toString(settings) 
