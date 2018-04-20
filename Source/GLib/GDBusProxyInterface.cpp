@@ -34,7 +34,8 @@ GVariant* GDBusProxyInterface::callMethod(const char *  methodName, GVariant* pa
             &error);
     if (error != nullptr)
     {
-        DBG(__func__ << "calling DBus adapter proxy method "
+        DBG("GDBusProxyInterface::" << __func__ 
+                << ": calling DBus adapter proxy method "
                 << methodName << " failed!");
         DBG("Error: " << String(error->message));
     }
