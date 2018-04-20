@@ -1,8 +1,8 @@
 #include "ResourceManager.h"
 
 /**
- * Throws an error if the resource is destroyed while the reference
- * list is not empty.
+ * While debugging, prints an error if the resource is destroyed while the 
+ * reference list is not empty.
  */
 ResourceManager::SharedResource::~SharedResource()
 {

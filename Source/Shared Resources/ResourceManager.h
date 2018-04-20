@@ -14,20 +14,7 @@
  * destroyed.
  *
  * As this application is multi-threaded, all SharedResource implementations
- * should disallow concurrent access.  This is relatively simple to do safely, 
- * as long as all implementations strictly follow these rules:
- * 
- * 1. ResourceManager may only interact with the shared resource after acquiring
- *    the resource lock.  
- * 
- * 2. While it holds the resource lock, the ResourceManager cannot call any 
- *    other method that interacts with the shared resource.
- * 
- * 3. SharedResource should never share references or pointers to its internal
- *    data with any other object.
- * 
- * 4. ResourceManagers and SharedResources must never have any circular 
- *    dependencies.
+ * should disallow concurrent access.
  */
 
 class ResourceManager
@@ -38,9 +25,10 @@ public:
     {
     public:
         friend class ResourceManager;
+        
         /**
-         * Throws an error if the resource is destroyed while the reference
-         * list is not empty.
+         * While debugging, prints an error if the resource is destroyed while the 
+         * reference list is not empty.
          */
         virtual ~SharedResource();
 
@@ -56,21 +44,22 @@ public:
 
     /**
      * @param classResource    This must be a reference to a static 
-     *                          ScopedPointer that will hold the class 
-     *                          SharedResource. This will initialize the 
-     *                          resource if necessary, and add the ResourceManager
-     *                          to the SharedResource's reference. 
+     *                         ScopedPointer that will hold the class 
+     *                         SharedResource. This will initialize the 
+     *                         resource if necessary, and add the 
+     *                         ResourceManager to the SharedResource's 
+     *                         reference. 
      *                        
-     *                          ResourceManager instances should never assign the
-     *                          classResource ScopedPointer themselves.
+     *                         ResourceManager instances should never assign the
+     *                         classResource ScopedPointer themselves.
      * 
      * @param resourceLock     A reference to a static CriticalSection to be
-     *                          shared by the class.  This must be locked any
-     *                          time the sharedResource is accessed. 
+     *                         shared by the class.  This must be locked any
+     *                         time the sharedResource is accessed. 
      * 
      * @param resourceCreator  This function will be used to create the 
-     *                          SharedResource if necessary.  This should not
-     *                          acquire the resource.
+     *                         SharedResource if necessary.  This should not
+     *                         acquire the resource lock.
      */
     ResourceManager(
             ScopedPointer<SharedResource>& classResource,

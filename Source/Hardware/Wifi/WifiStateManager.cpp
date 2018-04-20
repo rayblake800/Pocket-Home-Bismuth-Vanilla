@@ -299,30 +299,29 @@ WifiStateManager::WifiState WifiStateManager::NetworkInterface::getWifiState()
  */
 void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
 {
-    const ScopedLock stateLock(wifiLock);
-    if (state != wifiState)
+    MessageManager::callAsync([this,state]()
     {
-        wifiState = state;
-        DBG("WifiStateManager::" << __func__ << ": Setting wifi state to "
-                << wifiStateString(wifiState));
-        while (!notifyQueue.isEmpty())
+        const ScopedLock stateLock(wifiLock);
+        if(this != WifiStateManager::sharedResource.get())
         {
-            //All notification occurs on the message thread, so we must be
-            //calling from another thread while the message thread handles a
-            //different set of notifications.  Unlock and yield until
-            //awaitingSignal is empty again.
-            const ScopedUnlock signalUnlock(wifiLock);
-            Thread::yield();
+            return;//shared resource was destroyed, cancel notification.
         }
-        notifyQueue = listeners;
-        while (!notifyQueue.isEmpty())
+        if (state != wifiState)
         {
-            WifiStateManager::Listener* toNotify
-                    = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
-            const ScopedUnlock signalUnlock(wifiLock);
-            toNotify->wifiStateChanged(state);
+            wifiState = state;
+            DBG("WifiStateManager::" << __func__ << ": Setting wifi state to "
+                    << wifiStateString(wifiState));
+            jassert(notifyQueue.isEmpty());
+            notifyQueue = listeners;
+            while (!notifyQueue.isEmpty())
+            {
+                WifiStateManager::Listener* toNotify
+                        = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
+                const ScopedUnlock signalUnlock(wifiLock);
+                toNotify->wifiStateChanged(state);
+            }
         }
-    }
+    });
 }
 
 
