@@ -320,7 +320,6 @@ void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
             WifiStateManager::Listener* toNotify
                     = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
             const ScopedUnlock signalUnlock(wifiLock);
-            const MessageManagerLock mmLock;
             toNotify->wifiStateChanged(state);
         }
     }
