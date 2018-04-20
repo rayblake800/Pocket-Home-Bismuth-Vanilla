@@ -106,25 +106,38 @@ namespace GVariantConverter
                     }
                     if(arrayStr.isEmpty())
                     {
-                        arrayStr = "[\n";
+                        arrayStr = "[ ";
                     }
                     else
                     {
-                        arrayStr += ",\n";
+                        arrayStr += ", ";
                     }
                     StringArray lines
                             = StringArray::fromLines(toString(arrayVar));
+                    lines.removeEmptyStrings();
+                    if(lines.isEmpty())
+                    {
+                        return;
+                    }
+                    else if(lines.size() == 1)
+                    {
+                        arrayStr += lines[0];
+                        return;
+                    }
                     for(const String& line : lines)
                     {
+                        if(arrayStr.length() > 3 && !arrayStr.endsWithChar('\n'))
+                        {
+                            arrayStr += "\n";
+                        }
                         arrayStr += "    ";
                         arrayStr += line;
-                        arrayStr += "\n";
                     }
                     
                 });
                 if(arraySize > 1)
                 {
-                    arrayStr += "\n]";
+                    arrayStr += "]";
                 }
                 return arrayStr;
             }

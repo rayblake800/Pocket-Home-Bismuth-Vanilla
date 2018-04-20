@@ -1,0 +1,56 @@
+POWDER 117
+Linux Version
+Name: Otihuf
+------------------------------------------------------------------------
+Physical: -1/2 (max 26)
+Mental: 4/0 (max 11)
+AC: 8
+X: 822
+Depth: 2
+1067 moves over 7 minutes and 19 seconds
+Score: 232
+------------------------------------------------------------------------
+Intrinsics:
++ Fire resistance
++ Shock resistance
+x Teleport control
+x Reflective
++ Vulnerable to cold
+x Jump
+------------------------------------------------------------------------
+Spells:
++ Magic Missile
+------------------------------------------------------------------------
+Skills:
++ Cloth Armour
++ Ranged Weapons
+------------------------------------------------------------------------
+Equipped Items:
+- +0 Rapier in right hand.
+- +0 Mirror shield in left hand.
+- +0 Plain robe over body.
+- Ring of teleport control on right finger.
+- +0 Jump boots on feet.
+------------------------------------------------------------------------
+Inventory Items:
+- +0 Rapier.
+- +0 Mirror shield.
+- +0 Plain robe.
+- Ring of teleport control.
+- +0 Jump boots.
+- Holy +0 dagger.
+- +0 Leather cap.
+- Evil +0 leather cap.
+- +0 Iron helm.
+- +0 Helm of warning.
+- Holy +0 iron shoes.
+- +0 Splint mail.
+- Evil ring of teleportation.
+- Guide to armour (4).
+- Tome of fire (4).
+- Tome of cold (1).
+- Wand of invisibility (8).
+- Wand of polymorph (2).
+- Wand of speed (8).
+- 3 Empty bottles.
+
