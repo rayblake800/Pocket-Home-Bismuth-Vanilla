@@ -308,5 +308,19 @@ namespace GVariantConverter
             val = nullptr;
         }
     }
+      
+    StringArray getKeys(GVariant* dict)
+    {
+        StringArray keys;
+        if(g_variant_is_of_type(dict, G_VARIANT_TYPE_DICTIONARY))
+        {
+            iterateDict(dict, [&keys]
+                    (GVariant* key, GVariant* val)
+            {
+                keys.add(toString(key));
+            });
+        }
+        return keys;
+    }
 };
 

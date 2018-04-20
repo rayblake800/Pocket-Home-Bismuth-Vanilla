@@ -45,4 +45,6 @@ namespace GVariantConverter
     void iterateDict(GVariant* dict,
             std::function<void(GVariant*, GVariant*)> dictCall);
     
+    StringArray getKeys(GVariant* dict);
+    
 };
