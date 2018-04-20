@@ -1,3 +1,10 @@
+#pragma once
+#include "ScalingLabel.h"
+#include "DrawableImageButton.h"
+#include "RelativeLayoutManager.h"
+#include "ConfigurableImageComponent.h"
+#include "JuceHeader.h"
+
 /**
  * @file PopupEditorComponent.h
  * 
@@ -8,13 +15,6 @@
  * responsible for adding all other controls
  * to the component layout.
  */
-
-#pragma once
-#include "ScalingLabel.h"
-#include "DrawableImageButton.h"
-#include "RelativeLayoutManager.h"
-#include "ConfigurableImageComponent.h"
-#include "JuceHeader.h"
 
 class PopupEditorComponent : public ConfigurableImageComponent,
 public Button::Listener

@@ -1,4 +1,10 @@
-/* 
+#pragma once
+#include "ConfigurableImageComponent.h"
+#include "ConfigurableLabel.h"
+#include "WindowFocusedTimer.h"
+#include "BatteryMonitor.h"
+
+/** 
  * @file   BatteryIcon.h
  * 
  * BatteryIcon displays the current charge level and charging state of 
@@ -7,12 +13,6 @@
  * and update itself accordingly.
  *
  */
-
-#pragma once
-#include "ConfigurableImageComponent.h"
-#include "ConfigurableLabel.h"
-#include "WindowFocusedTimer.h"
-#include "BatteryMonitor.h"
 
 class BatteryIcon : public Component, private WindowFocusedTimer
 {

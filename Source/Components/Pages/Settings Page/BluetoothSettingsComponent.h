@@ -1,12 +1,13 @@
+#pragma once
+#include "BluetoothStatus.h"
+#include "ConnectionSettingsComponent.h"
+
 /**
  * @file BluetoothSettingsComponent.h
  * 
  * Bluetooth is not yet implemented, for now this does pretty much nothing.
  * TODO: documentation
  */
-#pragma once
-#include "BluetoothStatus.h"
-#include "ConnectionSettingsComponent.h"
 
 class BluetoothSettingsComponent : public ConnectionSettingsComponent
 {

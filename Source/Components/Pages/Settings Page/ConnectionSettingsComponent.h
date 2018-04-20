@@ -1,11 +1,3 @@
-/**
- * @file ConnectionSettingsComponent.h
- * 
- * ConnectionSettingsComponent is a widget that provides a connection status
- * icon, a toggle switch for enabling/disabling the connection, and a button
- * that shows a connection status string. The button will also open a 
- * connection page when clicked while the switch is enabled.
- */
 #pragma once
 
 #include "JuceHeader.h"
@@ -14,6 +6,15 @@
 #include "SwitchComponent.h"
 #include "Spinner.h"
 #include "DrawableImageComponent.h"
+
+/**
+ * @file ConnectionSettingsComponent.h
+ * 
+ * ConnectionSettingsComponent is a widget that provides a connection status
+ * icon, a toggle switch for enabling/disabling the connection, and a button
+ * that shows a connection status string. The button will also open a 
+ * connection page when clicked while the switch is enabled.
+ */
 
 class ConnectionSettingsComponent : public Component,
 private Button::Listener

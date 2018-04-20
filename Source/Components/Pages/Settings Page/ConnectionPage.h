@@ -1,3 +1,11 @@
+#pragma once
+#include "ScalingLabel.h"
+#include "SwitchComponent.h"
+#include "ConfigurableImageButton.h"
+#include "RelativeLayoutManager.h"
+#include "PageComponent.h"
+#include "PageStackComponent.h"
+
 /**
  * @file ConnectionPage.h
  * 
@@ -10,14 +18,6 @@
  * inheriting class should also have a toString() method that returns some sort 
  * of identifying string for debug output.
  */
-
-#pragma once
-#include "ScalingLabel.h"
-#include "SwitchComponent.h"
-#include "ConfigurableImageButton.h"
-#include "RelativeLayoutManager.h"
-#include "PageComponent.h"
-#include "PageStackComponent.h"
 
 template<class ConnectionPtr>
 class ConnectionPage : public PageComponent {

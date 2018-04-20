@@ -1,10 +1,3 @@
-/**
- * @file HomeSettingsPage.h
- * 
- * The HomeSettingsPage allows user configuration of the HomePage, setting the
- * page background, application menu type, and application menu dimensions.
- */
-
 #pragma once
 
 #include "ConfigurableImageButton.h"
@@ -14,6 +7,14 @@
 #include "PageComponent.h"
 #include "Utils.h"
 #include "Localized.h"
+
+/**
+ * @file HomeSettingsPage.h
+ * 
+ * The HomeSettingsPage allows user configuration of the HomePage, setting the
+ * page background, application menu type, and application menu dimensions.
+ */
+
 
 class HomeSettingsPage : public PageComponent, private ComboBox::Listener,
 private FileSelectTextEditor::Listener, private Localized

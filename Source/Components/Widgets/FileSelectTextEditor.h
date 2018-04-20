@@ -1,14 +1,14 @@
+#pragma once
+#include <set>
+#include "Localized.h"
+#include "JuceHeader.h"
+
 /**
  * @file FileSelectTextEditor.h
  * 
  * This component allows a user to either type in a text value, or click a
  * button to open a file picker and choose a file/directory path.
  */
-
-#pragma once
-#include <set>
-#include "Localized.h"
-#include "JuceHeader.h"
 
 class FileSelectTextEditor : public Component,
 public TextEditor::Listener, public Button::Listener, private Localized

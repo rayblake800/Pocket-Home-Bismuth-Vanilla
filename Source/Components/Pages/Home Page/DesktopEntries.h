@@ -1,17 +1,17 @@
-/* 
- * @file   DesktopEntries.h
- *
- * Finds all .Desktop and .Directory files in the system, and stores and sorts 
- * them as DesktopEntry objects.   Desktop entry file indexing occurs within
- * its own thread.
- */
-
 #pragma once
 #include <map>
 #include <set>
 #include <functional>
 #include "Utils.h"
 #include "DesktopEntry.h"
+
+/** 
+ * @file   DesktopEntries.h
+ *
+ * Finds all .Desktop and .Directory files in the system, and stores and sorts 
+ * them as DesktopEntry objects.   Desktop entry file indexing occurs within
+ * its own thread.
+ */
 
 class DesktopEntries : private Thread {
 public:

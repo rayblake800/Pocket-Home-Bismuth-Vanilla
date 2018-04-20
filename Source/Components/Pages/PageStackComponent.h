@@ -1,3 +1,7 @@
+#pragma once
+#include "PageComponent.h"
+#include "JuceHeader.h"
+
 /**
  * @file PageStackComponent.h
  * 
@@ -8,9 +12,6 @@
  * 
  * @see PageComponent.h
  */
-#pragma once
-#include "PageComponent.h"
-#include "JuceHeader.h"
 
 class PageStackComponent : public PageComponent::PageStackInterface,
 public Component

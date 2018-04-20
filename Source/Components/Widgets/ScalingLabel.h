@@ -1,13 +1,13 @@
+#pragma once
+#include "ComponentConfigFile.h"
+#include "JuceHeader.h"
+
 /**
  * @File ScalingLabel.h
  * 
  * ScalingLabel is a basic Juce Label that adjusts its text height to fit its
  * bounds whenever it is resized.
  */
-
-#pragma once
-#include "ComponentConfigFile.h"
-#include "JuceHeader.h"
 
 class ScalingLabel : public Label
 {

@@ -1,6 +1,6 @@
-#include "GDBusProxyObject.h"
+#include "GDBusProxyInterface.h"
 
-GDBusProxyObject::GDBusProxyObject
+GDBusProxyInterface::GDBusProxyInterface
 (const char* name, const char* path, const char* interface)
 {
 
@@ -22,11 +22,11 @@ GDBusProxyObject::GDBusProxyObject
     }
 }
 
-GVariant* GDBusProxyObject::callMethod(String methodName, GVariant* params)
+GVariant* GDBusProxyInterface::callMethod(const char *  methodName, GVariant* params)
 {
     GError * error = nullptr;
     GVariant* result = g_dbus_proxy_call_sync(proxy,
-            methodName.toRawUTF8(),
+            methodName,
             params,
             G_DBUS_CALL_FLAGS_NONE,
             -1,

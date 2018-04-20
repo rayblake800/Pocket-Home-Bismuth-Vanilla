@@ -4796,9 +4796,6 @@
       <df name="dev scripts">
       </df>
       <df name="docs">
-        <in>ColourIds.h</in>
-        <in>SafeSignaler.h</in>
-        <in>sorted.cpp</in>
       </df>
       <df name="JuceLibraryCode">
         <in>AppConfig.h</in>
@@ -5020,8 +5017,11 @@
             <in>BluetoothStatus.h</in>
             <in>BluezAdapter.cpp</in>
             <in>BluezAdapter.h</in>
+            <in>GDBusInterface.cpp</in>
+            <in>GDBusInterface.h</in>
+            <in>GDBusObject.cpp</in>
+            <in>GDBusObject.h</in>
             <in>GDBusProxyObject.cpp</in>
-            <in>GDBusProxyObject.h</in>
             <in>GVariantConverter.cpp</in>
             <in>GVariantConverter.h</in>
           </df>

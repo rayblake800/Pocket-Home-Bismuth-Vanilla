@@ -1,3 +1,9 @@
+#pragma once
+#include "JuceHeader.h"
+#include "Localized.h"
+#include "ScalingLabel.h"
+#include "PageComponent.h"
+
 /**
  * @file RemovePasswordPage.h
  * 
@@ -5,11 +11,6 @@
  * user must enter in the existing Pocket-Home password, along with their root
  * password.
  */
-#pragma once
-#include "JuceHeader.h"
-#include "Localized.h"
-#include "ScalingLabel.h"
-#include "PageComponent.h"
 
 class RemovePasswordPage : public PageComponent, private Localized
 {

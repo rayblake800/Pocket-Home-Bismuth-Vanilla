@@ -1,11 +1,11 @@
+#pragma once
+#include "DrawableImageComponent.h"
+
 /**
  * @file DrawableImageButton.h
  * 
  * DrawableImageButton is a button drawn using a DrawableImageComponent.
  */
-#pragma once
-#include "DrawableImageComponent.h"
-
 
 class DrawableImageButton : public Button {
 public:

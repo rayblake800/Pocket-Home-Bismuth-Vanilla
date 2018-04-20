@@ -1,10 +1,3 @@
-/**
- * @file WifiSettingsPage.h
- * 
- * WifiSettingsPage shows information on all visible Wifi access points, and
- * provides controls for connecting or disconnecting from those access points.
- */
-
 #pragma once
 #include "WifiStateManager.h"
 #include "Localized.h"
@@ -16,6 +9,14 @@
 #include "PageComponent.h"
 #include "PageStackComponent.h"
 #include "ConnectionPage.h"
+
+/**
+ * @file WifiSettingsPage.h
+ * 
+ * WifiSettingsPage shows information on all visible Wifi access points, and
+ * provides controls for connecting or disconnecting from those access points.
+ */
+
 
 class WifiSettingsPage : public ConnectionPage<WifiAccessPoint::Ptr>,
 public WifiStateManager::Listener, public TextEditor::Listener,

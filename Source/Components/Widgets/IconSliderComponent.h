@@ -1,13 +1,13 @@
+#pragma once
+#include "DrawableImageComponent.h"
+#include "JuceHeader.h"
+
 /**
  * @file IconSliderComponent.h
  * 
  * IconSliderComponent is a horizontal slider that draws icons on
  * its left and right sides.
  */
-
-#pragma once
-#include "DrawableImageComponent.h"
-#include "JuceHeader.h"
 
 class IconSliderComponent : public Component
 {

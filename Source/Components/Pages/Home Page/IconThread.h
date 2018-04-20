@@ -1,3 +1,9 @@
+#pragma once
+#include <map>
+#include <functional>
+#include "ResourceManager.h"
+#include "JuceHeader.h"
+
 /**
  * @File IconThread.h
  * 
@@ -6,11 +12,6 @@
  * then used to quickly locate icon files by name as they are needed.
  */
 
-#pragma once
-#include <map>
-#include <functional>
-#include "ResourceManager.h"
-#include "JuceHeader.h"
 
 class IconThread : private ResourceManager
 {

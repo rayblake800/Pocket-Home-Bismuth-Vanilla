@@ -1,3 +1,6 @@
+#pragma once
+#include "JuceHeader.h"
+
 /**
  * @file CounterComponent.h
  * 
@@ -6,9 +9,6 @@
  * into the number field, or increment/decrement its value by pressing
  * the plus and minus buttons next to the number field.
  */
-#pragma once
-
-#include "JuceHeader.h"
 
 class CounterComponent : public Component, private Button::Listener,
 private TextEditor::Listener

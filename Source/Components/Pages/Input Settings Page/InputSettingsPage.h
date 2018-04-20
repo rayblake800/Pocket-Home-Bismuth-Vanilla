@@ -1,14 +1,15 @@
+#pragma once
+#include "ConfigurableImageButton.h"
+#include "Localized.h"
+#include "ScalingLabel.h"
+#include "PageComponent.h"
+
 /**
  * @file InputSettingsPage.h
  * 
  * The input settings page sets cursor visibility, opens screen calibration,
  * and fixes button mapping.
  */
-#pragma once
-#include "ConfigurableImageButton.h"
-#include "Localized.h"
-#include "ScalingLabel.h"
-#include "PageComponent.h"
 
 class InputSettingsPage : public PageComponent, private ComboBox::Listener,
 private Localized

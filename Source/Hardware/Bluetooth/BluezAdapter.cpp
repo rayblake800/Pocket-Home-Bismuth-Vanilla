@@ -1,7 +1,7 @@
 #include "BluezAdapter.h"
 
 BluezAdapter::BluezAdapter() :
-GDBusProxyObject("org.bluez", "/org/bluez/hci0", "org.bluez.Adapter1") { }
+GDBusProxyInterface("org.bluez", "/org/bluez/hci0", "org.bluez.Adapter1") { }
 
 String BluezAdapter::getDeviceAddress()
 {

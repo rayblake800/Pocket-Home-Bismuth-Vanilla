@@ -1,3 +1,8 @@
+#pragma once
+#include "JuceHeader.h"
+#include "ScalingLabel.h"
+#include "Spinner.h"
+
 /**
  * @file OverlaySpinner.h
  * 
@@ -6,11 +11,6 @@
  * 
  * @see Spinner.h
  */
-
-#pragma once
-#include "JuceHeader.h"
-#include "ScalingLabel.h"
-#include "Spinner.h"
 
 class OverlaySpinner : public Component
 {

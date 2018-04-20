@@ -1,14 +1,14 @@
+#pragma once
+#include "WindowFocusedTimer.h"
+#include "WifiStateManager.h"
+#include "ConfigurableImageComponent.h"
+
 /**
  * @File WifiIcon.h
  * 
  * WifiIcon tracks WiFi status and displays an image indicating connection
  * state.
  */
-
-#pragma once
-#include "WindowFocusedTimer.h"
-#include "WifiStateManager.h"
-#include "ConfigurableImageComponent.h"
 
 class WifiIcon : public ConfigurableImageComponent, private WindowFocusedTimer,
 private WifiStateManager::Listener

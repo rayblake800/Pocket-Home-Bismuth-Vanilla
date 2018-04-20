@@ -1,3 +1,7 @@
+#pragma once
+#include <map>
+#include "AppConfigFile.h"
+
 /* 
  * @file DesktopEntry.h
  * 
@@ -5,10 +9,6 @@
  * the Desktop entry format is very well documented at
  * https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys
  */
-
-#pragma once
-#include <map>
-#include "AppConfigFile.h"
 
 class DesktopEntry
 {

@@ -1,11 +1,3 @@
-/**
- * @file PowerPageComponent.h
- * 
- * PowerPageComponent is a UI menu page that shows buttons that perform actions
- * related to system power state.  From this page, the user can shut down the
- * system, reboot the system, turn off the display, or enter PocketCHIP flashing
- * mode.
- */
 #pragma once
 #include "PageComponent.h"
 #include "ConfigurableImageButton.h"
@@ -15,6 +7,13 @@
 #include "Localized.h"
 
 /**
+ * @file PowerPageComponent.h
+ * 
+ * PowerPageComponent is a UI menu page that shows buttons that perform actions
+ * related to system power state.  From this page, the user can shut down the
+ * system, reboot the system, turn off the display, or enter PocketCHIP flashing
+ * mode.
+ *
  * TODO:
  * 
  * -Set the sleep mode command in config.json

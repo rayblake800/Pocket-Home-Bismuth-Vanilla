@@ -1,13 +1,14 @@
+#pragma once
+#include "Localized.h"
+#include "WifiStateManager.h"
+#include "ConnectionSettingsComponent.h"
+
 /**
  * @file WifiSettingsComponent.h
  * 
  * WifiSettingsComponent shows wifi state, lets the user enable or disable wifi,
  * and opens the wifi settings page.
  */
-#pragma once
-#include "Localized.h"
-#include "WifiStateManager.h"
-#include "ConnectionSettingsComponent.h"
 
 class WifiSettingsComponent : public ConnectionSettingsComponent,
 public WifiStateManager::Listener, private Localized

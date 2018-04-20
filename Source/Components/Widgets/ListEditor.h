@@ -1,3 +1,8 @@
+#pragma once
+#include "RelativeLayoutManager.h"
+#include "DrawableImageButton.h"
+#include "JuceHeader.h"
+
 /**
  * @file ListEditor.h
  * 
@@ -6,11 +11,6 @@
  * and delete list items.  The edited list of strings can then be obtained with
  * getListItems().
  */
-
-#pragma once
-#include "RelativeLayoutManager.h"
-#include "DrawableImageButton.h"
-#include "JuceHeader.h"
 
 class ListEditor : public Component, private Button::Listener,
 private Label::Listener, private ListBoxModel

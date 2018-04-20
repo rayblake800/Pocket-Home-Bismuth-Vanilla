@@ -1,15 +1,16 @@
-/**
- * @file PageFactory.h
- * 
- * PageFactory creates all new PageComponent objects, and initializes all
- * shared resources needed by pages.
- */
 #pragma once
 #include "ComponentConfigFile.h"
 #include "MainConfigFile.h"
 #include "BluetoothStatus.h"
 #include "PageComponent.h"
 #include "JuceHeader.h"
+
+/**
+ * @file PageFactory.h
+ * 
+ * PageFactory creates all new PageComponent objects, and initializes all
+ * shared resources needed by pages.
+ */
 
 class PageFactory : public PageComponent::PageFactoryInterface
 {

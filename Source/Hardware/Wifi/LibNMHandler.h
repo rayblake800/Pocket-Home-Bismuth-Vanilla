@@ -1,9 +1,3 @@
-/**
- * @file WifiEventHandler
- * 
- * @brief WifiEventHandler interacts with LibNM and the GLib event loop
- *         to simplify the use of LibNM functionality.
- */
 #pragma once
 #include <NetworkManager.h>
 #include <nm-client.h>
@@ -14,6 +8,12 @@
 #include "WifiAccessPoint.h"
 #include "GLibSignalHandler.h"
 
+/**
+ * @file LibNMHandler.h
+ * 
+ * @brief Interacts with LibNM and the GLib event loop to simplify the use of 
+ *        LibNM functionality.
+ */
 class LibNMHandler
 {
 public:  

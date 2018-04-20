@@ -2,9 +2,9 @@
  * 
  */
 #pragma once
-#include "GDBusProxyObject.h"
+#include "GDBusProxyInterface.h"
 
-class BluezAdapter : private GDBusProxyObject
+class BluezAdapter : private GDBusProxyInterface
 {
 public:
     BluezAdapter();

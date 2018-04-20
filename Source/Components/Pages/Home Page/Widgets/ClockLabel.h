@@ -1,14 +1,14 @@
+#pragma once
+#include "JuceHeader.h"
+#include "WindowFocusedTimer.h"
+#include "ConfigurableLabel.h"
+
 /**
  * @file ClockLabel.h
  * 
  * ClockLabel is a component managed by the ComponentConfigFile that displays
  * the current time.
  */
-
-#pragma once
-#include "JuceHeader.h"
-#include "WindowFocusedTimer.h"
-#include "ConfigurableLabel.h"
 
 class ClockLabel : public ConfigurableLabel, private WindowFocusedTimer{
 public:

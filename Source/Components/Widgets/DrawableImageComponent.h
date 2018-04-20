@@ -1,3 +1,6 @@
+#pragma once
+#include "JuceHeader.h"
+
 /**
  * @file DrawableImageComponent.h
  * 
@@ -5,9 +8,6 @@
  * Juce DrawableImage objects, this component's image will resize itself
  * whenever the component bounds change.
  */
-
-#pragma once
-#include "JuceHeader.h"
 
 class DrawableImageComponent : public Component {
 public:

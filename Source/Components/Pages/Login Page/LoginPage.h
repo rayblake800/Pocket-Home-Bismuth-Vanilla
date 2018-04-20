@@ -1,3 +1,10 @@
+#pragma once
+#include "JuceHeader.h"
+#include "Localized.h"
+#include "ScalingLabel.h"
+#include "DrawableImageComponent.h"
+#include "PageComponent.h"
+
 /**
  * @file LoginPage.h
  * 
@@ -9,12 +16,6 @@
  * close the LoginPage.  Otherwise, the page just functions as a lock screen,
  * and can be closed by pressing a button.
  */
-#include "JuceHeader.h"
-#include "Localized.h"
-#include "ScalingLabel.h"
-#include "DrawableImageComponent.h"
-#include "PageComponent.h"
-#pragma once
 
 class LoginPage : public PageComponent, public TextEditor::Listener,
 private Localized

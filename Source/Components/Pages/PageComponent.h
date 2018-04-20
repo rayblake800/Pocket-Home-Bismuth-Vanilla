@@ -1,3 +1,9 @@
+#pragma once
+
+#include "RelativeLayoutManager.h"
+#include "ConfigurableImageButton.h"
+#include "JuceHeader.h"
+
 /**
  * @file PageComponent.h
  * 
@@ -20,11 +26,6 @@
  * create any other page type to add to the stack, without needing to know
  * anything about the created page.
  */
-#pragma once
-
-#include "RelativeLayoutManager.h"
-#include "ConfigurableImageButton.h"
-#include "JuceHeader.h"
 
 class PageComponent : public Component, public Button::Listener
 {

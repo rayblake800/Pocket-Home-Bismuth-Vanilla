@@ -1,3 +1,9 @@
+#pragma once
+#include "ScalingLabel.h"
+#include "Localized.h"
+#include "ColourPicker.h"
+#include "PageComponent.h"
+
 /**
  * @File FelPage.h
  * 
@@ -7,11 +13,6 @@
  * happen if the user clicks the confirmation button.
  */
 
-#pragma once
-#include "ScalingLabel.h"
-#include "Localized.h"
-#include "ColourPicker.h"
-#include "PageComponent.h"
 
 class FelPage : public PageComponent, private Localized
 {

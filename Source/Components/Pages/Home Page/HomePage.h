@@ -1,10 +1,3 @@
-/**
- * @file HomePage.h
- * 
- * HomePage is the main page of the application. It displays the app launch
- * menu, assorted system information, and navigation controls to access
- * power and settings pages.
- */
 #pragma once
 
 #include "OverlaySpinner.h"
@@ -18,6 +11,14 @@
 #include "WifiIcon.h"
 #include "AppMenuPopupEditor.h"
 #include "AppMenuComponent.h"
+
+/**
+ * @file HomePage.h
+ * 
+ * HomePage is the main page of the application. It displays the app launch
+ * menu, assorted system information, and navigation controls to access
+ * power and settings pages.
+ */
 
 /**
  * TODO:

@@ -1,8 +1,3 @@
-/**
- * @file BluetoothSettingsPage.h
- * 
- * TODO: documentation, cleanup
- */
 #pragma once
 
 #include "SwitchComponent.h"
@@ -11,6 +6,12 @@
 #include "Spinner.h"
 #include "BluetoothStatus.h"
 #include "ConnectionPage.h"
+
+/**
+ * @file BluetoothSettingsPage.h
+ * 
+ * TODO: documentation, cleanup
+ */
 
 class BluetoothSettingsPage :
 public ConnectionPage<BluetoothDevice::Ptr>, 

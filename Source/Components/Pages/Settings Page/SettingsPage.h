@@ -1,9 +1,3 @@
-/**
- * @file SettingsPage.h
- * 
- * The settings page provides wireless device controls, brightness and volume
- * sliders, and a button to open additional settings pages.
- */
 #pragma once
 
 #include "IconSliderComponent.h"
@@ -14,6 +8,13 @@
 #include "WindowFocusedTimer.h"
 #include "WifiSettingsComponent.h"
 //#include "BluetoothSettingsComponent.h"
+
+/**
+ * @file SettingsPage.h
+ * 
+ * The settings page provides wireless device controls, brightness and volume
+ * sliders, and a button to open additional settings pages.
+ */
 
 class SettingsPage : public PageComponent, public WindowFocusedTimer,
 private Slider::Listener, private Localized

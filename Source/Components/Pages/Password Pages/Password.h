@@ -1,11 +1,12 @@
+#pragma once
+#include "JuceHeader.h"
+
 /**
  * @file Password.h
  * 
  * Password provides functions for hashing password strings and checking
  * hash values against the current application password.
  */
-#pragma once
-#include "JuceHeader.h"
 
 namespace Password
 {

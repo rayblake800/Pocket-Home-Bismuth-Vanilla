@@ -1,14 +1,11 @@
 
 #include <nm-device.h>
-#include <glib-2.0/glib/gerror.h>
-#include <glib-2.0/glib/garray.h>
-#include <libnm-glib/nm-remote-settings.h>
 #include <nm-connection.h>
-#include <glib-2.0/glib/gslist.h>
 #include "MainConfigFile.h"
 #include "WifiAccessPoint.h"
 #include "LibNMHandler.h"
 #include "GLibThread.h"
+#include "SavedConnections.h"
 
 
 /**
@@ -615,44 +612,9 @@ void LibNMHandler::disconnectSignalHandlers()
  */
 GSList* LibNMHandler::getSavedConnections()
 {
-    GSList* savedConnections = nullptr;
-    GMainContext* dbusContext = g_main_context_new();
-    GLibThread connThread(dbusContext);
-    GError* err = nullptr;
-    DBusGConnection* bus = dbus_g_bus_get_private
-            (DBUS_BUS_SYSTEM, dbusContext, &err);
-    if(err != nullptr)
-    {
-        DBG("LibNMHandler::" << __func__ << ": DBus connection error: " 
-                << err->message);
-        g_error_free(err);
-        err = nullptr;
-    }
-    if(bus == nullptr)
-    {
-        DBG("LibNMHandler::" << __func__ 
-                << ": Unable to open DBus connection!");
-        return savedConnections;
-    }
-    NMRemoteSettings* settings = nm_remote_settings_new (bus);
-    if(settings == nullptr)
-    {
-        DBG("LibNMHandler::" << __func__  
-                << ": Unable to access remote connection settings!");
-        return savedConnections;
-    }
-    connThread.call([&savedConnections, &settings, &err]
-    {
-        //DBG("Loading saved connections");
-        savedConnections = nm_remote_settings_list_connections(settings);
-    });
-    if(savedConnections == nullptr)
-    {
-        DBG("LibNMHandler::" << __func__ 
-                << ": Found no saved connections!");
-    }
-    dbus_g_connection_unref(bus);
-    return savedConnections;
+    SavedConnections c;
+    c.getConnections();
+    return nullptr;
 }
 
 

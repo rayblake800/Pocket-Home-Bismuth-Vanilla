@@ -1,12 +1,13 @@
+#pragma once
+#include "RelativeLayoutManager.h"
+#include "Localized.h"
+#include "JuceHeader.h"
+
 /**
  * @file ColourPicker.h
  * 
  * @brief A UI component that allows the user to select a color value.
  */
-#pragma once
-#include "RelativeLayoutManager.h"
-#include "Localized.h"
-#include "JuceHeader.h"
 
 class ColourPicker : public Component, private  Slider::Listener,
 private TextEditor::Listener, private Button::Listener, private Localized
