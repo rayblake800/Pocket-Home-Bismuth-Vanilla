@@ -4,6 +4,11 @@
 namespace GVariantConverter
 {
 
+    /**
+     * If a GVariant is a container holding a single item, remove that item
+     * from the container and return it as a GVariant*.  This function will not
+     * dereference the container object.
+     */
     GVariant* unpack(GVariant* container)
     {
         if (g_variant_is_container(container)
@@ -20,6 +25,10 @@ namespace GVariantConverter
         return nullptr;
     }
 
+    /**
+     * Extract the value from a GVariant object as a specific type.  Supported
+     * types are bool, guint32, String, StringArray, GArray*, and GByteArray*.
+     */
     template<> bool getValue(GVariant* variant)
     {
         if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_BOOLEAN))
@@ -100,6 +109,10 @@ namespace GVariantConverter
         return array;
     }
 
+    /**
+     * Packages a variable into a GVariant* object.  Supported types are bool,
+     * guint32, String, and StringArray.
+     */
     template<> GVariant* getVariant(bool value)
     {
         return g_variant_new_boolean(value);
@@ -130,9 +143,11 @@ namespace GVariantConverter
         GVariant* varArray = g_variant_new_strv(array, value.size());
         delete[] array;
         return varArray;
-
     }
 
+    /**
+     * Get the VariantType enum value that best describes a variant.
+     */
     GVariantConverter::VariantType getType(GVariant* variant)
     {
         if (g_variant_is_of_type(variant, G_VARIANT_TYPE_BOOLEAN))
@@ -197,6 +212,10 @@ namespace GVariantConverter
         return unsupported;
     }
 
+    /**
+     * Get the GType that best fits the data stored in a GVariant object.  This
+     * only supports a small subset of GTypes.
+     */
     GType getGType(GVariant* variant)
     {
         if (variant == nullptr)
@@ -237,6 +256,10 @@ namespace GVariantConverter
         }
     }
 
+    /**
+     * Attempts to extract a value from a GVariant object and store it within a
+     * GValue object. 
+     */
     GValue getGValue(GVariant* variant)
     {
         GValue value = G_VALUE_INIT;
@@ -271,7 +294,8 @@ namespace GVariantConverter
                 g_value_set_double(&value, g_variant_get_double(variant));
                 break;
             case stringType:
-                g_value_set_string(&value, g_variant_get_string(variant, nullptr));
+                g_value_set_string(&value, g_variant_get_string(variant,
+                        nullptr));
                 break;
             case byteStringType:
             {
@@ -281,14 +305,10 @@ namespace GVariantConverter
                         &numBytes, sizeof(guchar));
                 g_byte_array_append(array, (const guint8*) byteData, numBytes);
                 g_value_take_boxed(&value, array);
-                char* debug = g_strdup_value_contents(&value);
-                DBG("Byte array GValue:" << debug);
-                g_free(debug);
                 break;
             }
             case arrayType:
             {
-
                 GArray* array = getValue<GArray*>(variant);
                 if (array != nullptr)
                 {
@@ -306,6 +326,9 @@ namespace GVariantConverter
         return value;
     }
 
+    /**
+     * Convert any GVariant object into a formatted string object.
+     */
     String toString(GVariant* variant)
     {
         if (variant == nullptr)
@@ -374,12 +397,13 @@ namespace GVariantConverter
                     }
                     for (const String& line : lines)
                     {
-                        if (arrayStr.length() > 3 && !arrayStr.endsWithChar('\n'))
+                        if (arrayStr.length() > 3 
+                            && !arrayStr.endsWithChar('\n'))
                         {
                             arrayStr += "\n";
                         }
                         arrayStr += "    ";
-                                arrayStr += line;
+                        arrayStr += line;
                     }
 
                 });
@@ -418,7 +442,7 @@ namespace GVariantConverter
                     else if (lines.size() == 1)
                     {
                         dictStr += "    ";
-                                dictStr += lines[0];
+                        dictStr += lines[0];
                         return;
                     }
                     for (const String& line : lines)
@@ -428,13 +452,11 @@ namespace GVariantConverter
                             dictStr += "\n";
                         }
                         dictStr += "    ";
-                                dictStr += line;
+                        dictStr += line;
                     }
-
                 });
                 if (dictStr.isEmpty())
                 {
-
                     return "{}";
                 }
                 return dictStr + "\n}";
@@ -444,22 +466,37 @@ namespace GVariantConverter
         }
     }
 
+    /**
+     * Iterate through a GVariant* container, running a callback function for
+     * each array element.
+     */ 
     void iterateArray(GVariant* array,
             std::function<void(GVariant*) > arrayCall)
     {
-        g_assert(g_variant_is_container(array));
+        if(!g_variant_is_container(array))
+        {
+            DBG("GVariantConverter::" << __func__ 
+                    << ": variant is not a container!");
+            #ifdef JUCE_DEBUG
+            std::cout << "\tVariant= " << toString(array) << "\n";
+            #endif
+            return;
+        }
         GVariantIter arrayIter;
         g_variant_iter_init(&arrayIter, array);
         GVariant * child = nullptr;
         while ((child = g_variant_iter_next_value(&arrayIter)))
         {
-
             arrayCall(child);
             g_variant_unref(child);
             child = nullptr;
         }
     }
-
+    
+    /**
+     * Iterate through a GVariant* dictionary, running a callback function for
+     * each key/value pair.
+     */
     void iterateDict(GVariant* dict,
             std::function<void(GVariant*, GVariant*) > dictCall)
     {
@@ -467,9 +504,9 @@ namespace GVariantConverter
         {
             DBG("GVariantConverter::" << __func__ 
                     << ": variant is not a dictionary!");
-#ifdef JUCE_DEBUG
+            #ifdef JUCE_DEBUG
             std::cout << "\tVariant= " << toString(dict) << "\n";
-#endif
+            #endif
             return;
         }
         
@@ -480,7 +517,6 @@ namespace GVariantConverter
         GVariant * val = nullptr;
         while (g_variant_iter_next(&dictIter, "{@s*}", &key, &val))
         {
-
             if(g_variant_is_container(val) 
                     && !g_variant_is_of_type(val, G_VARIANT_TYPE_DICTIONARY)
                     && g_variant_n_children(val) == 1)
@@ -491,8 +527,7 @@ namespace GVariantConverter
                     g_variant_unref(val);
                     val = temp;
                 }
-            }
-            
+            }           
             dictCall(key, val);
             g_variant_unref(key);
             g_variant_unref(val);
@@ -501,6 +536,9 @@ namespace GVariantConverter
         }
     }
 
+    /**
+     * Extract all key strings from a GVariant* dictionary.
+     */
     StringArray getKeys(GVariant* dict)
     {
         StringArray keys;
