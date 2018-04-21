@@ -103,7 +103,7 @@ NMConnection* SavedConnection::createNMConnection()
                             g_variant_new_string(SETTING_WIFI_SECURITY));
                     if (secrets != nullptr)
                     {
-                        GVariant* securitySecrets = g_variant_dict_lookup_value
+                        GVariant* securitySecrets = g_variant_lookup_value
                                 (secrets, SETTING_WIFI_SECURITY, nullptr);
                         if (securitySecrets != nullptr)
                         {
