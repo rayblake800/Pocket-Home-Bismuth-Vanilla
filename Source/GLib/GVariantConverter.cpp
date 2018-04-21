@@ -281,6 +281,11 @@ namespace GVariantConverter
                 GBytes* byteStr = getValue<GBytes*>(variant);
                 g_value_set_instance(&value,
                         g_bytes_unref_to_data(byteStr,nullptr));
+                
+                char* debug = g_strdup_value_contents(&value);
+                DBG("Byte GValue:" << debug);
+                g_free(debug);
+                
                 break;
             }
         }
