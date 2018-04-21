@@ -228,8 +228,7 @@ namespace GVariantConverter
 
     GValue getGValue(GVariant* variant)
     {
-        DBG("Getting GValue for " << g_variant_print(variant, true));
-        //unbox single item containers
+        //unpack single item containers
         if (g_variant_is_container(variant)
             && g_variant_n_children(variant) == 1)
         {
@@ -284,10 +283,6 @@ namespace GVariantConverter
                 break;
             }
         }
-        gchar * resultDebug = g_strdup_value_contents(&value);
-        DBG("Final GValue:" << resultDebug);
-        g_free(resultDebug);
-        resultDebug = nullptr;
         return value;
     }
 

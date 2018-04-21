@@ -26,27 +26,24 @@
 #define SETTING_BLUETOOTH_ADDR "bdaddr"
 #define SETTING_BLUETOOTH_TYPE "type"
 
-
-
 SavedConnection::SavedConnection(const char * path) :
 GDBusProxyInterface(BUS_NAME, path, INTERFACE)
 {
-//    GVariant* connectionSettings = callMethod(GET_SETTINGS);
-//    if(connectionSettings != nullptr)
-//    {
-//        std::cout << "Connection settings:\n" 
-//                << GVariantConverter::toString(connectionSettings) << "\n";
-//        g_variant_unref(connectionSettings);
-//        connectionSettings = nullptr;
-//    }
+    //    GVariant* connectionSettings = callMethod(GET_SETTINGS);
+    //    if(connectionSettings != nullptr)
+    //    {
+    //        std::cout << "Connection settings:\n" 
+    //                << GVariantConverter::toString(connectionSettings) << "\n";
+    //        g_variant_unref(connectionSettings);
+    //        connectionSettings = nullptr;
+    //    }
     createNMConnection();
 }
-
 
 bool SavedConnection::isWifiConnection()
 {
     GVariant* type = getSettingProp(SETTING_CONN, SETTING_CONN_TYPE);
-    if(type != nullptr)
+    if (type != nullptr)
     {
         String typeStr = GVariantConverter::toString(type);
         g_variant_unref(type);
@@ -66,59 +63,67 @@ NMConnection* SavedConnection::createNMConnection()
 {
     NMConnection* con = nm_connection_new();
     GVariant* settings = callMethod(GET_SETTINGS);
-    //std::cout<<"Settings = \n" << g_variant_print(settings,true) << "\n";//GVariantConverter::toString(settings) << "\n";
-    if(settings != nullptr)
+    if (settings != nullptr)
     {
-        GVariantConverter::iterateDict(settings,[this,con]
-        (GVariant* key, GVariant* val)
+        NMSetting* setting = nullptr;
+        std::function<void(GVariant*, GVariant*) > copyDict = [this, &setting]
+                (GVariant* key, GVariant * val)
+        {
+            String keyStr = GVariantConverter::toString(key);
+            if (keyStr.isNotEmpty())
+            {
+                GValue propValue = GVariantConverter::getGValue(val);
+                g_object_set_property(G_OBJECT(setting), keyStr.toRawUTF8(),
+                        &propValue);
+            }
+        };
+        GVariantConverter::iterateDict(settings, [this, con, &setting]
+                (GVariant* key, GVariant * val)
         {
             String keyStr = GVariantConverter::getValue<String>(key);
-            NMSetting* setting = nullptr;
-            if(keyStr == SETTING_CONN)
+            if (keyStr == SETTING_CONN)
             {
                 setting = nm_setting_connection_new();
             }
-            else if(keyStr == SETTING_WIFI)
+            else if (keyStr == SETTING_WIFI)
             {
                 setting = nm_setting_wireless_new();
             }
-            else if(keyStr == SETTING_WIFI_SECURITY)
+            else if (keyStr == SETTING_WIFI_SECURITY)
             {
                 setting = nm_setting_wireless_security_new();
             }
-            if(setting != nullptr)
+            if (setting != nullptr)
             {
-                GVariantConverter::iterateDict(val,[setting]
-                (GVariant* key, GVariant* val)
-                {
-                    
-                    String keyStr = GVariantConverter::toString(key);
-                    if(keyStr.isNotEmpty())
-                    {
-                        GValue propValue = GVariantConverter::getGValue(val);
-                        g_object_set_property(G_OBJECT(setting),keyStr.toRawUTF8(),
-                                &propValue);
-                    }
-                });
-                if(keyStr == SETTING_WIFI_SECURITY)
+                GVariantConverter::iterateDict(val, copyDict);
+                if (keyStr == SETTING_WIFI_SECURITY)
                 {
                     GVariant* secrets = callMethod(GET_SECRETS,
                             g_variant_new_string(SETTING_WIFI_SECURITY));
-                    std::cout << "Secrets:\n" 
-                            << GVariantConverter::toString(secrets) << "\n";
-                    g_variant_unref(secrets);
-                    secrets = nullptr;
+                    if (secrets != nullptr)
+                    {
+                        GVariant* securitySecrets = g_variant_dict_lookup_value
+                                (secrets, SETTING_WIFI_SECURITY, nullptr);
+                        if (securitySecrets != nullptr)
+                        {
+                            GVariantConverter::iterateDict(securitySecrets,
+                                    copyDict);
+                                    g_variant_unref(securitySecrets);
+                                    securitySecrets = nullptr;
+                        }
+                        g_variant_unref(secrets);
+                                secrets = nullptr;
+                    }
                 }
-                nm_connection_add_setting(con,setting);
+                nm_connection_add_setting(con, setting);
+                        setting = nullptr;
             }
         });
     }
-    
-    if(con != nullptr)
+    if (con != nullptr)
     {
         nm_connection_dump(con);
     }
-    
     return con;
 }
 
@@ -129,15 +134,15 @@ GVariant* SavedConnection::getSetting(const char* name)
 {
     GVariant* allSettings = callMethod(GET_SETTINGS);
     GVariant* setting = nullptr;
-    if(allSettings != nullptr)
-    {  
+    if (allSettings != nullptr)
+    {
         g_variant_lookup(allSettings, name, "@*", &setting);
         g_variant_unref(allSettings);
         allSettings = nullptr;
     }
     return setting;
 }
-    
+
 /**
  * Returns the value of a specific property for a specific settings
  * object
@@ -147,7 +152,7 @@ GVariant* SavedConnection::getSettingProp(const char* settingName,
 {
     GVariant* property = nullptr;
     GVariant* setting = getSetting(settingName);
-    if(setting != nullptr)
+    if (setting != nullptr)
     {
         property = getSettingProp(setting, propName);
         g_variant_unref(setting);
@@ -168,7 +173,6 @@ GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
     return property;
 }
 
-    
 /**
  * Checks if this connection has a particular setting type.
  * Don't use this if you actually need any data from the setting, in that
@@ -178,7 +182,7 @@ GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
 bool SavedConnection::hasSetting(const char* settingName)
 {
     GVariant* setting = getSetting(settingName);
-    if(setting != nullptr)
+    if (setting != nullptr)
     {
         g_variant_unref(setting);
         setting = nullptr;
@@ -186,7 +190,6 @@ bool SavedConnection::hasSetting(const char* settingName)
     }
     return false;
 }
-
 
 /**
  * Checks if this connection has a specific settings property in a specific 
@@ -198,7 +201,7 @@ bool SavedConnection::hasSettingProperty(const char* settingName,
         const char* propName)
 {
     GVariant* prop = getSettingProp(settingName, propName);
-    if(prop != nullptr)
+    if (prop != nullptr)
     {
         g_variant_unref(prop);
         prop = nullptr;
