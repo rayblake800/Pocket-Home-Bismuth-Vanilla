@@ -67,15 +67,27 @@ namespace GVariantConverter
         free(array);
         return varArray;
     }
-
-    template<> GBytes* getValue(GVariant* variant)
+    
+    template<> GArray* getValue(GVariant* variant)
     {
-        if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_BYTESTRING))
+        if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_ARRAY))
         {
             jassertfalse;
             return nullptr;
         }
-        return g_variant_get_data_as_bytes(variant);
+        gsize numChildren = g_variant_n_children(variant);
+        if(numChildren == 0)
+        {
+            return nullptr;
+        }
+        gsize childSize = g_variant_get_size(variant)/numChildren;
+        
+        gconstpointer arrayData = g_variant_get_fixed_array(variant,
+                &numChildren,childSize);
+        GArray* arrayValue = g_array_sized_new(false, true, 
+                g_variant_get_size(variant)/numChildren, numChildren);
+        g_array_append_vals(arrayValue, arrayData, numChildren);
+        return arrayValue;
     }
 
     template<> GVariant* getVariant(bool value)
@@ -108,23 +120,6 @@ namespace GVariantConverter
         GVariant* varArray = g_variant_new_strv(array, value.size());
         delete[] array;
         return varArray;
-
-    }
-
-    template<> GVariant* getVariant(GBytes* value)
-    {
-        gsize size = 0;
-        const char* data = (const char*) g_bytes_get_data(value, &size);
-        if (data[size - 1] == 0)
-        {
-            return g_variant_new_bytestring(data);
-        }
-        else
-        {
-            DBG("GVariantConverter::" << __func__
-                    << ": bytestring is not null terminated!");
-            return nullptr;
-        }
 
     }
 
@@ -217,7 +212,6 @@ namespace GVariantConverter
             case stringType:
                 return G_TYPE_STRING;
             case byteStringType:
-                return G_TYPE_BYTES;
             case arrayType:
                 return G_TYPE_ARRAY;
             case dictType:
@@ -276,16 +270,17 @@ namespace GVariantConverter
                 g_value_set_string(&value, g_variant_get_string(variant, nullptr));
                 break;
             case byteStringType:
+            case arrayType:
             {
 
-                GBytes* byteStr = getValue<GBytes*>(variant);
-                g_value_set_instance(&value,
-                        g_bytes_unref_to_data(byteStr,nullptr));
-                
-                char* debug = g_strdup_value_contents(&value);
-                DBG("Byte GValue:" << debug);
-                g_free(debug);
-                
+                GArray* array = getValue<GArray*>(variant);
+                if(array != nullptr)
+                {
+                    g_value_take_boxed(&value, array);
+                    char* debug = g_strdup_value_contents(&value);
+                    DBG("Array GValue:" << debug);
+                    g_free(debug);
+                }
                 break;
             }
         }
