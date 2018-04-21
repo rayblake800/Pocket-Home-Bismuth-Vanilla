@@ -72,9 +72,23 @@ NMConnection* SavedConnection::createNMConnection()
             String keyStr = GVariantConverter::toString(key);
             if (keyStr.isNotEmpty())
             {
-                GValue propValue = GVariantConverter::getGValue(val);
-                g_object_set_property(G_OBJECT(setting), keyStr.toRawUTF8(),
-                        &propValue);
+                //GObject refuses to accept byte arrays packaged in GValues
+                if(GVariantConverter::getType(val) 
+                        == GVariantConverter::byteStringType)
+                {
+                    GByteArray* byteArray 
+                            = GVariantConverter::getValue<GByteArray*>(val);
+                    g_object_set(G_OBJECT(setting),
+                            keyStr.toRawUTF8(),
+                            byteArray,
+                            nullptr);
+                }
+                else
+                {
+                    GValue propValue = GVariantConverter::getGValue(val);
+                    g_object_set_property(G_OBJECT(setting), keyStr.toRawUTF8(),
+                            &propValue);
+                }
             }
         };
         GVariantConverter::iterateDict(settings, [this, con, &setting,

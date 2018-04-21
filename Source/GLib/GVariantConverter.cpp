@@ -89,6 +89,16 @@ namespace GVariantConverter
         g_array_append_vals(arrayValue, arrayData, numChildren);
         return arrayValue;
     }
+    
+    template<> GByteArray* getValue(GVariant* variant)
+    {
+        GByteArray* array = g_byte_array_new();
+        gsize numBytes = 0;
+        gconstpointer byteData = g_variant_get_fixed_array(variant,
+                &numBytes, sizeof(guchar));
+        g_byte_array_append(array, (const guint8*) byteData, numBytes);
+        return array;
+    }
 
     template<> GVariant* getVariant(bool value)
     {
