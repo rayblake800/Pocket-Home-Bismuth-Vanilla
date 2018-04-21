@@ -222,9 +222,9 @@ namespace GVariantConverter
             case stringType:
                 return G_TYPE_STRING;
             case byteStringType:
-            case arrayType:
                 return G_TYPE_BYTE_ARRAY;
-                //return G_TYPE_ARRAY;
+            case arrayType:
+                return G_TYPE_ARRAY;
             case dictType:
             case unsupported:
                 return G_TYPE_INVALID;
@@ -233,19 +233,6 @@ namespace GVariantConverter
 
     GValue getGValue(GVariant* variant)
     {
-        //unpack single item containers
-        if (g_variant_is_container(variant)
-            && g_variant_n_children(variant) == 1)
-        {
-            GVariant* unpacked = unpack(variant);
-            if (unpacked != nullptr)
-            {
-                GValue value = getGValue(unpacked);
-                g_variant_unref(unpacked);
-                unpacked = nullptr;
-                return value;
-            }
-        }
         GValue value = G_VALUE_INIT;
         g_value_init(&value, getGType(variant));
         switch (getType(variant))
@@ -475,6 +462,17 @@ namespace GVariantConverter
         while (g_variant_iter_next(&dictIter, "{@s*}", &key, &val))
         {
 
+            if(g_variant_is_container(val) 
+                    && g_variant_n_children(val) == 1)
+            {
+                GVariant* temp = unpack(val);
+                if(temp != nullptr)
+                {
+                    g_variant_unref(val);
+                    val = temp;
+                }
+            }
+            
             dictCall(key, val);
             g_variant_unref(key);
             g_variant_unref(val);
