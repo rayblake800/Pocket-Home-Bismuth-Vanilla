@@ -77,7 +77,8 @@ NMConnection* SavedConnection::createNMConnection()
                         &propValue);
             }
         };
-        GVariantConverter::iterateDict(settings, [this, con, &setting]
+        GVariantConverter::iterateDict(settings, [this, con, &setting,
+                &copyDict]
                 (GVariant* key, GVariant * val)
         {
             String keyStr = GVariantConverter::getValue<String>(key);
