@@ -279,7 +279,8 @@ namespace GVariantConverter
             {
 
                 GBytes* byteStr = getValue<GBytes*>(variant);
-                g_value_init_from_instance(&value, byteStr);
+                g_value_set_instance(&value,
+                        g_bytes_unref_to_data(byteStr,nullptr));
                 break;
             }
         }
