@@ -28,6 +28,7 @@ namespace GVariantConverter
         stringType,
         byteStringType,
         arrayType,
+        stringArrayType,
         dictType,
         unsupported
     };

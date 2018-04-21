@@ -186,6 +186,10 @@ namespace GVariantConverter
         {
             return byteStringType;
         }
+        if (g_variant_is_of_type(variant, G_VARIANT_TYPE_STRING_ARRAY))
+        {
+            return stringArrayType;
+        }
         if (g_variant_is_container(variant))
         {
             return arrayType;
@@ -225,6 +229,8 @@ namespace GVariantConverter
                 return G_TYPE_BYTE_ARRAY;
             case arrayType:
                 return G_TYPE_ARRAY;
+            case stringArrayType:
+                return G_TYPE_STRV;
             case dictType:
             case unsupported:
                 return G_TYPE_INVALID;
@@ -293,6 +299,9 @@ namespace GVariantConverter
                 }
                 break;
             }
+            case stringArrayType:
+                g_value_take_boxed(&value,
+                        g_variant_get_strv(variant, nullptr));
         }
         return value;
     }
