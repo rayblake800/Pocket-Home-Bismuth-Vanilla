@@ -19,12 +19,19 @@ GDBusProxyInterface::GDBusProxyInterface
         DBG(__func__ << "Opening DBus adapter proxy "
                 << name << " failed!");
         DBG("Error: " << String(error->message));
+        proxy = nullptr;
+        g_error_free(error);
+        error = nullptr;
     }
 }
 
-GVariant* GDBusProxyInterface::callMethod(const char *  methodName, GVariant* params)
+/*
+ * Calls one of the methods provided by this interface.
+ */
+GVariant* GDBusProxyInterface::callMethod
+(const char *  methodName, GVariant* params)
 {
-    if(params != nullptr && !g_variant_is_container(params))
+    if(params != nullptr && !g_variant_is_of_type(G_VARIANT_TYPE_TUPLE))
     {
         GVariant* tuple = g_variant_new_tuple(&params, 1);
         params = tuple;
