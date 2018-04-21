@@ -1,0 +1,468 @@
+\hypertarget{classComponentConfigFile}{}\section{Component\+Config\+File Class Reference}
+\label{classComponentConfigFile}\index{Component\+Config\+File@{Component\+Config\+File}}
+
+
+{\ttfamily \#include $<$Component\+Config\+File.\+h$>$}
+
+Inheritance diagram for Component\+Config\+File\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classComponentConfigFile}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classComponentConfigFile_1_1ComponentSettings}{Component\+Settings}}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Default\+Colour}} \{ \newline
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a2daf94192d0e470e5084007c049eef34}{window\+Background}} = 0, 
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a764db1737dab17abd6d33ad0e4e51fbf}{widget\+Background}}, 
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a42fc259cbb0ce35b0801d48bc58e82f7}{widget\+Off}}, 
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a32f89a57e955b08ccb0441584fc1b31f}{widget\+On}}, 
+\newline
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8adae9364a025b93aa1ad73e41e48dd752}{menu\+Background}}, 
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8aad68287d1b2f6b9cb182f8f5e8cf4c64}{outline}}, 
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ae8a61ef52cfbc4b37b9a916f2578167b}{focused\+Outline}}, 
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a13f9576ad0e53261fe0c2226236909e5}{text\+Field}}, 
+\newline
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}{text}}, 
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a52bf955c46fb890fa87cd0e06003e3c9}{highlighted\+Text\+Field}}, 
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8aee87ae032142d7a1ba6b7422fbd93e37}{highlighted\+Text}}, 
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a90d8e30c032df00001865e3ea0968369}{none}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classComponentConfigFile_a304974fc0520848aa84a3141a3521fbb}{Component\+Config\+File}} ()
+\item 
+virtual \mbox{\hyperlink{classComponentConfigFile_a2ae01b7e47e86976baee8326db9de17c}{$\sim$\+Component\+Config\+File}} ()
+\item 
+\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Default\+Colour}} \mbox{\hyperlink{classComponentConfigFile_a4a82c4e5eedd8ee0128e4e4074a84f8a}{get\+Colour\+Type}} (String color\+Key)
+\item 
+String \mbox{\hyperlink{classComponentConfigFile_a96867166b573ab6d14d343d45ee7d51e}{get\+Colour\+Key}} (\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Default\+Colour}} colour)
+\item 
+Colour \mbox{\hyperlink{classComponentConfigFile_a1219b2ee65746b2dc044b2309da91544}{get\+Colour}} (\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Default\+Colour}} colour\+Type)
+\item 
+Array$<$ int $>$ \mbox{\hyperlink{classComponentConfigFile_ae2d37902d4153dd9b8f31418955c991f}{get\+Colour\+Ids}} (\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Default\+Colour}} colour\+Type)
+\item 
+void \mbox{\hyperlink{classComponentConfigFile_a2afa7e95d450f22c91cde28e909fb0b1}{set\+Colour}} (\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Default\+Colour}} colour\+Type, Colour new\+Colour)
+\item 
+void \mbox{\hyperlink{classComponentConfigFile_afa051342de6ce64f115df2528b48663b}{set\+Colour}} (String key, Colour new\+Colour)
+\item 
+String\+Array \mbox{\hyperlink{classComponentConfigFile_af3ca8de8ed548f662eaf07c59cd4abe9}{get\+Colour\+Keys}} () const
+\item 
+int \mbox{\hyperlink{classComponentConfigFile_aa87c850a6381399fcbf9242522c9a65a}{get\+Colour\+Id}} (String colour\+Key)
+\item 
+Colour \mbox{\hyperlink{classComponentConfigFile_aad2b82f6ff6f0883cdf3a54d4869e8e4}{get\+Colour}} (String colour\+Key)
+\item 
+\mbox{\hyperlink{classComponentConfigFile_1_1ComponentSettings}{Component\+Settings}} \mbox{\hyperlink{classComponentConfigFile_a708a5f5d09bb6f8bc00857eaa7bbc943}{get\+Component\+Settings}} (String component\+Key)
+\item 
+void \mbox{\hyperlink{classComponentConfigFile_a6b4babfe3b324fb37a00d9ab9b65f5ec}{add\+Listener}} (\mbox{\hyperlink{classConfigFile_1_1Listener}{Config\+File\+::\+Listener}} $\ast$listener, String\+Array tracked\+Keys)
+\item 
+int \mbox{\hyperlink{classComponentConfigFile_a21564a3d43977aac7ed217836fe79f73}{get\+Font\+Height}} (Rectangle$<$ int $>$ text\+Bounds, String \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}{text}})
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const String\+Array \mbox{\hyperlink{classComponentConfigFile_af218812d58a0af67b7632490803c4a69}{default\+Colour\+Keys}}
+\item 
+static const std\+::map$<$ String, int $>$ \mbox{\hyperlink{classComponentConfigFile_a5bf8be78dd943ff78d1b9fce70a1b994}{colour\+Ids}}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a61966be0b36f2ef9c620bbf61ef87686}{scrolling\+App\+Menu\+Key}} = \char`\"{}scrolling app menu\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a8d06be7c70ea29e823f57c4fa061adb6}{paged\+App\+Menu\+Key}} = \char`\"{}paged app menu\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_ac2ee472ddefecc76de9cb5853371fb82}{menu\+Frame\+Key}} = \char`\"{}menu frame\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a613804a43d6243563a55a22dd161db43}{battery\+Icon\+Key}} = \char`\"{}battery\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a20146b9d5193bc8f368c739b48bf5a5e}{battery\+Percent\+Key}} = \char`\"{}battery percent \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}{text}}\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a2a887447ef1562c45715a66c9578c2c9}{clock\+Label\+Key}} = \char`\"{}time\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a5c10f5b11465272acaff46b8e10e225e}{wifi\+Icon\+Key}} = \char`\"{}wifi\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_adf7ae9f1c9a87122a29084cac57c7471}{power\+Button\+Key}} = \char`\"{}power button\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_acf8c6fa3b10f88cfb59346677c432ceb}{settings\+Button\+Key}} = \char`\"{}settings button\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a576e0a902d5dee82b6de22b784a7fcfd}{popup\+Menu\+Key}} = \char`\"{}popup menu\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_adeea9bba1d2894ed94d65f454544eed9}{page\+Left\+Key}} = \char`\"{}left arrow button\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a776fbf69042134e4bef50674d887b5fe}{page\+Right\+Key}} = \char`\"{}right arrow button\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_ad633ebb28c7b2794a3ae280c8a27be0c}{page\+Up\+Key}} = \char`\"{}up arrow button\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_aac4344074e1e037ded90c7b5393bb25c}{page\+Down\+Key}} = \char`\"{}down arrow button\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a2dc1970e3a42bc95ed6b19da3c70613a}{spinner\+Key}} = \char`\"{}loading spinner\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a1983a2e8d69a256bd25b300a2019da22}{small\+Text\+Key}} = \char`\"{}small \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}{text}}\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_a1f62cbbdd6827681a7e429185b0c56a1}{medium\+Text\+Key}} = \char`\"{}medium \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}{text}}\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classComponentConfigFile_ade34635c596844daae68c87a079ea5fd}{large\+Text\+Key}} = \char`\"{}large \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}{text}}\char`\"{}
+\end{DoxyCompactItemize}
+\subsection*{Static Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static String\+Array \mbox{\hyperlink{classComponentConfigFile_a5d5fb2db80da161d553e60d0ad16241e}{get\+Component\+Keys}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!Default\+Colour@{Default\+Colour}}
+\index{Default\+Colour@{Default\+Colour}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{Default\+Colour}{DefaultColour}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Component\+Config\+File\+::\+Default\+Colour}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{window\+Background@{window\+Background}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!window\+Background@{window\+Background}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a2daf94192d0e470e5084007c049eef34}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a2daf94192d0e470e5084007c049eef34}} 
+window\+Background&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{widget\+Background@{widget\+Background}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!widget\+Background@{widget\+Background}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a764db1737dab17abd6d33ad0e4e51fbf}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a764db1737dab17abd6d33ad0e4e51fbf}} 
+widget\+Background&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{widget\+Off@{widget\+Off}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!widget\+Off@{widget\+Off}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a42fc259cbb0ce35b0801d48bc58e82f7}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a42fc259cbb0ce35b0801d48bc58e82f7}} 
+widget\+Off&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{widget\+On@{widget\+On}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!widget\+On@{widget\+On}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a32f89a57e955b08ccb0441584fc1b31f}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a32f89a57e955b08ccb0441584fc1b31f}} 
+widget\+On&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{menu\+Background@{menu\+Background}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!menu\+Background@{menu\+Background}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8adae9364a025b93aa1ad73e41e48dd752}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8adae9364a025b93aa1ad73e41e48dd752}} 
+menu\+Background&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{outline@{outline}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!outline@{outline}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8aad68287d1b2f6b9cb182f8f5e8cf4c64}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8aad68287d1b2f6b9cb182f8f5e8cf4c64}} 
+outline&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{focused\+Outline@{focused\+Outline}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!focused\+Outline@{focused\+Outline}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ae8a61ef52cfbc4b37b9a916f2578167b}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ae8a61ef52cfbc4b37b9a916f2578167b}} 
+focused\+Outline&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{text\+Field@{text\+Field}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!text\+Field@{text\+Field}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a13f9576ad0e53261fe0c2226236909e5}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a13f9576ad0e53261fe0c2226236909e5}} 
+text\+Field&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{text@{text}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!text@{text}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}} 
+text&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{highlighted\+Text\+Field@{highlighted\+Text\+Field}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!highlighted\+Text\+Field@{highlighted\+Text\+Field}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a52bf955c46fb890fa87cd0e06003e3c9}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a52bf955c46fb890fa87cd0e06003e3c9}} 
+highlighted\+Text\+Field&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{highlighted\+Text@{highlighted\+Text}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!highlighted\+Text@{highlighted\+Text}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8aee87ae032142d7a1ba6b7422fbd93e37}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8aee87ae032142d7a1ba6b7422fbd93e37}} 
+highlighted\+Text&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{none@{none}!Component\+Config\+File@{Component\+Config\+File}}\index{Component\+Config\+File@{Component\+Config\+File}!none@{none}}}\mbox{\Hypertarget{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a90d8e30c032df00001865e3ea0968369}\label{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8a90d8e30c032df00001865e3ea0968369}} 
+none&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classComponentConfigFile_a304974fc0520848aa84a3141a3521fbb}\label{classComponentConfigFile_a304974fc0520848aa84a3141a3521fbb}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!Component\+Config\+File@{Component\+Config\+File}}
+\index{Component\+Config\+File@{Component\+Config\+File}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{Component\+Config\+File()}{ComponentConfigFile()}}
+{\footnotesize\ttfamily Component\+Config\+File\+::\+Component\+Config\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classComponentConfigFile_a2ae01b7e47e86976baee8326db9de17c}\label{classComponentConfigFile_a2ae01b7e47e86976baee8326db9de17c}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!````~Component\+Config\+File@{$\sim$\+Component\+Config\+File}}
+\index{````~Component\+Config\+File@{$\sim$\+Component\+Config\+File}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{$\sim$\+Component\+Config\+File()}{~ComponentConfigFile()}}
+{\footnotesize\ttfamily virtual Component\+Config\+File\+::$\sim$\+Component\+Config\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classComponentConfigFile_a6b4babfe3b324fb37a00d9ab9b65f5ec}\label{classComponentConfigFile_a6b4babfe3b324fb37a00d9ab9b65f5ec}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!add\+Listener@{add\+Listener}}
+\index{add\+Listener@{add\+Listener}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{add\+Listener()}{addListener()}}
+{\footnotesize\ttfamily void Component\+Config\+File\+::add\+Listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classConfigFile_1_1Listener}{Config\+File\+::\+Listener}} $\ast$}]{listener,  }\item[{String\+Array}]{tracked\+Keys }\end{DoxyParamCaption})}
+
+Add a listener to track component setting changes. \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{ConfigFile_8h}{Config\+File.\+h}}
+\end{DoxySeeAlso}
+Add a listener to track component setting changes. \mbox{\Hypertarget{classComponentConfigFile_a1219b2ee65746b2dc044b2309da91544}\label{classComponentConfigFile_a1219b2ee65746b2dc044b2309da91544}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!get\+Colour@{get\+Colour}}
+\index{get\+Colour@{get\+Colour}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Colour()}{getColour()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Colour Component\+Config\+File\+::get\+Colour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Default\+Colour}}}]{colour\+Type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classComponentConfigFile_aad2b82f6ff6f0883cdf3a54d4869e8e4}\label{classComponentConfigFile_aad2b82f6ff6f0883cdf3a54d4869e8e4}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!get\+Colour@{get\+Colour}}
+\index{get\+Colour@{get\+Colour}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Colour()}{getColour()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Colour Component\+Config\+File\+::get\+Colour (\begin{DoxyParamCaption}\item[{String}]{colour\+Key }\end{DoxyParamCaption})}
+
+Get a color value from its String key.
+
+
+\begin{DoxyParams}{Parameters}
+{\em colour\+Key} & the key for a color value in colour\+Ids \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the corresponding Colour value, or Colour() if colour\+Key wasn\textquotesingle{}t found. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classComponentConfigFile_aa87c850a6381399fcbf9242522c9a65a}\label{classComponentConfigFile_aa87c850a6381399fcbf9242522c9a65a}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!get\+Colour\+Id@{get\+Colour\+Id}}
+\index{get\+Colour\+Id@{get\+Colour\+Id}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Colour\+Id()}{getColourId()}}
+{\footnotesize\ttfamily int Component\+Config\+File\+::get\+Colour\+Id (\begin{DoxyParamCaption}\item[{String}]{colour\+Key }\end{DoxyParamCaption})}
+
+Find a Component Colour\+Id value from its String key
+
+
+\begin{DoxyParams}{Parameters}
+{\em colour\+Key} & the key for a color value in colour\+Ids \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the corresponding Colour\+Id value, or -\/1 if colour\+Key wasn\textquotesingle{}t found.
+\end{DoxyReturn}
+Find a Component Colour\+Id value from its config key String \mbox{\Hypertarget{classComponentConfigFile_ae2d37902d4153dd9b8f31418955c991f}\label{classComponentConfigFile_ae2d37902d4153dd9b8f31418955c991f}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!get\+Colour\+Ids@{get\+Colour\+Ids}}
+\index{get\+Colour\+Ids@{get\+Colour\+Ids}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Colour\+Ids()}{getColourIds()}}
+{\footnotesize\ttfamily Array$<$ int $>$ Component\+Config\+File\+::get\+Colour\+Ids (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Component\+Config\+File\+::\+Default\+Colour}}}]{colour\+Type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classComponentConfigFile_a96867166b573ab6d14d343d45ee7d51e}\label{classComponentConfigFile_a96867166b573ab6d14d343d45ee7d51e}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!get\+Colour\+Key@{get\+Colour\+Key}}
+\index{get\+Colour\+Key@{get\+Colour\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Colour\+Key()}{getColourKey()}}
+{\footnotesize\ttfamily String Component\+Config\+File\+::get\+Colour\+Key (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Default\+Colour}}}]{colour }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classComponentConfigFile_af3ca8de8ed548f662eaf07c59cd4abe9}\label{classComponentConfigFile_af3ca8de8ed548f662eaf07c59cd4abe9}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!get\+Colour\+Keys@{get\+Colour\+Keys}}
+\index{get\+Colour\+Keys@{get\+Colour\+Keys}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Colour\+Keys()}{getColourKeys()}}
+{\footnotesize\ttfamily String\+Array Component\+Config\+File\+::get\+Colour\+Keys (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the keys to all Component color settings stored in components.\+json 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classComponentConfigFile_a4a82c4e5eedd8ee0128e4e4074a84f8a}\label{classComponentConfigFile_a4a82c4e5eedd8ee0128e4e4074a84f8a}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!get\+Colour\+Type@{get\+Colour\+Type}}
+\index{get\+Colour\+Type@{get\+Colour\+Type}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Colour\+Type()}{getColourType()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Component\+Config\+File\+::\+Default\+Colour}} Component\+Config\+File\+::get\+Colour\+Type (\begin{DoxyParamCaption}\item[{String}]{color\+Key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classComponentConfigFile_a5d5fb2db80da161d553e60d0ad16241e}\label{classComponentConfigFile_a5d5fb2db80da161d553e60d0ad16241e}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!get\+Component\+Keys@{get\+Component\+Keys}}
+\index{get\+Component\+Keys@{get\+Component\+Keys}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Component\+Keys()}{getComponentKeys()}}
+{\footnotesize\ttfamily String\+Array Component\+Config\+File\+::get\+Component\+Keys (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+\begin{DoxyReturn}{Returns}
+the list of all component keys. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classComponentConfigFile_a708a5f5d09bb6f8bc00857eaa7bbc943}\label{classComponentConfigFile_a708a5f5d09bb6f8bc00857eaa7bbc943}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!get\+Component\+Settings@{get\+Component\+Settings}}
+\index{get\+Component\+Settings@{get\+Component\+Settings}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Component\+Settings()}{getComponentSettings()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classComponentConfigFile_1_1ComponentSettings}{Component\+Config\+File\+::\+Component\+Settings}} Component\+Config\+File\+::get\+Component\+Settings (\begin{DoxyParamCaption}\item[{String}]{component\+Key }\end{DoxyParamCaption})}
+
+Gets configured component settings from shared .json file data.
+
+
+\begin{DoxyParams}{Parameters}
+{\em component\+Key} & A configurable UI component\textquotesingle{}s key string.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the properties defined for that component.
+\end{DoxyReturn}
+Gets configured component settings from shared .json file data. \mbox{\Hypertarget{classComponentConfigFile_a21564a3d43977aac7ed217836fe79f73}\label{classComponentConfigFile_a21564a3d43977aac7ed217836fe79f73}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!get\+Font\+Height@{get\+Font\+Height}}
+\index{get\+Font\+Height@{get\+Font\+Height}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Font\+Height()}{getFontHeight()}}
+{\footnotesize\ttfamily int Component\+Config\+File\+::get\+Font\+Height (\begin{DoxyParamCaption}\item[{Rectangle$<$ int $>$}]{text\+Bounds,  }\item[{String}]{text }\end{DoxyParamCaption})}
+
+Return the most appropriate font size for drawing text.
+
+
+\begin{DoxyParams}{Parameters}
+{\em text\+Bounds} & The area in which the text will be drawn.\\
+\hline
+{\em text} & The actual text being drawn.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Whichever font height (small, medium, or large) defined in components.\+json would best fit this text within its bounds. If even the small font size is too big to fit in text\+Bounds, instead return whatever font height is small enough to fit.
+\end{DoxyReturn}
+Return the most appropriate font size for drawing text \mbox{\Hypertarget{classComponentConfigFile_a2afa7e95d450f22c91cde28e909fb0b1}\label{classComponentConfigFile_a2afa7e95d450f22c91cde28e909fb0b1}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!set\+Colour@{set\+Colour}}
+\index{set\+Colour@{set\+Colour}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{set\+Colour()}{setColour()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Component\+Config\+File\+::set\+Colour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8}{Default\+Colour}}}]{colour\+Type,  }\item[{Colour}]{new\+Colour }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classComponentConfigFile_afa051342de6ce64f115df2528b48663b}\label{classComponentConfigFile_afa051342de6ce64f115df2528b48663b}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!set\+Colour@{set\+Colour}}
+\index{set\+Colour@{set\+Colour}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{set\+Colour()}{setColour()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Component\+Config\+File\+::set\+Colour (\begin{DoxyParamCaption}\item[{String}]{key,  }\item[{Colour}]{new\+Colour }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classComponentConfigFile_a613804a43d6243563a55a22dd161db43}\label{classComponentConfigFile_a613804a43d6243563a55a22dd161db43}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!battery\+Icon\+Key@{battery\+Icon\+Key}}
+\index{battery\+Icon\+Key@{battery\+Icon\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{battery\+Icon\+Key}{batteryIconKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::battery\+Icon\+Key = \char`\"{}battery\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a20146b9d5193bc8f368c739b48bf5a5e}\label{classComponentConfigFile_a20146b9d5193bc8f368c739b48bf5a5e}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!battery\+Percent\+Key@{battery\+Percent\+Key}}
+\index{battery\+Percent\+Key@{battery\+Percent\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{battery\+Percent\+Key}{batteryPercentKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::battery\+Percent\+Key = \char`\"{}battery percent \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}{text}}\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a2a887447ef1562c45715a66c9578c2c9}\label{classComponentConfigFile_a2a887447ef1562c45715a66c9578c2c9}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!clock\+Label\+Key@{clock\+Label\+Key}}
+\index{clock\+Label\+Key@{clock\+Label\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{clock\+Label\+Key}{clockLabelKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::clock\+Label\+Key = \char`\"{}time\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a5bf8be78dd943ff78d1b9fce70a1b994}\label{classComponentConfigFile_a5bf8be78dd943ff78d1b9fce70a1b994}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!colour\+Ids@{colour\+Ids}}
+\index{colour\+Ids@{colour\+Ids}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{colour\+Ids}{colourIds}}
+{\footnotesize\ttfamily const std\+::map$<$ String, int $>$ Component\+Config\+File\+::colour\+Ids\hspace{0.3cm}{\ttfamily [static]}}
+
+Colour value string keys are stored here along with their corresponding Colour\+Id values \mbox{\Hypertarget{classComponentConfigFile_af218812d58a0af67b7632490803c4a69}\label{classComponentConfigFile_af218812d58a0af67b7632490803c4a69}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!default\+Colour\+Keys@{default\+Colour\+Keys}}
+\index{default\+Colour\+Keys@{default\+Colour\+Keys}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{default\+Colour\+Keys}{defaultColourKeys}}
+{\footnotesize\ttfamily const String\+Array Component\+Config\+File\+::default\+Colour\+Keys\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= 
+\{
+    \textcolor{stringliteral}{"window background"},
+    \textcolor{stringliteral}{"widget background"},
+    \textcolor{stringliteral}{"widget(off)"},
+    \textcolor{stringliteral}{"widget(on)"},
+    \textcolor{stringliteral}{"menu background"},
+    \textcolor{stringliteral}{"outline"},
+    \textcolor{stringliteral}{"focused outline"},
+    \textcolor{stringliteral}{"text field"},
+    \textcolor{stringliteral}{"text"},
+    \textcolor{stringliteral}{"highlighted text field"},
+    \textcolor{stringliteral}{"highlighted text"}
+\}
+\end{DoxyCode}
+\mbox{\Hypertarget{classComponentConfigFile_ade34635c596844daae68c87a079ea5fd}\label{classComponentConfigFile_ade34635c596844daae68c87a079ea5fd}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!large\+Text\+Key@{large\+Text\+Key}}
+\index{large\+Text\+Key@{large\+Text\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{large\+Text\+Key}{largeTextKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::large\+Text\+Key = \char`\"{}large \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}{text}}\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a1f62cbbdd6827681a7e429185b0c56a1}\label{classComponentConfigFile_a1f62cbbdd6827681a7e429185b0c56a1}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!medium\+Text\+Key@{medium\+Text\+Key}}
+\index{medium\+Text\+Key@{medium\+Text\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{medium\+Text\+Key}{mediumTextKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::medium\+Text\+Key = \char`\"{}medium \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}{text}}\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_ac2ee472ddefecc76de9cb5853371fb82}\label{classComponentConfigFile_ac2ee472ddefecc76de9cb5853371fb82}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!menu\+Frame\+Key@{menu\+Frame\+Key}}
+\index{menu\+Frame\+Key@{menu\+Frame\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{menu\+Frame\+Key}{menuFrameKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::menu\+Frame\+Key = \char`\"{}menu frame\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a8d06be7c70ea29e823f57c4fa061adb6}\label{classComponentConfigFile_a8d06be7c70ea29e823f57c4fa061adb6}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!paged\+App\+Menu\+Key@{paged\+App\+Menu\+Key}}
+\index{paged\+App\+Menu\+Key@{paged\+App\+Menu\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{paged\+App\+Menu\+Key}{pagedAppMenuKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::paged\+App\+Menu\+Key = \char`\"{}paged app menu\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_aac4344074e1e037ded90c7b5393bb25c}\label{classComponentConfigFile_aac4344074e1e037ded90c7b5393bb25c}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!page\+Down\+Key@{page\+Down\+Key}}
+\index{page\+Down\+Key@{page\+Down\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{page\+Down\+Key}{pageDownKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::page\+Down\+Key = \char`\"{}down arrow button\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_adeea9bba1d2894ed94d65f454544eed9}\label{classComponentConfigFile_adeea9bba1d2894ed94d65f454544eed9}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!page\+Left\+Key@{page\+Left\+Key}}
+\index{page\+Left\+Key@{page\+Left\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{page\+Left\+Key}{pageLeftKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::page\+Left\+Key = \char`\"{}left arrow button\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a776fbf69042134e4bef50674d887b5fe}\label{classComponentConfigFile_a776fbf69042134e4bef50674d887b5fe}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!page\+Right\+Key@{page\+Right\+Key}}
+\index{page\+Right\+Key@{page\+Right\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{page\+Right\+Key}{pageRightKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::page\+Right\+Key = \char`\"{}right arrow button\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_ad633ebb28c7b2794a3ae280c8a27be0c}\label{classComponentConfigFile_ad633ebb28c7b2794a3ae280c8a27be0c}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!page\+Up\+Key@{page\+Up\+Key}}
+\index{page\+Up\+Key@{page\+Up\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{page\+Up\+Key}{pageUpKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::page\+Up\+Key = \char`\"{}up arrow button\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a576e0a902d5dee82b6de22b784a7fcfd}\label{classComponentConfigFile_a576e0a902d5dee82b6de22b784a7fcfd}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!popup\+Menu\+Key@{popup\+Menu\+Key}}
+\index{popup\+Menu\+Key@{popup\+Menu\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{popup\+Menu\+Key}{popupMenuKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::popup\+Menu\+Key = \char`\"{}popup menu\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_adf7ae9f1c9a87122a29084cac57c7471}\label{classComponentConfigFile_adf7ae9f1c9a87122a29084cac57c7471}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!power\+Button\+Key@{power\+Button\+Key}}
+\index{power\+Button\+Key@{power\+Button\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{power\+Button\+Key}{powerButtonKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::power\+Button\+Key = \char`\"{}power button\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a61966be0b36f2ef9c620bbf61ef87686}\label{classComponentConfigFile_a61966be0b36f2ef9c620bbf61ef87686}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!scrolling\+App\+Menu\+Key@{scrolling\+App\+Menu\+Key}}
+\index{scrolling\+App\+Menu\+Key@{scrolling\+App\+Menu\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{scrolling\+App\+Menu\+Key}{scrollingAppMenuKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::scrolling\+App\+Menu\+Key = \char`\"{}scrolling app menu\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_acf8c6fa3b10f88cfb59346677c432ceb}\label{classComponentConfigFile_acf8c6fa3b10f88cfb59346677c432ceb}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!settings\+Button\+Key@{settings\+Button\+Key}}
+\index{settings\+Button\+Key@{settings\+Button\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{settings\+Button\+Key}{settingsButtonKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::settings\+Button\+Key = \char`\"{}settings button\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a1983a2e8d69a256bd25b300a2019da22}\label{classComponentConfigFile_a1983a2e8d69a256bd25b300a2019da22}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!small\+Text\+Key@{small\+Text\+Key}}
+\index{small\+Text\+Key@{small\+Text\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{small\+Text\+Key}{smallTextKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::small\+Text\+Key = \char`\"{}small \mbox{\hyperlink{classComponentConfigFile_a9bf86058d7f64d6ba94770c3dbf3cad8ac27156a5310c2ff67c46cd3cd629eb70}{text}}\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a2dc1970e3a42bc95ed6b19da3c70613a}\label{classComponentConfigFile_a2dc1970e3a42bc95ed6b19da3c70613a}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!spinner\+Key@{spinner\+Key}}
+\index{spinner\+Key@{spinner\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{spinner\+Key}{spinnerKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::spinner\+Key = \char`\"{}loading spinner\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classComponentConfigFile_a5c10f5b11465272acaff46b8e10e225e}\label{classComponentConfigFile_a5c10f5b11465272acaff46b8e10e225e}} 
+\index{Component\+Config\+File@{Component\+Config\+File}!wifi\+Icon\+Key@{wifi\+Icon\+Key}}
+\index{wifi\+Icon\+Key@{wifi\+Icon\+Key}!Component\+Config\+File@{Component\+Config\+File}}
+\subsubsection{\texorpdfstring{wifi\+Icon\+Key}{wifiIconKey}}
+{\footnotesize\ttfamily const String Component\+Config\+File\+::wifi\+Icon\+Key = \char`\"{}wifi\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{ComponentConfigFile_8h}{Component\+Config\+File.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{ComponentConfigFile_8cpp}{Component\+Config\+File.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,279 @@
+\hypertarget{classConfigAppMenuItem}{}\section{Config\+App\+Menu\+Item Class Reference}
+\label{classConfigAppMenuItem}\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+
+
+{\ttfamily \#include $<$Config\+App\+Menu\+Item.\+h$>$}
+
+Inheritance diagram for Config\+App\+Menu\+Item\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classConfigAppMenuItem}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classConfigAppMenuItem_ac310da919ec5dd0d462d15eacda9b00f}{Config\+App\+Menu\+Item}} (const \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Config\+File\+::\+App\+Item}} \&app\+Item)
+\item 
+virtual \mbox{\hyperlink{classConfigAppMenuItem_ab8485e4ace7e6418dc857d08bd570bc7}{$\sim$\+Config\+App\+Menu\+Item}} ()
+\item 
+String \mbox{\hyperlink{classConfigAppMenuItem_a79678785733e59496daabe77c488c1b0}{get\+App\+Name}} () const override
+\item 
+String \mbox{\hyperlink{classConfigAppMenuItem_ada51b274c9d790f1bf5f9e84f878f0a4}{get\+Command}} () const override
+\item 
+bool \mbox{\hyperlink{classConfigAppMenuItem_ae986dacefb0b3fb79917452b4857d6ec}{is\+Terminal\+App}} () const override
+\item 
+String \mbox{\hyperlink{classConfigAppMenuItem_a63f0a259553e03a6f33336777c753f74}{get\+Icon\+Name}} () const override
+\item 
+bool \mbox{\hyperlink{classConfigAppMenuItem_a6a65535f73a82a093217843240ba7496}{can\+Change\+Index}} (int offset) const override
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual String \mbox{\hyperlink{classConfigAppMenuItem_a7fa58af5cacd6c4dbd891a959efe1c07}{get\+Confirm\+Delete\+Title}} () const override
+\item 
+virtual String \mbox{\hyperlink{classConfigAppMenuItem_a5dd3db4741768d444af41adc11b36cde}{get\+Confirm\+Delete\+Message}} () const override
+\item 
+virtual String \mbox{\hyperlink{classConfigAppMenuItem_a4982d39204f8e5449917a934866fd0f3}{get\+Editor\+Title}} () const override
+\item 
+virtual bool \mbox{\hyperlink{classConfigAppMenuItem_a3fc7d1bbbe4b75e522f77d4efc688819}{has\+Editable\+Categories}} () const override
+\item 
+virtual bool \mbox{\hyperlink{classConfigAppMenuItem_a7c7b432e4c9e7aaf09f00c47b7f165d7}{has\+Editable\+Command}} () const override
+\item 
+std\+::function$<$ void(\mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} $\ast$) $>$ \mbox{\hyperlink{classConfigAppMenuItem_a82c1db45a09f0997b9f8802a3729972a}{get\+Editor\+Callback}} () override
+\item 
+void \mbox{\hyperlink{classConfigAppMenuItem_ad8358a8870a055bfcee96a242e452e8f}{edit\+App}} (String name, String icon, String command, bool terminal)
+\item 
+bool \mbox{\hyperlink{classConfigAppMenuItem_aa29ddde5f4f5c1e531bde3ea8f4d0ddb}{remove\+Menu\+Item\+Source}} () override
+\item 
+bool \mbox{\hyperlink{classConfigAppMenuItem_a3429460996f3d912566ab0a6c901bc11}{move\+Data\+Index}} (int offset) override
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classConfigAppMenuItem_ac310da919ec5dd0d462d15eacda9b00f}\label{classConfigAppMenuItem_ac310da919ec5dd0d462d15eacda9b00f}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{Config\+App\+Menu\+Item()}{ConfigAppMenuItem()}}
+{\footnotesize\ttfamily Config\+App\+Menu\+Item\+::\+Config\+App\+Menu\+Item (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Config\+File\+::\+App\+Item}} \&}]{app\+Item }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em app\+Item} & Defines all menu item data. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classConfigAppMenuItem_ab8485e4ace7e6418dc857d08bd570bc7}\label{classConfigAppMenuItem_ab8485e4ace7e6418dc857d08bd570bc7}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!````~Config\+App\+Menu\+Item@{$\sim$\+Config\+App\+Menu\+Item}}
+\index{````~Config\+App\+Menu\+Item@{$\sim$\+Config\+App\+Menu\+Item}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{$\sim$\+Config\+App\+Menu\+Item()}{~ConfigAppMenuItem()}}
+{\footnotesize\ttfamily virtual Config\+App\+Menu\+Item\+::$\sim$\+Config\+App\+Menu\+Item (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classConfigAppMenuItem_a6a65535f73a82a093217843240ba7496}\label{classConfigAppMenuItem_a6a65535f73a82a093217843240ba7496}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!can\+Change\+Index@{can\+Change\+Index}}
+\index{can\+Change\+Index@{can\+Change\+Index}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{can\+Change\+Index()}{canChangeIndex()}}
+{\footnotesize\ttfamily bool Config\+App\+Menu\+Item\+::can\+Change\+Index (\begin{DoxyParamCaption}\item[{int}]{offset }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Return true if this menu item has an index that can be moved by a given amount. 
+\begin{DoxyParams}{Parameters}
+{\em offset} & some value to add to the menu item index \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if this menu item has an index value i that can be changed to i+offset
+\end{DoxyReturn}
+Return true if this button\textquotesingle{}s data source has an index that can be moved by a given amount. 
+\begin{DoxyParams}{Parameters}
+{\em offset} & some value to add to the button index \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if this button\textquotesingle{}s data source has an index value i that can be changed to i+offset 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a62de7cea03d96eecba40a533fdac6477}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_ad8358a8870a055bfcee96a242e452e8f}\label{classConfigAppMenuItem_ad8358a8870a055bfcee96a242e452e8f}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!edit\+App@{edit\+App}}
+\index{edit\+App@{edit\+App}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{edit\+App()}{editApp()}}
+{\footnotesize\ttfamily void Config\+App\+Menu\+Item\+::edit\+App (\begin{DoxyParamCaption}\item[{String}]{name,  }\item[{String}]{icon,  }\item[{String}]{command,  }\item[{bool}]{terminal }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Edit this menu item\textquotesingle{}s data in the config file. 
+\begin{DoxyParams}{Parameters}
+{\em name} & application display name \\
+\hline
+{\em icon} & application icon \\
+\hline
+{\em command} & application launch command \\
+\hline
+{\em terminal} & sets whether this application launches in the terminal\\
+\hline
+\end{DoxyParams}
+Edit this button\textquotesingle{}s data source in the config file. \mbox{\Hypertarget{classConfigAppMenuItem_a79678785733e59496daabe77c488c1b0}\label{classConfigAppMenuItem_a79678785733e59496daabe77c488c1b0}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!get\+App\+Name@{get\+App\+Name}}
+\index{get\+App\+Name@{get\+App\+Name}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+App\+Name()}{getAppName()}}
+{\footnotesize\ttfamily String Config\+App\+Menu\+Item\+::get\+App\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the application\textquotesingle{}s display name
+
+the display name of the associated app 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_aef18401da6511ac234ccbb2d2131fcad}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_ada51b274c9d790f1bf5f9e84f878f0a4}\label{classConfigAppMenuItem_ada51b274c9d790f1bf5f9e84f878f0a4}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!get\+Command@{get\+Command}}
+\index{get\+Command@{get\+Command}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Command()}{getCommand()}}
+{\footnotesize\ttfamily String Config\+App\+Menu\+Item\+::get\+Command (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the application\textquotesingle{}s launch command 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_ab56357ca864c4cedc9caed1118498670}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_a5dd3db4741768d444af41adc11b36cde}\label{classConfigAppMenuItem_a5dd3db4741768d444af41adc11b36cde}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!get\+Confirm\+Delete\+Message@{get\+Confirm\+Delete\+Message}}
+\index{get\+Confirm\+Delete\+Message@{get\+Confirm\+Delete\+Message}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Confirm\+Delete\+Message()}{getConfirmDeleteMessage()}}
+{\footnotesize\ttfamily String Config\+App\+Menu\+Item\+::get\+Confirm\+Delete\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Gets appropriate descriptive text for a deletion confirmation window. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_ac5922f3ac33054ecd54bb3fab692d639}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_a7fa58af5cacd6c4dbd891a959efe1c07}\label{classConfigAppMenuItem_a7fa58af5cacd6c4dbd891a959efe1c07}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!get\+Confirm\+Delete\+Title@{get\+Confirm\+Delete\+Title}}
+\index{get\+Confirm\+Delete\+Title@{get\+Confirm\+Delete\+Title}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Confirm\+Delete\+Title()}{getConfirmDeleteTitle()}}
+{\footnotesize\ttfamily String Config\+App\+Menu\+Item\+::get\+Confirm\+Delete\+Title (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Get an appropriate title to use for a deletion confirmation window. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a93bd0cf3b4e28d09a4975023b383c1dc}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_a82c1db45a09f0997b9f8802a3729972a}\label{classConfigAppMenuItem_a82c1db45a09f0997b9f8802a3729972a}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!get\+Editor\+Callback@{get\+Editor\+Callback}}
+\index{get\+Editor\+Callback@{get\+Editor\+Callback}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Editor\+Callback()}{getEditorCallback()}}
+{\footnotesize\ttfamily std\+::function$<$ void(\mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} $\ast$) $>$ Config\+App\+Menu\+Item\+::get\+Editor\+Callback (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Gets a \mbox{\hyperlink{classPopupEditorComponent}{Popup\+Editor\+Component}} callback function that will apply changes from an \mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} to this menu item. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_af742017ff127e5f36da1e206205c86ee}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_a4982d39204f8e5449917a934866fd0f3}\label{classConfigAppMenuItem_a4982d39204f8e5449917a934866fd0f3}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!get\+Editor\+Title@{get\+Editor\+Title}}
+\index{get\+Editor\+Title@{get\+Editor\+Title}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Editor\+Title()}{getEditorTitle()}}
+{\footnotesize\ttfamily String Config\+App\+Menu\+Item\+::get\+Editor\+Title (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the title to display over an editor for this menu item. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a4f0501780311afb7630d99b9e84a5c9d}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_a63f0a259553e03a6f33336777c753f74}\label{classConfigAppMenuItem_a63f0a259553e03a6f33336777c753f74}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!get\+Icon\+Name@{get\+Icon\+Name}}
+\index{get\+Icon\+Name@{get\+Icon\+Name}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Icon\+Name()}{getIconName()}}
+{\footnotesize\ttfamily String Config\+App\+Menu\+Item\+::get\+Icon\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the name or path used to load the icon file. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a7c5b3d84b4fa24009e0618e0e3cd804e}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_a3fc7d1bbbe4b75e522f77d4efc688819}\label{classConfigAppMenuItem_a3fc7d1bbbe4b75e522f77d4efc688819}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!has\+Editable\+Categories@{has\+Editable\+Categories}}
+\index{has\+Editable\+Categories@{has\+Editable\+Categories}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{has\+Editable\+Categories()}{hasEditableCategories()}}
+{\footnotesize\ttfamily virtual bool Config\+App\+Menu\+Item\+::has\+Editable\+Categories (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+returns true iff this menu item has categories that can be edited. \begin{DoxyReturn}{Returns}
+false, Config\+App\+Menu\+Items don\textquotesingle{}t have categories. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_aa9656d7c1a2dd93bd02f119c0efbb2e0}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_a7c7b432e4c9e7aaf09f00c47b7f165d7}\label{classConfigAppMenuItem_a7c7b432e4c9e7aaf09f00c47b7f165d7}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!has\+Editable\+Command@{has\+Editable\+Command}}
+\index{has\+Editable\+Command@{has\+Editable\+Command}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{has\+Editable\+Command()}{hasEditableCommand()}}
+{\footnotesize\ttfamily virtual bool Config\+App\+Menu\+Item\+::has\+Editable\+Command (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+returns true iff this menu item has a command that can be edited. \begin{DoxyReturn}{Returns}
+true, all Config\+App\+Menu\+Items have editable commands. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a295fde428e713a8c891dc19b5048c373}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_ae986dacefb0b3fb79917452b4857d6ec}\label{classConfigAppMenuItem_ae986dacefb0b3fb79917452b4857d6ec}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!is\+Terminal\+App@{is\+Terminal\+App}}
+\index{is\+Terminal\+App@{is\+Terminal\+App}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{is\+Terminal\+App()}{isTerminalApp()}}
+{\footnotesize\ttfamily bool Config\+App\+Menu\+Item\+::is\+Terminal\+App (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+true iff this menu item is an application that launches in the terminal. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_ac8e0c435f1e5dcf67dff223d819f6a2d}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_a3429460996f3d912566ab0a6c901bc11}\label{classConfigAppMenuItem_a3429460996f3d912566ab0a6c901bc11}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!move\+Data\+Index@{move\+Data\+Index}}
+\index{move\+Data\+Index@{move\+Data\+Index}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{move\+Data\+Index()}{moveDataIndex()}}
+{\footnotesize\ttfamily bool Config\+App\+Menu\+Item\+::move\+Data\+Index (\begin{DoxyParamCaption}\item[{int}]{offset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+If possible, change the index of this menu item by some offset amount. 
+\begin{DoxyParams}{Parameters}
+{\em offset} & will be added to the menu item\textquotesingle{}s current index, if possible. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true iff the operation succeeded.
+\end{DoxyReturn}
+If possible, change the index of this menu item by some offset amount. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a66b922c9168e1df29f61ca6e98726d16}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classConfigAppMenuItem_aa29ddde5f4f5c1e531bde3ea8f4d0ddb}\label{classConfigAppMenuItem_aa29ddde5f4f5c1e531bde3ea8f4d0ddb}} 
+\index{Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}!remove\+Menu\+Item\+Source@{remove\+Menu\+Item\+Source}}
+\index{remove\+Menu\+Item\+Source@{remove\+Menu\+Item\+Source}!Config\+App\+Menu\+Item@{Config\+App\+Menu\+Item}}
+\subsubsection{\texorpdfstring{remove\+Menu\+Item\+Source()}{removeMenuItemSource()}}
+{\footnotesize\ttfamily bool Config\+App\+Menu\+Item\+::remove\+Menu\+Item\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Remove this menu item\textquotesingle{}s application from the config file.
+
+\begin{DoxyReturn}{Returns}
+true iff the source was removed.
+\end{DoxyReturn}
+Remove this menu item\textquotesingle{}s application from the config file. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a5a156a436279e0319c7960ac2931b14d}{App\+Menu\+Item}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\+Menu Items/\mbox{\hyperlink{ConfigAppMenuItem_8h}{Config\+App\+Menu\+Item.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\+Menu Items/\mbox{\hyperlink{ConfigAppMenuItem_8cpp}{Config\+App\+Menu\+Item.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,386 @@
+\hypertarget{classWifiStateManager_1_1NetworkInterface}{}\section{Wifi\+State\+Manager\+:\+:Network\+Interface Class Reference}
+\label{classWifiStateManager_1_1NetworkInterface}\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+
+
+{\ttfamily \#include $<$Wifi\+State\+Manager.\+h$>$}
+
+Inheritance diagram for Wifi\+State\+Manager\+:\+:Network\+Interface\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classWifiStateManager_1_1NetworkInterface}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a5b438ba9ecda0b255916ff1ab160d457}{Network\+Interface}} (Critical\+Section \&wifi\+Lock)
+\item 
+virtual \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a89d73a6b2a7eaf74882501a4e62f2569}{$\sim$\+Network\+Interface}} ()
+\item 
+\mbox{\hyperlink{classWifiStateManager_a1b2ed840606c57c43d4a147c96d43128}{Wifi\+State}} \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a15bec43de60c0e31694b28d2362c894f}{get\+Wifi\+State}} ()
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_acbe026d2598cf8438ff470325a12cdc4}{set\+Wifi\+State}} (\mbox{\hyperlink{classWifiStateManager_a1b2ed840606c57c43d4a147c96d43128}{Wifi\+State}} state)
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a10613ea1fe2bfbf47c1605b0eb224fef}{add\+Listener}} (\mbox{\hyperlink{classWifiStateManager_1_1Listener}{Wifi\+State\+Manager\+::\+Listener}} $\ast$listener)
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a0019ba49d65a7d3351469768f4d44bdf}{remove\+Listener}} (\mbox{\hyperlink{classWifiStateManager_1_1Listener}{Wifi\+State\+Manager\+::\+Listener}} $\ast$listener)
+\item 
+virtual \mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a924f90089b1d0a64771b904bc96ce81a}{get\+Connected\+AP}} ()=0
+\item 
+virtual \mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_abff4fdeee0026c367dccc03828a88cc2}{get\+Connecting\+AP}} ()=0
+\item 
+virtual Array$<$ \mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} $>$ \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a898004009e9645ad96a777ca2ee6a245}{get\+Visible\+A\+Ps}} ()=0
+\item 
+virtual bool \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_aefcafd5baac9715524c60d65b0f523ce}{is\+Wifi\+Enabled}} ()=0
+\item 
+virtual bool \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_ade4c478d4b57628d39726f1b85a396f0}{is\+Wifi\+Connecting}} ()=0
+\item 
+virtual bool \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a236b07174e3ab91973fce616746c0f70}{is\+Wifi\+Connected}} ()=0
+\item 
+virtual bool \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a0c2675d835715d956315d9e04e2667f9}{wifi\+Device\+Found}} ()=0
+\item 
+virtual void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a5c8a6cb7df8aaf53a0ebdf56aefc5080}{connect\+To\+Access\+Point}} (\mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} to\+Connect, String psk=String())=0
+\item 
+virtual void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a440fe19155e268f94cbbd4e133b95037}{disconnect}} ()=0
+\item 
+virtual void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a201033fbed61d18311773c3035806fc0}{stop\+Connecting}} ()=0
+\item 
+virtual void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a276f17f2d4aa943e9781dcc1b5e93e54}{enable\+Wifi}} ()=0
+\item 
+virtual void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_ab0dc19a7f15294a59894581a34d6109e}{disable\+Wifi}} ()=0
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const constexpr int \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_acb18c91fe47da4e1bd3e9011e46076c9}{wifi\+Enabled\+Change\+Timeout}} = 10000
+\item 
+static const constexpr int \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a35701ae2339bcbbeeee25518ee990a41}{wifi\+Connection\+Timeout}} = 5000
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a0d4037e930a96b9458486f619725b480}{confirm\+Wifi\+State}} ()
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a3ce3bfd90ed3f746ab1c4b9f73c97495}{signal\+Wifi\+Connecting}} ()
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_af7a140260780ce451d022e19329494a2}{signal\+Wifi\+Connected}} (\mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} connected\+AP)
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a998596cc24e160b1c13de43b17e104c6}{signal\+Connection\+Failed}} ()
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a240d4a02fabfd92c6384fc404d979aac}{signal\+Wifi\+Disconnected}} ()
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_aa97315b54f7a73f1643823856fbf50c7}{signal\+Wifi\+Enabled}} ()
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a523c3139b607afe2fb92d66218c1b88d}{signal\+Wifi\+Disabled}} ()
+\item 
+void \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a88b943e2cf2e694e40ee84974f09fb22}{signal\+Psk\+Needed}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a5b438ba9ecda0b255916ff1ab160d457}\label{classWifiStateManager_1_1NetworkInterface_a5b438ba9ecda0b255916ff1ab160d457}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!Network\+Interface@{Network\+Interface}}
+\index{Network\+Interface@{Network\+Interface}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{Network\+Interface()}{NetworkInterface()}}
+{\footnotesize\ttfamily Wifi\+State\+Manager\+::\+Network\+Interface\+::\+Network\+Interface (\begin{DoxyParamCaption}\item[{Critical\+Section \&}]{wifi\+Lock }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em wifi\+Lock} & The static resource lock used to control access to the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}}. This should only be used for methods triggered by the timer or by wifi device signals. In any other case, it is assumed that the caller acquired the lock already. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a89d73a6b2a7eaf74882501a4e62f2569}\label{classWifiStateManager_1_1NetworkInterface_a89d73a6b2a7eaf74882501a4e62f2569}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!````~Network\+Interface@{$\sim$\+Network\+Interface}}
+\index{````~Network\+Interface@{$\sim$\+Network\+Interface}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{$\sim$\+Network\+Interface()}{~NetworkInterface()}}
+{\footnotesize\ttfamily virtual Wifi\+State\+Manager\+::\+Network\+Interface\+::$\sim$\+Network\+Interface (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a10613ea1fe2bfbf47c1605b0eb224fef}\label{classWifiStateManager_1_1NetworkInterface_a10613ea1fe2bfbf47c1605b0eb224fef}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!add\+Listener@{add\+Listener}}
+\index{add\+Listener@{add\+Listener}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{add\+Listener()}{addListener()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::add\+Listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classWifiStateManager_1_1Listener}{Wifi\+State\+Manager\+::\+Listener}} $\ast$}]{listener }\end{DoxyParamCaption})}
+
+Add a listener to the list of objects receiving updates whenever Wifi state changes. ~\newline
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classWifiStateManager_ac4262cfae2045cef25443fd8dddcd1b3}{Wifi\+State\+Manager\+::add\+Listener()}}
+\end{DoxySeeAlso}
+Add a listener to the list of objects receiving updates whenever Wifi state changes. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a0d4037e930a96b9458486f619725b480}\label{classWifiStateManager_1_1NetworkInterface_a0d4037e930a96b9458486f619725b480}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!confirm\+Wifi\+State@{confirm\+Wifi\+State}}
+\index{confirm\+Wifi\+State@{confirm\+Wifi\+State}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{confirm\+Wifi\+State()}{confirmWifiState()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::confirm\+Wifi\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+This method queries the wifi device to ensure that the current tracked wifi state actually matches the device state. If necessary, this will update the \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}\textquotesingle{}s current state. The \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this method whenever it has reason to believe the wifi state may be out of date. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a5c8a6cb7df8aaf53a0ebdf56aefc5080}\label{classWifiStateManager_1_1NetworkInterface_a5c8a6cb7df8aaf53a0ebdf56aefc5080}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!connect\+To\+Access\+Point@{connect\+To\+Access\+Point}}
+\index{connect\+To\+Access\+Point@{connect\+To\+Access\+Point}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{connect\+To\+Access\+Point()}{connectToAccessPoint()}}
+{\footnotesize\ttfamily virtual void Wifi\+State\+Manager\+::\+Network\+Interface\+::connect\+To\+Access\+Point (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}}}]{to\+Connect,  }\item[{String}]{psk = {\ttfamily String()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Attempts to open a connection to a wifi access point. This will fail if wifi is disabled, the access point is invalid, or the psk is wrong.
+
+
+\begin{DoxyParams}{Parameters}
+{\em to\+Connect} & Specifies which access point should be connected to.\\
+\hline
+{\em psk} & The wifi key for to\+Connect, or the empty string if to\+Connect isn\textquotesingle{}t secured. \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classJsonWifiInterface_aed57685bddc0a447976d86095d232cf5}{Json\+Wifi\+Interface}}, and \mbox{\hyperlink{classLibNMInterface_ac0e06cb2f360cd1cb16b50d4feff92c7}{Lib\+N\+M\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_ab0dc19a7f15294a59894581a34d6109e}\label{classWifiStateManager_1_1NetworkInterface_ab0dc19a7f15294a59894581a34d6109e}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!disable\+Wifi@{disable\+Wifi}}
+\index{disable\+Wifi@{disable\+Wifi}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{disable\+Wifi()}{disableWifi()}}
+{\footnotesize\ttfamily virtual void Wifi\+State\+Manager\+::\+Network\+Interface\+::disable\+Wifi (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+If wifi is currently enabled, this will disable it. Otherwise, nothing will happen. 
+
+Implemented in \mbox{\hyperlink{classLibNMInterface_a49b4c61f6f8794d6af742464ab0f2d93}{Lib\+N\+M\+Interface}}, and \mbox{\hyperlink{classJsonWifiInterface_a076d1c4d0830aad955a77c4ff46a15f7}{Json\+Wifi\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a440fe19155e268f94cbbd4e133b95037}\label{classWifiStateManager_1_1NetworkInterface_a440fe19155e268f94cbbd4e133b95037}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!disconnect@{disconnect}}
+\index{disconnect@{disconnect}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{disconnect()}{disconnect()}}
+{\footnotesize\ttfamily virtual void Wifi\+State\+Manager\+::\+Network\+Interface\+::disconnect (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+If a wifi access point is currently connected, attempt to disconnect from that access point. 
+
+Implemented in \mbox{\hyperlink{classJsonWifiInterface_a4e9f35812633e8b2b50463f9523585e0}{Json\+Wifi\+Interface}}, and \mbox{\hyperlink{classLibNMInterface_af86c4e620e1292428e8955bad4617805}{Lib\+N\+M\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a276f17f2d4aa943e9781dcc1b5e93e54}\label{classWifiStateManager_1_1NetworkInterface_a276f17f2d4aa943e9781dcc1b5e93e54}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!enable\+Wifi@{enable\+Wifi}}
+\index{enable\+Wifi@{enable\+Wifi}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{enable\+Wifi()}{enableWifi()}}
+{\footnotesize\ttfamily virtual void Wifi\+State\+Manager\+::\+Network\+Interface\+::enable\+Wifi (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+If wifi is currently disabled, this will enable it. Otherwise, nothing will happen. 
+
+Implemented in \mbox{\hyperlink{classLibNMInterface_ab50348ebed5778ecc56346e7b3419978}{Lib\+N\+M\+Interface}}, and \mbox{\hyperlink{classJsonWifiInterface_ac87e53c922fb19cf684d94d174aa6274}{Json\+Wifi\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a924f90089b1d0a64771b904bc96ce81a}\label{classWifiStateManager_1_1NetworkInterface_a924f90089b1d0a64771b904bc96ce81a}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!get\+Connected\+AP@{get\+Connected\+AP}}
+\index{get\+Connected\+AP@{get\+Connected\+AP}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{get\+Connected\+A\+P()}{getConnectedAP()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} Wifi\+State\+Manager\+::\+Network\+Interface\+::get\+Connected\+AP (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Gets the connected wifi access point, if one exists.
+
+\begin{DoxyReturn}{Returns}
+the current connected \mbox{\hyperlink{classWifiAccessPoint}{Wifi\+Access\+Point}} if one is found, or a null \mbox{\hyperlink{classWifiAccessPoint}{Wifi\+Access\+Point}} if not connected. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classLibNMInterface_a92020826593a03979017bd7fb0c143a5}{Lib\+N\+M\+Interface}}, and \mbox{\hyperlink{classJsonWifiInterface_a9c42aee1d88451e199646732f60e125a}{Json\+Wifi\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_abff4fdeee0026c367dccc03828a88cc2}\label{classWifiStateManager_1_1NetworkInterface_abff4fdeee0026c367dccc03828a88cc2}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!get\+Connecting\+AP@{get\+Connecting\+AP}}
+\index{get\+Connecting\+AP@{get\+Connecting\+AP}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{get\+Connecting\+A\+P()}{getConnectingAP()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} Wifi\+State\+Manager\+::\+Network\+Interface\+::get\+Connecting\+AP (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Gets the connecting wifi access point, if one exists.
+
+\begin{DoxyReturn}{Returns}
+the current connecting \mbox{\hyperlink{classWifiAccessPoint}{Wifi\+Access\+Point}} if one is found, or a null \mbox{\hyperlink{classWifiAccessPoint}{Wifi\+Access\+Point}} if not connecting. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classLibNMInterface_a79b0bb8661be490b6cbb68abfdc93152}{Lib\+N\+M\+Interface}}, and \mbox{\hyperlink{classJsonWifiInterface_a16cf46edd6f175f1217f6b341651b18d}{Json\+Wifi\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a898004009e9645ad96a777ca2ee6a245}\label{classWifiStateManager_1_1NetworkInterface_a898004009e9645ad96a777ca2ee6a245}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!get\+Visible\+A\+Ps@{get\+Visible\+A\+Ps}}
+\index{get\+Visible\+A\+Ps@{get\+Visible\+A\+Ps}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{get\+Visible\+A\+Ps()}{getVisibleAPs()}}
+{\footnotesize\ttfamily virtual Array$<$\mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}}$>$ Wifi\+State\+Manager\+::\+Network\+Interface\+::get\+Visible\+A\+Ps (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Scans for and returns nearby wifi access points.
+
+\begin{DoxyReturn}{Returns}
+the list of all wifi access points close enough to detect. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classLibNMInterface_a52834cf27d1d7ea06939695c9caebca1}{Lib\+N\+M\+Interface}}, and \mbox{\hyperlink{classJsonWifiInterface_aaf538e8120fad2c6a861de5ef9c01543}{Json\+Wifi\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a15bec43de60c0e31694b28d2362c894f}\label{classWifiStateManager_1_1NetworkInterface_a15bec43de60c0e31694b28d2362c894f}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!get\+Wifi\+State@{get\+Wifi\+State}}
+\index{get\+Wifi\+State@{get\+Wifi\+State}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{get\+Wifi\+State()}{getWifiState()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classWifiStateManager_a1b2ed840606c57c43d4a147c96d43128}{Wifi\+State\+Manager\+::\+Wifi\+State}} Wifi\+State\+Manager\+::\+Network\+Interface\+::get\+Wifi\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the current state of the wifi device. \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classWifiStateManager_a204b08dd7e75bf62cbf3eccf51acda8e}{Wifi\+State\+Manager\+::get\+Wifi\+State()}}
+\end{DoxySeeAlso}
+Gets the current state of the wifi device. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a236b07174e3ab91973fce616746c0f70}\label{classWifiStateManager_1_1NetworkInterface_a236b07174e3ab91973fce616746c0f70}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!is\+Wifi\+Connected@{is\+Wifi\+Connected}}
+\index{is\+Wifi\+Connected@{is\+Wifi\+Connected}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{is\+Wifi\+Connected()}{isWifiConnected()}}
+{\footnotesize\ttfamily virtual bool Wifi\+State\+Manager\+::\+Network\+Interface\+::is\+Wifi\+Connected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Accesses the wifi device to check if an active wifi connection exists.
+
+\begin{DoxyReturn}{Returns}
+true iff a connection is found. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classLibNMInterface_afb02b052a8c2a67ce2865d3faf689c39}{Lib\+N\+M\+Interface}}, and \mbox{\hyperlink{classJsonWifiInterface_abd6d4e6e67e47a13560263e96e644131}{Json\+Wifi\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_ade4c478d4b57628d39726f1b85a396f0}\label{classWifiStateManager_1_1NetworkInterface_ade4c478d4b57628d39726f1b85a396f0}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!is\+Wifi\+Connecting@{is\+Wifi\+Connecting}}
+\index{is\+Wifi\+Connecting@{is\+Wifi\+Connecting}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{is\+Wifi\+Connecting()}{isWifiConnecting()}}
+{\footnotesize\ttfamily virtual bool Wifi\+State\+Manager\+::\+Network\+Interface\+::is\+Wifi\+Connecting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Accesses the wifi device to check if it\textquotesingle{}s attempting to create a wifi connection.
+
+\begin{DoxyReturn}{Returns}
+true iff currently connecting. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classLibNMInterface_a78c4b23cbf834a6352c5351b7aedb1c1}{Lib\+N\+M\+Interface}}, and \mbox{\hyperlink{classJsonWifiInterface_ae39dde05b32eb35e755c79a947210dc4}{Json\+Wifi\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_aefcafd5baac9715524c60d65b0f523ce}\label{classWifiStateManager_1_1NetworkInterface_aefcafd5baac9715524c60d65b0f523ce}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!is\+Wifi\+Enabled@{is\+Wifi\+Enabled}}
+\index{is\+Wifi\+Enabled@{is\+Wifi\+Enabled}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{is\+Wifi\+Enabled()}{isWifiEnabled()}}
+{\footnotesize\ttfamily virtual bool Wifi\+State\+Manager\+::\+Network\+Interface\+::is\+Wifi\+Enabled (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Accesses the wifi device to check if wifi is enabled.
+
+\begin{DoxyReturn}{Returns}
+true iff wifi is enabled 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classLibNMInterface_aded8fa727a07bfac38828815bf607c61}{Lib\+N\+M\+Interface}}, and \mbox{\hyperlink{classJsonWifiInterface_ab5b5756ab6c456dbf25d93233b237d40}{Json\+Wifi\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a0019ba49d65a7d3351469768f4d44bdf}\label{classWifiStateManager_1_1NetworkInterface_a0019ba49d65a7d3351469768f4d44bdf}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!remove\+Listener@{remove\+Listener}}
+\index{remove\+Listener@{remove\+Listener}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{remove\+Listener()}{removeListener()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::remove\+Listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classWifiStateManager_1_1Listener}{Wifi\+State\+Manager\+::\+Listener}} $\ast$}]{listener }\end{DoxyParamCaption})}
+
+Searches the list of registered listeners for a particular one, and removes it if it\textquotesingle{}s found. \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classWifiStateManager_aad72d9ce616be466679c52188662d8bb}{Wifi\+State\+Manager\+::remove\+Listener()}}
+\end{DoxySeeAlso}
+Searches the list of registered listeners for a particular one, and removes it if it\textquotesingle{}s found. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_acbe026d2598cf8438ff470325a12cdc4}\label{classWifiStateManager_1_1NetworkInterface_acbe026d2598cf8438ff470325a12cdc4}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!set\+Wifi\+State@{set\+Wifi\+State}}
+\index{set\+Wifi\+State@{set\+Wifi\+State}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{set\+Wifi\+State()}{setWifiState()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::set\+Wifi\+State (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classWifiStateManager_a1b2ed840606c57c43d4a147c96d43128}{Wifi\+State}}}]{state }\end{DoxyParamCaption})}
+
+Updates the current wifi state and notifies all listeners. This method acquires the wifi lock.
+
+Update the current wifi state and notify all listeners. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a998596cc24e160b1c13de43b17e104c6}\label{classWifiStateManager_1_1NetworkInterface_a998596cc24e160b1c13de43b17e104c6}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!signal\+Connection\+Failed@{signal\+Connection\+Failed}}
+\index{signal\+Connection\+Failed@{signal\+Connection\+Failed}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{signal\+Connection\+Failed()}{signalConnectionFailed()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::signal\+Connection\+Failed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Whenever the wifi device fails to connect to an access point, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}.
+
+Whenever the wifi device fails to connect to an access point, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}. This method acquires the \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}\textquotesingle{}s state\+Lock. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a88b943e2cf2e694e40ee84974f09fb22}\label{classWifiStateManager_1_1NetworkInterface_a88b943e2cf2e694e40ee84974f09fb22}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!signal\+Psk\+Needed@{signal\+Psk\+Needed}}
+\index{signal\+Psk\+Needed@{signal\+Psk\+Needed}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{signal\+Psk\+Needed()}{signalPskNeeded()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::signal\+Psk\+Needed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+When wifi is connecting and a missing psk is required, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_af7a140260780ce451d022e19329494a2}\label{classWifiStateManager_1_1NetworkInterface_af7a140260780ce451d022e19329494a2}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!signal\+Wifi\+Connected@{signal\+Wifi\+Connected}}
+\index{signal\+Wifi\+Connected@{signal\+Wifi\+Connected}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{signal\+Wifi\+Connected()}{signalWifiConnected()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::signal\+Wifi\+Connected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}}}]{connected\+AP }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Whenever the wifi device establishes a new connection, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em connected\+AP} & the newly connected access point\\
+\hline
+\end{DoxyParams}
+Whenever the wifi device establishes a new connection, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}. This method acquires the \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}\textquotesingle{}s state\+Lock. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a3ce3bfd90ed3f746ab1c4b9f73c97495}\label{classWifiStateManager_1_1NetworkInterface_a3ce3bfd90ed3f746ab1c4b9f73c97495}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!signal\+Wifi\+Connecting@{signal\+Wifi\+Connecting}}
+\index{signal\+Wifi\+Connecting@{signal\+Wifi\+Connecting}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{signal\+Wifi\+Connecting()}{signalWifiConnecting()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::signal\+Wifi\+Connecting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Whenever the wifi device detects a connection being established, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}.
+
+This is intended to notify the state manager of unexpected connections, so it\textquotesingle{}s not necessary to call this for connections opened by the state manager. Calls for known connection attempts will just be ignored.
+
+Whenever the wifi device detects a connection being established, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a523c3139b607afe2fb92d66218c1b88d}\label{classWifiStateManager_1_1NetworkInterface_a523c3139b607afe2fb92d66218c1b88d}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!signal\+Wifi\+Disabled@{signal\+Wifi\+Disabled}}
+\index{signal\+Wifi\+Disabled@{signal\+Wifi\+Disabled}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{signal\+Wifi\+Disabled()}{signalWifiDisabled()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::signal\+Wifi\+Disabled (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Whenever the wifi device is turned off, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}.
+
+Whenever the wifi device is turned off, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}. This method acquires the \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}\textquotesingle{}s state\+Lock. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a240d4a02fabfd92c6384fc404d979aac}\label{classWifiStateManager_1_1NetworkInterface_a240d4a02fabfd92c6384fc404d979aac}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!signal\+Wifi\+Disconnected@{signal\+Wifi\+Disconnected}}
+\index{signal\+Wifi\+Disconnected@{signal\+Wifi\+Disconnected}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{signal\+Wifi\+Disconnected()}{signalWifiDisconnected()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::signal\+Wifi\+Disconnected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Whenever the wifi device disconnects from a wifi access point, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}.
+
+Whenever the wifi device disconnects from a wifi access point, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}. This method acquires the \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}\textquotesingle{}s state\+Lock. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_aa97315b54f7a73f1643823856fbf50c7}\label{classWifiStateManager_1_1NetworkInterface_aa97315b54f7a73f1643823856fbf50c7}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!signal\+Wifi\+Enabled@{signal\+Wifi\+Enabled}}
+\index{signal\+Wifi\+Enabled@{signal\+Wifi\+Enabled}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{signal\+Wifi\+Enabled()}{signalWifiEnabled()}}
+{\footnotesize\ttfamily void Wifi\+State\+Manager\+::\+Network\+Interface\+::signal\+Wifi\+Enabled (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Whenever the wifi device is turned on, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}.
+
+Whenever the wifi device is turned on, the \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface}{Network\+Interface}} should call this to notify its \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}. This method acquires the \mbox{\hyperlink{classWifiStateManager}{Wifi\+State\+Manager}}\textquotesingle{}s state\+Lock. \mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a201033fbed61d18311773c3035806fc0}\label{classWifiStateManager_1_1NetworkInterface_a201033fbed61d18311773c3035806fc0}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!stop\+Connecting@{stop\+Connecting}}
+\index{stop\+Connecting@{stop\+Connecting}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{stop\+Connecting()}{stopConnecting()}}
+{\footnotesize\ttfamily virtual void Wifi\+State\+Manager\+::\+Network\+Interface\+::stop\+Connecting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+If attempting to connect to a wifi access point, that attempted connection will be canceled. 
+
+Implemented in \mbox{\hyperlink{classLibNMInterface_a46a4b026d110f3f397bd74aa413a6276}{Lib\+N\+M\+Interface}}, and \mbox{\hyperlink{classJsonWifiInterface_abb186f1293c4f5b7c28dfb2b86f8c95a}{Json\+Wifi\+Interface}}.
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a0c2675d835715d956315d9e04e2667f9}\label{classWifiStateManager_1_1NetworkInterface_a0c2675d835715d956315d9e04e2667f9}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!wifi\+Device\+Found@{wifi\+Device\+Found}}
+\index{wifi\+Device\+Found@{wifi\+Device\+Found}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{wifi\+Device\+Found()}{wifiDeviceFound()}}
+{\footnotesize\ttfamily virtual bool Wifi\+State\+Manager\+::\+Network\+Interface\+::wifi\+Device\+Found (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\begin{DoxyReturn}{Returns}
+true iff a wifi device was successfully found. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classLibNMInterface_a78f5de282c47c78e87ffa21ea542475b}{Lib\+N\+M\+Interface}}, and \mbox{\hyperlink{classJsonWifiInterface_ae8f08870a543214555113d103e9fc136}{Json\+Wifi\+Interface}}.
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_a35701ae2339bcbbeeee25518ee990a41}\label{classWifiStateManager_1_1NetworkInterface_a35701ae2339bcbbeeee25518ee990a41}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!wifi\+Connection\+Timeout@{wifi\+Connection\+Timeout}}
+\index{wifi\+Connection\+Timeout@{wifi\+Connection\+Timeout}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{wifi\+Connection\+Timeout}{wifiConnectionTimeout}}
+{\footnotesize\ttfamily const constexpr int Wifi\+State\+Manager\+::\+Network\+Interface\+::wifi\+Connection\+Timeout = 5000\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classWifiStateManager_1_1NetworkInterface_acb18c91fe47da4e1bd3e9011e46076c9}\label{classWifiStateManager_1_1NetworkInterface_acb18c91fe47da4e1bd3e9011e46076c9}} 
+\index{Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}!wifi\+Enabled\+Change\+Timeout@{wifi\+Enabled\+Change\+Timeout}}
+\index{wifi\+Enabled\+Change\+Timeout@{wifi\+Enabled\+Change\+Timeout}!Wifi\+State\+Manager\+::\+Network\+Interface@{Wifi\+State\+Manager\+::\+Network\+Interface}}
+\subsubsection{\texorpdfstring{wifi\+Enabled\+Change\+Timeout}{wifiEnabledChangeTimeout}}
+{\footnotesize\ttfamily const constexpr int Wifi\+State\+Manager\+::\+Network\+Interface\+::wifi\+Enabled\+Change\+Timeout = 10000\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Hardware/\+Wifi/\mbox{\hyperlink{WifiStateManager_8h}{Wifi\+State\+Manager.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Hardware/\+Wifi/\mbox{\hyperlink{WifiStateManager_8cpp}{Wifi\+State\+Manager.\+cpp}}\end{DoxyCompactItemize}

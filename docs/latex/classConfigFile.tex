@@ -1,0 +1,319 @@
+\hypertarget{classConfigFile}{}\section{Config\+File Class Reference}
+\label{classConfigFile}\index{Config\+File@{Config\+File}}
+
+
+{\ttfamily \#include $<$Config\+File.\+h$>$}
+
+Inheritance diagram for Config\+File\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classConfigFile}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structConfigFile_1_1DataKey}{Data\+Key}}
+\item 
+class \mbox{\hyperlink{classConfigFile_1_1Listener}{Listener}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classConfigFile_ae73765f7f0320bb6422da1cebe866f31}{$\sim$\+Config\+File}} ()
+\item 
+{\footnotesize template$<$typename T $>$ }\\T \mbox{\hyperlink{classConfigFile_adad78b3b99b0176b8f59310905fe6671}{get\+Config\+Value}} (String key)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{classConfigFile_ae5fb973a2863f027b21fb17ebfdcd45c}{set\+Config\+Value}} (String key, T new\+Value)
+\item 
+bool \mbox{\hyperlink{classConfigFile_a1c903db747150a045d8b32fc3e8ee122}{operator==}} (const \mbox{\hyperlink{classConfigFile}{Config\+File}} \&rhs) const
+\item 
+void \mbox{\hyperlink{classConfigFile_a6bb53ad4195ac634155039149b01922d}{add\+Listener}} (\mbox{\hyperlink{classConfigFile_1_1Listener}{Listener}} $\ast$listener, String\+Array tracked\+Keys)
+\item 
+void \mbox{\hyperlink{classConfigFile_abe813ce8975feb1bca7e06ce961df167}{remove\+Listener}} (\mbox{\hyperlink{classConfigFile_1_1Listener}{Listener}} $\ast$listener)
+\item 
+void \mbox{\hyperlink{classConfigFile_aafbaeb574d209485c120a952d21588c6}{notify\+Listeners}} (String key)
+\end{DoxyCompactItemize}
+\subsection*{Protected Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{classConfigFile_aed5da60a5b6856a240c88d20c8975dce}{Supported\+Data\+Type}} \{ \mbox{\hyperlink{classConfigFile_aed5da60a5b6856a240c88d20c8975dcea8988515f68d6a7d2cda728890405c8bc}{string\+Type}}, 
+\mbox{\hyperlink{classConfigFile_aed5da60a5b6856a240c88d20c8975dcea3162db2e4d4bee4b907dabadf34bc3ce}{int\+Type}}, 
+\mbox{\hyperlink{classConfigFile_aed5da60a5b6856a240c88d20c8975dceadedf59f626a60e53192ea42ef95dc918}{bool\+Type}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classConfigFile_a6a763d70b03214a2435ff38840d1db34}{Config\+File}} (String config\+Filename)
+\item 
+virtual std\+::vector$<$ \mbox{\hyperlink{structConfigFile_1_1DataKey}{Data\+Key}} $>$ \mbox{\hyperlink{classConfigFile_a68a698b58c68f5e3a4d9ba8a81a82688}{get\+Data\+Keys}} () const =0
+\item 
+virtual void \mbox{\hyperlink{classConfigFile_af8d94d456b78720f3e90b6d9df3dc77e}{read\+Data\+From\+Json}} (var \&config, var \&default\+Config)
+\item 
+virtual void \mbox{\hyperlink{classConfigFile_a89902824e2b6cbd394a10530637ad3d7}{copy\+Data\+To\+Json}} (Dynamic\+Object\+::\+Ptr json\+Obj)
+\item 
+bool \mbox{\hyperlink{classConfigFile_a2faff4383c2921ee7c67aef7c55f0540}{property\+Exists}} (var \&config, String property\+Key)
+\item 
+var \mbox{\hyperlink{classConfigFile_a7e1391339b37bed32c642f638a845499}{get\+Property}} (var \&config, var \&default\+Config, String key)
+\item 
+void \mbox{\hyperlink{classConfigFile_a4dc13463864c0b90aef8d6bc5699d674}{mark\+Pending\+Changes}} ()
+\item 
+void \mbox{\hyperlink{classConfigFile_a4d2215793e3e3ff8132285f2caa82168}{write\+Changes}} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const constexpr char $\ast$ \mbox{\hyperlink{classConfigFile_ab0e244c7b281434d671c30e0f5278119}{config\+Path}} = \char`\"{}$\sim$/.pocket-\/home/\char`\"{}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classConfigFile_aed5da60a5b6856a240c88d20c8975dce}\label{classConfigFile_aed5da60a5b6856a240c88d20c8975dce}} 
+\index{Config\+File@{Config\+File}!Supported\+Data\+Type@{Supported\+Data\+Type}}
+\index{Supported\+Data\+Type@{Supported\+Data\+Type}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{Supported\+Data\+Type}{SupportedDataType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classConfigFile_aed5da60a5b6856a240c88d20c8975dce}{Config\+File\+::\+Supported\+Data\+Type}}\hspace{0.3cm}{\ttfamily [protected]}}
+
+Defines the basic data types that can be stored in all \mbox{\hyperlink{classConfigFile}{Config\+File}} objects. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{string\+Type@{string\+Type}!Config\+File@{Config\+File}}\index{Config\+File@{Config\+File}!string\+Type@{string\+Type}}}\mbox{\Hypertarget{classConfigFile_aed5da60a5b6856a240c88d20c8975dcea8988515f68d6a7d2cda728890405c8bc}\label{classConfigFile_aed5da60a5b6856a240c88d20c8975dcea8988515f68d6a7d2cda728890405c8bc}} 
+string\+Type&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{int\+Type@{int\+Type}!Config\+File@{Config\+File}}\index{Config\+File@{Config\+File}!int\+Type@{int\+Type}}}\mbox{\Hypertarget{classConfigFile_aed5da60a5b6856a240c88d20c8975dcea3162db2e4d4bee4b907dabadf34bc3ce}\label{classConfigFile_aed5da60a5b6856a240c88d20c8975dcea3162db2e4d4bee4b907dabadf34bc3ce}} 
+int\+Type&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{bool\+Type@{bool\+Type}!Config\+File@{Config\+File}}\index{Config\+File@{Config\+File}!bool\+Type@{bool\+Type}}}\mbox{\Hypertarget{classConfigFile_aed5da60a5b6856a240c88d20c8975dceadedf59f626a60e53192ea42ef95dc918}\label{classConfigFile_aed5da60a5b6856a240c88d20c8975dceadedf59f626a60e53192ea42ef95dc918}} 
+bool\+Type&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classConfigFile_ae73765f7f0320bb6422da1cebe866f31}\label{classConfigFile_ae73765f7f0320bb6422da1cebe866f31}} 
+\index{Config\+File@{Config\+File}!````~Config\+File@{$\sim$\+Config\+File}}
+\index{````~Config\+File@{$\sim$\+Config\+File}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{$\sim$\+Config\+File()}{~ConfigFile()}}
+{\footnotesize\ttfamily Config\+File\+::$\sim$\+Config\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Writes any pending changes to the file before destruction. \mbox{\Hypertarget{classConfigFile_a6a763d70b03214a2435ff38840d1db34}\label{classConfigFile_a6a763d70b03214a2435ff38840d1db34}} 
+\index{Config\+File@{Config\+File}!Config\+File@{Config\+File}}
+\index{Config\+File@{Config\+File}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{Config\+File()}{ConfigFile()}}
+{\footnotesize\ttfamily Config\+File\+::\+Config\+File (\begin{DoxyParamCaption}\item[{String}]{config\+Filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+This constructor should only be called when constructing \mbox{\hyperlink{classConfigFile}{Config\+File}} subclasses.
+
+
+\begin{DoxyParams}{Parameters}
+{\em config\+Filename} & The name of a json file to be read or created in $\sim$/.pocket-\/home/. There should be a file with the same name in the asset folder filled with default values. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classConfigFile_a6bb53ad4195ac634155039149b01922d}\label{classConfigFile_a6bb53ad4195ac634155039149b01922d}} 
+\index{Config\+File@{Config\+File}!add\+Listener@{add\+Listener}}
+\index{add\+Listener@{add\+Listener}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{add\+Listener()}{addListener()}}
+{\footnotesize\ttfamily void Config\+File\+::add\+Listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classConfigFile_1_1Listener}{Config\+File\+::\+Listener}} $\ast$}]{listener,  }\item[{String\+Array}]{tracked\+Keys }\end{DoxyParamCaption})}
+
+Adds a listener to the list of objects to notify when config values change.
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The object that will be notified.\\
+\hline
+{\em tracked\+Keys} & The set of keys that the listener wants to track.\\
+\hline
+\end{DoxyParams}
+Adds a listener to the list of objects to notify when config values change. \mbox{\Hypertarget{classConfigFile_a89902824e2b6cbd394a10530637ad3d7}\label{classConfigFile_a89902824e2b6cbd394a10530637ad3d7}} 
+\index{Config\+File@{Config\+File}!copy\+Data\+To\+Json@{copy\+Data\+To\+Json}}
+\index{copy\+Data\+To\+Json@{copy\+Data\+To\+Json}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{copy\+Data\+To\+Json()}{copyDataToJson()}}
+{\footnotesize\ttfamily void Config\+File\+::copy\+Data\+To\+Json (\begin{DoxyParamCaption}\item[{Dynamic\+Object\+::\+Ptr}]{json\+Obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Copy all config data to a json object.
+
+
+\begin{DoxyParams}{Parameters}
+{\em json\+Obj} & A dynamic\+Object that can later be written to a json file.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+Any code calling this function is expected to have already acquired the object\textquotesingle{}s lock.
+\end{DoxyPrecond}
+Copy all config data to a json object \mbox{\Hypertarget{classConfigFile_adad78b3b99b0176b8f59310905fe6671}\label{classConfigFile_adad78b3b99b0176b8f59310905fe6671}} 
+\index{Config\+File@{Config\+File}!get\+Config\+Value@{get\+Config\+Value}}
+\index{get\+Config\+Value@{get\+Config\+Value}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{get\+Config\+Value()}{getConfigValue()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T Config\+File\+::get\+Config\+Value (\begin{DoxyParamCaption}\item[{String}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Gets one of the values stored in the json configuration file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key string that maps to the desired value.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The value data type. This can be int, String, or bool.\\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::out\+\_\+of\+\_\+range} & if key does not map to a value of type T in this config file\\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+the value read from the config file. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classConfigFile_a68a698b58c68f5e3a4d9ba8a81a82688}\label{classConfigFile_a68a698b58c68f5e3a4d9ba8a81a82688}} 
+\index{Config\+File@{Config\+File}!get\+Data\+Keys@{get\+Data\+Keys}}
+\index{get\+Data\+Keys@{get\+Data\+Keys}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{get\+Data\+Keys()}{getDataKeys()}}
+{\footnotesize\ttfamily virtual std\+::vector$<$\mbox{\hyperlink{structConfigFile_1_1DataKey}{Data\+Key}}$>$ Config\+File\+::get\+Data\+Keys (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the keys to all variables tracked in this config file. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classConfigFile_a7e1391339b37bed32c642f638a845499}\label{classConfigFile_a7e1391339b37bed32c642f638a845499}} 
+\index{Config\+File@{Config\+File}!get\+Property@{get\+Property}}
+\index{get\+Property@{get\+Property}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{get\+Property()}{getProperty()}}
+{\footnotesize\ttfamily var Config\+File\+::get\+Property (\begin{DoxyParamCaption}\item[{var \&}]{config,  }\item[{var \&}]{default\+Config,  }\item[{String}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Gets a property from json configuration data, or from default configuration data if necessary
+
+
+\begin{DoxyParams}{Parameters}
+{\em config} & This should pass in json configuration data from $\sim$/.pocket-\/home/$<$filename$>$.json\\
+\hline
+{\em default\+Config} & This should be either json data from the default config file in the assets folder, or a void var. If default\+Config is void and data is missing from the configuration file, this method will open configuration/$<$filename$>$.json from the asset folder and load all data into default\+Config.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value read from config/default\+Config at \mbox{[}key\mbox{]}, or a void var if nothing was found in either var object.
+\end{DoxyReturn}
+Gets a property from json configuration data, or from default configuration data if necessary \mbox{\Hypertarget{classConfigFile_a4dc13463864c0b90aef8d6bc5699d674}\label{classConfigFile_a4dc13463864c0b90aef8d6bc5699d674}} 
+\index{Config\+File@{Config\+File}!mark\+Pending\+Changes@{mark\+Pending\+Changes}}
+\index{mark\+Pending\+Changes@{mark\+Pending\+Changes}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{mark\+Pending\+Changes()}{markPendingChanges()}}
+{\footnotesize\ttfamily void Config\+File\+::mark\+Pending\+Changes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Marks this \mbox{\hyperlink{classConfigFile}{Config\+File}} as containing changes that need to be written to the underlying .json file. \mbox{\Hypertarget{classConfigFile_aafbaeb574d209485c120a952d21588c6}\label{classConfigFile_aafbaeb574d209485c120a952d21588c6}} 
+\index{Config\+File@{Config\+File}!notify\+Listeners@{notify\+Listeners}}
+\index{notify\+Listeners@{notify\+Listeners}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{notify\+Listeners()}{notifyListeners()}}
+{\footnotesize\ttfamily void Config\+File\+::notify\+Listeners (\begin{DoxyParamCaption}\item[{String}]{key }\end{DoxyParamCaption})}
+
+Announce new changes to each object tracking a particular key.
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & maps to a value that has changed in this \mbox{\hyperlink{classConfigFile}{Config\+File}}.\\
+\hline
+\end{DoxyParams}
+Announce new changes to each object tracking a particular key. \mbox{\Hypertarget{classConfigFile_a1c903db747150a045d8b32fc3e8ee122}\label{classConfigFile_a1c903db747150a045d8b32fc3e8ee122}} 
+\index{Config\+File@{Config\+File}!operator==@{operator==}}
+\index{operator==@{operator==}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool Config\+File\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classConfigFile}{Config\+File}} \&}]{rhs }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+true iff this \mbox{\hyperlink{classConfigFile}{Config\+File}} and rhs have the same filename. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classConfigFile_a2faff4383c2921ee7c67aef7c55f0540}\label{classConfigFile_a2faff4383c2921ee7c67aef7c55f0540}} 
+\index{Config\+File@{Config\+File}!property\+Exists@{property\+Exists}}
+\index{property\+Exists@{property\+Exists}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{property\+Exists()}{propertyExists()}}
+{\footnotesize\ttfamily bool Config\+File\+::property\+Exists (\begin{DoxyParamCaption}\item[{var \&}]{config,  }\item[{String}]{property\+Key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Checks if a property exists in a config data object loaded from a json file.
+
+\begin{DoxyReturn}{Returns}
+true iff property\+Key has a value in config
+\end{DoxyReturn}
+Checks if a property exists in a config data object loaded from a json file. \mbox{\Hypertarget{classConfigFile_af8d94d456b78720f3e90b6d9df3dc77e}\label{classConfigFile_af8d94d456b78720f3e90b6d9df3dc77e}} 
+\index{Config\+File@{Config\+File}!read\+Data\+From\+Json@{read\+Data\+From\+Json}}
+\index{read\+Data\+From\+Json@{read\+Data\+From\+Json}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{read\+Data\+From\+Json()}{readDataFromJson()}}
+{\footnotesize\ttfamily void Config\+File\+::read\+Data\+From\+Json (\begin{DoxyParamCaption}\item[{var \&}]{config,  }\item[{var \&}]{default\+Config }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Read in this object\textquotesingle{}s data from a json config object
+
+
+\begin{DoxyParams}{Parameters}
+{\em config} & This should pass in json configuration data from $\sim$/.pocket-\/home/$<$filename$>$.json.\\
+\hline
+{\em default\+Config} & This should be either json data from the default config file in the assets folder, or a void var. If default\+Config is null and data is missing from the configuration file, this method will open $<$filename$>$.json and load all data into default\+Config.\\
+\hline
+\end{DoxyParams}
+Read in this object\textquotesingle{}s data from a json config object \mbox{\Hypertarget{classConfigFile_abe813ce8975feb1bca7e06ce961df167}\label{classConfigFile_abe813ce8975feb1bca7e06ce961df167}} 
+\index{Config\+File@{Config\+File}!remove\+Listener@{remove\+Listener}}
+\index{remove\+Listener@{remove\+Listener}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{remove\+Listener()}{removeListener()}}
+{\footnotesize\ttfamily void Config\+File\+::remove\+Listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classConfigFile_1_1Listener}{Config\+File\+::\+Listener}} $\ast$}]{listener }\end{DoxyParamCaption})}
+
+Removes a listener from this \mbox{\hyperlink{classConfigFile}{Config\+File}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & This will no longer receive updates on any changes to this \mbox{\hyperlink{classConfigFile}{Config\+File}}.\\
+\hline
+\end{DoxyParams}
+Removes a listener from this \mbox{\hyperlink{classConfigFile}{Config\+File}}. \mbox{\Hypertarget{classConfigFile_ae5fb973a2863f027b21fb17ebfdcd45c}\label{classConfigFile_ae5fb973a2863f027b21fb17ebfdcd45c}} 
+\index{Config\+File@{Config\+File}!set\+Config\+Value@{set\+Config\+Value}}
+\index{set\+Config\+Value@{set\+Config\+Value}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{set\+Config\+Value()}{setConfigValue()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Config\+File\+::set\+Config\+Value (\begin{DoxyParamCaption}\item[{String}]{key,  }\item[{T}]{new\+Value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets one of this \mbox{\hyperlink{classConfigFile}{Config\+File}}\textquotesingle{}s values, writing it to the config file if the value has changed. ~\newline
+ 
+\begin{DoxyParams}{Parameters}
+{\em key} & The key string that maps to the value being updated.\\
+\hline
+{\em new\+Value} & The new value to save to the file.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The value data type. This can be int, String, or bool.\\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::out\+\_\+of\+\_\+range} & if key does not map to a value of type T in this config file \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classConfigFile_a4d2215793e3e3ff8132285f2caa82168}\label{classConfigFile_a4d2215793e3e3ff8132285f2caa82168}} 
+\index{Config\+File@{Config\+File}!write\+Changes@{write\+Changes}}
+\index{write\+Changes@{write\+Changes}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{write\+Changes()}{writeChanges()}}
+{\footnotesize\ttfamily void Config\+File\+::write\+Changes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Re-\/writes all data back to the config file, as long as there are changes to write.
+
+\begin{DoxyPrecond}{Precondition}
+any code calling this function is expected to have already acquired the \mbox{\hyperlink{classConfigFile}{Config\+File}}\textquotesingle{}s lock
+\end{DoxyPrecond}
+Re-\/writes all data back to the config file, as long as there are changes to write. 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classConfigFile_ab0e244c7b281434d671c30e0f5278119}\label{classConfigFile_ab0e244c7b281434d671c30e0f5278119}} 
+\index{Config\+File@{Config\+File}!config\+Path@{config\+Path}}
+\index{config\+Path@{config\+Path}!Config\+File@{Config\+File}}
+\subsubsection{\texorpdfstring{config\+Path}{configPath}}
+{\footnotesize\ttfamily const constexpr char$\ast$ Config\+File\+::config\+Path = \char`\"{}$\sim$/.pocket-\/home/\char`\"{}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{ConfigFile_8h}{Config\+File.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{ConfigFile_8cpp}{Config\+File.\+cpp}}\end{DoxyCompactItemize}

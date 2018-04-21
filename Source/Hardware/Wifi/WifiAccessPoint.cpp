@@ -22,8 +22,7 @@ networkConnection(savedConnection)
     glibHandler.gLibCall([this]()
     {
         const ScopedWriteLock initLock(networkUpdateLock);
-        const GByteArray* ssidBytes = getSSIDBytes(nmAccessPoint,
-                networkConnection);
+        const GByteArray* ssidBytes = getSSIDBytes();
         if(ssidBytes != nullptr)
         {
             char* utfSSID = nm_utils_ssid_to_utf8(ssidBytes);
@@ -510,6 +509,33 @@ void WifiAccessPoint::removePsk()
 }
 
 /**
+ * Gets an SSID byte array from a saved connection or access point.  If
+ * possible, the value from the saved connection will be used first.
+ */
+const GByteArray* WifiAccessPoint::getSSIDBytes()
+{
+    const GByteArray* ssidBytes = nullptr;
+    GLibSignalHandler glibHandler;
+    glibHandler.gLibCall([this, &ssidBytes]()
+    {
+        if (networkConnection != nullptr)
+        {
+            NMSettingWireless* wifiSettings =
+                    nm_connection_get_setting_wireless(networkConnection);
+            if (wifiSettings != nullptr)
+            {
+                ssidBytes = nm_setting_wireless_get_ssid(wifiSettings);
+            }
+        }
+        if(ssidBytes == nullptr && nmAccessPoint != nullptr)
+        {
+            ssidBytes = nm_access_point_get_ssid(nmAccessPoint);
+        }
+    });
+    return ssidBytes;
+}
+
+/**
  * If the NMAccessPoint is non-null and signal handlers aren't already
  * registered, this will register this object to receive updates when
  * access point signal strength changes or the NMAccessPoint is destroyed.
@@ -593,34 +619,6 @@ String WifiAccessPoint::generateHash(
             (G_CHECKSUM_MD5, input, sizeof (input));
 }
 
-
-/**
- * Gets an SSID byte array from a saved connection or access point.  If
- * possible, the value from the saved connection will be used first.
- */
-const GByteArray* WifiAccessPoint::getSSIDBytes(NMAccessPoint* ap,
-        NMConnection* conn)
-{
-    const GByteArray* ssidBytes = nullptr;
-    GLibSignalHandler glibHandler;
-    glibHandler.gLibCall([conn, ap, &ssidBytes]()
-    {
-        if (conn != nullptr)
-        {
-            NMSettingWireless* wifiSettings =
-                    nm_connection_get_setting_wireless(conn);
-            if (wifiSettings != nullptr)
-            {
-                ssidBytes = nm_setting_wireless_get_ssid(wifiSettings);
-            }
-        }
-        if(ssidBytes == nullptr && ap != nullptr)
-        {
-            ssidBytes = nm_access_point_get_ssid(ap);
-        }
-    });
-    return ssidBytes;
-}
 
 /**
  * If this object's NMAccessPoint or NMConnection is deleted, this will 

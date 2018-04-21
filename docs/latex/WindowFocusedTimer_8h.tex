@@ -1,0 +1,14 @@
+\hypertarget{WindowFocusedTimer_8h}{}\section{/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Util/\+Window\+Focused\+Timer.h File Reference}
+\label{WindowFocusedTimer_8h}\index{/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Util/\+Window\+Focused\+Timer.\+h@{/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Util/\+Window\+Focused\+Timer.\+h}}
+{\ttfamily \#include \char`\"{}Juce\+Header.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Window\+Focus.\+h\char`\"{}}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classWindowFocusedTimer}{Window\+Focused\+Timer}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\mbox{\hyperlink{classWindowFocusedTimer}{Window\+Focused\+Timer}} is a Juce timer that is guaranteed to stop whenever \mbox{\hyperlink{classPocketHomeWindow}{Pocket\+Home\+Window}} loses focus, and resume whenever it regains focus. This should reduce the amount that this application wastes C\+PU cycles while it\textquotesingle{}s running in the background. ~\newline
+ Suspended timers save their next scheduled runtime, not the amount of time left on the timer, so timers that would have ended while suspended will immediately call their timer\+Callback when resumed. 

@@ -1,0 +1,55 @@
+\hypertarget{classBatteryMonitor}{}\section{Battery\+Monitor Class Reference}
+\label{classBatteryMonitor}\index{Battery\+Monitor@{Battery\+Monitor}}
+
+
+{\ttfamily \#include $<$Battery\+Monitor.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structBatteryMonitor_1_1BatteryStatus}{Battery\+Status}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classBatteryMonitor_a18d0b41efbbd1f94668666d3a7bd246e}{Battery\+Monitor}} ()
+\item 
+\mbox{\hyperlink{classBatteryMonitor_ade860ba6ffe04195873a36dec4e287a7}{$\sim$\+Battery\+Monitor}} ()
+\item 
+\mbox{\hyperlink{structBatteryMonitor_1_1BatteryStatus}{Battery\+Status}} \mbox{\hyperlink{classBatteryMonitor_aa1d9ec63974c47884c294f82637f152f}{get\+Battery\+Status}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classBatteryMonitor_a18d0b41efbbd1f94668666d3a7bd246e}\label{classBatteryMonitor_a18d0b41efbbd1f94668666d3a7bd246e}} 
+\index{Battery\+Monitor@{Battery\+Monitor}!Battery\+Monitor@{Battery\+Monitor}}
+\index{Battery\+Monitor@{Battery\+Monitor}!Battery\+Monitor@{Battery\+Monitor}}
+\subsubsection{\texorpdfstring{Battery\+Monitor()}{BatteryMonitor()}}
+{\footnotesize\ttfamily Battery\+Monitor\+::\+Battery\+Monitor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classBatteryMonitor_ade860ba6ffe04195873a36dec4e287a7}\label{classBatteryMonitor_ade860ba6ffe04195873a36dec4e287a7}} 
+\index{Battery\+Monitor@{Battery\+Monitor}!````~Battery\+Monitor@{$\sim$\+Battery\+Monitor}}
+\index{````~Battery\+Monitor@{$\sim$\+Battery\+Monitor}!Battery\+Monitor@{Battery\+Monitor}}
+\subsubsection{\texorpdfstring{$\sim$\+Battery\+Monitor()}{~BatteryMonitor()}}
+{\footnotesize\ttfamily Battery\+Monitor\+::$\sim$\+Battery\+Monitor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classBatteryMonitor_aa1d9ec63974c47884c294f82637f152f}\label{classBatteryMonitor_aa1d9ec63974c47884c294f82637f152f}} 
+\index{Battery\+Monitor@{Battery\+Monitor}!get\+Battery\+Status@{get\+Battery\+Status}}
+\index{get\+Battery\+Status@{get\+Battery\+Status}!Battery\+Monitor@{Battery\+Monitor}}
+\subsubsection{\texorpdfstring{get\+Battery\+Status()}{getBatteryStatus()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structBatteryMonitor_1_1BatteryStatus}{Battery\+Monitor\+::\+Battery\+Status}} Battery\+Monitor\+::get\+Battery\+Status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Finds the current battery charge percentage and charging state.
+
+\begin{DoxyReturn}{Returns}
+An integer between 0 and 100 representing battery charge state, and a boolean value indicating if the battery is charging. If battery information can\textquotesingle{}t be found, percent is set to -\/1.
+\end{DoxyReturn}
+Find the current battery charge percentage and charging state 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Hardware/\mbox{\hyperlink{BatteryMonitor_8h}{Battery\+Monitor.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Hardware/\mbox{\hyperlink{BatteryMonitor_8cpp}{Battery\+Monitor.\+cpp}}\end{DoxyCompactItemize}

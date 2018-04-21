@@ -1,0 +1,360 @@
+\hypertarget{classAppMenuButton}{}\section{App\+Menu\+Button Class Reference}
+\label{classAppMenuButton}\index{App\+Menu\+Button@{App\+Menu\+Button}}
+
+
+{\ttfamily \#include $<$App\+Menu\+Button.\+h$>$}
+
+Inheritance diagram for App\+Menu\+Button\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classAppMenuButton}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{classAppMenuButton_a9c81c78f6797058581b02308e25021f9}{Colour\+Ids}} \{ \mbox{\hyperlink{classAppMenuButton_a9c81c78f6797058581b02308e25021f9a4837ae0581b3de7a3dce1c1a05abc08c}{text\+Colour\+Id}} = 0x1900200, 
+\mbox{\hyperlink{classAppMenuButton_a9c81c78f6797058581b02308e25021f9aaf3eb1c5718cdafded022d9d3b4a573d}{background\+Colour\+Id}} = 0x1900201, 
+\mbox{\hyperlink{classAppMenuButton_a9c81c78f6797058581b02308e25021f9ae604b421b06927745c38a5c56b4e0b61}{selection\+Colour\+Id}} = 0x1900202, 
+\mbox{\hyperlink{classAppMenuButton_a9c81c78f6797058581b02308e25021f9a1b502c02e063c24793abb78d347a5872}{border\+Colour\+Id}} = 0x1900203
+ \}
+\item 
+typedef Reference\+Counted\+Object\+Ptr$<$ \mbox{\hyperlink{classAppMenuButton}{App\+Menu\+Button}} $>$ \mbox{\hyperlink{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}{Ptr}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classAppMenuButton_ac107b991d1f46e6bc21005ca1d46b350}{App\+Menu\+Button}} (\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} menu\+Item, String name=String())
+\item 
+virtual \mbox{\hyperlink{classAppMenuButton_aaf609655fb3b0f5d7a14ba82b7339929}{$\sim$\+App\+Menu\+Button}} ()
+\item 
+\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} \mbox{\hyperlink{classAppMenuButton_aa4d1780267f97aba5f0cc8359cbea3b2}{get\+Menu\+Item}} ()
+\item 
+\mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} $\ast$ \mbox{\hyperlink{classAppMenuButton_a388243c4b6afa532afce4352e35bfec4}{get\+Editor}} (const std\+::function$<$ void(\mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} $\ast$) $>$ \&on\+Confirm)
+\item 
+void \mbox{\hyperlink{classAppMenuButton_ad89d44c5aacdb80c10af0259e6502b27}{confirm\+Remove\+Button\+Source}} (const std\+::function$<$ void() $>$ \&on\+Remove)
+\item 
+virtual bool \mbox{\hyperlink{classAppMenuButton_a9e7e01517bf52a0e1519206e6c76db7a}{move\+Data\+Index}} (int offset)
+\item 
+bool \mbox{\hyperlink{classAppMenuButton_aae298a5007ccac5f71c89375d1954d74}{is\+Selected}} () const
+\item 
+void \mbox{\hyperlink{classAppMenuButton_a9cc29333d34ad085a110abd03d7ee6d9}{set\+Selected}} (bool select)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classAppMenuButton_aabd4012101fc3f9d48ee816d5a1c5182}{selection\+State\+Changed}} ()
+\item 
+void \mbox{\hyperlink{classAppMenuButton_a8c3a08391a811b18631ce391f51bd081}{load\+Icon}} (String icon)
+\item 
+virtual void \mbox{\hyperlink{classAppMenuButton_ae25b2203f6d796af9ab7686d600f7f23}{reload\+Data\+From\+Source}} ()
+\item 
+const Rectangle$<$ float $>$ \& \mbox{\hyperlink{classAppMenuButton_ac7893a9e707238feb9fe367d6e444446}{get\+Text\+Bounds}} () const
+\item 
+const Rectangle$<$ float $>$ \& \mbox{\hyperlink{classAppMenuButton_a404859940108f1284c0b28f0b66d7567}{get\+Image\+Bounds}} () const
+\item 
+const Font \& \mbox{\hyperlink{classAppMenuButton_aa0659bfa4729f2a3ce5c62bbf1205fc9}{get\+Title\+Font}} () const
+\item 
+void \mbox{\hyperlink{classAppMenuButton_aee22a18243e83c0b5735c320d7461a8a}{set\+Text\+Bounds}} (const Rectangle$<$ float $>$ \&bounds)
+\item 
+void \mbox{\hyperlink{classAppMenuButton_a1a444d9d4016f407bc021774fcd62a36}{set\+Image\+Bounds}} (const Rectangle$<$ float $>$ \&bounds)
+\item 
+void \mbox{\hyperlink{classAppMenuButton_a67d3f396b0c87a25c67e1867d01bff73}{set\+Draw\+Border}} (bool should\+Draw)
+\item 
+void \mbox{\hyperlink{classAppMenuButton_abb921087445de1a6f25674ea36f26c8f}{set\+Fill\+Background}} (bool should\+Fill)
+\item 
+void \mbox{\hyperlink{classAppMenuButton_ab3368972b9d659cad06cc95586b4a63c}{set\+Title\+Font}} (const Font \&font)
+\item 
+void \mbox{\hyperlink{classAppMenuButton_ae6fc015caaa91b9c661dce2326e03e01}{set\+Text\+Justification}} (Justification justification)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}\label{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!Ptr@{Ptr}}
+\index{Ptr@{Ptr}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{Ptr}{Ptr}}
+{\footnotesize\ttfamily typedef Reference\+Counted\+Object\+Ptr$<$\mbox{\hyperlink{classAppMenuButton}{App\+Menu\+Button}}$>$ \mbox{\hyperlink{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}{App\+Menu\+Button\+::\+Ptr}}}
+
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classAppMenuButton_a9c81c78f6797058581b02308e25021f9}\label{classAppMenuButton_a9c81c78f6797058581b02308e25021f9}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!Colour\+Ids@{Colour\+Ids}}
+\index{Colour\+Ids@{Colour\+Ids}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{Colour\+Ids}{ColourIds}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classAppMenuButton_a9c81c78f6797058581b02308e25021f9}{App\+Menu\+Button\+::\+Colour\+Ids}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{text\+Colour\+Id@{text\+Colour\+Id}!App\+Menu\+Button@{App\+Menu\+Button}}\index{App\+Menu\+Button@{App\+Menu\+Button}!text\+Colour\+Id@{text\+Colour\+Id}}}\mbox{\Hypertarget{classAppMenuButton_a9c81c78f6797058581b02308e25021f9a4837ae0581b3de7a3dce1c1a05abc08c}\label{classAppMenuButton_a9c81c78f6797058581b02308e25021f9a4837ae0581b3de7a3dce1c1a05abc08c}} 
+text\+Colour\+Id&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{background\+Colour\+Id@{background\+Colour\+Id}!App\+Menu\+Button@{App\+Menu\+Button}}\index{App\+Menu\+Button@{App\+Menu\+Button}!background\+Colour\+Id@{background\+Colour\+Id}}}\mbox{\Hypertarget{classAppMenuButton_a9c81c78f6797058581b02308e25021f9aaf3eb1c5718cdafded022d9d3b4a573d}\label{classAppMenuButton_a9c81c78f6797058581b02308e25021f9aaf3eb1c5718cdafded022d9d3b4a573d}} 
+background\+Colour\+Id&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{selection\+Colour\+Id@{selection\+Colour\+Id}!App\+Menu\+Button@{App\+Menu\+Button}}\index{App\+Menu\+Button@{App\+Menu\+Button}!selection\+Colour\+Id@{selection\+Colour\+Id}}}\mbox{\Hypertarget{classAppMenuButton_a9c81c78f6797058581b02308e25021f9ae604b421b06927745c38a5c56b4e0b61}\label{classAppMenuButton_a9c81c78f6797058581b02308e25021f9ae604b421b06927745c38a5c56b4e0b61}} 
+selection\+Colour\+Id&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{border\+Colour\+Id@{border\+Colour\+Id}!App\+Menu\+Button@{App\+Menu\+Button}}\index{App\+Menu\+Button@{App\+Menu\+Button}!border\+Colour\+Id@{border\+Colour\+Id}}}\mbox{\Hypertarget{classAppMenuButton_a9c81c78f6797058581b02308e25021f9a1b502c02e063c24793abb78d347a5872}\label{classAppMenuButton_a9c81c78f6797058581b02308e25021f9a1b502c02e063c24793abb78d347a5872}} 
+border\+Colour\+Id&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classAppMenuButton_ac107b991d1f46e6bc21005ca1d46b350}\label{classAppMenuButton_ac107b991d1f46e6bc21005ca1d46b350}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!App\+Menu\+Button@{App\+Menu\+Button}}
+\index{App\+Menu\+Button@{App\+Menu\+Button}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{App\+Menu\+Button()}{AppMenuButton()}}
+{\footnotesize\ttfamily App\+Menu\+Button\+::\+App\+Menu\+Button (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}}}]{menu\+Item,  }\item[{String}]{name = {\ttfamily String()} }\end{DoxyParamCaption})}
+
+Create a new \mbox{\hyperlink{classAppMenuButton}{App\+Menu\+Button}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em menu\+Item} & This is set as the button\textquotesingle{}s menu data source.\\
+\hline
+{\em name} & Sets the button\textquotesingle{}s internal component name. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classAppMenuButton_aaf609655fb3b0f5d7a14ba82b7339929}\label{classAppMenuButton_aaf609655fb3b0f5d7a14ba82b7339929}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!````~App\+Menu\+Button@{$\sim$\+App\+Menu\+Button}}
+\index{````~App\+Menu\+Button@{$\sim$\+App\+Menu\+Button}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{$\sim$\+App\+Menu\+Button()}{~AppMenuButton()}}
+{\footnotesize\ttfamily virtual App\+Menu\+Button\+::$\sim$\+App\+Menu\+Button (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classAppMenuButton_ad89d44c5aacdb80c10af0259e6502b27}\label{classAppMenuButton_ad89d44c5aacdb80c10af0259e6502b27}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!confirm\+Remove\+Button\+Source@{confirm\+Remove\+Button\+Source}}
+\index{confirm\+Remove\+Button\+Source@{confirm\+Remove\+Button\+Source}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{confirm\+Remove\+Button\+Source()}{confirmRemoveButtonSource()}}
+{\footnotesize\ttfamily void App\+Menu\+Button\+::confirm\+Remove\+Button\+Source (\begin{DoxyParamCaption}\item[{const std\+::function$<$ void() $>$ \&}]{on\+Remove }\end{DoxyParamCaption})}
+
+Calling this method will create a message box asking for user confirmation that this button and its source should be removed. If the user clicks \char`\"{}\+O\+K\char`\"{}, remove\+Button\+Source is called.
+
+
+\begin{DoxyParams}{Parameters}
+{\em on\+Remove} & A callback function that is responsible for removing his button from its parent if the user clicks \char`\"{}\+O\+K\char`\"{}.\\
+\hline
+\end{DoxyParams}
+Calling this method will create a message box asking for user confirmation that this button and its source should be removed. If the user clicks \char`\"{}\+O\+K\char`\"{}, remove\+Button\+Source is called. \mbox{\Hypertarget{classAppMenuButton_a388243c4b6afa532afce4352e35bfec4}\label{classAppMenuButton_a388243c4b6afa532afce4352e35bfec4}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!get\+Editor@{get\+Editor}}
+\index{get\+Editor@{get\+Editor}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{get\+Editor()}{getEditor()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} $\ast$ App\+Menu\+Button\+::get\+Editor (\begin{DoxyParamCaption}\item[{const std\+::function$<$ void(\mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} $\ast$) $>$ \&}]{on\+Confirm }\end{DoxyParamCaption})}
+
+Gets a \mbox{\hyperlink{classPopupEditorComponent}{Popup\+Editor\+Component}} configured to edit this button\textquotesingle{}s data.
+
+
+\begin{DoxyParams}{Parameters}
+{\em on\+Confirm} & A callback function that will run if changes are made and confirmed in the new editor. This should be used for updating button properties that aren\textquotesingle{}t managed internally (e.\+g., button icon, but not button bounds).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a new \mbox{\hyperlink{classPopupEditorComponent}{Popup\+Editor\+Component}}, ready to be added to the screen.
+\end{DoxyReturn}
+Gets a \mbox{\hyperlink{classPopupEditorComponent}{Popup\+Editor\+Component}} configured to edit this button\textquotesingle{}s data \mbox{\Hypertarget{classAppMenuButton_a404859940108f1284c0b28f0b66d7567}\label{classAppMenuButton_a404859940108f1284c0b28f0b66d7567}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!get\+Image\+Bounds@{get\+Image\+Bounds}}
+\index{get\+Image\+Bounds@{get\+Image\+Bounds}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{get\+Image\+Bounds()}{getImageBounds()}}
+{\footnotesize\ttfamily const Rectangle$<$ float $>$ \& App\+Menu\+Button\+::get\+Image\+Bounds (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+Gets the button\textquotesingle{}s image bounds.
+
+\begin{DoxyReturn}{Returns}
+the area relative to this button\textquotesingle{}s position where it will draw its image.
+
+the area relative to this button\textquotesingle{}s position where it will draw its image. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuButton_aa4d1780267f97aba5f0cc8359cbea3b2}\label{classAppMenuButton_aa4d1780267f97aba5f0cc8359cbea3b2}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!get\+Menu\+Item@{get\+Menu\+Item}}
+\index{get\+Menu\+Item@{get\+Menu\+Item}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{get\+Menu\+Item()}{getMenuItem()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} App\+Menu\+Button\+::get\+Menu\+Item (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get this button\textquotesingle{}s menu data.
+
+\begin{DoxyReturn}{Returns}
+a pointer to this button\textquotesingle{}s internal \mbox{\hyperlink{classAppMenuItem}{App\+Menu\+Item}}. This pointer will be valid as long as this \mbox{\hyperlink{classAppMenuButton}{App\+Menu\+Button}} still exists.
+\end{DoxyReturn}
+Get this button\textquotesingle{}s menu data. \mbox{\Hypertarget{classAppMenuButton_ac7893a9e707238feb9fe367d6e444446}\label{classAppMenuButton_ac7893a9e707238feb9fe367d6e444446}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!get\+Text\+Bounds@{get\+Text\+Bounds}}
+\index{get\+Text\+Bounds@{get\+Text\+Bounds}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{get\+Text\+Bounds()}{getTextBounds()}}
+{\footnotesize\ttfamily const Rectangle$<$ float $>$ \& App\+Menu\+Button\+::get\+Text\+Bounds (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+Gets the button\textquotesingle{}s text bounds.
+
+\begin{DoxyReturn}{Returns}
+the area relative to this button\textquotesingle{}s position where it will draw its name.
+
+the area relative to this button\textquotesingle{}s position where it will draw its name. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuButton_aa0659bfa4729f2a3ce5c62bbf1205fc9}\label{classAppMenuButton_aa0659bfa4729f2a3ce5c62bbf1205fc9}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!get\+Title\+Font@{get\+Title\+Font}}
+\index{get\+Title\+Font@{get\+Title\+Font}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{get\+Title\+Font()}{getTitleFont()}}
+{\footnotesize\ttfamily const Font \& App\+Menu\+Button\+::get\+Title\+Font (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+Gets the button\textquotesingle{}s title font.
+
+\begin{DoxyReturn}{Returns}
+the font used to draw this button\textquotesingle{}s title.
+
+the font used to draw this button\textquotesingle{}s title. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuButton_aae298a5007ccac5f71c89375d1954d74}\label{classAppMenuButton_aae298a5007ccac5f71c89375d1954d74}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!is\+Selected@{is\+Selected}}
+\index{is\+Selected@{is\+Selected}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{is\+Selected()}{isSelected()}}
+{\footnotesize\ttfamily bool App\+Menu\+Button\+::is\+Selected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+true if this button is selected, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuButton_a8c3a08391a811b18631ce391f51bd081}\label{classAppMenuButton_a8c3a08391a811b18631ce391f51bd081}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!load\+Icon@{load\+Icon}}
+\index{load\+Icon@{load\+Icon}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{load\+Icon()}{loadIcon()}}
+{\footnotesize\ttfamily void App\+Menu\+Button\+::load\+Icon (\begin{DoxyParamCaption}\item[{String}]{icon }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Requests an icon from the icon thread.
+
+
+\begin{DoxyParams}{Parameters}
+{\em icon} & An icon\textquotesingle{}s full path, or the name of an icon file located in common icon directories.\\
+\hline
+\end{DoxyParams}
+Requests an icon from the icon thread. \mbox{\Hypertarget{classAppMenuButton_a9e7e01517bf52a0e1519206e6c76db7a}\label{classAppMenuButton_a9e7e01517bf52a0e1519206e6c76db7a}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!move\+Data\+Index@{move\+Data\+Index}}
+\index{move\+Data\+Index@{move\+Data\+Index}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{move\+Data\+Index()}{moveDataIndex()}}
+{\footnotesize\ttfamily bool App\+Menu\+Button\+::move\+Data\+Index (\begin{DoxyParamCaption}\item[{int}]{offset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+If possible, change the index of this button\textquotesingle{}s data source by some offset amount.
+
+
+\begin{DoxyParams}{Parameters}
+{\em offset} & This will be added to the button\textquotesingle{}s current index, if possible.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true iff the operation succeeded.
+\end{DoxyReturn}
+If possible, change the index of this button\textquotesingle{}s data source by some offset amount. \mbox{\Hypertarget{classAppMenuButton_ae25b2203f6d796af9ab7686d600f7f23}\label{classAppMenuButton_ae25b2203f6d796af9ab7686d600f7f23}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!reload\+Data\+From\+Source@{reload\+Data\+From\+Source}}
+\index{reload\+Data\+From\+Source@{reload\+Data\+From\+Source}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{reload\+Data\+From\+Source()}{reloadDataFromSource()}}
+{\footnotesize\ttfamily void App\+Menu\+Button\+::reload\+Data\+From\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Reload this button\textquotesingle{}s data from its menu item \mbox{\Hypertarget{classAppMenuButton_aabd4012101fc3f9d48ee816d5a1c5182}\label{classAppMenuButton_aabd4012101fc3f9d48ee816d5a1c5182}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!selection\+State\+Changed@{selection\+State\+Changed}}
+\index{selection\+State\+Changed@{selection\+State\+Changed}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{selection\+State\+Changed()}{selectionStateChanged()}}
+{\footnotesize\ttfamily virtual void App\+Menu\+Button\+::selection\+State\+Changed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Triggers whenever the button is selected or unselected. \mbox{\Hypertarget{classAppMenuButton_a67d3f396b0c87a25c67e1867d01bff73}\label{classAppMenuButton_a67d3f396b0c87a25c67e1867d01bff73}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!set\+Draw\+Border@{set\+Draw\+Border}}
+\index{set\+Draw\+Border@{set\+Draw\+Border}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{set\+Draw\+Border()}{setDrawBorder()}}
+{\footnotesize\ttfamily void App\+Menu\+Button\+::set\+Draw\+Border (\begin{DoxyParamCaption}\item[{bool}]{should\+Draw }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Sets if this button will draw an outline around its border.
+
+
+\begin{DoxyParams}{Parameters}
+{\em should\+Draw} & Sets if this button will draw an outline around its border. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classAppMenuButton_abb921087445de1a6f25674ea36f26c8f}\label{classAppMenuButton_abb921087445de1a6f25674ea36f26c8f}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!set\+Fill\+Background@{set\+Fill\+Background}}
+\index{set\+Fill\+Background@{set\+Fill\+Background}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{set\+Fill\+Background()}{setFillBackground()}}
+{\footnotesize\ttfamily void App\+Menu\+Button\+::set\+Fill\+Background (\begin{DoxyParamCaption}\item[{bool}]{should\+Fill }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Sets if this button will fill in its background with its background color.
+
+
+\begin{DoxyParams}{Parameters}
+{\em should\+Fill} & Sets if this button will fill in its background with its background color. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classAppMenuButton_a1a444d9d4016f407bc021774fcd62a36}\label{classAppMenuButton_a1a444d9d4016f407bc021774fcd62a36}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!set\+Image\+Bounds@{set\+Image\+Bounds}}
+\index{set\+Image\+Bounds@{set\+Image\+Bounds}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{set\+Image\+Bounds()}{setImageBounds()}}
+{\footnotesize\ttfamily void App\+Menu\+Button\+::set\+Image\+Bounds (\begin{DoxyParamCaption}\item[{const Rectangle$<$ float $>$ \&}]{bounds }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Set new bounds to draw the button icon within.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bounds} & The area relative to this button\textquotesingle{}s position where it will draw its icon.\\
+\hline
+\end{DoxyParams}
+Set new bounds to draw the button icon within. \mbox{\Hypertarget{classAppMenuButton_a9cc29333d34ad085a110abd03d7ee6d9}\label{classAppMenuButton_a9cc29333d34ad085a110abd03d7ee6d9}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!set\+Selected@{set\+Selected}}
+\index{set\+Selected@{set\+Selected}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{set\+Selected()}{setSelected()}}
+{\footnotesize\ttfamily void App\+Menu\+Button\+::set\+Selected (\begin{DoxyParamCaption}\item[{bool}]{select }\end{DoxyParamCaption})}
+
+Select or un-\/select this button.
+
+
+\begin{DoxyParams}{Parameters}
+{\em select} & Sets the button as selected if true and unselected if false.\\
+\hline
+{\em select} & sets the button as selected if true and unselected if false. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classAppMenuButton_aee22a18243e83c0b5735c320d7461a8a}\label{classAppMenuButton_aee22a18243e83c0b5735c320d7461a8a}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!set\+Text\+Bounds@{set\+Text\+Bounds}}
+\index{set\+Text\+Bounds@{set\+Text\+Bounds}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{set\+Text\+Bounds()}{setTextBounds()}}
+{\footnotesize\ttfamily void App\+Menu\+Button\+::set\+Text\+Bounds (\begin{DoxyParamCaption}\item[{const Rectangle$<$ float $>$ \&}]{bounds }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Set new bounds to draw the button title within.
+
+
+\begin{DoxyParams}{Parameters}
+{\em text\+Bounds} & The area relative to this button\textquotesingle{}s position where it will draw its name.\\
+\hline
+\end{DoxyParams}
+Set new bounds to draw the button title within. \mbox{\Hypertarget{classAppMenuButton_ae6fc015caaa91b9c661dce2326e03e01}\label{classAppMenuButton_ae6fc015caaa91b9c661dce2326e03e01}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!set\+Text\+Justification@{set\+Text\+Justification}}
+\index{set\+Text\+Justification@{set\+Text\+Justification}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{set\+Text\+Justification()}{setTextJustification()}}
+{\footnotesize\ttfamily void App\+Menu\+Button\+::set\+Text\+Justification (\begin{DoxyParamCaption}\item[{Justification}]{justification }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Set the text justification of the button title.
+
+
+\begin{DoxyParams}{Parameters}
+{\em justification} & This will be used to position button title within the text bounds.\\
+\hline
+\end{DoxyParams}
+Set the text justification of the button title. \mbox{\Hypertarget{classAppMenuButton_ab3368972b9d659cad06cc95586b4a63c}\label{classAppMenuButton_ab3368972b9d659cad06cc95586b4a63c}} 
+\index{App\+Menu\+Button@{App\+Menu\+Button}!set\+Title\+Font@{set\+Title\+Font}}
+\index{set\+Title\+Font@{set\+Title\+Font}!App\+Menu\+Button@{App\+Menu\+Button}}
+\subsubsection{\texorpdfstring{set\+Title\+Font()}{setTitleFont()}}
+{\footnotesize\ttfamily void App\+Menu\+Button\+::set\+Title\+Font (\begin{DoxyParamCaption}\item[{const Font \&}]{font }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Sets the button\textquotesingle{}s title font.
+
+
+\begin{DoxyParams}{Parameters}
+{\em font} & will be used to draw this button\textquotesingle{}s title.\\
+\hline
+\end{DoxyParams}
+Sets the button\textquotesingle{}s title font. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\mbox{\hyperlink{AppMenuButton_8h}{App\+Menu\+Button.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\mbox{\hyperlink{AppMenuButton_8cpp}{App\+Menu\+Button.\+cpp}}\end{DoxyCompactItemize}

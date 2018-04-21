@@ -1,0 +1,68 @@
+\hypertarget{classConfigFile_1_1Listener}{}\section{Config\+File\+:\+:Listener Class Reference}
+\label{classConfigFile_1_1Listener}\index{Config\+File\+::\+Listener@{Config\+File\+::\+Listener}}
+
+
+{\ttfamily \#include $<$Config\+File.\+h$>$}
+
+Inheritance diagram for Config\+File\+:\+:Listener\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.555556cm]{classConfigFile_1_1Listener}
+\end{center}
+\end{figure}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classConfigFile_1_1Listener_af8f0bbca45e2dbc56aa71bd78b65aeed}{Listener}} ()
+\item 
+virtual \mbox{\hyperlink{classConfigFile_1_1Listener_acc7fc4ebc0b3f85b6092e84dbec4ac5f}{$\sim$\+Listener}} ()
+\item 
+void \mbox{\hyperlink{classConfigFile_1_1Listener_a766f4c212ec0dc6bd79622f2d7a50760}{load\+All\+Config\+Properties}} ()
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classConfigFile_1_1Listener_a1b8ab5fe482c5910209dfb9815de99c4}{Config\+File}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Listeners receive updates whenever key values they track are updated in a config file. Listeners may track any number of keys in any number of \mbox{\hyperlink{classConfigFile}{Config\+File}} objects. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classConfigFile_1_1Listener_af8f0bbca45e2dbc56aa71bd78b65aeed}\label{classConfigFile_1_1Listener_af8f0bbca45e2dbc56aa71bd78b65aeed}} 
+\index{Config\+File\+::\+Listener@{Config\+File\+::\+Listener}!Listener@{Listener}}
+\index{Listener@{Listener}!Config\+File\+::\+Listener@{Config\+File\+::\+Listener}}
+\subsubsection{\texorpdfstring{Listener()}{Listener()}}
+{\footnotesize\ttfamily Config\+File\+::\+Listener\+::\+Listener (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classConfigFile_1_1Listener_acc7fc4ebc0b3f85b6092e84dbec4ac5f}\label{classConfigFile_1_1Listener_acc7fc4ebc0b3f85b6092e84dbec4ac5f}} 
+\index{Config\+File\+::\+Listener@{Config\+File\+::\+Listener}!````~Listener@{$\sim$\+Listener}}
+\index{````~Listener@{$\sim$\+Listener}!Config\+File\+::\+Listener@{Config\+File\+::\+Listener}}
+\subsubsection{\texorpdfstring{$\sim$\+Listener()}{~Listener()}}
+{\footnotesize\ttfamily Config\+File\+::\+Listener\+::$\sim$\+Listener (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Listeners safely remove themselves from all tracked Config\+Files when they are destroyed. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classConfigFile_1_1Listener_a766f4c212ec0dc6bd79622f2d7a50760}\label{classConfigFile_1_1Listener_a766f4c212ec0dc6bd79622f2d7a50760}} 
+\index{Config\+File\+::\+Listener@{Config\+File\+::\+Listener}!load\+All\+Config\+Properties@{load\+All\+Config\+Properties}}
+\index{load\+All\+Config\+Properties@{load\+All\+Config\+Properties}!Config\+File\+::\+Listener@{Config\+File\+::\+Listener}}
+\subsubsection{\texorpdfstring{load\+All\+Config\+Properties()}{loadAllConfigProperties()}}
+{\footnotesize\ttfamily void Config\+File\+::\+Listener\+::load\+All\+Config\+Properties (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Calls config\+Value\+Changed() for every key tracked by this listener. 
+
+\subsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classConfigFile_1_1Listener_a1b8ab5fe482c5910209dfb9815de99c4}\label{classConfigFile_1_1Listener_a1b8ab5fe482c5910209dfb9815de99c4}} 
+\index{Config\+File\+::\+Listener@{Config\+File\+::\+Listener}!Config\+File@{Config\+File}}
+\index{Config\+File@{Config\+File}!Config\+File\+::\+Listener@{Config\+File\+::\+Listener}}
+\subsubsection{\texorpdfstring{Config\+File}{ConfigFile}}
+{\footnotesize\ttfamily friend class \mbox{\hyperlink{classConfigFile}{Config\+File}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{ConfigFile_8h}{Config\+File.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{ConfigFile_8cpp}{Config\+File.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,67 @@
+\hypertarget{classPageFactory}{}\section{Page\+Factory Class Reference}
+\label{classPageFactory}\index{Page\+Factory@{Page\+Factory}}
+
+
+{\ttfamily \#include $<$Page\+Factory.\+h$>$}
+
+Inheritance diagram for Page\+Factory\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPageFactory}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPageFactory_aefe63d515d040a6ad96b00d611a1abfb}{Page\+Factory}} ()
+\item 
+virtual \mbox{\hyperlink{classPageFactory_a62d5a5ddeff01c924c98556cf87aa64d}{$\sim$\+Page\+Factory}} ()
+\item 
+\mbox{\hyperlink{classPageComponent}{Page\+Component}} $\ast$ \mbox{\hyperlink{classPageFactory_a08f1a7c80349bcd20a6aadeb75c4f9ac}{create\+Home\+Page}} ()
+\item 
+\mbox{\hyperlink{classPageComponent}{Page\+Component}} $\ast$ \mbox{\hyperlink{classPageFactory_aa00448c458c43a9931023c30b3821670}{create\+Login\+Page}} (std\+::function$<$ void() $>$ login\+Callback)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classPageFactory_aefe63d515d040a6ad96b00d611a1abfb}\label{classPageFactory_aefe63d515d040a6ad96b00d611a1abfb}} 
+\index{Page\+Factory@{Page\+Factory}!Page\+Factory@{Page\+Factory}}
+\index{Page\+Factory@{Page\+Factory}!Page\+Factory@{Page\+Factory}}
+\subsubsection{\texorpdfstring{Page\+Factory()}{PageFactory()}}
+{\footnotesize\ttfamily Page\+Factory\+::\+Page\+Factory (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPageFactory_a62d5a5ddeff01c924c98556cf87aa64d}\label{classPageFactory_a62d5a5ddeff01c924c98556cf87aa64d}} 
+\index{Page\+Factory@{Page\+Factory}!````~Page\+Factory@{$\sim$\+Page\+Factory}}
+\index{````~Page\+Factory@{$\sim$\+Page\+Factory}!Page\+Factory@{Page\+Factory}}
+\subsubsection{\texorpdfstring{$\sim$\+Page\+Factory()}{~PageFactory()}}
+{\footnotesize\ttfamily virtual Page\+Factory\+::$\sim$\+Page\+Factory (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classPageFactory_a08f1a7c80349bcd20a6aadeb75c4f9ac}\label{classPageFactory_a08f1a7c80349bcd20a6aadeb75c4f9ac}} 
+\index{Page\+Factory@{Page\+Factory}!create\+Home\+Page@{create\+Home\+Page}}
+\index{create\+Home\+Page@{create\+Home\+Page}!Page\+Factory@{Page\+Factory}}
+\subsubsection{\texorpdfstring{create\+Home\+Page()}{createHomePage()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPageComponent}{Page\+Component}} $\ast$ Page\+Factory\+::create\+Home\+Page (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initializes a \mbox{\hyperlink{classHomePage}{Home\+Page}} instance to use as the root page of the page stack. \mbox{\Hypertarget{classPageFactory_aa00448c458c43a9931023c30b3821670}\label{classPageFactory_aa00448c458c43a9931023c30b3821670}} 
+\index{Page\+Factory@{Page\+Factory}!create\+Login\+Page@{create\+Login\+Page}}
+\index{create\+Login\+Page@{create\+Login\+Page}!Page\+Factory@{Page\+Factory}}
+\subsubsection{\texorpdfstring{create\+Login\+Page()}{createLoginPage()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPageComponent}{Page\+Component}} $\ast$ Page\+Factory\+::create\+Login\+Page (\begin{DoxyParamCaption}\item[{std\+::function$<$ void() $>$}]{login\+Callback }\end{DoxyParamCaption})}
+
+Initializes a login page instance.
+
+
+\begin{DoxyParams}{Parameters}
+{\em login\+Callback} & A callback function for the page to run when the user successfully logs in.\\
+\hline
+\end{DoxyParams}
+Initializes a login page instance. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\mbox{\hyperlink{PageFactory_8h}{Page\+Factory.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\mbox{\hyperlink{PageFactory_8cpp}{Page\+Factory.\+cpp}}\end{DoxyCompactItemize}

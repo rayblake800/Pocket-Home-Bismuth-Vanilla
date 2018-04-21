@@ -1,0 +1,64 @@
+\hypertarget{classIconThread}{}\section{Icon\+Thread Class Reference}
+\label{classIconThread}\index{Icon\+Thread@{Icon\+Thread}}
+
+
+{\ttfamily \#include $<$Icon\+Thread.\+h$>$}
+
+Inheritance diagram for Icon\+Thread\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classIconThread}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classIconThread_afb8624ebeb2b23499d7a3051a755f0f1}{Icon\+Thread}} ()
+\item 
+virtual \mbox{\hyperlink{classIconThread_abcbf5265504acb501d46f393bc421b0f}{$\sim$\+Icon\+Thread}} ()
+\item 
+void \mbox{\hyperlink{classIconThread_a508dad34417fb3767781191654fb7acb}{load\+Icon}} (String icon, std\+::function$<$ void(Image) $>$ assign\+Image)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\mbox{\hyperlink{IconThread_8h}{Icon\+Thread.\+h}}
+
+Loads application and directory icons asynchronously. All icons in typical icon directories are mapped, attempting to avoid duplicates. This map is then used to quickly locate icon files by name as they are needed. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classIconThread_afb8624ebeb2b23499d7a3051a755f0f1}\label{classIconThread_afb8624ebeb2b23499d7a3051a755f0f1}} 
+\index{Icon\+Thread@{Icon\+Thread}!Icon\+Thread@{Icon\+Thread}}
+\index{Icon\+Thread@{Icon\+Thread}!Icon\+Thread@{Icon\+Thread}}
+\subsubsection{\texorpdfstring{Icon\+Thread()}{IconThread()}}
+{\footnotesize\ttfamily Icon\+Thread\+::\+Icon\+Thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classIconThread_abcbf5265504acb501d46f393bc421b0f}\label{classIconThread_abcbf5265504acb501d46f393bc421b0f}} 
+\index{Icon\+Thread@{Icon\+Thread}!````~Icon\+Thread@{$\sim$\+Icon\+Thread}}
+\index{````~Icon\+Thread@{$\sim$\+Icon\+Thread}!Icon\+Thread@{Icon\+Thread}}
+\subsubsection{\texorpdfstring{$\sim$\+Icon\+Thread()}{~IconThread()}}
+{\footnotesize\ttfamily virtual Icon\+Thread\+::$\sim$\+Icon\+Thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classIconThread_a508dad34417fb3767781191654fb7acb}\label{classIconThread_a508dad34417fb3767781191654fb7acb}} 
+\index{Icon\+Thread@{Icon\+Thread}!load\+Icon@{load\+Icon}}
+\index{load\+Icon@{load\+Icon}!Icon\+Thread@{Icon\+Thread}}
+\subsubsection{\texorpdfstring{load\+Icon()}{loadIcon()}}
+{\footnotesize\ttfamily void Icon\+Thread\+::load\+Icon (\begin{DoxyParamCaption}\item[{String}]{icon,  }\item[{std\+::function$<$ void(Image) $>$}]{assign\+Image }\end{DoxyParamCaption})}
+
+Queues up an icon request. ~\newline
+ 
+\begin{DoxyParams}{Parameters}
+{\em icon} & This should be either a full icon file path, or the filename(without extension) of an icon in one of the system icon directories. If no direct match is found, the icon thread will attempt to find and use an icon with a name partially matching this string.\\
+\hline
+{\em assign\+Image} & A callback function to asynchronously use the image found by the thread. Unless the icon can be immediately located without searching, It will be called twice, once to immediately apply a default image, and again when the requested image has been found.\\
+\hline
+\end{DoxyParams}
+Queues up an icon request. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\mbox{\hyperlink{IconThread_8h}{Icon\+Thread.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\mbox{\hyperlink{IconThread_8cpp}{Icon\+Thread.\+cpp}}\end{DoxyCompactItemize}

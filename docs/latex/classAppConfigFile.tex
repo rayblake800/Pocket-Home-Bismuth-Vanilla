@@ -1,0 +1,180 @@
+\hypertarget{classAppConfigFile}{}\section{App\+Config\+File Class Reference}
+\label{classAppConfigFile}\index{App\+Config\+File@{App\+Config\+File}}
+
+
+{\ttfamily \#include $<$App\+Config\+File.\+h$>$}
+
+Inheritance diagram for App\+Config\+File\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classAppConfigFile}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Folder}}
+\item 
+struct \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classAppConfigFile_a8b8c0dff9b79a1bf6f2e8f840ef28fa9}{App\+Config\+File}} ()
+\item 
+virtual \mbox{\hyperlink{classAppConfigFile_a8748d74c5d81884dcf9de17f7f3655b4}{$\sim$\+App\+Config\+File}} ()
+\item 
+Array$<$ \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}} $>$ \mbox{\hyperlink{classAppConfigFile_adafa59cdb408a3b4a29d5bc247120c21}{get\+Favorites}} ()
+\item 
+void \mbox{\hyperlink{classAppConfigFile_acf142d89fbe1eec9c39fd16ee188a38e}{add\+Favorite\+App}} (\mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}} new\+App, int index, bool write\+Changes\+Now=true)
+\item 
+void \mbox{\hyperlink{classAppConfigFile_aadece130a132eb7b490e99d980aa0206}{remove\+Favorite\+App}} (int index, bool write\+Changes\+Now=true)
+\item 
+int \mbox{\hyperlink{classAppConfigFile_afbe8b003a2d63d4bdf9f595d6c70ac79}{get\+Favorite\+Index}} (\mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}} to\+Find)
+\item 
+Array$<$ \mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Folder}} $>$ \mbox{\hyperlink{classAppConfigFile_a4e7df52156d7ae5c5c7e8abeb56609e7}{get\+Folders}} ()
+\item 
+void \mbox{\hyperlink{classAppConfigFile_a0d5b0b0ccc5956f17fdb78a62b46d966}{add\+App\+Folder}} (\mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Folder}} new\+Folder, int index, bool write\+Changes\+Now=true)
+\item 
+void \mbox{\hyperlink{classAppConfigFile_a59fdc4888bb0575bb8c7c9a3de3e4876}{remove\+App\+Folder}} (int index, bool write\+Changes\+Now=true)
+\item 
+int \mbox{\hyperlink{classAppConfigFile_aa9ad1776ef603daf34e26cb35be8c123}{get\+Folder\+Index}} (\mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Folder}} to\+Find)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classAppConfigFile_a8b8c0dff9b79a1bf6f2e8f840ef28fa9}\label{classAppConfigFile_a8b8c0dff9b79a1bf6f2e8f840ef28fa9}} 
+\index{App\+Config\+File@{App\+Config\+File}!App\+Config\+File@{App\+Config\+File}}
+\index{App\+Config\+File@{App\+Config\+File}!App\+Config\+File@{App\+Config\+File}}
+\subsubsection{\texorpdfstring{App\+Config\+File()}{AppConfigFile()}}
+{\footnotesize\ttfamily App\+Config\+File\+::\+App\+Config\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classAppConfigFile_a8748d74c5d81884dcf9de17f7f3655b4}\label{classAppConfigFile_a8748d74c5d81884dcf9de17f7f3655b4}} 
+\index{App\+Config\+File@{App\+Config\+File}!````~App\+Config\+File@{$\sim$\+App\+Config\+File}}
+\index{````~App\+Config\+File@{$\sim$\+App\+Config\+File}!App\+Config\+File@{App\+Config\+File}}
+\subsubsection{\texorpdfstring{$\sim$\+App\+Config\+File()}{~AppConfigFile()}}
+{\footnotesize\ttfamily virtual App\+Config\+File\+::$\sim$\+App\+Config\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classAppConfigFile_a0d5b0b0ccc5956f17fdb78a62b46d966}\label{classAppConfigFile_a0d5b0b0ccc5956f17fdb78a62b46d966}} 
+\index{App\+Config\+File@{App\+Config\+File}!add\+App\+Folder@{add\+App\+Folder}}
+\index{add\+App\+Folder@{add\+App\+Folder}!App\+Config\+File@{App\+Config\+File}}
+\subsubsection{\texorpdfstring{add\+App\+Folder()}{addAppFolder()}}
+{\footnotesize\ttfamily void App\+Config\+File\+::add\+App\+Folder (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Config\+File\+::\+App\+Folder}}}]{new\+Folder,  }\item[{int}]{index,  }\item[{bool}]{write\+Changes\+Now = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Add a new folder to the list of App\+Folders in the config file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Folder} & Defines the new folder.\\
+\hline
+{\em index} & Where to insert the new folder.\\
+\hline
+{\em write\+Changes\+Now} & Sets if the change should be written to the config file immediately.\\
+\hline
+\end{DoxyParams}
+Add a new folder to the list of App\+Folders in the config file. \mbox{\Hypertarget{classAppConfigFile_acf142d89fbe1eec9c39fd16ee188a38e}\label{classAppConfigFile_acf142d89fbe1eec9c39fd16ee188a38e}} 
+\index{App\+Config\+File@{App\+Config\+File}!add\+Favorite\+App@{add\+Favorite\+App}}
+\index{add\+Favorite\+App@{add\+Favorite\+App}!App\+Config\+File@{App\+Config\+File}}
+\subsubsection{\texorpdfstring{add\+Favorite\+App()}{addFavoriteApp()}}
+{\footnotesize\ttfamily void App\+Config\+File\+::add\+Favorite\+App (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Config\+File\+::\+App\+Item}}}]{new\+App,  }\item[{int}]{index,  }\item[{bool}]{write\+Changes\+Now = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Add a new app to the list of pinned favorite apps in the config file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+App} & The new application data object.\\
+\hline
+{\em index} & The position to insert the new application.\\
+\hline
+{\em write\+Changes\+Now} & Sets if the change should be written to the config file immediately.\\
+\hline
+\end{DoxyParams}
+Add a new app to the list of pinned favorite apps in the config file. \mbox{\Hypertarget{classAppConfigFile_afbe8b003a2d63d4bdf9f595d6c70ac79}\label{classAppConfigFile_afbe8b003a2d63d4bdf9f595d6c70ac79}} 
+\index{App\+Config\+File@{App\+Config\+File}!get\+Favorite\+Index@{get\+Favorite\+Index}}
+\index{get\+Favorite\+Index@{get\+Favorite\+Index}!App\+Config\+File@{App\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Favorite\+Index()}{getFavoriteIndex()}}
+{\footnotesize\ttfamily int App\+Config\+File\+::get\+Favorite\+Index (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Config\+File\+::\+App\+Item}}}]{to\+Find }\end{DoxyParamCaption})}
+
+Find the index of an \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}} in favorites.
+
+
+\begin{DoxyParams}{Parameters}
+{\em to\+Find} & will be searched for in the favorites list\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the index of to\+Find, or -\/1 if it isn\textquotesingle{}t in the list.
+\end{DoxyReturn}
+Find the index of an \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}} in favorites. \mbox{\Hypertarget{classAppConfigFile_adafa59cdb408a3b4a29d5bc247120c21}\label{classAppConfigFile_adafa59cdb408a3b4a29d5bc247120c21}} 
+\index{App\+Config\+File@{App\+Config\+File}!get\+Favorites@{get\+Favorites}}
+\index{get\+Favorites@{get\+Favorites}!App\+Config\+File@{App\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Favorites()}{getFavorites()}}
+{\footnotesize\ttfamily Array$<$ \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Config\+File\+::\+App\+Item}} $>$ App\+Config\+File\+::get\+Favorites (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+a list of App\+Items to be pinned to the main column of the App\+Menu 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppConfigFile_aa9ad1776ef603daf34e26cb35be8c123}\label{classAppConfigFile_aa9ad1776ef603daf34e26cb35be8c123}} 
+\index{App\+Config\+File@{App\+Config\+File}!get\+Folder\+Index@{get\+Folder\+Index}}
+\index{get\+Folder\+Index@{get\+Folder\+Index}!App\+Config\+File@{App\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Folder\+Index()}{getFolderIndex()}}
+{\footnotesize\ttfamily int App\+Config\+File\+::get\+Folder\+Index (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Config\+File\+::\+App\+Folder}}}]{to\+Find }\end{DoxyParamCaption})}
+
+Find the index of an \mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Folder}} in the list of folders.
+
+
+\begin{DoxyParams}{Parameters}
+{\em to\+Find} & This will be searched for in the folder list.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the index of to\+Find, or -\/1 if it isn\textquotesingle{}t in the list.
+\end{DoxyReturn}
+Find the index of an \mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Folder}} in the list of folders. \mbox{\Hypertarget{classAppConfigFile_a4e7df52156d7ae5c5c7e8abeb56609e7}\label{classAppConfigFile_a4e7df52156d7ae5c5c7e8abeb56609e7}} 
+\index{App\+Config\+File@{App\+Config\+File}!get\+Folders@{get\+Folders}}
+\index{get\+Folders@{get\+Folders}!App\+Config\+File@{App\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Folders()}{getFolders()}}
+{\footnotesize\ttfamily Array$<$ \mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Config\+File\+::\+App\+Folder}} $>$ App\+Config\+File\+::get\+Folders (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+A list of folders to display in the App\+Menu. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppConfigFile_a59fdc4888bb0575bb8c7c9a3de3e4876}\label{classAppConfigFile_a59fdc4888bb0575bb8c7c9a3de3e4876}} 
+\index{App\+Config\+File@{App\+Config\+File}!remove\+App\+Folder@{remove\+App\+Folder}}
+\index{remove\+App\+Folder@{remove\+App\+Folder}!App\+Config\+File@{App\+Config\+File}}
+\subsubsection{\texorpdfstring{remove\+App\+Folder()}{removeAppFolder()}}
+{\footnotesize\ttfamily void App\+Config\+File\+::remove\+App\+Folder (\begin{DoxyParamCaption}\item[{int}]{index,  }\item[{bool}]{write\+Changes\+Now = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Remove a folder from the list of App\+Folders.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The position of the folder to remove.\\
+\hline
+{\em write\+Changes\+Now} & Sets if the change should be written to the config file immediately.\\
+\hline
+\end{DoxyParams}
+Remove a folder from the list of App\+Folders. \mbox{\Hypertarget{classAppConfigFile_aadece130a132eb7b490e99d980aa0206}\label{classAppConfigFile_aadece130a132eb7b490e99d980aa0206}} 
+\index{App\+Config\+File@{App\+Config\+File}!remove\+Favorite\+App@{remove\+Favorite\+App}}
+\index{remove\+Favorite\+App@{remove\+Favorite\+App}!App\+Config\+File@{App\+Config\+File}}
+\subsubsection{\texorpdfstring{remove\+Favorite\+App()}{removeFavoriteApp()}}
+{\footnotesize\ttfamily void App\+Config\+File\+::remove\+Favorite\+App (\begin{DoxyParamCaption}\item[{int}]{index,  }\item[{bool}]{write\+Changes\+Now = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Remove an app from the list of favorite applications
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The position of the app to remove.\\
+\hline
+{\em write\+Changes\+Now} & Sets if the change should be written to the config file immediately.\\
+\hline
+\end{DoxyParams}
+Remove an app from the list of favorite applications 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{AppConfigFile_8h}{App\+Config\+File.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{AppConfigFile_8cpp}{App\+Config\+File.\+cpp}}\end{DoxyCompactItemize}

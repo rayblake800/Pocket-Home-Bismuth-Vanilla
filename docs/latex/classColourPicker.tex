@@ -1,0 +1,166 @@
+\hypertarget{classColourPicker}{}\section{Colour\+Picker Class Reference}
+\label{classColourPicker}\index{Colour\+Picker@{Colour\+Picker}}
+
+
+{\ttfamily \#include $<$Colour\+Picker.\+h$>$}
+
+Inheritance diagram for Colour\+Picker\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classColourPicker}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classColourPicker_1_1ColourBox}{Colour\+Box}}
+\item 
+class \mbox{\hyperlink{classColourPicker_1_1ColourButton}{Colour\+Button}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classColourPicker_ab9845d6261629eab48409af6f6cadc78}{Colour\+Picker}} (int num\+Saved\+Colours=5, Colour colour=Colours\+::white)
+\item 
+virtual \mbox{\hyperlink{classColourPicker_af32a8228429703caf9773fd487dfb130}{$\sim$\+Colour\+Picker}} ()
+\item 
+Colour \mbox{\hyperlink{classColourPicker_a7a30eb54f6ba258e4108621787466e3e}{get\+Selected\+Colour}} ()
+\item 
+void \mbox{\hyperlink{classColourPicker_a1cbc99e3fe17c0b8679d33bcc7fcf4cf}{set\+Selected\+Colour}} (Colour colour, bool run\+Callback=false)
+\item 
+void \mbox{\hyperlink{classColourPicker_a8746628b7337bfe94aa0c1e426a48884}{set\+Selection\+Callback}} (std\+::function$<$ void(Colour)$>$ callback)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classColourPicker_ab5ff0a207d39bf95dbfa7f99b1ceb195}{set\+Sliders\+To\+Colour}} ()
+\item 
+void \mbox{\hyperlink{classColourPicker_a52bf8209281242f85ec63faa3393e624}{set\+Editor\+Text}} ()
+\item 
+void \mbox{\hyperlink{classColourPicker_a74764d4f6457f505f3ccb412c8628f44}{update\+Colour\+Buttons}} ()
+\item 
+void \mbox{\hyperlink{classColourPicker_a85d862565ab5e61870ab9b050ece7bf0}{slider\+Value\+Changed}} (Slider $\ast$slider) override
+\item 
+void \mbox{\hyperlink{classColourPicker_a4d8a73a1d31692df09192e27a9d32ac7}{text\+Editor\+Focus\+Lost}} (Text\+Editor \&editor) override
+\item 
+void \mbox{\hyperlink{classColourPicker_aa9e98e6dfda7410c7de9b1dbaf05ef19}{text\+Editor\+Return\+Key\+Pressed}} (Text\+Editor \&editor) override
+\item 
+void \mbox{\hyperlink{classColourPicker_a937924ab624cb81d4f2cb1e094ead86b}{button\+Clicked}} (Button $\ast$button) override
+\item 
+void \mbox{\hyperlink{classColourPicker_a9572f9b8ec233f5e89d1b6893c9b4300}{resized}} () override
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classColourPicker_ab9845d6261629eab48409af6f6cadc78}\label{classColourPicker_ab9845d6261629eab48409af6f6cadc78}} 
+\index{Colour\+Picker@{Colour\+Picker}!Colour\+Picker@{Colour\+Picker}}
+\index{Colour\+Picker@{Colour\+Picker}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{Colour\+Picker()}{ColourPicker()}}
+{\footnotesize\ttfamily Colour\+Picker\+::\+Colour\+Picker (\begin{DoxyParamCaption}\item[{int}]{num\+Saved\+Colours = {\ttfamily 5},  }\item[{Colour}]{colour = {\ttfamily Colours\+:\+:white} }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em num\+Saved\+Colours} & Sets the number of quick colour selection buttons to show.\\
+\hline
+{\em colour} & Sets the initial colour value to show in the \mbox{\hyperlink{classColourPicker}{Colour\+Picker}}. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classColourPicker_af32a8228429703caf9773fd487dfb130}\label{classColourPicker_af32a8228429703caf9773fd487dfb130}} 
+\index{Colour\+Picker@{Colour\+Picker}!````~Colour\+Picker@{$\sim$\+Colour\+Picker}}
+\index{````~Colour\+Picker@{$\sim$\+Colour\+Picker}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{$\sim$\+Colour\+Picker()}{~ColourPicker()}}
+{\footnotesize\ttfamily virtual Colour\+Picker\+::$\sim$\+Colour\+Picker (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classColourPicker_a937924ab624cb81d4f2cb1e094ead86b}\label{classColourPicker_a937924ab624cb81d4f2cb1e094ead86b}} 
+\index{Colour\+Picker@{Colour\+Picker}!button\+Clicked@{button\+Clicked}}
+\index{button\+Clicked@{button\+Clicked}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{button\+Clicked()}{buttonClicked()}}
+{\footnotesize\ttfamily void Colour\+Picker\+::button\+Clicked (\begin{DoxyParamCaption}\item[{Button $\ast$}]{button }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+If a colour thumbnail is clicked, apply it to the sliders, text box, and preview. If the apply button is clicked, add the selection colour to the preview thumbnails and run the selection callback. \mbox{\Hypertarget{classColourPicker_a7a30eb54f6ba258e4108621787466e3e}\label{classColourPicker_a7a30eb54f6ba258e4108621787466e3e}} 
+\index{Colour\+Picker@{Colour\+Picker}!get\+Selected\+Colour@{get\+Selected\+Colour}}
+\index{get\+Selected\+Colour@{get\+Selected\+Colour}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{get\+Selected\+Colour()}{getSelectedColour()}}
+{\footnotesize\ttfamily Colour Colour\+Picker\+::get\+Selected\+Colour (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the current selected colour. \mbox{\Hypertarget{classColourPicker_a9572f9b8ec233f5e89d1b6893c9b4300}\label{classColourPicker_a9572f9b8ec233f5e89d1b6893c9b4300}} 
+\index{Colour\+Picker@{Colour\+Picker}!resized@{resized}}
+\index{resized@{resized}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{resized()}{resized()}}
+{\footnotesize\ttfamily void Colour\+Picker\+::resized (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+Re-\/apply component layout using the layout\+Manager,
+
+Re-\/apply component layout using the layout manager. \mbox{\Hypertarget{classColourPicker_a52bf8209281242f85ec63faa3393e624}\label{classColourPicker_a52bf8209281242f85ec63faa3393e624}} 
+\index{Colour\+Picker@{Colour\+Picker}!set\+Editor\+Text@{set\+Editor\+Text}}
+\index{set\+Editor\+Text@{set\+Editor\+Text}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{set\+Editor\+Text()}{setEditorText()}}
+{\footnotesize\ttfamily void Colour\+Picker\+::set\+Editor\+Text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Set the text field to the current color\textquotesingle{}s 8 digit hex value. \mbox{\Hypertarget{classColourPicker_a1cbc99e3fe17c0b8679d33bcc7fcf4cf}\label{classColourPicker_a1cbc99e3fe17c0b8679d33bcc7fcf4cf}} 
+\index{Colour\+Picker@{Colour\+Picker}!set\+Selected\+Colour@{set\+Selected\+Colour}}
+\index{set\+Selected\+Colour@{set\+Selected\+Colour}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{set\+Selected\+Colour()}{setSelectedColour()}}
+{\footnotesize\ttfamily void Colour\+Picker\+::set\+Selected\+Colour (\begin{DoxyParamCaption}\item[{Colour}]{colour,  }\item[{bool}]{run\+Callback = {\ttfamily false} }\end{DoxyParamCaption})}
+
+Sets a new colour value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em colour} & \\
+\hline
+{\em run\+Callback} & Sets if the colour selection callback should be called for this xolour change.\\
+\hline
+\end{DoxyParams}
+Sets a new colour value. \mbox{\Hypertarget{classColourPicker_a8746628b7337bfe94aa0c1e426a48884}\label{classColourPicker_a8746628b7337bfe94aa0c1e426a48884}} 
+\index{Colour\+Picker@{Colour\+Picker}!set\+Selection\+Callback@{set\+Selection\+Callback}}
+\index{set\+Selection\+Callback@{set\+Selection\+Callback}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{set\+Selection\+Callback()}{setSelectionCallback()}}
+{\footnotesize\ttfamily void Colour\+Picker\+::set\+Selection\+Callback (\begin{DoxyParamCaption}\item[{std\+::function$<$ void(Colour)$>$}]{callback }\end{DoxyParamCaption})}
+
+Assigns a callback function to run when a colour is selected.
+
+
+\begin{DoxyParams}{Parameters}
+{\em callback} & The function to run. The new colour will be passed in as a parameter.\\
+\hline
+\end{DoxyParams}
+Assigns a callback function to run when a colour is selected. \mbox{\Hypertarget{classColourPicker_ab5ff0a207d39bf95dbfa7f99b1ceb195}\label{classColourPicker_ab5ff0a207d39bf95dbfa7f99b1ceb195}} 
+\index{Colour\+Picker@{Colour\+Picker}!set\+Sliders\+To\+Colour@{set\+Sliders\+To\+Colour}}
+\index{set\+Sliders\+To\+Colour@{set\+Sliders\+To\+Colour}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{set\+Sliders\+To\+Colour()}{setSlidersToColour()}}
+{\footnotesize\ttfamily void Colour\+Picker\+::set\+Sliders\+To\+Colour (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Apply the current colour selection to the sliders. \mbox{\Hypertarget{classColourPicker_a85d862565ab5e61870ab9b050ece7bf0}\label{classColourPicker_a85d862565ab5e61870ab9b050ece7bf0}} 
+\index{Colour\+Picker@{Colour\+Picker}!slider\+Value\+Changed@{slider\+Value\+Changed}}
+\index{slider\+Value\+Changed@{slider\+Value\+Changed}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{slider\+Value\+Changed()}{sliderValueChanged()}}
+{\footnotesize\ttfamily void Colour\+Picker\+::slider\+Value\+Changed (\begin{DoxyParamCaption}\item[{Slider $\ast$}]{slider }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+Updates the color preview and text box when slider values change. \mbox{\Hypertarget{classColourPicker_a4d8a73a1d31692df09192e27a9d32ac7}\label{classColourPicker_a4d8a73a1d31692df09192e27a9d32ac7}} 
+\index{Colour\+Picker@{Colour\+Picker}!text\+Editor\+Focus\+Lost@{text\+Editor\+Focus\+Lost}}
+\index{text\+Editor\+Focus\+Lost@{text\+Editor\+Focus\+Lost}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{text\+Editor\+Focus\+Lost()}{textEditorFocusLost()}}
+{\footnotesize\ttfamily void Colour\+Picker\+::text\+Editor\+Focus\+Lost (\begin{DoxyParamCaption}\item[{Text\+Editor \&}]{editor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+Updates the sliders and colour preview after the text box value changes. \mbox{\Hypertarget{classColourPicker_aa9e98e6dfda7410c7de9b1dbaf05ef19}\label{classColourPicker_aa9e98e6dfda7410c7de9b1dbaf05ef19}} 
+\index{Colour\+Picker@{Colour\+Picker}!text\+Editor\+Return\+Key\+Pressed@{text\+Editor\+Return\+Key\+Pressed}}
+\index{text\+Editor\+Return\+Key\+Pressed@{text\+Editor\+Return\+Key\+Pressed}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{text\+Editor\+Return\+Key\+Pressed()}{textEditorReturnKeyPressed()}}
+{\footnotesize\ttfamily void Colour\+Picker\+::text\+Editor\+Return\+Key\+Pressed (\begin{DoxyParamCaption}\item[{Text\+Editor \&}]{editor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+Updates the sliders and colour preview after the text box value changes. \mbox{\Hypertarget{classColourPicker_a74764d4f6457f505f3ccb412c8628f44}\label{classColourPicker_a74764d4f6457f505f3ccb412c8628f44}} 
+\index{Colour\+Picker@{Colour\+Picker}!update\+Colour\+Buttons@{update\+Colour\+Buttons}}
+\index{update\+Colour\+Buttons@{update\+Colour\+Buttons}!Colour\+Picker@{Colour\+Picker}}
+\subsubsection{\texorpdfstring{update\+Colour\+Buttons()}{updateColourButtons()}}
+{\footnotesize\ttfamily void Colour\+Picker\+::update\+Colour\+Buttons (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+If the current colour selection isn\textquotesingle{}t one of the preset colour buttons, add it to the list and remove the oldest value from the list. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Widgets/\mbox{\hyperlink{ColourPicker_8h}{Colour\+Picker.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Widgets/\mbox{\hyperlink{ColourPicker_8cpp}{Colour\+Picker.\+cpp}}\end{DoxyCompactItemize}

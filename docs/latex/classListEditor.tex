@@ -1,0 +1,129 @@
+\hypertarget{classListEditor}{}\section{List\+Editor Class Reference}
+\label{classListEditor}\index{List\+Editor@{List\+Editor}}
+
+
+{\ttfamily \#include $<$List\+Editor.\+h$>$}
+
+Inheritance diagram for List\+Editor\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classListEditor}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67}{Colour\+Ids}} \{ \mbox{\hyperlink{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67aa57108934c6be3db46e950cbd5d8f25f}{background\+Colour\+Id}} = 0x1900100, 
+\mbox{\hyperlink{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67a73ad6c76af29afa03009fdff98d5b51b}{list\+Item\+Colour\+Id}} = 0x1900101, 
+\mbox{\hyperlink{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67a0d7332af1407467d42f48aa77595ffdf}{selected\+List\+Item\+Colour\+Id}} = 0x1900102, 
+\mbox{\hyperlink{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67a835bc6ccf892030d0a94f722face1915}{text\+Colour\+Id}} = 0x1900103
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classListEditor_a3a5192ee7c78ecc19d9f1b9e21cf5285}{List\+Editor}} (String\+Array initial\+List)
+\item 
+virtual \mbox{\hyperlink{classListEditor_ae1d17155182eebb4b4e912d10d32bf61}{$\sim$\+List\+Editor}} ()
+\item 
+int \mbox{\hyperlink{classListEditor_a6c6a99c9a44c0ae3917cfd99cf55fde9}{get\+Num\+Rows}} ()
+\item 
+String\+Array \mbox{\hyperlink{classListEditor_a4ac52086c134de41552e98ba1c425e51}{get\+List\+Items}} () const
+\item 
+void \mbox{\hyperlink{classListEditor_aea184ebf953b388ad7a9565a2a383237}{set\+List\+Items}} (String\+Array new\+Items)
+\item 
+void \mbox{\hyperlink{classListEditor_a901d86cfa2ce035d1d57fe6af5a9200a}{colour\+Changed}} () override
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67}\label{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67}} 
+\index{List\+Editor@{List\+Editor}!Colour\+Ids@{Colour\+Ids}}
+\index{Colour\+Ids@{Colour\+Ids}!List\+Editor@{List\+Editor}}
+\subsubsection{\texorpdfstring{Colour\+Ids}{ColourIds}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67}{List\+Editor\+::\+Colour\+Ids}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{background\+Colour\+Id@{background\+Colour\+Id}!List\+Editor@{List\+Editor}}\index{List\+Editor@{List\+Editor}!background\+Colour\+Id@{background\+Colour\+Id}}}\mbox{\Hypertarget{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67aa57108934c6be3db46e950cbd5d8f25f}\label{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67aa57108934c6be3db46e950cbd5d8f25f}} 
+background\+Colour\+Id&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{list\+Item\+Colour\+Id@{list\+Item\+Colour\+Id}!List\+Editor@{List\+Editor}}\index{List\+Editor@{List\+Editor}!list\+Item\+Colour\+Id@{list\+Item\+Colour\+Id}}}\mbox{\Hypertarget{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67a73ad6c76af29afa03009fdff98d5b51b}\label{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67a73ad6c76af29afa03009fdff98d5b51b}} 
+list\+Item\+Colour\+Id&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{selected\+List\+Item\+Colour\+Id@{selected\+List\+Item\+Colour\+Id}!List\+Editor@{List\+Editor}}\index{List\+Editor@{List\+Editor}!selected\+List\+Item\+Colour\+Id@{selected\+List\+Item\+Colour\+Id}}}\mbox{\Hypertarget{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67a0d7332af1407467d42f48aa77595ffdf}\label{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67a0d7332af1407467d42f48aa77595ffdf}} 
+selected\+List\+Item\+Colour\+Id&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{text\+Colour\+Id@{text\+Colour\+Id}!List\+Editor@{List\+Editor}}\index{List\+Editor@{List\+Editor}!text\+Colour\+Id@{text\+Colour\+Id}}}\mbox{\Hypertarget{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67a835bc6ccf892030d0a94f722face1915}\label{classListEditor_af4420d183bdc9aa3ebcbb967f2196c67a835bc6ccf892030d0a94f722face1915}} 
+text\+Colour\+Id&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classListEditor_a3a5192ee7c78ecc19d9f1b9e21cf5285}\label{classListEditor_a3a5192ee7c78ecc19d9f1b9e21cf5285}} 
+\index{List\+Editor@{List\+Editor}!List\+Editor@{List\+Editor}}
+\index{List\+Editor@{List\+Editor}!List\+Editor@{List\+Editor}}
+\subsubsection{\texorpdfstring{List\+Editor()}{ListEditor()}}
+{\footnotesize\ttfamily List\+Editor\+::\+List\+Editor (\begin{DoxyParamCaption}\item[{String\+Array}]{initial\+List }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+List} & Sets the initial contents of the list. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classListEditor_ae1d17155182eebb4b4e912d10d32bf61}\label{classListEditor_ae1d17155182eebb4b4e912d10d32bf61}} 
+\index{List\+Editor@{List\+Editor}!````~List\+Editor@{$\sim$\+List\+Editor}}
+\index{````~List\+Editor@{$\sim$\+List\+Editor}!List\+Editor@{List\+Editor}}
+\subsubsection{\texorpdfstring{$\sim$\+List\+Editor()}{~ListEditor()}}
+{\footnotesize\ttfamily virtual List\+Editor\+::$\sim$\+List\+Editor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classListEditor_a901d86cfa2ce035d1d57fe6af5a9200a}\label{classListEditor_a901d86cfa2ce035d1d57fe6af5a9200a}} 
+\index{List\+Editor@{List\+Editor}!colour\+Changed@{colour\+Changed}}
+\index{colour\+Changed@{colour\+Changed}!List\+Editor@{List\+Editor}}
+\subsubsection{\texorpdfstring{colour\+Changed()}{colourChanged()}}
+{\footnotesize\ttfamily void List\+Editor\+::colour\+Changed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+Calls update\+Colours whenever component color values are changed. \mbox{\Hypertarget{classListEditor_a4ac52086c134de41552e98ba1c425e51}\label{classListEditor_a4ac52086c134de41552e98ba1c425e51}} 
+\index{List\+Editor@{List\+Editor}!get\+List\+Items@{get\+List\+Items}}
+\index{get\+List\+Items@{get\+List\+Items}!List\+Editor@{List\+Editor}}
+\subsubsection{\texorpdfstring{get\+List\+Items()}{getListItems()}}
+{\footnotesize\ttfamily String\+Array List\+Editor\+::get\+List\+Items (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+all list row strings. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classListEditor_a6c6a99c9a44c0ae3917cfd99cf55fde9}\label{classListEditor_a6c6a99c9a44c0ae3917cfd99cf55fde9}} 
+\index{List\+Editor@{List\+Editor}!get\+Num\+Rows@{get\+Num\+Rows}}
+\index{get\+Num\+Rows@{get\+Num\+Rows}!List\+Editor@{List\+Editor}}
+\subsubsection{\texorpdfstring{get\+Num\+Rows()}{getNumRows()}}
+{\footnotesize\ttfamily int List\+Editor\+::get\+Num\+Rows (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+the number of rows in the list 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classListEditor_aea184ebf953b388ad7a9565a2a383237}\label{classListEditor_aea184ebf953b388ad7a9565a2a383237}} 
+\index{List\+Editor@{List\+Editor}!set\+List\+Items@{set\+List\+Items}}
+\index{set\+List\+Items@{set\+List\+Items}!List\+Editor@{List\+Editor}}
+\subsubsection{\texorpdfstring{set\+List\+Items()}{setListItems()}}
+{\footnotesize\ttfamily void List\+Editor\+::set\+List\+Items (\begin{DoxyParamCaption}\item[{String\+Array}]{new\+Items }\end{DoxyParamCaption})}
+
+Replace the existing item list entries with new ones.
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Items} & The replacement list of strings.\\
+\hline
+\end{DoxyParams}
+Replace the existing item list entries with new ones. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Widgets/\mbox{\hyperlink{ListEditor_8h}{List\+Editor.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Widgets/\mbox{\hyperlink{ListEditor_8cpp}{List\+Editor.\+cpp}}\end{DoxyCompactItemize}

@@ -10,4 +10,9 @@ public:
     virtual ~SavedConnections() { }
     
     Array<SavedConnection> getConnections();
+    
+    
+    
+private:
+    Array<SavedConnection> connections;
 };

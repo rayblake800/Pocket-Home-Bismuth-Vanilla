@@ -12,9 +12,7 @@ GDBusProxyInterface(BUS_NAME, PATH, INTERFACE) { }
 Array<SavedConnection> SavedConnections::getConnections()
 {
     Array<SavedConnection> connections;
-    GVariant* conTuple = callMethod("ListConnections");
-    GVariant* conArrayVar = nullptr;
-    g_variant_get(conTuple, "(*)" , &conArrayVar);
+    GVariant* conArrayVar = callMethod("ListConnections");
     if(conArrayVar != nullptr)
     {
         gsize length = 0;
@@ -33,3 +31,4 @@ Array<SavedConnection> SavedConnections::getConnections()
     }
     return connections;
 }
+

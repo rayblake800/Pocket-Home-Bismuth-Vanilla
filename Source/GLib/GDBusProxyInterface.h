@@ -48,6 +48,14 @@ protected:
     }
 
     /**
+     * @return  the return value of the method, or nullptr if the method call
+     *          failed, the method returned nothing, or the method returned an
+     *          empty container object. If the method returned a single GVariant
+     *          inside of a tuple, that variant will be extracted from its 
+     *          container and returned alone. 
+     * 
+     *          Any non-null value returned by this method should eventually be
+     *          freed with g_variant_unref.
      */
     GVariant* callMethod(const char * methodName, GVariant* params = nullptr);
 

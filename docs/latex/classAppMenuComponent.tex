@@ -1,0 +1,352 @@
+\hypertarget{classAppMenuComponent}{}\section{App\+Menu\+Component Class Reference}
+\label{classAppMenuComponent}\index{App\+Menu\+Component@{App\+Menu\+Component}}
+
+
+{\ttfamily \#include $<$App\+Menu\+Component.\+h$>$}
+
+Inheritance diagram for App\+Menu\+Component\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classAppMenuComponent}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classAppMenuComponent_a8f45bc3e1129b74539842cc80347deee}{App\+Menu\+Component}} (String component\+Key, \mbox{\hyperlink{classOverlaySpinner}{Overlay\+Spinner}} \&loading\+Spinner)
+\item 
+virtual \mbox{\hyperlink{classAppMenuComponent_a60eac163da7fb829ff5fe09f23df295f}{$\sim$\+App\+Menu\+Component}} ()
+\item 
+bool \mbox{\hyperlink{classAppMenuComponent_a34b9d65125be02234eadd43498ae0adc}{is\+Loading}} () const
+\item 
+void \mbox{\hyperlink{classAppMenuComponent_a6dec3cfe6fd266e720cc66ab3d0191b7}{exit\+Loading\+State}} ()
+\item 
+void \mbox{\hyperlink{classAppMenuComponent_a1e2dcc587da7b7ffacdff89e0cbb310c}{open\+Popup\+Menu}} (\mbox{\hyperlink{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}{App\+Menu\+Button\+::\+Ptr}} selected\+Button)
+\item 
+bool \mbox{\hyperlink{classAppMenuComponent_a510bdd8204a9c1164c482923f69e5819}{key\+Pressed}} (const Key\+Press \&key) override
+\item 
+virtual void \mbox{\hyperlink{classAppMenuComponent_a722d34923b746830bad57e960c4076a2}{menu\+Resized}} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classAppMenuComponent_ada3fb52b04dd685b0f84c1870ed4bad2}{load\+Base\+Folder}} ()
+\item 
+void \mbox{\hyperlink{classAppMenuComponent_ab129bc87304b1dddfe497599bdcb9051}{close\+Folder}} ()
+\item 
+void \mbox{\hyperlink{classAppMenuComponent_a7de278fbb7a5e3a0986fe2311d54b72f}{close\+Non\+Base\+Folder}} ()
+\item 
+void \mbox{\hyperlink{classAppMenuComponent_ad71e8e46bc22b655363acefcb2c071b5}{set\+Active\+Folder\+Index}} (int folder)
+\item 
+int \mbox{\hyperlink{classAppMenuComponent_a2200f8d6fa8179d064531b338c20254b}{get\+Active\+Folder\+Index}} () const
+\item 
+void \mbox{\hyperlink{classAppMenuComponent_a489731e0173f2e22392403326957b402}{click\+Selected}} ()
+\item 
+void \mbox{\hyperlink{classAppMenuComponent_ad102ea087cd87c48e44e71b56e9023aa}{open\+Editor\+For\+Selected}} ()
+\item 
+int \mbox{\hyperlink{classAppMenuComponent_aa42fbf211b823e0fe37f531caea7f148}{get\+Num\+Folders}} () const
+\item 
+int \mbox{\hyperlink{classAppMenuComponent_a82eba35fa1f3a80ba178d30b6889d49e}{get\+Folder\+Size}} (int index)
+\item 
+int \mbox{\hyperlink{classAppMenuComponent_a454aa10ad1fe085dce2e960dd810c8e4}{get\+Minimum\+Folder\+Width}} (int index)
+\item 
+int \mbox{\hyperlink{classAppMenuComponent_aabc1b6657b6cea28d9f94c3530ccfcff}{get\+Folder\+Selected\+Index}} (int index) const
+\item 
+void \mbox{\hyperlink{classAppMenuComponent_a1c90f9d6cecddc3473abc706faa1fcc9}{layout\+Folders}} (bool animate=false)
+\item 
+int \mbox{\hyperlink{classAppMenuComponent_aa389abb2f459a479a732d4c93f339163}{get\+Max\+Columns}} () const
+\item 
+int \mbox{\hyperlink{classAppMenuComponent_a66c23d297d5ce0fe96895310e891189a}{get\+Max\+Rows}} () const
+\item 
+int \mbox{\hyperlink{classAppMenuComponent_ac49b72c82ee49d659702df629206c3ed}{buttons\+Per\+Page}} () const
+\item 
+void \mbox{\hyperlink{classAppMenuComponent_aadc7aa3e03fa89fd6dc9d0c73b46f644}{set\+Only\+Trigger\+Selected}} (bool new\+Val)
+\item 
+bool \mbox{\hyperlink{classAppMenuComponent_a1a74b9fcc52b97ecac24fbd95d77102e}{ignoring\+Input}} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classAppMenuComponent_a8f45bc3e1129b74539842cc80347deee}\label{classAppMenuComponent_a8f45bc3e1129b74539842cc80347deee}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!App\+Menu\+Component@{App\+Menu\+Component}}
+\index{App\+Menu\+Component@{App\+Menu\+Component}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{App\+Menu\+Component()}{AppMenuComponent()}}
+{\footnotesize\ttfamily App\+Menu\+Component\+::\+App\+Menu\+Component (\begin{DoxyParamCaption}\item[{String}]{component\+Key,  }\item[{\mbox{\hyperlink{classOverlaySpinner}{Overlay\+Spinner}} \&}]{loading\+Spinner }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em component\+Key} & Loads menu bounds from config.\\
+\hline
+{\em loading\+Spinner} & Reference to an overlay spinner that sits over the \mbox{\hyperlink{classPageComponent}{Page\+Component}} holding this \mbox{\hyperlink{classAppMenuComponent}{App\+Menu\+Component}}. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classAppMenuComponent_a60eac163da7fb829ff5fe09f23df295f}\label{classAppMenuComponent_a60eac163da7fb829ff5fe09f23df295f}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!````~App\+Menu\+Component@{$\sim$\+App\+Menu\+Component}}
+\index{````~App\+Menu\+Component@{$\sim$\+App\+Menu\+Component}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{$\sim$\+App\+Menu\+Component()}{~AppMenuComponent()}}
+{\footnotesize\ttfamily App\+Menu\+Component\+::$\sim$\+App\+Menu\+Component (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classAppMenuComponent_ac49b72c82ee49d659702df629206c3ed}\label{classAppMenuComponent_ac49b72c82ee49d659702df629206c3ed}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!buttons\+Per\+Page@{buttons\+Per\+Page}}
+\index{buttons\+Per\+Page@{buttons\+Per\+Page}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{buttons\+Per\+Page()}{buttonsPerPage()}}
+{\footnotesize\ttfamily int App\+Menu\+Component\+::buttons\+Per\+Page (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+\begin{DoxyReturn}{Returns}
+the maximum number of menu items to show on screen 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuComponent_a489731e0173f2e22392403326957b402}\label{classAppMenuComponent_a489731e0173f2e22392403326957b402}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!click\+Selected@{click\+Selected}}
+\index{click\+Selected@{click\+Selected}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{click\+Selected()}{clickSelected()}}
+{\footnotesize\ttfamily void App\+Menu\+Component\+::click\+Selected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Trigger a click for the selected button in the active App\+Folder \mbox{\Hypertarget{classAppMenuComponent_ab129bc87304b1dddfe497599bdcb9051}\label{classAppMenuComponent_ab129bc87304b1dddfe497599bdcb9051}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!close\+Folder@{close\+Folder}}
+\index{close\+Folder@{close\+Folder}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{close\+Folder()}{closeFolder()}}
+{\footnotesize\ttfamily void App\+Menu\+Component\+::close\+Folder (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Close the active folder, removing it and all folders after it from the menu component. \mbox{\Hypertarget{classAppMenuComponent_a7de278fbb7a5e3a0986fe2311d54b72f}\label{classAppMenuComponent_a7de278fbb7a5e3a0986fe2311d54b72f}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!close\+Non\+Base\+Folder@{close\+Non\+Base\+Folder}}
+\index{close\+Non\+Base\+Folder@{close\+Non\+Base\+Folder}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{close\+Non\+Base\+Folder()}{closeNonBaseFolder()}}
+{\footnotesize\ttfamily void App\+Menu\+Component\+::close\+Non\+Base\+Folder (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Closes the active folder, unless the active folder is at index 0, in which case it will reload the folder. \mbox{\Hypertarget{classAppMenuComponent_a6dec3cfe6fd266e720cc66ab3d0191b7}\label{classAppMenuComponent_a6dec3cfe6fd266e720cc66ab3d0191b7}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!exit\+Loading\+State@{exit\+Loading\+State}}
+\index{exit\+Loading\+State@{exit\+Loading\+State}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{exit\+Loading\+State()}{exitLoadingState()}}
+{\footnotesize\ttfamily void App\+Menu\+Component\+::exit\+Loading\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Exit the loading state, hiding the spinner and enabling user input \mbox{\Hypertarget{classAppMenuComponent_a2200f8d6fa8179d064531b338c20254b}\label{classAppMenuComponent_a2200f8d6fa8179d064531b338c20254b}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!get\+Active\+Folder\+Index@{get\+Active\+Folder\+Index}}
+\index{get\+Active\+Folder\+Index@{get\+Active\+Folder\+Index}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{get\+Active\+Folder\+Index()}{getActiveFolderIndex()}}
+{\footnotesize\ttfamily int App\+Menu\+Component\+::get\+Active\+Folder\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+Get the index of the active folder. App\+Menu\+Components should center the folder layout on the active folder, and apply key controls to that folder\textquotesingle{}s menu items.
+
+\begin{DoxyReturn}{Returns}
+the active folder index, usually the last open folder. Returns 0 if no folders are open.
+\end{DoxyReturn}
+Get the index of the active folder. App\+Menu\+Components should center the folder layout on the active folder, and apply key controls to that folder\textquotesingle{}s menu items. \mbox{\Hypertarget{classAppMenuComponent_aabc1b6657b6cea28d9f94c3530ccfcff}\label{classAppMenuComponent_aabc1b6657b6cea28d9f94c3530ccfcff}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!get\+Folder\+Selected\+Index@{get\+Folder\+Selected\+Index}}
+\index{get\+Folder\+Selected\+Index@{get\+Folder\+Selected\+Index}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{get\+Folder\+Selected\+Index()}{getFolderSelectedIndex()}}
+{\footnotesize\ttfamily int App\+Menu\+Component\+::get\+Folder\+Selected\+Index (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+Gets the selected menu index of an open folder.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The folder index.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the selected menu button index for the folder, or -\/1 if the folder at the index parameter doesn\textquotesingle{}t exist or has no selected menu button.
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em index} & the index of one of this menu\textquotesingle{}s App\+Menu\+Folders \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the selected menu button index for the folder, or -\/1 if the folder at the index parameter doesn\textquotesingle{}t exist or has no selected menu button. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuComponent_a82eba35fa1f3a80ba178d30b6889d49e}\label{classAppMenuComponent_a82eba35fa1f3a80ba178d30b6889d49e}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!get\+Folder\+Size@{get\+Folder\+Size}}
+\index{get\+Folder\+Size@{get\+Folder\+Size}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{get\+Folder\+Size()}{getFolderSize()}}
+{\footnotesize\ttfamily int App\+Menu\+Component\+::get\+Folder\+Size (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Gets the menu size of an open folder.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The folder index.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the number of buttons in the folder at this index, or -\/1 if there is no folder at this index.
+
+the number of buttons in the folder at this index, or -\/1 if there is no folder at this index. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuComponent_aa389abb2f459a479a732d4c93f339163}\label{classAppMenuComponent_aa389abb2f459a479a732d4c93f339163}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!get\+Max\+Columns@{get\+Max\+Columns}}
+\index{get\+Max\+Columns@{get\+Max\+Columns}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{get\+Max\+Columns()}{getMaxColumns()}}
+{\footnotesize\ttfamily int App\+Menu\+Component\+::get\+Max\+Columns (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+\begin{DoxyReturn}{Returns}
+the maximum number of menu item columns to show on screen.
+
+the maximum number of menu item columns to show on screen 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuComponent_a66c23d297d5ce0fe96895310e891189a}\label{classAppMenuComponent_a66c23d297d5ce0fe96895310e891189a}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!get\+Max\+Rows@{get\+Max\+Rows}}
+\index{get\+Max\+Rows@{get\+Max\+Rows}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{get\+Max\+Rows()}{getMaxRows()}}
+{\footnotesize\ttfamily int App\+Menu\+Component\+::get\+Max\+Rows (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+\begin{DoxyReturn}{Returns}
+the maximum number of menu item rows to show on screen.
+
+the maximum number of menu item rows to show on screen 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuComponent_a454aa10ad1fe085dce2e960dd810c8e4}\label{classAppMenuComponent_a454aa10ad1fe085dce2e960dd810c8e4}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!get\+Minimum\+Folder\+Width@{get\+Minimum\+Folder\+Width}}
+\index{get\+Minimum\+Folder\+Width@{get\+Minimum\+Folder\+Width}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{get\+Minimum\+Folder\+Width()}{getMinimumFolderWidth()}}
+{\footnotesize\ttfamily int App\+Menu\+Component\+::get\+Minimum\+Folder\+Width (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Get the minimum permitted component width of an open folder.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The folder index.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the minimum width, in pixels, that the folder at this index should have, or -\/1 if there is no folder at this index.
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em index} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the minimum width, in pixels, that the folder at this index should have, or -\/1 if there is no folder at this index. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuComponent_aa42fbf211b823e0fe37f531caea7f148}\label{classAppMenuComponent_aa42fbf211b823e0fe37f531caea7f148}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!get\+Num\+Folders@{get\+Num\+Folders}}
+\index{get\+Num\+Folders@{get\+Num\+Folders}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{get\+Num\+Folders()}{getNumFolders()}}
+{\footnotesize\ttfamily int App\+Menu\+Component\+::get\+Num\+Folders (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+\begin{DoxyReturn}{Returns}
+the number of currently open folder components 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuComponent_a1a74b9fcc52b97ecac24fbd95d77102e}\label{classAppMenuComponent_a1a74b9fcc52b97ecac24fbd95d77102e}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!ignoring\+Input@{ignoring\+Input}}
+\index{ignoring\+Input@{ignoring\+Input}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{ignoring\+Input()}{ignoringInput()}}
+{\footnotesize\ttfamily bool App\+Menu\+Component\+::ignoring\+Input (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+Check if input should be ignored.
+
+\begin{DoxyReturn}{Returns}
+true iff the menu is loading, empty, animating, or otherwise in a state where user input should be ignored.
+
+true iff the menu is loading, empty, animating, or otherwise in a state where user input should be ignored. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuComponent_a34b9d65125be02234eadd43498ae0adc}\label{classAppMenuComponent_a34b9d65125be02234eadd43498ae0adc}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!is\+Loading@{is\+Loading}}
+\index{is\+Loading@{is\+Loading}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{is\+Loading()}{isLoading()}}
+{\footnotesize\ttfamily bool App\+Menu\+Component\+::is\+Loading (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+true if the \mbox{\hyperlink{classAppMenuComponent}{App\+Menu\+Component}} is currently in the loading state 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAppMenuComponent_a510bdd8204a9c1164c482923f69e5819}\label{classAppMenuComponent_a510bdd8204a9c1164c482923f69e5819}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!key\+Pressed@{key\+Pressed}}
+\index{key\+Pressed@{key\+Pressed}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{key\+Pressed()}{keyPressed()}}
+{\footnotesize\ttfamily bool App\+Menu\+Component\+::key\+Pressed (\begin{DoxyParamCaption}\item[{const Key\+Press \&}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+Respond to key events if input is not being ignored. This opens the pop-\/up menu or reloads the App\+Menu if the correct shortcuts are detected, otherwise it lets the \mbox{\hyperlink{classAppMenuComponent}{App\+Menu\+Component}}\textquotesingle{}s subclass determine how to handle the key event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the key\+Press is handled by the menu, false otherwise.
+\end{DoxyReturn}
+Pass on key events to the App\+Menu from its containing page. Opens the pop-\/up menu or reloads the App\+Menu if the correct shortcuts are detected, otherwise let the \mbox{\hyperlink{classAppMenuComponent}{App\+Menu\+Component}}\textquotesingle{}s subclass determine how to handle the key event. \mbox{\Hypertarget{classAppMenuComponent_a1c90f9d6cecddc3473abc706faa1fcc9}\label{classAppMenuComponent_a1c90f9d6cecddc3473abc706faa1fcc9}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!layout\+Folders@{layout\+Folders}}
+\index{layout\+Folders@{layout\+Folders}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{layout\+Folders()}{layoutFolders()}}
+{\footnotesize\ttfamily void App\+Menu\+Component\+::layout\+Folders (\begin{DoxyParamCaption}\item[{bool}]{animate = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Updates the folder component layout, optionally animating the transition.
+
+
+\begin{DoxyParams}{Parameters}
+{\em animate} & Iff true, the folder transition will be animated.\\
+\hline
+\end{DoxyParams}
+Updates the folder component layout, optionally animating the transition. \mbox{\Hypertarget{classAppMenuComponent_ada3fb52b04dd685b0f84c1870ed4bad2}\label{classAppMenuComponent_ada3fb52b04dd685b0f84c1870ed4bad2}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!load\+Base\+Folder@{load\+Base\+Folder}}
+\index{load\+Base\+Folder@{load\+Base\+Folder}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{load\+Base\+Folder()}{loadBaseFolder()}}
+{\footnotesize\ttfamily void App\+Menu\+Component\+::load\+Base\+Folder (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Load and display the base menu folder that contains favorite application shortcuts and all other folders. Any existing open folders will first be closed. If the base folder was open, its selected index will be saved and re-\/selected. \mbox{\Hypertarget{classAppMenuComponent_a722d34923b746830bad57e960c4076a2}\label{classAppMenuComponent_a722d34923b746830bad57e960c4076a2}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!menu\+Resized@{menu\+Resized}}
+\index{menu\+Resized@{menu\+Resized}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{menu\+Resized()}{menuResized()}}
+{\footnotesize\ttfamily virtual void App\+Menu\+Component\+::menu\+Resized (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+This method will run whenever this component is resized. Classes inheriting \mbox{\hyperlink{classAppMenuComponent}{App\+Menu\+Component}} should override this instead of void resized(). This method will run before the menu folders are updated for the new bounds. 
+
+Reimplemented in \mbox{\hyperlink{classPagedAppMenu_a1f79e778c41331eda6ed158448dc14e7}{Paged\+App\+Menu}}.
+
+\mbox{\Hypertarget{classAppMenuComponent_ad102ea087cd87c48e44e71b56e9023aa}\label{classAppMenuComponent_ad102ea087cd87c48e44e71b56e9023aa}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!open\+Editor\+For\+Selected@{open\+Editor\+For\+Selected}}
+\index{open\+Editor\+For\+Selected@{open\+Editor\+For\+Selected}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{open\+Editor\+For\+Selected()}{openEditorForSelected()}}
+{\footnotesize\ttfamily void App\+Menu\+Component\+::open\+Editor\+For\+Selected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Open a \mbox{\hyperlink{classPopupEditorComponent}{Popup\+Editor\+Component}} for editing the selected button in the active App\+Folder. \mbox{\Hypertarget{classAppMenuComponent_a1e2dcc587da7b7ffacdff89e0cbb310c}\label{classAppMenuComponent_a1e2dcc587da7b7ffacdff89e0cbb310c}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!open\+Popup\+Menu@{open\+Popup\+Menu}}
+\index{open\+Popup\+Menu@{open\+Popup\+Menu}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{open\+Popup\+Menu()}{openPopupMenu()}}
+{\footnotesize\ttfamily void App\+Menu\+Component\+::open\+Popup\+Menu (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}{App\+Menu\+Button\+::\+Ptr}}}]{selected\+Button }\end{DoxyParamCaption})}
+
+Open the pop-\/up menu used for editing menu items.
+
+
+\begin{DoxyParams}{Parameters}
+{\em selected\+Button} & If null, open a generic folder editing menu. otherwise, open the menu for editing this particular menu button.\\
+\hline
+\end{DoxyParams}
+Open the pop-\/up menu used for editing menu items. The pop-\/up menu really shouldn\textquotesingle{}t be appearing when the button editor is visible, but if it still is, close and remove the editor.\mbox{\Hypertarget{classAppMenuComponent_ad71e8e46bc22b655363acefcb2c071b5}\label{classAppMenuComponent_ad71e8e46bc22b655363acefcb2c071b5}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!set\+Active\+Folder\+Index@{set\+Active\+Folder\+Index}}
+\index{set\+Active\+Folder\+Index@{set\+Active\+Folder\+Index}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{set\+Active\+Folder\+Index()}{setActiveFolderIndex()}}
+{\footnotesize\ttfamily void App\+Menu\+Component\+::set\+Active\+Folder\+Index (\begin{DoxyParamCaption}\item[{int}]{folder }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Sets which open folder is currently focused. This value will change to the index of the last open folder whenever a folder opens or closes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em folder} & This must be a valid folder index, or the active folder index will not change.\\
+\hline
+\end{DoxyParams}
+Sets which open folder is currently focused. This value will change to the index of the last open folder whenever a folder opens or closes. \mbox{\Hypertarget{classAppMenuComponent_aadc7aa3e03fa89fd6dc9d0c73b46f644}\label{classAppMenuComponent_aadc7aa3e03fa89fd6dc9d0c73b46f644}} 
+\index{App\+Menu\+Component@{App\+Menu\+Component}!set\+Only\+Trigger\+Selected@{set\+Only\+Trigger\+Selected}}
+\index{set\+Only\+Trigger\+Selected@{set\+Only\+Trigger\+Selected}!App\+Menu\+Component@{App\+Menu\+Component}}
+\subsubsection{\texorpdfstring{set\+Only\+Trigger\+Selected()}{setOnlyTriggerSelected()}}
+{\footnotesize\ttfamily void App\+Menu\+Component\+::set\+Only\+Trigger\+Selected (\begin{DoxyParamCaption}\item[{bool}]{new\+Val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Sets how unselected menu buttons respond to clicks.
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Val} & if set to true, clicking unselected menu buttons only selects them. If set to false, clicking them also immediately launches their application or opens their folder. This is set to true by default.\\
+\hline
+{\em new\+Val} & if set to true, clicking unselected menu buttons only selects them. If set to false, clicking them also immediately launches their application or opens their folder. This is set to true by default. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\mbox{\hyperlink{AppMenuComponent_8h}{App\+Menu\+Component.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\mbox{\hyperlink{AppMenuComponent_8cpp}{App\+Menu\+Component.\+cpp}}\end{DoxyCompactItemize}

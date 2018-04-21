@@ -1,0 +1,94 @@
+\hypertarget{classGLibThread}{}\section{G\+Lib\+Thread Class Reference}
+\label{classGLibThread}\index{G\+Lib\+Thread@{G\+Lib\+Thread}}
+
+
+{\ttfamily \#include $<$G\+Lib\+Thread.\+h$>$}
+
+Inheritance diagram for G\+Lib\+Thread\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classGLibThread}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGLibThread_a22d8cefcf9ab16388737139d8eaecbf1}{G\+Lib\+Thread}} (G\+Main\+Context $\ast$context)
+\item 
+virtual \mbox{\hyperlink{classGLibThread_a8d47d4b4e6989548340a8f018d648e54}{$\sim$\+G\+Lib\+Thread}} ()
+\item 
+bool \mbox{\hyperlink{classGLibThread_a48e06a164ff2bb673d115fad34706cbd}{running\+On\+Thread}} ()
+\item 
+void \mbox{\hyperlink{classGLibThread_a32b38c6db21cb4f86b6840acf0cda1b4}{call}} (std\+::function$<$ void()$>$ fn)
+\item 
+void \mbox{\hyperlink{classGLibThread_aa31afcc7fc630ad32aab01852f3d2e9a}{call\+Async}} (std\+::function$<$ void()$>$ fn)
+\item 
+G\+Main\+Context $\ast$ \mbox{\hyperlink{classGLibThread_a27a5c316c4b927d48534d023fe4c4029}{get\+Context}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classGLibThread_a22d8cefcf9ab16388737139d8eaecbf1}\label{classGLibThread_a22d8cefcf9ab16388737139d8eaecbf1}} 
+\index{G\+Lib\+Thread@{G\+Lib\+Thread}!G\+Lib\+Thread@{G\+Lib\+Thread}}
+\index{G\+Lib\+Thread@{G\+Lib\+Thread}!G\+Lib\+Thread@{G\+Lib\+Thread}}
+\subsubsection{\texorpdfstring{G\+Lib\+Thread()}{GLibThread()}}
+{\footnotesize\ttfamily G\+Lib\+Thread\+::\+G\+Lib\+Thread (\begin{DoxyParamCaption}\item[{G\+Main\+Context $\ast$}]{context }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The event context that will be claimed by this thread. This will be unreferenced when the thread is destroyed. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classGLibThread_a8d47d4b4e6989548340a8f018d648e54}\label{classGLibThread_a8d47d4b4e6989548340a8f018d648e54}} 
+\index{G\+Lib\+Thread@{G\+Lib\+Thread}!````~G\+Lib\+Thread@{$\sim$\+G\+Lib\+Thread}}
+\index{````~G\+Lib\+Thread@{$\sim$\+G\+Lib\+Thread}!G\+Lib\+Thread@{G\+Lib\+Thread}}
+\subsubsection{\texorpdfstring{$\sim$\+G\+Lib\+Thread()}{~GLibThread()}}
+{\footnotesize\ttfamily G\+Lib\+Thread\+::$\sim$\+G\+Lib\+Thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classGLibThread_a32b38c6db21cb4f86b6840acf0cda1b4}\label{classGLibThread_a32b38c6db21cb4f86b6840acf0cda1b4}} 
+\index{G\+Lib\+Thread@{G\+Lib\+Thread}!call@{call}}
+\index{call@{call}!G\+Lib\+Thread@{G\+Lib\+Thread}}
+\subsubsection{\texorpdfstring{call()}{call()}}
+{\footnotesize\ttfamily void G\+Lib\+Thread\+::call (\begin{DoxyParamCaption}\item[{std\+::function$<$ void()$>$}]{fn }\end{DoxyParamCaption})}
+
+Run a function on this G\+Lib event loop, waiting until the function has finished.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fn} & A function that needs to run on the G\+Lib event loop.\\
+\hline
+\end{DoxyParams}
+Run a function on this G\+Lib event loop, waiting until the function has finished. \mbox{\Hypertarget{classGLibThread_aa31afcc7fc630ad32aab01852f3d2e9a}\label{classGLibThread_aa31afcc7fc630ad32aab01852f3d2e9a}} 
+\index{G\+Lib\+Thread@{G\+Lib\+Thread}!call\+Async@{call\+Async}}
+\index{call\+Async@{call\+Async}!G\+Lib\+Thread@{G\+Lib\+Thread}}
+\subsubsection{\texorpdfstring{call\+Async()}{callAsync()}}
+{\footnotesize\ttfamily void G\+Lib\+Thread\+::call\+Async (\begin{DoxyParamCaption}\item[{std\+::function$<$ void()$>$}]{fn }\end{DoxyParamCaption})}
+
+Asynchronously run a function once on this G\+Lib event loop.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fn} & A function that needs to run on the G\+Lib event loop.\\
+\hline
+\end{DoxyParams}
+Asynchronously run a function once on this G\+Lib event loop. \mbox{\Hypertarget{classGLibThread_a27a5c316c4b927d48534d023fe4c4029}\label{classGLibThread_a27a5c316c4b927d48534d023fe4c4029}} 
+\index{G\+Lib\+Thread@{G\+Lib\+Thread}!get\+Context@{get\+Context}}
+\index{get\+Context@{get\+Context}!G\+Lib\+Thread@{G\+Lib\+Thread}}
+\subsubsection{\texorpdfstring{get\+Context()}{getContext()}}
+{\footnotesize\ttfamily G\+Main\+Context $\ast$ G\+Lib\+Thread\+::get\+Context (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns the thread default context that was set when this thread was created. \mbox{\Hypertarget{classGLibThread_a48e06a164ff2bb673d115fad34706cbd}\label{classGLibThread_a48e06a164ff2bb673d115fad34706cbd}} 
+\index{G\+Lib\+Thread@{G\+Lib\+Thread}!running\+On\+Thread@{running\+On\+Thread}}
+\index{running\+On\+Thread@{running\+On\+Thread}!G\+Lib\+Thread@{G\+Lib\+Thread}}
+\subsubsection{\texorpdfstring{running\+On\+Thread()}{runningOnThread()}}
+{\footnotesize\ttfamily bool G\+Lib\+Thread\+::running\+On\+Thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns true if it\textquotesingle{}s being executed on this G\+Lib event thread. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\mbox{\hyperlink{GLibThread_8h}{G\+Lib\+Thread.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\mbox{\hyperlink{GLibThread_8cpp}{G\+Lib\+Thread.\+cpp}}\end{DoxyCompactItemize}

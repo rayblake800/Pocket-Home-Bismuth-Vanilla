@@ -1,0 +1,371 @@
+\hypertarget{classPageComponent}{}\section{Page\+Component Class Reference}
+\label{classPageComponent}\index{Page\+Component@{Page\+Component}}
+
+
+{\ttfamily \#include $<$Page\+Component.\+h$>$}
+
+Inheritance diagram for Page\+Component\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=12.000000cm]{classPageComponent}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classPageComponent_1_1PageFactoryInterface}{Page\+Factory\+Interface}}
+\item 
+class \mbox{\hyperlink{classPageComponent_1_1PageStackInterface}{Page\+Stack\+Interface}}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{classPageComponent_ac9e1faf6866dd703a0f3fd754b075dd5}{Colour\+Ids}} \{ \mbox{\hyperlink{classPageComponent_ac9e1faf6866dd703a0f3fd754b075dd5af8b0bbb8c07b030c327b7193809711db}{background\+Colour\+Id}} = 0x1900500
+ \}
+\item 
+enum \mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26a}{Page\+Type}} \{ \newline
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa615de1cbe6664f1cf99b29ae6de5dc8e}{Input\+Settings}}, 
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa1c49fa27df2e7834069e30d2ad72cb70}{Keybinding}}, 
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aac9835d795346411568f00e42008b8a01}{Set\+Password}}, 
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aac86afd9133f3411f214b7fb7b2672257}{Remove\+Password}}, 
+\newline
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aab976a485a0174db09c3890d767c5b348}{Power}}, 
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa46d155b0015c976bb302198b66dcfe9e}{Fel}}, 
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa6575eb37b04e3c684ecc3f6d5e8a5d5e}{Settings}}, 
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa6af234587883c550916bf8741b06e82d}{Bluetooth\+Settings}}, 
+\newline
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aaae7c69347f2d38ac534197995e330f2c}{Wifi\+Settings}}, 
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aade78a751a2d71f7c8f9c304a25d8b442}{UI}}, 
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa3ce159a0f0e04f9d8caf70e68e1003ef}{Colour\+Settings}}, 
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aaa63ec874985427b051007a94463d8e93}{Advanced\+Settings}}, 
+\newline
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa49ddd79f45c4197a50e402e76bee860b}{Date\+Time}}, 
+\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa64a3870f987bbe66354a72dba1656820}{Home\+Settings}}
+ \}
+\item 
+enum \mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57}{Animation}} \{ \mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57adbac6154e4032acdceaee8ba654754b2}{slide\+In\+From\+Left}}, 
+\mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57a8c9e13babb1de0b453edf68fbbb86e9e}{slide\+In\+From\+Right}}, 
+\mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57a67a095a948c38ce7f0e8d351f4502fd3}{none}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPageComponent_aa3fec95406141cea5175afc08b93a3c2}{Page\+Component}} (const String \&name=String(), \mbox{\hyperlink{classRelativeLayoutManager_a3dcd4cd0bc41754f3b4a64bc29b5eca5}{Relative\+Layout\+Manager\+::\+Layout}} layout=\{\}, bool show\+Back\+Button=true, bool back\+Button\+On\+Right=false)
+\item 
+virtual \mbox{\hyperlink{classPageComponent_a911e85b5c24e9716e5aabf46eb264ffd}{$\sim$\+Page\+Component}} ()
+\item 
+void \mbox{\hyperlink{classPageComponent_a8928cfec4b20fdb541ec1cf20cf0c194}{set\+Background\+Image}} (Image bg\+Image)
+\item 
+void \mbox{\hyperlink{classPageComponent_a5a0e41cc4ed37234cc4eb19c84910a94}{add\+And\+Show\+Layout\+Components}} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classPageComponent_af31c1ed2264dfcbfd6ec1e32ee90fbef}{page\+Added\+To\+Stack}} ()
+\item 
+virtual void \mbox{\hyperlink{classPageComponent_adf0158301585f91e9bad647adc6ed86c}{page\+Revealed\+On\+Stack}} ()
+\item 
+virtual void \mbox{\hyperlink{classPageComponent_a50d861b6ec4c25dcaa8de2db68cc3b5e}{page\+Removed\+From\+Stack}} ()
+\item 
+virtual void \mbox{\hyperlink{classPageComponent_a048ad03d61031e4e89ffed12916db9ae}{page\+Button\+Clicked}} (Button $\ast$button)
+\item 
+virtual void \mbox{\hyperlink{classPageComponent_a9f1abe0866fdc56ed3bc69706027976a}{page\+Resized}} ()
+\item 
+void \mbox{\hyperlink{classPageComponent_a94072392071e79cf7d5fe655336aa277}{update\+Layout}} (\mbox{\hyperlink{classRelativeLayoutManager_a3dcd4cd0bc41754f3b4a64bc29b5eca5}{Relative\+Layout\+Manager\+::\+Layout}} layout)
+\item 
+void \mbox{\hyperlink{classPageComponent_a7dd0b15f5369377d281fc66509979090}{set\+Margin\+Fraction}} (float margin\+Fraction)
+\item 
+void \mbox{\hyperlink{classPageComponent_a0632af1c5b40e99587ce79a781eee6b6}{set\+Padding}} (float vertical\+Fraction, float horizontal\+Fraction)
+\item 
+void \mbox{\hyperlink{classPageComponent_a7c51a53665d56c9f2f33da194bdf99ab}{layout\+Components}} ()
+\item 
+bool \mbox{\hyperlink{classPageComponent_a1ffe94ede2560dac8c2b1b9acef4192c}{is\+Stack\+Top}} ()
+\item 
+void \mbox{\hyperlink{classPageComponent_a3816c970f27dcdcbaab09bbe77c8ea97}{remove\+From\+Stack}} (\mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57}{Animation}} animation=\mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57a8c9e13babb1de0b453edf68fbbb86e9e}{slide\+In\+From\+Right}})
+\item 
+void \mbox{\hyperlink{classPageComponent_a92c6528f2296b6ab1b2e3420aa75a198}{push\+Page\+To\+Stack}} (\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26a}{Page\+Type}} page\+Type, \mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57}{Animation}} animation=\mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57a8c9e13babb1de0b453edf68fbbb86e9e}{slide\+In\+From\+Right}})
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57}\label{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57}} 
+\index{Page\+Component@{Page\+Component}!Animation@{Animation}}
+\index{Animation@{Animation}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{Animation}{Animation}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57}{Page\+Component\+::\+Animation}}}
+
+Defines all possible page transition animations. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{slide\+In\+From\+Left@{slide\+In\+From\+Left}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!slide\+In\+From\+Left@{slide\+In\+From\+Left}}}\mbox{\Hypertarget{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57adbac6154e4032acdceaee8ba654754b2}\label{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57adbac6154e4032acdceaee8ba654754b2}} 
+slide\+In\+From\+Left&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{slide\+In\+From\+Right@{slide\+In\+From\+Right}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!slide\+In\+From\+Right@{slide\+In\+From\+Right}}}\mbox{\Hypertarget{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57a8c9e13babb1de0b453edf68fbbb86e9e}\label{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57a8c9e13babb1de0b453edf68fbbb86e9e}} 
+slide\+In\+From\+Right&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{none@{none}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!none@{none}}}\mbox{\Hypertarget{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57a67a095a948c38ce7f0e8d351f4502fd3}\label{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57a67a095a948c38ce7f0e8d351f4502fd3}} 
+none&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{classPageComponent_ac9e1faf6866dd703a0f3fd754b075dd5}\label{classPageComponent_ac9e1faf6866dd703a0f3fd754b075dd5}} 
+\index{Page\+Component@{Page\+Component}!Colour\+Ids@{Colour\+Ids}}
+\index{Colour\+Ids@{Colour\+Ids}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{Colour\+Ids}{ColourIds}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classPageComponent_ac9e1faf6866dd703a0f3fd754b075dd5}{Page\+Component\+::\+Colour\+Ids}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{background\+Colour\+Id@{background\+Colour\+Id}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!background\+Colour\+Id@{background\+Colour\+Id}}}\mbox{\Hypertarget{classPageComponent_ac9e1faf6866dd703a0f3fd754b075dd5af8b0bbb8c07b030c327b7193809711db}\label{classPageComponent_ac9e1faf6866dd703a0f3fd754b075dd5af8b0bbb8c07b030c327b7193809711db}} 
+background\+Colour\+Id&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26a}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26a}} 
+\index{Page\+Component@{Page\+Component}!Page\+Type@{Page\+Type}}
+\index{Page\+Type@{Page\+Type}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{Page\+Type}{PageType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26a}{Page\+Component\+::\+Page\+Type}}}
+
+Defines all pages that other pages can create to add to the page stack. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Input\+Settings@{Input\+Settings}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Input\+Settings@{Input\+Settings}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa615de1cbe6664f1cf99b29ae6de5dc8e}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa615de1cbe6664f1cf99b29ae6de5dc8e}} 
+Input\+Settings&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Keybinding@{Keybinding}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Keybinding@{Keybinding}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa1c49fa27df2e7834069e30d2ad72cb70}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa1c49fa27df2e7834069e30d2ad72cb70}} 
+Keybinding&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Set\+Password@{Set\+Password}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Set\+Password@{Set\+Password}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aac9835d795346411568f00e42008b8a01}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aac9835d795346411568f00e42008b8a01}} 
+Set\+Password&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Remove\+Password@{Remove\+Password}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Remove\+Password@{Remove\+Password}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aac86afd9133f3411f214b7fb7b2672257}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aac86afd9133f3411f214b7fb7b2672257}} 
+Remove\+Password&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Power@{Power}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Power@{Power}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aab976a485a0174db09c3890d767c5b348}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aab976a485a0174db09c3890d767c5b348}} 
+Power&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Fel@{Fel}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Fel@{Fel}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa46d155b0015c976bb302198b66dcfe9e}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa46d155b0015c976bb302198b66dcfe9e}} 
+Fel&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Settings@{Settings}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Settings@{Settings}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa6575eb37b04e3c684ecc3f6d5e8a5d5e}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa6575eb37b04e3c684ecc3f6d5e8a5d5e}} 
+Settings&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Bluetooth\+Settings@{Bluetooth\+Settings}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Bluetooth\+Settings@{Bluetooth\+Settings}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa6af234587883c550916bf8741b06e82d}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa6af234587883c550916bf8741b06e82d}} 
+Bluetooth\+Settings&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Wifi\+Settings@{Wifi\+Settings}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Wifi\+Settings@{Wifi\+Settings}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aaae7c69347f2d38ac534197995e330f2c}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aaae7c69347f2d38ac534197995e330f2c}} 
+Wifi\+Settings&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI@{UI}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!UI@{UI}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aade78a751a2d71f7c8f9c304a25d8b442}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aade78a751a2d71f7c8f9c304a25d8b442}} 
+UI&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Colour\+Settings@{Colour\+Settings}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Colour\+Settings@{Colour\+Settings}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa3ce159a0f0e04f9d8caf70e68e1003ef}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa3ce159a0f0e04f9d8caf70e68e1003ef}} 
+Colour\+Settings&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Advanced\+Settings@{Advanced\+Settings}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Advanced\+Settings@{Advanced\+Settings}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aaa63ec874985427b051007a94463d8e93}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aaa63ec874985427b051007a94463d8e93}} 
+Advanced\+Settings&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Date\+Time@{Date\+Time}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Date\+Time@{Date\+Time}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa49ddd79f45c4197a50e402e76bee860b}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa49ddd79f45c4197a50e402e76bee860b}} 
+Date\+Time&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Home\+Settings@{Home\+Settings}!Page\+Component@{Page\+Component}}\index{Page\+Component@{Page\+Component}!Home\+Settings@{Home\+Settings}}}\mbox{\Hypertarget{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa64a3870f987bbe66354a72dba1656820}\label{classPageComponent_a39cf3ea9f212fd4383133881dec6e26aa64a3870f987bbe66354a72dba1656820}} 
+Home\+Settings&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classPageComponent_aa3fec95406141cea5175afc08b93a3c2}\label{classPageComponent_aa3fec95406141cea5175afc08b93a3c2}} 
+\index{Page\+Component@{Page\+Component}!Page\+Component@{Page\+Component}}
+\index{Page\+Component@{Page\+Component}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{Page\+Component()}{PageComponent()}}
+{\footnotesize\ttfamily Page\+Component\+::\+Page\+Component (\begin{DoxyParamCaption}\item[{const String \&}]{name = {\ttfamily String()},  }\item[{\mbox{\hyperlink{classRelativeLayoutManager_a3dcd4cd0bc41754f3b4a64bc29b5eca5}{Relative\+Layout\+Manager\+::\+Layout}}}]{layout = {\ttfamily \{\}},  }\item[{bool}]{show\+Back\+Button = {\ttfamily true},  }\item[{bool}]{back\+Button\+On\+Right = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The internal component name.\\
+\hline
+{\em layout} & Defines the layout of all page components. ~\newline
+ This layout will be saved, but components will not be added to the page until add\+And\+Show\+Layout\+Components is called.\\
+\hline
+{\em show\+Back\+Button} & If true, add a back button on this page.\\
+\hline
+{\em back\+Button\+On\+Right} & If true, the back button will be on the right side of the page. Otherwise, it will be on the left. This also controls the default animation used when closing this page, even if not using a back button. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classPageComponent_a911e85b5c24e9716e5aabf46eb264ffd}\label{classPageComponent_a911e85b5c24e9716e5aabf46eb264ffd}} 
+\index{Page\+Component@{Page\+Component}!````~Page\+Component@{$\sim$\+Page\+Component}}
+\index{````~Page\+Component@{$\sim$\+Page\+Component}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{$\sim$\+Page\+Component()}{~PageComponent()}}
+{\footnotesize\ttfamily virtual Page\+Component\+::$\sim$\+Page\+Component (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classPageComponent_a5a0e41cc4ed37234cc4eb19c84910a94}\label{classPageComponent_a5a0e41cc4ed37234cc4eb19c84910a94}} 
+\index{Page\+Component@{Page\+Component}!add\+And\+Show\+Layout\+Components@{add\+And\+Show\+Layout\+Components}}
+\index{add\+And\+Show\+Layout\+Components@{add\+And\+Show\+Layout\+Components}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{add\+And\+Show\+Layout\+Components()}{addAndShowLayoutComponents()}}
+{\footnotesize\ttfamily void Page\+Component\+::add\+And\+Show\+Layout\+Components (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Adds all components in the layout to the page and makes them visible. \mbox{\Hypertarget{classPageComponent_a1ffe94ede2560dac8c2b1b9acef4192c}\label{classPageComponent_a1ffe94ede2560dac8c2b1b9acef4192c}} 
+\index{Page\+Component@{Page\+Component}!is\+Stack\+Top@{is\+Stack\+Top}}
+\index{is\+Stack\+Top@{is\+Stack\+Top}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{is\+Stack\+Top()}{isStackTop()}}
+{\footnotesize\ttfamily bool Page\+Component\+::is\+Stack\+Top (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Checks if this page is on top of a page stack.
+
+\begin{DoxyReturn}{Returns}
+true iff the page is currently on the top of a page stack.
+
+true iff the page is currently on the top of a page stack. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classPageComponent_a7c51a53665d56c9f2f33da194bdf99ab}\label{classPageComponent_a7c51a53665d56c9f2f33da194bdf99ab}} 
+\index{Page\+Component@{Page\+Component}!layout\+Components@{layout\+Components}}
+\index{layout\+Components@{layout\+Components}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{layout\+Components()}{layoutComponents()}}
+{\footnotesize\ttfamily void Page\+Component\+::layout\+Components (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Repositions all page components using the layout manager along with the margin and padding values. \mbox{\Hypertarget{classPageComponent_af31c1ed2264dfcbfd6ec1e32ee90fbef}\label{classPageComponent_af31c1ed2264dfcbfd6ec1e32ee90fbef}} 
+\index{Page\+Component@{Page\+Component}!page\+Added\+To\+Stack@{page\+Added\+To\+Stack}}
+\index{page\+Added\+To\+Stack@{page\+Added\+To\+Stack}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{page\+Added\+To\+Stack()}{pageAddedToStack()}}
+{\footnotesize\ttfamily virtual void Page\+Component\+::page\+Added\+To\+Stack (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Whenever this page is added to a page stack, the Page\+Stack will call this method. \mbox{\Hypertarget{classPageComponent_a048ad03d61031e4e89ffed12916db9ae}\label{classPageComponent_a048ad03d61031e4e89ffed12916db9ae}} 
+\index{Page\+Component@{Page\+Component}!page\+Button\+Clicked@{page\+Button\+Clicked}}
+\index{page\+Button\+Clicked@{page\+Button\+Clicked}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{page\+Button\+Clicked()}{pageButtonClicked()}}
+{\footnotesize\ttfamily virtual void Page\+Component\+::page\+Button\+Clicked (\begin{DoxyParamCaption}\item[{Button $\ast$}]{button }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Handles any buttons besides the back button. Inheriting classes should override this instead of button\+Clicked(\+Button$\ast$) to handle their own button actions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em button} & Points to a button that was just clicked that added this \mbox{\hyperlink{classPageComponent}{Page\+Component}} as a listener. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{classInputSettingsPage_a89fcfdf1adb1d8a7a1ba03a2325d72f2}{Input\+Settings\+Page}}.
+
+\mbox{\Hypertarget{classPageComponent_a50d861b6ec4c25dcaa8de2db68cc3b5e}\label{classPageComponent_a50d861b6ec4c25dcaa8de2db68cc3b5e}} 
+\index{Page\+Component@{Page\+Component}!page\+Removed\+From\+Stack@{page\+Removed\+From\+Stack}}
+\index{page\+Removed\+From\+Stack@{page\+Removed\+From\+Stack}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{page\+Removed\+From\+Stack()}{pageRemovedFromStack()}}
+{\footnotesize\ttfamily virtual void Page\+Component\+::page\+Removed\+From\+Stack (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Whenever this page is removed from the stack, the \mbox{\hyperlink{classPageStackComponent}{Page\+Stack\+Component}} will call this method. \mbox{\Hypertarget{classPageComponent_a9f1abe0866fdc56ed3bc69706027976a}\label{classPageComponent_a9f1abe0866fdc56ed3bc69706027976a}} 
+\index{Page\+Component@{Page\+Component}!page\+Resized@{page\+Resized}}
+\index{page\+Resized@{page\+Resized}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{page\+Resized()}{pageResized()}}
+{\footnotesize\ttfamily virtual void Page\+Component\+::page\+Resized (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Handles any actions necessary whenever the page is resized, besides updating the layout manager and back button. Inheriting classes should override this instead of resized() to handle page resizing. \mbox{\Hypertarget{classPageComponent_adf0158301585f91e9bad647adc6ed86c}\label{classPageComponent_adf0158301585f91e9bad647adc6ed86c}} 
+\index{Page\+Component@{Page\+Component}!page\+Revealed\+On\+Stack@{page\+Revealed\+On\+Stack}}
+\index{page\+Revealed\+On\+Stack@{page\+Revealed\+On\+Stack}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{page\+Revealed\+On\+Stack()}{pageRevealedOnStack()}}
+{\footnotesize\ttfamily virtual void Page\+Component\+::page\+Revealed\+On\+Stack (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Whenever this page becomes the top page on the page stack, the \mbox{\hyperlink{classPageStackComponent}{Page\+Stack\+Component}} will call this method. \mbox{\Hypertarget{classPageComponent_a92c6528f2296b6ab1b2e3420aa75a198}\label{classPageComponent_a92c6528f2296b6ab1b2e3420aa75a198}} 
+\index{Page\+Component@{Page\+Component}!push\+Page\+To\+Stack@{push\+Page\+To\+Stack}}
+\index{push\+Page\+To\+Stack@{push\+Page\+To\+Stack}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{push\+Page\+To\+Stack()}{pushPageToStack()}}
+{\footnotesize\ttfamily void Page\+Component\+::push\+Page\+To\+Stack (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classPageComponent_a39cf3ea9f212fd4383133881dec6e26a}{Page\+Component\+::\+Page\+Type}}}]{page\+Type,  }\item[{\mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57}{Page\+Component\+::\+Animation}}}]{animation = {\ttfamily \mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57a8c9e13babb1de0b453edf68fbbb86e9e}{slide\+In\+From\+Right}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Creates and pushes a new page on top of the stack.
+
+
+\begin{DoxyParams}{Parameters}
+{\em page\+Type} & The type of page to create and add.\\
+\hline
+{\em animation} & This animation will run if the page is successfully added to the stack.\\
+\hline
+\end{DoxyParams}
+Creates and pushes a new page on top of the stack. \mbox{\Hypertarget{classPageComponent_a3816c970f27dcdcbaab09bbe77c8ea97}\label{classPageComponent_a3816c970f27dcdcbaab09bbe77c8ea97}} 
+\index{Page\+Component@{Page\+Component}!remove\+From\+Stack@{remove\+From\+Stack}}
+\index{remove\+From\+Stack@{remove\+From\+Stack}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{remove\+From\+Stack()}{removeFromStack()}}
+{\footnotesize\ttfamily void Page\+Component\+::remove\+From\+Stack (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57}{Page\+Component\+::\+Animation}}}]{animation = {\ttfamily \mbox{\hyperlink{classPageComponent_a9ee0e31dfa2a628bc303d30ec5774e57a8c9e13babb1de0b453edf68fbbb86e9e}{slide\+In\+From\+Right}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+If this page is currently on top of a page stack, this will remove it from the stack and destroy it.
+
+
+\begin{DoxyParams}{Parameters}
+{\em animation} & This animation will run if the page was on top of the stack and was removed successfully.\\
+\hline
+\end{DoxyParams}
+If this page is currently on top of a page stack, this will remove it from the stack and destroy it. \mbox{\Hypertarget{classPageComponent_a8928cfec4b20fdb541ec1cf20cf0c194}\label{classPageComponent_a8928cfec4b20fdb541ec1cf20cf0c194}} 
+\index{Page\+Component@{Page\+Component}!set\+Background\+Image@{set\+Background\+Image}}
+\index{set\+Background\+Image@{set\+Background\+Image}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{set\+Background\+Image()}{setBackgroundImage()}}
+{\footnotesize\ttfamily void Page\+Component\+::set\+Background\+Image (\begin{DoxyParamCaption}\item[{Image}]{bg\+Image }\end{DoxyParamCaption})}
+
+Sets a background image to draw behind all page components.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bg\+Image} & The image to draw, or a null Image(). If a null image is used, the background will be filled with the background color instead of an image.\\
+\hline
+\end{DoxyParams}
+Sets a background image to draw behind all page components. \mbox{\Hypertarget{classPageComponent_a7dd0b15f5369377d281fc66509979090}\label{classPageComponent_a7dd0b15f5369377d281fc66509979090}} 
+\index{Page\+Component@{Page\+Component}!set\+Margin\+Fraction@{set\+Margin\+Fraction}}
+\index{set\+Margin\+Fraction@{set\+Margin\+Fraction}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{set\+Margin\+Fraction()}{setMarginFraction()}}
+{\footnotesize\ttfamily void Page\+Component\+::set\+Margin\+Fraction (\begin{DoxyParamCaption}\item[{float}]{margin\+Fraction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Sets the amount of space to leave between page components and the edges of the page. Note that margins don\textquotesingle{}t affect the back button, and if necessary they will be expanded to make room for the back button.
+
+
+\begin{DoxyParams}{Parameters}
+{\em margin\+Fraction} & This value is multiplied by the page height to get the margin size in pixels.\\
+\hline
+\end{DoxyParams}
+Sets the amount of space to leave between page components and the edges of the page. \mbox{\Hypertarget{classPageComponent_a0632af1c5b40e99587ce79a781eee6b6}\label{classPageComponent_a0632af1c5b40e99587ce79a781eee6b6}} 
+\index{Page\+Component@{Page\+Component}!set\+Padding@{set\+Padding}}
+\index{set\+Padding@{set\+Padding}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{set\+Padding()}{setPadding()}}
+{\footnotesize\ttfamily void Page\+Component\+::set\+Padding (\begin{DoxyParamCaption}\item[{float}]{vertical\+Fraction,  }\item[{float}]{horizontal\+Fraction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Sets the amount of space to leave between components in the page layout.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vertical\+Fraction} & This value is multiplied by the page height to find the amount of vertical empty space (in pixels) to leave between components.\\
+\hline
+{\em horizontal\+Fraction} & This value is multiplied by the page width to find the amount of horizontal empty space (in pixels) to leave between components.\\
+\hline
+\end{DoxyParams}
+Sets the amount of space to leave between components in the page layout. \mbox{\Hypertarget{classPageComponent_a94072392071e79cf7d5fe655336aa277}\label{classPageComponent_a94072392071e79cf7d5fe655336aa277}} 
+\index{Page\+Component@{Page\+Component}!update\+Layout@{update\+Layout}}
+\index{update\+Layout@{update\+Layout}!Page\+Component@{Page\+Component}}
+\subsubsection{\texorpdfstring{update\+Layout()}{updateLayout()}}
+{\footnotesize\ttfamily void Page\+Component\+::update\+Layout (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRelativeLayoutManager_a3dcd4cd0bc41754f3b4a64bc29b5eca5}{Relative\+Layout\+Manager\+::\+Layout}}}]{layout }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Replaces the page layout. All components in the old layout will be removed from the page before setting the new layout. Components in the new layout will be added to the page and made visible.
+
+
+\begin{DoxyParams}{Parameters}
+{\em layout} & The new page layout.\\
+\hline
+\end{DoxyParams}
+Replaces the page layout. All components in the old layout will be removed from the page before setting the new layout. Components in the new layout will be added to the page and made visible. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\mbox{\hyperlink{PageComponent_8h}{Page\+Component.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\mbox{\hyperlink{PageComponent_8cpp}{Page\+Component.\+cpp}}\end{DoxyCompactItemize}

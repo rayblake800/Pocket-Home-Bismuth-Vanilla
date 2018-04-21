@@ -1,0 +1,121 @@
+\hypertarget{classAppMenuItemFactory}{}\section{App\+Menu\+Item\+Factory Class Reference}
+\label{classAppMenuItemFactory}\index{App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}}
+
+
+{\ttfamily \#include $<$App\+Menu\+Item\+Factory.\+h$>$}
+
+Inheritance diagram for App\+Menu\+Item\+Factory\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classAppMenuItemFactory}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classAppMenuItemFactory_aa3715de15c9f0ef001b26c5a09af1634}{App\+Menu\+Item\+Factory}} (\mbox{\hyperlink{classDesktopEntries}{Desktop\+Entries}} \&desktop\+Entries)
+\item 
+virtual \mbox{\hyperlink{classAppMenuItemFactory_a737f91df4d228b97623ad2be87b1bfb9}{$\sim$\+App\+Menu\+Item\+Factory}} ()
+\item 
+\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} \mbox{\hyperlink{classAppMenuItemFactory_ab4e1c1019c09f110ff17091a45c918f0}{create\+Base\+Folder\+Item}} ()
+\item 
+\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} \mbox{\hyperlink{classAppMenuItemFactory_a018510777d99cbda23a0aea41f90c4f9}{create}} (const \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Config\+File\+::\+App\+Item}} \&app\+Item) override
+\item 
+\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} \mbox{\hyperlink{classAppMenuItemFactory_a6b77c85063b587a6f5930fa9e94908eb}{create}} (const \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} \&desktop\+Entry) override
+\item 
+\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} \mbox{\hyperlink{classAppMenuItemFactory_a39e1a6e96d7c22413cb396a46b496804}{create}} (const \mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Config\+File\+::\+App\+Folder}} \&app\+Folder) override
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classAppMenuItemFactory_aa3715de15c9f0ef001b26c5a09af1634}\label{classAppMenuItemFactory_aa3715de15c9f0ef001b26c5a09af1634}} 
+\index{App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}!App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}}
+\index{App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}!App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}}
+\subsubsection{\texorpdfstring{App\+Menu\+Item\+Factory()}{AppMenuItemFactory()}}
+{\footnotesize\ttfamily App\+Menu\+Item\+Factory\+::\+App\+Menu\+Item\+Factory (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classDesktopEntries}{Desktop\+Entries}} \&}]{desktop\+Entries }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classAppMenuItemFactory_a737f91df4d228b97623ad2be87b1bfb9}\label{classAppMenuItemFactory_a737f91df4d228b97623ad2be87b1bfb9}} 
+\index{App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}!````~App\+Menu\+Item\+Factory@{$\sim$\+App\+Menu\+Item\+Factory}}
+\index{````~App\+Menu\+Item\+Factory@{$\sim$\+App\+Menu\+Item\+Factory}!App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}}
+\subsubsection{\texorpdfstring{$\sim$\+App\+Menu\+Item\+Factory()}{~AppMenuItemFactory()}}
+{\footnotesize\ttfamily virtual App\+Menu\+Item\+Factory\+::$\sim$\+App\+Menu\+Item\+Factory (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classAppMenuItemFactory_a018510777d99cbda23a0aea41f90c4f9}\label{classAppMenuItemFactory_a018510777d99cbda23a0aea41f90c4f9}} 
+\index{App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}!create@{create}}
+\index{create@{create}!App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}}
+\subsubsection{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} App\+Menu\+Item\+Factory\+::create (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Config\+File\+::\+App\+Item}} \&}]{app\+Item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Get an \mbox{\hyperlink{classAppMenuItem}{App\+Menu\+Item}} for an application link provided by the \mbox{\hyperlink{classAppConfigFile}{App\+Config\+File}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em app\+Item} & Defines all menu item data.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the new menu item.
+\end{DoxyReturn}
+Get an \mbox{\hyperlink{classAppMenuItem}{App\+Menu\+Item}} for an application link provided by the \mbox{\hyperlink{classAppConfigFile}{App\+Config\+File}} 
+
+Implements \mbox{\hyperlink{classAppMenuItem_1_1FactoryInterface_a5b176b2573b638c01d71f05655d73ba0}{App\+Menu\+Item\+::\+Factory\+Interface}}.
+
+\mbox{\Hypertarget{classAppMenuItemFactory_a6b77c85063b587a6f5930fa9e94908eb}\label{classAppMenuItemFactory_a6b77c85063b587a6f5930fa9e94908eb}} 
+\index{App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}!create@{create}}
+\index{create@{create}!App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}}
+\subsubsection{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} App\+Menu\+Item\+Factory\+::create (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} \&}]{desktop\+Entry }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Get an \mbox{\hyperlink{classAppMenuItem}{App\+Menu\+Item}} for an application link that was read from a desktop entry file/
+
+
+\begin{DoxyParams}{Parameters}
+{\em desktop\+Entry} & This defines the application/directory data.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the new menu item.
+\end{DoxyReturn}
+Get an \mbox{\hyperlink{classAppMenuItem}{App\+Menu\+Item}} for an application link that was read from a desktop entry file 
+
+Implements \mbox{\hyperlink{classAppMenuItem_1_1FactoryInterface_ab4a62330cdbb3e4a0864f354ceb3396f}{App\+Menu\+Item\+::\+Factory\+Interface}}.
+
+\mbox{\Hypertarget{classAppMenuItemFactory_a39e1a6e96d7c22413cb396a46b496804}\label{classAppMenuItemFactory_a39e1a6e96d7c22413cb396a46b496804}} 
+\index{App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}!create@{create}}
+\index{create@{create}!App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}}
+\subsubsection{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} App\+Menu\+Item\+Factory\+::create (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Config\+File\+::\+App\+Folder}} \&}]{app\+Folder }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Get an \mbox{\hyperlink{classAppMenuItem}{App\+Menu\+Item}} for an application folder provided by the \mbox{\hyperlink{classAppConfigFile}{App\+Config\+File}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em app\+Folder} & This defines all menu item data.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the new menu item.
+\end{DoxyReturn}
+Get an \mbox{\hyperlink{classAppMenuItem}{App\+Menu\+Item}} for an application folder provided by the \mbox{\hyperlink{classAppConfigFile}{App\+Config\+File}} 
+
+Implements \mbox{\hyperlink{classAppMenuItem_1_1FactoryInterface_a3b9ef458047ad7c8c5bbae6157466f6c}{App\+Menu\+Item\+::\+Factory\+Interface}}.
+
+\mbox{\Hypertarget{classAppMenuItemFactory_ab4e1c1019c09f110ff17091a45c918f0}\label{classAppMenuItemFactory_ab4e1c1019c09f110ff17091a45c918f0}} 
+\index{App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}!create\+Base\+Folder\+Item@{create\+Base\+Folder\+Item}}
+\index{create\+Base\+Folder\+Item@{create\+Base\+Folder\+Item}!App\+Menu\+Item\+Factory@{App\+Menu\+Item\+Factory}}
+\subsubsection{\texorpdfstring{create\+Base\+Folder\+Item()}{createBaseFolderItem()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} App\+Menu\+Item\+Factory\+::create\+Base\+Folder\+Item (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Create the folder menu item that defines the base menu folder \begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+Create the folder menu item that defines the base menu folder 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\+Menu Items/\mbox{\hyperlink{AppMenuItemFactory_8h}{App\+Menu\+Item\+Factory.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\+Menu Items/\mbox{\hyperlink{AppMenuItemFactory_8cpp}{App\+Menu\+Item\+Factory.\+cpp}}\end{DoxyCompactItemize}

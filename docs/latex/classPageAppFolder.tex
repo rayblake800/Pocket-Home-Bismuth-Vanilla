@@ -1,0 +1,230 @@
+\hypertarget{classPageAppFolder}{}\section{Page\+App\+Folder Class Reference}
+\label{classPageAppFolder}\index{Page\+App\+Folder@{Page\+App\+Folder}}
+
+
+{\ttfamily \#include $<$Page\+App\+Folder.\+h$>$}
+
+Inheritance diagram for Page\+App\+Folder\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classPageAppFolder}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPageAppFolder_a0c5e4015a885b703f251e0379d6ec9b4}{Page\+App\+Folder}} (\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} folder\+Item, Mouse\+Listener $\ast$btn\+Listener, std\+::map$<$ String, \mbox{\hyperlink{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}{App\+Menu\+Button\+::\+Ptr}} $>$ \&button\+Name\+Map)
+\item 
+virtual \mbox{\hyperlink{classPageAppFolder_ac13fb86b1e0b8bb8109ea9fbe979253b}{$\sim$\+Page\+App\+Folder}} ()
+\item 
+virtual \mbox{\hyperlink{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}{App\+Menu\+Button\+::\+Ptr}} \mbox{\hyperlink{classPageAppFolder_a1f26a965194bf0e14503823971f21ec4}{create\+Menu\+Button}} (\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} menu\+Item) override
+\item 
+virtual \mbox{\hyperlink{classRelativeLayoutManager_a3dcd4cd0bc41754f3b4a64bc29b5eca5}{Relative\+Layout\+Manager\+::\+Layout}} \mbox{\hyperlink{classPageAppFolder_a24e2bcf990a45c7c45ee1bf04140d46b}{build\+Folder\+Layout}} (Array$<$ \mbox{\hyperlink{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}{App\+Menu\+Button\+::\+Ptr}} $>$ \&buttons)
+\item 
+int \mbox{\hyperlink{classPageAppFolder_a5f18f8c254b9cca63770b93bf881a9a4}{get\+Num\+Folder\+Pages}} () const
+\item 
+int \mbox{\hyperlink{classPageAppFolder_a1ef76fbc32e943614313b30708ae8dac}{get\+Current\+Folder\+Page}} () const
+\item 
+bool \mbox{\hyperlink{classPageAppFolder_a0e5433a11571b599ec279f7a4ca9ee39}{set\+Current\+Folder\+Page}} (int page\+Num)
+\item 
+int \mbox{\hyperlink{classPageAppFolder_a12d9149b5502f2bef56542f65a298964}{get\+Selection\+Page}} () const
+\item 
+int \mbox{\hyperlink{classPageAppFolder_a1c59f6ee22e0ba08d47a8e5e9a9a29de}{get\+Selected\+Index\+In\+Folder\+Page}} () const
+\item 
+int \mbox{\hyperlink{classPageAppFolder_ae70550dbace1ea8619b8a3b02a9896e9}{get\+Selection\+Column}} () const
+\item 
+int \mbox{\hyperlink{classPageAppFolder_a5d2e4c1c9a389824e03ea658adad2c57}{get\+Selection\+Row}} () const
+\item 
+int \mbox{\hyperlink{classPageAppFolder_a90b3428fc2ebfb34759ca3d1e63ab530}{position\+Index}} (int page, int column, int row) const
+\item 
+bool \mbox{\hyperlink{classPageAppFolder_a81ecc480e6b29644cc0c39f397df21d5}{set\+Selected\+Position}} (int page, int column, int row)
+\item 
+void \mbox{\hyperlink{classPageAppFolder_a4393f5fc5b77a2c901285f4a111357b1}{set\+Parent\+Relative\+Margin}} (float margin)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classPageAppFolder_a0c5e4015a885b703f251e0379d6ec9b4}\label{classPageAppFolder_a0c5e4015a885b703f251e0379d6ec9b4}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!Page\+App\+Folder@{Page\+App\+Folder}}
+\index{Page\+App\+Folder@{Page\+App\+Folder}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{Page\+App\+Folder()}{PageAppFolder()}}
+{\footnotesize\ttfamily Page\+App\+Folder\+::\+Page\+App\+Folder (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}}}]{folder\+Item,  }\item[{Mouse\+Listener $\ast$}]{btn\+Listener,  }\item[{std\+::map$<$ String, \mbox{\hyperlink{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}{App\+Menu\+Button\+::\+Ptr}} $>$ \&}]{button\+Name\+Map }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classPageAppFolder_ac13fb86b1e0b8bb8109ea9fbe979253b}\label{classPageAppFolder_ac13fb86b1e0b8bb8109ea9fbe979253b}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!````~Page\+App\+Folder@{$\sim$\+Page\+App\+Folder}}
+\index{````~Page\+App\+Folder@{$\sim$\+Page\+App\+Folder}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{$\sim$\+Page\+App\+Folder()}{~PageAppFolder()}}
+{\footnotesize\ttfamily virtual Page\+App\+Folder\+::$\sim$\+Page\+App\+Folder (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classPageAppFolder_a24e2bcf990a45c7c45ee1bf04140d46b}\label{classPageAppFolder_a24e2bcf990a45c7c45ee1bf04140d46b}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!build\+Folder\+Layout@{build\+Folder\+Layout}}
+\index{build\+Folder\+Layout@{build\+Folder\+Layout}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{build\+Folder\+Layout()}{buildFolderLayout()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classRelativeLayoutManager_a3dcd4cd0bc41754f3b4a64bc29b5eca5}{Relative\+Layout\+Manager\+::\+Layout}} Page\+App\+Folder\+::build\+Folder\+Layout (\begin{DoxyParamCaption}\item[{Array$<$ \mbox{\hyperlink{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}{App\+Menu\+Button\+::\+Ptr}} $>$ \&}]{buttons }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Given a list of folder buttons, return an appropriate layout for positioning them in the folder component.
+
+
+\begin{DoxyParams}{Parameters}
+{\em buttons} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a Layout containing all items in the button array.
+\end{DoxyReturn}
+Given a list of folder buttons, return an appropriate layout for positioning them in the folder component. 
+
+Implements \mbox{\hyperlink{classAppMenuFolder}{App\+Menu\+Folder}}.
+
+\mbox{\Hypertarget{classPageAppFolder_a1f26a965194bf0e14503823971f21ec4}\label{classPageAppFolder_a1f26a965194bf0e14503823971f21ec4}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!create\+Menu\+Button@{create\+Menu\+Button}}
+\index{create\+Menu\+Button@{create\+Menu\+Button}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{create\+Menu\+Button()}{createMenuButton()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAppMenuButton_aeb692efb6a933970de8eac14e5e71544}{App\+Menu\+Button\+::\+Ptr}} Page\+App\+Folder\+::create\+Menu\+Button (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}}}]{menu\+Item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Create an \mbox{\hyperlink{classAppMenuButton}{App\+Menu\+Button}} component for an \mbox{\hyperlink{classAppMenuItem}{App\+Menu\+Item}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em menu\+Item} & Create an \mbox{\hyperlink{classAppMenuButton}{App\+Menu\+Button}} component for an \mbox{\hyperlink{classAppMenuItem}{App\+Menu\+Item}}. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classAppMenuFolder_a001ecdee13bf394746b5d0b49dcc55cc}{App\+Menu\+Folder}}.
+
+\mbox{\Hypertarget{classPageAppFolder_a1ef76fbc32e943614313b30708ae8dac}\label{classPageAppFolder_a1ef76fbc32e943614313b30708ae8dac}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!get\+Current\+Folder\+Page@{get\+Current\+Folder\+Page}}
+\index{get\+Current\+Folder\+Page@{get\+Current\+Folder\+Page}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{get\+Current\+Folder\+Page()}{getCurrentFolderPage()}}
+{\footnotesize\ttfamily int Page\+App\+Folder\+::get\+Current\+Folder\+Page (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the index of the page that\textquotesingle{}s currently visible, or 0 if there is no current page.
+
+the index of the page that\textquotesingle{}s currently visible, or -\/1 if there is no current page. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classPageAppFolder_a5f18f8c254b9cca63770b93bf881a9a4}\label{classPageAppFolder_a5f18f8c254b9cca63770b93bf881a9a4}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!get\+Num\+Folder\+Pages@{get\+Num\+Folder\+Pages}}
+\index{get\+Num\+Folder\+Pages@{get\+Num\+Folder\+Pages}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{get\+Num\+Folder\+Pages()}{getNumFolderPages()}}
+{\footnotesize\ttfamily int Page\+App\+Folder\+::get\+Num\+Folder\+Pages (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the number of pages this folder needs to display all menu buttons. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classPageAppFolder_a1c59f6ee22e0ba08d47a8e5e9a9a29de}\label{classPageAppFolder_a1c59f6ee22e0ba08d47a8e5e9a9a29de}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!get\+Selected\+Index\+In\+Folder\+Page@{get\+Selected\+Index\+In\+Folder\+Page}}
+\index{get\+Selected\+Index\+In\+Folder\+Page@{get\+Selected\+Index\+In\+Folder\+Page}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{get\+Selected\+Index\+In\+Folder\+Page()}{getSelectedIndexInFolderPage()}}
+{\footnotesize\ttfamily int Page\+App\+Folder\+::get\+Selected\+Index\+In\+Folder\+Page (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the index of the selected button within its folder page, or -\/1 if there is no selection. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classPageAppFolder_ae70550dbace1ea8619b8a3b02a9896e9}\label{classPageAppFolder_ae70550dbace1ea8619b8a3b02a9896e9}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!get\+Selection\+Column@{get\+Selection\+Column}}
+\index{get\+Selection\+Column@{get\+Selection\+Column}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{get\+Selection\+Column()}{getSelectionColumn()}}
+{\footnotesize\ttfamily int Page\+App\+Folder\+::get\+Selection\+Column (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the column index of the selected button within its folder page, or -\/1 if there is no selection. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classPageAppFolder_a12d9149b5502f2bef56542f65a298964}\label{classPageAppFolder_a12d9149b5502f2bef56542f65a298964}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!get\+Selection\+Page@{get\+Selection\+Page}}
+\index{get\+Selection\+Page@{get\+Selection\+Page}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{get\+Selection\+Page()}{getSelectionPage()}}
+{\footnotesize\ttfamily int Page\+App\+Folder\+::get\+Selection\+Page (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the folder page index containing the selected folder button, or -\/1 if there is no selection. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classPageAppFolder_a5d2e4c1c9a389824e03ea658adad2c57}\label{classPageAppFolder_a5d2e4c1c9a389824e03ea658adad2c57}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!get\+Selection\+Row@{get\+Selection\+Row}}
+\index{get\+Selection\+Row@{get\+Selection\+Row}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{get\+Selection\+Row()}{getSelectionRow()}}
+{\footnotesize\ttfamily int Page\+App\+Folder\+::get\+Selection\+Row (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+the row index of the selected button within its folder page, or -\/1 if there is no selection. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classPageAppFolder_a90b3428fc2ebfb34759ca3d1e63ab530}\label{classPageAppFolder_a90b3428fc2ebfb34759ca3d1e63ab530}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!position\+Index@{position\+Index}}
+\index{position\+Index@{position\+Index}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{position\+Index()}{positionIndex()}}
+{\footnotesize\ttfamily int Page\+App\+Folder\+::position\+Index (\begin{DoxyParamCaption}\item[{int}]{page,  }\item[{int}]{column,  }\item[{int}]{row }\end{DoxyParamCaption}) const}
+
+Finds what index value a button would have at a particular position within the folder.
+
+
+\begin{DoxyParams}{Parameters}
+{\em page} & The folder page\textquotesingle{}s index.\\
+\hline
+{\em column} & The button\textquotesingle{}s column index in the page.\\
+\hline
+{\em row} & The button\textquotesingle{}s row index in the page.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the button\textquotesingle{}s index within the entire folder, or -\/1 for invalid positions.
+\end{DoxyReturn}
+Finds what index value a button would have at a particular position within the folder. \mbox{\Hypertarget{classPageAppFolder_a0e5433a11571b599ec279f7a4ca9ee39}\label{classPageAppFolder_a0e5433a11571b599ec279f7a4ca9ee39}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!set\+Current\+Folder\+Page@{set\+Current\+Folder\+Page}}
+\index{set\+Current\+Folder\+Page@{set\+Current\+Folder\+Page}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{set\+Current\+Folder\+Page()}{setCurrentFolderPage()}}
+{\footnotesize\ttfamily bool Page\+App\+Folder\+::set\+Current\+Folder\+Page (\begin{DoxyParamCaption}\item[{int}]{page\+Num }\end{DoxyParamCaption})}
+
+Set which folder page should currently be visible.
+
+
+\begin{DoxyParams}{Parameters}
+{\em page\+Num} & This must be a valid page index, or the selection will not change.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true iff the page selection changed.
+\end{DoxyReturn}
+Set which folder page should currently be visible. \mbox{\Hypertarget{classPageAppFolder_a4393f5fc5b77a2c901285f4a111357b1}\label{classPageAppFolder_a4393f5fc5b77a2c901285f4a111357b1}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!set\+Parent\+Relative\+Margin@{set\+Parent\+Relative\+Margin}}
+\index{set\+Parent\+Relative\+Margin@{set\+Parent\+Relative\+Margin}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{set\+Parent\+Relative\+Margin()}{setParentRelativeMargin()}}
+{\footnotesize\ttfamily void Page\+App\+Folder\+::set\+Parent\+Relative\+Margin (\begin{DoxyParamCaption}\item[{float}]{margin }\end{DoxyParamCaption})}
+
+Sets the margin width relative to the parent component width, rather than relative to folder width. The actual margin will be calculated using this value whenever the folder\textquotesingle{}s size changes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em margin} & If this value is negative, folder margins will not scale based on the size of the parent component.\\
+\hline
+\end{DoxyParams}
+Sets the margin width relative to the parent component width, rather than relative to folder width. The actual margin will be calculated using this value whenever the folder\textquotesingle{}s size changes. \mbox{\Hypertarget{classPageAppFolder_a81ecc480e6b29644cc0c39f397df21d5}\label{classPageAppFolder_a81ecc480e6b29644cc0c39f397df21d5}} 
+\index{Page\+App\+Folder@{Page\+App\+Folder}!set\+Selected\+Position@{set\+Selected\+Position}}
+\index{set\+Selected\+Position@{set\+Selected\+Position}!Page\+App\+Folder@{Page\+App\+Folder}}
+\subsubsection{\texorpdfstring{set\+Selected\+Position()}{setSelectedPosition()}}
+{\footnotesize\ttfamily bool Page\+App\+Folder\+::set\+Selected\+Position (\begin{DoxyParamCaption}\item[{int}]{page,  }\item[{int}]{column,  }\item[{int}]{row }\end{DoxyParamCaption})}
+
+Set the button selection based on its position in the folder. The selection will not change if there isn\textquotesingle{}t a button located at the given position. If necessary, the current folder page will change to the one containing the new selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em page} & The index of the button\textquotesingle{}s folder page.\\
+\hline
+{\em column} & The new selected button\textquotesingle{}s column number within its folder page.\\
+\hline
+{\em row} & The new selected button\textquotesingle{}s row number within its folder page.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the selection changed, false otherwise.
+\end{DoxyReturn}
+Set the button selection based on its position in the folder. The selection will not change if there isn\textquotesingle{}t a button located at the given position. If necessary, the current folder page will change to the one containing the new selection. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\+Menu Folders/\mbox{\hyperlink{PageAppFolder_8h}{Page\+App\+Folder.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\+Menu Folders/\mbox{\hyperlink{PageAppFolder_8cpp}{Page\+App\+Folder.\+cpp}}\end{DoxyCompactItemize}

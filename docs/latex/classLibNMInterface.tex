@@ -1,0 +1,227 @@
+\hypertarget{classLibNMInterface}{}\section{Lib\+N\+M\+Interface Class Reference}
+\label{classLibNMInterface}\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+
+
+{\ttfamily \#include $<$Lib\+N\+M\+Interface.\+h$>$}
+
+Inheritance diagram for Lib\+N\+M\+Interface\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.858407cm]{classLibNMInterface}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classLibNMInterface_a4dc08d1cab2e2984976c69152ce2a92b}{Lib\+N\+M\+Interface}} (Critical\+Section \&wifi\+Lock)
+\item 
+virtual \mbox{\hyperlink{classLibNMInterface_a0e0b81b6b5b14fbfc5633576d554fb64}{$\sim$\+Lib\+N\+M\+Interface}} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classLibNMInterface_a78f5de282c47c78e87ffa21ea542475b}{wifi\+Device\+Found}} () override
+\item 
+bool \mbox{\hyperlink{classLibNMInterface_aded8fa727a07bfac38828815bf607c61}{is\+Wifi\+Enabled}} () override
+\item 
+bool \mbox{\hyperlink{classLibNMInterface_a78c4b23cbf834a6352c5351b7aedb1c1}{is\+Wifi\+Connecting}} () override
+\item 
+bool \mbox{\hyperlink{classLibNMInterface_afb02b052a8c2a67ce2865d3faf689c39}{is\+Wifi\+Connected}} () override
+\item 
+\mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} \mbox{\hyperlink{classLibNMInterface_a92020826593a03979017bd7fb0c143a5}{get\+Connected\+AP}} () override
+\item 
+\mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} \mbox{\hyperlink{classLibNMInterface_a79b0bb8661be490b6cbb68abfdc93152}{get\+Connecting\+AP}} () override
+\item 
+Array$<$ \mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} $>$ \mbox{\hyperlink{classLibNMInterface_a52834cf27d1d7ea06939695c9caebca1}{get\+Visible\+A\+Ps}} () override
+\item 
+void \mbox{\hyperlink{classLibNMInterface_ac0e06cb2f360cd1cb16b50d4feff92c7}{connect\+To\+Access\+Point}} (\mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} to\+Connect, String psk=String()) override
+\item 
+void \mbox{\hyperlink{classLibNMInterface_afdb4daa97cc16cd38b154921969c4237}{update\+All\+Wifi\+Data}} ()
+\item 
+void \mbox{\hyperlink{classLibNMInterface_af86c4e620e1292428e8955bad4617805}{disconnect}} () override
+\item 
+void \mbox{\hyperlink{classLibNMInterface_a46a4b026d110f3f397bd74aa413a6276}{stop\+Connecting}} () override
+\item 
+void \mbox{\hyperlink{classLibNMInterface_ab50348ebed5778ecc56346e7b3419978}{enable\+Wifi}} () override
+\item 
+void \mbox{\hyperlink{classLibNMInterface_a49b4c61f6f8794d6af742464ab0f2d93}{disable\+Wifi}} () override
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classLibNMInterface_a4dc08d1cab2e2984976c69152ce2a92b}\label{classLibNMInterface_a4dc08d1cab2e2984976c69152ce2a92b}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{Lib\+N\+M\+Interface()}{LibNMInterface()}}
+{\footnotesize\ttfamily Lib\+N\+M\+Interface\+::\+Lib\+N\+M\+Interface (\begin{DoxyParamCaption}\item[{Critical\+Section \&}]{wifi\+Lock }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classLibNMInterface_a0e0b81b6b5b14fbfc5633576d554fb64}\label{classLibNMInterface_a0e0b81b6b5b14fbfc5633576d554fb64}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!````~Lib\+N\+M\+Interface@{$\sim$\+Lib\+N\+M\+Interface}}
+\index{````~Lib\+N\+M\+Interface@{$\sim$\+Lib\+N\+M\+Interface}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{$\sim$\+Lib\+N\+M\+Interface()}{~LibNMInterface()}}
+{\footnotesize\ttfamily virtual Lib\+N\+M\+Interface\+::$\sim$\+Lib\+N\+M\+Interface (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classLibNMInterface_ac0e06cb2f360cd1cb16b50d4feff92c7}\label{classLibNMInterface_ac0e06cb2f360cd1cb16b50d4feff92c7}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!connect\+To\+Access\+Point@{connect\+To\+Access\+Point}}
+\index{connect\+To\+Access\+Point@{connect\+To\+Access\+Point}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{connect\+To\+Access\+Point()}{connectToAccessPoint()}}
+{\footnotesize\ttfamily void Lib\+N\+M\+Interface\+::connect\+To\+Access\+Point (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}}}]{to\+Connect,  }\item[{String}]{psk = {\ttfamily String()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Begin opening a connection to a wifi access point.
+
+
+\begin{DoxyParams}{Parameters}
+{\em to\+Connect} & The access point that should be connected to.\\
+\hline
+{\em psk} & The access point\textquotesingle{}s security key. This will be ignored if the access point is unsecured.\\
+\hline
+\end{DoxyParams}
+Begin opening a connection to a wifi access point. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a5c8a6cb7df8aaf53a0ebdf56aefc5080}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_a49b4c61f6f8794d6af742464ab0f2d93}\label{classLibNMInterface_a49b4c61f6f8794d6af742464ab0f2d93}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!disable\+Wifi@{disable\+Wifi}}
+\index{disable\+Wifi@{disable\+Wifi}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{disable\+Wifi()}{disableWifi()}}
+{\footnotesize\ttfamily void Lib\+N\+M\+Interface\+::disable\+Wifi (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Asynchronously turns off the wifi radio. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_ab0dc19a7f15294a59894581a34d6109e}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_af86c4e620e1292428e8955bad4617805}\label{classLibNMInterface_af86c4e620e1292428e8955bad4617805}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!disconnect@{disconnect}}
+\index{disconnect@{disconnect}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{disconnect()}{disconnect()}}
+{\footnotesize\ttfamily void Lib\+N\+M\+Interface\+::disconnect (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Close the currently active connection, if one exists. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a440fe19155e268f94cbbd4e133b95037}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_ab50348ebed5778ecc56346e7b3419978}\label{classLibNMInterface_ab50348ebed5778ecc56346e7b3419978}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!enable\+Wifi@{enable\+Wifi}}
+\index{enable\+Wifi@{enable\+Wifi}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{enable\+Wifi()}{enableWifi()}}
+{\footnotesize\ttfamily void Lib\+N\+M\+Interface\+::enable\+Wifi (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Asynchronously turns on the wifi radio. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a276f17f2d4aa943e9781dcc1b5e93e54}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_a92020826593a03979017bd7fb0c143a5}\label{classLibNMInterface_a92020826593a03979017bd7fb0c143a5}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!get\+Connected\+AP@{get\+Connected\+AP}}
+\index{get\+Connected\+AP@{get\+Connected\+AP}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{get\+Connected\+A\+P()}{getConnectedAP()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} Lib\+N\+M\+Interface\+::get\+Connected\+AP (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Request information on the connected access point from the N\+M\+Device.
+
+\begin{DoxyReturn}{Returns}
+a \mbox{\hyperlink{classWifiAccessPoint}{Wifi\+Access\+Point}} object representing the access point connected to the wifi device, or \mbox{\hyperlink{classWifiAccessPoint}{Wifi\+Access\+Point()}} if not connected.
+\end{DoxyReturn}
+Request information on the connected access point from the N\+M\+Device. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a924f90089b1d0a64771b904bc96ce81a}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_a79b0bb8661be490b6cbb68abfdc93152}\label{classLibNMInterface_a79b0bb8661be490b6cbb68abfdc93152}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!get\+Connecting\+AP@{get\+Connecting\+AP}}
+\index{get\+Connecting\+AP@{get\+Connecting\+AP}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{get\+Connecting\+A\+P()}{getConnectingAP()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} Lib\+N\+M\+Interface\+::get\+Connecting\+AP (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Request information on the connecting access point from the N\+M\+Device.
+
+\begin{DoxyReturn}{Returns}
+a \mbox{\hyperlink{classWifiAccessPoint}{Wifi\+Access\+Point}} object representing the access point connecting to the wifi device, or \mbox{\hyperlink{classWifiAccessPoint}{Wifi\+Access\+Point()}} if not connecting.
+\end{DoxyReturn}
+Request information on the connecting access point from the N\+M\+Device. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_abff4fdeee0026c367dccc03828a88cc2}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_a52834cf27d1d7ea06939695c9caebca1}\label{classLibNMInterface_a52834cf27d1d7ea06939695c9caebca1}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!get\+Visible\+A\+Ps@{get\+Visible\+A\+Ps}}
+\index{get\+Visible\+A\+Ps@{get\+Visible\+A\+Ps}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{get\+Visible\+A\+Ps()}{getVisibleAPs()}}
+{\footnotesize\ttfamily Array$<$ \mbox{\hyperlink{classWifiAccessPoint_ad18977f884076774803027efbaa131a0}{Wifi\+Access\+Point\+::\+Ptr}} $>$ Lib\+N\+M\+Interface\+::get\+Visible\+A\+Ps (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Request information on all wifi access points detected by the N\+M\+Device.
+
+\begin{DoxyReturn}{Returns}
+a list of all visible access points within range of the wifi device, or an empty list if wifi is disabled.
+\end{DoxyReturn}
+Request information on all wifi access points detected by the N\+M\+Device. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a898004009e9645ad96a777ca2ee6a245}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_afb02b052a8c2a67ce2865d3faf689c39}\label{classLibNMInterface_afb02b052a8c2a67ce2865d3faf689c39}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!is\+Wifi\+Connected@{is\+Wifi\+Connected}}
+\index{is\+Wifi\+Connected@{is\+Wifi\+Connected}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{is\+Wifi\+Connected()}{isWifiConnected()}}
+{\footnotesize\ttfamily bool Lib\+N\+M\+Interface\+::is\+Wifi\+Connected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Check the N\+M\+Device state to see if wifi is connected to an access point.
+
+Check the N\+M\+Device state to see if wifi is connected. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a236b07174e3ab91973fce616746c0f70}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_a78c4b23cbf834a6352c5351b7aedb1c1}\label{classLibNMInterface_a78c4b23cbf834a6352c5351b7aedb1c1}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!is\+Wifi\+Connecting@{is\+Wifi\+Connecting}}
+\index{is\+Wifi\+Connecting@{is\+Wifi\+Connecting}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{is\+Wifi\+Connecting()}{isWifiConnecting()}}
+{\footnotesize\ttfamily bool Lib\+N\+M\+Interface\+::is\+Wifi\+Connecting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Check the N\+M\+Device state to see if wifi is connecting to an access point.
+
+Check the N\+M\+Device state to see if wifi is connecting. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_ade4c478d4b57628d39726f1b85a396f0}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_aded8fa727a07bfac38828815bf607c61}\label{classLibNMInterface_aded8fa727a07bfac38828815bf607c61}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!is\+Wifi\+Enabled@{is\+Wifi\+Enabled}}
+\index{is\+Wifi\+Enabled@{is\+Wifi\+Enabled}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{is\+Wifi\+Enabled()}{isWifiEnabled()}}
+{\footnotesize\ttfamily bool Lib\+N\+M\+Interface\+::is\+Wifi\+Enabled (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Check the N\+M\+Device state to see if wifi is enabled. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_aefcafd5baac9715524c60d65b0f523ce}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_a46a4b026d110f3f397bd74aa413a6276}\label{classLibNMInterface_a46a4b026d110f3f397bd74aa413a6276}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!stop\+Connecting@{stop\+Connecting}}
+\index{stop\+Connecting@{stop\+Connecting}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{stop\+Connecting()}{stopConnecting()}}
+{\footnotesize\ttfamily void Lib\+N\+M\+Interface\+::stop\+Connecting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Cancel any activating wifi connection. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a201033fbed61d18311773c3035806fc0}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+\mbox{\Hypertarget{classLibNMInterface_afdb4daa97cc16cd38b154921969c4237}\label{classLibNMInterface_afdb4daa97cc16cd38b154921969c4237}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!update\+All\+Wifi\+Data@{update\+All\+Wifi\+Data}}
+\index{update\+All\+Wifi\+Data@{update\+All\+Wifi\+Data}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{update\+All\+Wifi\+Data()}{updateAllWifiData()}}
+{\footnotesize\ttfamily void Lib\+N\+M\+Interface\+::update\+All\+Wifi\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Checks the wifi device list, connection state, and active and pending connections. \mbox{\Hypertarget{classLibNMInterface_a78f5de282c47c78e87ffa21ea542475b}\label{classLibNMInterface_a78f5de282c47c78e87ffa21ea542475b}} 
+\index{Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}!wifi\+Device\+Found@{wifi\+Device\+Found}}
+\index{wifi\+Device\+Found@{wifi\+Device\+Found}!Lib\+N\+M\+Interface@{Lib\+N\+M\+Interface}}
+\subsubsection{\texorpdfstring{wifi\+Device\+Found()}{wifiDeviceFound()}}
+{\footnotesize\ttfamily bool Lib\+N\+M\+Interface\+::wifi\+Device\+Found (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Check if the network manager found a valid wifi device. 
+
+Implements \mbox{\hyperlink{classWifiStateManager_1_1NetworkInterface_a0c2675d835715d956315d9e04e2667f9}{Wifi\+State\+Manager\+::\+Network\+Interface}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Hardware/\+Wifi/\mbox{\hyperlink{LibNMInterface_8h}{Lib\+N\+M\+Interface.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Hardware/\+Wifi/\mbox{\hyperlink{LibNMInterface_8cpp}{Lib\+N\+M\+Interface.\+cpp}}\end{DoxyCompactItemize}

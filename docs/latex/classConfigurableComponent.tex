@@ -1,0 +1,102 @@
+\hypertarget{classConfigurableComponent}{}\section{Configurable\+Component Class Reference}
+\label{classConfigurableComponent}\index{Configurable\+Component@{Configurable\+Component}}
+
+
+{\ttfamily \#include $<$Configurable\+Component.\+h$>$}
+
+Inheritance diagram for Configurable\+Component\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.962963cm]{classConfigurableComponent}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classConfigurableComponent_ad3ba70fac3d8420b25b0005e406dd30c}{Configurable\+Component}} (const String \&component\+Key)
+\item 
+virtual \mbox{\hyperlink{classConfigurableComponent_ab5b5120910e7579e9209fde6065e3d38}{$\sim$\+Configurable\+Component}} ()
+\item 
+virtual void \mbox{\hyperlink{classConfigurableComponent_ad6a11482af604e0f93699c1c24e39fba}{apply\+Config\+Bounds}} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classConfigurableComponent_a394fbc2f6a8b3dc9210464d3d6efa212}{apply\+Config\+Assets}} (String\+Array asset\+Names, Array$<$ Colour $>$ colours)
+\item 
+virtual void \mbox{\hyperlink{classConfigurableComponent_ab6a55a5e7aff6798bdbc5cafa85443d4}{extra\+Config\+Value\+Changed}} (String key)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classConfigurableComponent_ad3ba70fac3d8420b25b0005e406dd30c}\label{classConfigurableComponent_ad3ba70fac3d8420b25b0005e406dd30c}} 
+\index{Configurable\+Component@{Configurable\+Component}!Configurable\+Component@{Configurable\+Component}}
+\index{Configurable\+Component@{Configurable\+Component}!Configurable\+Component@{Configurable\+Component}}
+\subsubsection{\texorpdfstring{Configurable\+Component()}{ConfigurableComponent()}}
+{\footnotesize\ttfamily Configurable\+Component\+::\+Configurable\+Component (\begin{DoxyParamCaption}\item[{const String \&}]{component\+Key }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em component\+Key} & Sets the component\+Key that defines this component\textquotesingle{}s bounds and asset files. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classConfigurableComponent_ab5b5120910e7579e9209fde6065e3d38}\label{classConfigurableComponent_ab5b5120910e7579e9209fde6065e3d38}} 
+\index{Configurable\+Component@{Configurable\+Component}!````~Configurable\+Component@{$\sim$\+Configurable\+Component}}
+\index{````~Configurable\+Component@{$\sim$\+Configurable\+Component}!Configurable\+Component@{Configurable\+Component}}
+\subsubsection{\texorpdfstring{$\sim$\+Configurable\+Component()}{~ConfigurableComponent()}}
+{\footnotesize\ttfamily virtual Configurable\+Component\+::$\sim$\+Configurable\+Component (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classConfigurableComponent_a394fbc2f6a8b3dc9210464d3d6efa212}\label{classConfigurableComponent_a394fbc2f6a8b3dc9210464d3d6efa212}} 
+\index{Configurable\+Component@{Configurable\+Component}!apply\+Config\+Assets@{apply\+Config\+Assets}}
+\index{apply\+Config\+Assets@{apply\+Config\+Assets}!Configurable\+Component@{Configurable\+Component}}
+\subsubsection{\texorpdfstring{apply\+Config\+Assets()}{applyConfigAssets()}}
+{\footnotesize\ttfamily virtual void Configurable\+Component\+::apply\+Config\+Assets (\begin{DoxyParamCaption}\item[{String\+Array}]{asset\+Names,  }\item[{Array$<$ Colour $>$}]{colours }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+This method passes in asset file names and asset color values when the component is created, and whenever those values change in configuration.
+
+By default, this will do nothing, inheriting classes are responsible for implementing any useful behavior.
+
+
+\begin{DoxyParams}{Parameters}
+{\em asset\+Names} & A list of file names to load from the program asset folder.\\
+\hline
+{\em colours} & An optional list of Colour objects to use for recoloring image assets. Standard component colors should be loaded through the component\textquotesingle{}s Look\+And\+Feel, not through here.\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{PokeLookAndFeel_8h}{Poke\+Look\+And\+Feel.\+h}} 
+\end{DoxySeeAlso}
+
+
+Reimplemented in \mbox{\hyperlink{classConfigurableImageComponent_ad7670a14df8fd20780f91d85db2ec542}{Configurable\+Image\+Component}}.
+
+\mbox{\Hypertarget{classConfigurableComponent_ad6a11482af604e0f93699c1c24e39fba}\label{classConfigurableComponent_ad6a11482af604e0f93699c1c24e39fba}} 
+\index{Configurable\+Component@{Configurable\+Component}!apply\+Config\+Bounds@{apply\+Config\+Bounds}}
+\index{apply\+Config\+Bounds@{apply\+Config\+Bounds}!Configurable\+Component@{Configurable\+Component}}
+\subsubsection{\texorpdfstring{apply\+Config\+Bounds()}{applyConfigBounds()}}
+{\footnotesize\ttfamily void Configurable\+Component\+::apply\+Config\+Bounds (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Load and apply this component\textquotesingle{}s relative bounds from config. All sizes and coordinates are relative to the application window size. Any coordinates or dimensions that are not defined in config will remain unchanged.
+
+Load and apply this component\textquotesingle{}s relative bounds from config. \mbox{\Hypertarget{classConfigurableComponent_ab6a55a5e7aff6798bdbc5cafa85443d4}\label{classConfigurableComponent_ab6a55a5e7aff6798bdbc5cafa85443d4}} 
+\index{Configurable\+Component@{Configurable\+Component}!extra\+Config\+Value\+Changed@{extra\+Config\+Value\+Changed}}
+\index{extra\+Config\+Value\+Changed@{extra\+Config\+Value\+Changed}!Configurable\+Component@{Configurable\+Component}}
+\subsubsection{\texorpdfstring{extra\+Config\+Value\+Changed()}{extraConfigValueChanged()}}
+{\footnotesize\ttfamily virtual void Configurable\+Component\+::extra\+Config\+Value\+Changed (\begin{DoxyParamCaption}\item[{String}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Handles updates to any tracked config key values other than the one defining the component. Inheriting classes should override this instead of load\+Config\+Properties.
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The updated data value\textquotesingle{}s key. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Configurable/\mbox{\hyperlink{ConfigurableComponent_8h}{Configurable\+Component.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Configurable/\mbox{\hyperlink{ConfigurableComponent_8cpp}{Configurable\+Component.\+cpp}}\end{DoxyCompactItemize}

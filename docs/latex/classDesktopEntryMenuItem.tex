@@ -1,0 +1,276 @@
+\hypertarget{classDesktopEntryMenuItem}{}\section{Desktop\+Entry\+Menu\+Item Class Reference}
+\label{classDesktopEntryMenuItem}\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+
+
+{\ttfamily \#include $<$Desktop\+Entry\+Menu\+Item.\+h$>$}
+
+Inheritance diagram for Desktop\+Entry\+Menu\+Item\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classDesktopEntryMenuItem}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classDesktopEntryMenuItem_a50adefcfca937d39fff8d79375637642}{Desktop\+Entry\+Menu\+Item}} (const \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} \&desktop\+Entry)
+\item 
+virtual \mbox{\hyperlink{classDesktopEntryMenuItem_abf055f6a6556a065821761bb7c3235df}{$\sim$\+Desktop\+Entry\+Menu\+Item}} ()
+\item 
+bool \mbox{\hyperlink{classDesktopEntryMenuItem_aad1d7a68badcde44cd25344e3b8382ab}{is\+Folder}} () const override
+\item 
+String \mbox{\hyperlink{classDesktopEntryMenuItem_a778402e3f98d1a2a64c9f6939b7aef8e}{get\+App\+Name}} () const override
+\item 
+String \mbox{\hyperlink{classDesktopEntryMenuItem_a544130c3a2984272cd80955dd3c9126d}{get\+Command}} () const override
+\item 
+bool \mbox{\hyperlink{classDesktopEntryMenuItem_a6018762c850c13febc94792c81dd7e33}{is\+Terminal\+App}} () const override
+\item 
+String\+Array \mbox{\hyperlink{classDesktopEntryMenuItem_a1bf16bd033c09fca27c950d45717c862}{get\+Categories}} () const override
+\item 
+String \mbox{\hyperlink{classDesktopEntryMenuItem_ad65fc5b9d5d94280ab02708cedbf742c}{get\+Icon\+Name}} () const override
+\item 
+bool \mbox{\hyperlink{classDesktopEntryMenuItem_a4c0415f2a01c9634efa99e9a78a39458}{changes\+Desktop\+Entries}} () const override
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual String \mbox{\hyperlink{classDesktopEntryMenuItem_a4ec791310ca94a2e9e5d3fab24656502}{get\+Confirm\+Delete\+Title}} () const override
+\item 
+virtual String \mbox{\hyperlink{classDesktopEntryMenuItem_ae08d54a981ea02f2fcac9a8aba51e65f}{get\+Confirm\+Delete\+Message}} () const override
+\item 
+virtual bool \mbox{\hyperlink{classDesktopEntryMenuItem_a6fcceaef6c50610d94fdec1f3f6e4dd5}{has\+Editable\+Categories}} () const override
+\item 
+virtual bool \mbox{\hyperlink{classDesktopEntryMenuItem_a60ed757bf4ebe33537b7204d005ecc78}{has\+Editable\+Command}} () const override
+\item 
+virtual String \mbox{\hyperlink{classDesktopEntryMenuItem_a0b57ee9d99e2ddf037ba8fe91c725bab}{get\+Editor\+Title}} () const override
+\item 
+std\+::function$<$ void(\mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} $\ast$) $>$ \mbox{\hyperlink{classDesktopEntryMenuItem_a5f32e4ceb94436758097c546aa22928f}{get\+Editor\+Callback}} () override
+\item 
+bool \mbox{\hyperlink{classDesktopEntryMenuItem_a299ebe632156d897ccbde21519ed72e4}{remove\+Menu\+Item\+Source}} () override
+\item 
+void \mbox{\hyperlink{classDesktopEntryMenuItem_a4c8c78e253fb65da989fc0643962865f}{edit\+Entry}} (String name, String icon, String\+Array categories, String command, bool use\+Terminal)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a50adefcfca937d39fff8d79375637642}\label{classDesktopEntryMenuItem_a50adefcfca937d39fff8d79375637642}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{Desktop\+Entry\+Menu\+Item()}{DesktopEntryMenuItem()}}
+{\footnotesize\ttfamily Desktop\+Entry\+Menu\+Item\+::\+Desktop\+Entry\+Menu\+Item (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} \&}]{desktop\+Entry }\end{DoxyParamCaption})}
+
+Create a new menu item representing a \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} 
+\begin{DoxyParams}{Parameters}
+{\em desktop\+Entry} & defines the application/directory data \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDesktopEntryMenuItem_abf055f6a6556a065821761bb7c3235df}\label{classDesktopEntryMenuItem_abf055f6a6556a065821761bb7c3235df}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!````~Desktop\+Entry\+Menu\+Item@{$\sim$\+Desktop\+Entry\+Menu\+Item}}
+\index{````~Desktop\+Entry\+Menu\+Item@{$\sim$\+Desktop\+Entry\+Menu\+Item}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{$\sim$\+Desktop\+Entry\+Menu\+Item()}{~DesktopEntryMenuItem()}}
+{\footnotesize\ttfamily virtual Desktop\+Entry\+Menu\+Item\+::$\sim$\+Desktop\+Entry\+Menu\+Item (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a4c0415f2a01c9634efa99e9a78a39458}\label{classDesktopEntryMenuItem_a4c0415f2a01c9634efa99e9a78a39458}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!changes\+Desktop\+Entries@{changes\+Desktop\+Entries}}
+\index{changes\+Desktop\+Entries@{changes\+Desktop\+Entries}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{changes\+Desktop\+Entries()}{changesDesktopEntries()}}
+{\footnotesize\ttfamily bool Desktop\+Entry\+Menu\+Item\+::changes\+Desktop\+Entries (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+true, changes to this menu item change the current user\textquotesingle{}s .Desktop files 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a692765630ee15b4acdedc62d2d2e15d8}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a4c8c78e253fb65da989fc0643962865f}\label{classDesktopEntryMenuItem_a4c8c78e253fb65da989fc0643962865f}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!edit\+Entry@{edit\+Entry}}
+\index{edit\+Entry@{edit\+Entry}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{edit\+Entry()}{editEntry()}}
+{\footnotesize\ttfamily void Desktop\+Entry\+Menu\+Item\+::edit\+Entry (\begin{DoxyParamCaption}\item[{String}]{name,  }\item[{String}]{icon,  }\item[{String\+Array}]{categories,  }\item[{String}]{command,  }\item[{bool}]{use\+Terminal }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Update this button\textquotesingle{}s desktop\+Entry. This writes to $\sim$/.local/share/applications, so changes will only affect the current user. 
+\begin{DoxyParams}{Parameters}
+{\em name} & application display name \\
+\hline
+{\em icon} & application icon \\
+\hline
+{\em categories} & application categories \\
+\hline
+{\em command} & application launch command \\
+\hline
+{\em use\+Terminal} & sets if this launches in a terminal window \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a778402e3f98d1a2a64c9f6939b7aef8e}\label{classDesktopEntryMenuItem_a778402e3f98d1a2a64c9f6939b7aef8e}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!get\+App\+Name@{get\+App\+Name}}
+\index{get\+App\+Name@{get\+App\+Name}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+App\+Name()}{getAppName()}}
+{\footnotesize\ttfamily String Desktop\+Entry\+Menu\+Item\+::get\+App\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the display name of the associated application 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_aef18401da6511ac234ccbb2d2131fcad}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a1bf16bd033c09fca27c950d45717c862}\label{classDesktopEntryMenuItem_a1bf16bd033c09fca27c950d45717c862}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!get\+Categories@{get\+Categories}}
+\index{get\+Categories@{get\+Categories}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Categories()}{getCategories()}}
+{\footnotesize\ttfamily String\+Array Desktop\+Entry\+Menu\+Item\+::get\+Categories (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+all application categories linked to this menu item. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a4d944a13d50b5156d77d0d735c7a0a90}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a544130c3a2984272cd80955dd3c9126d}\label{classDesktopEntryMenuItem_a544130c3a2984272cd80955dd3c9126d}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!get\+Command@{get\+Command}}
+\index{get\+Command@{get\+Command}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Command()}{getCommand()}}
+{\footnotesize\ttfamily String Desktop\+Entry\+Menu\+Item\+::get\+Command (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+application shell command or directory path. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_ab56357ca864c4cedc9caed1118498670}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_ae08d54a981ea02f2fcac9a8aba51e65f}\label{classDesktopEntryMenuItem_ae08d54a981ea02f2fcac9a8aba51e65f}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!get\+Confirm\+Delete\+Message@{get\+Confirm\+Delete\+Message}}
+\index{get\+Confirm\+Delete\+Message@{get\+Confirm\+Delete\+Message}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Confirm\+Delete\+Message()}{getConfirmDeleteMessage()}}
+{\footnotesize\ttfamily String Desktop\+Entry\+Menu\+Item\+::get\+Confirm\+Delete\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Gets appropriate descriptive text for a deletion confirmation window. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_ac5922f3ac33054ecd54bb3fab692d639}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a4ec791310ca94a2e9e5d3fab24656502}\label{classDesktopEntryMenuItem_a4ec791310ca94a2e9e5d3fab24656502}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!get\+Confirm\+Delete\+Title@{get\+Confirm\+Delete\+Title}}
+\index{get\+Confirm\+Delete\+Title@{get\+Confirm\+Delete\+Title}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Confirm\+Delete\+Title()}{getConfirmDeleteTitle()}}
+{\footnotesize\ttfamily String Desktop\+Entry\+Menu\+Item\+::get\+Confirm\+Delete\+Title (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Get an appropriate title to use for a deletion confirmation window. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a93bd0cf3b4e28d09a4975023b383c1dc}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a5f32e4ceb94436758097c546aa22928f}\label{classDesktopEntryMenuItem_a5f32e4ceb94436758097c546aa22928f}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!get\+Editor\+Callback@{get\+Editor\+Callback}}
+\index{get\+Editor\+Callback@{get\+Editor\+Callback}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Editor\+Callback()}{getEditorCallback()}}
+{\footnotesize\ttfamily std\+::function$<$ void(\mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} $\ast$) $>$ Desktop\+Entry\+Menu\+Item\+::get\+Editor\+Callback (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Gets a \mbox{\hyperlink{classPopupEditorComponent}{Popup\+Editor\+Component}} callback function that will apply changes from an \mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} to this menu item. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_af742017ff127e5f36da1e206205c86ee}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a0b57ee9d99e2ddf037ba8fe91c725bab}\label{classDesktopEntryMenuItem_a0b57ee9d99e2ddf037ba8fe91c725bab}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!get\+Editor\+Title@{get\+Editor\+Title}}
+\index{get\+Editor\+Title@{get\+Editor\+Title}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Editor\+Title()}{getEditorTitle()}}
+{\footnotesize\ttfamily String Desktop\+Entry\+Menu\+Item\+::get\+Editor\+Title (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the title to display over an editor for this menu item. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a4f0501780311afb7630d99b9e84a5c9d}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_ad65fc5b9d5d94280ab02708cedbf742c}\label{classDesktopEntryMenuItem_ad65fc5b9d5d94280ab02708cedbf742c}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!get\+Icon\+Name@{get\+Icon\+Name}}
+\index{get\+Icon\+Name@{get\+Icon\+Name}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Icon\+Name()}{getIconName()}}
+{\footnotesize\ttfamily String Desktop\+Entry\+Menu\+Item\+::get\+Icon\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the name or path used to load the icon file. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a7c5b3d84b4fa24009e0618e0e3cd804e}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a6fcceaef6c50610d94fdec1f3f6e4dd5}\label{classDesktopEntryMenuItem_a6fcceaef6c50610d94fdec1f3f6e4dd5}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!has\+Editable\+Categories@{has\+Editable\+Categories}}
+\index{has\+Editable\+Categories@{has\+Editable\+Categories}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{has\+Editable\+Categories()}{hasEditableCategories()}}
+{\footnotesize\ttfamily virtual bool Desktop\+Entry\+Menu\+Item\+::has\+Editable\+Categories (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+true iff this menu item has categories that can be edited. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_aa9656d7c1a2dd93bd02f119c0efbb2e0}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a60ed757bf4ebe33537b7204d005ecc78}\label{classDesktopEntryMenuItem_a60ed757bf4ebe33537b7204d005ecc78}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!has\+Editable\+Command@{has\+Editable\+Command}}
+\index{has\+Editable\+Command@{has\+Editable\+Command}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{has\+Editable\+Command()}{hasEditableCommand()}}
+{\footnotesize\ttfamily virtual bool Desktop\+Entry\+Menu\+Item\+::has\+Editable\+Command (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+true iff this menu item has a command that can be edited. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a295fde428e713a8c891dc19b5048c373}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_aad1d7a68badcde44cd25344e3b8382ab}\label{classDesktopEntryMenuItem_aad1d7a68badcde44cd25344e3b8382ab}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!is\+Folder@{is\+Folder}}
+\index{is\+Folder@{is\+Folder}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{is\+Folder()}{isFolder()}}
+{\footnotesize\ttfamily bool Desktop\+Entry\+Menu\+Item\+::is\+Folder (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+true if this menu item is an application folder 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a8246d80e6cec284fa67a69eb8fa12354}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a6018762c850c13febc94792c81dd7e33}\label{classDesktopEntryMenuItem_a6018762c850c13febc94792c81dd7e33}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!is\+Terminal\+App@{is\+Terminal\+App}}
+\index{is\+Terminal\+App@{is\+Terminal\+App}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{is\+Terminal\+App()}{isTerminalApp()}}
+{\footnotesize\ttfamily bool Desktop\+Entry\+Menu\+Item\+::is\+Terminal\+App (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+true iff this menu item is an application that launches in the terminal. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_ac8e0c435f1e5dcf67dff223d819f6a2d}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classDesktopEntryMenuItem_a299ebe632156d897ccbde21519ed72e4}\label{classDesktopEntryMenuItem_a299ebe632156d897ccbde21519ed72e4}} 
+\index{Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}!remove\+Menu\+Item\+Source@{remove\+Menu\+Item\+Source}}
+\index{remove\+Menu\+Item\+Source@{remove\+Menu\+Item\+Source}!Desktop\+Entry\+Menu\+Item@{Desktop\+Entry\+Menu\+Item}}
+\subsubsection{\texorpdfstring{remove\+Menu\+Item\+Source()}{removeMenuItemSource()}}
+{\footnotesize\ttfamily bool Desktop\+Entry\+Menu\+Item\+::remove\+Menu\+Item\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Removes the source of this menu item\textquotesingle{}s data. This will hide the desktop entry from pocket-\/home, but leave it otherwise unchanged and accessible to other programs.
+
+\begin{DoxyReturn}{Returns}
+true iff the source was removed.
+\end{DoxyReturn}
+Sets this menu items desktop\+Entry to not display in pocket-\/home for the current user. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a5a156a436279e0319c7960ac2931b14d}{App\+Menu\+Item}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\+Menu Items/\mbox{\hyperlink{DesktopEntryMenuItem_8h}{Desktop\+Entry\+Menu\+Item.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\+Menu Items/\mbox{\hyperlink{DesktopEntryMenuItem_8cpp}{Desktop\+Entry\+Menu\+Item.\+cpp}}\end{DoxyCompactItemize}

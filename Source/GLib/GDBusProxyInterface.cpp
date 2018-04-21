@@ -24,6 +24,11 @@ GDBusProxyInterface::GDBusProxyInterface
 
 GVariant* GDBusProxyInterface::callMethod(const char *  methodName, GVariant* params)
 {
+    if(params != nullptr && !g_variant_is_container(params))
+    {
+        GVariant* tuple = g_variant_new_tuple(&params, 1);
+        params = tuple;
+    }
     GError * error = nullptr;
     GVariant* result = g_dbus_proxy_call_sync(proxy,
             methodName,
@@ -38,6 +43,22 @@ GVariant* GDBusProxyInterface::callMethod(const char *  methodName, GVariant* pa
                 << ": calling DBus adapter proxy method "
                 << methodName << " failed!");
         DBG("Error: " << String(error->message));
+    }
+    if(result != nullptr  && g_variant_is_container(result))
+    {
+        gsize resultSize = g_variant_n_children(result);
+        if(resultSize == 0)
+        {
+            g_variant_unref(result);
+            return nullptr;
+        }
+        else if(resultSize == 1)
+        {
+            GVariant* extracted = nullptr;
+            g_variant_get(result, "(*)" , &extracted);
+            g_variant_unref(result);
+            result = extracted;
+        }
     }
     return result;
 }

@@ -4796,6 +4796,12 @@
       <df name="dev scripts">
       </df>
       <df name="docs">
+        <df name="html">
+          <df name="search">
+          </df>
+        </df>
+        <df name="latex">
+        </df>
       </df>
       <df name="JuceLibraryCode">
         <in>AppConfig.h</in>
@@ -5009,6 +5015,12 @@
           <in>ConfigFile.cpp</in>
           <in>MainConfigFile.cpp</in>
         </df>
+        <df name="GLib">
+          <in>GDBusProxyInterface.cpp</in>
+          <in>GDBusProxyInterface.h</in>
+          <in>GVariantConverter.cpp</in>
+          <in>GVariantConverter.h</in>
+        </df>
         <df name="Hardware">
           <df name="Bluetooth">
             <in>BluetoothDevice.cpp</in>
@@ -5017,13 +5029,8 @@
             <in>BluetoothStatus.h</in>
             <in>BluezAdapter.cpp</in>
             <in>BluezAdapter.h</in>
-            <in>GDBusInterface.cpp</in>
-            <in>GDBusInterface.h</in>
-            <in>GDBusObject.cpp</in>
-            <in>GDBusObject.h</in>
             <in>GDBusProxyObject.cpp</in>
             <in>GVariantConverter.cpp</in>
-            <in>GVariantConverter.h</in>
           </df>
           <df name="Wifi">
             <in>JsonWifiInterface.cpp</in>
@@ -5032,6 +5039,10 @@
             <in>LibNMHandler.h</in>
             <in>LibNMInterface.cpp</in>
             <in>LibNMInterface.h</in>
+            <in>SavedConnection.cpp</in>
+            <in>SavedConnection.h</in>
+            <in>SavedConnections.cpp</in>
+            <in>SavedConnections.h</in>
             <in>WifiAccessPoint.cpp</in>
             <in>WifiAccessPoint.h</in>
             <in>WifiDebugOutput.h</in>

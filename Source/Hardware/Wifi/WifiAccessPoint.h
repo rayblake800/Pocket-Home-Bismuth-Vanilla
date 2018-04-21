@@ -13,7 +13,7 @@ class WifiAccessPoint : public ReferenceCountedObject
 {
 public:
     typedef ReferenceCountedObjectPtr<WifiAccessPoint> Ptr;
-    
+
     /**
      * Create an access point object using LibNM access point data and optional
      * saved connection data.
@@ -119,8 +119,8 @@ public:
      * 
      * @return the access point SSID, for debugging use only.
      */
-    const String& toString() const;    
-        
+    const String& toString() const;
+
     /**
      * Checks if this access point is compatible with a given connection.
      * 
@@ -128,7 +128,7 @@ public:
      *          doesn't have a different non-null saved connection.  
      */
     bool isConnectionCompatible(NMConnection* connection) const;
-    
+
     /**
      * Checks if this access point and another both share a network
      * 
@@ -139,7 +139,7 @@ public:
      */
     bool sharesConnectionWith(WifiAccessPoint::Ptr otherAP) const;
 
-      
+
     /**
      * @return the access point device mode 
      */
@@ -159,7 +159,7 @@ public:
      * @return all RSN security flags 
      */
     NM80211ApSecurityFlags getRSNFlags() const;
-    
+
     /**
      * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.
      */
@@ -186,7 +186,7 @@ public:
      * @return this access point's LibNM access point object 
      */
     NMAccessPoint* getNMAccessPoint();
-    
+
     /**
      * Gets this access point's connection object.  If it has no connection
      * object, a new one will be created and returned.
@@ -194,7 +194,7 @@ public:
      * @return this access point's connection object.
      */
     NMConnection* getNMConnection();
-    
+
     /**
      * Assigns a new connection to this access point. This will fail if a valid
      * connection is already assigned, or if the new connection is not valid
@@ -205,7 +205,7 @@ public:
      * @return true iff the new connection was set.
      */
     bool setNMConnection(NMConnection* newConnection);
-    
+
     /**
      * Saves a new security key for this access point's connection.
      * 
@@ -213,12 +213,18 @@ public:
      *             valid for the access point's security type.
      */
     void setPsk(String psk);
-    
+
     /**
      * Removes the security key saved for this access point.  This should only 
      * be done when the saved key turns out to be invalid. 
      */
     void removePsk();
+
+    /**
+     * Gets an SSID byte array from the saved connection or access point.  If
+     * possible, the value from the saved connection will be used first.
+     */
+    const GByteArray* getSSIDBytes();
 
 private:
     /**
@@ -230,13 +236,6 @@ private:
      * writing.
      */
     void registerSignalHandlers();
-    
-    /**
-     * Gets an SSID byte array from the saved connection or access point.  If
-     * possible, the value from the saved connection will be used first.
-     */
-    const GByteArray* getSSIDBytes
-    (NMAccessPoint* ap, NMConnection* conn = nullptr);
 
     /**
      * Generates a hash value for a list of access point parameters that will
@@ -294,7 +293,7 @@ private:
     NM80211ApSecurityFlags wpaFlags;
     NM80211ApSecurityFlags rsnFlags;
     gulong updateSignalId = 0;
-    
+
     NMAccessPoint* nmAccessPoint = nullptr;
-    NMConnection*  networkConnection = nullptr;
+    NMConnection* networkConnection = nullptr;
 };

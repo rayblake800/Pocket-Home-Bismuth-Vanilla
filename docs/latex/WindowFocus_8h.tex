@@ -1,0 +1,23 @@
+\hypertarget{WindowFocus_8h}{}\section{/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Util/\+Window\+Focus.h File Reference}
+\label{WindowFocus_8h}\index{/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Util/\+Window\+Focus.\+h@{/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Util/\+Window\+Focus.\+h}}
+{\ttfamily \#include \char`\"{}Juce\+Header.\+h\char`\"{}}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classWindowFocus_1_1BroadcastWindow}{Window\+Focus\+::\+Broadcast\+Window}}
+\item 
+class \mbox{\hyperlink{classWindowFocus_1_1Listener}{Window\+Focus\+::\+Listener}}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespaceWindowFocus}{Window\+Focus}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Defines \mbox{\hyperlink{classWindowFocus_1_1Listener}{Window\+Focus\+::\+Listener}} and \mbox{\hyperlink{classWindowFocus_1_1BroadcastWindow}{Window\+Focus\+::\+Broadcast\+Window}}.
+
+Whenever a Broadcast\+Window gains or loses focus, it will notify all Listeners of the focus change event.
+
+Since all background tasks absolutely must shut down when the window loses focus and restore themselves when it regains focus, Listener objects will automatically register themselves on creation and unregister themselves on destruction. 

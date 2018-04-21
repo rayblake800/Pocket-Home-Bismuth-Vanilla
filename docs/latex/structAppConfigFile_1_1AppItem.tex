@@ -1,0 +1,104 @@
+\hypertarget{structAppConfigFile_1_1AppItem}{}\section{App\+Config\+File\+:\+:App\+Item Struct Reference}
+\label{structAppConfigFile_1_1AppItem}\index{App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}}
+
+
+{\ttfamily \#include $<$App\+Config\+File.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structAppConfigFile_1_1AppItem_a89719db20b034986d64a0dd294dac1a8}{App\+Item}} ()
+\item 
+\mbox{\hyperlink{structAppConfigFile_1_1AppItem_a13b53e6a54c637e25c398d9d0d671a44}{App\+Item}} (var json\+Obj)
+\item 
+Dynamic\+Object $\ast$ \mbox{\hyperlink{structAppConfigFile_1_1AppItem_aeb7a307ccf35208d4ac6e99896cf36a4}{get\+Dynamic\+Object}} ()
+\item 
+bool \mbox{\hyperlink{structAppConfigFile_1_1AppItem_a59f1da2494ec22640457936c74e2761e}{operator==}} (const \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}} \&rhs) const
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+String \mbox{\hyperlink{structAppConfigFile_1_1AppItem_aeaf1017ffc17a97da64da86187468597}{name}}
+\item 
+String \mbox{\hyperlink{structAppConfigFile_1_1AppItem_a66b909148010e5c478eadc968c426947}{icon}}
+\item 
+String \mbox{\hyperlink{structAppConfigFile_1_1AppItem_aff5793aa12da18b14753f9647e627f39}{shell}}
+\item 
+bool \mbox{\hyperlink{structAppConfigFile_1_1AppItem_a378ce5972f077ca6c5a2a3c6986ce16f}{launch\+In\+Terminal}} = false
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Represents an application pinned to the main menu 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structAppConfigFile_1_1AppItem_a89719db20b034986d64a0dd294dac1a8}\label{structAppConfigFile_1_1AppItem_a89719db20b034986d64a0dd294dac1a8}} 
+\index{App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}!App\+Item@{App\+Item}}
+\index{App\+Item@{App\+Item}!App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}}
+\subsubsection{\texorpdfstring{App\+Item()}{AppItem()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily App\+Config\+File\+::\+App\+Item\+::\+App\+Item (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{structAppConfigFile_1_1AppItem_a13b53e6a54c637e25c398d9d0d671a44}\label{structAppConfigFile_1_1AppItem_a13b53e6a54c637e25c398d9d0d671a44}} 
+\index{App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}!App\+Item@{App\+Item}}
+\index{App\+Item@{App\+Item}!App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}}
+\subsubsection{\texorpdfstring{App\+Item()}{AppItem()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily App\+Config\+File\+::\+App\+Item\+::\+App\+Item (\begin{DoxyParamCaption}\item[{var}]{json\+Obj }\end{DoxyParamCaption})}
+
+Load an \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}} from json file data.
+
+
+\begin{DoxyParams}{Parameters}
+{\em json\+Obj} & Load an \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}} from json file data. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structAppConfigFile_1_1AppItem_aeb7a307ccf35208d4ac6e99896cf36a4}\label{structAppConfigFile_1_1AppItem_aeb7a307ccf35208d4ac6e99896cf36a4}} 
+\index{App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}!get\+Dynamic\+Object@{get\+Dynamic\+Object}}
+\index{get\+Dynamic\+Object@{get\+Dynamic\+Object}!App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}}
+\subsubsection{\texorpdfstring{get\+Dynamic\+Object()}{getDynamicObject()}}
+{\footnotesize\ttfamily Dynamic\+Object $\ast$ App\+Config\+File\+::\+App\+Item\+::get\+Dynamic\+Object (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}} data stored as a Dynamic\+Object$\ast$ that can be written to json. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structAppConfigFile_1_1AppItem_a59f1da2494ec22640457936c74e2761e}\label{structAppConfigFile_1_1AppItem_a59f1da2494ec22640457936c74e2761e}} 
+\index{App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}!operator==@{operator==}}
+\index{operator==@{operator==}!App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool App\+Config\+File\+::\+App\+Item\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structAppConfigFile_1_1AppItem}{App\+Item}} \&}]{rhs }\end{DoxyParamCaption}) const}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structAppConfigFile_1_1AppItem_a66b909148010e5c478eadc968c426947}\label{structAppConfigFile_1_1AppItem_a66b909148010e5c478eadc968c426947}} 
+\index{App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}!icon@{icon}}
+\index{icon@{icon}!App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}}
+\subsubsection{\texorpdfstring{icon}{icon}}
+{\footnotesize\ttfamily String App\+Config\+File\+::\+App\+Item\+::icon}
+
+\mbox{\Hypertarget{structAppConfigFile_1_1AppItem_a378ce5972f077ca6c5a2a3c6986ce16f}\label{structAppConfigFile_1_1AppItem_a378ce5972f077ca6c5a2a3c6986ce16f}} 
+\index{App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}!launch\+In\+Terminal@{launch\+In\+Terminal}}
+\index{launch\+In\+Terminal@{launch\+In\+Terminal}!App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}}
+\subsubsection{\texorpdfstring{launch\+In\+Terminal}{launchInTerminal}}
+{\footnotesize\ttfamily bool App\+Config\+File\+::\+App\+Item\+::launch\+In\+Terminal = false}
+
+\mbox{\Hypertarget{structAppConfigFile_1_1AppItem_aeaf1017ffc17a97da64da86187468597}\label{structAppConfigFile_1_1AppItem_aeaf1017ffc17a97da64da86187468597}} 
+\index{App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}!name@{name}}
+\index{name@{name}!App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}}
+\subsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily String App\+Config\+File\+::\+App\+Item\+::name}
+
+\mbox{\Hypertarget{structAppConfigFile_1_1AppItem_aff5793aa12da18b14753f9647e627f39}\label{structAppConfigFile_1_1AppItem_aff5793aa12da18b14753f9647e627f39}} 
+\index{App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}!shell@{shell}}
+\index{shell@{shell}!App\+Config\+File\+::\+App\+Item@{App\+Config\+File\+::\+App\+Item}}
+\subsubsection{\texorpdfstring{shell}{shell}}
+{\footnotesize\ttfamily String App\+Config\+File\+::\+App\+Item\+::shell}
+
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{AppConfigFile_8h}{App\+Config\+File.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{AppConfigFile_8cpp}{App\+Config\+File.\+cpp}}\end{DoxyCompactItemize}

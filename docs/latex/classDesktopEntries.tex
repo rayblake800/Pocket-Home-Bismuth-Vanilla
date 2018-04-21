@@ -1,0 +1,130 @@
+\hypertarget{classDesktopEntries}{}\section{Desktop\+Entries Class Reference}
+\label{classDesktopEntries}\index{Desktop\+Entries@{Desktop\+Entries}}
+
+
+{\ttfamily \#include $<$Desktop\+Entries.\+h$>$}
+
+Inheritance diagram for Desktop\+Entries\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classDesktopEntries}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classDesktopEntries_a99529c8954741328beed7ae78dc6b285}{Desktop\+Entries}} ()
+\item 
+virtual \mbox{\hyperlink{classDesktopEntries_a28a96ba644a65f67d75791b5ef34c385}{$\sim$\+Desktop\+Entries}} ()
+\item 
+int \mbox{\hyperlink{classDesktopEntries_a03a12d03f4b47e7bff920df1a29e7afe}{size}} ()
+\item 
+std\+::set$<$ \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} $>$ \mbox{\hyperlink{classDesktopEntries_a4c6b03297e85398db665df5df63fd168}{get\+Category\+Entries}} (String category)
+\item 
+std\+::set$<$ \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} $>$ \mbox{\hyperlink{classDesktopEntries_acc37ea433350d3be03a4665a14ce8b97}{get\+Category\+List\+Entries}} (String\+Array category\+List)
+\item 
+std\+::set$<$ String $>$ \mbox{\hyperlink{classDesktopEntries_ae3fadcd522793a38145d0815143532d9}{get\+Categories}} ()
+\item 
+void \mbox{\hyperlink{classDesktopEntries_a719f4190cf4c0fcc9edb807c8b5814ba}{load\+Entries}} (std\+::function$<$ void(String) $>$ notify\+Callback=std\+::function$<$ void(String)$>$(), std\+::function$<$ void() $>$ on\+Finish=std\+::function$<$ void()$>$())
+\item 
+void \mbox{\hyperlink{classDesktopEntries_aa72574a699efbc9b35f700b0e3f62bc3}{clear\+Callbacks}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classDesktopEntries_a99529c8954741328beed7ae78dc6b285}\label{classDesktopEntries_a99529c8954741328beed7ae78dc6b285}} 
+\index{Desktop\+Entries@{Desktop\+Entries}!Desktop\+Entries@{Desktop\+Entries}}
+\index{Desktop\+Entries@{Desktop\+Entries}!Desktop\+Entries@{Desktop\+Entries}}
+\subsubsection{\texorpdfstring{Desktop\+Entries()}{DesktopEntries()}}
+{\footnotesize\ttfamily Desktop\+Entries\+::\+Desktop\+Entries (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classDesktopEntries_a28a96ba644a65f67d75791b5ef34c385}\label{classDesktopEntries_a28a96ba644a65f67d75791b5ef34c385}} 
+\index{Desktop\+Entries@{Desktop\+Entries}!````~Desktop\+Entries@{$\sim$\+Desktop\+Entries}}
+\index{````~Desktop\+Entries@{$\sim$\+Desktop\+Entries}!Desktop\+Entries@{Desktop\+Entries}}
+\subsubsection{\texorpdfstring{$\sim$\+Desktop\+Entries()}{~DesktopEntries()}}
+{\footnotesize\ttfamily Desktop\+Entries\+::$\sim$\+Desktop\+Entries (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classDesktopEntries_aa72574a699efbc9b35f700b0e3f62bc3}\label{classDesktopEntries_aa72574a699efbc9b35f700b0e3f62bc3}} 
+\index{Desktop\+Entries@{Desktop\+Entries}!clear\+Callbacks@{clear\+Callbacks}}
+\index{clear\+Callbacks@{clear\+Callbacks}!Desktop\+Entries@{Desktop\+Entries}}
+\subsubsection{\texorpdfstring{clear\+Callbacks()}{clearCallbacks()}}
+{\footnotesize\ttfamily void Desktop\+Entries\+::clear\+Callbacks (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+This removes the notify\+Callback and on\+Finish callback functions that are currently set to run when the thread finishes loading. This should be called whenever it\textquotesingle{}s necessary to delete an object referenced in the callbacks while desktop entries are still loading.
+
+If entries are currently loading asynchronously, this will signal for them to stop. Unless loading finishes on its own before this has a chance to stop it, the on\+Finish callback to load\+Entries will not be called. \mbox{\Hypertarget{classDesktopEntries_ae3fadcd522793a38145d0815143532d9}\label{classDesktopEntries_ae3fadcd522793a38145d0815143532d9}} 
+\index{Desktop\+Entries@{Desktop\+Entries}!get\+Categories@{get\+Categories}}
+\index{get\+Categories@{get\+Categories}!Desktop\+Entries@{Desktop\+Entries}}
+\subsubsection{\texorpdfstring{get\+Categories()}{getCategories()}}
+{\footnotesize\ttfamily std\+::set$<$ String $>$ Desktop\+Entries\+::get\+Categories (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Finds the list of all categories found in all desktop entries.
+
+\begin{DoxyReturn}{Returns}
+a set of all category entries.
+\end{DoxyReturn}
+Get the list of all categories found in all desktop entries. \mbox{\Hypertarget{classDesktopEntries_a4c6b03297e85398db665df5df63fd168}\label{classDesktopEntries_a4c6b03297e85398db665df5df63fd168}} 
+\index{Desktop\+Entries@{Desktop\+Entries}!get\+Category\+Entries@{get\+Category\+Entries}}
+\index{get\+Category\+Entries@{get\+Category\+Entries}!Desktop\+Entries@{Desktop\+Entries}}
+\subsubsection{\texorpdfstring{get\+Category\+Entries()}{getCategoryEntries()}}
+{\footnotesize\ttfamily std\+::set$<$ \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} $>$ Desktop\+Entries\+::get\+Category\+Entries (\begin{DoxyParamCaption}\item[{String}]{category }\end{DoxyParamCaption})}
+
+Get all \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} objects with a given category name.
+
+
+\begin{DoxyParams}{Parameters}
+{\em category} & The category name to search for.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a set of all matching \mbox{\hyperlink{classDesktopEntries}{Desktop\+Entries}}
+\end{DoxyReturn}
+Get all \mbox{\hyperlink{classDesktopEntries}{Desktop\+Entries}} with a given category name \mbox{\Hypertarget{classDesktopEntries_acc37ea433350d3be03a4665a14ce8b97}\label{classDesktopEntries_acc37ea433350d3be03a4665a14ce8b97}} 
+\index{Desktop\+Entries@{Desktop\+Entries}!get\+Category\+List\+Entries@{get\+Category\+List\+Entries}}
+\index{get\+Category\+List\+Entries@{get\+Category\+List\+Entries}!Desktop\+Entries@{Desktop\+Entries}}
+\subsubsection{\texorpdfstring{get\+Category\+List\+Entries()}{getCategoryListEntries()}}
+{\footnotesize\ttfamily std\+::set$<$ \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} $>$ Desktop\+Entries\+::get\+Category\+List\+Entries (\begin{DoxyParamCaption}\item[{String\+Array}]{category\+List }\end{DoxyParamCaption})}
+
+Finds all \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} objects within several categories.
+
+
+\begin{DoxyParams}{Parameters}
+{\em category\+List} & One or more application category names.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the set of all \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} objects with at least one of the category values in the category list.
+\end{DoxyReturn}
+Get a list of all \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} objects within several categories \mbox{\Hypertarget{classDesktopEntries_a719f4190cf4c0fcc9edb807c8b5814ba}\label{classDesktopEntries_a719f4190cf4c0fcc9edb807c8b5814ba}} 
+\index{Desktop\+Entries@{Desktop\+Entries}!load\+Entries@{load\+Entries}}
+\index{load\+Entries@{load\+Entries}!Desktop\+Entries@{Desktop\+Entries}}
+\subsubsection{\texorpdfstring{load\+Entries()}{loadEntries()}}
+{\footnotesize\ttfamily void Desktop\+Entries\+::load\+Entries (\begin{DoxyParamCaption}\item[{std\+::function$<$ void(String) $>$}]{notify\+Callback = {\ttfamily std\+:\+:function$<$void(String)$>$()},  }\item[{std\+::function$<$ void() $>$}]{on\+Finish = {\ttfamily std\+:\+:function$<$void()$>$()} }\end{DoxyParamCaption})}
+
+Discards any existing entry data and asynchronously reload all desktop entries from the file system.
+
+
+\begin{DoxyParams}{Parameters}
+{\em notify\+Callback} & An optional callback function to send loading progress update strings. This will be called asynchronously on the message thread.\\
+\hline
+{\em on\+Finish} & An optional callback function to run on completion. This will be called asynchronously on the message thread.\\
+\hline
+\end{DoxyParams}
+Discards any existing entry data and reloads all desktop entries from the file system. \mbox{\Hypertarget{classDesktopEntries_a03a12d03f4b47e7bff920df1a29e7afe}\label{classDesktopEntries_a03a12d03f4b47e7bff920df1a29e7afe}} 
+\index{Desktop\+Entries@{Desktop\+Entries}!size@{size}}
+\index{size@{size}!Desktop\+Entries@{Desktop\+Entries}}
+\subsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily int Desktop\+Entries\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+the number of stored \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} objects
+\end{DoxyReturn}
+return the number of stored \mbox{\hyperlink{classDesktopEntry}{Desktop\+Entry}} objects 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\mbox{\hyperlink{DesktopEntries_8h}{Desktop\+Entries.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\mbox{\hyperlink{DesktopEntries_8cpp}{Desktop\+Entries.\+cpp}}\end{DoxyCompactItemize}

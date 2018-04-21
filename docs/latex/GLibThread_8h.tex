@@ -1,0 +1,24 @@
+\hypertarget{GLibThread_8h}{}\section{/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+G\+Lib\+Thread.h File Reference}
+\label{GLibThread_8h}\index{/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+G\+Lib\+Thread.\+h@{/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+G\+Lib\+Thread.\+h}}
+
+
+\mbox{\hyperlink{classGLibThread}{G\+Lib\+Thread}} runs a G\+Lib event loop on a separate thread.  
+
+
+{\ttfamily \#include $<$mutex$>$}\newline
+{\ttfamily \#include $<$condition\+\_\+variable$>$}\newline
+{\ttfamily \#include \char`\"{}gio/gio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Juce\+Header.\+h\char`\"{}}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classGLibThread}{G\+Lib\+Thread}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\mbox{\hyperlink{classGLibThread}{G\+Lib\+Thread}} runs a G\+Lib event loop on a separate thread. 
+
+On creation, this starts up a G\+Lib event thread to handle events associated with a G\+Main\+Context provided on creation. This G\+Main\+Context will be set as the thread default context. This context will be available through the get\+Context method, so that it can be used to add signal sources and signal handlers to this thread.
+
+\mbox{\hyperlink{classGLibThread}{G\+Lib\+Thread}} also provides methods for synchronously or asynchronously executing code within the thread. These should be used to handle all interactions with G\+Lib object tied to the thread context, unless those objects are explicitly guaranteed to be thread-\/safe. 

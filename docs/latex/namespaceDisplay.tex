@@ -1,0 +1,63 @@
+\hypertarget{namespaceDisplay}{}\section{Display Namespace Reference}
+\label{namespaceDisplay}\index{Display@{Display}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{namespaceDisplay_a0bdcda0e79ba7d0fcf25c6e31256ce02}{get\+Brightness}} ()
+\item 
+void \mbox{\hyperlink{namespaceDisplay_a6965f1373908aadf49a66f4537835ed5}{set\+Brightness}} (const int \&brightness)
+\item 
+Rectangle$<$ int $>$ \mbox{\hyperlink{namespaceDisplay_a712b05610783ba22b437222e777e7ce5}{get\+Display\+Size}} ()
+\item 
+Rectangle$<$ int $>$ \mbox{\hyperlink{namespaceDisplay_afd822a7c63a9a91adba3c8db2b14e34a}{get\+Window\+Size}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespaceDisplay_a0bdcda0e79ba7d0fcf25c6e31256ce02}\label{namespaceDisplay_a0bdcda0e79ba7d0fcf25c6e31256ce02}} 
+\index{Display@{Display}!get\+Brightness@{get\+Brightness}}
+\index{get\+Brightness@{get\+Brightness}!Display@{Display}}
+\subsubsection{\texorpdfstring{get\+Brightness()}{getBrightness()}}
+{\footnotesize\ttfamily int Display\+::get\+Brightness (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the current display brightness level.
+
+\begin{DoxyReturn}{Returns}
+display brightness, as an integer between 1 and 10.
+\end{DoxyReturn}
+Gets the current display brightness level. \mbox{\Hypertarget{namespaceDisplay_a712b05610783ba22b437222e777e7ce5}\label{namespaceDisplay_a712b05610783ba22b437222e777e7ce5}} 
+\index{Display@{Display}!get\+Display\+Size@{get\+Display\+Size}}
+\index{get\+Display\+Size@{get\+Display\+Size}!Display@{Display}}
+\subsubsection{\texorpdfstring{get\+Display\+Size()}{getDisplaySize()}}
+{\footnotesize\ttfamily Rectangle$<$ int $>$ Display\+::get\+Display\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the size of the active display.
+
+\begin{DoxyReturn}{Returns}
+the size of the display, measured in pixels. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceDisplay_afd822a7c63a9a91adba3c8db2b14e34a}\label{namespaceDisplay_afd822a7c63a9a91adba3c8db2b14e34a}} 
+\index{Display@{Display}!get\+Window\+Size@{get\+Window\+Size}}
+\index{get\+Window\+Size@{get\+Window\+Size}!Display@{Display}}
+\subsubsection{\texorpdfstring{get\+Window\+Size()}{getWindowSize()}}
+{\footnotesize\ttfamily Rectangle$<$ int $>$ Display\+::get\+Window\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the size of the single application window.
+
+\begin{DoxyReturn}{Returns}
+the size of the active window, measured in pixels.
+\end{DoxyReturn}
+Gets the size of the single application window. \mbox{\Hypertarget{namespaceDisplay_a6965f1373908aadf49a66f4537835ed5}\label{namespaceDisplay_a6965f1373908aadf49a66f4537835ed5}} 
+\index{Display@{Display}!set\+Brightness@{set\+Brightness}}
+\index{set\+Brightness@{set\+Brightness}!Display@{Display}}
+\subsubsection{\texorpdfstring{set\+Brightness()}{setBrightness()}}
+{\footnotesize\ttfamily void Display\+::set\+Brightness (\begin{DoxyParamCaption}\item[{const int \&}]{brightness }\end{DoxyParamCaption})}
+
+Sets the display brightness level.
+
+
+\begin{DoxyParams}{Parameters}
+{\em brightness} & This should be an integer between 1 and 10. Values outside of this range will be rounded to the closest valid integer.\\
+\hline
+\end{DoxyParams}
+Sets the display brightness level. 

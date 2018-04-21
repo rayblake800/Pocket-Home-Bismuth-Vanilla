@@ -26,12 +26,19 @@ namespace GVariantConverter
         uint64Type,
         doubleType,
         stringType,
+        byteStringType,
         arrayType,
         dictType,
         unsupported
     };
     
+    GVariant* unpack(GVariant* container);
+    
     VariantType getType(GVariant* variant);
+    
+    GType getGType(GVariant* variant);
+    
+    GValue getGValue(GVariant* variant);
     
     String toString(GVariant* variant);
     

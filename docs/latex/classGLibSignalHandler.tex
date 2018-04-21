@@ -1,0 +1,83 @@
+\hypertarget{classGLibSignalHandler}{}\section{G\+Lib\+Signal\+Handler Class Reference}
+\label{classGLibSignalHandler}\index{G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}}
+
+
+{\ttfamily \#include $<$G\+Lib\+Signal\+Handler.\+h$>$}
+
+Inheritance diagram for G\+Lib\+Signal\+Handler\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classGLibSignalHandler}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGLibSignalHandler_ae99630e0eb20b2f755187a48dcc9b814}{G\+Lib\+Signal\+Handler}} ()
+\item 
+virtual \mbox{\hyperlink{classGLibSignalHandler_a026fd58f52f4b6a3cc51bf0a329d89fe}{$\sim$\+G\+Lib\+Signal\+Handler}} ()
+\item 
+bool \mbox{\hyperlink{classGLibSignalHandler_a9456898f16d7cb736a591099187637e4}{running\+On\+G\+Lib\+Thread}} ()
+\item 
+void \mbox{\hyperlink{classGLibSignalHandler_a4d9f6408798f02a193ac21847712f981}{g\+Lib\+Call\+Async}} (std\+::function$<$ void() $>$ fn)
+\item 
+void \mbox{\hyperlink{classGLibSignalHandler_a3784efcec39f3f007c06f0f88cda794d}{g\+Lib\+Call}} (std\+::function$<$ void() $>$ fn)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classGLibSignalHandler_ae99630e0eb20b2f755187a48dcc9b814}\label{classGLibSignalHandler_ae99630e0eb20b2f755187a48dcc9b814}} 
+\index{G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}!G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}}
+\index{G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}!G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}}
+\subsubsection{\texorpdfstring{G\+Lib\+Signal\+Handler()}{GLibSignalHandler()}}
+{\footnotesize\ttfamily G\+Lib\+Signal\+Handler\+::\+G\+Lib\+Signal\+Handler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGLibSignalHandler_a026fd58f52f4b6a3cc51bf0a329d89fe}\label{classGLibSignalHandler_a026fd58f52f4b6a3cc51bf0a329d89fe}} 
+\index{G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}!````~G\+Lib\+Signal\+Handler@{$\sim$\+G\+Lib\+Signal\+Handler}}
+\index{````~G\+Lib\+Signal\+Handler@{$\sim$\+G\+Lib\+Signal\+Handler}!G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}}
+\subsubsection{\texorpdfstring{$\sim$\+G\+Lib\+Signal\+Handler()}{~GLibSignalHandler()}}
+{\footnotesize\ttfamily virtual G\+Lib\+Signal\+Handler\+::$\sim$\+G\+Lib\+Signal\+Handler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classGLibSignalHandler_a3784efcec39f3f007c06f0f88cda794d}\label{classGLibSignalHandler_a3784efcec39f3f007c06f0f88cda794d}} 
+\index{G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}!g\+Lib\+Call@{g\+Lib\+Call}}
+\index{g\+Lib\+Call@{g\+Lib\+Call}!G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}}
+\subsubsection{\texorpdfstring{g\+Lib\+Call()}{gLibCall()}}
+{\footnotesize\ttfamily void G\+Lib\+Signal\+Handler\+::g\+Lib\+Call (\begin{DoxyParamCaption}\item[{std\+::function$<$ void() $>$}]{fn }\end{DoxyParamCaption})}
+
+Run a function on the G\+Lib event loop, waiting until the function has finished.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fn} & A function that needs to run on the G\+Lib event loop.\\
+\hline
+\end{DoxyParams}
+Run a function on the G\+Lib event loop, yielding until the function has finished. \mbox{\Hypertarget{classGLibSignalHandler_a4d9f6408798f02a193ac21847712f981}\label{classGLibSignalHandler_a4d9f6408798f02a193ac21847712f981}} 
+\index{G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}!g\+Lib\+Call\+Async@{g\+Lib\+Call\+Async}}
+\index{g\+Lib\+Call\+Async@{g\+Lib\+Call\+Async}!G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}}
+\subsubsection{\texorpdfstring{g\+Lib\+Call\+Async()}{gLibCallAsync()}}
+{\footnotesize\ttfamily void G\+Lib\+Signal\+Handler\+::g\+Lib\+Call\+Async (\begin{DoxyParamCaption}\item[{std\+::function$<$ void() $>$}]{fn }\end{DoxyParamCaption})}
+
+Asynchronously run a function once on the default G\+Lib event loop.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fn} & A function that needs to run on the G\+Lib event loop.\\
+\hline
+\end{DoxyParams}
+Asynchronously run a function once on the G\+Lib event loop. \mbox{\Hypertarget{classGLibSignalHandler_a9456898f16d7cb736a591099187637e4}\label{classGLibSignalHandler_a9456898f16d7cb736a591099187637e4}} 
+\index{G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}!running\+On\+G\+Lib\+Thread@{running\+On\+G\+Lib\+Thread}}
+\index{running\+On\+G\+Lib\+Thread@{running\+On\+G\+Lib\+Thread}!G\+Lib\+Signal\+Handler@{G\+Lib\+Signal\+Handler}}
+\subsubsection{\texorpdfstring{running\+On\+G\+Lib\+Thread()}{runningOnGLibThread()}}
+{\footnotesize\ttfamily bool G\+Lib\+Signal\+Handler\+::running\+On\+G\+Lib\+Thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns true if it\textquotesingle{}s being executed on the G\+Lib default event thread.
+
+Returns true if it\textquotesingle{}s being executed on the G\+Lib event thread. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\mbox{\hyperlink{GLibSignalHandler_8h}{G\+Lib\+Signal\+Handler.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\mbox{\hyperlink{GLibSignalHandler_8cpp}{G\+Lib\+Signal\+Handler.\+cpp}}\end{DoxyCompactItemize}

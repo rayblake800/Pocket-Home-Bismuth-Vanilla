@@ -1,0 +1,101 @@
+\hypertarget{classI2CBus}{}\section{I2\+C\+Bus Class Reference}
+\label{classI2CBus}\index{I2\+C\+Bus@{I2\+C\+Bus}}
+
+
+{\ttfamily \#include $<$I2\+C\+Bus.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structI2CBus_1_1I2CException}{I2\+C\+Exception}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classI2CBus_ac6ff4433440a77e9978080e848917930}{I2\+C\+Bus}} ()
+\item 
+virtual \mbox{\hyperlink{classI2CBus_a70dac2923cd16ce06f0e73f7fc5bca89}{$\sim$\+I2\+C\+Bus}} ()
+\item 
+bool \mbox{\hyperlink{classI2CBus_a54c84733e096f9f08338c18072a02f71}{battery\+Is\+Charging}} ()
+\item 
+int \mbox{\hyperlink{classI2CBus_a41d93fe98984595078aea7b54f475fbe}{battery\+Gauge\+Percent}} ()
+\item 
+void \mbox{\hyperlink{classI2CBus_ac92bf5730bad62c9118e47eac2f8f69a}{enable\+Fel\+Mode}} ()
+\item 
+void \mbox{\hyperlink{classI2CBus_a963f9df4208f99c796cede0552ca83ba}{i2c\+Close}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classI2CBus_ac6ff4433440a77e9978080e848917930}\label{classI2CBus_ac6ff4433440a77e9978080e848917930}} 
+\index{I2\+C\+Bus@{I2\+C\+Bus}!I2\+C\+Bus@{I2\+C\+Bus}}
+\index{I2\+C\+Bus@{I2\+C\+Bus}!I2\+C\+Bus@{I2\+C\+Bus}}
+\subsubsection{\texorpdfstring{I2\+C\+Bus()}{I2CBus()}}
+{\footnotesize\ttfamily I2\+C\+Bus\+::\+I2\+C\+Bus (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classI2CBus_a70dac2923cd16ce06f0e73f7fc5bca89}\label{classI2CBus_a70dac2923cd16ce06f0e73f7fc5bca89}} 
+\index{I2\+C\+Bus@{I2\+C\+Bus}!````~I2\+C\+Bus@{$\sim$\+I2\+C\+Bus}}
+\index{````~I2\+C\+Bus@{$\sim$\+I2\+C\+Bus}!I2\+C\+Bus@{I2\+C\+Bus}}
+\subsubsection{\texorpdfstring{$\sim$\+I2\+C\+Bus()}{~I2CBus()}}
+{\footnotesize\ttfamily I2\+C\+Bus\+::$\sim$\+I2\+C\+Bus (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+If the i2c bus file is still open at this point, it will be closed. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classI2CBus_a41d93fe98984595078aea7b54f475fbe}\label{classI2CBus_a41d93fe98984595078aea7b54f475fbe}} 
+\index{I2\+C\+Bus@{I2\+C\+Bus}!battery\+Gauge\+Percent@{battery\+Gauge\+Percent}}
+\index{battery\+Gauge\+Percent@{battery\+Gauge\+Percent}!I2\+C\+Bus@{I2\+C\+Bus}}
+\subsubsection{\texorpdfstring{battery\+Gauge\+Percent()}{batteryGaugePercent()}}
+{\footnotesize\ttfamily int I2\+C\+Bus\+::battery\+Gauge\+Percent (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Reads the battery charge percentage from the i2c bus.
+
+\begin{DoxyReturn}{Returns}
+the percent of battery life remaining, between 0-\/100.
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \mbox{\hyperlink{structI2CBus_1_1I2CException}{I2\+C\+Exception}}} & if unable to access the i2c bus.\\
+\hline
+\end{DoxyExceptions}
+Reads the battery charge percentage from the i2c bus. \mbox{\Hypertarget{classI2CBus_a54c84733e096f9f08338c18072a02f71}\label{classI2CBus_a54c84733e096f9f08338c18072a02f71}} 
+\index{I2\+C\+Bus@{I2\+C\+Bus}!battery\+Is\+Charging@{battery\+Is\+Charging}}
+\index{battery\+Is\+Charging@{battery\+Is\+Charging}!I2\+C\+Bus@{I2\+C\+Bus}}
+\subsubsection{\texorpdfstring{battery\+Is\+Charging()}{batteryIsCharging()}}
+{\footnotesize\ttfamily bool I2\+C\+Bus\+::battery\+Is\+Charging (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Reads the battery charge state from the i2c bus.
+
+\begin{DoxyReturn}{Returns}
+true iff the battery is currently charging.
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \mbox{\hyperlink{structI2CBus_1_1I2CException}{I2\+C\+Exception}}} & if unable to access the i2c bus\\
+\hline
+\end{DoxyExceptions}
+Reads the battery charge state from the i2c bus. \mbox{\Hypertarget{classI2CBus_ac92bf5730bad62c9118e47eac2f8f69a}\label{classI2CBus_ac92bf5730bad62c9118e47eac2f8f69a}} 
+\index{I2\+C\+Bus@{I2\+C\+Bus}!enable\+Fel\+Mode@{enable\+Fel\+Mode}}
+\index{enable\+Fel\+Mode@{enable\+Fel\+Mode}!I2\+C\+Bus@{I2\+C\+Bus}}
+\subsubsection{\texorpdfstring{enable\+Fel\+Mode()}{enableFelMode()}}
+{\footnotesize\ttfamily void I2\+C\+Bus\+::enable\+Fel\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Writes a series of bytes to the i2c bus that will force the system to enter Fel (Flashing) mode after the next restart.
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \mbox{\hyperlink{structI2CBus_1_1I2CException}{I2\+C\+Exception}}} & if unable to access the i2c bus.\\
+\hline
+\end{DoxyExceptions}
+Writes a series of bytes to the i2c bus that will force the system to enter Fel (Flashing) mode after the next restart. \mbox{\Hypertarget{classI2CBus_a963f9df4208f99c796cede0552ca83ba}\label{classI2CBus_a963f9df4208f99c796cede0552ca83ba}} 
+\index{I2\+C\+Bus@{I2\+C\+Bus}!i2c\+Close@{i2c\+Close}}
+\index{i2c\+Close@{i2c\+Close}!I2\+C\+Bus@{I2\+C\+Bus}}
+\subsubsection{\texorpdfstring{i2c\+Close()}{i2cClose()}}
+{\footnotesize\ttfamily void I2\+C\+Bus\+::i2c\+Close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+If the i2c bus file was opened, this will close it. Otherwise, nothing will happen. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Hardware/\mbox{\hyperlink{I2CBus_8h}{I2\+C\+Bus.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Hardware/\mbox{\hyperlink{I2CBus_8cpp}{I2\+C\+Bus.\+cpp}}\end{DoxyCompactItemize}

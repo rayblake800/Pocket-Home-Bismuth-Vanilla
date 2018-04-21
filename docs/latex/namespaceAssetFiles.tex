@@ -1,0 +1,89 @@
+\hypertarget{namespaceAssetFiles}{}\section{Asset\+Files Namespace Reference}
+\label{namespaceAssetFiles}\index{Asset\+Files@{Asset\+Files}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+File \mbox{\hyperlink{namespaceAssetFiles_a5c8bcc68293ec4b5200ada870dc32398}{find\+Asset\+File}} (const String \&asset\+Name, bool look\+Outside\+Assets=true)
+\item 
+Image \mbox{\hyperlink{namespaceAssetFiles_a40e7c07e1d4cbdeb097b7f4350af0050}{load\+Image\+Asset}} (const String \&asset\+Name, bool look\+Outside\+Assets=true)
+\item 
+Drawable $\ast$ \mbox{\hyperlink{namespaceAssetFiles_a8975b48c898f7f632c8a617543c21690}{load\+S\+V\+G\+Drawable}} (const String \&asset\+Name, bool look\+Outside\+Assets=true)
+\item 
+var \mbox{\hyperlink{namespaceAssetFiles_a2dafaffb7079b9b899753e8dc5b4b0df}{load\+J\+S\+O\+N\+Asset}} (const String \&asset\+Name, bool look\+Outside\+Assets=true)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespaceAssetFiles_a5c8bcc68293ec4b5200ada870dc32398}\label{namespaceAssetFiles_a5c8bcc68293ec4b5200ada870dc32398}} 
+\index{Asset\+Files@{Asset\+Files}!find\+Asset\+File@{find\+Asset\+File}}
+\index{find\+Asset\+File@{find\+Asset\+File}!Asset\+Files@{Asset\+Files}}
+\subsubsection{\texorpdfstring{find\+Asset\+File()}{findAssetFile()}}
+{\footnotesize\ttfamily File Asset\+Files\+::find\+Asset\+File (\begin{DoxyParamCaption}\item[{const String \&}]{asset\+Name,  }\item[{bool}]{look\+Outside\+Assets = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Loads an asset file using its asset name.
+
+
+\begin{DoxyParams}{Parameters}
+{\em asset\+Name} & The name of a file in the asset folder.\\
+\hline
+{\em look\+Outside\+Assets} & If the file isn\textquotesingle{}t found in the asset folder, and this value is set to true, find\+Asset\+File will attempt to treat asset\+Name as a path, and load the file from elsewhere in the file system.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the requested file, or an invalid file if nothing was found.
+\end{DoxyReturn}
+Loads an asset file using its asset name. \mbox{\Hypertarget{namespaceAssetFiles_a40e7c07e1d4cbdeb097b7f4350af0050}\label{namespaceAssetFiles_a40e7c07e1d4cbdeb097b7f4350af0050}} 
+\index{Asset\+Files@{Asset\+Files}!load\+Image\+Asset@{load\+Image\+Asset}}
+\index{load\+Image\+Asset@{load\+Image\+Asset}!Asset\+Files@{Asset\+Files}}
+\subsubsection{\texorpdfstring{load\+Image\+Asset()}{loadImageAsset()}}
+{\footnotesize\ttfamily Image Asset\+Files\+::load\+Image\+Asset (\begin{DoxyParamCaption}\item[{const String \&}]{asset\+Name,  }\item[{bool}]{look\+Outside\+Assets = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Creates an Image object from an asset file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em asset\+Name} & The name of an image file in the asset folder.\\
+\hline
+{\em look\+Outside\+Assets} & If the image isn\textquotesingle{}t found in the asset folder, and this value is set to true, find\+Asset\+File will attempt to treat asset\+Name as a path, and load the image from elsewhere in the file system.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the requested file\textquotesingle{}s Image, or Image() if no valid image file was found.
+\end{DoxyReturn}
+Create an Image object from an asset file. \mbox{\Hypertarget{namespaceAssetFiles_a2dafaffb7079b9b899753e8dc5b4b0df}\label{namespaceAssetFiles_a2dafaffb7079b9b899753e8dc5b4b0df}} 
+\index{Asset\+Files@{Asset\+Files}!load\+J\+S\+O\+N\+Asset@{load\+J\+S\+O\+N\+Asset}}
+\index{load\+J\+S\+O\+N\+Asset@{load\+J\+S\+O\+N\+Asset}!Asset\+Files@{Asset\+Files}}
+\subsubsection{\texorpdfstring{load\+J\+S\+O\+N\+Asset()}{loadJSONAsset()}}
+{\footnotesize\ttfamily var Asset\+Files\+::load\+J\+S\+O\+N\+Asset (\begin{DoxyParamCaption}\item[{const String \&}]{asset\+Name,  }\item[{bool}]{look\+Outside\+Assets = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Loads J\+S\+ON data from an asset file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em asset\+Name} & The name of a .json file in the asset folder.\\
+\hline
+{\em look\+Outside\+Assets} & If the .json isn\textquotesingle{}t found in the asset folder, and this value is set to true, find\+Asset\+File will attempt to treat asset\+Name as a path, and load the .json from elsewhere in the file system.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new drawable if the file was valid, nullptr otherwise.
+\end{DoxyReturn}
+Loads J\+S\+ON data from an asset file. \mbox{\Hypertarget{namespaceAssetFiles_a8975b48c898f7f632c8a617543c21690}\label{namespaceAssetFiles_a8975b48c898f7f632c8a617543c21690}} 
+\index{Asset\+Files@{Asset\+Files}!load\+S\+V\+G\+Drawable@{load\+S\+V\+G\+Drawable}}
+\index{load\+S\+V\+G\+Drawable@{load\+S\+V\+G\+Drawable}!Asset\+Files@{Asset\+Files}}
+\subsubsection{\texorpdfstring{load\+S\+V\+G\+Drawable()}{loadSVGDrawable()}}
+{\footnotesize\ttfamily Drawable $\ast$ Asset\+Files\+::load\+S\+V\+G\+Drawable (\begin{DoxyParamCaption}\item[{const String \&}]{asset\+Name,  }\item[{bool}]{look\+Outside\+Assets = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Creates a Drawable object from an svg asset file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em svg\+File} & The name of a .svg file in the asset folder.\\
+\hline
+{\em look\+Outside\+Assets} & If the .svg isn\textquotesingle{}t found in the asset folder, and this value is set to true, find\+Asset\+File will attempt to treat asset\+Name as a path, and load the .svg from elsewhere in the file system.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new drawable if the file was valid, nullptr otherwise.
+\end{DoxyReturn}
+Creates a Drawable object from an svg asset file. 

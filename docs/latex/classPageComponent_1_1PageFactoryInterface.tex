@@ -1,0 +1,81 @@
+\hypertarget{classPageComponent_1_1PageFactoryInterface}{}\section{Page\+Component\+:\+:Page\+Factory\+Interface Class Reference}
+\label{classPageComponent_1_1PageFactoryInterface}\index{Page\+Component\+::\+Page\+Factory\+Interface@{Page\+Component\+::\+Page\+Factory\+Interface}}
+
+
+{\ttfamily \#include $<$Page\+Component.\+h$>$}
+
+Inheritance diagram for Page\+Component\+:\+:Page\+Factory\+Interface\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPageComponent_1_1PageFactoryInterface}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classPageComponent_1_1PageFactoryInterface_a9ee056a5a0fe76215c38312f03fb9514}{$\sim$\+Page\+Factory\+Interface}} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPageComponent_1_1PageFactoryInterface_a2ac3c4c1c22a71468a9238dd5941cde0}{Page\+Factory\+Interface}} ()
+\item 
+\mbox{\hyperlink{classPageComponent}{Page\+Component}} $\ast$ \mbox{\hyperlink{classPageComponent_1_1PageFactoryInterface_a6e32640cdfb7e12b0c7172d74195de56}{set\+Page\+Factory}} (\mbox{\hyperlink{classPageComponent}{Page\+Component}} $\ast$page)
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classPageComponent_1_1PageFactoryInterface_ad38036d55f115286c52feb1c6fcf3b39}{Page\+Component}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Defines the interface between Page\+Components and the \mbox{\hyperlink{classPageFactory}{Page\+Factory}} object that creates new pages to add to the page stack. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classPageComponent_1_1PageFactoryInterface_a9ee056a5a0fe76215c38312f03fb9514}\label{classPageComponent_1_1PageFactoryInterface_a9ee056a5a0fe76215c38312f03fb9514}} 
+\index{Page\+Component\+::\+Page\+Factory\+Interface@{Page\+Component\+::\+Page\+Factory\+Interface}!````~Page\+Factory\+Interface@{$\sim$\+Page\+Factory\+Interface}}
+\index{````~Page\+Factory\+Interface@{$\sim$\+Page\+Factory\+Interface}!Page\+Component\+::\+Page\+Factory\+Interface@{Page\+Component\+::\+Page\+Factory\+Interface}}
+\subsubsection{\texorpdfstring{$\sim$\+Page\+Factory\+Interface()}{~PageFactoryInterface()}}
+{\footnotesize\ttfamily virtual Page\+Component\+::\+Page\+Factory\+Interface\+::$\sim$\+Page\+Factory\+Interface (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{classPageComponent_1_1PageFactoryInterface_a2ac3c4c1c22a71468a9238dd5941cde0}\label{classPageComponent_1_1PageFactoryInterface_a2ac3c4c1c22a71468a9238dd5941cde0}} 
+\index{Page\+Component\+::\+Page\+Factory\+Interface@{Page\+Component\+::\+Page\+Factory\+Interface}!Page\+Factory\+Interface@{Page\+Factory\+Interface}}
+\index{Page\+Factory\+Interface@{Page\+Factory\+Interface}!Page\+Component\+::\+Page\+Factory\+Interface@{Page\+Component\+::\+Page\+Factory\+Interface}}
+\subsubsection{\texorpdfstring{Page\+Factory\+Interface()}{PageFactoryInterface()}}
+{\footnotesize\ttfamily Page\+Component\+::\+Page\+Factory\+Interface\+::\+Page\+Factory\+Interface (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classPageComponent_1_1PageFactoryInterface_a6e32640cdfb7e12b0c7172d74195de56}\label{classPageComponent_1_1PageFactoryInterface_a6e32640cdfb7e12b0c7172d74195de56}} 
+\index{Page\+Component\+::\+Page\+Factory\+Interface@{Page\+Component\+::\+Page\+Factory\+Interface}!set\+Page\+Factory@{set\+Page\+Factory}}
+\index{set\+Page\+Factory@{set\+Page\+Factory}!Page\+Component\+::\+Page\+Factory\+Interface@{Page\+Component\+::\+Page\+Factory\+Interface}}
+\subsubsection{\texorpdfstring{set\+Page\+Factory()}{setPageFactory()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPageComponent}{Page\+Component}} $\ast$ Page\+Component\+::\+Page\+Factory\+Interface\+::set\+Page\+Factory (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classPageComponent}{Page\+Component}} $\ast$}]{page }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Assigns this \mbox{\hyperlink{classPageFactory}{Page\+Factory}} to a \mbox{\hyperlink{classPageComponent}{Page\+Component}}. The \mbox{\hyperlink{classPageFactory}{Page\+Factory}} should call this on every page it creates that should be allowed to open other pages.
+
+
+\begin{DoxyParams}{Parameters}
+{\em page} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+page
+\end{DoxyReturn}
+Assigns this \mbox{\hyperlink{classPageFactory}{Page\+Factory}} to a \mbox{\hyperlink{classPageComponent}{Page\+Component}}. 
+
+\subsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classPageComponent_1_1PageFactoryInterface_ad38036d55f115286c52feb1c6fcf3b39}\label{classPageComponent_1_1PageFactoryInterface_ad38036d55f115286c52feb1c6fcf3b39}} 
+\index{Page\+Component\+::\+Page\+Factory\+Interface@{Page\+Component\+::\+Page\+Factory\+Interface}!Page\+Component@{Page\+Component}}
+\index{Page\+Component@{Page\+Component}!Page\+Component\+::\+Page\+Factory\+Interface@{Page\+Component\+::\+Page\+Factory\+Interface}}
+\subsubsection{\texorpdfstring{Page\+Component}{PageComponent}}
+{\footnotesize\ttfamily friend class \mbox{\hyperlink{classPageComponent}{Page\+Component}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\mbox{\hyperlink{PageComponent_8h}{Page\+Component.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\mbox{\hyperlink{PageComponent_8cpp}{Page\+Component.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,286 @@
+\hypertarget{classFolderMenuItem}{}\section{Folder\+Menu\+Item Class Reference}
+\label{classFolderMenuItem}\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+
+
+{\ttfamily \#include $<$Folder\+Menu\+Item.\+h$>$}
+
+Inheritance diagram for Folder\+Menu\+Item\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classFolderMenuItem}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classFolderMenuItem_aa9047739dfc7d9a9c4a88403e2ad416e}{Folder\+Menu\+Item}} (const \mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Config\+File\+::\+App\+Folder}} \&app\+Folder, \mbox{\hyperlink{classDesktopEntries}{Desktop\+Entries}} \&desktop\+Entries)
+\item 
+virtual \mbox{\hyperlink{classFolderMenuItem_a2052273d4ba80b0bb922a936a41b3f85}{$\sim$\+Folder\+Menu\+Item}} ()
+\item 
+bool \mbox{\hyperlink{classFolderMenuItem_a04f57be51d2e79ca6d5e8ed5cdff7815}{is\+Folder}} () const override
+\item 
+virtual Array$<$ \mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} $>$ \mbox{\hyperlink{classFolderMenuItem_af3b9473a335da9e3cb6ceccbb78c3ea6}{get\+Folder\+Items}} () const override
+\item 
+virtual String \mbox{\hyperlink{classFolderMenuItem_a82ec3210cc211f59b414275dfd60ccb1}{get\+App\+Name}} () const override
+\item 
+virtual String\+Array \mbox{\hyperlink{classFolderMenuItem_ae9026a329e1b9e6111354802624328f5}{get\+Categories}} () const override
+\item 
+virtual String \mbox{\hyperlink{classFolderMenuItem_a0f78f25c3d73abbb3179613b1f40467b}{get\+Icon\+Name}} () const override
+\item 
+virtual bool \mbox{\hyperlink{classFolderMenuItem_a61111b596d78f912bc1573c1ee1d356f}{can\+Change\+Index}} (int offset) const override
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual String \mbox{\hyperlink{classFolderMenuItem_ab3a7232acdc84681c8c31113383471ad}{get\+Confirm\+Delete\+Title}} () const override
+\item 
+virtual String \mbox{\hyperlink{classFolderMenuItem_ae1961598036e3f731d146257cd556d05}{get\+Confirm\+Delete\+Message}} () const override
+\item 
+virtual bool \mbox{\hyperlink{classFolderMenuItem_aff205a81de032f9ce018d65391a8d638}{has\+Editable\+Categories}} () const override
+\item 
+virtual bool \mbox{\hyperlink{classFolderMenuItem_ad38b52ffa7098be2aa8bef09b4013f0e}{has\+Editable\+Command}} () const override
+\item 
+virtual String \mbox{\hyperlink{classFolderMenuItem_a0cd063b5b374a47a0913ff11c4c1a905}{get\+Editor\+Title}} () const override
+\item 
+std\+::function$<$ void(\mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} $\ast$) $>$ \mbox{\hyperlink{classFolderMenuItem_a165416374f830311c0881b568922f9f5}{get\+Editor\+Callback}} () override
+\item 
+bool \mbox{\hyperlink{classFolderMenuItem_a0cddd7f7e2ac8f27e93861f058ca5094}{remove\+Menu\+Item\+Source}} () override
+\item 
+bool \mbox{\hyperlink{classFolderMenuItem_a294208ac148dd8af604edea603d9dcf1}{move\+Data\+Index}} (int offset) override
+\item 
+void \mbox{\hyperlink{classFolderMenuItem_a77305d28e9c8eacbea21e71157f21cf1}{edit\+Folder}} (String name, String icon, String\+Array categories)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classFolderMenuItem_aa9047739dfc7d9a9c4a88403e2ad416e}\label{classFolderMenuItem_aa9047739dfc7d9a9c4a88403e2ad416e}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{Folder\+Menu\+Item()}{FolderMenuItem()}}
+{\footnotesize\ttfamily Folder\+Menu\+Item\+::\+Folder\+Menu\+Item (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structAppConfigFile_1_1AppFolder}{App\+Config\+File\+::\+App\+Folder}} \&}]{app\+Folder,  }\item[{\mbox{\hyperlink{classDesktopEntries}{Desktop\+Entries}} \&}]{desktop\+Entries }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classFolderMenuItem_a2052273d4ba80b0bb922a936a41b3f85}\label{classFolderMenuItem_a2052273d4ba80b0bb922a936a41b3f85}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!````~Folder\+Menu\+Item@{$\sim$\+Folder\+Menu\+Item}}
+\index{````~Folder\+Menu\+Item@{$\sim$\+Folder\+Menu\+Item}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{$\sim$\+Folder\+Menu\+Item()}{~FolderMenuItem()}}
+{\footnotesize\ttfamily virtual Folder\+Menu\+Item\+::$\sim$\+Folder\+Menu\+Item (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classFolderMenuItem_a61111b596d78f912bc1573c1ee1d356f}\label{classFolderMenuItem_a61111b596d78f912bc1573c1ee1d356f}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!can\+Change\+Index@{can\+Change\+Index}}
+\index{can\+Change\+Index@{can\+Change\+Index}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{can\+Change\+Index()}{canChangeIndex()}}
+{\footnotesize\ttfamily bool Folder\+Menu\+Item\+::can\+Change\+Index (\begin{DoxyParamCaption}\item[{int}]{offset }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Return true if this menu item has an index that can be moved by a given amount. 
+\begin{DoxyParams}{Parameters}
+{\em offset} & some value to add to the menu item index \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if this menu item has an index value i that can be changed to i+offset
+\end{DoxyReturn}
+Return true if this menu item has an index that can be moved by a given amount. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a62de7cea03d96eecba40a533fdac6477}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_a77305d28e9c8eacbea21e71157f21cf1}\label{classFolderMenuItem_a77305d28e9c8eacbea21e71157f21cf1}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!edit\+Folder@{edit\+Folder}}
+\index{edit\+Folder@{edit\+Folder}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{edit\+Folder()}{editFolder()}}
+{\footnotesize\ttfamily void Folder\+Menu\+Item\+::edit\+Folder (\begin{DoxyParamCaption}\item[{String}]{name,  }\item[{String}]{icon,  }\item[{String\+Array}]{categories }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Assign new properties to this folder, changing configuration files 
+\begin{DoxyParams}{Parameters}
+{\em name} & folder display name \\
+\hline
+{\em icon} & folder icon image name/path \\
+\hline
+{\em categories} & list of folder application categories\\
+\hline
+\end{DoxyParams}
+Assign new properties to this folder button, changing configuration files 
+\begin{DoxyParams}{Parameters}
+{\em name} & folder display name \\
+\hline
+{\em icon} & folder icon image name/path \\
+\hline
+{\em categories} & list of folder application categories \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classFolderMenuItem_a82ec3210cc211f59b414275dfd60ccb1}\label{classFolderMenuItem_a82ec3210cc211f59b414275dfd60ccb1}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!get\+App\+Name@{get\+App\+Name}}
+\index{get\+App\+Name@{get\+App\+Name}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+App\+Name()}{getAppName()}}
+{\footnotesize\ttfamily String Folder\+Menu\+Item\+::get\+App\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the display name of the associated folder 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_aef18401da6511ac234ccbb2d2131fcad}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_ae9026a329e1b9e6111354802624328f5}\label{classFolderMenuItem_ae9026a329e1b9e6111354802624328f5}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!get\+Categories@{get\+Categories}}
+\index{get\+Categories@{get\+Categories}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Categories()}{getCategories()}}
+{\footnotesize\ttfamily String\+Array Folder\+Menu\+Item\+::get\+Categories (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+all application categories linked to this folder. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a4d944a13d50b5156d77d0d735c7a0a90}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_ae1961598036e3f731d146257cd556d05}\label{classFolderMenuItem_ae1961598036e3f731d146257cd556d05}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!get\+Confirm\+Delete\+Message@{get\+Confirm\+Delete\+Message}}
+\index{get\+Confirm\+Delete\+Message@{get\+Confirm\+Delete\+Message}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Confirm\+Delete\+Message()}{getConfirmDeleteMessage()}}
+{\footnotesize\ttfamily String Folder\+Menu\+Item\+::get\+Confirm\+Delete\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Gets appropriate descriptive text for a deletion confirmation window. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_ac5922f3ac33054ecd54bb3fab692d639}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_ab3a7232acdc84681c8c31113383471ad}\label{classFolderMenuItem_ab3a7232acdc84681c8c31113383471ad}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!get\+Confirm\+Delete\+Title@{get\+Confirm\+Delete\+Title}}
+\index{get\+Confirm\+Delete\+Title@{get\+Confirm\+Delete\+Title}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Confirm\+Delete\+Title()}{getConfirmDeleteTitle()}}
+{\footnotesize\ttfamily String Folder\+Menu\+Item\+::get\+Confirm\+Delete\+Title (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Get an appropriate title to use for a deletion confirmation window. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a93bd0cf3b4e28d09a4975023b383c1dc}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_a165416374f830311c0881b568922f9f5}\label{classFolderMenuItem_a165416374f830311c0881b568922f9f5}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!get\+Editor\+Callback@{get\+Editor\+Callback}}
+\index{get\+Editor\+Callback@{get\+Editor\+Callback}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Editor\+Callback()}{getEditorCallback()}}
+{\footnotesize\ttfamily std\+::function$<$ void(\mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} $\ast$) $>$ Folder\+Menu\+Item\+::get\+Editor\+Callback (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Gets a \mbox{\hyperlink{classPopupEditorComponent}{Popup\+Editor\+Component}} callback function that will apply changes from an \mbox{\hyperlink{classAppMenuPopupEditor}{App\+Menu\+Popup\+Editor}} to this menu item. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_af742017ff127e5f36da1e206205c86ee}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_a0cd063b5b374a47a0913ff11c4c1a905}\label{classFolderMenuItem_a0cd063b5b374a47a0913ff11c4c1a905}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!get\+Editor\+Title@{get\+Editor\+Title}}
+\index{get\+Editor\+Title@{get\+Editor\+Title}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Editor\+Title()}{getEditorTitle()}}
+{\footnotesize\ttfamily String Folder\+Menu\+Item\+::get\+Editor\+Title (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the title to display over an editor for this menu item. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a4f0501780311afb7630d99b9e84a5c9d}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_af3b9473a335da9e3cb6ceccbb78c3ea6}\label{classFolderMenuItem_af3b9473a335da9e3cb6ceccbb78c3ea6}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!get\+Folder\+Items@{get\+Folder\+Items}}
+\index{get\+Folder\+Items@{get\+Folder\+Items}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Folder\+Items()}{getFolderItems()}}
+{\footnotesize\ttfamily Array$<$ \mbox{\hyperlink{classAppMenuItem_ab5f51c5d74f8df62b8862c0cc8126cb7}{App\+Menu\+Item\+::\+Ptr}} $>$ Folder\+Menu\+Item\+::get\+Folder\+Items (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+all menu items in this folder 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a3a9b2ec87af0c063a892753bd64e944a}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_a0f78f25c3d73abbb3179613b1f40467b}\label{classFolderMenuItem_a0f78f25c3d73abbb3179613b1f40467b}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!get\+Icon\+Name@{get\+Icon\+Name}}
+\index{get\+Icon\+Name@{get\+Icon\+Name}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{get\+Icon\+Name()}{getIconName()}}
+{\footnotesize\ttfamily String Folder\+Menu\+Item\+::get\+Icon\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+the name or path used to load the icon file. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a7c5b3d84b4fa24009e0618e0e3cd804e}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_aff205a81de032f9ce018d65391a8d638}\label{classFolderMenuItem_aff205a81de032f9ce018d65391a8d638}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!has\+Editable\+Categories@{has\+Editable\+Categories}}
+\index{has\+Editable\+Categories@{has\+Editable\+Categories}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{has\+Editable\+Categories()}{hasEditableCategories()}}
+{\footnotesize\ttfamily virtual bool Folder\+Menu\+Item\+::has\+Editable\+Categories (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+true, as folder categories can be edited. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_aa9656d7c1a2dd93bd02f119c0efbb2e0}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_ad38b52ffa7098be2aa8bef09b4013f0e}\label{classFolderMenuItem_ad38b52ffa7098be2aa8bef09b4013f0e}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!has\+Editable\+Command@{has\+Editable\+Command}}
+\index{has\+Editable\+Command@{has\+Editable\+Command}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{has\+Editable\+Command()}{hasEditableCommand()}}
+{\footnotesize\ttfamily virtual bool Folder\+Menu\+Item\+::has\+Editable\+Command (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+false, as folders have no command. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a295fde428e713a8c891dc19b5048c373}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_a04f57be51d2e79ca6d5e8ed5cdff7815}\label{classFolderMenuItem_a04f57be51d2e79ca6d5e8ed5cdff7815}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!is\+Folder@{is\+Folder}}
+\index{is\+Folder@{is\+Folder}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{is\+Folder()}{isFolder()}}
+{\footnotesize\ttfamily bool Folder\+Menu\+Item\+::is\+Folder (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Check if this button is for an application folder \begin{DoxyReturn}{Returns}
+true 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a8246d80e6cec284fa67a69eb8fa12354}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_a294208ac148dd8af604edea603d9dcf1}\label{classFolderMenuItem_a294208ac148dd8af604edea603d9dcf1}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!move\+Data\+Index@{move\+Data\+Index}}
+\index{move\+Data\+Index@{move\+Data\+Index}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{move\+Data\+Index()}{moveDataIndex()}}
+{\footnotesize\ttfamily bool Folder\+Menu\+Item\+::move\+Data\+Index (\begin{DoxyParamCaption}\item[{int}]{offset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+If possible, change the index of this menu item by some offset amount. 
+\begin{DoxyParams}{Parameters}
+{\em offset} & will be added to the menu item\textquotesingle{}s current index, if possible. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true iff the operation succeeded.
+\end{DoxyReturn}
+If possible, change the index of this menu item by some offset amount. 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a66b922c9168e1df29f61ca6e98726d16}{App\+Menu\+Item}}.
+
+\mbox{\Hypertarget{classFolderMenuItem_a0cddd7f7e2ac8f27e93861f058ca5094}\label{classFolderMenuItem_a0cddd7f7e2ac8f27e93861f058ca5094}} 
+\index{Folder\+Menu\+Item@{Folder\+Menu\+Item}!remove\+Menu\+Item\+Source@{remove\+Menu\+Item\+Source}}
+\index{remove\+Menu\+Item\+Source@{remove\+Menu\+Item\+Source}!Folder\+Menu\+Item@{Folder\+Menu\+Item}}
+\subsubsection{\texorpdfstring{remove\+Menu\+Item\+Source()}{removeMenuItemSource()}}
+{\footnotesize\ttfamily bool Folder\+Menu\+Item\+::remove\+Menu\+Item\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Removes the source of this menu item\textquotesingle{}s data, deleting the folder from apps.\+json
+
+\begin{DoxyReturn}{Returns}
+true iff the source was removed.
+\end{DoxyReturn}
+Removes the source of this menu item\textquotesingle{}s data, deleting the folder from apps.\+json 
+
+Reimplemented from \mbox{\hyperlink{classAppMenuItem_a5a156a436279e0319c7960ac2931b14d}{App\+Menu\+Item}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\+Menu Items/\mbox{\hyperlink{FolderMenuItem_8h}{Folder\+Menu\+Item.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Components/\+Pages/\+Home Page/\+App\+Menu/\+Menu Items/\mbox{\hyperlink{FolderMenuItem_8cpp}{Folder\+Menu\+Item.\+cpp}}\end{DoxyCompactItemize}

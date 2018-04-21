@@ -1,0 +1,196 @@
+\hypertarget{classMainConfigFile}{}\section{Main\+Config\+File Class Reference}
+\label{classMainConfigFile}\index{Main\+Config\+File@{Main\+Config\+File}}
+
+
+{\ttfamily \#include $<$Main\+Config\+File.\+h$>$}
+
+Inheritance diagram for Main\+Config\+File\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classMainConfigFile}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMainConfigFile_af95264a153df021dc5113554d99d7ffa}{Main\+Config\+File}} ()
+\item 
+virtual \mbox{\hyperlink{classMainConfigFile_a142bd2744550dc97ef0969da0db90e23}{$\sim$\+Main\+Config\+File}} ()
+\item 
+{\footnotesize template$<$typename T $>$ }\\T \mbox{\hyperlink{classMainConfigFile_ab856604112ebd4364fba1a2bbe3755ed}{get\+Config\+Value}} (String key)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{classMainConfigFile_a17371ce4c90e5e4ae04a5adbeae6428e}{set\+Config\+Value}} (String key, T new\+Value)
+\item 
+void \mbox{\hyperlink{classMainConfigFile_a1d1fa50851f5d896f728176a399401d8}{add\+Listener}} (\mbox{\hyperlink{classConfigFile_1_1Listener}{Config\+File\+::\+Listener}} $\ast$listener, String\+Array tracked\+Keys)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_ac58ef6c74a1bcbbb205ba85057d883e6}{max\+Rows\+Key}} = \char`\"{}max menu row count\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_a31bf45762887a072a47366bdcc52fd0d}{max\+Columns\+Key}} = \char`\"{}max menu column count\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_a3df811f08f3de7ab34f688af16591fad}{background\+Key}} = \char`\"{}background\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_a6efa1f589e99f39a780a23ec60ec44d5}{menu\+Type\+Key}} = \char`\"{}app menu type\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_a932e061dfe0eeb6478eb61fa590caa7a}{shutdown\+Command\+Key}} = \char`\"{}shutdown command\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_a0ac923baebcb7449dd3cbf77be0720db}{restart\+Command\+Key}} = \char`\"{}restart command\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_a2e92489b6a6c5c1f5043490ae1025b27}{sleep\+Command\+Key}} = \char`\"{}sleep command\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_ab13bb4440414df9dc1c958332583c84f}{term\+Launch\+Command\+Key}} = \char`\"{}terminal launch command\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_ab4e4470a18947cb402ecaf9287e453a3}{wifi\+Interface\+Key}} = \char`\"{}Wifi interface\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_a70246b438641864c17eca91c189d1eba}{show\+Cursor\+Key}} = \char`\"{}cursor\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_aec2fa3961a0366b2d947b4ed16779e02}{show\+Clock\+Key}} = \char`\"{}show clock\char`\"{}
+\item 
+static const String \mbox{\hyperlink{classMainConfigFile_ac8433e4a6b136435be61b9a348abb131}{use24\+Hr\+Mode\+Key}} = \char`\"{}use 24h mode\char`\"{}
+\item 
+static const String\+Array \mbox{\hyperlink{classMainConfigFile_ab1aa5ad7c36eab3136ce7f5a7227d707}{menu\+Types}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMainConfigFile_af95264a153df021dc5113554d99d7ffa}\label{classMainConfigFile_af95264a153df021dc5113554d99d7ffa}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!Main\+Config\+File@{Main\+Config\+File}}
+\index{Main\+Config\+File@{Main\+Config\+File}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{Main\+Config\+File()}{MainConfigFile()}}
+{\footnotesize\ttfamily Main\+Config\+File\+::\+Main\+Config\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classMainConfigFile_a142bd2744550dc97ef0969da0db90e23}\label{classMainConfigFile_a142bd2744550dc97ef0969da0db90e23}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!````~Main\+Config\+File@{$\sim$\+Main\+Config\+File}}
+\index{````~Main\+Config\+File@{$\sim$\+Main\+Config\+File}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{$\sim$\+Main\+Config\+File()}{~MainConfigFile()}}
+{\footnotesize\ttfamily virtual Main\+Config\+File\+::$\sim$\+Main\+Config\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classMainConfigFile_a1d1fa50851f5d896f728176a399401d8}\label{classMainConfigFile_a1d1fa50851f5d896f728176a399401d8}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!add\+Listener@{add\+Listener}}
+\index{add\+Listener@{add\+Listener}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{add\+Listener()}{addListener()}}
+{\footnotesize\ttfamily void Main\+Config\+File\+::add\+Listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classConfigFile_1_1Listener}{Config\+File\+::\+Listener}} $\ast$}]{listener,  }\item[{String\+Array}]{tracked\+Keys }\end{DoxyParamCaption})}
+
+Add a listener to track setting changes. \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{ConfigFile_8h}{Config\+File.\+h}}
+\end{DoxySeeAlso}
+Add a listener to track component setting changes. \mbox{\Hypertarget{classMainConfigFile_ab856604112ebd4364fba1a2bbe3755ed}\label{classMainConfigFile_ab856604112ebd4364fba1a2bbe3755ed}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!get\+Config\+Value@{get\+Config\+Value}}
+\index{get\+Config\+Value@{get\+Config\+Value}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{get\+Config\+Value()}{getConfigValue()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T Main\+Config\+File\+::get\+Config\+Value (\begin{DoxyParamCaption}\item[{String}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Gets one of the values stored in the json configuration file. \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{ConfigFile_8h}{Config\+File.\+h}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classMainConfigFile_a17371ce4c90e5e4ae04a5adbeae6428e}\label{classMainConfigFile_a17371ce4c90e5e4ae04a5adbeae6428e}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!set\+Config\+Value@{set\+Config\+Value}}
+\index{set\+Config\+Value@{set\+Config\+Value}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{set\+Config\+Value()}{setConfigValue()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Main\+Config\+File\+::set\+Config\+Value (\begin{DoxyParamCaption}\item[{String}]{key,  }\item[{T}]{new\+Value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets one of this \mbox{\hyperlink{classConfigFile}{Config\+File}}\textquotesingle{}s values, writing it to the config file if the value has changed. ~\newline
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{ConfigFile_8h}{Config\+File.\+h}} 
+\end{DoxySeeAlso}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classMainConfigFile_a3df811f08f3de7ab34f688af16591fad}\label{classMainConfigFile_a3df811f08f3de7ab34f688af16591fad}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!background\+Key@{background\+Key}}
+\index{background\+Key@{background\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{background\+Key}{backgroundKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::background\+Key = \char`\"{}background\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_a31bf45762887a072a47366bdcc52fd0d}\label{classMainConfigFile_a31bf45762887a072a47366bdcc52fd0d}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!max\+Columns\+Key@{max\+Columns\+Key}}
+\index{max\+Columns\+Key@{max\+Columns\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{max\+Columns\+Key}{maxColumnsKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::max\+Columns\+Key = \char`\"{}max menu column count\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_ac58ef6c74a1bcbbb205ba85057d883e6}\label{classMainConfigFile_ac58ef6c74a1bcbbb205ba85057d883e6}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!max\+Rows\+Key@{max\+Rows\+Key}}
+\index{max\+Rows\+Key@{max\+Rows\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{max\+Rows\+Key}{maxRowsKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::max\+Rows\+Key = \char`\"{}max menu row count\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_a6efa1f589e99f39a780a23ec60ec44d5}\label{classMainConfigFile_a6efa1f589e99f39a780a23ec60ec44d5}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!menu\+Type\+Key@{menu\+Type\+Key}}
+\index{menu\+Type\+Key@{menu\+Type\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{menu\+Type\+Key}{menuTypeKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::menu\+Type\+Key = \char`\"{}app menu type\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_ab1aa5ad7c36eab3136ce7f5a7227d707}\label{classMainConfigFile_ab1aa5ad7c36eab3136ce7f5a7227d707}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!menu\+Types@{menu\+Types}}
+\index{menu\+Types@{menu\+Types}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{menu\+Types}{menuTypes}}
+{\footnotesize\ttfamily const String\+Array Main\+Config\+File\+::menu\+Types\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{
+                                               \textcolor{stringliteral}{"Scrolling menu"},
+                                               \textcolor{stringliteral}{"Paged menu"}
+\}
+\end{DoxyCode}
+\mbox{\Hypertarget{classMainConfigFile_a0ac923baebcb7449dd3cbf77be0720db}\label{classMainConfigFile_a0ac923baebcb7449dd3cbf77be0720db}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!restart\+Command\+Key@{restart\+Command\+Key}}
+\index{restart\+Command\+Key@{restart\+Command\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{restart\+Command\+Key}{restartCommandKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::restart\+Command\+Key = \char`\"{}restart command\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_aec2fa3961a0366b2d947b4ed16779e02}\label{classMainConfigFile_aec2fa3961a0366b2d947b4ed16779e02}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!show\+Clock\+Key@{show\+Clock\+Key}}
+\index{show\+Clock\+Key@{show\+Clock\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{show\+Clock\+Key}{showClockKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::show\+Clock\+Key = \char`\"{}show clock\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_a70246b438641864c17eca91c189d1eba}\label{classMainConfigFile_a70246b438641864c17eca91c189d1eba}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!show\+Cursor\+Key@{show\+Cursor\+Key}}
+\index{show\+Cursor\+Key@{show\+Cursor\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{show\+Cursor\+Key}{showCursorKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::show\+Cursor\+Key = \char`\"{}cursor\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_a932e061dfe0eeb6478eb61fa590caa7a}\label{classMainConfigFile_a932e061dfe0eeb6478eb61fa590caa7a}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!shutdown\+Command\+Key@{shutdown\+Command\+Key}}
+\index{shutdown\+Command\+Key@{shutdown\+Command\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{shutdown\+Command\+Key}{shutdownCommandKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::shutdown\+Command\+Key = \char`\"{}shutdown command\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_a2e92489b6a6c5c1f5043490ae1025b27}\label{classMainConfigFile_a2e92489b6a6c5c1f5043490ae1025b27}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!sleep\+Command\+Key@{sleep\+Command\+Key}}
+\index{sleep\+Command\+Key@{sleep\+Command\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{sleep\+Command\+Key}{sleepCommandKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::sleep\+Command\+Key = \char`\"{}sleep command\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_ab13bb4440414df9dc1c958332583c84f}\label{classMainConfigFile_ab13bb4440414df9dc1c958332583c84f}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!term\+Launch\+Command\+Key@{term\+Launch\+Command\+Key}}
+\index{term\+Launch\+Command\+Key@{term\+Launch\+Command\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{term\+Launch\+Command\+Key}{termLaunchCommandKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::term\+Launch\+Command\+Key = \char`\"{}terminal launch command\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_ac8433e4a6b136435be61b9a348abb131}\label{classMainConfigFile_ac8433e4a6b136435be61b9a348abb131}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!use24\+Hr\+Mode\+Key@{use24\+Hr\+Mode\+Key}}
+\index{use24\+Hr\+Mode\+Key@{use24\+Hr\+Mode\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{use24\+Hr\+Mode\+Key}{use24HrModeKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::use24\+Hr\+Mode\+Key = \char`\"{}use 24h mode\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classMainConfigFile_ab4e4470a18947cb402ecaf9287e453a3}\label{classMainConfigFile_ab4e4470a18947cb402ecaf9287e453a3}} 
+\index{Main\+Config\+File@{Main\+Config\+File}!wifi\+Interface\+Key@{wifi\+Interface\+Key}}
+\index{wifi\+Interface\+Key@{wifi\+Interface\+Key}!Main\+Config\+File@{Main\+Config\+File}}
+\subsubsection{\texorpdfstring{wifi\+Interface\+Key}{wifiInterfaceKey}}
+{\footnotesize\ttfamily const String Main\+Config\+File\+::wifi\+Interface\+Key = \char`\"{}Wifi interface\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{MainConfigFile_8h}{Main\+Config\+File.\+h}}\item 
+/home/anthony/\+Workspace/\+C++/\+Pocket\+C\+H\+I\+P-\/pocket-\/home/\+Source/\+Shared Resources/\+Config Files/\mbox{\hyperlink{MainConfigFile_8cpp}{Main\+Config\+File.\+cpp}}\end{DoxyCompactItemize}
