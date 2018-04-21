@@ -463,7 +463,17 @@ namespace GVariantConverter
     void iterateDict(GVariant* dict,
             std::function<void(GVariant*, GVariant*) > dictCall)
     {
-        g_assert(g_variant_is_of_type(dict, G_VARIANT_TYPE_DICTIONARY));
+        if(!g_variant_is_of_type(dict, G_VARIANT_TYPE_DICTIONARY))
+        {
+            DBG("GVariantConverter::" << __func__ 
+                    << ": variant is not a dictionary!");
+#ifdef JUCE_DEBUG
+            std::cout << "\tVariant= " << toString(dict) << "\n";
+#endif
+            return;
+        }
+        
+        
         GVariantIter dictIter;
         g_variant_iter_init(&dictIter, dict);
         GVariant * key = nullptr;
@@ -472,6 +482,7 @@ namespace GVariantConverter
         {
 
             if(g_variant_is_container(val) 
+                    && !g_variant_is_of_type(val, G_VARIANT_TYPE_DICTIONARY)
                     && g_variant_n_children(val) == 1)
             {
                 GVariant* temp = unpack(val);

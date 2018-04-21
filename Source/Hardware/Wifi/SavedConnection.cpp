@@ -61,6 +61,7 @@ bool SavedConnection::isWifiConnection()
  */
 NMConnection* SavedConnection::createNMConnection()
 {
+    using namespace GVariantConverter;
     NMConnection* con = nm_connection_new();
     GVariant* settings = callMethod(GET_SETTINGS);
     if (settings != nullptr)
@@ -73,10 +74,9 @@ NMConnection* SavedConnection::createNMConnection()
             if (keyStr.isNotEmpty())
             {
                 //GObject refuses to accept byte arrays packaged in GValues
-                if(GVariantConverter::getGType(val) == G_TYPE_BYTE_ARRAY)
+                if(getGType(val) == G_TYPE_BYTE_ARRAY)
                 {
-                    GByteArray* byteArray 
-                            = GVariantConverter::getValue<GByteArray*>(val);
+                    GByteArray* byteArray = getValue<GByteArray*>(val);
                     g_object_set(G_OBJECT(setting),
                             keyStr.toRawUTF8(),
                             byteArray,
@@ -84,17 +84,17 @@ NMConnection* SavedConnection::createNMConnection()
                 }
                 else
                 {
-                    GValue propValue = GVariantConverter::getGValue(val);
+                    GValue propValue = getGValue(val);
                     g_object_set_property(G_OBJECT(setting), keyStr.toRawUTF8(),
                             &propValue);
                 }
             }
         };
-        GVariantConverter::iterateDict(settings, [this, con, &setting,
+        iterateDict(settings, [this, con, &setting,
                 &copyDict]
                 (GVariant* key, GVariant * val)
         {
-            String keyStr = GVariantConverter::getValue<String>(key);
+            String keyStr = getValue<String>(key);
             if (keyStr == SETTING_CONN)
             {
                 setting = nm_setting_connection_new();
@@ -109,7 +109,7 @@ NMConnection* SavedConnection::createNMConnection()
             }
             if (setting != nullptr)
             {
-                GVariantConverter::iterateDict(val, copyDict);
+                iterateDict(val, copyDict);
                 if (keyStr == SETTING_WIFI_SECURITY)
                 {
                     GVariant* secrets = callMethod(GET_SECRETS,
@@ -120,8 +120,7 @@ NMConnection* SavedConnection::createNMConnection()
                                 (secrets, SETTING_WIFI_SECURITY, nullptr);
                         if (securitySecrets != nullptr)
                         {
-                            GVariantConverter::iterateDict(securitySecrets,
-                                    copyDict);
+                            iterateDict(securitySecrets, copyDict);
                             g_variant_unref(securitySecrets);
                             securitySecrets = nullptr;
                         }
