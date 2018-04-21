@@ -73,8 +73,7 @@ NMConnection* SavedConnection::createNMConnection()
             if (keyStr.isNotEmpty())
             {
                 //GObject refuses to accept byte arrays packaged in GValues
-                if(GVariantConverter::getType(val) 
-                        == GVariantConverter::byteStringType)
+                if(GVariantConverter::getGType(val) == G_TYPE_BYTE_ARRAY)
                 {
                     GByteArray* byteArray 
                             = GVariantConverter::getValue<GByteArray*>(val);
