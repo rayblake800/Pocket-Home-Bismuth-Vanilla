@@ -222,9 +222,9 @@ namespace GVariantConverter
             case stringType:
                 return G_TYPE_STRING;
             case byteStringType:
-                return G_TYPE_BYTE_ARRAY;
             case arrayType:
-                return G_TYPE_ARRAY;
+                return G_TYPE_BYTE_ARRAY;
+                //return G_TYPE_ARRAY;
             case dictType:
             case unsupported:
                 return G_TYPE_INVALID;
