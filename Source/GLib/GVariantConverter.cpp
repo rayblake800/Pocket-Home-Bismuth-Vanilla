@@ -67,7 +67,7 @@ namespace GVariantConverter
         free(array);
         return varArray;
     }
-    
+
     template<> GArray* getValue(GVariant* variant)
     {
         if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_ARRAY))
@@ -76,16 +76,16 @@ namespace GVariantConverter
             return nullptr;
         }
         gsize numChildren = g_variant_n_children(variant);
-        if(numChildren == 0)
+        if (numChildren == 0)
         {
             return nullptr;
         }
-        gsize childSize = g_variant_get_size(variant)/numChildren;
-        
+        gsize childSize = g_variant_get_size(variant) / numChildren;
+
         gconstpointer arrayData = g_variant_get_fixed_array(variant,
-                &numChildren,childSize);
-        GArray* arrayValue = g_array_sized_new(false, true, 
-                g_variant_get_size(variant)/numChildren, numChildren);
+                &numChildren, childSize);
+        GArray* arrayValue = g_array_sized_new(false, true,
+                g_variant_get_size(variant) / numChildren, numChildren);
         g_array_append_vals(arrayValue, arrayData, numChildren);
         return arrayValue;
     }
@@ -212,6 +212,7 @@ namespace GVariantConverter
             case stringType:
                 return G_TYPE_STRING;
             case byteStringType:
+                return G_TYPE_BYTE_ARRAY;
             case arrayType:
                 return G_TYPE_ARRAY;
             case dictType:
@@ -270,11 +271,23 @@ namespace GVariantConverter
                 g_value_set_string(&value, g_variant_get_string(variant, nullptr));
                 break;
             case byteStringType:
+            {
+                GByteArray* array = g_byte_array_new();
+                gsize numBytes = 0;
+                gconstpointer byteData = g_variant_get_fixed_array(variant,
+                        &numBytes, sizeof(guchar));
+                g_byte_array_append(array, (const guint8*) byteData, numBytes);
+                g_value_take_boxed(&value, array);
+                char* debug = g_strdup_value_contents(&value);
+                DBG("Byte array GValue:" << debug);
+                g_free(debug);
+                break;
+            }
             case arrayType:
             {
 
                 GArray* array = getValue<GArray*>(variant);
-                if(array != nullptr)
+                if (array != nullptr)
                 {
                     g_value_take_boxed(&value, array);
                     char* debug = g_strdup_value_contents(&value);

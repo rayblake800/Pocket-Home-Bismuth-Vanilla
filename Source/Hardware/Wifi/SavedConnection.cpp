@@ -109,15 +109,15 @@ NMConnection* SavedConnection::createNMConnection()
                         {
                             GVariantConverter::iterateDict(securitySecrets,
                                     copyDict);
-                                    g_variant_unref(securitySecrets);
-                                    securitySecrets = nullptr;
+                            g_variant_unref(securitySecrets);
+                            securitySecrets = nullptr;
                         }
                         g_variant_unref(secrets);
-                                secrets = nullptr;
+                        secrets = nullptr;
                     }
                 }
                 nm_connection_add_setting(con, setting);
-                        setting = nullptr;
+                setting = nullptr;
             }
         });
     }
