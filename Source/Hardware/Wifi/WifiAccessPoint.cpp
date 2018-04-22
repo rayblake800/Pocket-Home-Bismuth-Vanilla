@@ -458,7 +458,7 @@ void WifiAccessPoint::setPsk(String psk)
         nm_connection_add_setting(networkConnection,
                     NM_SETTING(securitySettings));
         GVariantDict* settingsDict = nullptr;
-        if(hasSavedConnection())
+        if(hasSavedConnection() && psk.isNotEmpty())
         {
             settingsDict = g_variant_dict_new(nullptr);
         }
