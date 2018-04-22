@@ -1,7 +1,6 @@
 #pragma once
 #include <nm-connection.h>
 #include "JuceHeader.h"
-#include "WifiAccessPoint.h"
 #include "GDBusProxyInterface.h"
 
 /**
@@ -14,6 +13,13 @@ class SavedConnection : public GDBusProxyInterface
 {
 public:
     /**
+     * Create an empty object with no linked connection.
+     */
+    SavedConnection();
+    
+    /**
+     * Initialize a SavedConnection from a DBus connection path.
+     * 
      * @param path A valid DBus path to a NetworkManager saved connection.
      */
     SavedConnection(const char* path);
@@ -28,14 +34,40 @@ public:
     bool isWifiConnection();
     
     /**
-     * Create a NMConnection object using this saved connection's data.
+     * Gets the NMConnection object generated from this connection's data.
      * Only wifi connections are supported, others are not guaranteed to work.
      * 
-     * @return the new NMConnection object.
+     * @return the NMConnection object for this connection, or nullptr if the
+     *         connection is invalid.
      */
-    NMConnection* createNMConnection();
+    NMConnection* getNMConnection();
+    
+    /**
+     * Replace the connection's existing wifi security settings.
+     * 
+     * @param newSettings  A GVariant* dictionary used to construct the
+     *                     replacement settings.
+     */
+    void updateWifiSecurity(GVariant* newSettings);
+    
+    /**
+     * Removes any saved WEP key or WPA PSK attached to this connection.
+     */
+    void removeSecurityKey();
+    
+    /**
+     * Deletes this connection from the list of saved connections.  This object
+     * will be invalid after this method is called.
+     */
+    void deleteConnection();
     
 private:
+    /**
+     * Create a NMConnection object using this saved connection's data.
+     * Only wifi connections are supported, others are not guaranteed to work.
+     */
+    void createNMConnection();
+    
     /**
      * Returns one of this connection's settings objects.
      * 
@@ -102,4 +134,6 @@ private:
      *         a property called propName.
      */
     bool hasSettingProperty(const char* settingName, const char* propName);
+    
+    NMConnection* nmConnection = nullptr;
 };

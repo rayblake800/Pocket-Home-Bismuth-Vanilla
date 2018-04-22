@@ -9,9 +9,10 @@
  * saved connection data.
  */
 WifiAccessPoint::WifiAccessPoint
-(NMAccessPoint* accessPoint, NMConnection* savedConnection) : 
+(NMAccessPoint* accessPoint, SavedConnection savedConnection) : 
 nmAccessPoint(accessPoint),
-networkConnection(savedConnection)
+savedConnection(savedConnection),
+networkConnection(savedConnection.getNMConnection())
 {
     if(nmAccessPoint == nullptr)
     {
@@ -161,7 +162,7 @@ bool WifiAccessPoint::getRequiresAuth() const
 bool WifiAccessPoint::hasSavedConnection() const
 {
     const ScopedReadLock readLock(networkUpdateLock);
-    return networkConnection != nullptr;
+    return savedConnection.isValid();
 }
 
 /**
@@ -402,9 +403,17 @@ NMConnection* WifiAccessPoint::getNMConnection()
 bool WifiAccessPoint::setNMConnection(NMConnection* newConnection)
 {
     const ScopedWriteLock updateLock(networkUpdateLock);
-    if(isConnectionCompatible(newConnection))
+    if(!hasSavedConnection() && isConnectionCompatible(newConnection))
     {
+        if(networkConnection != nullptr)
+        {
+            g_object_weak_unref(G_OBJECT(networkConnection),
+                (GWeakNotify) apDestroyedCallback,
+                this);
+        }
         networkConnection = newConnection;
+        savedConnection = SavedConnection
+                (nm_connection_get_path(networkConnection));
         registerSignalHandlers();
         return true;
     }
@@ -448,6 +457,11 @@ void WifiAccessPoint::setPsk(String psk)
                     nm_setting_wireless_security_new();
         nm_connection_add_setting(networkConnection,
                     NM_SETTING(securitySettings));
+        GVariantDict* settingsDict = nullptr;
+        if(hasSavedConnection())
+        {
+            settingsDict = g_variant_dict_new(nullptr);
+        }
         if(security == securedWEP)
         {
             DBG("WifiAccessPoint::" << __func__
@@ -455,19 +469,23 @@ void WifiAccessPoint::setPsk(String psk)
             /* WEP */
             nm_setting_wireless_security_set_wep_key
                     (securitySettings, 0, psk.toRawUTF8());
+            if(settingsDict != nullptr)
+            {
+                g_variant_dict_insert_value(settingsDict,
+                        NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
+                        g_variant_new_variant(
+                        g_variant_new_string(psk.toRawUTF8())));
+            }
             //valid key format: length 10 or length 26
+            const char* keyType = nullptr;
             if (psk.length() == 10 || psk.length() == 26)
             {
-                g_object_set(G_OBJECT(securitySettings),
-                        NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
-                        NM_WEP_KEY_TYPE_KEY, nullptr);
+                keyType = (const char*) NM_WEP_KEY_TYPE_KEY;
             }
             //valid passphrase format: length 5 or length 14
             else if (psk.length() == 5 || psk.length() == 13)
             {
-                g_object_set(G_OBJECT(securitySettings),
-                        NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
-                        NM_WEP_KEY_TYPE_PASSPHRASE, nullptr);
+                keyType = (const char*) NM_WEP_KEY_TYPE_PASSPHRASE;
             }
             else
             {
@@ -475,6 +493,19 @@ void WifiAccessPoint::setPsk(String psk)
                         << ": User input invalid WEP Key type, "
                         << "psk.length() = " << psk.length()
                         << ", not in [5,10,13,26]");
+            }
+            if(keyType != nullptr)
+            {
+                g_object_set(G_OBJECT(securitySettings),
+                        NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
+                        keyType, nullptr);
+                if(settingsDict != nullptr)
+                {
+                    g_variant_dict_insert_value(settingsDict,
+                            NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
+                            g_variant_new_variant(
+                            g_variant_new_string(keyType)));
+                }
             }
         }
         else
@@ -484,6 +515,19 @@ void WifiAccessPoint::setPsk(String psk)
             g_object_set(G_OBJECT(securitySettings),
                     NM_SETTING_WIRELESS_SECURITY_PSK,
                     psk.toRawUTF8(), nullptr);
+            if(settingsDict != nullptr)
+            {
+                g_variant_dict_insert_value(settingsDict,
+                        NM_SETTING_WIRELESS_SECURITY_PSK,
+                        g_variant_new_variant(
+                        g_variant_new_string(psk.toRawUTF8())));
+            }
+        }
+        if(settingsDict != nullptr)
+        {
+            savedConnection.updateWifiSecurity
+                    (g_variant_dict_end(settingsDict));
+            settingsDict = nullptr;
         }
     });
     
@@ -503,6 +547,7 @@ void WifiAccessPoint::removePsk()
             const ScopedWriteLock updateLock(networkUpdateLock);
             nm_connection_remove_setting(networkConnection,
                         NM_TYPE_SETTING_WIRELESS_SECURITY);
+            savedConnection.removeSecurityKey();
 
         });
     }

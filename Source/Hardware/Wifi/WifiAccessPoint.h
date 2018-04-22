@@ -7,6 +7,7 @@
 #include <NetworkManager.h>
 #include <nm-access-point.h>
 #include <nm-connection.h>
+#include "SavedConnections.h"
 #include "JuceHeader.h"
 
 class WifiAccessPoint : public ReferenceCountedObject
@@ -15,16 +16,16 @@ public:
     typedef ReferenceCountedObjectPtr<WifiAccessPoint> Ptr;
 
     /**
-     * Create an access point object using LibNM access point data and optional
-     * saved connection data.
+     * Create an access point object using LibNM access point data.
      * 
      * @param accessPoint      A LibNM access point object.
      * 
      * @param savedConnection  A saved connection that is compatible with this 
-     *                         access point, or nullptr if none is available.
+     *                         access point, or an invalid connection object if
+     *                         none exists.
      */
     WifiAccessPoint(NMAccessPoint* accessPoint,
-            NMConnection* savedConnection = nullptr);
+            SavedConnection savedConnection = nullptr);
 
     /**
      * Represents the main categories of wifi access point security.
@@ -194,11 +195,11 @@ public:
      * @return this access point's connection object.
      */
     NMConnection* getNMConnection();
-
+    
     /**
      * Assigns a new connection to this access point. This will fail if a valid
-     * connection is already assigned, or if the new connection is not valid
-     * for this access point.
+     * saved connection is already assigned, or if the new connection is not 
+     * valid for this access point.
      *
      * @param newConnection
      * 
@@ -217,6 +218,9 @@ public:
     /**
      * Removes the security key saved for this access point.  This should only 
      * be done when the saved key turns out to be invalid. 
+     * 
+     * If the access point is associated with a saved connection, this will
+     * delete that connection.
      */
     void removePsk();
 
@@ -270,6 +274,7 @@ private:
      * @param toUpdate
      */
     static void strengthUpdateCallback(WifiAccessPoint* toUpdate);
+    
 
     //Prevent concurrent access when being updated with new network data
     ReadWriteLock networkUpdateLock;
@@ -296,4 +301,5 @@ private:
 
     NMAccessPoint* nmAccessPoint = nullptr;
     NMConnection* networkConnection = nullptr;
+    SavedConnection savedConnection;
 };

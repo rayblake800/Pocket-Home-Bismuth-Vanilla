@@ -10,6 +10,7 @@
 
 #pragma once
 #include <functional>
+#include <map>
 #include "gio/gio.h"
 #include "JuceHeader.h"
 

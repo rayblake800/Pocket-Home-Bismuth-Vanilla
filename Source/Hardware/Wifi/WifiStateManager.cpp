@@ -10,9 +10,9 @@ WifiStateManager::WifiStateManager
 (std::function<ResourceManager::SharedResource*(CriticalSection&)> 
 createWifiResource):
 ResourceManager(sharedResource, stateLock,
-        [&stateLock,&createWifiResource]
+        [&createWifiResource]
         {
-            return createWifiResource(stateLock);
+            return createWifiResource(WifiStateManager::stateLock);
         }) { }
 
 /**

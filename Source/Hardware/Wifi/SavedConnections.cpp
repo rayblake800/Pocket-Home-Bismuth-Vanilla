@@ -8,8 +8,11 @@
 SavedConnections::SavedConnections() :
 GDBusProxyInterface(BUS_NAME, PATH, INTERFACE) { }
 
-
-Array<SavedConnection> SavedConnections::getConnections()
+/*
+ * Reads all connection paths from NetworkManager, and returns all the wifi
+ * connections as SavedConnection objects.
+ */
+Array<SavedConnection> SavedConnections::getWifiConnections()
 {
     Array<SavedConnection> connections;
     GVariant* conArrayVar = callMethod("ListConnections");
@@ -21,7 +24,11 @@ Array<SavedConnection> SavedConnections::getConnections()
         {
             for(int i = 0; i < length; i++)
             {
-                connections.add(SavedConnection(paths[i]));
+                SavedConnection con(paths[i]);
+                if(con.isWifiConnection())
+                {
+                    connections.add(SavedConnection(paths[i]));
+                }
             }
             g_free(paths);
             paths = nullptr;

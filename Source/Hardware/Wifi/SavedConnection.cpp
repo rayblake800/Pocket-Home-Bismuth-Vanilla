@@ -6,6 +6,7 @@
 //Methods:
 #define GET_SETTINGS "GetSettings"
 #define GET_SECRETS "GetSecrets"
+#define DELETE_CONN "Delete"
 
 //Settings types and parameters:
 #define SETTING_CONN "connection"
@@ -26,22 +27,34 @@
 #define SETTING_BLUETOOTH_ADDR "bdaddr"
 #define SETTING_BLUETOOTH_TYPE "type"
 
+
+/**
+ * Create an empty object with no linked connection.
+ */
+SavedConnection::SavedConnection() :
+GDBusProxyInterface(nullptr, nullptr, nullptr) { } 
+
+/**
+ * Initialize a SavedConnection from a DBus connection path.
+ */ 
 SavedConnection::SavedConnection(const char * path) :
-GDBusProxyInterface(BUS_NAME, path, INTERFACE)
-{
-    //    GVariant* connectionSettings = callMethod(GET_SETTINGS);
-    //    if(connectionSettings != nullptr)
-    //    {
-    //        std::cout << "Connection settings:\n" 
-    //                << GVariantConverter::toString(connectionSettings) << "\n";
-    //        g_variant_unref(connectionSettings);
-    //        connectionSettings = nullptr;
-    //    }
-    createNMConnection();
+GDBusProxyInterface(BUS_NAME, path, INTERFACE) 
+{ 
+    if(isValid())
+    {
+        createNMConnection();
+    }
 }
 
+/**
+ * Checks if this connection is a wifi connection.
+ */
 bool SavedConnection::isWifiConnection()
 {
+    if(!isValid())
+    {
+        return false;
+    }
     GVariant* type = getSettingProp(SETTING_CONN, SETTING_CONN_TYPE);
     if (type != nullptr)
     {
@@ -53,16 +66,59 @@ bool SavedConnection::isWifiConnection()
     return false;
 }
 
+    
 /**
+ * Replace the connection's existing wifi security settings.
+ */
+void SavedConnection::updateWifiSecurity(GVariant* newSettings)
+{
+    //TODO: Implement!
+}
+
+    
+/**
+ * Removes any saved WEP key or WPA PSK attached to this connection.
+ */
+void SavedConnection::removeSecurityKey()
+{
+    //TODO: Implement!
+}
+
+/*
+ * Gets the NMConnection object generated from this connection's data.
+ * Only wifi connections are supported, others are not guaranteed to work.
+ */
+NMConnection* SavedConnection::getNMConnection()
+{
+    return nmConnection;
+}
+
+/**
+ * Deletes this connection from the list of saved connections.  This object
+ * will be invalid after this method is called.
+ */
+void SavedConnection::deleteConnection()
+{
+    if(isValid())
+    {
+        callMethod(DELETE_CONN);
+        invalidate();
+        nmConnection = nullptr;
+    }
+}
+
+/*
  * Create a NMConnection object using this saved connection's data.
  * Only wifi connections are supported, others are not guaranteed to work.
- * 
- * @return the new NMConnection object.
  */
-NMConnection* SavedConnection::createNMConnection()
+void SavedConnection::createNMConnection()
 {
+    if(!isValid())
+    {
+        return;
+    }
     using namespace GVariantConverter;
-    NMConnection* con = nm_connection_new();
+    nmConnection = nm_connection_new();
     GVariant* settings = callMethod(GET_SETTINGS);
     if (settings != nullptr)
     {
@@ -70,7 +126,7 @@ NMConnection* SavedConnection::createNMConnection()
         std::function<void(GVariant*, GVariant*) > copyDict = [this, &setting]
                 (GVariant* key, GVariant * val)
         {
-            String keyStr = GVariantConverter::toString(key);
+            String keyStr = getValue<String>(key);
             if (keyStr.isNotEmpty())
             {
                 //GObject refuses to accept byte arrays packaged in GValues
@@ -90,8 +146,7 @@ NMConnection* SavedConnection::createNMConnection()
                 }
             }
         };
-        iterateDict(settings, [this, con, &setting,
-                &copyDict]
+        iterateDict(settings, [this, &setting, &copyDict]
                 (GVariant* key, GVariant * val)
         {
             String keyStr = getValue<String>(key);
@@ -128,23 +183,22 @@ NMConnection* SavedConnection::createNMConnection()
                         secrets = nullptr;
                     }
                 }
-                nm_connection_add_setting(con, setting);
+                nm_connection_add_setting(nmConnection, setting);
                 setting = nullptr;
             }
         });
     }
-    if (con != nullptr)
-    {
-        nm_connection_dump(con);
-    }
-    return con;
 }
 
 /**
  * Returns one of this connection's settings objects.
  */
 GVariant* SavedConnection::getSetting(const char* name)
-{
+{  
+    if(!isValid())
+    {
+        return nullptr;
+    }
     GVariant* allSettings = callMethod(GET_SETTINGS);
     GVariant* setting = nullptr;
     if (allSettings != nullptr)
@@ -162,7 +216,11 @@ GVariant* SavedConnection::getSetting(const char* name)
  */
 GVariant* SavedConnection::getSettingProp(const char* settingName,
         const char* propName)
-{
+{  
+    if(!isValid())
+    {
+        return nullptr;
+    }
     GVariant* property = nullptr;
     GVariant* setting = getSetting(settingName);
     if (setting != nullptr)
@@ -181,6 +239,10 @@ GVariant* SavedConnection::getSettingProp(const char* settingName,
 GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
         const char* propName)
 {
+    if(!isValid())
+    {
+        return nullptr;
+    }
     GVariant* property = nullptr;
     g_variant_lookup(settingsObject, propName, "@*", &property);
     return property;
@@ -194,6 +256,10 @@ GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
  */
 bool SavedConnection::hasSetting(const char* settingName)
 {
+    if(!isValid())
+    {
+        return false;
+    }
     GVariant* setting = getSetting(settingName);
     if (setting != nullptr)
     {
@@ -213,6 +279,10 @@ bool SavedConnection::hasSetting(const char* settingName)
 bool SavedConnection::hasSettingProperty(const char* settingName,
         const char* propName)
 {
+    if(!isValid())
+    {
+        return false;
+    }
     GVariant* prop = getSettingProp(settingName, propName);
     if (prop != nullptr)
     {

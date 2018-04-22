@@ -186,14 +186,6 @@ protected:
     void disconnectSignalHandlers();
 
 private:  
-    /**
-     * Loads the list of all saved network connections as a GSList* of 
-     * NMRemoteConnection* objects.
-     * 
-     * @return  the list of saved connections. The list object will need to be
-     *          freed with g_slist_free.
-     */
-    GSList* getSavedConnections();
     
     //Internal signal handlers:
     

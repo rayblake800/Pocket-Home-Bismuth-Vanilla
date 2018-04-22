@@ -21,6 +21,16 @@ public:
 
     virtual ~GDBusProxyInterface() { }
 
+    /**
+     * Checks if the object connected successfully to a DBus interface.
+     * 
+     * @return  true iff the connection succeeded.
+     */
+    bool isValid() const
+    {
+        return proxy != nullptr;
+    }
+    
 protected:
     /**
      * @param name        The name of the bus providing the DBus interface.  
@@ -36,15 +46,6 @@ protected:
     GDBusProxyInterface(const char* name, const char* path,
             const char* interface);
     
-    /**
-     * Checks if the object connected successfully to a DBus interface.
-     * 
-     * @return  true iff the connection succeeded.
-     */
-    bool isConnected()
-    {
-        return proxy != nullptr;
-    }
 
     /**
      * Checks if the interface has a property with a particular name
@@ -72,7 +73,7 @@ protected:
      */
     template<typename T> T getProperty(const char *  propertyName)
     {
-        if(!isConnected())
+        if(!isValid())
         {
             return T();
         }
@@ -131,6 +132,14 @@ protected:
      */
     GVariant* callMethod(const char * methodName, GVariant* params = nullptr);
 
+    /**
+     * Invalidate this object, removing its DBus connection. 
+     */
+    void invalidate()
+    {
+        proxy = nullptr;
+    }
+    
 private:
     GDBusProxy* proxy = nullptr;
 };

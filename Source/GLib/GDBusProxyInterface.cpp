@@ -3,6 +3,11 @@
 GDBusProxyInterface::GDBusProxyInterface
 (const char* name, const char* path, const char* interface)
 {
+    if(name == nullptr || path == nullptr || interface == nullptr)
+    {
+        //creating an invalid/null interface, skip initialization
+        return;
+    }
 
     GError * error = nullptr;
     proxy = g_dbus_proxy_new_for_bus_sync(
@@ -31,7 +36,7 @@ GDBusProxyInterface::GDBusProxyInterface
 GVariant* GDBusProxyInterface::callMethod
 (const char *  methodName, GVariant* params)
 {
-    if(params != nullptr && !g_variant_is_of_type(G_VARIANT_TYPE_TUPLE))
+    if(params != nullptr && !g_variant_is_of_type(params, G_VARIANT_TYPE_TUPLE))
     {
         GVariant* tuple = g_variant_new_tuple(&params, 1);
         params = tuple;

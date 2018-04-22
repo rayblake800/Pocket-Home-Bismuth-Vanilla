@@ -35,9 +35,9 @@ public:
     /**
      * Gets one of the values stored in the json configuration file.
      * 
-     * @param   key The key string that maps to the desired value.
+     * @tparam T   The value data type. This can be int, String, or bool.
      * 
-     * @tparam  T   The value data type. This can be int, String, or bool.
+     * @param key  The key string that maps to the desired value.
      * 
      * @throws  std::out_of_range if key does not map to a value of type T
      *           in this config file

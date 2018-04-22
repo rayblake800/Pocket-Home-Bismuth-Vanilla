@@ -73,20 +73,6 @@ LibNMHandler::LibNMHandler()
         
         buildAPMap();
     });
-    
-    GSList* saved = getSavedConnections();
-    if(saved != nullptr)
-    {
-        int cnum = 0;
-        for(GSList* iter = saved; iter!=nullptr; iter=iter->next)
-        {
-            cnum++;
-            DBG("Saved connection " << cnum);
-            nm_connection_dump((NMConnection*)iter->data);
-
-        }
-        g_slist_free(saved);
-    }
 }
 
 /**
@@ -605,19 +591,6 @@ void LibNMHandler::disconnectSignalHandlers()
     clientSignalHandlers.clear();
 }
 
-
-/**
- * Loads the list of all saved network connections as a GSList* of 
- * NMRemoteConnection* objects.
- */
-GSList* LibNMHandler::getSavedConnections()
-{
-    SavedConnections c;
-    c.getConnections();
-    return nullptr;
-}
-
-
 //Internal signal handlers:
 
 void LibNMHandler::handleWifiEnabledChange(LibNMHandler* nmHandler)
@@ -829,41 +802,39 @@ void LibNMHandler::buildAPMap()
             }
             
             //look for a matching valid connection
-            NMConnection* apSavedConn = nullptr;
-            if(wifiConns != nullptr)
+            SavedConnections saved;
+            SavedConnection matchingConn;
+            Array<SavedConnection> wifiConnections = saved.getWifiConnections();
+            /*
+             if(nm_connection_verify(connection, &error))
+        {
+            isValid = nm_access_point_connection_valid(nmAccessPoint, 
+                    connection);
+        }
+             */
+            for(SavedConnection& savedConn : wifiConnections)
             {
-                GSList* wifiConnList = nullptr;
-                for (int i = 0; i < wifiConns->len; i++)
+                NMConnection* nmCon = savedConn.getNMConnection();
+                GError* err = nullptr;
+                if(nm_connection_verify(nmCon, &err))
                 {
-                    wifiConnList = g_slist_prepend(wifiConnList,
-                            wifiConns->pdata[i]);
-                }
-                GSList* matchingConns = nm_access_point_filter_connections
-                        (nmAP, wifiConnList);
-                        g_slist_free(wifiConnList);
-                for (GSList* iter = matchingConns; iter != nullptr;
-                     iter = iter->next)
-                {
-                    NMConnection* conn
-                            = (NMConnection*) iter->data;
-                            GError * error = nullptr;
-                    if (nm_connection_verify(conn, &error))
+                    if(nm_access_point_connection_valid(nmAP, nmCon))
                     {
-                        apSavedConn = conn;
+                        matchingConn = savedConn;
                         break;
                     }
-                    else if (error != nullptr)
-                    {
-                        DBG("LibNMHandler: invalid connection: "
-                                << String(error->message));
-                                g_error_free(error);
-                                error = nullptr;
-                    }
                 }
-                g_slist_free(matchingConns);
+                else
+                {
+                    DBG("LibNMHandler::" << __func__ 
+                            << ": Invalid saved connection found!");
+                    DBG("\tError=" << err->message);
+                    g_error_free(err);
+                    err = nullptr;
+                }
             }
             WifiAccessPoint::Ptr wifiAP 
-                    = new WifiAccessPoint(nmAP, apSavedConn);
+                    = new WifiAccessPoint(nmAP, matchingConn);
             if(wifiAP == nullptr)
             {
                 DBG("LibNMHandler::buildAPMap: failed to create wifi AP!");
