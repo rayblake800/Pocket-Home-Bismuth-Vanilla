@@ -105,6 +105,8 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
             newSettingsAdded = true;
         }
         g_variant_ref(setting);
+        DBG("SavedConnection::" << __func__ << "inserting setting " << keyStr
+                << ", type " << g_variant_get_type_string(setting));
         g_variant_dict_insert(newDict, keyStr.toRawUTF8(), "a{sv}", setting);
     });
     g_variant_unref(newSettings);
