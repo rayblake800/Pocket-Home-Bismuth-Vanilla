@@ -409,6 +409,17 @@ void LibNMHandler::initConnection(WifiAccessPoint::Ptr toConnect, String psk)
             connectionFailureCallback(); 
             return;
         }
+        if(toConnect->hasSavedConnection())
+        {
+            nm_client_activate_connection(nmClient,
+                    connection,
+                    nmDevice,
+                    nm_object_get_path
+                    (NM_OBJECT(toConnect->getNMAccessPoint())),
+                    (NMClientActivateFn) handleKnownConnectionAttempt,
+                    this);
+            return;
+        }
 
         //Check if the connection has been added already:
         const GPtrArray* wifiConnections 
