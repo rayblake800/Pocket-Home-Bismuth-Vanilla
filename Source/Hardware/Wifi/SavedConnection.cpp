@@ -7,6 +7,7 @@
 #define GET_SETTINGS "GetSettings"
 #define GET_SECRETS "GetSecrets"
 #define DELETE_CONN "Delete"
+#define UPDATE_CONN "Update"
 
 //Settings types and parameters:
 #define SETTING_CONN "connection"
@@ -72,7 +73,29 @@ bool SavedConnection::isWifiConnection()
  */
 void SavedConnection::updateWifiSecurity(GVariant* newSettings)
 {
-    //TODO: Implement!
+    if(!isValid())
+    {
+        return;
+    }
+    using namespace GVariantConverter;
+    GVariantDict* newDict = g_variant_dict_new(nullptr);
+    GVariant* oldSettings = callMethod(GET_SETTINGS);
+    bool newSettingsAdded = false;
+    iterateDict(oldSettings,[this, newDict, newSettings, &newSettingsAdded]
+            (GVariant* key, GVariant* val)
+    {
+        String keyStr = getValue<String>(key);
+        GVariant* setting = val;
+        if(keyStr == SETTING_WIFI_SECURITY && !newSettingsAdded)
+        {
+            setting = newSettings;
+            newSettingsAdded = true;
+        }
+        g_variant_ref(setting);
+        g_variant_dict_insert_value(newDict, keyStr.toRawUTF8(), setting);
+    });
+    g_variant_unref(newSettings);
+    callMethod(UPDATE_CONN, g_variant_dict_end(newDict));
 }
 
     
@@ -81,7 +104,34 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
  */
 void SavedConnection::removeSecurityKey()
 {
-    //TODO: Implement!
+    if(!isValid())
+    {
+        return;
+    }
+    using namespace GVariantConverter;
+    GVariantDict* newDict = g_variant_dict_new(nullptr);
+    GVariant* oldSettings = getSetting(SETTING_WIFI_SECURITY);
+    if(oldSettings != nullptr)
+    {
+        iterateDict(oldSettings,[this, newDict]
+                (GVariant* key, GVariant* val)
+        {
+            String keyStr = getValue<String>(key);
+            if(keyStr == NM_SETTING_WIRELESS_SECURITY_WEP_KEY0
+               || keyStr == NM_SETTING_WIRELESS_SECURITY_WEP_KEY1
+               || keyStr == NM_SETTING_WIRELESS_SECURITY_WEP_KEY2
+               || keyStr == NM_SETTING_WIRELESS_SECURITY_WEP_KEY3
+               || keyStr == NM_SETTING_WIRELESS_SECURITY_PSK)
+            {
+                return;
+            }
+            g_variant_ref(val);
+            g_variant_dict_insert_value(newDict, keyStr.toRawUTF8(), val);
+        });
+        updateWifiSecurity(g_variant_dict_end(newDict));
+        g_variant_unref(oldSettings);
+        oldSettings = nullptr;
+    }
 }
 
 /*
