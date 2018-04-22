@@ -412,8 +412,11 @@ bool WifiAccessPoint::setNMConnection(NMConnection* newConnection)
                 this);
         }
         networkConnection = newConnection;
-        savedConnection = SavedConnection
-                (nm_connection_get_path(networkConnection));
+        const char* path = nm_connection_get_path(networkConnection);
+        if(path != nullptr)
+        {
+            savedConnection = SavedConnection(path);
+        }
         registerSignalHandlers();
         return true;
     }
