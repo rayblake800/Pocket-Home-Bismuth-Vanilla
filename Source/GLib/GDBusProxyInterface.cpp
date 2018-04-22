@@ -25,8 +25,7 @@ GDBusProxyInterface::GDBusProxyInterface
                 << name << " failed!");
         DBG("Error: " << String(error->message));
         proxy = nullptr;
-        g_error_free(error);
-        error = nullptr;
+        g_clear_error(&error);
     }
 }
 

@@ -302,8 +302,7 @@ void LibNMHandler::requestScan()
             {
                 DBG("LibNMHandler::requestScan: error requesting scan: "
                         << String(error->message));
-                g_error_free(error);
-                error = nullptr;
+                g_clear_error(&error);
             }
         }
     });
@@ -355,11 +354,9 @@ void LibNMHandler::handleConnectionAttempt(
     {
         if(err != nullptr)
         {
-            gint errorCode = err->code;
             DBG("LibNMHandler::" << __func__ 
                     << ": Error=" << String(err->message));
-            g_error_free(err);
-            err = nullptr;
+            g_clear_error(&err);
             nmHandler->invalidSecurityCallback();
             return;
         }
@@ -515,8 +512,7 @@ void LibNMHandler::closeActivatingConnection()
                                     << ": failed to remove active connection!");
                             DBG("LibNMInterface::" << __func__ << ": "
                                     << err->message);
-                            g_error_free(err);
-                            err = nullptr;
+                            g_clear_error(&err);
                         }
                         break;
                     }
@@ -840,8 +836,7 @@ void LibNMHandler::buildAPMap()
                     DBG("LibNMHandler::" << __func__ 
                             << ": Invalid saved connection found!");
                     DBG("\tError=" << err->message);
-                    g_error_free(err);
-                    err = nullptr;
+                    g_clear_error(&err);
                 }
             }
             WifiAccessPoint::Ptr wifiAP 

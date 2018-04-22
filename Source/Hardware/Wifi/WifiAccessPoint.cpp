@@ -253,7 +253,7 @@ bool WifiAccessPoint::isConnectionCompatible(NMConnection* connection) const
             if(error != nullptr)
             {
                 DBG("Error: " << String(error->message));
-                g_error_free(error);
+                g_clear_error(&error);
             }
                    
         }
