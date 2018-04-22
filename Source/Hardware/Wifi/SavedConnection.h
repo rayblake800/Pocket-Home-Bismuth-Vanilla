@@ -136,4 +136,5 @@ private:
     bool hasSettingProperty(const char* settingName, const char* propName);
     
     NMConnection* nmConnection = nullptr;
+    String path;
 };

@@ -26,4 +26,5 @@ public:
      * @return all saved wifi connections.
      */
     Array<SavedConnection> getWifiConnections();
+        
 };

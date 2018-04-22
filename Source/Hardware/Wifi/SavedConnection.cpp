@@ -39,7 +39,8 @@ GDBusProxyInterface(nullptr, nullptr, nullptr) { }
  * Initialize a SavedConnection from a DBus connection path.
  */ 
 SavedConnection::SavedConnection(const char * path) :
-GDBusProxyInterface(BUS_NAME, path, INTERFACE) 
+GDBusProxyInterface(BUS_NAME, path, INTERFACE),
+path(path)
 { 
     if(isValid())
     {
@@ -184,6 +185,7 @@ void SavedConnection::createNMConnection()
     }
     using namespace GVariantConverter;
     nmConnection = nm_connection_new();
+    nm_connection_set_path(nmConnection, path.toRawUTF8());
     GVariant* settings = callMethod(GET_SETTINGS);
     if (settings != nullptr)
     {
