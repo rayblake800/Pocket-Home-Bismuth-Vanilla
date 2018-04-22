@@ -73,13 +73,20 @@ bool SavedConnection::isWifiConnection()
  */
 void SavedConnection::updateWifiSecurity(GVariant* newSettings)
 {
+    using namespace GVariantConverter;
     if(!isValid())
     {
         return;
     }
-    using namespace GVariantConverter;
     GVariantDict* newDict = g_variant_dict_new(nullptr);
     GVariant* oldSettings = callMethod(GET_SETTINGS);
+    #ifdef JUCE_DEBUG
+    jassert(newDict != nullptr 
+            && oldSettings != nullptr 
+            && newSettings != nullptr);
+    DBG("SavedConnection::" << __func__ << ": Updating connection security.");
+    std::cout << " New settings:\n" << toString(newSettings) << "\n";
+    #endif
     bool newSettingsAdded = false;
     iterateDict(oldSettings,[this, newDict, newSettings, &newSettingsAdded]
             (GVariant* key, GVariant* val)
@@ -88,6 +95,11 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
         GVariant* setting = val;
         if(keyStr == SETTING_WIFI_SECURITY && !newSettingsAdded)
         {
+            #ifdef JUCE_DEBUG
+            DBG("SavedConnection::" << __func__ 
+                    << ": old security settings found and being replaced.");
+            std::cout << " Old settings:\n" << toString(setting) << "\n";
+            #endif
             setting = newSettings;
             newSettingsAdded = true;
         }
@@ -95,7 +107,10 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
         g_variant_dict_insert(newDict, keyStr.toRawUTF8(), "a{sv}", setting);
     });
     g_variant_unref(newSettings);
-    callMethod(UPDATE_CONN, g_variant_dict_end(newDict));
+    GVariant* updatedSettings = g_variant_dict_end(newDict);
+    newDict = nullptr;
+    jassert(updatedSettings != nullptr);
+    callMethod(UPDATE_CONN, updatedSettings);
 }
 
     
