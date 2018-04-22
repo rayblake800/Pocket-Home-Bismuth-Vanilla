@@ -92,7 +92,7 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
             newSettingsAdded = true;
         }
         g_variant_ref(setting);
-        g_variant_dict_insert_value(newDict, keyStr.toRawUTF8(), setting);
+        g_variant_dict_insert(newDict, keyStr.toRawUTF8(), "a{sv}", setting);
     });
     g_variant_unref(newSettings);
     callMethod(UPDATE_CONN, g_variant_dict_end(newDict));
