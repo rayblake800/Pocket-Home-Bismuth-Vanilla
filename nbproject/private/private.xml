@@ -15,9 +15,11 @@
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/GLib/GDBusProxyInterface.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/GLib/GDBusProxyInterface.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/LibNMHandler.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStateManager.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiStateManager.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/GLib/GVariantConverter.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/SavedConnections.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/WifiAccessPoint.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Hardware/Wifi/SavedConnection.h</file>
         </group>
     </open-files>
 </project-private>
