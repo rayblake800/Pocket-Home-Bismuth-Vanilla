@@ -96,6 +96,16 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
         {
             return;
         }
+        
+        //testing if any changes get made at all
+        if(keyStr == "id")
+        {
+            String conId = getValue<String>(val);
+            conId += "(edited)";
+            val = getVariant(conId);
+            DBG("Id replaced with "<<conId);
+        }
+        
         StringArray keysToReplace;
         if(keyStr == SETTING_WIFI_SECURITY && !newSettingsAdded)
         {
