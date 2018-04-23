@@ -50,7 +50,8 @@ namespace GVariantConverter
     
     /**
      * Extract the value from a GVariant object as a specific type.  Supported
-     * types are bool, guint32, String, StringArray, GArray*, and GByteArray*.
+     * types are bool, guint32, const char*, String, StringArray, GArray*, 
+     * and GByteArray*.
      * 
      * @tparam T       The value type to extract from the variant.  If this
      *                 does not match the variant type, a default value will

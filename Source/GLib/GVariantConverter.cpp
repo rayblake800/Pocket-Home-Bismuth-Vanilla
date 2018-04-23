@@ -48,6 +48,16 @@ namespace GVariantConverter
         }
         return g_variant_get_int32(variant);
     }
+    
+    template<> const char* getValue(GVariant* variant)
+    {
+        if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_STRING))
+        {
+            jassertfalse;
+            return nullptr;
+        }
+        return g_variant_get_string(variant, nullptr);
+    }
 
     template<> String getValue(GVariant* variant)
     {

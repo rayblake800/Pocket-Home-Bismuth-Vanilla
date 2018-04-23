@@ -46,7 +46,9 @@ public:
      * Replace the connection's existing wifi security settings.
      * 
      * @param newSettings  A GVariant* dictionary used to construct the
-     *                     replacement settings.
+     *                     replacement settings.  Only the keys found in this
+     *                     dictionary will be replaced, any others will be 
+     *                     copied over from the old wireless security settings.
      */
     void updateWifiSecurity(GVariant* newSettings);
     

@@ -67,8 +67,7 @@ bool SavedConnection::isWifiConnection()
     }
     return false;
 }
-
-    
+  
 /**
  * Replace the connection's existing wifi security settings.
  */
@@ -79,11 +78,11 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
     {
         return;
     }
-    GVariantBuilder* builder = g_variant_builder_new(G_VARIANT_TYPE("a{sa{sv}}"));
+    GVariantBuilder* builder = g_variant_builder_new
+            (G_VARIANT_TYPE("a{sa{sv}}"));
     GVariant* oldSettings = callMethod(GET_SETTINGS);
     #ifdef JUCE_DEBUG
-    jassert(builder != nullptr 
-            && oldSettings != nullptr 
+    jassert(builder != nullptr && oldSettings != nullptr 
             && newSettings != nullptr);
     DBG("SavedConnection::" << __func__ << ": Updating connection security.");
     std::cout << " New settings:\n" << toString(newSettings) << "\n";
@@ -93,30 +92,41 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
             (GVariant* key, GVariant* val)
     {
         String keyStr = getValue<String>(key);
-        GVariant* setting = val;
+        if(keyStr.isEmpty())
+        {
+            return;
+        }
+        StringArray keysToReplace;
         if(keyStr == SETTING_WIFI_SECURITY && !newSettingsAdded)
         {
-            #ifdef JUCE_DEBUG
-            DBG("SavedConnection::" << __func__ 
-                    << ": old security settings found and being replaced.");
-            std::cout << " Old settings:\n" << toString(setting) << "\n";
-            #endif
-            setting = newSettings;
             newSettingsAdded = true;
+            keysToReplace = getKeys(newSettings);
         }
-    	GVariantBuilder* setBldr = g_variant_builder_new
+    	GVariantBuilder* settingBldr = g_variant_builder_new
 	        (G_VARIANT_TYPE("a{sv}"));
-	iterateDict(setting,[this, setBldr]
+	iterateDict(val,[this, settingBldr, newSettings, &keysToReplace]
                 (GVariant* key, GVariant* val)
         {
-	    const char* keyStr = g_variant_get_string(key, nullptr);
-	    g_variant_builder_add(setBldr, "{sv}", keyStr, val);
+	    String keyStr = getValue<String>(key);
+            GVariant* addedValue = val;
+            if(keysToReplace.contains(keyStr))
+            {
+                addedValue = g_variant_lookup_value(newSettings,
+                        keyStr.toRawUTF8(), nullptr);
+            }
+            if(addedValue != nullptr)
+            {
+                g_variant_builder_add(settingBldr, "{sv}",
+                        keyStr.toRawUTF8(), addedValue);
+            }
 	});
-        g_variant_builder_add(builder, "{sa{sv}}", keyStr.toRawUTF8(), setBldr);
+        g_variant_builder_add(builder, "{sa{sv}}",
+                keyStr.toRawUTF8(), settingBldr);
     });
-    g_variant_unref(newSettings);
     GVariant* updatedSettings = g_variant_builder_end(builder);
     builder = nullptr;
+    g_variant_unref(newSettings);
+    newSettings = nullptr;
     jassert(updatedSettings != nullptr);
     callMethod(UPDATE_CONN, updatedSettings);
 }
