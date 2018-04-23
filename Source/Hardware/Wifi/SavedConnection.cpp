@@ -79,17 +79,17 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
     {
         return;
     }
-    GVariantDict* newDict = g_variant_dict_new(nullptr);
+    GVariantBuilder* builder = g_variant_builder_new(G_VARIANT_TYPE("a{sa{sv}}"));
     GVariant* oldSettings = callMethod(GET_SETTINGS);
     #ifdef JUCE_DEBUG
-    jassert(newDict != nullptr 
+    jassert(builder != nullptr 
             && oldSettings != nullptr 
             && newSettings != nullptr);
     DBG("SavedConnection::" << __func__ << ": Updating connection security.");
     std::cout << " New settings:\n" << toString(newSettings) << "\n";
     #endif
     bool newSettingsAdded = false;
-    iterateDict(oldSettings,[this, newDict, newSettings, &newSettingsAdded]
+    iterateDict(oldSettings,[this, builder, newSettings, &newSettingsAdded]
             (GVariant* key, GVariant* val)
     {
         String keyStr = getValue<String>(key);
@@ -104,14 +104,19 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
             setting = newSettings;
             newSettingsAdded = true;
         }
-        g_variant_ref(setting);
-        DBG("SavedConnection::" << __func__ << "inserting setting " << keyStr
-                << ", type " << g_variant_get_type_string(setting));
-        g_variant_dict_insert(newDict, keyStr.toRawUTF8(), "a{sv}", setting);
+    	GVariantBuilder* setBldr = g_variant_builder_new
+	        (G_VARIANT_TYPE("a{sv}"));
+	iterateDict(setting,[this, setBldr]
+                (GVariant* key, GVariant* val)
+        {
+	    const char* keyStr = g_variant_get_string(key, nullptr);
+	    g_variant_builder_add(setBldr, "{sv}", keyStr, val);
+	});
+        g_variant_builder_add(builder, "{sa{sv}}", keyStr.toRawUTF8(), setBldr);
     });
     g_variant_unref(newSettings);
-    GVariant* updatedSettings = g_variant_dict_end(newDict);
-    newDict = nullptr;
+    GVariant* updatedSettings = g_variant_builder_end(builder);
+    builder = nullptr;
     jassert(updatedSettings != nullptr);
     callMethod(UPDATE_CONN, updatedSettings);
 }
