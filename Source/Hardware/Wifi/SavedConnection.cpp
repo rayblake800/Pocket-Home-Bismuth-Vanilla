@@ -120,6 +120,16 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
                         keyStr.toRawUTF8(), addedValue);
             }
 	});
+	for(const String& key : keysToReplace)
+	{
+	    GVariant* newVal = g_variant_lookup_value(newSettings,
+	            key.toRawUTF8(), nullptr);
+	    if(newVal != nullptr)
+	    {
+	        g_variant_builder_add(settingBldr, "{sv}",
+		        key.toRawUTF8(), newVal);
+	    }
+	}
         g_variant_builder_add(builder, "{sa{sv}}",
                 keyStr.toRawUTF8(), settingBldr);
     });
