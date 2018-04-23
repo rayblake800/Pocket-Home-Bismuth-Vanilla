@@ -121,6 +121,12 @@ protected:
      *                    only takes a single parameter, the GDBusProxyInterface
      *                    will handle packaging it in a tuple if necessary.
      * 
+     * @param error       The address of a null GError*, or nullptr.  If this
+     *                    parameter is not null and an error occurs, the GError*
+     *                    will be set to the address of a new GError object.
+     *                    If this happens, the caller should free the error with
+     *                    g_clear_error(GError**) when it's no longer needed.
+     * 
      * @return  the return value of the method. Returns nullptr instead if the 
      *          method call failed, the method returned nothing, or the method 
      *          returned an empty container object. If the method returned a 
@@ -130,7 +136,8 @@ protected:
      *          Any non-null value returned by this method should eventually be
      *          freed with g_variant_unref.
      */
-    GVariant* callMethod(const char * methodName, GVariant* params = nullptr);
+    GVariant* callMethod(const char * methodName, GVariant* params = nullptr,
+            GError** error = nullptr);
 
     /**
      * Invalidate this object, removing its DBus connection. 

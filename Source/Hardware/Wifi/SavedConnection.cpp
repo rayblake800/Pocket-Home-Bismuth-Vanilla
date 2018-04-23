@@ -128,6 +128,8 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
     g_variant_unref(newSettings);
     newSettings = nullptr;
     jassert(updatedSettings != nullptr);
+    std::cout<< "Updated Connection settings:\n" << toString(updatedSettings)
+            << "\n";
     callMethod(UPDATE_CONN, updatedSettings);
 }
 
@@ -251,8 +253,10 @@ void SavedConnection::createNMConnection()
                 iterateDict(val, copyDict);
                 if (keyStr == SETTING_WIFI_SECURITY)
                 {
+                    GError * secretsError = nullptr;
                     GVariant* secrets = callMethod(GET_SECRETS,
-                            g_variant_new_string(SETTING_WIFI_SECURITY));
+                            g_variant_new_string(SETTING_WIFI_SECURITY),
+                            &secretsError);
                     if (secrets != nullptr)
                     {
                         GVariant* securitySecrets = g_variant_lookup_value
@@ -265,6 +269,14 @@ void SavedConnection::createNMConnection()
                         }
                         g_variant_unref(secrets);
                         secrets = nullptr;
+                    }
+                    if(secretsError != nullptr)
+                    {
+                        DBG("SavedConnection::" << __func__ 
+                                << ": Reading secrets failed, error code="
+                                << secretsError->code);
+                        g_clear_error(&secretsError);
+                        secretsError = nullptr;
                     }
                 }
                 nm_connection_add_setting(nmConnection, setting);

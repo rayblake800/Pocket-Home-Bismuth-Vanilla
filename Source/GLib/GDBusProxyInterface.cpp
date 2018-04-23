@@ -33,27 +33,28 @@ GDBusProxyInterface::GDBusProxyInterface
  * Calls one of the methods provided by this interface.
  */
 GVariant* GDBusProxyInterface::callMethod
-(const char *  methodName, GVariant* params)
+(const char *  methodName, GVariant* params, GError ** error)
 {
     if(params != nullptr && !g_variant_is_of_type(params, G_VARIANT_TYPE_TUPLE))
     {
         GVariant* tuple = g_variant_new_tuple(&params, 1);
         params = tuple;
     }
-    GError * error = nullptr;
+    GError * defaultError = nullptr;
     GVariant* result = g_dbus_proxy_call_sync(proxy,
             methodName,
             params,
             G_DBUS_CALL_FLAGS_NONE,
             -1,
             nullptr,
-            &error);
-    if (error != nullptr)
+            (error==nullptr ? &defaultError: error));
+    if (defaultError != nullptr)
     {
         DBG("GDBusProxyInterface::" << __func__ 
                 << ": calling DBus adapter proxy method "
                 << methodName << " failed!");
-        DBG("Error: " << String(error->message));
+        DBG("Error: " << String(defaultError->message));
+        g_clear_error(&defaultError);
     }
     if(result != nullptr  && g_variant_is_container(result))
     {
