@@ -5003,18 +5003,6 @@
           <in>RelativeLayoutManager.cpp</in>
           <in>RelativeLayoutManager.h</in>
         </df>
-        <df name="Configuration">
-          <df name="Configurables">
-            <in>ConfigurableComponent.cpp</in>
-            <in>ConfigurableImageButton.cpp</in>
-            <in>ConfigurableImageComponent.cpp</in>
-            <in>ConfigurableLabel.cpp</in>
-          </df>
-          <in>AppConfigFile.cpp</in>
-          <in>ComponentConfigFile.cpp</in>
-          <in>ConfigFile.cpp</in>
-          <in>MainConfigFile.cpp</in>
-        </df>
         <df name="GLib">
           <in>GDBusProxyInterface.cpp</in>
           <in>GDBusProxyInterface.h</in>
@@ -5058,78 +5046,6 @@
           <in>I2CBus.cpp</in>
           <in>I2CBus.h</in>
         </df>
-        <df name="Pages">
-          <df name="Home Page">
-            <df name="AppMenu">
-              <df name="Menu Editors">
-                <in>AppMenuPopupEditor.cpp</in>
-                <in>CategoryPopupEditor.cpp</in>
-                <in>NewConfigAppEditor.cpp</in>
-                <in>NewDesktopAppEditor.cpp</in>
-                <in>NewFolderEditor.cpp</in>
-              </df>
-              <df name="Menu Folders">
-                <in>PageAppFolder.cpp</in>
-                <in>ScrollingAppFolder.cpp</in>
-              </df>
-              <df name="Menu Items">
-                <in>AppMenuItem.cpp</in>
-                <in>AppMenuItemFactory.cpp</in>
-                <in>BaseFolderMenuItem.cpp</in>
-                <in>ConfigAppMenuItem.cpp</in>
-                <in>DesktopEntryMenuItem.cpp</in>
-                <in>FolderMenuItem.cpp</in>
-              </df>
-              <df name="Menu Types">
-                <in>PagedAppMenu.cpp</in>
-                <in>ScrollingAppMenu.cpp</in>
-              </df>
-              <in>AppMenuButton.cpp</in>
-              <in>AppMenuComponent.cpp</in>
-              <in>AppMenuFolder.cpp</in>
-            </df>
-            <df name="Widgets">
-              <in>BatteryIcon.cpp</in>
-              <in>ClockLabel.cpp</in>
-              <in>WifiIcon.cpp</in>
-            </df>
-            <in>DesktopEntries.cpp</in>
-            <in>DesktopEntry.cpp</in>
-            <in>HomePage.cpp</in>
-            <in>IconThread.cpp</in>
-          </df>
-          <df name="Input Settings Page">
-            <in>InputSettingsPage.cpp</in>
-            <in>KeybindingPage.cpp</in>
-          </df>
-          <df name="Password Pages">
-            <in>Password.cpp</in>
-            <in>RemovePasswordPage.cpp</in>
-            <in>SetPasswordPage.cpp</in>
-          </df>
-          <df name="Power Page">
-            <in>FelPage.cpp</in>
-            <in>PowerPage.cpp</in>
-          </df>
-          <df name="Settings Page">
-            <in>BluetoothSettingsComponent.cpp</in>
-            <in>BluetoothSettingsPage.cpp</in>
-            <in>ConnectionPage.cpp</in>
-            <in>ConnectionSettingsComponent.cpp</in>
-            <in>SettingsPage.cpp</in>
-            <in>WifiSettingsComponent.cpp</in>
-            <in>WifiSettingsPage.cpp</in>
-          </df>
-          <df name="UI Page">
-            <in>ColourPage.cpp</in>
-            <in>ComponentEditorPage.cpp</in>
-            <in>UIPage.cpp</in>
-          </df>
-          <in>AdvancedSettingsPage.cpp</in>
-          <in>DateTimePage.cpp</in>
-          <in>HomeSettingsPage.cpp</in>
-          <in>LoginPage.cpp</in>
-        </df>
         <df name="Shared Resources">
           <df name="Config Files">
             <in>AppConfigFile.cpp</in>
@@ -5150,10 +5066,6 @@
           <in>ResourceManager.cpp</in>
           <in>ResourceManager.h</in>
         </df>
-        <df name="Threads and Memory">
-          <in>GLibSignalHandler.cpp</in>
-          <in>ResourceManager.cpp</in>
-        </df>
         <df name="Util">
           <in>AppLauncher.cpp</in>
           <in>AppLauncher.h</in>
@@ -5168,19 +5080,9 @@
           <in>WindowFocusedTimer.cpp</in>
           <in>WindowFocusedTimer.h</in>
         </df>
-        <in>AppLauncher.cpp</in>
-        <in>AssetFiles.cpp</in>
-        <in>Localized.cpp</in>
         <in>Main.cpp</in>
-        <in>PageFactory.cpp</in>
         <in>PocketHomeApplication.cpp</in>
         <in>PocketHomeApplication.h</in>
-        <in>PokeLookAndFeel.cpp</in>
-        <in>RelativeLayoutManager.cpp</in>
-        <in>TempTimer.cpp</in>
-        <in>Utils.cpp</in>
-        <in>WindowFocus.cpp</in>
-        <in>WindowFocusedTimer.cpp</in>
       </df>
     </df>
     <itemPath>assets/configuration/apps.json</itemPath>

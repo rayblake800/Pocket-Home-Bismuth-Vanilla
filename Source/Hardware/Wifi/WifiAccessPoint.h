@@ -212,8 +212,10 @@ public:
      * 
      * @param psk  The new security key.  This key will only be saved if it is
      *             valid for the access point's security type.
+     * 
+     * @return  true if the key was saved, false if the key was invalid.
      */
-    void setPsk(String psk);
+    bool setPsk(String psk);
 
     /**
      * Removes the security key saved for this access point.  This should only 

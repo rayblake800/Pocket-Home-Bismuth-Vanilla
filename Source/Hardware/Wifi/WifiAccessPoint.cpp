@@ -425,26 +425,23 @@ bool WifiAccessPoint::setNMConnection(NMConnection* newConnection)
  
 /**
  * Saves a new security key for this access point's connection.
- * 
- * @param psk  The new security key.  This key will only be saved if it is
- *             valid for the access point's security type.
  */
-void WifiAccessPoint::setPsk(String psk)
+bool WifiAccessPoint::setPsk(String psk)
 {
     if(*this == nullptr)
     {
         DBG("WifiAccessPoint::" << __func__ << ": NMAccessPoint is null!");
-        return;
+        return false;
     }
     else if(psk.isEmpty())
     {
         DBG("WifiAccessPoint::" << __func__ << ": psk is empty!");
-        return;
+        return false;
     }
     else if(!getRequiresAuth())
     {
         DBG("WifiAccessPoint::" << __func__ << ": AP is unsecured!");
-        return;
+        return false;
     }
     if(!hasSavedConnection())
     {
@@ -452,7 +449,8 @@ void WifiAccessPoint::setPsk(String psk)
     }
     
     GLibSignalHandler glibHandler;
-    glibHandler.gLibCall([this, &psk]()
+    bool keySet = false;
+    glibHandler.gLibCall([this, &psk, &keySet]()
     {
         const ScopedWriteLock updateLock(networkUpdateLock);
         NMSettingWirelessSecurity* securitySettings
@@ -470,15 +468,6 @@ void WifiAccessPoint::setPsk(String psk)
             DBG("WifiAccessPoint::" << __func__
                     << ": access point has WEP security");
             /* WEP */
-            nm_setting_wireless_security_set_wep_key
-                    (securitySettings, 0, psk.toRawUTF8());
-            if(settingsDict != nullptr)
-            {
-                g_variant_dict_insert_value(settingsDict,
-                        NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
-                        g_variant_new_variant(
-                        g_variant_new_string(psk.toRawUTF8())));
-            }
             //valid key format: length 10 or length 26
             const char* keyType = nullptr;
             if (psk.length() == 10 || psk.length() == 26)
@@ -502,35 +491,61 @@ void WifiAccessPoint::setPsk(String psk)
                 g_object_set(G_OBJECT(securitySettings),
                         NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
                         keyType, nullptr);
+                nm_setting_wireless_security_set_wep_key
+                        (securitySettings, 0, psk.toRawUTF8());
                 if(settingsDict != nullptr)
                 {
+                    g_variant_dict_insert_value(settingsDict,
+                            NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
+                            g_variant_new_variant(
+                            g_variant_new_string(psk.toRawUTF8())));
                     g_variant_dict_insert_value(settingsDict,
                             NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
                             g_variant_new_variant(
                             g_variant_new_string(keyType)));
                 }
+                keySet = true;
             }
         }
         else
         {
-            DBG("LibNMHandler::" << __func__
+            DBG("WifiAccessPoint::" << __func__
                     << ": access point has WPA security");
-            g_object_set(G_OBJECT(securitySettings),
-                    NM_SETTING_WIRELESS_SECURITY_PSK,
-                    psk.toRawUTF8(), nullptr);
-            if(settingsDict != nullptr)
+            if(psk.length() >= 8)
             {
-                g_variant_dict_insert_value(settingsDict,
+                g_object_set(G_OBJECT(securitySettings),
                         NM_SETTING_WIRELESS_SECURITY_PSK,
-                        g_variant_new_variant(
-                        g_variant_new_string(psk.toRawUTF8())));
+                        psk.toRawUTF8(), nullptr);
+                if(settingsDict != nullptr)
+                {
+                    g_variant_dict_insert_value(settingsDict,
+                            NM_SETTING_WIRELESS_SECURITY_PSK,
+                            g_variant_new_variant(
+                            g_variant_new_string(psk.toRawUTF8())));
+                }
+                keySet = true;
+            }
+            else
+            {
+                DBG("WifiAccessPoint::" << __func__ 
+                        << ": invalid WPA PSK, length was " << psk.length()
+                        << " but the key must be at least 8 characters");
+            
             }
         }
         if(settingsDict != nullptr)
         {
-            savedConnection.updateWifiSecurity
-                    (g_variant_dict_end(settingsDict));
-            settingsDict = nullptr;
+            GVariant* newSettings = g_variant_dict_end(settingsDict);
+            if(keySet)
+            {
+                //ensure NetworkManager actually saves connection secrets
+                g_variant_dict_insert_value(settingsDict,
+                            NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
+                            g_variant_new_variant(
+                            g_variant_new_int32(NM_SETTING_SECRET_FLAG_NONE)));
+                savedConnection.updateWifiSecurity(newSettings);
+            }
+            g_variant_unref(newSettings);
         }
     });
     
