@@ -14,28 +14,47 @@ GDBusProxyInterface(BUS_NAME, PATH, INTERFACE) { }
  */
 Array<SavedConnection> SavedConnections::getWifiConnections()
 {
+    using namespace GVariantConverter;
     Array<SavedConnection> connections;
     GVariant* conArrayVar = callMethod("ListConnections");
     if(conArrayVar != nullptr)
     {
-        gsize length = 0;
-        const gchar** paths = g_variant_get_objv(conArrayVar, &length);
-        if(paths != nullptr)
+        StringArray paths = getValue<StringArray>(conArrayVar);
+        for(const String& path : paths)
         {
-            for(int i = 0; i < length; i++)
+            SavedConnection con(path.toRawUTF8());
+            if(con.isWifiConnection())
             {
-                SavedConnection con(paths[i]);
-                if(con.isWifiConnection())
-                {
-                    connections.add(SavedConnection(paths[i]));
-                }
+                connections.add(con);
             }
-            g_free(paths);
-            paths = nullptr;
+            
         }
         g_variant_unref(conArrayVar);
         conArrayVar = nullptr;
     }
     return connections;
+}
+
+    
+/**
+ * Checks saved connection paths to see if one exists at the given path.
+ * 
+ * @param connectionPath  A DBus path to check for a connection.
+ * 
+ * @return  true iff connectionPath is a valid path to a saved connection. 
+ */
+bool connectionExists(const String& connectionPath)
+{
+    using namespace GVariantConverter;
+    Array<SavedConnection> connections;
+    GVariant* conArrayVar = callMethod("ListConnections");
+    if(conArrayVar != nullptr)
+    {
+        StringArray paths = getValue<StringArray>(conArrayVar);
+        g_variant_unref(conArrayVar);
+        conArrayVar = nullptr;
+        return paths.contains(connectionPath);
+    }
+    return false;
 }
 

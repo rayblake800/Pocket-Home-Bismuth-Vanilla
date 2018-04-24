@@ -162,6 +162,7 @@ bool WifiAccessPoint::getRequiresAuth() const
 bool WifiAccessPoint::hasSavedConnection() const
 {
     const ScopedReadLock readLock(networkUpdateLock);
+    
     return savedConnection.isValid();
 }
 
@@ -224,7 +225,7 @@ const String& WifiAccessPoint::toString() const
 bool WifiAccessPoint::isConnectionCompatible(NMConnection* connection) const
 {
     const ScopedReadLock readLock(networkUpdateLock);
-    if(nmAccessPoint == nullptr)
+    if(nmAccessPoint == nullptr || connection == nullptr)
     {
         return false;
     }
@@ -232,17 +233,17 @@ bool WifiAccessPoint::isConnectionCompatible(NMConnection* connection) const
     {
         return true;
     }
-    if((networkConnection != nullptr && connection != nullptr)
-        && networkConnection != connection)
-    {
-        return false;
-    }
     bool isValid = false;
     GLibSignalHandler glibHandler;
     glibHandler.gLibCall([this, &isValid, connection]()
     {
         GError* error = nullptr;
-        if(nm_connection_verify(connection, &error))
+        if(networkConnection != nullptr)
+        {
+           isValid = nm_connection_compare(networkConnection,connection,
+                NM_SETTING_COMPARE_FLAG_FUZZY);
+        }
+        else if(nm_connection_verify(connection, &error))
         {
             isValid = nm_access_point_connection_valid(nmAccessPoint, 
                     connection);

@@ -26,5 +26,14 @@ public:
      * @return all saved wifi connections.
      */
     Array<SavedConnection> getWifiConnections();
+    
+    /**
+     * Checks saved connection paths to see if one exists at the given path.
+     * 
+     * @param connectionPath  A DBus path to check for a connection.
+     * 
+     * @return  true iff connectionPath is a valid path to a saved connection. 
+     */
+    bool connectionExists(const String& connectionPath);
         
 };
