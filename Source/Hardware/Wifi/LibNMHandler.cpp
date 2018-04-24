@@ -199,7 +199,7 @@ WifiAccessPoint::Ptr LibNMHandler::findConnectingAP()
     GLibSignalHandler signalHandler;
     signalHandler.gLibCall([this, &connectingAP]()
     {
-        if (isWifiAvailable())
+        if (isWifiAvailable() && activatingConn != nullptr)
         {
             if (!checkWifiConnecting())
             {
