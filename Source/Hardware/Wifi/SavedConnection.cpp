@@ -48,6 +48,13 @@ path(path)
     }
 }
 
+/**
+ * Gets the connection's DBus path.
+ */
+const String& getPath()
+{
+    return path;
+}
     
 /*
  * When copying other saved connections, share a path and a generated 

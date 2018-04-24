@@ -35,6 +35,14 @@ public:
     virtual ~SavedConnection() { }
     
     /**
+     * Gets the connection's DBus path.
+     * 
+     * @return the DBus path used to create this object, or the empty string if
+     *         the connection is not valid.
+     */
+    const String& getPath();
+    
+    /**
      * Checks if this connection is a wifi connection.
      * 
      * @return true iff connection settings are for a wifi connection.
