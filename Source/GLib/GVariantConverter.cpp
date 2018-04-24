@@ -71,19 +71,28 @@ namespace GVariantConverter
 
     template<> StringArray getValue(GVariant* variant)
     {
-        if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_STRING_ARRAY))
+        const gchar ** array = nullptr;
+        gsize arraySize = 0;
+        if (g_variant_is_of_type(variant, G_VARIANT_TYPE_STRING_ARRAY))
+        {
+            array = g_variant_get_strv(variant, &arraySize);
+        }
+        else if (g_variant_is_of_type(variant,
+                G_VARIANT_TYPE_OBJECT_PATH_ARRAY))
+        {
+            array = g_variant_get_objv(variant, &arraySize);
+        }
+        else
         {
             jassertfalse;
             return {};
         }
-        gsize arraySize = 0;
-        const gchar ** array = g_variant_get_strv(variant, &arraySize);
         StringArray varArray;
         for (int i = 0; i < arraySize; i++)
         {
             varArray.add(String(array[i]));
         }
-        free(array);
+        g_free(array);
         return varArray;
     }
 
