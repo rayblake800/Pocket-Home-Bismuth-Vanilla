@@ -24,6 +24,14 @@ public:
      */
     SavedConnection(const char* path);
     
+    /**
+     * When copying other saved connections, share a path and a generated 
+     * NMConnection, but do not share a DBus interface.
+     * 
+     * @param toCopy An existing connection to copy.
+     */
+    SavedConnection(const SavedConnection& toCopy);
+    
     virtual ~SavedConnection() { }
     
     /**
@@ -62,6 +70,24 @@ public:
      * will be invalid after this method is called.
      */
     void deleteConnection();
+    
+    /**
+     * Compare SavedConnections using the connection path.
+     * 
+     * @param rhs  A connection to compare with this object.
+     * 
+     * @return  true iff this connection and rhs share a DBus path.
+     */
+    bool operator==(const SavedConnection& rhs) const;
+    
+    /**
+     * Compare SavedConnections with NMConnections using the connection path.
+     * 
+     * @param rhs  A connection to compare with this object.
+     * 
+     * @return  true iff this connection and rhs share a DBus path.
+     */
+    bool operator==(NMConnection* rhs) const;
     
 private:
     /**

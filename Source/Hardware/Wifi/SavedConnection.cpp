@@ -29,7 +29,7 @@
 #define SETTING_BLUETOOTH_TYPE "type"
 
 
-/**
+/*
  * Create an empty object with no linked connection.
  */
 SavedConnection::SavedConnection() :
@@ -48,7 +48,18 @@ path(path)
     }
 }
 
-/**
+    
+/*
+ * When copying other saved connections, share a path and a generated 
+ * NMConnection, but do not share a DBus interface.
+ */
+SavedConnection::SavedConnection(const SavedConnection& toCopy) :
+GDBusProxyInterface(BUS_NAME, toCopy.path.toRawUTF8(), INTERFACE),
+path(toCopy.path),
+nmConnection(toCopy.nmConnection) { }
+
+
+/*
  * Checks if this connection is a wifi connection.
  */
 bool SavedConnection::isWifiConnection()
@@ -201,8 +212,26 @@ void SavedConnection::deleteConnection()
     {
         callMethod(DELETE_CONN);
         invalidate();
+        path = "";
         nmConnection = nullptr;
     }
+}
+
+    
+/**
+ * Compare SavedConnections using the connection path.
+ */
+bool SavedConnection::operator==(const SavedConnection& rhs) const
+{
+    return path == rhs.path;
+}
+
+/**
+ * Compare SavedConnections with NMConnections using the connection path.
+ */
+bool SavedConnection::operator==(NMConnection* rhs) const
+{
+    return path == String(nm_connection_get_path(rhs));
 }
 
 /*
