@@ -40,14 +40,14 @@ public:
      * @return the DBus path used to create this object, or the empty string if
      *         the connection is not valid.
      */
-    const String& getPath();
+    const String& getPath() const;
     
     /**
      * Checks if this connection is a wifi connection.
      * 
      * @return true iff connection settings are for a wifi connection.
      */
-    bool isWifiConnection();
+    bool isWifiConnection() const;
     
     /**
      * Gets the NMConnection object generated from this connection's data.
@@ -112,7 +112,7 @@ private:
      * @return the setting with the matching name, if found. If this value is
      *         non-null, it will need to be freed with g_variant_unref. 
      */
-    GVariant* getSetting(const char* name);
+    GVariant* getSetting(const char* name) const;
     
     /**
      * Returns the value of a specific property for a specific settings
@@ -127,7 +127,7 @@ private:
      *         non-null, it will need to be freed with g_variant_unref. 
      */
     GVariant* getSettingProp(const char* settingName,
-            const char* propName);
+            const char* propName) const;
         
     /**
      * Returns the value of a specific property for a specific settings
@@ -142,7 +142,7 @@ private:
      *         non-null, it will need to be freed with g_variant_unref. 
      */
     GVariant* getSettingProp(GVariant* settingsObject,
-            const char* propName);
+            const char* propName) const;
     
     /**
      * Checks if this connection has a particular setting type.
@@ -154,7 +154,7 @@ private:
      * 
      * @return true iff a settings object named settingName exists 
      */
-    bool hasSetting(const char* settingName);
+    bool hasSetting(const char* settingName) const;
         
     /**
      * Checks if this connection has a specific settings property in a specific 
@@ -169,7 +169,7 @@ private:
      * @return true iff a settings object named settingName exists and contains
      *         a property called propName.
      */
-    bool hasSettingProperty(const char* settingName, const char* propName);
+    bool hasSettingProperty(const char* settingName, const char* propName) const;
     
     NMConnection* nmConnection = nullptr;
     String path;

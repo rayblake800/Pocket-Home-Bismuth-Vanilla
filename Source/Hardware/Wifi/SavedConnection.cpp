@@ -51,7 +51,7 @@ path(path)
 /**
  * Gets the connection's DBus path.
  */
-const String& getPath()
+const String& SavedConnection::getPath() const
 {
     return path;
 }
@@ -69,7 +69,7 @@ nmConnection(toCopy.nmConnection) { }
 /*
  * Checks if this connection is a wifi connection.
  */
-bool SavedConnection::isWifiConnection()
+bool SavedConnection::isWifiConnection() const
 {
     if(!isValid())
     {
@@ -338,7 +338,7 @@ void SavedConnection::createNMConnection()
 /**
  * Returns one of this connection's settings objects.
  */
-GVariant* SavedConnection::getSetting(const char* name)
+GVariant* SavedConnection::getSetting(const char* name) const
 {  
     if(!isValid())
     {
@@ -360,7 +360,7 @@ GVariant* SavedConnection::getSetting(const char* name)
  * object
  */
 GVariant* SavedConnection::getSettingProp(const char* settingName,
-        const char* propName)
+        const char* propName) const
 {  
     if(!isValid())
     {
@@ -382,7 +382,7 @@ GVariant* SavedConnection::getSettingProp(const char* settingName,
  * object
  */
 GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
-        const char* propName)
+        const char* propName) const
 {
     if(!isValid())
     {
@@ -399,7 +399,7 @@ GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
  * case it's more effective to just get the setting object and check if 
  * it is null.
  */
-bool SavedConnection::hasSetting(const char* settingName)
+bool SavedConnection::hasSetting(const char* settingName) const
 {
     if(!isValid())
     {
@@ -422,7 +422,7 @@ bool SavedConnection::hasSetting(const char* settingName)
  * and check if getSettingParam returns null.
  */
 bool SavedConnection::hasSettingProperty(const char* settingName,
-        const char* propName)
+        const char* propName) const
 {
     if(!isValid())
     {

@@ -5,8 +5,18 @@
 #define PATH "/org/freedesktop/NetworkManager/Settings"
 #define INTERFACE "org.freedesktop.NetworkManager.Settings"
 
+//methods
+#define LIST_CONNECTIONS "ListConnections"
+
 SavedConnections::SavedConnections() :
-GDBusProxyInterface(BUS_NAME, PATH, INTERFACE) { }
+GDBusProxyInterface(BUS_NAME, PATH, INTERFACE) 
+{ 
+    StringArray paths = getConnectionPaths();
+    for(const String& path : paths)
+    {
+        connectionList.add(SavedConnection(path.toRawUTF8()));
+    }
+}
 
 /*
  * Reads all connection paths from NetworkManager, and returns all the wifi
@@ -14,23 +24,14 @@ GDBusProxyInterface(BUS_NAME, PATH, INTERFACE) { }
  */
 Array<SavedConnection> SavedConnections::getWifiConnections()
 {
-    using namespace GVariantConverter;
+    updateSavedConnections();
     Array<SavedConnection> connections;
-    GVariant* conArrayVar = callMethod("ListConnections");
-    if(conArrayVar != nullptr)
+    for(const SavedConnection& con : connectionList)
     {
-        StringArray paths = getValue<StringArray>(conArrayVar);
-        for(const String& path : paths)
+        if(con.isWifiConnection())
         {
-            SavedConnection con(path.toRawUTF8());
-            if(con.isWifiConnection())
-            {
-                connections.add(con);
-            }
-            
+            connections.add(con);
         }
-        g_variant_unref(conArrayVar);
-        conArrayVar = nullptr;
     }
     return connections;
 }
@@ -43,18 +44,57 @@ Array<SavedConnection> SavedConnections::getWifiConnections()
  * 
  * @return  true iff connectionPath is a valid path to a saved connection. 
  */
-bool connectionExists(const String& connectionPath)
+bool SavedConnections::connectionExists(const String& connectionPath)
 {
     using namespace GVariantConverter;
-    Array<SavedConnection> connections;
-    GVariant* conArrayVar = callMethod("ListConnections");
+    StringArray paths = getConnectionPaths();
+    return paths.contains(connectionPath);
+}
+    
+/**
+ * Get the list of all available connection paths
+ * 
+ * @return the list of paths, freshly updated over the DBus interface.
+ */
+inline StringArray SavedConnections::getConnectionPaths()
+{
+    using namespace GVariantConverter;
     if(conArrayVar != nullptr)
     {
         StringArray paths = getValue<StringArray>(conArrayVar);
         g_variant_unref(conArrayVar);
         conArrayVar = nullptr;
-        return paths.contains(connectionPath);
+        return paths;
     }
-    return false;
+    return StringArray();
+}
+
+/**
+ * Check the list of saved connections against an updated connection path
+ * list, adding any new connections and removing any deleted connections.
+ */
+void SavedConnections::updateSavedConnections()
+{
+    StringArray paths = getConnectionPaths();
+    Array<SavedConnection> toRemove;
+    for(const SavedConnection& saved : connectionList)
+    {
+        if(!paths.contains(saved.getPath()))
+        {
+            toRemove.add(saved);
+        }
+        else
+        {
+            paths.removeString(saved.getPath());
+        }
+    }
+    for(const SavedConnection& removing : toRemove)
+    {
+        connectionList.removeAllInstancesOf(removing);
+    }
+    for(const String& path : paths)
+    {
+        connectionList.add(SavedConnection(path.toRawUTF8()));
+    }
 }
 

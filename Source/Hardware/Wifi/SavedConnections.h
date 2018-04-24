@@ -35,5 +35,20 @@ public:
      * @return  true iff connectionPath is a valid path to a saved connection. 
      */
     bool connectionExists(const String& connectionPath);
-        
+    
+private:
+    /**
+     * Check the list of saved connections against an updated connection path
+     * list, adding any new connections and removing any deleted connections.
+     */
+    void updateSavedConnections();
+    
+    /**
+     * Get the list of all available connection paths
+     * 
+     * @return the list of paths, freshly updated over the DBus interface.
+     */
+    inline StringArray getConnectionPaths();
+    
+    Array<SavedConnection> connectionList;    
 };
