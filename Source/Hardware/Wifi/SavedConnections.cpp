@@ -59,6 +59,7 @@ bool SavedConnections::connectionExists(const String& connectionPath)
 inline StringArray SavedConnections::getConnectionPaths()
 {
     using namespace GVariantConverter;
+    GVariant* conArrayVar = callMethod(LIST_CONNECTIONS);
     if(conArrayVar != nullptr)
     {
         StringArray paths = getValue<StringArray>(conArrayVar);

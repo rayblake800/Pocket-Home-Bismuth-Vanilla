@@ -75,15 +75,7 @@ bool SavedConnection::isWifiConnection() const
     {
         return false;
     }
-    GVariant* type = getSettingProp(SETTING_CONN, SETTING_CONN_TYPE);
-    if (type != nullptr)
-    {
-        String typeStr = GVariantConverter::toString(type);
-        g_variant_unref(type);
-        type = nullptr;
-        return typeStr == SETTING_WIFI;
-    }
-    return false;
+    return hasSetting(SETTING_WIFI);
 }
   
 /**
@@ -152,12 +144,11 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
         g_variant_builder_add(builder, "{sa{sv}}",
                 keyStr.toRawUTF8(), settingBldr);
     });
-    //TODO: Add new settings if there were no old settings to replace!
     if(!newSettingsAdded)
     {
         GVariantBuilder* settingBldr = g_variant_builder_new
 	        (G_VARIANT_TYPE("a{sv}"));
-	iterateDict(val,[this, settingBldr, newSettings, &keysToReplace]
+	iterateDict(newSettings,[this, settingBldr]
                 (GVariant* key, GVariant* val)
         {
             String keyStr = getValue<String>(key);
@@ -168,8 +159,8 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
                         keyStr.toRawUTF8(), val);
             }
 	});
-	 g_variant_builder_add(builder, "{sa{sv}}",
-                keyStr.toRawUTF8(), settingBldr);
+	g_variant_builder_add(builder, "{sa{sv}}",
+                SETTING_WIFI_SECURITY, settingBldr);
     }
     GVariant* updatedSettings = g_variant_builder_end(builder);
     builder = nullptr;
@@ -357,7 +348,7 @@ void SavedConnection::createNMConnection()
 /**
  * Returns one of this connection's settings objects.
  */
-GVariant* SavedConnection::getSetting(const char* name) const
+GVariant* SavedConnection::getSetting(const char* name)
 {  
     if(!isValid())
     {
@@ -379,7 +370,7 @@ GVariant* SavedConnection::getSetting(const char* name) const
  * object
  */
 GVariant* SavedConnection::getSettingProp(const char* settingName,
-        const char* propName) const
+        const char* propName)
 {  
     if(!isValid())
     {
@@ -401,7 +392,7 @@ GVariant* SavedConnection::getSettingProp(const char* settingName,
  * object
  */
 GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
-        const char* propName) const
+        const char* propName)
 {
     if(!isValid())
     {
@@ -431,7 +422,7 @@ bool SavedConnection::hasSetting(const char* settingName) const
  * and check if getSettingParam returns null.
  */
 bool SavedConnection::hasSettingProperty(const char* settingName,
-        const char* propName) const
+        const char* propName)
 {
     if(!isValid())
     {

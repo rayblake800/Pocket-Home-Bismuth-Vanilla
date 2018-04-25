@@ -112,7 +112,7 @@ private:
      * @return the setting with the matching name, if found. If this value is
      *         non-null, it will need to be freed with g_variant_unref. 
      */
-    GVariant* getSetting(const char* name) const;
+    GVariant* getSetting(const char* name);
     
     /**
      * Returns the value of a specific property for a specific settings
@@ -127,7 +127,7 @@ private:
      *         non-null, it will need to be freed with g_variant_unref. 
      */
     GVariant* getSettingProp(const char* settingName,
-            const char* propName) const;
+            const char* propName);
         
     /**
      * Returns the value of a specific property for a specific settings
@@ -142,7 +142,7 @@ private:
      *         non-null, it will need to be freed with g_variant_unref. 
      */
     GVariant* getSettingProp(GVariant* settingsObject,
-            const char* propName) const;
+            const char* propName);
     
     /**
      * Checks if this connection has a particular setting type.

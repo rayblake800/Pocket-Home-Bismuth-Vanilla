@@ -5,7 +5,6 @@
 #include "WifiAccessPoint.h"
 #include "LibNMHandler.h"
 #include "GLibThread.h"
-#include "SavedConnections.h"
 
 
 /**

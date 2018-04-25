@@ -7,6 +7,7 @@
 #include "JuceHeader.h"
 #include "WifiAccessPoint.h"
 #include "GLibSignalHandler.h"
+#include "SavedConnections.h"
 
 /**
  * @file LibNMHandler.h
@@ -304,7 +305,7 @@ private:
     
     NMActiveConnection* activatingConn = nullptr;
     
-    Array<NMRemoteConnection*> savedConnections;
+    SavedConnections savedConnections;
     
     Array<WifiAccessPoint::Ptr, CriticalSection> visibleAPs;
 
