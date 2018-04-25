@@ -146,9 +146,6 @@ private:
     
     /**
      * Checks if this connection has a particular setting type.
-     * Don't use this if you actually need any data from the setting, in that
-     * case it's more effective to just get the setting object and check if 
-     * it is null.
      * 
      * @param settingName  The name of a connection settings object to find.
      * 
@@ -169,8 +166,9 @@ private:
      * @return true iff a settings object named settingName exists and contains
      *         a property called propName.
      */
-    bool hasSettingProperty(const char* settingName, const char* propName) const;
+    bool hasSettingProperty(const char* settingName, const char* propName);
     
     NMConnection* nmConnection = nullptr;
+    StringArray settingNames;
     String path;
 };

@@ -114,10 +114,9 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
         {
             return;
         }
-        
-        
+              
         StringArray keysToReplace;
-        if(keyStr == SETTING_WIFI_SECURITY && !newSettingsAdded)
+        if(!newSettingsAdded && keyStr == SETTING_WIFI_SECURITY)
         {
             newSettingsAdded = true;
             keysToReplace = getKeys(newSettings);
@@ -153,6 +152,25 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
         g_variant_builder_add(builder, "{sa{sv}}",
                 keyStr.toRawUTF8(), settingBldr);
     });
+    //TODO: Add new settings if there were no old settings to replace!
+    if(!newSettingsAdded)
+    {
+        GVariantBuilder* settingBldr = g_variant_builder_new
+	        (G_VARIANT_TYPE("a{sv}"));
+	iterateDict(val,[this, settingBldr, newSettings, &keysToReplace]
+                (GVariant* key, GVariant* val)
+        {
+            String keyStr = getValue<String>(key);
+            GVariant* addedValue = val;
+            if(val != nullptr)
+            {
+                g_variant_builder_add(settingBldr, "{sv}",
+                        keyStr.toRawUTF8(), val);
+            }
+	});
+	 g_variant_builder_add(builder, "{sa{sv}}",
+                keyStr.toRawUTF8(), settingBldr);
+    }
     GVariant* updatedSettings = g_variant_builder_end(builder);
     builder = nullptr;
     g_variant_unref(newSettings);
@@ -264,7 +282,8 @@ void SavedConnection::createNMConnection()
             String keyStr = getValue<String>(key);
             if (keyStr.isNotEmpty())
             {
-                //GObject refuses to accept byte arrays packaged in GValues
+                settingNames.add(keyStr);
+		//GObject refuses to accept byte arrays packaged in GValues
                 if(getGType(val) == G_TYPE_BYTE_ARRAY)
                 {
                     GByteArray* byteArray = getValue<GByteArray*>(val);
@@ -395,9 +414,6 @@ GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
 
 /**
  * Checks if this connection has a particular setting type.
- * Don't use this if you actually need any data from the setting, in that
- * case it's more effective to just get the setting object and check if 
- * it is null.
  */
 bool SavedConnection::hasSetting(const char* settingName) const
 {
@@ -405,14 +421,7 @@ bool SavedConnection::hasSetting(const char* settingName) const
     {
         return false;
     }
-    GVariant* setting = getSetting(settingName);
-    if (setting != nullptr)
-    {
-        g_variant_unref(setting);
-        setting = nullptr;
-        return true;
-    }
-    return false;
+    return settingNames.contains(settingName);
 }
 
 /**
