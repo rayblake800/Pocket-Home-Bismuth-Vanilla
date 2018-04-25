@@ -1,12 +1,12 @@
-/**
- * @file MainConfigFile.h
- * 
- * MainConfigFile loads general application settings from
- * the config.json file.
- */
 #pragma once
 #include "ResourceManager.h"
 #include "ConfigFile.h"
+
+/**
+ * @file MainConfigFile.h
+ * 
+ * @brief Loads general application settings from the config.json file.
+ */
 
 class MainConfigFile : public ResourceManager
 {
@@ -17,6 +17,7 @@ public:
 
     /**
      * Gets one of the values stored in the json configuration file.
+     * 
      * @see ConfigFile.h
      */
     template<typename T > T getConfigValue(String key)
@@ -29,6 +30,7 @@ public:
     /**
      * Sets one of this ConfigFile's values, writing it to the config 
      * file if the value has changed.  
+     * 
      * @see ConfigFile.h
      */
     template<typename T>
@@ -41,6 +43,7 @@ public:
 
     /**
      * Add a listener to track setting changes.
+     * 
      * @see ConfigFile.h
      */
     void addListener(ConfigFile::Listener* listener, StringArray trackedKeys);

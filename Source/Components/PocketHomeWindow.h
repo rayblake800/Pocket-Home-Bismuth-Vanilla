@@ -8,8 +8,8 @@
 /**
  * @file PocketHomeWindow.h
  * 
- * @brief PocketHomeWindow is the application window object and the root 
- * component in the component display tree. 
+ * @brief The sole application window object and the root component in the 
+ *        component display tree. 
  */
 
 class PocketHomeWindow : public WindowFocus::BroadcastWindow

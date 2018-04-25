@@ -50,7 +50,7 @@ void componentTrace()
 }
 #endif
 
-/**
+/*
  * Requests user confirmation before performing some action
  */
 void confirmAction

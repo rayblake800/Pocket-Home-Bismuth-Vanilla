@@ -8,12 +8,13 @@
 /**
  * @file PopupEditorComponent.h
  * 
+ * @brief A generic data editing overlay component.
+ * 
  * PopupEditorComponent shows a small pop-up panel containing a title,
  * some type of content editing components, a cancel button, and a confirm 
  * button. Both buttons will remove the component, and the confirm button will
  * also run a callback function to save all changes.  Inheriting classes are 
- * responsible for adding all other controls
- * to the component layout.
+ * responsible for adding all other controls to the component layout.
  */
 
 class PopupEditorComponent : public ConfigurableImageComponent,

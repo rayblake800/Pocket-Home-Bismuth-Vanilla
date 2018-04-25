@@ -1,8 +1,13 @@
+#pragma once
+#include "JuceHeader.h"
+#include "WindowFocus.h"
+
 /**
  * @file WindowFocusedTimer.h
  * 
- * WindowFocusedTimer is a Juce timer that is guaranteed to stop whenever 
- * PocketHomeWindow loses focus, and resume whenever it regains focus.
+ * @brief  A Juce timer that is guaranteed to stop whenever the main application
+ *         window loses focus, and resume whenever it regains focus.
+ * 
  * This should reduce the amount that this application wastes CPU cycles while
  * it's running in the background.  
  * 
@@ -10,9 +15,6 @@
  * left on the timer, so timers that would have ended while suspended will 
  * immediately call their timerCallback when resumed.
  */
-#pragma once
-#include "JuceHeader.h"
-#include "WindowFocus.h"
 
 class PocketHomeWindow;
 class WindowFocusedTimer : public Timer, private WindowFocus::Listener {

@@ -4,8 +4,9 @@
 /**
  * @file DrawableImageComponent.h
  * 
- * DrawableImageComponent is a component that draws a scaled image. Unlike 
- * Juce DrawableImage objects, this component's image will resize itself
+ * @brief A Juce component that draws a scaled image. 
+ * 
+ * Unlike Juce DrawableImage objects, this component's image will resize itself
  * whenever the component bounds change.
  */
 

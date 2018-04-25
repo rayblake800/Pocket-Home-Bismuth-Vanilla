@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "Display.h"
 
-/**
+/*
  * Gets the current display brightness level.
  */
 int Display::getBrightness()
@@ -15,7 +15,7 @@ int Display::getBrightness()
     return 0;
 }
 
-/**
+/*
  * Sets the display brightness level.
  */
 void Display::setBrightness(const int& brightness)

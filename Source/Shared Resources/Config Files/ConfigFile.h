@@ -1,7 +1,13 @@
+#pragma once
+#include <map>
+#include "ResourceManager.h"
+#include "Localized.h"
+#include "JuceHeader.h"
+
 /**
  * @file ConfigFile.h
  * 
- * @brief ConfigFile reads and writes data from a json configuration file. 
+ * @brief Reads and writes data from a json configuration file. 
  * 
  * ConfigFile provides an abstract basis for ResourceManager sharedResources that
  * access .json file data.  Each ConfigFile should provide access to a set of 
@@ -18,11 +24,6 @@
  * overwritten.  To reduce file IO and prevent concurrent file modification,
  * only one ConfigFile object should exist for each json configuration file.
  */
-#pragma once
-#include <map>
-#include "ResourceManager.h"
-#include "Localized.h"
-#include "JuceHeader.h"
 
 class ConfigFile : public ResourceManager::SharedResource, private Localized
 {

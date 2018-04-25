@@ -1,12 +1,11 @@
+#pragma once
+#include "JuceHeader.h"
+
 /**
  * @file Utils.h
  * 
- * Utils defines a few useful general purpose functions and debugging functions
- * that are useful to have throughout this project.
+ * @brief Provides miscellaneous utility and debugging functions.
  */
-
-#pragma once
-#include "JuceHeader.h"
 
 #if JUCE_DEBUG
 /**

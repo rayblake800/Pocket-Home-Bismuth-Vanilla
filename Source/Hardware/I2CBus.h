@@ -1,12 +1,13 @@
-/**
- * @file I2CBus.h
- * 
- * On a PocketCHIP, I2CBus accesses the i2c bus to read information on battery 
- * state or put the system in FEL mode.  
- */
 #pragma once
 #include <exception>
 #include "JuceHeader.h"
+
+/**
+ * @file I2CBus.h
+ * 
+ * @brief Accesses the i2c bus on PocketCHIP to read information on battery 
+ *        state or put the system in FEL mode.  
+ */
 
 class I2CBus
 {

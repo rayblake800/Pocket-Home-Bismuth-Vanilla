@@ -1,13 +1,16 @@
-/**
- * @file Localized.h
- *
- * Localized manages a set of LocalizedTextConsumer objects, which load all
- * displayed text from a locale/<localeName.json> file in the asset folder.
- */
-
 #pragma once
 #include <map>
 #include "JuceHeader.h"
+
+/**
+ * @file Localized.h
+ *
+ * @brief Manages a set of LocalizedTextConsumer objects, which load all text
+ *        displayed to the user.
+ * 
+ *  Displayed text is loaded from a locale/<localeName.json> file in the asset 
+ *  folder.
+ */
 
 class Localized
 {

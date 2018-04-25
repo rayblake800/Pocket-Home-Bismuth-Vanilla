@@ -15,6 +15,7 @@
  * @brief Interacts with LibNM and the GLib event loop to simplify the use of 
  *        LibNM functionality.
  */
+
 class LibNMHandler
 {
 public:  
@@ -190,6 +191,18 @@ private:
     
     //Internal signal handlers:
     
+    /**
+     * 
+     * @param client
+     * 
+     * @param active
+     * 
+     * @param path
+     * 
+     * @param err
+     * 
+     * @param nmHandler
+     */
     static void handleConnectionAttempt(
         NMClient *client,
         NMActiveConnection *active,
@@ -197,24 +210,66 @@ private:
         GError *err,
         LibNMHandler* nmHandler);
     
+    /**
+     * 
+     * @param client
+     * 
+     * @param active
+     * 
+     * @param err
+     * 
+     * @param nmHandler
+     */
     static void handleKnownConnectionAttempt(
         NMClient *client,
         NMActiveConnection *active,
         GError *err,
         LibNMHandler* nmHandler);
     
+    /**
+     * 
+     * @param nmHandler
+     */
     static void handleWifiEnabledChange(LibNMHandler* nmHandler);
     
+    /**
+     * 
+     * @param nmHandler
+     */
     static void handleStateChange(LibNMHandler* nmHandler);
     
+    /**
+     * 
+     * @param nmHandler
+     */
     static void handleApAdded(LibNMHandler* nmHandler);
     
+    /**
+     * 
+     * @param nmHandler
+     */
     static void handleApRemoved(LibNMHandler* nmHandler);
     
+    /**
+     * 
+     * @param nmHandler
+     */
     static void handleConnectionChange(LibNMHandler* nmHandler);
     
+    /**
+     * 
+     * @param self
+     * 
+     * @param client
+     */
     static void handleClientRemoved(LibNMHandler* self, GObject* client);
     
+    /**
+     * 
+     * @param self
+     * 
+     * @param device
+     */
     static void handleDeviceRemoved(LibNMHandler* self, GObject* device);
     
     /**
@@ -300,15 +355,32 @@ private:
             GCallback signalHandler,
             gpointer callbackData);
 
+    /**
+     */
     NMClient* nmClient = nullptr;
+    
+    /**
+     */
     NMDevice* nmDevice = nullptr;
     
+    /**
+     *
+     */
     NMActiveConnection* activatingConn = nullptr;
     
+    /**
+     *
+     */
     SavedConnections savedConnections;
     
+    /**
+     *
+     */
     Array<WifiAccessPoint::Ptr, CriticalSection> visibleAPs;
 
+    /**
+     *
+     */
     Array<gulong, CriticalSection> clientSignalHandlers;
     Array<gulong, CriticalSection> deviceSignalHandlers;
     Array<gulong, CriticalSection> wifiDeviceSignalHandlers;

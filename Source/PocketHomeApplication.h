@@ -9,8 +9,7 @@
 /**
  * @file PocketHomeApplication.h
  * 
- * PocketHomeApplication is the base application class that initializes and
- * shuts down the program.
+ * @brief The base class that initializes and shuts down the program.
  */
 
 class PocketHomeApplication : public JUCEApplication

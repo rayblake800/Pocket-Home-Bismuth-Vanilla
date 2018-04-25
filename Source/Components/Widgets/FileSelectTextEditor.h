@@ -6,6 +6,8 @@
 /**
  * @file FileSelectTextEditor.h
  * 
+ * @brief A file selection UI component.
+ * 
  * This component allows a user to either type in a text value, or click a
  * button to open a file picker and choose a file/directory path.
  */

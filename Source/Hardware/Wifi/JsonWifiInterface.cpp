@@ -29,7 +29,7 @@ bool JsonWifiInterface::wifiDeviceFound()
     return true;
 }
 
-/**
+/*
  * Checks if the simulated wifi device is enabled.
  */
 bool JsonWifiInterface::isWifiEnabled()
@@ -38,7 +38,7 @@ bool JsonWifiInterface::isWifiEnabled()
     return enabled;
 }
 
-/**
+/*
  * Checks if a connection event is currently being simulated.
  */
 bool JsonWifiInterface::isWifiConnecting()
@@ -47,7 +47,7 @@ bool JsonWifiInterface::isWifiConnecting()
     return waitingToConnect != nullptr;
 }
 
-/**
+/*
  *  Checks if a simulated connection has been created.
  */
 bool JsonWifiInterface::isWifiConnected()
@@ -57,7 +57,7 @@ bool JsonWifiInterface::isWifiConnected()
 }
 
 
-/**
+/*
  *  Returns the connected access point.
  */
 WifiAccessPoint::Ptr JsonWifiInterface::getConnectedAP()
@@ -70,7 +70,7 @@ WifiAccessPoint::Ptr JsonWifiInterface::getConnectedAP()
     return connectedAP;
 }
 
-/**
+/*
  * Returns the connecting access point.
  */
 WifiAccessPoint::Ptr JsonWifiInterface::getConnectingAP()
@@ -79,7 +79,7 @@ WifiAccessPoint::Ptr JsonWifiInterface::getConnectingAP()
     return waitingToConnect;
 }
 
-/**
+/*
  * Returns the entire list of access points defined in wifi.json.
  */
 Array<WifiAccessPoint::Ptr> JsonWifiInterface::getVisibleAPs()
@@ -92,7 +92,7 @@ Array<WifiAccessPoint::Ptr> JsonWifiInterface::getVisibleAPs()
     return {};
 }
 
-/**
+/*
  * Triggers a wifi connection event.  This will set a timer to simulate
  * the connection's success or failure after a randomized delay of two to
  * four seconds.
@@ -196,8 +196,7 @@ void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
     }
 }
 
-
-/**
+/*
  * If a connection is pending, cancel it.
  */
 void JsonWifiInterface::stopConnecting()
@@ -213,7 +212,7 @@ void JsonWifiInterface::stopConnecting()
     }
 }
 
-/**
+/*
  * Triggers a simulated wifi disconnection event.  If a simulated connection
  * exists, after a randomized delay of no more than two seconds, a 
  * disconnection event will trigger.
@@ -239,7 +238,7 @@ void JsonWifiInterface::disconnect()
     }
 }
 
-/**
+/*
  * Turns on the simulated wifi device.  This will trigger a wifi enabled
  * event after a randomized delay of no more than two seconds.
  */
@@ -276,7 +275,7 @@ void JsonWifiInterface::enableWifi()
     }
 }
 
-/**
+/*
  * Turns off the simulated wifi device.  This will trigger a wifi disabled
  * event after a randomized delay of no more than two seconds.
  */

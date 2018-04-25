@@ -432,7 +432,7 @@ void ComponentConfigFile::setColour(String key, Colour newColour)
     config->setConfigValue<String>(key,newColour.toString());
 }
 
-/**
+/*
  * @return the keys to all Component color settings stored in
  *          components.json
  */
@@ -447,7 +447,7 @@ StringArray ComponentConfigFile::getColourKeys() const
     return keys;
 }
 
-/**
+/*
  * Find a Component ColourId value from its config key String
  */
 int ComponentConfigFile::getColourId(String colourKey)
@@ -460,12 +460,8 @@ int ComponentConfigFile::getColourId(String colourKey)
     return searchIter->second;
 }
 
-/**
+/*
  * Get a color value from its String key.
- *  
- * @param colourKey the key for a color value in colourIds
- * @return the corresponding Colour value, or Colour() if colourKey wasn't
- * found.
  */
 Colour ComponentConfigFile::getColour(String colourKey)
 {
@@ -474,7 +470,7 @@ Colour ComponentConfigFile::getColour(String colourKey)
     return Colour(config->getConfigValue<String>(colourKey).getHexValue32());
 }
 
-/**
+/*
  * Gets configured component settings from shared .json file data.
  */
 ComponentConfigFile::ComponentSettings
@@ -485,7 +481,7 @@ ComponentConfigFile::getComponentSettings(String componentKey)
     return config->getComponentSettings(componentKey);
 }
 
-/**
+/*
  * Add a listener to track component setting changes.
  */
 void ComponentConfigFile::addListener(ConfigFile::Listener* listener,
@@ -517,7 +513,7 @@ const String ComponentConfigFile::smallTextKey = "small text";
 const String ComponentConfigFile::mediumTextKey = "medium text";
 const String ComponentConfigFile::largeTextKey = "large text";
 
-/**
+/*
  * Return the most appropriate font size for drawing text
  */
 int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds, String text)
@@ -561,7 +557,7 @@ int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds, String text)
     return height;
 }
 
-/**
+/*
  * @return the list of all component keys.
  */
 StringArray ComponentConfigFile::getComponentKeys()
@@ -596,7 +592,7 @@ ComponentConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
     writeChanges();
 }
 
-/**
+/*
  * Gets the configured settings for a particular component.
  */
 ComponentConfigFile::ComponentSettings
@@ -605,7 +601,7 @@ ComponentConfigFile::ConfigJson::getComponentSettings(String componentKey)
     return components[componentKey];
 }
 
-/**
+/*
  * @return the list of key Strings for each integer value tracked in 
  * components.json
  */
@@ -625,7 +621,7 @@ std::vector<ConfigFile::DataKey> ComponentConfigFile::ConfigJson
     return keys;
 }
 
-/**
+/*
  * Read in this object's data from a json config object
  */
 void ComponentConfigFile::ConfigJson::readDataFromJson
@@ -640,7 +636,7 @@ void ComponentConfigFile::ConfigJson::readDataFromJson
     }
 }
 
-/**
+/*
  * Copy all config data to a json object
  */
 void ComponentConfigFile::ConfigJson::copyDataToJson
@@ -657,7 +653,7 @@ void ComponentConfigFile::ConfigJson::copyDataToJson
 ComponentConfigFile::ComponentSettings::ComponentSettings() :
 x(0), y(0), width(0), height(0) { }
 
-/**
+/*
  * Initializes from json data.
  */
 ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
@@ -688,7 +684,7 @@ ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
     }
 }
 
-/**
+/*
  * Packages the object into a DynamicObject that can be written to a
  * json file.
  */
@@ -744,7 +740,7 @@ bool ComponentConfigFile::ComponentSettings::operator==
             assetFiles == rhs.assetFiles;
 }
 
-/**
+/*
  * @return the bounds of the component relative to the window,
  * measured in pixels.
  */
@@ -758,7 +754,7 @@ Rectangle<int> ComponentConfigFile::ComponentSettings::getBounds()
                           height * window.getHeight());
 }
 
-/**
+/*
  * @return the list of configurable colors.
  */
 Array<Colour> ComponentConfigFile::ComponentSettings::getColours()
@@ -766,7 +762,7 @@ Array<Colour> ComponentConfigFile::ComponentSettings::getColours()
     return colours;
 }
 
-/**
+/*
  * @return the list of component asset files.
  */
 StringArray ComponentConfigFile::ComponentSettings::getAssetFiles()
@@ -774,7 +770,7 @@ StringArray ComponentConfigFile::ComponentSettings::getAssetFiles()
     return assetFiles;
 }
 
-/**
+/*
  * Use these settings to position and size a component.
  */
 void ComponentConfigFile::ComponentSettings::applyBounds(Component * component)

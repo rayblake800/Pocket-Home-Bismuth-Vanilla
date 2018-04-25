@@ -1,8 +1,17 @@
+#pragma once
+#include "JuceHeader.h"
+#include "WindowFocus.h"
+#include "ResourceManager.h"
+#include "WindowFocusedTimer.h"
+#include "WifiAccessPoint.h"
+
 /**
  * @file WifiStateManager.h
  *
- * WifiStateManager tracks the current state of the Wifi network device,
- * provides information about nearby access points and any current connections,
+ * @brief Tracks wifi state and controls the wifi device.
+ * 
+ * WifiStateManager tracks the current state of the wifi device, provides 
+ * information about nearby access points and any current connections,
  * notifies Listener objects whenever Wifi state changes, and provides an
  * interface for requesting Wifi connections or other changes in Wifi
  * state.
@@ -11,12 +20,6 @@
  * communication with the Wifi device.
  */
 
-#pragma once
-#include "JuceHeader.h"
-#include "WindowFocus.h"
-#include "ResourceManager.h"
-#include "WindowFocusedTimer.h"
-#include "WifiAccessPoint.h"
 
 class WifiStateManager : private ResourceManager
 {
@@ -198,6 +201,7 @@ public:
 
         /**
          * Gets the current state of the wifi device.
+         * 
          * @see WifiStateManager::getWifiState()
          */
         WifiState getWifiState();
@@ -211,6 +215,7 @@ public:
         /**
          * Add a listener to the list of objects receiving updates whenever 
          * Wifi state changes.  
+         * 
          * @see WifiStateManager::addListener()
          */
         void addListener(WifiStateManager::Listener* listener);
@@ -218,6 +223,7 @@ public:
         /**
          * Searches the list of registered listeners for a particular one, and 
          * removes it if it's found. 
+         * 
          * @see WifiStateManager::removeListener()
          */
         void removeListener(WifiStateManager::Listener* listener);

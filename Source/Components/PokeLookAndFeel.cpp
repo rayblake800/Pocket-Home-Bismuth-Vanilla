@@ -22,7 +22,7 @@ cursor(MouseCursor::NoCursor)
     loadAllConfigProperties();
 }
 
-/**
+/*
  * Get the appropriate typeface for the given font.
  */
 Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const Font &font)
@@ -30,7 +30,7 @@ Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const Font &font)
     return seguibl;
 }
 
-/**
+/*
  * Draws the background of a linear slider. 
  */
 void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
@@ -58,7 +58,7 @@ void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
     g.fillPath(circle);
 }
 
-/**
+/*
  * Draws the entire linear slider component.
  */
 void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y,
@@ -92,7 +92,7 @@ void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y,
     g.fillPath(indent);
 }
 
-/**
+/*
  * Draws the entire linear slider component.
  */
 void PokeLookAndFeel::drawLinearSlider(Graphics &g, int x, int y,
@@ -109,7 +109,7 @@ void PokeLookAndFeel::drawLinearSlider(Graphics &g, int x, int y,
             slider);
 }
 
-/**
+/*
  * Defines the radius in pixels of the slider thumb.
  */
 int PokeLookAndFeel::getSliderThumbRadius(Slider &slider)
@@ -117,7 +117,7 @@ int PokeLookAndFeel::getSliderThumbRadius(Slider &slider)
     return jmin(14, slider.getHeight() / 2, slider.getWidth() / 2);
 }
 
-/**
+/*
  * Draws the text onto a TextButton.
  */
 void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
@@ -156,7 +156,7 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
             Justification::centred, 2);
 }
 
-/**
+/*
  * Draws the background of a Button component.
  */
 void PokeLookAndFeel::drawButtonBackground(Graphics &g, Button &button,
@@ -179,7 +179,7 @@ void PokeLookAndFeel::drawButtonBackground(Graphics &g, Button &button,
     g.fillPath(path);
 }
 
-/**
+/*
  * Get the cursor to display over a given component.
  */
 MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
@@ -187,7 +187,7 @@ MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
     return cursor;
 }
 
-/**
+/*
  * Loads and applies component colors from components.json, and updates
  * cursor visibility.
  */

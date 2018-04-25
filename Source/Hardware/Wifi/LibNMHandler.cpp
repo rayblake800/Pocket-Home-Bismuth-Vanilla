@@ -7,7 +7,7 @@
 #include "GLibThread.h"
 
 
-/**
+/*
  * Loads client and device objects, and starts the signal thread.
  */
 LibNMHandler::LibNMHandler()
@@ -74,7 +74,7 @@ LibNMHandler::LibNMHandler()
     });
 }
 
-/**
+/*
  * Shuts down the signal thread, removing all signal handlers.
  */
 LibNMHandler::~LibNMHandler()
@@ -92,7 +92,7 @@ LibNMHandler::~LibNMHandler()
     disconnectSignalHandlers();
 }
 
-/**
+/*
  * Checks if the network manager and the wifi device are available
  */
 bool LibNMHandler::isWifiAvailable()
@@ -101,7 +101,7 @@ bool LibNMHandler::isWifiAvailable()
             && nmDevice != nullptr;
 }
 
-/**
+/*
  * @return true iff the wifi device is enabled. 
  */
 bool LibNMHandler::checkWifiEnabled()
@@ -118,7 +118,7 @@ bool LibNMHandler::checkWifiEnabled()
     return enabled;
 }
 
-/**
+/*
  * @return true iff the wifi device is connecting to an access point. 
  */
 bool LibNMHandler::checkWifiConnecting()
@@ -127,7 +127,7 @@ bool LibNMHandler::checkWifiConnecting()
             && findWifiState() != NM_DEVICE_STATE_ACTIVATED;
 }
 
-/**
+/*
  * @return true iff the wifi device is connected to an access point. 
  */
 bool LibNMHandler::checkWifiConnected()
@@ -149,12 +149,9 @@ bool LibNMHandler::checkWifiConnected()
     return connected;
 }
 
-/**
+/*
  * Gets the current connected access point from the network manager wifi
  * device.
- * 
- * @return the current connected access point, or the void access point if
- *         none is found.
  */
 WifiAccessPoint::Ptr LibNMHandler::findConnectedAP()
 {
@@ -186,11 +183,9 @@ WifiAccessPoint::Ptr LibNMHandler::findConnectedAP()
     return ap;
 }
 
-/**
+/*
  * Gets the current connecting access point from the network manager wifi
  * device.
- * 
- * @return the current connecting access point, or nullptr if none is found.
  */
 WifiAccessPoint::Ptr LibNMHandler::findConnectingAP()
 {
@@ -228,7 +223,7 @@ WifiAccessPoint::Ptr LibNMHandler::findConnectingAP()
     return connectingAP;
 }
 
-/**
+/*
  * Returns the list of visible wifi access points.
  */
 Array<WifiAccessPoint::Ptr> LibNMHandler::findVisibleAPs()
@@ -266,11 +261,8 @@ Array<WifiAccessPoint::Ptr> LibNMHandler::findVisibleAPs()
     return returnedAPs;
 }
 
-/**
+/*
  * Turns the wifi device on or off.
- * 
- * @param wifiEnabled  If true, wifi will be enabled.  If false, wifi will
- *                     be disabled.
  */
 void LibNMHandler::setWifiEnabled(bool wifiEnabled)
 {
@@ -284,7 +276,7 @@ void LibNMHandler::setWifiEnabled(bool wifiEnabled)
     });
 }
 
-/**
+/*
  * Send a request to the wifi device to scan for new access points.
  */
 void LibNMHandler::requestScan()
@@ -307,7 +299,7 @@ void LibNMHandler::requestScan()
     });
 }
 
-/**
+/*
  * @return  the current state of the wifi device. 
  */
 NMDeviceState LibNMHandler::findWifiState()
@@ -383,7 +375,7 @@ void LibNMHandler::handleKnownConnectionAttempt(
     handleConnectionAttempt(client, active, nullptr, err, nmHandler);
 }
 
-/**
+/*
  * Attempts to open a connection to an access point.
  */
 void LibNMHandler::initConnection(WifiAccessPoint::Ptr toConnect, String psk)
@@ -464,7 +456,7 @@ void LibNMHandler::initConnection(WifiAccessPoint::Ptr toConnect, String psk)
     });
 }
 
-/**
+/*
  * Shuts down the active wifi connection.
  */
 void LibNMHandler::closeActiveConnection()
@@ -479,7 +471,7 @@ void LibNMHandler::closeActiveConnection()
     });
 }
 
-/**
+/*
  * Shuts down any wifi connection currently being activated.
  */
 void LibNMHandler::closeActivatingConnection()
@@ -521,7 +513,7 @@ void LibNMHandler::closeActivatingConnection()
     });
 }
 
-/**
+/*
  * Attach all signal handlers to the wifi thread, so that they are run
  * whenever the appropriate signals occur.
  */
@@ -556,7 +548,7 @@ void LibNMHandler::connectSignalHandlers()
     });
 }
 
-/**
+/*
  * Remove all signal handlers from the wifi thread, so that they don't 
  * register wifi updates.
  */
@@ -735,7 +727,7 @@ void LibNMHandler::handleDeviceRemoved(LibNMHandler* self, GObject* device)
     self->wifiDeviceSignalHandlers.clear(); 
 }
 
-/**
+/*
  * Checks if a connection belongs to the wifi device.  This function should
  * be called from the GLib event thread.
  */
@@ -759,7 +751,7 @@ bool LibNMHandler::isWifiConnection(NMActiveConnection* connection)
     return false;
 }
 
-/**
+/*
  * Scans for all visible NMAccessPoints and build the data structure 
  * mapping WifiAccessPoint objects to their NMAccessPoints.
  */
@@ -857,7 +849,7 @@ void LibNMHandler::buildAPMap()
     });
 }
 
-/**
+/*
  * Connects a signal handler to the network manager client.
  */
 gulong LibNMHandler::nmClientSignalConnect(
@@ -886,7 +878,7 @@ gulong LibNMHandler::nmClientSignalConnect(
     return handlerId;
 }
 
-/**
+/*
  * Connects a signal handler to the generic wlan0 device.
  */
 gulong LibNMHandler::nmDeviceSignalConnect(
@@ -915,7 +907,7 @@ gulong LibNMHandler::nmDeviceSignalConnect(
     return handlerId;
 }
 
-/**
+/*
  * Connects a signal handler to the wifi device wlan0.
  */
 gulong LibNMHandler::nmWifiDeviceSignalConnect(

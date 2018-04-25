@@ -6,7 +6,8 @@
 /**
  * @file ListEditor.h
  * 
- * ListEditor provides a UI component for editing a list of strings.
+ * @brief A UI component used for editing a list of strings.
+ * 
  * The user can add new strings, edit existing ones by double clicking them,
  * and delete list items.  The edited list of strings can then be obtained with
  * getListItems().

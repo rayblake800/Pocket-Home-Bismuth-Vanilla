@@ -1,5 +1,11 @@
+#pragma once
+#include "JuceHeader.h"
+
 /**
  * @file WindowFocus.h
+ * 
+ * @brief  Defines an abstract base object that is notified whenever the program
+ *         gains or loses window focus.
  * 
  * Defines WindowFocus::Listener and WindowFocus::BroadcastWindow.
  * 
@@ -11,8 +17,6 @@
  * automatically register themselves on creation and unregister themselves on 
  * destruction.
  */
-#pragma once
-#include "JuceHeader.h"
 namespace WindowFocus {
 
     class BroadcastWindow : public DocumentWindow {

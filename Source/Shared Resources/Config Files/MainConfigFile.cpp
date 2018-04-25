@@ -16,7 +16,7 @@ ResourceManager(sharedResource,configLock,
 }) { }
 
 
-/**
+/*
  * Add a listener to track component setting changes.
  */
 void MainConfigFile::addListener(ConfigFile::Listener* listener,

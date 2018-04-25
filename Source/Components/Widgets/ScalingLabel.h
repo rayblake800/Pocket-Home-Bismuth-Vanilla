@@ -5,8 +5,8 @@
 /**
  * @File ScalingLabel.h
  * 
- * ScalingLabel is a basic Juce Label that adjusts its text height to fit its
- * bounds whenever it is resized.
+ * @brief A Juce Label component that adjusts its text height to fit its bounds 
+ *        whenever it is resized.
  */
 
 class ScalingLabel : public Label

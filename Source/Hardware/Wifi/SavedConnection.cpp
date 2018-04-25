@@ -345,7 +345,7 @@ void SavedConnection::createNMConnection()
     }
 }
 
-/**
+/*
  * Returns one of this connection's settings objects.
  */
 GVariant* SavedConnection::getSetting(const char* name)
@@ -365,7 +365,7 @@ GVariant* SavedConnection::getSetting(const char* name)
     return setting;
 }
 
-/**
+/*
  * Returns the value of a specific property for a specific settings
  * object
  */
@@ -387,7 +387,7 @@ GVariant* SavedConnection::getSettingProp(const char* settingName,
     return property;
 }
 
-/**
+/*
  * Returns the value of a specific property for a specific settings
  * object
  */
@@ -403,7 +403,7 @@ GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
     return property;
 }
 
-/**
+/*
  * Checks if this connection has a particular setting type.
  */
 bool SavedConnection::hasSetting(const char* settingName) const
@@ -415,7 +415,7 @@ bool SavedConnection::hasSetting(const char* settingName) const
     return settingNames.contains(settingName);
 }
 
-/**
+/*
  * Checks if this connection has a specific settings property in a specific 
  * settings type. Don't use this if you actually need any data from the 
  * setting, in that case it's more effective to just get the setting object

@@ -6,17 +6,17 @@
 /**
  * @file Spinner.h
  * 
- * @brief A Component that shows a small spinning circle animation meant to
- * be used as a loading indicator.  
+ * @brief A Component that shows a small spinning circle animation.
  * 
- * Spinner only animates while visible, and
- * can be set to automatically lose visibility after a set amount of time.
+ * The Spinner component is intended to be used as a loading indicator.  It only
+ * animates while visible, and can be set to automatically lose visibility after
+ * a set amount of time.
  */
 
 class Spinner : public ConfigurableImageComponent, private WindowFocusedTimer {
 public:
     /**
-     * @param secondsToTimeout Sets how many seconds should pass after enabling
+     * @param secondsToTimeout  Sets how many seconds should pass after enabling
      *                          the spinner before the spinner is automatically 
      *                          disabled.  If this value is negative, the 
      *                          spinner will keep running until destroyed or 

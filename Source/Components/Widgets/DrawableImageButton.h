@@ -4,7 +4,7 @@
 /**
  * @file DrawableImageButton.h
  * 
- * DrawableImageButton is a button drawn using a DrawableImageComponent.
+ * @brief a Juce button component drawn using a DrawableImageComponent.
  */
 
 class DrawableImageButton : public Button {

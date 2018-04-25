@@ -1,9 +1,3 @@
-/**
- * @file AppLauncher.h
- * 
- * AppLauncher launches and tracks new application processes, automatically
- * switching window focus to the new application.
- */
 #pragma once
 #include <functional>
 #include <map>
@@ -12,9 +6,10 @@
 #include "WindowFocusedTimer.h"
 
 /**
- * TODO:
- *  -Test to see if it's really necessary to reload xmodmap every time an 
- *   application launches
+ * @file AppLauncher.h
+ * 
+ * @brief Launches and tracks new application processes, automatically
+ *        switching window focus to the launched application.
  */
 
 class AppLauncher : public WindowFocusedTimer, private Localized
@@ -40,8 +35,10 @@ public:
     /**
      * Launch a new application, or focus its window if the application is
      * already running
-     * @param appTitle the application title
-     * @param command the shell command that starts the application
+     * 
+     * @param appTitle  The application title.
+     * 
+     * @param command   The shell command that starts the application.
      */
     void startOrFocusApp(String appTitle, String command);
 private:
@@ -61,26 +58,32 @@ private:
     };
 
     /**
-     * Start a new instance of an application process
-     * @param processInfo defines the new application title and
-     * launch command.
+     * Start a new instance of an application process.
+     * 
+     * @param processInfo  Provides the new application title and launch 
+     *                     command.
      */
     void startApp(ProcessInfo processInfo);
 
     /**
-     * Focus the window of a running app
-     * @param windowId the app window's id
+     * Focus the window of a running application.
+     * 
+     * @param windowId  The application window's ID.
      */
     void focusApp(const String& windowId);
 
     /**
-     * Attempt to find an open window of a launched application
-     * @param processInfo running application process info
-     * @return the window ID, or the empty string if none was found
+     * Searches for the ID of any window belonging to a given process.
+     * 
+     * @param processInfo  The running application process info.
+     * 
+     * @return  the window ID, or the empty string if none was found.
      */
     String getWindowId(ProcessInfo processInfo);
 
-    //Track application launch success and respond appropriately.
+    /**
+     * Track application launch success and respond appropriately.
+     */
     virtual void timerCallback() override;
 
     /**

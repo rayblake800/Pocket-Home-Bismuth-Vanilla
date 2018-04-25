@@ -1,6 +1,6 @@
 #include "RelativeLayoutManager.h"
 
-/**
+/*
  * Set a new Component layout, removing all old layout definitions.
  */
 void RelativeLayoutManager::setLayout
@@ -23,7 +23,7 @@ void RelativeLayoutManager::setLayout
     }
 }
 
-/**
+/*
  * Adds all components in the layout to a parent component, and makes them
  * all visible.
  */
@@ -38,7 +38,7 @@ void RelativeLayoutManager::addComponentsToParent(Component* parent)
     }
 }
 
-/**
+/*
  * Arranges the components within a bounding rectangle.
  */
 void RelativeLayoutManager::layoutComponents(
@@ -81,7 +81,7 @@ void RelativeLayoutManager::layoutComponents(
     }
 }
 
-/**
+/*
  * Remove all saved component layout parameters
  */
 void RelativeLayoutManager::clearLayout(bool removeComponentsFromParent)

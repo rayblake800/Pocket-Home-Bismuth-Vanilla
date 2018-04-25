@@ -1,11 +1,12 @@
+#pragma once
+#include "JuceHeader.h"
+
 /**
  * @file Display.h
  * 
- * Display contains functions related to display management and properties.
+ * @brief Contains functions related to display management and properties.
  */
 
-#pragma once
-#include "JuceHeader.h"
 namespace Display
 {
 

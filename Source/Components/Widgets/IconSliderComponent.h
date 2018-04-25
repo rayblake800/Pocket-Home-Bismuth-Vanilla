@@ -5,8 +5,8 @@
 /**
  * @file IconSliderComponent.h
  * 
- * IconSliderComponent is a horizontal slider that draws icons on
- * its left and right sides.
+ * @brief A horizontal slider component that draws icons on its left and right 
+ *        sides.
  */
 
 class IconSliderComponent : public Component

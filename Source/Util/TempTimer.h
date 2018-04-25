@@ -1,12 +1,15 @@
+#pragma once
+#include "JuceHeader.h"
+
 /**
  * @file TempTimer.h
  * 
- * TempTimer starts a temporarily allocated timer that deletes itself after
- * it runs once.  Once started it cannot be canceled, so avoid using this to
+ * @brief Starts a temporarily allocated timer that deletes itself after
+ *        it runs once.  
+ * 
+ * Once started it cannot be canceled, so avoid using this to
  * handle actions for objects that may be unexpectedly destroyed.
  */
-#pragma once
-#include "JuceHeader.h"
 
 class TempTimer : public ReferenceCountedObject, private Timer
 {

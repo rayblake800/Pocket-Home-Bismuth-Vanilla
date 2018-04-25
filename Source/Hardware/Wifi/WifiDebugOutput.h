@@ -1,10 +1,10 @@
+#pragma once
 
 /** 
  * @file WifiDebugOutput.h
  * 
  * @brief Converts assorted Wifi-related enums to text for debug output.
  */
-#pragma once
 
 
 const char* nmStateString(NMState state)

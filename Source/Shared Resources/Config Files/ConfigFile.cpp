@@ -1,7 +1,7 @@
 #include "AssetFiles.h"
 #include "ConfigFile.h"
 
-/**
+/*
  * @return a std::map of String keys mapped to integers, so getConfigValue()
  *          and setConfigValue() can use int as a template type. 
  */
@@ -10,7 +10,7 @@ template<> std::map<String, int>& ConfigFile::getMapReference<int>()
     return intValues;
 }
 
-/**
+/*
  * @return a std::map of String keys mapped to strings, so getConfigValue()
  *          and setConfigValue() can use String as a template type. 
  */
@@ -19,7 +19,7 @@ template<> std::map<String, String>& ConfigFile::getMapReference<String>()
     return stringValues;
 }
 
-/**
+/*
  * @return a std::map of String keys mapped to booleans, so getConfigValue()
  *          and setConfigValue() can use bool as a template type. 
  */
@@ -31,7 +31,7 @@ template<> std::map<String, bool>& ConfigFile::getMapReference<bool>()
 ConfigFile::ConfigFile(String configFilename) : Localized("ConfigFile"),
 filename(configFilename) { }
 
-/**
+/*
  * Writes any pending changes to the file before destruction.
  */
 ConfigFile::~ConfigFile()
@@ -39,7 +39,7 @@ ConfigFile::~ConfigFile()
     writeChanges();
 }
 
-/**
+/*
  * @return true iff this ConfigFile and rhs have the same filename.
  */
 bool ConfigFile::operator==(const ConfigFile& rhs) const
@@ -47,7 +47,7 @@ bool ConfigFile::operator==(const ConfigFile& rhs) const
     return filename == rhs.filename;
 }
 
-/**
+/*
  * Listeners safely remove themselves from all tracked ConfigFiles when
  * they are destroyed.
  */
@@ -62,7 +62,7 @@ ConfigFile::Listener::~Listener()
     }
 }
 
-/**
+/*
  * Calls configValueChanged() for every key tracked by this listener.
  */
 void ConfigFile::Listener::loadAllConfigProperties()
@@ -78,7 +78,7 @@ void ConfigFile::Listener::loadAllConfigProperties()
     }
 }
 
-/**
+/*
  * Adds a listener to the list of objects to notify when config values
  * change.
  */
@@ -94,7 +94,7 @@ void ConfigFile::addListener(ConfigFile::Listener* listener,
     }
 }
 
-/**
+/*
  * Removes a listener from this ConfigFile.
  */
 void ConfigFile::removeListener(ConfigFile::Listener* listener)
@@ -112,7 +112,7 @@ void ConfigFile::removeListener(ConfigFile::Listener* listener)
     }
 }
 
-/**
+/*
  * Announce new changes to each object tracking a particular key.
  */
 void ConfigFile::notifyListeners(String key)
@@ -134,7 +134,7 @@ void ConfigFile::notifyListeners(String key)
 
 //################################# File IO ####################################
 
-/**
+/*
  * Read in this object's data from a json config object
  */
 void ConfigFile::readDataFromJson(var& config, var & defaultConfig)
@@ -166,7 +166,7 @@ void ConfigFile::readDataFromJson(var& config, var & defaultConfig)
     }
 }
 
-/**
+/*
  * Copy all config data to a json object
  */
 void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
@@ -196,7 +196,7 @@ void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
     }
 }
 
-/**
+/*
  * Checks if a property exists in a config data object loaded from a json
  * file.
  */
@@ -208,7 +208,7 @@ bool ConfigFile::propertyExists(var& config, String propertyKey)
     return !property.isVoid();
 }
 
-/**
+/*
  * Gets a property from json configuration data, or from default
  * configuration data if necessary
  */
@@ -233,7 +233,7 @@ var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
     }
 }
 
-/**
+/*
  * Marks this ConfigFile as containing changes that need to be written to
  * the underlying .json file.
  */
@@ -243,7 +243,7 @@ void ConfigFile::markPendingChanges()
     fileChangesPending = true;
 }
 
-/**
+/*
  * Re-writes all data back to the config file, as long as there are
  * changes to write.
  */

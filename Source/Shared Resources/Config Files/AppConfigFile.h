@@ -1,13 +1,14 @@
+#pragma once
+#include "ConfigFile.h"
+
 /**
  * @file AppConfigFile.h
  * 
- * AppConfigFile loads the pinned application links and folders displayed
- * in the AppMenuComponent.
+ * @brief Loads the pinned application links and folders displayed in the 
+ *        AppMenuComponent.
  * 
  * @see AppMenuComponent.h
  */
-#pragma once
-#include "ConfigFile.h"
 
 class AppConfigFile : public ResourceManager
 {

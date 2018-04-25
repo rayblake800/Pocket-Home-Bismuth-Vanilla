@@ -56,7 +56,7 @@ wifiManager([fakeWifi]
     pageStack.setRootPage(pageFactory.createHomePage());
 }
 
-/**
+/*
  * closes the application normally.
  */
 void PocketHomeWindow::closeButtonPressed()
@@ -64,7 +64,7 @@ void PocketHomeWindow::closeButtonPressed()
     JUCEApplication::getInstance()->systemRequestedQuit();
 }
 
-/**
+/*
  * Resize page content to match window size.
  */
 void PocketHomeWindow::resized()

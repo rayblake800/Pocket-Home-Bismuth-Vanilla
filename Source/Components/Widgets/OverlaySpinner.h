@@ -6,8 +6,8 @@
 /**
  * @file OverlaySpinner.h
  * 
- * OverlaySpinner shows a Spinner component and optional loading text over
- * a full-screen overlay.
+ * @brief A UI component displaying a Spinner and optional loading text over
+ *        a full-screen overlay.
  * 
  * @see Spinner.h
  */

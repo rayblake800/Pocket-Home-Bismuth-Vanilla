@@ -21,7 +21,7 @@ wifiLock(wifiLock)
     });
 }
 
-/**
+/*
  * Check if the network manager found a valid wifi device.
  */
 bool LibNMInterface::wifiDeviceFound()
@@ -29,7 +29,7 @@ bool LibNMInterface::wifiDeviceFound()
     return isWifiAvailable();
 }
 
-/**
+/*
  * Check the NMDevice state to see if wifi is enabled.
  */
 bool LibNMInterface::isWifiEnabled()
@@ -71,7 +71,7 @@ bool LibNMInterface::isWifiConnecting()
     return false;
 }
 
-/**
+/*
  * Check the NMDevice state to see if wifi is connected.
  */
 bool LibNMInterface::isWifiConnected()
@@ -86,7 +86,7 @@ bool LibNMInterface::isWifiConnected()
     return false;
 }
 
-/**
+/*
  * Request information on the connected access point from the NMDevice.
  */
 WifiAccessPoint::Ptr LibNMInterface::getConnectedAP()
@@ -95,7 +95,7 @@ WifiAccessPoint::Ptr LibNMInterface::getConnectedAP()
     return connectedAP;
 }
 
-/**
+/*
  * Request information on the connecting access point from the NMDevice.
  */
 WifiAccessPoint::Ptr LibNMInterface::getConnectingAP()
@@ -104,7 +104,7 @@ WifiAccessPoint::Ptr LibNMInterface::getConnectingAP()
     return connectingAP;
 }
 
-/**
+/*
  * Request information on all wifi access points detected by the NMDevice.
  */
 Array<WifiAccessPoint::Ptr> LibNMInterface::getVisibleAPs()
@@ -113,7 +113,7 @@ Array<WifiAccessPoint::Ptr> LibNMInterface::getVisibleAPs()
     return visibleAPs;
 }
 
-/**
+/*
  * Begin opening a connection to a wifi access point.
  */
 void LibNMInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
@@ -122,7 +122,7 @@ void LibNMInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
     initConnection(toConnect, psk);
 }
 
-/**
+/*
  * Checks the wifi device list, connection state, and active and pending 
  * connections.
  */
@@ -138,7 +138,7 @@ void LibNMInterface::updateAllWifiData()
     confirmWifiState();
 }
 
-/**
+/*
  * Close the currently active connection, if one exists.
  */
 void LibNMInterface::disconnect()
@@ -146,7 +146,7 @@ void LibNMInterface::disconnect()
     closeActiveConnection();
 }
 
-/**
+/*
  * Cancel any activating wifi connection.
  */
 void LibNMInterface::stopConnecting()
@@ -154,7 +154,7 @@ void LibNMInterface::stopConnecting()
     closeActivatingConnection();
 }
 
-/**
+/*
  * Asynchronously turns on the wifi radio.
  */
 void LibNMInterface::enableWifi()
@@ -167,7 +167,7 @@ void LibNMInterface::enableWifi()
     setWifiEnabled(true);
 }
 
-/**
+/*
  * Asynchronously turns off the wifi radio.
  */
 void LibNMInterface::disableWifi()
@@ -180,11 +180,9 @@ void LibNMInterface::disableWifi()
     setWifiEnabled(false);
 }
 
-/**
+/*
  * Notify listeners and save the connecting access point if starting to
  * connect.
- * 
- * @param connectingAP
  */
 void LibNMInterface::connectingCallback(WifiAccessPoint::Ptr connectingAP)
 {  
@@ -197,7 +195,7 @@ void LibNMInterface::connectingCallback(WifiAccessPoint::Ptr connectingAP)
     }
 }
 
-/**
+/*
  * Notify listeners that a connection attempt failed.
  */
 void LibNMInterface::connectionFailureCallback()
@@ -212,7 +210,7 @@ void LibNMInterface::connectionFailureCallback()
 }
 
     
-/**
+/*
  * Notify listeners that connection security settings were invalid.
  */
 void LibNMInterface::invalidSecurityCallback()
@@ -238,7 +236,7 @@ void LibNMInterface::invalidSecurityCallback()
     }
 }
 
-/**
+/*
  * Notifies listeners when wifi turns on or off.
  */
 void LibNMInterface::wifiEnablementChangeCallback(bool isEnabled)
@@ -254,7 +252,7 @@ void LibNMInterface::wifiEnablementChangeCallback(bool isEnabled)
     }
 }
 
-/**
+/*
  * A callback function to run whenever the list of wifi access points is 
  * updated.
  */
@@ -269,7 +267,7 @@ void LibNMInterface::apUpdateCallback(Array<WifiAccessPoint::Ptr> visibleAPs)
     }
  }
 
-/**
+/*
  * Registers updates to the wifi device when the NetworkManager device state
  * changes.
  */
@@ -365,7 +363,7 @@ void LibNMInterface::stateUpdateCallback(NMDeviceState newState,
     }
 }
 
-/**
+/*
  * Notifies listeners when the active access point changes.
  */
 void LibNMInterface::connectionUpdateCallback(WifiAccessPoint::Ptr connected)
@@ -387,7 +385,7 @@ void LibNMInterface::connectionUpdateCallback(WifiAccessPoint::Ptr connected)
 }
 
 
-/**
+/*
  * called whenever the application window gains focus.
  */
 void LibNMInterface::windowFocusGained()
@@ -396,7 +394,7 @@ void LibNMInterface::windowFocusGained()
     updateAllWifiData();
 }
 
-/**
+/*
  * called whenever the application window loses focus.
  */
 void LibNMInterface::windowFocusLost()

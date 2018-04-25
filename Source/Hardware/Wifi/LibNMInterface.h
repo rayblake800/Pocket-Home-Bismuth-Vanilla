@@ -1,11 +1,3 @@
-
-/**
- * @file LibNMInterface.h
- * 
- * Connects to the libnm NetworkManager to track and control wifi device.
- * As a WifiStateManager::NetworkInterface, only the WifiStateManager should
- * directly interact with this class.
- */
 #pragma once
 
 #include <NetworkManager.h>
@@ -16,10 +8,22 @@
 #include "LibNMHandler.h"
 #include "WifiStateManager.h"
 
+/**
+ * @file LibNMInterface.h
+ * 
+ * Connects to the libnm NetworkManager to track and control wifi device.
+ * As a WifiStateManager::NetworkInterface, only the WifiStateManager should
+ * directly interact with this class.
+ */
+
 class LibNMInterface : public WifiStateManager::NetworkInterface, 
 public LibNMHandler, private WindowFocus::Listener 
 {
 public:
+    /**
+     * 
+     * @param wifiLock
+     */
     LibNMInterface(CriticalSection& wifiLock);
 
     virtual ~LibNMInterface() { }
@@ -27,16 +31,22 @@ public:
 protected:
     /**
      * Check if the network manager found a valid wifi device.
+     * 
+     * @return
      */
     bool wifiDeviceFound() override;
     
     /**
      * Check the NMDevice state to see if wifi is enabled.
+     * 
+     * @return
      */
     bool isWifiEnabled() override;
 
     /**
      * Check the NMDevice state to see if wifi is connecting to an access point.
+     * 
+     * @return
      */
     bool isWifiConnecting() override;
 
@@ -179,10 +189,16 @@ private:
     //any time any of the data members listed beneath it is accessed.
     CriticalSection& wifiLock;
 
+    //
     NMDeviceState lastNMState = NM_DEVICE_STATE_UNKNOWN;
 
+    //
     WifiAccessPoint::Ptr connectedAP = nullptr;
+    
+    //
     WifiAccessPoint::Ptr connectingAP = nullptr;
+    
+    //
     Array<WifiAccessPoint::Ptr> visibleAPs;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LibNMInterface)

@@ -1,10 +1,11 @@
+#pragma once
+
 /**
  * @file Audio.h
  * 
- * Audio provides functions for initializing system audio and viewing/changing
- * system volume.
+ * @brief Provides functions for initializing system audio and viewing/changing
+ *        system volume.
  */
-#pragma once
 
 namespace Audio
 {
@@ -18,7 +19,7 @@ namespace Audio
     /**
      * Gets the system's volume level.
      * 
-     * @return system audio volume level, as a percentage of the maximum
+     * @return  system audio volume level, as a percentage of the maximum
      *          volume.
      */
     int getVolumePercent();
@@ -27,7 +28,7 @@ namespace Audio
      * Changes the system audio volume level.
      * 
      * @param volumePercent  The volume level, which will be constrained to
-     *                        values between 0 and 100.
+     *                       values between 0 and 100.
      */
     void setVolume(int volumePercent);
 };

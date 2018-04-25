@@ -11,6 +11,7 @@
  * GDBusProxyInterface.
  */
 #pragma once
+#include <map>
 #include "gio/gio.h"
 #include "GVariantConverter.h"
 #include "JuceHeader.h"
@@ -19,7 +20,7 @@ class GDBusProxyInterface
 {
 public:
 
-    virtual ~GDBusProxyInterface() { }
+    virtual ~GDBusProxyInterface();
 
     /**
      * Checks if the object connected successfully to a DBus interface.
@@ -46,6 +47,25 @@ protected:
     GDBusProxyInterface(const char* name, const char* path,
             const char* interface);
     
+    /**
+     * 
+     * 
+     * @param signalName
+     * 
+     * @param callback
+     * 
+     * @return 
+     */
+    gulong addSignalHandler(const char* signalName, 
+            std::function<void(GVariant*)> callback);
+    
+    /**
+     * 
+     * @param handlerID
+     * 
+     * @return 
+     */
+    bool removeSignalHandler(gulong handlerID);
 
     /**
      * Checks if the interface has a property with a particular name
@@ -148,5 +168,32 @@ protected:
     }
     
 private:
+    struct SignalData
+    {
+        std::function<void(GVariant*)> callback;
+        String dbusSignalName;
+        GDBusProxyInterface* signalSource;
+    };
+    
+    /**
+     * 
+     * @param proxy
+     * 
+     * @param senderName
+     * 
+     * @param signalName
+     * 
+     * @param parameters
+     * 
+     * @param signalData
+     */
+    static void dBusSignalCallback(GDBusProxy* proxy,
+            gchar* senderName,
+            gchar* signalName,
+            GVariant* parameters,
+            SignalData* signalData);
+    
+    std::map<gulong, SignalData*> signalHandlers;
+    
     GDBusProxy* proxy = nullptr;
 };

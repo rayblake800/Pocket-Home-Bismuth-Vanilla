@@ -1,14 +1,15 @@
+#pragma once
+#include "WifiStateManager.h"
+
 /**
  * @file JsonWifiInterface.h
  * 
- * Simulates interaction with a wifi device using fake access point data.  
+ * @brief Simulates interaction with a wifi device using fake access point data.  
+ * 
  * Access point data is loaded from the wifi.json file in the pocket-home assets
  * folder.  As a WifiStateManager::NetworkInterface, only the WifiStateManager
  * should directly interact with this class.
  */
-#pragma once
-
-#include "WifiStateManager.h"
 
 class JsonWifiInterface : public WifiStateManager::NetworkInterface
 {

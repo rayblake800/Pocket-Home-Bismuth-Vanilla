@@ -5,7 +5,7 @@
 #define DEFAULT_BUFFER_SIZE 4096 /*in samples*/
 snd_pcm_t *g_alsa_playback_handle = 0;
 
-/**
+/*
  * Initializes system audio.
  */
 bool Audio::initAudio()
@@ -113,7 +113,7 @@ bool Audio::initAudio()
     return true;
 }
 
-/**
+/*
  * Gets the system's volume level.
  */
 int Audio::getVolumePercent()
@@ -133,7 +133,7 @@ int Audio::getVolumePercent()
     return volume;
 }
 
-/**
+/*
  * Changes the system audio volume level.
  */
 void Audio::setVolume(int volumePercent)

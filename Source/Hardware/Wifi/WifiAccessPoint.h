@@ -1,14 +1,15 @@
-/**
- * @file WifiAccessPoint
- * 
- * WifiAccessPoint stores all relevant data about a single wifi access point.
- */
 #pragma once
 #include <NetworkManager.h>
 #include <nm-access-point.h>
 #include <nm-connection.h>
 #include "SavedConnections.h"
 #include "JuceHeader.h"
+
+/**
+ * @file WifiAccessPoint
+ * 
+ * @brief Stores all relevant data about a single wifi access point.
+ */
 
 class WifiAccessPoint : public ReferenceCountedObject
 {

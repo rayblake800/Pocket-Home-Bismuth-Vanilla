@@ -1,16 +1,17 @@
+#pragma once
+#include "ConfigFile.h"
+#include "ResourceManager.h"
+
 /**
  * @file ComponentConfigFile.h
  * 
- * ComponentConfigFile gets and sets all component settings defined in 
- * ~/.pocket-home/components.json.
+ * @brief gets and sets all component settings defined in 
+ *        ~/.pocket-home/components.json.
  * 
  * This includes component color values, relative component size and position,
  * image asset filenames, and other miscellaneous data relevant to UI 
  * components.
  */
-#pragma once
-#include "ConfigFile.h"
-#include "ResourceManager.h"
 
 class ComponentConfigFile : public ResourceManager
 {

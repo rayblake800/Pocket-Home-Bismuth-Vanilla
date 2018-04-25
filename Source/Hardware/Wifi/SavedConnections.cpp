@@ -37,12 +37,8 @@ Array<SavedConnection> SavedConnections::getWifiConnections()
 }
 
     
-/**
+/*
  * Checks saved connection paths to see if one exists at the given path.
- * 
- * @param connectionPath  A DBus path to check for a connection.
- * 
- * @return  true iff connectionPath is a valid path to a saved connection. 
  */
 bool SavedConnections::connectionExists(const String& connectionPath)
 {
@@ -51,10 +47,8 @@ bool SavedConnections::connectionExists(const String& connectionPath)
     return paths.contains(connectionPath);
 }
     
-/**
+/*
  * Get the list of all available connection paths
- * 
- * @return the list of paths, freshly updated over the DBus interface.
  */
 inline StringArray SavedConnections::getConnectionPaths()
 {
@@ -70,7 +64,7 @@ inline StringArray SavedConnections::getConnectionPaths()
     return StringArray();
 }
 
-/**
+/*
  * Check the list of saved connections against an updated connection path
  * list, adding any new connections and removing any deleted connections.
  */

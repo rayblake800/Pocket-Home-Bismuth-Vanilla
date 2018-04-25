@@ -4,7 +4,7 @@
 #include "GLibSignalHandler.h"
 #include "WifiAccessPoint.h"
     
-/**
+/*
  * Create an access point object using LibNM access point data and optional
  * saved connection data.
  */
@@ -63,8 +63,7 @@ networkConnection(savedConnection.getNMConnection())
 }
 
     
-/**
- *
+/*
  * Create a wifi access point from pre-generated data.  This is intended for
  * debugging purposes only.
  */
@@ -77,7 +76,7 @@ hash(hash)
     security = requiresAuth ? securedWPA : none;
 }
 
-/**
+/*
  * Unregisters the signal handler, if one exists
  */
 WifiAccessPoint::~WifiAccessPoint()
@@ -101,7 +100,7 @@ WifiAccessPoint::~WifiAccessPoint()
     }
 }
 
-/**
+/*
  * Gets the access point's service set identifier, its primary name.
  */
 const String& WifiAccessPoint::getSSID() const
@@ -110,7 +109,7 @@ const String& WifiAccessPoint::getSSID() const
     return ssid;
 }
 
-/**
+/*
  * Gets the MAC address of the wifi access point.
  */
 const String& WifiAccessPoint::getBSSID() const
@@ -119,7 +118,7 @@ const String& WifiAccessPoint::getBSSID() const
     return bssid;
 }
 
-/**
+/*
  * Gets the signal strength of the wifi access point.
  */
 int WifiAccessPoint::getSignalStrength() const
@@ -128,7 +127,7 @@ int WifiAccessPoint::getSignalStrength() const
     return signalStrength;
 }
 
-/**
+/*
  * Gets the wifi access point frequency in (TODO: what format? MHz? 
  * documentation is unclear, do some tests and figure it out.)
  */
@@ -138,7 +137,7 @@ unsigned long WifiAccessPoint::getFrequency() const
     return frequency;
 }
 
-/**
+/*
  * Gets the access point's maximum data transfer bit rate.
  */
 unsigned long WifiAccessPoint::getMaxBitrate() const
@@ -147,7 +146,7 @@ unsigned long WifiAccessPoint::getMaxBitrate() const
     return maxBitrate;
 }
  
-/**
+/*
  * Checks if this access point requires a security key.
  */
 bool WifiAccessPoint::getRequiresAuth() const
@@ -156,7 +155,7 @@ bool WifiAccessPoint::getRequiresAuth() const
     return security != none;
 }
 
-/**
+/*
  * Checks if this access point corresponds to a saved network connection.
  */
 bool WifiAccessPoint::hasSavedConnection() const
@@ -166,7 +165,7 @@ bool WifiAccessPoint::hasSavedConnection() const
     return savedConnection.isValid();
 }
 
-/**
+/*
  * Checks if there is a psk for this connection saved by the network
  * manager.
  */
@@ -206,7 +205,7 @@ bool WifiAccessPoint::hasSavedPsk() const
 }
 
 
-/**
+/*
  * Returns a string identifying this object for debug purposes.
  */
 const String& WifiAccessPoint::toString() const
@@ -216,11 +215,8 @@ const String& WifiAccessPoint::toString() const
 }
 
         
-/**
+/*
  * Checks if this access point is compatible with a given connection.
- * 
- * @return  true iff the connection is compatible, and the WifiAccessPoint
- *          doesn't have a different non-null saved connection.  
  */
 bool WifiAccessPoint::isConnectionCompatible(NMConnection* connection) const
 {
@@ -262,7 +258,7 @@ bool WifiAccessPoint::isConnectionCompatible(NMConnection* connection) const
     return isValid;
 }
     
-/**
+/*
  * Checks if this access point and another both share a network
  */
 bool WifiAccessPoint::sharesConnectionWith(WifiAccessPoint::Ptr otherAP) const
@@ -281,7 +277,7 @@ bool WifiAccessPoint::sharesConnectionWith(WifiAccessPoint::Ptr otherAP) const
 }
 
 
-/**
+/*
  * @return the access point device mode 
  */
 NM80211Mode WifiAccessPoint::getMode() const
@@ -290,7 +286,7 @@ NM80211Mode WifiAccessPoint::getMode() const
     return apMode;
 }
 
-/**
+/*
  * @return basic Wifi security flags 
  */
 NM80211ApFlags WifiAccessPoint::getFlags() const
@@ -299,7 +295,7 @@ NM80211ApFlags WifiAccessPoint::getFlags() const
     return apFlags;
 }
 
-/**
+/*
  * @return all WPA security flags. 
  */
 NM80211ApSecurityFlags WifiAccessPoint::getWPAFlags() const
@@ -308,7 +304,7 @@ NM80211ApSecurityFlags WifiAccessPoint::getWPAFlags() const
     return wpaFlags;
 }
 
-/**
+/*
  * @return all RSN security flags 
  */
 NM80211ApSecurityFlags WifiAccessPoint::getRSNFlags() const
@@ -318,7 +314,7 @@ NM80211ApSecurityFlags WifiAccessPoint::getRSNFlags() const
 }
 
     
-/**
+/*
  * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.
  */
 bool WifiAccessPoint::operator==(NMAccessPoint* rhs) const
@@ -327,7 +323,7 @@ bool WifiAccessPoint::operator==(NMAccessPoint* rhs) const
     return nmAccessPoint == rhs;
 }
 
-/**
+/*
  * Returns true iff this WifiAccessPoint does not have rhs as its 
  * nmAccessPoint.
  */
@@ -338,7 +334,7 @@ bool WifiAccessPoint::operator!=(NMAccessPoint* rhs) const
 }
 
 
-/**
+/*
  * Returns true iff this access point and rhs share a nmAccessPoint.
  */
 bool WifiAccessPoint::operator==(const WifiAccessPoint& rhs) const
@@ -352,7 +348,7 @@ bool WifiAccessPoint::operator==(const WifiAccessPoint& rhs) const
     return nmAccessPoint == rhs.nmAccessPoint;
 }
 
-/**
+/*
  * Returns true iff this access point and rhs do not share a nmAccessPoint.
  */
 bool WifiAccessPoint::operator!=(const WifiAccessPoint& rhs) const
@@ -360,7 +356,7 @@ bool WifiAccessPoint::operator!=(const WifiAccessPoint& rhs) const
     return !(*this == rhs);
 }
 
-/**
+/*
  * @return this access point's LibNM access point object 
  */
 NMAccessPoint* WifiAccessPoint::getNMAccessPoint()
@@ -368,11 +364,9 @@ NMAccessPoint* WifiAccessPoint::getNMAccessPoint()
     return nmAccessPoint;
 }
 
-/**
+/*
  * Gets this access point's connection object.  If it has no connection
  * object, a new one will be created and returned.
- * 
- * @return this access point's connection object.
  */
 NMConnection* WifiAccessPoint::getNMConnection()
 {
@@ -396,7 +390,7 @@ NMConnection* WifiAccessPoint::getNMConnection()
 }
 
     
-/**
+/*
  * Assigns a new connection to this access point. This will fail if a valid
  * connection is already assigned, or if the new connection is not valid
  * for this access point.
@@ -424,7 +418,7 @@ bool WifiAccessPoint::setNMConnection(NMConnection* newConnection)
     return false;
 }
  
-/**
+/*
  * Saves a new security key for this access point's connection.
  */
 bool WifiAccessPoint::setPsk(String psk)
@@ -552,7 +546,7 @@ bool WifiAccessPoint::setPsk(String psk)
     
 }
  
-/**
+/*
  * Removes the security key saved for this access point.  This should only 
  * be done when the saved key turns out to be invalid. 
  */
@@ -572,7 +566,7 @@ void WifiAccessPoint::removePsk()
     }
 }
 
-/**
+/*
  * Gets an SSID byte array from a saved connection or access point.  If
  * possible, the value from the saved connection will be used first.
  */
@@ -599,7 +593,7 @@ const GByteArray* WifiAccessPoint::getSSIDBytes()
     return ssidBytes;
 }
 
-/**
+/*
  * If the NMAccessPoint is non-null and signal handlers aren't already
  * registered, this will register this object to receive updates when
  * access point signal strength changes or the NMAccessPoint is destroyed.
@@ -625,7 +619,7 @@ void WifiAccessPoint::registerSignalHandlers()
     }
 }
 
-/**
+/*
  * Generates a hash value for a list of access point parameters that will
  * be unique to that access point's connection.
  */
@@ -684,7 +678,7 @@ String WifiAccessPoint::generateHash(
 }
 
 
-/**
+/*
  * If this object's NMAccessPoint or NMConnection is deleted, this will 
  * remove the pointer to the deleted object and set it to null.  This should
  * only be called on the GLib event loop by GLib library code.
@@ -716,7 +710,7 @@ void WifiAccessPoint::apDestroyedCallback(WifiAccessPoint* toUpdate,
 }
 
 
-/**
+/*
  * A callback to update signal strength whenever NMAccessPoint strength
  * changes.  This should only be called on the GLib event loop by GLib 
  * library code.
