@@ -1,29 +1,57 @@
 #include "GPPObject.h"
 
-GPPObject();
+GPPObject::GPPObject()
+{
+}
 
-GPPObject(GPPObject& toCopy);
+GPPObject::GPPObject(GPPObject& toCopy)
+{
+}
 
-GPPObject(gpointer toAssign);
+GPPObject::GPPObject(gpointer toAssign)
+{
+}
 
-~GPPObject();
+GPPObject::~GPPObject()
+{
+}
 
-bool isValid();
-bool operator==(const GPPObject& rhs) const;
+bool GPPObject::isVoid()
+{
+}
 
-bool operator==(gpointer rhs);
+bool GPPObject::operator==(const GPPObject& rhs) const
+{
+}
 
-void operator=(GPPObject& toCopy);
+bool GPPObject::operator==(gpointer rhs)
+{
+}
 
-void operator=(gobject toAssign);
+void GPPObject::operator=(GPPObject& toCopy)
+{
+}
 
-GType getType();
+void GPPObject::operator=(gpointer toAssign)
+{
+}
 
+GType GPPObject::getType()
+{
+}
 
-void freezeNotify();
+void GPPObject::freezeNotify()
+{
+}
 
-void thawNotify();
+void GPPObject::thawNotify()
+{
+}
 
-gpointer getGObject();
+gpointer GPPObject::getGObject()
+{
+}
 
-void removeData();
+void GPPObject::removeData()
+{
+}

@@ -13,7 +13,7 @@ protected:
 public:
     ~GPPObject();
     
-    bool isValid();
+    bool isVoid();
     
 protected:
     bool operator==(const GPPObject& rhs) const;
@@ -22,7 +22,7 @@ protected:
     
     void operator=(GPPObject& toCopy);
     
-    void operator=(gobject toAssign);
+    void operator=(gpointer toAssign);
     
     virtual GType getType();
     
