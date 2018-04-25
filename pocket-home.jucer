@@ -18,6 +18,8 @@
               file="Source/GLib/GDBusProxyInterface.cpp"/>
         <FILE id="nN1gji" name="GDBusProxyInterface.h" compile="0" resource="0"
               file="Source/GLib/GDBusProxyInterface.h"/>
+        <FILE id="cdp704" name="GPPObject.cpp" compile="1" resource="0" file="Source/GLib/GPPObject.cpp"/>
+        <FILE id="R8ed81" name="GPPObject.h" compile="0" resource="0" file="Source/GLib/GPPObject.h"/>
         <FILE id="xI5msA" name="GVariantConverter.cpp" compile="1" resource="0"
               file="Source/GLib/GVariantConverter.cpp"/>
         <FILE id="r2Ef0a" name="GVariantConverter.h" compile="0" resource="0"

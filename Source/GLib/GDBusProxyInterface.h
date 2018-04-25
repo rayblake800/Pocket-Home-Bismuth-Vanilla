@@ -20,6 +20,9 @@ class GDBusProxyInterface
 {
 public:
 
+    /**
+     * Removes all signal handlers and dereferences the GDBusProxy object.
+     */
     virtual ~GDBusProxyInterface();
 
     /**

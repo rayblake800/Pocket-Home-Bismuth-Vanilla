@@ -1,6 +1,18 @@
 #include "GDBusProxyInterface.h"
 #include "GLibSignalHandler.h"
 
+/*
+ * Removes all signal handlers and dereferences the GDBusProxy object.
+ */
+virtual GDBusProxyInterface::~GDBusProxyInterface()
+{
+    while(!signalHandlers.empty())
+    {
+        gulong firstID = signalHandlers.begin()->first;
+        
+    }
+}
+
 GDBusProxyInterface::GDBusProxyInterface
 (const char* name, const char* path, const char* interface)
 {
