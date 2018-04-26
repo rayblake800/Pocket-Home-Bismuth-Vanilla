@@ -269,6 +269,7 @@ void SavedConnection::createNMConnection()
     GVariant* settings = callMethod(GET_SETTINGS);
     if (settings != nullptr)
     {
+        std::cout << "connection settings:\n" << toString(settings) << "\n";
         NMSetting* setting = nullptr;
         std::function<void(GVariant*, GVariant*) > copyDict = [this, &setting]
                 (GVariant* key, GVariant * val)
