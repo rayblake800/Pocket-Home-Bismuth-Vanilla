@@ -4,13 +4,9 @@
 /*
  * Removes all signal handlers and dereferences the GDBusProxy object.
  */
-virtual GDBusProxyInterface::~GDBusProxyInterface()
+GDBusProxyInterface::~GDBusProxyInterface()
 {
-    while(!signalHandlers.empty())
-    {
-        gulong firstID = signalHandlers.begin()->first;
-        
-    }
+    
 }
 
 GDBusProxyInterface::GDBusProxyInterface
@@ -22,10 +18,10 @@ GDBusProxyInterface::GDBusProxyInterface
         return;
     }
 
-    GError * error = nullptr;
     GLibSignalHandler signalThread;
-    signalThread.gLibCall([this]()
+    signalThread.gLibCall([this, name, path, interface]()
     {
+        GError * error = nullptr;
         proxy = g_dbus_proxy_new_for_bus_sync(
                 G_BUS_TYPE_SYSTEM,
                 G_DBUS_PROXY_FLAGS_NONE,
