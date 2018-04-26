@@ -346,7 +346,6 @@ void SavedConnection::createNMConnection()
             }
         });
     }
-    nm_connection_dump(nmConnection);
 }
 
 /*

@@ -49,7 +49,7 @@ GPPObject::~GPPObject()
  */
 bool GPPObject::isVoid() const
 {
-    return objectData.get() != nullptr;
+    return objectData.get() == nullptr;
 }
 
 /**
