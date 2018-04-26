@@ -9,7 +9,7 @@
 #define LIST_CONNECTIONS "ListConnections"
 
 SavedConnections::SavedConnections() :
-GDBusProxyInterface(BUS_NAME, PATH, INTERFACE) 
+GPPDBusProxy(BUS_NAME, PATH, INTERFACE) 
 { 
     StringArray paths = getConnectionPaths();
     for(const String& path : paths)

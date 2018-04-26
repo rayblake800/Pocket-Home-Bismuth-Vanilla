@@ -9,6 +9,7 @@ Array<GPPObject::SignalHandler*, CriticalSection> GPPObject::signalHandlers;
 GPPObject::GPPObject() 
 { 
     objectRef = new GWeakRef;
+    objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
 }
 
@@ -18,6 +19,7 @@ GPPObject::GPPObject()
 GPPObject::GPPObject(GPPObject& toCopy)
 {
     objectRef = new GWeakRef;
+    objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
     copyData(toCopy);
 }
@@ -28,6 +30,7 @@ GPPObject::GPPObject(GPPObject& toCopy)
 GPPObject::GPPObject(GObject* toAssign)
 {
     objectRef = new GWeakRef;
+    objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
     assignData(toAssign);
 }
@@ -90,49 +93,6 @@ void GPPObject::SignalHandler::propertyChanged
 }
 
 /*
- * Add a signal handler to receive notifications when a specific object 
- * property changes.
- */
-void GPPObject::addNotifySignalHandler(GPPObject::SignalHandler* signalHandler,
-        const char* propertyName)
-{
-    callInMainContext([this, signalHandler, propertyName]()
-    {
-        GObject* object = getGObject();
-        if(object != nullptr)
-        {
-            if(signalHandlers.contains(signalHandler))
-            {
-                String signal("notify::");
-                signal += propertyName;
-                gulong handlerID = g_signal_connect(object,
-                        signal.toRawUTF8(), 
-                        G_CALLBACK(notifyCallback),
-                        signalHandler);
-                if(handlerID > 0)
-                {
-                    registeredSignals[handlerID] = signalHandler;
-                    signalHandler->sources.addIfNotAlreadyThere(this);
-                }
-                else
-                {
-                    DBG("GPPObject::addNotifySignalHandler: Received invalid "
-                            << "ID when adding handler for signal notify::"
-                            << propertyName);
-                }
-            }
-            g_clear_object(&object);
-        }
-        else
-        {
-            DBG("GPPObject::addNotifySignalHandler: Tried to add signal "
-                    << "notify::" << propertyName 
-                    << "to void object.");
-        }
-    });
-}
-
-/*
  * Un-subscribe a signal handler from all of this object's signals
  */
 void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
@@ -164,6 +124,19 @@ void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
                     << "handler from void object.");
         }
     });
+}
+
+/*
+ * Add a signal handler to receive notifications when a specific object 
+ * property changes.
+ */
+void GPPObject::addNotifySignalHandler(GPPObject::SignalHandler* signalHandler,
+        const char* propertyName)
+{
+    String signal("notify::");
+    signal += propertyName;
+    addSignalHandler(signalHandler, signal.toRawUTF8(),
+            G_CALLBACK(notifyCallback));
 }
 
 /**
@@ -201,7 +174,7 @@ bool GPPObject::operator==(const GObject* rhs) const
  * already holds the same data as this object, any references or signal
  * handlers associated with previous GObject data will be removed.
  */ 
-void GPPObject::copyData(GPPObject& toCopy)
+void GPPObject::copyData(const GPPObject& toCopy)
 {   
     callInMainContext([this,&toCopy]()
     {
@@ -268,14 +241,21 @@ void GPPObject::removeData()
 {
     callInMainContext([this]
     {
-        g_weak_ref_set(objectRef.get(), nullptr);
-        while(!registeredSignals.empty())
+        if(!isVoid())
         {
-            SignalHandler* toRemove = registeredSignals.begin()->second;
-            removeSignalHandler(toRemove);
+            g_weak_ref_set(objectRef.get(), nullptr);
+            while(!registeredSignals.empty())
+            {
+                SignalHandler* toRemove = registeredSignals.begin()->second;
+                removeSignalHandler(toRemove);
+            }
+            GObject* object = objectData.get();
+            if(object != nullptr)
+            {
+                g_object_unref(object);
+                objectData.set(nullptr);
+            }
         }
-        g_object_unref(objectData.get());
-        objectData.set(nullptr);
     });
 }
  

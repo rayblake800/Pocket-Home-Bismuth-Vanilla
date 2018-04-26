@@ -14,10 +14,9 @@
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
       <GROUP id="{FDA4E67F-621B-EA4E-D0EC-3AFCFDE4E820}" name="GLib">
-        <FILE id="sMlaSb" name="GDBusProxyInterface.cpp" compile="1" resource="0"
-              file="Source/GLib/GDBusProxyInterface.cpp"/>
-        <FILE id="nN1gji" name="GDBusProxyInterface.h" compile="0" resource="0"
-              file="Source/GLib/GDBusProxyInterface.h"/>
+        <FILE id="sMlaSb" name="GPPDBusProxy.cpp" compile="1" resource="0"
+              file="Source/GLib/GPPDBusProxy.cpp"/>
+        <FILE id="nN1gji" name="GPPDBusProxy.h" compile="0" resource="0" file="Source/GLib/GPPDBusProxy.h"/>
         <FILE id="cdp704" name="GPPObject.cpp" compile="1" resource="0" file="Source/GLib/GPPObject.cpp"/>
         <FILE id="R8ed81" name="GPPObject.h" compile="0" resource="0" file="Source/GLib/GPPObject.h"/>
         <FILE id="xI5msA" name="GVariantConverter.cpp" compile="1" resource="0"

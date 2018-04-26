@@ -103,6 +103,15 @@ public:
     };
     
     /**
+     * Un-subscribe a signal handler from all of this object's signals
+     * 
+     * @param signalHandler  Any signal handler object that should no longer
+     *                       receive signals from this GPPObject.
+     */
+    void removeSignalHandler(SignalHandler* signalHandler);
+    
+protected:
+    /**
      * Add a signal handler to receive notifications when a specific object 
      * property changes.  
      * 
@@ -119,15 +128,6 @@ public:
     void addNotifySignalHandler(SignalHandler* signalHandler,
             const char* propertyName);
 
-    /**
-     * Un-subscribe a signal handler from all of this object's signals
-     * 
-     * @param signalHandler  Any signal handler object that should no longer
-     *                       receive signals from this GPPObject.
-     */
-    void removeSignalHandler(SignalHandler* signalHandler);
-    
-protected:
     /**
      * Call an arbitrary function from within the context assigned to this
      * GObject.  This defaults to using the global default context.  Override
@@ -164,7 +164,7 @@ protected:
      * @param toCopy  Any other GPPObject.  If toCopy holds the same data as 
      *                this GPPObject, nothing will happen.
      */
-    void copyData(GPPObject& toCopy);
+    void copyData(const GPPObject& toCopy);
     
     /**
      * Assigns new GObject data to this GPPObject.  Unless the new object
@@ -176,6 +176,11 @@ protected:
      *                  nothing.
      */
     void assignData(GObject* toAssign);
+    
+    void operator=(const GPPObject& toCopy)
+    {
+        copyData(toCopy);
+    }
     
     /**
      * Get the GType assigned to this object.  This must be implemented by 

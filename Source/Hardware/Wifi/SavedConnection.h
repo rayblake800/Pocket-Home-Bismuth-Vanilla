@@ -1,7 +1,7 @@
 #pragma once
 #include <nm-connection.h>
 #include "JuceHeader.h"
-#include "GDBusProxyInterface.h"
+#include "GPPDBusProxy.h"
 
 /**
  * @file SavedConnection.h
@@ -9,7 +9,7 @@
  * @brief Controls a NetworkManager saved connection object over DBus. 
  */
 
-class SavedConnection : public GDBusProxyInterface
+class SavedConnection : public GPPDBusProxy
 {
 public:
     /**
@@ -18,19 +18,18 @@ public:
     SavedConnection();
     
     /**
+     * Create an object from an existing DBus Connection proxy.
+     * 
+     * @param toCopy  Existing connection object to copy.
+     */
+    SavedConnection(const SavedConnection& toCopy);
+    
+    /**
      * Initialize a SavedConnection from a DBus connection path.
      * 
      * @param path A valid DBus path to a NetworkManager saved connection.
      */
     SavedConnection(const char* path);
-    
-    /**
-     * When copying other saved connections, share a path and a generated 
-     * NMConnection, but do not share a DBus interface.
-     * 
-     * @param toCopy An existing connection to copy.
-     */
-    SavedConnection(const SavedConnection& toCopy);
     
     virtual ~SavedConnection() { }
     

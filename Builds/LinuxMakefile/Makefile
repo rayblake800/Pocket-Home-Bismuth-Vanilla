@@ -68,7 +68,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
-  $(JUCE_OBJDIR)/GDBusProxyInterface_b6873ec6.o \
+  $(JUCE_OBJDIR)/GPPDBusProxy_812aa0bd.o \
   $(JUCE_OBJDIR)/GPPObject_f97abf7e.o \
   $(JUCE_OBJDIR)/GVariantConverter_47eeb0da.o \
   $(JUCE_OBJDIR)/AssetFiles_d42310d.o \
@@ -186,9 +186,9 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
 
-$(JUCE_OBJDIR)/GDBusProxyInterface_b6873ec6.o: ../../Source/GLib/GDBusProxyInterface.cpp
+$(JUCE_OBJDIR)/GPPDBusProxy_812aa0bd.o: ../../Source/GLib/GPPDBusProxy.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling GDBusProxyInterface.cpp"
+	@echo "Compiling GPPDBusProxy.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/GPPObject_f97abf7e.o: ../../Source/GLib/GPPObject.cpp

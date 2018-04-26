@@ -26,7 +26,7 @@ public:
      *                         none exists.
      */
     WifiAccessPoint(NMAccessPoint* accessPoint,
-            SavedConnection savedConnection = nullptr);
+            SavedConnection savedConnection);
 
     /**
      * Represents the main categories of wifi access point security.

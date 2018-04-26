@@ -162,7 +162,7 @@ bool WifiAccessPoint::hasSavedConnection() const
 {
     const ScopedReadLock readLock(networkUpdateLock);
     
-    return savedConnection.isValid();
+    return !savedConnection.isVoid();
 }
 
 /*

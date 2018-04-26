@@ -1,5 +1,5 @@
 #pragma once
-#include "GDBusProxyInterface.h"
+#include "GPPDBusProxy.h"
 #include "SavedConnection.h"
 
 /**
@@ -12,7 +12,7 @@
  * all wifi connections.
  */
 
-class SavedConnections : public GDBusProxyInterface
+class SavedConnections : public GPPDBusProxy
 {
 public:
     SavedConnections();

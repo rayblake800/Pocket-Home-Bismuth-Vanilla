@@ -33,16 +33,27 @@
  * Create an empty object with no linked connection.
  */
 SavedConnection::SavedConnection() :
-GDBusProxyInterface(nullptr, nullptr, nullptr) { } 
+GPPDBusProxy(nullptr, nullptr, nullptr) { } 
+
+/**
+ * Create an object from an existing DBus Connection proxy.
+ */
+SavedConnection::SavedConnection(const SavedConnection& toCopy) :
+GPPDBusProxy(nullptr, nullptr, nullptr),
+path(toCopy.path),
+nmConnection(toCopy.nmConnection)
+{
+    copyData(toCopy);
+}
 
 /**
  * Initialize a SavedConnection from a DBus connection path.
  */ 
 SavedConnection::SavedConnection(const char * path) :
-GDBusProxyInterface(BUS_NAME, path, INTERFACE),
+GPPDBusProxy(BUS_NAME, path, INTERFACE),
 path(path)
 { 
-    if(isValid())
+    if(!isVoid())
     {
         createNMConnection();
     }
@@ -55,15 +66,6 @@ const String& SavedConnection::getPath() const
 {
     return path;
 }
-    
-/*
- * When copying other saved connections, share a path and a generated 
- * NMConnection, but do not share a DBus interface.
- */
-SavedConnection::SavedConnection(const SavedConnection& toCopy) :
-GDBusProxyInterface(BUS_NAME, toCopy.path.toRawUTF8(), INTERFACE),
-path(toCopy.path),
-nmConnection(toCopy.nmConnection) { }
 
 
 /*
@@ -71,7 +73,7 @@ nmConnection(toCopy.nmConnection) { }
  */
 bool SavedConnection::isWifiConnection() const
 {
-    if(!isValid())
+    if(isVoid())
     {
         return false;
     }
@@ -84,7 +86,7 @@ bool SavedConnection::isWifiConnection() const
 void SavedConnection::updateWifiSecurity(GVariant* newSettings)
 {
     using namespace GVariantConverter;
-    if(!isValid())
+    if(isVoid())
     {
         return;
     }
@@ -179,7 +181,7 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
  */
 void SavedConnection::removeSecurityKey()
 {
-    if(!isValid())
+    if(isVoid())
     {
         return;
     }
@@ -224,12 +226,13 @@ NMConnection* SavedConnection::getNMConnection()
  */
 void SavedConnection::deleteConnection()
 {
-    if(isValid())
+    if(isVoid())
     {
         callMethod(DELETE_CONN);
-        invalidate();
+        removeData();
         path = "";
         nmConnection = nullptr;
+        settingNames.clear();
     }
 }
 
@@ -256,7 +259,7 @@ bool SavedConnection::operator==(NMConnection* rhs) const
  */
 void SavedConnection::createNMConnection()
 {
-    if(!isValid())
+    if(isVoid())
     {
         return;
     }
@@ -343,6 +346,7 @@ void SavedConnection::createNMConnection()
             }
         });
     }
+    nm_connection_dump(nmConnection);
 }
 
 /*
@@ -350,7 +354,7 @@ void SavedConnection::createNMConnection()
  */
 GVariant* SavedConnection::getSetting(const char* name)
 {  
-    if(!isValid())
+    if(isVoid())
     {
         return nullptr;
     }
@@ -372,7 +376,7 @@ GVariant* SavedConnection::getSetting(const char* name)
 GVariant* SavedConnection::getSettingProp(const char* settingName,
         const char* propName)
 {  
-    if(!isValid())
+    if(isVoid())
     {
         return nullptr;
     }
@@ -394,7 +398,7 @@ GVariant* SavedConnection::getSettingProp(const char* settingName,
 GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
         const char* propName)
 {
-    if(!isValid())
+    if(isVoid())
     {
         return nullptr;
     }
@@ -408,7 +412,7 @@ GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
  */
 bool SavedConnection::hasSetting(const char* settingName) const
 {
-    if(!isValid())
+    if(isVoid())
     {
         return false;
     }
@@ -424,7 +428,7 @@ bool SavedConnection::hasSetting(const char* settingName) const
 bool SavedConnection::hasSettingProperty(const char* settingName,
         const char* propName)
 {
-    if(!isValid())
+    if(isVoid())
     {
         return false;
     }
