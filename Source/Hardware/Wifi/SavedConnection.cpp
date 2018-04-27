@@ -227,7 +227,7 @@ NMConnection* SavedConnection::getNMConnection()
  */
 void SavedConnection::deleteConnection()
 {
-    if(isVoid())
+    if(!isVoid())
     {
         callMethod(DELETE_CONN);
         removeData();
