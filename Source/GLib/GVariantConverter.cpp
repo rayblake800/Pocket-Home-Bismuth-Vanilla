@@ -377,7 +377,20 @@ namespace GVariantConverter
             case stringType:
                 return String(g_variant_get_string(variant, nullptr));
             case byteStringType:
-                return String(g_variant_get_bytestring(variant));
+            {
+                String byteString(g_variant_get_bytestring(variant));
+                if(byteString.isEmpty())
+                {
+                    gsize stringLength = 0;
+                    guchar* charArray = (guchar*) g_variant_get_fixed_array
+                            (variant, &stringLength, sizeof(guchar));
+                    for(int i = 0; i < stringLength; i++)
+                    {
+                        byteString += (char) charArray[i];
+                    }
+                }
+                return byteString;
+            }
             case arrayType:
             {
                 gsize arraySize = g_variant_n_children(variant);
