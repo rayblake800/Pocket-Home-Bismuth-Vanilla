@@ -432,6 +432,17 @@ namespace GVariantConverter
                 }
                 return arrayStr;
             }
+            case stringArrayType:
+            {
+                String arrayStr;
+                StringArray strings = getValue<StringArray>variant;
+                for(const String& string : strings)
+                {
+                    arrayStr += (arrayStr.isEmpty() ? "[" : ", ");
+                    arrayStr += string;
+                }
+                return arrayStr + "]";
+            }
             case dictType:
             {
                 String dictStr = "";
@@ -480,7 +491,7 @@ namespace GVariantConverter
                 }
                 return dictStr + "\n}";
             }
-            case unsupported:
+            default:
                 return "unsupported";
         }
     }
