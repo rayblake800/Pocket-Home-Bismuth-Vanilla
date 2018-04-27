@@ -417,7 +417,7 @@ bool SavedConnection::hasSetting(const char* settingName) const
     {
         return false;
     }
-    return settingNames.contains(settingName);
+    return settingNames.contains(String(settingName));
 }
 
 /*
