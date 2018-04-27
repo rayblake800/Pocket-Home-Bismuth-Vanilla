@@ -16,6 +16,8 @@ GPPDBusProxy(BUS_NAME, PATH, INTERFACE)
     {
         connectionList.add(SavedConnection(path.toRawUTF8()));
     }
+    DBG("SavedConnections::" << __func__  << ": Found "
+            << connectionList.size() << " connections.");
 }
 
 /*
@@ -33,6 +35,8 @@ Array<SavedConnection> SavedConnections::getWifiConnections()
             connections.add(con);
         }
     }
+    DBG("SavedConnections::" << __func__  << ": Found "
+            << connections.size() << " wifi connections.");
     return connections;
 }
 
