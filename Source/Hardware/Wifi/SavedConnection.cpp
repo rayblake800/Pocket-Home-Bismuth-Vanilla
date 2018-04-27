@@ -28,13 +28,6 @@
 #define SETTING_BLUETOOTH_ADDR "bdaddr"
 #define SETTING_BLUETOOTH_TYPE "type"
 
-static void printSettingNames(StringArray& settingNames)
-{
-    String debug = "Settings:";
-    debug += settingNames.joinIntoString(",");
-    DBG(debug);
-}
-
 /*
  * Create an empty object with no linked connection.
  */
@@ -51,7 +44,6 @@ settingNames(toCopy.settingNames),
 nmConnection(toCopy.nmConnection)
 {
     copyData(toCopy);
-    printSettingNames(settingNames);
 }
 
 /**
@@ -65,7 +57,6 @@ path(path)
     {
         createNMConnection();
     }
-    printSettingNames(settingNames);
 }
 
 /**
