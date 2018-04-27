@@ -28,6 +28,12 @@
 #define SETTING_BLUETOOTH_ADDR "bdaddr"
 #define SETTING_BLUETOOTH_TYPE "type"
 
+static void printSettingNames(StringArray& settingNames)
+{
+    String debug = "Settings:";
+    debug += settingNames.joinIntoString(",");
+    DBG(debug);
+}
 
 /*
  * Create an empty object with no linked connection.
@@ -45,6 +51,7 @@ settingNames(toCopy.settingNames),
 nmConnection(toCopy.nmConnection)
 {
     copyData(toCopy);
+    printSettingNames(settingNames);
 }
 
 /**
@@ -58,6 +65,7 @@ path(path)
     {
         createNMConnection();
     }
+    printSettingNames(settingNames);
 }
 
 /**
@@ -270,7 +278,6 @@ void SavedConnection::createNMConnection()
     GVariant* settings = callMethod(GET_SETTINGS);
     if (settings != nullptr)
     {
-        std::cout << "connection settings:\n" << toString(settings) << "\n";
         NMSetting* setting = nullptr;
         std::function<void(GVariant*, GVariant*) > copyDict = [this, &setting]
                 (GVariant* key, GVariant * val)
