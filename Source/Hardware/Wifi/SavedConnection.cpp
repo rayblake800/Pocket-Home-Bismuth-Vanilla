@@ -285,7 +285,6 @@ void SavedConnection::createNMConnection()
             String keyStr = getValue<String>(key);
             if (keyStr.isNotEmpty())
             {
-                settingNames.add(keyStr);
 		//GObject refuses to accept byte arrays packaged in GValues
                 if(getGType(val) == G_TYPE_BYTE_ARRAY)
                 {
@@ -307,6 +306,7 @@ void SavedConnection::createNMConnection()
                 (GVariant* key, GVariant * val)
         {
             String keyStr = getValue<String>(key);
+            settingNames.add(keyStr);
             if (keyStr == SETTING_CONN)
             {
                 setting = nm_setting_connection_new();
