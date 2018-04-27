@@ -41,6 +41,7 @@ GPPDBusProxy(nullptr, nullptr, nullptr) { }
 SavedConnection::SavedConnection(const SavedConnection& toCopy) :
 GPPDBusProxy(nullptr, nullptr, nullptr),
 path(toCopy.path),
+settingNames(toCopy.settingNames),
 nmConnection(toCopy.nmConnection)
 {
     copyData(toCopy);
