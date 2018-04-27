@@ -435,7 +435,7 @@ namespace GVariantConverter
             case stringArrayType:
             {
                 String arrayStr;
-                StringArray strings = getValue<StringArray>variant;
+                StringArray strings = getValue<StringArray>(variant);
                 for(const String& string : strings)
                 {
                     arrayStr += (arrayStr.isEmpty() ? "[" : ", ");
