@@ -37,7 +37,7 @@ namespace GVariantConverter
     /**
      * If a GVariant is a container holding a single item, remove that item
      * from the container and return it as a GVariant*.  This function will not
-     * dereference the container object.
+     * unreference the container object.
      * 
      * @param container  the GVariant object to try and unpack.
      * 
@@ -130,7 +130,7 @@ namespace GVariantConverter
      *  
      * @param arrayCall  This function will run once for each element in the
      *                   array, passing in the array element as a parameter.
-     *                   The array elements passed in will be dereferenced
+     *                   The array elements passed in will be unreferenced
      *                   after the function runs.
      */
     void iterateArray(GVariant* array,
@@ -145,7 +145,7 @@ namespace GVariantConverter
      * @param dictCall  This function will run once for each key/value pair in
      *                  the dictionary. Each call passes in a single key and its
      *                  value as GVariant* objects. These objects will be
-     *                  dereferenced after the function runs.
+     *                  unreferenced after the function runs.
      */
     void iterateDict(GVariant* dict,
             std::function<void(GVariant*, GVariant*)> dictCall);

@@ -192,20 +192,12 @@ protected:
             GError** error = nullptr);
     
     /**
-     * Register a signal handler to receive DBus signals.
+     * Register a signal handler to receive DBus signals and property updates.
      * 
      * @param signalHandler  A signal handler that will receive all signals
-     *                       emitted by the DBus object.
+     *                       and property updates emitted by the DBus object.
      */
     void addDBusSignalHandler(DBusSignalHandler* signalHandler);
-    
-    /**
-     * Register a signal handler to receive DBus property updates.
-     * 
-     * @param signalHandler  A signal handler that will be notified whenever
-     *                       DBus object properties change.
-     */
-    void addDBusPropChangeHandler(DBusSignalHandler* signalHandler);
     
 private:
     /**
@@ -214,6 +206,25 @@ private:
      * @return G_TYPE_DBUS_PROXY
      */
     virtual GType getType() const override;
+    
+    /**
+     * Check if a GObject's type allows it to be held by this object. 
+     * 
+     * @param toCheck  Any valid GObject, or nullptr.
+     * 
+     * @return  true iff toCheck is a GDBusProxy or is null. 
+     */
+    virtual bool isValidType(GObject* toCheck) const override;
+    
+        
+    /**
+     * Used to re-add a list of signal handlers to new GObject data.
+     * 
+     * @param toTransfer  A list of signal handler objects to add to this
+     *                    GPPDBusProxy.
+     */
+    virtual void transferSignalHandlers
+    (Array<SignalHandler*>& toTransfer) override;
 
     /**
      * Callback function for handling all DBus signals.

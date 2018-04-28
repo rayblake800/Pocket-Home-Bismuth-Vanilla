@@ -3,7 +3,7 @@
 
 Array<GPPObject::SignalHandler*, CriticalSection> GPPObject::signalHandlers;
 
-/**
+/*
  * Create a void GPPObject, with no internal GObject.
  */
 GPPObject::GPPObject() 
@@ -16,12 +16,12 @@ GPPObject::GPPObject()
 /*
  * Create a new GPPObject as a reference to existing object data.
  */
-GPPObject::GPPObject(GPPObject& toCopy)
+GPPObject::GPPObject(const GPPObject& toCopy)
 {
     objectRef = new GWeakRef;
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
-    copyData(toCopy);
+    setGObject(toCopy);
 }
 
 /*
@@ -32,11 +32,11 @@ GPPObject::GPPObject(GObject* toAssign)
     objectRef = new GWeakRef;
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
-    assignData(toAssign);
+    setGObject(toAssign);
 }
 
 /*
- * When this GPPObject is destroyed, dereference its GObject data, and 
+ * When this GPPObject is destroyed, unreference its GObject data, and 
  * remove all signal handlers added through this GPPObject.
  */
 GPPObject::~GPPObject()
@@ -52,7 +52,7 @@ bool GPPObject::isVoid() const
     return objectData.get() == nullptr;
 }
 
-/**
+/*
  * Adds the signal handler's address to the list of valid signal
  * handlers.
  */
@@ -79,8 +79,7 @@ GPPObject::SignalHandler::~SignalHandler()
     }
 }
 
-
-/**
+/*
  * Callback function for handling property change notification signals.
  * Subclasses should override this to handle all specific property 
  * change notifications that they support.
@@ -127,30 +126,6 @@ void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
 }
 
 /*
- * Add a signal handler to receive notifications when a specific object 
- * property changes.
- */
-void GPPObject::addNotifySignalHandler(GPPObject::SignalHandler* signalHandler,
-        const char* propertyName)
-{
-    String signal("notify::");
-    signal += propertyName;
-    addSignalHandler(signalHandler, signal.toRawUTF8(),
-            G_CALLBACK(notifyCallback));
-}
-
-/**
- * Call an arbitrary function from within the context assigned to this
- * GObject.  This defaults to using the global default context.  Override
- * this if the object should operate on a different context and thread.
- */
-void GPPObject::callInMainContext(std::function<void()> call)
-{
-    GLibSignalHandler globalDefault;
-    globalDefault.gLibCall(call);
-}
-
-/*
  * Checks if this GPPObject and another share the same GObject data.
  */
 bool GPPObject::operator==(const GPPObject& rhs) const
@@ -170,69 +145,109 @@ bool GPPObject::operator==(const GObject* rhs) const
 }
 
 /*
- * Assigns new GObject data to this GPPObject.  Unless the new object
- * already holds the same data as this object, any references or signal
- * handlers associated with previous GObject data will be removed.
- */ 
-void GPPObject::copyData(const GPPObject& toCopy)
-{   
-    callInMainContext([this,&toCopy]()
-    {
-        if(g_type_is_a(getType(), toCopy.getType()))
-        {
-            GObject* copiedData = toCopy.getGObject();
-            if(copiedData != nullptr && copiedData != objectData.get())
-            {
-                removeData();
-                objectData.set(copiedData);
-                g_weak_ref_set(objectRef.get(), copiedData);
-                if(g_object_is_floating(copiedData))
-                {
-                    //Claim the floating reference, and remove the reference 
-                    //added by getGObject()
-                    g_object_ref_sink(copiedData);
-                    g_object_unref(copiedData);
-                }
-                //otherwise, keep the reference added by getGObject.
-            }
-        }
-        else
-        {
-            DBG("GPPObject::" << __func__ << ":Invalid assignment of type "
-                    << g_type_name(toCopy.getType()) << " to type "
-                    << g_type_name(getType()));
-        }
-    });
-}
-
-/*
- * Assigns new GObject data to this GPPObject.  Unless the new object
- * already holds the same data as this object, any references or signal
- * handlers associated with previous GObject data will be removed.
+ * Checks if this GPPObject and another don't share the same GObject data.
  */
-void GPPObject::assignData(GObject* toAssign)
+bool GPPObject::operator!=(const GPPObject& rhs) const
 {
-    callInMainContext([this,toAssign]
-    {
-        if(toAssign != nullptr && objectData.get() != toAssign)
-        {
-            removeData();
-            objectData.set(toAssign);
-            g_weak_ref_set(objectRef.get(), toAssign);
-            g_object_ref_sink(toAssign);
-        }
-    });
+    GObject* thisObject = objectData.get();
+    GObject* othrObject = rhs.objectData.get();
+    return thisObject != othrObject;
 }
 
 /*
- * Gets a pointer to this object's data in a thread-safe manner.
+ * Checks if this GPPObject does not hold a particular GObject pointer.
+ */
+bool operator!=(GObject* rhs) const
+{
+    GObject* heldObject = objectData.get();
+    return heldObject != rhs;
+}
+
+/*
+ * Sets this GPPObject's stored data to a new reference of another 
+ * GPPObject's stored GObject.
+ */
+void GPPObject::operator=(const GPPObject& rhs)
+{
+    setGObject(rhs);
+}
+
+/*
+ * Sets this GPPObject's stored GObject data.
+ */
+void GPPObject::operator=(GObject* rhs)
+{
+    setGObject(rhs);
+}
+
+/*
+ * Gets a pointer to this object's data in a thread-safe manner.  Don't use
+ * this outside of GPPObject implementations.  This method is only public
+ * to allow different GPPObject subclasses to share GObjects for library
+ * function calls.
  */
 GObject* GPPObject::getGObject() const
 {
     return G_OBJECT(g_weak_ref_get(objectRef.get()));
 }
 
+/*
+ * Assigns new GObject data to this GPPObject.  Unless the new object
+ * already holds the same data as this object, any references or signal
+ * handlers associated with previous GObject data will be removed.
+ */
+void GPPObject::setGObject(GObject* toAssign, bool transferSignalHandlers)
+{
+    setData(toAssign, true, transferSignalHandlers);
+}
+
+/*
+ * Assigns new GObject data to this GPPObject.  Unless the new object
+ * already holds the same data as this object, any references or signal
+ * handlers associated with previous GObject data will be removed from the old
+ * GObject.
+ */ 
+void GPPObject::setGObject(const GPPObject& toCopy, bool transferSignalHandlers,
+        bool stealSignalHandlers)
+{   
+    if(g_type_is_a(getType(), toCopy.getType()) && *this != toCopy)
+    {
+        GObject* newData = toCopy.getGObject();
+        setData(newData, false, transferSignalHandlers);
+        if(stealSignalHandlers)
+        {
+            callInMainContext([this, &toCopy]()
+            {
+                for(auto it = toCopy.registeredSignals.begin();
+                    it != toCopy.registeredSignals.end();
+                    it++)
+                {
+                    SignalHandler* handler 
+                            = dynamic_cast<SignalHandler*>(it->second);
+                    if(handler != nullptr)
+                    {
+                        registeredSignals[it->first] = handler;
+                        handler->sources.removeAllInstancesOf(&toCopy);
+                        handler->sources.addIfNotAlreadyThere(this);
+                    }
+                }
+                toCopy.registeredSignals.clear();
+            });
+        }
+    }
+}
     
+/**
+ * Allows GPPObject subclasses to access GObject data within other 
+ * GPPObjects. Avoid using this for anything other than calling library 
+ * functions that need GObject* parameter data.
+ */
+void getOtherGObject(const GPPObject& source)
+{
+    return source.getGObject();
+}
+
+
 /*
  * Remove this object's GObject data, clearing all associated references 
  * and signal handlers.
@@ -255,6 +270,41 @@ void GPPObject::removeData()
                 g_object_unref(object);
                 objectData.set(nullptr);
             }
+        }
+    });
+}
+
+/*
+ * Call an arbitrary function from within the context assigned to this
+ * GObject.  This defaults to using the global default context.  Override
+ * this if the object should operate on a different context and thread.
+ */
+void GPPObject::callInMainContext(std::function<void()> call)
+{
+    GLibSignalHandler globalDefault;
+    globalDefault.gLibCall(call);
+}
+
+/*
+ * Call an arbitrary function from within the context assigned to this
+ * GObject, passing in GObject data as a parameter.  This makes use of the
+ * zero parameter callInMainContext function, so it does not need to be
+ * overridden to operate in a different context.
+ */
+void GPPObject::callInMainContext(std::function<void(GObject*)> call,
+        bool skipCallIfVoid)
+{
+    callInMainContext([this, &call, skipCallIfVoid]()
+    {
+        GObject* data = getGObject();
+        if(data != nullptr)
+        {
+            call(data);
+            g_clear_object(&data);
+        }
+        else if(!skipCallIfVoid)
+        {
+            call(nullptr);
         }
     });
 }
@@ -334,6 +384,19 @@ GPPObject* GPPObject::findObjectWrapper(GObject* objectData,
 }
 
 /*
+ * Add a signal handler to receive notifications when a specific object 
+ * property changes.
+ */
+void GPPObject::addNotifySignalHandler(GPPObject::SignalHandler* signalHandler,
+        const char* propertyName)
+{
+    String signal("notify::");
+    signal += propertyName;
+    addSignalHandler(signalHandler, signal.toRawUTF8(),
+            G_CALLBACK(notifyCallback));
+}
+
+/*
  * Callback to handle property change signals.
  */
 void GPPObject::notifyCallback(GObject* objectData, GParamSpec* pSpec,
@@ -361,4 +424,67 @@ void GPPObject::notifyCallback(GObject* objectData, GParamSpec* pSpec,
                 << signalName << "!");
     }
     
+}
+
+/*
+ * Get all signal handlers registered with this object's GObject data.
+ */
+Array<GPPObject::SignalHandler*> GPPObject::getSignalHandlers()
+{
+    Array<SignalHandler*> handlers;
+    for(auto it = registeredSignals.begin(); 
+        it != registeredSignals.end(); it++)
+    {
+        handlers.addIfNotAlreadyThere(it->second);
+    }
+    return handlers;
+}
+
+/*
+ * Set this object's GObject data to a new value.  Unless the object data 
+ * given equals the object's old data, any signal handlers attached to the
+ * old GObject data will be removed.
+ */
+void GPPObject::setData(GObject* data, bool refNeeded, bool moveSignalHandlers)
+{
+    callInMainContext([this, data, refNeeded, moveSignalHandlers]()
+    {
+        if(data != nullptr && isValidType(data) && objectData.get() != data)
+        {
+            Array<SignalHandlers> toTransfer;
+            if(moveSignalHandlers)
+            {
+                toTransfer = getSignalHandlers();
+            }
+            removeData();
+            objectData.set(data);
+            g_weak_ref_set(objectRef.get(), data);
+            if(refNeeded || g_object_is_floating(data))
+            {
+                g_object_ref_sink(data);
+            }
+            if(!toTransfer.isEmpty())
+            {
+                transferSignalHandlers(toTransfer);
+            }
+        }
+        else if(data == nullptr)
+        {
+            removeData();
+        }
+    });
+}
+
+/**
+ * Used to re-add a list of signal handlers to new GObject data.
+ * Subclasses are responsible for implementing this to attach the signal 
+ * handlers to the correct object signal(s).
+ */
+void GPPObject::transferSignalHandlers(Array<SignalHandler*>& toTransfer)
+{
+    jassertfalse;
+    DBG("Error: GPPObject subclass with GType " << g_type_name(getType())
+            << " did not override transferSignalHandlers()");
+    DBG("  Lost " << toTransfer.size() 
+            << " signal handlers that should have been transferred");
 }

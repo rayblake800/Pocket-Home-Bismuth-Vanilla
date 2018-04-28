@@ -43,7 +43,7 @@ path(toCopy.path),
 settingNames(toCopy.settingNames),
 nmConnection(toCopy.nmConnection)
 {
-    copyData(toCopy);
+    setGObject(toCopy);
 }
 
 /**
@@ -169,10 +169,8 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
     g_variant_unref(newSettings);
     newSettings = nullptr;
     jassert(updatedSettings != nullptr);
-    std::cout<< "Updated Connection settings:\n" << toString(updatedSettings)
-            << "\n";
-    callMethod("ClearSecrets");
     callMethod(UPDATE_CONN, updatedSettings);
+    createNMConnection();
 }
 
     
@@ -215,7 +213,7 @@ void SavedConnection::removeSecurityKey()
  * Gets the NMConnection object generated from this connection's data.
  * Only wifi connections are supported, others are not guaranteed to work.
  */
-NMConnection* SavedConnection::getNMConnection()
+NMPPConnection SavedConnection::getNMConnection()
 {
     return nmConnection;
 }
@@ -231,7 +229,7 @@ void SavedConnection::deleteConnection()
         callMethod(DELETE_CONN);
         removeData();
         path = "";
-        nmConnection = nullptr;
+        nmConnection = NMPPConnection();
         settingNames.clear();
     }
 }
@@ -264,8 +262,12 @@ void SavedConnection::createNMConnection()
         return;
     }
     using namespace GVariantConverter;
-    nmConnection = nm_connection_new();
-    nm_connection_set_path(nmConnection, path.toRawUTF8());
+    if(!settingNames.isEmpty())
+    {
+        settingNames.clear();
+        nmConnection = NMPPConnection();
+    }
+    nmConnection.setPath(path.toRawUTF8());
     GVariant* settings = callMethod(GET_SETTINGS);
     if (settings != nullptr)
     {
@@ -341,7 +343,7 @@ void SavedConnection::createNMConnection()
                         secretsError = nullptr;
                     }
                 }
-                nm_connection_add_setting(nmConnection, setting);
+                nmConnection.addSetting(setting);
                 setting = nullptr;
             }
         });

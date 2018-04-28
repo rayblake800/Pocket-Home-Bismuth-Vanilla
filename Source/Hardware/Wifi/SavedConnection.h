@@ -1,6 +1,6 @@
 #pragma once
-#include <nm-connection.h>
 #include "JuceHeader.h"
+#include "NMPPConnection.h"
 #include "GPPDBusProxy.h"
 
 /**
@@ -49,13 +49,13 @@ public:
     bool isWifiConnection() const;
     
     /**
-     * Gets the NMConnection object generated from this connection's data.
+     * Gets the NMPPConnection object generated from this connection's data.
      * Only wifi connections are supported, others are not guaranteed to work.
      * 
-     * @return the NMConnection object for this connection, or nullptr if the
+     * @return the NMPPConnection object for this connection, or nullptr if the
      *         connection is invalid.
      */
-    NMConnection* getNMConnection();
+    NMPPConnection getNMConnection();
     
     /**
      * Replace the connection's existing wifi security settings.
@@ -98,7 +98,7 @@ public:
     
 private:
     /**
-     * Create a NMConnection object using this saved connection's data.
+     * Create a NMPPConnection object using this saved connection's data.
      * Only wifi connections are supported, others are not guaranteed to work.
      */
     void createNMConnection();
@@ -167,7 +167,7 @@ private:
      */
     bool hasSettingProperty(const char* settingName, const char* propName);
     
-    NMConnection* nmConnection = nullptr;
+    NMPPConnection nmConnection;
     StringArray settingNames;
     String path;
 };

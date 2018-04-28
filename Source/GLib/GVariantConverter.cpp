@@ -7,7 +7,7 @@ namespace GVariantConverter
     /**
      * If a GVariant is a container holding a single item, remove that item
      * from the container and return it as a GVariant*.  This function will not
-     * dereference the container object.
+     * unreference the container object.
      */
     GVariant* unpack(GVariant* container)
     {

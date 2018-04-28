@@ -17,8 +17,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -5004,8 +5002,20 @@
           <in>RelativeLayoutManager.h</in>
         </df>
         <df name="GLib">
-          <in>GDBusProxyInterface.cpp</in>
-          <in>GDBusProxyInterface.h</in>
+          <df name="LibNM">
+            <in>NMPPAccessPoint.cpp</in>
+            <in>NMPPAccessPoint.h</in>
+            <in>NMPPClient.cpp</in>
+            <in>NMPPClient.h</in>
+            <in>NMPPConnection.cpp</in>
+            <in>NMPPConnection.h</in>
+            <in>NMPPDeviceWifi.cpp</in>
+            <in>NMPPDeviceWifi.h</in>
+          </df>
+          <in>GPPDBusProxy.cpp</in>
+          <in>GPPDBusProxy.h</in>
+          <in>GPPObject.cpp</in>
+          <in>GPPObject.h</in>
           <in>GVariantConverter.cpp</in>
           <in>GVariantConverter.h</in>
         </df>

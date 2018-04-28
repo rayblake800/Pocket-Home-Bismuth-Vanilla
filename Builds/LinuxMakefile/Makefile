@@ -35,7 +35,7 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/GLib -I../../Source/Components/Pages -I../../Source/Components/Pages/DateTime\ Page -I../../Source/Components/Widgets -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Configurable -I../../Source/Components/Pages/Password\ Pages -I../../Source/Components/Pages/Home\ Settings\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Hardware -I../../Source/Components/Pages/Settings\ Page -I../../Source/Components/Pages/Advanced\ Settings\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source/Util -I../../Source/Shared\ Resources/Config\ Files -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/Hardware/Bluetooth -I../../Source/Components/Pages/UI\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Folders -I../../Source/Shared\ Resources -I../../Source/Hardware/Wifi -I../../Source/Components/Pages/Login\ Page -I../../Source/Components -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Types -I../../Source/Components/Pages/Home\ Page -I../../Source/Components/Pages/Input\ Settings\ Page -I../../Source $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source/Components/Pages/Advanced\ Settings\ Page -I../../Source/Components/Pages/DateTime\ Page -I../../Source/Components/Pages/Home\ Page -I../../Source/Hardware -I../../Source/Hardware/Wifi -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source -I../../Source/Shared\ Resources -I../../Source/Components/Widgets -I../../Source/Components/Pages -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/GLib -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Types -I../../Source/Components/Pages/Password\ Pages -I../../Source/Util -I../../Source/Components/Pages/Home\ Settings\ Page -I../../Source/Components/Pages/Settings\ Page -I../../Source/GLib/LibNM -I../../Source/Components/Pages/Login\ Page -I../../Source/Components/Configurable -I../../Source/Components -I../../Source/Hardware/Bluetooth -I../../Source/Components/Pages/Input\ Settings\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Folders -I../../Source/Shared\ Resources/Config\ Files -I../../Source/Components/Pages/UI\ Page $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
@@ -56,7 +56,7 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/GLib -I../../Source/Components/Pages -I../../Source/Components/Pages/DateTime\ Page -I../../Source/Components/Widgets -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Configurable -I../../Source/Components/Pages/Password\ Pages -I../../Source/Components/Pages/Home\ Settings\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Hardware -I../../Source/Components/Pages/Settings\ Page -I../../Source/Components/Pages/Advanced\ Settings\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source/Util -I../../Source/Shared\ Resources/Config\ Files -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/Hardware/Bluetooth -I../../Source/Components/Pages/UI\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Folders -I../../Source/Shared\ Resources -I../../Source/Hardware/Wifi -I../../Source/Components/Pages/Login\ Page -I../../Source/Components -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Types -I../../Source/Components/Pages/Home\ Page -I../../Source/Components/Pages/Input\ Settings\ Page -I../../Source $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.1 -DJUCE_APP_VERSION_HEX=0x1 $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source/Components/Pages/Advanced\ Settings\ Page -I../../Source/Components/Pages/DateTime\ Page -I../../Source/Components/Pages/Home\ Page -I../../Source/Hardware -I../../Source/Hardware/Wifi -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source -I../../Source/Shared\ Resources -I../../Source/Components/Widgets -I../../Source/Components/Pages -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/GLib -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Types -I../../Source/Components/Pages/Password\ Pages -I../../Source/Util -I../../Source/Components/Pages/Home\ Settings\ Page -I../../Source/Components/Pages/Settings\ Page -I../../Source/GLib/LibNM -I../../Source/Components/Pages/Login\ Page -I../../Source/Components/Configurable -I../../Source/Components -I../../Source/Hardware/Bluetooth -I../../Source/Components/Pages/Input\ Settings\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Folders -I../../Source/Shared\ Resources/Config\ Files -I../../Source/Components/Pages/UI\ Page $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
@@ -68,6 +68,10 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/NMPPAccessPoint_680fb63a.o \
+  $(JUCE_OBJDIR)/NMPPClient_2840c667.o \
+  $(JUCE_OBJDIR)/NMPPConnection_5641847a.o \
+  $(JUCE_OBJDIR)/NMPPDeviceWifi_a7e88da7.o \
   $(JUCE_OBJDIR)/GPPDBusProxy_812aa0bd.o \
   $(JUCE_OBJDIR)/GPPObject_f97abf7e.o \
   $(JUCE_OBJDIR)/GVariantConverter_47eeb0da.o \
@@ -185,6 +189,26 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
+
+$(JUCE_OBJDIR)/NMPPAccessPoint_680fb63a.o: ../../Source/GLib/LibNM/NMPPAccessPoint.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NMPPAccessPoint.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NMPPClient_2840c667.o: ../../Source/GLib/LibNM/NMPPClient.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NMPPClient.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NMPPConnection_5641847a.o: ../../Source/GLib/LibNM/NMPPConnection.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NMPPConnection.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NMPPDeviceWifi_a7e88da7.o: ../../Source/GLib/LibNM/NMPPDeviceWifi.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NMPPDeviceWifi.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/GPPDBusProxy_812aa0bd.o: ../../Source/GLib/GPPDBusProxy.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)

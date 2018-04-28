@@ -31,12 +31,10 @@ GPPDBusProxy::GPPDBusProxy
         }
         if(proxy != nullptr)
         {
-            assignData(G_OBJECT(proxy));
+            setGObject(G_OBJECT(proxy));
         }
-    });
-    
+    }); 
 }
-
 
 /*
  * Called whenever the DBus object emits a signal.  DBusSignalHandler
@@ -86,68 +84,71 @@ GVariant* GPPDBusProxy::callMethod
         GVariant* tuple = g_variant_new_tuple(&params, 1);
         params = tuple;
     }
-    GDBusProxy* proxy = G_DBUS_PROXY(getGObject());
-    if(proxy == nullptr)
+    GVariant* retVal = nullptr;
+    callInMainContext([this, methodName, params, error, &retVal]
+            (GObject * proxyObj)
     {
-        DBG("GPPDBusProxy::" << __func__ << ": invalid DBus proxy!");
-        return nullptr;
-    }
-    GError * defaultError = nullptr;
-    GVariant* result = g_dbus_proxy_call_sync(proxy,
-            methodName,
-            params,
-            G_DBUS_CALL_FLAGS_NONE,
-            -1,
-            nullptr,
-            (error==nullptr ? &defaultError: error));
-    g_clear_object(&proxy);
-    if (defaultError != nullptr)
-    {
-        DBG("GPPDBusProxy::" << __func__ 
-                << ": calling DBus adapter proxy method "
-                << methodName << " failed!");
-        DBG("Error: " << String(defaultError->message));
-        g_clear_error(&defaultError);
-    }
-    if(result != nullptr  && g_variant_is_container(result))
-    {
-        gsize resultSize = g_variant_n_children(result);
-        if(resultSize == 0)
+        GDBusProxy* proxy = G_DBUS_PROXY(proxyObj);
+        if(proxy == nullptr)
         {
-            g_variant_unref(result);
-            return nullptr;
+            DBG("GPPDBusProxy::" << __func__ << ": invalid DBus proxy!");
+            DBG("GPPDBusProxy::" << __func__ 
+                    << ": params will now be unreferenced if non-null.");
+            if(params != nullptr)
+            {
+                g_variant_unref(params);
+            }
+            return;
         }
-        else if(resultSize == 1)
+        GError * defaultError = nullptr;
+        result = g_dbus_proxy_call_sync(proxy,
+                methodName,
+                params,
+                G_DBUS_CALL_FLAGS_NONE,
+                -1,
+                nullptr,
+                (error==nullptr ? &defaultError: error));
+        if (defaultError != nullptr)
         {
-            GVariant* extracted = nullptr;
-            g_variant_get(result, "(*)" , &extracted);
-            g_variant_unref(result);
-            result = extracted;
+            DBG("GPPDBusProxy::" << __func__ 
+                    << ": calling DBus adapter proxy method "
+                    << methodName << " failed!");
+            DBG("Error: " << String(defaultError->message));
+            g_clear_error(&defaultError);
         }
-    }
+        if(result != nullptr  && g_variant_is_container(result))
+        {
+            gsize resultSize = g_variant_n_children(result);
+            if(resultSize == 0)
+            {
+                g_variant_unref(result);
+                return nullptr;
+            }
+            else if(resultSize == 1)
+            {
+                GVariant* extracted = nullptr;
+                g_variant_get(result, "(*)" , &extracted);
+                g_variant_unref(result);
+                result = extracted;
+            }
+        }     
+    }, false);
     return result;
 }
 
-/**
- * Register a signal handler to receive DBus signals.
+/*
+ * Register a signal handler to receive DBus signals and property updates.
  */
 void GPPDBusProxy::addDBusSignalHandler(DBusSignalHandler* signalHandler)
 {
     addSignalHandler(static_cast<SignalHandler*>(signalHandler),
             "g-signal", G_CALLBACK(dBusSignalCallback));
-}
-
-/**
- * Register a signal handler to receive DBus property updates.
- */
-void GPPDBusProxy::addDBusPropChangeHandler(DBusSignalHandler* signalHandler)
-{
     addSignalHandler(static_cast<SignalHandler*>(signalHandler),
             "g-properties-changed",
             G_CALLBACK(dBusPropertiesChanged));
 }
 
- /**
+ /*
  * Get GDbusProxy's GLib class type.
  */
 GType GPPDBusProxy::getType() const
@@ -155,7 +156,27 @@ GType GPPDBusProxy::getType() const
     return G_TYPE_DBUS_PROXY;
 }
 
-/**
+/*
+ * Check if a GObject's type allows it to be held by this object.
+ */
+bool isValidType(GObject* toCheck) const
+{
+    return G_IS_DBUS_PROXY(toCheck);
+}
+
+/*
+ * Used to re-add a list of signal handlers to new GObject data.
+ */
+void transferSignalHandlers(Array<SignalHandler*>& toTransfer)
+{
+    for(SignalHandler* handler : toTransfer)
+    {
+        addDBusSignalHandler(static_cast<DBusSignalHandler*>(handler));
+    }
+    
+}
+
+/*
  * Callback function for handling all DBus signals.
  */
 void GPPDBusProxy::dBusSignalCallback(GDBusProxy* proxy,

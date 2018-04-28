@@ -4,7 +4,7 @@
               bundleIdentifier="co.nextthing.PokeLaunch" includeBinaryInAppConfig="1"
               jucerVersion="5.3.0" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
               displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
-              companyCopyright="Next Thing Co." headerPath="../../Source/GLib&#10;../../Source/Components/Pages&#10;../../Source/Components/Pages/DateTime Page&#10;../../Source/Components/Widgets&#10;../../Source/Components/Pages/Power Page&#10;../../Source/Components/Configurable&#10;../../Source/Components/Pages/Password Pages&#10;../../Source/Components/Pages/Home Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Hardware&#10;../../Source/Components/Pages/Settings Page&#10;../../Source/Components/Pages/Advanced Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Util&#10;../../Source/Shared Resources/Config Files&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Hardware/Bluetooth&#10;../../Source/Components/Pages/UI Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Shared Resources&#10;../../Source/Hardware/Wifi&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Components&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components/Pages/Input Settings Page&#10;../../Source">
+              companyCopyright="Next Thing Co." headerPath="../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Pages/Advanced Settings Page&#10;../../Source/Components/Pages/DateTime Page&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Hardware&#10;../../Source/Hardware/Wifi&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source&#10;../../Source/Shared Resources&#10;../../Source/Components/Widgets&#10;../../Source/Components/Pages&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/GLib&#10;../../Source/Components/Pages/Power Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/Components/Pages/Password Pages&#10;../../Source/Util&#10;../../Source/Components/Pages/Home Settings Page&#10;../../Source/Components/Pages/Settings Page&#10;../../Source/GLib/LibNM&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Components/Configurable&#10;../../Source/Components&#10;../../Source/Hardware/Bluetooth&#10;../../Source/Components/Pages/Input Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Shared Resources/Config Files&#10;../../Source/Components/Pages/UI Page">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
       <FILE id="lJvIsl" name="bluetooth.json" compile="0" resource="1" file="assets/bluetooth.json"/>
@@ -14,6 +14,22 @@
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
       <GROUP id="{FDA4E67F-621B-EA4E-D0EC-3AFCFDE4E820}" name="GLib">
+        <GROUP id="{2E477569-DD32-F554-1AAC-AAE6F2932409}" name="LibNM">
+          <FILE id="v9npEc" name="NMPPAccessPoint.cpp" compile="1" resource="0"
+                file="Source/GLib/LibNM/NMPPAccessPoint.cpp"/>
+          <FILE id="fgqnfZ" name="NMPPAccessPoint.h" compile="0" resource="0"
+                file="Source/GLib/LibNM/NMPPAccessPoint.h"/>
+          <FILE id="SSaAlJ" name="NMPPClient.cpp" compile="1" resource="0" file="Source/GLib/LibNM/NMPPClient.cpp"/>
+          <FILE id="SFmKpY" name="NMPPClient.h" compile="0" resource="0" file="Source/GLib/LibNM/NMPPClient.h"/>
+          <FILE id="hff10x" name="NMPPConnection.cpp" compile="1" resource="0"
+                file="Source/GLib/LibNM/NMPPConnection.cpp"/>
+          <FILE id="HJF3eT" name="NMPPConnection.h" compile="0" resource="0"
+                file="Source/GLib/LibNM/NMPPConnection.h"/>
+          <FILE id="z7uZxn" name="NMPPDeviceWifi.cpp" compile="1" resource="0"
+                file="Source/GLib/LibNM/NMPPDeviceWifi.cpp"/>
+          <FILE id="IBIEPS" name="NMPPDeviceWifi.h" compile="0" resource="0"
+                file="Source/GLib/LibNM/NMPPDeviceWifi.h"/>
+        </GROUP>
         <FILE id="sMlaSb" name="GPPDBusProxy.cpp" compile="1" resource="0"
               file="Source/GLib/GPPDBusProxy.cpp"/>
         <FILE id="nN1gji" name="GPPDBusProxy.h" compile="0" resource="0" file="Source/GLib/GPPDBusProxy.h"/>

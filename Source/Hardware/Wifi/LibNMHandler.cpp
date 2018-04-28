@@ -1,6 +1,7 @@
 
 #include <nm-device.h>
 #include <nm-connection.h>
+#include "NMPPConnection.h"
 #include "MainConfigFile.h"
 #include "WifiAccessPoint.h"
 #include "LibNMHandler.h"
