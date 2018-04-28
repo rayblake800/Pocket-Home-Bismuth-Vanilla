@@ -136,7 +136,7 @@ public:
     
     /**
      * Listener objects can subscribe to receive updates when the access point
-     * signal strength changes, or the access point is removed.
+     * signal strength changes.
      */
     class Listener : public GPPObject::SignalHandler
     {
@@ -145,13 +145,6 @@ public:
         Listener() { }
         virtual ~Listener() { }
     private:
-        /**
-         * Signals that an access point has been removed, and should no longer
-         * be saved.
-         * 
-         * @param removed  The removed wifi access point object.
-         */
-        virtual void accessPointRemoved(NMPPAccessPoint* removed) = 0;
         
         /**
          * Signals that the access point's signal strength has been updated.
@@ -180,7 +173,7 @@ public:
      * Add a new listener object to receive signals from this access point.
      * 
      * @param listener  An object that needs to act when connection signal
-     *                  strength changes or the access point is removed.
+     *                  strength changes.
      */
     void addListener(Listener* listener);
     
@@ -188,7 +181,7 @@ public:
      * Remove a listener object from this access point.
      * 
      * @param listener  This object will no longer be notified when signal
-     *                  strength changes or the access point is removed.
+     *                  strength changes.
      */
     void removeListener(Listener* listener);
     
@@ -199,4 +192,23 @@ private:
      * @return NM_TYPE_ACCESS_POINT
      */
     GType getType() const override;    
+    
+    /**
+     * Check if a GObject's type allows it to be held by this object. 
+     * 
+     * @param toCheck  Any valid GObject, or nullptr.
+     * 
+     * @return  true iff toCheck is a NMAccessPoint or is null. 
+     */
+    virtual bool isValidType(GObject* toCheck) const override;
+    
+        
+    /**
+     * Used to re-add a list of signal handlers to new GObject data.
+     * 
+     * @param toTransfer  A list of signal handler objects to add to this
+     *                    NMPPAccessPoint.
+     */
+    virtual void transferSignalHandlers
+    (Array<SignalHandler*>& toTransfer) override;
 };
