@@ -296,7 +296,7 @@ GType NMPPDeviceWifi::getType() const
  */
 bool NMPPDeviceWifi::isValidType(GObject* toCheck) const 
 { 
-    return NM_IS_DEVICE_WIFI_CLASS(toCheck);
+    return NM_IS_DEVICE_WIFI(toCheck);
 }
 
 /*

@@ -1,4 +1,4 @@
-export CONFIG:=Debug
+export CONFIG:=Release
 
 VERSION=0.0.8.9
 BUILD=1
@@ -23,6 +23,13 @@ clean:
 
 wifitest:
 	cd Builds/LinuxMakefile && $(MAKE) -f UnitTests.mk ../../build/$(CONFIG)/wifitest
+	
+debug:
+	reset
+	export CONFIG=Debug
+	cd Builds/LinuxMakefile && $(MAKE)
+	sudo make devinstall
+
 
 pack: all
 	mkdir -p pack-debian/usr/bin/ pack-debian/usr/share/pocket-home/
