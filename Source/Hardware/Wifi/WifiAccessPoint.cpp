@@ -529,7 +529,6 @@ bool WifiAccessPoint::setPsk(String psk)
         }
         if(settingsDict != nullptr)
         {
-            GVariant* newSettings = g_variant_dict_end(settingsDict);
             if(keySet)
             {
                 //ensure NetworkManager actually saves connection secrets
@@ -537,9 +536,10 @@ bool WifiAccessPoint::setPsk(String psk)
                             NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
                             g_variant_new_variant(
                             g_variant_new_int32(NM_SETTING_SECRET_FLAG_NONE)));
+                GVariant* newSettings = g_variant_dict_end(settingsDict);
                 savedConnection.updateWifiSecurity(newSettings);
+                g_variant_unref(newSettings);
             }
-            g_variant_unref(newSettings);
         }
     });
     

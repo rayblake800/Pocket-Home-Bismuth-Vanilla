@@ -159,6 +159,23 @@ PowerPage::pageButtonClicked(Button *button)
         NMPPConnection first = wifiCons[0].getNMConnection();
         DBG("First connection: ");
         first.printDebugOutput();
+        GVariantDict* settingsDict = g_variant_dict_new(nullptr);
+        g_variant_dict_insert_value(settingsDict,
+                            NM_SETTING_WIRELESS_SECURITY_PSK,
+                            g_variant_new_variant(
+                            g_variant_new_string("bbbbbbbb!")));
+        g_variant_dict_insert_value(settingsDict,
+                    NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
+                    g_variant_new_variant(
+                    g_variant_new_int32(NM_SETTING_SECRET_FLAG_NONE)));
+        GVariant* newSettings = g_variant_dict_end(settingsDict);
+        wifiCons[0].updateWifiSecurity(newSettings);
+        g_variant_unref(newSettings);
+        
+        DBG("Saved updates, checking if changes stuck:");
+        NMPPConnection refreshed = wifiCons[0].getNMConnection();
+        DBG("First connection: ");
+        refreshed.printDebugOutput();    
     }
 #endif
     ChildProcess commandProcess;
