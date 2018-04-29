@@ -811,26 +811,6 @@ void LibNMHandler::buildAPMap()
                     connection);
         }
              */
-            for(SavedConnection& savedConn : wifiConnections)
-            {
-                NMConnection* nmCon = savedConn.getNMConnection();
-                GError* err = nullptr;
-                if(nm_connection_verify(nmCon, &err))
-                {
-                    if(nm_access_point_connection_valid(nmAP, nmCon))
-                    {
-                        matchingConn = savedConn;
-                        break;
-                    }
-                }
-                else
-                {
-                    DBG("LibNMHandler::" << __func__ 
-                            << ": Invalid saved connection found!");
-                    DBG("\tError=" << err->message);
-                    g_clear_error(&err);
-                }
-            }
             WifiAccessPoint::Ptr wifiAP 
                     = new WifiAccessPoint(nmAP, matchingConn);
             if(wifiAP == nullptr)

@@ -21,7 +21,7 @@ class NMPPAccessPoint : public GPPObject
 {
 public:
     /**
-     * Create a NMPPAccessPoint sharing a GObject with an existing
+     * Creates a NMPPAccessPoint sharing a GObject with an existing
      * NMPPAccessPoint.
      * 
      * @toCopy  An existing connection object.
@@ -29,16 +29,16 @@ public:
     NMPPAccessPoint(const NMPPAccessPoint& toCopy);
 
     /**
-     * Create a NMPPAccessPoint to contain a NMAccessPoint object.
+     * Creates a NMPPAccessPoint to contain a NMAccessPoint object.
      * 
      * @toAssign  A valid NMAccessPoint for this NMPPAccessPoint to hold.
      */
     NMPPAccessPoint(NMAccessPoint* toAssign);
     
     /**
-     * Create a void NMPPAccessPoint.
+     * Creates a null NMPPAccessPoint.
      */
-    NMPPAccessPoint();
+    NMPPAccessPoint() { }
     
     /**
      * Gets the access point SSID as a byte array from the access point.  This 
@@ -46,7 +46,7 @@ public:
      * 
      * @return  the exact SSID value, packaged in a byte array. 
      */
-    const GByteArray* getSSID();
+    const GByteArray* getSSID() const;
     
     /**
      * Gets the access point SSID, converted into a printable string object.
@@ -55,49 +55,47 @@ public:
      * 
      * @return  the SSID as printable text.
      */
-    String getSSIDText();
+    String getSSIDText() const;
     
     /**
      * Gets the MAC address of the wifi access point.
      * 
-     * @return the access point's BSSID, or nullptr if the access point is void.
+     * @return the access point's BSSID, or nullptr if the access point is null.
      */
-    const char* getBSSID();
+    const char* getBSSID() const;
+    
+    /**
+     * Gets the DBus path of the wifi access point.
+     * 
+     * @return  the access point object's DBus path, or nullptr if the access
+     *          point is null
+     */
+    const char* getPath() const;
     
     /**
      * Gets the wifi access point frequency in (TODO: what format? MHz? 
      * documentation is unclear, do some tests and figure it out.)
      * 
      * @return the wifi access point frequency, or zero if the access point is
-     *         void.
+     *         null.
      */
-    unsigned int getFrequency();
+    unsigned int getFrequency() const;
     
     /**
      * Gets the access point's maximum data transfer bit rate.
      * 
      * @return the maximum access point bit rate in kb/s, or zero if the access
-     *         point is void.
+     *         point is null.
      */
-    unsigned int getMaxBitrate();
+    unsigned int getMaxBitrate() const;
     
     /**
      * Gets the signal strength of the wifi access point.
      * 
      * @return the wifi signal strength, between 0 and 100, or zero if the
-     *         access point is void.
+     *         access point is null.
      */
-    unsigned int getSignalStrength();
-    
-    /**
-     * Returns the timestamp (in CLOCK_BOOTTIME seconds) for the last time the 
-     * access point was found in scan results. A value of -1 means the access 
-     * point has not been found in a scan.
-     * 
-     * @return  the last time seen in seconds, or -1 if the access point is void
-     *          or has not been found in a scan.
-     */
-    int getLastSeen();
+    unsigned int getSignalStrength() const;
     
     /**
      * Check the settings of a connection against the properties of this access
@@ -108,31 +106,31 @@ public:
      * 
      * @return true  iff this access point and connection are compatible.
      */
-    bool isValidConnection(const NMPPConnection& connection);
+    bool isValidConnection(const NMPPConnection& connection) const;
     
     /**
      * Get access point flags for this access point.
      * 
      * @return  basic Wifi security flags for this access point, or 
-     *          NM_802_11_AP_FLAGS_NONE if the access point is void.
+     *          NM_802_11_AP_FLAGS_NONE if the access point is null.
      */
-    NM80211ApFlags getFlags();
+    NM80211ApFlags getFlags() const;
     
     /**
      * Get WPA security flags for this access point.
      * 
      * @return all WPA security flags describing the access point, or
-     *         NM_802_11_AP_SEC_NONE if the access point is void. 
+     *         NM_802_11_AP_SEC_NONE if the access point is null. 
      */
-    NM80211ApSecurityFlags getWPAFlags();
+    NM80211ApSecurityFlags getWPAFlags() const;
     
     /**
      * Get RSN security flags for this access point.
      * 
      * @return all RSN security flags describing the access point, or
-     *         NM_802_11_AP_SEC_NONE if the access point is void. 
+     *         NM_802_11_AP_SEC_NONE if the access point is null. 
      */
-    NM80211ApSecurityFlags getRSNFlags();
+    NM80211ApSecurityFlags getRSNFlags() const;
     
     /**
      * Listener objects can subscribe to receive updates when the access point

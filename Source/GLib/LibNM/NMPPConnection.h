@@ -13,7 +13,7 @@ class NMPPConnection : public GPPObject
 {
 public:
     /**
-     * Create a NMPPConnection sharing a GObject with an existing
+     * Creates a NMPPConnection sharing a GObject with an existing
      * NMPPConnection.
      * 
      * @toCopy  An existing connection object.
@@ -21,14 +21,14 @@ public:
     NMPPConnection(const NMPPConnection& toCopy);
     
     /**
-     * Create a NMPPConnection to contain a NMConnection object.
+     * Creates a NMPPConnection to contain a NMConnection object.
      * 
      * @toAssign  A valid NMConnection for this NMPPConnection to hold.
      */
     NMPPConnection(NMConnection* toAssign);
     
     /**
-     * Create a void NMPPConnection.
+     * Creates a null NMPPConnection.
      */
     NMPPConnection();
     
@@ -47,7 +47,7 @@ public:
     
     /**
      * Add a new connection setting to this connection.  If the connection is
-     * void, this will create a new NMConnection object.
+     * null, this will create a new NMConnection object.
      * 
      * @param setting  A valid NMSetting object.  Ownership of this setting
      *                 will be transferred to the NMConnection object.
@@ -88,7 +88,7 @@ public:
     
     /**
      * Set the connection path stored by this object.  If the connection is
-     * void, this will create a new NMConnection object.
+     * null, this will create a new NMConnection object.
      * 
      * @path  The DBus path where this connection is saved.  This value has no
      *        effect on the actual DBus path, and the caller is entirely

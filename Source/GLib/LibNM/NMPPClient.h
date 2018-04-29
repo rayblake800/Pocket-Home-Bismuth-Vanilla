@@ -39,7 +39,7 @@ public:
      * 
      * @param interface  The interface name of the desired wifi device.
      * 
-     * @return  the requested wifi device, or a void object if no valid device
+     * @return  the requested wifi device, or a null object if no valid device
      *          is found.
      */
     NMPPDeviceWifi getWifiDeviceByIface(const char* interface);
@@ -49,7 +49,7 @@ public:
      * 
      * @param path  The DBus path of the desired wifi device.
      * 
-     * @return  the requested wifi device, or a void object if no valid device
+     * @return  the requested wifi device, or a null object if no valid device
      *          is found.
      */
     NMPPDeviceWifi getWifiDeviceByPath(const char* path);
@@ -64,7 +64,7 @@ public:
     /**
      * Gets the primary active network connection.
      * 
-     * @return  an active NMPPConnection object, or a void object if there is no
+     * @return  an active NMPPConnection object, or a null object if there is no
      *          primary connection.
      */
     NMPPConnection getPrimaryConnection();
@@ -73,7 +73,7 @@ public:
      * Gets the connection being activated by the network manager.
      * 
      * @return  the activating connection as an active NMPPConnection object,
-     *          or a void object if there is no activating connection.
+     *          or a null object if there is no activating connection.
      */
     NMPPConnection getActivatingConnection();
     
@@ -101,79 +101,48 @@ public:
     void setWirelessEnabled(bool enabled);
     
     /**
-     * An interface for objects that can create new active connections.
+     * ConnectionHandler objects implement methods for handling connection
+     * activation attempts.  When attempting to activate a new connection,
+     * a connection handler must be provided to receive the resulting new
+     * connection object along with any errors that occur.
      */
     class ConnectionHandler
     {
     public:
+        friend class NMPPClient;
         ConnectionHandler() { }
-        virtual ~ConnectionHandler();
-        
-        /**
-         * Activate an existing network connection.
-         * 
-         * @param client       A valid NMPPClient object.
-         * 
-         * @param connection   A network connection that has been saved by the
-         *                     network manager.
-         * 
-         * @param accessPoint  The wifi access point used to activate the
-         *                     connection.
-         */
-        void activateConnection(
-                const NMPPClient& client,
-                const NMPPConnection& connection,
-                const NMPPAccessPoint& accessPoint);
-        
-        /**
-         * Add and activate a new network connection.
-         * 
-         * @param client       A valid NMPPClient object.
-         * 
-         * @param connection   A new network connection object.
-         * 
-         * @param wifiDevice   The system network device used to activate the
-         *                     connection. 
-         * 
-         * @param accessPoint  The wifi access point used to activate the
-         *                     connection.
-         */
-        void addAndActivateConnection(
-                const NMPPClient& client,
-                const NMPPConnection& connection,
-                const NMPPDeviceWifi& wifiDevice,
-                const NMPPAccessPoint& accessPoint);
+        virtual ~ConnectionHandler() { }
         
     private:
         /**
          * This function will be called whenever starting to activate a 
          * connection succeeds.
          * 
-         * @param client      The NMPPClient holding the activating connection.
-         * 
          * @param connection  A new active connection object representing the 
-         *                    added connection.
+         *                    added connection. This connection object might not
+         *                    be completely connected yet.
          * 
-         * @param isNew       True iff the connection was just added to the
-         *                    network manager. 
+         * @param isNew       True if the connection was just added to the
+         *                    network manager, false if it was a known
+         *                    connection that was re-activated.
          */
-        virtual void openingConnection(NMPPClient* client,
-                NMPPConnection connection, bool isNew) = 0;
+        virtual void openingConnection(NMPPConnection connection,
+                bool isNew) = 0;
         
         /**
          * This function will be called whenever starting to activate a
          * connection fails.
          * 
-         * @param client  The NMPPClient that failed to activate the connection.
+         * #param connection  The connection that failed to activate.  This
+         *                    may be a null connection.
          * 
-         * @param error   A GError object describing the problem.  If this
-         *                value is not null, it will need to be released with
-         *                g_error_free().
+         * @param error       A GError object describing the problem.  This 
+         *                    error object should not be freed.
          * 
-         * @param isNew   True iff the connection was just added to the network
-         *                manager. 
+         * @param isNew       True iff the connection was just added to the 
+         *                    network manager. 
          */
-        virtual void openingConnectionFailed(NMPPClient* client,
+        virtual void openingConnectionFailed(NMPPConnection connection, 
                 GError* error, bool isNew) = 0;
         
         /**
@@ -188,13 +157,13 @@ public:
          * @param error       A GError object describing any problems, or
          *                    nullptr if nothing went wrong.
          * 
-         * @param listener    The listener object that attempted to activate
-         *                    the connection.
+         * @param handler     The connection handler object that attempted to 
+         *                    activate the connection.
          */
         static void activateCallback(NMClient* client,
                 NMActiveConnection* connection,
                 GError* error,
-                NMPPClient::Listener* listener);
+                NMPPClient::ConnectionHandler* handler);
         
         /**
          * The NMClientAddActivateFn called by LibNM when adding and activating
@@ -210,15 +179,37 @@ public:
          * @param error       A GError object describing any problems, or
          *                    nullptr if nothing went wrong.
          * 
-         * @param listener    The listener object that attempted to activate
-         *                    the connection.
+         * @param handler     The connection handler object that attempted to 
+         *                    activate the connection.
          */
         static void addActivateCallback(NMClient* client,
                 NMConnection* connection,
                 const char* path,
                 GError* error,
-                NMPPClient::Listener* listener);
+                NMPPClient::ConnectionHandler* handler);
     };
+    
+    /**
+     * Activates a wifi network connection, attempting to set it as the primary
+     * network connection.
+     * 
+     * @param connection   A network connection to activate.  If this is a new 
+     *                     connection, it will be saved by the network manager.
+     * 
+     * @param wifiDevice   The system network device used to activate the
+     *                     connection. 
+     * 
+     * @param accessPoint  The wifi access point used to activate the 
+     *                     connection.
+     * 
+     * @param handler      The connectionHandler object that will receive the 
+     *                     new connection object.
+     */
+    void activateConnection(
+            const NMPPConnection& connection,
+            const NMPPDeviceWifi& wifiDevice,
+            const NMPPAccessPoint& accessPoint,
+            ConnectionHandler* handler);
     
     /**
      * Listeners receive updates whenever wireless is enabled or disabled.

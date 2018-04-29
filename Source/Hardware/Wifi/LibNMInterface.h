@@ -167,7 +167,7 @@ private:
     /**
      * Notifies listeners when the active access point changes.
      * 
-     * @param connected  The newly connected access point, or the void access
+     * @param connected  The newly connected access point, or the null access
      *                   point if wifi just disconnected.
      */
     void connectionUpdateCallback (WifiAccessPoint::Ptr connected) override;

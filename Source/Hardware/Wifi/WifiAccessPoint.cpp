@@ -11,8 +11,7 @@
 WifiAccessPoint::WifiAccessPoint
 (NMAccessPoint* accessPoint, SavedConnection savedConnection) : 
 nmAccessPoint(accessPoint),
-savedConnection(savedConnection),
-networkConnection(savedConnection.getNMConnection())
+savedConnection(savedConnection)
 {
     if(nmAccessPoint == nullptr)
     {
@@ -162,7 +161,7 @@ bool WifiAccessPoint::hasSavedConnection() const
 {
     const ScopedReadLock readLock(networkUpdateLock);
     
-    return !savedConnection.isVoid();
+    return !savedConnection.isNull();
 }
 
 /*

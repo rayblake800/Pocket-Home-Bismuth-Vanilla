@@ -57,7 +57,7 @@ protected:
      * Gets the current connected access point from the network manager wifi
      * device.
      * 
-     * @return the current connected access point, or the void access point if
+     * @return the current connected access point, or the null access point if
      *         none is found.
      */
     WifiAccessPoint::Ptr findConnectedAP();
@@ -67,7 +67,7 @@ protected:
      * Gets the current connecting access point from the network manager wifi
      * device.
      * 
-     * @return the current connecting access point, or the void access point if
+     * @return the current connecting access point, or the null access point if
      *         none is found.
      */
     WifiAccessPoint::Ptr findConnectingAP();
@@ -169,7 +169,7 @@ protected:
     /**
      * A callback function to run whenever the wifi connection changes.
      * 
-     * @param connected  The newly connected access point, or the void access
+     * @param connected  The newly connected access point, or the null access
      *                   point if wifi just disconnected.
      */
     virtual void connectionUpdateCallback (WifiAccessPoint::Ptr connected) = 0;

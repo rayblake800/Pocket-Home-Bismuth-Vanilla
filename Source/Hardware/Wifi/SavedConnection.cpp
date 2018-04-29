@@ -53,7 +53,7 @@ SavedConnection::SavedConnection(const char * path) :
 GPPDBusProxy(BUS_NAME, path, INTERFACE),
 path(path)
 { 
-    if(!isVoid())
+    if(!isNull())
     {
         createNMConnection();
     }
@@ -73,7 +73,7 @@ const String& SavedConnection::getPath() const
  */
 bool SavedConnection::isWifiConnection() const
 {
-    if(isVoid())
+    if(isNull())
     {
         return false;
     }
@@ -86,7 +86,7 @@ bool SavedConnection::isWifiConnection() const
 void SavedConnection::updateWifiSecurity(GVariant* newSettings)
 {
     using namespace GVariantConverter;
-    if(isVoid())
+    if(isNull())
     {
         return;
     }
@@ -179,7 +179,7 @@ void SavedConnection::updateWifiSecurity(GVariant* newSettings)
  */
 void SavedConnection::removeSecurityKey()
 {
-    if(isVoid())
+    if(isNull())
     {
         return;
     }
@@ -224,7 +224,7 @@ NMPPConnection SavedConnection::getNMConnection()
  */
 void SavedConnection::deleteConnection()
 {
-    if(!isVoid())
+    if(!isNull())
     {
         callMethod(DELETE_CONN);
         removeData();
@@ -257,7 +257,7 @@ bool SavedConnection::operator==(NMConnection* rhs) const
  */
 void SavedConnection::createNMConnection()
 {
-    if(isVoid())
+    if(isNull())
     {
         return;
     }
@@ -355,7 +355,7 @@ void SavedConnection::createNMConnection()
  */
 GVariant* SavedConnection::getSetting(const char* name)
 {  
-    if(isVoid())
+    if(isNull())
     {
         return nullptr;
     }
@@ -377,7 +377,7 @@ GVariant* SavedConnection::getSetting(const char* name)
 GVariant* SavedConnection::getSettingProp(const char* settingName,
         const char* propName)
 {  
-    if(isVoid())
+    if(isNull())
     {
         return nullptr;
     }
@@ -399,7 +399,7 @@ GVariant* SavedConnection::getSettingProp(const char* settingName,
 GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
         const char* propName)
 {
-    if(isVoid())
+    if(isNull())
     {
         return nullptr;
     }
@@ -413,7 +413,7 @@ GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
  */
 bool SavedConnection::hasSetting(const char* settingName) const
 {
-    if(isVoid())
+    if(isNull())
     {
         return false;
     }
@@ -429,7 +429,7 @@ bool SavedConnection::hasSetting(const char* settingName) const
 bool SavedConnection::hasSettingProperty(const char* settingName,
         const char* propName)
 {
-    if(isVoid())
+    if(isNull())
     {
         return false;
     }

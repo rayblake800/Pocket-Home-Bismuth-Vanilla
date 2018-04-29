@@ -4,20 +4,23 @@
  * Create a NMPPConnection sharing a GObject with an existing
  * NMPPConnection.
  */
-NMPPConnection::NMPPConnection(const NMPPConnection& toCopy) :
-GPPObject(static_cast<const GPPObject&>(toCopy)) { }
+NMPPConnection::NMPPConnection(const NMPPConnection& toCopy)
+{ 
+    setGObject(toCopy);
+}
 
 /**
  * Create a NMPPConnection to contain a NMConnection object.
  */
-NMPPConnection::NMPPConnection(NMConnection* toAssign) :
-GPPObject(G_OBJECT(toAssign)) { }
+NMPPConnection::NMPPConnection(NMConnection* toAssign)
+{
+    setGObject(G_OBJECT(toAssign));
+}
 
 /**
- * Create a void NMPPConnection.
+ * Create a null NMPPConnection.
  */
-NMPPConnection::NMPPConnection() :
-GPPObject() { }
+NMPPConnection::NMPPConnection() { }
 
 /**
  * Check if this connection object and another could be describing the 
@@ -25,11 +28,11 @@ GPPObject() { }
  */
 bool NMPPConnection::connectionMatches(const NMPPConnection& rhs) const
 {
-    if(isVoid())
+    if(isNull())
     {
-        return rhs.isVoid();
+        return rhs.isNull();
     }
-    else if(rhs.isVoid())
+    else if(rhs.isNull())
     {
         return false;
     }
@@ -41,16 +44,19 @@ bool NMPPConnection::connectionMatches(const NMPPConnection& rhs) const
         {
             compatible = true;
         }
-        NMConnection* self = NM_CONNECTION(conObj);
-        NMConnection* other = NM_CONNECTION(rhsObj);
-        else if(self != nullptr && other != nullptr)
+        else
         {
-            compatible = nm_connection_compare(self, other,
-                    NM_SETTING_COMPARE_FLAG_FUZZY);
+            NMConnection* self = NM_CONNECTION(conObj);
+            NMConnection* other = NM_CONNECTION(rhsObj);
+            if(self != nullptr && other != nullptr)
+            {
+                compatible = nm_connection_compare(self, other,
+                        NM_SETTING_COMPARE_FLAG_FUZZY);
+            }
         }
-        if(other != nullptr)
+        if(rhsObj != nullptr)
         {
-            g_object_unref(G_OBJECT(other));
+            g_object_unref(rhsObj);
         }
     });
     return compatible;
@@ -58,13 +64,13 @@ bool NMPPConnection::connectionMatches(const NMPPConnection& rhs) const
     
 /*
  * Add a new connection setting to this connection.  If the connection is
- * void, this will create a new NMConnection object.
+ * null, this will create a new NMConnection object.
  */
 void NMPPConnection::addSetting(NMSetting* setting)
 {
-    if(isVoid())
+    if(isNull())
     {
-        assignData(nm_connection_new());
+        setGObject(G_OBJECT(nm_connection_new()));
     }
     callInMainContext([this, setting](GObject* conObj)
     {
@@ -126,21 +132,21 @@ bool NMPPConnection::verify(GError** error) const
 }
 
 /*
- * Set the connection path stored by this object.  If the connection is void,
+ * Set the connection path stored by this object.  If the connection is null,
  * this will create a new NMConnection object.
  */
 void NMPPConnection::setPath(const char* path)
 {
-    if(isVoid())
+    if(isNull())
     {
-        assignData(nm_connection_new());
+        setGObject(G_OBJECT(nm_connection_new()));
     }
     callInMainContext([this, path](GObject* conObj)
     {
         NMConnection* connection = NM_CONNECTION(conObj);
         if(connection != nullptr)
         {
-            nm_connection_set_path(conRef, path);
+            nm_connection_set_path(connection, path);
         }
     });
 }
@@ -173,7 +179,7 @@ const char* NMPPConnection::getUUID() const
         NMConnection* connection = NM_CONNECTION(conObj);
         if(connection != nullptr)
         {
-            uuid = nm_connection_get_uuid(conRef);
+            uuid = nm_connection_get_uuid(connection);
         }
     });
     return uuid;
@@ -207,7 +213,7 @@ bool NMPPConnection::isActive() const
         NMConnection* connection = NM_CONNECTION(conObj);
         if(connection != nullptr)
         {
-            active = NM_IS_ACTIVE_CONNECTION(conRef);
+            active = NM_IS_ACTIVE_CONNECTION(connection);
         }
     });
     return active;
@@ -222,7 +228,7 @@ NMActiveConnectionState NMPPConnection::getConnectionState() const
     callInMainContext([this, &state](GObject* conObj)
     {
         NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr && NM_IS_ACTIVE_CONNECTION(conRef))
+        if(connection != nullptr && NM_IS_ACTIVE_CONNECTION(connection))
         {
             state = nm_active_connection_get_state
                     (NM_ACTIVE_CONNECTION(connection));
@@ -238,3 +244,13 @@ GType NMPPConnection::getType() const
 {
     return NM_TYPE_CONNECTION;
 }
+
+/*
+ * Check if a GObject's type allows it to be held by this object. 
+ */
+bool NMPPConnection::isValidType(GObject* toCheck) const
+{
+    return NM_IS_CONNECTION(toCheck);
+}
+
+    

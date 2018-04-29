@@ -13,7 +13,7 @@
  * 
  *   GPPObjects ensure that GObject pointers are referenced when acquired, and
  * unreferenced when removed.  If the GObject data is null or otherwise invalid,
- * isVoid() will return true, and all other methods will return default data or 
+ * isNull() will return true, and all other methods will return default data or 
  * do nothing.
  * 
  *   GPPObject is intended only for use as a base class for specialized GObject
@@ -24,7 +24,7 @@ class GPPObject
 {
 protected:
     /**
-     * Create a void GPPObject, with no internal GObject.
+     * Create a null GPPObject, with no internal GObject.
      */
     GPPObject();
     
@@ -58,7 +58,7 @@ public:
      * 
      * @return true iff this object's GObject* is null or otherwise invalid
      */
-    bool isVoid() const;
+    bool isNull() const;
     
     
     /**
@@ -102,14 +102,6 @@ public:
         
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SignalHandler);
     };
-    
-    /**
-     * Un-subscribe a signal handler from all of this object's signals
-     * 
-     * @param signalHandler  Any signal handler object that should no longer
-     *                       receive signals from this GPPObject.
-     */
-    void removeSignalHandler(SignalHandler* signalHandler);
            
     /**
      * Checks if this GPPObject and another share the same GObject data.
@@ -152,8 +144,8 @@ public:
      * Sets this GPPObject's stored data to a new reference of another 
      * GPPObject's stored GObject.
      * 
-     * @param rhs  Another GPPObject instance.  If rhs is void, this object's
-     *             data will be removed.
+     * @param rhs  Another GPPObject instance.  If rhs is a null object, this 
+     *             object's data will be removed.
      */
     void operator=(const GPPObject& rhs);
     
@@ -161,7 +153,7 @@ public:
      * Sets this GPPObject's stored GObject data.
      * 
      * @param rhs  A valid GObject to store, or nullptr to convert this 
-     *             GPPObject into a void object. If this value is floating, 
+     *             GPPObject into a null object. If this value is floating, 
      *             the floating reference will be claimed by the GPPObject. 
      *             Otherwise, the reference count will be increased.
      */
@@ -207,18 +199,13 @@ protected:
      *                                 GType.  If toCopy holds the same data as 
      *                                 this GPPObject, nothing will happen.
      * 
-     * @param transferSignalHandlers   If toCopy is not void and this
+     * @param transferSignalHandlers   If toCopy is not null and this
      *                                 parameter is true, any signal handlers
      *                                 attached to the old GObject data will
      *                                 be re-assigned to the new GObject data.
-     * 
-     * @param stealSignalHandlers      If this value is true, all signal
-     *                                 held by toCopy will be moved to this
-     *                                 GPPObject.
      */
     void setGObject(const GPPObject& toCopy,
-            bool transferSignalHandlers = true,
-            bool stealSignalHandlers = false);
+            bool transferSignalHandlers = true);
     
     /**
      * Allows GPPObject subclasses to access GObject data within other 
@@ -227,12 +214,12 @@ protected:
      * 
      * @param source  Another GPPObject.
      * 
-     * @return  the GObject* data held by source, or nullptr if source is void.
+     * @return  the GObject* data held by source, or nullptr if source is null.
      *          Any valid GObject returned by this function will have its
      *          reference count incremented, and the caller is responsible for
      *          unreferencing it when it is no longer needed.
      */
-    void getOtherGObject(const GPPObject& source);
+    GObject* getOtherGObject(const GPPObject& source) const;
     
     /**
      * Remove this object's GObject data, clearing all associated references 
@@ -248,7 +235,7 @@ protected:
      * @param call  This function will synchronously run on the GMainLoop
      *              that owns this object's GMainContext.
      */
-    virtual void callInMainContext(std::function<void()> call);
+    virtual void callInMainContext(std::function<void()> call) const;
     
     /**
      * Call an arbitrary function from within the context assigned to this
@@ -263,11 +250,11 @@ protected:
      *                        through this parameter does not need to be 
      *                        unreferenced by the caller.
      * 
-     * @param skipCallIfVoid  If this value is true and this GPPObject is void,
+     * @param skipCallIfNull  If this value is true and this GPPObject is null,
      *                        the call function parameter will not run.
      */
     void callInMainContext(std::function<void(GObject*)> call,
-            bool skipCallIfVoid = true);
+            bool skipCallIfNull = true) const;
     
     /**
      * Get the GType assigned to this object.  This must be implemented by 
@@ -348,6 +335,14 @@ protected:
      */
     void addSignalHandler(SignalHandler* handler,
             const char* signalName, GCallback callback);
+      
+    /**
+     * Un-subscribe a signal handler from all of this object's signals
+     * 
+     * @param signalHandler  Any signal handler object that should no longer
+     *                       receive signals from this GPPObject.
+     */
+    void removeSignalHandler(SignalHandler* signalHandler);
     
     /**
      * Check if a specific SignalHandler still exists.  Signal callback

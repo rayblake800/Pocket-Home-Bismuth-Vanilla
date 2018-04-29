@@ -84,8 +84,8 @@ GVariant* GPPDBusProxy::callMethod
         GVariant* tuple = g_variant_new_tuple(&params, 1);
         params = tuple;
     }
-    GVariant* retVal = nullptr;
-    callInMainContext([this, methodName, params, error, &retVal]
+    GVariant* result = nullptr;
+    callInMainContext([this, methodName, params, error, &result]
             (GObject * proxyObj)
     {
         GDBusProxy* proxy = G_DBUS_PROXY(proxyObj);
@@ -122,7 +122,7 @@ GVariant* GPPDBusProxy::callMethod
             if(resultSize == 0)
             {
                 g_variant_unref(result);
-                return nullptr;
+                return;
             }
             else if(resultSize == 1)
             {
@@ -159,7 +159,7 @@ GType GPPDBusProxy::getType() const
 /*
  * Check if a GObject's type allows it to be held by this object.
  */
-bool isValidType(GObject* toCheck) const
+bool GPPDBusProxy::isValidType(GObject* toCheck) const
 {
     return G_IS_DBUS_PROXY(toCheck);
 }
@@ -167,13 +167,12 @@ bool isValidType(GObject* toCheck) const
 /*
  * Used to re-add a list of signal handlers to new GObject data.
  */
-void transferSignalHandlers(Array<SignalHandler*>& toTransfer)
+void GPPDBusProxy::transferSignalHandlers(Array<SignalHandler*>& toTransfer)
 {
     for(SignalHandler* handler : toTransfer)
     {
         addDBusSignalHandler(static_cast<DBusSignalHandler*>(handler));
-    }
-    
+    }  
 }
 
 /*

@@ -4792,6 +4792,7 @@
         </df>
       </df>
       <df name="dev scripts">
+        <in>NMPPClient.cpp</in>
       </df>
       <df name="docs">
         <df name="html">
