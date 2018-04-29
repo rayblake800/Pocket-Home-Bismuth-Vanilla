@@ -69,6 +69,7 @@ endif
 
 OBJECTS_APP := \
   $(JUCE_OBJDIR)/NMPPAccessPoint_680fb63a.o \
+  $(JUCE_OBJDIR)/NMPPActiveConnection_d182c3e0.o \
   $(JUCE_OBJDIR)/NMPPClient_2840c667.o \
   $(JUCE_OBJDIR)/NMPPConnection_5641847a.o \
   $(JUCE_OBJDIR)/NMPPDeviceWifi_a7e88da7.o \
@@ -193,6 +194,11 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 $(JUCE_OBJDIR)/NMPPAccessPoint_680fb63a.o: ../../Source/GLib/LibNM/NMPPAccessPoint.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling NMPPAccessPoint.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NMPPActiveConnection_d182c3e0.o: ../../Source/GLib/LibNM/NMPPActiveConnection.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NMPPActiveConnection.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/NMPPClient_2840c667.o: ../../Source/GLib/LibNM/NMPPClient.cpp

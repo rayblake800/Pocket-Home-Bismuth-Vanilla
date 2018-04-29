@@ -1,6 +1,7 @@
 #pragma once
 #include <nm-client.h>
 #include "NMPPConnection.h"
+#include "NMPPActiveConnection.h"
 #include "NMPPDeviceWifi.h"
 #include "GPPObject.h"
 
@@ -59,7 +60,7 @@ public:
      * 
      * @return  an array of all active network connections.
      */
-    Array<NMPPConnection> getActiveConnections();
+    Array<NMPPActiveConnection> getActiveConnections();
     
     /**
      * Gets the primary active network connection.
@@ -67,7 +68,7 @@ public:
      * @return  an active NMPPConnection object, or a null object if there is no
      *          primary connection.
      */
-    NMPPConnection getPrimaryConnection();
+    NMPPActiveConnection getPrimaryConnection();
     
     /**
      * Gets the connection being activated by the network manager.
@@ -75,7 +76,7 @@ public:
      * @return  the activating connection as an active NMPPConnection object,
      *          or a null object if there is no activating connection.
      */
-    NMPPConnection getActivatingConnection();
+    NMPPActiveConnection getActivatingConnection();
     
     /**
      * Deactivates an active network connection.
@@ -83,7 +84,7 @@ public:
      * @param activeCon  The network connection to deactivate.  If this 
      *                   connection is not active, nothing will happen.
      */
-    void deactivateConnection(const NMPPConnection& activeCon);
+    void deactivateConnection(const NMPPActiveConnection& activeCon);
     
     /**
      * Checks if wireless connections are currently enabled.

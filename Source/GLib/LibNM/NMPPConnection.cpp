@@ -18,11 +18,6 @@ NMPPConnection::NMPPConnection(NMConnection* toAssign)
 }
 
 /**
- * Create a null NMPPConnection.
- */
-NMPPConnection::NMPPConnection() { }
-
-/**
  * Check if this connection object and another could be describing the 
  * same network connection.
  */
@@ -200,41 +195,6 @@ const char* NMPPConnection::getID() const
         }
     });
     return conId;
-}
-
-/*
- * Checks if the connection held by this object is an active connection.
- */
-bool NMPPConnection::isActive() const
-{
-    bool active = false;
-    callInMainContext([this, &active](GObject* conObj)
-    {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr)
-        {
-            active = NM_IS_ACTIVE_CONNECTION(connection);
-        }
-    });
-    return active;
-}
-
-/*
- * Get this object's active connection state.
- */
-NMActiveConnectionState NMPPConnection::getConnectionState() const
-{
-    NMActiveConnectionState state = NM_ACTIVE_CONNECTION_STATE_UNKNOWN;
-    callInMainContext([this, &state](GObject* conObj)
-    {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr && NM_IS_ACTIVE_CONNECTION(connection))
-        {
-            state = nm_active_connection_get_state
-                    (NM_ACTIVE_CONNECTION(connection));
-        }
-    });
-    return state;
 }
 
 /*

@@ -89,9 +89,9 @@ NMPPDeviceWifi NMPPClient::getWifiDeviceByPath(const char* path)
 /*
  * Gets the list of all active connections known to the network manager.
  */
-Array<NMPPConnection> NMPPClient::getActiveConnections() 
+Array<NMPPActiveConnection> NMPPClient::getActiveConnections() 
 { 
-    Array<NMPPConnection> connections;
+    Array<NMPPActiveConnection> connections;
     callInMainContext([&connections](GObject* clientObject)
     {
         NMClient* client = NM_CLIENT(clientObject);
@@ -100,10 +100,10 @@ Array<NMPPConnection> NMPPClient::getActiveConnections()
             const GPtrArray* cons = nm_client_get_active_connections(client);
             for(int i = 0; cons && i < cons->len; i++)
             {
-                NMConnection* con = NM_CONNECTION(cons->pdata[i]);
-                if(NM_IS_CONNECTION(con))
+                NMActiveConnection* con = NM_ACTIVE_CONNECTION(cons->pdata[i]);
+                if(NM_IS_ACTIVE_CONNECTION(con))
                 {
-                    connections.add(NMPPConnection(con));
+                    connections.add(NMPPActiveConnection(con));
                 }
             }
         }
@@ -114,18 +114,18 @@ Array<NMPPConnection> NMPPClient::getActiveConnections()
 /*
  * Gets the primary active network connection.
  */
-NMPPConnection NMPPClient::getPrimaryConnection() 
+NMPPActiveConnection NMPPClient::getPrimaryConnection() 
 { 
-    NMPPConnection primary;
+    NMPPActiveConnection primary;
     callInMainContext([&primary](GObject* clientObject)
     {
         NMClient* client = NM_CLIENT(clientObject);
         if(client != nullptr)
         {
             NMActiveConnection* con = nm_client_get_primary_connection(client);
-            if(con != nullptr && NM_IS_CONNECTION(con))
+            if(con != nullptr)
             {
-                primary = NM_CONNECTION(con);
+                primary = con;
             }
         }
     });
@@ -135,9 +135,9 @@ NMPPConnection NMPPClient::getPrimaryConnection()
 /*
  * Gets the connection being activated by the network manager.
  */
-NMPPConnection NMPPClient::getActivatingConnection() 
+NMPPActiveConnection NMPPClient::getActivatingConnection() 
 { 
-    NMPPConnection activating;
+    NMPPActiveConnection activating;
     callInMainContext([&activating](GObject* clientObject)
     {
         NMClient* client = NM_CLIENT(clientObject);
@@ -145,9 +145,9 @@ NMPPConnection NMPPClient::getActivatingConnection()
         {
             NMActiveConnection* con = nm_client_get_activating_connection(
                     client);
-            if(con != nullptr && NM_IS_CONNECTION(con))
+            if(con != nullptr)
             {
-                activating = NM_CONNECTION(con);
+                activating = con;
             }
         }
     });
@@ -157,7 +157,7 @@ NMPPConnection NMPPClient::getActivatingConnection()
 /*
  * Deactivates an active network connection.
  */
-void NMPPClient::deactivateConnection(const NMPPConnection& activeCon) 
+void NMPPClient::deactivateConnection(const NMPPActiveConnection& activeCon) 
 { 
     callInMainContext([this, &activeCon](GObject* clientObject)
     {

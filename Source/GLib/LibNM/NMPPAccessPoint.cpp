@@ -5,14 +5,18 @@
  * Create a NMPPAccessPoint sharing a GObject with an existing
  * NMPPAccessPoint.
  */
-NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy) :
-GPPObject(static_cast<const GPPObject&> (toCopy)) { }
+NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy)
+{ 
+    setGObject(toCopy);
+}
 
 /*
  * Create a NMPPAccessPoint to contain a NMAccessPoint object.
  */
-NMPPAccessPoint::NMPPAccessPoint(NMAccessPoint* toAssign) :
-GPPObject(G_OBJECT(toAssign)) { }
+NMPPAccessPoint::NMPPAccessPoint(NMAccessPoint* toAssign)
+{
+    setGObject(G_OBJECT(toAssign));
+}
 
 /*
  * Gets the access point SSID as a byte array from the access point.  This 

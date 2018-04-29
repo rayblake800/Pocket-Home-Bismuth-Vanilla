@@ -13,6 +13,10 @@
  * related to system power state.  From this page, the user can shut down the
  * system, reboot the system, turn off the display, or enter PocketCHIP flashing
  * mode.
+ * 
+ * In debug builds, this page also contains a test button.  The test button
+ * provides a convenient place to attach temporary debugging code so that it can
+ * be triggered through the UI.
  *
  * TODO:
  * 
@@ -65,6 +69,11 @@ private:
     TextButton rebootButton;
     //Shows a page that gives the user the option to enter flashing mode.
     TextButton felButton;
+#if JUCE_DEBUG
+    //In debug builds, this button provides a convenient place to tie in
+    //temporary test routines.
+    TextButton testButton;
+#endif
     //Spinner to indicate that the system is rebooting/shutting down
     OverlaySpinner overlaySpinner;
     //The lock screen is displayed after entering sleep mode.

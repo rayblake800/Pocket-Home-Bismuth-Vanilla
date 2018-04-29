@@ -19,6 +19,10 @@
                 file="Source/GLib/LibNM/NMPPAccessPoint.cpp"/>
           <FILE id="fgqnfZ" name="NMPPAccessPoint.h" compile="0" resource="0"
                 file="Source/GLib/LibNM/NMPPAccessPoint.h"/>
+          <FILE id="wAbykI" name="NMPPActiveConnection.cpp" compile="1" resource="0"
+                file="Source/GLib/LibNM/NMPPActiveConnection.cpp"/>
+          <FILE id="ynYLsL" name="NMPPActiveConnection.h" compile="0" resource="0"
+                file="Source/GLib/LibNM/NMPPActiveConnection.h"/>
           <FILE id="SSaAlJ" name="NMPPClient.cpp" compile="1" resource="0" file="Source/GLib/LibNM/NMPPClient.cpp"/>
           <FILE id="SFmKpY" name="NMPPClient.h" compile="0" resource="0" file="Source/GLib/LibNM/NMPPClient.h"/>
           <FILE id="hff10x" name="NMPPConnection.cpp" compile="1" resource="0"

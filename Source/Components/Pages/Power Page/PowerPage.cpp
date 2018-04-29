@@ -3,6 +3,11 @@
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
 
+#if JUCE_DEBUG
+//put any includes needed for test routines here.
+#include "NMPPClient.h"
+#endif
+
 PowerPage::PowerPage() :Localized("PowerPage"),
 PageComponent("PowerPage",{
     {1,
@@ -25,6 +30,12 @@ PageComponent("PowerPage",{
         {
             {&felButton, 1}
         }},
+#if JUCE_DEBUG
+    {1,
+        {
+            {&testButton, 1}
+        }},
+#endif
     {1,
         {
             {nullptr, 1}
@@ -34,6 +45,9 @@ powerOffButton(localeText(shutdown)),
 rebootButton(localeText(reboot)),
 sleepButton(localeText(sleep)),
 felButton(localeText(flash_software)),
+#if JUCE_DEBUG
+        testButton("Run Test"),
+#endif
 lockscreen([this]()
 {
     hideLockscreen();
@@ -42,6 +56,7 @@ lockscreen([this]()
 
 #    if JUCE_DEBUG
     setName("PowerPage");
+    testButton.addListener(this);
 #    endif
     powerOffButton.addListener(this);
     sleepButton.addListener(this);
@@ -130,6 +145,53 @@ PowerPage::pageButtonClicked(Button *button)
         startSleepMode();
         return;
     }
+#if JUCE_DEBUG
+    if (button == &testButton)
+    {
+        DBG("Running LibNM wrapper tests");
+        DBG("Testing NMPPClient:");
+        NMPPClient client;
+        bool enabled = client.wirelessEnabled();
+        DBG("\tClient created.  Wireless enabled:"  
+                << (enabled ? "yes" : "no"));
+        Array<NMPPDeviceWifi> devices = client.getWifiDevices();
+        DBG("\tFound " << devices.size() << " wifi devices");
+        for(const NMPPDeviceWifi& device : devices)
+        {
+            DBG("\tDevice " << device.getInterface());
+            DBG("\t\tPath " << device.getPath());
+            DBG("\t\tManaged:" << (device.isManaged() ? "yes" : "no"));
+            Array<NMPPAccessPoint> aps = device.getAccessPoints();
+            DBG("\t\tFound "  << aps.size() << " access points");
+            Array<NMPPConnection> saved = device.getAvailableConnections();
+            DBG("\t\tFound " << saved.size() << " saved connections");
+        }
+        
+        Array<NMPPActiveConnection> active = client.getActiveConnections();
+        DBG("\tFound " << active.size() << " active connections");
+        
+        NMPPActiveConnection primary = client.getPrimaryConnection();
+        if(!primary.isNull())
+        {
+            DBG("\tPrimary Connection id:" << primary.getID());
+        }
+        else
+        {
+            DBG("\tNo primary connection found.");
+        }
+        
+        
+        NMPPActiveConnection activating = client.getActivatingConnection();
+        if(!activating.isNull())
+        {
+            DBG("\tActivating Connection id:" << activating.getID());
+        }
+        else
+        {
+            DBG("\tNo activating connection found.");
+        }
+    }
+#endif
     ChildProcess commandProcess;
     MainConfigFile mainConfig;
     if (button == &powerOffButton)

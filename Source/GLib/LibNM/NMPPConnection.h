@@ -1,12 +1,11 @@
 #pragma once
 #include <nm-connection.h>
-#include <nm-active-connection.h>
 #include "GPPObject.h"
 
 /**
  * @file NMPPConnection.h
  * 
- * @brief A RAII container and C++ interface for the LibNM NMConnection object.
+ * @brief A RAII container and C++ interface for LibNM NMConnection objects.
  */
 
 class NMPPConnection : public GPPObject
@@ -30,7 +29,7 @@ public:
     /**
      * Creates a null NMPPConnection.
      */
-    NMPPConnection();
+    NMPPConnection() { }
     
     virtual ~NMPPConnection() { }
     
@@ -115,23 +114,7 @@ public:
      * 
      * @return the connection's ID string.
      */
-    const char* getID() const; 
-    
-    /**
-     * Checks if the connection held by this object is an active connection.
-     * 
-     * @return  true iff this object holds a NMConnection that is also a
-     *          NMActiveConnection
-     */
-    bool isActive() const;
-    
-    /**
-     * Get this object's active connection state.
-     * 
-     * @return  the connection state if this object holds an active connection,
-     *          NM_ACTIVE_CONNECTION_STATE_UNKNOWN otherwise.
-     */
-    NMActiveConnectionState getConnectionState() const;
+    const char* getID() const;
     
 private:
     /**
@@ -146,7 +129,8 @@ private:
      * 
      * @param toCheck  Any valid GObject, or nullptr.
      * 
-     * @return  true iff toCheck is a NMConnection or is null. 
+     * @return  true iff toCheck is a NMConnection, a NMActiveConnection,
+     *          or is null. 
      */
     virtual bool isValidType(GObject* toCheck) const override;
 };
