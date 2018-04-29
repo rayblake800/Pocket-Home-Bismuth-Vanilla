@@ -186,7 +186,7 @@ const char* NMPPConnection::getUUID() const
 const char* NMPPConnection::getID() const
 {
     const char* conId = "";
-    callInMainContext([this, &conId](GObject* conObj)
+    callInMainContext([&conId](GObject* conObj)
     {
         NMConnection* connection = NM_CONNECTION(conObj);
         if(connection != nullptr)
@@ -196,6 +196,24 @@ const char* NMPPConnection::getID() const
     });
     return conId;
 }
+
+
+#ifdef JUCE_DEBUG
+/*
+ * Prints all stored connection data to stdout.
+ */
+void NMPPConnection::printDebugOutput() const
+{
+    callInMainContext([](GObject* conObj)
+    {
+        NMConnection* connection = NM_CONNECTION(conObj);
+        if(connection != nullptr)
+        {
+            nm_connection_dump(connection);
+        }
+    });
+}
+#endif
 
 /*
  * Get the GType of the stored NMConnection object.

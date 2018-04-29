@@ -119,6 +119,13 @@ public:
      */
     const char* getID() const;
     
+#ifdef JUCE_DEBUG
+    /**
+     * Prints all stored connection data to stdout.
+     */
+    void printDebugOutput() const;
+#endif
+    
 private:
     /**
      * Get the GType of the stored NMConnection object.

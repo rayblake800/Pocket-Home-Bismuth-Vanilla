@@ -34,17 +34,9 @@ Array<NMPPDeviceWifi> NMPPClient::getWifiDevices()
             for(int i = 0; devArray && i < devArray->len; i++)
             {
                 NMDevice* dev = NM_DEVICE(devArray->pdata[i]);
-                if(NM_IS_DEVICE_WIFI(dev))
+                if(dev != nullptr && NM_IS_DEVICE_WIFI(dev))
                 {
-                    NMPPDeviceWifi wifiDevice(NM_DEVICE_WIFI(dev));
-                    if(wifiDevice.isNull())
-                    {
-                        DBG("NULL wifi device!");
-                    }
-                    else
-                    {
-                    devices.add(wifiDevice);
-                    }
+                    devices.add(NMPPDeviceWifi(NM_DEVICE_WIFI(dev)));
                 }
             }  
         }
