@@ -22,7 +22,7 @@ NMPPActiveConnection::NMPPActiveConnection(NMActiveConnection* toAssign)
  */
 const char* NMPPActiveConnection::getPath() const
 {
-    const char* path = nullptr;
+    const char* path = "";
     callInMainContext([this, &path](GObject* conObj)
     {
         NMObject* connection = NM_OBJECT(conObj);
@@ -39,7 +39,7 @@ const char* NMPPActiveConnection::getPath() const
  */
 const char* NMPPActiveConnection::getUUID() const
 {
-    const char* uuid = nullptr;
+    const char* uuid = "";
     callInMainContext([this, &uuid](GObject* conObj)
     {
         NMActiveConnection* connection = NM_ACTIVE_CONNECTION(conObj);
@@ -56,7 +56,7 @@ const char* NMPPActiveConnection::getUUID() const
  */
 const char* NMPPActiveConnection::getID() const
 {
-    const char* conId = nullptr;
+    const char* conId = "";
     callInMainContext([this, &conId](GObject* conObj)
     {
         NMActiveConnection* connection = NM_ACTIVE_CONNECTION(conObj);

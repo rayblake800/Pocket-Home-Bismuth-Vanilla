@@ -2,6 +2,7 @@
 #include <nm-device-wifi.h>
 #include "NMPPAccessPoint.h"
 #include "NMPPConnection.h"
+#include "NMPPActiveConnection.h"
 #include "GPPObject.h"
 
 /**
@@ -60,14 +61,14 @@ public:
     /**
      * Gets the interface name of this wifi device.
      * 
-     * @return  the interface name, or nullptr if this object is null.
+     * @return  the interface name, or the empty string if this object is null.
      */
     const char* getInterface() const;
     
     /**
      * Gets the DBus path of this wifi device.
      * 
-     * @return  the path value, or nullptr if this object is null.
+     * @return  the path value, or the empty string if this object is null.
      */
     const char* getPath() const;
     
@@ -83,7 +84,7 @@ public:
      * @return  the active connection object, or a null connection object if
      *          this object is not connected or is null.
      */
-    NMPPConnection getActiveConnection() const;
+    NMPPActiveConnection getActiveConnection() const;
     
     /**
      * Gets the list of connections available to activate on this device.

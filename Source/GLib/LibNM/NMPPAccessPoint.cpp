@@ -63,7 +63,7 @@ String NMPPAccessPoint::getSSIDText() const
  */
 const char* NMPPAccessPoint::getBSSID() const
 {
-    const char* bssid = nullptr;
+    const char* bssid = "";
     callInMainContext([&bssid](GObject* apObject)
     {
         NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
@@ -80,7 +80,7 @@ const char* NMPPAccessPoint::getBSSID() const
  */
 const char* NMPPAccessPoint::getPath() const
 {
-    const char* path = nullptr;
+    const char* path = "";
     callInMainContext([&path](GObject* apObject)
     {
         NMObject* accessPoint = NM_OBJECT(apObject);

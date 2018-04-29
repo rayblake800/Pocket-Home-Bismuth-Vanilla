@@ -6,6 +6,8 @@
 #if JUCE_DEBUG
 //put any includes needed for test routines here.
 #include "NMPPClient.h"
+#include "GLibSignalHandler.h"
+#include <nm-remote-settings.h>
 #endif
 
 PowerPage::PowerPage() :Localized("PowerPage"),

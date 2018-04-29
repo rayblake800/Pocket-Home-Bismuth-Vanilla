@@ -73,7 +73,7 @@ bool NMPPDeviceWifi::isManaged() const
  */
 const char* NMPPDeviceWifi::getInterface() const
 { 
-    const char* iface = nullptr;
+    const char* iface = "";
     callInMainContext([&iface](GObject* devObject)
     {
         NMDevice* device = NM_DEVICE(devObject);
@@ -90,7 +90,7 @@ const char* NMPPDeviceWifi::getInterface() const
  */
 const char* NMPPDeviceWifi::getPath() const
 { 
-    const char* path = nullptr;
+    const char* path = "";
     callInMainContext([&path](GObject* devObject)
     {
         NMObject* device = NM_OBJECT(devObject);
@@ -121,9 +121,9 @@ void NMPPDeviceWifi::disconnect()
 /*
  * Gets the current active connection running on this device.
  */
-NMPPConnection NMPPDeviceWifi::getActiveConnection() const
+NMPPActiveConnection NMPPDeviceWifi::getActiveConnection() const
 { 
-    NMPPConnection active;
+    NMPPActiveConnection active;
     callInMainContext([&active](GObject* devObject)
     {
         NMDevice* device = NM_DEVICE(devObject);
@@ -132,7 +132,7 @@ NMPPConnection NMPPDeviceWifi::getActiveConnection() const
             NMActiveConnection* con = nm_device_get_active_connection(device);
             if(con != nullptr)
             {
-                active = NM_CONNECTION(con);
+                active = con;
             }
         }
     });

@@ -151,7 +151,7 @@ void NMPPConnection::setPath(const char* path)
  */
 const char* NMPPConnection::getPath() const
 {
-    const char* path = nullptr;
+    const char* path = "";
     callInMainContext([this, &path](GObject* conObj)
     {
         NMConnection* connection = NM_CONNECTION(conObj);
@@ -168,7 +168,7 @@ const char* NMPPConnection::getPath() const
  */
 const char* NMPPConnection::getUUID() const
 {
-    const char* uuid = nullptr;
+    const char* uuid = "";
     callInMainContext([this, &uuid](GObject* conObj)
     {
         NMConnection* connection = NM_CONNECTION(conObj);
@@ -185,7 +185,7 @@ const char* NMPPConnection::getUUID() const
  */
 const char* NMPPConnection::getID() const
 {
-    const char* conId = nullptr;
+    const char* conId = "";
     callInMainContext([this, &conId](GObject* conObj)
     {
         NMConnection* connection = NM_CONNECTION(conObj);

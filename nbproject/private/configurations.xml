@@ -17,6 +17,8 @@
         </df>
       </df>
       <df name="build">
+        <df name="Debug">
+        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -4792,7 +4794,6 @@
         </df>
       </df>
       <df name="dev scripts">
-        <in>NMPPClient.cpp</in>
       </df>
       <df name="docs">
         <df name="html">
@@ -4993,8 +4994,6 @@
             <in>SwitchComponent.h</in>
           </df>
           <in>ColourIds.h</in>
-          <in>PageComponent.cpp</in>
-          <in>PageStackComponent.cpp</in>
           <in>PocketHomeWindow.cpp</in>
           <in>PocketHomeWindow.h</in>
           <in>PokeLookAndFeel.cpp</in>
@@ -5006,6 +5005,8 @@
           <df name="LibNM">
             <in>NMPPAccessPoint.cpp</in>
             <in>NMPPAccessPoint.h</in>
+            <in>NMPPActiveConnection.cpp</in>
+            <in>NMPPActiveConnection.h</in>
             <in>NMPPClient.cpp</in>
             <in>NMPPClient.h</in>
             <in>NMPPConnection.cpp</in>

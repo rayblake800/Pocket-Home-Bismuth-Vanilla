@@ -291,7 +291,7 @@ protected:
         if(object != nullptr)
         {
             T* pValue = nullptr;
-            g_object_get(object, property, &pValue);
+            g_object_get(object, property, &pValue, nullptr);
             g_object_unref(object);
             return pValue;
         }

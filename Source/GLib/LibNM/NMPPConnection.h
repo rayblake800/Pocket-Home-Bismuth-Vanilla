@@ -98,21 +98,24 @@ public:
     /**
      * Get the connection path stored by this object.
      * 
-     * @return  the connection's stored path, or nullptr if no path is stored.
+     * @return  the connection's stored path, or the empty string if no path is 
+     *          stored.
      */
     const char* getPath() const;
 
     /**
      * Get a unique ID string for this connection.
      * 
-     * @return the connection's UUID string.
+     * @return the connection's UUID string, or the empty string if the
+     *         connection is null.
      */
     const char* getUUID() const;
     
     /**
      * Get the connection's NetworkManager ID string.
      * 
-     * @return the connection's ID string.
+     * @return the connection's ID string, or the empty string if the connection
+     *         is null.
      */
     const char* getID() const;
     

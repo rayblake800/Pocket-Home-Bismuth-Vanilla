@@ -60,15 +60,16 @@ public:
     /**
      * Gets the MAC address of the wifi access point.
      * 
-     * @return the access point's BSSID, or nullptr if the access point is null.
+     * @return the access point's BSSID, or the empty string if the access point
+     *         is null.
      */
     const char* getBSSID() const;
     
     /**
      * Gets the DBus path of the wifi access point.
      * 
-     * @return  the access point object's DBus path, or nullptr if the access
-     *          point is null
+     * @return  the access point object's DBus path, or the empty string if the 
+     *          access point is null
      */
     const char* getPath() const;
     
