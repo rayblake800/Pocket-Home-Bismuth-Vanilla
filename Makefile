@@ -1,4 +1,4 @@
-export CONFIG:=Release
+export CONFIG:=Debug
 
 VERSION=0.0.8.9
 BUILD=1
@@ -26,7 +26,6 @@ wifitest:
 	
 debug:
 	reset
-	export CONFIG=Debug
 	cd Builds/LinuxMakefile && $(MAKE)
 	sudo make devinstall
 
