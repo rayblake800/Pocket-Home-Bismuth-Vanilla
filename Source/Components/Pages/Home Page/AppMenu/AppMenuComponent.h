@@ -38,14 +38,17 @@ public:
      * @param componentKey     Loads menu bounds from config.
      * 
      * @param loadingSpinner   Reference to an overlay spinner that sits over
-     *                          the PageComponent holding this AppMenuComponent.
+     *                         the PageComponent holding this AppMenuComponent.
      */
     AppMenuComponent(String componentKey, OverlaySpinner& loadingSpinner);
 
     virtual ~AppMenuComponent();
 
     /**
-     * @return true if the AppMenuComponent is currently in the loading state
+     * Checks if the menu is currently in the loading state, where it is busy
+     * loading menu items or launching an application.
+     * 
+     * @return true if the AppMenuComponent is currently in the loading state.
      */
     bool isLoading() const;
 

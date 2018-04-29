@@ -6,7 +6,7 @@
  * @file PagedAppMenu.h
  * 
  * @brief PagedAppMenu displays all applications in a grid, spreading them across
- * multiple pages.  
+ *        multiple pages.  
  * 
  * Only one page of one folder is visible at once. Touch
  * navigation buttons or hardware keys can be used to open or close folders,
@@ -32,34 +32,49 @@ public:
 private:
     /**
      * Uses key events to navigate through the menu.
-     * @param key
-     * @param activeFolder
+     * 
+     * @param key            Represents a key pressed by the user.
+     * 
+     * @param activeFolder   The current open menu folder.
+     * 
      * @return true iff the key press was used.
      */
     bool folderKeyPressed
     (const KeyPress& key, AppMenuFolder* activeFolder) override;
 
     /**
-     * Create a folder component object from a folder menu item.
-     * @param folderItem provides folder menu items
-     * @param buttonMap is used by the folder to recycle menu buttons
+     * Creates a folder component object from a folder menu item.
+     * 
+     * @param folderItem  A folder menu item that provides the new folder's menu
+     *                    items.
+     * 
+     * @param buttonMap   A map of all previously created menu buttons, used
+     *                    to re-load previously created menu buttons.  Any new
+     *                    buttons created for this folder will be added to the
+     *                    button map.
      */
     AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
             std::map<String, AppMenuButton::Ptr>& buttonMap) override;
 
     /**
-     * Return the bounds where the given folder should be placed in the menu.
-     * @param folder
-     * @param folderIndex
-     * @return 
+     * Returns the bounds where the given folder should be placed in the menu.
+     * 
+     * @param folder       An open menu folder object.
+     * 
+     * @param folderIndex  The folder's index in the list of open folders.
+     * 
+     * @return  a rectangle specifying the location where the folder should be
+     *          placed within the AppMenuComponent. 
      */
     virtual Rectangle<int> updateFolderBounds
     (const AppMenuFolder* folder, int folderIndex) override;
 
     /**
-     * Handles navigation button controls
-     * @param button should be pageLeft, pageRight, or closeFolderBtn
+     * Handles navigation button controls.
+     * 
+     * @param button   The button pressed by the user.  This should be pageLeft,
+     *                 pageRight, or closeFolderBtn
      */
     void buttonClicked(Button* button) override;
 

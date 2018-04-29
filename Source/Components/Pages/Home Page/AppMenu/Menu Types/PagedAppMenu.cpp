@@ -37,7 +37,8 @@ void PagedAppMenu::menuResized()
 /**
  * Uses key events to navigate through the menu.
  */
-bool PagedAppMenu::folderKeyPressed(const KeyPress& key, AppMenuFolder* activeFolder)
+bool PagedAppMenu::folderKeyPressed(const KeyPress& key,
+        AppMenuFolder* activeFolder)
 {
     PageAppFolder* folder = static_cast<PageAppFolder*> (activeFolder);
     int selectedIndex = folder->getSelectedIndex();
