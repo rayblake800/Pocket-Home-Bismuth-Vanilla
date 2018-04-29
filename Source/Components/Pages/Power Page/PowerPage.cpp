@@ -173,9 +173,9 @@ PowerPage::pageButtonClicked(Button *button)
         g_variant_unref(newSettings);
         
         DBG("Saved updates, checking if changes stuck:");
-        NMPPConnection refreshed = wifiCons[0].getNMConnection();
+        SavedConnection refreshed(wifiCons[0].getPath().toRawUTF8());
         DBG("First connection: ");
-        refreshed.printDebugOutput();    
+        refreshed.getNMConnection().printDebugOutput();  
     }
 #endif
     ChildProcess commandProcess;
