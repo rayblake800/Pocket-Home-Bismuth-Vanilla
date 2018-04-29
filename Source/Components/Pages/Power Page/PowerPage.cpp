@@ -5,9 +5,7 @@
 
 #if JUCE_DEBUG
 //put any includes needed for test routines here.
-#include "NMPPClient.h"
-#include "GLibSignalHandler.h"
-#include <nm-remote-settings.h>
+#include "SavedConnections.h"
 #endif
 
 PowerPage::PowerPage() :Localized("PowerPage"),
@@ -150,48 +148,17 @@ PowerPage::pageButtonClicked(Button *button)
 #if JUCE_DEBUG
     if (button == &testButton)
     {
-        DBG("Running LibNM wrapper tests");
-        DBG("Testing NMPPClient:");
-        NMPPClient client;
-        bool enabled = client.wirelessEnabled();
-        DBG("\tClient created.  Wireless enabled:"  
-                << (enabled ? "yes" : "no"));
-        Array<NMPPDeviceWifi> devices = client.getWifiDevices();
-        DBG("\tFound " << devices.size() << " wifi devices");
-        for(const NMPPDeviceWifi& device : devices)
+        DBG("Running connection update tests");
+        SavedConnections saved;
+        Array<SavedConnection> wifiCons = saved.getWifiConnections();
+        if(wifiCons.isEmpty())
         {
-            DBG("\tDevice " << device.getInterface());
-            DBG("\t\tPath " << device.getPath());
-            DBG("\t\tManaged:" << (device.isManaged() ? "yes" : "no"));
-            Array<NMPPAccessPoint> aps = device.getAccessPoints();
-            DBG("\t\tFound "  << aps.size() << " access points");
-            Array<NMPPConnection> saved = device.getAvailableConnections();
-            DBG("\t\tFound " << saved.size() << " saved connections");
+            DBG("No connections found!");
+            return;
         }
-        
-        Array<NMPPActiveConnection> active = client.getActiveConnections();
-        DBG("\tFound " << active.size() << " active connections");
-        
-        NMPPActiveConnection primary = client.getPrimaryConnection();
-        if(!primary.isNull())
-        {
-            DBG("\tPrimary Connection id:" << primary.getID());
-        }
-        else
-        {
-            DBG("\tNo primary connection found.");
-        }
-        
-        
-        NMPPActiveConnection activating = client.getActivatingConnection();
-        if(!activating.isNull())
-        {
-            DBG("\tActivating Connection id:" << activating.getID());
-        }
-        else
-        {
-            DBG("\tNo activating connection found.");
-        }
+        NMPPConnection first = wifiCons[0].getNMConnection();
+        DBG("First connection: ");
+        first.printDebugOutput();
     }
 #endif
     ChildProcess commandProcess;
