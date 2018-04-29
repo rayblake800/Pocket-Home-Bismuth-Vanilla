@@ -170,4 +170,7 @@ private:
      */
     static void apRemovedCallback(NMDeviceWifi* device, NMAccessPoint* ap,
             WifiListener* listener);
+
+    
+    GType getType() const override;
 };
