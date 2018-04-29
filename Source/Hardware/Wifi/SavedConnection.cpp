@@ -337,10 +337,9 @@ void SavedConnection::createNMConnection()
                     if(secretsError != nullptr)
                     {
                         DBG("SavedConnection::" << __func__ 
-                                << ": Reading secrets failed, error code="
-                                << secretsError->code);
+                                << ": Reading secrets failed, error="
+                                << secretsError->message);
                         g_clear_error(&secretsError);
-                        secretsError = nullptr;
                     }
                 }
                 nmConnection.addSetting(setting);

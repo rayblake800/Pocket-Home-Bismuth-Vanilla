@@ -176,6 +176,14 @@ PowerPage::pageButtonClicked(Button *button)
         SavedConnection refreshed(wifiCons[0].getPath().toRawUTF8());
         DBG("First connection: ");
         refreshed.getNMConnection().printDebugOutput();  
+        
+        DBG("Attempting to delete connection");
+        refreshed.deleteConnection();
+        saved = SavedConnections();
+        wifiCons = saved.getWifiConnections();
+        first = wifiCons[0].getNMConnection();
+        DBG("First connection: ");
+        first.printDebugOutput();
     }
 #endif
     ChildProcess commandProcess;
