@@ -1,28 +1,27 @@
 #pragma once
 
-#include <NetworkManager.h>
-#include <nm-client.h>
-#include <nm-device.h>
-#include <nm-device-wifi.h>
+#include "NMPPClient.h"
 #include "WindowFocus.h"
-#include "LibNMHandler.h"
 #include "WifiStateManager.h"
 
 /**
  * @file LibNMInterface.h
  * 
- * Connects to the libnm NetworkManager to track and control wifi device.
+ * @brief Connects to the libnm NetworkManager to track and control wifi device.
+ * 
  * As a WifiStateManager::NetworkInterface, only the WifiStateManager should
  * directly interact with this class.
  */
 
 class LibNMInterface : public WifiStateManager::NetworkInterface, 
-public LibNMHandler, private WindowFocus::Listener 
+        public NMPPClient::ConnectionHandler 
 {
 public:
     /**
-     * 
-     * @param wifiLock
+     * @param wifiLock  The lock used by the WifiStateManager to control access
+     *                  to the network interface.  This will be used to ensure
+     *                  the interface is locked when receiving updates from 
+     *                  NetworkManager.
      */
     LibNMInterface(CriticalSection& wifiLock);
 
@@ -30,47 +29,50 @@ public:
 
 protected:
     /**
-     * Check if the network manager found a valid wifi device.
+     * Checks if the network manager found a valid wifi device.
      * 
-     * @return
+     * @return  true iff a NetworkManager managed wifi device was found.
      */
     bool wifiDeviceFound() override;
     
     /**
-     * Check the NMDevice state to see if wifi is enabled.
+     * Checks the NMDevice state to see if wifi is enabled.
      * 
-     * @return
+     * @return  true iff wifi is enabled.
      */
     bool isWifiEnabled() override;
 
     /**
-     * Check the NMDevice state to see if wifi is connecting to an access point.
+     * Checks the NMDevice state to see if wifi is connecting to an access 
+     * point.
      * 
-     * @return
+     * @return  true iff wifi is connecting.
      */
     bool isWifiConnecting() override;
 
     /**
-     * Check the NMDevice state to see if wifi is connected to an access point.
+     * Checks the NMDevice state to see if wifi is connected to an access point.
+     * 
+     * @return  true iff wifi is connected.
      */
     bool isWifiConnected() override;
 
     /**
-     * Request information on the connected access point from the NMDevice.
+     * Requests information on the connected access point from the NMDevice.
      * 
      * @return a WifiAccessPoint object representing the access point connected
-     *          to the wifi device, or WifiAccessPoint() if not connected.
+     *         to the wifi device, or WifiAccessPoint() if not connected.
      */
-    WifiAccessPoint::Ptr getConnectedAP() override;
+    WifiAccessPoint getConnectedAP() override;
 
     /**
-     * Request information on the connecting access point from the NMDevice.
+     * Requests information on the connecting access point from the NMDevice.
      * 
      * @return  a WifiAccessPoint object representing the access point 
      *          connecting to the wifi device, or WifiAccessPoint() if not 
      *          connecting.
      */
-    WifiAccessPoint::Ptr getConnectingAP() override;
+    WifiAccessPoint getConnectingAP() override;
 
     /**
      * Request information on all wifi access points detected by the NMDevice.
@@ -78,7 +80,7 @@ protected:
      * @return  a list of all visible access points within range of the wifi
      *          device, or an empty list if wifi is disabled.
      */
-    Array<WifiAccessPoint::Ptr> getVisibleAPs() override;
+    Array<WifiAccessPoint> getVisibleAPs() override;
 
     /**
      * Begin opening a connection to a wifi access point.
@@ -88,9 +90,8 @@ protected:
      * @param psk        The access point's security key. This will be ignored
      *                   if the access point is unsecured.
      */
-    void connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
+    void connectToAccessPoint(WifiAccessPoint toConnect,
             String psk = String()) override;
-
 
     /**
      * Checks the wifi device list, connection state, and active and pending 
@@ -118,88 +119,165 @@ protected:
      */
     void disableWifi() override;
 
-private:
-        
+private:       
     /**
      * Notify listeners and save the connecting access point if starting to
      * connect.
      * 
-     * @param connectingAP
+     * @param connection  A new active connection object representing the 
+     *                    added connection. This connection object might not
+     *                    be completely connected yet.
+     * 
+     * @param isNew       True if the connection was just added to the
+     *                    network manager, false if it was a known
+     *                    connection that was re-activated.
      */
-    void connectingCallback(WifiAccessPoint::Ptr connectingAP) override;
+    void openingConnection(NMPPActiveConnection connection,
+                bool isNew) override;
     
     /**
      * Notify listeners that a connection attempt failed.
-     */
-    void connectionFailureCallback() override;
-    
-    /**
-     * Notify listeners that connection security settings were invalid.
-     */
-    void invalidSecurityCallback() override;
-    
-    /**
-     * Notifies listeners when wifi turns on or off.
      * 
-     * @param isEnabled  Indicates if the wifi device is on or off.
-     */
-    void wifiEnablementChangeCallback(bool isEnabled) override;
-    
-    /**
-     * Updates the list of visible access points whenever the network manager
-     * reports a change.
+     * #param connection  The connection that failed to activate.  This
+     *                    may be a null connection.
      * 
-     * @param visibleAPs  The updated visible access point list.
+     * @param error       A GError object describing the problem.  This 
+     *                    error object should not be freed.
+     * 
+     * @param isNew       True iff the connection was just added to the 
+     *                    network manager. 
      */
-    void apUpdateCallback(Array<WifiAccessPoint::Ptr> visibleAPs) override;
+    virtual void openingConnectionFailed(NMPPActiveConnection connection, 
+            GError* error, bool isNew) override;
+    
+    //################# Network Manager Client Updates #########################
+    /**
+     * Called whenever wireless is enabled or disabled, this method will update
+     * the wifi state accordingly.
+     * 
+     * @param enabled  true if wifi was enabled, false if it was disabled.
+     */
+    void wirelessEnabledChange(bool enabled);
+    
+
+    
+    //#################### Wifi Device Updates #################################
+    /**
+     * This method will be called whenever the wifi device state changes.
+     *
+     * @param newState  The new device state value.
+     *
+     * @param oldState  The previous device state value.
+     *
+     * @param reason    The reason for the change in device state.
+     */
+    void stateChanged(NMDeviceState newState, NMDeviceState oldState,
+            NMDeviceStateReason reason);
     
     /**
-     * Registers updates to the wifi device when the NetworkManager device state
+     * This method will be called whenever the wifi device detects a new
+     * access point.
+     * 
+     * @param addedAP  The new access point detected by the wifi device.
+     */
+    void accessPointAdded(NMPPAccessPoint addedAP);
+
+    /**
+     * This method will be called whenever the wifi device no longer detects
+     * a wifi access point.
+     * 
+     * @param removedAP  The nearby access point that the device can no
+     *                   longer detect.
+     */
+    void accessPointRemoved(NMPPAccessPoint removedAP);
+
+    /**
+     * This method will be called whenever the device's active connection
      * changes.
      * 
-     * @param newState     The updated wifi device state.
-     * 
-     * @param stateReason  The reason for the change in device state.
+     * @param active   The new active connection.  If the device has
+     *                 disconnected, this will be a null object.
      */
-    void stateUpdateCallback
-    (NMDeviceState newState, NMDeviceStateReason stateReason) override;
-          
+    virtual void activeConnectionChanged(NMPPActiveConnection active);
+    
     /**
-     * Notifies listeners when the active access point changes.
-     * 
-     * @param connected  The newly connected access point, or the null access
-     *                   point if wifi just disconnected.
+     *#######################  Listener Classes  ###############################
+     * These objects listen to signals from NetworkManager classes and pass them
+     * on to the LibNMInterface.  All GPPObject Listeners share a parent class,
+     * so one object can't simply inherit multiple listener classes directly.
      */
-    void connectionUpdateCallback (WifiAccessPoint::Ptr connected) override;
-
-
-    /**
-     * Called whenever the application window gains focus in order to subscribe
-     * to wifi signals.
-     */
-    void windowFocusGained() override;
-
-    /**
-     * Called whenever the application window loses focus in order to
-     * un-subscribe from wifi signals.
-     */
-    void windowFocusLost() override;
+    class ClientListener : public NMPPClient::Listener
+    {
+    public:
+        ClientListener(LibNMInterface& interface, NMPPClient& client) :
+        interface(interface)
+        {
+            client.addListener(this);
+        }
+        virtual ~ClientListener() { }
+    private:
+        void wirelessStateChange(bool wifiEnabled) override
+        {
+            interface.wirelessEnabledChange(wifiEnabled);
+        }
+        LibNMInterface& interface;
+    };
+    
+    class DeviceListener : public NMPPDeviceWifi::Listener
+    {
+    public:
+        DeviceListener(LibNMInterface& interface, NMPPDeviceWifi& device) :
+        interface(interface)
+        {
+            device.addListener(this);
+        }
+        virtual ~DeviceListener();
+    private:
+        void stateChanged(NMDeviceState newState, NMDeviceState oldState,
+                NMDeviceStateReason reason) override
+        {
+            interface.stateChanged(newState, oldState, reason);
+        }
+        void accessPointAdded(NMPPAccessPoint addedAP) override
+        {
+            interface.accessPointAdded(addedAP);
+        }
+        void accessPointRemoved(NMPPAccessPoint removedAP) override
+        {
+            interface.accessPointRemoved(removedAP);
+        }
+        LibNMInterface& interface;
+    };
+    
+    ScopedPointer<ClientListener> clientListener;
+    ScopedPointer<DeviceListener> deviceListener;
     
     //Prevent concurrent access to the wifi data.  This should be locked
     //any time any of the data members listed beneath it is accessed.
     CriticalSection& wifiLock;
 
-    //
+    //The client used to access the network manager.
+    NMPPClient client;
+    //The active wifi device.
+    NMPPDeviceWifi wifiDevice;
+            
+    //The last known state of the wifi device.
     NMDeviceState lastNMState = NM_DEVICE_STATE_UNKNOWN;
-
-    //
-    WifiAccessPoint::Ptr connectedAP = nullptr;
+    //All connections saved with NetworkManager.
+    SavedConnections savedConnections;
     
-    //
-    WifiAccessPoint::Ptr connectingAP = nullptr;
+    //The current active wifi connection, or a null object.
+    NMPPActiveConnection activeConnection;
+    //The access point used by the active connection, or a null object.
+    NMPPAccessPoint connectedAP;
     
-    //
-    Array<WifiAccessPoint::Ptr> visibleAPs;
+    //The connection currently being activated, or a null object.
+    NMPPActiveConnection activatingConnection;
+    //The access point used by the activating connection, or a null object.
+    NMPPAccessPoint connectingAP;
+    
+    //All access points visible to the wifi device.
+    Array<NMPPAccessPoint> visibleAPs;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LibNMInterface)
 };

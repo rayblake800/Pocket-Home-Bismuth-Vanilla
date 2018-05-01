@@ -127,7 +127,7 @@ public:
          *                    network manager, false if it was a known
          *                    connection that was re-activated.
          */
-        virtual void openingConnection(NMPPConnection connection,
+        virtual void openingConnection(NMPPActiveConnection connection,
                 bool isNew) = 0;
         
         /**
@@ -143,7 +143,7 @@ public:
          * @param isNew       True iff the connection was just added to the 
          *                    network manager. 
          */
-        virtual void openingConnectionFailed(NMPPConnection connection, 
+        virtual void openingConnectionFailed(NMPPActiveConnection connection, 
                 GError* error, bool isNew) = 0;
         
         /**

@@ -36,12 +36,12 @@ public:
      */
     bool connectionExists(const String& connectionPath);
     
-private:
     /**
      * Check the list of saved connections against an updated connection path
      * list, adding any new connections and removing any deleted connections.
      */
     void updateSavedConnections();
+private:
     
     /**
      * Get the list of all available connection paths

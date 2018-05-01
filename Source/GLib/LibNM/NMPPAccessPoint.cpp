@@ -169,6 +169,23 @@ bool NMPPAccessPoint::isValidConnection(const NMPPConnection& connection) const
 }
 
 /*
+ * Gets the device mode of this access point.
+ */
+NM80211Mode NMPPAccessPoint::getMode() const
+{
+    NM80211Mode mode = NM_802_11_MODE_UNKNOWN;
+    callInMainContext([&mode](GObject* apObject)
+    {
+        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
+        if(accessPoint != nullptr)
+        {
+            mode = nm_access_point_get_mode(accessPoint);
+        }
+    });
+    return mode;
+}
+
+/*
  * Get access point flags for this access point.
  */
 NM80211ApFlags NMPPAccessPoint::getFlags() const

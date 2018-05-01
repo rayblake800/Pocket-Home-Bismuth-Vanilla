@@ -1,12 +1,8 @@
 #pragma once
 #include <NetworkManager.h>
-#include <nm-client.h>
-#include <nm-device.h>
-#include <nm-device-wifi.h>
-#include <nm-remote-connection.h>
 #include "JuceHeader.h"
 #include "WifiAccessPoint.h"
-#include "GLibSignalHandler.h"
+#include "NMPPClient.h"
 #include "SavedConnections.h"
 
 /**
@@ -286,102 +282,39 @@ private:
      * Scans for all visible NMAccessPoints and build the data structure 
      * mapping WifiAccessPoint objects to their NMAccessPoints.
      */
-    void buildAPMap();
-    
-    /**
-     * Connects a signal handler to the network manager client.
-     * 
-     * @param signal         The string value of some signal the nmClient
-     *                       could send.
-     * 
-     * @param signalHandler  A callback function to run when the signal is
-     *                       sent. This should take the NMClient* as its first
-     *                       parameter and the callbackData as its second
-     *                       parameter.
-     * 
-     * @param callbackData   User data to pass to the signalHandler function.
-     * 
-     * @return  an ID for this signal handler, which can be used to disconnect
-     *           the signal handler.  This ID should not be used after the 
-     *           signal handler is disconnected.
-     */
-    gulong nmClientSignalConnect(
-            const char* signal,
-            GCallback signalHandler,
-            gpointer callbackData);
+    void buildAPList();
 
-    /**
-     * Connects a signal handler to the generic wlan0 device.
-     * 
-     * @param signal         The string value of some signal the nmDevice
-     *                       could send.
-     * 
-     * @param signalHandler  A callback function to run when the signal is
-     *                       sent. This should take the NMDevice* as its first
-     *                       parameter and the callbackData as its second
-     *                       parameter.
-     * 
-     * @param callbackData   User data to pass to the signalHandler function.
-     * 
-     * @return  an ID for this signal handler, which can be used to disconnect
-     *           the signal handler.  This ID should not be used after the 
-     *           signal handler is disconnected.
-     */
-    gulong nmDeviceSignalConnect(
-            const char* signal,
-            GCallback signalHandler,
-            gpointer callbackData);
+    
+    class ClientListener : public NMPPClient::Listener
+    {
+    public:
+        ClientListener(NMPPClient client, LibNMHandler* handler) :
+        handler(handler)
+        {
+            client.addListener(this);
+        }
+        
+    private:
+        /**
+         * This method will be called on registered listeners whenever 
+         * wireless is enabled or disabled.
+         * 
+         * @param wifiEnabled  True if wifi was enabled, false if wifi was
+         *                     disabled.
+         */
+        virtual void wirelessStateChange(bool wifiEnabled) override
+        {
+            handler->wifiEnablementChangeCallback(wifiEnabled);
+        }
+        
+        LibNMHandler* handler;
+    };
+    ClientListener clientListener;
 
 
-    /**
-     * Connects a signal handler to the wifi device wlan0.
-     * 
-     * @param signal         The string value of some signal the NMDeviceWifi
-     *                       could send.
-     * 
-     * @param signalHandler  A callback function to run when the signal is
-     *                       sent. This should take the NMDeviceWifi* as its 
-     *                       first parameter and the callbackData as its second
-     *                       parameter.
-     * 
-     * @param callbackData  User data to pass to the signalHandler function.
-     * 
-     * @return  an ID for this signal handler, which can be used to disconnect
-     *          the signal handler.  This ID should not be used after the 
-     *          signal handler is disconnected.
-     */
-    gulong nmWifiDeviceSignalConnect(
-            const char* signal,
-            GCallback signalHandler,
-            gpointer callbackData);
-
-    /**
-     */
-    NMClient* nmClient = nullptr;
-    
-    /**
-     */
-    NMDevice* nmDevice = nullptr;
-    
-    /**
-     *
-     */
-    NMActiveConnection* activatingConn = nullptr;
-    
-    /**
-     *
-     */
+    NMPPClient client;
+    NMPPDeviceWifi device;
+    NMPPActiveConnection lastActivated;
     SavedConnections savedConnections;
-    
-    /**
-     *
-     */
     Array<WifiAccessPoint::Ptr, CriticalSection> visibleAPs;
-
-    /**
-     *
-     */
-    Array<gulong, CriticalSection> clientSignalHandlers;
-    Array<gulong, CriticalSection> deviceSignalHandlers;
-    Array<gulong, CriticalSection> wifiDeviceSignalHandlers;
 };

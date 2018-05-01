@@ -181,6 +181,23 @@ NMPPAccessPoint NMPPDeviceWifi::getAccessPoint(const char* path) const
     });
     return ap;
 }
+  
+/*
+ * Gets the active connection's access point.
+ */
+NMPPAccessPoint NMPPDeviceWifi:getActiveAccessPoint() const
+{ 
+    NMPPAccessPoint ap;
+    callInMainContext([&ap](GObject* devObject)
+    {
+        NMDeviceWifi* device = NM_DEVICE_WIFI(devObject);
+        if(device != nullptr)
+        {
+            ap = nm_device_wifi_get_active_access_point(device);
+        }
+    });
+    return ap;
+}
 
 /*
  * Gets all access points visible to this device.
@@ -223,6 +240,24 @@ void NMPPDeviceWifi::requestScan()
     });
 }
 
+/**
+ * Convert generic property change notifications into 
+ * activeConnectionChanged calls.
+ * 
+ * @param source    Holds the GObject that emitted the signal. This
+ *                  will be a NMPPDeviceWifi object.
+ * 
+ * @param property  This should be the active connection property, 
+ *                  "active-connection"
+ */
+void NMPPDeviceWifi::Listener::propertyChanged(GPPObject* source, 
+        String property)
+{
+    jassert(property == "active-connection");
+    NMPPDeviceWifi* dev = static_cast<NMPPDeviceWifi*>(source);
+    activeConnectionChanged(dev->getActiveConnection());
+}
+
 /*
  * Adds a listener object to this wifi device.
  */
@@ -256,9 +291,7 @@ void NMPPDeviceWifi::stateChangeCallback(
         NMDeviceStateReason reason,
         Listener* listener) 
 { 
-    NMPPDeviceWifi* deviceWrapper = dynamic_cast<NMPPDeviceWifi*>
-            (GPPObject::findObjectWrapper(G_OBJECT(device), listener));
-    listener->stateChanged(deviceWrapper, newState, oldState, reason);
+    listener->stateChanged(newState, oldState, reason);
 }
 
 /*

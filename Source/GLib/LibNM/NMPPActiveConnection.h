@@ -1,5 +1,6 @@
 #pragma once
 #include <nm-active-connection.h>
+#include "NMPPConnection.h"
 #include "GPPObject.h"
 
 /**
@@ -42,6 +43,14 @@ public:
      *          is null.
      */
     const char* getPath() const;
+    
+    /**
+     * Gets the path of the access point used to activate this connection.
+     * 
+     * @return  the DBus path of a NMAccessPoint object, or the empty string if
+     *          this object is null.
+     */
+    const char* getAccessPointPath() const;
 
     /**
      * Get a unique ID string for this connection.

@@ -3,6 +3,7 @@
 #include <nm-utils.h>
 #include <nm-remote-connection.h>
 #include "JuceHeader.h"
+#include "SavedConnections.h"
 #if JUCE_DEBUG
 #include "WifiDebugOutput.h"
 #endif
@@ -11,14 +12,7 @@ LibNMInterface::LibNMInterface(CriticalSection& wifiLock) :
 NetworkInterface(wifiLock),
 wifiLock(wifiLock)
 {
-    //connect signal handlers and update wifi data asynchronously outside of the
-    //constructor
-    GLibSignalHandler* handler;
-    handler->gLibCallAsync([this]()
-    {
-        connectSignalHandlers();
-        updateAllWifiData();
-    });
+    updateAllWifiData();
 }
 
 /*
@@ -26,7 +20,8 @@ wifiLock(wifiLock)
  */
 bool LibNMInterface::wifiDeviceFound()
 {
-    return isWifiAvailable();
+    const ScopedLock lock(wifiLock);
+    return !wifiDevice.isNull();
 }
 
 /*
@@ -35,21 +30,7 @@ bool LibNMInterface::wifiDeviceFound()
 bool LibNMInterface::isWifiEnabled()
 {
     const ScopedLock lock(wifiLock);
-    switch (lastNMState)
-    {
-        case NM_DEVICE_STATE_DISCONNECTED:
-        case NM_DEVICE_STATE_PREPARE:
-        case NM_DEVICE_STATE_CONFIG:
-        case NM_DEVICE_STATE_NEED_AUTH:
-        case NM_DEVICE_STATE_IP_CONFIG:
-        case NM_DEVICE_STATE_IP_CHECK:
-        case NM_DEVICE_STATE_SECONDARIES:
-        case NM_DEVICE_STATE_ACTIVATED:
-        case NM_DEVICE_STATE_DEACTIVATING:
-        case NM_DEVICE_STATE_FAILED:
-            return true;
-    }
-    return false;
+    return client.wirelessEnabled();
 }
 
 /**
@@ -58,14 +39,10 @@ bool LibNMInterface::isWifiEnabled()
 bool LibNMInterface::isWifiConnecting()
 {
     const ScopedLock lock(wifiLock);
-    switch (lastNMState)
+    switch (activatingConnection.getConnectionState())
     {
-        case NM_DEVICE_STATE_PREPARE:
-        case NM_DEVICE_STATE_CONFIG:
-        case NM_DEVICE_STATE_NEED_AUTH:
-        case NM_DEVICE_STATE_IP_CONFIG:
-        case NM_DEVICE_STATE_IP_CHECK:
-        case NM_DEVICE_STATE_SECONDARIES:
+        case NM_ACTIVE_CONNECTION_STATE_ACTIVATING:
+        case NM_ACTIVE_CONNECTION_STATE_ACTIVATED:
             return true;
     }
     return false;
@@ -77,46 +54,65 @@ bool LibNMInterface::isWifiConnecting()
 bool LibNMInterface::isWifiConnected()
 {
     const ScopedLock lock(wifiLock);
-    DBG("LibNMInterface::" << __func__ << ": state is "
-            << deviceStateString(lastNMState));
-    if (lastNMState == NM_DEVICE_STATE_ACTIVATED && connectedAP != nullptr)
-    {
-        return true;
-    }
-    return false;
+    return activeConnection.getConnectionState() 
+            == NM_ACTIVE_CONNECTION_STATE_ACTIVATED;
 }
 
 /*
  * Request information on the connected access point from the NMDevice.
  */
-WifiAccessPoint::Ptr LibNMInterface::getConnectedAP()
+WifiAccessPoint LibNMInterface::getConnectedAP()
 {
     const ScopedLock lock(wifiLock);
-    return connectedAP;
+    WifiAccessPoint connected(connectedAP);
+    connected.setConnectionPath(activeConnection.getAccessPointPath());
+    return connected;
 }
 
 /*
  * Request information on the connecting access point from the NMDevice.
  */
-WifiAccessPoint::Ptr LibNMInterface::getConnectingAP()
+WifiAccessPoint LibNMInterface::getConnectingAP()
 {
     const ScopedLock lock(wifiLock);
-    return connectingAP;
+    WifiAccessPoint connecting(connectingAP);
+    connecting.setConnectionPath(activatingConnection.getAccessPointPath());
+    return connecting;
 }
 
 /*
  * Request information on all wifi access points detected by the NMDevice.
  */
-Array<WifiAccessPoint::Ptr> LibNMInterface::getVisibleAPs()
+Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 {
     const ScopedLock lock(wifiLock);
-    return visibleAPs;
+    Array<WifiAccessPoint> filteredAPs;
+    filteredAPs.addIfNotAlreadyThere(getConnectedAP());
+    filteredAPs.addIfNotAlreadyThere(getConnectingAP());
+    Array<SavedConnection> savedCons = savedConnections.getWifiConnections();
+    for(const NMPPAccessPoint& ap : visibleAPs)
+    {
+        WifiAccessPoint packagedAP(ap);
+        if(!filteredAPs.contains(packagedAP))
+        {
+            for(const SavedConnection& con : savedCons)
+            {
+                if(ap.isValidConnection(con.getNMConnection()))
+                {
+                    packagedAP.setConnectionPath(con.getPath());
+                    break;
+                }
+            }
+            filteredAPs.add(packagedAP);
+        }
+    }
+    return filteredAPs;
 }
 
 /*
  * Begin opening a connection to a wifi access point.
  */
-void LibNMInterface::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
+void LibNMInterface::connectToAccessPoint(WifiAccessPoint toConnect,
         String psk)
 {
     initConnection(toConnect, psk);
@@ -130,10 +126,14 @@ void LibNMInterface::updateAllWifiData()
 {
     DBG("LibNMInterface::updateAllWifiData reloading data");
     ScopedLock updateLock(wifiLock);
-    connectedAP = findConnectedAP();
-    connectingAP = findConnectingAP();
-    lastNMState = findWifiState();
-    visibleAPs = findVisibleAPs();
+    lastNMState = wifiDevice.getState();
+    savedConnections.updateSavedConnections();
+    activeConnection = wifiDevice.getActiveConnection();
+    connectedAP = wifiDevice.getActiveAccessPoint();
+    activatingConnection = client.getActivatingConnection();
+    connectingAP = wifiDevice.getAccessPoint
+            (activatingConnection.getAccessPointPath());
+    visibleAPs = wifiDevice.getAccessPoints();
     ScopedUnlock confirmUnlock(wifiLock);
     confirmWifiState();
 }
@@ -143,7 +143,7 @@ void LibNMInterface::updateAllWifiData()
  */
 void LibNMInterface::disconnect()
 {
-    closeActiveConnection();
+    wifiDevice.disconnect();
 }
 
 /*
@@ -151,7 +151,7 @@ void LibNMInterface::disconnect()
  */
 void LibNMInterface::stopConnecting()
 {
-    closeActivatingConnection();
+    client.deactivateConnection(activatingConnection);
 }
 
 /*
@@ -159,12 +159,12 @@ void LibNMInterface::stopConnecting()
  */
 void LibNMInterface::enableWifi()
 {
-    if (!isWifiAvailable())
+    if (wifiDevice.isNull())
     {
         signalWifiDisabled();
         return;
     }
-    setWifiEnabled(true);
+    client.setWirelessEnabled(true);
 }
 
 /*
@@ -172,12 +172,12 @@ void LibNMInterface::enableWifi()
  */
 void LibNMInterface::disableWifi()
 {
-    if (!isWifiAvailable())
+    if (wifiDevice.isNull())
     {
         signalWifiDisabled();
         return;
     }
-    setWifiEnabled(false);
+    client.setWirelessEnabled(false);
 }
 
 /*

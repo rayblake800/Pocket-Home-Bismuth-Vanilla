@@ -33,6 +33,23 @@ const char* NMPPActiveConnection::getPath() const
     });
     return path;
 }
+    
+/*
+ * Gets the path of the access point used to activate this connection.
+ */
+const char* NMPPActiveConnection::getAccessPointPath() const
+{
+    const char* path = "";
+    callInMainContext([this, &path](GObject* conObj)
+    {
+        NMObject* connection = NM_OBJECT(conObj);
+        if(connection != nullptr)
+        {
+            path = nm_active_connection_get_specific_object(connection);
+        }
+    });
+    return path;
+}
 
 /*
  * Get a unique ID string for this connection.

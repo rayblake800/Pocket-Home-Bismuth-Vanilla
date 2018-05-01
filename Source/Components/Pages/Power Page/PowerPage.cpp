@@ -148,34 +148,7 @@ PowerPage::pageButtonClicked(Button *button)
 #if JUCE_DEBUG
     if (button == &testButton)
     {
-        DBG("Running connection update tests");
-        SavedConnections saved;
-        Array<SavedConnection> wifiCons = saved.getWifiConnections();
-        if(wifiCons.isEmpty())
-        {
-            DBG("No connections found!");
-            return;
-        }
-        NMPPConnection first = wifiCons[0].getNMConnection();
-        DBG("First connection: ");
-        first.printDebugOutput();
-        GVariantDict* settingsDict = g_variant_dict_new(nullptr);
-        g_variant_dict_insert_value(settingsDict,
-                            NM_SETTING_WIRELESS_SECURITY_PSK,
-                            g_variant_new_variant(
-                            g_variant_new_string("bbbbbbbb!")));
-        g_variant_dict_insert_value(settingsDict,
-                    NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
-                    g_variant_new_variant(
-                    g_variant_new_int32(NM_SETTING_SECRET_FLAG_NONE)));
-        GVariant* newSettings = g_variant_dict_end(settingsDict);
-        wifiCons[0].updateWifiSecurity(newSettings);
-        g_variant_unref(newSettings);
-        
-        DBG("Saved updates, checking if changes stuck:");
-        SavedConnection refreshed(wifiCons[0].getPath().toRawUTF8());
-        DBG("First connection: ");
-        refreshed.getNMConnection().printDebugOutput();
+        DBG("No test routines defined.");
     }
 #endif
     ChildProcess commandProcess;

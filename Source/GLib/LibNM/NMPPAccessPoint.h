@@ -108,7 +108,15 @@ public:
      * @return true  iff this access point and connection are compatible.
      */
     bool isValidConnection(const NMPPConnection& connection) const;
-    
+   
+    /**
+     * Gets the device mode of this access point.
+     * 
+     * @return  the access point's mode, or NM_802_11_MODE_UNKNOWN if the access
+     *          point is null. 
+     */
+    NM80211Mode getMode() const;
+   
     /**
      * Get access point flags for this access point.
      * 

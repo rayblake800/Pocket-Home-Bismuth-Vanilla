@@ -1,8 +1,6 @@
 #pragma once
 #include <NetworkManager.h>
-#include <nm-access-point.h>
-#include <nm-connection.h>
-#include "SavedConnections.h"
+#include "NMPPAccessPoint.h"
 #include "JuceHeader.h"
 
 /**
@@ -11,22 +9,16 @@
  * @brief Stores all relevant data about a single wifi access point.
  */
 
-class WifiAccessPoint : public ReferenceCountedObject
+class WifiAccessPoint : public NMPPAccessPoint::Listener
 {
 public:
-    typedef ReferenceCountedObjectPtr<WifiAccessPoint> Ptr;
 
     /**
      * Create an access point object using LibNM access point data.
      * 
      * @param accessPoint      A LibNM access point object.
-     * 
-     * @param savedConnection  A saved connection that is compatible with this 
-     *                         access point, or an invalid connection object if
-     *                         none exists.
      */
-    WifiAccessPoint(NMAccessPoint* accessPoint,
-            SavedConnection savedConnection);
+    WifiAccessPoint(NMPPAccessPoint accessPoint);
 
     /**
      * Represents the main categories of wifi access point security.
@@ -57,10 +49,14 @@ public:
     WifiAccessPoint(String ssid, int signalStrength, bool requiresAuth,
             String hash);
 
+    virtual ~WifiAccessPoint() { }
+    
     /**
-     * Unregisters the signal handler, if one exists
+     * Checks if this object contains a valid wifi access point or not.
+     * 
+     * @return  true iff this object has no valid access point. 
      */
-    virtual ~WifiAccessPoint();
+    bool isNull() const;
 
     /**
      * Gets the access point's service set identifier, its primary name.
@@ -106,17 +102,6 @@ public:
     bool getRequiresAuth() const;
 
     /**
-     * Checks if this access point corresponds to a saved network connection.
-     */
-    bool hasSavedConnection() const;
-
-    /**
-     * Checks if there is a psk for this connection saved by the network
-     * manager.
-     */
-    bool hasSavedPsk() const;
-
-    /**
      * Returns a string identifying this object for debug purposes.
      * 
      * @return the access point SSID, for debugging use only.
@@ -129,17 +114,17 @@ public:
      * @return  true iff the connection is compatible, and the WifiAccessPoint
      *          doesn't have a different non-null saved connection.  
      */
-    bool isConnectionCompatible(NMConnection* connection) const;
+    bool isConnectionCompatible(NMPPConnection connection) const;
 
     /**
-     * Checks if this access point and another both share a network
+     * Checks if this access point and another both share a network connection.
      * 
      * @param otherAP
      * 
      * @return true if their hash values match, and they don't both have saved
      *         nonmatching connection objects.
      */
-    bool sharesConnectionWith(WifiAccessPoint::Ptr otherAP) const;
+    bool sharesConnectionWith(const WifiAccessPoint& otherAP) const;
 
 
     /**
@@ -165,13 +150,13 @@ public:
     /**
      * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.
      */
-    bool operator==(NMAccessPoint* rhs) const;
+    bool operator==(NMPPAccessPoint rhs) const;
 
     /**
      * Returns true iff this WifiAccessPoint does not have rhs as its 
      * nmAccessPoint.
      */
-    bool operator!=(NMAccessPoint* rhs) const;
+    bool operator!=(NMPPAccessPoint rhs) const;
 
     /**
      * Returns true iff this access point and rhs share a nmAccessPoint.
@@ -187,62 +172,34 @@ public:
     /**
      * @return this access point's LibNM access point object 
      */
-    NMAccessPoint* getNMAccessPoint();
-
-    /**
-     * Gets this access point's connection object.  If it has no connection
-     * object, a new one will be created and returned.
-     * 
-     * @return this access point's connection object.
-     */
-    NMConnection* getNMConnection();
+    NMPPAccessPoint getNMAccessPoint();
     
     /**
-     * Assigns a new connection to this access point. This will fail if a valid
-     * saved connection is already assigned, or if the new connection is not 
-     * valid for this access point.
-     *
-     * @param newConnection
+     * Gets the network connection DBus path associated with this access point.
      * 
-     * @return true iff the new connection was set.
+     * @return  The saved path value, or the empty string if there is no saved
+     *          connection.
      */
-    bool setNMConnection(NMConnection* newConnection);
-
+    String getConnectionPath() const;
+    
     /**
-     * Saves a new security key for this access point's connection.
-     * 
-     * @param psk  The new security key.  This key will only be saved if it is
-     *             valid for the access point's security type.
-     * 
-     * @return  true if the key was saved, false if the key was invalid.
+     * Stores a network connection DBus path associated with this access point.
+     *  
+     * @param path  A valid DBus path to store.
      */
-    bool setPsk(String psk);
-
-    /**
-     * Removes the security key saved for this access point.  This should only 
-     * be done when the saved key turns out to be invalid. 
-     * 
-     * If the access point is associated with a saved connection, this will
-     * delete that connection.
-     */
-    void removePsk();
-
-    /**
-     * Gets an SSID byte array from the saved connection or access point.  If
-     * possible, the value from the saved connection will be used first.
-     */
-    const GByteArray* getSSIDBytes();
+    void setConnectionPath(String path);
 
 private:
     /**
-     * If the NMAccessPoint is non-null and signal handlers aren't already
-     * registered, this will register this object to receive updates when
-     * access point signal strength changes or the NMAccessPoint is destroyed.
+     * Signals that the access point's signal strength has been updated.
      * 
-     * This method assumes that the WifiAccessPoint is already locked for
-     * writing.
+     * @param updatedAP    The updated wifi access point.
+     * 
+     * @param newStrength  The access point's new signal strength, ranging 
+     *                     from zero to 100.
      */
-    void registerSignalHandlers();
+    void signalStrengthChanged(NMPPAccessPoint* updatedAP,
+            unsigned int newStrength) override;
 
     /**
      * Generates a hash value for a list of access point parameters that will
@@ -254,31 +211,7 @@ private:
             guint32 flags,
             guint32 wpa_flags,
             guint32 rsn_flags);
-
-    /**
-     * If this object's NMAccessPoint or NMConnection is deleted, this will 
-     * remove the pointer to the deleted object and set it to null.  This should
-     * only be called on the GLib event loop by GLib library code.
-     * 
-     * @param toUpdate  A WifiAccessPoint that is holding a pointer to the 
-     *                  object that will be deleted.
-     * 
-     * @param removed   This should be either the WifiAccessPoint's 
-     *                  NMAccessPoint, or its NMConnection.
-     */
-    static void apDestroyedCallback
-    (WifiAccessPoint* toUpdate, GObject* removed);
-
-    /**
-     * A callback to update signal strength whenever NMAccessPoint strength
-     * changes.  This should only be called on the GLib event loop by GLib 
-     * library code.
-     * 
-     * @param toUpdate
-     */
-    static void strengthUpdateCallback(WifiAccessPoint* toUpdate);
     
-
     //Prevent concurrent access when being updated with new network data
     ReadWriteLock networkUpdateLock;
 
@@ -302,7 +235,6 @@ private:
     NM80211ApSecurityFlags rsnFlags;
     gulong updateSignalId = 0;
 
-    NMAccessPoint* nmAccessPoint = nullptr;
-    NMConnection* networkConnection = nullptr;
-    SavedConnection savedConnection;
+    NMPPAccessPoint nmAccessPoint;
+    String connectionPath;
 };

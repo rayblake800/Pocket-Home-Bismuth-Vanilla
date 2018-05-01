@@ -106,6 +106,14 @@ public:
     NMPPAccessPoint getAccessPoint(const char* path) const;
     
     /**
+     * Gets the active connection's access point.
+     *
+     * @return  the active access point object, or a null access point object
+     *          if this object is disconnected or null.
+     */
+    NMPPAccessPoint getActiveAccessPoint() const;
+    
+    /**
      * Gets all access points visible to this device.
      * 
      * @return  An array containing one access point object for each nearby
@@ -132,8 +140,6 @@ public:
     private:
 	/**
 	 * This method will be called whenever the wifi device state changes.
-         * 
-	 * @param device    The updated wifi device object.
 	 *
 	 * @param newState  The new device state value.
 	 *
@@ -141,8 +147,7 @@ public:
 	 *
 	 * @param reason    The reason for the change in device state.
 	 */
-        virtual void stateChanged(NMPPDeviceWifi* device,
-                NMDeviceState newState,
+        virtual void stateChanged(NMDeviceState newState,
                 NMDeviceState oldState,
                 NMDeviceStateReason reason) = 0;
         
@@ -162,6 +167,28 @@ public:
          *                   longer detect.
 	 */
         virtual void accessPointRemoved(NMPPAccessPoint removedAP) = 0;
+        
+        /**
+         * This method will be called whenever the device's active connection
+         * changes.
+         * 
+         * @param active   The new active connection.  If the device has
+         *                 disconnected, this will be a null object.
+         */
+        virtual void activeConnectionChanged(NMPPActiveConnection active) = 0;
+        
+        /**
+         * Convert generic property change notifications into 
+         * activeConnectionChanged calls.
+         * 
+         * @param source    Holds the GObject that emitted the signal. This
+         *                  will be a NMPPDeviceWifi object.
+         * 
+         * @param property  This should be the active connection property, 
+         *                  "active-connection"
+         */
+        virtual void propertyChanged(GPPObject* source, String property)
+                override;
     };
     
     /**
