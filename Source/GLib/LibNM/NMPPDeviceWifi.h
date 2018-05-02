@@ -96,6 +96,19 @@ public:
     Array<NMPPConnection> getAvailableConnections() const;
     
     /**
+     * Finds the first available connection that is compatible with a specific
+     * wifi access point.
+     * 
+     * @param accessPoint  A wifi access point object.
+     * 
+     * @return  the first available connection that could be used to activate
+     *          this access point, or a null connection if this device is null,
+     *          the access point is null, or no matching connection is found. 
+     */
+    NMPPConnection getAvailableConnection
+    (const NMPPAccessPoint& accessPoint) const;
+    
+    /**
      * Gets an access point object using the access point's path.
      * 
      * @param path  A valid wifi access point DBus path.
@@ -120,6 +133,18 @@ public:
      *          wifi access point visible to the device.
      */
     Array<NMPPAccessPoint> getAccessPoints() const;
+    
+    /**
+     * Checks if a specific connection is present in the list of available
+     * device connections.
+     * 
+     * @param toFind  A connection object to find.
+     * 
+     * @return  true iff a matching connection is already known to this wifi
+     *          device.
+     */
+    bool hasConnectionAvailable(const NMPPConnection& toFind);
+    
     
     /**
      * Sends a request to the wifi device asking it to scan visible access 

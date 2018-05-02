@@ -165,6 +165,29 @@ Array<NMPPConnection> NMPPDeviceWifi::getAvailableConnections() const
     return available;
 }
 
+
+    
+/*
+ * Finds the first available connection that is compatible with a specific
+ * wifi access point.
+ */
+NMPPConnection NMPPDeviceWifi::getAvailableConnection
+(const NMPPAccessPoint& accessPoint) const
+{
+    if(!accessPoint.isNull())
+    {
+        Array<NMPPConnection> available = getAvailableConnections();
+        for(const NMPPConnection& con : available)
+        {
+            if(accessPoint.isValidConnection(con))
+            {
+                return con;
+            }
+        }
+    }
+    return NMPPConnection();
+}
+
 /*
  * Gets an access point object using the access point's path.
  */
@@ -222,6 +245,19 @@ Array<NMPPAccessPoint> NMPPDeviceWifi::getAccessPoints() const
         }
     });
     return accessPoints;
+}
+    
+/*
+ * Checks if a specific connection is present in the list of available
+ * device connections.
+ */
+bool NMPPDeviceWifi::hasConnectionAvailable(const NMPPConnection& toFind)
+{
+    if(toFind.isNull())
+    {
+        return false;
+    }
+    return getAvailableConnections().contains(toFind);
 }
 
 /*
