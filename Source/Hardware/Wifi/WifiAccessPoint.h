@@ -126,6 +126,19 @@ public:
      */
     bool sharesConnectionWith(const WifiAccessPoint& otherAP) const;
 
+    /**
+     * Create a new connection object that could be used to connect with this
+     * access point.
+     * 
+     * @param psk  The security key needed to connect to the access point.  If
+     *             this access point is unsecured, this parameter will be
+     *             ignored.
+     * 
+     * @return  a connection that can be used to connect with this access point,
+     *          or a null connection object if this access point is null or
+     *          the psk was invalid.
+     */
+    NMPPConnection createConnection(String psk = String());
 
     /**
      * @return the access point device mode 
@@ -172,7 +185,7 @@ public:
     /**
      * @return this access point's LibNM access point object 
      */
-    NMPPAccessPoint getNMAccessPoint();
+    const NMPPAccessPoint& getNMAccessPoint();
     
     /**
      * Gets the network connection DBus path associated with this access point.

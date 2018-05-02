@@ -147,6 +147,43 @@ bool WifiAccessPoint::sharesConnectionWith(const WifiAccessPoint& otherAP) const
     return hash == otherAP->hash;
 }
 
+/*
+ * Create a new connection object that could be used to connect with this
+ * access point.
+ * 
+ * @param psk  The security key needed to connect to the access point.  If
+ *             this access point is unsecured, this parameter will be
+ *             ignored.
+ * 
+ * @return  a connection that can be used to connect with this access point,
+ *          or a null connection object if this access point is null or
+ *          the psk was invalid.
+ */
+NMPPConnection WifiAccessPoint::createConnection(String psk)
+{
+    const ScopedReadLock readLock(networkUpdateLock);
+    NMPPConnection newConnection;
+    if(security == securedWEP)
+    {
+        if(!newConnection.addWEPSettings(psk))
+        {
+            DBG("NMPPConnection::" << __func__ 
+                    << ": failed to create connection.");
+            return newConnection;
+        }
+    }
+    else if(security != none)
+    {
+        if(!newConnection.addWPASettings(psk))
+        {
+            DBG("NMPPConnection::" << __func__ 
+                    << ": failed to create connection.");
+            return newConnection;         
+        }
+    }
+    newConnection.addWifiSettings(nmAccessPoint.getSSID());
+    return newConnection;
+}
 
 /*
  * @return the access point device mode 
@@ -226,7 +263,7 @@ bool WifiAccessPoint::operator!=(const WifiAccessPoint& rhs) const
 /*
  * @return this access point's LibNM access point object 
  */
-NMPPAccessPoint WifiAccessPoint::getNMAccessPoint()
+const NMPPAccessPoint& WifiAccessPoint::getNMAccessPoint()
 {
     return nmAccessPoint;
 }
