@@ -1,5 +1,6 @@
 #pragma once
 #include <nm-active-connection.h>
+#include "NMPPAccessPoint.h"
 #include "NMPPConnection.h"
 #include "GPPObject.h"
 
@@ -51,6 +52,18 @@ public:
      *          this object is null.
      */
     const char* getAccessPointPath() const;
+    
+    /**
+     * Checks if an access point object is linked to this active connection.
+     * 
+     * @param accessPoint  A wifi access point object.
+     * 
+     * @return  true if the access point's path matches the connection's access
+     *          point path, false if there is no match, this object is null,
+     *          or the access point is null.
+     *          
+     */
+    bool isConnectedAccessPoint(const NMPPAccessPoint& accessPoint) const;
 
     /**
      * Get a unique ID string for this connection.

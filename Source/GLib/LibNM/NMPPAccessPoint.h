@@ -1,6 +1,7 @@
 #pragma once
 #include <nm-access-point.h>
 #include "NMPPConnection.h"
+#include "NMPPActiveConnection.h"
 #include "GPPObject.h"
 
 /**
@@ -108,6 +109,7 @@ public:
      * @return true  iff this access point and connection are compatible.
      */
     bool isValidConnection(const NMPPConnection& connection) const;
+    
    
     /**
      * Gets the device mode of this access point.

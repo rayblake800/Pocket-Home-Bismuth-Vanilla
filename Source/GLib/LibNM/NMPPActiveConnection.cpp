@@ -52,6 +52,19 @@ const char* NMPPActiveConnection::getAccessPointPath() const
 }
 
 /*
+ * Checks if an access point object is linked to this active connection.
+ */
+bool NMPPActiveConnection::isConnectedAccessPoint
+(const NMPPAccessPoint& accessPoint) const
+{
+    if(isNull() || accessPoint.isNull())
+    {
+        return false;
+    }
+    return strcmp(getAccessPointPath(), accessPoint.getPath()) == 0; 
+}
+
+/*
  * Get a unique ID string for this connection.
  */
 const char* NMPPActiveConnection::getUUID() const
