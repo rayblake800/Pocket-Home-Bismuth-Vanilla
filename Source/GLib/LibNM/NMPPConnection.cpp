@@ -165,6 +165,7 @@ bool NMPPConnection::addWEPSettings(const String& psk)
     nm_setting_wireless_security_set_wep_key
             (securitySettings, 0, psk.toRawUTF8());
     addSetting(NM_SETTING(securitySettings));
+    return true;
 }
 
 
