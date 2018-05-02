@@ -1,5 +1,6 @@
 #pragma once
 #include "GPPDBusProxy.h"
+#include "NMPPAccessPoint.h"
 #include "SavedConnection.h"
 
 /**
@@ -25,7 +26,7 @@ public:
      * 
      * @return all saved wifi connections.
      */
-    Array<SavedConnection> getWifiConnections();
+    Array<SavedConnection> getWifiConnections() const;
     
     /**
      * Checks saved connection paths to see if one exists at the given path.
@@ -34,7 +35,20 @@ public:
      * 
      * @return  true iff connectionPath is a valid path to a saved connection. 
      */
-    bool connectionExists(const String& connectionPath);
+    bool connectionExists(const String& connectionPath) const;
+    
+    /**
+     * Finds all saved connections that are compatible with a given wifi
+     * access point.
+     * 
+     * @param accessPoint  A wifi access point to check against the list of
+     *                     saved connections.
+     * 
+     * @return  the list of all saved connections that could be activated with
+     *          the given access point.
+     */
+    Array<SavedConnection> findConnectionsForAP
+    (const NMPPAccessPoint& accessPoint) const;
     
     /**
      * Check the list of saved connections against an updated connection path
@@ -48,7 +62,7 @@ private:
      * 
      * @return the list of paths, freshly updated over the DBus interface.
      */
-    inline StringArray getConnectionPaths();
+    inline StringArray getConnectionPaths() const;
     
     Array<SavedConnection> connectionList;    
 };
