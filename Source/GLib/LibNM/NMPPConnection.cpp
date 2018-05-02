@@ -56,7 +56,8 @@ bool NMPPConnection::connectionMatches(const NMPPConnection& rhs) const
     });
     return compatible;
 }
-    
+   
+
 /*
  * Add a new connection setting to this connection.  If the connection is
  * null, this will create a new NMConnection object.
@@ -91,6 +92,81 @@ void NMPPConnection::removeSetting(GType settingType)
         }
     });
 }
+    
+/*
+ * Adds new wireless connection settings to this connection.  If this
+ * connection is null, this will initialize it with a new NMConnection
+ * object.
+ */
+void NMPPConnection::addWifiSettings(const GByteArray* ssid, bool isHidden)
+{
+    if(ssid != nullptr)
+    {   
+        NMSettingWireless* wifiSettings
+                = (NMSettingWireless*) nm_setting_wireless_new();
+        g_object_set(wifiSettings,
+                NM_SETTING_WIRELESS_SSID,
+                ssid,
+                NM_SETTING_WIRELESS_HIDDEN,
+                isHidden,
+                nullptr);
+        addSetting(NM_SETTING(wifiSettings));
+    }
+}
+
+/*
+ * Attempts to add WPA security settings to this connection.
+ */
+bool NMPPConnection::addWPASettings(const String& psk)
+{
+    if(psk.length() < 8)
+    {
+        return false;
+    }
+    NMSettingWirelessSecurity* securitySettings
+            = (NMSettingWirelessSecurity*) nm_setting_wireless_security_new();
+    g_object_set(G_OBJECT(securitySettings),
+            NM_SETTING_WIRELESS_SECURITY_PSK,
+            psk.toRawUTF8(),
+            NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
+            NM_SETTING_SECRET_FLAG_NONE, nullptr);
+    addSetting(NM_SETTING(securitySettings));
+    return true;
+}
+
+/*
+ * Attempts to add WEP security settings to this connection.
+ */
+bool NMPPConnection::addWEPSettings(const String& psk)
+{
+    const char* keyType = nullptr;
+    if (psk.length() == 10 || psk.length() == 26)
+    {
+        keyType = (const char*) NM_WEP_KEY_TYPE_KEY;
+    }
+    //valid passphrase format: length 5 or length 14
+    else if (psk.length() == 5 || psk.length() == 13)
+    {
+        keyType = (const char*) NM_WEP_KEY_TYPE_PASSPHRASE;
+    }
+    else
+    {
+        DBG("NMPPConnection::" << __func__
+                << ": Invalid WEP Key type, "
+                << "psk.length() = " << psk.length()
+                << ", not in [5,10,13,26]");
+        return false;
+    }
+    g_object_set(G_OBJECT(securitySettings),
+            NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
+            keyType,
+            NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
+            NM_SETTING_SECRET_FLAG_NONE,  nullptr);
+    nm_setting_wireless_security_set_wep_key
+            (securitySettings, 0, psk.toRawUTF8());
+    addSetting(NM_SETTING(securitySettings));
+}
+
 
 /*
  * Get one of this connection's setting objects.

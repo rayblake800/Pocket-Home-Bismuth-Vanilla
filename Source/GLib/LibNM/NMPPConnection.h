@@ -34,7 +34,7 @@ public:
     virtual ~NMPPConnection() { }
     
     /**
-     * Check if this connection object and another could be describing the 
+     * Checks if this connection object and another could be describing the 
      * same network connection.
      * 
      * @param rhs  Another connection to compare with this one.
@@ -46,7 +46,7 @@ public:
     
     /**
      * Add a new connection setting to this connection.  If the connection is
-     * null, this will create a new NMConnection object.
+     * null, this will initialize it with a new NMConnection object.
      * 
      * @param setting  A valid NMSetting object.  Ownership of this setting
      *                 will be transferred to the NMConnection object.
@@ -61,6 +61,44 @@ public:
      *                     removed and unreferenced.
      */
     void removeSetting(GType settingType);
+    
+    /**
+     * Adds new wireless connection settings to this connection.  If this
+     * connection is null, this will initialize it with a new NMConnection
+     * object.
+     * 
+     * @param ssid      The connection's SSID byte string.
+     * 
+     * @param isHidden  Sets if this connection is a hidden connection.
+     *                  TODO: research and support hidden connections properly.
+     */
+    void addWifiSettings(const GByteArray* ssid, bool isHidden = false);
+    
+    /**
+     * Attempts to add WPA security settings to this connection.  If this
+     * connection is null, this will initialize it with a new NMConnection
+     * object.
+     *
+     * @param  psk  The WPA security key code.  This must be at least eight
+     *              characters long.
+     * 
+     * @return  true if the psk was valid and the setting was added, false if
+     *          the psk was invalid and the setting was not added.
+     */
+    bool addWPASettings(const String& psk);
+    
+    /**
+     * Attempts to add WEP security settings to this connection.  If this
+     * connection is null, this will initialize it with a new NMConnection
+     * object.
+     *
+     * @param  psk  The WEP security key or passphrase.  This must be five, ten,
+     *              thirteen, or twenty-six characters long.
+     * 
+     * @return  true if the psk was valid and the setting was added, false if
+     *          the psk was invalid and the setting was not added.
+     */
+    bool addWEPSettings(const String& psk);
     
     /**
      * Get one of this connection's setting objects.
