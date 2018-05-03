@@ -16,7 +16,7 @@ wifiLock(wifiLock)
             (MainConfigFile::wifiInterfaceKey);
     if(wifiIface.isNotEmpty())
     {
-        wifiDevice = client.getWifiDeviceByIface(wifiIface);
+        wifiDevice = client.getWifiDeviceByIface(wifiIface.toRawUTF8());
     }
     else
     {
