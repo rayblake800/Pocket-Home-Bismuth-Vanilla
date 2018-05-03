@@ -5,6 +5,16 @@
 #include "WifiAccessPoint.h"
 #include "LibNM/NMPPAccessPoint.h"
     
+
+    
+/*
+ * Create a wifi access point copying data from another access point.
+ */
+WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
+{
+    *this = toCopy;
+}
+
 /*
  * Create an access point object using LibNM access point data.
  */
@@ -15,14 +25,17 @@ nmAccessPoint(accessPoint)
     {
         return;
     }
-    ssid = nmAccessPoint.getSSIDText();
-    bssid = nmAccessPoint.getBSSID();
-    apMode = nmAccessPoint.getMode();
-    apFlags = nmAccessPoint.getFlags();
-    wpaFlags = nmAccessPoint.getWPAFlags();
-    rsnFlags = nmAccessPoint.getRSNFlags();
-    hash = generateHash(nmAccessPoint.getSSID(),
-            apMode,apFlags,wpaFlags,rsnFlags);
+    ssid           = nmAccessPoint.getSSIDText();
+    bssid          = nmAccessPoint.getBSSID();
+    apMode         = nmAccessPoint.getMode();
+    apFlags        = nmAccessPoint.getFlags();
+    wpaFlags       = nmAccessPoint.getWPAFlags();
+    rsnFlags       = nmAccessPoint.getRSNFlags();
+    hash           = generateHash(nmAccessPoint.getSSID(),
+                            apMode,apFlags,wpaFlags,rsnFlags);
+    signalStrength = nmAccessPoint.getSignalStrength();
+    frequency      = nmAccessPoint.getFrequency();
+    maxBitrate     = nmAccessPoint.getMaxBitrate();
     //get security type
     if (rsnFlags != NM_802_11_AP_SEC_NONE)
     {
@@ -37,10 +50,7 @@ nmAccessPoint(accessPoint)
         security = (apFlags == NM_802_11_AP_FLAGS_NONE) ?
                 none : securedWEP;
     }
-    signalStrength = nmAccessPoint.getSignalStrength()
-    frequency = nmAccessPoint.getFrequency();
-    maxBitrate = nmAccessPoint.getMaxBitrate();
-    nmAccessPoint.addListener(this);
+    nmAccessPoint.addSignalHandler(this);
 }
 
     
@@ -54,6 +64,10 @@ ssid(ssid),
 signalStrength(median<int>(0, signalStrength, 100)),
 hash(hash)
 {
+    
+#if JUCE_DEBUG
+    fakeConnection = true;
+#endif
     security = requiresAuth ? securedWPA : none;
 }
     
@@ -63,6 +77,13 @@ hash(hash)
 bool WifiAccessPoint::isNull() const
 {
     const ScopedReadLock readLock(networkUpdateLock);
+    
+#if JUCE_DEBUG
+    if(fakeConnection)
+    {
+        return ssid.isEmpty();
+    }
+#endif
     return nmAccessPoint.isNull();
 }
 
@@ -144,20 +165,12 @@ bool WifiAccessPoint::isConnectionCompatible(NMPPConnection connection) const
 bool WifiAccessPoint::sharesConnectionWith(const WifiAccessPoint& otherAP) const
 {
     const ScopedReadLock readLock(networkUpdateLock);
-    return hash == otherAP->hash;
+    return hash == otherAP.hash;
 }
 
 /*
  * Create a new connection object that could be used to connect with this
  * access point.
- * 
- * @param psk  The security key needed to connect to the access point.  If
- *             this access point is unsecured, this parameter will be
- *             ignored.
- * 
- * @return  a connection that can be used to connect with this access point,
- *          or a null connection object if this access point is null or
- *          the psk was invalid.
  */
 NMPPConnection WifiAccessPoint::createConnection(String psk)
 {
@@ -220,8 +233,35 @@ NM80211ApSecurityFlags WifiAccessPoint::getRSNFlags() const
     const ScopedReadLock readLock(networkUpdateLock);
     return rsnFlags;
 }
-
     
+/*
+ * Assigns another access point's data to this access point.
+ */
+bool WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
+{
+    const ScopedReadLock readLock(rhs.networkUpdateLock);
+    ssid           = rhs.ssid;
+    bssid          = rhs.bssid;
+    security       = rhs.security;
+    hash           = rhs.hash;
+    signalStrength = rhs.signalStrength;
+    frequency      = rhs.frequency;
+    maxBitrate     = rhs.maxBitrate;
+    apMode         = rhs.apMode;
+    apFlags        = rhs.apFlags;
+    wpaFlags       = rhs.wpaFlags;
+    rsnFlags       = rhs.rsnFlags;
+    nmAccessPoint  = rhs.nmAccessPoint;
+    connectionPath = rhs.connectionPath;
+#if JUCE_DEBUG
+    fakeConnection = rhs.fakeConnection;
+#endif
+    if(!nmAccessPoint.isNull())
+    {
+        nmAccessPoint.addSignalHandler(this);
+    }
+}
+
 /*
  * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.
  */

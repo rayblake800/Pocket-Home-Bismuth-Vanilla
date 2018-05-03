@@ -75,6 +75,14 @@ public:
          */
         SignalHandler();
         
+        /**
+         * Copies an existing signal handler, subscribing to all of that
+         * handler's tracked signals.
+         * 
+         * @param rhs  Another valid signal handler.
+         */
+        SignalHandler(const SignalHandler& rhs);
+        
     public:
         /**
          * Removes all of its signal handling callback functions from within the
@@ -99,9 +107,23 @@ public:
          * Track all signal sources handled by this object
          */
         Array<GPPObject*, CriticalSection> sources;
-        
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SignalHandler);
     };
+    
+    /**
+     * Adds a signal handler to all of this object's tracked signals.
+     * 
+     * @param signalHandler  A signal handler object that will listen to this
+     *                       object's signals.
+     */
+    virtual void addSignalHandler(SignalHandler* signalHandler);
+      
+    /**
+     * Un-subscribe a signal handler from all of this object's signals
+     * 
+     * @param signalHandler  A signal handler object that should no longer
+     *                       receive signals from this GPPObject.
+     */
+    virtual void removeSignalHandler(SignalHandler* signalHandler);
            
     /**
      * Checks if this GPPObject and another share the same GObject data.
@@ -333,16 +355,8 @@ protected:
      *                    their own callback functions for any signals they
      *                    support.
      */
-    void addSignalHandler(SignalHandler* handler,
+    void connectSignalHandler(SignalHandler* handler,
             const char* signalName, GCallback callback);
-      
-    /**
-     * Un-subscribe a signal handler from all of this object's signals
-     * 
-     * @param signalHandler  Any signal handler object that should no longer
-     *                       receive signals from this GPPObject.
-     */
-    void removeSignalHandler(SignalHandler* signalHandler);
     
     /**
      * Check if a specific SignalHandler still exists.  Signal callback
@@ -429,16 +443,6 @@ private:
      *                            GObject data.
      */
     void setData(GObject* data, bool refNeeded, bool moveSignalHandlers);
-    
-    /**
-     * Used to re-add a list of signal handlers to new GObject data.
-     * Subclasses are responsible for implementing this to attach the signal 
-     * handlers to the correct object signal(s).
-     * 
-     * @param toTransfer  A list of signal handler objects to add to this
-     *                    GPPObject.
-     */
-    virtual void transferSignalHandlers(Array<SignalHandler*>& toTransfer);
     
     /**
      * Holds pointers to all existing SignalHandler objects.  SignalHandler

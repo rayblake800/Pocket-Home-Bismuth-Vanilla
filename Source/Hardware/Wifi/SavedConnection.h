@@ -55,7 +55,7 @@ public:
      * @return the NMPPConnection object for this connection, or nullptr if the
      *         connection is invalid.
      */
-    NMPPConnection getNMConnection();
+    NMPPConnection getNMConnection() const;
     
     /**
      * Replace the connection's existing wifi security settings.

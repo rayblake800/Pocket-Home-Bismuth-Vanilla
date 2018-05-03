@@ -1,4 +1,5 @@
 #include "nm-utils.h"
+#include "Utils.h"
 #include "NMPPAccessPoint.h"
 
 /*
@@ -252,20 +253,20 @@ void NMPPAccessPoint::Listener::propertyChanged
 }
 
 /*
- * Add a new listener object to receive signals from this access point.
+ * Add a new signal handler to receive signals from this access point.
  */
-void NMPPAccessPoint::addListener(Listener* listener) 
+void NMPPAccessPoint::addSignalHandler(SignalHandler* signalHandler)
 { 
-    addNotifySignalHandler(listener, NM_ACCESS_POINT_STRENGTH);
+    if(isClass<SignalHandler,Listener>(signalHandler))
+    {
+        addNotifySignalHandler(signalHandler, NM_ACCESS_POINT_STRENGTH);
+    }
+    else
+    {
+        DBG("NMPPAccessPoint::" << __func__ << ": Invalid signal handler!");
+    }
 }
 
-/*
- * Remove a listener object from this access point.
- */
-void NMPPAccessPoint::removeListener(Listener* listener) 
-{ 
-    removeSignalHandler(listener);
-}
 
 /*
  * Get the NMAccessPoint class GType
@@ -281,16 +282,4 @@ GType NMPPAccessPoint::getType() const
 bool NMPPAccessPoint::isValidType(GObject* toCheck) const 
 { 
     return NM_IS_ACCESS_POINT(toCheck);
-}
-
-/*
- * Used to re-add a list of signal handlers to new GObject data.
- */
-void NMPPAccessPoint::transferSignalHandlers
-(Array<SignalHandler*>& toTransfer) 
-{
-    for(SignalHandler* handler : toTransfer)
-    {
-        addListener(static_cast<Listener*>(handler));
-    }
 }

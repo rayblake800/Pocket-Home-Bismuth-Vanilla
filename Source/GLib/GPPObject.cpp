@@ -61,6 +61,21 @@ GPPObject::SignalHandler::SignalHandler()
     GPPObject::signalHandlers.addIfNotAlreadyThere(this);
 }
 
+
+        
+/*
+ * Copies an existing signal handler, subscribing to all of that
+ * handler's tracked signals.
+ */
+GPPObject::SignalHandler::SignalHandler(const SignalHandler& rhs)
+{   
+    GPPObject::signalHandlers.addIfNotAlreadyThere(this);
+    for(GPPObject* signalSource : sources)
+    {
+        signalSource->addSignalHandler(this);
+    }
+}
+        
 /*
  * Removes all of its signal handling callback functions from within the
  * signal context thread, and remove this signal handler's address from
@@ -89,6 +104,50 @@ void GPPObject::SignalHandler::propertyChanged
 {
     DBG("GPPObject::SignalHandler::" << __func__ << ": Unexpected notification"
             << "for property " << property); 
+}
+    
+/*
+ * Adds a signal handler to all of this object's tracked signals.
+ */
+void GPPObject::addSignalHandler(SignalHandler* signalHandler)
+{
+    DBG("GPPObject::" << __func__ << ": Error: GPPObject subclass with GType " 
+            << g_type_name(getType())
+            << " did not override addListener()");
+}
+
+/*
+ * Un-subscribe a signal handler from all of this object's signals
+ */
+void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
+{
+    callInMainContext([this,signalHandler]()
+    {
+        GObject* object = getGObject();
+        if(object != nullptr)
+        {
+            Array<gulong> signalIDs;
+            for(auto it = registeredSignals.begin(); 
+                it != registeredSignals.end(); it++)
+            {
+                if(it->second == signalHandler)
+                {
+                    signalIDs.add(it->first);
+                }
+            }
+            for(const gulong& signalID : signalIDs)
+            {
+                g_signal_handler_disconnect(object, signalID);
+                registeredSignals.erase(signalID);
+            }
+            g_clear_object(&object);
+        }
+        else
+        {
+            DBG("GPPObject::removeSignalHandler: Tried to remove signal "
+                    << "handler from null object.");
+        }
+    });
 }
 
 /*
@@ -257,7 +316,7 @@ void GPPObject::callInMainContext(std::function<void(GObject*)> call,
 /*
  * Register a signal handler for any signal the GObject can send.
  */
-void GPPObject::addSignalHandler(SignalHandler* handler,
+void GPPObject::connectSignalHandler(SignalHandler* handler,
         const char* signalName, GCallback callback)
 {
     callInMainContext([this, handler, signalName, callback]()
@@ -288,40 +347,6 @@ void GPPObject::addSignalHandler(SignalHandler* handler,
         {
             DBG("GPPObject::addSignalHandler: Tried to add signal "
                     << signalName << "to null object.");
-        }
-    });
-}
-
-/*
- * Un-subscribe a signal handler from all of this object's signals
- */
-void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
-{
-    callInMainContext([this,signalHandler]()
-    {
-        GObject* object = getGObject();
-        if(object != nullptr)
-        {
-            Array<gulong> signalIDs;
-            for(auto it = registeredSignals.begin(); 
-                it != registeredSignals.end(); it++)
-            {
-                if(it->second == signalHandler)
-                {
-                    signalIDs.add(it->first);
-                }
-            }
-            for(const gulong& signalID : signalIDs)
-            {
-                g_signal_handler_disconnect(object, signalID);
-                registeredSignals.erase(signalID);
-            }
-            g_clear_object(&object);
-        }
-        else
-        {
-            DBG("GPPObject::removeSignalHandler: Tried to remove signal "
-                    << "handler from null object.");
         }
     });
 }
@@ -371,7 +396,7 @@ void GPPObject::addNotifySignalHandler(GPPObject::SignalHandler* signalHandler,
 {
     String signal("notify::");
     signal += propertyName;
-    addSignalHandler(signalHandler, signal.toRawUTF8(),
+    connectSignalHandler(signalHandler, signal.toRawUTF8(),
             G_CALLBACK(notifyCallback));
 }
 
@@ -444,7 +469,10 @@ void GPPObject::setData(GObject* data, bool refNeeded, bool moveSignalHandlers)
             }
             if(!toTransfer.isEmpty())
             {
-                transferSignalHandlers(toTransfer);
+                for(SignalHandler* handler : toTransfer)
+                {
+                    addSignalHandler(handler);
+                }
             }
         }
         else if(data == nullptr)
@@ -452,18 +480,4 @@ void GPPObject::setData(GObject* data, bool refNeeded, bool moveSignalHandlers)
             removeData();
         }
     });
-}
-
-/**
- * Used to re-add a list of signal handlers to new GObject data.
- * Subclasses are responsible for implementing this to attach the signal 
- * handlers to the correct object signal(s).
- */
-void GPPObject::transferSignalHandlers(Array<SignalHandler*>& toTransfer)
-{
-    jassertfalse;
-    DBG("Error: GPPObject subclass with GType " << g_type_name(getType())
-            << " did not override transferSignalHandlers()");
-    DBG("  Lost " << toTransfer.size() 
-            << " signal handlers that should have been transferred");
 }

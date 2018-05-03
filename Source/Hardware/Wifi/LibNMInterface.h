@@ -1,6 +1,7 @@
 #pragma once
 
 #include "NMPPClient.h"
+#include "SavedConnections.h"
 #include "WindowFocus.h"
 #include "WifiStateManager.h"
 
@@ -212,7 +213,7 @@ private:
         ClientListener(LibNMInterface& interface, NMPPClient& client) :
         interface(interface)
         {
-            client.addListener(this);
+            client.addSignalHandler(this);
         }
         virtual ~ClientListener() { }
     private:
@@ -229,7 +230,7 @@ private:
         DeviceListener(LibNMInterface& interface, NMPPDeviceWifi& device) :
         interface(interface)
         {
-            device.addListener(this);
+            device.addSignalHandler(this);
         }
         virtual ~DeviceListener();
     private:

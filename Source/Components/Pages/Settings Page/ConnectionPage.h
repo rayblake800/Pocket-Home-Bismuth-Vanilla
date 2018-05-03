@@ -9,17 +9,22 @@
 /**
  * @file ConnectionPage.h
  * 
+ * @brief  Defines an abstract base for pages that select network connections.
+ * 
  * Connection page is the abstract base for PageComponent classes that
  * show a list of connections and allow the user to connect or disconnect
  * from connections in the list.
  * 
- * ConnectionPtr must be a ReferenceCountedObjectPtr for a class inheriting from
- * juce::ReferenceCountedObject. In debug builds, the ReferenceCountedObject
- * inheriting class should also have a toString() method that returns some sort 
- * of identifying string for debug output.
+ * ConnectionPoint objects represent a potential connection point.  These
+ * objects must have an isNull() method that returns true iff the object is
+ * invalid.  ConnectionPoint objects created with the default constructor should
+ * always be null.  
+ * 
+ * In debug builds, ConnectionPoint should also have a toString() method that 
+ * returns some sort of identifying string for debug output.
  */
 
-template<class ConnectionPtr>
+template<class ConnectionPoint>
 class ConnectionPage : public PageComponent {
 public:
 
@@ -29,21 +34,23 @@ public:
 
 protected:
     /**
-     * @return the selected connection pointer
+     * Returns the current selected connection point.
+     * 
+     * @return the selected connection point.
      */
-    ConnectionPtr getSelectedConnection();
+    ConnectionPoint getSelectedConnection();
 
 
     /**
-     * Sets ConnectionPtr's connection as the selected connection.  When a
-     * connection is selected, this page will show details and controls for that
-     * connection, and the other connections on the list will be hidden.  When
-     * set to nullptr, the full ConnectionPoint list will be shown again.
+     * Sets the selected connection.  When a connection is selected, this page 
+     * will show details and controls for that connection, and the other 
+     * connections on the list will be hidden.  When set to the null
+     * connectionPoint, the full ConnectionPoint list will be shown again.
      * 
-     * @param connection   This must be null, or equal to one of the 
-     *                     connections in the connection list.
+     * @param connectionPt  This must be null, or equal to one of the 
+     *                      connections in the connection list.
      */
-    void setSelectedConnection(ConnectionPtr connection);
+    void setSelectedConnection(ConnectionPoint connectionPt);
 
 
     /**
@@ -64,23 +71,29 @@ protected:
     void layoutConnectionPage();
     
     /**
-     * Replaces pageResized as the method inheriting classes should override
-     * to execute code whenever the page bounds change.
+     * This method will run every time the page component bounds change.
+     * Inheriting classes that need to act whenever page bounds change should
+     * override this method instead of pageResized().
      */
-    virtual void connectionPageResized() {}
+    virtual void connectionPageResized() { }
 
 private:
     /**
-     *Returns the list of all connection objects that should be listed.
+     * Returns the list of all connection point objects that should be listed.
+     * 
+     * @return  the complete list of connection points.
      */
-    virtual Array<ConnectionPtr> loadConnectionList() = 0;
+    virtual Array<ConnectionPoint> loadConnectionPoints() = 0;
 
     /**
-     * @return true iff the system is connected to ConnectionPtr's connection.
+     * Checks if the system is currently connected to a specific connection
+     * point.
      * 
-     * @param connection
+     * @param connectionPt  The connection point that may be connected
+     * 
+     * @return true iff a connection exists that is using this ConnectionPoint.
      */
-    virtual bool isConnected(ConnectionPtr connection) = 0;
+    virtual bool isConnected(ConnectionPoint connectionPt) = 0;
 
     /**
      * Construct a button component to represent a network connection point.
@@ -91,18 +104,19 @@ private:
      * and when clicked, it will toggle the visibility of the connection 
      * controls.  
      * 
-     * @param connection  One of the connection pointers listed on this page.
+     * @param connectionPt  One of the connection points listed on this page.
      * 
-     * @return           a dynamically allocated Button component that displays
-     *                    basic connection information.  
+     * @return  a dynamically allocated Button component that displays basic 
+     *          connection information.  
      */
-    virtual Button* getConnectionButton(ConnectionPtr connection) = 0;
+    virtual Button* getConnectionButton(ConnectionPoint connectionPt) = 0;
 
     /**
-     * This is called whenever a button other than the navigation buttons
-     * is clicked.
+     * This is called whenever any button other than the navigation buttons
+     * is clicked.  Inheriting classes should override this method if they
+     * need to handle button events.
      * 
-     * @param button
+     * @param button  A button that was clicked.
      */
     virtual void connectionButtonClicked(Button* button) = 0;
 
@@ -112,33 +126,36 @@ private:
      * at a time, the ConnectionPage should reuse a a single set of control
      * components for every call to this method.
      * 
-     * @param connection
+     * @param connectionPt   The connection point that the control layout will
+     *                       affect.
      */
     virtual RelativeLayoutManager::Layout
-    getConnectionControlsLayout(ConnectionPtr connection) = 0;
+    getConnectionControlsLayout(ConnectionPoint connectionPt) = 0;
 
     /**
-     * Update the connection control components for a given connection.
-     * Call this whenever the selected connection changes state or
+     * Update the connection control components for a given connection point.
+     * This should be called whenever the selected connection changes state or
      * is replaced.
-     *
-     * @param connection 
      */
-    virtual void updateConnectionControls(ConnectionPtr connection) = 0;
+    virtual void updateConnectionControls() = 0;
     
     /**
-     * Update the connection list when the page is first added to the
+     * Updates the connection point list when the page is first added to the
      * page stack.
      */
     virtual void pageAddedToStack() override;
 
     /**
-     * Update the connection list when the page is revealed on the page stack.
+     * Updates the connection point list when the page is revealed on the page 
+     * stack.
      */
     virtual void pageRevealedOnStack() override;
 
     /**
-     * Handles connection list scrolling and connection selection.
+     * Handles connection list scrolling and connection selection.  Other button
+     * events will be passed to the connectionButtonClicked() method.
+     * 
+     * @button  A button that was clicked by the user.
      */
     void pageButtonClicked(Button* button) override;
     
@@ -148,14 +165,16 @@ private:
      * connection controls instead of closing the page.
      * 
      * @return true if connection controls were open when the back button was
-     *          clicked.
+     *         clicked.
      */
     bool overrideBackButton() override;
 
     /**
-     * Close connection controls when esc is pressed.
+     * Close connection controls when the escape key is pressed.
      * 
-     * @param key
+     * @param key  represents a key pressed by the user.
+     * 
+     * @return  true iff the key pressed was the escape key.
      */
     virtual bool keyPressed(const KeyPress& key) override;
     
@@ -167,37 +186,39 @@ private:
 
     /**
      * Holds the connection button and connection controls for a single
-     * connection point.  Clicking the connection button toggles visibility
+     * connection point. Clicking the connection button toggles visibility
      * of connection controls.
      */
     class ConnectionListItem : public Component {
     public:
 
         /**
-         * Create a new ConnectionListItem representing a ConnectionPtr.
+         * Creates a new ConnectionListItem representing a ConnectionPoint.
          * 
-         * @param connection        The represented connection.
+         * @param connectionPt      The represented connection point.
          * 
-         * @param connectionButton  This should be generated by the
-         *                           ConnectionPage::getConnectionButton method 
-         *                           using the connection.
+         * @param connectionButton  A button component generated by the
+         *                          ConnectionPage::getConnectionButton method 
+         *                          using connectionPt.
          */
         ConnectionListItem
-        (ConnectionPtr connection, Button* connectionButton);
+        (ConnectionPoint connectionPt, Button* connectionButton);
 
-        virtual ~ConnectionListItem();
-
-        /**
-         * @return the connection represented by this component.
-         */
-        ConnectionPtr getConnection();
+        virtual ~ConnectionListItem() { }
 
         /**
-         * Switch to connection point control mode, showing only the selected
-         * connection.
+         * Gets this button's connection point.
          * 
-         * @param detailLayout Contains the layout and component pointers to
-         *                      add and show on this list item.
+         * @return the connection point represented by this component.
+         */
+        ConnectionPoint getConnectionPt();
+
+        /**
+         * Switches to connection point control mode, filling the entire
+         * connection page.
+         * 
+         * @param detailLayout  Contains the layout generated by
+         *                      getConnectionControlsLayout().
          */
         void setControlLayout(RelativeLayoutManager::Layout detailLayout);
 
@@ -211,15 +232,16 @@ private:
         /**
          * Checks if a button is the one attached to this list item.
          * 
-         * @param button
+         * @param button  A button component to check.
          * 
-         * @return true iff Button* button is this list item's 
-         *          connectionButton.
+         * @return true iff the button is this list item's connectionButton.
          */
         bool ownsButton(Button* button);
         
     private:
         /**
+         * Returns the layout of an unselected list item.
+         * 
          * @return the component's layout when not showing connection controls.
          */
         RelativeLayoutManager::Layout getListItemLayout();
@@ -228,9 +250,10 @@ private:
          * Draws an outline around the entire component, with a width of 
          * ConnectionPage<ConnectionPoint>::ConnectionListItem::borderWidth
          * and color set by the ListBox backgroundColourId.
+         * 
          * TODO: define a unique ColourId for the outline.
          * 
-         * @param g
+         * @param g  Graphics context to use for drawing operations.
          */
         void paint(Graphics &g) override;
 
@@ -242,7 +265,7 @@ private:
         //Clicked to select this ConnectionPoint
         ScopedPointer<Button> connectionButton;
         RelativeLayoutManager listItemLayout;
-        ConnectionPtr connection = nullptr;
+        ConnectionPoint connectionPt = nullptr;
         static const constexpr int borderWidth = 4;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionListItem)
     };
@@ -253,8 +276,8 @@ private:
     int connectionIndex = 0;
     
     OwnedArray<ConnectionListItem> connectionItems;
-    Array<ConnectionPtr> connections;
-    ConnectionPtr selectedConnection;
+    Array<ConnectionPoint> connectionPts;
+    ConnectionPoint selectedConnectionPt;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionPage)
 };

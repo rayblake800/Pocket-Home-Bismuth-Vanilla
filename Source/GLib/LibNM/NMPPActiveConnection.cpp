@@ -42,7 +42,7 @@ const char* NMPPActiveConnection::getAccessPointPath() const
     const char* path = "";
     callInMainContext([this, &path](GObject* conObj)
     {
-        NMObject* connection = NM_OBJECT(conObj);
+        NMActiveConnection* connection = NM_ACTIVE_CONNECTION(conObj);
         if(connection != nullptr)
         {
             path = nm_active_connection_get_specific_object(connection);

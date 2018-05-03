@@ -216,3 +216,20 @@ const char * deviceStateReasonString(NMDeviceStateReason stateReason)
              */
     }
 }
+   
+const char * activeConnectionStateString(NMActiveConnectionState state)
+{
+    switch(state)
+    {
+        case NM_ACTIVE_CONNECTION_STATE_UNKNOWN:
+            return "NM_ACTIVE_CONNECTION_STATE_UNKNOWN";
+        case NM_ACTIVE_CONNECTION_STATE_ACTIVATING:
+            return "NM_ACTIVE_CONNECTION_STATE_ACTIVATING";
+        case NM_ACTIVE_CONNECTION_STATE_ACTIVATED:
+            return "NM_ACTIVE_CONNECTION_STATE_ACTIVATED";
+        case NM_ACTIVE_CONNECTION_STATE_DEACTIVATING:
+            return "NM_ACTIVE_CONNECTION_STATE_DEACTIVATING";
+        case NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
+            return "NM_ACTIVE_CONNECTION_STATE_DEACTIVATED";
+    }
+}

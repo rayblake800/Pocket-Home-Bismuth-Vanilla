@@ -17,8 +17,6 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
         <df name="Release">
         </df>
       </df>
@@ -5031,14 +5029,10 @@
             <in>BluetoothStatus.h</in>
             <in>BluezAdapter.cpp</in>
             <in>BluezAdapter.h</in>
-            <in>GDBusProxyObject.cpp</in>
-            <in>GVariantConverter.cpp</in>
           </df>
           <df name="Wifi">
             <in>JsonWifiInterface.cpp</in>
             <in>JsonWifiInterface.h</in>
-            <in>LibNMHandler.cpp</in>
-            <in>LibNMHandler.h</in>
             <in>LibNMInterface.cpp</in>
             <in>LibNMInterface.h</in>
             <in>SavedConnection.cpp</in>

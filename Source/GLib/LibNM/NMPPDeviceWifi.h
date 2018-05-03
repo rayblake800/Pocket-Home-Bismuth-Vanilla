@@ -143,7 +143,7 @@ public:
      * @return  true iff a matching connection is already known to this wifi
      *          device.
      */
-    bool hasConnectionAvailable(const NMPPConnection& toFind);
+    bool hasConnectionAvailable(const NMPPConnection& toFind) const;
     
     
     /**
@@ -217,21 +217,13 @@ public:
     };
     
     /**
-     * Adds a listener object to this wifi device.
+     * Adds a signal handler object to this wifi device.
      * 
-     * @param listener  This object will receive updates when the wifi device
-     *                  state changes or the list of visible access points is
-     *                  updated.
+     * @param handler  This object will receive updates when the wifi device
+     *                 state changes or the list of visible access points is
+     *                 updated.
      */
-    void addListener(Listener* listener);
-    
-    /**
-     * Removes a listener object from this wifi device.
-     * 
-     * @param listener  This object will no longer receive updates on this
-     *                  device's state or visible access points.
-     */
-    void removeListener(Listener* listener);
+    void addSignalHandler(SignalHandler* handler) override;
     
 private:
     /**
@@ -301,12 +293,4 @@ private:
      * @return  true iff toCheck is a NMDeviceWifi or is null. 
      */
     virtual bool isValidType(GObject* toCheck) const override;
-    
-    /**
-     * Used to re-add a list of Listeners to new GObject data.
-     * 
-     * @param toTransfer  A list of Listener objects to add to this
-     *                    NMPPDeviceWifi.
-     */
-    virtual void transferSignalHandlers(Array<SignalHandler*>& toTransfer);
 };

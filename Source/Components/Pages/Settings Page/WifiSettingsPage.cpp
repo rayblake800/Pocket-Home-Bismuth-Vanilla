@@ -10,7 +10,7 @@ const StringArray WifiSettingsPage::wifiImageFiles
 };
 
 WifiSettingsPage::WifiSettingsPage() :
-ConnectionPage<WifiAccessPoint::Ptr>(),
+ConnectionPage<WifiAccessPoint>(),
 passwordLabel("passwordLabel", localeText(password_field)),
 Localized("WifiSettingsPage")
 {
@@ -26,59 +26,59 @@ Localized("WifiSettingsPage")
     updateConnectionList();
 }
 
-/**
+/*
  * Finds all wifi access points within range of the wifi device.
  */
-Array<WifiAccessPoint::Ptr> WifiSettingsPage::loadConnectionList()
+Array<WifiAccessPoint> WifiSettingsPage::loadConnectionPoints()
 {
     WifiStateManager wifiManager;
     return wifiManager.getVisibleAPs();
 }
 
-/**
+/*
  * Attempts to connect to a Wifi access point.  This will close any
  * connections to other access points.
  */
-void WifiSettingsPage::connect(WifiAccessPoint::Ptr connection)
+void WifiSettingsPage::connect(WifiAccessPoint accessPoint)
 {
-    if (connection == nullptr)
+    if (accessPoint.isNull())
     {
         DBG("WifiSettingsPage::" << __func__ << ": ap is null!");
         return;
     }
     WifiStateManager wifiManager;
-    lastConnecting = connection;
-    if (connection->getRequiresAuth())
+    lastConnecting = accessPoint;
+    if (accessPoint.getRequiresAuth())
     {
         const String& psk = passwordEditor.getText();
         DBG("WifiSettingsPage::" << __func__ << ": connecting to "
-                << connection->getSSID() << " with psk of length "
+                << accessPoint.getSSID() << " with psk of length "
                 << psk.length());
-        wifiManager.connectToAccessPoint(connection, psk);
+        wifiManager.connectToAccessPoint(accessPoint, psk);
     }
     else
     {
         DBG("WifiSettingsPage::" << __func__ << ": connecting to "
-                << connection->getSSID() << " with no psk required.");
-        wifiManager.connectToAccessPoint(connection);
+                << accessPoint.getSSID() << " with no psk required.");
+        wifiManager.connectToAccessPoint(accessPoint);
     }
     errorLabel.setVisible(false);
 }
 
-/**
+/*
  * Tries to disconnect from a specific wifi access point.
  */
-void WifiSettingsPage::disconnect(WifiAccessPoint::Ptr connection)
+void WifiSettingsPage::disconnect(WifiAccessPoint accessPoint)
 {
     WifiStateManager wifiManager;
-    if(connection == wifiManager.getConnectingAP())
+    if(accessPoint == wifiManager.getConnectingAP())
     {
-        lastDisconnecting = connection;
+        lastDisconnecting = accessPoint;
         wifiManager.stopConnecting();
     }
-    else if(connection == wifiManager.getConnectedAP())
+    else if(accessPoint == wifiManager.getConnectedAP())
     {
-        lastDisconnecting = connection;
+        lastDisconnecting = accessPoint;
         wifiManager.disconnect();
     }
     else
@@ -88,28 +88,28 @@ void WifiSettingsPage::disconnect(WifiAccessPoint::Ptr connection)
     }
 }
 
-/**
- * @return true iff the system is connected to WifiAccessPoint connection.
+/*
+ * Checks if wifi is connected to a specific access point.
  */
-bool WifiSettingsPage::isConnected(WifiAccessPoint::Ptr connection)
+bool WifiSettingsPage::isConnected(WifiAccessPoint accessPoint)
 {
     WifiStateManager wifiManager;
-    if (connection == nullptr)
+    if (accessPoint.isNull())
     {
         return false;
     }
-    return wifiManager.getConnectedAP() == connection;
+    return wifiManager.getConnectedAP() == accessPoint;
 }
 
-/**
- * Attempt to connect or disconnect from the current selected access point
+/*
+ * Attempts to connect or disconnect from the current selected access point
  * when the connection button is clicked.
  */
 void WifiSettingsPage::connectionButtonClicked(Button* button)
 {
     if (&connectionButton == button)
     {
-        WifiAccessPoint::Ptr selectedAP = getSelectedConnection();
+        WifiAccessPoint selectedAP = getSelectedConnection();
         if (isConnected(selectedAP))
         {
             disconnect(selectedAP);
@@ -121,15 +121,15 @@ void WifiSettingsPage::connectionButtonClicked(Button* button)
     }
 }
 
-/**
- * Construct a button component to represent a wifi access point.
+/*
+ * Constructs a button component to represent a wifi access point.
  */
 Button* WifiSettingsPage::getConnectionButton
-(WifiAccessPoint::Ptr connection)
+(WifiAccessPoint accessPoint)
 {
-    if(connection != nullptr)
+    if(!accessPoint.isNull())
     {
-        return new WifiAPButton(connection, isConnected(connection));
+        return new WifiAPButton(accessPoint, isConnected(accessPoint));
     }
     else
     {
@@ -138,13 +138,14 @@ Button* WifiSettingsPage::getConnectionButton
     }
 }
 
-/**
- * Get the layout for the Wifi access point controls.
+/*
+ * Gets the layout for the Wifi access point controls.
  */
 RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
-(WifiAccessPoint::Ptr connection)
+(WifiAccessPoint accessPoint)
 {
-    updateConnectionControls(connection);
+    jassert(accessPoint == getSelectedConnection());
+    updateConnectionControls();
     return {
         {1,
             {
@@ -157,8 +158,8 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
         {2,
             {
                 {nullptr, 1},
-                {connection->getRequiresAuth() ? &passwordLabel : nullptr, 2},
-                {connection->getRequiresAuth() ? &passwordEditor : nullptr, 4},
+                {accessPoint.getRequiresAuth() ? &passwordLabel : nullptr, 2},
+                {accessPoint.getRequiresAuth() ? &passwordEditor : nullptr, 4},
                 {nullptr, 1}
             }},
         {2,
@@ -173,14 +174,14 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
             }}};
 }
 
-/**
- * Update connection control components to match the current Wifi connection
- * state and the provided Wifi access point.
+/*
+ * Updates connection control components to match the current Wifi connection 
+ * state.
  */
-void WifiSettingsPage::updateConnectionControls
-(WifiAccessPoint::Ptr accessPoint)
+void WifiSettingsPage::updateConnectionControls()
 {
-    if(accessPoint == nullptr)
+    WifiAccessPoint selectedAP = getSelectedConnection();
+    if(selectedAP.isNull())
     {
         DBG("WifiSettingsPage::" << __func__ << ": null AP selected");
         return;
@@ -189,18 +190,17 @@ void WifiSettingsPage::updateConnectionControls
     String connectionBtnText = localeText(btn_connect);
     bool showButtonSpinner = false;
     String errorMessage = "";
-    bool apConnected = isConnected(accessPoint);
+    bool apConnected = isConnected(selectedAP);
+    bool connectionSaved = selectedAP.getConnectionPath().isNotEmpty();
     //debug text
     String debug = "Saved=";
-    debug += (accessPoint->hasSavedConnection() ? "yes " : "no ");
-    debug += "   SavedPsk=";
-    debug += (accessPoint->hasSavedPsk() ? "yes " : "no ");
+    debug += (connectionSaved ? "yes " : "no ");
     debugLabel.setText(debug,NotificationType::dontSendNotification);
-    if(!apConnected && lastConnecting != accessPoint 
-            && lastDisconnecting != accessPoint)
+    if(!apConnected && lastConnecting != selectedAP 
+            && lastDisconnecting != selectedAP)
     {
-        showPasswordEntry = accessPoint->getRequiresAuth()
-                && !accessPoint->hasSavedPsk();
+        showPasswordEntry = selectedAP.getRequiresAuth()
+                && !connectionSaved;
     }
     else
     {
@@ -208,14 +208,14 @@ void WifiSettingsPage::updateConnectionControls
         switch(wifiManager.getWifiState())
         {
             case WifiStateManager::connecting:
-                if(lastConnecting == accessPoint)
+                if(lastConnecting == selectedAP)
                 {
                     showButtonSpinner = true;
                 }
                 break;
             case WifiStateManager::missingPassword:
-                showPasswordEntry = accessPoint->getRequiresAuth();
-                if(accessPoint == lastConnecting)
+                showPasswordEntry = selectedAP.getRequiresAuth();
+                if(selectedAP == lastConnecting)
                 {
                     errorMessage = localeText(wrong_password);
                 }
@@ -227,16 +227,16 @@ void WifiSettingsPage::updateConnectionControls
                     break;
                 }    
             case WifiStateManager::enabled:
-                if(lastConnecting == accessPoint 
-                   && lastDisconnecting != accessPoint)
+                if(lastConnecting == selectedAP 
+                   && lastDisconnecting != selectedAP)
                 {
                     errorMessage = localeText(connection_failed);
                 }
-                showPasswordEntry = accessPoint->getRequiresAuth()
-                        && !accessPoint->hasSavedPsk();
+                showPasswordEntry = selectedAP.getRequiresAuth()
+                        && !connectionSaved;
                 break;
             case WifiStateManager::disconnecting:
-                if(lastDisconnecting == accessPoint)
+                if(lastDisconnecting == selectedAP)
                 {
                     showButtonSpinner = true;
                 }
@@ -262,7 +262,7 @@ void WifiSettingsPage::updateConnectionControls
 }
 
 
-/**
+/*
  * Keeps the page updated when wifi state changes.
  */
 void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
@@ -278,64 +278,62 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
                 removeFromStack();
                 break;
             case WifiStateManager::connected:
-                lastConnecting = nullptr;
+                lastConnecting = WifiAccessPoint();
             default:
                 reloadPage();
         }
     });
 }
 
-/**
- * Attempt to connect if return is pressed after entering a password.
+/*
+ * Attempts to connect if return is pressed after entering a password.
  */
 void WifiSettingsPage::textEditorReturnKeyPressed(TextEditor & editor)
 {
     connect(getSelectedConnection());
 }
 
-/**
- * Set the spinner's bounds within the connection button
+/*
+ * Sets the spinner's bounds within the connection button
  */
 void WifiSettingsPage::connectionPageResized()
 {
     int spinnerSize = connectionButton.getHeight();
-
     spinner.setBounds(connectionButton.getLocalBounds().
             withSizeKeepingCentre(spinnerSize, spinnerSize));
 }
 
-/**
- * Get the asset name for the icon that best represents accessPoint's 
+/*
+ * Gets the asset name for the icon that best represents accessPoint's 
  * signal strength.
  */
-String WifiSettingsPage::getWifiAssetName(WifiAccessPoint::Ptr accessPoint)
+String WifiSettingsPage::getWifiAssetName(WifiAccessPoint accessPoint)
 {
-    float sigStrength = accessPoint->getSignalStrength();
+    float sigStrength = accessPoint.getSignalStrength();
     int maxIndex = wifiImageFiles.size() - 1;
-
     return wifiImageFiles[round((maxIndex * (sigStrength) / 100.0f))];
 }
 
 /**
- * Reload the access point list, re-select the selected connection, 
- * update and enable connection controls.
+ * Reloads the access point list, re-selects the selected connection, 
+ * updates and enables connection controls.
  */
 void WifiSettingsPage::reloadPage()
 {
-    WifiAccessPoint::Ptr selected = getSelectedConnection();
+    WifiAccessPoint selected = getSelectedConnection();
     updateConnectionList();
     setSelectedConnection(selected);
-    updateConnectionControls(getSelectedConnection());
+    updateConnectionControls();
 }
 
 WifiSettingsPage::WifiAPButton::WifiAPButton(
-        WifiAccessPoint::Ptr connection,
+        WifiAccessPoint accessPoint,
         bool isConnected) :
-Button(connection->getSSID() + "Button"),
+Button(accessPoint.getSSID() + "Button"),
 Localized("WifiAPButton"),
-apLabel("apLabel", connection->getSSID() 
+apLabel("apLabel", accessPoint.getSSID() 
 + (isConnected ? localeText(connected_ap) : String())),
-wifiIcon(getWifiAssetName(connection))
+wifiIcon(getWifiAssetName(accessPoint))
 {
     Colour iconColour = findColour(Label::textColourId);
     wifiIcon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
@@ -343,17 +341,16 @@ wifiIcon(getWifiAssetName(connection))
     addAndMakeVisible(wifiIcon);
     apLabel.setJustificationType(Justification::centred);
     apLabel.setInterceptsMouseClicks(false, false);
-    if (connection->getRequiresAuth())
+    if (accessPoint.getRequiresAuth())
     {
-
         lockIcon = new DrawableImageComponent("lock.svg");
         lockIcon->setColour(DrawableImageComponent::imageColour0Id, iconColour);
         addAndMakeVisible(lockIcon);
     }
 }
 
-/**
- * Update icon and label bounds to fit button bounds.
+/*
+ * Updates icon and label bounds to fit button bounds.
  */
 void WifiSettingsPage::WifiAPButton::resized()
 {

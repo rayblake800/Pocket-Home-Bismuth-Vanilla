@@ -157,6 +157,8 @@ bool NMPPConnection::addWEPSettings(const String& psk)
                 << ", not in [5,10,13,26]");
         return false;
     }
+    NMSettingWirelessSecurity* securitySettings
+            = (NMSettingWirelessSecurity*) nm_setting_wireless_security_new();
     g_object_set(G_OBJECT(securitySettings),
             NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
             keyType,

@@ -62,7 +62,8 @@ private:
      * 
      * @return the list of paths, freshly updated over the DBus interface.
      */
-    inline StringArray getConnectionPaths() const;
+    inline StringArray getConnectionPaths();
     
-    Array<SavedConnection> connectionList;    
+    Array<SavedConnection> connectionList;   
+    StringArray connectionPaths;
 };

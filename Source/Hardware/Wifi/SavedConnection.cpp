@@ -213,7 +213,7 @@ void SavedConnection::removeSecurityKey()
  * Gets the NMConnection object generated from this connection's data.
  * Only wifi connections are supported, others are not guaranteed to work.
  */
-NMPPConnection SavedConnection::getNMConnection()
+NMPPConnection SavedConnection::getNMConnection() const
 {
     return nmConnection;
 }

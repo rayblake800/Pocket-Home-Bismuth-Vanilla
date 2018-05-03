@@ -102,7 +102,6 @@
 		49964672DD2CA58C773C9511 = {isa = PBXBuildFile; fileRef = 60855E54EB5FD1F66FEF69F1; };
 		A631DF9627AE3408C76B6A09 = {isa = PBXBuildFile; fileRef = 899727573DDE36107D3F7784; };
 		9F581359A97CE01C560BD18F = {isa = PBXBuildFile; fileRef = 5F465EF5D7C4E41ED0240D5D; };
-		C40609296853661FA8474AF7 = {isa = PBXBuildFile; fileRef = 55FB232EDA1450C232B65FFE; };
 		F0E77AC31120CDDC5B9A110D = {isa = PBXBuildFile; fileRef = 9430064C1E372F7949061BB6; };
 		FB42D550D6134B5788239E93 = {isa = PBXBuildFile; fileRef = D1232B45052DF74E9F94FBEF; };
 		7593A587F1D039E505260F05 = {isa = PBXBuildFile; fileRef = DD2505E3F0EAFCF94A273BDB; };
@@ -127,7 +126,6 @@
 		00F169F4F344BBF6892637D1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Source/Main.cpp; sourceTree = "SOURCE_ROOT"; };
 		0307E00AE2BF0E6B52A232A6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BluetoothSettingsComponent.h; path = "../../Source/Components/Pages/Settings Page/BluetoothSettingsComponent.h"; sourceTree = "SOURCE_ROOT"; };
 		03B199F254A33BC958ADCCB3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiAccessPoint.h; path = ../../Source/Hardware/Wifi/WifiAccessPoint.h; sourceTree = "SOURCE_ROOT"; };
-		03D6C04565CB9E3587DE89FF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LibNMHandler.h; path = ../../Source/Hardware/Wifi/LibNMHandler.h; sourceTree = "SOURCE_ROOT"; };
 		0426EA016292DCDC1E11ACE7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuComponent.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/AppMenuComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		046C580CAE38B6EA5D85FF85 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwitchComponent.h; path = ../../Source/Components/Widgets/SwitchComponent.h; sourceTree = "SOURCE_ROOT"; };
 		094DE65A02C39F15A43C7F1A = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NMPPActiveConnection.cpp; path = ../../Source/GLib/LibNM/NMPPActiveConnection.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -192,7 +190,6 @@
 		4F793CD40BCFC0F4C2F05060 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SettingsPage.h; path = "../../Source/Components/Pages/Settings Page/SettingsPage.h"; sourceTree = "SOURCE_ROOT"; };
 		51DE45AF71067519A80E9FE6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PowerPage.h; path = "../../Source/Components/Pages/Power Page/PowerPage.h"; sourceTree = "SOURCE_ROOT"; };
 		51FADB3E23C5B6BDBD632DB4 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GVariantConverter.h; path = ../../Source/GLib/GVariantConverter.h; sourceTree = "SOURCE_ROOT"; };
-		55FB232EDA1450C232B65FFE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LibNMHandler.cpp; path = ../../Source/Hardware/Wifi/LibNMHandler.cpp; sourceTree = "SOURCE_ROOT"; };
 		56AC429C5B3420A45299748E = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NMPPDeviceWifi.h; path = ../../Source/GLib/LibNM/NMPPDeviceWifi.h; sourceTree = "SOURCE_ROOT"; };
 		5A984E825881A6C4DC98B605 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BluetoothSettingsComponent.cpp; path = "../../Source/Components/Pages/Settings Page/BluetoothSettingsComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		5B7E8DCDDC03ECA2491BBA4C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenuButton.h; path = "../../Source/Components/Pages/Home Page/AppMenu/AppMenuButton.h"; sourceTree = "SOURCE_ROOT"; };
@@ -591,9 +588,7 @@
 					899727573DDE36107D3F7784,
 					22200823820DDB5572F33C7A,
 					5F465EF5D7C4E41ED0240D5D,
-					88C0E7B8F9D9D8AC38FDAD08,
-					55FB232EDA1450C232B65FFE,
-					03D6C04565CB9E3587DE89FF, ); name = LibNM; sourceTree = "<group>"; };
+					88C0E7B8F9D9D8AC38FDAD08, ); name = LibNM; sourceTree = "<group>"; };
 		FCAE40D7F9CB5383DE0C8EEB = {isa = PBXGroup; children = (
 					251E2BD47EBDE05BA9E23092,
 					9430064C1E372F7949061BB6,
@@ -910,7 +905,6 @@
 					49964672DD2CA58C773C9511,
 					A631DF9627AE3408C76B6A09,
 					9F581359A97CE01C560BD18F,
-					C40609296853661FA8474AF7,
 					F0E77AC31120CDDC5B9A110D,
 					FB42D550D6134B5788239E93,
 					7593A587F1D039E505260F05,

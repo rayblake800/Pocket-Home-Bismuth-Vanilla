@@ -26,7 +26,6 @@ GPPDBusProxy(BUS_NAME, PATH, INTERFACE)
  */
 Array<SavedConnection> SavedConnections::getWifiConnections() const
 {
-    updateSavedConnections();
     Array<SavedConnection> connections;
     for(const SavedConnection& con : connectionList)
     {
@@ -46,9 +45,7 @@ Array<SavedConnection> SavedConnections::getWifiConnections() const
  */
 bool SavedConnections::connectionExists(const String& connectionPath) const
 {
-    using namespace GVariantConverter;
-    StringArray paths = getConnectionPaths();
-    return paths.contains(connectionPath);
+    return connectionPaths.contains(connectionPath);
 }
 
   
@@ -60,7 +57,7 @@ Array<SavedConnection> SavedConnections::findConnectionsForAP
 (const NMPPAccessPoint& accessPoint) const
 {
     Array<SavedConnection> compatible;
-    if(!isNull && !accessPoint.isNull())
+    if(!isNull() && !accessPoint.isNull())
     {
         Array<SavedConnection> wifiCons = getWifiConnections();
         for(const SavedConnection& con : wifiCons)
@@ -77,7 +74,7 @@ Array<SavedConnection> SavedConnections::findConnectionsForAP
 /*
  * Get the list of all available connection paths
  */
-inline StringArray SavedConnections::getConnectionPaths() const
+inline StringArray SavedConnections::getConnectionPaths()
 {
     using namespace GVariantConverter;
     GVariant* conArrayVar = callMethod(LIST_CONNECTIONS);
@@ -97,24 +94,24 @@ inline StringArray SavedConnections::getConnectionPaths() const
  */
 void SavedConnections::updateSavedConnections()
 {
-    StringArray paths = getConnectionPaths();
+    connectionPaths = getConnectionPaths();
     Array<SavedConnection> toRemove;
     for(const SavedConnection& saved : connectionList)
     {
-        if(!paths.contains(saved.getPath()))
+        if(!connectionPaths.contains(saved.getPath()))
         {
             toRemove.add(saved);
         }
         else
         {
-            paths.removeString(saved.getPath());
+            connectionPaths.removeString(saved.getPath());
         }
     }
     for(const SavedConnection& removing : toRemove)
     {
         connectionList.removeAllInstancesOf(removing);
     }
-    for(const String& path : paths)
+    for(const String& path : connectionPaths)
     {
         connectionList.add(SavedConnection(path.toRawUTF8()));
     }

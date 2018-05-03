@@ -12,6 +12,18 @@
 class WifiAccessPoint : public NMPPAccessPoint::Listener
 {
 public:
+    
+    /**
+     * Create a null access point object.
+     */
+    WifiAccessPoint() { }
+    
+    /**
+     * Create a wifi access point copying data from another access point.
+     * 
+     * @param toCopy  An access point object to copy.
+     */
+    WifiAccessPoint(const WifiAccessPoint& toCopy);
 
     /**
      * Create an access point object using LibNM access point data.
@@ -159,6 +171,11 @@ public:
      * @return all RSN security flags 
      */
     NM80211ApSecurityFlags getRSNFlags() const;
+    
+    /**
+     * Assigns another access point's data to this access point.
+     */
+    bool operator=(const WifiAccessPoint& rhs);
 
     /**
      * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.
@@ -246,8 +263,10 @@ private:
     NM80211ApFlags apFlags;
     NM80211ApSecurityFlags wpaFlags;
     NM80211ApSecurityFlags rsnFlags;
-    gulong updateSignalId = 0;
 
     NMPPAccessPoint nmAccessPoint;
     String connectionPath;
+#if JUCE_DEBUG
+    bool fakeConnection = false;
+#endif
 };

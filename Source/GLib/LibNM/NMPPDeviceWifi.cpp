@@ -1,3 +1,4 @@
+#include "Utils.h"
 #include "NMPPDeviceWifi.h"
 
 /*
@@ -208,7 +209,7 @@ NMPPAccessPoint NMPPDeviceWifi::getAccessPoint(const char* path) const
 /*
  * Gets the active connection's access point.
  */
-NMPPAccessPoint NMPPDeviceWifi:getActiveAccessPoint() const
+NMPPAccessPoint NMPPDeviceWifi::getActiveAccessPoint() const
 { 
     NMPPAccessPoint ap;
     callInMainContext([&ap](GObject* devObject)
@@ -251,7 +252,7 @@ Array<NMPPAccessPoint> NMPPDeviceWifi::getAccessPoints() const
  * Checks if a specific connection is present in the list of available
  * device connections.
  */
-bool NMPPDeviceWifi::hasConnectionAvailable(const NMPPConnection& toFind)
+bool NMPPDeviceWifi::hasConnectionAvailable(const NMPPConnection& toFind) const
 {
     if(toFind.isNull())
     {
@@ -276,7 +277,7 @@ void NMPPDeviceWifi::requestScan()
     });
 }
 
-/**
+/*
  * Convert generic property change notifications into 
  * activeConnectionChanged calls.
  * 
@@ -295,25 +296,25 @@ void NMPPDeviceWifi::Listener::propertyChanged(GPPObject* source,
 }
 
 /*
- * Adds a listener object to this wifi device.
+ * Adds a signal handler object to this wifi device.
  */
-void NMPPDeviceWifi::addListener(Listener* listener) 
+void NMPPDeviceWifi::addSignalHandler(SignalHandler* handler)
 { 
-    addSignalHandler(listener, "state-changed",
-            G_CALLBACK(stateChangeCallback));
-    addSignalHandler(listener, "access-point-added", 
-            G_CALLBACK(apAddedCallback));
-    addSignalHandler(listener, "access-point-removed",
-            G_CALLBACK(apRemovedCallback));
+    if(isClass<SignalHandler,Listener>(handler))
+    {
+        connectSignalHandler(handler, "state-changed",
+                G_CALLBACK(stateChangeCallback));
+        connectSignalHandler(handler, "access-point-added", 
+                G_CALLBACK(apAddedCallback));
+        connectSignalHandler(handler, "access-point-removed",
+                G_CALLBACK(apRemovedCallback));
+    }
+    else
+    {
+        DBG("NMPPDeviceWifi::" << __func__ << ": Invalid signal handler!");
+    }
 }
 
-/*
- * Removes a listener object from this wifi device.
- */
-void NMPPDeviceWifi::removeListener(Listener* listener) 
-{ 
-    removeSignalHandler(listener);
-}
 
 /*
  * The GCallback method called directly by LibNM code when sending 
@@ -366,15 +367,4 @@ GType NMPPDeviceWifi::getType() const
 bool NMPPDeviceWifi::isValidType(GObject* toCheck) const 
 { 
     return NM_IS_DEVICE_WIFI(toCheck);
-}
-
-/*
- * Used to re-add a list of Listeners to new GObject data.
- */
-void NMPPDeviceWifi::transferSignalHandlers(Array<SignalHandler*>& toTransfer)
-{
-    for(SignalHandler* handler : toTransfer)
-    {
-        addListener(static_cast<Listener*>(handler));
-    }
 }

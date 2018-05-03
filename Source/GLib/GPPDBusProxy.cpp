@@ -1,5 +1,6 @@
-#include "GPPDBusProxy.h"
+#include "Utils.h"
 #include "GLibSignalHandler.h"
+#include "GPPDBusProxy.h"
 
 GPPDBusProxy::GPPDBusProxy
 (const char* name, const char* path, const char* interface)
@@ -139,13 +140,20 @@ GVariant* GPPDBusProxy::callMethod
 /*
  * Register a signal handler to receive DBus signals and property updates.
  */
-void GPPDBusProxy::addDBusSignalHandler(DBusSignalHandler* signalHandler)
+void GPPDBusProxy::addSignalHandler(SignalHandler* signalHandler)
 {
-    addSignalHandler(static_cast<SignalHandler*>(signalHandler),
-            "g-signal", G_CALLBACK(dBusSignalCallback));
-    addSignalHandler(static_cast<SignalHandler*>(signalHandler),
-            "g-properties-changed",
-            G_CALLBACK(dBusPropertiesChanged));
+    if(isClass<SignalHandler,DBusSignalHandler>(signalHandler))
+    {   
+        connectSignalHandler(signalHandler,
+                "g-signal", G_CALLBACK(dBusSignalCallback));
+        connectSignalHandler(signalHandler,
+                "g-properties-changed",
+                G_CALLBACK(dBusPropertiesChanged));
+    }
+    else
+    {
+        DBG("GPPDBusProxy::" << __func__ << ": Invalid signal handler!");
+    }
 }
 
  /*
@@ -164,16 +172,6 @@ bool GPPDBusProxy::isValidType(GObject* toCheck) const
     return G_IS_DBUS_PROXY(toCheck);
 }
 
-/*
- * Used to re-add a list of signal handlers to new GObject data.
- */
-void GPPDBusProxy::transferSignalHandlers(Array<SignalHandler*>& toTransfer)
-{
-    for(SignalHandler* handler : toTransfer)
-    {
-        addDBusSignalHandler(static_cast<DBusSignalHandler*>(handler));
-    }  
-}
 
 /*
  * Callback function for handling all DBus signals.

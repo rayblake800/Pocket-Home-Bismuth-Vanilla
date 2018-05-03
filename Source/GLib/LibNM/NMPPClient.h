@@ -245,20 +245,12 @@ public:
     };
     
     /**
-     * Adds a listener to this network manager client.
+     * Adds a signal handler to this network manager client.
      * 
-     * @param listener  The object that will receive updates when wireless is
+     * @param handler   The object that will receive updates when wireless is
      *                  enabled or disabled.
      */
-    void addListener(Listener* listener);
-    
-    /**
-     * Removes a listener from this network manager client.
-     * 
-     * @param listener  This object will no longer receive updates when wireless
-     *                  is enabled or disabled.
-     */
-    void removeListener(Listener* listener);
+    void addSignalHandler(SignalHandler* handler) override;
 
 private:
     /**
@@ -276,12 +268,4 @@ private:
      * @return  true iff toCheck is a NMClient or is null. 
      */
     virtual bool isValidType(GObject* toCheck) const override;
-    
-    /**
-     * Used to re-add a list of Listeners to new GObject data.
-     * 
-     * @param toTransfer  A list of Listener objects to add to this
-     *                    NMPPClient.
-     */
-    virtual void transferSignalHandlers(Array<SignalHandler*>& toTransfer);
 };

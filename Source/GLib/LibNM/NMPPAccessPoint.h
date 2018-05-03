@@ -1,7 +1,6 @@
 #pragma once
 #include <nm-access-point.h>
 #include "NMPPConnection.h"
-#include "NMPPActiveConnection.h"
 #include "GPPObject.h"
 
 /**
@@ -179,20 +178,12 @@ public:
     };
     
     /**
-     * Add a new listener object to receive signals from this access point.
+     * Add a new signal handler to receive signals from this access point.
      * 
-     * @param listener  An object that needs to act when connection signal
-     *                  strength changes.
+     * @param signalHandler  An object that needs to act when connection signal
+     *                       strength changes.
      */
-    void addListener(Listener* listener);
-    
-    /**
-     * Remove a listener object from this access point.
-     * 
-     * @param listener  This object will no longer be notified when signal
-     *                  strength changes.
-     */
-    void removeListener(Listener* listener);
+    void addSignalHandler(SignalHandler* signalHandler) override;
     
 private:
     /**
@@ -210,14 +201,4 @@ private:
      * @return  true iff toCheck is a NMAccessPoint or is null. 
      */
     virtual bool isValidType(GObject* toCheck) const override;
-    
-        
-    /**
-     * Used to re-add a list of signal handlers to new GObject data.
-     * 
-     * @param toTransfer  A list of signal handler objects to add to this
-     *                    NMPPAccessPoint.
-     */
-    virtual void transferSignalHandlers
-    (Array<SignalHandler*>& toTransfer) override;
 };

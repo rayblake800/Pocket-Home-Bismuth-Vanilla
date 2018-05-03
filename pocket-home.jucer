@@ -375,9 +375,6 @@
                   file="Source/Hardware/Wifi/LibNMInterface.cpp"/>
             <FILE id="eWhlRs" name="LibNMInterface.h" compile="0" resource="0"
                   file="Source/Hardware/Wifi/LibNMInterface.h"/>
-            <FILE id="qADzaR" name="LibNMHandler.cpp" compile="1" resource="0"
-                  file="Source/Hardware/Wifi/LibNMHandler.cpp"/>
-            <FILE id="LGedGN" name="LibNMHandler.h" compile="0" resource="0" file="Source/Hardware/Wifi/LibNMHandler.h"/>
           </GROUP>
           <FILE id="oVu111" name="WifiAccessPoint.cpp" compile="1" resource="0"
                 file="Source/Hardware/Wifi/WifiAccessPoint.cpp"/>

@@ -13,12 +13,12 @@
 /**
  * @file WifiSettingsPage.h
  * 
- * WifiSettingsPage shows information on all visible Wifi access points, and
- * provides controls for connecting or disconnecting from those access points.
+ * @brief Shows information on all visible Wifi access points, and provides 
+ *        controls for connecting to or disconnecting from those access points.
  */
 
 
-class WifiSettingsPage : public ConnectionPage<WifiAccessPoint::Ptr>,
+class WifiSettingsPage : public ConnectionPage<WifiAccessPoint>,
 public WifiStateManager::Listener, public TextEditor::Listener,
 private Localized
 {
@@ -33,133 +33,133 @@ private:
      * 
      * @return the list of all visible Wifi access points.
      */
-    Array<WifiAccessPoint::Ptr> loadConnectionList();
+    Array<WifiAccessPoint> loadConnectionPoints();
 
 
     /**
      * Attempts to connect to a Wifi access point.  This will close any
      * connections to other access points.
      *
-     *  @param connection  The wifi device will attempt to find and connect
+     *  @param accessPoint  The wifi device will attempt to find and connect
      *                      to this access point.
      */
-    void connect(WifiAccessPoint::Ptr connection);
+    void connect(WifiAccessPoint accessPoint);
 
     /**
      * Tries to disconnect from a specific wifi access point.
      * 
-     * @param connection   If the system is currently connected to this
-     *                      connection, this method closes that connection.
+     * @param accessPoint   If the system is currently connected to this
+     *                      access point, this method closes that connection.
      */
-    void disconnect(WifiAccessPoint::Ptr connection);
+    void disconnect(WifiAccessPoint accessPoint);
 
     /**
      * Checks if wifi is connected to a specific access point.
      * 
-     * @param connection
+     * @param accessPoint  The access point to check.
      * 
-     * @return true iff the system is connected to WifiAccessPoint connection.
+     * @return  true iff an active network connection is using the given access
+     *          point.
      */
-    bool isConnected(WifiAccessPoint::Ptr connection);
+    bool isConnected(WifiAccessPoint accessPoint);
 
     /**
-     * Attempt to connect or disconnect from the current selected access point
+     * Attempts to connect or disconnect from the current selected access point
      * when the connection button is clicked.
      * 
-     * @param button
+     * @param button  This should always be the connection button.
      */
     void connectionButtonClicked(Button* button);
 
     /**
-     * Construct a button component to represent a wifi access point.
+     * Constructs a button component to represent a wifi access point.
      * This button will display the access point name, along with a signal
      * strength indicator and a lock icon if the connection requires a password.
      * 
-     * @param connection
+     * @param connection  The access point represented by the new button
+     *                    component.
      */
-    Button* getConnectionButton(WifiAccessPoint::Ptr connection);
+    Button* getConnectionButton(WifiAccessPoint accessPoint);
 
     /**
-     * Get the layout for the Wifi access point controls.
+     * Gets the layout for the Wifi access point controls.
      * 
-     * @param connection   The control components will be updated to suit
+     * @param accessPoint   The control components will be updated to control
      *                      this access point.
      */
     RelativeLayoutManager::Layout getConnectionControlsLayout
-    (WifiAccessPoint::Ptr connection);
+    (WifiAccessPoint accessPoint);
 
     /**
-     * Update connection control components to match the current Wifi connection
-     * state and the provided Wifi access point.
-     * 
-     * @param accessPoint
+     * Updates connection control components to match the current Wifi 
+     * connection state.
      */
-    virtual void updateConnectionControls
-    (WifiAccessPoint::Ptr accessPoint) override;
+    virtual void updateConnectionControls() override;
 
     /**
      * Keeps the page updated when wifi state changes.
      * 
-     * @param state
+     * @param state  The new wifi connection state.
      */
     void wifiStateChanged(WifiStateManager::WifiState state) override;
 
 
     /**
-     * Attempt to connect if return is pressed after entering a password.
+     * Attempts to connect if return is pressed after entering a password.
      * 
-     * @param editor
+     * @param editor  This should always be 
      */
     void textEditorReturnKeyPressed(TextEditor& editor) override;
 
     /**
-     * Set the spinner's bounds within the connection button
+     * Sets the spinner's bounds within the connection button
      */
     void connectionPageResized() override;
 
 
     /**
-     * Get the asset name for the icon that best represents accessPoint's 
+     * Gets the asset name for the icon that best represents accessPoint's 
      * signal strength.
      * 
      * @param accessPoint
      */
-    static String getWifiAssetName(WifiAccessPoint::Ptr accessPoint);
+    static String getWifiAssetName(WifiAccessPoint accessPoint);
 
     /**
-     * Reload the access point list, re-select the selected connection, 
-     * update and enable connection controls.
+     * Reloads the access point list, re-selects the selected connection, 
+     * updates and enables connection controls.
      */
     void reloadPage();
 
     /**
-     * Custom button type to use for getConnectionButton
+     * The custom button type to use for access point list buttons.
      */
     class WifiAPButton : public Button, private Localized
     {
     public:
         /**
-         * @param connection    The access point represented by this button.
+         * @param accessPoint   The access point represented by this button.
          * 
-         * @param isConnected   Should be true if wifi is connected to the 
-         *                       connection access point parameter.
+         * @param isConnected   Indicates if an active connection exists using
+         *                      this access point.
          */
-        WifiAPButton(WifiAccessPoint::Ptr connection, bool isConnected);
+        WifiAPButton(WifiAccessPoint accessPoint, bool isConnected);
     private:
 
         /**
-         * Update icon and label bounds to fit button bounds.
+         * Updates icon and label bounds to fit button bounds.
          */
         void resized() override;
 
         /**
-         * This has to be implemented in all Button classes, but child
+         * This method must be implemented in all Button classes, but child
          * components and the LookAndFeel handle all WifiAPButton drawing.
          */
         void paintButton(
                 Graphics& g,
                 bool isMouseOverButton,
                 bool isButtonDown) { }
+        
         //shows the access point name
         ScalingLabel apLabel;
         //shows the access point signal strength
@@ -171,10 +171,10 @@ private:
     //Wifi icons for all signal strengths
     static const StringArray wifiImageFiles;
     
-    WifiAccessPoint::Ptr lastConnecting = nullptr;
-    WifiAccessPoint::Ptr lastDisconnecting = nullptr;
+    WifiAccessPoint lastConnecting;
+    WifiAccessPoint lastDisconnecting;
 
-    
+    //TODO: remove once connections reliably indicate connection status.
     ScalingLabel debugLabel;
     //Used for entering a password for a secured access point.
     ScalingLabel passwordLabel;

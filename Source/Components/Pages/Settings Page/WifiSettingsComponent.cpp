@@ -135,25 +135,25 @@ String WifiSettingsComponent::updateButtonText()
             return localeText(wifi_turning_off);
         case WifiStateManager::connecting:
         {
-            WifiAccessPoint::Ptr ap = wifiManager.getConnectingAP();
-            if (ap == nullptr)
+            WifiAccessPoint ap = wifiManager.getConnectingAP();
+            if (ap.isNull())
             {
                 DBG("WifiSettingsComponent::" << __func__ << ": wifi is "
                         << "connecting, but can't get the connecting AP.");
                 return localeText(connecting_to_unknown);
             }
-            return String(localeText(connecting_to_ap)) + ap->getSSID();
+            return String(localeText(connecting_to_ap)) + ap.getSSID();
         }
         case WifiStateManager::missingPassword:
             return localeText(missing_psk);
         case WifiStateManager::connected:
         {
-            WifiAccessPoint::Ptr ap = wifiManager.getConnectedAP();
-            if(ap == nullptr)
+            WifiAccessPoint ap = wifiManager.getConnectedAP();
+            if(ap.isNull())
             {
                 return "Error: connected AP missing!";
             }
-            return ap->getSSID();
+            return ap.getSSID();
         }
         case WifiStateManager::disconnecting:
             return localeText(disconnecting);
@@ -168,9 +168,6 @@ String WifiSettingsComponent::updateButtonText()
 void WifiSettingsComponent::wifiStateChanged
 (WifiStateManager::WifiState state)
 {
-    MessageManager::callAsync([this]()
-    {
-        refresh();
-    });
+    refresh();
 }
 

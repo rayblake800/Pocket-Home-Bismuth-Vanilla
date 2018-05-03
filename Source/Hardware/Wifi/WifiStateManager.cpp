@@ -54,7 +54,7 @@ void WifiStateManager::removeListener(WifiStateManager::Listener* listener)
 /*
  * Gets the connected wifi access point, if one exists.
  */
-WifiAccessPoint::Ptr WifiStateManager::getConnectedAP()
+WifiAccessPoint WifiStateManager::getConnectedAP()
 {
     const ScopedLock lock(stateLock);
     NetworkInterface* wifiResource
@@ -65,7 +65,7 @@ WifiAccessPoint::Ptr WifiStateManager::getConnectedAP()
 /*
  * Gets the connecting wifi access point, if one exists.
  */
-WifiAccessPoint::Ptr WifiStateManager::getConnectingAP()
+WifiAccessPoint WifiStateManager::getConnectingAP()
 {
     const ScopedLock lock(stateLock);
     NetworkInterface* wifiResource
@@ -76,7 +76,7 @@ WifiAccessPoint::Ptr WifiStateManager::getConnectingAP()
 /*
  * Gets all access points visible to the wifi device.
  */
-Array<WifiAccessPoint::Ptr> WifiStateManager::getVisibleAPs()
+Array<WifiAccessPoint> WifiStateManager::getVisibleAPs()
 {
     const ScopedLock lock(stateLock);
     NetworkInterface* wifiResource
@@ -110,13 +110,13 @@ bool WifiStateManager::isConnected()
  * Attempts to open a connection to a wifi access point. This will fail if 
  * wifi is disabled, the access point is invalid, or the psk is wrong.
  */
-void WifiStateManager::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
+void WifiStateManager::connectToAccessPoint(WifiAccessPoint toConnect,
         String psk)
 {
     const ScopedLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
-    if (toConnect == nullptr)
+    if (toConnect.isNull())
     {
         DBG("WifiStateManager::" << __func__
                 << ": Tried to connect to null access point!");
@@ -124,15 +124,14 @@ void WifiStateManager::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
     }
     else if(toConnect == getConnectedAP())
     {
-        DBG("WifiStat"
-                "eManager::" << __func__
-                << ": already connected to " << toConnect->getSSID());
+        DBG("WifiStateManager::" << __func__
+                << ": already connected to " << toConnect.getSSID());
         return;
     }
     else if(toConnect == getConnectingAP())
     {
         DBG("WifiStateManager::" << __func__
-                << ": already connecting to " << toConnect->getSSID());
+                << ": already connecting to " << toConnect.getSSID());
         return;
     }
     
@@ -154,12 +153,12 @@ void WifiStateManager::connectToAccessPoint(WifiAccessPoint::Ptr toConnect,
             break;
         default:
             DBG("WifiStateManager::" << __func__ << ": Can't connect to "
-                    << toConnect->getSSID() << " from wifi state "
+                    << toConnect.getSSID() << " from wifi state "
                     << wifiStateString(wifiState));
             return;
     }
     DBG("WifiStateManager::" << __func__ << ": Connecting to access "
-            << "point " << toConnect->getSSID());
+            << "point " << toConnect.getSSID());
     wifiResource->setWifiState(connecting);
     wifiResource->connectToAccessPoint(toConnect, psk);
     wifiResource->startTimer(wifiResource->wifiConnectionTimeout);
@@ -464,10 +463,10 @@ void WifiStateManager::NetworkInterface::signalWifiConnecting()
  * WifiStateManager's stateLock.
  */
 void WifiStateManager::NetworkInterface::signalWifiConnected
-(WifiAccessPoint::Ptr connectedAP)
+(WifiAccessPoint connectedAP)
 {
     DBG("NetworkInterface::" << __func__ << ": connected to "
-            << connectedAP->getSSID() << " during state "
+            << connectedAP.getSSID() << " during state "
             << wifiStateString(getWifiState()));
     setWifiState(connected);
 }

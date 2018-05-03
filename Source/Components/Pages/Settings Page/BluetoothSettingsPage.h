@@ -10,11 +10,11 @@
 /**
  * @file BluetoothSettingsPage.h
  * 
- * TODO: documentation, cleanup
+ * TODO: implement bluetooth
  */
 
 class BluetoothSettingsPage :
-public ConnectionPage<BluetoothDevice::Ptr>, 
+public ConnectionPage<BluetoothDevice>, 
         public TextEditor::Listener  {
 public:
     
@@ -25,7 +25,7 @@ private:
     /**
      * @return the list of all visible bluetooth devices
      */
-    Array<BluetoothDevice::Ptr> loadConnectionList();
+    Array<BluetoothDevice> loadConnectionPoints();
 
 
     /**
@@ -33,7 +33,7 @@ private:
      *
      *  @param device
      */
-    void connect(BluetoothDevice::Ptr device);
+    void connect(BluetoothDevice device);
 
     /**
      * @param device  If the system is currently connected to this
@@ -41,14 +41,14 @@ private:
      *  
      * @param connection
      */
-    void disconnect(BluetoothDevice::Ptr device);
+    void disconnect(BluetoothDevice device);
 
     /**
      * @param connection
      * 
      * @return true iff the system is connected to this bluetooth device.
      */
-    bool isConnected(BluetoothDevice::Ptr device);
+    bool isConnected(BluetoothDevice device);
 
     /**
      * @param button
@@ -64,7 +64,7 @@ private:
      * 
      * @param device
      */
-    Button* getConnectionButton(BluetoothDevice::Ptr device);
+    Button* getConnectionButton(BluetoothDevice device);
 
     /**
      * Get the layout for the Bluetooth device controls.
@@ -72,16 +72,13 @@ private:
      * this bluetooth device.
      */
     RelativeLayoutManager::Layout getConnectionControlsLayout
-    (BluetoothDevice::Ptr device);
+    (BluetoothDevice device);
 
     /**
      * Update connection control components to match the current bluetooth
-     * device connection state and the provided Bluetooth device.
-     * 
-     * @param BluetoothDevice
+     * device connection state.
      */
-    virtual void updateConnectionControls
-    (BluetoothDevice::Ptr device) override;
+    virtual void updateConnectionControls() override;
 
 
     /**
@@ -119,7 +116,7 @@ private:
      */
     class BTDeviceButton : public Button{
     public:
-        BTDeviceButton(BluetoothDevice::Ptr connection, 
+        BTDeviceButton(BluetoothDevice connection, 
                 bool isConnected);
     private:
         void resized() override;

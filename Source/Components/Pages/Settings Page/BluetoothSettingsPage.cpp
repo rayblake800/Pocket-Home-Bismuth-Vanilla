@@ -3,13 +3,13 @@
 
 BluetoothSettingsPage::BluetoothSettingsPage
 (BluetoothStatus& bluetoothStatus) :
-ConnectionPage<BluetoothDevice::Ptr>(),
+ConnectionPage<BluetoothDevice>(),
 bluetoothStatus(bluetoothStatus) { }
 
 /**
  * @return the list of all visible bluetooth devices
  */
-Array<BluetoothDevice::Ptr> BluetoothSettingsPage::loadConnectionList()
+Array<BluetoothDevice> BluetoothSettingsPage::loadConnectionPoints()
 {
     return {};
 }
@@ -19,7 +19,7 @@ Array<BluetoothDevice::Ptr> BluetoothSettingsPage::loadConnectionList()
  *
  *  @param device
  */
-void BluetoothSettingsPage::connect(BluetoothDevice::Ptr device) { }
+void BluetoothSettingsPage::connect(BluetoothDevice device) { }
 
 /**
  * @param device if the system is currently connected to this
@@ -27,16 +27,16 @@ void BluetoothSettingsPage::connect(BluetoothDevice::Ptr device) { }
  *  
  * @param connection
  */
-void BluetoothSettingsPage::disconnect(BluetoothDevice::Ptr device) { }
+void BluetoothSettingsPage::disconnect(BluetoothDevice device) { }
 
 /**
  * @param connection
  * 
  * @return true iff the system is connected to this bluetooth device.
  */
-bool BluetoothSettingsPage::isConnected(BluetoothDevice::Ptr device)
+bool BluetoothSettingsPage::isConnected(BluetoothDevice device)
 {
-    return device->connected;
+    return device.connected;
 }
 
 /**
@@ -55,7 +55,7 @@ void BluetoothSettingsPage::connectionButtonClicked(Button* button) { }
  * @param device
  */
 Button* BluetoothSettingsPage::getConnectionButton
-(BluetoothDevice::Ptr device)
+(BluetoothDevice device)
 {
     return new BTDeviceButton(device, isConnected(device));
 }
@@ -68,7 +68,7 @@ Button* BluetoothSettingsPage::getConnectionButton
  */
 RelativeLayoutManager::Layout
 BluetoothSettingsPage::getConnectionControlsLayout
-(BluetoothDevice::Ptr device)
+(BluetoothDevice device)
 {
     return {};
 }
@@ -79,8 +79,7 @@ BluetoothSettingsPage::getConnectionControlsLayout
  * 
  * @param BluetoothDevice
  */
-void BluetoothSettingsPage::updateConnectionControls
-(BluetoothDevice::Ptr device) { }
+void BluetoothSettingsPage::updateConnectionControls() { }
 
 /**
  * When currentlyConnecting, disable bluetooth controls and show a loading
@@ -112,9 +111,9 @@ void BluetoothSettingsPage::connectionPageResized() { }
 void BluetoothSettingsPage::reloadPage() { }
 
 BluetoothSettingsPage::BTDeviceButton::BTDeviceButton(
-        BluetoothDevice::Ptr connection,
+        BluetoothDevice connection,
         bool isConnected) :
-Button(connection->name + String("Button")),
-deviceLabel("deviceLabel", connection->name) { }
+Button(connection.name + String("Button")),
+deviceLabel("deviceLabel", connection.name) { }
 
 void BluetoothSettingsPage::BTDeviceButton::resized() { }

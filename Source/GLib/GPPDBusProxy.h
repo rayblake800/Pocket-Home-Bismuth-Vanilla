@@ -197,7 +197,7 @@ protected:
      * @param signalHandler  A signal handler that will receive all signals
      *                       and property updates emitted by the DBus object.
      */
-    void addDBusSignalHandler(DBusSignalHandler* signalHandler);
+    void addSignalHandler(SignalHandler* signalHandler) override;
     
 private:
     /**
@@ -215,16 +215,6 @@ private:
      * @return  true iff toCheck is a GDBusProxy or is null. 
      */
     virtual bool isValidType(GObject* toCheck) const override;
-    
-        
-    /**
-     * Used to re-add a list of signal handlers to new GObject data.
-     * 
-     * @param toTransfer  A list of signal handler objects to add to this
-     *                    GPPDBusProxy.
-     */
-    virtual void transferSignalHandlers
-    (Array<SignalHandler*>& toTransfer) override;
 
     /**
      * Callback function for handling all DBus signals.

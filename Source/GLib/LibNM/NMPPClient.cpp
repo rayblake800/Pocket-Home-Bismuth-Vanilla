@@ -1,3 +1,4 @@
+#include "Utils.h"
 #include "NMPPClient.h"
 
 /*
@@ -223,14 +224,15 @@ void NMPPClient::ConnectionHandler::activateCallback(NMClient* client,
 {
     if(error != nullptr)
     {
-        handler->openingConnectionFailed
-                (NMPPConnection(NM_CONNECTION(connection)), error, false);
+        handler->openingConnectionFailed(
+                NMPPActiveConnection(NM_ACTIVE_CONNECTION(connection)), error,
+                false);
         g_error_free(error);
     }
     else
     {
-        handler->openingConnection    
-                (NMPPConnection(NM_CONNECTION(connection)), false);
+        handler->openingConnection(
+                NMPPActiveConnection(NM_ACTIVE_CONNECTION(connection)), false);
     } 
 }
 
@@ -248,13 +250,14 @@ void NMPPClient::ConnectionHandler::addActivateCallback(NMClient* client,
     if(error != nullptr)
     {
         handler->openingConnectionFailed
-                (NMPPConnection(NM_CONNECTION(connection)), error, true);
+                (NMPPActiveConnection(NM_ACTIVE_CONNECTION(connection)), error,
+                true);
         g_error_free(error);
     }
     else
     {
         handler->openingConnection    
-                (NMPPConnection(NM_CONNECTION(connection)), true);
+                (NMPPActiveConnection(NM_ACTIVE_CONNECTION(connection)), true);
     } 
 }
 
@@ -271,16 +274,7 @@ void NMPPClient::activateConnection(
 { 
     
     //determine if this is a new connection attempt
-    bool isNew = false;
-    Array<NMPPConnection> connections = wifiDevice.getAvailableConnections();
-    for(const NMPPConnection& saved : connections)
-    {
-        if(saved.connectionMatches(connection))
-        {
-            isNew = true;
-            break;
-        }
-    }
+    bool isNew = !wifiDevice.hasConnectionAvailable(connection);
     callInMainContext(
             [this, isNew, &connection, &wifiDevice, &accessPoint, handler]
             (GObject* clientObject)
@@ -343,20 +337,20 @@ void NMPPClient::Listener::propertyChanged(GPPObject* source, String property)
 }
 
 /*
- * Adds a listener to this network manager client.
+ * Adds a signal handler to this network manager client.
  */
-void NMPPClient::addListener(NMPPClient::Listener* listener)
+void NMPPClient::addSignalHandler(SignalHandler* handler)
 { 
-    addNotifySignalHandler(listener, NM_CLIENT_WIRELESS_ENABLED);
+    if(isClass<SignalHandler,Listener>(handler))
+    {
+        addNotifySignalHandler(handler, NM_CLIENT_WIRELESS_ENABLED);
+    }
+    else
+    {
+        DBG("NMPPClient::" << __func__ <": Invalid signal handler!");
+    }
 }
 
-/*
- * Removes a listener from this network manager client.
- */
-void NMPPClient::removeListener(NMPPClient::Listener* listener)
-{ 
-    removeSignalHandler(listener);
-}
 
 /*
  * Gets the GType of this object's stored GObject class.
@@ -372,16 +366,4 @@ GType NMPPClient::getType() const
 bool NMPPClient::isValidType(GObject* toCheck) const 
 { 
     return NM_IS_CLIENT(toCheck);
-}
-
-/*
- * Used to re-add a list of Listeners to new GObject data.
- */
-void NMPPClient::transferSignalHandlers
-(Array<GPPObject::SignalHandler*>& toTransfer)
-{
-    for(SignalHandler* handler : toTransfer)
-    {
-        addListener(static_cast<Listener*>(handler));
-    }
 }
