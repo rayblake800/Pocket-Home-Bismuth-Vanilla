@@ -247,6 +247,10 @@ private:
         {
             interface.accessPointRemoved(removedAP);
         }
+        void activeConnectionChanged(NMPPActiveConnection active) override
+        {
+            interface.activeConnectionChanged((active));
+        }
         LibNMInterface& interface;
     };
     
