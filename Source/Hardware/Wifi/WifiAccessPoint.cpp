@@ -13,6 +13,7 @@
 WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 {
     *this = toCopy;
+    DBG("AP " << addressID(this) << " holds " << addressID(&nmAccessPoint));
 }
 
 /*
@@ -21,6 +22,7 @@ WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 WifiAccessPoint::WifiAccessPoint(NMPPAccessPoint accessPoint) : 
 nmAccessPoint(accessPoint)
 {
+    DBG("AP " << addressID(this) << " holds " << addressID(&nmAccessPoint));
     if(nmAccessPoint.isNull())
     {
         return;
