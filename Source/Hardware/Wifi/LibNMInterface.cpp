@@ -35,6 +35,10 @@ wifiLock(wifiLock)
     updateAllWifiData();
 }
 
+LibNMInterface::~LibNMInterface()
+{
+}
+
 /*
  * Check if the network manager found a valid wifi device.
  */

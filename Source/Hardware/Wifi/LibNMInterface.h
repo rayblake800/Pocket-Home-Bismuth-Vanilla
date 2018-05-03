@@ -26,7 +26,7 @@ public:
      */
     LibNMInterface(CriticalSection& wifiLock);
 
-    virtual ~LibNMInterface() { }
+    virtual ~LibNMInterface();
 
 protected:
     /**
@@ -213,7 +213,10 @@ private:
         ClientListener(LibNMInterface& interface, NMPPClient& client) :
         interface(interface)
         {
-            client.addSignalHandler(this);
+            if(!client.isNull())
+            {
+                client.addSignalHandler(this);
+            }
         }
         virtual ~ClientListener() { }
     private:
@@ -230,9 +233,12 @@ private:
         DeviceListener(LibNMInterface& interface, NMPPDeviceWifi& device) :
         interface(interface)
         {
-            device.addSignalHandler(this);
+            if(!device.isNull())
+            {
+                device.addSignalHandler(this);
+            }
         }
-        virtual ~DeviceListener();
+        virtual ~DeviceListener() { }
     private:
         void stateChanged(NMDeviceState newState, NMDeviceState oldState,
                 NMDeviceStateReason reason) override
@@ -249,7 +255,7 @@ private:
         }
         void activeConnectionChanged(NMPPActiveConnection active) override
         {
-            interface.activeConnectionChanged((active));
+            interface.activeConnectionChanged(active);
         }
         LibNMInterface& interface;
     };

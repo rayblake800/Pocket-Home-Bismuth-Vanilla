@@ -74,6 +74,13 @@ GMainContext* GLibThread::getContext()
 void GLibThread::addAndInitCall(std::function<void() > call,
         std::mutex* callerMutex, std::condition_variable* callPending)
 {
+    if(threadShouldExit())
+    {
+        DBG("GLibThread::" << __func__ 
+                << ": Thread is exiting, running function call now");
+        call();
+        return;
+    }
     jassert((callerMutex == nullptr && callPending == nullptr)
             || (callerMutex != nullptr && callPending != nullptr));
     CallData* callData = new CallData;

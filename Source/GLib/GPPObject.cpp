@@ -89,7 +89,16 @@ GPPObject::SignalHandler::~SignalHandler()
         GPPObject* source = sources[0];
         if(source != nullptr)
         {
-            source->removeSignalHandler(this);
+            if(source->isNull())
+            {
+                DBG("GPPObject::SignalHandler::" << __func__ 
+                        << ": Error: Found null signal source");
+                sources.removeAllInstancesOf(source);
+            }
+            else
+            {
+                source->removeSignalHandler(this);
+            }
         }
     }
 }
@@ -213,7 +222,12 @@ void GPPObject::operator=(GObject* rhs)
  */
 GObject* GPPObject::getGObject() const
 {
-    return G_OBJECT(g_weak_ref_get(objectRef.get()));
+    GWeakRef* weakRef = objectRef.get();
+    if(weakRef == nullptr)
+    {
+        return nullptr;
+    }
+    return G_OBJECT(g_weak_ref_get(weakRef));
 }
 
 /*
@@ -262,13 +276,13 @@ void GPPObject::removeData()
     {
         if(!isNull())
         {
-            g_weak_ref_set(objectRef.get(), nullptr);
             while(!registeredSignals.empty())
             {
                 SignalHandler* toRemove = registeredSignals.begin()->second;
                 removeSignalHandler(toRemove);
             }
             GObject* object = objectData.get();
+            g_weak_ref_set(objectRef.get(), nullptr);
             if(object != nullptr)
             {
                 g_object_unref(object);
@@ -346,7 +360,7 @@ void GPPObject::connectSignalHandler(SignalHandler* handler,
         else
         {
             DBG("GPPObject::addSignalHandler: Tried to add signal "
-                    << signalName << "to null object.");
+                    << signalName << " to null object.");
         }
     });
 }
