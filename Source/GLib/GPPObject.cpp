@@ -1,3 +1,4 @@
+#include "Utils.h"
 #include "GLibSignalHandler.h"
 #include "GPPObject.h"
 
@@ -11,6 +12,7 @@ GPPObject::GPPObject()
     objectRef = new GWeakRef;
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
+    //DBG("Created: " << addressStr(this) << ":" << addressStr(objectData.get()));
 }
 
 /*
@@ -22,6 +24,7 @@ GPPObject::GPPObject(const GPPObject& toCopy)
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
     setGObject(toCopy);
+    //DBG("Created: " << addressStr(this) << ":" << addressStr(objectData.get()));
 }
 
 /*
@@ -33,6 +36,7 @@ GPPObject::GPPObject(GObject* toAssign)
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
     setGObject(toAssign);
+    //DBG("Created: " << addressStr(this) << ":" << addressStr(objectData.get()));
 }
 
 /*
@@ -42,6 +46,8 @@ GPPObject::GPPObject(GObject* toAssign)
 GPPObject::~GPPObject()
 {
     removeData();
+    
+    //DBG("Destroyed: " << addressStr(this) << ":" << addressStr(objectData.get()));
 }
 
 /*
@@ -58,6 +64,7 @@ bool GPPObject::isNull() const
  */
 GPPObject::SignalHandler::SignalHandler()
 {
+    //DBG("Created handler " << addressStr(this));
     GPPObject::signalHandlers.addIfNotAlreadyThere(this);
 }
 
@@ -101,6 +108,8 @@ GPPObject::SignalHandler::~SignalHandler()
             }
         }
     }
+    
+    //DBG("Destroyed handler " << addressStr(this));
 }
 
 /*
@@ -132,6 +141,7 @@ void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
 {
     callInMainContext([this,signalHandler]()
     {
+        signalHandler->sources.removeAllInstancesOf(this);
         GObject* object = getGObject();
         if(object != nullptr)
         {
@@ -148,13 +158,17 @@ void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
             {
                 g_signal_handler_disconnect(object, signalID);
                 registeredSignals.erase(signalID);
+                DBG(addressStr(this) << ":" << addressStr(objectData.get())
+                        << "  removed " << signalID << ":" << addressStr(signalHandler));
             }
             g_clear_object(&object);
         }
         else
         {
-            DBG("GPPObject::removeSignalHandler: Tried to remove signal "
-                    << "handler from null object.");
+            DBG(addressStr(this) << ":" << addressStr(objectData.get())
+                    << "  tried removing ?:" << addressStr(signalHandler));
+            //DBG("GPPObject::removeSignalHandler: Tried to remove signal "
+            //        << "handler from null object.");
         }
     });
 }
@@ -287,6 +301,9 @@ void GPPObject::removeData()
             {
                 g_object_unref(object);
                 objectData.set(nullptr);
+                
+                DBG(addressStr(this) << ":" << addressStr(objectData.get())
+                        << "  -> " << addressStr(this) << ":0x0");
             }
         }
     });
@@ -346,6 +363,9 @@ void GPPObject::connectSignalHandler(SignalHandler* handler,
                         handler);
                 if(handlerID > 0)
                 {
+
+                    DBG(addressStr(this) << ":" << addressStr(objectData.get())
+                            << "  added " << handlerID << ":" << addressStr(handler));
                     registeredSignals[handlerID] = handler;
                     handler->sources.addIfNotAlreadyThere(this);
                 }
@@ -475,7 +495,10 @@ void GPPObject::setData(GObject* data, bool refNeeded, bool moveSignalHandlers)
                 toTransfer = getSignalHandlers();
             }
             removeData();
+            DBG(addressStr(this) << ":" << addressStr(objectData.get())
+                    << "  -> " << addressStr(this) << ":" << addressStr(data));
             objectData.set(data);
+            
             g_weak_ref_set(objectRef.get(), data);
             if(refNeeded || g_object_is_floating(data))
             {

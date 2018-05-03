@@ -118,8 +118,13 @@
         <df name="GLib">
           <df name="LibNM">
             <in>NMPPAccessPoint.cpp</in>
+            <in>NMPPActiveConnection.cpp</in>
             <in>NMPPClient.cpp</in>
+            <in>NMPPConnection.cpp</in>
+            <in>NMPPDeviceWifi.cpp</in>
           </df>
+          <in>GPPDBusProxy.cpp</in>
+          <in>GPPObject.cpp</in>
           <in>GVariantConverter.cpp</in>
         </df>
         <df name="Hardware">
@@ -191,7 +196,6 @@
       <flagsDictionary>
         <element flagsID="0"
                  commonFlags="-march=haswell -msse3 -mssse3 -mcx16 -maes -mpclmul -mpopcnt -mabm -mavx -mavx2 -msse4.2 -msse4.1 -mlzcnt -mrdrnd -mfsgsbase -mxsave -mtune=haswell -std=gnu++1y"/>
-        <element flagsID="1" commonFlags="-march=native -std=gnu++14"/>
       </flagsDictionary>
       <codeAssistance>
         <transientMacros>
@@ -1493,7 +1497,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>Source/Shared Resources</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
@@ -1643,7 +1646,6 @@
             flavor2="11">
         <ccTool flags="0">
           <incDir>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
             <pElem>deps/JUCE/modules/juce_core/files</pElem>
             <pElem>deps/JUCE/modules/juce_events/timers</pElem>
@@ -1651,11 +1653,13 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/mouse</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
             <pElem>Source/Util</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
             <pElem>Source/Hardware/Wifi</pElem>
             <pElem>Source/Shared Resources/Config Files</pElem>
             <pElem>Source/Components/Configurable</pElem>
             <pElem>Source/Components/Widgets</pElem>
             <pElem>Source/Components/Pages/Home Page/Widgets</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
             <pElem>deps/JUCE/modules/juce_core/maths</pElem>
             <pElem>deps/JUCE/modules/juce_core</pElem>
@@ -1680,7 +1684,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
         </ccTool>
@@ -1779,7 +1782,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
@@ -2055,6 +2057,7 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
+            <pElem>Source/GLib</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
         </ccTool>
@@ -2111,7 +2114,7 @@
             flavor2="11">
         <ccTool flags="0">
           <incDir>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
             <pElem>deps/JUCE/modules/juce_core/files</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/placement</pElem>
@@ -2127,6 +2130,7 @@
             <pElem>Source/Components</pElem>
             <pElem>Source/Components/Pages</pElem>
             <pElem>Source/Components/Pages/Settings Page</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
             <pElem>deps/JUCE/modules/juce_core/maths</pElem>
@@ -2137,7 +2141,6 @@
             <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
             <pElem>deps/JUCE/modules/juce_core/system</pElem>
-            <pElem>deps/JUCE/modules/juce_core/text</pElem>
             <pElem>deps/JUCE/modules/juce_core/misc</pElem>
             <pElem>deps/JUCE/modules/juce_core/xml</pElem>
             <pElem>deps/JUCE/modules/juce_core/time</pElem>
@@ -2249,7 +2252,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
         </ccTool>
@@ -2260,10 +2262,8 @@
             flavor2="11">
         <ccTool flags="0">
           <incDir>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
             <pElem>deps/JUCE/modules/juce_core/files</pElem>
-            <pElem>deps/JUCE/modules/juce_events/messages</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/mouse</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/buttons</pElem>
@@ -2271,8 +2271,10 @@
             <pElem>Source/Components/Widgets</pElem>
             <pElem>Source/Shared Resources/Config Files</pElem>
             <pElem>Source/Components/Configurable</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
             <pElem>Source/Hardware/Wifi</pElem>
             <pElem>Source/Components/Pages/Settings Page</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
             <pElem>/usr/include/c++/4.9/ext</pElem>
@@ -2287,7 +2289,6 @@
             <pElem>deps/JUCE/modules/juce_core/misc</pElem>
             <pElem>deps/JUCE/modules/juce_core/xml</pElem>
             <pElem>deps/JUCE/modules/juce_core/time</pElem>
-            <pElem>deps/JUCE/modules/juce_events/broadcasters</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/placement</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/colour</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/images</pElem>
@@ -2299,7 +2300,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
         </ccTool>
@@ -2310,9 +2310,9 @@
             flavor2="11">
         <ccTool flags="0">
           <incDir>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
             <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
-            <pElem>deps/JUCE/modules/juce_core/text</pElem>
             <pElem>deps/JUCE/modules/juce_core/files</pElem>
             <pElem>deps/JUCE/modules/juce_events/messages</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/placement</pElem>
@@ -2321,6 +2321,7 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/buttons</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/widgets</pElem>
             <pElem>Source/Util</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
             <pElem>Source/Hardware/Wifi</pElem>
             <pElem>Source/Shared Resources/Config Files</pElem>
             <pElem>Source/Components/Configurable</pElem>
@@ -2352,7 +2353,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
         </ccTool>
@@ -3047,10 +3047,68 @@
           </incDir>
         </ccTool>
       </item>
+      <item path="Source/GLib/GPPDBusProxy.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>Source/GLib</pElem>
+            <pElem>/usr/include/c++/4.9/bits</pElem>
+            <pElem>Source/Util</pElem>
+            <pElem>deps/JUCE/modules/juce_core</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
+            <pElem>/usr/include/c++/4.9/debug</pElem>
+            <pElem>/usr/include/c++/4.9/ext</pElem>
+            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
+            <pElem>deps/JUCE/modules/juce_core/system</pElem>
+            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
+            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
+            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
+            <pElem>deps/JUCE/modules/juce_events/native</pElem>
+            <pElem>JuceLibraryCode</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="Source/GLib/GPPObject.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/c++/4.9/bits</pElem>
+            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
+            <pElem>Source/Shared Resources</pElem>
+            <pElem>Source/GLib</pElem>
+            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
+            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
+            <pElem>/usr/include/c++/4.9/ext</pElem>
+            <pElem>deps/JUCE/modules/juce_core</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
+            <pElem>/usr/include/c++/4.9/debug</pElem>
+            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
+            <pElem>deps/JUCE/modules/juce_core/system</pElem>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
+            <pElem>deps/JUCE/modules/juce_events/native</pElem>
+            <pElem>JuceLibraryCode</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+        </ccTool>
+      </item>
       <item path="Source/GLib/GVariantConverter.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
           <incDir>
-            <pElem>/usr/include/c++/4.9</pElem>
             <pElem>deps/JUCE/modules/juce_core/text</pElem>
             <pElem>Source/GLib</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
@@ -3081,11 +3139,170 @@
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="1">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>Source/GLib/LibNM</pElem>
+            <pElem>/usr/include/c++/4.9/bits</pElem>
+            <pElem>Source/Util</pElem>
+            <pElem>deps/JUCE/modules/juce_core</pElem>
+            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
+            <pElem>/usr/include/NetworkManager</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
+            <pElem>/usr/include/c++/4.9/debug</pElem>
+            <pElem>/usr/include/c++/4.9/ext</pElem>
+            <pElem>deps/JUCE/modules/juce_core/system</pElem>
+            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
+            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
+            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
+            <pElem>deps/JUCE/modules/juce_events/native</pElem>
+            <pElem>JuceLibraryCode</pElem>
+            <pElem>/usr/include/libnm-glib</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="Source/GLib/LibNM/NMPPActiveConnection.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>Source/GLib/LibNM</pElem>
+            <pElem>/usr/include/c++/4.9/bits</pElem>
+            <pElem>deps/JUCE/modules/juce_core</pElem>
+            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
+            <pElem>/usr/include/libnm-glib</pElem>
+            <pElem>/usr/include/NetworkManager</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
+            <pElem>/usr/include/c++/4.9/debug</pElem>
+            <pElem>/usr/include/c++/4.9/ext</pElem>
+            <pElem>deps/JUCE/modules/juce_core/system</pElem>
+            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
+            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
+            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
+            <pElem>deps/JUCE/modules/juce_events/native</pElem>
+            <pElem>JuceLibraryCode</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
         </ccTool>
       </item>
       <item path="Source/GLib/LibNM/NMPPClient.cpp" ex="false" tool="1" flavor2="11">
-        <ccTool flags="1">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
+            <pElem>/usr/include/c++/4.9/bits</pElem>
+            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
+            <pElem>Source/Util</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
+            <pElem>deps/JUCE/modules/juce_core</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
+            <pElem>/usr/include/c++/4.9/debug</pElem>
+            <pElem>/usr/include/c++/4.9/ext</pElem>
+            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
+            <pElem>deps/JUCE/modules/juce_core/system</pElem>
+            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
+            <pElem>deps/JUCE/modules/juce_events/native</pElem>
+            <pElem>JuceLibraryCode</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
+            <pElem>/usr/include/libnm-glib</pElem>
+            <pElem>/usr/include/NetworkManager</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="Source/GLib/LibNM/NMPPConnection.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>Source/GLib/LibNM</pElem>
+            <pElem>/usr/include/c++/4.9/bits</pElem>
+            <pElem>deps/JUCE/modules/juce_core</pElem>
+            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
+            <pElem>/usr/include/NetworkManager</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
+            <pElem>/usr/include/c++/4.9/debug</pElem>
+            <pElem>/usr/include/c++/4.9/ext</pElem>
+            <pElem>deps/JUCE/modules/juce_core/system</pElem>
+            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
+            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
+            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
+            <pElem>deps/JUCE/modules/juce_events/native</pElem>
+            <pElem>JuceLibraryCode</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="Source/GLib/LibNM/NMPPDeviceWifi.cpp"
+            ex="false"
+            tool="1"
+            flavor2="11">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>deps/JUCE/modules/juce_core/threads</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
+            <pElem>/usr/include/c++/4.9/bits</pElem>
+            <pElem>deps/JUCE/modules/juce_core/containers</pElem>
+            <pElem>Source/Util</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
+            <pElem>deps/JUCE/modules/juce_core</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
+            <pElem>/usr/include/c++/4.9/debug</pElem>
+            <pElem>/usr/include/c++/4.9/ext</pElem>
+            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
+            <pElem>deps/JUCE/modules/juce_core/system</pElem>
+            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
+            <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
+            <pElem>deps/JUCE/modules/juce_events/native</pElem>
+            <pElem>JuceLibraryCode</pElem>
+            <pElem>/usr/include/libnm-glib</pElem>
+            <pElem>/usr/include/NetworkManager</pElem>
+            <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
+            <pElem>Builds/LinuxMakefile</pElem>
+          </incDir>
         </ccTool>
       </item>
       <item path="Source/Hardware/Audio.cpp" ex="false" tool="1" flavor2="11">
@@ -3193,9 +3410,9 @@
           <incDir>
             <pElem>/usr/include/c++/4.9/bits</pElem>
             <pElem>/usr/include/c++/4.9</pElem>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
             <pElem>Source/Hardware/Bluetooth</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
             <pElem>deps/JUCE/modules/juce_core/maths</pElem>
             <pElem>deps/JUCE/modules/juce_core</pElem>
@@ -3231,7 +3448,6 @@
             <pElem>/usr/include/c++/4.9</pElem>
             <pElem>deps/JUCE/modules/juce_core</pElem>
             <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
             <pElem>/usr/include/c++/4.9/bits</pElem>
@@ -3322,14 +3538,15 @@
             flavor2="11">
         <ccTool flags="0">
           <incDir>
+            <pElem>/usr/include/c++/4.9</pElem>
             <pElem>/usr/include/c++/4.9/bits</pElem>
             <pElem>deps/JUCE/modules/juce_core/text</pElem>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
             <pElem>deps/JUCE/modules/juce_core/files</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
             <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
-            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
             <pElem>deps/JUCE/modules/juce_core</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
             <pElem>/usr/include/c++/4.9/debug</pElem>
@@ -3337,6 +3554,7 @@
             <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
             <pElem>deps/JUCE/modules/juce_core/system</pElem>
+            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
             <pElem>deps/JUCE/modules/juce_core/misc</pElem>
             <pElem>deps/JUCE/modules/juce_core/time</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
@@ -3345,7 +3563,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
             <pElem>Source/Shared Resources</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
@@ -3358,32 +3575,35 @@
             flavor2="11">
         <ccTool flags="0">
           <incDir>
+            <pElem>/usr/include/c++/4.9</pElem>
             <pElem>/usr/include/c++/4.9/bits</pElem>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
+            <pElem>Source/GLib</pElem>
             <pElem>Source/Hardware/Wifi</pElem>
+            <pElem>Source/Shared Resources/Config Files</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
             <pElem>deps/JUCE/modules/juce_core/maths</pElem>
+            <pElem>/usr/include/c++/4.9/ext</pElem>
             <pElem>deps/JUCE/modules/juce_core</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
             <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
+            <pElem>/usr/include/NetworkManager</pElem>
+            <pElem>/usr/include/libnm-glib</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
             <pElem>/usr/include/c++/4.9/debug</pElem>
-            <pElem>/usr/include/c++/4.9/ext</pElem>
             <pElem>deps/JUCE/modules/juce_core/system</pElem>
-            <pElem>deps/JUCE/modules/juce_core/text</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
-            <pElem>Source/Util</pElem>
-            <pElem>Source/Shared Resources</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
         </ccTool>
@@ -3394,21 +3614,20 @@
             flavor2="11">
         <ccTool flags="0">
           <incDir>
+            <pElem>/usr/include/c++/4.9</pElem>
             <pElem>deps/JUCE/modules/juce_core/text</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
             <pElem>Source/GLib</pElem>
             <pElem>Source/Hardware/Wifi</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
             <pElem>/usr/include/c++/4.9/bits</pElem>
             <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core</pElem>
-            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
-            <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
             <pElem>/usr/include/c++/4.9/debug</pElem>
             <pElem>/usr/include/c++/4.9/ext</pElem>
+            <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
+            <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
             <pElem>deps/JUCE/modules/juce_core/system</pElem>
             <pElem>deps/JUCE/modules/juce_core/maths</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
@@ -3418,6 +3637,8 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
+            <pElem>/usr/include/NetworkManager</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
@@ -3429,14 +3650,17 @@
             flavor2="11">
         <ccTool flags="0">
           <incDir>
+            <pElem>/usr/include/c++/4.9</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
+            <pElem>deps/JUCE/modules/juce_core/text</pElem>
             <pElem>Source/GLib</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
             <pElem>Source/Hardware/Wifi</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
             <pElem>deps/JUCE/modules/juce_core/memory</pElem>
+            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
             <pElem>deps/JUCE/modules/juce_core</pElem>
             <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
             <pElem>/usr/include/c++/4.9/bits</pElem>
@@ -3444,8 +3668,6 @@
             <pElem>/usr/include/c++/4.9/debug</pElem>
             <pElem>/usr/include/c++/4.9/ext</pElem>
             <pElem>deps/JUCE/modules/juce_core/system</pElem>
-            <pElem>deps/JUCE/modules/juce_core/maths</pElem>
-            <pElem>deps/JUCE/modules/juce_core/text</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/commands</pElem>
@@ -3464,25 +3686,25 @@
             flavor2="11">
         <ccTool flags="0">
           <incDir>
-            <pElem>/usr/include/c++/4.9/bits</pElem>
             <pElem>deps/JUCE/modules/juce_core/text</pElem>
-            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
-            <pElem>Source/Shared Resources</pElem>
-            <pElem>Source/GLib</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
             <pElem>Source/Hardware/Wifi</pElem>
             <pElem>Source/Util</pElem>
+            <pElem>/usr/include/c++/4.9</pElem>
             <pElem>deps/JUCE/modules/juce_core</pElem>
             <pElem>/usr/lib/gcc/x86_64-linux-gnu/4.9/include</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/bits</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/sys</pElem>
             <pElem>/usr/include/NetworkManager</pElem>
+            <pElem>/usr/include/c++/4.9/bits</pElem>
             <pElem>/usr/include/x86_64-linux-gnu/c++/4.9/bits</pElem>
             <pElem>/usr/include/c++/4.9/debug</pElem>
             <pElem>/usr/include/c++/4.9/ext</pElem>
             <pElem>deps/JUCE/modules/juce_core/system</pElem>
             <pElem>deps/JUCE/modules/juce_core/maths</pElem>
+            <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/geometry</pElem>
             <pElem>deps/JUCE/modules/juce_graphics/native</pElem>
@@ -3490,7 +3712,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>/usr/include/libnm-glib</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
@@ -3502,12 +3723,14 @@
             flavor2="11">
         <ccTool flags="0">
           <incDir>
+            <pElem>/usr/include/c++/4.9</pElem>
             <pElem>/usr/include/c++/4.9/bits</pElem>
             <pElem>deps/JUCE/modules/juce_core/memory</pElem>
             <pElem>deps/JUCE/modules/juce_core/threads</pElem>
             <pElem>deps/JUCE/modules/juce_events/messages</pElem>
             <pElem>deps/JUCE/modules/juce_events/timers</pElem>
             <pElem>Source/Shared Resources</pElem>
+            <pElem>Source/GLib/LibNM</pElem>
             <pElem>Source/Hardware/Wifi</pElem>
             <pElem>deps/JUCE/modules/juce_core/containers</pElem>
             <pElem>deps/JUCE/modules/juce_core/maths</pElem>
@@ -3527,7 +3750,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
         </ccTool>
@@ -3559,7 +3781,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>Source/Components</pElem>
             <pElem>deps/JUCE/modules/juce_gui_basics/components</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
@@ -3595,7 +3816,6 @@
             <pElem>deps/JUCE/modules/juce_gui_basics/layout</pElem>
             <pElem>deps/JUCE/modules/juce_events/native</pElem>
             <pElem>JuceLibraryCode</pElem>
-            <pElem>Source/GLib</pElem>
             <pElem>Source/Components</pElem>
             <pElem>Builds/LinuxMakefile</pElem>
           </incDir>
@@ -4424,70 +4644,7 @@
           </incDir>
         </ccTool>
       </folder>
-      <folder path="0/Source/GLib/LibNM">
-        <ccTool>
-          <incDir>
-            <pElem>/usr/include/libnm-glib</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
-            <pElem>/usr/include/dbus-1.0</pElem>
-            <pElem>/usr/lib/dbus-1.0/include</pElem>
-            <pElem>/usr/include/alsa</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>/usr/include/libpng16</pElem>
-            <pElem>/usr/include/harfbuzz</pElem>
-            <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/glib-2.0/include</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>deps/JUCE/modules</pElem>
-            <pElem>Source/Components/Pages/Home Page/AppMenu/Menu Editors</pElem>
-            <pElem>Source/Components/Pages/Advanced Settings Page</pElem>
-            <pElem>Source/Components/Pages/DateTime Page</pElem>
-            <pElem>Source/Components/Pages/Home Page</pElem>
-            <pElem>Source/Hardware</pElem>
-            <pElem>Source/Hardware/Wifi</pElem>
-            <pElem>Source/Components/Pages/Home Page/AppMenu/Menu Items</pElem>
-            <pElem>Source</pElem>
-            <pElem>Source/Shared Resources</pElem>
-            <pElem>Source/Components/Widgets</pElem>
-            <pElem>Source/Components/Pages</pElem>
-            <pElem>Source/Components/Pages/Home Page/Widgets</pElem>
-            <pElem>Source/Components/Pages/Home Page/AppMenu</pElem>
-            <pElem>Source/GLib</pElem>
-            <pElem>Source/Components/Pages/Power Page</pElem>
-            <pElem>Source/Components/Pages/Home Page/AppMenu/Menu Types</pElem>
-            <pElem>Source/Components/Pages/Password Pages</pElem>
-            <pElem>Source/Util</pElem>
-            <pElem>Source/Components/Pages/Home Settings Page</pElem>
-            <pElem>Source/Components/Pages/Settings Page</pElem>
-            <pElem>Source/GLib/LibNM</pElem>
-            <pElem>Source/Components/Pages/Login Page</pElem>
-            <pElem>Source/Components/Configurable</pElem>
-            <pElem>Source/Components</pElem>
-            <pElem>Source/Hardware/Bluetooth</pElem>
-            <pElem>Source/Components/Pages/Input Settings Page</pElem>
-            <pElem>Source/Components/Pages/Home Page/AppMenu/Menu Folders</pElem>
-            <pElem>Source/Shared Resources/Config Files</pElem>
-            <pElem>Source/Components/Pages/UI Page</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
-          <preprocessorList>
-            <Elem>DEBUG=1</Elem>
-            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
-            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
-            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
-            <Elem>JucePlugin_Build_AAX=0</Elem>
-            <Elem>JucePlugin_Build_AU=0</Elem>
-            <Elem>JucePlugin_Build_AUv3=0</Elem>
-            <Elem>JucePlugin_Build_RTAS=0</Elem>
-            <Elem>JucePlugin_Build_Standalone=0</Elem>
-            <Elem>JucePlugin_Build_VST3=0</Elem>
-            <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=true</Elem>
-            <Elem>_DEBUG=1</Elem>
-          </preprocessorList>
-        </ccTool>
-      </folder>
-      <folder path="0/Source/Hardware/Wifi">
+      <folder path="0/Source/GLib">
         <ccTool>
           <incDir>
             <pElem>/usr/include/c++/4.9</pElem>

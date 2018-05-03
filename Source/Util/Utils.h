@@ -14,6 +14,20 @@
 void componentTrace();
 
 /**
+ * Convert a pointer to a string for debug output.
+ * 
+ * @tparam T   Any type.
+ * 
+ * @param ptr  The address to convert to a string.
+ * 
+ * @return  the address pointed to by ptr, as a hex string.
+ */
+template<typename T>String addressStr(T* ptr)
+{
+    return String("0x")+String::toHexString((unsigned long) ptr);
+}
+
+/**
  * Measures program execution time by printing how long it existed 
  * (in milliseconds) when it is destroyed.
  */
