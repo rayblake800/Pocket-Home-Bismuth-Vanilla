@@ -82,8 +82,13 @@ void ConnectionPage<ConnectionPoint>::updateConnectionList()
 {
     clearConnectionList();
     connectionPts = loadConnectionPoints();
-    DBG("creating connection list with " << connectionPts.size() <<
-            "connection points");
+    DBG("ConnectionPage: updateConnectionList:");
+    int count = 1;
+    for(const ConnectionPoint& ap : connectionPts)
+    {
+        DBG("\t" << count <<": AP " << addressID(&ap));
+        count++;
+    }
     for (const ConnectionPoint& connection : connectionPts)
     {
         DBG("Adding connection button for " << addressID(&connection));

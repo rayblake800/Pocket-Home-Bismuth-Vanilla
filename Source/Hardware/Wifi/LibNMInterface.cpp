@@ -1,5 +1,6 @@
-#include "LibNMInterface.h"
 #include <map>
+#include "Utils.h"
+#include "LibNMInterface.h"
 #include "JuceHeader.h"
 #include "MainConfigFile.h"
 #include "SavedConnections.h"
@@ -130,7 +131,13 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
             filteredAPs.add(packagedAP);
         }
     }
-    DBG("LibNMInterface: returning " << filteredAPs.size() << " visible APs");
+    DBG("LibNMInterface: getVisibleAPS:");
+    int count = 1;
+    for(const WifiAccessPoint& ap : filteredAPs)
+    {
+        DBG("\t" << count <<": AP " << addressID(&ap));
+        count++;
+    }
     return filteredAPs;
 }
 
