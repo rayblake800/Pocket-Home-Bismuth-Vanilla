@@ -1,8 +1,7 @@
 #include "LibNMInterface.h"
 #include <map>
-#include <nm-utils.h>
-#include <nm-remote-connection.h>
 #include "JuceHeader.h"
+#include "MainConfigFile.h"
 #include "SavedConnections.h"
 #if JUCE_DEBUG
 #include "WifiDebugOutput.h"
@@ -12,6 +11,25 @@ LibNMInterface::LibNMInterface(CriticalSection& wifiLock) :
 NetworkInterface(wifiLock),
 wifiLock(wifiLock)
 {
+    MainConfigFile config;
+    String wifiIface = config.getConfigValue<String>
+            (MainConfigFile::wifiInterfaceKey);
+    if(wifiIface.isNotEmpty())
+    {
+        wifiDevice = client.getWifiDeviceByIface(wifiIface);
+    }
+    else
+    {
+        Array<NMPPDeviceWifi> devices = client.getWifiDevices();
+        for(const NMPPDeviceWifi& dev : devices)
+        {
+            if(dev.isManaged())
+            {
+                wifiDevice = dev;
+                break;
+            }
+        }
+    }
     updateAllWifiData();
 }
 
