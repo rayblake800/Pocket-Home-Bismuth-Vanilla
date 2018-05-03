@@ -30,6 +30,8 @@ wifiLock(wifiLock)
             }
         }
     }
+    clientListener = new ClientListener(*this, client);
+    deviceListener = new DeviceListener(*this, wifiDevice);
     updateAllWifiData();
 }
 
