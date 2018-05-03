@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include "JuceHeader.h"
 
 /**
@@ -13,19 +14,16 @@
  */
 void componentTrace();
 
+
 /**
- * Convert a pointer to a string for debug output.
+ * Convert a pointer to a unique, fixed ID for debug output. Nullptr will always
+ * have ID 0.
  * 
- * @tparam T   Any type.
+ * @param ptr  any pointer.
  * 
- * @param ptr  The address to convert to a string.
- * 
- * @return  the address pointed to by ptr, as a hex string.
+ * @return  an ID number unique to this pointer.
  */
-template<typename T>String addressStr(T* ptr)
-{
-    return String("0x")+String::toHexString((unsigned long) ptr);
-}
+int addressID(const void* ptr);
 
 /**
  * Measures program execution time by printing how long it existed 

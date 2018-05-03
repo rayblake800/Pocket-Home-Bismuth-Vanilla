@@ -82,8 +82,11 @@ void ConnectionPage<ConnectionPoint>::updateConnectionList()
 {
     clearConnectionList();
     connectionPts = loadConnectionPoints();
+    DBG("creating connection list with " << connectionPts.size() <<
+            "connection points");
     for (const ConnectionPoint& connection : connectionPts)
     {
+        DBG("Adding connection button for " << addressID(&connection));
         jassert(!connection.isNull());
         Button * connectionButton = getConnectionButton(connection);
         connectionButton->addListener(this);

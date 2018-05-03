@@ -48,6 +48,27 @@ void componentTrace()
     recursiveInfo(rootComponent, 0);
     rootComponent->addAndMakeVisible(highlightFocus);
 }
+
+/*
+ * Convert a pointer to a unique, fixed ID for debug output.
+ */
+int addressID(const void* ptr)
+{
+    static int nextID = 0;
+    static std::map<unsigned long,int> ids;
+    if(nextID == 0)
+    {
+        ids[0] = 0;
+        nextID++;
+    }
+    if(ids.count((unsigned long) ptr) == 0)
+    {
+        ids[(unsigned long) ptr] = nextID;
+        nextID++;
+    }
+    return ids[(unsigned long) ptr];
+}
+
 #endif
 
 /*

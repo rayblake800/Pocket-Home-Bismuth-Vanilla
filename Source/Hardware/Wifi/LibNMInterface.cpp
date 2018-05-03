@@ -130,6 +130,7 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
             filteredAPs.add(packagedAP);
         }
     }
+    DBG("LibNMInterface: returning " << filteredAPs.size() << " visible APs");
     return filteredAPs;
 }
 
