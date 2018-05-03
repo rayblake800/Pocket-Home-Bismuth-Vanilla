@@ -12,7 +12,7 @@ GPPObject::GPPObject()
     objectRef = new GWeakRef;
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
-    DBG("Created: " << addressID(this) << ":" << addressID(objectData.get()));
+    //DBG("Created: " << addressID(this) << ":" << addressID(objectData.get()));
 }
 
 /*
