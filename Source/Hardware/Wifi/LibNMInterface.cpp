@@ -130,8 +130,6 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
             filteredAPs.add(connecting);
         }
     }
-    filteredAPs.addIfNotAlreadyThere(getConnectedAP());
-    filteredAPs.addIfNotAlreadyThere(getConnectingAP());
     Array<SavedConnection> savedCons = savedConnections.getWifiConnections();
     for(const NMPPAccessPoint& ap : visibleAPs)
     {
