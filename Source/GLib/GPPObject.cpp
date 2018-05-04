@@ -290,8 +290,8 @@ void GPPObject::setGObject(GObject* toAssign, bool transferSignalHandlers)
  */ 
 void GPPObject::setGObject(const GPPObject& toCopy, bool transferSignalHandlers)
 {   
-    ADDR_LOG(this, "Copying data from ", &toCopy);
-    ADDR_LOG(&toCopy, "Sharing data with ", this);
+    ADDR_LOG(this, "Copying data from GPPObject ", &toCopy);
+    ADDR_LOG(&toCopy, "Sharing data with GPPObject ", this);
     if(g_type_is_a(getType(), toCopy.getType()) && *this != toCopy)
     {
         GObject* newData = toCopy.getGObject();
@@ -553,6 +553,10 @@ void GPPObject::setData(GObject* data, bool refNeeded, bool moveSignalHandlers)
         else if(data == nullptr)
         {
             removeData();
+        }
+        else
+        {
+            ADDR_LOG(this, "Failed to get GObject ",data);
         }
     });
 }
