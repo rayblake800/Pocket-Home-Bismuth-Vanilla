@@ -112,10 +112,14 @@ void WifiSettingsPage::connectionButtonClicked(Button* button)
         WifiAccessPoint selectedAP = getSelectedConnection();
         if (isConnected(selectedAP))
         {
+            DBG("WifiSettingsPage::" << __func__ << ": Disconnecting from "
+                    << selectedAP.getSSID());
             disconnect(selectedAP);
         }
         else
         {
+            DBG("WifiSettingsPage::" << __func__ << ": Connecting to "
+                    << selectedAP.getSSID());
             connect(selectedAP);
         }
     }

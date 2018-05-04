@@ -22,7 +22,6 @@ nmAccessPoint(accessPoint)
 {
     if(nmAccessPoint.isNull())
     {
-        DBG("WifiAccessPoint created from null NMPPAccessPoint!");
         return;
     }
     ssid           = nmAccessPoint.getSSIDText();

@@ -139,18 +139,7 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
             {
                 filteredAPs.add(packagedAP);
             }
-            else
-            {
-                DBG("LibNMInterface::" << __func__ << ": almost added null access point!");
-            }
         }
-    }
-    DBG("LibNMInterface: getVisibleAPS:");
-    int count = 1;
-    for(const WifiAccessPoint& ap : filteredAPs)
-    {
-        DBG("\t" << count <<": AP " << addressID(&ap));
-        count++;
     }
     return filteredAPs;
 }
