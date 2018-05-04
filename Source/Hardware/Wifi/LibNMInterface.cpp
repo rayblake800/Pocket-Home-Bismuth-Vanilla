@@ -12,6 +12,8 @@ LibNMInterface::LibNMInterface(CriticalSection& wifiLock) :
 NetworkInterface(wifiLock),
 wifiLock(wifiLock)
 {
+    ADDR_LOG(&connectingAP, "Initialized as LibNMInterface::connectingAP");
+    ADDR_LOG(&connectedAP, "Initialized as LibNMInterface::connectedAP");
     MainConfigFile config;
     String wifiIface = config.getConfigValue<String>
             (MainConfigFile::wifiInterfaceKey);
