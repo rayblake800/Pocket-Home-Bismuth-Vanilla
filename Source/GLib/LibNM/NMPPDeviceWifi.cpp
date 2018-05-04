@@ -309,6 +309,7 @@ void NMPPDeviceWifi::addSignalHandler(SignalHandler* handler)
                 G_CALLBACK(apAddedCallback));
         connectSignalHandler(handler, "access-point-removed",
                 G_CALLBACK(apRemovedCallback));
+        addNotifySignalHandler(handler, "active-connection");
     }
     else
     {

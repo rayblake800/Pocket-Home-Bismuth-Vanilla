@@ -122,13 +122,13 @@ void WifiStateManager::connectToAccessPoint(WifiAccessPoint toConnect,
                 << ": Tried to connect to null access point!");
         return;
     }
-    else if(toConnect == getConnectedAP())
+    else if(wifiResource->isAPConnected(toConnect))
     {
         DBG("WifiStateManager::" << __func__
                 << ": already connected to " << toConnect.getSSID());
         return;
     }
-    else if(toConnect == getConnectingAP())
+    else if(wifiResource->isAPConnecting(toConnect))
     {
         DBG("WifiStateManager::" << __func__
                 << ": already connecting to " << toConnect.getSSID());
