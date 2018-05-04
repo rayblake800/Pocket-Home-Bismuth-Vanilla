@@ -1,23 +1,8 @@
--Access points with a shared connection are no longer being combined, fix that.
-	-Compare SavedConnection objects based on path
-
--Updating saved connection passwords is barely tested and very broken.
-
--Connections occasionally briefly dip into a failed state before connection,
-  use timeouts instead of immediately sending the failure signal
-
--Remove disconnection signal call from the wifi state manager, instead try
-  only calling it when the active connection changes to null.
-
--Remove connection signal from the AP update callback, only send it on relevant
-  state changes
-
--Rework DBus method error handling, pass errors back to the calling method
-
--Wifi connection page occasionally goes blank during connection/disconnection
 
 -Connecting/Disconnecting sometimes fails to register with the connection
   page until it is closed and reopened.
+
+-Add connection page item sorting
 
 -Add visible AP change callback so the connection page can dynamically update
   the access point list
