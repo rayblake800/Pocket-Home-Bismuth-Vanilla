@@ -12,8 +12,8 @@ LibNMInterface::LibNMInterface(CriticalSection& wifiLock) :
 NetworkInterface(wifiLock),
 wifiLock(wifiLock)
 {
-    ADDR_LOG(&connectingAP, "Initialized as LibNMInterface::connectingAP");
-    ADDR_LOG(&connectedAP, "Initialized as LibNMInterface::connectedAP");
+    //ADDR_LOG(&connectingAP, "Initialized as LibNMInterface::connectingAP");
+    //ADDR_LOG(&connectedAP, "Initialized as LibNMInterface::connectedAP");
     MainConfigFile config;
     String wifiIface = config.getConfigValue<String>
             (MainConfigFile::wifiInterfaceKey);
@@ -47,7 +47,6 @@ LibNMInterface::~LibNMInterface()
  */
 bool LibNMInterface::wifiDeviceFound()
 {
-    const ScopedLock lock(wifiLock);
     return !wifiDevice.isNull();
 }
 
@@ -56,7 +55,6 @@ bool LibNMInterface::wifiDeviceFound()
  */
 bool LibNMInterface::isWifiEnabled()
 {
-    const ScopedLock lock(wifiLock);
     return client.wirelessEnabled();
 }
 
@@ -65,7 +63,6 @@ bool LibNMInterface::isWifiEnabled()
  */
 bool LibNMInterface::isWifiConnecting()
 {
-    const ScopedLock lock(wifiLock);
     switch (activatingConnection.getConnectionState())
     {
         case NM_ACTIVE_CONNECTION_STATE_ACTIVATING:
@@ -80,7 +77,6 @@ bool LibNMInterface::isWifiConnecting()
  */
 bool LibNMInterface::isWifiConnected()
 {
-    const ScopedLock lock(wifiLock);
     return activeConnection.getConnectionState() 
             == NM_ACTIVE_CONNECTION_STATE_ACTIVATED;
 }
@@ -90,7 +86,6 @@ bool LibNMInterface::isWifiConnected()
  */
 WifiAccessPoint LibNMInterface::getConnectedAP()
 {
-    const ScopedLock lock(wifiLock);
     WifiAccessPoint connected(connectedAP);
     connected.setConnectionPath(activeConnection.getAccessPointPath());
     return connected;
@@ -101,7 +96,6 @@ WifiAccessPoint LibNMInterface::getConnectedAP()
  */
 WifiAccessPoint LibNMInterface::getConnectingAP()
 {
-    const ScopedLock lock(wifiLock);
     WifiAccessPoint connecting(connectingAP);
     connecting.setConnectionPath(activatingConnection.getAccessPointPath());
     return connecting;
@@ -112,7 +106,6 @@ WifiAccessPoint LibNMInterface::getConnectingAP()
  */
 Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 {
-    const ScopedLock lock(wifiLock);
     Array<WifiAccessPoint> filteredAPs;
     if(!connectedAP.isNull())
     {
@@ -133,7 +126,6 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
     Array<SavedConnection> savedCons = savedConnections.getWifiConnections();
     for(const NMPPAccessPoint& ap : visibleAPs)
     {
-        jassert(!ap.isNull());
         WifiAccessPoint packagedAP(ap);
         if(!filteredAPs.contains(packagedAP))
         {
@@ -236,7 +228,7 @@ void LibNMInterface::connectToAccessPoint(WifiAccessPoint toConnect,
  */
 void LibNMInterface::updateAllWifiData()
 {
-    DBG("LibNMInterface::updateAllWifiData reloading data");
+    DBG("LibNMInterface::updateAllWifiData: reloading data");
     ScopedLock updateLock(wifiLock);
     lastNMState = wifiDevice.getState();
     savedConnections.updateSavedConnections();

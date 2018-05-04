@@ -20,9 +20,9 @@ class LibNMInterface : public WifiStateManager::NetworkInterface,
 public:
     /**
      * @param wifiLock  The lock used by the WifiStateManager to control access
-     *                  to the network interface.  This will be used to ensure
-     *                  the interface is locked when receiving updates from 
-     *                  NetworkManager.
+     *                  to the network interface.  LibNMInterface will acquire
+     *                  the lock when it is updated by NetworkManager in the
+     *                  GLib event thread.
      */
     LibNMInterface(CriticalSection& wifiLock);
 
