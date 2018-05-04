@@ -138,7 +138,8 @@ public:
          *                    may be a null connection.
          * 
          * @param error       A GError object describing the problem.  This 
-         *                    error object should not be freed.
+         *                    error object must be freed by the 
+         *                    ConnectionHandler
          * 
          * @param isNew       True iff the connection was just added to the 
          *                    network manager. 

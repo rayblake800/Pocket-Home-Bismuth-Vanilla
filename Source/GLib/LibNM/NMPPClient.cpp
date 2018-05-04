@@ -227,7 +227,6 @@ void NMPPClient::ConnectionHandler::activateCallback(NMClient* client,
         handler->openingConnectionFailed(
                 NMPPActiveConnection(NM_ACTIVE_CONNECTION(connection)), error,
                 false);
-        g_error_free(error);
     }
     else
     {
@@ -252,7 +251,6 @@ void NMPPClient::ConnectionHandler::addActivateCallback(NMClient* client,
         handler->openingConnectionFailed
                 (NMPPActiveConnection(NM_ACTIVE_CONNECTION(connection)), error,
                 true);
-        g_error_free(error);
     }
     else
     {

@@ -322,6 +322,7 @@ WifiStateManager::WifiState WifiStateManager::NetworkInterface::getWifiState()
  */
 void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
 {
+    
     MessageManager::callAsync([this,state]()
     {
         const ScopedLock stateLock(wifiLock);
