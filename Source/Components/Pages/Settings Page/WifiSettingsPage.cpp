@@ -93,12 +93,12 @@ void WifiSettingsPage::disconnect(WifiAccessPoint accessPoint)
  */
 bool WifiSettingsPage::isConnected(WifiAccessPoint accessPoint)
 {
-    WifiStateManager wifiManager;
     if (accessPoint.isNull())
     {
         return false;
     }
-    return wifiManager.getConnectedAP() == accessPoint;
+    WifiStateManager wifiManager;
+    return wifiManager.isAPConnected(accessPoint);
 }
 
 /*
@@ -244,6 +244,7 @@ void WifiSettingsPage::updateConnectionControls()
                 {
                     showButtonSpinner = true;
                 }
+                break;
             default:
                 DBG("WifiSettingsPage::" << __func__ << ": page should be closed!");
         };

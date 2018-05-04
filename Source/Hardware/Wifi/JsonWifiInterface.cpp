@@ -306,3 +306,22 @@ void JsonWifiInterface::disableWifi()
         });
     }
 }
+
+
+/*
+ * Checks if an access point is currently being used by the active network
+ * connection.
+ */
+bool JsonWifiInterface::isAPConnected(const WifiAccessPoint& accessPoint)
+{
+    return connected && accessPoint == connectedAP;
+}
+
+/*
+ * Checks if an access point is currently being used by the activating
+ * network connection.
+ */
+bool JsonWifiInterface::isAPConnecting(const WifiAccessPoint& accessPoint)
+{
+    return accessPoint == waitingToConnect;
+}

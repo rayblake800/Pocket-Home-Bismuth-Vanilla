@@ -210,6 +210,26 @@ void LibNMInterface::connectToAccessPoint(WifiAccessPoint toConnect,
 }
 
 /*
+ * Checks if an access point is currently being used by an active network
+ * connection.
+ */
+bool LibNMInterface::isAPConnected(const WifiAccessPoint& accessPoint)
+{
+    return activeConnection.isConnectedAccessPoint
+            (accessPoint.getNMAccessPoint()) && isWifiConnected();
+}
+
+/*
+ * Checks if an access point is currently being used by an activating
+ * network connection.
+ */
+bool LibNMInterface::isAPConnecting(const WifiAccessPoint& accessPoint)
+{
+    return activatingConnection.isConnectedAccessPoint
+            (accessPoint.getNMAccessPoint()) && isWifiConnecting();
+}
+
+/*
  * Checks the wifi device list, connection state, and active and pending 
  * connections.
  */

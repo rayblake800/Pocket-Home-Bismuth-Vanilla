@@ -33,7 +33,7 @@ private:
      * 
      * @return the list of all visible Wifi access points.
      */
-    Array<WifiAccessPoint> loadConnectionPoints();
+    Array<WifiAccessPoint> loadConnectionPoints() override;
 
 
     /**
@@ -61,7 +61,7 @@ private:
      * @return  true iff an active network connection is using the given access
      *          point.
      */
-    bool isConnected(WifiAccessPoint accessPoint);
+    bool isConnected(WifiAccessPoint accessPoint) override;
 
     /**
      * Attempts to connect or disconnect from the current selected access point
@@ -69,7 +69,7 @@ private:
      * 
      * @param button  This should always be the connection button.
      */
-    void connectionButtonClicked(Button* button);
+    void connectionButtonClicked(Button* button) override;
 
     /**
      * Constructs a button component to represent a wifi access point.
@@ -79,7 +79,7 @@ private:
      * @param connection  The access point represented by the new button
      *                    component.
      */
-    Button* getConnectionButton(WifiAccessPoint accessPoint);
+    Button* getConnectionButton(WifiAccessPoint accessPoint) override;
 
     /**
      * Gets the layout for the Wifi access point controls.
@@ -88,7 +88,7 @@ private:
      *                      this access point.
      */
     RelativeLayoutManager::Layout getConnectionControlsLayout
-    (WifiAccessPoint accessPoint);
+    (WifiAccessPoint accessPoint) override;
 
     /**
      * Updates connection control components to match the current Wifi 

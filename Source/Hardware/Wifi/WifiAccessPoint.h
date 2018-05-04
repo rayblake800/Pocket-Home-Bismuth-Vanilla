@@ -202,7 +202,7 @@ public:
     /**
      * @return this access point's LibNM access point object 
      */
-    const NMPPAccessPoint& getNMAccessPoint();
+    const NMPPAccessPoint& getNMAccessPoint() const;
     
     /**
      * Gets the network connection DBus path associated with this access point.

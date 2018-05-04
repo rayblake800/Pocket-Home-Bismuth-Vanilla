@@ -183,6 +183,26 @@ public:
      * will happen.
      */
     void disableWifi();
+    
+    /**
+     * Checks if an access point is currently being used by an active network
+     * connection.
+     * 
+     * @param accessPoint  An access point to check.
+     * 
+     * @return  true iff accessPoint is being used by the active connection. 
+     */
+    bool isAPConnected(const WifiAccessPoint& accessPoint);
+    
+    /**
+     * Checks if an access point is currently being used by an activating
+     * network connection.
+     * 
+     * @param accessPoint  An access point to check.
+     * 
+     * @return  true iff accessPoint is being used by the activating connection. 
+     */
+    bool isAPConnecting(const WifiAccessPoint& accessPoint);
 
     class NetworkInterface : public ResourceManager::SharedResource, 
     public Timer
@@ -316,6 +336,26 @@ public:
          * nothing will happen.
          */
         virtual void disableWifi() = 0;
+        
+        /**
+         * Checks if an access point is currently being used by an active network
+         * connection.
+         * 
+         * @param accessPoint  An access point to check.
+         * 
+         * @return  true iff accessPoint is being used by the active connection. 
+         */
+        virtual bool isAPConnected(const WifiAccessPoint& accessPoint) = 0;
+
+        /**
+         * Checks if an access point is currently being used by an activating
+         * network connection.
+         * 
+         * @param accessPoint  An access point to check.
+         * 
+         * @return  true iff accessPoint is being used by the activating connection. 
+         */
+        virtual bool isAPConnecting(const WifiAccessPoint& accessPoint) = 0;
 
         //Milliseconds to wait before assuming that enabling or
         //disabling wifi has failed.

@@ -119,6 +119,26 @@ protected:
      * Asynchronously turns off the wifi radio.
      */
     void disableWifi() override;
+     
+    /**
+     * Checks if an access point is currently being used by an active network
+     * connection.
+     * 
+     * @param accessPoint  An access point to check.
+     * 
+     * @return  true iff accessPoint is being used by the active connection. 
+     */
+    bool isAPConnected(const WifiAccessPoint& accessPoint) override;
+    
+    /**
+     * Checks if an access point is currently being used by an activating
+     * network connection.
+     * 
+     * @param accessPoint  An access point to check.
+     * 
+     * @return  true iff accessPoint is being used by the activating connection. 
+     */
+    bool isAPConnecting(const WifiAccessPoint& accessPoint) override;
 
 private:       
     /**

@@ -107,6 +107,26 @@ protected:
      * event after a randomized delay of no more than two seconds.
      */
     void disableWifi() override;
+     
+    /**
+     * Checks if an access point is currently being used by the active network
+     * connection.
+     * 
+     * @param accessPoint  An access point to check.
+     * 
+     * @return  true iff accessPoint is being used by the active connection. 
+     */
+    bool isAPConnected(const WifiAccessPoint& accessPoint) override;
+    
+    /**
+     * Checks if an access point is currently being used by the activating
+     * network connection.
+     * 
+     * @param accessPoint  An access point to check.
+     * 
+     * @return  true iff accessPoint is being used by the activating connection. 
+     */
+    bool isAPConnecting(const WifiAccessPoint& accessPoint) override;
 
 private:
     //Simulated wifi state variables.

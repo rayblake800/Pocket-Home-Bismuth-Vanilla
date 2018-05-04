@@ -280,6 +280,30 @@ void WifiStateManager::disableWifi()
             wifiResource->disableWifi();
     }
 }
+ 
+/*
+ * Checks if an access point is currently being used by an active network
+ * connection.
+ */
+bool WifiStateManager::isAPConnected(const WifiAccessPoint& accessPoint)
+{  
+    const ScopedLock lock(stateLock);
+    NetworkInterface* wifiResource
+            = static_cast<NetworkInterface*> (sharedResource.get());
+    return wifiResource->isAPConnected(accessPoint);
+}
+
+/*
+ * Checks if an access point is currently being used by an activating
+ * network connection.
+ */
+bool WifiStateManager::isAPConnecting(const WifiAccessPoint& accessPoint)
+{  
+    const ScopedLock lock(stateLock);
+    NetworkInterface* wifiResource
+            = static_cast<NetworkInterface*> (sharedResource.get());
+    return wifiResource->isAPConnecting(accessPoint);
+}
 
 WifiStateManager::NetworkInterface::NetworkInterface(CriticalSection& wifiLock)
 : wifiLock(wifiLock) { }

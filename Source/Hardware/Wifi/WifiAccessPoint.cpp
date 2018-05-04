@@ -307,7 +307,7 @@ bool WifiAccessPoint::operator!=(const WifiAccessPoint& rhs) const
 /*
  * @return this access point's LibNM access point object 
  */
-const NMPPAccessPoint& WifiAccessPoint::getNMAccessPoint()
+const NMPPAccessPoint& WifiAccessPoint::getNMAccessPoint() const
 {
     return nmAccessPoint;
 }
