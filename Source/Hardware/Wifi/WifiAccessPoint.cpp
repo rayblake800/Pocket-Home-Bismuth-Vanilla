@@ -14,7 +14,8 @@ WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 {
     ADDR_LOG(&nmAccessPoint, "Created as a NMPPAccessPoint for WifiAccessPoint ", this);
     *this = toCopy;
-    ADDR_LOG(this,"Created WifiAccessPoint copying ", &toCopy);
+    ADDR_LOG(this,"Created as WifiAccessPoint copying ", &toCopy);
+    ADDR_LOG(this,"with NMPPAccessPoint", &nmAccessPoint);
 }
 
 /*
@@ -24,10 +25,9 @@ WifiAccessPoint::WifiAccessPoint(const NMPPAccessPoint& accessPoint) :
 nmAccessPoint(accessPoint)
 {
     ADDR_LOG(&nmAccessPoint, "Created as a NMPPAccessPoint for WifiAccessPoint ", this);
-    ADDR_LOG(this, "CreatedWifiAccessPoint holding ",&accessPoint);
-    ADDR_LOG(&accessPoint, "Shared  ",&accessPoint);
-    G_OBJ_ADDR_LOG(nmAccessPoint, "shared with WifiAccessPoint ",this);
-    DBG("AP " << addressID(this) << " holds " << addressID(&nmAccessPoint));
+    ADDR_LOG(this, "Created as WifiAccessPoint holding NMPPAccessPoint ",&nmAccessPoint);
+    ADDR_LOG(&accessPoint, "Shared with WifiAccessPoint ",this);
+    G_OBJ_ADDR_LOG(nmAccessPoint, "Shared with WifiAccessPoint ",this);
     if(nmAccessPoint.isNull())
     {
         return;
