@@ -12,11 +12,7 @@
  */
 WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 {
-    ADDR_LOG(&nmAccessPoint, "Created as a NMPPAccessPoint for WifiAccessPoint ", this);
-    *this = toCopy;
-    ADDR_LOG(this,"Created as WifiAccessPoint copying ", &toCopy);
-    ADDR_LOG(this,"with NMPPAccessPoint", &nmAccessPoint);
-}
+    *this = toCopy;}
 
 /*
  * Create an access point object using LibNM access point data.
@@ -24,10 +20,6 @@ WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 WifiAccessPoint::WifiAccessPoint(const NMPPAccessPoint& accessPoint) : 
 nmAccessPoint(accessPoint)
 {
-    ADDR_LOG(&nmAccessPoint, "Created as a NMPPAccessPoint for WifiAccessPoint ", this);
-    ADDR_LOG(this, "Created as WifiAccessPoint holding NMPPAccessPoint ",&nmAccessPoint);
-    ADDR_LOG(&accessPoint, "Shared with WifiAccessPoint ",this);
-    G_OBJ_ADDR_LOG(nmAccessPoint, "Shared with WifiAccessPoint ",this);
     if(nmAccessPoint.isNull())
     {
         DBG("WifiAccessPoint created from null NMPPAccessPoint!");
@@ -80,10 +72,7 @@ hash(hash)
 }
 
 
-WifiAccessPoint::~WifiAccessPoint()
-{
-    ADDR_LOG(this, "Destroyed as WifiAccessPoint");
-}
+WifiAccessPoint::~WifiAccessPoint() { }
     
 /*
  * Checks if this object contains a valid wifi access point or not.
@@ -272,14 +261,10 @@ bool WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
 #if JUCE_DEBUG
     fakeConnection = rhs.fakeConnection;
 #endif
-    ADDR_LOG(&nmAccessPoint, "Data copied from WifiAccessPoint ", &rhs);
-    G_OBJ_ADDR_LOG(nmAccessPoint, "shared with WifiAccessPoint ",this);
     if(!nmAccessPoint.isNull())
     {
         nmAccessPoint.addSignalHandler(this);
     }
-    ADDR_LOG(&rhs,"Shared data with ", this);
-    ADDR_LOG(this,"Copied data from ", &rhs);
 }
 
 /*

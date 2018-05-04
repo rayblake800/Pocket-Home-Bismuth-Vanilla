@@ -9,7 +9,7 @@
 NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy)
 { 
     setGObject(toCopy);
-    ADDR_LOG(this, "initialized as NMPPAccessPoint");
+    //ADDR_LOG(this, "initialized as NMPPAccessPoint");
 }
 
 /*
@@ -18,7 +18,7 @@ NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy)
 NMPPAccessPoint::NMPPAccessPoint(NMAccessPoint* toAssign)
 {
     setGObject(G_OBJECT(toAssign));
-    ADDR_LOG(this, "initialized as NMPPAccessPoint");
+    //ADDR_LOG(this, "initialized as NMPPAccessPoint");
 }
 
 /*
