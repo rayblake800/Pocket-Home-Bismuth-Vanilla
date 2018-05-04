@@ -30,6 +30,8 @@ nmAccessPoint(accessPoint)
     G_OBJ_ADDR_LOG(nmAccessPoint, "Shared with WifiAccessPoint ",this);
     if(nmAccessPoint.isNull())
     {
+        DBG("WifiAccessPoint created from null NMPPAccessPoint!");
+        jassertfalse;
         return;
     }
     ssid           = nmAccessPoint.getSSIDText();

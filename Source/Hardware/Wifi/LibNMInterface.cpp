@@ -117,6 +117,7 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
     Array<SavedConnection> savedCons = savedConnections.getWifiConnections();
     for(const NMPPAccessPoint& ap : visibleAPs)
     {
+        jassert(!ap.isNull());
         WifiAccessPoint packagedAP(ap);
         if(!filteredAPs.contains(packagedAP))
         {
@@ -128,6 +129,7 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
                     break;
                 }
             }
+            jassert(!packagedAP.isNull());
             filteredAPs.add(packagedAP);
         }
     }
