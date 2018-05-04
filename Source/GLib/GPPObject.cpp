@@ -290,12 +290,24 @@ void GPPObject::setGObject(GObject* toAssign, bool transferSignalHandlers)
  */ 
 void GPPObject::setGObject(const GPPObject& toCopy, bool transferSignalHandlers)
 {   
+    
     ADDR_LOG(this, "Copying data from GPPObject ", &toCopy);
     ADDR_LOG(&toCopy, "Sharing data with GPPObject ", this);
     if(g_type_is_a(getType(), toCopy.getType()) && *this != toCopy)
     {
         GObject* newData = toCopy.getGObject();
         setData(newData, false, transferSignalHandlers);
+    }
+    else
+    {
+        ADDR_LOG(this, "Couldn't copy data from GPPObject ", &toCopy);
+        ADDR_LOG(&toCopy, "Couldn't share data with with GPPObject ", this);
+        String types = "Source type:";
+        types += g_type_name(toCopy.getType());
+        types += ", Dest. type:";
+        types += g_type_name(getType());
+        ADDR_LOG(this,types);
+        ADDR_LOG(&toCopy,types);
     }
 }
     
