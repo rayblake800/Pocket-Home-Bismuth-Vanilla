@@ -12,16 +12,21 @@
  */
 WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 {
+    ADDR_LOG(&nmAccessPoint, "Created as a NMPPAccessPoint for WifiAccessPoint ", this);
     *this = toCopy;
-    DBG("AP " << addressID(this) << " holds " << addressID(&nmAccessPoint));
+    ADDR_LOG(this,"Created WifiAccessPoint copying ", &toCopy);
 }
 
 /*
  * Create an access point object using LibNM access point data.
  */
-WifiAccessPoint::WifiAccessPoint(NMPPAccessPoint accessPoint) : 
+WifiAccessPoint::WifiAccessPoint(const NMPPAccessPoint& accessPoint) : 
 nmAccessPoint(accessPoint)
 {
+    ADDR_LOG(&nmAccessPoint, "Created as a NMPPAccessPoint for WifiAccessPoint ", this);
+    ADDR_LOG(this, "CreatedWifiAccessPoint holding ",&accessPoint);
+    ADDR_LOG(&accessPoint, "Shared  ",&accessPoint);
+    G_OBJ_ADDR_LOG(nmAccessPoint, "shared with WifiAccessPoint ",this);
     DBG("AP " << addressID(this) << " holds " << addressID(&nmAccessPoint));
     if(nmAccessPoint.isNull())
     {
@@ -71,6 +76,12 @@ hash(hash)
     fakeConnection = true;
 #endif
     security = requiresAuth ? securedWPA : none;
+}
+
+
+WifiAccessPoint::~WifiAccessPoint()
+{
+    ADDR_LOG(this, "Destroyed as WifiAccessPoint");
 }
     
 /*
@@ -156,7 +167,8 @@ const String& WifiAccessPoint::toString() const
 /*
  * Checks if this access point is compatible with a given connection.
  */
-bool WifiAccessPoint::isConnectionCompatible(NMPPConnection connection) const
+bool WifiAccessPoint::isConnectionCompatible
+(const NMPPConnection& connection) const
 {
     return nmAccessPoint.isValidConnection(connection);
 }
@@ -242,6 +254,7 @@ NM80211ApSecurityFlags WifiAccessPoint::getRSNFlags() const
 bool WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
 {
     const ScopedReadLock readLock(rhs.networkUpdateLock);
+    
     ssid           = rhs.ssid;
     bssid          = rhs.bssid;
     security       = rhs.security;
@@ -258,16 +271,20 @@ bool WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
 #if JUCE_DEBUG
     fakeConnection = rhs.fakeConnection;
 #endif
+    ADDR_LOG(&nmAccessPoint, "Data copied from WifiAccessPoint ", &rhs);
+    G_OBJ_ADDR_LOG(nmAccessPoint, "shared with WifiAccessPoint ",this);
     if(!nmAccessPoint.isNull())
     {
         nmAccessPoint.addSignalHandler(this);
     }
+    ADDR_LOG(&rhs,"Shared data with ", this);
+    ADDR_LOG(this,"Copied data from ", &rhs);
 }
 
 /*
  * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.
  */
-bool WifiAccessPoint::operator==(NMPPAccessPoint rhs) const
+bool WifiAccessPoint::operator==(const NMPPAccessPoint& rhs) const
 {
     const ScopedReadLock readLock(networkUpdateLock);
     return nmAccessPoint == rhs;
@@ -277,7 +294,7 @@ bool WifiAccessPoint::operator==(NMPPAccessPoint rhs) const
  * Returns true iff this WifiAccessPoint does not have rhs as its 
  * nmAccessPoint.
  */
-bool WifiAccessPoint::operator!=(NMPPAccessPoint rhs) const
+bool WifiAccessPoint::operator!=(const NMPPAccessPoint& rhs) const
 {
     const ScopedReadLock readLock(networkUpdateLock);
     return nmAccessPoint != rhs;
@@ -316,7 +333,7 @@ const NMPPAccessPoint& WifiAccessPoint::getNMAccessPoint()
  * @return  The saved path value, or the empty string if there is no saved
  *          connection.
  */
-String WifiAccessPoint::getConnectionPath() const
+const String& WifiAccessPoint::getConnectionPath() const
 {
     return connectionPath;
 }

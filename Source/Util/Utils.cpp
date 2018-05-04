@@ -49,24 +49,73 @@ void componentTrace()
     rootComponent->addAndMakeVisible(highlightFocus);
 }
 
+static std::map<const void*,int>& getAddressMap()
+{
+    static std::map<const void*,int> ids;
+    return ids;
+}
+
 /*
  * Convert a pointer to a unique, fixed ID for debug output.
  */
 int addressID(const void* ptr)
 {
     static int nextID = 0;
-    static std::map<unsigned long,int> ids;
+    std::map<const void*,int>& ids = getAddressMap();
     if(nextID == 0)
     {
         ids[0] = 0;
         nextID++;
     }
-    if(ids.count((unsigned long) ptr) == 0)
+    if(ids.count(ptr) == 0)
     {
-        ids[(unsigned long) ptr] = nextID;
+        ids[ptr] = nextID;
         nextID++;
     }
-    return ids[(unsigned long) ptr];
+    return ids[ptr];
+}
+
+/*
+ * Appends a line of text to the log of events occurring to a specific address.
+ */
+const String& addressLog(const void* ptr, String event, const void* ptr2)
+{
+    static CriticalSection logSection;
+    static std::map<int,String> eventLog;
+    const ScopedLock eventLock(logSection);
+    if(ptr == nullptr)
+    {
+        return eventLog[0];
+    }
+    int id = addressID(ptr);
+    String& log = eventLog[id];
+    log += "\n";
+    log += event;
+    if(ptr2 != nullptr)
+    {
+        log+=addressID(ptr2);
+    }
+    return log;
+}
+
+/*
+ * Prints all logged events for a specific memory address
+ */
+void printLog(int addressID)
+{
+    const void* address = nullptr;
+    std::map<const void*,int>& ids = getAddressMap();
+    for(auto iter = ids.begin(); iter != ids.end(); iter++)
+    {
+        if(iter->second == addressID)
+        {
+            address = iter->first;
+            break;
+        }
+    }
+    const String& log = ADDR_LOG(address, "printed log");
+    std::cout << "\n\n\tPrinting log for " << addressID << ":\n"
+            << log << "\n\n";
 }
 
 #endif

@@ -30,7 +30,7 @@ public:
      * 
      * @param accessPoint      A LibNM access point object.
      */
-    WifiAccessPoint(NMPPAccessPoint accessPoint);
+    WifiAccessPoint(const NMPPAccessPoint& accessPoint);
 
     /**
      * Represents the main categories of wifi access point security.
@@ -61,7 +61,7 @@ public:
     WifiAccessPoint(String ssid, int signalStrength, bool requiresAuth,
             String hash);
 
-    virtual ~WifiAccessPoint() { }
+    virtual ~WifiAccessPoint();
     
     /**
      * Checks if this object contains a valid wifi access point or not.
@@ -126,7 +126,7 @@ public:
      * @return  true iff the connection is compatible, and the WifiAccessPoint
      *          doesn't have a different non-null saved connection.  
      */
-    bool isConnectionCompatible(NMPPConnection connection) const;
+    bool isConnectionCompatible(const NMPPConnection& connection) const;
 
     /**
      * Checks if this access point and another both share a network connection.
@@ -180,13 +180,13 @@ public:
     /**
      * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.
      */
-    bool operator==(NMPPAccessPoint rhs) const;
+    bool operator==(const NMPPAccessPoint& rhs) const;
 
     /**
      * Returns true iff this WifiAccessPoint does not have rhs as its 
      * nmAccessPoint.
      */
-    bool operator!=(NMPPAccessPoint rhs) const;
+    bool operator!=(const NMPPAccessPoint& rhs) const;
 
     /**
      * Returns true iff this access point and rhs share a nmAccessPoint.
@@ -210,7 +210,7 @@ public:
      * @return  The saved path value, or the empty string if there is no saved
      *          connection.
      */
-    String getConnectionPath() const;
+    const String& getConnectionPath() const;
     
     /**
      * Stores a network connection DBus path associated with this access point.

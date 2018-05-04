@@ -26,6 +26,29 @@ void componentTrace();
 int addressID(const void* ptr);
 
 /**
+ * Appends a line of text to the log of events occurring to a specific address.
+ * 
+ * @param ptr  any pointer.
+ * 
+ * @param event  Some event that occurred involving that pointer
+ * 
+ * @param ptr2   Some other pointer involved in the event, if non-null, it's ID
+ *               will be appended onto the end of the event log.
+ * 
+ * @return  a reference to the full event log for that pointer.
+ */
+const String& addressLog(const void* ptr, String event, const void* ptr2 = nullptr);
+
+#define ADDR_LOG(ptr1,...) addressLog(ptr1, __VA_ARGS__)
+
+/**
+ * Prints all logged events for a specific memory address
+ *  
+ * @param addressID  The address being debugged.
+ */
+void printLog(int addressID);
+
+/**
  * Measures program execution time by printing how long it existed 
  * (in milliseconds) when it is destroyed.
  */
@@ -71,6 +94,7 @@ struct DuplicateInstanceException: public std::exception{
 #define ASSERT_SINGULAR static int n = 0; if(n){throw DuplicateInstanceException(__func__,n);} n++
 #else
 #define ASSERT_SINGULAR
+#define ADDR_LOG(ptr1,...)
 #endif
 
 

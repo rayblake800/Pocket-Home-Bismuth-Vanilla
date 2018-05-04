@@ -53,6 +53,26 @@ public:
      */
     virtual ~GPPObject();
     
+    
+#if JUCE_DEBUG
+    /**
+     * Adds an entry to the address log of the contained GObject, if this 
+     * GPPObject is not null.
+     * 
+     * @param log  A line of text to add to the GObject's address log 
+     * 
+     * @param ptr2 Another data pointer.  If non-null, this pointer's 
+     *             address ID will be appended to the log entry.
+     */
+    void gObjectAddressLog(String log, void* ptr2 = nullptr) const;
+    
+#define G_OBJ_ADDR_LOG(gppObj,...)   gppObj.gObjectAddressLog(__VA_ARGS__)
+    
+#else
+#define G_OBJ_ADDR_LOG(gppObj,...)
+#endif
+    
+    
     /**
      * Checks if this object holds valid GObject data.
      * 

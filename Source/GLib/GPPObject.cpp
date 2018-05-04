@@ -12,7 +12,7 @@ GPPObject::GPPObject()
     objectRef = new GWeakRef;
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
-    //DBG("Created: " << addressID(this) << ":" << addressID(objectData.get()));
+    ADDR_LOG(this,"Created as GPPObject");
 }
 
 /*
@@ -20,12 +20,11 @@ GPPObject::GPPObject()
  */
 GPPObject::GPPObject(const GPPObject& toCopy)
 {
+    ADDR_LOG(this,"Created as GPPObject");
     objectRef = new GWeakRef;
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
     setGObject(toCopy);
-    DBG("Created: " << addressID(this) << ":" << addressID(objectData.get())
-            << "(from " << addressID(&toCopy) << ")");
 }
 
 /*
@@ -33,11 +32,11 @@ GPPObject::GPPObject(const GPPObject& toCopy)
  */
 GPPObject::GPPObject(GObject* toAssign)
 {
+    ADDR_LOG(this,"Created as GPPObject");
     objectRef = new GWeakRef;
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
     setGObject(toAssign);
-    DBG("Created: " << addressID(this) << ":" << addressID(objectData.get()));
 }
 
 /*
@@ -46,10 +45,27 @@ GPPObject::GPPObject(GObject* toAssign)
  */
 GPPObject::~GPPObject()
 {
-    removeData();
-    
-    DBG("Destroyed: " << addressID(this) << ":" << addressID(objectData.get()));
+    removeData(); 
+    ADDR_LOG(this,"Destroyed as GPPObject");
 }
+
+#if JUCE_DEBUG
+    /*
+     * Adds an entry to the address log of the contained GObject, if this 
+     * GPPObject is not null.
+     */
+    void GPPObject::gObjectAddressLog(String log, void* ptr2) const
+    {
+        GObject* object = getGObject();
+        if(object != nullptr)
+        {
+            ADDR_LOG(object, log, ptr2);
+            g_object_unref(object);
+        }
+        
+    }
+#endif
+
 
 /*
  * Checks if this object holds valid GObject data.
@@ -65,7 +81,7 @@ bool GPPObject::isNull() const
  */
 GPPObject::SignalHandler::SignalHandler()
 {
-    //DBG("Created handler " << addressID(this));
+    ADDR_LOG(this,"Created as SignalHandler");
     GPPObject::signalHandlers.addIfNotAlreadyThere(this);
 }
 
@@ -77,6 +93,9 @@ GPPObject::SignalHandler::SignalHandler()
  */
 GPPObject::SignalHandler::SignalHandler(const SignalHandler& rhs)
 {   
+    
+    ADDR_LOG(this,"Created as SignalHandler copying ", &rhs);
+    ADDR_LOG(&rhs,"Shared data with ", this);
     GPPObject::signalHandlers.addIfNotAlreadyThere(this);
     for(GPPObject* signalSource : sources)
     {
@@ -109,7 +128,7 @@ GPPObject::SignalHandler::~SignalHandler()
             }
         }
     }
-    
+    ADDR_LOG(this, "Destroyed as SignalHandler");
     //DBG("Destroyed handler " << addressID(this));
 }
 
@@ -140,6 +159,8 @@ void GPPObject::addSignalHandler(SignalHandler* signalHandler)
  */
 void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
 {
+    ADDR_LOG(this, "removing signal handler ", signalHandler);
+    ADDR_LOG(signalHandler, " removing from signal source ", this);
     callInMainContext([this,signalHandler]()
     {
         signalHandler->sources.removeAllInstancesOf(this);
@@ -159,15 +180,21 @@ void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
             {
                 g_signal_handler_disconnect(object, signalID);
                 registeredSignals.erase(signalID);
-                DBG(addressID(this) << ":" << addressID(objectData.get())
-                        << "  removed " << signalID << ":" << addressID(signalHandler));
+                
+                ADDR_LOG(this, String("signal ID ") +String(signalID) 
+                        + String(" removed, handler was "), signalHandler);
+                ADDR_LOG(signalHandler, String("signal ID ") +String(signalID) 
+                        + String(" removed, source was "), object);
+                ADDR_LOG(object, String("signal ID ") +String(signalID) 
+                        + String(" removed, handler was "), signalHandler);
+                
             }
             g_clear_object(&object);
         }
         else
         {
-            DBG(addressID(this) << ":" << addressID(objectData.get())
-                    << "  tried removing ?:" << addressID(signalHandler));
+            ADDR_LOG(this, "GPPObject is null, but tried removing ",
+                    signalHandler);
             //DBG("GPPObject::removeSignalHandler: Tried to remove signal "
             //        << "handler from null object.");
         }
@@ -263,7 +290,8 @@ void GPPObject::setGObject(GObject* toAssign, bool transferSignalHandlers)
  */ 
 void GPPObject::setGObject(const GPPObject& toCopy, bool transferSignalHandlers)
 {   
-    DBG(addressID(this) << " = " << addressID(&toCopy));
+    ADDR_LOG(this, "Copying data from ", &toCopy);
+    ADDR_LOG(&toCopy, "Sharing data with ", this);
     if(g_type_is_a(getType(), toCopy.getType()) && *this != toCopy)
     {
         GObject* newData = toCopy.getGObject();
@@ -298,14 +326,13 @@ void GPPObject::removeData()
                 removeSignalHandler(toRemove);
             }
             GObject* object = objectData.get();
+            ADDR_LOG(object, "Removing from GPPObject ", this);
             g_weak_ref_set(objectRef.get(), nullptr);
             if(object != nullptr)
             {
                 g_object_unref(object);
                 objectData.set(nullptr);
-                
-                DBG(addressID(this) << ":" << addressID(object)
-                        << "  -> " << addressID(this) << ":0");
+                ADDR_LOG(this, "Removed GObject ",object);
             }
         }
     });
@@ -365,9 +392,12 @@ void GPPObject::connectSignalHandler(SignalHandler* handler,
                         handler);
                 if(handlerID > 0)
                 {
+                    ADDR_LOG(this, "Connected signal handler ", handler);
+                    ADDR_LOG(handler, "Connected to GPPObject ", this);
+                    ADDR_LOG(handler, "and attached to GObject ", object);
+                    ADDR_LOG(object, "Added signal handler ", handler);
+                    ADDR_LOG(object, "through GPPObject ", this);
 
-                    DBG(addressID(this) << ":" << addressID(objectData.get())
-                            << "  added " << handlerID << ":" << addressID(handler));
                     registeredSignals[handlerID] = handler;
                     handler->sources.addIfNotAlreadyThere(this);
                 }
@@ -498,8 +528,13 @@ void GPPObject::setData(GObject* data, bool refNeeded, bool moveSignalHandlers)
             }
             GObject* oldData = objectData.get();
             removeData();
-            DBG(addressID(this) << ":" << addressID(oldData)
-                    << "  -> " << addressID(this) << ":" << addressID(data));
+            if(oldData != nullptr)
+            {
+                ADDR_LOG(oldData, "Removed from GPPObject ", this);
+                ADDR_LOG(this, "Removed GObject ", oldData);
+            }
+            ADDR_LOG(data, "Added to GPPObject ", this);
+            ADDR_LOG(this, "Set GObject ", data);
             objectData.set(data);
             
             g_weak_ref_set(objectRef.get(), data);

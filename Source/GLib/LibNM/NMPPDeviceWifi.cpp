@@ -240,6 +240,7 @@ Array<NMPPAccessPoint> NMPPDeviceWifi::getAccessPoints() const
                 NMAccessPoint* nmAP = NM_ACCESS_POINT(aps->pdata[i]);
                 if(nmAP != nullptr)
                 {
+                    ADDR_LOG(nmAP,"Created as NMAccessPoint");
                     accessPoints.add(NMPPAccessPoint(nmAP));
                 }
             }
