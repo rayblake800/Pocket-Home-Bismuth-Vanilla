@@ -112,7 +112,7 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 {
     const ScopedLock lock(wifiLock);
     Array<WifiAccessPoint> filteredAPs;
-    if(isWifiConnected())
+    if(!connectedAP.isNull())
     {
         WifiAccessPoint connected = getConnectedAP();
         if(!connected.isNull())
@@ -120,7 +120,7 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
             filteredAPs.add(connected);
         }
     }
-    if(isWifiConnecting())
+    if(!connectingAP.isNull())
     {
         WifiAccessPoint connecting = getConnectingAP();
         if(!connecting.isNull())
@@ -145,8 +145,14 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
                     break;
                 }
             }
-            jassert(!packagedAP.isNull());
-            filteredAPs.add(packagedAP);
+            if(!packagedAP.isNull())
+            {
+                filteredAPs.add(packagedAP);
+            }
+            else
+            {
+                DBG("LibNMInterface::" << __func__ << ": almost added null access point!");
+            }
         }
     }
     DBG("LibNMInterface: getVisibleAPS:");
