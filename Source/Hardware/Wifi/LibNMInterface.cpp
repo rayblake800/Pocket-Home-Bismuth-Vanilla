@@ -112,6 +112,22 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 {
     const ScopedLock lock(wifiLock);
     Array<WifiAccessPoint> filteredAPs;
+    if(isWifiConnected())
+    {
+        WifiAccessPoint connected = getConnectedAP();
+        if(!connected.isNull())
+        {
+            filteredAPs.add(connected);
+        }
+    }
+    if(isWifiConnecting())
+    {
+        WifiAccessPoint connecting = getConnectingAP();
+        if(!connecting.isNull())
+        {
+            filteredAPs.add(connecting);
+        }
+    }
     filteredAPs.addIfNotAlreadyThere(getConnectedAP());
     filteredAPs.addIfNotAlreadyThere(getConnectingAP());
     Array<SavedConnection> savedCons = savedConnections.getWifiConnections();
