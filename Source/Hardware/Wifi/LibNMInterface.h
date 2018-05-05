@@ -75,21 +75,13 @@ protected:
     bool isWifiConnected() override;
 
     /**
-     * Requests information on the connected access point from the NMDevice.
+     * Requests information on the active access point from the NMDevice.
      * 
      * @return a WifiAccessPoint object representing the access point connected
-     *         to the wifi device, or WifiAccessPoint() if not connected.
+     *         or connecting to the wifi device, or a null access point if there
+     *         is no active access point.
      */
-    WifiAccessPoint getConnectedAP() override;
-
-    /**
-     * Requests information on the connecting access point from the NMDevice.
-     * 
-     * @return  a WifiAccessPoint object representing the access point 
-     *          connecting to the wifi device, or WifiAccessPoint() if not 
-     *          connecting.
-     */
-    WifiAccessPoint getConnectingAP() override;
+    WifiAccessPoint getActiveAP() override;
 
     /**
      * Requests information on all wifi access points detected by the wifi
@@ -108,7 +100,7 @@ protected:
      * @param psk        The access point's security key. This will be ignored
      *                   if the access point is unsecured.
      */
-    void connectToAccessPoint(WifiAccessPoint toConnect,
+    void connectToAccessPoint(const WifiAccessPoint& toConnect,
             String psk = String()) override;
 
     /**
@@ -131,26 +123,16 @@ protected:
      * Asynchronously turns off the wifi radio.
      */
     void disableWifi() override;
-     
+       
     /**
-     * Checks if an access point is currently being used by an active network
-     * connection.
+     * Finds the current network state of an access point object.
      * 
-     * @param accessPoint  An access point to check.
+     * @param accessPoint  The access point to check.
      * 
-     * @return  true iff accessPoint is being used by the active connection. 
+     * @return  the access point's current state. 
      */
-    bool isAPConnected(const WifiAccessPoint& accessPoint) override;
-    
-    /**
-     * Checks if an access point is currently being used by an activating
-     * network connection.
-     * 
-     * @param accessPoint  An access point to check.
-     * 
-     * @return  true iff accessPoint is being used by the activating connection. 
-     */
-    bool isAPConnecting(const WifiAccessPoint& accessPoint) override;
+    WifiStateManager::AccessPointState getAPState
+    (const WifiAccessPoint& accessPoint) override;
 
 private:       
     /**
@@ -324,7 +306,7 @@ private:
     //The current active/activating wifi connection, or a null object.
     NMPPActiveConnection activeConnection;
     //The access point used by the active connection, or a null object.
-    NMPPAccessPoint activeAP;
+    WifiAccessPoint activeAP;
     
     //All access points visible to the wifi device.
     Array<NMPPAccessPoint> visibleAPs;

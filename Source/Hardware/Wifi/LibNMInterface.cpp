@@ -57,12 +57,8 @@ bool LibNMInterface::isWifiEnabled()
  */
 bool LibNMInterface::isWifiConnecting()
 {
-    switch (activeConnection.getConnectionState())
-    {
-        case NM_ACTIVE_CONNECTION_STATE_ACTIVATING:
-            return true;
-    }
-    return false;
+    return activeConnection.getConnectionState()
+            == NM_ACTIVE_CONNECTION_STATE_ACTIVATING;
 }
 
 /*
@@ -74,32 +70,20 @@ bool LibNMInterface::isWifiConnected()
             == NM_ACTIVE_CONNECTION_STATE_ACTIVATED;
 }
 
-/*
- * Request information on the connected access point from the NMDevice.
- */
-WifiAccessPoint LibNMInterface::getConnectedAP()
-{
-    if(!isWifiConnected())
-    {
-        return WifiAccessPoint();
-    }
-    WifiAccessPoint connected(activeAP);
-    connected.setConnectionPath(activeConnection.getAccessPointPath());
-    return connected;
-}
 
 /*
- * Request information on the connecting access point from the NMDevice.
+ * Requests information on the active access point from the NMDevice.
  */
-WifiAccessPoint LibNMInterface::getConnectingAP()
+WifiAccessPoint LibNMInterface::getActiveAP()
 {
-    if(!isWifiConnecting())
+    switch(activeConnection.getConnectionState())
     {
-        return WifiAccessPoint();
+        case NM_ACTIVE_CONNECTION_STATE_ACTIVATING:
+        case NM_ACTIVE_CONNECTION_STATE_ACTIVATED:
+            return activeAP;
+        default:
+            return WifiAccessPoint();
     }
-    WifiAccessPoint connecting(activeAP);
-    connecting.setConnectionPath(activeConnection.getAccessPointPath());
-    return connecting;
 }
 
 /*
@@ -110,18 +94,14 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
     Array<WifiAccessPoint> filteredAPs;
     if(!activeAP.isNull())
     {
-        WifiAccessPoint active(activeAP);
-        if(!active.isNull())
-        {
-	    active.setConnectionPath(activeConnection.getAccessPointPath());
-            filteredAPs.add(active);
-        }
+        filteredAPs.add(activeAP);
     }
     Array<SavedConnection> savedCons = savedConnections.getWifiConnections();
     for(const NMPPAccessPoint& ap : visibleAPs)
     {
         WifiAccessPoint packagedAP(ap);
-        if(packagedAP.getSSID().isNotEmpty && !filteredAPs.contains(packagedAP))
+        if(packagedAP.getSSID().isNotEmpty() 
+                && !filteredAPs.contains(packagedAP))
         {
             for(const SavedConnection& con : savedCons)
             {
@@ -143,7 +123,7 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 /*
  * Begin opening a connection to a wifi access point.
  */
-void LibNMInterface::connectToAccessPoint(WifiAccessPoint toConnect,
+void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
 {
     //search for active connections
@@ -201,23 +181,35 @@ void LibNMInterface::connectToAccessPoint(WifiAccessPoint toConnect,
 }
 
 /*
- * Checks if an access point is currently being used by an active network
- * connection.
+ * Finds the current network state of an access point object.
  */
-bool LibNMInterface::isAPConnected(const WifiAccessPoint& accessPoint)
+WifiStateManager::AccessPointState LibNMInterface::getAPState 
+(const WifiAccessPoint& accessPoint)
 {
-    return activeConnection.isConnectedAccessPoint
-            (accessPoint.getNMAccessPoint()) && isWifiConnected();
-}
-
-/*
- * Checks if an access point is currently being used by an activating
- * network connection.
- */
-bool LibNMInterface::isAPConnecting(const WifiAccessPoint& accessPoint)
-{
-    return activeConnection.isConnectedAccessPoint
-            (accessPoint.getNMAccessPoint()) && isWifiConnecting();
+    if(accessPoint.isNull())
+    {
+        return WifiStateManager::nullAP;
+    }
+    if(activeConnection.isConnectedAccessPoint(accessPoint.getNMAccessPoint())
+            || activeAP.sharesConnectionWith(accessPoint))
+    {
+        switch(activeConnection.getConnectionState())
+        {
+            case NM_ACTIVE_CONNECTION_STATE_ACTIVATING:
+                return WifiStateManager::connectingAP;
+            case NM_ACTIVE_CONNECTION_STATE_ACTIVATED:
+                return WifiStateManager::connectedAP;
+            case NM_ACTIVE_CONNECTION_STATE_DEACTIVATING:
+                return WifiStateManager::disconnectingAP;
+            case NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
+                return WifiStateManager::disconnectedAP;
+        }
+    }
+    if(visibleAPs.contains(accessPoint.getNMAccessPoint()))
+    {
+        return WifiStateManager::disconnectedAP;
+    }
+    return WifiStateManager::missingAP;
 }
 
 /*
@@ -231,7 +223,7 @@ void LibNMInterface::updateAllWifiData()
     lastNMState = wifiDevice.getState();
     savedConnections.updateSavedConnections();
     activeConnection = wifiDevice.getActiveConnection();
-    activeAP = wifiDevice.getAccessPoint(connection.getAccessPointPath());
+    activeAP = wifiDevice.getAccessPoint(activeConnection.getAccessPointPath());
     visibleAPs = wifiDevice.getAccessPoints();
     ScopedUnlock confirmUnlock(wifiLock);
     confirmWifiState();
@@ -377,7 +369,6 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
         {
             return;
         }
-
         lastNMState = newState;
         DBG("LibNMInterface::" << __func__ << ":  changed to "
                 << deviceStateString(newState));
@@ -385,13 +376,15 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                 << deviceStateReasonString(reason));
         switch (newState)
         {
-            case NM_DEVICE_STATE_ACTIVATED:        
+            case NM_DEVICE_STATE_ACTIVATED:
+            {
                 DBG("LibNMInterface::" << __func__ 
                         << ": new connection activated, send connection signal");
 		stopTimer();
 		ScopedUnlock unlockForUpdate(wifiLock);
 		signalWifiConnected(activeAP);
                 break;
+            }
             case NM_DEVICE_STATE_PREPARE:
             case NM_DEVICE_STATE_CONFIG:
             case NM_DEVICE_STATE_IP_CONFIG:
@@ -496,14 +489,15 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
             activeConnection = active;
             if (active.isNull())
             {
-                activeAP = NMPPAccessPoint();
+                activeAP = WifiAccessPoint();
                 ScopedUnlock notifyUnlock(wifiLock);
                 signalWifiDisconnected();
             }
             else
             {
-                activeAP = wifiDevice.getAccessPoint
+                NMPPAccessPoint nmAP = wifiDevice.getAccessPoint
                         (activeConnection.getAccessPointPath());
+                activeAP = WifiAccessPoint(nmAP);
                 ScopedUnlock notifyUnlock(wifiLock);
                 if(active.getConnectionState() 
                         == NM_ACTIVE_CONNECTION_STATE_ACTIVATED)
@@ -512,7 +506,7 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
 		}
 		else 
 		{
-                    signalWifiConnecting(activeAP);
+                    signalWifiConnecting();
 		}
             }
         }

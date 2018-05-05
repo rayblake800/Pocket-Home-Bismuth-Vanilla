@@ -135,7 +135,7 @@ String WifiSettingsComponent::updateButtonText()
             return localeText(wifi_turning_off);
         case WifiStateManager::connecting:
         {
-            WifiAccessPoint ap = wifiManager.getConnectingAP();
+            WifiAccessPoint ap = wifiManager.getActiveAP();
             if (ap.isNull())
             {
                 DBG("WifiSettingsComponent::" << __func__ << ": wifi is "
@@ -148,7 +148,7 @@ String WifiSettingsComponent::updateButtonText()
             return localeText(missing_psk);
         case WifiStateManager::connected:
         {
-            WifiAccessPoint ap = wifiManager.getConnectedAP();
+            WifiAccessPoint ap = wifiManager.getActiveAP();
             if(ap.isNull())
             {
                 return "Error: connected AP missing!";

@@ -60,25 +60,16 @@ bool JsonWifiInterface::isWifiConnected()
 
 
 /*
- *  Returns the connected access point.
+ * Returns the connected or connecting access point.
  */
-WifiAccessPoint JsonWifiInterface::getConnectedAP()
+WifiAccessPoint JsonWifiInterface::getActiveAP()
 {
     ScopedLock lock(wifiLock);
     if (!connected)
     {
-        return WifiAccessPoint();
+        return waitingToConnect;
     }
     return connectedAP;
-}
-
-/*
- * Returns the connecting access point.
- */
-WifiAccessPoint JsonWifiInterface::getConnectingAP()
-{
-    ScopedLock lock(wifiLock);
-    return waitingToConnect;
 }
 
 /*
@@ -99,7 +90,7 @@ Array<WifiAccessPoint> JsonWifiInterface::getVisibleAPs()
  * the connection's success or failure after a randomized delay of two to
  * four seconds.
  */
-void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint toConnect,
+void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
 {
     ScopedLock lock(wifiLock);
@@ -291,21 +282,35 @@ void JsonWifiInterface::disableWifi()
     }
 }
 
-
-/*
- * Checks if an access point is currently being used by the active network
- * connection.
+       
+/**
+ * Finds the current network state of an access point object.
  */
-bool JsonWifiInterface::isAPConnected(const WifiAccessPoint& accessPoint)
+WifiStateManager::AccessPointState JsonWifiInterface::getAPState
+(const WifiAccessPoint& accessPoint)
 {
-    return connected && accessPoint == connectedAP;
-}
-
-/*
- * Checks if an access point is currently being used by the activating
- * network connection.
- */
-bool JsonWifiInterface::isAPConnecting(const WifiAccessPoint& accessPoint)
-{
-    return accessPoint == waitingToConnect;
+    if(accessPoint.isNull())
+    {
+        return WifiStateManager::nullAP;
+    }
+    if(accessPoint == connectedAP)
+    {
+        if(connected)
+        {
+            return WifiStateManager::connectedAP;
+        }
+        if(disconnecting)
+        {
+            return WifiStateManager::disconnectingAP;
+        }
+    }
+    if(accessPoint == waitingToConnect)
+    {
+        return WifiStateManager::connectingAP;
+    }
+    if(enabled && visibleAPs.contains(accessPoint))
+    {
+        return WifiStateManager::disconnectedAP;
+    }
+    return WifiStateManager::missingAP;
 }

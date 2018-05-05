@@ -74,7 +74,7 @@ void WifiIcon::timerCallback()
             return;
     }
     //wifi connected
-    WifiAccessPoint accessPoint = wifiManager.getConnectedAP();
+    WifiAccessPoint accessPoint = wifiManager.getActiveAP();
     WifiIconImage wifiState = wifiOff;
     if (!accessPoint.isNull())
     {

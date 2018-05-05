@@ -150,7 +150,7 @@ public:
      *          or a null connection object if this access point is null or
      *          the psk was invalid.
      */
-    NMPPConnection createConnection(String psk = String());
+    NMPPConnection createConnection(String psk = String()) const;
 
     /**
      * @return the access point device mode 

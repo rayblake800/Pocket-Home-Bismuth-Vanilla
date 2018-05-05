@@ -175,7 +175,7 @@ bool WifiAccessPoint::sharesConnectionWith(const WifiAccessPoint& otherAP) const
  * Create a new connection object that could be used to connect with this
  * access point.
  */
-NMPPConnection WifiAccessPoint::createConnection(String psk)
+NMPPConnection WifiAccessPoint::createConnection(String psk) const
 {
     const ScopedReadLock readLock(networkUpdateLock);
     NMPPConnection newConnection;

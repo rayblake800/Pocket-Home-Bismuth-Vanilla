@@ -52,25 +52,14 @@ void WifiStateManager::removeListener(WifiStateManager::Listener* listener)
 }
 
 /*
- * Gets the connected wifi access point, if one exists.
+ * Gets the connected or connecting wifi access point.
  */
-WifiAccessPoint WifiStateManager::getConnectedAP()
+WifiAccessPoint WifiStateManager::getActiveAP()
 {
     const ScopedLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
-    return wifiResource->getConnectedAP();
-}
-
-/*
- * Gets the connecting wifi access point, if one exists.
- */
-WifiAccessPoint WifiStateManager::getConnectingAP()
-{
-    const ScopedLock lock(stateLock);
-    NetworkInterface* wifiResource
-            = static_cast<NetworkInterface*> (sharedResource.get());
-    return wifiResource->getConnectingAP();
+    return wifiResource->getActiveAP();
 }
 
 /*
@@ -110,38 +99,37 @@ bool WifiStateManager::isConnected()
  * Attempts to open a connection to a wifi access point. This will fail if 
  * wifi is disabled, the access point is invalid, or the psk is wrong.
  */
-void WifiStateManager::connectToAccessPoint(WifiAccessPoint toConnect,
+void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
 {
     const ScopedLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
-    if (toConnect.isNull())
+    switch(getAPState(toConnect))
     {
-        DBG("WifiStateManager::" << __func__
-                << ": Tried to connect to null access point!");
-        return;
-    }
-    else if(wifiResource->isAPConnected(toConnect))
-    {
-        DBG("WifiStateManager::" << __func__
-                << ": already connected to " << toConnect.getSSID());
-        return;
-    }
-    else if(wifiResource->isAPConnecting(toConnect))
-    {
-        DBG("WifiStateManager::" << __func__
-                << ": already connecting to " << toConnect.getSSID());
-        return;
+        case nullAP:
+            DBG("WifiStateManager::" << __func__
+                    << ": Tried to connect to null access point!");
+            return;
+        case missingAP:
+            DBG("WifiStateManager::" << __func__
+                    << ": Access point " << toConnect.getSSID()
+                    << "is no longer visible");
+            return;
+        case connectedAP:
+            DBG("WifiStateManager::" << __func__
+                    << ": already connected to " << toConnect.getSSID());
+            return;
+        case connectingAP:
+            DBG("WifiStateManager::" << __func__
+                    << ": already connecting to " << toConnect.getSSID());
+            return;
     }
     
     WifiState wifiState = wifiResource->getWifiState();
     switch (wifiState)
     {
-        //start connecting:
         case connecting:
-            stopConnecting();
-            break;
         case connected:
             DBG("WifiStateManager::" << __func__
                     << ": closing previous connection");
@@ -257,27 +245,19 @@ void WifiStateManager::disableWifi()
 }
  
 /*
- * Checks if an access point is currently being used by an active network
- * connection.
+ * Finds the current network state of an access point object.
  */
-bool WifiStateManager::isAPConnected(const WifiAccessPoint& accessPoint)
-{  
+WifiStateManager::AccessPointState WifiStateManager::getAPState
+(const WifiAccessPoint& accessPoint)
+{
+    if(accessPoint.isNull())
+    {
+        return nullAP;
+    }
     const ScopedLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
-    return wifiResource->isAPConnected(accessPoint);
-}
-
-/*
- * Checks if an access point is currently being used by an activating
- * network connection.
- */
-bool WifiStateManager::isAPConnecting(const WifiAccessPoint& accessPoint)
-{  
-    const ScopedLock lock(stateLock);
-    NetworkInterface* wifiResource
-            = static_cast<NetworkInterface*> (sharedResource.get());
-    return wifiResource->isAPConnecting(accessPoint);
+    return wifiResource->getAPState(accessPoint);
 }
 
 WifiStateManager::NetworkInterface::NetworkInterface(CriticalSection& wifiLock)

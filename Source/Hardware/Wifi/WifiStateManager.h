@@ -112,20 +112,12 @@ public:
     void removeListener(Listener* listener);
 
     /**
-     * Gets the connected wifi access point, if one exists.
+     * Gets the connected or connecting wifi access point.
      * 
-     * @return the current connected Wifi access point, or a null 
-     *         WifiAccessPoint if there is no connection.
+     * @return the current active WifiAccessPoint if one is found, or a 
+     *          null WifiAccessPoint if not connected or connecting.
      */
-    WifiAccessPoint getConnectedAP();
-
-    /**
-     * Gets the connecting wifi access point, if one exists.
-     * 
-     * @return the current connecting WifiAccessPoint if one is found, or a 
-     *         null WifiAccessPoint if wifi is not connecting.
-     */
-    WifiAccessPoint getConnectingAP();
+    WifiAccessPoint getActiveAP();
 
     /**
      * Gets all access points visible to the wifi device.
@@ -158,11 +150,11 @@ public:
      * @param psk        The wifi key for toConnect. This parameter will be
      *                   ignored if toConnect isn't secured.
      */
-    void connectToAccessPoint(WifiAccessPoint toConnect,
+    void connectToAccessPoint(const WifiAccessPoint& toConnect,
             String psk = String());
 
     /**
-     * If wifi is connected, this will close the active connection.
+     * Closes any active or activating wifi connection.
      */
     void disconnect();
             
@@ -179,24 +171,32 @@ public:
     void disableWifi();
     
     /**
-     * Checks if an access point is currently being used by an active network
-     * connection.
-     * 
-     * @param accessPoint  An access point to check.
-     * 
-     * @return  true iff accessPoint is being used by the active connection. 
+     * Describes the current network state of a WifiAccessPoint object.
      */
-    bool isAPConnected(const WifiAccessPoint& accessPoint);
+    enum AccessPointState
+    {
+        // WifiAccessPoint contains no access point data.
+        nullAP,
+        // The access point is not visible to the wifi device.
+        missingAP,
+        // The access point is visible but not being used.
+        disconnectedAP,
+        // A connection is being created through this access point.
+        connectingAP,
+        // An active connection exists using this access point.
+        connectedAP,
+        // A connection using this access point is being closed.
+        disconnectingAP
+    };
     
     /**
-     * Checks if an access point is currently being used by an activating
-     * network connection.
+     * Finds the current network state of an access point object.
      * 
-     * @param accessPoint  An access point to check.
+     * @param accessPoint  The access point to check.
      * 
-     * @return  true iff accessPoint is being used by the activating connection. 
+     * @return  the access point's current state. 
      */
-    bool isAPConnecting(const WifiAccessPoint& accessPoint);
+    AccessPointState getAPState(const WifiAccessPoint& accessPoint);
 
     class NetworkInterface : public ResourceManager::SharedResource, 
     public Timer
@@ -243,20 +243,12 @@ public:
         void removeListener(WifiStateManager::Listener* listener);
 
         /**
-         * Gets the connected wifi access point, if one exists.
+         * Gets the connected or connecting wifi access point.
          * 
-         * @return the current connected WifiAccessPoint if one is found, or a 
-         *          null WifiAccessPoint if not connected.
+         * @return the current active WifiAccessPoint if one is found, or a 
+         *          null WifiAccessPoint if not connected or connecting.
          */
-        virtual WifiAccessPoint getConnectedAP() = 0;
-
-        /**
-         * Gets the connecting wifi access point, if one exists.
-         * 
-         * @return the current connecting WifiAccessPoint if one is found, or a
-         *          null WifiAccessPoint if not connecting.
-         */
-        virtual WifiAccessPoint getConnectingAP() = 0;
+        virtual WifiAccessPoint getActiveAP() = 0;
 
         /**
          * Scans for and returns nearby wifi access points.
@@ -304,12 +296,11 @@ public:
          * @param psk        The wifi key for toConnect, or the empty string if
          *                    toConnect isn't secured.
          */
-        virtual void connectToAccessPoint(WifiAccessPoint toConnect,
+        virtual void connectToAccessPoint(const WifiAccessPoint& toConnect,
                 String psk = String()) = 0;
 
         /**
-         * If a wifi access point is currently connected, attempt to disconnect
-         * from that access point.
+         * Closes any active or activating wifi connection.
          */
         virtual void disconnect() = 0;
 
@@ -326,24 +317,14 @@ public:
         virtual void disableWifi() = 0;
         
         /**
-         * Checks if an access point is currently being used by an active network
-         * connection.
+         * Finds the current network state of an access point object.
          * 
-         * @param accessPoint  An access point to check.
+         * @param accessPoint  The access point to check.
          * 
-         * @return  true iff accessPoint is being used by the active connection. 
+         * @return  the access point's current state. 
          */
-        virtual bool isAPConnected(const WifiAccessPoint& accessPoint) = 0;
-
-        /**
-         * Checks if an access point is currently being used by an activating
-         * network connection.
-         * 
-         * @param accessPoint  An access point to check.
-         * 
-         * @return  true iff accessPoint is being used by the activating connection. 
-         */
-        virtual bool isAPConnecting(const WifiAccessPoint& accessPoint) = 0;
+        virtual AccessPointState getAPState
+        (const WifiAccessPoint& accessPoint) = 0;
 
         //Milliseconds to wait before assuming that enabling or
         //disabling wifi has failed.

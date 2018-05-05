@@ -44,19 +44,12 @@ protected:
     bool isWifiConnected() override;
 
     /**
-     * Returns the connected access point.
+     * Returns the connected or connecting access point.
      * 
-     * @return the access point, or WifiAccessPoint() if not connected.
+     * @return the access point, or WifiAccessPoint() if not connected or
+     *         connecting.
      */
-    WifiAccessPoint getConnectedAP() override;
-
-    /**
-     * Returns the connecting access point.
-     * 
-     * @return the access point, or WifiAccessPoint() if wifi is not 
-     *          connecting.
-     */
-    WifiAccessPoint getConnectingAP() override;
+    WifiAccessPoint getActiveAP() override;
 
     /**
      * Returns the entire list of access points defined in wifi.json.
@@ -81,7 +74,7 @@ protected:
      *                    value will be noted in debug output, but otherwise
      *                    is ignored.
      */
-    void connectToAccessPoint(WifiAccessPoint toConnect,
+    void connectToAccessPoint(const WifiAccessPoint& toConnect,
             String psk = String()) override;
 
     /**
@@ -102,26 +95,16 @@ protected:
      * event after a randomized delay of no more than two seconds.
      */
     void disableWifi() override;
-     
+       
     /**
-     * Checks if an access point is currently being used by the active network
-     * connection.
+     * Finds the current network state of an access point object.
      * 
-     * @param accessPoint  An access point to check.
+     * @param accessPoint  The access point to check.
      * 
-     * @return  true iff accessPoint is being used by the active connection. 
+     * @return  the access point's current state. 
      */
-    bool isAPConnected(const WifiAccessPoint& accessPoint) override;
-    
-    /**
-     * Checks if an access point is currently being used by the activating
-     * network connection.
-     * 
-     * @param accessPoint  An access point to check.
-     * 
-     * @return  true iff accessPoint is being used by the activating connection. 
-     */
-    bool isAPConnecting(const WifiAccessPoint& accessPoint) override;
+    WifiStateManager::AccessPointState getAPState
+    (const WifiAccessPoint& accessPoint) override;
 
 private:
     //Simulated wifi state variables.

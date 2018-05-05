@@ -1,4 +1,5 @@
 #pragma once
+#include "WifiStateManager.h"
 
 /** 
  * @file WifiDebugOutput.h

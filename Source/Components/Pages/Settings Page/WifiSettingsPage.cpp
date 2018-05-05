@@ -71,12 +71,7 @@ void WifiSettingsPage::connect(WifiAccessPoint accessPoint)
 void WifiSettingsPage::disconnect(WifiAccessPoint accessPoint)
 {
     WifiStateManager wifiManager;
-    if(accessPoint == wifiManager.getConnectingAP())
-    {
-        lastDisconnecting = accessPoint;
-        wifiManager.stopConnecting();
-    }
-    else if(accessPoint == wifiManager.getConnectedAP())
+    if(accessPoint == wifiManager.getActiveAP())
     {
         lastDisconnecting = accessPoint;
         wifiManager.disconnect();
@@ -98,7 +93,8 @@ bool WifiSettingsPage::isConnected(WifiAccessPoint accessPoint)
         return false;
     }
     WifiStateManager wifiManager;
-    return wifiManager.isAPConnected(accessPoint);
+    return wifiManager.getAPState(accessPoint) == 
+            WifiStateManager::connectedAP;
 }
 
 /*

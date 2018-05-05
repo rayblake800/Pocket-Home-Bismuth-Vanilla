@@ -1,3 +1,8 @@
+- turns out activeConnectionChanged is called when the connection begins
+  activating, not when it's fully active.  Connection handling needs to be
+  updated to reflect this.
+
+-Finish implementing failed connection handling
 
 -Connecting/Disconnecting sometimes fails to register with the connection
   page until it is closed and reopened.
@@ -12,8 +17,6 @@
 -Animate connection page transitions.
 
 -Update the HomePage wifi icon to better use new wifi features.
-
--Build a fully threadsafe signaller/listener pattern for SharedResource objects.
 
 -Finish documenting and formatting AppMenu helper classes.
 
