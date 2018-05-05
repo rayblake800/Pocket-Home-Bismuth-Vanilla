@@ -8,10 +8,22 @@
 /**
  * @file LibNMInterface.h
  * 
- * @brief Connects to the libnm NetworkManager to track and control wifi device.
+ * @brief Connects to the LibNM NetworkManager to track and control the wifi 
+ * device.
  * 
  * As a WifiStateManager::NetworkInterface, only the WifiStateManager should
  * directly interact with this class.
+ *
+ * The NetworkManager interface is built with GLib's C-based object system.
+ * To reduce the amount of messy C-style code and error-prone manual memory
+ * management, NetworkManager objects are packaged into C++ wrapper objects
+ * defined in Source/GLib/LibNM.
+ *
+ * The latest version of NetworkManager available in the Debian Jesse 
+ * repositories is 0.9.10, which is considerably out of date.  Supporting
+ * such an old version has required a lot of compromises and complications
+ * that should be re-examined before reusing this code in any project that
+ * can expect a newer NetworkManager version.
  */
 
 class LibNMInterface : public WifiStateManager::NetworkInterface, 
@@ -19,6 +31,10 @@ class LibNMInterface : public WifiStateManager::NetworkInterface,
 {
 public:
     /**
+     * Initializes the LibNM client interface and connects signal handlers. The
+     * wifi device will be loaded from the interface name loaded from the
+     * MainConfigFile, or selected automatically if the config value is empty.
+     *
      * @param wifiLock  The lock used by the WifiStateManager to control access
      *                  to the network interface.  LibNMInterface will acquire
      *                  the lock when it is updated by NetworkManager.  The lock
@@ -26,7 +42,7 @@ public:
      */
     LibNMInterface(CriticalSection& wifiLock);
 
-    virtual ~LibNMInterface();
+    virtual ~LibNMInterface() { }
 
 protected:
     /**
@@ -76,7 +92,8 @@ protected:
     WifiAccessPoint getConnectingAP() override;
 
     /**
-     * Request information on all wifi access points detected by the NMDevice.
+     * Requests information on all wifi access points detected by the wifi
+     * device.
      * 
      * @return  a list of all visible access points within range of the wifi
      *          device, or an empty list if wifi is disabled.
@@ -101,14 +118,9 @@ protected:
     void updateAllWifiData();
 
     /**
-     * Close the currently active connection, if one exists.
+     * Close the currently active/activating connection, if one exists.
      */
     void disconnect() override;
-    
-    /**
-     * Cancel any activating wifi connection.
-     */
-    void stopConnecting() override;
 
     /**
      * Asynchronously turns on the wifi radio.
@@ -146,8 +158,8 @@ private:
      * connect.
      * 
      * @param connection  A new active connection object representing the 
-     *                    added connection. This connection object might not
-     *                    be completely connected yet.
+     *                    added connection. This connection object will 
+     *                    probably not be completely connected yet.
      * 
      * @param isNew       True if the connection was just added to the
      *                    network manager, false if it was a known
@@ -159,11 +171,11 @@ private:
     /**
      * Notify listeners that a connection attempt failed.
      * 
-     * #param connection  The connection that failed to activate.  This
+     * @param connection  The connection that failed to activate.  This
      *                    may be a null connection.
      * 
      * @param error       A GError object describing the problem.  This 
-     *                    error object should not be freed.
+     *                    error object will be freed by this method.
      * 
      * @param isNew       True iff the connection was just added to the 
      *                    network manager. 
@@ -217,7 +229,9 @@ private:
      * changes.
      * 
      * @param active   The new active connection.  If the device has
-     *                 disconnected, this will be a null object.
+     *                 disconnected, this will be a null object
+     *                 (TODO: will it really be null, or just not connected?
+     *                 test this)
      */
     virtual void activeConnectionChanged(NMPPActiveConnection active);
     
@@ -225,7 +239,7 @@ private:
      *#######################  Listener Classes  ###############################
      * These objects listen to signals from NetworkManager classes and pass them
      * on to the LibNMInterface.  All GPPObject Listeners share a parent class,
-     * so one object can't simply inherit multiple listener classes directly.
+     * so LibNMInterface can't just inherit all Listener classes itself.
      */
     class ClientListener : public NMPPClient::Listener
     {
@@ -283,8 +297,18 @@ private:
     ScopedPointer<ClientListener> clientListener;
     ScopedPointer<DeviceListener> deviceListener;
     
-    //Prevent concurrent access to the wifi data.  This should be locked
-    //any time any of the data members listed beneath it is accessed.
+    /**
+     * Prevents concurrent access to the wifi data.  This is a reference to the
+     * CriticalSection used by WifiStateManager, so it should not be locked
+     * within this class in any method the WifiStateManager could call.
+     *
+     * The only reason this object is accessible here at all is so LibNM
+     * callback functions can acquire the lock when updating data.  Even then,
+     * the lock must never be acquired within the Glib event thread, as this 
+     * can easily create a deadlock where the GLib thread waits for the
+     * wifiLock, while another thread holding the wifiLock waits for access to
+     * the GLib thread.
+     */
     CriticalSection& wifiLock;
 
     //The client used to access the network manager.
@@ -297,15 +321,10 @@ private:
     //All connections saved with NetworkManager.
     SavedConnections savedConnections;
     
-    //The current active wifi connection, or a null object.
+    //The current active/activating wifi connection, or a null object.
     NMPPActiveConnection activeConnection;
     //The access point used by the active connection, or a null object.
-    NMPPAccessPoint connectedAP;
-    
-    //The connection currently being activated, or a null object.
-    NMPPActiveConnection activatingConnection;
-    //The access point used by the activating connection, or a null object.
-    NMPPAccessPoint connectingAP;
+    NMPPAccessPoint activeAP;
     
     //All access points visible to the wifi device.
     Array<NMPPAccessPoint> visibleAPs;

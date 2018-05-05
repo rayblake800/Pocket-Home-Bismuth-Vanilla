@@ -199,22 +199,6 @@ void JsonWifiInterface::connectToAccessPoint(WifiAccessPoint toConnect,
 }
 
 /*
- * If a connection is pending, cancel it.
- */
-void JsonWifiInterface::stopConnecting()
-{
-    ScopedLock lock(wifiLock);
-    if(waitingToConnect.isNull())
-    {
-         DBG("JsonWifiInterface::" << __func__ << ": no connection to cancel");
-    }
-    else
-    {
-        waitingToConnect = WifiAccessPoint();
-    }
-}
-
-/*
  * Triggers a simulated wifi disconnection event.  If a simulated connection
  * exists, after a randomized delay of no more than two seconds, a 
  * disconnection event will trigger.

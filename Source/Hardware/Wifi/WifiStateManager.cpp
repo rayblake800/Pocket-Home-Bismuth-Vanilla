@@ -176,6 +176,8 @@ void WifiStateManager::disconnect()
     WifiState wifiState = wifiResource->getWifiState();
     switch (wifiState)
     {
+	case connecting:
+        case missingPassword:
         case connected:
             DBG("WifiStateManager::" << __func__ << ": Disconnecting... ");
             wifiResource->setWifiState(disconnecting);
@@ -185,33 +187,6 @@ void WifiStateManager::disconnect()
         default:
             DBG("WifiStateManager::" << __func__
                     << ": Attempted to disconnect from state " 
-                    << wifiStateString(wifiState));
-    }
-}
-
-
-/*
- * If attempting to connect to a wifi access point, that attempted
- * connection will be canceled.
- */
-void WifiStateManager::stopConnecting()
-{
-    const ScopedLock lock(stateLock);
-    NetworkInterface* wifiResource
-            = static_cast<NetworkInterface*> (sharedResource.get());
-    WifiState wifiState = wifiResource->getWifiState();
-    switch (wifiState)
-    {
-        case connecting:
-        case missingPassword:
-            DBG("WifiStateManager::" << __func__ << ": Disconnecting... ");
-            wifiResource->setWifiState(disconnecting);
-            wifiResource->startTimer(wifiResource->wifiConnectionTimeout);
-            wifiResource->stopConnecting();
-            return;
-        default:
-            DBG("WifiStateManager::" << __func__
-                    << ": Attempted to stop connecting from state " 
                     << wifiStateString(wifiState));
     }
 }

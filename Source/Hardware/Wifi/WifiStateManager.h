@@ -165,12 +165,6 @@ public:
      * If wifi is connected, this will close the active connection.
      */
     void disconnect();
-
-    /**
-     * If attempting to connect to a wifi access point, that attempted
-     * connection will be canceled.
-     */
-    void stopConnecting();
             
     /**
      * If wifi is currently disabled, this will enable it.  Otherwise, nothing 
@@ -318,12 +312,6 @@ public:
          * from that access point.
          */
         virtual void disconnect() = 0;
-        
-        /**
-         * If attempting to connect to a wifi access point, that attempted
-         * connection will be canceled.
-         */
-        virtual void stopConnecting() = 0;
 
         /**
          * If wifi is currently disabled, this will enable it.  Otherwise,

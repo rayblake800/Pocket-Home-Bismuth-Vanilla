@@ -85,11 +85,6 @@ protected:
             String psk = String()) override;
 
     /**
-     * If a connection is pending, cancel it.
-     */
-    void stopConnecting() override;
-    
-    /**
      * Triggers a simulated wifi disconnection event.  If a simulated connection
      * exists, after a randomized delay of no more than two seconds, a 
      * disconnection event will trigger.

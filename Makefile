@@ -1,5 +1,6 @@
 VERSION=0.0.8.9
 BUILD=1
+CONFIG:=Release
 
 #PKG_CONFIG:=$(shell which pkg-config)
 
@@ -12,18 +13,19 @@ BUILD=1
 #export PKG_CONFIG_LDFLAGS=$(foreach pkg, $(PKG_CONFIG_PACKAGES), $(shell $(PKG_CONFIG) --libs $(pkg)))
 
 
-all: CONFIG:=Release
+#all: CONFIG:=Release
 all:
+	echo building $(CONFIG)
 	cd Builds/LinuxMakefile && $(MAKE)
 
 clean:
 	cd Builds/LinuxMakefile && $(MAKE) clean
 
-wifitest: CONFIG:=Debug
+#wifitest: CONFIG:=Debug
 wifitest:
 	cd Builds/LinuxMakefile && $(MAKE) -f UnitTests.mk ../../build/$(CONFIG)/wifitest
 	
-debug: CONFIG:=Debug
+#debug: CONFIG:=Debug
 debug:
 	reset
 	cd Builds/LinuxMakefile && $(MAKE)
@@ -40,7 +42,7 @@ pack: all
 install: pack
 	sudo dpkg -i pocket-home_$(VERSION)-$(BUILD)_armhf.deb
 
-devinstall: CONFIG:=Release
+#devinstall: CONFIG:=Release
 devinstall:
 	killall pocket-home ;\
 	sudo cp build/$(CONFIG)/pocket-home /usr/bin/pocket-home && \
