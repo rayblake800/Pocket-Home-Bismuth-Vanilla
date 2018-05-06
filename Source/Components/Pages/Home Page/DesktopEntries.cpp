@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <stdlib.h>
+#include "Utils.h"
 #include "DesktopEntries.h"
 
 DesktopEntries::DesktopEntries() : Thread("DesktopEntries") { }
@@ -113,6 +114,7 @@ void DesktopEntries::clearCallbacks()
 
 void DesktopEntries::run()
 {
+    ScopedExecTimer threadTimer("Desktop Entry Loading");
     const ScopedLock loadingLock(lock);
     std::atomic<bool> uiCallPending;
     uiCallPending = false;
@@ -143,7 +145,7 @@ void DesktopEntries::run()
             {
                 return;
             }
-            wait(-1);
+            wait(1);
         }
         File directory(dirs[i]);
         if (directory.isDirectory())
@@ -178,7 +180,7 @@ void DesktopEntries::run()
             {
                 return;
             }
-            wait(-1);
+            wait(1);
         }
         DesktopEntry entry(file);
         StringArray onlyShowIn = entry.getValue(DesktopEntry::onlyShowIn);
@@ -203,24 +205,13 @@ void DesktopEntries::run()
         entries.insert(entry);
 
     }
-    uiCallPending = true;
     MessageManager::callAsync([&uiCallPending, this]
     {
+    	ScopedExecTimer endTimer("Async OnFinish Callback");
         const ScopedLock loadingLock(lock);
         notifyCallback("Finished loading applications.");
         DBG("DesktopEntries::" << __func__
                 << ": All desktop entries loaded.");
         onFinish();
-        uiCallPending = false;
-        this->notify();
     });
-    while (uiCallPending)
-    {
-        const ScopedUnlock unlockToFinish(lock);
-        if (threadShouldExit())
-        {
-            return;
-        }
-        wait(-1);
-    }
 }
