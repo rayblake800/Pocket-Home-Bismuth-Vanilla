@@ -58,19 +58,12 @@ public:
     NMPPConnection getNMConnection() const;
     
     /**
-     * Replace the connection's existing wifi security settings.
+     * Checks if the connection has a saved wireless security key.
      * 
-     * @param newSettings  A GVariant* dictionary used to construct the
-     *                     replacement settings.  Only the keys found in this
-     *                     dictionary will be replaced, any others will be 
-     *                     copied over from the old wireless security settings.
+     * @return true iff a security key value was found in this connection's
+     *         settings.
      */
-    void updateWifiSecurity(GVariant* newSettings);
-    
-    /**
-     * Removes any saved WEP key or WPA PSK attached to this connection.
-     */
-    void removeSecurityKey();
+    bool hasSavedKey();
     
     /**
      * Deletes this connection from the list of saved connections.  This object
@@ -170,4 +163,13 @@ private:
     NMPPConnection nmConnection;
     StringArray settingNames;
     String path;
+    
+    static const constexpr char * busName = "org.freedesktop.NetworkManager";
+    static const constexpr char * interfaceName 
+            = "org.freedesktop.NetworkManager.Settings.Connection";
+
+    static const constexpr char * getSettingsMethod = "GetSettings";
+    static const constexpr char * getSecretsMethod = "GetSecrets";
+    static const constexpr char * deleteConnectionMethod = "Delete";
+    static const constexpr char * updateMethod = "Update";
 };

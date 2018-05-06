@@ -1,32 +1,7 @@
+#include <nm-setting-connection.h>
+#include <nm-setting-wireless.h>
+#include <nm-setting-wireless-security.h>
 #include "SavedConnection.h"
-
-#define BUS_NAME "org.freedesktop.NetworkManager"
-#define INTERFACE "org.freedesktop.NetworkManager.Settings.Connection"
-
-//Methods:
-#define GET_SETTINGS "GetSettings"
-#define GET_SECRETS "GetSecrets"
-#define DELETE_CONN "Delete"
-#define UPDATE_CONN "Update"
-
-//Settings types and parameters:
-#define SETTING_CONN "connection"
-#define SETTING_CONN_AUTOCONNECT "autoconnect"
-#define SETTING_CONN_ID "id"
-#define SETTING_CONN_UUID "uuid"
-#define SETTING_CONN_TYPE "type"
-#define SETTING_CONN_TIMESTAMP "timestamp"
-
-#define SETTING_WIFI "802-11-wireless"
-#define SETTING_WIFI_SSID "ssid"
-#define SETTING_WIFI_MODE "mode"
-
-#define SETTING_WIFI_SECURITY "802-11-wireless-security"
-#define SETTING_WIFI_SECURITY_KEY_MGMT "key-mgmt"
-
-#define SETTING_BLUETOOTH "bluetooth"
-#define SETTING_BLUETOOTH_ADDR "bdaddr"
-#define SETTING_BLUETOOTH_TYPE "type"
 
 /*
  * Create an empty object with no linked connection.
@@ -50,8 +25,8 @@ nmConnection(toCopy.nmConnection)
  * Initialize a SavedConnection from a DBus connection path.
  */ 
 SavedConnection::SavedConnection(const char * path) :
-GPPDBusProxy(BUS_NAME, path, INTERFACE),
-path(path)
+GPPDBusProxy(busName, path, interfaceName),
+path(path) 
 { 
     if(!isNull())
     {
@@ -77,136 +52,7 @@ bool SavedConnection::isWifiConnection() const
     {
         return false;
     }
-    return hasSetting(SETTING_WIFI);
-}
-  
-/**
- * Replace the connection's existing wifi security settings.
- */
-void SavedConnection::updateWifiSecurity(GVariant* newSettings)
-{
-    using namespace GVariantConverter;
-    if(isNull())
-    {
-        return;
-    }
-    GVariantBuilder* builder = g_variant_builder_new
-            (G_VARIANT_TYPE("a{sa{sv}}"));
-    GVariant* oldSettings = callMethod(GET_SETTINGS);
-    #ifdef JUCE_DEBUG
-    jassert(builder != nullptr && oldSettings != nullptr 
-            && newSettings != nullptr);
-    DBG("SavedConnection::" << __func__ << ": Updating connection security.");
-    std::cout << " New settings:\n" << toString(newSettings) << "\n";
-    #endif
-    bool newSettingsAdded = false;
-    iterateDict(oldSettings,[this, builder, newSettings, &newSettingsAdded]
-            (GVariant* key, GVariant* val)
-    {
-        String keyStr = getValue<String>(key);
-        if(keyStr.isEmpty())
-        {
-            return;
-        }
-              
-        StringArray keysToReplace;
-        if(!newSettingsAdded && keyStr == SETTING_WIFI_SECURITY)
-        {
-            newSettingsAdded = true;
-            keysToReplace = getKeys(newSettings);
-        }
-    	GVariantBuilder* settingBldr = g_variant_builder_new
-	        (G_VARIANT_TYPE("a{sv}"));
-	iterateDict(val,[this, settingBldr, newSettings, &keysToReplace]
-                (GVariant* key, GVariant* val)
-        {
-	    String keyStr = getValue<String>(key);
-            GVariant* addedValue = val;
-            if(keysToReplace.contains(keyStr))
-            {
-                addedValue = g_variant_lookup_value(newSettings,
-                        keyStr.toRawUTF8(), nullptr);
-            }
-            if(addedValue != nullptr)
-            {
-                g_variant_builder_add(settingBldr, "{sv}",
-                        keyStr.toRawUTF8(), addedValue);
-            }
-	});
-	for(const String& key : keysToReplace)
-	{
-	    GVariant* newVal = g_variant_lookup_value(newSettings,
-	            key.toRawUTF8(), nullptr);
-	    if(newVal != nullptr)
-	    {
-	        g_variant_builder_add(settingBldr, "{sv}",
-		        key.toRawUTF8(), newVal);
-	    }
-	}
-        g_variant_builder_add(builder, "{sa{sv}}",
-                keyStr.toRawUTF8(), settingBldr);
-    });
-    if(!newSettingsAdded)
-    {
-        GVariantBuilder* settingBldr = g_variant_builder_new
-	        (G_VARIANT_TYPE("a{sv}"));
-	iterateDict(newSettings,[this, settingBldr]
-                (GVariant* key, GVariant* val)
-        {
-            String keyStr = getValue<String>(key);
-            GVariant* addedValue = val;
-            if(val != nullptr)
-            {
-                g_variant_builder_add(settingBldr, "{sv}",
-                        keyStr.toRawUTF8(), val);
-            }
-	});
-	g_variant_builder_add(builder, "{sa{sv}}",
-                SETTING_WIFI_SECURITY, settingBldr);
-    }
-    GVariant* updatedSettings = g_variant_builder_end(builder);
-    builder = nullptr;
-    g_variant_unref(newSettings);
-    newSettings = nullptr;
-    jassert(updatedSettings != nullptr);
-    callMethod(UPDATE_CONN, updatedSettings);
-    createNMConnection();
-}
-
-    
-/**
- * Removes any saved WEP key or WPA PSK attached to this connection.
- */
-void SavedConnection::removeSecurityKey()
-{
-    if(isNull())
-    {
-        return;
-    }
-    using namespace GVariantConverter;
-    GVariantDict* newDict = g_variant_dict_new(nullptr);
-    GVariant* oldSettings = getSetting(SETTING_WIFI_SECURITY);
-    if(oldSettings != nullptr)
-    {
-        iterateDict(oldSettings,[this, newDict]
-                (GVariant* key, GVariant* val)
-        {
-            String keyStr = getValue<String>(key);
-            if(keyStr == NM_SETTING_WIRELESS_SECURITY_WEP_KEY0
-               || keyStr == NM_SETTING_WIRELESS_SECURITY_WEP_KEY1
-               || keyStr == NM_SETTING_WIRELESS_SECURITY_WEP_KEY2
-               || keyStr == NM_SETTING_WIRELESS_SECURITY_WEP_KEY3
-               || keyStr == NM_SETTING_WIRELESS_SECURITY_PSK)
-            {
-                return;
-            }
-            g_variant_ref(val);
-            g_variant_dict_insert_value(newDict, keyStr.toRawUTF8(), val);
-        });
-        updateWifiSecurity(g_variant_dict_end(newDict));
-        g_variant_unref(oldSettings);
-        oldSettings = nullptr;
-    }
+    return hasSetting(NM_SETTING_WIRELESS_SETTING_NAME);
 }
 
 /*
@@ -217,6 +63,67 @@ NMPPConnection SavedConnection::getNMConnection() const
 {
     return nmConnection;
 }
+ 
+/*
+ * Checks if the connection has a saved wireless security key.
+ */
+bool SavedConnection::hasSavedKey()
+{
+    if(isNull())
+    {
+        return false;
+    }
+    using namespace GVariantConverter;
+    GError * secretsError = nullptr;
+    GVariant* secrets = callMethod(
+            getSecretsMethod,
+            g_variant_new_string(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME),
+            &secretsError);
+    bool keyFound = false;
+    if (secrets != nullptr)
+    {
+        GVariant* securitySecrets = g_variant_lookup_value
+                (secrets, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, nullptr);
+        if (securitySecrets != nullptr)
+        {
+            Array<const char*> keyTypes = 
+            {
+                NM_SETTING_WIRELESS_SECURITY_PSK,
+                NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
+                NM_SETTING_WIRELESS_SECURITY_WEP_KEY1,
+                NM_SETTING_WIRELESS_SECURITY_WEP_KEY2,
+                NM_SETTING_WIRELESS_SECURITY_WEP_KEY3          
+            };
+            for(const char* keyType : keyTypes)
+            {
+                GVariant* keyVal = g_variant_lookup_value(securitySecrets,
+                        keyType, nullptr);
+                if(keyVal != nullptr)
+                {
+                    String keyString = getValue<String>(keyVal);
+                    g_variant_unref(keyVal);
+                    if(keyString.isNotEmpty())
+                    {
+                        keyFound = true;
+                        break;
+                    }             
+                }
+            }
+            g_variant_unref(securitySecrets);
+            securitySecrets = nullptr;
+        }
+        g_variant_unref(secrets);
+        secrets = nullptr;
+    }
+    if(secretsError != nullptr)
+    {
+        DBG("SavedConnection::" << __func__ 
+                << ": Reading secrets failed, error="
+                << secretsError->message);
+        g_clear_error(&secretsError);
+    }
+    return keyFound;
+}
 
 /**
  * Deletes this connection from the list of saved connections.  This object
@@ -226,7 +133,7 @@ void SavedConnection::deleteConnection()
 {
     if(!isNull())
     {
-        callMethod(DELETE_CONN);
+        callMethod(deleteConnectionMethod);
         removeData();
         path = "";
         nmConnection = NMPPConnection();
@@ -268,7 +175,7 @@ void SavedConnection::createNMConnection()
         nmConnection = NMPPConnection();
     }
     nmConnection.setPath(path.toRawUTF8());
-    GVariant* settings = callMethod(GET_SETTINGS);
+    GVariant* settings = callMethod(getSettingsMethod);
     if (settings != nullptr)
     {
         NMSetting* setting = nullptr;
@@ -300,31 +207,34 @@ void SavedConnection::createNMConnection()
         {
             String keyStr = getValue<String>(key);
             settingNames.add(keyStr);
-            if (keyStr == SETTING_CONN)
+            if (keyStr == NM_SETTING_CONNECTION_SETTING_NAME)
             {
                 setting = nm_setting_connection_new();
             }
-            else if (keyStr == SETTING_WIFI)
+            else if (keyStr == NM_SETTING_WIRELESS_SETTING_NAME)
             {
                 setting = nm_setting_wireless_new();
             }
-            else if (keyStr == SETTING_WIFI_SECURITY)
+            else if (keyStr == NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
             {
                 setting = nm_setting_wireless_security_new();
             }
             if (setting != nullptr)
             {
                 iterateDict(val, copyDict);
-                if (keyStr == SETTING_WIFI_SECURITY)
+                if (keyStr == NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
                 {
                     GError * secretsError = nullptr;
-                    GVariant* secrets = callMethod(GET_SECRETS,
-                            g_variant_new_string(SETTING_WIFI_SECURITY),
+                    GVariant* secrets = callMethod(getSecretsMethod,
+                            g_variant_new_string
+                            (NM_SETTING_WIRELESS_SECURITY_SETTING_NAME),
                             &secretsError);
                     if (secrets != nullptr)
                     {
                         GVariant* securitySecrets = g_variant_lookup_value
-                                (secrets, SETTING_WIFI_SECURITY, nullptr);
+                                (secrets,
+                                NM_SETTING_WIRELESS_SECURITY_SETTING_NAME,
+                                nullptr);
                         if (securitySecrets != nullptr)
                         {
                             iterateDict(securitySecrets, copyDict);
@@ -358,7 +268,7 @@ GVariant* SavedConnection::getSetting(const char* name)
     {
         return nullptr;
     }
-    GVariant* allSettings = callMethod(GET_SETTINGS);
+    GVariant* allSettings = callMethod(getSettingsMethod);
     GVariant* setting = nullptr;
     if (allSettings != nullptr)
     {
