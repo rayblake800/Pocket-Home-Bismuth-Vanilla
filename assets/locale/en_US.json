@@ -59,7 +59,7 @@
         "btn_connect": "Connect",
         "btn_disconnect": "Disconnect",
         "wrong_password": "Incorrect password",
-        "invalid_key_format" : "Invalid password length"
+        "invalid_key_format" : "Invalid password length",
         "connection_failed": "Connection failed."  
     },
     "WifiAPButton": {
