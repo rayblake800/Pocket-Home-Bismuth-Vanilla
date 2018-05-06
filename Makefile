@@ -1,6 +1,6 @@
 VERSION=0.0.8.9
 BUILD=1
-CONFIG:=Release
+CONFIX:=Debug
 
 #PKG_CONFIG:=$(shell which pkg-config)
 
@@ -25,7 +25,7 @@ clean:
 wifitest:
 	cd Builds/LinuxMakefile && $(MAKE) -f UnitTests.mk ../../build/$(CONFIG)/wifitest
 	
-#debug: CONFIG:=Debug
+debug: CONFIG:=Debug
 debug:
 	reset
 	cd Builds/LinuxMakefile && $(MAKE)

@@ -4,7 +4,6 @@
 
 PageStackComponent::PageStackComponent()
 {
-    ASSERT_SINGULAR;
     setInterceptsMouseClicks(false, true);
     setWantsKeyboardFocus(false);
 #    if JUCE_DEBUG

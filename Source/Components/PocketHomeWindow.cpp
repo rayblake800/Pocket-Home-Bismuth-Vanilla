@@ -21,8 +21,6 @@ wifiManager([fakeWifi]
     }
 })
 {
-    ASSERT_SINGULAR;
-
 #    if JUCE_DEBUG
     setBounds(10, 10, 480, 272);
 #    else

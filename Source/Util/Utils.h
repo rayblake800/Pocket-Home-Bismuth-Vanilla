@@ -70,33 +70,7 @@ private:
     uint32 startTime;
 };
 
-/*
- * Some shared resources are too expensive to load more than once, or having
- * multiples creates tricky problems with concurrent resource access that are
- * best avoided.  Singleton design patterns are a possible solution, but that
- * makes it much harder to manage their life cycles with RAII methods. 
- * 
- * Instead of making explicit singleton classes, I'm just going to make each
- * shared resource once, and pass them to any object that needs them.
- * 
- * The ASSERT_SINGULAR macro should be added to the constructor of all of these
- * classes.  In debug builds it will throw an exception and print an error if
- * any of these classes is initialized more than once.  
- */
-
-struct DuplicateInstanceException: public std::exception{
-    DuplicateInstanceException(const char* function, int num)
-    {
-        DBG(function<<": this class was instantiated " << (num+1) 
-                << " times, but there should only be one!");
-    }         
-};
-#define ASSERT_SINGULAR static int n = 0; if(n){throw DuplicateInstanceException(__func__,n);} n++
-#else
-#define ASSERT_SINGULAR
-#define ADDR_LOG(ptr1,...)
 #endif
-
 
 /**
  * Requests user confirmation before performing some action.
