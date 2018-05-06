@@ -284,6 +284,7 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
                 break;
             case NM_ACTIVE_CONNECTION_STATE_ACTIVATING:
             case NM_ACTIVE_CONNECTION_STATE_ACTIVATED:
+            {
                 DBG("LibNMInterface::" << __func__ 
                         << ": setting new activating/activated connection");
                 if(activeConnection != connection)
@@ -294,6 +295,7 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
                 activeAP = WifiAccessPoint(wifiDevice.getAccessPoint(path));
                 activeAP.setConnectionPath(path);
                 break;
+            }
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATING:
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
                 DBG("LibNMInterface::" << __func__ << ": No error, but new "
