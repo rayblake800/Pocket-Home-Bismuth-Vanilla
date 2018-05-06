@@ -183,7 +183,7 @@ NMPPConnection WifiAccessPoint::createConnection(String psk) const
     {
         if(!newConnection.addWEPSettings(psk))
         {
-            DBG("NMPPConnection::" << __func__ 
+            DBG("WifiAccessPoint::" << __func__ 
                     << ": failed to create connection.");
             return newConnection;
         }
@@ -192,7 +192,7 @@ NMPPConnection WifiAccessPoint::createConnection(String psk) const
     {
         if(!newConnection.addWPASettings(psk))
         {
-            DBG("NMPPConnection::" << __func__ 
+            DBG("WifiAccessPoint::" << __func__ 
                     << ": failed to create connection.");
             return newConnection;         
         }
@@ -235,6 +235,27 @@ NM80211ApSecurityFlags WifiAccessPoint::getRSNFlags() const
 {
     const ScopedReadLock readLock(networkUpdateLock);
     return rsnFlags;
+}
+
+  
+/*
+ * Checks if a psk is formatted correctly for this access point's security.
+ * This will not check if the key is actually correct, just if it is a valid
+ * length.
+ */
+bool WifiAccessPoint::isValidKeyFormat(const String& psk) const
+{
+    int length = psk.length();
+    switch(security)
+    {
+        case none:
+            return length == 0;
+        case securedWEP:
+            return length == 10 || length == 26 || length == 5 || length == 13;
+        case securedWPA:
+        case securedRSN:
+            return length >= 8;
+    }
 }
     
 /*

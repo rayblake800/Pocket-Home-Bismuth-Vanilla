@@ -1,7 +1,3 @@
-- turns out activeConnectionChanged is called when the connection begins
-  activating, not when it's fully active.  Connection handling needs to be
-  updated to reflect this.
-
 -Finish implementing failed connection handling
 
 -Connecting/Disconnecting sometimes fails to register with the connection
@@ -15,6 +11,12 @@
 -Add detailed AP info to the connections page.
 
 -Animate connection page transitions.
+
+-Find and fix missing localized text
+
+-Replace SharedResource CriticalSections with ReadWriteLocks
+
+-Pause GLib threads when window focus is lost
 
 -Update the HomePage wifi icon to better use new wifi features.
 

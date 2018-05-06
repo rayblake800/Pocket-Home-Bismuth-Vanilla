@@ -173,6 +173,18 @@ public:
     NM80211ApSecurityFlags getRSNFlags() const;
     
     /**
+     * Checks if a psk is formatted correctly for this access point's security.
+     * This will not check if the key is actually correct, just if it is a valid
+     * length.
+     * 
+     * @param psk  A security key to test.
+     * 
+     * @return  true iff psk is a valid key for this access point's security
+     *          type.  
+     */
+    bool isValidKeyFormat(const String& psk) const;
+    
+    /**
      * Assigns another access point's data to this access point.
      */
     bool operator=(const WifiAccessPoint& rhs);

@@ -46,11 +46,18 @@ void WifiSettingsPage::connect(WifiAccessPoint accessPoint)
         DBG("WifiSettingsPage::" << __func__ << ": ap is null!");
         return;
     }
+    const String& psk = passwordEditor.getText();
+    if (!accessPoint.isValidKeyFormat(psk))
+    {
+        errorLabel.setText(localeText(invalid_key_format),
+                NotificationType::dontSendNotification);
+        errorLabel.setVisible(true);
+        return;
+    }
     WifiStateManager wifiManager;
     lastConnecting = accessPoint;
     if (accessPoint.getRequiresAuth())
     {
-        const String& psk = passwordEditor.getText();
         DBG("WifiSettingsPage::" << __func__ << ": connecting to "
                 << accessPoint.getSSID() << " with psk of length "
                 << psk.length());
@@ -151,10 +158,6 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
             {
                 {nullptr, 1}
             }},
-        {1,
-            {
-                {&debugLabel, 1}
-            }},
         {2,
             {
                 {nullptr, 1},
@@ -192,10 +195,6 @@ void WifiSettingsPage::updateConnectionControls()
     String errorMessage = "";
     bool apConnected = isConnected(selectedAP);
     bool connectionSaved = selectedAP.getConnectionPath().isNotEmpty();
-    //debug text
-    String debug = "Saved=";
-    debug += (connectionSaved ? "yes " : "no ");
-    debugLabel.setText(debug,NotificationType::dontSendNotification);
     if(!apConnected && lastConnecting != selectedAP 
             && lastDisconnecting != selectedAP)
     {
