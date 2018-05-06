@@ -223,7 +223,9 @@ void LibNMInterface::updateAllWifiData()
     lastNMState = wifiDevice.getState();
     savedConnections.updateSavedConnections();
     activeConnection = wifiDevice.getActiveConnection();
-    activeAP = wifiDevice.getAccessPoint(activeConnection.getAccessPointPath());
+    const char* path = activeConnection.getAccessPointPath();
+    activeAP = wifiDevice.getAccessPoint(path);
+    activeAP.setConnectionPath(path);
     visibleAPs = wifiDevice.getAccessPoints();
     ScopedUnlock confirmUnlock(wifiLock);
     confirmWifiState();
@@ -288,8 +290,9 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
 		{
 		    activeConnection = connection;
 		}
-                activeAP = wifiDevice.getAccessPoint
-                        (connection.getAccessPointPath());
+                const char* path = connection.getAccessPointPath();
+                activeAP = WifiAccessPoint(wifiDevice.getAccessPoint(path));
+                activeAP.setConnectionPath(path);
                 break;
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATING:
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
@@ -409,7 +412,7 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                 }
                 else if(!activeAP.isNull())
                 {
-                    activeAP = NMPPAccessPoint();
+                    activeAP = WifiAccessPoint();
                     signalConnectionFailed();
                 }
                 break;
