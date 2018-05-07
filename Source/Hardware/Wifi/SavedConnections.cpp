@@ -47,7 +47,30 @@ bool SavedConnections::connectionExists(const String& connectionPath) const
 {
     return connectionPaths.contains(connectionPath);
 }
-
+ 
+/*
+ * Finds a saved connection from its path.  If no matching connection is
+ * already loaded, the saved connection list will be updated in case the
+ * requested connection was recently added.
+ */
+SavedConnection SavedConnections::getConnection(const String& connectionPath)
+{
+    if(!connectionExists(connectionPath))
+    {
+        updateSavedConnections();
+    }
+    if(connectionExists(connectionPath))
+    {
+        for(const SavedConnection& con : connectionList)
+        {
+            if(con.getPath() == connectionPath)
+            {
+                return con;
+            }
+        }
+    }
+    return SavedConnection();
+}
   
 /*
  * Finds all saved connections that are compatible with a given wifi

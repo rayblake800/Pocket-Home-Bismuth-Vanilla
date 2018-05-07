@@ -38,6 +38,18 @@ public:
     bool connectionExists(const String& connectionPath) const;
     
     /**
+     * Finds a saved connection from its path.  If no matching connection is
+     * already loaded, the saved connection list will be updated in case the
+     * requested connection was recently added.
+     * 
+     * @param connectionPath  The DBus path of a saved network connection.
+     * 
+     * @return  the connection at the given path, or a null object if no 
+     *          connection was found. 
+     */
+    SavedConnection getConnection(const String& connectionPath);
+    
+    /**
      * Finds all saved connections that are compatible with a given wifi
      * access point.
      * 
