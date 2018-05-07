@@ -4,7 +4,7 @@
               bundleIdentifier="co.nextthing.PokeLaunch" includeBinaryInAppConfig="1"
               jucerVersion="5.3.0" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
               displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
-              companyCopyright="Next Thing Co." headerPath="../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Pages/Advanced Settings Page&#10;../../Source/Components/Pages/DateTime Page&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Hardware&#10;../../Source/Hardware/Wifi&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source&#10;../../Source/Shared Resources&#10;../../Source/Components/Widgets&#10;../../Source/Components/Pages&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/GLib&#10;../../Source/Components/Pages/Power Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/Components/Pages/Password Pages&#10;../../Source/Util&#10;../../Source/Components/Pages/Home Settings Page&#10;../../Source/Components/Pages/Settings Page&#10;../../Source/GLib/LibNM&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Components/Configurable&#10;../../Source/Components&#10;../../Source/Hardware/Bluetooth&#10;../../Source/Components/Pages/Input Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Shared Resources/Config Files&#10;../../Source/Components/Pages/UI Page">
+              companyCopyright="Next Thing Co." headerPath="../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Pages/Input Settings Page&#10;../../Source/Hardware&#10;../../Source/Shared Resources/Config Files&#10;../../Source/Shared Resources/Bluetooth&#10;../../Source/Components/Pages/Home Settings Page&#10;../../Source/GLib&#10;../../Source/Components/Pages/Settings Page&#10;../../Source/Components/Pages/Power Page&#10;../../Source&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components&#10;../../Source/Components/Pages/Password Pages&#10;../../Source/Components/Configurable&#10;../../Source/Util&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Components/Pages/Advanced Settings Page&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/GLib/DBus&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Shared Resources/Wifi&#10;../../Source/Components/Pages&#10;../../Source/Shared Resources&#10;../../Source/Components/Pages/DateTime Page&#10;../../Source/Components/Pages/UI Page&#10;../../Source/Components/Widgets&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/GLib/LibNM">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
       <FILE id="lJvIsl" name="bluetooth.json" compile="0" resource="1" file="assets/bluetooth.json"/>
@@ -14,7 +14,24 @@
     </GROUP>
     <GROUP id="{4593A345-C350-960A-058D-B48F8240AA1D}" name="Source">
       <GROUP id="{FDA4E67F-621B-EA4E-D0EC-3AFCFDE4E820}" name="GLib">
+        <GROUP id="{7F5979BF-8382-80EA-A2E8-8630E3BFFDB4}" name="DBus">
+          <FILE id="xI5msA" name="GVariantConverter.cpp" compile="1" resource="0"
+                file="Source/GLib/DBus/GVariantConverter.cpp"/>
+          <FILE id="r2Ef0a" name="GVariantConverter.h" compile="0" resource="0"
+                file="Source/GLib/DBus/GVariantConverter.h"/>
+          <FILE id="sMlaSb" name="GPPDBusProxy.cpp" compile="1" resource="0"
+                file="Source/GLib/DBus/GPPDBusProxy.cpp"/>
+          <FILE id="nN1gji" name="GPPDBusProxy.h" compile="0" resource="0" file="Source/GLib/DBus/GPPDBusProxy.h"/>
+        </GROUP>
         <GROUP id="{2E477569-DD32-F554-1AAC-AAE6F2932409}" name="LibNM">
+          <FILE id="zcVdlx" name="SavedConnection.cpp" compile="1" resource="0"
+                file="Source/GLib/LibNM/SavedConnection.cpp"/>
+          <FILE id="ZiNdvS" name="SavedConnection.h" compile="0" resource="0"
+                file="Source/GLib/LibNM/SavedConnection.h"/>
+          <FILE id="Jrf3Iw" name="SavedConnections.cpp" compile="1" resource="0"
+                file="Source/GLib/LibNM/SavedConnections.cpp"/>
+          <FILE id="qggGjY" name="SavedConnections.h" compile="0" resource="0"
+                file="Source/GLib/LibNM/SavedConnections.h"/>
           <FILE id="v9npEc" name="NMPPAccessPoint.cpp" compile="1" resource="0"
                 file="Source/GLib/LibNM/NMPPAccessPoint.cpp"/>
           <FILE id="fgqnfZ" name="NMPPAccessPoint.h" compile="0" resource="0"
@@ -34,27 +51,16 @@
           <FILE id="IBIEPS" name="NMPPDeviceWifi.h" compile="0" resource="0"
                 file="Source/GLib/LibNM/NMPPDeviceWifi.h"/>
         </GROUP>
-        <FILE id="sMlaSb" name="GPPDBusProxy.cpp" compile="1" resource="0"
-              file="Source/GLib/GPPDBusProxy.cpp"/>
-        <FILE id="nN1gji" name="GPPDBusProxy.h" compile="0" resource="0" file="Source/GLib/GPPDBusProxy.h"/>
+        <FILE id="enqIe3" name="GLibSignalHandler.cpp" compile="1" resource="0"
+              file="Source/GLib/GLibSignalHandler.cpp"/>
+        <FILE id="JxYitG" name="GLibSignalHandler.h" compile="0" resource="0"
+              file="Source/GLib/GLibSignalHandler.h"/>
+        <FILE id="I3J62v" name="GLibThread.cpp" compile="1" resource="0" file="Source/GLib/GLibThread.cpp"/>
+        <FILE id="Bena02" name="GLibThread.h" compile="0" resource="0" file="Source/GLib/GLibThread.h"/>
         <FILE id="cdp704" name="GPPObject.cpp" compile="1" resource="0" file="Source/GLib/GPPObject.cpp"/>
         <FILE id="R8ed81" name="GPPObject.h" compile="0" resource="0" file="Source/GLib/GPPObject.h"/>
-        <FILE id="xI5msA" name="GVariantConverter.cpp" compile="1" resource="0"
-              file="Source/GLib/GVariantConverter.cpp"/>
-        <FILE id="r2Ef0a" name="GVariantConverter.h" compile="0" resource="0"
-              file="Source/GLib/GVariantConverter.h"/>
       </GROUP>
       <GROUP id="{A7E7A929-6942-F1C2-FAC5-FC3AF0D2442B}" name="Shared Resources">
-        <FILE id="U4ygJ9" name="AssetFiles.cpp" compile="1" resource="0" file="Source/Shared Resources/AssetFiles.cpp"/>
-        <FILE id="cXrxti" name="AssetFiles.h" compile="0" resource="0" file="Source/Shared Resources/AssetFiles.h"/>
-        <GROUP id="{3E342548-6FE9-E182-B490-16AD71AA37A9}" name="GLib">
-          <FILE id="enqIe3" name="GLibSignalHandler.cpp" compile="1" resource="0"
-                file="Source/Shared Resources/GLibSignalHandler.cpp"/>
-          <FILE id="JxYitG" name="GLibSignalHandler.h" compile="0" resource="0"
-                file="Source/Shared Resources/GLibSignalHandler.h"/>
-          <FILE id="I3J62v" name="GLibThread.cpp" compile="1" resource="0" file="Source/Shared Resources/GLibThread.cpp"/>
-          <FILE id="Bena02" name="GLibThread.h" compile="0" resource="0" file="Source/Shared Resources/GLibThread.h"/>
-        </GROUP>
         <GROUP id="{85D01745-B7AD-BE3B-8D28-80F47A0AA8BA}" name="Config Files">
           <FILE id="dNgJxN" name="ConfigFile.cpp" compile="1" resource="0" file="Source/Shared Resources/Config Files/ConfigFile.cpp"/>
           <FILE id="sqDYSh" name="ConfigFile.h" compile="0" resource="0" file="Source/Shared Resources/Config Files/ConfigFile.h"/>
@@ -70,6 +76,39 @@
           <FILE id="N1gZuQ" name="MainConfigFile.h" compile="0" resource="0"
                 file="Source/Shared Resources/Config Files/MainConfigFile.h"/>
         </GROUP>
+        <GROUP id="{E98D5B9C-4E34-6090-B2F4-D1F92AFB0C81}" name="Wifi">
+          <FILE id="oqvpyg" name="LibNMInterface.cpp" compile="1" resource="0"
+                file="Source/Shared Resources/Wifi/LibNMInterface.cpp"/>
+          <FILE id="eWhlRs" name="LibNMInterface.h" compile="0" resource="0"
+                file="Source/Shared Resources/Wifi/LibNMInterface.h"/>
+          <FILE id="oVu111" name="WifiAccessPoint.cpp" compile="1" resource="0"
+                file="Source/Shared Resources/Wifi/WifiAccessPoint.cpp"/>
+          <FILE id="Oipn2r" name="WifiAccessPoint.h" compile="0" resource="0"
+                file="Source/Shared Resources/Wifi/WifiAccessPoint.h"/>
+          <FILE id="C8W8YY" name="WifiStateManager.cpp" compile="1" resource="0"
+                file="Source/Shared Resources/Wifi/WifiStateManager.cpp"/>
+          <FILE id="e1CJwp" name="WifiStateManager.h" compile="0" resource="0"
+                file="Source/Shared Resources/Wifi/WifiStateManager.h"/>
+          <FILE id="gnqOio" name="JsonWifiInterface.cpp" compile="1" resource="0"
+                file="Source/Shared Resources/Wifi/JsonWifiInterface.cpp"/>
+          <FILE id="obCnmM" name="JsonWifiInterface.h" compile="0" resource="0"
+                file="Source/Shared Resources/Wifi/JsonWifiInterface.h"/>
+        </GROUP>
+        <GROUP id="{38AC9CDE-7CCA-7016-63C1-8FA8A65A1424}" name="Bluetooth">
+          <FILE id="GLpTNX" name="BluetoothDevice.cpp" compile="1" resource="0"
+                file="Source/Shared Resources/Bluetooth/BluetoothDevice.cpp"/>
+          <FILE id="YTcTYS" name="BluetoothDevice.h" compile="0" resource="0"
+                file="Source/Shared Resources/Bluetooth/BluetoothDevice.h"/>
+          <FILE id="QfgT5g" name="BluetoothStatus.cpp" compile="1" resource="0"
+                file="Source/Shared Resources/Bluetooth/BluetoothStatus.cpp"/>
+          <FILE id="cpqm4n" name="BluetoothStatus.h" compile="0" resource="0"
+                file="Source/Shared Resources/Bluetooth/BluetoothStatus.h"/>
+          <FILE id="E78zcr" name="BluezAdapter.cpp" compile="1" resource="0"
+                file="Source/Shared Resources/Bluetooth/BluezAdapter.cpp"/>
+          <FILE id="SEXHIm" name="BluezAdapter.h" compile="0" resource="0" file="Source/Shared Resources/Bluetooth/BluezAdapter.h"/>
+        </GROUP>
+        <FILE id="U4ygJ9" name="AssetFiles.cpp" compile="1" resource="0" file="Source/Shared Resources/AssetFiles.cpp"/>
+        <FILE id="cXrxti" name="AssetFiles.h" compile="0" resource="0" file="Source/Shared Resources/AssetFiles.h"/>
         <FILE id="Yl2sdL" name="ResourceManager.cpp" compile="1" resource="0"
               file="Source/Shared Resources/ResourceManager.cpp"/>
         <FILE id="WuV2YN" name="ResourceManager.h" compile="0" resource="0"
@@ -348,47 +387,6 @@
               file="Source/Components/RelativeLayoutManager.h"/>
       </GROUP>
       <GROUP id="{E9FAD86E-0FA8-B4EA-823C-6DA2E0586F80}" name="Hardware">
-        <GROUP id="{38AC9CDE-7CCA-7016-63C1-8FA8A65A1424}" name="Bluetooth">
-          <FILE id="GLpTNX" name="BluetoothDevice.cpp" compile="1" resource="0"
-                file="Source/Hardware/Bluetooth/BluetoothDevice.cpp"/>
-          <FILE id="YTcTYS" name="BluetoothDevice.h" compile="0" resource="0"
-                file="Source/Hardware/Bluetooth/BluetoothDevice.h"/>
-          <FILE id="QfgT5g" name="BluetoothStatus.cpp" compile="1" resource="0"
-                file="Source/Hardware/Bluetooth/BluetoothStatus.cpp"/>
-          <FILE id="cpqm4n" name="BluetoothStatus.h" compile="0" resource="0"
-                file="Source/Hardware/Bluetooth/BluetoothStatus.h"/>
-          <FILE id="E78zcr" name="BluezAdapter.cpp" compile="1" resource="0"
-                file="Source/Hardware/Bluetooth/BluezAdapter.cpp"/>
-          <FILE id="SEXHIm" name="BluezAdapter.h" compile="0" resource="0" file="Source/Hardware/Bluetooth/BluezAdapter.h"/>
-        </GROUP>
-        <GROUP id="{E98D5B9C-4E34-6090-B2F4-D1F92AFB0C81}" name="Wifi">
-          <GROUP id="{E1F33EB1-14CC-F8AB-79F6-B6D1F0EF1900}" name="LibNM">
-            <FILE id="zcVdlx" name="SavedConnection.cpp" compile="1" resource="0"
-                  file="Source/Hardware/Wifi/SavedConnection.cpp"/>
-            <FILE id="ZiNdvS" name="SavedConnection.h" compile="0" resource="0"
-                  file="Source/Hardware/Wifi/SavedConnection.h"/>
-            <FILE id="Jrf3Iw" name="SavedConnections.cpp" compile="1" resource="0"
-                  file="Source/Hardware/Wifi/SavedConnections.cpp"/>
-            <FILE id="qggGjY" name="SavedConnections.h" compile="0" resource="0"
-                  file="Source/Hardware/Wifi/SavedConnections.h"/>
-            <FILE id="oqvpyg" name="LibNMInterface.cpp" compile="1" resource="0"
-                  file="Source/Hardware/Wifi/LibNMInterface.cpp"/>
-            <FILE id="eWhlRs" name="LibNMInterface.h" compile="0" resource="0"
-                  file="Source/Hardware/Wifi/LibNMInterface.h"/>
-          </GROUP>
-          <FILE id="oVu111" name="WifiAccessPoint.cpp" compile="1" resource="0"
-                file="Source/Hardware/Wifi/WifiAccessPoint.cpp"/>
-          <FILE id="Oipn2r" name="WifiAccessPoint.h" compile="0" resource="0"
-                file="Source/Hardware/Wifi/WifiAccessPoint.h"/>
-          <FILE id="C8W8YY" name="WifiStateManager.cpp" compile="1" resource="0"
-                file="Source/Hardware/Wifi/WifiStateManager.cpp"/>
-          <FILE id="e1CJwp" name="WifiStateManager.h" compile="0" resource="0"
-                file="Source/Hardware/Wifi/WifiStateManager.h"/>
-          <FILE id="gnqOio" name="JsonWifiInterface.cpp" compile="1" resource="0"
-                file="Source/Hardware/Wifi/JsonWifiInterface.cpp"/>
-          <FILE id="obCnmM" name="JsonWifiInterface.h" compile="0" resource="0"
-                file="Source/Hardware/Wifi/JsonWifiInterface.h"/>
-        </GROUP>
         <FILE id="XvLxag" name="Audio.cpp" compile="1" resource="0" file="Source/Hardware/Audio.cpp"/>
         <FILE id="rBZLpt" name="Audio.h" compile="0" resource="0" file="Source/Hardware/Audio.h"/>
         <FILE id="bt1KwE" name="BatteryMonitor.cpp" compile="1" resource="0"
