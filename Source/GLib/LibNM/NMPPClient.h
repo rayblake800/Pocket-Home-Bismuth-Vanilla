@@ -206,12 +206,17 @@ public:
      * 
      * @param handler      The connectionHandler object that will receive the 
      *                     new connection object.
+     * 
+     * @param useSaved     If true, the client will attempt to re-activate an
+     *                     existing connection.  Otherwise, a new connection
+     *                     will be created even if an existing one is found.  
      */
     void activateConnection(
             const NMPPConnection& connection,
             const NMPPDeviceWifi& wifiDevice,
             const NMPPAccessPoint& accessPoint,
-            ConnectionHandler* handler);
+            ConnectionHandler* handler,
+            bool useSaved = true);
     
     /**
      * Listeners receive updates whenever wireless is enabled or disabled.

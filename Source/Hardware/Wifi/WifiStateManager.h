@@ -186,7 +186,9 @@ public:
         // An active connection exists using this access point.
         connectedAP,
         // A connection using this access point is being closed.
-        disconnectingAP
+        disconnectingAP,
+        // Connecting failed because the security key was invalid.
+        invalidSecurityAP
     };
     
     /**

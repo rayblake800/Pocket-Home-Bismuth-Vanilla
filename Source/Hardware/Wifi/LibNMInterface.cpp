@@ -140,7 +140,25 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
     }
     else
     {
-        NMPPConnection toActivate = wifiDevice.getAvailableConnection(nmAP);
+        NMPPConnection toActivate;
+        //Copy the saved connection, delete the original, and re-create it with
+        //new security info.
+        if(toConnect.getConnectionPath().isNotEmpty())
+        {
+            SavedConnection saved = savedConnections.getConnection
+                    (toConnect.getConnectionPath());
+            if(!saved.isNull())
+            {
+                toActivate = saved.getNMConnection();
+                if(failedConnectionAPs.contains(toConnect))
+                {
+                    DBG("LibNMInterface::" << __func__ 
+                            << ": re-creating failed connection with new "
+                            << "security settings.");
+                    toConnect.setConnectionSecurity(toActivate, psk);
+                }
+            }          
+        }
         if(!toActivate.isNull())
         {
             DBG("LibNMInterface::" << __func__ << ": Connecting to AP "
@@ -149,26 +167,26 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         }
         else
         {
-            Array<SavedConnection> matchingSaved 
-                    = savedConnections.findConnectionsForAP(nmAP);
-            if(!matchingSaved.isEmpty())
+            toActivate = wifiDevice.getAvailableConnection(nmAP);
+            if(toActivate.isNull())
             {
-                toActivate = matchingSaved[0].getNMConnection();
-                DBG("LibNMInterface::" << __func__ << ": Found "
-                        << matchingSaved.size() 
-                        << " matching saved connection(s)");
-                DBG("LibNMInterface::" << __func__ << ":  connecting to"
-                        << toConnect.getSSID() << " with saved connection "
-                        << toActivate.getID());
+                toActivate = toConnect.createConnection(psk);
+                newConnectionAP = toConnect;
+                DBG("LibNMInterface::" << __func__ 
+                        << ": Creating new connection for AP "
+                        << toConnect.getSSID());
             }
             else
             {
-                toActivate = toConnect.createConnection(psk);
+                DBG("LibNMInterface::" << __func__ << ": Connecting to AP "
+                        << toConnect.getSSID() << " with existing connection "
+                        << toActivate.getID());
             }
         }
         if(!toActivate.isNull())
         {
-            client.activateConnection(toActivate, wifiDevice, nmAP, this);
+            client.activateConnection(toActivate, wifiDevice, nmAP, this,
+                    !failedConnectionAPs.contains(toConnect));
         }
         else
         {
@@ -189,6 +207,10 @@ WifiStateManager::AccessPointState LibNMInterface::getAPState
     if(accessPoint.isNull())
     {
         return WifiStateManager::nullAP;
+    }
+    if(failedConnectionAPs.contains(accessPoint))
+    {
+        return WifiStateManager::invalidSecurityAP;
     }
     if(activeConnection.isConnectedAccessPoint(accessPoint.getNMAccessPoint())
             || activeAP.sharesConnectionWith(accessPoint))
@@ -317,8 +339,9 @@ void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection,
         ScopedLock updateLock(wifiLock);
         DBG("LibNMInterface::" << __func__ << ": Error "
                 << error->code << ":" << error->message);
-        //TODO: is it necessary to make sure this isn't the active/activating
-        //connection or access point?  Probably not, but run tests to be sure.
+        //TODO: is it necessary to make sure activeConnection or activeAP
+        //aren't currently set to this failed connection?  Probably not, but run
+        //tests to be sure.
 
         //TODO: properly detect invalid security errors, then:
         /*
@@ -386,6 +409,7 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                 DBG("LibNMInterface::" << __func__ 
                         << ": new connection activated, send connection signal");
 		stopTimer();
+                failedConnectionAPs.removeAllInstancesOf(activeAP);
 		ScopedUnlock unlockForUpdate(wifiLock);
 		signalWifiConnected(activeAP);
                 break;
@@ -423,8 +447,24 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
             case NM_DEVICE_STATE_FAILED:
             {
                 stopTimer();
+                if(reason == NM_DEVICE_STATE_REASON_NO_SECRETS)
+                {
+                    failedConnectionAPs.add(activeAP);
+                    if(newConnectionAP == activeAP)
+                    {
+                        DBG("LibNMInterface::" << __func__
+                                << ": Deleting failed new connection.");
+                        SavedConnection toDelete(activeConnection.getPath());
+                        toDelete.deleteConnection();
+                        activeConnection = NMPPActiveConnection();
+                        activeAP = WifiAccessPoint();
+                        newConnectionAP = WifiAccessPoint();
+                    }
+                    ScopedUnlock unlockForUpdate(wifiLock);
+                    signalConnectionFailed();
+                    return;
+                }
                 ScopedUnlock unlockForUpdate(wifiLock);
-                //TODO: check for authorization here
                 signalWifiDisconnected();
                 break;
             }

@@ -268,11 +268,12 @@ void NMPPClient::activateConnection(
         const NMPPConnection& connection,
         const NMPPDeviceWifi& wifiDevice,
         const NMPPAccessPoint& accessPoint, 
-        NMPPClient::ConnectionHandler* handler)
+        NMPPClient::ConnectionHandler* handler,
+        bool usedSaved)
 { 
     
     //determine if this is a new connection attempt
-    bool isNew = !wifiDevice.hasConnectionAvailable(connection);
+    bool isNew = !usedSaved || !wifiDevice.hasConnectionAvailable(connection);
     callInMainContext(
             [this, isNew, &connection, &wifiDevice, &accessPoint, handler]
             (GObject* clientObject)
@@ -289,6 +290,8 @@ void NMPPClient::activateConnection(
             {
                 if(isNew)
                 {
+                    DBG("NMPPClient::" << __func__ 
+                            << ": adding new connection.");
                     nm_client_add_and_activate_connection(client,
                         NM_CONNECTION(conObj),
                         NM_DEVICE(devObj),
@@ -299,6 +302,8 @@ void NMPPClient::activateConnection(
                 }
                 else
                 {
+                    DBG("NMPPClient::" << __func__ 
+                            << ": activating saved connection.");
                     nm_client_activate_connection(client,
                             NM_CONNECTION(conObj),
                             NM_DEVICE(devObj),

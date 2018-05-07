@@ -308,6 +308,26 @@ private:
     //The access point used by the active connection, or a null object.
     WifiAccessPoint activeAP;
     
+    /**
+     * When creating a new connection, the connection's access point will
+     * be saved here.  If a connection fails due to invalid security settings,
+     * this value can be checked to see if the connection is a new one.
+     * 
+     * New connections that are not valid are safe to delete immediately, but
+     * this application should not be deleting the user's pre-existing
+     * connections, even if they seem to be invalid.
+     */
+    WifiAccessPoint newConnectionAP;
+    
+    /**
+     * Used by getAPState to track failed connection attempts.
+     * Whenever an attempted connection fails due to invalid security, the
+     * connection's access point will be added to this list.  If a successful
+     * connection is created, all access points that could use that connection
+     * will be removed from this list. 
+     */
+    Array<WifiAccessPoint> failedConnectionAPs;
+    
     //All access points visible to the wifi device.
     Array<NMPPAccessPoint> visibleAPs;
 

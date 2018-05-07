@@ -47,7 +47,7 @@ void WifiSettingsPage::connect(WifiAccessPoint accessPoint)
         return;
     }
     const String& psk = passwordEditor.getText();
-    if (!accessPoint.isValidKeyFormat(psk))
+    if (passwordEditor.isVisible() && !accessPoint.isValidKeyFormat(psk))
     {
         errorLabel.setText(localeText(invalid_key_format),
                 NotificationType::dontSendNotification);
@@ -232,7 +232,9 @@ void WifiSettingsPage::updateConnectionControls()
                     errorMessage = localeText(connection_failed);
                 }
                 showPasswordEntry = selectedAP.getRequiresAuth()
-                        && !connectionSaved;
+                        && (!connectionSaved 
+                        || wifiManager.getAPState(selectedAP) 
+                        == WifiStateManager::invalidSecurityAP);
                 break;
             case WifiStateManager::disconnecting:
                 if(lastDisconnecting == selectedAP)
@@ -241,7 +243,8 @@ void WifiSettingsPage::updateConnectionControls()
                 }
                 break;
             default:
-                DBG("WifiSettingsPage::" << __func__ << ": page should be closed!");
+                DBG("WifiSettingsPage::" << __func__ 
+                        << ": page should be closed!");
         };
     }
     if(showPasswordEntry != passwordEditor.isVisible())

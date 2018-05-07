@@ -3,7 +3,7 @@
 #include "Utils.h"
 #include "GLibSignalHandler.h"
 #include "WifiAccessPoint.h"
-#include "LibNM/NMPPAccessPoint.h"
+#include "NMPPAccessPoint.h"
     
 
     
@@ -179,26 +179,48 @@ NMPPConnection WifiAccessPoint::createConnection(String psk) const
 {
     const ScopedReadLock readLock(networkUpdateLock);
     NMPPConnection newConnection;
+    newConnection.addWifiSettings(nmAccessPoint.getSSID());
+    if(!setConnectionSecurity(newConnection, psk))
+    {
+        return NMPPConnection();
+    }
+    return newConnection;
+}
+ 
+/*
+ * Attempts to add wireless security settings to a connection intended for
+ * this access point.  This will fail if the connection is not compatible
+ * with this access point, or the security key is not valid for the access
+ * point security type.
+ */
+bool WifiAccessPoint::setConnectionSecurity
+(NMPPConnection& connection, const String& psk) const
+{
+    if(!isConnectionCompatible(connection))
+    {
+        DBG("WifiAccessPoint::" << __func__ 
+                << ": Connection is not compatible!");
+        return false;
+    }
     if(security == securedWEP)
     {
-        if(!newConnection.addWEPSettings(psk))
+        if(!connection.addWEPSettings(psk))
         {
             DBG("WifiAccessPoint::" << __func__ 
-                    << ": failed to create connection.");
-            return newConnection;
+                    << ": failed to set WEP key.");
+            return false;
         }
     }
     else if(security != none)
     {
-        if(!newConnection.addWPASettings(psk))
+        if(!connection.addWPASettings(psk))
         {
             DBG("WifiAccessPoint::" << __func__ 
-                    << ": failed to create connection.");
-            return newConnection;         
+                    << ": failed to set WPA key.");
+            return false;         
         }
     }
-    newConnection.addWifiSettings(nmAccessPoint.getSSID());
-    return newConnection;
+    return true;
 }
 
 /*

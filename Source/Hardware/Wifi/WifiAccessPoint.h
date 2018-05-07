@@ -33,17 +33,6 @@ public:
     WifiAccessPoint(const NMPPAccessPoint& accessPoint);
 
     /**
-     * Represents the main categories of wifi access point security.
-     */
-    enum SecurityType
-    {
-        none,
-        securedWEP,
-        securedWPA,
-        securedRSN
-    };
-
-    /**
      * Create a wifi access point from pre-generated data.  This is intended for
      * debugging purposes only.
      * 
@@ -71,7 +60,7 @@ public:
     bool isNull() const;
 
     /**
-     * Gets the access point's service set identifier, its primary name.
+     * Gets the access point's primary name.
      * 
      * @return the SSID identifying the access point. 
      */
@@ -112,7 +101,7 @@ public:
      * @return true iff this access point requires a security key. 
      */
     bool getRequiresAuth() const;
-
+    
     /**
      * Returns a string identifying this object for debug purposes.
      * 
@@ -123,8 +112,8 @@ public:
     /**
      * Checks if this access point is compatible with a given connection.
      * 
-     * @return  true iff the connection is compatible, and the WifiAccessPoint
-     *          doesn't have a different non-null saved connection.  
+     * @return  true iff the connection could be activated using this access
+     *          point.
      */
     bool isConnectionCompatible(const NMPPConnection& connection) const;
 
@@ -151,23 +140,47 @@ public:
      *          the psk was invalid.
      */
     NMPPConnection createConnection(String psk = String()) const;
+    
+    /**
+     * Attempts to add wireless security settings to a connection intended for
+     * this access point.  This will fail if the connection is not compatible
+     * with this access point, or the security key is not valid for the access
+     * point security type.
+     * 
+     * @param connection  The connection object to modify.
+     * 
+     * @param psk         The access point's security key.
+     * 
+     * @return  true iff the settings were applied successfully.
+     */
+    bool setConnectionSecurity
+    (NMPPConnection& connection, const String& psk) const;
 
     /**
+     * Returns the 802.11 mode of this access point.
+     * 
      * @return the access point device mode 
      */
     NM80211Mode getMode() const;
 
     /**
+     * Returns access point flags describing the access point's basic security
+     * capabilities.
+     * 
      * @return basic Wifi security flags 
      */
     NM80211ApFlags getFlags() const;
 
     /**
+     * Returns flags describing the access point's WPA security capabilities. 
+     * 
      * @return all WPA security flags. 
      */
     NM80211ApSecurityFlags getWPAFlags() const;
 
     /**
+     * Returns flags describing the access point's RSN security capabilities.
+     * 
      * @return all RSN security flags 
      */
     NM80211ApSecurityFlags getRSNFlags() const;
@@ -256,12 +269,23 @@ private:
     
     //Prevent concurrent access when being updated with new network data
     ReadWriteLock networkUpdateLock;
+    
+    /**
+     * Represents the main categories of wifi access point security.
+     */
+    enum SecurityType
+    {
+        none,
+        securedWEP,
+        securedWPA,
+        securedRSN
+    };
 
     //Access point name
     String ssid;
     //Access point hardware ID string
     String bssid;
-    //Access point security strength
+    //Access point security protocol
     SecurityType security;
     //Identifying hash unique to this APs connection
     String hash;
