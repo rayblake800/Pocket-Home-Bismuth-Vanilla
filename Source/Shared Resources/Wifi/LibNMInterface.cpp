@@ -126,7 +126,6 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
 {
-    //search for active connections
     const NMPPAccessPoint& nmAP = toConnect.getNMAccessPoint();
     if(nmAP.isNull())
     {
@@ -192,7 +191,7 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         {
             DBG("LibNMInterface::" << __func__ 
                     << ": failed to find or create a connection for AP "
-                    <<toConnect.getSSID());
+                    << toConnect.getSSID());
         }
     }
     

@@ -159,7 +159,8 @@ const String& WifiAccessPoint::toString() const
 bool WifiAccessPoint::isConnectionCompatible
 (const NMPPConnection& connection) const
 {
-    return nmAccessPoint.isValidConnection(connection);
+    return !isNull() && !connection.isNull()
+	    && nmAccessPoint.isValidConnection(connection);
 }
     
 /*
@@ -189,19 +190,12 @@ NMPPConnection WifiAccessPoint::createConnection(String psk) const
  
 /*
  * Attempts to add wireless security settings to a connection intended for
- * this access point.  This will fail if the connection is not compatible
- * with this access point, or the security key is not valid for the access
- * point security type.
+ * this access point.  This will fail if the security key is not valid for 
+ * the access point security type.
  */
 bool WifiAccessPoint::setConnectionSecurity
 (NMPPConnection& connection, const String& psk) const
 {
-    if(!isConnectionCompatible(connection))
-    {
-        DBG("WifiAccessPoint::" << __func__ 
-                << ": Connection is not compatible!");
-        return false;
-    }
     if(security == securedWEP)
     {
         if(!connection.addWEPSettings(psk))

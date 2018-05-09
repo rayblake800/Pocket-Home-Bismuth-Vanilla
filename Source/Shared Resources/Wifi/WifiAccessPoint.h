@@ -143,9 +143,8 @@ public:
     
     /**
      * Attempts to add wireless security settings to a connection intended for
-     * this access point.  This will fail if the connection is not compatible
-     * with this access point, or the security key is not valid for the access
-     * point security type.
+     * this access point.  This will fail if the security key is not valid for
+     * the access point security type.
      * 
      * @param connection  The connection object to modify.
      * 
