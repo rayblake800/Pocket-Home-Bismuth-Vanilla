@@ -237,6 +237,10 @@ const char* NMPPConnection::getPath() const
         if(connection != nullptr)
         {
             path = nm_connection_get_path(connection);
+            if(path == nullptr)
+            {
+                path = "";
+            }
         }
     });
     return path;
@@ -254,6 +258,10 @@ const char* NMPPConnection::getUUID() const
         if(connection != nullptr)
         {
             uuid = nm_connection_get_uuid(connection);
+            if(uuid == nullptr)
+            {
+                uuid = "";
+            }
         }
     });
     return uuid;
@@ -271,6 +279,10 @@ const char* NMPPConnection::getID() const
         if(connection != nullptr)
         {
             conId = nm_connection_get_id(connection);
+            if(conId == nullptr)
+            {
+                conId = "";
+            }
         }
     });
     return conId;

@@ -90,6 +90,10 @@ const char* NMPPAccessPoint::getPath() const
         if(accessPoint != nullptr)
         {
             path = nm_object_get_path(accessPoint);
+            if(path == nullptr)
+            {
+                path = "";
+            }
         }
     });
     return path;

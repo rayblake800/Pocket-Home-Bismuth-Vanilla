@@ -81,6 +81,10 @@ const char* NMPPDeviceWifi::getInterface() const
         if(device != nullptr)
         {
             iface = nm_device_get_iface(device);
+            if(iface == nullptr)
+            {
+                iface = "";
+            }
         }
     });
     return iface;
@@ -98,6 +102,10 @@ const char* NMPPDeviceWifi::getPath() const
         if(device != nullptr)
         {
             path = nm_object_get_path(device);
+            if(path == nullptr)
+            {
+                path = "";
+            }
         }
     });
     return path;

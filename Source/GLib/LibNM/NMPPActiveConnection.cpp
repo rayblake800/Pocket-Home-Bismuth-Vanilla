@@ -29,6 +29,10 @@ const char* NMPPActiveConnection::getPath() const
         if(connection != nullptr)
         {
             path = nm_object_get_path(connection);
+            if(path == nullptr)
+            {
+                path = "";
+            }
         }
     });
     return path;
@@ -46,6 +50,10 @@ const char* NMPPActiveConnection::getAccessPointPath() const
         if(connection != nullptr)
         {
             path = nm_active_connection_get_specific_object(connection);
+            if(path == nullptr)
+            {
+                path = "";
+            }
         }
     });
     return path;
@@ -61,7 +69,9 @@ bool NMPPActiveConnection::isConnectedAccessPoint
     {
         return false;
     }
-    return strcmp(getAccessPointPath(), accessPoint.getPath()) == 0; 
+    const char* apPath = getAccessPointPath();
+    return strcmp(apPath, accessPoint.getPath()) == 0
+            && strcmp(apPath, "") != 0; 
 }
 
 /*
