@@ -281,21 +281,22 @@ bool WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
 {
     const ScopedReadLock readLock(rhs.networkUpdateLock);
     
-    ssid           = rhs.ssid;
-    bssid          = rhs.bssid;
-    security       = rhs.security;
-    hash           = rhs.hash;
-    signalStrength = rhs.signalStrength;
-    frequency      = rhs.frequency;
-    maxBitrate     = rhs.maxBitrate;
-    apMode         = rhs.apMode;
-    apFlags        = rhs.apFlags;
-    wpaFlags       = rhs.wpaFlags;
-    rsnFlags       = rhs.rsnFlags;
-    nmAccessPoint  = rhs.nmAccessPoint;
-    connectionPath = rhs.connectionPath;
+    ssid                 = rhs.ssid;
+    bssid                = rhs.bssid;
+    security             = rhs.security;
+    hash                 = rhs.hash;
+    signalStrength       = rhs.signalStrength;
+    frequency            = rhs.frequency;
+    maxBitrate           = rhs.maxBitrate;
+    apMode               = rhs.apMode;
+    apFlags              = rhs.apFlags;
+    wpaFlags             = rhs.wpaFlags;
+    rsnFlags             = rhs.rsnFlags;
+    nmAccessPoint        = rhs.nmAccessPoint;
+    activeConnectionPath = rhs.activeConnectionPath;
+    savedConnectionPath  = rhs.savedConnectionPath;
 #if JUCE_DEBUG
-    fakeConnection = rhs.fakeConnection;
+    fakeConnection       = rhs.fakeConnection;
 #endif
     if(!nmAccessPoint.isNull())
     {
@@ -348,26 +349,39 @@ const NMPPAccessPoint& WifiAccessPoint::getNMAccessPoint() const
 {
     return nmAccessPoint;
 }
- 
-/**
- * Gets the network connection DBus path associated with this access point.
- * 
- * @return  The saved path value, or the empty string if there is no saved
- *          connection.
+   
+/*
+ * Saves a path to a DBus active connection object that is using this
+ * access point.
  */
-const String& WifiAccessPoint::getConnectionPath() const
+void WifiAccessPoint::setActiveConnectionPath(const String path)
 {
-    return connectionPath;
+    activeConnectionPath = path;
 }
 
-/**
- * Stores a network connection DBus path associated with this access point.
- *  
- * @param path  A valid DBus path to store.
+/*
+ * Saves a path to a DBus saved connection object that is compatible with
+ * this access point.
  */
-void WifiAccessPoint::setConnectionPath(String path)
+void WifiAccessPoint::setSavedConnectionPath(const String path)
 {
-    connectionPath = path;
+    savedConnectionPath = path;
+}
+
+/*
+ * Returns the active connection path stored with this access point.
+ */
+const String& WifiAccessPoint::getActiveConnectionPath() const
+{
+    return activeConnectionPath;
+}
+
+/*
+ * Returns the saved connection path stored with this access point.
+ */
+const String& WifiAccessPoint::getSavedConnectionPath() const
+{
+    return savedConnectionPath;
 }
 
 /*

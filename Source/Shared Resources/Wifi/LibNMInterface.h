@@ -136,6 +136,18 @@ protected:
 
 private:       
     /**
+     * Finds and sets active and saved connection paths for a wifi access point.
+     *
+     * 
+     * @param accessPoint  The access point to update.  For both the access 
+     *                     point's active and saved path strings, this will
+     *                     attempt to find a compatible connection object and
+     *                     store its path, or set the path variable to the empty
+     *                     string if no matching connection is found. 
+     */
+    void setAccessPointPaths(WifiAccessPoint& accessPoint);
+    
+    /**
      * Notify listeners and save the connecting access point if starting to
      * connect.
      * 

@@ -5004,6 +5004,12 @@
           <in>RelativeLayoutManager.h</in>
         </df>
         <df name="GLib">
+          <df name="DBus">
+            <in>GPPDBusProxy.cpp</in>
+            <in>GPPDBusProxy.h</in>
+            <in>GVariantConverter.cpp</in>
+            <in>GVariantConverter.h</in>
+          </df>
           <df name="LibNM">
             <in>NMPPAccessPoint.cpp</in>
             <in>NMPPAccessPoint.h</in>
@@ -5015,37 +5021,31 @@
             <in>NMPPConnection.h</in>
             <in>NMPPDeviceWifi.cpp</in>
             <in>NMPPDeviceWifi.h</in>
-          </df>
-          <in>GPPDBusProxy.cpp</in>
-          <in>GPPDBusProxy.h</in>
-          <in>GPPObject.cpp</in>
-          <in>GPPObject.h</in>
-          <in>GVariantConverter.cpp</in>
-          <in>GVariantConverter.h</in>
-        </df>
-        <df name="Hardware">
-          <df name="Bluetooth">
-            <in>BluetoothDevice.cpp</in>
-            <in>BluetoothDevice.h</in>
-            <in>BluetoothStatus.cpp</in>
-            <in>BluetoothStatus.h</in>
-            <in>BluezAdapter.cpp</in>
-            <in>BluezAdapter.h</in>
-          </df>
-          <df name="Wifi">
-            <in>JsonWifiInterface.cpp</in>
-            <in>JsonWifiInterface.h</in>
-            <in>LibNMInterface.cpp</in>
-            <in>LibNMInterface.h</in>
             <in>SavedConnection.cpp</in>
             <in>SavedConnection.h</in>
             <in>SavedConnections.cpp</in>
             <in>SavedConnections.h</in>
+          </df>
+          <in>GLibSignalHandler.cpp</in>
+          <in>GLibSignalHandler.h</in>
+          <in>GLibThread.cpp</in>
+          <in>GLibThread.h</in>
+          <in>GPPObject.cpp</in>
+          <in>GPPObject.h</in>
+        </df>
+        <df name="Hardware">
+          <df name="Bluetooth">
+            <in>BluetoothDevice.cpp</in>
+            <in>BluetoothStatus.cpp</in>
+            <in>BluezAdapter.cpp</in>
+          </df>
+          <df name="Wifi">
+            <in>JsonWifiInterface.cpp</in>
+            <in>LibNMInterface.cpp</in>
+            <in>SavedConnection.cpp</in>
+            <in>SavedConnections.cpp</in>
             <in>WifiAccessPoint.cpp</in>
-            <in>WifiAccessPoint.h</in>
-            <in>WifiDebugOutput.h</in>
             <in>WifiStateManager.cpp</in>
-            <in>WifiStateManager.h</in>
           </df>
           <in>Audio.cpp</in>
           <in>Audio.h</in>
@@ -5057,6 +5057,14 @@
           <in>I2CBus.h</in>
         </df>
         <df name="Shared Resources">
+          <df name="Bluetooth">
+            <in>BluetoothDevice.cpp</in>
+            <in>BluetoothDevice.h</in>
+            <in>BluetoothStatus.cpp</in>
+            <in>BluetoothStatus.h</in>
+            <in>BluezAdapter.cpp</in>
+            <in>BluezAdapter.h</in>
+          </df>
           <df name="Config Files">
             <in>AppConfigFile.cpp</in>
             <in>AppConfigFile.h</in>
@@ -5067,12 +5075,19 @@
             <in>MainConfigFile.cpp</in>
             <in>MainConfigFile.h</in>
           </df>
+          <df name="Wifi">
+            <in>JsonWifiInterface.cpp</in>
+            <in>JsonWifiInterface.h</in>
+            <in>LibNMInterface.cpp</in>
+            <in>LibNMInterface.h</in>
+            <in>WifiAccessPoint.cpp</in>
+            <in>WifiAccessPoint.h</in>
+            <in>WifiDebugOutput.h</in>
+            <in>WifiStateManager.cpp</in>
+            <in>WifiStateManager.h</in>
+          </df>
           <in>AssetFiles.cpp</in>
           <in>AssetFiles.h</in>
-          <in>GLibSignalHandler.cpp</in>
-          <in>GLibSignalHandler.h</in>
-          <in>GLibThread.cpp</in>
-          <in>GLibThread.h</in>
           <in>ResourceManager.cpp</in>
           <in>ResourceManager.h</in>
         </df>

@@ -100,21 +100,11 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
     for(const NMPPAccessPoint& ap : visibleAPs)
     {
         WifiAccessPoint packagedAP(ap);
-        if(packagedAP.getSSID().isNotEmpty() 
+        if(!packagedAP.isNull() && packagedAP.getSSID().isNotEmpty() 
                 && !filteredAPs.contains(packagedAP))
         {
-            for(const SavedConnection& con : savedCons)
-            {
-                if(ap.isValidConnection(con.getNMConnection()))
-                {
-                    packagedAP.setConnectionPath(con.getPath());
-                    break;
-                }
-            }
-            if(!packagedAP.isNull())
-            {
-                filteredAPs.add(packagedAP);
-            }
+            setAccessPointPaths(packagedAP);
+            filteredAPs.add(packagedAP);
         }
     }
     return filteredAPs;
@@ -142,10 +132,10 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         NMPPConnection toActivate;
         //Copy the saved connection, delete the original, and re-create it with
         //new security info.
-        if(toConnect.getConnectionPath().isNotEmpty())
+        if(toConnect.getSavedConnectionPath().isNotEmpty())
         {
             SavedConnection saved = savedConnections.getConnection
-                    (toConnect.getConnectionPath());
+                    (toConnect.getSavedConnectionPath());
             if(!saved.isNull())
             {
                 toActivate = saved.getNMConnection();
@@ -231,6 +221,43 @@ WifiStateManager::AccessPointState LibNMInterface::getAPState
         return WifiStateManager::disconnectedAP;
     }
     return WifiStateManager::missingAP;
+}     
+
+/*
+ * Finds and sets active and saved connection paths for a wifi access point.
+ */
+void LibNMInterface::setAccessPointPaths(WifiAccessPoint& accessPoint)
+{
+    if(!accessPoint.isNull())
+    {
+        const char* path = nullptr;
+        Array<NMPPActiveConnection> active = client.getActiveConnections();
+        for(const NMPPActiveConnection& con : active)
+        {
+            if(con.isConnectedAccessPoint(accessPoint.getNMAccessPoint()))
+            {
+                path = con.getAccessPointPath();
+                break;
+            }
+        }
+        DBG("LibNMInterface::" << __func__ << ": Found active connection path "
+                << path);
+        accessPoint.setActiveConnectionPath((path == nullptr) ? "" : path);
+        savedConnections.updateSavedConnections();
+        Array<SavedConnection> saved = savedConnections.findConnectionsForAP
+                (accessPoint.getNMAccessPoint());
+        if(!saved.isEmpty())
+        {
+            DBG("LibNMInterface::" << __func__ 
+                    << ": Found active connection path "
+                    << saved[0].getPath());
+            accessPoint.setSavedConnectionPath(saved[0].getPath());
+        }
+        else
+        {
+            accessPoint.setSavedConnectionPath("");
+        }
+    }
 }
 
 /*
@@ -244,9 +271,9 @@ void LibNMInterface::updateAllWifiData()
     lastNMState = wifiDevice.getState();
     savedConnections.updateSavedConnections();
     activeConnection = wifiDevice.getActiveConnection();
-    const char* path = activeConnection.getAccessPointPath();
-    activeAP = wifiDevice.getAccessPoint(path);
-    activeAP.setConnectionPath(path);
+    activeAP = WifiAccessPoint(wifiDevice.getAccessPoint
+            (activeConnection.getAccessPointPath()));
+    setAccessPointPaths(activeAP);
     visibleAPs = wifiDevice.getAccessPoints();
     ScopedUnlock confirmUnlock(wifiLock);
     confirmWifiState();
@@ -314,7 +341,7 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
 		}
                 const char* path = connection.getAccessPointPath();
                 activeAP = WifiAccessPoint(wifiDevice.getAccessPoint(path));
-                activeAP.setConnectionPath(path);
+                setAccessPointPaths(activeAP);
                 break;
             }
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATING:
@@ -542,6 +569,15 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
                 NMPPAccessPoint nmAP = wifiDevice.getAccessPoint
                         (activeConnection.getAccessPointPath());
                 activeAP = WifiAccessPoint(nmAP);
+                activeAP.setActiveConnectionPath
+                        (activeConnection.getAccessPointPath());
+                Array<SavedConnection> saved 
+                        = savedConnections.findConnectionsForAP
+                        (activeAP.getNMAccessPoint());
+                if(!saved.isEmpty())
+                {
+                    activeAP.setSavedConnectionPath(saved[0].getPath());
+                }
                 ScopedUnlock notifyUnlock(wifiLock);
                 if(active.getConnectionState() 
                         == NM_ACTIVE_CONNECTION_STATE_ACTIVATED)

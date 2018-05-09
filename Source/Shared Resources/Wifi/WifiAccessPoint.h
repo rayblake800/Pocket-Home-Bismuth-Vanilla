@@ -227,21 +227,40 @@ public:
      * @return this access point's LibNM access point object 
      */
     const NMPPAccessPoint& getNMAccessPoint() const;
-    
+   
     /**
-     * Gets the network connection DBus path associated with this access point.
+     * Saves a path to a DBus active connection object that is using this
+     * access point.
      * 
-     * @return  The saved path value, or the empty string if there is no saved
-     *          connection.
+     * @param path  The active connection path value to store with this access 
+     *              point.  The caller is responsible for ensuring this value
+     *              is valid.
      */
-    const String& getConnectionPath() const;
+    void setActiveConnectionPath(const String path);
     
     /**
-     * Stores a network connection DBus path associated with this access point.
-     *  
-     * @param path  A valid DBus path to store.
+     * Saves a path to a DBus saved connection object that is compatible with
+     * this access point.
+     * 
+     * @param path  The saved connection path value to store with this access 
+     *              point.  The caller is responsible for ensuring this value
+     *              is valid.
      */
-    void setConnectionPath(String path);
+    void setSavedConnectionPath(const String path);
+    
+    /**
+     * Returns the active connection path stored with this access point.
+     * 
+     * @return  the path value stored with setActiveConnectionPath()
+     */
+    const String& getActiveConnectionPath() const;
+    
+    /**
+     * Returns the saved connection path stored with this access point.
+     * 
+     * @return  the path value stored with setSavedConnectionPath()
+     */
+    const String& getSavedConnectionPath() const;
 
 private:
     /**
@@ -300,7 +319,8 @@ private:
     NM80211ApSecurityFlags rsnFlags;
 
     NMPPAccessPoint nmAccessPoint;
-    String connectionPath;
+    String activeConnectionPath;
+    String savedConnectionPath;
 #if JUCE_DEBUG
     bool fakeConnection = false;
 #endif

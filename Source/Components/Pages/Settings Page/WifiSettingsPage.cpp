@@ -194,7 +194,7 @@ void WifiSettingsPage::updateConnectionControls()
     bool showButtonSpinner = false;
     String errorMessage = "";
     bool apConnected = isConnected(selectedAP);
-    bool connectionSaved = selectedAP.getConnectionPath().isNotEmpty();
+    bool connectionSaved = selectedAP.getSavedConnectionPath().isNotEmpty();
     if(!apConnected && lastConnecting != selectedAP 
             && lastDisconnecting != selectedAP)
     {
