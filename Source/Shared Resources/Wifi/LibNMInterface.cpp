@@ -480,7 +480,9 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                     {
                         DBG("LibNMInterface::" << __func__
                                 << ": Deleting failed new connection.");
-                        SavedConnection toDelete(activeConnection.getPath());
+                        setAccessPointPaths(activeAP);
+                        SavedConnection toDelete
+                                (activeAP.getSavedConnectionPath().toRawUTF8());
                         toDelete.deleteConnection();
                         activeConnection = NMPPActiveConnection();
                         activeAP = WifiAccessPoint();
