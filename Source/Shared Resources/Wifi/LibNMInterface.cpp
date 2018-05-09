@@ -230,7 +230,7 @@ void LibNMInterface::setAccessPointPaths(WifiAccessPoint& accessPoint)
 {
     if(!accessPoint.isNull())
     {
-        const char* path = nullptr;
+        const char* path = "";
         Array<NMPPActiveConnection> active = client.getActiveConnections();
         for(const NMPPActiveConnection& con : active)
         {
@@ -242,7 +242,7 @@ void LibNMInterface::setAccessPointPaths(WifiAccessPoint& accessPoint)
         }
         DBG("LibNMInterface::" << __func__ << ": Found active connection path "
                 << path);
-        accessPoint.setActiveConnectionPath((path == nullptr) ? "" : path);
+        accessPoint.setActiveConnectionPath(path);
         savedConnections.updateSavedConnections();
         Array<SavedConnection> saved = savedConnections.findConnectionsForAP
                 (accessPoint.getNMAccessPoint());
