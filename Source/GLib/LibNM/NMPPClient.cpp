@@ -290,7 +290,7 @@ void NMPPClient::activateConnection(
             {
                 if(isNew)
                 {
-                    DBG("NMPPClient::" << __func__ 
+                    DBG("NMPPClient::activateConnection"
                             << ": adding new connection.");
                     nm_client_add_and_activate_connection(client,
                         NM_CONNECTION(conObj),
@@ -302,7 +302,7 @@ void NMPPClient::activateConnection(
                 }
                 else
                 {
-                    DBG("NMPPClient::" << __func__ 
+                    DBG("NMPPClient::activateConnection"
                             << ": activating saved connection.");
                     nm_client_activate_connection(client,
                             NM_CONNECTION(conObj),

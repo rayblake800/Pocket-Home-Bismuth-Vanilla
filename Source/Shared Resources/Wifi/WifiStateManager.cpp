@@ -288,7 +288,7 @@ void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
         if (state != wifiState)
         {
             wifiState = state;
-            DBG("WifiStateManager::" << __func__ << ": Setting wifi state to "
+            DBG("WifiStateManager::setWifiState: Setting wifi state to "
                     << wifiStateString(wifiState));
             jassert(notifyQueue.isEmpty());
             notifyQueue = listeners;

@@ -151,6 +151,9 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                 }
                 else
                 {
+                    DBG("LibNMInterface::" << __func__ 
+                            << ": No failed connection found, failedList size:"
+                            << failedConnectionAPs.size());
                     DBG("LibNMInterface::" << __func__ << ": Connecting to AP "
                             << toConnect.getSSID() 
                             << " with existing connection " 
