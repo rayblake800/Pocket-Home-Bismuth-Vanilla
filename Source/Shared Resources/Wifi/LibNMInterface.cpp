@@ -166,9 +166,6 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                 }
                 else
                 {
-                    DBG("LibNMInterface::" << __func__ 
-                            << ": No failed connection found, failedList size:"
-                            << failedConnectionAPs.size());
                     DBG("LibNMInterface::" << __func__ << ": Connecting to AP "
                             << toConnect.getSSID() 
                             << " with existing connection " 
@@ -201,10 +198,6 @@ WifiStateManager::AccessPointState LibNMInterface::getAPState
     {
         return WifiStateManager::nullAP;
     }
-    if(failedConnectionAPs.contains(accessPoint))
-    {
-        return WifiStateManager::invalidSecurityAP;
-    }
     if(activeConnection.isConnectedAccessPoint(accessPoint.getNMAccessPoint())
             || activeAP.sharesConnectionWith(accessPoint))
     {
@@ -219,6 +212,10 @@ WifiStateManager::AccessPointState LibNMInterface::getAPState
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
                 return WifiStateManager::disconnectedAP;
         }
+    }
+    if(failedConnectionAPs.contains(accessPoint))
+    {
+        return WifiStateManager::invalidSecurityAP;
     }
     if(visibleAPs.contains(accessPoint.getNMAccessPoint()))
     {
