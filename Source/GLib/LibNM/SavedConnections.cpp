@@ -34,8 +34,6 @@ Array<SavedConnection> SavedConnections::getWifiConnections() const
             connections.add(con);
         }
     }
-    DBG("SavedConnections::" << __func__  << ": Found "
-            << connections.size() << " wifi connections.");
     return connections;
 }
 

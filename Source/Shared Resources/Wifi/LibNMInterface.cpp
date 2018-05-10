@@ -149,15 +149,16 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                     //can re-generate them for the new connection.
                     toActivate.removeSetting(NM_TYPE_SETTING_CONNECTION);
                 }
+                else
+                {
+                    DBG("LibNMInterface::" << __func__ << ": Connecting to AP "
+                            << toConnect.getSSID() 
+                            << " with existing connection " 
+                            << toActivate.getID());
+                }
             }          
         }
-        if(!toActivate.isNull())
-        {
-            DBG("LibNMInterface::" << __func__ << ": Connecting to AP "
-                    << toConnect.getSSID() << " with existing connection "
-                    << toActivate.getID());
-        }
-        else
+        if(toActivate.isNull())
         {
             toActivate = wifiDevice.getAvailableConnection(nmAP);
             if(toActivate.isNull())
@@ -243,17 +244,12 @@ void LibNMInterface::setAccessPointPaths(WifiAccessPoint& accessPoint)
                 break;
             }
         }
-        DBG("LibNMInterface::" << __func__ << ": Found active connection path "
-                << path);
         accessPoint.setActiveConnectionPath(path);
         savedConnections.updateSavedConnections();
         Array<SavedConnection> saved = savedConnections.findConnectionsForAP
                 (accessPoint.getNMAccessPoint());
         if(!saved.isEmpty())
         {
-            DBG("LibNMInterface::" << __func__ 
-                    << ": Found active connection path "
-                    << saved[0].getPath());
             accessPoint.setSavedConnectionPath(saved[0].getPath());
         }
         else
