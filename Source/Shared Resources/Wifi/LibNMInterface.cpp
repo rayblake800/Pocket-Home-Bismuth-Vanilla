@@ -139,6 +139,21 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
             if(!saved.isNull())
             {
                 toActivate = saved.getNMConnection();
+            }          
+        }
+        if(toActivate.isNull())
+        {
+            toActivate = wifiDevice.getAvailableConnection(nmAP);
+            if(toActivate.isNull())
+            {
+                toActivate = toConnect.createConnection(psk);
+                newConnectionAP = toConnect;
+                DBG("LibNMInterface::" << __func__ 
+                        << ": Creating new connection for AP "
+                        << toConnect.getSSID());
+            }
+            else
+            {            
                 if(failedConnectionAPs.contains(toConnect))
                 {
                     DBG("LibNMInterface::" << __func__ 
@@ -159,24 +174,6 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                             << " with existing connection " 
                             << toActivate.getID());
                 }
-            }          
-        }
-        if(toActivate.isNull())
-        {
-            toActivate = wifiDevice.getAvailableConnection(nmAP);
-            if(toActivate.isNull())
-            {
-                toActivate = toConnect.createConnection(psk);
-                newConnectionAP = toConnect;
-                DBG("LibNMInterface::" << __func__ 
-                        << ": Creating new connection for AP "
-                        << toConnect.getSSID());
-            }
-            else
-            {
-                DBG("LibNMInterface::" << __func__ << ": Connecting to AP "
-                        << toConnect.getSSID() << " with existing connection "
-                        << toActivate.getID());
             }
         }
         if(!toActivate.isNull())
