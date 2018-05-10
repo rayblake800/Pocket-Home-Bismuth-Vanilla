@@ -193,6 +193,8 @@ private:
     static const constexpr char * wrong_password = "wrong_password";
     static const constexpr char * invalid_key_format = "invalid_key_format";
     static const constexpr char * connection_failed = "connection_failed";
+    static const constexpr char * lost_ap = "lost_ap";
+    
     static const constexpr char * connected_ap = "connected_ap";
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiSettingsPage)

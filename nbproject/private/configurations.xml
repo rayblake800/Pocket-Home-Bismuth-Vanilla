@@ -5034,19 +5034,6 @@
           <in>GPPObject.h</in>
         </df>
         <df name="Hardware">
-          <df name="Bluetooth">
-            <in>BluetoothDevice.cpp</in>
-            <in>BluetoothStatus.cpp</in>
-            <in>BluezAdapter.cpp</in>
-          </df>
-          <df name="Wifi">
-            <in>JsonWifiInterface.cpp</in>
-            <in>LibNMInterface.cpp</in>
-            <in>SavedConnection.cpp</in>
-            <in>SavedConnections.cpp</in>
-            <in>WifiAccessPoint.cpp</in>
-            <in>WifiStateManager.cpp</in>
-          </df>
           <in>Audio.cpp</in>
           <in>Audio.h</in>
           <in>BatteryMonitor.cpp</in>

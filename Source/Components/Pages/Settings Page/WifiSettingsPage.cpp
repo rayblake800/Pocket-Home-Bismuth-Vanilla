@@ -192,60 +192,35 @@ void WifiSettingsPage::updateConnectionControls()
     bool showPasswordEntry = false;
     String connectionBtnText = localeText(btn_connect);
     bool showButtonSpinner = false;
+    bool hideConnectionButton = false;
     String errorMessage = "";
-    bool apConnected = isConnected(selectedAP);
-    bool connectionSaved = selectedAP.getSavedConnectionPath().isNotEmpty();
-    if(!apConnected && lastConnecting != selectedAP 
-            && lastDisconnecting != selectedAP)
+    WifiStateManager wifiManager;
+    switch(wifiManager.getAPState(selectedAP))
     {
-        showPasswordEntry = selectedAP.getRequiresAuth()
-                && !connectionSaved;
-    }
-    else
-    {
-        WifiStateManager wifiManager;
-        switch(wifiManager.getWifiState())
-        {
-            case WifiStateManager::connecting:
-                if(lastConnecting == selectedAP)
-                {
-                    showButtonSpinner = true;
-                }
-                break;
-            case WifiStateManager::missingPassword:
-                showPasswordEntry = selectedAP.getRequiresAuth();
-                if(selectedAP == lastConnecting)
-                {
-                    errorMessage = localeText(wrong_password);
-                }
-                break;
-            case WifiStateManager::connected:
-                if(apConnected)
-                {
-                    connectionBtnText = localeText(btn_disconnect);
-                    break;
-                }    
-            case WifiStateManager::enabled:
-                if(lastConnecting == selectedAP 
-                   && lastDisconnecting != selectedAP)
-                {
-                    errorMessage = localeText(connection_failed);
-                }
-                showPasswordEntry = selectedAP.getRequiresAuth()
-                        && (!connectionSaved 
-                        || wifiManager.getAPState(selectedAP) 
-                        == WifiStateManager::invalidSecurityAP);
-                break;
-            case WifiStateManager::disconnecting:
-                if(lastDisconnecting == selectedAP)
-                {
-                    showButtonSpinner = true;
-                }
-                break;
-            default:
-                DBG("WifiSettingsPage::" << __func__ 
-                        << ": page should be closed!");
-        };
+        case WifiStateManager::nullAP:
+            DBG("WifiSettingsPage::" << __func__ 
+                    << ": AP is suddenly null!");
+            return;
+        case WifiStateManager::connectingAP:
+        case WifiStateManager::disconnectingAP:
+            connectionBtnText = "";
+            showButtonSpinner = true;
+            break;
+        case WifiStateManager::connectedAP:
+            connectionBtnText = localeText(btn_disconnect);
+            break;
+        case WifiStateManager::disconnectedAP:
+            showPasswordEntry = selectedAP.getRequiresAuth() &&
+                    selectedAP.getSavedConnectionPath().isEmpty();
+            break;
+        case WifiStateManager::invalidSecurityAP:
+            showPasswordEntry = selectedAP.getRequiresAuth();
+            errorMessage = localeText(wrong_password);
+            break;
+        case WifiStateManager::missingAP:
+            errorMessage = localeText(lost_ap);
+            hideConnectionButton = true;
+            
     }
     if(showPasswordEntry != passwordEditor.isVisible())
     {
@@ -254,13 +229,21 @@ void WifiSettingsPage::updateConnectionControls()
         passwordEditor.setVisible(showPasswordEntry);
         passwordLabel.setVisible(showPasswordEntry);
     }
-    if(showButtonSpinner)
+    if(hideConnectionButton)
     {
-        connectionBtnText = String();
+        connectionButton.setVisible(false);
     }
-    connectionButton.setButtonText(connectionBtnText);
-    connectionButton.setEnabled(!showButtonSpinner);
-    spinner.setVisible(showButtonSpinner);
+    else
+    {
+        connectionButton.setVisible(true);
+        if(showButtonSpinner)
+        {
+            connectionBtnText = String();
+        }
+        connectionButton.setButtonText(connectionBtnText);
+        connectionButton.setEnabled(!showButtonSpinner);
+        spinner.setVisible(showButtonSpinner);
+    }
     errorLabel.setText(errorMessage, NotificationType::dontSendNotification);
 }
 
