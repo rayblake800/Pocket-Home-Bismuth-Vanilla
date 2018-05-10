@@ -327,13 +327,13 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
         switch(connection.getConnectionState())
         {
             case NM_ACTIVE_CONNECTION_STATE_UNKNOWN:
-                DBG("LibNMInterface::" << __func__ 
+                DBG("LibNMInterface::openingConnection"
                         << ": unknown connection state");
                 break;
             case NM_ACTIVE_CONNECTION_STATE_ACTIVATING:
             case NM_ACTIVE_CONNECTION_STATE_ACTIVATED:
             {
-                DBG("LibNMInterface::" << __func__ 
+                DBG("LibNMInterface::openingConnection"
                         << ": setting new activating/activated connection");
                 if(activeConnection != connection)
 		{
@@ -346,7 +346,8 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
             }
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATING:
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
-                DBG("LibNMInterface::" << __func__ << ": No error, but new "
+                DBG("LibNMInterface::openingConnection"
+                        << ": No error, but new "
                         << "connection already being closed.");
         }
     });
@@ -363,7 +364,7 @@ void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection,
     MessageManager::callAsync([this, connection, error, isNew]()
     {
         ScopedLock updateLock(wifiLock);
-        DBG("LibNMInterface::" << __func__ << ": Error "
+        DBG("LibNMInterface::openingConnectionFailed" << ": Error "
                 << error->code << ":" << error->message);
         //TODO: is it necessary to make sure activeConnection or activeAP
         //aren't currently set to this failed connection?  Probably not, but run
@@ -424,16 +425,16 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
             return;
         }
         lastNMState = newState;
-        DBG("LibNMInterface::" << __func__ << ":  changed to "
+        DBG("LibNMInterface::stateChanged" << ":  changed to "
                 << deviceStateString(newState));
-        DBG("LibNMInterface::" << __func__ << ":  reason="
+        DBG("LibNMInterface::stateChanged" << ":  reason="
                 << deviceStateReasonString(reason));
         switch (newState)
         {
             case NM_DEVICE_STATE_ACTIVATED:
             {
-                DBG("LibNMInterface::" << __func__ 
-                        << ": new connection activated, send connection signal");
+                DBG("LibNMInterface::stateChanged: new connection activated, "
+                        << "send connection signal");
 		stopTimer();
                 failedConnectionAPs.removeAllInstancesOf(activeAP);
 		ScopedUnlock unlockForUpdate(wifiLock);
@@ -478,7 +479,7 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                     failedConnectionAPs.add(activeAP);
                     if(newConnectionAP == activeAP)
                     {
-                        DBG("LibNMInterface::" << __func__
+                        DBG("LibNMInterface::stateChanged"
                                 << ": Deleting failed new connection.");
                         setAccessPointPaths(activeAP);
                         SavedConnection toDelete
@@ -501,7 +502,7 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
             case NM_DEVICE_STATE_UNAVAILABLE:
             default:
             {
-                DBG("LibNMInterface::" << __func__
+                DBG("LibNMInterface::stateChanged"
                         << ": wlan0 device entered unmanaged state: "
                         << deviceStateString(newState));
 		if(!activeAP.isNull())
@@ -554,7 +555,7 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
     MessageManager::callAsync([this, active]()
     {
         ScopedLock updateLock(wifiLock);
-        DBG("LibNMInterface::" << __func__ 
+        DBG("LibNMInterface::activeConnectionChanged" 
                 << ": new active connection with state "
                 << activeConnectionStateString(active.getConnectionState()));
         if(active != activeConnection)
