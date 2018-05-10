@@ -31,6 +31,18 @@ path(path)
     if(!isNull())
     {
         createNMConnection();
+        GVariant* timestamp = getSettingProp(NM_SETTING_CONNECTION_SETTING_NAME,
+                NM_SETTING_CONNECTION_TIMESTAMP);
+        if(timestamp != nullptr)
+        {
+            DBG("SavedConnection: Loaded connection with timestamp "
+                    << GVariantConverter::toString(timestamp));
+            g_variant_unref(timestamp);
+        }
+        else
+        {
+            DBG("SavedConnection: Loaded connection with no timestamp.");
+        }
     }
 }
 
