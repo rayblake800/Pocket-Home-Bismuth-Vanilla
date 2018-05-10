@@ -147,7 +147,8 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
     }
     DBG("WifiStateManager::" << __func__ << ": Connecting to access "
             << "point " << toConnect.getSSID());
-    wifiResource->setWifiState(connecting);
+    //Testing: let wifiResource choose when to set state to connecting.
+    //wifiResource->setWifiState(connecting);
     wifiResource->connectToAccessPoint(toConnect, psk);
     wifiResource->startTimer(wifiResource->wifiConnectionTimeout);
 }

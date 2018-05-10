@@ -343,8 +343,8 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATING:
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
                 DBG("LibNMInterface::openingConnection"
-                        << ": No error, but new "
-                        << "connection already being closed.");
+                        << ": No GError, but the new connection is already "
+                        << "being closed.");
         }
     });
 }
@@ -366,7 +366,7 @@ void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection,
         //aren't currently set to this failed connection?  Probably not, but run
         //tests to be sure.
 
-        //TODO: properly detect invalid security errors, then:
+        //TODO: delete invalid new connections?
         /*
          if(isNew)
          {
@@ -377,10 +377,10 @@ void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection,
          {
             //ask before deleting non-new connection.
          }
-         ScopedUnlock confirmUnlock(wifiLock);
-         signalConnectionFailed();
          */
         g_error_free(error);
+        ScopedUnlock confirmUnlock(wifiLock);
+        signalConnectionFailed();
     });
 }
 
@@ -568,6 +568,7 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
                 NMPPAccessPoint nmAP = wifiDevice.getAccessPoint
                         (activeConnection.getAccessPointPath());
                 activeAP = WifiAccessPoint(nmAP);
+                jassert(!activeAP.isNull());
                 activeAP.setActiveConnectionPath
                         (activeConnection.getAccessPointPath());
                 Array<SavedConnection> saved 
@@ -576,6 +577,13 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
                 if(!saved.isEmpty())
                 {
                     activeAP.setSavedConnectionPath(saved[0].getPath());
+                    if(saved.size() > 1)
+                    {
+                        DBG("LibNMInterface::activeConnectionChanged: "
+                                << "Multiple saved connections found!");
+                        //TODO: figure out how to make sure networkManager picks
+                        //the right one
+                    }
                 }
                 ScopedUnlock notifyUnlock(wifiLock);
                 if(active.getConnectionState() 
