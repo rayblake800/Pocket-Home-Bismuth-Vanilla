@@ -145,6 +145,9 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                             << ": re-creating failed connection with new "
                             << "security settings.");
                     toConnect.setConnectionSecurity(toActivate, psk);
+                    //Remove the basic connection settings so NetworkManager
+                    //can re-generate them for the new connection.
+                    toActivate.removeSetting(NM_TYPE_SETTING_CONNECTION);
                 }
             }          
         }
