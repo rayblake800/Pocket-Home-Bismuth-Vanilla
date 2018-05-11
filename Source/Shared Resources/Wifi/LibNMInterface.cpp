@@ -201,6 +201,10 @@ WifiStateManager::AccessPointState LibNMInterface::getAPState
     if(activeConnection.isConnectedAccessPoint(accessPoint.getNMAccessPoint())
             || activeAP.sharesConnectionWith(accessPoint))
     {
+        if(getWifiState() == WifiStateManager::disconnecting)
+        {
+            return WifiStateManager::disconnectingAP;
+        }
         switch(activeConnection.getConnectionState())
         {
             case NM_ACTIVE_CONNECTION_STATE_ACTIVATING:
@@ -281,6 +285,7 @@ void LibNMInterface::updateAllWifiData()
 void LibNMInterface::disconnect()
 {
     wifiDevice.disconnect();
+    signalWifiDisconn
 }
 
 /*
@@ -434,7 +439,7 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
 		stopTimer();
                 failedConnectionAPs.removeAllInstancesOf(activeAP);
 		ScopedUnlock unlockForUpdate(wifiLock);
-		signalWifiConnected(activeAP);
+		signalWifiConnected();
                 break;
             }
             case NM_DEVICE_STATE_PREPARE:
@@ -522,7 +527,10 @@ void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
     {
         ScopedLock updateLock(wifiLock);
         visibleAPs.add(addedAP);
-        //TODO: add AP change notification for listeners.
+        
+        ScopedUnlock notifyUnlock(wifiLock);
+        WifiAccessPoint newAP(addedAP);
+        signalAPAdded(newAP);
     });
 }
 
@@ -537,7 +545,10 @@ void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
     {
         ScopedLock updateLock(wifiLock);
         visibleAPs.removeAllInstancesOf(removedAP);
-        //TODO: add AP change notification for listeners.
+             
+        ScopedUnlock notifyUnlock(wifiLock);
+        WifiAccessPoint missingAP(removedAP);
+        signalAPRemoved(missingAP);
     });
 }
 
@@ -589,7 +600,7 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
                 if(active.getConnectionState() 
                         == NM_ACTIVE_CONNECTION_STATE_ACTIVATED)
 		{
-                    signalWifiConnected(activeAP);
+                    signalWifiConnected();
 		}
 		else 
 		{

@@ -25,37 +25,31 @@ private:
     /**
      * @return the list of all visible bluetooth devices
      */
-    Array<BluetoothDevice> loadConnectionPoints();
-
-
+    Array<BluetoothDevice> loadConnectionPoints() override;
+    
     /**
-     * Attempts to connect to a Bluetooth device.
-     *
-     *  @param device
-     */
-    void connect(BluetoothDevice device);
-
-    /**
-     * @param device  If the system is currently connected to this
-     *                 bluetooth device, this method closes that connection.
-     *  
-     * @param connection
-     */
-    void disconnect(BluetoothDevice device);
-
-    /**
-     * @param connection
+     * This method will be used to sort the list of bluetooth devices.
      * 
-     * @return true iff the system is connected to this bluetooth device.
+     * @param first    Some bluetooth device in the list.
+     * 
+     * @param second   Some other bluetooth device in the list.
+     * 
+     * @return  a negative number if first should come before second, zero if 
+     *          the two bluetooth devices are equal, or a positive number if
+     *          second should come before first.
      */
-    bool isConnected(BluetoothDevice device);
+    int compareConnectionPoints
+    (const BluetoothDevice& first, const BluetoothDevice& second) override
+    {
+        return 0;
+    }
 
     /**
      * @param button
      * This is called whenever a button other than the navigation buttons
      * is clicked.
      */
-    void connectionButtonClicked(Button* button);
+    void connectionButtonClicked(Button* button) override;
 
     /**
      * Construct a button component to represent a bluetooth device.
@@ -64,7 +58,7 @@ private:
      * 
      * @param device
      */
-    Button* getConnectionButton(BluetoothDevice device);
+    Button* getConnectionButton(const BluetoothDevice& device) override;
 
     /**
      * Get the layout for the Bluetooth device controls.
@@ -72,25 +66,13 @@ private:
      * this bluetooth device.
      */
     RelativeLayoutManager::Layout getConnectionControlsLayout
-    (BluetoothDevice device);
+    (const BluetoothDevice& device) override;
 
     /**
      * Update connection control components to match the current bluetooth
      * device connection state.
      */
-    virtual void updateConnectionControls() override;
-
-
-    /**
-     * When currentlyConnecting, disable bluetooth controls and show a loading
-     * spinner.  Otherwise, enable controls and hide the loading spinner.
-     * 
-     * @param currentlyConnecting Indicates if bluetooth is trying to connect 
-     *                             to a device, or is otherwise busy.
-     */
-    void setCurrentlyConnecting(bool currentlyConnecting);
-
-
+    void updateConnectionControls() override;
 
     /**
      * Attempt to connect if return is pressed.

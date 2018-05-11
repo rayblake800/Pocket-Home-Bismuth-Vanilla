@@ -34,7 +34,23 @@ private:
      * @return the list of all visible Wifi access points.
      */
     Array<WifiAccessPoint> loadConnectionPoints() override;
-
+    
+    /**
+     * Compares wifi access points, in order to sort the access point list.
+     * The connected access point will always come before all others, and
+     * saved access points will come before new ones.  Otherwise, access points
+     * are sorted by signal strength.
+     * 
+     * @param first    Some access point in the list.
+     * 
+     * @param second   Some other access point in the list.
+     * 
+     * @return  a negative number if first should come before second, zero if 
+     *          the two connection points are equal, or a positive number if
+     *          second should come before first.
+     */
+    int compareConnectionPoints
+    (const WifiAccessPoint& first, const WifiAccessPoint& second) override;
 
     /**
      * Attempts to connect to a Wifi access point.  This will close any
@@ -43,7 +59,7 @@ private:
      *  @param accessPoint  The wifi device will attempt to find and connect
      *                      to this access point.
      */
-    void connect(WifiAccessPoint accessPoint);
+    void connect(const WifiAccessPoint& accessPoint);
 
     /**
      * Tries to disconnect from a specific wifi access point.
@@ -51,17 +67,7 @@ private:
      * @param accessPoint   If the system is currently connected to this
      *                      access point, this method closes that connection.
      */
-    void disconnect(WifiAccessPoint accessPoint);
-
-    /**
-     * Checks if wifi is connected to a specific access point.
-     * 
-     * @param accessPoint  The access point to check.
-     * 
-     * @return  true iff an active network connection is using the given access
-     *          point.
-     */
-    bool isConnected(WifiAccessPoint accessPoint) override;
+    void disconnect(const WifiAccessPoint& accessPoint);
 
     /**
      * Attempts to connect or disconnect from the current selected access point
@@ -79,7 +85,7 @@ private:
      * @param connection  The access point represented by the new button
      *                    component.
      */
-    Button* getConnectionButton(WifiAccessPoint accessPoint) override;
+    Button* getConnectionButton(const WifiAccessPoint& accessPoint) override;
 
     /**
      * Gets the layout for the Wifi access point controls.
@@ -88,7 +94,7 @@ private:
      *                      this access point.
      */
     RelativeLayoutManager::Layout getConnectionControlsLayout
-    (WifiAccessPoint accessPoint) override;
+    (const WifiAccessPoint& accessPoint) override;
 
     /**
      * Updates connection control components to match the current Wifi 
@@ -107,7 +113,7 @@ private:
     /**
      * Attempts to connect if return is pressed after entering a password.
      * 
-     * @param editor  This should always be 
+     * @param editor  This should always be the password field.
      */
     void textEditorReturnKeyPressed(TextEditor& editor) override;
 
@@ -123,13 +129,7 @@ private:
      * 
      * @param accessPoint
      */
-    static String getWifiAssetName(WifiAccessPoint accessPoint);
-
-    /**
-     * Reloads the access point list, re-selects the selected connection, 
-     * updates and enables connection controls.
-     */
-    void reloadPage();
+    static String getWifiAssetName(const WifiAccessPoint& accessPoint);
 
     /**
      * The custom button type to use for access point list buttons.
@@ -143,7 +143,7 @@ private:
          * @param isConnected   Indicates if an active connection exists using
          *                      this access point.
          */
-        WifiAPButton(WifiAccessPoint accessPoint, bool isConnected);
+        WifiAPButton(const WifiAccessPoint& accessPoint, bool isConnected);
     private:
 
         /**

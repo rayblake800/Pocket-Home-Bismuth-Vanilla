@@ -183,9 +183,12 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                     }
                     else
                     {
-                        signalWifiConnected(connectedAP);
+                        signalWifiConnected();
                     }                
                 });
+        
+        ScopedUnlock notifyUnlock(wifiLock);      
+        signalWifiConnecting();
     }
 }
 

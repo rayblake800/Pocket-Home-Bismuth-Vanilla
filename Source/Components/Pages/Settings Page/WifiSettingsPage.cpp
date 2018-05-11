@@ -34,12 +34,47 @@ Array<WifiAccessPoint> WifiSettingsPage::loadConnectionPoints()
     WifiStateManager wifiManager;
     return wifiManager.getVisibleAPs();
 }
-
+   
+/*
+ * Compares wifi access points, in order to sort the access point list.
+ * The connected access point will always come before all others, and
+ * saved access points will come before new ones.  Otherwise, access points
+ * are sorted by signal strength.
+ */
+int WifiSettingsPage::compareConnectionPoints
+(const WifiAccessPoint& first, const WifiAccessPoint& second)
+{   
+    jassert(!first.isNull() && !second.isNull());
+    WifiStateManager wifiManager;
+    WifiAccessPoint activeAP = wifiManager.getActiveAP();
+    if(!activeAP.isNull())
+    {
+        if(first == activeAP)
+        {
+            return -1;
+        }
+        else if(second == activeAP)
+        {
+            return 1;
+        }
+    }
+    bool firstSaved = first.getSavedConnectionPath().isNotEmpty();
+    bool secondSaved= second.getSavedConnectionPath().isNotEmpty();
+    if(firstSaved && !secondSaved)
+    {
+        return -1;
+    }
+    else if(secondSaved && !firstSaved)
+    {
+        return -1;
+    }
+    return second.getSignalStrength() - first.getSignalStrength();
+}
 /*
  * Attempts to connect to a Wifi access point.  This will close any
  * connections to other access points.
  */
-void WifiSettingsPage::connect(WifiAccessPoint accessPoint)
+void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
 {
     if (accessPoint.isNull())
     {
@@ -75,7 +110,7 @@ void WifiSettingsPage::connect(WifiAccessPoint accessPoint)
 /*
  * Tries to disconnect from a specific wifi access point.
  */
-void WifiSettingsPage::disconnect(WifiAccessPoint accessPoint)
+void WifiSettingsPage::disconnect(const WifiAccessPoint& accessPoint)
 {
     WifiStateManager wifiManager;
     if(accessPoint == wifiManager.getActiveAP())
@@ -91,20 +126,6 @@ void WifiSettingsPage::disconnect(WifiAccessPoint accessPoint)
 }
 
 /*
- * Checks if wifi is connected to a specific access point.
- */
-bool WifiSettingsPage::isConnected(WifiAccessPoint accessPoint)
-{
-    if (accessPoint.isNull())
-    {
-        return false;
-    }
-    WifiStateManager wifiManager;
-    return wifiManager.getAPState(accessPoint) == 
-            WifiStateManager::connectedAP;
-}
-
-/*
  * Attempts to connect or disconnect from the current selected access point
  * when the connection button is clicked.
  */
@@ -112,18 +133,25 @@ void WifiSettingsPage::connectionButtonClicked(Button* button)
 {
     if (&connectionButton == button)
     {
-        WifiAccessPoint selectedAP = getSelectedConnection();
-        if (isConnected(selectedAP))
+        WifiStateManager wifiManager;
+        const WifiAccessPoint& selectedAP = getSelectedConnection();
+        switch(wifiManager.getAPState(selectedAP))
         {
-            DBG("WifiSettingsPage::" << __func__ << ": Disconnecting from "
-                    << selectedAP.getSSID());
-            disconnect(selectedAP);
-        }
-        else
-        {
-            DBG("WifiSettingsPage::" << __func__ << ": Connecting to "
-                    << selectedAP.getSSID());
-            connect(selectedAP);
+            case WifiStateManager::connectedAP:
+                DBG("WifiSettingsPage::" << __func__ << ": Disconnecting from "
+                        << selectedAP.getSSID());
+                disconnect(selectedAP);
+                return;
+            case WifiStateManager::disconnectedAP:
+            case WifiStateManager::invalidSecurityAP:
+                DBG("WifiSettingsPage::" << __func__ << ": Connecting to "
+                        << selectedAP.getSSID());
+                connect(selectedAP);
+                return;
+            default:
+                DBG("WifiSettingsPage::" << __func__ 
+                        << ": The connection button should have been disabled "
+                        << "or hidden!");
         }
     }
 }
@@ -132,11 +160,14 @@ void WifiSettingsPage::connectionButtonClicked(Button* button)
  * Constructs a button component to represent a wifi access point.
  */
 Button* WifiSettingsPage::getConnectionButton
-(WifiAccessPoint accessPoint)
+(const WifiAccessPoint& accessPoint)
 {
     if(!accessPoint.isNull())
     {
-        return new WifiAPButton(accessPoint, isConnected(accessPoint));
+        WifiStateManager wifiManager;
+        return new WifiAPButton(accessPoint, 
+                wifiManager.getAPState(accessPoint) 
+                == WifiStateManager::connectedAP);
     }
     else
     {
@@ -149,7 +180,7 @@ Button* WifiSettingsPage::getConnectionButton
  * Gets the layout for the Wifi access point controls.
  */
 RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
-(WifiAccessPoint accessPoint)
+(const WifiAccessPoint& accessPoint)
 {
     jassert(accessPoint == getSelectedConnection());
     updateConnectionControls();
@@ -183,7 +214,7 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
  */
 void WifiSettingsPage::updateConnectionControls()
 {
-    WifiAccessPoint selectedAP = getSelectedConnection();
+    const WifiAccessPoint& selectedAP = getSelectedConnection();
     if(selectedAP.isNull())
     {
         DBG("WifiSettingsPage::" << __func__ << ": null AP selected");
@@ -266,7 +297,8 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
             case WifiStateManager::connected:
                 lastConnecting = WifiAccessPoint();
             default:
-                reloadPage();
+                layoutConnectionPage();
+                updateConnectionControls();
         }
     });
 }
@@ -274,7 +306,7 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
 /*
  * Attempts to connect if return is pressed after entering a password.
  */
-void WifiSettingsPage::textEditorReturnKeyPressed(TextEditor & editor)
+void WifiSettingsPage::textEditorReturnKeyPressed(TextEditor& editor)
 {
     connect(getSelectedConnection());
 }
@@ -293,27 +325,15 @@ void WifiSettingsPage::connectionPageResized()
  * Gets the asset name for the icon that best represents accessPoint's 
  * signal strength.
  */
-String WifiSettingsPage::getWifiAssetName(WifiAccessPoint accessPoint)
+String WifiSettingsPage::getWifiAssetName(const WifiAccessPoint& accessPoint)
 {
     float sigStrength = accessPoint.getSignalStrength();
     int maxIndex = wifiImageFiles.size() - 1;
     return wifiImageFiles[round((maxIndex * (sigStrength) / 100.0f))];
 }
 
-/**
- * Reloads the access point list, re-selects the selected connection, 
- * updates and enables connection controls.
- */
-void WifiSettingsPage::reloadPage()
-{
-    WifiAccessPoint selected = getSelectedConnection();
-    updateConnectionList();
-    setSelectedConnection(selected);
-    updateConnectionControls();
-}
-
 WifiSettingsPage::WifiAPButton::WifiAPButton(
-        WifiAccessPoint accessPoint,
+        const WifiAccessPoint& accessPoint,
         bool isConnected) :
 Button(accessPoint.getSSID() + "Button"),
 Localized("WifiAPButton"),

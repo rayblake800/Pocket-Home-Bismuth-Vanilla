@@ -443,11 +443,10 @@ void WifiStateManager::NetworkInterface::signalWifiConnecting()
  * should call this to notify its WifiStateManager. This method acquires the 
  * WifiStateManager's stateLock.
  */
-void WifiStateManager::NetworkInterface::signalWifiConnected
-(WifiAccessPoint connectedAP)
+void WifiStateManager::NetworkInterface::signalWifiConnected()
 {
-    DBG("NetworkInterface::" << __func__ << ": connected to "
-            << connectedAP.getSSID() << " during state "
+    DBG("NetworkInterface::" << __func__ 
+            << ": connection established during state "
             << wifiStateString(getWifiState()));
     setWifiState(connected);
 }
@@ -544,6 +543,64 @@ void WifiStateManager::NetworkInterface::signalPskNeeded()
     setWifiState(missingPassword);
     const ScopedLock timerLock(wifiLock);
     stopTimer();
+}
+     
+/*
+ * Whenever a new wifi access point is detected, the NetworkInterface
+ * should call this to notify its WifiStateManager.
+ */
+void WifiStateManager::NetworkInterface::signalAPAdded
+(const WifiAccessPoint& addedAP)
+{
+    MessageManager::callAsync([this, &addedAP]()
+    {
+        const ScopedLock stateLock(wifiLock);
+        if(this != WifiStateManager::sharedResource.get())
+        {
+            return;//shared resource was destroyed, cancel notification.
+        }
+        if (!addedAP.isNull())
+        {
+            jassert(notifyQueue.isEmpty());
+            notifyQueue = listeners;
+            while (!notifyQueue.isEmpty())
+            {
+                WifiStateManager::Listener* toNotify
+                        = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
+                const ScopedUnlock signalUnlock(wifiLock);
+                toNotify->accessPointAdded(addedAP);
+            }
+        }
+    });
+}
+
+/*
+ * Whenever a wifi access point loses visibility, the NetworkInterface
+ * should call this to notify its WifiStateManager.
+ */
+void WifiStateManager::NetworkInterface::signalAPRemoved
+(const WifiAccessPoint& removedAP)
+{
+    MessageManager::callAsync([this, &removedAP]()
+    {
+        const ScopedLock stateLock(wifiLock);
+        if(this != WifiStateManager::sharedResource.get())
+        {
+            return;//shared resource was destroyed, cancel notification.
+        }
+        if (!removedAP.isNull())
+        {
+            jassert(notifyQueue.isEmpty());
+            notifyQueue = listeners;
+            while (!notifyQueue.isEmpty())
+            {
+                WifiStateManager::Listener* toNotify
+                        = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
+                const ScopedUnlock signalUnlock(wifiLock);
+                toNotify->accessPointRemoved(removedAP);
+            }
+        }
+    });
 }
 
 /*

@@ -14,12 +14,11 @@ nextPageBtn(ComponentConfigFile::pageDownKey)
     addAndMakeVisible(nextPageBtn);
 }
 
-
 /*
  * Returns the current selected connection point.
  */
 template<class ConnectionPoint>
-ConnectionPoint ConnectionPage<ConnectionPoint>::getSelectedConnection()
+const ConnectionPoint& ConnectionPage<ConnectionPoint>::getSelectedConnection()
 {
     return selectedConnectionPt;
 };
@@ -32,30 +31,128 @@ ConnectionPoint ConnectionPage<ConnectionPoint>::getSelectedConnection()
  */
 template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::setSelectedConnection
-(ConnectionPoint connectionPt)
+(const ConnectionPoint& connectionPt)
 {
-    bool selectionChanged = false;
-    DBG("Selecting " << connectionPt.toString());
-    if (connectionPt.isNull()
-        || !connectionPts.contains(connectionPt))
+    if (connectionPt.isNull())
     {
         if (!selectedConnectionPt.isNull())
         {
-            selectionChanged = true;
+            DBG("ConnectionPage::" << __func__ << ": De-selecting "
+                    << selectedConnectionPt.toString());
             selectedConnectionPt = ConnectionPoint();
         }
+        else
+        {
+            if(!connectionPt.isNull())
+            {
+                DBG("ConnectionPage::" << __func__ << ": Connection point "
+                        << connectionPt.toString() << " not found!");
+            }
+            return;
+        }
     }
-    else if (connectionPt != selectedConnectionPt)
+    else if(connectionPointIndex(connectionPt) == -1)
     {
+        DBG("ConnectionPage::" << __func__ << ": Connection point "
+                << connectionPt.toString() << " not found!");
+        return;
+    }
+    else
+    {
+        DBG("Selecting " << connectionPt.toString());
         setWantsKeyboardFocus(true);
-        selectionChanged = true;
         selectedConnectionPt = connectionPt;
     }
-    if (selectionChanged)
-    {
+    layoutConnectionPage();
+};
+
+/*
+ * Add a new connection point to the page, and update page layout.
+ */
+template<class ConnectionPoint>
+void ConnectionPage<ConnectionPoint>::addConnectionPoint
+(const ConnectionPoint& addedCP)
+{
+    if(!addedCP.isNull() && connectionPointIndex(addedCP) == -1)
+    {     
+        Button * connectionButton = getConnectionButton(addedCP);
+        connectionButton->addListener(this);
+        connectionItems.add(new ConnectionListItem(addedCP,
+                connectionButton));
         layoutConnectionPage();
     }
-};
+    else
+    {
+        DBG("ConnectionPage::" << __func__ 
+                << ": Tried to add invalid connection point!");       
+    }
+}
+
+/*
+ * Remove a connectionPoint from the page, and update page layout.
+ */
+template<class ConnectionPoint>
+void ConnectionPage<ConnectionPoint>::removeConnectionPoint
+(const ConnectionPoint& removedCP)
+{
+    if(selectedConnectionPt == removedCP)
+    {
+        DBG("ConnectionPage::" << __func__ << ": De-selecting "
+                << selectedConnectionPt.toString() << " before it is removed.");
+        setSelectedConnection(ConnectionPoint());
+    }
+    int itemIndex = connectionPointIndex(removedCP);
+    if(itemIndex >= 0)
+    {
+        updateLayout({});
+        connectionItems.remove(itemIndex);
+        layoutConnectionPage();
+    }
+    else
+    {
+        DBG("ConnectionPage::" << __func__ << ": couldn't find connectionPoint "
+                << removedCP.toString() << " in the page list.");
+    }
+    
+}
+ 
+/*
+ * Updates a connection point's list component.
+ */
+template<class ConnectionPoint>
+void ConnectionPage<ConnectionPoint>::updateConnectionPoint
+(const ConnectionPoint& updatedCP)
+{
+    
+    int itemIndex = connectionPointIndex(updatedCP);
+    if(itemIndex >= 0)
+    {
+        updateLayout({});
+        connectionItems.remove(itemIndex);
+        Button * connectionButton = getConnectionButton(updatedCP);
+        connectionButton->addListener(this);
+        connectionItems.add(new ConnectionListItem(updatedCP,
+                connectionButton));
+        
+        //Selected connection must be checked and possibly updated because two
+        //connectionPoint objects can be equal despite having different
+        //properties.
+        if(selectedConnectionPt == updatedCP)
+        {
+            setSelectedConnection(updatedCP);
+        }
+        else
+        {
+            layoutConnectionPage();
+        }
+    }
+    else
+    {
+        DBG("ConnectionPage::" << __func__ << ": couldn't find connectionPoint "
+                << updatedCP.toString() << " in the page list.");
+    }
+    
+}
 
 /*
  * Remove all items from the connection list, and clear the page layout.
@@ -65,13 +162,8 @@ void ConnectionPage<ConnectionPoint>::clearConnectionList()
 {
     connectionIndex = 0;
     selectedConnectionPt = ConnectionPoint();
-    for (ConnectionListItem* listItem : connectionItems)
-    {
-        removeChildComponent(listItem);
-    }
-    connectionItems.clear();
-    connectionPts.clear();
     updateLayout({});
+    connectionItems.clear();
 }
 
 /*
@@ -81,7 +173,7 @@ template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::updateConnectionList()
 {
     clearConnectionList();
-    connectionPts = loadConnectionPoints();
+    Array<ConnectionPoint> connectionPts = loadConnectionPoints();
     for (const ConnectionPoint& connection : connectionPts)
     {
         jassert(!connection.isNull());
@@ -89,14 +181,7 @@ void ConnectionPage<ConnectionPoint>::updateConnectionList()
         connectionButton->addListener(this);
         ConnectionListItem* listItem = new ConnectionListItem(connection,
                 connectionButton);
-        if (isConnected(connection))
-        {
-            connectionItems.insert(0, listItem);
-        }
-        else
-        {
-            connectionItems.add(listItem);
-        }
+        connectionItems.add(listItem);
     }
     layoutConnectionPage();
 }
@@ -114,6 +199,7 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
     prevPageBtn.setVisible(connectionIndex > 0 && showList);
     nextPageBtn.setVisible(connectionItems.size() > connectionIndex
             + connectionsPerPage && showList);
+    connectionItems.sort(*this);
     int rowWeight = 2;
     if (!showList)
     {
@@ -189,17 +275,17 @@ void ConnectionPage<ConnectionPoint>::pageButtonClicked(Button* button)
                 connectionIndex = 0;
             }
             DBG("ConnectionPage::" << __func__ << ": Connection index set to "
-                    << connectionIndex << " of " << connectionPts.size());
+                    << connectionIndex << " of " << connectionItems.size());
             layoutConnectionPage();
         }
     }
     else if (button == &nextPageBtn)
     {
-        if ((connectionIndex + connectionsPerPage) < connectionPts.size())
+        if ((connectionIndex + connectionsPerPage) < connectionItems.size())
         {
             connectionIndex += connectionsPerPage;
             DBG("ConnectionPage::" << __func__ << ": Connection index set to "
-                    << connectionIndex << " of " << connectionPts.size());
+                    << connectionIndex << " of " << connectionItems.size());
             layoutConnectionPage();
         }
     }
@@ -272,6 +358,39 @@ void ConnectionPage<ConnectionPoint>::pageResized()
     connectionPageResized();
 }
 
+  
+/*
+ * Allows ConnectionPage to sort connection list item components.
+ */
+template<class ConnectionPoint>
+int ConnectionPage<ConnectionPoint>::compareElements
+(ConnectionListItem* first, ConnectionListItem* second)
+{
+    return compareConnectionPoints(first->getConnectionPt(),
+            second->getConnectionPt());
+}
+     
+/*
+ * Finds the index of a ConnectionPoint in the connection button list.
+ */
+template<class ConnectionPoint>
+int ConnectionPage<ConnectionPoint>::connectionPointIndex
+(const ConnectionPoint& toFind)
+{
+    if(toFind.isNull())
+    {
+        return -1;
+    }
+    for(int i = 0; i < connectionItems.size(); i++)
+    {
+        if(toFind == connectionItems[i]->getConnectionPt())
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 /*
  * Create a new ConnectionListItem representing a ConnectionPoint
  */
@@ -288,7 +407,7 @@ connectionButton(connectionButton)
  * Gets this button's connection point.
  */
 template<class ConnectionPoint>
-ConnectionPoint ConnectionPage<ConnectionPoint>::ConnectionListItem::
+const ConnectionPoint& ConnectionPage<ConnectionPoint>::ConnectionListItem::
 getConnectionPt()
 {
     return connectionPt;

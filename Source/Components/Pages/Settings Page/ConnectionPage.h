@@ -12,13 +12,13 @@
  * @brief  Defines an abstract base for pages that select network connections.
  * 
  * Connection page is the abstract base for PageComponent classes that
- * show a list of connections and allow the user to connect or disconnect
- * from connections in the list.
+ * show a list of ConnectionPointa and allow the user to connect or disconnect
+ * from ConnectionPoints in the list.
  * 
- * ConnectionPoint objects represent a potential connection point.  These
- * objects must have an isNull() method that returns true iff the object is
- * invalid.  ConnectionPoint objects created with the default constructor should
- * always be null.  
+ * ConnectionPoint objects represent a potential network connection point, such
+ * as a wifi access point or a bluetooth device. These objects must have an 
+ * isNull() method that returns true iff the object is invalid.  ConnectionPoint
+ * objects created with the default constructor should always be null.  
  * 
  * In debug builds, ConnectionPoint should also have a toString() method that 
  * returns some sort of identifying string for debug output.
@@ -38,7 +38,7 @@ protected:
      * 
      * @return the selected connection point.
      */
-    ConnectionPoint getSelectedConnection();
+    const ConnectionPoint& getSelectedConnection();
 
 
     /**
@@ -50,9 +50,30 @@ protected:
      * @param connectionPt  This must be null, or equal to one of the 
      *                      connections in the connection list.
      */
-    void setSelectedConnection(ConnectionPoint connectionPt);
+    void setSelectedConnection(const ConnectionPoint& connectionPt);
 
-
+    /**
+     * Add a new connection point to the page, and update page layout.
+     * 
+     * @param addedCP  A newly detected connection point to add to the list.
+     */
+    void addConnectionPoint(const ConnectionPoint& addedCP);
+    
+    /**
+     * Remove a connectionPoint from the page, and update page layout.
+     * 
+     * @param removedCP  A connection point to remove from the list.
+     */
+    void removeConnectionPoint(const ConnectionPoint& removedCP);
+    
+    /**
+     * Updates a connection point's list component.
+     * 
+     * @param updatedCP  A connection point that's changed in some way that
+     *                   requires its list component to be re-created.
+     */
+    void updateConnectionPoint(const ConnectionPoint& updatedCP);
+    
     /**
      * Remove all items from the connection list, and clear the page layout.
      */
@@ -64,9 +85,10 @@ protected:
     void updateConnectionList();
 
     /**
-     * Reloads the page layout.  This method is responsible for updating the 
-     * page when scrolling through the connection list or opening/closing 
-     * connection details.
+     * Sorts the list of connection points, checks the index, and reloads the
+     * page layout if necessary.  This method is used to update the page
+     * when changing the selected index, adding and removing connection points,
+     * and opening and closing connection point details.
      */
     void layoutConnectionPage();
     
@@ -84,16 +106,20 @@ private:
      * @return  the complete list of connection points.
      */
     virtual Array<ConnectionPoint> loadConnectionPoints() = 0;
-
+    
     /**
-     * Checks if the system is currently connected to a specific connection
-     * point.
+     * This method will be used to sort the list of connection points.
      * 
-     * @param connectionPt  The connection point that may be connected
+     * @param first    Some connection point in the list.
      * 
-     * @return true iff a connection exists that is using this ConnectionPoint.
+     * @param second   Some other connection point in the list.
+     * 
+     * @return  a negative number if first should come before second, zero if 
+     *          the two connection points are equal, or a positive number if
+     *          second should come before first.
      */
-    virtual bool isConnected(ConnectionPoint connectionPt) = 0;
+    virtual int compareConnectionPoints
+    (const ConnectionPoint& first, const ConnectionPoint& second) = 0;
 
     /**
      * Construct a button component to represent a network connection point.
@@ -109,7 +135,8 @@ private:
      * @return  a dynamically allocated Button component that displays basic 
      *          connection information.  
      */
-    virtual Button* getConnectionButton(ConnectionPoint connectionPt) = 0;
+    virtual Button* getConnectionButton
+    (const ConnectionPoint& connectionPt) = 0;
 
     /**
      * This is called whenever any button other than the navigation buttons
@@ -130,7 +157,7 @@ private:
      *                       affect.
      */
     virtual RelativeLayoutManager::Layout
-    getConnectionControlsLayout(ConnectionPoint connectionPt) = 0;
+    getConnectionControlsLayout(const ConnectionPoint& connectionPt) = 0;
 
     /**
      * Update the connection control components for a given connection point.
@@ -182,8 +209,17 @@ private:
      * Update list navigation buttons to fit the page.
      */
     void pageResized() final override;
-
-
+     
+    /**
+     * Finds the index of a ConnectionPoint in the connection button list.
+     * 
+     * @param toFind  The connection point to find within the list.
+     * 
+     * @return  The index of toFind's ConnectionListItem in the ConnectionItem
+     *          array, or -1 if no matching list item is found.
+     */
+    int connectionPointIndex(const ConnectionPoint& toFind);
+    
     /**
      * Holds the connection button and connection controls for a single
      * connection point. Clicking the connection button toggles visibility
@@ -211,7 +247,7 @@ private:
          * 
          * @return the connection point represented by this component.
          */
-        ConnectionPoint getConnectionPt();
+        const ConnectionPoint& getConnectionPt();
 
         /**
          * Switches to connection point control mode, filling the entire
@@ -265,10 +301,26 @@ private:
         //Clicked to select this ConnectionPoint
         ScopedPointer<Button> connectionButton;
         RelativeLayoutManager listItemLayout;
-        ConnectionPoint connectionPt = nullptr;
+        ConnectionPoint connectionPt;
         static const constexpr int borderWidth = 4;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionListItem)
     };
+   
+public:
+    /**
+     * Allows ConnectionPage to sort connection list item components.
+     * 
+     * @param first   A list component.
+     * 
+     * @param second  Another list component.
+     * 
+     * @return  a negative number if first should come before second, zero if 
+     *          the two components are equal, or a positive number if second 
+     *          should come before first.
+     */
+    int compareElements(ConnectionListItem* first, ConnectionListItem* second);
+    
+private:
     //scroll through the list of connections
     ConfigurableImageButton prevPageBtn;
     ConfigurableImageButton nextPageBtn;
@@ -276,7 +328,6 @@ private:
     int connectionIndex = 0;
     
     OwnedArray<ConnectionListItem> connectionItems;
-    Array<ConnectionPoint> connectionPts;
     ConnectionPoint selectedConnectionPt;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionPage)

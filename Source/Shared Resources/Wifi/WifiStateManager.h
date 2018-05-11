@@ -361,10 +361,8 @@ public:
         /**
          * Whenever the wifi device establishes a new connection, the 
          * NetworkInterface should call this to notify its WifiStateManager.
-         *
-         * @param connectedAP the newly connected access point
          */
-        void signalWifiConnected(WifiAccessPoint connectedAP);
+        void signalWifiConnected();
 
         /**
          * Whenever the wifi device fails to connect to an access point, the 
@@ -395,6 +393,22 @@ public:
          * NetworkInterface should call this to notify its WifiStateManager.
          */
         void signalPskNeeded();
+        
+        /**
+         * Whenever a new wifi access point is detected, the NetworkInterface
+         * should call this to notify its WifiStateManager.
+         * 
+         * @param addedAP  The newly detected access point.
+         */
+        void signalAPAdded(const WifiAccessPoint& addedAP);
+        
+        /**
+         * Whenever a wifi access point loses visibility, the NetworkInterface
+         * should call this to notify its WifiStateManager.
+         * 
+         * @param removedAP  The access point that is no longer visible.
+         */
+        void signalAPRemoved(const WifiAccessPoint& removedAP);
 
     private:
         /**
@@ -438,12 +452,30 @@ public:
     private:
 
         /**
-         * When added to a WifiStateManager, it will call this method whenever 
-         * the wifi state changes.
+         * If this Listener has been added to the WifiStateManager, the state
+         * manager will call this method whenever the wifi state changes.
          *
-         * @param state new wifi device state
+         * @param state  The new wifi device state.
          */
         virtual void wifiStateChanged(WifiState state) { };
+        
+        /**
+         * If this Listener has been added to the WifiStateManager, the state
+         * manager will call this method whenever a new wifi access point is
+         * detected
+         *
+         * @param addedAP  The newly detected access point object.
+         */
+        virtual void accessPointAdded(const WifiAccessPoint& addedAP) { };
+        
+        /**
+         * If this Listener has been added to the WifiStateManager, the state
+         * manager will call this method whenever a wifi access point is no
+         * longer detected.
+         *
+         * @param removedAP  The access point that is no longer visible.
+         */
+        virtual void accessPointRemoved(const WifiAccessPoint& removedAP) { };
     };
 
 private:

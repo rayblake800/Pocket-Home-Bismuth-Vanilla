@@ -15,31 +15,6 @@ Array<BluetoothDevice> BluetoothSettingsPage::loadConnectionPoints()
 }
 
 /**
- * Attempts to connect to a Bluetooth device.
- *
- *  @param device
- */
-void BluetoothSettingsPage::connect(BluetoothDevice device) { }
-
-/**
- * @param device if the system is currently connected to this
- * bluetooth device, this method closes that connection.
- *  
- * @param connection
- */
-void BluetoothSettingsPage::disconnect(BluetoothDevice device) { }
-
-/**
- * @param connection
- * 
- * @return true iff the system is connected to this bluetooth device.
- */
-bool BluetoothSettingsPage::isConnected(BluetoothDevice device)
-{
-    return device.connected;
-}
-
-/**
  * @param button
  * 
  * This is called whenever a button other than the navigation buttons
@@ -55,9 +30,9 @@ void BluetoothSettingsPage::connectionButtonClicked(Button* button) { }
  * @param device
  */
 Button* BluetoothSettingsPage::getConnectionButton
-(BluetoothDevice device)
+(const BluetoothDevice& device)
 {
-    return new BTDeviceButton(device, isConnected(device));
+    return new BTDeviceButton(device, device.connected);
 }
 
 /**
@@ -68,7 +43,7 @@ Button* BluetoothSettingsPage::getConnectionButton
  */
 RelativeLayoutManager::Layout
 BluetoothSettingsPage::getConnectionControlsLayout
-(BluetoothDevice device)
+(const BluetoothDevice& device)
 {
     return {};
 }
@@ -80,16 +55,6 @@ BluetoothSettingsPage::getConnectionControlsLayout
  * @param BluetoothDevice
  */
 void BluetoothSettingsPage::updateConnectionControls() { }
-
-/**
- * When currentlyConnecting, disable bluetooth controls and show a loading
- * spinner.  Otherwise, enable controls and hide the loading spinner.
- * 
- * @param currentlyConnecting Indicates if bluetooth is trying to connect 
- *                             to a device, or is otherwise busy.
- */
-void BluetoothSettingsPage::setCurrentlyConnecting
-(bool currentlyConnecting) { }
 
 /**
  * Attempts to connect if return is pressed.
