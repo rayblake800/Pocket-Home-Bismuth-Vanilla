@@ -66,7 +66,7 @@ int WifiSettingsPage::compareConnectionPoints
     }
     else if(secondSaved && !firstSaved)
     {
-        return -1;
+        return 1;
     }
     return second.getSignalStrength() - first.getSignalStrength();
 }
