@@ -1,4 +1,5 @@
 #pragma once
+#include <atomic>
 #include <NetworkManager.h>
 #include "NMPPAccessPoint.h"
 #include "JuceHeader.h"
@@ -78,7 +79,7 @@ public:
      * 
      * @return the wifi signal strength, between 0 and 100 
      */
-    int getSignalStrength() const;
+    unsigned int getSignalStrength() const;
 
     /**
      * Gets the wifi access point frequency in (TODO: what format? MHz? 
@@ -285,9 +286,6 @@ private:
             guint32 wpa_flags,
             guint32 rsn_flags);
     
-    //Prevent concurrent access when being updated with new network data
-    ReadWriteLock networkUpdateLock;
-    
     /**
      * Represents the main categories of wifi access point security.
      */
@@ -309,7 +307,7 @@ private:
     String hash;
 
     //saved signal strength, between 0 and 100
-    int signalStrength;
+    std::atomic<unsigned int> signalStrength;
     unsigned long frequency;
     unsigned long maxBitrate;
 

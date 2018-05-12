@@ -32,9 +32,9 @@ nmAccessPoint(accessPoint)
     rsnFlags       = nmAccessPoint.getRSNFlags();
     hash           = generateHash(nmAccessPoint.getSSID(),
                             apMode,apFlags,wpaFlags,rsnFlags);
-    signalStrength = nmAccessPoint.getSignalStrength();
     frequency      = nmAccessPoint.getFrequency();
     maxBitrate     = nmAccessPoint.getMaxBitrate();
+    signalStrength.store(nmAccessPoint.getSignalStrength());
     //get security type
     if (rsnFlags != NM_802_11_AP_SEC_NONE)
     {
@@ -60,10 +60,9 @@ nmAccessPoint(accessPoint)
 WifiAccessPoint::WifiAccessPoint
 (String ssid, int signalStrength, bool requiresAuth, String hash) :
 ssid(ssid),
-signalStrength(median<int>(0, signalStrength, 100)),
 hash(hash)
 {
-    
+    this->signalStrength.store(median<unsigned int>(0, signalStrength, 100));
 #if JUCE_DEBUG
     fakeConnection = true;
 #endif
@@ -78,8 +77,6 @@ WifiAccessPoint::~WifiAccessPoint() { }
  */
 bool WifiAccessPoint::isNull() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
-    
 #if JUCE_DEBUG
     if(fakeConnection)
     {
@@ -94,7 +91,6 @@ bool WifiAccessPoint::isNull() const
  */
 const String& WifiAccessPoint::getSSID() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return ssid;
 }
 
@@ -103,17 +99,15 @@ const String& WifiAccessPoint::getSSID() const
  */
 const String& WifiAccessPoint::getBSSID() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return bssid;
 }
 
 /*
  * Gets the signal strength of the wifi access point.
  */
-int WifiAccessPoint::getSignalStrength() const
+unsigned int WifiAccessPoint::getSignalStrength() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
-    return signalStrength;
+    return signalStrength.load();
 }
 
 /*
@@ -122,7 +116,6 @@ int WifiAccessPoint::getSignalStrength() const
  */
 unsigned long WifiAccessPoint::getFrequency() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return frequency;
 }
 
@@ -131,7 +124,6 @@ unsigned long WifiAccessPoint::getFrequency() const
  */
 unsigned long WifiAccessPoint::getMaxBitrate() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return maxBitrate;
 }
  
@@ -140,7 +132,6 @@ unsigned long WifiAccessPoint::getMaxBitrate() const
  */
 bool WifiAccessPoint::getRequiresAuth() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return security != none;
 }
 
@@ -149,7 +140,6 @@ bool WifiAccessPoint::getRequiresAuth() const
  */
 const String& WifiAccessPoint::toString() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return ssid;
 }
         
@@ -168,7 +158,6 @@ bool WifiAccessPoint::isConnectionCompatible
  */
 bool WifiAccessPoint::sharesConnectionWith(const WifiAccessPoint& otherAP) const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return hash == otherAP.hash;
 }
 
@@ -178,7 +167,6 @@ bool WifiAccessPoint::sharesConnectionWith(const WifiAccessPoint& otherAP) const
  */
 NMPPConnection WifiAccessPoint::createConnection(String psk) const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     NMPPConnection newConnection;
     newConnection.addWifiSettings(nmAccessPoint.getSSID());
     if(!setConnectionSecurity(newConnection, psk))
@@ -222,7 +210,6 @@ bool WifiAccessPoint::setConnectionSecurity
  */
 NM80211Mode WifiAccessPoint::getMode() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return apMode;
 }
 
@@ -231,7 +218,6 @@ NM80211Mode WifiAccessPoint::getMode() const
  */
 NM80211ApFlags WifiAccessPoint::getFlags() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return apFlags;
 }
 
@@ -240,7 +226,6 @@ NM80211ApFlags WifiAccessPoint::getFlags() const
  */
 NM80211ApSecurityFlags WifiAccessPoint::getWPAFlags() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return wpaFlags;
 }
 
@@ -249,11 +234,9 @@ NM80211ApSecurityFlags WifiAccessPoint::getWPAFlags() const
  */
 NM80211ApSecurityFlags WifiAccessPoint::getRSNFlags() const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return rsnFlags;
 }
 
-  
 /*
  * Checks if a psk is formatted correctly for this access point's security.
  * This will not check if the key is actually correct, just if it is a valid
@@ -278,14 +261,11 @@ bool WifiAccessPoint::isValidKeyFormat(const String& psk) const
  * Assigns another access point's data to this access point.
  */
 bool WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
-{
-    const ScopedReadLock readLock(rhs.networkUpdateLock);
-    
+{   
     ssid                 = rhs.ssid;
     bssid                = rhs.bssid;
     security             = rhs.security;
     hash                 = rhs.hash;
-    signalStrength       = rhs.signalStrength;
     frequency            = rhs.frequency;
     maxBitrate           = rhs.maxBitrate;
     apMode               = rhs.apMode;
@@ -298,6 +278,7 @@ bool WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
 #if JUCE_DEBUG
     fakeConnection       = rhs.fakeConnection;
 #endif
+    signalStrength.store(rhs.signalStrength.load());
     if(!nmAccessPoint.isNull())
     {
         nmAccessPoint.addSignalHandler(this);
@@ -309,7 +290,6 @@ bool WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
  */
 bool WifiAccessPoint::operator==(const NMPPAccessPoint& rhs) const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return nmAccessPoint == rhs;
 }
 
@@ -319,7 +299,6 @@ bool WifiAccessPoint::operator==(const NMPPAccessPoint& rhs) const
  */
 bool WifiAccessPoint::operator!=(const NMPPAccessPoint& rhs) const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
     return nmAccessPoint != rhs;
 }
 
@@ -329,8 +308,6 @@ bool WifiAccessPoint::operator!=(const NMPPAccessPoint& rhs) const
  */
 bool WifiAccessPoint::operator==(const WifiAccessPoint& rhs) const
 {
-    const ScopedReadLock readLock(networkUpdateLock);
-    const ScopedReadLock rhsLock(rhs.networkUpdateLock);
     return hash == rhs.hash;
 }
 
@@ -390,8 +367,7 @@ const String& WifiAccessPoint::getSavedConnectionPath() const
 void WifiAccessPoint::signalStrengthChanged(NMPPAccessPoint* updatedAP,
         unsigned int newStrength)
 {
-    const ScopedWriteLock updateLock(networkUpdateLock);
-    signalStrength = newStrength;
+    signalStrength.store(newStrength);
 }
 
 
