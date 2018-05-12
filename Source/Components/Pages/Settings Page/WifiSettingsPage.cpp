@@ -254,13 +254,10 @@ void WifiSettingsPage::updateConnectionControls()
             hideConnectionButton = true;
             
     }
-    if(showPasswordEntry != passwordEditor.isVisible())
-    {
-        passwordEditor.clear();
-        passwordEditor.setEnabled(showPasswordEntry);
-        passwordEditor.setVisible(showPasswordEntry);
-        passwordLabel.setVisible(showPasswordEntry);
-    }
+    passwordEditor.clear();
+    passwordEditor.setEnabled(showPasswordEntry);
+    passwordEditor.setVisible(showPasswordEntry);
+    passwordLabel.setVisible(showPasswordEntry);
     if(hideConnectionButton)
     {
         connectionButton.setVisible(false);
