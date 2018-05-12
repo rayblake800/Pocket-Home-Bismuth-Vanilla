@@ -185,8 +185,7 @@ private:
     //Wifi icons for all signal strengths
     static const StringArray wifiImageFiles;
     
-    WifiAccessPoint lastConnecting;
-    WifiAccessPoint lastDisconnecting;
+    WifiAccessPoint lastConnected;
 
     //Used for entering a password for a secured access point.
     ScalingLabel passwordLabel;

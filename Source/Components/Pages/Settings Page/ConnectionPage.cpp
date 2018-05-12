@@ -220,9 +220,9 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
                 if (connectionPt == selectedConnectionPt
                     && !connectionPt.isNull())
                 {
+                    updateConnectionControls();
                     listItem->setControlLayout
                             (getConnectionControlsLayout(connectionPt));
-                    updateConnectionControls();
                 }
                 else
                 {

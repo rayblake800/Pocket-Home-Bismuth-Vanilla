@@ -90,7 +90,6 @@ void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
         return;
     }
     WifiStateManager wifiManager;
-    lastConnecting = accessPoint;
     if (accessPoint.getRequiresAuth())
     {
         DBG("WifiSettingsPage::" << __func__ << ": connecting to "
@@ -115,7 +114,6 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& accessPoint)
     WifiStateManager wifiManager;
     if(accessPoint == wifiManager.getActiveAP())
     {
-        lastDisconnecting = accessPoint;
         wifiManager.disconnect();
     }
     else
@@ -183,7 +181,6 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
 (const WifiAccessPoint& accessPoint)
 {
     jassert(accessPoint == getSelectedConnection());
-    updateConnectionControls();
     return {
         {1,
             {
@@ -227,7 +224,7 @@ void WifiSettingsPage::updateConnectionControls()
     String errorMessage = "";
     WifiStateManager wifiManager;
     DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"
-            "AP " << selectedAP.getSSID() << " with state " 
+            " AP " << selectedAP.getSSID() << " with state " 
             << WifiStateManager::apStateString
             (wifiManager.getAPState(selectedAP)));
     switch(wifiManager.getAPState(selectedAP))
@@ -299,12 +296,24 @@ void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
             removeFromStack();
             break;
         case WifiStateManager::connected:
-            lastConnecting = WifiAccessPoint();
+            lastConnected = activeAP;
         case WifiStateManager::enabled:
-            updateConnectionPoint(activeAP);
+        case WifiStateManager::disconnecting:
+            if(!activeAP.isNull())
+            {
+                updateConnectionPoint(activeAP);
+            }
+            else if(!lastConnected.isNull())
+            {
+                updateConnectionPoint(lastConnected);
+            }
+            else
+            {
+                layoutConnectionPage();
+            }
+            break;
         default:
             layoutConnectionPage();
-            //updateConnectionControls();
     }
 }
   

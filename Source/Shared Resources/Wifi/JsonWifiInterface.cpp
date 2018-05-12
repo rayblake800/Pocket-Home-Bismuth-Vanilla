@@ -300,13 +300,14 @@ WifiStateManager::AccessPointState JsonWifiInterface::getAPState
     }
     if(accessPoint == connectedAP)
     {
+        if(disconnecting || 
+           getWifiState() == WifiStateManager::disconnecting)
+        {
+            return WifiStateManager::disconnectingAP;
+        }
         if(connected)
         {
             return WifiStateManager::connectedAP;
-        }
-        if(disconnecting)
-        {
-            return WifiStateManager::disconnectingAP;
         }
     }
     if(accessPoint == waitingToConnect)
