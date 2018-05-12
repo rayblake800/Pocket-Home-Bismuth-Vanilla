@@ -201,6 +201,10 @@ WifiStateManager::AccessPointState LibNMInterface::getAPState
     if(activeConnection.isConnectedAccessPoint(accessPoint.getNMAccessPoint())
             || activeAP.sharesConnectionWith(accessPoint))
     {
+        //This check will report a disconnecting AP slightly earlier than
+        //waiting for the connection state to switch to 
+        //NM_ACTIVE_CONNECTION_STATE_DEACTIVATING. This approach can't be used
+        //when connecting, as the connecting AP might not have been saved yet.
         if(getWifiState() == WifiStateManager::disconnecting)
         {
             return WifiStateManager::disconnectingAP;
@@ -285,7 +289,6 @@ void LibNMInterface::updateAllWifiData()
 void LibNMInterface::disconnect()
 {
     wifiDevice.disconnect();
-    signalWifiDisconn
 }
 
 /*

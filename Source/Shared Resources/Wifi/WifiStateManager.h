@@ -35,6 +35,9 @@ public:
 
     virtual ~WifiStateManager() { }
 
+    /**
+     * Describes the current state of the system wifi device.
+     */
     enum WifiState
     {
         //no wifi device found
@@ -56,13 +59,34 @@ public:
         //Wifi device is closing its connection to an access point.
         disconnecting
     };
+    
+    /**
+     * Describes the current network state of a WifiAccessPoint object.
+     */
+    enum AccessPointState
+    {
+        // WifiAccessPoint contains no access point data.
+        nullAP,
+        // The access point is not visible to the wifi device.
+        missingAP,
+        // The access point is visible but not being used.
+        disconnectedAP,
+        // A connection is being created through this access point.
+        connectingAP,
+        // An active connection exists using this access point.
+        connectedAP,
+        // A connection using this access point is being closed.
+        disconnectingAP,
+        // Connecting failed because the security key was invalid.
+        invalidSecurityAP
+    };
 
 #ifdef JUCE_DEBUG    
 
     /**
-     * Convert a WifiState to a string for debugging.
+     * Converts a WifiState to a string for debugging.
      */
-    static String wifiStateString(WifiState state)
+    static const char* wifiStateString(WifiState state)
     {
         switch (state)
         {
@@ -84,6 +108,30 @@ public:
                 return "connected";
             case disconnecting:
                 return "disconnecting";
+        }
+    }
+    
+    /**
+     * Converts an AccessPointState to a string for debugging. 
+     */
+    static const char* apStateString(AccessPointState state)
+    {
+        switch(state)
+        {
+            case nullAP:
+                return "nullAP";
+            case missingAP:
+                return "missingAP";
+            case disconnectedAP:
+                return "disconnectedAP";
+            case connectingAP:
+                return "connectingAP";
+            case connectedAP:
+                return "connectedAP";
+            case disconnectingAP:
+                return "disconnectingAP";
+            case invalidSecurityAP:
+                return "invalidSecurityAP";
         }
     }
 #endif
@@ -169,27 +217,6 @@ public:
      * will happen.
      */
     void disableWifi();
-    
-    /**
-     * Describes the current network state of a WifiAccessPoint object.
-     */
-    enum AccessPointState
-    {
-        // WifiAccessPoint contains no access point data.
-        nullAP,
-        // The access point is not visible to the wifi device.
-        missingAP,
-        // The access point is visible but not being used.
-        disconnectedAP,
-        // A connection is being created through this access point.
-        connectingAP,
-        // An active connection exists using this access point.
-        connectedAP,
-        // A connection using this access point is being closed.
-        disconnectingAP,
-        // Connecting failed because the security key was invalid.
-        invalidSecurityAP
-    };
     
     /**
      * Finds the current network state of an access point object.

@@ -226,6 +226,10 @@ void WifiSettingsPage::updateConnectionControls()
     bool hideConnectionButton = false;
     String errorMessage = "";
     WifiStateManager wifiManager;
+    DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"
+            "AP " << selectedAP.getSSID() << " with state " 
+            << WifiStateManager::apStateString
+            (wifiManager.getAPState(selectedAP)));
     switch(wifiManager.getAPState(selectedAP))
     {
         case WifiStateManager::nullAP:
@@ -284,23 +288,40 @@ void WifiSettingsPage::updateConnectionControls()
  */
 void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
 {
-    MessageManager::callAsync([this, state]()
+    WifiStateManager wifiManager;
+    WifiAccessPoint activeAP = wifiManager.getActiveAP();
+    switch (state)
     {
-        switch (state)
-        {
-            case WifiStateManager::missingNetworkDevice:
-            case WifiStateManager::turningOn:
-            case WifiStateManager::turningOff:
-            case WifiStateManager::disabled:
-                removeFromStack();
-                break;
-            case WifiStateManager::connected:
-                lastConnecting = WifiAccessPoint();
-            default:
-                layoutConnectionPage();
-                updateConnectionControls();
-        }
-    });
+        case WifiStateManager::missingNetworkDevice:
+        case WifiStateManager::turningOn:
+        case WifiStateManager::turningOff:
+        case WifiStateManager::disabled:
+            removeFromStack();
+            break;
+        case WifiStateManager::connected:
+            lastConnecting = WifiAccessPoint();
+        case WifiStateManager::enabled:
+            updateConnectionPoint(activeAP);
+        default:
+            layoutConnectionPage();
+            //updateConnectionControls();
+    }
+}
+  
+/*
+ * Adds all newly detected access points to the access point list.
+ */
+void WifiSettingsPage::accessPointAdded(const WifiAccessPoint& addedAP)
+{
+    addConnectionPoint(addedAP);
+}
+
+/*
+ * Removes all missing access points from the access point list.
+ */
+void WifiSettingsPage::accessPointRemoved(const WifiAccessPoint& removedAP)
+{
+    removeConnectionPoint(removedAP);
 }
 
 /*

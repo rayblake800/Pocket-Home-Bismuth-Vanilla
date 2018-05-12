@@ -108,6 +108,20 @@ private:
      * @param state  The new wifi connection state.
      */
     void wifiStateChanged(WifiStateManager::WifiState state) override;
+   
+    /**
+     * Adds all newly detected access points to the access point list.
+     *
+     * @param addedAP  The newly detected access point object.
+     */
+    void accessPointAdded(const WifiAccessPoint& addedAP) override;
+
+    /**
+     * Removes all missing access points from the access point list.
+     *
+     * @param removedAP  The access point that is no longer visible.
+     */
+    void accessPointRemoved(const WifiAccessPoint& removedAP) override;
 
 
     /**

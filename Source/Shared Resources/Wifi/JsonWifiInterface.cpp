@@ -206,12 +206,14 @@ void JsonWifiInterface::disconnect()
     }
     else
     {
+        disconnecting = true;
         TempTimer::initTimer(Random().nextInt(2000), [this]()
         {
             ScopedLock lock(wifiLock);
             DBG("JsonWifiInterface::" << __func__ << ": wifi disconnected");
             connectedAP = WifiAccessPoint();
             connected = false;
+            disconnecting = false;
             signalWifiDisconnected();
         });
 

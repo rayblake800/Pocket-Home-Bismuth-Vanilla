@@ -20,6 +20,7 @@ void PageStackComponent::pushPage(PageComponent* page,
 {
     DBG("PageStackComponent::" << __func__ << ": pushing " << page->getName());
     stack.add(page);
+    signalPageAdded(page);
     transitionPage(page, animation, transitionDurationMS);
 }
 
@@ -39,6 +40,7 @@ void PageStackComponent::popPage(PageComponent::Animation animation)
                 {
                     removeChildComponent(page);
                     stack.removeObject(page);
+                    signalPageRevealed(stack.getLast());
                 },
         false);
     }
