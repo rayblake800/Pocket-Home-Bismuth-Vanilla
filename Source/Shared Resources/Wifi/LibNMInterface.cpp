@@ -533,6 +533,7 @@ void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
         
         ScopedUnlock notifyUnlock(wifiLock);
         WifiAccessPoint newAP(addedAP);
+        setAccessPointPaths(newAP);
         signalAPAdded(newAP);
     });
 }
