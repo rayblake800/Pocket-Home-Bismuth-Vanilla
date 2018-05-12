@@ -544,6 +544,7 @@ void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
  */
 void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
 {    
+    jassert(!removedAP.isNull());
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, removedAP]()
     {
@@ -552,6 +553,7 @@ void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
              
         ScopedUnlock notifyUnlock(wifiLock);
         WifiAccessPoint missingAP(removedAP);
+        jassert(!missingAP.isNull());
         signalAPRemoved(missingAP);
     });
 }

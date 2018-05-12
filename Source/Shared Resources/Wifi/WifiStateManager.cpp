@@ -552,7 +552,7 @@ void WifiStateManager::NetworkInterface::signalPskNeeded()
 void WifiStateManager::NetworkInterface::signalAPAdded
 (const WifiAccessPoint& addedAP)
 {
-    MessageManager::callAsync([this, &addedAP]()
+    MessageManager::callAsync([this, addedAP]()
     {
         const ScopedLock stateLock(wifiLock);
         if(this != WifiStateManager::sharedResource.get())
@@ -581,7 +581,7 @@ void WifiStateManager::NetworkInterface::signalAPAdded
 void WifiStateManager::NetworkInterface::signalAPRemoved
 (const WifiAccessPoint& removedAP)
 {
-    MessageManager::callAsync([this, &removedAP]()
+    MessageManager::callAsync([this, removedAP]()
     {
         const ScopedLock stateLock(wifiLock);
         if(this != WifiStateManager::sharedResource.get())
