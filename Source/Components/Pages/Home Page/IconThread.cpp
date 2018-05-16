@@ -1,4 +1,5 @@
 #include "AssetFiles.h"
+#include "Utils.h"
 #include "IconThread.h"
 
 const String IconThread::defaultIconPath =
@@ -12,7 +13,6 @@ ScopedPointer<ResourceManager::SharedResource> IconThread::sharedResource
 IconThread::IconThread() :
 ResourceManager(sharedResource, iconLock, [this]()->ResourceManager::SharedResource*
 {
-
     return new IconResource(iconLock);
 })
 {
@@ -172,6 +172,7 @@ int IconThread::IconResource::IconFileComparator::compareElements
 void IconThread::IconResource::run()
 {
     const ScopedLock queueLock(threadLock);
+    ScopedExecTimer(String("Loading") + String(numJobsQueued()) + "Icons");
     while (!threadShouldExit() && numJobsQueued() > 0)
     {
         IconResource::QueuedJob activeJob = getQueuedJob();
@@ -210,6 +211,7 @@ void IconThread::IconResource::run()
  */
 void IconThread::IconResource::mapIcons()
 {
+    ScopedExecTimer(String("building icon map"));
     //Subdirectories with these names are likely to appear, but should
     //not be searched for icons.
     const StringArray ignore = {

@@ -3,7 +3,7 @@
 #include "Utils.h"
 #include "DesktopEntry.h"
 
-const String DesktopEntry::localEntryPath = "/~.local/share/applications/";
+const String DesktopEntry::localEntryPath = "~/.local/share/applications/";
 
 /**
  * Load DesktopEntry data from a .desktop or .directory file
@@ -157,15 +157,8 @@ void DesktopEntry::setValue(BoolValue valueType, bool newValue)
  */
 void DesktopEntry::setValue(ListValue valueType, StringArray newValue)
 {
-    String joinedList = "";
-    for (const String& listItem : newValue)
-    {
-        if (joinedList.isNotEmpty())
-        {
-            joinedList += ";";
-        }
-        joinedList += listItem;
-    }
+    String joinedList = newValue.joinIntoString(";");
+    DBG("DesktopEntry::" << __func__ << "Saving category list " << joinedList);
     dataStrings[getKey(valueType)] = joinedList;
 }
 
@@ -228,6 +221,7 @@ void DesktopEntry::writeFile()
     entrypath = localEntryPath + entrypath.fromLastOccurrenceOf("/", false, false);
     File outFile(entrypath);
     outFile.create();
+    DBG("DesktopEntry::" << __func__ << ": writing file " << entrypath); 
     outFile.replaceWithText(outFileText);
 }
 
