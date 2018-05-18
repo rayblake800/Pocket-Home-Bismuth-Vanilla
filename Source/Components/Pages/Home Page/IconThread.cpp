@@ -5,15 +5,16 @@
 const String IconThread::defaultIconPath =
         "/usr/share/pocket-home/appIcons/default.png";
 
-CriticalSection IconThread::iconLock;
+ReadWriteLock IconThread::iconLock;
 
 ScopedPointer<ResourceManager::SharedResource> IconThread::sharedResource
         = nullptr;
 
 IconThread::IconThread() :
-ResourceManager(sharedResource, iconLock, [this]()->ResourceManager::SharedResource*
+ResourceManager(sharedResource, iconLock,
+        [this]()->ResourceManager::SharedResource*
 {
-    return new IconResource(iconLock);
+    return new IconResource();
 })
 {
     defaultIcon = AssetFiles::loadImageAsset(defaultIconPath);
@@ -37,7 +38,7 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
             icon = icon.substring(1 + icon.lastIndexOf("/"));
         }
         assignImage(defaultIcon);
-        const ScopedLock queueLock(iconLock);
+        const ScopedWriteLock queueLock(iconLock);
         IconResource::QueuedJob iconRequest;
         IconResource* iconResource
                 = dynamic_cast<IconResource*> (sharedResource.get());
@@ -51,8 +52,8 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
     }
 }
 
-IconThread::IconResource::IconResource(CriticalSection& threadLock) :
-Thread("IconThread"), threadLock(threadLock) { }
+IconThread::IconResource::IconResource() :
+Thread("IconThread") { }
 
 IconThread::IconResource::~IconResource()
 {
@@ -171,17 +172,16 @@ int IconThread::IconResource::IconFileComparator::compareElements
  */
 void IconThread::IconResource::run()
 {
-    const ScopedLock queueLock(threadLock);
-    ScopedExecTimer(String("Loading") + String(numJobsQueued()) + "Icons");
-    while (!threadShouldExit() && numJobsQueued() > 0)
+    ScopedExecTimer(String("Loading ") + String(numJobsQueued()) + " Icons");
+    for(IconResource::QueuedJob activeJob = getQueuedJob();
+        !threadShouldExit() && activeJob.icon.isNotEmpty();
+        activeJob = getQueuedJob())
     {
-        IconResource::QueuedJob activeJob = getQueuedJob();
         String icon = getIconPath(activeJob.icon);
         if (icon.isNotEmpty())
         {
             Image iconImg;
             {
-                const ScopedUnlock imageLoadUnlock(threadLock);
                 const MessageManagerLock lock;
                 iconImg = AssetFiles::loadImageAsset(icon);
             }
@@ -193,16 +193,11 @@ void IconThread::IconResource::run()
             }
             else
             {
-                const ScopedUnlock imageLoadUnlock(threadLock);
                 const MessageManagerLock lock;
                 activeJob.callback(iconImg);
             }
         }
-        //Allow other threads to run
-        {
-            const ScopedUnlock yieldUnlock(threadLock);
-            Thread::yield();
-        }
+        
     }
 }
 

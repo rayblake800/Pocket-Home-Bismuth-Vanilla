@@ -4,7 +4,7 @@
 #include "JsonWifiInterface.h"
 #include "TempTimer.h"
 
-JsonWifiInterface::JsonWifiInterface(CriticalSection& wifiLock) : 
+JsonWifiInterface::JsonWifiInterface(ReadWriteLock& wifiLock) : 
 WifiStateManager::NetworkInterface(wifiLock),
 wifiLock(wifiLock) 
 {
@@ -36,7 +36,6 @@ bool JsonWifiInterface::wifiDeviceFound()
  */
 bool JsonWifiInterface::isWifiEnabled()
 {
-    ScopedLock lock(wifiLock);
     return enabled;
 }
 
@@ -45,7 +44,6 @@ bool JsonWifiInterface::isWifiEnabled()
  */
 bool JsonWifiInterface::isWifiConnecting()
 {
-    ScopedLock lock(wifiLock);
     return !waitingToConnect.isNull();
 }
 
@@ -54,7 +52,6 @@ bool JsonWifiInterface::isWifiConnecting()
  */
 bool JsonWifiInterface::isWifiConnected()
 {
-    ScopedLock lock(wifiLock);
     return connected;
 }
 
@@ -64,7 +61,6 @@ bool JsonWifiInterface::isWifiConnected()
  */
 WifiAccessPoint JsonWifiInterface::getActiveAP()
 {
-    ScopedLock lock(wifiLock);
     if (!connected)
     {
         return waitingToConnect;
@@ -93,7 +89,6 @@ Array<WifiAccessPoint> JsonWifiInterface::getVisibleAPs()
 void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
 {
-    ScopedLock lock(wifiLock);
     if(toConnect.isNull())
     {
         DBG("JsonWifiInterface::" << __func__
@@ -148,7 +143,7 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         TempTimer::initTimer(Random().nextInt(2000) + 2000,
                 [this, psk]()
                 {
-                    ScopedLock lock(wifiLock);
+                    ScopedWriteLock lock(wifiLock);
                     bool isTestCred = (waitingToConnect.getSSID() == "MyFi");
                     if (!isTestCred)
                     {
@@ -185,9 +180,7 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                     {
                         signalWifiConnected();
                     }                
-                });
-        
-        ScopedUnlock notifyUnlock(wifiLock);      
+                });    
         signalWifiConnecting();
     }
 }
@@ -199,7 +192,6 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
  */
 void JsonWifiInterface::disconnect()
 {
-    ScopedLock lock(wifiLock);
     if (!connected)
     {
         DBG("JsonWifiInterface::" << __func__ << ": no connection to kill");
@@ -209,7 +201,7 @@ void JsonWifiInterface::disconnect()
         disconnecting = true;
         TempTimer::initTimer(Random().nextInt(2000), [this]()
         {
-            ScopedLock lock(wifiLock);
+            ScopedWriteLock lock(wifiLock);
             DBG("JsonWifiInterface::" << __func__ << ": wifi disconnected");
             connectedAP = WifiAccessPoint();
             connected = false;
@@ -226,8 +218,6 @@ void JsonWifiInterface::disconnect()
  */
 void JsonWifiInterface::enableWifi()
 {
-
-    ScopedLock lock(wifiLock);
     if (turningOn)
     {
         DBG("JsonWifiInterface::" << __func__ << ": already enabling wifi!");
@@ -245,7 +235,7 @@ void JsonWifiInterface::enableWifi()
         turningOff = false;
         TempTimer::initTimer(Random().nextInt(2000), [this]()
         {
-            ScopedLock lock(wifiLock);
+            ScopedWriteLock lock(wifiLock);
             if (turningOn)
             {
                 DBG("JsonWifiInterface::" << __func__ << ": wifi enabled");
@@ -275,7 +265,7 @@ void JsonWifiInterface::disableWifi()
         turningOff = true;
         TempTimer::initTimer(Random().nextInt(2000), [this]()
         {
-            ScopedLock lock(wifiLock);
+            ScopedWriteLock lock(wifiLock);
             if (turningOff)
             {
                 DBG("JsonWifiInterface::" << __func__ << ": wifi disabled");

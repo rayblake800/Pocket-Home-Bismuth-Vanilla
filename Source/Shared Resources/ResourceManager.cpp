@@ -15,12 +15,12 @@ ResourceManager::SharedResource::~SharedResource()
 
 ResourceManager::ResourceManager(
         ScopedPointer<SharedResource>& classResource,
-        CriticalSection& resourceLock,
+        ReadWriteLock& resourceLock,
         std::function<SharedResource*() > createResource) :
 classResource(classResource),
 resourceLock(resourceLock)
 {
-    const ScopedLock initLock(resourceLock);
+    const ScopedWriteLock initLock(resourceLock);
     if (classResource == nullptr)
     {
         classResource = createResource();
@@ -34,7 +34,7 @@ resourceLock(resourceLock)
  */
 ResourceManager::~ResourceManager()
 {
-    const ScopedLock initLock(resourceLock);
+    const ScopedWriteLock initLock(resourceLock);
     if (classResource == nullptr)
     {
         DBG("ResourceManager Error: shared resource is missing!");

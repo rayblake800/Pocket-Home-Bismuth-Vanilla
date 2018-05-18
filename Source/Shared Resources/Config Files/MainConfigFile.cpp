@@ -6,7 +6,7 @@
 ScopedPointer<ResourceManager::SharedResource>
         MainConfigFile::sharedResource = nullptr;
 
-CriticalSection MainConfigFile::configLock;
+ReadWriteLock MainConfigFile::configLock;
 
 MainConfigFile::MainConfigFile() : 
 ResourceManager(sharedResource,configLock,
@@ -22,7 +22,7 @@ ResourceManager(sharedResource,configLock,
 void MainConfigFile::addListener(ConfigFile::Listener* listener,
         StringArray trackedKeys)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedWriteLock writeLock(configLock);
     MainJson* config = static_cast<MainJson*> (sharedResource.get());
     config->addListener(listener, trackedKeys);
 }

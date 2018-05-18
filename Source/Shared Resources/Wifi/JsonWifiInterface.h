@@ -14,7 +14,7 @@
 class JsonWifiInterface : public WifiStateManager::NetworkInterface
 {
 public:
-    JsonWifiInterface(CriticalSection& wifiLock);
+    JsonWifiInterface(ReadWriteLock& wifiLock);
     virtual ~JsonWifiInterface();
 
 protected:
@@ -118,7 +118,7 @@ private:
     bool turningOff = false;
     
     //Disallows concurrent modification
-    CriticalSection& wifiLock;
+    ReadWriteLock& wifiLock;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(JsonWifiInterface)

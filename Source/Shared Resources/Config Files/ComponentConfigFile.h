@@ -263,7 +263,7 @@ private:
 
     //ResourceManager shared object and lock;
     static ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static CriticalSection configLock;
+    static ReadWriteLock configLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ComponentConfigFile)
 };

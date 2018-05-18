@@ -8,7 +8,7 @@
 #include "WifiDebugOutput.h"
 #endif
 
-LibNMInterface::LibNMInterface(CriticalSection& wifiLock) :
+LibNMInterface::LibNMInterface(ReadWriteLock& wifiLock) :
 NetworkInterface(wifiLock),
 wifiLock(wifiLock)
 {
@@ -271,7 +271,6 @@ void LibNMInterface::setAccessPointPaths(WifiAccessPoint& accessPoint)
 void LibNMInterface::updateAllWifiData()
 {
     DBG("LibNMInterface::updateAllWifiData: reloading data");
-    ScopedLock updateLock(wifiLock);
     lastNMState = wifiDevice.getState();
     savedConnections.updateSavedConnections();
     activeConnection = wifiDevice.getActiveConnection();
@@ -279,7 +278,6 @@ void LibNMInterface::updateAllWifiData()
             (activeConnection.getAccessPointPath()));
     setAccessPointPaths(activeAP);
     visibleAPs = wifiDevice.getAccessPoints();
-    ScopedUnlock confirmUnlock(wifiLock);
     confirmWifiState();
 }
 
@@ -327,7 +325,7 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, connection, isNew]()
     {
-        ScopedLock updateLock(wifiLock);
+        ScopedWriteLock updateLock(wifiLock);
         switch(connection.getConnectionState())
         {
             case NM_ACTIVE_CONNECTION_STATE_UNKNOWN:
@@ -367,7 +365,7 @@ void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection,
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, connection, error, isNew]()
     {
-        ScopedLock updateLock(wifiLock);
+        wifiLock.enterWrite();
         DBG("LibNMInterface::openingConnectionFailed" << ": Error "
                 << error->code << ":" << error->message);
         //TODO: is it necessary to make sure activeConnection or activeAP
@@ -387,7 +385,7 @@ void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection,
          }
          */
         g_error_free(error);
-        ScopedUnlock confirmUnlock(wifiLock);
+        wifiLock.exitWrite();
         signalConnectionFailed();
     });
 }
@@ -423,9 +421,10 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, newState, oldState, reason]()
     {
-        ScopedLock updateLock(wifiLock);
+        wifiLock.enterWrite();
         if(lastNMState == newState)//duplicate callback, ignore
         {
+            wifiLock.exitWrite();
             return;
         }
         lastNMState = newState;
@@ -441,7 +440,7 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                         << "send connection signal");
 		stopTimer();
                 failedConnectionAPs.removeAllInstancesOf(activeAP);
-		ScopedUnlock unlockForUpdate(wifiLock);
+                wifiLock.exitWrite();
 		signalWifiConnected();
                 break;
             }
@@ -458,11 +457,12 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
 		//changes.
                 stopTimer();
                 startTimer(wifiConnectionTimeout);
+                wifiLock.exitWrite();
                 break;
             case NM_DEVICE_STATE_DISCONNECTED:
             {
 		stopTimer();
-                ScopedUnlock unlockForUpdate(wifiLock);
+                wifiLock.exitWrite();
                 if(oldState == NM_DEVICE_STATE_DEACTIVATING)
                 {
                     signalWifiDisconnected();
@@ -493,11 +493,11 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                         activeAP = WifiAccessPoint();
                         newConnectionAP = WifiAccessPoint();
                     }
-                    ScopedUnlock unlockForUpdate(wifiLock);
+                    wifiLock.exitWrite();
                     signalConnectionFailed();
                     return;
                 }
-                ScopedUnlock unlockForUpdate(wifiLock);
+                wifiLock.exitWrite();
                 signalWifiDisconnected();
                 break;
             }
@@ -511,9 +511,13 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                         << deviceStateString(newState));
 		if(!activeAP.isNull())
 	    	{
-                    ScopedUnlock unlockForUpdate(wifiLock);
+                    wifiLock.exitWrite();
                     signalWifiDisconnected();
 		}
+                else
+                {
+                    wifiLock.exitWrite();
+                }
             }
         }
     });
@@ -528,10 +532,9 @@ void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, addedAP]()
     {
-        ScopedLock updateLock(wifiLock);
+        wifiLock.enterWrite();
         visibleAPs.add(addedAP);
-        
-        ScopedUnlock notifyUnlock(wifiLock);
+        wifiLock.exitWrite();
         WifiAccessPoint newAP(addedAP);
         setAccessPointPaths(newAP);
         signalAPAdded(newAP);
@@ -548,10 +551,9 @@ void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, removedAP]()
     {
-        ScopedLock updateLock(wifiLock);
+        wifiLock.enterWrite();
         visibleAPs.removeAllInstancesOf(removedAP);
-             
-        ScopedUnlock notifyUnlock(wifiLock);
+        wifiLock.exitWrite();
         WifiAccessPoint missingAP(removedAP);
         jassert(!missingAP.isNull());
         signalAPRemoved(missingAP);
@@ -567,7 +569,7 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, active]()
     {
-        ScopedLock updateLock(wifiLock);
+        wifiLock.enterWrite();
         DBG("LibNMInterface::activeConnectionChanged" 
                 << ": new active connection with state "
                 << activeConnectionStateString(active.getConnectionState()));
@@ -577,8 +579,9 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
             if (active.isNull())
             {
                 activeAP = WifiAccessPoint();
-                ScopedUnlock notifyUnlock(wifiLock);
+                wifiLock.exitWrite();
                 signalWifiDisconnected();
+                return;
             }
             else
             {
@@ -602,7 +605,7 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
                         //the right one
                     }
                 }
-                ScopedUnlock notifyUnlock(wifiLock);
+                wifiLock.exitWrite();
                 if(active.getConnectionState() 
                         == NM_ACTIVE_CONNECTION_STATE_ACTIVATED)
 		{
@@ -612,7 +615,9 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
 		{
                     signalWifiConnecting();
 		}
+                return;
             }
         }
+        wifiLock.exitWrite();
     });
 }

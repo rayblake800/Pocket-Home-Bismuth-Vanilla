@@ -1,5 +1,3 @@
--Creating new connections to replace invalid saved connections needs additional
- debugging.
 
 -Track down and fix the occasional 10+ second delay in initializing the AppMenu.
 
@@ -9,8 +7,6 @@
 
 -Find and fix missing localized text
 
--Replace SharedResource CriticalSections with ReadWriteLocks
-
 -Pause GLib threads when window focus is lost
 
 -Update the HomePage wifi icon to better use new wifi features.
@@ -19,6 +15,10 @@
 
 -Set password page isn`t hiding the current password field!
  new password isn't being set either...
+
+-Creating new connections to replace invalid saved connections needs additional
+ debugging.
+
  
 -Look into PolicyKit api for requesting privileges, add application specific
   policies for bluetooth and the password file.

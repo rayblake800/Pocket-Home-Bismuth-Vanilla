@@ -27,8 +27,8 @@ public:
     class Listener;
 
     WifiStateManager
-    (std::function<ResourceManager::SharedResource*(CriticalSection&)> 
-            createWifiResource = [](CriticalSection& c)
+    (std::function<ResourceManager::SharedResource*(ReadWriteLock&)> 
+            createWifiResource = [](ReadWriteLock& c)
             {
                 return nullptr;
             });
@@ -238,7 +238,7 @@ public:
 	 *                    device signals.  In any other case, it is assumed
 	 *                    that the caller acquired the lock already.
          */
-        NetworkInterface(CriticalSection& wifiLock);
+        NetworkInterface(ReadWriteLock& wifiLock);
 
         virtual ~NetworkInterface() { }
 
@@ -448,7 +448,7 @@ public:
         void timerCallback() override;
         
         WifiState wifiState = missingNetworkDevice;
-        CriticalSection& wifiLock;
+        ReadWriteLock& wifiLock;
         //All objects tracking the current wifi state.
         Array<WifiStateManager::Listener*> listeners;
         //Listeners waiting for a pending notification.
@@ -509,7 +509,7 @@ private:
 
     //ResourceManager shared object and lock;
     static ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static CriticalSection stateLock;
+    static ReadWriteLock stateLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiStateManager)
 };

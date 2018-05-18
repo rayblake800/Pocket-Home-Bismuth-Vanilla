@@ -14,7 +14,9 @@
  * destroyed.
  *
  * As this application is multi-threaded, all SharedResource implementations
- * should disallow concurrent access.
+ * should disallow concurrent modification.  Each ResourceManager subclass
+ * will have a shared Juce::ReadWriteLock that should be used whenever the
+ * shared resource is accessed.  
  */
 
 class ResourceManager
@@ -53,7 +55,7 @@ public:
      *                         ResourceManager instances should never assign the
      *                         classResource ScopedPointer themselves.
      * 
-     * @param resourceLock     A reference to a static CriticalSection to be
+     * @param resourceLock     A reference to a static ReadWriteLock to be
      *                         shared by the class.  This must be locked any
      *                         time the sharedResource is accessed. 
      * 
@@ -63,7 +65,7 @@ public:
      */
     ResourceManager(
             ScopedPointer<SharedResource>& classResource,
-            CriticalSection& resourceLock,
+            ReadWriteLock& resourceLock,
             std::function<SharedResource*()> resourceCreator);
 
 
@@ -85,7 +87,5 @@ private:
      * Shared by all instances of the ResourceManager, used to control access to
      * the shared resource object.
      */
-    CriticalSection& resourceLock;
-
-
+    ReadWriteLock& resourceLock;
 };

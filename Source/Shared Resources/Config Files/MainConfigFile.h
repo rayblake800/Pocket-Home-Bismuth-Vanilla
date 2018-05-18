@@ -22,7 +22,7 @@ public:
      */
     template<typename T > T getConfigValue(String key)
     {
-        const ScopedLock readLock(configLock);
+        const ScopedReadLock readLock(configLock);
         MainJson* config = static_cast<MainJson*> (sharedResource.get());
         return config->getConfigValue<T>(key);
     }
@@ -36,7 +36,7 @@ public:
     template<typename T>
     void setConfigValue(String key, T newValue)
     {
-        const ScopedLock readLock(configLock);
+        const ScopedWriteLock writeLock(configLock);
         MainJson* config = static_cast<MainJson*> (sharedResource.get());
         config->setConfigValue<T>(key, newValue);
     }
@@ -106,7 +106,7 @@ private:
 
     //ResourceManager shared object and lock;
     static ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static CriticalSection configLock;
+    static ReadWriteLock configLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainConfigFile)
 };

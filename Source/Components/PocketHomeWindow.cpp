@@ -9,7 +9,7 @@ PocketHomeWindow::PocketHomeWindow(String windowName, bool fakeWifi) :
 WindowFocus::BroadcastWindow(windowName, Colours::darkgrey,
         DocumentWindow::allButtons),
 wifiManager([fakeWifi]
-(CriticalSection& lock)->WifiStateManager::NetworkInterface*
+(ReadWriteLock& lock)->WifiStateManager::NetworkInterface*
 {
     if(fakeWifi)
     {

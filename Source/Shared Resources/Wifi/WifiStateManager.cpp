@@ -4,10 +4,10 @@
 ScopedPointer<ResourceManager::SharedResource>
         WifiStateManager::sharedResource = nullptr;
 
-CriticalSection WifiStateManager::stateLock;
+ReadWriteLock WifiStateManager::stateLock;
 
 WifiStateManager::WifiStateManager
-(std::function<ResourceManager::SharedResource*(CriticalSection&)> 
+(std::function<ResourceManager::SharedResource*(ReadWriteLock&)> 
 createWifiResource):
 ResourceManager(sharedResource, stateLock,
         [&createWifiResource]
@@ -20,7 +20,7 @@ ResourceManager(sharedResource, stateLock,
  */
 WifiStateManager::WifiState WifiStateManager::getWifiState()
 {
-    const ScopedLock lock(stateLock);
+    const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     return wifiResource->getWifiState();
@@ -33,7 +33,7 @@ WifiStateManager::WifiState WifiStateManager::getWifiState()
  */
 void WifiStateManager::addListener(WifiStateManager::Listener* listener)
 {
-    const ScopedLock lock(stateLock);
+    const ScopedWriteLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     wifiResource->addListener(listener);
@@ -45,7 +45,7 @@ void WifiStateManager::addListener(WifiStateManager::Listener* listener)
  */
 void WifiStateManager::removeListener(WifiStateManager::Listener* listener)
 {
-    const ScopedLock lock(stateLock);
+    const ScopedWriteLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     wifiResource->removeListener(listener);
@@ -56,7 +56,7 @@ void WifiStateManager::removeListener(WifiStateManager::Listener* listener)
  */
 WifiAccessPoint WifiStateManager::getActiveAP()
 {
-    const ScopedLock lock(stateLock);
+    const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     return wifiResource->getActiveAP();
@@ -67,7 +67,7 @@ WifiAccessPoint WifiStateManager::getActiveAP()
  */
 Array<WifiAccessPoint> WifiStateManager::getVisibleAPs()
 {
-    const ScopedLock lock(stateLock);
+    const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     return wifiResource->getVisibleAPs();
@@ -78,7 +78,7 @@ Array<WifiAccessPoint> WifiStateManager::getVisibleAPs()
  */
 bool WifiStateManager::isEnabled()
 {
-    const ScopedLock lock(stateLock);
+    const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     return wifiResource->isWifiEnabled();
@@ -89,7 +89,7 @@ bool WifiStateManager::isEnabled()
  */
 bool WifiStateManager::isConnected()
 {
-    const ScopedLock lock(stateLock);
+    const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     return wifiResource->isWifiConnected();
@@ -102,7 +102,7 @@ bool WifiStateManager::isConnected()
 void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
         String psk)
 {
-    const ScopedLock lock(stateLock);
+    const ScopedWriteLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     switch(getAPState(toConnect))
@@ -147,8 +147,6 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
     }
     DBG("WifiStateManager::" << __func__ << ": Connecting to access "
             << "point " << toConnect.getSSID());
-    //Testing: let wifiResource choose when to set state to connecting.
-    //wifiResource->setWifiState(connecting);
     wifiResource->connectToAccessPoint(toConnect, psk);
     wifiResource->startTimer(wifiResource->wifiConnectionTimeout);
 }
@@ -159,7 +157,7 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
  */
 void WifiStateManager::disconnect()
 {
-    const ScopedLock lock(stateLock);
+    const ScopedWriteLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     WifiState wifiState = wifiResource->getWifiState();
@@ -188,7 +186,7 @@ void WifiStateManager::enableWifi()
 {
     if(getWifiState() != missingNetworkDevice)
     {
-        const ScopedLock lock(stateLock);
+        const ScopedWriteLock lock(stateLock);
         NetworkInterface* wifiResource
                 = static_cast<NetworkInterface*> (sharedResource.get());
         WifiState wifiState = wifiResource->getWifiState();
@@ -222,7 +220,7 @@ void WifiStateManager::enableWifi()
  */
 void WifiStateManager::disableWifi()
 {
-    const ScopedLock lock(stateLock);
+    const ScopedWriteLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     WifiState wifiState = wifiResource->getWifiState();
@@ -255,13 +253,13 @@ WifiStateManager::AccessPointState WifiStateManager::getAPState
     {
         return nullAP;
     }
-    const ScopedLock lock(stateLock);
+    const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
     return wifiResource->getAPState(accessPoint);
 }
 
-WifiStateManager::NetworkInterface::NetworkInterface(CriticalSection& wifiLock)
+WifiStateManager::NetworkInterface::NetworkInterface(ReadWriteLock& wifiLock)
 : wifiLock(wifiLock) { }
 
 /*
@@ -281,26 +279,29 @@ void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
     
     MessageManager::callAsync([this,state]()
     {
-        const ScopedLock stateLock(wifiLock);
-        if(this != WifiStateManager::sharedResource.get())
+        wifiLock.enterWrite();
+        //make sure the sharedResource wasn't destroyed.
+        if(this == WifiStateManager::sharedResource.get())
         {
-            return;//shared resource was destroyed, cancel notification.
-        }
-        if (state != wifiState)
-        {
-            wifiState = state;
-            DBG("WifiStateManager::setWifiState: Setting wifi state to "
-                    << wifiStateString(wifiState));
-            jassert(notifyQueue.isEmpty());
-            notifyQueue = listeners;
-            while (!notifyQueue.isEmpty())
+            if (state != wifiState)
             {
-                WifiStateManager::Listener* toNotify
-                        = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
-                const ScopedUnlock signalUnlock(wifiLock);
-                toNotify->wifiStateChanged(state);
+                wifiState = state;
+                DBG("WifiStateManager::setWifiState: Setting wifi state to "
+                        << wifiStateString(wifiState));
+                jassert(notifyQueue.isEmpty());
+                notifyQueue = listeners;
+                while(this == WifiStateManager::sharedResource.get()
+                        && !notifyQueue.isEmpty())
+                {
+                    WifiStateManager::Listener* toNotify = notifyQueue
+                            .removeAndReturn(notifyQueue.size() - 1);
+                    wifiLock.exitWrite();
+                    toNotify->wifiStateChanged(state);
+                    wifiLock.enterWrite();
+                }
             }
         }
+        wifiLock.exitWrite();
     });
 }
 
@@ -344,14 +345,11 @@ WifiStateManager::Listener::~Listener()
  */
 void WifiStateManager::NetworkInterface::confirmWifiState()
 {
-    const ScopedLock wifiStateLock(wifiLock);
+    wifiLock.enterRead();
     bool wifiConnecting = isWifiConnecting();
     bool wifiConnected = isWifiConnected();
     WifiState state = getWifiState();
-    const ScopedUnlock wifiStateUnlock(wifiLock);
-    //DBG("NetworkInterface::" << __func__ << ": state was "
-    //        << wifiStateString(state)
-    //        << ", checking if that is still accurate");
+    wifiLock.exitRead();
     
     if(!wifiDeviceFound())
     {
@@ -384,7 +382,7 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
                     << wifiStateString(state)
                     << ", but wifi is connecting.");
             setWifiState(connecting);
-            const ScopedLock timerLock(wifiLock);
+            const ScopedWriteLock timerLock(wifiLock);
             if (!isTimerRunning())
             {
                 startTimer(wifiConnectionTimeout);
@@ -400,7 +398,7 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
                     << wifiStateString(state)
                     << ", but wifi is connected.");
             setWifiState(connected);
-            const ScopedLock timerLock(wifiLock);
+            const ScopedWriteLock timerLock(wifiLock);
             if (!isTimerRunning())
             {
                 startTimer(wifiConnectionTimeout);
@@ -425,7 +423,7 @@ void WifiStateManager::NetworkInterface::confirmWifiState()
  */
 void WifiStateManager::NetworkInterface::signalWifiConnecting()
 {
-    const ScopedLock updateLock(wifiLock);
+    wifiLock.enterWrite();
     WifiState wifiState = getWifiState();
     if (wifiState != connecting)
     {
@@ -433,8 +431,12 @@ void WifiStateManager::NetworkInterface::signalWifiConnecting()
                 << ": started to connect during state "
                 << wifiStateString(wifiState));
         startTimer(wifiConnectionTimeout);
-        const ScopedUnlock stateUnlock(wifiLock);
+        wifiLock.exitWrite();
         setWifiState(connecting);
+    }
+    else
+    {
+        wifiLock.exitWrite();
     }
 }
 
@@ -463,7 +465,7 @@ void WifiStateManager::NetworkInterface::signalConnectionFailed()
         case connecting:
             DBG("NetworkInterface::" << __func__ << ": connection failed.");
             {
-                const ScopedLock timerLock(wifiLock);
+                const ScopedWriteLock timerLock(wifiLock);
                 stopTimer();
             }
             setWifiState(enabled);
@@ -482,11 +484,11 @@ void WifiStateManager::NetworkInterface::signalConnectionFailed()
  */
 void WifiStateManager::NetworkInterface::signalWifiDisconnected()
 {
-    const ScopedLock wifiStateLock(wifiLock);
+    wifiLock.enterWrite();
     //DBG("NetworkInterface::" << __func__ << ": wifi disconnected");
     stopTimer();
     WifiState currentState = getWifiState();
-    const ScopedUnlock stateUnlock(wifiLock);
+    wifiLock.exitWrite();
     
     switch (currentState)
     {
@@ -512,10 +514,9 @@ void WifiStateManager::NetworkInterface::signalWifiDisconnected()
  */
 void WifiStateManager::NetworkInterface::signalWifiEnabled()
 {
-
     //DBG("NetworkInterface::" << __func__ << ": wifi enabled");
     setWifiState(enabled);
-    const ScopedLock timerLock(wifiLock);
+    const ScopedWriteLock timerLock(wifiLock);
     stopTimer();
 }
 
@@ -528,7 +529,7 @@ void WifiStateManager::NetworkInterface::signalWifiDisabled()
 {
     //DBG("NetworkInterface::" << __func__ << ": wifi disabled");
     setWifiState(disabled);
-    const ScopedLock timerLock(wifiLock);
+    const ScopedWriteLock timerLock(wifiLock);
     stopTimer();
 }
 
@@ -541,7 +542,7 @@ void WifiStateManager::NetworkInterface::signalPskNeeded()
 {
     //DBG("NetworkInterface::" << __func__ << ": missing password");
     setWifiState(missingPassword);
-    const ScopedLock timerLock(wifiLock);
+    const ScopedWriteLock timerLock(wifiLock);
     stopTimer();
 }
      
@@ -554,23 +555,25 @@ void WifiStateManager::NetworkInterface::signalAPAdded
 {
     MessageManager::callAsync([this, addedAP]()
     {
-        const ScopedLock stateLock(wifiLock);
-        if(this != WifiStateManager::sharedResource.get())
+        wifiLock.enterWrite();
+        if(this == WifiStateManager::sharedResource.get())
         {
-            return;//shared resource was destroyed, cancel notification.
-        }
-        if (!addedAP.isNull())
-        {
-            jassert(notifyQueue.isEmpty());
-            notifyQueue = listeners;
-            while (!notifyQueue.isEmpty())
+            if (!addedAP.isNull())
             {
-                WifiStateManager::Listener* toNotify
-                        = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
-                const ScopedUnlock signalUnlock(wifiLock);
-                toNotify->accessPointAdded(addedAP);
+                jassert(notifyQueue.isEmpty());
+                notifyQueue = listeners;
+                while(this == WifiStateManager::sharedResource.get()
+                        && !notifyQueue.isEmpty())
+                {
+                    WifiStateManager::Listener* toNotify = notifyQueue
+                            .removeAndReturn(notifyQueue.size() - 1);
+                    wifiLock.exitWrite();
+                    toNotify->accessPointAdded(addedAP);
+                    wifiLock.enterWrite();
+                }
             }
         }
+        wifiLock.exitWrite();
     });
 }
 
@@ -583,23 +586,25 @@ void WifiStateManager::NetworkInterface::signalAPRemoved
 {
     MessageManager::callAsync([this, removedAP]()
     {
-        const ScopedLock stateLock(wifiLock);
-        if(this != WifiStateManager::sharedResource.get())
+        wifiLock.enterWrite();
+        if(this == WifiStateManager::sharedResource.get())
         {
-            return;//shared resource was destroyed, cancel notification.
-        }
-        if (!removedAP.isNull())
-        {
-            jassert(notifyQueue.isEmpty());
-            notifyQueue = listeners;
-            while (!notifyQueue.isEmpty())
+            if (!removedAP.isNull())
             {
-                WifiStateManager::Listener* toNotify
-                        = notifyQueue.removeAndReturn(notifyQueue.size() - 1);
-                const ScopedUnlock signalUnlock(wifiLock);
-                toNotify->accessPointRemoved(removedAP);
+                jassert(notifyQueue.isEmpty());
+                notifyQueue = listeners;
+                while(this == WifiStateManager::sharedResource.get()
+                        && !notifyQueue.isEmpty())
+                {
+                    WifiStateManager::Listener* toNotify = notifyQueue
+                            .removeAndReturn(notifyQueue.size() - 1);
+                    wifiLock.exitWrite();
+                    toNotify->accessPointRemoved(removedAP);
+                    wifiLock.enterWrite();
+                }
             }
         }
+        wifiLock.exitWrite();
     });
 }
 
@@ -611,12 +616,12 @@ void WifiStateManager::NetworkInterface::signalAPRemoved
  */
 void WifiStateManager::NetworkInterface::timerCallback()
 {
-    const ScopedLock lock(wifiLock);
+    wifiLock.enterWrite();
     stopTimer();
     bool wifiEnabled = isWifiEnabled();
     bool wifiConnected = isWifiConnected();
     WifiState currentState = wifiState;
-    const ScopedUnlock stateUpdateUnlock(wifiLock);
+    wifiLock.exitWrite();
     switch (currentState)
     {
         case connecting:

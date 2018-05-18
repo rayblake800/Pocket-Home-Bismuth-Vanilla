@@ -40,7 +40,7 @@ public:
      *                  the lock when it is updated by NetworkManager.  The lock
      *                  should never be acquired within the GLib event thread.
      */
-    LibNMInterface(CriticalSection& wifiLock);
+    LibNMInterface(ReadWriteLock& wifiLock);
 
     virtual ~LibNMInterface() { }
 
@@ -292,8 +292,8 @@ private:
     ScopedPointer<DeviceListener> deviceListener;
     
     /**
-     * Prevents concurrent access to the wifi data.  This is a reference to the
-     * CriticalSection used by WifiStateManager, so it should not be locked
+     * Restricts concurrent access to the wifi data.  This is a reference to the
+     * ReadWriteLock used by WifiStateManager, so it should not be locked
      * within this class in any method the WifiStateManager could call.
      *
      * The only reason this object is accessible here at all is so LibNM
@@ -303,7 +303,7 @@ private:
      * wifiLock, while another thread holding the wifiLock waits for access to
      * the GLib thread.
      */
-    CriticalSection& wifiLock;
+    ReadWriteLock& wifiLock;
 
     //The client used to access the network manager.
     NMPPClient client;

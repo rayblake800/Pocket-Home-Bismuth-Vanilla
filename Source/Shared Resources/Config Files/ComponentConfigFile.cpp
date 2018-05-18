@@ -7,7 +7,7 @@
 ScopedPointer<ResourceManager::SharedResource>
         ComponentConfigFile::sharedResource = nullptr;
 
-CriticalSection ComponentConfigFile::configLock;
+ReadWriteLock ComponentConfigFile::configLock;
 
 const StringArray ComponentConfigFile::defaultColourKeys = 
 {
@@ -188,7 +188,7 @@ Colour ComponentConfigFile::getColour(DefaultColour colourType)
     {
         return Colour();
     }
-    const ScopedLock readLock(configLock);
+    const ScopedReadLock readLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     return Colour(config->getConfigValue<String>(getColourKey(colourType))
 		    .getHexValue32());
@@ -418,7 +418,7 @@ void ComponentConfigFile::setColour
 {
     if(colourType != none)
     {
-        const ScopedLock readLock(configLock);
+        const ScopedWriteLock writeLock(configLock);
         ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
 	config->setConfigValue<String>
 		(getColourKey(colourType),newColour.toString());
@@ -427,7 +427,7 @@ void ComponentConfigFile::setColour
 
 void ComponentConfigFile::setColour(String key, Colour newColour)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedWriteLock writeLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     config->setConfigValue<String>(key,newColour.toString());
 }
@@ -465,7 +465,7 @@ int ComponentConfigFile::getColourId(String colourKey)
  */
 Colour ComponentConfigFile::getColour(String colourKey)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedReadLock readLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     return Colour(config->getConfigValue<String>(colourKey).getHexValue32());
 }
@@ -476,7 +476,7 @@ Colour ComponentConfigFile::getColour(String colourKey)
 ComponentConfigFile::ComponentSettings
 ComponentConfigFile::getComponentSettings(String componentKey)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedReadLock readLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     return config->getComponentSettings(componentKey);
 }
@@ -487,7 +487,7 @@ ComponentConfigFile::getComponentSettings(String componentKey)
 void ComponentConfigFile::addListener(ConfigFile::Listener* listener,
         StringArray trackedKeys)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedWriteLock writeLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     config->addListener(listener, trackedKeys);
 }
@@ -518,7 +518,7 @@ const String ComponentConfigFile::largeTextKey = "large text";
  */
 int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds, String text)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedReadLock readLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     int heightLarge = config->getComponentSettings(largeTextKey).getBounds()
             .getHeight();

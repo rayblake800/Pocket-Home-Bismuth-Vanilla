@@ -2,7 +2,7 @@
 
 
 ScopedPointer<ResourceManager::SharedResource> GLibSignalHandler::globalThread;
-CriticalSection GLibSignalHandler::threadLock;
+ReadWriteLock GLibSignalHandler::threadLock;
 
 GLibSignalHandler::GLibSignalHandler()
 : ResourceManager(globalThread, threadLock, []()
@@ -16,7 +16,7 @@ GLibSignalHandler::GLibSignalHandler()
  */
 bool GLibSignalHandler::runningOnGLibThread()
 {
-    const ScopedLock accessLock(threadLock);
+    const ScopedReadLock accessLock(threadLock);
     GLibDefaultThread* thread
             = static_cast<GLibDefaultThread*> (globalThread.get());
     return thread->runningOnThread();
@@ -27,7 +27,7 @@ bool GLibSignalHandler::runningOnGLibThread()
  */
 void GLibSignalHandler::gLibCallAsync(std::function<void() > fn)
 {
-    const ScopedLock accessLock(threadLock);
+    const ScopedWriteLock accessLock(threadLock);
     GLibDefaultThread* thread
             = static_cast<GLibDefaultThread*> (globalThread.get());
     thread->callAsync(fn);
@@ -39,11 +39,11 @@ void GLibSignalHandler::gLibCallAsync(std::function<void() > fn)
  */
 void GLibSignalHandler::gLibCall(std::function<void() > fn)
 {
-    const ScopedLock accessLock(threadLock);
+    threadLock.enterWrite();
     GLibDefaultThread* thread 
             = static_cast<GLibDefaultThread*> (globalThread.get());
     //synchronous calls will lock the thread themselves
-    const ScopedUnlock callUnlock(threadLock);
+    threadLock.exitWrite();
     thread->call(fn);
 }
 

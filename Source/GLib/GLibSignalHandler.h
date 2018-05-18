@@ -76,5 +76,5 @@ private:
     };
 
     static ScopedPointer<SharedResource> globalThread;
-    static CriticalSection threadLock;
+    static ReadWriteLock threadLock;
 };

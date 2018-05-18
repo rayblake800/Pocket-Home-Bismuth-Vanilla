@@ -23,14 +23,14 @@ public:
     /**
      * Queues up an icon request.  
      * 
-     * @param icon          This should be either a full icon file path, or the 
+     * @param icon           This should be either a full icon file path, or the 
      *                       filename(without extension) of an icon in one of 
      *                       the system icon directories.  If no direct match
      *                       is found, the icon thread will attempt to find and
      *                       use an icon with a name partially matching this
      *                       string.
      * 
-     * @param assignImage   A callback function to asynchronously use the
+     * @param assignImage    A callback function to asynchronously use the
      *                       image found by the thread. Unless the icon can be 
      *                       immediately located without searching, It will be 
      *                       called twice, once to immediately apply a default 
@@ -48,13 +48,7 @@ private:
     class IconResource : public Thread, public ResourceManager::SharedResource
     {
     public:
-
-        /**
-         * @param threadLock  The ResourceManager resource lock, which needs to 
-         *                     be held by the thread loop while it accesses
-         *                     icon data. 
-         */
-        IconResource(CriticalSection& threadLock);
+        IconResource();
 
         /**
          * Make sure the thread exits before destroying this object.
@@ -133,7 +127,7 @@ private:
         };
 
         //Queued icon requests waiting for the icon thread.
-        Array<QueuedJob> queuedJobs;
+        Array<QueuedJob, CriticalSection> queuedJobs;
 
         //Contains <filename(no extention),fullpath/filename.extension>
         //mappings for all icons found on the system.
@@ -141,9 +135,6 @@ private:
 
         //True iff icon paths have already been mapped
         bool iconPathsMapped = false;
-
-        //needed by the run() method only.
-        CriticalSection& threadLock;
 
     };
 
@@ -155,7 +146,7 @@ private:
 
     //ResourceManager shared object and lock;
     static ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static CriticalSection iconLock;
+    static ReadWriteLock iconLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconThread)
 };

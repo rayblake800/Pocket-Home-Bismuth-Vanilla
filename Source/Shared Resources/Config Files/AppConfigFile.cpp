@@ -6,7 +6,7 @@
 ScopedPointer<ResourceManager::SharedResource>
         AppConfigFile::sharedResource = nullptr;
 
-CriticalSection AppConfigFile::configLock;
+ReadWriteLock AppConfigFile::configLock;
 
 AppConfigFile::AppConfigFile() :
 ResourceManager(sharedResource, configLock,
@@ -25,7 +25,7 @@ ResourceManager(sharedResource, configLock,
  */
 Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 {
-    const ScopedLock readLock(configLock);
+    const ScopedReadLock readLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     return config->getFavorites();
 }
@@ -36,7 +36,7 @@ Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 void AppConfigFile::addFavoriteApp
 (AppConfigFile::AppItem newApp, int index, bool writeChangesNow)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedWriteLock writeLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     config->addFavoriteApp(newApp,index,writeChangesNow);
 }
@@ -46,7 +46,7 @@ void AppConfigFile::addFavoriteApp
  */
 void AppConfigFile::removeFavoriteApp(int index, bool writeChangesNow)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedWriteLock writeLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     config->removeFavoriteApp(index,writeChangesNow);
 }
@@ -56,7 +56,7 @@ void AppConfigFile::removeFavoriteApp(int index, bool writeChangesNow)
  */
 int AppConfigFile::getFavoriteIndex(AppConfigFile::AppItem toFind)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedReadLock readLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     return config->getFavoriteIndex(toFind);
 }
@@ -68,7 +68,7 @@ int AppConfigFile::getFavoriteIndex(AppConfigFile::AppItem toFind)
  */
 Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 {
-    const ScopedLock readLock(configLock);
+    const ScopedReadLock readLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     return config->getFolders();
 }
@@ -79,7 +79,7 @@ Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 void AppConfigFile::addAppFolder
 (AppConfigFile::AppFolder newFolder, int index, bool writeChangesNow)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedWriteLock writeLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     config->addAppFolder(newFolder,index,writeChangesNow);
 }
@@ -89,7 +89,7 @@ void AppConfigFile::addAppFolder
  */
 void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedWriteLock writeLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     config->removeAppFolder(index,writeChangesNow);
 }
@@ -99,7 +99,7 @@ void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
  */
 int AppConfigFile::getFolderIndex(AppConfigFile::AppFolder toFind)
 {
-    const ScopedLock readLock(configLock);
+    const ScopedReadLock readLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     return config->getFolderIndex(toFind);
 }
