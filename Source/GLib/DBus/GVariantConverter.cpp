@@ -128,6 +128,16 @@ namespace GVariantConverter
         return array;
     }
 
+    template<> guint64 getValue(GVariant* variant)
+    {
+         if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_UINT64))
+        {
+            jassertfalse;
+            return -1;
+	}
+        return g_variant_get_uint64(variant);
+    }
+
     /**
      * Packages a variable into a GVariant* object.  Supported types are bool,
      * guint32, String, and StringArray.

@@ -31,18 +31,6 @@ path(path)
     if(!isNull())
     {
         createNMConnection();
-        GVariant* timestamp = getSettingProp(NM_SETTING_CONNECTION_SETTING_NAME,
-                NM_SETTING_CONNECTION_TIMESTAMP);
-        if(timestamp != nullptr)
-        {
-            DBG("SavedConnection: Loaded connection with timestamp "
-                    << GVariantConverter::toString(timestamp));
-            g_variant_unref(timestamp);
-        }
-        else
-        {
-            DBG("SavedConnection: Loaded connection with no timestamp.");
-        }
     }
 }
 
@@ -76,6 +64,28 @@ NMPPConnection SavedConnection::getNMConnection() const
     return nmConnection;
 }
  
+/*
+ * Gets the last recorded time this saved connection was active.
+ */
+Time SavedConnection::lastConnectionTime()
+{ 
+    Time lastTime(0);
+    if(!isNull())
+    {
+        GVariant* timestamp = getSettingProp(NM_SETTING_CONNECTION_SETTING_NAME,
+                NM_SETTING_CONNECTION_TIMESTAMP);
+        if(timestamp != nullptr)
+        {
+	    lastTime = Time(1000 * GVariantConverter::getValue<uint64>
+	            (timestamp));
+            g_variant_unref(timestamp);
+        }
+    }
+    return lastTime;
+}
+
+
+
 /*
  * Checks if the connection has a saved wireless security key.
  */

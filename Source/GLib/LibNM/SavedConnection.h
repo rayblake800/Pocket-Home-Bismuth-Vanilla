@@ -58,6 +58,14 @@ public:
     NMPPConnection getNMConnection() const;
     
     /**
+     * Gets the last recorded time this saved connection was active.
+     *
+     * @return  the last time the connection was active, or the Unix epoch if
+     *          the connection has no saved connection time.
+     */
+    Time lastConnectionTime();
+
+    /**
      * Checks if the connection has a saved wireless security key.
      * 
      * @return true iff a security key value was found in this connection's
