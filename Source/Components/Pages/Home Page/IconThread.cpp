@@ -207,7 +207,8 @@ void IconThread::IconResource::run()
  */
 void IconThread::IconResource::mapIcons()
 {
-    ScopedExecTimer timer(String("building icon map"));
+    ScopedPointer<ScopedExecTimer> timer =
+            new ScopedExecTimer(String("mapping icon directories"));
     //Subdirectories with these names are likely to appear, but should
     //not be searched for icons.
     const StringArray ignore = {
@@ -311,7 +312,7 @@ void IconThread::IconResource::mapIcons()
     {
         findSearchPaths(File(path));
     }
-
+    timer = new ScopedExecTimer(String("finding icon files"));
     DBG("IconThread::" << __func__ << ":Searching " << searchDirs.size()
             << " icon directories:");
     //finally, find and map icon files

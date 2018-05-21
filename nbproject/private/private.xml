@@ -10,11 +10,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/IconThread.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/ResourceManager.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/GLib/GLibSignalHandler.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Config%20Files/AppConfigFile.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Wifi/JsonWifiInterface.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Config%20Files/AppConfigFile.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/PocketHomeWindow.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/ResourceManager.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/TODO.txt</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/GLib/GLibThread.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Config%20Files/ComponentConfigFile.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Config%20Files/MainConfigFile.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/IconThread.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Wifi/WifiStateManager.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Config%20Files/ComponentConfigFile.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/IconThread.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Wifi/WifiStateManager.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Wifi/LibNMInterface.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/ResourceManager.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/GLib/GLibSignalHandler.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Wifi/JsonWifiInterface.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Config%20Files/MainConfigFile.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/TODO.txt</file>
         </group>
     </open-files>
 </project-private>

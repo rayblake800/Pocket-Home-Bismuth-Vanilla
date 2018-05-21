@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
+#include "LocalizedTime.h"
 
 #if JUCE_DEBUG
 //put any includes needed for test routines here.
@@ -148,7 +149,7 @@ PowerPage::pageButtonClicked(Button *button)
 #if JUCE_DEBUG
     if (button == &testButton)
     {
-        DBG("No test routines defined.");
+        DBG("No current test code");
     }
 #endif
     ChildProcess commandProcess;

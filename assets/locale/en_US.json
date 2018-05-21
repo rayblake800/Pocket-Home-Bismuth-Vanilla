@@ -168,6 +168,23 @@
     },
     "ColourPicker" : {
 	    "set_colour" : "Set Color"
+    },
+    "LocalizedTime" : {
+	    "never" : "never",
+            "now" : "now",
+            "moments_ago" : "moments ago",
+            "seconds_pre" : "",
+            "minutes_pre" : "",
+            "hours_pre" : "",
+            "days_pre" : "",
+            "weeks_pre" : "",
+            "years_pre" : "",
+            "seconds_post" : " seconds ago",
+            "minutes_post" : " minutes ago",
+            "hours_post" : " hours ago",
+            "days_post" : " days ago",
+            "weeks_post" : " weeks ago",
+            "years_post" : " years ago"
     }
 
-    }
+}

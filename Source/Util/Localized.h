@@ -5,8 +5,7 @@
 /**
  * @file Localized.h
  *
- * @brief Manages a set of LocalizedTextConsumer objects, which load all text
- *        displayed to the user.
+ * @brief Loads localized display text.
  * 
  *  Displayed text is loaded from a locale/<localeName.json> file in the asset 
  *  folder.

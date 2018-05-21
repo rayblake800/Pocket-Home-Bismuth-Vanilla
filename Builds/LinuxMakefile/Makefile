@@ -164,6 +164,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/BatteryMonitor_e04a8815.o \
   $(JUCE_OBJDIR)/Display_ae2c5c84.o \
   $(JUCE_OBJDIR)/I2CBus_c2ea13ae.o \
+  $(JUCE_OBJDIR)/LocalizedTime_cb579984.o \
   $(JUCE_OBJDIR)/TempTimer_170bcb6d.o \
   $(JUCE_OBJDIR)/Utils_94161fcd.o \
   $(JUCE_OBJDIR)/WindowFocus_936f2124.o \
@@ -668,6 +669,11 @@ $(JUCE_OBJDIR)/Display_ae2c5c84.o: ../../Source/Hardware/Display.cpp
 $(JUCE_OBJDIR)/I2CBus_c2ea13ae.o: ../../Source/Hardware/I2CBus.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling I2CBus.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/LocalizedTime_cb579984.o: ../../Source/Util/LocalizedTime.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling LocalizedTime.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/TempTimer_170bcb6d.o: ../../Source/Util/TempTimer.cpp

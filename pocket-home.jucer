@@ -399,6 +399,9 @@
         <FILE id="b2jNEM" name="I2CBus.h" compile="0" resource="0" file="Source/Hardware/I2CBus.h"/>
       </GROUP>
       <GROUP id="{3911B28B-4F73-61C8-49FD-75C1B19EC83E}" name="Util">
+        <FILE id="aeBK6f" name="LocalizedTime.cpp" compile="1" resource="0"
+              file="Source/Util/LocalizedTime.cpp"/>
+        <FILE id="o6D28t" name="LocalizedTime.h" compile="0" resource="0" file="Source/Util/LocalizedTime.h"/>
         <FILE id="VTewwc" name="TempTimer.cpp" compile="1" resource="0" file="Source/Util/TempTimer.cpp"/>
         <FILE id="idqyCx" name="TempTimer.h" compile="0" resource="0" file="Source/Util/TempTimer.h"/>
         <FILE id="Ury6Cc" name="Utils.cpp" compile="1" resource="0" file="Source/Util/Utils.cpp"/>

@@ -128,7 +128,7 @@ namespace GVariantConverter
         return array;
     }
 
-    template<> guint64 getValue(GVariant* variant)
+    template<> uint64 getValue(GVariant* variant)
     {
          if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_UINT64))
         {

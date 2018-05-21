@@ -109,6 +109,7 @@
 		9D51B278A30698DF3EA19B7E = {isa = PBXBuildFile; fileRef = 36D43AF5E05B42C8B5F85DC8; };
 		0432DAFA4564AC8C76C5D3CA = {isa = PBXBuildFile; fileRef = 6519D4800DAC6619BC560289; };
 		A8D2D4BBDB554A0C823D9483 = {isa = PBXBuildFile; fileRef = F758B2C099DA5225FC9BB454; };
+		F112E613E75B3C3F53A850ED = {isa = PBXBuildFile; fileRef = F18672AC338A67FA634DC2CE; };
 		E3F1D0910870ABED557C303A = {isa = PBXBuildFile; fileRef = DEEB7CA214AC81F3883BE35C; };
 		D40938493DBD419F5D2892CB = {isa = PBXBuildFile; fileRef = 209C74FC6664A1A2358F7FE1; };
 		3111794276DA9CB54CDF48EF = {isa = PBXBuildFile; fileRef = 201B4889632122AEF45DBFF2; };
@@ -210,6 +211,7 @@
 		6D2FE986B52FDE25D45161C2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiIcon.h; path = "../../Source/Components/Pages/Home Page/Widgets/WifiIcon.h"; sourceTree = "SOURCE_ROOT"; };
 		6D6C24217AA339D3A3F43101 = {isa = PBXFileReference; lastKnownFileType = file; name = "juce_core"; path = "../../deps/JUCE/modules/juce_core"; sourceTree = "SOURCE_ROOT"; };
 		6E7279BB5B08F4915D165DC8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RelativeLayoutManager.h; path = ../../Source/Components/RelativeLayoutManager.h; sourceTree = "SOURCE_ROOT"; };
+		700A47AE9DE4F1A6BF7D3438 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LocalizedTime.h; path = ../../Source/Util/LocalizedTime.h; sourceTree = "SOURCE_ROOT"; };
 		7035C11BC5EAB1E71C8507CF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FelPage.h; path = "../../Source/Components/Pages/Power Page/FelPage.h"; sourceTree = "SOURCE_ROOT"; };
 		70821AA3FFF3F16D181E7613 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigurableComponent.h; path = ../../Source/Components/Configurable/ConfigurableComponent.h; sourceTree = "SOURCE_ROOT"; };
 		70BE9E54871BBE196842E167 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Audio.h; path = ../../Source/Hardware/Audio.h; sourceTree = "SOURCE_ROOT"; };
@@ -342,6 +344,7 @@
 		EF0777B21B337F6A85095494 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ListEditor.h; path = ../../Source/Components/Widgets/ListEditor.h; sourceTree = "SOURCE_ROOT"; };
 		EF57F8D59B0C326941BD663E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_data_structures.mm"; path = "../../JuceLibraryCode/include_juce_data_structures.mm"; sourceTree = "SOURCE_ROOT"; };
 		F1352089ACD0E52AE626B817 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HomeSettingsPage.h; path = "../../Source/Components/Pages/Home Settings Page/HomeSettingsPage.h"; sourceTree = "SOURCE_ROOT"; };
+		F18672AC338A67FA634DC2CE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LocalizedTime.cpp; path = ../../Source/Util/LocalizedTime.cpp; sourceTree = "SOURCE_ROOT"; };
 		F2F496FAF9C420819210AB79 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RelativeLayoutManager.cpp; path = ../../Source/Components/RelativeLayoutManager.cpp; sourceTree = "SOURCE_ROOT"; };
 		F38B3B9D4952E5831DEFF7BE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AssetFiles.cpp; path = "../../Source/Shared Resources/AssetFiles.cpp"; sourceTree = "SOURCE_ROOT"; };
 		F3B41E0F996958EA3F61CCD3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentEditorPage.cpp; path = "../../Source/Components/Pages/UI Page/ComponentEditorPage.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -607,6 +610,8 @@
 					F758B2C099DA5225FC9BB454,
 					69EF9AE7DD1D8427E430FE98, ); name = Hardware; sourceTree = "<group>"; };
 		60553D032698E22478A3BFC0 = {isa = PBXGroup; children = (
+					F18672AC338A67FA634DC2CE,
+					700A47AE9DE4F1A6BF7D3438,
 					DEEB7CA214AC81F3883BE35C,
 					E3A456EB4A82D5986837A591,
 					209C74FC6664A1A2358F7FE1,
@@ -910,6 +915,7 @@
 					9D51B278A30698DF3EA19B7E,
 					0432DAFA4564AC8C76C5D3CA,
 					A8D2D4BBDB554A0C823D9483,
+					F112E613E75B3C3F53A850ED,
 					E3F1D0910870ABED557C303A,
 					D40938493DBD419F5D2892CB,
 					3111794276DA9CB54CDF48EF,
