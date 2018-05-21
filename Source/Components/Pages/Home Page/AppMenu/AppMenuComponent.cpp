@@ -4,7 +4,7 @@
 #include "NewDesktopAppEditor.h"
 #include "NewFolderEditor.h"
 #include "AppMenuComponent.h"
-
+#include "Utils.h"
 
 //TODO: load these from config, set on input page
 const String AppMenuComponent::openPopupMenuBinding = "CTRL + e";
@@ -525,8 +525,11 @@ void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
         removeChildComponent(openFolders.getLast());
         openFolders.removeLast();
     }
+    ScopedPointer<ScopedExecTimer> opentime = new ScopedExecTimer("opening new folder");
+
     AppMenuFolder* newFolder = createFolderObject(folderItem, buttonNameMap);
 
+    opentime = nullptr;
     openFolders.add(newFolder);
     newFolder->addMouseListener(this, false);
     newFolder->updateGridSize(maxRows, maxColumns);

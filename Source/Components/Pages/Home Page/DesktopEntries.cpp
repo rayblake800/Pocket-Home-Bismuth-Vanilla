@@ -114,7 +114,6 @@ void DesktopEntries::clearCallbacks()
 
 void DesktopEntries::run()
 {
-    ScopedExecTimer threadTimer("Desktop Entry Loading");
     const ScopedLock loadingLock(lock);
     std::atomic<bool> uiCallPending;
     uiCallPending = false;
@@ -207,7 +206,6 @@ void DesktopEntries::run()
     }
     MessageManager::callAsync([&uiCallPending, this]
     {
-    	ScopedExecTimer endTimer("Async OnFinish Callback");
         const ScopedLock loadingLock(lock);
         notifyCallback("Finished loading applications.");
         DBG("DesktopEntries::" << __func__

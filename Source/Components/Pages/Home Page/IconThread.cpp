@@ -172,7 +172,8 @@ int IconThread::IconResource::IconFileComparator::compareElements
  */
 void IconThread::IconResource::run()
 {
-    ScopedExecTimer(String("Loading ") + String(numJobsQueued()) + " Icons");
+    ScopedExecTimer timer(String("Loading ") 
+            + String(numJobsQueued()) + " Icons");
     for(IconResource::QueuedJob activeJob = getQueuedJob();
         !threadShouldExit() && activeJob.icon.isNotEmpty();
         activeJob = getQueuedJob())
@@ -206,7 +207,7 @@ void IconThread::IconResource::run()
  */
 void IconThread::IconResource::mapIcons()
 {
-    ScopedExecTimer(String("building icon map"));
+    ScopedExecTimer timer(String("building icon map"));
     //Subdirectories with these names are likely to appear, but should
     //not be searched for icons.
     const StringArray ignore = {
