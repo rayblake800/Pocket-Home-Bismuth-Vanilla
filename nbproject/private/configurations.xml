@@ -5083,6 +5083,8 @@
           <in>AppLauncher.h</in>
           <in>Localized.cpp</in>
           <in>Localized.h</in>
+          <in>LocalizedTime.cpp</in>
+          <in>LocalizedTime.h</in>
           <in>TempTimer.cpp</in>
           <in>TempTimer.h</in>
           <in>Utils.cpp</in>

@@ -20,7 +20,7 @@ String LocalizedTime::approxTimePassed()
         return localeText(never);
     }
     int64 timePassed = Time::currentTimeMillis() - time.toMilliseconds();
-    if(timePassed <= 0)
+    if(timePassed < 1000)
     {
         return localeText(now);
     }

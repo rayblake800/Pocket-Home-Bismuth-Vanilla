@@ -187,6 +187,8 @@ private:
     
     WifiAccessPoint lastConnected;
 
+    ScalingLabel frequencyLabel;
+    ScalingLabel bitrateLabel;
     //Displays the last connection time of access points with saved connections.
     ScalingLabel lastConnectionLabel;
     //Used for entering a password for a secured access point.
@@ -209,6 +211,9 @@ private:
     static const constexpr char * invalid_key_format = "invalid_key_format";
     static const constexpr char * connection_failed = "connection_failed";
     static const constexpr char * lost_ap = "lost_ap";
+    static const constexpr char * frequency = "frequency";
+    static const constexpr char * max_bitrate = "max_bitrate";
+    static const constexpr char * kb_per_sec = "kb_per_sec";
     static const constexpr char * last_connected = "last_connected";
     
     static const constexpr char * connected_ap = "connected_ap";

@@ -193,6 +193,18 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
         {2,
             {
                 {nullptr, 1},
+                {&frequencyLabel, 2},
+                {nullptr, 1}
+            }},
+        {2,
+            {
+                {nullptr, 1},
+                {&bitrateLabel, 2},
+                {nullptr, 1}
+            }},
+        {2,
+            {
+                {nullptr, 1},
                 {accessPoint.getRequiresAuth() ? &passwordLabel : nullptr, 2},
                 {accessPoint.getRequiresAuth() ? &passwordEditor : nullptr, 4},
                 {nullptr, 1}
@@ -238,6 +250,12 @@ void WifiSettingsPage::updateConnectionControls()
     bool hideConnectionButton = false;
     String errorMessage = "";
     WifiStateManager wifiManager;
+    frequencyLabel.setText(localeText(frequency) 
+            + String(selectedAP.getFrequency()),
+            NotificationType::dontSendNotification);
+    bitrateLabel.setText(localeText(max_bitrate) 
+            + String(selectedAP.getMaxBitrate()) + localeText(kb_per_sec),
+            NotificationType::dontSendNotification);
     if(selectedAP.getSavedConnectionPath().isNotEmpty())
     {
         LocalizedTime connTime(wifiManager.lastConnectionTime(selectedAP));

@@ -269,6 +269,10 @@ Time WifiStateManager::lastConnectionTime(const WifiAccessPoint& accessPoint)
     {
         return Time();
     }
+    if(getAPState(accessPoint) == connectedAP)
+    {
+        return Time::getCurrentTime();
+    }
     const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
