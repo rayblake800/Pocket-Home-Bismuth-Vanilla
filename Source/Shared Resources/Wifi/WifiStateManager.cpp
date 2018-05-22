@@ -258,6 +258,22 @@ WifiStateManager::AccessPointState WifiStateManager::getAPState
             = static_cast<NetworkInterface*> (sharedResource.get());
     return wifiResource->getAPState(accessPoint);
 }
+     
+/*
+ * Finds the last time a connection was active using a specific access
+ * point.
+ */
+Time WifiStateManager::lastConnectionTime(const WifiAccessPoint& accessPoint)
+{
+    if(accessPoint.isNull())
+    {
+        return Time();
+    }
+    const ScopedReadLock lock(stateLock);
+    NetworkInterface* wifiResource
+            = static_cast<NetworkInterface*> (sharedResource.get());
+    return wifiResource->lastConnectionTime(accessPoint);
+}
 
 WifiStateManager::NetworkInterface::NetworkInterface(ReadWriteLock& wifiLock)
 : wifiLock(wifiLock) { }

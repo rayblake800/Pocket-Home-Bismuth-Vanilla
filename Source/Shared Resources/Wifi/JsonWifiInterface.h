@@ -105,6 +105,20 @@ protected:
      */
     WifiStateManager::AccessPointState getAPState
     (const WifiAccessPoint& accessPoint) override;
+      
+    /**
+     * Finds the last time a connection was active using a specific access
+     * point.
+     * 
+     * @param accessPoint  A wifi access point object.
+     * 
+     * @return  Time(), as saved connections are not currently simulated by this
+     *          test class.
+     */
+    Time lastConnectionTime(const WifiAccessPoint& accessPoint) override
+    {
+        return Time();
+    }
 
 private:
     //Simulated wifi state variables.

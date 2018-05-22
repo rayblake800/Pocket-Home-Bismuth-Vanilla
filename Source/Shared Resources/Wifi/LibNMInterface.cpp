@@ -231,6 +231,26 @@ WifiStateManager::AccessPointState LibNMInterface::getAPState
     }
     return WifiStateManager::missingAP;
 }     
+    
+/*
+ * Finds the last time a connection was active using a specific access
+ * point.
+ */
+Time LibNMInterface::lastConnectionTime(const WifiAccessPoint& accessPoint)
+{
+    Time connectionTime;
+    Array<SavedConnection> apConnections = savedConnections
+            .findConnectionsForAP(accessPoint.getNMAccessPoint());
+    for(SavedConnection& con : apConnections)
+    {
+        Time lastConnected = con.lastConnectionTime();
+        if(lastConnected.toMilliseconds() > connectionTime.toMilliseconds())
+        {
+            connectionTime = lastConnected;
+        }
+    }
+    return connectionTime;
+}
 
 /*
  * Finds and sets active and saved connection paths for a wifi access point.

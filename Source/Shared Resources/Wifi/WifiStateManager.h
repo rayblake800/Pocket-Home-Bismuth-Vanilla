@@ -226,6 +226,18 @@ public:
      * @return  the access point's current state. 
      */
     AccessPointState getAPState(const WifiAccessPoint& accessPoint);
+        
+    /**
+     * Finds the last time a connection was active using a specific access
+     * point.
+     * 
+     * @param accessPoint  A wifi access point object.
+     * 
+     * @return  The last time a connection compatible with this access point
+     *          was active, or the Unix epoch time if no compatible
+     *          compatible connection has a saved timestamp.
+     */
+    Time lastConnectionTime(const WifiAccessPoint& accessPoint);
 
     class NetworkInterface : public ResourceManager::SharedResource, 
     public Timer
@@ -353,6 +365,19 @@ public:
          * @return  the access point's current state. 
          */
         virtual AccessPointState getAPState
+        (const WifiAccessPoint& accessPoint) = 0;
+        
+        /**
+         * Finds the last time a connection was active using a specific access
+         * point.
+         * 
+         * @param accessPoint  A wifi access point object.
+         * 
+         * @return  The last time a connection compatible with this access point
+         *          was active, or the Unix epoch time if no compatible
+         *          compatible connection has a saved timestamp.
+         */
+        virtual Time lastConnectionTime
         (const WifiAccessPoint& accessPoint) = 0;
 
         //Milliseconds to wait before assuming that enabling or

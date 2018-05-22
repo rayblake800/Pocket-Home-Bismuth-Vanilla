@@ -69,7 +69,7 @@ NMPPConnection SavedConnection::getNMConnection() const
  */
 Time SavedConnection::lastConnectionTime()
 { 
-    Time lastTime(0);
+    Time lastTime;
     if(!isNull())
     {
         GVariant* timestamp = getSettingProp(NM_SETTING_CONNECTION_SETTING_NAME,

@@ -61,7 +61,8 @@
         "wrong_password": "Incorrect password",
         "invalid_key_format" : "Invalid password length",
         "connection_failed" : "Connection failed.",
-        "lost_ap" : "Access point lost."
+        "lost_ap" : "Access point lost.",
+        "last_connected" : "Last connected: " 
     },
     "WifiAPButton": {
         "connected_ap": " (Connected)"

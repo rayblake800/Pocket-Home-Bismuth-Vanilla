@@ -2,7 +2,6 @@
 #include "Utils.h"
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
-#include "LocalizedTime.h"
 
 #if JUCE_DEBUG
 //put any includes needed for test routines here.
