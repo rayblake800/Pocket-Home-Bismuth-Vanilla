@@ -65,6 +65,8 @@ hash(hash)
     this->signalStrength.store(median<unsigned int>(0, signalStrength, 100));
 #if JUCE_DEBUG
     fakeConnection = true;
+    frequency = 2437;
+    maxBitrate = 54000;
 #endif
     security = requiresAuth ? securedWPA : none;
 }

@@ -1,3 +1,4 @@
+#include <nm-utils.h>
 #include "Utils.h"
 #include "LocalizedTime.h"
 #include "WifiSettingsPage.h"
@@ -22,6 +23,12 @@ Localized("WifiSettingsPage")
     connectionButton.addChildComponent(spinner);
     connectionButton.addListener(this);
     errorLabel.setJustificationType(Justification::centred);
+    channelLabel.setText(localeText(channel),
+            NotificationType::dontSendNotification);
+    bitrateLabel.setText(localeText(max_bitrate),
+            NotificationType::dontSendNotification);
+    lastConnectionLabel.setText(localeText(last_connected),
+            NotificationType::dontSendNotification);
     WifiStateManager wifiManager;
     wifiManager.addListener(this);
     updateConnectionList();
@@ -186,20 +193,18 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
 {
     jassert(accessPoint == getSelectedConnection());
     RelativeLayoutManager::Layout controlLayout = {
-        {1,
-            {
-                {nullptr, 1}
-            }},
-        {2,
-            {
-                {nullptr, 1},
-                {&frequencyLabel, 2},
-                {nullptr, 1}
-            }},
         {2,
             {
                 {nullptr, 1},
                 {&bitrateLabel, 2},
+                {&bitrateValue, 4},
+                {nullptr, 1}
+            }},
+        {2,
+            {
+                {nullptr, 1},
+                {&channelLabel, 2},
+                {&channelValue, 4},
                 {nullptr, 1}
             }},
         {2,
@@ -222,12 +227,15 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
     };
     if (accessPoint.getSavedConnectionPath().isNotEmpty())
     {
-        auto iter = controlLayout.begin() + 1;
         RelativeLayoutManager::RowLayout row = 
         {2,
-            {{&lastConnectionLabel, 1}}
-        };
-        controlLayout.insert(iter, row);
+            {
+                {nullptr, 1},
+                {&lastConnectionLabel, 2},
+                {&lastConnectionValue, 4},
+                {nullptr, 1}
+            }};
+        controlLayout.insert(controlLayout.begin(), row);
     }
     return controlLayout;
 }
@@ -250,17 +258,16 @@ void WifiSettingsPage::updateConnectionControls()
     bool hideConnectionButton = false;
     String errorMessage = "";
     WifiStateManager wifiManager;
-    frequencyLabel.setText(localeText(frequency) 
-            + String(selectedAP.getFrequency()),
+    bitrateValue.setText(String(selectedAP.getMaxBitrate()/1000) 
+            + localeText(mb_per_sec),
             NotificationType::dontSendNotification);
-    bitrateLabel.setText(localeText(max_bitrate) 
-            + String(selectedAP.getMaxBitrate()) + localeText(kb_per_sec),
+    channelValue.setText
+            (String(nm_utils_wifi_freq_to_channel(selectedAP.getFrequency())),
             NotificationType::dontSendNotification);
     if(selectedAP.getSavedConnectionPath().isNotEmpty())
     {
         LocalizedTime connTime(wifiManager.lastConnectionTime(selectedAP));
-        lastConnectionLabel.setText(localeText(last_connected) 
-                + connTime.approxTimePassed(),
+        lastConnectionValue.setText(connTime.approxTimePassed(),
                 NotificationType::dontSendNotification);
     }
     DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"
