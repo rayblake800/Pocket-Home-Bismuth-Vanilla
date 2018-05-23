@@ -186,15 +186,8 @@ private:
     static const StringArray wifiImageFiles;
     
     WifiAccessPoint lastConnected;
-    //Displays the access point channel
-    ScalingLabel channelLabel;
-    ScalingLabel channelValue;
-    //Displays the access point maximum bitrate in Mbps
-    ScalingLabel bitrateLabel;
-    ScalingLabel bitrateValue;
     //Displays the last connection time of access points with saved connections.
     ScalingLabel lastConnectionLabel;
-    ScalingLabel lastConnectionValue;
     //Used for entering a password for a secured access point.
     ScalingLabel passwordLabel;
     TextEditor passwordEditor;
@@ -215,9 +208,6 @@ private:
     static const constexpr char * invalid_key_format = "invalid_key_format";
     static const constexpr char * connection_failed = "connection_failed";
     static const constexpr char * lost_ap = "lost_ap";
-    static const constexpr char * max_bitrate = "max_bitrate";
-    static const constexpr char * mb_per_sec = "mb_per_sec";
-    static const constexpr char * channel = "channel";
     static const constexpr char * last_connected = "last_connected";
     
     static const constexpr char * connected_ap = "connected_ap";

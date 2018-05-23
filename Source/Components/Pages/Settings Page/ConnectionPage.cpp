@@ -484,6 +484,6 @@ void ConnectionPage<ConnectionPoint>::ConnectionListItem::resized()
     Rectangle<int> bounds = getLocalBounds().reduced(borderWidth,
             borderWidth);
     listItemLayout.layoutComponents(bounds,
-            bounds.getWidth() / 20, bounds.getHeight() / 20);
+            bounds.getWidth() / 20, bounds.getHeight() / 60);
 }
 
