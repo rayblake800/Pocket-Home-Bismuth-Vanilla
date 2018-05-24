@@ -100,6 +100,12 @@ private:
          */
         void removeIcon(String iconName);
 
+        /**
+         * Compares icon directories for icon mapping, prioritizing ones 
+         * with resolution numbers closer to 128
+         */
+        static int compareElements(File first, File second);
+
     private:
         /**
          * While AppMenuButtons still need icons, this finds them in a separate 
@@ -116,16 +122,6 @@ private:
         //this value.
         const int idealIconResolution = 128;
 
-        /**
-         * Compares icon directories for icon mapping, prioritizing ones 
-         * with resolution numbers closer to 128
-         */
-        class IconFileComparator
-        {
-        public:
-            static int compareElements(File first, File second);
-        };
-
         //Queued icon requests waiting for the icon thread.
         Array<QueuedJob, CriticalSection> queuedJobs;
 
@@ -138,6 +134,25 @@ private:
 
     };
 
+    struct IconDirectory
+    {
+        int size;
+        int scale;
+        String context;
+        String type;
+        int maxSize;
+        int minSize;
+        int Threshold;
+    };
+    
+    class IconTheme
+    {
+    public:
+        IconTheme();
+    private:
+    };
+    
+    
     //Default image icons to copy into AppMenuButtons
     Image defaultIcon;
 

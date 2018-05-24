@@ -1,8 +1,6 @@
 
 -Track down and fix the occasional 10+ second delay in initializing the AppMenu.
 
--Add detailed AP info to the connections page.
-
 -Animate connection page transitions.
 
 -Find and fix missing localized text

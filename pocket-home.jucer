@@ -61,6 +61,8 @@
         <FILE id="R8ed81" name="GPPObject.h" compile="0" resource="0" file="Source/GLib/GPPObject.h"/>
       </GROUP>
       <GROUP id="{A7E7A929-6942-F1C2-FAC5-FC3AF0D2442B}" name="Shared Resources">
+        <FILE id="gPlOWC" name="IconTheme.cpp" compile="1" resource="0" file="Source/Shared Resources/IconTheme.cpp"/>
+        <FILE id="M5TO7i" name="IconTheme.h" compile="0" resource="0" file="Source/Shared Resources/IconTheme.h"/>
         <GROUP id="{85D01745-B7AD-BE3B-8D28-80F47A0AA8BA}" name="Config Files">
           <FILE id="dNgJxN" name="ConfigFile.cpp" compile="1" resource="0" file="Source/Shared Resources/Config Files/ConfigFile.cpp"/>
           <FILE id="sqDYSh" name="ConfigFile.h" compile="0" resource="0" file="Source/Shared Resources/Config Files/ConfigFile.h"/>

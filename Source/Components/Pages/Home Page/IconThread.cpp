@@ -140,7 +140,7 @@ void IconThread::IconResource::removeIcon(String iconName)
 static int iconDirValue(const File& file)
 {
     String filename = file.getFileName();
-    const String numeric = "0123456789";
+    static const String numeric = "0123456789";
     if (filename.containsAnyOf(numeric))
     {
         int value = filename.substring(filename.indexOfAnyOf(numeric))
@@ -156,7 +156,7 @@ static int iconDirValue(const File& file)
     return 0;
 }
 
-int IconThread::IconResource::IconFileComparator::compareElements
+int IconThread::IconResource::compareElements
 (File first, File second)
 {
     if (first == second)
@@ -202,6 +202,8 @@ void IconThread::IconResource::run()
     }
 }
 
+
+
 /**
  * Creates the map of all icon file paths.
  */
@@ -244,8 +246,7 @@ void IconThread::IconResource::mapIcons()
                         subDirs.add(directory);
                     }
                 }
-                IconFileComparator comp;
-                subDirs.sort(comp);
+                subDirs.sort(*this);
                 for (const File& directory : subDirs)
                 {
                     if (!searchDirs.contains(directory))

@@ -14,13 +14,12 @@
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Wifi/WifiAccessPoint.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Power%20Page/PowerPage.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/WifiSettingsPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/assets/locale/en_US.json</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/WifiSettingsPage.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/assets/locale/en_US.json</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Wifi/WifiAccessPoint.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/Localized.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/LocalizedTime.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Wifi/WifiStateManager.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/GLib/LibNM/SavedConnections.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/LocalizedTime.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Wifi/WifiStateManager.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/Wifi/LibNMInterface.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/GLib/LibNM/SavedConnection.cpp</file>

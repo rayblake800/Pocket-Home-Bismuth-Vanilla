@@ -24,6 +24,7 @@
 		D4416508933EE32773303DF4 = {isa = PBXBuildFile; fileRef = E75C7D102534749A624C00A5; };
 		092B5D9B06328B81DF1383B3 = {isa = PBXBuildFile; fileRef = 3DE12B0B1E6E9121E02A5DEC; };
 		B7AF5A735E8C649AB188629F = {isa = PBXBuildFile; fileRef = 3B2D54137C44BEEF047456E3; };
+		476558250CFFA9F852A037F9 = {isa = PBXBuildFile; fileRef = EDFB2E41EA088ED195A15C7B; };
 		5E011D1BE06EA8093EC27BF4 = {isa = PBXBuildFile; fileRef = 9B4275CC55034D8F09F08B16; };
 		7CBFEB21C11DE67B562181C3 = {isa = PBXBuildFile; fileRef = FCE789CF086443EA3D67D87A; };
 		033FB0C0B2493F12724DF17A = {isa = PBXBuildFile; fileRef = 6CC42B977B1D15C7E859694B; };
@@ -249,6 +250,7 @@
 		9912A25465A1A956D891C7CB = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ScalingLabel.h; path = ../../Source/Components/Widgets/ScalingLabel.h; sourceTree = "SOURCE_ROOT"; };
 		998DEA589C72CBF44512E4A9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LibNMInterface.h; path = "../../Source/Shared Resources/Wifi/LibNMInterface.h"; sourceTree = "SOURCE_ROOT"; };
 		9A31713BEC517A71B37737E6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NMPPAccessPoint.cpp; path = ../../Source/GLib/LibNM/NMPPAccessPoint.cpp; sourceTree = "SOURCE_ROOT"; };
+		9AF37AF283C8F97098CEA553 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IconTheme.h; path = "../../Source/Shared Resources/IconTheme.h"; sourceTree = "SOURCE_ROOT"; };
 		9B32EC50CA9C1B328AACF8FD = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WindowFocusedTimer.h; path = ../../Source/Util/WindowFocusedTimer.h; sourceTree = "SOURCE_ROOT"; };
 		9B4275CC55034D8F09F08B16 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigFile.cpp; path = "../../Source/Shared Resources/Config Files/ConfigFile.cpp"; sourceTree = "SOURCE_ROOT"; };
 		9B91362E9164EF3C9652D21F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BluetoothStatus.cpp; path = "../../Source/Shared Resources/Bluetooth/BluetoothStatus.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -338,6 +340,7 @@
 		E91522E3F323AF9E1FF44703 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiStateManager.cpp; path = "../../Source/Shared Resources/Wifi/WifiStateManager.cpp"; sourceTree = "SOURCE_ROOT"; };
 		E91C5E8DF91CA471543F0E02 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiAccessPoint.cpp; path = "../../Source/Shared Resources/Wifi/WifiAccessPoint.cpp"; sourceTree = "SOURCE_ROOT"; };
 		EDB8737E32ADFE4062B2F271 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigurableLabel.h; path = ../../Source/Components/Configurable/ConfigurableLabel.h; sourceTree = "SOURCE_ROOT"; };
+		EDFB2E41EA088ED195A15C7B = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IconTheme.cpp; path = "../../Source/Shared Resources/IconTheme.cpp"; sourceTree = "SOURCE_ROOT"; };
 		EE0860C56D0E35295F0CD347 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuPopupEditor.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Editors/AppMenuPopupEditor.cpp"; sourceTree = "SOURCE_ROOT"; };
 		EEA5E18A0CAB4FA3C57C4951 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		EF06DE8BB9E6C5B5EC0AF16C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Localized.h; path = ../../Source/Util/Localized.h; sourceTree = "SOURCE_ROOT"; };
@@ -418,6 +421,8 @@
 					A93203F32DF5C29D3E6FBFD5,
 					5E24F1A3CF4BB10B06DD6CC6, ); name = Bluetooth; sourceTree = "<group>"; };
 		9E4AA629394D622794951120 = {isa = PBXGroup; children = (
+					EDFB2E41EA088ED195A15C7B,
+					9AF37AF283C8F97098CEA553,
 					A97F6D4D0C68ACC50A214162,
 					FCAE40D7F9CB5383DE0C8EEB,
 					F42580DD8F13CBCA9F8F5F08,
@@ -831,6 +836,7 @@
 					D4416508933EE32773303DF4,
 					092B5D9B06328B81DF1383B3,
 					B7AF5A735E8C649AB188629F,
+					476558250CFFA9F852A037F9,
 					5E011D1BE06EA8093EC27BF4,
 					7CBFEB21C11DE67B562181C3,
 					033FB0C0B2493F12724DF17A,
