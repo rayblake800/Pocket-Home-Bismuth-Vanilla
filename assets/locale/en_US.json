@@ -62,9 +62,6 @@
         "invalid_key_format" : "Invalid password length",
         "connection_failed" : "Connection failed.",
         "lost_ap" : "Access point lost.",
-        "channel" : "Channel:",
-        "max_bitrate" : "Max. bitrate:",
-        "mb_per_sec" : " Mbps",
         "last_connected" : "Last connected:"
     },
     "WifiAPButton": {

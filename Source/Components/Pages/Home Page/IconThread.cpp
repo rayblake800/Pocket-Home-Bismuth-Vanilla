@@ -242,8 +242,8 @@ void IconThread::IconResource::mapIcons()
                 for (const File& directory : searchResults)
                 {
                     if (!ignore.contains(directory.getFileName(), true))
-                    {
-                        subDirs.add(directory);
+		    {
+                        subDirs.addIfNotAlreadyThere(directory);
                     }
                 }
                 subDirs.sort(*this);

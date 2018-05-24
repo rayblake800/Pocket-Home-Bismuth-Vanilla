@@ -1,4 +1,3 @@
-#include <nm-utils.h>
 #include "Utils.h"
 #include "LocalizedTime.h"
 #include "WifiSettingsPage.h"
@@ -23,12 +22,6 @@ Localized("WifiSettingsPage")
     connectionButton.addChildComponent(spinner);
     connectionButton.addListener(this);
     errorLabel.setJustificationType(Justification::centred);
-    channelLabel.setText(localeText(channel),
-            NotificationType::dontSendNotification);
-    bitrateLabel.setText(localeText(max_bitrate),
-            NotificationType::dontSendNotification);
-    lastConnectionLabel.setText(localeText(last_connected),
-            NotificationType::dontSendNotification);
     WifiStateManager wifiManager;
     wifiManager.addListener(this);
     updateConnectionList();
@@ -193,28 +186,20 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
 {
     jassert(accessPoint == getSelectedConnection());
     RelativeLayoutManager::Layout controlLayout = {
-        {2,
+	{1,
+	    {
+	        {nullptr,1}
+	    }},
+	{2,
             {
-                {nullptr, 1},
-                {&bitrateLabel, 2},
-                {&bitrateValue, 4},
-                {nullptr, 1}
+                {accessPoint.getRequiresAuth() ? &passwordLabel : nullptr, 4},
+                {accessPoint.getRequiresAuth() ? &passwordEditor : nullptr, 5}
             }},
-        {2,
-            {
-                {nullptr, 1},
-                {&channelLabel, 2},
-                {&channelValue, 4},
-                {nullptr, 1}
-            }},
-        {2,
-            {
-                {nullptr, 1},
-                {accessPoint.getRequiresAuth() ? &passwordLabel : nullptr, 2},
-                {accessPoint.getRequiresAuth() ? &passwordEditor : nullptr, 4},
-                {nullptr, 1}
-            }},
-        {2,
+        {1,
+	    {
+	        {nullptr,1}
+	    }},
+	{2,
             {
                 {nullptr, 1},
                 {&connectionButton, 1},
@@ -231,8 +216,7 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
         {2,
             {
                 {nullptr, 1},
-                {&lastConnectionLabel, 2},
-                {&lastConnectionValue, 4},
+                {&lastConnectionLabel, 4},
                 {nullptr, 1}
             }};
         controlLayout.insert(controlLayout.begin(), row);
@@ -258,16 +242,11 @@ void WifiSettingsPage::updateConnectionControls()
     bool hideConnectionButton = false;
     String errorMessage = "";
     WifiStateManager wifiManager;
-    bitrateValue.setText(String(selectedAP.getMaxBitrate()/1000) 
-            + localeText(mb_per_sec),
-            NotificationType::dontSendNotification);
-    channelValue.setText
-            (String(nm_utils_wifi_freq_to_channel(selectedAP.getFrequency())),
-            NotificationType::dontSendNotification);
     if(selectedAP.getSavedConnectionPath().isNotEmpty())
     {
         LocalizedTime connTime(wifiManager.lastConnectionTime(selectedAP));
-        lastConnectionValue.setText(connTime.approxTimePassed(),
+        lastConnectionLabel.setText(localeText(last_connected)
+		+ connTime.approxTimePassed(),
                 NotificationType::dontSendNotification);
     }
     DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"
