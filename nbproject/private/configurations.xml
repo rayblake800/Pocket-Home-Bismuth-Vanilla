@@ -5075,6 +5075,10 @@
           </df>
           <in>AssetFiles.cpp</in>
           <in>AssetFiles.h</in>
+          <in>IconCache.cpp</in>
+          <in>IconCache.h</in>
+          <in>IconTheme.cpp</in>
+          <in>IconTheme.h</in>
           <in>ResourceManager.cpp</in>
           <in>ResourceManager.h</in>
         </df>

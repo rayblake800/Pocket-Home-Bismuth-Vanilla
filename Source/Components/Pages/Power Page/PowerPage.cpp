@@ -1,5 +1,6 @@
 #include "MainConfigFile.h"
 #include "Utils.h"
+#include "IconCache.h"
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
 
@@ -148,7 +149,7 @@ PowerPage::pageButtonClicked(Button *button)
 #if JUCE_DEBUG
     if (button == &testButton)
     {
-        DBG("No current test code");
+        IconCache testCache("/usr/share/icons/hicolor/icon-theme.cache");
     }
 #endif
     ChildProcess commandProcess;

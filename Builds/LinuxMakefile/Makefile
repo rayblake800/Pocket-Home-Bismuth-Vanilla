@@ -80,6 +80,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/GLibSignalHandler_56c7123c.o \
   $(JUCE_OBJDIR)/GLibThread_5746ca5a.o \
   $(JUCE_OBJDIR)/GPPObject_f97abf7e.o \
+  $(JUCE_OBJDIR)/IconCache_30e5f62d.o \
   $(JUCE_OBJDIR)/IconTheme_52ee40f4.o \
   $(JUCE_OBJDIR)/ConfigFile_77117fb8.o \
   $(JUCE_OBJDIR)/AppConfigFile_5f9d59cf.o \
@@ -250,6 +251,11 @@ $(JUCE_OBJDIR)/GLibThread_5746ca5a.o: ../../Source/GLib/GLibThread.cpp
 $(JUCE_OBJDIR)/GPPObject_f97abf7e.o: ../../Source/GLib/GPPObject.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling GPPObject.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/IconCache_30e5f62d.o: ../../Source/Shared\ Resources/IconCache.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling IconCache.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/IconTheme_52ee40f4.o: ../../Source/Shared\ Resources/IconTheme.cpp
