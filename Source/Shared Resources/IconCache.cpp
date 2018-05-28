@@ -1,36 +1,117 @@
-#include <fstream>
-#include <arpa/inet.h>
-#include "JuceHeader.h"
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "IconCache.h"
-
 
 IconCache::IconCache(const char* cachePath)
 {
-    std::ifstream cache;
-    cache.open(cachePath, std::ios_base::binary);
-    if(cache.is_open())
+    struct stat fileStat;
+    stat(cachePath, &fileStat);
+    fileLen = fileStat.st_size;
+    if(fileLen <= 0)
     {
-        DBG("Opened cache file" << cachePath);
-        uint16 majorVersion, minorVersion;
-        uint32 hashOffset, dirListOffset;
-        cache >> majorVersion;
-        cache >> minorVersion;
-        cache >> hashOffset;
-        cache >> dirListOffset;
-        DBG("Version: " << String(majorVersion) << "." << String(minorVersion));
-        DBG("Hash offset:" << String(hashOffset));
-        DBG("Directory list offset:"  << String(dirListOffset));
-        cache.seekg(hashOffset);
-        uint32 hashBuckets;
-        cache >> hashBuckets;
-        DBG("Hash bucket count: " << String(hashBuckets));
-        cache.seekg(dirListOffset);
-        uint32 numDirs;
-        cache >> numDirs;
-        DBG("Sub-directory count: " << String(numDirs));
-        
-        cache.close();
+        DBG("IconCache::IconCache: Failed to find cache file " << cachePath);
+	return;
     }
+    fd = open(cachePath, O_RDONLY, 0);
+    if(fd <= 0)
+    {
+        DBG("IconCache::IconCache: Failed to open cache file " << cachePath);
+	return;
+    }
+    fileMap = mmap(nullptr, fileLen, PROT_READ, MAP_PRIVATE | MAP_POPULATE,
+            fd, 0);
+    if(fileMap == MAP_FAILED)
+    {
+        DBG("IconCache::IconCache: Failed to map cache file " << cachePath);
+	return;
+    }
+    DBG("IconCache::IconCache: mapped cache file" << cachePath << ", size " 
+            << String(fileLen));
+    bigEndian == (htonl(47) == 47);
+    uint32 hashOffset = read<uint32>(4);
+    uint32 dirListOffset = read<uint32>(8);
+        
+    DBG("Reading dir list from offset " << String(dirListOffset));
+    uint32 numDirs = read<uint32>(dirListOffset);
+    dirListOffset += 4; 
+    DBG("Finding " << String(numDirs) << " directories");
+    for(int i = 0; i < numDirs; i++)
+    {
+        uint32 offset = read<uint32>(dirListOffset + i * 4);
+	directories.add(readString(offset));
+	DBG("Directory " << i << ":" << directories[i]);
+    }
+
+    hashBuckets = read<uint32>(hashOffset);
+    DBG("Hash bucket count: " << String(hashBuckets));       
+    hashOffset+=4;
+    for(int i = 0; i < hashBuckets; i++)
+    {
+        hashOffsets.add(read<uint32>(hashOffset + i * 4));
+    }
+
+    for(int i = 0; i < hashBuckets; i++)
+    {
+        DBG("Bucket " << i << ":");
+	uint32 first = read<uint32>(hashOffsets[i]);
+	for(uint32 offset = first;
+	        offset > 0 && offset < fileLen;
+		offset = read<uint32>(offset))
+	{
+	    String name = readString(read<uint32>(offset + 4));
+	    DBG("\t" << String(hashValue(name.toRawUTF8())) << ": "
+			    << name);
+	}
+    }
+}
+
+IconCache::~IconCache()
+{
+    if(fileMap != MAP_FAILED)
+    {
+        int rc = munmap(fileMap, fileLen);
+	jassert(rc == 0);
+    }
+    if(fd > 0)
+    {
+        close(fd);
+    }
+}
+
+String IconCache::readString(uint32 offset)
+{
+    if(fileMap == MAP_FAILED || offset >= fileLen)
+    {
+        jassertfalse;
+	return String();
+    }
+    int length = 0;
+    while(read<char>((uint32) offset + length) != '\0')
+    {
+        length++;
+	if((length + offset) >= fileLen)
+	{
+	    jassertfalse;
+	    return String();
+	}
+    } 
+    return String((char *) fileMap + offset);
+}
+
+uint32 IconCache::hashValue(const char* icon)
+{
+    if(icon == nullptr)
+    {
+	jassertfalse;
+        return 0;
+    }
+    uint32 val = (int) * icon;
+    for(const char* ch = icon + 1; *ch != '\0'; ch++)
+    {
+        val = (val << 5) - val + *ch;
+    }
+    return val % hashBuckets;
 }
 
 /*
