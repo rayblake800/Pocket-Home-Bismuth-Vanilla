@@ -10,12 +10,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/IconThread.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Power%20Page/PowerPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Main.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/IconTheme.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/IconCache.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/IconThread.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/IconTheme.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/IconCache.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Shared%20Resources/IconTheme.h</file>
         </group>
     </open-files>

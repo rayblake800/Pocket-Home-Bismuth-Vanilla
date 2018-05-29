@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include "IconCache.h"
 #include "JuceHeader.h"
 
 /**
@@ -9,17 +10,26 @@
  * 
  * This stores theme data, tracks all theme icon directories, and finds icon
  * paths within the icon theme.
+ * 
+ * For more information on icon theme specifications, see 
+ * https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html
+ * https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
  */
 
 class IconTheme
 {
 public:
     /**
-     * @param themeFile  The index.theme file defining an icon theme.
+     * @param themeFile  The root directory of an icon theme.
      */
-    IconTheme(File themeFile);
+    IconTheme(File themeDir);
     
     virtual ~IconTheme() { }
+    
+    /**
+     * Checks if this object represents a valid icon theme.
+     */
+    bool isValidTheme();
     
     /**
      * Defines the purpose of an icon directory.
@@ -121,7 +131,11 @@ public:
      */
     String getExampleIcon();
     
+    bool disableCache() { useCache = false; };
+    
 private:
+    bool useCache = true;
+    
     /**
      * Describes a directory of icon files within the theme
      */
@@ -140,42 +154,86 @@ private:
     };
     
     /**
-     * Checks if an icon directory is suitable for a given size.
-     * 
-     * @param subdir  An icon directory defined by this theme.
-     * 
-     * @param size    The intended icon size.
-     * 
-     * @param scale   The intended icon scale.
-     * 
-     * @return  true iff this directory is compatible with icons of the given
-     *          size and scale.
+     * Sorts icon directories by distance from a target size and scale, from
+     * closet to farthest.
      */
-    bool directoryMatchesSize(IconDirectory subdir, int size, int scale);
+    class DirectoryComparator
+    {
+    public:
+        /**
+         * @param size   Ideal icon height and width in pixels.
+         * 
+         * @param scale  The multiplier the icon image will be scaled by when it
+         *               is displayed.
+         */
+        DirectoryComparator(int size, int scale) :
+        size(size), scale(scale) { }
         
-    /**
-     * Finds the distance between an icon directory's icon size and a 
-     * given icon size and scale.
-     * 
-     * @param subdir  An icon directory defined by this theme.
-     * 
-     * @param size    The intended icon size.
-     * 
-     * @param scale   The intended icon scale.
-     * 
-     * @return  true iff this directory is compatible with icons of the given
-     *          size and scale.
-     */
-    int directorySizeDistance(IconDirectory subdir, int size, int scale);
+        virtual ~DirectoryComparator() { }
+        
+        /**
+         * Compares two icon directories by their distance from a target size 
+         * and scale.
+         * 
+         * @param first  The first icon directory.
+         * 
+         * @param second The second icon directory.
+         * 
+         * @return a value of < 0 if first is closer than second,
+         *         a value of > 0 if second is closer than first,
+         *         or 0 if both directories are equally close to the desired
+         *         size and scale.
+         */
+        int compareElements(IconDirectory first, IconDirectory second);
     
+    private:
+        
+        /**
+         * Checks if an icon directory is suitable for a given size.
+         * 
+         * @param subdir  An icon directory defined by this theme.
+         * 
+         * @return  true iff this directory is compatible with icons of the 
+         *          given size and scale.
+         */
+        bool directoryMatchesSize(const IconDirectory& subdir);
+
+        /**
+         * Finds the distance between an icon directory's icon size and a 
+         * given icon size and scale.
+         * 
+         * @param subdir  An icon directory defined by this theme.
+         * 
+         * @return  true iff this directory is compatible with icons of the 
+         *          given size and scale.
+         */
+        int directorySizeDistance(const IconDirectory& subdir);
+        
+        int size = -1;
+        int scale = 1;
+    };
+    
+    //The path to the theme's base directory
     String path;
+    //The name of the icon theme
     String name;
+    //A brief description of the icon theme
     String comment;
+    //The list of backup themes to search for icons missing in this theme
     StringArray inheritedThemes;
+    //Indicates if this theme should be shown to the user in theme lists
     bool hidden = false;
+    //The name of an icon to use as an example of this theme's icons
     String example;
+    //Accesses the theme's cache file, if one exists
+    IconCache cacheFile;
     
-    Array<IconDirectory> directories;
+    //filenames used by index and cache files
+    static const constexpr char* indexFileName = "/index.theme";
+    static const constexpr char* cacheFileName = "/icon-theme.cache";
+    
+    //All icon sub-directories in the theme, indexed by relative path name
+    std::map<String, IconDirectory> directories;
     
     
 };

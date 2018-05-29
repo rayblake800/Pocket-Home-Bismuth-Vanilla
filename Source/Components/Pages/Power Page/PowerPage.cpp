@@ -1,6 +1,6 @@
 #include "MainConfigFile.h"
 #include "Utils.h"
-#include "IconCache.h"
+#include "IconTheme.h"
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
 
@@ -149,7 +149,50 @@ PowerPage::pageButtonClicked(Button *button)
 #if JUCE_DEBUG
     if (button == &testButton)
     {
-        IconCache testCache("/usr/share/icons/hicolor/icon-theme.cache");
+        File iconDir("/usr/share/icons/hicolor");
+        IconTheme testTheme(iconDir);
+        Array<File> iconFiles;
+        if(iconDir.isDirectory())
+        {
+            DirectoryIterator iter(iconDir, true,
+                    "*.png;*.xpm;*.svg");
+            while(iter.next())
+            {
+                iconFiles.add(iter.getFile());
+            }
+        }
+        
+        
+        std::function<void()> searchTest = [&iconFiles, &testTheme]()
+        {
+            int filesFound = 0;
+            uint32 maxSearchTime = 0;
+            uint32 avgSearchTime = 0;
+            for(File& iconFile: iconFiles)
+            {
+                String fileName = iconFile.getFileNameWithoutExtension();
+                uint32 start = Time::getMillisecondCounter();
+                String result = testTheme.lookupIcon(fileName, 64);
+                uint32 duration = Time::getMillisecondCounter() - start;
+                avgSearchTime += duration;
+                if(result.isNotEmpty())
+                {
+                    filesFound++;
+                }
+                if(duration > maxSearchTime)
+                {
+                    maxSearchTime = duration;
+                }
+            }
+            avgSearchTime /= iconFiles.size();
+            DBG("Found " << filesFound << "/" << iconFiles.size() << " files, "
+                    << "avg. search time: " << String(avgSearchTime) << " ms, "
+                    << "max search time: "  << String(maxSearchTime) << "ms");
+        };
+        searchTest();
+        DBG("Testing with cache files disabled:");
+        testTheme.disableCache();
+        searchTest();
     }
 #endif
     ChildProcess commandProcess;
