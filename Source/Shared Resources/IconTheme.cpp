@@ -24,66 +24,75 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
 
     static const String themeSectionName = "Icon Theme";
     String sectionName;
-    IconDirectory currentDir;
 
     //Map each data key string to a function that saves the key's value
-    static const std::map<String,
-            std::function<void(IconTheme*, String&, IconDirectory&) >> assnFns ={
+    static const std::map
+            <String, std::function<void(IconTheme*, String&, String&) >>
+            assnFns = {
         {"Name",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
                 self->name = val;
             }},
+        {"Directories",
+         [](IconTheme* self, String& val, String& sectionName)
+            {
+                StringArray dirNames = StringArray::fromTokens(val, ",", "");
+                for (const String& dir : dirNames)
+                {
+                    self->directories[dir].path = dir;
+                }
+            }},
         {"Comment",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
                 self->comment = val;
             }},
         {"Inherits",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
                 self->inheritedThemes
                         = StringArray::fromTokens(val, ",", "");
             }},
         {"Hidden",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
                 self->hidden = (val == "true");
             }},
         {"Example",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
                 self->example = val;
             }},
         {"Size",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
-                dir.size = val.getIntValue();
+                self->directories[sectionName].size = val.getIntValue();
             }},
         {"Scale",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
-                dir.scale = val.getIntValue();
+                self->directories[sectionName].scale = val.getIntValue();
             }},
         {"MaxSize",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
-                dir.maxSize = val.getIntValue();
+                self->directories[sectionName].maxSize = val.getIntValue();
             }},
         {"MinSize",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
-                dir.minSize = val.getIntValue();
+                self->directories[sectionName].minSize = val.getIntValue();
             }},
         {"Threshold",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
-                dir.threshold = val.getIntValue();
+                self->directories[sectionName].threshold = val.getIntValue();
             }},
         {"Context",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
-                static const std::map<String, Context> contexts ={
+                static const std::map<String, Context> contexts = {
                     {"Actions", actionsCtx},
                     {"Animations", animationsCtx},
                     {"Applications", applicationsCtx},
@@ -99,13 +108,14 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
                 auto contextIter = contexts.find(val);
                 if (contextIter != contexts.end())
                 {
-                    dir.context = contextIter->second;
+                    self->directories[sectionName].context 
+                            = contextIter->second;
                 }
             }},
         {"Type",
-         [](IconTheme* self, String& val, IconDirectory & dir)
+         [](IconTheme* self, String& val, String& sectionName)
             {
-                static const std::map<String, SizeType> types ={
+                static const std::map<String, SizeType> types = {
                     {"Fixed", fixedType},
                     {"Scalable", scalableType},
                     {"Threshold", thresholdType}
@@ -113,7 +123,7 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
                 auto typeIter = types.find(val);
                 if (typeIter != types.end())
                 {
-                    dir.type = typeIter->second;
+                    self->directories[sectionName].type = typeIter->second;
                 }
             }}
     };
@@ -122,12 +132,8 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
     {
         if (line.startsWithChar('[') && line.endsWithChar(']'))
         {
-            if (sectionName.isNotEmpty() && sectionName != themeSectionName)
-            {
-                currentDir.path = sectionName;
-                directories[sectionName] = currentDir;
-                currentDir = IconDirectory();
-            }
+            jassert(sectionName.isEmpty() || sectionName == "Icon Theme"
+                    || directories[sectionName].path == sectionName);
             sectionName = line.substring(1, line.length() - 1);
         }
         else if (line.isNotEmpty())
@@ -142,15 +148,10 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
             auto keyActionIter = assnFns.find(key);
             if (keyActionIter != assnFns.end())
             {
-                String val = line.substring(divider);
-                keyActionIter->second(this, val, currentDir);
+                String val = line.substring(divider + 1);
+                keyActionIter->second(this, val, sectionName);
             }
         }
-    }
-    if(sectionName.isNotEmpty())
-    {
-        currentDir.path = sectionName;
-        directories[sectionName] = currentDir;
     }
 }
 
@@ -168,15 +169,15 @@ bool IconTheme::isValidTheme()
  */
 String IconTheme::lookupIcon(String icon, int size, Context context, int scale)
 {
-    if(!isValidTheme())
+    if (!isValidTheme())
     {
         return String();
     }
-    
+
     Array<IconDirectory> searchDirs;
 
     std::map<String, String> cacheMatches;
-    if(useCache)
+    if (useCache)
     {
         cacheMatches = cacheFile.lookupIcon(icon);
     }
@@ -199,10 +200,10 @@ String IconTheme::lookupIcon(String icon, int size, Context context, int scale)
         {
             if (context == unknownCtx || context == dirIter->second.context)
             {
-                if(dirIter->second.path.isEmpty())
-                {
-                    DBG(dirIter->first << " missing path ");
-                }
+//                if (dirIter->second.path.isEmpty())
+//                {
+//                    DBG(dirIter->first << " missing path ");
+//                }
                 searchDirs.add(dirIter->second);
             }
         }
@@ -217,7 +218,7 @@ String IconTheme::lookupIcon(String icon, int size, Context context, int scale)
         try
         {
             String extension = cacheMatches.at(dir.path);
-            if(File(filePath + extension).existsAsFile())
+            if (File(filePath + extension).existsAsFile())
             {
                 return filePath + extension;
             }

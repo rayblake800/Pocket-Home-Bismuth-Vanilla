@@ -179,6 +179,10 @@ PowerPage::pageButtonClicked(Button *button)
                 {
                     filesFound++;
                 }
+                else
+                {
+                    DBG("Failed to find " << iconFile.getFullPathName());
+                }
                 if(duration > maxSearchTime)
                 {
                     maxSearchTime = duration;
