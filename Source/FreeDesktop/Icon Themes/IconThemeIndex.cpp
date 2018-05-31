@@ -27,15 +27,15 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
 
     //Map each data key string to a function that saves the key's value
     static const std::map
-            <String, std::function<void(IconTheme*, String&, String&) >>
+            <String, std::function<void(IconThemeIndex*, String&, String&) >>
             assnFns = {
         {"Name",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 self->name = val;
             }},
         {"Directories",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 DBG("Adding " << val);
                 StringArray dirNames = StringArray::fromTokens(val, ",", "");
@@ -45,53 +45,53 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
                 }
             }},
         {"Comment",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 self->comment = val;
             }},
         {"Inherits",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 self->inheritedThemes
                         = StringArray::fromTokens(val, ",", "");
             }},
         {"Hidden",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 self->hidden = (val == "true");
             }},
         {"Example",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 self->example = val;
             }},
         {"Size",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 self->directories[sectionName].size = val.getIntValue();
             }},
         {"Scale",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 self->directories[sectionName].scale = val.getIntValue();
             }},
         {"MaxSize",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 self->directories[sectionName].maxSize = val.getIntValue();
             }},
         {"MinSize",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 self->directories[sectionName].minSize = val.getIntValue();
             }},
         {"Threshold",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 self->directories[sectionName].threshold = val.getIntValue();
             }},
         {"Context",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 static const std::map<String, Context> contexts = {
                     {"Actions", actionsCtx},
@@ -114,7 +114,7 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
                 }
             }},
         {"Type",
-         [](IconTheme* self, String& val, String& sectionName)
+         [](IconThemeIndex* self, String& val, String& sectionName)
             {
                 static const std::map<String, SizeType> types = {
                     {"Fixed", fixedType},
