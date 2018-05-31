@@ -6,18 +6,18 @@
 #include "DesktopEntry.h"
 
 /** 
- * @file   DesktopEntries.h
+ * @file   DesktopEntryLoader.h
  *
  * Finds all .Desktop and .Directory files in the system, and stores and sorts 
  * them as DesktopEntry objects.   Desktop entry file indexing occurs within
  * its own thread.
  */
 
-class DesktopEntries : private Thread {
+class DesktopEntryLoader : private Thread {
 public:
-    DesktopEntries();
+    DesktopEntryLoader();
 
-    virtual ~DesktopEntries();
+    virtual ~DesktopEntryLoader();
 
     /**
      * @return the number of stored DesktopEntry objects
@@ -91,7 +91,7 @@ private:
     //Callback to run when desktop entries finish loading.
     std::function<void() > onFinish;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DesktopEntries)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DesktopEntryLoader)
 
 };
 

@@ -3,7 +3,7 @@
 
 FolderMenuItem::FolderMenuItem(
         const AppConfigFile::AppFolder& appFolder,
-        DesktopEntries& desktopEntries) :
+        DesktopEntryLoader& desktopEntries) :
 Localized("FolderMenuItem"),
 appFolder(appFolder),
 desktopEntries(desktopEntries) { }

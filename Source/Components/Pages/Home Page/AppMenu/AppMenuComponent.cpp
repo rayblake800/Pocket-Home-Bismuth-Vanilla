@@ -9,7 +9,7 @@
 //TODO: load these from config, set on input page
 const String AppMenuComponent::openPopupMenuBinding = "CTRL + e";
 const String AppMenuComponent::reloadMenuBinding = "TAB";
-DesktopEntries AppMenuComponent::desktopEntries;
+DesktopEntryLoader AppMenuComponent::desktopEntries;
 
 AppMenuComponent::AppMenuComponent(
         String componentKey,

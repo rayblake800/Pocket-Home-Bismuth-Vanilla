@@ -3,11 +3,11 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include "Utils.h"
-#include "DesktopEntries.h"
+#include "DesktopEntryLoader.h"
 
-DesktopEntries::DesktopEntries() : Thread("DesktopEntries") { }
+DesktopEntryLoader::DesktopEntryLoader() : Thread("DesktopEntryLoader") { }
 
-DesktopEntries::~DesktopEntries()
+DesktopEntryLoader::~DesktopEntryLoader()
 {
     if (isThreadRunning())
     {
@@ -18,7 +18,7 @@ DesktopEntries::~DesktopEntries()
 /**
  * return the number of stored DesktopEntry objects 
  */
-int DesktopEntries::size()
+int DesktopEntryLoader::size()
 {
 
     const ScopedLock readLock(lock);
@@ -28,7 +28,7 @@ int DesktopEntries::size()
 /**
  * Get a list of all DesktopEntry objects within several categories
  */
-std::set<DesktopEntry> DesktopEntries::getCategoryListEntries
+std::set<DesktopEntry> DesktopEntryLoader::getCategoryListEntries
 (StringArray categoryList)
 {
 
@@ -46,9 +46,9 @@ std::set<DesktopEntry> DesktopEntries::getCategoryListEntries
 }
 
 /**
- * Get all DesktopEntries with a given category name
+ * Get all DesktopEntryLoader with a given category name
  */
-std::set<DesktopEntry> DesktopEntries::getCategoryEntries(String category)
+std::set<DesktopEntry> DesktopEntryLoader::getCategoryEntries(String category)
 {
 
     const ScopedLock readLock(lock);
@@ -58,7 +58,7 @@ std::set<DesktopEntry> DesktopEntries::getCategoryEntries(String category)
 /**
  * Get the list of all categories found in all desktop entries. 
  */
-std::set<String> DesktopEntries::getCategories()
+std::set<String> DesktopEntryLoader::getCategories()
 {
     const ScopedLock readLock(lock);
     std::set<String> categoryNames;
@@ -74,7 +74,7 @@ std::set<String> DesktopEntries::getCategories()
  * Discards any existing entry data and reloads all desktop entries
  * from the file system.
  */
-void DesktopEntries::loadEntries
+void DesktopEntryLoader::loadEntries
 (std::function<void(String) > notifyCallback, std::function<void() > onFinish)
 {
     if (!isThreadRunning())
@@ -83,7 +83,7 @@ void DesktopEntries::loadEntries
             const ScopedTryLock readLock(lock);
             if (!readLock.isLocked())
             {
-                DBG("DesktopEntries::" << __func__
+                DBG("DesktopEntryLoader::" << __func__
                         << ": Can't load desktop entries, thread is already locked");
                 return;
             }
@@ -101,7 +101,7 @@ void DesktopEntries::loadEntries
  * them to stop. Unless loading finishes on its own before this has a chance to
  * stop it, the onFinish callback to loadEntries will not be called.
  */
-void DesktopEntries::clearCallbacks()
+void DesktopEntryLoader::clearCallbacks()
 {
     const ScopedLock loadingLock(lock);
     notifyCallback = [](String s)
@@ -112,13 +112,13 @@ void DesktopEntries::clearCallbacks()
     };
 }
 
-void DesktopEntries::run()
+void DesktopEntryLoader::run()
 {
     const ScopedLock loadingLock(lock);
     std::atomic<bool> uiCallPending;
     uiCallPending = false;
     //read the contents of all desktop application directories
-    DBG("DesktopEntries::" << __func__ << ": finding desktop entries...");
+    DBG("DesktopEntryLoader::" << __func__ << ": finding desktop entries...");
     std::vector<String> dirs = {
                                 "~/.local/share/applications",
                                 "/usr/share/applications",
@@ -208,7 +208,7 @@ void DesktopEntries::run()
     {
         const ScopedLock loadingLock(lock);
         notifyCallback("Finished loading applications.");
-        DBG("DesktopEntries::" << __func__
+        DBG("DesktopEntryLoader::" << __func__
                 << ": All desktop entries loaded.");
         onFinish();
     });

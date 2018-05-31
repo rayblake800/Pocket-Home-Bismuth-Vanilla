@@ -4,7 +4,7 @@
 #include "BaseFolderMenuItem.h"
 #include "AppMenuItemFactory.h"
 
-AppMenuItemFactory::AppMenuItemFactory(DesktopEntries& desktopEntries) :
+AppMenuItemFactory::AppMenuItemFactory(DesktopEntryLoader& desktopEntries) :
 desktopEntries(desktopEntries) { }
 
 /**

@@ -4,7 +4,7 @@
 #include "JuceHeader.h"
 
 /**
- * @file IconTheme.h
+ * @file IconThemeIndex.h
  * 
  * @brief Holds icon data for a particular display theme.
  * 
@@ -16,15 +16,15 @@
  * https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
  */
 
-class IconTheme
+class IconThemeIndex
 {
 public:
     /**
      * @param themeFile  The root directory of an icon theme.
      */
-    IconTheme(File themeDir);
+    IconThemeIndex(File themeDir);
     
-    virtual ~IconTheme() { }
+    virtual ~IconThemeIndex() { }
     
     /**
      * Checks if this object represents a valid icon theme.

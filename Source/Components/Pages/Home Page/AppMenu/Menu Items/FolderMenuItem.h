@@ -2,7 +2,7 @@
 #include "AppMenuItemFactory.h"
 #include "IconThread.h"
 #include "Localized.h"
-#include "DesktopEntries.h"
+#include "DesktopEntryLoader.h"
 #include "AppMenuItem.h"
 
 /**
@@ -21,7 +21,7 @@ public:
     /**
      */
     FolderMenuItem
-    (const AppConfigFile::AppFolder& appFolder, DesktopEntries& desktopEntries);
+    (const AppConfigFile::AppFolder& appFolder, DesktopEntryLoader& desktopEntries);
 
     virtual ~FolderMenuItem() { }
 
@@ -124,7 +124,7 @@ protected:
 private:
     
     AppConfigFile::AppFolder appFolder;
-    DesktopEntries& desktopEntries;
+    DesktopEntryLoader& desktopEntries;
 
     //localized text keys: 
     static const constexpr char * delete_NAME = "delete_NAME";

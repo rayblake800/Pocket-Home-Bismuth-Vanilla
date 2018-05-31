@@ -10,7 +10,7 @@
 #include "IconThread.h"
 #include "MainConfigFile.h"
 #include "AppConfigFile.h"
-#include "DesktopEntries.h"
+#include "DesktopEntryLoader.h"
 #include "AppMenuPopupEditor.h"
 #include "AppMenuItemFactory.h"
 #include "AppMenuFolder.h"
@@ -365,7 +365,7 @@ private:
     //Holds the menu editor component that can be accessed via the pop-up menu
     ScopedPointer<AppMenuPopupEditor> buttonEditor;
     //Loads system applications from .Desktop files
-    static DesktopEntries desktopEntries;
+    static DesktopEntryLoader desktopEntries;
     //Tracks if desktop entries are loading or applications are launching in
     //another thread
     std::atomic<bool> loadingState;
