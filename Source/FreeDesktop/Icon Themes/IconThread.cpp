@@ -3,6 +3,9 @@
 #include "XDGDirectories.h"
 #include "IconThread.h"
 
+const String IconThread::defaultIconPath =
+        "/usr/share/pocket-home/appIcons/default.png";
+
 ReadWriteLock IconThread::iconLock;
 
 ScopedPointer<ResourceManager::SharedResource> IconThread::sharedResource
@@ -13,7 +16,10 @@ ResourceManager(sharedResource, iconLock,
         [this]()->ResourceManager::SharedResource*
 {
     return new IconResource();
-}) { }
+})
+{
+    defaultIcon = AssetFiles::loadImageAsset(defaultIconPath);
+}
 
 /*
  * Queues up an icon request.  
@@ -29,6 +35,8 @@ void IconThread::loadIcon(String icon, int size,
     }
     else
     {
+        //assign the default icon for now
+        assignImage(defaultIcon);
         //if icon is a partial path, trim it
         if (icon.contains("/"))
         {
@@ -233,17 +241,17 @@ String IconThread::IconResource::getIconPath
     //Last, search for matching un-themed icon files
     for(const String& iconDir : iconDirectories)
     {
-        //TODO: add support for .xpm files
+        //TODO: add support for .xpm files, fix svg rendering problems
         //static const StringArray iconExtensions = {".png", ".xpm", ".svg"};
-        static const StringArray iconExtensions = {".png", ".svg"};
-        for(const String& ext : iconExtensions)
-        {
+        //for(const String& ext : iconExtensions)
+        //{
+            static const char* ext = ".png";
             String iconPath = iconDir + String("/") + request.icon + ext;
             if(File(iconPath).existsAsFile())
             {
                 return iconPath;
             }
-        }
+        //}
     }
     return String();
 }

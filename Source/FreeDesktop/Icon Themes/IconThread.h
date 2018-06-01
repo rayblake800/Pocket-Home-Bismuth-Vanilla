@@ -47,10 +47,10 @@ public:
      *                       to find an image file as close to this size as
      *                       possible.
      * 
-     * @param assignImage    If an icon Image object is found, it will be passed
-     *                       to this callback function as a parameter.  This
-     *                       callback function will always run on the message
-     *                       thread.
+     * @param assignImage    This function will be called on the message thread.
+     *                       The image parameter passed to the callback will
+     *                       either be the requested image, or a default icon
+     *                       image if no image files match the request.
      * 
      * @param context        An icon context to use to limit which icon theme
      *                       sub-directories are searched, or 
@@ -135,6 +135,12 @@ private:
         //Directories to search, in order, for icon themes and un-themed icons.
         StringArray iconDirectories;
     };
+
+    //Default image icons to copy into AppMenuButtons
+    Image defaultIcon;
+
+    //default icon path definitions
+    static const String defaultIconPath;
 
     //ResourceManager shared object and lock;
     static ScopedPointer<ResourceManager::SharedResource> sharedResource;

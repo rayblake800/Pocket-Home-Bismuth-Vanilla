@@ -232,17 +232,17 @@ String IconThemeIndex::lookupIcon
         {
             //file extensions not found, continue on to check all possibilities
         }
-        //TODO: add support for the .xpm file extension
+        //TODO: add support for the .xpm file extension, fix svg render issues
         //static const StringArray extensions = {".png", ".svg", ".xpm"};
-        static const StringArray extensions = {".png", ".svg"};
-        for (const String& ext : extensions)
-        {
-            File iconFile(filePath + ext);
+        //for (const String& ext : extensions)
+        //{
+            //File iconFile(filePath + ext);
+            File iconFile(filePath + ".png");
             if (iconFile.existsAsFile())
             {
                 return iconFile.getFullPathName();
             }
-        }
+        //}
     }
     DBG("IconThemeIndex::" << __func__ << ": No matches for " << icon
             << " in theme directory at " << path);

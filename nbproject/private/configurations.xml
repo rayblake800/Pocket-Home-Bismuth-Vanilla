@@ -5589,8 +5589,6 @@
               </df>
               <in>HomePage.cpp</in>
               <in>HomePage.h</in>
-              <in>IconThread.cpp</in>
-              <in>IconThread.h</in>
             </df>
             <df name="Home Settings Page">
               <in>HomeSettingsPage.cpp</in>
@@ -5707,7 +5705,11 @@
             <in>IconCache.h</in>
             <in>IconThemeIndex.cpp</in>
             <in>IconThemeIndex.h</in>
+            <in>IconThread.cpp</in>
+            <in>IconThread.h</in>
           </df>
+          <in>XDGDirectories.cpp</in>
+          <in>XDGDirectories.h</in>
         </df>
         <df name="GLib">
           <df name="DBus">

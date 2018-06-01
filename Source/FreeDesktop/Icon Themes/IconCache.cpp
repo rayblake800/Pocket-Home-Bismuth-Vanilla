@@ -146,11 +146,14 @@ std::map<String,String> IconCache::lookupIcon
                 {
                     extension = ".xpm";
                 }
-                */
+                
+                //svg image loading tends to fail on icon files, so don't select
+                //svg icons automatically
                 else if((iconFlags & svgExtensionFlag) == svgExtensionFlag)
                 {
                     extension = ".svg";
                 }
+                */
                 if(extension.isNotEmpty())
                 {
                    matches[directories[read16(img)]] = extension;
