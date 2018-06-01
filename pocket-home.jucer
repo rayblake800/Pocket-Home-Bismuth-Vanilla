@@ -2,9 +2,9 @@
 
 <JUCERPROJECT id="EFuQKG" name="pocket-home" projectType="guiapp" version="0.0.1"
               bundleIdentifier="co.nextthing.PokeLaunch" includeBinaryInAppConfig="1"
-              jucerVersion="5.3.0" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
+              jucerVersion="5.3.2" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
               displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
-              companyCopyright="Next Thing Co." headerPath="../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Util&#10;../../Source&#10;../../Source/Components/Configurable&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Components&#10;../../Source/Components/Pages/Home Settings Page&#10;../../Source/Components/Pages/Password Pages&#10;../../Source/FreeDesktop&#10;../../Source/Components/Pages/DateTime Page&#10;../../Source/Components/Pages&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components/Pages/Power Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Pages/UI Page&#10;../../Source/Wifi&#10;../../Source/FreeDesktop/Desktop Entries&#10;../../Source/Components/Widgets&#10;../../Source/FreeDesktop/Icon Themes&#10;../../Source/Components/Pages/Input Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/GLib&#10;../../Source/GLib/DBus&#10;../../Source/Components/Pages/Advanced Settings Page&#10;../../Source/Bluetooth&#10;../../Source/Config Files&#10;../../Source/GLib/LibNM&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Components/Pages/Settings Page&#10;../../Source/PocketCHIP">
+              companyCopyright="Next Thing Co." headerPath="../../Source/PocketCHIP&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Components/Pages/Password Pages&#10;../../Source/GLib/LibNM&#10;../../Source/Components/Pages/UI Page&#10;../../Source/Util&#10;../../Source/Components/Pages/Settings Page&#10;../../Source/FreeDesktop/Icon Themes&#10;../../Source/GLib/DBus&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Components/Pages/Input Settings Page&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components/Pages&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Components/Pages/Power Page&#10;../../Source/Config Files&#10;../../Source/Components/Pages/Home Settings Page&#10;../../Source/FreeDesktop&#10;../../Source/Components&#10;../../Source&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Bluetooth&#10;../../Source/Components/Widgets&#10;../../Source/Components/Pages/DateTime Page&#10;../../Source/Components/Configurable&#10;../../Source/Components/Pages/Advanced Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/GLib&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/FreeDesktop/Desktop Entries&#10;../../Source/Wifi">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
       <FILE id="lJvIsl" name="bluetooth.json" compile="0" resource="1" file="assets/bluetooth.json"/>
@@ -135,8 +135,6 @@
             </GROUP>
             <FILE id="e0rlnj" name="HomePage.cpp" compile="1" resource="0" file="Source/Components/Pages/Home Page/HomePage.cpp"/>
             <FILE id="NstX3c" name="HomePage.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/HomePage.h"/>
-            <FILE id="a25qaH" name="IconThread.cpp" compile="1" resource="0" file="Source/Components/Pages/Home Page/IconThread.cpp"/>
-            <FILE id="kTeYJT" name="IconThread.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/IconThread.h"/>
           </GROUP>
           <GROUP id="{C96717A1-95F3-9F7D-57DE-9F9A9F7A2385}" name="Home Settings Page">
             <FILE id="lL4zp6" name="HomeSettingsPage.cpp" compile="1" resource="0"
@@ -314,6 +312,8 @@
                 file="Source/FreeDesktop/Icon Themes/IconThemeIndex.cpp"/>
           <FILE id="M5TO7i" name="IconThemeIndex.h" compile="0" resource="0"
                 file="Source/FreeDesktop/Icon Themes/IconThemeIndex.h"/>
+          <FILE id="a25qaH" name="IconThread.cpp" compile="1" resource="0" file="Source/FreeDesktop/Icon Themes/IconThread.cpp"/>
+          <FILE id="kTeYJT" name="IconThread.h" compile="0" resource="0" file="Source/FreeDesktop/Icon Themes/IconThread.h"/>
         </GROUP>
         <GROUP id="{EDE7E2EB-34F8-AA7C-E6C7-C8A1894467A0}" name="Desktop Entries">
           <FILE id="CyIMe5" name="DesktopEntryLoader.cpp" compile="1" resource="0"
@@ -480,4 +480,7 @@
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
   </MODULES>
   <JUCEOPTIONS JUCE_WEB_BROWSER="0" JUCE_USE_CURL="0" JUCE_ALLOW_STATIC_NULL_VARIABLES="0"/>
+  <LIVE_SETTINGS>
+    <LINUX/>
+  </LIVE_SETTINGS>
 </JUCERPROJECT>

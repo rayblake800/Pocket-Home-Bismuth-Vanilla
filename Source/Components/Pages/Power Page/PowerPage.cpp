@@ -1,5 +1,6 @@
 #include "MainConfigFile.h"
 #include "Utils.h"
+#include "AssetFiles.h"
 #include "IconThemeIndex.h"
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
@@ -148,7 +149,7 @@ PowerPage::pageButtonClicked(Button *button)
     }
 #if JUCE_DEBUG
     if (button == &testButton)
-    {
+    {     
         File iconDir("/usr/share/icons/hicolor");
         IconThemeIndex testTheme(iconDir);
         Array<File> iconFiles;

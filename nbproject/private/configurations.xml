@@ -190,6 +190,82 @@
                 <in>MainComponent.cpp</in>
               </df>
             </df>
+            <df name="Assets">
+              <df name="Box2DTests">
+                <in>AddPair.h</in>
+                <in>ApplyForce.h</in>
+                <in>BodyTypes.h</in>
+                <in>Breakable.h</in>
+                <in>Bridge.h</in>
+                <in>BulletTest.h</in>
+                <in>Cantilever.h</in>
+                <in>Car.h</in>
+                <in>Chain.h</in>
+                <in>CharacterCollision.h</in>
+                <in>CollisionFiltering.h</in>
+                <in>CollisionProcessing.h</in>
+                <in>CompoundShapes.h</in>
+                <in>Confined.h</in>
+                <in>ContinuousTest.h</in>
+                <in>DistanceTest.h</in>
+                <in>Dominos.h</in>
+                <in>DumpShell.h</in>
+                <in>DynamicTreeTest.h</in>
+                <in>EdgeShapes.h</in>
+                <in>EdgeTest.h</in>
+                <in>Gears.h</in>
+                <in>OneSidedPlatform.h</in>
+                <in>Pinball.h</in>
+                <in>PolyCollision.h</in>
+                <in>PolyShapes.h</in>
+                <in>Prismatic.h</in>
+                <in>Pulleys.h</in>
+                <in>Pyramid.h</in>
+                <in>RayCast.h</in>
+                <in>Revolute.h</in>
+                <in>Rope.h</in>
+                <in>RopeJoint.h</in>
+                <in>SensorTest.h</in>
+                <in>ShapeEditing.h</in>
+                <in>SliderCrank.h</in>
+                <in>SphereStack.h</in>
+                <in>TestEntries.cpp</in>
+                <in>TheoJansen.h</in>
+                <in>Tiles.h</in>
+                <in>TimeOfImpact.h</in>
+                <in>Tumbler.h</in>
+                <in>VaryingFriction.h</in>
+                <in>VaryingRestitution.h</in>
+                <in>VerticalStack.h</in>
+                <in>Web.h</in>
+              </df>
+              <df name="Notifications">
+                <df name="images">
+                </df>
+                <df name="sounds">
+                </df>
+              </df>
+              <df name="Purchases">
+              </df>
+              <df name="Signing">
+              </df>
+              <in>AudioLiveScrollingDisplay.h</in>
+              <in>DSPDemos_Common.h</in>
+              <in>DemoUtilities.h</in>
+              <in>WavefrontObjParser.h</in>
+            </df>
+            <df name="Audio">
+              <in>AudioAppDemo.h</in>
+              <in>AudioLatencyDemo.h</in>
+              <in>AudioPlaybackDemo.h</in>
+              <in>AudioRecordingDemo.h</in>
+              <in>AudioSettingsDemo.h</in>
+              <in>AudioSynthesiserDemo.h</in>
+              <in>MPEDemo.h</in>
+              <in>MidiDemo.h</in>
+              <in>PluckedStringsDemo.h</in>
+              <in>SimpleFFTDemo.h</in>
+            </df>
             <df name="audio plugin demo">
               <df name="Builds">
                 <df name="Android">
@@ -678,6 +754,9 @@
                   <in>WaveshapeProgram.h</in>
                 </df>
               </df>
+              <in>BlocksDrawingDemo.h</in>
+              <in>BlocksMonitorDemo.h</in>
+              <in>BlocksSynthDemo.h</in>
             </df>
             <df name="BouncingBallWavetableDemo">
               <df name="Builds">
@@ -972,6 +1051,220 @@
                 <in>MainWindow.h</in>
               </df>
             </df>
+            <df name="DemoRunner">
+              <df name="Builds">
+                <df name="Android">
+                  <df name="app">
+                    <df name="src">
+                      <df name="debug">
+                        <df name="res">
+                          <df name="values">
+                          </df>
+                        </df>
+                      </df>
+                      <df name="main">
+                        <df name="assets">
+                          <df name="Box2DTests">
+                            <in>AddPair.h</in>
+                            <in>ApplyForce.h</in>
+                            <in>BodyTypes.h</in>
+                            <in>Breakable.h</in>
+                            <in>Bridge.h</in>
+                            <in>BulletTest.h</in>
+                            <in>Cantilever.h</in>
+                            <in>Car.h</in>
+                            <in>Chain.h</in>
+                            <in>CharacterCollision.h</in>
+                            <in>CollisionFiltering.h</in>
+                            <in>CollisionProcessing.h</in>
+                            <in>CompoundShapes.h</in>
+                            <in>Confined.h</in>
+                            <in>ContinuousTest.h</in>
+                            <in>DistanceTest.h</in>
+                            <in>Dominos.h</in>
+                            <in>DumpShell.h</in>
+                            <in>DynamicTreeTest.h</in>
+                            <in>EdgeShapes.h</in>
+                            <in>EdgeTest.h</in>
+                            <in>Gears.h</in>
+                            <in>OneSidedPlatform.h</in>
+                            <in>Pinball.h</in>
+                            <in>PolyCollision.h</in>
+                            <in>PolyShapes.h</in>
+                            <in>Prismatic.h</in>
+                            <in>Pulleys.h</in>
+                            <in>Pyramid.h</in>
+                            <in>RayCast.h</in>
+                            <in>Revolute.h</in>
+                            <in>Rope.h</in>
+                            <in>RopeJoint.h</in>
+                            <in>SensorTest.h</in>
+                            <in>ShapeEditing.h</in>
+                            <in>SliderCrank.h</in>
+                            <in>SphereStack.h</in>
+                            <in>TestEntries.cpp</in>
+                            <in>TheoJansen.h</in>
+                            <in>Tiles.h</in>
+                            <in>TimeOfImpact.h</in>
+                            <in>Tumbler.h</in>
+                            <in>VaryingFriction.h</in>
+                            <in>VaryingRestitution.h</in>
+                            <in>VerticalStack.h</in>
+                            <in>Web.h</in>
+                          </df>
+                          <df name="Notifications">
+                            <df name="images">
+                            </df>
+                            <df name="sounds">
+                            </df>
+                          </df>
+                          <df name="Purchases">
+                          </df>
+                          <df name="Signing">
+                          </df>
+                          <in>AudioLiveScrollingDisplay.h</in>
+                          <in>DSPDemos_Common.h</in>
+                          <in>DemoUtilities.h</in>
+                          <in>WavefrontObjParser.h</in>
+                        </df>
+                        <df name="java">
+                          <df name="com">
+                            <df name="android">
+                              <df name="vending">
+                                <df name="billing">
+                                </df>
+                              </df>
+                            </df>
+                            <df name="juce">
+                              <df name="demorunner">
+                              </df>
+                            </df>
+                            <df name="roli">
+                              <df name="juce">
+                                <df name="demorunner">
+                                </df>
+                              </df>
+                            </df>
+                          </df>
+                        </df>
+                        <df name="res">
+                          <df name="drawable-hdpi">
+                          </df>
+                          <df name="drawable-ldpi">
+                          </df>
+                          <df name="drawable-mdpi">
+                          </df>
+                          <df name="drawable-xhdpi">
+                          </df>
+                        </df>
+                      </df>
+                      <df name="release">
+                        <df name="res">
+                          <df name="values">
+                          </df>
+                        </df>
+                      </df>
+                    </df>
+                  </df>
+                  <df name="gradle">
+                    <df name="wrapper">
+                    </df>
+                  </df>
+                </df>
+                <df name="iOS">
+                  <df name="DemoRunner">
+                    <df name="Images.xcassets">
+                      <df name="AppIcon.appiconset">
+                      </df>
+                      <df name="LaunchImage.launchimage">
+                      </df>
+                    </df>
+                  </df>
+                  <df name="DemoRunner.xcodeproj">
+                  </df>
+                </df>
+                <df name="LinuxMakefile">
+                </df>
+                <df name="MacOSX">
+                  <df name="DemoRunner.xcodeproj">
+                  </df>
+                </df>
+                <df name="VisualStudio2013">
+                </df>
+                <df name="VisualStudio2015">
+                </df>
+                <df name="VisualStudio2017">
+                </df>
+              </df>
+              <df name="JuceLibraryCode">
+                <in>AppConfig.h</in>
+                <in>JuceHeader.h</in>
+                <in>include_juce_analytics.cpp</in>
+                <in>include_juce_audio_basics.cpp</in>
+                <in>include_juce_audio_basics.mm</in>
+                <in>include_juce_audio_devices.cpp</in>
+                <in>include_juce_audio_devices.mm</in>
+                <in>include_juce_audio_formats.cpp</in>
+                <in>include_juce_audio_formats.mm</in>
+                <in>include_juce_audio_processors.cpp</in>
+                <in>include_juce_audio_processors.mm</in>
+                <in>include_juce_audio_utils.cpp</in>
+                <in>include_juce_audio_utils.mm</in>
+                <in>include_juce_blocks_basics.cpp</in>
+                <in>include_juce_box2d.cpp</in>
+                <in>include_juce_core.cpp</in>
+                <in>include_juce_core.mm</in>
+                <in>include_juce_cryptography.cpp</in>
+                <in>include_juce_cryptography.mm</in>
+                <in>include_juce_data_structures.cpp</in>
+                <in>include_juce_data_structures.mm</in>
+                <in>include_juce_dsp.cpp</in>
+                <in>include_juce_dsp.mm</in>
+                <in>include_juce_events.cpp</in>
+                <in>include_juce_events.mm</in>
+                <in>include_juce_graphics.cpp</in>
+                <in>include_juce_graphics.mm</in>
+                <in>include_juce_gui_basics.cpp</in>
+                <in>include_juce_gui_basics.mm</in>
+                <in>include_juce_gui_extra.cpp</in>
+                <in>include_juce_gui_extra.mm</in>
+                <in>include_juce_opengl.cpp</in>
+                <in>include_juce_opengl.mm</in>
+                <in>include_juce_osc.cpp</in>
+                <in>include_juce_product_unlocking.cpp</in>
+                <in>include_juce_product_unlocking.mm</in>
+                <in>include_juce_video.cpp</in>
+                <in>include_juce_video.mm</in>
+              </df>
+              <df name="Source">
+                <df name="Demos">
+                  <in>DemoPIPs1.cpp</in>
+                  <in>DemoPIPs2.cpp</in>
+                  <in>IntroScreen.h</in>
+                  <in>JUCEDemos.cpp</in>
+                  <in>JUCEDemos.h</in>
+                </df>
+                <df name="UI">
+                  <in>DemoContentComponent.cpp</in>
+                  <in>DemoContentComponent.h</in>
+                  <in>MainComponent.cpp</in>
+                  <in>MainComponent.h</in>
+                  <in>SettingsContent.h</in>
+                </df>
+                <in>Main.cpp</in>
+              </df>
+            </df>
+            <df name="DSP">
+              <in>ConvolutionDemo.h</in>
+              <in>FIRFilterDemo.h</in>
+              <in>GainDemo.h</in>
+              <in>IIRFilterDemo.h</in>
+              <in>OscillatorDemo.h</in>
+              <in>OverdriveDemo.h</in>
+              <in>SIMDRegisterDemo.h</in>
+              <in>StateVariableFilterDemo.h</in>
+              <in>WaveShaperTanhDemo.h</in>
+            </df>
             <df name="DSP module plugin demo">
               <df name="Builds">
                 <df name="MacOSX">
@@ -1101,6 +1394,35 @@
                 <in>MainComponent.cpp</in>
                 <in>MainComponent.h</in>
               </df>
+            </df>
+            <df name="GUI">
+              <in>AnimationAppDemo.h</in>
+              <in>AnimationDemo.h</in>
+              <in>BouncingBallWavetableDemo.h</in>
+              <in>CameraDemo.h</in>
+              <in>CodeEditorDemo.h</in>
+              <in>ComponentDemo.h</in>
+              <in>ComponentTransformsDemo.h</in>
+              <in>DialogsDemo.h</in>
+              <in>FlexBoxDemo.h</in>
+              <in>FontsDemo.h</in>
+              <in>GraphicsDemo.h</in>
+              <in>GridDemo.h</in>
+              <in>HelloWorldDemo.h</in>
+              <in>ImagesDemo.h</in>
+              <in>KeyMappingsDemo.h</in>
+              <in>LookAndFeelDemo.h</in>
+              <in>MDIDemo.h</in>
+              <in>MenusDemo.h</in>
+              <in>MultiTouchDemo.h</in>
+              <in>OpenGLAppDemo.h</in>
+              <in>OpenGLDemo.h</in>
+              <in>OpenGLDemo2D.h</in>
+              <in>PropertiesDemo.h</in>
+              <in>VideoDemo.h</in>
+              <in>WebBrowserDemo.h</in>
+              <in>WidgetsDemo.h</in>
+              <in>WindowsDemo.h</in>
             </df>
             <df name="HelloWorld">
               <df name="Builds">
@@ -1844,6 +2166,18 @@
                 <in>StringSynthesiser.h</in>
               </df>
             </df>
+            <df name="Plugins">
+              <in>AUv3SynthPluginDemo.h</in>
+              <in>ArpeggiatorPluginDemo.h</in>
+              <in>AudioPluginDemo.h</in>
+              <in>DSPModulePluginDemo.h</in>
+              <in>GainPluginDemo.h</in>
+              <in>InterAppAudioEffectPluginDemo.h</in>
+              <in>MultiOutSynthPluginDemo.h</in>
+              <in>NoiseGatePluginDemo.h</in>
+              <in>SamplerPluginDemo.h</in>
+              <in>SurroundPluginDemo.h</in>
+            </df>
             <df name="PlugInSamples">
               <df name="Arpeggiator">
                 <df name="Builds">
@@ -2372,6 +2706,24 @@
                 <in>SpectrogramComponent.h</in>
               </df>
             </df>
+            <df name="Utilities">
+              <in>AnalyticsCollectionDemo.h</in>
+              <in>Box2DDemo.h</in>
+              <in>ChildProcessDemo.h</in>
+              <in>CryptographyDemo.h</in>
+              <in>InAppPurchasesDemo.h</in>
+              <in>JavaScriptDemo.h</in>
+              <in>LiveConstantDemo.h</in>
+              <in>MultithreadingDemo.h</in>
+              <in>NetworkingDemo.h</in>
+              <in>OSCDemo.h</in>
+              <in>PushNotificationsDemo.h</in>
+              <in>SystemInfoDemo.h</in>
+              <in>TimersAndEventsDemo.h</in>
+              <in>UnitTestsDemo.h</in>
+              <in>ValueTreesDemo.h</in>
+              <in>XMLandJSONDemo.h</in>
+            </df>
           </df>
           <df name="extras">
             <df name="AudioPerformanceTest">
@@ -2434,6 +2786,8 @@
                 </df>
                 <df name="VisualStudio2015">
                 </df>
+                <df name="VisualStudio2017">
+                </df>
               </df>
               <df name="JuceLibraryCode">
                 <in>AppConfig.h</in>
@@ -2466,7 +2820,158 @@
                 <in>MainComponent.h</in>
               </df>
             </df>
+            <df name="AudioPluginHost">
+              <df name="Builds">
+                <df name="Android">
+                  <df name="app">
+                    <df name="src">
+                      <df name="debug">
+                        <df name="res">
+                          <df name="values">
+                          </df>
+                        </df>
+                      </df>
+                      <df name="main">
+                        <df name="java">
+                          <df name="com">
+                            <df name="android">
+                              <df name="vending">
+                                <df name="billing">
+                                </df>
+                              </df>
+                            </df>
+                            <df name="roli">
+                              <df name="juce">
+                                <df name="pluginhost">
+                                </df>
+                              </df>
+                            </df>
+                          </df>
+                        </df>
+                        <df name="res">
+                          <df name="drawable-hdpi">
+                          </df>
+                          <df name="drawable-ldpi">
+                          </df>
+                          <df name="drawable-mdpi">
+                          </df>
+                          <df name="drawable-xhdpi">
+                          </df>
+                        </df>
+                      </df>
+                      <df name="release">
+                        <df name="res">
+                          <df name="values">
+                          </df>
+                        </df>
+                      </df>
+                    </df>
+                  </df>
+                  <df name="gradle">
+                    <df name="wrapper">
+                    </df>
+                  </df>
+                </df>
+                <df name="iOS">
+                  <df name="AudioPluginHost">
+                    <df name="Images.xcassets">
+                      <df name="AppIcon.appiconset">
+                      </df>
+                      <df name="LaunchImage.launchimage">
+                      </df>
+                    </df>
+                  </df>
+                  <df name="AudioPluginHost.xcodeproj">
+                  </df>
+                </df>
+                <df name="LinuxMakefile">
+                </df>
+                <df name="MacOSX">
+                  <df name="AudioPluginHost.xcodeproj">
+                  </df>
+                </df>
+                <df name="VisualStudio2013">
+                </df>
+                <df name="VisualStudio2015">
+                </df>
+                <df name="VisualStudio2017">
+                </df>
+              </df>
+              <df name="JuceLibraryCode">
+                <in>AppConfig.h</in>
+                <in>BinaryData.cpp</in>
+                <in>BinaryData.h</in>
+                <in>JuceHeader.h</in>
+                <in>include_juce_audio_basics.cpp</in>
+                <in>include_juce_audio_basics.mm</in>
+                <in>include_juce_audio_devices.cpp</in>
+                <in>include_juce_audio_devices.mm</in>
+                <in>include_juce_audio_formats.cpp</in>
+                <in>include_juce_audio_formats.mm</in>
+                <in>include_juce_audio_processors.cpp</in>
+                <in>include_juce_audio_processors.mm</in>
+                <in>include_juce_audio_utils.cpp</in>
+                <in>include_juce_audio_utils.mm</in>
+                <in>include_juce_core.cpp</in>
+                <in>include_juce_core.mm</in>
+                <in>include_juce_cryptography.cpp</in>
+                <in>include_juce_cryptography.mm</in>
+                <in>include_juce_data_structures.cpp</in>
+                <in>include_juce_data_structures.mm</in>
+                <in>include_juce_events.cpp</in>
+                <in>include_juce_events.mm</in>
+                <in>include_juce_graphics.cpp</in>
+                <in>include_juce_graphics.mm</in>
+                <in>include_juce_gui_basics.cpp</in>
+                <in>include_juce_gui_basics.mm</in>
+                <in>include_juce_gui_extra.cpp</in>
+                <in>include_juce_gui_extra.mm</in>
+                <in>include_juce_opengl.cpp</in>
+                <in>include_juce_opengl.mm</in>
+                <in>include_juce_video.cpp</in>
+                <in>include_juce_video.mm</in>
+              </df>
+              <df name="Source">
+                <df name="Filters">
+                  <in>FilterGraph.cpp</in>
+                  <in>FilterGraph.h</in>
+                  <in>FilterIOConfiguration.cpp</in>
+                  <in>FilterIOConfiguration.h</in>
+                  <in>InternalFilters.cpp</in>
+                  <in>InternalFilters.h</in>
+                </df>
+                <df name="UI">
+                  <in>GraphEditorPanel.cpp</in>
+                  <in>GraphEditorPanel.h</in>
+                  <in>MainHostWindow.cpp</in>
+                  <in>MainHostWindow.h</in>
+                  <in>PluginWindow.h</in>
+                </df>
+                <in>HostStartup.cpp</in>
+              </df>
+            </df>
             <df name="binarybuilder">
+              <df name="Builds">
+                <df name="LinuxMakefile">
+                </df>
+                <df name="MacOSX">
+                  <df name="BinaryBuilder.xcodeproj">
+                  </df>
+                </df>
+                <df name="VisualStudio2017">
+                </df>
+              </df>
+              <df name="JuceLibraryCode">
+                <in>AppConfig.h</in>
+                <in>JuceHeader.h</in>
+                <in>include_juce_core.cpp</in>
+                <in>include_juce_core.mm</in>
+              </df>
+              <df name="Source">
+                <in>Main.cpp</in>
+              </df>
+            </df>
+            <df name="BinaryBuilder">
               <df name="Builds">
                 <df name="LinuxMakefile">
                 </df>
@@ -2527,6 +3032,114 @@
                 </df>
               </df>
             </df>
+            <df name="NetworkGraphicsDemo">
+              <df name="Builds">
+                <df name="Android">
+                  <df name="app">
+                    <df name="src">
+                      <df name="debug">
+                        <df name="res">
+                          <df name="values">
+                          </df>
+                        </df>
+                      </df>
+                      <df name="main">
+                        <df name="java">
+                          <df name="com">
+                            <df name="android">
+                              <df name="vending">
+                                <df name="billing">
+                                </df>
+                              </df>
+                            </df>
+                            <df name="juce">
+                              <df name="networkgraphicsdemo">
+                              </df>
+                            </df>
+                          </df>
+                        </df>
+                        <df name="res">
+                          <df name="drawable-mdpi">
+                          </df>
+                        </df>
+                      </df>
+                      <df name="release">
+                        <df name="res">
+                          <df name="values">
+                          </df>
+                        </df>
+                      </df>
+                    </df>
+                  </df>
+                  <df name="gradle">
+                    <df name="wrapper">
+                    </df>
+                  </df>
+                </df>
+                <df name="iOS">
+                  <df name="NetworkGraphicsDemo">
+                    <df name="Images.xcassets">
+                      <df name="AppIcon.appiconset">
+                      </df>
+                      <df name="LaunchImage.launchimage">
+                      </df>
+                    </df>
+                  </df>
+                  <df name="NetworkGraphicsDemo.xcodeproj">
+                  </df>
+                </df>
+                <df name="LinuxMakefile">
+                </df>
+                <df name="MacOSX">
+                  <df name="NetworkGraphicsDemo.xcodeproj">
+                  </df>
+                </df>
+                <df name="VisualStudio2013">
+                </df>
+                <df name="VisualStudio2017">
+                </df>
+              </df>
+              <df name="JuceLibraryCode">
+                <in>AppConfig.h</in>
+                <in>BinaryData.cpp</in>
+                <in>BinaryData.h</in>
+                <in>JuceHeader.h</in>
+                <in>include_juce_audio_basics.cpp</in>
+                <in>include_juce_audio_basics.mm</in>
+                <in>include_juce_audio_devices.cpp</in>
+                <in>include_juce_audio_devices.mm</in>
+                <in>include_juce_audio_formats.cpp</in>
+                <in>include_juce_audio_formats.mm</in>
+                <in>include_juce_audio_processors.cpp</in>
+                <in>include_juce_audio_processors.mm</in>
+                <in>include_juce_audio_utils.cpp</in>
+                <in>include_juce_audio_utils.mm</in>
+                <in>include_juce_core.cpp</in>
+                <in>include_juce_core.mm</in>
+                <in>include_juce_cryptography.cpp</in>
+                <in>include_juce_cryptography.mm</in>
+                <in>include_juce_data_structures.cpp</in>
+                <in>include_juce_data_structures.mm</in>
+                <in>include_juce_events.cpp</in>
+                <in>include_juce_events.mm</in>
+                <in>include_juce_graphics.cpp</in>
+                <in>include_juce_graphics.mm</in>
+                <in>include_juce_gui_basics.cpp</in>
+                <in>include_juce_gui_basics.mm</in>
+                <in>include_juce_gui_extra.cpp</in>
+                <in>include_juce_gui_extra.mm</in>
+                <in>include_juce_opengl.cpp</in>
+                <in>include_juce_opengl.mm</in>
+                <in>include_juce_osc.cpp</in>
+              </df>
+              <df name="Source">
+                <in>Demos.h</in>
+                <in>Main.cpp</in>
+                <in>MasterComponent.h</in>
+                <in>SharedCanvas.h</in>
+                <in>SlaveComponent.h</in>
+              </df>
+            </df>
             <df name="Projucer">
               <df name="Builds">
                 <df name="LinuxMakefile">
@@ -2547,6 +3160,7 @@
                 <in>BinaryData.cpp</in>
                 <in>BinaryData.h</in>
                 <in>JuceHeader.h</in>
+                <in>include_juce_analytics.cpp</in>
                 <in>include_juce_core.cpp</in>
                 <in>include_juce_core.mm</in>
                 <in>include_juce_cryptography.cpp</in>
@@ -2569,7 +3183,9 @@
                     <in>jucer_ApplicationUsageDataWindowComponent.h</in>
                     <in>jucer_EditorColourSchemeWindowComponent.h</in>
                     <in>jucer_FloatingToolWindow.h</in>
+                    <in>jucer_GlobalPathsWindowComponent.h</in>
                     <in>jucer_GlobalSearchPathsWindowComponent.h</in>
+                    <in>jucer_PIPCreatorWindowComponent.h</in>
                     <in>jucer_SVGPathDataWindowComponent.h</in>
                     <in>jucer_TranslationToolWindowComponent.h</in>
                     <in>jucer_UTF8WindowComponent.h</in>
@@ -2586,6 +3202,8 @@
                   <in>jucer_Main.cpp</in>
                   <in>jucer_MainWindow.cpp</in>
                   <in>jucer_MainWindow.h</in>
+                  <in>jucer_ProjucerAnalytics.cpp</in>
+                  <in>jucer_ProjucerAnalytics.h</in>
                 </df>
                 <df name="BinaryData">
                   <df name="gradle">
@@ -2621,6 +3239,9 @@
                     <in>jucer_OpenGLComponentSimpleTemplate.h</in>
                     <in>jucer_OpenGLComponentTemplate.cpp</in>
                     <in>jucer_OpenGLComponentTemplate.h</in>
+                    <in>jucer_PIPAudioProcessorTemplate.h</in>
+                    <in>jucer_PIPMain.cpp</in>
+                    <in>jucer_PIPTemplate.h</in>
                   </df>
                 </df>
                 <df name="CodeEditor">
@@ -2752,6 +3373,7 @@
                   <in>jucer_CompileEngineDLL.h</in>
                   <in>jucer_CompileEngineServer.cpp</in>
                   <in>jucer_CompileEngineServer.h</in>
+                  <in>jucer_CompileEngineSettings.h</in>
                   <in>jucer_CppHelpers.h</in>
                   <in>jucer_DiagnosticMessage.h</in>
                   <in>jucer_DownloadCompileEngineThread.cpp</in>
@@ -2776,6 +3398,7 @@
                     </df>
                     <in>jucer_ContentViewComponents.h</in>
                     <in>jucer_FileGroupInformationComponent.h</in>
+                    <in>jucer_HeaderComponent.cpp</in>
                     <in>jucer_HeaderComponent.h</in>
                     <in>jucer_ModulesInformationComponent.h</in>
                     <in>jucer_ProjectContentComponent.cpp</in>
@@ -2820,6 +3443,10 @@
                     <in>jucer_RelativePath.h</in>
                     <in>jucer_TranslationHelpers.h</in>
                     <in>jucer_ValueSourceHelpers.h</in>
+                  </df>
+                  <df name="PIPs">
+                    <in>jucer_PIPGenerator.cpp</in>
+                    <in>jucer_PIPGenerator.h</in>
                   </df>
                   <df name="UI">
                     <df name="PropertyComponents">
@@ -2954,6 +3581,44 @@
                 <in>include_juce_video.mm</in>
               </df>
             </df>
+            <df name="WindowsDLL">
+              <df name="Builds">
+                <df name="VisualStudio2017">
+                </df>
+              </df>
+              <df name="JuceLibraryCode">
+                <in>AppConfig.h</in>
+                <in>JuceHeader.h</in>
+                <in>include_juce_audio_basics.cpp</in>
+                <in>include_juce_audio_basics.mm</in>
+                <in>include_juce_audio_devices.cpp</in>
+                <in>include_juce_audio_devices.mm</in>
+                <in>include_juce_audio_formats.cpp</in>
+                <in>include_juce_audio_formats.mm</in>
+                <in>include_juce_audio_processors.cpp</in>
+                <in>include_juce_audio_processors.mm</in>
+                <in>include_juce_audio_utils.cpp</in>
+                <in>include_juce_audio_utils.mm</in>
+                <in>include_juce_core.cpp</in>
+                <in>include_juce_core.mm</in>
+                <in>include_juce_cryptography.cpp</in>
+                <in>include_juce_cryptography.mm</in>
+                <in>include_juce_data_structures.cpp</in>
+                <in>include_juce_data_structures.mm</in>
+                <in>include_juce_events.cpp</in>
+                <in>include_juce_events.mm</in>
+                <in>include_juce_graphics.cpp</in>
+                <in>include_juce_graphics.mm</in>
+                <in>include_juce_gui_basics.cpp</in>
+                <in>include_juce_gui_basics.mm</in>
+                <in>include_juce_gui_extra.cpp</in>
+                <in>include_juce_gui_extra.mm</in>
+                <in>include_juce_opengl.cpp</in>
+                <in>include_juce_opengl.mm</in>
+                <in>include_juce_video.cpp</in>
+                <in>include_juce_video.mm</in>
+              </df>
+            </df>
           </df>
           <df name="modules">
             <df name="juce_analytics">
@@ -3022,6 +3687,8 @@
                 <in>juce_MPESynthesiserBase.h</in>
                 <in>juce_MPESynthesiserVoice.cpp</in>
                 <in>juce_MPESynthesiserVoice.h</in>
+                <in>juce_MPEUtils.cpp</in>
+                <in>juce_MPEUtils.h</in>
                 <in>juce_MPEValue.cpp</in>
                 <in>juce_MPEValue.h</in>
                 <in>juce_MPEZone.cpp</in>
@@ -3081,10 +3748,12 @@
                 <in>juce_MidiDataConcatenator.h</in>
                 <in>juce_android_Audio.cpp</in>
                 <in>juce_android_Midi.cpp</in>
+                <in>juce_android_Oboe.cpp</in>
                 <in>juce_android_OpenSL.cpp</in>
                 <in>juce_ios_Audio.cpp</in>
                 <in>juce_ios_Audio.h</in>
                 <in>juce_linux_ALSA.cpp</in>
+                <in>juce_linux_Bela.cpp</in>
                 <in>juce_linux_JackAudio.cpp</in>
                 <in>juce_linux_Midi.cpp</in>
                 <in>juce_mac_CoreAudio.cpp</in>
@@ -3422,6 +4091,7 @@
                 <in>juce_AudioUnitPluginFormat.mm</in>
                 <in>juce_LADSPAPluginFormat.cpp</in>
                 <in>juce_LADSPAPluginFormat.h</in>
+                <in>juce_LegacyAudioParameter.cpp</in>
                 <in>juce_VST3Common.h</in>
                 <in>juce_VST3Headers.h</in>
                 <in>juce_VST3PluginFormat.cpp</in>
@@ -3433,6 +4103,7 @@
                 <in>juce_VSTPluginFormat.h</in>
               </df>
               <df name="processors">
+                <in>juce_AudioPluginInstance.cpp</in>
                 <in>juce_AudioPluginInstance.h</in>
                 <in>juce_AudioProcessor.cpp</in>
                 <in>juce_AudioProcessor.h</in>
@@ -3690,6 +4361,7 @@
                 <in>juce_ReferenceCountedArray.h</in>
                 <in>juce_ScopedValueSetter.h</in>
                 <in>juce_SortedSet.h</in>
+                <in>juce_SparseSet.cpp</in>
                 <in>juce_SparseSet.h</in>
                 <in>juce_Variant.cpp</in>
                 <in>juce_Variant.h</in>
@@ -3827,6 +4499,8 @@
                 <in>juce_OutputStream.h</in>
                 <in>juce_SubregionStream.cpp</in>
                 <in>juce_SubregionStream.h</in>
+                <in>juce_URLInputSource.cpp</in>
+                <in>juce_URLInputSource.h</in>
               </df>
               <df name="system">
                 <in>juce_CompilerSupport.h</in>
@@ -3992,6 +4666,7 @@
               <df name="containers">
                 <in>juce_AudioBlock.h</in>
                 <in>juce_SIMDRegister.h</in>
+                <in>juce_SIMDRegister_Impl.h</in>
                 <in>juce_SIMDRegister_test.cpp</in>
               </df>
               <df name="filter_design">
@@ -4549,6 +5224,8 @@
                 <in>juce_ButtonPropertyComponent.h</in>
                 <in>juce_ChoicePropertyComponent.cpp</in>
                 <in>juce_ChoicePropertyComponent.h</in>
+                <in>juce_MultiChoicePropertyComponent.cpp</in>
+                <in>juce_MultiChoicePropertyComponent.h</in>
                 <in>juce_PropertyComponent.cpp</in>
                 <in>juce_PropertyComponent.h</in>
                 <in>juce_PropertyPanel.cpp</in>
@@ -4779,6 +5456,7 @@
               </df>
               <df name="native">
                 <in>juce_android_CameraDevice.h</in>
+                <in>juce_ios_CameraDevice.h</in>
                 <in>juce_mac_CameraDevice.h</in>
                 <in>juce_mac_Video.h</in>
                 <in>juce_win32_CameraDevice.h</in>
@@ -4826,6 +5504,14 @@
         </df>
       </df>
       <df name="Source">
+        <df name="Bluetooth">
+          <in>BluetoothDevice.cpp</in>
+          <in>BluetoothDevice.h</in>
+          <in>BluetoothStatus.cpp</in>
+          <in>BluetoothStatus.h</in>
+          <in>BluezAdapter.cpp</in>
+          <in>BluezAdapter.h</in>
+        </df>
         <df name="Components">
           <df name="Configurable">
             <in>ConfigurableComponent.cpp</in>
@@ -4901,10 +5587,6 @@
                 <in>WifiIcon.cpp</in>
                 <in>WifiIcon.h</in>
               </df>
-              <in>DesktopEntries.cpp</in>
-              <in>DesktopEntries.h</in>
-              <in>DesktopEntry.cpp</in>
-              <in>DesktopEntry.h</in>
               <in>HomePage.cpp</in>
               <in>HomePage.h</in>
               <in>IconThread.cpp</in>
@@ -5003,6 +5685,30 @@
           <in>RelativeLayoutManager.cpp</in>
           <in>RelativeLayoutManager.h</in>
         </df>
+        <df name="Config Files">
+          <in>AppConfigFile.cpp</in>
+          <in>AppConfigFile.h</in>
+          <in>ComponentConfigFile.cpp</in>
+          <in>ComponentConfigFile.h</in>
+          <in>ConfigFile.cpp</in>
+          <in>ConfigFile.h</in>
+          <in>MainConfigFile.cpp</in>
+          <in>MainConfigFile.h</in>
+        </df>
+        <df name="FreeDesktop">
+          <df name="Desktop Entries">
+            <in>DesktopEntry.cpp</in>
+            <in>DesktopEntry.h</in>
+            <in>DesktopEntryLoader.cpp</in>
+            <in>DesktopEntryLoader.h</in>
+          </df>
+          <df name="Icon Themes">
+            <in>IconCache.cpp</in>
+            <in>IconCache.h</in>
+            <in>IconThemeIndex.cpp</in>
+            <in>IconThemeIndex.h</in>
+          </df>
+        </df>
         <df name="GLib">
           <df name="DBus">
             <in>GPPDBusProxy.cpp</in>
@@ -5033,7 +5739,7 @@
           <in>GPPObject.cpp</in>
           <in>GPPObject.h</in>
         </df>
-        <df name="Hardware">
+        <df name="PocketCHIP">
           <in>Audio.cpp</in>
           <in>Audio.h</in>
           <in>BatteryMonitor.cpp</in>
@@ -5043,52 +5749,17 @@
           <in>I2CBus.cpp</in>
           <in>I2CBus.h</in>
         </df>
-        <df name="Shared Resources">
-          <df name="Bluetooth">
-            <in>BluetoothDevice.cpp</in>
-            <in>BluetoothDevice.h</in>
-            <in>BluetoothStatus.cpp</in>
-            <in>BluetoothStatus.h</in>
-            <in>BluezAdapter.cpp</in>
-            <in>BluezAdapter.h</in>
-          </df>
-          <df name="Config Files">
-            <in>AppConfigFile.cpp</in>
-            <in>AppConfigFile.h</in>
-            <in>ComponentConfigFile.cpp</in>
-            <in>ComponentConfigFile.h</in>
-            <in>ConfigFile.cpp</in>
-            <in>ConfigFile.h</in>
-            <in>MainConfigFile.cpp</in>
-            <in>MainConfigFile.h</in>
-          </df>
-          <df name="Wifi">
-            <in>JsonWifiInterface.cpp</in>
-            <in>JsonWifiInterface.h</in>
-            <in>LibNMInterface.cpp</in>
-            <in>LibNMInterface.h</in>
-            <in>WifiAccessPoint.cpp</in>
-            <in>WifiAccessPoint.h</in>
-            <in>WifiDebugOutput.h</in>
-            <in>WifiStateManager.cpp</in>
-            <in>WifiStateManager.h</in>
-          </df>
-          <in>AssetFiles.cpp</in>
-          <in>AssetFiles.h</in>
-          <in>IconCache.cpp</in>
-          <in>IconCache.h</in>
-          <in>IconTheme.cpp</in>
-          <in>IconTheme.h</in>
-          <in>ResourceManager.cpp</in>
-          <in>ResourceManager.h</in>
-        </df>
         <df name="Util">
           <in>AppLauncher.cpp</in>
           <in>AppLauncher.h</in>
+          <in>AssetFiles.cpp</in>
+          <in>AssetFiles.h</in>
           <in>Localized.cpp</in>
           <in>Localized.h</in>
           <in>LocalizedTime.cpp</in>
           <in>LocalizedTime.h</in>
+          <in>ResourceManager.cpp</in>
+          <in>ResourceManager.h</in>
           <in>TempTimer.cpp</in>
           <in>TempTimer.h</in>
           <in>Utils.cpp</in>
@@ -5097,6 +5768,17 @@
           <in>WindowFocus.h</in>
           <in>WindowFocusedTimer.cpp</in>
           <in>WindowFocusedTimer.h</in>
+        </df>
+        <df name="Wifi">
+          <in>JsonWifiInterface.cpp</in>
+          <in>JsonWifiInterface.h</in>
+          <in>LibNMInterface.cpp</in>
+          <in>LibNMInterface.h</in>
+          <in>WifiAccessPoint.cpp</in>
+          <in>WifiAccessPoint.h</in>
+          <in>WifiDebugOutput.h</in>
+          <in>WifiStateManager.cpp</in>
+          <in>WifiStateManager.h</in>
         </df>
         <in>Main.cpp</in>
         <in>PocketHomeApplication.cpp</in>
