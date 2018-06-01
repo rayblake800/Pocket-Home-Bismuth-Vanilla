@@ -212,10 +212,10 @@ String IconThemeIndex::lookupIcon
 
     DirectoryComparator comp(size, scale);
     searchDirs.sort(comp);
-    DBG("Directory search order:");
+    DBG("Directory search order, size = " << size);
     for(const IconDirectory& dir : searchDirs)
     {
-        DBG("\t" << path + "/" + dir.path);
+        DBG("\t" << path + "/" + dir.path << ", size = " << dir.size);
     }
 
     for (const IconDirectory& dir : searchDirs)
