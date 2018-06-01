@@ -87,7 +87,12 @@ cacheFile(themeDir.getFullPathName())
         {"Threshold",
          [](IconThemeIndex* self, String& val, String& sectionName)
             {
-                self->directories[sectionName].threshold = val.getIntValue();
+                int thresholdVal = val.getIntValue();
+                self->directories[sectionName].threshold = thresholdVal;
+                self->directories[sectionName].minSize =
+                        self->directories[sectionName].size - thresholdVal;
+                self->directories[sectionName].maxSize =
+                        self->directories[sectionName].size + thresholdVal;
             }},
         {"Context",
          [](IconThemeIndex* self, String& val, String& sectionName)
@@ -212,11 +217,6 @@ String IconThemeIndex::lookupIcon
 
     DirectoryComparator comp(size, scale);
     searchDirs.sort(comp);
-    DBG("Directory search order, size = " << size);
-    for(const IconDirectory& dir : searchDirs)
-    {
-        DBG("\t" << path + "/" + dir.path << ", size = " << dir.size);
-    }
 
     for (const IconDirectory& dir : searchDirs)
     {
