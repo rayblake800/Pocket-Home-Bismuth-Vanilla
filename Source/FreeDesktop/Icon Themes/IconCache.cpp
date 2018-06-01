@@ -131,10 +131,13 @@ std::map<String,String> IconCache::lookupIcon
                 {
                     extension = ".png";
                 }
+                //TODO: add support for the xpm file format
+                /*
                 else if((iconFlags & xpmExtensionFlag) == xpmExtensionFlag)
                 {
                     extension = ".xpm";
                 }
+                */
                 else if((iconFlags & svgExtensionFlag) == svgExtensionFlag)
                 {
                     extension = ".svg";

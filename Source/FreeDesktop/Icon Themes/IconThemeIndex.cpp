@@ -228,7 +228,9 @@ String IconThemeIndex::lookupIcon(String icon, int size, Context context, int sc
         {
             //file extensions not found, continue on to check all possibilities
         }
-        static const StringArray extensions = {".png", ".svg", ".xpm"};
+        //TODO: add support for the .xpm file extension
+        //static const StringArray extensions = {".png", ".svg", ".xpm"};
+        static const StringArray extensions = {".png", ".svg"};
         for (const String& ext : extensions)
         {
             File iconFile(filePath + ext);
