@@ -28,6 +28,8 @@ void IconThread::loadIcon(String icon, int size,
         std::function<void(Image) > assignImage,
         IconThemeIndex::Context context, int scale)
 {
+    DBG("IconThread::" << __func__ << ": Requesting icon " << icon 
+            << ", target size " << size);
     //if the icon variable is a full path, return that
     if (icon.substring(0, 1) == "/")
     {
