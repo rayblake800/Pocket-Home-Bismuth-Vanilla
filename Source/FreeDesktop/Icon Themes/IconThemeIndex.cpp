@@ -3,7 +3,7 @@
 
 IconThemeIndex::IconThemeIndex(File themeDir) :
 path(themeDir.getFullPathName()),
-cacheFile(themeDir.getFullPathName() + cacheFileName)
+cacheFile(themeDir.getFullPathName())
 {
     if (!themeDir.isDirectory())
     {
@@ -37,7 +37,6 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
         {"Directories",
          [](IconThemeIndex* self, String& val, String& sectionName)
             {
-                DBG("Adding " << val);
                 StringArray dirNames = StringArray::fromTokens(val, ",", "");
                 for (const String& dir : dirNames)
                 {
@@ -142,7 +141,6 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
             int divider = line.indexOfChar('=');
             if (divider == -1)
             {
-                jassertfalse;
                 continue;
             }
             String key = line.substring(0, divider);
@@ -159,7 +157,7 @@ cacheFile(themeDir.getFullPathName() + cacheFileName)
 /**
  * Checks if this object represents a valid icon theme.
  */
-bool IconThemeIndex::isValidTheme()
+bool IconThemeIndex::isValidTheme() const
 {
     return path.isNotEmpty();
 }
@@ -168,7 +166,8 @@ bool IconThemeIndex::isValidTheme()
  * Finds the path of an icon within the theme.  The caller is responsible
  * for searching within all inherited themes if the icon is not found.
  */
-String IconThemeIndex::lookupIcon(String icon, int size, Context context, int scale)
+String IconThemeIndex::lookupIcon
+(String icon, int size, Context context, int scale) const
 {
     if (!isValidTheme())
     {
@@ -178,18 +177,23 @@ String IconThemeIndex::lookupIcon(String icon, int size, Context context, int sc
     Array<IconDirectory> searchDirs;
 
     std::map<String, String> cacheMatches;
-    if (useCache)
-    {
-        cacheMatches = cacheFile.lookupIcon(icon);
-    }
+    cacheMatches = cacheFile.lookupIcon(icon);
     if (!cacheMatches.empty())
     {
         for (auto it = cacheMatches.begin(); it != cacheMatches.end(); it++)
         {
-            searchDirs.add(directories[it->first]);
+            try
+            {
+                searchDirs.add(directories.at(it->first));
+            }
+            catch(std::out_of_range e)
+            {
+                DBG("IconThemeIndex::" << __func__ << ": directory "
+                        << it->first << " in cache is missing from index!");
+            }
         }
     }
-    else if (cacheFile.isValidCache() && useCache)
+    else if (cacheFile.isValidCache())
     {
         //cache is valid and doesn't contain the icon, no need to keep looking
         return String();
@@ -240,13 +244,15 @@ String IconThemeIndex::lookupIcon(String icon, int size, Context context, int sc
             }
         }
     }
+    DBG("IconThemeIndex::" << __func__ << ": No matches for " << icon
+            << " in theme directory at " << path);
     return String();
 }
 
 /*
  * Gets the name of the icon theme.
  */
-String IconThemeIndex::getName()
+String IconThemeIndex::getName() const
 {
     return name;
 }
@@ -254,7 +260,7 @@ String IconThemeIndex::getName()
 /*
  * Gets a short comment describing the icon theme.
  */
-String IconThemeIndex::getComment()
+String IconThemeIndex::getComment() const
 {
     return comment;
 }
@@ -263,7 +269,7 @@ String IconThemeIndex::getComment()
  * Gets the names of all themes inherited by this icon theme.  When findIcon
  * doesn't locate a requested icon, all inherited themes should be searched.
  */
-StringArray IconThemeIndex::getInheritedThemes()
+StringArray IconThemeIndex::getInheritedThemes() const
 {
     return inheritedThemes;
 }
@@ -271,7 +277,7 @@ StringArray IconThemeIndex::getInheritedThemes()
 /*
  * Checks if this theme should be displayed to the user in theme lists.
  */
-bool IconThemeIndex::isHidden()
+bool IconThemeIndex::isHidden() const
 {
     return hidden;
 }
@@ -279,7 +285,7 @@ bool IconThemeIndex::isHidden()
 /*
  * Gets the name of an icon to use as an example of this theme.
  */
-String IconThemeIndex::getExampleIcon()
+String IconThemeIndex::getExampleIcon() const
 {
     return example;
 }

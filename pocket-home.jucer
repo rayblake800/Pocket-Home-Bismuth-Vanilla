@@ -305,6 +305,10 @@
               file="Source/Config Files/MainConfigFile.h"/>
       </GROUP>
       <GROUP id="{19EF72F0-004C-98C0-E6A4-143C67F2B66B}" name="FreeDesktop">
+        <FILE id="Y2756N" name="XDGDirectories.cpp" compile="1" resource="0"
+              file="Source/FreeDesktop/XDGDirectories.cpp"/>
+        <FILE id="kJ69ba" name="XDGDirectories.h" compile="0" resource="0"
+              file="Source/FreeDesktop/XDGDirectories.h"/>
         <GROUP id="{B344B2B3-54B5-0A6A-4285-3E39C423A896}" name="Icon Themes">
           <FILE id="zBZMg7" name="IconCache.cpp" compile="1" resource="0" file="Source/FreeDesktop/Icon Themes/IconCache.cpp"/>
           <FILE id="pNIoHB" name="IconCache.h" compile="0" resource="0" file="Source/FreeDesktop/Icon Themes/IconCache.h"/>

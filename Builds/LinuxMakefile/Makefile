@@ -139,6 +139,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/AppConfigFile_9fbc232.o \
   $(JUCE_OBJDIR)/ComponentConfigFile_eae6a58e.o \
   $(JUCE_OBJDIR)/MainConfigFile_7c4a634e.o \
+  $(JUCE_OBJDIR)/XDGDirectories_5308a3d8.o \
   $(JUCE_OBJDIR)/IconCache_491da5cd.o \
   $(JUCE_OBJDIR)/IconThemeIndex_dea347e8.o \
   $(JUCE_OBJDIR)/IconThread_94e2d9e9.o \
@@ -546,6 +547,11 @@ $(JUCE_OBJDIR)/ComponentConfigFile_eae6a58e.o: ../../Source/Config\ Files/Compon
 $(JUCE_OBJDIR)/MainConfigFile_7c4a634e.o: ../../Source/Config\ Files/MainConfigFile.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling MainConfigFile.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/XDGDirectories_5308a3d8.o: ../../Source/FreeDesktop/XDGDirectories.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling XDGDirectories.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/IconCache_491da5cd.o: ../../Source/FreeDesktop/Icon\ Themes/IconCache.cpp

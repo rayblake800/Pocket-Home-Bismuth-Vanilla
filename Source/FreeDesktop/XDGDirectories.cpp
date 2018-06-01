@@ -20,21 +20,21 @@ static const constexpr char* configPathsVar = "XDG_CONFIG_DIRS";
 // Default paths to use if the XDG environment variables are not set.
 
 //Default user data directory, relative to $HOME
-static const constexpr char* defaultDataDir   = "/.local/share";
+static const String defaultDataDir   = "/.local/share";
 //Default user config directory, relative to $HOME
-static const constexpr char* defaultConfigDir = "/.config";
+static const String defaultConfigDir = "/.config";
 //Default user cache directory, relative to $HOME
-static const constexpr char* defaultCacheDir = "/.cache";
+static const String defaultCacheDir = "/.cache";
 //Default data paths to search after defaultDataDir
-static const constexpr char* defaultDataPaths = "/usr/local/share/:/usr/share/";
+static const String defaultDataPaths = "/usr/local/share:/usr/share";
 //Default config paths to search after defaultConfigDir
-static const constexpr char* defaultConfigPaths = "/etc/xdg";
+static const String defaultConfigPaths = "/etc/xdg";
 
 /*
  * Returns a string from an environment variable, or a default string if the
  * environment variable is unset or empty.  
  */
-static String getEnvOrDefaultString(const char* envVar, const char* defaultStr)
+static String getEnvOrDefaultString(const char* envVar, String defaultStr)
 {
     const char* envString = std::getenv(envVar);
     if(envString == nullptr || envString[0] == '\0')
@@ -43,13 +43,22 @@ static String getEnvOrDefaultString(const char* envVar, const char* defaultStr)
     }
     return String(envString);
 }
+
+/*
+ * Gets the user's home directory.
+ */
+static String homePath()
+{
+    return String(getenv("HOME"));
+}
+
 /*
  * Gets the path of the single base directory where user-specific data files
  * should be written.
  */
 String XDGDirectories::getUserDataPath()
 {
-    return getEnvOrDefaultString(dataDirVar, defaultDataDir);
+    return getEnvOrDefaultString(dataDirVar, homePath() + defaultDataDir);
 }
 
 /*
@@ -58,7 +67,7 @@ String XDGDirectories::getUserDataPath()
  */
 String XDGDirectories::getUserConfigPath()
 {
-    return getEnvOrDefaultString(configDirVar, defaultConfigDir);
+    return getEnvOrDefaultString(configDirVar, homePath() + defaultConfigDir);
 } 
 
 /*
@@ -67,7 +76,7 @@ String XDGDirectories::getUserConfigPath()
  */
 String XDGDirectories::getUserCachePath()
 {
-    return getEnvOrDefaultString(cacheDirVar, defaultCacheDir);
+    return getEnvOrDefaultString(cacheDirVar, homePath() + defaultCacheDir);
 }
 
 /*

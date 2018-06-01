@@ -10,7 +10,6 @@ menuItem(menuItem)
 
     setName(name);
     setWantsKeyboardFocus(false);
-    loadIcon(menuItem->getIconName());
 }
 
 /**
@@ -96,7 +95,8 @@ void AppMenuButton::setSelected(bool select)
 void AppMenuButton::loadIcon(String icon)
 {
     IconThread iconThread;
-    iconThread.loadIcon(icon, [this](Image iconImg)
+    iconThread.loadIcon(icon, imageBounds.toNearestInt().getWidth(),
+    [this](Image iconImg)
     {
         appIcon = iconImg;
         repaint();
@@ -151,6 +151,10 @@ void AppMenuButton::setTextBounds(const Rectangle<float>& bounds)
 void AppMenuButton::setImageBounds(const Rectangle<float>& bounds)
 {
     imageBounds = bounds;
+    if(appIcon.isNull())
+    {
+        loadIcon(menuItem->getIconName());
+    }
 }
 
 /**

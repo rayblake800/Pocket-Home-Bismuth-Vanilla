@@ -24,12 +24,17 @@ public:
      */
     IconThemeIndex(File themeDir);
     
+    /**
+     * Creates an empty, invalid index object.
+     */
+    IconThemeIndex() { }
+    
     virtual ~IconThemeIndex() { }
     
     /**
      * Checks if this object represents a valid icon theme.
      */
-    bool isValidTheme();
+    bool isValidTheme() const;
     
     /**
      * Defines the purpose of an icon directory.
@@ -94,34 +99,34 @@ public:
      *          match is found.
      */
     String lookupIcon(String icon, int size, Context context = unknownCtx,
-            int scale = 1);
+            int scale = 1) const;
     
     /**
      * Gets the name of the icon theme.
      * 
      * @return the theme's name.
      */
-    String getName();
+    String getName() const;
     
     /**
      * Gets a short comment describing the icon theme.
      * 
      * @return  the theme's comment value.
      */
-    String getComment();
+    String getComment() const;
     
     /**
      * Gets the names of all themes inherited by this icon theme.  When findIcon
      * doesn't locate a requested icon, all inherited themes should be searched.
      */
-    StringArray getInheritedThemes();
+    StringArray getInheritedThemes() const;
     
     /**
      * Checks if this theme should be displayed to the user in theme lists.
      * 
      * @return  true iff the theme should be shown.
      */
-    bool isHidden();
+    bool isHidden() const;
     
     /**
      * Gets the name of an icon to use as an example of this theme.
@@ -129,12 +134,9 @@ public:
      * @return  an icon name, to be used as the "icon" parameter in a findIcon
      *          call.
      */
-    String getExampleIcon();
-    
-    bool disableCache() { useCache = false; };
+    String getExampleIcon() const;
     
 private:
-    bool useCache = true;
     
     /**
      * Describes a directory of icon files within the theme
@@ -227,10 +229,8 @@ private:
     String example;
     //Accesses the theme's cache file, if one exists
     IconCache cacheFile;
-    
-    //filenames used by index and cache files
+    //Filename shared by all icon theme indexes
     static const constexpr char* indexFileName = "/index.theme";
-    static const constexpr char* cacheFileName = "/icon-theme.cache";
     
     //All icon sub-directories in the theme, indexed by relative path name
     std::map<String, IconDirectory> directories;

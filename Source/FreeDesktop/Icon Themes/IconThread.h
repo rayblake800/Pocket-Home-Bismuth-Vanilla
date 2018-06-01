@@ -2,14 +2,26 @@
 #include <map>
 #include <functional>
 #include "ResourceManager.h"
+#include "IconThemeIndex.h"
 #include "JuceHeader.h"
 
 /**
  * @File IconThread.h
  * 
- * Loads application and directory icons asynchronously. All icons in typical
- * icon directories are mapped, attempting to avoid duplicates.  This map is
- * then used to quickly locate icon files by name as they are needed.
+ * @brief Finds icon files in icon theme directories, and loads them as Image
+ *        objects.
+ * 
+ * The IconThread provides an interface for other objects to request icon Image
+ * objects with a specific name, and a preferred size and scale.  The IconThread
+ * handles these requests asynchronously, searching the user's selected icon
+ * theme directories for the closest icon matching the request.  
+ * 
+ * This process uses the XDG Base Directory Specification, the user's .gtkrc
+ * config file, and the icon themes' index.theme files to determine which
+ * directories are prioritized.  GTK's icon-theme.cache files are used to
+ * quickly locate image files within icon theme directories.
+ * 
+ * @see IconThemeIndex.h, IconCache.h
  */
 
 
@@ -30,14 +42,30 @@ public:
      *                       use an icon with a name partially matching this
      *                       string.
      * 
-     * @param assignImage    A callback function to asynchronously use the
-     *                       image found by the thread. Unless the icon can be 
-     *                       immediately located without searching, It will be 
-     *                       called twice, once to immediately apply a default 
-     *                       image, and again when the requested image has been
-     *                       found.
+     * @param size           The ideal width and height, in pixels, of the
+     *                       returned Image object.  IconThread will attempt
+     *                       to find an image file as close to this size as
+     *                       possible.
+     * 
+     * @param assignImage    If an icon Image object is found, it will be passed
+     *                       to this callback function as a parameter.  This
+     *                       callback function will always run on the message
+     *                       thread.
+     * 
+     * @param context        An icon context to use to limit which icon theme
+     *                       sub-directories are searched, or 
+     *                       IconThemeIndex::unknownCtx to search all
+     *                       sub-directories within icon themes. 
+     * 
+     * @param scale          The scale factor that the caller expects to apply
+     *                       to the image file before displaying the Image
+     *                       object.  This value is typically only relevant on
+     *                       extra high resolution displays.
      */
-    void loadIcon(String icon, std::function<void(Image) > assignImage);
+    void loadIcon(String icon, int size, 
+            std::function<void(Image) > assignImage,
+            IconThemeIndex::Context context = IconThemeIndex::unknownCtx,
+            int scale = 1);
 
 
 private:
@@ -58,6 +86,9 @@ private:
         struct QueuedJob
         {
             String icon;
+            int size;
+            int scale;
+            IconThemeIndex::Context context;
             std::function<void(Image) > callback;
         };
 
@@ -81,83 +112,29 @@ private:
          */
         QueuedJob getQueuedJob();
 
-        /**
-         * Searches for and returns an icon's full path. 
-         * 
-         * @param icon  Either a full icon file path, or the filename(without
-         *               extension) of an icon in one of the system icon 
-         *               directories.
-         * 
-         * @return     The closest matching icon image available 
-         */
-        String getIconPath(String icon);
-
-        /**
-         * Removes an icon from the icon path map.
-         * 
-         * @param iconName  If an icon with this key is in the list of mapped
-         *                   icons, it will be removed.
-         */
-        void removeIcon(String iconName);
-
-        /**
-         * Compares icon directories for icon mapping, prioritizing ones 
-         * with resolution numbers closer to 128
-         */
-        static int compareElements(File first, File second);
-
     private:
         /**
-         * While AppMenuButtons still need icons, this finds them in a separate 
-         * thread.
+         * Asynchronously handles queued icon requests
          */
         void run() override;
-
+        
         /**
-         * Creates the map of all icon file paths.
+         * Search icon theme directories for an icon matching a given request.
+         * 
+         * @param request  Defines the name and size of the requested icon
+         * 
+         * @return  The full path of the best matching icon file, or the empty
+         *          string if no match is found.
          */
-        void mapIcons();
-
-        //Prioritize icon directories with listed resolutions closest to 
-        //this value.
-        const int idealIconResolution = 128;
+        String getIconPath(const QueuedJob& request);
 
         //Queued icon requests waiting for the icon thread.
         Array<QueuedJob, CriticalSection> queuedJobs;
-
-        //Contains <filename(no extention),fullpath/filename.extension>
-        //mappings for all icons found on the system.
-        std::map<String, String> iconPaths;
-
-        //True iff icon paths have already been mapped
-        bool iconPathsMapped = false;
-
+        //Icon theme indexes used to load icons, in order of priority
+        OwnedArray<IconThemeIndex> iconThemes;
+        //Directories to search, in order, for icon themes and un-themed icons.
+        StringArray iconDirectories;
     };
-
-    struct IconDirectory
-    {
-        int size;
-        int scale;
-        String context;
-        String type;
-        int maxSize;
-        int minSize;
-        int Threshold;
-    };
-    
-    class IconTheme
-    {
-    public:
-        IconTheme();
-    private:
-    };
-    
-    
-    //Default image icons to copy into AppMenuButtons
-    Image defaultIcon;
-
-    //default icon path definitions
-    static const String defaultIconPath;
 
     //ResourceManager shared object and lock;
     static ScopedPointer<ResourceManager::SharedResource> sharedResource;

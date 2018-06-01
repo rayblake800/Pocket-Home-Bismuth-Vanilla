@@ -5,9 +5,10 @@
 /*
  * Maps an icon cache file to memory.
  */
-IconCache::IconCache(String cachePath)
+IconCache::IconCache(const String& themePath)
 {
-    File cacheFile(cachePath.toRawUTF8());
+    String cachePath = themePath + cacheFileName;
+    File cacheFile(cachePath);
     if (!cacheFile.existsAsFile())
     {
         DBG("IconCache::IconCache: Failed to find cache file " << cachePath);
@@ -44,7 +45,7 @@ IconCache::IconCache(String cachePath)
         return;
     }
     
-    DBG("IconCache::IconCache: mapped cache file" << cachePath << ", size "
+    DBG("IconCache::IconCache: mapped cache file " << cachePath << ", size "
             << String(fileLen));
 
     /*
@@ -61,15 +62,21 @@ IconCache::IconCache(String cachePath)
     uint32 dirListOffset = read32(8);
 
     uint32 numDirs = read32(dirListOffset);
+    DBG("IconCache::IconCache:: reading " << String(numDirs) 
+            << " directory names from offset " 
+            << String::toHexString(dirListOffset));
     dirListOffset += 4;
     for (int i = 0; i < numDirs; i++)
     {
         uint32 offset = read32(dirListOffset + i * 4);
-        directories.add(readString(offset));
+        String dirPath = readString(offset);
+        directories.add(dirPath);
     }
 
     hashBuckets = read32(hashOffset);
     hashOffset += 4;
+    DBG("IconCache::IconCache:: reading " << String(hashBuckets) 
+            << " hash bucket offsets");
     for (int i = 0; i < hashBuckets; i++)
     {
         hashOffsets.add(read32(hashOffset + i * 4));
@@ -82,10 +89,12 @@ IconCache::~IconCache()
     {
         int rc = munmap(fileMap, fileLen);
         jassert(rc == 0);
+        fileMap = MAP_FAILED;
     }
     if (fd > 0)
     {
         close(fd);
+        fd = 0;
     }
 }
 
@@ -93,7 +102,7 @@ IconCache::~IconCache()
  * Checks if this object represents a valid cache file.  This ensures that
  * the cache file exists, is not out of date, and contains icon data. 
  */
-bool IconCache::isValidCache()
+bool IconCache::isValidCache() const
 {
     return fileMap != MAP_FAILED && fileLen > 0
             && !directories.isEmpty() && !hashOffsets.isEmpty();
@@ -103,7 +112,7 @@ bool IconCache::isValidCache()
  * Looks up an icon's data in the icon cache.
  */
 std::map<String,String> IconCache::lookupIcon
-(const String& iconName)
+(const String& iconName) const
 {
     std::map<String, String>  matches;
     if(!isValidCache())
@@ -156,7 +165,7 @@ std::map<String,String> IconCache::lookupIcon
 /*
  * Calculate the hash value of an icon name.
  */
-uint32 IconCache::hashValue(const char* icon)
+uint32 IconCache::hashValue(const char* icon) const
 {
     if (icon == nullptr)
     {
@@ -176,7 +185,7 @@ uint32 IconCache::hashValue(const char* icon)
  * file, after ensuring that the cache file is valid and the offset is
  * within the file bounds.
  */
-uint16 IconCache::read16(uint32 offset)
+uint16 IconCache::read16(uint32 offset) const
 {
     if(fileMap == MAP_FAILED || (offset + sizeof(uint16)) > fileLen
        || (offset + sizeof(uint16)) < offset)
@@ -194,7 +203,7 @@ uint16 IconCache::read16(uint32 offset)
  * file, after ensuring that the cache file is valid and the offset is
  * within the file bounds.
  */
-uint16 IconCache::read32(uint32 offset)
+uint32 IconCache::read32(uint32 offset) const
 {
     if(fileMap == MAP_FAILED || (offset + sizeof(uint32)) > fileLen
        || (offset + sizeof(uint32)) < offset)
@@ -212,7 +221,7 @@ uint16 IconCache::read32(uint32 offset)
  * cache file, after ensuring that the cache file is valid and the offset is
  * within the file bounds.
  */
-String IconCache::readString(uint32 offset)
+String IconCache::readString(uint32 offset) const
 {
     if (fileMap == MAP_FAILED || offset >= fileLen)
     {
@@ -229,5 +238,5 @@ String IconCache::readString(uint32 offset)
             return String();
         }
     }
-    return String(reinterpret_cast<char*>(fileMap) + offset);
+    return String(CharPointer_UTF8(reinterpret_cast<char*>(fileMap) + offset));
 }

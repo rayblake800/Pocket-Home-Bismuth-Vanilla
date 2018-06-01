@@ -173,7 +173,7 @@ void AppMenuPopupEditor::fileSelected(FileSelectTextEditor* edited)
 {
     String newIcon = getIconField();
     IconThread iconThread;
-    iconThread.loadIcon(newIcon, [this](Image iconImg)
+    iconThread.loadIcon(newIcon, iconPreview.getWidth(), [this](Image iconImg)
     {
         iconPreview.setImage(iconImg);
     });

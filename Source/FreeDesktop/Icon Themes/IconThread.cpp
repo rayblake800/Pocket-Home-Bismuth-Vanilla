@@ -1,9 +1,7 @@
 #include "AssetFiles.h"
 #include "Utils.h"
+#include "XDGDirectories.h"
 #include "IconThread.h"
-
-const String IconThread::defaultIconPath =
-        "/usr/share/pocket-home/appIcons/default.png";
 
 ReadWriteLock IconThread::iconLock;
 
@@ -15,15 +13,14 @@ ResourceManager(sharedResource, iconLock,
         [this]()->ResourceManager::SharedResource*
 {
     return new IconResource();
-})
-{
-    defaultIcon = AssetFiles::loadImageAsset(defaultIconPath);
-}
+}) { }
 
-/**
+/*
  * Queues up an icon request.  
  */
-void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
+void IconThread::loadIcon(String icon, int size,
+        std::function<void(Image) > assignImage,
+        IconThemeIndex::Context context, int scale)
 {
     //if the icon variable is a full path, return that
     if (icon.substring(0, 1) == "/")
@@ -37,13 +34,16 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
         {
             icon = icon.substring(1 + icon.lastIndexOf("/"));
         }
-        assignImage(defaultIcon);
         const ScopedWriteLock queueLock(iconLock);
-        IconResource::QueuedJob iconRequest;
         IconResource* iconResource
                 = dynamic_cast<IconResource*> (sharedResource.get());
-        iconRequest.icon = icon;
-        iconRequest.callback = assignImage;
+        IconResource::QueuedJob iconRequest = {
+            icon,
+            size,
+            scale,
+            context,
+            assignImage
+        };
         iconResource->addQueuedJob(iconRequest);
         if (!iconResource->isThreadRunning())
         {
@@ -53,7 +53,87 @@ void IconThread::loadIcon(String icon, std::function<void(Image) > assignImage)
 }
 
 IconThread::IconResource::IconResource() :
-Thread("IconThread") { }
+Thread("IconThread") 
+{ 
+    //Icon directory search list and priority defined at
+    //https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html
+    iconDirectories.add(String(getenv("HOME")) + "/.icons");
+    StringArray dataDirs = XDGDirectories::getDataSearchPaths();
+    for(String& dir : dataDirs)
+    {
+        if(!dir.endsWithChar('/'))
+        {
+            dir += '/';
+        }
+        dir += "icons";
+    }
+    iconDirectories.addArray(dataDirs);
+    iconDirectories.add("/usr/share/pixmaps");
+    iconDirectories.add("/usr/share/pocket-home/appIcons");
+    
+    StringArray themeNames;
+    //Icon theme selection is stored in $HOME/.gtkrc-2.0
+    StringArray themeSettings;
+    String gtkSettingPath(String(getenv("HOME")) + "/.gtkrc-2.0");
+    File(gtkSettingPath).readLines(themeSettings);
+    for(const String& line : themeSettings)
+    {
+        int divider = line.indexOfChar('=');
+        if(divider != -1)
+        {
+            String key = line.substring(0,divider);
+            if(key == "gtk-icon-theme-name" || key == "gtk-fallback-icon-theme")
+            {
+                themeNames.add(line.substring(divider+1).unquoted());
+                if(themeNames.size() > 1)
+                {
+                    break;
+                }
+            }
+        }
+    }
+    themeNames.add("hicolor");//The default fallback theme
+    
+    //create theme index objects for the user's icon theme and all
+    //inherited/fallback themes
+    for(int i = 0; i < themeNames.size(); i++)
+    {
+        DBG("IconThread::IconThread: Finding icon theme " << themeNames[i]);
+        for(const String& dir : iconDirectories)
+        {
+            File themeDir(dir + (dir.endsWithChar('/') ? "" : "/") 
+                    + themeNames[i]);
+            if(themeDir.isDirectory())
+            {
+                iconThemes.add(new IconThemeIndex(themeDir));
+                if(iconThemes.getLast()->isValidTheme())
+                {
+                    DBG("IconThread::IconThread: Theme directory " 
+                            << iconThemes.size() << " added with path "
+                            << themeDir.getFullPathName());
+                    StringArray inherited = iconThemes.getLast()
+                            ->getInheritedThemes();
+                    int insertParentIdx = i + 1;
+                    for(const String& parent : inherited)
+                    {
+                        if(!themeNames.contains(parent))
+                        {
+                            themeNames.insert(insertParentIdx, parent);
+                            insertParentIdx++;
+                        }
+                    }
+                    break;
+                }
+                else
+                {
+                    DBG("IconThread::IconThread: Invalid theme directory "
+                            << themeDir.getFullPathName());
+                    iconThemes.removeLast();
+                }
+            }
+        }
+    } 
+}
 
 IconThread::IconResource::~IconResource()
 {
@@ -61,7 +141,7 @@ IconThread::IconResource::~IconResource()
     waitForThreadToExit(-1);
 }
 
-/**
+/*
  * Returns the number of pending icon requests. 
  */
 int IconThread::IconResource::numJobsQueued()
@@ -69,10 +149,8 @@ int IconThread::IconResource::numJobsQueued()
     return queuedJobs.size();
 }
 
-/**
+/*
  * Adds another job request to the queue.
- * 
- * @param newJob
  */
 void IconThread::IconResource::addQueuedJob
 (IconThread::IconResource::QueuedJob newJob)
@@ -80,7 +158,7 @@ void IconThread::IconResource::addQueuedJob
     queuedJobs.add(newJob);
 }
 
-/**
+/*
  * Removes and returns the last job from the list.
  */
 IconThread::IconResource::QueuedJob
@@ -91,82 +169,7 @@ IconThread::IconResource::getQueuedJob()
     return lastJob;
 }
 
-/**
- * Searches for and returns an icon.
- */
-String IconThread::IconResource::getIconPath(String icon)
-{
-    //if it hasn't happened already, build the icon path map
-    if (!iconPathsMapped)
-    {
-        mapIcons();
-    }
-    if (iconPaths.count(icon) > 0)
-    {
-        return iconPaths[icon];
-    }
-    else
-    {
-        // If the icon isn't in the map, look for one with a similar name
-        for (auto it = iconPaths.begin(); it != iconPaths.end(); it++)
-        {
-            String iconCandidate = it->first;
-            if (!it->second.isEmpty() &&
-                (iconCandidate.containsIgnoreCase(icon) ||
-                 icon.containsIgnoreCase(iconCandidate)))
-            {
-                return it->second;
-            }
-        }
-    }
-    return String();
-}
-
-/**
- * Removes an icon from the icon path map.
- * 
- * @param iconName  If an icon with this key is in the list of mapped
- *                   icons, it will be removed.
- */
-void IconThread::IconResource::removeIcon(String iconName)
-{
-    auto iconIter = iconPaths.find(iconName);
-    iconPaths.erase(iconIter);
-}
-
-/**
- * Assign an integer value to an icon file for sorting purposes.
- */
-static int iconDirValue(const File& file)
-{
-    String filename = file.getFileName();
-    static const String numeric = "0123456789";
-    if (filename.containsAnyOf(numeric))
-    {
-        int value = filename.substring(filename.indexOfAnyOf(numeric))
-                .initialSectionContainingOnly(numeric)
-                .getIntValue();
-        //higher numbers first, until after 128px
-        if (value > 128)
-        {
-            value = 128 / value;
-        }
-        return value;
-    }
-    return 0;
-}
-
-int IconThread::IconResource::compareElements
-(File first, File second)
-{
-    if (first == second)
-    {
-        return 0;
-    }
-    return iconDirValue(second) - iconDirValue(first);
-}
-
-/**
+/*
  * While AppMenuButtons still need icons, this finds them in a separate 
  * thread.
  */
@@ -178,7 +181,7 @@ void IconThread::IconResource::run()
         !threadShouldExit() && activeJob.icon.isNotEmpty();
         activeJob = getQueuedJob())
     {
-        String icon = getIconPath(activeJob.icon);
+        String icon = getIconPath(activeJob);
         if (icon.isNotEmpty())
         {
             Image iconImg;
@@ -186,13 +189,7 @@ void IconThread::IconResource::run()
                 const MessageManagerLock lock;
                 iconImg = AssetFiles::loadImageAsset(icon);
             }
-            if (iconImg.isNull())
-            {
-                DBG("Removing unloadable icon " << icon);
-                removeIcon(File(icon).getFileNameWithoutExtension());
-                addQueuedJob(activeJob);
-            }
-            else
+            if (!iconImg.isNull())
             {
                 const MessageManagerLock lock;
                 activeJob.callback(iconImg);
@@ -202,135 +199,51 @@ void IconThread::IconResource::run()
     }
 }
 
-
-
-/**
- * Creates the map of all icon file paths.
+/*
+ * Search icon theme directories for an icon matching a given request.
  */
-void IconThread::IconResource::mapIcons()
+String IconThread::IconResource::getIconPath
+(const IconThread::IconResource::QueuedJob& request)
 {
-    ScopedPointer<ScopedExecTimer> timer =
-            new ScopedExecTimer(String("mapping icon directories"));
-    //Subdirectories with these names are likely to appear, but should
-    //not be searched for icons.
-    const StringArray ignore = {
-                                "actions",
-                                "applets",
-                                "cursors",
-                                "devices",
-                                "emblems",
-                                "emotes",
-                                "mimetypes",
-                                "places",
-                                "status",
-                                "stock",
-                                "symbolic"
-    };
-    Array<File> searchDirs;
-    //Recursively traverse all subdirectories at a given path, and add all valid
-    //ones to the list of paths to search
-    std::function<void(const File&) > findSearchPaths;
-    findSearchPaths =
-            [&findSearchPaths, &ignore, &searchDirs, this]
-            (const File & directory)
-            {
-                searchDirs.add(directory);
-                Array<File> searchResults = directory.findChildFiles
-                        (File::findDirectories, false);
-                if (searchResults.isEmpty()) return;
-                Array<File> subDirs;
-                for (const File& directory : searchResults)
-                {
-                    if (!ignore.contains(directory.getFileName(), true))
-		    {
-                        subDirs.addIfNotAlreadyThere(directory);
-                    }
-                }
-                subDirs.sort(*this);
-                for (const File& directory : subDirs)
-                {
-                    if (!searchDirs.contains(directory))
-                    {
-                        findSearchPaths(directory);
-                    }
-                }
-            };
-    //check user and pocket-home directories before all else
-    findSearchPaths(File("/usr/share/pocket-home/appIcons/"));
-    findSearchPaths(File("~/.icons/"));
-    findSearchPaths(File("~/.local/share/icons"));
-    //build a list of primary search directories
-    const StringArray basePaths = {
-                                   "/usr/share/icons/",
-                                   "/usr/local/icons/",
-                                   "/usr/share/pixmaps/"
-    };
-    //search for icon theme directories, prioritize them if found
-    String iconTheme;
-    String fallbackIconTheme;
-    File configPath("~/.gtkrc-2.0");
-    if (configPath.existsAsFile())
+    //First, search themes in order to find a matching icon
+    for(const IconThemeIndex* themeIndex : iconThemes)
     {
-        String themeLine("gtk-icon-theme-name=\"");
-        String fallbackThemeLine("gtk-fallback=icon-theme=\"");
-        StringArray lines;
-        configPath.readLines(lines);
-        for (const String& line : lines)
+        String iconPath = themeIndex->lookupIcon(request.icon, request.size,
+                request.context, request.scale);
+        if(iconPath.isNotEmpty())
         {
-            if (iconTheme.isNotEmpty() && line.contains(themeLine))
+            return iconPath;
+        }
+    }
+    //If not searching within the application context and the icon name is
+    //hyphenated, remove the last section of the name to search for a less
+    //specific icon.
+    if(request.context != IconThemeIndex::applicationsCtx &&
+       request.icon.containsChar('-'))
+    {
+        QueuedJob subRequest = request;
+        subRequest.icon = subRequest.icon.upToLastOccurrenceOf("-", false,
+                false);
+        String iconPath = getIconPath(subRequest);
+        if(iconPath.isNotEmpty())
+        {
+            return iconPath;
+        }
+    }
+    //Last, search for matching un-themed icon files
+    for(const String& iconDir : iconDirectories)
+    {
+        //TODO: add support for .xpm files
+        //static const StringArray iconExtensions = {".png", ".xpm", ".svg"};
+        static const StringArray iconExtensions = {".png", ".svg"};
+        for(const String& ext : iconExtensions)
+        {
+            String iconPath = iconDir + String("/") + request.icon + ext;
+            if(File(iconPath).existsAsFile())
             {
-                iconTheme = line.fromFirstOccurrenceOf("\"", false, false)
-                        .upToLastOccurrenceOf("\"", false, false);
-            }
-            if (fallbackIconTheme.isNotEmpty() && line.contains
-                (fallbackThemeLine))
-            {
-                fallbackIconTheme = line
-                        .fromFirstOccurrenceOf("\"", false, false)
-                        .upToLastOccurrenceOf("\"", false, false);
-            }
-            if (iconTheme.isNotEmpty() && fallbackIconTheme.isNotEmpty())
-            {
-                break;
+                return iconPath;
             }
         }
     }
-    if (iconTheme.isNotEmpty())
-    {
-        for (const String& path : basePaths)
-        {
-            findSearchPaths(File(path + iconTheme + "/"));
-        }
-    }
-    if (fallbackIconTheme.isNotEmpty())
-    {
-        for (const String& path : basePaths)
-        {
-            findSearchPaths(File(path + fallbackIconTheme + "/"));
-        }
-    }
-    for (const String& path : basePaths)
-    {
-        findSearchPaths(File(path));
-    }
-    timer = new ScopedExecTimer(String("finding icon files"));
-    DBG("IconThread::" << __func__ << ":Searching " << searchDirs.size()
-            << " icon directories:");
-    //finally, find and map icon files
-    for (const File& directory : searchDirs)
-    {
-        Array<File> iconFiles = directory.findChildFiles(File::findFiles, false,
-                "*.png;*.svg;*.xpm;*.jpg");
-        for (const File& file : iconFiles)
-        {
-            String filename = file.getFileNameWithoutExtension();
-            if (iconPaths[filename].isEmpty())
-            {
-                iconPaths[filename] = file.getFullPathName();
-            }
-        }
-    }
-    DBG("IconThread::" << __func__ << ": Mapped " << String(iconPaths.size())
-            << " icon files.");
-    iconPathsMapped = true;
+    return String();
 }

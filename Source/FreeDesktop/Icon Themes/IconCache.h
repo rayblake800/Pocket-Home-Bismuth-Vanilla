@@ -19,11 +19,16 @@ class IconCache
 {
 public:
     /**
-     * Maps an icon cache file to memory.
+     * Maps an icon theme cache file to memory.
      * 
-     * @param cachePath  The path to an icon theme's icon-theme.cache file.
+     * @param themePath  The absolute path of an icon theme directory.
      */
-    IconCache(String cachePath);
+    IconCache(const String& themePath);
+    
+    /**
+     * Creates an empty, invalid cache object.
+     */
+    IconCache() { }
     
     virtual ~IconCache();
 
@@ -33,7 +38,7 @@ public:
      * 
      * @return  true iff the object maps a valid cache file.
      */
-    bool isValidCache();
+    bool isValidCache() const;
     
     //icon flags
     /*
@@ -62,7 +67,7 @@ public:
      *          the first available file extension for the icon within the 
      *          directory.
      */
-    std::map<String,String> lookupIcon(const String& iconName);
+    std::map<String,String> lookupIcon(const String& iconName) const;
     
 private:
     /**
@@ -73,7 +78,7 @@ private:
      * 
      * @return  the hash value needed to look up the icon in the icon cache. 
      */
-    uint32 hashValue(const char* icon);
+    uint32 hashValue(const char* icon) const;
     
     /**
      * Reads a two-byte unsigned integer from an arbitrary offset in the cache
@@ -86,7 +91,7 @@ private:
      *          order if necessary, or 0 if the cache file or offset index are
      *          invalid. 
      */
-    uint16 read16(uint32 offset);
+    uint16 read16(uint32 offset) const;
     
     /**
      * Reads a four-byte unsigned integer from an arbitrary offset in the cache
@@ -99,7 +104,7 @@ private:
      *          order if necessary, or 0 if the cache file or offset index are
      *          invalid. 
      */
-    uint16 read32(uint32 offset);
+    uint32 read32(uint32 offset) const;
     
     /**
      * Reads a null-terminated character string from an arbitrary offset in the 
@@ -112,8 +117,11 @@ private:
      *          is invalid, the offset is out of bounds, or the null terminator
      *          is not found.
      */
-    String readString(uint32 offset);
-
+    String readString(uint32 offset) const;
+    
+    //Filename shared by all icon cache files
+    static const constexpr char* cacheFileName = "/icon-theme.cache";
+    
     //file descriptor needed to map the cache file to memory
     int fd = -1;
     
