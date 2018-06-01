@@ -525,11 +525,8 @@ void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
         removeChildComponent(openFolders.getLast());
         openFolders.removeLast();
     }
-    ScopedPointer<ScopedExecTimer> opentime = new ScopedExecTimer("opening new folder");
 
     AppMenuFolder* newFolder = createFolderObject(folderItem, buttonNameMap);
-
-    opentime = nullptr;
     openFolders.add(newFolder);
     newFolder->addMouseListener(this, false);
     newFolder->updateGridSize(maxRows, maxColumns);

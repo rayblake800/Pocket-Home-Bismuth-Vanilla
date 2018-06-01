@@ -185,8 +185,6 @@ IconThread::IconResource::getQueuedJob()
  */
 void IconThread::IconResource::run()
 {
-    ScopedExecTimer timer(String("Loading ") 
-            + String(numJobsQueued()) + " Icons");
     for(IconResource::QueuedJob activeJob = getQueuedJob();
         !threadShouldExit() && activeJob.icon.isNotEmpty();
         activeJob = getQueuedJob())
