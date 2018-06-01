@@ -87,12 +87,7 @@ cacheFile(themeDir.getFullPathName())
         {"Threshold",
          [](IconThemeIndex* self, String& val, String& sectionName)
             {
-                int thresholdVal = val.getIntValue();
-                self->directories[sectionName].threshold = thresholdVal;
-                self->directories[sectionName].minSize =
-                        self->directories[sectionName].size - thresholdVal;
-                self->directories[sectionName].maxSize =
-                        self->directories[sectionName].size + thresholdVal;
+                self->directories[sectionName].threshold = val.getIntValue();
             }},
         {"Context",
          [](IconThemeIndex* self, String& val, String& sectionName)
@@ -365,11 +360,13 @@ int IconThemeIndex::DirectoryComparator::directorySizeDistance
         case thresholdType:
             if (size * scale < (subdir.size - subdir.threshold) * subdir.scale)
             {
-                return subdir.minSize * subdir.scale - size * scale;
+                return (subdir.size - subdir.threshold) * subdir.scale 
+                        - size * scale;
             }
             if (size * scale > (subdir.size + subdir.threshold) * subdir.scale)
             {
-                return size * scale - subdir.maxSize * subdir.scale;
+                return size * scale 
+                        - (subdir.size + subdir.threshold)  * subdir.scale;
             }
             return 0;
     }
