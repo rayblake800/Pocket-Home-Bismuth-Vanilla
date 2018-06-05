@@ -21,60 +21,91 @@ namespace TransitionAnimator
     };
 
     /**
-     * Replaces the on-screen components, animating the transition.
+     * Moves one set of components off-screen, while moving another set of
+     * components on-screen, animating the transition.  Any component that is
+     * in both sets will appear to move off-screen while a duplicate component
+     * moves on-screen simultaneously.
+     * 
+     * @param movingOut              An array of all components that will move
+     *                               off of the screen.  If a component in this
+     *                               array is also in the transitionIn list,
+     *                               a proxy component will be created to slide
+     *                               off-screen.  Any changes made to the
+     *                               component after calling this method will
+     *                               not affect the proxy component.
+     * 
+     * @param movingIn               An array of all components that will move
+     *                               onto the screen, paired with their target
+     *                               bounding rectangle.  Components will be
+     *                               moved before animating so that they slide 
+     *                               in from the correct direction.
+     * 
+     * @param direction              The direction Components will move when
+     *                               animating.
+     * 
+     * @param animationMilliseconds  Duration of the component animation, in
+     *                               milliseconds.
      */
     void animateTransition(
-	    Array<Component*> transitionOut,
-            Array<std::pair<Component*, Rectangle<int>> transitionIn,
+	    Array<juce::Component*> movingOut,
+            Array<std::pair<Component*, Rectangle<int>>> movingIn,
             const Direction direction,
             const unsigned int animationMilliseconds);
     
+    /**
+     * Moves a component off-screen, animating the transition.
+     * 
+     * @param component              An on-screen component to move off-screen.  
+     *                               If the component is already outside of the
+     *                               screen bounds, nothing will happen.
+     * 
+     * @param direction              The direction the component will move out
+     *                               of the screen bounds.
+     * 
+     * @param animationMilliseconds  The duration of the component animation, in
+     *                               milliseconds.
+     */
     void transitionOut(Component* component,
 	    const Direction direction,
-            const unsigned int animationMilliseconds,
-	    const bool useProxy = false);
+            const unsigned int animationMilliseconds);
 
+    /**
+     * Moves a component into the screen bounds, animating the transition.
+     * 
+     * @param component              A component to move onto the screen. Before
+     *                               animating, it will be re-positioned outside
+     *                               the screen bounds to ensure it moves in
+     *                               from the right direction.
+     * 
+     * @param direction              The direction the component moves as it
+     *                               enters the screen bounds.
+     * 
+     * @param destination            The destination bounds of the component,
+     *                               relative to its parent component.  If this
+     *                               does not intersect with the screen bounds,
+     *                               the component will not be re-positioned or
+     *                               animated.
+     * 
+     * @param animationMilliseconds  The duration of the component animation, in
+     *                               milliseconds.
+     */
     void transitionIn(Component* component,
             const Direction direction,
             const Rectangle<int> destination,
 	    const unsigned int animationMilliseconds);
 
-    void translate(Component* component,
+    /**
+     * Updates a component's bounds, animating the transformation.
+     * 
+     * @param component              The component being transformed.
+     * 
+     * @param destination            The new bounds to apply to the component,
+     *                               relative to its parent component.
+     * 
+     * @param animationMilliseconds  The duration of the component animation, in
+     *                               milliseconds.
+     */
+    void transformBounds(Component* component,
             const  Rectangle<int>& destination,
 	    const unsigned int animationMilliseconds);
-
-    /**
-     * Duplicates the appearance of other Component objects.
-     */
-    class AnimationProxy :
-    public ComponentAnimator::AnimationTask::ProxyComponent, private Timer
-    {
-    public:
-        /**
-         * @param source             The proxy component will add itself to this
-         *                           component's parent, and copy its bounds and
-         *                           appearance.
-         * 
-         * @param animationDuration  The duration in milliseconds the proxy will
-         *                           be needed for animation.  Once this time
-         *                           has elapsed and the component is finished
-         *                           animating, it will be deleted.
-         */
-        AnimationProxy(Component& source, int animationDuration);
-
-        virtual AnimationProxy() { }
-
-    private:
-        /**
-         * Deletes the component if it is no longer animating.  If it is still
-         * animating, the timer will be reset.
-         */
-        void timerCallback() override;
-        
-        //Saved animation duration
-        const int duration;
-    };
-
-    //Stores all proxy components while they're needed for animation.
-    static OwnedArray<AnimationProxy> proxies;
-}
+};
