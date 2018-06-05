@@ -9,10 +9,9 @@
  *        slide in from the opposite direction. 
  */
 
-class TransitionAnimator
+namespace TransitionAnimator
 {
-public:
-
+    //Defines the directions of movement available for Component transitions
     enum Direction
     {
         moveUp,
@@ -23,61 +22,26 @@ public:
 
     /**
      * Replaces the on-screen components, animating the transition.
-     * 
-     * @param transitionIn           New Component or Component Array to move 
-     *                               on-screen. Component bounds should already 
-     *                               be set to the desired destination bounds.  
-     *                               If not visible, Component(s) will become 
-     *                               visible after being moved off-screen for 
-     *                               animation.
-     * 
-     * @param transitionOut          Visible, on-screen Component or Component 
-     *                               Array to move off-screen.  If a 
-     *                               transitionOut component is also in 
-     *                               transitionIn, a proxy component will be 
-     *                               used to simulate the transition off-screen.
-     * 
-     * @param direction              The direction Components will move during
-     *                               the transition.
-     * 
-     * @param animationMilliseconds  Animation duration in milliseconds.
      */
-    template <class T> static void animateTransition(
-            T transitionIn,
-            T transitionOut,
+    void animateTransition(
+	    Array<Component*> transitionOut,
+            Array<std::pair<Component*, Rectangle<int>> transitionIn,
             const Direction direction,
             const unsigned int animationMilliseconds);
-private:
-    /**
-     * Constructor is private because there should never be any reason to create 
-     * a TransitionAnimator object.  
-     * 
-     * TODO: figure out if there's a way to resolve issues with using both 
-     *       templates and private methods, so TransitionAnimator can be
-     *       declared as a namespace instead of a class.
-     */
-    TransitionAnimator() { }
-    ~TransitionAnimator() { }
+    
+    void transitionOut(Component* component,
+	    const Direction direction,
+            const unsigned int animationMilliseconds,
+	    const bool useProxy = false);
 
-    /**
-     * Animates a Component* or Array<Component*>, translating them to a
-     * destination rectangle.
-     * 
-     * @tparam T                     Either Component* or Array<Component*>
-     * 
-     * @param toMove                 The Component or component array being
-     *                               translated.
-     * 
-     * @param destination            The final bounds of the Component*, or
-     *                               a rectangle containing the final bounds
-     *                               of all Component* in the Array.  If moving
-     *                               an Array of Components, their relative
-     *                               positions will be preserved.
-     * 
-     * @param animationMilliseconds  Duration of the translation, in ms. 
-     */
-    template <class T > static void translate
-    (T toMove, Rectangle<int>& destination, int animationMilliseconds);
+    void transitionIn(Component* component,
+            const Direction direction,
+            const Rectangle<int> destination,
+	    const unsigned int animationMilliseconds);
+
+    void translate(Component* component,
+            const  Rectangle<int>& destination,
+	    const unsigned int animationMilliseconds);
 
     /**
      * Duplicates the appearance of other Component objects.
