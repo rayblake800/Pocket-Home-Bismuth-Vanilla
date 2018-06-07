@@ -93,13 +93,12 @@ void RelativeLayoutManager::layoutComponents(Rectangle<int> bounds)
     // x2 = -c(a-2b)/(c+d-e)
     // x3 = -d(a-2b)/(c+d-e)
 
-    int yWeightValue = -(bounds.getHeight() - 2 * yMargin)
+    int yPixelsPerWeight = -(bounds.getHeight() - 2 * yMargin)
             / (topPaddingWeight + bottomPaddingWeight - vertWeightSum);
     
-    int usableHeight = vertWeightSum * yWeightValue;
-    int adjustedTopMargin = yMargin - topPaddingWeight * yWeightValue;
-    int adjustedBottomMargin =  yMargin - bottomPaddingWeight * yWeightValue;
-
+    int adjustedTopMargin = std::max(0,
+            yMargin - topPaddingWeight * yPixelsPerWeight);
+ 
     int yPos = bounds.getY() + adjustedTopMargin;
     for (int rowNum = 0; rowNum < layout.rows.size(); rowNum++)
     {
@@ -109,23 +108,30 @@ void RelativeLayoutManager::layoutComponents(Rectangle<int> bounds)
 
         if (vertWeightSum == 0)
         {
-            yPadding = row.yPaddingWeight * usableHeight
-                    / vertWeightSum / 2;
-            int height = row.rowWeight * usableHeight / vertWeightSum;
+            yPadding = row.yPaddingWeight * yPixelsPerWeight;
+            int height = row.rowWeight * yPixelsPerWeight;
             yPos += yPadding;
         }
 
-        int xPos = bounds.getX();
+        int leftPaddingWeight = row.rowItems.begin()->xPaddingWeight;
+        int rightPaddingWeight = row.rowItems.back()->yPaddingWeight;
+
+        int xPixelsPerWeight = -(bounds.getWidth() - 2 * xMargin)
+                / (leftPaddingWeight + rightPaddingWeight 
+		- horizWeightSums[rowNum]);
+    
+        int adjustedLeftMargin = std::max(0,
+            xMargin - leftPaddingWeight * xPixelsPerWeight);
+
+        int xPos = bounds.getX() + adjustedLeftMargin;
         for (const ComponentLayout& compLayout : row.rowItems)
         {
             int xPadding = 0;
             int width = 0;
             if (horizWeightSums[rowNum] > 0)
             {
-                xPadding = compLayout.xPaddingWeight * bounds.getWidth()
-                        / horizWeightSums[rowNum] / 2;
-                width = bounds.getWidth() * compLayout.componentWeight
-                        / horizWeightSums[rowNum];
+                xPadding = compLayout.xPaddingWeight * xPixelsPerWidth;
+                width = compLayout.componentWeight * xPixelsPerWidth;
             }
             xPos += xPadding;
             if (compLayout.component != nullptr)

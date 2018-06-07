@@ -3,6 +3,41 @@
 DateTimePage::DateTimePage() :
 Localized("DateTimePage"),
 PageComponent("DateTimePage",{
+    .xMarginFraction = 0.1,
+    .yMarginFraction = 0.1,
+    .rows = 
+    {
+        {
+            .rowWeight = 30,
+            .yPaddingWeight = 1,
+	    .rowItems = 
+	    {
+	        {
+	            .component = &titleLabel,
+		    .componentWeight = 20,
+		    .xPaddingWeight = 1
+	        }
+	    }
+        },
+	{
+            .rowWeight = 20,
+            .yPaddingWeight = 1,
+	    .rowItems = 
+	    {
+	        {
+	            .component = &clockModeLabel,
+		    .componentWeight = 30,
+		    .xPaddingWeight = 1
+	        },
+		{
+	            .component = &setClockMode,
+		    .componentWeight = 10,
+		    .xPaddingWeight = 1
+	        },
+	    }
+        },
+
+    }
     {3,
         {
             {&titleLabel, 1}
