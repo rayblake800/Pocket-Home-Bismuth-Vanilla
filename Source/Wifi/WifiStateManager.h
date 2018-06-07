@@ -133,6 +133,7 @@ public:
             case invalidSecurityAP:
                 return "invalidSecurityAP";
         }
+        return "apStateString: missing AccessPointState!";
     }
 #endif
 

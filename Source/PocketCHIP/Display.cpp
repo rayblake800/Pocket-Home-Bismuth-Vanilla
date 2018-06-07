@@ -27,25 +27,4 @@ void Display::setBrightness(const int& brightness)
     }
 }
 
-/**
- * Gets the size of the active display.
- * 
- * @return the size of the display, measured in pixels.
- */
-Rectangle<int> Display::getDisplaySize(){
-    return Desktop::getInstance().getDisplays().getMainDisplay().userArea;
-}
-
-/**
- * Gets the size of the single application window.
- */
-Rectangle<int> Display::getWindowSize()
-{
-    Component * windowComp = Desktop::getInstance().getComponent(0);
-    if (windowComp == nullptr)
-    {
-        return Rectangle<int>();
-    }
-    return windowComp->getLocalBounds();
-}
 

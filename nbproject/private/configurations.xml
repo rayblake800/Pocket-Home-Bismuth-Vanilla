@@ -2950,7 +2950,7 @@
                 <in>HostStartup.cpp</in>
               </df>
             </df>
-            <df name="binarybuilder">
+            <df name="BinaryBuilder">
               <df name="Builds">
                 <df name="LinuxMakefile">
                 </df>
@@ -2971,7 +2971,7 @@
                 <in>Main.cpp</in>
               </df>
             </df>
-            <df name="BinaryBuilder">
+            <df name="binarybuilder">
               <df name="Builds">
                 <df name="LinuxMakefile">
                 </df>
@@ -5682,6 +5682,8 @@
           <in>PokeLookAndFeel.h</in>
           <in>RelativeLayoutManager.cpp</in>
           <in>RelativeLayoutManager.h</in>
+          <in>TransitionAnimator.cpp</in>
+          <in>TransitionAnimator.h</in>
         </df>
         <df name="Config Files">
           <in>AppConfigFile.cpp</in>

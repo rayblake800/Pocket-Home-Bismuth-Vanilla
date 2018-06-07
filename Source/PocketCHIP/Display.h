@@ -25,18 +25,4 @@ namespace Display
      *                      valid integer.
      */
     void setBrightness(const int& brightness);
-    
-    /**
-     * Gets the size of the active display.
-     * 
-     * @return the size of the display, measured in pixels.
-     */
-    Rectangle<int> getDisplaySize();
-
-    /**
-     * Gets the size of the single application window.
-     * 
-     * @return the size of the active window, measured in pixels.
-     */
-    Rectangle<int> getWindowSize();
 }

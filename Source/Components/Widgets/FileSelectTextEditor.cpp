@@ -1,4 +1,4 @@
-#include "Display.h"
+#include "Utils.h"
 #include "FileSelectTextEditor.h"
 
 const WildcardFileFilter FileSelectTextEditor::imageFilter
@@ -141,7 +141,7 @@ void FileSelectTextEditor::buttonClicked(Button* button)
             findColour(fileWindowColourId));
     dialogBox.setColour(FileChooserDialogBox::titleTextColourId, Colours::red);
     jassert(dialogBox.isColourSpecified(FileChooserDialogBox::titleTextColourId));
-    Rectangle<int> size = Display::getWindowSize();
+    Rectangle<int> size = getWindowBounds();
     if (dialogBox.show(size.getWidth(), size.getHeight()))
     {
         File selectedFile = browser.getSelectedFile(0);

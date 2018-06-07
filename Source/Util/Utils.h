@@ -135,3 +135,17 @@ bool isClass(C1* checkIfC2)
     C2* testPtr = dynamic_cast<C2*> (checkIfC2);
     return testPtr != nullptr;
 }
+ 
+/**
+ * Gets the size of the active display.
+ * 
+ * @return the size of the display, measured in pixels.
+ */
+Rectangle<int> getDisplaySize();
+
+/**
+ * Gets the size of the single application window.
+ * 
+ * @return the bounds of the active window, measured in pixels.
+ */
+Rectangle<int> getWindowBounds();

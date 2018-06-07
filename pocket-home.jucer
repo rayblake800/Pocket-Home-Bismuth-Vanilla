@@ -27,6 +27,24 @@
         <FILE id="SEXHIm" name="BluezAdapter.h" compile="0" resource="0" file="Source/Bluetooth/BluezAdapter.h"/>
       </GROUP>
       <GROUP id="{185415EC-B399-8F03-8F25-DEE2244D2B03}" name="Components">
+        <GROUP id="{6B24A9E3-3F63-2A4B-CDEB-72FB27F4FEB0}" name="Configurable">
+          <FILE id="g1W6SX" name="ConfigurableComponent.cpp" compile="1" resource="0"
+                file="Source/Components/Configurable/ConfigurableComponent.cpp"/>
+          <FILE id="OBFKiD" name="ConfigurableComponent.h" compile="0" resource="0"
+                file="Source/Components/Configurable/ConfigurableComponent.h"/>
+          <FILE id="gzdytE" name="ConfigurableImageButton.cpp" compile="1" resource="0"
+                file="Source/Components/Configurable/ConfigurableImageButton.cpp"/>
+          <FILE id="qHMdEQ" name="ConfigurableImageButton.h" compile="0" resource="0"
+                file="Source/Components/Configurable/ConfigurableImageButton.h"/>
+          <FILE id="Gf8A1r" name="ConfigurableImageComponent.cpp" compile="1"
+                resource="0" file="Source/Components/Configurable/ConfigurableImageComponent.cpp"/>
+          <FILE id="HkMUgr" name="ConfigurableImageComponent.h" compile="0" resource="0"
+                file="Source/Components/Configurable/ConfigurableImageComponent.h"/>
+          <FILE id="a9u0EC" name="ConfigurableLabel.cpp" compile="1" resource="0"
+                file="Source/Components/Configurable/ConfigurableLabel.cpp"/>
+          <FILE id="pINIgS" name="ConfigurableLabel.h" compile="0" resource="0"
+                file="Source/Components/Configurable/ConfigurableLabel.h"/>
+        </GROUP>
         <GROUP id="{784530F1-5C98-43D9-7726-F997AD12D9F5}" name="Pages">
           <FILE id="OP9h3M" name="PageFactory.cpp" compile="1" resource="0" file="Source/Components/Pages/PageFactory.cpp"/>
           <FILE id="HpTag6" name="PageFactory.h" compile="0" resource="0" file="Source/Components/Pages/PageFactory.h"/>
@@ -214,24 +232,6 @@
             <FILE id="sfXLMJ" name="ColourPage.h" compile="0" resource="0" file="Source/Components/Pages/UI Page/ColourPage.h"/>
           </GROUP>
         </GROUP>
-        <GROUP id="{6B24A9E3-3F63-2A4B-CDEB-72FB27F4FEB0}" name="Configurable">
-          <FILE id="g1W6SX" name="ConfigurableComponent.cpp" compile="1" resource="0"
-                file="Source/Components/Configurable/ConfigurableComponent.cpp"/>
-          <FILE id="OBFKiD" name="ConfigurableComponent.h" compile="0" resource="0"
-                file="Source/Components/Configurable/ConfigurableComponent.h"/>
-          <FILE id="gzdytE" name="ConfigurableImageButton.cpp" compile="1" resource="0"
-                file="Source/Components/Configurable/ConfigurableImageButton.cpp"/>
-          <FILE id="qHMdEQ" name="ConfigurableImageButton.h" compile="0" resource="0"
-                file="Source/Components/Configurable/ConfigurableImageButton.h"/>
-          <FILE id="Gf8A1r" name="ConfigurableImageComponent.cpp" compile="1"
-                resource="0" file="Source/Components/Configurable/ConfigurableImageComponent.cpp"/>
-          <FILE id="HkMUgr" name="ConfigurableImageComponent.h" compile="0" resource="0"
-                file="Source/Components/Configurable/ConfigurableImageComponent.h"/>
-          <FILE id="a9u0EC" name="ConfigurableLabel.cpp" compile="1" resource="0"
-                file="Source/Components/Configurable/ConfigurableLabel.cpp"/>
-          <FILE id="pINIgS" name="ConfigurableLabel.h" compile="0" resource="0"
-                file="Source/Components/Configurable/ConfigurableLabel.h"/>
-        </GROUP>
         <GROUP id="{6D4C4A1E-8E24-8D6C-5A9B-840CFA0F9A73}" name="Widgets">
           <FILE id="kzte4q" name="ColourPicker.cpp" compile="1" resource="0"
                 file="Source/Components/Widgets/ColourPicker.cpp"/>
@@ -288,6 +288,10 @@
               file="Source/Components/RelativeLayoutManager.cpp"/>
         <FILE id="r4oAKB" name="RelativeLayoutManager.h" compile="0" resource="0"
               file="Source/Components/RelativeLayoutManager.h"/>
+        <FILE id="TlYPG7" name="TransitionAnimator.cpp" compile="1" resource="0"
+              file="Source/Components/TransitionAnimator.cpp"/>
+        <FILE id="HOKMvj" name="TransitionAnimator.h" compile="0" resource="0"
+              file="Source/Components/TransitionAnimator.h"/>
       </GROUP>
       <GROUP id="{85D01745-B7AD-BE3B-8D28-80F47A0AA8BA}" name="Config Files">
         <FILE id="dNgJxN" name="ConfigFile.cpp" compile="1" resource="0" file="Source/Config Files/ConfigFile.cpp"/>

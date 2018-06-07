@@ -1,5 +1,4 @@
 #include "ColourIds.h"
-#include "Display.h"
 #include "ComponentConfigFile.h"
 #include "AssetFiles.h"
 #include "Utils.h"
@@ -746,7 +745,7 @@ bool ComponentConfigFile::ComponentSettings::operator==
  */
 Rectangle<int> ComponentConfigFile::ComponentSettings::getBounds()
 {
-    Rectangle<int> window = Display::getWindowSize();
+    Rectangle<int> window = getWindowBounds();
     return Rectangle<int>(
                           x * window.getWidth(),
                           y * window.getHeight(),

@@ -200,7 +200,7 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
     nextPageBtn.setVisible(connectionItems.size() > connectionIndex
             + connectionsPerPage && showList);
     connectionItems.sort(*this);
-    int rowWeight = 2;
+    int rowWeight = 20;
     if (!showList)
     {
         rowWeight *= connectionsPerPage;
@@ -229,10 +229,19 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
                     listItem->setListItemLayout();
                 }
             }
-            layout.push_back({rowWeight,
-                {
-                    {listItem, 1}
-                }});
+            RelativeLayoutManager::RowLayout row = {
+                        .rowItems = 
+                        {
+                            {
+                                .component = listItem,
+                                .componentWeight = 6,
+                                .xPaddingWeight  = 1
+                            }
+                        },
+                        .rowWeight = rowWeight,
+                        .yPaddingWeight = 1
+                    };
+            layout.rows.push_back(row);
         }
     }
     updateLayout(layout);
@@ -421,7 +430,8 @@ template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::ConnectionListItem::setControlLayout
 (RelativeLayoutManager::Layout detailLayout)
 {
-    detailLayout.insert(detailLayout.begin(), getListItemLayout()[0]);
+    detailLayout.rows.insert(detailLayout.rows.begin(), 
+            getListItemLayout().rows[0]);
     listItemLayout.clearLayout(true);
     listItemLayout.setLayout(detailLayout, this);
 }
@@ -455,11 +465,23 @@ template<class ConnectionPoint>
 RelativeLayoutManager::Layout 
 ConnectionPage<ConnectionPoint>::ConnectionListItem::getListItemLayout()
 {
-    return {
-        { 3,
+    return  {
+        .xMarginFraction = 0.0,
+        .yMarginFraction = 0.0,
+        .rows = {
             {
-                {connectionButton, 1}
-            }}};
+                .rowItems = {
+                    {
+                        .component       = connectionButton,
+                        .componentWeight = 20,
+                        .xPaddingWeight  = 1
+                    }
+                },
+                .rowWeight      = 1,
+                .yPaddingWeight = 0
+            }
+        }
+    };
 }
 
 /**
@@ -481,9 +503,7 @@ paint(Graphics &g)
 template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::ConnectionListItem::resized()
 {
-    Rectangle<int> bounds = getLocalBounds().reduced(borderWidth,
-            borderWidth);
-    listItemLayout.layoutComponents(bounds,
-            bounds.getWidth() / 20, bounds.getHeight() / 60);
+    listItemLayout.layoutComponents(getLocalBounds().reduced(borderWidth,
+            borderWidth));
 }
 

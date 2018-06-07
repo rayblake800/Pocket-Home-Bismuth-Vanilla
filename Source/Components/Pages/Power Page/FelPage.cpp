@@ -35,7 +35,7 @@ PageComponent("FelPage",{
         {
             {&infoLine2, 1}
         }}
-},nullptr,false),
+},false,false),
 debounce(false),
 infoLine1("infoLine1", localeText(ask_to_reboot)),
 yesButton(localeText(yes_btn)),

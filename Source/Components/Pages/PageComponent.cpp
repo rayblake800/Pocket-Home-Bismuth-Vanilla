@@ -135,9 +135,7 @@ void PageComponent::layoutComponents()
                 bounds.reduce(overlap, 0);
             }
         }
-        layoutManager.layoutComponents(bounds,
-                (int) bounds.getWidth() * horizontalPadding,
-                (int) bounds.getHeight() * verticalPadding);
+        layoutManager.layoutComponents(bounds);
     }
 
 }

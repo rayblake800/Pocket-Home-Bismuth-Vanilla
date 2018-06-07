@@ -15,6 +15,10 @@
 		C24F726C0D9B8AFE8D03DB56 = {isa = PBXBuildFile; fileRef = 0C26CA302DF7D2ADFFC3CBFC; };
 		1F01880C73BF88636C7F681C = {isa = PBXBuildFile; fileRef = D39166F474CED117992E9132; };
 		5B6F6587EAD4D17284D44353 = {isa = PBXBuildFile; fileRef = DA3438D75EE9C6668F663471; };
+		3F9D080180D720002C8887B6 = {isa = PBXBuildFile; fileRef = AC61110E42BA7191BE529001; };
+		57D31E001DE2E70D8114AF89 = {isa = PBXBuildFile; fileRef = D8DEF28E7800C921E6C71479; };
+		757D2B35242922F89358ACC7 = {isa = PBXBuildFile; fileRef = E06FCE4B68E53D63EEE9F3CC; };
+		FF5E0BF4427F9D4BDBCB963E = {isa = PBXBuildFile; fileRef = 462DED55618D22F9993189CA; };
 		AC92A0480BE8451D6278220C = {isa = PBXBuildFile; fileRef = 981E053B45C0EA999DEBAC94; };
 		9AE402C45D5DEE1DC2F7FCBE = {isa = PBXBuildFile; fileRef = 48A28AD8DCB2D133CDC9D639; };
 		3394F245DAD91D720F33E28B = {isa = PBXBuildFile; fileRef = F4952FBC07881B0BFC4F5990; };
@@ -60,10 +64,6 @@
 		88EF320222F63EBCCC3A344A = {isa = PBXBuildFile; fileRef = A12883C88EDA0F7068A4A4FE; };
 		6E9AA20D280B6D33B5EDD0AD = {isa = PBXBuildFile; fileRef = F3B41E0F996958EA3F61CCD3; };
 		31A4EC54AC9A2923AAD29698 = {isa = PBXBuildFile; fileRef = D2E6D861C600DCFFB2AAE9A1; };
-		3F9D080180D720002C8887B6 = {isa = PBXBuildFile; fileRef = AC61110E42BA7191BE529001; };
-		57D31E001DE2E70D8114AF89 = {isa = PBXBuildFile; fileRef = D8DEF28E7800C921E6C71479; };
-		757D2B35242922F89358ACC7 = {isa = PBXBuildFile; fileRef = E06FCE4B68E53D63EEE9F3CC; };
-		FF5E0BF4427F9D4BDBCB963E = {isa = PBXBuildFile; fileRef = 462DED55618D22F9993189CA; };
 		D587F5CBC33CD0DB4840E35F = {isa = PBXBuildFile; fileRef = C1D33117DF650FD4889D2C6F; };
 		92DD77698B97EA7A842D3432 = {isa = PBXBuildFile; fileRef = FBB8317B019C4A10DD12AE7A; };
 		3D9D9AD4341FD53B830D9595 = {isa = PBXBuildFile; fileRef = DA4E58E9574DC56015EEA841; };
@@ -79,6 +79,7 @@
 		E929002590C85FB73D5DB61D = {isa = PBXBuildFile; fileRef = 32E135486EC1BF2307CFBA1A; };
 		9554CD7AC4626F460BDCA747 = {isa = PBXBuildFile; fileRef = 43618EC1AF9B84CDF65343BF; };
 		F5EE6C7360F2005BCF752980 = {isa = PBXBuildFile; fileRef = F2F496FAF9C420819210AB79; };
+		F539140B92AE87F503660C9F = {isa = PBXBuildFile; fileRef = 1DE205CBDB541988A015F7A8; };
 		D70E5CE257B21FB385C6F314 = {isa = PBXBuildFile; fileRef = C2A16ADF8541BE782A1A5979; };
 		A82BA2454C8A85343067F986 = {isa = PBXBuildFile; fileRef = BF50D88F5F1D071A66013D51; };
 		668E8659155A8695F2ECB433 = {isa = PBXBuildFile; fileRef = 69904417D332F940BAA49A60; };
@@ -151,6 +152,7 @@
 		1C81254A1679A7E194399A32 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Spinner.cpp; path = ../../Source/Components/Widgets/Spinner.cpp; sourceTree = "SOURCE_ROOT"; };
 		1CC9DDA62B928C623D1C2EE2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScrollingAppMenu.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Types/ScrollingAppMenu.cpp"; sourceTree = "SOURCE_ROOT"; };
 		1D245B6E8B1AEAA57F3E55ED = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AdvancedSettingsPage.h; path = "../../Source/Components/Pages/Advanced Settings Page/AdvancedSettingsPage.h"; sourceTree = "SOURCE_ROOT"; };
+		1DE205CBDB541988A015F7A8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TransitionAnimator.cpp; path = ../../Source/Components/TransitionAnimator.cpp; sourceTree = "SOURCE_ROOT"; };
 		1E9E217DFCDE71E1995501E0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NewDesktopAppEditor.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Editors/NewDesktopAppEditor.h"; sourceTree = "SOURCE_ROOT"; };
 		1F10F22B68853898866A4490 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PageAppFolder.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Folders/PageAppFolder.h"; sourceTree = "SOURCE_ROOT"; };
 		201B4889632122AEF45DBFF2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WindowFocus.cpp; path = ../../Source/Util/WindowFocus.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -210,6 +212,7 @@
 		6290E082A822E3C728AB4B0B = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PageAppFolder.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Folders/PageAppFolder.cpp"; sourceTree = "SOURCE_ROOT"; };
 		63F235E0AED98F95153223EA = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SwitchComponent.cpp; path = ../../Source/Components/Widgets/SwitchComponent.cpp; sourceTree = "SOURCE_ROOT"; };
 		6419A817F1F0AA5F8537161E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ListEditor.cpp; path = ../../Source/Components/Widgets/ListEditor.cpp; sourceTree = "SOURCE_ROOT"; };
+		643563D65D8762CFE0070A7D = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TransitionAnimator.h; path = ../../Source/Components/TransitionAnimator.h; sourceTree = "SOURCE_ROOT"; };
 		64CDB83B7CD434FF78AD3B16 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		65FFD0896B1D0EEFB2A5024F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BluetoothSettingsPage.cpp; path = "../../Source/Components/Pages/Settings Page/BluetoothSettingsPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		66437E769AE6FADAE19C2E2F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuFolder.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/AppMenuFolder.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -379,6 +382,15 @@
 					B44E813A61814D606FB06E8E,
 					DA3438D75EE9C6668F663471,
 					7CE52C4DAE06F4EFD840A7B8, ); name = Bluetooth; sourceTree = "<group>"; };
+		7A6D449AF4ECDB030B1AF8A2 = {isa = PBXGroup; children = (
+					AC61110E42BA7191BE529001,
+					70821AA3FFF3F16D181E7613,
+					D8DEF28E7800C921E6C71479,
+					A913E91CDEDFFF580C9345C6,
+					E06FCE4B68E53D63EEE9F3CC,
+					8312A28FFDD47BDB369486D8,
+					462DED55618D22F9993189CA,
+					EDB8737E32ADFE4062B2F271, ); name = Configurable; sourceTree = "<group>"; };
 		E06F72F738CED4F4ED7F1D8C = {isa = PBXGroup; children = (
 					E16A82F1FB9A31916DEEBA9E,
 					1D245B6E8B1AEAA57F3E55ED, ); name = "Advanced Settings Page"; sourceTree = "<group>"; };
@@ -504,15 +516,6 @@
 					E9EC8369276B45845216ECF9,
 					663A784635D4704F72715384,
 					293FCCDD16AB557B1FE4FAAA, ); name = Pages; sourceTree = "<group>"; };
-		7A6D449AF4ECDB030B1AF8A2 = {isa = PBXGroup; children = (
-					AC61110E42BA7191BE529001,
-					70821AA3FFF3F16D181E7613,
-					D8DEF28E7800C921E6C71479,
-					A913E91CDEDFFF580C9345C6,
-					E06FCE4B68E53D63EEE9F3CC,
-					8312A28FFDD47BDB369486D8,
-					462DED55618D22F9993189CA,
-					EDB8737E32ADFE4062B2F271, ); name = Configurable; sourceTree = "<group>"; };
 		43D4C0ABDFF23BF1E430A832 = {isa = PBXGroup; children = (
 					C1D33117DF650FD4889D2C6F,
 					170916E09422D64072DF440A,
@@ -539,15 +542,17 @@
 					63F235E0AED98F95153223EA,
 					046C580CAE38B6EA5D85FF85, ); name = Widgets; sourceTree = "<group>"; };
 		FE8CAAF1F4599E1506C8A569 = {isa = PBXGroup; children = (
-					2C6EB5C34648D0ED406443A4,
 					7A6D449AF4ECDB030B1AF8A2,
+					2C6EB5C34648D0ED406443A4,
 					43D4C0ABDFF23BF1E430A832,
 					32E135486EC1BF2307CFBA1A,
 					F6611C402BB2F3A63AC2C0CD,
 					43618EC1AF9B84CDF65343BF,
 					AD9CB3537563586C23BF79A5,
 					F2F496FAF9C420819210AB79,
-					6E7279BB5B08F4915D165DC8, ); name = Components; sourceTree = "<group>"; };
+					6E7279BB5B08F4915D165DC8,
+					1DE205CBDB541988A015F7A8,
+					643563D65D8762CFE0070A7D, ); name = Components; sourceTree = "<group>"; };
 		A97F6D4D0C68ACC50A214162 = {isa = PBXGroup; children = (
 					C2A16ADF8541BE782A1A5979,
 					23B408DB9AA8CE2220B9FD39,
@@ -842,6 +847,10 @@
 					C24F726C0D9B8AFE8D03DB56,
 					1F01880C73BF88636C7F681C,
 					5B6F6587EAD4D17284D44353,
+					3F9D080180D720002C8887B6,
+					57D31E001DE2E70D8114AF89,
+					757D2B35242922F89358ACC7,
+					FF5E0BF4427F9D4BDBCB963E,
 					AC92A0480BE8451D6278220C,
 					9AE402C45D5DEE1DC2F7FCBE,
 					3394F245DAD91D720F33E28B,
@@ -887,10 +896,6 @@
 					88EF320222F63EBCCC3A344A,
 					6E9AA20D280B6D33B5EDD0AD,
 					31A4EC54AC9A2923AAD29698,
-					3F9D080180D720002C8887B6,
-					57D31E001DE2E70D8114AF89,
-					757D2B35242922F89358ACC7,
-					FF5E0BF4427F9D4BDBCB963E,
 					D587F5CBC33CD0DB4840E35F,
 					92DD77698B97EA7A842D3432,
 					3D9D9AD4341FD53B830D9595,
@@ -906,6 +911,7 @@
 					E929002590C85FB73D5DB61D,
 					9554CD7AC4626F460BDCA747,
 					F5EE6C7360F2005BCF752980,
+					F539140B92AE87F503660C9F,
 					D70E5CE257B21FB385C6F314,
 					A82BA2454C8A85343067F986,
 					668E8659155A8695F2ECB433,

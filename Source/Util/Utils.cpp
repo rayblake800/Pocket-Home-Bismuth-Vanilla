@@ -136,3 +136,26 @@ void confirmAction
                 }
             }));
 }
+
+
+/**
+ * Gets the size of the active display.
+ * 
+ * @return the size of the display, measured in pixels.
+ */
+Rectangle<int> getDisplaySize(){
+    return Desktop::getInstance().getDisplays().getMainDisplay().userArea;
+}
+
+/**
+ * Gets the bounds of the single application window.
+ */
+Rectangle<int> getWindowBounds()
+{
+    Component * windowComp = Desktop::getInstance().getComponent(0);
+    if (windowComp == nullptr)
+    {
+        return Rectangle<int>();
+    }
+    return windowComp->getLocalBounds();
+}

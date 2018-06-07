@@ -334,6 +334,9 @@ bool IconThemeIndex::DirectoryComparator::directoryMatchesSize
         case thresholdType:
             return abs(size - subdir.size) < subdir.threshold;
     }
+    DBG("IconThemeIndex::DirectoryComparator::" << __func__ 
+            << ": Missing directory type!");
+    return false;
 }
 
 /*
@@ -370,4 +373,7 @@ int IconThemeIndex::DirectoryComparator::directorySizeDistance
             }
             return 0;
     }
+    DBG("IconThemeIndex::DirectoryComparator::" << __func__ 
+            << ": Missing directory type!");
+    return 0;
 }

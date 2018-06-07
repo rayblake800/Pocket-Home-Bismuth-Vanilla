@@ -24,47 +24,62 @@ public:
     struct ComponentLayout
     {
         /**
-         * @param component     Either a valid component pointer, or nullptr to
-         *                       specify an area of empty space.
-         * 
-         * @param horizWeight   The amount of horizontal space to give this
-         *                       component, relative to the other components in
-         *                       the row.
+         * Points to a component in the layout, or nullptr to add an empty space
+         * in the layout.
          */
-        ComponentLayout(Component* component, int horizWeight) :
-        component(component),
-        horizWeight(horizWeight) { };
-        
         Component* component;
-        int horizWeight;
+        /**
+         * Component width = total width * componentWeight / horizontalWeightSum
+         */
+        int componentWeight;
+        /**
+         * totalWidth * xPaddingWeight / horizontalWeightSum pixels will be left
+         * empty around this component.  Padding space is divided evenly between
+         * the left and right sides of the component.      
+         */
+        int xPaddingWeight;
     };
 
     /**
-     * Defines one row in a RelativeLayout
+     * Defines one row of components in a RelativeLayout
      */
     struct RowLayout
     {
         /**
-         * @param vertWeight  The amount of vertical space to give this row,
-         *                     relative to the other rows in the layout.
-         * 
-         * @param components  The layout of all components in the row. An empty
-         *                     component list may be used to specify an empty
-         *                     space.
+         * Holds all ComponentLayouts in a row.
          */
-        RowLayout (int vertWeight, std::vector<ComponentLayout> components) :
-        vertWeight(vertWeight),
-        components(components) { };
-        
-        int vertWeight;
-        std::vector<ComponentLayout> components;
+        std::vector<ComponentLayout> rowItems;
+        /**
+         * Row height = total height * rowWeight / verticalWeightSum
+         */
+        int rowWeight;
+        /**
+         * totalWidth * yPaddingWeight / verticalWeightSum pixels will be left
+         * empty around this row.  Padding space is divided evenly between the
+         * top and bottom of the row.
+         */
+        int yPaddingWeight;
     };
 
-    /**
-     * This type allows an entire layout to be declared at once in a
-     * brace enclosed initializer list.
-     */
-    typedef std::vector<RowLayout> Layout;
+    struct Layout
+    {
+        /**
+         * The fraction of the total layout space that should be left empty on
+         * the left and right sides of the layout.  This space is divided evenly
+         * between the left and right sides.
+         */
+        float xMarginFraction;
+        /**
+         * The fraction of the total layout space that should be left empty on
+         * the top and bottom of the layout.  This space is divided evenly
+         * between the top and bottom.
+         */
+        float yMarginFraction;
+        /**
+         * Holds the layouts of all component rows.
+         */
+        std::vector<RowLayout> rows;
+    };
 
     /**
      * Set a new Component layout, removing all old layout definitions.
@@ -88,15 +103,8 @@ public:
      * Arranges the components within a bounding rectangle.
      * 
      * @param bounds    The rectangle components will be positioned within.
-     * 
-     * @param xPadding  The space in pixels to leave between components in a 
-     *                   row, and between components and the left and right 
-     *                   edges of the bounds.
-     * 
-     * @param yPadding  The space in pixels to leave between rows, and between
-     *                   the rows and the top and bottom edges of the bounds.
      */
-    void layoutComponents(Rectangle<int> bounds, int xPadding, int yPadding);
+    void layoutComponents(Rectangle<int> bounds);
 
     /**
      * Remove all saved component layout parameters.

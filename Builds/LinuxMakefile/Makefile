@@ -71,6 +71,10 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/BluetoothDevice_b56b2104.o \
   $(JUCE_OBJDIR)/BluetoothStatus_95a3a4a0.o \
   $(JUCE_OBJDIR)/BluezAdapter_eb8139.o \
+  $(JUCE_OBJDIR)/ConfigurableComponent_2fd2b8e8.o \
+  $(JUCE_OBJDIR)/ConfigurableImageButton_bf755ad8.o \
+  $(JUCE_OBJDIR)/ConfigurableImageComponent_8700fda1.o \
+  $(JUCE_OBJDIR)/ConfigurableLabel_16cf925f.o \
   $(JUCE_OBJDIR)/PageFactory_2f0467c0.o \
   $(JUCE_OBJDIR)/PageComponent_cc06e5f3.o \
   $(JUCE_OBJDIR)/PageStackComponent_e433769.o \
@@ -116,10 +120,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/UIPage_7fd19d1c.o \
   $(JUCE_OBJDIR)/ComponentEditorPage_bc490e6a.o \
   $(JUCE_OBJDIR)/ColourPage_8cc97274.o \
-  $(JUCE_OBJDIR)/ConfigurableComponent_2fd2b8e8.o \
-  $(JUCE_OBJDIR)/ConfigurableImageButton_bf755ad8.o \
-  $(JUCE_OBJDIR)/ConfigurableImageComponent_8700fda1.o \
-  $(JUCE_OBJDIR)/ConfigurableLabel_16cf925f.o \
   $(JUCE_OBJDIR)/ColourPicker_b22d9d54.o \
   $(JUCE_OBJDIR)/CounterComponent_e2edf03b.o \
   $(JUCE_OBJDIR)/DrawableImageButton_f6e4065f.o \
@@ -135,6 +135,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/PocketHomeWindow_b7303d3f.o \
   $(JUCE_OBJDIR)/PokeLookAndFeel_14171995.o \
   $(JUCE_OBJDIR)/RelativeLayoutManager_47b4eae7.o \
+  $(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o \
   $(JUCE_OBJDIR)/ConfigFile_eac3aa35.o \
   $(JUCE_OBJDIR)/AppConfigFile_9fbc232.o \
   $(JUCE_OBJDIR)/ComponentConfigFile_eae6a58e.o \
@@ -207,6 +208,26 @@ $(JUCE_OBJDIR)/BluetoothStatus_95a3a4a0.o: ../../Source/Bluetooth/BluetoothStatu
 $(JUCE_OBJDIR)/BluezAdapter_eb8139.o: ../../Source/Bluetooth/BluezAdapter.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling BluezAdapter.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigurableComponent_2fd2b8e8.o: ../../Source/Components/Configurable/ConfigurableComponent.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigurableComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigurableImageButton_bf755ad8.o: ../../Source/Components/Configurable/ConfigurableImageButton.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigurableImageButton.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigurableImageComponent_8700fda1.o: ../../Source/Components/Configurable/ConfigurableImageComponent.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigurableImageComponent.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigurableLabel_16cf925f.o: ../../Source/Components/Configurable/ConfigurableLabel.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigurableLabel.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PageFactory_2f0467c0.o: ../../Source/Components/Pages/PageFactory.cpp
@@ -434,26 +455,6 @@ $(JUCE_OBJDIR)/ColourPage_8cc97274.o: ../../Source/Components/Pages/UI\ Page/Col
 	@echo "Compiling ColourPage.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/ConfigurableComponent_2fd2b8e8.o: ../../Source/Components/Configurable/ConfigurableComponent.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ConfigurableComponent.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/ConfigurableImageButton_bf755ad8.o: ../../Source/Components/Configurable/ConfigurableImageButton.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ConfigurableImageButton.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/ConfigurableImageComponent_8700fda1.o: ../../Source/Components/Configurable/ConfigurableImageComponent.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ConfigurableImageComponent.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/ConfigurableLabel_16cf925f.o: ../../Source/Components/Configurable/ConfigurableLabel.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ConfigurableLabel.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/ColourPicker_b22d9d54.o: ../../Source/Components/Widgets/ColourPicker.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ColourPicker.cpp"
@@ -527,6 +528,11 @@ $(JUCE_OBJDIR)/PokeLookAndFeel_14171995.o: ../../Source/Components/PokeLookAndFe
 $(JUCE_OBJDIR)/RelativeLayoutManager_47b4eae7.o: ../../Source/Components/RelativeLayoutManager.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling RelativeLayoutManager.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o: ../../Source/Components/TransitionAnimator.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling TransitionAnimator.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigFile_eac3aa35.o: ../../Source/Config\ Files/ConfigFile.cpp
