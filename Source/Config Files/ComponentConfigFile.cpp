@@ -793,4 +793,39 @@ void ComponentConfigFile::ComponentSettings::applyBounds(Component * component)
     }
     component->setBounds(bounds);
 }
+        
+/*
+ * Gets this component's x-coordinate as a fraction of the window's
+ * width.
+ */
+float ComponentConfigFile::ComponentSettings::getXFraction()
+{
+    return x;
+}
+
+/*
+ * Gets this component's y-coordinate as a fraction of the window's
+ * height.
+ */
+float ComponentConfigFile::ComponentSettings::getYFraction()
+{
+    return y;
+}
+
+/*
+ * Gets this component's width as a fraction of the window's width.
+ */
+float ComponentConfigFile::ComponentSettings::getWidthFraction()
+{
+    return width;
+}
+
+/*
+ * Gets this component's height as a fraction of the window's height.
+ */
+float ComponentConfigFile::ComponentSettings::getHeightFraction()
+{
+    return height;
+}
+
 

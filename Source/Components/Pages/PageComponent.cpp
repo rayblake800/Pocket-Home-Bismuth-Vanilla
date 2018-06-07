@@ -1,24 +1,64 @@
 #include "ComponentConfigFile.h"
 #include "PageComponent.h"
 
-PageComponent::PageComponent(
-        const String& name,
-        RelativeLayoutManager::Layout layout,
-        bool showBackButton,
-        bool backButtonOnRight) :
-Component(name),
-backButtonOnRight(backButtonOnRight)
+PageComponent::PageComponent(const String& name) :
+Component(name) { }
+    
+/**
+ * Sets the layout of the page component.
+ */
+void PageComponent::setLayout(RelativeLayoutManager::Layout layout, 
+        PageComponent::BackButtonType buttonType)
 {
-    layoutManager.setLayout(layout);
-    if (showBackButton)
+    String buttonKey;
+    switch(buttonType)
     {
-        backButton = new ConfigurableImageButton(
-                backButtonOnRight ?
-                ComponentConfigFile::pageRightKey
-                : ComponentConfigFile::pageLeftKey);
-        backButton->addListener(this);
-        addAndMakeVisible(backButton);
+        case leftBackButton:
+            buttonKey == ComponentConfigFile::pageLeftKey;
+            break;
+        case rightBackButton:
+            buttonKey == ComponentConfigFile::pageRightKey;        
     }
+    
+    const String& currentButtonKey;
+    if(backButton != nullptr)
+    {
+        currentButtonKey = backButton->getComponentKey();
+    }
+    if(buttonKey != currentButtonKey)
+    {
+        if(backButton != nullptr)
+        {
+            removeChildComponent(backButton);
+            backButton = nullptr;
+        }
+        if(buttonKey.isNotEmpty())
+        {
+            backButton = new ConfigurableImageButton(buttonKey);
+            backButton->addListener(this);
+            addAndMakeVisible(backButton);
+        }
+    }
+    
+    //make sure layout margins fit the back button
+    if(backButton != nullptr) 
+    {
+        ComponentConfigFile config;
+        ComponentConfigFile::ComponentSettings buttonConfig 
+                = config.getComponentSettings(buttonKey);
+        float minMargin = 0;
+        if(buttonType == leftBackButton)
+        {
+            minMargin = buttonConfig.getWidthFraction() 
+                    + buttonConfig.getXFraction();
+        }
+        else //rightBackButton
+        {
+            minMargin = 1 - buttonConfig.getXFraction();
+        }
+        layout.xMarginFraction = std::max(layout.xMarginFraction, minMargin);
+    }   
+    layoutManager.setLayout(layout, this);
 }
 
 /**

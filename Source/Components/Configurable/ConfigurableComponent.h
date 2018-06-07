@@ -31,6 +31,14 @@ public:
      * unchanged.
      */
     virtual void applyConfigBounds();
+    
+    /**
+     * Gets the componentKey that defines this component's bounds and asset
+     * files
+     * 
+     * @return  the stored component key. 
+     */
+    const String& getComponentKey() const;
 
 protected:
     /**

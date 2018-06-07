@@ -38,28 +38,34 @@ public:
     };
 
     /**
-     * @param name               The internal component name.
-     * 
-     * @param layout             Defines the layout of all page components.  
-     *                            This layout will be saved, but components will
-     *                            not be added to the page until 
-     *                            addAndShowLayoutComponents is called.
-     * 
-     * @param showBackButton     If true, add a back button on this page.
-     * 
-     * @param backButtonOnRight  If true, the back button will be on the right
-     *                            side of the page. Otherwise, it will be on the
-     *                            left. This also controls the default animation
-     *                            used when closing this page, even if not using
-     *                            a back button. 
+     * @param name  The internal component name.
      */
-    PageComponent(
-            const String& name = String(),
-            RelativeLayoutManager::Layout layout = {},
-            bool showBackButton = true,
-            bool backButtonOnRight = false);
+    PageComponent(const String& name = String());
 
     virtual ~PageComponent() { }
+    
+    //Options available for showing a back button on the page
+    enum BackButtonType
+    {
+        leftBackButton,
+        rightBackButton,
+        noBackButton
+    };
+    
+    /**
+     * Sets the layout of the page component.
+     * 
+     * @param layout      Defines the layout of all child components within the
+     *                    page, not including the back button. These components 
+     *                    will be added to the page as child components 
+     *                    and made visible. If necessary, the layout margins 
+     *                    will be resized to make room for the back button.
+     * 
+     * @param buttonType  Sets whether this page should show a back button, and
+     *                    which side it is shown on.
+     */
+    void setLayout(RelativeLayoutManager::Layout layout, 
+            BackButtonType buttonType = leftBackButton);
 
     /**
      * Sets a background image to draw behind all page components.

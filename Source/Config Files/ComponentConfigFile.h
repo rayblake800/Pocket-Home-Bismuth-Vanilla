@@ -177,6 +177,40 @@ public:
          * @param component  Any component object.
          */
         void applyBounds(Component * component);
+        
+        /**
+         * Gets this component's x-coordinate as a fraction of the window's
+         * width.
+         * 
+         * @return the x coordinate fraction, or -1 if the x-coordinate fraction
+         *         is not defined.
+         */
+        float getXFraction();
+         
+        /**
+         * Gets this component's y-coordinate as a fraction of the window's
+         * height.
+         * 
+         * @return the y coordinate fraction, or -1 if the y-coordinate fraction
+         *         is not defined.
+         */
+        float getYFraction();
+              
+        /**
+         * Gets this component's width as a fraction of the window's width.
+         * 
+         * @return the width fraction, or -1 if the width fraction is not 
+         *         defined.
+         */
+        float getWidthFraction();      
+              
+        /**
+         * Gets this component's height as a fraction of the window's height.
+         * 
+         * @return the height fraction, or -1 if the height fraction is not 
+         *         defined.
+         */
+        float getHeightFraction();
 
 
         bool operator==(const ComponentSettings& rhs) const;

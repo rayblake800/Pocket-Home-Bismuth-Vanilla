@@ -45,6 +45,19 @@ void ConfigurableComponent::applyConfigBounds()
 }
 
 
+
+
+    
+/*
+ * Gets the componentKey that defines this component's bounds and asset
+ * files
+ */
+const String& ConfigurableComponent::getComponentKey() const
+{
+    return componentKey;
+}
+
+
 /**
  * Load and apply all component data from the ComponentConfigFile.
  */
