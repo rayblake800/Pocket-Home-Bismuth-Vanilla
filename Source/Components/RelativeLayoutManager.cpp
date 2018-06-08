@@ -64,42 +64,29 @@ void RelativeLayoutManager::addComponentsToParent(Component* parent)
  */
 void RelativeLayoutManager::layoutComponents(Rectangle<int> bounds)
 {
-    int xMargin = layout.xMarginFraction * bounds.getWidth() / 2;
-    int yMargin = layout.yMarginFraction * bounds.getHeight() / 2;
+    int xMargins = layout.xMarginFraction * bounds.getWidth();
+    int yMargins = layout.yMarginFraction * bounds.getHeight();
     int topPaddingWeight = layout.rows.begin()->yPaddingWeight;
     int bottomPaddingWeight = layout.rows.back()->yPaddingWeight;
 
     //Layout margins and edge row padding should overlap.
+    int yPixPerWeight = 0;
+    if(vertWeightSum > 0 && vertWeightSum 
+            > ((topPadding + bottomPaddingWeight) / 2))
+    {
+        yPixPerWeight = (bounds.getHeight() - xMargins) / (vertWeightSum 
+	        - ((topPaddingWeight + bottomPaddingWeight) / 2);
+	
+	if((yPixelsPerWeight * (topPaddingWeight + bottomPaddingWeight) / 2)
+	        > xMargins)
+	{
+	    yPixelsPerWeight = bounds.getHeight() / vertWeightSum;
+	}
+    }
 
-    //usableHeight = height - 2*yMargin + topPadding + bottomPadding
-    //topPadding   = usableHeight * topPaddingWeight / vertWeightSum
-    //bottomPadding= usableHeight * bottomPaddingWeight / vertWeightSum
-
-    //x1 = usableHeight
-    //x2 = topPadding
-    //x3 = bottomPadding
-
-    //a = height
-    //b = yMargin
-    //c = top padding weight
-    //d = bottom padding weight
-    //e = vertWeightSum
-
-    // x1 = a - 2b + x2 + x3
-    // x2 = x1*c/e
-    // x3 = x1*d/e
-
-    // x1 = -e(a-2b)/(c+d-e)
-    // x2 = -c(a-2b)/(c+d-e)
-    // x3 = -d(a-2b)/(c+d-e)
-
-    int yPixelsPerWeight = -(bounds.getHeight() - 2 * yMargin)
-            / (topPaddingWeight + bottomPaddingWeight - vertWeightSum);
+    int yPos = bounds.getY() 
+            + (xMargins - topPaddingWeight * yPixelsPerWeight) / 2;
     
-    int adjustedTopMargin = std::max(0,
-            yMargin - topPaddingWeight * yPixelsPerWeight);
- 
-    int yPos = bounds.getY() + adjustedTopMargin;
     for (int rowNum = 0; rowNum < layout.rows.size(); rowNum++)
     {
         const RowLayout& row = layout.rows[rowNum];
@@ -110,7 +97,7 @@ void RelativeLayoutManager::layoutComponents(Rectangle<int> bounds)
         {
             yPadding = row.yPaddingWeight * yPixelsPerWeight;
             int height = row.rowWeight * yPixelsPerWeight;
-            yPos += yPadding;
+            yPos += yPadding/2;
         }
 
         int leftPaddingWeight = row.rowItems.begin()->xPaddingWeight;
