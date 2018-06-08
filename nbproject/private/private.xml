@@ -12,20 +12,22 @@
         <group>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/deps/JUCE/modules/juce_gui_basics/layout/juce_ComponentAnimator.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/ConnectionPage.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/PageComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Configurable/ConfigurableComponent.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PocketCHIP/I2CBus.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/PageComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Configurable/ConfigurableImageButton.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Power%20Page/PowerPage.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/FileSelectTextEditor.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PocketCHIP/Audio.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/PageComponent.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/FreeDesktop/Icon%20Themes/IconThemeIndex.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/RelativeLayoutManager.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/RelativeLayoutManager.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/ConnectionPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/RelativeLayoutManager.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/FreeDesktop/Desktop%20Entries/DesktopEntry.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/ConnectionPage.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Password%20Pages/Password.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiStateManager.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/ComponentConfigFile.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/ComponentConfigFile.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Power%20Page/FelPage.cpp</file>
         </group>
     </open-files>

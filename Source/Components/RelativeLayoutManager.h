@@ -126,7 +126,7 @@ private:
     //Current layout definition
     Layout layout;
     //Holds the sum of component weights for each row
-    Array<int> horizWeightSums;
+    Array<int> xWeightSums;
     //holds the sum of component row weights.
-    int vertWeightSum = 0;
+    int yWeightSum = 0;
 };

@@ -11,31 +11,31 @@ void RelativeLayoutManager::setLayout
     for (int rowNum = 0; rowNum < layout.rows. size(); rowNum++)
     {
         const RowLayout& rowLayout = layout.rows[rowNum];
-        vertWeightSum += rowLayout.rowWeight;
+        yWeightSum += rowLayout.rowWeight;
         if (rowLayout.yPaddingWeight >= 0)
         {
-            vertWeightSum += rowLayout.yPaddingWeight;
+            yWeightSum += rowLayout.yPaddingWeight;
         }
         else
         {
-            vertWeightSum += layout.yPaddingWeight;
+            yWeightSum += layout.yPaddingWeight;
         }
-        horizWeightSums[rowNum] = 0;
+        xWeightSums[rowNum] = 0;
         for (const ComponentLayout& compLayout : rowLayout.rowItems)
         {
             if (compLayout.xPaddingWeight >= 0)
             {
-                horizWeightSums[rowNum] += compLayout.xPaddingWeight;
+                xWeightSums[rowNum] += compLayout.xPaddingWeight;
             }
             else if (rowLayout.xPaddingWeight >= 0)
             {
-                horizWeightSums[rowNum] += rowLayout.xPaddingWeight;
+                xWeightSums[rowNum] += rowLayout.xPaddingWeight;
             }
             else
             {
-                horizWeightSums[rowNum] += layout.xPaddingWeight;
+                xWeightSums[rowNum] += layout.xPaddingWeight;
             }
-            horizWeightSums[rowNum] += compLayout.componentWeight;
+            xWeightSums[rowNum] += compLayout.componentWeight;
             if (parentToInit != nullptr)
             {
                 parentToInit->addAndMakeVisible(compLayout.component);
@@ -71,63 +71,60 @@ void RelativeLayoutManager::layoutComponents(Rectangle<int> bounds)
 
     //Layout margins and edge row padding should overlap.
     int yPixPerWeight = 0;
-    if(vertWeightSum > 0 && vertWeightSum 
-            > ((topPadding + bottomPaddingWeight) / 2))
+    if (yWeightSum > 0 && yWeightSum
+        > ((topPaddingWeight + bottomPaddingWeight) / 2))
     {
-        yPixPerWeight = (bounds.getHeight() - xMargins) / (vertWeightSum 
-	        - ((topPaddingWeight + bottomPaddingWeight) / 2);
-	
-	if((yPixelsPerWeight * (topPaddingWeight + bottomPaddingWeight) / 2)
-	        > xMargins)
-	{
-	    yPixelsPerWeight = bounds.getHeight() / vertWeightSum;
-	}
+        yPixPerWeight = (bounds.getHeight() - yMargins)
+                / (yWeightSum - ((topPaddingWeight + bottomPaddingWeight) / 2));
+
+        if ((yPixPerWeight * (topPaddingWeight + bottomPaddingWeight) / 2)
+            > yMargins)
+        {
+            yPixPerWeight = bounds.getHeight() / yWeightSum;
+        }
     }
 
-    int yPos = bounds.getY() 
-            + (xMargins - topPaddingWeight * yPixelsPerWeight) / 2;
-    
+    int yPos = bounds.getY()
+            + (yMargins - topPaddingWeight * yPixPerWeight) / 2;
+
     for (int rowNum = 0; rowNum < layout.rows.size(); rowNum++)
     {
         const RowLayout& row = layout.rows[rowNum];
-        int yPadding = 0;
-        int height = 0;
-
-        if (vertWeightSum == 0)
-        {
-            yPadding = row.yPaddingWeight * yPixelsPerWeight;
-            int height = row.rowWeight * yPixelsPerWeight;
-            yPos += yPadding/2;
-        }
+        int yPadding = row.yPaddingWeight * yPixPerWeight;
+        int height = row.rowWeight * yPixPerWeight;
+        yPos += yPadding / 2;
 
         int leftPaddingWeight = row.rowItems.begin()->xPaddingWeight;
-        int rightPaddingWeight = row.rowItems.back()->yPaddingWeight;
+        int rightPaddingWeight = row.rowItems.back()->xPaddingWeight;
+        const int& xWeightSum = xWeightSums[rowNum];
 
-        int xPixelsPerWeight = -(bounds.getWidth() - 2 * xMargin)
-                / (leftPaddingWeight + rightPaddingWeight 
-		- horizWeightSums[rowNum]);
-    
-        int adjustedLeftMargin = std::max(0,
-            xMargin - leftPaddingWeight * xPixelsPerWeight);
-
-        int xPos = bounds.getX() + adjustedLeftMargin;
+        int xPixPerWeight = 0;
+        if (xWeightSum > 0 && xWeightSum
+            > ((leftPaddingWeight + rightPaddingWeight) / 2))
+        {
+            xPixPerWeight = (bounds.getWidth() - xMargins) / (xWeightSum 
+                    - ((leftPaddingWeight + rightPaddingWeight) / 2));
+        }
+        if ((xPixPerWeight * (leftPaddingWeight + rightPaddingWeight) / 2)
+            > xMargins)
+        {
+            xPixPerWeight = bounds.getWidth() / xWeightSum;
+        }
+        
+        int xPos = bounds.getX() 
+            + (xMargins - leftPaddingWeight * xPixPerWeight) / 2;
         for (const ComponentLayout& compLayout : row.rowItems)
         {
-            int xPadding = 0;
-            int width = 0;
-            if (horizWeightSums[rowNum] > 0)
-            {
-                xPadding = compLayout.xPaddingWeight * xPixelsPerWidth;
-                width = compLayout.componentWeight * xPixelsPerWidth;
-            }
-            xPos += xPadding;
+            int xPadding = compLayout.xPaddingWeight * xPixPerWeight;
+            int width = compLayout.componentWeight * xPixPerWeight;
+            xPos += xPadding / 2;
             if (compLayout.component != nullptr)
             {
                 compLayout.component->setBounds(xPos, yPos, width, height);
             }
-            xPos += width + xPadding;
+            xPos += width + xPadding / 2;
         }
-        yPos += height + yPadding;
+        yPos += height + yPadding / 2;
     }
 }
 
@@ -155,8 +152,8 @@ void RelativeLayoutManager::clearLayout(bool removeComponentsFromParent)
         }
     }
     layout = {};
-    horizWeightSums.clear();
-    vertWeightSum = 0;
+    xWeightSums.clear();
+    yWeightSum = 0;
 }
 
 #if JUCE_DEBUG
@@ -171,7 +168,7 @@ void RelativeLayoutManager::printLayout()
     {
         DBG("RelativeLayoutManager::" << __func__ << ":");
         DBG(String("Row weight:") + String(row.vertWeight) + String("/")
-                + String(vertWeightSum));
+                + String(yWeightSum));
         String rowStr = "\t";
         for (ComponentLayout& comp : row.rowItems)
         {
@@ -186,7 +183,7 @@ void RelativeLayoutManager::printLayout()
             rowStr += "(";
             rowStr += String(comp.componentWeight);
             rowStr += "/";
-            rowStr += String(horizWeightSums[rowNum]);
+            rowStr += String(xWeightSums[rowNum]);
             rowStr += ") ";
         }
         DBG(rowStr);

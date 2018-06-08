@@ -58,30 +58,67 @@ void AdvancedSettingsPage::reloadLayout()
     setPasswordButton.setButtonText(Password::isPasswordSet() ?
             localeText(change_password) : localeText(set_password));
     std::vector<Button*> buttons = getButtonList();
-    prevArrow.setVisible(buttonIndex > 0);
-    nextArrow.setVisible(buttonIndex + buttonsPerPage < buttons.size());
     if (buttonIndex >= buttons.size() || buttonIndex < 0)
     {
         buttonIndex = 0;
     }
+    prevArrow.setVisible(buttonIndex > 0);
+    nextArrow.setVisible(buttonIndex + buttonsPerPage < buttons.size());
+
+    ComponentConfigFile config;
+    ComponentConfigFile::ComponentSettings prevBtnSettings
+            = config.getComponentSettings(ComponentConfigFile::pageUpKey);
+    ComponentConfigFile::ComponentSettings nextBtnSettings
+            = config.getComponentSettings(ComponentConfigFile::pageDownKey);
+    float yMarginFraction = prevBtnSettings.getYFraction()
+            + prevBtnSettings.getHeightFraction()
+            + nextBtnSettings.getYFraction();
     RelativeLayoutManager::Layout layout = {
-        {4,
+        .xMarginFraction = 0,
+        .yMarginFraction = yMarginFraction,
+        .rows = {
             {
-                {buttonIndex > 0 ? nullptr : &titleLabel, 1}
-            }}
+                .rowItems = {
+                    {
+                        .component = buttonIndex > 0 ? nullptr : &titleLabel,
+                        .componentWeight = 10,
+                        .xPaddingWeight = 2
+                    }
+                },
+                .rowWeight = 40,
+                .yPaddingWeight = 2
+            }
+        }
     };
 
     for (int i = buttonIndex; i < (buttonIndex + buttonsPerPage); i++)
     {
-        layout.push_back({3,
+        layout.rows.push_back(  
             {
-                {(i < buttons.size()) ? buttons[i] : nullptr, 1}
-            }});
+                .rowItems = {
+                    {
+                        .component = (i < buttons.size()) ?
+                                buttons[i] : nullptr,
+                        .componentWeight = 10,
+                        .xPaddingWeight = 2
+                    }
+                },
+                .rowWeight = 30,
+                .yPaddingWeight = 2
+            });
+        layout.rows.push_back(  
+            {
+                .rowItems = {
+                    {
+                        .component =  nullptr,
+                        .componentWeight = 10,
+                        .xPaddingWeight = 2
+                    }
+                },
+                .rowWeight = 10,
+                .yPaddingWeight = 2
+            });
     }
-    layout.push_back({1,
-        {
-            {nullptr, 1}
-        }});
     updateLayout(layout);
 }
 

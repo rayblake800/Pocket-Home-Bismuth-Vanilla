@@ -20,7 +20,7 @@ void PageComponent::setLayout(RelativeLayoutManager::Layout layout,
             buttonKey == ComponentConfigFile::pageRightKey;        
     }
     
-    const String& currentButtonKey;
+    String currentButtonKey;
     if(backButton != nullptr)
     {
         currentButtonKey = backButton->getComponentKey();
@@ -56,7 +56,8 @@ void PageComponent::setLayout(RelativeLayoutManager::Layout layout,
         {
             minMargin = 1 - buttonConfig.getXFraction();
         }
-        layout.xMarginFraction = std::max(layout.xMarginFraction, minMargin);
+        layout.xMarginFraction 
+                = std::max(layout.xMarginFraction, minMargin) * 2;
     }   
     layoutManager.setLayout(layout, this);
 }
