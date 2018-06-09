@@ -2,64 +2,7 @@
 
 DateTimePage::DateTimePage() :
 Localized("DateTimePage"),
-PageComponent("DateTimePage",{
-    .xMarginFraction = 0.1,
-    .yMarginFraction = 0.1,
-    .rows = 
-    {
-        {
-            .rowWeight = 30,
-            .yPaddingWeight = 1,
-	    .rowItems = 
-	    {
-	        {
-	            .component = &titleLabel,
-		    .componentWeight = 20,
-		    .xPaddingWeight = 1
-	        }
-	    }
-        },
-	{
-            .rowWeight = 20,
-            .yPaddingWeight = 1,
-	    .rowItems = 
-	    {
-	        {
-	            .component = &clockModeLabel,
-		    .componentWeight = 30,
-		    .xPaddingWeight = 1
-	        },
-		{
-	            .component = &setClockMode,
-		    .componentWeight = 10,
-		    .xPaddingWeight = 1
-	        },
-	    }
-        },
-
-    }
-    {3,
-        {
-            {&titleLabel, 1}
-        }},
-    {2,
-        {
-            {&clockModeLabel, 3},
-            {&setClockMode, 1}
-        }},
-    {3,
-        {
-            {nullptr, 1}
-        }},
-    {2,
-        {
-            {&reconfigureBtn, 1}
-        }},
-    {1,
-        {
-            {nullptr, 1}
-        }}
-}),
+PageComponent("DateTimePage"),
 titleLabel("dateTimeTitle", localeText(date_time_settings)),
 setClockMode("setClockMode"),
 reconfigureBtn(localeText(set_system_clock)),
@@ -69,7 +12,44 @@ clockModeLabel("modeLabel", localeText(select_clock_mode))
 #    if JUCE_DEBUG
     setName("DateTimePage");
 #    endif
-    addAndShowLayoutComponents();
+    setLayout(
+    {
+        .xMarginFraction = 0.0,
+        .yMarginFraction = 0.1,
+        .rows = 
+        {
+            {
+                .rowItems = 
+	        {
+	            {
+	                .component = &titleLabel,
+		        .componentWeight = 20,
+		        .xPaddingWeight = 2
+	            }
+	        },
+		.rowWeight = 30,
+                .yPaddingWeight = 2
+	
+            },
+	    {
+      	        .rowItems = 
+	        {
+	            {
+	                .component = &clockModeLabel,
+		        .componentWeight = 30,
+		        .xPaddingWeight = 2
+	            },
+		    {
+	                .component = &setClockMode,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+	            }
+	        },
+                .rowWeight = 20,
+                .yPaddingWeight = 2
+	   }
+	}
+    });
     reconfigureBtn.addListener(this);
     titleLabel.setJustificationType(Justification::centred);
 
