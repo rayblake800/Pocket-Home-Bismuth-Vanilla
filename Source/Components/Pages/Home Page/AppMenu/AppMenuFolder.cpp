@@ -196,8 +196,7 @@ void AppMenuFolder::layoutButtons()
     bounds.reduce(margin * getWidth(), margin * getWidth());
     if (!bounds.isEmpty())
     {
-        folderLayout.layoutComponents(bounds, getWidth() * xPadding,
-                getHeight() * yPadding);
+        folderLayout.layoutComponents(bounds);
     }
 }
 
@@ -297,8 +296,7 @@ void AppMenuFolder::resized()
     //DBG("AppMenuFolder::" << __func__  << ": bounds="
     //        << getScreenBounds().toString() << " layoutBounds=" 
     //        <<bounds.toString());
-    folderLayout.layoutComponents(bounds, getWidth() * xPadding,
-            getHeight() * yPadding);
+    folderLayout.layoutComponents(bounds);
 }
 
 /**

@@ -46,10 +46,6 @@ public:
     struct RowLayout
     {
         /**
-         * Holds all ComponentLayouts in a row.
-         */
-        std::vector<ComponentLayout> rowItems;
-        /**
          * Row height = total height * rowWeight / verticalWeightSum
          */
         int rowWeight;
@@ -59,6 +55,10 @@ public:
          * top and bottom of the row.
          */
         int yPaddingWeight;
+        /**
+         * Holds all ComponentLayouts in the row.
+         */
+        std::vector<ComponentLayout> rowItems;
     };
 
     struct Layout

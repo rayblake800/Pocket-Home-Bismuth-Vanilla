@@ -230,6 +230,8 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
                 }
             }
             RelativeLayoutManager::RowLayout row = {
+                        .rowWeight = rowWeight,
+                        .yPaddingWeight = 1,
                         .rowItems = 
                         {
                             {
@@ -237,9 +239,7 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
                                 .componentWeight = 6,
                                 .xPaddingWeight  = 1
                             }
-                        },
-                        .rowWeight = rowWeight,
-                        .yPaddingWeight = 1
+                        }
                     };
             layout.rows.push_back(row);
         }
@@ -470,15 +470,15 @@ ConnectionPage<ConnectionPoint>::ConnectionListItem::getListItemLayout()
         .yMarginFraction = 0.0,
         .rows = {
             {
+                .rowWeight      = 1,
+                .yPaddingWeight = 0,
                 .rowItems = {
                     {
                         .component       = connectionButton,
                         .componentWeight = 20,
                         .xPaddingWeight  = 1
                     }
-                },
-                .rowWeight      = 1,
-                .yPaddingWeight = 0
+                }
             }
         }
     };

@@ -42,30 +42,40 @@ RelativeLayoutManager::Layout PageAppFolder::buildFolderLayout
     //the +2 to numSpacers is to account for the two margins
     int buttonSize = (getWidth() - (numSpacers + 2) * spacerSize
                       - numPaddingGaps * paddingSize) / numAppColumns;
+    paddingSize /= 2;
 
     int numLayoutColumns = numAppColumns + numSpacers;
 
     std::function<void(Component*, int) > addButton =
-            [&layout, buttonSize, spacerSize, numLayoutColumns, this]
+            [&layout, buttonSize, spacerSize, paddingSize, numLayoutColumns, this]
             (Component* component, int row)
             {
-                layout[row].components.push_back({component, buttonSize});
-                int rowSize = layout[row].components.size();
+                layout.rows[row].rowItems.push_back({
+                    .component = component,
+                    .componentWeight = buttonSize,
+                    .xPaddingWeight = paddingSize
+                });
+                int rowSize = layout.rows[row].rowItems.size();
                 if ((rowSize + 1) % (getMaxColumns() + 1) == 0
-                    && layout[row].components.size() < numLayoutColumns)
+                    && layout.rows[row].rowItems.size() < numLayoutColumns)
                 {
-                    layout[row].components.push_back({nullptr, spacerSize});
+                    layout.rows[row].rowItems.push_back({
+                        .component = nullptr,
+                        .componentWeight = spacerSize,
+                        .xPaddingWeight = paddingSize});
                 }
             };
 
     //reserve space
-    layout.reserve(sizeof (RelativeLayoutManager::RowLayout)
+    layout.rows.reserve(sizeof (RelativeLayoutManager::RowLayout)
             * getMaxRows());
     for (int i = 0; i < getMaxRows(); i++)
     {
-        layout.push_back({1,
-            {}});
-        layout[i].components.reserve(sizeof
+        layout.rows.push_back({
+            .rowWeight = 10,
+            .yPaddingWeight = 2
+        });
+        layout.rows[i].rowItems.reserve(sizeof
                 (RelativeLayoutManager::ComponentLayout)
                 * numLayoutColumns);
     }
@@ -81,7 +91,7 @@ RelativeLayoutManager::Layout PageAppFolder::buildFolderLayout
     //Fill in remaining empty spaces
     for (int row = 0; row < getMaxRows(); row++)
     {
-        while (layout[row].components.size() < numLayoutColumns)
+        while (layout.rows[row].rowItems.size() < numLayoutColumns)
         {
             addButton(nullptr, row);
         }

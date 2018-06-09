@@ -29,13 +29,24 @@ AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
 RelativeLayoutManager::Layout ScrollingAppFolder::buildFolderLayout
 (Array<AppMenuButton::Ptr>& buttons)
 {
-    RelativeLayoutManager::Layout layout;
+    RelativeLayoutManager::Layout layout = {
+        .xMarginFraction = 0,
+        .yMarginFraction = 0,
+        .rows = {}
+    };
     for (AppMenuButton::Ptr button : buttons)
     {
-        layout.push_back({1,
-            {
-                {button, 1}
-            }});
+        layout.rows.push_back({
+           .rowWeight = 1,
+           .yPaddingWeight = 0,
+           .rowItems = {
+               {
+                   .component = button,
+                   .componentWeight = 1,
+                   .xPaddingWeight = 0
+               }
+           }
+        });
     }
     return layout;
 }

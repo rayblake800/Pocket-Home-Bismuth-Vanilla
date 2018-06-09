@@ -78,15 +78,15 @@ void AdvancedSettingsPage::reloadLayout()
         .yMarginFraction = yMarginFraction,
         .rows = {
             {
+                .rowWeight = 40,
+                .yPaddingWeight = 2,
                 .rowItems = {
                     {
                         .component = buttonIndex > 0 ? nullptr : &titleLabel,
                         .componentWeight = 10,
                         .xPaddingWeight = 2
                     }
-                },
-                .rowWeight = 40,
-                .yPaddingWeight = 2
+                }
             }
         }
     };
@@ -95,6 +95,8 @@ void AdvancedSettingsPage::reloadLayout()
     {
         layout.rows.push_back(  
             {
+                .rowWeight = 30,
+                .yPaddingWeight = 2,
                 .rowItems = {
                     {
                         .component = (i < buttons.size()) ?
@@ -102,21 +104,19 @@ void AdvancedSettingsPage::reloadLayout()
                         .componentWeight = 10,
                         .xPaddingWeight = 2
                     }
-                },
-                .rowWeight = 30,
-                .yPaddingWeight = 2
+                }
             });
         layout.rows.push_back(  
             {
+                .rowWeight = 10,
+                .yPaddingWeight = 2,
                 .rowItems = {
                     {
                         .component =  nullptr,
                         .componentWeight = 10,
                         .xPaddingWeight = 2
                     }
-                },
-                .rowWeight = 10,
-                .yPaddingWeight = 2
+                }
             });
     }
     updateLayout(layout);

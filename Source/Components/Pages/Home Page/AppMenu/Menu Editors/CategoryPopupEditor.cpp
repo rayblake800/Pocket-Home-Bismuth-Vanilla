@@ -14,12 +14,22 @@ categoryList(categories)
 #    if JUCE_DEBUG
     setName("categoryEditor");
 #    endif
-    RelativeLayoutManager::Layout layout = {
-        {4,
+    setLayout({
+        .xMarginFraction = 0.1,
+        .yMarginFraction = 0.1,
+        .rows = {
             {
-                {&categoryList, 1}
-            }},
-    };
-    setLayout(layout);
+                .rowWeight = 20,
+                .yPaddingWeight = 2,
+                .rowItems = {
+                    {
+                        .component = &categoryList,
+                        .componentWeight = 10,
+                        .xPaddingWeight = 2
+                    }
+                }
+            }
+        }
+    });
 }
 
