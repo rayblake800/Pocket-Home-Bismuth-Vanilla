@@ -12,12 +12,19 @@ clockModeLabel("modeLabel", localeText(select_clock_mode))
 #    if JUCE_DEBUG
     setName("DateTimePage");
 #    endif
+<<<<<<< HEAD
     setLayout({
         .xMarginFraction = 0.1,
+=======
+    setLayout(
+    {
+        .xMarginFraction = 0.0,
+>>>>>>> cdadd70a4d0204b4c160acc1d0a799cd9be03b5c
         .yMarginFraction = 0.1,
         .rows = 
         {
             {
+<<<<<<< HEAD
                 .rowWeight = 30,
                 .yPaddingWeight = 1,
                 .rowItems = 
@@ -47,6 +54,38 @@ clockModeLabel("modeLabel", localeText(select_clock_mode))
                 }
             },
         }
+=======
+                .rowItems = 
+	        {
+	            {
+	                .component = &titleLabel,
+		        .componentWeight = 20,
+		        .xPaddingWeight = 2
+	            }
+	        },
+		.rowWeight = 30,
+                .yPaddingWeight = 2
+	
+            },
+	    {
+      	        .rowItems = 
+	        {
+	            {
+	                .component = &clockModeLabel,
+		        .componentWeight = 30,
+		        .xPaddingWeight = 2
+	            },
+		    {
+	                .component = &setClockMode,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+	            }
+	        },
+                .rowWeight = 20,
+                .yPaddingWeight = 2
+	   }
+	}
+>>>>>>> cdadd70a4d0204b4c160acc1d0a799cd9be03b5c
     });
     reconfigureBtn.addListener(this);
     titleLabel.setJustificationType(Justification::centred);
