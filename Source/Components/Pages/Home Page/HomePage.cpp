@@ -7,7 +7,7 @@
 #include "HomePage.h"
 
 HomePage::HomePage() :
-PageComponent("HomePage",{}, false),
+PageComponent("HomePage"),
 frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
 powerButton(ComponentConfigFile::powerButtonKey),
 settingsButton(ComponentConfigFile::settingsButtonKey)

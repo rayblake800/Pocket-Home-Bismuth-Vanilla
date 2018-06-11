@@ -3,39 +3,7 @@
 
 HomeSettingsPage::HomeSettingsPage() :
 Localized("HomeSettingsPage"),
-PageComponent("HomeSettingsPage",{
-    {
-        { 3,
-            {
-                {&title, 1}
-            }},
-        { 2,
-            {
-                {&bgTypeLabel, 1},
-                {&bgTypePicker, 1}
-            }},
-        { 2,
-            {
-                {&bgLabel, 1},
-                {&bgEditor, 1}
-            }},
-        { 2,
-            {
-                {&menuPickerLabel, 1},
-                {&menuTypePicker, 1}
-            }},
-        { 2,
-            {
-                {&columnCountLabel, 2},
-                {&columnCounter, 1}
-            }},
-        { 2,
-            {
-                {&rowCountLabel, 2},
-                {&rowCounter, 1}
-            }}
-    }
-}),
+PageComponent("HomeSettingsPage"),
 title("personalizeTitle", localeText(title_text)),
 bgTypeLabel("bgLabel", localeText(background_text)),
 bgTypePicker("bgTypePicker"),
@@ -52,6 +20,105 @@ rowCounter(1, 1, 9)
 #    if JUCE_DEBUG
     setName("HomeSettingsPage");
 #    endif
+    setLayout({
+        .xMarginFraction = 0,
+	.yMarginFraction = 0.1,
+	.rows = {
+            {
+	        .rowWeight = 30,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = &title,
+		        .componentWeight = 10,
+			.xPaddingWeight = 2
+		    }
+                }
+            },
+            {
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = &bgTypeLabel,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    },
+                    {
+		        .component = &bgTypePicker,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    },
+            {
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = &bgLabel,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    },
+                    {
+		        .component = &bgEditor,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    },
+            { 
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = &menuPickerLabel,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    },
+                    {
+		        .component = &menuTypePicker,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    },
+            {
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems =
+                {
+                    {
+		        .component = &columnCountLabel,
+		        .componentWeight = 20,
+		        .xPaddingWeight = 2
+		    },
+                    {
+		        .component = &columnCounter,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    },
+            { 
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems =
+                {
+                    {
+		        .component = &rowCountLabel,
+		        .componentWeight = 20,
+		        .xPaddingWeight = 2
+		    },
+                    {
+			.component = &rowCounter,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+            }
+        }
+    });
     title.setJustificationType(Justification::centred);
     bgTypePicker.addItem(localeText(default_bg), 1);
     bgTypePicker.addItem(localeText(color_bg), 2);
