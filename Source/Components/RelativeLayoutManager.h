@@ -10,6 +10,31 @@
  * with weight values determining their sizes in proportion to each other.
  */
 
+/* Layout Declaration Template:
+
+Layout layout =
+{
+    .xMarginFraction = 0,
+    .yMarginFraction = 0.1,
+    .rows = 
+    {
+        {
+            .rowWeight = 20,
+            .yPaddingWeight = 2,
+            .rowItems = 
+            {
+                {
+                    .component = nullptr,
+                    .componentWeight = 10,
+                    .xPaddingWeight = 2
+                }
+            }
+        }
+    }
+ }
+ * 
+ */
+
 class RelativeLayoutManager
 {
 public:

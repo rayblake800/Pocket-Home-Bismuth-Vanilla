@@ -3,31 +3,7 @@
 
 SetPasswordPage::SetPasswordPage() :
 Localized("SetPasswordPage"),
-PageComponent("SetPasswordPage",{
-    {2,
-        {
-            {&title, 1}
-        }},
-    {1,
-        {
-            {&curLabel, 2},
-            {&curPassword, 3}
-        }},
-    {1,
-        {
-            {&newLabel, 2},
-            {&newPassword, 3}
-        }},
-    {1,
-        {
-            {&confirmLabel, 2},
-            {&confirmPassword, 3}
-        }},
-    {1,
-        {
-            {&setPassword, 1}
-        }}
-}),
+PageComponent("SetPasswordPage"),
 title("Title", localeText(change_password)),
 curLabel("CurLabel", localeText(current_password)),
 curPassword("Current", 0x2022),
@@ -40,6 +16,88 @@ confirmPassword("Confirmation", 0x2022)
 #    if JUCE_DEBUG
     setName("SetPasswordPage");
 #    endif
+    setLayout({
+        .xMarginFraction = 0,
+	.yMarginFraction = 0.1,
+	.rows = 
+        {
+	    {
+	        .rowWeight = 20,
+	        .yPaddingWeight = 2,
+	        .rowItems = 
+                {
+                    {
+		        .component = &title,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+            },
+	    {
+	        .rowWeight = 10,
+	        .yPaddingWeight = 2,
+	        .rowItems = 
+                {
+                    {
+		        .component = &curLabel,
+		        .componentWeight = 20,
+		        .xPaddingWeight = 2
+		    },
+                    {
+		        .component = &curPassword,
+		        .componentWeight = 30,
+		        .xPaddingWeight = 2
+		    }
+                }
+            },
+	    {
+	        .rowWeight = 10,
+	        .yPaddingWeight = 2,
+	        .rowItems = 
+                {
+                    {
+		        .component = &newLabel,
+		        .componentWeight = 20,
+		        .xPaddingWeight = 2
+		    },
+                    {
+		        .component = &newPassword,
+		        .componentWeight = 30,
+		        .xPaddingWeight = 2
+		    }
+                }
+            },
+	    {
+	        .rowWeight = 10,
+	        .yPaddingWeight = 2,
+	        .rowItems = 
+                {
+                    {
+		        .component = &confirmLabel,
+		        .componentWeight = 20,
+		        .xPaddingWeight = 2
+		    },
+                    {
+		        .component = &confirmPassword,
+		        .componentWeight = 30,
+		        .xPaddingWeight = 2
+		    }
+                }
+            },
+	    {
+	        .rowWeight = 10,
+	        .yPaddingWeight = 2,
+	        .rowItems = 
+                {
+                    {
+		        .component = &setPassword,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+            }
+        }
+    });
     title.setJustificationType(Justification::centred);
     setPassword.setButtonText(localeText(apply));
     setPassword.addListener(this);
