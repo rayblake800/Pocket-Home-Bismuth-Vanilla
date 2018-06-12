@@ -5,34 +5,7 @@
 
 LoginPage::LoginPage(std::function<void () > loginCallback) :
 Localized("LoginPage"),
-PageComponent("LoginPage",{
-    {7,
-        {
-            {&ntcIcon, 1}
-        }},
-    {2,
-        {
-            {nullptr, 1}
-        }},
-    {1,
-        {
-            {nullptr, 1},
-            {&passwordLabel, 1},
-            {nullptr, 1}
-        }},
-    {2,
-        {
-            {nullptr, 1},
-            {&passwordField, 1},
-            {nullptr, 1}
-        }},
-    {2,
-        {
-            {nullptr, 1},
-            {&loginButton, 1},
-            {nullptr, 1}
-        }}
-}, false),
+PageComponent("LoginPage"),
 ntcIcon("login/ntcbanner.png"),
 passwordLabel("pass", localeText(password_label)),
 passwordField("passwordField", 0x2022),
@@ -45,6 +18,77 @@ foundPassword(false)
 #    if JUCE_DEBUG
     setName("LoginPage");
 #    endif
+    setLayout({
+        .xMarginFraction = 0.1,
+	.yMarginFraction = 0.05,
+	.rows = {
+            {
+	        .rowWeight = 70,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = &ntcIcon,
+		        .componentWeight = 10,
+			.xPaddingWeight = 2
+		    }
+                }
+	    },
+            {
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = nullptr,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 0
+		    }
+                }
+	    },
+            {
+	        .rowWeight = 10,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+	                .component = nullptr,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    },
+                    {
+		        .component = &passwordLabel,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    },
+                    {
+			.component = nullptr,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    },
+            {
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = &passwordField,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 20
+		    },
+                }
+            },
+            {
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+                        .component = &loginButton,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 20
+		    },
+                }
+	    }
+        }
+    });
     setBackgroundImage(AssetFiles::loadImageAsset("login/background.png"));
     loginButton.addListener(this);
     passwordField.addListener(this);

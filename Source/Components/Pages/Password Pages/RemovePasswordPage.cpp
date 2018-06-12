@@ -3,21 +3,7 @@
 
 RemovePasswordPage::RemovePasswordPage() :
 Localized("RemovePasswordPage"),
-PageComponent("RemovePasswordPage",{
-    {2,
-        {
-            {&titleLabel, 1}
-        }},
-    {1,
-        {
-            {&curPwdLabel, 2},
-            {&curPassword, 3}
-        }},
-    {1,
-        {
-            {&deleteButton, 1}
-        }}
-}),
+PageComponent("RemovePasswordPage"),
 curPwdLabel("CurLabel", localeText(current_password)),
 curPassword("Current", 0x2022),
 titleLabel("Title", localeText(remove_password))
@@ -26,6 +12,50 @@ titleLabel("Title", localeText(remove_password))
 #    if JUCE_DEBUG
     setName("RemovePasswordPage");
 #    endif
+    setLayout({
+        .xMarginFraction = 0,
+	.yMarginFraction = 0.1,
+	.rows = {
+	    {
+	        .rowWeight = 20,
+	        .yPaddingWeight = 2,
+	        .rowItems = {
+                    {
+		        .component = &titleLabel,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+            },
+            {
+	        .rowWeight = 10,
+	        .yPaddingWeight = 2,
+	        .rowItems = {
+                    {
+		        .component = &curPwdLabel,
+		        .componentWeight = 20,
+		        .xPaddingWeight = 2
+		    },
+                    {
+		        .component = &curPassword,
+		        .componentWeight = 30,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    },
+            {
+	        .rowWeight = 10,
+	        .yPaddingWeight = 2,
+	        .rowItems = {
+                    {
+                        .component = &deleteButton,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    }
+	}
+    });
     titleLabel.setJustificationType(Justification::centred);
     deleteButton.setButtonText(localeText(apply));
     deleteButton.addListener(this);
