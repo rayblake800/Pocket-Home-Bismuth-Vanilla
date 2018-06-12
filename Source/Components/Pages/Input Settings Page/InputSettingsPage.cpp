@@ -4,29 +4,7 @@
 
 InputSettingsPage::InputSettingsPage() :
 Localized("InputSettingsPage"),
-PageComponent("InputSettingsPage",{
-    {3,
-        {
-            {&title, 1}
-        }},
-    {2,
-        {
-            {&cursorVisible, 5},
-            {&chooseMode, 2}
-        }},
-    {4,
-        {
-            {nullptr, 1}
-        }},
-    {2,
-        {
-            {&calibrating, 1}
-        }},
-    {2,
-        {
-            {&fnmapping, 1}
-        }}
-}),
+PageComponent("InputSettingsPage"),
 title("settings", localeText(input_settings)),
 chooseMode("chooseMode"),
 calibrating(localeText(calibrate_screen)),
@@ -37,6 +15,72 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
 #    if JUCE_DEBUG
     setName("InputSettingsPage");
 #    endif
+    setLayout({
+        .xMarginFraction = 0,
+	.yMarginFraction = 0.1,
+	.rows = {
+            {
+	        .rowWeight = 30,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = &title,
+			.componentWeight = 10,
+			.xPaddingWeight = 2
+		    }
+                }
+	    },
+            {
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = &cursorVisible,
+		        .componentWeight = 50,
+			.xPaddingWeight = 2
+		    },
+                    {
+		        .component = &chooseMode,
+		        .componentWeight = 20,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    },
+            {
+	        .rowWeight = 40,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = nullptr,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    },
+            {
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = &calibrating,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    },
+            {
+	        .rowWeight = 20,
+		.yPaddingWeight = 2,
+		.rowItems = {
+                    {
+		        .component = &fnmapping,
+		        .componentWeight = 10,
+		        .xPaddingWeight = 2
+		    }
+                }
+	    }
+        }
+    });
     title.setJustificationType(Justification::centred);
     //ComboBox
     chooseMode.addItem(localeText(not_visible), 1);
