@@ -70,55 +70,34 @@ void AdvancedSettingsPage::reloadLayout()
             = config.getComponentSettings(ComponentConfigFile::pageUpKey);
     ComponentConfigFile::ComponentSettings nextBtnSettings
             = config.getComponentSettings(ComponentConfigFile::pageDownKey);
-    float yMarginFraction = prevBtnSettings.getYFraction()
-            + prevBtnSettings.getHeightFraction()
-            + nextBtnSettings.getYFraction();
-    RelativeLayoutManager::Layout layout = {
-        .xMarginFraction = 0,
-        .yMarginFraction = yMarginFraction,
-        .rows = {
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout(
+    {
             {
-                .rowWeight = 40,
-                .yPaddingWeight = 2,
-                .rowItems = {
-                    {
-                        .component = buttonIndex > 0 ? nullptr : &titleLabel,
-                        .componentWeight = 10,
-                        .xPaddingWeight = 2
-                    }
+                .weight = 40, .rowItems = 
+                {
+                    RowItem(buttonIndex > 0 ? nullptr : &titleLabel, 10),
                 }
             }
-        }
-    };
+    });
 
     for (int i = buttonIndex; i < (buttonIndex + buttonsPerPage); i++)
     {
-        layout.rows.push_back(  
+        layout.addRow(
+        {
+            .weight = 30, .rowItems = 
             {
-                .rowWeight = 30,
-                .yPaddingWeight = 2,
-                .rowItems = {
-                    {
-                        .component = (i < buttons.size()) ?
-                                buttons[i] : nullptr,
-                        .componentWeight = 10,
-                        .xPaddingWeight = 2
-                    }
-                }
-            });
-        layout.rows.push_back(  
-            {
-                .rowWeight = 10,
-                .yPaddingWeight = 2,
-                .rowItems = {
-                    {
-                        .component =  nullptr,
-                        .componentWeight = 10,
-                        .xPaddingWeight = 2
-                    }
-                }
-            });
+                RowItem((i < buttons.size()) ? buttons[i] : nullptr, 10)
+            }
+        });
     }
+    
+    float yMarginFraction = std::max(prevBtnSettings.getYFraction()
+            + prevBtnSettings.getHeightFraction(),
+            nextBtnSettings.getYFraction());
+    layout.setYMarginFraction(yMarginFraction);
+    layout.setXPaddingWeight(1);
+    layout.setYPaddingWeight(1);
     updateLayout(layout);
 }
 

@@ -12,11 +12,11 @@
         <group>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/ConnectionPage.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/DateTime%20Page/DateTimePage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/AppMenuFolder.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/Menu%20Folders/PageAppFolder.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/Menu%20Folders/ScrollingAppFolder.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/Menu%20Editors/CategoryPopupEditor.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Settings%20Page/HomeSettingsPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/PageComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Advanced%20Settings%20Page/AdvancedSettingsPage.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/RelativeLayoutManager.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/RelativeLayoutManager.cpp</file>
         </group>
     </open-files>
 </project-private>

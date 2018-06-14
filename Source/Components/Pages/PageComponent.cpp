@@ -56,8 +56,8 @@ void PageComponent::setLayout(RelativeLayoutManager::Layout layout,
         {
             minMargin = 1 - buttonConfig.getXFraction();
         }
-        layout.xMarginFraction 
-                = std::max(layout.xMarginFraction, minMargin) * 2;
+        layout.setXMarginFraction(std::max(layout.getXMarginFraction(),
+                minMargin));
     }   
     layoutManager.setLayout(layout, this);
 }

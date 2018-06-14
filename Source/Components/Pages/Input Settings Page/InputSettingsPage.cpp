@@ -15,72 +15,41 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
 #    if JUCE_DEBUG
     setName("InputSettingsPage");
 #    endif
-    setLayout({
-        .xMarginFraction = 0,
-	.yMarginFraction = 0.1,
-	.rows = {
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout(
+    {
+        {
+	    .weight = 30, .rowItems = 
             {
-	        .rowWeight = 30,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &title,
-			.componentWeight = 10,
-			.xPaddingWeight = 2
-		    }
-                }
-	    },
+                RowItem(&title, 10)
+	    }
+        },
+        {
+	    .weight = 20, .rowItems = 
             {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &cursorVisible,
-		        .componentWeight = 50,
-			.xPaddingWeight = 2
-		    },
-                    {
-		        .component = &chooseMode,
-		        .componentWeight = 20,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    },
+                RowItem(&cursorVisible, 50),
+                RowItem(&chooseMode, 20)
+	    }
+        },
+        {   .weight = 40, .rowItems = {} },
+        {
+	    .weight = 20, .rowItems = 
             {
-	        .rowWeight = 40,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = nullptr,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    },
+                RowItem(&calibrating, 10)
+	    }
+        },
+        {
+            .weight = 20, .rowItems = 
             {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &calibrating,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    },
-            {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &fnmapping,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
+                RowItem(&fnmapping, 10)
 	    }
         }
     });
+    layout.setYMarginFraction(0.1);
+    layout.setXPaddingWeight(1);
+    layout.setYPaddingWeight(1);
+    setLayout(layout); 
+    
     title.setJustificationType(Justification::centred);
     //ComboBox
     chooseMode.addItem(localeText(not_visible), 1);

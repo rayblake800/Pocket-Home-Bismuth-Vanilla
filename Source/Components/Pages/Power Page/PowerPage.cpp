@@ -10,38 +10,7 @@
 #endif
 
 PowerPage::PowerPage() :Localized("PowerPage"),
-PageComponent("PowerPage",{
-    {1,
-        {
-            {nullptr, 1}
-        }},
-    {1,
-        {
-            {&powerOffButton, 1}
-        }},
-    {1,
-        {
-            {&sleepButton, 1}
-        }},
-    {1,
-        {
-            {&rebootButton, 1}
-        }},
-    {1,
-        {
-            {&felButton, 1}
-        }},
-#if JUCE_DEBUG
-    {1,
-        {
-            {&testButton, 1}
-        }},
-#endif
-    {1,
-        {
-            {nullptr, 1}
-        }}
-}, true, true),
+PageComponent("PowerPage"),
 powerOffButton(localeText(shutdown)),
 rebootButton(localeText(reboot)),
 sleepButton(localeText(sleep)),
@@ -59,6 +28,31 @@ lockscreen([this]()
     setName("PowerPage");
     testButton.addListener(this);
 #    endif
+      
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout({
+        {
+            .weight = 20, .rowItems = { RowItem(&powerOffButton) }
+        },
+        {
+            .weight = 20, .rowItems = { RowItem(&sleepButton) }
+        },
+        {
+            .weight = 20, .rowItems = { RowItem(&rebootButton) }
+        },
+        {
+            .weight = 20, .rowItems = { RowItem(&felButton) }
+        }       
+#if JUCE_DEBUG
+        ,{
+            .weight = 20, .rowItems = { RowItem(&testButton) }
+        }          
+#endif
+    });
+    layout.setYMarginFraction(0.1);
+    layout.setYPaddingWeight(2);
+    setLayout(layout);
+    
     powerOffButton.addListener(this);
     sleepButton.addListener(this);
     rebootButton.addListener(this);

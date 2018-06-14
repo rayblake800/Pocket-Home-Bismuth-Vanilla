@@ -185,41 +185,43 @@ RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
 (const WifiAccessPoint& accessPoint)
 {
     jassert(accessPoint == getSelectedConnection());
-    RelativeLayoutManager::Layout controlLayout = {
-	{1,
-	    {
-	        {nullptr,1}
-	    }},
-	{2,
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout controlLayout({
+	{ 
+            .weight = 20, .rowItems =
             {
-                {accessPoint.getRequiresAuth() ? &passwordLabel : nullptr, 4},
-                {accessPoint.getRequiresAuth() ? &passwordEditor : nullptr, 5}
-            }},
-        {1,
-	    {
-	        {nullptr,1}
-	    }},
-	{2,
+                RowItem(accessPoint.getRequiresAuth() ?
+                    &passwordLabel : nullptr, 4),
+                RowItem(accessPoint.getRequiresAuth() ?
+                    &passwordEditor : nullptr, 5)
+            }
+        },
+        {
+            .weight = 20, .rowItems =
             {
-                {nullptr, 1},
-                {&connectionButton, 1},
-                {nullptr, 1}
-            }},
-        {2,
+                RowItem(),
+                RowItem(&connectionButton),
+                RowItem()
+            }
+        },
+        {
+            .weight = 20, .rowItems =
             {
-                {&errorLabel, 1}
-            }}
-    };
+                RowItem(&errorLabel)
+            }
+        }
+    });
     if (accessPoint.getSavedConnectionPath().isNotEmpty())
     {
         RelativeLayoutManager::RowLayout row = 
-        {2,
+        {
+            .weight = 20, .rowItems =
             {
-                {nullptr, 1},
-                {&lastConnectionLabel, 4},
-                {nullptr, 1}
+                RowItem(),
+                RowItem(&lastConnectionLabel, 4),
+                RowItem()
             }};
-        controlLayout.insert(controlLayout.begin(), row);
+        controlLayout.insertRow(row, 0);
     }
     return controlLayout;
 }

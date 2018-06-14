@@ -18,77 +18,18 @@ foundPassword(false)
 #    if JUCE_DEBUG
     setName("LoginPage");
 #    endif
-    setLayout({
-        .xMarginFraction = 0.1,
-	.yMarginFraction = 0.05,
-	.rows = {
-            {
-	        .rowWeight = 70,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &ntcIcon,
-		        .componentWeight = 10,
-			.xPaddingWeight = 2
-		    }
-                }
-	    },
-            {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = nullptr,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 0
-		    }
-                }
-	    },
-            {
-	        .rowWeight = 10,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-	                .component = nullptr,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &passwordLabel,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    },
-                    {
-			.component = nullptr,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    },
-            {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &passwordField,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 20
-		    },
-                }
-            },
-            {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-                        .component = &loginButton,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 20
-		    },
-                }
-	    }
-        }
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout({
+        { .weight = 70, .rowItems =  { RowItem(&ntcIcon) } },
+        { .weight = 10, .rowItems =  { RowItem(&passwordLabel) } },
+        { .weight = 20, .rowItems =  { RowItem(&passwordField) } },
+        { .weight = 20, .rowItems =  { RowItem(&loginButton) } }
     });
+    layout.setXMarginFraction(0.3);
+    layout.setYMarginFraction(0.1);
+    layout.setYPaddingWeight(1);
+    setLayout(layout);
+    
     setBackgroundImage(AssetFiles::loadImageAsset("login/background.png"));
     loginButton.addListener(this);
     passwordField.addListener(this);

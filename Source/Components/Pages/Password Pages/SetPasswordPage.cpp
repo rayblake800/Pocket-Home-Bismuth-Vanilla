@@ -16,88 +16,42 @@ confirmPassword("Confirmation", 0x2022)
 #    if JUCE_DEBUG
     setName("SetPasswordPage");
 #    endif
-    setLayout({
-        .xMarginFraction = 0,
-	.yMarginFraction = 0.1,
-	.rows = 
+    
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout({
         {
-	    {
-	        .rowWeight = 20,
-	        .yPaddingWeight = 2,
-	        .rowItems = 
-                {
-                    {
-		        .component = &title,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-            },
-	    {
-	        .rowWeight = 10,
-	        .yPaddingWeight = 2,
-	        .rowItems = 
-                {
-                    {
-		        .component = &curLabel,
-		        .componentWeight = 20,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &curPassword,
-		        .componentWeight = 30,
-		        .xPaddingWeight = 2
-		    }
-                }
-            },
-	    {
-	        .rowWeight = 10,
-	        .yPaddingWeight = 2,
-	        .rowItems = 
-                {
-                    {
-		        .component = &newLabel,
-		        .componentWeight = 20,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &newPassword,
-		        .componentWeight = 30,
-		        .xPaddingWeight = 2
-		    }
-                }
-            },
-	    {
-	        .rowWeight = 10,
-	        .yPaddingWeight = 2,
-	        .rowItems = 
-                {
-                    {
-		        .component = &confirmLabel,
-		        .componentWeight = 20,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &confirmPassword,
-		        .componentWeight = 30,
-		        .xPaddingWeight = 2
-		    }
-                }
-            },
-	    {
-	        .rowWeight = 10,
-	        .yPaddingWeight = 2,
-	        .rowItems = 
-                {
-                    {
-		        .component = &setPassword,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
+	    .weight = 20, .rowItems = { RowItem(&title) }
+        },
+        {
+            .weight = 10, .rowItems = 
+            {
+                RowItem(&curLabel, 20),
+                RowItem(&curPassword, 30)
             }
-        }
+	},
+        {
+            .weight = 10, .rowItems = 
+            {
+                RowItem(&newLabel, 20),
+                RowItem(&newPassword, 30)
+            }
+	},
+        {
+            .weight = 10, .rowItems = 
+            {
+                RowItem(&confirmLabel, 20),
+                RowItem(&confirmPassword, 30)
+            }
+	},
+        {
+            .weight = 10, .rowItems = { RowItem(&setPassword, 10) }
+	}
     });
+    layout.setXMarginFraction(0.1);
+    layout.setXPaddingWeight(1);
+    layout.setYPaddingWeight(1);
+    setLayout(layout);
+    
     title.setJustificationType(Justification::centred);
     setPassword.setButtonText(localeText(apply));
     setPassword.addListener(this);

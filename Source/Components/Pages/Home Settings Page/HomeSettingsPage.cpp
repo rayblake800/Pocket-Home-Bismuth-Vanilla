@@ -20,105 +20,57 @@ rowCounter(1, 1, 9)
 #    if JUCE_DEBUG
     setName("HomeSettingsPage");
 #    endif
-    setLayout({
-        .xMarginFraction = 0,
-	.yMarginFraction = 0.1,
-	.rows = {
-            {
-	        .rowWeight = 30,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &title,
-		        .componentWeight = 10,
-			.xPaddingWeight = 2
-		    }
-                }
-            },
-            {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &bgTypeLabel,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &bgTypePicker,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    },
-            {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &bgLabel,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &bgEditor,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    },
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout({
+        { 
+            .weight = 30, .rowItems = 
             { 
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &menuPickerLabel,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &menuTypePicker,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    },
+                RowItem(&title) 
+            } 
+        },
+        { 
+            .weight = 20, .rowItems = 
             {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems =
-                {
-                    {
-		        .component = &columnCountLabel,
-		        .componentWeight = 20,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &columnCounter,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    },
-            { 
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems =
-                {
-                    {
-		        .component = &rowCountLabel,
-		        .componentWeight = 20,
-		        .xPaddingWeight = 2
-		    },
-                    {
-			.component = &rowCounter,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
+                RowItem(&bgTypeLabel, 10),
+                RowItem(&bgTypePicker, 10)
+	    }
+        },
+        {
+            .weight = 20, .rowItems = 
+            {
+                RowItem(&bgLabel, 10),
+                RowItem(&bgEditor, 10)
+            }
+        },
+        { 
+            .weight = 20, .rowItems = 
+            {
+                RowItem(&menuPickerLabel, 10),
+                RowItem(&menuTypePicker, 20)
+            }
+        },
+        {
+            .weight = 20,
+            .rowItems =
+            {
+                RowItem(&columnCountLabel, 20),
+                RowItem(&columnCounter, 10)
+            }
+	},
+        {
+            .weight = 20,
+            .rowItems =
+            {
+                RowItem(&rowCountLabel, 20),
+                RowItem(&rowCounter, 10)
             }
         }
     });
+    layout.setYMarginFraction(0.1);
+    layout.setXPaddingWeight(1);
+    layout.setYPaddingWeight(1);
+    setLayout(layout);
+    
     title.setJustificationType(Justification::centred);
     bgTypePicker.addItem(localeText(default_bg), 1);
     bgTypePicker.addItem(localeText(color_bg), 2);

@@ -8,40 +8,21 @@ numSavedColours(numSavedColours),
 selectionCallback([](Colour c){}),	
 colour(colour)
 {
-    RelativeLayoutManager::Layout layout =
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout(
     {
-        {6,
+        { .weight = 60, .rowItems = { RowItem(&colourPreview)} },
+        { .weight = 10, .rowItems = { RowItem(&rSlider)} },
+        { .weight = 10, .rowItems = { RowItem(&gSlider)} },
+        { .weight = 10, .rowItems = { RowItem(&bSlider)} },
+        { .weight = 10, .rowItems = { RowItem(&aSlider)} },
+	{ .weight = 10, .rowItems =
 	    {
-	        {&colourPreview,1}
-	    }
-        },
-	{1,
-	    {
-	        {&rSlider, 1}
-	    }
-        },
-	{1,
-	    {
-	        {&gSlider, 1}
-	    }
-        },
-	{1,
-	    {
-	        {&bSlider, 1}
-	    }
-        },
-	{1,
-	    {
-	        {&aSlider, 1}
-	    }
-        },
-	{1,
-	    {
-	        {&colourField, 1},
-	        {&selectionButton, 1}
+	        RowItem(&colourField),
+	        RowItem(&selectionButton)
 	    }
         }
-    };
+    });
     colourPreview.setColour(colour);
     for(int i = 0; i < numSavedColours; i++)
     {
@@ -239,7 +220,7 @@ void ColourPicker::resized()
 	}
 	
     }
-    layoutManager.layoutComponents(bounds,padding,padding);
+    layoutManager.layoutComponents(bounds);
 }
 
 ColourPicker::ColourBox::ColourBox(Colour colour, bool drawBorder) : 

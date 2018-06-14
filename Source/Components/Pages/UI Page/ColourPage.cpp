@@ -2,21 +2,18 @@
 #include "ColourPage.h"
 
 ColourPage::ColourPage() :
-PageComponent("ColourPage",{
-    {4,
-        {
-            {&colourList, 1}
-        }},
-    {1,
-        {
-            {&testSwitch, 1}
-        }}
-
-}),
+PageComponent("ColourPage"),
 listModel(),
 colourList("colourList", &listModel)
 {
-    addAndShowLayoutComponents();
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout({
+        { .weight = 40, .rowItems = { RowItem(&colourList) } },
+        { .weight = 10, .rowItems = { RowItem(&testSwitch) } }
+    });
+    layout.setYMarginFraction(0.1);
+    layout.setYPaddingWeight(3);
+    setLayout(layout);
     colourList.setOutlineThickness(2);
 }
 

@@ -12,43 +12,28 @@ clockModeLabel("modeLabel", localeText(select_clock_mode))
 #    if JUCE_DEBUG
     setName("DateTimePage");
 #    endif
-    setLayout(
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout(
     {
-        .xMarginFraction = 0.0,
-        .yMarginFraction = 0.1,
-        .rows = 
         {
+            .weight = 30, .rowItems = 
             {
-                .rowWeight = 30,
-                .yPaddingWeight = 1,
-                .rowItems = 
-                {
-                    {
-                        .component = &titleLabel,
-                        .componentWeight = 20,
-                        .xPaddingWeight = 1
-                    }
-                }
-            },
+                RowItem(&titleLabel, 20)
+            }
+        },
+        {
+            .weight = 20, .rowItems = 
             {
-                .rowWeight = 20,
-                .yPaddingWeight = 1,
-                .rowItems = 
-                {
-                    {
-                        .component = &clockModeLabel,
-                        .componentWeight = 30,
-                        .xPaddingWeight = 1
-                    },
-                    {
-                        .component = &setClockMode,
-                        .componentWeight = 10,
-                        .xPaddingWeight = 1
-                    },
-                }
-            },
-        }
+                RowItem(&clockModeLabel, 30),
+                RowItem(&setClockMode, 10)
+            }   
+        },
     });
+    layout.setYMarginFraction(0.1);
+    layout.setXPaddingWeight(1);
+    layout.setYPaddingWeight(1);
+    setLayout(layout);
+    
     reconfigureBtn.addListener(this);
     titleLabel.setJustificationType(Justification::centred);
 

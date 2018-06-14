@@ -12,50 +12,27 @@ titleLabel("Title", localeText(remove_password))
 #    if JUCE_DEBUG
     setName("RemovePasswordPage");
 #    endif
-    setLayout({
-        .xMarginFraction = 0,
-	.yMarginFraction = 0.1,
-	.rows = {
-	    {
-	        .rowWeight = 20,
-	        .yPaddingWeight = 2,
-	        .rowItems = {
-                    {
-		        .component = &titleLabel,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-            },
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout({
+        {
+	    .weight = 20, .rowItems = { RowItem(&titleLabel) }
+        },
+        {
+            .weight = 10, .rowItems = 
             {
-	        .rowWeight = 10,
-	        .yPaddingWeight = 2,
-	        .rowItems = {
-                    {
-		        .component = &curPwdLabel,
-		        .componentWeight = 20,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &curPassword,
-		        .componentWeight = 30,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    },
-            {
-	        .rowWeight = 10,
-	        .yPaddingWeight = 2,
-	        .rowItems = {
-                    {
-                        .component = &deleteButton,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    }
+                RowItem(&curPwdLabel, 20),
+                RowItem(&curPassword, 30)
+            }
+	},
+        {
+            .weight = 10, .rowItems = { RowItem(&deleteButton, 10) }
 	}
     });
+    layout.setXMarginFraction(0.1);
+    layout.setXPaddingWeight(1);
+    layout.setYPaddingWeight(1);
+    setLayout(layout);
+    
     titleLabel.setJustificationType(Justification::centred);
     deleteButton.setButtonText(localeText(apply));
     deleteButton.addListener(this);

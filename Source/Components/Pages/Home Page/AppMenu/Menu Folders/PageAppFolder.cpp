@@ -37,48 +37,33 @@ RelativeLayoutManager::Layout PageAppFolder::buildFolderLayout
     int numAppColumns = getMaxColumns() * numPages;
     int numPaddingGaps = numAppColumns - 1;
 
-    int spacerSize = getMargin() * getWidth() * 2;
     int paddingSize = getXPadding() * getWidth();
+    int spacerSize = getMargin() * getWidth() * 2 + paddingSize;
     //the +2 to numSpacers is to account for the two margins
     int buttonSize = (getWidth() - (numSpacers + 2) * spacerSize
                       - numPaddingGaps * paddingSize) / numAppColumns;
     paddingSize /= 2;
 
     int numLayoutColumns = numAppColumns + numSpacers;
+    
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    Array<RelativeLayoutManager::RowLayout> rows;
 
     std::function<void(Component*, int) > addButton =
-            [&layout, buttonSize, spacerSize, paddingSize, numLayoutColumns, this]
+            [&rows, buttonSize, spacerSize, paddingSize, numLayoutColumns, this]
             (Component* component, int row)
             {
-                layout.rows[row].rowItems.push_back({
-                    .component = component,
-                    .componentWeight = buttonSize,
-                    .xPaddingWeight = paddingSize
-                });
-                int rowSize = layout.rows[row].rowItems.size();
+                rows[row].rowItems.push_back(RowItem(component, buttonSize));
+                int rowSize = rows[row].rowItems.size();
                 if ((rowSize + 1) % (getMaxColumns() + 1) == 0
-                    && layout.rows[row].rowItems.size() < numLayoutColumns)
+                    && rowSize < numLayoutColumns)
                 {
-                    layout.rows[row].rowItems.push_back({
-                        .component = nullptr,
-                        .componentWeight = spacerSize,
-                        .xPaddingWeight = paddingSize});
+                    rows[row].rowItems.push_back(
+                    {
+                        RowItem(spacerSize)
+                    });
                 }
             };
-
-    //reserve space
-    layout.rows.reserve(sizeof (RelativeLayoutManager::RowLayout)
-            * getMaxRows());
-    for (int i = 0; i < getMaxRows(); i++)
-    {
-        layout.rows.push_back({
-            .rowWeight = 10,
-            .yPaddingWeight = 2
-        });
-        layout.rows[i].rowItems.reserve(sizeof
-                (RelativeLayoutManager::ComponentLayout)
-                * numLayoutColumns);
-    }
 
     //place buttons
     for (int i = 0; i < buttons.size(); i++)
@@ -91,11 +76,14 @@ RelativeLayoutManager::Layout PageAppFolder::buildFolderLayout
     //Fill in remaining empty spaces
     for (int row = 0; row < getMaxRows(); row++)
     {
-        while (layout.rows[row].rowItems.size() < numLayoutColumns)
+        while (rows[row].rowItems.size() < numLayoutColumns)
         {
             addButton(nullptr, row);
         }
+        layout.addRow(rows[row]);
     }
+    layout.setXPaddingWeight(paddingSize);
+    layout.setYPaddingWeight(1);
     return layout;
 }
 

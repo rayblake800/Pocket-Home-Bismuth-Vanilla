@@ -7,28 +7,7 @@
 SettingsPage::SettingsPage() :
 Localized("SettingsPage"),
 WindowFocusedTimer("SettingsPage"),
-PageComponent("SettingsPage",{
-    {1,
-        {
-            {&wifiComponent, 1}
-        }},
-    //    {1,
-    //        {
-    //            {&bluetoothComponent, 1}
-    //        }},
-    {1,
-        {
-            {&screenBrightnessSlider, 1}
-        }},
-    {1,
-        {
-            {&volumeSlider, 1}
-        }},
-    {1,
-        {
-            {&advancedPageButton, 1}
-        }}
-}, true),
+PageComponent("SettingsPage"),
 wifiComponent([this]()
 {
 
@@ -47,8 +26,19 @@ advancedPageButton(localeText(advanced_settings))
 #    if JUCE_DEBUG
     setName("SettingsPage");
 #    endif
-
-    addAndShowLayoutComponents();
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout({
+        { .weight = 10, .rowItems = { RowItem(&wifiComponent) } },
+        //{ .weight = 10, .rowItems = { RowItem(&bluetoothComponent) } },
+        { .weight = 10, .rowItems = { RowItem(&screenBrightnessSlider) } },
+        { .weight = 10, .rowItems = { RowItem(&volumeSlider) } },
+        { .weight = 10, .rowItems = { RowItem(&advancedPageButton) } }
+    });
+    layout.setXMarginFraction(0.1);
+    layout.setXPaddingWeight(1);
+    layout.setYPaddingWeight(1);
+    setLayout(layout);
+    
     advancedPageButton.addListener(this);
     screenBrightnessSlider.setRange(1, 10, 1);
     screenBrightnessSlider.setValue(Display::getBrightness());

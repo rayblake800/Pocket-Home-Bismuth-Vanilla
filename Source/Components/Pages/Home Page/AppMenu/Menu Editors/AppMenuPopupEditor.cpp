@@ -25,82 +25,44 @@ terminalCheckboxLabel("runInTermLabel", localeText(run_in_terminal))
     categoryEditButton.addListener(this);
     iconPathEditor.addFileSelectListener(this);
 
-    RelativeLayoutManager::Layout layout = {
-	.xMarginFraction = 0.1,
-	.yMarginFraction = 0.1,
-        .rows = {
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout(
+    {
+        {
+            .weight = 20,
+            .rowItems = 
             {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-			.component = &nameLabel,
-			.componentWeight = 10,
-			.xPaddingWeight = 2
-	            },
-                    {
-			.component = &nameEditor,
-			.componentWeight =  20,
-			.xPaddingWeight = 2
-	            }
-                }
-	    },
+                RowItem(&nameLabel, 10),
+                RowItem(&nameEditor, 20)
+            }
+        },
+        {
+            .weight = 20,
+            .rowItems = 
             {
-	        .rowWeight = 20,
-		.yPaddingWeight = 2,
-		.rowItems = {
-                    {
-		        .component = &iconLabel,
-		        .componentWeight = 20,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &iconPathEditor,
-		        .componentWeight = 30,
-		        .xPaddingWeight = 2
-		    },
-                    {
-		        .component = &iconPreview,
-		        .componentWeight = 10,
-		        .xPaddingWeight = 2
-		    }
-                }
-	    }
-	}
-    };
+                RowItem(&iconLabel, 20),
+                RowItem(&iconPathEditor, 30),
+                RowItem(&iconPreview, 10)
+            }
+        }
+    });
     //launch command row
     if (showCommandField)
     {
-        layout.rows.push_back({
-	    .rowWeight = 10,
-	    .yPaddingWeight = 2,
-	    .rowItems = {
-                {
-		    .component = &commandLabel,
-		    .componentWeight = 10,
-		    .xPaddingWeight = 2
-		},
-                {
-		    .component = &commandEditor,
-		    .componentWeight = 20,
-		    .xPaddingWeight = 2
-		}
+        layout.addRow({
+	    .weight = 10,
+	    .rowItems = 
+            {
+                RowItem(&commandLabel, 10),
+		RowItem(&commandEditor, 20)
 	    }
         });
-        layout.rows.push_back({
-	    .rowWeight = 10,
-	    .yPaddingWeight = 2,
-	    .rowItems = {
-                {
-		    .component = &terminalCheckboxLabel,
-		    .componentWeight = 60,
-		    .xPaddingWeight = 2
-		},
-                {
-		    .component = &terminalCheckbox,
-		    .componentWeight = 10,
-		    .xPaddingWeight = 2
-		}
+        layout.addRow({
+	    .weight = 10,
+	    .rowItems = 
+            {
+                RowItem(&terminalCheckboxLabel, 60),
+		RowItem(&terminalCheckbox, 10)
             }
 	});
     }
@@ -108,28 +70,20 @@ terminalCheckboxLabel("runInTermLabel", localeText(run_in_terminal))
     if (showCategoryList)
     {
 
-        layout.rows.push_back({
-	    .rowWeight = 10,
-	    .yPaddingWeight = 2,
-	    .rowItems = {
-                {
-		    .component = nullptr,
-		    .componentWeight = 10,
-		    .xPaddingWeight = 2
-		},
-                {
-		    .component = &categoryEditButton,
-		    .componentWeight = 40,
-		    .xPaddingWeight = 2
-		},
-                {
-		    .component = nullptr,
-		    .componentWeight = 10,
-		    .xPaddingWeight = 2
-		}
+        layout.addRow({
+	    .weight = 10,
+	    .rowItems = 
+            {
+                RowItem(10),
+                RowItem(&categoryEditButton, 40),
+                RowItem(10)
             }
 	});
     }
+    layout.setXMarginFraction(0.1);
+    layout.setYMarginFraction(0.1);
+    layout.setXPaddingWeight(1);
+    layout.setYPaddingWeight(1);
     setLayout(layout);
 }
 

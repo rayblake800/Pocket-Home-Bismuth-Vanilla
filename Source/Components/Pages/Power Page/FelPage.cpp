@@ -16,85 +16,33 @@ infoLine2("infoLine2", localeText(flashing_info))
 #    if JUCE_DEBUG
     setName("FelPage");
 #    endif
-    setLayout({
-        .xMarginFraction = 0,
-        .yMarginFraction = 0.1,
-        .rows =
+    using RowItem = RelativeLayoutManager::ComponentLayout;
+    RelativeLayoutManager::Layout layout({
         {
-            {
-                .rowWeight = 20,
-                .yPaddingWeight = 2,
-                .rowItems =
-                {
-                    {
-                        .component = &infoLine1,
-                        .componentWeight = 10,
-                        .xPaddingWeight = 2
-                    }
-                }
-            },
-            {
-                .rowWeight = 20,
-                .yPaddingWeight = 2,
-                .rowItems =
-                {
-                    {
-                        .component = &yesButton,
-                        .componentWeight = 20,
-                        .xPaddingWeight = 20
-                    }
-                }
-            },
-            {
-                .rowWeight = 10,
-                .yPaddingWeight = 2,
-                .rowItems =
-                {
-                    {
-                        .component = nullptr,
-                        .componentWeight = 10,
-                        .xPaddingWeight = 2
-                    }
-                }
-            },
-            {
-                .rowWeight = 20,
-                .yPaddingWeight = 2,
-                .rowItems =
-                {
-                    {
-                        .component = &noButton,
-                        .componentWeight = 20,
-                        .xPaddingWeight = 20
-                    }
-                }
-            },
-            {
-                .rowWeight = 10,
-                .yPaddingWeight = 2,
-                .rowItems =
-                {
-                    {
-                        .component = nullptr,
-                        .componentWeight = 10,
-                        .xPaddingWeight = 2
-                    }
-                }
-            },
-            {
-                .rowWeight = 10,
-                .yPaddingWeight = 2,
-                .rowItems =
-                {
-                    {
-                        .component = &infoLine2,
-                        .componentWeight = 10,
-                        .xPaddingWeight = 2
-                    }
-                }
+            .weight = 20, .rowItems = { RowItem(&infoLine1) }
+        },
+        {
+            .weight = 20, .rowItems = { 
+                RowItem(),
+                RowItem(&yesButton),
+                RowItem()
             }
+        },
+        {
+            .weight = 20, .rowItems = { 
+                RowItem(),
+                RowItem(&noButton),
+                RowItem()
+            }
+        },
+        {
+            .weight = 20, .rowItems = { RowItem(&infoLine2) }
         }
     });
+    layout.setYMarginFraction(0.1);
+    layout.setYPaddingWeight(3);
+    setLayout(layout);
+                
     infoLine1.setJustificationType(Justification::centred);
     infoLine2.setJustificationType(Justification::centred);
     yesButton.addListener(this);
