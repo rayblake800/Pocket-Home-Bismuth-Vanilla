@@ -5,7 +5,7 @@
 #include "OverlaySpinner.h"
 #include "ConfigurableComponent.h"
 #include "AppLauncher.h"
-#include "RelativeLayoutManager.h"
+#include "LayoutManager.h"
 #include "WindowFocus.h"
 #include "IconThread.h"
 #include "MainConfigFile.h"

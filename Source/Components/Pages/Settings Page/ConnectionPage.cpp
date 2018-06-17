@@ -104,7 +104,7 @@ void ConnectionPage<ConnectionPoint>::removeConnectionPoint
     int itemIndex = connectionPointIndex(removedCP);
     if (itemIndex >= 0)
     {
-        updateLayout({});
+        setLayout({});
         connectionItems.remove(itemIndex);
         layoutConnectionPage();
     }
@@ -127,7 +127,7 @@ void ConnectionPage<ConnectionPoint>::updateConnectionPoint
     int itemIndex = connectionPointIndex(updatedCP);
     if (itemIndex >= 0)
     {
-        updateLayout({});
+        setLayout({});
         connectionItems.remove(itemIndex);
         Button * connectionButton = getConnectionButton(updatedCP);
         connectionButton->addListener(this);
@@ -162,7 +162,7 @@ void ConnectionPage<ConnectionPoint>::clearConnectionList()
 {
     connectionIndex = 0;
     selectedConnectionPt = ConnectionPoint();
-    updateLayout({});
+    setLayout({});
     connectionItems.clear();
 }
 
@@ -194,17 +194,13 @@ void ConnectionPage<ConnectionPoint>::updateConnectionList()
 template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
 {
-    RelativeLayoutManager::Layout layout;
+    LayoutManager::Layout layout;
     bool showList = selectedConnectionPt.isNull();
     prevPageBtn.setVisible(connectionIndex > 0 && showList);
     nextPageBtn.setVisible(connectionItems.size() > connectionIndex
             + connectionsPerPage && showList);
     connectionItems.sort(*this);
-    int rowWeight = 20;
-    if (!showList)
-    {
-        rowWeight *= connectionsPerPage;
-    }
+    DBG("Setting layout for " << connectionItems.size() << " connections");
     for (int i = connectionIndex;
          i < connectionIndex + connectionsPerPage; i++)
     {
@@ -229,16 +225,22 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
                     listItem->setListItemLayout();
                 }
             }
-            using RowItem = RelativeLayoutManager::ComponentLayout;
-            layout.addRow({
-                .weight = rowWeight,
-                .rowItems = { RowItem(listItem, 6) }
-            });
+            using Row = LayoutManager::Row;
+            using RowItem = LayoutManager::RowItem;
+            layout.addRow(Row(20,{RowItem(listItem, 6)}));
         }
     }
-    layout.setXPaddingWeight(1);
-    layout.setYPaddingWeight(1);
-    updateLayout(layout);
+    layout.setYPaddingWeight(3);
+    layout.setXMarginFraction(0.1);
+    ComponentConfigFile config;
+    ComponentConfigFile::ComponentSettings prevSettings 
+            = config.getComponentSettings(prevPageBtn.getComponentKey());
+    ComponentConfigFile::ComponentSettings nextSettings 
+            = config.getComponentSettings(nextPageBtn.getComponentKey());
+    layout.setYMarginFraction(0.01 + (float) std::max(
+         prevSettings.getHeightFraction() + prevSettings.getYFraction(),
+         1 - nextSettings.getYFraction()));
+    setLayout(layout);
 }
 
 /*
@@ -353,9 +355,6 @@ void ConnectionPage<ConnectionPoint>::pageResized()
     {
         prevPageBtn.applyConfigBounds();
         nextPageBtn.applyConfigBounds();
-        setMarginFraction((float) (prevPageBtn.getBottom() + getWidth() / 50)
-                / (float) getHeight());
-        layoutComponents();
     }
     connectionPageResized();
 }
@@ -420,9 +419,9 @@ getConnectionPt()
  */
 template<class ConnectionPoint>
 void ConnectionPage<ConnectionPoint>::ConnectionListItem::setControlLayout
-(RelativeLayoutManager::Layout detailLayout)
+(LayoutManager::Layout detailLayout)
 {
-    detailLayout.insertRow(getListItemLayout().getRows()[0], 0);
+    detailLayout.insertRow(getListItemLayout().getRow(0), 0);
     listItemLayout.clearLayout(true);
     listItemLayout.setLayout(detailLayout, this);
 }
@@ -453,17 +452,14 @@ bool ConnectionPage<ConnectionPoint>::ConnectionListItem::ownsButton
  * Returns the layout of an unselected list item.
  */
 template<class ConnectionPoint>
-RelativeLayoutManager::Layout
+LayoutManager::Layout
 ConnectionPage<ConnectionPoint>::ConnectionListItem::getListItemLayout()
 {
-    return RelativeLayoutManager::Layout(
-    {
-        {   
-            .weight = 1, .rowItems = 
-            {
-                RelativeLayoutManager::ComponentLayout(connectionButton, 20)
-            }
-        }
+    return LayoutManager::Layout({
+        LayoutManager::Row(20,
+        {
+            LayoutManager::RowItem(connectionButton, 20)
+        })
     });
 }
 

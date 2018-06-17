@@ -52,10 +52,6 @@ private:
      */
     void pageResized();
 
-
-    //Title of the page: "Advanced Settings"
-    ScalingLabel titleLabel;
-
     //Pages with associated buttons
     TextButton personalizeButton;
     TextButton setPasswordButton;

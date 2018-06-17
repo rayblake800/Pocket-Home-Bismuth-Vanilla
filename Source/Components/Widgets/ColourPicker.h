@@ -1,5 +1,5 @@
 #pragma once
-#include "RelativeLayoutManager.h"
+#include "LayoutManager.h"
 #include "Localized.h"
 #include "JuceHeader.h"
 
@@ -142,7 +142,7 @@ private:
     Colour colour;
 
     //Handles child component layout
-    RelativeLayoutManager layoutManager;
+    LayoutManager layoutManager;
     
     //Shows the current color selection over a grid background.
     ColourBox colourPreview;

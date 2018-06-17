@@ -5,19 +5,24 @@ PageComponent::PageComponent(const String& name) :
 Component(name) { }
     
 /**
- * Sets the layout of the page component.
+ * Sets the layout of the page component.  If the page layout was set
+     * previously, the old layout will be cleared, and its components will be
+     * removed from the page.
  */
-void PageComponent::setLayout(RelativeLayoutManager::Layout layout, 
+void PageComponent::setLayout(LayoutManager::Layout layout, 
         PageComponent::BackButtonType buttonType)
 {
+    layoutManager.clearLayout(true);
     String buttonKey;
     switch(buttonType)
     {
         case leftBackButton:
-            buttonKey == ComponentConfigFile::pageLeftKey;
+            buttonKey = ComponentConfigFile::pageLeftKey;
+            backButtonOnRight = false;
             break;
         case rightBackButton:
-            buttonKey == ComponentConfigFile::pageRightKey;        
+            buttonKey = ComponentConfigFile::pageRightKey;        
+            backButtonOnRight = true;
     }
     
     String currentButtonKey;
@@ -39,7 +44,6 @@ void PageComponent::setLayout(RelativeLayoutManager::Layout layout,
             addAndMakeVisible(backButton);
         }
     }
-    
     //make sure layout margins fit the back button
     if(backButton != nullptr) 
     {
@@ -60,6 +64,10 @@ void PageComponent::setLayout(RelativeLayoutManager::Layout layout,
                 minMargin));
     }   
     layoutManager.setLayout(layout, this);
+    if (!getBounds().isEmpty())
+    {
+        resized();
+    }
 }
 
 /**
@@ -117,69 +125,7 @@ PageComponent::PageFactoryInterface::setPageFactory(PageComponent* page)
     return page;
 }
 
-/**
- * Replaces the page layout.  All components in the old layout will be
- * removed from the page before setting the new layout.  Components in
- * the new layout will be added to the page and made visible.
- */
-void PageComponent::updateLayout(RelativeLayoutManager::Layout layout)
-{
-    layoutManager.clearLayout(true);
-    layoutManager.setLayout(layout, this);
-    if (!getBounds().isEmpty())
-    {
-        resized();
-    }
-}
 
-/**
- * Sets the amount of space to leave between page components and the edges
- * of the page.
- */
-void PageComponent::setMarginFraction(float marginFraction)
-{
-
-    horizontalMargin = marginFraction;
-    verticalMargin = marginFraction;
-}
-
-/**
- * Sets the amount of space to leave between components in the page layout.
- */
-void PageComponent::setPadding
-(float verticalFraction, float horizontalFraction)
-{
-
-    verticalPadding = verticalFraction;
-    horizontalPadding = horizontalFraction;
-}
-
-/**
- * Repositions all page components using the layout manager along with
- * the margin and padding values.
- */
-void PageComponent::layoutComponents()
-{
-    Rectangle<int> bounds = getLocalBounds();
-    if (!bounds.isEmpty())
-    {
-        int xMargin = (int) (bounds.getHeight() * horizontalMargin);
-        bounds.reduce(xMargin, (int) bounds.getHeight() * verticalMargin);
-        if (backButton != nullptr)
-        {
-
-            int overlap = std::min<int>
-                    (backButton->getRight() - bounds.getX(),
-                     bounds.getRight() - backButton->getX());
-            if (overlap > 0)
-            {
-                bounds.reduce(overlap, 0);
-            }
-        }
-        layoutManager.layoutComponents(bounds);
-    }
-
-}
 
 /**
  * @return true iff the page is currently on the top of a page stack.
@@ -237,7 +183,7 @@ void PageComponent::resized()
     {
         backButton->applyConfigBounds();
     }
-    layoutComponents();
+    layoutManager.layoutComponents(getLocalBounds());
     pageResized();
 }
 

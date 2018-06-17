@@ -12,21 +12,15 @@ titleLabel("Title", localeText(remove_password))
 #    if JUCE_DEBUG
     setName("RemovePasswordPage");
 #    endif
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout({
-        {
-	    .weight = 20, .rowItems = { RowItem(&titleLabel) }
-        },
-        {
-            .weight = 10, .rowItems = 
-            {
-                RowItem(&curPwdLabel, 20),
-                RowItem(&curPassword, 30)
-            }
-	},
-        {
-            .weight = 10, .rowItems = { RowItem(&deleteButton, 10) }
-	}
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout({
+        Row(20, { RowItem(&titleLabel) }),
+        Row(10, {
+                    RowItem(&curPwdLabel, 20),
+                    RowItem(&curPassword, 30)
+                }),
+        Row(10, { RowItem(&deleteButton, 10) })
     });
     layout.setXMarginFraction(0.1);
     layout.setXPaddingWeight(1);

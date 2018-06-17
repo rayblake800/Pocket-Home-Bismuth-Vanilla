@@ -8,20 +8,20 @@ numSavedColours(numSavedColours),
 selectionCallback([](Colour c){}),	
 colour(colour)
 {
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout(
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout(
     {
-        { .weight = 60, .rowItems = { RowItem(&colourPreview)} },
-        { .weight = 10, .rowItems = { RowItem(&rSlider)} },
-        { .weight = 10, .rowItems = { RowItem(&gSlider)} },
-        { .weight = 10, .rowItems = { RowItem(&bSlider)} },
-        { .weight = 10, .rowItems = { RowItem(&aSlider)} },
-	{ .weight = 10, .rowItems =
-	    {
-	        RowItem(&colourField),
-	        RowItem(&selectionButton)
-	    }
-        }
+        Row(60, { RowItem(&colourPreview) }),
+        Row(10, { RowItem(&rSlider) }),
+        Row(10, { RowItem(&gSlider) }),
+        Row(10, { RowItem(&bSlider) }),
+        Row(10, { RowItem(&aSlider) }),
+	Row(10,
+        {
+            RowItem(&colourField),
+            RowItem(&selectionButton)
+        })
     });
     colourPreview.setColour(colour);
     for(int i = 0; i < numSavedColours; i++)

@@ -49,18 +49,17 @@ void PopupEditorComponent::closePopup()
  * Add, make visible, and set the layout of components below the title
  * label and above the cancel and confirm buttons.
  */
-void PopupEditorComponent::setLayout(RelativeLayoutManager::Layout layout)
+void PopupEditorComponent::setLayout(LayoutManager::Layout layout)
 {
-    layout.insert(layout.begin(),{1,
-        {
-            {&titleLabel, 1}
-        }});
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    layout.insertRow(Row(10, { RowItem(&titleLabel) }), 0);
 
-    layout.push_back({1,
-        {
-            {&cancelButton, 1},
-            {&confirmButton, 1}
-        }});
+    layout.addRow(Row(10,
+    {
+        RowItem(&cancelButton, 10),
+        RowItem(&confirmButton, 10)
+    }));
     layoutManager.setLayout(layout, this);
     if (!getBounds().isEmpty())
     {
@@ -115,8 +114,7 @@ bool PopupEditorComponent::keyPressed(const KeyPress & key)
 void PopupEditorComponent::resized()
 {
     this->ConfigurableImageComponent::resized();
-    layoutManager.layoutComponents(getLocalBounds().reduced(marginPixels),
-            xPaddingPixels, yPaddingPixels);
+    layoutManager.layoutComponents(getLocalBounds());
 }
 
 /**

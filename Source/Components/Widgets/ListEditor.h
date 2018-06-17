@@ -1,5 +1,5 @@
 #pragma once
-#include "RelativeLayoutManager.h"
+#include "LayoutManager.h"
 #include "DrawableImageButton.h"
 #include "JuceHeader.h"
 
@@ -187,7 +187,7 @@ private:
     StringArray listItems;
 
     //Handles the layout of the list and the editor components.
-    RelativeLayoutManager layoutManager;
+    LayoutManager layoutManager;
 
     //The component displaying all list items.
     ListBox listContainer;

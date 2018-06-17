@@ -34,7 +34,7 @@ public:
      * 
      * @return a Layout containing all items in the button array.
      */
-    virtual RelativeLayoutManager::Layout buildFolderLayout
+    virtual LayoutManager::Layout buildFolderLayout
     (Array<AppMenuButton::Ptr>& buttons);
 
     /**

@@ -2,7 +2,7 @@
 #include "JuceHeader.h"
 
 /**
- * @file RelativeLayoutManager.h
+ * @file LayoutManager.h
  * 
  * @brief Arranges components in an arbitrary bounding rectangle.
  * 
@@ -20,72 +20,107 @@
  * 
  *  (component width) = (layout width) * (component weight) 
  *          / (sum of all horizontal weights in the row)
- */
-
-/*
-* Layout Declaration Example:
- -----------------------
-
-using RowItem = RelativeLayoutManager::ComponentLayout;
-Layout layout(
-{
-    {.weight = 1, .rowItems = {}},
-    {.weight = 3, .rowItems = {
-            RowItem(),         // empty space, weight 1
-            RowItem(cpA, 10),  // Component* cpA, weight 10
-            RowItem(cpB),      // Component* cpB, weight 1
-            RowItem(5)         // empty space, weight 5
-        }
-    },
-    {.weight = 1, .rowItems = { RowItem(cpC) }}
- });
- layout.setXPaddingWeight(1);
- layout.setYPaddingWeight(2);
- layout.setXMarginFraction(1/20);
- layout.setYMarginWeight(2);
- 
- -----------------------
+ *
+ *
+ * Layout Declaration Example:
+ * -----------------------
+ *
+ * using Row     = LayoutManager::Row;
+ * using RowItem = LayoutManager::RowItem;
+ * Layout layout(
+ * {
+ *    Row(1),
+ *    Row(3,
+ *    {
+ *        RowItem(),         // empty space, weight 1
+ *        RowItem(cpA, 10),  // Component* cpA, weight 10
+ *        RowItem(cpB),      // Component* cpB, weight 1
+ *        RowItem(5)         // empty space, weight 5
+ *    }),
+ *    Row(1, { RowItem(cpC) })
+ * });
+ * layout.setXPaddingWeight(1);
+ * layout.setYPaddingWeight(2);
+ * layout.setXMarginFraction(1/20);
+ * layout.setYMarginWeight(2);
+ *  
+ * -----------------------
  * Resulting layout:
- -----------------------
+ * -----------------------
  * A = Component* cpA
  * B = Component* cpB
  * C = Component* cpC
  * . = margin space
  * _ = empty space
- -----------------------
-  
-  ....................
-  ....................
-  .__________________.
-  ._AAAAAAAAAA_B_____.
-  ._AAAAAAAAAA_B_____.
-  ._AAAAAAAAAA_B_____.
-  .__________________.
-  .__________________.
-  .CCCCCCCCCCCCCCCCCC.
-  ....................
-  ....................
- 
+ * -----------------------
+ *   
+ *   ....................
+ *   ....................
+ *   .__________________.
+ *   ._AAAAAAAAAA_B_____.
+ *   ._AAAAAAAAAA_B_____.
+ *   ._AAAAAAAAAA_B_____.
+ *   .__________________.
+ *   .__________________.
+ *   .CCCCCCCCCCCCCCCCCC.
+ *   ....................
+ *   ....................
+ *  
  */
 
-class RelativeLayoutManager
+class LayoutManager
 {
 public:
 
-    RelativeLayoutManager() { }
+    LayoutManager() { }
 
-    virtual ~RelativeLayoutManager() { }
+    virtual ~LayoutManager() { }
 
     /**
-     * Defines one component's space in a RelativeLayout row.
+     * Defines one component's space in a LayoutManager row.
      */
-    struct ComponentLayout
+    class RowItem
     {
-        ComponentLayout(Component* component, int weight = 1) :
+    public:
+        /**
+         * @param component  A component to place in the layout, or nullptr
+         *                   to add an empty space.
+         * 
+         * @param weight     Sets this row item's width, relative to the other
+         *                   RowItems in the row.
+         */
+        RowItem(Component* component, const unsigned int weight = 1) :
         component(component), weight(weight) { }
+             
+        /**
+         * @param weight     Sets this row item's width, relative to the other
+         *                   RowItems in the row.
+         */
+        RowItem(const unsigned int weight = 1) : weight(weight) { }
         
+        /**
+         * Gets the component assigned to this RowItem. 
+         * 
+         * @return  The Component* assigned to this RowItem on creation.  This
+         *          value may be null.
+         */
+        Component* getComponent() const;
         
-        ComponentLayout(int weight = 1) : weight(weight) { } 
+        /**
+         * Gets the horizontal weight value assigned to this RowItem.
+         * 
+         * @return  the weight value. 
+         */
+        unsigned int getWeight() const;
+        
+        /**
+         * Checks if this row item represents an empty space.
+         * 
+         * @return  true iff this row item has no component.
+         */
+        bool isEmpty() const;
+        
+    private:
         /**
          * Points to a component in the layout, or nullptr to add an empty space
          * in the layout.
@@ -94,22 +129,72 @@ public:
         /**
          * Component width = total width * weight / xWeightSum[rowNumber]
          */
-        int weight;
+        unsigned int weight;
     };
 
     /**
-     * Defines one row of components in a RelativeLayout
+     * Defines one row of components in a LayoutManager
      */
-    struct RowLayout
+    class Row
     {
+    public:
+        /**
+         * @param weight    Sets this row's height, relative to other rows in
+         *                  the layout.
+         * 
+         * @param rowItems  The list of all RowItems arranged in this row.
+         */
+        Row(const unsigned int weight = 1, std::vector<RowItem> rowItems = {}) :
+        weight(weight), rowItems(rowItems) { }
+        
+        /**
+         * Adds a new RowItem to the end of this row.
+         *  
+         * @param rowItem  The RowItem to add to the row.
+         */
+        void addRowItem(const RowItem rowItem);
+        
+        /**
+         * Gets the number of rowItems in the row.
+         * 
+         * @return  The number of components/empty spaces in the row layout.
+         */
+        unsigned int itemCount() const;
+        
+        /**
+         * Checks if this row is empty.
+         * 
+         * @return true iff this row contains no row items. 
+         */
+        bool isEmpty() const;
+        
+        /**
+         * Gets a RowItem from the row.
+         * 
+         * @param index  The index of the row item within the row.
+         * 
+         * @return the row item at the given index.
+         * 
+         * @throw  std::out_of_range if the index is invalid. 
+         */
+        const RowItem& getRowItem(const unsigned int index) const;
+        
+        /**
+         * Gets the weight assigned to this row.
+         * 
+         * @return  The weight value used to set the row's height.
+         */
+        unsigned int getWeight() const;
+        
+    private:      
         /**
          * Row height = total height * weight / yWeightSum
          */
-        int weight;
+        unsigned int weight;
         /**
          * Holds all ComponentLayouts in the row.
          */
-        std::vector<ComponentLayout> rowItems;
+        std::vector<RowItem> rowItems;
     };
 
     class Layout
@@ -119,7 +204,7 @@ public:
         /**
          * @param rows  The rows of components arranged in this Layout
          */
-        Layout(std::vector<RowLayout> rows = std::vector<RowLayout>()) : 
+        Layout(std::vector<Row> rows = std::vector<Row>()) : 
         rows(rows) { }
         
         /**
@@ -134,7 +219,7 @@ public:
          * @param weight  Both vertical margins will have this assigned as their
          *                weight.
          */
-        void setYMarginWeights(const int weight);
+        void setYMarginWeights(const unsigned int weight);
         
         /**
          *  Sets the size of the left and right margins of the layout as a
@@ -196,7 +281,7 @@ public:
          * @param weight  The weight value to assign to each space between
          *                non-null components.  
          */
-        void setXPaddingWeight(const int weight);
+        void setXPaddingWeight(const unsigned int weight);
         
                          
         /**
@@ -209,7 +294,7 @@ public:
          * @param weight  The weight value to assign to each space between
          *                non-empty rows.  
          */
-        void setYPaddingWeight(int weight);
+        void setYPaddingWeight(const unsigned int weight);
         
         /**
          * Gets the fraction of the width to allocate to each horizontal margin.
@@ -236,7 +321,7 @@ public:
          *          if margins are explicitly defined as a specific fraction of 
          *          the layout height.
          */
-        int getYMarginWeight() const;
+        unsigned int getYMarginWeight() const;
         
         /**
          * Gets the fraction of the width to allocate to each space between
@@ -254,7 +339,7 @@ public:
          * @return  The weight value to allocate to each horizontal padding 
          *          section.
          */
-        int getXPaddingWeight() const;
+        unsigned int getXPaddingWeight() const;
         
         /**
          * Gets the fraction of the height to allocate to each space between
@@ -271,14 +356,25 @@ public:
          * 
          * @return  The weight value to allocate to each padding section
          */
-        int getYPaddingWeight() const;
+        unsigned int getYPaddingWeight() const;
         
         /**
-         * Gets the list of all rows in the layout.
+         * Gets the number of rows in the layout.
          * 
-         * @return  the layout's component rows.
+         * @return the number of rows. 
          */
-        const std::vector<RowLayout>& getRows() const;
+        unsigned int rowCount() const;
+        
+        /**
+         * Gets a row in the layout.
+         * 
+         * @param index  The index of the row to get.
+         * 
+         * @return  The row at the given index.
+         * 
+         * @throw   std::out_of_range if the index is invalid.
+         */
+        const Row& getRow(const unsigned int index) const;
         
         /**
          * Inserts a new row into the layout at a specific index.
@@ -290,14 +386,14 @@ public:
          *               forward.  If the index value is invalid, the closest
          *               valid index will be used.
          */
-        void insertRow(const RowLayout row, int index);
+        void insertRow(const Row row, const unsigned int index);
         
         /**
          * Adds a new row to the end of the layout.
          * 
          * @param row  The new layout row to add.
          */
-        void addRow(const RowLayout row);
+        void addRow(const Row row);
     private:
         
         //Margin Sizes:
@@ -305,22 +401,22 @@ public:
         //row in the layout can have a different horizontal weight sum.
         float xMarginFraction = 0;
         
-        int yMarginWeight = 0;
+        unsigned int yMarginWeight = 0;
         float yMarginFraction = 0;
         
         //Padding Sizes:
         //defines the amount of horizontal space between non-null components
-        int xPaddingWeight = 0;
+        unsigned int xPaddingWeight = 0;
         float xPaddingFraction = 0;
         
         //defines the amount of vertical space between non-empty rows
-        int yPaddingWeight = 0;        
+        unsigned int yPaddingWeight = 0;        
         float yPaddingFraction = 0;
         
         /**
          * Holds the layouts of all component rows.
          */
-        std::vector<RowLayout> rows;
+        std::vector<Row> rows;
     };
 
     /**
@@ -346,7 +442,7 @@ public:
      * 
      * @param bounds    The rectangle components will be positioned within.
      */
-    void layoutComponents(Rectangle<int> bounds);
+    void layoutComponents(const Rectangle<int>& bounds);
 
     /**
      * Remove all saved component layout parameters.
@@ -368,7 +464,7 @@ private:
     //Current layout definition
     Layout layout;
     //Holds the sum of component weights for each row
-    Array<int> xWeightSums;
+    Array<unsigned int> xWeightSums;
     //holds the sum of component row weights.
-    int yWeightSum = 0;
+    unsigned int yWeightSum = 0;
 };

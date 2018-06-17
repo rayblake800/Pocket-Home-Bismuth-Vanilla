@@ -26,15 +26,16 @@ advancedPageButton(localeText(advanced_settings))
 #    if JUCE_DEBUG
     setName("SettingsPage");
 #    endif
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout({
-        { .weight = 10, .rowItems = { RowItem(&wifiComponent) } },
-        //{ .weight = 10, .rowItems = { RowItem(&bluetoothComponent) } },
-        { .weight = 10, .rowItems = { RowItem(&screenBrightnessSlider) } },
-        { .weight = 10, .rowItems = { RowItem(&volumeSlider) } },
-        { .weight = 10, .rowItems = { RowItem(&advancedPageButton) } }
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout({
+        Row(10, { RowItem(&wifiComponent) } ),
+        //Row(10, { RowItem(&bluetoothComponent) } ),
+        Row(10, { RowItem(&screenBrightnessSlider) } ),
+        Row(10, { RowItem(&volumeSlider) } ),
+        Row(10, { RowItem(&advancedPageButton) } )
     });
-    layout.setXMarginFraction(0.1);
+    layout.setYMarginFraction(0.1);
     layout.setXPaddingWeight(1);
     layout.setYPaddingWeight(1);
     setLayout(layout);

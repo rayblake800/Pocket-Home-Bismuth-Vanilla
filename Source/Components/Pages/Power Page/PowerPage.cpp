@@ -29,29 +29,20 @@ lockscreen([this]()
     testButton.addListener(this);
 #    endif
       
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout({
-        {
-            .weight = 20, .rowItems = { RowItem(&powerOffButton) }
-        },
-        {
-            .weight = 20, .rowItems = { RowItem(&sleepButton) }
-        },
-        {
-            .weight = 20, .rowItems = { RowItem(&rebootButton) }
-        },
-        {
-            .weight = 20, .rowItems = { RowItem(&felButton) }
-        }       
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout({
+        Row(10, { RowItem(&powerOffButton) }),
+        Row(10, { RowItem(&sleepButton) }),
+        Row(10, { RowItem(&rebootButton) }),
+        Row(10, { RowItem(&felButton) })
 #if JUCE_DEBUG
-        ,{
-            .weight = 20, .rowItems = { RowItem(&testButton) }
-        }          
+        ,Row(10, { RowItem(&testButton) })
 #endif
     });
     layout.setYMarginFraction(0.1);
-    layout.setYPaddingWeight(2);
-    setLayout(layout);
+    layout.setYPaddingWeight(4);
+    setLayout(layout, PageComponent::BackButtonType::rightBackButton);
     
     powerOffButton.addListener(this);
     sleepButton.addListener(this);

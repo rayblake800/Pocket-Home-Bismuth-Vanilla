@@ -134,7 +134,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/SwitchComponent_5e914a19.o \
   $(JUCE_OBJDIR)/PocketHomeWindow_b7303d3f.o \
   $(JUCE_OBJDIR)/PokeLookAndFeel_14171995.o \
-  $(JUCE_OBJDIR)/RelativeLayoutManager_47b4eae7.o \
+  $(JUCE_OBJDIR)/LayoutManager_6a2c5f53.o \
   $(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o \
   $(JUCE_OBJDIR)/ConfigFile_eac3aa35.o \
   $(JUCE_OBJDIR)/AppConfigFile_9fbc232.o \
@@ -525,9 +525,9 @@ $(JUCE_OBJDIR)/PokeLookAndFeel_14171995.o: ../../Source/Components/PokeLookAndFe
 	@echo "Compiling PokeLookAndFeel.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/RelativeLayoutManager_47b4eae7.o: ../../Source/Components/RelativeLayoutManager.cpp
+$(JUCE_OBJDIR)/LayoutManager_6a2c5f53.o: ../../Source/Components/LayoutManager.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling RelativeLayoutManager.cpp"
+	@echo "Compiling LayoutManager.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o: ../../Source/Components/TransitionAnimator.cpp

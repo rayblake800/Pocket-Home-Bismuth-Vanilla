@@ -9,18 +9,21 @@ addItemBtn("+")
     setName("ListEditor");
 #    endif
 
-    RelativeLayoutManager::Layout layout = {
-        {3,
-            {
-                {&listContainer, 1}
-            }},
-        {1,
-            {
-                {&newItemField, 4},
-                {&addItemBtn, 1}
-            }}
-    };
-
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout(
+    {
+        Row(30, { RowItem(&listContainer) }),
+        Row(10,
+        {
+            RowItem(&newItemField, 40),
+            RowItem(&addItemBtn, 10)
+        })
+    });
+    layout.setXPaddingWeight(1);
+    layout.setYPaddingWeight(1);
+    layout.setXMarginFraction(0.02);
+    layout.setYMarginFraction(0.02);
     layoutManager.setLayout(layout, this);
 
     updateColours();
@@ -253,6 +256,6 @@ void ListEditor::buttonClicked(Button* buttonClicked)
  */
 void ListEditor::resized()
 {
-    layoutManager.layoutComponents(getLocalBounds(), 0, 2);
+    layoutManager.layoutComponents(getLocalBounds());
     listContainer.setRowHeight(newItemField.getHeight());
 }

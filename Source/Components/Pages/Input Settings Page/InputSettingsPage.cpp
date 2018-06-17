@@ -15,41 +15,33 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
 #    if JUCE_DEBUG
     setName("InputSettingsPage");
 #    endif
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout(
-    {
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout({
+        Row(30,
         {
-	    .weight = 30, .rowItems = 
-            {
-                RowItem(&title, 10)
-	    }
-        },
+            RowItem(&title, 10)
+        }),
+        Row(20,
         {
-	    .weight = 20, .rowItems = 
-            {
-                RowItem(&cursorVisible, 50),
-                RowItem(&chooseMode, 20)
-	    }
-        },
-        {   .weight = 40, .rowItems = {} },
+            RowItem(&cursorVisible, 50),
+            RowItem(&chooseMode, 20)
+        }),
+        Row(20),
+        Row(20,
         {
-	    .weight = 20, .rowItems = 
-            {
-                RowItem(&calibrating, 10)
-	    }
-        },
+            RowItem(&calibrating, 10)
+        }),
+        Row(20,
         {
-            .weight = 20, .rowItems = 
-            {
-                RowItem(&fnmapping, 10)
-	    }
-        }
+            RowItem(&fnmapping, 10)
+        })
     });
-    layout.setYMarginFraction(0.1);
+    layout.setYMarginFraction(0.03);
     layout.setXPaddingWeight(1);
-    layout.setYPaddingWeight(1);
-    setLayout(layout); 
-    
+    layout.setYPaddingWeight(3);
+    setLayout(layout);
+
     title.setJustificationType(Justification::centred);
     //ComboBox
     chooseMode.addItem(localeText(not_visible), 1);

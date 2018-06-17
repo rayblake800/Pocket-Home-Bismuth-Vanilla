@@ -2,7 +2,7 @@
 
 #include "JuceHeader.h"
 #include "PageComponent.h"
-#include "RelativeLayoutManager.h"
+#include "LayoutManager.h"
 #include "SwitchComponent.h"
 #include "Spinner.h"
 #include "DrawableImageComponent.h"

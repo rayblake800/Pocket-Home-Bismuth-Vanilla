@@ -20,6 +20,7 @@ Localized("WifiSettingsComponent")
 bool WifiSettingsComponent::connectionEnabled()
 {
     WifiStateManager wifiManager;
+    DBG("Connection enabled? state = " << WifiStateManager::wifiStateString(wifiManager.getWifiState()));
     switch (wifiManager.getWifiState())
     {
         case WifiStateManager::turningOn:

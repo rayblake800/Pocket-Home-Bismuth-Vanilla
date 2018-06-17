@@ -20,57 +20,44 @@ rowCounter(1, 1, 9)
 #    if JUCE_DEBUG
     setName("HomeSettingsPage");
 #    endif
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout({
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout({
+        Row(30,
         { 
-            .weight = 30, .rowItems = 
-            { 
-                RowItem(&title) 
-            } 
-        },
-        { 
-            .weight = 20, .rowItems = 
-            {
-                RowItem(&bgTypeLabel, 10),
-                RowItem(&bgTypePicker, 10)
-	    }
-        },
+            RowItem(&title)
+        }),
+        Row(20,
         {
-            .weight = 20, .rowItems = 
-            {
-                RowItem(&bgLabel, 10),
-                RowItem(&bgEditor, 10)
-            }
-        },
-        { 
-            .weight = 20, .rowItems = 
-            {
-                RowItem(&menuPickerLabel, 10),
-                RowItem(&menuTypePicker, 20)
-            }
-        },
+            RowItem(&bgTypeLabel, 10),
+            RowItem(&bgTypePicker, 10)
+        }),
+        Row(20,
         {
-            .weight = 20,
-            .rowItems =
-            {
-                RowItem(&columnCountLabel, 20),
-                RowItem(&columnCounter, 10)
-            }
-	},
+            RowItem(&bgLabel, 10),
+            RowItem(&bgEditor, 10)
+        }),
+        Row(20,
         {
-            .weight = 20,
-            .rowItems =
-            {
-                RowItem(&rowCountLabel, 20),
-                RowItem(&rowCounter, 10)
-            }
-        }
+            RowItem(&menuPickerLabel, 10),
+            RowItem(&menuTypePicker, 10)
+        }),
+        Row(20,
+        {
+            RowItem(&columnCountLabel, 20),
+            RowItem(&columnCounter, 10)
+        }),
+        Row(20,
+        {
+            RowItem(&rowCountLabel, 20),
+            RowItem(&rowCounter, 10)
+        })
     });
-    layout.setYMarginFraction(0.1);
+    layout.setYMarginFraction(0.05);
     layout.setXPaddingWeight(1);
-    layout.setYPaddingWeight(1);
+    layout.setYPaddingWeight(3);
     setLayout(layout);
-    
+
     title.setJustificationType(Justification::centred);
     bgTypePicker.addItem(localeText(default_bg), 1);
     bgTypePicker.addItem(localeText(color_bg), 2);

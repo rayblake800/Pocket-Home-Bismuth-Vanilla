@@ -165,7 +165,7 @@ Button* WifiSettingsPage::getConnectionButton
     if (!accessPoint.isNull())
     {
         WifiStateManager wifiManager;
-        WifiStateManager::AccessPointState apState 
+        WifiStateManager::AccessPointState apState
                 = wifiManager.getAPState(accessPoint);
         return new WifiAPButton(accessPoint,
                 apState == WifiStateManager::connectedAP ||
@@ -181,48 +181,37 @@ Button* WifiSettingsPage::getConnectionButton
 /*
  * Gets the layout for the Wifi access point controls.
  */
-RelativeLayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
+LayoutManager::Layout WifiSettingsPage::getConnectionControlsLayout
 (const WifiAccessPoint& accessPoint)
 {
     jassert(accessPoint == getSelectedConnection());
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout controlLayout({
-	{ 
-            .weight = 20, .rowItems =
-            {
-                RowItem(accessPoint.getRequiresAuth() ?
-                    &passwordLabel : nullptr, 4),
-                RowItem(accessPoint.getRequiresAuth() ?
-                    &passwordEditor : nullptr, 5)
-            }
-        },
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout controlLayout({
+        Row(20,
         {
-            .weight = 20, .rowItems =
-            {
-                RowItem(),
-                RowItem(&connectionButton),
-                RowItem()
-            }
-        },
+            RowItem(accessPoint.getRequiresAuth() ?
+            &passwordLabel : nullptr, 4),
+            RowItem(accessPoint.getRequiresAuth() ?
+            &passwordEditor : nullptr, 5)
+        }),
+        Row(20,
         {
-            .weight = 20, .rowItems =
-            {
-                RowItem(&errorLabel)
-            }
-        }
+            RowItem(),
+            RowItem(&connectionButton),
+            RowItem()
+        }),
+        Row(10, { RowItem(&errorLabel)} )
     });
     if (accessPoint.getSavedConnectionPath().isNotEmpty())
     {
-        RelativeLayoutManager::RowLayout row = 
-        {
-            .weight = 20, .rowItems =
-            {
-                RowItem(),
-                RowItem(&lastConnectionLabel, 4),
-                RowItem()
-            }};
-        controlLayout.insertRow(row, 0);
+        controlLayout.insertRow(Row(20,{
+            RowItem(),
+            RowItem(&lastConnectionLabel, 4),
+            RowItem()
+        }), 0);
     }
+    controlLayout.setYPaddingWeight(5);
     return controlLayout;
 }
 
@@ -244,11 +233,11 @@ void WifiSettingsPage::updateConnectionControls()
     bool hideConnectionButton = false;
     String errorMessage = "";
     WifiStateManager wifiManager;
-    if(selectedAP.getSavedConnectionPath().isNotEmpty())
+    if (selectedAP.getSavedConnectionPath().isNotEmpty())
     {
         LocalizedTime connTime(wifiManager.lastConnectionTime(selectedAP));
         lastConnectionLabel.setText(localeText(last_connected)
-		+ connTime.approxTimePassed(),
+                + connTime.approxTimePassed(),
                 NotificationType::dontSendNotification);
     }
     DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"

@@ -1,7 +1,7 @@
 #pragma once
 #include "ScalingLabel.h"
 #include "DrawableImageButton.h"
-#include "RelativeLayoutManager.h"
+#include "LayoutManager.h"
 #include "ConfigurableImageComponent.h"
 #include "JuceHeader.h"
 
@@ -48,7 +48,7 @@ protected:
      *                to the end.  Each of these rows will have a vertical \
      *                weight of 1.
      */
-    void setLayout(RelativeLayoutManager::Layout layout);
+    void setLayout(LayoutManager::Layout layout);
 
     /**
      * Button click events for any buttons other than the cancel and confirm
@@ -125,7 +125,7 @@ private:
     DrawableImageButton confirmButton;
 
     //Manages editor child component layout.
-    RelativeLayoutManager layoutManager;
+    LayoutManager layoutManager;
 
     //Default layout margin/padding values.
     int marginPixels = 6;

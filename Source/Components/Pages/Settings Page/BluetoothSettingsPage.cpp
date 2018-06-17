@@ -41,7 +41,7 @@ Button* BluetoothSettingsPage::getConnectionButton
  * @param connection The control components will be updated to suit
  *                    this bluetooth device.
  */
-RelativeLayoutManager::Layout
+LayoutManager::Layout
 BluetoothSettingsPage::getConnectionControlsLayout
 (const BluetoothDevice& device)
 {

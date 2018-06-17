@@ -5680,8 +5680,9 @@
           <in>PocketHomeWindow.h</in>
           <in>PokeLookAndFeel.cpp</in>
           <in>PokeLookAndFeel.h</in>
+          <in>RelativeLayout.cpp</in>
+          <in>RelativeLayout.h</in>
           <in>RelativeLayoutManager.cpp</in>
-          <in>RelativeLayoutManager.h</in>
           <in>TransitionAnimator.cpp</in>
           <in>TransitionAnimator.h</in>
         </df>

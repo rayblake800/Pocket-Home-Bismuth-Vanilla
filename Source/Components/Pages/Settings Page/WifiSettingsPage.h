@@ -93,7 +93,7 @@ private:
      * @param accessPoint   The control components will be updated to control
      *                      this access point.
      */
-    RelativeLayoutManager::Layout getConnectionControlsLayout
+    LayoutManager::Layout getConnectionControlsLayout
     (const WifiAccessPoint& accessPoint) override;
 
     /**

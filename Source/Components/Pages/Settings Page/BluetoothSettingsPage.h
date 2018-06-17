@@ -65,7 +65,7 @@ private:
      * @param connection the control components will be updated to suit
      * this bluetooth device.
      */
-    RelativeLayoutManager::Layout getConnectionControlsLayout
+    LayoutManager::Layout getConnectionControlsLayout
     (const BluetoothDevice& device) override;
 
     /**

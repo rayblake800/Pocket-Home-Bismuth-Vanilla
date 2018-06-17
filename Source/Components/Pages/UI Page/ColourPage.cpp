@@ -6,10 +6,11 @@ PageComponent("ColourPage"),
 listModel(),
 colourList("colourList", &listModel)
 {
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout({
-        { .weight = 40, .rowItems = { RowItem(&colourList) } },
-        { .weight = 10, .rowItems = { RowItem(&testSwitch) } }
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout({
+        Row(40, { RowItem(&colourList) } ),
+        Row(10, { RowItem(&testSwitch) } )
     });
     layout.setYMarginFraction(0.1);
     layout.setYPaddingWeight(3);

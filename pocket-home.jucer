@@ -284,10 +284,9 @@
               file="Source/Components/PokeLookAndFeel.cpp"/>
         <FILE id="g1eykD" name="PokeLookAndFeel.h" compile="0" resource="0"
               file="Source/Components/PokeLookAndFeel.h"/>
-        <FILE id="X7wz2M" name="RelativeLayoutManager.cpp" compile="1" resource="0"
-              file="Source/Components/RelativeLayoutManager.cpp"/>
-        <FILE id="r4oAKB" name="RelativeLayoutManager.h" compile="0" resource="0"
-              file="Source/Components/RelativeLayoutManager.h"/>
+        <FILE id="X7wz2M" name="LayoutManager.cpp" compile="1" resource="0"
+              file="Source/Components/LayoutManager.cpp"/>
+        <FILE id="r4oAKB" name="LayoutManager.h" compile="0" resource="0" file="Source/Components/LayoutManager.h"/>
         <FILE id="TlYPG7" name="TransitionAnimator.cpp" compile="1" resource="0"
               file="Source/Components/TransitionAnimator.cpp"/>
         <FILE id="HOKMvj" name="TransitionAnimator.h" compile="0" resource="0"

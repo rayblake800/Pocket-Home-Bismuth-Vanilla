@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RelativeLayoutManager.h"
+#include "LayoutManager.h"
 #include "ConfigurableImageButton.h"
 #include "JuceHeader.h"
 
@@ -53,7 +53,9 @@ public:
     };
     
     /**
-     * Sets the layout of the page component.
+     * Sets the layout of the page component.  If the page layout was set
+     * previously, the old layout will be cleared, and its components will be
+     * removed from the page.
      * 
      * @param layout      Defines the layout of all child components within the
      *                    page, not including the back button. These components 
@@ -64,7 +66,7 @@ public:
      * @param buttonType  Sets whether this page should show a back button, and
      *                    which side it is shown on.
      */
-    void setLayout(RelativeLayoutManager::Layout layout, 
+    void setLayout(LayoutManager::Layout layout, 
             BackButtonType buttonType = leftBackButton);
 
     /**
@@ -254,44 +256,6 @@ protected:
     virtual void pageResized() { }
 
     /**
-     * Replaces the page layout.  All components in the old layout will be
-     * removed from the page before setting the new layout.  Components in
-     * the new layout will be added to the page and made visible.
-     *
-     * @param layout  The new page layout.
-     */
-    void updateLayout(RelativeLayoutManager::Layout layout);
-
-    /**
-     * Sets the amount of space to leave between page components and the edges
-     * of the page.  Note that margins don't affect the back button, and if
-     * necessary they will be expanded to make room for the back button.
-     * 
-     * @param marginFraction This value is multiplied by the page height to
-     *                       get the margin size in pixels.
-     */
-    void setMarginFraction(float marginFraction);
-
-    /**
-     * Sets the amount of space to leave between components in the page layout.
-     *
-     * @param verticalFraction    This value is multiplied by the page height 
-     *                             to find the amount of vertical empty space 
-     *                             (in pixels) to leave between components.
-     *
-     * @param horizontalFraction  This value is multiplied by the page width to
-     *                             find the amount of horizontal empty space (in
-     *                             pixels) to leave between components.
-     */
-    void setPadding(float verticalFraction, float horizontalFraction);
-
-    /**
-     * Repositions all page components using the layout manager along with
-     * the margin and padding values.
-     */
-    void layoutComponents();
-
-    /**
      * Checks if this page is on top of a page stack.
      * 
      * @return true iff the page is currently on the top of a page stack.
@@ -357,11 +321,9 @@ private:
     bool backButtonOnRight;
 
     //Layout manager and component margin/padding values.
-    RelativeLayoutManager layoutManager;
-    float horizontalMargin = 0.05;
-    float verticalMargin = 0.05;
-    float verticalPadding = 0.05;
-    float horizontalPadding = 0.05;
+    LayoutManager layoutManager;
+    float xMarginFraction = 0.03;
+    float yMarginFraction = 0.03;
 
     //Optional page background image.
     Image backgroundImage;

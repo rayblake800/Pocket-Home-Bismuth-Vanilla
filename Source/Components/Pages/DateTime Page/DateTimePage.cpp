@@ -12,26 +12,20 @@ clockModeLabel("modeLabel", localeText(select_clock_mode))
 #    if JUCE_DEBUG
     setName("DateTimePage");
 #    endif
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout(
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout(
     {
-        {
-            .weight = 30, .rowItems = 
-            {
-                RowItem(&titleLabel, 20)
-            }
-        },
-        {
-            .weight = 20, .rowItems = 
-            {
+        Row(30, { RowItem(&titleLabel, 20) }),
+        Row(20,{
                 RowItem(&clockModeLabel, 30),
                 RowItem(&setClockMode, 10)
-            }   
-        },
+            }),
+        Row(50)
     });
-    layout.setYMarginFraction(0.1);
+    layout.setYMarginFraction(0.05);
     layout.setXPaddingWeight(1);
-    layout.setYPaddingWeight(1);
+    layout.setYPaddingWeight(3);
     setLayout(layout);
     
     reconfigureBtn.addListener(this);

@@ -25,65 +25,47 @@ terminalCheckboxLabel("runInTermLabel", localeText(run_in_terminal))
     categoryEditButton.addListener(this);
     iconPathEditor.addFileSelectListener(this);
 
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout(
-    {
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout({
+        Row(10,
         {
-            .weight = 20,
-            .rowItems = 
-            {
-                RowItem(&nameLabel, 10),
-                RowItem(&nameEditor, 20)
-            }
-        },
+            RowItem(&nameLabel, 20),
+            RowItem(&nameEditor, 41)
+        }),
+        Row(10,
         {
-            .weight = 20,
-            .rowItems = 
-            {
-                RowItem(&iconLabel, 20),
-                RowItem(&iconPathEditor, 30),
-                RowItem(&iconPreview, 10)
-            }
-        }
+            RowItem(&iconLabel, 20),
+            RowItem(&iconPathEditor, 30),
+            RowItem(&iconPreview, 10)
+        })
     });
     //launch command row
     if (showCommandField)
     {
-        layout.addRow({
-	    .weight = 10,
-	    .rowItems = 
-            {
-                RowItem(&commandLabel, 10),
-		RowItem(&commandEditor, 20)
-	    }
-        });
-        layout.addRow({
-	    .weight = 10,
-	    .rowItems = 
-            {
-                RowItem(&terminalCheckboxLabel, 60),
-		RowItem(&terminalCheckbox, 10)
-            }
-	});
+        layout.addRow(Row(10,{
+            RowItem(&commandLabel, 10),
+            RowItem(&commandEditor, 20)
+        }));
+        layout.addRow(Row(10,{
+            RowItem(&terminalCheckboxLabel, 60),
+            RowItem(&terminalCheckbox, 10)
+        }));
     }
     //category list rows:
     if (showCategoryList)
     {
 
-        layout.addRow({
-	    .weight = 10,
-	    .rowItems = 
-            {
-                RowItem(10),
-                RowItem(&categoryEditButton, 40),
-                RowItem(10)
-            }
-	});
+        layout.addRow(Row(10,{
+            RowItem(10),
+            RowItem(&categoryEditButton, 40),
+            RowItem(10)
+        }));
     }
-    layout.setXMarginFraction(0.1);
-    layout.setYMarginFraction(0.1);
+    layout.setXMarginFraction(0.03);
+    layout.setYMarginFraction(0.03);
     layout.setXPaddingWeight(1);
-    layout.setYPaddingWeight(1);
+    layout.setYPaddingWeight(2);
     setLayout(layout);
 }
 

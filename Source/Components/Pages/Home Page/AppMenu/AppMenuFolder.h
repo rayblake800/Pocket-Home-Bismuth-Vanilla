@@ -1,6 +1,6 @@
 #pragma once
 #include "JuceHeader.h"
-#include "RelativeLayoutManager.h"
+#include "LayoutManager.h"
 #include "AppMenuItem.h"
 #include "AppMenuButton.h"
 
@@ -246,7 +246,7 @@ private:
      * 
      * @return a Layout containing all items in the button array.
      */
-    virtual RelativeLayoutManager::Layout buildFolderLayout
+    virtual LayoutManager::Layout buildFolderLayout
     (Array<AppMenuButton::Ptr>& buttons) = 0;
 
     /**
@@ -268,7 +268,7 @@ private:
     //Holds the folder menu item used to load this folder's menu items
     AppMenuItem::Ptr sourceFolderItem = nullptr;
     //folder layout manager and relative spacing values.
-    RelativeLayoutManager folderLayout;
+    LayoutManager folderLayout;
     float margin = 0;
     float xPadding = 0;
     float yPadding = 0;

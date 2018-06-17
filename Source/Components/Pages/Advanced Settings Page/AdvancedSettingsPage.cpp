@@ -4,7 +4,6 @@
 AdvancedSettingsPage::AdvancedSettingsPage() :
 Localized("AdvancedSettingsPage"),
 PageComponent("AdvancedSettingsPage"),
-titleLabel("settings", localeText(advanced_settings)),
 setPasswordButton(localeText(set_password)),
 removePasswordButton(localeText(remove_password)),
 personalizeButton(localeText(personalize_homepage)),
@@ -24,7 +23,6 @@ nextArrow(ComponentConfigFile::pageDownKey)
     }
     addAndMakeVisible(prevArrow);
     addAndMakeVisible(nextArrow);
-    titleLabel.setJustificationType(Justification::centred);
     reloadLayout();
 }
 
@@ -70,35 +68,25 @@ void AdvancedSettingsPage::reloadLayout()
             = config.getComponentSettings(ComponentConfigFile::pageUpKey);
     ComponentConfigFile::ComponentSettings nextBtnSettings
             = config.getComponentSettings(ComponentConfigFile::pageDownKey);
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout(
-    {
-            {
-                .weight = 40, .rowItems = 
-                {
-                    RowItem(buttonIndex > 0 ? nullptr : &titleLabel, 10),
-                }
-            }
-    });
+
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout;
 
     for (int i = buttonIndex; i < (buttonIndex + buttonsPerPage); i++)
     {
-        layout.addRow(
-        {
-            .weight = 30, .rowItems = 
-            {
-                RowItem((i < buttons.size()) ? buttons[i] : nullptr, 10)
-            }
-        });
+        layout.addRow(Row(10,{
+            RowItem((i < buttons.size()) ? buttons[i] : nullptr, 10)
+        }));
     }
-    
+
     float yMarginFraction = std::max(prevBtnSettings.getYFraction()
             + prevBtnSettings.getHeightFraction(),
-            nextBtnSettings.getYFraction());
+            1 - nextBtnSettings.getYFraction());
     layout.setYMarginFraction(yMarginFraction);
     layout.setXPaddingWeight(1);
-    layout.setYPaddingWeight(1);
-    updateLayout(layout);
+    layout.setYPaddingWeight(7);
+    setLayout(layout);
 }
 
 /**

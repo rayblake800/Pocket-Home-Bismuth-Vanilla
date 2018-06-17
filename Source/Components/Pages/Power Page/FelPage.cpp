@@ -16,32 +16,28 @@ infoLine2("infoLine2", localeText(flashing_info))
 #    if JUCE_DEBUG
     setName("FelPage");
 #    endif
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout({
-        {
-            .weight = 20, .rowItems = { RowItem(&infoLine1) }
-        },
-        {
-            .weight = 20, .rowItems = { 
-                RowItem(),
-                RowItem(&yesButton),
-                RowItem()
-            }
-        },
-        {
-            .weight = 20, .rowItems = { 
-                RowItem(),
-                RowItem(&noButton),
-                RowItem()
-            }
-        },
-        {
-            .weight = 20, .rowItems = { RowItem(&infoLine2) }
-        }
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout({
+        Row(10, { RowItem(&infoLine1) } ),
+        Row(10,
+        { 
+            RowItem(),
+            RowItem(&yesButton),
+            RowItem()
+        }),
+        Row(10,
+        { 
+            RowItem(),
+            RowItem(&noButton),
+            RowItem()
+        }),
+        Row(10, { RowItem(&infoLine2) } )
     });
-    layout.setYMarginFraction(0.1);
+    layout.setXMarginFraction(0.1);
+    layout.setYMarginFraction(0.05);
     layout.setYPaddingWeight(3);
-    setLayout(layout);
+    setLayout(layout, PageComponent::noBackButton);
                 
     infoLine1.setJustificationType(Justification::centred);
     infoLine2.setJustificationType(Justification::centred);

@@ -18,12 +18,13 @@ foundPassword(false)
 #    if JUCE_DEBUG
     setName("LoginPage");
 #    endif
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    RelativeLayoutManager::Layout layout({
-        { .weight = 70, .rowItems =  { RowItem(&ntcIcon) } },
-        { .weight = 10, .rowItems =  { RowItem(&passwordLabel) } },
-        { .weight = 20, .rowItems =  { RowItem(&passwordField) } },
-        { .weight = 20, .rowItems =  { RowItem(&loginButton) } }
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    LayoutManager::Layout layout({
+        Row(70, { RowItem(&ntcIcon) } ),
+        Row(10, { RowItem(&passwordLabel) } ),
+        Row(20, { RowItem(&passwordField) } ),
+        Row(20, { RowItem(&loginButton) } )
     });
     layout.setXMarginFraction(0.3);
     layout.setYMarginFraction(0.1);

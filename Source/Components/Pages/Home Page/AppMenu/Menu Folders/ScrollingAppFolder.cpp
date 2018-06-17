@@ -26,20 +26,16 @@ AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
  * Given a list of folder buttons, return an appropriate layout
  * for positioning them in the folder component.
  */
-RelativeLayoutManager::Layout ScrollingAppFolder::buildFolderLayout
+LayoutManager::Layout ScrollingAppFolder::buildFolderLayout
 (Array<AppMenuButton::Ptr>& buttons)
 {
-    RelativeLayoutManager::Layout layout;
+    LayoutManager::Layout layout;
     for (AppMenuButton::Ptr button : buttons)
     {
-        layout.addRow(
-        {
-           .weight = 1,
-           .rowItems = 
-           {
-               RelativeLayoutManager::ComponentLayout(button)               
-           }
-        });
+        layout.addRow(LayoutManager::Row(1,{
+            LayoutManager::RowItem(button)
+        }
+        ));
     }
     return layout;
 }

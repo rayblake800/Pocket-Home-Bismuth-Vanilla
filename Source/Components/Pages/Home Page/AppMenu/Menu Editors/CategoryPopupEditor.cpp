@@ -6,6 +6,7 @@ CategoryPopupEditor::CategoryPopupEditor(
 PopupEditorComponent("Edit Categories",
 [this, onConfirm](PopupEditorComponent* thisPopup)
 {
+
     onConfirm(categoryList.getListItems());
 }),
 categoryList(categories)
@@ -14,18 +15,15 @@ categoryList(categories)
 #    if JUCE_DEBUG
     setName("categoryEditor");
 #    endif
-    RelativeLayoutManager::Layout layout(
-    {
+    LayoutManager::Layout layout({
+        LayoutManager::Row(40,
         {
-            .weight = 20,
-            .rowItems = {
-                {
-                    RelativeLayoutManager::ComponentLayout(&categoryList, 10)
-                }
-            }
-        }
-    });
-    layout.setXMarginFraction(0.1);
-    layout.setYMarginFraction(0.1);
+            LayoutManager::RowItem(&categoryList, 10)
+        })
+    }
+    );
+    layout.setXMarginFraction(0.03);
+    layout.setYMarginFraction(0.03);
+    setLayout(layout);
 }
 

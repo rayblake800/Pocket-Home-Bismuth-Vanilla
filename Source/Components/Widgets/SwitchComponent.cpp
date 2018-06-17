@@ -87,7 +87,8 @@ void SwitchComponent::resized()
  */
 void SwitchComponent::clicked()
 {
-    if(Desktop::getInstance().getAnimator().isAnimating(&handle)){
+    if(Desktop::getInstance().getAnimator().isAnimating(&handle))
+    {
         startTimer(animationDuration);
     }
     else
@@ -117,8 +118,8 @@ void SwitchComponent::timerCallback()
 {
     MessageManager::callAsync([this]()
     {
-        clicked();
         stopTimer();
+        clicked();
     });
 }
 

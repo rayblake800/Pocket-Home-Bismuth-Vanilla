@@ -1,5 +1,5 @@
 #pragma once
-#include "RelativeLayoutManager.h"
+#include "LayoutManager.h"
 #include "ListEditor.h"
 #include "Localized.h"
 #include "FileSelectTextEditor.h"

@@ -24,14 +24,14 @@ AppMenuButton::Ptr PageAppFolder::createMenuButton(AppMenuItem::Ptr menuItem)
  * Given a list of folder buttons, return an appropriate layout
  * for positioning them in the folder component.
  */
-RelativeLayoutManager::Layout PageAppFolder::buildFolderLayout
+LayoutManager::Layout PageAppFolder::buildFolderLayout
 (Array<AppMenuButton::Ptr>& buttons)
 {
     if (buttons.isEmpty() || getBounds().isEmpty())
     {
         return {};
     }
-    RelativeLayoutManager::Layout layout;
+    LayoutManager::Layout layout;
     int numPages = getNumFolderPages();
     int numSpacers = numPages - 1;
     int numAppColumns = getMaxColumns() * numPages;
@@ -46,22 +46,25 @@ RelativeLayoutManager::Layout PageAppFolder::buildFolderLayout
 
     int numLayoutColumns = numAppColumns + numSpacers;
     
-    using RowItem = RelativeLayoutManager::ComponentLayout;
-    Array<RelativeLayoutManager::RowLayout> rows;
+    using Row = LayoutManager::Row;
+    using RowItem = LayoutManager::RowItem;
+    Array<Row> rows;
+    for(int i = 0; i < getMaxRows(); i++)
+    {
+        rows.add(Row(10, {}));
+    }
 
     std::function<void(Component*, int) > addButton =
             [&rows, buttonSize, spacerSize, paddingSize, numLayoutColumns, this]
             (Component* component, int row)
             {
-                rows[row].rowItems.push_back(RowItem(component, buttonSize));
-                int rowSize = rows[row].rowItems.size();
+                rows.getReference(row).addRowItem
+                        (RowItem(component, buttonSize));
+                int rowSize = rows[row].itemCount();
                 if ((rowSize + 1) % (getMaxColumns() + 1) == 0
                     && rowSize < numLayoutColumns)
                 {
-                    rows[row].rowItems.push_back(
-                    {
-                        RowItem(spacerSize)
-                    });
+                    rows.getReference(row).addRowItem(RowItem(spacerSize));
                 }
             };
 
@@ -76,7 +79,7 @@ RelativeLayoutManager::Layout PageAppFolder::buildFolderLayout
     //Fill in remaining empty spaces
     for (int row = 0; row < getMaxRows(); row++)
     {
-        while (rows[row].rowItems.size() < numLayoutColumns)
+        while (rows[row].itemCount() < numLayoutColumns)
         {
             addButton(nullptr, row);
         }
