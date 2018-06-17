@@ -193,7 +193,7 @@ void WifiStateManager::enableWifi()
         switch (wifiState)
         {
             case disabled:
-                DBG("WifiStateManager::WifiResource::" << __func__ 
+                DBG("WifiStateManager::" << __func__ 
                         << ": enabling wifi");
                 wifiResource->setWifiState(turningOn);
                 wifiResource->startTimer
@@ -295,19 +295,20 @@ WifiStateManager::WifiState WifiStateManager::NetworkInterface::getWifiState()
  * Update the current wifi state and notify all listeners.
  */
 void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
-{
-    
-    MessageManager::callAsync([this,state]()
+{    
+    if (state != wifiState)
     {
         wifiLock.enterWrite();
-        //make sure the sharedResource wasn't destroyed.
-        if(this == WifiStateManager::sharedResource.get())
+        DBG("WifiStateManager::setWifiState: Setting wifi state to "
+                << wifiStateString(wifiState));
+        wifiState = state;
+        wifiLock.exitWrite();
+        MessageManager::callAsync([this,state]()
         {
-            if (state != wifiState)
+            wifiLock.enterWrite();
+            //make sure the sharedResource wasn't destroyed.
+            if(this == WifiStateManager::sharedResource.get())
             {
-                wifiState = state;
-                DBG("WifiStateManager::setWifiState: Setting wifi state to "
-                        << wifiStateString(wifiState));
                 jassert(notifyQueue.isEmpty());
                 notifyQueue = listeners;
                 while(this == WifiStateManager::sharedResource.get()
@@ -320,9 +321,9 @@ void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
                     wifiLock.enterWrite();
                 }
             }
-        }
-        wifiLock.exitWrite();
-    });
+            wifiLock.exitWrite();
+        });
+    }
 }
 
 /*
