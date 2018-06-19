@@ -1,22 +1,29 @@
+-Add a NavigationButton class to handle all four directional, config-defined
+ navigation buttons.
 
--Track down and fix the occasional 10+ second delay in initializing the AppMenu.
+-Integrate TransitionAnimator with LayoutManager, use to animate AppMenu,
+ ConnectionPage
 
--Animate connection page transitions.
+-Add SetMaximumTextSize(enum ConfigTextSize) to ScalingLabel components
 
 -Find and fix missing localized text
 
--Pause GLib threads when window focus is lost
+-Pause GLib threads when window focus is lost.
 
 -Update the HomePage wifi icon to better use new wifi features.
+ -Add a Listener interface to WifiAccessPoint objects
+
+-Make the wifi page regularly scan for updates when open.
 
 -Finish documenting and formatting AppMenu helper classes.
 
 -Set password page isn`t hiding the current password field!
  new password isn't being set either...
 
--Creating new connections to replace invalid saved connections needs additional
- debugging.
+-Add a "Forget saved connection" button to saved wifi access points
 
+-Make AdvancedSettingPage look nicer, come up with a better name or replace
+ the page opening button with an icon.
  
 -Look into PolicyKit api for requesting privileges, add application specific
   policies for bluetooth and the password file.
@@ -45,7 +52,14 @@
         https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/client/main.c
 
 -More thorough implementation of the Desktop entry standard
+
+-Add support for .Desktop Actions
+
 -Add support for nested folders
+
+-Add .xpm image support
+
+-Fix rendering issues with some .svg icons
 
 -Design and implement TabbedAppMenu
 
