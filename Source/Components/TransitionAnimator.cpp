@@ -114,7 +114,6 @@ void TransitionAnimator::animateTransition(
         const TransitionAnimator::Direction direction,
         const unsigned int animationMilliseconds)
 {
-    Array<Component*> useProxy;
     for (std::pair<Component*, Rectangle<int>>&inComponent : movingIn)
     {
         if (inComponent.first == nullptr || Desktop::getInstance().getAnimator()
@@ -126,11 +125,8 @@ void TransitionAnimator::animateTransition(
         int outIndex = movingOut.indexOf(inComponent.first);
         if (outIndex >= 0)
         {
-            AnimationProxy* proxy = AnimationProxy::getNewProxy(
-                    *inComponent.first,
-                    animationMilliseconds);
-            transitionOut(static_cast<Component*> (proxy), direction,
-                    animationMilliseconds);
+            transitionOut(inComponent.first, direction,
+                    animationMilliseconds, true);
             movingOut.remove(outIndex);
         }
         transitionIn(inComponent.first, direction, inComponent.second,
@@ -153,7 +149,8 @@ void TransitionAnimator::animateTransition(
  */
 void TransitionAnimator::transitionOut(Component* component,
         const TransitionAnimator::Direction direction,
-        const unsigned int animationMilliseconds)
+        const unsigned int animationMilliseconds,
+	const bool useProxy)
 {
     if (component == nullptr)
     {
@@ -177,6 +174,14 @@ void TransitionAnimator::transitionOut(Component* component,
             case Direction::moveRight:
                 destination.setX(destination.getX() + windowBounds.getWidth());
         }
+        if(useProxy)
+	{
+            Component * proxy = static_cast<Component*>
+		    (AnimationProxy::getNewProxy(*component
+		    ,animationMilliseconds);
+            component->setBounds(destination);
+	    component = proxy;
+	}
         transformBounds(component, destination, animationMilliseconds);
     }
 }

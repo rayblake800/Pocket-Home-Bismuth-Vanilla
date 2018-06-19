@@ -64,10 +64,16 @@ namespace TransitionAnimator
      * 
      * @param animationMilliseconds  The duration of the component animation, in
      *                               milliseconds.
+     *
+     * @param useProxy               If true, the component will immediately be
+     *                               moved to its final bounds, and a temporary
+     *                               proxy component will be used to simulate
+     *                               the transition animation.
      */
     void transitionOut(Component* component,
 	    const Direction direction,
-            const unsigned int animationMilliseconds);
+            const unsigned int animationMilliseconds,
+	    const bool useProxy = false);
 
     /**
      * Moves a component into the screen bounds, animating the transition.

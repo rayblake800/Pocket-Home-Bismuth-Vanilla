@@ -1,4 +1,3 @@
-#include "Display.h"
 #include "Utils.h"
 #include "JsonWifiInterface.h"
 #include "LibNMInterface.h"
@@ -24,7 +23,7 @@ wifiManager([fakeWifi]
 #    if JUCE_DEBUG
     setBounds(10, 10, 480, 272);
 #    else
-    Rectangle<int> screenSize = Display::getDisplaySize();
+    Rectangle<int> screenSize = getDisplaySize();
 
     setBounds(0, 0, screenSize.getWidth(), screenSize.getHeight());
 #    endif
