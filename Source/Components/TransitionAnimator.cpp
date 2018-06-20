@@ -111,7 +111,7 @@ private:
 void TransitionAnimator::animateTransition(
         Array<Component*> movingOut,
         Array<std::pair<Component*, Rectangle<int>>> movingIn,
-        const TransitionAnimator::Direction direction,
+        const TransitionAnimator::Transition transition,
         const unsigned int animationMilliseconds)
 {
     for (std::pair<Component*, Rectangle<int>>&inComponent : movingIn)
@@ -125,11 +125,11 @@ void TransitionAnimator::animateTransition(
         int outIndex = movingOut.indexOf(inComponent.first);
         if (outIndex >= 0)
         {
-            transitionOut(inComponent.first, direction,
+            transitionOut(inComponent.first, transition,
                     animationMilliseconds, true);
             movingOut.remove(outIndex);
         }
-        transitionIn(inComponent.first, direction, inComponent.second,
+        transitionIn(inComponent.first, transition, inComponent.second,
                 animationMilliseconds);
     }
     for (Component* outComponent : movingOut)
@@ -139,7 +139,7 @@ void TransitionAnimator::animateTransition(
         {
             continue;
         }
-        transitionOut(outComponent, direction, animationMilliseconds);
+        transitionOut(outComponent, transition, animationMilliseconds);
     }
 
 }
@@ -148,7 +148,7 @@ void TransitionAnimator::animateTransition(
  * Moves a component off-screen, animating the transition.
  */
 void TransitionAnimator::transitionOut(Component* component,
-        const TransitionAnimator::Direction direction,
+        const TransitionAnimator::Transition transition,
         const unsigned int animationMilliseconds,
 	const bool useProxy)
 {
@@ -160,19 +160,23 @@ void TransitionAnimator::transitionOut(Component* component,
     Rectangle<int> destination = component->getBounds();
     if (component->getScreenBounds().intersects(windowBounds))
     {
-        switch (direction)
+        switch (Transition)
         {
-            case Direction::moveUp:
+            case Transition::moveUp:
                 destination.setY(destination.getY() - windowBounds.getHeight());
                 break;
-            case Direction::moveDown:
+            case Transition::moveDown:
                 destination.setY(destination.getY() + windowBounds.getHeight());
                 break;
-            case Direction::moveLeft:
+            case Transition::moveLeft:
                 destination.setX(destination.getX() - windowBounds.getWidth());
                 break;
-            case Direction::moveRight:
+            case Transition::moveRight:
                 destination.setX(destination.getX() + windowBounds.getWidth());
+	    case Transition::toDestination:
+            case Transition::none:
+		component->setBounds(Rectangle<int>(0,0,0,0));
+		return;
         }
         if(useProxy)
 	{
@@ -190,7 +194,7 @@ void TransitionAnimator::transitionOut(Component* component,
  * Moves a component into the screen bounds, animating the transition.
  */
 void TransitionAnimator::transitionIn(Component* component,
-        const TransitionAnimator::Direction direction,
+        const TransitionAnimator::Transition transition,
         const Rectangle<int> destination,
         const unsigned int animationMilliseconds)
 {
@@ -198,23 +202,36 @@ void TransitionAnimator::transitionIn(Component* component,
     {
         return;
     }
+    if(transition == Transition::none)
+    {
+        component->setBounds(destination);
+	return;
+    }
+    if(transition == Transition::toDestination)
+    {
+        transformBounds(component, destination, animationMilliseconds);
+	return;
+    }
     Rectangle<int> windowBounds = getWindowBounds();
     Rectangle<int> startBounds = destination;
     if (destination.intersects(windowBounds))
     {
-        switch (direction)
+        switch (transition)
         {
-            case Direction::moveUp:
+            case Transition::moveUp:
                 startBounds.setY(startBounds.getY() + windowBounds.getHeight());
                 break;
-            case Direction::moveDown:
+            case Transition::moveDown:
                 startBounds.setY(startBounds.getY() - windowBounds.getHeight());
                 break;
-            case Direction::moveLeft:
+            case Transition::moveLeft:
                 startBounds.setX(startBounds.getX() + windowBounds.getWidth());
                 break;
-            case Direction::moveRight:
+            case Transition::moveRight:
                 startBounds.setX(startBounds.getX() - windowBounds.getWidth());
+		break;
+	    case Transition::toDestination:
+		startBounds = component->getBounds();
         }
         component->setBounds(startBounds);
         transformBounds(component, destination, animationMilliseconds);

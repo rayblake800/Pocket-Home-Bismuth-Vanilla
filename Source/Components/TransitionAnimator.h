@@ -11,13 +11,15 @@
 
 namespace TransitionAnimator
 {
-    //Defines the directions of movement available for Component transitions
-    enum Direction
+    //Lists all available transition animations
+    enum Transition
     {
         moveUp,
         moveDown,
         moveLeft,
-        moveRight
+        moveRight,
+	toDestination,
+	none
     };
 
     /**
@@ -40,8 +42,8 @@ namespace TransitionAnimator
      *                               moved before animating so that they slide 
      *                               in from the correct direction.
      * 
-     * @param direction              The direction Components will move when
-     *                               animating.
+     * @param transition             The animation type to apply to all moving
+     *                               Components.
      * 
      * @param animationMilliseconds  Duration of the component animation, in
      *                               milliseconds.
@@ -49,7 +51,7 @@ namespace TransitionAnimator
     void animateTransition(
 	    Array<juce::Component*> movingOut,
             Array<std::pair<Component*, Rectangle<int>>> movingIn,
-            const Direction direction,
+            const Transition transition,
             const unsigned int animationMilliseconds);
     
     /**
