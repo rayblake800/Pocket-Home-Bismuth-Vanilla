@@ -120,6 +120,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/UIPage_7fd19d1c.o \
   $(JUCE_OBJDIR)/ComponentEditorPage_bc490e6a.o \
   $(JUCE_OBJDIR)/ColourPage_8cc97274.o \
+  $(JUCE_OBJDIR)/ArrowButton_4101130b.o \
   $(JUCE_OBJDIR)/ColourPicker_b22d9d54.o \
   $(JUCE_OBJDIR)/CounterComponent_e2edf03b.o \
   $(JUCE_OBJDIR)/DrawableImageButton_f6e4065f.o \
@@ -453,6 +454,11 @@ $(JUCE_OBJDIR)/ComponentEditorPage_bc490e6a.o: ../../Source/Components/Pages/UI\
 $(JUCE_OBJDIR)/ColourPage_8cc97274.o: ../../Source/Components/Pages/UI\ Page/ColourPage.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ColourPage.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ArrowButton_4101130b.o: ../../Source/Components/Widgets/ArrowButton.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ArrowButton.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ColourPicker_b22d9d54.o: ../../Source/Components/Widgets/ColourPicker.cpp

@@ -10,11 +10,39 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/PopupEditorComponent.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/AppMenuComponent.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/ListEditor.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/Menu%20Folders/PageAppFolder.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/PageComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/LayoutManager.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Power%20Page/PowerPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Password%20Pages/SetPasswordPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/WifiSettingsComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/Menu%20Editors/CategoryPopupEditor.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/SwitchComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/Menu%20Folders/ScrollingAppFolder.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiStateManager.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Power%20Page/FelPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/PopupEditorComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/ConnectionPage.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Settings%20Page/HomeSettingsPage.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/PopupEditorComponent.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/SettingsPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/WifiSettingsPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/PageComponent.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/Menu%20Editors/AppMenuPopupEditor.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/UI%20Page/ColourPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/LayoutManager.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/ConnectionPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/AppMenuComponent.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/DateTime%20Page/DateTimePage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Login%20Page/LoginPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Page/ConnectionSettingsComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Home%20Page/AppMenu/Menu%20Folders/PageAppFolder.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Input%20Settings%20Page/InputSettingsPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Advanced%20Settings%20Page/AdvancedSettingsPage.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Password%20Pages/RemovePasswordPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/SwitchComponent.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Advanced%20Settings%20Page/AdvancedSettingsPage.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/ColourPicker.cpp</file>
         </group>
     </open-files>
 </project-private>
