@@ -8,9 +8,9 @@ const String PagedAppMenu::pageRightBinding = "shift + cursor right";
 
 PagedAppMenu::PagedAppMenu(OverlaySpinner& loadingSpinner) :
 AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
-pageLeft(ComponentConfigFile::pageLeftKey),
-pageRight(ComponentConfigFile::pageRightKey),
-closeFolderBtn(ComponentConfigFile::pageUpKey)
+pageLeft(NavButton::left),
+pageRight(NavButton::right),
+closeFolderBtn(NavButton::up)
 {
     setOnlyTriggerSelected(false);
     Array<Button*> buttons = {&pageLeft, &pageRight, &closeFolderBtn};

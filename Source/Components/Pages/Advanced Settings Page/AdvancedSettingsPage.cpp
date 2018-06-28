@@ -9,13 +9,14 @@ removePasswordButton(localeText(remove_password)),
 personalizeButton(localeText(personalize_homepage)),
 dateTimeButton(localeText(date_and_time)),
 inputOptionsButton(localeText(input_settings)),
-prevArrow(ComponentConfigFile::pageUpKey),
-nextArrow(ComponentConfigFile::pageDownKey)
+prevArrow(NavButton::up),
+nextArrow(NavButton::down)
 {
 
 #    if JUCE_DEBUG
     setName("AdvancedSettingsPage");
 #    endif
+    setBackButton(PageComponent::leftBackButton);
     std::vector<Button*> allButtons = getButtonList(true);
     for (Button* button : allButtons)
     {
@@ -63,12 +64,6 @@ void AdvancedSettingsPage::reloadLayout()
     prevArrow.setVisible(buttonIndex > 0);
     nextArrow.setVisible(buttonIndex + buttonsPerPage < buttons.size());
 
-    ComponentConfigFile config;
-    ComponentConfigFile::ComponentSettings prevBtnSettings
-            = config.getComponentSettings(ComponentConfigFile::pageUpKey);
-    ComponentConfigFile::ComponentSettings nextBtnSettings
-            = config.getComponentSettings(ComponentConfigFile::pageDownKey);
-
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout;
@@ -80,9 +75,8 @@ void AdvancedSettingsPage::reloadLayout()
         }));
     }
 
-    float yMarginFraction = std::max(prevBtnSettings.getYFraction()
-            + prevBtnSettings.getHeightFraction(),
-            1 - nextBtnSettings.getYFraction());
+    float yMarginFraction = std::max(prevArrow.yMarginFractionNeeded(),
+            nextArrow.yMarginFractionNeeded());
     layout.setYMarginFraction(yMarginFraction);
     layout.setXPaddingWeight(1);
     layout.setYPaddingWeight(7);

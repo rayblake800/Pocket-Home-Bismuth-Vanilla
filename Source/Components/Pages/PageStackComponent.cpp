@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include "TempTimer.h"
+#include "TransitionAnimator.h"
 #include "PageStackComponent.h"
 
 PageStackComponent::PageStackComponent()
@@ -16,26 +17,26 @@ PageStackComponent::PageStackComponent()
  * the transition. 
  */
 void PageStackComponent::pushPage(PageComponent* page,
-        PageComponent::Animation animation)
+        TransitionAnimator::Transition transition)
 {
     DBG("PageStackComponent::" << __func__ << ": pushing " << page->getName());
     stack.add(page);
     signalPageAdded(page);
-    transitionPage(page, animation, transitionDurationMS);
+    transitionPage(page, transition, transitionDurationMS);
 }
 
 /**
  * Removes the top page from the stack, optionally animating the 
  * transition.  This will not remove the last page from the stack.
  */
-void PageStackComponent::popPage(PageComponent::Animation animation)
+void PageStackComponent::popPage(TransitionAnimator::Transition transition)
 {
     if (stack.size() > 1)
     {
         PageComponent* page = stack.getLast();
         page->setEnabled(false);
 
-        transitionPage(page, animation, transitionDurationMS,
+        transitionPage(page, transition, transitionDurationMS,
                 [this](PageComponent * page)
                 {
                     removeChildComponent(page);
@@ -73,7 +74,7 @@ void PageStackComponent::resized()
  * animating, and re-enabled once animation finishes.
  */
 void PageStackComponent::transitionPage(PageComponent* page,
-        PageComponent::Animation animation,
+        TransitionAnimator::Transition transition,
         int duration,
         std::function<void(PageComponent*) > postAnimation,
         bool addingPage)
@@ -82,31 +83,16 @@ void PageStackComponent::transitionPage(PageComponent* page,
     {
         addAndMakeVisible(page);
     }
-    Rectangle<int> translatedBounds;
     page->setEnabled(false);
-    int dir = -1;
-    switch (animation)
+    if(addingPage)
     {
-        case PageComponent::Animation::none:
-            if (addingPage)
-            {
-                page->setBounds(getLocalBounds());
-            }
-            page->setEnabled(true);
-            postAnimation(page);
-            return;
-        case PageComponent::Animation::slideInFromRight:
-            dir *= -1;
-        case PageComponent::Animation::slideInFromLeft:
-            translatedBounds = getLocalBounds().translated(getWidth() * dir, 0);
+        TransitionAnimator::transitionIn(page, transition, getLocalBounds(),
+                duration);
     }
-    if (addingPage)
+    else
     {
-        page->setBounds(translatedBounds);
+        TransitionAnimator::transitionOut(page, transition, duration, true);
     }
-    Desktop::getInstance().getAnimator().animateComponent(page,
-            addingPage ? getLocalBounds() : translatedBounds,
-            1, duration, true, 0.2, 1);
     TempTimer::initTimer(duration * 1.2, [this, postAnimation, page]()
     {
         page->setEnabled(true);

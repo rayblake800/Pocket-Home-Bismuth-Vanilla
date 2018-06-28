@@ -15,6 +15,7 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
 #    if JUCE_DEBUG
     setName("InputSettingsPage");
 #    endif
+    setBackButton(PageComponent::leftBackButton);
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({

@@ -20,6 +20,7 @@ rowCounter(1, 1, 9)
 #    if JUCE_DEBUG
     setName("HomeSettingsPage");
 #    endif
+    setBackButton(PageComponent::leftBackButton);
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({

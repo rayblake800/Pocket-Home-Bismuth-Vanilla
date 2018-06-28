@@ -1,7 +1,7 @@
 #pragma once
 #include "PageComponent.h"
 #include "Localized.h"
-#include "ConfigurableImageButton.h"
+#include "NavButton.h"
 #include "ScalingLabel.h"
 
 /**
@@ -60,8 +60,8 @@ private:
     TextButton inputOptionsButton;
 
     //Next and previous buttons for scrolling page buttons
-    ConfigurableImageButton prevArrow;
-    ConfigurableImageButton nextArrow;
+    NavButton prevArrow;
+    NavButton nextArrow;
 
     //Number of page buttons to show on the screen at a time
     static const int buttonsPerPage = 4;

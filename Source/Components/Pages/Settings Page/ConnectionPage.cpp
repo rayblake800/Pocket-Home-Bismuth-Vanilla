@@ -5,9 +5,10 @@
 template<class ConnectionPoint>
 ConnectionPage<ConnectionPoint>::ConnectionPage() :
 PageComponent("ConnectionPage"),
-prevPageBtn(ComponentConfigFile::pageUpKey),
-nextPageBtn(ComponentConfigFile::pageDownKey)
+prevPageBtn(NavButton::up),
+nextPageBtn(NavButton::down)
 {
+    setBackButton(PageComponent::leftBackButton);
     prevPageBtn.addListener(this);
     nextPageBtn.addListener(this);
     addAndMakeVisible(prevPageBtn);
@@ -232,14 +233,9 @@ void ConnectionPage<ConnectionPoint>::layoutConnectionPage()
     }
     layout.setYPaddingWeight(3);
     layout.setXMarginFraction(0.1);
-    ComponentConfigFile config;
-    ComponentConfigFile::ComponentSettings prevSettings 
-            = config.getComponentSettings(prevPageBtn.getComponentKey());
-    ComponentConfigFile::ComponentSettings nextSettings 
-            = config.getComponentSettings(nextPageBtn.getComponentKey());
     layout.setYMarginFraction(0.01 + (float) std::max(
-         prevSettings.getHeightFraction() + prevSettings.getYFraction(),
-         1 - nextSettings.getYFraction()));
+            prevPageBtn.yMarginFractionNeeded(),
+            nextPageBtn.yMarginFractionNeeded()));
     setLayout(layout);
 }
 

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "LayoutManager.h"
-#include "ConfigurableImageButton.h"
+#include "NavButton.h"
+#include "TransitionAnimator.h"
 #include "JuceHeader.h"
 
 /**
@@ -44,14 +45,6 @@ public:
 
     virtual ~PageComponent() { }
     
-    //Options available for showing a back button on the page
-    enum BackButtonType
-    {
-        leftBackButton,
-        rightBackButton,
-        noBackButton
-    };
-    
     /**
      * Sets the layout of the page component.  If the page layout was set
      * previously, the old layout will be cleared, and its components will be
@@ -62,12 +55,25 @@ public:
      *                    will be added to the page as child components 
      *                    and made visible. If necessary, the layout margins 
      *                    will be resized to make room for the back button.
-     * 
-     * @param buttonType  Sets whether this page should show a back button, and
-     *                    which side it is shown on.
      */
-    void setLayout(LayoutManager::Layout layout, 
-            BackButtonType buttonType = leftBackButton);
+    void setLayout(LayoutManager::Layout layout);
+    
+    //Options available for showing a back button on the page
+    enum BackButtonType
+    {
+        leftBackButton,
+        rightBackButton,
+        noBackButton
+    };
+    
+    /**
+     * Sets the type of back button(if any) that should be shown on the page.
+     * If necessary, page layout margins will be resized to make room for the
+     * back button.
+     * 
+     * @param buttonType  The type of back button to show on the page.
+     */
+    void setBackButton(BackButtonType buttonType);
 
     /**
      * Sets a background image to draw behind all page components.
@@ -102,16 +108,6 @@ public:
         AdvancedSettings,
         DateTime,
         HomeSettings
-    };
-
-    /**
-     * Defines all possible page transition animations.
-     */
-    enum Animation
-    {
-        slideInFromLeft,
-        slideInFromRight,
-        none
     };
 
     /**
@@ -158,20 +154,26 @@ public:
          * Pushes a new PageComponent on top of the stack, optionally animating
          * the transition. 
          * 
-         * @param page       The new top page to add.
+         * @param page        The new top page to add.
          * 
-         * @param animation  The animation type to apply to the page.
+         * @param transition  The animation type to use for the page
+         *                    transition.
          */
         virtual void pushPage
-        (PageComponent* page, Animation animation = slideInFromRight) = 0;
+        (PageComponent* page,
+                TransitionAnimator::Transition transition 
+                = TransitionAnimator::moveLeft) = 0;
 
         /**
          * Removes the top page from the stack, optionally animating the 
          * transition.
          * 
-         * @param animation
+         * @param transition  The animation type to use for the page
+         *                    transition.
          */
-        virtual void popPage(Animation animation = slideInFromRight) = 0;
+        virtual void popPage(TransitionAnimator::Transition transition 
+                = TransitionAnimator::moveRight) = 0;
+
 
         /**
          * Checks if a page is the top page on the stack.
@@ -266,21 +268,23 @@ protected:
      * If this page is currently on top of a page stack, this will remove it 
      * from the stack and destroy it.
      *
-     * @param animation   This animation will run if the page was on top
-     *                     of the stack and was removed successfully.
+     * @param transition  This transition animation will run if the page that 
+     *                    was on top of the stack and was removed successfully.
      */
-    void removeFromStack(Animation animation = slideInFromRight);
+    void removeFromStack(TransitionAnimator::Transition transition 
+                = TransitionAnimator::moveLeft);
 
     /**
      * Creates and pushes a new page on top of the stack.
      *
      * @param pageType   The type of page to create and add.
     
-     * @param animation  This animation will run if the page is successfully
-     *                    added to the stack.
+     * @param transition This transition animation will run if the page is 
+     *                   successfully added to the stack.
      */
-    void pushPageToStack(PageType pageType, Animation animation
-            = slideInFromRight);
+    void pushPageToStack(PageType pageType,
+            TransitionAnimator::Transition transition 
+                = TransitionAnimator::moveLeft);
 
 private:
     /**
@@ -316,14 +320,10 @@ private:
     virtual void paint(Graphics& g) override;
 
     //A button that removes the page from the page stack may be held here.
-    ScopedPointer<ConfigurableImageButton> backButton = nullptr;
-    //If the page contains a back button, this sets the side it appears on.
-    bool backButtonOnRight;
+    ScopedPointer<NavButton> backButton = nullptr;
 
     //Layout manager and component margin/padding values.
     LayoutManager layoutManager;
-    float xMarginFraction = 0.03;
-    float yMarginFraction = 0.03;
 
     //Optional page background image.
     Image backgroundImage;

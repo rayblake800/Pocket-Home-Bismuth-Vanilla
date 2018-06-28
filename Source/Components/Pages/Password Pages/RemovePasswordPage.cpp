@@ -12,6 +12,7 @@ titleLabel("Title", localeText(remove_password))
 #    if JUCE_DEBUG
     setName("RemovePasswordPage");
 #    endif
+    setBackButton(PageComponent::leftBackButton);
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({

@@ -2402,7 +2402,6 @@
           </df>
           <in>PocketHomeWindow.cpp</in>
           <in>PokeLookAndFeel.cpp</in>
-          <in>RelativeLayoutManager.cpp</in>
           <in>TransitionAnimator.cpp</in>
         </df>
         <df name="Config Files">
@@ -3389,75 +3388,6 @@
         </ccTool>
       </item>
       <item path="Source/Components/PokeLookAndFeel.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-          <incDir>
-            <pElem>/usr/include/libnm-glib</pElem>
-            <pElem>/usr/include/NetworkManager</pElem>
-            <pElem>/usr/include/dbus-1.0</pElem>
-            <pElem>/usr/lib/dbus-1.0/include</pElem>
-            <pElem>/usr/include/alsa</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>/usr/include/libpng16</pElem>
-            <pElem>/usr/include/harfbuzz</pElem>
-            <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/glib-2.0/include</pElem>
-            <pElem>JuceLibraryCode</pElem>
-            <pElem>deps/JUCE/modules</pElem>
-            <pElem>Source/PocketCHIP</pElem>
-            <pElem>Source/Components/Pages/Home Page/AppMenu/Menu Folders</pElem>
-            <pElem>Source/Components/Pages/Password Pages</pElem>
-            <pElem>Source/GLib/LibNM</pElem>
-            <pElem>Source/Components/Pages/UI Page</pElem>
-            <pElem>Source/Util</pElem>
-            <pElem>Source/Components/Pages/Settings Page</pElem>
-            <pElem>Source/FreeDesktop/Icon Themes</pElem>
-            <pElem>Source/GLib/DBus</pElem>
-            <pElem>Source/Components/Pages/Home Page/Widgets</pElem>
-            <pElem>Source/Components/Pages/Input Settings Page</pElem>
-            <pElem>Source/Components/Pages/Home Page</pElem>
-            <pElem>Source/Components/Pages</pElem>
-            <pElem>Source/Components/Pages/Home Page/AppMenu/Menu Editors</pElem>
-            <pElem>Source/Components/Pages/Home Page/AppMenu</pElem>
-            <pElem>Source/Components/Pages/Power Page</pElem>
-            <pElem>Source/Config Files</pElem>
-            <pElem>Source/Components/Pages/Home Settings Page</pElem>
-            <pElem>Source/FreeDesktop</pElem>
-            <pElem>Source/Components</pElem>
-            <pElem>Source</pElem>
-            <pElem>Source/Components/Pages/Login Page</pElem>
-            <pElem>Source/Bluetooth</pElem>
-            <pElem>Source/Components/Widgets</pElem>
-            <pElem>Source/Components/Pages/DateTime Page</pElem>
-            <pElem>Source/Components/Configurable</pElem>
-            <pElem>Source/Components/Pages/Advanced Settings Page</pElem>
-            <pElem>Source/Components/Pages/Home Page/AppMenu/Menu Items</pElem>
-            <pElem>Source/GLib</pElem>
-            <pElem>Source/Components/Pages/Home Page/AppMenu/Menu Types</pElem>
-            <pElem>Source/FreeDesktop/Desktop Entries</pElem>
-            <pElem>Source/Wifi</pElem>
-            <pElem>Builds/LinuxMakefile</pElem>
-          </incDir>
-          <preprocessorList>
-            <Elem>DEBUG=1</Elem>
-            <Elem>JUCER_LINUX_MAKE_6D53C8B4=1</Elem>
-            <Elem>JUCE_APP_VERSION=0.0.1</Elem>
-            <Elem>JUCE_APP_VERSION_HEX=0x1</Elem>
-            <Elem>JucePlugin_Build_AAX=0</Elem>
-            <Elem>JucePlugin_Build_AU=0</Elem>
-            <Elem>JucePlugin_Build_AUv3=0</Elem>
-            <Elem>JucePlugin_Build_RTAS=0</Elem>
-            <Elem>JucePlugin_Build_Standalone=0</Elem>
-            <Elem>JucePlugin_Build_VST3=0</Elem>
-            <Elem>JucePlugin_Build_VST=0</Elem>
-            <Elem>LINUX=true</Elem>
-            <Elem>_DEBUG=1</Elem>
-          </preprocessorList>
-        </ccTool>
-      </item>
-      <item path="Source/Components/RelativeLayoutManager.cpp"
             ex="false"
             tool="1"
             flavor2="11">

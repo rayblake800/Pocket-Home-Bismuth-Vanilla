@@ -43,6 +43,14 @@ void LayoutManager::setLayout
 }
 
 /*
+ * Gets the current component layout held by this LayoutManager.
+ */
+LayoutManager::Layout LayoutManager::getLayout()
+{
+    return layout;
+}
+
+/*
  * Adds all components in the layout to a parent component, and makes them
  * all visible.
  */

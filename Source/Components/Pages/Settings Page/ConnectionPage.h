@@ -1,7 +1,7 @@
 #pragma once
 #include "ScalingLabel.h"
 #include "SwitchComponent.h"
-#include "ConfigurableImageButton.h"
+#include "NavButton.h"
 #include "LayoutManager.h"
 #include "PageComponent.h"
 #include "PageStackComponent.h"
@@ -322,8 +322,8 @@ public:
     
 private:
     //scroll through the list of connections
-    ConfigurableImageButton prevPageBtn;
-    ConfigurableImageButton nextPageBtn;
+    NavButton prevPageBtn;
+    NavButton nextPageBtn;
     static const constexpr int connectionsPerPage = 4;
     int connectionIndex = 0;
     

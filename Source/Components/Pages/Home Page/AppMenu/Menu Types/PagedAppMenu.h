@@ -1,5 +1,5 @@
 #pragma once
-#include "ConfigurableImageButton.h"
+#include "NavButton.h"
 #include "AppMenuComponent.h"
 
 /**
@@ -82,7 +82,7 @@ private:
     static const String pageLeftBinding;
     static const String pageRightBinding;
     //navigation buttons
-    ConfigurableImageButton closeFolderBtn;
-    ConfigurableImageButton pageLeft;
-    ConfigurableImageButton pageRight;
+    NavButton closeFolderBtn;
+    NavButton pageLeft;
+    NavButton pageRight;
 };

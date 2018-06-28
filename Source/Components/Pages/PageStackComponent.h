@@ -27,21 +27,23 @@ private:
      * Pushes a new PageComponent on top of the stack, optionally animating
      * the transition. 
      * 
-     * @param page
+     * @param page        The new page to display.
      * 
-     * @param animation
+     * @param transition  The transition animation type to apply to the added
+     *                    page.
      */
-    void pushPage(PageComponent* page, PageComponent::Animation animation
-            = PageComponent::slideInFromLeft) override;
+    void pushPage(PageComponent* page, TransitionAnimator::Transition transition 
+                = TransitionAnimator::moveLeft) override;
 
     /**
      * Removes the top page from the stack, optionally animating the 
      * transition.  This will not remove the last page from the stack.
      * 
-     * @param animation
+     * @param transition  The transition animation type to apply to the removed
+     *                    page.
      */
-    void popPage(PageComponent::Animation animation
-            = PageComponent::slideInFromLeft) override;
+    void popPage(TransitionAnimator::Transition transition 
+                = TransitionAnimator::moveRight) override;
 
 
     /**
@@ -68,18 +70,17 @@ private:
      * 
      * @param page           The pageComponent being added or removed.
      * 
-     * @param animation      Type of animation to show.
+     * @param transition     Type of transition animation to show.
      * 
      * @param duration       Animation duration in milliseconds.
      * 
      * @param postAnimation  Callback function to run when animation finishes.
      * 
      * @param addingPage     True if the page is being added, false if it's 
-     *                        being removed.  Animation direction is reversed 
-     *                        when pages are removed.
+     *                        being removed.
      */
     void transitionPage(PageComponent* page,
-            PageComponent::Animation animation,
+            TransitionAnimator::Transition transition,
             int duration,
             std::function<void(PageComponent*) > postAnimation = []
             (PageComponent* page)

@@ -61,8 +61,8 @@ namespace TransitionAnimator
      *                               If the component is already outside of the
      *                               screen bounds, nothing will happen.
      * 
-     * @param direction              The direction the component will move out
-     *                               of the screen bounds.
+     * @param transition             The animation type used to move the
+     *                               component out of screen bounds.
      * 
      * @param animationMilliseconds  The duration of the component animation, in
      *                               milliseconds.
@@ -73,7 +73,7 @@ namespace TransitionAnimator
      *                               the transition animation.
      */
     void transitionOut(Component* component,
-	    const Direction direction,
+	    const Transition transition,
             const unsigned int animationMilliseconds,
 	    const bool useProxy = false);
 
@@ -85,8 +85,8 @@ namespace TransitionAnimator
      *                               the screen bounds to ensure it moves in
      *                               from the right direction.
      * 
-     * @param direction              The direction the component moves as it
-     *                               enters the screen bounds.
+     * @param transition             The animation type used to move the
+     *                               component onto screen bounds.
      * 
      * @param destination            The destination bounds of the component,
      *                               relative to its parent component.  If this
@@ -98,7 +98,7 @@ namespace TransitionAnimator
      *                               milliseconds.
      */
     void transitionIn(Component* component,
-            const Direction direction,
+	    const Transition transition,
             const Rectangle<int> destination,
 	    const unsigned int animationMilliseconds);
 

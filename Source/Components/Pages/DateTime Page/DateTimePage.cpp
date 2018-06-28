@@ -12,6 +12,7 @@ clockModeLabel("modeLabel", localeText(select_clock_mode))
 #    if JUCE_DEBUG
     setName("DateTimePage");
 #    endif
+    setBackButton(PageComponent::leftBackButton);
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout(

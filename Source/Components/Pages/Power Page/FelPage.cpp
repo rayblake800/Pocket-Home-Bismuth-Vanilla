@@ -37,7 +37,7 @@ infoLine2("infoLine2", localeText(flashing_info))
     layout.setXMarginFraction(0.1);
     layout.setYMarginFraction(0.05);
     layout.setYPaddingWeight(3);
-    setLayout(layout, PageComponent::noBackButton);
+    setLayout(layout);
                 
     infoLine1.setJustificationType(Justification::centred);
     infoLine2.setJustificationType(Justification::centred);
@@ -54,7 +54,7 @@ void FelPage::pageButtonClicked(Button* button)
 {
     if (button == &noButton)
     {
-        removeFromStack(Animation::slideInFromLeft);
+        removeFromStack(TransitionAnimator::moveRight);
     }
     else if (button == &yesButton && !debounce)
     {

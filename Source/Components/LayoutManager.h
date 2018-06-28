@@ -430,6 +430,13 @@ public:
      *                       of parentToInit and make them visible.
      */
     void setLayout(const Layout& layout, Component* parentToInit = nullptr);
+    
+    /**
+     * Gets the current component layout held by this LayoutManager.
+     * 
+     * @return  a copy of the layout saved with setLayout().
+     */
+    Layout getLayout();
 
     /**
      * Adds all components in the layout to a parent component, and makes them

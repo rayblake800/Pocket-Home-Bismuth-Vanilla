@@ -160,7 +160,7 @@ void TransitionAnimator::transitionOut(Component* component,
     Rectangle<int> destination = component->getBounds();
     if (component->getScreenBounds().intersects(windowBounds))
     {
-        switch (Transition)
+        switch (transition)
         {
             case Transition::moveUp:
                 destination.setY(destination.getY() - windowBounds.getHeight());
@@ -173,6 +173,7 @@ void TransitionAnimator::transitionOut(Component* component,
                 break;
             case Transition::moveRight:
                 destination.setX(destination.getX() + windowBounds.getWidth());
+                break;
 	    case Transition::toDestination:
             case Transition::none:
 		component->setBounds(Rectangle<int>(0,0,0,0));
@@ -182,7 +183,7 @@ void TransitionAnimator::transitionOut(Component* component,
 	{
             Component * proxy = static_cast<Component*>
 		    (AnimationProxy::getNewProxy(*component
-		    ,animationMilliseconds);
+		    ,animationMilliseconds));
             component->setBounds(destination);
 	    component = proxy;
 	}

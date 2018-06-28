@@ -26,6 +26,7 @@ advancedPageButton(localeText(advanced_settings))
 #    if JUCE_DEBUG
     setName("SettingsPage");
 #    endif
+    setBackButton(PageComponent::leftBackButton);
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({

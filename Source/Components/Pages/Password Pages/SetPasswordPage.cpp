@@ -16,7 +16,7 @@ confirmPassword("Confirmation", 0x2022)
 #    if JUCE_DEBUG
     setName("SetPasswordPage");
 #    endif
-
+    setBackButton(PageComponent::leftBackButton);
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({

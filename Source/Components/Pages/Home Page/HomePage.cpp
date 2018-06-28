@@ -142,7 +142,7 @@ void HomePage::pageButtonClicked(Button * button)
     else if (button == &powerButton)
     {
         pushPageToStack(PageComponent::PageType::Power,
-                PageComponent::Animation::slideInFromLeft);
+                TransitionAnimator::moveRight);
     }
 }
 

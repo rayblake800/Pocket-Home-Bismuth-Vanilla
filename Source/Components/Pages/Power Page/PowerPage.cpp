@@ -42,7 +42,8 @@ lockscreen([this]()
     });
     layout.setYMarginFraction(0.1);
     layout.setYPaddingWeight(4);
-    setLayout(layout, PageComponent::BackButtonType::rightBackButton);
+    setBackButton(PageComponent::rightBackButton);
+    setLayout(layout);
     
     powerOffButton.addListener(this);
     sleepButton.addListener(this);
@@ -88,7 +89,7 @@ void PowerPage::hideLockscreen()
     if (lockscreen.isShowing())
     {
         removeChildComponent(&lockscreen);
-        removeFromStack(Animation::slideInFromLeft);
+        removeFromStack(TransitionAnimator::moveRight);
     }
 }
 
@@ -123,7 +124,7 @@ PowerPage::pageButtonClicked(Button *button)
 {
     if (button == &felButton)
     {
-        pushPageToStack(PageType::Fel, Animation::slideInFromLeft);
+        pushPageToStack(PageType::Fel, TransitionAnimator::moveRight);
         return;
     }
     if (button == &sleepButton)
