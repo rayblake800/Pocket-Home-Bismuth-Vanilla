@@ -233,6 +233,8 @@
           </GROUP>
         </GROUP>
         <GROUP id="{6D4C4A1E-8E24-8D6C-5A9B-840CFA0F9A73}" name="Widgets">
+          <FILE id="LSg3eR" name="SimpleList.cpp" compile="1" resource="0" file="Source/Components/Widgets/SimpleList.cpp"/>
+          <FILE id="VXRYq6" name="SimpleList.h" compile="0" resource="0" file="Source/Components/Widgets/SimpleList.h"/>
           <FILE id="Ft4KCk" name="NavButton.cpp" compile="1" resource="0" file="Source/Components/Widgets/NavButton.cpp"/>
           <FILE id="iIapjX" name="NavButton.h" compile="0" resource="0" file="Source/Components/Widgets/NavButton.h"/>
           <FILE id="kzte4q" name="ColourPicker.cpp" compile="1" resource="0"

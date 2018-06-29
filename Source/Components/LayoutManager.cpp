@@ -1,6 +1,14 @@
 #include "LayoutManager.h"
 
 /*
+ * Gets the current component layout held by this LayoutManager.
+ */
+LayoutManager::Layout LayoutManager::getLayout()
+{
+    return layout;
+}
+
+/*
  * Set a new Component layout, removing all old layout definitions.
  */
 void LayoutManager::setLayout
@@ -42,12 +50,41 @@ void LayoutManager::setLayout
     }
 }
 
+
 /*
- * Gets the current component layout held by this LayoutManager.
+ * Changes the current layout, and immediately applies the updated layout
+ * to all components in the layout, optionally animating the transition.
  */
-LayoutManager::Layout LayoutManager::getLayout()
+void LayoutManager::transitionLayout(const LayoutManager::Layout& newLayout,
+        Component* parent,
+        const TransitionAnimator::Transition transition,
+        const unsigned int duration)
 {
-    return layout;
+    if(transition == TransitionAnimator::none || duration == 0)
+    {
+        clearLayout(true);
+        setLayout(newLayout, parent);
+        layoutComponents(parent->getBounds());
+        return;
+    }
+    //Transition out old layout items
+    for (int rNum = 0; rNum < layout.rowCount(); rNum++)
+    {
+        const Row& row = layout.getRow(rNum);
+        for (int i = 0; i < row.itemCount(); i++)
+        {
+            const RowItem& rowItem = row.getRowItem(i);
+            if (!rowItem.isEmpty())
+            {
+                TransitionAnimator::transitionOut(rowItem.getComponent(),
+                        transition, duration, true);
+            }
+        }
+    }
+    clearLayout(true);
+    //Transition in new layout items
+    setLayout(newLayout, parent);
+    layoutComponents(parent->getBounds(), transition, duration);
 }
 
 /*
@@ -73,7 +110,9 @@ void LayoutManager::addComponentsToParent(Component* parent)
 /*
  * Arranges the components within a bounding rectangle.
  */
-void LayoutManager::layoutComponents(const Rectangle<int>& bounds)
+void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
+            const TransitionAnimator::Transition transition,
+            const unsigned int duration)
 {
     int xMarginFraction = layout.getXMarginFraction() * bounds.getWidth();
     int yMarginFraction = layout.getYMarginFraction() * bounds.getHeight();
@@ -153,7 +192,10 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds)
             }
             if (!rowItem.isEmpty())
             {
-                rowItem.getComponent()->setBounds(xPos, yPos, width, height);
+                TransitionAnimator::transitionIn(rowItem.getComponent(),
+                        transition,
+                        Rectangle<int>(xPos, yPos, width, height),
+                        duration);
             }
             xPos += width;
         }

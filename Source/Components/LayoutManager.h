@@ -1,4 +1,5 @@
 #pragma once
+#include "TransitionAnimator.h"
 #include "JuceHeader.h"
 
 /**
@@ -420,6 +421,13 @@ public:
     };
 
     /**
+     * Gets the current component layout held by this LayoutManager.
+     * 
+     * @return  a copy of the layout saved with setLayout().
+     */
+    Layout getLayout();
+    
+    /**
      * Set a new Component layout, removing all old layout definitions.
      * 
      * @param rows          Defines the position and weight of all components. 
@@ -432,11 +440,29 @@ public:
     void setLayout(const Layout& layout, Component* parentToInit = nullptr);
     
     /**
-     * Gets the current component layout held by this LayoutManager.
+     * Changes the current layout, and immediately applies the updated layout
+     * to all components in the layout, optionally animating the transition.
+     *
+     * @param newLayout    The new layout to apply.
      * 
-     * @return  a copy of the layout saved with setLayout().
+     * @param parent       The parent component of all layout components.
+     *                     All components in the old layout will be removed
+     *                     from this component's children.  All components in
+     *                     the new layout will be added to this component as
+     *                     children.  Layout components will be placed within
+     *                     this component's bounds.
+     * 
+     * @param transition   Optional transition animation to apply when updating
+     *                     the layout.
+     * 
+     * @param duration     If animating the transition, this defines the
+     *                     animation duration in milliseconds.
      */
-    Layout getLayout();
+    void transitionLayout(const Layout& newLayout,
+            Component* parent,
+            const TransitionAnimator::Transition transition
+                = TransitionAnimator::none,
+            const unsigned int duration = 0);
 
     /**
      * Adds all components in the layout to a parent component, and makes them
@@ -445,11 +471,20 @@ public:
     void addComponentsToParent(Component* parent);
 
     /**
-     * Arranges the components within a bounding rectangle.
+     * Arranges the components within a bounding rectangle, optionally applying
+     *  a transition animation to all components in the layout.
      * 
-     * @param bounds    The rectangle components will be positioned within.
+     * @param bounds      The rectangle components will be positioned within.
+     * 
+     * @param transition  The optional transition animation to apply.
+     * 
+     * @param duration    The duration of any transition animation, in
+     *                    milliseconds.
      */
-    void layoutComponents(const Rectangle<int>& bounds);
+    void layoutComponents(const Rectangle<int>& bounds,
+            const TransitionAnimator::Transition transition
+                = TransitionAnimator::none,
+            const unsigned int duration = 0);
 
     /**
      * Remove all saved component layout parameters.
