@@ -3,84 +3,42 @@
 
 AdvancedSettingsPage::AdvancedSettingsPage() :
 Localized("AdvancedSettingsPage"),
-PageComponent("AdvancedSettingsPage"),
-setPasswordButton(localeText(set_password)),
-removePasswordButton(localeText(remove_password)),
-personalizeButton(localeText(personalize_homepage)),
-dateTimeButton(localeText(date_and_time)),
-inputOptionsButton(localeText(input_settings)),
-prevArrow(NavButton::up),
-nextArrow(NavButton::down)
+PageComponent("AdvancedSettingsPage")
 {
 
 #    if JUCE_DEBUG
     setName("AdvancedSettingsPage");
 #    endif
     setBackButton(PageComponent::leftBackButton);
-    std::vector<Button*> allButtons = getButtonList(true);
-    for (Button* button : allButtons)
+    LayoutManager::Layout layout(
     {
-        button->addListener(this);
-    }
-    addAndMakeVisible(prevArrow);
-    addAndMakeVisible(nextArrow);
-    reloadLayout();
-}
-
-/**
- * Get pointers to all buttons on the page
- */
-std::vector<Button*> AdvancedSettingsPage::getButtonList(bool includeAll)
-{
-    std::vector<Button*> buttonList;
-    buttonList.push_back(&personalizeButton);
-    buttonList.push_back(&setPasswordButton);
-    if (Password::isPasswordSet() || includeAll)
-    {
-        buttonList.push_back(&removePasswordButton);
-    }
-    buttonList.push_back(&dateTimeButton);
-    buttonList.push_back(&inputOptionsButton);
-    if (includeAll)
-    {
-        buttonList.push_back(&prevArrow);
-        buttonList.push_back(&nextArrow);
-    }
-    return buttonList;
-}
-
-/**
- * Reloads the page layout settings.
- */
-void AdvancedSettingsPage::reloadLayout()
-{
-    setPasswordButton.setButtonText(Password::isPasswordSet() ?
-            localeText(change_password) : localeText(set_password));
-    std::vector<Button*> buttons = getButtonList();
-    if (buttonIndex >= buttons.size() || buttonIndex < 0)
-    {
-        buttonIndex = 0;
-    }
-    prevArrow.setVisible(buttonIndex > 0);
-    nextArrow.setVisible(buttonIndex + buttonsPerPage < buttons.size());
-
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout;
-
-    for (int i = buttonIndex; i < (buttonIndex + buttonsPerPage); i++)
-    {
-        layout.addRow(Row(10,{
-            RowItem((i < buttons.size()) ? buttons[i] : nullptr, 10)
-        }));
-    }
-
-    float yMarginFraction = std::max(prevArrow.yMarginFractionNeeded(),
-            nextArrow.yMarginFractionNeeded());
-    layout.setYMarginFraction(yMarginFraction);
-    layout.setXPaddingWeight(1);
-    layout.setYPaddingWeight(7);
+        LayoutManager::Row(1,
+        {
+            LayoutManager::RowItem(&buttonList)
+        })
+    });
     setLayout(layout);
+}
+
+/*
+ * Gets button titles for all page buttons.
+ */
+StringArray AdvancedSettingsPage::getButtonTitles()
+{
+    StringArray titleList;
+    titleList.add(localeText(personalize_homepage));
+    if (Password::isPasswordSet())
+    {
+        titleList.add(localeText(change_password));
+        titleList.add(localeText(remove_password));
+    }
+    else
+    {
+        titleList.add(localeText(set_password));
+    }
+    titleList.add(localeText(date_and_time));
+    titleList.add(localeText(input_settings));
+    return titleList;
 }
 
 /**
@@ -90,7 +48,7 @@ void AdvancedSettingsPage::visibilityChanged()
 {
     if (isVisible())
     {
-        reloadLayout();
+        buttonList.refresh();
     }
 }
 
@@ -100,58 +58,69 @@ void AdvancedSettingsPage::visibilityChanged()
  */
 void AdvancedSettingsPage::pageButtonClicked(Button * button)
 {
-    PageComponent::PageType pageType =
-            PageComponent::PageType::AdvancedSettings;
-    if (button == &setPasswordButton)
+    TextButton * textButton = dynamic_cast<TextButton*>(button);
+    if(textButton == nullptr)
     {
-        pageType = PageComponent::PageType::SetPassword;
+        DBG("AdvancedSettingsPage::" << __func__ << ": invalid button!");
+        return;
     }
-    else if (button == &removePasswordButton)
+    
+    Array<PageComponent::PageType> pageTypes;
+    pageTypes.add(PageComponent::PageType::HomeSettings);
+    pageTypes.add(PageComponent::PageType::SetPassword);
+    if(Password::isPasswordSet())
     {
-        pageType = PageComponent::PageType::RemovePassword;
+        pageTypes.add(PageComponent::PageType::RemovePassword);
     }
-    else if (button == &personalizeButton)
+    pageTypes.add(PageComponent::PageType::DateTime);
+    pageTypes.add(PageComponent::PageType::InputSettings);
+    
+    StringArray pageNames = getButtonTitles();
+    int typeIndex = pageNames.indexOf(textButton->getButtonText());
+    if(typeIndex >= 0 && typeIndex < pageTypes.size())
     {
-        pageType = PageComponent::PageType::HomeSettings;
-    }
-    else if (button == &inputOptionsButton)
-    {
-        pageType = PageComponent::PageType::InputSettings;
-    }
-    else if (button == &dateTimeButton)
-    {
-        pageType = PageComponent::PageType::DateTime;
-    }
-    else if (button == &nextArrow)
-    {
-        buttonIndex += buttonsPerPage;
-        reloadLayout();
-    }
-    else if (button == &prevArrow)
-    {
-        buttonIndex -= buttonsPerPage;
-        reloadLayout();
-    }
-    if (pageType != PageComponent::PageType::AdvancedSettings)
-    {
-        pushPageToStack(pageType);
+        pushPageToStack(pageTypes[typeIndex]);
     }
 }
 
-/**
- * Updates the up/down navigation buttons to fit when the page changes
- * size.
- */
-void AdvancedSettingsPage::pageResized()
+AdvancedSettingsPage::SettingsList::SettingsList()
 {
-    prevArrow.applyConfigBounds();
-    nextArrow.applyConfigBounds();
+    setItemsPerPage(buttonsPerPage);
+    setYPaddingFraction(yPaddingFraction);
+}
+     
+/*
+ * Gets the total number of page buttons.
+ */
+unsigned int AdvancedSettingsPage::SettingsList::getListSize()
+{
+    return Password::isPasswordSet() ? 5 : 4;
 }
 
+/*
+ * Updates or creates a page TextButton for a specific button index.
+ */
+Component* AdvancedSettingsPage::SettingsList::updateListItem
+(Component* listItem, unsigned int index)
+{
+    AdvancedSettingsPage * parent 
+            = static_cast<AdvancedSettingsPage*>(getParentComponent());
+    String title = parent->getButtonTitles()[index];
+    TextButton * textButton = dynamic_cast<TextButton*>(listItem);
+    if(textButton == nullptr)
+    {
+        textButton = new TextButton();
+        textButton->addListener(parent);
+    }
+    textButton->setButtonText(title);
+    textButton->setName(title);
+    return textButton;
+}
 
-
-
-
-
-
-
+/*
+ * Refresh list components.
+ */
+void AdvancedSettingsPage::SettingsList::refresh()
+{
+    refreshListContent();
+}

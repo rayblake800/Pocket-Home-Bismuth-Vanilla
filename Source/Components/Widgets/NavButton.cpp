@@ -21,7 +21,7 @@ float NavButton::xMarginFractionNeeded(NavButton::WindowEdge edge)
     ComponentConfigFile::ComponentSettings settings
             = config.getComponentSettings(getEdgeComponentKey(edge));
     return std::min(settings.getXFraction() + settings.getWidthFraction(),
-            1.0f - settings.getXFraction());
+            1.0f - settings.getXFraction()) + marginPadding;
 }
 
 /*
@@ -34,7 +34,7 @@ float NavButton::yMarginFractionNeeded(NavButton::WindowEdge edge)
     ComponentConfigFile::ComponentSettings settings
             = config.getComponentSettings(getEdgeComponentKey(edge));
     return std::min(settings.getYFraction() + settings.getHeightFraction(),
-            1.0f - settings.getYFraction());
+            1.0f - settings.getYFraction()) + marginPadding;
 }
 
 

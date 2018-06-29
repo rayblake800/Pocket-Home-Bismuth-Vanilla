@@ -64,7 +64,7 @@ void LayoutManager::transitionLayout(const LayoutManager::Layout& newLayout,
     {
         clearLayout(true);
         setLayout(newLayout, parent);
-        layoutComponents(parent->getBounds());
+        layoutComponents(parent->getLocalBounds());
         return;
     }
     //Transition out old layout items
@@ -84,7 +84,7 @@ void LayoutManager::transitionLayout(const LayoutManager::Layout& newLayout,
     clearLayout(true);
     //Transition in new layout items
     setLayout(newLayout, parent);
-    layoutComponents(parent->getBounds(), transition, duration);
+    layoutComponents(parent->getLocalBounds(), transition, duration);
 }
 
 /*
@@ -114,10 +114,9 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
             const TransitionAnimator::Transition transition,
             const unsigned int duration)
 {
-    int xMarginFraction = layout.getXMarginFraction() * bounds.getWidth();
-    int yMarginFraction = layout.getYMarginFraction() * bounds.getHeight();
-    int xPaddingFraction = layout.getXPaddingFraction() * bounds.getWidth();
-    int yPaddingFraction = layout.getYPaddingFraction() * bounds.getHeight();
+    int xMarginSize = layout.getXMarginFraction() * bounds.getWidth();
+    int yMarginSize = layout.getYMarginFraction() * bounds.getHeight();
+    int yPaddingSize = layout.getYPaddingFraction() * bounds.getHeight();
     int yPaddingCount = 0;
     for (int i = 1; i < layout.rowCount(); i++)
     {
@@ -131,15 +130,14 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
     int weightedHeight = 0;
     if (yWeightSum > 0)
     {
-        weightedHeight = bounds.getHeight() - yMarginFraction * 2
-                         - yPaddingFraction * yPaddingCount;
+        weightedHeight = bounds.getHeight() - yMarginSize * 2
+                         - yPaddingSize * yPaddingCount;
     }
-    int yPos = bounds.getY() + yMarginFraction;
+    int yPos = bounds.getY() + yMarginSize;
     if(yWeightSum > 0)
     {
         yPos += layout.getYMarginWeight() * weightedHeight / yWeightSum;
     }
-    int yPaddingSize = bounds.getHeight() * yPaddingFraction;
     if (yPaddingSize == 0 && yWeightSum > 0)
     {
         yPaddingSize = layout.getYPaddingWeight() * weightedHeight / yWeightSum;
@@ -168,10 +166,10 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
                 xPaddingCount++;
             }
         }
-        int weightedWidth = bounds.getWidth() - xMarginFraction * 2
-                             - xPaddingFraction * xPaddingCount;
-        int xPos = bounds.getX() + xMarginFraction;
-        int xPaddingSize = bounds.getWidth() * xPaddingFraction;
+        int xPaddingSize = layout.getXPaddingFraction() * bounds.getWidth();
+        int weightedWidth = bounds.getWidth() - xMarginSize * 2
+                             - xPaddingSize * xPaddingCount;
+        int xPos = bounds.getX() + xMarginSize;
         if (xPaddingSize == 0 && xWeightSum > 0)
         {
             xPaddingSize = layout.getXPaddingWeight() * weightedWidth 
@@ -486,7 +484,6 @@ void LayoutManager::printLayout()
     for (int rowNum = 0; rowNum < layout.rowCount(); rowNum++)
     {
         const Row& row = layout.getRow(rowNum);
-        DBG("LayoutManager::" << __func__ << ":");
         DBG(String("Row weight:") + String(row.getWeight()) + String("/")
                 + String(yWeightSum));
         String rowStr = "\t";

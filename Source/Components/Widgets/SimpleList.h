@@ -51,6 +51,15 @@ protected:
     void setItemsPerPage(int perPage);
     
     /**
+     * Sets the fraction of the list height that should be placed between list
+     * items.
+     * 
+     * @param paddingFraction  The fraction of the height used to determine
+     *                         padding size/
+     */
+    void setYPaddingFraction(float paddingFraction);
+    
+    /**
      * Reloads list content, running updateListItem for each visible
      * list item.
      * 
@@ -92,8 +101,8 @@ private:
     unsigned int pageIndex = 0;
     
     //Fraction of the list vertical space to place between each list item pair
-    static const constexpr float yPaddingFraction = 0.03;
+    float yPaddingFraction = 0.05;
     
     //animation duration(milliseconds) when scrolling between list pages
-    static const constexpr unsigned int animDuration = 1000;
+    static const constexpr unsigned int animDuration = 300;
 };

@@ -106,4 +106,7 @@ private:
     static String getEdgeComponentKey(WindowEdge edge);
     
     WindowEdge edge;
+    
+    //Extra padding space to add to button margins
+    static const constexpr float marginPadding = 0.02;
 };

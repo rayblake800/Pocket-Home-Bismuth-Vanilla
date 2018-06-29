@@ -18,12 +18,30 @@ void SimpleList::setItemsPerPage(int perPage)
     if(perPage != itemsPerPage)
     {
         itemsPerPage = perPage;
-        refreshListContent();
+        if(getParentComponent() != nullptr && !getBounds().isEmpty())
+        {
+            refreshListContent();
+        }
         //if items per page decreased, remove unneeded list components
         while(listComponents.size() > itemsPerPage)
         {
             listComponents.removeLast();
         }
+    }
+}
+
+
+    
+/*
+ * Sets the fraction of the list height that should be placed between list
+ * items.
+ */
+void SimpleList::setYPaddingFraction(float paddingFraction)
+{
+    yPaddingFraction = paddingFraction;
+    if(getParentComponent() != nullptr && !getBounds().isEmpty())
+    {
+        refreshListContent();
     }
 }
   
@@ -43,25 +61,29 @@ void SimpleList::refreshListContent(TransitionAnimator::Transition transition,
     int componentsSaved = listComponents.size();
     for(int i = 0; i < itemsPerPage; i++)
     {
-        LayoutManager::Row row;
+        LayoutManager::Row row(1);
         int itemIndex = i + pageIndex * itemsPerPage;
         if(itemIndex < listSize)
         {
-            if(componentsSaved < i)
+            if(componentsSaved < i || listComponents[i] == nullptr)
             {
-                listComponents.add(updateListItem(nullptr, itemIndex));
+                listComponents.set(i, updateListItem(nullptr, itemIndex));
             }
-            row.addRowItem(LayoutManager::RowItem(listComponents[i]));
+            row.addRowItem(LayoutManager::RowItem(listComponents[i], 1));
         }
         layout.addRow(row);
     }
     layout.setYPaddingFraction(yPaddingFraction);
+    DBG("yPadding = " << yPaddingFraction);
+    layout.setYMarginFraction(std::max(upButton.yMarginFractionNeeded(),
+            downButton.yMarginFractionNeeded()));
     layoutManager.transitionLayout(layout, this, transition, duration);
+    layoutManager.printLayout();
     //update recycled components
-    for(int i = 0; i < componentsSaved; i++)
+    for(int i = 0; i < itemsPerPage; i++)
     {
         int itemIndex = i + pageIndex * itemsPerPage;
-        if(itemIndex > listSize)
+        if(itemIndex >= listSize)
         {
             break;
         }
@@ -102,4 +124,8 @@ void SimpleList::resized()
     layoutManager.layoutComponents(getLocalBounds());
     upButton.applyConfigBounds();
     downButton.applyConfigBounds();
+    upButton.setBounds(getLocalArea(getParentComponent(),
+            upButton.getBounds()));
+    downButton.setBounds(getLocalArea(getParentComponent(),
+            downButton.getBounds()));
 }
