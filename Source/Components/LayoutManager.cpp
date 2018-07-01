@@ -116,12 +116,19 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
     int yMarginSize = layout.getYMarginFraction() * bounds.getHeight();
     int yPaddingSize = layout.getYPaddingFraction() * bounds.getHeight();
     int yPaddingCount = 0;
-    for (int i = 1; i < layout.rowCount(); i++)
+    bool nonzeroRowFound = false;
+    for (int i = 0; i < layout.rowCount(); i++)
     {
-        if (!layout.getRow(i - 1).isEmpty()
-            && !layout.getRow(i).isEmpty())
+        if(layout.getRow(i).getWeight() > 0)
         {
-            yPaddingCount++;
+            if(nonzeroRowFound)
+            {
+                yPaddingCount++;
+            }
+            else
+            {
+                nonzeroRowFound = true;
+            }
         }
     }
 
@@ -131,20 +138,24 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
         weightedHeight = bounds.getHeight() - yMarginSize * 2
                          - yPaddingSize * yPaddingCount;
     }
-    int yPos = bounds.getY() + yMarginSize;
+    int yStart = bounds.getY() + yMarginSize;
     if(yWeightSum > 0)
     {
-        yPos += layout.getYMarginWeight() * weightedHeight / yWeightSum;
+        yStart += layout.getYMarginWeight() * weightedHeight / yWeightSum;
     }
     if (yPaddingSize == 0 && yWeightSum > 0)
     {
         yPaddingSize = layout.getYPaddingWeight() * weightedHeight / yWeightSum;
     }
+    int yPos = yStart;
     for (int rowNum = 0; rowNum < layout.rowCount(); rowNum++)
     {
         const Row& row = layout.getRow(rowNum);
-        if (rowNum > 0 && row.getWeight() > 0
-            && !layout.getRow(rowNum - 1))
+        if(row.getWeight() == 0)
+        {
+            continue;
+        }
+        if (yPos != yStart)
         {
             yPos += yPaddingSize;
         }
@@ -156,28 +167,39 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
         }
         const int& xWeightSum = xWeightSums[rowNum];
         int xPaddingCount = 0;
-        for (int i = 1; i < row.itemCount(); i++)
+        bool nonzeroItmFound = false;
+        for (int i = 0; i < row.itemCount(); i++)
         {
-            if (!row.getRowItem(i).isEmpty()
-                && !row.getRowItem(i - 1).isEmpty())
+            if (row.getRowItem(i).getWeight() > 0)
             {
-                xPaddingCount++;
+                if(nonzeroItmFound)
+                {
+                    xPaddingCount++;
+                }
+                else
+                {
+                    nonzeroItmFound = true;
+                }
             }
         }
         int xPaddingSize = layout.getXPaddingFraction() * bounds.getWidth();
         int weightedWidth = bounds.getWidth() - xMarginSize * 2
                              - xPaddingSize * xPaddingCount;
-        int xPos = bounds.getX() + xMarginSize;
         if (xPaddingSize == 0 && xWeightSum > 0)
         {
             xPaddingSize = layout.getXPaddingWeight() * weightedWidth 
                     / xWeightSum;
         }
+        int xStart = bounds.getX() + xMarginSize;
+        int xPos = xStart;
         for (int cNum = 0; cNum < row.itemCount(); cNum++)
         {
             const RowItem& rowItem = row.getRowItem(cNum);
-            if (cNum > 0 && !rowItem.isEmpty()
-                && !row.getRowItem(cNum - 1).isEmpty())
+            if(rowItem.getWeight() == 0)
+            {
+                continue;
+            }
+            if (xPos != xStart)
             {
                 xPos += xPaddingSize;
             }
@@ -331,8 +353,8 @@ void LayoutManager::Layout::setYMarginFraction(const float fraction)
 }
 
 /*
- *  Sets the amount of space to leave between all non-null components
- * in each row, as a fraction of the total layout width.
+ *  Sets the fraction of the total layout width to leave empty between
+ * all row items with non-zero weights.
  */
 void LayoutManager::Layout::setXPaddingFraction(const float fraction)
 {
@@ -341,8 +363,8 @@ void LayoutManager::Layout::setXPaddingFraction(const float fraction)
 }
 
 /*
- *  Sets the amount of space to leave between all non-empty rows in the
- * layout, as a fraction of the total layout height.
+ *  Sets the fraction of the total layout height to leave empty
+ * between all layout rows with non-zero weights.
  */
 void LayoutManager::Layout::setYPaddingFraction(const float fraction)
 {
@@ -351,8 +373,8 @@ void LayoutManager::Layout::setYPaddingFraction(const float fraction)
 }
 
 /*
- *  Sets the amount of space to leave between all non-null components
- * in each row using a weight value. 
+ *  Assigns a weight value to the amount of empty space left between
+ * each row item, ignoring row items with a zero weight value.
  */
 void LayoutManager::Layout::setXPaddingWeight(const unsigned int weight)
 {
@@ -361,8 +383,8 @@ void LayoutManager::Layout::setXPaddingWeight(const unsigned int weight)
 }
 
 /*
- *  Sets the amount of space to leave between all non-empty rows in the
- * layout using a weight value.  
+ *  Assigns a weight value to the amount of empty space left between
+ * each row, ignoring rows with a zero weight value.
  */
 void LayoutManager::Layout::setYPaddingWeight(const unsigned int weight)
 {
@@ -396,7 +418,7 @@ unsigned int LayoutManager::Layout::getYMarginWeight() const
 
 /*
  * Gets the fraction of the width to allocate to each space between
- * non-null components.
+ * RowItems.
  */
 float LayoutManager::Layout::getXPaddingFraction() const
 {
@@ -405,7 +427,7 @@ float LayoutManager::Layout::getXPaddingFraction() const
 
 /*
  * Gets the weight value assigned to each horizontal space between
- * non-null layout components.
+ * layout rows.
  */
 unsigned int LayoutManager::Layout::getXPaddingWeight() const
 {
@@ -414,7 +436,7 @@ unsigned int LayoutManager::Layout::getXPaddingWeight() const
 
 /*
  * Gets the fraction of the height to allocate to each space between
- * non-empty rows.
+ * layout rows.
  */
 float LayoutManager::Layout::getYPaddingFraction() const
 {
@@ -423,7 +445,7 @@ float LayoutManager::Layout::getYPaddingFraction() const
 
 /*
  * Gets the weight value assigned to each vertical space between
- * non-empty layout rows.
+ * layout rows.
  */
 unsigned int LayoutManager::Layout::getYPaddingWeight() const
 {

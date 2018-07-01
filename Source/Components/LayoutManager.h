@@ -278,27 +278,26 @@ public:
                  
         /**
          *  Assigns a weight value to the amount of empty space left between
-	 * each adjacent row item, ignoring row items with a weight value of
-	 * zero.
+	 * each row item, ignoring row items with a zero weight value.
          *   
          *  Setting the X-padding weight resets the X-padding fraction to
          * zero. Padding can be defined by a weight or a fraction, but not both.
          * 
          * @param weight  The weight value to assign to each space between
-         *                non-null components.  
+         *                row items.  
          */
         void setXPaddingWeight(const unsigned int weight);
         
                          
         /**
-         *  Sets the amount of space to leave between all non-empty rows in the
-         * layout using a weight value. 
+         *  Assigns a weight value to the amount of empty space left between
+	 * each row, ignoring rows with a zero weight value.
          *   
          *  Setting the Y-padding weight resets the Y-padding fraction to
          * zero. Padding can be defined by a weight or a fraction, but not both.
          * 
          * @param weight  The weight value to assign to each space between
-         *                non-empty rows.  
+         *                rows.  
          */
         void setYPaddingWeight(const unsigned int weight);
         
@@ -331,7 +330,7 @@ public:
         
         /**
          * Gets the fraction of the width to allocate to each space between
-         * non-null components.
+         * RowItems.
          * 
          * @return  The width fraction to allocate to each padding section, or
          *          zero if horizontal padding is set with a weight value. 
@@ -340,7 +339,7 @@ public:
         
         /**
          * Gets the weight value assigned to each horizontal space between
-         * non-null layout components.
+         * RowItems.
          * 
          * @return  The weight value to allocate to each horizontal padding 
          *          section.
@@ -349,7 +348,7 @@ public:
         
         /**
          * Gets the fraction of the height to allocate to each space between
-         * non-empty rows.
+         * layout rows.
          * 
          * @return  The height fraction to allocate to each padding section, or
          *          zero if vertical padding is set with a weight value. 
@@ -358,7 +357,7 @@ public:
                     
         /**
          * Gets the weight value assigned to each vertical space between
-         * non-empty layout rows.
+         * layout rows.
          * 
          * @return  The weight value to allocate to each padding section
          */
@@ -411,11 +410,11 @@ public:
         float yMarginFraction = 0;
         
         //Padding Sizes:
-        //defines the amount of horizontal space between non-null components
+        //defines the amount of horizontal space between row items
         unsigned int xPaddingWeight = 0;
         float xPaddingFraction = 0;
         
-        //defines the amount of vertical space between non-empty rows
+        //defines the amount of vertical space between rows
         unsigned int yPaddingWeight = 0;        
         float yPaddingFraction = 0;
         
