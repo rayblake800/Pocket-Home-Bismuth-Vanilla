@@ -52,17 +52,21 @@
  * B = Component* cpB
  * C = Component* cpC
  * . = margin space
+ * | = vertical padding
+ * - = horizontal padding
  * _ = empty space
  * -----------------------
  *   
  *   ....................
  *   ....................
  *   .__________________.
- *   ._AAAAAAAAAA_B_____.
- *   ._AAAAAAAAAA_B_____.
- *   ._AAAAAAAAAA_B_____.
- *   .__________________.
- *   .__________________.
+ *   .||||||||||||||||||.
+ *   .||||||||||||||||||.
+ *   ._AAAAAAAAAA-B_____.
+ *   ._AAAAAAAAAA-B_____.
+ *   ._AAAAAAAAAA-B_____.
+ *   .||||||||||||||||||.
+ *   .||||||||||||||||||.
  *   .CCCCCCCCCCCCCCCCCC.
  *   ....................
  *   ....................
@@ -247,34 +251,35 @@ public:
         void setYMarginFraction(const float fraction);
         
         /**
-         *  Sets the amount of space to leave between all non-null components
-         * in each row, as a fraction of the total layout width.
+         *  Sets the fraction of the total layout width to leave empty between
+	 * all row items with non-zero weights.
          *   
          *  Setting the X-padding fraction resets the X-padding weight to
          * zero. Padding can be defined by a weight or a fraction, but not both.
          * 
          * @param fraction  The amount of horizontal space to leave between each
-         *                  non-null component in the layout, as a fraction of
-         *                  the total layout width.
+         *                  item in the row with nonzero weight, as a fraction
+	 *                  of the total layout width.
          */
         void setXPaddingFraction(const float fraction);
                
         /**
-         *  Sets the amount of space to leave between all non-empty rows in the
-         * layout, as a fraction of the total layout height.
+         *  Sets the fraction of the total layout height to leave empty
+	 * between all layout rows with non-zero weights.
          *   
          *  Setting the Y-padding fraction resets the Y-padding weight to
          * zero. Padding can be defined by a weight or a fraction, but not both.
          * 
          * @param fraction  The amount of vertical space to leave between each
-         *                  non-empty row in the layout, as a fraction of
-         *                  the total layout height.
+         *                  nonzero row in the layout, as a fraction of the 
+	 *                  total layout height.
          */
         void setYPaddingFraction(const float fraction);
                  
         /**
-         *  Sets the amount of space to leave between all non-null components
-         * in each row using a weight value. 
+         *  Assigns a weight value to the amount of empty space left between
+	 * each adjacent row item, ignoring row items with a weight value of
+	 * zero.
          *   
          *  Setting the X-padding weight resets the X-padding fraction to
          * zero. Padding can be defined by a weight or a fraction, but not both.

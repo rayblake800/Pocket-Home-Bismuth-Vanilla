@@ -22,9 +22,8 @@ void LayoutManager::setLayout
         const Row& rowLayout = layout.getRow(rowNum);
         yWeightSum += rowLayout.getWeight();
 
-        //add padding weights between non-empty rows
-        if (rowNum > 0 && !rowLayout.isEmpty()
-            && layout.getRow(rowNum - 1).itemCount() > 0)
+        //add padding weights between rows with non-zero weight
+        if (rowNum > 0 && yWeightSum > 0 &&  rowLayout.getWeight() > 0)
         {
             yWeightSum += layout.getYPaddingWeight();
         }
@@ -35,10 +34,9 @@ void LayoutManager::setLayout
             const RowItem& rowItem = rowLayout.getRowItem(cNum);
             xWeightSums.getReference(rowNum) += rowItem.getWeight();
 
-            //add padding weights between non-null components
-            if (cNum > 0 && layout.getXPaddingWeight() > 0
-                && !rowItem.isEmpty()
-                && !rowLayout.getRowItem(cNum).isEmpty())
+            //add padding weights between row items with non-zero weight
+            if (cNum > 0 && !rowItem.getWeight() == 0
+                && xWeightSums[rowNum] > 0)
             {
                 xWeightSums.getReference(rowNum) += layout.getXPaddingWeight();
             }
@@ -145,8 +143,8 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
     for (int rowNum = 0; rowNum < layout.rowCount(); rowNum++)
     {
         const Row& row = layout.getRow(rowNum);
-        if (rowNum > 0 && !row.isEmpty()
-            && !layout.getRow(rowNum - 1).isEmpty())
+        if (rowNum > 0 && row.getWeight() > 0
+            && !layout.getRow(rowNum - 1))
         {
             yPos += yPaddingSize;
         }
