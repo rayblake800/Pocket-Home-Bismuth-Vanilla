@@ -30,8 +30,8 @@ protected:
      * 
      * @return  The selected index, or -1 if no list item is selected.
      */
-    int getSelectedIndex();
-    
+    int getSelectedIndex() const;
+
     /**
      * Sets the selected list index.
      * 
@@ -39,7 +39,7 @@ protected:
      *               outside of the list bounds, nothing will happen.
      */
     void setSelectedIndex(const int index);
-    
+
     /**
      * If a list item is currently selected, it will be de-selected and the
      * component will be updated.
@@ -48,8 +48,15 @@ protected:
 
     /**
      * Refreshes displayed list content.
+     * 
+     * @param transition   Optional transition animation to apply when 
+     *                    updating list content.
+     * 
+     * @param duration     Duration in milliseconds to run transition 
+     *                    animations.
      */
-    void updateList();
+    void updateList(TransitionAnimator::Transition transition
+            = TransitionAnimator::none, unsigned int duration = 0);
 
     /**
      * Handles list item selection.
@@ -69,7 +76,7 @@ protected:
     bool overrideBackButton() override;
 
 private:
-    
+
     /**
      * Used to load or update content for each item in the list.
      * 
@@ -84,7 +91,7 @@ private:
      */
     virtual void updateListItemLayout(LayoutManager::Layout& layout,
             const unsigned int index) = 0;
-    
+
     /**
      * Used to load or update additional content for the selected list item.
      * 
@@ -95,7 +102,7 @@ private:
      *                added to the layout. 
      */
     virtual void updateSelectedItemLayout(LayoutManager::Layout& layout) = 0;
-    
+
     class ListItem : public Button
     {
     public:
@@ -108,8 +115,8 @@ private:
          * 
          * @return  The layout containing the list item's child components.
          */
-        LayoutManager::Layout getLayout();
-        
+        LayoutManager::Layout getLayout() const;
+
         /**
          * Sets the layout used by this list item.  All components in the layout
          * will be added to the list item as child components.
@@ -123,10 +130,24 @@ private:
          *                    animation. 
          */
         void setLayout(LayoutManager::Layout layout,
-            const TransitionAnimator::Transition transition
+                const TransitionAnimator::Transition transition
                 = TransitionAnimator::none,
-            const unsigned int duration = 0));
+                const unsigned int duration = 0));
         
+        /**
+         * Gets the current list index assigned to this list item.
+         * 
+         * @return  The index represented by the list item. 
+         */
+        int getIndex() const;
+        
+        /**
+         * Sets the list index value stored by this list item.
+         * 
+         * @newIndex  The list index value to store.
+         */
+        void setIndex(const int newIndex);
+
     private:
         /**
          * Draws a border around the list item.
@@ -134,23 +155,39 @@ private:
          * @param g The Juce graphics context.
          */
         void paint(Graphics &g) override;
-        
+
         /**
          * Reapply the list item's layout when it is resized. 
          */
         void resized() override;
         
-        LayoutManager::Layout buttonLayout;
-    };
+        int index == -1;
+        
+        static const constexpr unsigned int borderWidth = 4;
 
+        LayoutManager buttonLayout;
+    };
 
     class FocusingList : public SimpleList
     {
     public:
-        FocusingList();
+        FocusingList() { }
 
         virtual ~FocusingList() { }
-        
+
+        /**
+         * Reloads list content, running updateListItem for each visible
+         * list item.
+         * 
+         * @param transition   Optional transition animation to apply when 
+         *                    updating list content.
+         * 
+         * @param duration     Duration in milliseconds to run transition 
+         *                    animations.
+         */
+        void updateList(TransitionAnimator::Transition transition
+                = TransitionAnimator::none, unsigned int duration = 0);
+
     protected:
         /**
          * Reads the number of list items from the parent FocusingListPage
@@ -158,7 +195,7 @@ private:
          * @return the number of items in the list.
          */
         virtual unsigned int getListSize() override;
-        
+
         /**
          * Updates a list item, loading and applying its layout from the parent
          * FocusingListPage.
@@ -171,9 +208,24 @@ private:
          * @return   The updated ListItem.
          */
         virtual Component* updateListItem(Component* listItem,
-            unsigned int index) override;
+                unsigned int index) override;
+        
+    private:
+        //default number of list items per page
+        static const constexpr unsigned int defaultItemsPerPage = 5;
+
+        //default list padding fraction
+        static const constexpr float defaultPaddingFraction = 0.05;
+        
+        //Layout to update and use for any focused list item.
+        LayoutManager::Layout selectedLayout;
     };
 
     FocusingList pageList;
+    
+    //milliseconds to take when (un)focusing list content
+    static const constexpr unsigned int focusDuration = 300;
+
+    //Current selected list index.
     int selectedIndex = -1;
 };
