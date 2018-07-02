@@ -55,6 +55,7 @@
 		9CE0D8EDF90274B66789B5B4 = {isa = PBXBuildFile; fileRef = C4B7F2605DDC614A6295BC76; };
 		A62BBA197B5C6AF9E457A28E = {isa = PBXBuildFile; fileRef = 45D42417D3D0CEAC8E93F20B; };
 		6B5F5D25EAAE53CB971A05B4 = {isa = PBXBuildFile; fileRef = B281180296E2F68C0D1C81FE; };
+		EB8CBC866A2D9D29F58D538E = {isa = PBXBuildFile; fileRef = 73240445B2BF668C63139062; };
 		720B5981C48C2EE300F2002D = {isa = PBXBuildFile; fileRef = E7D0A3633C3BAD15D88AF8EF; };
 		AAF92988679552ADC9208BB0 = {isa = PBXBuildFile; fileRef = F452132CA9D3D080E83AD424; };
 		BB9AF355B935270E51B88027 = {isa = PBXBuildFile; fileRef = AB0E482DAE9BEB8A259F2C17; };
@@ -155,6 +156,7 @@
 		1CC9DDA62B928C623D1C2EE2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScrollingAppMenu.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Types/ScrollingAppMenu.cpp"; sourceTree = "SOURCE_ROOT"; };
 		1D245B6E8B1AEAA57F3E55ED = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AdvancedSettingsPage.h; path = "../../Source/Components/Pages/Advanced Settings Page/AdvancedSettingsPage.h"; sourceTree = "SOURCE_ROOT"; };
 		1DE205CBDB541988A015F7A8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TransitionAnimator.cpp; path = ../../Source/Components/TransitionAnimator.cpp; sourceTree = "SOURCE_ROOT"; };
+		1E51D063D32B23E4AC846861 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FocusingListPage.h; path = "../../Source/Components/Pages/Settings Page/FocusingListPage.h"; sourceTree = "SOURCE_ROOT"; };
 		1E9E217DFCDE71E1995501E0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NewDesktopAppEditor.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Editors/NewDesktopAppEditor.h"; sourceTree = "SOURCE_ROOT"; };
 		1F10F22B68853898866A4490 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PageAppFolder.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Folders/PageAppFolder.h"; sourceTree = "SOURCE_ROOT"; };
 		201B4889632122AEF45DBFF2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WindowFocus.cpp; path = ../../Source/Util/WindowFocus.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -231,6 +233,7 @@
 		7035C11BC5EAB1E71C8507CF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FelPage.h; path = "../../Source/Components/Pages/Power Page/FelPage.h"; sourceTree = "SOURCE_ROOT"; };
 		70821AA3FFF3F16D181E7613 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigurableComponent.h; path = ../../Source/Components/Configurable/ConfigurableComponent.h; sourceTree = "SOURCE_ROOT"; };
 		71D9E2052FB7F3B71773C017 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NewDesktopAppEditor.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Editors/NewDesktopAppEditor.cpp"; sourceTree = "SOURCE_ROOT"; };
+		73240445B2BF668C63139062 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FocusingListPage.cpp; path = "../../Source/Components/Pages/Settings Page/FocusingListPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		7618424B43AAB00C45F316A2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenuItemFactory.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItemFactory.h"; sourceTree = "SOURCE_ROOT"; };
 		762F992C19C2E300EAB92094 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConnectionPage.h; path = "../../Source/Components/Pages/Settings Page/ConnectionPage.h"; sourceTree = "SOURCE_ROOT"; };
 		7643C01C5204DE12B74037CB = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesktopEntry.h; path = "../../Source/FreeDesktop/Desktop Entries/DesktopEntry.h"; sourceTree = "SOURCE_ROOT"; };
@@ -484,6 +487,8 @@
 					B281180296E2F68C0D1C81FE,
 					51DE45AF71067519A80E9FE6, ); name = "Power Page"; sourceTree = "<group>"; };
 		663A784635D4704F72715384 = {isa = PBXGroup; children = (
+					73240445B2BF668C63139062,
+					1E51D063D32B23E4AC846861,
 					E31856ECFC4A1614ACF556D6,
 					762F992C19C2E300EAB92094,
 					E7D0A3633C3BAD15D88AF8EF,
@@ -897,6 +902,7 @@
 					9CE0D8EDF90274B66789B5B4,
 					A62BBA197B5C6AF9E457A28E,
 					6B5F5D25EAAE53CB971A05B4,
+					EB8CBC866A2D9D29F58D538E,
 					720B5981C48C2EE300F2002D,
 					AAF92988679552ADC9208BB0,
 					BB9AF355B935270E51B88027,
