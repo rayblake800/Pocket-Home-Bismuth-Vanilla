@@ -10,6 +10,17 @@ downButton(NavButton::down)
     downButton.addListener(this);
 }
 
+/**
+ * Provides the weight value used to set each list item's relative
+ * height. All list items have vertical weight 1 by default.  Subclasses
+ * should override this method if they need to have rows of varying
+ * heights.
+ */
+unsigned int SimpleList::getListItemWeight(const unsigned int index)
+{
+    return 1;
+}
+
 /*
  * Sets the number of list items that are displayed at one time.
  */

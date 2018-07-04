@@ -154,7 +154,8 @@ private:
          * 
          * @param g The Juce graphics context.
          */
-        void paint(Graphics &g) override;
+        void paintButton(Graphics &g, bool isMouseOverButton,
+                        bool isButtonDown) override;
 
         /**
          * Reapply the list item's layout when it is resized. 
@@ -171,7 +172,7 @@ private:
     class FocusingList : public SimpleList
     {
     public:
-        FocusingList() { }
+        FocusingList();
 
         virtual ~FocusingList() { }
 
@@ -210,6 +211,20 @@ private:
         virtual Component* updateListItem(Component* listItem,
                 unsigned int index) override;
         
+        /**
+         * Gets the weight value used to determine the height of a particular
+         * row item.  When no list item is selected, all row heights are
+         * equal.  When a list item is selected, the selected item uses the
+         * entire list height.
+         *
+         * @param index  The index of a list item, or of an empty space after
+         *               the last list item.
+         *
+         * @return  Zero if a row item is selected and it is not the row item
+         *          at the given index, one otherwise.
+         */ 
+        virtual unsigned int getListItemWeight(const unsigned int index)
+                override;    
     private:
         //default number of list items per page
         static const constexpr unsigned int defaultItemsPerPage = 5;

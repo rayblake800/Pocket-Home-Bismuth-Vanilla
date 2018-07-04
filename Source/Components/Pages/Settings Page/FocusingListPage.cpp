@@ -97,7 +97,7 @@ LayoutManager::Layout FocusingListPage::ListItem::getLayout() const
  */
 void FocusingListPage::ListItem::setLayout(LayoutManager::Layout layout,
         const TransitionAnimator::Transition transition,
-        const unsigned int duration)) 
+        const unsigned int duration) 
 { 
     buttonLayout.transitionLayout(layout, this, transition, duration);
 }
@@ -123,7 +123,8 @@ void FocusingListPage::ListItem::setIndex(const int newIndex)
 /*
  * Draws a border around the list item.
  */
-void FocusingListPage::ListItem::paint(Graphics &g) 
+void FocusingListPage::ListItem::paintButton(Graphics &g,
+                bool isMouseOverButton, bool isButtonDown) 
 { 
     g.setColour(findColour(Label::ColourIds::textColourId));
     g.drawRoundedRectangle(0, 0, getWidth(), getHeight(), 1, borderWidth);
@@ -182,7 +183,7 @@ Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
     }
     else
     {
-        pageButton = static_cast<ListItem*>(listItem)
+        pageButton = static_cast<ListItem*>(listItem);
     }
     
     
@@ -200,3 +201,22 @@ Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
     
     
 }
+
+/**
+ * Gets the weight value used to determine the height of a particular
+ * row item.  When no list item is selected, all row heights are
+ * equal.  When a list item is selected, the selected item uses the
+ * entire list height.
+ */ 
+unsigned int FocusingListPage::FocusingList::getListItemWeight
+(const unsigned int index)
+{
+    FocusingListPage* parentPage 
+            = static_cast<FocusingListPage*>(getParentComponent());
+    int selected = parentPage->getSelectedIndex();
+    if(selected == index || selected < 0)
+    {
+        return 1;
+    }
+    return 0;
+} 
