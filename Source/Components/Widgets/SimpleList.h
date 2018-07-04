@@ -26,6 +26,7 @@ public:
      */
     virtual unsigned int getListSize() = 0;
     
+protected:
     /**
      * Updates a component so it can be used as a specific list item.
      * 
@@ -39,9 +40,22 @@ public:
      * @return  The updated list Component. 
      */
     virtual Component* updateListItem(Component* listItem,
-            unsigned int index) = 0;
+            const unsigned int index) = 0;
     
-protected:
+    /**
+     * Provides the weight value used to set each list item's relative
+     * height. All list items have vertical weight 1 by default.  Subclasses
+     * should override this method if they need to have rows of varying
+     * heights.
+     *
+     * @param index  A list index.  This may be an index greater than the list
+     *               bounds, if determining the weight of an empty list row
+     *               after the last list item.
+     *
+     * @return  The weight value that should be used to determine the relative
+     *          height of this index.
+     */
+    virtual unsigned int getListItemWeight(const unsigned int index);    
     
     /**
      * Sets the number of list items that are displayed at one time.
