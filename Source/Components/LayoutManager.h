@@ -125,6 +125,24 @@ public:
          */
         bool isEmpty() const;
         
+        /**
+         * RowItems are equivalent if they have the same weight and
+         * Component.
+         *
+         * @param rhs  The row item being compared to this one.
+         *
+         * @return  True iff this and rhs are equivalent.
+         */
+        bool operator==(const RowItem& rhs) const
+        {
+            return component == rhs.component && weight == rhs.weight;
+        }
+
+        bool operator!=(const RowItem& rhs) const
+        {
+            return !(*this == rhs);
+        }
+
     private:
         /**
          * Points to a component in the layout, or nullptr to add an empty space
@@ -190,7 +208,29 @@ public:
          * @return  The weight value used to set the row's height.
          */
         unsigned int getWeight() const;
-        
+     
+        /**
+         *
+         * @param rhs
+         *
+         * @return
+         */
+        bool operator==(const Row& rhs) const
+        {
+            if(weight != rhs.weight 
+                    || rowItems.size() != rhs.rowItems.size())
+            {
+                return false;
+            }
+            for(int i = 0; i < rowItems.size(); i++)
+            {
+                if(rowItems[i] != rhs.rowItems[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }   
     private:      
         /**
          * Row height = total height * weight / yWeightSum

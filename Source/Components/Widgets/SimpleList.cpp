@@ -72,7 +72,7 @@ void SimpleList::refreshListContent(TransitionAnimator::Transition transition,
     int componentsSaved = listComponents.size();
     for(int i = 0; i < itemsPerPage; i++)
     {
-        LayoutManager::Row row(1);
+        LayoutManager::Row row(getListItemWeight(i));
         int itemIndex = i + pageIndex * itemsPerPage;
         if(itemIndex < listSize)
         {

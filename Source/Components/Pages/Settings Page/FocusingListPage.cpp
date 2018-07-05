@@ -3,6 +3,11 @@
 FocusingListPage::FocusingListPage() : PageComponent("FocusingListPage") 
 { 
     pageList.setItemsPerPage()
+    setBackButton(PageComponent::leftBackButton);
+    setLayout(LayoutManager::Layout(
+    {
+        LayoutManager::Row(1,{ LayoutManager::RowItem(&pageList) })
+    }));
 }
 
 /*
@@ -101,8 +106,6 @@ void FocusingListPage::ListItem::setLayout(LayoutManager::Layout layout,
 { 
     buttonLayout.transitionLayout(layout, this, transition, duration);
 }
-
-
         
 /*
  * Gets the current list index assigned to this list item.
@@ -189,17 +192,25 @@ Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
     
     FocusingListPage* parentPage 
             = static_cast<FocusingListPage*>(getParentComponent());
-    
     LayoutManager::Layout buttonLayout = pageButton->getLayout();
-    
+    bool animateTransition = false;
     if(index == parentPage->getSelectedIndex())
     {
-        updateSelectedItemLayout
-        layout = controlLayout;
-        
+        animateTransition = (buttonLayout == selectedLayout);
+        parentPage->updateSelectedItemLayout(selectedLayout);
+        buttonLayout = selectedLayout;
     }
-    
-    
+    else
+    {
+        animateTransition = !(buttonLayout == selectedLayout);
+        parentPage->updateListItemLayout(buttonLayout, index);
+    }
+    animateTransition = (animateTransition
+            && (pageButton->getIndex() == index));
+
+    pageButton->setLayout(buttonLayout, (animateTransition ?
+            TransitionAnimator::toDestination
+            : TransitionAnimator::none), parentPage->focusDuration);
 }
 
 /**
