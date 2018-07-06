@@ -126,22 +126,23 @@ public:
         bool isEmpty() const;
         
         /**
-         * RowItems are equivalent if they have the same weight and
-         * Component.
+         * Checks if this RowItem and another are equivalent. RowItems are 
+         * equivalent if they have the same weight and Component.
          *
          * @param rhs  The row item being compared to this one.
          *
-         * @return  True iff this and rhs are equivalent.
+         * @return     True iff this and rhs are equivalent.
          */
-        bool operator==(const RowItem& rhs) const
-        {
-            return component == rhs.component && weight == rhs.weight;
-        }
+        bool operator==(const RowItem& rhs) const;
 
-        bool operator!=(const RowItem& rhs) const
-        {
-            return !(*this == rhs);
-        }
+        /**
+         * Checks if this RowItem and another are not equivalent.
+         *
+         * @param rhs  Another RowItem being compared to this one.
+         *
+         * @return     True iff this and rhs are not equivalent.
+         */
+        bool operator!=(const RowItem& rhs) const;
 
     private:
         /**
@@ -149,6 +150,7 @@ public:
          * in the layout.
          */
         Component* component = nullptr;
+
         /**
          * Component width = total width * weight / xWeightSum[rowNumber]
          */
@@ -210,32 +212,32 @@ public:
         unsigned int getWeight() const;
      
         /**
+         * Checks if this Row and another Row are equivalent.  Rows are
+         * equivalent if they have the same vertical weight and each RowItem
+         * in this Row is equivalent to another row item at the same index
+         * in the other row.
          *
-         * @param rhs
+         * @param rhs  The other row being compared to this one.
          *
-         * @return
+         * @return     True iff this row and rhs are equivalent.
          */
-        bool operator==(const Row& rhs) const
-        {
-            if(weight != rhs.weight 
-                    || rowItems.size() != rhs.rowItems.size())
-            {
-                return false;
-            }
-            for(int i = 0; i < rowItems.size(); i++)
-            {
-                if(rowItems[i] != rhs.rowItems[i])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }   
+        bool operator==(const Row& rhs) const;
+
+        /**
+         * Checks if this Row and another Row are not equivalent.
+         *
+         * @param rhs  The other Row being compared with this row.
+         *
+         * @return     True iff this Row and rhs are not equivalent.
+         */
+        bool operator !=(const Row& rhs) const;   
+
     private:      
         /**
          * Row height = total height * weight / yWeightSum
          */
         unsigned int weight;
+
         /**
          * Holds all ComponentLayouts in the row.
          */
@@ -247,7 +249,7 @@ public:
     public:
         
         /**
-         * @param rows  The rows of components arranged in this Layout
+         * @param rows  The rows of components arranged in this Layout.
          */
         Layout(std::vector<Row> rows = std::vector<Row>()) : 
         rows(rows) { }
@@ -439,6 +441,26 @@ public:
          * @param row  The new layout row to add.
          */
         void addRow(const Row row);
+
+        /**
+         * Checks if this layout and another are equivalent.  Layouts are 
+         * equivalent if they have the same margin and padding values, and for
+         * each row index, their rows are equivalent.
+         *
+         * @param rhs  Another Layout to compare to this Layout.
+         *
+         * @return     True iff this Layout and rhs are equivalent.
+         */
+        bool operator==(const Layout& rhs) const;
+
+        /**
+         * Checks if this layout and another are not equivalent.
+         *
+         * @param rhs  Another Layout to compare to this Layout
+         *
+         * @return     True iff this Layout and rhs are not equivalent.
+         */
+        bool operator!=(const Layout& rhs) const;
     private:
         
         //Margin Sizes:
@@ -467,19 +489,19 @@ public:
     /**
      * Gets the current component layout held by this LayoutManager.
      * 
-     * @return  a copy of the layout saved with setLayout().
+     * @return  A copy of the layout saved with setLayout().
      */
     Layout getLayout();
     
     /**
      * Set a new Component layout, removing all old layout definitions.
      * 
-     * @param rows          Defines the position and weight of all components. 
-     *                       Null components may be used to define empty spaces. 
+     * @param rows           Defines the position and weight of all components. 
+     *                      Null components may be used to define empty spaces. 
      * 
-     * @param parentToInit  If a non-null component pointer is provided, This 
-     *                       will add all components in the layout as children 
-     *                       of parentToInit and make them visible.
+     * @param parentToInit   If a non-null component pointer is provided, This 
+     *                      will add all components in the layout as children 
+     *                      of parentToInit and make them visible.
      */
     void setLayout(const Layout& layout, Component* parentToInit = nullptr);
     
@@ -516,7 +538,7 @@ public:
 
     /**
      * Arranges the components within a bounding rectangle, optionally applying
-     *  a transition animation to all components in the layout.
+     * a transition animation to all components in the layout.
      * 
      * @param bounds      The rectangle components will be positioned within.
      * 
@@ -533,7 +555,7 @@ public:
     /**
      * Remove all saved component layout parameters.
      * 
-     * @param removeComponentsFromParent  If true, all components will also
+     * @param removeComponentsFromParent   If true, all components will also
      *                                     be removed from their parent 
      *                                     component.
      */
@@ -549,8 +571,10 @@ public:
 private:
     //Current layout definition
     Layout layout;
+
     //Holds the sum of component weights for each row
     Array<unsigned int> xWeightSums;
+
     //holds the sum of component row weights.
     unsigned int yWeightSum = 0;
 };

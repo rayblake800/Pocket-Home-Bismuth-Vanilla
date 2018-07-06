@@ -277,6 +277,23 @@ bool LayoutManager::RowItem::isEmpty() const
 {
     return component == nullptr;
 }
+ 
+/*
+ * Checks if this RowItem and another are equivalent. RowItems are 
+ * equivalent if they have the same weight and Component.
+ */
+bool LayoutManager::RowItem::operator==(const LayoutManager::RowItem& rhs) const
+{
+    return component == rhs.component && weight == rhs.weight;
+}
+
+/*
+ * Checks if this RowItem and another are not equivalent.
+ */
+bool LayoutManager::RowItem::operator!=(const LayoutManager::RowItem& rhs) const
+{
+    return !(*this == rhs);
+}
 
 //######################### LayoutManager::Row #################################
 
@@ -320,11 +337,41 @@ unsigned int LayoutManager::Row::getWeight() const
 {
     return weight;
 }
+/*
+ * Checks if this Row and another Row are equivalent.  Rows are
+ * equivalent if they have the same vertical weight and each RowItem
+ * in this Row is equivalent to another row item at the same index
+ * in the other row.
+ */
+bool LayoutManager::Row::operator==(const LayoutManager::Row& rhs) const
+{
+    if(weight != rhs.weight 
+            || rowItems.size() != rhs.rowItems.size())
+    {
+        return false;
+    }
+    for(int i = 0; i < rowItems.size(); i++)
+    {
+        if(rowItems[i] != rhs.rowItems[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+/*
+ * Checks if this Row and another Row are not equivalent.
+ */
+bool LayoutManager::Row::operator !=(const LayoutManager::Row& rhs) const
+{
+    return !(*this == rhs);
+}
 
 //######################## LayoutManager::Layout ###############################
 
 /*
- *  Sets the size of the top and bottom margins of the layout using a
+ * Sets the size of the top and bottom margins of the layout using a
  * weight value.
  */
 void LayoutManager::Layout::setYMarginWeights(const unsigned int weight)
@@ -334,7 +381,7 @@ void LayoutManager::Layout::setYMarginWeights(const unsigned int weight)
 }
 
 /*
- *  Sets the size of the left and right margins of the layout as a
+ * Sets the size of the left and right margins of the layout as a
  * fraction of the total layout width.
  */
 void LayoutManager::Layout::setXMarginFraction(const float fraction)
@@ -343,7 +390,7 @@ void LayoutManager::Layout::setXMarginFraction(const float fraction)
 }
 
 /*
- *  Sets the size of the top and bottom margins of the layout as a
+ * Sets the size of the top and bottom margins of the layout as a
  * fraction of the total layout height.
  */
 void LayoutManager::Layout::setYMarginFraction(const float fraction)
@@ -353,7 +400,7 @@ void LayoutManager::Layout::setYMarginFraction(const float fraction)
 }
 
 /*
- *  Sets the fraction of the total layout width to leave empty between
+ * Sets the fraction of the total layout width to leave empty between
  * all row items with non-zero weights.
  */
 void LayoutManager::Layout::setXPaddingFraction(const float fraction)
@@ -492,6 +539,42 @@ void LayoutManager::Layout::addRow
 (const LayoutManager::Row row)
 {
     rows.push_back(row);
+}
+
+/*
+ * Checks if this layout and another are equivalent.  Layouts are 
+ * equivalent if they have the same margin and padding values, and for
+ * each row index, their rows are equivalent.
+ */
+bool LayoutManager::Layout::operator==(const LayoutManager::Layout& rhs) const
+{
+    if(yPaddingFraction != rhs.yPaddingFraction
+            || yPaddingWeight   != rhs.yPaddingWeight
+            || xPaddingFraction != rhs.xPaddingFraction
+            || xPaddingWeight   != rhs.xPaddingWeight
+            || yMarginFraction  != rhs.yMarginFraction
+            || yMarginWeight    != rhs.yMarginWeight
+            || xMarginFraction  != rhs.xMarginFraction
+            || rows.size()      != rhs.rows.size())
+    {
+        return false;
+    }
+    for(int i = 0; i < rows.size(); i++)
+    {
+        if(rows[i] != rhs.rows[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Checks if this layout and another are not equivalent.
+ */
+bool LayoutManager::Layout::operator!=(const LayoutManager::Layout& rhs) const
+{
+    return !(*this == rhs);
 }
 
 #if JUCE_DEBUG
