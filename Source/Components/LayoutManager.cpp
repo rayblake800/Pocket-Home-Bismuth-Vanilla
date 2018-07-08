@@ -151,11 +151,7 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
     for (int rowNum = 0; rowNum < layout.rowCount(); rowNum++)
     {
         const Row& row = layout.getRow(rowNum);
-        if(row.getWeight() == 0)
-        {
-            continue;
-        }
-        if (yPos != yStart)
+        if (row.getWeight() > 0 && yPos != yStart)
         {
             yPos += yPaddingSize;
         }
@@ -195,11 +191,7 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
         for (int cNum = 0; cNum < row.itemCount(); cNum++)
         {
             const RowItem& rowItem = row.getRowItem(cNum);
-            if(rowItem.getWeight() == 0)
-            {
-                continue;
-            }
-            if (xPos != xStart)
+            if (rowItem.getWeight() > 0 && xPos != xStart)
             {
                 xPos += xPaddingSize;
             }

@@ -1,7 +1,10 @@
 #include "NavButton.h"
 
 NavButton::NavButton(NavButton::WindowEdge edge) : edge(edge),
-ConfigurableImageButton(NavButton::getEdgeComponentKey(edge)) { }
+ConfigurableImageButton(NavButton::getEdgeComponentKey(edge)) 
+{ 
+    setWantsKeyboardFocus(false);
+}
  
 /*
  * Gets the window edge assigned to this NavButton. 

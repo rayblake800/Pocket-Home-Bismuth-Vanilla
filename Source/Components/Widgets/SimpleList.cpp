@@ -34,11 +34,6 @@ void SimpleList::setItemsPerPage(int perPage)
         {
             refreshListContent();
         }
-        //if items per page decreased, remove unneeded list components
-        while(listComponents.size() > itemsPerPage)
-        {
-            listComponents.removeLast();
-        }
     }
 }
 
@@ -85,12 +80,6 @@ void SimpleList::refreshListContent(TransitionAnimator::Transition transition,
         }
         layout.addRow(row);
     }
-    layout.setYPaddingFraction(yPaddingFraction);
-    DBG("yPadding = " << yPaddingFraction);
-    layout.setYMarginFraction(std::max(upButton.yMarginFractionNeeded(),
-            downButton.yMarginFractionNeeded()));
-    layoutManager.transitionLayout(layout, this, transition, duration);
-    layoutManager.printLayout();
     //update recycled components
     for(int i = 0; i < itemsPerPage; i++)
     {
@@ -103,6 +92,10 @@ void SimpleList::refreshListContent(TransitionAnimator::Transition transition,
     }
     upButton.setVisible(pageIndex > 0);
     downButton.setVisible(listSize > ((pageIndex + 1) * itemsPerPage));
+    layout.setYPaddingFraction(yPaddingFraction);
+    layout.setYMarginFraction(std::max(upButton.yMarginFractionNeeded(),
+            downButton.yMarginFractionNeeded()));
+    layoutManager.transitionLayout(layout, this, transition, duration);
 }
 
 /*

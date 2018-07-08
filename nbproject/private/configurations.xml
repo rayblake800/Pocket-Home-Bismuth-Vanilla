@@ -5627,6 +5627,8 @@
               <in>ConnectionPage.h</in>
               <in>ConnectionSettingsComponent.cpp</in>
               <in>ConnectionSettingsComponent.h</in>
+              <in>FocusingListPage.cpp</in>
+              <in>FocusingListPage.h</in>
               <in>SettingsPage.cpp</in>
               <in>SettingsPage.h</in>
               <in>WifiSettingsComponent.cpp</in>

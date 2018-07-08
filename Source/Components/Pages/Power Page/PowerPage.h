@@ -11,7 +11,10 @@
 class TestPage : public FocusingListPage
 {
 public:
-    TestPage() { updateList();}
+    TestPage() { 
+        setInterceptsMouseClicks(false, true); 
+        control.setInterceptsMouseClicks(false, false);
+        updateList();}
 private:
     ScalingLabel control;
     OwnedArray<ScalingLabel> listLabels;
@@ -34,6 +37,7 @@ protected:
         if(label == nullptr)
         {
             label = new ScalingLabel();
+            label->setInterceptsMouseClicks(false, false);
             listLabels.add(label);
             layout.addRow(LayoutManager::Row(1, 
                 {LayoutManager::RowItem(label)}));

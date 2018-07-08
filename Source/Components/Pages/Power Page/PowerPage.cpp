@@ -135,9 +135,9 @@ PowerPage::pageButtonClicked(Button *button)
 #if JUCE_DEBUG
     if (button == &testButton)
     {
-        TestPage* test = new TestPage();
-        addAndMakeVisible(test);
-        test->setBounds(getLocalBounds());
+        static TestPage test;
+        addAndMakeVisible(&test);
+        test.setBounds(getLocalBounds());
     }
 #endif
     ChildProcess commandProcess;

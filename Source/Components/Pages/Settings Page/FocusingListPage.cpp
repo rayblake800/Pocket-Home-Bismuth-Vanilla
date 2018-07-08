@@ -61,7 +61,7 @@ void FocusingListPage::updateList(TransitionAnimator::Transition transition,
 void FocusingListPage::pageButtonClicked(Button* button)
 {
     ListItem* listButton = dynamic_cast<ListItem*>(button);
-    DBG("Button " << listButton->getIndex() << " Clicked");
+    DBG("Button " << button->getName() << " Clicked");
     if(listButton != nullptr)
     {
         if(listButton->getIndex() != getSelectedIndex())
@@ -95,7 +95,7 @@ bool FocusingListPage::overrideBackButton()
 
 FocusingListPage::ListItem::ListItem() : Button("FocusingListItem") 
 { 
-    setInterceptsMouseClicks(true, true);
+    //setInterceptsMouseClicks(true, false);
     setWantsKeyboardFocus(false);
 }
 
@@ -140,6 +140,8 @@ void FocusingListPage::ListItem::setIndex(const int newIndex)
 void FocusingListPage::ListItem::paintButton(Graphics &g,
                 bool isMouseOverButton, bool isButtonDown) 
 { 
+    g.setColour(Colours::black);
+    g.fillRect(getLocalBounds());
     g.setColour(findColour(Label::ColourIds::textColourId));
     g.drawRoundedRectangle(0, 0, getWidth(), getHeight(), 1, borderWidth);
 }
