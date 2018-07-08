@@ -2,11 +2,13 @@
 
 FocusingListPage::FocusingListPage() : PageComponent("FocusingListPage") 
 { 
-    pageList.setItemsPerPage()
     setBackButton(PageComponent::leftBackButton);
     setLayout(LayoutManager::Layout(
     {
-        LayoutManager::Row(1,{ LayoutManager::RowItem(&pageList) })
+        LayoutManager::Row(1,
+        { 
+            LayoutManager::RowItem(&pageList, 1) 
+        })
     }));
 }
 
@@ -50,7 +52,7 @@ void FocusingListPage::deselect()
 void FocusingListPage::updateList(TransitionAnimator::Transition transition,
         unsigned int duration)
 {
-    refreshList(transition, duration);
+    pageList.updateList(transition, duration);
 }
 
 /*
@@ -59,6 +61,7 @@ void FocusingListPage::updateList(TransitionAnimator::Transition transition,
 void FocusingListPage::pageButtonClicked(Button* button)
 {
     ListItem* listButton = dynamic_cast<ListItem*>(button);
+    DBG("Button " << listButton->getIndex() << " Clicked");
     if(listButton != nullptr)
     {
         if(listButton->getIndex() != getSelectedIndex())
@@ -70,6 +73,10 @@ void FocusingListPage::pageButtonClicked(Button* button)
             deselect();
         }
     }
+    else
+    {
+        DBG("NULL list button!");
+    }
 }
 
 /*
@@ -78,7 +85,7 @@ void FocusingListPage::pageButtonClicked(Button* button)
  */
 bool FocusingListPage::overrideBackButton()
 {
-    if(getSelectedIndex() < 0)
+    if(getSelectedIndex() > 0)
     {
         return false;
     }
@@ -86,7 +93,11 @@ bool FocusingListPage::overrideBackButton()
     return true;
 }
 
-FocusingListPage::ListItem::ListItem() { }
+FocusingListPage::ListItem::ListItem() : Button("FocusingListItem") 
+{ 
+    setInterceptsMouseClicks(true, true);
+    setWantsKeyboardFocus(false);
+}
 
 /*
  * Gets the layout used by this list item.
@@ -153,7 +164,7 @@ FocusingListPage::FocusingList::FocusingList()
 */
 void FocusingListPage::FocusingList::updateList(
         TransitionAnimator::Transition transition,
-        unsigned int duration);
+        unsigned int duration)
 {
     refreshListContent(transition, duration);
 }
@@ -179,10 +190,13 @@ unsigned int FocusingListPage::FocusingList::getListSize()
 Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
         unsigned int index) 
 {
+    FocusingListPage* parentPage 
+            = static_cast<FocusingListPage*>(getParentComponent());
     ListItem * pageButton;
-    if(pageButton == nullptr)
+    if(listItem == nullptr)
     {
         pageButton = new ListItem();
+        pageButton->addListener(parentPage);
     }
     else
     {
@@ -190,8 +204,6 @@ Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
     }
     
     
-    FocusingListPage* parentPage 
-            = static_cast<FocusingListPage*>(getParentComponent());
     LayoutManager::Layout buttonLayout = pageButton->getLayout();
     bool animateTransition = false;
     if(index == parentPage->getSelectedIndex())
@@ -211,6 +223,8 @@ Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
     pageButton->setLayout(buttonLayout, (animateTransition ?
             TransitionAnimator::toDestination
             : TransitionAnimator::none), parentPage->focusDuration);
+    pageButton->setIndex(index);
+    return pageButton;
 }
 
 /**

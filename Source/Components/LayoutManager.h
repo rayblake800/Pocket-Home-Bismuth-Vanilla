@@ -491,7 +491,7 @@ public:
      * 
      * @return  A copy of the layout saved with setLayout().
      */
-    Layout getLayout();
+    Layout getLayout() const;
     
     /**
      * Set a new Component layout, removing all old layout definitions.

@@ -135,7 +135,9 @@ PowerPage::pageButtonClicked(Button *button)
 #if JUCE_DEBUG
     if (button == &testButton)
     {
-        DBG("No debug routine defined");
+        TestPage* test = new TestPage();
+        addAndMakeVisible(test);
+        test->setBounds(getLocalBounds());
     }
 #endif
     ChildProcess commandProcess;

@@ -8,6 +8,7 @@ downButton(NavButton::down)
     addAndMakeVisible(downButton);
     upButton.addListener(this);
     downButton.addListener(this);
+    setInterceptsMouseClicks(false, true);
 }
 
 /**

@@ -3,7 +3,7 @@
 /*
  * Gets the current component layout held by this LayoutManager.
  */
-LayoutManager::Layout LayoutManager::getLayout()
+LayoutManager::Layout LayoutManager::getLayout() const
 {
     return layout;
 }

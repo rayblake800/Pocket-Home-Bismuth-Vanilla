@@ -132,7 +132,7 @@ private:
         void setLayout(LayoutManager::Layout layout,
                 const TransitionAnimator::Transition transition
                 = TransitionAnimator::none,
-                const unsigned int duration = 0));
+                const unsigned int duration = 0);
         
         /**
          * Gets the current list index assigned to this list item.
@@ -162,7 +162,7 @@ private:
          */
         void resized() override;
         
-        int index == -1;
+        int index = -1;
         
         static const constexpr unsigned int borderWidth = 4;
 
