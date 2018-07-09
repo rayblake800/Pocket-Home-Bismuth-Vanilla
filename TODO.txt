@@ -1,6 +1,3 @@
--Add a NavigationButton class to handle all four directional, config-defined
- navigation buttons.
-
 -Integrate TransitionAnimator with LayoutManager, use to animate AppMenu,
  ConnectionPage
 
@@ -14,6 +11,8 @@
  -Add a Listener interface to WifiAccessPoint objects
 
 -Make the wifi page regularly scan for updates when open.
+
+-Wifi error: libnm-glib-WARNING nm-access-point.c:310 ap_ssid == NULL
 
 -Finish documenting and formatting AppMenu helper classes.
 

@@ -95,7 +95,6 @@ bool FocusingListPage::overrideBackButton()
 
 FocusingListPage::ListItem::ListItem() : Button("FocusingListItem") 
 { 
-    //setInterceptsMouseClicks(true, false);
     setWantsKeyboardFocus(false);
 }
 
@@ -140,8 +139,6 @@ void FocusingListPage::ListItem::setIndex(const int newIndex)
 void FocusingListPage::ListItem::paintButton(Graphics &g,
                 bool isMouseOverButton, bool isButtonDown) 
 { 
-    g.setColour(Colours::black);
-    g.fillRect(getLocalBounds());
     g.setColour(findColour(Label::ColourIds::textColourId));
     g.drawRoundedRectangle(0, 0, getWidth(), getHeight(), 1, borderWidth);
 }
@@ -167,8 +164,14 @@ FocusingListPage::FocusingList::FocusingList()
 void FocusingListPage::FocusingList::updateList(
         TransitionAnimator::Transition transition,
         unsigned int duration)
-{
-    refreshListContent(transition, duration);
+{   
+    FocusingListPage* parentPage 
+            = dynamic_cast<FocusingListPage*>(getParentComponent());
+    if(parentPage != nullptr)
+    {
+        setNavButtonsVisible(parentPage->getSelectedIndex() < 0);
+        refreshListContent(transition, duration);
+    }
 }
 
 /*
@@ -193,7 +196,12 @@ Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
         unsigned int index) 
 {
     FocusingListPage* parentPage 
-            = static_cast<FocusingListPage*>(getParentComponent());
+            = dynamic_cast<FocusingListPage*>(getParentComponent());
+    if(parentPage == nullptr)
+    {
+        DBG("FocusingListPage::" << __func__ << ": Parent is null!");
+        return nullptr;
+    }
     ListItem * pageButton;
     if(listItem == nullptr)
     {
@@ -204,19 +212,23 @@ Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
     {
         pageButton = static_cast<ListItem*>(listItem);
     }
-    
-    
+       
     LayoutManager::Layout buttonLayout = pageButton->getLayout();
-    bool animateTransition = false;
-    if(index == parentPage->getSelectedIndex())
+    bool wasSelected = (buttonLayout == selectedLayout);
+    bool  isSelected = (index == parentPage->getSelectedIndex());
+    bool animateTransition = (wasSelected != isSelected);
+
+    if(isSelected)
     {
-        animateTransition = (buttonLayout == selectedLayout);
         parentPage->updateSelectedItemLayout(selectedLayout);
-        buttonLayout = selectedLayout;
+        buttonLayout = selectedLayout;    
     }
     else
     {
-        animateTransition = !(buttonLayout == selectedLayout);
+        if(wasSelected)
+        {
+            buttonLayout = LayoutManager::Layout();
+        }
         parentPage->updateListItemLayout(buttonLayout, index);
     }
     animateTransition = (animateTransition
@@ -245,5 +257,6 @@ unsigned int FocusingListPage::FocusingList::getListItemWeight
     {
         return 1;
     }
+    DBG("selected = " << selected << ", index=" <<(int) index);
     return 0;
 } 

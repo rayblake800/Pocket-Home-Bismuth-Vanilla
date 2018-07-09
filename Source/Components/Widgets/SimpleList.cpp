@@ -37,6 +37,14 @@ void SimpleList::setItemsPerPage(int perPage)
     }
 }
 
+/*
+ * Gets the number of list items shown on the page at one time.
+ */
+unsigned int SimpleList::getItemsPerPage() const
+{
+    return itemsPerPage;
+}
+
 
     
 /*
@@ -68,8 +76,8 @@ void SimpleList::refreshListContent(TransitionAnimator::Transition transition,
     int componentsSaved = listComponents.size();
     for(int i = 0; i < itemsPerPage; i++)
     {
-        LayoutManager::Row row(getListItemWeight(i));
         int itemIndex = i + pageIndex * itemsPerPage;
+        LayoutManager::Row row(getListItemWeight(itemIndex));
         if(itemIndex < listSize)
         {
             if(componentsSaved < i || listComponents[i] == nullptr)
@@ -90,13 +98,34 @@ void SimpleList::refreshListContent(TransitionAnimator::Transition transition,
         }
         updateListItem(listComponents[i], itemIndex);
     }
-    upButton.setVisible(pageIndex > 0);
-    downButton.setVisible(listSize > ((pageIndex + 1) * itemsPerPage));
+    upButton.setVisible(showNavButtons && pageIndex > 0);
+    downButton.setVisible(showNavButtons
+            && listSize > ((pageIndex + 1) * itemsPerPage));
     layout.setYPaddingFraction(yPaddingFraction);
     layout.setYMarginFraction(std::max(upButton.yMarginFractionNeeded(),
             downButton.yMarginFractionNeeded()));
     layoutManager.transitionLayout(layout, this, transition, duration);
+    layoutManager.printLayout();
 }
+
+/*
+ * Shows or hides the list page navigation buttons. By default, navigation
+ * buttons will be visible.  Even if navigation buttons are currently
+ * set as visible, the up navigation button will still be hidden on the
+ * first list page, and the down navigation button will still be hidden on
+ * the last list page.
+ */
+void SimpleList::setNavButtonsVisible(bool buttonsVisible)
+{
+    if(buttonsVisible != showNavButtons)
+    {
+        showNavButtons = buttonsVisible;
+        upButton.setVisible(showNavButtons && pageIndex > 0);
+        downButton.setVisible(showNavButtons
+               && getListSize() > ((pageIndex + 1) * itemsPerPage));
+    }
+}
+
 
 /*
  * Scrolls the list when the navigation buttons are clicked.  
