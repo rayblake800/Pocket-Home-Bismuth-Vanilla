@@ -7,55 +7,6 @@
 #include "Localized.h"
 #include "FocusingListPage.h"
 
-//testing FocusingListPage
-class TestPage : public FocusingListPage
-{
-public:
-    TestPage() { 
-        setInterceptsMouseClicks(false, true); 
-        control.setInterceptsMouseClicks(false, false);
-        updateList();}
-private:
-    ScalingLabel control;
-    OwnedArray<ScalingLabel> listLabels;
-protected:
-    virtual unsigned int getListSize() override { return 15; }
-    
-    virtual void updateListItemLayout(LayoutManager::Layout& layout,
-                    const unsigned int index) override 
-    {
-        ScalingLabel* label = nullptr; 
-        if(layout.rowCount() > 0)
-        {
-            LayoutManager::Row row = layout.getRow(0);
-            if(!row.isEmpty())
-            {
-                label = (ScalingLabel*) layout.getRow(0).getRowItem(0)
-                      .getComponent();
-            }
-        }
-        if(label == nullptr)
-        {
-            label = new ScalingLabel();
-            label->setInterceptsMouseClicks(false, false);
-            listLabels.add(label);
-            layout.addRow(LayoutManager::Row(1, 
-                {LayoutManager::RowItem(label)}));
-        }
-        label->setText(String("label ")+String(index), 
-                NotificationType::dontSendNotification);
-    }
-    virtual void updateSelectedItemLayout(LayoutManager::Layout& layout)
-            override { 
-        if(layout.rowCount() == 0)
-        {
-            control.setText("control", NotificationType::dontSendNotification);
-            layout.addRow(LayoutManager::Row(1, 
-                {LayoutManager::RowItem(&control)}));
-        }
-    }
-};
-
 /**
  * @file PowerPageComponent.h
  * 
@@ -137,4 +88,3 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerPage)
 };
-
