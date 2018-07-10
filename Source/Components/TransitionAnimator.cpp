@@ -176,7 +176,7 @@ void TransitionAnimator::transitionOut(Component* component,
                 break;
 	    case Transition::toDestination:
             case Transition::none:
-		component->setBounds(Rectangle<int>(0,0,0,0));
+		//component->setBounds(Rectangle<int>(0,0,0,0));
 		return;
         }
         if(useProxy)
