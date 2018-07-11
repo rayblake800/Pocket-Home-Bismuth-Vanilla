@@ -5674,8 +5674,8 @@
             <in>PopupEditorComponent.h</in>
             <in>ScalingLabel.cpp</in>
             <in>ScalingLabel.h</in>
-            <in>SimpleList.cpp</in>
-            <in>SimpleList.h</in>
+            <in>PagedList.cpp</in>
+            <in>PagedList.h</in>
             <in>Spinner.cpp</in>
             <in>Spinner.h</in>
             <in>SwitchComponent.cpp</in>

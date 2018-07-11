@@ -1,7 +1,7 @@
 #pragma once
 #include "PageComponent.h"
 #include "LayoutManager.h"
-#include "SimpleList.h"
+#include "PagedList.h"
 
 /**
  * @file FocusingListPage
@@ -169,7 +169,7 @@ private:
         LayoutManager buttonLayout;
     };
 
-    class FocusingList : public SimpleList
+    class FocusingList : public PagedList
     {
     public:
         FocusingList();

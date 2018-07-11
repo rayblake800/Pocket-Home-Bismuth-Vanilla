@@ -1,6 +1,6 @@
-#include "SimpleList.h"
+#include "PagedList.h"
 
-SimpleList::SimpleList() : 
+PagedList::PagedList() : 
 upButton(NavButton::up),
 downButton(NavButton::down)        
 {
@@ -17,7 +17,7 @@ downButton(NavButton::down)
  * should override this method if they need to have rows of varying
  * heights.
  */
-unsigned int SimpleList::getListItemWeight(const unsigned int index)
+unsigned int PagedList::getListItemWeight(const unsigned int index)
 {
     return 1;
 }
@@ -25,7 +25,7 @@ unsigned int SimpleList::getListItemWeight(const unsigned int index)
 /*
  * Sets the number of list items that are displayed at one time.
  */
-void SimpleList::setItemsPerPage(int perPage)
+void PagedList::setItemsPerPage(int perPage)
 {
     if(perPage != itemsPerPage)
     {
@@ -40,7 +40,7 @@ void SimpleList::setItemsPerPage(int perPage)
 /*
  * Gets the number of list items shown on the page at one time.
  */
-unsigned int SimpleList::getItemsPerPage() const
+unsigned int PagedList::getItemsPerPage() const
 {
     return itemsPerPage;
 }
@@ -51,7 +51,7 @@ unsigned int SimpleList::getItemsPerPage() const
  * Sets the fraction of the list height that should be placed between list
  * items.
  */
-void SimpleList::setYPaddingFraction(float paddingFraction)
+void PagedList::setYPaddingFraction(float paddingFraction)
 {
     yPaddingFraction = paddingFraction;
     if(getParentComponent() != nullptr && !getBounds().isEmpty())
@@ -64,7 +64,7 @@ void SimpleList::setYPaddingFraction(float paddingFraction)
  * Reloads list content, running updateListItem for each visible
  * list item.
  */
-void SimpleList::refreshListContent(TransitionAnimator::Transition transition,
+void PagedList::refreshListContent(TransitionAnimator::Transition transition,
         unsigned int duration)
 {
     LayoutManager::Layout layout;
@@ -115,7 +115,7 @@ void SimpleList::refreshListContent(TransitionAnimator::Transition transition,
  * first list page, and the down navigation button will still be hidden on
  * the last list page.
  */
-void SimpleList::setNavButtonsVisible(bool buttonsVisible)
+void PagedList::setNavButtonsVisible(bool buttonsVisible)
 {
     if(buttonsVisible != showNavButtons)
     {
@@ -130,7 +130,7 @@ void SimpleList::setNavButtonsVisible(bool buttonsVisible)
 /*
  * Scrolls the list when the navigation buttons are clicked.  
  */
-void SimpleList::buttonClicked(Button* button)
+void PagedList::buttonClicked(Button* button)
 {
     if(button == &upButton)
     {
@@ -153,7 +153,7 @@ void SimpleList::buttonClicked(Button* button)
 /*
  * Re-positions list items and navigation buttons when the list is resized.
  */
-void SimpleList::resized()
+void PagedList::resized()
 {
     layoutManager.layoutComponents(getLocalBounds());
     upButton.applyConfigBounds();

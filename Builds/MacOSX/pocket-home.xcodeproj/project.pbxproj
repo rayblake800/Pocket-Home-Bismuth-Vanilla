@@ -258,7 +258,7 @@
 		8C652516D09DA9F2B71E602C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiStateManager.cpp; path = ../../Source/Wifi/WifiStateManager.cpp; sourceTree = "SOURCE_ROOT"; };
 		8E1E710ECEEBEF009ABF477C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BaseFolderMenuItem.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/BaseFolderMenuItem.cpp"; sourceTree = "SOURCE_ROOT"; };
 		906DAB690A9B8DB5BCFFD9A7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SavedConnection.cpp; path = ../../Source/GLib/LibNM/SavedConnection.cpp; sourceTree = "SOURCE_ROOT"; };
-		913DFCC82595011925009047 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleList.cpp; path = ../../Source/Components/Widgets/SimpleList.cpp; sourceTree = "SOURCE_ROOT"; };
+		913DFCC82595011925009047 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PagedList.cpp; path = ../../Source/Components/Widgets/PagedList.cpp; sourceTree = "SOURCE_ROOT"; };
 		927364F39ABEA3B200BB7AC8 = {isa = PBXFileReference; lastKnownFileType = file; name = "juce_events"; path = "../../deps/JUCE/modules/juce_events"; sourceTree = "SOURCE_ROOT"; };
 		945326766C34FB0EF610651A = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DesktopEntryLoader.cpp; path = "../../Source/FreeDesktop/Desktop Entries/DesktopEntryLoader.cpp"; sourceTree = "SOURCE_ROOT"; };
 		946F54B666AB59031FF33B6F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = JsonWifiInterface.cpp; path = ../../Source/Wifi/JsonWifiInterface.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -275,7 +275,7 @@
 		9BB133AC66570D81B05E658E = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiStateManager.h; path = ../../Source/Wifi/WifiStateManager.h; sourceTree = "SOURCE_ROOT"; };
 		9CC3777BF6C5C56A176C4974 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuItemFactory.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItemFactory.cpp"; sourceTree = "SOURCE_ROOT"; };
 		9E7FBB2072315B967114AF51 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NewConfigAppEditor.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Editors/NewConfigAppEditor.h"; sourceTree = "SOURCE_ROOT"; };
-		9F0D04CF8161E4F3D25324EF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimpleList.h; path = ../../Source/Components/Widgets/SimpleList.h; sourceTree = "SOURCE_ROOT"; };
+		9F0D04CF8161E4F3D25324EF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PagedList.h; path = ../../Source/Components/Widgets/PagedList.h; sourceTree = "SOURCE_ROOT"; };
 		9F9204F6A483ABAB95700CCE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PagedAppMenu.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Types/PagedAppMenu.cpp"; sourceTree = "SOURCE_ROOT"; };
 		A12883C88EDA0F7068A4A4FE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UIPage.cpp; path = "../../Source/Components/Pages/UI Page/UIPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		A1B36B0F55CDE29CF30CA280 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Password.cpp; path = "../../Source/Components/Pages/Password Pages/Password.cpp"; sourceTree = "SOURCE_ROOT"; };

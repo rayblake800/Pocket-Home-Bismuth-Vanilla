@@ -2,22 +2,22 @@
 #include "NavButton.h"
 #include "LayoutManager.h"
 /**
- * @file SimpleList.h
+ * @file PagedList.h
  * 
  * @brief  Abstract interface for classes arranging components in a vertical 
  *         scrolling list.
  * 
- * SimpleList evenly spaces Components in a vertical list, using up and down
- * NavButtons to scroll the list one page at a time.  SimpleList takes ownership
+ * PagedList evenly spaces Components in a vertical list, using up and down
+ * NavButtons to scroll the list one page at a time.  PagedList takes ownership
  * of all Components in the list.  When scrolling through the list, existing
  * Components are re-used and updated.
  */
-class SimpleList : public Component, private Button::Listener
+class PagedList : public Component, private Button::Listener
 {
 public:
-    SimpleList();
+    PagedList();
 
-    virtual ~SimpleList() { }
+    virtual ~PagedList() { }
     
     /**
      * Return the number of items in the list.

@@ -3,7 +3,7 @@
 #include "Localized.h"
 #include "NavButton.h"
 #include "ScalingLabel.h"
-#include "SimpleList.h"
+#include "PagedList.h"
 
 /**
  * @file AdvancedSettingsPage.h
@@ -39,7 +39,7 @@ private:
     void pageButtonClicked(Button*) override;
     
     
-    class SettingsList : public SimpleList
+    class SettingsList : public PagedList
     {
     public:
         SettingsList();
