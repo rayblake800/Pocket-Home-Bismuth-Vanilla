@@ -238,6 +238,11 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
                 + connTime.approxTimePassed(),
                 NotificationType::dontSendNotification);
     }
+    else
+    {
+        lastConnectionLabel.setText(String(),
+                NotificationType::dontSendNotification);
+    }
     DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"
             " AP " << selectedAP.getSSID() << " with state "
             << WifiStateManager::apStateString
@@ -330,7 +335,7 @@ void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
         return;
     }
     const String& psk = passwordEditor.getText();
-    if (passwordEditor.isVisible() && !accessPoint.isValidKeyFormat(psk))
+    if (passwordEditor.isShowing() && !accessPoint.isValidKeyFormat(psk))
     {
         errorLabel.setText(localeText(invalid_key_format),
                 NotificationType::dontSendNotification);

@@ -5623,8 +5623,6 @@
               <in>BluetoothSettingsComponent.h</in>
               <in>BluetoothSettingsPage.cpp</in>
               <in>BluetoothSettingsPage.h</in>
-              <in>ConnectionPage.cpp</in>
-              <in>ConnectionPage.h</in>
               <in>ConnectionSettingsComponent.cpp</in>
               <in>ConnectionSettingsComponent.h</in>
               <in>FocusingListPage.cpp</in>
@@ -5670,12 +5668,12 @@
             <in>NavButton.h</in>
             <in>OverlaySpinner.cpp</in>
             <in>OverlaySpinner.h</in>
+            <in>PagedList.cpp</in>
+            <in>PagedList.h</in>
             <in>PopupEditorComponent.cpp</in>
             <in>PopupEditorComponent.h</in>
             <in>ScalingLabel.cpp</in>
             <in>ScalingLabel.h</in>
-            <in>PagedList.cpp</in>
-            <in>PagedList.h</in>
             <in>Spinner.cpp</in>
             <in>Spinner.h</in>
             <in>SwitchComponent.cpp</in>
