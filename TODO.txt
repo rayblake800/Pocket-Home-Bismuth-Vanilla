@@ -1,9 +1,12 @@
--Integrate TransitionAnimator with LayoutManager, use to animate AppMenu,
- ConnectionPage
+
+
+-Text height shouldn't be in configuration as a component.
 
 -Add SetMaximumTextSize(enum ConfigTextSize) to ScalingLabel components
 
 -Find and fix missing localized text
+
+-Setup Localized with ResourceManager to avoid unnecessary resource duplication 
 
 -Pause GLib threads when window focus is lost.
 
@@ -17,7 +20,13 @@
 -Finish documenting and formatting AppMenu helper classes.
 
 -Set password page isn`t hiding the current password field!
- new password isn't being set either...
+ Figure out why the program hangs on authentication
+
+-Fix Login page layout
+
+-Fix cursor selection option
+
+-Fix clock mode option
 
 -Add a "Forget saved connection" button to saved wifi access points
 
@@ -32,8 +41,6 @@
 
 -Define page background color/image in config
      Replace the background selector on HomePageSettings 
-
--Text height shouldn't be in configuration as a component.
 
 -ScalingLabel should be a ComponentConfigFile Listener
 
