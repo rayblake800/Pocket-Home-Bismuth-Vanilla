@@ -53,7 +53,7 @@ void PopupEditorComponent::setLayout(LayoutManager::Layout layout)
 {
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
-    layout.insertRow(Row(10, { RowItem(&titleLabel) }), 0);
+    layout.insertRow(0, Row(10, { RowItem(&titleLabel) }));
 
     layout.addRow(Row(10,
     {
