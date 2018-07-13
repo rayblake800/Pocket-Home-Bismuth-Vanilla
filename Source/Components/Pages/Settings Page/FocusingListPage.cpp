@@ -1,5 +1,15 @@
 #include "FocusingListPage.h"
 
+//default number of list items per page
+static const constexpr unsigned int defaultItemsPerPage = 5;
+
+//default list padding fraction
+static const constexpr float defaultPaddingFraction = 0.02;
+
+//milliseconds to take when (un)focusing list content
+static const constexpr unsigned int focusDuration = 300;
+
+
 FocusingListPage::FocusingListPage() : PageComponent("FocusingListPage") 
 { 
     setBackButton(PageComponent::leftBackButton);
@@ -61,7 +71,6 @@ void FocusingListPage::updateList(TransitionAnimator::Transition transition,
 void FocusingListPage::pageButtonClicked(Button* button)
 {
     ListItem* listButton = dynamic_cast<ListItem*>(button);
-    DBG("Button " << button->getName() << " Clicked");
     if(listButton != nullptr)
     {
         if(listButton->getIndex() != getSelectedIndex())
@@ -75,7 +84,7 @@ void FocusingListPage::pageButtonClicked(Button* button)
     }
     else
     {
-        DBG("NULL list button!");
+        listPageButtonClicked(button);
     }
 }
 
@@ -85,7 +94,7 @@ void FocusingListPage::pageButtonClicked(Button* button)
  */
 bool FocusingListPage::overrideBackButton()
 {
-    if(getSelectedIndex() > 0)
+    if(getSelectedIndex() < 0)
     {
         return false;
     }
@@ -216,10 +225,10 @@ Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
     LayoutManager::Layout buttonLayout = pageButton->getLayout();
     bool wasSelected = (buttonLayout == selectedLayout);
     bool  isSelected = (index == parentPage->getSelectedIndex());
-    bool animateTransition = (wasSelected != isSelected);
 
     if(isSelected)
     {
+        parentPage->updateListItemLayout(selectedLayout, index);
         parentPage->updateSelectedItemLayout(selectedLayout);
         buttonLayout = selectedLayout;    
     }
@@ -231,12 +240,8 @@ Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
         }
         parentPage->updateListItemLayout(buttonLayout, index);
     }
-    animateTransition = (animateTransition
-            && (pageButton->getIndex() == index));
 
-    pageButton->setLayout(buttonLayout, (animateTransition ?
-            TransitionAnimator::toDestination
-            : TransitionAnimator::none), parentPage->focusDuration);
+    pageButton->setLayout(buttonLayout);
     pageButton->setIndex(index);
     return pageButton;
 }
@@ -257,6 +262,5 @@ unsigned int FocusingListPage::FocusingList::getListItemWeight
     {
         return 1;
     }
-    DBG("selected = " << selected << ", index=" <<(int) index);
     return 0;
 } 
