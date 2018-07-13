@@ -1,7 +1,6 @@
 #pragma once
 #include "ComponentConfigFile.h"
 #include "MainConfigFile.h"
-#include "BluetoothStatus.h"
 #include "PageComponent.h"
 #include "JuceHeader.h"
 
@@ -38,7 +37,4 @@ private:
      * Create a new page to push on top of the page stack.
      */
     PageComponent* createPage(PageComponent::PageType type) override;
-
-    //shared page resources
-    BluetoothStatus bluetoothStatus;
 };

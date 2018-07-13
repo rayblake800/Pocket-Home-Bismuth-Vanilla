@@ -58,7 +58,7 @@ PageComponent* PageFactory::createPage(PageComponent::PageType type)
         case PageComponent::Settings:
             return setPageFactory(new SettingsPage());
         case PageComponent::BluetoothSettings:
-            return new BluetoothSettingsPage(bluetoothStatus);
+            return new BluetoothSettingsPage();
         case PageComponent::WifiSettings:
             return new WifiSettingsPage();
         case PageComponent::UI:
