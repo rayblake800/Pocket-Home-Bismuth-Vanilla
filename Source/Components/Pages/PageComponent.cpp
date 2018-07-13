@@ -64,7 +64,7 @@ void PageComponent::setBackButton(PageComponent::BackButtonType buttonType)
     backButton->addListener(this);
     
     LayoutManager::Layout layout = layoutManager.getLayout();
-    if(!layout.rowCount() == 0
+    if(!layout.isEmpty()
        && layout.getXMarginFraction() < backButton->xMarginFractionNeeded())
     {
         layout.setXMarginFraction(backButton->xMarginFractionNeeded());

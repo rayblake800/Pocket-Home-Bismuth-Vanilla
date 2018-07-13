@@ -499,6 +499,15 @@ unsigned int LayoutManager::Layout::rowCount() const
     return rows.size();
 }
 
+        
+/*
+ * Checks if the layout contains any rows.
+ */
+bool LayoutManager::Layout::isEmpty() const
+{
+    return rows.size() == 0;
+}
+
 /*
  * Gets a row in the layout.
  */
@@ -512,7 +521,7 @@ const LayoutManager::Row& LayoutManager::Layout::getRow
  * Inserts a new row into the layout at a specific index.
  */
 void LayoutManager::Layout::insertRow
-(const LayoutManager::Row row, const unsigned int index)
+(const unsigned int index, const LayoutManager::Row row)
 {
     int iterIdx = 0;
     auto rowIter = rows.begin();
@@ -522,6 +531,15 @@ void LayoutManager::Layout::insertRow
         rowIter++;
     }
     rows.insert(rowIter, row);
+}
+     
+/*
+ * Replaces a row in the layout.
+ */
+void LayoutManager::Layout::setRow
+(const unsigned int index, const LayoutManager::Row row)
+{
+    rows.at(index) = row;
 }
 
 /*

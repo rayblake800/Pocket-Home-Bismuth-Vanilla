@@ -413,27 +413,47 @@ public:
         unsigned int rowCount() const;
         
         /**
+         * Checks if the layout contains any rows.
+         * 
+         * @return  True iff the layout contains zero rows.  Note that this will
+         *          return false even if all rows are empty or have a weight of
+         *          zero. 
+         */
+        bool isEmpty() const;
+        
+        /**
          * Gets a row in the layout.
          * 
          * @param index  The index of the row to get.
          * 
          * @return  The row at the given index.
          * 
-         * @throw   std::out_of_range if the index is invalid.
+         * @throw   std::out_of_range if index is not a valid row index.
          */
         const Row& getRow(const unsigned int index) const;
         
         /**
          * Inserts a new row into the layout at a specific index.
          * 
-         * @param row    The new layout row to add.
-         * 
          * @param index  The index where the row will be inserted. Any rows
          *               already located at that index or greater will be pushed
          *               forward.  If the index value is invalid, the closest
          *               valid index will be used.
+         * 
+         * @param row    The new layout row to add.
          */
-        void insertRow(const Row row, const unsigned int index);
+        void insertRow(const unsigned int index, const Row row);
+        
+        /**
+         * Replaces a row in the layout.
+         * 
+         * @param index  The index of the row that will be replaced.
+         * 
+         * @param row    The new row to add to the layout.
+         * 
+         * @throw   std::out_of_range if index is not a valid row index.
+         */
+        void setRow(const unsigned int index, const Row row);
         
         /**
          * Adds a new row to the end of the layout.
