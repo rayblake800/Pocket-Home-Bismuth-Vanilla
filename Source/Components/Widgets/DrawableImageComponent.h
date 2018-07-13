@@ -119,7 +119,14 @@ public:
      * @param drawable  Any drawable object.
      */
     void setImage(Drawable* drawable);
-
+    
+    /**
+     * Checks if an image is set for this component.
+     * 
+     * @return  True iff the drawable image is null or has an area of zero
+     *          pixels. 
+     */
+    bool isEmpty();
 
     /**
      * Apply component colors to the image.

@@ -128,6 +128,18 @@ void DrawableImageComponent::setImage(Drawable* drawable)
     imageDrawable = drawable;
     initImage();
 }
+ 
+/*
+ * Checks if an image is set for this component.
+ */
+bool DrawableImageComponent::isEmpty()
+{
+    if(imageDrawable == nullptr)
+    {
+        return true;
+    }
+    return imageDrawable->getBounds().isEmpty();
+}
 
 /**
  * Apply component colors to the image.
@@ -169,10 +181,10 @@ void DrawableImageComponent::initImage()
     {
         int colourId = imageColour0Id + i;
         /**
-         * if colour[i] is changing from a to b, and colour[i+x] is changing 
-         * from b to c, set colour[i] to some temporary value so that in the 
-         * end we get colour[i]=b, colour[i+x]=c instead of 
-         * colour[i]=c, colour[i+x]=c
+         * Let i and j be colour indices where j > i.  If colour[i] is changing 
+         * from a to b, and colour[j] is changing from b to c, set colour[i] to 
+         * some temporary value so that in the end we get colour[i] = b, 
+         * colour[j]=c instead of colour[i] = c, colour[j] = c
          */
         int existingIndex = defaultColours.indexOf(imageColours[i]);
         if (existingIndex < i)
