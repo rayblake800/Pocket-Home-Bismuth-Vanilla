@@ -197,10 +197,6 @@
                   file="Source/Components/Pages/Settings Page/FocusingListPage.cpp"/>
             <FILE id="H8rojp" name="FocusingListPage.h" compile="0" resource="0"
                   file="Source/Components/Pages/Settings Page/FocusingListPage.h"/>
-            <FILE id="gZU56m" name="ConnectionPage.cpp" compile="0" resource="0"
-                  file="Source/Components/Pages/Settings Page/ConnectionPage.cpp"/>
-            <FILE id="suprkG" name="ConnectionPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Settings Page/ConnectionPage.h"/>
             <FILE id="W2VIIg" name="SettingsPage.cpp" compile="1" resource="0"
                   file="Source/Components/Pages/Settings Page/SettingsPage.cpp"/>
             <FILE id="H7JAkN" name="SettingsPage.h" compile="0" resource="0" file="Source/Components/Pages/Settings Page/SettingsPage.h"/>
