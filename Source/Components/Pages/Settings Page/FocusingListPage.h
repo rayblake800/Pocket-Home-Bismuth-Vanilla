@@ -6,8 +6,18 @@
 /**
  * @file FocusingListPage
  * 
- * @brief Shows a scrolling list of items, which can be selected to show
- *        additional information or controls.
+ * @brief Shows a scrolling list of items.  List items can be selected, causing
+ *        the page to focus on them and potentially display additional content
+ *        relevant to the selected item.
+ * 
+ *  FocusingListPage is an abstract PageComponent that contains a single 
+ * PagedList.  When a list item is clicked, it expands to fill the page, hiding
+ * all other list items and the PagedList's navigation buttons.  While a list
+ * item is selected, the page's back button will be set to de-select the focused
+ * list item instead of closing the page.
+ * 
+ *  Implementations of FocusingListPage are responsible for providing all list
+ * items and setting the layout of list item components.  
  */
 
 class FocusingListPage : public PageComponent
@@ -21,9 +31,18 @@ protected:
     /**
      * Determines the total number of items that should be in the list.
      * 
-     * @return the number of items in the list.
+     * @return   The number of items in the list.
      */
     virtual unsigned int getListSize() = 0;
+    
+    /**
+     * Called to handle button click events for any buttons other than
+     * navigation buttons and list items.  Subclasses should override this if
+     * they need to handle additional button events.
+     * 
+     * @param button  A button component that was clicked.
+     */
+    virtual void listPageButtonClicked(Button* button) { }
 
     /**
      * Gets the index of the selected list item.
@@ -49,10 +68,10 @@ protected:
     /**
      * Refreshes displayed list content.
      * 
-     * @param transition   Optional transition animation to apply when 
+     * @param transition  Optional transition animation to apply when 
      *                    updating list content.
      * 
-     * @param duration     Duration in milliseconds to run transition 
+     * @param duration    Duration in milliseconds to run transition 
      *                    animations.
      */
     void updateList(TransitionAnimator::Transition transition
@@ -63,45 +82,44 @@ protected:
      * 
      * @button  A list item button that was clicked by the user.
      */
-    void pageButtonClicked(Button* button) override;
+    virtual void pageButtonClicked(Button* button) final override;
 
 
     /**
      * When a list item is selected, override the back button to de-select
      * the list item instead of closing the page.
      * 
-     * @return true if a list item was selected when the back button was
-     *         clicked.
+     * @return   True if a list item was selected when the back button was
+     *           clicked.
      */
     bool overrideBackButton() override;
 
 private:
 
     /**
-     * Used to load or update content for each item in the list.
+     * Loads or updates the Component layout for each item in the list.
      * 
-     * @param layout   The layout of a single list item.  If empty, appropriate
+     * @param layout  The layout of a single list item.  If empty, appropriate
      *                components should be added to the layout.  Otherwise, any 
-     *                existing components in the layout should be updated as 
-     *                necessary.  FocusingListPage will not take ownership of
-     *                Components added to the layout. 
+     *                existing components in the layout should be updated to fit
+     *                the provided list index.  
      *                
-     * @param index    The index of the list item being updated.  This should
+     * @param index   The index of the list item being updated.  This should
      *                be used to select appropriate content for the layout. 
      */
     virtual void updateListItemLayout(LayoutManager::Layout& layout,
             const unsigned int index) = 0;
 
     /**
-     * Used to load or update additional content for the selected list item.
+     * Updates the layout of the selected list item.  Subclasses should override
+     * this method to add additional information or control Components that will
+     * only be shown when a list item is selected.
      * 
-     * @param layout   The layout used for a list item when it is selected. If 
-     *                empty, new components should be added. Otherwise, existing
-     *                components in the layout should be updated as necessary.  
-     *                FocusingListPage will not take ownership of components 
-     *                added to the layout. 
+     * @param layout  The layout used for the selected list item.  This layout
+     *                will always be updated with updateListItemLayout before
+     *                this method is called.
      */
-    virtual void updateSelectedItemLayout(LayoutManager::Layout& layout) = 0;
+    virtual void updateSelectedItemLayout(LayoutManager::Layout& layout) { }
 
     class ListItem : public Button
     {
@@ -152,15 +170,15 @@ private:
         /**
          * Draws a border around the list item.
          * 
-         * @param g The Juce graphics context.
+         * @param g   The Juce graphics context.
          */
         void paintButton(Graphics &g, bool isMouseOverButton,
                         bool isButtonDown) override;
 
         /**
-         * Reapply the list item's layout when it is resized. 
+         * Re-apply the list item's layout when it is resized. 
          */
-        void resized() override;
+        virtual void resized() final override;
         
         int index = -1;
         
@@ -180,10 +198,10 @@ private:
          * Reloads list content, running updateListItem for each visible
          * list item.
          * 
-         * @param transition   Optional transition animation to apply when 
+         * @param transition  Optional transition animation to apply when 
          *                    updating list content.
          * 
-         * @param duration     Duration in milliseconds to run transition 
+         * @param duration    Duration in milliseconds to run transition 
          *                    animations.
          */
         void updateList(TransitionAnimator::Transition transition
@@ -226,21 +244,14 @@ private:
         virtual unsigned int getListItemWeight(const unsigned int index)
                 override;    
     private:
-        //default number of list items per page
-        static const constexpr unsigned int defaultItemsPerPage = 5;
-
-        //default list padding fraction
-        static const constexpr float defaultPaddingFraction = 0.05;
         
         //Layout to update and use for any focused list item.
         LayoutManager::Layout selectedLayout;
     };
-
     FocusingList pageList;
     
-    //milliseconds to take when (un)focusing list content
-    static const constexpr unsigned int focusDuration = 300;
-
     //Current selected list index.
     int selectedIndex = -1;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FocusingListPage)
 };
