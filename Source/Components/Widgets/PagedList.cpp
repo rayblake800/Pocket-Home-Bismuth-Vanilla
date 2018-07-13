@@ -88,6 +88,13 @@ void PagedList::refreshListContent(TransitionAnimator::Transition transition,
         }
         layout.addRow(row);
     }
+    upButton.setVisible(showNavButtons && pageIndex > 0);
+    downButton.setVisible(showNavButtons
+            && listSize > ((pageIndex + 1) * itemsPerPage));
+    layout.setYPaddingFraction(yPaddingFraction);
+    layout.setYMarginFraction(std::max(upButton.yMarginFractionNeeded(),
+            downButton.yMarginFractionNeeded()));
+    layoutManager.transitionLayout(layout, this, transition, duration);
     //update recycled components
     for(int i = 0; i < itemsPerPage; i++)
     {
@@ -98,14 +105,6 @@ void PagedList::refreshListContent(TransitionAnimator::Transition transition,
         }
         updateListItem(listComponents[i], itemIndex);
     }
-    upButton.setVisible(showNavButtons && pageIndex > 0);
-    downButton.setVisible(showNavButtons
-            && listSize > ((pageIndex + 1) * itemsPerPage));
-    layout.setYPaddingFraction(yPaddingFraction);
-    layout.setYMarginFraction(std::max(upButton.yMarginFractionNeeded(),
-            downButton.yMarginFractionNeeded()));
-    layoutManager.transitionLayout(layout, this, transition, duration);
-    layoutManager.printLayout();
 }
 
 /*
