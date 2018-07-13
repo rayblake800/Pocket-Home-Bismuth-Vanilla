@@ -5,116 +5,47 @@
 #include "ScalingLabel.h"
 #include "Spinner.h"
 #include "BluetoothStatus.h"
-#include "ConnectionPage.h"
+#include "FocusingListPage.h"
 
 /**
  * @file BluetoothSettingsPage.h
  * 
- * TODO: implement bluetooth
+ * @brief  Shows visible bluetooth devices, providing controls for initializing
+ *         or removing connections.  
+ * 
+ * As Bluetooth support is not yet implemented, this class is currently just an
+ * empty FocusingListPage.
  */
 
 class BluetoothSettingsPage :
-public ConnectionPage<BluetoothDevice>, 
-        public TextEditor::Listener  {
+public FocusingListPage {
 public:
     
-    BluetoothSettingsPage(BluetoothStatus& bluetoothStatus);
+    BluetoothSettingsPage() { }
     
     ~BluetoothSettingsPage() { }
 private:
-    /**
-     * @return the list of all visible bluetooth devices
-     */
-    Array<BluetoothDevice> loadConnectionPoints() override;
     
     /**
-     * This method will be used to sort the list of bluetooth devices.
+     * Gets the total number of items that should be in the list.
      * 
-     * @param first    Some bluetooth device in the list.
+     * @return   The number of visible Bluetooth devices.
+     */
+    virtual unsigned int getListSize() override { return 0;}
+
+    /**
+     * Loads or updates the Component layout for each Bluetooth device in the 
+     * list.
      * 
-     * @param second   Some other bluetooth device in the list.
-     * 
-     * @return  a negative number if first should come before second, zero if 
-     *          the two bluetooth devices are equal, or a positive number if
-     *          second should come before first.
+     * @param layout  The layout of a single list item.  If empty, appropriate
+     *                components should be added to the layout.  Otherwise, any 
+     *                existing components in the layout should be updated to fit
+     *                the provided list index.  
+     *                
+     * @param index   The index of a Bluetooth device in the list. 
      */
-    int compareConnectionPoints
-    (const BluetoothDevice& first, const BluetoothDevice& second) override
-    {
-        return 0;
-    }
-
-    /**
-     * @param button
-     * This is called whenever a button other than the navigation buttons
-     * is clicked.
-     */
-    void connectionButtonClicked(Button* button) override;
-
-    /**
-     * Construct a button component to represent a bluetooth device.
-     * This button will display the device name:
-     * TODO: design connection button
-     * 
-     * @param device
-     */
-    Button* getConnectionButton(const BluetoothDevice& device) override;
-
-    /**
-     * Get the layout for the Bluetooth device controls.
-     * @param connection the control components will be updated to suit
-     * this bluetooth device.
-     */
-    LayoutManager::Layout getConnectionControlsLayout
-    (const BluetoothDevice& device) override;
-
-    /**
-     * Update connection control components to match the current bluetooth
-     * device connection state.
-     */
-    void updateConnectionControls() override;
-
-    /**
-     * Attempt to connect if return is pressed.
-     * 
-     * @param editor
-     */
-    void textEditorReturnKeyPressed(TextEditor& editor) override;
-
-    /**
-     * Set the spinner's bounds within the connection button.
-     */
-    void connectionPageResized() override;
-
-
-    /**
-     * Reload the device list, re-select the selected connection, 
-     * update and enable connection controls.
-     */
-    void reloadPage();
-
-    /**
-     * Custom button type to use for getConnectionButton
-     */
-    class BTDeviceButton : public Button{
-    public:
-        BTDeviceButton(BluetoothDevice connection, 
-                bool isConnected);
-    private:
-        void resized() override;
-
-        void paintButton(Graphics& g, bool isMouseOverButton,
-                bool isButtonDown) {
-        }
-        ScalingLabel deviceLabel;
-        DrawableImageComponent bluetoothIcon;
-        ScopedPointer<DrawableImageComponent> lockIcon;
-
-    };
+    virtual void updateListItemLayout(LayoutManager::Layout& layout,
+            const unsigned int index) { }
     
-    BluetoothStatus& bluetoothStatus;
-    TextButton connectionButton;
-    ScalingLabel errorLabel;
-    Spinner spinner;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BluetoothSettingsPage)
 };

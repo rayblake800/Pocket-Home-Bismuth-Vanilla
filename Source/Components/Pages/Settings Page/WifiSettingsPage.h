@@ -8,7 +8,7 @@
 #include "DrawableImageButton.h"
 #include "PageComponent.h"
 #include "PageStackComponent.h"
-#include "ConnectionPage.h"
+#include "FocusingListPage.h"
 
 /**
  * @file WifiSettingsPage.h
@@ -18,7 +18,7 @@
  */
 
 
-class WifiSettingsPage : public ConnectionPage<WifiAccessPoint>,
+class WifiSettingsPage : public FocusingListPage,
 public WifiStateManager::Listener, public TextEditor::Listener,
 private Localized
 {
@@ -26,31 +26,52 @@ public:
     WifiSettingsPage();
 
     virtual ~WifiSettingsPage() { }
+    
+protected:
+    /**
+     * Sets the number of items in the list to match the number of visible
+     * Wifi access points.
+     * 
+     * @return  The number of WifiAccessPoint objects available. 
+     */
+    virtual unsigned int getListSize() override;
+    
+    /**
+     * Creates or updates the layout of one access point on the list.
+     * 
+     * @param layout  A layout object to update.  Components will be added or
+     *                updated in this layout to match a particular Wifi access
+     *                point.
+     * 
+     * @param index   An index in the list.  The layout will be updated to match
+     *                the WifiAccessPoint with this index in the the sorted
+     *                list of access points.
+     */
+    virtual void updateListItemLayout(LayoutManager::Layout& layout,
+            const unsigned int index) override;
+    
+    /**
+     * Creates or updates the access point control/information panel that
+     * appears when an access point in the list is selected.
+     * 
+     * @param layout   The control layout object, to be updated to match the 
+     *                 current selected access point.
+     */
+    virtual void updateSelectedItemLayout(LayoutManager::Layout& layout) 
+    override;
 
 private:
     /**
-     * Finds all wifi access points within range of the wifi device.
-     * 
-     * @return the list of all visible Wifi access points.
+     * Reloads the list of wifi access points within range of the wifi device,
+     * and updates the access point list.
      */
-    Array<WifiAccessPoint> loadConnectionPoints() override;
+    void loadAccessPoints();
     
     /**
-     * Compares wifi access points, in order to sort the access point list.
-     * The connected access point will always come before all others, and
-     * saved access points will come before new ones.  Otherwise, access points
-     * are sorted by signal strength.
-     * 
-     * @param first    Some access point in the list.
-     * 
-     * @param second   Some other access point in the list.
-     * 
-     * @return  a negative number if first should come before second, zero if 
-     *          the two connection points are equal, or a positive number if
-     *          second should come before first.
+     * Removes any lost access points, sorts the access point list, and
+     * refreshes the access point list component.
      */
-    int compareConnectionPoints
-    (const WifiAccessPoint& first, const WifiAccessPoint& second) override;
+    void updateAPList();
 
     /**
      * Attempts to connect to a Wifi access point.  This will close any
@@ -75,32 +96,7 @@ private:
      * 
      * @param button  This should always be the connection button.
      */
-    void connectionButtonClicked(Button* button) override;
-
-    /**
-     * Constructs a button component to represent a wifi access point.
-     * This button will display the access point name, along with a signal
-     * strength indicator and a lock icon if the connection requires a password.
-     * 
-     * @param connection  The access point represented by the new button
-     *                    component.
-     */
-    Button* getConnectionButton(const WifiAccessPoint& accessPoint) override;
-
-    /**
-     * Gets the layout for the Wifi access point controls.
-     * 
-     * @param accessPoint   The control components will be updated to control
-     *                      this access point.
-     */
-    LayoutManager::Layout getConnectionControlsLayout
-    (const WifiAccessPoint& accessPoint) override;
-
-    /**
-     * Updates connection control components to match the current Wifi 
-     * connection state.
-     */
-    virtual void updateConnectionControls() override;
+    virtual void listPageButtonClicked(Button* button) override;
 
     /**
      * Keeps the page updated when wifi state changes.
@@ -123,7 +119,6 @@ private:
      */
     void accessPointRemoved(const WifiAccessPoint& removedAP) override;
 
-
     /**
      * Attempts to connect if return is pressed after entering a password.
      * 
@@ -132,74 +127,68 @@ private:
     void textEditorReturnKeyPressed(TextEditor& editor) override;
 
     /**
-     * Sets the spinner's bounds within the connection button
-     */
-    void connectionPageResized() override;
-
-
-    /**
      * Gets the asset name for the icon that best represents accessPoint's 
      * signal strength.
      * 
      * @param accessPoint
      */
     static String getWifiAssetName(const WifiAccessPoint& accessPoint);
+    
+    //All visible access points.
+    Array<WifiAccessPoint> visibleAPs;
 
-    /**
-     * The custom button type to use for access point list buttons.
-     */
-    class WifiAPButton : public Button, private Localized
-    {
-    public:
-        /**
-         * @param accessPoint   The access point represented by this button.
-         * 
-         * @param isConnected   Indicates if an active connection exists using
-         *                      this access point.
-         */
-        WifiAPButton(const WifiAccessPoint& accessPoint, bool isConnected);
-    private:
-
-        /**
-         * Updates icon and label bounds to fit button bounds.
-         */
-        void resized() override;
-
-        /**
-         * This method must be implemented in all Button classes, but child
-         * components and the LookAndFeel handle all WifiAPButton drawing.
-         */
-        void paintButton(
-                Graphics& g,
-                bool isMouseOverButton,
-                bool isButtonDown) { }
-        
-        //shows the access point name
-        ScalingLabel apLabel;
-        //shows the access point signal strength
-        DrawableImageComponent wifiIcon;
-        //shown iff the access point is secured
-        ScopedPointer<DrawableImageComponent> lockIcon;
-    };
-
-    //Wifi icons for all signal strengths
+    //Holds recycled list item components
+    OwnedArray<ScalingLabel> apLabels;
+    OwnedArray<DrawableImageComponent> apIcons;
+    OwnedArray<DrawableImageComponent> lockIcons;
+    
+    //Wifi icon paths for all signal strengths
     static const StringArray wifiImageFiles;
     
-    WifiAccessPoint lastConnected;
+    /**
+     * ConnectionButton is a TextButton with text that can be replaced by a
+     * Spinner to indicate that wifi is busy.
+     */
+    class ConnectionButton : public TextButton
+    {
+    public:
+        ConnectionButton();
+        
+        virtual ~ConnectionButton() { }
+      
+        /**
+         * Show or hide the spinner, ensuring the button is enabled when
+         * text is visible and disabled when the spinner is visible.
+         * 
+         * @param showSpinner  True to show the spinner, false to show the
+         *                     button text.
+         */
+        void setSpinnerVisible(bool showSpinner);
+    private:
+        /**
+         * Ensures spinner bounds are updated with connection button bounds.
+         */
+        virtual void resized() override;
+        
+        Spinner spinner;
+        //Holds the button text while the spinner is enabled.
+        String savedText;
+    };
+    
+    WifiAccessPoint lastConnecting;
     //Displays the last connection time of access points with saved connections.
     ScalingLabel lastConnectionLabel;
     //Used for entering a password for a secured access point.
     ScalingLabel passwordLabel;
     TextEditor passwordEditor;
     //clicked to connect or disconnect
-    TextButton connectionButton;
+    ConnectionButton connectionButton;
     //prints an error if the connection fails
     ScalingLabel errorLabel;
     //displays over the connection button while connecting to indicate that
     //wifi is busy
     Spinner spinner;
-    
-    
+     
     //localized text keys;
     static const constexpr char * password_field = "password_field";
     static const constexpr char * btn_connect = "btn_connect";
@@ -209,7 +198,6 @@ private:
     static const constexpr char * connection_failed = "connection_failed";
     static const constexpr char * lost_ap = "lost_ap";
     static const constexpr char * last_connected = "last_connected";
-    
     static const constexpr char * connected_ap = "connected_ap";
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiSettingsPage)
