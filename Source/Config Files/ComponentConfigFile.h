@@ -8,9 +8,8 @@
  * @brief gets and sets all component settings defined in 
  *        ~/.pocket-home/components.json.
  * 
- * This includes component color values, relative component size and position,
- * image asset filenames, and other miscellaneous data relevant to UI 
- * components.
+ * This includes relative component size and position, image asset filenames, 
+ * and other miscellaneous data relevant to UI components.
  */
 
 class ComponentConfigFile : public ResourceManager
@@ -21,65 +20,6 @@ public:
     virtual ~ComponentConfigFile() { }
 
     class ComponentSettings;
-
-    static const StringArray defaultColourKeys;
-    /**
-     * Colour value string keys are stored here along with their corresponding
-     * ColourId values
-     */
-    static const std::map<String, int> colourIds;
-
-    enum DefaultColour
-    {
-        windowBackground = 0,
-	widgetBackground,
-	widgetOff,
-	widgetOn,
-	menuBackground,
-	outline,
-	focusedOutline,
-	textField,
-	text,
-	highlightedTextField,
-	highlightedText,
-	none
-    };
-
-    DefaultColour getColourType(String colorKey);
-
-    String getColourKey(DefaultColour colour);
-
-    Colour getColour(DefaultColour colourType);
-
-    Array<int> getColourIds(DefaultColour colourType);
-
-    void setColour(DefaultColour colourType, Colour newColour);
-
-    void setColour(String key, Colour newColour);
-
-    /**
-     * @return the keys to all Component color settings stored in
-     * components.json
-     */
-    StringArray getColourKeys() const;
-
-    /**
-     * Find a Component ColourId value from its String key
-     * 
-     * @param colourKey the key for a color value in colourIds
-     * @return the corresponding ColourId value, or -1 if colourKey wasn't
-     * found.
-     */
-    int getColourId(String colourKey);
-
-    /**
-     * Get a color value from its String key.
-     *  
-     * @param colourKey the key for a color value in colourIds
-     * @return the corresponding Colour value, or Colour() if colourKey wasn't
-     * found.
-     */
-    Colour getColour(String colourKey);
 
     /**
      * Gets configured component settings from shared .json file data.
@@ -286,8 +226,11 @@ private:
         std::map<String, ComponentSettings> components;
 
         /**
-         * @return the list of key Strings for each basic data value tracked in 
-         * components.json
+         * Gets the string key and data type for each basic value stored in
+         * components.json.
+         * 
+         * @return  Key strings and data types for each bool, int, String, or
+         *          double stored in components.json.
          */
         virtual std::vector<DataKey> getDataKeys() const override;
     };

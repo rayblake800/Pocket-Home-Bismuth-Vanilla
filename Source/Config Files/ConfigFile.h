@@ -173,7 +173,8 @@ protected:
     {
         stringType,
         intType,
-        boolType
+        boolType,
+        doubleType
     };
 
     /**
@@ -310,6 +311,7 @@ private:
     std::map<String, int> intValues;
     std::map<String, String> stringValues;
     std::map<String, bool> boolValues;
+    std::map<String, double> doubleValues;
 
     
     std::map<String, Array < Listener*>> keyListeners;

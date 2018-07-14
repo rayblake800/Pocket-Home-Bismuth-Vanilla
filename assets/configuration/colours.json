@@ -1,0 +1,70 @@
+{     
+    "window background"           : "0xffe9e9e9",
+    "widget background"           : "0xffb8b8b8",
+    "widget(off)"                 : "0xff393939",
+    "widget(on)"                  : "0xffbc3662",
+    "menu background"             : "0xffe9e9e9",
+    "outline"                     : "0xffb8b8b8",
+    "focused outline"             : "0xffb88e47",
+    "text field"                  : "0xffe9e9e9",
+    "text"                        : "0xffbc3662",
+    "highlighted text field"      : "0xff393939",
+    "highlighted text"            : "0xffeb008b",
+    
+    "Page background"             : "",
+
+    "Image0"                      : "0xffffffff",
+    "Image1"                      : "0xff000000",
+    "Image2"                      : "0xffff0000",
+    "Image3"                      : "0xff00ff00",
+    "Image4"                      : "0xff0000ff",
+
+    "AppMenuButton text"          : "",
+    "AppMenuButton background"    : "",
+    "AppMenuButton selection"     : "0xfff799aa",
+    "AppMenuButton border"        : "0xffb88e47",
+
+    "FilePicker window"           : "",
+    "FilePicker text"             : "",
+
+    "OverlaySpinner background"   : "0xeec9c9c9",
+    "OverlaySpinner text"         : "",
+
+    "TextButton(off)"             : "",
+    "TextButton(off) text"        : "",
+    "TextButton(on)"              : "0xffb8b8b8",
+    "TextButton(on) text"         : "",
+
+    "Slider background"           : "",
+    "Slider thumb"                : "",
+    "Slider track"                : "0xff393939",
+
+    "Switch background"           : "",
+    "Switch handle"               : "0xffbc3662",
+    "Switch handle(off)"          : "0xff393939",
+
+    "ComboBox text"               : "",
+    "ComboBox background"         : "",
+    "ComboBox outline"            : "0xffb88e47",
+    "ComboBox button"             : "0xffbc3662",
+    "ComboBox arrow"              : "",
+
+    "AlertWindow text"            : "",
+    "AlertWindow outline"         : "0xffb88e47",
+    "AlertWindow background"      : "",
+            
+    "TextEditor background"       : "",
+    "TextEditor text"             : "",
+    "TextEditor highlight"        : "",
+    "TextEditor highlighted text" : "",
+    "TextEditor outline"          : "",
+    "TextEditor focused outline"  : "",
+    "TextEditor shadow"           : "",
+            
+    "Label background"            : "",
+    "Label text"                  : "",
+    "Label outline"               : "",
+    "Label background(editing)"   : "",
+    "Label text(editing)"         : "",
+    "Label outline(editing)"      : ""
+}

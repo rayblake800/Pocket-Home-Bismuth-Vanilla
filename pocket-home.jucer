@@ -297,6 +297,10 @@
               file="Source/Components/TransitionAnimator.h"/>
       </GROUP>
       <GROUP id="{85D01745-B7AD-BE3B-8D28-80F47A0AA8BA}" name="Config Files">
+        <FILE id="qkl5uS" name="ColourConfigFile.cpp" compile="1" resource="0"
+              file="Source/Config Files/ColourConfigFile.cpp"/>
+        <FILE id="xY2XIE" name="ColourConfigFile.h" compile="0" resource="0"
+              file="Source/Config Files/ColourConfigFile.h"/>
         <FILE id="dNgJxN" name="ConfigFile.cpp" compile="1" resource="0" file="Source/Config Files/ConfigFile.cpp"/>
         <FILE id="sqDYSh" name="ConfigFile.h" compile="0" resource="0" file="Source/Config Files/ConfigFile.h"/>
         <FILE id="DCzTro" name="AppConfigFile.cpp" compile="1" resource="0"

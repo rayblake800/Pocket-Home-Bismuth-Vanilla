@@ -1,4 +1,5 @@
 #include "TempTimer.h"
+#include "ColourConfigFile.h"
 #include "ColourPage.h"
 
 ColourPage::ColourPage() :
@@ -9,8 +10,7 @@ colourList("colourList", &listModel)
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({
-        Row(40, { RowItem(&colourList) } ),
-        Row(10, { RowItem(&testSwitch) } )
+        Row(40, { RowItem(&colourList) } )
     });
     layout.setYMarginFraction(0.1);
     layout.setYPaddingWeight(3);
@@ -27,9 +27,9 @@ void ColourPage::pageResized()
 
 ColourPage::ColourListModel::ColourListModel()
 {
-    ComponentConfigFile config;
+    ColourConfigFile config;
     colourKeys = config.getColourKeys();
-    config.addListener(this, colourKeys);
+    config.addListener(this, config.getColourIds());
     DBG(__func__ << ": adding " << colourKeys.size() << " colors");
     for (const String& key : colourKeys)
     {
@@ -90,12 +90,13 @@ Component* ColourPage::ColourListModel::refreshComponentForRow(int rowNumber,
 
 void ColourPage::ColourListModel::selectedRowsChanged(int lastRowSelected) { }
 
-void ColourPage::ColourListModel::configValueChanged(String key)
+void ColourPage::ColourListModel::colourValueChanged
+(int colourID, String colourKey, Colour newColour)
 {
-    ComponentConfigFile config;
-    int colourIndex = colourKeys.indexOf(key);
+    ColourConfigFile config;
+    int colourIndex = colourKeys.indexOf(colourKey);
     if (colourIndex >= 0)
     {
-        colours[colourIndex] = config.getColour(key);
+        colours[colourIndex] = newColour;
     }
 }

@@ -139,6 +139,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/PokeLookAndFeel_14171995.o \
   $(JUCE_OBJDIR)/LayoutManager_6a2c5f53.o \
   $(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o \
+  $(JUCE_OBJDIR)/ColourConfigFile_94131da1.o \
   $(JUCE_OBJDIR)/ConfigFile_eac3aa35.o \
   $(JUCE_OBJDIR)/AppConfigFile_9fbc232.o \
   $(JUCE_OBJDIR)/ComponentConfigFile_eae6a58e.o \
@@ -551,6 +552,11 @@ $(JUCE_OBJDIR)/LayoutManager_6a2c5f53.o: ../../Source/Components/LayoutManager.c
 $(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o: ../../Source/Components/TransitionAnimator.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling TransitionAnimator.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ColourConfigFile_94131da1.o: ../../Source/Config\ Files/ColourConfigFile.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ColourConfigFile.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigFile_eac3aa35.o: ../../Source/Config\ Files/ConfigFile.cpp

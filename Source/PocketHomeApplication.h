@@ -4,6 +4,7 @@
 #include "PokeLookAndFeel.h"
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
+#include "ColourConfigFile.h"
 #include "GLibSignalHandler.h"
 
 /**
@@ -71,6 +72,9 @@ private:
     
     //Holds user-set UI component configuration data.
     ComponentConfigFile componentConfig;
+    
+    //Holds UI colour settings
+    ColourConfigFile colourConfig;
 
     //Runs the GLib event loop
     GLibSignalHandler gLibThread;

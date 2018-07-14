@@ -6,6 +6,7 @@
         <df name="appIcons">
         </df>
         <df name="configuration">
+          <in>colours.json</in>
         </df>
         <df name="fonts">
         </df>
@@ -5692,6 +5693,8 @@
         <df name="Config Files">
           <in>AppConfigFile.cpp</in>
           <in>AppConfigFile.h</in>
+          <in>ColourConfigFile.cpp</in>
+          <in>ColourConfigFile.h</in>
           <in>ComponentConfigFile.cpp</in>
           <in>ComponentConfigFile.h</in>
           <in>ConfigFile.cpp</in>

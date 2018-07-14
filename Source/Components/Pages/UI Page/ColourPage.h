@@ -2,9 +2,8 @@
  * @file ColorPage.h
  */
 #pragma once
-#include "ConfigFile.h"
+#include "ColourConfigFile.h"
 #include "PageComponent.h"
-#include "SwitchComponent.h"
 
 class ColourPage : public PageComponent
 {
@@ -15,7 +14,8 @@ public:
 private:
     void pageResized() override;
 
-    class ColourListModel : public ListBoxModel, public ConfigFile::Listener
+    class ColourListModel : public ListBoxModel,
+            public ColourConfigFile::Listener
     {
     public:
         ColourListModel();
@@ -34,7 +34,8 @@ private:
 
 
     private:
-        void configValueChanged(String key) override;
+        void colourValueChanged(int colourID, String colourKey,
+                Colour newColour) override;
         int textHeight;
         StringArray colourKeys;
         Array<Colour> colours;
@@ -42,7 +43,6 @@ private:
 
     ColourListModel listModel;
     ListBox colourList;
-    SwitchComponent testSwitch;
 
 };
 

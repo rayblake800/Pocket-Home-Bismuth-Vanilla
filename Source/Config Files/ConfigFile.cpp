@@ -28,6 +28,15 @@ template<> std::map<String, bool>& ConfigFile::getMapReference<bool>()
     return boolValues;
 }
 
+/*
+ * @return a std::map of String keys mapped to doubles, so getConfigValue()
+ *          and setConfigValue() can use double as a template type. 
+ */
+template<> std::map<String, double>& ConfigFile::getMapReference<double>()
+{
+    return doubleValues;
+}
+
 ConfigFile::ConfigFile(String configFilename) : Localized("ConfigFile"),
 filename(configFilename) { }
 
@@ -160,8 +169,12 @@ void ConfigFile::readDataFromJson(var& config, var & defaultConfig)
                 initMapProperty<bool>(key.keyString,
                                       getProperty(config, defaultConfig,
                                       key.keyString));
-
                 break;
+            case doubleType:
+                initMapProperty<double>(key.keyString,
+                                      getProperty(config, defaultConfig,
+                                      key.keyString));
+
         }
     }
 }
@@ -192,6 +205,9 @@ void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
                         getMapReference<bool>()[key.keyString]);
 
                 break;
+            case doubleType:
+                jsonObj->setProperty(key.keyString,
+                        getMapReference<double>()[key.keyString]);
         }
     }
 }
@@ -204,7 +220,6 @@ bool ConfigFile::propertyExists(var& config, String propertyKey)
 {
 
     var property = config.getProperty(propertyKey, var());
-
     return !property.isVoid();
 }
 

@@ -32,7 +32,7 @@ ConfigFile(filenameConst)
 {
     var jsonConfig = AssetFiles::loadJSONAsset
             (String(configPath) + filenameConst, true);
-    var defaultConfig = var();
+    var defaultConfig;
     readDataFromJson(jsonConfig, defaultConfig);
     writeChanges();
 }

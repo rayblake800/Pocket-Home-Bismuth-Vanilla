@@ -1,4 +1,5 @@
 #include "ComponentConfigFile.h"
+#include "ColourConfigFile.h"
 #include "MainConfigFile.h"
 #include "SwitchComponent.h"
 #include "DrawableImageComponent.h"
@@ -13,11 +14,9 @@ seguibl(Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
 BinaryData::LatoRegular_ttfSize)),
 cursor(MouseCursor::NoCursor)
 {
-    ComponentConfigFile componentConfig;
+    ColourConfigFile colourConfig;
     MainConfigFile mainConfig;
-    StringArray keys = ComponentConfigFile::defaultColourKeys;
-    keys.addArray(componentConfig.getColourKeys());
-    componentConfig.addListener(this, keys);
+    colourConfig.addListener(this, colourConfig.getColourIds());
     mainConfig.addListener(this,{MainConfigFile::showCursorKey});
     loadAllConfigProperties();
 }
@@ -188,10 +187,9 @@ MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
 }
 
 /*
- * Loads and applies component colors from components.json, and updates
- * cursor visibility.
+ * Updates the cursor visibility when the associated config key is changed. 
  */
-void PokeLookAndFeel::configValueChanged(String key)
+void PokeLookAndFeel::nonColorValueChanged(String key)
 {
     if (key == MainConfigFile::showCursorKey)
     {
@@ -199,25 +197,13 @@ void PokeLookAndFeel::configValueChanged(String key)
         cursor = (config.getConfigValue<bool>(key) ?
                   MouseCursor::ParentCursor : MouseCursor::NoCursor);
     }
-    else
-    {
-        ComponentConfigFile componentConfig;
-        int colourId = componentConfig.getColourId(key);
-        if (colourId != -1)
-        {
-            Colour confColour = componentConfig.getColour(key);
-            setColour(colourId, confColour);
-        }
-	else
-	{
-	    ComponentConfigFile::DefaultColour colourType =
-	    	componentConfig.getColourType(key);
-            Array<int> colourIds = componentConfig.getColourIds(colourType);
-            Colour colour = componentConfig.getColour(colourType);
-            for(const int& id : colourIds)
-            {
-                 setColour(id,colour);
-            }
-	}
-    }
+}
+ 
+/**
+ * Updates Component colours when they're changed in the ColourConfigFile.
+ */
+void PokeLookAndFeel::colourValueChanged
+(int colourID, String colourKey, Colour newColour)
+{
+    setColour(colourID, newColour);
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "MainConfigFile.h"
+#include "ColourConfigFile.h"
 #include "ComponentConfigFile.h"
 
 /**
@@ -18,7 +19,7 @@
  */
 
 
-class PokeLookAndFeel : public LookAndFeel_V4, public ConfigFile::Listener
+class PokeLookAndFeel : public LookAndFeel_V4, public ColourConfigFile::Listener
 {
 public:
     PokeLookAndFeel();
@@ -89,12 +90,23 @@ public:
 
 private:
     /**
-     * Loads and applies component colors from components.json, and updates
-     * cursor visibility.
+     * Updates the cursor visibility when the associated config key is changed. 
      * 
-     * @param key
+     * @param key  The cursor visibility key.
      */
-    void configValueChanged(String key) override;
+    void nonColorValueChanged(String key) override;
+    
+    /**
+     * Updates Component colours when they're changed in the ColourConfigFile.
+     * 
+     * @param colourID   The Juce ColourID of the updated Component element.
+     * 
+     * @param colourKey  The key string of the value updated in the config file.
+     * 
+     * @param newColour  The new colour value to apply to the colourID.
+     */
+    void colourValueChanged(int colourID, String colourKey, Colour newColour) 
+    override;
 
     //Defines the maximum number of characters that will fit on a text button.
     static const int maxButtonStrSize = 30;

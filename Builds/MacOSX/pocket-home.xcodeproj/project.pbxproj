@@ -83,6 +83,7 @@
 		9554CD7AC4626F460BDCA747 = {isa = PBXBuildFile; fileRef = 43618EC1AF9B84CDF65343BF; };
 		4DD86E5BA0F685778565D72B = {isa = PBXBuildFile; fileRef = C08565A81F3D3960148B3847; };
 		F539140B92AE87F503660C9F = {isa = PBXBuildFile; fileRef = 1DE205CBDB541988A015F7A8; };
+		D97D26BB40FCD02EFA5DDEBF = {isa = PBXBuildFile; fileRef = 3F7219A24B52A1BFF362A71F; };
 		D70E5CE257B21FB385C6F314 = {isa = PBXBuildFile; fileRef = C2A16ADF8541BE782A1A5979; };
 		A82BA2454C8A85343067F986 = {isa = PBXBuildFile; fileRef = BF50D88F5F1D071A66013D51; };
 		668E8659155A8695F2ECB433 = {isa = PBXBuildFile; fileRef = 69904417D332F940BAA49A60; };
@@ -189,6 +190,7 @@
 		3DE12B0B1E6E9121E02A5DEC = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GLibThread.cpp; path = ../../Source/GLib/GLibThread.cpp; sourceTree = "SOURCE_ROOT"; };
 		3F13DEE0D2D557F789151928 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JsonWifiInterface.h; path = ../../Source/Wifi/JsonWifiInterface.h; sourceTree = "SOURCE_ROOT"; };
 		3F54304E794DA80D5D4425CC = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenuItem.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItem.h"; sourceTree = "SOURCE_ROOT"; };
+		3F7219A24B52A1BFF362A71F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ColourConfigFile.cpp; path = "../../Source/Config Files/ColourConfigFile.cpp"; sourceTree = "SOURCE_ROOT"; };
 		409096AF3FAC19F2F082F497 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PocketHomeApplication.h; path = ../../Source/PocketHomeApplication.h; sourceTree = "SOURCE_ROOT"; };
 		4223ACAC7C171CF75945FD82 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PageStackComponent.h; path = ../../Source/Components/Pages/PageStackComponent.h; sourceTree = "SOURCE_ROOT"; };
 		43618EC1AF9B84CDF65343BF = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PokeLookAndFeel.cpp; path = ../../Source/Components/PokeLookAndFeel.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -304,6 +306,7 @@
 		BB3D58FDF2D817776CE58B99 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = ../../JuceLibraryCode/AppConfig.h; sourceTree = "SOURCE_ROOT"; };
 		BB88AEE494C74F681E8BC6C3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiIcon.cpp; path = "../../Source/Components/Pages/Home Page/Widgets/WifiIcon.cpp"; sourceTree = "SOURCE_ROOT"; };
 		BC8B99BDB27FF812849CE45D = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FileSelectTextEditor.h; path = ../../Source/Components/Widgets/FileSelectTextEditor.h; sourceTree = "SOURCE_ROOT"; };
+		BDFE24B0561E16A4686F9A35 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ColourConfigFile.h; path = "../../Source/Config Files/ColourConfigFile.h"; sourceTree = "SOURCE_ROOT"; };
 		BE10AC05F743D7B9F14B072B = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IconSliderComponent.h; path = ../../Source/Components/Widgets/IconSliderComponent.h; sourceTree = "SOURCE_ROOT"; };
 		BE1714D68A7F5872612D9985 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = InputSettingsPage.cpp; path = "../../Source/Components/Pages/Input Settings Page/InputSettingsPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		BE1D2DD5647FA0CCACA2C0D6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SavedConnections.h; path = ../../Source/GLib/LibNM/SavedConnections.h; sourceTree = "SOURCE_ROOT"; };
@@ -565,6 +568,8 @@
 					1DE205CBDB541988A015F7A8,
 					643563D65D8762CFE0070A7D, ); name = Components; sourceTree = "<group>"; };
 		A97F6D4D0C68ACC50A214162 = {isa = PBXGroup; children = (
+					3F7219A24B52A1BFF362A71F,
+					BDFE24B0561E16A4686F9A35,
 					C2A16ADF8541BE782A1A5979,
 					23B408DB9AA8CE2220B9FD39,
 					BF50D88F5F1D071A66013D51,
@@ -926,6 +931,7 @@
 					9554CD7AC4626F460BDCA747,
 					4DD86E5BA0F685778565D72B,
 					F539140B92AE87F503660C9F,
+					D97D26BB40FCD02EFA5DDEBF,
 					D70E5CE257B21FB385C6F314,
 					A82BA2454C8A85343067F986,
 					668E8659155A8695F2ECB433,
