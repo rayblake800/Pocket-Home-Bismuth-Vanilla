@@ -16,11 +16,21 @@ fontPadding(fontPadding)
 }
 
 /**
+ * Sets the maximum height of the label text.
+ */
+void ScalingLabel::setMaximumTextSize(ComponentConfigFile::TextSize maxSize)
+{
+    this->maxSize = maxSize;
+    resized();
+}
+
+/**
  * Updates font size when label bounds change.
  */
 void ScalingLabel::resized()
 {
     ComponentConfigFile config;
-    setFont(getFont().withHeight(config.getFontHeight
-            (getLocalBounds(), getText())));
+    int fontHeight = std::min(config.getFontHeight(maxSize),
+        config.getFontHeight(getLocalBounds(), getText()));
+    setFont(getFont().withHeight(fontHeight));
 }

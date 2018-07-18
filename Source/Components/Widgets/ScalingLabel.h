@@ -1,7 +1,6 @@
 #pragma once
-#include "ComponentConfigFile.h"
 #include "JuceHeader.h"
-
+#include "ComponentConfigFile.h"
 /**
  * @File ScalingLabel.h
  * 
@@ -28,7 +27,14 @@ public:
 
     virtual ~ScalingLabel() { }
 
-    private:
+    /**
+     * Sets the maximum height of the label text.
+     *
+     * @param maxSize  One of the text height values set in ComponentConfigFile.
+     */
+    void setMaximumTextSize(ComponentConfigFile::TextSize maxSize);
+
+private:
     /**
      * Updates font size when label bounds change.
      */
@@ -36,6 +42,9 @@ public:
 
     //Pixels of vertical space to leave between text and component bounds.
     int fontPadding = 0;
+
+    //Maximum text height setting.
+    ComponentConfigFile::TextSize maxSize = ComponentConfigFile::largeText;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ScalingLabel)
 };
