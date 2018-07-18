@@ -274,8 +274,7 @@ void PageAppFolder::PageMenuButton::resized()
     Rectangle<float> imageBounds = bounds.toFloat();
     const Font& titleFont = getTitleFont();
     ComponentConfigFile config;
-    int textHeight = config.getComponentSettings
-            (ComponentConfigFile::smallTextKey).getBounds().getHeight();
+    int textHeight = config.getFontHeight(ComponentConfigFile::smallText);
 
     imageBounds.setHeight(imageBounds.getWidth());
     textBounds.setTop(imageBounds.getBottom());

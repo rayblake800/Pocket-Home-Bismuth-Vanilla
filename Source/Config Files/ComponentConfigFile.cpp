@@ -12,7 +12,18 @@ ResourceManager(sharedResource, configLock,
 [this]()->ResourceManager::SharedResource*
 {
     return new ConfigJson();
-}) { }
+}) 
+{
+    static bool first = true;
+    if(!getWindowBounds().isEmpty() && first)
+    {
+        DBG("LargeText = " << getFontHeight(largeText));
+        DBG("MediumText = " << getFontHeight(mediumText));
+        DBG("SmallText = " << getFontHeight(smallText));
+        first = false;
+    }
+
+}
 
 /*
  * Gets configured component settings from shared .json file data.
@@ -35,6 +46,10 @@ void ComponentConfigFile::addListener(ConfigFile::Listener* listener,
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     config->addListener(listener, trackedKeys);
 }
+//######################### Text Size Keys #################################
+const String ComponentConfigFile::smallTextKey  = "small text";
+const String ComponentConfigFile::mediumTextKey = "medium text";
+const String ComponentConfigFile::largeTextKey  = "large text";
 
 //######################### UI Component Data ##############################
 //Defines all component types managed in the config file
@@ -53,9 +68,6 @@ const String ComponentConfigFile::pageRightKey = "right arrow button";
 const String ComponentConfigFile::pageUpKey = "up arrow button";
 const String ComponentConfigFile::pageDownKey = "down arrow button";
 const String ComponentConfigFile::spinnerKey = "loading spinner";
-const String ComponentConfigFile::smallTextKey = "small text";
-const String ComponentConfigFile::mediumTextKey = "medium text";
-const String ComponentConfigFile::largeTextKey = "large text";
 
 /*
  * Return the most appropriate font size for drawing text
@@ -64,12 +76,7 @@ int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds, String text)
 {
     const ScopedReadLock readLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
-    int heightLarge = config->getComponentSettings(largeTextKey).getBounds()
-            .getHeight();
-    int heightMedium = config->getComponentSettings(mediumTextKey).getBounds()
-            .getHeight();
-    int heightSmall = config->getComponentSettings(smallTextKey).getBounds()
-            .getHeight();
+
     int numLines = 1;
     for (int i = 0; i < text.length(); i++)
     {
@@ -86,19 +93,49 @@ int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds, String text)
     {
         height = textBounds.getWidth() * height / width;
     }
-    if (height > heightLarge)
+    int testHeight = getFontHeight(largeText);
+    if (height > testHeight)
     {
-        return heightLarge;
+        return testHeight;
     }
-    else if (height > heightMedium)
+    testHeight = getFontHeight(mediumText);
+    if (height > testHeight)
     {
-        return heightMedium;
+        return testHeight;
     }
-    else if (height > heightSmall)
+    testHeight = getFontHeight(smallText);
+    if (height > testHeight)
     {
-        return heightSmall;
+        return testHeight;
     }
     return height;
+}
+
+/**
+ * Gets the height in pixels of one of the three configured text sizes.
+ */
+int ComponentConfigFile::getFontHeight(TextSize sizeType)
+{
+    String key;
+    switch(sizeType)
+    {
+    case smallText:
+        key = smallTextKey;
+        break;
+    case mediumText:
+        key = mediumTextKey;
+        break;
+    case largeText:
+        key = largeTextKey;
+    }
+    const ScopedReadLock readLock(configLock);
+    ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
+    double size = config->getConfigValue<double>(key);
+    if(size > 1)
+    {
+        return (int) size;
+    }
+    return (int) (size * getWindowBounds().getHeight());
 }
 
 /*
@@ -122,9 +159,7 @@ StringArray ComponentConfigFile::getComponentKeys()
             pageUpKey,
             pageDownKey,
             spinnerKey,
-            smallTextKey,
-            mediumTextKey,
-            largeTextKey};
+            };
 }
 
 ComponentConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
@@ -152,7 +187,11 @@ ComponentConfigFile::ConfigJson::getComponentSettings(String componentKey)
 std::vector<ConfigFile::DataKey> ComponentConfigFile::ConfigJson
 ::getDataKeys() const
 {
-    std::vector<DataKey> keys = {
+    std::vector<DataKey> keys = 
+    {
+        {smallTextKey,  doubleType},
+        {mediumTextKey, doubleType},
+        {largeTextKey,  doubleType}
     };
     return keys;
 }

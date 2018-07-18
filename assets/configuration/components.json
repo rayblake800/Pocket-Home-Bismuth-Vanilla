@@ -1,4 +1,8 @@
 {  
+    "small text"  : 0.05,  
+    "medium text" : 0.073,  
+    "large text"  : 0.13,
+
     "scrolling app menu": {
         "x": 0,
         "y": 0,
@@ -177,14 +181,5 @@
             "spinner6.svg",
             "spinner7.svg"
         ]
-    },
-    "small text": {
-        "height": 0.05  
-    },
-    "medium text": {
-        "height": 0.073  
-    },
-    "large text": {
-        "height": 0.13
     }
 }

@@ -63,8 +63,7 @@ int ScrollingAppFolder::getMinimumWidth()
 Font ScrollingAppFolder::getButtonFont()
 {
     ComponentConfigFile config;
-    return Font(config.getComponentSettings
-            (ComponentConfigFile::smallTextKey).getBounds().getHeight());
+    return Font(config.getFontHeight(ComponentConfigFile::smallText));
 }
 
 ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton

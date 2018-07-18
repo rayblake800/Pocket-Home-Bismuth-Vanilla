@@ -35,6 +35,10 @@ public:
      * @see ConfigFile.h
      */
     void addListener(ConfigFile::Listener* listener, StringArray trackedKeys);
+    //######################### Text Size Keys #################################
+    static const String smallTextKey;
+    static const String mediumTextKey;
+    static const String largeTextKey;
 
     //######################### UI Component Data ##############################
     //Defines all component types managed in the config file
@@ -53,9 +57,19 @@ public:
     static const String pageUpKey;
     static const String pageDownKey;
     static const String spinnerKey;
-    static const String smallTextKey;
-    static const String mediumTextKey;
-    static const String largeTextKey;
+
+    /**
+     * Represents the three main text size options.  The actual size of
+     * each of these options is set in components.json, either as a fraction
+     * of the window height (if textSize <= 1) or as a fixed height in pixels
+     * (if textSize > 1).
+     */
+    enum TextSize
+    {
+        smallText,
+        mediumText,
+        largeText
+    };
 
     /**
      * Return the most appropriate font size for drawing text.
@@ -64,13 +78,21 @@ public:
      * 
      * @param text        The actual text being drawn.
      * 
-     * @return            Whichever font height (small, medium, or large) 
-     *                     defined in components.json would best fit this text 
-     *                     within its bounds. If even the small font size is 
-     *                     too big to fit in textBounds, instead return whatever 
-     *                     font height is small enough to fit.
+     * @return   Whichever font height (small, medium, or large) defined in 
+     *           components.json would best fit this text within its bounds. 
+     *           If even the small font size is too big to fit in textBounds, 
+     *           instead return whatever font height is small enough to fit.
      */
     int getFontHeight(Rectangle <int> textBounds, String text);
+
+    /**
+     * Gets the height in pixels of one of the three configured text sizes.
+     *
+     * @param sizeType  A text size type defined in the Component config file.
+     *
+     * @return  The height in pixels of that text size type.
+     */
+    int getFontHeight(TextSize sizeType);
 
     /**
      * Represents a configurable UI element
@@ -176,15 +198,12 @@ public:
 
 
 protected:
-
     /**
      * @return the list of all component keys.
      */
     static StringArray getComponentKeys();
 
-
 private:
-
     class ConfigJson : public ConfigFile
     {
     public:
@@ -222,9 +241,6 @@ private:
          */
         void copyDataToJson(DynamicObject::Ptr jsonObj) override final;
 
-        //Stores all component settings loaded from the component config file
-        std::map<String, ComponentSettings> components;
-
         /**
          * Gets the string key and data type for each basic value stored in
          * components.json.
@@ -233,6 +249,9 @@ private:
          *          double stored in components.json.
          */
         virtual std::vector<DataKey> getDataKeys() const override;
+
+        //Stores all component settings loaded from the component config file
+        std::map<String, ComponentSettings> components;
     };
 
     //Defines the component config file's name

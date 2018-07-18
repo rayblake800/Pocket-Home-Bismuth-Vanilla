@@ -1,5 +1,3 @@
--Text height shouldn't be in configuration as a component.
-
 -Add SetMaximumTextSize(enum ConfigTextSize) to ScalingLabel components
 
 -Find and fix missing localized text

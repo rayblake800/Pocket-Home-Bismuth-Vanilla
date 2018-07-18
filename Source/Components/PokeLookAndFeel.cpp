@@ -30,7 +30,7 @@ Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const Font &font)
 }
 
 /*
- * Draws the background of a linear slider. 
+ * Draws the thumb portion of a linear Slider.
  */
 void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
         int width, int height,
@@ -58,7 +58,7 @@ void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
 }
 
 /*
- * Draws the entire linear slider component.
+ * Draws the background of a linear slider.
  */
 void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y,
         int width, int height,
