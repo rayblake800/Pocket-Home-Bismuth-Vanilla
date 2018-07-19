@@ -13,16 +13,28 @@ context(context)
 
 GLibThread::~GLibThread()
 {
-    addAndInitCall([this]()
+    if(isThreadRunning())
     {
-        g_main_loop_quit(mainLoop);
-    });
-    signalThreadShouldExit();
-    waitForThreadToExit(-1);
-    g_main_context_unref(context);
-    context = nullptr;
-    g_main_loop_unref(mainLoop);
-    mainLoop = nullptr;
+        if(mainLoop != nullptr)
+        {
+            addAndInitCall([this]()
+            {
+                g_main_loop_quit(mainLoop);
+            });
+        }
+        signalThreadShouldExit();
+        waitForThreadToExit(-1);
+    }
+    if(mainLoop != nullptr)
+    {
+        g_main_loop_unref(mainLoop);
+        mainLoop = nullptr;
+    }
+    if(context != nullptr)
+    {
+        g_main_context_unref(context);
+        context = nullptr;
+    }
 }
 
 /**
@@ -44,13 +56,17 @@ void GLibThread::call(std::function<void()> fn)
     {
         fn();
     }
-    else
+    else if(isThreadRunning())
     {
         std::mutex callMutex;
         std::condition_variable callPending;
         std::unique_lock<std::mutex> callLock(callMutex);
         addAndInitCall(fn, &callMutex, &callPending);
         callPending.wait(callLock);
+    }
+    else
+    {
+        DBG("GLibThread::" << __func__ << ": Thread not running, skipping function call.");
     }
 }
 
@@ -78,11 +94,15 @@ GMainContext* GLibThread::getContext()
 void GLibThread::addAndInitCall(std::function<void() > call,
         std::mutex* callerMutex, std::condition_variable* callPending)
 {
-    if(threadShouldExit())
+    if(context == nullptr)
     {
         DBG("GLibThread::" << __func__ 
-                << ": Thread is exiting, running function call now");
-        call();
+                << ": Thread context not initialized!");
+	if(callerMutex != nullptr)
+	{
+            std::unique_lock<std::mutex> lock(*callerMutex);
+            callPending->notify_one();
+	}
         return;
     }
     jassert((callerMutex == nullptr && callPending == nullptr)
@@ -163,7 +183,7 @@ void GLibThread::windowFocusLost()
  */
 void GLibThread::windowFocusGained()
 {
-    if(mainLoop != nullptr)
+    if(mainLoop != nullptr && !isThreadRunning())
     {
         startThread();
     }
