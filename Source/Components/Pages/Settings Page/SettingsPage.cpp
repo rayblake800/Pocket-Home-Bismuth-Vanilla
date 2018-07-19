@@ -42,6 +42,7 @@ advancedPageButton(localeText(advanced_settings))
     setLayout(layout);
     
     advancedPageButton.addListener(this);
+    advancedPageButton.setMaxTextScale(ComponentConfigFile::mediumText);
     screenBrightnessSlider.setRange(1, 10, 1);
     screenBrightnessSlider.setValue(Display::getBrightness());
     screenBrightnessSlider.addListener(this);

@@ -65,6 +65,7 @@
 		88EF320222F63EBCCC3A344A = {isa = PBXBuildFile; fileRef = A12883C88EDA0F7068A4A4FE; };
 		6E9AA20D280B6D33B5EDD0AD = {isa = PBXBuildFile; fileRef = F3B41E0F996958EA3F61CCD3; };
 		31A4EC54AC9A2923AAD29698 = {isa = PBXBuildFile; fileRef = D2E6D861C600DCFFB2AAE9A1; };
+		B37FF55F17D8662C2BD0F40D = {isa = PBXBuildFile; fileRef = 1B19BD3710F7CDF74FAD92E7; };
 		C4835695425F0FA30527FE9E = {isa = PBXBuildFile; fileRef = 190CB9DA24BAFD99DFA0341D; };
 		FAE400061BEC09E7824AB8B9 = {isa = PBXBuildFile; fileRef = 9AADB226D34CF8F75E4A3B9F; };
 		D587F5CBC33CD0DB4840E35F = {isa = PBXBuildFile; fileRef = C1D33117DF650FD4889D2C6F; };
@@ -154,6 +155,7 @@
 		1748C1E55244590122D8CC5A = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WifiSettingsComponent.h; path = "../../Source/Components/Pages/Settings Page/WifiSettingsComponent.h"; sourceTree = "SOURCE_ROOT"; };
 		17AB6C1399ED873A9FACEA96 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuButton.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/AppMenuButton.cpp"; sourceTree = "SOURCE_ROOT"; };
 		190CB9DA24BAFD99DFA0341D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PagedList.cpp; path = ../../Source/Components/Widgets/PagedList.cpp; sourceTree = "SOURCE_ROOT"; };
+		1B19BD3710F7CDF74FAD92E7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScalingTextButton.cpp; path = ../../Source/Components/Widgets/ScalingTextButton.cpp; sourceTree = "SOURCE_ROOT"; };
 		1C81254A1679A7E194399A32 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Spinner.cpp; path = ../../Source/Components/Widgets/Spinner.cpp; sourceTree = "SOURCE_ROOT"; };
 		1CC9DDA62B928C623D1C2EE2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScrollingAppMenu.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Types/ScrollingAppMenu.cpp"; sourceTree = "SOURCE_ROOT"; };
 		1D245B6E8B1AEAA57F3E55ED = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AdvancedSettingsPage.h; path = "../../Source/Components/Pages/Advanced Settings Page/AdvancedSettingsPage.h"; sourceTree = "SOURCE_ROOT"; };
@@ -214,6 +216,7 @@
 		56AC429C5B3420A45299748E = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NMPPDeviceWifi.h; path = ../../Source/GLib/LibNM/NMPPDeviceWifi.h; sourceTree = "SOURCE_ROOT"; };
 		58741991E2AF00B3933A4739 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LibNMInterface.h; path = ../../Source/Wifi/LibNMInterface.h; sourceTree = "SOURCE_ROOT"; };
 		595CC33D265F13657679829E = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IconThemeIndex.h; path = "../../Source/FreeDesktop/Icon Themes/IconThemeIndex.h"; sourceTree = "SOURCE_ROOT"; };
+		599929A177913EA7EECE95E8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ScalingTextButton.h; path = ../../Source/Components/Widgets/ScalingTextButton.h; sourceTree = "SOURCE_ROOT"; };
 		5A984E825881A6C4DC98B605 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BluetoothSettingsComponent.cpp; path = "../../Source/Components/Pages/Settings Page/BluetoothSettingsComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		5B7E8DCDDC03ECA2491BBA4C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenuButton.h; path = "../../Source/Components/Pages/Home Page/AppMenu/AppMenuButton.h"; sourceTree = "SOURCE_ROOT"; };
 		5C7604E65FFEB432A94A3F6C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BatteryIcon.h; path = "../../Source/Components/Pages/Home Page/Widgets/BatteryIcon.h"; sourceTree = "SOURCE_ROOT"; };
@@ -527,6 +530,8 @@
 					663A784635D4704F72715384,
 					293FCCDD16AB557B1FE4FAAA, ); name = Pages; sourceTree = "<group>"; };
 		43D4C0ABDFF23BF1E430A832 = {isa = PBXGroup; children = (
+					1B19BD3710F7CDF74FAD92E7,
+					599929A177913EA7EECE95E8,
 					190CB9DA24BAFD99DFA0341D,
 					C78A5D5B3E1EDCD66541AC1D,
 					9AADB226D34CF8F75E4A3B9F,
@@ -913,6 +918,7 @@
 					88EF320222F63EBCCC3A344A,
 					6E9AA20D280B6D33B5EDD0AD,
 					31A4EC54AC9A2923AAD29698,
+					B37FF55F17D8662C2BD0F40D,
 					C4835695425F0FA30527FE9E,
 					FAE400061BEC09E7824AB8B9,
 					D587F5CBC33CD0DB4840E35F,

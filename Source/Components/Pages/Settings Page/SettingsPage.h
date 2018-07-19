@@ -7,6 +7,7 @@
 #include "PageComponent.h"
 #include "WindowFocusedTimer.h"
 #include "WifiSettingsComponent.h"
+#include "ScalingTextButton.h"
 //#include "BluetoothSettingsComponent.h"
 
 /**
@@ -76,7 +77,7 @@ public:
     //sets system volume levels
     IconSliderComponent volumeSlider;
     //opens the advanced settings page
-    TextButton advancedPageButton;
+    ScalingTextButton advancedPageButton;
     
     //localized text keys
     static const constexpr char * advanced_settings = "advanced_settings";

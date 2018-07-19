@@ -7,6 +7,7 @@
 #include "FileSelectTextEditor.h"
 #include "OverlaySpinner.h"
 #include "AppMenuButton.h"
+#include "ScalingTextButton.h"
 #include "PokeLookAndFeel.h"
 
 PokeLookAndFeel::PokeLookAndFeel() :
@@ -125,9 +126,20 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
     Font font(getTextButtonFont(button, button.getHeight()));
     font.setExtraKerningFactor(0.06f);
     ComponentConfigFile componentConfig;
-    font.setHeight(componentConfig.getFontHeight
-            (button.getLocalBounds(), button.getButtonText()));
+    int fontHeight = componentConfig.getFontHeight
+            (button.getLocalBounds(), button.getButtonText());
+    //Check if the TextButton is actually a ScalingTextButton with a maximum
+    //height scale set.
+    ScalingTextButton* scalingBtn = dynamic_cast<ScalingTextButton*>(&button);
+    if(scalingBtn != nullptr 
+       && scalingBtn->getMaxTextScale() != ComponentConfigFile::largeText)
+    {
+        fontHeight = std::min(fontHeight,
+                componentConfig.getFontHeight(scalingBtn->getMaxTextScale()));
+    }
+    font.setHeight(fontHeight);
     g.setFont(font);
+    
     Colour buttonColour = button.findColour(button.getToggleState() ?
             TextButton::textColourOnId : TextButton::textColourOffId);
     if (!button.isEnabled())
@@ -140,10 +152,10 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
     }
     g.setColour(buttonColour);
 
+    //fontHeight = roundToInt(font.getHeight() * 0.6f);
     const int yIndent = jmin(4, button.proportionOfHeight(0.3f));
     const int cornerSize = jmin(button.getHeight(), button.getWidth()) / 2;
 
-    const int fontHeight = roundToInt(font.getHeight() * 0.6f);
     const int leftIndent = jmin(fontHeight,
             2 + cornerSize / (button.isConnectedOnLeft() ? 4 : 2));
     const int rightIndent = jmin(fontHeight,

@@ -16,8 +16,6 @@
 -Set password page isn`t hiding the current password field!
  Figure out why the program hangs on authentication
 
--Fix Login page layout
-
 -Fix cursor selection option
 
 -Fix clock mode option

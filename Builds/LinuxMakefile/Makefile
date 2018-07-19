@@ -121,6 +121,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/UIPage_7fd19d1c.o \
   $(JUCE_OBJDIR)/ComponentEditorPage_bc490e6a.o \
   $(JUCE_OBJDIR)/ColourPage_8cc97274.o \
+  $(JUCE_OBJDIR)/ScalingTextButton_2b003e56.o \
   $(JUCE_OBJDIR)/PagedList_64e4f23.o \
   $(JUCE_OBJDIR)/NavButton_cf1b4265.o \
   $(JUCE_OBJDIR)/ColourPicker_b22d9d54.o \
@@ -462,6 +463,11 @@ $(JUCE_OBJDIR)/ComponentEditorPage_bc490e6a.o: ../../Source/Components/Pages/UI\
 $(JUCE_OBJDIR)/ColourPage_8cc97274.o: ../../Source/Components/Pages/UI\ Page/ColourPage.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ColourPage.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ScalingTextButton_2b003e56.o: ../../Source/Components/Widgets/ScalingTextButton.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ScalingTextButton.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PagedList_64e4f23.o: ../../Source/Components/Widgets/PagedList.cpp
