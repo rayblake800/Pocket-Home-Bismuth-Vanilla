@@ -28,8 +28,8 @@ void IconThread::loadIcon(String icon, int size,
         std::function<void(Image) > assignImage,
         IconThemeIndex::Context context, int scale)
 {
-    DBG("IconThread::" << __func__ << ": Requesting icon " << icon 
-            << ", target size " << size);
+    //DBG("IconThread::" << __func__ << ": Requesting icon " << icon 
+    //        << ", target size " << size);
     //if the icon variable is a full path, return that
     if (icon.substring(0, 1) == "/")
     {
@@ -242,7 +242,7 @@ String IconThread::IconResource::getIconPath
     for(const String& iconDir : iconDirectories)
     {
         //TODO: add support for .xpm files, fix svg rendering problems
-        //static const StringArray iconExtensions = {".png", ".xpm", ".svg"};
+        static const StringArray iconExtensions = {".png", ".xpm", ".svg"};
         //for(const String& ext : iconExtensions)
         //{
             static const char* ext = ".png";
