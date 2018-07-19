@@ -39,6 +39,37 @@ private:
      * Updates font size when label bounds change.
      */
     void resized() override;
+    
+    /**
+     * Listens for changes to text size configuration, and updates the
+     * ScalingLabel in response.  I would normally have ScalingLabel directly
+     * inherit from ConfigFile::Listener, but doing that would leave
+     * ScalingLabel subclasses unable to inherit ConfigurableComponent.
+     */
+    class SizeListener : public ConfigFile::Listener
+    {
+    public:
+        /**
+         * @param label  Passes in the address of the ScalingLabel that owns
+         *               this SizeListener.
+         */
+        SizeListener(ScalingLabel* label);
+        
+        virtual ~SizeListener() { }
+        
+    private:
+        /**
+         * Updates the ScalingLabel component when text size configuration
+         * changes.
+         * 
+         * @param propertyKey  One of the text size keys defined by 
+         *                     ComponentConfigFile.
+         */
+        virtual void configValueChanged(String propertyKey) override;
+        
+        ScalingLabel* label = nullptr;
+    };
+    SizeListener sizeListener;
 
     //Pixels of vertical space to leave between text and component bounds.
     int fontPadding = 0;
