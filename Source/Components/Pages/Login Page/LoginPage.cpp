@@ -81,9 +81,10 @@ void LoginPage::textFocus()
  */
 void LoginPage::pageButtonClicked(Button *button)
 {
-    if (Password::checkPassword(passwordField.getText()))
+    String password = passwordField.getText();
+    passwordField.setText("");
+    if (Password::checkPassword(password))
     {
-        passwordField.setText("");
         loginCallback();
     }
     else displayError();
