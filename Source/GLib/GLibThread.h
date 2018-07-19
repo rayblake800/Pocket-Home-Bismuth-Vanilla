@@ -22,9 +22,10 @@
 #include <condition_variable>
 
 #include "gio/gio.h"
+#include "WindowFocus.h"
 #include "JuceHeader.h"
 
-class GLibThread : private Thread
+class GLibThread : private Thread, private WindowFocus::Listener
 {
 public:
     /**
@@ -101,6 +102,17 @@ private:
      * GMainLoop.
      */
     static gboolean runAsync(CallData* runData);
+
+    /**
+     * Pause the event loop whenever window focus is lost.
+     */
+    virtual void windowFocusLost() override;
+    
+    /*
+     * Resume the event loop whenever window focus is regained.
+     */
+    virtual void windowFocusGained() override;
+    
     
     GMainContext* context = nullptr;
     GMainLoop* mainLoop = nullptr;

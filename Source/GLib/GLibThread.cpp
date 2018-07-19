@@ -19,6 +19,10 @@ GLibThread::~GLibThread()
     });
     signalThreadShouldExit();
     waitForThreadToExit(-1);
+    g_main_context_unref(context);
+    context = nullptr;
+    g_main_loop_unref(mainLoop);
+    mainLoop = nullptr;
 }
 
 /**
@@ -104,17 +108,15 @@ void GLibThread::run()
 {
     if (context != nullptr)
     {
-        mainLoop = g_main_loop_new(context, false);
         g_main_context_push_thread_default(context);
-               
+        if(mainLoop == nullptr)
+        {
+            mainLoop = g_main_loop_new(context, false);
+        }      
+	DBG("GLibSignalHandler: entering GLib main loop");
         g_main_loop_run(mainLoop);
-        
 	DBG("GLibSignalHandler: exiting GLib main loop");
         g_main_context_pop_thread_default(context);
-        g_main_context_unref(context);
-        context = nullptr;
-        g_main_loop_unref(mainLoop);
-        mainLoop = nullptr;
     }
 }
 
@@ -138,4 +140,31 @@ gboolean GLibThread::runAsync(CallData* runData)
     g_source_destroy(runData->callSource);
     delete runData;
     return false;
+}
+
+/**
+ * Pause the event loop whenever window focus is lost.
+ */
+void GLibThread::windowFocusLost()
+{
+    if(isThreadRunning())
+    {
+        addAndInitCall([this]()
+        {
+            g_main_loop_quit(mainLoop);
+        });
+        signalThreadShouldExit();
+        waitForThreadToExit(-1);
+    }
+}
+
+/*
+ * Resume the event loop whenever window focus is regained.
+ */
+void GLibThread::windowFocusGained()
+{
+    if(mainLoop != nullptr)
+    {
+        startThread();
+    }
 }
