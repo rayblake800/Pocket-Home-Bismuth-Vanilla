@@ -32,7 +32,9 @@
         "choose_bg_image": "Please choose your new background image",
         "menu_type_text": "Application menu:",
         "menu_columns": "Menu columns:",
-        "menu_rows": "Menu rows:"
+        "menu_rows": "Menu rows:",
+        "scrolling_menu" : "Scrolling menu",
+        "paged_menu" : "Paged menu"
     },
     "DateTimePage": {
         "date_time_settings": "Date and time settings",
@@ -186,6 +188,16 @@
             "days_post" : " days ago",
             "weeks_post" : " weeks ago",
             "years_post" : " years ago"
+    },
+    "AppMenuComponent" : {
+        "edit_app" : "Edit",
+        "delete_app" : "Delete",
+        "add_shortcut" : "Add application shortcut",
+        "move_back" : "Move back",
+        "move_forward" : "Move forward",
+        "new_shortcut" : "New shortcut",
+        "new_entry" : "New desktop menu entry",
+        "new_folder" : "New folder"
     }
 
 }

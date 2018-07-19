@@ -69,10 +69,8 @@ rowCounter(1, 1, 9)
             Colour::greyLevel(0.f));
     bgEditor.addFileSelectListener(this);
 
-    for (int i = 0; i < MainConfigFile::menuTypes.size(); i++)
-    {
-        menuTypePicker.addItem(MainConfigFile::menuTypes[i], i + 1);
-    }
+    menuTypePicker.addItem(localeText(scrolling_menu), 1);
+    menuTypePicker.addItem(localeText(paged_menu), 2);
     menuTypePicker.addListener(this);
     MainConfigFile mainConfig;
     rowCounter.setValue(mainConfig.getConfigValue<int>

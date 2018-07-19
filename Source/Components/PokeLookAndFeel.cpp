@@ -152,7 +152,6 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
     }
     g.setColour(buttonColour);
 
-    //fontHeight = roundToInt(font.getHeight() * 0.6f);
     const int yIndent = jmin(4, button.proportionOfHeight(0.3f));
     const int cornerSize = jmin(button.getHeight(), button.getWidth()) / 2;
 

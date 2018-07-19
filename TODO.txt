@@ -1,5 +1,3 @@
--Find and fix missing localized text
-
 -Setup Localized with ResourceManager to avoid unnecessary resource duplication 
 
 -Pause GLib threads when window focus is lost.

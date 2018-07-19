@@ -88,6 +88,12 @@ private:
     static const constexpr char * menu_type_text = "menu_type_text";
     static const constexpr char * menu_columns = "menu_columns";
     static const constexpr char * menu_rows = "menu_rows";
+    
+    // Don't forget to update these if adding/removing/re-ordering menu types!
+    // Keep in the same order used in MainConfigFile::menuTypes
+    static const constexpr char * scrolling_menu = "scrolling_menu";
+    static const constexpr char * paged_menu = "paged_menu";
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomeSettingsPage)
 };

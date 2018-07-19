@@ -14,8 +14,9 @@ DesktopEntryLoader AppMenuComponent::desktopEntries;
 AppMenuComponent::AppMenuComponent(
         String componentKey,
         OverlaySpinner& loadingSpinner) :
-loadingState(false),
+Localized("AppMenuComponent"),
 ConfigurableComponent(componentKey),
+loadingState(false),
 loadingSpinner(loadingSpinner),
 menuItemFactory(desktopEntries)
 {
@@ -96,30 +97,30 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
      */
     if (selectedButton != nullptr)
     {
-        editMenu.addItem(1, "Edit");
-        editMenu.addItem(2, "Delete");
+        editMenu.addItem(1, localeText(edit_app));
+        editMenu.addItem(2, localeText(delete_app));
         if (selectedMenuItem->isFolder())
         {
-            editMenu.addItem(4, "New application link");
+            editMenu.addItem(4, localeText(new_shortcut));
         }
         else if (getActiveFolderIndex() > 0)
         {
-            editMenu.addItem(6, "Pin to favorites");
+            editMenu.addItem(6, localeText(add_shortcut));
         }
         if (selectedMenuItem->canChangeIndex(-1))
         {
-            editMenu.addItem(7, "Move back");
+            editMenu.addItem(7, localeText(move_back));
         }
         if (selectedMenuItem->canChangeIndex(1))
         {
-            editMenu.addItem(8, "Move forward");
+            editMenu.addItem(8, localeText(move_forward));
         }
     }
     else
     {
-        editMenu.addItem(3, "New favorite application link");
-        editMenu.addItem(4, "New application link");
-        editMenu.addItem(5, "New folder");
+        editMenu.addItem(3, localeText(new_shortcut));
+        editMenu.addItem(4, localeText(new_entry));
+        editMenu.addItem(5, localeText(new_folder));
     }
 
     AppMenuFolder* activeFolder = openFolders[getActiveFolderIndex()];

@@ -15,6 +15,7 @@
 #include "AppMenuItemFactory.h"
 #include "AppMenuFolder.h"
 #include "AppMenuButton.h"
+#include "Localized.h"
 
 /** 
  * @file   AppMenuComponent.h
@@ -31,7 +32,7 @@
 
 
 class AppMenuComponent : public Component, public ConfigurableComponent,
-private WindowFocus::Listener
+private WindowFocus::Listener, private Localized
 {
 public:
     /**
@@ -369,6 +370,16 @@ private:
     //Tracks if desktop entries are loading or applications are launching in
     //another thread
     std::atomic<bool> loadingState;
+    
+    //Localized text keys:
+    static const constexpr char* edit_app     = "edit_app";
+    static const constexpr char* delete_app   = "delete_app";
+    static const constexpr char* add_shortcut = "add_shortcut";
+    static const constexpr char* move_back    = "move_back";
+    static const constexpr char* move_forward = "move_forward";
+    static const constexpr char* new_shortcut = "new_shortcut";
+    static const constexpr char* new_entry    = "new_entry";
+    static const constexpr char* new_folder   = "new_folder";
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
 };
