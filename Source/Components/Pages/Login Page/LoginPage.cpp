@@ -22,13 +22,28 @@ foundPassword(false)
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({
         Row(70, { RowItem(&ntcIcon) } ),
-        Row(10, { RowItem(&passwordLabel) } ),
-        Row(20, { RowItem(&passwordField) } ),
-        Row(20, { RowItem(&loginButton) } )
+        Row(12, 
+        {   
+            RowItem(),
+            RowItem(&passwordLabel),
+            RowItem()
+        }),
+        Row(15,
+        {   
+            RowItem(),
+            RowItem(&passwordField),
+            RowItem()
+        }),
+        Row(15, 
+        {   
+            RowItem(),
+            RowItem(&loginButton),
+            RowItem()
+        })
     });
-    layout.setXMarginFraction(0.3);
+    layout.setXMarginFraction(0.1);
     layout.setYMarginFraction(0.1);
-    layout.setYPaddingWeight(1);
+    layout.setYPaddingWeight(2);
     setLayout(layout);
     
     setBackgroundImage(AssetFiles::loadImageAsset("login/background.png"));
