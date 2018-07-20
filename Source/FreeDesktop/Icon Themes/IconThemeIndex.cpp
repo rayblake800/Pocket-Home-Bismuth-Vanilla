@@ -133,8 +133,8 @@ cacheFile(themeDir.getFullPathName())
         if (line.startsWithChar('[') && line.endsWithChar(']'))
         {
             sectionName = line.substring(1, line.length() - 1);
-            jassert(sectionName == "Icon Theme"
-                    || directories[sectionName].path == sectionName);
+            //jassert(sectionName == "Icon Theme"
+            //        || directories[sectionName].path == sectionName);
         }
         else if (line.isNotEmpty())
         {

@@ -160,44 +160,41 @@ void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
 {
     //ADDR_LOG(this, "removing signal handler ", signalHandler);
     //ADDR_LOG(signalHandler, " removing from signal source ", this);
-    callInMainContext([this,signalHandler]()
+    signalHandler->sources.removeAllInstancesOf(this);
+    GObject* object = getGObject();
+    if(object != nullptr)
     {
-        signalHandler->sources.removeAllInstancesOf(this);
-        GObject* object = getGObject();
-        if(object != nullptr)
+        Array<gulong> signalIDs;
+        for(auto it = registeredSignals.begin(); 
+            it != registeredSignals.end(); it++)
         {
-            Array<gulong> signalIDs;
-            for(auto it = registeredSignals.begin(); 
-                it != registeredSignals.end(); it++)
+            if(it->second == signalHandler)
             {
-                if(it->second == signalHandler)
-                {
-                    signalIDs.add(it->first);
-                }
+                signalIDs.add(it->first);
             }
-            for(const gulong& signalID : signalIDs)
-            {
-                g_signal_handler_disconnect(object, signalID);
-                registeredSignals.erase(signalID);
-                
-                //ADDR_LOG(this, String("signal ID ") +String(signalID) 
-                //        + String(" removed, handler was "), signalHandler);
-                //ADDR_LOG(signalHandler, String("signal ID ") +String(signalID) 
-                //        + String(" removed, source was "), object);
-                //ADDR_LOG(object, String("signal ID ") +String(signalID) 
-                //        + String(" removed, handler was "), signalHandler);
-                
-            }
-            g_clear_object(&object);
         }
-        else
+        for(const gulong& signalID : signalIDs)
         {
-            //ADDR_LOG(this, "GPPObject is null, but tried removing ",
-            //        signalHandler);
-            DBG("GPPObject::removeSignalHandler: Tried to remove signal "
-                    << "handler from null object.");
+            g_signal_handler_disconnect(object, signalID);
+            registeredSignals.erase(signalID);
+            
+            //ADDR_LOG(this, String("signal ID ") +String(signalID) 
+            //        + String(" removed, handler was "), signalHandler);
+            //ADDR_LOG(signalHandler, String("signal ID ") +String(signalID) 
+            //        + String(" removed, source was "), object);
+            //ADDR_LOG(object, String("signal ID ") +String(signalID) 
+            //        + String(" removed, handler was "), signalHandler);
+            
         }
-    });
+        g_clear_object(&object);
+    }
+    else
+    {
+        //ADDR_LOG(this, "GPPObject is null, but tried removing ",
+        //        signalHandler);
+        DBG("GPPObject::removeSignalHandler: Tried to remove signal "
+                << "handler from null object.");
+    }
 }
 
 /*
