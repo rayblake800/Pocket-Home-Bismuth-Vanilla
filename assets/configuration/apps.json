@@ -2,37 +2,37 @@
     "favorites": [
         {
             "name": "Terminal",
-            "icon": "appIcons/terminal.svg",
+            "icon": "terminal",
             "shell": "vala-terminal -fs 8 -g 20 20",
             "launch in terminal": false
         },
         {
             "name": "Play PICO-8",
-            "icon": "appIcons/pico8.svg",
+            "icon": "pico8",
             "shell": "pico8",
             "launch in terminal": false
         },
         {
             "name": "Make Music",
-            "icon": "appIcons/musicsequencer.svg",
+            "icon": "musicsequencer",
             "shell": "sunvox",
             "launch in terminal": false
         },
         {
             "name": "Get Help",
-            "icon": "appIcons/help.svg",
+            "icon": "help",
             "shell": "surf /usr/share/pocketchip-localdoc/index.html",
             "launch in terminal": false
         },
         {
             "name": "Write",
-            "icon": "appIcons/texteditor.svg",
+            "icon": "texteditor",
             "shell": "leafpad",
             "launch in terminal": false
         },
         {
             "name": "Browse Files",
-            "icon": "appIcons/filebrowser.svg",
+            "icon": "filebrowser",
             "shell": "pcmanfm",
             "launch in terminal": false
         }

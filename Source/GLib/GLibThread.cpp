@@ -66,7 +66,7 @@ void GLibThread::call(std::function<void()> fn)
     }
     else
     {
-        DBG("GLibThread::" << __func__ << ": Thread not running, skipping function call.");
+        DBG("GLibThread::" << __func__ << ": Thread not running, skipping execution.");
     }
 }
 
