@@ -327,26 +327,23 @@ GObject* GPPObject::getOtherGObject(const GPPObject& source) const
  */
 void GPPObject::removeData()
 {
-    callInMainContext([this]
+    if(!isNull())
     {
-        if(!isNull())
+        while(!registeredSignals.empty())
         {
-            while(!registeredSignals.empty())
-            {
-                SignalHandler* toRemove = registeredSignals.begin()->second;
-                removeSignalHandler(toRemove);
-            }
-            GObject* object = objectData.get();
-            //ADDR_LOG(object, "Removing from GPPObject ", this);
-            g_weak_ref_set(objectRef.get(), nullptr);
-            if(object != nullptr)
-            {
-                g_object_unref(object);
-                objectData.set(nullptr);
-                //ADDR_LOG(this, "Removed GObject ",object);
-            }
+            SignalHandler* toRemove = registeredSignals.begin()->second;
+            removeSignalHandler(toRemove);
         }
-    });
+        GObject* object = objectData.get();
+        //ADDR_LOG(object, "Removing from GPPObject ", this);
+        g_weak_ref_set(objectRef.get(), nullptr);
+        if(object != nullptr)
+        {
+            g_object_unref(object);
+            objectData.set(nullptr);
+            //ADDR_LOG(this, "Removed GObject ",object);
+        }
+    }
 }
 
 /*
