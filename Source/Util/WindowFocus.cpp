@@ -1,5 +1,16 @@
 #include "WindowFocus.h"
 
+//holds the current window focus state.
+static bool focused = false;
+
+/*
+ * Checks if the main application window is currently focused.
+ */
+bool WindowFocus::isFocused()
+{
+    return focused;
+}
+
 /**
  * Access the listener array through a callback function that will receive
  * the listener array reference as a parameter.  
@@ -26,7 +37,6 @@ DocumentWindow(title, backgroundColour, requiredButtons) { }
  */
 void WindowFocus::BroadcastWindow::activeWindowStatusChanged()
 {
-    static bool focused = !isActiveWindow();
     if (focused != isActiveWindow())
     {
         focused = !focused;

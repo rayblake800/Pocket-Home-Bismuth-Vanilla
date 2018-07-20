@@ -31,6 +31,16 @@ public:
      * a suspended timer will prevent it from resuming.
      */
     void stopTimer();
+
+    /**
+     * Starts the timer and sets the length of interval required. If the
+     * window is currently unfocused, the timer will immediately be
+     * suspended.
+     *
+     * @param intervalInMilliseconds  Milliseconds to wait before the 
+     *                                timer callback function runs.
+     */
+    void startTimer(int intervalInMilliseconds);
     
 private:
     /**

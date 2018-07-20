@@ -19,6 +19,14 @@
  */
 namespace WindowFocus {
 
+    /**
+     * Checks if the main application window is currently focused.
+     *
+     * @return   True iff the application window exists and is currently
+     *           focused.
+     */
+    bool isFocused();
+
     class BroadcastWindow : public DocumentWindow {
     public:
         /**

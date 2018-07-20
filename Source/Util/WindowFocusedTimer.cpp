@@ -11,6 +11,24 @@ void WindowFocusedTimer::stopTimer()
 }
 
 /**
+ * Starts the timer and sets the length of interval required. If the
+ * window is currently unfocused, the timer will immediately be
+ * suspended.
+ */
+void WindowFocusedTimer::startTimer(int intervalInMilliseconds)
+{
+    if(WindowFocus::isFocused())
+    {
+        Timer::startTimer(intervalInMilliseconds);
+    }
+    else
+    {   
+        suspendedEndTime = Time::getMillisecondCounter() + intervalInMilliseconds;
+        onSuspend();
+    }
+}
+
+/**
  * Suspends the timer when the window loses focus.
  */
 void WindowFocusedTimer::windowFocusLost()
