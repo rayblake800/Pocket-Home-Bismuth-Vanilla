@@ -61,9 +61,9 @@ bool PageStackComponent::isTopPage(PageComponent* page)
  */
 void PageStackComponent::resized()
 {
-    if (!stack.isEmpty())
+    for(PageComponent* page : stack)
     {
-        stack.getLast()->setBounds(getBounds());
+        page->setBounds(getBounds());
     }
 }
 
