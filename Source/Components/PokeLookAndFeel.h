@@ -87,6 +87,46 @@ public:
      */
     MouseCursor getMouseCursorFor(Component &component) override;
 
+   /**
+    * Gets the default font to use for popup menu text.
+    *
+    * @return  The default typeface, set to the medium font size defined in
+    *          ComponentConfigFile.
+    */
+    Font getPopupMenuFont() override;
+
+   /**
+    * Gets the default font to use for combo box text.
+    *
+    * @return  The default typeface, set to the small font size defined in
+    *          ComponentConfigFile.
+    */  
+    Font getComboBoxFont (ComboBox&) override;
+
+   /**
+    * Gets the default font to use for Label components.
+    *
+    * @return  The default typeface, set to the small font size defined in
+    *          ComponentConfigFile.
+    */ 
+    Font getLabelFont (Label&) override;
+
+
+   /**
+    * Gets the default font to use for alert window title text.
+    *
+    * @return  The default typeface, set to the large font size defined in
+    *          ComponentConfigFile.
+    */ 
+    Font getAlertWindowTitleFont() override;
+   
+   /**
+    * Gets the default font to use for alert window message text.
+    *
+    * @return  The default typeface, set to the medium font size defined in
+    *          ComponentConfigFile.
+    */ 
+    Font getAlertWindowMessageFont() override;
 
 private:
     /**

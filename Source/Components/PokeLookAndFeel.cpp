@@ -197,6 +197,56 @@ MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
     return cursor;
 }
 
+/**
+ * Gets the default font to use for popup menu text.
+ */
+Font PokeLookAndFeel::getPopupMenuFont()
+{
+    ComponentConfigFile config;
+    return Font(config.getFontHeight(ComponentConfigFile::mediumText));
+}
+
+/**
+ * Gets the default font to use for combo box text.
+ */  
+Font PokeLookAndFeel::getComboBoxFont(ComboBox& comboBox)
+{
+    ComponentConfigFile config;
+    int height = std::min(config.getFontHeight(ComponentConfigFile::mediumText),
+            config.getFontHeight(comboBox.getLocalBounds(), comboBox.getText()));
+    return Font(height);
+}
+
+/**
+ * Gets the default font to use for Label components.
+ */ 
+Font PokeLookAndFeel::getLabelFont(Label& label)
+
+{
+    ComponentConfigFile config;
+    int height = std::min(config.getFontHeight(ComponentConfigFile::smallText),
+            config.getFontHeight(label.getLocalBounds(), label.getText()));
+    return Font(height);
+}
+
+/**
+ * Gets the default font to use for alert window title text.
+ */ 
+Font PokeLookAndFeel::getAlertWindowTitleFont()
+{
+    ComponentConfigFile config;
+    return Font(config.getFontHeight(ComponentConfigFile::largeText));
+}
+   
+/**
+ * Gets the default font to use for alert window message text.
+ */ 
+Font PokeLookAndFeel::getAlertWindowMessageFont()
+{
+    ComponentConfigFile config;
+    return Font(config.getFontHeight(ComponentConfigFile::mediumText));
+}
+
 /*
  * Updates the cursor visibility when the associated config key is changed. 
  */
