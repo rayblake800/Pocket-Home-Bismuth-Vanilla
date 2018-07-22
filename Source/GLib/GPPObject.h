@@ -473,6 +473,6 @@ private:
     static Array<SignalHandler*, CriticalSection> signalHandlers;
     
     std::map<gulong,SignalHandler*> registeredSignals;
-    ScopedPointer<GWeakRef> objectRef;
+    ScopedPointer<GWeakRef> objectRef = nullptr;
     Atomic<GObject*> objectData;
 };

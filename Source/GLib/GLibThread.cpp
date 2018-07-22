@@ -13,18 +13,7 @@ context(context)
 
 GLibThread::~GLibThread()
 {
-    if(isThreadRunning())
-    {
-        if(mainLoop != nullptr)
-        {
-            addAndInitCall([this]()
-            {
-                g_main_loop_quit(mainLoop);
-            });
-        }
-        signalThreadShouldExit();
-        waitForThreadToExit(-1);
-    }
+    stopGLibThread();
     if(mainLoop != nullptr)
     {
         g_main_loop_unref(mainLoop);
@@ -56,17 +45,25 @@ void GLibThread::call(std::function<void()> fn)
     {
         fn();
     }
-    else if(isThreadRunning())
+    else
     {
+        bool threadStopped = !isThreadRunning();
+        if(threadStopped)
+        {
+            DBG("GLibThread::" << __func__ 
+                    << ": Thread not running, restarting thread.");
+            startThread();             
+        }    
         std::mutex callMutex;
         std::condition_variable callPending;
         std::unique_lock<std::mutex> callLock(callMutex);
         addAndInitCall(fn, &callMutex, &callPending);
         callPending.wait(callLock);
-    }
-    else
-    {
-        DBG("GLibThread::" << __func__ << ": Thread not running, skipping execution.");
+        if(threadStopped)
+        {
+            DBG("GLibThread::" << __func__ << ": Shutting down thread again.");
+            stopGLibThread();
+        }
     }
 }
 
@@ -94,15 +91,11 @@ GMainContext* GLibThread::getContext()
 void GLibThread::addAndInitCall(std::function<void() > call,
         std::mutex* callerMutex, std::condition_variable* callPending)
 {
-    if(context == nullptr)
+    if(threadShouldExit())
     {
         DBG("GLibThread::" << __func__ 
-                << ": Thread context not initialized!");
-	if(callerMutex != nullptr)
-	{
-            std::unique_lock<std::mutex> lock(*callerMutex);
-            callPending->notify_one();
-	}
+                << ": Thread is exiting, running function call now");
+        call();
         return;
     }
     jassert((callerMutex == nullptr && callPending == nullptr)
@@ -128,15 +121,17 @@ void GLibThread::run()
 {
     if (context != nullptr)
     {
+        mainLoop = g_main_loop_new(context, false);
         g_main_context_push_thread_default(context);
-        if(mainLoop == nullptr)
-        {
-            mainLoop = g_main_loop_new(context, false);
-        }      
-	DBG("GLibSignalHandler: entering GLib main loop");
+               
         g_main_loop_run(mainLoop);
+        
 	DBG("GLibSignalHandler: exiting GLib main loop");
         g_main_context_pop_thread_default(context);
+        g_main_context_unref(context);
+        context = nullptr;
+        g_main_loop_unref(mainLoop);
+        mainLoop = nullptr;
     }
 }
 
@@ -167,15 +162,7 @@ gboolean GLibThread::runAsync(CallData* runData)
  */
 void GLibThread::windowFocusLost()
 {
-    if(isThreadRunning())
-    {
-        addAndInitCall([this]()
-        {
-            g_main_loop_quit(mainLoop);
-        });
-        signalThreadShouldExit();
-        waitForThreadToExit(-1);
-    }
+    stopGLibThread();
 }
 
 /*
@@ -188,3 +175,24 @@ void GLibThread::windowFocusGained()
         startThread();
     }
 }
+
+/*
+ * Terminates the GLib main loop and stops the thread.
+ */
+void GLibThread::stopGLibThread()
+{
+    
+    if(isThreadRunning())
+    {
+        if(mainLoop != nullptr)
+        {
+            addAndInitCall([this]()
+            {
+                g_main_loop_quit(mainLoop);
+            });
+        }
+        signalThreadShouldExit();
+        waitForThreadToExit(-1);
+    }
+}
+

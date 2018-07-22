@@ -6,13 +6,23 @@
 #include "NMPPAccessPoint.h"
     
 
+/*
+ * Create a null access point object.
+ */
+WifiAccessPoint::WifiAccessPoint()
+{
+    DBG("Creating " << String::toHexString(reinterpret_cast<long>(this)));
+}
     
 /*
  * Create a wifi access point copying data from another access point.
  */
 WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 {
-    *this = toCopy;}
+    DBG("Creating " << String::toHexString(reinterpret_cast<long>(this))
+            << " copying " << String::toHexString(reinterpret_cast<long>(&toCopy)));
+    *this = toCopy;
+}
 
 /*
  * Create an access point object using LibNM access point data.
@@ -20,6 +30,7 @@ WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 WifiAccessPoint::WifiAccessPoint(const NMPPAccessPoint& accessPoint) : 
 nmAccessPoint(accessPoint)
 {
+    DBG("Creating " << String::toHexString(reinterpret_cast<long>(this)));
     if(nmAccessPoint.isNull())
     {
         return;
@@ -62,6 +73,7 @@ WifiAccessPoint::WifiAccessPoint
 ssid(ssid),
 hash(hash)
 {
+    DBG("Creating " << String::toHexString(reinterpret_cast<long>(this)));
     this->signalStrength.store(median<unsigned int>(0, signalStrength, 100));
 #if JUCE_DEBUG
     fakeConnection = true;
@@ -72,7 +84,10 @@ hash(hash)
 }
 
 
-WifiAccessPoint::~WifiAccessPoint() { }
+WifiAccessPoint::~WifiAccessPoint() 
+{
+    DBG("Destroying " << String::toHexString(reinterpret_cast<long>(this)));
+}
     
 /*
  * Checks if this object contains a valid wifi access point or not.
@@ -262,7 +277,7 @@ bool WifiAccessPoint::isValidKeyFormat(const String& psk) const
 /*
  * Assigns another access point's data to this access point.
  */
-bool WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
+WifiAccessPoint& WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
 {   
     ssid                 = rhs.ssid;
     bssid                = rhs.bssid;
@@ -285,6 +300,7 @@ bool WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
     {
         nmAccessPoint.addSignalHandler(this);
     }
+    return *this;
 }
 
 /*

@@ -17,7 +17,7 @@ public:
     /**
      * Create a null access point object.
      */
-    WifiAccessPoint() { }
+    WifiAccessPoint();
     
     /**
      * Create a wifi access point copying data from another access point.
@@ -200,7 +200,7 @@ public:
     /**
      * Assigns another access point's data to this access point.
      */
-    bool operator=(const WifiAccessPoint& rhs);
+    WifiAccessPoint& operator=(const WifiAccessPoint& rhs);
 
     /**
      * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.

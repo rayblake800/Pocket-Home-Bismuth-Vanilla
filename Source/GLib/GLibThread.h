@@ -113,6 +113,11 @@ private:
      */
     virtual void windowFocusGained() override;
     
+    /**
+     * Terminates the GLib main loop and stops the thread.
+     */
+    void stopGLibThread();
+    
     
     GMainContext* context = nullptr;
     GMainLoop* mainLoop = nullptr;

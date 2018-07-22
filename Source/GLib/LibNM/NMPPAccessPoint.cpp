@@ -263,7 +263,11 @@ void NMPPAccessPoint::Listener::propertyChanged
  */
 void NMPPAccessPoint::addSignalHandler(SignalHandler* signalHandler)
 { 
-    if(isClass<SignalHandler,Listener>(signalHandler))
+    if(isNull())
+    {
+        DBG("NMPPAccessPoint::" << __func__ << ": access point is null");
+    }
+    else if(isClass<SignalHandler,Listener>(signalHandler))
     {
         addNotifySignalHandler(signalHandler, NM_ACCESS_POINT_STRENGTH);
     }

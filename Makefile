@@ -1,6 +1,6 @@
 VERSION=0.0.8.9
 BUILD=1
-
+CONFIG=Release
 all: CONFIG:=Release
 all:
 	echo building $(CONFIG)

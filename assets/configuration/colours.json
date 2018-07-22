@@ -11,7 +11,7 @@
     "highlighted text field"      : "0xff393939",
     "highlighted text"            : "0xffeb008b",
     
-    "Page background"             : "",
+    "Page background"             : "0xffffffff",
 
     "Image0"                      : "0xffffffff",
     "Image1"                      : "0xff000000",

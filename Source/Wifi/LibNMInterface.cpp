@@ -294,9 +294,17 @@ void LibNMInterface::updateAllWifiData()
     lastNMState = wifiDevice.getState();
     savedConnections.updateSavedConnections();
     activeConnection = wifiDevice.getActiveConnection();
-    activeAP = WifiAccessPoint(wifiDevice.getAccessPoint
-            (activeConnection.getAccessPointPath()));
-    setAccessPointPaths(activeAP);
+    const char* apPath = activeConnection.getAccessPointPath();
+    if(apPath[0] != 0)
+    {
+        NMPPAccessPoint activeNMAP = wifiDevice.getAccessPoint(apPath);
+        if(!activeNMAP.isNull())
+        {
+            WifiAccessPoint newActive(activeNMAP);
+            activeAP = newActive;
+            setAccessPointPaths(activeAP);
+        }
+    }
     visibleAPs = wifiDevice.getAccessPoints();
     confirmWifiState();
 }

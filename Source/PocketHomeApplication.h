@@ -68,16 +68,16 @@ private:
     //as long as the application is running.
 
     //Holds general user-set program configuration data.
-    MainConfigFile mainConfig;
+    volatile MainConfigFile mainConfig;
     
     //Holds user-set UI component configuration data.
-    ComponentConfigFile componentConfig;
+    volatile ComponentConfigFile componentConfig;
     
     //Holds UI colour settings
-    ColourConfigFile colourConfig;
+    volatile ColourConfigFile colourConfig;
 
     //Runs the GLib event loop
-    GLibSignalHandler gLibThread;
+    volatile GLibSignalHandler gLibThread;
     
     //The program appearance manager.  This is dynamically allocated because it
     //should be created after/destroyed before all of the above resources.

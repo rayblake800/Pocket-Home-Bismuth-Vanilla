@@ -82,7 +82,9 @@ bool GPPObject::isNull() const
 GPPObject::SignalHandler::SignalHandler()
 {
     //ADDR_LOG(this,"Created as SignalHandler");
+    DBG("Adding signal handler, current count =" << signalHandlers.size());
     GPPObject::signalHandlers.addIfNotAlreadyThere(this);
+    DBG("Added signal handler, current count =" << signalHandlers.size());
 }
 
 
@@ -96,7 +98,9 @@ GPPObject::SignalHandler::SignalHandler(const SignalHandler& rhs)
     
     //ADDR_LOG(this,"Created as SignalHandler copying ", &rhs);
     //ADDR_LOG(&rhs,"Shared data with ", this);
+    DBG("Adding signal handler, current count =" << signalHandlers.size());
     GPPObject::signalHandlers.addIfNotAlreadyThere(this);
+    DBG("Added signal handler, current count =" << signalHandlers.size());
     for(GPPObject* signalSource : sources)
     {
         signalSource->addSignalHandler(this);
@@ -110,7 +114,10 @@ GPPObject::SignalHandler::SignalHandler(const SignalHandler& rhs)
  */
 GPPObject::SignalHandler::~SignalHandler()
 {
+    
+    DBG("Removing signal handler, current count =" << signalHandlers.size());
     GPPObject::signalHandlers.removeAllInstancesOf(this);
+    DBG("Removed signal handler, current count =" << signalHandlers.size());
     while(!sources.isEmpty())
     {
         GPPObject* source = sources[0];
@@ -465,10 +472,11 @@ GPPObject* GPPObject::findObjectWrapper(GObject* objectData,
 void GPPObject::addNotifySignalHandler(GPPObject::SignalHandler* signalHandler,
         const char* propertyName)
 {
+    jassert(propertyName != nullptr && isSignalHandlerValid(signalHandler));
     String signal("notify::");
     signal += propertyName;
-    connectSignalHandler(signalHandler, signal.toRawUTF8(),
-            G_CALLBACK(notifyCallback));
+    const char * cSignal = signal.toRawUTF8();
+    connectSignalHandler(signalHandler, cSignal, G_CALLBACK(notifyCallback));
 }
 
 /*
