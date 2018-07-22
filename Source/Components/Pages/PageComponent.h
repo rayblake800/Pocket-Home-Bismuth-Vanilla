@@ -100,12 +100,12 @@ public:
         RemovePassword,
         Power,
         Fel,
-        Settings,
+        QuickSettings,
         BluetoothSettings,
         WifiSettings,
         UI,
         ColourSettings,
-        AdvancedSettings,
+        SettingsList,
         DateTime,
         HomeSettings
     };

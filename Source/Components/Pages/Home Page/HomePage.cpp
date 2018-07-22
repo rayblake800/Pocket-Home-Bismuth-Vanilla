@@ -137,7 +137,7 @@ void HomePage::pageButtonClicked(Button * button)
 {
     if (button == &settingsButton)
     {
-        pushPageToStack(PageComponent::PageType::Settings);
+        pushPageToStack(PageComponent::PageType::QuickSettings);
     }
     else if (button == &powerButton)
     {

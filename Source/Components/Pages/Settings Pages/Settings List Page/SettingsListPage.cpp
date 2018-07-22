@@ -1,13 +1,13 @@
-#include "AdvancedSettingsPage.h"
+#include "SettingsListPage.h"
 #include "Password.h"
 
-AdvancedSettingsPage::AdvancedSettingsPage() :
-Localized("AdvancedSettingsPage"),
-PageComponent("AdvancedSettingsPage")
+SettingsListPage::SettingsListPage() :
+Localized("SettingsListPage"),
+PageComponent("SettingsListPage")
 {
 
 #    if JUCE_DEBUG
-    setName("AdvancedSettingsPage");
+    setName("SettingsListPage");
 #    endif
     setBackButton(PageComponent::leftBackButton);
     LayoutManager::Layout layout(
@@ -23,7 +23,7 @@ PageComponent("AdvancedSettingsPage")
 /*
  * Gets button titles for all page buttons.
  */
-StringArray AdvancedSettingsPage::getButtonTitles()
+StringArray SettingsListPage::getButtonTitles()
 {
     StringArray titleList;
     titleList.add(localeText(personalize_homepage));
@@ -44,7 +44,7 @@ StringArray AdvancedSettingsPage::getButtonTitles()
 /**
  * Reloads page layout whenever the page becomes visible.
  */
-void AdvancedSettingsPage::visibilityChanged()
+void SettingsListPage::visibilityChanged()
 {
     if (isVisible())
     {
@@ -56,12 +56,12 @@ void AdvancedSettingsPage::visibilityChanged()
  * Handle button clicks to open menu pages, close this page, or 
  * scroll the list of page buttons.
  */
-void AdvancedSettingsPage::pageButtonClicked(Button * button)
+void SettingsListPage::pageButtonClicked(Button * button)
 {
     TextButton * textButton = dynamic_cast<TextButton*>(button);
     if(textButton == nullptr)
     {
-        DBG("AdvancedSettingsPage::" << __func__ << ": invalid button!");
+        DBG("SettingsListPage::" << __func__ << ": invalid button!");
         return;
     }
     
@@ -83,7 +83,7 @@ void AdvancedSettingsPage::pageButtonClicked(Button * button)
     }
 }
 
-AdvancedSettingsPage::SettingsList::SettingsList()
+SettingsListPage::SettingsList::SettingsList()
 {
     setItemsPerPage(buttonsPerPage);
     setYPaddingFraction(yPaddingFraction);
@@ -92,7 +92,7 @@ AdvancedSettingsPage::SettingsList::SettingsList()
 /*
  * Gets the total number of page buttons.
  */
-unsigned int AdvancedSettingsPage::SettingsList::getListSize()
+unsigned int SettingsListPage::SettingsList::getListSize()
 {
     return Password::isPasswordSet() ? 5 : 4;
 }
@@ -100,11 +100,11 @@ unsigned int AdvancedSettingsPage::SettingsList::getListSize()
 /*
  * Updates or creates a page TextButton for a specific button index.
  */
-Component* AdvancedSettingsPage::SettingsList::updateListItem
+Component* SettingsListPage::SettingsList::updateListItem
 (Component* listItem, unsigned int index)
 {
-    AdvancedSettingsPage * parent 
-            = static_cast<AdvancedSettingsPage*>(getParentComponent());
+    SettingsListPage * parent 
+            = static_cast<SettingsListPage*>(getParentComponent());
     String title = parent->getButtonTitles()[index];
     TextButton * textButton = dynamic_cast<TextButton*>(listItem);
     if(textButton == nullptr)
@@ -120,7 +120,7 @@ Component* AdvancedSettingsPage::SettingsList::updateListItem
 /*
  * Refresh list components.
  */
-void AdvancedSettingsPage::SettingsList::refresh()
+void SettingsListPage::SettingsList::refresh()
 {
     refreshListContent();
 }

@@ -6,12 +6,12 @@
 #include "RemovePasswordPage.h"
 #include "PowerPage.h"
 #include "FelPage.h"
-#include "SettingsPage.h"
+#include "QuickSettingsPage.h"
 #include "BluetoothSettingsPage.h"
 #include "WifiSettingsPage.h"
 #include "UIPage.h"
 #include "ColourPage.h"
-#include "AdvancedSettingsPage.h"
+#include "SettingsListPage.h"
 #include "DateTimePage.h"
 #include "HomeSettingsPage.h"
 #include "LoginPage.h"
@@ -55,8 +55,8 @@ PageComponent* PageFactory::createPage(PageComponent::PageType type)
             return setPageFactory(new PowerPage());
         case PageComponent::Fel:
             return new FelPage();
-        case PageComponent::Settings:
-            return setPageFactory(new SettingsPage());
+        case PageComponent::QuickSettings:
+            return setPageFactory(new QuickSettingsPage());
         case PageComponent::BluetoothSettings:
             return new BluetoothSettingsPage();
         case PageComponent::WifiSettings:
@@ -65,8 +65,8 @@ PageComponent* PageFactory::createPage(PageComponent::PageType type)
             return nullptr;
         case PageComponent::ColourSettings:
             return new ColourPage();
-        case PageComponent::AdvancedSettings:
-            return setPageFactory(new AdvancedSettingsPage());
+        case PageComponent::SettingsList:
+            return setPageFactory(new SettingsListPage());
         case PageComponent::DateTime:
             return new DateTimePage();
         case PageComponent::HomeSettings:

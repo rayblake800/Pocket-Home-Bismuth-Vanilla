@@ -6,18 +6,17 @@
 #include "PagedList.h"
 
 /**
- * @file AdvancedSettingsPage.h
+ * @file SettingsListPage.h
  * 
- * @brief AdvancedSettingsPage is a navigation page containing buttons that open
- * other settings pages.
+ * @brief A navigation page containing buttons that open other settings pages.
  */
 
-class AdvancedSettingsPage : public PageComponent, private Localized
+class SettingsListPage : public PageComponent, private Localized
 {
 public:
-    AdvancedSettingsPage();
+    SettingsListPage();
 
-    virtual ~AdvancedSettingsPage() { }
+    virtual ~SettingsListPage() { }
 
 private:
     
@@ -86,5 +85,5 @@ private:
     static const constexpr char * date_and_time = "date_and_time";
     static const constexpr char * input_settings = "input_settings";
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AdvancedSettingsPage)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsListPage)
 };

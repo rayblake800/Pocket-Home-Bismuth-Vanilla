@@ -11,19 +11,19 @@
 //#include "BluetoothSettingsComponent.h"
 
 /**
- * @file SettingsPage.h
+ * @file QuickSettingsPage.h
  * 
- * The settings page provides wireless device controls, brightness and volume
- * sliders, and a button to open additional settings pages.
+ * @brief  Provides wireless device controls, brightness and volume sliders, and 
+ *         a button to open additional settings pages.
  */
 
-class SettingsPage : public PageComponent, public WindowFocusedTimer,
+class QuickSettingsPage : public PageComponent, public WindowFocusedTimer,
 private Slider::Listener, private Localized
 {
 public:
-    SettingsPage();
+    QuickSettingsPage();
 
-    virtual ~SettingsPage() { }
+    virtual ~QuickSettingsPage() { }
 
     private:    
     /**

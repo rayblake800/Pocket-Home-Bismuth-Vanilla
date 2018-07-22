@@ -4,7 +4,7 @@
               bundleIdentifier="co.nextthing.PokeLaunch" includeBinaryInAppConfig="1"
               jucerVersion="5.3.2" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
               displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
-              companyCopyright="Next Thing Co." headerPath="../../Source/PocketCHIP&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Folders&#10;../../Source/Components/Pages/Password Pages&#10;../../Source/GLib/LibNM&#10;../../Source/Components/Pages/UI Page&#10;../../Source/Util&#10;../../Source/Components/Pages/Settings Page&#10;../../Source/FreeDesktop/Icon Themes&#10;../../Source/GLib/DBus&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Components/Pages/Input Settings Page&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components/Pages&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Components/Pages/Power Page&#10;../../Source/Config Files&#10;../../Source/Components/Pages/Home Settings Page&#10;../../Source/FreeDesktop&#10;../../Source/Components&#10;../../Source&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Bluetooth&#10;../../Source/Components/Widgets&#10;../../Source/Components/Pages/DateTime Page&#10;../../Source/Components/Configurable&#10;../../Source/Components/Pages/Advanced Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/GLib&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Types&#10;../../Source/FreeDesktop/Desktop Entries&#10;../../Source/Wifi">
+              companyCopyright="Next Thing Co." headerPath="../../Source&#10;../../Source/Components/Pages/Settings Pages/UI Page&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Bluetooth&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Scrolling Menu&#10;../../Source/Components&#10;../../Source/Components/Configurable&#10;../../Source/Components/Pages/Settings Pages&#10;../../Source/Components/Pages/Settings Pages/Quick Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Components/Pages/Power Page&#10;../../Source/GLib/DBus&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Wifi&#10;../../Source/Components/Pages/Settings Pages/Network Pages&#10;../../Source/GLib&#10;../../Source/GLib/LibNM&#10;../../Source/FreeDesktop/Desktop Entries&#10;../../Source/Components/Pages&#10;../../Source/Components/Pages/Settings Pages/Settings List Page&#10;../../Source/Components/Pages/Settings Pages/Home Settings Page&#10;../../Source/PocketCHIP&#10;../../Source/Components/Widgets&#10;../../Source/Components/Pages/Settings Pages/DateTime Page&#10;../../Source/Util&#10;../../Source/Config Files&#10;../../Source/Components/Pages/Home Page&#10;../../Source/FreeDesktop/Icon Themes&#10;../../Source/Components/Pages/Settings Pages/Password Pages&#10;../../Source/Components/Pages/Settings Pages/Input Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Paged Menu&#10;../../Source/FreeDesktop">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
       <FILE id="lJvIsl" name="bluetooth.json" compile="0" resource="1" file="assets/bluetooth.json"/>
@@ -46,28 +46,26 @@
                 file="Source/Components/Configurable/ConfigurableLabel.h"/>
         </GROUP>
         <GROUP id="{784530F1-5C98-43D9-7726-F997AD12D9F5}" name="Pages">
-          <FILE id="OP9h3M" name="PageFactory.cpp" compile="1" resource="0" file="Source/Components/Pages/PageFactory.cpp"/>
-          <FILE id="HpTag6" name="PageFactory.h" compile="0" resource="0" file="Source/Components/Pages/PageFactory.h"/>
-          <FILE id="QzBmfL" name="PageComponent.cpp" compile="1" resource="0"
-                file="Source/Components/Pages/PageComponent.cpp"/>
-          <FILE id="bFrJLt" name="PageComponent.h" compile="0" resource="0" file="Source/Components/Pages/PageComponent.h"/>
-          <FILE id="GuBz6r" name="PageStackComponent.cpp" compile="1" resource="0"
-                file="Source/Components/Pages/PageStackComponent.cpp"/>
-          <FILE id="QBJM6w" name="PageStackComponent.h" compile="0" resource="0"
-                file="Source/Components/Pages/PageStackComponent.h"/>
-          <GROUP id="{B5396474-9A96-3F76-A4DD-245BBA9C9B71}" name="Advanced Settings Page">
-            <FILE id="zZK08d" name="AdvancedSettingsPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Advanced Settings Page/AdvancedSettingsPage.cpp"/>
-            <FILE id="wdC2BA" name="AdvancedSettingsPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Advanced Settings Page/AdvancedSettingsPage.h"/>
-          </GROUP>
-          <GROUP id="{E702239B-7008-C6A8-2BDF-F6378B0C9C21}" name="DateTime Page">
-            <FILE id="Fu5GTF" name="DateTimePage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/DateTime Page/DateTimePage.cpp"/>
-            <FILE id="Ja1BN2" name="DateTimePage.h" compile="0" resource="0" file="Source/Components/Pages/DateTime Page/DateTimePage.h"/>
-          </GROUP>
           <GROUP id="{E5D177ED-F000-E2C8-AB9E-11F897C0E250}" name="Home Page">
             <GROUP id="{E7E990F1-7C96-A39F-60D1-722F584F3B95}" name="AppMenu">
+              <GROUP id="{52F1A362-B89C-654D-F66D-BDADAC748EB7}" name="Scrolling Menu">
+                <FILE id="vJakyl" name="ScrollingAppFolder.cpp" compile="1" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Scrolling Menu/ScrollingAppFolder.cpp"/>
+                <FILE id="GrAj69" name="ScrollingAppFolder.h" compile="0" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Scrolling Menu/ScrollingAppFolder.h"/>
+                <FILE id="lpC4Pr" name="ScrollingAppMenu.cpp" compile="1" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Scrolling Menu/ScrollingAppMenu.cpp"/>
+                <FILE id="Zzogft" name="ScrollingAppMenu.h" compile="0" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Scrolling Menu/ScrollingAppMenu.h"/>
+              </GROUP>
+              <GROUP id="{B2A26A9C-3E6D-F551-3859-4F4E685B1302}" name="Paged Menu">
+                <FILE id="xYFQkV" name="PageAppFolder.cpp" compile="1" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Paged Menu/PageAppFolder.cpp"/>
+                <FILE id="DOhJt0" name="PageAppFolder.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/AppMenu/Paged Menu/PageAppFolder.h"/>
+                <FILE id="MtwNPT" name="PagedAppMenu.cpp" compile="1" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Paged Menu/PagedAppMenu.cpp"/>
+                <FILE id="IENsPc" name="PagedAppMenu.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/AppMenu/Paged Menu/PagedAppMenu.h"/>
+              </GROUP>
               <FILE id="uoTYvl" name="AppMenuComponent.cpp" compile="1" resource="0"
                     file="Source/Components/Pages/Home Page/AppMenu/AppMenuComponent.cpp"/>
               <FILE id="ZRD8T3" name="AppMenuComponent.h" compile="0" resource="0"
@@ -78,15 +76,6 @@
               <FILE id="yT2LgN" name="AppMenuButton.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/AppMenu/AppMenuButton.h"/>
               <FILE id="wuxNd9" name="AppMenuButton.cpp" compile="1" resource="0"
                     file="Source/Components/Pages/Home Page/AppMenu/AppMenuButton.cpp"/>
-              <GROUP id="{3FBA29F4-96A1-6621-B813-CEA7AE161BA0}" name="Menu Types">
-                <FILE id="MtwNPT" name="PagedAppMenu.cpp" compile="1" resource="0"
-                      file="Source/Components/Pages/Home Page/AppMenu/Menu Types/PagedAppMenu.cpp"/>
-                <FILE id="IENsPc" name="PagedAppMenu.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/AppMenu/Menu Types/PagedAppMenu.h"/>
-                <FILE id="lpC4Pr" name="ScrollingAppMenu.cpp" compile="1" resource="0"
-                      file="Source/Components/Pages/Home Page/AppMenu/Menu Types/ScrollingAppMenu.cpp"/>
-                <FILE id="Zzogft" name="ScrollingAppMenu.h" compile="0" resource="0"
-                      file="Source/Components/Pages/Home Page/AppMenu/Menu Types/ScrollingAppMenu.h"/>
-              </GROUP>
               <GROUP id="{0999720F-DD6B-E080-5269-A32810E91F5C}" name="Menu Items">
                 <FILE id="qQ1gT2" name="AppMenuItem.cpp" compile="1" resource="0" file="Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItem.cpp"/>
                 <FILE id="sNu85i" name="AppMenuItem.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItem.h"/>
@@ -111,15 +100,6 @@
                 <FILE id="ZIvJMb" name="BaseFolderMenuItem.h" compile="0" resource="0"
                       file="Source/Components/Pages/Home Page/AppMenu/Menu Items/BaseFolderMenuItem.h"/>
               </GROUP>
-              <GROUP id="{9EC3D895-A892-D227-F8FC-77E119666DC6}" name="Menu Folders">
-                <FILE id="vJakyl" name="ScrollingAppFolder.cpp" compile="1" resource="0"
-                      file="Source/Components/Pages/Home Page/AppMenu/Menu Folders/ScrollingAppFolder.cpp"/>
-                <FILE id="GrAj69" name="ScrollingAppFolder.h" compile="0" resource="0"
-                      file="Source/Components/Pages/Home Page/AppMenu/Menu Folders/ScrollingAppFolder.h"/>
-                <FILE id="xYFQkV" name="PageAppFolder.cpp" compile="1" resource="0"
-                      file="Source/Components/Pages/Home Page/AppMenu/Menu Folders/PageAppFolder.cpp"/>
-                <FILE id="DOhJt0" name="PageAppFolder.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/AppMenu/Menu Folders/PageAppFolder.h"/>
-              </GROUP>
               <GROUP id="{A49BAA90-8955-9E45-DAB3-EAE88CC60FE2}" name="Menu Editors">
                 <FILE id="AimLwj" name="NewFolderEditor.cpp" compile="1" resource="0"
                       file="Source/Components/Pages/Home Page/AppMenu/Menu Editors/NewFolderEditor.cpp"/>
@@ -143,6 +123,8 @@
                       file="Source/Components/Pages/Home Page/AppMenu/Menu Editors/AppMenuPopupEditor.h"/>
               </GROUP>
             </GROUP>
+            <FILE id="NstX3c" name="HomePage.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/HomePage.h"/>
+            <FILE id="e0rlnj" name="HomePage.cpp" compile="1" resource="0" file="Source/Components/Pages/Home Page/HomePage.cpp"/>
             <GROUP id="{559D4599-2DCA-D578-255D-9A50712E8E88}" name="Widgets">
               <FILE id="r72J8h" name="BatteryIcon.cpp" compile="1" resource="0" file="Source/Components/Pages/Home Page/Widgets/BatteryIcon.cpp"/>
               <FILE id="HVRJip" name="BatteryIcon.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/Widgets/BatteryIcon.h"/>
@@ -151,86 +133,109 @@
               <FILE id="TnTmFi" name="WifiIcon.cpp" compile="1" resource="0" file="Source/Components/Pages/Home Page/Widgets/WifiIcon.cpp"/>
               <FILE id="BIw8ef" name="WifiIcon.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/Widgets/WifiIcon.h"/>
             </GROUP>
-            <FILE id="e0rlnj" name="HomePage.cpp" compile="1" resource="0" file="Source/Components/Pages/Home Page/HomePage.cpp"/>
-            <FILE id="NstX3c" name="HomePage.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/HomePage.h"/>
-          </GROUP>
-          <GROUP id="{C96717A1-95F3-9F7D-57DE-9F9A9F7A2385}" name="Home Settings Page">
-            <FILE id="lL4zp6" name="HomeSettingsPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Home Settings Page/HomeSettingsPage.cpp"/>
-            <FILE id="bPFFa7" name="HomeSettingsPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Home Settings Page/HomeSettingsPage.h"/>
-          </GROUP>
-          <GROUP id="{3ADC1214-3DB2-6788-1881-85A4471A2652}" name="Input Settings Page">
-            <FILE id="cBlEsv" name="InputSettingsPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Input Settings Page/InputSettingsPage.cpp"/>
-            <FILE id="DMnbBB" name="InputSettingsPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Input Settings Page/InputSettingsPage.h"/>
-            <FILE id="RXN52i" name="KeybindingPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Input Settings Page/KeybindingPage.cpp"/>
-            <FILE id="Wt38du" name="KeybindingPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Input Settings Page/KeybindingPage.h"/>
           </GROUP>
           <GROUP id="{1E8A17D5-905D-37E0-A64D-9689C058B614}" name="Login Page">
             <FILE id="LxVUAo" name="LoginPage.cpp" compile="1" resource="0" file="Source/Components/Pages/Login Page/LoginPage.cpp"/>
             <FILE id="ecOl3Y" name="LoginPage.h" compile="0" resource="0" file="Source/Components/Pages/Login Page/LoginPage.h"/>
           </GROUP>
-          <GROUP id="{DA0FC550-71F8-DA3A-3590-10149A6CBFF7}" name="Password Pages">
-            <FILE id="gtrGWD" name="Password.cpp" compile="1" resource="0" file="Source/Components/Pages/Password Pages/Password.cpp"/>
-            <FILE id="Do3x3Q" name="Password.h" compile="0" resource="0" file="Source/Components/Pages/Password Pages/Password.h"/>
-            <FILE id="Dvyqrf" name="RemovePasswordPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Password Pages/RemovePasswordPage.cpp"/>
-            <FILE id="ZqU26x" name="RemovePasswordPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Password Pages/RemovePasswordPage.h"/>
-            <FILE id="aP9mqt" name="SetPasswordPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Password Pages/SetPasswordPage.cpp"/>
-            <FILE id="uDiveh" name="SetPasswordPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Password Pages/SetPasswordPage.h"/>
-          </GROUP>
-          <GROUP id="{5FCE87F8-C771-AB28-D507-B62A54A40615}" name="Power Page">
+          <GROUP id="{5FCE87F8-C771-AB28-D507-B62A54A40615}" name="Power Pages">
             <FILE id="XG2PnG" name="FelPage.cpp" compile="1" resource="0" file="Source/Components/Pages/Power Page/FelPage.cpp"/>
             <FILE id="JcDF39" name="FelPage.h" compile="0" resource="0" file="Source/Components/Pages/Power Page/FelPage.h"/>
             <FILE id="NEe5WE" name="PowerPage.cpp" compile="1" resource="0" file="Source/Components/Pages/Power Page/PowerPage.cpp"/>
             <FILE id="xYpw8n" name="PowerPage.h" compile="0" resource="0" file="Source/Components/Pages/Power Page/PowerPage.h"/>
           </GROUP>
-          <GROUP id="{FDCEDC91-C32F-38E5-C05D-83F37D382BE5}" name="Settings Page">
-            <FILE id="MIcdzM" name="FocusingListPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Settings Page/FocusingListPage.cpp"/>
-            <FILE id="H8rojp" name="FocusingListPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Settings Page/FocusingListPage.h"/>
-            <FILE id="W2VIIg" name="SettingsPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Settings Page/SettingsPage.cpp"/>
-            <FILE id="H7JAkN" name="SettingsPage.h" compile="0" resource="0" file="Source/Components/Pages/Settings Page/SettingsPage.h"/>
-            <FILE id="ZVuYHM" name="WifiSettingsComponent.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Settings Page/WifiSettingsComponent.cpp"/>
-            <FILE id="geUCyF" name="WifiSettingsComponent.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Settings Page/WifiSettingsComponent.h"/>
-            <FILE id="cOBxcn" name="WifiSettingsPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Settings Page/WifiSettingsPage.cpp"/>
-            <FILE id="LaoqFh" name="WifiSettingsPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Settings Page/WifiSettingsPage.h"/>
-            <FILE id="Otn0T9" name="BluetoothSettingsComponent.cpp" compile="1"
-                  resource="0" file="Source/Components/Pages/Settings Page/BluetoothSettingsComponent.cpp"/>
-            <FILE id="uCRTEM" name="BluetoothSettingsComponent.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Settings Page/BluetoothSettingsComponent.h"/>
-            <FILE id="bNqiMl" name="ConnectionSettingsComponent.cpp" compile="1"
-                  resource="0" file="Source/Components/Pages/Settings Page/ConnectionSettingsComponent.cpp"/>
-            <FILE id="Lw6SDH" name="ConnectionSettingsComponent.h" compile="0"
-                  resource="0" file="Source/Components/Pages/Settings Page/ConnectionSettingsComponent.h"/>
-            <FILE id="Ee4ILT" name="BluetoothSettingsPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/Settings Page/BluetoothSettingsPage.cpp"/>
-            <FILE id="hzA3Hr" name="BluetoothSettingsPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/Settings Page/BluetoothSettingsPage.h"/>
+          <GROUP id="{BBA90EAE-153D-55F3-8EEC-C72D8A8C42AF}" name="Settings Pages">
+            <GROUP id="{FDCEDC91-C32F-38E5-C05D-83F37D382BE5}" name="Quick Settings Page">
+              <FILE id="W2VIIg" name="QuickSettingsPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Quick Settings Page/QuickSettingsPage.cpp"/>
+              <FILE id="H7JAkN" name="QuickSettingsPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Quick Settings Page/QuickSettingsPage.h"/>
+              <FILE id="ZVuYHM" name="WifiSettingsComponent.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Quick Settings Page/WifiSettingsComponent.cpp"/>
+              <FILE id="geUCyF" name="WifiSettingsComponent.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Quick Settings Page/WifiSettingsComponent.h"/>
+              <FILE id="Otn0T9" name="BluetoothSettingsComponent.cpp" compile="1"
+                    resource="0" file="Source/Components/Pages/Settings Pages/Quick Settings Page/BluetoothSettingsComponent.cpp"/>
+              <FILE id="uCRTEM" name="BluetoothSettingsComponent.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Quick Settings Page/BluetoothSettingsComponent.h"/>
+              <FILE id="bNqiMl" name="ConnectionSettingsComponent.cpp" compile="1"
+                    resource="0" file="Source/Components/Pages/Settings Pages/Quick Settings Page/ConnectionSettingsComponent.cpp"/>
+              <FILE id="Lw6SDH" name="ConnectionSettingsComponent.h" compile="0"
+                    resource="0" file="Source/Components/Pages/Settings Pages/Quick Settings Page/ConnectionSettingsComponent.h"/>
+            </GROUP>
+            <GROUP id="{B5396474-9A96-3F76-A4DD-245BBA9C9B71}" name="Settings List Page">
+              <FILE id="zZK08d" name="SettingsListPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Settings List Page/SettingsListPage.cpp"/>
+              <FILE id="wdC2BA" name="SettingsListPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Settings List Page/SettingsListPage.h"/>
+            </GROUP>
+            <GROUP id="{DB24E234-E6BE-E847-D73E-F2E70FF18520}" name="Network Pages">
+              <FILE id="cOBxcn" name="WifiSettingsPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Network Pages/WifiSettingsPage.cpp"/>
+              <FILE id="LaoqFh" name="WifiSettingsPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Network Pages/WifiSettingsPage.h"/>
+              <FILE id="Ee4ILT" name="BluetoothSettingsPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Network Pages/BluetoothSettingsPage.cpp"/>
+              <FILE id="hzA3Hr" name="BluetoothSettingsPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Network Pages/BluetoothSettingsPage.h"/>
+              <FILE id="MIcdzM" name="FocusingListPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Network Pages/FocusingListPage.cpp"/>
+              <FILE id="H8rojp" name="FocusingListPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Network Pages/FocusingListPage.h"/>
+            </GROUP>
+            <GROUP id="{C96717A1-95F3-9F7D-57DE-9F9A9F7A2385}" name="Home Settings Page">
+              <FILE id="lL4zp6" name="HomeSettingsPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Home Settings Page/HomeSettingsPage.cpp"/>
+              <FILE id="bPFFa7" name="HomeSettingsPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Home Settings Page/HomeSettingsPage.h"/>
+            </GROUP>
+            <GROUP id="{6AAB73F7-B870-30B1-26D4-2A996BA193EC}" name="UI Page">
+              <FILE id="oaZ0hX" name="UIPage.cpp" compile="1" resource="0" file="Source/Components/Pages/Settings Pages/UI Page/UIPage.cpp"/>
+              <FILE id="w0Nxcr" name="UIPage.h" compile="0" resource="0" file="Source/Components/Pages/Settings Pages/UI Page/UIPage.h"/>
+              <FILE id="M7P9h1" name="ComponentEditorPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/UI Page/ComponentEditorPage.cpp"/>
+              <FILE id="AnfA4Z" name="ComponentEditorPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/UI Page/ComponentEditorPage.h"/>
+              <FILE id="EuPKO2" name="ColourPage.cpp" compile="1" resource="0" file="Source/Components/Pages/Settings Pages/UI Page/ColourPage.cpp"/>
+              <FILE id="sfXLMJ" name="ColourPage.h" compile="0" resource="0" file="Source/Components/Pages/Settings Pages/UI Page/ColourPage.h"/>
+            </GROUP>
+            <GROUP id="{3ADC1214-3DB2-6788-1881-85A4471A2652}" name="Input Settings Page">
+              <FILE id="cBlEsv" name="InputSettingsPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Input Settings Page/InputSettingsPage.cpp"/>
+              <FILE id="DMnbBB" name="InputSettingsPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Input Settings Page/InputSettingsPage.h"/>
+              <FILE id="RXN52i" name="KeybindingPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Input Settings Page/KeybindingPage.cpp"/>
+              <FILE id="Wt38du" name="KeybindingPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Input Settings Page/KeybindingPage.h"/>
+            </GROUP>
+            <GROUP id="{DA0FC550-71F8-DA3A-3590-10149A6CBFF7}" name="Password Pages">
+              <FILE id="gtrGWD" name="Password.cpp" compile="1" resource="0" file="Source/Components/Pages/Settings Pages/Password Pages/Password.cpp"/>
+              <FILE id="Do3x3Q" name="Password.h" compile="0" resource="0" file="Source/Components/Pages/Settings Pages/Password Pages/Password.h"/>
+              <FILE id="Dvyqrf" name="RemovePasswordPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Password Pages/RemovePasswordPage.cpp"/>
+              <FILE id="ZqU26x" name="RemovePasswordPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Password Pages/RemovePasswordPage.h"/>
+              <FILE id="aP9mqt" name="SetPasswordPage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Password Pages/SetPasswordPage.cpp"/>
+              <FILE id="uDiveh" name="SetPasswordPage.h" compile="0" resource="0"
+                    file="Source/Components/Pages/Settings Pages/Password Pages/SetPasswordPage.h"/>
+            </GROUP>
+            <GROUP id="{E702239B-7008-C6A8-2BDF-F6378B0C9C21}" name="DateTime Page">
+              <FILE id="Fu5GTF" name="DateTimePage.cpp" compile="1" resource="0"
+                    file="Source/Components/Pages/Settings Pages/DateTime Page/DateTimePage.cpp"/>
+              <FILE id="Ja1BN2" name="DateTimePage.h" compile="0" resource="0" file="Source/Components/Pages/Settings Pages/DateTime Page/DateTimePage.h"/>
+            </GROUP>
           </GROUP>
-          <GROUP id="{6AAB73F7-B870-30B1-26D4-2A996BA193EC}" name="UI Page">
-            <FILE id="oaZ0hX" name="UIPage.cpp" compile="1" resource="0" file="Source/Components/Pages/UI Page/UIPage.cpp"/>
-            <FILE id="w0Nxcr" name="UIPage.h" compile="0" resource="0" file="Source/Components/Pages/UI Page/UIPage.h"/>
-            <FILE id="M7P9h1" name="ComponentEditorPage.cpp" compile="1" resource="0"
-                  file="Source/Components/Pages/UI Page/ComponentEditorPage.cpp"/>
-            <FILE id="AnfA4Z" name="ComponentEditorPage.h" compile="0" resource="0"
-                  file="Source/Components/Pages/UI Page/ComponentEditorPage.h"/>
-            <FILE id="EuPKO2" name="ColourPage.cpp" compile="1" resource="0" file="Source/Components/Pages/UI Page/ColourPage.cpp"/>
-            <FILE id="sfXLMJ" name="ColourPage.h" compile="0" resource="0" file="Source/Components/Pages/UI Page/ColourPage.h"/>
-          </GROUP>
+          <FILE id="QzBmfL" name="PageComponent.cpp" compile="1" resource="0"
+                file="Source/Components/Pages/PageComponent.cpp"/>
+          <FILE id="bFrJLt" name="PageComponent.h" compile="0" resource="0" file="Source/Components/Pages/PageComponent.h"/>
+          <FILE id="OP9h3M" name="PageFactory.cpp" compile="1" resource="0" file="Source/Components/Pages/PageFactory.cpp"/>
+          <FILE id="HpTag6" name="PageFactory.h" compile="0" resource="0" file="Source/Components/Pages/PageFactory.h"/>
+          <FILE id="GuBz6r" name="PageStackComponent.cpp" compile="1" resource="0"
+                file="Source/Components/Pages/PageStackComponent.cpp"/>
+          <FILE id="QBJM6w" name="PageStackComponent.h" compile="0" resource="0"
+                file="Source/Components/Pages/PageStackComponent.h"/>
         </GROUP>
         <GROUP id="{6D4C4A1E-8E24-8D6C-5A9B-840CFA0F9A73}" name="Widgets">
           <FILE id="HjPnyC" name="ScalingTextButton.cpp" compile="1" resource="0"
@@ -475,12 +480,13 @@
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile" cppLanguageStandard="-std=c++11"
                 extraDefs="" extraLinkerFlags="-lcrypto" externalLibraries=""
                 linuxExtraPkgConfig="NetworkManager libnm-glib alsa freetype2 libssl gio-2.0"
-                enableGNUExtensions="1" extraCompilerFlags="-Og">
+                enableGNUExtensions="1">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
                        targetName="pocket-home" binaryPath="build/Debug" headerPath=""/>
-        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="3"
-                       targetName="pocket-home" binaryPath="build/Release" headerPath=""/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="3"
+                       targetName="pocket-home" binaryPath="build/Release" headerPath=""
+                       linkTimeOptimisation="1"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="deps/JUCE/modules"/>

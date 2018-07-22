@@ -2,12 +2,12 @@
 #include "Audio.h"
 #include "Display.h"
 #include "PokeLookAndFeel.h"
-#include "SettingsPage.h"
+#include "QuickSettingsPage.h"
 
-SettingsPage::SettingsPage() :
-Localized("SettingsPage"),
-WindowFocusedTimer("SettingsPage"),
-PageComponent("SettingsPage"),
+QuickSettingsPage::QuickSettingsPage() :
+Localized("QuickSettingsPage"),
+WindowFocusedTimer("QuickSettingsPage"),
+PageComponent("QuickSettingsPage"),
 wifiComponent([this]()
 {
 
@@ -24,7 +24,7 @@ advancedPageButton(localeText(advanced_settings))
 {
 
 #    if JUCE_DEBUG
-    setName("SettingsPage");
+    setName("QuickSettingsPage");
 #    endif
     setBackButton(PageComponent::leftBackButton);
     using Row = LayoutManager::Row;
@@ -54,7 +54,7 @@ advancedPageButton(localeText(advanced_settings))
 /**
  * Cancels the slider timer when visibility is lost.
  */
-void SettingsPage::visibilityChanged()
+void QuickSettingsPage::visibilityChanged()
 {
     if (!isVisible())
     {
@@ -66,7 +66,7 @@ void SettingsPage::visibilityChanged()
 /**
  * Used to update the sliders while they're being dragged.
  */
-void SettingsPage::timerCallback()
+void QuickSettingsPage::timerCallback()
 {
     if (screenBrightnessSlider.ownsSlider(changingSlider))
     {
@@ -82,18 +82,18 @@ void SettingsPage::timerCallback()
 /**
  * Opens the advanced settings page when its button is clicked.
  */
-void SettingsPage::pageButtonClicked(Button *button)
+void QuickSettingsPage::pageButtonClicked(Button *button)
 {
     if (button == &advancedPageButton)
     {
-        pushPageToStack(PageType::AdvancedSettings);
+        pushPageToStack(PageType::SettingsList);
     }
 }
 
 /**
  * Starts a timer to update the slider values as its being dragged.
  */
-void SettingsPage::sliderDragStarted(Slider* slider)
+void QuickSettingsPage::sliderDragStarted(Slider* slider)
 {
     if (!isTimerRunning())
     {
@@ -105,7 +105,7 @@ void SettingsPage::sliderDragStarted(Slider* slider)
 /**
  * Stops the timer and immediately updates slider values.
  */
-void SettingsPage::sliderDragEnded(Slider* slider)
+void QuickSettingsPage::sliderDragEnded(Slider* slider)
 {
     changingSlider = slider;
     timerCallback();
