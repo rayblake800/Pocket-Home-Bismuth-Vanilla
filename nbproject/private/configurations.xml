@@ -5525,14 +5525,6 @@
             <in>ConfigurableLabel.h</in>
           </df>
           <df name="Pages">
-            <df name="Advanced Settings Page">
-              <in>AdvancedSettingsPage.cpp</in>
-              <in>AdvancedSettingsPage.h</in>
-            </df>
-            <df name="DateTime Page">
-              <in>DateTimePage.cpp</in>
-              <in>DateTimePage.h</in>
-            </df>
             <df name="Home Page">
               <df name="AppMenu">
                 <df name="Menu Editors">
@@ -5549,9 +5541,7 @@
                 </df>
                 <df name="Menu Folders">
                   <in>PageAppFolder.cpp</in>
-                  <in>PageAppFolder.h</in>
                   <in>ScrollingAppFolder.cpp</in>
-                  <in>ScrollingAppFolder.h</in>
                 </df>
                 <df name="Menu Items">
                   <in>AppMenuItem.cpp</in>
@@ -5569,7 +5559,17 @@
                 </df>
                 <df name="Menu Types">
                   <in>PagedAppMenu.cpp</in>
+                  <in>ScrollingAppMenu.cpp</in>
+                </df>
+                <df name="Paged Menu">
+                  <in>PageAppFolder.cpp</in>
+                  <in>PageAppFolder.h</in>
+                  <in>PagedAppMenu.cpp</in>
                   <in>PagedAppMenu.h</in>
+                </df>
+                <df name="Scrolling Menu">
+                  <in>ScrollingAppFolder.cpp</in>
+                  <in>ScrollingAppFolder.h</in>
                   <in>ScrollingAppMenu.cpp</in>
                   <in>ScrollingAppMenu.h</in>
                 </df>
@@ -5591,27 +5591,9 @@
               <in>HomePage.cpp</in>
               <in>HomePage.h</in>
             </df>
-            <df name="Home Settings Page">
-              <in>HomeSettingsPage.cpp</in>
-              <in>HomeSettingsPage.h</in>
-            </df>
-            <df name="Input Settings Page">
-              <in>InputSettingsPage.cpp</in>
-              <in>InputSettingsPage.h</in>
-              <in>KeybindingPage.cpp</in>
-              <in>KeybindingPage.h</in>
-            </df>
             <df name="Login Page">
               <in>LoginPage.cpp</in>
               <in>LoginPage.h</in>
-            </df>
-            <df name="Password Pages">
-              <in>Password.cpp</in>
-              <in>Password.h</in>
-              <in>RemovePasswordPage.cpp</in>
-              <in>RemovePasswordPage.h</in>
-              <in>SetPasswordPage.cpp</in>
-              <in>SetPasswordPage.h</in>
             </df>
             <df name="Power Page">
               <in>FelPage.cpp</in>
@@ -5619,29 +5601,59 @@
               <in>PowerPage.cpp</in>
               <in>PowerPage.h</in>
             </df>
-            <df name="Settings Page">
-              <in>BluetoothSettingsComponent.cpp</in>
-              <in>BluetoothSettingsComponent.h</in>
-              <in>BluetoothSettingsPage.cpp</in>
-              <in>BluetoothSettingsPage.h</in>
-              <in>ConnectionSettingsComponent.cpp</in>
-              <in>ConnectionSettingsComponent.h</in>
-              <in>FocusingListPage.cpp</in>
-              <in>FocusingListPage.h</in>
-              <in>SettingsPage.cpp</in>
-              <in>SettingsPage.h</in>
-              <in>WifiSettingsComponent.cpp</in>
-              <in>WifiSettingsComponent.h</in>
-              <in>WifiSettingsPage.cpp</in>
-              <in>WifiSettingsPage.h</in>
-            </df>
-            <df name="UI Page">
-              <in>ColourPage.cpp</in>
-              <in>ColourPage.h</in>
-              <in>ComponentEditorPage.cpp</in>
-              <in>ComponentEditorPage.h</in>
-              <in>UIPage.cpp</in>
-              <in>UIPage.h</in>
+            <df name="Settings Pages">
+              <df name="DateTime Page">
+                <in>DateTimePage.cpp</in>
+                <in>DateTimePage.h</in>
+              </df>
+              <df name="Home Settings Page">
+                <in>HomeSettingsPage.cpp</in>
+                <in>HomeSettingsPage.h</in>
+              </df>
+              <df name="Input Settings Page">
+                <in>InputSettingsPage.cpp</in>
+                <in>InputSettingsPage.h</in>
+                <in>KeybindingPage.cpp</in>
+                <in>KeybindingPage.h</in>
+              </df>
+              <df name="Network Pages">
+                <in>BluetoothSettingsPage.cpp</in>
+                <in>BluetoothSettingsPage.h</in>
+                <in>FocusingListPage.cpp</in>
+                <in>FocusingListPage.h</in>
+                <in>WifiSettingsPage.cpp</in>
+                <in>WifiSettingsPage.h</in>
+              </df>
+              <df name="Password Pages">
+                <in>Password.cpp</in>
+                <in>Password.h</in>
+                <in>RemovePasswordPage.cpp</in>
+                <in>RemovePasswordPage.h</in>
+                <in>SetPasswordPage.cpp</in>
+                <in>SetPasswordPage.h</in>
+              </df>
+              <df name="Quick Settings Page">
+                <in>BluetoothSettingsComponent.cpp</in>
+                <in>BluetoothSettingsComponent.h</in>
+                <in>ConnectionSettingsComponent.cpp</in>
+                <in>ConnectionSettingsComponent.h</in>
+                <in>QuickSettingsPage.cpp</in>
+                <in>QuickSettingsPage.h</in>
+                <in>WifiSettingsComponent.cpp</in>
+                <in>WifiSettingsComponent.h</in>
+              </df>
+              <df name="Settings List Page">
+                <in>SettingsListPage.cpp</in>
+                <in>SettingsListPage.h</in>
+              </df>
+              <df name="UI Page">
+                <in>ColourPage.cpp</in>
+                <in>ColourPage.h</in>
+                <in>ComponentEditorPage.cpp</in>
+                <in>ComponentEditorPage.h</in>
+                <in>UIPage.cpp</in>
+                <in>UIPage.h</in>
+              </df>
             </df>
             <in>PageComponent.cpp</in>
             <in>PageComponent.h</in>

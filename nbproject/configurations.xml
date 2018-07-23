@@ -2313,12 +2313,6 @@
             <in>ConfigurableLabel.cpp</in>
           </df>
           <df name="Pages">
-            <df name="Advanced Settings Page">
-              <in>AdvancedSettingsPage.cpp</in>
-            </df>
-            <df name="DateTime Page">
-              <in>DateTimePage.cpp</in>
-            </df>
             <df name="Home Page">
               <df name="AppMenu">
                 <df name="Menu Editors">
@@ -2355,37 +2349,12 @@
               </df>
               <in>HomePage.cpp</in>
             </df>
-            <df name="Home Settings Page">
-              <in>HomeSettingsPage.cpp</in>
-            </df>
-            <df name="Input Settings Page">
-              <in>InputSettingsPage.cpp</in>
-              <in>KeybindingPage.cpp</in>
-            </df>
             <df name="Login Page">
               <in>LoginPage.cpp</in>
-            </df>
-            <df name="Password Pages">
-              <in>Password.cpp</in>
-              <in>RemovePasswordPage.cpp</in>
-              <in>SetPasswordPage.cpp</in>
             </df>
             <df name="Power Page">
               <in>FelPage.cpp</in>
               <in>PowerPage.cpp</in>
-            </df>
-            <df name="Settings Page">
-              <in>BluetoothSettingsComponent.cpp</in>
-              <in>BluetoothSettingsPage.cpp</in>
-              <in>ConnectionSettingsComponent.cpp</in>
-              <in>SettingsPage.cpp</in>
-              <in>WifiSettingsComponent.cpp</in>
-              <in>WifiSettingsPage.cpp</in>
-            </df>
-            <df name="UI Page">
-              <in>ColourPage.cpp</in>
-              <in>ComponentEditorPage.cpp</in>
-              <in>UIPage.cpp</in>
             </df>
             <in>PageComponent.cpp</in>
             <in>PageFactory.cpp</in>
@@ -3008,20 +2977,6 @@
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="Source/Components/Pages/Advanced Settings Page/AdvancedSettingsPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/DateTime Page/DateTimePage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
       <item path="Source/Components/Pages/Home Page/AppMenu/AppMenuButton.cpp"
             ex="false"
             tool="1"
@@ -3176,27 +3131,6 @@
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="Source/Components/Pages/Home Settings Page/HomeSettingsPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Input Settings Page/InputSettingsPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Input Settings Page/KeybindingPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
       <item path="Source/Components/Pages/Login Page/LoginPage.cpp"
             ex="false"
             tool="1"
@@ -3225,27 +3159,6 @@
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="Source/Components/Pages/Password Pages/Password.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Password Pages/RemovePasswordPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Password Pages/SetPasswordPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
       <item path="Source/Components/Pages/Power Page/FelPage.cpp"
             ex="false"
             tool="1"
@@ -3254,69 +3167,6 @@
         </ccTool>
       </item>
       <item path="Source/Components/Pages/Power Page/PowerPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Settings Page/BluetoothSettingsComponent.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Settings Page/BluetoothSettingsPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Settings Page/ConnectionSettingsComponent.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Settings Page/SettingsPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Settings Page/WifiSettingsComponent.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Settings Page/WifiSettingsPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/UI Page/ColourPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/UI Page/ComponentEditorPage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/UI Page/UIPage.cpp"
             ex="false"
             tool="1"
             flavor2="11">
