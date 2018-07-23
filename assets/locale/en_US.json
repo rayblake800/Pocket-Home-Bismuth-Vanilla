@@ -47,7 +47,7 @@
         "failed_to_run": "Failed command:",
         "check_term_cmd": "Is the terminal launch command set correctly?"     
     },
-    "AdvancedSettingsPage": {
+    "SettingsListPage": {
         "advanced_settings": "Advanced Settings",
         "set_password": "Set your password",
         "change_password": "Change your password",
@@ -69,7 +69,7 @@
     "WifiAPButton": {
         "connected_ap": " (Connected)"
     },
-    "SettingsPage": {
+    "QuickSettingsPage": {
         "advanced_settings": "Advanced Settings Page"
     },
     "WifiSettingsComponent": {
