@@ -1,5 +1,6 @@
+# Pocket-home: Bismuth Edition Task List
 
-## Documentation Tasks
+### Documentation
 
     1. Update README.md, documenting all major features and improvements.
         -Find and document all hidden dependencies, including ones met by
@@ -14,16 +15,16 @@
     7. Document all config files and options.
     8. Generate UML diagrams.
 
-### Known documentation issues for individual classes
+#### Known documentation issues for individual classes
 
     -AppMenu helper classes are missing full documentation.
     -PokeLookAndFeel.h is missing some @param tags.
 
-## Version Management Tasks
+### Version Management
 
     -Rename the ChipDebugging branch to development.
 
-## Testing
+### Testing
 
     1. Set up unit testing system, write tests for at least one class.
     2. Set up an integration testing system, write tests for at least a few 
@@ -172,11 +173,3 @@
      xdotool
     -Avoid directly interacting with AwesomeWM, or at least provide support for
      other common window managers.
-
-
-
-
-
-
-
-

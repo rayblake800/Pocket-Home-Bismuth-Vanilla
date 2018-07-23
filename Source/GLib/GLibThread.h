@@ -16,7 +16,8 @@
  */
 
 #pragma once
-//Since the main UI/message thread isn't a Juce thread, standard C++ thread
+
+// Since the main UI/message thread isn't a Juce thread, standard C++ thread
 // libraries need to be used to wait/notify
 #include <mutex>
 #include <condition_variable>
@@ -114,11 +115,34 @@ private:
     virtual void windowFocusGained() override;
     
     /**
-     * Terminates the GLib main loop and stops the thread.
+     * Starts the GLib thread, then waits until the thread is running and
+     * the thread context and main loop are initialized. This function locks the
+     * threadStateLock for writing.
+     * 
+     * @return  True if the thread started successfully, false if the
+     *          GLibThread is being destroyed.
      */
-    void stopGLibThread();
+    bool startGLibThread();
     
+    /**
+     * Terminates the GLib main loop and stops the thread. This function locks
+     * the threadStateLock for writing.
+     * 
+     * @param unrefGLibVars  If true, the thread context and GLib main loop 
+     *                       will be dereferenced and removed.  This should only
+     *                       be set to true if the GLibThread is being
+     *                       destroyed, as the thread cannot be started again
+     *                       after the GLib variables are removed.
+     */
+    void stopGLibThread(bool unrefGLibVars = false);
     
     GMainContext* context = nullptr;
     GMainLoop* mainLoop = nullptr;
+    
+    //Prevent thread access while it is being started or stopped.
+    ReadWriteLock threadStateLock;
+    
+    //Used when waiting for the thread to start.
+    std::mutex threadStartMutex;
+    std::condition_variable threadStarting;
 };

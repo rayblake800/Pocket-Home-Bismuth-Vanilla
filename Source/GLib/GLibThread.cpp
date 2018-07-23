@@ -1,29 +1,16 @@
 #include "GLibThread.h"
 
-/**
- * @param context  The event context that will be claimed by this thread.
- *                 This will be unreferenced when the thread is destroyed.
- */
+
 GLibThread::GLibThread(GMainContext* context) : Thread("GLibThread"),
 context(context)
-{
-    
-    startThread(); 
+{  
+    jassert(context != nullptr);
+    startGLibThread(); 
 }
 
 GLibThread::~GLibThread()
 {
-    stopGLibThread();
-    if(mainLoop != nullptr)
-    {
-        g_main_loop_unref(mainLoop);
-        mainLoop = nullptr;
-    }
-    if(context != nullptr)
-    {
-        g_main_context_unref(context);
-        context = nullptr;
-    }
+    stopGLibThread(true);
 }
 
 /**
@@ -40,6 +27,7 @@ bool GLibThread::runningOnThread()
  */
 void GLibThread::call(std::function<void()> fn)
 {
+    threadStateLock.enterRead();
     //If already on the GLib thread the function can just run immediately.
     if (runningOnThread())
     {
@@ -47,12 +35,26 @@ void GLibThread::call(std::function<void()> fn)
     }
     else
     {
+        if(mainLoop == nullptr || context == nullptr)
+        {
+            DBG("GLibThread::" << __func__ << ": GLib variables are null!");
+            return;
+        }
+        
         bool threadStopped = !isThreadRunning();
         if(threadStopped)
         {
             DBG("GLibThread::" << __func__ 
                     << ": Thread not running, restarting thread.");
-            startThread();             
+            threadStateLock.exitRead();
+            if(!startGLibThread())
+            {
+                
+                DBG("GLibThread::" << __func__  << ": Restarting thread failed,"
+                        << " this should not happen!");
+                return;
+            }
+            threadStateLock.enterRead();
         }    
         std::mutex callMutex;
         std::condition_variable callPending;
@@ -62,9 +64,12 @@ void GLibThread::call(std::function<void()> fn)
         if(threadStopped)
         {
             DBG("GLibThread::" << __func__ << ": Shutting down thread again.");
+            threadStateLock.exitRead();
             stopGLibThread();
+            return;
         }
     }
+    threadStateLock.exitRead();
 }
 
 /**
@@ -72,6 +77,7 @@ void GLibThread::call(std::function<void()> fn)
  */
 void GLibThread::callAsync(std::function<void()> fn)
 {
+    ScopedReadLock(threadStateLock);
     addAndInitCall(fn);
 }
 
@@ -81,6 +87,7 @@ void GLibThread::callAsync(std::function<void()> fn)
  */
 GMainContext* GLibThread::getContext()
 {
+    ScopedReadLock(threadStateLock);
     return context;
 }
 
@@ -121,17 +128,22 @@ void GLibThread::run()
 {
     if (context != nullptr)
     {
+        std::unique_lock<std::mutex> lock(threadStartMutex);
         mainLoop = g_main_loop_new(context, false);
         g_main_context_push_thread_default(context);
-               
-        g_main_loop_run(mainLoop);
+        threadStarting.notify_all();
+        lock.unlock();
         
-	DBG("GLibSignalHandler: exiting GLib main loop");
+        DBG("GLibSignalHandler: entering GLib main loop");
+        g_main_loop_run(mainLoop);
+        DBG("GLibSignalHandler: exiting GLib main loop");
+        
         g_main_context_pop_thread_default(context);
-        g_main_context_unref(context);
-        context = nullptr;
-        g_main_loop_unref(mainLoop);
-        mainLoop = nullptr;
+    }
+    else
+    {
+        DBG("GLibThread::" << __func__ 
+                << ": Thread started after the context was destroyed!");
     }
 }
 
@@ -170,21 +182,44 @@ void GLibThread::windowFocusLost()
  */
 void GLibThread::windowFocusGained()
 {
-    if(mainLoop != nullptr && !isThreadRunning())
+    startGLibThread();
+}
+
+/**
+ * Starts the GLib thread, then waits until the thread is running and
+ * the thread context and main loop are initialized.  This function locks the
+ * threadStateLock for writing.
+ */
+bool GLibThread::startGLibThread()
+{
+    ScopedWriteLock changeLock(threadStateLock);
+    std::unique_lock<std::mutex> startLock(threadStartMutex);
+    if(isThreadRunning())
     {
+        DBG("GLibThread::" << __func__ << ": Thread is already running.");
+    }
+    else
+    {
+        if(mainLoop == nullptr || context == nullptr)
+        {
+            DBG("GLibThread::" << __func__ << ": Thread is being destroyed!");
+            return false;
+        }
         startThread();
+        threadStarting.wait(threadStartMutex);      
     }
 }
 
 /*
- * Terminates the GLib main loop and stops the thread.
+ * Terminates the GLib main loop and stops the thread.  This function locks the
+ * threadStateLock for writing.
  */
-void GLibThread::stopGLibThread()
+void GLibThread::stopGLibThread(bool unrefGLibVars)
 {
-    
+    ScopedWriteLock changeLock(threadStateLock);
     if(isThreadRunning())
     {
-        if(mainLoop != nullptr)
+        if(mainLoop != nullptr && context != nullptr)
         {
             addAndInitCall([this]()
             {
@@ -193,6 +228,19 @@ void GLibThread::stopGLibThread()
         }
         signalThreadShouldExit();
         waitForThreadToExit(-1);
+    }
+    if(unrefGLibVars)
+    {
+        if(mainLoop != nullptr)
+        {
+            g_main_loop_unref(mainLoop);
+            mainLoop = nullptr;
+        }
+        if(context != nullptr)
+        {
+            g_main_context_unref(context);
+            context = nullptr;
+        }
     }
 }
 
