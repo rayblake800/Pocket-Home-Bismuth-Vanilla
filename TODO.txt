@@ -6,14 +6,13 @@
         -Find and document all hidden dependencies, including ones met by
          default by every PocketCHIP.
         -List all optional dependencies.
-    2. Create Changelog.txt, copy important changes from the git commit history.
-    3. Create class documentation checklist/style guide.
-    4. Create a list of all code files, and use it to systematically check
+    2. Create class documentation checklist/style guide.
+    3. Create a list of all code files, and use it to systematically check
        existing documentation.
-    5. Create a Markdown page outlining the entire project structure.
-    6. Create pages documenting each code group.
-    7. Document all config files and options.
-    8. Generate UML diagrams.
+    4. Create a Markdown page outlining the entire project structure.
+    5. Create pages documenting each code group.
+    6. Document all config files and options.
+    7. Generate UML diagrams.
 
 #### Known documentation issues for individual classes
 
