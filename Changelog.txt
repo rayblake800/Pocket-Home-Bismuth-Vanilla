@@ -1,0 +1,10 @@
+### Jan 12 2018
+   -Created popup application menu editor component
+   -Added basic support for editing application menu items and folders
+
+### Jan 5 2018
+   -Initial DesktopEntry support
+   -Created AppMenuComponent application menu
+   -Began refactoring existing pocket-home code
+   -Created ConfigFile class
+   -Split configuration into three .json files.

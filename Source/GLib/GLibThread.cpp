@@ -61,9 +61,10 @@ void GLibThread::call(std::function<void()> fn)
         std::unique_lock<std::mutex> callLock(callMutex);
         addAndInitCall(fn, &callMutex, &callPending);
         callPending.wait(callLock);
-        if(threadStopped)
+        if(threadStopped && !WindowFocus::isFocused())
         {
-            DBG("GLibThread::" << __func__ << ": Shutting down thread again.");
+            DBG("GLibThread::" << __func__ 
+                    << ": Window not focused, shutting down thread again.");
             threadStateLock.exitRead();
             stopGLibThread();
             return;
@@ -200,7 +201,7 @@ bool GLibThread::startGLibThread()
     }
     else
     {
-        if(mainLoop == nullptr || context == nullptr)
+        if(context == nullptr)
         {
             DBG("GLibThread::" << __func__ << ": Thread is being destroyed!");
             return false;
