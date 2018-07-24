@@ -77,7 +77,7 @@ void GLibThread::call(std::function<void()> fn)
  */
 void GLibThread::callAsync(std::function<void()> fn)
 {
-    ScopedReadLock(threadStateLock);
+    ScopedReadLock threadLock(threadStateLock);
     addAndInitCall(fn);
 }
 
@@ -87,7 +87,7 @@ void GLibThread::callAsync(std::function<void()> fn)
  */
 GMainContext* GLibThread::getContext()
 {
-    ScopedReadLock(threadStateLock);
+    ScopedReadLock threadLock(threadStateLock);
     return context;
 }
 
@@ -206,8 +206,9 @@ bool GLibThread::startGLibThread()
             return false;
         }
         startThread();
-        threadStarting.wait(threadStartMutex);      
+        threadStarting.wait(startLock);      
     }
+    return true;
 }
 
 /*
