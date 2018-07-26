@@ -283,6 +283,7 @@ void PageAppFolder::PageMenuButton::resized()
         textBounds.setTop(bounds.getBottom()-(textHeight + 4));
         imageBounds.setBottom(textBounds.getY());
     }
+    textBounds.setBottom(bounds.getBottom());
 
     if (textHeight != titleFont.getHeight())
     {

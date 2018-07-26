@@ -207,6 +207,8 @@ private:
     //title font and justification
     Font titleFont;
     Justification textJustification = Justification::centredLeft;
+    //Pre-calculated text width
+    int textWidth;
     //background draw options
     bool fillBackground = true;
     bool drawBorder = true;

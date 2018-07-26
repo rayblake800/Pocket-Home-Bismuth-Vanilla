@@ -10,6 +10,7 @@ menuItem(menuItem)
 
     setName(name);
     setWantsKeyboardFocus(false);
+    textWidth = titleFont.getStringWidth(getMenuItem()->getAppName() + "    ");
 }
 
 /**
@@ -143,6 +144,8 @@ const Font& AppMenuButton::getTitleFont() const
 void AppMenuButton::setTextBounds(const Rectangle<float>& bounds)
 {
     textBounds = bounds;
+    textWidth = std::min((int) bounds.getWidth(),
+            titleFont.getStringWidth(getMenuItem()->getAppName() + "    "));
 }
 
 /**
@@ -180,6 +183,8 @@ void AppMenuButton::setFillBackground(bool shouldFill)
 void AppMenuButton::setTitleFont(const Font& font)
 {
     titleFont = font;
+    textWidth = std::min((int) textBounds.getWidth(),
+            font.getStringWidth(getMenuItem()->getAppName() + "    "));
 }
 
 /**
@@ -196,16 +201,22 @@ void AppMenuButton::setTextJustification(Justification justification)
 void AppMenuButton::paintButton
 (Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
-    Rectangle<int> border = getBounds().withPosition(0, 0);
+    Rectangle<int> border = getLocalBounds();
     if ((imageBounds.isEmpty() || textBounds.isEmpty()) && !border.isEmpty())
     {
         resized();
     }
+    g.setColour(findColour(isSelected() ?
+            selectionColourId : backgroundColourId));
     if (fillBackground)
     {
-        g.setColour(findColour(isSelected() ?
-                selectionColourId : backgroundColourId));
         g.fillRect(border);
+    }
+    else
+    {
+        Rectangle<float> textOval = textBounds.withSizeKeepingCentre
+                (textWidth, textBounds.getHeight());
+        g.fillRoundedRectangle(textOval, textOval.getHeight() / 6);
     }
     //app icon
     g.setOpacity(1);
