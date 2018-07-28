@@ -27,6 +27,8 @@ AppMenuItem::Ptr AppMenuButton::getMenuItem()
 AppMenuPopupEditor* AppMenuButton::getEditor
 (const std::function<void(AppMenuPopupEditor*) >& onConfirm)
 {
+    MainConfigFile mainConfig;
+    
     AppMenuPopupEditor* editor = new AppMenuPopupEditor
             (menuItem->getEditorTitle(),
             [this, onConfirm](AppMenuPopupEditor * editor)
@@ -41,7 +43,13 @@ AppMenuPopupEditor* AppMenuButton::getEditor
     editor->setNameField(menuItem->getAppName());
     editor->setIconField(menuItem->getIconName());
     editor->setCategories(menuItem->getCategories());
-    editor->setCommandField(menuItem->getCommand());
+    String command = menuItem->getCommand();
+    if(menuItem->isTerminalApp())
+    {
+        command = command.substring(mainConfig.getConfigValue<String>
+                (MainConfigFile::termLaunchCommandKey).length() + 1);
+    }
+    editor->setCommandField(command);
     editor->setTerminalCheckbox(menuItem->isTerminalApp());
     return editor;
 };

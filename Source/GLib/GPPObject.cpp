@@ -82,9 +82,7 @@ bool GPPObject::isNull() const
 GPPObject::SignalHandler::SignalHandler()
 {
     //ADDR_LOG(this,"Created as SignalHandler");
-    DBG("Adding signal handler, current count =" << signalHandlers.size());
     GPPObject::signalHandlers.addIfNotAlreadyThere(this);
-    DBG("Added signal handler, current count =" << signalHandlers.size());
 }
 
 
@@ -98,9 +96,7 @@ GPPObject::SignalHandler::SignalHandler(const SignalHandler& rhs)
     
     //ADDR_LOG(this,"Created as SignalHandler copying ", &rhs);
     //ADDR_LOG(&rhs,"Shared data with ", this);
-    DBG("Adding signal handler, current count =" << signalHandlers.size());
     GPPObject::signalHandlers.addIfNotAlreadyThere(this);
-    DBG("Added signal handler, current count =" << signalHandlers.size());
     for(GPPObject* signalSource : sources)
     {
         signalSource->addSignalHandler(this);
@@ -114,10 +110,7 @@ GPPObject::SignalHandler::SignalHandler(const SignalHandler& rhs)
  */
 GPPObject::SignalHandler::~SignalHandler()
 {
-    
-    DBG("Removing signal handler, current count =" << signalHandlers.size());
     GPPObject::signalHandlers.removeAllInstancesOf(this);
-    DBG("Removed signal handler, current count =" << signalHandlers.size());
     while(!sources.isEmpty())
     {
         GPPObject* source = sources[0];

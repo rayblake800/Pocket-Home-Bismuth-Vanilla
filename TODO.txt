@@ -16,10 +16,6 @@
     
     
 ## Misc. bug fixes and improvements
-    
-    -The terminal launch command is permanently added to shortcuts/desktop
-     entry launch commands if they have the "Launch in Terminal" property and
-     are edited.  
     -Program hangs when launching applications if xdotool is not installed.
     -Set the program to automatically grab window focus on launch.
     -Restore the build and version labels to the power page.

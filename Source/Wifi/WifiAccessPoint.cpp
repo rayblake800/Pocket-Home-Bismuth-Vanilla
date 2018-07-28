@@ -11,7 +11,6 @@
  */
 WifiAccessPoint::WifiAccessPoint()
 {
-    DBG("Creating " << String::toHexString(reinterpret_cast<long>(this)));
 }
     
 /*
@@ -19,8 +18,6 @@ WifiAccessPoint::WifiAccessPoint()
  */
 WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 {
-    DBG("Creating " << String::toHexString(reinterpret_cast<long>(this))
-            << " copying " << String::toHexString(reinterpret_cast<long>(&toCopy)));
     *this = toCopy;
 }
 
@@ -73,8 +70,6 @@ WifiAccessPoint::WifiAccessPoint
 ssid(ssid),
 hash(hash)
 {
-    DBG("Creating " << String::toHexString(reinterpret_cast<long>(this)));
-    this->signalStrength.store(median<unsigned int>(0, signalStrength, 100));
 #if JUCE_DEBUG
     fakeConnection = true;
     frequency = 2437;
@@ -86,7 +81,6 @@ hash(hash)
 
 WifiAccessPoint::~WifiAccessPoint() 
 {
-    DBG("Destroying " << String::toHexString(reinterpret_cast<long>(this)));
 }
     
 /*

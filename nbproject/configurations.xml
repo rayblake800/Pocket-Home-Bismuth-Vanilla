@@ -2322,10 +2322,6 @@
                   <in>NewDesktopAppEditor.cpp</in>
                   <in>NewFolderEditor.cpp</in>
                 </df>
-                <df name="Menu Folders">
-                  <in>PageAppFolder.cpp</in>
-                  <in>ScrollingAppFolder.cpp</in>
-                </df>
                 <df name="Menu Items">
                   <in>AppMenuItem.cpp</in>
                   <in>AppMenuItemFactory.cpp</in>
@@ -2333,10 +2329,6 @@
                   <in>ConfigAppMenuItem.cpp</in>
                   <in>DesktopEntryMenuItem.cpp</in>
                   <in>FolderMenuItem.cpp</in>
-                </df>
-                <df name="Menu Types">
-                  <in>PagedAppMenu.cpp</in>
-                  <in>ScrollingAppMenu.cpp</in>
                 </df>
                 <in>AppMenuButton.cpp</in>
                 <in>AppMenuComponent.cpp</in>
@@ -3033,20 +3025,6 @@
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="Source/Components/Pages/Home Page/AppMenu/Menu Folders/PageAppFolder.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Home Page/AppMenu/Menu Folders/ScrollingAppFolder.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
       <item path="Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItem.cpp"
             ex="false"
             tool="1"
@@ -3083,20 +3061,6 @@
         </ccTool>
       </item>
       <item path="Source/Components/Pages/Home Page/AppMenu/Menu Items/FolderMenuItem.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Home Page/AppMenu/Menu Types/PagedAppMenu.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="Source/Components/Pages/Home Page/AppMenu/Menu Types/ScrollingAppMenu.cpp"
             ex="false"
             tool="1"
             flavor2="11">

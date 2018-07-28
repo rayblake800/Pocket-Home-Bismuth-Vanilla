@@ -195,6 +195,7 @@ bool GLibThread::startGLibThread()
 {
     ScopedWriteLock changeLock(threadStateLock);
     std::unique_lock<std::mutex> startLock(threadStartMutex);
+    DBG("GLibThread::" << __func__ << ": Thread is starting.");
     if(isThreadRunning())
     {
         DBG("GLibThread::" << __func__ << ": Thread is already running.");
@@ -221,6 +222,7 @@ void GLibThread::stopGLibThread(bool unrefGLibVars)
     ScopedWriteLock changeLock(threadStateLock);
     if(isThreadRunning())
     {
+        DBG("GLibThread::" << __func__ << ": Thread is stopping.");
         if(mainLoop != nullptr && context != nullptr)
         {
             addAndInitCall([this]()

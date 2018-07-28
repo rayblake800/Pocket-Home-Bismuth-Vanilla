@@ -6,7 +6,7 @@
 LoginPage::LoginPage(std::function<void () > loginCallback) :
 Localized("LoginPage"),
 PageComponent("LoginPage"),
-ntcIcon("login/ntcbanner.png"),
+ntcIcon("login/chipBismuth.png"),
 passwordLabel("pass", localeText(password_label)),
 passwordField("passwordField", 0x2022),
 loginButton(localeText(log_in), "loginButton"),

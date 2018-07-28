@@ -5539,10 +5539,6 @@
                   <in>NewFolderEditor.cpp</in>
                   <in>NewFolderEditor.h</in>
                 </df>
-                <df name="Menu Folders">
-                  <in>PageAppFolder.cpp</in>
-                  <in>ScrollingAppFolder.cpp</in>
-                </df>
                 <df name="Menu Items">
                   <in>AppMenuItem.cpp</in>
                   <in>AppMenuItem.h</in>
@@ -5556,10 +5552,6 @@
                   <in>DesktopEntryMenuItem.h</in>
                   <in>FolderMenuItem.cpp</in>
                   <in>FolderMenuItem.h</in>
-                </df>
-                <df name="Menu Types">
-                  <in>PagedAppMenu.cpp</in>
-                  <in>ScrollingAppMenu.cpp</in>
                 </df>
                 <df name="Paged Menu">
                   <in>PageAppFolder.cpp</in>

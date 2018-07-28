@@ -33,7 +33,7 @@ nameLength=${#targetUser}
 if ! [[ ${targetUser} =~ [a-z_][a-z0-9_-]*$ ]] \
 || [[ ${nameLength} -gt 32 ]] \
 || [[ ${allUsers} != *$targetUser* ]]; then
-    echo "invalid user!"
+    echo "invalid user ${targetUser}!"
     exit $INVALID_USER
 fi
 
