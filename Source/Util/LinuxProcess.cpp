@@ -16,19 +16,24 @@ pid_t LinuxProcess::getProcessId()
     return getpid();
 }
 
-/*
- * Looks up information on a process using its process id.
+/**
+ * Looks up information on a process using its process path.
+ * 
+ * @param processPath  The full path of a process directory in /proc
+ * 
+ * @return  Data describing the process, or an empty value if no process exists at
+ *          the given path.
  */
-std::optional<ProcessData> LinuxProcess::getProcessData(pid_t processId)
+static std::optional<LinuxProcess::ProcessData> getPathProcessData(juce::String processPath)
 {
     using namespace juce;
-    std::optional<ProcessData> matchingData;
-    File statFile(String("/proc/") + String(processId) + "/stat");
+    std::optional<LinuxProcess::ProcessData> matchingData;
+    File statFile(processPath + "/stat");
     if(statFile.existsAsFile())
     {
         StringArray statItems 
                 = StringArray::fromTokens(statFile.loadFileAsString(), true);
-        ProcessData foundData;
+        LinuxProcess::ProcessData foundData;
         foundData.processId = statItems[idIndex].getIntValue();
         foundData.executableName = statItems[nameIndex];
         foundData.parentId = statItems[parentIdIndex].getIntValue();
@@ -44,7 +49,37 @@ std::optional<ProcessData> LinuxProcess::getProcessData(pid_t processId)
     return matchingData;   
 }
 
+    
+
+/*
+ * Looks up information on a process using its process id.
+ */
+std::optional<LinuxProcess::ProcessData> LinuxProcess::getProcessData
+(pid_t processId)
+{
+    using namespace juce;
+    String path("/proc/");
+    path += String(processId);
+    return getPathProcessData(path); 
+}
+
 /*
  * Gets all processes that are direct child processes of a specific process.
  */
-juce::Array<ProcessData> LinuxProcess::getChildProcesses(pid_t processId);
+juce::Array<LinuxProcess::ProcessData> LinuxProcess::getChildProcesses
+(pid_t processId)
+{
+    using namespace juce;
+    File proc("/proc");
+    Array<File> childDirs = proc.findChildFiles(File::findDirectories, false);
+    Array<ProcessData> childProcs;
+    for(const File& dir : childDirs)
+    {
+        std::optional<ProcessData> processData = getPathProcessData(dir.getFullPathName());
+        if(processData && processData->parentId == processId)
+        {
+            childProcs.add(*processData);
+        }
+    }
+    return childProcs;
+}
