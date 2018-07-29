@@ -4,6 +4,7 @@
 //Print debug info about the component tree
 void componentTrace()
 {
+    using namespace juce;
     static DrawableRectangle highlightFocus;
     highlightFocus.setFill(FillType(Colour(0x0)));
     highlightFocus.setStrokeFill(FillType(Colour(0xff00ff00)));
@@ -78,8 +79,10 @@ int addressID(const void* ptr)
 /*
  * Appends a line of text to the log of events occurring to a specific address.
  */
-const String& addressLog(const void* ptr, String event, const void* ptr2)
+const juce::String& addressLog
+(const void* ptr, juce::String event, const void* ptr2)
 {
+    using namespace juce;
     static CriticalSection logSection;
     static std::map<int,String> eventLog;
     const ScopedLock eventLock(logSection);
@@ -103,6 +106,7 @@ const String& addressLog(const void* ptr, String event, const void* ptr2)
  */
 void printLog(int addressID)
 {
+    using namespace juce;
     const void* address = nullptr;
     std::map<const void*,int>& ids = getAddressMap();
     for(auto iter = ids.begin(); iter != ids.end(); iter++)
@@ -121,11 +125,32 @@ void printLog(int addressID)
 #endif
 
 /*
+ * Waits for a process to end, forcibly terminating it if necessary, then
+ * returns all process output as long as the process exited normally.
+ */
+juce::String getProcessOutput
+(juce::ChildProcess& process, unsigned int timeoutMs)
+{
+    using namespace juce;
+    process.waitForProcessToFinish(timeoutMs);
+    if(!process.isRunning())
+    {
+        return process.readAllProcessOutput();
+    }
+    if(process.isRunning() && !process.kill())
+    {
+        DBG(__func__ << ": Child process refused to stop!");
+    }
+    return String();
+}
+
+/*
  * Requests user confirmation before performing some action
  */
 void confirmAction
-(String title, String message, std::function<void() > onConfirm)
+(juce::String title, juce::String message, std::function<void() > onConfirm)
 {
+    using namespace juce;
     NativeMessageBox::showOkCancelBox(AlertWindow::QuestionIcon,
             title, message, nullptr,
             ModalCallbackFunction::create([onConfirm](int response)
@@ -143,15 +168,17 @@ void confirmAction
  * 
  * @return the size of the display, measured in pixels.
  */
-Rectangle<int> getDisplaySize(){
+juce::Rectangle<int> getDisplaySize(){
+    using namespace juce;
     return Desktop::getInstance().getDisplays().getMainDisplay().userArea;
 }
 
 /**
  * Gets the bounds of the single application window.
  */
-Rectangle<int> getWindowBounds()
+juce::Rectangle<int> getWindowBounds()
 {
+    using namespace juce;
     Component * windowComp = Desktop::getInstance().getComponent(0);
     if (windowComp == nullptr)
     {

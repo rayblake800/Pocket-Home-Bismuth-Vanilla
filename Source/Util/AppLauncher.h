@@ -40,7 +40,7 @@ public:
      * 
      * @param command   The shell command that starts the application.
      */
-    void startOrFocusApp(String appTitle, String command);
+    void startOrFocusApp(juce::String appTitle, juce::String command);
 private:
 
     /**
@@ -48,11 +48,11 @@ private:
      */
     struct ProcessInfo
     {
-        ProcessInfo(String title, String command);
+        ProcessInfo(juce::String title, juce::String command);
         //Application title
-        String title;
+        juce::String title;
         //Application launch command
-        String command;
+        juce::String command;
         bool operator==(const ProcessInfo& rhs) const;
         bool operator<(const ProcessInfo& rhs) const;
     };
@@ -70,7 +70,7 @@ private:
      * 
      * @param windowId  The application window's ID.
      */
-    void focusApp(const String& windowId);
+    void focusApp(const juce::String& windowId);
 
     /**
      * Searches for the ID of any window belonging to a given process.
@@ -79,7 +79,8 @@ private:
      * 
      * @return  the window ID, or the empty string if none was found.
      */
-    String getWindowId(ProcessInfo processInfo);
+    juce::String getWindowId(ProcessInfo processInfo);
+    
 
     /**
      * Track application launch success and respond appropriately.
@@ -95,23 +96,22 @@ private:
     std::function<void() > launchFailureCallback;
 
     //holds all running processes launched by this object.
-    OwnedArray<ChildProcess> runningApps;
+    juce::OwnedArray<juce::ChildProcess> runningApps;
 
     //store child process launch information
-    std::map<ProcessInfo, ChildProcess*> processMap;
+    std::map<ProcessInfo, juce::ChildProcess*> processMap;
 
     //timer interval in milliseconds
     static const int timerFrequency = 2000;
 
     //milliseconds to wait before giving up on a launch
-
     static const int timeout = 15000;
 
     //last launch time from Time::getMillisecondCounter()
-    uint32 lastLaunch = 0;
+    juce::uint32 lastLaunch = 0;
 
     //Process to check up on when the timer finishes
-    ChildProcess * timedProcess = nullptr;
+    juce::ChildProcess * timedProcess = nullptr;
 
     //localized text keys;
     static const constexpr char * could_not_open = "could_not_open";
