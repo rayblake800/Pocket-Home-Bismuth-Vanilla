@@ -1,10 +1,11 @@
 #include <limits>
 #include "IconThemeIndex.h"
 
-IconThemeIndex::IconThemeIndex(File themeDir) :
+IconThemeIndex::IconThemeIndex(juce::File themeDir) :
 path(themeDir.getFullPathName()),
 cacheFile(themeDir.getFullPathName())
 {
+    using namespace juce;
     if (!themeDir.isDirectory())
     {
         DBG("IconTheme::IconTheme:: Theme directory does not exist!");
@@ -166,9 +167,10 @@ bool IconThemeIndex::isValidTheme() const
  * Finds the path of an icon within the theme.  The caller is responsible
  * for searching within all inherited themes if the icon is not found.
  */
-String IconThemeIndex::lookupIcon
-(String icon, int size, Context context, int scale) const
+juce::String IconThemeIndex::lookupIcon
+(juce::String icon, int size, Context context, int scale) const
 {
+    using namespace juce;
     if (!isValidTheme())
     {
         return String();
@@ -252,7 +254,7 @@ String IconThemeIndex::lookupIcon
 /*
  * Gets the name of the icon theme.
  */
-String IconThemeIndex::getName() const
+juce::String IconThemeIndex::getName() const
 {
     return name;
 }
@@ -260,7 +262,7 @@ String IconThemeIndex::getName() const
 /*
  * Gets a short comment describing the icon theme.
  */
-String IconThemeIndex::getComment() const
+juce::String IconThemeIndex::getComment() const
 {
     return comment;
 }
@@ -269,7 +271,7 @@ String IconThemeIndex::getComment() const
  * Gets the names of all themes inherited by this icon theme.  When findIcon
  * doesn't locate a requested icon, all inherited themes should be searched.
  */
-StringArray IconThemeIndex::getInheritedThemes() const
+juce::StringArray IconThemeIndex::getInheritedThemes() const
 {
     return inheritedThemes;
 }
@@ -285,7 +287,7 @@ bool IconThemeIndex::isHidden() const
 /*
  * Gets the name of an icon to use as an example of this theme.
  */
-String IconThemeIndex::getExampleIcon() const
+juce::String IconThemeIndex::getExampleIcon() const
 {
     return example;
 }

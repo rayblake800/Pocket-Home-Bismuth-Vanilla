@@ -8,7 +8,7 @@ curPwdLabel("CurLabel", localeText(current_password)),
 curPassword("Current", 0x2022),
 titleLabel("Title", localeText(remove_password))
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("RemovePasswordPage");
 #    endif
@@ -38,8 +38,9 @@ titleLabel("Title", localeText(remove_password))
  * Attempts to delete the Pocket-Home password when deleteButton is pressed.
  * If this succeeds, the page will close after showing an AlertWindow.
  */
-void RemovePasswordPage::pageButtonClicked(Button* button)
+void RemovePasswordPage::pageButtonClicked(juce::Button* button)
 {
+    using namespace juce;
     if (button != &deleteButton)
     {
         DBG("RemovePasswordPage::" << __func__ << ": button "

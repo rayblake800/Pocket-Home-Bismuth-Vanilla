@@ -22,7 +22,7 @@ public:
     /**
      * @param themeFile  The root directory of an icon theme.
      */
-    IconThemeIndex(File themeDir);
+    IconThemeIndex(juce::File themeDir);
     
     /**
      * Creates an empty, invalid index object.
@@ -98,7 +98,7 @@ public:
      * @return  the path of a suitable icon file, or the empty string if no
      *          match is found.
      */
-    String lookupIcon(String icon, int size, Context context = unknownCtx,
+    juce::String lookupIcon(juce::String icon, int size, Context context = unknownCtx,
             int scale = 1) const;
     
     /**
@@ -106,20 +106,20 @@ public:
      * 
      * @return the theme's name.
      */
-    String getName() const;
+    juce::String getName() const;
     
     /**
      * Gets a short comment describing the icon theme.
      * 
      * @return  the theme's comment value.
      */
-    String getComment() const;
+    juce::String getComment() const;
     
     /**
      * Gets the names of all themes inherited by this icon theme.  When findIcon
      * doesn't locate a requested icon, all inherited themes should be searched.
      */
-    StringArray getInheritedThemes() const;
+    juce::StringArray getInheritedThemes() const;
     
     /**
      * Checks if this theme should be displayed to the user in theme lists.
@@ -134,7 +134,7 @@ public:
      * @return  an icon name, to be used as the "icon" parameter in a findIcon
      *          call.
      */
-    String getExampleIcon() const;
+    juce::String getExampleIcon() const;
     
 private:
     
@@ -144,7 +144,7 @@ private:
     struct IconDirectory
     {
         //Directory path, relative to the main theme directory
-        String path;
+        juce::String path;
         
         int size = -1;
         int scale = 1;
@@ -216,24 +216,24 @@ private:
     };
     
     //The path to the theme's base directory
-    String path;
+    juce::String path;
     //The name of the icon theme
-    String name;
+    juce::String name;
     //A brief description of the icon theme
-    String comment;
+    juce::String comment;
     //The list of backup themes to search for icons missing in this theme
-    StringArray inheritedThemes;
+    juce::StringArray inheritedThemes;
     //Indicates if this theme should be shown to the user in theme lists
     bool hidden = false;
     //The name of an icon to use as an example of this theme's icons
-    String example;
+    juce::String example;
     //Accesses the theme's cache file, if one exists
     IconCache cacheFile;
     //Filename shared by all icon theme indexes
     static const constexpr char* indexFileName = "/index.theme";
     
     //All icon sub-directories in the theme, indexed by relative path name
-    std::map<String, IconDirectory> directories;
+    std::map<juce::String, IconDirectory> directories;
     
     
 };

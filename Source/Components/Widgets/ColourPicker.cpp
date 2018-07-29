@@ -1,13 +1,14 @@
 #include "ColourPicker.h"
 
-Array<Colour> ColourPicker::savedColours;
+juce::Array<juce::Colour> ColourPicker::savedColours;
 
-ColourPicker::ColourPicker(int numSavedColours, Colour colour):
+ColourPicker::ColourPicker(int numSavedColours, juce::Colour colour):
 Localized("ColourPicker"),
 numSavedColours(numSavedColours),
-selectionCallback([](Colour c){}),	
+selectionCallback([](juce::Colour c){}),	
 colour(colour)
 {
+    using namespace juce;
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout(
@@ -66,7 +67,7 @@ colour(colour)
 /**
  * Gets the current selected colour.
  */
-Colour ColourPicker::getSelectedColour()
+juce::Colour ColourPicker::getSelectedColour()
 {
     return colour;
 }
@@ -74,7 +75,7 @@ Colour ColourPicker::getSelectedColour()
 /**
  * Sets a new colour value.
  */
-void ColourPicker::setSelectedColour(Colour colour, bool runCallback)
+void ColourPicker::setSelectedColour(juce::Colour colour, bool runCallback)
 {
     this->colour = colour;
     setSlidersToColour();
@@ -89,7 +90,8 @@ void ColourPicker::setSelectedColour(Colour colour, bool runCallback)
 /**
  * Assigns a callback function to run when a colour is selected.
  */
-void ColourPicker::setSelectionCallback(std::function<void(Colour)> callback)
+void ColourPicker::setSelectionCallback
+(std::function<void(juce::Colour)> callback)
 {
     selectionCallback = callback;
 }
@@ -110,12 +112,13 @@ void ColourPicker::setSlidersToColour()
  */
 void ColourPicker::setEditorText()
 {
-     String colourStr = colour.toString();
-     while(colourStr.length() < 8)
-     {
-        colourStr = '0' + colourStr;
-     }
-     colourField.setText("0x"+colourStr);
+    using namespace juce;
+    String colourStr = colour.toString();
+    while(colourStr.length() < 8)
+    {
+       colourStr = '0' + colourStr;
+    }
+    colourField.setText("0x"+colourStr);
 }
 
 /**
@@ -140,8 +143,9 @@ void ColourPicker::updateColourButtons()
 /**
  * Updates the color preview and text box when slider values change.
  */
-void ColourPicker::sliderValueChanged(Slider* slider)
+void ColourPicker::sliderValueChanged(juce::Slider* slider)
 {
+    using namespace juce;
     colour = Colour(
             (uint8_t) rSlider.getValue(),
 	    (uint8_t) gSlider.getValue(),
@@ -154,8 +158,9 @@ void ColourPicker::sliderValueChanged(Slider* slider)
 /**
  * Updates the sliders and colour preview after the text box value changes.
  */
-void ColourPicker::textEditorFocusLost(TextEditor& editor)
+void ColourPicker::textEditorFocusLost(juce::TextEditor& editor)
 {
+    using namespace juce;
     colour = Colour(editor.getText().getHexValue32());
     setEditorText();
     setSlidersToColour();
@@ -165,8 +170,9 @@ void ColourPicker::textEditorFocusLost(TextEditor& editor)
 /**
  * Updates the sliders and colour preview after the text box value changes.
  */
-void ColourPicker::textEditorReturnKeyPressed(TextEditor& editor) 
+void ColourPicker::textEditorReturnKeyPressed(juce::TextEditor& editor) 
 {
+    using namespace juce;
     colour = Colour(editor.getText().getHexValue32());
     setEditorText();
     setSlidersToColour();
@@ -178,9 +184,8 @@ void ColourPicker::textEditorReturnKeyPressed(TextEditor& editor)
  * and preview.  If the apply button is clicked, add the selection colour
  * to the preview thumbnails and run the selection callback.
  */
-void ColourPicker::buttonClicked(Button* button) 
+void ColourPicker::buttonClicked(juce::Button* button) 
 {
-    DBG("click!");
     if(button == &selectionButton)
     {
 	updateColourButtons();
@@ -203,6 +208,7 @@ void ColourPicker::buttonClicked(Button* button)
  */
 void ColourPicker::resized()
 {
+    using namespace juce;
     Rectangle<int> bounds = getLocalBounds().reduced(getWidth() / 20);
     int padding = 3;
     if(numSavedColours > 0)
@@ -223,26 +229,27 @@ void ColourPicker::resized()
     layoutManager.layoutComponents(bounds);
 }
 
-ColourPicker::ColourBox::ColourBox(Colour colour, bool drawBorder) : 
+ColourPicker::ColourBox::ColourBox(juce::Colour colour, bool drawBorder) : 
 colour(colour),
 drawBorder(drawBorder)
 {
     setInterceptsMouseClicks(false,false);
 }
 
-Colour ColourPicker::ColourBox::getColour()
+juce::Colour ColourPicker::ColourBox::getColour()
 {
     return colour;
 }
 
-void ColourPicker::ColourBox::setColour(Colour colour)
+void ColourPicker::ColourBox::setColour(juce::Colour colour)
 {
     this->colour = colour;
     repaint();
 }
 
-void ColourPicker::ColourBox::paint(Graphics& g)
+void ColourPicker::ColourBox::paint(juce::Graphics& g)
 {
+    using namespace juce;
     Rectangle<int> bounds = getLocalBounds();
     if(!colour.isOpaque())
     {
@@ -259,19 +266,19 @@ void ColourPicker::ColourBox::paint(Graphics& g)
     }
 }
 
-ColourPicker::ColourButton::ColourButton(Colour colour) 
+ColourPicker::ColourButton::ColourButton(juce::Colour colour) 
 : colourBox(colour,false),	
 Button("colourButton")
 {
     addAndMakeVisible(colourBox);
 }
 
-Colour ColourPicker::ColourButton::getColour()
+juce::Colour ColourPicker::ColourButton::getColour()
 {
     return colourBox.getColour();
 }
 
-void ColourPicker::ColourButton::setColour(Colour colour)
+void ColourPicker::ColourButton::setColour(juce::Colour colour)
 {
     colourBox.setColour(colour);
 }
@@ -285,8 +292,9 @@ void ColourPicker::ColourButton::resized()
  * Change the outline color when the button is down.
  */
 void ColourPicker::ColourButton::paintButton
-(Graphics &g, bool isMouseOverButton, bool isButtonDown)
+(juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
+    using namespace juce;
     g.setColour(findColour(isButtonDown ? 
 			      TextEditor::focusedOutlineColourId
 			    : TextEditor::outlineColourId));

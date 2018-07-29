@@ -11,11 +11,11 @@ public:
 
     virtual ~BluezAdapter() { }
     
-    String getDeviceAddress();
+    juce::String getDeviceAddress();
     
-    String getDeviceName();
+    juce::String getDeviceName();
     
-    StringArray getUUIDs();
+    juce::StringArray getUUIDs();
     
     bool isPowered();
     

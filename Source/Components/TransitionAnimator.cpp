@@ -10,7 +10,7 @@
  * in order to allow simultaneous animation of component proxies and their 
  * source components. 
  */
-class AnimationProxy : public Component, private Timer
+class AnimationProxy : public juce::Component, private juce::Timer
 {
 public:
 
@@ -25,7 +25,7 @@ public:
      *                           animating, it will be deleted.
      */
     static AnimationProxy * getNewProxy
-    (Component& source, const unsigned int animationDuration)
+    (juce::Component& source, const unsigned int animationDuration)
     {
         AnimationProxy* proxy = new AnimationProxy(source, animationDuration);
         proxy->selfHolder = proxy;
@@ -35,8 +35,10 @@ public:
     virtual ~AnimationProxy() { }
 private:
 
-    AnimationProxy(Component& source, const unsigned int animationDuration)
+    AnimationProxy
+    (juce::Component& source, const unsigned int animationDuration)
     {
+        using namespace juce;
         startTimer(animationDuration + timeBuffer);
         setWantsKeyboardFocus(false);
         setBounds(source.getBounds());
@@ -67,8 +69,9 @@ private:
         setVisible(true);
     }
 
-    void paint(Graphics& g) override
+    void paint(juce::Graphics& g) override
     {
+        using namespace juce;
         g.setOpacity(1.0f);
         g.drawImageTransformed(image,
                 AffineTransform::scale(getWidth() / (float) image.getWidth(),
@@ -81,6 +84,7 @@ private:
      */
     void timerCallback() override
     {
+        using namespace juce;
         if (Desktop::getInstance().getAnimator().isAnimating(this))
         {
             startTimer(timeBuffer);
@@ -95,11 +99,11 @@ private:
         }
     }
 
-    ScopedPointer<AnimationProxy> selfHolder;
+    juce::ScopedPointer<AnimationProxy> selfHolder;
     //Extra time to wait, in milliseconds, to ensure the timer is deleted
     //after animation finishes.
     static const constexpr unsigned int timeBuffer = 500;
-    Image image;
+    juce::Image image;
 };
 
 /*
@@ -109,11 +113,12 @@ private:
  * moves on-screen simultaneously.
  */
 void TransitionAnimator::animateTransition(
-        Array<Component*> movingOut,
-        Array<std::pair<Component*, Rectangle<int>>> movingIn,
+        juce::Array<juce::Component*> movingOut,
+        juce::Array<std::pair<juce::Component*, juce::Rectangle<int>>> movingIn,
         const TransitionAnimator::Transition transition,
         const unsigned int animationMilliseconds)
 {
+    using namespace juce;
     for (std::pair<Component*, Rectangle<int>>&inComponent : movingIn)
     {
         if (inComponent.first == nullptr || Desktop::getInstance().getAnimator()
@@ -147,11 +152,13 @@ void TransitionAnimator::animateTransition(
 /*
  * Moves a component off-screen, animating the transition.
  */
-void TransitionAnimator::transitionOut(Component* component,
+void TransitionAnimator::transitionOut(
+        juce::Component* component,
         const TransitionAnimator::Transition transition,
         const unsigned int animationMilliseconds,
 	const bool useProxy)
 {
+    using namespace juce;
     if (component == nullptr)
     {
         return;
@@ -194,11 +201,13 @@ void TransitionAnimator::transitionOut(Component* component,
 /*
  * Moves a component into the screen bounds, animating the transition.
  */
-void TransitionAnimator::transitionIn(Component* component,
+void TransitionAnimator::transitionIn(
+        juce::Component* component,
         const TransitionAnimator::Transition transition,
-        const Rectangle<int> destination,
+        const juce::Rectangle<int> destination,
         const unsigned int animationMilliseconds)
 {
+    using namespace juce;
     if (component == nullptr)
     {
         return;
@@ -242,10 +251,12 @@ void TransitionAnimator::transitionIn(Component* component,
 /*
  * Updates a component's bounds, animating the transformation.
  */
-void TransitionAnimator::transformBounds(Component* component,
-        const Rectangle<int>& destination,
+void TransitionAnimator::transformBounds(
+        juce::Component* component,
+        const juce::Rectangle<int>& destination,
         const unsigned int animationMilliseconds)
 {
+    using namespace juce;
     if (component != nullptr)
     {
         Desktop::getInstance().getAnimator().animateComponent(component,

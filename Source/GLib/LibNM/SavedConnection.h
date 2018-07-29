@@ -39,7 +39,7 @@ public:
      * @return the DBus path used to create this object, or the empty string if
      *         the connection is not valid.
      */
-    const String& getPath() const;
+    const juce::String& getPath() const;
     
     /**
      * Checks if this connection is a wifi connection.
@@ -63,7 +63,7 @@ public:
      * @return  the last time the connection was active, or the Unix epoch if
      *          the connection has no saved connection time.
      */
-    Time lastConnectionTime();
+    juce::Time lastConnectionTime();
 
     /**
      * Checks if the connection has a saved wireless security key.
@@ -169,8 +169,8 @@ private:
     bool hasSettingProperty(const char* settingName, const char* propName);
     
     NMPPConnection nmConnection;
-    StringArray settingNames;
-    String path;
+    juce::StringArray settingNames;
+    juce::String path;
     
     static const constexpr char * busName = "org.freedesktop.NetworkManager";
     static const constexpr char * interfaceName 

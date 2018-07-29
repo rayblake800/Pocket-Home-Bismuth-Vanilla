@@ -3,10 +3,10 @@
 #include "Utils.h"
 
 
-ScopedPointer<ResourceManager::SharedResource>
+juce::ScopedPointer<ResourceManager::SharedResource>
         AppConfigFile::sharedResource = nullptr;
 
-ReadWriteLock AppConfigFile::configLock;
+juce::ReadWriteLock AppConfigFile::configLock;
 
 AppConfigFile::AppConfigFile() :
 ResourceManager(sharedResource, configLock,
@@ -23,8 +23,9 @@ ResourceManager(sharedResource, configLock,
  * @return a list of AppItems to be pinned to the main column 
  * of the AppMenu
  */
-Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
+juce::Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 {
+    using namespace juce;
     const ScopedReadLock readLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     return config->getFavorites();
@@ -36,6 +37,7 @@ Array<AppConfigFile::AppItem> AppConfigFile::getFavorites()
 void AppConfigFile::addFavoriteApp
 (AppConfigFile::AppItem newApp, int index, bool writeChangesNow)
 {
+    using namespace juce;
     const ScopedWriteLock writeLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     config->addFavoriteApp(newApp,index,writeChangesNow);
@@ -46,6 +48,7 @@ void AppConfigFile::addFavoriteApp
  */
 void AppConfigFile::removeFavoriteApp(int index, bool writeChangesNow)
 {
+    using namespace juce;
     const ScopedWriteLock writeLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     config->removeFavoriteApp(index,writeChangesNow);
@@ -56,6 +59,7 @@ void AppConfigFile::removeFavoriteApp(int index, bool writeChangesNow)
  */
 int AppConfigFile::getFavoriteIndex(AppConfigFile::AppItem toFind)
 {
+    using namespace juce;
     const ScopedReadLock readLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     return config->getFavoriteIndex(toFind);
@@ -66,8 +70,9 @@ int AppConfigFile::getFavoriteIndex(AppConfigFile::AppItem toFind)
 /**
  * @return A list of folders to display in the AppMenu.
  */
-Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
+juce::Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 {
+    using namespace juce;
     const ScopedReadLock readLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     return config->getFolders();
@@ -79,6 +84,7 @@ Array<AppConfigFile::AppFolder> AppConfigFile::getFolders()
 void AppConfigFile::addAppFolder
 (AppConfigFile::AppFolder newFolder, int index, bool writeChangesNow)
 {
+    using namespace juce;
     const ScopedWriteLock writeLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     config->addAppFolder(newFolder,index,writeChangesNow);
@@ -89,6 +95,7 @@ void AppConfigFile::addAppFolder
  */
 void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
 {
+    using namespace juce;
     const ScopedWriteLock writeLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     config->removeAppFolder(index,writeChangesNow);
@@ -99,6 +106,7 @@ void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
  */
 int AppConfigFile::getFolderIndex(AppConfigFile::AppFolder toFind)
 {
+    using namespace juce;
     const ScopedReadLock readLock(configLock);
     AppJson* config = static_cast<AppJson*> (sharedResource.get());
     return config->getFolderIndex(toFind);
@@ -107,7 +115,7 @@ int AppConfigFile::getFolderIndex(AppConfigFile::AppFolder toFind)
 /**
  * Load an AppItem from json file data.
  */
-AppConfigFile::AppItem::AppItem(var jsonObj)
+AppConfigFile::AppItem::AppItem(juce::var jsonObj)
 {
     name = jsonObj.getProperty("name", "");
     icon = jsonObj.getProperty("icon", "");
@@ -119,8 +127,9 @@ AppConfigFile::AppItem::AppItem(var jsonObj)
  * @return AppItem data stored as a DynamicObject* that can be written
  *          to json.
  */
-DynamicObject* AppConfigFile::AppItem::getDynamicObject()
+juce::DynamicObject* AppConfigFile::AppItem::getDynamicObject()
 {
+    using namespace juce;
     DynamicObject * appObject = new DynamicObject();
     appObject->setProperty("name", name);
     appObject->setProperty("icon", icon);
@@ -142,8 +151,9 @@ bool AppConfigFile::AppItem::operator==(const AppItem& rhs) const
 /**
  * Load folder information from json data.
  */
-AppConfigFile::AppFolder::AppFolder(var jsonObj)
+AppConfigFile::AppFolder::AppFolder(juce::var jsonObj)
 {
+    using namespace juce;
     name = jsonObj.getProperty("name", "");
     icon = jsonObj.getProperty("icon", "");
 
@@ -162,8 +172,9 @@ AppConfigFile::AppFolder::AppFolder(var jsonObj)
  * @return folder data as a DynamicObject* ready to be written to a 
  *          json file.
  */
-DynamicObject* AppConfigFile::AppFolder::getDynamicObject()
+juce::DynamicObject* AppConfigFile::AppFolder::getDynamicObject()
 {
+    using namespace juce;
     DynamicObject * folderObject = new DynamicObject();
     folderObject->setProperty("name", name);
     folderObject->setProperty("icon", icon);
@@ -190,7 +201,7 @@ bool AppConfigFile::AppFolder::operator==(const AppFolder& rhs) const
  * @return a list of AppItems to be pinned to the main column 
  * of the AppMenu
  */
-Array<AppConfigFile::AppItem> AppConfigFile::AppJson::getFavorites()
+juce::Array<AppConfigFile::AppItem> AppConfigFile::AppJson::getFavorites()
 {
     return favoriteApps;
 }
@@ -236,7 +247,7 @@ int AppConfigFile::AppJson::getFavoriteIndex(AppItem toFind)
 /**
  * @return A list of folders to display in the AppMenu.
  */
-Array<AppConfigFile::AppFolder> AppConfigFile::AppJson::getFolders()
+juce::Array<AppConfigFile::AppFolder> AppConfigFile::AppJson::getFolders()
 {
     return categoryFolders;
 }
@@ -279,6 +290,7 @@ int AppConfigFile::AppJson::getFolderIndex(AppFolder toFind)
 
 AppConfigFile::AppJson::AppJson() : ConfigFile(filenameConst)
 {
+    using namespace juce;
     var jsonConfig = AssetFiles::loadJSONAsset
             (String(configPath) + filenameConst, true);
     var defaultConfig = var();
@@ -290,8 +302,10 @@ AppConfigFile::AppJson::AppJson() : ConfigFile(filenameConst)
 /**
  * Read in this object's data from a json config object
  */
-void AppConfigFile::AppJson::readDataFromJson(var& config, var& defaultConfig)
+void AppConfigFile::AppJson::readDataFromJson
+(juce::var& config, juce::var& defaultConfig)
 {
+    using namespace juce;
     ConfigFile::readDataFromJson(config, defaultConfig);
     //load favorites
     var favoriteList = getProperty(config, defaultConfig, favoritesKey);
@@ -324,8 +338,9 @@ void AppConfigFile::AppJson::readDataFromJson(var& config, var& defaultConfig)
 /**
  * Copy all config data to a json object.
  */
-void AppConfigFile::AppJson::copyDataToJson(DynamicObject::Ptr jsonObj)
+void AppConfigFile::AppJson::copyDataToJson(juce::DynamicObject::Ptr jsonObj)
 {
+    using namespace juce;
     ConfigFile::copyDataToJson(jsonObj);
     //set favorites
     Array<var> favoriteArray;

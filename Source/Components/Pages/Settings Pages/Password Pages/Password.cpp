@@ -14,8 +14,9 @@ static const constexpr char * passwordPath = "~/.pocket-home/.passwd/passwd";
  * 
  * @return         the hashed string value.
  */
-static String hashString(const String& string)
+static juce::String hashString(const juce::String& string)
 {
+    using namespace juce;
     const unsigned char* str = (unsigned char*) string.toRawUTF8();
     //(unsigned char*) string.toStdString().c_str();
     unsigned char hash[21];
@@ -33,16 +34,19 @@ static String hashString(const String& string)
 
 static bool passwordFileExists()
 {
+    using namespace juce;
     return File(passwordPath).existsAsFile();
 }
 
 static bool passwordFileProtected()
 {
+    using namespace juce;
     return !File(passwordPath).hasWriteAccess();
 }
 
 static bool pkexecInstalled()
 {
+    using namespace juce;
     ChildProcess checkCmd;
     checkCmd.start("command -v pkexec");
     return checkCmd.readAllProcessOutput().containsNonWhitespaceChars();
@@ -51,8 +55,9 @@ static bool pkexecInstalled()
 /**
  * Checks if a string matches the existing password.
  */
-bool Password::checkPassword(const String& password)
+bool Password::checkPassword(const juce::String& password)
 {
+    using namespace juce;
     if (!isPasswordSet())
     {
         return password.isEmpty();
@@ -67,6 +72,7 @@ bool Password::checkPassword(const String& password)
  */
 bool Password::isPasswordSet()
 {
+    using namespace juce;
     File pwd(passwordPath);
     return pwd.existsAsFile() && pwd.loadFileAsString().trim() != "none";
 }
@@ -76,8 +82,9 @@ bool Password::isPasswordSet()
  * Attempts to change or remove the current password.
  */
 static Password::ChangeResult runPasswordScript
-(const String& currentPass, const String& newPass)
+(const juce::String& currentPass, const juce::String& newPass)
 {
+    using namespace juce;
     using namespace Password;
     if (isPasswordSet() && !checkPassword(currentPass))
     {
@@ -109,8 +116,9 @@ static Password::ChangeResult runPasswordScript
  * possible.
  */
 Password::ChangeResult Password::changePassword
-(const String& currentPass, const String& newPass)
+(const juce::String& currentPass, const juce::String& newPass)
 {
+    using namespace juce;
     if (!newPass.containsNonWhitespaceChars() || currentPass == newPass)
     {
         return missingNewPassword;
@@ -142,7 +150,7 @@ Password::ChangeResult Password::changePassword
 /**
  * Attempts to remove the current pocket-home password.
  */
-Password::ChangeResult Password::removePassword(const String& currentPass)
+Password::ChangeResult Password::removePassword(const juce::String& currentPass)
 {
     ChangeResult result = runPasswordScript(currentPass, "");
     if(result != fileDeleteFailed)

@@ -54,7 +54,7 @@ private:
     /**
      * Handles all button clicks.
      */
-    void pageButtonClicked(Button*) override;
+    void pageButtonClicked(juce::Button*button) override;
 
     /**
      * Resize the lock screen and overlay spinner to fit the page.
@@ -63,17 +63,17 @@ private:
 
     
     //Turns off the system using the shutdown command in the MainConfigFile.
-    TextButton powerOffButton;
+    juce::TextButton powerOffButton;
     //Starts sleep mode with startSleepMode()
-    TextButton sleepButton;
+    juce::TextButton sleepButton;
     //Restarts the system using the reboot command in the MainConfigFile.
-    TextButton rebootButton;
+    juce::TextButton rebootButton;
     //Shows a page that gives the user the option to enter flashing mode.
-    TextButton felButton;
+    juce::TextButton felButton;
 #if JUCE_DEBUG
     //In debug builds, this button provides a convenient place to tie in
     //temporary test routines.
-    TextButton testButton;
+    juce::TextButton testButton;
 #endif
     //Spinner to indicate that the system is rebooting/shutting down
     OverlaySpinner overlaySpinner;

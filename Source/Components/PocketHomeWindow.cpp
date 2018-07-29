@@ -4,11 +4,11 @@
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
 
-PocketHomeWindow::PocketHomeWindow(String windowName, bool fakeWifi) :
-WindowFocus::BroadcastWindow(windowName, Colours::darkgrey,
-        DocumentWindow::allButtons),
+PocketHomeWindow::PocketHomeWindow(juce::String windowName, bool fakeWifi) :
+WindowFocus::BroadcastWindow(windowName, juce::Colours::darkgrey,
+        juce::DocumentWindow::allButtons),
 wifiManager([fakeWifi]
-(ReadWriteLock& lock)->WifiStateManager::NetworkInterface*
+(juce::ReadWriteLock& lock)->WifiStateManager::NetworkInterface*
 {
     if(fakeWifi)
     {
@@ -20,6 +20,7 @@ wifiManager([fakeWifi]
     }
 })
 {
+    using namespace juce;
 #    if JUCE_DEBUG
     setBounds(10, 10, 480, 272);
 #    else
@@ -58,6 +59,7 @@ wifiManager([fakeWifi]
  */
 void PocketHomeWindow::closeButtonPressed()
 {
+    using namespace juce;
     JUCEApplication::getInstance()->systemRequestedQuit();
 }
 
@@ -66,6 +68,7 @@ void PocketHomeWindow::closeButtonPressed()
  */
 void PocketHomeWindow::resized()
 {
+    using namespace juce;
     const Rectangle<int>& bounds = getLocalBounds();
     pageStack.setBounds(bounds);
     if (loginPage != nullptr)

@@ -2,7 +2,8 @@
 #include "GLibSignalHandler.h"
 #include "GPPObject.h"
 
-Array<GPPObject::SignalHandler*, CriticalSection> GPPObject::signalHandlers;
+juce::Array<GPPObject::SignalHandler*, juce::CriticalSection> 
+GPPObject::signalHandlers;
 
 /*
  * Creates a null GPPObject, with no internal GObject.
@@ -54,7 +55,7 @@ GPPObject::~GPPObject()
      * Adds an entry to the address log of the contained GObject, if this 
      * GPPObject is not null.
      */
-    void GPPObject::gObjectAddressLog(String log, void* ptr2) const
+    void GPPObject::gObjectAddressLog(juce::String log, void* ptr2) const
     {
         GObject* object = getGObject();
         if(object != nullptr)
@@ -137,7 +138,7 @@ GPPObject::SignalHandler::~SignalHandler()
  * change notifications that they support.
  */
 void GPPObject::SignalHandler::propertyChanged
-(GPPObject* source, String property)
+(GPPObject* source, juce::String property)
 {
     DBG("GPPObject::SignalHandler::" << __func__ << ": Unexpected notification"
             << "for property " << property); 
@@ -158,6 +159,7 @@ void GPPObject::addSignalHandler(SignalHandler* signalHandler)
  */
 void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
 {
+    using namespace juce;
     //ADDR_LOG(this, "removing signal handler ", signalHandler);
     //ADDR_LOG(signalHandler, " removing from signal source ", this);
     signalHandler->sources.removeAllInstancesOf(this);
@@ -465,6 +467,7 @@ GPPObject* GPPObject::findObjectWrapper(GObject* objectData,
 void GPPObject::addNotifySignalHandler(GPPObject::SignalHandler* signalHandler,
         const char* propertyName)
 {
+    using namespace juce;
     jassert(propertyName != nullptr && isSignalHandlerValid(signalHandler));
     String signal("notify::");
     signal += propertyName;
@@ -478,6 +481,7 @@ void GPPObject::addNotifySignalHandler(GPPObject::SignalHandler* signalHandler,
 void GPPObject::notifyCallback(GObject* objectData, GParamSpec* pSpec,
         GPPObject::SignalHandler* signalHandler)
 {
+    using namespace juce;
     const char* signalName = pSpec->name;
     if(isSignalHandlerValid(signalHandler))
     {
@@ -505,8 +509,9 @@ void GPPObject::notifyCallback(GObject* objectData, GParamSpec* pSpec,
 /*
  * Gets all signal handlers registered with this object's GObject data.
  */
-Array<GPPObject::SignalHandler*> GPPObject::getSignalHandlers()
+juce::Array<GPPObject::SignalHandler*> GPPObject::getSignalHandlers()
 {
+    using namespace juce;
     Array<SignalHandler*> handlers;
     for(auto it = registeredSignals.begin(); 
         it != registeredSignals.end(); it++)
@@ -523,6 +528,7 @@ Array<GPPObject::SignalHandler*> GPPObject::getSignalHandlers()
  */
 void GPPObject::setData(GObject* data, bool refNeeded, bool moveSignalHandlers)
 {
+    using namespace juce;
     callInMainContext([this, data, refNeeded, moveSignalHandlers]()
     {
         if(data != nullptr && isValidType(data) && objectData.get() != data)

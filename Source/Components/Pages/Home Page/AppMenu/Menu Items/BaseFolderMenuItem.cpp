@@ -15,8 +15,9 @@ bool BaseFolderMenuItem::isFolder() const
 /**
  * @return all menu items in this folder
  */
-Array<AppMenuItem::Ptr> BaseFolderMenuItem::getFolderItems() const
+juce::Array<AppMenuItem::Ptr> BaseFolderMenuItem::getFolderItems() const
 {
+    using namespace juce;
     AppConfigFile config;
     Array<AppMenuItem::Ptr> folderItems;
 

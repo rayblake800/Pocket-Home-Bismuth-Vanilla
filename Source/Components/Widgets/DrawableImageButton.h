@@ -7,7 +7,7 @@
  * @brief a Juce button component drawn using a DrawableImageComponent.
  */
 
-class DrawableImageButton : public Button {
+class DrawableImageButton : public juce::Button {
 public:
 
     /**
@@ -16,8 +16,8 @@ public:
      * @param placement  Defines how the image will be scaled to fit the button
      *                    bounds.
      */
-    DrawableImageButton(File imageFile,
-            RectanglePlacement placement = RectanglePlacement::centred);
+    DrawableImageButton(juce::File imageFile, juce::RectanglePlacement placement
+            = juce::RectanglePlacement::centred);
 
     /**
      * @param assetName  The button image will be loaded from the file with 
@@ -26,8 +26,9 @@ public:
      * @param placement  Defines how the image will be scaled to fit the button
      *                    bounds.
      */
-    DrawableImageButton(String assetName,
-            RectanglePlacement placement = RectanglePlacement::centred);
+    DrawableImageButton(juce::String assetName, 
+            juce::RectanglePlacement placement 
+            = juce::RectanglePlacement::centred);
 
     /**
      * @param imageObject This will be set as the button's image.
@@ -35,8 +36,9 @@ public:
      * @param placement   Defines how the image will be scaled to fit the 
      *                     button bounds.
      */
-    DrawableImageButton(Image imageObject,
-            RectanglePlacement placement = RectanglePlacement::centred);
+    DrawableImageButton(juce::Image imageObject,
+            juce::RectanglePlacement placement 
+            = juce::RectanglePlacement::centred);
 
     virtual ~DrawableImageButton() { }
 
@@ -45,21 +47,21 @@ public:
      * 
      * @param assetFilename The filename of an image in the asset folder.
      */
-    void setImage(String assetFilename);
+    void setImage(juce::String assetFilename);
 
     /**
      * Changes the image drawn by this component.
      * 
      * @param imageFile  Any image file.
      */
-    void setImage(File imageFile);
+    void setImage(juce::File imageFile);
     
     /**
      * Changes the image drawn by this component.
      * 
      * @param image  An image object.
      */
-    void setImage(Image imageObject);
+    void setImage(juce::Image imageObject);
 
     enum ColourIds {
         imageColour0Id = 0x1900000,
@@ -89,10 +91,11 @@ private:
     /**
      * Changes button alpha on click.
      */
-    void paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown);
+    void paintButton
+    (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown);
     
     //Internal button image component.
-    ScopedPointer<DrawableImageComponent> imageComponent;
+    juce::ScopedPointer<DrawableImageComponent> imageComponent;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DrawableImageButton)

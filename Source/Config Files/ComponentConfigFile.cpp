@@ -2,10 +2,10 @@
 #include "AssetFiles.h"
 #include "Utils.h"
 
-ScopedPointer<ResourceManager::SharedResource>
+juce::ScopedPointer<ResourceManager::SharedResource>
         ComponentConfigFile::sharedResource = nullptr;
 
-ReadWriteLock ComponentConfigFile::configLock;
+juce::ReadWriteLock ComponentConfigFile::configLock;
 
 ComponentConfigFile::ComponentConfigFile() :
 ResourceManager(sharedResource, configLock,
@@ -29,8 +29,9 @@ ResourceManager(sharedResource, configLock,
  * Gets configured component settings from shared .json file data.
  */
 ComponentConfigFile::ComponentSettings
-ComponentConfigFile::getComponentSettings(String componentKey)
+ComponentConfigFile::getComponentSettings(juce::String componentKey)
 {
+    using namespace juce;
     const ScopedReadLock readLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     return config->getComponentSettings(componentKey);
@@ -40,40 +41,43 @@ ComponentConfigFile::getComponentSettings(String componentKey)
  * Add a listener to track component setting changes.
  */
 void ComponentConfigFile::addListener(ConfigFile::Listener* listener,
-        StringArray trackedKeys)
+        juce::StringArray trackedKeys)
 {
+    using namespace juce;
     const ScopedWriteLock writeLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     config->addListener(listener, trackedKeys);
 }
 //######################### Text Size Keys #################################
-const String ComponentConfigFile::smallTextKey  = "small text";
-const String ComponentConfigFile::mediumTextKey = "medium text";
-const String ComponentConfigFile::largeTextKey  = "large text";
+const juce::String ComponentConfigFile::smallTextKey  = "small text";
+const juce::String ComponentConfigFile::mediumTextKey = "medium text";
+const juce::String ComponentConfigFile::largeTextKey  = "large text";
 
 //######################### UI Component Data ##############################
 //Defines all component types managed in the config file
-const String ComponentConfigFile::scrollingAppMenuKey = "scrolling app menu";
-const String ComponentConfigFile::pagedAppMenuKey = "paged app menu";
-const String ComponentConfigFile::menuFrameKey = "menu frame";
-const String ComponentConfigFile::batteryIconKey = "battery";
-const String ComponentConfigFile::batteryPercentKey = "battery percent text";
-const String ComponentConfigFile::clockLabelKey = "time";
-const String ComponentConfigFile::wifiIconKey = "wifi";
-const String ComponentConfigFile::powerButtonKey = "power button";
-const String ComponentConfigFile::settingsButtonKey = "settings button";
-const String ComponentConfigFile::popupMenuKey = "popup menu";
-const String ComponentConfigFile::pageLeftKey = "left arrow button";
-const String ComponentConfigFile::pageRightKey = "right arrow button";
-const String ComponentConfigFile::pageUpKey = "up arrow button";
-const String ComponentConfigFile::pageDownKey = "down arrow button";
-const String ComponentConfigFile::spinnerKey = "loading spinner";
+const juce::String ComponentConfigFile::scrollingAppMenuKey = "scrolling app menu";
+const juce::String ComponentConfigFile::pagedAppMenuKey = "paged app menu";
+const juce::String ComponentConfigFile::menuFrameKey = "menu frame";
+const juce::String ComponentConfigFile::batteryIconKey = "battery";
+const juce::String ComponentConfigFile::batteryPercentKey = "battery percent text";
+const juce::String ComponentConfigFile::clockLabelKey = "time";
+const juce::String ComponentConfigFile::wifiIconKey = "wifi";
+const juce::String ComponentConfigFile::powerButtonKey = "power button";
+const juce::String ComponentConfigFile::settingsButtonKey = "settings button";
+const juce::String ComponentConfigFile::popupMenuKey = "popup menu";
+const juce::String ComponentConfigFile::pageLeftKey = "left arrow button";
+const juce::String ComponentConfigFile::pageRightKey = "right arrow button";
+const juce::String ComponentConfigFile::pageUpKey = "up arrow button";
+const juce::String ComponentConfigFile::pageDownKey = "down arrow button";
+const juce::String ComponentConfigFile::spinnerKey = "loading spinner";
 
 /*
  * Return the most appropriate font size for drawing text
  */
-int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds, String text)
+int ComponentConfigFile::getFontHeight
+(juce::Rectangle <int> textBounds, juce::String text)
 {
+    using namespace juce;
     const ScopedReadLock readLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
 
@@ -116,6 +120,7 @@ int ComponentConfigFile::getFontHeight(Rectangle <int> textBounds, String text)
  */
 int ComponentConfigFile::getFontHeight(TextSize sizeType)
 {
+    using namespace juce;
     String key;
     switch(sizeType)
     {
@@ -141,7 +146,7 @@ int ComponentConfigFile::getFontHeight(TextSize sizeType)
 /*
  * @return the list of all component keys.
  */
-StringArray ComponentConfigFile::getComponentKeys()
+juce::StringArray ComponentConfigFile::getComponentKeys()
 {
     return {
             scrollingAppMenuKey,
@@ -164,6 +169,7 @@ StringArray ComponentConfigFile::getComponentKeys()
 
 ComponentConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
 {
+    using namespace juce;
     var jsonConfig = AssetFiles::loadJSONAsset(String(configPath)
             + filenameConst, true);
     var defaultConfig = var();
@@ -175,7 +181,7 @@ ComponentConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
  * Gets the configured settings for a particular component.
  */
 ComponentConfigFile::ComponentSettings
-ComponentConfigFile::ConfigJson::getComponentSettings(String componentKey)
+ComponentConfigFile::ConfigJson::getComponentSettings(juce::String componentKey)
 {
     return components[componentKey];
 }
@@ -200,8 +206,9 @@ std::vector<ConfigFile::DataKey> ComponentConfigFile::ConfigJson
  * Read in this object's data from a json config object
  */
 void ComponentConfigFile::ConfigJson::readDataFromJson
-(var& config, var& defaultConfig)
+(juce::var& config, juce::var& defaultConfig)
 {
+    using namespace juce;
     ConfigFile::readDataFromJson(config, defaultConfig);
     StringArray keys = getComponentKeys();
     for (const String& key : keys)
@@ -215,8 +222,9 @@ void ComponentConfigFile::ConfigJson::readDataFromJson
  * Copy all config data to a json object
  */
 void ComponentConfigFile::ConfigJson::copyDataToJson
-(DynamicObject::Ptr jsonObj)
+(juce::DynamicObject::Ptr jsonObj)
 {
+    using namespace juce;
     ConfigFile::copyDataToJson(jsonObj);
     StringArray keys = getComponentKeys();
     for (const String& key : keys)
@@ -231,8 +239,9 @@ x(0), y(0), width(0), height(0) { }
 /*
  * Initializes from json data.
  */
-ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
+ComponentConfigFile::ComponentSettings::ComponentSettings(juce::var jsonObj)
 {
+    using namespace juce;
     x = jsonObj.getProperty("x", -1);
     y = jsonObj.getProperty("y", -1);
     width = jsonObj.getProperty("width", -1);
@@ -263,8 +272,9 @@ ComponentConfigFile::ComponentSettings::ComponentSettings(var jsonObj)
  * Packages the object into a DynamicObject that can be written to a
  * json file.
  */
-DynamicObject * ComponentConfigFile::ComponentSettings::getDynamicObject()
+juce::DynamicObject * ComponentConfigFile::ComponentSettings::getDynamicObject()
 {
+    using namespace juce;
     DynamicObject * componentObject = new DynamicObject();
     if (x != -1)
     {
@@ -319,8 +329,9 @@ bool ComponentConfigFile::ComponentSettings::operator==
  * @return the bounds of the component relative to the window,
  * measured in pixels.
  */
-Rectangle<int> ComponentConfigFile::ComponentSettings::getBounds()
+juce::Rectangle<int> ComponentConfigFile::ComponentSettings::getBounds()
 {
+    using namespace juce;
     Rectangle<int> window = getWindowBounds();
     return Rectangle<int>(
                           x * window.getWidth(),
@@ -332,7 +343,7 @@ Rectangle<int> ComponentConfigFile::ComponentSettings::getBounds()
 /*
  * @return the list of configurable colors.
  */
-Array<Colour> ComponentConfigFile::ComponentSettings::getColours()
+juce::Array<juce::Colour> ComponentConfigFile::ComponentSettings::getColours()
 {
     return colours;
 }
@@ -340,7 +351,7 @@ Array<Colour> ComponentConfigFile::ComponentSettings::getColours()
 /*
  * @return the list of component asset files.
  */
-StringArray ComponentConfigFile::ComponentSettings::getAssetFiles()
+juce::StringArray ComponentConfigFile::ComponentSettings::getAssetFiles()
 {
     return assetFiles;
 }
@@ -348,8 +359,10 @@ StringArray ComponentConfigFile::ComponentSettings::getAssetFiles()
 /*
  * Use these settings to position and size a component.
  */
-void ComponentConfigFile::ComponentSettings::applyBounds(Component * component)
+void ComponentConfigFile::ComponentSettings::applyBounds
+(juce::Component * component)
 {
+    using namespace juce;
     Rectangle<int> bounds = getBounds();
     if (x == -1)
     {

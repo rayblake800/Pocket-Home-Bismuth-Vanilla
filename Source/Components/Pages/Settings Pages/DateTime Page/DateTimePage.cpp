@@ -8,7 +8,7 @@ setClockMode("setClockMode"),
 reconfigureBtn(localeText(set_system_clock)),
 clockModeLabel("modeLabel", localeText(select_clock_mode))
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("DateTimePage");
 #    endif
@@ -61,8 +61,9 @@ clockModeLabel("modeLabel", localeText(select_clock_mode))
  * Runs reconfigureCommand in the terminal to update system time when
  * the user presses the reconfigure button.
  */
-void DateTimePage::pageButtonClicked(Button* button)
+void DateTimePage::pageButtonClicked(juce::Button* button)
 {
+    using namespace juce;
     if (button == &reconfigureBtn)
     {
         MainConfigFile mainConfig;
@@ -85,7 +86,7 @@ void DateTimePage::pageButtonClicked(Button* button)
  * Changes the clock mode saved in the ComponentConfigFile when the
  * user selects a new mode with the setClockMode combo box.
  */
-void DateTimePage::comboBoxChanged(ComboBox* comboBox)
+void DateTimePage::comboBoxChanged(juce::ComboBox* comboBox)
 {
     if (comboBox != &setClockMode)
     {

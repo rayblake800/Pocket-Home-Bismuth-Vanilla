@@ -6,7 +6,7 @@ Spinner::Spinner(int secondsToTimeout) :
 WindowFocusedTimer("SpinnerFrame"),
 ConfigurableImageComponent(
 ComponentConfigFile::spinnerKey,
-0,RectanglePlacement::fillDestination),
+0,juce::RectanglePlacement::fillDestination),
 timeout(secondsToTimeout)
 {
 #    if JUCE_DEBUG

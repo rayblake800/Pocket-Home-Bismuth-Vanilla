@@ -3,10 +3,10 @@
 #include "Utils.h"
 
 
-ScopedPointer<ResourceManager::SharedResource>
+juce::ScopedPointer<ResourceManager::SharedResource>
         MainConfigFile::sharedResource = nullptr;
 
-ReadWriteLock MainConfigFile::configLock;
+juce::ReadWriteLock MainConfigFile::configLock;
 
 MainConfigFile::MainConfigFile() : 
 ResourceManager(sharedResource,configLock,
@@ -20,8 +20,9 @@ ResourceManager(sharedResource,configLock,
  * Add a listener to track component setting changes.
  */
 void MainConfigFile::addListener(ConfigFile::Listener* listener,
-        StringArray trackedKeys)
+        juce::StringArray trackedKeys)
 {
+    using namespace juce;
     const ScopedWriteLock writeLock(configLock);
     MainJson* config = static_cast<MainJson*> (sharedResource.get());
     config->addListener(listener, trackedKeys);
@@ -30,6 +31,7 @@ void MainConfigFile::addListener(ConfigFile::Listener* listener,
 MainConfigFile::MainJson::MainJson() :
 ConfigFile(filenameConst)
 {
+    using namespace juce;
     var jsonConfig = AssetFiles::loadJSONAsset
             (String(configPath) + filenameConst, true);
     var defaultConfig;
@@ -38,27 +40,28 @@ ConfigFile(filenameConst)
 }
 
 //menu types
-const StringArray MainConfigFile::menuTypes = {
-                                               "Scrolling menu",
-                                               "Paged menu"
+const juce::StringArray MainConfigFile::menuTypes = 
+{
+    "Scrolling menu",
+     "Paged menu"
 };
 
 
 //#### Integer value keys #######
-const String MainConfigFile::maxRowsKey = "max menu row count";
-const String MainConfigFile::maxColumnsKey = "max menu column count";
+const juce::String MainConfigFile::maxRowsKey = "max menu row count";
+const juce::String MainConfigFile::maxColumnsKey = "max menu column count";
 //string
-const String MainConfigFile::menuTypeKey = "app menu type";
-const String MainConfigFile::shutdownCommandKey = "shutdown command";
-const String MainConfigFile::restartCommandKey = "restart command";
-const String MainConfigFile::sleepCommandKey = "sleep command";
-const String MainConfigFile::termLaunchCommandKey = "terminal launch command";
-const String MainConfigFile::backgroundKey = "background";
-const String MainConfigFile::wifiInterfaceKey = "Wifi interface";
+const juce::String MainConfigFile::menuTypeKey = "app menu type";
+const juce::String MainConfigFile::shutdownCommandKey = "shutdown command";
+const juce::String MainConfigFile::restartCommandKey = "restart command";
+const juce::String MainConfigFile::sleepCommandKey = "sleep command";
+const juce::String MainConfigFile::termLaunchCommandKey = "terminal launch command";
+const juce::String MainConfigFile::backgroundKey = "background";
+const juce::String MainConfigFile::wifiInterfaceKey = "Wifi interface";
 //boolean
-const String MainConfigFile::showCursorKey = "cursor";
-const String MainConfigFile::showClockKey = "show clock";
-const String MainConfigFile::use24HrModeKey = "use 24h mode";
+const juce::String MainConfigFile::showCursorKey = "cursor";
+const juce::String MainConfigFile::showClockKey = "show clock";
+const juce::String MainConfigFile::use24HrModeKey = "use 24h mode";
 
 std::vector<ConfigFile::DataKey> MainConfigFile::MainJson::getDataKeys() const
 {

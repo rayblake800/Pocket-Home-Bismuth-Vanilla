@@ -118,6 +118,7 @@ bool Audio::initAudio()
  */
 int Audio::getVolumePercent()
 {
+    using namespace juce;
     int volume = 0;
     // Get initial brightness value
     ChildProcess child;
@@ -138,6 +139,7 @@ int Audio::getVolumePercent()
  */
 void Audio::setVolume(int volumePercent)
 {
+    using namespace juce;
     StringArray cmd{"amixer", "sset", "Power Amplifier",
                     (String(volumePercent) + "%").toRawUTF8()};
     ChildProcess child;

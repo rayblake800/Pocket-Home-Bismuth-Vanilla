@@ -12,7 +12,7 @@
  * of all Components in the list.  When scrolling through the list, existing
  * Components are re-used and updated.
  */
-class PagedList : public Component, private Button::Listener
+class PagedList : public juce::Component, private juce::Button::Listener
 {
 public:
     PagedList();
@@ -39,7 +39,7 @@ protected:
      * 
      * @return  The updated list Component. 
      */
-    virtual Component* updateListItem(Component* listItem,
+    virtual juce::Component* updateListItem(juce::Component* listItem,
             const unsigned int index) = 0;
     
     /**
@@ -111,7 +111,7 @@ private:
      *
      * @param button  One of the two page navigation buttons.
      */
-    virtual void buttonClicked(Button* button) final override;
+    virtual void buttonClicked(juce::Button* button) final override;
     
     /**
      * Re-positions list items and navigation buttons when the list is resized.
@@ -129,7 +129,7 @@ private:
     bool showNavButtons = true;
 
     //All Components displayed in the list.
-    OwnedArray<Component> listComponents;
+    juce::OwnedArray<juce::Component> listComponents;
     
     //number of list items to display per page
     unsigned int itemsPerPage = 5;

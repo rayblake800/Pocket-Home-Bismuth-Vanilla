@@ -41,7 +41,7 @@ public:
     private:
         //Holds a reference to every existing ResourceManager that uses this
         //resource.
-        Array<ResourceManager*> referenceList;
+        juce::Array<ResourceManager*> referenceList;
     };
 
     /**
@@ -64,8 +64,8 @@ public:
      *                         acquire the resource lock.
      */
     ResourceManager(
-            ScopedPointer<SharedResource>& classResource,
-            ReadWriteLock& resourceLock,
+            juce::ScopedPointer<SharedResource>& classResource,
+            juce::ReadWriteLock& resourceLock,
             std::function<SharedResource*()> resourceCreator);
 
 
@@ -76,16 +76,15 @@ public:
     virtual ~ResourceManager();
 
 private:
-
     /**
      * Needed in order to update the resource's reference list when this
      * object is destroyed.
      */
-    ScopedPointer<SharedResource>& classResource;
+    juce::ScopedPointer<SharedResource>& classResource;
 
     /**
      * Shared by all instances of the ResourceManager, used to control access to
      * the shared resource object.
      */
-    ReadWriteLock& resourceLock;
+    juce::ReadWriteLock& resourceLock;
 };

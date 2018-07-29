@@ -1,12 +1,11 @@
 #include "CategoryPopupEditor.h"
 
 CategoryPopupEditor::CategoryPopupEditor(
-        StringArray categories,
-        std::function<void(StringArray) > onConfirm) :
+        juce::StringArray categories,
+        std::function<void(juce::StringArray) > onConfirm) :
 PopupEditorComponent("Edit Categories",
 [this, onConfirm](PopupEditorComponent* thisPopup)
 {
-
     onConfirm(categoryList.getListItems());
 }),
 categoryList(categories)

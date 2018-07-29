@@ -23,8 +23,9 @@ NMPPClient::NMPPClient(const NMPPClient& toCopy)
 /*
  * Get all wifi devices from Network Manager.
  */
-Array<NMPPDeviceWifi> NMPPClient::getWifiDevices() 
+juce::Array<NMPPDeviceWifi> NMPPClient::getWifiDevices() 
 { 
+    using namespace juce;
     Array<NMPPDeviceWifi> devices;
     callInMainContext([&devices](GObject* clientObject)
     {
@@ -90,8 +91,9 @@ NMPPDeviceWifi NMPPClient::getWifiDeviceByPath(const char* path)
 /*
  * Gets the list of all active connections known to the network manager.
  */
-Array<NMPPActiveConnection> NMPPClient::getActiveConnections() 
+juce::Array<NMPPActiveConnection> NMPPClient::getActiveConnections() 
 { 
+    using namespace juce;
     Array<NMPPActiveConnection> connections;
     callInMainContext([&connections](GObject* clientObject)
     {
@@ -329,7 +331,8 @@ void NMPPClient::activateConnection(
  * Converts generic propertyChanged calls to class-specific 
  * wirelessStateChange calls.
  */
-void NMPPClient::Listener::propertyChanged(GPPObject* source, String property)
+void NMPPClient::Listener::propertyChanged
+(GPPObject* source, juce::String property)
 { 
     NMPPClient* client = dynamic_cast<NMPPClient*>(source);
     if(client != nullptr && property == NM_CLIENT_WIRELESS_ENABLED)

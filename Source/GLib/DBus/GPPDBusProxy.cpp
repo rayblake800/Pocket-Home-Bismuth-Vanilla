@@ -5,6 +5,7 @@
 GPPDBusProxy::GPPDBusProxy
 (const char* name, const char* path, const char* interface)
 {
+    using namespace juce;
     if(name == nullptr || path == nullptr || interface == nullptr)
     {
         //creating an invalid/null interface, skip initialization
@@ -43,7 +44,7 @@ GPPDBusProxy::GPPDBusProxy
  * they expect to receive.
  */
 void GPPDBusProxy::DBusSignalHandler::dBusSignalReceived(GPPDBusProxy* source, 
-        String senderName, String signalName, GVariant* parameters)
+        juce::String senderName, juce::String signalName, GVariant* parameters)
 {
     DBG("GPPDBusProxy::DBusSignalHandler::" << __func__ <<
             ": Received un-handled signal " << signalName << " from "
@@ -56,7 +57,7 @@ void GPPDBusProxy::DBusSignalHandler::dBusSignalReceived(GPPDBusProxy* source,
  * specific property changes they need to receive.
  */
 void GPPDBusProxy::DBusSignalHandler::dBusPropertyChanged
-(GPPDBusProxy* source, String propertyName, GVariant* newValue)
+(GPPDBusProxy* source, juce::String propertyName, GVariant* newValue)
 {   
     DBG("GPPDBusProxy::DBusSignalHandler::" << __func__ <<
             ": Received un-handled change to property" << propertyName);
@@ -68,7 +69,7 @@ void GPPDBusProxy::DBusSignalHandler::dBusPropertyChanged
  * specific property changes they need to receive.
  */
 void GPPDBusProxy::DBusSignalHandler::dBusPropertyInvalidated
-(GPPDBusProxy* source, String propertyName)
+(GPPDBusProxy* source, juce::String propertyName)
 {   
     DBG("GPPDBusProxy::DBusSignalHandler::" << __func__ <<
             ": Received un-handled invalidation message for " << propertyName);
@@ -80,6 +81,7 @@ void GPPDBusProxy::DBusSignalHandler::dBusPropertyInvalidated
 GVariant* GPPDBusProxy::callMethod
 (const char *  methodName, GVariant* params, GError ** error)
 {
+    using namespace juce;
     if(params != nullptr && !g_variant_is_of_type(params, G_VARIANT_TYPE_TUPLE))
     {
         GVariant* tuple = g_variant_new_tuple(&params, 1);
@@ -182,6 +184,7 @@ void GPPDBusProxy::dBusSignalCallback(GDBusProxy* proxy,
         GVariant* parameters,
         DBusSignalHandler* handler)
 {
+    using namespace juce;
     if(isSignalHandlerValid(handler))
     {
         GPPDBusProxy* proxyWrapper = dynamic_cast<GPPDBusProxy*>
@@ -207,6 +210,7 @@ void GPPDBusProxy::dBusPropertiesChanged(GDBusProxy* proxy,
         GStrv invalidatedProperties,
         DBusSignalHandler* handler)
 {
+    using namespace juce;
     if(isSignalHandlerValid(handler))
     {
         GPPDBusProxy* proxyWrapper = dynamic_cast<GPPDBusProxy*>

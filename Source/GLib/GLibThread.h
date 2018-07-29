@@ -26,7 +26,7 @@
 #include "WindowFocus.h"
 #include "JuceHeader.h"
 
-class GLibThread : private Thread, private WindowFocus::Listener
+class GLibThread : private juce::Thread, private WindowFocus::Listener
 {
 public:
     /**
@@ -140,7 +140,7 @@ private:
     GMainLoop* mainLoop = nullptr;
     
     //Prevent thread access while it is being started or stopped.
-    ReadWriteLock threadStateLock;
+    juce::ReadWriteLock threadStateLock;
     
     //Used when waiting for the thread to start.
     std::mutex threadStartMutex;

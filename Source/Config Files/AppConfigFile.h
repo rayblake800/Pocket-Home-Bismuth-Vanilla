@@ -23,7 +23,7 @@ public:
      * @return a list of AppItems to be pinned to the main column 
      * of the AppMenu
      */
-    Array<AppItem> getFavorites();
+    juce::Array<AppItem> getFavorites();
 
     /**
      * Add a new app to the list of pinned favorite apps in the config file.
@@ -62,7 +62,7 @@ public:
     /**
      * @return A list of folders to display in the AppMenu.
      */
-    Array<AppFolder> getFolders();
+    juce::Array<AppFolder> getFolders();
 
     /**
      * Add a new folder to the list of AppFolders in the config file.
@@ -109,22 +109,22 @@ public:
          * 
          * @param jsonObj
          */
-        AppItem(var jsonObj);
+        AppItem(juce::var jsonObj);
 
         /**
          * @return AppItem data stored as a DynamicObject* that can be written
          *          to json.
          */
-        DynamicObject* getDynamicObject();
+        juce::DynamicObject* getDynamicObject();
 
         bool operator==(const AppItem& rhs)const;
 
         //Application display name
-        String name;
+        juce::String name;
         //Application icon name or path
-        String icon;
+        juce::String icon;
         //Application launch command
-        String shell;
+        juce::String shell;
         //Sets if the application launches in a terminal window
         bool launchInTerminal = false;
     };
@@ -143,20 +143,20 @@ public:
          * 
          * @param jsonObj
          */
-        AppFolder(var jsonObj);
+        AppFolder(juce::var jsonObj);
 
         /**
          * @return folder data as a DynamicObject* ready to be written to a 
          *          json file.
          */
-        DynamicObject * getDynamicObject();
+        juce::DynamicObject * getDynamicObject();
 
         //Folder display name
-        String name;
+        juce::String name;
         //Application categories held in the folder.
-        StringArray categories;
+        juce::StringArray categories;
         //The application icon path or file name
-        String icon;
+        juce::String icon;
 
         bool operator==(const AppFolder& rhs) const;
     };
@@ -176,7 +176,7 @@ private:
          * @return a list of AppItems to be pinned to the main column 
          * of the AppMenu
          */
-        Array<AppItem> getFavorites();
+        juce::Array<AppItem> getFavorites();
 
         /**
          * Add a new app to the list of pinned favorite apps in the config file.
@@ -200,7 +200,7 @@ private:
          * @return A list of folders to display in the AppMenu.
          * @see AppConfigFile::getFolders
          */
-        Array<AppFolder> getFolders();
+        juce::Array<AppFolder> getFolders();
 
         /**
          * Add a new folder to the list of AppFolders in the config file.
@@ -232,14 +232,15 @@ private:
          *                        is needed, this method will open it as the 
          *                        appropriate default config file from assets.
          */
-        void readDataFromJson(var& config, var& defaultConfig) override final;
+        void readDataFromJson
+        (juce::var& config, juce::var& defaultConfig) override final;
 
         /**
          * Copy all config data to a json object
          * 
          * @param jsonObj
          */
-        void copyDataToJson(DynamicObject::Ptr jsonObj) override final;
+        void copyDataToJson(juce::DynamicObject::Ptr jsonObj) override final;
 
         /**
          * @return the empty list, as AppConfigFile doesn't track any DataKey
@@ -251,10 +252,10 @@ private:
         }
 
         //Stores application shortcuts
-        Array<AppItem> favoriteApps;
+        juce::Array<AppItem> favoriteApps;
 
         //Stores application folders
-        Array<AppFolder> categoryFolders;
+        juce::Array<AppFolder> categoryFolders;
 
         //Application configuration file name
         static constexpr const char* filenameConst = "apps.json";
@@ -265,8 +266,8 @@ private:
     };
 
     //ResourceManager shared object and lock;
-    static ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static ReadWriteLock configLock;
+    static juce::ScopedPointer<ResourceManager::SharedResource> sharedResource;
+    static juce::ReadWriteLock configLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppConfigFile)
 };

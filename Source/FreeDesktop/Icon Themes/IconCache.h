@@ -23,7 +23,7 @@ public:
      * 
      * @param themePath  The absolute path of an icon theme directory.
      */
-    IconCache(const String& themePath);
+    IconCache(const juce::String& themePath);
     
     /**
      * Creates an empty, invalid cache object.
@@ -52,9 +52,9 @@ public:
      * These values actually work:
      */
     
-    static const constexpr uint16 xpmExtensionFlag = 1;
-    static const constexpr uint16 svgExtensionFlag = 2;
-    static const constexpr uint16 pngExtensionFlag = 4;
+    static const constexpr juce::uint16 xpmExtensionFlag = 1;
+    static const constexpr juce::uint16 svgExtensionFlag = 2;
+    static const constexpr juce::uint16 pngExtensionFlag = 4;
 
     
     /**
@@ -67,7 +67,7 @@ public:
      *          the first available file extension for the icon within the 
      *          directory.
      */
-    std::map<String,String> lookupIcon(const String& iconName) const;
+    std::map<juce::String,juce::String> lookupIcon(const juce::String& iconName) const;
     
 private:
     /**
@@ -78,7 +78,7 @@ private:
      * 
      * @return  the hash value needed to look up the icon in the icon cache. 
      */
-    uint32 hashValue(const char* icon) const;
+    juce::uint32 hashValue(const char* icon) const;
     
     /**
      * Reads a two-byte unsigned integer from an arbitrary offset in the cache
@@ -91,7 +91,7 @@ private:
      *          order if necessary, or 0 if the cache file or offset index are
      *          invalid. 
      */
-    uint16 read16(uint32 offset) const;
+    juce::uint16 read16(juce::uint32 offset) const;
     
     /**
      * Reads a four-byte unsigned integer from an arbitrary offset in the cache
@@ -104,7 +104,7 @@ private:
      *          order if necessary, or 0 if the cache file or offset index are
      *          invalid. 
      */
-    uint32 read32(uint32 offset) const;
+    juce::uint32 read32(juce::uint32 offset) const;
     
     /**
      * Reads a null-terminated character string from an arbitrary offset in the 
@@ -117,7 +117,7 @@ private:
      *          is invalid, the offset is out of bounds, or the null terminator
      *          is not found.
      */
-    String readString(uint32 offset) const;
+    juce::String readString(juce::uint32 offset) const;
     
     //Filename shared by all icon cache files
     static const constexpr char* cacheFileName = "/icon-theme.cache";
@@ -129,16 +129,16 @@ private:
     void* fileMap = MAP_FAILED;
     
     //length of the cache file in bytes
-    int64 fileLen = 0;
+    juce::int64 fileLen = 0;
     
     //number of hash values used to store icon data
-    uint32 hashBuckets = 0;
+    juce::uint32 hashBuckets = 0;
     
     //all icon directory sub-paths within the icon theme directory
-    Array<String> directories;
+    juce::Array<juce::String> directories;
     
     //the index of each hash bucket within the icon file
-    Array<uint32> hashOffsets;
+    juce::Array<juce::uint32> hashOffsets;
     
     //stores if the system byte order is big-Endian.  If this value is false,
     //numbers read from the cache file will need to be converted from network to

@@ -20,7 +20,7 @@ bool AppMenuItem::isFolder() const
  * @return all menu items in this folder, or an empty array if this isn't
  *          a folder.
  */
-Array<AppMenuItem::Ptr> AppMenuItem::getFolderItems() const
+juce::Array<AppMenuItem::Ptr> AppMenuItem::getFolderItems() const
 {
     return {};
 }
@@ -28,17 +28,17 @@ Array<AppMenuItem::Ptr> AppMenuItem::getFolderItems() const
 /**
  * @return the display name of the associated application.
  */
-String AppMenuItem::getAppName() const
+juce::String AppMenuItem::getAppName() const
 {
-    return String();
+    return juce::String();
 }
 
 /**
  * @return the application shell command or directory path.
  */
-String AppMenuItem::getCommand() const
+juce::String AppMenuItem::getCommand() const
 {
-    return String();
+    return juce::String();
 }
 
 /**
@@ -62,7 +62,7 @@ bool AppMenuItem::changesDesktopEntries() const
 /**
  * @return all application categories linked to this menu item.
  */
-StringArray AppMenuItem::getCategories() const
+juce::StringArray AppMenuItem::getCategories() const
 {
     return {};
 }
@@ -70,9 +70,9 @@ StringArray AppMenuItem::getCategories() const
 /**
  * @return the name or path used to load the icon file. 
  */
-String AppMenuItem::getIconName() const
+juce::String AppMenuItem::getIconName() const
 {
-    return String();
+    return juce::String();
 }
 
 /**
@@ -116,7 +116,7 @@ AppMenuItem::Ptr AppMenuItem::FactoryInterface::setFactory
 /**
  * Get an appropriate title to use for a deletion confirmation window.
  */
-String AppMenuItem::getConfirmDeleteTitle() const
+juce::String AppMenuItem::getConfirmDeleteTitle() const
 {
     return txt.localeText(delete_APP) + getAppName()
             + txt.localeText(question_mark);
@@ -125,7 +125,7 @@ String AppMenuItem::getConfirmDeleteTitle() const
 /**
  * Gets appropriate descriptive text for a deletion confirmation window.
  */
-String AppMenuItem::getConfirmDeleteMessage() const
+juce::String AppMenuItem::getConfirmDeleteMessage() const
 {
     return txt.localeText(really_delete);
 }
@@ -151,7 +151,7 @@ bool AppMenuItem::hasEditableCommand() const
 /**
  * @return the title to display over an editor for this menu item. 
  */
-String AppMenuItem::getEditorTitle() const
+juce::String AppMenuItem::getEditorTitle() const
 {
     return txt.localeText(edit_menu_item);
 }
@@ -190,7 +190,7 @@ bool AppMenuItem::moveDataIndex(int offset)
  * Gets the string to add before a launch command to make it launch in the
  * terminal.
  */
-String AppMenuItem::getTermLaunchPrefix() const
+juce::String AppMenuItem::getTermLaunchPrefix() const
 {
     return termLaunchPrefix;
 }
@@ -239,8 +239,9 @@ AppMenuItem::Ptr AppMenuItem::create
 /**
  * Updates the termLaunchPrefix if it's changed in configuration.
  */
-void AppMenuItem::configValueChanged(String propertyKey)
+void AppMenuItem::configValueChanged(juce::String propertyKey)
 {
+    using namespace juce;
     if (propertyKey == MainConfigFile::termLaunchCommandKey)
     {
         MainConfigFile mainConfig;

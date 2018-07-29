@@ -12,7 +12,7 @@ LayoutManager::Layout LayoutManager::getLayout() const
  * Set a new Component layout, removing all old layout definitions.
  */
 void LayoutManager::setLayout
-(const Layout& layout, Component* parentToInit)
+(const Layout& layout, juce::Component* parentToInit)
 {
     clearLayout();
     this->layout = layout;
@@ -54,7 +54,7 @@ void LayoutManager::setLayout
  * to all components in the layout, optionally animating the transition.
  */
 void LayoutManager::transitionLayout(const LayoutManager::Layout& newLayout,
-        Component* parent,
+        juce::Component* parent,
         const TransitionAnimator::Transition transition,
         const unsigned int duration)
 {
@@ -89,7 +89,7 @@ void LayoutManager::transitionLayout(const LayoutManager::Layout& newLayout,
  * Adds all components in the layout to a parent component, and makes them
  * all visible.
  */
-void LayoutManager::addComponentsToParent(Component* parent)
+void LayoutManager::addComponentsToParent(juce::Component* parent)
 {
     for (int rNum = 0; rNum < layout.rowCount(); rNum++)
     {
@@ -108,10 +108,11 @@ void LayoutManager::addComponentsToParent(Component* parent)
 /*
  * Arranges the components within a bounding rectangle.
  */
-void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
+void LayoutManager::layoutComponents(const juce::Rectangle<int>& bounds,
             const TransitionAnimator::Transition transition,
             const unsigned int duration)
 {
+    using namespace juce;
     int xMarginSize = layout.getXMarginFraction() * bounds.getWidth();
     int yMarginSize = layout.getYMarginFraction() * bounds.getHeight();
     int yPaddingSize = layout.getYPaddingFraction() * bounds.getHeight();
@@ -218,6 +219,7 @@ void LayoutManager::layoutComponents(const Rectangle<int>& bounds,
  */
 void LayoutManager::clearLayout(bool removeComponentsFromParent)
 {
+    using namespace juce;
     if (removeComponentsFromParent)
     {
         for (int rNum = 0; rNum < layout.rowCount(); rNum++)
@@ -249,7 +251,7 @@ void LayoutManager::clearLayout(bool removeComponentsFromParent)
 /*
  * Gets the component assigned to this RowItem. 
  */
-Component* LayoutManager::RowItem::getComponent() const
+juce::Component* LayoutManager::RowItem::getComponent() const
 {
     return component;
 }
@@ -594,6 +596,7 @@ bool LayoutManager::Layout::operator!=(const LayoutManager::Layout& rhs) const
  */
 void LayoutManager::printLayout()
 {
+    using namespace juce;
     for (int rowNum = 0; rowNum < layout.rowCount(); rowNum++)
     {
         const Row& row = layout.getRow(rowNum);

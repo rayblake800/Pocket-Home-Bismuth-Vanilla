@@ -21,8 +21,8 @@ public:
      */
     ScrollingAppFolder(
             AppMenuItem::Ptr folderItem,
-            MouseListener* btnListener,
-            std::map<String, AppMenuButton::Ptr>& buttonNameMap);
+            juce::MouseListener* btnListener,
+            std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap);
 
     virtual ~ScrollingAppFolder() { }
 
@@ -43,7 +43,7 @@ public:
      * @return a Layout containing all items in the button array.
      */
     virtual LayoutManager::Layout buildFolderLayout
-    (Array<AppMenuButton::Ptr>& buttons);
+    (juce::Array<AppMenuButton::Ptr>& buttons);
 
 
     /**
@@ -56,7 +56,7 @@ private:
     /**
      * Get the font used by all buttons in this menu type.
      */
-    static Font getButtonFont();
+    static juce::Font getButtonFont();
 
     /**
      * Custom AppMenuButton proportioned correctly for a scrolling menu.
@@ -71,7 +71,7 @@ private:
          */
         ScrollingMenuButton(
                 AppMenuItem* menuItem,
-                String name);
+                juce::String name);
 
         virtual ~ScrollingMenuButton() { }
 

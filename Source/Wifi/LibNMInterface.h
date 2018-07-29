@@ -40,7 +40,7 @@ public:
      *                  the lock when it is updated by NetworkManager.  The lock
      *                  should never be acquired within the GLib event thread.
      */
-    LibNMInterface(ReadWriteLock& wifiLock);
+    LibNMInterface(juce::ReadWriteLock& wifiLock);
 
     virtual ~LibNMInterface() { }
 
@@ -90,7 +90,7 @@ protected:
      * @return  a list of all visible access points within range of the wifi
      *          device, or an empty list if wifi is disabled.
      */
-    Array<WifiAccessPoint> getVisibleAPs() override;
+    juce::Array<WifiAccessPoint> getVisibleAPs() override;
 
     /**
      * Begin opening a connection to a wifi access point.
@@ -101,7 +101,7 @@ protected:
      *                   if the access point is unsecured.
      */
     void connectToAccessPoint(const WifiAccessPoint& toConnect,
-            String psk = String()) override;
+            juce::String psk = juce::String()) override;
 
     /**
      * Checks the wifi device list, connection state, and active and pending 
@@ -144,7 +144,7 @@ protected:
      *          was active, or the Unix epoch time if no compatible
      *          compatible connection has a saved timestamp.
      */
-    Time lastConnectionTime(const WifiAccessPoint& accessPoint) override;
+    juce::Time lastConnectionTime(const WifiAccessPoint& accessPoint) override;
 
 private:       
     /**
@@ -300,8 +300,8 @@ private:
         LibNMInterface& interface;
     };
     
-    ScopedPointer<ClientListener> clientListener;
-    ScopedPointer<DeviceListener> deviceListener;
+    juce::ScopedPointer<ClientListener> clientListener;
+    juce::ScopedPointer<DeviceListener> deviceListener;
     
     /**
      * Restricts concurrent access to the wifi data.  This is a reference to the
@@ -315,7 +315,7 @@ private:
      * wifiLock, while another thread holding the wifiLock waits for access to
      * the GLib thread.
      */
-    ReadWriteLock& wifiLock;
+    juce::ReadWriteLock& wifiLock;
 
     //The client used to access the network manager.
     NMPPClient client;
@@ -350,10 +350,10 @@ private:
      * connection is created, all access points that could use that connection
      * will be removed from this list. 
      */
-    Array<WifiAccessPoint> failedConnectionAPs;
+    juce::Array<WifiAccessPoint> failedConnectionAPs;
     
     //All access points visible to the wifi device.
-    Array<NMPPAccessPoint> visibleAPs;
+    juce::Array<NMPPAccessPoint> visibleAPs;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LibNMInterface)
 };

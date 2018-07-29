@@ -11,7 +11,7 @@
  * handle actions for objects that may be unexpectedly destroyed.
  */
 
-class TempTimer : public ReferenceCountedObject, private Timer
+class TempTimer : public juce::ReferenceCountedObject, private juce::Timer
 {
 public:
 
@@ -44,7 +44,7 @@ private:
 
     //TempTimer uses a reference counted pointer to itself to ensure it is
     //deleted appropriately.
-    ReferenceCountedObjectPtr<TempTimer> selfRef = nullptr;
+    juce::ReferenceCountedObjectPtr<TempTimer> selfRef = nullptr;
     //callback function to run when the timer finishes.
     std::function<void() > callback;
 }; 

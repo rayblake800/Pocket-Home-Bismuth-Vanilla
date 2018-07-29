@@ -3,11 +3,12 @@
 
 ConnectionSettingsComponent::ConnectionSettingsComponent(
         std::function<void() > openConnectionPage,
-        const String& name) :
+        const juce::String& name) :
 Component(name),
 openConnectionPage(openConnectionPage),
 pageButton(name + "Button")
 {
+    using namespace juce;
     toggle.addListener(this);
     pageButton.addListener(this);
     addAndMakeVisible(icon);
@@ -24,6 +25,7 @@ pageButton(name + "Button")
  */
 void ConnectionSettingsComponent::refresh()
 {
+    using namespace juce;
     //DBG("ConnectionSettingsComponent::refresh()");
     bool busy = shouldShowSpinner();
     bool enabled = connectionEnabled();
@@ -71,6 +73,7 @@ void ConnectionSettingsComponent::resized()
  */
 void ConnectionSettingsComponent::colourChanged()
 {
+    using namespace juce;
     Colour iconColour = findColour(Label::textColourId);
     icon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
 }
@@ -80,7 +83,7 @@ void ConnectionSettingsComponent::colourChanged()
  * If the switch is clicked, this will call  enabledStateChanged(), passing
  * it the switch toggle state.
  */
-void ConnectionSettingsComponent::buttonClicked(Button *b)
+void ConnectionSettingsComponent::buttonClicked(juce::Button *b)
 {
     if (b == &toggle)
     {
@@ -108,13 +111,13 @@ void ConnectionSettingsComponent::visibilityChanged()
  * @param name internal component name
  */
 ConnectionSettingsComponent::ConnectionButton::ConnectionButton
-(const String& name) : Button(name){ }
+(const juce::String& name) : juce::Button(name){ }
 
 /**
  * Sets the text that will be printed on the button.
  */
 void ConnectionSettingsComponent::ConnectionButton::setText
-(const String &text)
+(const juce::String &text)
 {
     displayText = text;
     resized();
@@ -124,8 +127,9 @@ void ConnectionSettingsComponent::ConnectionButton::setText
  * Draws the connection button outline and prints the button text
  */
 void ConnectionSettingsComponent::ConnectionButton::paintButton
-(Graphics &g, bool isMouseOverButton, bool isButtonDown)
+(juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
+    using namespace juce;
     const Rectangle<int>& bounds = getLocalBounds();
 
     g.setColour(findColour(TextButton::textColourOnId));

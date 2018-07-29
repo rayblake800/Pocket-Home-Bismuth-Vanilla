@@ -7,12 +7,12 @@
 #include "Utils.h"
 
 //TODO: load these from config, set on input page
-const String AppMenuComponent::openPopupMenuBinding = "CTRL + e";
-const String AppMenuComponent::reloadMenuBinding = "TAB";
+const juce::String AppMenuComponent::openPopupMenuBinding = "CTRL + e";
+const juce::String AppMenuComponent::reloadMenuBinding = "TAB";
 DesktopEntryLoader AppMenuComponent::desktopEntries;
 
 AppMenuComponent::AppMenuComponent(
-        String componentKey,
+        juce::String componentKey,
         OverlaySpinner& loadingSpinner) :
 Localized("AppMenuComponent"),
 ConfigurableComponent(componentKey),
@@ -70,7 +70,7 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
     {
         return;
     }
-    PopupMenu editMenu;
+    juce::PopupMenu editMenu;
 
     AppMenuItem::Ptr selectedMenuItem = selectedButton == nullptr ?
             nullptr : selectedButton->getMenuItem();
@@ -192,8 +192,9 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
  * are detected, otherwise let the AppMenuComponent's subclass determine
  * how to handle the key event.
  */
-bool AppMenuComponent::keyPressed(const KeyPress& key)
+bool AppMenuComponent::keyPressed(const juce::KeyPress& key)
 {
+    using namespace juce;
     if (ignoringInput())
     {
         return true;
@@ -220,6 +221,7 @@ bool AppMenuComponent::keyPressed(const KeyPress& key)
  */
 void AppMenuComponent::loadBaseFolder()
 {
+    using namespace juce;
     if (!isLoading())
     {
         int savedIndex = -1;
@@ -265,6 +267,7 @@ void AppMenuComponent::loadBaseFolder()
  */
 void AppMenuComponent::closeFolder()
 {
+    using namespace juce;
     if (openFolders.size() > 0)
     {
         int targetFolderCount = getActiveFolderIndex();
@@ -405,6 +408,7 @@ int AppMenuComponent::getFolderSelectedIndex(int index) const
  */
 void AppMenuComponent::layoutFolders(bool animate)
 {
+    using namespace juce;
     if (getBounds().isEmpty())
     {
         return;
@@ -459,6 +463,7 @@ void AppMenuComponent::setOnlyTriggerSelected(bool newVal)
  */
 bool AppMenuComponent::ignoringInput() const
 {
+    using namespace juce;
     return openFolders.isEmpty() || isLoading()
             || (buttonEditor != nullptr && buttonEditor->isVisible())
             || Desktop::getInstance().getAnimator().isAnimating
@@ -476,7 +481,7 @@ void AppMenuComponent::windowFocusLost()
 /*
  * Updates the layout if row/column size changes.
  */
-void AppMenuComponent::extraConfigValueChanged(String key)
+void AppMenuComponent::extraConfigValueChanged(juce::String key)
 {
     MainConfigFile mainConfig;
 
@@ -500,6 +505,7 @@ void AppMenuComponent::extraConfigValueChanged(String key)
  */
 void AppMenuComponent::resized()
 {
+    using namespace juce;
     menuResized();
     Rectangle<int> bounds = getLocalBounds();
 //    DBG("AppMenuComponent::" << __func__ << ": bounds set to "
@@ -573,6 +579,7 @@ void AppMenuComponent::showPopupEditor(AppMenuPopupEditor * editor)
  */
 void AppMenuComponent::showMenuButtonEditor(AppMenuButton::Ptr button)
 {
+    using namespace juce;
     if (ignoringInput() ||
         openFolders[getActiveFolderIndex()]->getButtonIndex(button) == -1)
     {
@@ -601,6 +608,7 @@ void AppMenuComponent::showMenuButtonEditor(AppMenuButton::Ptr button)
  */
 void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
 {
+    using namespace juce;
     if (ignoringInput())
     {
         return;
@@ -655,7 +663,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
  * Click AppMenuButtons on left click, open the pop-up menu
  * on right click or control click.
  */
-void AppMenuComponent::mouseDown(const MouseEvent & event)
+void AppMenuComponent::mouseDown(const juce::MouseEvent & event)
 {
     if (ignoringInput())
     {
@@ -704,7 +712,7 @@ void AppMenuComponent::setLoadingState(bool loading)
         loadingSpinner.setVisible(loading);
         if (!loading)
         {
-            loadingSpinner.setLoadingText("");
+            loadingSpinner.setLoadingText(juce::String());
         }
     }
 }

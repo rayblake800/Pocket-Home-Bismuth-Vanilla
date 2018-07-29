@@ -10,8 +10,8 @@
  * the plus and minus buttons next to the number field.
  */
 
-class CounterComponent : public Component, private Button::Listener,
-private TextEditor::Listener
+class CounterComponent : public juce::Component, private juce::Button::Listener,
+        private juce::TextEditor::Listener
 {
 public: 
     /**
@@ -63,7 +63,7 @@ private:
      * 
      * @param button
      */
-    void buttonClicked(Button* button) override;
+    void buttonClicked(juce::Button* button) override;
 
     /**
      * Updates the value in the counter's TextEditor.  This parses the text as 
@@ -78,7 +78,7 @@ private:
      * 
      * @param editor
      */
-    void textEditorFocusLost(TextEditor& editor);
+    void textEditorFocusLost(juce::TextEditor& editor);
 
     /**
      * Updates the number field if it's focused and the user presses the return 
@@ -86,7 +86,7 @@ private:
      * 
      * @param editor
      */
-    void textEditorReturnKeyPressed(TextEditor& editor) override;
+    void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
 
     /**
      * Updates the number field if it's focused and the user presses the escape 
@@ -94,7 +94,7 @@ private:
      * 
      * @param editor
      */
-    void textEditorEscapeKeyPressed(TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor& editor) override;
 
     /**
      * Arranges the buttons and number field to fit in the component bounds.
@@ -102,13 +102,13 @@ private:
     void resized() override;
 
     //Press to decrement the counter value.
-    TextButton minusButton;
+    juce::TextButton minusButton;
     
     //Press to increment the counter value.
-    TextButton plusButton;
+    juce::TextButton plusButton;
     
     //Display the counter value or directly edit it.
-    TextEditor textField;
+    juce::TextEditor textField;
     
     //Current counter value
     int count;

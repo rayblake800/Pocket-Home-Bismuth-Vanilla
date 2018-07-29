@@ -2,8 +2,8 @@
 
 ScrollingAppFolder::ScrollingAppFolder(
         AppMenuItem::Ptr folderItem,
-        MouseListener* btnListener,
-        std::map<String, AppMenuButton::Ptr>& buttonNameMap) :
+        juce::MouseListener* btnListener,
+        std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap) :
 AppMenuFolder(folderItem, btnListener, buttonNameMap)
 {
     setMargin(0);
@@ -19,7 +19,7 @@ AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
 {
     return new ScrollingMenuButton(
             menuItem,
-            menuItem->getAppName() + String("Button"));
+            menuItem->getAppName() + juce::String("Button"));
 }
 
 /**
@@ -27,7 +27,7 @@ AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
  * for positioning them in the folder component.
  */
 LayoutManager::Layout ScrollingAppFolder::buildFolderLayout
-(Array<AppMenuButton::Ptr>& buttons)
+(juce::Array<AppMenuButton::Ptr>& buttons)
 {
     LayoutManager::Layout layout;
     for (AppMenuButton::Ptr button : buttons)
@@ -46,13 +46,14 @@ LayoutManager::Layout ScrollingAppFolder::buildFolderLayout
  */
 int ScrollingAppFolder::getMinimumWidth()
 {
+    using namespace juce;
     int iconSize = getParentHeight() / getMaxRows();
     int maxTextWidth = 0;
     Font measureFont = getButtonFont();
     for (int i = 0; i < getButtonCount(); i++)
     {
-        maxTextWidth = std::max<int> (maxTextWidth,
-                                      measureFont.getStringWidth(getMenuButtonName(i)));
+        maxTextWidth = std::max<int>(maxTextWidth,
+                measureFont.getStringWidth(getMenuButtonName(i)));
     }
     return maxTextWidth + iconSize;
 }
@@ -60,16 +61,17 @@ int ScrollingAppFolder::getMinimumWidth()
 /**
  * Get the font used by all buttons in this menu type.
  */
-Font ScrollingAppFolder::getButtonFont()
+juce::Font ScrollingAppFolder::getButtonFont()
 {
     ComponentConfigFile config;
-    return Font(config.getFontHeight(ComponentConfigFile::smallText));
+    return juce::Font(config.getFontHeight(ComponentConfigFile::smallText));
 }
 
 ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton
-(AppMenuItem* menuItem, String name) :
+(AppMenuItem* menuItem, juce::String name) :
 AppMenuButton(menuItem, name)
 {
+    using namespace juce;
     setTitleFont(ScrollingAppFolder::getButtonFont());
     setTextJustification(Justification::centredLeft);
 }
@@ -79,6 +81,7 @@ AppMenuButton(menuItem, name)
  */
 int ScrollingAppFolder::ScrollingMenuButton::getTitleWidth()
 {
+    using namespace juce;
     String title = getMenuItem()->getAppName();
     const Font& titleFont = getTitleFont();
     return getTitleFont().getStringWidth(title);
@@ -89,6 +92,7 @@ int ScrollingAppFolder::ScrollingMenuButton::getTitleWidth()
  */
 void ScrollingAppFolder::ScrollingMenuButton::resized()
 {
+    using namespace juce;
     Rectangle<int> bounds = getLocalBounds();
     Rectangle<float> imageBounds = bounds.toFloat();
     Rectangle<float> textBounds = imageBounds;

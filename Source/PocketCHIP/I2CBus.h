@@ -63,15 +63,15 @@ public:
          * Throw I2C exceptions when i2c bus access fails
          * @param errorMessage a short error message describing the failure.
          */
-        I2CException(String errorMessage);
+        I2CException(juce::String errorMessage);
 
         /**
          * @return a short message explaining the i2c bus access failure.
          */
-        String getErrorMessage();
+        juce::String getErrorMessage();
     private:
 
-        String errorMessage;
+        juce::String errorMessage;
     };
 
 private:

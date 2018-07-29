@@ -62,7 +62,7 @@ public:
          *                    with the signal.
          */
         virtual void dBusSignalReceived(GPPDBusProxy* source,
-                String senderName, String signalName, GVariant* parameters); 
+                juce::String senderName, juce::String signalName, GVariant* parameters); 
         
         /**
          * Called whenever a property of the DBus object changes. 
@@ -76,7 +76,7 @@ public:
          * @param newValue      A GVariant holding the updated property value.
          */
         virtual void dBusPropertyChanged(GPPDBusProxy* source,
-                String propertyName, GVariant* newValue);
+                juce::String propertyName, GVariant* newValue);
         
         /**
          * Called whenever a property of the DBus object becomes invalid. 
@@ -88,7 +88,7 @@ public:
          * @param propertyName  The name of the invalidated property.
          */
         virtual void dBusPropertyInvalidated(GPPDBusProxy* source,
-                String propertyName);
+                juce::String propertyName);
     };
 
 protected:

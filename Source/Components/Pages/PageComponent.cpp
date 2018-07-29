@@ -1,7 +1,7 @@
 #include "ComponentConfigFile.h"
 #include "PageComponent.h"
 
-PageComponent::PageComponent(const String& name) :
+PageComponent::PageComponent(const juce::String& name) :
 Component(name) { }
     
 /**
@@ -75,7 +75,7 @@ void PageComponent::setBackButton(PageComponent::BackButtonType buttonType)
 /*
  * Sets a background image to draw behind all page components.
  */
-void PageComponent::setBackgroundImage(Image bgImage)
+void PageComponent::setBackgroundImage(juce::Image bgImage)
 {
     backgroundImage = bgImage;
 }
@@ -193,7 +193,7 @@ void PageComponent::resized()
  * Closes the page when the back button is clicked, and passes all other
  * button clicks to the pageButtonClicked method.
  */
-void PageComponent::buttonClicked(Button* button)
+void PageComponent::buttonClicked(juce::Button* button)
 {
     if (button == backButton && !overrideBackButton())
     {
@@ -210,7 +210,7 @@ void PageComponent::buttonClicked(Button* button)
 /*
  * Fills the page background with an image or color.
  */
-void PageComponent::paint(Graphics& g)
+void PageComponent::paint(juce::Graphics& g)
 {
     if (backgroundImage.isValid())
     {

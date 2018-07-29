@@ -45,9 +45,9 @@ public:
      * 
      * @return  the value read from the config file.
      */
-    template<typename T > T getConfigValue(String key)
+    template<typename T > T getConfigValue(juce::String key)
     {
-        std::map<String, T>& fileDataMap = getMapReference<T>();
+        std::map<juce::String, T>& fileDataMap = getMapReference<T>();
         try
         {
             return fileDataMap.at(key);
@@ -74,9 +74,9 @@ public:
      *                    type T in this config file
      */
     template<typename T>
-    void setConfigValue(String key, T newValue)
+    void setConfigValue(juce::String key, T newValue)
     {
-        std::map<String, T>& fileDataMap = getMapReference<T>();
+        std::map<juce::String, T>& fileDataMap = getMapReference<T>();
         try
         {
             if (fileDataMap.at(key) != newValue)
@@ -132,11 +132,11 @@ public:
          * 
          * @param propertyKey   Passes in the updated value's key.
          */
-        virtual void configValueChanged(String propertyKey) = 0;
+        virtual void configValueChanged(juce::String propertyKey) = 0;
 
         //holds references to all ConfigFiles this listener follows.
-        CriticalSection configKeyAccess; 
-        std::map<ConfigFile*, StringArray> configKeyMap;
+        juce::CriticalSection configKeyAccess; 
+        std::map<ConfigFile*, juce::StringArray> configKeyMap;
     };
 
     /**
@@ -147,7 +147,7 @@ public:
      * 
      * @param trackedKeys   The set of keys that the listener wants to track.
      */
-    void addListener(Listener* listener, StringArray trackedKeys);
+    void addListener(Listener* listener, juce::StringArray trackedKeys);
 
     /**
      * Removes a listener from this ConfigFile.
@@ -162,7 +162,7 @@ public:
      * 
      * @param key maps to a value that has changed in this ConfigFile. 
      */
-    void notifyListeners(String key);
+    void notifyListeners(juce::String key);
 
 protected:
     /**
@@ -182,7 +182,7 @@ protected:
      */
     struct DataKey
     {
-        String keyString;
+        juce::String keyString;
         SupportedDataType dataType;
     };
 
@@ -196,7 +196,7 @@ protected:
      *                        same name in the asset folder filled with default 
      *                        values.
      */
-    ConfigFile(String configFilename);
+    ConfigFile(juce::String configFilename);
 
     /**
      * @return the keys to all variables tracked in this config file.
@@ -216,7 +216,7 @@ protected:
      *                        <filename>.json and load all data into 
      *                        defaultConfig. 
      */
-    virtual void readDataFromJson(var& config, var & defaultConfig);
+    virtual void readDataFromJson(juce::var& config, juce::var & defaultConfig);
 
     /**
      * Copy all config data to a json object.
@@ -227,7 +227,7 @@ protected:
      * @pre   Any code calling this function is expected to have already
      *         acquired the object's lock.
      */
-    virtual void copyDataToJson(DynamicObject::Ptr jsonObj);
+    virtual void copyDataToJson(juce::DynamicObject::Ptr jsonObj);
 
     /**
      * Checks if a property exists in a config data object loaded from a json
@@ -235,7 +235,7 @@ protected:
      * 
      * @return true iff propertyKey has a value in config
      */
-    bool propertyExists(var& config, String propertyKey);
+    bool propertyExists(juce::var& config, juce::String propertyKey);
 
 
     /**
@@ -255,7 +255,8 @@ protected:
      * @return the value read from config/defaultConfig at [key], or a void var
      *          if nothing was found in either var object.
      */
-    var getProperty(var& config, var& defaultConfig, String key);
+    juce::var getProperty
+    (juce::var& config, juce::var& defaultConfig, juce::String key);
 
     /**
      * Marks this ConfigFile as containing changes that need to be written to
@@ -283,7 +284,7 @@ private:
      *          explicitly defined for each type supported by getConfigValue()
      *          and setConfigValue()
      */
-    template <class T > std::map<String, T>& getMapReference();
+    template <class T > std::map<juce::String, T>& getMapReference();
 
     /**
      * Sets a property in the appropriate data map.  This does not notify
@@ -294,31 +295,31 @@ private:
      * 
      * @param newValue
      */
-    template <class T> void initMapProperty(String key, T newValue)
+    template <class T> void initMapProperty(juce::String key, T newValue)
     {
-        std::map<String, T>& fileDataMap = getMapReference<T>();
+        std::map<juce::String, T>& fileDataMap = getMapReference<T>();
         fileDataMap[key] = newValue;
     }
 
 
     //Stores the name of the .json config file.
-    String filename;
+    juce::String filename;
 
     //Indicates if changes need to be written to the file.
     bool fileChangesPending = false;
 
     //Holds configuration values read from the file.
-    std::map<String, int> intValues;
-    std::map<String, String> stringValues;
-    std::map<String, bool> boolValues;
-    std::map<String, double> doubleValues;
+    std::map<juce::String, int> intValues;
+    std::map<juce::String, juce::String> stringValues;
+    std::map<juce::String, bool> boolValues;
+    std::map<juce::String, double> doubleValues;
 
     
-    std::map<String, Array < Listener*>> keyListeners;
-    std::map<String, Array < Listener*>> notificationQueue;
+    std::map<juce::String, juce::Array<Listener*>> keyListeners;
+    std::map<juce::String, juce::Array<Listener*>> notificationQueue;
 
     //prevents concurrent access to listeners.
-    CriticalSection listenerLock;
+    juce::CriticalSection listenerLock;
 
     //localized text keys;
     static const constexpr char * failed_saving_to_FILE =

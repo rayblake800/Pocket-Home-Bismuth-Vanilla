@@ -20,7 +20,7 @@ public:
      *                     to it as its only parameter.
      */
     CategoryPopupEditor
-    (StringArray categories, std::function<void(StringArray) > onConfirm);
+    (juce::StringArray categories, std::function<void(juce::StringArray) > onConfirm);
 
     virtual ~CategoryPopupEditor() { }
 

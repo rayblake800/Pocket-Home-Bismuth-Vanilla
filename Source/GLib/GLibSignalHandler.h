@@ -75,6 +75,6 @@ private:
         virtual ~GLibDefaultThread() { }
     };
 
-    static ScopedPointer<SharedResource> globalThread;
-    static ReadWriteLock threadLock;
+    static juce::ScopedPointer<SharedResource> globalThread;
+    static juce::ReadWriteLock threadLock;
 };

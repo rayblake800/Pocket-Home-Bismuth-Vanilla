@@ -9,6 +9,7 @@ maximum(maximum),
 minusButton("-"),
 plusButton("+")
 {
+    using namespace juce;
     minusButton.addListener(this);
     plusButton.addListener(this);
     textField.addListener(this);
@@ -36,6 +37,7 @@ int CounterComponent::getValue()
  */
 void CounterComponent::setValue(int newValue)
 {
+    using namespace juce;
     int value = median<int>(minimum, newValue, maximum);
     if (value != count)
     {
@@ -66,7 +68,7 @@ void CounterComponent::setMaximum(int newMax)
  * Increments or decrements the counter value when the plus or minus 
  * buttons are pressed.
  */
-void CounterComponent::buttonClicked(Button* button)
+void CounterComponent::buttonClicked(juce::Button* button)
 {
     if (button == &minusButton)
     {
@@ -91,7 +93,7 @@ void CounterComponent::updateNumberField()
 /**
  * Updates the number field when it loses focus.
  */
-void CounterComponent::textEditorFocusLost(TextEditor& editor)
+void CounterComponent::textEditorFocusLost(juce::TextEditor& editor)
 {
     updateNumberField();
 }
@@ -99,7 +101,7 @@ void CounterComponent::textEditorFocusLost(TextEditor& editor)
 /**
  * Updates the number field if it's focused and the user presses the return key.
  */
-void CounterComponent::textEditorReturnKeyPressed(TextEditor& editor)
+void CounterComponent::textEditorReturnKeyPressed(juce::TextEditor& editor)
 {
     updateNumberField();
 }
@@ -107,7 +109,7 @@ void CounterComponent::textEditorReturnKeyPressed(TextEditor& editor)
 /**
  * Update the number field if it's focused and the user presses the escape key.
  */
-void CounterComponent::textEditorEscapeKeyPressed(TextEditor& editor)
+void CounterComponent::textEditorEscapeKeyPressed(juce::TextEditor& editor)
 {
     updateNumberField();
 }
@@ -117,6 +119,7 @@ void CounterComponent::textEditorEscapeKeyPressed(TextEditor& editor)
  */
 void CounterComponent::resized()
 {
+    using namespace juce;
     Rectangle<int> bounds = getLocalBounds();
     if (bounds.isEmpty())
     {

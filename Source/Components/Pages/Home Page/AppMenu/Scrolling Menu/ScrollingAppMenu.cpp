@@ -10,9 +10,10 @@ AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey, loadingSpinner) { }
  * AppMenu type. Other classes may call this to pass on or simulate
  * key events.
  */
-bool ScrollingAppMenu::folderKeyPressed(const KeyPress& key,
+bool ScrollingAppMenu::folderKeyPressed(const juce::KeyPress& key,
         AppMenuFolder* activeFolder)
 {
+    using namespace juce;
     int selectedIndex = activeFolder->getSelectedIndex();
     if (selectedIndex == -1 && getActiveFolderIndex() > 0)
     {
@@ -88,10 +89,11 @@ bool ScrollingAppMenu::folderKeyPressed(const KeyPress& key,
  * @param folderIndex
  * @return 
  */
-Rectangle<int> ScrollingAppMenu::updateFolderBounds(
+juce::Rectangle<int> ScrollingAppMenu::updateFolderBounds(
         const AppMenuFolder* folder,
         int folderIndex)
 {
+    using namespace juce;
     int activeFolder = getActiveFolderIndex();
     static Array<int> folderWidths;
     while (folderWidths.size() >= getNumFolders())
@@ -132,7 +134,7 @@ Rectangle<int> ScrollingAppMenu::updateFolderBounds(
  */
 AppMenuFolder* ScrollingAppMenu::createFolderObject(
         AppMenuItem::Ptr folderItem,
-        std::map<String, AppMenuButton::Ptr>& buttonMap)
+        std::map<juce::String, AppMenuButton::Ptr>& buttonMap)
 {
     ScrollingAppFolder* folder = new ScrollingAppFolder
             (folderItem, this, buttonMap);

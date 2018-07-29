@@ -26,7 +26,7 @@ public:
      * 
      * @return all saved wifi connections.
      */
-    Array<SavedConnection> getWifiConnections() const;
+    juce::Array<SavedConnection> getWifiConnections() const;
     
     /**
      * Checks saved connection paths to see if one exists at the given path.
@@ -35,7 +35,7 @@ public:
      * 
      * @return  true iff connectionPath is a valid path to a saved connection. 
      */
-    bool connectionExists(const String& connectionPath) const;
+    bool connectionExists(const juce::String& connectionPath) const;
     
     /**
      * Finds a saved connection from its path.  If no matching connection is
@@ -47,7 +47,7 @@ public:
      * @return  the connection at the given path, or a null object if no 
      *          connection was found. 
      */
-    SavedConnection getConnection(const String& connectionPath);
+    SavedConnection getConnection(const juce::String& connectionPath);
     
     /**
      * Finds all saved connections that are compatible with a given wifi
@@ -59,7 +59,7 @@ public:
      * @return  the list of all saved connections that could be activated with
      *          the given access point.
      */
-    Array<SavedConnection> findConnectionsForAP
+    juce::Array<SavedConnection> findConnectionsForAP
     (const NMPPAccessPoint& accessPoint) const;
     
     /**
@@ -74,8 +74,8 @@ private:
      * 
      * @return the list of paths, freshly updated over the DBus interface.
      */
-    inline StringArray getConnectionPaths();
+    inline juce::StringArray getConnectionPaths();
     
-    Array<SavedConnection> connectionList;   
-    StringArray connectionPaths;
+    juce::Array<SavedConnection> connectionList;   
+    juce::StringArray connectionPaths;
 };

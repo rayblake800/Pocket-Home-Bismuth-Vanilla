@@ -13,7 +13,7 @@
  * its own thread.
  */
 
-class DesktopEntryLoader : private Thread {
+class DesktopEntryLoader : private juce::Thread {
 public:
     DesktopEntryLoader();
 
@@ -31,7 +31,7 @@ public:
      *
      * @return a set of all matching DesktopEntries
      */
-    std::set<DesktopEntry> getCategoryEntries(String category);
+    std::set<DesktopEntry> getCategoryEntries(juce::String category);
 
     /**
      * Finds all DesktopEntry objects within several categories.
@@ -41,14 +41,14 @@ public:
      * @return the set of all DesktopEntry objects with at least one of the 
      *         category values in the category list.
      */
-    std::set<DesktopEntry> getCategoryListEntries(StringArray categoryList);
+    std::set<DesktopEntry> getCategoryListEntries(juce::StringArray categoryList);
 
     /**
      * Finds the list of all categories found in all desktop entries.
      * 
      * @return a set of all category entries.
      */
-    std::set<String> getCategories();
+    std::set<juce::String> getCategories();
 
     /**
      * Discards any existing entry data and asynchronously reload all desktop 
@@ -63,7 +63,7 @@ public:
      *                        the message thread.
      */
     void loadEntries
-    (std::function<void(String) > notifyCallback = std::function<void(String)>(),
+    (std::function<void(juce::String) > notifyCallback = std::function<void(juce::String)>(),
             std::function<void() > onFinish = std::function<void()>());
 
     /**
@@ -83,11 +83,12 @@ private:
     //list of all entries
     std::set<DesktopEntry> entries;
     //maps category names to lists of entries
-    std::map<String, std::set<DesktopEntry>> categories;
+    std::map<juce::String, std::set<DesktopEntry>> categories;
     //protects desktopEntry data from concurrent access
-    CriticalSection lock;
+    juce::CriticalSection lock;
+    
     //Callback function to send loading progress update strings.
-    std::function<void(String) > notifyCallback;
+    std::function<void(juce::String) > notifyCallback;
     //Callback to run when desktop entries finish loading.
     std::function<void() > onFinish;
     

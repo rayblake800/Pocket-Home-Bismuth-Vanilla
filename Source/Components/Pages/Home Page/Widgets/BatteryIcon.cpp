@@ -5,6 +5,7 @@ BatteryIcon::BatteryIcon() : WindowFocusedTimer("BatteryIcon"),
 batteryImage(ComponentConfigFile::batteryIconKey),
 batteryPercent(ComponentConfigFile::batteryPercentKey)
 {
+    using namespace juce;
 
 #    if JUCE_DEBUG
     setName("BatteryIcon");
@@ -23,6 +24,7 @@ batteryPercent(ComponentConfigFile::batteryPercentKey)
  */
 void BatteryIcon::applyConfigBounds()
 {
+    using namespace juce;
     batteryImage.applyConfigBounds();
     batteryPercent.applyConfigBounds();
     Rectangle<int> childBounds = batteryImage.getBounds()
@@ -38,8 +40,10 @@ void BatteryIcon::applyConfigBounds()
 /**
  * Set the icon's new display status.
  */
-void BatteryIcon::setStatus(BatteryIconImage imageSelection, String percent)
+void BatteryIcon::setStatus
+(BatteryIconImage imageSelection, juce::String percent)
 {
+    using namespace juce;
     batteryImage.setImageAssetIndex((int) imageSelection);
     batteryPercent.setText(percent, dontSendNotification);
 }
@@ -74,6 +78,7 @@ void BatteryIcon::onSuspend()
 
 void BatteryIcon::timerCallback()
 {
+    using namespace juce;
     BatteryMonitor::BatteryStatus batteryStatus =
             batteryMonitor.getBatteryStatus();
     int batteryPercent = batteryStatus.percent;

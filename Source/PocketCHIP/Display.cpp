@@ -7,6 +7,7 @@
  */
 int Display::getBrightness()
 {
+    using namespace juce;
     File brightnessFile("/sys/class/backlight/backlight/brightness");
     if (brightnessFile.existsAsFile())
     {
@@ -20,6 +21,7 @@ int Display::getBrightness()
  */
 void Display::setBrightness(const int& brightness)
 {
+    using namespace juce;
     File brightnessFile("/sys/class/backlight/backlight/brightness");
     if (brightnessFile.existsAsFile())
     {

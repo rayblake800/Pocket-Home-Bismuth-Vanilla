@@ -59,7 +59,7 @@ namespace GVariantConverter
         return g_variant_get_string(variant, nullptr);
     }
 
-    template<> String getValue(GVariant* variant)
+    template<> juce::String getValue(GVariant* variant)
     {
         if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_STRING))
         {
@@ -69,8 +69,9 @@ namespace GVariantConverter
         return g_variant_get_string(variant, nullptr);
     }
 
-    template<> StringArray getValue(GVariant* variant)
+    template<> juce::StringArray getValue(GVariant* variant)
     {
+        using namespace juce;
         const gchar ** array = nullptr;
         gsize arraySize = 0;
         if (g_variant_is_of_type(variant, G_VARIANT_TYPE_STRING_ARRAY))
@@ -128,7 +129,7 @@ namespace GVariantConverter
         return array;
     }
 
-    template<> uint64 getValue(GVariant* variant)
+    template<> juce::uint64 getValue(GVariant* variant)
     {
          if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_UINT64))
         {
@@ -152,12 +153,12 @@ namespace GVariantConverter
         return g_variant_new_uint32(value);
     }
 
-    template<> GVariant* getVariant(String value)
+    template<> GVariant* getVariant(juce::String value)
     {
         return g_variant_new_string(value.toRawUTF8());
     }
 
-    template<> GVariant* getVariant(StringArray value)
+    template<> GVariant* getVariant(juce::StringArray value)
     {
         const char ** array = new (std::nothrow) const char*[value.size()];
         if (array == nullptr)
@@ -358,8 +359,9 @@ namespace GVariantConverter
     /**
      * Convert any GVariant object into a formatted string object.
      */
-    String toString(GVariant* variant)
+    juce::String toString(GVariant* variant)
     {
+        using namespace juce;
         if (variant == nullptr)
         {
             return "nullptr";
@@ -592,8 +594,9 @@ namespace GVariantConverter
     /**
      * Extract all key strings from a GVariant* dictionary.
      */
-    StringArray getKeys(GVariant* dict)
+    juce::StringArray getKeys(GVariant* dict)
     {
+        using namespace juce;
         StringArray keys;
         if (g_variant_is_of_type(dict, G_VARIANT_TYPE_DICTIONARY))
         {

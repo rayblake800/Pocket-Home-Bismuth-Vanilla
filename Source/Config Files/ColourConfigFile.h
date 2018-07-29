@@ -47,7 +47,7 @@ public:
      *          for the UICategory associated with that Id will be returned. If
      *          colourId is not a valid Id, Colour() will be returned.
      */
-    Colour getColour(int colourId) const;
+    juce::Colour getColour(int colourId) const;
     
     /**
      * Gets the Colour value assigned as the default for all UI items in a
@@ -58,7 +58,7 @@ public:
      * @return  The default color value used by all items in that category that
      *          don't have a color value assigned to them specifically.
      */
-    Colour getColour(UICategory category) const;
+    juce::Colour getColour(UICategory category) const;
     
     /**
      * Gets the colour value associated with a particular key string.
@@ -67,7 +67,7 @@ public:
      * 
      * @return  The saved Colour, or Colour() if the colour key isn't found.
      */
-    Colour getColour(String colourKey) const;
+    juce::Colour getColour(juce::String colourKey) const;
        
     /**
      * Sets the saved colour value for a single UI element.
@@ -77,7 +77,7 @@ public:
      * 
      * @param newColour  The colour value to assign to the ColourId. 
      */
-    void setColour(int colourId, Colour newColour);
+    void setColour(int colourId, juce::Colour newColour);
 
     /**
      * Sets the saved colour value for a category of UI elements.
@@ -86,7 +86,7 @@ public:
      * 
      * @param newColour  The colour value to assign to the category.
      */
-    void setColour(UICategory category, Colour newColour);
+    void setColour(UICategory category, juce::Colour newColour);
     
     /**
      * Sets the saved colour value for a specific key string.
@@ -95,7 +95,7 @@ public:
      * 
      * @param newColour  The new colour value to save to the file.
      */
-    void setColour(String colourKey, Colour newColour);
+    void setColour(juce::String colourKey, juce::Colour newColour);
    
     /**
      * Gets all Juce ColourId values defined by the colour config file.
@@ -103,14 +103,14 @@ public:
      * @return  All ColourIds defined in colours.json, either directly or
      *          through a UICategory. 
      */
-    static Array<int> getColourIds();
+    static juce::Array<int> getColourIds();
     
     /**
      * Gets all key strings used by the ColourConfigFile.
      * 
      * @return  All UICategory keys and ColourID keys. 
      */
-    static StringArray getColourKeys();
+    static juce::StringArray getColourKeys();
     
     class Listener : public ConfigFile::Listener
     {
@@ -129,7 +129,7 @@ public:
          * @param newColour   The updated Colour value.
          */
         virtual void colourValueChanged
-        (int colourId, String updatedKey, Colour newColour) = 0;
+        (int colourId, juce::String updatedKey, juce::Colour newColour) = 0;
         
         /**
          * Notify the Listener whenever a non-color key value it tracks is
@@ -138,7 +138,7 @@ public:
          * @param propertyKey  The key string of some property tracked by the
          *                     Listener that is not from the ColorConfigFile.
          */
-        virtual void nonColorValueChanged(String propertyKey) { }
+        virtual void nonColorValueChanged(juce::String propertyKey) { }
         
         /**
          * Calls colourValueChanged for each Juce ColourId associated with
@@ -146,9 +146,10 @@ public:
          * 
          * @param propertyKey  The key of an updated ColourId or UICategory.
          */
-        virtual void configValueChanged(String propertyKey) final override;
+        virtual void configValueChanged(juce::String propertyKey) 
+        final override;
         
-        Array<int> trackedColourIds;
+        juce::Array<int> trackedColourIds;
     };
 
     /**
@@ -158,7 +159,7 @@ public:
      * 
      * @param trackedIds  All Juce ColourId values the listener will track.
      */
-    void addListener(Listener* listener, Array<int> trackedIds);
+    void addListener(Listener* listener, juce::Array<int> trackedIds);
 
 private:
     /**
@@ -170,7 +171,7 @@ private:
      * @return  The colour hex string mapped to that key, or the empty string
      *          if the key isn't found.
      */
-    String getColourString(String colourKey) const;
+    juce::String getColourString(juce::String colourKey) const;
     
     /**
      * Gets the UICategory assigned to a Juce ColourId value.
@@ -193,7 +194,7 @@ private:
      * @return  The corresponding ColourId value, or -1 if colourKey doesn't
      *          map to a UI element.
      */
-    static int getColourId(String colourKey);
+    static int getColourId(juce::String colourKey);
     
     /**
      * Finds the UICategory type represented by a specific key string.
@@ -203,7 +204,7 @@ private:
      * @return   The UICategory value associated with the key string, or
      *           UICategory::none if categoryKey is not a valid key string.
      */
-    static UICategory getCategoryType(String categoryKey);
+    static UICategory getCategoryType(juce::String categoryKey);
      
     //================ Lookup key strings by value: ============================
     /**
@@ -215,7 +216,7 @@ private:
      * @return  The key string for that colourId, or String() if colourId is not
      *          tracked in colours.json. 
      */
-    static String getColourKey(int colourId);
+    static juce::String getColourKey(int colourId);
        
     /**
      * Finds the key string representing a UICategory value.
@@ -225,7 +226,7 @@ private:
      * @return  The string key used to store this category's value in the
      *          json config file.
      */
-    static String getCategoryKey(UICategory category);
+    static juce::String getCategoryKey(UICategory category);
       
 
     class ConfigJson : public ConfigFile
@@ -249,19 +250,19 @@ private:
      * looking up colour values, if no value is explicitly assigned to a given
      * ColourId, the value assigned to the associated UICategory will be used.
      */
-    static const StringArray uiCategoryKeys;
+    static const juce::StringArray uiCategoryKeys;
     
     /**
      * For each Juce ColourId value tracked in colours.json, colourIds maps that
      * colour to its string key.
      */
-    static const std::map<int, String> colourIdKeys;
+    static const std::map<int, juce::String> colourIdKeys;
     
     /**
      * For each colour key string tracked in colours.json, colourIds maps that
      * key to its Juce ColourId value.
      */
-    static const std::map<String, int> colourIds;
+    static const std::map<juce::String, int> colourIds;
     
     /**
      * Maps each Juce ColourId value to the UI element category used to select
@@ -273,8 +274,8 @@ private:
     static constexpr const char * filenameConst = "colours.json";
 
     //ResourceManager shared object and lock;
-    static ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static ReadWriteLock configLock;
+    static juce::ScopedPointer<ResourceManager::SharedResource> sharedResource;
+    static juce::ReadWriteLock configLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ColourConfigFile)
 };

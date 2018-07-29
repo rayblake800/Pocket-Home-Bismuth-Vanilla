@@ -112,6 +112,7 @@
 		49E161B11BB369520C8308CC = {isa = PBXBuildFile; fileRef = 3D7355F625656F0FD02775F0; };
 		2BDB18505DE08E6D8E90E703 = {isa = PBXBuildFile; fileRef = B4A65A40CD538F70EDA51C26; };
 		0B120B69E15D68C70BE8145E = {isa = PBXBuildFile; fileRef = AFB69E8EEE8214A6B9EDB24E; };
+		D12A54203BBE331CDCD95A02 = {isa = PBXBuildFile; fileRef = F02494FF35A30A307E0E99D9; };
 		C5D4695A8D35AA0C1118B8B5 = {isa = PBXBuildFile; fileRef = CF74A26644CA57CFB55AE463; };
 		D0A4B2156F96D3578FCD0496 = {isa = PBXBuildFile; fileRef = DEA4E10C4338A9E08D459CE7; };
 		F112E613E75B3C3F53A850ED = {isa = PBXBuildFile; fileRef = F18672AC338A67FA634DC2CE; };
@@ -312,6 +313,7 @@
 		B5DCAF01E0490D7413E9E85F = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B6EC3B4CE1ECD55CDDC6CBB8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuItem.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItem.cpp"; sourceTree = "SOURCE_ROOT"; };
 		B804C442E741C79B0E35B0E3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HomeSettingsPage.cpp; path = "../../Source/Components/Pages/Settings Pages/Home Settings Page/HomeSettingsPage.cpp"; sourceTree = "SOURCE_ROOT"; };
+		B8E4A84CA4E08C080B15886C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LinuxProcess.h; path = ../../Source/Util/LinuxProcess.h; sourceTree = "SOURCE_ROOT"; };
 		BA57FC113844D4179FC3862A = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConnectionSettingsComponent.h; path = "../../Source/Components/Pages/Settings Pages/Quick Settings Page/ConnectionSettingsComponent.h"; sourceTree = "SOURCE_ROOT"; };
 		BB3D58FDF2D817776CE58B99 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = ../../JuceLibraryCode/AppConfig.h; sourceTree = "SOURCE_ROOT"; };
 		BB88AEE494C74F681E8BC6C3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiIcon.cpp; path = "../../Source/Components/Pages/Home Page/Widgets/WifiIcon.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -373,6 +375,7 @@
 		EF0777B21B337F6A85095494 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ListEditor.h; path = ../../Source/Components/Widgets/ListEditor.h; sourceTree = "SOURCE_ROOT"; };
 		EF07DC97934FC0BE02256AC6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DateTimePage.h; path = "../../Source/Components/Pages/Settings Pages/DateTime Page/DateTimePage.h"; sourceTree = "SOURCE_ROOT"; };
 		EF57F8D59B0C326941BD663E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_data_structures.mm"; path = "../../JuceLibraryCode/include_juce_data_structures.mm"; sourceTree = "SOURCE_ROOT"; };
+		F02494FF35A30A307E0E99D9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LinuxProcess.cpp; path = ../../Source/Util/LinuxProcess.cpp; sourceTree = "SOURCE_ROOT"; };
 		F18672AC338A67FA634DC2CE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LocalizedTime.cpp; path = ../../Source/Util/LocalizedTime.cpp; sourceTree = "SOURCE_ROOT"; };
 		F259762CBCD4BEA2A54CE6C1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiSettingsPage.cpp; path = "../../Source/Components/Pages/Settings Pages/Network Pages/WifiSettingsPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		F367C9C90B98F46D1336D4FC = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AssetFiles.h; path = ../../Source/Util/AssetFiles.h; sourceTree = "SOURCE_ROOT"; };
@@ -642,6 +645,8 @@
 					AFB69E8EEE8214A6B9EDB24E,
 					BF42644B03F4AC99B8E3C285, ); name = PocketCHIP; sourceTree = "<group>"; };
 		60553D032698E22478A3BFC0 = {isa = PBXGroup; children = (
+					F02494FF35A30A307E0E99D9,
+					B8E4A84CA4E08C080B15886C,
 					CF74A26644CA57CFB55AE463,
 					F367C9C90B98F46D1336D4FC,
 					DEA4E10C4338A9E08D459CE7,
@@ -719,7 +724,7 @@
 					F52C15B3C4E93E9FE736BCD9,
 					3227693E509670763A902693, ); name = Source; sourceTree = "<group>"; };
 		635F10322A3786ADEF6D97AE = {isa = XCBuildConfiguration; buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -730,9 +735,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"_DEBUG=1",
 					"DEBUG=1",
+					"DONT_SET_USING_JUCE_NAMESPACE=1",
 					"JUCER_XCODE_MAC_F6D2F4CF=1",
-					"JUCE_APP_VERSION=0.0.1",
-					"JUCE_APP_VERSION_HEX=0x1",
+					"JUCE_APP_VERSION=0.0.8.10",
+					"JUCE_APP_VERSION_HEX=0x80a",
 					"JucePlugin_Build_VST=0",
 					"JucePlugin_Build_VST3=0",
 					"JucePlugin_Build_AU=0",
@@ -751,7 +757,7 @@
 				SDKROOT_ppc = macosx10.5;
 				USE_HEADERMAP = NO; }; name = Debug; };
 		C0448FECE564C0B85D724E32 = {isa = XCBuildConfiguration; buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -762,9 +768,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"_NDEBUG=1",
 					"NDEBUG=1",
+					"DONT_SET_USING_JUCE_NAMESPACE=1",
 					"JUCER_XCODE_MAC_F6D2F4CF=1",
-					"JUCE_APP_VERSION=0.0.1",
-					"JUCE_APP_VERSION_HEX=0x1",
+					"JUCE_APP_VERSION=0.0.8.10",
+					"JUCE_APP_VERSION_HEX=0x80a",
 					"JucePlugin_Build_VST=0",
 					"JucePlugin_Build_VST3=0",
 					"JucePlugin_Build_AU=0",
@@ -968,6 +975,7 @@
 					49E161B11BB369520C8308CC,
 					2BDB18505DE08E6D8E90E703,
 					0B120B69E15D68C70BE8145E,
+					D12A54203BBE331CDCD95A02,
 					C5D4695A8D35AA0C1118B8B5,
 					D0A4B2156F96D3578FCD0496,
 					F112E613E75B3C3F53A850ED,

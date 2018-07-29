@@ -49,8 +49,9 @@ namespace TransitionAnimator
      *                               milliseconds.
      */
     void animateTransition(
-	    Array<juce::Component*> movingOut,
-            Array<std::pair<Component*, Rectangle<int>>> movingIn,
+	    juce::Array<juce::Component*> movingOut,
+            juce::Array<std::pair<juce::Component*,juce::Rectangle<int>>> 
+                    movingIn,
             const Transition transition,
             const unsigned int animationMilliseconds);
     
@@ -72,7 +73,7 @@ namespace TransitionAnimator
      *                               proxy component will be used to simulate
      *                               the transition animation.
      */
-    void transitionOut(Component* component,
+    void transitionOut(juce::Component* component,
 	    const Transition transition,
             const unsigned int animationMilliseconds,
 	    const bool useProxy = false);
@@ -97,9 +98,9 @@ namespace TransitionAnimator
      * @param animationMilliseconds  The duration of the component animation, in
      *                               milliseconds.
      */
-    void transitionIn(Component* component,
+    void transitionIn(juce::Component* component,
 	    const Transition transition,
-            const Rectangle<int> destination,
+            const juce::Rectangle<int> destination,
 	    const unsigned int animationMilliseconds);
 
     /**
@@ -113,7 +114,7 @@ namespace TransitionAnimator
      * @param animationMilliseconds  The duration of the component animation, in
      *                               milliseconds.
      */
-    void transformBounds(Component* component,
-            const  Rectangle<int>& destination,
+    void transformBounds(juce::Component* component,
+            const juce::Rectangle<int>& destination,
 	    const unsigned int animationMilliseconds);
 };

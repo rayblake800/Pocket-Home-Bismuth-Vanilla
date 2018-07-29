@@ -3,7 +3,7 @@
 #include "IconThread.h"
 #include "AppMenuButton.h"
 
-AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem, String name) :
+AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem, juce::String name) :
 Button(name),
 menuItem(menuItem)
 {
@@ -27,6 +27,7 @@ AppMenuItem::Ptr AppMenuButton::getMenuItem()
 AppMenuPopupEditor* AppMenuButton::getEditor
 (const std::function<void(AppMenuPopupEditor*) >& onConfirm)
 {
+    using namespace juce;
     MainConfigFile mainConfig;
     
     AppMenuPopupEditor* editor = new AppMenuPopupEditor
@@ -94,6 +95,7 @@ bool AppMenuButton::isSelected() const
  */
 void AppMenuButton::setSelected(bool select)
 {
+    using namespace juce;
     setToggleState(select, dontSendNotification);
     selectionStateChanged();
 }
@@ -101,8 +103,9 @@ void AppMenuButton::setSelected(bool select)
 /**
  * Requests an icon from the icon thread.
  */
-void AppMenuButton::loadIcon(String icon)
+void AppMenuButton::loadIcon(juce::String icon)
 {
+    using namespace juce;
     IconThread iconThread;
     iconThread.loadIcon(icon, imageBounds.toNearestInt().getWidth(),
     [this](Image iconImg)
@@ -124,7 +127,7 @@ void AppMenuButton::reloadDataFromSource()
  * @return  the area relative to this button's position where
  *           it will draw its name.
  */
-const Rectangle<float>& AppMenuButton::getTextBounds() const
+const juce::Rectangle<float>& AppMenuButton::getTextBounds() const
 {
     return textBounds;
 }
@@ -133,7 +136,7 @@ const Rectangle<float>& AppMenuButton::getTextBounds() const
  * @return  the area relative to this button's position where
  *           it will draw its image.
  */
-const Rectangle<float>& AppMenuButton::getImageBounds() const
+const juce::Rectangle<float>& AppMenuButton::getImageBounds() const
 {
     return imageBounds;
 }
@@ -141,7 +144,7 @@ const Rectangle<float>& AppMenuButton::getImageBounds() const
 /**
  * @return the font used to draw this button's title.
  */
-const Font& AppMenuButton::getTitleFont() const
+const juce::Font& AppMenuButton::getTitleFont() const
 {
     return titleFont;
 }
@@ -149,7 +152,7 @@ const Font& AppMenuButton::getTitleFont() const
 /**
  * Set new bounds to draw the button title within.
  */
-void AppMenuButton::setTextBounds(const Rectangle<float>& bounds)
+void AppMenuButton::setTextBounds(const juce::Rectangle<float>& bounds)
 {
     textBounds = bounds;
     textWidth = std::min((int) bounds.getWidth(),
@@ -159,7 +162,7 @@ void AppMenuButton::setTextBounds(const Rectangle<float>& bounds)
 /**
  * Set new bounds to draw the button icon within.
  */
-void AppMenuButton::setImageBounds(const Rectangle<float>& bounds)
+void AppMenuButton::setImageBounds(const juce::Rectangle<float>& bounds)
 {
     imageBounds = bounds;
     if(appIcon.isNull())
@@ -188,7 +191,7 @@ void AppMenuButton::setFillBackground(bool shouldFill)
 /**
  * Sets the button's title font.
  */
-void AppMenuButton::setTitleFont(const Font& font)
+void AppMenuButton::setTitleFont(const juce::Font& font)
 {
     titleFont = font;
     textWidth = std::min((int) textBounds.getWidth(),
@@ -198,7 +201,7 @@ void AppMenuButton::setTitleFont(const Font& font)
 /**
  * Set the text justification of the button title.
  */
-void AppMenuButton::setTextJustification(Justification justification)
+void AppMenuButton::setTextJustification(juce::Justification justification)
 {
     textJustification = justification;
 }
@@ -207,8 +210,9 @@ void AppMenuButton::setTextJustification(Justification justification)
  * Custom button painting method.
  */
 void AppMenuButton::paintButton
-(Graphics &g, bool isMouseOverButton, bool isButtonDown)
+(juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
+    using namespace juce;
     Rectangle<int> border = getLocalBounds();
     if ((imageBounds.isEmpty() || textBounds.isEmpty()) && !border.isEmpty())
     {

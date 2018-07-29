@@ -3,14 +3,14 @@
 #include "ScalingLabel.h"
 
 ScalingLabel::ScalingLabel(
-        const String &componentName,
-        const String &labelText,
+        const juce::String &componentName,
+        const juce::String &labelText,
         const int& fontPadding)
 : Label(componentName, labelText),
 sizeListener(this),
 fontPadding(fontPadding)
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName(String("ScalingLabel:") + labelText);
 #    endif
@@ -49,7 +49,7 @@ ScalingLabel::SizeListener::SizeListener(ScalingLabel* label) : label(label)
 /*
  * Updates the ScalingLabel component when text size configuration changes.
  */
-void ScalingLabel::SizeListener::configValueChanged(String propertyKey)
+void ScalingLabel::SizeListener::configValueChanged(juce::String propertyKey)
 {
     if(label != nullptr)
     {

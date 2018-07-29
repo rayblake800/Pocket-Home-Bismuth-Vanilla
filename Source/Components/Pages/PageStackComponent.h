@@ -14,7 +14,7 @@
  */
 
 class PageStackComponent : public PageComponent::PageStackInterface,
-public Component
+public juce::Component
 {
 public:
     PageStackComponent();
@@ -92,7 +92,7 @@ private:
     const int transitionDurationMS = 300;
 
     //holds all pages in order
-    OwnedArray<PageComponent> stack;
+    juce::OwnedArray<PageComponent> stack;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PageStackComponent)
 };

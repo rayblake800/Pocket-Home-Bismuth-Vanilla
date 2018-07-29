@@ -1,9 +1,9 @@
 #include "ConfigurableImageComponent.h"
 
 ConfigurableImageComponent::ConfigurableImageComponent(
-        String componentKey,
+        juce::String componentKey,
         int assetIndex,
-        RectanglePlacement placement) :
+        juce::RectanglePlacement placement) :
 ConfigurableComponent(componentKey),
 DrawableImageComponent(placement),
 assetIndex(assetIndex)
@@ -26,8 +26,8 @@ void ConfigurableImageComponent::setImageAssetIndex(int index)
 /**
  * (re)load the image file and set the colors.
  */
-void ConfigurableImageComponent::applyConfigAssets(StringArray assetNames,
-        Array<Colour> colours)
+void ConfigurableImageComponent::applyConfigAssets(juce::StringArray assetNames,
+        juce::Array<juce::Colour> colours)
 {
     if (assetIndex >= 0 && assetIndex < assetNames.size())
     {
@@ -46,5 +46,4 @@ void ConfigurableImageComponent::applyConfigAssets(StringArray assetNames,
         setColour(colourId, colours[i]);
     }
     applyConfigBounds();
-
 }

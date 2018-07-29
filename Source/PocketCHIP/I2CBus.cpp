@@ -72,13 +72,13 @@ void I2CBus::i2cClose()
 /**
  * Throw I2C exceptions when i2c bus access fails.
  */
-I2CBus::I2CException::I2CException(String errorMessage)
+I2CBus::I2CException::I2CException(juce::String errorMessage)
 : errorMessage(errorMessage) { }
 
 /**
  * @return a short message explaining the i2c bus access failure.
  */
-String I2CBus::I2CException::getErrorMessage()
+juce::String I2CBus::I2CException::getErrorMessage()
 {
     return errorMessage;
 }
@@ -104,6 +104,7 @@ void I2CBus::i2cOpen()
  */
 uint8_t I2CBus::i2cReadByte(uint8_t regAddr)
 {
+    using namespace juce;
     if (i2cFileDescriptor < 0)
     {
         i2cOpen();
@@ -122,6 +123,7 @@ uint8_t I2CBus::i2cReadByte(uint8_t regAddr)
  */
 void I2CBus::i2cWriteByte(uint8_t regAddr, uint8_t byte)
 {
+    using namespace juce;
     if (i2cFileDescriptor < 0)
     {
         i2cOpen();

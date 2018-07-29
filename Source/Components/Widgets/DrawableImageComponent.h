@@ -10,7 +10,7 @@
  * whenever the component bounds change.
  */
 
-class DrawableImageComponent : public Component {
+class DrawableImageComponent : public juce::Component {
 public:
     /**
      * These ColourId values correspond to the colors set in loadDefaultColours.
@@ -43,8 +43,9 @@ public:
      * @param placement      Defines how the image will be scaled to fit the
      *                        component.
      */
-    DrawableImageComponent(String assetFilename,
-            RectanglePlacement placement = RectanglePlacement::centred);
+    DrawableImageComponent(juce::String assetFilename,
+            juce::RectanglePlacement placement 
+            = juce::RectanglePlacement::centred);
 
     /**
      * Create a DrawableImageComponent using any image file.
@@ -54,8 +55,9 @@ public:
      * @param placement  Defines how the image will be scaled to fit the
      *                    component.
      */
-    DrawableImageComponent(File imageFile,
-            RectanglePlacement placement = RectanglePlacement::centred);
+    DrawableImageComponent(juce::File imageFile,
+            juce::RectanglePlacement placement 
+            = juce::RectanglePlacement::centred);
 
     /**
      * Create a DrawableImageComponent using an image object.
@@ -65,8 +67,9 @@ public:
      * @param placement  Defines how the image will be scaled to fit the
      *                    component.
      */
-    DrawableImageComponent(Image image,
-            RectanglePlacement placement = RectanglePlacement::centred);
+    DrawableImageComponent(juce::Image image,
+            juce::RectanglePlacement placement 
+            = juce::RectanglePlacement::centred);
 
     /**
      * Create a DrawableImageComponent using a Drawable object.
@@ -76,8 +79,9 @@ public:
      * @param placement  Defines how the image will be scaled to fit the
      *                    component.
      */
-    DrawableImageComponent(Drawable* drawable,
-            RectanglePlacement placement = RectanglePlacement::centred);
+    DrawableImageComponent(juce::Drawable* drawable,
+            juce::RectanglePlacement placement 
+            = juce::RectanglePlacement::centred);
 
 
     /**
@@ -86,8 +90,8 @@ public:
      * @param placement  Defines how the image will be scaled to fit the
      *                    component, once it is added.
      */
-    DrawableImageComponent
-    (RectanglePlacement placement = RectanglePlacement::centred);
+    DrawableImageComponent(juce::RectanglePlacement placement 
+            = juce::RectanglePlacement::centred);
 
     virtual ~DrawableImageComponent() { }
 
@@ -97,28 +101,28 @@ public:
      * @param assetFilename  The filename of an image in the asset folder, or
      *                        a full image path.
      */
-    void setImage(String assetFilename);
+    void setImage(juce::String assetFilename);
 
     /**
      * Changes the image drawn by this component.
      * 
      * @param imageFile  Any image file.
      */
-    void setImage(File imageFile);
+    void setImage(juce::File imageFile);
 
     /**
      * Changes the image drawn by this component.
      * 
      * @param image  Any image object.
      */
-    void setImage(Image image);
+    void setImage(juce::Image image);
 
     /**
      * Changes the image drawn by this component.
      * 
      * @param drawable  Any drawable object.
      */
-    void setImage(Drawable* drawable);
+    void setImage(juce::Drawable* drawable);
     
     /**
      * Checks if an image is set for this component.
@@ -149,16 +153,16 @@ private:
     void initImage();
     
     //Image source file, if one is provided.
-    File imageSource;
+    juce::File imageSource;
     
     //Internal image component.
-    ScopedPointer<Drawable> imageDrawable;
+    juce::ScopedPointer<juce::Drawable> imageDrawable;
     
     //Image placement setting.
-    RectanglePlacement placement;
+    juce::RectanglePlacement placement;
 
     //Default image colors, to be replaced by the actual image colors.
-    static const Array<Colour> defaultColours;
+    static const juce::Array<juce::Colour> defaultColours;
 
     /**
      * This gets the list of default image colors, which can be changed through
@@ -166,7 +170,8 @@ private:
      * 
      * @return the default colors 
      */
-    static const Array<Colour> loadDefaultColours() {
+    static const juce::Array<juce::Colour> loadDefaultColours() {
+        using namespace juce;
         Array<Colour> defaults;
         defaults.add(Colour(0xffffffff));
         defaults.add(Colour(0xff000000));

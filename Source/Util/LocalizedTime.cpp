@@ -1,6 +1,6 @@
 #include "LocalizedTime.h"
 
-LocalizedTime::LocalizedTime(Time time) : Localized("LocalizedTime"),
+LocalizedTime::LocalizedTime(juce::Time time) : Localized("LocalizedTime"),
 time(time) { }
 
 /*
@@ -12,8 +12,9 @@ time(time) { }
  *          object's time, or the localized equivalent of "now"
  *          if the time is not in the past.
  */
-String LocalizedTime::approxTimePassed()
+juce::String LocalizedTime::approxTimePassed()
 {
+    using namespace juce;
     int64 timeMS = time.toMilliseconds();
     if(timeMS == 0)
     {

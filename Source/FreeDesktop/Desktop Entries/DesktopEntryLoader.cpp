@@ -15,23 +15,23 @@ DesktopEntryLoader::~DesktopEntryLoader()
     }
 }
 
-/**
+/*
  * return the number of stored DesktopEntry objects 
  */
 int DesktopEntryLoader::size()
 {
-
+    using namespace juce;
     const ScopedLock readLock(lock);
     return entries.size();
 }
 
-/**
+/*
  * Get a list of all DesktopEntry objects within several categories
  */
 std::set<DesktopEntry> DesktopEntryLoader::getCategoryListEntries
-(StringArray categoryList)
+(juce::StringArray categoryList)
 {
-
+    using namespace juce;
     const ScopedLock readLock(lock);
     std::set<DesktopEntry> categoryEntries;
     for (String& category : categoryList)
@@ -45,21 +45,23 @@ std::set<DesktopEntry> DesktopEntryLoader::getCategoryListEntries
     return categoryEntries;
 }
 
-/**
+/*
  * Get all DesktopEntryLoader with a given category name
  */
-std::set<DesktopEntry> DesktopEntryLoader::getCategoryEntries(String category)
+std::set<DesktopEntry> DesktopEntryLoader::getCategoryEntries
+(juce::String category)
 {
-
+    using namespace juce;
     const ScopedLock readLock(lock);
     return categories[category];
 }
 
-/**
+/*
  * Get the list of all categories found in all desktop entries. 
  */
-std::set<String> DesktopEntryLoader::getCategories()
+std::set<juce::String> DesktopEntryLoader::getCategories()
 {
+    using namespace juce;
     const ScopedLock readLock(lock);
     std::set<String> categoryNames;
     for (std::map<String, std::set < DesktopEntry>>::iterator it = categories.begin();
@@ -70,13 +72,15 @@ std::set<String> DesktopEntryLoader::getCategories()
     return categoryNames;
 }
 
-/**
+/*
  * Discards any existing entry data and reloads all desktop entries
  * from the file system.
  */
-void DesktopEntryLoader::loadEntries
-(std::function<void(String) > notifyCallback, std::function<void() > onFinish)
+void DesktopEntryLoader::loadEntries(
+        std::function<void(juce::String) > notifyCallback,
+        std::function<void() > onFinish)
 {
+    using namespace juce;
     if (!isThreadRunning())
     {
         {
@@ -96,13 +100,14 @@ void DesktopEntryLoader::loadEntries
     }
 }
 
-/**
+/*
  * If entries are currently loading asynchronously, this will signal for
  * them to stop. Unless loading finishes on its own before this has a chance to
  * stop it, the onFinish callback to loadEntries will not be called.
  */
 void DesktopEntryLoader::clearCallbacks()
 {
+    using namespace juce;
     const ScopedLock loadingLock(lock);
     notifyCallback = [](String s)
     {
@@ -114,6 +119,7 @@ void DesktopEntryLoader::clearCallbacks()
 
 void DesktopEntryLoader::run()
 {
+    using namespace juce;
     const ScopedLock loadingLock(lock);
     std::atomic<bool> uiCallPending;
     uiCallPending = false;

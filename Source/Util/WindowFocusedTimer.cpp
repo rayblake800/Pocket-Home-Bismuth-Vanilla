@@ -6,6 +6,7 @@
  */
 void WindowFocusedTimer::stopTimer()
 {
+    using namespace juce;
     Timer::stopTimer();
     suspendedEndTime = 0;
 }
@@ -17,13 +18,15 @@ void WindowFocusedTimer::stopTimer()
  */
 void WindowFocusedTimer::startTimer(int intervalInMilliseconds)
 {
+    using namespace juce;
     if(WindowFocus::isFocused())
     {
         Timer::startTimer(intervalInMilliseconds);
     }
     else
     {   
-        suspendedEndTime = Time::getMillisecondCounter() + intervalInMilliseconds;
+        suspendedEndTime = Time::getMillisecondCounter() 
+                + intervalInMilliseconds;
         onSuspend();
     }
 }
@@ -33,6 +36,7 @@ void WindowFocusedTimer::startTimer(int intervalInMilliseconds)
  */
 void WindowFocusedTimer::windowFocusLost()
 {
+    using namespace juce;
     if (isTimerRunning())
     {
         uint32 endTime = Time::getMillisecondCounter() + getTimerInterval();
@@ -47,6 +51,7 @@ void WindowFocusedTimer::windowFocusLost()
  */
 void WindowFocusedTimer::windowFocusGained()
 {
+    using namespace juce;
     if (suspendedEndTime > 0)
     {
         uint32 now = Time::getMillisecondCounter();

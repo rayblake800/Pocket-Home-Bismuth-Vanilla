@@ -27,17 +27,17 @@ private:
      * 
      * @param button  This should always be deleteButton
      */
-    void pageButtonClicked(Button* button) override;
+    void pageButtonClicked(juce::Button* button) override;
 
     //Title of the page
     ScalingLabel titleLabel;
 
     //Text field for the current password
     ScalingLabel curPwdLabel;
-    TextEditor curPassword;
+    juce::TextEditor curPassword;
 
     //Triggers the attempted password removal
-    TextButton deleteButton;
+    juce::TextButton deleteButton;
 
 
     //localized text keys;

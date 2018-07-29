@@ -14,7 +14,7 @@
 class JsonWifiInterface : public WifiStateManager::NetworkInterface
 {
 public:
-    JsonWifiInterface(ReadWriteLock& wifiLock);
+    JsonWifiInterface(juce::ReadWriteLock& wifiLock);
     virtual ~JsonWifiInterface();
 
 protected:
@@ -57,7 +57,7 @@ protected:
      * @return the list of fake access points, or the empty list if the 
      *          simulated wifi device is disabled.
      */
-    Array<WifiAccessPoint> getVisibleAPs() override;
+    juce::Array<WifiAccessPoint> getVisibleAPs() override;
 
 
     /**
@@ -75,7 +75,7 @@ protected:
      *                    is ignored.
      */
     void connectToAccessPoint(const WifiAccessPoint& toConnect,
-            String psk = String()) override;
+            juce::String psk = juce::String()) override;
 
     /**
      * Triggers a simulated wifi disconnection event.  If a simulated connection
@@ -115,16 +115,16 @@ protected:
      * @return  Time(), as saved connections are not currently simulated by this
      *          test class.
      */
-    Time lastConnectionTime(const WifiAccessPoint& accessPoint) override
+    juce::Time lastConnectionTime(const WifiAccessPoint& accessPoint) override
     {
-        return Time();
+        return juce::Time();
     }
 
 private:
     //Simulated wifi state variables.
     WifiAccessPoint connectedAP;
     WifiAccessPoint waitingToConnect;
-    Array<WifiAccessPoint> visibleAPs;
+    juce::Array<WifiAccessPoint> visibleAPs;
     bool enabled = false;
     bool connected = false;
     bool disconnecting = false;
@@ -132,7 +132,7 @@ private:
     bool turningOff = false;
     
     //Disallows concurrent modification
-    ReadWriteLock& wifiLock;
+    juce::ReadWriteLock& wifiLock;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(JsonWifiInterface)

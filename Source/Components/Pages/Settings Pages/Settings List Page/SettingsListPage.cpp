@@ -23,8 +23,9 @@ PageComponent("SettingsListPage")
 /*
  * Gets button titles for all page buttons.
  */
-StringArray SettingsListPage::getButtonTitles()
+juce::StringArray SettingsListPage::getButtonTitles()
 {
+    using namespace juce;
     StringArray titleList;
     titleList.add(localeText(personalize_homepage));
     if (Password::isPasswordSet())
@@ -56,8 +57,9 @@ void SettingsListPage::visibilityChanged()
  * Handle button clicks to open menu pages, close this page, or 
  * scroll the list of page buttons.
  */
-void SettingsListPage::pageButtonClicked(Button * button)
+void SettingsListPage::pageButtonClicked(juce::Button * button)
 {
+    using namespace juce;
     TextButton * textButton = dynamic_cast<TextButton*>(button);
     if(textButton == nullptr)
     {
@@ -100,9 +102,10 @@ unsigned int SettingsListPage::SettingsList::getListSize()
 /*
  * Updates or creates a page TextButton for a specific button index.
  */
-Component* SettingsListPage::SettingsList::updateListItem
-(Component* listItem, unsigned int index)
+juce::Component* SettingsListPage::SettingsList::updateListItem
+(juce::Component* listItem, unsigned int index)
 {
+    using namespace juce;
     SettingsListPage * parent 
             = static_cast<SettingsListPage*>(getParentComponent());
     String title = parent->getButtonTitles()[index];

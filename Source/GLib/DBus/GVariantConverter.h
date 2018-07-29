@@ -120,7 +120,7 @@ namespace GVariantConverter
      * 
      * @return  the formatted string 
      */
-    String toString(GVariant* variant);
+    juce::String toString(GVariant* variant);
     
     /**
      * Iterate through a GVariant* container, running a callback function for
@@ -158,6 +158,6 @@ namespace GVariantConverter
      * @return  the extracted key strings, or an empty array if dict was not a
      *          valid dictionary.
      */
-    StringArray getKeys(GVariant* dict);
+    juce::StringArray getKeys(GVariant* dict);
     
 };

@@ -5,7 +5,7 @@
  * @return a std::map of String keys mapped to integers, so getConfigValue()
  *          and setConfigValue() can use int as a template type. 
  */
-template<> std::map<String, int>& ConfigFile::getMapReference<int>()
+template<> std::map<juce::String, int>& ConfigFile::getMapReference<int>()
 {
     return intValues;
 }
@@ -14,7 +14,8 @@ template<> std::map<String, int>& ConfigFile::getMapReference<int>()
  * @return a std::map of String keys mapped to strings, so getConfigValue()
  *          and setConfigValue() can use String as a template type. 
  */
-template<> std::map<String, String>& ConfigFile::getMapReference<String>()
+template<> std::map<juce::String, juce::String>& 
+ConfigFile::getMapReference<juce::String>()
 {
     return stringValues;
 }
@@ -23,7 +24,7 @@ template<> std::map<String, String>& ConfigFile::getMapReference<String>()
  * @return a std::map of String keys mapped to booleans, so getConfigValue()
  *          and setConfigValue() can use bool as a template type. 
  */
-template<> std::map<String, bool>& ConfigFile::getMapReference<bool>()
+template<> std::map<juce::String, bool>& ConfigFile::getMapReference<bool>()
 {
     return boolValues;
 }
@@ -32,12 +33,12 @@ template<> std::map<String, bool>& ConfigFile::getMapReference<bool>()
  * @return a std::map of String keys mapped to doubles, so getConfigValue()
  *          and setConfigValue() can use double as a template type. 
  */
-template<> std::map<String, double>& ConfigFile::getMapReference<double>()
+template<> std::map<juce::String, double>& ConfigFile::getMapReference<double>()
 {
     return doubleValues;
 }
 
-ConfigFile::ConfigFile(String configFilename) : Localized("ConfigFile"),
+ConfigFile::ConfigFile(juce::String configFilename) : Localized("ConfigFile"),
 filename(configFilename) { }
 
 /*
@@ -62,6 +63,7 @@ bool ConfigFile::operator==(const ConfigFile& rhs) const
  */
 ConfigFile::Listener::~Listener()
 {
+    using namespace juce;
     const ScopedLock removalLock(configKeyAccess);
     while (configKeyMap.begin() != configKeyMap.end())
     {
@@ -76,6 +78,7 @@ ConfigFile::Listener::~Listener()
  */
 void ConfigFile::Listener::loadAllConfigProperties()
 {
+    using namespace juce;
     const ScopedLock updateLock(configKeyAccess);
     for (auto it = configKeyMap.begin(); it != configKeyMap.end(); it++)
     {
@@ -92,8 +95,9 @@ void ConfigFile::Listener::loadAllConfigProperties()
  * change.
  */
 void ConfigFile::addListener(ConfigFile::Listener* listener,
-        StringArray trackedKeys)
+        juce::StringArray trackedKeys)
 {
+    using namespace juce;
     const ScopedLock keyMapLock(listener->configKeyAccess);
     listener->configKeyMap[this].mergeArray(trackedKeys,false);
     const ScopedUnlock keyMapUnlock(listener->configKeyAccess);
@@ -108,7 +112,7 @@ void ConfigFile::addListener(ConfigFile::Listener* listener,
  */
 void ConfigFile::removeListener(ConfigFile::Listener* listener)
 {
-    
+    using namespace juce;
     const ScopedLock keyMapLock(listener->configKeyAccess);
     StringArray trackedKeys = listener->configKeyMap[this];
     listener->configKeyMap.erase(this);
@@ -124,8 +128,9 @@ void ConfigFile::removeListener(ConfigFile::Listener* listener)
 /*
  * Announce new changes to each object tracking a particular key.
  */
-void ConfigFile::notifyListeners(String key)
+void ConfigFile::notifyListeners(juce::String key)
 {
+    using namespace juce;
     const ScopedLock lock(listenerLock);
     //since notifications are separated by key, and no variation exists between
     //key notifications, there's no need to make sure the queue is starting out
@@ -146,8 +151,9 @@ void ConfigFile::notifyListeners(String key)
 /*
  * Read in this object's data from a json config object
  */
-void ConfigFile::readDataFromJson(var& config, var & defaultConfig)
+void ConfigFile::readDataFromJson(juce::var& config, juce::var& defaultConfig)
 {
+    using namespace juce;
     std::vector<DataKey> dataKeys = getDataKeys();
     for (const DataKey& key : dataKeys)
     {
@@ -182,9 +188,9 @@ void ConfigFile::readDataFromJson(var& config, var & defaultConfig)
 /*
  * Copy all config data to a json object
  */
-void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
+void ConfigFile::copyDataToJson(juce::DynamicObject::Ptr jsonObj)
 {
-
+    using namespace juce;
     std::vector<DataKey> dataKeys = getDataKeys();
     for (const DataKey& key : dataKeys)
     {
@@ -216,9 +222,9 @@ void ConfigFile::copyDataToJson(DynamicObject::Ptr jsonObj)
  * Checks if a property exists in a config data object loaded from a json
  * file.
  */
-bool ConfigFile::propertyExists(var& config, String propertyKey)
+bool ConfigFile::propertyExists(juce::var& config, juce::String propertyKey)
 {
-
+    using namespace juce;
     var property = config.getProperty(propertyKey, var());
     return !property.isVoid();
 }
@@ -227,8 +233,10 @@ bool ConfigFile::propertyExists(var& config, String propertyKey)
  * Gets a property from json configuration data, or from default
  * configuration data if necessary
  */
-var ConfigFile::getProperty(var& config, var& defaultConfig, String key)
+juce::var ConfigFile::getProperty
+(juce::var& config, juce::var& defaultConfig, juce::String key)
 {
+    using namespace juce;
     if (propertyExists(config, key))
     {
         return config.getProperty(key, var());
@@ -264,6 +272,7 @@ void ConfigFile::markPendingChanges()
  */
 void ConfigFile::writeChanges()
 {
+    using namespace juce;
     if (!fileChangesPending)
     {
         return;

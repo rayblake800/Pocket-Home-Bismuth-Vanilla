@@ -8,7 +8,7 @@ appItem(appItem) { }
 /**
  * @return the display name of the associated app
  */
-String ConfigAppMenuItem::getAppName() const
+juce::String ConfigAppMenuItem::getAppName() const
 {
     return appItem.name;
 }
@@ -16,8 +16,9 @@ String ConfigAppMenuItem::getAppName() const
 /**
  * @return the application's launch command
  */
-String ConfigAppMenuItem::getCommand() const
+juce::String ConfigAppMenuItem::getCommand() const
 {
+    using namespace juce;
     String command = appItem.shell;
     if (appItem.launchInTerminal)
     {
@@ -38,7 +39,7 @@ bool ConfigAppMenuItem::isTerminalApp() const
 /**
  * @return the name or path used to load the icon file. 
  */
-String ConfigAppMenuItem::getIconName() const
+juce::String ConfigAppMenuItem::getIconName() const
 {
     return appItem.icon;
 }
@@ -60,7 +61,7 @@ bool ConfigAppMenuItem::canChangeIndex(int offset) const
 /**
  * Get an appropriate title to use for a deletion confirmation window.
  */
-String ConfigAppMenuItem::getConfirmDeleteTitle() const
+juce::String ConfigAppMenuItem::getConfirmDeleteTitle() const
 {
     return localeText(remove_APP) 
             + getAppName() + localeText(from_favorites);
@@ -69,7 +70,7 @@ String ConfigAppMenuItem::getConfirmDeleteTitle() const
 /**
  * Gets appropriate descriptive text for a deletion confirmation window.
  */
-String ConfigAppMenuItem::getConfirmDeleteMessage() const
+juce::String ConfigAppMenuItem::getConfirmDeleteMessage() const
 {
     return localeText(will_remove_link);
 }
@@ -77,7 +78,7 @@ String ConfigAppMenuItem::getConfirmDeleteMessage() const
 /**
  * @return the title to display over an editor for this menu item. 
  */
-String ConfigAppMenuItem::getEditorTitle() const
+juce::String ConfigAppMenuItem::getEditorTitle() const
 {
     return localeText(edit_app);
 }
@@ -99,7 +100,7 @@ std::function<void(AppMenuPopupEditor*) > ConfigAppMenuItem::getEditorCallback()
  * Edit this button's data source in the config file.
  */
 void ConfigAppMenuItem::editApp
-(String name, String icon, String command, bool terminal)
+(juce::String name, juce::String icon, juce::String command, bool terminal)
 {
     AppConfigFile appConfig;
     int index = appConfig.getFavoriteIndex(appItem);

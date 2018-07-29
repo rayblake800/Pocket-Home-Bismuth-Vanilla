@@ -19,7 +19,8 @@
  */
 
 
-class PokeLookAndFeel : public LookAndFeel_V4, public ColourConfigFile::Listener
+class PokeLookAndFeel : public juce::LookAndFeel_V4,
+        public ColourConfigFile::Listener
 {
 public:
     PokeLookAndFeel();
@@ -31,50 +32,75 @@ public:
      * 
      * @return seguibl, no other typeface is used.
      */
-    Typeface::Ptr getTypefaceForFont(const Font &font) override;
+    juce::Typeface::Ptr getTypefaceForFont(const juce::Font &font) override;
 
     /**
      * Draws the thumb portion of a linear Slider.
      */
-    void drawLinearSliderThumb(Graphics &g, int x, int y,
-            int width, int height, float sliderPos,
-            float minSliderPos, float maxSliderPos,
-            const Slider::SliderStyle style, Slider &slider) override;
-
-    
-    
+    void drawLinearSliderThumb(
+            juce::Graphics &g,
+            int x,
+            int y,
+            int width,
+            int height,
+            float sliderPos,
+            float minSliderPos,
+            float maxSliderPos,
+            const juce::Slider::SliderStyle style,
+            juce::Slider &slider) override;
+  
     /**
      * Draws the background of a linear slider.
      */
-    void drawLinearSliderBackground(Graphics &g, int x, int y,
-            int width, int height, float sliderPos,
-            float minSliderPos, float maxSliderPos,
-            const Slider::SliderStyle style, Slider &slider) override;
+    void drawLinearSliderBackground(
+            juce::Graphics &g,
+            int x,
+            int y,
+            int width,
+            int height,
+            float sliderPos,
+            float minSliderPos,
+            float maxSliderPos,
+            const juce::Slider::SliderStyle style,
+            juce::Slider &slider) override;
 
     /**
      * Draws the entire linear slider component.  
      */
-    void drawLinearSlider(Graphics &g, int x, int y,
-            int width, int height, float sliderPos,
-            float minSliderPos, float maxSliderPos,
-            const Slider::SliderStyle style, Slider &slider) override;
+    void drawLinearSlider(
+            juce::Graphics &g,
+            int x,
+            int y,
+            int width,
+            int height,
+            float sliderPos,
+            float minSliderPos,
+            float maxSliderPos,
+            const juce::Slider::SliderStyle style,
+            juce::Slider &slider) override;
 
     /**
      * Defines the radius in pixels of the Slider thumb.
      */
-    int getSliderThumbRadius(Slider &slider) override;
+    int getSliderThumbRadius(juce::Slider &slider) override;
 
     /**
      * Draws the text onto a TextButton.
      */
-    void drawButtonText(Graphics &g, TextButton &button,
-            bool isMouseOverButton, bool isButtonDown) override;
+    void drawButtonText(
+            juce::Graphics &g, 
+            juce::TextButton &button,
+            bool isMouseOverButton,
+            bool isButtonDown) override;
 
     /**
      * Draws the background of a Button component.
      */
-    void drawButtonBackground(Graphics &, Button &,
-            const Colour &backgroundColour, bool isMouseOverButton,
+    void drawButtonBackground(
+            juce::Graphics& g,
+            juce::Button& button,
+            const juce::Colour& backgroundColour,
+            bool isMouseOverButton,
             bool isButtonDown) override;
 
     /**
@@ -85,7 +111,7 @@ public:
      * @return the same cursor for all components, this application doesn't
      *          need different cursors for different components.
      */
-    MouseCursor getMouseCursorFor(Component &component) override;
+    juce::MouseCursor getMouseCursorFor(juce::Component &component) override;
 
    /**
     * Gets the default font to use for popup menu text.
@@ -93,7 +119,7 @@ public:
     * @return  The default typeface, set to the medium font size defined in
     *          ComponentConfigFile.
     */
-    Font getPopupMenuFont() override;
+    juce::Font getPopupMenuFont() override;
 
    /**
     * Gets the default font to use for combo box text.
@@ -101,7 +127,7 @@ public:
     * @return  The default typeface, set to the small font size defined in
     *          ComponentConfigFile.
     */  
-    Font getComboBoxFont (ComboBox&) override;
+    juce::Font getComboBoxFont (juce::ComboBox& comboBox) override;
 
    /**
     * Gets the default font to use for Label components.
@@ -109,7 +135,7 @@ public:
     * @return  The default typeface, set to the small font size defined in
     *          ComponentConfigFile.
     */ 
-    Font getLabelFont (Label&) override;
+    juce::Font getLabelFont (juce::Label& label) override;
 
 
    /**
@@ -118,7 +144,7 @@ public:
     * @return  The default typeface, set to the large font size defined in
     *          ComponentConfigFile.
     */ 
-    Font getAlertWindowTitleFont() override;
+    juce::Font getAlertWindowTitleFont() override;
    
    /**
     * Gets the default font to use for alert window message text.
@@ -126,7 +152,7 @@ public:
     * @return  The default typeface, set to the medium font size defined in
     *          ComponentConfigFile.
     */ 
-    Font getAlertWindowMessageFont() override;
+    juce::Font getAlertWindowMessageFont() override;
 
 private:
     /**
@@ -134,7 +160,7 @@ private:
      * 
      * @param key  The cursor visibility key.
      */
-    void nonColorValueChanged(String key) override;
+    void nonColorValueChanged(juce::String key) override;
     
     /**
      * Updates Component colours when they're changed in the ColourConfigFile.
@@ -145,14 +171,14 @@ private:
      * 
      * @param newColour  The new colour value to apply to the colourID.
      */
-    void colourValueChanged(int colourID, String colourKey, Colour newColour) 
-    override;
+    void colourValueChanged
+    (int colourID, juce::String colourKey, juce::Colour newColour) override;
 
     //Defines the maximum number of characters that will fit on a text button.
     static const int maxButtonStrSize = 30;
 
     //application font
-    Typeface::Ptr seguibl;
+    juce::Typeface::Ptr seguibl;
     //application cursor
-    MouseCursor::StandardCursorType cursor;
+    juce::MouseCursor::StandardCursorType cursor;
 };

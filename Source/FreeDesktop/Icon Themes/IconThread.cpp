@@ -3,12 +3,12 @@
 #include "XDGDirectories.h"
 #include "IconThread.h"
 
-const String IconThread::defaultIconPath =
+const juce::String IconThread::defaultIconPath =
         "/usr/share/pocket-home/appIcons/default.png";
 
-ReadWriteLock IconThread::iconLock;
+juce::ReadWriteLock IconThread::iconLock;
 
-ScopedPointer<ResourceManager::SharedResource> IconThread::sharedResource
+juce::ScopedPointer<ResourceManager::SharedResource> IconThread::sharedResource
         = nullptr;
 
 IconThread::IconThread() :
@@ -24,10 +24,14 @@ ResourceManager(sharedResource, iconLock,
 /*
  * Queues up an icon request.  
  */
-void IconThread::loadIcon(String icon, int size,
-        std::function<void(Image) > assignImage,
-        IconThemeIndex::Context context, int scale)
+void IconThread::loadIcon(
+        juce::String icon,
+        int size,
+        std::function<void(juce::Image) > assignImage,
+        IconThemeIndex::Context context,
+        int scale)
 {
+    using namespace juce;
     //DBG("IconThread::" << __func__ << ": Requesting icon " << icon 
     //        << ", target size " << size);
     //if the icon variable is a full path, return that
@@ -65,6 +69,7 @@ void IconThread::loadIcon(String icon, int size,
 IconThread::IconResource::IconResource() :
 Thread("IconThread") 
 { 
+    using namespace juce;
     //Icon directory search list and priority defined at
     //https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html
     iconDirectories.add(String(getenv("HOME")) + "/.icons");
@@ -185,6 +190,7 @@ IconThread::IconResource::getQueuedJob()
  */
 void IconThread::IconResource::run()
 {
+    using namespace juce;
     for(IconResource::QueuedJob activeJob = getQueuedJob();
         !threadShouldExit() && activeJob.icon.isNotEmpty();
         activeJob = getQueuedJob())
@@ -210,9 +216,10 @@ void IconThread::IconResource::run()
 /*
  * Search icon theme directories for an icon matching a given request.
  */
-String IconThread::IconResource::getIconPath
+juce::String IconThread::IconResource::getIconPath
 (const IconThread::IconResource::QueuedJob& request)
 {
+    using namespace juce;
     //First, search themes in order to find a matching icon
     for(const IconThemeIndex* themeIndex : iconThemes)
     {

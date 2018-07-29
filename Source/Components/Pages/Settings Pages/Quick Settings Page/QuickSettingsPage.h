@@ -18,7 +18,7 @@
  */
 
 class QuickSettingsPage : public PageComponent, public WindowFocusedTimer,
-private Slider::Listener, private Localized
+        private juce::Slider::Listener, private Localized
 {
 public:
     QuickSettingsPage();
@@ -41,31 +41,31 @@ public:
      * 
      * @param b
      */
-    void pageButtonClicked(Button *b) override;
+    void pageButtonClicked(juce::Button *b) override;
 
     /**
      * Slider::Listener requires this method to be implemented, but it's not 
      * actually needed.
      */
-    void sliderValueChanged(Slider* slider) { };
+    void sliderValueChanged(juce::Slider* slider) { };
     
     /**
      * Starts a timer to update the slider values as its being dragged.
      * 
      * @param slider
      */
-    void sliderDragStarted(Slider* slider);
+    void sliderDragStarted(juce::Slider* slider);
     
     /**
      * Stops the timer and immediately updates slider values.
      * 
      * @param slider
      */
-    void sliderDragEnded(Slider* slider);
+    void sliderDragEnded(juce::Slider* slider);
     
     //Tracks the slider currently being dragged so the timer callback knows
     //whether it should update brightness or volume
-    Slider* changingSlider;
+    juce::Slider* changingSlider;
 
     //Turns wifi on or off, shows connection state, and opens the wifi page.
     WifiSettingsComponent wifiComponent;

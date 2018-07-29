@@ -23,7 +23,7 @@ public:
      *                            wifi device.
      */
     PocketHomeWindow(
-            String windowName, 
+            juce::String windowName, 
             bool fakeWifi);
 
     virtual ~PocketHomeWindow() { }
@@ -49,7 +49,7 @@ private:
 
     //LoginPage will be initially shown instead of the pageStack if a password
     //has been set.
-    ScopedPointer<LoginPage> loginPage;
+    juce::ScopedPointer<LoginPage> loginPage;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PocketHomeWindow)
 };

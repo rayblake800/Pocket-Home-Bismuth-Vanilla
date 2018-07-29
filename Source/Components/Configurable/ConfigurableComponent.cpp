@@ -2,7 +2,7 @@
 #include "ComponentConfigFile.h"
 #include "ConfigurableComponent.h"
 
-ConfigurableComponent::ConfigurableComponent(const String& componentKey) :
+ConfigurableComponent::ConfigurableComponent(const juce::String& componentKey) :
 componentKey(componentKey)
 { 
     ComponentConfigFile config;
@@ -10,11 +10,12 @@ componentKey(componentKey)
     config.addListener(this,{componentKey});
 }
 
-/**
+/*
  * Load and apply this component's relative bounds from config.
  */
 void ConfigurableComponent::applyConfigBounds()
 {
+    using namespace juce;
     Component * component = dynamic_cast<Component*> (this);
 
     if (component == nullptr)
@@ -44,15 +45,11 @@ void ConfigurableComponent::applyConfigBounds()
     component->setBounds(newBounds);
 }
 
-
-
-
-    
 /*
  * Gets the componentKey that defines this component's bounds and asset
  * files
  */
-const String& ConfigurableComponent::getComponentKey() const
+const juce::String& ConfigurableComponent::getComponentKey() const
 {
     return componentKey;
 }
@@ -61,7 +58,7 @@ const String& ConfigurableComponent::getComponentKey() const
 /**
  * Load and apply all component data from the ComponentConfigFile.
  */
-void ConfigurableComponent::configValueChanged(String key)
+void ConfigurableComponent::configValueChanged(juce::String key)
 {
     ComponentConfigFile config;
     if(key != componentKey)

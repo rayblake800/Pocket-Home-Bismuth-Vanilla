@@ -94,7 +94,7 @@ public:
          * @param weight     Sets this row item's width, relative to the other
          *                   RowItems in the row.
          */
-        RowItem(Component* component, const unsigned int weight = 1) :
+        RowItem(juce::Component* component, const unsigned int weight = 1) :
         component(component), weight(weight) { }
              
         /**
@@ -109,7 +109,7 @@ public:
          * @return  The Component* assigned to this RowItem on creation.  This
          *          value may be null.
          */
-        Component* getComponent() const;
+        juce::Component* getComponent() const;
         
         /**
          * Gets the horizontal weight value assigned to this RowItem.
@@ -149,7 +149,7 @@ public:
          * Points to a component in the layout, or nullptr to add an empty space
          * in the layout.
          */
-        Component* component = nullptr;
+        juce::Component* component = nullptr;
 
         /**
          * Component width = total width * weight / xWeightSum[rowNumber]
@@ -523,7 +523,8 @@ public:
      *                      will add all components in the layout as children 
      *                      of parentToInit and make them visible.
      */
-    void setLayout(const Layout& layout, Component* parentToInit = nullptr);
+    void setLayout
+    (const Layout& layout, juce::Component* parentToInit = nullptr);
     
     /**
      * Changes the current layout, and immediately applies the updated layout
@@ -544,8 +545,9 @@ public:
      * @param duration     If animating the transition, this defines the
      *                     animation duration in milliseconds.
      */
-    void transitionLayout(const Layout& newLayout,
-            Component* parent,
+    void transitionLayout(
+            const Layout& newLayout,
+            juce::Component* parent,
             const TransitionAnimator::Transition transition
                 = TransitionAnimator::none,
             const unsigned int duration = 0);
@@ -554,7 +556,7 @@ public:
      * Adds all components in the layout to a parent component, and makes them
      * all visible.
      */
-    void addComponentsToParent(Component* parent);
+    void addComponentsToParent(juce::Component* parent);
 
     /**
      * Arranges the components within a bounding rectangle, optionally applying
@@ -567,7 +569,8 @@ public:
      * @param duration    The duration of any transition animation, in
      *                    milliseconds.
      */
-    void layoutComponents(const Rectangle<int>& bounds,
+    void layoutComponents(
+            const juce::Rectangle<int>& bounds,
             const TransitionAnimator::Transition transition
                 = TransitionAnimator::none,
             const unsigned int duration = 0);
@@ -593,7 +596,7 @@ private:
     Layout layout;
 
     //Holds the sum of component weights for each row
-    Array<unsigned int> xWeightSums;
+    juce::Array<unsigned int> xWeightSums;
 
     //holds the sum of component row weights.
     unsigned int yWeightSum = 0;

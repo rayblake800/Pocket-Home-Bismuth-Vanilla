@@ -12,7 +12,7 @@ public:
     /**
      * @param time  The time being used to generate text.
      */
-    LocalizedTime(Time time);
+    LocalizedTime(juce::Time time);
 
     virtual ~LocalizedTime() { }
 
@@ -26,10 +26,10 @@ public:
      *          if the time is not in the past, or the localized equivalent of
      *          "never" if the time is set to the Unix epoch.
      */
-    String approxTimePassed();
+    juce::String approxTimePassed();
 
 private:
-    Time time;
+    juce::Time time;
 
     //Localized text keys
     static const constexpr char * never = "never";

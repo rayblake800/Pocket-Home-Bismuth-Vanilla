@@ -27,8 +27,8 @@ public:
     class Listener;
 
     WifiStateManager
-    (std::function<ResourceManager::SharedResource*(ReadWriteLock&)> 
-            createWifiResource = [](ReadWriteLock& c)
+    (std::function<ResourceManager::SharedResource*(juce::ReadWriteLock&)> 
+            createWifiResource = [](juce::ReadWriteLock& c)
             {
                 return nullptr;
             });
@@ -109,6 +109,7 @@ public:
             case disconnecting:
                 return "disconnecting";
         }
+        return "unexpected state value!";
     }
     
     /**
@@ -174,7 +175,7 @@ public:
      * @return all wifi access points currently detected. If wifi is disabled, 
      *         this will return an empty list.
      */
-    Array<WifiAccessPoint> getVisibleAPs();
+    juce::Array<WifiAccessPoint> getVisibleAPs();
 
     /**
      * Checks if wifi is enabled.
@@ -200,7 +201,7 @@ public:
      *                   ignored if toConnect isn't secured.
      */
     void connectToAccessPoint(const WifiAccessPoint& toConnect,
-            String psk = String());
+            juce::String psk = juce::String());
 
     /**
      * Closes any active or activating wifi connection.
@@ -238,10 +239,10 @@ public:
      *          was active, or the Unix epoch time if no compatible
      *          compatible connection has a saved timestamp.
      */
-    Time lastConnectionTime(const WifiAccessPoint& accessPoint);
+    juce::Time lastConnectionTime(const WifiAccessPoint& accessPoint);
 
     class NetworkInterface : public ResourceManager::SharedResource, 
-    public Timer
+    public juce::Timer
     {
     public:
         /**
@@ -251,7 +252,7 @@ public:
 	 *                    device signals.  In any other case, it is assumed
 	 *                    that the caller acquired the lock already.
          */
-        NetworkInterface(ReadWriteLock& wifiLock);
+        NetworkInterface(juce::ReadWriteLock& wifiLock);
 
         virtual ~NetworkInterface() { }
 
@@ -297,7 +298,7 @@ public:
          * 
          * @return the list of all wifi access points close enough to detect.
          */
-        virtual Array<WifiAccessPoint> getVisibleAPs() = 0;
+        virtual juce::Array<WifiAccessPoint> getVisibleAPs() = 0;
 
         /**
          * Accesses the wifi device to check if wifi is enabled.
@@ -339,7 +340,7 @@ public:
          *                    toConnect isn't secured.
          */
         virtual void connectToAccessPoint(const WifiAccessPoint& toConnect,
-                String psk = String()) = 0;
+                juce::String psk = juce::String()) = 0;
 
         /**
          * Closes any active or activating wifi connection.
@@ -378,7 +379,7 @@ public:
          *          was active, or the Unix epoch time if no compatible
          *          compatible connection has a saved timestamp.
          */
-        virtual Time lastConnectionTime
+        virtual juce::Time lastConnectionTime
         (const WifiAccessPoint& accessPoint) = 0;
 
         //Milliseconds to wait before assuming that enabling or
@@ -474,11 +475,11 @@ public:
         void timerCallback() override;
         
         WifiState wifiState = missingNetworkDevice;
-        ReadWriteLock& wifiLock;
+        juce::ReadWriteLock& wifiLock;
         //All objects tracking the current wifi state.
-        Array<WifiStateManager::Listener*> listeners;
+        juce::Array<WifiStateManager::Listener*> listeners;
         //Listeners waiting for a pending notification.
-        Array<WifiStateManager::Listener*> notifyQueue;
+        juce::Array<WifiStateManager::Listener*> notifyQueue;
     };
 
 public:
@@ -532,10 +533,9 @@ public:
     };
 
 private:
-
     //ResourceManager shared object and lock;
-    static ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static ReadWriteLock stateLock;
+    static juce::ScopedPointer<ResourceManager::SharedResource> sharedResource;
+    static juce::ReadWriteLock stateLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiStateManager)
 };

@@ -13,14 +13,14 @@
  * getListItems().
  */
 
-class ListEditor : public Component, private Button::Listener,
-private Label::Listener, private ListBoxModel
+class ListEditor : public juce::Component, private juce::Button::Listener,
+private juce::Label::Listener, private juce::ListBoxModel
 {
 public:
     /**
      * @param initialList  Sets the initial contents of the list.
      */
-    ListEditor(StringArray initialList);
+    ListEditor(juce::StringArray initialList);
 
     virtual ~ListEditor() { }
 
@@ -40,14 +40,14 @@ public:
     /**
      * @return all list row strings.
      */
-    StringArray getListItems() const;
+    juce::StringArray getListItems() const;
 
     /**
      * Replace the existing item list entries with new ones.
      * 
      * @param newItems  The replacement list of strings.
      */
-    void setListItems(StringArray newItems);
+    void setListItems(juce::StringArray newItems);
 
     /**
      * Calls updateColours whenever component color values are changed. 
@@ -67,7 +67,7 @@ private:
      * 
      * @param source  The label component for one of the list rows.
      */
-    void labelTextChanged(Label *source);
+    void labelTextChanged(juce::Label *source);
 
     /**
      * Clicking a listBoxItem selects it.  This should not be called directly.
@@ -76,7 +76,7 @@ private:
      * 
      * @param mouseEvent
      */
-    void listBoxItemClicked(int row, const MouseEvent& mouseEvent);
+    void listBoxItemClicked(int row, const juce::MouseEvent& mouseEvent);
 
     /**
      * Double clicking a listBoxItem makes it editable.  This should not be
@@ -87,7 +87,7 @@ private:
      * @param mouseEvent
      */
     virtual void listBoxItemDoubleClicked
-    (int row, const MouseEvent & mouseEvent);
+    (int row, const juce::MouseEvent & mouseEvent);
 
     /**
      * Pressing the delete key removes the selected row.  This should not be
@@ -108,7 +108,7 @@ private:
      * Custom ListBox item component class, basically just a label with a 
      * delete button.
      **/
-    class ListItemComponent : public Label
+    class ListItemComponent : public juce::Label
     {
     public:
         /**
@@ -116,7 +116,7 @@ private:
          * 
          * @param owner The ListEditor containing this list item.
          */
-        ListItemComponent(String text, ListEditor * owner);
+        ListItemComponent(juce::String text, ListEditor * owner);
         
         virtual ~ListItemComponent() { }
 
@@ -124,7 +124,7 @@ private:
          * @param id  This should be set to String(rowIndex) by the
          *             ListEditor.
          */
-        void setButtonComponentID(String id);
+        void setButtonComponentID(juce::String id);
 
         /**
          * Sets button colour, used by the ListEditor to apply
@@ -132,7 +132,7 @@ private:
          * 
          * @param colour
          */
-        void setButtonColour(Colour colour);
+        void setButtonColour(juce::Colour colour);
 
         /**
          * Update the font and delete button to fit new bounds.
@@ -158,23 +158,23 @@ private:
      * 
      * @return                          The created/updated list component.
      */
-    Component* refreshComponentForRow(
+    juce::Component* refreshComponentForRow(
             int rowNumber,
             bool isRowSelected,
-            Component * existingComponentToUpdate);
+            juce::Component * existingComponentToUpdate);
 
     /**
      * Handles the add and delete item buttons.
      * 
      * @param buttonClicked
      */
-    void buttonClicked(Button* buttonClicked) override;
+    void buttonClicked(juce::Button* buttonClicked) override;
 
     /**
      * Implemented as an empty function, as the list item component
      * handles its own draw operations.
      */
-    void paintListBoxItem(int rowNumber, Graphics&g, int width,
+    void paintListBoxItem(int rowNumber, juce::Graphics&g, int width,
             int height, bool rowIsSelected) override { }
 
     /**
@@ -184,19 +184,19 @@ private:
     void resized() override;
 
     //Holds all list strings.
-    StringArray listItems;
+    juce::StringArray listItems;
 
     //Handles the layout of the list and the editor components.
     LayoutManager layoutManager;
 
     //The component displaying all list items.
-    ListBox listContainer;
+    juce::ListBox listContainer;
 
     //Text field for entering new list item text.
-    TextEditor newItemField;
+    juce::TextEditor newItemField;
 
     //Button for adding the contents of newItemField to the list.
-    TextButton addItemBtn;
+    juce::TextButton addItemBtn;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ListEditor)
 };

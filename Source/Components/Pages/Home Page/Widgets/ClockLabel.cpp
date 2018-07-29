@@ -5,6 +5,7 @@ ClockLabel::ClockLabel() :
 WindowFocusedTimer("ClockLabel"),
 ConfigurableLabel(ComponentConfigFile::clockLabelKey, "clockLabel", "00:00")
 {
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("ClockLabel");
 #    endif
@@ -23,6 +24,7 @@ ConfigurableLabel(ComponentConfigFile::clockLabelKey, "clockLabel", "00:00")
  */
 void ClockLabel::timerCallback()
 {
+    using namespace juce;
     Time timeNow = Time::getCurrentTime();
     String hours = String(use24HrMode
             ? timeNow.getHours() : timeNow.getHoursInAmPmFormat());
@@ -68,8 +70,9 @@ void ClockLabel::visibilityChanged()
 /**
  * Receives notification whenever clock configuration values change
  */
-void ClockLabel::extraConfigValueChanged(String key)
+void ClockLabel::extraConfigValueChanged(juce::String key)
 {
+    using namespace juce;
     MainConfigFile config;
     if (key == MainConfigFile::showClockKey)
     {

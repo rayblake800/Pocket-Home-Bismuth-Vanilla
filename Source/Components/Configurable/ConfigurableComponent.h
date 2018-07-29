@@ -20,7 +20,7 @@ public:
      * @param componentKey  Sets the componentKey that defines this component's
      *                       bounds and asset files.
      */
-    ConfigurableComponent(const String& componentKey);
+    ConfigurableComponent(const juce::String& componentKey);
 
     virtual ~ConfigurableComponent() { }
 
@@ -38,7 +38,7 @@ public:
      * 
      * @return  the stored component key. 
      */
-    const String& getComponentKey() const;
+    const juce::String& getComponentKey() const;
 
 protected:
     /**
@@ -59,8 +59,8 @@ protected:
      * 
      * @see PokeLookAndFeel.h
      */
-    virtual void applyConfigAssets(StringArray assetNames,
-            Array<Colour> colours) { }
+    virtual void applyConfigAssets(juce::StringArray assetNames,
+            juce::Array<juce::Colour> colours) { }
 
     /**
      * Handles updates to any tracked config key values other than the 
@@ -69,7 +69,7 @@ protected:
      * 
      * @param key     The updated data value's key.
      */
-    virtual void extraConfigValueChanged(String key) { }
+    virtual void extraConfigValueChanged(juce::String key) { }
 
 private:
     /**
@@ -77,10 +77,10 @@ private:
      * 
      * @param key     This selects the correct component data from config.
      */
-    void configValueChanged(String key) final override;
+    void configValueChanged(juce::String key) final override;
 
     //Component properties loaded from config
     ComponentConfigFile::ComponentSettings componentSettings;
     //this component's config key
-    const String componentKey;
+    const juce::String componentKey;
 };

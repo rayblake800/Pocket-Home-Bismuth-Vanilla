@@ -25,7 +25,7 @@ private:
      *
      * @return  Titles for all page buttons, in order.
      */
-    StringArray getButtonTitles();
+    juce::StringArray getButtonTitles();
 
     /**
      * Reloads page layout whenever the page becomes visible.
@@ -35,7 +35,7 @@ private:
     /**
      * Handle button clicks to open menu pages
      */
-    void pageButtonClicked(Button*) override;
+    void pageButtonClicked(juce::Button* button) override;
     
     
     class SettingsList : public PagedList

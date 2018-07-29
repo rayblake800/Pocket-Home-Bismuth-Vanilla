@@ -2,14 +2,13 @@
 #include "AppMenuPopupEditor.h"
 
 AppMenuPopupEditor::AppMenuPopupEditor(
-        String title,
+        juce::String title,
         std::function<void(AppMenuPopupEditor*) > onConfirm,
         bool showCategoryList,
         bool showCommandField) :
 PopupEditorComponent(title,
 [this, onConfirm](PopupEditorComponent* thisPopup)
 {
-
     onConfirm(this);
 }),
 Localized("AppMenuPopupEditor"),
@@ -74,7 +73,7 @@ AppMenuPopupEditor::~AppMenuPopupEditor() { }
 /**
  * @return the contents of the editable name field 
  */
-String AppMenuPopupEditor::getNameField()
+juce::String AppMenuPopupEditor::getNameField()
 {
     return nameEditor.getText();
 }
@@ -82,7 +81,7 @@ String AppMenuPopupEditor::getNameField()
 /**
  * @return the contents of the editable icon field 
  */
-String AppMenuPopupEditor::getIconField()
+juce::String AppMenuPopupEditor::getIconField()
 {
     return iconPathEditor.getText();
 }
@@ -90,7 +89,7 @@ String AppMenuPopupEditor::getIconField()
 /**
  * @return the contents of the editable category list. 
  */
-StringArray AppMenuPopupEditor::getCategories()
+juce::StringArray AppMenuPopupEditor::getCategories()
 {
     return categories;
 }
@@ -98,7 +97,7 @@ StringArray AppMenuPopupEditor::getCategories()
 /**
  * @return the contents of the editable launch command field.
  */
-String AppMenuPopupEditor::getCommandField()
+juce::String AppMenuPopupEditor::getCommandField()
 {
     return commandEditor.getText();
 }
@@ -114,7 +113,7 @@ bool AppMenuPopupEditor::launchInTerm()
 /**
  * Set the value stored in the editable name field.
  */
-void AppMenuPopupEditor::setNameField(String name)
+void AppMenuPopupEditor::setNameField(juce::String name)
 {
     nameEditor.setText(name);
 }
@@ -123,7 +122,7 @@ void AppMenuPopupEditor::setNameField(String name)
  * Set the value stored in the editable icon field, and update
  * the preview icon.
  */
-void AppMenuPopupEditor::setIconField(String icon)
+void AppMenuPopupEditor::setIconField(juce::String icon)
 {
     iconPathEditor.setText(icon);
 }
@@ -131,7 +130,7 @@ void AppMenuPopupEditor::setIconField(String icon)
 /**
  * Set the values stored in the editable category list.
  */
-void AppMenuPopupEditor::setCategories(StringArray categories)
+void AppMenuPopupEditor::setCategories(juce::StringArray categories)
 {
     this->categories = categories;
 }
@@ -139,7 +138,7 @@ void AppMenuPopupEditor::setCategories(StringArray categories)
 /**
  * Set the value stored in the editable launch command field.
  */
-void AppMenuPopupEditor::setCommandField(String command)
+void AppMenuPopupEditor::setCommandField(juce::String command)
 {
     commandEditor.setText(command);
 }
@@ -150,14 +149,15 @@ void AppMenuPopupEditor::setCommandField(String command)
 void AppMenuPopupEditor::setTerminalCheckbox(bool launchInTerm)
 {
     terminalCheckbox.setToggleState(launchInTerm,
-            NotificationType::dontSendNotification);
+            juce::NotificationType::dontSendNotification);
 }
 
 /**
  * Handles the category editor button.
  */
-void AppMenuPopupEditor::editorButtonClicked(Button* button)
+void AppMenuPopupEditor::editorButtonClicked(juce::Button* button)
 {
+    using namespace juce;
     if (button == &categoryEditButton)
     {
         categoryEditor = new CategoryPopupEditor(categories,
@@ -174,6 +174,7 @@ void AppMenuPopupEditor::editorButtonClicked(Button* button)
  */
 void AppMenuPopupEditor::fileSelected(FileSelectTextEditor* edited)
 {
+    using namespace juce;
     String newIcon = getIconField();
     IconThread iconThread;
     iconThread.loadIcon(newIcon, iconPreview.getWidth(), [this](Image iconImg)

@@ -9,7 +9,7 @@
  *        sides.
  */
 
-class IconSliderComponent : public Component
+class IconSliderComponent : public juce::Component
 {
 public:
     /**
@@ -21,7 +21,7 @@ public:
      * @param highImgAsset The asset name to use for the icon shown to the 
      *                      right of the slider.
      */
-    IconSliderComponent(String lowImgAsset, String highImgAsset);
+    IconSliderComponent(juce::String lowImgAsset, juce::String highImgAsset);
 
     virtual ~IconSliderComponent() { }
 
@@ -35,7 +35,7 @@ public:
      *                       this change.
      */
     void setValue(double newValue,
-            NotificationType notification = sendNotificationAsync);
+            juce::NotificationType notification = juce::sendNotificationAsync);
 
     /**
      * @return the current slider position value.
@@ -46,7 +46,7 @@ public:
      * @param listener   This will receive updates whenever the slider value
      *                    changes.
      */
-    void addListener(Slider::Listener* listener);
+    void addListener(juce::Slider::Listener* listener);
 
     /**
      * Use this to determine which IconSliderComponent is responsible for
@@ -56,7 +56,7 @@ public:
      * 
      * @return           true iff slider belongs to this IconSliderComponent.
      */
-    bool ownsSlider(Slider * sliderPtr);
+    bool ownsSlider(juce::Slider * sliderPtr);
 
     /** Sets the limits that the slider's value can take.
      * 
@@ -92,7 +92,7 @@ private:
     DrawableImageComponent highIcon;
 
     //Internal slider component.
-    Slider slider;
+    juce::Slider slider;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconSliderComponent)
 };

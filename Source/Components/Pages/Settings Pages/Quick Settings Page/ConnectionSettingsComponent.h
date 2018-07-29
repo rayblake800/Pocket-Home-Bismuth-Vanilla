@@ -16,8 +16,8 @@
  * connection page when clicked while the switch is enabled.
  */
 
-class ConnectionSettingsComponent : public Component,
-private Button::Listener
+class ConnectionSettingsComponent : public juce::Component,
+        private juce::Button::Listener
 {
 public:
     /**
@@ -29,7 +29,7 @@ public:
      */
     ConnectionSettingsComponent(
             std::function<void() > openConnectionPage,
-            const String& name = String());
+            const juce::String& name = juce::String());
 
     virtual ~ConnectionSettingsComponent() { }
 
@@ -80,7 +80,7 @@ private:
      * @return an appropriate asset file name for the connection type and
      *          status.
      */
-    virtual String getIconAsset() = 0;
+    virtual juce::String getIconAsset() = 0;
 
     /**
      * This will be called whenever the enable/disable switch is flipped.
@@ -97,7 +97,7 @@ private:
      * state of the enabled/disabled switch to determine an appropriate short
      * text value to print on the connection button.
      */
-    virtual String updateButtonText() = 0;
+    virtual juce::String updateButtonText() = 0;
 
     /**
      * Arranges child components to fit within bounds.
@@ -116,7 +116,7 @@ private:
      * 
      * @param b
      */
-    void buttonClicked(Button *b) override;
+    void buttonClicked(juce::Button *b) override;
 
     /**
      * Run refresh() when the component regains visibility.
@@ -127,13 +127,13 @@ private:
      * Connection button displays status text and opens the connection page
      * when possible.
      */
-    class ConnectionButton : public Button
+    class ConnectionButton : public juce::Button
     {
     public:
         /**
          * @param name    The internal component name
          */
-        ConnectionButton(const String& name = String());
+        ConnectionButton(const juce::String& name = juce::String());
 
         virtual ~ConnectionButton() { }
 
@@ -141,7 +141,7 @@ private:
          * Sets the text that will be printed on the button.
          * @param text
          */
-        void setText(const String &text);
+        void setText(const juce::String &text);
 
     private:
         /**
@@ -152,7 +152,7 @@ private:
          * @param isButtonDown
          */
         void paintButton
-        (Graphics &g, bool isMouseOverButton, bool isButtonDown) override;
+        (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown) override;
 
         /**
          * Calculates button text height based on button size.
@@ -165,7 +165,7 @@ private:
         //height
         int borderSize;
         //Connection information text
-        String displayText;
+        juce::String displayText;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionButton)
     };

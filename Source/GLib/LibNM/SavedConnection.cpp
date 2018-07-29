@@ -37,7 +37,7 @@ path(path)
 /**
  * Gets the connection's DBus path.
  */
-const String& SavedConnection::getPath() const
+const juce::String& SavedConnection::getPath() const
 {
     return path;
 }
@@ -67,8 +67,9 @@ NMPPConnection SavedConnection::getNMConnection() const
 /*
  * Gets the last recorded time this saved connection was active.
  */
-Time SavedConnection::lastConnectionTime()
+juce::Time SavedConnection::lastConnectionTime()
 { 
+    using namespace juce;
     Time lastTime;
     if(!isNull())
     {
@@ -91,6 +92,7 @@ Time SavedConnection::lastConnectionTime()
  */
 bool SavedConnection::hasSavedKey()
 {
+    using namespace juce;
     if(isNull())
     {
         return false;
@@ -177,6 +179,7 @@ bool SavedConnection::operator==(const SavedConnection& rhs) const
  */
 bool SavedConnection::operator==(NMConnection* rhs) const
 {
+    using namespace juce;
     return path == String(nm_connection_get_path(rhs));
 }
 
@@ -186,6 +189,7 @@ bool SavedConnection::operator==(NMConnection* rhs) const
  */
 void SavedConnection::createNMConnection()
 {
+    using namespace juce;
     if(isNull())
     {
         return;
@@ -344,6 +348,7 @@ GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
  */
 bool SavedConnection::hasSetting(const char* settingName) const
 {
+    using namespace juce;
     if(isNull())
     {
         return false;

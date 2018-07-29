@@ -20,22 +20,24 @@ static const constexpr char* configPathsVar = "XDG_CONFIG_DIRS";
 // Default paths to use if the XDG environment variables are not set.
 
 //Default user data directory, relative to $HOME
-static const String defaultDataDir   = "/.local/share";
+static const juce::String defaultDataDir   = "/.local/share";
 //Default user config directory, relative to $HOME
-static const String defaultConfigDir = "/.config";
+static const juce::String defaultConfigDir = "/.config";
 //Default user cache directory, relative to $HOME
-static const String defaultCacheDir = "/.cache";
+static const juce::String defaultCacheDir = "/.cache";
 //Default data paths to search after defaultDataDir
-static const String defaultDataPaths = "/usr/local/share:/usr/share";
+static const juce::String defaultDataPaths = "/usr/local/share:/usr/share";
 //Default config paths to search after defaultConfigDir
-static const String defaultConfigPaths = "/etc/xdg";
+static const juce::String defaultConfigPaths = "/etc/xdg";
 
 /*
  * Returns a string from an environment variable, or a default string if the
  * environment variable is unset or empty.  
  */
-static String getEnvOrDefaultString(const char* envVar, String defaultStr)
+static juce::String getEnvOrDefaultString
+(const char* envVar, juce::String defaultStr)
 {
+    using namespace juce;
     const char* envString = std::getenv(envVar);
     if(envString == nullptr || envString[0] == '\0')
     {
@@ -47,8 +49,9 @@ static String getEnvOrDefaultString(const char* envVar, String defaultStr)
 /*
  * Gets the user's home directory.
  */
-static String homePath()
+static juce::String homePath()
 {
+    using namespace juce;
     return String(getenv("HOME"));
 }
 
@@ -56,7 +59,7 @@ static String homePath()
  * Gets the path of the single base directory where user-specific data files
  * should be written.
  */
-String XDGDirectories::getUserDataPath()
+juce::String XDGDirectories::getUserDataPath()
 {
     return getEnvOrDefaultString(dataDirVar, homePath() + defaultDataDir);
 }
@@ -65,7 +68,7 @@ String XDGDirectories::getUserDataPath()
  * Gets the path of the single base directory where user-specific 
  * configuration files should be written.
  */
-String XDGDirectories::getUserConfigPath()
+juce::String XDGDirectories::getUserConfigPath()
 {
     return getEnvOrDefaultString(configDirVar, homePath() + defaultConfigDir);
 } 
@@ -74,7 +77,7 @@ String XDGDirectories::getUserConfigPath()
  * Gets the path of the single base directory where user-specific 
  * cache files should be written.
  */
-String XDGDirectories::getUserCachePath()
+juce::String XDGDirectories::getUserCachePath()
 {
     return getEnvOrDefaultString(cacheDirVar, homePath() + defaultCacheDir);
 }
@@ -83,8 +86,9 @@ String XDGDirectories::getUserCachePath()
  * Gets the path of the single base directory where user-specific 
  * runtime files should be written.
  */
-String XDGDirectories::getUserRuntimePath()
+juce::String XDGDirectories::getUserRuntimePath()
 {
+    using namespace juce;
     String runtimePath = getEnvOrDefaultString(runtimeDirVar, "");
     if(runtimePath.isEmpty())
     {
@@ -98,8 +102,9 @@ String XDGDirectories::getUserRuntimePath()
 /*
  * Gets the ordered list of directories to search for user data files.
  */
-StringArray XDGDirectories::getDataSearchPaths()
+juce::StringArray XDGDirectories::getDataSearchPaths()
 {
+    using namespace juce;
     String paths = getUserDataPath() + ":";
     paths += getEnvOrDefaultString(dataPathsVar, defaultDataPaths);
     return StringArray::fromTokens(paths, ":", "");
@@ -109,8 +114,9 @@ StringArray XDGDirectories::getDataSearchPaths()
  * Gets the ordered list of directories to search for user configuration
  * files.
  */
-StringArray XDGDirectories::getConfigSearchPaths()
+juce::StringArray XDGDirectories::getConfigSearchPaths()
 {
+    using namespace juce;
     String paths = getUserConfigPath() + ":";
     paths += getEnvOrDefaultString(configPathsVar, defaultConfigPaths);
     return StringArray::fromTokens(paths, ":", "");

@@ -17,7 +17,7 @@
  * and can be closed by pressing a button.
  */
 
-class LoginPage : public PageComponent, public TextEditor::Listener,
+class LoginPage : public PageComponent, public juce::TextEditor::Listener,
 private Localized
 {
 public:
@@ -50,7 +50,7 @@ private:
      * 
      * @param button  This should always be the loginButton.
      */
-    virtual void pageButtonClicked(Button *button) override;
+    virtual void pageButtonClicked(juce::Button *button) override;
 
     /**
      * If the return key is pressed, handle it the same as clicking the login
@@ -58,7 +58,7 @@ private:
      * 
      * @param editor
      */
-    virtual void textEditorReturnKeyPressed(TextEditor& editor) override;
+    virtual void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
 
     /**
      * Show an error message in a message box if logging in fails.
@@ -67,10 +67,10 @@ private:
 
     std::function<void() > loginCallback;
     bool foundPassword;
-    TextButton loginButton;
+    juce::TextButton loginButton;
     ScalingLabel passwordLabel;
-    TextEditor passwordField;
-    String hashedPassword;
+    juce::TextEditor passwordField;
+    juce::String hashedPassword;
     DrawableImageComponent ntcIcon;
 
     //localized text keys;

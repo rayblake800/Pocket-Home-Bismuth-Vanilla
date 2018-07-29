@@ -13,7 +13,7 @@
  * and switch between folder pages.
  */
 
-class PagedAppMenu : public AppMenuComponent, public Button::Listener
+class PagedAppMenu : public AppMenuComponent, public juce::Button::Listener
 {
 public:
     /**
@@ -40,7 +40,7 @@ private:
      * @return true iff the key press was used.
      */
     bool folderKeyPressed
-    (const KeyPress& key, AppMenuFolder* activeFolder) override;
+    (const juce::KeyPress& key, AppMenuFolder* activeFolder) override;
 
     /**
      * Creates a folder component object from a folder menu item.
@@ -55,7 +55,7 @@ private:
      */
     AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
-            std::map<String, AppMenuButton::Ptr>& buttonMap) override;
+            std::map<juce::String, AppMenuButton::Ptr>& buttonMap) override;
 
     /**
      * Returns the bounds where the given folder should be placed in the menu.
@@ -67,7 +67,7 @@ private:
      * @return  a rectangle specifying the location where the folder should be
      *          placed within the AppMenuComponent. 
      */
-    virtual Rectangle<int> updateFolderBounds
+    virtual juce::Rectangle<int> updateFolderBounds
     (const AppMenuFolder* folder, int folderIndex) override;
 
     /**
@@ -76,11 +76,11 @@ private:
      * @param button   The button pressed by the user.  This should be pageLeft,
      *                 pageRight, or closeFolderBtn
      */
-    void buttonClicked(Button* button) override;
+    void buttonClicked(juce::Button* button) override;
 
     //folder navigation key bindings
-    static const String pageLeftBinding;
-    static const String pageRightBinding;
+    static const juce::String pageLeftBinding;
+    static const juce::String pageRightBinding;
     //navigation buttons
     NavButton closeFolderBtn;
     NavButton pageLeft;

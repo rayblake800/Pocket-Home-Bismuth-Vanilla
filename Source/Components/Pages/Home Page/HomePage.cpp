@@ -8,7 +8,8 @@
 
 HomePage::HomePage() :
 PageComponent("HomePage"),
-frame(ComponentConfigFile::menuFrameKey, 0, RectanglePlacement::stretchToFit),
+frame(ComponentConfigFile::menuFrameKey, 0,
+        juce::RectanglePlacement::stretchToFit),
 powerButton(ComponentConfigFile::powerButtonKey),
 settingsButton(ComponentConfigFile::settingsButtonKey)
 {
@@ -47,8 +48,9 @@ settingsButton(ComponentConfigFile::settingsButtonKey)
  * should be calling this.  Depending on the key provided, this will update
  * the page background or recreate the AppMenu.
  */
-void HomePage::configValueChanged(String key)
+void HomePage::configValueChanged(juce::String key)
 {
+    using namespace juce;
     MainConfigFile mainConfig;
     if (key == MainConfigFile::backgroundKey)
     {
@@ -119,7 +121,7 @@ void HomePage::configValueChanged(String key)
  * Forward all clicks (except button clicks) to the appMenu so that it can 
  * potentially create a pop-up menu
  */
-void HomePage::mouseDown(const MouseEvent &event)
+void HomePage::mouseDown(const juce::MouseEvent &event)
 {
     if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
     {
@@ -133,7 +135,7 @@ void HomePage::mouseDown(const MouseEvent &event)
  * 
  * @param button
  */
-void HomePage::pageButtonClicked(Button * button)
+void HomePage::pageButtonClicked(juce::Button * button)
 {
     if (button == &settingsButton)
     {
@@ -149,8 +151,9 @@ void HomePage::pageButtonClicked(Button * button)
 /**
  * Forwards all key events to the AppMenu.
  */
-bool HomePage::keyPressed(const KeyPress& key)
+bool HomePage::keyPressed(const juce::KeyPress& key)
 {
+    using namespace juce;
     //don't interrupt animation or loading
     if (Desktop::getInstance().getAnimator().isAnimating(appMenu)
         || appMenu->isLoading())
@@ -167,7 +170,7 @@ void HomePage::visibilityChanged()
 {
     if (isShowing())
     {
-        MessageManager::callAsync([this]()
+        juce::MessageManager::callAsync([this]()
         {
             grabKeyboardFocus();
         });

@@ -24,7 +24,7 @@ namespace AssetFiles
      * @return                   the requested file, or an invalid file if 
      *                            nothing was found.
      */
-    File findAssetFile(const String& assetName, 
+    juce::File findAssetFile(const juce::String& assetName, 
             bool lookOutsideAssets = true);
 
     /**
@@ -41,7 +41,7 @@ namespace AssetFiles
      * @return                   the requested file's Image, or Image() if no 
      *                            valid image file was found.
      */
-    Image loadImageAsset(const String& assetName, 
+    juce::Image loadImageAsset(const juce::String& assetName, 
             bool lookOutsideAssets = true);
     
 
@@ -59,7 +59,7 @@ namespace AssetFiles
      * @return                   A new drawable if the file was valid, nullptr 
      *                            otherwise.
      */
-    Drawable * loadSVGDrawable(const String& assetName, 
+    juce::Drawable * loadSVGDrawable(const juce::String& assetName, 
             bool lookOutsideAssets = true);
     
     /**
@@ -76,7 +76,7 @@ namespace AssetFiles
      * @return                   A new drawable if the file was valid, nullptr 
      *                            otherwise.
      */
-    var loadJSONAsset(const String& assetName, 
+    juce::var loadJSONAsset(const juce::String& assetName, 
             bool lookOutsideAssets = true);
 
     // FIXME: don't hardcode this, maybe find it via .deb configuration

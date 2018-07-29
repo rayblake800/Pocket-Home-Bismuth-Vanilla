@@ -8,7 +8,7 @@
  *        whenever it is resized.
  */
 
-class ScalingLabel : public Label
+class ScalingLabel : public juce::Label
 {
 public:
 
@@ -21,8 +21,8 @@ public:
      *                        the text top and bottom and the label edges.
      */
     ScalingLabel(
-            const String& componentName = String(),
-            const String& labelText = String(),
+            const juce::String& componentName = juce::String(),
+            const juce::String& labelText = juce::String(),
             const int& fontPadding = 0);
 
     virtual ~ScalingLabel() { }
@@ -65,7 +65,7 @@ private:
          * @param propertyKey  One of the text size keys defined by 
          *                     ComponentConfigFile.
          */
-        virtual void configValueChanged(String propertyKey) override;
+        virtual void configValueChanged(juce::String propertyKey) override;
         
         ScalingLabel* label = nullptr;
     };

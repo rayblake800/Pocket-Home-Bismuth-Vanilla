@@ -55,7 +55,7 @@ public:
      * 
      * @return  the SSID as printable text.
      */
-    String getSSIDText() const;
+    juce::String getSSIDText() const;
     
     /**
      * Gets the MAC address of the wifi access point.
@@ -174,7 +174,7 @@ public:
          * 
          * @param property  The updated property type.
          */
-        void propertyChanged(GPPObject* source, String property) override;
+        void propertyChanged(GPPObject* source, juce::String property) override;
     };
     
     /**

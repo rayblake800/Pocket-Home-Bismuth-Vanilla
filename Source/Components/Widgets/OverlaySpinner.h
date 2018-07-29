@@ -12,7 +12,7 @@
  * @see Spinner.h
  */
 
-class OverlaySpinner : public Component
+class OverlaySpinner : public juce::Component
 {
 public:
 
@@ -36,7 +36,7 @@ public:
      * 
      * @param newText
      */
-    void setLoadingText(String newText);
+    void setLoadingText(juce::String newText);
 
 private:
 
@@ -46,7 +46,7 @@ private:
      * 
      * @param g
      */
-    void paint(Graphics & g) override;
+    void paint(juce::Graphics & g) override;
 
     /**
      * Update the spinner and loading text to fit overlay bounds.

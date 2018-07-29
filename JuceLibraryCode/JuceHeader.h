@@ -32,7 +32,7 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "pocket-home";
-    const char* const  versionString  = "0.0.1";
-    const int          versionNumber  = 0x1;
+    const char* const  versionString  = "0.0.8.10";
+    const int          versionNumber  = 0x80a;
 }
 #endif

@@ -95,7 +95,7 @@ bool WifiSettingsComponent::connectionPageAvailable()
 /**
  * @return the wifi icon
  */
-String WifiSettingsComponent::getIconAsset()
+juce::String WifiSettingsComponent::getIconAsset()
 {
     return "wifiIcon.svg";
 }
@@ -119,8 +119,9 @@ void WifiSettingsComponent::enabledStateChanged(bool enabled)
 /**
  * Sets the wifi button text based on the current wifi state.
  */
-String WifiSettingsComponent::updateButtonText()
+juce::String WifiSettingsComponent::updateButtonText()
 {
+    using namespace juce;
     WifiStateManager wifiManager;
     switch (wifiManager.getWifiState())
     {

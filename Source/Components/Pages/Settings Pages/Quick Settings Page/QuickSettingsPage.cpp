@@ -10,7 +10,6 @@ WindowFocusedTimer("QuickSettingsPage"),
 PageComponent("QuickSettingsPage"),
 wifiComponent([this]()
 {
-
     pushPageToStack(PageType::WifiSettings);
 }),
 //bluetoothComponent([this]
@@ -82,7 +81,7 @@ void QuickSettingsPage::timerCallback()
 /**
  * Opens the advanced settings page when its button is clicked.
  */
-void QuickSettingsPage::pageButtonClicked(Button *button)
+void QuickSettingsPage::pageButtonClicked(juce::Button *button)
 {
     if (button == &advancedPageButton)
     {
@@ -93,7 +92,7 @@ void QuickSettingsPage::pageButtonClicked(Button *button)
 /**
  * Starts a timer to update the slider values as its being dragged.
  */
-void QuickSettingsPage::sliderDragStarted(Slider* slider)
+void QuickSettingsPage::sliderDragStarted(juce::Slider* slider)
 {
     if (!isTimerRunning())
     {
@@ -105,7 +104,7 @@ void QuickSettingsPage::sliderDragStarted(Slider* slider)
 /**
  * Stops the timer and immediately updates slider values.
  */
-void QuickSettingsPage::sliderDragEnded(Slider* slider)
+void QuickSettingsPage::sliderDragEnded(juce::Slider* slider)
 {
     changingSlider = slider;
     timerCallback();

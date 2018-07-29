@@ -68,7 +68,7 @@ void FocusingListPage::updateList(TransitionAnimator::Transition transition,
 /*
  * Handles list item selection.
  */
-void FocusingListPage::pageButtonClicked(Button* button)
+void FocusingListPage::pageButtonClicked(juce::Button* button)
 {
     ListItem* listButton = dynamic_cast<ListItem*>(button);
     if(listButton != nullptr)
@@ -145,9 +145,10 @@ void FocusingListPage::ListItem::setIndex(const int newIndex)
 /*
  * Draws a border around the list item.
  */
-void FocusingListPage::ListItem::paintButton(Graphics &g,
+void FocusingListPage::ListItem::paintButton(juce::Graphics &g,
                 bool isMouseOverButton, bool isButtonDown) 
 { 
+    using namespace juce;
     g.setColour(findColour(Label::ColourIds::textColourId));
     g.drawRoundedRectangle(0, 0, getWidth(), getHeight(), 1, borderWidth);
 }
@@ -201,8 +202,8 @@ unsigned int FocusingListPage::FocusingList::getListSize()
  * Updates a list item, loading and applying its layout from the parent
  * FocusingListPage.
  */
-Component* FocusingListPage::FocusingList::updateListItem(Component* listItem,
-        unsigned int index) 
+juce::Component* FocusingListPage::FocusingList::updateListItem
+(juce::Component* listItem, unsigned int index) 
 {
     FocusingListPage* parentPage 
             = dynamic_cast<FocusingListPage*>(getParentComponent());

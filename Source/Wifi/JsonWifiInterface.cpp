@@ -4,10 +4,11 @@
 #include "JsonWifiInterface.h"
 #include "TempTimer.h"
 
-JsonWifiInterface::JsonWifiInterface(ReadWriteLock& wifiLock) : 
+JsonWifiInterface::JsonWifiInterface(juce::ReadWriteLock& wifiLock) : 
 WifiStateManager::NetworkInterface(wifiLock),
 wifiLock(wifiLock) 
 {
+    using namespace juce;
     auto json = JSON::parse(AssetFiles::findAssetFile("wifi.json"));
 
     for (const auto &apJson : *json.getArray())
@@ -71,8 +72,9 @@ WifiAccessPoint JsonWifiInterface::getActiveAP()
 /*
  * Returns the entire list of access points defined in wifi.json.
  */
-Array<WifiAccessPoint> JsonWifiInterface::getVisibleAPs()
+juce::Array<WifiAccessPoint> JsonWifiInterface::getVisibleAPs()
 {
+    using namespace juce;
     Array<WifiAccessPoint> accessPoints;
     if (isWifiEnabled())
     {
@@ -87,8 +89,9 @@ Array<WifiAccessPoint> JsonWifiInterface::getVisibleAPs()
  * four seconds.
  */
 void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
-        String psk)
+        juce::String psk)
 {
+    using namespace juce;
     if(toConnect.isNull())
     {
         DBG("JsonWifiInterface::" << __func__
@@ -192,6 +195,7 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
  */
 void JsonWifiInterface::disconnect()
 {
+    using namespace juce;
     if (!connected)
     {
         DBG("JsonWifiInterface::" << __func__ << ": no connection to kill");
@@ -218,6 +222,7 @@ void JsonWifiInterface::disconnect()
  */
 void JsonWifiInterface::enableWifi()
 {
+    using namespace juce;
     if (turningOn)
     {
         DBG("JsonWifiInterface::" << __func__ << ": already enabling wifi!");
@@ -253,6 +258,7 @@ void JsonWifiInterface::enableWifi()
  */
 void JsonWifiInterface::disableWifi()
 {
+    using namespace juce;
     if (turningOff)
     {
         DBG("JsonWifiInterface::" << __func__ << ": already disabling wifi!");

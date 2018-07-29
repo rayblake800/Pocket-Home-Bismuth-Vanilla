@@ -12,8 +12,9 @@
  * button to open a file picker and choose a file/directory path.
  */
 
-class FileSelectTextEditor : public Component,
-public TextEditor::Listener, public Button::Listener, private Localized
+class FileSelectTextEditor : public juce::Component,
+public juce::TextEditor::Listener, public juce::Button::Listener,
+private Localized
 {
 public:
 
@@ -37,10 +38,11 @@ public:
      * @param componentName  Sets the component name value
      */
     FileSelectTextEditor(
-            const String& selectionTitle = String(),
-            const String& selectionText = String(),
-            WildcardFileFilter fileFilter = imageFilter,
-            const String& componentName = String("fileSelectTextEditor"));
+            const juce::String& selectionTitle = juce::String(),
+            const juce::String& selectionText = juce::String(),
+            juce::WildcardFileFilter fileFilter = imageFilter,
+            const juce::String& componentName 
+            = juce::String("fileSelectTextEditor"));
     
     virtual ~FileSelectTextEditor() { }
 
@@ -54,12 +56,12 @@ public:
      * @param shouldNotify  Sets whether FileSelectTextEditor::Listener objects
      *                       will be notified of this change.
      */
-    void setText(String path, bool shouldNotify = true);
+    void setText(juce::String path, bool shouldNotify = true);
 
     /**
      * @return the text stored within this component's text editor box.
      */
-    String getText();
+    juce::String getText();
 
     /**
      * @param shouldShow Sets the file selection button next to the text editor
@@ -110,7 +112,7 @@ private:
      * 
      * @param editor this component's internal TextEditor object.
      */
-    void textEditorFocusLost(TextEditor& editor) override;
+    void textEditorFocusLost(juce::TextEditor& editor) override;
 
     /**
      * Runs notifyListeners when the editor is focused and the return key
@@ -118,7 +120,7 @@ private:
      * 
      * @param editor this component's internal TextEditor object.
      */
-    void textEditorReturnKeyPressed(TextEditor & editor) override;
+    void textEditorReturnKeyPressed(juce::TextEditor & editor) override;
 
     /**
      * Opens the file selection window when the file selection button is 
@@ -126,7 +128,7 @@ private:
      * 
      * @param button Should be this component's file selection button.
      */
-    void buttonClicked(Button* button) override;
+    void buttonClicked(juce::Button* button) override;
 
     /**
      * Resize child components to fit within the parent component.
@@ -135,31 +137,31 @@ private:
 
     //Editable text field, shows the selected path, or whatever other value
     //the user types in
-    TextEditor filePath;
+    juce::TextEditor filePath;
     
     //Opens the file selection window.
-    TextButton fileSelectButton;
+    juce::TextButton fileSelectButton;
     
     //iff true, display fileSelectButton
     bool showButton;
     
     //Sets which files the file selection window will allow.
-    WildcardFileFilter fileFilter;
+    juce::WildcardFileFilter fileFilter;
     
     //Title to display on the file selection window.
-    String selectionTitle;
+    juce::String selectionTitle;
     
     //Brief description to display on the file selection window.
-    String selectionText;
+    juce::String selectionText;
     
     //Stores all objects that track when this editor's value changes.
     std::set<Listener*> listeners;
     
     //Image preview component to use on the file selection window.
-    ImagePreviewComponent imagePreview;
+    juce::ImagePreviewComponent imagePreview;
 
     //Default selection properties for selecting images.
-    static const WildcardFileFilter imageFilter;
+    static const juce::WildcardFileFilter imageFilter;
     static const constexpr char * img_select_title = "img_select_title";
     static const constexpr char * img_select_text = "img_select_text";
 

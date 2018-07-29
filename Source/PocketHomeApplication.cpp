@@ -5,8 +5,9 @@
  * This is called by the Juce framework to initialize the program.
  * This will initialize audio and create the program window.
  */
-void PocketHomeApplication::initialise(const String &commandLine)
+void PocketHomeApplication::initialise(const juce::String &commandLine)
 {
+    using namespace juce;
     StringArray args;
     args.addTokens(commandLine, true);
 
@@ -37,6 +38,7 @@ void PocketHomeApplication::initialise(const String &commandLine)
  */
 void PocketHomeApplication::shutdown()
 {
+    using namespace juce;
     homeWindow = nullptr;
     LookAndFeel::setDefaultLookAndFeel(nullptr);
     lookAndFeel = nullptr;

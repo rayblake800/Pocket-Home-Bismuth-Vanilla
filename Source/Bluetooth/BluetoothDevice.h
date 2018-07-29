@@ -4,8 +4,8 @@
 class BluetoothDevice
 {
 public:
-    String name;
-    String macAddress;
+    juce::String name;
+    juce::String macAddress;
     bool connected;
     bool paired;
     
@@ -24,7 +24,7 @@ public:
         return macAddress != rhs.macAddress;
     }
 
-    String toString() const
+    juce::String toString() const
     {
         return name;
     }

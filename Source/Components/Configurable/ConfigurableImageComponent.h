@@ -22,9 +22,10 @@ public:
      * 
      * @param placement     Defines how the image will be scaled.
      */
-    ConfigurableImageComponent(String componentKey,
+    ConfigurableImageComponent(juce::String componentKey,
             int assetIndex = 0,
-            RectanglePlacement placement = RectanglePlacement::centred);
+            juce::RectanglePlacement placement 
+            = juce::RectanglePlacement::centred);
 
     ~ConfigurableImageComponent() { }
 
@@ -47,8 +48,8 @@ protected:
      * @param colours     Custom colour values used to replace the default 
      *                     image colours.
      */
-    virtual void applyConfigAssets(StringArray assetNames,
-            Array<Colour> colours);
+    virtual void applyConfigAssets(juce::StringArray assetNames,
+            juce::Array<juce::Colour> colours);
 
 private:
     //current selected image asset.

@@ -1,14 +1,14 @@
 #include "Utils.h"
 #include "FileSelectTextEditor.h"
 
-const WildcardFileFilter FileSelectTextEditor::imageFilter
+const juce::WildcardFileFilter FileSelectTextEditor::imageFilter
 ("*.png;*.jpg;*.jpeg;*.svg;*.gif;*.xpm", "", "Image files");
 
 FileSelectTextEditor::FileSelectTextEditor(
-        const String& selectionTitle,
-        const String& selectionText,
-        WildcardFileFilter fileFilter,
-        const String& componentName) :
+        const juce::String& selectionTitle,
+        const juce::String& selectionText,
+        juce::WildcardFileFilter fileFilter,
+        const juce::String& componentName) :
 Localized("FileSelectTextEditor"),
 fileFilter(fileFilter),
 selectionTitle(selectionTitle),
@@ -39,7 +39,7 @@ showButton(true)
 /**
  * Set the initial text value for the file selection text editor.
  */
-void FileSelectTextEditor::setText(String path, bool shouldNotify)
+void FileSelectTextEditor::setText(juce::String path, bool shouldNotify)
 {
     filePath.setText(path, shouldNotify);
     if (shouldNotify)
@@ -51,7 +51,7 @@ void FileSelectTextEditor::setText(String path, bool shouldNotify)
 /**
  * @return the text stored within this component's text editor box.
  */
-String FileSelectTextEditor::getText()
+juce::String FileSelectTextEditor::getText()
 {
     return filePath.getText();
 }
@@ -104,7 +104,7 @@ void FileSelectTextEditor::notifyListeners()
 /**
  * Runs notifyListeners when the editor loses focus.
  */
-void FileSelectTextEditor::textEditorFocusLost(TextEditor& editor)
+void FileSelectTextEditor::textEditorFocusLost(juce::TextEditor& editor)
 {
     if (editor.getText().isNotEmpty())
     {
@@ -116,7 +116,7 @@ void FileSelectTextEditor::textEditorFocusLost(TextEditor& editor)
  * Runs notifyListeners when the editor is focused and the return key
  * is pressed.
  */
-void FileSelectTextEditor::textEditorReturnKeyPressed(TextEditor & editor)
+void FileSelectTextEditor::textEditorReturnKeyPressed(juce::TextEditor & editor)
 {
     if (editor.getText().isNotEmpty())
     {
@@ -127,8 +127,9 @@ void FileSelectTextEditor::textEditorReturnKeyPressed(TextEditor & editor)
 /**
  * Opens the file selection window when the file selection button is clicked.
  */
-void FileSelectTextEditor::buttonClicked(Button* button)
+void FileSelectTextEditor::buttonClicked(juce::Button* button)
 {
+    using namespace juce;
     FileBrowserComponent browser(FileBrowserComponent::canSelectFiles |
             FileBrowserComponent::openMode,
             File(),
@@ -155,6 +156,7 @@ void FileSelectTextEditor::buttonClicked(Button* button)
  */
 void FileSelectTextEditor::resized()
 {
+    using namespace juce;
     Rectangle<int> bounds = getLocalBounds();
     if (!showButton)
     {
