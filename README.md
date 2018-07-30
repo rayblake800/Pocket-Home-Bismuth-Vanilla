@@ -1,15 +1,27 @@
 # Pocket-Home Bismuth Edition
 
- Pocket-Home Bismuth is an application launcher for PocketCHIP and other portable Linux devices.  It provides a highly configurable application menu, along with power controls, a basic WiFi manager, and other assorted system controls and information.
+  Pocket-Home Bismuth is an application launcher for PocketCHIP and other portable Linux devices.  It provides a highly configurable application menu, along with power controls, a basic WiFi manager, and other assorted system controls and information.
 
-  Bismuth is (mostly) compliant with FreeDesktop application menu standards, automatically detecting installed applications.  The menu interface and contents are fully customizable, either within the application or by editing ~/.pocket-home/apps.json.
+  Bismuth is (mostly) compliant with FreeDesktop application menu standards, automatically detecting installed applications.  The menu interface and contents are fully customizable, either within the application or by editing the config files in the ~/.pocket-home/ directory.
+ 
+[Add here: animated screenshot of paged menu]
+ 
+[Add here: animated screenshot of scrolling menu]
 
-  
-config options
+[Add here: animated screenshot of editing a desktop entry]
 
-wifi manager
+[Add here: animated screenshot of adding a folder]
 
-better process management
+
+
+### Less obvious improvements vs. ntc pocket-home and marshmallow:
+-Code is actually organized and documented.
+
+-Encapsulation and modularity enforced: no more .cpp files filled with four or five loosely related classes full of public data members.
+
+-All UI elements scale based on window size.  All UI elements are now either managed by a LayoutManager object or defined as a ConfigurableComponent.
+
+-WiFi code now runs in a proper GLib event loop, drastically improving Wifi performance.
 
 # Dependencies
      sudo apt-get install \
