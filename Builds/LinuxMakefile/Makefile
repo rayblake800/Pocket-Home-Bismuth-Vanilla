@@ -167,7 +167,8 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/BatteryMonitor_95f8a5db.o \
   $(JUCE_OBJDIR)/Display_81e1917e.o \
   $(JUCE_OBJDIR)/I2CBus_459d5774.o \
-  $(JUCE_OBJDIR)/LinuxProcess_483b4949.o \
+  $(JUCE_OBJDIR)/X11Utils_fffc5ae7.o \
+  $(JUCE_OBJDIR)/ProcessUtils_6fe72270.o \
   $(JUCE_OBJDIR)/AssetFiles_de972815.o \
   $(JUCE_OBJDIR)/ResourceManager_5acafb1b.o \
   $(JUCE_OBJDIR)/LocalizedTime_cb579984.o \
@@ -696,9 +697,14 @@ $(JUCE_OBJDIR)/I2CBus_459d5774.o: ../../Source/PocketCHIP/I2CBus.cpp
 	@echo "Compiling I2CBus.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/LinuxProcess_483b4949.o: ../../Source/Util/LinuxProcess.cpp
+$(JUCE_OBJDIR)/X11Utils_fffc5ae7.o: ../../Source/Util/X11Utils.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling LinuxProcess.cpp"
+	@echo "Compiling X11Utils.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ProcessUtils_6fe72270.o: ../../Source/Util/ProcessUtils.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ProcessUtils.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AssetFiles_de972815.o: ../../Source/Util/AssetFiles.cpp

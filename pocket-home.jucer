@@ -411,9 +411,11 @@
         <FILE id="b2jNEM" name="I2CBus.h" compile="0" resource="0" file="Source/PocketCHIP/I2CBus.h"/>
       </GROUP>
       <GROUP id="{3911B28B-4F73-61C8-49FD-75C1B19EC83E}" name="Util">
-        <FILE id="c2OgcT" name="LinuxProcess.cpp" compile="1" resource="0"
-              file="Source/Util/LinuxProcess.cpp"/>
-        <FILE id="tbiPsS" name="LinuxProcess.h" compile="0" resource="0" file="Source/Util/LinuxProcess.h"/>
+        <FILE id="Wa7niC" name="X11Utils.cpp" compile="1" resource="0" file="Source/Util/X11Utils.cpp"/>
+        <FILE id="IcDWWY" name="X11Utils.h" compile="0" resource="0" file="Source/Util/X11Utils.h"/>
+        <FILE id="c2OgcT" name="ProcessUtils.cpp" compile="1" resource="0"
+              file="Source/Util/ProcessUtils.cpp"/>
+        <FILE id="tbiPsS" name="ProcessUtils.h" compile="0" resource="0" file="Source/Util/ProcessUtils.h"/>
         <FILE id="U4ygJ9" name="AssetFiles.cpp" compile="1" resource="0" file="Source/Util/AssetFiles.cpp"/>
         <FILE id="cXrxti" name="AssetFiles.h" compile="0" resource="0" file="Source/Util/AssetFiles.h"/>
         <FILE id="Yl2sdL" name="ResourceManager.cpp" compile="1" resource="0"

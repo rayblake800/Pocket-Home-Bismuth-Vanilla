@@ -6,7 +6,6 @@
         <df name="appIcons">
         </df>
         <df name="configuration">
-          <in>colours.json</in>
         </df>
         <df name="fonts">
         </df>
@@ -5477,11 +5476,15 @@
       <df name="dev scripts">
       </df>
       <df name="docs">
-        <df name="html">
-          <df name="search">
+        <df name="Doxygen">
+          <df name="html">
+            <df name="search">
+            </df>
+          </df>
+          <df name="latex">
           </df>
         </df>
-        <df name="latex">
+        <df name="images">
         </df>
       </df>
       <df name="JuceLibraryCode">
@@ -5771,12 +5774,12 @@
           <in>AppLauncher.h</in>
           <in>AssetFiles.cpp</in>
           <in>AssetFiles.h</in>
-          <in>LinuxProcess.cpp</in>
-          <in>LinuxProcess.h</in>
           <in>Localized.cpp</in>
           <in>Localized.h</in>
           <in>LocalizedTime.cpp</in>
           <in>LocalizedTime.h</in>
+          <in>ProcessUtils.cpp</in>
+          <in>ProcessUtils.h</in>
           <in>ResourceManager.cpp</in>
           <in>ResourceManager.h</in>
           <in>TempTimer.cpp</in>
@@ -5787,6 +5790,8 @@
           <in>WindowFocus.h</in>
           <in>WindowFocusedTimer.cpp</in>
           <in>WindowFocusedTimer.h</in>
+          <in>X11Utils.cpp</in>
+          <in>X11Utils.h</in>
         </df>
         <df name="Wifi">
           <in>JsonWifiInterface.cpp</in>
@@ -5802,6 +5807,9 @@
         <in>Main.cpp</in>
         <in>PocketHomeApplication.cpp</in>
         <in>PocketHomeApplication.h</in>
+      </df>
+      <df name="Tests">
+        <in>catch.hpp</in>
       </df>
     </df>
     <itemPath>assets/configuration/apps.json</itemPath>

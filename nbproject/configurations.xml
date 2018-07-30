@@ -1669,11 +1669,7 @@
           <df name="modules">
             <df name="juce_analytics">
               <df name="analytics">
-                <in>juce_Analytics.cpp</in>
                 <in>juce_ButtonTracker.cpp</in>
-              </df>
-              <df name="destinations">
-                <in>juce_ThreadedAnalyticsDestination.cpp</in>
               </df>
               <in>juce_analytics.cpp</in>
             </df>
@@ -1686,11 +1682,9 @@
               <df name="effects">
                 <in>juce_CatmullRomInterpolator.cpp</in>
                 <in>juce_IIRFilter.cpp</in>
-                <in>juce_LagrangeInterpolator.cpp</in>
               </df>
               <df name="midi">
                 <in>juce_MidiBuffer.cpp</in>
-                <in>juce_MidiFile.cpp</in>
                 <in>juce_MidiKeyboardState.cpp</in>
                 <in>juce_MidiMessage.cpp</in>
                 <in>juce_MidiMessageSequence.cpp</in>
@@ -1718,20 +1712,15 @@
                 <in>juce_ReverbAudioSource.cpp</in>
                 <in>juce_ToneGeneratorAudioSource.cpp</in>
               </df>
-              <df name="synthesisers">
-                <in>juce_Synthesiser.cpp</in>
-              </df>
               <in>juce_audio_basics.cpp</in>
               <in>juce_audio_basics.mm</in>
             </df>
             <df name="juce_audio_devices">
               <df name="audio_io">
-                <in>juce_AudioDeviceManager.cpp</in>
                 <in>juce_AudioIODevice.cpp</in>
                 <in>juce_AudioIODeviceType.cpp</in>
               </df>
               <df name="midi_io">
-                <in>juce_MidiMessageCollector.cpp</in>
                 <in>juce_MidiOutput.cpp</in>
               </df>
               <df name="native">
@@ -1752,7 +1741,6 @@
                 <in>juce_win32_WASAPI.cpp</in>
               </df>
               <df name="sources">
-                <in>juce_AudioSourcePlayer.cpp</in>
                 <in>juce_AudioTransportSource.cpp</in>
               </df>
               <in>juce_audio_devices.cpp</in>
@@ -1762,52 +1750,16 @@
               <df name="codecs">
                 <df name="flac">
                   <df name="libFLAC">
-                    <in>bitmath.c</in>
-                    <in>bitreader.c</in>
-                    <in>bitwriter.c</in>
-                    <in>cpu.c</in>
-                    <in>crc.c</in>
-                    <in>fixed.c</in>
-                    <in>float.c</in>
                     <in>format.c</in>
-                    <in>lpc_flac.c</in>
-                    <in>md5.c</in>
-                    <in>memory.c</in>
-                    <in>stream_decoder.c</in>
-                    <in>stream_encoder.c</in>
-                    <in>stream_encoder_framing.c</in>
-                    <in>window_flac.c</in>
                   </df>
                 </df>
                 <df name="oggvorbis">
                   <df name="libvorbis-1.3.2">
                     <df name="lib">
-                      <in>analysis.c</in>
-                      <in>bitrate.c</in>
-                      <in>block.c</in>
-                      <in>codebook.c</in>
-                      <in>envelope.c</in>
-                      <in>floor0.c</in>
-                      <in>floor1.c</in>
-                      <in>info.c</in>
                       <in>lookup.c</in>
-                      <in>lpc.c</in>
-                      <in>lsp.c</in>
-                      <in>mapping0.c</in>
-                      <in>mdct.c</in>
-                      <in>psy.c</in>
-                      <in>registry.c</in>
-                      <in>res0.c</in>
-                      <in>sharedbook.c</in>
-                      <in>smallft.c</in>
-                      <in>synthesis.c</in>
-                      <in>vorbisenc.c</in>
-                      <in>vorbisfile.c</in>
-                      <in>window.c</in>
                     </df>
                   </df>
                   <in>bitwise.c</in>
-                  <in>framing.c</in>
                 </df>
                 <in>juce_AiffAudioFormat.cpp</in>
                 <in>juce_CoreAudioFormat.cpp</in>
@@ -1827,16 +1779,10 @@
                 <in>juce_AudioSubsectionReader.cpp</in>
                 <in>juce_BufferingAudioFormatReader.cpp</in>
               </df>
-              <df name="sampler">
-                <in>juce_Sampler.cpp</in>
-              </df>
               <in>juce_audio_formats.cpp</in>
               <in>juce_audio_formats.mm</in>
             </df>
             <df name="juce_audio_plugin_client">
-              <df name="AAX">
-                <in>juce_AAX_Wrapper.cpp</in>
-              </df>
               <df name="AU">
                 <df name="CoreAudioUtilityClasses">
                   <in>AUBase.cpp</in>
@@ -1861,7 +1807,6 @@
                   <in>MusicDeviceBase.cpp</in>
                 </df>
                 <in>juce_AU_Wrapper.mm</in>
-                <in>juce_AUv3_Wrapper.mm</in>
               </df>
               <df name="RTAS">
                 <in>juce_RTAS_DigiCode1.cpp</in>
@@ -1874,15 +1819,8 @@
               <df name="Standalone">
                 <in>juce_StandaloneFilterApp.cpp</in>
               </df>
-              <df name="utility">
-                <in>juce_PluginUtilities.cpp</in>
-              </df>
               <df name="VST">
                 <in>juce_VST_Wrapper.cpp</in>
-                <in>juce_VST_Wrapper.mm</in>
-              </df>
-              <df name="VST3">
-                <in>juce_VST3_Wrapper.cpp</in>
               </df>
               <in>juce_audio_plugin_client_AAX.cpp</in>
               <in>juce_audio_plugin_client_AAX.mm</in>
@@ -1910,11 +1848,9 @@
                 <in>juce_AudioUnitPluginFormat.mm</in>
                 <in>juce_LADSPAPluginFormat.cpp</in>
                 <in>juce_LegacyAudioParameter.cpp</in>
-                <in>juce_VST3PluginFormat.cpp</in>
                 <in>juce_VSTPluginFormat.cpp</in>
               </df>
               <df name="processors">
-                <in>juce_AudioPluginInstance.cpp</in>
                 <in>juce_AudioProcessor.cpp</in>
                 <in>juce_AudioProcessorEditor.cpp</in>
                 <in>juce_AudioProcessorGraph.cpp</in>
@@ -1934,11 +1870,7 @@
               <in>juce_audio_processors.mm</in>
             </df>
             <df name="juce_audio_utils">
-              <df name="audio_cd">
-                <in>juce_AudioCDReader.cpp</in>
-              </df>
               <df name="gui">
-                <in>juce_AudioAppComponent.cpp</in>
                 <in>juce_AudioDeviceSelectorComponent.cpp</in>
                 <in>juce_AudioThumbnail.cpp</in>
                 <in>juce_AudioThumbnailCache.cpp</in>
@@ -1959,7 +1891,6 @@
               </df>
               <df name="players">
                 <in>juce_AudioProcessorPlayer.cpp</in>
-                <in>juce_SoundPlayer.cpp</in>
               </df>
               <in>juce_audio_utils.cpp</in>
               <in>juce_audio_utils.mm</in>
@@ -1980,68 +1911,11 @@
             </df>
             <df name="juce_box2d">
               <df name="box2d">
-                <df name="Collision">
-                  <df name="Shapes">
-                    <in>b2ChainShape.cpp</in>
-                    <in>b2CircleShape.cpp</in>
-                    <in>b2EdgeShape.cpp</in>
-                    <in>b2PolygonShape.cpp</in>
-                  </df>
-                  <in>b2BroadPhase.cpp</in>
-                  <in>b2CollideCircle.cpp</in>
-                  <in>b2CollideEdge.cpp</in>
-                  <in>b2CollidePolygon.cpp</in>
-                  <in>b2Collision.cpp</in>
-                  <in>b2Distance.cpp</in>
-                  <in>b2DynamicTree.cpp</in>
-                  <in>b2TimeOfImpact.cpp</in>
-                </df>
-                <df name="Common">
-                  <in>b2BlockAllocator.cpp</in>
-                  <in>b2Draw.cpp</in>
-                  <in>b2Math.cpp</in>
-                  <in>b2Settings.cpp</in>
-                  <in>b2StackAllocator.cpp</in>
-                  <in>b2Timer.cpp</in>
-                </df>
                 <df name="Dynamics">
-                  <df name="Contacts">
-                    <in>b2ChainAndCircleContact.cpp</in>
-                    <in>b2ChainAndPolygonContact.cpp</in>
-                    <in>b2CircleContact.cpp</in>
-                    <in>b2Contact.cpp</in>
-                    <in>b2ContactSolver.cpp</in>
-                    <in>b2EdgeAndCircleContact.cpp</in>
-                    <in>b2EdgeAndPolygonContact.cpp</in>
-                    <in>b2PolygonAndCircleContact.cpp</in>
-                    <in>b2PolygonContact.cpp</in>
-                  </df>
                   <df name="Joints">
-                    <in>b2DistanceJoint.cpp</in>
-                    <in>b2FrictionJoint.cpp</in>
-                    <in>b2GearJoint.cpp</in>
-                    <in>b2Joint.cpp</in>
-                    <in>b2MouseJoint.cpp</in>
                     <in>b2PrismaticJoint.cpp</in>
-                    <in>b2PulleyJoint.cpp</in>
-                    <in>b2RevoluteJoint.cpp</in>
-                    <in>b2RopeJoint.cpp</in>
-                    <in>b2WeldJoint.cpp</in>
-                    <in>b2WheelJoint.cpp</in>
                   </df>
-                  <in>b2Body.cpp</in>
-                  <in>b2ContactManager.cpp</in>
-                  <in>b2Fixture.cpp</in>
-                  <in>b2Island.cpp</in>
-                  <in>b2World.cpp</in>
-                  <in>b2WorldCallbacks.cpp</in>
                 </df>
-                <df name="Rope">
-                  <in>b2Rope.cpp</in>
-                </df>
-              </df>
-              <df name="utils">
-                <in>juce_Box2DRenderer.cpp</in>
               </df>
               <in>juce_box2d.cpp</in>
             </df>
@@ -2079,12 +1953,10 @@
             <df name="juce_cryptography">
               <df name="encryption">
                 <in>juce_BlowFish.cpp</in>
-                <in>juce_Primes.cpp</in>
                 <in>juce_RSAKey.cpp</in>
               </df>
               <df name="hashing">
                 <in>juce_MD5.cpp</in>
-                <in>juce_SHA256.cpp</in>
                 <in>juce_Whirlpool.cpp</in>
               </df>
               <in>juce_cryptography.cpp</in>
@@ -2186,9 +2058,6 @@
                 <in>juce_LuaCodeTokeniser.cpp</in>
                 <in>juce_XMLCodeTokeniser.cpp</in>
               </df>
-              <df name="documents">
-                <in>juce_FileBasedDocument.cpp</in>
-              </df>
               <df name="misc">
                 <in>juce_AnimatedAppComponent.cpp</in>
                 <in>juce_BubbleMessageComponent.cpp</in>
@@ -2228,13 +2097,9 @@
                 <in>juce_OpenGLFrameBuffer.cpp</in>
                 <in>juce_OpenGLGraphicsContext.cpp</in>
                 <in>juce_OpenGLHelpers.cpp</in>
-                <in>juce_OpenGLImage.cpp</in>
                 <in>juce_OpenGLPixelFormat.cpp</in>
                 <in>juce_OpenGLShaderProgram.cpp</in>
                 <in>juce_OpenGLTexture.cpp</in>
-              </df>
-              <df name="utils">
-                <in>juce_OpenGLAppComponent.cpp</in>
               </df>
               <in>juce_opengl.cpp</in>
               <in>juce_opengl.mm</in>
@@ -2247,7 +2112,6 @@
                 <in>juce_OSCMessage.cpp</in>
                 <in>juce_OSCReceiver.cpp</in>
                 <in>juce_OSCSender.cpp</in>
-                <in>juce_OSCTimeTag.cpp</in>
                 <in>juce_OSCTypes.cpp</in>
               </df>
               <in>juce_osc.cpp</in>
@@ -2258,7 +2122,6 @@
               </df>
               <df name="marketplace">
                 <in>juce_OnlineUnlockForm.cpp</in>
-                <in>juce_OnlineUnlockStatus.cpp</in>
                 <in>juce_TracktionMarketplaceStatus.cpp</in>
               </df>
               <df name="native">
@@ -2271,9 +2134,6 @@
             <df name="juce_video">
               <df name="capture">
                 <in>juce_CameraDevice.cpp</in>
-              </df>
-              <df name="playback">
-                <in>juce_VideoComponent.cpp</in>
               </df>
               <in>juce_video.cpp</in>
               <in>juce_video.mm</in>
@@ -2458,11 +2318,13 @@
           <in>AssetFiles.cpp</in>
           <in>Localized.cpp</in>
           <in>LocalizedTime.cpp</in>
+          <in>ProcessUtils.cpp</in>
           <in>ResourceManager.cpp</in>
           <in>TempTimer.cpp</in>
           <in>Utils.cpp</in>
           <in>WindowFocus.cpp</in>
           <in>WindowFocusedTimer.cpp</in>
+          <in>X11Utils.cpp</in>
         </df>
         <df name="Wifi">
           <in>JsonWifiInterface.cpp</in>
@@ -2480,6 +2342,11 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
       <itemPath>nbproject/private/launcher.properties</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
     </logicalFolder>
     <itemPath>assets/configuration/apps.json</itemPath>
     <itemPath>assets/configuration/components.json</itemPath>
@@ -2988,6 +2855,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Configurable/ConfigurableImageButton.cpp"
@@ -3191,6 +3061,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Pages/PageStackComponent.cpp"
@@ -3198,6 +3071,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Pages/Power Page/FelPage.cpp"
@@ -3212,6 +3088,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Pages/Settings Pages/DateTime Page/DateTimePage.cpp"
@@ -3247,6 +3126,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Pages/Settings Pages/Network Pages/WifiSettingsPage.cpp"
@@ -3324,6 +3206,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/PokeLookAndFeel.cpp"
@@ -3331,6 +3216,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/TransitionAnimator.cpp"
@@ -3338,6 +3226,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/ColourPicker.cpp"
@@ -3352,6 +3243,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/DrawableImageButton.cpp"
@@ -3373,6 +3267,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/IconSliderComponent.cpp"
@@ -3380,6 +3277,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/ListEditor.cpp"
@@ -3401,6 +3301,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/PagedList.cpp"
@@ -3422,6 +3325,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/ScalingTextButton.cpp"
@@ -3436,6 +3342,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/SwitchComponent.cpp"
@@ -3443,6 +3352,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Config Files/AppConfigFile.cpp"
@@ -3471,6 +3383,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Config Files/MainConfigFile.cpp"
@@ -3513,6 +3428,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/FreeDesktop/XDGDirectories.cpp"
@@ -3531,6 +3449,9 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/GLib/GLibSignalHandler.cpp" ex="false" tool="1" flavor2="11">
@@ -3604,10 +3525,16 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/PocketCHIP/Display.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/PocketCHIP/I2CBus.cpp" ex="false" tool="1" flavor2="11">
@@ -3624,22 +3551,41 @@
       </item>
       <item path="Source/Util/AssetFiles.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Util/Localized.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Util/LocalizedTime.cpp" ex="false" tool="1" flavor2="11">
+        <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
+      <item path="Source/Util/ProcessUtils.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
         </ccTool>
       </item>
       <item path="Source/Util/ResourceManager.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Util/TempTimer.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Util/Utils.cpp" ex="false" tool="1" flavor2="11">
@@ -3654,6 +3600,10 @@
             ex="false"
             tool="1"
             flavor2="11">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="Source/Util/X11Utils.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
         </ccTool>
       </item>
@@ -12899,21 +12849,7 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_analytics/analytics/juce_Analytics.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_analytics/analytics/juce_ButtonTracker.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_analytics/destinations/juce_ThreadedAnalyticsDestination.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -12962,13 +12898,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_audio_basics/effects/juce_LagrangeInterpolator.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_audio_basics/juce_audio_basics.cpp"
             ex="false"
             tool="1"
@@ -12984,13 +12913,6 @@
         </ccTool>
       </item>
       <item path="deps/JUCE/modules/juce_audio_basics/midi/juce_MidiBuffer.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_basics/midi/juce_MidiFile.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -13151,20 +13073,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_audio_basics/synthesisers/juce_Synthesiser.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_devices/audio_io/juce_AudioDeviceManager.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_audio_devices/audio_io/juce_AudioIODevice.cpp"
             ex="false"
             tool="1"
@@ -13187,13 +13095,6 @@
         </ccTool>
       </item>
       <item path="deps/JUCE/modules/juce_audio_devices/juce_audio_devices.mm"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_devices/midi_io/juce_MidiMessageCollector.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -13312,13 +13213,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_audio_devices/sources/juce_AudioSourcePlayer.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_audio_devices/sources/juce_AudioTransportSource.cpp"
             ex="false"
             tool="1"
@@ -13326,77 +13220,7 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/bitmath.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/bitreader.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/bitwriter.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/cpu.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/crc.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/fixed.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/float.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
       <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/format.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/lpc_flac.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/md5.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/memory.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/stream_decoder.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/stream_encoder.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/stream_encoder_framing.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/window_flac.c"
             ex="false"
             tool="0"
             flavor2="2">
@@ -13462,117 +13286,7 @@
             tool="0"
             flavor2="2">
       </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/framing.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/analysis.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/bitrate.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/block.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/codebook.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/envelope.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/floor0.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/floor1.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/info.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
       <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/lookup.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/lpc.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/lsp.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/mapping0.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/mdct.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/psy.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/registry.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/res0.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/sharedbook.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/smallft.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/synthesis.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/vorbisenc.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/vorbisfile.c"
-            ex="false"
-            tool="0"
-            flavor2="2">
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/codecs/oggvorbis/libvorbis-1.3.2/lib/window.c"
             ex="false"
             tool="0"
             flavor2="2">
@@ -13634,20 +13348,6 @@
         </ccTool>
       </item>
       <item path="deps/JUCE/modules/juce_audio_formats/juce_audio_formats.mm"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_formats/sampler/juce_Sampler.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_plugin_client/AAX/juce_AAX_Wrapper.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -13801,13 +13501,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_audio_plugin_client/AU/juce_AUv3_Wrapper.mm"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_audio_plugin_client/RTAS/juce_RTAS_DigiCode1.cpp"
             ex="false"
             tool="1"
@@ -13858,20 +13551,6 @@
         </ccTool>
       </item>
       <item path="deps/JUCE/modules/juce_audio_plugin_client/VST/juce_VST_Wrapper.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_plugin_client/VST/juce_VST_Wrapper.mm"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_plugin_client/VST3/juce_VST3_Wrapper.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -13990,13 +13669,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_audio_plugin_client/utility/juce_PluginUtilities.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_audio_processors/format/juce_AudioPluginFormat.cpp"
             ex="false"
             tool="1"
@@ -14032,13 +13704,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_audio_processors/format_types/juce_VST3PluginFormat.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_audio_processors/format_types/juce_VSTPluginFormat.cpp"
             ex="false"
             tool="1"
@@ -14054,13 +13719,6 @@
         </ccTool>
       </item>
       <item path="deps/JUCE/modules/juce_audio_processors/juce_audio_processors.mm"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_processors/processors/juce_AudioPluginInstance.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -14131,20 +13789,6 @@
         </ccTool>
       </item>
       <item path="deps/JUCE/modules/juce_audio_processors/utilities/juce_AudioProcessorValueTreeState.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_utils/audio_cd/juce_AudioCDReader.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_audio_utils/gui/juce_AudioAppComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -14277,13 +13921,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_audio_utils/players/juce_SoundPlayer.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_blocks_basics/blocks/juce_Block.cpp"
             ex="false"
             tool="1"
@@ -14326,230 +13963,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/Shapes/b2ChainShape.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/Shapes/b2CircleShape.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/Shapes/b2EdgeShape.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/Shapes/b2PolygonShape.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/b2BroadPhase.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/b2CollideCircle.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/b2CollideEdge.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/b2CollidePolygon.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/b2Collision.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/b2Distance.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/b2DynamicTree.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Collision/b2TimeOfImpact.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Common/b2BlockAllocator.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Common/b2Draw.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Common/b2Math.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Common/b2Settings.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Common/b2StackAllocator.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Common/b2Timer.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Contacts/b2ChainAndCircleContact.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Contacts/b2ChainAndPolygonContact.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Contacts/b2CircleContact.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Contacts/b2Contact.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Contacts/b2ContactSolver.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Contacts/b2EdgeAndCircleContact.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Contacts/b2PolygonAndCircleContact.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Contacts/b2PolygonContact.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2DistanceJoint.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2FrictionJoint.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2GearJoint.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2Joint.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2MouseJoint.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2PrismaticJoint.cpp"
             ex="false"
             tool="1"
@@ -14557,98 +13970,7 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2PulleyJoint.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2RevoluteJoint.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2RopeJoint.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2WeldJoint.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/Joints/b2WheelJoint.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/b2Body.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/b2ContactManager.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/b2Fixture.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/b2Island.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/b2World.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Dynamics/b2WorldCallbacks.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/box2d/Rope/b2Rope.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_box2d/juce_box2d.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_box2d/utils/juce_Box2DRenderer.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -14805,13 +14127,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_cryptography/encryption/juce_Primes.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_cryptography/encryption/juce_RSAKey.cpp"
             ex="false"
             tool="1"
@@ -14820,13 +14135,6 @@
         </ccTool>
       </item>
       <item path="deps/JUCE/modules/juce_cryptography/hashing/juce_MD5.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_cryptography/hashing/juce_SHA256.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -15279,13 +14587,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_gui_extra/documents/juce_FileBasedDocument.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_gui_extra/juce_gui_extra.cpp"
             ex="false"
             tool="1"
@@ -15524,13 +14825,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_opengl/opengl/juce_OpenGLImage.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_opengl/opengl/juce_OpenGLPixelFormat.cpp"
             ex="false"
             tool="1"
@@ -15546,13 +14840,6 @@
         </ccTool>
       </item>
       <item path="deps/JUCE/modules/juce_opengl/opengl/juce_OpenGLTexture.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_opengl/utils/juce_OpenGLAppComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -15608,13 +14895,6 @@
         <ccTool flags="2">
         </ccTool>
       </item>
-      <item path="deps/JUCE/modules/juce_osc/osc/juce_OSCTimeTag.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
       <item path="deps/JUCE/modules/juce_osc/osc/juce_OSCTypes.cpp"
             ex="false"
             tool="1"
@@ -15644,13 +14924,6 @@
         </ccTool>
       </item>
       <item path="deps/JUCE/modules/juce_product_unlocking/marketplace/juce_OnlineUnlockForm.cpp"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_product_unlocking/marketplace/juce_OnlineUnlockStatus.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -15693,13 +14966,6 @@
         </ccTool>
       </item>
       <item path="deps/JUCE/modules/juce_video/juce_video.mm"
-            ex="false"
-            tool="1"
-            flavor2="11">
-        <ccTool flags="2">
-        </ccTool>
-      </item>
-      <item path="deps/JUCE/modules/juce_video/playback/juce_VideoComponent.cpp"
             ex="false"
             tool="1"
             flavor2="11">
@@ -15771,6 +15037,34 @@
             <Elem>JucePlugin_Build_VST=0</Elem>
             <Elem>LINUX=true</Elem>
             <Elem>NDEBUG=1</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/Source/Bluetooth">
+        <ccTool>
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/Source/Components">
+        <ccTool>
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/Source/FreeDesktop">
+        <ccTool>
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/Source/PocketCHIP">
+        <ccTool>
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
           </preprocessorList>
         </ccTool>
       </folder>

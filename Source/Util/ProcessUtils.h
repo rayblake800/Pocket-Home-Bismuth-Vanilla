@@ -4,11 +4,11 @@
 #include "JuceHeader.h"
 
 /**
- * @file LinuxProcess.h
+ * @file ProcessUtils.h
  * 
  * @brief Gets information on Linux processes.
  */
-namespace LinuxProcess
+namespace ProcessUtils
 {
     
     enum ProcessState

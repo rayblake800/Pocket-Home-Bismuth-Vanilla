@@ -1,4 +1,4 @@
-#include "LinuxProcess.h"
+#include "ProcessUtils.h"
 #include <unistd.h>
 
 //Indices of process data members within the process stat file
@@ -11,7 +11,7 @@ static const constexpr int startTimeIndex = 21;
 /*
  * Gets the id of the current process.
  */
-pid_t LinuxProcess::getProcessId()
+pid_t ProcessUtils::getProcessId()
 {
     return getpid();
 }
@@ -24,16 +24,16 @@ pid_t LinuxProcess::getProcessId()
  * @return  Data describing the process, or an empty value if no process exists at
  *          the given path.
  */
-static std::optional<LinuxProcess::ProcessData> getPathProcessData(juce::String processPath)
+static std::optional<ProcessUtils::ProcessData> getPathProcessData(juce::String processPath)
 {
     using namespace juce;
-    std::optional<LinuxProcess::ProcessData> matchingData;
+    std::optional<ProcessUtils::ProcessData> matchingData;
     File statFile(processPath + "/stat");
     if(statFile.existsAsFile())
     {
         StringArray statItems 
                 = StringArray::fromTokens(statFile.loadFileAsString(), true);
-        LinuxProcess::ProcessData foundData;
+        ProcessUtils::ProcessData foundData;
         foundData.processId = statItems[idIndex].getIntValue();
         foundData.executableName = statItems[nameIndex];
         foundData.parentId = statItems[parentIdIndex].getIntValue();
@@ -54,7 +54,7 @@ static std::optional<LinuxProcess::ProcessData> getPathProcessData(juce::String 
 /*
  * Looks up information on a process using its process id.
  */
-std::optional<LinuxProcess::ProcessData> LinuxProcess::getProcessData
+std::optional<ProcessUtils::ProcessData> ProcessUtils::getProcessData
 (pid_t processId)
 {
     using namespace juce;
@@ -66,7 +66,7 @@ std::optional<LinuxProcess::ProcessData> LinuxProcess::getProcessData
 /*
  * Gets all processes that are direct child processes of a specific process.
  */
-juce::Array<LinuxProcess::ProcessData> LinuxProcess::getChildProcesses
+juce::Array<ProcessUtils::ProcessData> ProcessUtils::getChildProcesses
 (pid_t processId)
 {
     using namespace juce;
