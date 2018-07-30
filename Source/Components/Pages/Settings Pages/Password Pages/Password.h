@@ -19,7 +19,7 @@ namespace Password
      * @return         True iff the hashed string matches the saved password
      *                 hash value.
      */
-    bool checkPassword(const String& password);
+    bool checkPassword(const juce::String& password);
 
     /**
      * Checks if a password has been set for the application.
@@ -59,7 +59,7 @@ namespace Password
      *           operation.
      */
     ChangeResult changePassword
-    (const String& currentPass, const String& newPass);
+    (const juce::String& currentPass, const juce::String& newPass);
 
     /**
      * Attempts to remove the current pocket-home password.
@@ -71,6 +71,6 @@ namespace Password
      * @return  the ChangeResult that best describes the result of this
      *           operation.
      */
-    ChangeResult removePassword(const String& currentPass);
+    ChangeResult removePassword(const juce::String& currentPass);
 
 }

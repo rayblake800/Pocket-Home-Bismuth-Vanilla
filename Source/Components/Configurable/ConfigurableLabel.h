@@ -21,9 +21,9 @@ public:
      * @param fontPadding  The font height will not exceed 
      *                       (getHeight() - fontPadding).
      */
-    ConfigurableLabel(String componentKey,
-            const String &componentName = String(),
-            const String &labelText = String(),
+    ConfigurableLabel(juce::String componentKey,
+            const juce::String &componentName = juce::String(),
+            const juce::String &labelText = juce::String(),
             const int& fontPadding = 0);
 
     virtual ~ConfigurableLabel() { }
@@ -39,6 +39,6 @@ private:
      *                      index 1, that will be applied to the label
      *                      background.
      */
-    void applyConfigAssets(StringArray assetNames,
-            Array<Colour> colours) override;
+    void applyConfigAssets(juce::StringArray assetNames,
+            juce::Array<juce::Colour> colours) override;
 };

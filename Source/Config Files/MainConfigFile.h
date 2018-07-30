@@ -20,9 +20,9 @@ public:
      * 
      * @see ConfigFile.h
      */
-    template<typename T > T getConfigValue(String key)
+    template<typename T > T getConfigValue(juce::String key)
     {
-        const ScopedReadLock readLock(configLock);
+        const juce::ScopedReadLock readLock(configLock);
         MainJson* config = static_cast<MainJson*> (sharedResource.get());
         return config->getConfigValue<T>(key);
     }
@@ -34,9 +34,9 @@ public:
      * @see ConfigFile.h
      */
     template<typename T>
-    void setConfigValue(String key, T newValue)
+    void setConfigValue(juce::String key, T newValue)
     {
-        const ScopedWriteLock writeLock(configLock);
+        const juce::ScopedWriteLock writeLock(configLock);
         MainJson* config = static_cast<MainJson*> (sharedResource.get());
         config->setConfigValue<T>(key, newValue);
     }
@@ -46,43 +46,43 @@ public:
      * 
      * @see ConfigFile.h
      */
-    void addListener(ConfigFile::Listener* listener, StringArray trackedKeys);
+    void addListener(ConfigFile::Listener* listener, juce::StringArray trackedKeys);
 
     // ### Integer value keys: ###
     //sets the maximum number of AppMenu icon rows per screen
-    static const String maxRowsKey;
+    static const juce::String maxRowsKey;
     //sets the maximum number of AppMenu icon columns per screen
-    static const String maxColumnsKey;
+    static const juce::String maxColumnsKey;
 
     // ### String value keys: ###
     //sets the HomePage background color or image.
-    static const String backgroundKey;
+    static const juce::String backgroundKey;
     //sets the AppMenuComponent type to use on the home page.
-    static const String menuTypeKey;
+    static const juce::String menuTypeKey;
 
     //sets the command used to shut down the system on the power page.
-    static const String shutdownCommandKey;
+    static const juce::String shutdownCommandKey;
     //sets the command used to restart the system on the power page.
-    static const String restartCommandKey;
+    static const juce::String restartCommandKey;
     //Sets the command used to turn off the display from the power page.
-    static const String sleepCommandKey;
+    static const juce::String sleepCommandKey;
     //Sets the string prefix to put before commands in order to launch them
     //from the terminal
-    static const String termLaunchCommandKey;
+    static const juce::String termLaunchCommandKey;
     
     //Sets the name of the wifi interface
-    static const String wifiInterfaceKey;
+    static const juce::String wifiInterfaceKey;
 
     // ### Boolean value keys: ###
     //Sets if the cursor should be shown
-    static const String showCursorKey;
+    static const juce::String showCursorKey;
     //Sets if the HomePage clock should be shown
-    static const String showClockKey;
+    static const juce::String showClockKey;
     //Sets if the HomePage clock should use 12 hour or 24 hour time
-    static const String use24HrModeKey;
+    static const juce::String use24HrModeKey;
 
     //All possible values of menuTypeKey
-    static const StringArray menuTypes;
+    static const juce::StringArray menuTypes;
 
 private:
 
@@ -105,8 +105,8 @@ private:
     static constexpr const char* filenameConst = "config.json";
 
     //ResourceManager shared object and lock;
-    static ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static ReadWriteLock configLock;
+    static juce::ScopedPointer<ResourceManager::SharedResource> sharedResource;
+    static juce::ReadWriteLock configLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainConfigFile)
 };

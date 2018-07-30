@@ -23,7 +23,7 @@ lockscreen([this]()
     hideLockscreen();
 })
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("PowerPage");
     testButton.addListener(this);
@@ -57,9 +57,9 @@ lockscreen([this]()
  * Turns off the display until key or mouse input is detected.
  * The lock screen will be visible when the display turns on again.
  */
-void
-PowerPage::startSleepMode()
+void PowerPage::startSleepMode()
 {
+    using namespace juce;
     ChildProcess commandProcess;
     StringArray cmd{ "xset", "q", "|", "grep", "is O"};
     if (commandProcess.start(cmd))
@@ -97,8 +97,7 @@ void PowerPage::hideLockscreen()
  * Show the power spinner to indicate to the user that the system is
  * restarting or shutting down.
  */
-void
-PowerPage::showPowerSpinner()
+void PowerPage::showPowerSpinner()
 {
     powerOffButton.setVisible(false);
     sleepButton.setVisible(false);
@@ -119,9 +118,9 @@ void PowerPage::pageResized()
 /**
  * Handles all button clicks.
  */
-void
-PowerPage::pageButtonClicked(Button *button)
+void PowerPage::pageButtonClicked(juce::Button *button)
 {
+    using namespace juce;
     if (button == &felButton)
     {
         pushPageToStack(PageType::Fel, TransitionAnimator::moveRight);

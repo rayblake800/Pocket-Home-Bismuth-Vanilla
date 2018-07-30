@@ -23,6 +23,7 @@ callback(callback)
  */
 void TempTimer::timerCallback()
 {
+    using namespace juce;
     callback();
     stopTimer();
     //Can't delete this timer while running its callback, so schedule

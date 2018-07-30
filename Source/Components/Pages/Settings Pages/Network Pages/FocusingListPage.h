@@ -42,7 +42,7 @@ protected:
      * 
      * @param button  A button component that was clicked.
      */
-    virtual void listPageButtonClicked(Button* button) { }
+    virtual void listPageButtonClicked(juce::Button* button) { }
 
     /**
      * Gets the index of the selected list item.
@@ -82,7 +82,7 @@ protected:
      * 
      * @button  A list item button that was clicked by the user.
      */
-    virtual void pageButtonClicked(Button* button) final override;
+    virtual void pageButtonClicked(juce::Button* button) final override;
 
 
     /**
@@ -121,7 +121,7 @@ private:
      */
     virtual void updateSelectedItemLayout(LayoutManager::Layout& layout) { }
 
-    class ListItem : public Button
+    class ListItem : public juce::Button
     {
     public:
         ListItem();
@@ -172,7 +172,7 @@ private:
          * 
          * @param g   The Juce graphics context.
          */
-        void paintButton(Graphics &g, bool isMouseOverButton,
+        void paintButton(juce::Graphics &g, bool isMouseOverButton,
                         bool isButtonDown) override;
 
         /**

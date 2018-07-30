@@ -4,7 +4,7 @@
 PageAppFolder::PageAppFolder(
         AppMenuItem::Ptr folderItem,
         MouseListener* btnListener,
-        std::map<String, AppMenuButton::Ptr>& buttonNameMap) :
+        std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap) :
 AppMenuFolder(folderItem, btnListener, buttonNameMap)
 {
     reload();
@@ -17,7 +17,7 @@ AppMenuButton::Ptr PageAppFolder::createMenuButton(AppMenuItem::Ptr menuItem)
 {
     return new PageMenuButton(
             menuItem,
-            menuItem->getAppName() + String("Button"));
+            menuItem->getAppName() + juce::String("Button"));
 }
 
 /**
@@ -25,8 +25,9 @@ AppMenuButton::Ptr PageAppFolder::createMenuButton(AppMenuItem::Ptr menuItem)
  * for positioning them in the folder component.
  */
 LayoutManager::Layout PageAppFolder::buildFolderLayout
-(Array<AppMenuButton::Ptr>& buttons)
+(juce::Array<AppMenuButton::Ptr>& buttons)
 {
+    using namespace juce;
     if (buttons.isEmpty() || getBounds().isEmpty())
     {
         return {};
@@ -230,6 +231,7 @@ void PageAppFolder::setParentRelativeMargin(float margin)
  */
 void PageAppFolder::resized()
 {
+    using namespace juce;
     Component* parent = getParentComponent();
     if (parent != nullptr)
     {
@@ -255,16 +257,17 @@ void PageAppFolder::resized()
 //############################  PageMenuButton  ################################
 
 PageAppFolder::PageMenuButton::PageMenuButton
-(AppMenuItem::Ptr menuItem, String name) :
+(AppMenuItem::Ptr menuItem, juce::String name) :
 AppMenuButton(menuItem, name)
 {
     setFillBackground(false);
     setDrawBorder(false);
-    setTextJustification(Justification::centredTop);
+    setTextJustification(juce::Justification::centredTop);
 }
 
 void PageAppFolder::PageMenuButton::resized()
 {
+    using namespace juce;
     Rectangle<int> bounds = getLocalBounds();
     if (bounds.isEmpty())
     {

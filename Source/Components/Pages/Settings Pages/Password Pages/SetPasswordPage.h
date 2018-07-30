@@ -28,7 +28,7 @@ private:
      * 
      * @param button  Should only ever be the setPassword button.
      */
-    void pageButtonClicked(Button* button) override;
+    void pageButtonClicked(juce::Button* button) override;
 
     /**
      * Opens a message box to display an error message, and clears all text entry
@@ -38,7 +38,7 @@ private:
      * 
      * @param error  The error message to print in the message box.
      */
-    void showErrorMessage(String title, String error);
+    void showErrorMessage(juce::String title, juce::String error);
 
     /**
      * Clears the text in all text entry fields on the page.
@@ -50,18 +50,18 @@ private:
     
     //Text field for the current password (if there is one)
     ScalingLabel curLabel;
-    TextEditor curPassword;
+    juce::TextEditor curPassword;
 
     //Text field for the new password
     ScalingLabel newLabel;
-    TextEditor newPassword;
+    juce::TextEditor newPassword;
 
     //Text field for the confirmation of the new password
     ScalingLabel confirmLabel;
-    TextEditor confirmPassword;
+    juce::TextEditor confirmPassword;
 
     //Button for applying the settings
-    TextButton setPassword;
+    juce::TextButton setPassword;
     
         
     //localized text keys;

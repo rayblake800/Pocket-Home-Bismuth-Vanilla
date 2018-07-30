@@ -12,7 +12,7 @@ yesButton(localeText(yes_btn)),
 noButton(localeText(no_btn)),
 infoLine2("infoLine2", localeText(flashing_info))
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("FelPage");
 #    endif
@@ -50,8 +50,9 @@ infoLine2("infoLine2", localeText(flashing_info))
  * Handle button clicks, either restarting into Fel mode or closing the 
  * page.
  */
-void FelPage::pageButtonClicked(Button* button)
+void FelPage::pageButtonClicked(juce::Button* button)
 {
+    using namespace juce;
     if (button == &noButton)
     {
         removeFromStack(TransitionAnimator::moveRight);

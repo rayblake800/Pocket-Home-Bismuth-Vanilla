@@ -4,6 +4,7 @@
 
 BatteryMonitor::BatteryMonitor()
 {
+    using namespace juce;
     //Battery files are assumed valid if they exist and were updated in the
     //last 10 minutes.
     std::function<bool(const char*) > validFile = []
@@ -43,6 +44,7 @@ BatteryMonitor::~BatteryMonitor() { }
  */
 BatteryMonitor::BatteryStatus BatteryMonitor::getBatteryStatus()
 {
+    using namespace juce;
     BatteryStatus currentStatus;
     currentStatus.percent = -1;
     if (dataSource == noBattery)

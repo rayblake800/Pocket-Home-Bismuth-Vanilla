@@ -26,18 +26,18 @@ private:
      * Handle button clicks, either restarting into Fel mode or closing the 
      * page.
      * 
-     * @param  This should be either &yesButton or &noButton
+     * @param button  This should be either &yesButton or &noButton.
      */
-    void pageButtonClicked(Button*) override;
+    void pageButtonClicked(juce::Button* button) override;
 
     //Ask for confirmation
     ScalingLabel infoLine1;
     //Tell the user where to find flashing instructions.
     ScalingLabel infoLine2;
     //Confirm, and reboot into Fel mode
-    TextButton yesButton;
+    juce::TextButton yesButton;
     //Cancel, and close this page
-    TextButton noButton;
+    juce::TextButton noButton;
 
     ColourPicker colourPicker;
     //If true, the yes button was clicked already and further clicks should

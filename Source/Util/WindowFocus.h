@@ -4,8 +4,9 @@
 /**
  * @file WindowFocus.h
  * 
- * @brief  Defines an abstract base object that is notified whenever the program
- *         gains or loses window focus.
+ * @brief  Provides tools for getting and setting the current focused window,
+ *         and a system for receiving notifications when the pocket-home
+ *         application window gains or loses focus.
  * 
  * Defines WindowFocus::Listener and WindowFocus::BroadcastWindow.
  * 
@@ -18,7 +19,6 @@
  * destruction.
  */
 namespace WindowFocus {
-
     /**
      * Checks if the main application window is currently focused.
      *
@@ -26,8 +26,22 @@ namespace WindowFocus {
      *           focused.
      */
     bool isFocused();
+    
+    /**
+     * Attempts to find and focus a specific application window.  This assumes
+     * that the window you're looking for is not on another desktop, as any
+     * system running pocket-home should have no good reason to have multiple
+     * desktops.  If this assumption is false, focusing the window will not
+     * work.
+     * 
+     * @param windowAppName  The name of a running application.
+     * 
+     * @return  true if the window was found and focused, false if the window
+     *          couldn't be found or couldn't be focused.
+     */
+    bool focusWindow(juce::String windowAppName);
 
-    class BroadcastWindow : public DocumentWindow {
+    class BroadcastWindow : public juce::DocumentWindow {
     public:
         /**
          * @param title              Sets the window's title as printed on the 
@@ -41,7 +55,9 @@ namespace WindowFocus {
          * 
          * @see juce_DocumentWindow.h
          */
-        BroadcastWindow(const String& title, Colour backgroundColour,
+        BroadcastWindow(
+                const juce::String& title, 
+                juce::Colour backgroundColour, 
                 int requiredButtons);
 
         virtual ~BroadcastWindow() { }
@@ -56,8 +72,8 @@ namespace WindowFocus {
     class Listener {
     public:
         friend class BroadcastWindow;
-        friend void accessListeners
-        (std::function<void(Array<WindowFocus::Listener*>&) > listenerAction);
+        friend void accessListeners(std::function
+                <void(juce::Array<WindowFocus::Listener*>&) > listenerAction);
         
         /**
          * Adds itself to the Listener list on creation.

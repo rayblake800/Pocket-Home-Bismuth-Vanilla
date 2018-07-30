@@ -12,11 +12,11 @@
  * ScalingTextButton, and enforcing the button's maximum text height.
  */
 
-class ScalingTextButton : public TextButton
+class ScalingTextButton : public juce::TextButton
 {
 public:
     //Inherit all of TextButton's constructors.
-    using TextButton::TextButton;
+    using juce::TextButton::TextButton;
     
     /**
      * Sets the maximum text height scale to use when rendering this button's

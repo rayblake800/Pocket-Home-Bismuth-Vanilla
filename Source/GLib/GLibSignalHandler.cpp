@@ -1,8 +1,10 @@
 #include "GLibSignalHandler.h"
 
 
-ScopedPointer<ResourceManager::SharedResource> GLibSignalHandler::globalThread;
-ReadWriteLock GLibSignalHandler::threadLock;
+juce::ScopedPointer<ResourceManager::SharedResource> 
+GLibSignalHandler::globalThread;
+
+juce::ReadWriteLock GLibSignalHandler::threadLock;
 
 GLibSignalHandler::GLibSignalHandler()
 : ResourceManager(globalThread, threadLock, []()
@@ -16,6 +18,7 @@ GLibSignalHandler::GLibSignalHandler()
  */
 bool GLibSignalHandler::runningOnGLibThread()
 {
+    using namespace juce;
     const ScopedReadLock accessLock(threadLock);
     GLibDefaultThread* thread
             = static_cast<GLibDefaultThread*> (globalThread.get());
@@ -27,6 +30,7 @@ bool GLibSignalHandler::runningOnGLibThread()
  */
 void GLibSignalHandler::gLibCallAsync(std::function<void() > fn)
 {
+    using namespace juce;
     const ScopedWriteLock accessLock(threadLock);
     GLibDefaultThread* thread
             = static_cast<GLibDefaultThread*> (globalThread.get());

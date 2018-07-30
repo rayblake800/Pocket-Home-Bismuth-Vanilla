@@ -85,7 +85,7 @@ public:
      * @return  true if the psk was valid and the setting was added, false if
      *          the psk was invalid and the setting was not added.
      */
-    bool addWPASettings(const String& psk);
+    bool addWPASettings(const juce::String& psk);
     
     /**
      * Attempts to add WEP security settings to this connection.  If this
@@ -98,7 +98,7 @@ public:
      * @return  true if the psk was valid and the setting was added, false if
      *          the psk was invalid and the setting was not added.
      */
-    bool addWEPSettings(const String& psk);
+    bool addWEPSettings(const juce::String& psk);
     
     /**
      * Get one of this connection's setting objects.

@@ -13,8 +13,8 @@ class BluetoothStatus {
 public:
     BluetoothStatus();
     
-    OwnedArray<BluetoothDevice> devices;
+    juce::OwnedArray<BluetoothDevice> devices;
     bool enabled = false;
 
-    void populateFromJson(const var &json);
+    void populateFromJson(const juce::var &json);
 };

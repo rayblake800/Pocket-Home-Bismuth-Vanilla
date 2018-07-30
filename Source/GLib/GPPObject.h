@@ -64,7 +64,7 @@ public:
      * @param ptr2 Another data pointer.  If non-null, this pointer's 
      *             address ID will be appended to the log entry.
      */
-    void gObjectAddressLog(String log, void* ptr2 = nullptr) const;
+    void gObjectAddressLog(juce::String log, void* ptr2 = nullptr) const;
     
 #define G_OBJ_ADDR_LOG(gppObj,...)   gppObj.gObjectAddressLog(__VA_ARGS__)
     
@@ -121,12 +121,12 @@ public:
          * 
          * @param property  The name of the object property that changed.
          */
-        virtual void propertyChanged(GPPObject* source, String property);
+        virtual void propertyChanged(GPPObject* source, juce::String property);
         
         /**
          * Track all signal sources handled by this object
          */
-        Array<GPPObject*, CriticalSection> sources;
+        juce::Array<GPPObject*, juce::CriticalSection> sources;
     };
     
     /**
@@ -442,7 +442,7 @@ private:
      * 
      * @return  the list of all signal handlers, without duplicate entries.
      */
-    Array<SignalHandler*> getSignalHandlers();
+    juce::Array<SignalHandler*> getSignalHandlers();
     
     /**
      * Set this object's GObject data to a new value.  Unless the object data 
@@ -470,9 +470,9 @@ private:
      * signal handlers will ensure that they're removed from this list when
      * they're destroyed.
      */
-    static Array<SignalHandler*, CriticalSection> signalHandlers;
+    static juce::Array<SignalHandler*, juce::CriticalSection> signalHandlers;
     
     std::map<gulong,SignalHandler*> registeredSignals;
-    ScopedPointer<GWeakRef> objectRef = nullptr;
-    Atomic<GObject*> objectData;
+    juce::ScopedPointer<GWeakRef> objectRef = nullptr;
+    juce::Atomic<GObject*> objectData;
 };

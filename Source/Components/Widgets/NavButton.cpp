@@ -63,7 +63,7 @@ float NavButton::yMarginFractionNeeded() const
  * Given a window edge, return the component key string for the
  * corresponding NavButton type.
  */
-String NavButton::getEdgeComponentKey(NavButton::WindowEdge edge)
+juce::String NavButton::getEdgeComponentKey(NavButton::WindowEdge edge)
 {
     switch(edge)
     {

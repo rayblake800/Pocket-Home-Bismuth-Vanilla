@@ -27,12 +27,12 @@ public:
     /**
      * @return the application's display name
      */
-    String getAppName() const override;
+    juce::String getAppName() const override;
 
     /**
      * @return the application's launch command
      */
-    String getCommand() const override;
+    juce::String getCommand() const override;
 
     /**
      * @return true iff this menu item is an application that launches in
@@ -43,7 +43,7 @@ public:
     /**
      * @return the name or path used to load the icon file. 
      */
-    String getIconName() const override;
+    juce::String getIconName() const override;
 
     /**
      * Return true if this menu item has an index that can be moved by a given 
@@ -58,17 +58,17 @@ protected:
     /**
      * Get an appropriate title to use for a deletion confirmation window.
      */
-    virtual String getConfirmDeleteTitle() const override;
+    virtual juce::String getConfirmDeleteTitle() const override;
 
     /**
      * Gets appropriate descriptive text for a deletion confirmation window.
      */
-    virtual String getConfirmDeleteMessage() const override;
+    virtual juce::String getConfirmDeleteMessage() const override;
 
     /**
      * @return the title to display over an editor for this menu item. 
      */
-    virtual String getEditorTitle() const override;
+    virtual juce::String getEditorTitle() const override;
 
     /**
      * returns true iff this menu item has categories that can be edited.
@@ -99,7 +99,7 @@ protected:
      * @param command application launch command
      * @param terminal sets whether this application launches in the terminal
      */
-    void editApp(String name, String icon, String command, bool terminal);
+    void editApp(juce::String name, juce::String icon, juce::String command, bool terminal);
 
     /**
      * Remove this menu item's application from the config file.

@@ -7,7 +7,7 @@ BluetoothStatus::BluetoothStatus()
 
 }
 
-void BluetoothStatus::populateFromJson(const var &json)
+void BluetoothStatus::populateFromJson(const juce::var &json)
 {
     devices.clear();
 

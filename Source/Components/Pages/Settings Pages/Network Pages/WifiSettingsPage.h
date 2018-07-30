@@ -19,7 +19,7 @@
 
 
 class WifiSettingsPage : public FocusingListPage,
-public WifiStateManager::Listener, public TextEditor::Listener,
+        public WifiStateManager::Listener, public juce::TextEditor::Listener,
 private Localized
 {
 public:
@@ -96,7 +96,7 @@ private:
      * 
      * @param button  This should always be the connection button.
      */
-    virtual void listPageButtonClicked(Button* button) override;
+    virtual void listPageButtonClicked(juce::Button* button) override;
 
     /**
      * Keeps the page updated when wifi state changes.
@@ -124,7 +124,7 @@ private:
      * 
      * @param editor  This should always be the password field.
      */
-    void textEditorReturnKeyPressed(TextEditor& editor) override;
+    void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
 
     /**
      * Gets the asset name for the icon that best represents accessPoint's 
@@ -132,24 +132,24 @@ private:
      * 
      * @param accessPoint
      */
-    static String getWifiAssetName(const WifiAccessPoint& accessPoint);
+    static juce::String getWifiAssetName(const WifiAccessPoint& accessPoint);
     
     //All visible access points.
-    Array<WifiAccessPoint> visibleAPs;
+    juce::Array<WifiAccessPoint> visibleAPs;
 
     //Holds recycled list item components
-    OwnedArray<ScalingLabel> apLabels;
-    OwnedArray<DrawableImageComponent> apIcons;
-    OwnedArray<DrawableImageComponent> lockIcons;
+    juce::OwnedArray<ScalingLabel> apLabels;
+    juce::OwnedArray<DrawableImageComponent> apIcons;
+    juce::OwnedArray<DrawableImageComponent> lockIcons;
     
     //Wifi icon paths for all signal strengths
-    static const StringArray wifiImageFiles;
+    static const juce::StringArray wifiImageFiles;
     
     /**
      * ConnectionButton is a TextButton with text that can be replaced by a
      * Spinner to indicate that wifi is busy.
      */
-    class ConnectionButton : public TextButton
+    class ConnectionButton : public juce::TextButton
     {
     public:
         ConnectionButton();
@@ -172,7 +172,7 @@ private:
         
         Spinner spinner;
         //Holds the button text while the spinner is enabled.
-        String savedText;
+        juce::String savedText;
     };
     
     WifiAccessPoint lastConnecting;
@@ -180,7 +180,7 @@ private:
     ScalingLabel lastConnectionLabel;
     //Used for entering a password for a secured access point.
     ScalingLabel passwordLabel;
-    TextEditor passwordEditor;
+    juce::TextEditor passwordEditor;
     //clicked to connect or disconnect
     ConnectionButton connectionButton;
     //prints an error if the connection fails

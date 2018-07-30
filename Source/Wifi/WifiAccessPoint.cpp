@@ -9,9 +9,7 @@
 /*
  * Create a null access point object.
  */
-WifiAccessPoint::WifiAccessPoint()
-{
-}
+WifiAccessPoint::WifiAccessPoint() { }
     
 /*
  * Create a wifi access point copying data from another access point.
@@ -27,6 +25,7 @@ WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 WifiAccessPoint::WifiAccessPoint(const NMPPAccessPoint& accessPoint) : 
 nmAccessPoint(accessPoint)
 {
+    using namespace juce;
     DBG("Creating " << String::toHexString(reinterpret_cast<long>(this)));
     if(nmAccessPoint.isNull())
     {
@@ -66,7 +65,7 @@ nmAccessPoint(accessPoint)
  * debugging purposes only.
  */
 WifiAccessPoint::WifiAccessPoint
-(String ssid, int signalStrength, bool requiresAuth, String hash) :
+(juce::String ssid, int signalStrength, bool requiresAuth, juce::String hash) :
 ssid(ssid),
 hash(hash)
 {
@@ -100,7 +99,7 @@ bool WifiAccessPoint::isNull() const
 /*
  * Gets the access point's service set identifier, its primary name.
  */
-const String& WifiAccessPoint::getSSID() const
+const juce::String& WifiAccessPoint::getSSID() const
 {
     return ssid;
 }
@@ -108,7 +107,7 @@ const String& WifiAccessPoint::getSSID() const
 /*
  * Gets the MAC address of the wifi access point.
  */
-const String& WifiAccessPoint::getBSSID() const
+const juce::String& WifiAccessPoint::getBSSID() const
 {
     return bssid;
 }
@@ -149,7 +148,7 @@ bool WifiAccessPoint::getRequiresAuth() const
 /*
  * Returns a string identifying this object for debug purposes.
  */
-const String& WifiAccessPoint::toString() const
+const juce::String& WifiAccessPoint::toString() const
 {
     return ssid;
 }
@@ -176,7 +175,7 @@ bool WifiAccessPoint::sharesConnectionWith(const WifiAccessPoint& otherAP) const
  * Create a new connection object that could be used to connect with this
  * access point.
  */
-NMPPConnection WifiAccessPoint::createConnection(String psk) const
+NMPPConnection WifiAccessPoint::createConnection(juce::String psk) const
 {
     NMPPConnection newConnection;
     newConnection.addWifiSettings(nmAccessPoint.getSSID());
@@ -193,7 +192,7 @@ NMPPConnection WifiAccessPoint::createConnection(String psk) const
  * the access point security type.
  */
 bool WifiAccessPoint::setConnectionSecurity
-(NMPPConnection& connection, const String& psk) const
+(NMPPConnection& connection, const juce::String& psk) const
 {
     if(security == securedWEP)
     {
@@ -253,7 +252,7 @@ NM80211ApSecurityFlags WifiAccessPoint::getRSNFlags() const
  * This will not check if the key is actually correct, just if it is a valid
  * length.
  */
-bool WifiAccessPoint::isValidKeyFormat(const String& psk) const
+bool WifiAccessPoint::isValidKeyFormat(const juce::String& psk) const
 {
     int length = psk.length();
     switch(security)
@@ -266,6 +265,7 @@ bool WifiAccessPoint::isValidKeyFormat(const String& psk) const
         case securedRSN:
             return length >= 8;
     }
+    return false;
 }
     
 /*
@@ -343,7 +343,7 @@ const NMPPAccessPoint& WifiAccessPoint::getNMAccessPoint() const
  * Saves a path to a DBus active connection object that is using this
  * access point.
  */
-void WifiAccessPoint::setActiveConnectionPath(const String path)
+void WifiAccessPoint::setActiveConnectionPath(const juce::String path)
 {
     activeConnectionPath = path;
 }
@@ -352,7 +352,7 @@ void WifiAccessPoint::setActiveConnectionPath(const String path)
  * Saves a path to a DBus saved connection object that is compatible with
  * this access point.
  */
-void WifiAccessPoint::setSavedConnectionPath(const String path)
+void WifiAccessPoint::setSavedConnectionPath(const juce::String path)
 {
     savedConnectionPath = path;
 }
@@ -360,7 +360,7 @@ void WifiAccessPoint::setSavedConnectionPath(const String path)
 /*
  * Returns the active connection path stored with this access point.
  */
-const String& WifiAccessPoint::getActiveConnectionPath() const
+const juce::String& WifiAccessPoint::getActiveConnectionPath() const
 {
     return activeConnectionPath;
 }
@@ -368,7 +368,7 @@ const String& WifiAccessPoint::getActiveConnectionPath() const
 /*
  * Returns the saved connection path stored with this access point.
  */
-const String& WifiAccessPoint::getSavedConnectionPath() const
+const juce::String& WifiAccessPoint::getSavedConnectionPath() const
 {
     return savedConnectionPath;
 }
@@ -387,7 +387,7 @@ void WifiAccessPoint::signalStrengthChanged(NMPPAccessPoint* updatedAP,
  * Generates a hash value for a list of access point parameters that will
  * be unique to that access point's connection.
  */
-String WifiAccessPoint::generateHash(
+juce::String WifiAccessPoint::generateHash(
         const GByteArray* ssid,
         NM80211Mode mode,
         guint32 flags,

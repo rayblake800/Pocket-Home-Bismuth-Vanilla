@@ -4,11 +4,12 @@
 AppMenuFolder::AppMenuFolder
 (AppMenuItem::Ptr folderItem,
         MouseListener* btnListener,
-        std::map<String, AppMenuButton::Ptr>& buttonNameMap) :
+        std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap) :
 sourceFolderItem(folderItem),
 btnListener(btnListener),
 buttonNameMap(buttonNameMap)
 {
+    using namespace juce;
 #if JUCE_DEBUG
     setName(String("AppMenuFolder") + folderItem->getAppName());
 #endif
@@ -35,6 +36,7 @@ void AppMenuFolder::updateGridSize(int maxRows, int maxColumns)
  */
 void AppMenuFolder::reload()
 {
+    using namespace juce;
     removeAllChildren();
     Array<AppMenuItem::Ptr> menuItems = sourceFolderItem->getFolderItems();
     for (AppMenuItem::Ptr menuItem : menuItems)
@@ -82,6 +84,7 @@ void AppMenuFolder::deselect()
 void AppMenuFolder::insertButton
 (AppMenuItem::Ptr newItem, int index, bool updateLayout)
 {
+    using namespace juce;
     AppMenuButton::Ptr menuButton = nullptr;
     String buttonName = newItem->getAppName();
     while (buttonNameMap.count(buttonName) > 0)
@@ -183,6 +186,7 @@ void AppMenuFolder::setPadding(float xPadding, float yPadding)
  */
 void AppMenuFolder::layoutButtons()
 {
+    using namespace juce;
     while (!validBtnIndex(selectedIndex) && selectedIndex != -1)
     {
         selectedIndex--;
@@ -220,8 +224,9 @@ int AppMenuFolder::getButtonIndex
 /**
  * Get the display name of a menu button.
  */
-String AppMenuFolder::getMenuButtonName(int index) const
+juce::String AppMenuFolder::getMenuButtonName(int index) const
 {
+    using namespace juce;
     if (index < 0 || index >= folderButtons.size())
     {
         return String();
@@ -291,6 +296,7 @@ int AppMenuFolder::getMinimumWidth()
  */
 void AppMenuFolder::resized()
 {
+    using namespace juce;
     Rectangle<int> bounds = getLocalBounds();
     bounds.reduce(margin * getWidth(), margin * getWidth());
     //DBG("AppMenuFolder::" << __func__  << ": bounds="
@@ -303,8 +309,9 @@ void AppMenuFolder::resized()
  * @return the title of the menu button at this index, or String::empty
  * if there is no button at this index.
  */
-String AppMenuFolder::getButtonTitle(int index)
+juce::String AppMenuFolder::getButtonTitle(int index)
 {
+    using namespace juce;
     if (index < 0 || index >= folderButtons.size())
     {
         return String();

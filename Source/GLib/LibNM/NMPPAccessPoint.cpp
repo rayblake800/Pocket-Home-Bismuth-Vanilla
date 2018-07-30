@@ -44,8 +44,9 @@ const GByteArray* NMPPAccessPoint::getSSID() const
  * This value should only be used for displaying the access point name to
  * the user, or for debug output.
  */
-String NMPPAccessPoint::getSSIDText() const
+juce::String NMPPAccessPoint::getSSIDText() const
 {
+    using namespace juce;
     String ssidText;
     const GByteArray* ssid = getSSID();
     if(ssid != nullptr)
@@ -248,7 +249,7 @@ NM80211ApSecurityFlags NMPPAccessPoint::getRSNFlags() const
  * property change notifications.
  */
 void NMPPAccessPoint::Listener::propertyChanged
-(GPPObject* source, String property) 
+(GPPObject* source, juce::String property) 
 { 
     NMPPAccessPoint* ap = dynamic_cast<NMPPAccessPoint*>(source);
     if(ap != nullptr && property == NM_ACCESS_POINT_STRENGTH)

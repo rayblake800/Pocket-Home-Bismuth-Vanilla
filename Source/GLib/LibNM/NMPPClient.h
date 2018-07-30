@@ -33,7 +33,7 @@ public:
      * @return  All NMDevices found that are wifi devices, packaged into an
      *          array of NMPPDeviceWifi objects.
      */
-    Array<NMPPDeviceWifi> getWifiDevices();
+    juce::Array<NMPPDeviceWifi> getWifiDevices();
     
     /**
      * Gets a specific wifi device using its interface name.
@@ -60,7 +60,7 @@ public:
      * 
      * @return  an array of all active network connections.
      */
-    Array<NMPPActiveConnection> getActiveConnections();
+    juce::Array<NMPPActiveConnection> getActiveConnections();
     
     /**
      * Gets the primary active network connection.
@@ -247,7 +247,7 @@ public:
          * @param property  This should always be the "wireless-enabled"
          *                  property.
          */
-        void propertyChanged(GPPObject* source, String property) override;  
+        void propertyChanged(GPPObject* source, juce::String property) override;  
     };
     
     /**

@@ -11,7 +11,7 @@
  * AppMenuComponent.
  */
 
-class AppMenuFolder : public Component
+class AppMenuFolder : public juce::Component
 {
 public:
     /**
@@ -29,7 +29,7 @@ public:
     AppMenuFolder(
             AppMenuItem::Ptr folderItem,
             MouseListener* btnListener,
-            std::map<String, AppMenuButton::Ptr>& buttonNameMap);
+            std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap);
 
     virtual ~AppMenuFolder() { }
 
@@ -166,7 +166,7 @@ public:
      * @return the button title at this index, or the empty string
      *          if index does not correspond to a menu button.
      */
-    String getMenuButtonName(int index) const;
+    juce::String getMenuButtonName(int index) const;
 
     /**
      * @return the index of the selected menu button, or -1 if no button
@@ -217,7 +217,7 @@ protected:
      * @return the title of the menu button at this index, or String()
      *          if there is no button at this index.
      */
-    String getButtonTitle(int index);
+    juce::String getButtonTitle(int index);
 
     /**
      * @return the maximum number of menu item rows to show on screen.
@@ -247,7 +247,7 @@ private:
      * @return a Layout containing all items in the button array.
      */
     virtual LayoutManager::Layout buildFolderLayout
-    (Array<AppMenuButton::Ptr>& buttons) = 0;
+    (juce::Array<AppMenuButton::Ptr>& buttons) = 0;
 
     /**
      * Checks if a number is a valid button index.
@@ -262,9 +262,9 @@ private:
     }
 
     //Listener to assign to all button components
-    MouseListener* btnListener = nullptr;
+    juce::MouseListener* btnListener = nullptr;
     //Reference to the AppMenuComponent's button map
-    std::map<String, AppMenuButton::Ptr>& buttonNameMap;
+    std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap;
     //Holds the folder menu item used to load this folder's menu items
     AppMenuItem::Ptr sourceFolderItem = nullptr;
     //folder layout manager and relative spacing values.
@@ -275,7 +275,7 @@ private:
     int maxRows = 1;
     int maxColumns = 1;
     //Holds all menu buttons
-    Array<AppMenuButton::Ptr> folderButtons;
+    juce::Array<AppMenuButton::Ptr> folderButtons;
     //Tracks selected button index
     int selectedIndex = -1;
 

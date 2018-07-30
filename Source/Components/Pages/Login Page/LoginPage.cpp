@@ -79,8 +79,9 @@ void LoginPage::textFocus()
 /**
  * Attempts to login when the user clicks the login button.
  */
-void LoginPage::pageButtonClicked(Button *button)
+void LoginPage::pageButtonClicked(juce::Button *button)
 {
+    using namespace juce;
     String password = passwordField.getText();
     passwordField.setText("");
     if (Password::checkPassword(password))
@@ -94,7 +95,7 @@ void LoginPage::pageButtonClicked(Button *button)
  * If the return key is pressed, handle it the same as clicking the login
  * button.
  */
-void LoginPage::textEditorReturnKeyPressed(TextEditor& editor)
+void LoginPage::textEditorReturnKeyPressed(juce::TextEditor& editor)
 {
     pageButtonClicked(&loginButton);
 }
@@ -104,7 +105,9 @@ void LoginPage::textEditorReturnKeyPressed(TextEditor& editor)
  */
 void LoginPage::displayError()
 {
-    AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,
+    using namespace juce;
+    AlertWindow::showMessageBoxAsync(
+            AlertWindow::AlertIconType::WarningIcon,
             localeText(wrong_password),
             localeText(wrong_password_retry),
             localeText(close_button_text));

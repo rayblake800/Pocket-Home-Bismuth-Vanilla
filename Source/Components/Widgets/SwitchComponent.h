@@ -8,7 +8,7 @@
  * switches off(left) or on(right) in front of a rounded rectangle.
  */
 
-class SwitchComponent : public ToggleButton, private Timer
+class SwitchComponent : public juce::ToggleButton, private juce::Timer
 {
 public:
 
@@ -35,8 +35,8 @@ public:
      *                        state. This may briefly delay the change in toggle 
      *                        state if the switch is currently animating.
      */
-    void setToggleState(bool shouldBeOn, NotificationType notification =
-            NotificationType::dontSendNotification, bool animate = false);
+    void setToggleState(bool shouldBeOn, juce::NotificationType notification =
+            juce::NotificationType::dontSendNotification, bool animate = false);
 
 private:
 
@@ -50,7 +50,7 @@ private:
      * 
      * @param isButtonDown
      */
-    void paintButton(Graphics &g,
+    void paintButton(juce::Graphics &g,
             bool isMouseOverButton, bool isButtonDown) override;
 
     /**
@@ -70,7 +70,7 @@ private:
      * component because Juce library animation only works through changing
      * component bounds or transparency.
      */
-    class SwitchHandle : public Component
+    class SwitchHandle : public juce::Component
     {
     public:
 
@@ -83,7 +83,7 @@ private:
          * 
          * @param colour
          */
-        void setColour(Colour colour)
+        void setColour(juce::Colour colour)
         {
             this->colour = colour;
         }
@@ -93,9 +93,9 @@ private:
          * 
          * @param g
          */
-        void paint(Graphics& g) override;
+        void paint(juce::Graphics& g) override;
         //fill colour
-        Colour colour;
+        juce::Colour colour;
     };
 
     /**
@@ -113,10 +113,10 @@ private:
     SwitchHandle handle;
     
     //defines the bounds of the switch handle in both button states
-    Rectangle<int> handleBoundsOff, handleBoundsOn;
+    juce::Rectangle<int> handleBoundsOff, handleBoundsOn;
     
     //defines the switch's rounded rectangle background
-    Rectangle<int> backgroundShape;
+    juce::Rectangle<int> backgroundShape;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SwitchComponent)
 };

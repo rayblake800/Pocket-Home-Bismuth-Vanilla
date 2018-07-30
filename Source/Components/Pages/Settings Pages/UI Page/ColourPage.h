@@ -14,35 +14,43 @@ public:
 private:
     void pageResized() override;
 
-    class ColourListModel : public ListBoxModel,
+    class ColourListModel : public juce::ListBoxModel,
             public ColourConfigFile::Listener
     {
     public:
         ColourListModel();
         virtual ~ColourListModel();
+        
         int getNumRows() override;
 
-        void listResized(ListBox& list);
+        void listResized(juce::ListBox& list);
 
-        void paintListBoxItem(int rowNumber, Graphics& g, int width, int height,
+        void paintListBoxItem(
+                int rowNumber,
+                juce::Graphics& g,
+                int width,
+                int height,
                 bool rowIsSelected) override;
 
-        Component* refreshComponentForRow(int rowNumber, bool isRowSelected,
-                Component* toUpdate) override;
+        juce::Component* refreshComponentForRow
+        (int rowNumber, bool isRowSelected, juce::Component* toUpdate) override;
 
         void selectedRowsChanged(int lastRowSelected) override;
 
 
     private:
-        void colourValueChanged(int colourID, String colourKey,
-                Colour newColour) override;
+        void colourValueChanged(int colourID, juce::String colourKey,
+                juce::Colour newColour) override;
+        
         int textHeight;
-        StringArray colourKeys;
-        Array<Colour> colours;
+        
+        juce::StringArray colourKeys;
+        
+        juce::Array<juce::Colour> colours;
     };
 
     ColourListModel listModel;
-    ListBox colourList;
+    juce::ListBox colourList;
 
 };
 

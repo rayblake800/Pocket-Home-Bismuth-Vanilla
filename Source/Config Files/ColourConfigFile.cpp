@@ -3,10 +3,10 @@
 #include "AssetFiles.h"
 #include "Utils.h"
 
-ScopedPointer<ResourceManager::SharedResource>
+juce::ScopedPointer<ResourceManager::SharedResource>
         ColourConfigFile::sharedResource = nullptr;
 
-ReadWriteLock ColourConfigFile::configLock;
+juce::ReadWriteLock ColourConfigFile::configLock;
 
 ColourConfigFile::ColourConfigFile() :
 ResourceManager(sharedResource, configLock,
@@ -18,8 +18,9 @@ ResourceManager(sharedResource, configLock,
 /*
  * Look up the Colour value saved for a specific Juce ColourId.
  */
-Colour ColourConfigFile::getColour(int colourId) const
+juce::Colour ColourConfigFile::getColour(int colourId) const
 {
+    using namespace juce;
     String colourKey = getColourKey(colourId);
     String colourStr = getColourString(colourKey);
     if(colourStr.isEmpty())
@@ -35,8 +36,9 @@ Colour ColourConfigFile::getColour(int colourId) const
  * Gets the Colour value assigned as the default for all UI items in a
  * specific category.
  */
-Colour ColourConfigFile::getColour(UICategory category) const
+juce::Colour ColourConfigFile::getColour(UICategory category) const
 {
+    using namespace juce;
     if(category == none)
     {
         return Colour();
@@ -47,17 +49,18 @@ Colour ColourConfigFile::getColour(UICategory category) const
 /**
  * Gets the colour value associated with a particular key string.
  */
-Colour ColourConfigFile::getColour(String colourKey) const
+juce::Colour ColourConfigFile::getColour(juce::String colourKey) const
 {
-    return Colour(getColourString(colourKey).getHexValue32());
-    
+    using namespace juce;
+    return Colour(getColourString(colourKey).getHexValue32());   
 }
 
 /**
  * Sets the saved colour value for a single UI element.
  */
-void ColourConfigFile::setColour(int colourId, Colour newColour)
+void ColourConfigFile::setColour(int colourId, juce::Colour newColour)
 {
+    using namespace juce;
     String colourKey = getColourKey(colourId);
     if(colourKey.isNotEmpty())
     {
@@ -68,7 +71,7 @@ void ColourConfigFile::setColour(int colourId, Colour newColour)
 /**
  * Sets the saved colour value for a category of UI elements.
  */
-void ColourConfigFile::setColour(UICategory category, Colour newColour)
+void ColourConfigFile::setColour(UICategory category, juce::Colour newColour)
 {
     if(category != none)
     {
@@ -79,8 +82,9 @@ void ColourConfigFile::setColour(UICategory category, Colour newColour)
 /*
  * Sets the saved colour value for a specific key string.
  */
-void ColourConfigFile::setColour(String colourKey, Colour newColour)
+void ColourConfigFile::setColour(juce::String colourKey, juce::Colour newColour)
 {
+    using namespace juce;
     const ScopedWriteLock writeLock(configLock);
         ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
 	config->setConfigValue<String>(colourKey, newColour.toString());
@@ -89,8 +93,9 @@ void ColourConfigFile::setColour(String colourKey, Colour newColour)
 /*
  * Gets all Juce ColourId values defined by the colour config file.
  */
-Array<int> ColourConfigFile::getColourIds()
+juce::Array<int> ColourConfigFile::getColourIds()
 {
+    using namespace juce;
     Array<int> colourIds;
     for(const auto& iter : idCategories)
     {
@@ -106,8 +111,9 @@ Array<int> ColourConfigFile::getColourIds()
 /*
  * Gets all key strings used by the ColourConfigFile.
  */
-StringArray ColourConfigFile::getColourKeys()
+juce::StringArray ColourConfigFile::getColourKeys()
 {
+    using namespace juce;
     StringArray colourKeys = uiCategoryKeys;
     for(const auto& colourId : colourIdKeys)
     {
@@ -120,8 +126,9 @@ StringArray ColourConfigFile::getColourKeys()
  * Calls colourValueChanged for each Juce ColourId associated with
  * the updated value's key.
  */
-void ColourConfigFile::Listener::configValueChanged(String propertyKey)
+void ColourConfigFile::Listener::configValueChanged(juce::String propertyKey)
 {
+    using namespace juce;
     ColourConfigFile config;
     String colourString;
     try
@@ -170,8 +177,9 @@ void ColourConfigFile::Listener::configValueChanged(String propertyKey)
  * Adds a listener to track color setting changes.
  */
 void ColourConfigFile::addListener(ColourConfigFile::Listener * listener,
-        Array<int> trackedIds)
+        juce::Array<int> trackedIds)
 {
+    using namespace juce;
     listener->trackedColourIds = trackedIds;
     StringArray colourKeys;
     for(const int& colourId : trackedIds)
@@ -192,8 +200,9 @@ void ColourConfigFile::addListener(ColourConfigFile::Listener * listener,
 /*
  * Gets a Colour string saved to the colour config file.
  */
-String ColourConfigFile::getColourString(String colourKey) const
+juce::String ColourConfigFile::getColourString(juce::String colourKey) const
 {
+    using namespace juce;
     const ScopedReadLock readLock(configLock);
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     return config->getConfigValue<String>(colourKey);
@@ -218,7 +227,7 @@ ColourConfigFile::getUICategory(int colourId)
 /*
  * Finds the Juce ColourId value of a UI element from its key string.
  */
-int ColourConfigFile::getColourId(String colourKey)
+int ColourConfigFile::getColourId(juce::String colourKey)
 {
     auto searchIter = colourIds.find(colourKey);
     if (searchIter == colourIds.end())
@@ -232,7 +241,7 @@ int ColourConfigFile::getColourId(String colourKey)
  * Finds the UICategory type represented by a specific key string.
  */
 ColourConfigFile::UICategory ColourConfigFile::getCategoryType
-(String categoryKey)
+(juce::String categoryKey)
 {
     int enumVal = uiCategoryKeys.indexOf(categoryKey);
     if(enumVal < 0)
@@ -246,8 +255,9 @@ ColourConfigFile::UICategory ColourConfigFile::getCategoryType
  * Gets the key string used to store a specific Juce ColourId in the
  * colour config file.
  */
-String ColourConfigFile::getColourKey(int colourId)
+juce::String ColourConfigFile::getColourKey(int colourId)
 {
+    using namespace juce;
     auto keySearch = colourIdKeys.find(colourId);
     if(keySearch == colourIdKeys.end())
     {
@@ -259,8 +269,9 @@ String ColourConfigFile::getColourKey(int colourId)
 /*
  * Finds the key string representing a UICategory value.
  */
-String ColourConfigFile::getCategoryKey(UICategory category)
+juce::String ColourConfigFile::getCategoryKey(UICategory category)
 {
+    using namespace juce;
     if(category == none)
     {
         return String();
@@ -270,6 +281,7 @@ String ColourConfigFile::getCategoryKey(UICategory category)
 
 ColourConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
 {
+    using namespace juce;
     var jsonConfig = AssetFiles::loadJSONAsset(String(configPath)
             + filenameConst, true);
     var defaultConfig;
@@ -280,6 +292,7 @@ ColourConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
 std::vector<ConfigFile::DataKey> ColourConfigFile::ConfigJson
 ::getDataKeys() const
 {
+    using namespace juce;
     std::vector<DataKey> keys = { };
     for(const String& key : uiCategoryKeys)
     {
@@ -293,7 +306,7 @@ std::vector<ConfigFile::DataKey> ColourConfigFile::ConfigJson
 }
 
 //=============================== Colour Keys: =================================
-const StringArray ColourConfigFile::uiCategoryKeys = 
+const juce::StringArray ColourConfigFile::uiCategoryKeys = 
 {
     "window background",
     "widget background",
@@ -308,7 +321,7 @@ const StringArray ColourConfigFile::uiCategoryKeys =
     "highlighted text"
 };
 
-const std::map<int, String> ColourConfigFile::colourIdKeys = 
+const std::map<int, juce::String> ColourConfigFile::colourIdKeys = 
 {
     {ColourIds::pageComponent::background,       "Page background"},
     {ColourIds::drawableImageComponent::image0,  "Image0"},
@@ -358,7 +371,7 @@ const std::map<int, String> ColourConfigFile::colourIdKeys =
     {ColourIds::label::outlineWhenEditing,       "Label outline(editing)"}
 };
 
-const std::map<String, int> ColourConfigFile::colourIds
+const std::map<juce::String, int> ColourConfigFile::colourIds
 {
     {"Page background",            ColourIds::pageComponent::background},
             

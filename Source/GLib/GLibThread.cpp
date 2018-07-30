@@ -78,6 +78,7 @@ void GLibThread::call(std::function<void()> fn)
  */
 void GLibThread::callAsync(std::function<void()> fn)
 {
+    using namespace juce;
     ScopedReadLock threadLock(threadStateLock);
     addAndInitCall(fn);
 }
@@ -88,6 +89,7 @@ void GLibThread::callAsync(std::function<void()> fn)
  */
 GMainContext* GLibThread::getContext()
 {
+    using namespace juce;
     ScopedReadLock threadLock(threadStateLock);
     return context;
 }
@@ -193,6 +195,7 @@ void GLibThread::windowFocusGained()
  */
 bool GLibThread::startGLibThread()
 {
+    using namespace juce;
     ScopedWriteLock changeLock(threadStateLock);
     std::unique_lock<std::mutex> startLock(threadStartMutex);
     DBG("GLibThread::" << __func__ << ": Thread is starting.");
@@ -219,6 +222,7 @@ bool GLibThread::startGLibThread()
  */
 void GLibThread::stopGLibThread(bool unrefGLibVars)
 {
+    using namespace juce;
     ScopedWriteLock changeLock(threadStateLock);
     if(isThreadRunning())
     {

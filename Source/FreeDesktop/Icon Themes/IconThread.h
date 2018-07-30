@@ -62,8 +62,8 @@ public:
      *                       object.  This value is typically only relevant on
      *                       extra high resolution displays.
      */
-    void loadIcon(String icon, int size, 
-            std::function<void(Image) > assignImage,
+    void loadIcon(juce::String icon, int size, 
+            std::function<void(juce::Image) > assignImage,
             IconThemeIndex::Context context = IconThemeIndex::unknownCtx,
             int scale = 1);
 
@@ -73,7 +73,8 @@ private:
     /**
      * Shares access to the icon map and the job queue.
      */
-    class IconResource : public Thread, public ResourceManager::SharedResource
+    class IconResource : public juce::Thread,
+    public ResourceManager::SharedResource
     {
     public:
         IconResource();
@@ -85,11 +86,11 @@ private:
 
         struct QueuedJob
         {
-            String icon;
+            juce::String icon;
             int size;
             int scale;
             IconThemeIndex::Context context;
-            std::function<void(Image) > callback;
+            std::function<void(juce::Image) > callback;
         };
 
         /**
@@ -126,25 +127,25 @@ private:
          * @return  The full path of the best matching icon file, or the empty
          *          string if no match is found.
          */
-        String getIconPath(const QueuedJob& request);
+        juce::String getIconPath(const QueuedJob& request);
 
         //Queued icon requests waiting for the icon thread.
-        Array<QueuedJob, CriticalSection> queuedJobs;
+        juce::Array<QueuedJob, juce::CriticalSection> queuedJobs;
         //Icon theme indexes used to load icons, in order of priority
-        OwnedArray<IconThemeIndex> iconThemes;
+        juce::OwnedArray<IconThemeIndex> iconThemes;
         //Directories to search, in order, for icon themes and un-themed icons.
-        StringArray iconDirectories;
+        juce::StringArray iconDirectories;
     };
 
     //Default image icons to copy into AppMenuButtons
-    Image defaultIcon;
+    juce::Image defaultIcon;
 
     //default icon path definitions
-    static const String defaultIconPath;
+    static const juce::String defaultIconPath;
 
     //ResourceManager shared object and lock;
-    static ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static ReadWriteLock iconLock;
+    static juce::ScopedPointer<ResourceManager::SharedResource> sharedResource;
+    static juce::ReadWriteLock iconLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconThread)
 };

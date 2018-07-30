@@ -59,7 +59,7 @@ bool BluetoothSettingsComponent::connectionPageAvailable()
 /**
  * @return the bluetooth icon asset name
  */
-String BluetoothSettingsComponent::getIconAsset()
+juce::String BluetoothSettingsComponent::getIconAsset()
 {
     return "bluetoothIcon.svg";
 }
@@ -73,7 +73,7 @@ void BluetoothSettingsComponent::enabledStateChanged(bool enabled) { }
 /**
  * @return "coming soon!"
  */
-String BluetoothSettingsComponent::updateButtonText()
+juce::String BluetoothSettingsComponent::updateButtonText()
 {
     return "coming soon!";
 }

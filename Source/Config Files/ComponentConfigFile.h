@@ -28,35 +28,35 @@ public:
      * 
      * @return              the properties defined for that component.
      */
-    ComponentSettings getComponentSettings(String componentKey);
+    ComponentSettings getComponentSettings(juce::String componentKey);
 
     /**
      * Add a listener to track component setting changes.
      * @see ConfigFile.h
      */
-    void addListener(ConfigFile::Listener* listener, StringArray trackedKeys);
+    void addListener(ConfigFile::Listener* listener, juce::StringArray trackedKeys);
     //######################### Text Size Keys #################################
-    static const String smallTextKey;
-    static const String mediumTextKey;
-    static const String largeTextKey;
+    static const juce::String smallTextKey;
+    static const juce::String mediumTextKey;
+    static const juce::String largeTextKey;
 
     //######################### UI Component Data ##############################
     //Defines all component types managed in the config file
-    static const String scrollingAppMenuKey;
-    static const String pagedAppMenuKey;
-    static const String menuFrameKey;
-    static const String batteryIconKey;
-    static const String batteryPercentKey;
-    static const String clockLabelKey;
-    static const String wifiIconKey;
-    static const String powerButtonKey;
-    static const String settingsButtonKey;
-    static const String popupMenuKey;
-    static const String pageLeftKey;
-    static const String pageRightKey;
-    static const String pageUpKey;
-    static const String pageDownKey;
-    static const String spinnerKey;
+    static const juce::String scrollingAppMenuKey;
+    static const juce::String pagedAppMenuKey;
+    static const juce::String menuFrameKey;
+    static const juce::String batteryIconKey;
+    static const juce::String batteryPercentKey;
+    static const juce::String clockLabelKey;
+    static const juce::String wifiIconKey;
+    static const juce::String powerButtonKey;
+    static const juce::String settingsButtonKey;
+    static const juce::String popupMenuKey;
+    static const juce::String pageLeftKey;
+    static const juce::String pageRightKey;
+    static const juce::String pageUpKey;
+    static const juce::String pageDownKey;
+    static const juce::String spinnerKey;
 
     /**
      * Represents the three main text size options.  The actual size of
@@ -83,7 +83,7 @@ public:
      *           If even the small font size is too big to fit in textBounds, 
      *           instead return whatever font height is small enough to fit.
      */
-    int getFontHeight(Rectangle <int> textBounds, String text);
+    int getFontHeight(juce::Rectangle <int> textBounds, juce::String text);
 
     /**
      * Gets the height in pixels of one of the three configured text sizes.
@@ -107,7 +107,7 @@ public:
          * 
          * @param jsonObj  An object var containing json data.
          */
-        ComponentSettings(var jsonObj);
+        ComponentSettings(juce::var jsonObj);
 
         /**
          * Packages the object into a DynamicObject that can be written to a
@@ -115,30 +115,30 @@ public:
          * 
          * @return  the converted component settings.
          */
-        DynamicObject * getDynamicObject();
+        juce::DynamicObject * getDynamicObject();
 
         /**
          * @return the bounds of the component relative to the window,
          * measured in pixels.
          */
-        Rectangle<int> getBounds();
+        juce::Rectangle<int> getBounds();
 
         /**
          * @return the list of configurable colors.
          */
-        Array<Colour> getColours();
+        juce::Array<juce::Colour> getColours();
 
         /**
          * @return the list of component asset files.
          */
-        StringArray getAssetFiles();
+        juce::StringArray getAssetFiles();
 
         /**
          * Use these settings to position and size a component.
          * 
          * @param component  Any component object.
          */
-        void applyBounds(Component * component);
+        void applyBounds(juce::Component * component);
         
         /**
          * Gets this component's x-coordinate as a fraction of the window's
@@ -188,12 +188,12 @@ public:
         float height;
 
         //Custom colors for component image assets.
-        Array<Colour> colours;
+        juce::Array<juce::Colour> colours;
 
         //Component asset files.  This is mostly intended to define image 
         //assets, but there's no reason it couldn't be used to define other
         //assets.
-        StringArray assetFiles;
+        juce::StringArray assetFiles;
     };
 
 
@@ -201,7 +201,7 @@ protected:
     /**
      * @return the list of all component keys.
      */
-    static StringArray getComponentKeys();
+    static juce::StringArray getComponentKeys();
 
 private:
     class ConfigJson : public ConfigFile
@@ -218,7 +218,7 @@ private:
          * 
          * @return              the properties defined for that component.
          */
-        ComponentSettings getComponentSettings(String componentKey);
+        ComponentSettings getComponentSettings(juce::String componentKey);
 
     private:
         /**
@@ -232,14 +232,16 @@ private:
          *                        open it as the appropriate default config file
          *                        from assets.
          */
-        void readDataFromJson(var& config, var& defaultConfig) override final;
+        void readDataFromJson
+        (juce::var& config, juce::var& defaultConfig) override final;
 
         /**
          * Copy all config data to a json object
          * 
          * @param jsonObj
          */
-        void copyDataToJson(DynamicObject::Ptr jsonObj) override final;
+        void copyDataToJson
+        (juce::DynamicObject::Ptr jsonObj) override final;
 
         /**
          * Gets the string key and data type for each basic value stored in
@@ -251,15 +253,15 @@ private:
         virtual std::vector<DataKey> getDataKeys() const override;
 
         //Stores all component settings loaded from the component config file
-        std::map<String, ComponentSettings> components;
+        std::map<juce::String, ComponentSettings> components;
     };
 
     //Defines the component config file's name
     static constexpr const char * filenameConst = "components.json";
 
     //ResourceManager shared object and lock;
-    static ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static ReadWriteLock configLock;
+    static juce::ScopedPointer<ResourceManager::SharedResource> sharedResource;
+    static juce::ReadWriteLock configLock;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ComponentConfigFile)
 };

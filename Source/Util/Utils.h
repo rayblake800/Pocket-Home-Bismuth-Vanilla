@@ -14,7 +14,6 @@
  */
 void componentTrace();
 
-
 /**
  * Convert a pointer to a unique, fixed ID for debug output. Nullptr will always
  * have ID 0.
@@ -37,7 +36,8 @@ int addressID(const void* ptr);
  * 
  * @return  a reference to the full event log for that pointer.
  */
-const String& addressLog(const void* ptr, String event, const void* ptr2 = nullptr);
+const juce::String& addressLog
+(const void* ptr, juce::String event, const void* ptr2 = nullptr);
 
 #define ADDR_LOG(ptr1,...) addressLog(ptr1, __VA_ARGS__)
 
@@ -56,21 +56,36 @@ class ScopedExecTimer
 {
 public:
 
-    ScopedExecTimer(String name) :
+    ScopedExecTimer(juce::String name) :
     name(name),
-    startTime(Time::getMillisecondCounter()) { }
+    startTime(juce::Time::getMillisecondCounter()) { }
 
     virtual ~ScopedExecTimer()
     {
-        uint32 execTime = Time::getMillisecondCounter() - startTime;
-        DBG(name << ": Executed in " << String(execTime));
+        juce::uint32 execTime = juce::Time::getMillisecondCounter() - startTime;
+        DBG(name << ": Executed in " << juce::String(execTime));
     }
 private:
-    String name;
-    uint32 startTime;
+    juce::String name;
+    juce::uint32 startTime;
 };
 
 #endif
+
+/**
+ * Waits for a process to end, forcibly terminating it if necessary, then
+ * returns all process output as long as the process exited normally.
+ * 
+ * @param process     A child process that has already started.
+ * 
+ * @param timeoutMs   Number of milliseconds to wait before forcibly terminating
+ *                    the child process.
+ * 
+ * @return   All text that was printed to stdout or stderr by the child process,
+ *           or the empty string if the process did not exit normally. 
+ */
+juce::String getProcessOutput
+(juce::ChildProcess& process, unsigned int timeoutMs);
 
 /**
  * Requests user confirmation before performing some action.
@@ -83,7 +98,7 @@ private:
  *                    function will run.
  */
 void confirmAction
-(String title, String message, std::function<void() > onConfirm);
+(juce::String title, juce::String message, std::function<void() > onConfirm);
 
 /**
  * Find the median of three values.
@@ -141,11 +156,11 @@ bool isClass(C1* checkIfC2)
  * 
  * @return the size of the display, measured in pixels.
  */
-Rectangle<int> getDisplaySize();
+juce::Rectangle<int> getDisplaySize();
 
 /**
  * Gets the size of the single application window.
  * 
  * @return the bounds of the active window, measured in pixels.
  */
-Rectangle<int> getWindowBounds();
+juce::Rectangle<int> getWindowBounds();

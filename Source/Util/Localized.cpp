@@ -4,8 +4,9 @@
 /**
  * Loads all localized text into memory.
  */
-Localized::Localized(String className, String localeName)
+Localized::Localized(juce::String className, juce::String localeName)
 {
+    using namespace juce;
     StringArray filesToTry = {localeName, getLocaleName(), defaultLocale};
     var localeFile;
     for(const String& filename : filesToTry)
@@ -42,8 +43,9 @@ Localized::Localized(String className, String localeName)
 /**
  * Get the name of the system locale.
  */
-String Localized::getLocaleName()
+juce::String Localized::getLocaleName()
 {
+    using namespace juce;
     std::locale l("");
     return String(l.name()).initialSectionNotContaining(".");
 }
@@ -51,8 +53,9 @@ String Localized::getLocaleName()
 /**
  * Look up a piece of text for the current locale.
  */
-String Localized::localeText(String key) const
+juce::String Localized::localeText(juce::String key) const
 {
+    using namespace juce;
     try
     {
         return localeStrings.at(key);

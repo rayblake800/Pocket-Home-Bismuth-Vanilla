@@ -117,7 +117,7 @@ void NMPPConnection::addWifiSettings(const GByteArray* ssid, bool isHidden)
 /*
  * Attempts to add WPA security settings to this connection.
  */
-bool NMPPConnection::addWPASettings(const String& psk)
+bool NMPPConnection::addWPASettings(const juce::String& psk)
 {
     if(psk.length() < 8)
     {
@@ -137,7 +137,7 @@ bool NMPPConnection::addWPASettings(const String& psk)
 /*
  * Attempts to add WEP security settings to this connection.
  */
-bool NMPPConnection::addWEPSettings(const String& psk)
+bool NMPPConnection::addWEPSettings(const juce::String& psk)
 {
     const char* keyType = nullptr;
     if (psk.length() == 10 || psk.length() == 26)

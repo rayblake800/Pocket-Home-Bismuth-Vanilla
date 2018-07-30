@@ -11,9 +11,9 @@
 #include "PokeLookAndFeel.h"
 
 PokeLookAndFeel::PokeLookAndFeel() :
-seguibl(Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
+seguibl(juce::Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
 BinaryData::LatoRegular_ttfSize)),
-cursor(MouseCursor::NoCursor)
+cursor(juce::MouseCursor::NoCursor)
 {
     ColourConfigFile colourConfig;
     MainConfigFile mainConfig;
@@ -25,7 +25,7 @@ cursor(MouseCursor::NoCursor)
 /*
  * Get the appropriate typeface for the given font.
  */
-Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const Font &font)
+juce::Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const juce::Font &font)
 {
     return seguibl;
 }
@@ -33,11 +33,19 @@ Typeface::Ptr PokeLookAndFeel::getTypefaceForFont(const Font &font)
 /*
  * Draws the thumb portion of a linear Slider.
  */
-void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
-        int width, int height,
-        float sliderPos, float minSliderPos, float maxSliderPos,
-        const Slider::SliderStyle style, Slider &slider)
+void PokeLookAndFeel::drawLinearSliderThumb(
+        juce::Graphics &g,
+        int x,
+        int y,
+        int width,
+        int height,
+        float sliderPos,
+        float minSliderPos,
+        float maxSliderPos,
+        const juce::Slider::SliderStyle style,
+        juce::Slider &slider)
 {
+    using namespace juce;
     const float radius = getSliderThumbRadius(slider);
     g.setColour(slider.findColour(Slider::thumbColourId));
     float kx, ky;
@@ -61,12 +69,19 @@ void PokeLookAndFeel::drawLinearSliderThumb(Graphics &g, int x, int y,
 /*
  * Draws the background of a linear slider.
  */
-void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y,
-        int width, int height,
-        float sliderPos, float minSliderPos,
+void PokeLookAndFeel::drawLinearSliderBackground(
+        juce::Graphics &g,
+        int x,
+        int y,
+        int width,
+        int height,
+        float sliderPos,
+        float minSliderPos,
         float maxSliderPos,
-        const Slider::SliderStyle style, Slider &slider)
+        const juce::Slider::SliderStyle style,
+        juce::Slider &slider)
 {
+    using namespace juce;
     const float radius = std::floor(getSliderThumbRadius(slider) * 0.333f);
     g.setColour(slider.findColour(Slider::backgroundColourId));
     Path indent;
@@ -95,12 +110,19 @@ void PokeLookAndFeel::drawLinearSliderBackground(Graphics &g, int x, int y,
 /*
  * Draws the entire linear slider component.
  */
-void PokeLookAndFeel::drawLinearSlider(Graphics &g, int x, int y,
-        int width, int height,
-        float sliderPos, float minSliderPos, float maxSliderPos,
-        const Slider::SliderStyle style, Slider &slider)
+void PokeLookAndFeel::drawLinearSlider(
+        juce::Graphics &g,
+        int x,
+        int y,
+        int width,
+        int height,
+        float sliderPos,
+        float minSliderPos,
+        float maxSliderPos,
+        const juce::Slider::SliderStyle style,
+        juce::Slider &slider)
 {
-
+    using namespace juce;
     drawLinearSliderBackground(g, x, y, width, height,
             sliderPos, minSliderPos, maxSliderPos, style,
             slider);
@@ -112,17 +134,21 @@ void PokeLookAndFeel::drawLinearSlider(Graphics &g, int x, int y,
 /*
  * Defines the radius in pixels of the slider thumb.
  */
-int PokeLookAndFeel::getSliderThumbRadius(Slider &slider)
+int PokeLookAndFeel::getSliderThumbRadius(juce::Slider &slider)
 {
-    return jmin(14, slider.getHeight() / 2, slider.getWidth() / 2);
+    return juce::jmin(14, slider.getHeight() / 2, slider.getWidth() / 2);
 }
 
 /*
  * Draws the text onto a TextButton.
  */
-void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
-        bool isMouseOverButton, bool isButtonDown)
+void PokeLookAndFeel::drawButtonText(
+        juce::Graphics &g, 
+        juce::TextButton &button,
+        bool isMouseOverButton,
+        bool isButtonDown)
 {
+    using namespace juce;
     Font font(getTextButtonFont(button, button.getHeight()));
     font.setExtraKerningFactor(0.06f);
     ComponentConfigFile componentConfig;
@@ -169,10 +195,14 @@ void PokeLookAndFeel::drawButtonText(Graphics &g, TextButton &button,
 /*
  * Draws the background of a Button component.
  */
-void PokeLookAndFeel::drawButtonBackground(Graphics &g, Button &button,
-        const Colour &backgroundColour, bool isMouseOverButton,
+void PokeLookAndFeel::drawButtonBackground(
+        juce::Graphics &g, 
+        juce::Button &button,
+        const juce::Colour &backgroundColour, 
+        bool isMouseOverButton,
         bool isButtonDown)
 {
+    using namespace juce;
     const int width = button.getWidth();
     const int height = button.getHeight();
 
@@ -192,7 +222,7 @@ void PokeLookAndFeel::drawButtonBackground(Graphics &g, Button &button,
 /*
  * Get the cursor to display over a given component.
  */
-MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
+juce::MouseCursor PokeLookAndFeel::getMouseCursorFor(juce::Component &component)
 {
     return cursor;
 }
@@ -200,8 +230,9 @@ MouseCursor PokeLookAndFeel::getMouseCursorFor(Component &component)
 /**
  * Gets the default font to use for popup menu text.
  */
-Font PokeLookAndFeel::getPopupMenuFont()
+juce::Font PokeLookAndFeel::getPopupMenuFont()
 {
+    using namespace juce;
     ComponentConfigFile config;
     return Font(config.getFontHeight(ComponentConfigFile::mediumText));
 }
@@ -209,8 +240,9 @@ Font PokeLookAndFeel::getPopupMenuFont()
 /**
  * Gets the default font to use for combo box text.
  */  
-Font PokeLookAndFeel::getComboBoxFont(ComboBox& comboBox)
+juce::Font PokeLookAndFeel::getComboBoxFont(juce::ComboBox& comboBox)
 {
+    using namespace juce;
     ComponentConfigFile config;
     int height = std::min(config.getFontHeight(ComponentConfigFile::mediumText),
             config.getFontHeight(comboBox.getLocalBounds(), comboBox.getText()));
@@ -220,9 +252,9 @@ Font PokeLookAndFeel::getComboBoxFont(ComboBox& comboBox)
 /**
  * Gets the default font to use for Label components.
  */ 
-Font PokeLookAndFeel::getLabelFont(Label& label)
-
+juce::Font PokeLookAndFeel::getLabelFont(juce::Label& label)
 {
+    using namespace juce;
     ComponentConfigFile config;
     int height = std::min(config.getFontHeight(ComponentConfigFile::smallText),
             config.getFontHeight(label.getLocalBounds(), label.getText()));
@@ -232,8 +264,9 @@ Font PokeLookAndFeel::getLabelFont(Label& label)
 /**
  * Gets the default font to use for alert window title text.
  */ 
-Font PokeLookAndFeel::getAlertWindowTitleFont()
+juce::Font PokeLookAndFeel::getAlertWindowTitleFont()
 {
+    using namespace juce;
     ComponentConfigFile config;
     return Font(config.getFontHeight(ComponentConfigFile::largeText));
 }
@@ -241,8 +274,9 @@ Font PokeLookAndFeel::getAlertWindowTitleFont()
 /**
  * Gets the default font to use for alert window message text.
  */ 
-Font PokeLookAndFeel::getAlertWindowMessageFont()
+juce::Font PokeLookAndFeel::getAlertWindowMessageFont()
 {
+    using namespace juce;
     ComponentConfigFile config;
     return Font(config.getFontHeight(ComponentConfigFile::mediumText));
 }
@@ -250,8 +284,9 @@ Font PokeLookAndFeel::getAlertWindowMessageFont()
 /*
  * Updates the cursor visibility when the associated config key is changed. 
  */
-void PokeLookAndFeel::nonColorValueChanged(String key)
+void PokeLookAndFeel::nonColorValueChanged(juce::String key)
 {
+    using namespace juce;
     if (key == MainConfigFile::showCursorKey)
     {
         MainConfigFile config;
@@ -264,7 +299,7 @@ void PokeLookAndFeel::nonColorValueChanged(String key)
  * Updates Component colours when they're changed in the ColourConfigFile.
  */
 void PokeLookAndFeel::colourValueChanged
-(int colourID, String colourKey, Colour newColour)
+(int colourID, juce::String colourKey, juce::Colour newColour)
 {
     setColour(colourID, newColour);
 }

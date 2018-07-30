@@ -4,7 +4,7 @@
 OverlaySpinner::OverlaySpinner(int secondsToTimeout) :
 spinner(secondsToTimeout)
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("OverlaySpinner");
 #    endif
@@ -18,15 +18,16 @@ spinner(secondsToTimeout)
 /**
  * Sets text to display below the spinner
  */
-void OverlaySpinner::setLoadingText(String newText)
+void OverlaySpinner::setLoadingText(juce::String newText)
 {
+    using namespace juce;
     loadingText.setText(newText, NotificationType::dontSendNotification);
 }
 
 /**
  * Fills in the overlay background.
  */
-void OverlaySpinner::paint(Graphics &g)
+void OverlaySpinner::paint(juce::Graphics &g)
 {
     g.fillAll(findColour(backgroundColourId));
 }
@@ -36,6 +37,7 @@ void OverlaySpinner::paint(Graphics &g)
  */
 void OverlaySpinner::resized()
 {
+    using namespace juce;
     Rectangle<int> bounds = getLocalBounds();
     int spinnerSize = bounds.getHeight() / 10;
     spinner.setBounds(bounds.withSizeKeepingCentre(spinnerSize, spinnerSize));

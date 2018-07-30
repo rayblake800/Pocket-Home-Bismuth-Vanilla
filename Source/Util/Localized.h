@@ -28,7 +28,7 @@ public:
      *                     defaultLocale will be used.
      * 
      */
-    Localized(String className, String localeName = String());
+    Localized(juce::String className, juce::String localeName = juce::String());
 
     virtual ~Localized() { }
 
@@ -38,7 +38,7 @@ public:
      * @return The short locale name, used for naming locale text files and
      * identifying locale in .desktop files. 
      */
-    static String getLocaleName();
+    static juce::String getLocaleName();
 
     /**
      * Look up a piece of text for the current locale.
@@ -48,11 +48,11 @@ public:
      * @return     The localized text string, or the empty string if text
      *              wasn't found.
      */
-    String localeText(String key) const;
+    juce::String localeText(juce::String key) const;
 
 private:
     //All of the localized text for this class.
-    std::map<String, String> localeStrings;
+    std::map<juce::String, juce::String> localeStrings;
     //default locale to use if others aren't found.
     static const constexpr char * defaultLocale = "en_US";
 };

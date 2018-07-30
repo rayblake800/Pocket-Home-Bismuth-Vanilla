@@ -20,8 +20,9 @@ bool FolderMenuItem::isFolder() const
 /**
  * @return all menu items in this folder
  */
-Array<AppMenuItem::Ptr> FolderMenuItem::getFolderItems() const
+juce::Array<AppMenuItem::Ptr> FolderMenuItem::getFolderItems() const
 {
+    using namespace juce;
     std::set<DesktopEntry> folderEntries =
             desktopEntries.getCategoryListEntries(appFolder.categories);
     Array<AppMenuItem::Ptr> folderItems;
@@ -35,7 +36,7 @@ Array<AppMenuItem::Ptr> FolderMenuItem::getFolderItems() const
 /**
  * @return the display name of the associated folder
  */
-String FolderMenuItem::getAppName() const
+juce::String FolderMenuItem::getAppName() const
 {
     return appFolder.name;
 }
@@ -43,7 +44,7 @@ String FolderMenuItem::getAppName() const
 /**
  * @return all application categories linked to this folder.
  */
-StringArray FolderMenuItem::getCategories() const
+juce::StringArray FolderMenuItem::getCategories() const
 {
     return appFolder.categories;
 }
@@ -51,7 +52,7 @@ StringArray FolderMenuItem::getCategories() const
 /**
  * @return the name or path used to load the icon file. 
  */
-String FolderMenuItem::getIconName() const
+juce::String FolderMenuItem::getIconName() const
 {
     return appFolder.icon;
 }
@@ -70,7 +71,7 @@ bool FolderMenuItem::canChangeIndex(int offset) const
 /**
  * Get an appropriate title to use for a deletion confirmation window.
  */
-String FolderMenuItem::getConfirmDeleteTitle() const
+juce::String FolderMenuItem::getConfirmDeleteTitle() const
 {
     return localeText(delete_NAME) + appFolder.name 
             + localeText(folder);
@@ -79,7 +80,7 @@ String FolderMenuItem::getConfirmDeleteTitle() const
 /**
  * Gets appropriate descriptive text for a deletion confirmation window.
  */
-String FolderMenuItem::getConfirmDeleteMessage() const
+juce::String FolderMenuItem::getConfirmDeleteMessage() const
 {
     return localeText(will_remove_folder);
 }
@@ -87,7 +88,7 @@ String FolderMenuItem::getConfirmDeleteMessage() const
 /**
  * @return the title to display over an editor for this menu item. 
  */
-String FolderMenuItem::getEditorTitle() const
+juce::String FolderMenuItem::getEditorTitle() const
 {
     return localeText(edit_folder);
 }
@@ -147,7 +148,7 @@ bool FolderMenuItem::moveDataIndex(int offset)
  * @param categories list of folder application categories
  */
 void FolderMenuItem::editFolder
-(String name, String icon, StringArray categories)
+(juce::String name, juce::String icon, juce::StringArray categories)
 {
     AppConfigFile config;
     int index = config.getFolderIndex(appFolder);

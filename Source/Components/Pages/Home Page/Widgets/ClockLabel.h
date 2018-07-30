@@ -39,7 +39,7 @@ private:
      * @param key     This should be either the key for the clock visibility 
      *                setting, or for the 12h/24h mode toggle
      */
-    void extraConfigValueChanged(String key) override;
+    void extraConfigValueChanged(juce::String key) override;
     
     //If true, use 24 hour time, if false, use 12 hour AM/PM time.
     bool use24HrMode = false;

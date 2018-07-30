@@ -43,7 +43,7 @@ public:
      * @param showDeleteButton  Sets if the editor will contain a delete 
      *                           button.
      */
-    AppMenuPopupEditor(String title,
+    AppMenuPopupEditor(juce::String title,
             std::function<void(AppMenuPopupEditor*) > onConfirm,
             bool showCategoryList = true,
             bool showCommandField = true);
@@ -53,23 +53,23 @@ public:
     /**
      * @return the contents of the editable name field 
      */
-    String getNameField();
+    juce::String getNameField();
 
 
     /**
      * @return the contents of the editable icon field 
      */
-    String getIconField();
+    juce::String getIconField();
 
     /**
      * @return the contents of the editable category list. 
      */
-    StringArray getCategories();
+    juce::StringArray getCategories();
 
     /**
      * @return the contents of the editable launch command field.
      */
-    String getCommandField();
+    juce::String getCommandField();
 
     /**
      * @return true if the command should run in the terminal
@@ -79,24 +79,24 @@ public:
     /**
      * Set the value stored in the editable name field.
      */
-    void setNameField(String name);
+    void setNameField(juce::String name);
 
     /**
      * Set the value stored in the editable icon field, and update
      * the preview icon.
      */
-    void setIconField(String icon);
+    void setIconField(juce::String icon);
 
 
     /**
      * Set the values stored in the editable category list.
      */
-    void setCategories(StringArray categories);
+    void setCategories(juce::StringArray categories);
 
     /**
      * Set the value displayed in the editable launch command field.
      */
-    void setCommandField(String command);
+    void setCommandField(juce::String command);
 
     /**
      * Sets the state of the "launch in terminal" checkbox.
@@ -118,11 +118,11 @@ private:
      * 
      * @param button
      */
-    void editorButtonClicked(Button* button) override;
+    void editorButtonClicked(juce::Button* button) override;
 
     ScalingLabel nameLabel; //text:"Name:"
     //Edits an application/folder display name
-    TextEditor nameEditor;
+    juce::TextEditor nameEditor;
 
     ScalingLabel iconLabel; //text:"Icon path:"
     //Draws a preview of the selected icon
@@ -131,15 +131,15 @@ private:
     FileSelectTextEditor iconPathEditor;
 
     //Launches a category editor pop-up
-    TextButton categoryEditButton; 
+    juce::TextButton categoryEditButton; 
     //Holds the category editor when it's launched.
-    ScopedPointer<CategoryPopupEditor> categoryEditor;
+    juce::ScopedPointer<CategoryPopupEditor> categoryEditor;
     //List of editable categories associated with this application/folder
-    StringArray categories;
+    juce::StringArray categories;
 
     ScalingLabel commandLabel; //text:"Command"
     //Edits the application launch command
-    TextEditor commandEditor;
+    juce::TextEditor commandEditor;
     //Labels the terminal check
     ScalingLabel terminalCheckboxLabel; //text:"Run in terminal:"
     //Sets if this application launches as a terminal application

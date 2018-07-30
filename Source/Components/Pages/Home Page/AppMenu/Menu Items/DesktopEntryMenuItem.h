@@ -35,12 +35,12 @@ public:
     /**
      * @return the display name of the associated application
      */
-    String getAppName() const override;
+    juce::String getAppName() const override;
 
     /**
      * @return application shell command or directory path.
      */
-    String getCommand() const override;
+    juce::String getCommand() const override;
 
     /**
      * @return true iff this menu item is an application that launches in
@@ -51,12 +51,12 @@ public:
     /**
      * @return all application categories linked to this menu item.
      */
-    StringArray getCategories() const override;
+    juce::StringArray getCategories() const override;
 
     /**
      * @return the name or path used to load the icon file. 
      */
-    String getIconName() const override;
+    juce::String getIconName() const override;
 
     /**
      * @return true, changes to this menu item change the current user's
@@ -70,12 +70,12 @@ protected:
     /**
      * Get an appropriate title to use for a deletion confirmation window.
      */
-    virtual String getConfirmDeleteTitle() const override;
+    virtual juce::String getConfirmDeleteTitle() const override;
 
     /**
      * Gets appropriate descriptive text for a deletion confirmation window.
      */
-    virtual String getConfirmDeleteMessage() const override;
+    virtual juce::String getConfirmDeleteMessage() const override;
 
     /**
      * @return true iff this menu item has categories that can be edited.
@@ -96,7 +96,7 @@ protected:
     /**
      * @return the title to display over an editor for this menu item. 
      */
-    virtual String getEditorTitle() const override;
+    virtual juce::String getEditorTitle() const override;
 
     /**
      * Gets a PopupEditorComponent callback function that will apply 
@@ -122,8 +122,8 @@ protected:
      * @param command application launch command
      * @param useTerminal sets if this launches in a terminal window
      */
-    void editEntry(String name, String icon, StringArray categories,
-            String command, bool useTerminal);
+    void editEntry(juce::String name, juce::String icon, juce::StringArray categories,
+            juce::String command, bool useTerminal);
 
 private:
     //localized text keys: 

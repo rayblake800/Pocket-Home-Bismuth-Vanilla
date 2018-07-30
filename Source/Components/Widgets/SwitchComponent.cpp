@@ -16,8 +16,9 @@ SwitchComponent::SwitchComponent()
  * updates the button handle.
  */
 void SwitchComponent::setToggleState(bool shouldBeOn,
-        NotificationType notification, bool animate)
+        juce::NotificationType notification, bool animate)
 {
+    using namespace juce;
     if (shouldBeOn != getToggleState())
     {
         ToggleButton::setToggleState(shouldBeOn, notification);
@@ -29,7 +30,7 @@ void SwitchComponent::setToggleState(bool shouldBeOn,
  * Draws the switch background as a rounded rectangle.
  */
 void SwitchComponent::paintButton
-(Graphics &g, bool isMouseOverButton, bool isButtonDown)
+(juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
     float radius = float(backgroundShape.getHeight()) / 2.0f;
 
@@ -47,6 +48,7 @@ void SwitchComponent::paintButton
  */
 void SwitchComponent::resized()
 {
+    using namespace juce;
     backgroundShape = getLocalBounds();
     float ratio = (float) backgroundShape.getWidth()
             / (float) backgroundShape.getHeight();
@@ -87,6 +89,7 @@ void SwitchComponent::resized()
  */
 void SwitchComponent::clicked()
 {
+    using namespace juce;
     if(Desktop::getInstance().getAnimator().isAnimating(&handle))
     {
         startTimer(animationDuration);
@@ -105,7 +108,7 @@ void SwitchComponent::clicked()
     }
 }
 
-void SwitchComponent::SwitchHandle::paint(Graphics& g)
+void SwitchComponent::SwitchHandle::paint(juce::Graphics& g)
 {
     g.setColour(colour);
     g.fillEllipse(getLocalBounds().toFloat());
@@ -116,6 +119,7 @@ void SwitchComponent::SwitchHandle::paint(Graphics& g)
  */
 void SwitchComponent::timerCallback()
 {
+    using namespace juce;
     MessageManager::callAsync([this]()
     {
         stopTimer();

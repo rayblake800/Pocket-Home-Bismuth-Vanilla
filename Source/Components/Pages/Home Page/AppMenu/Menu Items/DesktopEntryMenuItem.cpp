@@ -17,7 +17,7 @@ bool DesktopEntryMenuItem::isFolder() const
 /**
  * @return the display name of the associated application
  */
-String DesktopEntryMenuItem::getAppName() const
+juce::String DesktopEntryMenuItem::getAppName() const
 {
     return desktopEntry.getValue(DesktopEntry::name);
 }
@@ -25,8 +25,9 @@ String DesktopEntryMenuItem::getAppName() const
 /**
  * @return application shell command or directory path.
  */
-String DesktopEntryMenuItem::getCommand() const
+juce::String DesktopEntryMenuItem::getCommand() const
 {
+    using namespace juce;
     String command = desktopEntry.getValue(DesktopEntry::exec);
     if (desktopEntry.getValue(DesktopEntry::terminal))
     {
@@ -47,7 +48,7 @@ bool DesktopEntryMenuItem::isTerminalApp() const
 /**
  * @return all application categories linked to this menu item.
  */
-StringArray DesktopEntryMenuItem::getCategories() const
+juce::StringArray DesktopEntryMenuItem::getCategories() const
 {
     return desktopEntry.getValue(DesktopEntry::categories);
 }
@@ -55,7 +56,7 @@ StringArray DesktopEntryMenuItem::getCategories() const
 /**
  * @return the name or path used to load the icon file. 
  */
-String DesktopEntryMenuItem::getIconName() const
+juce::String DesktopEntryMenuItem::getIconName() const
 {
     return desktopEntry.getValue(DesktopEntry::icon);
 }
@@ -72,7 +73,7 @@ bool DesktopEntryMenuItem::changesDesktopEntries() const
 /**
  * Get an appropriate title to use for a deletion confirmation window.
  */
-String DesktopEntryMenuItem::getConfirmDeleteTitle() const
+juce::String DesktopEntryMenuItem::getConfirmDeleteTitle() const
 {
     return localeText(remove_link_to) + getAppName()
             + localeText(question_mark);
@@ -81,7 +82,7 @@ String DesktopEntryMenuItem::getConfirmDeleteTitle() const
 /**
  * Gets appropriate descriptive text for a deletion confirmation window.
  */
-String DesktopEntryMenuItem::getConfirmDeleteMessage() const
+juce::String DesktopEntryMenuItem::getConfirmDeleteMessage() const
 {
     return localeText(will_hide);
 }
@@ -89,7 +90,7 @@ String DesktopEntryMenuItem::getConfirmDeleteMessage() const
 /**
  * @return the title to display over an editor for this menu item. 
  */
-String DesktopEntryMenuItem::getEditorTitle() const
+juce::String DesktopEntryMenuItem::getEditorTitle() const
 {
     return localeText(edit_app);
 }
@@ -115,6 +116,7 @@ DesktopEntryMenuItem::getEditorCallback()
  */
 bool DesktopEntryMenuItem::removeMenuItemSource()
 {
+    using namespace juce;
     StringArray notShowIn = desktopEntry.getValue(DesktopEntry::notShowIn);
     notShowIn.add("pocket-home");
     desktopEntry.setValue(DesktopEntry::notShowIn, notShowIn);
@@ -131,9 +133,9 @@ bool DesktopEntryMenuItem::removeMenuItemSource()
  * @param command application launch command
  * @param useTerminal sets if this launches in a terminal window
  */
-void DesktopEntryMenuItem::editEntry(String name, String icon,
-        StringArray categories,
-        String command, bool useTerminal)
+void DesktopEntryMenuItem::editEntry(juce::String name, juce::String icon,
+        juce::StringArray categories,
+        juce::String command, bool useTerminal)
 {
     desktopEntry.setValue(DesktopEntry::name, name);
     desktopEntry.setValue(DesktopEntry::icon, icon);

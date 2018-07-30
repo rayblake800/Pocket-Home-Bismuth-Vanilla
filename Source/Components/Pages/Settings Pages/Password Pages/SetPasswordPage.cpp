@@ -12,7 +12,7 @@ newPassword("New", 0x2022),
 confirmLabel("ConfLabel", localeText(retype_password)),
 confirmPassword("Confirmation", 0x2022)
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("SetPasswordPage");
 #    endif
@@ -57,8 +57,9 @@ confirmPassword("Confirmation", 0x2022)
  * and all text fields on the page will be cleared.  If the password was
  * set successfully, the page will be closed.
  */
-void SetPasswordPage::pageButtonClicked(Button* button)
+void SetPasswordPage::pageButtonClicked(juce::Button* button)
 {
+    using namespace juce;
     if (button != &setPassword)
     {
         DBG("SetPasswordPage::" << __func__ << ": button " << button->getName()
@@ -144,9 +145,9 @@ void SetPasswordPage::pageButtonClicked(Button* button)
  * Opens a message box to display an error message, and clears all text entry
  * fields on the page.
  */
-void SetPasswordPage::showErrorMessage(String title, String error)
+void SetPasswordPage::showErrorMessage(juce::String title, juce::String error)
 {
-
+    using namespace juce;
     AlertWindow::showMessageBoxAsync
             (AlertWindow::AlertIconType::WarningIcon, title, error, "");
     clearAllFields();

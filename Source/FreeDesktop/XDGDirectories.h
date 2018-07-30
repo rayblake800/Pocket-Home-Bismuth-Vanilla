@@ -17,7 +17,7 @@ namespace XDGDirectories
      * 
      * @return  The path to the user's data directory.
      */
-    String getUserDataPath();
+    juce::String getUserDataPath();
     
     /**
      * Gets the path of the single base directory where user-specific 
@@ -25,7 +25,7 @@ namespace XDGDirectories
      * 
      * @return  The path to the user's configuration directory.
      */
-    String getUserConfigPath();   
+    juce::String getUserConfigPath();   
     
     /**
      * Gets the path of the single base directory where user-specific 
@@ -33,7 +33,7 @@ namespace XDGDirectories
      * 
      * @return  The path to the user's cache directory.
      */
-    String getUserCachePath();
+    juce::String getUserCachePath();
         
     /**
      * Gets the path of the single base directory where user-specific 
@@ -41,7 +41,7 @@ namespace XDGDirectories
      * 
      * @return  The path to the user's runtime file directory.
      */
-    String getUserRuntimePath();
+    juce::String getUserRuntimePath();
     
     /**
      * Gets the ordered list of directories to search for user data files.
@@ -49,7 +49,7 @@ namespace XDGDirectories
      * @return  The list of directories to search for data files, from highest
      *          priority to lowest.
      */
-    StringArray getDataSearchPaths();
+    juce::StringArray getDataSearchPaths();
     
     /**
      * Gets the ordered list of directories to search for user configuration
@@ -58,5 +58,5 @@ namespace XDGDirectories
      * @return  The list of directories to search for configuration files, from 
      *          highest priority to lowest.
      */
-    StringArray getConfigSearchPaths();
+    juce::StringArray getConfigSearchPaths();
 };

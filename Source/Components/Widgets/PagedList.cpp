@@ -129,7 +129,7 @@ void PagedList::setNavButtonsVisible(bool buttonsVisible)
 /*
  * Scrolls the list when the navigation buttons are clicked.  
  */
-void PagedList::buttonClicked(Button* button)
+void PagedList::buttonClicked(juce::Button* button)
 {
     if(button == &upButton)
     {

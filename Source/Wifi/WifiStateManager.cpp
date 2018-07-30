@@ -1,13 +1,13 @@
 #include "WifiStateManager.h"
 #include "GLibSignalHandler.h"
 
-ScopedPointer<ResourceManager::SharedResource>
+juce::ScopedPointer<ResourceManager::SharedResource>
         WifiStateManager::sharedResource = nullptr;
 
-ReadWriteLock WifiStateManager::stateLock;
+juce::ReadWriteLock WifiStateManager::stateLock;
 
 WifiStateManager::WifiStateManager
-(std::function<ResourceManager::SharedResource*(ReadWriteLock&)> 
+(std::function<ResourceManager::SharedResource*(juce::ReadWriteLock&)> 
 createWifiResource):
 ResourceManager(sharedResource, stateLock,
         [&createWifiResource]
@@ -20,6 +20,7 @@ ResourceManager(sharedResource, stateLock,
  */
 WifiStateManager::WifiState WifiStateManager::getWifiState()
 {
+    using namespace juce;
     const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
@@ -33,6 +34,7 @@ WifiStateManager::WifiState WifiStateManager::getWifiState()
  */
 void WifiStateManager::addListener(WifiStateManager::Listener* listener)
 {
+    using namespace juce;
     const ScopedWriteLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
@@ -45,6 +47,7 @@ void WifiStateManager::addListener(WifiStateManager::Listener* listener)
  */
 void WifiStateManager::removeListener(WifiStateManager::Listener* listener)
 {
+    using namespace juce;
     const ScopedWriteLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
@@ -56,6 +59,7 @@ void WifiStateManager::removeListener(WifiStateManager::Listener* listener)
  */
 WifiAccessPoint WifiStateManager::getActiveAP()
 {
+    using namespace juce;
     const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
@@ -65,8 +69,9 @@ WifiAccessPoint WifiStateManager::getActiveAP()
 /*
  * Gets all access points visible to the wifi device.
  */
-Array<WifiAccessPoint> WifiStateManager::getVisibleAPs()
+juce::Array<WifiAccessPoint> WifiStateManager::getVisibleAPs()
 {
+    using namespace juce;
     const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
@@ -78,6 +83,7 @@ Array<WifiAccessPoint> WifiStateManager::getVisibleAPs()
  */
 bool WifiStateManager::isEnabled()
 {
+    using namespace juce;
     const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
@@ -89,6 +95,7 @@ bool WifiStateManager::isEnabled()
  */
 bool WifiStateManager::isConnected()
 {
+    using namespace juce;
     const ScopedReadLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
@@ -100,8 +107,9 @@ bool WifiStateManager::isConnected()
  * wifi is disabled, the access point is invalid, or the psk is wrong.
  */
 void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
-        String psk)
+        juce::String psk)
 {
+    using namespace juce;
     const ScopedWriteLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
@@ -157,6 +165,7 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
  */
 void WifiStateManager::disconnect()
 {
+    using namespace juce;
     const ScopedWriteLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
@@ -184,6 +193,7 @@ void WifiStateManager::disconnect()
  */
 void WifiStateManager::enableWifi()
 {
+    using namespace juce;
     if(getWifiState() != missingNetworkDevice)
     {
         const ScopedWriteLock lock(stateLock);
@@ -220,6 +230,7 @@ void WifiStateManager::enableWifi()
  */
 void WifiStateManager::disableWifi()
 {
+    using namespace juce;
     const ScopedWriteLock lock(stateLock);
     NetworkInterface* wifiResource
             = static_cast<NetworkInterface*> (sharedResource.get());
@@ -249,6 +260,7 @@ void WifiStateManager::disableWifi()
 WifiStateManager::AccessPointState WifiStateManager::getAPState
 (const WifiAccessPoint& accessPoint)
 {
+    using namespace juce;
     if(accessPoint.isNull())
     {
         return nullAP;
@@ -263,8 +275,10 @@ WifiStateManager::AccessPointState WifiStateManager::getAPState
  * Finds the last time a connection was active using a specific access
  * point.
  */
-Time WifiStateManager::lastConnectionTime(const WifiAccessPoint& accessPoint)
+juce::Time WifiStateManager::lastConnectionTime
+(const WifiAccessPoint& accessPoint)
 {
+    using namespace juce;
     if(accessPoint.isNull())
     {
         return Time();
@@ -279,8 +293,8 @@ Time WifiStateManager::lastConnectionTime(const WifiAccessPoint& accessPoint)
     return wifiResource->lastConnectionTime(accessPoint);
 }
 
-WifiStateManager::NetworkInterface::NetworkInterface(ReadWriteLock& wifiLock)
-: wifiLock(wifiLock) { }
+WifiStateManager::NetworkInterface::NetworkInterface
+(juce::ReadWriteLock& wifiLock) : wifiLock(wifiLock) { }
 
 /*
  * Gets the current state of the wifi device.
@@ -296,6 +310,7 @@ WifiStateManager::WifiState WifiStateManager::NetworkInterface::getWifiState()
  */
 void WifiStateManager::NetworkInterface::setWifiState(WifiState state)
 {    
+    using namespace juce;
     if (state != wifiState)
     {
         wifiLock.enterWrite();
@@ -366,6 +381,7 @@ WifiStateManager::Listener::~Listener()
  */
 void WifiStateManager::NetworkInterface::confirmWifiState()
 {
+    using namespace juce;
     wifiLock.enterRead();
     bool wifiConnecting = isWifiConnecting();
     bool wifiConnected = isWifiConnected();
@@ -481,6 +497,7 @@ void WifiStateManager::NetworkInterface::signalWifiConnected()
  */
 void WifiStateManager::NetworkInterface::signalConnectionFailed()
 {
+    using namespace juce;
     switch (getWifiState())
     {
         case connecting:
@@ -535,6 +552,7 @@ void WifiStateManager::NetworkInterface::signalWifiDisconnected()
  */
 void WifiStateManager::NetworkInterface::signalWifiEnabled()
 {
+    using namespace juce;
     //DBG("NetworkInterface::" << __func__ << ": wifi enabled");
     setWifiState(enabled);
     const ScopedWriteLock timerLock(wifiLock);
@@ -548,6 +566,7 @@ void WifiStateManager::NetworkInterface::signalWifiEnabled()
  */
 void WifiStateManager::NetworkInterface::signalWifiDisabled()
 {
+    using namespace juce;
     //DBG("NetworkInterface::" << __func__ << ": wifi disabled");
     setWifiState(disabled);
     const ScopedWriteLock timerLock(wifiLock);
@@ -561,6 +580,7 @@ void WifiStateManager::NetworkInterface::signalWifiDisabled()
  */
 void WifiStateManager::NetworkInterface::signalPskNeeded()
 {
+    using namespace juce;
     //DBG("NetworkInterface::" << __func__ << ": missing password");
     setWifiState(missingPassword);
     const ScopedWriteLock timerLock(wifiLock);
@@ -574,6 +594,7 @@ void WifiStateManager::NetworkInterface::signalPskNeeded()
 void WifiStateManager::NetworkInterface::signalAPAdded
 (const WifiAccessPoint& addedAP)
 {
+    using namespace juce;
     MessageManager::callAsync([this, addedAP]()
     {
         wifiLock.enterWrite();
@@ -605,6 +626,7 @@ void WifiStateManager::NetworkInterface::signalAPAdded
 void WifiStateManager::NetworkInterface::signalAPRemoved
 (const WifiAccessPoint& removedAP)
 {
+    using namespace juce;
     MessageManager::callAsync([this, removedAP]()
     {
         wifiLock.enterWrite();

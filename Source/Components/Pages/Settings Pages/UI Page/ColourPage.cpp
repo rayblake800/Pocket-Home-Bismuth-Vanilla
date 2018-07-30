@@ -27,6 +27,7 @@ void ColourPage::pageResized()
 
 ColourPage::ColourListModel::ColourListModel()
 {
+    using namespace juce;
     ColourConfigFile config;
     colourKeys = config.getColourKeys();
     config.addListener(this, config.getColourIds());
@@ -46,7 +47,7 @@ int ColourPage::ColourListModel::getNumRows()
     return colourKeys.size();
 }
 
-void ColourPage::ColourListModel::listResized(ListBox& list)
+void ColourPage::ColourListModel::listResized(juce::ListBox& list)
 {
     ComponentConfigFile config;
     textHeight = config.getComponentSettings(ComponentConfigFile::mediumTextKey)
@@ -56,9 +57,14 @@ void ColourPage::ColourListModel::listResized(ListBox& list)
     list.repaint();
 }
 
-void ColourPage::ColourListModel::paintListBoxItem(int rowNumber, Graphics& g,
-        int width, int height, bool rowIsSelected)
+void ColourPage::ColourListModel::paintListBoxItem(
+        int rowNumber, 
+        juce::Graphics& g,
+        int width,
+        int height,
+        bool rowIsSelected)
 {
+    using namespace juce;
     Rectangle<int> fillArea(0, 0, width, height);
     float checkSize = fillArea.getHeight() / 4;
     g.fillCheckerBoard(fillArea.toFloat(), checkSize, checkSize,
@@ -78,8 +84,10 @@ void ColourPage::ColourListModel::paintListBoxItem(int rowNumber, Graphics& g,
     g.drawText(colourKeys[rowNumber], fillArea, Justification::centred);
 }
 
-Component* ColourPage::ColourListModel::refreshComponentForRow(int rowNumber,
-        bool isRowSelected, Component* toUpdate)
+juce::Component* ColourPage::ColourListModel::refreshComponentForRow(
+        int rowNumber,
+        bool isRowSelected, 
+        juce::Component* toUpdate)
 {
     if (toUpdate != nullptr)
     {
@@ -91,7 +99,7 @@ Component* ColourPage::ColourListModel::refreshComponentForRow(int rowNumber,
 void ColourPage::ColourListModel::selectedRowsChanged(int lastRowSelected) { }
 
 void ColourPage::ColourListModel::colourValueChanged
-(int colourID, String colourKey, Colour newColour)
+(int colourID, juce::String colourKey, juce::Colour newColour)
 {
     ColourConfigFile config;
     int colourIndex = colourKeys.indexOf(colourKey);

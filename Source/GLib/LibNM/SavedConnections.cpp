@@ -11,6 +11,7 @@
 SavedConnections::SavedConnections() :
 GPPDBusProxy(BUS_NAME, PATH, INTERFACE) 
 { 
+    using namespace juce;
     StringArray paths = getConnectionPaths();
     for(const String& path : paths)
     {
@@ -24,8 +25,9 @@ GPPDBusProxy(BUS_NAME, PATH, INTERFACE)
  * Reads all connection paths from NetworkManager, and returns all the wifi
  * connections as SavedConnection objects.
  */
-Array<SavedConnection> SavedConnections::getWifiConnections() const
+juce::Array<SavedConnection> SavedConnections::getWifiConnections() const
 {
+    using namespace juce;
     Array<SavedConnection> connections;
     for(const SavedConnection& con : connectionList)
     {
@@ -41,7 +43,7 @@ Array<SavedConnection> SavedConnections::getWifiConnections() const
 /*
  * Checks saved connection paths to see if one exists at the given path.
  */
-bool SavedConnections::connectionExists(const String& connectionPath) const
+bool SavedConnections::connectionExists(const juce::String& connectionPath) const
 {
     return connectionPaths.contains(connectionPath);
 }
@@ -51,7 +53,8 @@ bool SavedConnections::connectionExists(const String& connectionPath) const
  * already loaded, the saved connection list will be updated in case the
  * requested connection was recently added.
  */
-SavedConnection SavedConnections::getConnection(const String& connectionPath)
+SavedConnection SavedConnections::getConnection
+(const juce::String& connectionPath)
 {
     if(!connectionExists(connectionPath))
     {
@@ -74,9 +77,10 @@ SavedConnection SavedConnections::getConnection(const String& connectionPath)
  * Finds all saved connections that are compatible with a given wifi
  * access point.
  */
-Array<SavedConnection> SavedConnections::findConnectionsForAP
+juce::Array<SavedConnection> SavedConnections::findConnectionsForAP
 (const NMPPAccessPoint& accessPoint) const
 {
+    using namespace juce;
     Array<SavedConnection> compatible;
     if(!isNull() && !accessPoint.isNull())
     {
@@ -95,8 +99,9 @@ Array<SavedConnection> SavedConnections::findConnectionsForAP
 /*
  * Get the list of all available connection paths
  */
-inline StringArray SavedConnections::getConnectionPaths()
+inline juce::StringArray SavedConnections::getConnectionPaths()
 {
+    using namespace juce;
     using namespace GVariantConverter;
     GVariant* conArrayVar = callMethod(LIST_CONNECTIONS);
     if(conArrayVar != nullptr)
@@ -115,6 +120,7 @@ inline StringArray SavedConnections::getConnectionPaths()
  */
 void SavedConnections::updateSavedConnections()
 {
+    using namespace juce;
     connectionPaths = getConnectionPaths();
     Array<SavedConnection> toRemove;
     for(const SavedConnection& saved : connectionList)

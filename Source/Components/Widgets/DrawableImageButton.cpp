@@ -1,23 +1,23 @@
 #include "DrawableImageButton.h"
 
 DrawableImageButton::DrawableImageButton
-(File imageFile, RectanglePlacement placement) :
-Button(imageFile.getFileName() + String("ImageButton")),
+(juce::File imageFile, juce::RectanglePlacement placement) :
+juce::Button(imageFile.getFileName() + juce::String("ImageButton")),
 imageComponent(new DrawableImageComponent(imageFile, placement))
 {
     addAndMakeVisible(imageComponent);
 }
 
 DrawableImageButton::DrawableImageButton
-(String assetName, RectanglePlacement placement) :
-Button(assetName + String("ImageButton")),
+(juce::String assetName, juce::RectanglePlacement placement) :
+Button(assetName + juce::String("ImageButton")),
 imageComponent(new DrawableImageComponent(assetName, placement))
 {
     addAndMakeVisible(imageComponent);
 }
 
 DrawableImageButton::DrawableImageButton
-(Image imageObject, RectanglePlacement placement) :
+(juce::Image imageObject, juce::RectanglePlacement placement) :
 Button("DrawableImageButton"),
 imageComponent(new DrawableImageComponent(imageObject, placement))
 {
@@ -27,7 +27,7 @@ imageComponent(new DrawableImageComponent(imageObject, placement))
 /**
  * Changed the image drawn by this component.
  */
-void DrawableImageButton::setImage(String assetFilename)
+void DrawableImageButton::setImage(juce::String assetFilename)
 {
     imageComponent->setImage(assetFilename);
     updateImageColors();
@@ -36,7 +36,7 @@ void DrawableImageButton::setImage(String assetFilename)
 /**
  * Changes the image drawn by this component.
  */
-void DrawableImageButton::setImage(File imageFile)
+void DrawableImageButton::setImage(juce::File imageFile)
 {
     imageComponent->setImage(imageFile);
     updateImageColors();
@@ -45,7 +45,7 @@ void DrawableImageButton::setImage(File imageFile)
 /**
  * Changes the image drawn by this component.
  */
-void DrawableImageButton::setImage(Image imageObject)
+void DrawableImageButton::setImage(juce::Image imageObject)
 {
     imageComponent->setImage(imageObject);
     updateImageColors();
@@ -64,6 +64,7 @@ void DrawableImageButton::colourChanged()
  */
 void DrawableImageButton::updateImageColors()
 {
+    using namespace juce;
     if (imageComponent != nullptr)
     {
         for (int colourId = imageColour0Id; 
@@ -92,7 +93,7 @@ void DrawableImageButton::resized()
  * Changes button alpha on click.
  */
 void DrawableImageButton::paintButton
-(Graphics &g, bool isMouseOverButton, bool isButtonDown)
+(juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
     if (isMouseOverButton && isButtonDown)
     {

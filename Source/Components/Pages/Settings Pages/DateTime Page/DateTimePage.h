@@ -14,7 +14,7 @@
  * the clock display mode and adjust system time.
  */
 
-class DateTimePage : public PageComponent, private ComboBox::Listener,
+class DateTimePage : public PageComponent, private juce::ComboBox::Listener,
 private Localized
 {
 public:
@@ -29,7 +29,7 @@ private:
      * 
      * @param button
      */
-    void pageButtonClicked(Button* button) override;
+    void pageButtonClicked(juce::Button* button) override;
 
     /**
      * Changes the clock mode saved in the ComponentConfigFile when the
@@ -37,17 +37,17 @@ private:
      * 
      * @param comboBox
      */
-    void comboBoxChanged(ComboBox* comboBox) override;
+    void comboBoxChanged(juce::ComboBox* comboBox) override;
 
     //page title label
     ScalingLabel titleLabel;
     
     //set the clock mode
     ScalingLabel clockModeLabel;
-    ComboBox setClockMode;
+    juce::ComboBox setClockMode;
 
     //Button for setting system time
-    TextButton reconfigureBtn;
+    juce::TextButton reconfigureBtn;
 
     //Command for changing system time
     static const constexpr char * reconfigureCommand

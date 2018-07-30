@@ -1,6 +1,6 @@
 #include "ListEditor.h"
 
-ListEditor::ListEditor(StringArray initialList) :
+ListEditor::ListEditor(juce::StringArray initialList) :
 listItems(initialList),
 listContainer("ListEditor", nullptr),
 addItemBtn("+")
@@ -46,7 +46,7 @@ int ListEditor::getNumRows()
 /**
  * @return all list row strings.
  */
-StringArray ListEditor::getListItems() const
+juce::StringArray ListEditor::getListItems() const
 {
     return listItems;
 }
@@ -54,7 +54,7 @@ StringArray ListEditor::getListItems() const
 /**
  * Replace the existing item list entries with new ones.
  */
-void ListEditor::setListItems(StringArray newItems)
+void ListEditor::setListItems(juce::StringArray newItems)
 {
     listItems = newItems;
     listContainer.updateContent();
@@ -74,6 +74,7 @@ void ListEditor::colourChanged()
  */
 void ListEditor::updateColours()
 {
+    using namespace juce;
     addItemBtn.setColour(TextButton::textColourOnId, findColour(textColourId));
     listContainer.setColour(ListBox::backgroundColourId,
             findColour(backgroundColourId));
@@ -89,7 +90,7 @@ void ListEditor::updateColours()
 /**
  * Receives notifications when ListItemComponent text is changed.
  */
-void ListEditor::labelTextChanged(Label *source)
+void ListEditor::labelTextChanged(juce::Label *source)
 {
     ListItemComponent * listItem = dynamic_cast<ListItemComponent*> (source);
     if (listItem != nullptr)
@@ -107,7 +108,7 @@ void ListEditor::labelTextChanged(Label *source)
  * Clicking a listBoxItem selects it.
  */
 void ListEditor::listBoxItemClicked
-(int row, const MouseEvent & mouseEvent)
+(int row, const juce::MouseEvent & mouseEvent)
 {
     listContainer.selectRow(row);
 }
@@ -116,8 +117,9 @@ void ListEditor::listBoxItemClicked
  * Double clicking a listBoxItem makes it editable.
  */
 void ListEditor::listBoxItemDoubleClicked
-(int row, const MouseEvent & mouseEvent)
+(int row, const juce::MouseEvent & mouseEvent)
 {
+    using namespace juce;
     Label * rowClicked =
             static_cast<Label*> (listContainer.getComponentForRowNumber(row));
     rowClicked->showEditor();
@@ -149,9 +151,10 @@ void ListEditor::removeRow(int rowNumber)
 }
 
 ListEditor::ListItemComponent::ListItemComponent
-(String text, ListEditor * owner) : Label(text),
+(juce::String text, ListEditor * owner) : juce::Label(text),
 delBtn("cancel.svg")
 {
+    using namespace juce;
     setJustificationType(Justification::left);
     setButtonColour(owner->findColour(textColourId));
     addAndMakeVisible(delBtn);
@@ -164,7 +167,7 @@ delBtn("cancel.svg")
  * @param id  This should be set to String(rowIndex) by the
  *             ListEditor.
  */
-void ListEditor::ListItemComponent::setButtonComponentID(String id)
+void ListEditor::ListItemComponent::setButtonComponentID(juce::String id)
 {
     delBtn.setComponentID(id);
 }
@@ -173,9 +176,10 @@ void ListEditor::ListItemComponent::setButtonComponentID(String id)
  * Sets button colour, used by the ListEditor to apply
  * its color scheme to all list items.
  */
-void ListEditor::ListItemComponent::setButtonColour(Colour colour)
+void ListEditor::ListItemComponent::setButtonColour(juce::Colour colour)
 {
-    delBtn.setColour(DrawableImageButton::imageColour0Id, findColour(textColourId));
+    delBtn.setColour(DrawableImageButton::imageColour0Id,
+            findColour(textColourId));
 }
 
 /**
@@ -193,9 +197,10 @@ void ListEditor::ListItemComponent::resized()
 /**
  * Creates or recycles a list component to fit a list row.
  */
-Component * ListEditor::refreshComponentForRow
-(int rowNumber, bool isRowSelected, Component * existingComponent)
+juce::Component * ListEditor::refreshComponentForRow
+(int rowNumber, bool isRowSelected, juce::Component * existingComponent)
 {
+    using namespace juce;
     ListItemComponent * rowLabel =
             static_cast<ListItemComponent*> (existingComponent);
     if (rowNumber >= getNumRows())
@@ -230,8 +235,9 @@ Component * ListEditor::refreshComponentForRow
 /**
  * Handles the add and delete item buttons.
  */
-void ListEditor::buttonClicked(Button* buttonClicked)
+void ListEditor::buttonClicked(juce::Button* buttonClicked)
 {
+    using namespace juce;
     if (buttonClicked == &addItemBtn)
     {
         String newListItem = newItemField.getText();

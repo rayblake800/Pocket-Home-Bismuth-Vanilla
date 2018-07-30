@@ -3,14 +3,16 @@
 #include "Utils.h"
 #include "DesktopEntry.h"
 
-const String DesktopEntry::localEntryPath = "~/.local/share/applications/";
+const juce::String DesktopEntry::localEntryPath 
+        = "~/.local/share/applications/";
 
 /**
  * Load DesktopEntry data from a .desktop or .directory file
  */
-DesktopEntry::DesktopEntry(File entryFile) :
+DesktopEntry::DesktopEntry(juce::File entryFile) :
 entrypath(entryFile.getFullPathName())
 {
+    using namespace juce;
     ScopedPointer<FileInputStream> in = entryFile.createInputStream();
     StringArray lines;
     while (!in->isExhausted())
@@ -33,9 +35,14 @@ entrypath(entryFile.getFullPathName())
 /**
  * Creates a new desktop entry from parameter data.
  */
-DesktopEntry::DesktopEntry(String title, String icon, String command,
-        StringArray categories, bool launchInTerminal)
+DesktopEntry::DesktopEntry(
+        juce::String title,
+        juce::String icon,
+        juce::String command,
+        juce::StringArray categories,
+        bool launchInTerminal)
 {
+    using namespace juce;
     dataStrings[typeKey] = "Application";
     setValue(StringValue::name, title);
     setValue(StringValue::icon, icon);
@@ -61,6 +68,7 @@ DesktopEntry::DesktopEntry(String title, String icon, String command,
  */
 DesktopEntry::Type DesktopEntry::getType() const
 {
+    using namespace juce;
     String type = dataStrings.at(typeKey);
     if (type == "Application") return application;
     if (type == "Link") return link;
@@ -76,6 +84,7 @@ DesktopEntry::Type DesktopEntry::getType() const
  */
 bool DesktopEntry::operator==(const DesktopEntry toCompare) const
 {
+    using namespace juce;
     String file1 = entrypath.fromLastOccurrenceOf("/", false, false);
     String file2 = toCompare.entrypath.fromLastOccurrenceOf("/", false, false);
     DBG("DesktopEntry::" << __func__ << file1 << "==" << "?");
@@ -93,7 +102,7 @@ bool DesktopEntry::operator<(const DesktopEntry toCompare) const
 /**
  * Get stored string data.
  */
-String DesktopEntry::getValue(StringValue valueType) const
+juce::String DesktopEntry::getValue(StringValue valueType) const
 {
     try
     {
@@ -123,8 +132,9 @@ bool DesktopEntry::getValue(BoolValue valueType) const
 /**
  * Get stored list data.
  */
-StringArray DesktopEntry::getValue(ListValue valueType) const
+juce::StringArray DesktopEntry::getValue(ListValue valueType) const
 {
+    using namespace juce;
     try
     {
         return StringArray::fromTokens(dataStrings.at(getKey(valueType)),
@@ -139,7 +149,7 @@ StringArray DesktopEntry::getValue(ListValue valueType) const
 /**
  * Changes the value of stored string data.
  */
-void DesktopEntry::setValue(StringValue valueType, String newValue)
+void DesktopEntry::setValue(StringValue valueType, juce::String newValue)
 {
     dataStrings[getKey(valueType)] = newValue;
 }
@@ -155,8 +165,9 @@ void DesktopEntry::setValue(BoolValue valueType, bool newValue)
 /**
  * Changes the value of stored list data.
  */
-void DesktopEntry::setValue(ListValue valueType, StringArray newValue)
+void DesktopEntry::setValue(ListValue valueType, juce::StringArray newValue)
 {
+    using namespace juce;
     String joinedList = newValue.joinIntoString(";");
     DBG("DesktopEntry::" << __func__ << "Saving category list " << joinedList);
     dataStrings[getKey(valueType)] = joinedList;
@@ -167,6 +178,7 @@ void DesktopEntry::setValue(ListValue valueType, StringArray newValue)
  */
 void DesktopEntry::writeFile()
 {
+    using namespace juce;
     String outFileText = "";
     String locale = Localized::getLocaleName();
     StringArray foundKeys;
@@ -228,27 +240,28 @@ void DesktopEntry::writeFile()
 /**
  * Get any StringValue's key.
  */
-String DesktopEntry::getKey(StringValue valueType) const
+juce::String DesktopEntry::getKey(StringValue valueType) const
 {
     switch (valueType)
     {
-        case version: return "Version";
-        case name: return "Name";
-        case genericName: return "GenericName";
-        case comment: return "Comment";
-        case icon: return "Icon";
-        case tryExec: return "TryExec";
-        case exec: return "Exec";
-        case path: return "Path";
-        case startupWMClass: return "StartupWMClass";
-        case url: return "URL";
+        case version:         return "Version";
+        case name:            return "Name";
+        case genericName:     return "GenericName";
+        case comment:         return "Comment";
+        case icon:            return "Icon";
+        case tryExec:         return "TryExec";
+        case exec:            return "Exec";
+        case path:            return "Path";
+        case startupWMClass:  return "StartupWMClass";
+        case url:             return "URL";
     }
+    return "";
 }
 
 /**
  * Get any BoolValue's key.
  */
-String DesktopEntry::getKey(BoolValue valueType) const
+juce::String DesktopEntry::getKey(BoolValue valueType) const
 {
     switch (valueType)
     {
@@ -258,12 +271,13 @@ String DesktopEntry::getKey(BoolValue valueType) const
         case terminal: return "Terminal";
         case startupNotify: return "StartupNotify";
     }
+    return "";
 }
 
 /**
  * Get any ListValue's key.
  */
-String DesktopEntry::getKey(ListValue valueType) const
+juce::String DesktopEntry::getKey(ListValue valueType) const
 {
     switch (valueType)
     {
@@ -275,12 +289,13 @@ String DesktopEntry::getKey(ListValue valueType) const
         case implements: return "Implements";
         case keywords: return "Keywords";
     }
+    return "";
 }
 
 /**
  * Parses desktop entry file lines
  */
-DesktopEntry::LineValues DesktopEntry::getLineData(String line)
+DesktopEntry::LineValues DesktopEntry::getLineData(juce::String line)
 {
     LineValues values;
     int valueIndex = line.indexOf("=");

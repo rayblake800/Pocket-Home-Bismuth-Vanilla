@@ -48,8 +48,8 @@ public:
      * @param hash            A hashed string value unique to this access 
      *                         point.
      */
-    WifiAccessPoint(String ssid, int signalStrength, bool requiresAuth,
-            String hash);
+    WifiAccessPoint(juce::String ssid, int signalStrength, bool requiresAuth,
+            juce::String hash);
 
     virtual ~WifiAccessPoint();
     
@@ -65,14 +65,14 @@ public:
      * 
      * @return the SSID identifying the access point. 
      */
-    const String& getSSID() const;
+    const juce::String& getSSID() const;
 
     /**
      * Gets the MAC address of the wifi access point.
      * 
      * @return the access point's BSSID
      */
-    const String& getBSSID() const;
+    const juce::String& getBSSID() const;
 
     /**
      * Gets the signal strength of the wifi access point.
@@ -108,7 +108,7 @@ public:
      * 
      * @return the access point SSID, for debugging use only.
      */
-    const String& toString() const;
+    const juce::String& toString() const;
 
     /**
      * Checks if this access point is compatible with a given connection.
@@ -140,7 +140,7 @@ public:
      *          or a null connection object if this access point is null or
      *          the psk was invalid.
      */
-    NMPPConnection createConnection(String psk = String()) const;
+    NMPPConnection createConnection(juce::String psk = juce::String()) const;
     
     /**
      * Attempts to add wireless security settings to a connection intended for
@@ -154,7 +154,7 @@ public:
      * @return  true iff the settings were applied successfully.
      */
     bool setConnectionSecurity
-    (NMPPConnection& connection, const String& psk) const;
+    (NMPPConnection& connection, const juce::String& psk) const;
 
     /**
      * Returns the 802.11 mode of this access point.
@@ -195,7 +195,7 @@ public:
      * @return  true iff psk is a valid key for this access point's security
      *          type.  
      */
-    bool isValidKeyFormat(const String& psk) const;
+    bool isValidKeyFormat(const juce::String& psk) const;
     
     /**
      * Assigns another access point's data to this access point.
@@ -237,7 +237,7 @@ public:
      *              point.  The caller is responsible for ensuring this value
      *              is valid.
      */
-    void setActiveConnectionPath(const String path);
+    void setActiveConnectionPath(const juce::String path);
     
     /**
      * Saves a path to a DBus saved connection object that is compatible with
@@ -247,21 +247,21 @@ public:
      *              point.  The caller is responsible for ensuring this value
      *              is valid.
      */
-    void setSavedConnectionPath(const String path);
+    void setSavedConnectionPath(const juce::String path);
     
     /**
      * Returns the active connection path stored with this access point.
      * 
      * @return  the path value stored with setActiveConnectionPath()
      */
-    const String& getActiveConnectionPath() const;
+    const juce::String& getActiveConnectionPath() const;
     
     /**
      * Returns the saved connection path stored with this access point.
      * 
      * @return  the path value stored with setSavedConnectionPath()
      */
-    const String& getSavedConnectionPath() const;
+    const juce::String& getSavedConnectionPath() const;
 
 private:
     /**
@@ -279,7 +279,7 @@ private:
      * Generates a hash value for a list of access point parameters that will
      * be unique to that access point's connection.
      */
-    static String generateHash(
+    static juce::String generateHash(
             const GByteArray* ssid,
             NM80211Mode mode,
             guint32 flags,
@@ -298,13 +298,13 @@ private:
     };
 
     //Access point name
-    String ssid;
+    juce::String ssid;
     //Access point hardware ID string
-    String bssid;
+    juce::String bssid;
     //Access point security protocol
     SecurityType security;
     //Identifying hash unique to this APs connection
-    String hash;
+    juce::String hash;
 
     //saved signal strength, between 0 and 100
     std::atomic<unsigned int> signalStrength;
@@ -317,8 +317,8 @@ private:
     NM80211ApSecurityFlags rsnFlags;
 
     NMPPAccessPoint nmAccessPoint;
-    String activeConnectionPath;
-    String savedConnectionPath;
+    juce::String activeConnectionPath;
+    juce::String savedConnectionPath;
 #if JUCE_DEBUG
     bool fakeConnection = false;
 #endif

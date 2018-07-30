@@ -2,11 +2,11 @@
 #include "IconSliderComponent.h"
 
 IconSliderComponent::IconSliderComponent
-(String lowImgAsset, String highImgAsset) :
-lowIcon(lowImgAsset, RectanglePlacement::stretchToFit),
-highIcon(highImgAsset, RectanglePlacement::stretchToFit)
+(juce::String lowImgAsset, juce::String highImgAsset) :
+lowIcon(lowImgAsset, juce::RectanglePlacement::stretchToFit),
+highIcon(highImgAsset, juce::RectanglePlacement::stretchToFit)
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("IconSliderComponent");
 #    endif
@@ -25,7 +25,7 @@ highIcon(highImgAsset, RectanglePlacement::stretchToFit)
  * Changes the slider's stored value.
  */
 void IconSliderComponent::setValue
-(double newValue, NotificationType notification)
+(double newValue, juce::NotificationType notification)
 {
     slider.setValue(newValue, notification);
 }
@@ -42,7 +42,7 @@ double IconSliderComponent::getValue() const
  * @param listener   This will receive updates whenever the slider value
  *                    changes.
  */
-void IconSliderComponent::addListener(Slider::Listener* listener)
+void IconSliderComponent::addListener(juce::Slider::Listener* listener)
 {
     slider.addListener(listener);
 }
@@ -51,7 +51,7 @@ void IconSliderComponent::addListener(Slider::Listener* listener)
  * Use this to determine which IconSliderComponent is responsible for
  * a slider callback.
  */
-bool IconSliderComponent::ownsSlider(Slider * sliderPtr)
+bool IconSliderComponent::ownsSlider(juce::Slider * sliderPtr)
 {
     return sliderPtr == &slider;
 }
@@ -70,6 +70,7 @@ void IconSliderComponent::setRange(double newMinimum,
  */
 void IconSliderComponent::resized()
 {
+    using namespace juce;
     Rectangle<int> bounds = getLocalBounds();
     lowIcon.setBounds(bounds.withWidth(bounds.getHeight()));
     highIcon.setBounds(bounds.withLeft(bounds.getRight() - bounds.getHeight()));
@@ -81,6 +82,7 @@ void IconSliderComponent::resized()
  */
 void IconSliderComponent::colourChanged()
 {
+    using namespace juce;
     Colour imageColour = findColour(Slider::trackColourId);
     lowIcon.setColour(DrawableImageComponent::imageColour0Id, imageColour);
     highIcon.setColour(DrawableImageComponent::imageColour0Id, imageColour);

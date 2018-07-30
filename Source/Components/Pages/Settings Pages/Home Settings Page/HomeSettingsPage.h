@@ -16,7 +16,7 @@
  */
 
 
-class HomeSettingsPage : public PageComponent, private ComboBox::Listener,
+class HomeSettingsPage : public PageComponent, private juce::ComboBox::Listener,
 private FileSelectTextEditor::Listener, private Localized
 {
 public:
@@ -40,7 +40,7 @@ private:
      * field, and update its labels. If the menu type ComboBox is updated,
      * save the changed value to the MainConfigFile
      */
-    void comboBoxChanged(ComboBox* box) override;
+    void comboBoxChanged(juce::ComboBox* box) override;
 
     /**
      * When a value is set in the background editor, attempt to set a new
@@ -56,7 +56,7 @@ private:
     
     //select the HomePage background type
     ScalingLabel bgTypeLabel;
-    ComboBox bgTypePicker;
+    juce::ComboBox bgTypePicker;
     
     //enter a hex color or select an image path
     ScalingLabel bgLabel;
@@ -64,7 +64,7 @@ private:
 
     //Choose the AppMenu type to use
     ScalingLabel menuPickerLabel;
-    ComboBox menuTypePicker;
+    juce::ComboBox menuTypePicker;
 
     //Set the max column count for AppMenu grids
     ScalingLabel columnCountLabel;

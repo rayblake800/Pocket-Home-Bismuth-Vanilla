@@ -11,7 +11,7 @@ calibrating(localeText(calibrate_screen)),
 fnmapping(localeText(remap_keybord)),
 cursorVisible("cursorVisible", localeText(select_cursor_visible))
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("InputSettingsPage");
 #    endif
@@ -66,8 +66,9 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
  * Re-applies the Xmodmap file or runs Xinput Calibrator, depending on 
  * which button was pressed.
  */
-void InputSettingsPage::pageButtonClicked(Button* button)
+void InputSettingsPage::pageButtonClicked(juce::Button* button)
 {
+    using namespace juce;
     if (button == &calibrating)
     {
         AppLauncher launcher;
@@ -84,7 +85,7 @@ void InputSettingsPage::pageButtonClicked(Button* button)
 /**
  * Changes the cursor visibility settings.
  */
-void InputSettingsPage::comboBoxChanged(ComboBox* box)
+void InputSettingsPage::comboBoxChanged(juce::ComboBox* box)
 {
     MainConfigFile mainConfig;
     if (box != &chooseMode) return;

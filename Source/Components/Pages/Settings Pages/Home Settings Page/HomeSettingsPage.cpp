@@ -16,7 +16,7 @@ rowCountLabel("rowCountLabel", localeText(menu_rows)),
 columnCounter(1, 1, 9),
 rowCounter(1, 1, 9)
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("HomeSettingsPage");
 #    endif
@@ -101,6 +101,7 @@ HomeSettingsPage::~HomeSettingsPage()
  */
 void HomeSettingsPage::updateComboBox()
 {
+    using namespace juce;
     /* Checking the current configuration */
     MainConfigFile mainConfig;
     String background
@@ -137,8 +138,9 @@ void HomeSettingsPage::updateComboBox()
  * field, and update its labels. If the menu type ComboBox is updated,
  * save the changed value to the MainConfigFile
  */
-void HomeSettingsPage::comboBoxChanged(ComboBox* box)
+void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
 {
+    using namespace juce;
     MainConfigFile mainConfig;
     if (box == &bgTypePicker)
     {
@@ -185,6 +187,7 @@ void HomeSettingsPage::comboBoxChanged(ComboBox* box)
  */
 void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
 {
+    using namespace juce;
     String value = edited->getText();
     MainConfigFile mainConfig;
     //color value

@@ -29,8 +29,7 @@ public:
     /**
      * @return all menu items in this folder
      */
-    virtual Array<AppMenuItem::Ptr> getFolderItems() const override;
-private:
+    virtual juce::Array<AppMenuItem::Ptr> getFolderItems() const override;
 };
 
 

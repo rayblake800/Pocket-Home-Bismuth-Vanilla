@@ -29,7 +29,7 @@ private:
      * 
      * @return true iff the key press was used.
      */
-    bool folderKeyPressed(const KeyPress& key, 
+    bool folderKeyPressed(const juce::KeyPress& key, 
             AppMenuFolder* activeFolder) override;
 
     /**
@@ -42,7 +42,7 @@ private:
      * @return  a rectangle specifying the location where the folder should be
      *          placed within the AppMenuComponent. 
      */
-    Rectangle<int> updateFolderBounds(const AppMenuFolder* folder,
+    juce::Rectangle<int> updateFolderBounds(const AppMenuFolder* folder,
             int folderIndex) override;
 
     /**
@@ -57,5 +57,5 @@ private:
      *                    button map.
      */
     AppMenuFolder* createFolderObject(AppMenuItem::Ptr folderItem,
-            std::map<String, AppMenuButton::Ptr>& buttonMap) override;
+            std::map<juce::String, AppMenuButton::Ptr>& buttonMap) override;
 };

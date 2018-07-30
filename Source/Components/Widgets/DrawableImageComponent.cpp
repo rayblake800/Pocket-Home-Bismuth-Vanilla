@@ -2,19 +2,19 @@
 #include "AssetFiles.h"
 #include "DrawableImageComponent.h"
 
-const Array<Colour> DrawableImageComponent::defaultColours =
+const juce::Array<juce::Colour> DrawableImageComponent::defaultColours =
         DrawableImageComponent::loadDefaultColours();
 
 /**
  * Create a DrawableImageComponent using an asset file.
  */
 DrawableImageComponent::DrawableImageComponent
-(String assetFilename, RectanglePlacement placement) :
+(juce::String assetFilename, juce::RectanglePlacement placement) :
 placement(placement)
 {
 
 #    if JUCE_DEBUG
-    setName(String("DrawableImageComponent:") + assetFilename);
+    setName(juce::String("DrawableImageComponent:") + assetFilename);
 #    endif
     setImage(assetFilename);
     setInterceptsMouseClicks(false, false);
@@ -24,11 +24,11 @@ placement(placement)
  * Create a DrawableImageComponent using any image file.
  */
 DrawableImageComponent::DrawableImageComponent
-(File imageFile, RectanglePlacement placement) :
+(juce::File imageFile, juce::RectanglePlacement placement) :
 placement(placement)
 {
 #    if JUCE_DEBUG
-    setName(String("DrawableImageComponent:") + imageFile.getFileName());
+    setName(juce::String("DrawableImageComponent:") + imageFile.getFileName());
 #    endif
     setImage(imageFile);
     setInterceptsMouseClicks(false, false);
@@ -37,8 +37,8 @@ placement(placement)
 /**
  * Create a DrawableImageComponent using an image object.
  */
-DrawableImageComponent::DrawableImageComponent(Image image,
-        RectanglePlacement placement) :
+DrawableImageComponent::DrawableImageComponent(juce::Image image,
+        juce::RectanglePlacement placement) :
 placement(placement)
 {
 
@@ -53,7 +53,7 @@ placement(placement)
  * Create a DrawableImageComponent using a Drawable object.
  */
 DrawableImageComponent::DrawableImageComponent
-(Drawable* drawable, RectanglePlacement placement) :
+(juce::Drawable* drawable, juce::RectanglePlacement placement) :
 placement(placement)
 {
 #    if JUCE_DEBUG
@@ -68,7 +68,7 @@ placement(placement)
  * Create a DrawableImageComponent without an initial image.
  */
 DrawableImageComponent::DrawableImageComponent
-(RectanglePlacement placement) :
+(juce::RectanglePlacement placement) :
 placement(placement)
 {
 #    if JUCE_DEBUG
@@ -80,7 +80,7 @@ placement(placement)
 /**
  * Changes the image drawn by this component.
  */
-void DrawableImageComponent::setImage(String assetFilename)
+void DrawableImageComponent::setImage(juce::String assetFilename)
 {
     if (assetFilename.isNotEmpty())
     {
@@ -91,8 +91,9 @@ void DrawableImageComponent::setImage(String assetFilename)
 /**
  * Changes the image drawn by this component.
  */
-void DrawableImageComponent::setImage(File imageFile)
+void DrawableImageComponent::setImage(juce::File imageFile)
 {
+    using namespace juce;
     if (imageFile.existsAsFile())
     {
         imageDrawable = Drawable::createFromImageFile(imageFile);
@@ -112,8 +113,9 @@ void DrawableImageComponent::setImage(File imageFile)
 /**
  * Changes the image drawn by this component.
  */
-void DrawableImageComponent::setImage(Image image)
+void DrawableImageComponent::setImage(juce::Image image)
 {
+    using namespace juce;
     DrawableImage * drawable = new DrawableImage();
     drawable->setImage(image);
     imageDrawable = drawable;
@@ -123,7 +125,7 @@ void DrawableImageComponent::setImage(Image image)
 /**
  * Changes the image drawn by this component.
  */
-void DrawableImageComponent::setImage(Drawable* drawable)
+void DrawableImageComponent::setImage(juce::Drawable* drawable)
 {
     imageDrawable = drawable;
     initImage();
@@ -169,6 +171,7 @@ void DrawableImageComponent::resized()
  */
 void DrawableImageComponent::initImage()
 {
+    using namespace juce;
     addAndMakeVisible(imageDrawable);
     imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
     Array<Colour> imageColours;

@@ -1,15 +1,16 @@
 #include "PopupEditorComponent.h"
 
 PopupEditorComponent::PopupEditorComponent(
-        String title,
+        juce::String title,
         std::function<void(PopupEditorComponent*) > onConfirm) :
 ConfigurableImageComponent(ComponentConfigFile::popupMenuKey,
-0, RectanglePlacement::stretchToFit),
+0, juce::RectanglePlacement::stretchToFit),
 onConfirm(onConfirm),
 titleLabel("EditorTitle", title, 2),
 cancelButton("cancel.svg"),
 confirmButton("confirm.svg")
 {
+    using namespace juce;
     setWantsKeyboardFocus(true);
 #    if JUCE_DEBUG
     setName(title + String("popupEditor"));
@@ -71,7 +72,7 @@ void PopupEditorComponent::setLayout(LayoutManager::Layout layout)
  * Manages the cancel and confirm buttons passing all other button events
  * to editorButtonClicked().
  */
-void PopupEditorComponent::buttonClicked(Button* buttonClicked)
+void PopupEditorComponent::buttonClicked(juce::Button* buttonClicked)
 {
     if (buttonClicked == &cancelButton)
     {
@@ -92,8 +93,9 @@ void PopupEditorComponent::buttonClicked(Button* buttonClicked)
  * The escape and return keys work the same as pressing the cancel and confirm 
  * buttons, respectively.
  */
-bool PopupEditorComponent::keyPressed(const KeyPress & key)
+bool PopupEditorComponent::keyPressed(const juce::KeyPress & key)
 {
+    using namespace juce;
     DBG("PopupEditorComponent::" << __func__ << ": "
             << key.getTextDescription());
     if (key == KeyPress::escapeKey)

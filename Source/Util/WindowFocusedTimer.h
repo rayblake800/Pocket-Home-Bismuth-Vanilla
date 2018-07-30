@@ -17,12 +17,12 @@
  */
 
 class PocketHomeWindow;
-class WindowFocusedTimer : public Timer, private WindowFocus::Listener {
+class WindowFocusedTimer : public juce::Timer, private WindowFocus::Listener {
 public:
     /**
      * @param name  This identifies the timer for debug purposes.
      */
-    WindowFocusedTimer(String name) : name(name) { }
+    WindowFocusedTimer(juce::String name) : name(name) { }
 
     virtual ~WindowFocusedTimer() { }
     
@@ -64,11 +64,11 @@ private:
      * Time::getMillisecondCounter(). If set to zero, this indicates that 
      * the timer is not suspended.
      */
-    uint32 suspendedEndTime = 0;
+    juce::uint32 suspendedEndTime = 0;
     
     //Timer name, set to better track the behavior of specific timers while
     //debugging.
-    String name;
+    juce::String name;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WindowFocusedTimer)
 };

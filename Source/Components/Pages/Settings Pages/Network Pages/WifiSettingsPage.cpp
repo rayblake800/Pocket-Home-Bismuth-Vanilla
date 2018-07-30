@@ -3,7 +3,7 @@
 #include "WifiSettingsPage.h"
 
 //Wifi signal strength icon asset files
-const StringArray WifiSettingsPage::wifiImageFiles
+const juce::StringArray WifiSettingsPage::wifiImageFiles
         = {
            "wifiStrength0.svg",
            "wifiStrength1.svg",
@@ -79,6 +79,7 @@ WifiSettingsPage::WifiSettingsPage() :
 passwordLabel("passwordLabel", localeText(password_field)),
 Localized("WifiSettingsPage")
 {
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("WifiSettingsPage");
 #    endif
@@ -112,7 +113,8 @@ unsigned int WifiSettingsPage::getListSize()
  *          item if all old list items are in use.
  */
 template<class ComponentType>
-static ComponentType * getFirstUnused(OwnedArray<ComponentType>& recycleList)
+static ComponentType * getFirstUnused
+(juce::OwnedArray<ComponentType>& recycleList)
 {
     for (ComponentType * comp : recycleList)
     {
@@ -132,6 +134,7 @@ static ComponentType * getFirstUnused(OwnedArray<ComponentType>& recycleList)
 void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
         const unsigned int index)
 {
+    using namespace juce;
     jassert(index < visibleAPs.size());
     const WifiAccessPoint& wifiAP = visibleAPs[index];
     ScalingLabel* apLabel = nullptr;
@@ -202,6 +205,7 @@ void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
  */
 void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
 {
+    using namespace juce;
     jassert(getSelectedIndex() >= 0 && !layout.isEmpty());
     const WifiAccessPoint& selectedAP = visibleAPs[getSelectedIndex()];
     using Row = LayoutManager::Row;
@@ -329,6 +333,7 @@ void WifiSettingsPage::updateAPList()
  */
 void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
 {
+    using namespace juce;
     if (accessPoint.isNull())
     {
         DBG("WifiSettingsPage::" << __func__ << ": ap is null!");
@@ -382,7 +387,7 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& accessPoint)
  * Attempts to connect or disconnect from the current selected access point
  * when the connection button is clicked.
  */
-void WifiSettingsPage::listPageButtonClicked(Button* button)
+void WifiSettingsPage::listPageButtonClicked(juce::Button* button)
 {
     if (&connectionButton == button)
     {
@@ -442,7 +447,7 @@ void WifiSettingsPage::accessPointRemoved(const WifiAccessPoint& removedAP)
 /*
  * Attempts to connect if return is pressed after entering a password.
  */
-void WifiSettingsPage::textEditorReturnKeyPressed(TextEditor& editor)
+void WifiSettingsPage::textEditorReturnKeyPressed(juce::TextEditor& editor)
 {
     connect(visibleAPs[getSelectedIndex()]);
 }
@@ -452,7 +457,8 @@ void WifiSettingsPage::textEditorReturnKeyPressed(TextEditor& editor)
  * Gets the asset name for the icon that best represents accessPoint's 
  * signal strength.
  */
-String WifiSettingsPage::getWifiAssetName(const WifiAccessPoint& accessPoint)
+juce::String WifiSettingsPage::getWifiAssetName
+(const WifiAccessPoint& accessPoint)
 {
     float sigStrength = accessPoint.getSignalStrength();
     int maxIndex = wifiImageFiles.size() - 1;
@@ -470,6 +476,7 @@ WifiSettingsPage::ConnectionButton::ConnectionButton()
  */
 void WifiSettingsPage::ConnectionButton::setSpinnerVisible(bool showSpinner)
 {
+    using namespace juce;
     spinner.setVisible(showSpinner);
     setEnabled(!showSpinner);
     if(showSpinner)

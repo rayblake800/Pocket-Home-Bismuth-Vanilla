@@ -152,8 +152,9 @@ NMPPActiveConnection NMPPDeviceWifi::getActiveConnection() const
  * Gets the list of connections available to activate on this device.
  * This might not load all saved connections.
  */
-Array<NMPPConnection> NMPPDeviceWifi::getAvailableConnections() const
+juce::Array<NMPPConnection> NMPPDeviceWifi::getAvailableConnections() const
 { 
+    using namespace juce;
     Array<NMPPConnection> available;
     callInMainContext([&available](GObject* devObject)
     {
@@ -183,6 +184,7 @@ Array<NMPPConnection> NMPPDeviceWifi::getAvailableConnections() const
 NMPPConnection NMPPDeviceWifi::getAvailableConnection
 (const NMPPAccessPoint& accessPoint) const
 {
+    using namespace juce;
     if(!accessPoint.isNull())
     {
         Array<NMPPConnection> available = getAvailableConnections();
@@ -234,8 +236,9 @@ NMPPAccessPoint NMPPDeviceWifi::getActiveAccessPoint() const
 /*
  * Gets all access points visible to this device.
  */
-Array<NMPPAccessPoint> NMPPDeviceWifi::getAccessPoints() const
+juce::Array<NMPPAccessPoint> NMPPDeviceWifi::getAccessPoints() const
 { 
+    using namespace juce;
     Array<NMPPAccessPoint> accessPoints;
     callInMainContext([&accessPoints](GObject* devObject)
     {
@@ -297,7 +300,7 @@ void NMPPDeviceWifi::requestScan()
  *                  "active-connection"
  */
 void NMPPDeviceWifi::Listener::propertyChanged(GPPObject* source, 
-        String property)
+        juce::String property)
 {
     jassert(property == "active-connection");
     NMPPDeviceWifi* dev = static_cast<NMPPDeviceWifi*>(source);

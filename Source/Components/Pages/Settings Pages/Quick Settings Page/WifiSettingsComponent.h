@@ -58,7 +58,7 @@ private:
     /**
      * @return the wifi icon
      */
-    String getIconAsset() override;
+    juce::String getIconAsset() override;
 
     /**
      * Enable or disable the wifi radio.
@@ -70,7 +70,7 @@ private:
     /**
      * Sets the wifi button text based on the current wifi state.
      */
-    String updateButtonText() override;
+    juce::String updateButtonText() override;
 
     /**
      * Use wifi status updates to keep the component updated.

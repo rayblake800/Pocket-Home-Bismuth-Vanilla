@@ -28,7 +28,7 @@
  * anything about the created page.
  */
 
-class PageComponent : public Component, public Button::Listener
+class PageComponent : public juce::Component, public juce::Button::Listener
 {
 public:
     class PageFactoryInterface;
@@ -41,7 +41,7 @@ public:
     /**
      * @param name  The internal component name.
      */
-    PageComponent(const String& name = String());
+    PageComponent(const juce::String& name = juce::String());
 
     virtual ~PageComponent() { }
     
@@ -82,7 +82,7 @@ public:
      *                   image is used, the background will be filled with the 
      *                   background color instead of an image.
      */
-    void setBackgroundImage(Image bgImage);
+    void setBackgroundImage(juce::Image bgImage);
 
     /**
      * Adds all components in the layout to the page and makes them visible.
@@ -221,7 +221,6 @@ public:
     };
 
 protected:
-
     /**
      * Whenever this page is added to a page stack, the PageStack
      * will call this method. 
@@ -248,7 +247,7 @@ protected:
      * @param button  Points to a button that was just clicked that added this
      *                 PageComponent as a listener.
      */
-    virtual void pageButtonClicked(Button* button) { }
+    virtual void pageButtonClicked(juce::Button* button) { }
 
     /**
      * Handles any actions necessary whenever the page is resized, besides
@@ -310,23 +309,23 @@ private:
      *
      * @param button
      */
-    void buttonClicked(Button* button) final override;
+    void buttonClicked(juce::Button* button) final override;
 
     /**
      * Fills the page background with an image or color.
      *
      * @param g
      */
-    virtual void paint(Graphics& g) override;
+    virtual void paint(juce::Graphics& g) override;
 
     //A button that removes the page from the page stack may be held here.
-    ScopedPointer<NavButton> backButton = nullptr;
+    juce::ScopedPointer<NavButton> backButton = nullptr;
 
     //Layout manager and component margin/padding values.
     LayoutManager layoutManager;
 
     //Optional page background image.
-    Image backgroundImage;
+    juce::Image backgroundImage;
 
     //Used by the page to create additional pages to display.
     PageFactoryInterface* pageFactory = nullptr;

@@ -3,19 +3,19 @@
 BluezAdapter::BluezAdapter() :
 GPPDBusProxy("org.bluez", "/org/bluez/hci0", "org.bluez.Adapter1") { }
 
-String BluezAdapter::getDeviceAddress()
+juce::String BluezAdapter::getDeviceAddress()
 {
-    return getProperty<String>("Address");
+    return getProperty<juce::String>("Address");
 }
 
-String BluezAdapter::getDeviceName()
+juce::String BluezAdapter::getDeviceName()
 {
-    return getProperty<String>("Name");
+    return getProperty<juce::String>("Name");
 }
 
-StringArray BluezAdapter::getUUIDs()
+juce::StringArray BluezAdapter::getUUIDs()
 {
-    return getProperty<StringArray>("UUIDs");
+    return getProperty<juce::StringArray>("UUIDs");
 }
 
 bool BluezAdapter::isPowered()
@@ -68,8 +68,8 @@ void BluezAdapter::printDebug()
     DBG("\tDiscoverable:" << (isDiscoverable() ? "true" : "false"));
     DBG("\tPairable:" << (isPairable() ? "true" : "false"));
     DBG("\tUUIDs:");
-    StringArray uuids = getUUIDs();
-    for (String& uuid : uuids)
+    juce::StringArray uuids = getUUIDs();
+    for (juce::String& uuid : uuids)
     {
         DBG("\t\t" << uuid);
     }

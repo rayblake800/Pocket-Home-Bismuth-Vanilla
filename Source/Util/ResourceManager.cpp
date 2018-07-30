@@ -14,12 +14,13 @@ ResourceManager::SharedResource::~SharedResource()
 }
 
 ResourceManager::ResourceManager(
-        ScopedPointer<SharedResource>& classResource,
-        ReadWriteLock& resourceLock,
+        juce::ScopedPointer<SharedResource>& classResource,
+        juce::ReadWriteLock& resourceLock,
         std::function<SharedResource*() > createResource) :
 classResource(classResource),
 resourceLock(resourceLock)
 {
+    using namespace juce;
     const ScopedWriteLock initLock(resourceLock);
     if (classResource == nullptr)
     {
@@ -34,6 +35,7 @@ resourceLock(resourceLock)
  */
 ResourceManager::~ResourceManager()
 {
+    using namespace juce;
     const ScopedWriteLock initLock(resourceLock);
     if (classResource == nullptr)
     {

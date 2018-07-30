@@ -42,7 +42,7 @@ protected:
      * 
      * @param key     This should be the background key or the menu type key.
      */
-    void configValueChanged(String key);
+    void configValueChanged(juce::String key);
 
 private:
     /**
@@ -51,7 +51,7 @@ private:
      * 
      * @param event
      */
-    virtual void mouseDown(const MouseEvent& event) override;
+    virtual void mouseDown(const juce::MouseEvent& event) override;
 
     /**
      * Opens the power page or the settings page, depending on which button
@@ -59,12 +59,12 @@ private:
      * 
      * @param button
      */
-    void pageButtonClicked(Button* button) override;
+    void pageButtonClicked(juce::Button* button) override;
 
     /**
      * Forwards all key events to the AppMenu.
      */
-    bool keyPressed(const KeyPress &) override;
+    bool keyPressed(const juce::KeyPress &) override;
 
     /**
      * Grab keyboard focus when the page becomes visible.
@@ -89,7 +89,7 @@ private:
     
     //The application menu.  This is recreated whenever the menu type preference
     //changes in MainConfigFile
-    ScopedPointer<AppMenuComponent> appMenu;
+    juce::ScopedPointer<AppMenuComponent> appMenu;
     
     //On pocketChip this displays the current battery status.
     BatteryIcon batteryIcon;

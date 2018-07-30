@@ -9,8 +9,11 @@
  * @brief A UI component that allows the user to select a color value.
  */
 
-class ColourPicker : public Component, private  Slider::Listener,
-private TextEditor::Listener, private Button::Listener, private Localized
+class ColourPicker : public juce::Component,
+        private juce::Slider::Listener,
+        private juce::TextEditor::Listener,
+        private juce::Button::Listener,
+        private Localized
 {
 public:
     /**
@@ -20,14 +23,15 @@ public:
      * @param colour           Sets the initial colour value to show in the
      *                         ColourPicker.
      */
-    ColourPicker(int numSavedColours = 5, Colour colour = Colours::white);
+    ColourPicker
+    (int numSavedColours = 5, juce::Colour colour = juce::Colours::white);
 
     virtual ~ColourPicker() { }
 
     /**
      * Gets the current selected colour.
      */
-    Colour getSelectedColour();
+    juce::Colour getSelectedColour();
 
     /**
      * Sets a new colour value.
@@ -37,7 +41,7 @@ public:
      * @param runCallback  Sets if the colour selection callback should
      *                     be called for this xolour change.
      */
-    void setSelectedColour(Colour colour, bool runCallback = false);
+    void setSelectedColour(juce::Colour colour, bool runCallback = false);
 
     /**
      * Assigns a callback function to run when a colour is selected.
@@ -45,7 +49,7 @@ public:
      * @param callback  The function to run. The new colour will be passed in
      *                  as a parameter.
      */
-    void setSelectionCallback(std::function<void(Colour)> callback);
+    void setSelectionCallback(std::function<void(juce::Colour)> callback);
 
 protected:
     /**
@@ -67,24 +71,24 @@ protected:
     /**
      * Updates the color preview and text box when slider values change.
      */
-    void sliderValueChanged(Slider* slider) override;
+    void sliderValueChanged(juce::Slider* slider) override;
 
     /**
      * Updates the sliders and colour preview after the text box value changes.
      */
-    void textEditorFocusLost(TextEditor& editor) override;
+    void textEditorFocusLost(juce::TextEditor& editor) override;
 
     /**
      * Updates the sliders and colour preview after the text box value changes.
      */
-    void textEditorReturnKeyPressed(TextEditor& editor) override;
+    void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
 
     /**
      * If a colour thumbnail is clicked, apply it to the sliders, text box,
      * and preview.  If the apply button is clicked, add the selection colour
      * to the preview thumbnails and run the selection callback.
      */
-    void buttonClicked(Button* button) override;
+    void buttonClicked(juce::Button* button) override;
 
     /**
      * Re-apply component layout using the layoutManager,
@@ -94,44 +98,44 @@ protected:
     /**
      * A square component that shows a colour value.
      */
-    class ColourBox: public Component
+    class ColourBox: public juce::Component
     {
     public: 
-        ColourBox(Colour colour = Colour(), bool drawBorder = true);
+        ColourBox(juce::Colour colour = juce::Colour(), bool drawBorder = true);
 		
 	virtual ~ColourBox() { };
 
-	Colour getColour();
+	juce::Colour getColour();
 
-	void setColour(Colour colour);
+	void setColour(juce::Colour colour);
 
     private:
-	void paint(Graphics& g) override;
+	void paint(juce::Graphics& g) override;
 		
-	Colour colour;
+	juce::Colour colour;
 	bool drawBorder;
     };
 
     /**
      * A ColourBox button, used for re-selecting previous selected colours.
      */
-    class ColourButton : public Button
+    class ColourButton : public juce::Button
     {
     public:
-	ColourButton(Colour colour = Colour());
+	ColourButton(juce::Colour colour = juce::Colour());
 
 	virtual ~ColourButton() { }
 
-	Colour getColour();
+	juce::Colour getColour();
 
-	void setColour(Colour colour);
+	void setColour(juce::Colour colour);
 	
     private:
 	/**
 	 * Change the outline color when the button is down.
 	 */
 	void paintButton
-	(Graphics &g, bool isMouseOverButton, bool isButtonDown);	
+	(juce::Graphics &g, bool isMouseOverButton, bool isButtonDown);	
 
 	void resized() override;
 
@@ -139,7 +143,7 @@ protected:
     };
 private:
 
-    Colour colour;
+    juce::Colour colour;
 
     //Handles child component layout
     LayoutManager layoutManager;
@@ -148,26 +152,26 @@ private:
     ColourBox colourPreview;
 
     //Holds the buttons used to re-select previously selected colors.
-    OwnedArray<ColourButton> colourButtons;
+    juce::OwnedArray<ColourButton> colourButtons;
     //Shares the last selected colours between all colour pickers.
-    static Array<Colour> savedColours;
+    static juce::Array<juce::Colour> savedColours;
     //Sets how many saved colours are shown.
     int numSavedColours = 0;
 
     //Runs when the user selects a color.
-    std::function<void(Colour)> selectionCallback;
+    std::function<void(juce::Colour)> selectionCallback;
 
     //Red, green, blue, and alpha color component sliders.
-    Slider rSlider;
-    Slider gSlider;
-    Slider bSlider;
-    Slider aSlider;
+    juce::Slider rSlider;
+    juce::Slider gSlider;
+    juce::Slider bSlider;
+    juce::Slider aSlider;
 
     //Holds the colour value as an eight digit hex number string.
-    TextEditor colourField;
+    juce::TextEditor colourField;
 
     //Clicking this confirms the color selection.
-    TextButton selectionButton;
+    juce::TextButton selectionButton;
 
     static const constexpr char * set_colour = "set_colour"; 
 

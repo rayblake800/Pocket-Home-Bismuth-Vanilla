@@ -18,7 +18,7 @@
  */
 
 class PopupEditorComponent : public ConfigurableImageComponent,
-public Button::Listener
+public juce::Button::Listener
 {
 public:
     virtual ~PopupEditorComponent() { }
@@ -36,7 +36,7 @@ protected:
      *                    button is pressed.  When called, this editor passes 
      *                    in a reference to itself as the only argument.
      */
-    PopupEditorComponent(String title,
+    PopupEditorComponent(juce::String title,
             std::function<void(PopupEditorComponent*) > onConfirm);
 
     /**
@@ -57,7 +57,7 @@ protected:
      * 
      * @param button
      */
-    virtual void editorButtonClicked(Button * button) { }
+    virtual void editorButtonClicked(juce::Button * button) { }
 
     /**
      * Set the space in pixels to leave between child components and outer 
@@ -90,7 +90,7 @@ private:
      * 
      * @param buttonClicked
      */
-    void buttonClicked(Button* buttonClicked) final override;
+    void buttonClicked(juce::Button* buttonClicked) final override;
 
     /**
      * The escape and return keys work the same as pressing the cancel and 
@@ -103,7 +103,7 @@ private:
      * @return      true, to keep the Juce library key handling system from 
      *               passing the key event to another component. 
      */
-    virtual bool keyPressed(const KeyPress & key) final override;
+    virtual bool keyPressed(const juce::KeyPress & key) final override;
 
     /**
      * Re-apply the layout to fit the new bounds.

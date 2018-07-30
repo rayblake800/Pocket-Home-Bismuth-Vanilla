@@ -13,7 +13,7 @@
  * @brief The base class that initializes and shuts down the program.
  */
 
-class PocketHomeApplication : public JUCEApplication
+class PocketHomeApplication : public juce::JUCEApplication
 {
 public:
     PocketHomeApplication() { }
@@ -30,7 +30,7 @@ private:
      *                      the program, so that any command line parameters
      *                      can be processed.
      */
-    void initialise(const String &commandLine) override;
+    void initialise(const juce::String &commandLine) override;
 
     /**
      * This is called by the Juce framework to safely shut down the program.
@@ -40,7 +40,7 @@ private:
     /**
      * @return the application name set in Juce project files.
      */
-    const String getApplicationName() override
+    const juce::String getApplicationName() override
     {
         return ProjectInfo::projectName;
     }
@@ -48,7 +48,7 @@ private:
     /**
      * @return the application version set in Juce project files.
      */
-    const String getApplicationVersion() override
+    const juce::String getApplicationVersion() override
     {
         return ProjectInfo::versionString;
     }
@@ -68,22 +68,22 @@ private:
     //as long as the application is running.
 
     //Holds general user-set program configuration data.
-    volatile MainConfigFile mainConfig;
+    MainConfigFile mainConfig;
     
     //Holds user-set UI component configuration data.
-    volatile ComponentConfigFile componentConfig;
+    ComponentConfigFile componentConfig;
     
     //Holds UI colour settings
-    volatile ColourConfigFile colourConfig;
+    ColourConfigFile colourConfig;
 
     //Runs the GLib event loop
-    volatile GLibSignalHandler gLibThread;
+    GLibSignalHandler gLibThread;
     
     //The program appearance manager.  This is dynamically allocated because it
     //should be created after/destroyed before all of the above resources.
-    ScopedPointer<PokeLookAndFeel> lookAndFeel = nullptr;
+    juce::ScopedPointer<PokeLookAndFeel> lookAndFeel = nullptr;
     
     //The single program window.  This is dynamically allocated because it
     //should be created after/destroyed before all of the above resources.
-    ScopedPointer<PocketHomeWindow> homeWindow = nullptr;
+    juce::ScopedPointer<PocketHomeWindow> homeWindow = nullptr;
 };

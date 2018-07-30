@@ -49,7 +49,7 @@ private:
     /**
      * @return the bluetooth icon asset name
      */
-    String getIconAsset() override;
+    juce::String getIconAsset() override;
 
     /**
      * Enable/disable bluetooth, once this program can actually do that.
@@ -60,7 +60,7 @@ private:
     /**
      * @return "coming soon!"
      */
-    String updateButtonText() override;
+    juce::String updateButtonText() override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BluetoothSettingsComponent)
 };

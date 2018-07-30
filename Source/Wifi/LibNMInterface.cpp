@@ -8,10 +8,11 @@
 #include "WifiDebugOutput.h"
 #endif
 
-LibNMInterface::LibNMInterface(ReadWriteLock& wifiLock) :
+LibNMInterface::LibNMInterface(juce::ReadWriteLock& wifiLock) :
 NetworkInterface(wifiLock),
 wifiLock(wifiLock)
 {
+    using namespace juce;
     MainConfigFile config;
     String wifiIface = config.getConfigValue<String>
             (MainConfigFile::wifiInterfaceKey);
@@ -89,8 +90,9 @@ WifiAccessPoint LibNMInterface::getActiveAP()
 /*
  * Request information on all wifi access points detected by the NMDevice.
  */
-Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
+juce::Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
 {
+    using namespace juce;
     Array<WifiAccessPoint> filteredAPs;
     if(!activeAP.isNull())
     {
@@ -114,8 +116,9 @@ Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
  * Begin opening a connection to a wifi access point.
  */
 void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
-        String psk)
+        juce::String psk)
 {
+    using namespace juce;
     const NMPPAccessPoint& nmAP = toConnect.getNMAccessPoint();
     if(nmAP.isNull())
     {
@@ -236,8 +239,10 @@ WifiStateManager::AccessPointState LibNMInterface::getAPState
  * Finds the last time a connection was active using a specific access
  * point.
  */
-Time LibNMInterface::lastConnectionTime(const WifiAccessPoint& accessPoint)
+juce::Time LibNMInterface::lastConnectionTime
+(const WifiAccessPoint& accessPoint)
 {
+    using namespace juce;
     Time connectionTime;
     Array<SavedConnection> apConnections = savedConnections
             .findConnectionsForAP(accessPoint.getNMAccessPoint());
@@ -257,6 +262,7 @@ Time LibNMInterface::lastConnectionTime(const WifiAccessPoint& accessPoint)
  */
 void LibNMInterface::setAccessPointPaths(WifiAccessPoint& accessPoint)
 {
+    using namespace juce;
     if(!accessPoint.isNull())
     {
         const char* path = "";
@@ -350,6 +356,7 @@ void LibNMInterface::disableWifi()
 void LibNMInterface::openingConnection(NMPPActiveConnection connection,
             bool isNew)
 {
+    using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, connection, isNew]()
     {
@@ -390,6 +397,7 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
 void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection, 
         GError* error, bool isNew)
 {   
+    using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, connection, error, isNew]()
     {
@@ -424,6 +432,7 @@ void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection,
  */
 void LibNMInterface::wirelessEnabledChange(bool enabled)
 {  
+    using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, enabled]()
     {
@@ -446,6 +455,7 @@ void LibNMInterface::wirelessEnabledChange(bool enabled)
 void LibNMInterface::stateChanged(NMDeviceState newState,
         NMDeviceState oldState, NMDeviceStateReason reason)
 {
+    using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, newState, oldState, reason]()
     {
@@ -557,6 +567,7 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
  */
 void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
 {    
+    using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, addedAP]()
     {
@@ -575,6 +586,7 @@ void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
  */
 void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
 {    
+    using namespace juce;
     jassert(!removedAP.isNull());
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, removedAP]()
@@ -594,6 +606,7 @@ void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
  */
 void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
 {
+    using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, active]()
     {

@@ -31,7 +31,7 @@
  */
 
 
-class AppMenuComponent : public Component, public ConfigurableComponent,
+class AppMenuComponent : public juce::Component, public ConfigurableComponent,
 private WindowFocus::Listener, private Localized
 {
 public:
@@ -41,7 +41,7 @@ public:
      * @param loadingSpinner   Reference to an overlay spinner that sits over
      *                         the PageComponent holding this AppMenuComponent.
      */
-    AppMenuComponent(String componentKey, OverlaySpinner& loadingSpinner);
+    AppMenuComponent(juce::String componentKey, OverlaySpinner& loadingSpinner);
 
     virtual ~AppMenuComponent();
 
@@ -78,7 +78,7 @@ public:
      * 
      * @return true if the keyPress is handled by the menu, false otherwise.
      */
-    bool keyPressed(const KeyPress& key) override;
+    bool keyPressed(const juce::KeyPress& key) override;
 
     /**
      * This method will run whenever this component is resized.  Classes
@@ -231,7 +231,7 @@ private:
      */
     virtual AppMenuFolder* createFolderObject(
             AppMenuItem::Ptr folderItem,
-            std::map<String, AppMenuButton::Ptr>& buttonMap) = 0;
+            std::map<juce::String, AppMenuButton::Ptr>& buttonMap) = 0;
 
     /**
      * Return the bounds where the given folder should be placed in the menu.
@@ -242,7 +242,7 @@ private:
      *
      * @return  updated folder bounds to apply.
      */
-    virtual Rectangle<int> updateFolderBounds(const AppMenuFolder* folder,
+    virtual juce::Rectangle<int> updateFolderBounds(const AppMenuFolder* folder,
             int folderIndex) = 0;
 
     /**
@@ -256,7 +256,7 @@ private:
      * @return  true iff the key press was used.
      */
     virtual bool folderKeyPressed
-    (const KeyPress& key, AppMenuFolder* activeFolder) = 0;
+    (const juce::KeyPress& key, AppMenuFolder* activeFolder) = 0;
 
     /**
      * Exits the loading state if the window loses focus.
@@ -268,7 +268,7 @@ private:
      *
      * @param key     the key of property that has changed
      */
-    void extraConfigValueChanged(String key) final override;
+    void extraConfigValueChanged(juce::String key) final override;
 
     /**
      * Reposition child components, and update folder layout without animating.
@@ -323,7 +323,7 @@ private:
      *
      * @paeam event
      */
-    virtual void mouseDown(const MouseEvent& event) override;
+    virtual void mouseDown(const juce::MouseEvent& event) override;
 
     /**
      * Enter or exit the loading state, where the component shows the
@@ -337,18 +337,18 @@ private:
     const int animationDuration = 350;
 
     //Holds the AppFolder components that organize the menu buttons.
-    OwnedArray<AppMenuFolder> openFolders;
+    juce::OwnedArray<AppMenuFolder> openFolders;
 
     //Stores each button by name, so buttons don't need to be re-loaded
     //every time you close a folder and open it again.
-    std::map<String, AppMenuButton::Ptr> buttonNameMap;
+    std::map<juce::String, AppMenuButton::Ptr> buttonNameMap;
 
     //creates all menu items
     AppMenuItemFactory menuItemFactory;
 
     //keyboard shortcuts
-    static const String openPopupMenuBinding;
-    static const String reloadMenuBinding;
+    static const juce::String openPopupMenuBinding;
+    static const juce::String reloadMenuBinding;
     //The shared iconThread should exist as long as the AppMenu does.
     IconThread iconThread;
     //Sets if clicking unselected buttons immediately triggers
@@ -364,7 +364,7 @@ private:
     //Page lading spinner reference
     OverlaySpinner& loadingSpinner;
     //Holds the menu editor component that can be accessed via the pop-up menu
-    ScopedPointer<AppMenuPopupEditor> buttonEditor;
+    juce::ScopedPointer<AppMenuPopupEditor> buttonEditor;
     //Loads system applications from .Desktop files
     static DesktopEntryLoader desktopEntries;
     //Tracks if desktop entries are loading or applications are launching in

@@ -18,7 +18,7 @@ public:
      * 
      * @param entryFile
      */
-    DesktopEntry(File entryFile);
+    DesktopEntry(juce::File entryFile);
 
     /**
      * Creates a new desktop entry from parameter data.
@@ -38,8 +38,11 @@ public:
      * @param launchInTerminal  Marks if the application should run in a
      *                           terminal window.
      */
-    DesktopEntry(String title, String icon, String command,
-            StringArray categories,
+    DesktopEntry(
+            juce::String title,
+            juce::String icon,
+            juce::String command,
+            juce::StringArray categories,
             bool launchInTerminal);
 
     virtual ~DesktopEntry() { }
@@ -113,7 +116,7 @@ public:
      * 
      * @return the stored value, or empty string if not found.
      */
-    String getValue(StringValue valueType) const;
+    juce::String getValue(StringValue valueType) const;
 
     /**
      * Get stored boolean data.
@@ -131,7 +134,7 @@ public:
      * 
      * @return the stored value, or the empty list if not found.
      */
-    StringArray getValue(ListValue valueType) const;
+    juce::StringArray getValue(ListValue valueType) const;
 
     /**
      * Changes the value of stored string data.
@@ -140,7 +143,7 @@ public:
      * 
      * @param newValue   The new value for valueType
      */
-    void setValue(StringValue valueType, String newValue);
+    void setValue(StringValue valueType, juce::String newValue);
 
     /**
      * Changes the value of stored boolean data.
@@ -158,7 +161,7 @@ public:
      * 
      * @param newValue   The new value for valueType.
      */
-    void setValue(ListValue valueType, StringArray newValue);
+    void setValue(ListValue valueType, juce::StringArray newValue);
 
     /**
      * Exports this entry to a .Desktop file.  This creates or overwrites a 
@@ -181,29 +184,29 @@ private:
      * 
      * @return that value's key String
      */
-    String getKey(StringValue valueType) const;
+    juce::String getKey(StringValue valueType) const;
 
     /**
      * @param valueType any BoolValue
      * 
      * @return that value's key String
      */
-    String getKey(BoolValue valueType) const;
+    juce::String getKey(BoolValue valueType) const;
 
     /**
      * @param valueType any ListValue
      * 
      * @return that value's key String
      */
-    String getKey(ListValue valueType) const;
+    juce::String getKey(ListValue valueType) const;
 
     static constexpr const char* typeKey = "Type";
 
     struct LineValues
     {
-        String key;
-        String locale;
-        String value;
+        juce::String key;
+        juce::String locale;
+        juce::String value;
     };
 
     /**
@@ -213,16 +216,16 @@ private:
      * 
      * @return       the data extracted from that line.
      */
-    LineValues getLineData(String line);
+    LineValues getLineData(juce::String line);
 
     //Stores all data values as strings, mapped to their respective key values
-    std::map<String, String> dataStrings;
+    std::map<juce::String, juce::String> dataStrings;
 
     //path of the .Desktop/.Directory file
-    String entrypath;
+    juce::String entrypath;
 
     //local user directory for storing updated .Desktop files
-    static const String localEntryPath;
+    static const juce::String localEntryPath;
 
 };
 

@@ -34,22 +34,22 @@ public:
     /**
      * @return all menu items in this folder
      */
-    virtual Array<AppMenuItem::Ptr> getFolderItems() const override;
+    virtual juce::Array<AppMenuItem::Ptr> getFolderItems() const override;
 
     /**
      * @return the display name of the associated folder
      */
-    virtual String getAppName() const override;
+    virtual juce::String getAppName() const override;
 
     /**
      * @return all application categories linked to this folder.
      */
-    virtual StringArray getCategories() const override;
+    virtual juce::StringArray getCategories() const override;
 
     /**
      * @return the name or path used to load the icon file. 
      */
-    virtual String getIconName() const override;
+    virtual juce::String getIconName() const override;
 
     /**
      * Return true if this menu item has an index that can be moved by a given 
@@ -63,12 +63,12 @@ protected:
     /**
      * Get an appropriate title to use for a deletion confirmation window.
      */
-    virtual String getConfirmDeleteTitle() const override;
+    virtual juce::String getConfirmDeleteTitle() const override;
 
     /**
      * Gets appropriate descriptive text for a deletion confirmation window.
      */
-    virtual String getConfirmDeleteMessage() const override;
+    virtual juce::String getConfirmDeleteMessage() const override;
 
     /**
      * @return true, as folder categories can be edited.
@@ -89,7 +89,7 @@ protected:
     /**
      * @return the title to display over an editor for this menu item. 
      */
-    virtual String getEditorTitle() const override;
+    virtual juce::String getEditorTitle() const override;
 
     /**
      * Gets a PopupEditorComponent callback function that will apply 
@@ -120,7 +120,7 @@ protected:
      * @param icon folder icon image name/path
      * @param categories list of folder application categories
      */
-    void editFolder(String name, String icon, StringArray categories);
+    void editFolder(juce::String name, juce::String icon, juce::StringArray categories);
 private:
     
     AppConfigFile::AppFolder appFolder;

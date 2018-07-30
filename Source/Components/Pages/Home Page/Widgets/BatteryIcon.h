@@ -14,7 +14,7 @@
  *
  */
 
-class BatteryIcon : public Component, private WindowFocusedTimer
+class BatteryIcon : public juce::Component, private WindowFocusedTimer
 {
 public:
     BatteryIcon();
@@ -52,7 +52,7 @@ private:
      *
      * @param percent       The battery charge percentage.
      */
-    void setStatus(BatteryIconImage imageSelection, String percent);
+    void setStatus(BatteryIconImage imageSelection, juce::String percent);
 
     /**
      * Turn battery updates on when this component becomes visible, off
@@ -78,7 +78,7 @@ private:
     //timer frequency in ms
     const static int frequency = 2000;
     //Use a rolling average for the battery percentage
-    Array<int> batteryPercents;
+    juce::Array<int> batteryPercents;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BatteryIcon)
 };

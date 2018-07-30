@@ -3,8 +3,8 @@
 
 //folder navigation key bindings
 //TODO: set these in config
-const String PagedAppMenu::pageLeftBinding = "shift + cursor left";
-const String PagedAppMenu::pageRightBinding = "shift + cursor right";
+const juce::String PagedAppMenu::pageLeftBinding = "shift + cursor left";
+const juce::String PagedAppMenu::pageRightBinding = "shift + cursor right";
 
 PagedAppMenu::PagedAppMenu(OverlaySpinner& loadingSpinner) :
 AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
@@ -12,6 +12,7 @@ pageLeft(NavButton::left),
 pageRight(NavButton::right),
 closeFolderBtn(NavButton::up)
 {
+    using namespace juce;
     setOnlyTriggerSelected(false);
     Array<Button*> buttons = {&pageLeft, &pageRight, &closeFolderBtn};
 
@@ -37,9 +38,10 @@ void PagedAppMenu::menuResized()
 /**
  * Uses key events to navigate through the menu.
  */
-bool PagedAppMenu::folderKeyPressed(const KeyPress& key,
+bool PagedAppMenu::folderKeyPressed(const juce::KeyPress& key,
         AppMenuFolder* activeFolder)
 {
+    using namespace juce;
     PageAppFolder* folder = static_cast<PageAppFolder*> (activeFolder);
     int selectedIndex = folder->getSelectedIndex();
     int currentPage = folder->getCurrentFolderPage();
@@ -174,9 +176,10 @@ bool PagedAppMenu::folderKeyPressed(const KeyPress& key,
 /**
  * Return the bounds where the given folder should be placed in the menu.
  */
-Rectangle<int> PagedAppMenu::updateFolderBounds(const AppMenuFolder* folder,
-        int folderIndex)
+juce::Rectangle<int> PagedAppMenu::updateFolderBounds
+(const AppMenuFolder* folder, int folderIndex)
 {
+    using namespace juce;
     const PageAppFolder* pageFolder =
             static_cast<const PageAppFolder*> (folder);
     int folderPage = pageFolder->getCurrentFolderPage();
@@ -210,7 +213,7 @@ Rectangle<int> PagedAppMenu::updateFolderBounds(const AppMenuFolder* folder,
  */
 AppMenuFolder* PagedAppMenu::createFolderObject(
         AppMenuItem::Ptr folderItem,
-        std::map<String, AppMenuButton::Ptr>& buttonMap)
+        std::map<juce::String, AppMenuButton::Ptr>& buttonMap)
 {
     PageAppFolder* folder = new PageAppFolder(folderItem, this, buttonMap);
     folder->setParentRelativeMargin(
@@ -221,8 +224,9 @@ AppMenuFolder* PagedAppMenu::createFolderObject(
 /**
  * Handles navigation button controls
  */
-void PagedAppMenu::buttonClicked(Button* button)
+void PagedAppMenu::buttonClicked(juce::Button* button)
 {
+    using namespace juce;
     if (!ignoringInput())
     {
         if (button == &closeFolderBtn && getNumFolders() > 1)

@@ -5,8 +5,9 @@
 /*
  * Maps an icon cache file to memory.
  */
-IconCache::IconCache(const String& themePath)
+IconCache::IconCache(const juce::String& themePath)
 {
+    using namespace juce;
     String cachePath = themePath + cacheFileName;
     File cacheFile(cachePath);
     if (!cacheFile.existsAsFile())
@@ -111,9 +112,10 @@ bool IconCache::isValidCache() const
 /*
  * Looks up an icon's data in the icon cache.
  */
-std::map<String,String> IconCache::lookupIcon
-(const String& iconName) const
+std::map<juce::String,juce::String> IconCache::lookupIcon
+(const juce::String& iconName) const
 {
+    using namespace juce;
     std::map<String, String>  matches;
     if(!isValidCache())
     {
@@ -168,8 +170,9 @@ std::map<String,String> IconCache::lookupIcon
 /*
  * Calculate the hash value of an icon name.
  */
-uint32 IconCache::hashValue(const char* icon) const
+juce::uint32 IconCache::hashValue(const char* icon) const
 {
+    using namespace juce;
     if (icon == nullptr)
     {
         jassertfalse;
@@ -188,8 +191,9 @@ uint32 IconCache::hashValue(const char* icon) const
  * file, after ensuring that the cache file is valid and the offset is
  * within the file bounds.
  */
-uint16 IconCache::read16(uint32 offset) const
+juce::uint16 IconCache::read16(juce::uint32 offset) const
 {
+    using namespace juce;
     if(fileMap == MAP_FAILED || (offset + sizeof(uint16)) > fileLen
        || (offset + sizeof(uint16)) < offset)
     {
@@ -206,8 +210,9 @@ uint16 IconCache::read16(uint32 offset) const
  * file, after ensuring that the cache file is valid and the offset is
  * within the file bounds.
  */
-uint32 IconCache::read32(uint32 offset) const
+juce::uint32 IconCache::read32(juce::uint32 offset) const
 {
+    using namespace juce;
     if(fileMap == MAP_FAILED || (offset + sizeof(uint32)) > fileLen
        || (offset + sizeof(uint32)) < offset)
     {
@@ -224,8 +229,9 @@ uint32 IconCache::read32(uint32 offset) const
  * cache file, after ensuring that the cache file is valid and the offset is
  * within the file bounds.
  */
-String IconCache::readString(uint32 offset) const
+juce::String IconCache::readString(juce::uint32 offset) const
 {
+    using namespace juce;
     if (fileMap == MAP_FAILED || offset >= fileLen)
     {
         jassertfalse;

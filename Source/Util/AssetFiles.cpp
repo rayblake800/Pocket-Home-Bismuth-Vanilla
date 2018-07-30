@@ -1,7 +1,8 @@
 #include "AssetFiles.h"
 
-File absoluteFileFromPath(const String& path)
+juce::File absoluteFileFromPath(const juce::String& path)
 {
+    using namespace juce;
     return File::isAbsolutePath(path) ? File(path)
             : File::getCurrentWorkingDirectory().getChildFile(path);
 }
@@ -9,8 +10,10 @@ File absoluteFileFromPath(const String& path)
 /**     
  * Loads an asset file using its asset name.
  */
-File AssetFiles::findAssetFile(const String& assetName, bool lookOutsideAssets)
+juce::File AssetFiles::findAssetFile
+(const juce::String& assetName, bool lookOutsideAssets)
 {
+    using namespace juce;
     File assetFile = absoluteFileFromPath(String(assetFolder) + assetName);
     if (!assetFile.existsAsFile() && lookOutsideAssets)
     {
@@ -22,9 +25,10 @@ File AssetFiles::findAssetFile(const String& assetName, bool lookOutsideAssets)
 /**
  * Create an Image object from an asset file.
  */
-Image AssetFiles::loadImageAsset(const String& assetName,
-        bool lookOutsideAssets)
+juce::Image AssetFiles::loadImageAsset
+(const juce::String& assetName, bool lookOutsideAssets)
 {
+    using namespace juce;
     if (assetName.endsWith(".svg"))
     {
         Image image;
@@ -49,9 +53,10 @@ Image AssetFiles::loadImageAsset(const String& assetName,
 /**
  * Creates a Drawable object from an svg asset file.
  */
-Drawable * AssetFiles::loadSVGDrawable(const String& assetName,
-        bool lookOutsideAssets)
+juce::Drawable * AssetFiles::loadSVGDrawable
+(const juce::String& assetName, bool lookOutsideAssets)
 {
+    using namespace juce;
     File svgFile = findAssetFile(assetName, lookOutsideAssets);
     if (!svgFile.existsAsFile() || svgFile.getFileExtension() != ".svg")
     {
@@ -70,9 +75,10 @@ Drawable * AssetFiles::loadSVGDrawable(const String& assetName,
 /**
  * Loads JSON data from an asset file.
  */
-var AssetFiles::loadJSONAsset(const String& assetName,
-        bool lookOutsideAssets)
+juce::var AssetFiles::loadJSONAsset
+(const juce::String& assetName, bool lookOutsideAssets)
 {
+    using namespace juce;
     File jsonFile = findAssetFile(assetName, lookOutsideAssets);
     if (!jsonFile.existsAsFile() || jsonFile.getFileExtension() != ".json")
     {

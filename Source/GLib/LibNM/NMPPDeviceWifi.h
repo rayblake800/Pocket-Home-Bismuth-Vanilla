@@ -93,7 +93,7 @@ public:
      * @return  The list of known connections that are compatible with this
      *          device.
      */
-    Array<NMPPConnection> getAvailableConnections() const;
+    juce::Array<NMPPConnection> getAvailableConnections() const;
     
     /**
      * Finds the first available connection that is compatible with a specific
@@ -132,7 +132,7 @@ public:
      * @return  An array containing one access point object for each nearby
      *          wifi access point visible to the device.
      */
-    Array<NMPPAccessPoint> getAccessPoints() const;
+    juce::Array<NMPPAccessPoint> getAccessPoints() const;
     
     /**
      * Checks if a specific connection is present in the list of available
@@ -212,7 +212,7 @@ public:
          * @param property  This should be the active connection property, 
          *                  "active-connection"
          */
-        virtual void propertyChanged(GPPObject* source, String property)
+        virtual void propertyChanged(GPPObject* source, juce::String property)
                 override;
     };
     

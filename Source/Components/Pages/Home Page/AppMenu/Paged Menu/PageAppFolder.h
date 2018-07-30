@@ -14,7 +14,7 @@ public:
     PageAppFolder(
             AppMenuItem::Ptr folderItem,
             MouseListener* btnListener,
-            std::map<String, AppMenuButton::Ptr>& buttonNameMap);
+            std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap);
 
     virtual ~PageAppFolder() { }
 
@@ -35,7 +35,7 @@ public:
      * @return a Layout containing all items in the button array.
      */
     virtual LayoutManager::Layout buildFolderLayout
-    (Array<AppMenuButton::Ptr>& buttons);
+    (juce::Array<AppMenuButton::Ptr>& buttons);
 
     /**
      * @return the number of pages this folder needs to display all menu
@@ -153,7 +153,7 @@ private:
          */
         PageMenuButton(
                 AppMenuItem::Ptr menuItem,
-                String name);
+                juce::String name);
 
         virtual ~PageMenuButton() { }
     private:

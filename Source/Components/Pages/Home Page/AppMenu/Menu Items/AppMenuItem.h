@@ -15,16 +15,16 @@
  *  Methods that edit this menu data are only accessible to AppMenuButton 
  * objects, as each menu item should only be directly modified by its 
  * AppMenuButton.  All methods for getting menu data return false, {}, or
- * String::empty by default. Inheriting classes are responsible for overriding
+ * String() by default. Inheriting classes are responsible for overriding
  * these to provide accurate data.
  */
 
-class AppMenuItem : public ReferenceCountedObject,
+class AppMenuItem : public juce::ReferenceCountedObject,
 public ConfigFile::Listener
 {
 public:
     friend class AppMenuButton;
-    typedef ReferenceCountedObjectPtr<AppMenuItem> Ptr;
+    typedef juce::ReferenceCountedObjectPtr<AppMenuItem> Ptr;
 
     AppMenuItem();
 
@@ -39,17 +39,17 @@ public:
      * @return all menu items in this folder, or an empty array if this isn't
      *          a folder.
      */
-    virtual Array<AppMenuItem::Ptr> getFolderItems() const;
+    virtual juce::Array<AppMenuItem::Ptr> getFolderItems() const;
 
     /**
      * @return the display name of the associated application.
      */
-    virtual String getAppName() const;
+    virtual juce::String getAppName() const;
 
     /**
      * @return the application shell command or directory path.
      */
-    virtual String getCommand() const;
+    virtual juce::String getCommand() const;
 
     /**
      * @return true iff this menu item is an application that launches in
@@ -66,12 +66,12 @@ public:
     /**
      * @return all application categories linked to this menu item.
      */
-    virtual StringArray getCategories() const;
+    virtual juce::StringArray getCategories() const;
 
     /**
      * @return the name or path used to load the icon file. 
      */
-    virtual String getIconName() const;
+    virtual juce::String getIconName() const;
 
     /**
      * Return true if this menu item has an index that can be moved by a given 
@@ -162,12 +162,12 @@ protected:
     /**
      * Get an appropriate title to use for a deletion confirmation window.
      */
-    virtual String getConfirmDeleteTitle() const;
+    virtual juce::String getConfirmDeleteTitle() const;
 
     /**
      * Gets appropriate descriptive text for a deletion confirmation window.
      */
-    virtual String getConfirmDeleteMessage() const;
+    virtual juce::String getConfirmDeleteMessage() const;
 
     /**
      * @return true iff this menu item has categories that can be edited,
@@ -184,7 +184,7 @@ protected:
     /**
      * @return the title to display over an editor for this menu item. 
      */
-    virtual String getEditorTitle() const;
+    virtual juce::String getEditorTitle() const;
 
     /**
      * Gets a PopupEditorComponent callback function that will apply 
@@ -214,7 +214,7 @@ protected:
      * Gets the string to add before a launch command to make it launch in the
      * terminal.
      */
-    String getTermLaunchPrefix() const;
+    juce::String getTermLaunchPrefix() const;
     
     
     /**
@@ -257,7 +257,7 @@ private:
      * 
      * @param propertyKey
      */
-    void configValueChanged(String propertyKey);
+    void configValueChanged(juce::String propertyKey);
 
 
 
@@ -265,7 +265,7 @@ private:
     FactoryInterface* factoryInterface = nullptr;
 
     //prefix to add before commands that launch in a terminal window.
-    String termLaunchPrefix;
+    juce::String termLaunchPrefix;
 
     /**
      * Using a private Localized member is necessary to allow AppMenuItem

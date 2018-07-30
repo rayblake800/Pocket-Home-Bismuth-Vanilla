@@ -1,12 +1,17 @@
 #include "Utils.h"
 #include "AppLauncher.h"
+#include "WindowFocus.h"
+
+//Ms to wait before forcibly terminating a window focus operation.
+static const int windowFocusTimeout = 1000;
 
 /**
  * Launch a new application, or focus its window if the application is
  * already running
  */
-void AppLauncher::startOrFocusApp(String appTitle, String command)
+void AppLauncher::startOrFocusApp(juce::String appTitle, juce::String command)
 {
+    using namespace juce;
     DBG("AppLauncher::" << __func__ << ": title = " << appTitle
             << ", command = " << command);
     //before adding another process to the list, clean out any old dead ones,
@@ -34,20 +39,38 @@ void AppLauncher::startOrFocusApp(String appTitle, String command)
             DBG("AppLauncher::" << __func__
                     << ": app is already running,"
                     << " attempting to find the window id");
-            String windowId = getWindowId(processInfo);
-
-            if (!windowId.isEmpty())
+            if(WindowFocus::focusWindow(appTitle))
+            {  
+                DBG("AppLauncher::" << __func__ 
+                        << "Focused window using title " << appTitle);
+                
+            }
+            else if(WindowFocus::focusWindow(command.upToFirstOccurrenceOf
+                                             (" ", false, false)))
             {
-                DBG("AppLauncher::" << __func__ << ": Found window "
-                        << windowId << ", focusing app");
-                focusApp(windowId);
+                DBG("AppLauncher::" << __func__ 
+                        << "Focused window using command " << command);
             }
             else
             {
-                DBG("AppLauncher::" << __func__
-                        << ": Process exists, but has no window to focus.");
+                
+                DBG("AppLauncher::" << __func__ 
+                        << "Failed to find window for " << appTitle);
             }
             return;
+//            String windowId = getWindowId(processInfo);
+//            if (!windowId.isEmpty())
+//            {
+//                DBG("AppLauncher::" << __func__ << ": Found window "
+//                        << windowId << ", focusing app");
+//                focusApp(windowId);
+//            }
+//            else
+//            {
+//                DBG("AppLauncher::" << __func__
+//                        << ": Process exists, but has no window to focus.");
+//            }
+//            return;
         }
         else
         {
@@ -61,7 +84,8 @@ void AppLauncher::startOrFocusApp(String appTitle, String command)
     startApp(processInfo);
 }
 
-AppLauncher::ProcessInfo::ProcessInfo(String title, String command) :
+AppLauncher::ProcessInfo::ProcessInfo
+(juce::String title, juce::String command) :
 title(title), command(command) { }
 
 bool AppLauncher::ProcessInfo::operator==(const ProcessInfo& rhs) const
@@ -79,6 +103,7 @@ bool AppLauncher::ProcessInfo::operator<(const ProcessInfo& rhs) const
  */
 void AppLauncher::startApp(ProcessInfo processInfo)
 {
+    using namespace juce;
     String command = processInfo.command;
     DBG("AppsPageComponent::startApp - " << processInfo.command);
     String testExistance = String("command -v ") + processInfo.command;
@@ -94,10 +119,6 @@ void AppLauncher::startApp(ProcessInfo processInfo)
 
     }
     ChildProcess* launchApp = new ChildProcess();
-    // Reload xmodmap to ensure it's running
-    // Commented for testing, remember to clean this out if it turns out to
-    // be unneeded
-    //launchApp->start("xmodmap ${HOME}/.Xmodmap");
     if (launchApp->start(processInfo.command))
     {
         runningApps.add(launchApp);
@@ -111,8 +132,9 @@ void AppLauncher::startApp(ProcessInfo processInfo)
 /**
  * Focus the window of a running app
  */
-void AppLauncher::focusApp(const String & windowId)
+void AppLauncher::focusApp(const juce::String & windowId)
 {
+    using namespace juce;
     String focusShell = "echo 'focus_client_by_window_id(" + windowId
             + ")' | awesome-client";
     StringArray focusCmd{"sh", "-c", focusShell.toRawUTF8()};
@@ -123,18 +145,23 @@ void AppLauncher::focusApp(const String & windowId)
 /**
  * Attempt to find an open window of a launched application
  */
-String AppLauncher::getWindowId(ProcessInfo processInfo)
+juce::String AppLauncher::getWindowId(ProcessInfo processInfo)
 {
+    using namespace juce;
     std::function < String(String) > windowSearch =
             [this](String searchTerm)->String
             {
-                StringArray findCmd{"xdotool", "search", "--all"
-                                    , "--limit", "1", "--class", searchTerm.toRawUTF8()};
+                StringArray findCmd{"xdodtool", "search", "--all"
+                                    , "--limit", "1", "--class",
+                                    searchTerm.toRawUTF8() , "> pTest.txt"};
                 DBG("AppLauncher::" << __func__ << ": Running command:"
                         << findCmd.joinIntoString(" ", 0, -1));
                 ChildProcess findWindow;
-                findWindow.start(findCmd);
-                String windowId = findWindow.readAllProcessOutput();
+                findWindow.start(findCmd,
+                        ChildProcess::wantStdErr | ChildProcess::wantStdOut);
+                
+                String windowId = getProcessOutput
+                        (findWindow, windowFocusTimeout);
                 DBG(String("Search result:") + windowId);
                 return windowId.trimEnd();
             };
@@ -150,6 +177,7 @@ String AppLauncher::getWindowId(ProcessInfo processInfo)
 
 void AppLauncher::timerCallback()
 {
+    using namespace juce;
     if (timedProcess != nullptr)
     {
         if (timedProcess->isRunning())

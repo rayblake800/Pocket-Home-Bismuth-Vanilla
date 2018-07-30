@@ -11,7 +11,8 @@
  * and fixes button mapping.
  */
 
-class InputSettingsPage : public PageComponent, private ComboBox::Listener,
+class InputSettingsPage : public PageComponent,
+private juce::ComboBox::Listener,
 private Localized
 {
 public:
@@ -25,14 +26,14 @@ public:
      * 
      * @param button
      */
-    void pageButtonClicked(Button* button) override;
+    void pageButtonClicked(juce::Button* button) override;
 
     /**
      * Changes the cursor visibility settings.
      * 
      * @param box
      */
-    void comboBoxChanged(ComboBox* box) override;
+    void comboBoxChanged(juce::ComboBox* box) override;
 
 private:
     //Title of the page
@@ -40,15 +41,15 @@ private:
 
     //Set cursor visibility
     ScalingLabel cursorVisible;
-    ComboBox chooseMode;
+    juce::ComboBox chooseMode;
 
     //Button for calibrating
-    TextButton calibrating;
+    juce::TextButton calibrating;
     //calibration command
     static const constexpr char * calibrationCommand = "xinput_calibrator";
 
     //Button for the FN key (xmodmap)
-    TextButton fnmapping;
+    juce::TextButton fnmapping;
     //Command to fix key mappings
     static const constexpr char * keyFixCommand = "xmodmap ${HOME}/.Xmodmap";
 
