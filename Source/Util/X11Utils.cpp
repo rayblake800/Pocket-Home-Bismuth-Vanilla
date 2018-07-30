@@ -26,38 +26,11 @@ struct WindowProperty
     
     WindowProperty() { }
     
-    WindowProperty(const WindowProperty& rhs)
-    {
-        *this = rhs;
-    }
+    WindowProperty(const WindowProperty& rhs);
     
-    ~WindowProperty()
-    {
-        if(data != nullptr)
-        {
-            free(data);
-            data = nullptr;
-        }
-    }
+    ~WindowProperty();
     
-    WindowProperty& operator=(const WindowProperty& rhs)
-    {
-        numItems = rhs.numItems;
-        type = rhs.type;
-        size = rhs.size;
-        if(data != nullptr)
-        {
-            free(data);
-            data = nullptr;
-        }
-        if(rhs.data != nullptr)
-        {
-            data = static_cast<unsigned char*>(malloc(numItems * size));
-            memcpy(data, rhs.data, numItems * size);
-        }
-        data = rhs.data;
-        return *this;
-    }
+    WindowProperty& operator=(const WindowProperty& rhs);
 };
 
 /**
@@ -90,6 +63,7 @@ WindowProperty getWindowProperty
 bool xPropertySupported(X11Utils::XDisplay& display, const char* property);
 
 
+
 /*
  * Create a new interface to the X11 display manager.
  */
@@ -112,6 +86,39 @@ X11Utils::XDisplay::~XDisplay()
 Display* X11Utils::XDisplay::operator*()
 {
     return display;
+}
+
+WindowProperty::WindowProperty(const WindowProperty& rhs)
+{
+    *this = rhs;
+}
+
+WindowProperty::~WindowProperty()
+{
+    if(data != nullptr)
+    {
+        free(data);
+        data = nullptr;
+    }
+}
+
+WindowProperty& WindowProperty::operator=(const WindowProperty& rhs)
+{
+    numItems = rhs.numItems;
+    type = rhs.type;
+    size = rhs.size;
+    if(data != nullptr)
+    {
+        free(data);
+        data = nullptr;
+    }
+    if(rhs.data != nullptr)
+    {
+        data = static_cast<unsigned char*>(malloc(numItems * size));
+        memcpy(data, rhs.data, numItems * size);
+    }
+    data = rhs.data;
+    return *this;
 }
 
 /*

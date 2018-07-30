@@ -49,4 +49,79 @@ namespace X11Utils
         
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(XDisplay)
     };
+    
+    /**
+     * Checks if a window's name matches a particular string.
+     * 
+     * @param display            The display object used to interact with the X 
+     *                           Window server.
+     * 
+     * @param window             Identifies the window being checked.
+     * 
+     * @param windowName         The string being checked against the window 
+     *                           title.
+     * 
+     * @param ignoreCase         If true, the comparison will ignore case, 
+     *                           treating capital letters as identical to their 
+     *                           lowercase equivalents.
+     * 
+     * @param allowPartialMatch  If true, the window's title and windowName will
+     *                           be considered matching not only when both 
+     *                           strings are equivalent, but also when one 
+     *                           string contains the other.
+     * 
+     * @return   True iff the window's title matches the windowName string. 
+     *
+     */
+    bool windowNameMatches(
+            X11Utils::XDisplay& display,
+            Window window, 
+            juce::String& windowName,
+            bool ignoreCase = true,
+            bool allowPartialMatch = false);
+
+
+    /**
+     * Checks if a window's class or classname matches a particular string.
+     * 
+     * @param display            The display object used to interact with the X 
+     *                           Window server.
+     * 
+     * @param window             Identifies the window being checked.
+     * 
+     * @param windowClass        The string being checked against the window's 
+     *                           class and classname.
+     * 
+     * @param ignoreCase         If true, the comparison will ignore case, 
+     *                           treating capital letters as identical to their 
+     *                           lowercase equivalents.
+     * 
+     * @param allowPartialMatch  If true, the window's class or classname and 
+     *                           windowClass will be considered matching not 
+     *                           only when both strings are equivalent, but also
+     *                           when one string contains the other.
+     * 
+     * @return   True iff the window's class or classname strings match the 
+     *           windowClass string.
+     *
+     */
+    bool windowClassMatches(
+            X11Utils::XDisplay& display,
+            Window window, 
+            juce::String& windowClass,
+            bool ignoreCase = true,
+            bool allowPartialMatch = false);
+
+    /**
+     * Gets the id of the process that created a window.
+     * 
+     * @param display            The display object used to interact with the X 
+     *                           Window server.
+     * 
+     * @param window             Identifies the window being checked.
+     * 
+     * @return  The process id of the process that created the window.
+     *
+     */
+    int getWindowPID(X11Utils::XDisplay& display, Window window);
 }
