@@ -2324,7 +2324,7 @@
           <in>Utils.cpp</in>
           <in>WindowFocus.cpp</in>
           <in>WindowFocusedTimer.cpp</in>
-          <in>X11Utils.cpp</in>
+          <in>XWindowInterface.cpp</in>
         </df>
         <df name="Wifi">
           <in>JsonWifiInterface.cpp</in>
@@ -2855,9 +2855,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Configurable/ConfigurableImageButton.cpp"
@@ -3061,9 +3058,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Pages/PageStackComponent.cpp"
@@ -3071,9 +3065,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Pages/Power Page/FelPage.cpp"
@@ -3088,9 +3079,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Pages/Settings Pages/DateTime Page/DateTimePage.cpp"
@@ -3126,9 +3114,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Pages/Settings Pages/Network Pages/WifiSettingsPage.cpp"
@@ -3206,9 +3191,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/PokeLookAndFeel.cpp"
@@ -3216,9 +3198,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/TransitionAnimator.cpp"
@@ -3226,9 +3205,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/ColourPicker.cpp"
@@ -3243,9 +3219,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/DrawableImageButton.cpp"
@@ -3267,9 +3240,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/IconSliderComponent.cpp"
@@ -3277,9 +3247,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/ListEditor.cpp"
@@ -3301,9 +3268,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/PagedList.cpp"
@@ -3325,9 +3289,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/ScalingTextButton.cpp"
@@ -3342,9 +3303,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Components/Widgets/SwitchComponent.cpp"
@@ -3352,9 +3310,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Config Files/AppConfigFile.cpp"
@@ -3383,9 +3338,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Config Files/MainConfigFile.cpp"
@@ -3428,9 +3380,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/FreeDesktop/XDGDirectories.cpp"
@@ -3449,9 +3398,6 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/GLib/GLibSignalHandler.cpp" ex="false" tool="1" flavor2="11">
@@ -3525,16 +3471,10 @@
             tool="1"
             flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/PocketCHIP/Display.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/PocketCHIP/I2CBus.cpp" ex="false" tool="1" flavor2="11">
@@ -3551,23 +3491,14 @@
       </item>
       <item path="Source/Util/AssetFiles.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Util/Localized.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Util/LocalizedTime.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Util/ProcessUtils.cpp" ex="false" tool="1" flavor2="11">
@@ -3576,16 +3507,10 @@
       </item>
       <item path="Source/Util/ResourceManager.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Util/TempTimer.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Util/Utils.cpp" ex="false" tool="1" flavor2="11">
@@ -3603,8 +3528,11 @@
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="Source/Util/X11Utils.cpp" ex="false" tool="1" flavor2="11">
+      <item path="Source/Util/XWindowInterface.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="0">
+          <preprocessorList>
+            <Elem>LINUX=true</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="Source/Wifi/JsonWifiInterface.cpp" ex="false" tool="1" flavor2="11">
@@ -15037,34 +14965,6 @@
             <Elem>JucePlugin_Build_VST=0</Elem>
             <Elem>LINUX=true</Elem>
             <Elem>NDEBUG=1</Elem>
-          </preprocessorList>
-        </ccTool>
-      </folder>
-      <folder path="0/Source/Bluetooth">
-        <ccTool>
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
-        </ccTool>
-      </folder>
-      <folder path="0/Source/Components">
-        <ccTool>
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
-        </ccTool>
-      </folder>
-      <folder path="0/Source/FreeDesktop">
-        <ccTool>
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
-          </preprocessorList>
-        </ccTool>
-      </folder>
-      <folder path="0/Source/PocketCHIP">
-        <ccTool>
-          <preprocessorList>
-            <Elem>LINUX=true</Elem>
           </preprocessorList>
         </ccTool>
       </folder>

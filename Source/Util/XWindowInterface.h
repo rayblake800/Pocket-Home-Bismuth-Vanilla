@@ -151,7 +151,7 @@ public:
      *
      * @param desktopIndex  The index of the desktop to set as active.
      */
-    void setDesktopIndex(int desktopIndex)
+    void setDesktopIndex(int desktopIndex);
 
     /**
      * Gets the index of the desktop that contains a specific window.

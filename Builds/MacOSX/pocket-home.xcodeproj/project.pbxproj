@@ -112,7 +112,7 @@
 		49E161B11BB369520C8308CC = {isa = PBXBuildFile; fileRef = 3D7355F625656F0FD02775F0; };
 		2BDB18505DE08E6D8E90E703 = {isa = PBXBuildFile; fileRef = B4A65A40CD538F70EDA51C26; };
 		0B120B69E15D68C70BE8145E = {isa = PBXBuildFile; fileRef = AFB69E8EEE8214A6B9EDB24E; };
-		F2585DA010F315A43110593A = {isa = PBXBuildFile; fileRef = 05D2B09238BF1965DD3CB890; };
+		1DA0BFA7991B09983A5F3E56 = {isa = PBXBuildFile; fileRef = 228977BE79D829AAF9C22D5C; };
 		FED3A0EF9812C5B418A4F915 = {isa = PBXBuildFile; fileRef = C2159CD9308818292D3B893B; };
 		C5D4695A8D35AA0C1118B8B5 = {isa = PBXBuildFile; fileRef = CF74A26644CA57CFB55AE463; };
 		D0A4B2156F96D3578FCD0496 = {isa = PBXBuildFile; fileRef = DEA4E10C4338A9E08D459CE7; };
@@ -137,11 +137,9 @@
 		C05ED6CFEAE6927FBFFFB07E = {isa = PBXBuildFile; fileRef = CD053589A2351711B21EACAE; };
 		0071C29EC02771A1CBE9061A = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IconThread.cpp; path = "../../Source/FreeDesktop/Icon Themes/IconThread.cpp"; sourceTree = "SOURCE_ROOT"; };
 		00F169F4F344BBF6892637D1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Source/Main.cpp; sourceTree = "SOURCE_ROOT"; };
-		0391F533D1192DA889DADA11 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = X11Utils.h; path = ../../Source/Util/X11Utils.h; sourceTree = "SOURCE_ROOT"; };
 		03CDF2CC3ED755590797F7C2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ScrollingAppFolder.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Scrolling Menu/ScrollingAppFolder.h"; sourceTree = "SOURCE_ROOT"; };
 		0426EA016292DCDC1E11ACE7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuComponent.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/AppMenuComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		046C580CAE38B6EA5D85FF85 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwitchComponent.h; path = ../../Source/Components/Widgets/SwitchComponent.h; sourceTree = "SOURCE_ROOT"; };
-		05D2B09238BF1965DD3CB890 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = X11Utils.cpp; path = ../../Source/Util/X11Utils.cpp; sourceTree = "SOURCE_ROOT"; };
 		06209E159DE83DCDF9D7D4B0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesktopEntryLoader.h; path = "../../Source/FreeDesktop/Desktop Entries/DesktopEntryLoader.h"; sourceTree = "SOURCE_ROOT"; };
 		078882C1F18FE66DDA339A99 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Audio.h; path = ../../Source/PocketCHIP/Audio.h; sourceTree = "SOURCE_ROOT"; };
 		07B13CFC3860907117DDBE4F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GVariantConverter.h; path = ../../Source/GLib/DBus/GVariantConverter.h; sourceTree = "SOURCE_ROOT"; };
@@ -163,6 +161,7 @@
 		1E9E217DFCDE71E1995501E0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NewDesktopAppEditor.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Editors/NewDesktopAppEditor.h"; sourceTree = "SOURCE_ROOT"; };
 		201B4889632122AEF45DBFF2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WindowFocus.cpp; path = ../../Source/Util/WindowFocus.cpp; sourceTree = "SOURCE_ROOT"; };
 		209C74FC6664A1A2358F7FE1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Utils.cpp; path = ../../Source/Util/Utils.cpp; sourceTree = "SOURCE_ROOT"; };
+		228977BE79D829AAF9C22D5C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = XWindowInterface.cpp; path = ../../Source/Util/XWindowInterface.cpp; sourceTree = "SOURCE_ROOT"; };
 		23625EA822AC632567A0C94E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DesktopEntry.cpp; path = "../../Source/FreeDesktop/Desktop Entries/DesktopEntry.cpp"; sourceTree = "SOURCE_ROOT"; };
 		23B408DB9AA8CE2220B9FD39 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigFile.h; path = "../../Source/Config Files/ConfigFile.h"; sourceTree = "SOURCE_ROOT"; };
 		2436422F6F0796E6F948373C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Audio.cpp; path = ../../Source/PocketCHIP/Audio.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -278,6 +277,7 @@
 		94A20F14CE3CA585AFAFE915 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ClockLabel.cpp; path = "../../Source/Components/Pages/Home Page/Widgets/ClockLabel.cpp"; sourceTree = "SOURCE_ROOT"; };
 		955DCC53DB80162305A4B4E8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ComponentConfigFile.h; path = "../../Source/Config Files/ComponentConfigFile.h"; sourceTree = "SOURCE_ROOT"; };
 		964A432C1989D7BB5D758870 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Password.cpp; path = "../../Source/Components/Pages/Settings Pages/Password Pages/Password.cpp"; sourceTree = "SOURCE_ROOT"; };
+		9710570516580926E58DF381 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XWindowInterface.h; path = ../../Source/Util/XWindowInterface.h; sourceTree = "SOURCE_ROOT"; };
 		971AC1ADDD308D77064E66DD = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ResourceManager.h; path = ../../Source/Util/ResourceManager.h; sourceTree = "SOURCE_ROOT"; };
 		981E053B45C0EA999DEBAC94 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PageFactory.cpp; path = ../../Source/Components/Pages/PageFactory.cpp; sourceTree = "SOURCE_ROOT"; };
 		9912A25465A1A956D891C7CB = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ScalingLabel.h; path = ../../Source/Components/Widgets/ScalingLabel.h; sourceTree = "SOURCE_ROOT"; };
@@ -648,8 +648,8 @@
 					AFB69E8EEE8214A6B9EDB24E,
 					BF42644B03F4AC99B8E3C285, ); name = PocketCHIP; sourceTree = "<group>"; };
 		60553D032698E22478A3BFC0 = {isa = PBXGroup; children = (
-					05D2B09238BF1965DD3CB890,
-					0391F533D1192DA889DADA11,
+					228977BE79D829AAF9C22D5C,
+					9710570516580926E58DF381,
 					C2159CD9308818292D3B893B,
 					EC9ADBC521922E2752148D3D,
 					CF74A26644CA57CFB55AE463,
@@ -980,7 +980,7 @@
 					49E161B11BB369520C8308CC,
 					2BDB18505DE08E6D8E90E703,
 					0B120B69E15D68C70BE8145E,
-					F2585DA010F315A43110593A,
+					1DA0BFA7991B09983A5F3E56,
 					FED3A0EF9812C5B418A4F915,
 					C5D4695A8D35AA0C1118B8B5,
 					D0A4B2156F96D3578FCD0496,

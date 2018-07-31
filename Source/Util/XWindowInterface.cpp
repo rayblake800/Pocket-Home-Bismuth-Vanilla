@@ -1,4 +1,5 @@
-#include "X11Utils.h"
+#include "XWindowInterface.h"
+#include "ProcessUtils.h"
 #include <cstring>
 #include <cstdlib>
 #include <X11/Xutil.h>
@@ -36,6 +37,17 @@ XWindowInterface::~XWindowInterface()
  */
 Window XWindowInterface::getPocketHomeWindow()
 {
+    using namespace juce;
+    const int homeProcess = ProcessUtils::getProcessId();
+    const String windowName = "pocket-home";
+    Array<Window> possibleWindows = getMatchingWindows(
+            [this, &homeProcess, &windowName](Window testWindow)
+            {
+                return getWindowPID(testWindow) == homeProcess
+                        && windowNameMatches(windowName);
+            });
+    jassert(possibleWindows.size() == 1);
+    return possibleWindows[0];
 }
 
 /*
@@ -117,6 +129,11 @@ XWindowInterface::WindowProperty::WindowProperty
     
 XWindowInterface::WindowProperty::~WindowProperty()
 {
+    if(data != nullptr)
+    {
+        free(data);
+        data = nullptr;
+    }
 }
     
 XWindowInterface::WindowProperty& 
@@ -144,11 +161,11 @@ XWindowInterface::WindowProperty::operator=
  * Gets an arbitrary window property.
  */
 XWindowInterface::WindowProperty
-XWindowInterface::WindowProperty::getWindowProperty
+XWindowInterface::getWindowProperty
 (Window window, Atom property)
 {
     unsigned long bytesAfter; //needed for XGetWindowProperty, result unused.
-    WindowProperty propertyData;
+    XWindowInterface::WindowProperty propertyData;
     int status = XGetWindowProperty(display, window, property, 0, (~0L), false,
             AnyPropertyType, &propertyData.type, &propertyData.size,
             &propertyData.numItems, &bytesAfter, &propertyData.data);
@@ -157,11 +174,11 @@ XWindowInterface::WindowProperty::getWindowProperty
     {
         if(status == BadWindow)
         {
-            DBG("X11Utils::" << __func__ << ": Window " 
+            DBG("XWindowInterface::" << __func__ << ": Window " 
                     << juce::String((unsigned long) window) 
                     << "does not exist!");
         }
-        DBG("X11Utils::" << __func__ << ": XGetWindowProperty failed!");
+        DBG("XWindowInterface::" << __func__ << ": XGetWindowProperty failed!");
         propertyData = WindowProperty();
     }
     return propertyData;
