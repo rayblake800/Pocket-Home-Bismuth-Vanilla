@@ -54,7 +54,7 @@ namespace X11Utils
      * Checks if a window's name matches a particular string.
      * 
      * @param display            The display object used to interact with the X 
-     *                           Window server.
+     *                           Window system.
      * 
      * @param window             Identifies the window being checked.
      * 
@@ -74,7 +74,7 @@ namespace X11Utils
      *
      */
     bool windowNameMatches(
-            X11Utils::XDisplay& display,
+            XDisplay& display,
             Window window, 
             juce::String& windowName,
             bool ignoreCase = true,
@@ -85,7 +85,7 @@ namespace X11Utils
      * Checks if a window's class or classname matches a particular string.
      * 
      * @param display            The display object used to interact with the X 
-     *                           Window server.
+     *                           Window system.
      * 
      * @param window             Identifies the window being checked.
      * 
@@ -106,7 +106,7 @@ namespace X11Utils
      *
      */
     bool windowClassMatches(
-            X11Utils::XDisplay& display,
+            XDisplay& display,
             Window window, 
             juce::String& windowClass,
             bool ignoreCase = true,
@@ -116,12 +116,89 @@ namespace X11Utils
      * Gets the id of the process that created a window.
      * 
      * @param display            The display object used to interact with the X 
-     *                           Window server.
+     *                           Window system.
      * 
      * @param window             Identifies the window being checked.
      * 
      * @return  The process id of the process that created the window.
      *
      */
-    int getWindowPID(X11Utils::XDisplay& display, Window window);
+    int getWindowPID(XDisplay& display, Window window);
+
+    /**
+     * Performs a breadth-first search of the entire window tree, returning
+     * windows that fit some match function.
+     *
+     * @param display                 The display object used to interact with
+     *                                the X Window server.
+     *
+     * @param verifyMatch             An arbitrary matching function that will
+     *                                be used to determine which windows are 
+     *                                matching.  When passed the display and a
+     *                                window, iff verifyMatch returns true, the
+     *                                window will be added to the array returned
+     *                                by getMatchingWindows
+     *
+     * @param stopAtFirstMatchDepth   If true, once a matching window is found,
+     *                                the search will not check any windows
+     *                                that are deeper on the window tree.  If
+     *                                false, the search will continue to search
+     *                                further down on the window tree.
+     *
+     * @return                        All windows selected by the verifyMatch
+     *                                function.
+     */
+    juce::Array<Window> getMatchingWindows(
+                    XDisplay& display,
+                    std::function<bool(XDisplay&, Window)> verifyMatch,
+                    bool stopAtFirstMatchDepth = true);
+
+    /**
+     * Activates a window.  This will switch the active desktop to the one 
+     * containing this window, bring the window to the front, and set it
+     * as the focused window.
+     *
+     * @param display  The display object used to interact with the X Window
+     *                 system.
+     *
+     * @param window   The window to activate.
+     */
+    void activateWindow(XDisplay& display, Window window);
+    
+    /**
+     * Finds the current selected desktop index.
+     *
+     * @param display  The display object used to interact with the X Window
+     *                 system.
+     *
+     * @return   The index of the current active desktop, or -1 if the system
+     *           does not support multiple desktops
+     */
+    int getDesktop(XDisplay& display);
+
+    /**
+     * Sets the current active desktop index.  This will do nothing if the new
+     * index is the same as the current index, the index is not a valid desktop 
+     * index, or the system does not support multiple desktops.
+     *
+     * @param display       The display object used to interact with the X 
+     *                      Window system.
+     *
+     * @param desktopIndex  The index of the desktop to set as active.
+     */
+    void setDesktop(XDisplay& display, int desktopIndex)
+
+    /**
+     * Gets the index of the desktop that contains a specific window.
+     *
+     * @param display  The display object used to interact with the X Window
+     *                 system.
+     *
+     * @param window   The window to check.
+     *
+     * @return   The index of the desktop containing the window, or -1 if
+     *           the window is invalid or the system does not support multiple
+     *           desktops.
+     */
+    int getWindowDesktop(XDisplay& display, Window window);
 }
