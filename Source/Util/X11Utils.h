@@ -1,5 +1,5 @@
 /**
- * @file X11Utils.h
+ * @file XWindowInterface.h
  * 
  * @brief Interacts with the X Window System to find and manipulate windows.
  * 
@@ -16,45 +16,32 @@
 
 #pragma once
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include "JuceHeader.h"
 
-namespace X11Utils
+class XWindowInterface
 {
+public:
+   /**
+    * Create a new interface to the X11 display manager.
+    * 
+    * @param displayName  The name of the display to access.  If null, the
+    *                     default display set by the $DISPLAY environment
+    *                     variable will be used.
+    */
+    XWindowInterface(const char* displayName = nullptr);
+        
+    ~XWindowInterface();
+ 
     /**
-     * A simple RAII wrapper for managing XLib Display objects.  Display
-     * objects maintain a connection to the X Window server, and are required
-     * by nearly all XLib functions.
+     * Gets the XLib window object that represents the pocket-home application
+     * window.
+     *
+     * @return  The main pocket-home window used by this application.
      */
-    class XDisplay
-    {
-    public:
-        /**
-         * Create a new interface to the X11 display manager.
-         * 
-         * @param displayName  The name of the display to access.  If null, the
-         *                     default display set by the $DISPLAY environment
-         *                     variable will be used.
-         */
-        XDisplay(const char* displayName = nullptr);
-        
-        ~XDisplay();
-        
-        /**
-         * Gets the internal display object.
-         */
-        Display* operator*();
-        
-    private:
-        Display* display = nullptr;
-        
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(XDisplay)
-    };
-    
+    Window getPocketHomeWindow();    
     /**
      * Checks if a window's name matches a particular string.
-     * 
-     * @param display            The display object used to interact with the X 
-     *                           Window system.
      * 
      * @param window             Identifies the window being checked.
      * 
@@ -74,18 +61,13 @@ namespace X11Utils
      *
      */
     bool windowNameMatches(
-            XDisplay& display,
             Window window, 
             juce::String& windowName,
             bool ignoreCase = true,
             bool allowPartialMatch = false);
 
-
     /**
      * Checks if a window's class or classname matches a particular string.
-     * 
-     * @param display            The display object used to interact with the X 
-     *                           Window system.
      * 
      * @param window             Identifies the window being checked.
      * 
@@ -106,7 +88,6 @@ namespace X11Utils
      *
      */
     bool windowClassMatches(
-            XDisplay& display,
             Window window, 
             juce::String& windowClass,
             bool ignoreCase = true,
@@ -115,33 +96,27 @@ namespace X11Utils
     /**
      * Gets the id of the process that created a window.
      * 
-     * @param display            The display object used to interact with the X 
-     *                           Window system.
-     * 
      * @param window             Identifies the window being checked.
      * 
      * @return  The process id of the process that created the window.
      *
      */
-    int getWindowPID(XDisplay& display, Window window);
+    int getWindowPID(Window window);
 
     /**
      * Performs a breadth-first search of the entire window tree, returning
      * windows that fit some match function.
      *
-     * @param display                 The display object used to interact with
-     *                                the X Window server.
-     *
      * @param verifyMatch             An arbitrary matching function that will
      *                                be used to determine which windows are 
-     *                                matching.  When passed the display and a
-     *                                window, iff verifyMatch returns true, the
-     *                                window will be added to the array returned
-     *                                by getMatchingWindows
+     *                                matching.  When called passing in a Window
+     *                                parameter, iff verifyMatch returns true, 
+     *                                the window will be added to the array 
+     *                                returned by getMatchingWindows.
      *
      * @param stopAtFirstMatchDepth   If true, once a matching window is found,
      *                                the search will not check any windows
-     *                                that are deeper on the window tree.  If
+     *                                that are deeper in the window tree.  If
      *                                false, the search will continue to search
      *                                further down on the window tree.
      *
@@ -149,8 +124,7 @@ namespace X11Utils
      *                                function.
      */
     juce::Array<Window> getMatchingWindows(
-                    XDisplay& display,
-                    std::function<bool(XDisplay&, Window)> verifyMatch,
+                    std::function<bool(Window)> verifyMatch,
                     bool stopAtFirstMatchDepth = true);
 
     /**
@@ -158,41 +132,29 @@ namespace X11Utils
      * containing this window, bring the window to the front, and set it
      * as the focused window.
      *
-     * @param display  The display object used to interact with the X Window
-     *                 system.
-     *
      * @param window   The window to activate.
      */
-    void activateWindow(XDisplay& display, Window window);
+    void activateWindow(Window window);
     
     /**
      * Finds the current selected desktop index.
      *
-     * @param display  The display object used to interact with the X Window
-     *                 system.
-     *
      * @return   The index of the current active desktop, or -1 if the system
      *           does not support multiple desktops
      */
-    int getDesktop(XDisplay& display);
+    int getDesktopIndex();
 
     /**
      * Sets the current active desktop index.  This will do nothing if the new
      * index is the same as the current index, the index is not a valid desktop 
      * index, or the system does not support multiple desktops.
      *
-     * @param display       The display object used to interact with the X 
-     *                      Window system.
-     *
      * @param desktopIndex  The index of the desktop to set as active.
      */
-    void setDesktop(XDisplay& display, int desktopIndex)
+    void setDesktopIndex(int desktopIndex)
 
     /**
      * Gets the index of the desktop that contains a specific window.
-     *
-     * @param display  The display object used to interact with the X Window
-     *                 system.
      *
      * @param window   The window to check.
      *
@@ -200,5 +162,53 @@ namespace X11Utils
      *           the window is invalid or the system does not support multiple
      *           desktops.
      */
-    int getWindowDesktop(XDisplay& display, Window window);
-}
+    int getWindowDesktop(Window window);
+    
+private:
+ 
+    //holds arbitrary window property data.
+    struct WindowProperty
+    {
+        unsigned char* data = nullptr;
+        Atom type = 0;
+        int size = 0;
+        unsigned long numItems = 0;
+    
+        WindowProperty() { }
+    
+        WindowProperty(const WindowProperty& rhs);
+    
+        ~WindowProperty();
+    
+        WindowProperty& operator=(const WindowProperty& rhs);
+    };
+
+    /**
+     * Gets an arbitrary window property.
+     *
+     * @param window    The window to check for the given property.
+     * 
+     * @param property  The value used by XLib to describe the requested 
+     *                  property.
+     * 
+     * @return  A structure containing the requested property, or one 
+     *          containing no data if the property was not found.
+     */
+    WindowProperty getWindowProperty(Window window, Atom property);
+
+    /**
+     * Checks if a particular property is supported by the window manager.
+     * 
+     * @param property  The name of a property set by the window manager or 
+     *                  pager.
+     * 
+     * @return  True iff this property is supported by the current window 
+     *          manager or pager.
+     */
+    bool xPropertySupported(const char* property);
+
+   //XLib display object used to connect to the X Window system.
+    Display* display = nullptr; 
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(XWindowInterface)
+};
