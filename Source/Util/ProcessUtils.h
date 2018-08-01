@@ -21,8 +21,8 @@ namespace ProcessUtils
     
     struct ProcessData
     {
-        pid_t processId;
-        pid_t parentId;
+        int processId;
+        int parentId;
         juce::String executableName;
         ProcessState lastState;    
         juce::uint64 startTime;
@@ -33,7 +33,7 @@ namespace ProcessUtils
      * 
      * @return  The id of the process that is executing this function.
      */
-    pid_t getProcessId();
+    int getProcessId();
     
     /**
      * Looks up information on a process using its process id.
@@ -43,7 +43,7 @@ namespace ProcessUtils
      * @return  A data structure containing information about the process, or an
      *          empty value if no matching process is found.
      */
-    std::optional<ProcessData> getProcessData(pid_t processId);
+    std::optional<ProcessData> getProcessData(int processId);
     
     /**
      * Gets all processes that are direct child processes of a specific process.
@@ -51,8 +51,9 @@ namespace ProcessUtils
      * @param processId  The id of a Linux process.
      * 
      * @return  An array of process data structures for each child that has
-     *          processId as its parent id.
+     *          processId as its parent id.  This array will be sorted with the
+     *          newest elements listed first.
      */
-    juce::Array<ProcessData> getChildProcesses(pid_t processId);
+    juce::Array<ProcessData> getChildProcesses(int processId);
 }
 

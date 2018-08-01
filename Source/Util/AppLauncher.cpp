@@ -1,6 +1,6 @@
 #include "Utils.h"
 #include "AppLauncher.h"
-#include "WindowFocus.h"
+#include "XWindowInterface.h"
 
 //Ms to wait before forcibly terminating a window focus operation.
 static const int windowFocusTimeout = 1000;
@@ -101,12 +101,13 @@ bool AppLauncher::ProcessInfo::operator<(const ProcessInfo& rhs) const
 /**
  * Start a new instance of an application process
  */
-void AppLauncher::startApp(ProcessInfo processInfo)
+std::optional<AppLauncher::ProcessInfo> AppLauncher::startApp
+(const juce::String& command)
 {
     using namespace juce;
-    String command = processInfo.command;
-    DBG("AppsPageComponent::startApp - " << processInfo.command);
-    String testExistance = String("command -v ") + processInfo.command;
+    std::optional<ProcessInfo> launchedProcess;
+    DBG("AppsPageComponent::startApp - " << command);
+    String testExistance = String("command -v ") + command;
     if (system(testExistance.toRawUTF8()) != 0)
     {
         AlertWindow::showMessageBoxAsync
@@ -115,18 +116,27 @@ void AppLauncher::startApp(ProcessInfo processInfo)
                 String("\"") + processInfo.command + String("\"")
                 + localeText(not_valid_command));
         launchFailureCallback();
-        return;
+        return launchedProcess;
 
     }
-    ChildProcess* launchApp = new ChildProcess();
-    if (launchApp->start(processInfo.command))
+    
+    launchedProcess = 
     {
+        .command = command,
+        .childProcess = new ChildProcess();
+        .processId = -1;
+    };
+    ChildProcess launchApp;
+    if (launchApp.start(processInfo.command))
+    {
+        
         runningApps.add(launchApp);
         processMap[processInfo] = launchApp;
         timedProcess = launchApp;
         lastLaunch = Time::getMillisecondCounter();
         startTimer(timerFrequency);
     }
+    return launchedProcess;
 }
 
 /**

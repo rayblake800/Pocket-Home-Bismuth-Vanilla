@@ -26,20 +26,6 @@ namespace WindowFocus {
      *           focused.
      */
     bool isFocused();
-    
-    /**
-     * Attempts to find and focus a specific application window.  This assumes
-     * that the window you're looking for is not on another desktop, as any
-     * system running pocket-home should have no good reason to have multiple
-     * desktops.  If this assumption is false, focusing the window will not
-     * work.
-     * 
-     * @param windowAppName  The name of a running application.
-     * 
-     * @return  true if the window was found and focused, false if the window
-     *          couldn't be found or couldn't be focused.
-     */
-    bool focusWindow(juce::String windowAppName);
 
     class BroadcastWindow : public juce::DocumentWindow {
     public:

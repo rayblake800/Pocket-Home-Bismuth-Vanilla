@@ -112,6 +112,7 @@
 		49E161B11BB369520C8308CC = {isa = PBXBuildFile; fileRef = 3D7355F625656F0FD02775F0; };
 		2BDB18505DE08E6D8E90E703 = {isa = PBXBuildFile; fileRef = B4A65A40CD538F70EDA51C26; };
 		0B120B69E15D68C70BE8145E = {isa = PBXBuildFile; fileRef = AFB69E8EEE8214A6B9EDB24E; };
+		9D5BA517720336E1E649BBA1 = {isa = PBXBuildFile; fileRef = 841130C695AD378306646D12; };
 		1DA0BFA7991B09983A5F3E56 = {isa = PBXBuildFile; fileRef = 228977BE79D829AAF9C22D5C; };
 		FED3A0EF9812C5B418A4F915 = {isa = PBXBuildFile; fileRef = C2159CD9308818292D3B893B; };
 		C5D4695A8D35AA0C1118B8B5 = {isa = PBXBuildFile; fileRef = CF74A26644CA57CFB55AE463; };
@@ -149,6 +150,7 @@
 		0C3B50AD11D474215F3E63B0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PagedAppMenu.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Paged Menu/PagedAppMenu.h"; sourceTree = "SOURCE_ROOT"; };
 		0C507CE1846AC662B91CB6E8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NewFolderEditor.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Editors/NewFolderEditor.cpp"; sourceTree = "SOURCE_ROOT"; };
 		0D6AC4CD1AB952DA99E28B23 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_graphics.mm"; path = "../../JuceLibraryCode/include_juce_graphics.mm"; sourceTree = "SOURCE_ROOT"; };
+		0D7A8680F46678D0CEE6797B = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LaunchedApp.h; path = ../../Source/Util/LaunchedApp.h; sourceTree = "SOURCE_ROOT"; };
 		159F7A356414F09C404E271F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FolderMenuItem.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/FolderMenuItem.cpp"; sourceTree = "SOURCE_ROOT"; };
 		15BF8C9931EE608106C00125 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SetPasswordPage.h; path = "../../Source/Components/Pages/Settings Pages/Password Pages/SetPasswordPage.h"; sourceTree = "SOURCE_ROOT"; };
 		168113BE606EA9EB7993D914 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConnectionSettingsComponent.cpp; path = "../../Source/Components/Pages/Settings Pages/Quick Settings Page/ConnectionSettingsComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -259,6 +261,7 @@
 		8312A28FFDD47BDB369486D8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigurableImageComponent.h; path = ../../Source/Components/Configurable/ConfigurableImageComponent.h; sourceTree = "SOURCE_ROOT"; };
 		838A1FDC1A43D1D0D86FFFD8 = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = "Lato-Regular.ttf"; path = "../../assets/fonts/Lato-Regular.ttf"; sourceTree = "SOURCE_ROOT"; };
 		838C283DE24825BC5221EE7A = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NMPPClient.h; path = ../../Source/GLib/LibNM/NMPPClient.h; sourceTree = "SOURCE_ROOT"; };
+		841130C695AD378306646D12 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LaunchedApp.cpp; path = ../../Source/Util/LaunchedApp.cpp; sourceTree = "SOURCE_ROOT"; };
 		8431658E51F02215B2534BB3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HomePage.h; path = "../../Source/Components/Pages/Home Page/HomePage.h"; sourceTree = "SOURCE_ROOT"; };
 		86CAF1684F5CAB30225AA08F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GPPDBusProxy.h; path = ../../Source/GLib/DBus/GPPDBusProxy.h; sourceTree = "SOURCE_ROOT"; };
 		86F2263541FE153356599AA5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = XDGDirectories.cpp; path = ../../Source/FreeDesktop/XDGDirectories.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -648,6 +651,8 @@
 					AFB69E8EEE8214A6B9EDB24E,
 					BF42644B03F4AC99B8E3C285, ); name = PocketCHIP; sourceTree = "<group>"; };
 		60553D032698E22478A3BFC0 = {isa = PBXGroup; children = (
+					841130C695AD378306646D12,
+					0D7A8680F46678D0CEE6797B,
 					228977BE79D829AAF9C22D5C,
 					9710570516580926E58DF381,
 					C2159CD9308818292D3B893B,
@@ -980,6 +985,7 @@
 					49E161B11BB369520C8308CC,
 					2BDB18505DE08E6D8E90E703,
 					0B120B69E15D68C70BE8145E,
+					9D5BA517720336E1E649BBA1,
 					1DA0BFA7991B09983A5F3E56,
 					FED3A0EF9812C5B418A4F915,
 					C5D4695A8D35AA0C1118B8B5,

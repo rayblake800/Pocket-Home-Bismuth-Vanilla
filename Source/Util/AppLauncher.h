@@ -1,6 +1,7 @@
 #pragma once
 #include <functional>
 #include <map>
+#include <optional>
 #include "Localized.h"
 #include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
@@ -42,44 +43,33 @@ public:
      */
     void startOrFocusApp(juce::String appTitle, juce::String command);
 private:
-
+    
     /**
      * Stores information on launched processes
      */
     struct ProcessInfo
     {
-        ProcessInfo(juce::String title, juce::String command);
-        //Application title
-        juce::String title;
-        //Application launch command
         juce::String command;
-        bool operator==(const ProcessInfo& rhs) const;
-        bool operator<(const ProcessInfo& rhs) const;
+        juce::ScopedPointer<juce::ChildProcess> childProcess;
+        int processId;
     };
 
     /**
      * Start a new instance of an application process.
      * 
-     * @param processInfo  Provides the new application title and launch 
-     *                     command.
+     * @param command   The command used to launch the process.
+     * 
+     * @return   Information on the newly started process, or an empty value
+     *           if the process did not start.
      */
-    void startApp(ProcessInfo processInfo);
+    std::optional<ProcessInfo> startApp(const juce::String& command);
 
     /**
      * Focus the window of a running application.
      * 
-     * @param windowId  The application window's ID.
+     * @param ProcessInfo  The application's process information.
      */
-    void focusApp(const juce::String& windowId);
-
-    /**
-     * Searches for the ID of any window belonging to a given process.
-     * 
-     * @param processInfo  The running application process info.
-     * 
-     * @return  the window ID, or the empty string if none was found.
-     */
-    juce::String getWindowId(ProcessInfo processInfo);
+    void focusApp(ProcessInfo processInfo);
     
 
     /**
@@ -96,10 +86,7 @@ private:
     std::function<void() > launchFailureCallback;
 
     //holds all running processes launched by this object.
-    juce::OwnedArray<juce::ChildProcess> runningApps;
-
-    //store child process launch information
-    std::map<ProcessInfo, juce::ChildProcess*> processMap;
+    juce::Array<ProcessInfo> runningApps;
 
     //timer interval in milliseconds
     static const int timerFrequency = 2000;

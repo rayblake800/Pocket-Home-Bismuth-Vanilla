@@ -235,6 +235,42 @@ juce::Array<Window> XWindowInterface::getMatchingWindows(
  */
 void XWindowInterface::activateWindow(Window window)
 {
+    jassert(xPropertySupported(activeWindowProperty));
+    if(xPropertySupported(currentDesktopProperty)
+        && xPropertySupported(windowDesktopProperty))
+    {
+        setDesktopIndex(getWindowDesktop(window));
+    }
+    
+    //Raise window first(does nothing in some window managers):
+    XRaiseWindow(display, window);
+    XFlush(display);
+    
+    XEvent xEvent;
+    memset(&xEvent, 0, sizeof(xEvent));
+    xEvent.type = ClientMessage;
+    xEvent.xclient.display = display;
+    xEvent.xclient.window = window;
+    xEvent.xclient.message_type 
+            = XInternAtom(display, activeWindowProperty, false);
+    xEvent.xclient.format = 32;
+    xEvent.xclient.data.l[0] = 2L; /* 2 == Message from a window pager */
+    xEvent.xclient.data.l[1] = CurrentTime;
+    
+    XWindowAttributes winAttr;
+    XGetWindowAttributes(display, window, &winAttr);
+    int result = XSendEvent(display, winAttr.screen->root, false,
+            SubstructureNotifyMask | SubstructureRedirectMask,
+            &xEvent);
+    
+    if(result == BadWindow)
+    {
+        DBG("XWindowInterface::" << __func__ << ": Bad window error!");
+    }
+    else if(result == BadValue)
+    {
+        DBG("XWindowInterface::" << __func__ << ": Bad value error!");
+    }
 }
     
 /*
@@ -242,6 +278,19 @@ void XWindowInterface::activateWindow(Window window)
  */
 int XWindowInterface::getDesktopIndex()
 {
+    if(!xPropertySupported(currentDesktopProperty))
+    {
+        return -1;
+    }
+    Atom request = XInternAtom(display, currentDesktopProperty, false);
+    Window rootWindow = XDefaultRootWindow(display);
+    WindowProperty desktopProp = getWindowProperty(rootWindow, request);
+    if(desktopProp.numItems == 0 || desktopProp.size == 0
+            || desktopProp.data == nullptr)
+    {
+        return -1;
+    }
+    return (int) *((long*) desktopProp.data);
 }
 
 /*
@@ -251,6 +300,22 @@ int XWindowInterface::getDesktopIndex()
  */
 void XWindowInterface::setDesktopIndex(int desktopIndex)
 {
+    if(!xPropertySupported(currentDesktopProperty))
+    {
+        return;
+    }
+    
+    Window rootWindow = RootWindow(display, 0);
+    XEvent xEvent;
+    memset(&xEvent, 0, sizeof(xEvent));
+    xEvent.type = ClientMessage;
+    xEvent.xclient.display = display;
+    xEvent.xclient.window = rootWindow;
+    xEvent.xclient.message_type 
+            = XInternAtom(display, currentDesktopProperty, false);
+    XSendEvent(display, root, false,
+            SubstructureNotifyMask | SubstructureRedirectMask,
+            &xEvent);
 }
 
 /*
@@ -258,6 +323,18 @@ void XWindowInterface::setDesktopIndex(int desktopIndex)
  */
 int XWindowInterface::getWindowDesktop(Window window)
 {
+    if(!xPropertySupported(windowDesktopProperty))
+    {
+        return -1;
+    }
+    Atom request = XInternAtom(display, windowDesktopProperty, false);
+    WindowProperty desktopProp = getWindowProperty(window, request);
+    if(desktopProp.numItems == 0 || desktopProp.size == 0
+            || desktopProp.data == nullptr)
+    {
+        return -1;
+    }
+    return (int) *((long*) desktopProp.data);
 }
 
 XWindowInterface::WindowProperty::WindowProperty

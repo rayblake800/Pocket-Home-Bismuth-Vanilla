@@ -24,7 +24,8 @@ pid_t ProcessUtils::getProcessId()
  * @return  Data describing the process, or an empty value if no process exists at
  *          the given path.
  */
-static std::optional<ProcessUtils::ProcessData> getPathProcessData(juce::String processPath)
+static std::optional<ProcessUtils::ProcessData> getPathProcessData
+(juce::String processPath)
 {
     using namespace juce;
     std::optional<ProcessUtils::ProcessData> matchingData;
@@ -35,7 +36,7 @@ static std::optional<ProcessUtils::ProcessData> getPathProcessData(juce::String 
                 = StringArray::fromTokens(statFile.loadFileAsString(), true);
         ProcessUtils::ProcessData foundData;
         foundData.processId = statItems[idIndex].getIntValue();
-        foundData.executableName = statItems[nameIndex];
+        foundData.executableName = statItems[nameIndex].removeCharacters("()");
         foundData.parentId = statItems[parentIdIndex].getIntValue();
         //juce Strings have no getUInt64 method, unfortunately
         foundData.startTime = 0;
@@ -63,6 +64,21 @@ std::optional<ProcessUtils::ProcessData> ProcessUtils::getProcessData
     return getPathProcessData(path); 
 }
 
+/**
+ * Sorts processes by launch time, newest first.
+ */
+class
+{
+public:
+    static int compareElements
+    (ProcessUtils::ProcessData first, ProcessUtils::ProcessData second)
+    {
+        return second.startTime - first.startTime;
+    }
+    
+} processComparator;
+
+
 /*
  * Gets all processes that are direct child processes of a specific process.
  */
@@ -75,11 +91,13 @@ juce::Array<ProcessUtils::ProcessData> ProcessUtils::getChildProcesses
     Array<ProcessData> childProcs;
     for(const File& dir : childDirs)
     {
-        std::optional<ProcessData> processData = getPathProcessData(dir.getFullPathName());
+        std::optional<ProcessData> processData 
+                = getPathProcessData(dir.getFullPathName());
         if(processData && processData->parentId == processId)
         {
             childProcs.add(*processData);
         }
     }
+    childProcs.sort(processComparator);
     return childProcs;
 }

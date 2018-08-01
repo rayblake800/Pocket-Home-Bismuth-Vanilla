@@ -411,6 +411,8 @@
         <FILE id="b2jNEM" name="I2CBus.h" compile="0" resource="0" file="Source/PocketCHIP/I2CBus.h"/>
       </GROUP>
       <GROUP id="{3911B28B-4F73-61C8-49FD-75C1B19EC83E}" name="Util">
+        <FILE id="HmnVgu" name="LaunchedApp.cpp" compile="1" resource="0" file="Source/Util/LaunchedApp.cpp"/>
+        <FILE id="T5AXVq" name="LaunchedApp.h" compile="0" resource="0" file="Source/Util/LaunchedApp.h"/>
         <FILE id="Wa7niC" name="XWindowInterface.cpp" compile="1" resource="0"
               file="Source/Util/XWindowInterface.cpp"/>
         <FILE id="IcDWWY" name="XWindowInterface.h" compile="0" resource="0"
