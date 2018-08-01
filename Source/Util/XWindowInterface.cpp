@@ -59,6 +59,45 @@ bool XWindowInterface::windowNameMatches(
     bool ignoreCase,
     bool allowPartialMatch)
 {
+    using namespace juce;
+    std::function<bool(const String&)> nameMatch;
+    XTextProperty textProp;
+    char** nameList = nullptr;
+    XGetWMName(display, window, &textProp);
+    if(textProp.nitems > 0)
+    {
+        int count = 0;
+        Xutf8TextPropertyToTextList(display, &textProp, &nameList, &count);
+        for(int i = 0; i < count; i++)
+        {
+            String listName(CharPointer_UTF8(nameList[i]));
+            if(allowPartialMatch)
+            {
+                String& longer = (nameMatch.length() > listName.length())
+                        ? nameMatch : listName;
+                String& shorter = (nameMatch.length() <= listName.length())
+                        ? nameMatch : listName;
+                nameMatchFound = (ignoreCase ? 
+                        longer.containsIgnoreCase(shorter)
+                        : longer.contains(shorter));
+            }
+            else
+            {
+                nameMatchFound = (ignoreCase ?
+                        nameMatch.equalsIgnoreCase(listName) :
+                        (nameMatch == listName))
+            }
+            if(nameMatchFound)
+            {
+                DBG("XWindowInterface::" << __func__ << ": " << windowName
+                        << " matches name " << listName << " window=" 
+                        << String(reinterpret_cast<unsigned long>(window)));
+                break;
+            }
+        }
+        XFreeStringList(nameList);
+        XFree(textProp.value);   
+ 
 }
 
 /*
