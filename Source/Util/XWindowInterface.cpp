@@ -15,6 +15,8 @@ static const constexpr char* activeWindowProperty = "_NET_ACTIVE_WINDOW";
 static const constexpr char* currentDesktopProperty = "_NET_CURRENT_DESKTOP";
 // Holds the desktop index where a window is located.
 static const constexpr char* windowDesktopProperty = "_NET_WM_DESKTOP";
+//Holds the id of the process that created the window.
+static const constexpr char* windowProcessProperty = "_NET_WM_PID";
 
 /*
  * Create a new interface to the X11 display manager.
@@ -57,12 +59,12 @@ Window XWindowInterface::getPocketHomeWindow()
  * 
  * @param s2                 The second string.
  * 
- * @param ignoreCase         Iff true, capital and lowercase letters will be treated
- *                           as equivalent.
+ * @param ignoreCase         Iff true, capital and lowercase letters will be 
+ *                           treated as equivalent.
  * 
  * @param allowPartialMatch  If false, the strings only match if each of their
- *                           characters are equivalent.  If true, they also match
- *                           if one string contains the other.
+ *                           characters are equivalent.  If true, they also 
+ *                           match if one string contains the other.
  * 
  * @return   True iff both strings match.
  */
@@ -159,6 +161,9 @@ bool XWindowInterface::windowClassMatches(
  */
 int XWindowInterface::getWindowPID(Window window)
 {
+    Atom pidAtom = XInternAtom(display, windowProcessProperty, false);
+    WindowProperty pidProp = getWindowProperty(window, pidAtom);
+    return (int) *((unsigned long *) pidProp.data); 
 }
 
 /*
