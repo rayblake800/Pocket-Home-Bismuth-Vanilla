@@ -62,7 +62,7 @@ public:
      */
     bool windowNameMatches(
             Window window, 
-            juce::String& windowName,
+            const juce::String& windowName,
             bool ignoreCase = true,
             bool allowPartialMatch = false);
 
@@ -89,7 +89,7 @@ public:
      */
     bool windowClassMatches(
             Window window, 
-            juce::String& windowClass,
+            const juce::String& windowClass,
             bool ignoreCase = true,
             bool allowPartialMatch = false);
 

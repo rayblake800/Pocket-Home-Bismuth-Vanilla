@@ -41,13 +41,47 @@ Window XWindowInterface::getPocketHomeWindow()
     const int homeProcess = ProcessUtils::getProcessId();
     const String windowName = "pocket-home";
     Array<Window> possibleWindows = getMatchingWindows(
-            [this, &homeProcess, &windowName](Window testWindow)
+            [this, &homeProcess, &windowName](Window testWindow)->bool
             {
                 return getWindowPID(testWindow) == homeProcess
-                        && windowNameMatches(windowName);
+                        && windowNameMatches(testWindow, windowName);
             });
     jassert(possibleWindows.size() == 1);
     return possibleWindows[0];
+}
+
+/**
+ * Checks if two strings match, for varying definitions of "match".
+ * 
+ * @param s1                 The first string.
+ * 
+ * @param s2                 The second string.
+ * 
+ * @param ignoreCase         Iff true, capital and lowercase letters will be treated
+ *                           as equivalent.
+ * 
+ * @param allowPartialMatch  If false, the strings only match if each of their
+ *                           characters are equivalent.  If true, they also match
+ *                           if one string contains the other.
+ * 
+ * @return   True iff both strings match.
+ */
+static bool stringsMatch(const juce::String& s1, const juce::String& s2,
+        bool ignoreCase, bool allowPartialMatch)
+{
+    using namespace juce;
+    if(allowPartialMatch)
+    {
+        const String& longer  = ((s1.length() >  s2.length()) ? s1 : s2);
+        const String& shorter = ((s1.length() <= s2.length()) ? s1 : s2);
+        return (ignoreCase ? longer.containsIgnoreCase(shorter)
+                : longer.contains(shorter));
+    }
+    else
+    {
+        return (ignoreCase ? s1.equalsIgnoreCase(s2) 
+                : (s1 == s2));
+    }
 }
 
 /*
@@ -55,15 +89,15 @@ Window XWindowInterface::getPocketHomeWindow()
  */   
 bool XWindowInterface::windowNameMatches(
     Window window, 
-    juce::String& windowName,
+    const juce::String& windowName,
     bool ignoreCase,
     bool allowPartialMatch)
 {
     using namespace juce;
-    std::function<bool(const String&)> nameMatch;
     XTextProperty textProp;
     char** nameList = nullptr;
     XGetWMName(display, window, &textProp);
+    bool nameMatchFound = false;
     if(textProp.nitems > 0)
     {
         int count = 0;
@@ -71,22 +105,8 @@ bool XWindowInterface::windowNameMatches(
         for(int i = 0; i < count; i++)
         {
             String listName(CharPointer_UTF8(nameList[i]));
-            if(allowPartialMatch)
-            {
-                String& longer = (nameMatch.length() > listName.length())
-                        ? nameMatch : listName;
-                String& shorter = (nameMatch.length() <= listName.length())
-                        ? nameMatch : listName;
-                nameMatchFound = (ignoreCase ? 
-                        longer.containsIgnoreCase(shorter)
-                        : longer.contains(shorter));
-            }
-            else
-            {
-                nameMatchFound = (ignoreCase ?
-                        nameMatch.equalsIgnoreCase(listName) :
-                        (nameMatch == listName))
-            }
+            nameMatchFound = stringsMatch
+                    (windowName, listName, ignoreCase, allowPartialMatch);
             if(nameMatchFound)
             {
                 DBG("XWindowInterface::" << __func__ << ": " << windowName
@@ -95,9 +115,10 @@ bool XWindowInterface::windowNameMatches(
                 break;
             }
         }
-        XFreeStringList(nameList);
-        XFree(textProp.value);   
- 
+    }
+    XFreeStringList(nameList);
+    XFree(textProp.value);
+    return nameMatchFound;
 }
 
 /*
@@ -105,10 +126,32 @@ bool XWindowInterface::windowNameMatches(
  */
 bool XWindowInterface::windowClassMatches(
     Window window, 
-    juce::String& windowClass,
+    const juce::String& windowClass,
     bool ignoreCase,
     bool allowPartialMatch)
 {
+    using namespace juce;
+    XWindowAttributes attr;
+    XClassHint classHint;
+    XGetWindowAttributes(display, window, &attr);
+
+    if(!XGetClassHint(display, window, &classHint))
+    {
+        return false;
+    }
+    bool windowMatches = 
+            stringsMatch(windowClass, String(classHint.res_name),
+                         ignoreCase, allowPartialMatch) 
+            || stringsMatch(windowClass, String(classHint.res_class),
+                         ignoreCase, allowPartialMatch) ;
+    DBG("WindowFocus::" << __func__ << ": " << windowClass
+                << (windowMatches ? " matches" : " doesn't match")
+                << " XClassHint name=" << classHint.res_name
+                << ", class=" << classHint.res_class << " window=" 
+                << String(reinterpret_cast<unsigned long>(window)));
+    XFree(classHint.res_name);
+    XFree(classHint.res_class);
+    return windowMatches;
 }
 
 /*
@@ -126,6 +169,58 @@ juce::Array<Window> XWindowInterface::getMatchingWindows(
             std::function<bool(Window)> verifyMatch,
             bool stopAtFirstMatchDepth)
 {
+    using namespace juce;
+    const int screenCount = ScreenCount(display);
+    Array<Window> matches;
+    Array<Window> currentDepth;
+    Array<Window> nextDepth;
+    for(int i = 0; i < screenCount; i++)
+    {
+        currentDepth.add(RootWindow(display, i));
+    }
+    
+    while(!currentDepth.isEmpty())
+    {
+        for(const Window& window : currentDepth)
+        {
+            if(verifyMatch(window))
+            {
+                matches.add(window);
+            }
+            if(stopAtFirstMatchDepth && !matches.isEmpty())
+            {
+                continue;
+            }
+            unsigned int numChildren = 0;
+            Window* childWindows = nullptr;
+            Window unneededReturnVal;
+            Status success = XQueryTree(display, window,
+                    &unneededReturnVal, &unneededReturnVal,
+                    &childWindows, &numChildren);
+            if(success && numChildren > 0)
+            {
+                for(unsigned int i = 0; i < numChildren; i++)
+                {
+                    nextDepth.add(childWindows[i]);
+                }
+            }
+            if(childWindows != nullptr)
+            {
+                XFree(childWindows);
+                childWindows = nullptr;
+            }
+        }
+        if(stopAtFirstMatchDepth && !matches.isEmpty())
+        {
+            currentDepth.clear();
+        }
+        else
+        {
+            currentDepth = nextDepth;
+            nextDepth.clear();
+        }
+    }
+    return matches;
 }
 
 /*
@@ -229,7 +324,7 @@ XWindowInterface::getWindowProperty
 bool XWindowInterface::xPropertySupported(const char* property)
 {
     Window rootWindow = XDefaultRootWindow(display);
-    Atom featureList = XInternAtom(*display, supportedFeatureProperty, false);
+    Atom featureList = XInternAtom(display, supportedFeatureProperty, false);
     WindowProperty supportedPropertyList 
             = getWindowProperty(rootWindow, featureList);
     
