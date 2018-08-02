@@ -16,19 +16,21 @@ void AppLauncher::startOrFocusApp(juce::String appTitle, juce::String command)
             << ", command = " << command);
     //before adding another process to the list, clean out any old dead ones,
     //so they don't start piling up
-    std::vector<ChildProcess*>toRemove;
-    for (int i = 0; i < runningApps.size(); i++)
+    std::vector<LaunchedApp*> toRemove;
+    LaunchedApp* appInstance = nullptr;
+    for (LaunchedApp* app : runningApps)
     {
-        ChildProcess* appProcess = runningApps[i];
-        if (appProcess != nullptr && !appProcess->isRunning())
+        if (!app->isRunning())
         {
-            toRemove.push_back(appProcess);
+            toRemove.push_back(app);
+        }
+        else if(app->getLaunchCommand() == command)
+        {
+            appInstance = app;
         }
     }
-    ProcessInfo processInfo(appTitle, command);
-    for (ChildProcess* appProcess : toRemove)
+    for (LaunchedApp* appProcess : toRemove)
     {
-        processMap.erase(processInfo);
         runningApps.removeObject(appProcess);
     }
     ChildProcess* appProcess = processMap[processInfo];

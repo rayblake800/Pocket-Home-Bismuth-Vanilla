@@ -1,6 +1,5 @@
 #pragma once
 #include <sys/types.h>
-#include <optional>
 #include "JuceHeader.h"
 
 /**
@@ -15,8 +14,10 @@ namespace ProcessUtils
     {
         running,
         stopped,
+        dead,
         sleep,
-        uninterruptableSleep
+        uninterruptableSleep,
+        nonexistent
     };
     
     struct ProcessData
@@ -40,10 +41,11 @@ namespace ProcessUtils
      * 
      * @param processId  The id of a Linux process.
      * 
-     * @return  A data structure containing information about the process, or an
-     *          empty value if no matching process is found.
+     * @return  A data structure containing information about the process, one
+     *          with a last state of ProcessState::nonexistent if no process is
+     *          found.
      */
-    std::optional<ProcessData> getProcessData(int processId);
+    ProcessData getProcessData(int processId);
     
     /**
      * Gets all processes that are direct child processes of a specific process.

@@ -5774,6 +5774,8 @@
           <in>AppLauncher.h</in>
           <in>AssetFiles.cpp</in>
           <in>AssetFiles.h</in>
+          <in>LaunchedApp.cpp</in>
+          <in>LaunchedApp.h</in>
           <in>Localized.cpp</in>
           <in>Localized.h</in>
           <in>LocalizedTime.cpp</in>

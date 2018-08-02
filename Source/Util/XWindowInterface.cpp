@@ -37,7 +37,7 @@ XWindowInterface::~XWindowInterface()
  * Gets the XLib window object that represents the pocket-home application
  * window.
  */
-Window XWindowInterface::getPocketHomeWindow()
+Window XWindowInterface::getPocketHomeWindow() const
 {
     using namespace juce;
     const int homeProcess = ProcessUtils::getProcessId();
@@ -69,7 +69,7 @@ Window XWindowInterface::getPocketHomeWindow()
  * @return   True iff both strings match.
  */
 static bool stringsMatch(const juce::String& s1, const juce::String& s2,
-        bool ignoreCase, bool allowPartialMatch)
+        const bool ignoreCase, const bool allowPartialMatch)
 {
     using namespace juce;
     if(allowPartialMatch)
@@ -90,10 +90,10 @@ static bool stringsMatch(const juce::String& s1, const juce::String& s2,
  * Checks if a window's name matches a particular string.
  */   
 bool XWindowInterface::windowNameMatches(
-    Window window, 
+    const Window window, 
     const juce::String& windowName,
-    bool ignoreCase,
-    bool allowPartialMatch)
+    const bool ignoreCase,
+    const bool allowPartialMatch) const
 {
     using namespace juce;
     XTextProperty textProp;
@@ -127,10 +127,10 @@ bool XWindowInterface::windowNameMatches(
  * Checks if a window's class or classname matches a particular string.
  */
 bool XWindowInterface::windowClassMatches(
-    Window window, 
+    const Window window, 
     const juce::String& windowClass,
-    bool ignoreCase,
-    bool allowPartialMatch)
+    const bool ignoreCase,
+    const bool allowPartialMatch) const
 {
     using namespace juce;
     XWindowAttributes attr;
@@ -159,7 +159,7 @@ bool XWindowInterface::windowClassMatches(
 /*
  * Gets the id of the process that created a window.
  */
-int XWindowInterface::getWindowPID(Window window)
+int XWindowInterface::getWindowPID(const Window window) const
 {
     Atom pidAtom = XInternAtom(display, windowProcessProperty, false);
     WindowProperty pidProp = getWindowProperty(window, pidAtom);
@@ -171,8 +171,8 @@ int XWindowInterface::getWindowPID(Window window)
  * windows that fit some match function.
  */
 juce::Array<Window> XWindowInterface::getMatchingWindows(
-            std::function<bool(Window)> verifyMatch,
-            bool stopAtFirstMatchDepth)
+            const std::function<bool(const Window)> verifyMatch,
+            const bool stopAtFirstMatchDepth) const
 {
     using namespace juce;
     const int screenCount = ScreenCount(display);
@@ -233,7 +233,7 @@ juce::Array<Window> XWindowInterface::getMatchingWindows(
  * containing this window, bring the window to the front, and set it
  * as the focused window.
  */
-void XWindowInterface::activateWindow(Window window)
+void XWindowInterface::activateWindow(const Window window) const
 {
     jassert(xPropertySupported(activeWindowProperty));
     if(xPropertySupported(currentDesktopProperty)
@@ -276,7 +276,7 @@ void XWindowInterface::activateWindow(Window window)
 /*
  * Finds the current selected desktop index.
  */
-int XWindowInterface::getDesktopIndex()
+int XWindowInterface::getDesktopIndex() const
 {
     if(!xPropertySupported(currentDesktopProperty))
     {
@@ -298,7 +298,7 @@ int XWindowInterface::getDesktopIndex()
  * index is the same as the current index, the index is not a valid desktop 
  * index, or the system does not support multiple desktops.
  */
-void XWindowInterface::setDesktopIndex(int desktopIndex)
+void XWindowInterface::setDesktopIndex(const int desktopIndex) const
 {
     if(!xPropertySupported(currentDesktopProperty))
     {
@@ -313,7 +313,7 @@ void XWindowInterface::setDesktopIndex(int desktopIndex)
     xEvent.xclient.window = rootWindow;
     xEvent.xclient.message_type 
             = XInternAtom(display, currentDesktopProperty, false);
-    XSendEvent(display, root, false,
+    XSendEvent(display, rootWindow, false,
             SubstructureNotifyMask | SubstructureRedirectMask,
             &xEvent);
 }
@@ -321,7 +321,7 @@ void XWindowInterface::setDesktopIndex(int desktopIndex)
 /*
  * Gets the index of the desktop that contains a specific window.
  */
-int XWindowInterface::getWindowDesktop(Window window)
+int XWindowInterface::getWindowDesktop(const Window window) const
 {
     if(!xPropertySupported(windowDesktopProperty))
     {
@@ -378,7 +378,7 @@ XWindowInterface::WindowProperty::operator=
  */
 XWindowInterface::WindowProperty
 XWindowInterface::getWindowProperty
-(Window window, Atom property)
+(const Window window, const Atom property) const
 {
     unsigned long bytesAfter; //needed for XGetWindowProperty, result unused.
     XWindowInterface::WindowProperty propertyData;
@@ -403,7 +403,7 @@ XWindowInterface::getWindowProperty
 /*
  * Checks if a particular property is supported by the window manager.
  */
-bool XWindowInterface::xPropertySupported(const char* property)
+bool XWindowInterface::xPropertySupported(const char* property) const
 {
     Window rootWindow = XDefaultRootWindow(display);
     Atom featureList = XInternAtom(display, supportedFeatureProperty, false);

@@ -39,7 +39,8 @@ public:
      *
      * @return  The main pocket-home window used by this application.
      */
-    Window getPocketHomeWindow();    
+    Window getPocketHomeWindow() const;    
+    
     /**
      * Checks if a window's name matches a particular string.
      * 
@@ -61,10 +62,10 @@ public:
      *
      */
     bool windowNameMatches(
-            Window window, 
+            const Window window, 
             const juce::String& windowName,
-            bool ignoreCase = true,
-            bool allowPartialMatch = false);
+            const bool ignoreCase = true,
+            const bool allowPartialMatch = false) const;
 
     /**
      * Checks if a window's class or classname matches a particular string.
@@ -88,10 +89,10 @@ public:
      *
      */
     bool windowClassMatches(
-            Window window, 
+            const Window window, 
             const juce::String& windowClass,
-            bool ignoreCase = true,
-            bool allowPartialMatch = false);
+            const bool ignoreCase = true,
+            const bool allowPartialMatch = false) const;
 
     /**
      * Gets the id of the process that created a window.
@@ -101,7 +102,7 @@ public:
      * @return  The process id of the process that created the window.
      *
      */
-    int getWindowPID(Window window);
+    int getWindowPID(const Window window) const;
 
     /**
      * Performs a breadth-first search of the entire window tree, returning
@@ -124,8 +125,8 @@ public:
      *                                function.
      */
     juce::Array<Window> getMatchingWindows(
-                    std::function<bool(Window)> verifyMatch,
-                    bool stopAtFirstMatchDepth = true);
+                    const std::function<bool(const Window)> verifyMatch,
+                    const bool stopAtFirstMatchDepth = true) const;
 
     /**
      * Activates a window.  This will switch the active desktop to the one 
@@ -134,7 +135,7 @@ public:
      *
      * @param window   The window to activate.
      */
-    void activateWindow(Window window);
+    void activateWindow(const Window window) const;
     
     /**
      * Finds the current selected desktop index.
@@ -142,7 +143,7 @@ public:
      * @return   The index of the current active desktop, or -1 if the system
      *           does not support multiple desktops
      */
-    int getDesktopIndex();
+    int getDesktopIndex() const;
 
     /**
      * Sets the current active desktop index.  This will do nothing if the new
@@ -151,7 +152,7 @@ public:
      *
      * @param desktopIndex  The index of the desktop to set as active.
      */
-    void setDesktopIndex(int desktopIndex);
+    void setDesktopIndex(const int desktopIndex) const;
 
     /**
      * Gets the index of the desktop that contains a specific window.
@@ -162,7 +163,7 @@ public:
      *           the window is invalid or the system does not support multiple
      *           desktops.
      */
-    int getWindowDesktop(Window window);
+    int getWindowDesktop(const Window window) const;
     
 private:
  
@@ -194,7 +195,8 @@ private:
      * @return  A structure containing the requested property, or one 
      *          containing no data if the property was not found.
      */
-    WindowProperty getWindowProperty(Window window, Atom property);
+    WindowProperty getWindowProperty
+    (const Window window, const Atom property) const;
 
     /**
      * Checks if a particular property is supported by the window manager.
@@ -205,7 +207,7 @@ private:
      * @return  True iff this property is supported by the current window 
      *          manager or pager.
      */
-    bool xPropertySupported(const char* property);
+    bool xPropertySupported(const char* property) const;
 
    //XLib display object used to connect to the X Window system.
     Display* display = nullptr; 

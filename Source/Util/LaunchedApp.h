@@ -7,6 +7,9 @@
  * running a command passed in on construction.  The LaunchedApp object can then
  * be used to raise and focus the application's window, stop the application,
  * or read the application's output.
+ * 
+ * Destroying the LaunchedApp object does not stop the associated child
+ * process.
  */
 #pragma once
 #include "JuceHeader.h"
@@ -22,11 +25,7 @@ public:
      */
     LaunchedApp(juce::String launchCommand);
     
-    /**
-     * Destroys the LaunchedApp object. This does not stop the associated child
-     * process.
-     */
-    ~LaunchedApp();
+    ~LaunchedApp() { }
     
     /**
      * Gets the launch command used to start the process.
@@ -79,4 +78,6 @@ private:
     juce::String launchCommand;
     // The application's system process ID.
     int processId = -1;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaunchedApp)
 };

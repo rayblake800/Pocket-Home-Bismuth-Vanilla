@@ -1,7 +1,7 @@
 #pragma once
 #include <functional>
 #include <map>
-#include <optional>
+#include "LaunchedApp.h"
 #include "Localized.h"
 #include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
@@ -43,33 +43,22 @@ public:
      */
     void startOrFocusApp(juce::String appTitle, juce::String command);
 private:
-    
-    /**
-     * Stores information on launched processes
-     */
-    struct ProcessInfo
-    {
-        juce::String command;
-        juce::ScopedPointer<juce::ChildProcess> childProcess;
-        int processId;
-    };
 
     /**
      * Start a new instance of an application process.
      * 
      * @param command   The command used to launch the process.
      * 
-     * @return   Information on the newly started process, or an empty value
-     *           if the process did not start.
+     * @return   An object representing the application process.
      */
-    std::optional<ProcessInfo> startApp(const juce::String& command);
+    LaunchedApp* startApp(const juce::String& command);
 
     /**
      * Focus the window of a running application.
      * 
      * @param ProcessInfo  The application's process information.
      */
-    void focusApp(ProcessInfo processInfo);
+    void focusApp(LaunchedApp* runningApp);
     
 
     /**
@@ -86,7 +75,7 @@ private:
     std::function<void() > launchFailureCallback;
 
     //holds all running processes launched by this object.
-    juce::Array<ProcessInfo> runningApps;
+    juce::OwnedArray<LaunchedApp> runningApps;
 
     //timer interval in milliseconds
     static const int timerFrequency = 2000;
