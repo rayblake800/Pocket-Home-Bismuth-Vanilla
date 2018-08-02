@@ -78,5 +78,5 @@ private:
     // The command used to launch the process.
     juce::String launchCommand;
     // The application's system process ID.
-    int processId;
+    int processId = -1;
 };
