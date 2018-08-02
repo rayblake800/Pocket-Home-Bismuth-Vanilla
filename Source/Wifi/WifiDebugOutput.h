@@ -29,6 +29,7 @@ const char* nmStateString(NMState state)
         case NM_STATE_CONNECTED_GLOBAL:
             return "NM_STATE_CONNECTED_GLOBAL";
     }
+    return "[Unknown NMState!]";
 }
 
 const char * nmConnectivityStateString(NMConnectivityState state)
@@ -46,6 +47,7 @@ const char * nmConnectivityStateString(NMConnectivityState state)
         case NM_CONNECTIVITY_FULL:
             return "NM_CONNECTIVITY_FULL";
     }
+    return "[Unknown NMConnectivityState!]";
 }
 
 const char * deviceStateString(NMDeviceState state)
@@ -78,9 +80,8 @@ const char * deviceStateString(NMDeviceState state)
             return "NM_DEVICE_STATE_UNMANAGED";
         case NM_DEVICE_STATE_UNAVAILABLE:
             return "NM_DEVICE_STATE_UNAVAILABLE";
-        default:
-            return "Invalid state!";
     }
+    return "[Unknown NMDeviceState!]";
 }
 
 const char * deviceStateReasonString(NMDeviceStateReason stateReason)
@@ -216,6 +217,7 @@ const char * deviceStateReasonString(NMDeviceStateReason stateReason)
             return "NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED";            
              */
     }
+    return "[Unknown NMDeviceStateReason!]";
 }
    
 const char * activeConnectionStateString(NMActiveConnectionState state)
@@ -233,4 +235,5 @@ const char * activeConnectionStateString(NMActiveConnectionState state)
         case NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
             return "NM_ACTIVE_CONNECTION_STATE_DEACTIVATED";
     }
+    return "[Unknown NMActiveConnectionState!]";
 }

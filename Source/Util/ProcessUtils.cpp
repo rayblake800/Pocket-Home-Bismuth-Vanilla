@@ -54,6 +54,7 @@ static ProcessUtils::ProcessData getPathProcessData(juce::String processPath)
         switch(stateChar)
         {
             case 'R':
+            case 'C':
                 process.lastState = ProcessUtils::running;
                 break;
             case 'T':
@@ -68,6 +69,7 @@ static ProcessUtils::ProcessData getPathProcessData(juce::String processPath)
                 break;
             case 'S':
             case 'K':
+            case 'I':
                 process.lastState = ProcessUtils::sleep;
                 break;
             case 'D':
@@ -75,7 +77,8 @@ static ProcessUtils::ProcessData getPathProcessData(juce::String processPath)
                 process.lastState = ProcessUtils::uninterruptableSleep;
                 break;
             default:
-                DBG("ProcessUtils::" << __func__ 
+                DBG("ProcessUtils::" << __func__ << ": Process " 
+                        << process.processId
                         << ": Unexpected process state " << stateChar);
                 process.lastState = ProcessUtils::nonexistent;
                 break;

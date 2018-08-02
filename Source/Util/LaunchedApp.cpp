@@ -125,8 +125,9 @@ void LaunchedApp::activateWindow()
     Array<Window> appWindows = xWindows.getMatchingWindows([this, &xWindows]
         (Window window)
         {
-            return xWindows.getWindowPID(window) == processId;
-        });
+            return xWindows.getWindowPID(window) == processId
+                    && xWindows.getWindowName(window).isNotEmpty();
+        }, false);
     if(appWindows.isEmpty())
     {
         DBG("LaunchedApp::" << __func__ << ": no windows found!");
@@ -136,6 +137,14 @@ void LaunchedApp::activateWindow()
             << " windows for application " << process.executableName);
     for(const Window& window : appWindows)
     {
+        String name = xWindows.getWindowName(window);
+        String winClass = xWindows.getWindowClass(window);
+        String className = xWindows.getWindowClassName(window);
+        int desktop = xWindows.getWindowDesktop(window);
+        int pid = xWindows.getWindowPID(window);
+        DBG("Activating window, name=" << name << " class=" << winClass
+                << " className=" << className << " desktop=" << desktop
+                << " pid=" << pid);
         xWindows.activateWindow(window);
     }
     

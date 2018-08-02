@@ -31,6 +31,8 @@ void AppLauncher::startOrFocusApp(juce::String appTitle, juce::String command)
     }
     for (LaunchedApp* appProcess : toRemove)
     {
+        DBG("AppLauncher::" << __func__ << ": removing terminated app "
+                << appProcess->getLaunchCommand());
         runningApps.removeObject(appProcess);
     }
     if (appInstance != nullptr)
@@ -45,14 +47,14 @@ void AppLauncher::startOrFocusApp(juce::String appTitle, juce::String command)
         }
         else
         {
-            if (appProcess != nullptr)
+            if (appInstance != nullptr)
             {
                 DBG("AppLauncher::" << __func__
                         << ": Old process is dead, re-launching");
             }
         }
     }
-    LaunchedApp* newApp = startApp(processInfo);
+    LaunchedApp* newApp = startApp(command);
     if(newApp != nullptr)
     {
         runningApps.add(newApp);
@@ -77,7 +79,7 @@ LaunchedApp* AppLauncher::startApp(const juce::String& command)
         AlertWindow::showMessageBoxAsync
                 (AlertWindow::AlertIconType::WarningIcon,
                 localeText(could_not_open),
-                String("\"") + processInfo.command + String("\"")
+                String("\"") + command + String("\"")
                 + localeText(not_valid_command));
         launchFailureCallback();
         return nullptr;
@@ -87,7 +89,7 @@ LaunchedApp* AppLauncher::startApp(const juce::String& command)
     timedProcess = newApp;
     lastLaunch = juce::Time::getMillisecondCounter();
     startTimer(timerFrequency);
-    return launchedProcess;
+    return newApp;
 }
 
 void AppLauncher::timerCallback()
@@ -111,7 +113,7 @@ void AppLauncher::timerCallback()
         else
         {
             DBG("AppLauncher::" << __func__ << ": process died, show message");
-            String output = timedProcess->readAllProcessOutput();
+            String output = timedProcess->getProcessOutput();
             StringArray lines = StringArray::fromLines(output);
             output = "";
             for (int i = lines.size() - 1;

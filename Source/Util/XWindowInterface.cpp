@@ -46,114 +46,78 @@ Window XWindowInterface::getPocketHomeWindow() const
             [this, &homeProcess, &windowName](Window testWindow)->bool
             {
                 return getWindowPID(testWindow) == homeProcess
-                        && windowNameMatches(testWindow, windowName);
+                        && getWindowName(testWindow) == windowName;
             });
     jassert(possibleWindows.size() == 1);
     return possibleWindows[0];
 }
-
-/**
- * Checks if two strings match, for varying definitions of "match".
- * 
- * @param s1                 The first string.
- * 
- * @param s2                 The second string.
- * 
- * @param ignoreCase         Iff true, capital and lowercase letters will be 
- *                           treated as equivalent.
- * 
- * @param allowPartialMatch  If false, the strings only match if each of their
- *                           characters are equivalent.  If true, they also 
- *                           match if one string contains the other.
- * 
- * @return   True iff both strings match.
- */
-static bool stringsMatch(const juce::String& s1, const juce::String& s2,
-        const bool ignoreCase, const bool allowPartialMatch)
-{
-    using namespace juce;
-    if(allowPartialMatch)
-    {
-        const String& longer  = ((s1.length() >  s2.length()) ? s1 : s2);
-        const String& shorter = ((s1.length() <= s2.length()) ? s1 : s2);
-        return (ignoreCase ? longer.containsIgnoreCase(shorter)
-                : longer.contains(shorter));
-    }
-    else
-    {
-        return (ignoreCase ? s1.equalsIgnoreCase(s2) 
-                : (s1 == s2));
-    }
-}
-
+  
 /*
- * Checks if a window's name matches a particular string.
- */   
-bool XWindowInterface::windowNameMatches(
-    const Window window, 
-    const juce::String& windowName,
-    const bool ignoreCase,
-    const bool allowPartialMatch) const
+ * Gets the title of a window.
+ */
+juce::String XWindowInterface::getWindowName(const Window window) const
 {
     using namespace juce;
     XTextProperty textProp;
     char** nameList = nullptr;
     XGetWMName(display, window, &textProp);
-    bool nameMatchFound = false;
+    String name;
     if(textProp.nitems > 0)
     {
         int count = 0;
         Xutf8TextPropertyToTextList(display, &textProp, &nameList, &count);
+        if(count > 1)
+        {
+            DBG("XWindowInterface::" << __func__ << ": " << "Window has "
+                    << count << " names, returning comma-separated list.");
+        }
         for(int i = 0; i < count; i++)
         {
-            String listName(CharPointer_UTF8(nameList[i]));
-            nameMatchFound = stringsMatch
-                    (windowName, listName, ignoreCase, allowPartialMatch);
-            if(nameMatchFound)
+            String partialName(CharPointer_UTF8(nameList[i]));
+            if(!name.isEmpty() && !partialName.isEmpty())
             {
-                DBG("XWindowInterface::" << __func__ << ": " << windowName
-                        << " matches name " << listName << " window=" 
-                        << String(reinterpret_cast<unsigned long>(window)));
-                break;
+                name += ",";
             }
+            name += partialName;
         }
     }
     XFreeStringList(nameList);
     XFree(textProp.value);
-    return nameMatchFound;
+    return name;
+}
+    
+/*
+ * Gets the class of a window.
+ */
+juce::String XWindowInterface::getWindowClass(const Window window) const
+{
+    using namespace juce;
+    XClassHint classHint;
+    if(!XGetClassHint(display, window, &classHint))
+    {
+        return String();
+    }
+    String classStr(classHint.res_name);
+    XFree(classHint.res_name);
+    XFree(classHint.res_class);
+    return classStr;
 }
 
 /*
- * Checks if a window's class or classname matches a particular string.
+ * Gets the className of a window. 
  */
-bool XWindowInterface::windowClassMatches(
-    const Window window, 
-    const juce::String& windowClass,
-    const bool ignoreCase,
-    const bool allowPartialMatch) const
+juce::String XWindowInterface::getWindowClassName(const Window window) const
 {
     using namespace juce;
-    XWindowAttributes attr;
     XClassHint classHint;
-    XGetWindowAttributes(display, window, &attr);
-
     if(!XGetClassHint(display, window, &classHint))
     {
-        return false;
+        return String();
     }
-    bool windowMatches = 
-            stringsMatch(windowClass, String(classHint.res_name),
-                         ignoreCase, allowPartialMatch) 
-            || stringsMatch(windowClass, String(classHint.res_class),
-                         ignoreCase, allowPartialMatch) ;
-    DBG("WindowFocus::" << __func__ << ": " << windowClass
-                << (windowMatches ? " matches" : " doesn't match")
-                << " XClassHint name=" << classHint.res_name
-                << ", class=" << classHint.res_class << " window=" 
-                << String(reinterpret_cast<unsigned long>(window)));
+    String classStr(classHint.res_class);
     XFree(classHint.res_name);
     XFree(classHint.res_class);
-    return windowMatches;
+    return classStr;
 }
 
 /*
@@ -163,6 +127,11 @@ int XWindowInterface::getWindowPID(const Window window) const
 {
     Atom pidAtom = XInternAtom(display, windowProcessProperty, false);
     WindowProperty pidProp = getWindowProperty(window, pidAtom);
+    if(pidProp.numItems == 0 || pidProp.size == 0
+            || pidProp.data == nullptr)
+    {
+        return -1;
+    }
     return (int) *((unsigned long *) pidProp.data); 
 }
 
