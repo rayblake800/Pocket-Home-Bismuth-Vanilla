@@ -71,7 +71,6 @@ static ProcessUtils::ProcessData getPathProcessData(juce::String processPath)
                 process.lastState = ProcessUtils::sleep;
                 break;
             case 'D':
-            case 'W':
             case 'P':
                 process.lastState = ProcessUtils::uninterruptableSleep;
                 break;
@@ -125,7 +124,7 @@ juce::Array<ProcessUtils::ProcessData> ProcessUtils::getChildProcesses
     for(const File& dir : childDirs)
     {
         ProcessData processData = getPathProcessData(dir.getFullPathName());
-        if(processData->parentId == processId)
+        if(processData.parentId == processId)
         {
             childProcs.add(processData);
         }

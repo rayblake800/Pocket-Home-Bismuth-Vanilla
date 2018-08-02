@@ -87,7 +87,7 @@ private:
     juce::uint32 lastLaunch = 0;
 
     //Process to check up on when the timer finishes
-    juce::ChildProcess * timedProcess = nullptr;
+    LaunchedApp * timedProcess = nullptr;
 
     //localized text keys;
     static const constexpr char * could_not_open = "could_not_open";

@@ -1,7 +1,6 @@
 #include "WindowFocus.h"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <optional>
 
 //holds the current window focus state.
 static bool focused = false;

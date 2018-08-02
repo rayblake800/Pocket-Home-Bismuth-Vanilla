@@ -33,46 +33,15 @@ void AppLauncher::startOrFocusApp(juce::String appTitle, juce::String command)
     {
         runningApps.removeObject(appProcess);
     }
-    ChildProcess* appProcess = processMap[processInfo];
-    if (appProcess != nullptr)
+    if (appInstance != nullptr)
     {
-        if (appProcess->isRunning())
+        if (appInstance->isRunning())
         {
             DBG("AppLauncher::" << __func__
                     << ": app is already running,"
-                    << " attempting to find the window id");
-            if(WindowFocus::focusWindow(appTitle))
-            {  
-                DBG("AppLauncher::" << __func__ 
-                        << "Focused window using title " << appTitle);
-                
-            }
-            else if(WindowFocus::focusWindow(command.upToFirstOccurrenceOf
-                                             (" ", false, false)))
-            {
-                DBG("AppLauncher::" << __func__ 
-                        << "Focused window using command " << command);
-            }
-            else
-            {
-                
-                DBG("AppLauncher::" << __func__ 
-                        << "Failed to find window for " << appTitle);
-            }
+                    << " focusing the window");
+            appInstance->activateWindow();
             return;
-//            String windowId = getWindowId(processInfo);
-//            if (!windowId.isEmpty())
-//            {
-//                DBG("AppLauncher::" << __func__ << ": Found window "
-//                        << windowId << ", focusing app");
-//                focusApp(windowId);
-//            }
-//            else
-//            {
-//                DBG("AppLauncher::" << __func__
-//                        << ": Process exists, but has no window to focus.");
-//            }
-//            return;
         }
         else
         {
@@ -83,31 +52,24 @@ void AppLauncher::startOrFocusApp(juce::String appTitle, juce::String command)
             }
         }
     }
-    startApp(processInfo);
-}
-
-AppLauncher::ProcessInfo::ProcessInfo
-(juce::String title, juce::String command) :
-title(title), command(command) { }
-
-bool AppLauncher::ProcessInfo::operator==(const ProcessInfo& rhs) const
-{
-    return title == rhs.title && command == rhs.command;
-}
-
-bool AppLauncher::ProcessInfo::operator<(const ProcessInfo& rhs) const
-{
-    return title.compare(rhs.title) < 0;
+    LaunchedApp* newApp = startApp(processInfo);
+    if(newApp != nullptr)
+    {
+        runningApps.add(newApp);
+    }
+    else
+    {
+        DBG("AppLauncher::" << __func__
+                << ": Failed to launch " << appTitle);
+    }
 }
 
 /**
  * Start a new instance of an application process
  */
-std::optional<AppLauncher::ProcessInfo> AppLauncher::startApp
-(const juce::String& command)
+LaunchedApp* AppLauncher::startApp(const juce::String& command)
 {
     using namespace juce;
-    std::optional<ProcessInfo> launchedProcess;
     DBG("AppsPageComponent::startApp - " << command);
     String testExistance = String("command -v ") + command;
     if (system(testExistance.toRawUTF8()) != 0)
@@ -118,73 +80,14 @@ std::optional<AppLauncher::ProcessInfo> AppLauncher::startApp
                 String("\"") + processInfo.command + String("\"")
                 + localeText(not_valid_command));
         launchFailureCallback();
-        return launchedProcess;
-
+        return nullptr;
     }
     
-    launchedProcess = 
-    {
-        .command = command,
-        .childProcess = new ChildProcess();
-        .processId = -1;
-    };
-    ChildProcess launchApp;
-    if (launchApp.start(processInfo.command))
-    {
-        
-        runningApps.add(launchApp);
-        processMap[processInfo] = launchApp;
-        timedProcess = launchApp;
-        lastLaunch = Time::getMillisecondCounter();
-        startTimer(timerFrequency);
-    }
+    LaunchedApp* newApp = new LaunchedApp(command);    
+    timedProcess = newApp;
+    lastLaunch = juce::Time::getMillisecondCounter();
+    startTimer(timerFrequency);
     return launchedProcess;
-}
-
-/**
- * Focus the window of a running app
- */
-void AppLauncher::focusApp(const juce::String & windowId)
-{
-    using namespace juce;
-    String focusShell = "echo 'focus_client_by_window_id(" + windowId
-            + ")' | awesome-client";
-    StringArray focusCmd{"sh", "-c", focusShell.toRawUTF8()};
-    ChildProcess focusWindow;
-    focusWindow.start(focusCmd);
-}
-
-/**
- * Attempt to find an open window of a launched application
- */
-juce::String AppLauncher::getWindowId(ProcessInfo processInfo)
-{
-    using namespace juce;
-    std::function < String(String) > windowSearch =
-            [this](String searchTerm)->String
-            {
-                StringArray findCmd{"xdodtool", "search", "--all"
-                                    , "--limit", "1", "--class",
-                                    searchTerm.toRawUTF8() , "> pTest.txt"};
-                DBG("AppLauncher::" << __func__ << ": Running command:"
-                        << findCmd.joinIntoString(" ", 0, -1));
-                ChildProcess findWindow;
-                findWindow.start(findCmd,
-                        ChildProcess::wantStdErr | ChildProcess::wantStdOut);
-                
-                String windowId = getProcessOutput
-                        (findWindow, windowFocusTimeout);
-                DBG(String("Search result:") + windowId);
-                return windowId.trimEnd();
-            };
-    String result = windowSearch(processInfo.title);
-    //if no result on the title, try the launch command
-    if (result.isEmpty())
-    {
-        result = windowSearch(processInfo.command
-                .upToFirstOccurrenceOf(" ", false, true));
-    }
-    return result;
 }
 
 void AppLauncher::timerCallback()
@@ -196,7 +99,7 @@ void AppLauncher::timerCallback()
         {
             //if the process is still going and we have yet to reach timeout,
             //wait longer
-            if (Time::getMillisecondCounter() - lastLaunch < timeout)
+            if (juce::Time::getMillisecondCounter() - lastLaunch < timeout)
             {
                 return;
             }

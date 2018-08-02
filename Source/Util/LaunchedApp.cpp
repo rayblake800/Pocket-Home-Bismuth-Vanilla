@@ -1,4 +1,3 @@
-#pragma once
 #include "LaunchedApp.h"
 #include "JuceHeader.h"
 #include "ProcessUtils.h"
@@ -14,7 +13,7 @@ launchCommand(launchCommand)
     using namespace juce;
     if(childProcess.start(launchCommand))
     {
-        Array(ProcessUtils::ProcessData> childProcs
+        Array<ProcessUtils::ProcessData> childProcs
                 = ProcessUtils::getChildProcesses(ProcessUtils::getProcessId());
         jassert(!childProcs.isEmpty());
         for(const ProcessUtils::ProcessData process : childProcs)
@@ -128,8 +127,7 @@ void LaunchedApp::activateWindow()
         {
             return xWindows.getWindowPID(window) == processId;
         });
-    }
-    if(appWindows.empty())
+    if(appWindows.isEmpty())
     {
         DBG("LaunchedApp::" << __func__ << ": no windows found!");
         return;
