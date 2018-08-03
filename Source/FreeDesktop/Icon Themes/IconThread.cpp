@@ -113,7 +113,7 @@ Thread("IconThread")
     //inherited/fallback themes
     for(int i = 0; i < themeNames.size(); i++)
     {
-        DBG("IconThread::IconThread: Finding icon theme " << themeNames[i]);
+        //DBG("IconThread::IconThread: Finding icon theme " << themeNames[i]);
         for(const String& dir : iconDirectories)
         {
             File themeDir(dir + (dir.endsWithChar('/') ? "" : "/") 
@@ -123,9 +123,9 @@ Thread("IconThread")
                 iconThemes.add(new IconThemeIndex(themeDir));
                 if(iconThemes.getLast()->isValidTheme())
                 {
-                    DBG("IconThread::IconThread: Theme directory " 
-                            << iconThemes.size() << " added with path "
-                            << themeDir.getFullPathName());
+                    //DBG("IconThread::IconThread: Theme directory " 
+                    //        << iconThemes.size() << " added with path "
+                    //        << themeDir.getFullPathName());
                     StringArray inherited = iconThemes.getLast()
                             ->getInheritedThemes();
                     int insertParentIdx = i + 1;
@@ -141,8 +141,8 @@ Thread("IconThread")
                 }
                 else
                 {
-                    DBG("IconThread::IconThread: Invalid theme directory "
-                            << themeDir.getFullPathName());
+                    //DBG("IconThread::IconThread: Invalid theme directory "
+                    //        << themeDir.getFullPathName());
                     iconThemes.removeLast();
                 }
             }
