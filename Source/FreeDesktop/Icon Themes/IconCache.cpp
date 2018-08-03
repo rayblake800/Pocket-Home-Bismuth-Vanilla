@@ -27,8 +27,8 @@ IconCache::IconCache(const juce::String& themePath)
         cacheFile.getParentDirectory().getLastModificationTime()
         .toMilliseconds())
     {
-        DBG("IconCache::IconCache: Cache file is out of date, path = "
-                << cachePath);
+        //DBG("IconCache::IconCache: Cache file is out of date, path = "
+        //        << cachePath);
         return;
     }
     
@@ -46,8 +46,8 @@ IconCache::IconCache(const juce::String& themePath)
         return;
     }
     
-    DBG("IconCache::IconCache: mapped cache file " << cachePath << ", size "
-            << String(fileLen));
+    //DBG("IconCache::IconCache: mapped cache file " << cachePath << ", size "
+    //        << String(fileLen));
 
     /*
      * Quick method for determining local byte order from 
@@ -63,9 +63,9 @@ IconCache::IconCache(const juce::String& themePath)
     uint32 dirListOffset = read32(8);
 
     uint32 numDirs = read32(dirListOffset);
-    DBG("IconCache::IconCache:: reading " << String(numDirs) 
-            << " directory names from offset " 
-            << String::toHexString(dirListOffset));
+    //DBG("IconCache::IconCache:: reading " << String(numDirs) 
+    //        << " directory names from offset " 
+    //        << String::toHexString(dirListOffset));
     dirListOffset += 4;
     for (int i = 0; i < numDirs; i++)
     {
@@ -76,8 +76,8 @@ IconCache::IconCache(const juce::String& themePath)
 
     hashBuckets = read32(hashOffset);
     hashOffset += 4;
-    DBG("IconCache::IconCache:: reading " << String(hashBuckets) 
-            << " hash bucket offsets");
+    //DBG("IconCache::IconCache:: reading " << String(hashBuckets) 
+    //        << " hash bucket offsets");
     for (int i = 0; i < hashBuckets; i++)
     {
         hashOffsets.add(read32(hashOffset + i * 4));
