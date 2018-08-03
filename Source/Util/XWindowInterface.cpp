@@ -197,6 +197,86 @@ juce::Array<Window> XWindowInterface::getMatchingWindows(
     return matches;
 }
 
+/**
+ * Recursively search for a specific window's ancestry.
+ * 
+ * @param display     The XLib display interface.
+ * 
+ * @param parents     The current window search tree in parent->child order.
+ * 
+ * @param searchWin   The window being searched for among the child windows of 
+ *                    the last window in the parents array.
+ * 
+ * @return  The parents array updated to include searchWin and all of its
+ *          parents, or an empty array if searchWin is not a child of the last
+ *          window in the parents array.
+ */
+static juce::Array<Window> recursiveWindowSearch
+(Display* display, juce::Array<Window> parents, const Window searchWin)
+{
+    using namespace juce;
+    const Window lastParent = parents[parents.size() - 1];
+    unsigned int numChildren = 0;
+    Window* childWindows = nullptr;
+    Window unneededReturnVal;
+    Status success = XQueryTree(display, lastParent,
+            &unneededReturnVal, &unneededReturnVal,
+            &childWindows, &numChildren);
+    Array<Window> expandedParents;
+    if(success && numChildren > 0)
+    {
+        for(unsigned int i = 0; i < numChildren; i++)
+        {
+            expandedParents = parents;
+            expandedParents.add(childWindows[i]);
+            if(childWindows[i] == searchWin)
+            {
+                break;
+            }
+            expandedParents = recursiveWindowSearch
+                    (display, expandedParents, searchWin);
+            if(!expandedParents.isEmpty())
+            {
+                break;
+            }
+        }
+    }
+    if(childWindows != nullptr)
+    {
+        XFree(childWindows);
+        childWindows = nullptr;
+    }
+    return expandedParents;
+}
+
+/*
+ * Finds all direct ancestors of a window and returns them in parent->child
+ * order.
+ */
+juce::Array<Window> XWindowInterface::getWindowAncestry
+(const Window window) const
+{
+    using namespace juce;
+    Array<Window> ancestry;
+    const int screenCount = ScreenCount(display);
+    for(int i = 0; i < screenCount; i++)
+    {
+        Window root = RootWindow(display, i);
+        ancestry.add(root);
+        if(root == window)
+        {
+            return ancestry;
+        }
+        
+        ancestry = recursiveWindowSearch(display, ancestry, window);
+        if(!ancestry.isEmpty())
+        {
+            break;
+        }
+    }
+    return ancestry; 
+}
+
 /*
  * Activates a window.  This will switch the active desktop to the one 
  * containing this window, bring the window to the front, and set it

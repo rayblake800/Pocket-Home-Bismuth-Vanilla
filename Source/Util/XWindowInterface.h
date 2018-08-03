@@ -104,6 +104,19 @@ public:
     juce::Array<Window> getMatchingWindows(
                     const std::function<bool(const Window)> verifyMatch,
                     const bool stopAtFirstMatchDepth = true) const;
+    
+    /**
+     * Finds all direct ancestors of a window and returns them in parent->child
+     * order.
+     * 
+     * @param window  A valid XLib window identifier.
+     * 
+     * @return   An array of windows, where the first value is the root window,
+     *           the last is the window passed in to this function, and each
+     *           window in the array is a child of the window before it and the
+     *           parent of the window after it.
+     */
+    juce::Array<Window> getWindowAncestry(const Window window) const;
 
     /**
      * Activates a window.  This will switch the active desktop to the one 
