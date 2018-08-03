@@ -40,16 +40,25 @@ XWindowInterface::~XWindowInterface()
 Window XWindowInterface::getPocketHomeWindow() const
 {
     using namespace juce;
-    const int homeProcess = ProcessUtils::getProcessId();
-    const String windowName = "pocket-home";
-    Array<Window> possibleWindows = getMatchingWindows(
-            [this, &homeProcess, &windowName](Window testWindow)->bool
-            {
-                return getWindowPID(testWindow) == homeProcess
-                        && getWindowName(testWindow) == windowName;
-            });
-    jassert(possibleWindows.size() == 1);
-    return possibleWindows[0];
+    Component * rootComponent = Desktop::getInstance().getComponent(0);
+    Window windowHandle = (Window) rootComponent->getWindowHandle();
+    DBG("APP WINDOW:");
+    
+    #if JUCE_DEBUG
+        printWindowInfo(windowHandle);
+    #endif
+    return windowHandle;
+//    const int homeProcess = ProcessUtils::getProcessId();
+//    const String windowName = "pocket-home";
+//    Array<Window> possibleWindows = getMatchingWindows(
+//            [this, &homeProcess, &windowName](Window testWindow)->bool
+//            {
+//                return getWindowPID(testWindow) == homeProcess
+//                        && getWindowName(testWindow) == windowName
+//                        && getWindowClass(testWindow).isNotEmpty();
+//            });
+//    jassert(possibleWindows.size() == 1);
+//    return possibleWindows[0];
 }
   
 /*
@@ -135,6 +144,36 @@ int XWindowInterface::getWindowPID(const Window window) const
     return (int) *((unsigned long *) pidProp.data); 
 }
 
+
+/*
+ * Gets all child windows of a given parent window.
+ */
+juce::Array<Window> XWindowInterface::getWindowChildren
+(const Window parent) const
+{
+    using namespace juce;
+    Array<Window> children;
+    unsigned int numChildren = 0;
+    Window* childWindows = nullptr;
+    Window unneededReturnVal;
+    Status success = XQueryTree(display, parent,
+            &unneededReturnVal, &unneededReturnVal,
+            &childWindows, &numChildren);
+    if(success && numChildren > 0)
+    {
+        for(unsigned int i = 0; i < numChildren; i++)
+        {
+            children.add(childWindows[i]);
+        }
+    }
+    if(childWindows != nullptr)
+    {
+        XFree(childWindows);
+        childWindows = nullptr;
+    }
+    return children;
+}
+
 /*
  * Performs a breadth-first search of the entire window tree, returning
  * windows that fit some match function.
@@ -164,25 +203,8 @@ juce::Array<Window> XWindowInterface::getMatchingWindows(
             if(stopAtFirstMatchDepth && !matches.isEmpty())
             {
                 continue;
-            }
-            unsigned int numChildren = 0;
-            Window* childWindows = nullptr;
-            Window unneededReturnVal;
-            Status success = XQueryTree(display, window,
-                    &unneededReturnVal, &unneededReturnVal,
-                    &childWindows, &numChildren);
-            if(success && numChildren > 0)
-            {
-                for(unsigned int i = 0; i < numChildren; i++)
-                {
-                    nextDepth.add(childWindows[i]);
-                }
-            }
-            if(childWindows != nullptr)
-            {
-                XFree(childWindows);
-                childWindows = nullptr;
-            }
+            }        
+            nextDepth.addArray(getWindowChildren(window));
         }
         if(stopAtFirstMatchDepth && !matches.isEmpty())
         {
@@ -195,58 +217,6 @@ juce::Array<Window> XWindowInterface::getMatchingWindows(
         }
     }
     return matches;
-}
-
-/**
- * Recursively search for a specific window's ancestry.
- * 
- * @param display     The XLib display interface.
- * 
- * @param parents     The current window search tree in parent->child order.
- * 
- * @param searchWin   The window being searched for among the child windows of 
- *                    the last window in the parents array.
- * 
- * @return  The parents array updated to include searchWin and all of its
- *          parents, or an empty array if searchWin is not a child of the last
- *          window in the parents array.
- */
-static juce::Array<Window> recursiveWindowSearch
-(Display* display, juce::Array<Window> parents, const Window searchWin)
-{
-    using namespace juce;
-    const Window lastParent = parents[parents.size() - 1];
-    unsigned int numChildren = 0;
-    Window* childWindows = nullptr;
-    Window unneededReturnVal;
-    Status success = XQueryTree(display, lastParent,
-            &unneededReturnVal, &unneededReturnVal,
-            &childWindows, &numChildren);
-    Array<Window> expandedParents;
-    if(success && numChildren > 0)
-    {
-        for(unsigned int i = 0; i < numChildren; i++)
-        {
-            expandedParents = parents;
-            expandedParents.add(childWindows[i]);
-            if(childWindows[i] == searchWin)
-            {
-                break;
-            }
-            expandedParents = recursiveWindowSearch
-                    (display, expandedParents, searchWin);
-            if(!expandedParents.isEmpty())
-            {
-                break;
-            }
-        }
-    }
-    if(childWindows != nullptr)
-    {
-        XFree(childWindows);
-        childWindows = nullptr;
-    }
-    return expandedParents;
 }
 
 /*
@@ -268,13 +238,89 @@ juce::Array<Window> XWindowInterface::getWindowAncestry
             return ancestry;
         }
         
-        ancestry = recursiveWindowSearch(display, ancestry, window);
+        ancestry = recursiveWindowSearch(ancestry, window);
         if(!ancestry.isEmpty())
         {
             break;
         }
     }
     return ancestry; 
+}
+
+
+/*
+ * Checks if a specific window is active.
+ * 
+ * @param window  An XLib window identifier;
+ * 
+ * @return   True iff the window exists, has nonzero size, is on the current
+ *           desktop, has keyboard focus, and is not covered by other
+ *           windows.
+ */
+bool XWindowInterface::isActiveWindow(const Window window) const
+{
+    using namespace juce;
+    XWindowAttributes attr;
+    int foundAttributes = XGetWindowAttributes(display, window, &attr);
+    if(foundAttributes == 0)
+    {
+        DBG("XWindowInterface::" << __func__ 
+                << ": No, failed to get window attributes.");
+        return false;
+    }
+    if(attr.map_state == IsUnmapped || attr.map_state == IsUnviewable)
+    {
+        DBG("XWindowInterface::" << __func__ 
+                << ": No, window is unmapped or unviewable.");
+        return false;
+    }
+    if(attr.width == 0 || attr.height == 0)
+    {
+        DBG("XWindowInterface::" << __func__ 
+                << ": No, the window has zero area.");
+        return false;
+    }
+    if(getDesktopIndex() != getWindowDesktop(window))
+    {
+        DBG("XWindowInterface::" << __func__ 
+                << ": No, the window is on the wrong desktop.");
+        return false;
+    }
+    
+    
+    jassert(xPropertySupported(activeWindowProperty));
+    const Atom request = XInternAtom(display, activeWindowProperty, false);
+    const Window root = XDefaultRootWindow(display);
+    WindowProperty windowProp = getWindowProperty(root, request);
+    if(windowProp.numItems == 0)
+    {
+        DBG("XWindowInterface::" << __func__ 
+                << ": No, there is no focused window.");
+        return false;
+    }
+    
+    if(window != *((Window*) windowProp.data))
+    {
+        DBG("XWindowInterface::" << __func__ << ": No, window " 
+                << getWindowName(*((Window*) windowProp.data))
+                << " is focused.");
+        return false;
+    }
+    
+    Array<Window> ancestors = getWindowAncestry(window);
+    Array<Window> siblings = getWindowChildren(ancestors[ancestors.size() - 2]);
+    int higherWindows = (siblings.size() - 1) - siblings.indexOf(window);
+    if(higherWindows != 0)
+    {
+        DBG("XWindowInterface::" << __func__ << ": No, "  << higherWindows 
+                << " window(s) are above this window");
+        printWindowInfo(siblings.getLast());
+        return false;
+    }
+    
+    DBG("XWindowInterface::" << __func__ << ": Yes, this window is active");
+    return true;
+
 }
 
 /*
@@ -284,6 +330,11 @@ juce::Array<Window> XWindowInterface::getWindowAncestry
  */
 void XWindowInterface::activateWindow(const Window window) const
 {
+    using namespace juce;
+    DBG("XWindowInterface::" << __func__ << ": activating window:");
+    #if JUCE_DEBUG
+        printWindowInfo(window);
+    #endif
     jassert(xPropertySupported(activeWindowProperty));
     if(xPropertySupported(currentDesktopProperty)
         && xPropertySupported(windowDesktopProperty))
@@ -291,10 +342,17 @@ void XWindowInterface::activateWindow(const Window window) const
         setDesktopIndex(getWindowDesktop(window));
     }
     
-    //Raise window first(does nothing in some window managers):
-    XRaiseWindow(display, window);
-    XFlush(display);
+    //Raise and activate all parent windows before raising the target window
+    Array<Window> ancestors = getWindowAncestry(window);
+    jassert(!ancestors.isEmpty() && ancestors.getLast() == window);
     
+    for(const Window& window : ancestors)
+    {
+        //Raise window first(does nothing in some window managers):
+        XRaiseWindow(display, window);
+        XFlush(display);
+    }
+
     XEvent xEvent;
     memset(&xEvent, 0, sizeof(xEvent));
     xEvent.type = ClientMessage;
@@ -305,13 +363,13 @@ void XWindowInterface::activateWindow(const Window window) const
     xEvent.xclient.format = 32;
     xEvent.xclient.data.l[0] = 2L; /* 2 == Message from a window pager */
     xEvent.xclient.data.l[1] = CurrentTime;
-    
+
     XWindowAttributes winAttr;
     XGetWindowAttributes(display, window, &winAttr);
     int result = XSendEvent(display, winAttr.screen->root, false,
             SubstructureNotifyMask | SubstructureRedirectMask,
             &xEvent);
-    
+
     if(result == BadWindow)
     {
         DBG("XWindowInterface::" << __func__ << ": Bad window error!");
@@ -386,6 +444,114 @@ int XWindowInterface::getWindowDesktop(const Window window) const
     return (int) *((long*) desktopProp.data);
 }
 
+#if JUCE_DEBUG
+/*
+ * Prints comprehensive debug information about a window.
+ */
+void XWindowInterface::printWindowInfo(const Window window) const
+{
+    using namespace juce;
+    String id((unsigned long) window);
+    String name = getWindowName(window);
+    String claz = getWindowClass(window);
+    String className = getWindowClassName(window);
+    int desktop = getWindowDesktop(window);
+    int pid = getWindowPID(window);
+    Array<Window> parents = getWindowAncestry(window);
+    
+    std::cout << "Window " << id << ": " << name << "[class " << claz
+            << ", className " << className << "]\n";
+    std::cout << "\tDepth: " << parents.size() << ", Process: " << pid
+            << ", Desktop: " << desktop << "\n";
+    
+    XWindowAttributes attr;
+    int foundAttributes = XGetWindowAttributes(display, window, &attr);
+    if(foundAttributes == 0)
+    {
+        std::cout << "\tUnable to read window attributes\n";
+        return;
+    }
+    
+    std::cout << "\tPosition: (" << attr.x << "," << attr.y << "), size: ("
+            << attr.width << "," << attr.height << ")\n";
+}
+
+/*
+ * Recursively prints the entire window tree under some root window, from front
+ * to back.
+ */
+void XWindowInterface::printWindowTree(Window root, const int depth)
+{
+    using namespace juce;
+    if(root == 0 && depth == 0)
+    {
+        root = XDefaultRootWindow(display);
+    }
+    String output;
+    for(int i = 0; i < depth; i++)
+    {
+        output += "\t";
+    }
+    output += String((unsigned long) root);
+    
+    String title = getWindowName(root);
+    if(title.isNotEmpty())
+    {
+        output += ":";
+        output += title;
+    }
+    String winClass = getWindowClass(root);
+    String className = getWindowClassName(root);
+    if(winClass.isNotEmpty() || className.isNotEmpty())
+    {
+        output += "[";
+        output += winClass;
+        if(winClass.isNotEmpty() && className.isNotEmpty())
+        {
+            output += ", ";
+        }
+        output += className;
+        output += "]";
+    }
+    std::cout << output << std::endl;
+    Array<Window> children = getWindowChildren(root);
+    for(int i = children.size() - 1; i >= 0; i--)
+    {
+        printWindowTree(children[i], depth+1);
+    }
+}
+
+#endif
+
+
+/*
+ * Recursively search for a specific window's ancestry.
+ */
+juce::Array<Window> XWindowInterface::recursiveWindowSearch
+(juce::Array<Window> parents, const Window searchWin) const
+{
+    using namespace juce;
+    const Window lastParent = parents[parents.size() - 1];
+    Array<Window> expandedParents;
+    Array<Window> children = getWindowChildren(lastParent);
+    for(const Window& child : children)
+    {
+        expandedParents = parents;
+        expandedParents.add(child);
+        if(child == searchWin)
+        {
+            break;
+        }
+        expandedParents = recursiveWindowSearch(expandedParents, searchWin);
+        if(!expandedParents.isEmpty())
+        {
+            break;
+        }
+    }
+    return expandedParents;
+}
+
+
 XWindowInterface::WindowProperty::WindowProperty
 (const XWindowInterface::WindowProperty& rhs)
 {
@@ -443,7 +609,8 @@ XWindowInterface::getWindowProperty
                     << juce::String((unsigned long) window) 
                     << "does not exist!");
         }
-        DBG("XWindowInterface::" << __func__ << ": XGetWindowProperty failed!");
+        DBG("XWindowInterface::" << __func__ << ": XGetWindowProperty failed "
+                << "to find property " << XGetAtomName(display, property));
         propertyData = WindowProperty();
     }
     return propertyData;

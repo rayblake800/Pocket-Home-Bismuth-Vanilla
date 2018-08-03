@@ -106,6 +106,16 @@ public:
                     const bool stopAtFirstMatchDepth = true) const;
     
     /**
+     * Gets all child windows of a given parent window.
+     * 
+     * @param parent  The XLib window identifier of the parent window.
+     * 
+     * @return  All child windows, in stacking order from bottom to top, or
+     *          an empty array if parent is an invalid window.
+     */
+    juce::Array<Window> getWindowChildren(const Window parent) const;
+    
+    /**
      * Finds all direct ancestors of a window and returns them in parent->child
      * order.
      * 
@@ -118,6 +128,17 @@ public:
      */
     juce::Array<Window> getWindowAncestry(const Window window) const;
 
+    /**
+     * Checks if a specific window is active.
+     * 
+     * @param window  An XLib window identifier;
+     * 
+     * @return   True iff the window exists, has nonzero size, is on the current
+     *           desktop, has keyboard focus, and is not covered by other
+     *           windows.
+     */
+    bool isActiveWindow(const Window window) const;
+    
     /**
      * Activates a window.  This will switch the active desktop to the one 
      * containing this window, bring the window to the front, and set it
@@ -155,6 +176,27 @@ public:
      */
     int getWindowDesktop(const Window window) const;
     
+#if JUCE_DEBUG
+    /**
+     * Prints comprehensive debug information about a window.
+     * 
+     * @param window  The XLib id of a window to debug.
+     */
+    void printWindowInfo(const Window window) const;
+    
+    /**
+     * Recursively prints the entire window tree under some root window, from
+     * front to back.
+     * 
+     * @param root   The root window to start searching under.  If root is 0 and
+     *               depth is 0, this will be replaced with the default root
+     *               window.
+     * 
+     * @param depth  The current tree depth.
+     */
+    void printWindowTree(Window root = 0, const int depth = 0);
+#endif
+    
 private:
  
     //holds arbitrary window property data.
@@ -173,6 +215,21 @@ private:
     
         WindowProperty& operator=(const WindowProperty& rhs);
     };
+    
+    /**
+     * Recursively search for a specific window's ancestry.
+     * 
+     * @param parents     The current window search tree in parent->child order.
+     * 
+     * @param searchWin   The window being searched for among the child windows of 
+     *                    the last window in the parents array.
+     * 
+     * @return  The parents array updated to include searchWin and all of its
+     *          parents, or an empty array if searchWin is not a child of the last
+     *          window in the parents array.
+     */
+    juce::Array<Window> recursiveWindowSearch
+    (juce::Array<Window> parents, const Window searchWin) const;
 
     /**
      * Gets an arbitrary window property.

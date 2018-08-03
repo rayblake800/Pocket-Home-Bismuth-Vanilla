@@ -63,7 +63,8 @@ public:
      *                        the message thread.
      */
     void loadEntries
-    (std::function<void(juce::String) > notifyCallback = std::function<void(juce::String)>(),
+    (std::function<void(juce::String) > notifyCallback 
+            = std::function<void(juce::String)>(),
             std::function<void() > onFinish = std::function<void()>());
 
     /**

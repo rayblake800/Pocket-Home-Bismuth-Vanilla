@@ -156,23 +156,9 @@ void LaunchedApp::activateWindow()
     }
     for(const Window& window : appWindows)
     {
-        //raise and activate entire window line, ensuring each of the window's
-        //parents is the topmost window
-        Array<Window> ancestry = xWindows.getWindowAncestry(window);
-        jassert(!ancestry.isEmpty());
-        String name = xWindows.getWindowName(window);
-        String winClass = xWindows.getWindowClass(window);
-        String className = xWindows.getWindowClassName(window);
-        int desktop = xWindows.getWindowDesktop(window);
-        int pid = xWindows.getWindowPID(window);
-        DBG("LaunchedApp::" << __func__ << "Activating window, name=" 
-                << name << " class=" << winClass
-                << " className=" << className << " desktop=" << desktop
-                << " pid=" << pid << " depth=" << ancestry.size());
-        for(const Window& window : ancestry)
-        {
-            xWindows.activateWindow(window);
-        }
+        DBG("LaunchedApp::" << __func__ << "Activating window for " 
+                << launchCommand);
+        xWindows.activateWindow(window);
     }
     
 }

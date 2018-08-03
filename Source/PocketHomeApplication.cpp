@@ -1,7 +1,29 @@
 #include "Audio.h"
+#include "PocketHomeApplication.h"
 #include "XWindowInterface.h"
 #include "TempTimer.h"
-#include "PocketHomeApplication.h"
+
+//Milliseconds to wait between window focus attempts.
+static const constexpr int focusWaitMs = 200;
+
+/**
+ * Attempts to activate the application window and grab keyboard focus.  This
+ * may fail if the window isn't fully initialized, so it will repeatedly call
+ * itself on a timer until the action succeeds.
+ */
+static void focusAppWindow()
+{
+    using namespace juce;
+    XWindowInterface xWindows;
+    Window appWindow = xWindows.getPocketHomeWindow();
+    xWindows.activateWindow(appWindow);
+    Component * rootComponent = Desktop::getInstance().getComponent(0);
+    rootComponent->grabKeyboardFocus();
+    if(!WindowFocus::isFocused())
+    {
+        TempTimer::initTimer(focusWaitMs, focusAppWindow);
+    }
+}
 
 /**
  * This is called by the Juce framework to initialize the program.
@@ -46,17 +68,11 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         }
         homeWindow = new PocketHomeWindow
                 (getApplicationName(), args.contains("--fakeWifi"));
-        TempTimer::initTimer(500, [this]()
-        {
-            jassert(homeWindow->isVisible());
-            //focus the program window
-            XWindowInterface xWindows;
-            xWindows.activateWindow(xWindows.getPocketHomeWindow());
-        });
+        focusAppWindow();
     }
 }
 
-/**
+/*
  * This is called by the Juce framework to safely shut down the application.
  */
 void PocketHomeApplication::shutdown()
