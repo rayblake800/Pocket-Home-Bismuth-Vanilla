@@ -8,7 +8,7 @@ cacheFile(themeDir.getFullPathName())
     using namespace juce;
     if (!themeDir.isDirectory())
     {
-        DBG("IconTheme::IconTheme:: Theme directory does not exist!");
+        //DBG("IconTheme::IconTheme:: Theme directory does not exist!");
         path = String();
         return;
     }
@@ -16,7 +16,7 @@ cacheFile(themeDir.getFullPathName())
     File themeIndex(themeDir.getFullPathName() + indexFileName);
     if (!themeIndex.existsAsFile())
     {
-        DBG("IconTheme::IconTheme:: Theme index does not exist!");
+        //DBG("IconTheme::IconTheme:: Theme index does not exist!");
         path = String();
         return;
     }
@@ -190,8 +190,8 @@ juce::String IconThemeIndex::lookupIcon
             }
             catch(std::out_of_range e)
             {
-                DBG("IconThemeIndex::" << __func__ << ": directory "
-                        << it->first << " in cache is missing from index!");
+                //DBG("IconThemeIndex::" << __func__ << ": directory "
+                //        << it->first << " in cache is missing from index!");
             }
         }
     }
@@ -246,8 +246,8 @@ juce::String IconThemeIndex::lookupIcon
             }
         //}
     }
-    DBG("IconThemeIndex::" << __func__ << ": No matches for " << icon
-            << " in theme directory at " << path);
+    //DBG("IconThemeIndex::" << __func__ << ": No matches for " << icon
+    //        << " in theme directory at " << path);
     return String();
 }
 
@@ -336,8 +336,8 @@ bool IconThemeIndex::DirectoryComparator::directoryMatchesSize
         case thresholdType:
             return abs(size - subdir.size) < subdir.threshold;
     }
-    DBG("IconThemeIndex::DirectoryComparator::" << __func__ 
-            << ": Missing directory type!");
+    //DBG("IconThemeIndex::DirectoryComparator::" << __func__ 
+    //        << ": Missing directory type!");
     return false;
 }
 
@@ -375,7 +375,7 @@ int IconThemeIndex::DirectoryComparator::directorySizeDistance
             }
             return 0;
     }
-    DBG("IconThemeIndex::DirectoryComparator::" << __func__ 
-            << ": Missing directory type!");
+    //DBG("IconThemeIndex::DirectoryComparator::" << __func__ 
+    //        << ": Missing directory type!");
     return 0;
 }
