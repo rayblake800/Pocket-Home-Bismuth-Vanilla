@@ -2,6 +2,7 @@
 #include "JuceHeader.h"
 #include "ProcessUtils.h"
 #include "XWindowInterface.h"
+#include <cstdint>
 
 /*
  * Creates a LaunchedApp object, running an application launch command in a
@@ -29,6 +30,7 @@ launchCommand(launchCommand)
     {
         DBG("LaunchedApp::" << __func__ << ": Failed to launch "
                             << launchCommand);
+        outputValid = false;
     }
 }
 
@@ -45,7 +47,23 @@ juce::String LaunchedApp::getLaunchCommand()
  */
 bool LaunchedApp::isRunning()
 {
-    return childProcess.isRunning();
+    bool processRunning = childProcess.isRunning();
+    if(processRunning)
+    {
+        ProcessUtils::ProcessData process 
+                = ProcessUtils::getProcessData(processId);
+        DBG("LaunchedApp::" << __func__ << ": process " << launchCommand
+                << " is in state " 
+                << ProcessUtils::processStateString(process.lastState));
+        if(process.lastState == ProcessUtils::ProcessState::dead
+           || process.lastState == ProcessUtils::ProcessState::invalid )
+        {
+            bool killed = kill();
+            jassert(killed);
+            processRunning = false;
+        }
+    }  
+    return processRunning;
 }
 
 /*
@@ -53,6 +71,7 @@ bool LaunchedApp::isRunning()
  */
 bool LaunchedApp::kill()
 {
+    outputValid = false;
     return childProcess.kill();
 }
 
@@ -70,30 +89,38 @@ void LaunchedApp::waitForProcessToFinish(int timeoutMs)
 juce::String LaunchedApp::getProcessOutput()
 {
     using namespace juce;
-    ProcessUtils::ProcessData process = ProcessUtils::getProcessData(processId);
-    switch(process.lastState)
+    if(!outputValid)
     {
-        case ProcessUtils::running:
-            DBG("LaunchedApp::" << __func__ << ": Process is running.");
-            break;
-        case ProcessUtils::sleep:
-            DBG("LaunchedApp::" << __func__ << ": Process is sleeping.");
-            break;
-        case ProcessUtils::uninterruptableSleep:
-            DBG("LaunchedApp::" << __func__ 
-                    << ": Process is in uninterruptable sleep.");
-            break;
-        case ProcessUtils::stopped:
-            DBG("LaunchedApp::" << __func__ << ": Process is stopped.");
-            break;
-        case ProcessUtils::dead:
-            DBG("LaunchedApp::" << __func__ << ": Process is dead.");
-            break;
-        case ProcessUtils::nonexistent:
-            DBG("LaunchedApp::" << __func__ << ": Process does not exist!");
-            return String();
+        return String();
     }
-    return childProcess.readAllProcessOutput();
+    if(!isRunning())
+    {
+        return childProcess.readAllProcessOutput();
+    }
+    else
+    {    
+        ProcessUtils::ProcessData process 
+                = ProcessUtils::getProcessData(processId);
+        DBG("LaunchedApp::" << __func__ << ": process " << launchCommand
+                << " is still active in state " 
+                << ProcessUtils::processStateString(process.lastState)
+                << ", can't get output");
+        return String();
+    }
+}
+
+
+    
+/*
+ * If the process is finished, return its exit code.
+ */
+juce::uint32 LaunchedApp::getExitCode()
+{
+    if(isRunning())
+    {
+        return UINT32_MAX;
+    }
+    return childProcess.getExitCode();
 }
 
 /*
@@ -113,13 +140,6 @@ void LaunchedApp::activateWindow()
         DBG("LaunchedApp::" << __func__ << ": process is not found!");
         return;
     }
-    ProcessUtils::ProcessData process = ProcessUtils::getProcessData(processId);
-    if(process.lastState == ProcessUtils::nonexistent
-       || process.lastState == ProcessUtils::dead)
-    {
-        DBG("LaunchedApp::" << __func__ << ": process is in an invalid state!");
-        return;
-    }
         
     XWindowInterface xWindows;
     Array<Window> appWindows = xWindows.getMatchingWindows([this, &xWindows]
@@ -134,7 +154,7 @@ void LaunchedApp::activateWindow()
         return;
     }
     DBG("LaunchedApp::" << __func__ << ": activating " << appWindows.size()
-            << " windows for application " << process.executableName);
+            << " windows for application " << launchCommand);
     for(const Window& window : appWindows)
     {
         String name = xWindows.getWindowName(window);

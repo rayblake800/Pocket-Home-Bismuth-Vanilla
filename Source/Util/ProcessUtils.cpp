@@ -8,6 +8,43 @@ static const constexpr int stateIndex     = 2;
 static const constexpr int parentIdIndex  = 3;
 static const constexpr int startTimeIndex = 21;
 
+#ifdef JUCE_DEBUG
+juce::String ProcessUtils::processStateString
+(ProcessUtils::ProcessState ps)
+{
+    switch(ps)
+    {
+        case running:
+            return "running";
+        case sleeping:
+            return "sleeping";
+        case diskSleep:
+            return "diskSleep";
+        case zombie:
+            return "zombie";
+        case stopped:
+            return "stopped";
+        case tracingStop:
+            return "tracingStop";
+        case paging:
+            return "paging";
+        case dead:
+            return "dead";
+        case wakeKill:
+            return "wakeKill";
+        case parked:
+            return "parked";
+        case idle:
+            return "idle";
+        case unknown:
+            return "unknown";
+        case invalid:
+            return "invalid";
+    }
+    return "[un-handled ProcessState!]";
+}
+#endif
+
 /*
  * Gets the id of the current process.
  */
@@ -32,7 +69,7 @@ static ProcessUtils::ProcessData getPathProcessData(juce::String processPath)
         .processId = -1,
         .parentId = -1,
         .executableName = "",
-        .lastState = ProcessUtils::nonexistent
+        .lastState = ProcessUtils::invalid
     };
     
     File statFile(processPath + "/stat");
@@ -57,31 +94,36 @@ static ProcessUtils::ProcessData getPathProcessData(juce::String processPath)
             case 'C':
                 process.lastState = ProcessUtils::running;
                 break;
-            case 'T':
-            case 't':
-            case 'W':
-                process.lastState = ProcessUtils::stopped;
+            case 'S':
+                process.lastState = ProcessUtils::sleeping;
+                break;
+            case 'D':
+                process.lastState = ProcessUtils::diskSleep;
                 break;
             case 'Z':
+                process.lastState = ProcessUtils::zombie;
+                break;
+            case 'T':
+                process.lastState = ProcessUtils::stopped;
+                break;
+            case 't':
+                process.lastState = ProcessUtils::tracingStop;
+                break;
+            case 'W':
+                process.lastState = ProcessUtils::paging;
+                break;
             case 'X':
             case 'x':
                 process.lastState = ProcessUtils::dead;
                 break;
-            case 'S':
             case 'K':
-            case 'I':
-                process.lastState = ProcessUtils::sleep;
+                process.lastState = ProcessUtils::wakeKill;
                 break;
-            case 'D':
             case 'P':
-                process.lastState = ProcessUtils::uninterruptableSleep;
+                process.lastState = ProcessUtils::parked;
                 break;
             default:
-                DBG("ProcessUtils::" << __func__ << ": Process " 
-                        << process.processId
-                        << ": Unexpected process state " << stateChar);
-                process.lastState = ProcessUtils::nonexistent;
-                break;
+                process.lastState = ProcessUtils::unknown;
         }
     }
     return process;   

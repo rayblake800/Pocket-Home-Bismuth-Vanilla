@@ -12,13 +12,24 @@ namespace ProcessUtils
     
     enum ProcessState
     {
-        running,
-        stopped,
-        dead,
-        sleep,
-        uninterruptableSleep,
-        nonexistent
+        running,     //R
+        sleeping,    //S
+        diskSleep,   //D
+        zombie,      //Z
+        stopped,     //T
+        tracingStop, //t
+        paging,      //W
+        dead,        //X, x
+        wakeKill,    //K
+        parked,      //P
+        idle,        //I
+        unknown,
+        invalid
     };
+    
+#ifdef JUCE_DEBUG
+    juce::String processStateString(ProcessState ps);
+#endif
     
     struct ProcessData
     {

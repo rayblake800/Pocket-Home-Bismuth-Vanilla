@@ -66,6 +66,13 @@ public:
     juce::String getProcessOutput();
     
     /**
+     * If the process is finished, return its exit code.
+     * 
+     * @return  The exit code, or UINT32_MAX if the process is still running.
+     */
+    juce::uint32 getExitCode();
+    
+    /**
      * Moves the application's windows in front of all other windows and focuses
      * them.
      */
@@ -78,6 +85,8 @@ private:
     juce::String launchCommand;
     // The application's system process ID.
     int processId = -1;
+    //Iff true, the process is in a state where valid output cannot be read
+    bool outputValid = true;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaunchedApp)
 };

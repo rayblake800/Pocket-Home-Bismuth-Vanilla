@@ -5811,7 +5811,7 @@
         <in>PocketHomeApplication.h</in>
       </df>
       <df name="Tests">
-        <in>catch.hpp</in>
+        <in>LaunchedAppTest.cpp</in>
       </df>
     </df>
     <itemPath>assets/configuration/apps.json</itemPath>
