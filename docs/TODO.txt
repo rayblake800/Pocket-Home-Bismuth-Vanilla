@@ -30,13 +30,6 @@
 
     -Rename the ChipDebugging branch to development.
 
-### Testing
-
-    1. Set up unit testing system, write tests for at least one class.
-    2. Set up an integration testing system, write tests for at least a few 
-       common use cases.
-    3. Ensure all test code uses these systems from here on out.
-
 # Task list for release 0.10
 
 ## Appearance/Style Tweaks

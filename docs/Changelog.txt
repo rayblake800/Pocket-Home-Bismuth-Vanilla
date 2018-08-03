@@ -1,3 +1,12 @@
+### Aug 2 2018
+   -Updates to application launching:
+        -Removed xdotool and awesomeWm dependencies by directly handling 
+         windows with XLib.
+        -Improved ability to locate and focus existing program windows.
+        -Tracking child processes in /proc directly to better handle problems
+         with dead processes.
+   -Set up juce unit testing as a program option, wrote tests for LaunchedApp.
+
 ### Jul 23 2018
    -Updated GLibThread to improve thread safety and track window focus
    -Wifi thread now only runs when the application window is focused
