@@ -17,22 +17,34 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         std::cerr << "  --help:	Print usage help" << std::endl;
         std::cerr << "  --fakeWifi:	Use fake WifiStatus"   << std::endl;
         std::cerr << "  --test: 	Run all program tests" << std::endl;
+        std::cerr << "      -v: 	Verbose test output"   << std::endl;
         quit();
     }
 
-    // open sound handle
-    if (!Audio::initAudio())
-    {
-        DBG("PocketHomeApplication::" << __func__
-                << ": Sound failed to initialize");
-    }
 
     lookAndFeel = new PokeLookAndFeel();
     LookAndFeel::setDefaultLookAndFeel(lookAndFeel);
 
-    homeWindow = new PocketHomeWindow
-            (getApplicationName(), args.contains("--fakeWifi"));
     
+    if(args.contains("--test"))
+    {
+        UnitTestRunner tester;
+        tester.setPassesAreLogged(args.contains("-v"));
+        tester.runAllTests();
+        JUCEApplicationBase::quit();
+    }
+    
+    else
+    {
+        // open sound handle
+        if (!Audio::initAudio())
+        {
+            DBG("PocketHomeApplication::" << __func__
+                    << ": Sound failed to initialize");
+        }
+        homeWindow = new PocketHomeWindow
+                (getApplicationName(), args.contains("--fakeWifi"));
+    }
     
 }
 
