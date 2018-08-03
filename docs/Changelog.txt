@@ -6,6 +6,7 @@
         -Tracking child processes in /proc directly to better handle problems
          with dead processes.
    -Set up juce unit testing as a program option, wrote tests for LaunchedApp.
+   -pocket-home now automatically grabs window focus on launch.
 
 ### Jul 23 2018
    -Updated GLibThread to improve thread safety and track window focus

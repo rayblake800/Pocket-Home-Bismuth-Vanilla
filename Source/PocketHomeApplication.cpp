@@ -1,4 +1,6 @@
 #include "Audio.h"
+#include "XWindowInterface.h"
+#include "TempTimer.h"
 #include "PocketHomeApplication.h"
 
 /**
@@ -44,8 +46,14 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         }
         homeWindow = new PocketHomeWindow
                 (getApplicationName(), args.contains("--fakeWifi"));
+        TempTimer::initTimer(500, [this]()
+        {
+            jassert(homeWindow->isVisible());
+            //focus the program window
+            XWindowInterface xWindows;
+            xWindows.activateWindow(xWindows.getPocketHomeWindow());
+        });
     }
-    
 }
 
 /**

@@ -16,8 +16,6 @@
     
     
 ## Misc. bug fixes and improvements
-    -Program hangs when launching applications if xdotool is not installed.
-    -Set the program to automatically grab window focus on launch.
     -Restore the build and version labels to the power page.
     -Look into icon loading issues on the desktop build.
 
