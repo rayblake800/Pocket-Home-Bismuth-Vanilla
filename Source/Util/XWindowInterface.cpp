@@ -218,7 +218,41 @@ juce::Array<Window> XWindowInterface::getMatchingWindows(
     }
     return matches;
 }
+ 
+/*
+ * Gets all siblings of a window and returns the list sorted from front to
+ * back.
+ */
+juce::Array<Window> XWindowInterface::getWindowSiblings
+(const Window window) const
+{
+    Window parent = getWindowParent(window);
+    return getWindowChildren(parent);
+}
 
+/*
+ * Finds the parent of a window.
+ */
+Window XWindowInterface::getWindowParent(const Window window) const
+{
+    juce::Array<Window> parents = getWindowAncestry(window);
+    if(parents.size() < 2)
+    {
+        return 0;
+    }
+    return parents[parents.size() - 2];    
+}
+
+/*
+ * Gets a window's index among its siblings in the window tree.  Lower
+ * values are closer to the front.
+ */
+int XWindowInterface::getHeightIndex(const Window window) const
+{
+    return getWindowSiblings(window).indexOf(window);
+}
+    
+ 
 /*
  * Finds all direct ancestors of a window and returns them in parent->child
  * order.
@@ -314,7 +348,7 @@ bool XWindowInterface::isActiveWindow(const Window window) const
     {
         DBG("XWindowInterface::" << __func__ << ": No, "  << higherWindows 
                 << " window(s) are above this window");
-        printWindowInfo(siblings.getLast());
+        //printWindowInfo(siblings.getLast());
         return false;
     }
     
@@ -342,17 +376,6 @@ void XWindowInterface::activateWindow(const Window window) const
         setDesktopIndex(getWindowDesktop(window));
     }
     
-    //Raise and activate all parent windows before raising the target window
-    Array<Window> ancestors = getWindowAncestry(window);
-    jassert(!ancestors.isEmpty() && ancestors.getLast() == window);
-    
-    for(const Window& window : ancestors)
-    {
-        //Raise window first(does nothing in some window managers):
-        XRaiseWindow(display, window);
-        XFlush(display);
-    }
-
     XEvent xEvent;
     memset(&xEvent, 0, sizeof(xEvent));
     xEvent.type = ClientMessage;
@@ -378,6 +401,21 @@ void XWindowInterface::activateWindow(const Window window) const
     {
         DBG("XWindowInterface::" << __func__ << ": Bad value error!");
     }
+    //Raise and all parent windows before raising the target window
+    Array<Window> ancestors = getWindowAncestry(window);
+    jassert(!ancestors.isEmpty() && ancestors.getLast() == window);
+    
+    for(const Window& window : ancestors)
+    {
+        XWindowAttributes winAttr;
+        XGetWindowAttributes(display, window, &winAttr);
+        DBG("override_redirect =" << ((int) winAttr.override_redirect));
+
+        //Raise window first(does nothing in some window managers):
+        XRaiseWindow(display, window);
+    }
+    XFlush(display);
+
 }
     
 /*

@@ -129,6 +129,38 @@ public:
     juce::Array<Window> getWindowAncestry(const Window window) const;
 
     /**
+     * Gets all siblings of a window and returns the list sorted from front to
+     * back.
+     *
+     * @param window  A valid XLib window identifier.
+     *
+     * @return  An array of all windows (including the window parameter) that
+     *          have the same parent window as the window parameter.
+     */
+    juce::Array<Window> getWindowSiblings(const Window window) const;
+
+    /**
+     * Finds the parent of a window.
+     *
+     * @param window  A valid XLib window identifier.
+     *
+     * @return   The window's parent, or 0 if the window is invalid or has no
+     *           parent.
+     */
+    Window getWindowParent(const Window window) const;
+
+    /**
+     * Gets a window's index among its siblings in the window tree.  Lower
+     * values are closer to the front.
+     *
+     * @param window  An XLib window identifier.
+     *
+     * @return  The window's index among its siblings, or -1 if the window is
+     *          invalid.
+     */
+    int getHeightIndex(const Window window) const;
+    
+    /**
      * Checks if a specific window is active.
      * 
      * @param window  An XLib window identifier;
