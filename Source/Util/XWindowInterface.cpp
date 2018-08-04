@@ -413,8 +413,8 @@ void XWindowInterface::activateWindow(const Window window) const
         {
             lastHeight = getHeightIndex(window);
             XRaiseWindow(display, window);
-            XFlush(display);
             XSync(display, false);
+            XFlush(display);
             heightIndex = getHeightIndex(window);
         }
         DBG("Window moved from " << initialHeight << " to " << heightIndex);

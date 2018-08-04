@@ -6,6 +6,10 @@
 //Milliseconds to wait between window focus attempts.
 static const constexpr int focusWaitMs = 200;
 
+//sets if tests should run after the window initializes
+static bool runTests = false;
+static bool verboseTesting = false;
+
 /**
  * Attempts to activate the application window and grab keyboard focus.  This
  * may fail if the window isn't fully initialized, so it will repeatedly call
@@ -22,6 +26,13 @@ static void focusAppWindow()
     if(!WindowFocus::isFocused())
     {
         TempTimer::initTimer(focusWaitMs, focusAppWindow);
+    }
+    else if(runTests)
+    {
+        UnitTestRunner tester;
+        tester.setPassesAreLogged(verboseTesting);
+        tester.runAllTests();
+        JUCEApplication::getInstance()->systemRequestedQuit();
     }
 }
 
@@ -57,15 +68,9 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
     }
     homeWindow = new PocketHomeWindow
             (getApplicationName(), args.contains("--fakeWifi"));
+    runTests = args.contains("--test");
+    verboseTesting = args.contains("-v");
     focusAppWindow();
-    
-    if(args.contains("--test"))
-    {
-        UnitTestRunner tester;
-        tester.setPassesAreLogged(args.contains("-v"));
-        tester.runAllTests();
-        systemRequestedQuit();
-    }
     
     
 }
