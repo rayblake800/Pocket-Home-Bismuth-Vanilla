@@ -41,24 +41,20 @@ Window XWindowInterface::getPocketHomeWindow() const
 {
     using namespace juce;
     Component * rootComponent = Desktop::getInstance().getComponent(0);
-    Window windowHandle = (Window) rootComponent->getWindowHandle();
-    DBG("APP WINDOW:");
-    
+    Window windowHandle;
+    if(rootComponent == nullptr)
+    {
+        //window does not exist!
+        return BadWindow;
+    }
+    else
+    {
+        windowHandle = (Window) rootComponent->getWindowHandle();
+    }
     #if JUCE_DEBUG
         printWindowInfo(windowHandle);
     #endif
     return windowHandle;
-//    const int homeProcess = ProcessUtils::getProcessId();
-//    const String windowName = "pocket-home";
-//    Array<Window> possibleWindows = getMatchingWindows(
-//            [this, &homeProcess, &windowName](Window testWindow)->bool
-//            {
-//                return getWindowPID(testWindow) == homeProcess
-//                        && getWindowName(testWindow) == windowName
-//                        && getWindowClass(testWindow).isNotEmpty();
-//            });
-//    jassert(possibleWindows.size() == 1);
-//    return possibleWindows[0];
 }
   
 /*
@@ -161,7 +157,7 @@ juce::Array<Window> XWindowInterface::getWindowChildren
             &childWindows, &numChildren);
     if(success && numChildren > 0)
     {
-        for(unsigned int i = 0; i < numChildren; i++)
+        for(int i = numChildren - 1; i >= 0; i--)
         {
             children.add(childWindows[i]);
         }
@@ -409,12 +405,20 @@ void XWindowInterface::activateWindow(const Window window) const
     {
         XWindowAttributes winAttr;
         XGetWindowAttributes(display, window, &winAttr);
-        DBG("override_redirect =" << ((int) winAttr.override_redirect));
 
-        //Raise window first(does nothing in some window managers):
-        XRaiseWindow(display, window);
+        int heightIndex = getHeightIndex(window);
+        int initialHeight = heightIndex;
+        int lastHeight = heightIndex + 1;
+        while(heightIndex > 0 && heightIndex < lastHeight)
+        {
+            lastHeight = getHeightIndex(window);
+            XRaiseWindow(display, window);
+            XFlush(display);
+            XSync(display, false);
+            heightIndex = getHeightIndex(window);
+        }
+        DBG("Window moved from " << initialHeight << " to " << heightIndex);
     }
-    XFlush(display);
 
 }
     
