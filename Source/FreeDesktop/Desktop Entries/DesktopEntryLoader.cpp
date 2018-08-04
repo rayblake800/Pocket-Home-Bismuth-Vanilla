@@ -150,6 +150,7 @@ void DesktopEntryLoader::run()
             {
                 return;
             }
+            const ScopedUnlock waitUnlock(lock);
             wait(1);
         }
         File directory(dirs[i]);
@@ -185,6 +186,7 @@ void DesktopEntryLoader::run()
             {
                 return;
             }
+            const ScopedUnlock waitUnlock(lock);
             wait(1);
         }
         DesktopEntry entry(file);
