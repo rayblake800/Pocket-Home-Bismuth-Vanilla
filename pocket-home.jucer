@@ -8,8 +8,10 @@
               cppLanguageStandard="14" defines="DONT_SET_USING_JUCE_NAMESPACE=1">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{0EAA4235-1BE6-9631-C021-04197F639BB7}" name="Tests">
-      <FILE id="Bmp8Lw" name="LaunchedAppTest.cpp" compile="1" resource="0"
-            file="Tests/LaunchedAppTest.cpp"/>
+      <FILE id="Bmp8Lw" name="test_LaunchedApp.cpp" compile="1" resource="0"
+            file="Tests/test_LaunchedApp.cpp"/>
+      <FILE id="DCiFAO" name="test_XWindowInterface.cpp" compile="1" resource="0"
+            file="Tests/test_XWindowInterface.cpp"/>
     </GROUP>
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
       <FILE id="lJvIsl" name="bluetooth.json" compile="0" resource="1" file="assets/bluetooth.json"/>

@@ -10,19 +10,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/ProcessUtils.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/XWindowInterface.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/PocketHomeWindow.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/AppLauncher.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Main.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/LaunchedApp.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/LaunchedApp.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/AppLauncher.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Tests/TestCore.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/ProcessUtils.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PocketHomeApplication.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/XWindowInterface.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PocketHomeApplication.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Wifi/WifiDebugOutput.h</file>
         </group>
     </open-files>
 </project-private>

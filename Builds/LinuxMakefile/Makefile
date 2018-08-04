@@ -68,7 +68,8 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
-  $(JUCE_OBJDIR)/LaunchedAppTest_e117a1c8.o \
+  $(JUCE_OBJDIR)/test_LaunchedApp_3a56b785.o \
+  $(JUCE_OBJDIR)/test_XWindowInterface_40175345.o \
   $(JUCE_OBJDIR)/BluetoothDevice_b56b2104.o \
   $(JUCE_OBJDIR)/BluetoothStatus_95a3a4a0.o \
   $(JUCE_OBJDIR)/BluezAdapter_eb8139.o \
@@ -204,9 +205,14 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
 
-$(JUCE_OBJDIR)/LaunchedAppTest_e117a1c8.o: ../../Tests/LaunchedAppTest.cpp
+$(JUCE_OBJDIR)/test_LaunchedApp_3a56b785.o: ../../Tests/test_LaunchedApp.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling LaunchedAppTest.cpp"
+	@echo "Compiling test_LaunchedApp.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/test_XWindowInterface_40175345.o: ../../Tests/test_XWindowInterface.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling test_XWindowInterface.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/BluetoothDevice_b56b2104.o: ../../Source/Bluetooth/BluetoothDevice.cpp
