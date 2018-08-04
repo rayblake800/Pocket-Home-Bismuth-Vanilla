@@ -365,38 +365,38 @@ void XWindowInterface::activateWindow(const Window window) const
     #if JUCE_DEBUG
         printWindowInfo(window);
     #endif
-//    jassert(xPropertySupported(activeWindowProperty));
-//    if(xPropertySupported(currentDesktopProperty)
-//        && xPropertySupported(windowDesktopProperty))
-//    {
-//        setDesktopIndex(getWindowDesktop(window));
-//    }
-//    
-//    XEvent xEvent;
-//    memset(&xEvent, 0, sizeof(xEvent));
-//    xEvent.type = ClientMessage;
-//    xEvent.xclient.display = display;
-//    xEvent.xclient.window = window;
-//    xEvent.xclient.message_type 
-//            = XInternAtom(display, activeWindowProperty, false);
-//    xEvent.xclient.format = 32;
-//    xEvent.xclient.data.l[0] = 2L; /* 2 == Message from a window pager */
-//    xEvent.xclient.data.l[1] = CurrentTime;
-//
-//    XWindowAttributes winAttr;
-//    XGetWindowAttributes(display, window, &winAttr);
-//    int result = XSendEvent(display, winAttr.screen->root, false,
-//            SubstructureNotifyMask | SubstructureRedirectMask,
-//            &xEvent);
-//
-//    if(result == BadWindow)
-//    {
-//        DBG("XWindowInterface::" << __func__ << ": Bad window error!");
-//    }
-//    else if(result == BadValue)
-//    {
-//        DBG("XWindowInterface::" << __func__ << ": Bad value error!");
-//    }
+    jassert(xPropertySupported(activeWindowProperty));
+    if(xPropertySupported(currentDesktopProperty)
+        && xPropertySupported(windowDesktopProperty))
+    {
+        setDesktopIndex(getWindowDesktop(window));
+    }
+    
+    XEvent xEvent;
+    memset(&xEvent, 0, sizeof(xEvent));
+    xEvent.type = ClientMessage;
+    xEvent.xclient.display = display;
+    xEvent.xclient.window = window;
+    xEvent.xclient.message_type 
+            = XInternAtom(display, activeWindowProperty, false);
+    xEvent.xclient.format = 32;
+    xEvent.xclient.data.l[0] = 2L; /* 2 == Message from a window pager */
+    xEvent.xclient.data.l[1] = CurrentTime;
+
+    XWindowAttributes winAttr;
+    XGetWindowAttributes(display, window, &winAttr);
+    int result = XSendEvent(display, winAttr.screen->root, false,
+            SubstructureNotifyMask | SubstructureRedirectMask,
+            &xEvent);
+
+    if(result == BadWindow)
+    {
+        DBG("XWindowInterface::" << __func__ << ": Bad window error!");
+    }
+    else if(result == BadValue)
+    {
+        DBG("XWindowInterface::" << __func__ << ": Bad value error!");
+    }
     //Raise and all parent windows before raising the target window
     Array<Window> ancestors = getWindowAncestry(window);
     jassert(!ancestors.isEmpty() && ancestors.getLast() == window);
@@ -421,20 +421,32 @@ void XWindowInterface::activateWindow(const Window window) const
         XWindowAttributes winAttr;
         XGetWindowAttributes(display, window, &winAttr);
         DBG("override_redirect=" << winAttr.override_redirect);
-        
-        siblings.removeAllInstancesOf(window);
-        siblings.insert(window, 0);
-
-        Window * windowArray = new Window[siblings.size()];
-        for(int i = 0; i < siblings.size(); i++)
+        if(!winAttr.override_redirect)
         {
-            windowArray[i] = siblings[siblings.size() - i - 1];
+            //override_redirect needs to be true in order to move windows
         }
-        int result = XRestackWindows(display, windowArray, siblings.size());
-        DBG("XRestackWindows: Result=" << result);
-
+        
+        XRaiseWindow(display, window);
         XSync(display, false);
         XFlush(display);
+        
+        if(!winAttr.override_redirect)
+        {
+            //reset override_redirect
+        }
+//        siblings.removeAllInstancesOf(window);
+//        siblings.insert(window, 0);
+        
+        
+
+//        Window * windowArray = new Window[siblings.size()];
+//        for(int i = 0; i < siblings.size(); i++)
+//        {
+//            windowArray[i] = siblings[siblings.size() - i - 1];
+//        }
+//        int result = XRestackWindows(display, windowArray, siblings.size());
+//        DBG("XRestackWindows: Result=" << result);
+
             //heightIndex = getHeightIndex(window);
         //}
         //DBG("Window moved from " << initialHeight << " to " << heightIndex);
