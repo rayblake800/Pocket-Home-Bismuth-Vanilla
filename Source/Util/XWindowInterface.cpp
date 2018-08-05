@@ -403,15 +403,6 @@ void XWindowInterface::activateWindow(const Window window) const
     
     for(const Window& window : ancestors)
     {
-
-        //int heightIndex = getHeightIndex(window);
-        //int initialHeight = heightIndex;
-        //int lastHeight = heightIndex + 1;
-        //while(heightIndex > 0 && heightIndex < lastHeight)
-        //{
-        //    lastHeight = getHeightIndex(window);
-        //    XRaiseWindow(display, window);
-            
         Array<Window> siblings = getWindowSiblings(window);
         if(siblings.size() < 2)
         {
@@ -420,10 +411,14 @@ void XWindowInterface::activateWindow(const Window window) const
         
         XWindowAttributes winAttr;
         XGetWindowAttributes(display, window, &winAttr);
-        DBG("override_redirect=" << winAttr.override_redirect);
         if(!winAttr.override_redirect)
         {
+            XSetWindowAttributes newAttrs;
+            newAttrs.override_redirect = true;
+            long changeMask = 1L<<9; //defined on XSetWindowAttributes manpage
             //override_redirect needs to be true in order to move windows
+            int result = XChangeWindowAttributes(display, window, changeMask,
+                    &newAttrs);
         }
         
         XRaiseWindow(display, window);
@@ -433,25 +428,14 @@ void XWindowInterface::activateWindow(const Window window) const
         if(!winAttr.override_redirect)
         {
             //reset override_redirect
-        }
-//        siblings.removeAllInstancesOf(window);
-//        siblings.insert(window, 0);
-        
-        
-
-//        Window * windowArray = new Window[siblings.size()];
-//        for(int i = 0; i < siblings.size(); i++)
-//        {
-//            windowArray[i] = siblings[siblings.size() - i - 1];
-//        }
-//        int result = XRestackWindows(display, windowArray, siblings.size());
-//        DBG("XRestackWindows: Result=" << result);
-
-            //heightIndex = getHeightIndex(window);
-        //}
-        //DBG("Window moved from " << initialHeight << " to " << heightIndex);
+            XSetWindowAttributes newAttrs;
+            newAttrs.override_redirect = false;
+            long changeMask = 1L<<9; //defined on XSetWindowAttributes manpage
+            //override_redirect needs to be true in order to move windows
+            int result = XChangeWindowAttributes(display, window, changeMask,
+                    &newAttrs);
+         }
     }
-
 }
     
 /*
