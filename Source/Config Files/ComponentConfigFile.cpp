@@ -55,11 +55,13 @@ const juce::String ComponentConfigFile::largeTextKey  = "large text";
 
 //######################### UI Component Data ##############################
 //Defines all component types managed in the config file
-const juce::String ComponentConfigFile::scrollingAppMenuKey = "scrolling app menu";
+const juce::String ComponentConfigFile::scrollingAppMenuKey
+        = "scrolling app menu";
 const juce::String ComponentConfigFile::pagedAppMenuKey = "paged app menu";
 const juce::String ComponentConfigFile::menuFrameKey = "menu frame";
 const juce::String ComponentConfigFile::batteryIconKey = "battery";
-const juce::String ComponentConfigFile::batteryPercentKey = "battery percent text";
+const juce::String ComponentConfigFile::batteryPercentKey
+        = "battery percent text";
 const juce::String ComponentConfigFile::clockLabelKey = "time";
 const juce::String ComponentConfigFile::wifiIconKey = "wifi";
 const juce::String ComponentConfigFile::powerButtonKey = "power button";
@@ -69,6 +71,8 @@ const juce::String ComponentConfigFile::pageLeftKey = "left arrow button";
 const juce::String ComponentConfigFile::pageRightKey = "right arrow button";
 const juce::String ComponentConfigFile::pageUpKey = "up arrow button";
 const juce::String ComponentConfigFile::pageDownKey = "down arrow button";
+const juce::String ComponentConfigFile::settingsListBtnKey
+        = "settings list button";
 const juce::String ComponentConfigFile::spinnerKey = "loading spinner";
 
 /*
@@ -163,6 +167,7 @@ juce::StringArray ComponentConfigFile::getComponentKeys()
             pageRightKey,
             pageUpKey,
             pageDownKey,
+            settingsListBtnKey,
             spinnerKey,
             };
 }

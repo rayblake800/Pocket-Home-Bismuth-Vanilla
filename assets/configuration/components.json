@@ -167,6 +167,18 @@
             "pageDownIcon.svg"
         ]
     },
+    "settings list button": {
+        "x": 0.9,
+        "y": 0.4,
+        "width": 0.1,
+        "height": 0.2,
+        "colours": [
+            "0xffeb008b"
+        ],
+        "asset files": [
+            "settingsIcon.svg"
+        ]
+    },
     "loading spinner": {
         "colours": [
             "0xffeb008b"

@@ -56,6 +56,7 @@ public:
     static const juce::String pageRightKey;
     static const juce::String pageUpKey;
     static const juce::String pageDownKey;
+    static const juce::String settingsListBtnKey;
     static const juce::String spinnerKey;
 
     /**
