@@ -1,6 +1,6 @@
 {  
-    "small text"  : 0.05,  
-    "medium text" : 0.073,  
+    "small text"  : 0.075,  
+    "medium text" : 0.085,  
     "large text"  : 0.13,
 
     "scrolling app menu": {
