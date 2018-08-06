@@ -1,6 +1,7 @@
 #pragma once
 #include "PageComponent.h"
 #include "ConfigurableImageButton.h"
+#include "ScalingTextButton.h"
 #include "OverlaySpinner.h"
 #include "SwitchComponent.h"
 #include "LoginPage.h"
@@ -63,18 +64,13 @@ private:
 
     
     //Turns off the system using the shutdown command in the MainConfigFile.
-    juce::TextButton powerOffButton;
+    ScalingTextButton powerOffButton;
     //Starts sleep mode with startSleepMode()
-    juce::TextButton sleepButton;
+    ScalingTextButton sleepButton;
     //Restarts the system using the reboot command in the MainConfigFile.
-    juce::TextButton rebootButton;
+    ScalingTextButton rebootButton;
     //Shows a page that gives the user the option to enter flashing mode.
-    juce::TextButton felButton;
-#if JUCE_DEBUG
-    //In debug builds, this button provides a convenient place to tie in
-    //temporary test routines.
-    juce::TextButton testButton;
-#endif
+    ScalingTextButton felButton;
     //Spinner to indicate that the system is rebooting/shutting down
     OverlaySpinner overlaySpinner;
     //The lock screen is displayed after entering sleep mode.

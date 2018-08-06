@@ -18,6 +18,7 @@
 ## Misc. bug fixes and improvements
     -Restore the build and version labels to the power page.
     -Look into icon loading issues on the desktop build.
+    -Define missing ColourId values for custom component classes.
 
 #### Known documentation issues for individual classes
 
@@ -32,9 +33,8 @@
 
 ## Appearance/Style Tweaks
 
-    1. Enforce medium text size on power page buttons.
-    2. Review PokeLookAndFeel text size settings.
-    3. Fix text size for TextEntryComponents
+    1. Review PokeLookAndFeel text size settings.
+    2. Fix text size for TextEntryComponents
 
 ## Wifi Improvements
 
@@ -158,7 +158,3 @@
         -Input options
     -Create a class that can automatically disable a component if one or more
      of these features is not available
-    -Look into directly implementing window scanning, rather than calling
-     xdotool
-    -Avoid directly interacting with AwesomeWM, or at least provide support for
-     other common window managers.

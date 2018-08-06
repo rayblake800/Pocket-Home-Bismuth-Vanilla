@@ -15,20 +15,17 @@ powerOffButton(localeText(shutdown)),
 rebootButton(localeText(reboot)),
 sleepButton(localeText(sleep)),
 felButton(localeText(flash_software)),
-#if JUCE_DEBUG
-        testButton("Run Test"),
-#endif
 lockscreen([this]()
 {
     hideLockscreen();
 })
 {
-    using namespace juce;
-#    if JUCE_DEBUG
-    setName("PowerPage");
-    testButton.addListener(this);
-#    endif
-      
+    using namespace juce; 
+    powerOffButton.setMaxTextScale(ComponentConfigFile::mediumText);
+    rebootButton.setMaxTextScale(ComponentConfigFile::mediumText);
+    sleepButton.setMaxTextScale(ComponentConfigFile::mediumText);
+    felButton.setMaxTextScale(ComponentConfigFile::mediumText);
+    
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({
@@ -131,11 +128,7 @@ void PowerPage::pageButtonClicked(juce::Button *button)
         startSleepMode();
         return;
     }
-#if JUCE_DEBUG
-    if (button == &testButton)
-    {
-    }
-#endif
+
     ChildProcess commandProcess;
     MainConfigFile mainConfig;
     if (button == &powerOffButton)
