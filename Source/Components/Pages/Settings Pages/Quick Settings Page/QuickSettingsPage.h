@@ -44,6 +44,11 @@ public:
     void pageButtonClicked(juce::Button *b) override;
 
     /**
+     * Updates the advanced settings button when the page is resized.
+     */
+    void pageResized() override;
+
+    /**
      * Slider::Listener requires this method to be implemented, but it's not 
      * actually needed.
      */
@@ -76,8 +81,8 @@ public:
     IconSliderComponent screenBrightnessSlider;
     //sets system volume levels
     IconSliderComponent volumeSlider;
-    //opens the advanced settings page
-    ScalingTextButton advancedPageButton;
+    //opens the settings list page
+    ConfigurableImageButton settingsListBtn;
     
     //localized text keys
     static const constexpr char * advanced_settings = "advanced_settings";

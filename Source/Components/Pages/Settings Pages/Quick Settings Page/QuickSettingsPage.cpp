@@ -19,7 +19,7 @@ wifiComponent([this]()
 //}),
 screenBrightnessSlider("brightnessIconLo.svg", "brightnessIconHi.svg"),
 volumeSlider("volumeIconLo.svg", "volumeIconHi.svg"),
-advancedPageButton(localeText(advanced_settings))
+settingsListBtn(ComponentConfigFile::settingsListBtnKey)
 {
 
 #    if JUCE_DEBUG
@@ -32,16 +32,15 @@ advancedPageButton(localeText(advanced_settings))
         Row(10, { RowItem(&wifiComponent) } ),
         //Row(10, { RowItem(&bluetoothComponent) } ),
         Row(10, { RowItem(&screenBrightnessSlider) } ),
-        Row(10, { RowItem(&volumeSlider) } ),
-        Row(10, { RowItem(&advancedPageButton) } )
+        Row(10, { RowItem(&volumeSlider) } )
     });
     layout.setYMarginFraction(0.1);
     layout.setXPaddingWeight(1);
     layout.setYPaddingWeight(1);
     setLayout(layout);
     
-    advancedPageButton.addListener(this);
-    advancedPageButton.setMaxTextScale(ComponentConfigFile::mediumText);
+    addAndMakeVisible(settingsListBtn);
+    settingsListBtn.addListener(this);
     screenBrightnessSlider.setRange(1, 10, 1);
     screenBrightnessSlider.setValue(Display::getBrightness());
     screenBrightnessSlider.addListener(this);
@@ -78,12 +77,21 @@ void QuickSettingsPage::timerCallback()
     startTimer(200);
 }
 
+/*
+ * Updates the advanced settings button when the page is resized.
+ */
+void QuickSettingsPage::pageResized()
+{
+    settingsListBtn.applyConfigBounds();
+}
+
+
 /**
  * Opens the advanced settings page when its button is clicked.
  */
 void QuickSettingsPage::pageButtonClicked(juce::Button *button)
 {
-    if (button == &advancedPageButton)
+    if (button == &settingsListBtn)
     {
         pushPageToStack(PageType::SettingsList);
     }
