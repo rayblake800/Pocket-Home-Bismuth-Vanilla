@@ -33,9 +33,6 @@ lockscreen([this]()
         Row(10, { RowItem(&sleepButton) }),
         Row(10, { RowItem(&rebootButton) }),
         Row(10, { RowItem(&felButton) })
-#if JUCE_DEBUG
-        ,Row(10, { RowItem(&testButton) })
-#endif
     });
     layout.setYMarginFraction(0.1);
     layout.setYPaddingWeight(4);
