@@ -34,6 +34,7 @@ settingsListBtn(ComponentConfigFile::settingsListBtnKey)
         Row(10, { RowItem(&screenBrightnessSlider) } ),
         Row(10, { RowItem(&volumeSlider) } )
     });
+    layout.setXMarginFraction(1.0 - settingsListBtn.getXFraction());
     layout.setYMarginFraction(0.1);
     layout.setXPaddingWeight(1);
     layout.setYPaddingWeight(1);

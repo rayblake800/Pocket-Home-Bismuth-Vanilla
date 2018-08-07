@@ -5811,7 +5811,8 @@
         <in>PocketHomeApplication.h</in>
       </df>
       <df name="Tests">
-        <in>LaunchedAppTest.cpp</in>
+        <in>test_LaunchedApp.cpp</in>
+        <in>test_XWindowInterface.cpp</in>
       </df>
     </df>
     <itemPath>assets/configuration/apps.json</itemPath>

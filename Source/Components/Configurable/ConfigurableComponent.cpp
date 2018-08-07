@@ -54,6 +54,40 @@ const juce::String& ConfigurableComponent::getComponentKey() const
     return componentKey;
 }
 
+/*
+ * Gets this component's x-coordinate as a fraction of the window's
+ * width.
+ */
+float ConfigurableComponent::getXFraction()
+{
+    return componentSettings.getXFraction();
+}
+
+/*
+ * Gets this component's y-coordinate as a fraction of the window's
+ * height.
+ */
+float ConfigurableComponent::getYFraction()
+{
+    return componentSettings.getYFraction();
+}
+
+/*
+ * Gets this component's width as a fraction of the window's width.
+ */
+float ConfigurableComponent::getWidthFraction()
+{
+    return componentSettings.getWidthFraction();
+}
+
+/*
+ * Gets this component's height as a fraction of the window's height.
+ */
+float ConfigurableComponent::getHeightFraction()
+{
+    return componentSettings.getHeightFraction();
+}
+
 
 /**
  * Load and apply all component data from the ComponentConfigFile.
