@@ -1,3 +1,4 @@
+#include <map>
 #include "MainConfigFile.h"
 #include "Utils.h"
 #include "PokeLookAndFeel.h"
@@ -15,6 +16,8 @@ powerOffButton(localeText(shutdown)),
 rebootButton(localeText(reboot)),
 sleepButton(localeText(sleep)),
 felButton(localeText(flash_software)),
+versionLabel(localeText(version) 
++ juce::JUCEApplication::getInstance()->getApplicationVersion()),
 lockscreen([this]()
 {
     hideLockscreen();
@@ -29,15 +32,57 @@ lockscreen([this]()
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({
+        Row(6, { RowItem(&versionLabel) }),
         Row(10, { RowItem(&powerOffButton) }),
         Row(10, { RowItem(&sleepButton) }),
         Row(10, { RowItem(&rebootButton) }),
-        Row(10, { RowItem(&felButton) })
+        Row(10, { RowItem(&felButton) }),
+        Row(6, { RowItem(&buildLabel) })
     });
     layout.setYMarginFraction(0.1);
     layout.setYPaddingWeight(4);
     setBackButton(PageComponent::rightBackButton);
     setLayout(layout);
+ 
+    versionLabel.setJustificationType(Justification::centred);
+    versionLabel.setText(localeText(version) 
+        + juce::JUCEApplication::getInstance()->getApplicationVersion(),
+            NotificationType::dontSendNotification);
+    
+    //Determine release label contents
+    File releaseFile("/etc/os-release");
+    if(!releaseFile.existsAsFile())
+    {
+        releaseFile = File("/usr/lib/os-release");
+    }
+    if(releaseFile.existsAsFile())
+    {
+        StringArray releaseLines
+                = StringArray::fromLines(releaseFile.loadFileAsString());
+        std::map<String, String> releaseVars;
+        for(const String& line : releaseLines)
+        {
+            int eqIndex = line.indexOfChar(0, '=');
+            if(eqIndex >= 0)
+            {
+                releaseVars[line.substring(0, eqIndex)]
+                        = line.substring(eqIndex + 1).unquoted();
+            }
+        }
+        String buildText = localeText(build);
+        if(releaseVars.count("PRETTY_NAME"))
+        {
+            buildText += releaseVars["PRETTY_NAME"];
+        }
+        else
+        {
+            buildText += releaseVars["NAME"];
+            buildText += " ";
+            buildText += releaseVars["VERSION"];
+        }
+        buildLabel.setJustificationType(Justification::centred);
+        buildLabel.setText(buildText, NotificationType::dontSendNotification);
+    }
     
     powerOffButton.addListener(this);
     sleepButton.addListener(this);

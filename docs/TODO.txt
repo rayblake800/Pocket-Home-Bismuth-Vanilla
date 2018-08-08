@@ -16,7 +16,6 @@
     
     
 ## Misc. bug fixes and improvements
-    -Restore the build and version labels to the power page.
     -Look into icon loading issues on the desktop build.
     -Define missing ColourId values for custom component classes.
 

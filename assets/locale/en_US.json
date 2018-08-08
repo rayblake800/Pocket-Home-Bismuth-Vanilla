@@ -87,7 +87,9 @@
         "shutdown": "Shutdown",
         "reboot": "Reboot",
         "sleep": "Sleep",
-        "flash_software": "Flash Software" 
+        "flash_software": "Flash Software",
+        "build": "Build: ",
+        "version": "Version "
     },
     "FelPage": {
         "ask_to_reboot": "Reboot into software flashing mode?",

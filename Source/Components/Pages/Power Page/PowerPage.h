@@ -2,6 +2,8 @@
 #include "PageComponent.h"
 #include "ConfigurableImageButton.h"
 #include "ScalingTextButton.h"
+#include "ScalingLabel.h"
+
 #include "OverlaySpinner.h"
 #include "SwitchComponent.h"
 #include "LoginPage.h"
@@ -23,7 +25,6 @@
  * TODO:
  * 
  * -Set the sleep mode command in config.json
- * -Restore build/version labels.
  * -Make background color configurable.
  */
 
@@ -62,7 +63,8 @@ private:
      */
     void pageResized() override;
 
-    
+    //Identifies this pocket-home build
+    ScalingLabel buildLabel;
     //Turns off the system using the shutdown command in the MainConfigFile.
     ScalingTextButton powerOffButton;
     //Starts sleep mode with startSleepMode()
@@ -71,6 +73,8 @@ private:
     ScalingTextButton rebootButton;
     //Shows a page that gives the user the option to enter flashing mode.
     ScalingTextButton felButton;
+    //Identifies the pocket-home version
+    ScalingLabel versionLabel;
     //Spinner to indicate that the system is rebooting/shutting down
     OverlaySpinner overlaySpinner;
     //The lock screen is displayed after entering sleep mode.
@@ -80,6 +84,8 @@ private:
     static const constexpr char * shutdown = "shutdown";
     static const constexpr char * reboot = "reboot";
     static const constexpr char * sleep = "sleep";
+    static const constexpr char * build = "build";
+    static const constexpr char * version = "version";
     static const constexpr char * flash_software = "flash_software";
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerPage)

@@ -65,9 +65,8 @@
      network-manager-dev \
      libi2c-dev \
      libssl-dev \
-     libnm-gtk-dev
-
-     gio
+     libnm-gtk-dev \
+     libglib2.0-dev
 
 ####  2. Cloning and building
       
