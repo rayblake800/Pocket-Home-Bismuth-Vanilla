@@ -14,7 +14,7 @@ hashedPassword("none"),
 loginCallback(loginCallback),
 foundPassword(false)
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("LoginPage");
 #    endif
@@ -47,7 +47,11 @@ foundPassword(false)
     setLayout(layout);
     
     setBackgroundImage(AssetFiles::loadImageAsset("login/background.png"));
-    loginButton.addListener(this);
+    loginButton.addListener(this);   
+    
+    ComponentConfigFile config;
+    passwordField.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
     passwordField.addListener(this);
     addAndShowLayoutComponents();
     if (!hasPassword())

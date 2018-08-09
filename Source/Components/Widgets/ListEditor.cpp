@@ -1,10 +1,12 @@
 #include "ListEditor.h"
+#include "ComponentConfigFile.h"
 
 ListEditor::ListEditor(juce::StringArray initialList) :
 listItems(initialList),
 listContainer("ListEditor", nullptr),
 addItemBtn("+")
 {
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("ListEditor");
 #    endif
@@ -25,6 +27,10 @@ addItemBtn("+")
     layout.setXMarginFraction(0.02);
     layout.setYMarginFraction(0.02);
     layoutManager.setLayout(layout, this);
+    
+    ComponentConfigFile config;
+    newItemField.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
 
     updateColours();
 

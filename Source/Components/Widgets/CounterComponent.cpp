@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "ComponentConfigFile.h"
 #include "CounterComponent.h"
 
 CounterComponent::CounterComponent
@@ -12,11 +13,15 @@ plusButton("+")
     using namespace juce;
     minusButton.addListener(this);
     plusButton.addListener(this);
+    ComponentConfigFile config;
     textField.addListener(this);
     textField.setJustification(Justification::centred);
     textField.setInputFilter
             (new TextEditor::LengthAndCharacterRestriction(-1, "1234567890"),
             true);
+    textField.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
+    
     addAndMakeVisible(minusButton);
     addAndMakeVisible(textField);
     addAndMakeVisible(plusButton);

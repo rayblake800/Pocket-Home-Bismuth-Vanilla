@@ -1,4 +1,5 @@
 #include "ColourPicker.h"
+#include "ComponentConfigFile.h"
 
 juce::Array<juce::Colour> ColourPicker::savedColours;
 
@@ -65,15 +66,19 @@ colour(colour)
         addAndMakeVisible(sliderBackgrounds[i]);
         sliderBackgrounds[i].toBack();
     }  
-    setSlidersToColour();
     
+    ComponentConfigFile config;
+    colourField.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
+    colourField.setJustification(Justification::centred);
     colourField.addListener(this);
-    setEditorText();
-    colourField.setJustification(Justification::centred);    
+    
     selectionButton.setButtonText(localeText(set_colour));
     selectionButton.addListener(this);
+    
     layoutManager.setLayout(layout,this);
-
+    setSlidersToColour();
+    setEditorText();
 }
 
 /**

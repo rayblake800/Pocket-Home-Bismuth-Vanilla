@@ -49,6 +49,14 @@ confirmPassword("Confirmation", 0x2022)
     addAndShowLayoutComponents();
     curLabel.setVisible(passwordSet);
     curPassword.setVisible(passwordSet);
+     
+    ComponentConfigFile config;
+    curPassword.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
+    newPassword.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
+    confirmPassword.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
 }
 
 /**

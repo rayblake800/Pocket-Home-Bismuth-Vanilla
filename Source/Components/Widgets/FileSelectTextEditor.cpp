@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "ComponentConfigFile.h"
 #include "FileSelectTextEditor.h"
 
 const juce::WildcardFileFilter FileSelectTextEditor::imageFilter
@@ -17,7 +18,7 @@ filePath(componentName),
 fileSelectButton("..."),
 showButton(true)
 {
-
+    using namespace juce;
 #    if JUCE_DEBUG
     setName("FileSelectTextEditor");
 #    endif
@@ -32,6 +33,9 @@ showButton(true)
     }
     fileSelectButton.addListener(this);
     filePath.addListener(this);
+    ComponentConfigFile config;
+    filePath.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
     addAndMakeVisible(filePath);
     addAndMakeVisible(fileSelectButton);
 }

@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include "AppMenuPopupEditor.h"
+#include "ComponentConfigFile.h"
 
 AppMenuPopupEditor::AppMenuPopupEditor(
         juce::String title,
@@ -21,8 +22,15 @@ commandLabel("commandLabel", localeText(command)),
 commandEditor("commandEditor"),
 terminalCheckboxLabel("runInTermLabel", localeText(run_in_terminal))
 {
+    using namespace juce;
     categoryEditButton.addListener(this);
     iconPathEditor.addFileSelectListener(this);
+    
+    ComponentConfigFile config;
+    nameEditor.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
+    commandEditor.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
 
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;

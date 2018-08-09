@@ -28,6 +28,10 @@ titleLabel("Title", localeText(remove_password))
     layout.setYPaddingWeight(1);
     setLayout(layout);
     
+    ComponentConfigFile config;
+    curPassword.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
+    
     titleLabel.setJustificationType(Justification::centred);
     deleteButton.setButtonText(localeText(apply));
     deleteButton.addListener(this);

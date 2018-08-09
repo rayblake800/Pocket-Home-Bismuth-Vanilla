@@ -84,6 +84,10 @@ Localized("WifiSettingsPage")
     setName("WifiSettingsPage");
 #    endif
     passwordEditor.addListener(this);
+    ComponentConfigFile config;
+    passwordEditor.setFont(Font(config.getFontHeight
+            (ComponentConfigFile::smallText)));
+    
     connectionButton.addListener(this);
     errorLabel.setJustificationType(Justification::centred);
     WifiStateManager wifiManager;
