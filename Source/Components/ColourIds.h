@@ -522,5 +522,16 @@ namespace ColourIds
             border     = 0x1900203
         };
     };
+    
+    namespace colourPicker
+    {
+      enum
+      {
+          checkerboardLight = 0x1900600,
+          checkerboardDark  = 0x1900601,
+          outline           = 0x1900602,
+          focusedOutline    = 0x1900603
+      };
+    };
 
 };

@@ -7,15 +7,33 @@ PageComponent("ColourPage"),
 listModel(),
 colourList("colourList", &listModel)
 {
+    using namespace juce;
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({
-        Row(40, { RowItem(&colourList) } )
+        Row(40, 
+        { 
+            RowItem(&colourList, 60),
+            RowItem(&colourPicker, 40)
+        })
     });
     layout.setYMarginFraction(0.1);
     layout.setYPaddingWeight(3);
+    layout.setXPaddingWeight(3);
+    setBackButton(PageComponent::BackButtonType::leftBackButton);
     setLayout(layout);
     colourList.setOutlineThickness(2);
+    colourPicker.setSelectionCallback([this](Colour newColour)
+    {
+        SparseSet<int> selected = colourList.getSelectedRows();
+        if(!selected.isEmpty())
+        {
+            String selectedKey = listModel.getRowText(selected[0]);
+            ColourConfigFile config;
+            config.setColour(selectedKey, newColour);
+        }
+        repaint();
+    });
 }
 
 void ColourPage::pageResized()
@@ -36,7 +54,6 @@ ColourPage::ColourListModel::ColourListModel()
     {
         colours.add(config.getColour(key));
     }
-
     DBG(__func__ << ": found " << colours.size() << " colors");
 }
 
@@ -47,11 +64,20 @@ int ColourPage::ColourListModel::getNumRows()
     return colourKeys.size();
 }
 
+/*
+ * Gets the text of a specific row item.
+ */
+juce::String ColourPage::ColourListModel::getRowText(int index) const
+{
+    using namespace juce;
+    return colourKeys[index];
+}
+
 void ColourPage::ColourListModel::listResized(juce::ListBox& list)
 {
     ComponentConfigFile config;
-    textHeight = config.getComponentSettings(ComponentConfigFile::mediumTextKey)
-            .getBounds().getHeight();
+    textHeight 
+            = config.getFontHeight(ComponentConfigFile::TextSize::smallText);
     list.setRowHeight(textHeight * 1.5);
     list.updateContent();
     list.repaint();
@@ -65,19 +91,25 @@ void ColourPage::ColourListModel::paintListBoxItem(
         bool rowIsSelected)
 {
     using namespace juce;
+    ColourConfigFile config;
+    config.addListener(this, config.getColourIds());
     Rectangle<int> fillArea(0, 0, width, height);
     float checkSize = fillArea.getHeight() / 4;
     g.fillCheckerBoard(fillArea.toFloat(), checkSize, checkSize,
-            Colours::dimgrey, Colours::grey);
+            config.getColour(ColourPicker::checkerboardLight),
+            config.getColour(ColourPicker::checkerboardDark));
     g.setColour(colours[rowNumber]);
     g.fillRect(fillArea);
     fillArea.reduce(height / 5, height / 5);
     g.setColour((colours[rowNumber].getAlpha() < 0x88) ?
-            Colours::white : colours[rowNumber].contrasting());
+            config.getColour(ColourPicker::checkerboardLight).contrasting() 
+            : colours[rowNumber].contrasting());
     if (rowIsSelected)
     {
         g.fillRoundedRectangle(fillArea.toFloat(), textHeight / 5);
-        g.setColour(colours[rowNumber]);
+        g.setColour((colours[rowNumber].getAlpha() < 0x88) ?     
+            config.getColour(ColourPicker::checkerboardLight)
+            : colours[rowNumber]);
     }
     g.setOpacity(1);
     g.setFont(Font(textHeight));
@@ -105,6 +137,12 @@ void ColourPage::ColourListModel::colourValueChanged
     int colourIndex = colourKeys.indexOf(colourKey);
     if (colourIndex >= 0)
     {
-        colours[colourIndex] = newColour;
+        colours.set(colourIndex, newColour);
+        DBG("ColourPage::" << __func__ << ": Setting color " << colourKey 
+                << " index " << colourIndex << " to " << newColour.toString());
+    }
+    else
+    {
+        DBG("ColourPage::" << __func__ << ": Unknown color key " <<colourKey);
     }
 }

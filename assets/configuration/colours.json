@@ -66,5 +66,10 @@
     "Label outline"               : "",
     "Label background(editing)"   : "",
     "Label text(editing)"         : "",
-    "Label outline(editing)"      : ""
+    "Label outline(editing)"      : "",
+    
+    "Color picker checkerboard(light)"   : "0xffaaaaaa",
+    "Color picker checkerboard(dark)"    : "0xffe0e0e0",
+    "Color picker color outline"         : "",
+    "Color picker focused color outline" : ""
 }

@@ -28,6 +28,7 @@ juce::StringArray SettingsListPage::getButtonTitles()
     using namespace juce;
     StringArray titleList;
     titleList.add(localeText(personalize_homepage));
+    titleList.add(localeText(set_colors));
     if (Password::isPasswordSet())
     {
         titleList.add(localeText(change_password));
@@ -69,6 +70,7 @@ void SettingsListPage::pageButtonClicked(juce::Button * button)
     
     Array<PageComponent::PageType> pageTypes;
     pageTypes.add(PageComponent::PageType::HomeSettings);
+    pageTypes.add(PageComponent::PageType::ColourSettings);
     pageTypes.add(PageComponent::PageType::SetPassword);
     if(Password::isPasswordSet())
     {
@@ -96,7 +98,7 @@ SettingsListPage::SettingsList::SettingsList()
  */
 unsigned int SettingsListPage::SettingsList::getListSize()
 {
-    return Password::isPasswordSet() ? 5 : 4;
+    return Password::isPasswordSet() ? 6 : 5;
 }
 
 /*

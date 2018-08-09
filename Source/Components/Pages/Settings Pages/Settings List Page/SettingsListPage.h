@@ -69,16 +69,16 @@ private:
          */
         void refresh();
     private:
-        static const constexpr float yPaddingFraction = 0.09;
+        static const constexpr float yPaddingFraction = 0.04;
     };
     SettingsList buttonList;
 
     //Number of page buttons to show on the screen at a time
-    static const constexpr int buttonsPerPage = 4;
+    static const constexpr int buttonsPerPage = 5;
 
     //localized text keys;
-    static const constexpr char * advanced_settings = "advanced_settings";
     static const constexpr char * personalize_homepage = "personalize_homepage";
+    static const constexpr char * set_colors = "set_colors";
     static const constexpr char * set_password = "set_password";
     static const constexpr char * change_password = "change_password";
     static const constexpr char * remove_password = "remove_password";

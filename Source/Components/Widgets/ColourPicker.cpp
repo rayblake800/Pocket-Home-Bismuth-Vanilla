@@ -2,6 +2,22 @@
 
 juce::Array<juce::Colour> ColourPicker::savedColours;
 
+const juce::uint32 ColourPicker::sliderColorMasks [4] = 
+{
+    0x00ff0000,
+    0x0000ff00,
+    0x000000ff,
+    0xff000000
+};
+    
+const juce::uint32 ColourPicker::sliderThumbColors [4] =
+{
+  0xffff0000,
+  0xff00ff00,
+  0xff0000ff,
+  0x77777777
+};
+
 ColourPicker::ColourPicker(int numSavedColours, juce::Colour colour):
 Localized("ColourPicker"),
 numSavedColours(numSavedColours),
@@ -13,11 +29,15 @@ colour(colour)
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout(
     {
-        Row(60, { RowItem(&colourPreview) }),
-        Row(10, { RowItem(&rSlider) }),
-        Row(10, { RowItem(&gSlider) }),
-        Row(10, { RowItem(&bSlider) }),
-        Row(10, { RowItem(&aSlider) }),
+        Row(50, 
+        { 
+            RowItem(&colourPreview, 40),
+            RowItem(nullptr, 10) //Empty space to hold color buttons
+        }),
+        Row(10, { RowItem(&colourSliders[0]) }),
+        Row(10, { RowItem(&colourSliders[1]) }),
+        Row(10, { RowItem(&colourSliders[2]) }),
+        Row(10, { RowItem(&colourSliders[3]) }),
 	Row(10,
         {
             RowItem(&colourField),
@@ -32,27 +52,19 @@ colour(colour)
     	addAndMakeVisible(cButton);
 	cButton->addListener(this);
     }
-
-
-    Array<Slider*> sliders = 
-    {
-        &rSlider,
-	&gSlider,
-	&bSlider,
-	&aSlider
-    };
     
-    for(Slider* slider : sliders)
+    for(int i = 0; i < 4; i++)
     {
-        slider->setSliderStyle(Slider::LinearHorizontal);
-        slider->setRange(0,0xff,1);
-	slider->addListener(this);
-	slider->setTextBoxStyle(Slider::NoTextBox, true,0,0);
-    }
-    rSlider.setColour(Slider::thumbColourId,Colours::red);    
-    gSlider.setColour(Slider::thumbColourId,Colours::green);    
-    bSlider.setColour(Slider::thumbColourId,Colours::blue);    
-    aSlider.setColour(Slider::thumbColourId,Colour(0x77777777));    
+        colourSliders[i].setSliderStyle(Slider::LinearHorizontal);
+        colourSliders[i].setRange(0,0xff,1);
+	colourSliders[i].addListener(this);
+	colourSliders[i].setTextBoxStyle(Slider::NoTextBox, true,0,0);
+        colourSliders[i].setColour(Slider::thumbColourId,
+                Colour(sliderThumbColors[i]));   
+        sliderBackgrounds[i].setColourComponent(sliderColorMasks[i]);
+        addAndMakeVisible(sliderBackgrounds[i]);
+        sliderBackgrounds[i].toBack();
+    }  
     setSlidersToColour();
     
     colourField.addListener(this);
@@ -101,10 +113,17 @@ void ColourPicker::setSelectionCallback
  */
 void ColourPicker::setSlidersToColour()
 {
-	rSlider.setValue(colour.getRed());
-	gSlider.setValue(colour.getGreen());
-	bSlider.setValue(colour.getBlue());
-	aSlider.setValue(colour.getAlpha());
+    using namespace juce;
+    for(int i = 0; i < 4; i++)
+    {
+        sliderBackgrounds[i].setColour(colour);
+        uint32 colourValue = colour.getARGB() & sliderColorMasks[i];
+        while(colourValue > 0xff)
+        {
+            colourValue >>= 8;
+        }
+        colourSliders[i].setValue(colourValue);
+    }
 }
 
 /**
@@ -146,11 +165,17 @@ void ColourPicker::updateColourButtons()
 void ColourPicker::sliderValueChanged(juce::Slider* slider)
 {
     using namespace juce;
-    colour = Colour(
-            (uint8_t) rSlider.getValue(),
-	    (uint8_t) gSlider.getValue(),
-            (uint8_t) bSlider.getValue(),
-            (uint8_t) aSlider.getValue());	     
+    uint32 colorValue = 0;
+    for(int i = 0; i < 4; i++)
+    {
+        colorValue += ((uint32) colourSliders[i].getValue() 
+                * (sliderColorMasks[i] & 0x01010101));
+    }
+    colour = Colour(colorValue);
+    for(int i = 0; i < 4; i++)
+    {
+        sliderBackgrounds[i].setColour(colour);
+    }	     
     setEditorText();
     colourPreview.setColour(colour);
 }
@@ -209,16 +234,19 @@ void ColourPicker::buttonClicked(juce::Button* button)
 void ColourPicker::resized()
 {
     using namespace juce;
-    Rectangle<int> bounds = getLocalBounds().reduced(getWidth() / 20);
     int padding = 3;
+    layoutManager.layoutComponents(getLocalBounds());
+    for(int i = 0; i < 4; i++)
+    {
+        sliderBackgrounds[i].setBounds(colourSliders[i].getBounds());
+    }
     if(numSavedColours > 0)
     {
-        int btnHeight = (getHeight() / numSavedColours)
-	       	- padding * (numSavedColours+1);
-        int btnWidth = std::min(getWidth() / 3, btnHeight);
-	bounds.setWidth(bounds.getWidth() - (btnWidth + padding * 2));
-	int left = bounds.getRight() + padding;
-	int top = bounds.getY() + padding;
+        int btnHeight = (colourPreview.getHeight() / numSavedColours)
+	       	- padding;
+        int btnWidth = getWidth() - colourPreview.getWidth() - 2*padding;
+	int left = colourPreview.getRight() + padding;
+	int top = colourPreview.getY() + padding;
 	for(ColourButton* btn : colourButtons)
 	{
             btn->setBounds(left,top,btnWidth,btnHeight);
@@ -226,7 +254,6 @@ void ColourPicker::resized()
 	}
 	
     }
-    layoutManager.layoutComponents(bounds);
 }
 
 ColourPicker::ColourBox::ColourBox(juce::Colour colour, bool drawBorder) : 
@@ -255,19 +282,20 @@ void ColourPicker::ColourBox::paint(juce::Graphics& g)
     {
         float checkSize = bounds.getHeight() / 8;
 	g.fillCheckerBoard(bounds.toFloat(),checkSize,checkSize,
-	        Colour(0x05050505), Colour(0x01010101));
+                findColour(ColourPicker::checkerboardLight),
+                findColour(ColourPicker::checkerboardDark));
     }
     g.setColour(colour);
     g.fillRect(bounds);
     if(drawBorder)
     {
-    	g.setColour(findColour(TextEditor::outlineColourId));
+    	g.setColour(findColour(ColourPicker::outline));
     	g.drawRect(bounds, 1+getWidth()/35);
     }
 }
 
 ColourPicker::ColourButton::ColourButton(juce::Colour colour) 
-: colourBox(colour,false),	
+: colourBox(colour, true),	
 Button("colourButton")
 {
     addAndMakeVisible(colourBox);
@@ -296,7 +324,44 @@ void ColourPicker::ColourButton::paintButton
 {
     using namespace juce;
     g.setColour(findColour(isButtonDown ? 
-			      TextEditor::focusedOutlineColourId
-			    : TextEditor::outlineColourId));
-    g.drawRect(getLocalBounds(), getWidth()/35+1);
+			      ColourPicker::outline
+			    : ColourPicker::focusedOutline));
+    g.drawRect(getLocalBounds(), getWidth()/35 + 2);
 }    
+
+void ColourPicker::SliderBackground::setColourComponent
+(juce::uint32 colourMask)
+{
+    colourComponent = colourMask;
+}
+        
+/*
+ * Updates this component with the current selected colour value.
+ */
+void ColourPicker::SliderBackground::setColour(juce::Colour colour)
+{
+    using namespace juce;
+    uint32 colorARGB = colour.getARGB();
+    minColour = Colour(colorARGB & (~colourComponent));
+    maxColour = Colour(colorARGB | colourComponent);
+    repaint();
+}
+     
+/*
+ * Draws a gradient of all possible slider color values.  Given the
+ * current selected color, this shows what the color would become for 
+ * each slider value.
+ */
+void ColourPicker::SliderBackground::paint(juce::Graphics& g)
+{
+    using namespace juce;
+    float checkSize = getHeight() / 8;
+    g.fillCheckerBoard(getLocalBounds().toFloat(),checkSize,checkSize,
+            findColour(ColourPicker::ColourIds::checkerboardLight),
+            findColour(ColourPicker::ColourIds::checkerboardDark));
+    g.setGradientFill(ColourGradient::horizontal(minColour, 0,
+            maxColour, getWidth()));
+    g.fillRect(getLocalBounds());
+    g.setColour(findColour(ColourPicker::ColourIds::outline));
+    g.drawRect(getLocalBounds(), checkSize);
+}

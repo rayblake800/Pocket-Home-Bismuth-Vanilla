@@ -27,6 +27,18 @@ public:
     (int numSavedColours = 5, juce::Colour colour = juce::Colours::white);
 
     virtual ~ColourPicker() { }
+    
+    enum ColourIds
+      {
+        //Light area of the checkerboard pattern drawn behind color previews.
+        checkerboardLight = 0x1900600,
+        //Dark area of the checkerboard pattern drawn behind color previews.
+        checkerboardDark  = 0x1900601,
+        //Outline color for slider backgrounds and color previews.
+        outline           = 0x1900602,
+        //Outline color used on saved color buttons when held down.
+        focusedOutline    = 0x1900603
+      };
 
     /**
      * Gets the current selected colour.
@@ -51,7 +63,7 @@ public:
      */
     void setSelectionCallback(std::function<void(juce::Colour)> callback);
 
-protected:
+private:
     /**
      * Apply the current colour selection to the sliders.
      */
@@ -141,8 +153,9 @@ protected:
 
 	ColourBox colourBox;
     };
-private:
+    
 
+    //Current color selection.
     juce::Colour colour;
 
     //Handles child component layout
@@ -162,11 +175,65 @@ private:
     std::function<void(juce::Colour)> selectionCallback;
 
     //Red, green, blue, and alpha color component sliders.
-    juce::Slider rSlider;
-    juce::Slider gSlider;
-    juce::Slider bSlider;
-    juce::Slider aSlider;
-
+    juce::Slider colourSliders [4];
+    
+    /**
+     * Bitmasks for selecting each slider's color component.  For each slider at
+     * index i, (color & sliderColors[i]) selects that slider's color component
+     * from the current color.
+     */
+    static const juce::uint32 sliderColorMasks [4];
+    
+    /**
+     * Defines the thumb color of each color slider
+     */
+    static const juce::uint32 sliderThumbColors [4];
+    
+    /**
+     * Draws a gradient showing all slider values behind a color slider.
+     */
+    class SliderBackground : public juce::Component
+    {
+    public:
+        SliderBackground() { }
+        
+        virtual ~SliderBackground() { }
+        
+        /**
+         * Sets the colour component used to draw this slider background.
+         * 
+         * @param colourMask  The sliderColorMask of this component's
+         *                         slider.
+         */
+        void setColourComponent(juce::uint32 colourMask);
+        
+        /**
+         * Updates this component with the current selected colour value.
+         * 
+         * @param colour  The colour selected by the ColourPicker holding this
+         *                component.
+         */
+        void setColour(juce::Colour colour);
+        
+    private:     
+        /**
+         * Draws a gradient of all possible slider color values.  Given the
+         * current selected color, this shows what the color would become for 
+         * each slider value.
+         * 
+         * @param g  The Juce graphics object used for drawing.
+         */
+        void paint(juce::Graphics& g) override;
+        
+         juce::uint32 colourComponent = 0;
+         //darkest color in the component's gradient
+         juce::Colour minColour;
+         //brightest color in the component's gradient
+         juce::Colour maxColour;
+    };
+    
+    SliderBackground sliderBackgrounds [4];
+    
     //Holds the colour value as an eight digit hex number string.
     juce::TextEditor colourField;
 

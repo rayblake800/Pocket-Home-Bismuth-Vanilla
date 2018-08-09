@@ -48,12 +48,12 @@
         "check_term_cmd": "Is the terminal launch command set correctly?"     
     },
     "SettingsListPage": {
-        "advanced_settings": "Advanced Settings",
+        "set_colors": "Set colors",
+        "personalize_homepage": "Personalize your homepage",
         "set_password": "Set your password",
         "change_password": "Change your password",
         "remove_password": "Remove your password",
-        "personalize_homepage": "Personalize your homepage",
-        "date_and_time": "Date and Time",
+        "date_and_time": "Date and time",
         "input_settings": "Input settings"
     },
     "WifiSettingsPage": {

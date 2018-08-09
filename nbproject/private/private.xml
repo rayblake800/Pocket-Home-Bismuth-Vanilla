@@ -15,16 +15,15 @@
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/XWindowInterface.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/ProcessUtils.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Configurable/ConfigurableComponent.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Tests/test_XWindowInterface.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Configurable/ConfigurableImageButton.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Power%20Page/PowerPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/FreeDesktop/XDGDirectories.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/Utils.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Configurable/ConfigurableComponent.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/docs/Changelog.txt</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/docs/TODO.txt</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/FreeDesktop/Desktop%20Entries/DesktopEntryLoader.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/XWindowInterface.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/PocketHomeApplication.cpp</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/ComponentConfigFile.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Power%20Page/PowerPage.h</file>
         </group>
     </open-files>
 </project-private>

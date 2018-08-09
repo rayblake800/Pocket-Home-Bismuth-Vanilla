@@ -368,7 +368,15 @@ const std::map<int, juce::String> ColourConfigFile::colourIdKeys =
     {ColourIds::label::outline,                  "Label outline"},
     {ColourIds::label::backgroundWhenEditing,    "Label background(editing)"},
     {ColourIds::label::textWhenEditing,          "Label text(editing)"},
-    {ColourIds::label::outlineWhenEditing,       "Label outline(editing)"}
+    {ColourIds::label::outlineWhenEditing,       "Label outline(editing)"},
+    {ColourIds::colourPicker::checkerboardLight,
+            "Color picker checkerboard(light)"},
+    {ColourIds::colourPicker::checkerboardDark,
+            "Color picker checkerboard(dark)"},
+    {ColourIds::colourPicker::outline,           
+            "Color picker color outline"},
+    {ColourIds::colourPicker::focusedOutline, 
+            "Color picker focused color outline"}
 };
 
 const std::map<juce::String, int> ColourConfigFile::colourIds
@@ -429,7 +437,15 @@ const std::map<juce::String, int> ColourConfigFile::colourIds
     {"Label outline",               ColourIds::label::outline},
     {"Label background(editing)",   ColourIds::label::backgroundWhenEditing},
     {"Label text(editing)",         ColourIds::label::textWhenEditing},
-    {"Label outline(editing)",      ColourIds::label::outlineWhenEditing}          
+    {"Label outline(editing)",      ColourIds::label::outlineWhenEditing},   
+    
+    {"Color picker checkerboard(light)",
+            ColourIds::colourPicker::checkerboardLight},
+    { "Color picker checkerboard(dark)",
+            ColourIds::colourPicker::checkerboardDark},
+    {"Color picker color outline", ColourIds::colourPicker::outline},
+    {"Color picker focused color outline",
+            ColourIds::colourPicker::focusedOutline}
 };
 
 //======================= ColourId->UICategory Map =============================
@@ -1000,6 +1016,14 @@ ColourConfigFile::idCategories =
     {
         ColourIds::treeView::selectedItemBackground,
         ColourConfigFile::UICategory::highlightedTextField
+    },
+    {
+        ColourIds::colourPicker::outline,
+        ColourConfigFile::UICategory::outline
+    },
+    {
+        ColourIds::colourPicker::focusedOutline,
+        ColourConfigFile::UICategory::focusedOutline        
     }
 };
 
