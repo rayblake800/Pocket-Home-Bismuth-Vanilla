@@ -192,7 +192,8 @@ void IconThread::IconResource::run()
 {
     using namespace juce;
     for(IconResource::QueuedJob activeJob = getQueuedJob();
-        !threadShouldExit() && activeJob.icon.isNotEmpty();
+        !threadShouldExit() && (activeJob.icon.isNotEmpty() 
+                || !queuedJobs.isEmpty());
         activeJob = getQueuedJob())
     {
         String icon = getIconPath(activeJob);
