@@ -135,7 +135,7 @@ void ColourConfigFile::Listener::configValueChanged(juce::String propertyKey)
     {
         colourString = config.getColourString(propertyKey);
     }
-    catch(std::out_of_range e)
+    catch(ConfigFile::BadKeyException e)
     {
         nonColorValueChanged(propertyKey);
         return;
@@ -281,26 +281,24 @@ juce::String ColourConfigFile::getCategoryKey(UICategory category)
 
 ColourConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
 {
-    using namespace juce;
-    var jsonConfig = AssetFiles::loadJSONAsset(String(configPath)
-            + filenameConst, true);
-    var defaultConfig;
-    readDataFromJson(jsonConfig, defaultConfig);
-    writeChanges();
+    loadJSONData();
 }
 
-std::vector<ConfigFile::DataKey> ColourConfigFile::ConfigJson
-::getDataKeys() const
+const std::vector<ConfigFile::DataKey>&  
+ColourConfigFile::ConfigJson::getDataKeys() const
 {
     using namespace juce;
-    std::vector<DataKey> keys = { };
-    for(const String& key : uiCategoryKeys)
+    static std::vector<DataKey> keys;
+    if(keys.empty())
     {
-        keys.push_back({key,stringType});
-    }
-    for (auto it = colourIds.begin(); it != colourIds.end(); it++)
-    {
-        keys.push_back({it->first, stringType});
+        for(const String& key : uiCategoryKeys)
+        {
+            keys.push_back({key,stringType});
+        }
+        for (auto it = colourIds.begin(); it != colourIds.end(); it++)
+        {
+            keys.push_back({it->first, stringType});
+        }
     }
     return keys;
 }

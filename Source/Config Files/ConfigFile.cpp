@@ -1,45 +1,16 @@
 #include "AssetFiles.h"
 #include "ConfigFile.h"
 
-/*
- * @return a std::map of String keys mapped to integers, so getConfigValue()
- *          and setConfigValue() can use int as a template type. 
- */
-template<> std::map<juce::String, int>& ConfigFile::getMapReference<int>()
-{
-    return intValues;
-}
 
 /*
- * @return a std::map of String keys mapped to strings, so getConfigValue()
- *          and setConfigValue() can use String as a template type. 
+ * This constructor should only be called when constructing ConfigFile
+ * subclasses.
  */
-template<> std::map<juce::String, juce::String>& 
-ConfigFile::getMapReference<juce::String>()
-{
-    return stringValues;
-}
+ConfigFile::ConfigFile(juce::String configFilename) :
+filename(configFilename),
+configJson(configPath + filename, defaultAssetPath + filename),
+defaultJson(defaultAssetPath + filename) { }
 
-/*
- * @return a std::map of String keys mapped to booleans, so getConfigValue()
- *          and setConfigValue() can use bool as a template type. 
- */
-template<> std::map<juce::String, bool>& ConfigFile::getMapReference<bool>()
-{
-    return boolValues;
-}
-
-/*
- * @return a std::map of String keys mapped to doubles, so getConfigValue()
- *          and setConfigValue() can use double as a template type. 
- */
-template<> std::map<juce::String, double>& ConfigFile::getMapReference<double>()
-{
-    return doubleValues;
-}
-
-ConfigFile::ConfigFile(juce::String configFilename) : Localized("ConfigFile"),
-filename(configFilename) { }
 
 /*
  * Writes any pending changes to the file before destruction.
@@ -49,13 +20,6 @@ ConfigFile::~ConfigFile()
     writeChanges();
 }
 
-/*
- * @return true iff this ConfigFile and rhs have the same filename.
- */
-bool ConfigFile::operator==(const ConfigFile& rhs) const
-{
-    return filename == rhs.filename;
-}
 
 /*
  * Listeners safely remove themselves from all tracked ConfigFiles when
@@ -132,9 +96,12 @@ void ConfigFile::notifyListeners(juce::String key)
 {
     using namespace juce;
     const ScopedLock lock(listenerLock);
-    //since notifications are separated by key, and no variation exists between
-    //key notifications, there's no need to make sure the queue is starting out
-    //empty.
+    
+    /* In other Listener implementations, it's necessary to wait until the queue
+     * is empty, to prevent this notification event from interfering with
+     * others. Since these notifications are separated by key, that's not
+     * necessary here.
+     */ 
     notificationQueue[key].addArray(keyListeners[key]);
     while(!notificationQueue[key].isEmpty())
     {
@@ -146,124 +113,174 @@ void ConfigFile::notifyListeners(juce::String key)
     }
 }
 
-//################################# File IO ####################################
-
 /*
- * Read in this object's data from a json config object
+ * Loads all initial configuration data from the JSON config file. This 
+ * checks for all expected data keys, and replaces any missing or invalid
+ * values with ones from the default config file. ConfigFile subclasses
+ * should call this once, after they load any custom object or array data.
  */
-void ConfigFile::readDataFromJson(juce::var& config, juce::var& defaultConfig)
+void ConfigFile::loadJSONData()
 {
     using namespace juce;
-    std::vector<DataKey> dataKeys = getDataKeys();
+    const std::vector<DataKey>& dataKeys = getDataKeys();
     for (const DataKey& key : dataKeys)
     {
-        switch (key.dataType)
+        try
+        {
+            switch (key.dataType)
+            {
+                case stringType:
+                    initProperty<String>(key.keyString);
+                    break;
+                case intType:
+                    initProperty<int>(key.keyString);
+                    break;
+                case boolType:
+                    initProperty<bool>(key.keyString);
+                    break;
+                case doubleType:
+                    initProperty<double>(key.keyString);
+                    break;
+                default:
+                    DBG("ConfigFile::" << __func__ 
+                            << ": Unexpected type for key \"" << key.keyString
+                            << "\n in file " << filename);
+            }
+        }
+        catch(JSONFile::FileException e)
+        {
+            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
+        catch(JSONFile::TypeException e)
+        {
+            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
+    }
+    writeChanges();
+}
+
+/*
+ * Sets a configuration data value back to its default setting.  If this
+ * changes the value, listeners will be notified and changes will be saved.
+ */
+void ConfigFile::restoreDefaultValue(juce::String key)
+{
+    using namespace juce;
+    //Check key validity, find expected data type
+    SupportedDataType valueType; 
+    const std::vector<DataKey>& keys = getDataKeys();
+    bool keyFound = false;
+    for(const DataKey& dataKey : keys)
+    {
+        if(dataKey.keyString == key)
+        {
+            keyFound = true;
+            valueType = dataKey.dataType;
+            break;
+        }
+    }
+    if(!keyFound)
+    {
+        DBG("ConfigFile::" << __func__ << ": Key \"" << key 
+                << "\" is not expected in " << filename);
+        throw BadKeyException(key);
+    }
+    try
+    {
+        switch (valueType)
         {
             case stringType:
-                initMapProperty<String>(key.keyString, getProperty
-                                        (config, defaultConfig, key.keyString)
-                                        .toString());
-                break;
-
+                setConfigValue<String>(key,
+                        defaultJson.getProperty<String>(key));
+                return;
             case intType:
-                initMapProperty<int>(key.keyString,
-                                     getProperty(config, defaultConfig,
-                                     key.keyString));
-                break;
-
+                setConfigValue<int>(key,
+                        defaultJson.getProperty<int>(key));
+                return;
             case boolType:
-                initMapProperty<bool>(key.keyString,
-                                      getProperty(config, defaultConfig,
-                                      key.keyString));
-                break;
+                setConfigValue<bool>(key,
+                        defaultJson.getProperty<bool>(key));
+                return;
             case doubleType:
-                initMapProperty<double>(key.keyString,
-                                      getProperty(config, defaultConfig,
-                                      key.keyString));
-
+                setConfigValue<double>(key,
+                        defaultJson.getProperty<double>(key));
         }
+    }
+    catch(JSONFile::FileException e)
+    {
+        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+        alertWindows.showPlaceholderError(e.getErrorMessage());
+    }
+    catch(JSONFile::TypeException e)
+    {
+        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+        alertWindows.showPlaceholderError(e.getErrorMessage());
     }
 }
 
 /*
- * Copy all config data to a json object
- */
-void ConfigFile::copyDataToJson(juce::DynamicObject::Ptr jsonObj)
-{
-    using namespace juce;
-    std::vector<DataKey> dataKeys = getDataKeys();
-    for (const DataKey& key : dataKeys)
-    {
-        switch (key.dataType)
-        {
-            case stringType:
-                jsonObj->setProperty(key.keyString,
-                        getMapReference<String>()[key.keyString]);
-                break;
-
-            case intType:
-                jsonObj->setProperty(key.keyString,
-                        getMapReference<int>()[key.keyString]);
-                break;
-
-            case boolType:
-                jsonObj->setProperty(key.keyString,
-                        getMapReference<bool>()[key.keyString]);
-
-                break;
-            case doubleType:
-                jsonObj->setProperty(key.keyString,
-                        getMapReference<double>()[key.keyString]);
-        }
-    }
-}
-
-/*
- * Checks if a property exists in a config data object loaded from a json
+ * Restores all values in the configuration file to their defaults. All 
+ * updated values will notify their Listeners and be written to the JSON
  * file.
  */
-bool ConfigFile::propertyExists(juce::var& config, juce::String propertyKey)
+void ConfigFile::restoreDefaultValues()
 {
     using namespace juce;
-    var property = config.getProperty(propertyKey, var());
-    return !property.isVoid();
-}
-
-/*
- * Gets a property from json configuration data, or from default
- * configuration data if necessary
- */
-juce::var ConfigFile::getProperty
-(juce::var& config, juce::var& defaultConfig, juce::String key)
-{
-    using namespace juce;
-    if (propertyExists(config, key))
+    const std::vector<DataKey>& keys = getDataKeys();
+    for(const DataKey& key : keys)
     {
-        return config.getProperty(key, var());
-    }
-    else
-    {
-        DBG("ConfigFile::" << __func__ << ": key " << key
-                << " doesn't exist in " << filename);
-        if (defaultConfig.isVoid())
+        try
         {
-            defaultConfig = AssetFiles::loadJSONAsset
-                    ("configuration/" + filename, false);
+            switch(key.dataType)
+            {
+                case stringType:
+                    setConfigValue<String>(key.keyString,
+                            defaultJson.getProperty<String>(key.keyString));
+                    break;
+                case intType:
+                    setConfigValue<int>(key.keyString,
+                            defaultJson.getProperty<int>(key.keyString));
+                    break;
+                case boolType:
+                    setConfigValue<bool>(key.keyString,
+                            defaultJson.getProperty<bool>(key.keyString));
+                    break;
+                case doubleType:
+                    setConfigValue<double>(key.keyString,
+                            defaultJson.getProperty<double>(key.keyString));
+                    break;
+            }
         }
-        fileChangesPending = true;
-
-        return defaultConfig.getProperty(key, var());
+        catch(JSONFile::FileException e)
+        {
+            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
+        catch(JSONFile::TypeException e)
+        {
+            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
     }
+    writeChanges();
 }
-
+ 
 /*
- * Marks this ConfigFile as containing changes that need to be written to
- * the underlying .json file.
+ * Checks if a key string is valid for this ConfigFile.
  */
-void ConfigFile::markPendingChanges()
+bool ConfigFile::isValidKey(const juce::String& key) const
 {
-
-    fileChangesPending = true;
+    const std::vector<DataKey>& dataKeys = getDataKeys();
+    for(const DataKey& dataKey : dataKeys)
+    {
+        if(dataKey.keyString == key)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 /*
@@ -273,32 +290,19 @@ void ConfigFile::markPendingChanges()
 void ConfigFile::writeChanges()
 {
     using namespace juce;
-    if (!fileChangesPending)
+    writeDataToJSON();
+    try
     {
-        return;
+        configJson.writeChanges();
     }
-    DynamicObject::Ptr jsonBuilder = new DynamicObject();
-    copyDataToJson(jsonBuilder.get());
-
-    //convert to JSON string, write to config.json
-    String jsonText = JSON::toString(jsonBuilder.get());
-    File configFile = File(String(configPath) + filename);
-    if (!configFile.exists())
+    catch(JSONFile::FileException e)
     {
-        configFile.create();
+        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+        alertWindows.showPlaceholderError(e.getErrorMessage());
     }
-    if (!configFile.replaceWithText(jsonText))
+    catch(JSONFile::TypeException e)
     {
-        String message = localeText(failed_saving_to_FILE)
-                + String(configPath) + filename + "\n"
-                + localeText(check_permissions);
-        AlertWindow::showMessageBox(
-                AlertWindow::AlertIconType::WarningIcon,
-                localeText(save_error),
-                message);
-    }
-    else
-    {
-        fileChangesPending = false;
+        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+        alertWindows.showPlaceholderError(e.getErrorMessage());
     }
 }

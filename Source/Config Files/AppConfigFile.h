@@ -222,33 +222,22 @@ private:
         int getFolderIndex(AppFolder toFind);
 
     private:
-        /**
-         * Read in this object's data from a json config object
-         * 
-         * @param config         json data from ~/.pocket-home/filename.json.
-         * 
-         * @param defaultConfig  Default json config data from the filename.json
-         *                        in assets. If this value is void and default data 
-         *                        is needed, this method will open it as the 
-         *                        appropriate default config file from assets.
-         */
-        void readDataFromJson
-        (juce::var& config, juce::var& defaultConfig) override final;
 
         /**
-         * Copy all config data to a json object
-         * 
-         * @param jsonObj
+         * Copy all shortcuts and folders back to the JSON configuration file.
          */
-        void copyDataToJson(juce::DynamicObject::Ptr jsonObj) override final;
+        void writeDataToJSON() override final;
 
         /**
-         * @return the empty list, as AppConfigFile doesn't track any DataKey
-         * variables, only its own custom data structures.
+         * Gets all parameters with basic data types tracked by this ConfigFile.
+         * 
+         * @return  The empty list, as AppConfigFile doesn't track any DataKey
+         *          variables, only its own custom data structures.
          */
-        std::vector<DataKey> getDataKeys() const
+        const std::vector<ConfigFile::DataKey>& getDataKeys() const
         {
-            return {};
+            static const std::vector<ConfigFile::DataKey> keys = {};
+            return keys;
         }
 
         //Stores application shortcuts

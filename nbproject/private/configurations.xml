@@ -5706,8 +5706,12 @@
           <in>ColourConfigFile.h</in>
           <in>ComponentConfigFile.cpp</in>
           <in>ComponentConfigFile.h</in>
+          <in>ConfigAlertWindows.cpp</in>
+          <in>ConfigAlertWindows.h</in>
           <in>ConfigFile.cpp</in>
           <in>ConfigFile.h</in>
+          <in>JSONFile.cpp</in>
+          <in>JSONFile.h</in>
           <in>MainConfigFile.cpp</in>
           <in>MainConfigFile.h</in>
         </df>
@@ -5811,6 +5815,7 @@
         <in>PocketHomeApplication.h</in>
       </df>
       <df name="Tests">
+        <in>test_ConfigFile.cpp</in>
         <in>test_LaunchedApp.cpp</in>
         <in>test_XWindowInterface.cpp</in>
       </df>

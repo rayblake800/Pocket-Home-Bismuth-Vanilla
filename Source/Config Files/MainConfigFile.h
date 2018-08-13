@@ -98,7 +98,7 @@ private:
          * @return all keys tracked by this file, along with their corresponding
          *          data types.
          */
-        std::vector<DataKey> getDataKeys() const;
+        const std::vector<DataKey>& getDataKeys() const;
     };
 
     //filename to use for reading/storing MainConfigFile data

@@ -46,6 +46,7 @@
     "ComboBox text"               : "",
     "ComboBox background"         : "",
     "ComboBox outline"            : "0xffb88e47",
+    "ComboBox focused outline"    : "",
     "ComboBox button"             : "0xffbc3662",
     "ComboBox arrow"              : "",
 

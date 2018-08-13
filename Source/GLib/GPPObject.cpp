@@ -391,7 +391,7 @@ void GPPObject::connectSignalHandler(SignalHandler* handler,
         GObject* object = getGObject();
         if(object != nullptr)
         {
-            if(signalHandlers.contains(handler) && callback != nullptr)
+            if(isSignalHandlerValid(handler) && callback != nullptr)
             {
                 gulong handlerID = g_signal_connect(object,
                         signalName, 
@@ -468,11 +468,21 @@ void GPPObject::addNotifySignalHandler(GPPObject::SignalHandler* signalHandler,
         const char* propertyName)
 {
     using namespace juce;
-    jassert(propertyName != nullptr && isSignalHandlerValid(signalHandler));
-    String signal("notify::");
-    signal += propertyName;
-    const char * cSignal = signal.toRawUTF8();
-    connectSignalHandler(signalHandler, cSignal, G_CALLBACK(notifyCallback));
+    jassert(propertyName != nullptr);
+    if(isSignalHandlerValid(signalHandler))
+    {
+        String signal("notify::");
+        signal += propertyName;
+        const char * cSignal = signal.toRawUTF8();
+        connectSignalHandler(signalHandler, cSignal,
+                G_CALLBACK(notifyCallback));
+    }
+    else
+    {
+        DBG("GPPObject::" << __func__
+                << ": Signal handler no longer exists, will not be added to "
+                << "notify::" << propertyName);
+    }
 }
 
 /*

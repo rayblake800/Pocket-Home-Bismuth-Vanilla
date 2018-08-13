@@ -31,12 +31,7 @@ void MainConfigFile::addListener(ConfigFile::Listener* listener,
 MainConfigFile::MainJson::MainJson() :
 ConfigFile(filenameConst)
 {
-    using namespace juce;
-    var jsonConfig = AssetFiles::loadJSONAsset
-            (String(configPath) + filenameConst, true);
-    var defaultConfig;
-    readDataFromJson(jsonConfig, defaultConfig);
-    writeChanges();
+    loadJSONData();
 }
 
 //menu types
@@ -63,9 +58,11 @@ const juce::String MainConfigFile::showCursorKey = "cursor";
 const juce::String MainConfigFile::showClockKey = "show clock";
 const juce::String MainConfigFile::use24HrModeKey = "use 24h mode";
 
-std::vector<ConfigFile::DataKey> MainConfigFile::MainJson::getDataKeys() const
+const std::vector<ConfigFile::DataKey>& 
+MainConfigFile::MainJson::getDataKeys() const
 {
-    return {
+    static const std::vector<DataKey> keys =
+    {
         {maxRowsKey, intType},
         {maxColumnsKey, intType},
         {backgroundKey, stringType},
@@ -76,6 +73,8 @@ std::vector<ConfigFile::DataKey> MainConfigFile::MainJson::getDataKeys() const
         {wifiInterfaceKey, stringType},
         {showCursorKey, boolType},
         {showClockKey, boolType},
-        {use24HrModeKey, boolType}};
+        {use24HrModeKey, boolType}
+    };
+    return keys;
 }
 

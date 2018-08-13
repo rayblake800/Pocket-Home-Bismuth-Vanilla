@@ -10,16 +10,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Tests/test_ConfigFile.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/JSONFile.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/JSONFile.h</file>
             <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/ColourConfigFile.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Pages/Settings%20List%20Page/SettingsListPage.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/ColourPicker.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Pages/Settings%20List%20Page/SettingsListPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/ColourIds.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/assets/configuration/colours.json</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/ColourConfigFile.h</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Widgets/ColourPicker.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Pages/UI%20Page/ColourPage.cpp</file>
-            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Components/Pages/Settings%20Pages/UI%20Page/ColourPage.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/ConfigFile.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/ComponentConfigFile.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Util/AssetFiles.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/AppConfigFile.cpp</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Source/Config%20Files/ComponentConfigFile.h</file>
+            <file>file:/home/anthony/Workspace/C++/PocketCHIP-pocket-home/Tests/test_LaunchedApp.cpp</file>
         </group>
     </open-files>
 </project-private>

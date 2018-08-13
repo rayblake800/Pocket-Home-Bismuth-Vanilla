@@ -207,13 +207,12 @@ juce::Array<AppConfigFile::AppItem> AppConfigFile::AppJson::getFavorites()
 }
 
 /**
- * Add a new app to the list of pinned favorite apps in the config file
+ * Add a new app to the list of pinned favorite apps in the config file.
  */
 void AppConfigFile::AppJson::addFavoriteApp
 (AppItem newApp, int index, bool writeChangesNow)
 {
     favoriteApps.insert(index, newApp);
-    markPendingChanges();
     if (writeChangesNow)
     {
         writeChanges();
@@ -221,14 +220,13 @@ void AppConfigFile::AppJson::addFavoriteApp
 }
 
 /**
- * Remove an app from the list of favorite applications
+ * Remove an app from the list of favorite applications.
  */
 void AppConfigFile::AppJson::removeFavoriteApp(int index, bool writeChangesNow)
 {
     if (index >= 0 && index < favoriteApps.size())
     {
         favoriteApps.remove(index);
-        markPendingChanges();
         if (writeChangesNow)
         {
             writeChanges();
@@ -259,7 +257,6 @@ void AppConfigFile::AppJson::addAppFolder
 (AppFolder newFolder, int index, bool writeChangesNow)
 {
     categoryFolders.insert(index, newFolder);
-    markPendingChanges();
     if (writeChangesNow)
     {
         writeChanges();
@@ -273,7 +270,6 @@ void AppConfigFile::AppJson::removeAppFolder(int index, bool writeChangesNow)
 {
     int size = categoryFolders.size();
     categoryFolders.remove(index);
-    markPendingChanges();
     if (writeChangesNow)
     {
         writeChanges();
@@ -291,63 +287,47 @@ int AppConfigFile::AppJson::getFolderIndex(AppFolder toFind)
 AppConfigFile::AppJson::AppJson() : ConfigFile(filenameConst)
 {
     using namespace juce;
-    var jsonConfig = AssetFiles::loadJSONAsset
-            (String(configPath) + filenameConst, true);
-    var defaultConfig = var();
-    readDataFromJson(jsonConfig, defaultConfig);
-    writeChanges();
-}
-
-
-/**
- * Read in this object's data from a json config object
- */
-void AppConfigFile::AppJson::readDataFromJson
-(juce::var& config, juce::var& defaultConfig)
-{
-    using namespace juce;
-    ConfigFile::readDataFromJson(config, defaultConfig);
     //load favorites
-    var favoriteList = getProperty(config, defaultConfig, favoritesKey);
-    if (favoriteList.isArray())
+    DBG("Loading AppConfigFile:");
+    Array<var> favoriteList = initProperty<Array<var>>(favoritesKey);
+    DBG("AppConfigFile::" << __func__ << ": Read " << favoriteList.size()
+            << " favorites");
+    for(const var& app : favoriteList)
     {
-        for (const var& app : *favoriteList.getArray())
+        AppItem fave = AppItem(app);
+        if (!favoriteApps.contains(fave))
         {
-            AppItem fave = AppItem(app);
-            if (!favoriteApps.contains(fave))
-            {
-                favoriteApps.add(fave);
-            }
+            favoriteApps.add(fave);
         }
     }
     //load categories
-    var categoryList = getProperty(config, defaultConfig, foldersKey);
-    if (categoryList.isArray())
+    Array<var> categoryList = initProperty<Array<var>>(foldersKey);
+    DBG("AppConfigFile::" << __func__ << ": Read " << categoryList.size()
+            << " categories");
+    for (const var& folder : categoryList)
     {
-        for (const var& folder : *categoryList.getArray())
+        AppFolder menuFolder = AppFolder(folder);
+        if (!categoryFolders.contains(menuFolder))
         {
-            AppFolder menuFolder = AppFolder(folder);
-            if (!categoryFolders.contains(menuFolder))
-            {
-                categoryFolders.add(menuFolder);
-            }
+            categoryFolders.add(menuFolder);
         }
     }
+    loadJSONData();   
 }
 
 /**
  * Copy all config data to a json object.
  */
-void AppConfigFile::AppJson::copyDataToJson(juce::DynamicObject::Ptr jsonObj)
+void AppConfigFile::AppJson::writeDataToJSON()
 {
     using namespace juce;
-    ConfigFile::copyDataToJson(jsonObj);
     //set favorites
     Array<var> favoriteArray;
     for (int i = 0; i < favoriteApps.size(); i++)
     {
         favoriteArray.add(var(favoriteApps[i].getDynamicObject()));
     }
+    updateProperty<Array<var>>(favoritesKey, favoriteArray);
 
     //set folders
     Array<var> categoryArray;
@@ -355,6 +335,5 @@ void AppConfigFile::AppJson::copyDataToJson(juce::DynamicObject::Ptr jsonObj)
     {
         categoryArray.add(var(categoryFolders[i].getDynamicObject()));
     }
-    jsonObj->setProperty(favoritesKey, favoriteArray);
-    jsonObj->setProperty(foldersKey, categoryArray);
+    updateProperty<Array<var>>(foldersKey, categoryArray);
 }

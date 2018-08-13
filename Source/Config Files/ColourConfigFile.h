@@ -241,7 +241,8 @@ private:
          * @return the list of key Strings for each basic data value tracked in 
          * colours.json
          */
-        virtual std::vector<DataKey> getDataKeys() const override;
+        virtual const std::vector<ConfigFile::DataKey>& getDataKeys()
+        const final override;
     };
     
     /**

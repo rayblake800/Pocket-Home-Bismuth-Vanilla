@@ -1,32 +1,44 @@
 #pragma once
 #include <map>
 #include "ResourceManager.h"
-#include "Localized.h"
+#include "JSONFile.h"
 #include "JuceHeader.h"
+#include "ConfigAlertWindows.h"
 
 /**
  * @file ConfigFile.h
  * 
- * @brief Reads and writes data from a json configuration file. 
+ * @brief Reads and writes data from a JSON configuration file. 
  * 
- * ConfigFile provides an abstract basis for ResourceManager sharedResources that
- * access .json file data.  Each ConfigFile should provide access to a set of 
- * key Strings for accessing its specific data.  A default version of each 
- * ConfigFile's .json resource should be placed in the configuration 
+ * ConfigFile provides an abstract basis for ResourceManager sharedResources 
+ * that access JSON file data.  Each ConfigFile should provide access to a set 
+ * of key Strings for accessing its specific data.  A default version of each 
+ * ConfigFile's .json resource file should be placed in the configuration 
  * subdirectory of the asset folder.
  *
- * Along with reading and writing data, ConfigFile objects allow Configurable
+ * Along with reading and writing data, ConfigFile objects allow listener
  * objects to register to receive notification whenever particular data keys
  * are changed.
  * 
  * ConfigFile reads from each json file only once per program instance, so any 
- * external changes to the file that occur after that will be ignored and 
- * overwritten.  To reduce file IO and prevent concurrent file modification,
- * only one ConfigFile object should exist for each json configuration file.
+ * external changes to the file that occur while the program is running will
+ * most likely be ignored and may be overwritten.
  */
 
-class ConfigFile : public ResourceManager::SharedResource, private Localized
+class ConfigFile : public ResourceManager::SharedResource
 {
+protected:
+    /**
+     * This constructor should only be called when constructing ConfigFile
+     * subclasses.
+     * 
+     * @param configFilename  The name of a JSON file to read or create in
+     *                        the config file directory. There should be a file
+     *                        with the same name in the asset folder filled with
+     *                        default values.
+     */
+    ConfigFile(juce::String configFilename);
+
 public:
     /**
      * Writes any pending changes to the file before destruction.
@@ -36,71 +48,100 @@ public:
     /**
      * Gets one of the values stored in the json configuration file.
      * 
-     * @tparam T   The value data type. This can be int, String, or bool.
-     * 
      * @param key  The key string that maps to the desired value.
      * 
-     * @throws  std::out_of_range if key does not map to a value of type T
-     *           in this config file
+     * @tparam T   The value's data type.
      * 
-     * @return  the value read from the config file.
+     * @return  The value read from the config file.
+     * 
+     * @throws BadKeyException           If the key parameter was not a valid 
+     *                                   key string for this ConfigFile.
+     * 
+     * @throws JSONFile::TypeException   If the key does not map to a value of 
+     *                                   type T in this config file.
      */
     template<typename T > T getConfigValue(juce::String key)
-    {
-        std::map<juce::String, T>& fileDataMap = getMapReference<T>();
+    {      
+        using namespace juce;
+        if(!isValidKey(key))
+        {
+            throw BadKeyException(key);
+        }
         try
         {
-            return fileDataMap.at(key);
+            return configJson.getProperty<T>(key);
         }
-        catch (std::out_of_range e)
+        catch(JSONFile::TypeException e)
         {
-            DBG("ConfigFile::" << __func__ << ": key \"" << key
-                    << "\" is not value of this type stored in " << filename);
+            DBG("ConfigFile::" << __func__ 
+                    << ": Failed to load key \"" 
+                    << e.getPropertyKey()
+                    <<"\" , expected type:" << e.getExpectedType()
+                    <<", actual type: "  << e.getFoundType()
+                    << ", error = " << e.getErrorMessage());
             throw e;
         }
+        catch (JSONFile::FileException e)
+        {
+            //Failed to access .json file
+            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
+        return T();
     }
 
     /**
-     * Sets one of this ConfigFile's values, writing it to the config 
-     * file if the value has changed.  
+     * Sets one of this ConfigFile's values, notifying listeners and writing to
+     * the JSON file if the value is changed.
      * 
      * @param key        The key string that maps to the value being updated.
      * 
      * @param newValue   The new value to save to the file.
      * 
-     * @tparam T         The value data type. This can be int, String, or bool.
+     * @tparam T         The value data type.
      * 
-     * @throws           std::out_of_range if key does not map to a value of 
-     *                    type T in this config file
+     * 
+     * @throws BadKeyException           If the key parameter was not a valid 
+     *                                   key string for this ConfigFile.
      */
     template<typename T>
     void setConfigValue(juce::String key, T newValue)
     {
-        std::map<juce::String, T>& fileDataMap = getMapReference<T>();
-        try
+        using namespace juce;
+        if(!isValidKey(key))
         {
-            if (fileDataMap.at(key) != newValue)
-            {
-                fileChangesPending = true;
-                fileDataMap[key] = newValue;
-                writeChanges();
-
-                notifyListeners(key);
-            }
+            throw BadKeyException(key);
         }
-        catch (std::out_of_range e)
+        if(updateProperty<T>(key, newValue))
         {
-            DBG(__PRETTY_FUNCTION__ << ":");
-            DBG("\tkey " << key << " is not a value of this type stored in "
-                    << filename);
-            throw e;
+            configJson.writeChanges();
+            notifyListeners(key);
         }
     }
-
+     
     /**
-     * @return true iff this ConfigFile and rhs have the same filename.
+     * Signals an attempt to access an invalid config value in a ConfigFile.
      */
-    bool operator==(const ConfigFile& rhs) const;
+    struct BadKeyException : public std::exception
+    {
+    public:
+        /**
+         * @param invalidKey  The invalid key string that caused this exception.
+         */
+        BadKeyException(juce::String invalidKey) : invalidKey(invalidKey) { }
+        
+        /**
+         * Gets the invalid key that caused the exception.
+         * 
+         * @return  The unexpected key value.
+         */
+        juce::String getInvalidKey()
+        {
+            return invalidKey;
+        }
+    private:
+        const juce::String invalidKey;
+    };
 
     /**
      * Listeners receive updates whenever key values they track are updated in
@@ -128,14 +169,15 @@ public:
     private:
         /**
          * Called whenever a key tracked by this listener changes in the config
-         * file. Listeners should override this to react to config changes.
+         * file. Listeners should implement this to handle config changes.
          * 
          * @param propertyKey   Passes in the updated value's key.
          */
         virtual void configValueChanged(juce::String propertyKey) = 0;
 
-        //holds references to all ConfigFiles this listener follows.
+        //Prevents concurrent modification of tracked key values.
         juce::CriticalSection configKeyAccess; 
+        //Holds references to all keys in ConfigFiles this listener follows.
         std::map<ConfigFile*, juce::StringArray> configKeyMap;
     };
 
@@ -153,18 +195,53 @@ public:
      * Removes a listener from this ConfigFile.
      * 
      * @param listener  This will no longer receive updates on any changes to
-     *                   this ConfigFile.
+     *                  this ConfigFile.
      */
     void removeListener(Listener * listener);
 
+protected:
     /**
      * Announce new changes to each object tracking a particular key.
      * 
-     * @param key maps to a value that has changed in this ConfigFile. 
+     * @param key  Maps to a value that has changed in this ConfigFile. 
      */
     void notifyListeners(juce::String key);
 
-protected:
+    /**
+     * Loads all initial configuration data from the JSON config file. This 
+     * checks for all expected data keys, and replaces any missing or invalid
+     * values with ones from the default config file. ConfigFile subclasses
+     * should call this once, after they load any custom object or array data.
+     */
+    void loadJSONData();
+    
+    /**
+     * Sets a configuration data value back to its default setting.  If this
+     * changes the value, listeners will be notified and changes will be saved.
+     * 
+     * @param key       A key value defined in the config file.
+     * 
+     * @throws BadKeyException   If the key parameter was not a valid key string
+     *                           for this ConfigFile.
+     */
+    virtual void restoreDefaultValue(juce::String key);
+
+    /**
+     * Restores all values in the configuration file to their defaults. All 
+     * updated values will notify their Listeners and be written to the JSON
+     * file.
+     */
+    virtual void restoreDefaultValues();
+    
+    /**
+     * Checks if a key string is valid for this ConfigFile.
+     * 
+     * @param key  A key string value to check.
+     * 
+     * @return  True iff the key is valid for this file.
+     */
+    virtual bool isValidKey(const juce::String& key) const;
+    
     /**
      * Defines the basic data types that can be stored in all ConfigFile
      * objects.
@@ -184,148 +261,148 @@ protected:
     {
         juce::String keyString;
         SupportedDataType dataType;
-    };
-
-
+    }; 
+    
     /**
-     * This constructor should only be called when constructing ConfigFile
-     * subclasses.
+     * Get the set of all basic (non-array, non-object) properties tracked by
+     * this ConfigFile.
      * 
-     * @param configFilename The name of a json file to be read or created in
-     *                        ~/.pocket-home/. There should be a file with the 
-     *                        same name in the asset folder filled with default 
-     *                        values.
+     * @return  The keys to all variables tracked in this config file.
      */
-    ConfigFile(juce::String configFilename);
+    virtual const std::vector<DataKey>& getDataKeys() const = 0;
 
+    
     /**
-     * @return the keys to all variables tracked in this config file.
+     * Checks for an expected property value in the JSON config data.  If the
+     * value is not found or has an invalid type, the property will be copied
+     * from the default config file.
+     * 
+     * @param key  The key string of a parameter that should be defined in this
+     *             config file.
+     * 
+     * @tparam T   The expected type of the JSON property.
+     * 
+     * @return  The initialized property value.
+     * 
+     * @throws JSONFile::TypeException  If any data value is missing or has an
+     *                                  incorrect type in both the config file 
+     *                                  and the default config file.
      */
-    virtual std::vector<DataKey> getDataKeys() const = 0;
-
+    template<typename T> T initProperty(const juce::String& key)
+    {
+        try
+        {
+            if(!configJson.propertyExists<T>(key))
+            {
+                DBG("ConfigFile::" << __func__ << ": Key \"" << key
+                        << "\" not found in " << filename 
+                        << ", checking default config file");
+                if(!defaultJson.propertyExists<T>(key))
+                {
+                    DBG("ConfigFile::" << __func__ << ": Key \"" << key 
+                            << "\" missing in config and default config!");
+                }
+                T property = defaultJson.getProperty<T>(key);
+                configJson.setProperty<T>(key, property);
+                return property;
+            }
+            return configJson.getProperty<T>(key);
+        }
+        catch (JSONFile::FileException e)
+        {
+            //Failed to read from .json file
+            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
+        catch(JSONFile::TypeException e)
+        {
+            DBG("ConfigFile::" << __func__ 
+                    << ": Failed to load default value for " 
+                    << e.getPropertyKey()
+                    <<", expected type:" << e.getExpectedType()
+                    <<", actual type: "  << e.getFoundType()
+                    << ", error = " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
+        return T();
+    }
+    
     /**
-     * Read in this object's data from a json config object
+     * Updates a property in the JSON config file.  This will not check
+     * key validity, immediately write any changes, or notify listeners.
      * 
-     * @param config         This should pass in json configuration data from 
-     *                        ~/.pocket-home/<filename>.json.
+     * @param key        The key string that maps to the value being updated.
      * 
-     * @param defaultConfig  This should be either json data from the default 
-     *                        config file in the assets folder, or a void var. 
-     *                        If defaultConfig is null and data is missing from 
-     *                        the configuration file, this method will open 
-     *                        <filename>.json and load all data into 
-     *                        defaultConfig. 
+     * @param newValue   The new value to save to the file.
+     * 
+     * @tparam T         The value data type.
+     * 
+     * @return  True if JSON data changed, false if newValue was identical to
+     *          the old value with the same key.
      */
-    virtual void readDataFromJson(juce::var& config, juce::var & defaultConfig);
-
-    /**
-     * Copy all config data to a json object.
-     * 
-     * @param jsonObj  A dynamicObject that can later be
-     *                 written to a json file.
-     * 
-     * @pre   Any code calling this function is expected to have already
-     *         acquired the object's lock.
-     */
-    virtual void copyDataToJson(juce::DynamicObject::Ptr jsonObj);
-
-    /**
-     * Checks if a property exists in a config data object loaded from a json
-     * file.
-     * 
-     * @return true iff propertyKey has a value in config
-     */
-    bool propertyExists(juce::var& config, juce::String propertyKey);
-
-
-    /**
-     * Gets a property from json configuration data, or from default
-     * configuration data if necessary
-     * 
-     * @param config          This should pass in json configuration data from 
-     *                         ~/.pocket-home/<filename>.json
-     * 
-     * @param defaultConfig   This should be either json data from the default 
-     *                         config file in the assets folder, or a void var. 
-     *                         If defaultConfig is void and data is missing from
-     *                         the configuration file, this method will open 
-     *                         configuration/<filename>.json from the asset
-     *                         folder and load all data into defaultConfig. 
-     * 
-     * @return the value read from config/defaultConfig at [key], or a void var
-     *          if nothing was found in either var object.
-     */
-    juce::var getProperty
-    (juce::var& config, juce::var& defaultConfig, juce::String key);
-
-    /**
-     * Marks this ConfigFile as containing changes that need to be written to
-     * the underlying .json file.
-     */
-    void markPendingChanges();
+    template<typename T>
+    bool updateProperty(juce::String key, T newValue)
+    {
+        try
+        {
+            return configJson.setProperty<T>(key, newValue);
+        }
+        catch (JSONFile::FileException e)
+        {
+            //Failed to write to .json file
+            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
+        catch(JSONFile::TypeException e)
+        {
+            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
+        return false;
+    }
 
     /**
      * Re-writes all data back to the config file, as long as there are
      * changes to write.
      * 
-     * @pre any code calling this function is expected to have already
-     * acquired the ConfigFile's lock
+     * @pre Any code calling this function is expected to have already
+     *      acquired the ConfigFile's lock
      */
     void writeChanges();
 
-    //The directory all config files will use
-    static const constexpr char* configPath = "~/.pocket-home/";
-
 private:
-
-    /**
-     * @return a reference to the map that stores data values of type T for
-     *          ConfigFiles with this object's filename.  This needs to be
-     *          explicitly defined for each type supported by getConfigValue()
-     *          and setConfigValue()
-     */
-    template <class T > std::map<juce::String, T>& getMapReference();
-
-    /**
-     * Sets a property in the appropriate data map.  This does not notify
-     * Configurables or mark the value as a change waiting to be written to the
-     * file.
-     * 
-     * @param key
-     * 
-     * @param newValue
-     */
-    template <class T> void initMapProperty(juce::String key, T newValue)
-    {
-        std::map<juce::String, T>& fileDataMap = getMapReference<T>();
-        fileDataMap[key] = newValue;
-    }
-
-
-    //Stores the name of the .json config file.
-    juce::String filename;
-
-    //Indicates if changes need to be written to the file.
-    bool fileChangesPending = false;
-
-    //Holds configuration values read from the file.
-    std::map<juce::String, int> intValues;
-    std::map<juce::String, juce::String> stringValues;
-    std::map<juce::String, bool> boolValues;
-    std::map<juce::String, double> doubleValues;
-
     
+    /**
+     * If ConfigFiles define custom object or array data types, they must
+     * override this method to write that custom data back to the JSONFile
+     * object. 
+     */
+    virtual void writeDataToJSON() { }
+    
+    //The name of this JSON config file.
+    juce::String filename;
+    
+    //The directory where all config files will be located
+    static const constexpr char* configPath = "~/.pocket-home/";
+    
+    //The pocket-home asset folder subdirectory containing default config files.
+    static const constexpr char* defaultAssetPath = "configuration/";
+    
+    //Holds configuration values read from the file.
+    JSONFile configJson;
+    
+    //Holds default config file values
+    JSONFile defaultJson; 
+    
+    //Used to send error messages to the user
+    ConfigAlertWindows alertWindows;
+
+    //All listeners and pending notifications for listeners
     std::map<juce::String, juce::Array<Listener*>> keyListeners;
     std::map<juce::String, juce::Array<Listener*>> notificationQueue;
 
     //prevents concurrent access to listeners.
     juce::CriticalSection listenerLock;
-
-    //localized text keys;
-    static const constexpr char * failed_saving_to_FILE =
-            "failed_saving_to_FILE";
-    static const constexpr char * check_permissions = "check_permissions";
-    static const constexpr char * save_error = "save_error";
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConfigFile)
 };

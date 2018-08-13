@@ -26,7 +26,7 @@ public:
      * 
      * @param componentKey  A configurable UI component's key string.
      * 
-     * @return              the properties defined for that component.
+     * @return  The properties defined for that component.
      */
     ComponentSettings getComponentSettings(juce::String componentKey);
 
@@ -104,15 +104,15 @@ public:
         ComponentSettings();
 
         /**
-         * Initializes from json data.
+         * Initializes from JSON data.
          * 
-         * @param jsonObj  An object var containing json data.
+         * @param jsonObj  An dynamic object containing JSON data.
          */
         ComponentSettings(juce::var jsonObj);
 
         /**
          * Packages the object into a DynamicObject that can be written to a
-         * json file.
+         * JSON file.
          * 
          * @return  the converted component settings.
          */
@@ -200,9 +200,11 @@ public:
 
 protected:
     /**
-     * @return the list of all component keys.
+     * Gets the list of all configurable component keys.
+     * 
+     * @return  The list of component keys.
      */
-    static juce::StringArray getComponentKeys();
+    static const juce::StringArray& getComponentKeys();
 
 private:
     class ConfigJson : public ConfigFile
@@ -223,26 +225,9 @@ private:
 
     private:
         /**
-         * Read in this object's data from a json config object.
-         * 
-         * @param config         json data from ~/.pocket-home/filename.json.
-         * 
-         * @param defaultConfig  Default json config data from the 
-         *                        filename.json in assets. If this value is void
-         *                        and default data is needed, this  method will 
-         *                        open it as the appropriate default config file
-         *                        from assets.
+         * Copy all ComponentSettings data back to the JSON file.
          */
-        void readDataFromJson
-        (juce::var& config, juce::var& defaultConfig) override final;
-
-        /**
-         * Copy all config data to a json object
-         * 
-         * @param jsonObj
-         */
-        void copyDataToJson
-        (juce::DynamicObject::Ptr jsonObj) override final;
+        virtual void writeDataToJSON() final override;
 
         /**
          * Gets the string key and data type for each basic value stored in
@@ -251,7 +236,7 @@ private:
          * @return  Key strings and data types for each bool, int, String, or
          *          double stored in components.json.
          */
-        virtual std::vector<DataKey> getDataKeys() const override;
+        virtual const std::vector<DataKey>& getDataKeys() const final override;
 
         //Stores all component settings loaded from the component config file
         std::map<juce::String, ComponentSettings> components;

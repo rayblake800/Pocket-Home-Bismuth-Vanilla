@@ -148,38 +148,42 @@ int ComponentConfigFile::getFontHeight(TextSize sizeType)
 }
 
 /*
- * @return the list of all component keys.
+ * Gets the list of all configurable component keys.
  */
-juce::StringArray ComponentConfigFile::getComponentKeys()
+const juce::StringArray& ComponentConfigFile::getComponentKeys()
 {
-    return {
-            scrollingAppMenuKey,
-            pagedAppMenuKey,
-            menuFrameKey,
-            batteryIconKey,
-            batteryPercentKey,
-            clockLabelKey,
-            wifiIconKey,
-            powerButtonKey,
-            settingsButtonKey,
-            popupMenuKey,
-            pageLeftKey,
-            pageRightKey,
-            pageUpKey,
-            pageDownKey,
-            settingsListBtnKey,
-            spinnerKey,
-            };
+    static const juce::StringArray keys =
+    {
+        scrollingAppMenuKey,
+        pagedAppMenuKey,
+        menuFrameKey,
+        batteryIconKey,
+        batteryPercentKey,
+        clockLabelKey,
+        wifiIconKey,
+        powerButtonKey,
+        settingsButtonKey,
+        popupMenuKey,
+        pageLeftKey,
+        pageRightKey,
+        pageUpKey,
+        pageDownKey,
+        settingsListBtnKey,
+        spinnerKey,
+    };
+    return keys;
 }
 
 ComponentConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
 {
     using namespace juce;
-    var jsonConfig = AssetFiles::loadJSONAsset(String(configPath)
-            + filenameConst, true);
-    var defaultConfig = var();
-    readDataFromJson(jsonConfig, defaultConfig);
-    writeChanges();
+    StringArray keys = getComponentKeys();
+    for (const String& key : keys)
+    {
+        var componentData = initProperty<var>(key);
+        components[key] = ComponentSettings(componentData.getDynamicObject());
+    }
+    loadJSONData();
 }
 
 /*
@@ -195,46 +199,32 @@ ComponentConfigFile::ConfigJson::getComponentSettings(juce::String componentKey)
  * @return the list of key Strings for each integer value tracked in 
  * components.json
  */
-std::vector<ConfigFile::DataKey> ComponentConfigFile::ConfigJson
-::getDataKeys() const
+const std::vector<ConfigFile::DataKey>& 
+ComponentConfigFile::ConfigJson::getDataKeys() const
 {
-    std::vector<DataKey> keys = 
+    static const std::vector<ConfigFile::DataKey> keys = 
     {
-        {smallTextKey,  doubleType},
-        {mediumTextKey, doubleType},
-        {largeTextKey,  doubleType}
+        {smallTextKey,  ConfigFile::doubleType},
+        {mediumTextKey, ConfigFile::doubleType},
+        {largeTextKey,  ConfigFile::doubleType}
     };
     return keys;
 }
 
 /*
- * Read in this object's data from a json config object
+ * Copy all ComponentSettings data back to the JSON file.
  */
-void ComponentConfigFile::ConfigJson::readDataFromJson
-(juce::var& config, juce::var& defaultConfig)
+void ComponentConfigFile::ConfigJson::writeDataToJSON()
 {
     using namespace juce;
-    ConfigFile::readDataFromJson(config, defaultConfig);
-    StringArray keys = getComponentKeys();
+    const StringArray& keys = getComponentKeys();
     for (const String& key : keys)
     {
-        var componentData = getProperty(config, defaultConfig, key);
-        components[key] = ComponentSettings(componentData);
-    }
-}
-
-/*
- * Copy all config data to a json object
- */
-void ComponentConfigFile::ConfigJson::copyDataToJson
-(juce::DynamicObject::Ptr jsonObj)
-{
-    using namespace juce;
-    ConfigFile::copyDataToJson(jsonObj);
-    StringArray keys = getComponentKeys();
-    for (const String& key : keys)
-    {
-        jsonObj->setProperty(key, components[key].getDynamicObject());
+        if(components.count(key) != 0)
+        {
+            updateProperty<DynamicObject*>(key, 
+                    components[key].getDynamicObject());
+        }
     }
 }
 
@@ -244,7 +234,8 @@ x(0), y(0), width(0), height(0) { }
 /*
  * Initializes from json data.
  */
-ComponentConfigFile::ComponentSettings::ComponentSettings(juce::var jsonObj)
+ComponentConfigFile::ComponentSettings::ComponentSettings
+(juce::var jsonObj)
 {
     using namespace juce;
     x = jsonObj.getProperty("x", -1);
@@ -263,6 +254,7 @@ ComponentConfigFile::ComponentSettings::ComponentSettings(juce::var jsonObj)
             }
         }
     }
+    
     var assetList = jsonObj["asset files"];
     if (assetList.isArray())
     {

@@ -76,5 +76,6 @@ juce::String NavButton::getEdgeComponentKey(NavButton::WindowEdge edge)
         case right:
             return ComponentConfigFile::pageRightKey;
     }
-    
+    DBG("NavButton::" << __func__ << ": Unknown edge value!");
+    return juce::String();
 }
