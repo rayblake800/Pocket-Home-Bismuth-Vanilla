@@ -5486,6 +5486,7 @@
         </df>
         <df name="images">
         </df>
+        <in>Documentation Checklist</in>
       </df>
       <df name="JuceLibraryCode">
         <in>AppConfig.h</in>

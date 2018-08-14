@@ -10,17 +10,17 @@
  * 
  * @brief Reads and writes data from a JSON configuration file. 
  * 
- * ConfigFile provides an abstract basis for ResourceManager sharedResources 
+ *  ConfigFile provides an abstract basis for ResourceManager sharedResources 
  * that access JSON file data.  Each ConfigFile should provide access to a set 
- * of key Strings for accessing its specific data.  A default version of each 
- * ConfigFile's .json resource file should be placed in the configuration 
+ * of key strings for accessing its specific data.  A default version of each 
+ * ConfigFile's JSON resource file should be placed in the configuration 
  * subdirectory of the asset folder.
  *
  * Along with reading and writing data, ConfigFile objects allow listener
  * objects to register to receive notification whenever particular data keys
  * are changed.
  * 
- * ConfigFile reads from each json file only once per program instance, so any 
+ * ConfigFile reads from each JSON file only once per program instance, so any 
  * external changes to the file that occur while the program is running will
  * most likely be ignored and may be overwritten.
  */

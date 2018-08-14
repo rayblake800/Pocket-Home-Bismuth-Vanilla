@@ -7,6 +7,30 @@
  * 
  * @brief Provides a simplified interface for reading and writing JSON file
  *        data.
+ * 
+ *  JSONFile is associated with a file of JSON object data on construction.  
+ * Property values can then be read from the file with the getProperty method
+ * or written to the file with the setProperty method.  File IO is delayed until
+ * absolutely necessary, only reading the file when data is requested, and
+ * only writing to the file when requested, or when the object or its data are
+ * being unloaded.
+ * 
+ *  All data operations perform type checking, taking an expected type template 
+ * parameter, and throwing JSONFile::TypeException if the expected data type 
+ * does not match the actual data type.  JSONFile will also respect existing
+ * data types, throwing JSONFile::TypeException exception if setProperty would
+ * change the type of an existing parameter.  If necessary, this can be bypassed
+ * by requesting the juce::var class, but this should be avoided unless it is 
+ * absolutely necessary to have a JSON parameter with multiple valid types.
+ * 
+ *  JSONFile is primarily intended to simplify file operations in ConfigFile
+ * classes, and to help detect abnormalities and type errors within the JSON
+ * configuration files used by those classes.  In situations where JSON files
+ * can be trusted to only contain valid data, or where they do not need to be
+ * altered, directly using juce::JSON, juce::File, and juce::var may be more 
+ * appropriate.
+ * 
+ * @see ConfigFile.h, juce_Variant.h, juce_JSON.h
  */
 class JSONFile
 {   
@@ -18,15 +42,8 @@ public:
      *                      relative to the pocket-home assets folder, an 
      *                      absolute path, or a path relative to the current 
      *                      working directory.
-     * 
-     * @param defaultPath   The location of the default version of this .json
-     *                      file, relative to the pocket-home assets folder.
-     *                      If no file is found at filePath and this value is
-     *                      not the empty string, this will attempt to copy the
-     *                      default file to filePath.
      */
-    JSONFile(const juce::String filePath,
-            const juce::String defaultPath = juce::String());
+    JSONFile(const juce::String filePath);
     
     /**
      * Saves all changes back to the source file, if applicable.
@@ -135,6 +152,13 @@ public:
      * @throws FileException  If changes could not be written to the file.
      */
     void writeChanges();
+    
+    /**
+     * Unloads all file data from memory, writing any pending changes first.
+     * File data will be reloaded from disk if any methods accessing property
+     * data are called.
+     */
+    void unloadData();
     
     /**
      * Signals a failure to read from or write to the JSON config file.

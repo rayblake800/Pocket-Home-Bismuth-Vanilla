@@ -18,6 +18,7 @@
     -Briefly describe the implementation approach.
         -Are there any alternative strategies that should be considered?
         -Are there any parts of this module that could be split into other modules?
+    -List any closely related files or resources under the @see tag
 
 ## Documenting Functions
     -What is the purpose of the function?

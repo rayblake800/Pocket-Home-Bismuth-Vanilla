@@ -8,31 +8,7 @@ static const constexpr int decimalPlacesSaved = 5;
  * Opens a JSON data file interface.
  */
 JSONFile::JSONFile(const juce::String filePath, const juce::String defaultPath)
-: filePath(filePath) 
-{ 
-    using namespace juce;
-    File jsonFile = AssetFiles::findAssetFile(filePath);
-    if(!jsonFile.existsAsFile() && defaultPath.isNotEmpty())
-    {
-        DBG("JSONFile::" << __func__ << ": " << filePath 
-                << " not found, restoring default from " << defaultPath);
-        File defaultFile = AssetFiles::findAssetFile(defaultPath);
-        if(!defaultFile.existsAsFile())
-        {
-            DBG("JSONFile::" << __func__ << ": missing default file!");
-            return;
-        }
-        else if(!defaultFile.copyFileTo(jsonFile))
-        {       
-            DBG("JSONFile::" << __func__ << ": failed to copy default!");
-        }
-        else
-        {           
-            DBG("JSONFile::" << __func__ << ": restored " << filePath
-                    << " from default at " << defaultPath);
-        }
-    }
-}
+: filePath(filePath) { }
 
 /*
  * Saves all changes back to the source file, if applicable.
@@ -48,8 +24,6 @@ JSONFile::~JSONFile()
         DBG("JSONFile::" << __func__ << ": " << e.getErrorMessage());
     }
 }
-
-
 
 /*
  * Re-writes all data back to the config file, as long as there are
@@ -73,7 +47,22 @@ void JSONFile::writeChanges()
         unwrittenChanges = false;
     }
 }
-
+ 
+/*
+ * Unloads all file data from memory, writing any pending changes first.
+ * File data will be reloaded from disk if any methods accessing property
+ * data are called.
+ */
+void JSONFile::unloadData()
+{
+    if(!openedFile)
+    {
+        return;
+    }
+    writeChanges();
+    jsonData = juce::var();
+    openedFile = false;
+}
 
 /*
  * Removes and returns a value of type T from a var container. The caller
@@ -93,11 +82,7 @@ template<> double JSONFile::extractProperty<double>
 (juce::var& container) { return container; }
 
 template<> juce::var JSONFile::extractProperty<juce::var>
-(juce::var& container) 
-{ 
-    using namespace juce;
-    return container; 
-}
+(juce::var& container) { return container; }
 
 template<> 
 juce::Array<juce::var> JSONFile::extractProperty <juce::Array<juce::var>>
@@ -107,10 +92,7 @@ juce::Array<juce::var> JSONFile::extractProperty <juce::Array<juce::var>>
     Array<var>* arrayProperty = container.getArray();
     if(arrayProperty != nullptr)
     {
-        Array<var> arrayCopy(*container.getArray());
-        DBG("JSONFile::" << __func__ << ": Getting array of size " 
-                << arrayCopy.size() << " for " << filePath);
-        return arrayCopy;
+        return Array<var>(*container.getArray());
     } 
         DBG("JSONFile::" << __func__ << ": Array is null!");
     return Array<var>();
@@ -119,17 +101,7 @@ juce::Array<juce::var> JSONFile::extractProperty <juce::Array<juce::var>>
 template<> juce::DynamicObject* JSONFile::extractProperty<juce::DynamicObject*>
 (juce::var& container)
 {
-    using namespace juce;
-    DBG("File =" << filePath);
-    DBG( " container=" <<container.toString());
-    DynamicObject::Ptr object = container.getDynamicObject();
-    NamedValueSet& values = object->getProperties();
-    for(int i = 0; i < values.size(); i++)
-    {
-        DBG("\t ["  << values.getName(i) << "] = " 
-                << values.getValueAt(i).toString());
-    }
-    return object;
+    return container.getDynamicObject();
 }
 
 
@@ -183,7 +155,6 @@ juce::String JSONFile::getTypeName(const juce::var& property)
         return "DynamicObject*";
     }
     return "var";
-
 }
 
 /*
@@ -223,7 +194,6 @@ template<>juce::String JSONFile::getTypeName<juce::var>()
 {
     return "var";
 }
-
 
 /*
  * If the file has not yet been opened, this will open it, and read its

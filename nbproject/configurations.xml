@@ -2141,6 +2141,9 @@
           </df>
         </df>
       </df>
+      <df name="docs">
+        <in>Documentation Checklist</in>
+      </df>
       <df name="JuceLibraryCode">
         <in>BinaryData.cpp</in>
         <in>include_juce_core.cpp</in>
@@ -14934,6 +14937,8 @@
             flavor2="11">
         <ccTool flags="3">
         </ccTool>
+      </item>
+      <item path="docs/Documentation Checklist" ex="false" tool="3" flavor2="0">
       </item>
       <folder path="0/Source">
         <ccTool>
