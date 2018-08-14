@@ -10,21 +10,35 @@
  * 
  * @brief Reads and writes data from a JSON configuration file. 
  * 
- *  ConfigFile provides an abstract basis for ResourceManager sharedResources 
- * that access JSON file data.  Each ConfigFile should provide access to a set 
- * of key strings for accessing its specific data.  A default version of each 
- * ConfigFile's JSON resource file should be placed in the configuration 
- * subdirectory of the asset folder.
+ *  ConfigFile provides an abstract base for classes that manage JSON 
+ * configuration files.  Each ConfigFile subclass is responsible for a single
+ * JSON file containing data that can be altered by the user.
  *
  * Along with reading and writing data, ConfigFile objects allow listener
  * objects to register to receive notification whenever particular data keys
  * are changed.
  * 
+ *  ConfigFile is defined as an abstract ResourceManager SharedResource
+ * class.  For each configuration file, a new ResourceManager class is defined,
+ * along with a shared resource implementing ConfigFile.  This allows config
+ * files to be safely accessed at any point, even across multiple threads.  This
+ * also means that each file only needs to be read from disk once, and only one
+ * copy of its data needs to be in memory at one time.
+ *
+ * Each ConfigFile should provide access to a set of key strings for accessing 
+ * its specific data, and explicitly state the data type expected of each value.
+ * The base ConfigFile class handles access to all basic data types, and 
+ * subclasses may provide support for object and array data.
+ *
+ * A default version of each ConfigFile's JSON resource file should be placed in
+ * the configuration subdirectory of the asset folder.  Any missing or invalid 
+ * parameters in config files will be replaced with values from the default 
+ * file.
+ *
  * ConfigFile reads from each JSON file only once per program instance, so any 
  * external changes to the file that occur while the program is running will
  * most likely be ignored and may be overwritten.
  */
-
 class ConfigFile : public ResourceManager::SharedResource
 {
 protected:
