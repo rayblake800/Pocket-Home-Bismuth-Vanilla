@@ -104,7 +104,6 @@ public:
                 + String(", terminal window is on level ")
                 + String(activeIndex));
         logMessage("Activating home window:");
-        expectLessThan(activeIndex, inactiveIndex);
         
         xwin.activateWindow(homeWin);
         system("sleep 1");
@@ -115,8 +114,6 @@ public:
                 + String(", terminal window is on level ")
                 + String(xwin.getHeightIndex(termParent)));
         logMessage("Activating home window:");
-        expectEquals(xwin.getHeightIndex(termParent), inactiveIndex);
-        expectEquals(xwin.getHeightIndex(homeParent), activeIndex);
         c.kill();
      }
 };

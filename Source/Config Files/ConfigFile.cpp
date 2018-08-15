@@ -8,7 +8,7 @@
  */
 ConfigFile::ConfigFile(juce::String configFilename) :
 filename(configFilename),
-configJson(configPath + filename, defaultAssetPath + filename),
+configJson(configPath + filename),
 defaultJson(defaultAssetPath + filename) { }
 
 

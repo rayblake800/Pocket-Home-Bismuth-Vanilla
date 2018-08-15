@@ -7,7 +7,7 @@ static const constexpr int decimalPlacesSaved = 5;
 /*
  * Opens a JSON data file interface.
  */
-JSONFile::JSONFile(const juce::String filePath, const juce::String defaultPath)
+JSONFile::JSONFile(const juce::String filePath)
 : filePath(filePath) { }
 
 /*

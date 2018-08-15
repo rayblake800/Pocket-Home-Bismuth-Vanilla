@@ -42,6 +42,7 @@ public:
         system("sleep 0.5");
         expect(winApp.isRunning());
         winApp.activateWindow();
+        system("sleep 0.5");
         expect(!WindowFocus::isFocused());
         winApp.kill();
         XWindowInterface xwin;
