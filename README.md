@@ -37,9 +37,8 @@
      network-manager-dev \
      libi2c-dev \
      libssl-dev \
-     libnm-gtk-dev
-
-     gio
+     libnm-gtk-dev \
+     glib-2.0.dev
 
 # Optional
      polkit + authentication agent

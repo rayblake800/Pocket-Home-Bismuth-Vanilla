@@ -180,8 +180,8 @@ ComponentConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
     StringArray keys = getComponentKeys();
     for (const String& key : keys)
     {
-        var componentData = initProperty<var>(key);
-        components[key] = ComponentSettings(componentData.getDynamicObject());
+	DynamicObject::Ptr componentData = initProperty<DynamicObject*>(key);
+        components[key] = ComponentSettings(componentData);
     }
     loadJSONData();
 }
@@ -235,15 +235,19 @@ x(0), y(0), width(0), height(0) { }
  * Initializes from json data.
  */
 ComponentConfigFile::ComponentSettings::ComponentSettings
-(juce::var jsonObj)
+(juce::DynamicObject* jsonObj)
 {
     using namespace juce;
-    x = jsonObj.getProperty("x", -1);
-    y = jsonObj.getProperty("y", -1);
-    width = jsonObj.getProperty("width", -1);
-    height = jsonObj.getProperty("height", -1);
+    x = jsonObj->hasProperty("x") ?
+	   double(jsonObj->getProperty("x")) : -1.0;
+    y = jsonObj->hasProperty("y") ?
+	   double(jsonObj->getProperty("y")) : -1.0;
+    width = jsonObj->hasProperty("width") ?
+	   double(jsonObj->getProperty("width")) : -1.0;
+    height = jsonObj->hasProperty("height") ?
+	   double(jsonObj->getProperty("height")) : -1.0;
 
-    var colourList = jsonObj["colours"];
+    var colourList = jsonObj->getProperty("colours");
     if (colourList.isArray())
     {
         for (var colour : *colourList.getArray())
@@ -255,7 +259,7 @@ ComponentConfigFile::ComponentSettings::ComponentSettings
         }
     }
     
-    var assetList = jsonObj["asset files"];
+    var assetList = jsonObj->getProperty("asset files");
     if (assetList.isArray())
     {
         for (var asset : *assetList.getArray())

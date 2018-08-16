@@ -106,9 +106,9 @@ public:
         /**
          * Initializes from JSON data.
          * 
-         * @param jsonObj  An dynamic object containing JSON data.
+         * @param jsonObj  A dynamic object containing JSON data.
          */
-        ComponentSettings(juce::var jsonObj);
+        ComponentSettings(juce::DynamicObject* jsonObj);
 
         /**
          * Packages the object into a DynamicObject that can be written to a
