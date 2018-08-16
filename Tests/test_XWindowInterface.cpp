@@ -11,26 +11,22 @@ public:
     void runTest() override
     {
         using namespace juce;
-        /* Test command summary:
-        * beginTest("testName");
-        * expect(condition);
-        * expectEquals(item1, item2);
-        * logMessage(text);
-        * see deps/JUCE/modules/juce_core/unit_tests
-        */
         beginTest("Home Window Tests");
         XWindowInterface xwin;
         Window homeWin = xwin.getPocketHomeWindow();
-        expect(homeWin != 0); 
+        expect(homeWin != 0, "pocket-home window couldn't be found."); 
         xwin.activateWindow(homeWin);
         system("sleep 1");
-        expect(xwin.isActiveWindow(homeWin));
-        expectEquals(xwin.getDesktopIndex(), xwin.getWindowDesktop(homeWin));
-        expectEquals(xwin.getHeightIndex(homeWin), 0);
+        expect(xwin.isActiveWindow(homeWin),
+		"pocket-home window should have been active.");
+        expectEquals(xwin.getDesktopIndex(), xwin.getWindowDesktop(homeWin),
+		"pocket-home window should have been on the current desktop");
         
         beginTest("Other window test");
         
         String termName(std::getenv("TERMINAL"));
+	expect(termName.isNotEmpty(),
+		"Terminal environment variable is not set.");
         ChildProcess c;
         c.start(termName);
         system("sleep 2");
@@ -47,7 +43,7 @@ public:
                 break;
             }
         }
-        expect(termProcess != -1);
+        expect(termProcess != -1, "Terminal child process not found.");
         
         
         Array<Window> termWindows = xwin.getMatchingWindows(
@@ -58,10 +54,11 @@ public:
                             (termName)
                             && xwin.getWindowPID(win) == termProcess;
                 });
-        expectEquals(termWindows.size(), 1);
+        expectEquals(termWindows.size(), 1, 
+		"Only one terminal window should have been found.");
         Window termWin = termWindows[0];
-        expect(xwin.isActiveWindow(termWin));
-        expect(!xwin.isActiveWindow(homeWin));
+        expect(xwin.isActiveWindow(termWin), "Terminal window should have been active.");
+        expect(!xwin.isActiveWindow(homeWin), "pocket-home window should not have been active.");
         
         //find shared parent
         Array<Window> homeLine = xwin.getWindowAncestry(homeWin);
@@ -71,7 +68,8 @@ public:
         {
             if(homeLine.contains(termLine[i]))
             {
-                expectEquals(i, homeLine.indexOf(termLine[i]));
+                expectEquals(i, homeLine.indexOf(termLine[i]),
+			"HomeWindow and termWindow shared parents are not on the same level.");
                 sharedParent = termLine[i];
                 logMessage(String(
                         "pocket-home and $TERMINAL share a window on level ") 
@@ -79,7 +77,7 @@ public:
                 break;
             }
         }
-        expect(sharedParent != BadWindow);
+        expect(sharedParent != BadWindow, "Found no valid shared parent window");
         Array<Window> sharedLevel = xwin.getWindowChildren(sharedParent);
         Window homeParent = BadWindow;
         Window termParent = BadWindow;
@@ -94,8 +92,8 @@ public:
                 termParent = window;
             }
         }
-        expect(homeParent != BadWindow);
-        expect(termParent != BadWindow);
+        expect(homeParent != BadWindow, "pocket-home parent window not found.");
+        expect(termParent != BadWindow, "terminal parent window not found.");
         
         int activeIndex = xwin.getHeightIndex(termParent);
         int inactiveIndex = xwin.getHeightIndex(homeParent);
@@ -107,8 +105,10 @@ public:
         
         xwin.activateWindow(homeWin);
         system("sleep 1");
-        expect(!xwin.isActiveWindow(termWin));
-        expect(xwin.isActiveWindow(homeWin));
+        expect(!xwin.isActiveWindow(termWin), 
+		"terminal window should not have been active.");
+        expect(xwin.isActiveWindow(homeWin),
+		"pocket-home window should have been active.");
         logMessage( String("pocket home window is on level ") 
                 + String(xwin.getHeightIndex(homeParent)) 
                 + String(", terminal window is on level ")

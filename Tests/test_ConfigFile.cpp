@@ -129,7 +129,8 @@ public:
         File existingConfig("~/.pocket-home/config.json");
         //Backup existing config file
         File backup = File::createTempFile(".json");
-        expect(existingConfig.copyFileTo(backup));
+        expect(existingConfig.copyFileTo(backup),
+			"Failed to backup existing config file!");
         existingConfig.deleteFile();
         existingConfig.create();
 
@@ -138,11 +139,12 @@ public:
                 = new TestConfigFile("config.json");
         expectGreaterThan(
                 existingConfig.getLastModificationTime().toMilliseconds(),
-                writeTime.toMilliseconds());
+                writeTime.toMilliseconds(),
+		"Failed to restore and save default config values!");
         writeTime = existingConfig.getLastModificationTime();
         
         beginTest("Reading default values");
-        const String strKey = wifiInterfaceKey;
+        const String strKey = backgroundKey;
         const String intKey = maxRowsKey;
         const String boolKey = showCursorKey;
 
@@ -153,8 +155,8 @@ public:
         const bool testBool = config->getConfigValue<bool>
                 (boolKey);
 
-        expect(testString.isNotEmpty());
-        expect(testInt > 0);
+        expect(testString.isNotEmpty(), "Test string value is empty!");
+        expect(testInt > 0, "Test int value is 0!");
 
         beginTest("Writing new values");
         const String newStr = "testString";
@@ -167,46 +169,56 @@ public:
        
         expectGreaterThan(
                 existingConfig.getLastModificationTime().toMilliseconds(),
-                writeTime.toMilliseconds());
+                writeTime.toMilliseconds(),
+		"Changes were not written to file!");
         writeTime = existingConfig.getLastModificationTime();
         
         expectEquals(config->getConfigValue<String>(strKey),
-                newStr); 
+                newStr,
+		"Test string value change failed!"); 
         expectEquals(config->getConfigValue<int>(intKey),
-                newInt); 
+                newInt,
+		"Test int value change failed!"); 
         expect(config->getConfigValue<bool>(boolKey)
-               == newBool); 
+               == newBool,
+	       "Test bool value change failed!"); 
 
         beginTest("Listener testing");
-        expect(lastValueChanged.isEmpty()); 
+        expect(lastValueChanged.isEmpty(),
+			"Listener called without being added!"); 
         config->addListener(testListener, {strKey});
   
         config->setConfigValue<String>(strKey, "");
         config->setConfigValue<int>(intKey, -1);
         config->setConfigValue<bool>(boolKey, !newBool);  
         
-        expectEquals(lastValueChanged, strKey);
+        expectEquals(lastValueChanged, strKey,
+			"Listener registered wrong updated key!");
         lastValueChanged = ""; 
        
         expectGreaterThan(
                 existingConfig.getLastModificationTime().toMilliseconds(),
-                writeTime.toMilliseconds());
+                writeTime.toMilliseconds(),
+		"Changes were not written to file!");
         writeTime = existingConfig.getLastModificationTime();
 
         expectEquals(config->getConfigValue<String>(strKey),
-                String()); 
+                String(),
+		"Listener registered wrong updated key"); 
         expectEquals(config->getConfigValue<int>(intKey),
-                -1); 
+                -1, "Test int value change failed!"); 
         expect(config->getConfigValue<bool>(boolKey)
-                != newBool); 
+                != newBool, "Test bool value change failed!"); 
         config->addListener(testListener, {boolKey});
    
         config->setConfigValue<String>(strKey, testString);
         config->setConfigValue<int>(intKey, testInt);
-        expectEquals(lastValueChanged, strKey);
+        expectEquals(lastValueChanged, strKey,
+			"Listener registered wrong updated key!");
 
         config->setConfigValue<bool>(boolKey, !newBool);  
-        expectEquals(lastValueChanged, boolKey);
+        expectEquals(lastValueChanged, boolKey,
+			"Listener registered wrong updated key!");
         existingConfig.deleteFile();
         
         beginTest("Resource sharing");
@@ -214,20 +226,22 @@ public:
                 = new TestConfigFile("config.json");
         expectEquals(
                 existingConfig.getLastModificationTime().toMilliseconds(),
-                writeTime.toMilliseconds());
+                writeTime.toMilliseconds(),
+	       	"Config file should not have been updated!");
         config = nullptr;
-        config2 = nullptr;
-        
+        config2 = new TestConfigFile("config.json");
         expectGreaterThan(
                 existingConfig.getLastModificationTime().toMilliseconds(),
-                writeTime.toMilliseconds());
+                writeTime.toMilliseconds(),
+		"Config file should have been restored from default again!");
         config2 = nullptr;
         //save altered config file for examination
         File alteredCopy("~/altered.json");
         alteredCopy.create();
         existingConfig.copyFileTo(alteredCopy);
         //Restore existing config file
-        expect(existingConfig.copyFileTo(backup));
+        expect(existingConfig.copyFileTo(backup),
+		       	"Failed to restore backup!");
     }
 };
 
