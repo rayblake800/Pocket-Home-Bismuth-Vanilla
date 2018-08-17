@@ -12,35 +12,17 @@
 
 [Add here: animated screenshot of adding a folder]
 
+  Although this project started as a fork of Pocket-Home marshmallow, the project has been almost completely re-written.  Code modules are thoroughly documented and organized to simplify the process of introducing new features.  Whenever possible, program attributes are now defined in JSON configuration files.  
 
+  Bismuth also introduces significant performance improvements.  All background timers and processes now stop whenever the program loses focus.  WiFi management is significantly faster, and now properly detects and handles saved connections.
 
-### Less obvious improvements vs. ntc pocket-home and marshmallow:
--Code is actually organized and documented.
+## Development Goals
 
--Encapsulation and modularity enforced: no more .cpp files filled with four or five loosely related classes full of public data members.
+  Now that NTC is gone and the PocketCHIP has ceased production, the primary goal of this project is to make Pocket-Home as easy as possible to adapt and use for similar handheld GNU/Linux devices.  Future updates will focus on support for a greater variety of hardware options, input controls, and system configurations.  See /docs/TODO.txt for more information on future project goals.
 
--All UI elements scale based on window size.  All UI elements are now either managed by a LayoutManager object or defined as a ConfigurableComponent.
-
--WiFi code now runs in a proper GLib event loop, drastically improving Wifi performance.
-
-# Dependencies
-     sudo apt-get install \
-     git \
-     build-essential \
-     libasound2-dev \
-     libx11-dev \
-     libxrandr-dev \
-     libxcursor-dev \
-     libxft-dev \
-     libxinerama-dev \
-     libnm-glib-dev \
-     network-manager-dev \
-     libi2c-dev \
-     libssl-dev \
-     libnm-gtk-dev \
-     glib-2.0.dev
-
-# Optional
+# Requirements
+    
+  Although this project intends
      polkit + authentication agent
 
      gtk icon caching
