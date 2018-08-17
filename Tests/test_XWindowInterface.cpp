@@ -50,8 +50,6 @@ public:
                 [&xwin, termProcess, termName](const Window win)->bool
                 {
                     return xwin.getWindowName(win).isNotEmpty()
-                            && xwin.getWindowClass(win).equalsIgnoreCase
-                            (termName)
                             && xwin.getWindowPID(win) == termProcess;
                 });
         expectEquals(termWindows.size(), 1, 

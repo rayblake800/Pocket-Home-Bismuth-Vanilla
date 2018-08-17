@@ -134,14 +134,12 @@ public:
         existingConfig.deleteFile();
         existingConfig.create();
 
-        Time writeTime = existingConfig.getLastModificationTime();
+        int64 lastSize = 0;
         ScopedPointer<TestConfigFile> config
                 = new TestConfigFile("config.json");
-        expectGreaterThan(
-                existingConfig.getLastModificationTime().toMilliseconds(),
-                writeTime.toMilliseconds(),
+        expectGreaterThan(existingConfig.getSize(), lastSize,
 		"Failed to restore and save default config values!");
-        writeTime = existingConfig.getLastModificationTime();
+        lastSize = existingConfig.getSize();
         
         beginTest("Reading default values");
         const String strKey = backgroundKey;
@@ -159,8 +157,8 @@ public:
         expect(testInt > 0, "Test int value is 0!");
 
         beginTest("Writing new values");
-        const String newStr = "testString";
-        const int newInt = testInt + 100;
+        const String newStr = "testString" + testString;
+        const int newInt = testInt * 100;
         const bool newBool = !testBool;
 
         config->setConfigValue<String>(strKey, newStr);
@@ -168,10 +166,10 @@ public:
         config->setConfigValue<bool>(boolKey, newBool);
        
         expectGreaterThan(
-                existingConfig.getLastModificationTime().toMilliseconds(),
-                writeTime.toMilliseconds(),
+                existingConfig.getSize(),
+                lastSize,
 		"Changes were not written to file!");
-        writeTime = existingConfig.getLastModificationTime();
+        lastSize = existingConfig.getSize();
         
         expectEquals(config->getConfigValue<String>(strKey),
                 newStr,
@@ -192,19 +190,19 @@ public:
         config->setConfigValue<int>(intKey, -1);
         config->setConfigValue<bool>(boolKey, !newBool);  
         
-        expectEquals(lastValueChanged, strKey,
+        expectEquals(strKey, lastValueChanged,
 			"Listener registered wrong updated key!");
         lastValueChanged = ""; 
        
-        expectGreaterThan(
-                existingConfig.getLastModificationTime().toMilliseconds(),
-                writeTime.toMilliseconds(),
+        expectLessThan(
+                existingConfig.getSize(),
+                lastSize,
 		"Changes were not written to file!");
-        writeTime = existingConfig.getLastModificationTime();
+	lastSize = existingConfig.getSize();
 
         expectEquals(config->getConfigValue<String>(strKey),
                 String(),
-		"Listener registered wrong updated key"); 
+		"Test string balue change failed!"); 
         expectEquals(config->getConfigValue<int>(intKey),
                 -1, "Test int value change failed!"); 
         expect(config->getConfigValue<bool>(boolKey)
@@ -216,7 +214,7 @@ public:
         expectEquals(lastValueChanged, strKey,
 			"Listener registered wrong updated key!");
 
-        config->setConfigValue<bool>(boolKey, !newBool);  
+        config->setConfigValue<bool>(boolKey, newBool);  
         expectEquals(lastValueChanged, boolKey,
 			"Listener registered wrong updated key!");
         existingConfig.deleteFile();
@@ -224,23 +222,16 @@ public:
         beginTest("Resource sharing");
         ScopedPointer<TestConfigFile> config2
                 = new TestConfigFile("config.json");
-        expectEquals(
-                existingConfig.getLastModificationTime().toMilliseconds(),
-                writeTime.toMilliseconds(),
+        expectEquals(existingConfig.getSize(), int64(0),
 	       	"Config file should not have been updated!");
         config = nullptr;
+	config2 = nullptr;
         config2 = new TestConfigFile("config.json");
-        expectGreaterThan(
-                existingConfig.getLastModificationTime().toMilliseconds(),
-                writeTime.toMilliseconds(),
+        expectGreaterThan(existingConfig.getSize(), int64(0),
 		"Config file should have been restored from default again!");
         config2 = nullptr;
-        //save altered config file for examination
-        File alteredCopy("~/altered.json");
-        alteredCopy.create();
-        existingConfig.copyFileTo(alteredCopy);
         //Restore existing config file
-        expect(existingConfig.copyFileTo(backup),
+        expect(backup.copyFileTo(existingConfig),
 		       	"Failed to restore backup!");
     }
 };

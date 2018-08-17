@@ -44,6 +44,7 @@ void JSONFile::writeChanges()
     }
     else
     {
+	jsonFile.setLastModificationTime(Time::getCurrentTime());
         unwrittenChanges = false;
     }
 }
