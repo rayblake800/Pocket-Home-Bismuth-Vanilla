@@ -12,11 +12,12 @@
     4. Create pages documenting each code group.
     5. Document all config files and options.
     6. Generate UML diagrams.
-    
-    
+        
 ## Misc. bug fixes and improvements
     -Define missing ColourId values for custom component classes.
     -Recreate ResourceManager as a template class ResourceManager<SharedResourceType> to cut down on duplicate code.
+    -Figure out why the "file" label in the file selection window gets cut off.
+
 #### Known documentation issues for individual classes
 
     -AppMenu helper classes are missing full documentation.
@@ -25,10 +26,6 @@
 ### Version Management
 
 # Task list for release 0.10
-
-## Appearance/Style Tweaks
-
-    1. Review PokeLookAndFeel text size settings.
 
 ## Wifi Improvements
 
@@ -141,7 +138,9 @@
     4. Research bluetooth file transfer to see if pocket-home should handle it.
 
 ## Multi-System Support 
-    -Test pocket-home on all of my raspberry pi devices.
+    -Test pocket-home on all of my linux devices.
+    -Define all system commands in a single .json file in assets
+        (*not* editable without admin permissions!) 
     -List all pocket-home functionality that is PocketCHIP specific
     -Create a class that scans for various system features
         -Wifi

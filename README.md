@@ -18,7 +18,7 @@
 
 ## Development Goals
 
-  Now that NTC is gone and the PocketCHIP has ceased production, the primary goal of this project is to make Pocket-Home as easy as possible to adapt and use for similar handheld GNU/Linux devices.  Future updates will focus on support for a greater variety of hardware options, input controls, and system configurations.  See /docs/TODO.txt for more information on future project goals.
+  Now that NTC is gone and the PocketCHIP has ceased production, the primary goal of this project is to make Pocket-Home as easy as possible to adapt and use for similar handheld GNU/Linux devices.  Future updates will focus on support for a greater variety of hardware options, input controls, and system configurations.  See the [project tasklist](./docs/TODO.txt) for more information on future project goals.
 
 # Optional Requirements
     network-manager(>= 0.9.10.0-7): Required for WiFi controls.
@@ -63,3 +63,5 @@
       git submodule update
       make build
       make devinstall
+
+
