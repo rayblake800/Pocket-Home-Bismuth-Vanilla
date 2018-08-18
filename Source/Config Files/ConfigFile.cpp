@@ -20,6 +20,111 @@ ConfigFile::~ConfigFile()
     writeChanges();
 }
 
+/*
+ * Sets a configuration data value back to its default setting.  If this
+ * changes the value, listeners will be notified and changes will be saved.
+ */
+void ConfigFile::restoreDefaultValue(juce::String key)
+{
+    using namespace juce;
+    //Check key validity, find expected data type
+    SupportedDataType valueType; 
+    const std::vector<DataKey>& keys = getDataKeys();
+    bool keyFound = false;
+    for(const DataKey& dataKey : keys)
+    {
+        if(dataKey.keyString == key)
+        {
+            keyFound = true;
+            valueType = dataKey.dataType;
+            break;
+        }
+    }
+    if(!keyFound)
+    {
+        DBG("ConfigFile::" << __func__ << ": Key \"" << key 
+                << "\" is not expected in " << filename);
+        throw BadKeyException(key);
+    }
+    try
+    {
+        switch (valueType)
+        {
+            case stringType:
+                setConfigValue<String>(key,
+                        defaultJson.getProperty<String>(key));
+                return;
+            case intType:
+                setConfigValue<int>(key,
+                        defaultJson.getProperty<int>(key));
+                return;
+            case boolType:
+                setConfigValue<bool>(key,
+                        defaultJson.getProperty<bool>(key));
+                return;
+            case doubleType:
+                setConfigValue<double>(key,
+                        defaultJson.getProperty<double>(key));
+        }
+    }
+    catch(JSONFile::FileException e)
+    {
+        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+        alertWindows.showPlaceholderError(e.getErrorMessage());
+    }
+    catch(JSONFile::TypeException e)
+    {
+        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+        alertWindows.showPlaceholderError(e.getErrorMessage());
+    }
+}
+
+/*
+ * Restores all values in the configuration file to their defaults. All 
+ * updated values will notify their Listeners and be written to the JSON
+ * file.
+ */
+void ConfigFile::restoreDefaultValues()
+{
+    using namespace juce;
+    const std::vector<DataKey>& keys = getDataKeys();
+    for(const DataKey& key : keys)
+    {
+        try
+        {
+            switch(key.dataType)
+            {
+                case stringType:
+                    setConfigValue<String>(key.keyString,
+                            defaultJson.getProperty<String>(key.keyString));
+                    break;
+                case intType:
+                    setConfigValue<int>(key.keyString,
+                            defaultJson.getProperty<int>(key.keyString));
+                    break;
+                case boolType:
+                    setConfigValue<bool>(key.keyString,
+                            defaultJson.getProperty<bool>(key.keyString));
+                    break;
+                case doubleType:
+                    setConfigValue<double>(key.keyString,
+                            defaultJson.getProperty<double>(key.keyString));
+                    break;
+            }
+        }
+        catch(JSONFile::FileException e)
+        {
+            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
+        catch(JSONFile::TypeException e)
+        {
+            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            alertWindows.showPlaceholderError(e.getErrorMessage());
+        }
+    }
+    writeChanges();
+}
 
 /*
  * Listeners safely remove themselves from all tracked ConfigFiles when
@@ -145,112 +250,6 @@ void ConfigFile::loadJSONData()
                     DBG("ConfigFile::" << __func__ 
                             << ": Unexpected type for key \"" << key.keyString
                             << "\n in file " << filename);
-            }
-        }
-        catch(JSONFile::FileException e)
-        {
-            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
-            alertWindows.showPlaceholderError(e.getErrorMessage());
-        }
-        catch(JSONFile::TypeException e)
-        {
-            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
-            alertWindows.showPlaceholderError(e.getErrorMessage());
-        }
-    }
-    writeChanges();
-}
-
-/*
- * Sets a configuration data value back to its default setting.  If this
- * changes the value, listeners will be notified and changes will be saved.
- */
-void ConfigFile::restoreDefaultValue(juce::String key)
-{
-    using namespace juce;
-    //Check key validity, find expected data type
-    SupportedDataType valueType; 
-    const std::vector<DataKey>& keys = getDataKeys();
-    bool keyFound = false;
-    for(const DataKey& dataKey : keys)
-    {
-        if(dataKey.keyString == key)
-        {
-            keyFound = true;
-            valueType = dataKey.dataType;
-            break;
-        }
-    }
-    if(!keyFound)
-    {
-        DBG("ConfigFile::" << __func__ << ": Key \"" << key 
-                << "\" is not expected in " << filename);
-        throw BadKeyException(key);
-    }
-    try
-    {
-        switch (valueType)
-        {
-            case stringType:
-                setConfigValue<String>(key,
-                        defaultJson.getProperty<String>(key));
-                return;
-            case intType:
-                setConfigValue<int>(key,
-                        defaultJson.getProperty<int>(key));
-                return;
-            case boolType:
-                setConfigValue<bool>(key,
-                        defaultJson.getProperty<bool>(key));
-                return;
-            case doubleType:
-                setConfigValue<double>(key,
-                        defaultJson.getProperty<double>(key));
-        }
-    }
-    catch(JSONFile::FileException e)
-    {
-        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
-        alertWindows.showPlaceholderError(e.getErrorMessage());
-    }
-    catch(JSONFile::TypeException e)
-    {
-        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
-        alertWindows.showPlaceholderError(e.getErrorMessage());
-    }
-}
-
-/*
- * Restores all values in the configuration file to their defaults. All 
- * updated values will notify their Listeners and be written to the JSON
- * file.
- */
-void ConfigFile::restoreDefaultValues()
-{
-    using namespace juce;
-    const std::vector<DataKey>& keys = getDataKeys();
-    for(const DataKey& key : keys)
-    {
-        try
-        {
-            switch(key.dataType)
-            {
-                case stringType:
-                    setConfigValue<String>(key.keyString,
-                            defaultJson.getProperty<String>(key.keyString));
-                    break;
-                case intType:
-                    setConfigValue<int>(key.keyString,
-                            defaultJson.getProperty<int>(key.keyString));
-                    break;
-                case boolType:
-                    setConfigValue<bool>(key.keyString,
-                            defaultJson.getProperty<bool>(key.keyString));
-                    break;
-                case doubleType:
-                    setConfigValue<double>(key.keyString,
-                            defaultJson.getProperty<double>(key.keyString));
-                    break;
             }
         }
         catch(JSONFile::FileException e)

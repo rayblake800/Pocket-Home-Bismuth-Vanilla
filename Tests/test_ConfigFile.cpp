@@ -112,6 +112,28 @@ public:
         config->addListener(
                 static_cast<ConfigFile::Listener*>(&listener), trackedKeys);
     }
+
+    /*
+     * Restore a value to its default state.
+     */
+    void restoreDefaultValue(juce::String key)
+    {
+        using namespace juce;
+        const ScopedWriteLock writeLock(configLock);
+        TestJson* config = static_cast<TestJson*>(testResource.get());
+        config->restoreDefaultValue(key);
+    }
+
+    /*
+     * Restore all values to their default states.
+     */
+    void restoreDefaultValues()
+    {
+        using namespace juce;
+        const ScopedWriteLock writeLock(configLock);
+        TestJson* config = static_cast<TestJson*>(testResource.get());
+        config->restoreDefaultValues();
+    }
 };
 
 class ConfigTest : public juce::UnitTest
@@ -140,26 +162,27 @@ public:
         expectGreaterThan(existingConfig.getSize(), lastSize,
 		"Failed to restore and save default config values!");
         lastSize = existingConfig.getSize();
+	int64 defaultSize = lastSize;
         
         beginTest("Reading default values");
         const String strKey = backgroundKey;
         const String intKey = maxRowsKey;
         const String boolKey = showCursorKey;
 
-        const String testString = config->getConfigValue<String>
+        const String defaultString = config->getConfigValue<String>
                 (strKey);
-        const int testInt =  config->getConfigValue<int>
+        const int defaultInt =  config->getConfigValue<int>
                 (intKey);
-        const bool testBool = config->getConfigValue<bool>
+        const bool defaultBool = config->getConfigValue<bool>
                 (boolKey);
 
-        expect(testString.isNotEmpty(), "Test string value is empty!");
-        expect(testInt > 0, "Test int value is 0!");
+        expect(defaultString.isNotEmpty(), "Default string value is empty!");
+        expect(defaultInt > 0, "Default int value is 0!");
 
         beginTest("Writing new values");
-        const String newStr = "testString" + testString;
-        const int newInt = testInt * 100;
-        const bool newBool = !testBool;
+        const String newStr = "defaultString" + defaultString;
+        const int newInt = defaultInt * 100;
+        const bool newBool = !defaultBool;
 
         config->setConfigValue<String>(strKey, newStr);
         config->setConfigValue<int>(intKey, newInt);
@@ -209,8 +232,8 @@ public:
                 != newBool, "Test bool value change failed!"); 
         config->addListener(testListener, {boolKey});
    
-        config->setConfigValue<String>(strKey, testString);
-        config->setConfigValue<int>(intKey, testInt);
+        config->setConfigValue<String>(strKey, defaultString);
+        config->setConfigValue<int>(intKey, defaultInt);
         expectEquals(lastValueChanged, strKey,
 			"Listener registered wrong updated key!");
 
@@ -219,6 +242,27 @@ public:
 			"Listener registered wrong updated key!");
         existingConfig.deleteFile();
         
+	beginTest("Restoring defaults");
+	String largeString = defaultString;
+	for(int i = 0; i < 5; i++)
+	{
+	    largeString += largeString;
+	}
+	config->setConfigValue<String>(strKey, largeString);
+	config->setConfigValue<int>(intKey, newInt);
+	lastSize = existingConfig.getSize();
+	expectGreaterThan(lastSize, defaultSize,
+		"Test expects the current size to exceed the default.");
+	config->restoreDefaultValue(strKey);
+	expectEquals(config->getConfigValue<String>(strKey),
+		defaultString, "Default string should have been restored!");
+	expectGreaterThan(lastSize, existingConfig.getSize(),
+		"Config should still be greater than the default size.");
+	config->restoreDefaultValues();
+	lastSize = existingConfig.getSize();
+	expectEquals(defaultSize, lastSize,
+		"File size should have matched the default size.");
+
         beginTest("Resource sharing");
         ScopedPointer<TestConfigFile> config2
                 = new TestConfigFile("config.json");

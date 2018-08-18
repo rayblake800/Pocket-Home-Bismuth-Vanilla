@@ -134,6 +134,24 @@ public:
     }
      
     /**
+     * Sets a configuration data value back to its default setting.  If this
+     * changes the value, listeners will be notified and changes will be saved.
+     * 
+     * @param key       A key value defined in the config file.
+     * 
+     * @throws BadKeyException   If the key parameter was not a valid key string
+     *                           for this ConfigFile.
+     */
+    virtual void restoreDefaultValue(juce::String key);
+
+    /**
+     * Restores all values in the configuration file to their defaults. All 
+     * updated values will notify their Listeners and be written to the JSON
+     * file.
+     */
+    virtual void restoreDefaultValues();
+     
+    /**
      * Signals an attempt to access an invalid config value in a ConfigFile.
      */
     struct BadKeyException : public std::exception
@@ -228,25 +246,7 @@ protected:
      * should call this once, after they load any custom object or array data.
      */
     void loadJSONData();
-    
-    /**
-     * Sets a configuration data value back to its default setting.  If this
-     * changes the value, listeners will be notified and changes will be saved.
-     * 
-     * @param key       A key value defined in the config file.
-     * 
-     * @throws BadKeyException   If the key parameter was not a valid key string
-     *                           for this ConfigFile.
-     */
-    virtual void restoreDefaultValue(juce::String key);
 
-    /**
-     * Restores all values in the configuration file to their defaults. All 
-     * updated values will notify their Listeners and be written to the JSON
-     * file.
-     */
-    virtual void restoreDefaultValues();
-    
     /**
      * Checks if a key string is valid for this ConfigFile.
      * 
