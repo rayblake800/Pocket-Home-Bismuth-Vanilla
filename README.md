@@ -22,11 +22,11 @@
 
 # Optional Requirements
 
-*network-manager(>= 0.9.10.0-7)*: Required for WiFi controls.
+**network-manager(>= 0.9.10.0-7)**: Required for WiFi controls.
 
-*polkit-gnome*: Required for setting and changing the application password. Any other polkit package containing pkexec and a graphical authentication agent should work, but others are currently untested.
+**polkit-gnome**: Required for setting and changing the application password. Any other polkit package containing pkexec and a graphical authentication agent should work, but others are currently untested.
 
-*gtk-update-icon-cache*: Required for quickly loading application icons. The system should be configured to run this automatically when new icon directories or files are added. Pocket-home does not yet support automatic icon cache updates.
+**gtk-update-icon-cache**: Required for quickly loading application icons. The system should be configured to run this automatically when new icon directories or files are added. Pocket-home does not yet support automatic icon cache updates.
 
 # How to install
 
