@@ -1,5 +1,6 @@
 VERSION=0.0.8.10
 BUILD=1
+DATA_PATH="/usr/share/pocket-home"
 
 .PHONY: all debug debugClean debugBuild debugInstall clean build devinstall pack install
 
@@ -22,7 +23,10 @@ debugBuild:
 debugInstall:
 	killall pocket-home ;\
 	sudo cp build/Debug/pocket-home /usr/bin/pocket-home && \
-	sudo cp -R assets/* /usr/share/pocket-home
+	if [ ! -d $(DATA_PATH) ]; then \
+	    sudo mkdir $(DATA_PATH) ; \
+	fi && \
+	sudo cp -R assets/* $(DATA_PATH)
 
 clean:
 	cd Builds/LinuxMakefile && env CONFIG=Release $(MAKE) clean
@@ -34,7 +38,10 @@ build:
 devinstall:
 	killall pocket-home ;\
 	sudo cp build/Release/pocket-home /usr/bin/pocket-home && \
-	sudo cp -R assets/* /usr/share/pocket-home
+	if [ ! -d $(DATA_PATH) ]; then \
+	    sudo mkdir $(DATA_PATH) ; \
+	fi && \
+	sudo cp -R assets/* $(DATA_PATH)
 
 pack: all
 	mkdir -p pack-debian/usr/bin/ pack-debian/usr/share/pocket-home/
