@@ -21,13 +21,12 @@
   Now that NTC is gone and the PocketCHIP has ceased production, the primary goal of this project is to make Pocket-Home as easy as possible to adapt and use for similar handheld GNU/Linux devices.  Future updates will focus on support for a greater variety of hardware options, input controls, and system configurations.  See the [project tasklist](./docs/TODO.txt) for more information on future project goals.
 
 # Optional Requirements
-    network-manager(>= 0.9.10.0-7): Required for WiFi controls.
 
-    polkit-gnome: Required for setting and changing the application password.
-	-Any other polkit package containing pkexec and a graphical authentication agent should work, but others are currently untested.
+network-manager(>= 0.9.10.0-7): Required for WiFi controls.
 
-    gtk-update-icon-cache: Required for quickly loading application icons.
-	-The system should be configured to run this automatically when new icon directories or files are added. Pocket-home does not yet support automatic icon cache updates.
+polkit-gnome: Required for setting and changing the application password. Any other polkit package containing pkexec and a graphical authentication agent should work, but others are currently untested.
+
+gtk-update-icon-cache: Required for quickly loading application icons. The system should be configured to run this automatically when new icon directories or files are added. Pocket-home does not yet support automatic icon cache updates.
 
 # How to install
 
