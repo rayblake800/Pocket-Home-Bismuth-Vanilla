@@ -150,17 +150,6 @@ public:
     Window getWindowParent(const Window window) const;
 
     /**
-     * Gets a window's index among its siblings in the window tree.  Lower
-     * values are closer to the front.
-     *
-     * @param window  An XLib window identifier.
-     *
-     * @return  The window's index among its siblings, or -1 if the window is
-     *          invalid.
-     */
-    int getHeightIndex(const Window window) const;
-    
-    /**
      * Checks if a specific window is active.
      * 
      * @param window  An XLib window identifier;

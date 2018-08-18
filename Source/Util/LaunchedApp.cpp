@@ -156,7 +156,7 @@ void LaunchedApp::activateWindow()
     }
     for(const Window& window : appWindows)
     {
-        DBG("LaunchedApp::" << __func__ << "Activating window for " 
+        DBG("LaunchedApp::" << __func__ << ": Activating window for " 
                 << launchCommand);
         xWindows.activateWindow(window);
     }

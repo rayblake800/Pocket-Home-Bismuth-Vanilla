@@ -25,8 +25,8 @@ public:
 		"Killing process succeeded when process should have been already dead");
         
         beginTest("top test");
-        LaunchedApp top("urxvt -e top");
-        system("sleep 0.3");
+        LaunchedApp top("top");
+        system("sleep 1");
         expect(top.isRunning(), "\"top\" process is not running.");
         output = top.getProcessOutput();
         expect(output.isEmpty(), String("Unexpected process output ") + output);
@@ -42,21 +42,19 @@ public:
 			"Bad process error code should have been 0.");
         
         beginTest("window activation");
-        String termName(std::getenv("TERMINAL"));
-	expect(termName.isNotEmpty(), "$TERMINAL is not set.");
-        LaunchedApp winApp(termName);
-        system("sleep 0.5");
+        LaunchedApp winApp("xclock");
+        system("sleep 1");
         expect(winApp.isRunning(),
 		"Launched terminal process not running.");
         winApp.activateWindow();
-        system("sleep 0.5");
+	MessageManager::getInstance()->runDispatchLoopUntil(5000);
         expect(!WindowFocus::isFocused(),
 		"pocket-home window should not be focused.");
         winApp.kill();
         XWindowInterface xwin;
         xwin.activateWindow(xwin.getPocketHomeWindow());
         expect(!winApp.isRunning(),
-			"terminal process should be dead.");
+			"xclock process should be dead.");
     }
 };
 

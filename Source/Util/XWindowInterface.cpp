@@ -51,9 +51,7 @@ Window XWindowInterface::getPocketHomeWindow() const
     {
         windowHandle = (Window) rootComponent->getWindowHandle();
     }
-    #if JUCE_DEBUG
-        printWindowInfo(windowHandle);
-    #endif
+    //printWindowInfo(windowHandle);
     return windowHandle;
 }
   
@@ -212,6 +210,14 @@ juce::Array<Window> XWindowInterface::getMatchingWindows(
             nextDepth.clear();
         }
     }
+#if JUCE_DEBUG
+    for(int i = 0; i < matches.size(); i++)
+    {
+	DBG("XWindowInterface::" << __func__ <<
+	        ": Matching window " << i << ":");
+       printWindowInfo(matches[i]);	
+    }
+#endif
     return matches;
 }
  
@@ -239,16 +245,6 @@ Window XWindowInterface::getWindowParent(const Window window) const
     return parents[parents.size() - 2];    
 }
 
-/*
- * Gets a window's index among its siblings in the window tree.  Lower
- * values are closer to the front.
- */
-int XWindowInterface::getHeightIndex(const Window window) const
-{
-    return getWindowSiblings(window).indexOf(window);
-}
-    
- 
 /*
  * Finds all direct ancestors of a window and returns them in parent->child
  * order.
@@ -362,16 +358,53 @@ void XWindowInterface::activateWindow(const Window window) const
 {
     using namespace juce;
     DBG("XWindowInterface::" << __func__ << ": activating window:");
-    #if JUCE_DEBUG
-        printWindowInfo(window);
-    #endif
+    //printWindowInfo(window);
     jassert(xPropertySupported(activeWindowProperty));
+
+    //Switch to the window's desktop, if necessary
     if(xPropertySupported(currentDesktopProperty)
         && xPropertySupported(windowDesktopProperty))
     {
         setDesktopIndex(getWindowDesktop(window));
     }
-    
+
+    //Raise the window (and its parents) above other windows on the stack.
+    Array<Window> ancestors = getWindowAncestry(window);
+    jassert(!ancestors.isEmpty() && ancestors.getLast() == window);
+    for(const Window& window : ancestors)
+    {
+        Array<Window> siblings = getWindowSiblings(window);
+        if(siblings.size() < 2)
+        {
+            continue;
+        }
+	//Ensure override_redirect is enabled, or the window manager will
+	//prevent us from moving windows.
+        XWindowAttributes winAttr;
+        XGetWindowAttributes(display, window, &winAttr);
+        if(!winAttr.override_redirect)
+        {
+            XSetWindowAttributes newAttrs;
+            newAttrs.override_redirect = true;
+	    //Get mask for only changing the override_redirect attribute.
+            long changeMask = 1L<<9; //defined on XSetWindowAttributes manpage
+            int result = XChangeWindowAttributes(display, window, changeMask,
+                    &newAttrs);
+        }
+        XRaiseWindow(display, window);
+        XSync(display, false);
+        XFlush(display);
+        if(!winAttr.override_redirect)
+        {
+            //reset override_redirect
+            XSetWindowAttributes newAttrs;
+            newAttrs.override_redirect = false;
+            long changeMask = 1L<<9;
+            int result = XChangeWindowAttributes(display, window, changeMask,
+                    &newAttrs);
+         }
+    }
+    //Request input focus for the newly raised window
     XEvent xEvent;
     memset(&xEvent, 0, sizeof(xEvent));
     xEvent.type = ClientMessage;
@@ -396,47 +429,10 @@ void XWindowInterface::activateWindow(const Window window) const
     else if(result == BadValue)
     {
         DBG("XWindowInterface::" << __func__ << ": Bad value error!");
-    }
-    //Raise and all parent windows before raising the target window
-    Array<Window> ancestors = getWindowAncestry(window);
-    jassert(!ancestors.isEmpty() && ancestors.getLast() == window);
-    
-    for(const Window& window : ancestors)
-    {
-        Array<Window> siblings = getWindowSiblings(window);
-        if(siblings.size() < 2)
-        {
-            continue;
-        }
-        
-        XWindowAttributes winAttr;
-        XGetWindowAttributes(display, window, &winAttr);
-        if(!winAttr.override_redirect)
-        {
-            XSetWindowAttributes newAttrs;
-            newAttrs.override_redirect = true;
-            long changeMask = 1L<<9; //defined on XSetWindowAttributes manpage
-            //override_redirect needs to be true in order to move windows
-            int result = XChangeWindowAttributes(display, window, changeMask,
-                    &newAttrs);
-        }
-        
-        XRaiseWindow(display, window);
-        XSync(display, false);
-        XFlush(display);
-        
-        if(!winAttr.override_redirect)
-        {
-            //reset override_redirect
-            XSetWindowAttributes newAttrs;
-            newAttrs.override_redirect = false;
-            long changeMask = 1L<<9; //defined on XSetWindowAttributes manpage
-            //override_redirect needs to be true in order to move windows
-            int result = XChangeWindowAttributes(display, window, changeMask,
-                    &newAttrs);
-         }
-    }
-}
+    } 
+    XSync(display, false);
+    XFlush(display);
+}   
     
 /*
  * Finds the current selected desktop index.

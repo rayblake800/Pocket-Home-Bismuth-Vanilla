@@ -21,11 +21,11 @@ wifiManager([fakeWifi]
 })
 {
     using namespace juce;
-#    if JUCE_DEBUG
-    setBounds(10, 10, 480, 272);
-#    else
     Rectangle<int> screenSize = getDisplaySize();
-
+#    if JUCE_DEBUG
+    setBounds(screenSize.getWidth()/2 - 240,
+            screenSize.getHeight()/2 - 136, 480, 272);
+#    else
     setBounds(0, 0, screenSize.getWidth(), screenSize.getHeight());
 #    endif
     setWantsKeyboardFocus(false);
