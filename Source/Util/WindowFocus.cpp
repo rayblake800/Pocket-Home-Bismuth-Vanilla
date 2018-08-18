@@ -49,6 +49,10 @@ void WindowFocus::BroadcastWindow::activeWindowStatusChanged()
         {
             accessListeners([this](Array<Listener*>& listeners)
             {
+	        //Window focus regained, close modal components so 
+		//AlertWindows don't get stuck.
+	        ModalComponentManager::getInstance()
+		        ->cancelAllModalComponents();
                 DBG("WindowFocus::activeWindowStatusChanged: gained focus,"
                         << " notifying " << listeners.size() << " listeners.");
                 for (Listener* listener : listeners)
