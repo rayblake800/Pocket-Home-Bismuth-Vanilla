@@ -149,11 +149,20 @@ void PokeLookAndFeel::drawButtonText(
         bool isButtonDown)
 {
     using namespace juce;
+
+    int yIndent = jmin(4, button.proportionOfHeight(0.3f));
+    int cornerSize = jmin(button.getHeight(), button.getWidth()) / 2;
+
+    int leftIndent = 2 + cornerSize / (button.isConnectedOnLeft() ? 4 : 2);
+    int rightIndent = 2 + cornerSize / (button.isConnectedOnRight() ? 4 : 2);
     Font font(getTextButtonFont(button, button.getHeight()));
     font.setExtraKerningFactor(0.06f);
+    Rectangle<int> textBounds = button.getLocalBounds();
+    textBounds.setWidth(textBounds.getWidth() - leftIndent - rightIndent);
+    textBounds.setHeight(textBounds.getHeight() - 2 * yIndent);
     ComponentConfigFile componentConfig;
     int fontHeight = componentConfig.getFontHeight
-            (button.getLocalBounds(), button.getButtonText());
+            (textBounds, button.getButtonText());
     //Check if the TextButton is actually a ScalingTextButton with a maximum
     //height scale set.
     ScalingTextButton* scalingBtn = dynamic_cast<ScalingTextButton*>(&button);
@@ -177,14 +186,6 @@ void PokeLookAndFeel::drawButtonText(
         buttonColour = buttonColour.darker();
     }
     g.setColour(buttonColour);
-
-    const int yIndent = jmin(4, button.proportionOfHeight(0.3f));
-    const int cornerSize = jmin(button.getHeight(), button.getWidth()) / 2;
-
-    const int leftIndent = jmin(fontHeight,
-            2 + cornerSize / (button.isConnectedOnLeft() ? 4 : 2));
-    const int rightIndent = jmin(fontHeight,
-            2 + cornerSize / (button.isConnectedOnRight() ? 4 : 2));
 
     g.drawFittedText(button.getButtonText(), leftIndent, yIndent,
             button.getWidth() - leftIndent - rightIndent,
