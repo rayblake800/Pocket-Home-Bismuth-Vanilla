@@ -54,6 +54,8 @@
     -Read DesktopEntry data values using a key->function map.
     -Enforce thorough implementation of the Desktop entry standard.
     -Add support for .Desktop Actions
+    -Move all functionality in AssetFiles to XDGDirectories
+    -Select program data directories using XDGDirectories
 
 ## Configuration Improvements
 

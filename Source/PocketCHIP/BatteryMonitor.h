@@ -67,6 +67,7 @@ private:
      */
     enum DataSource
     {
+        customCommand, //execute a configured command and read output
         gaugeFile, //read from gauge file
         voltageFile, //read from voltage file
         i2cBus, //directly query i2c bus
