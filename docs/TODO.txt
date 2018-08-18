@@ -16,7 +16,7 @@
     
 ## Misc. bug fixes and improvements
     -Define missing ColourId values for custom component classes.
-
+    -Recreate ResourceManager as a template class ResourceManager<SharedResourceType> to cut down on duplicate code.
 #### Known documentation issues for individual classes
 
     -AppMenu helper classes are missing full documentation.
@@ -152,3 +152,4 @@
         -Input options
     -Create a class that can automatically disable a component if one or more
      of these features is not available
+    -Ensure that everything controllable by touch/mouse input can also be controlled by keyboard input, and vice versa.

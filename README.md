@@ -8,9 +8,9 @@
  
 [Add here: animated screenshot of scrolling menu]
 
-[Add here: animated screenshot of editing a desktop entry]
+[Add here: screenshot of editing a desktop entry]
 
-[Add here: animated screenshot of adding a folder]
+[Add here: screenshot of adding a folder]
 
   Although this project started as a fork of Pocket-Home marshmallow, the project has been almost completely re-written.  Code modules are thoroughly documented and organized to simplify the process of introducing new features.  Whenever possible, program attributes are now defined in JSON configuration files.  
 
@@ -20,12 +20,14 @@
 
   Now that NTC is gone and the PocketCHIP has ceased production, the primary goal of this project is to make Pocket-Home as easy as possible to adapt and use for similar handheld GNU/Linux devices.  Future updates will focus on support for a greater variety of hardware options, input controls, and system configurations.  See /docs/TODO.txt for more information on future project goals.
 
-# Requirements
-    
-  Although this project intends
-     polkit + authentication agent
+# Optional Requirements
+    network-manager(>= 0.9.10.0-7): Required for WiFi controls.
 
-     gtk icon caching
+    polkit-gnome: Required for setting and changing the application password.
+	-Any other polkit package containing pkexec and a graphical authentication agent should work, but others are currently untested.
+
+    gtk-update-icon-cache: Required for quickly loading application icons.
+	-The system should be configured to run this automatically when new icon directories or files are added. Pocket-home does not yet support automatic icon cache updates.
 
 # How to install
 
@@ -52,14 +54,12 @@
 ####  2. Cloning and building
       
       git clone --recursive https://github.com/centuryglass/PocketCHIP-pocket-home.git
-      make
+      make build
       make devinstall
-      sudo systemctl restart lightdm
 
 #### 3. Updating
 
       git pull
       git submodule update
-      make
+      make build
       make devinstall
-      sudo systemctl restart lightdm
