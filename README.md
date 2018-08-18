@@ -1,3 +1,4 @@
+
 # Pocket-Home Bismuth Edition
 
   Pocket-Home Bismuth is an application launcher for PocketCHIP and other portable Linux devices.  It provides a highly configurable application menu, along with power controls, a basic WiFi manager, and other assorted system controls and information.
@@ -22,11 +23,11 @@
 
 # Optional Requirements
 
--*network-manager*: Version 0.9.10.0-7 or greater. Required for WiFi controls.
-
--*polkit-gnome*: Required for setting and changing the application password. Any other polkit package containing pkexec and a graphical authentication agent should work, but others are currently untested.
-
--*gtk-update-icon-cache*: Required for quickly loading application icons. The system should be configured to run this automatically when new icon directories or files are added. Pocket-home does not yet support automatic icon cache updates.
+ - *network-manager*: Version 0.9.10.0-7 or greater. Required for WiFi controls.
+ 
+ - *polkit-gnome*: Required for setting and changing the application password. Any other polkit package containing pkexec and a graphical authentication agent should work, but others are currently untested.
+ 
+ - *gtk-update-icon-cache*: Required for quickly loading application icons. The system should be configured to run this automatically when new icon directories or files are added. Pocket-home does not yet support automatic icon cache updates.
 
 # How to install
 
