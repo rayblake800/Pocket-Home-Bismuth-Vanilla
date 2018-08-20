@@ -111,7 +111,6 @@ GPPObject::SignalHandler::SignalHandler(const SignalHandler& rhs)
  */
 GPPObject::SignalHandler::~SignalHandler()
 {
-    GPPObject::signalHandlers.removeAllInstancesOf(this);
     while(!sources.isEmpty())
     {
         GPPObject* source = sources[0];
@@ -121,14 +120,15 @@ GPPObject::SignalHandler::~SignalHandler()
             {
                 DBG("GPPObject::SignalHandler::" << __func__ 
                         << ": Error: Found null signal source");
-                sources.removeAllInstancesOf(source);
             }
             else
             {
                 source->removeSignalHandler(this);
             }
+            sources.removeAllInstancesOf(source);
         }
     }
+    GPPObject::signalHandlers.removeAllInstancesOf(this);
     //ADDR_LOG(this, "Destroyed as SignalHandler");
 }
 
@@ -160,25 +160,26 @@ void GPPObject::addSignalHandler(SignalHandler* signalHandler)
 void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
 {
     using namespace juce;
+    const juce::ScopedLock objectLock(signalLock);
     //ADDR_LOG(this, "removing signal handler ", signalHandler);
     //ADDR_LOG(signalHandler, " removing from signal source ", this);
-    signalHandler->sources.removeAllInstancesOf(this);
-    GObject* object = getGObject();
-    if(object != nullptr)
+    if(isSignalHandlerValid(signalHandler))
     {
-        Array<gulong> signalIDs;
-        for(auto it = registeredSignals.begin(); 
-            it != registeredSignals.end(); it++)
-        {
-            if(it->second == signalHandler)
-            {
-                signalIDs.add(it->first);
-            }
-        }
+        signalHandler->sources.removeAllInstancesOf(this);
+    }
+    else
+    {
+        DBG("GPPObject::" << __func__ 
+                << ": removing invalid signal handler " 
+                << String((unsigned long)signalHandler));
+    }
+    GObject* object = getGObject();
+    if(object != nullptr && signalHandler != nullptr)
+    {
+        Array<gulong> signalIDs = registeredSignals[signalHandler];
         for(const gulong& signalID : signalIDs)
         {
             g_signal_handler_disconnect(object, signalID);
-            registeredSignals.erase(signalID);
             
             //ADDR_LOG(this, String("signal ID ") +String(signalID) 
             //        + String(" removed, handler was "), signalHandler);
@@ -188,14 +189,16 @@ void GPPObject::removeSignalHandler(SignalHandler* signalHandler)
             //        + String(" removed, handler was "), signalHandler);
             
         }
+        registeredSignals.erase(signalHandler);
         g_clear_object(&object);
     }
     else
     {
         //ADDR_LOG(this, "GPPObject is null, but tried removing ",
         //        signalHandler);
-        DBG("GPPObject::removeSignalHandler: Tried to remove signal "
-                << "handler from null object.");
+        DBG("GPPObject::removeSignalHandler: Null object and/or SignalHandler,"
+                << "Object=" << String((unsigned long) object)
+                << ", SignalHandler=" << String((unsigned long) signalHandler));
     }
 }
 
@@ -326,12 +329,18 @@ GObject* GPPObject::getOtherGObject(const GPPObject& source) const
  */
 void GPPObject::removeData()
 {
+    const juce::ScopedLock objectLock(signalLock);
     if(!isNull())
     {
         while(!registeredSignals.empty())
         {
-            SignalHandler* toRemove = registeredSignals.begin()->second;
-            removeSignalHandler(toRemove);
+            auto signalIter = registeredSignals.begin();
+            SignalHandler* toClear = signalIter->first;
+            if(isSignalHandlerValid(toClear))
+            {
+                toClear->sources.removeAllInstancesOf(this);
+            }
+            registeredSignals.erase(signalIter);
         }
         GObject* object = objectData.get();
         //ADDR_LOG(object, "Removing from GPPObject ", this);
@@ -388,6 +397,7 @@ void GPPObject::connectSignalHandler(SignalHandler* handler,
 {
     callInMainContext([this, handler, signalName, callback]()
     {
+        const juce::ScopedLock objectLock(signalLock);
         GObject* object = getGObject();
         if(object != nullptr)
         {
@@ -405,7 +415,7 @@ void GPPObject::connectSignalHandler(SignalHandler* handler,
 //                    ADDR_LOG(object, "Added signal handler ", handler);
 //                    ADDR_LOG(object, "through GPPObject ", this);
 
-                    registeredSignals[handlerID] = handler;
+                    registeredSignals[handler].add(handlerID);
                     handler->sources.addIfNotAlreadyThere(this);
                 }
                 else
@@ -523,10 +533,13 @@ juce::Array<GPPObject::SignalHandler*> GPPObject::getSignalHandlers()
 {
     using namespace juce;
     Array<SignalHandler*> handlers;
-    for(auto it = registeredSignals.begin(); 
-        it != registeredSignals.end(); it++)
+    for(int i = 0; i < signalHandlers.size(); i++)
     {
-        handlers.addIfNotAlreadyThere(it->second);
+        SignalHandler* handler = signalHandlers[i];
+        if(!registeredSignals[handler].isEmpty())
+        {
+            handlers.addIfNotAlreadyThere(handler);
+        }
     }
     return handlers;
 }

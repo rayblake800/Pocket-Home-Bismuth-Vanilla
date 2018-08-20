@@ -676,12 +676,12 @@ void WifiStateManager::NetworkInterface::timerCallback()
             if (wifiConnected)
             {
                 DBG("WifiStateManager::" << __func__
-                        << ": disconnecting failed, this shouldn't be possible!");
+                      << ": disconnecting failed, this shouldn't be possible!");
             }
             else
             {
                 DBG("WifiStateManager::" << __func__
-                        << ": finished disconnecting, but no signal was received");
+                    << ": finished disconnecting, but no signal was received");
                 setWifiState(enabled);
             }
             return;
@@ -694,7 +694,7 @@ void WifiStateManager::NetworkInterface::timerCallback()
             else
             {
                 DBG("WifiStateManager::" << __func__
-                        << ": finished turning on wifi, but no signal was received");
+                   << ": finished turning on wifi, but no signal was received");
                 setWifiState(wifiEnabled ? enabled : disabled);
             }
             return;
@@ -708,14 +708,13 @@ void WifiStateManager::NetworkInterface::timerCallback()
             {
 
                 DBG("WifiStateManager::" << __func__
-                        << ": finished turning off wifi, but no signal was received");
+                  << ": finished turning off wifi, but no signal was received");
                 setWifiState(wifiEnabled ? enabled : disabled);
             }
             return;
         case disabled:
         case enabled:
         case connected:
-
             DBG("NetworkInterface::" << __func__
                     << ": unexpected timeout from state "
                     << wifiStateString(currentState));

@@ -321,7 +321,7 @@ void WifiSettingsPage::updateAPList()
 {
     for (int i = 0; i < visibleAPs.size(); i++)
     {
-        if (visibleAPs[i].isNull())
+        if (visibleAPs[i].isNull() || visibleAPs[i].getSSID().isEmpty())
         {
             visibleAPs.remove(i);
             i--;

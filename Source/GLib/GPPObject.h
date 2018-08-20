@@ -471,8 +471,13 @@ private:
      * they're destroyed.
      */
     static juce::Array<SignalHandler*, juce::CriticalSection> signalHandlers;
+
+    /**
+     * Used to prevent concurrent modification of signal handler data.
+     */
+    juce::CriticalSection signalLock;
     
-    std::map<gulong,SignalHandler*> registeredSignals;
+    std::map<SignalHandler*,juce::Array<gulong>> registeredSignals;
     juce::ScopedPointer<GWeakRef> objectRef = nullptr;
     juce::Atomic<GObject*> objectData;
 };
