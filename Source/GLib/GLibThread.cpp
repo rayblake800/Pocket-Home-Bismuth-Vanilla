@@ -137,9 +137,9 @@ void GLibThread::run()
         threadStarting.notify_all();
         lock.unlock();
         
-        DBG("GLibSignalHandler: entering GLib main loop");
+        DBG("GLibSignalThread: entering GLib main loop");
         g_main_loop_run(mainLoop);
-        DBG("GLibSignalHandler: exiting GLib main loop");
+        DBG("GLibSignalThread: exiting GLib main loop");
         
         g_main_context_pop_thread_default(context);
     }

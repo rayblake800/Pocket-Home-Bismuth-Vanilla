@@ -2306,7 +2306,6 @@
             <in>SavedConnection.cpp</in>
             <in>SavedConnections.cpp</in>
           </df>
-          <in>GLibSignalHandler.cpp</in>
           <in>GLibThread.cpp</in>
           <in>GPPObject.cpp</in>
         </df>
@@ -3447,10 +3446,6 @@
             ex="false"
             tool="1"
             flavor2="11">
-        <ccTool flags="1">
-        </ccTool>
-      </item>
-      <item path="Source/GLib/GLibSignalHandler.cpp" ex="false" tool="1" flavor2="11">
         <ccTool flags="1">
         </ccTool>
       </item>

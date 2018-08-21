@@ -403,14 +403,17 @@
           <FILE id="IBIEPS" name="NMPPDeviceWifi.h" compile="0" resource="0"
                 file="Source/GLib/LibNM/NMPPDeviceWifi.h"/>
         </GROUP>
-        <FILE id="enqIe3" name="GLibSignalHandler.cpp" compile="1" resource="0"
-              file="Source/GLib/GLibSignalHandler.cpp"/>
-        <FILE id="JxYitG" name="GLibSignalHandler.h" compile="0" resource="0"
-              file="Source/GLib/GLibSignalHandler.h"/>
+        <FILE id="enqIe3" name="GLibSignalThread.cpp" compile="1" resource="0"
+              file="Source/GLib/GLibSignalThread.cpp"/>
+        <FILE id="JxYitG" name="GLibSignalThread.h" compile="0" resource="0"
+              file="Source/GLib/GLibSignalThread.h"/>
         <FILE id="I3J62v" name="GLibThread.cpp" compile="1" resource="0" file="Source/GLib/GLibThread.cpp"/>
         <FILE id="Bena02" name="GLibThread.h" compile="0" resource="0" file="Source/GLib/GLibThread.h"/>
         <FILE id="cdp704" name="GPPObject.cpp" compile="1" resource="0" file="Source/GLib/GPPObject.cpp"/>
         <FILE id="R8ed81" name="GPPObject.h" compile="0" resource="0" file="Source/GLib/GPPObject.h"/>
+        <FILE id="P12bwS" name="SignalHandler.cpp" compile="1" resource="0"
+              file="Source/GLib/SignalHandler.cpp"/>
+        <FILE id="NniAEx" name="SignalHandler.h" compile="0" resource="0" file="Source/GLib/SignalHandler.h"/>
       </GROUP>
       <GROUP id="{E9FAD86E-0FA8-B4EA-823C-6DA2E0586F80}" name="PocketCHIP">
         <FILE id="XvLxag" name="Audio.cpp" compile="1" resource="0" file="Source/PocketCHIP/Audio.cpp"/>

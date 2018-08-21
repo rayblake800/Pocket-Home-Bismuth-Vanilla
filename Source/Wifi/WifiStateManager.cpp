@@ -1,5 +1,5 @@
 #include "WifiStateManager.h"
-#include "GLibSignalHandler.h"
+#include "GLibSignalThread.h"
 
 juce::ScopedPointer<ResourceManager::SharedResource>
         WifiStateManager::sharedResource = nullptr;

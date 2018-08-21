@@ -1,7 +1,7 @@
 #include "nm-utils.h"
 #include "JuceHeader.h"
 #include "Utils.h"
-#include "GLibSignalHandler.h"
+#include "GLibSignalThread.h"
 #include "WifiAccessPoint.h"
 #include "NMPPAccessPoint.h"
     

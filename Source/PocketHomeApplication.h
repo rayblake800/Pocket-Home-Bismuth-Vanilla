@@ -5,7 +5,7 @@
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
 #include "ColourConfigFile.h"
-#include "GLibSignalHandler.h"
+#include "GLibSignalThread.h"
 
 /**
  * @file PocketHomeApplication.h
@@ -77,7 +77,7 @@ private:
     ColourConfigFile colourConfig;
 
     //Runs the GLib event loop
-    GLibSignalHandler gLibThread;
+    GLibSignalThread gLibThread;
     
     //The program appearance manager.  This is dynamically allocated because it
     //should be created after/destroyed before all of the above resources.

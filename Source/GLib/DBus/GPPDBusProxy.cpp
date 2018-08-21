@@ -1,5 +1,5 @@
 #include "Utils.h"
-#include "GLibSignalHandler.h"
+#include "GLibSignalThread.h"
 #include "GPPDBusProxy.h"
 
 GPPDBusProxy::GPPDBusProxy

@@ -1,7 +1,7 @@
 /**
- * @file GLibSignalHandler.h
+ * @file GLibSignalThread.h
  * 
- * @brief GLibSignalHandler runs the main event loop used to send and receive 
+ * @brief GLibSignalThread runs the main event loop used to send and receive 
  *        GLib signals.
  * 
  * On creation, this starts up a GLib event thread to handle events on the
@@ -10,7 +10,7 @@
  * default context, they will use this thread to send signals, and run callback
  * functions in response to those signals.
  * 
- * All GLibSignalHandler share the global event thread, and provide methods for 
+ * All GLibSignalThreads share the global event thread, and provide methods for 
  * synchronously and asynchronously running functions on the thread. Signal 
  * sources and signal handlers can safely be added and removed from any thread,
  * but any other interaction with GLib objects should be handled on this thread.
@@ -32,12 +32,12 @@
 
 
 
-class GLibSignalHandler : private ResourceManager
+class GLibSignalThread : private ResourceManager
 {
 public:
-    GLibSignalHandler();
+    GLibSignalThread();
 
-    virtual ~GLibSignalHandler() { }
+    virtual ~GLibSignalThread() { }
     
     /**
      * Returns true if it's being executed on the GLib default event thread.

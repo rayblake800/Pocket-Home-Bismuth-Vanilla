@@ -8,18 +8,22 @@
  * 
  * @brief A C++ interface and RAII container for GLib GObject data.
  * 
- * GPPObject holds a GObject*, providing methods for setting and getting object
- * properties, and adding and removing object signal handlers.  
+ *  GPPObject holds a GObject*, providing methods for setting and getting object
+ * properties, and adding and removing object signal handlers.  GPPObject
+ * classes allow code to access GLib libraries through thread-safe C++ objects,
+ * reducing the amount of necessary C-style code.  
  * 
- *   GPPObjects ensure that GObject pointers are referenced when acquired, and
+ *  GPPObjects ensure that GObject pointers are referenced when acquired, and
  * unreferenced when removed.  If the GObject data is null or otherwise invalid,
  * isNull() will return true, and all other methods will return default data or 
  * do nothing.
  * 
- *   GPPObject is intended only for use as a base class for specialized GObject
- * containers.
+ *  GPPObject subclasses should each handle a single type of GObject, providing
+ * methods to interact with that object.  GPPObjects should avoid holding any
+ * extra data, to ensure that all objects holding the same GObject data are
+ * completely interchangeable.
  */
-
+template <class GPPObjectType>
 class GPPObject
 {
 protected:
@@ -32,9 +36,15 @@ protected:
      * Create a new GPPObject as a reference to existing object data.
      * 
      *@param toCopy  This object's GObject* will be shared, and its reference
-     *               count will be increased if the GObject* is GPPObject-owned.
+     *               count will be increased.
      */
-    GPPObject(const GPPObject& toCopy);
+    GPPObject(const GPPObject<GPPObjectType>& toCopy)
+    {
+        objectRef = new GWeakRef;
+        objectData.set(nullptr);
+        g_weak_ref_init(objectRef.get(), nullptr);
+        setGObject(toCopy);
+    }
     
     /**
      * Create a GPPObject from GObject* data.
@@ -45,33 +55,12 @@ protected:
      *                  added.
      */
     GPPObject(GObject* toAssign);
-    
+
 public:
     /**
-     * When this GPPObject is destroyed, unreference its GObject data, and 
-     * remove all signal handlers added through this GPPObject.
+     * When this GPPObject is destroyed, unreference its GObject data.
      */
     virtual ~GPPObject();
-    
-    
-#if JUCE_DEBUG
-    /**
-     * Adds an entry to the address log of the contained GObject, if this 
-     * GPPObject is not null.
-     * 
-     * @param log  A line of text to add to the GObject's address log 
-     * 
-     * @param ptr2 Another data pointer.  If non-null, this pointer's 
-     *             address ID will be appended to the log entry.
-     */
-    void gObjectAddressLog(juce::String log, void* ptr2 = nullptr) const;
-    
-#define G_OBJ_ADDR_LOG(gppObj,...)   gppObj.gObjectAddressLog(__VA_ARGS__)
-    
-#else
-#define G_OBJ_ADDR_LOG(gppObj,...)
-#endif
-    
     
     /**
      * Checks if this object holds valid GObject data.
@@ -79,63 +68,17 @@ public:
      * @return true iff this object's GObject* is null or otherwise invalid
      */
     bool isNull() const;
-    
-    
-    /**
-     * An abstract base for classes that handle GObject signals.
-     */
-    class SignalHandler
-    {
-    protected:
-        friend class GPPObject;
-        
-        /**
-         * Adds the signal handler's address to the list of valid signal
-         * handlers.
-         */
-        SignalHandler();
-        
-        /**
-         * Copies an existing signal handler, subscribing to all of that
-         * handler's tracked signals.
-         * 
-         * @param rhs  Another valid signal handler.
-         */
-        SignalHandler(const SignalHandler& rhs);
-        
-    public:
-        /**
-         * Removes all of its signal handling callback functions from within the
-         * signal context thread, and remove this signal handler's address from
-         * the list of valid signal handlers.
-         */
-        virtual ~SignalHandler();
-        
-    private:
-        /**
-         * Callback function for handling property change notification signals.
-         * Subclasses should override this to handle all specific property 
-         * change notifications that they support.
-         * 
-         * @param source    Holds the GObject that emitted the signal.
-         * 
-         * @param property  The name of the object property that changed.
-         */
-        virtual void propertyChanged(GPPObject* source, juce::String property);
-        
-        /**
-         * Track all signal sources handled by this object
-         */
-        juce::Array<GPPObject*, juce::CriticalSection> sources;
-    };
+
+    template<class HandlerObjectType> class SignalHandler;
     
     /**
      * Adds a signal handler to all of this object's tracked signals.
-     * 
+     *
      * @param signalHandler  A signal handler object that will listen to this
      *                       object's signals.
      */
-    virtual void addSignalHandler(SignalHandler* signalHandler);
+    virtual void addSignalHandler(SignalHandler<GPPObjectType>& signalHandler)
+            = 0;
       
     /**
      * Un-subscribe a signal handler from all of this object's signals
@@ -143,7 +86,8 @@ public:
      * @param signalHandler  A signal handler object that should no longer
      *                       receive signals from this GPPObject.
      */
-    virtual void removeSignalHandler(SignalHandler* signalHandler);
+    virtual void removeSignalHandler
+    (SignalHandler<GPPObjectType>& signalHandler);
            
     /**
      * Checks if this GPPObject and another share the same GObject data.
@@ -152,7 +96,7 @@ public:
      * 
      * @return true iff both objects hold pointers to the same GObject data.
      */
-    bool operator==(const GPPObject& rhs) const;
+    bool operator==(const GPPObject<GPPObjectType>& rhs) const;
     
     /**
      * Checks if this GPPObject holds a particular GObject pointer.
@@ -171,7 +115,7 @@ public:
      * @return true iff both objects don't hold pointers to the same GObject 
      *         data.
      */
-    bool operator!=(const GPPObject& rhs) const;
+    bool operator!=(const GPPObject<GPPObjectType>& rhs) const;
     
     /**
      * Checks if this GPPObject does not hold a particular GObject pointer.
@@ -189,7 +133,7 @@ public:
      * @param rhs  Another GPPObject instance.  If rhs is a null object, this 
      *             object's data will be removed.
      */
-    void operator=(const GPPObject& rhs);
+    void operator=(const GPPObject<GPPObjectType>& rhs);
     
     /**
      * Sets this GPPObject's stored GObject data.
@@ -246,7 +190,7 @@ protected:
      *                                 attached to the old GObject data will
      *                                 be re-assigned to the new GObject data.
      */
-    void setGObject(const GPPObject& toCopy,
+    void setGObject(const GPPObject<GPPObjectType>& toCopy,
             bool transferSignalHandlers = true);
     
     /**
@@ -261,7 +205,7 @@ protected:
      *          reference count incremented, and the caller is responsible for
      *          unreferencing it when it is no longer needed.
      */
-    GObject* getOtherGObject(const GPPObject& source) const;
+    GObject* getOtherGObject(const GPPObject<GPPObjectType>& source) const;
     
     /**
      * Remove this object's GObject data, clearing all associated references 
@@ -360,49 +304,20 @@ protected:
     }
        
     /**
-     * Register a signal handler for any signal the GObject can send.
+     * Subscribe a signal handler to any signal the GObject can send.
      * 
      * @param handler     A signal handler that can provide a valid GCallback 
      *                    for the chosen signal.
      * 
-     * @param signalName  The signal that handler wishes to receive.
+     * @param signalName  The signal that handler should receive.
      * 
-     * @param callback    A signal-specific callback function that checks if the
-     *                    signal handler and GPPObject are valid before running
-     *                    the callback provided by handler->getSignalCallback().
-     *                    Because callback parameters vary between different
-     *                    signal types, GPPObject subclasses have to provide
-     *                    their own callback functions for any signals they
-     *                    support.
+     * @param callback    A signal-specific callback function.  This should be a
+     *                    static void function that takes parameters specific
+     *                    to the subscribed signal.  A pointer to the signal
+     *                    handler will be passed to the callback as data.
      */
-    void connectSignalHandler(SignalHandler* handler,
+    void connectSignalHandler(SignalHandler<GPPObjectType>* handler,
             const char* signalName, GCallback callback);
-    
-    /**
-     * Check if a specific SignalHandler still exists.  Signal callback
-     * functions should never dereference SignalHandler data without first
-     * making sure this function returns true.
-     * 
-     * @param handler  A pointer that may or may not point to a valid 
-     *                 SignalHandler.
-     * 
-     * @return  true iff the SignalHandler is valid.
-     */
-    static bool isSignalHandlerValid(SignalHandler* handler);
-    
-    /**
-     * Use signal callback data to find the address of the GPPObject that
-     * contains the signal source.
-     * 
-     * @param objectData    The GObject that emitted the signal.
-     * 
-     * @param signalHandler The SignalHandler registered to handle the signal.
-     * 
-     * @return  the address of the first signal source tracked by signalHandler
-     *          that is storing objectData, or nullptr if none is found.
-     */
-    static GPPObject* findObjectWrapper(GObject* objectData,
-            SignalHandler* signalHandler);
     
     /**
      * Add a signal handler to receive notifications when a specific object 
@@ -435,19 +350,10 @@ protected:
     static void notifyCallback(GObject* objectData, GParamSpec* pSpec,
             SignalHandler* signalHandler);
     
-private:    
+private:
     
     /**
-     * Get all signal handlers registered with this object's GObject data.
-     * 
-     * @return  the list of all signal handlers, without duplicate entries.
-     */
-    juce::Array<SignalHandler*> getSignalHandlers();
-    
-    /**
-     * Set this object's GObject data to a new value.  Unless the object data 
-     * given equals the object's old data, any signal handlers attached to the
-     * old GObject data will be removed.
+     * Set this object's GObject data to a new value.
      * 
      * @param data                A GObject of a type that is compatible with 
      *                            this GPPObject. 
@@ -456,28 +362,12 @@ private:
      *                            the GObject data reference count.  This should
      *                            only be set to false if an extra reference was
      *                            added prior to calling setData.
-     * 
-     * @param moveSignalHandlers  Iff this parameter is true and data is not
-     *                            null, all signal handlers removed from the
-     *                            old GObject data will be attached to the new
-     *                            GObject data.
      */
-    void setData(GObject* data, bool refNeeded, bool moveSignalHandlers);
+    void setData(GObject* data, bool refNeeded = true);
     
-    /**
-     * Holds pointers to all existing SignalHandler objects.  SignalHandler
-     * pointers will only be dereferenced if they're found in this list. All
-     * signal handlers will ensure that they're removed from this list when
-     * they're destroyed.
-     */
-    static juce::Array<SignalHandler*, juce::CriticalSection> signalHandlers;
-
-    /**
-     * Used to prevent concurrent modification of signal handler data.
-     */
-    juce::CriticalSection signalLock;
     
-    std::map<SignalHandler*,juce::Array<gulong>> registeredSignals;
     juce::ScopedPointer<GWeakRef> objectRef = nullptr;
+    
+    
     juce::Atomic<GObject*> objectData;
 };

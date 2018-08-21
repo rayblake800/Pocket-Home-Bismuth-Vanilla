@@ -1,5 +1,5 @@
 #include "Utils.h"
-#include "GLibSignalHandler.h"
+#include "GLibSignalThread.h"
 #include "GPPObject.h"
 
 juce::Array<GPPObject::SignalHandler*, juce::CriticalSection> 
@@ -13,19 +13,6 @@ GPPObject::GPPObject()
     objectRef = new GWeakRef;
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
-    //ADDR_LOG(this,"Created as GPPObject");
-}
-
-/*
- * Creates a new GPPObject as a reference to existing object data.
- */
-GPPObject::GPPObject(const GPPObject& toCopy)
-{
-    //ADDR_LOG(this,"Created as GPPObject");
-    objectRef = new GWeakRef;
-    objectData.set(nullptr);
-    g_weak_ref_init(objectRef.get(), nullptr);
-    setGObject(toCopy);
 }
 
 /*
@@ -33,7 +20,6 @@ GPPObject::GPPObject(const GPPObject& toCopy)
  */
 GPPObject::GPPObject(GObject* toAssign)
 {
-    //ADDR_LOG(this,"Created as GPPObject");
     objectRef = new GWeakRef;
     objectData.set(nullptr);
     g_weak_ref_init(objectRef.get(), nullptr);
@@ -41,32 +27,12 @@ GPPObject::GPPObject(GObject* toAssign)
 }
 
 /*
- * When this GPPObject is destroyed, unreference its GObject data, and 
- * remove all signal handlers added through this GPPObject.
+ * When this GPPObject is destroyed, unreference its GObject data.
  */
 GPPObject::~GPPObject()
 {
     removeData(); 
-    //ADDR_LOG(this,"Destroyed as GPPObject");
 }
-
-#if JUCE_DEBUG
-    /*
-     * Adds an entry to the address log of the contained GObject, if this 
-     * GPPObject is not null.
-     */
-    void GPPObject::gObjectAddressLog(juce::String log, void* ptr2) const
-    {
-        GObject* object = getGObject();
-        if(object != nullptr)
-        {
-            ADDR_LOG(object, log, ptr2);
-            g_object_unref(object);
-        }
-        
-    }
-#endif
-
 
 /*
  * Checks if this object holds valid GObject data.
@@ -76,83 +42,6 @@ bool GPPObject::isNull() const
     return objectData.get() == nullptr;
 }
 
-/*
- * Adds the signal handler's address to the list of valid signal
- * handlers.
- */
-GPPObject::SignalHandler::SignalHandler()
-{
-    //ADDR_LOG(this,"Created as SignalHandler");
-    GPPObject::signalHandlers.addIfNotAlreadyThere(this);
-}
-
-
-        
-/*
- * Copies an existing signal handler, subscribing to all of that
- * handler's tracked signals.
- */
-GPPObject::SignalHandler::SignalHandler(const SignalHandler& rhs)
-{   
-    
-    //ADDR_LOG(this,"Created as SignalHandler copying ", &rhs);
-    //ADDR_LOG(&rhs,"Shared data with ", this);
-    GPPObject::signalHandlers.addIfNotAlreadyThere(this);
-    for(GPPObject* signalSource : sources)
-    {
-        signalSource->addSignalHandler(this);
-    }
-}
-        
-/*
- * Removes all of its signal handling callback functions from within the
- * signal context thread, and remove this signal handler's address from
- * the list of valid signal handlers.
- */
-GPPObject::SignalHandler::~SignalHandler()
-{
-    while(!sources.isEmpty())
-    {
-        GPPObject* source = sources[0];
-        if(source != nullptr)
-        {
-            if(source->isNull())
-            {
-                DBG("GPPObject::SignalHandler::" << __func__ 
-                        << ": Error: Found null signal source");
-            }
-            else
-            {
-                source->removeSignalHandler(this);
-            }
-            sources.removeAllInstancesOf(source);
-        }
-    }
-    GPPObject::signalHandlers.removeAllInstancesOf(this);
-    //ADDR_LOG(this, "Destroyed as SignalHandler");
-}
-
-/*
- * Callback function for handling property change notification signals.
- * Subclasses should override this to handle all specific property 
- * change notifications that they support.
- */
-void GPPObject::SignalHandler::propertyChanged
-(GPPObject* source, juce::String property)
-{
-    DBG("GPPObject::SignalHandler::" << __func__ << ": Unexpected notification"
-            << "for property " << property); 
-}
-    
-/*
- * Adds a signal handler to all of this object's tracked signals.
- */
-void GPPObject::addSignalHandler(SignalHandler* signalHandler)
-{
-    DBG("GPPObject::" << __func__ << ": Error: GPPObject subclass with GType " 
-            << g_type_name(getType())
-            << " did not override addListener()");
-}
 
 /*
  * Un-subscribe a signal handler from all of this object's signals
@@ -361,7 +250,7 @@ void GPPObject::removeData()
  */
 void GPPObject::callInMainContext(std::function<void()> call) const
 {
-    GLibSignalHandler globalDefault;
+    GLibSignalThread globalDefault;
     globalDefault.gLibCall(call);
 }
 

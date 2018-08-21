@@ -19,6 +19,8 @@
       <df name="build">
         <df name="Debug">
         </df>
+        <df name="Release">
+        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -50,69 +52,7 @@
           </df>
           <df name="examples">
             <df name="AnalyticsCollection">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="yourcompany">
-                              <df name="analyticscollection">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="AnalyticsCollection">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="AnalyticsCollection.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="AnalyticsCollection.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_analytics.cpp</in>
                 <in>include_juce_core.cpp</in>
                 <in>include_juce_core.mm</in>
@@ -126,36 +66,11 @@
                 <in>include_juce_gui_basics.mm</in>
               </df>
               <df name="Source">
-                <in>DemoAnalyticsEventTypes.h</in>
-                <in>GoogleAnalyticsDestination.h</in>
                 <in>Main.cpp</in>
-                <in>MainComponent.h</in>
               </df>
             </df>
             <df name="AnimationAppExample">
-              <df name="Builds">
-                <df name="iOS">
-                  <df name="AnimationAppExample">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="AnimationAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="AnimationAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -265,71 +180,7 @@
               <in>SimpleFFTDemo.h</in>
             </df>
             <df name="audio plugin demo">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="juce">
-                              <df name="jucedemoplugin">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="JuceDemoPlugin">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="JuceDemoPlugin.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="JuceDemoPlugin.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -371,30 +222,11 @@
               </df>
               <df name="Source">
                 <in>PluginEditor.cpp</in>
-                <in>PluginEditor.h</in>
                 <in>PluginProcessor.cpp</in>
-                <in>PluginProcessor.h</in>
-                <in>SinewaveSynth.h</in>
               </df>
             </df>
             <df name="audio plugin host">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="Plugin Host.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -426,43 +258,15 @@
               </df>
               <df name="Source">
                 <in>FilterGraph.cpp</in>
-                <in>FilterGraph.h</in>
                 <in>FilterIOConfiguration.cpp</in>
-                <in>FilterIOConfiguration.h</in>
                 <in>GraphEditorPanel.cpp</in>
-                <in>GraphEditorPanel.h</in>
                 <in>HostStartup.cpp</in>
                 <in>InternalFilters.cpp</in>
-                <in>InternalFilters.h</in>
                 <in>MainHostWindow.cpp</in>
-                <in>MainHostWindow.h</in>
-                <in>PluginWindow.h</in>
               </df>
             </df>
             <df name="AudioAppExample">
-              <df name="Builds">
-                <df name="iOS">
-                  <df name="AudioAppExample">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="AudioAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="AudioAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -498,29 +302,8 @@
               </df>
             </df>
             <df name="AUv3Synth">
-              <df name="Builds">
-                <df name="iOS">
-                  <df name="AUv3Synth">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="AUv3Synth.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="AUv3Synth.xcodeproj">
-                  </df>
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
                 <in>BinaryData.cpp</in>
-                <in>BinaryData.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -561,42 +344,12 @@
                 <in>include_juce_gui_extra.mm</in>
               </df>
               <df name="Source">
-                <df name="BinaryData">
-                </df>
-                <in>AUv3SynthEditor.h</in>
                 <in>AUv3SynthProcessor.cpp</in>
-                <in>MaterialLookAndFeel.h</in>
               </df>
             </df>
             <df name="BLOCKS">
               <df name="BlocksDrawing">
-                <df name="Builds">
-                  <df name="iOS">
-                    <df name="BlocksDrawing">
-                      <df name="Images.xcassets">
-                        <df name="AppIcon.appiconset">
-                        </df>
-                        <df name="LaunchImage.launchimage">
-                        </df>
-                      </df>
-                    </df>
-                    <df name="BlocksDrawing.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="LinuxMakefile">
-                  </df>
-                  <df name="MacOSX">
-                    <df name="BlocksDrawing.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
                 <df name="JuceLibraryCode">
-                  <in>AppConfig.h</in>
-                  <in>JuceHeader.h</in>
                   <in>include_juce_audio_basics.cpp</in>
                   <in>include_juce_audio_basics.mm</in>
                   <in>include_juce_audio_devices.cpp</in>
@@ -624,40 +377,12 @@
                   <in>include_juce_opengl.mm</in>
                 </df>
                 <df name="Source">
-                  <in>LightpadComponent.h</in>
                   <in>Main.cpp</in>
                   <in>MainComponent.cpp</in>
-                  <in>MainComponent.h</in>
                 </df>
               </df>
               <df name="BlocksMonitor">
-                <df name="Builds">
-                  <df name="iOS">
-                    <df name="BlocksMonitor">
-                      <df name="Images.xcassets">
-                        <df name="AppIcon.appiconset">
-                        </df>
-                        <df name="LaunchImage.launchimage">
-                        </df>
-                      </df>
-                    </df>
-                    <df name="BlocksMonitor.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="LinuxMakefile">
-                  </df>
-                  <df name="MacOSX">
-                    <df name="BlocksMonitor.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
                 <df name="JuceLibraryCode">
-                  <in>AppConfig.h</in>
-                  <in>JuceHeader.h</in>
                   <in>include_juce_audio_basics.cpp</in>
                   <in>include_juce_audio_basics.mm</in>
                   <in>include_juce_audio_devices.cpp</in>
@@ -685,39 +410,11 @@
                   <in>include_juce_opengl.mm</in>
                 </df>
                 <df name="Source">
-                  <in>BlockComponents.h</in>
                   <in>Main.cpp</in>
-                  <in>MainComponent.h</in>
                 </df>
               </df>
               <df name="BlocksSynth">
-                <df name="Builds">
-                  <df name="iOS">
-                    <df name="BlocksSynth">
-                      <df name="Images.xcassets">
-                        <df name="AppIcon.appiconset">
-                        </df>
-                        <df name="LaunchImage.launchimage">
-                        </df>
-                      </df>
-                    </df>
-                    <df name="BlocksSynth.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="LinuxMakefile">
-                  </df>
-                  <df name="MacOSX">
-                    <df name="BlocksSynth.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
                 <df name="JuceLibraryCode">
-                  <in>AppConfig.h</in>
-                  <in>JuceHeader.h</in>
                   <in>include_juce_audio_basics.cpp</in>
                   <in>include_juce_audio_basics.mm</in>
                   <in>include_juce_audio_devices.cpp</in>
@@ -745,11 +442,7 @@
                   <in>include_juce_opengl.mm</in>
                 </df>
                 <df name="Source">
-                  <in>Audio.h</in>
                   <in>Main.cpp</in>
-                  <in>MainComponent.h</in>
-                  <in>Oscillators.h</in>
-                  <in>WaveshapeProgram.h</in>
                 </df>
               </df>
               <in>BlocksDrawingDemo.h</in>
@@ -757,21 +450,7 @@
               <in>BlocksSynthDemo.h</in>
             </df>
             <df name="BouncingBallWavetableDemo">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="BouncingBallWavetableDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -805,19 +484,7 @@
               </df>
             </df>
             <df name="ComponentTutorialExample">
-              <df name="Builds">
-                <df name="MacOSX">
-                  <df name="ComponentTutorialExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_core.cpp</in>
                 <in>include_juce_core.mm</in>
                 <in>include_juce_data_structures.cpp</in>
@@ -834,89 +501,11 @@
               <df name="Source">
                 <in>Main.cpp</in>
                 <in>MainComponent.cpp</in>
-                <in>MainComponent.h</in>
-                <in>ToggleLightComponent.h</in>
-                <in>ToggleLightGridComponent.h</in>
               </df>
             </df>
             <df name="Demo">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="roli">
-                              <df name="jucedemo">
-                              </df>
-                            </df>
-                            <df name="yourcompany">
-                              <df name="jucedemo">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                        <df name="res">
-                          <df name="drawable-mdpi">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="JuceDemo">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="JuceDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="JuceDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
                 <in>BinaryData.cpp</in>
-                <in>BinaryData.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -947,61 +536,13 @@
                 <in>include_juce_video.cpp</in>
                 <in>include_juce_video.mm</in>
               </df>
-              <df name="Resources">
-              </df>
               <df name="Source">
                 <df name="Demos">
                   <df name="Box2DTests">
-                    <in>AddPair.h</in>
-                    <in>ApplyForce.h</in>
-                    <in>BodyTypes.h</in>
-                    <in>Breakable.h</in>
-                    <in>Bridge.h</in>
-                    <in>BulletTest.h</in>
-                    <in>Cantilever.h</in>
-                    <in>Car.h</in>
-                    <in>Chain.h</in>
-                    <in>CharacterCollision.h</in>
-                    <in>CollisionFiltering.h</in>
-                    <in>CollisionProcessing.h</in>
-                    <in>CompoundShapes.h</in>
-                    <in>Confined.h</in>
-                    <in>ContinuousTest.h</in>
-                    <in>DistanceTest.h</in>
-                    <in>Dominos.h</in>
-                    <in>DumpShell.h</in>
-                    <in>DynamicTreeTest.h</in>
-                    <in>EdgeShapes.h</in>
-                    <in>EdgeTest.h</in>
-                    <in>Gears.h</in>
-                    <in>OneSidedPlatform.h</in>
-                    <in>Pinball.h</in>
-                    <in>PolyCollision.h</in>
-                    <in>PolyShapes.h</in>
-                    <in>Prismatic.h</in>
-                    <in>Pulleys.h</in>
-                    <in>Pyramid.h</in>
-                    <in>RayCast.h</in>
-                    <in>Revolute.h</in>
-                    <in>Rope.h</in>
-                    <in>RopeJoint.h</in>
-                    <in>SensorTest.h</in>
-                    <in>ShapeEditing.h</in>
-                    <in>SliderCrank.h</in>
-                    <in>SphereStack.h</in>
                     <in>TestEntries.cpp</in>
-                    <in>TheoJansen.h</in>
-                    <in>Tiles.h</in>
-                    <in>TimeOfImpact.h</in>
-                    <in>Tumbler.h</in>
-                    <in>VaryingFriction.h</in>
-                    <in>VaryingRestitution.h</in>
-                    <in>VerticalStack.h</in>
-                    <in>Web.h</in>
                   </df>
                   <in>AnimationDemo.cpp</in>
                   <in>AudioLatencyDemo.cpp</in>
-                  <in>AudioLiveScrollingDisplay.h</in>
                   <in>AudioPlaybackDemo.cpp</in>
                   <in>AudioRecordingDemo.cpp</in>
                   <in>AudioSettingsDemo.cpp</in>
@@ -1035,18 +576,14 @@
                   <in>UnitTestsDemo.cpp</in>
                   <in>ValueTreesDemo.cpp</in>
                   <in>VideoDemo.cpp</in>
-                  <in>WavefrontObjParser.h</in>
                   <in>WebBrowserDemo.cpp</in>
                   <in>WidgetsDemo.cpp</in>
                   <in>WindowsDemo.cpp</in>
                   <in>XMLandJSONDemo.cpp</in>
                 </df>
-                <in>DemoUtilities.h</in>
                 <in>IntroScreen.cpp</in>
-                <in>JuceDemoHeader.h</in>
                 <in>Main.cpp</in>
                 <in>MainWindow.cpp</in>
-                <in>MainWindow.h</in>
               </df>
             </df>
             <df name="DemoRunner">
@@ -1264,21 +801,8 @@
               <in>WaveShaperTanhDemo.h</in>
             </df>
             <df name="DSP module plugin demo">
-              <df name="Builds">
-                <df name="MacOSX">
-                  <df name="DSPModulePluginDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
                 <in>BinaryData.cpp</in>
-                <in>BinaryData.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -1322,31 +846,14 @@
                 <in>include_juce_opengl.cpp</in>
                 <in>include_juce_opengl.mm</in>
               </df>
-              <df name="Resources">
-              </df>
               <df name="Source">
                 <in>PluginEditor.cpp</in>
-                <in>PluginEditor.h</in>
                 <in>PluginProcessor.cpp</in>
-                <in>PluginProcessor.h</in>
               </df>
             </df>
             <df name="DSPDemo">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="DSPDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
                 <in>BinaryData.cpp</in>
-                <in>BinaryData.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -1372,8 +879,6 @@
                 <in>include_juce_gui_extra.cpp</in>
                 <in>include_juce_gui_extra.mm</in>
               </df>
-              <df name="Resources">
-              </df>
               <df name="Source">
                 <df name="Demos">
                   <in>ConvolutionDemo.cpp</in>
@@ -1386,11 +891,8 @@
                   <in>StateVariableFilterDemo.cpp</in>
                   <in>WaveShaperTanhDemo.cpp</in>
                 </df>
-                <in>DSPDemo.h</in>
                 <in>Main.cpp</in>
-                <in>Main.h</in>
                 <in>MainComponent.cpp</in>
-                <in>MainComponent.h</in>
               </df>
             </df>
             <df name="GUI">
@@ -1423,33 +925,7 @@
               <in>WindowsDemo.h</in>
             </df>
             <df name="HelloWorld">
-              <df name="Builds">
-                <df name="iOS">
-                  <df name="HelloWorld">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="HelloWorld.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="HelloWorld.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_core.cpp</in>
                 <in>include_juce_core.mm</in>
                 <in>include_juce_data_structures.cpp</in>
@@ -1466,83 +942,11 @@
               <df name="Source">
                 <in>Main.cpp</in>
                 <in>MainComponent.cpp</in>
-                <in>MainComponent.h</in>
               </df>
             </df>
             <df name="InAppPurchase">
-              <df name="BinaryData">
-              </df>
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="roli">
-                              <df name="juceinapppurchasesample">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                        <df name="res">
-                          <df name="drawable-hdpi">
-                          </df>
-                          <df name="drawable-ldpi">
-                          </df>
-                          <df name="drawable-mdpi">
-                          </df>
-                          <df name="drawable-xhdpi">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="InAppPurchase">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="InAppPurchase.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="InAppPurchase.xcodeproj">
-                  </df>
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
                 <in>BinaryData.cpp</in>
-                <in>BinaryData.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -1572,79 +976,12 @@
                 <in>include_juce_product_unlocking.cpp</in>
                 <in>include_juce_product_unlocking.mm</in>
               </df>
-              <df name="Signing">
-              </df>
               <df name="Source">
                 <in>Main.cpp</in>
-                <in>VoicePurchases.h</in>
               </df>
             </df>
             <df name="MidiTest">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="yourcompany">
-                              <df name="miditest">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="MidiTest">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="MidiTest.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="MidiTest.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -1669,29 +1006,12 @@
                 <in>include_juce_gui_extra.mm</in>
               </df>
               <df name="Source">
-                <df name="Resources">
-                </df>
                 <in>Main.cpp</in>
                 <in>MainComponent.cpp</in>
-                <in>MainComponent.h</in>
               </df>
             </df>
             <df name="MPETest">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="MPETest.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -1722,87 +1042,12 @@
                 <in>include_juce_video.mm</in>
               </df>
               <df name="Source">
-                <in>MPEDemoSynthVoice.h</in>
-                <in>MPESetupComponent.h</in>
                 <in>Main.cpp</in>
-                <in>MainComponent.h</in>
-                <in>Visualiser.h</in>
-                <in>ZoneColourPicker.h</in>
-                <in>ZoneLayoutComponent.h</in>
               </df>
             </df>
             <df name="NetworkGraphicsDemo">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="juce">
-                              <df name="networkgraphicsdemo">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                        <df name="res">
-                          <df name="drawable-mdpi">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="JUCE Network Graphics Demo">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="JUCE Network Graphics Demo.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="JUCE Network Graphics Demo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
                 <in>BinaryData.cpp</in>
-                <in>BinaryData.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -1832,39 +1077,12 @@
                 <in>include_juce_osc.cpp</in>
               </df>
               <df name="Source">
-                <in>Demos.h</in>
                 <in>Main.cpp</in>
-                <in>MasterComponent.h</in>
-                <in>SharedCanvas.h</in>
-                <in>SlaveComponent.h</in>
               </df>
             </df>
             <df name="OpenGLAppExample">
-              <df name="Builds">
-                <df name="iOS">
-                  <df name="OpenGLAppExample">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="OpenGLAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="OpenGLAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
                 <in>BinaryData.cpp</in>
-                <in>BinaryData.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -1893,29 +1111,12 @@
                 <in>include_juce_video.mm</in>
               </df>
               <df name="Source">
-                <df name="Resources">
-                  <in>WavefrontObjParser.h</in>
-                </df>
                 <in>Main.cpp</in>
                 <in>MainComponent.cpp</in>
               </df>
             </df>
             <df name="OSCMonitor">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="OSCMonitor.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -1946,76 +1147,10 @@
               </df>
               <df name="Source">
                 <in>Main.cpp</in>
-                <in>MainComponent.h</in>
-                <in>OSCLogListBox.h</in>
               </df>
             </df>
             <df name="OSCReceiver">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="yourcompany">
-                              <df name="oscreceiver">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="OSCReceiver">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="OSCReceiver.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="OSCReceiver.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_core.cpp</in>
                 <in>include_juce_core.mm</in>
                 <in>include_juce_cryptography.cpp</in>
@@ -2034,75 +1169,10 @@
               </df>
               <df name="Source">
                 <in>Main.cpp</in>
-                <in>MainComponent.h</in>
               </df>
             </df>
             <df name="OSCSender">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="yourcompany">
-                              <df name="oscsender">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="OSCSender">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="OSCSender.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="OSCSender.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_core.cpp</in>
                 <in>include_juce_core.mm</in>
                 <in>include_juce_data_structures.cpp</in>
@@ -2117,23 +1187,10 @@
               </df>
               <df name="Source">
                 <in>Main.cpp</in>
-                <in>MainComponent.h</in>
               </df>
             </df>
             <df name="PluckedStringsDemo">
-              <df name="Builds">
-                <df name="MacOSX">
-                  <df name="PluckedStringsDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -2159,9 +1216,6 @@
               </df>
               <df name="Source">
                 <in>Main.cpp</in>
-                <in>StringComponent.h</in>
-                <in>StringDemoComponent.h</in>
-                <in>StringSynthesiser.h</in>
               </df>
             </df>
             <df name="Plugins">
@@ -2178,19 +1232,7 @@
             </df>
             <df name="PlugInSamples">
               <df name="Arpeggiator">
-                <df name="Builds">
-                  <df name="MacOSX">
-                    <df name="Arpeggiator.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
                 <df name="JuceLibraryCode">
-                  <in>AppConfig.h</in>
-                  <in>JuceHeader.h</in>
                   <in>include_juce_audio_basics.cpp</in>
                   <in>include_juce_audio_basics.mm</in>
                   <in>include_juce_audio_devices.cpp</in>
@@ -2239,19 +1281,7 @@
                 </df>
               </df>
               <df name="GainPlugIn">
-                <df name="Builds">
-                  <df name="MacOSX">
-                    <df name="GainPlugIn.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
                 <df name="JuceLibraryCode">
-                  <in>AppConfig.h</in>
-                  <in>JuceHeader.h</in>
                   <in>include_juce_audio_basics.cpp</in>
                   <in>include_juce_audio_basics.mm</in>
                   <in>include_juce_audio_devices.cpp</in>
@@ -2300,23 +1330,7 @@
                 </df>
               </df>
               <df name="InterAppAudioEffect">
-                <df name="Builds">
-                  <df name="iOS">
-                    <df name="InterAppAudioEffect">
-                      <df name="Images.xcassets">
-                        <df name="AppIcon.appiconset">
-                        </df>
-                        <df name="LaunchImage.launchimage">
-                        </df>
-                      </df>
-                    </df>
-                    <df name="InterAppAudioEffect.xcodeproj">
-                    </df>
-                  </df>
-                </df>
                 <df name="JuceLibraryCode">
-                  <in>AppConfig.h</in>
-                  <in>JuceHeader.h</in>
                   <in>include_juce_audio_basics.cpp</in>
                   <in>include_juce_audio_basics.mm</in>
                   <in>include_juce_audio_devices.cpp</in>
@@ -2357,28 +1371,12 @@
                   <in>include_juce_gui_extra.mm</in>
                 </df>
                 <df name="Source">
-                  <in>IAAEffectEditor.h</in>
                   <in>IAAEffectProcessor.cpp</in>
-                  <in>IAAEffectProcessor.h</in>
-                  <in>SimpleMeter.h</in>
                 </df>
               </df>
               <df name="MultiOutSynth">
-                <df name="Builds">
-                  <df name="MacOSX">
-                    <df name="MultiOutSynth.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
                 <df name="JuceLibraryCode">
-                  <in>AppConfig.h</in>
                   <in>BinaryData.cpp</in>
-                  <in>BinaryData.h</in>
-                  <in>JuceHeader.h</in>
                   <in>include_juce_audio_basics.cpp</in>
                   <in>include_juce_audio_basics.mm</in>
                   <in>include_juce_audio_devices.cpp</in>
@@ -2423,25 +1421,11 @@
                   <in>include_juce_video.mm</in>
                 </df>
                 <df name="Source">
-                  <df name="BinaryData">
-                  </df>
                   <in>MultiOutSynth.cpp</in>
                 </df>
               </df>
               <df name="NoiseGate">
-                <df name="Builds">
-                  <df name="MacOSX">
-                    <df name="NoiseGate.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
                 <df name="JuceLibraryCode">
-                  <in>AppConfig.h</in>
-                  <in>JuceHeader.h</in>
                   <in>include_juce_audio_basics.cpp</in>
                   <in>include_juce_audio_basics.mm</in>
                   <in>include_juce_audio_devices.cpp</in>
@@ -2490,21 +1474,7 @@
                 </df>
               </df>
               <df name="Surround">
-                <df name="Builds">
-                  <df name="LinuxMakefile">
-                  </df>
-                  <df name="MacOSX">
-                    <df name="Surround.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
                 <df name="JuceLibraryCode">
-                  <in>AppConfig.h</in>
-                  <in>JuceHeader.h</in>
                   <in>include_juce_audio_basics.cpp</in>
                   <in>include_juce_audio_basics.mm</in>
                   <in>include_juce_audio_devices.cpp</in>
@@ -2549,86 +1519,13 @@
                   <in>include_juce_video.mm</in>
                 </df>
                 <df name="Source">
-                  <in>SurroundEditor.h</in>
                   <in>SurroundProcessor.cpp</in>
                 </df>
               </df>
-              <in>GenericEditor.h</in>
             </df>
             <df name="PushNotificationsDemo">
-              <df name="BinaryResources">
-                <df name="images">
-                </df>
-                <df name="sounds">
-                </df>
-              </df>
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="raw">
-                          </df>
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="juce">
-                              <df name="pushnotificationsdemo">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="raw">
-                          </df>
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="PushNotificationsDemo">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="PushNotificationsDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="PushNotificationsDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
                 <in>BinaryData.cpp</in>
-                <in>BinaryData.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -2657,23 +1554,10 @@
               <df name="Source">
                 <in>Main.cpp</in>
                 <in>MainComponent.cpp</in>
-                <in>MainComponent.h</in>
               </df>
             </df>
             <df name="SimpleFFTExample">
-              <df name="Builds">
-                <df name="MacOSX">
-                  <df name="SimpleFFTExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -2701,7 +1585,6 @@
               </df>
               <df name="Source">
                 <in>Main.cpp</in>
-                <in>SpectrogramComponent.h</in>
               </df>
             </df>
             <df name="Utilities">
@@ -2970,19 +1853,7 @@
               </df>
             </df>
             <df name="binarybuilder">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="BinaryBuilder.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_core.cpp</in>
                 <in>include_juce_core.mm</in>
               </df>
@@ -2991,12 +1862,6 @@
               </df>
             </df>
             <df name="BLOCKS">
-              <df name="doxygen">
-                <df name="images">
-                </df>
-                <df name="pages">
-                </df>
-              </df>
               <df name="standalone_sdk">
                 <df name="examples">
                   <df name="BlockFinder">
@@ -3182,7 +2047,6 @@
                     <in>jucer_EditorColourSchemeWindowComponent.h</in>
                     <in>jucer_FloatingToolWindow.h</in>
                     <in>jucer_GlobalPathsWindowComponent.h</in>
-                    <in>jucer_GlobalSearchPathsWindowComponent.h</in>
                     <in>jucer_PIPCreatorWindowComponent.h</in>
                     <in>jucer_SVGPathDataWindowComponent.h</in>
                     <in>jucer_TranslationToolWindowComponent.h</in>
@@ -3542,13 +2406,7 @@
               </df>
             </df>
             <df name="windows dll">
-              <df name="Builds">
-                <df name="VisualStudio2017">
-                </df>
-              </df>
               <df name="JuceLibraryCode">
-                <in>AppConfig.h</in>
-                <in>JuceHeader.h</in>
                 <in>include_juce_audio_basics.cpp</in>
                 <in>include_juce_audio_basics.mm</in>
                 <in>include_juce_audio_devices.cpp</in>
@@ -3690,7 +2548,6 @@
                 <in>juce_MPEValue.cpp</in>
                 <in>juce_MPEValue.h</in>
                 <in>juce_MPEZone.cpp</in>
-                <in>juce_MPEZone.h</in>
                 <in>juce_MPEZoneLayout.cpp</in>
                 <in>juce_MPEZoneLayout.h</in>
               </df>
@@ -5709,8 +4566,6 @@
           <in>ConfigAlertWindows.h</in>
           <in>ConfigFile.cpp</in>
           <in>ConfigFile.h</in>
-          <in>ConfigJSON.cpp</in>
-          <in>ConfigJSON.h</in>
           <in>JSONFile.cpp</in>
           <in>JSONFile.h</in>
           <in>MainConfigFile.cpp</in>
@@ -5757,39 +4612,23 @@
             <in>SavedConnections.cpp</in>
             <in>SavedConnections.h</in>
           </df>
-          <in>GLibSignalHandler.cpp</in>
-          <in>GLibSignalHandler.h</in>
+          <in>GLibSignalThread.cpp</in>
+          <in>GLibSignalThread.h</in>
           <in>GLibThread.cpp</in>
           <in>GLibThread.h</in>
           <in>GPPObject.cpp</in>
           <in>GPPObject.h</in>
+          <in>SignalHandler.h</in>
         </df>
         <df name="PocketCHIP">
           <in>Audio.cpp</in>
+          <in>Audio.h</in>
           <in>BatteryMonitor.cpp</in>
+          <in>BatteryMonitor.h</in>
           <in>Display.cpp</in>
+          <in>Display.h</in>
           <in>I2CBus.cpp</in>
-        </df>
-        <df name="System">
-          <df name="Bluetooth">
-            <in>BluetoothDevice.cpp</in>
-            <in>BluetoothDevice.h</in>
-            <in>BluetoothStatus.cpp</in>
-            <in>BluetoothStatus.h</in>
-            <in>BluezAdapter.cpp</in>
-            <in>BluezAdapter.h</in>
-          </df>
-          <df name="Wifi">
-            <in>JsonWifiInterface.cpp</in>
-            <in>JsonWifiInterface.h</in>
-            <in>LibNMInterface.cpp</in>
-            <in>LibNMInterface.h</in>
-            <in>WifiAccessPoint.cpp</in>
-            <in>WifiAccessPoint.h</in>
-            <in>WifiDebugOutput.h</in>
-            <in>WifiStateManager.cpp</in>
-            <in>WifiStateManager.h</in>
-          </df>
+          <in>I2CBus.h</in>
         </df>
         <df name="Util">
           <in>AppLauncher.cpp</in>
@@ -5806,8 +4645,6 @@
           <in>ProcessUtils.h</in>
           <in>ResourceManager.cpp</in>
           <in>ResourceManager.h</in>
-          <in>SharedResource.cpp</in>
-          <in>SharedResource.h</in>
           <in>TempTimer.cpp</in>
           <in>TempTimer.h</in>
           <in>Utils.cpp</in>
@@ -5858,6 +4695,8 @@
       <df name="build">
         <df name="Debug">
         </df>
+        <df name="Release">
+        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
@@ -5888,98 +4727,6 @@
           <df name="doxygen">
           </df>
           <df name="examples">
-            <df name="AnalyticsCollection">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="yourcompany">
-                              <df name="analyticscollection">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="AnalyticsCollection">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="AnalyticsCollection.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="AnalyticsCollection.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="AnimationAppExample">
-              <df name="Builds">
-                <df name="iOS">
-                  <df name="AnimationAppExample">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="AnimationAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="AnimationAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
             <df name="Assets">
               <df name="Box2DTests">
               </df>
@@ -5996,355 +4743,7 @@
             </df>
             <df name="Audio">
             </df>
-            <df name="audio plugin demo">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="juce">
-                              <df name="jucedemoplugin">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="JuceDemoPlugin">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="JuceDemoPlugin.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="JuceDemoPlugin.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="audio plugin host">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="Plugin Host.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="AudioAppExample">
-              <df name="Builds">
-                <df name="iOS">
-                  <df name="AudioAppExample">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="AudioAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="AudioAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="AUv3Synth">
-              <df name="Builds">
-                <df name="iOS">
-                  <df name="AUv3Synth">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="AUv3Synth.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="AUv3Synth.xcodeproj">
-                  </df>
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-                <df name="BinaryData">
-                </df>
-              </df>
-            </df>
             <df name="BLOCKS">
-              <df name="BlocksDrawing">
-                <df name="Builds">
-                  <df name="iOS">
-                    <df name="BlocksDrawing">
-                      <df name="Images.xcassets">
-                        <df name="AppIcon.appiconset">
-                        </df>
-                        <df name="LaunchImage.launchimage">
-                        </df>
-                      </df>
-                    </df>
-                    <df name="BlocksDrawing.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="LinuxMakefile">
-                  </df>
-                  <df name="MacOSX">
-                    <df name="BlocksDrawing.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
-                <df name="JuceLibraryCode">
-                </df>
-                <df name="Source">
-                </df>
-              </df>
-              <df name="BlocksMonitor">
-                <df name="Builds">
-                  <df name="iOS">
-                    <df name="BlocksMonitor">
-                      <df name="Images.xcassets">
-                        <df name="AppIcon.appiconset">
-                        </df>
-                        <df name="LaunchImage.launchimage">
-                        </df>
-                      </df>
-                    </df>
-                    <df name="BlocksMonitor.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="LinuxMakefile">
-                  </df>
-                  <df name="MacOSX">
-                    <df name="BlocksMonitor.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
-                <df name="JuceLibraryCode">
-                </df>
-                <df name="Source">
-                </df>
-              </df>
-              <df name="BlocksSynth">
-                <df name="Builds">
-                  <df name="iOS">
-                    <df name="BlocksSynth">
-                      <df name="Images.xcassets">
-                        <df name="AppIcon.appiconset">
-                        </df>
-                        <df name="LaunchImage.launchimage">
-                        </df>
-                      </df>
-                    </df>
-                    <df name="BlocksSynth.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="LinuxMakefile">
-                  </df>
-                  <df name="MacOSX">
-                    <df name="BlocksSynth.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
-                <df name="JuceLibraryCode">
-                </df>
-                <df name="Source">
-                </df>
-              </df>
-            </df>
-            <df name="BouncingBallWavetableDemo">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="BouncingBallWavetableDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="ComponentTutorialExample">
-              <df name="Builds">
-                <df name="MacOSX">
-                  <df name="ComponentTutorialExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="Demo">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="roli">
-                              <df name="jucedemo">
-                              </df>
-                            </df>
-                            <df name="yourcompany">
-                              <df name="jucedemo">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                        <df name="res">
-                          <df name="drawable-mdpi">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="JuceDemo">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="JuceDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="JuceDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Resources">
-              </df>
-              <df name="Source">
-                <df name="Demos">
-                  <df name="Box2DTests">
-                  </df>
-                </df>
-              </df>
             </df>
             <df name="DemoRunner">
               <df name="Builds">
@@ -6452,707 +4851,9 @@
             </df>
             <df name="DSP">
             </df>
-            <df name="DSP module plugin demo">
-              <df name="Builds">
-                <df name="MacOSX">
-                  <df name="DSPModulePluginDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Resources">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="DSPDemo">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="DSPDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Resources">
-              </df>
-              <df name="Source">
-                <df name="Demos">
-                </df>
-              </df>
-            </df>
             <df name="GUI">
             </df>
-            <df name="HelloWorld">
-              <df name="Builds">
-                <df name="iOS">
-                  <df name="HelloWorld">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="HelloWorld.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="HelloWorld.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="InAppPurchase">
-              <df name="BinaryData">
-              </df>
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="roli">
-                              <df name="juceinapppurchasesample">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                        <df name="res">
-                          <df name="drawable-hdpi">
-                          </df>
-                          <df name="drawable-ldpi">
-                          </df>
-                          <df name="drawable-mdpi">
-                          </df>
-                          <df name="drawable-xhdpi">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="InAppPurchase">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="InAppPurchase.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="InAppPurchase.xcodeproj">
-                  </df>
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Signing">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="MidiTest">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="yourcompany">
-                              <df name="miditest">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="MidiTest">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="MidiTest.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="MidiTest.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-                <df name="Resources">
-                </df>
-              </df>
-            </df>
-            <df name="MPETest">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="MPETest.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="NetworkGraphicsDemo">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="juce">
-                              <df name="networkgraphicsdemo">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                        <df name="res">
-                          <df name="drawable-mdpi">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="JUCE Network Graphics Demo">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="JUCE Network Graphics Demo.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="JUCE Network Graphics Demo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="OpenGLAppExample">
-              <df name="Builds">
-                <df name="iOS">
-                  <df name="OpenGLAppExample">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="OpenGLAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="OpenGLAppExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-                <df name="Resources">
-                </df>
-              </df>
-            </df>
-            <df name="OSCMonitor">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="OSCMonitor.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="OSCReceiver">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="yourcompany">
-                              <df name="oscreceiver">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="OSCReceiver">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="OSCReceiver.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="OSCReceiver.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="OSCSender">
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="yourcompany">
-                              <df name="oscsender">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="OSCSender">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="OSCSender.xcodeproj">
-                  </df>
-                </df>
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="OSCSender.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="PluckedStringsDemo">
-              <df name="Builds">
-                <df name="MacOSX">
-                  <df name="PluckedStringsDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
             <df name="Plugins">
-            </df>
-            <df name="PlugInSamples">
-              <df name="Arpeggiator">
-                <df name="Builds">
-                  <df name="MacOSX">
-                    <df name="Arpeggiator.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
-                <df name="JuceLibraryCode">
-                </df>
-                <df name="Source">
-                </df>
-              </df>
-              <df name="GainPlugIn">
-                <df name="Builds">
-                  <df name="MacOSX">
-                    <df name="GainPlugIn.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
-                <df name="JuceLibraryCode">
-                </df>
-                <df name="Source">
-                </df>
-              </df>
-              <df name="InterAppAudioEffect">
-                <df name="Builds">
-                  <df name="iOS">
-                    <df name="InterAppAudioEffect">
-                      <df name="Images.xcassets">
-                        <df name="AppIcon.appiconset">
-                        </df>
-                        <df name="LaunchImage.launchimage">
-                        </df>
-                      </df>
-                    </df>
-                    <df name="InterAppAudioEffect.xcodeproj">
-                    </df>
-                  </df>
-                </df>
-                <df name="JuceLibraryCode">
-                </df>
-                <df name="Source">
-                </df>
-              </df>
-              <df name="MultiOutSynth">
-                <df name="Builds">
-                  <df name="MacOSX">
-                    <df name="MultiOutSynth.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
-                <df name="JuceLibraryCode">
-                </df>
-                <df name="Source">
-                  <df name="BinaryData">
-                  </df>
-                </df>
-              </df>
-              <df name="NoiseGate">
-                <df name="Builds">
-                  <df name="MacOSX">
-                    <df name="NoiseGate.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
-                <df name="JuceLibraryCode">
-                </df>
-                <df name="Source">
-                </df>
-              </df>
-              <df name="Surround">
-                <df name="Builds">
-                  <df name="LinuxMakefile">
-                  </df>
-                  <df name="MacOSX">
-                    <df name="Surround.xcodeproj">
-                    </df>
-                  </df>
-                  <df name="VisualStudio2015">
-                  </df>
-                  <df name="VisualStudio2017">
-                  </df>
-                </df>
-                <df name="JuceLibraryCode">
-                </df>
-                <df name="Source">
-                </df>
-              </df>
-            </df>
-            <df name="PushNotificationsDemo">
-              <df name="BinaryResources">
-                <df name="images">
-                </df>
-                <df name="sounds">
-                </df>
-              </df>
-              <df name="Builds">
-                <df name="Android">
-                  <df name="app">
-                    <df name="src">
-                      <df name="debug">
-                        <df name="res">
-                          <df name="raw">
-                          </df>
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                      <df name="main">
-                        <df name="java">
-                          <df name="com">
-                            <df name="android">
-                              <df name="vending">
-                                <df name="billing">
-                                </df>
-                              </df>
-                            </df>
-                            <df name="juce">
-                              <df name="pushnotificationsdemo">
-                              </df>
-                            </df>
-                          </df>
-                        </df>
-                      </df>
-                      <df name="release">
-                        <df name="res">
-                          <df name="raw">
-                          </df>
-                          <df name="values">
-                          </df>
-                        </df>
-                      </df>
-                    </df>
-                  </df>
-                  <df name="gradle">
-                    <df name="wrapper">
-                    </df>
-                  </df>
-                </df>
-                <df name="iOS">
-                  <df name="PushNotificationsDemo">
-                    <df name="Images.xcassets">
-                      <df name="AppIcon.appiconset">
-                      </df>
-                      <df name="LaunchImage.launchimage">
-                      </df>
-                    </df>
-                  </df>
-                  <df name="PushNotificationsDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="MacOSX">
-                  <df name="PushNotificationsDemo.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2015">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
-            <df name="SimpleFFTExample">
-              <df name="Builds">
-                <df name="MacOSX">
-                  <df name="SimpleFFTExample.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2013">
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
             </df>
             <df name="Utilities">
             </df>
@@ -7328,29 +5029,7 @@
               <df name="Source">
               </df>
             </df>
-            <df name="binarybuilder">
-              <df name="Builds">
-                <df name="LinuxMakefile">
-                </df>
-                <df name="MacOSX">
-                  <df name="BinaryBuilder.xcodeproj">
-                  </df>
-                </df>
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
-              </df>
-              <df name="Source">
-              </df>
-            </df>
             <df name="BLOCKS">
-              <df name="doxygen">
-                <df name="images">
-                </df>
-                <df name="pages">
-                </df>
-              </df>
               <df name="standalone_sdk">
                 <df name="examples">
                   <df name="BlockFinder">
@@ -7538,14 +5217,6 @@
               <df name="JuceLibraryCode">
               </df>
               <df name="Source">
-              </df>
-            </df>
-            <df name="windows dll">
-              <df name="Builds">
-                <df name="VisualStudio2017">
-                </df>
-              </df>
-              <df name="JuceLibraryCode">
               </df>
             </df>
             <df name="WindowsDLL">
@@ -7965,12 +5636,6 @@
           </df>
         </df>
         <df name="PocketCHIP">
-        </df>
-        <df name="System">
-          <df name="Bluetooth">
-          </df>
-          <df name="Wifi">
-          </df>
         </df>
         <df name="Util">
         </df>

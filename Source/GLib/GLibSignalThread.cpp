@@ -1,12 +1,12 @@
-#include "GLibSignalHandler.h"
+#include "GLibSignalThread.h"
 
 
 juce::ScopedPointer<ResourceManager::SharedResource> 
-GLibSignalHandler::globalThread;
+GLibSignalThread::globalThread;
 
-juce::ReadWriteLock GLibSignalHandler::threadLock;
+juce::ReadWriteLock GLibSignalThread::threadLock;
 
-GLibSignalHandler::GLibSignalHandler()
+GLibSignalThread::GLibSignalThread()
 : ResourceManager(globalThread, threadLock, []()
 {
 
@@ -16,7 +16,7 @@ GLibSignalHandler::GLibSignalHandler()
 /**
  * Returns true if it's being executed on the GLib event thread.
  */
-bool GLibSignalHandler::runningOnGLibThread()
+bool GLibSignalThread::runningOnGLibThread()
 {
     using namespace juce;
     const ScopedReadLock accessLock(threadLock);
@@ -28,7 +28,7 @@ bool GLibSignalHandler::runningOnGLibThread()
 /**
  * Asynchronously run a function once on the GLib event loop.
  */
-void GLibSignalHandler::gLibCallAsync(std::function<void() > fn)
+void GLibSignalThread::gLibCallAsync(std::function<void() > fn)
 {
     using namespace juce;
     const ScopedWriteLock accessLock(threadLock);
@@ -41,7 +41,7 @@ void GLibSignalHandler::gLibCallAsync(std::function<void() > fn)
  * Run a function on the GLib event loop, yielding until the function
  * has finished.
  */
-void GLibSignalHandler::gLibCall(std::function<void() > fn)
+void GLibSignalThread::gLibCall(std::function<void() > fn)
 {
     threadLock.enterWrite();
     GLibDefaultThread* thread 
@@ -54,7 +54,7 @@ void GLibSignalHandler::gLibCall(std::function<void() > fn)
 /**
  * Initializes and starts the main GLib event loop on its own thread.
  */
-GLibSignalHandler::GLibDefaultThread::GLibDefaultThread() : 
+GLibSignalThread::GLibDefaultThread::GLibDefaultThread() : 
 GLibThread(g_main_context_default())
 {
     //Adding a reference to the default context prevents it from being 
