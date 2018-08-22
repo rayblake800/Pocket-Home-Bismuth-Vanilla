@@ -7,6 +7,7 @@
  * NMPPAccessPoint.
  */
 NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy)
+: GPPObject<NMPPAccessPoint>(NM_TYPE_ACCESS_POINT)
 { 
     setGObject(toCopy);
     //ADDR_LOG(this, "initialized as NMPPAccessPoint");
@@ -16,6 +17,7 @@ NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy)
  * Create a NMPPAccessPoint to contain a NMAccessPoint object.
  */
 NMPPAccessPoint::NMPPAccessPoint(NMAccessPoint* toAssign)
+: GPPObject<NMPPAccessPoint>(NM_TYPE_ACCESS_POINT)
 {
     setGObject(G_OBJECT(toAssign));
     //ADDR_LOG(this, "initialized as NMPPAccessPoint");
@@ -276,21 +278,4 @@ void NMPPAccessPoint::addSignalHandler(SignalHandler* signalHandler)
     {
         DBG("NMPPAccessPoint::" << __func__ << ": Invalid signal handler!");
     }
-}
-
-
-/*
- * Get the NMAccessPoint class GType
- */
-GType NMPPAccessPoint::getType() const 
-{ 
-    return NM_TYPE_ACCESS_POINT;
-}
-
-/*
- * Check if a GObject's type allows it to be held by this object. 
- */
-bool NMPPAccessPoint::isValidType(GObject* toCheck) const 
-{ 
-    return NM_IS_ACCESS_POINT(toCheck);
 }

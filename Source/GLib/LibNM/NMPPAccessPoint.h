@@ -17,7 +17,7 @@
  * receive updates if signal strength changes or the access point is removed. 
  */
 
-class NMPPAccessPoint : public GPPObject
+class NMPPAccessPoint : public GPPObject<NMPPAccessPoint>
 {
 public:
     /**
@@ -146,7 +146,7 @@ public:
      * Listener objects can subscribe to receive updates when the access point
      * signal strength changes.
      */
-    class Listener : public GPPObject::SignalHandler
+    class Listener : public GPPObject<NMPPAccessPoint>::SignalHandler
     {
     public:
         friend class NMPPAccessPoint;       
@@ -184,21 +184,4 @@ public:
      *                       strength changes.
      */
     void addSignalHandler(SignalHandler* signalHandler) override;
-    
-private:
-    /**
-     * Get the NMAccessPoint class GType
-     * 
-     * @return NM_TYPE_ACCESS_POINT
-     */
-    GType getType() const override;    
-    
-    /**
-     * Check if a GObject's type allows it to be held by this object. 
-     * 
-     * @param toCheck  Any valid GObject, or nullptr.
-     * 
-     * @return  true iff toCheck is a NMAccessPoint or is null. 
-     */
-    virtual bool isValidType(GObject* toCheck) const override;
 };

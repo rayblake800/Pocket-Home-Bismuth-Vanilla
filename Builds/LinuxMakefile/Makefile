@@ -168,7 +168,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/GLibSignalThread_b93342e2.o \
   $(JUCE_OBJDIR)/GLibThread_5746ca5a.o \
   $(JUCE_OBJDIR)/GPPObject_f97abf7e.o \
-  $(JUCE_OBJDIR)/SignalHandler_68938ba.o \
+  $(JUCE_OBJDIR)/GSignalHandler_3a448c6d.o \
   $(JUCE_OBJDIR)/Audio_f2c8052.o \
   $(JUCE_OBJDIR)/BatteryMonitor_95f8a5db.o \
   $(JUCE_OBJDIR)/Display_81e1917e.o \
@@ -709,9 +709,9 @@ $(JUCE_OBJDIR)/GPPObject_f97abf7e.o: ../../Source/GLib/GPPObject.cpp
 	@echo "Compiling GPPObject.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/SignalHandler_68938ba.o: ../../Source/GLib/SignalHandler.cpp
+$(JUCE_OBJDIR)/GSignalHandler_3a448c6d.o: ../../Source/GLib/GSignalHandler.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling SignalHandler.cpp"
+	@echo "Compiling GSignalHandler.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Audio_f2c8052.o: ../../Source/PocketCHIP/Audio.cpp

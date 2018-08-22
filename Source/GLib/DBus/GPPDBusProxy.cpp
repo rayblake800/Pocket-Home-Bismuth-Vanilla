@@ -3,7 +3,8 @@
 #include "GPPDBusProxy.h"
 
 GPPDBusProxy::GPPDBusProxy
-(const char* name, const char* path, const char* interface)
+(const char* name, const char* path, const char* interface) :
+GPPObject<GPPDBusProxy>(G_TYPE_DBUS_PROXY)
 {
     using namespace juce;
     if(name == nullptr || path == nullptr || interface == nullptr)
@@ -37,6 +38,12 @@ GPPDBusProxy::GPPDBusProxy
         }
     }); 
 }
+ 
+/**
+ * Create an object holding an existing GDBusProxy.
+ */
+GPPDBusProxy::GPPDBusProxy(GDBusProxy * proxy) :
+GPPObject<GPPDBusProxy>(G_OBJECT(proxy), G_TYPE_DBUS_PROXY) { }
 
 /*
  * Called whenever the DBus object emits a signal.  DBusSignalHandler
@@ -142,38 +149,31 @@ GVariant* GPPDBusProxy::callMethod
 /*
  * Register a signal handler to receive DBus signals and property updates.
  */
-void GPPDBusProxy::addSignalHandler(SignalHandler* signalHandler)
+void GPPDBusProxy::connectSignalHandler<GPPDBusProxy::DBusSignalHandler>
+(GPPDBusProxy::DBusSignalHandler& signalHandler)
 {
-    if(isClass<SignalHandler,DBusSignalHandler>(signalHandler))
-    {   
-        connectSignalHandler(signalHandler,
+    connectSignalHandler(static_cast<GPPObject<GPPDBusProxy>::SignalHandler*>
+            (&signalHandler));
+}
+
+
+/**
+ * Register a signal handler to receive DBus signals and property updates.
+ */
+void GPPDBusProxy::connectSignalHandler
+(GPPObject<GPPDBusProxy>::SignalHandler* signalHandler)
+{
+    GObject* proxy = getGObject();
+    if(proxy != nullptr)
+    {
+        signalHandler->connectSignal(proxy,
                 "g-signal", G_CALLBACK(dBusSignalCallback));
-        connectSignalHandler(signalHandler,
+        signalHandler->connectSignal(proxy,
                 "g-properties-changed",
                 G_CALLBACK(dBusPropertiesChanged));
     }
-    else
-    {
-        DBG("GPPDBusProxy::" << __func__ << ": Invalid signal handler!");
-    }
+    g_clear_object(&proxy);
 }
-
- /*
- * Get GDbusProxy's GLib class type.
- */
-GType GPPDBusProxy::getType() const
-{
-    return G_TYPE_DBUS_PROXY;
-}
-
-/*
- * Check if a GObject's type allows it to be held by this object.
- */
-bool GPPDBusProxy::isValidType(GObject* toCheck) const
-{
-    return G_IS_DBUS_PROXY(toCheck);
-}
-
 
 /*
  * Callback function for handling all DBus signals.
@@ -185,21 +185,11 @@ void GPPDBusProxy::dBusSignalCallback(GDBusProxy* proxy,
         DBusSignalHandler* handler)
 {
     using namespace juce;
-    if(isSignalHandlerValid(handler))
-    {
-        GPPDBusProxy* proxyWrapper = dynamic_cast<GPPDBusProxy*>
-                (findObjectWrapper(G_OBJECT(proxy),
-                static_cast<SignalHandler*>(handler)));
-        if(proxyWrapper != nullptr)
-        {
-            handler->dBusSignalReceived(proxyWrapper,
-                    String(senderName),
-                    String(signalName),
-                    parameters);
-            return;
-        }
-    }
-    g_variant_unref(parameters);
+    GPPDBusProxy proxyWrapper(proxy);
+    handler->dBusSignalReceived(proxyWrapper,
+            String(senderName),
+            String(signalName),
+            parameters);
 }
 
 /**
@@ -211,26 +201,18 @@ void GPPDBusProxy::dBusPropertiesChanged(GDBusProxy* proxy,
         DBusSignalHandler* handler)
 {
     using namespace juce;
-    if(isSignalHandlerValid(handler))
+    using namespace GVariantConverter;
+    GPPDBusProxy proxyWrapper(proxy);
+    iterateDict(changedProperties,[proxyWrapper,handler]
+            (GVariant* key, GVariant* property)
     {
-        GPPDBusProxy* proxyWrapper = dynamic_cast<GPPDBusProxy*>
-                (findObjectWrapper(G_OBJECT(proxy),
-                dynamic_cast<SignalHandler*>(handler)));
-        if(proxyWrapper != nullptr)
-        {
-            using namespace GVariantConverter;
-            iterateDict(changedProperties,[proxyWrapper,handler]
-                    (GVariant* key, GVariant* property)
-            {
-               String propName = getValue<String>(key);
-               handler->dBusPropertyChanged(proxyWrapper, propName, property);
-            });
-            for(int i = 0; invalidatedProperties[i] != nullptr; i++)
-            {
-                String invalidProp(invalidatedProperties[i]);
-                handler->dBusPropertyInvalidated(proxyWrapper, invalidProp);
-            }
-        }
+       String propName = getValue<String>(key);
+       handler->dBusPropertyChanged(proxyWrapper, propName, property);
+    });
+    for(int i = 0; invalidatedProperties[i] != nullptr; i++)
+    {
+        String invalidProp(invalidatedProperties[i]);
+        handler->dBusPropertyInvalidated(proxyWrapper, invalidProp);
     }
     g_variant_unref(changedProperties);
 }

@@ -12,14 +12,17 @@
  */
 #pragma once
 #include "gio/gio.h"
+#include "JuceHeader.h"
 #include "GVariantConverter.h"
 #include "GPPObject.h"
-#include "JuceHeader.h"
+#include "GSignalHandler.h"
 
-class GPPDBusProxy : public GPPObject
+class GPPDBusProxy : public GPPObject<GPPDBusProxy>
 {
 protected:
     /**
+     * Open a new GDBusProxy.
+     * 
      * @param name        The name of the bus providing the DBus interface.  
      *                    This is usually something like "com.Group.ServiceName"
      * 
@@ -32,13 +35,32 @@ protected:
      */
     GPPDBusProxy(const char* name, const char* path,
             const char* interface);
+    
+    /**
+     * Create an object holding an existing GDBusProxy.
+     * 
+     * @param proxy  An initialized proxy object.  
+     */
+    GPPDBusProxy(GDBusProxy * proxy);
+    
+    /**
+     * Create a GPPDBusProxy as a copy of another GPPDBusProxy
+     * 
+     * @tparam ProxyType  A subclass of GPPDBusProxy.
+     * 
+     * @param proxy       The GPPDBusProxy object to copy.
+     */
+    template<class ProxyType>
+    GPPDBusProxy(ProxyType& proxy) : 
+    GPPObject<GPPDBusProxy>(proxy, G_TYPE_DBUS_PROXY) { }
+    
 public:
     virtual ~GPPDBusProxy() { }
     
     /**
      * Generic base class for objects that receive DBus signals.
      */
-    class DBusSignalHandler : public GPPObject::SignalHandler
+    class DBusSignalHandler : public GSignalHandler<GPPDBusProxy>
     {
     public:
         friend class GPPDBusProxy;
@@ -61,8 +83,11 @@ public:
          * @param parameters  A GVariant tuple containing all parameters sent
          *                    with the signal.
          */
-        virtual void dBusSignalReceived(GPPDBusProxy* source,
-                juce::String senderName, juce::String signalName, GVariant* parameters); 
+        virtual void dBusSignalReceived(
+                GPPDBusProxy* source,
+                juce::String senderName,
+                juce::String signalName,
+                GVariant* parameters); 
         
         /**
          * Called whenever a property of the DBus object changes. 
@@ -75,7 +100,7 @@ public:
          * 
          * @param newValue      A GVariant holding the updated property value.
          */
-        virtual void dBusPropertyChanged(GPPDBusProxy* source,
+        virtual void dBusPropertyChanged(GPPDBusProxy& source,
                 juce::String propertyName, GVariant* newValue);
         
         /**
@@ -197,24 +222,17 @@ protected:
      * @param signalHandler  A signal handler that will receive all signals
      *                       and property updates emitted by the DBus object.
      */
-    void addSignalHandler(SignalHandler* signalHandler) override;
+    void connectSignalHandler(DBusSignalHandler& signalHandler);
     
 private:
     /**
-     * Get GDbusProxy's GLib class type.
+     * Register a signal handler to receive DBus signals and property updates.
      * 
-     * @return G_TYPE_DBUS_PROXY
+     * @param signalHandler  A signal handler that will receive all signals
+     *                       and property updates emitted by the DBus object.
      */
-    virtual GType getType() const override;
-    
-    /**
-     * Check if a GObject's type allows it to be held by this object. 
-     * 
-     * @param toCheck  Any valid GObject, or nullptr.
-     * 
-     * @return  true iff toCheck is a GDBusProxy or is null. 
-     */
-    virtual bool isValidType(GObject* toCheck) const override;
+    virtual void connectSignalHandler
+    (GPPObject<GPPDBusProxy>::SignalHandler* signalHandler) override;
 
     /**
      * Callback function for handling all DBus signals.
