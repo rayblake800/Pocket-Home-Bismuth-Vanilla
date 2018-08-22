@@ -134,8 +134,7 @@ private:
                 g_object_ref(source);
             }
             existingSignals.add(handlerID);
-        }
-        
+        }       
     }
     
     /**

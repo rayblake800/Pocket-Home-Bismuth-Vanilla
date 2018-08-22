@@ -8,7 +8,7 @@
  * @brief A RAII container and C++ interface for LibNM NMConnection objects.
  */
 
-class NMPPConnection : public GPPObject
+class NMPPConnection : public GPPObject<NMPPConnection>
 {
 public:
     /**
@@ -29,7 +29,7 @@ public:
     /**
      * Creates a null NMPPConnection.
      */
-    NMPPConnection() { }
+    NMPPConnection();
     
     virtual ~NMPPConnection() { }
     
@@ -163,22 +163,4 @@ public:
      */
     void printDebugOutput() const;
 #endif
-    
-private:
-    /**
-     * Get the GType of the stored NMConnection object.
-     * 
-     * @return NM_TYPE_CONNECTION
-     */
-    GType getType() const override;
-    
-    /**
-     * Check if a GObject's type allows it to be held by this object. 
-     * 
-     * @param toCheck  Any valid GObject, or nullptr.
-     * 
-     * @return  true iff toCheck is a NMConnection, a NMActiveConnection,
-     *          or is null. 
-     */
-    virtual bool isValidType(GObject* toCheck) const override;
 };

@@ -6,22 +6,20 @@
  * Create a NMPPAccessPoint sharing a GObject with an existing
  * NMPPAccessPoint.
  */
-NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy)
-: GPPObject<NMPPAccessPoint>(NM_TYPE_ACCESS_POINT)
-{ 
-    setGObject(toCopy);
-    //ADDR_LOG(this, "initialized as NMPPAccessPoint");
-}
+NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy) :
+GPPObject<NMPPAccessPoint>(toCopy, NM_TYPE_ACCESS_POINT) { }
 
 /*
  * Create a NMPPAccessPoint to contain a NMAccessPoint object.
  */
-NMPPAccessPoint::NMPPAccessPoint(NMAccessPoint* toAssign)
-: GPPObject<NMPPAccessPoint>(NM_TYPE_ACCESS_POINT)
-{
-    setGObject(G_OBJECT(toAssign));
-    //ADDR_LOG(this, "initialized as NMPPAccessPoint");
-}
+NMPPAccessPoint::NMPPAccessPoint(NMAccessPoint* toAssign) :
+GPPObject<NMPPAccessPoint>(toAssign, NM_TYPE_ACCESS_POINT) { }
+    
+/**
+ * Creates a null NMPPAccessPoint.
+ */
+NMPPAccessPoint::NMPPAccessPoint() : 
+GPPObject<NMPPAccessPoint>(NM_TYPE_ACCESS_POINT) { }
 
 /*
  * Gets the access point SSID as a byte array from the access point.  This 
@@ -251,31 +249,41 @@ NM80211ApSecurityFlags NMPPAccessPoint::getRSNFlags() const
  * property change notifications.
  */
 void NMPPAccessPoint::Listener::propertyChanged
-(GPPObject* source, juce::String property) 
+(NMPPAccessPoint& source, juce::String property) 
 { 
-    NMPPAccessPoint* ap = dynamic_cast<NMPPAccessPoint*>(source);
-    if(ap != nullptr && property == NM_ACCESS_POINT_STRENGTH)
+    if(property == NM_ACCESS_POINT_STRENGTH)
     {
-        unsigned int strength = ap->getSignalStrength();
-        signalStrengthChanged(ap, strength);
+        unsigned int strength = source.getSignalStrength();
+        signalStrengthChanged(source, strength);
     }
+}
+ 
+/**
+ * Add a new listener to receive updates from this access point.
+ */
+void NMPPAccessPoint::addListener(NMPPAccessPoint::Listener* listener)
+{
+    connectSignalHandler(
+            static_cast<GPPObject<NMPPAccessPoint>::SignalHandler*>(listener));
 }
 
 /*
  * Add a new signal handler to receive signals from this access point.
  */
-void NMPPAccessPoint::addSignalHandler(SignalHandler* signalHandler)
+void NMPPAccessPoint::connectSignalHandler
+(GPPObject<NMPPAccessPoint>::SignalHandler* signalHandler)
 { 
     if(isNull())
     {
         DBG("NMPPAccessPoint::" << __func__ << ": access point is null");
     }
-    else if(isClass<SignalHandler,Listener>(signalHandler))
-    {
-        addNotifySignalHandler(signalHandler, NM_ACCESS_POINT_STRENGTH);
-    }
     else
     {
-        DBG("NMPPAccessPoint::" << __func__ << ": Invalid signal handler!");
+        GObject* signalSource = getGObject();
+        if(signalSource != nullptr)
+        {
+            signalHandler->connectNotifySignal(signalSource,
+                    NM_ACCESS_POINT_STRENGTH);
+        }
     }
 }

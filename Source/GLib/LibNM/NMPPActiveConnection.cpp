@@ -4,18 +4,20 @@
  * Creates a NMPPActiveConnection sharing a GObject with an existing
  * NMPPActiveConnection.
  */
-NMPPActiveConnection::NMPPActiveConnection(const NMPPActiveConnection& toCopy)
-{ 
-    setGObject(toCopy);
-}
+NMPPActiveConnection::NMPPActiveConnection(const NMPPActiveConnection& toCopy) :
+GPPObject<NMPPActiveConnection>(toCopy, NM_TYPE_ACTIVE_CONNECTION) { }
  
 /*
  * Creates a NMPPActiveConnection to contain a NMActiveConnection object.
  */
-NMPPActiveConnection::NMPPActiveConnection(NMActiveConnection* toAssign)
-{
-    setGObject(G_OBJECT(toAssign));
-}
+NMPPActiveConnection::NMPPActiveConnection(NMActiveConnection* toAssign) :
+GPPObject<NMPPActiveConnection>(toAssign, NM_TYPE_ACTIVE_CONNECTION) { }
+    
+/**
+ * Creates a null NMPPActiveConnection.
+ */
+NMPPActiveConnection::NMPPActiveConnection() :
+GPPObject<NMPPActiveConnection>(NM_TYPE_ACTIVE_CONNECTION) { }
 
 /*
  * Get the connection path stored by this object.
@@ -123,20 +125,4 @@ NMActiveConnectionState NMPPActiveConnection::getConnectionState() const
         }
     });
     return state;
-}
-
-/*
- * Get the GType of the stored NMConnection object.
- */
-GType NMPPActiveConnection::getType() const
-{
-    return NM_TYPE_ACTIVE_CONNECTION;
-}
-
-/*
- * Check if a GObject's type allows it to be held by this object. 
- */
-bool NMPPActiveConnection::isValidType(GObject* toCheck) const
-{
-    return toCheck == nullptr || NM_IS_ACTIVE_CONNECTION(toCheck);
 }

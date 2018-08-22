@@ -173,7 +173,7 @@ public:
      * @param signalHandler  A signal handler object that will listen to this
      *                       object's signals.
      */
-    virtual void connectSignalHandler(SignalHandler* signalHandler) = 0;
+    virtual void connectSignalHandler(SignalHandler* signalHandler) { };
     
     /**
      * Checks if this GPPObject and another share the same GObject data.

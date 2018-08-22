@@ -11,7 +11,7 @@
  *        objects.
  */
 
-class NMPPActiveConnection : public GPPObject
+class NMPPActiveConnection : public GPPObject<NMPPActiveConnection>
 {
 public:
     /**
@@ -33,7 +33,7 @@ public:
     /**
      * Creates a null NMPPActiveConnection.
      */
-    NMPPActiveConnection() { }
+    NMPPActiveConnection();
     
     virtual ~NMPPActiveConnection() { }
     
@@ -88,21 +88,4 @@ public:
      *          NM_ACTIVE_CONNECTION_STATE_UNKNOWN otherwise.
      */
     NMActiveConnectionState getConnectionState() const;
-    
-private:
-    /**
-     * Get the GType of the stored NMConnection object.
-     * 
-     * @return NM_TYPE_ACTIVE_CONNECTION
-     */
-    GType getType() const override;
-    
-    /**
-     * Check if a GObject's type allows it to be held by this object. 
-     * 
-     * @param toCheck  Any valid GObject, or nullptr.
-     * 
-     * @return  true iff toCheck is a NMActiveConnection or is null. 
-     */
-    virtual bool isValidType(GObject* toCheck) const override;
 };

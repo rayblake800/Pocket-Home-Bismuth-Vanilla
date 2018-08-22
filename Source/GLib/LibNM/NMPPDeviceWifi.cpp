@@ -5,18 +5,21 @@
  * Creates a NMPPDeviceWifi object that shares a NMDeviceWifi*
  * with another NMPPDeviceWifi object
  */
-NMPPDeviceWifi::NMPPDeviceWifi(const NMPPDeviceWifi& toCopy)
-{ 
-    setGObject(toCopy);
-}
+NMPPDeviceWifi::NMPPDeviceWifi(const NMPPDeviceWifi& toCopy) :
+GPPObject<NMPPDeviceWifi>(toCopy, NM_TYPE_DEVICE_WIFI) { }
 
 /*
  * Create a NMPPDeviceWifi to contain a NMDeviceWifi object.
  */
-NMPPDeviceWifi::NMPPDeviceWifi(NMDeviceWifi* toAssign)
-{
-    setGObject(G_OBJECT(toAssign));
-}
+NMPPDeviceWifi::NMPPDeviceWifi(NMDeviceWifi* toAssign) :
+GPPObject<NMPPDeviceWifi>(toAssign, NM_TYPE_DEVICE_WIFI) { }
+
+    
+/**
+ * Creates a null NMPPDeviceWifi.
+ */
+NMPPDeviceWifi::NMPPDeviceWifi() :
+GPPObject<NMPPDeviceWifi>(NM_TYPE_DEVICE_WIFI) { }
 
 /*
  * Gets the current state of the wifi network device.
@@ -299,33 +302,43 @@ void NMPPDeviceWifi::requestScan()
  * @param property  This should be the active connection property, 
  *                  "active-connection"
  */
-void NMPPDeviceWifi::Listener::propertyChanged(GPPObject* source, 
+void NMPPDeviceWifi::Listener::propertyChanged(NMPPDeviceWifi& source,
         juce::String property)
 {
     jassert(property == "active-connection");
-    NMPPDeviceWifi* dev = static_cast<NMPPDeviceWifi*>(source);
-    activeConnectionChanged(dev->getActiveConnection());
+    activeConnectionChanged(source.getActiveConnection());
+}
+
+/*
+ * Adds a listener to this wifi device.
+ */
+void NMPPDeviceWifi::addListener(NMPPDeviceWifi::Listener* listener)
+{
+    if(listener != nullptr)
+    {
+        connectSignalHandler(static_cast
+        <GPPObject<NMPPDeviceWifi>::SignalHandler*>(listener));
+    }
 }
 
 /*
  * Adds a signal handler object to this wifi device.
  */
-void NMPPDeviceWifi::addSignalHandler(SignalHandler* handler)
+void NMPPDeviceWifi::connectSignalHandler
+(GPPObject<NMPPDeviceWifi>::SignalHandler* handler)
 { 
-    if(isClass<SignalHandler,Listener>(handler))
+    GObject* signalSource = getGObject();
+    if(signalSource != nullptr)
     {
-        connectSignalHandler(handler, "state-changed",
+        handler->connectSignal(signalSource, "state-changed",
                 G_CALLBACK(stateChangeCallback));
-        connectSignalHandler(handler, "access-point-added", 
+        handler->connectSignal(signalSource, "access-point-added", 
                 G_CALLBACK(apAddedCallback));
-        connectSignalHandler(handler, "access-point-removed",
+        handler->connectSignal(signalSource, "access-point-removed",
                 G_CALLBACK(apRemovedCallback));
-        addNotifySignalHandler(handler, "active-connection");
+        handler->connectNotifySignal(signalSource, "active-connection");
     }
-    else
-    {
-        DBG("NMPPDeviceWifi::" << __func__ << ": Invalid signal handler!");
-    }
+    g_clear_object(&signalSource);
 }
 
 
@@ -364,20 +377,4 @@ void NMPPDeviceWifi::apRemovedCallback(NMDeviceWifi* device, NMAccessPoint* ap,
         Listener* listener) 
 { 
     listener->accessPointRemoved(NMPPAccessPoint(ap));
-}
-
-/*
- * Gets the GType of this object's stored GObject class.
- */
-GType NMPPDeviceWifi::getType() const 
-{ 
-    return NM_TYPE_DEVICE_WIFI;
-}
-
-/*
- * Checks if a GObject's type allows it to be held by this object. 
- */
-bool NMPPDeviceWifi::isValidType(GObject* toCheck) const 
-{ 
-    return NM_IS_DEVICE_WIFI(toCheck);
 }

@@ -4,6 +4,7 @@
 #include "NMPPConnection.h"
 #include "NMPPActiveConnection.h"
 #include "GPPObject.h"
+#include "GSignalHandler.h"
 
 /**
  * @file NMPPDeviceWifi.h
@@ -11,7 +12,7 @@
  * @brief A RAII container and C++ interface for LibNM NMDeviceWifi
  *        objects.
  */
-class NMPPDeviceWifi : public GPPObject
+class NMPPDeviceWifi : public GPPObject<NMPPDeviceWifi>
 {
 public:
     /**
@@ -33,7 +34,7 @@ public:
     /**
      * Creates a null NMPPDeviceWifi.
      */
-    NMPPDeviceWifi() { }
+    NMPPDeviceWifi();
     
     /**
      * Gets the current state of the wifi network device.
@@ -156,12 +157,14 @@ public:
      * Listeners receive notifications when the wifi device changes, a new
      * access point object is added, or an access point is removed.
      */
-    class Listener : public GPPObject::SignalHandler
+    class Listener : public GSignalHandler<NMPPDeviceWifi>
     {
     public:
         friend class NMPPDeviceWifi;
         Listener() { }
+        
         virtual ~Listener() { }
+        
     private:
 	/**
 	 * This method will be called whenever the wifi device state changes.
@@ -212,10 +215,20 @@ public:
          * @param property  This should be the active connection property, 
          *                  "active-connection"
          */
-        virtual void propertyChanged(GPPObject* source, juce::String property)
-                override;
+        virtual void propertyChanged(NMPPDeviceWifi& source,
+                juce::String property) override;
     };
     
+    /**
+     * Adds a listener to this wifi device.
+     * 
+     * @param listener  This object will receive updates when the wifi device
+     *                  state changes or the list of visible access points is
+     *                  updated.
+     */
+    void addListener(Listener* listener);
+    
+private:
     /**
      * Adds a signal handler object to this wifi device.
      * 
@@ -223,9 +236,9 @@ public:
      *                 state changes or the list of visible access points is
      *                 updated.
      */
-    void addSignalHandler(SignalHandler* handler) override;
+    virtual void connectSignalHandler
+    (GPPObject<NMPPDeviceWifi>::SignalHandler* handler) override;
     
-private:
     /**
      * The GCallback method called directly by LibNM code when sending 
      * state-changed signals.  This will use the signal data to call the 
@@ -278,19 +291,4 @@ private:
     static void apRemovedCallback(NMDeviceWifi* device, NMAccessPoint* ap,
             Listener* listener);
 
-    /**
-     * Gets the GType of this object's stored GObject class.
-     * 
-     * @return NM_TYPE_DEVICE_WIFI
-     */
-    GType getType() const override;
-    
-    /**
-     * Checks if a GObject's type allows it to be held by this object. 
-     * 
-     * @param toCheck  Any valid GObject, or nullptr.
-     * 
-     * @return  true iff toCheck is a NMDeviceWifi or is null. 
-     */
-    virtual bool isValidType(GObject* toCheck) const override;
 };

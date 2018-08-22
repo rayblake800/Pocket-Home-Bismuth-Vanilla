@@ -272,7 +272,7 @@ private:
      * @param newStrength  The access point's new signal strength, ranging 
      *                     from zero to 100.
      */
-    void signalStrengthChanged(NMPPAccessPoint* updatedAP,
+    void signalStrengthChanged(NMPPAccessPoint& updatedAP,
             unsigned int newStrength) override;
 
     /**

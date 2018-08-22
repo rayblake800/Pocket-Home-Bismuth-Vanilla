@@ -376,7 +376,7 @@ const juce::String& WifiAccessPoint::getSavedConnectionPath() const
 /*
  * Signals that the access point's signal strength has been updated.
  */
-void WifiAccessPoint::signalStrengthChanged(NMPPAccessPoint* updatedAP,
+void WifiAccessPoint::signalStrengthChanged(NMPPAccessPoint& updatedAP,
         unsigned int newStrength)
 {
     signalStrength.store(newStrength);

@@ -4,18 +4,20 @@
  * Create a NMPPConnection sharing a GObject with an existing
  * NMPPConnection.
  */
-NMPPConnection::NMPPConnection(const NMPPConnection& toCopy)
-{ 
-    setGObject(toCopy);
-}
+NMPPConnection::NMPPConnection(const NMPPConnection& toCopy) :
+GPPObject<NMPPConnection> (toCopy, NM_TYPE_CONNECTION) { }
 
 /**
  * Create a NMPPConnection to contain a NMConnection object.
  */
-NMPPConnection::NMPPConnection(NMConnection* toAssign)
-{
-    setGObject(G_OBJECT(toAssign));
-}
+NMPPConnection::NMPPConnection(NMConnection* toAssign) :
+GPPObject<NMPPConnection> (toAssign, NM_TYPE_CONNECTION) { }
+    
+/*
+ * Creates a null NMPPConnection.
+ */
+NMPPConnection::NMPPConnection() : 
+GPPObject<NMPPConnection> (NM_TYPE_CONNECTION) { }
 
 /**
  * Check if this connection object and another could be describing the 
@@ -305,21 +307,4 @@ void NMPPConnection::printDebugOutput() const
     });
 }
 #endif
-
-/*
- * Get the GType of the stored NMConnection object.
- */
-GType NMPPConnection::getType() const
-{
-    return NM_TYPE_CONNECTION;
-}
-
-/*
- * Check if a GObject's type allows it to be held by this object. 
- */
-bool NMPPConnection::isValidType(GObject* toCheck) const
-{
-    return NM_IS_CONNECTION(toCheck);
-}
-
     

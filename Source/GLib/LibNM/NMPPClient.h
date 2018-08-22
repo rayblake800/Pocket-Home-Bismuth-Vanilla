@@ -11,7 +11,7 @@
  * @brief A RAII container and C++ interface for the LibNM NMClient class.
  */
 
-class NMPPClient : public GPPObject
+class NMPPClient : public GPPObject<NMPPClient>
 {
 public:
     /**

@@ -2,6 +2,7 @@
 #include <nm-access-point.h>
 #include "NMPPConnection.h"
 #include "GPPObject.h"
+#include "GSignalHandler.h"
 
 /**
  * @file NMPPAccessPoint
@@ -26,7 +27,7 @@ public:
      * 
      * @toCopy  An existing connection object.
      */
-    NMPPAccessPoint(const NMPPAccessPoint& toCopy);
+    NMPPAccessPoint(NMPPAccessPoint& toCopy);
 
     /**
      * Creates a NMPPAccessPoint to contain a NMAccessPoint object.
@@ -38,7 +39,7 @@ public:
     /**
      * Creates a null NMPPAccessPoint.
      */
-    NMPPAccessPoint() { }
+    NMPPAccessPoint();
     
     /**
      * Gets the access point SSID as a byte array from the access point.  This 
@@ -146,14 +147,15 @@ public:
      * Listener objects can subscribe to receive updates when the access point
      * signal strength changes.
      */
-    class Listener : public GPPObject<NMPPAccessPoint>::SignalHandler
+    class Listener : public GSignalHandler<NMPPAccessPoint>
     {
-    public:
-        friend class NMPPAccessPoint;       
+    public:     
         Listener() { }
-        virtual ~Listener() { }
-    private:
         
+        virtual ~Listener() { }
+        
+    private:   
+        friend class NMPPAccessPoint;
         /**
          * Signals that the access point's signal strength has been updated.
          * 
@@ -162,7 +164,7 @@ public:
          * @param newStrength  The access point's new signal strength, ranging 
          *                     from zero to 100.
          */
-        virtual void signalStrengthChanged(NMPPAccessPoint* updatedAP,
+        virtual void signalStrengthChanged(NMPPAccessPoint& updatedAP,
                 unsigned int newStrength) = 0;
         
         /**
@@ -174,14 +176,27 @@ public:
          * 
          * @param property  The updated property type.
          */
-        void propertyChanged(GPPObject* source, juce::String property) override;
+        virtual void propertyChanged
+        (NMPPAccessPoint& source, juce::String property) override;
     };
     
+    
     /**
-     * Add a new signal handler to receive signals from this access point.
+     * Add a new listener to receive updates from this access point.
      * 
-     * @param signalHandler  An object that needs to act when connection signal
-     *                       strength changes.
+     * @param listener  An object that will be notified when connection signal
+     *                  strength changes.
      */
-    void addSignalHandler(SignalHandler* signalHandler) override;
+    void addListener(Listener* signalHandler);
+    
+    private:
+    /**
+     * Register a signal handler to receive NMAccessPoint signals..
+     * 
+     * @param signalHandler  A signal handler that will receive all signals
+     *                       and property updates emitted by the NMAccessPoint
+     *                       object.
+     */
+    virtual void connectSignalHandler
+    (GPPObject<NMPPAccessPoint>::SignalHandler* signalHandler) override;
 };
