@@ -50,7 +50,7 @@ GPPObject<GPPDBusProxy>(G_OBJECT(proxy), G_TYPE_DBUS_PROXY) { }
  * subclasses should override this to handle the specific signals
  * they expect to receive.
  */
-void GPPDBusProxy::DBusSignalHandler::dBusSignalReceived(GPPDBusProxy* source, 
+void GPPDBusProxy::DBusSignalHandler::dBusSignalReceived(GPPDBusProxy& source, 
         juce::String senderName, juce::String signalName, GVariant* parameters)
 {
     DBG("GPPDBusProxy::DBusSignalHandler::" << __func__ <<
@@ -64,7 +64,7 @@ void GPPDBusProxy::DBusSignalHandler::dBusSignalReceived(GPPDBusProxy* source,
  * specific property changes they need to receive.
  */
 void GPPDBusProxy::DBusSignalHandler::dBusPropertyChanged
-(GPPDBusProxy* source, juce::String propertyName, GVariant* newValue)
+(GPPDBusProxy& source, juce::String propertyName, GVariant* newValue)
 {   
     DBG("GPPDBusProxy::DBusSignalHandler::" << __func__ <<
             ": Received un-handled change to property" << propertyName);
@@ -76,7 +76,7 @@ void GPPDBusProxy::DBusSignalHandler::dBusPropertyChanged
  * specific property changes they need to receive.
  */
 void GPPDBusProxy::DBusSignalHandler::dBusPropertyInvalidated
-(GPPDBusProxy* source, juce::String propertyName)
+(GPPDBusProxy& source, juce::String propertyName)
 {   
     DBG("GPPDBusProxy::DBusSignalHandler::" << __func__ <<
             ": Received un-handled invalidation message for " << propertyName);
@@ -149,7 +149,7 @@ GVariant* GPPDBusProxy::callMethod
 /*
  * Register a signal handler to receive DBus signals and property updates.
  */
-void GPPDBusProxy::connectSignalHandler<GPPDBusProxy::DBusSignalHandler>
+void GPPDBusProxy::connectSignalHandler
 (GPPDBusProxy::DBusSignalHandler& signalHandler)
 {
     connectSignalHandler(static_cast<GPPObject<GPPDBusProxy>::SignalHandler*>

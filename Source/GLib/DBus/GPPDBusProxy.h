@@ -84,7 +84,7 @@ public:
          *                    with the signal.
          */
         virtual void dBusSignalReceived(
-                GPPDBusProxy* source,
+                GPPDBusProxy& source,
                 juce::String senderName,
                 juce::String signalName,
                 GVariant* parameters); 
@@ -112,7 +112,7 @@ public:
          * 
          * @param propertyName  The name of the invalidated property.
          */
-        virtual void dBusPropertyInvalidated(GPPDBusProxy* source,
+        virtual void dBusPropertyInvalidated(GPPDBusProxy& source,
                 juce::String propertyName);
     };
 

@@ -255,7 +255,7 @@ private:
         {
             if(!client.isNull())
             {
-                client.addSignalHandler(this);
+                client.addListener(*this);
             }
         }
         virtual ~ClientListener() { }
@@ -275,7 +275,7 @@ private:
         {
             if(!device.isNull())
             {
-                device.addSignalHandler(this);
+                device.addListener(*this);
             }
         }
         virtual ~DeviceListener() { }

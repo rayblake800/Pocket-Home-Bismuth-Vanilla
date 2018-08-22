@@ -226,7 +226,7 @@ public:
      *                  state changes or the list of visible access points is
      *                  updated.
      */
-    void addListener(Listener* listener);
+    void addListener(Listener& listener);
     
 private:
     /**

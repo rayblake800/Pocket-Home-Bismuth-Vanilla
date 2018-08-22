@@ -52,7 +52,7 @@ protected:
     GPPObject(GPPOtherType& toCopy, GType objectType) 
     : objectType(objectType) 
     {
-        setGObject<GPPOtherType>(&toCopy);
+        setGObject<GPPOtherType>(toCopy);
     }
     
     /**
@@ -84,7 +84,7 @@ public:
      * 
      * @return true iff this object's GObject* is null or otherwise invalid
      */
-    bool isNull() const
+    bool isNull()
     {
         GObject* object = getGObject();
         bool result = (object == nullptr);

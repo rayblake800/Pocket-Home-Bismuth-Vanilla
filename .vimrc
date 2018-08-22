@@ -1,6 +1,7 @@
 " required settings for Vundle
 set  nocompatible 
 filetype off
+set mouse=a
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -11,6 +12,7 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-scripts/Conque-GDB'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'lifepillar/vim-cheat40'
 call vundle#end()
  
 " Indentation

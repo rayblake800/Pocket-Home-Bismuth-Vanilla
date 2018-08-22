@@ -312,13 +312,10 @@ void NMPPDeviceWifi::Listener::propertyChanged(NMPPDeviceWifi& source,
 /*
  * Adds a listener to this wifi device.
  */
-void NMPPDeviceWifi::addListener(NMPPDeviceWifi::Listener* listener)
+void NMPPDeviceWifi::addListener(NMPPDeviceWifi::Listener& listener)
 {
-    if(listener != nullptr)
-    {
-        connectSignalHandler(static_cast
-        <GPPObject<NMPPDeviceWifi>::SignalHandler*>(listener));
-    }
+    connectSignalHandler(static_cast
+            <GPPObject<NMPPDeviceWifi>::SignalHandler*>(&listener));
 }
 
 /*

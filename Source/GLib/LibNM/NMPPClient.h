@@ -3,6 +3,7 @@
 #include "NMPPConnection.h"
 #include "NMPPActiveConnection.h"
 #include "NMPPDeviceWifi.h"
+#include "GSignalHandler.h"
 #include "GPPObject.h"
 
 /**
@@ -25,7 +26,7 @@ public:
      * @param toCopy  Holds the NMClient object that will be shared with the
      *                new NMPPClient.
      */
-    NMPPClient(const NMPPClient& toCopy);
+    NMPPClient(NMPPClient& toCopy);
     
     /**
      * Get all wifi devices from Network Manager.
@@ -84,7 +85,7 @@ public:
      * @param activeCon  The network connection to deactivate.  If this 
      *                   connection is not active, nothing will happen.
      */
-    void deactivateConnection(const NMPPActiveConnection& activeCon);
+    void deactivateConnection(NMPPActiveConnection& activeCon);
     
     /**
      * Checks if wireless connections are currently enabled.
@@ -221,7 +222,7 @@ public:
     /**
      * Listeners receive updates whenever wireless is enabled or disabled.
      */
-    class Listener : public GPPObject::SignalHandler
+    class Listener : public GSignalHandler<NMPPClient>
     {
     public:
         Listener() { }
@@ -247,31 +248,26 @@ public:
          * @param property  This should always be the "wireless-enabled"
          *                  property.
          */
-        void propertyChanged(GPPObject* source, juce::String property) override;  
+        void propertyChanged(NMPPClient& source, juce::String property)
+        override;  
     };
     
     /**
-     * Adds a signal handler to this network manager client.
+     * Adds a listener to this network manager client.
+     * 
+     * @param listener  The object that will receive updates when wireless is
+     *                  enabled or disabled.
+     */
+    void addListener(Listener& listener);
+    
+private:
+    /**
+     * Adds a signal handler to this network manager client.  This method should
+     * only be used to implement the addListener method.
      * 
      * @param handler   The object that will receive updates when wireless is
      *                  enabled or disabled.
      */
-    void addSignalHandler(SignalHandler* handler) override;
-
-private:
-    /**
-     * Gets the GType of this object's stored GObject class.
-     * 
-     * @return NM_TYPE_CLIENT
-     */
-    GType getType() const override;
-    
-    /**
-     * Checks if a GObject's type allows it to be held by this object. 
-     * 
-     * @param toCheck  Any valid GObject, or nullptr.
-     * 
-     * @return  true iff toCheck is a NMClient or is null. 
-     */
-    virtual bool isValidType(GObject* toCheck) const override;
+    void connectSignalHandler
+    (GPPObject<NMPPClient>::SignalHandler* handler) override;
 };
