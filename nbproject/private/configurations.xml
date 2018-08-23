@@ -17,18 +17,12 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
-        <df name="Release">
-        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
           <df name="build">
             <df name="intermediate">
               <df name="Debug">
-              </df>
-              <df name="Release">
               </df>
             </df>
           </df>
@@ -4618,7 +4612,8 @@
           <in>GLibThread.h</in>
           <in>GPPObject.cpp</in>
           <in>GPPObject.h</in>
-          <in>SignalHandler.h</in>
+          <in>GSignalHandler.cpp</in>
+          <in>GSignalHandler.h</in>
         </df>
         <df name="PocketCHIP">
           <in>Audio.cpp</in>
@@ -4676,6 +4671,7 @@
         <in>test_LaunchedApp.cpp</in>
         <in>test_XWindowInterface.cpp</in>
       </df>
+      <in></in>
     </df>
     <df root="." name="1">
       <df name="assets">
@@ -4693,18 +4689,12 @@
         </df>
       </df>
       <df name="build">
-        <df name="Debug">
-        </df>
-        <df name="Release">
-        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
           <df name="build">
             <df name="intermediate">
               <df name="Debug">
-              </df>
-              <df name="Release">
               </df>
             </df>
           </df>

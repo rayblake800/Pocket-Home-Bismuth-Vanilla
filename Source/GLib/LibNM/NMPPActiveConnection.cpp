@@ -5,19 +5,19 @@
  * NMPPActiveConnection.
  */
 NMPPActiveConnection::NMPPActiveConnection(const NMPPActiveConnection& toCopy) :
-GPPObject<NMPPActiveConnection>(toCopy, NM_TYPE_ACTIVE_CONNECTION) { }
+GPPObject(toCopy, NM_TYPE_ACTIVE_CONNECTION) { }
  
 /*
  * Creates a NMPPActiveConnection to contain a NMActiveConnection object.
  */
 NMPPActiveConnection::NMPPActiveConnection(NMActiveConnection* toAssign) :
-GPPObject<NMPPActiveConnection>(toAssign, NM_TYPE_ACTIVE_CONNECTION) { }
+GPPObject(toAssign, NM_TYPE_ACTIVE_CONNECTION) { }
     
 /**
  * Creates a null NMPPActiveConnection.
  */
 NMPPActiveConnection::NMPPActiveConnection() :
-GPPObject<NMPPActiveConnection>(NM_TYPE_ACTIVE_CONNECTION) { }
+GPPObject(NM_TYPE_ACTIVE_CONNECTION) { }
 
 /*
  * Get the connection path stored by this object.

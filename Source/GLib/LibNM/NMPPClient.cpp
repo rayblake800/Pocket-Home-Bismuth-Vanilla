@@ -4,7 +4,7 @@
 /*
  * Create a NMPPClient holding a new NMClient object.
  */
-NMPPClient::NMPPClient() : GPPObject<NMPPClient>(NM_TYPE_CLIENT)
+NMPPClient::NMPPClient() : GPPObject(NM_TYPE_CLIENT)
 { 
     callInMainContext([this]()
     {
@@ -15,13 +15,13 @@ NMPPClient::NMPPClient() : GPPObject<NMPPClient>(NM_TYPE_CLIENT)
 /*
  * Create a NMPPClient that shares a NMClient with another NMPPClient.
  */
-NMPPClient::NMPPClient(NMPPClient& toCopy) : 
-GPPObject<NMPPClient>(toCopy, NM_TYPE_CLIENT) { }
+NMPPClient::NMPPClient(const NMPPClient& toCopy) : 
+GPPObject(toCopy, NM_TYPE_CLIENT) { }
 
 /*
  * Get all wifi devices from Network Manager.
  */
-juce::Array<NMPPDeviceWifi> NMPPClient::getWifiDevices() 
+juce::Array<NMPPDeviceWifi> NMPPClient::getWifiDevices() const
 { 
     using namespace juce;
     Array<NMPPDeviceWifi> devices;
@@ -47,7 +47,7 @@ juce::Array<NMPPDeviceWifi> NMPPClient::getWifiDevices()
 /*
  * Gets a specific wifi device using its interface name.
  */
-NMPPDeviceWifi NMPPClient::getWifiDeviceByIface(const char* interface) 
+NMPPDeviceWifi NMPPClient::getWifiDeviceByIface(const char* interface) const
 { 
     NMPPDeviceWifi wifiDevice;
     callInMainContext([interface, &wifiDevice](GObject* clientObject)
@@ -68,7 +68,7 @@ NMPPDeviceWifi NMPPClient::getWifiDeviceByIface(const char* interface)
 /*
  * Gets a specific wifi device using its DBus path.
  */
-NMPPDeviceWifi NMPPClient::getWifiDeviceByPath(const char* path) 
+NMPPDeviceWifi NMPPClient::getWifiDeviceByPath(const char* path) const
 { 
     NMPPDeviceWifi wifiDevice;
     callInMainContext([path, &wifiDevice](GObject* clientObject)
@@ -89,7 +89,7 @@ NMPPDeviceWifi NMPPClient::getWifiDeviceByPath(const char* path)
 /*
  * Gets the list of all active connections known to the network manager.
  */
-juce::Array<NMPPActiveConnection> NMPPClient::getActiveConnections() 
+juce::Array<NMPPActiveConnection> NMPPClient::getActiveConnections() const
 { 
     using namespace juce;
     Array<NMPPActiveConnection> connections;
@@ -115,7 +115,7 @@ juce::Array<NMPPActiveConnection> NMPPClient::getActiveConnections()
 /*
  * Gets the primary active network connection.
  */
-NMPPActiveConnection NMPPClient::getPrimaryConnection() 
+NMPPActiveConnection NMPPClient::getPrimaryConnection() const
 { 
     NMPPActiveConnection primary;
     callInMainContext([&primary](GObject* clientObject)
@@ -136,7 +136,7 @@ NMPPActiveConnection NMPPClient::getPrimaryConnection()
 /*
  * Gets the connection being activated by the network manager.
  */
-NMPPActiveConnection NMPPClient::getActivatingConnection() 
+NMPPActiveConnection NMPPClient::getActivatingConnection() const
 { 
     NMPPActiveConnection activating;
     callInMainContext([&activating](GObject* clientObject)
@@ -182,7 +182,7 @@ void NMPPClient::deactivateConnection(NMPPActiveConnection& activeCon)
 /*
  * Checks if wireless connections are currently enabled.
  */
-bool NMPPClient::wirelessEnabled() 
+bool NMPPClient::wirelessEnabled() const
 { 
     bool enabled = false;
     callInMainContext([&enabled](GObject* clientObject)
@@ -348,8 +348,9 @@ void NMPPClient::Listener::propertyChanged
  */
 void NMPPClient::addListener(Listener& listener)
 {
-    connectSignalHandler(static_cast<GPPObject<NMPPClient>::SignalHandler*>
-            (&listener));
+    GObject* source = getGObject();
+    listener.addNotifySignal(source, NM_CLIENT_WIRELESS_ENABLED);
+    g_clear_object(&source);
 }
 
 /*

@@ -11,7 +11,7 @@
  *        objects.
  */
 
-class NMPPActiveConnection : public GPPObject<NMPPActiveConnection>
+class NMPPActiveConnection : public GPPObject
 {
 public:
     /**

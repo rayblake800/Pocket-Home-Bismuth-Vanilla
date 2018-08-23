@@ -44,6 +44,20 @@ GPPObject<GPPDBusProxy>(G_TYPE_DBUS_PROXY)
  */
 GPPDBusProxy::GPPDBusProxy(GDBusProxy * proxy) :
 GPPObject<GPPDBusProxy>(G_OBJECT(proxy), G_TYPE_DBUS_PROXY) { }
+        
+/*
+ * Subscribe to all DBus signals and property changes emitted by this
+ * signal source.
+ */
+void GPPDBusProxy::DBusSignalHandler::connectAllSignals(GObject* source)
+{
+    if(source != nullptr && G_IS_DBUS_PROXY(source))
+    {
+        connectSignal(source, "g-signal", G_CALLBACK(dBusSignalCallback));
+        connectSignal(source, "g-properties-changed", 
+                G_CALLBACK(dBusPropertiesChanged));
+    }
+}
 
 /*
  * Called whenever the DBus object emits a signal.  DBusSignalHandler
@@ -86,7 +100,7 @@ void GPPDBusProxy::DBusSignalHandler::dBusPropertyInvalidated
  * Calls one of the methods provided by this interface.
  */
 GVariant* GPPDBusProxy::callMethod
-(const char *  methodName, GVariant* params, GError ** error)
+(const char *  methodName, GVariant* params, GError ** error) const
 {
     using namespace juce;
     if(params != nullptr && !g_variant_is_of_type(params, G_VARIANT_TYPE_TUPLE))
@@ -146,6 +160,28 @@ GVariant* GPPDBusProxy::callMethod
     return result;
 }
 
+
+/*
+ * Checks if the interface has a property with a particular name
+ */
+bool GPPDBusProxy::hasProperty(const char *  propertyName) const
+{
+    GDBusProxy * proxy = G_DBUS_PROXY(getGObject());
+    if(proxy == nullptr)
+    {
+        return false;
+    }
+    GVariant* property = g_dbus_proxy_get_cached_property(proxy,
+            propertyName);
+    g_object_unref(G_OBJECT(proxy));
+    if(property == nullptr)
+    {
+        return false;
+    }
+    g_variant_unref(property);
+    return true;
+}
+
 /*
  * Register a signal handler to receive DBus signals and property updates.
  */
@@ -166,11 +202,7 @@ void GPPDBusProxy::connectSignalHandler
     GObject* proxy = getGObject();
     if(proxy != nullptr)
     {
-        signalHandler->connectSignal(proxy,
-                "g-signal", G_CALLBACK(dBusSignalCallback));
-        signalHandler->connectSignal(proxy,
-                "g-properties-changed",
-                G_CALLBACK(dBusPropertiesChanged));
+        signalHandler->connectAllSignals(proxy);
     }
     g_clear_object(&proxy);
 }
@@ -203,7 +235,7 @@ void GPPDBusProxy::dBusPropertiesChanged(GDBusProxy* proxy,
     using namespace juce;
     using namespace GVariantConverter;
     GPPDBusProxy proxyWrapper(proxy);
-    iterateDict(changedProperties,[proxyWrapper,handler]
+    iterateDict(changedProperties,[&proxyWrapper,handler]
             (GVariant* key, GVariant* property)
     {
        String propName = getValue<String>(key);

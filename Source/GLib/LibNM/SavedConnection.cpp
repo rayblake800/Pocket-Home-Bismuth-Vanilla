@@ -67,7 +67,7 @@ NMPPConnection SavedConnection::getNMConnection() const
 /*
  * Gets the last recorded time this saved connection was active.
  */
-juce::Time SavedConnection::lastConnectionTime()
+juce::Time SavedConnection::lastConnectionTime() const
 { 
     using namespace juce;
     Time lastTime;
@@ -90,7 +90,7 @@ juce::Time SavedConnection::lastConnectionTime()
 /*
  * Checks if the connection has a saved wireless security key.
  */
-bool SavedConnection::hasSavedKey()
+bool SavedConnection::hasSavedKey() const
 {
     using namespace juce;
     if(isNull())
@@ -158,9 +158,10 @@ void SavedConnection::deleteConnection()
     if(!isNull())
     {
         callMethod(deleteConnectionMethod);
-        removeData();
+        clearGObject();
         path = "";
-        nmConnection = NMPPConnection();
+        NMPPConnection emptyConnection;
+        nmConnection = emptyConnection; 
         settingNames.clear();
     }
 }
@@ -198,7 +199,8 @@ void SavedConnection::createNMConnection()
     if(!settingNames.isEmpty())
     {
         settingNames.clear();
-        nmConnection = NMPPConnection();
+        NMPPConnection emptyConnection;
+        nmConnection = emptyConnection; 
     }
     nmConnection.setPath(path.toRawUTF8());
     GVariant* settings = callMethod(getSettingsMethod);
@@ -288,7 +290,7 @@ void SavedConnection::createNMConnection()
 /*
  * Returns one of this connection's settings objects.
  */
-GVariant* SavedConnection::getSetting(const char* name)
+GVariant* SavedConnection::getSetting(const char* name) const
 {  
     if(isNull())
     {
@@ -310,7 +312,7 @@ GVariant* SavedConnection::getSetting(const char* name)
  * object
  */
 GVariant* SavedConnection::getSettingProp(const char* settingName,
-        const char* propName)
+        const char* propName) const
 {  
     if(isNull())
     {
@@ -332,7 +334,7 @@ GVariant* SavedConnection::getSettingProp(const char* settingName,
  * object
  */
 GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
-        const char* propName)
+        const char* propName) const
 {
     if(isNull())
     {
@@ -363,7 +365,7 @@ bool SavedConnection::hasSetting(const char* settingName) const
  * and check if getSettingParam returns null.
  */
 bool SavedConnection::hasSettingProperty(const char* settingName,
-        const char* propName)
+        const char* propName) const
 {
     if(isNull())
     {

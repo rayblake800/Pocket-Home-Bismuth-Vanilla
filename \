@@ -22,7 +22,7 @@ public:
      * 
      * @param toCopy  Existing connection object to copy.
      */
-    SavedConnection(const SavedConnection& toCopy);
+    SavedConnection(SavedConnection& toCopy);
     
     /**
      * Initialize a SavedConnection from a DBus connection path.
@@ -46,7 +46,7 @@ public:
      * 
      * @return true iff connection settings are for a wifi connection.
      */
-    bool isWifiConnection() const;
+    bool isWifiConnection();
     
     /**
      * Gets the NMPPConnection object generated from this connection's data.
@@ -55,7 +55,7 @@ public:
      * @return the NMPPConnection object for this connection, or nullptr if the
      *         connection is invalid.
      */
-    NMPPConnection getNMConnection() const;
+    NMPPConnection getNMConnection();
     
     /**
      * Gets the last recorded time this saved connection was active.
@@ -63,7 +63,7 @@ public:
      * @return  the last time the connection was active, or the Unix epoch if
      *          the connection has no saved connection time.
      */
-    juce::Time lastConnectionTime() const;
+    juce::Time lastConnectionTime();
 
     /**
      * Checks if the connection has a saved wireless security key.
@@ -71,7 +71,7 @@ public:
      * @return true iff a security key value was found in this connection's
      *         settings.
      */
-    bool hasSavedKey() const;
+    bool hasSavedKey();
     
     /**
      * Deletes this connection from the list of saved connections.  This object
@@ -86,7 +86,7 @@ public:
      * 
      * @return  true iff this connection and rhs share a DBus path.
      */
-    bool operator==(const SavedConnection& rhs) const;
+    bool operator==(const SavedConnection& rhs);
     
     /**
      * Compare SavedConnections with NMConnections using the connection path.
@@ -95,7 +95,7 @@ public:
      * 
      * @return  true iff this connection and rhs share a DBus path.
      */
-    bool operator==(NMConnection* rhs) const;
+    bool operator==(NMConnection* rhs);
     
 private:
     /**
@@ -112,7 +112,7 @@ private:
      * @return the setting with the matching name, if found. If this value is
      *         non-null, it will need to be freed with g_variant_unref. 
      */
-    GVariant* getSetting(const char* name) const;
+    GVariant* getSetting(const char* name);
     
     /**
      * Returns the value of a specific property for a specific settings
@@ -127,7 +127,7 @@ private:
      *         non-null, it will need to be freed with g_variant_unref. 
      */
     GVariant* getSettingProp(const char* settingName,
-            const char* propName) const;
+            const char* propName);
         
     /**
      * Returns the value of a specific property for a specific settings
@@ -142,7 +142,7 @@ private:
      *         non-null, it will need to be freed with g_variant_unref. 
      */
     GVariant* getSettingProp(GVariant* settingsObject,
-            const char* propName) const;
+            const char* propName);
     
     /**
      * Checks if this connection has a particular setting type.
@@ -151,7 +151,7 @@ private:
      * 
      * @return true iff a settings object named settingName exists 
      */
-    bool hasSetting(const char* settingName) const;
+    bool hasSetting(const char* settingName);
         
     /**
      * Checks if this connection has a specific settings property in a specific 
@@ -166,7 +166,7 @@ private:
      * @return true iff a settings object named settingName exists and contains
      *         a property called propName.
      */
-    bool hasSettingProperty(const char* settingName, const char* propName) const;
+    bool hasSettingProperty(const char* settingName, const char* propName);
     
     NMPPConnection nmConnection;
     juce::StringArray settingNames;

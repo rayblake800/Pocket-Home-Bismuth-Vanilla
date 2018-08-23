@@ -1,79 +1,132 @@
-/*
-  ==============================================================================
-
-    SignalHandler.cpp
-    Created: 21 Aug 2018 4:00:32pm
-    Author:  anthony
-
-  ==============================================================================
-*/
-
-#include "SignalHandler.h"
+#include "GSignalHandler.h"
 
 /*
- * Adds the signal handler's address to the list of valid signal
- * handlers.
+ * Unsubscribes the signal handler from all signal sources, and removes all
+ * held references to signal sources.
  */
-GPPObject::SignalHandler::SignalHandler()
+virtual GSignalHandler::~GSignalHandler()
 {
-    //ADDR_LOG(this,"Created as SignalHandler");
-    GPPObject::signalHandlers.addIfNotAlreadyThere(this);
+    unsubscribeAll();
 }
 
-
+/*
+ * Subscribe the signal handler to a single signal.
+ */
+void GSignalHandler::connectSignal(GObject* source,
+        const char* signalName, GCallback callback)
+{
+    if(source == nullptr || signalName == nullptr)
+    {
+        return;
+    }
+    const juce::ScopedLock signalLock(signals.getLock());
+    gulong handlerID = g_signal_connect
+            (source, signalName, callback, this);
+    if(handlerID != 0)
+    {
+        juce::Array<gulong>& existingSignals = signals.getReference(source);
+        if(existingSignals.isEmpty())
+        {
+            g_object_ref(source);
+        }
+        existingSignals.add(handlerID);
+    }       
+}
         
 /*
- * Copies an existing signal handler, subscribing to all of that
- * handler's tracked signals.
+ * Subscribe a signal handler to receive notifications when a specific 
+ * object property changes.
  */
-GPPObject::SignalHandler::SignalHandler(const SignalHandler& rhs)
+void GSignalHandler::connectNotifySignal
+(GObject* source, const char* propertyName)
 {   
-    
-    //ADDR_LOG(this,"Created as SignalHandler copying ", &rhs);
-    //ADDR_LOG(&rhs,"Shared data with ", this);
-    GPPObject::signalHandlers.addIfNotAlreadyThere(this);
-    for(GPPObject* signalSource : sources)
+    if(propertyName != nullptr)
     {
-        signalSource->addSignalHandler(this);
+        juce::String signal("notify::");
+        signal += propertyName;
+        connectSignal(source, signal.toRawUTF8(), 
+                G_CALLBACK(notifyCallback));
     }
 }
-        
+
 /*
- * Removes all of its signal handling callback functions from within the
- * signal context thread, and remove this signal handler's address from
- * the list of valid signal handlers.
+ * Connect to all relevant signals for all GObject signal sources tracked
+ * by another signal handler.
  */
-GPPObject::SignalHandler::~SignalHandler()
+void GSignalHandler::shareSignalSources(const GSignalHandler& otherHandler)
 {
-    while(!sources.isEmpty())
+    juce::Array<GObject*> signalSources;
+    const juce::ScopedLock readSourceLock(rhs.signals.getLock());
+    auto iter = rhs.signals.begin();
+    while(iter.next())
     {
-        GPPObject* source = sources[0];
+        GObject* source = iter.getKey();
         if(source != nullptr)
         {
-            if(source->isNull())
-            {
-                DBG("GPPObject::SignalHandler::" << __func__ 
-                        << ": Error: Found null signal source");
-            }
-            else
-            {
-                source->removeSignalHandler(this);
-            }
-            sources.removeAllInstancesOf(source);
+            g_object_ref(iter.getKey());
+            signalSources.add(source);
         }
     }
-    GPPObject::signalHandlers.removeAllInstancesOf(this);
-    //ADDR_LOG(this, "Destroyed as SignalHandler");
+    const juce::ScopedUnlock readFinished(rhs.signals.getLock());
+
+    for(GObject* source : signalSources)
+    {
+        GPPObjectType tempHolder(source);
+        tempHolder.connectSignalHandler(*this);
+        g_object_unref(source);
+    }
+    
+}
+    
+/*
+ * Unsubscribes this signal handler from all signals emitted by a GObject.
+ */
+void GSignalHandler::disconnectSignals(GObject* source)
+{
+    const juce::ScopedLock changeSourceLock(signals.getLock());
+    if(source != nullptr && signals.contains(source));
+    {
+        for(const guint& signalID : signals[source])
+        {
+            g_signal_handler_disconnect(source, signalID);
+        }
+        g_object_unref(source);
+        signals.remove(source);
+    }       
+}
+    
+/*
+ * Unsubscribes the signal handler from all signal sources, and removes all
+ * held references to signal sources.
+ */
+void GSignalHandler::unsubscribeAll()
+{
+    const juce::ScopedLock changeSourceLock(signals.getLock());
+    auto iter = signals.begin();
+    while(iter.next())
+    {
+        GObject* source = iter.getKey();
+        if(source == nullptr)
+        {
+            continue;
+        }
+        for(const guint& signalID : iter.getValue())
+        {
+            g_signal_handler_disconnect(source, signalID);
+        }
+        g_object_unref(source);
+    }   
+    signals.clear();
 }
 
-/*
- * Callback function for handling property change notification signals.
- * Subclasses should override this to handle all specific property 
- * change notifications that they support.
+/**
+ * Callback to handle property change signals.  This passes all received
+ * signals to the signal handler's propertyChanged method.
  */
-void GPPObject::SignalHandler::propertyChanged
-(GPPObject* source, juce::String property)
+void GSignalHandler::notifyCallback
+(GObject* objectData, GParamSpec* pSpec, GSignalHandler* signalHandler)
 {
-    DBG("GPPObject::SignalHandler::" << __func__ << ": Unexpected notification"
-            << "for property " << property); 
+    GPPObjectType tempObjectHolder(objectData);
+    juce::String property(pSpec->name);
+    signalHandler->propertyChanged(tempObjectHolder, property);
 }

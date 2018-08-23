@@ -18,7 +18,7 @@
  * receive updates if signal strength changes or the access point is removed. 
  */
 
-class NMPPAccessPoint : public GPPObject<NMPPAccessPoint>
+class NMPPAccessPoint : public GPPObject
 {
 public:
     /**
@@ -27,7 +27,7 @@ public:
      * 
      * @toCopy  An existing connection object.
      */
-    NMPPAccessPoint(NMPPAccessPoint& toCopy);
+    NMPPAccessPoint(const NMPPAccessPoint& toCopy);
 
     /**
      * Creates a NMPPAccessPoint to contain a NMAccessPoint object.
@@ -147,7 +147,7 @@ public:
      * Listener objects can subscribe to receive updates when the access point
      * signal strength changes.
      */
-    class Listener : public GSignalHandler<NMPPAccessPoint>
+    class Listener : public GSignalHandler
     {
     public:     
         Listener() { }
@@ -156,6 +156,14 @@ public:
         
     private:   
         friend class NMPPAccessPoint;
+        
+        /**
+         * Subscribe to signal strength signals from a single NMAccessPoint.
+         * 
+         * @param source  A NMAccessPoint accessed as a GObject pointer.
+         */
+        virtual void connectAllSignals(GObject* source) override;
+        
         /**
          * Signals that the access point's signal strength has been updated.
          * 
@@ -187,16 +195,5 @@ public:
      * @param listener  An object that will be notified when connection signal
      *                  strength changes.
      */
-    void addListener(Listener* signalHandler);
-    
-    private:
-    /**
-     * Register a signal handler to receive NMAccessPoint signals..
-     * 
-     * @param signalHandler  A signal handler that will receive all signals
-     *                       and property updates emitted by the NMAccessPoint
-     *                       object.
-     */
-    virtual void connectSignalHandler
-    (GPPObject<NMPPAccessPoint>::SignalHandler* signalHandler) override;
+    void addListener(Listener& listener);
 };

@@ -74,7 +74,7 @@ private:
      * 
      * @return the list of paths, freshly updated over the DBus interface.
      */
-    inline juce::StringArray getConnectionPaths();
+    inline juce::StringArray getConnectionPaths() const;
     
     juce::Array<SavedConnection> connectionList;   
     juce::StringArray connectionPaths;

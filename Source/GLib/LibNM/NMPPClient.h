@@ -12,7 +12,7 @@
  * @brief A RAII container and C++ interface for the LibNM NMClient class.
  */
 
-class NMPPClient : public GPPObject<NMPPClient>
+class NMPPClient : public GPPObject
 {
 public:
     /**
@@ -26,7 +26,7 @@ public:
      * @param toCopy  Holds the NMClient object that will be shared with the
      *                new NMPPClient.
      */
-    NMPPClient(NMPPClient& toCopy);
+    NMPPClient(const NMPPClient& toCopy);
     
     /**
      * Get all wifi devices from Network Manager.
@@ -34,7 +34,7 @@ public:
      * @return  All NMDevices found that are wifi devices, packaged into an
      *          array of NMPPDeviceWifi objects.
      */
-    juce::Array<NMPPDeviceWifi> getWifiDevices();
+    juce::Array<NMPPDeviceWifi> getWifiDevices() const;
     
     /**
      * Gets a specific wifi device using its interface name.
@@ -44,7 +44,7 @@ public:
      * @return  the requested wifi device, or a null object if no valid device
      *          is found.
      */
-    NMPPDeviceWifi getWifiDeviceByIface(const char* interface);
+    NMPPDeviceWifi getWifiDeviceByIface(const char* interface) const;
         
     /**
      * Gets a specific wifi device using its DBus path.
@@ -54,14 +54,14 @@ public:
      * @return  the requested wifi device, or a null object if no valid device
      *          is found.
      */
-    NMPPDeviceWifi getWifiDeviceByPath(const char* path);
+    NMPPDeviceWifi getWifiDeviceByPath(const char* path) const;
     
     /**
      * Gets the list of all active connections known to the network manager.
      * 
      * @return  an array of all active network connections.
      */
-    juce::Array<NMPPActiveConnection> getActiveConnections();
+    juce::Array<NMPPActiveConnection> getActiveConnections() const;
     
     /**
      * Gets the primary active network connection.
@@ -69,7 +69,7 @@ public:
      * @return  an active NMPPConnection object, or a null object if there is no
      *          primary connection.
      */
-    NMPPActiveConnection getPrimaryConnection();
+    NMPPActiveConnection getPrimaryConnection() const;
     
     /**
      * Gets the connection being activated by the network manager.
@@ -77,7 +77,7 @@ public:
      * @return  the activating connection as an active NMPPConnection object,
      *          or a null object if there is no activating connection.
      */
-    NMPPActiveConnection getActivatingConnection();
+    NMPPActiveConnection getActivatingConnection() const;
     
     /**
      * Deactivates an active network connection.
@@ -92,7 +92,7 @@ public:
      * 
      * @return  true iff wifi is enabled.
      */
-    bool wirelessEnabled();
+    bool wirelessEnabled() const;
     
     /**
      * Sets whether wireless connections are enabled.
@@ -222,7 +222,7 @@ public:
     /**
      * Listeners receive updates whenever wireless is enabled or disabled.
      */
-    class Listener : public GSignalHandler<NMPPClient>
+    class Listener : public GSignalHandler
     {
     public:
         Listener() { }
@@ -259,15 +259,4 @@ public:
      *                  enabled or disabled.
      */
     void addListener(Listener& listener);
-    
-private:
-    /**
-     * Adds a signal handler to this network manager client.  This method should
-     * only be used to implement the addListener method.
-     * 
-     * @param handler   The object that will receive updates when wireless is
-     *                  enabled or disabled.
-     */
-    void connectSignalHandler
-    (GPPObject<NMPPClient>::SignalHandler* handler) override;
 };

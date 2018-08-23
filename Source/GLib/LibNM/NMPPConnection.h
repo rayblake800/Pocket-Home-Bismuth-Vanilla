@@ -8,7 +8,7 @@
  * @brief A RAII container and C++ interface for LibNM NMConnection objects.
  */
 
-class NMPPConnection : public GPPObject<NMPPConnection>
+class NMPPConnection : public GPPObject
 {
 public:
     /**

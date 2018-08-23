@@ -17,7 +17,7 @@
 #include "GPPObject.h"
 #include "GSignalHandler.h"
 
-class GPPDBusProxy : public GPPObject<GPPDBusProxy>
+class GPPDBusProxy : public GPPObject
 {
 protected:
     /**
@@ -46,13 +46,10 @@ protected:
     /**
      * Create a GPPDBusProxy as a copy of another GPPDBusProxy
      * 
-     * @tparam ProxyType  A subclass of GPPDBusProxy.
-     * 
      * @param proxy       The GPPDBusProxy object to copy.
      */
-    template<class ProxyType>
-    GPPDBusProxy(ProxyType& proxy) : 
-    GPPObject<GPPDBusProxy>(proxy, G_TYPE_DBUS_PROXY) { }
+    GPPDBusProxy(const GPPDBusProxy& proxy) : 
+    GPPObject(proxy, G_TYPE_DBUS_PROXY) { }
     
 public:
     virtual ~GPPDBusProxy() { }
@@ -60,13 +57,22 @@ public:
     /**
      * Generic base class for objects that receive DBus signals.
      */
-    class DBusSignalHandler : public GSignalHandler<GPPDBusProxy>
+    class DBusSignalHandler : public GSignalHandler
     {
     public:
-        friend class GPPDBusProxy;
         DBusSignalHandler() { }
         
         virtual ~DBusSignalHandler() { }
+        
+        /**
+         * Subscribe to all DBus signals and property changes emitted by this
+         * signal source.
+         * 
+         * @param source  A GDBusProxy's underlying GObject.  This function will
+         *                do nothing if this source is nullptr or not a
+         *                GDBusProxy.
+         */
+        virtual void connectAllSignals(GObject* source);
         
     private:
         /**
@@ -122,10 +128,10 @@ protected:
      * 
      * @propertyName  A string value to search for as a property name.
      * 
-     * @return  true iff the interface is connected and has a property with the
+     * @return  True iff the interface is connected and has a property with the
      *          given name.
      */
-    bool hasProperty(const char *  propertyName);
+    bool hasProperty(const char *  propertyName) const;
 
     /**
      * Attempts to read and return a property from the interface.
@@ -141,7 +147,7 @@ protected:
      * 
      * @see GVariantConverter.h
      */
-    template<typename T> T getProperty(const char *  propertyName)
+    template<typename T> T getProperty(const char *  propertyName) const
     {
         GDBusProxy * proxy = G_DBUS_PROXY(getGObject());
         if(proxy == nullptr)
@@ -214,7 +220,7 @@ protected:
      *          freed with g_variant_unref.
      */
     GVariant* callMethod(const char * methodName, GVariant* params = nullptr,
-            GError** error = nullptr);
+            GError** error = nullptr) const;
     
     /**
      * Register a signal handler to receive DBus signals and property updates.
@@ -223,16 +229,6 @@ protected:
      *                       and property updates emitted by the DBus object.
      */
     void connectSignalHandler(DBusSignalHandler& signalHandler);
-    
-private:
-    /**
-     * Register a signal handler to receive DBus signals and property updates.
-     * 
-     * @param signalHandler  A signal handler that will receive all signals
-     *                       and property updates emitted by the DBus object.
-     */
-    virtual void connectSignalHandler
-    (GPPObject<GPPDBusProxy>::SignalHandler* signalHandler) override;
 
     /**
      * Callback function for handling all DBus signals.

@@ -38,7 +38,7 @@ set secure
 inoremap jj <ESC>
 
 " build tools
-set makeprg='make debug'
-nnoremap <F4> :make!<cr>
+set makeprg=make
+nnoremap <F4> :!make debug<cr>
 nnoremap <F5> :!pocket-home<cr>
 nnoremap <f6> :ConqueGDB<cr>

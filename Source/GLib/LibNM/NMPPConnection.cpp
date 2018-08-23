@@ -5,19 +5,18 @@
  * NMPPConnection.
  */
 NMPPConnection::NMPPConnection(const NMPPConnection& toCopy) :
-GPPObject<NMPPConnection> (toCopy, NM_TYPE_CONNECTION) { }
+GPPObject(toCopy, NM_TYPE_CONNECTION) { }
 
 /**
  * Create a NMPPConnection to contain a NMConnection object.
  */
 NMPPConnection::NMPPConnection(NMConnection* toAssign) :
-GPPObject<NMPPConnection> (toAssign, NM_TYPE_CONNECTION) { }
+GPPObject(toAssign, NM_TYPE_CONNECTION) { }
     
 /*
  * Creates a null NMPPConnection.
  */
-NMPPConnection::NMPPConnection() : 
-GPPObject<NMPPConnection> (NM_TYPE_CONNECTION) { }
+NMPPConnection::NMPPConnection() : GPPObject(NM_TYPE_CONNECTION) { }
 
 /**
  * Check if this connection object and another could be describing the 

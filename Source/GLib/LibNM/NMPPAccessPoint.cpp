@@ -7,19 +7,18 @@
  * NMPPAccessPoint.
  */
 NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy) :
-GPPObject<NMPPAccessPoint>(toCopy, NM_TYPE_ACCESS_POINT) { }
+GPPObject(toCopy, NM_TYPE_ACCESS_POINT) { }
 
 /*
  * Create a NMPPAccessPoint to contain a NMAccessPoint object.
  */
 NMPPAccessPoint::NMPPAccessPoint(NMAccessPoint* toAssign) :
-GPPObject<NMPPAccessPoint>(toAssign, NM_TYPE_ACCESS_POINT) { }
+GPPObject(G_OBJECT(toAssign), NM_TYPE_ACCESS_POINT) { }
     
 /**
  * Creates a null NMPPAccessPoint.
  */
-NMPPAccessPoint::NMPPAccessPoint() : 
-GPPObject<NMPPAccessPoint>(NM_TYPE_ACCESS_POINT) { }
+NMPPAccessPoint::NMPPAccessPoint() : GPPObject(NM_TYPE_ACCESS_POINT) { }
 
 /*
  * Gets the access point SSID as a byte array from the access point.  This 
@@ -99,7 +98,6 @@ const char* NMPPAccessPoint::getPath() const
     });
     return path;
 }
-
 
 /*
  * Gets the wifi access point frequency in (TODO: what format? MHz? 
@@ -245,6 +243,17 @@ NM80211ApSecurityFlags NMPPAccessPoint::getRSNFlags() const
 }
 
 /*
+ * Subscribe to signal strength signals from a single NMAccessPoint.
+ */
+void NMPPAccessPoint::Listener::connectAllSignals(GObject* source)
+{
+    if(source != nullptr && NM_IS_ACCESS_POINT(source))
+    {
+        connectNotifySignal(source, NM_ACCESS_POINT_STRENGTH);
+    }
+}
+
+/*
  * Build NMPPAccessPoint::Listener::signalStrengthChanged() calls from generic 
  * property change notifications.
  */
@@ -261,29 +270,12 @@ void NMPPAccessPoint::Listener::propertyChanged
 /**
  * Add a new listener to receive updates from this access point.
  */
-void NMPPAccessPoint::addListener(NMPPAccessPoint::Listener* listener)
+void NMPPAccessPoint::addListener(NMPPAccessPoint::Listener& listener)
 {
-    connectSignalHandler(
-            static_cast<GPPObject<NMPPAccessPoint>::SignalHandler*>(listener));
-}
-
-/*
- * Add a new signal handler to receive signals from this access point.
- */
-void NMPPAccessPoint::connectSignalHandler
-(GPPObject<NMPPAccessPoint>::SignalHandler* signalHandler)
-{ 
-    if(isNull())
+    GObject* apObject = getGObject();
+    if(apObject != nullptr)
     {
-        DBG("NMPPAccessPoint::" << __func__ << ": access point is null");
+        listener.connectAllSignals(apObject);
     }
-    else
-    {
-        GObject* signalSource = getGObject();
-        if(signalSource != nullptr)
-        {
-            signalHandler->connectNotifySignal(signalSource,
-                    NM_ACCESS_POINT_STRENGTH);
-        }
-    }
+    g_clear_object(&apObject);
 }

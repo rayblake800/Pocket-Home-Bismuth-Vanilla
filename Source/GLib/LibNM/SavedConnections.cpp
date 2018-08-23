@@ -43,7 +43,8 @@ juce::Array<SavedConnection> SavedConnections::getWifiConnections() const
 /*
  * Checks saved connection paths to see if one exists at the given path.
  */
-bool SavedConnections::connectionExists(const juce::String& connectionPath) const
+bool SavedConnections::connectionExists
+(const juce::String& connectionPath) const
 {
     return connectionPaths.contains(connectionPath);
 }
@@ -70,7 +71,8 @@ SavedConnection SavedConnections::getConnection
             }
         }
     }
-    return SavedConnection();
+    SavedConnection emptyConn;
+    return emptyConn;
 }
   
 /*
@@ -99,7 +101,7 @@ juce::Array<SavedConnection> SavedConnections::findConnectionsForAP
 /*
  * Get the list of all available connection paths
  */
-inline juce::StringArray SavedConnections::getConnectionPaths()
+inline juce::StringArray SavedConnections::getConnectionPaths() const
 {
     using namespace juce;
     using namespace GVariantConverter;

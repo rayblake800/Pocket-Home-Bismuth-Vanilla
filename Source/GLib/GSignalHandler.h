@@ -2,105 +2,30 @@
 #include <glib.h>
 #include <map>
 #include "JuceHeader.h"
-#include "GPPObject.h"
 /**
  * @file GSignalHandler.h
  * 
  * @brief Responds to signals emitted by GLib objects.
  */
-
-template <class GPPObjectType>
-class GSignalHandler : public GPPObject<GPPObjectType>::SignalHandler
-{    
-protected:
+class GSignalHandler
+{      
+public:
     GSignalHandler() { }
 
     /**
-     * Copies an existing signal handler, subscribing to all of that
-     * handler's tracked signals.
-     * 
-     * @param rhs  Another valid signal handler.
-     */
-    GSignalHandler(const GSignalHandler<GPPObjectType>& rhs)
-    {
-        juce::Array<GObject*> signalSources;
-        const juce::ScopedLock readSourceLock(rhs.signals.getLock());
-        auto iter = rhs.signals.begin();
-        while(iter.next())
-        {
-            GObject* source = iter.getKey();
-            if(source != nullptr)
-            {
-                g_object_ref(iter.getKey());
-                signalSources.add(source);
-            }
-        }
-        const juce::ScopedUnlock readFinished(rhs.signals.getLock());
-        
-        for(GObject* source : signalSources)
-        {
-            GPPObjectType tempHolder(source);
-            tempHolder.connectSignalHandler(*this);
-            g_object_unref(source);
-        }
-    }
-
-public:
-    /**
      * Unsubscribes the signal handler from all signal sources, and removes all
      * held references to signal sources.
      */
-    virtual ~GSignalHandler()
-    {
-        unsubscribeAll();
-    }
+    virtual ~GSignalHandler();
+    
+    /**
+     * Subscribe to all relevant signals from a single GObject signal source.
+     * 
+     * @param source  A GObject this signal handler should track.
+     */
+    virtual void connectAllSignals(GObject* source) = 0;
     
 protected:
-    /**
-     * Unsubscribes this signal handler from all signals emitted by a GObject.
-     * 
-     * @param source  A GObject signal source.
-     */
-    void disconnectSignals(GObject* source)
-    {
-        const juce::ScopedLock changeSourceLock(signals.getLock());
-        if(source != nullptr && signals.contains(source));
-        {
-            for(const guint& signalID : signals[source])
-            {
-                g_signal_handler_disconnect(source, signalID);
-            }
-            g_object_unref(source);
-            signals.remove(source);
-        }       
-    }
-    
-    /**
-     * Unsubscribes the signal handler from all signal sources, and removes all
-     * held references to signal sources.
-     */
-    void unsubscribeAll()
-    {
-        const juce::ScopedLock changeSourceLock(signals.getLock());
-        auto iter = signals.begin();
-        while(iter.next())
-        {
-            GObject* source = iter.getKey();
-            if(source == nullptr)
-            {
-                continue;
-            }
-            for(const guint& signalID : iter.getValue())
-            {
-                g_signal_handler_disconnect(source, signalID);
-            }
-            g_object_unref(source);
-        }   
-        signals.clear();
-    }
-    
-private:
-            
     /**
      * Subscribe the signal handler to a single signal.
      * 
@@ -116,26 +41,69 @@ private:
      *                    this signal handler will be passed to the callback
      *                    as data.
      */
-    virtual void connectSignal(GObject* source,
-            const char* signalName, GCallback callback) final override
-    {
-        if(source == nullptr || signalName == nullptr)
-        {
-            return;
-        }
-        const juce::ScopedLock signalLock(signals.getLock());
-        gulong handlerID = g_signal_connect
-                (source, signalName, callback, this);
-        if(handlerID != 0)
-        {
-            juce::Array<gulong>& existingSignals = signals.getReference(source);
-            if(existingSignals.isEmpty())
-            {
-                g_object_ref(source);
-            }
-            existingSignals.add(handlerID);
-        }       
-    }
+    void connectSignal
+    (GObject* source, const char* signalName,  GCallback callback);
+        
+    /**
+     * Subscribe a signal handler to receive notifications when a specific 
+     * object property changes.
+     * 
+     * @param source      A GOject signal source.  The signal handler will
+     *                    acquire a reference to the source's GObject, if it 
+     *                    doesn't have one already.
+     * 
+     * @param propertyName  A valid property of this object.
+     */
+    void connectNotifySignal(GObject* source, const char* propertyName);
+
+    /**
+     * Connect to all relevant signals for all GObject signal sources tracked
+     * by another signal handler.
+     * 
+     * @param otherHandler  Another signal handler.
+     */
+    void shareSignalSources(const GSignalHandler& otherHandler);
+
+        
+    /**
+     * Callback function for handling property change notification signals.
+     * Signal handlers should override this to handle all specific property 
+     * change notifications that they support.
+     * 
+     * @param source    Holds the GObject that emitted the signal.
+     * 
+     * @param property  The name of the object property that changed.
+     */
+    virtual void propertyChanged(GObject* source, juce::String property) { }
+    
+    /**
+     * Unsubscribes this signal handler from all signals emitted by a GObject.
+     * 
+     * @param source  A GObject signal source.
+     */
+    void disconnectSignals(GObject* source);
+    
+    /**
+     * Unsubscribes the signal handler from all signal sources, and removes all
+     * held references to signal sources.
+     */
+    void unsubscribeAll();
+    
+private:
+    /**
+     * Callback to handle property change signals.  This passes all received
+     * signals to the signal handler's propertyChanged method.
+     * 
+     * @param signalSource   The GObject notifying that one of its properties
+     *                       has changed.
+     * 
+     * @param pSpec          Holds the name of the updated property.
+     * 
+     * @param signalHandler  The signal handler subscribed to the source's 
+     *                       property updates. 
+     */
+    static void notifyCallback
+    (GObject* signalSource, GParamSpec* pSpec, GSignalHandler* signalHandler);
     
     /**
      * Maps each GObject* signal source to the list of subscribed signal IDs 
