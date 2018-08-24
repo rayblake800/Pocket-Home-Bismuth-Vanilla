@@ -8,12 +8,28 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " let Vundle manage Vundle, required
+" convenient plugin management 
 Plugin 'VundleVim/Vundle.vim'
+" automatic code completion
 Plugin 'Valloric/YouCompleteMe'
+" run GDB within vim
 Plugin 'vim-scripts/Conque-GDB'
+" quick generation of doxygen comments
+Plugin 'vim-scripts/DoxygenToolkit.vim'
+" quickly find files with ctrl+p
 Plugin 'ctrlpvim/ctrlp.vim'
+" vim cheat sheet, opened with \?
 Plugin 'lifepillar/vim-cheat40'
+" quick file tree
+Plugin 'scrooloose/nerdtree'
+" pretty status bar
+Plugin 'itchyny/lightline.vim'
 call vundle#end()
+
+" Open NERDtree when opening vim without picking a file
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
  
 " Indentation
 set tabstop=4
@@ -37,8 +53,14 @@ set secure
 " exit insert mode with jj
 inoremap jj <ESC>
 
-" build tools
+" build tools and project settings
+set syntax=cpp.doxygen
 set makeprg=make
-nnoremap <F4> :!make debug<cr>
-nnoremap <F5> :!pocket-home<cr>
-nnoremap <f6> :ConqueGDB<cr>
+"F1: open cheat sheets
+map <F1> <leader>?<cr>
+noremap <F2> :NERDTreeToggle<cr> 
+noremap <F3> :YcmCompleter GoTo<cr>
+noremap <F4> :! make debug<cr>
+noremap <F5> :!pocket-home<cr>
+noremap <F6> :ConqueGDB<cr>
+noremap <F7> :Dox<cr>
