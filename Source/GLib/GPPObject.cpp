@@ -4,7 +4,10 @@
 /*
  * Create a null GPPObject, with no internal GObject.
  */
-GPPObject::GPPObject(const GType objectType) : objectType(objectType) { }
+GPPObject::GPPObject(const GType objectType) : objectType(objectType) 
+{
+    g_weak_ref_set(&objectRef, nullptr); 
+}
 
 /*
  * Create a new GPPObject as a reference to existing object data.
@@ -12,6 +15,7 @@ GPPObject::GPPObject(const GType objectType) : objectType(objectType) { }
 GPPObject::GPPObject(const GPPObject& toCopy, const GType objectType) 
 : objectType(objectType) 
 {
+    g_weak_ref_set(&objectRef, nullptr); 
     setGObject(toCopy);
 }
 
@@ -21,6 +25,7 @@ GPPObject::GPPObject(const GPPObject& toCopy, const GType objectType)
 GPPObject::GPPObject(GObject* toAssign, const GType objectType) :
 objectType(objectType)
 {
+    g_weak_ref_set(&objectRef, nullptr); 
     setGObject(toAssign);
 }
 
@@ -105,7 +110,8 @@ void GPPObject::operator=(GObject* rhs)
  */
 GObject* GPPObject::getGObject() const
 {
-    return G_OBJECT(g_weak_ref_get(const_cast<GWeakRef*>(&objectRef)));
+    gpointer data = g_weak_ref_get(const_cast<GWeakRef*>(&objectRef));
+    return (data == nullptr) ? nullptr : G_OBJECT(data);
 }
 
 /*

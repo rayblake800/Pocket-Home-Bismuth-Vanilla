@@ -13,6 +13,7 @@
 		B97B8F50999FAC525F837AEC = {isa = PBXBuildFile; fileRef = B5DCAF01E0490D7413E9E85F; };
 		B60DD03FE5B471BE4AFBF56B = {isa = PBXBuildFile; fileRef = 81D682238B383EB3D7010236; };
 		8BF75DF65195F66A3F4FB617 = {isa = PBXBuildFile; fileRef = D8E721D535F8BF33B6FFC25F; };
+		A652D56965DF08DFBC7C1789 = {isa = PBXBuildFile; fileRef = 401DAF669F49BD7886D225DA; };
 		CCDB188F4BE61EA8EDD378AD = {isa = PBXBuildFile; fileRef = 7009667CD2D149DB5DFC0E19; };
 		E365392DE7E529EAA57260DA = {isa = PBXBuildFile; fileRef = 56F36E7FB73BB02FE6599D50; };
 		C24F726C0D9B8AFE8D03DB56 = {isa = PBXBuildFile; fileRef = 0C26CA302DF7D2ADFFC3CBFC; };
@@ -199,6 +200,7 @@
 		3F13DEE0D2D557F789151928 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JsonWifiInterface.h; path = ../../Source/Wifi/JsonWifiInterface.h; sourceTree = "SOURCE_ROOT"; };
 		3F54304E794DA80D5D4425CC = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenuItem.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItem.h"; sourceTree = "SOURCE_ROOT"; };
 		3F7219A24B52A1BFF362A71F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ColourConfigFile.cpp; path = "../../Source/Config Files/ColourConfigFile.cpp"; sourceTree = "SOURCE_ROOT"; };
+		401DAF669F49BD7886D225DA = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test_GPPObject.cpp"; path = "../../Tests/test_GPPObject.cpp"; sourceTree = "SOURCE_ROOT"; };
 		409096AF3FAC19F2F082F497 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PocketHomeApplication.h; path = ../../Source/PocketHomeApplication.h; sourceTree = "SOURCE_ROOT"; };
 		4223ACAC7C171CF75945FD82 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PageStackComponent.h; path = ../../Source/Components/Pages/PageStackComponent.h; sourceTree = "SOURCE_ROOT"; };
 		43618EC1AF9B84CDF65343BF = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PokeLookAndFeel.cpp; path = ../../Source/Components/PokeLookAndFeel.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -410,6 +412,7 @@
 		FE2AD97F03F339F27E32A12D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryData.cpp; path = ../../JuceLibraryCode/BinaryData.cpp; sourceTree = "SOURCE_ROOT"; };
 		E3053D796E9CDC05AB8387DE = {isa = PBXGroup; children = (
 					D8E721D535F8BF33B6FFC25F,
+					401DAF669F49BD7886D225DA,
 					7009667CD2D149DB5DFC0E19,
 					56F36E7FB73BB02FE6599D50, ); name = Tests; sourceTree = "<group>"; };
 		8276413844176736FBBD93FD = {isa = PBXGroup; children = (
@@ -913,6 +916,7 @@
 					5CFC0887F5B5B1779EC1471E, ); runOnlyForDeploymentPostprocessing = 0; };
 		467462E1976B8F50EA1165E3 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
 					8BF75DF65195F66A3F4FB617,
+					A652D56965DF08DFBC7C1789,
 					CCDB188F4BE61EA8EDD378AD,
 					E365392DE7E529EAA57260DA,
 					C24F726C0D9B8AFE8D03DB56,

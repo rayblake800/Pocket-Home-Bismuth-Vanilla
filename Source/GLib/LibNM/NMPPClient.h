@@ -232,6 +232,7 @@ public:
     class Listener : public GSignalHandler
     {
     public:
+        friend class NMPPClient;
         Listener() { }
         
         virtual ~Listener() { }
@@ -242,7 +243,7 @@ public:
         * 
         * @param source  A GObject this signal handler should track.
         */
-        virtual void connectAllSignals(GObject* source); 
+        virtual void connectAllSignals(GObject* source) override; 
 
        /**
         * This method will be called on registered listeners whenever 

@@ -369,7 +369,7 @@ void NMPPClient::addListener(Listener& listener)
     GObject* source = getGObject();
     if(source != nullptr)
     {
-        listener.GSignalHandler::connectAllSignals(source);
+        listener.connectAllSignals(source);
     }
     g_clear_object(&source);
 }

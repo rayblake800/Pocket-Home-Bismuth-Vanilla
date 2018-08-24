@@ -1,5 +1,5 @@
 #pragma once
-#include <glib.h>
+#include <glib-object.h>
 #include <map>
 #include "JuceHeader.h"
 

@@ -10,6 +10,8 @@
     <GROUP id="{0EAA4235-1BE6-9631-C021-04197F639BB7}" name="Tests">
       <FILE id="lpsFrf" name="test_ConfigFile.cpp" compile="1" resource="0"
             file="Tests/test_ConfigFile.cpp"/>
+      <FILE id="dLcpJh" name="test_GPPObject.cpp" compile="1" resource="0"
+            file="Tests/test_GPPObject.cpp"/>
       <FILE id="Bmp8Lw" name="test_LaunchedApp.cpp" compile="1" resource="0"
             file="Tests/test_LaunchedApp.cpp"/>
       <FILE id="DCiFAO" name="test_XWindowInterface.cpp" compile="1" resource="0"

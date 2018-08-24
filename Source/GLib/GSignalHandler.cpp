@@ -56,8 +56,8 @@ void GSignalHandler::connectNotifySignal
 void GSignalHandler::shareSignalSources(const GSignalHandler& otherHandler)
 {
     juce::Array<GObject*> signalSources;
-    const juce::ScopedLock readSourceLock(rhs.signals.getLock());
-    auto iter = rhs.signals.begin();
+    const juce::ScopedLock readSourceLock(otherHandler.signals.getLock());
+    auto iter = otherHandler.signals.begin();
     while(iter.next())
     {
         GObject* source = iter.getKey();
@@ -67,12 +67,11 @@ void GSignalHandler::shareSignalSources(const GSignalHandler& otherHandler)
             signalSources.add(source);
         }
     }
-    const juce::ScopedUnlock readFinished(rhs.signals.getLock());
+    const juce::ScopedUnlock readFinished(otherHandler.signals.getLock());
 
     for(GObject* source : signalSources)
     {
-        GPPObjectType tempHolder(source);
-        tempHolder.connectSignalHandler(*this);
+        connectAllSignals(source);
         g_object_unref(source);
     }
     
@@ -126,7 +125,6 @@ void GSignalHandler::unsubscribeAll()
 void GSignalHandler::notifyCallback
 (GObject* objectData, GParamSpec* pSpec, GSignalHandler* signalHandler)
 {
-    GPPObjectType tempObjectHolder(objectData);
     juce::String property(pSpec->name);
-    signalHandler->propertyChanged(tempObjectHolder, property);
+    signalHandler->propertyChanged(objectData, property);
 }

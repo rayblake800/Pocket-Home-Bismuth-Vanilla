@@ -56,7 +56,7 @@ nmAccessPoint(accessPoint)
         security = (apFlags == NM_802_11_AP_FLAGS_NONE) ?
                 none : securedWEP;
     }
-    nmAccessPoint.addSignalHandler(this);
+    nmAccessPoint.addListener(*this);
 }
 
     
@@ -292,7 +292,7 @@ WifiAccessPoint& WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
     signalStrength.store(rhs.signalStrength.load());
     if(!nmAccessPoint.isNull())
     {
-        nmAccessPoint.addSignalHandler(this);
+        nmAccessPoint.addListener(*this);
     }
     return *this;
 }
