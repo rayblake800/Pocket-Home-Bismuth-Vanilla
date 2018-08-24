@@ -6,20 +6,20 @@
  * with another NMPPDeviceWifi object
  */
 NMPPDeviceWifi::NMPPDeviceWifi(const NMPPDeviceWifi& toCopy) :
-GPPObject<NMPPDeviceWifi>(toCopy, NM_TYPE_DEVICE_WIFI) { }
+GPPObject(toCopy, NM_TYPE_DEVICE_WIFI) { }
 
 /*
  * Create a NMPPDeviceWifi to contain a NMDeviceWifi object.
  */
 NMPPDeviceWifi::NMPPDeviceWifi(NMDeviceWifi* toAssign) :
-GPPObject<NMPPDeviceWifi>(toAssign, NM_TYPE_DEVICE_WIFI) { }
+GPPObject(G_OBJECT(toAssign), NM_TYPE_DEVICE_WIFI) { }
 
     
 /**
  * Creates a null NMPPDeviceWifi.
  */
 NMPPDeviceWifi::NMPPDeviceWifi() :
-GPPObject<NMPPDeviceWifi>(NM_TYPE_DEVICE_WIFI) { }
+GPPObject(NM_TYPE_DEVICE_WIFI) { }
 
 /*
  * Gets the current state of the wifi network device.
@@ -293,20 +293,43 @@ void NMPPDeviceWifi::requestScan()
 }
 
 /*
+ * Subscribe to all relevant signals from a single GObject signal source.
+ * 
+ */
+void NMPPDeviceWifi::Listener::connectAllSignals(GObject* source) 
+{
+    if(source != nullptr && NM_IS_DEVICE_WIFI(source))
+    {
+        connectSignal(source, "state-changed",
+                G_CALLBACK(stateChangeCallback));
+        connectSignal(source, "access-point-added", 
+                G_CALLBACK(apAddedCallback));
+        connectSignal(source, "access-point-removed",
+                G_CALLBACK(apRemovedCallback));
+        connectNotifySignal(source, "active-connection");
+    }
+}
+ 
+/*
  * Convert generic property change notifications into 
  * activeConnectionChanged calls.
  * 
- * @param source    Holds the GObject that emitted the signal. This
+ * @param source    The GObject that emitted the signal. This
  *                  will be a NMPPDeviceWifi object.
  * 
  * @param property  This should be the active connection property, 
  *                  "active-connection"
  */
-void NMPPDeviceWifi::Listener::propertyChanged(NMPPDeviceWifi& source,
+void NMPPDeviceWifi::Listener::propertyChanged(GObject* source,
         juce::String property)
 {
     jassert(property == "active-connection");
-    activeConnectionChanged(source.getActiveConnection());
+    if(source != nullptr && NM_IS_DEVICE_WIFI(source)) 
+    {
+        NMPPDeviceWifi device(NM_DEVICE_WIFI(source));
+        activeConnectionChanged(device.getActiveConnection());
+    }
+
 }
 
 /*
@@ -314,30 +337,13 @@ void NMPPDeviceWifi::Listener::propertyChanged(NMPPDeviceWifi& source,
  */
 void NMPPDeviceWifi::addListener(NMPPDeviceWifi::Listener& listener)
 {
-    connectSignalHandler(static_cast
-            <GPPObject<NMPPDeviceWifi>::SignalHandler*>(&listener));
-}
-
-/*
- * Adds a signal handler object to this wifi device.
- */
-void NMPPDeviceWifi::connectSignalHandler
-(GPPObject<NMPPDeviceWifi>::SignalHandler* handler)
-{ 
-    GObject* signalSource = getGObject();
-    if(signalSource != nullptr)
+    GObject* object = getGObject();
+    if(object != nullptr)
     {
-        handler->connectSignal(signalSource, "state-changed",
-                G_CALLBACK(stateChangeCallback));
-        handler->connectSignal(signalSource, "access-point-added", 
-                G_CALLBACK(apAddedCallback));
-        handler->connectSignal(signalSource, "access-point-removed",
-                G_CALLBACK(apRemovedCallback));
-        handler->connectNotifySignal(signalSource, "active-connection");
+        listener.connectAllSignals(object);
     }
-    g_clear_object(&signalSource);
+    g_clear_object(&object);
 }
-
 
 /*
  * The GCallback method called directly by LibNM code when sending 

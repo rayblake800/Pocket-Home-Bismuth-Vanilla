@@ -27,7 +27,7 @@ objectType(objectType)
 /*
  * When this GPPObject is destroyed, unreference its GObject data.
  */
-virtual GPPObject::~GPPObject()
+GPPObject::~GPPObject()
 {
     clearGObject(); 
 }
@@ -155,7 +155,7 @@ void GPPObject::setGObject(const GPPObject& toCopy)
  * GPPObjects. Avoid using this for anything other than calling library 
  * functions that need GObject* parameter data.
  */
-GObject* GPPObject::getOtherGObject(const GPPObject source) const 
+GObject* GPPObject::getOtherGObject(const GPPObject& source) const 
 {
     return source.getGObject();
 }
@@ -180,7 +180,7 @@ void GPPObject::clearGObject()
  * GObject.  This defaults to using the global default context.  Override
  * this if the object should operate on a different context and thread.
  */
-virtual void GPPObject::callInMainContext(std::function<void()> call) const 
+void GPPObject::callInMainContext(std::function<void()> call) const 
 {
     GLibSignalThread globalDefault;
     globalDefault.gLibCall(call);

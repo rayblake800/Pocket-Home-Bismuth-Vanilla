@@ -60,6 +60,8 @@ public:
     class DBusSignalHandler : public GSignalHandler
     {
     public:
+        friend class GPPDBusProxy;
+
         DBusSignalHandler() { }
         
         virtual ~DBusSignalHandler() { }

@@ -2,6 +2,7 @@
 #include <glib.h>
 #include <map>
 #include "JuceHeader.h"
+
 /**
  * @file GSignalHandler.h
  * 

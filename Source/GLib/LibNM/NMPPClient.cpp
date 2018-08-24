@@ -8,7 +8,7 @@ NMPPClient::NMPPClient() : GPPObject(NM_TYPE_CLIENT)
 { 
     callInMainContext([this]()
     {
-        setGObject(G_OBJECT(nm_client_new()), false);
+        setGObject(G_OBJECT(nm_client_new()));
     });
 }
 
@@ -17,6 +17,12 @@ NMPPClient::NMPPClient() : GPPObject(NM_TYPE_CLIENT)
  */
 NMPPClient::NMPPClient(const NMPPClient& toCopy) : 
 GPPObject(toCopy, NM_TYPE_CLIENT) { }
+ 
+/**
+ * Create a NMPPClient holding an existing NMClient object.
+ */
+NMPPClient::NMPPClient(NMClient* toAssign) :
+GPPObject(G_OBJECT(toAssign), NM_TYPE_CLIENT) { }
 
 /*
  * Get all wifi devices from Network Manager.
@@ -326,16 +332,28 @@ void NMPPClient::activateConnection(
 }
 
 /*
+ * Subscribe to all relevant signals from a single GObject signal source.
+ */
+void NMPPClient::Listener::connectAllSignals(GObject* source)
+{
+    if(source != nullptr && NM_IS_CLIENT(source))
+    {
+        connectNotifySignal(source, NM_CLIENT_WIRELESS_ENABLED);
+    }
+}
+
+/*
  * Converts generic propertyChanged calls to class-specific 
  * wirelessStateChange calls.
  */
 void NMPPClient::Listener::propertyChanged
-(GPPObject* source, juce::String property)
+(GObject* source, juce::String property)
 { 
-    NMPPClient* client = dynamic_cast<NMPPClient*>(source);
-    if(client != nullptr && property == NM_CLIENT_WIRELESS_ENABLED)
+    if(source != nullptr && NM_IS_CLIENT(source) 
+            && property == NM_CLIENT_WIRELESS_ENABLED)
     {
-        bool enabled = client->wirelessEnabled();
+        NMPPClient client(NM_CLIENT(source));
+        bool enabled = client.wirelessEnabled();
         wirelessStateChange(enabled);
     }
 }
@@ -349,21 +367,9 @@ void NMPPClient::Listener::propertyChanged
 void NMPPClient::addListener(Listener& listener)
 {
     GObject* source = getGObject();
-    listener.addNotifySignal(source, NM_CLIENT_WIRELESS_ENABLED);
-    g_clear_object(&source);
-}
-
-/*
- * Adds a signal handler to this network manager client. This method should only
- * be used to implement the addListener method.
- */
-void NMPPClient::connectSignalHandler
-(GPPObject<NMPPClient>::SignalHandler* handler)
-{ 
-    if(handler != nullptr)
+    if(source != nullptr)
     {
-        GObject* source = getGObject();
-        handler->addNotifySignal(source, NM_CLIENT_WIRELESS_ENABLED);
-        g_clear_object(&source);
+        listener.GSignalHandler::connectAllSignals(source);
     }
+    g_clear_object(&source);
 }

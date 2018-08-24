@@ -12,7 +12,7 @@
  * @brief A RAII container and C++ interface for LibNM NMDeviceWifi
  *        objects.
  */
-class NMPPDeviceWifi : public GPPObject<NMPPDeviceWifi>
+class NMPPDeviceWifi : public GPPObject
 {
 public:
     /**
@@ -157,7 +157,7 @@ public:
      * Listeners receive notifications when the wifi device changes, a new
      * access point object is added, or an access point is removed.
      */
-    class Listener : public GSignalHandler<NMPPDeviceWifi>
+    class Listener : public GSignalHandler
     {
     public:
         friend class NMPPDeviceWifi;
@@ -166,56 +166,64 @@ public:
         virtual ~Listener() { }
         
     private:
-	/**
-	 * This method will be called whenever the wifi device state changes.
-	 *
-	 * @param newState  The new device state value.
-	 *
-	 * @param oldState  The previous device state value.
-	 *
-	 * @param reason    The reason for the change in device state.
-	 */
+       /**
+        * Subscribe to all relevant signals from a single GObject signal source.
+        * 
+        * @param source  A NMDeviceWifi GObject this signal handler should 
+        *                track.
+        */
+        virtual void connectAllSignals(GObject* source) override;
+ 
+	   /**
+	    * This method will be called whenever the wifi device state changes.
+	    *
+	    * @param newState  The new device state value.
+	    *
+	    * @param oldState  The previous device state value.
+	    *
+	    * @param reason    The reason for the change in device state.
+        */
         virtual void stateChanged(NMDeviceState newState,
                 NMDeviceState oldState,
                 NMDeviceStateReason reason) = 0;
         
-	/**
-         * This method will be called whenever the wifi device detects a new
-         * access point.
-         * 
-	 * @param addedAP  The new access point detected by the wifi device.
-	 */
+	   /**
+        * This method will be called whenever the wifi device detects a new
+        * access point.
+        * 
+    	* @param addedAP  The new access point detected by the wifi device.
+    	*/
         virtual void accessPointAdded(NMPPAccessPoint addedAP) = 0;
         
-	/**
-         * This method will be called whenever the wifi device no longer detects
-         * a wifi access point.
-         * 
-	 * @param removedAP  The nearby access point that the device can no
-         *                   longer detect.
-	 */
+	   /**
+        * This method will be called whenever the wifi device no longer detects
+        * a wifi access point.
+        * 
+	    * @param removedAP  The nearby access point that the device can no
+        *                   longer detect.
+	    */
         virtual void accessPointRemoved(NMPPAccessPoint removedAP) = 0;
         
-        /**
-         * This method will be called whenever the device's active connection
-         * changes.
-         * 
-         * @param active   The new active connection.  If the device has
-         *                 disconnected, this will be a null object.
-         */
+       /**
+        * This method will be called whenever the device's active connection
+        * changes.
+        * 
+        * @param active   The new active connection.  If the device has
+        *                 disconnected, this will be a null object.
+        */
         virtual void activeConnectionChanged(NMPPActiveConnection active) = 0;
         
-        /**
-         * Convert generic property change notifications into 
-         * activeConnectionChanged calls.
-         * 
-         * @param source    Holds the GObject that emitted the signal. This
-         *                  will be a NMPPDeviceWifi object.
-         * 
-         * @param property  This should be the active connection property, 
-         *                  "active-connection"
-         */
-        virtual void propertyChanged(NMPPDeviceWifi& source,
+       /**
+        * Convert generic property change notifications into 
+        * activeConnectionChanged calls.
+        * 
+        * @param source    The GObject that emitted the signal. This should be a
+        *                  NMDeviceWifi object.
+        * 
+        * @param property  This should be the active connection property, 
+        *                  "active-connection"
+        */
+        virtual void propertyChanged(GObject* source,
                 juce::String property) override;
     };
     
@@ -229,16 +237,6 @@ public:
     void addListener(Listener& listener);
     
 private:
-    /**
-     * Adds a signal handler object to this wifi device.
-     * 
-     * @param handler  This object will receive updates when the wifi device
-     *                 state changes or the list of visible access points is
-     *                 updated.
-     */
-    virtual void connectSignalHandler
-    (GPPObject<NMPPDeviceWifi>::SignalHandler* handler) override;
-    
     /**
      * The GCallback method called directly by LibNM code when sending 
      * state-changed signals.  This will use the signal data to call the 

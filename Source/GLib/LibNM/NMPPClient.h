@@ -27,7 +27,14 @@ public:
      *                new NMPPClient.
      */
     NMPPClient(const NMPPClient& toCopy);
-    
+   
+    /**
+     * Create a NMPPClient holding an existing NMClient object.
+     *
+     * @param toAssign  The NMClient* represented by the new NMPPClient.
+     */
+    NMPPClient(NMClient* toAssign);
+
     /**
      * Get all wifi devices from Network Manager.
      * 
@@ -230,26 +237,32 @@ public:
         virtual ~Listener() { }
         
     private:
-        /**
-         * This method will be called on registered listeners whenever 
-         * wireless is enabled or disabled.
-         * 
-         * @param wifiEnabled  True if wifi was enabled, false if wifi was
-         *                     disabled.
-         */
+       /**
+        * Subscribe to all relevant signals from a single GObject signal source.
+        * 
+        * @param source  A GObject this signal handler should track.
+        */
+        virtual void connectAllSignals(GObject* source); 
+
+       /**
+        * This method will be called on registered listeners whenever 
+        * wireless is enabled or disabled.
+        * 
+        * @param wifiEnabled  True if wifi was enabled, false if wifi was
+        *                     disabled.
+        */
         virtual void wirelessStateChange(bool wifiEnabled) = 0;
         
-        /**
-         * Converts generic propertyChanged calls to class-specific 
-         * wirelessStateChange calls.
-         * 
-         * @param source    The updated NMClient object.
-         * 
-         * @param property  This should always be the "wireless-enabled"
-         *                  property.
-         */
-        void propertyChanged(NMPPClient& source, juce::String property)
-        override;  
+       /**
+        * Converts generic propertyChanged calls to class-specific 
+        * wirelessStateChange calls.
+        * 
+        * @param source    The updated NMClient object.
+        * 
+        * @param property  This should always be the "wireless-enabled"
+        *                  property.
+        */
+        void propertyChanged(GObject* source, juce::String property) override;  
     };
     
     /**

@@ -185,7 +185,7 @@ public:
          * @param property  The updated property type.
          */
         virtual void propertyChanged
-        (NMPPAccessPoint& source, juce::String property) override;
+        (GObject* source, juce::String property) override;
     };
     
     

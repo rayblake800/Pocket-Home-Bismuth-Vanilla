@@ -31,7 +31,7 @@ protected:
      * 
      * @param objectType   Sets the type of GObject this GPPObject holds.
      */
-    GPPObject(const GType objectType) : objectType(objectType) { }
+    GPPObject(const GType objectType);
     
     /**
      * Create a new GPPObject as a reference to existing object data.
@@ -175,7 +175,7 @@ protected:
      *          reference count incremented, and the caller is responsible for
      *          unreferencing it when it is no longer needed.
      */
-    GObject* getOtherGObject(const GPPObject source) const;
+    GObject* getOtherGObject(const GPPObject& source) const;
 
     /**
      * Remove this object's GObject data, clearing all associated references.

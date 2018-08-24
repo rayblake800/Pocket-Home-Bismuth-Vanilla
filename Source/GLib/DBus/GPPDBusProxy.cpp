@@ -4,7 +4,7 @@
 
 GPPDBusProxy::GPPDBusProxy
 (const char* name, const char* path, const char* interface) :
-GPPObject<GPPDBusProxy>(G_TYPE_DBUS_PROXY)
+GPPObject(G_TYPE_DBUS_PROXY)
 {
     using namespace juce;
     if(name == nullptr || path == nullptr || interface == nullptr)
@@ -43,7 +43,7 @@ GPPObject<GPPDBusProxy>(G_TYPE_DBUS_PROXY)
  * Create an object holding an existing GDBusProxy.
  */
 GPPDBusProxy::GPPDBusProxy(GDBusProxy * proxy) :
-GPPObject<GPPDBusProxy>(G_OBJECT(proxy), G_TYPE_DBUS_PROXY) { }
+GPPObject(G_OBJECT(proxy), G_TYPE_DBUS_PROXY) { }
         
 /*
  * Subscribe to all DBus signals and property changes emitted by this
@@ -188,21 +188,10 @@ bool GPPDBusProxy::hasProperty(const char *  propertyName) const
 void GPPDBusProxy::connectSignalHandler
 (GPPDBusProxy::DBusSignalHandler& signalHandler)
 {
-    connectSignalHandler(static_cast<GPPObject<GPPDBusProxy>::SignalHandler*>
-            (&signalHandler));
-}
-
-
-/**
- * Register a signal handler to receive DBus signals and property updates.
- */
-void GPPDBusProxy::connectSignalHandler
-(GPPObject<GPPDBusProxy>::SignalHandler* signalHandler)
-{
     GObject* proxy = getGObject();
     if(proxy != nullptr)
     {
-        signalHandler->connectAllSignals(proxy);
+        signalHandler.connectAllSignals(proxy);
     }
     g_clear_object(&proxy);
 }

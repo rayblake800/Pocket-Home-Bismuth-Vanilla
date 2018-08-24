@@ -158,19 +158,20 @@ unsigned int NMPPAccessPoint::getSignalStrength() const
 bool NMPPAccessPoint::isValidConnection(const NMPPConnection& connection) const
 {
     bool isValid = false;
-    NMConnection* nmConn = NM_CONNECTION(getOtherGObject(connection));
-    callInMainContext([&isValid, &connection, nmConn](GObject* apObject)
+    GObject* conObj = getOtherGObject(connection);
+    if(conObj != nullptr && NM_IS_CONNECTION(conObj))
     {
-        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-        if(accessPoint != nullptr && nmConn != nullptr)
+        NMConnection* nmConn = NM_CONNECTION(conObj);
+        callInMainContext([&isValid, &connection, nmConn](GObject* apObject)
         {
-            isValid = nm_access_point_connection_valid(accessPoint, nmConn);
-        }
-    });
-    if(nmConn != nullptr)
-    {
-        g_object_unref(G_OBJECT(nmConn));
+            NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
+            if(accessPoint != nullptr && nmConn != nullptr)
+            {
+                isValid = nm_access_point_connection_valid(accessPoint, nmConn);
+            }
+        });
     }
+    g_clear_object(&conObj);
     return isValid;
 }
 
@@ -258,12 +259,13 @@ void NMPPAccessPoint::Listener::connectAllSignals(GObject* source)
  * property change notifications.
  */
 void NMPPAccessPoint::Listener::propertyChanged
-(NMPPAccessPoint& source, juce::String property) 
+(GObject* source, juce::String property) 
 { 
-    if(property == NM_ACCESS_POINT_STRENGTH)
+    if(property == NM_ACCESS_POINT_STRENGTH && NM_IS_ACCESS_POINT(source))
     {
-        unsigned int strength = source.getSignalStrength();
-        signalStrengthChanged(source, strength);
+        NMPPAccessPoint tempAP(NM_ACCESS_POINT(source));
+        unsigned int strength = tempAP.getSignalStrength();
+        signalStrengthChanged(tempAP, strength);
     }
 }
  

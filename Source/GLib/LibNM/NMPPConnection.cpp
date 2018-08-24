@@ -11,7 +11,7 @@ GPPObject(toCopy, NM_TYPE_CONNECTION) { }
  * Create a NMPPConnection to contain a NMConnection object.
  */
 NMPPConnection::NMPPConnection(NMConnection* toAssign) :
-GPPObject(toAssign, NM_TYPE_CONNECTION) { }
+GPPObject(G_OBJECT(toAssign), NM_TYPE_CONNECTION) { }
     
 /*
  * Creates a null NMPPConnection.

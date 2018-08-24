@@ -4,7 +4,7 @@
  * Unsubscribes the signal handler from all signal sources, and removes all
  * held references to signal sources.
  */
-virtual GSignalHandler::~GSignalHandler()
+GSignalHandler::~GSignalHandler()
 {
     unsubscribeAll();
 }
