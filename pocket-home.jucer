@@ -413,6 +413,8 @@
         <FILE id="Bena02" name="GLibThread.h" compile="0" resource="0" file="Source/GLib/GLibThread.h"/>
         <FILE id="cdp704" name="GPPObject.cpp" compile="1" resource="0" file="Source/GLib/GPPObject.cpp"/>
         <FILE id="R8ed81" name="GPPObject.h" compile="0" resource="0" file="Source/GLib/GPPObject.h"/>
+        <FILE id="wyxm9h" name="GPPWeakRef.cpp" compile="1" resource="0" file="Source/GLib/GPPWeakRef.cpp"/>
+        <FILE id="FD9naG" name="GPPWeakRef.h" compile="0" resource="0" file="Source/GLib/GPPWeakRef.h"/>
         <FILE id="P12bwS" name="GSignalHandler.cpp" compile="1" resource="0"
               file="Source/GLib/GSignalHandler.cpp"/>
         <FILE id="NniAEx" name="GSignalHandler.h" compile="0" resource="0"

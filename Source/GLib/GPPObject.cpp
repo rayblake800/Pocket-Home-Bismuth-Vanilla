@@ -6,7 +6,6 @@
  */
 GPPObject::GPPObject(const GType objectType) : objectType(objectType) 
 {
-    g_weak_ref_set(&objectRef, nullptr); 
 }
 
 /*
@@ -15,7 +14,6 @@ GPPObject::GPPObject(const GType objectType) : objectType(objectType)
 GPPObject::GPPObject(const GPPObject& toCopy, const GType objectType) 
 : objectType(objectType) 
 {
-    g_weak_ref_set(&objectRef, nullptr); 
     setGObject(toCopy);
 }
 
@@ -25,7 +23,6 @@ GPPObject::GPPObject(const GPPObject& toCopy, const GType objectType)
 GPPObject::GPPObject(GObject* toAssign, const GType objectType) :
 objectType(objectType)
 {
-    g_weak_ref_set(&objectRef, nullptr); 
     setGObject(toAssign);
 }
 
@@ -110,8 +107,7 @@ void GPPObject::operator=(GObject* rhs)
  */
 GObject* GPPObject::getGObject() const
 {
-    gpointer data = g_weak_ref_get(const_cast<GWeakRef*>(&objectRef));
-    return (data == nullptr) ? nullptr : G_OBJECT(data);
+    return objectRef.getObject();
 }
 
 /*
@@ -135,7 +131,7 @@ void GPPObject::setGObject(GObject* toAssign)
     {
         clearGObject();
         g_object_ref_sink(toAssign);
-        g_weak_ref_set(&objectRef, toAssign);      
+        objectRef = toAssign;
     }
     g_clear_object(&oldData);
 }
@@ -148,12 +144,7 @@ void GPPObject::setGObject(GObject* toAssign)
 void GPPObject::setGObject(const GPPObject& toCopy)
 {
     juce::ScopedLock lockData(objectLock);
-    GObject* newData = toCopy.getGObject();
-    if(isValidType(newData))
-    {
-        setGObject(newData);
-    }
-    g_clear_object(&newData);
+    objectRef = toCopy.objectRef;
 }
 
 /*
@@ -173,9 +164,9 @@ void GPPObject::clearGObject()
 {
     juce::ScopedLock lockData(objectLock);
     GObject* object = getGObject();
+    objectRef = NULL;
     if(object != nullptr)
     {
-        g_weak_ref_set(&objectRef, nullptr);
         g_object_unref(object);
     }
     g_clear_object(&object);

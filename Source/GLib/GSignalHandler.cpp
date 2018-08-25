@@ -6,6 +6,7 @@
  */
 GSignalHandler::~GSignalHandler()
 {
+    using namespace juce;
     unsubscribeAll();
 }
 
@@ -15,6 +16,7 @@ GSignalHandler::~GSignalHandler()
 void GSignalHandler::connectSignal(GObject* source,
         const char* signalName, GCallback callback)
 {
+    using namespace juce;
     if(source == nullptr || signalName == nullptr)
     {
         return;
@@ -60,10 +62,9 @@ void GSignalHandler::shareSignalSources(const GSignalHandler& otherHandler)
     auto iter = otherHandler.signals.begin();
     while(iter.next())
     {
-        GObject* source = iter.getKey();
+        GObject* source = iter.getKey().getObject();
         if(source != nullptr)
         {
-            g_object_ref(iter.getKey());
             signalSources.add(source);
         }
     }
@@ -82,15 +83,20 @@ void GSignalHandler::shareSignalSources(const GSignalHandler& otherHandler)
  */
 void GSignalHandler::disconnectSignals(GObject* source)
 {
-    const juce::ScopedLock changeSourceLock(signals.getLock());
-    if(source != nullptr && signals.contains(source));
+    using namespace juce;
+    if(source != nullptr)
     {
-        for(const guint& signalID : signals[source])
+        const ScopedLock changeSourceLock(signals.getLock());
+        GPPWeakRef sourceRef(source);
+        if(signals.contains(sourceRef))
         {
-            g_signal_handler_disconnect(source, signalID);
+            for(const guint& signalID : signals[sourceRef])
+            {
+                g_signal_handler_disconnect(source, signalID);
+            }
+            signals.remove(sourceRef);
+            g_object_unref(source);
         }
-        g_object_unref(source);
-        signals.remove(source);
     }       
 }
     
@@ -100,21 +106,20 @@ void GSignalHandler::disconnectSignals(GObject* source)
  */
 void GSignalHandler::unsubscribeAll()
 {
-    const juce::ScopedLock changeSourceLock(signals.getLock());
-    auto iter = signals.begin();
-    while(iter.next())
+    using namespace juce;
+    const ScopedLock changeSourceLock(signals.getLock());
+    for(auto iter = signals.begin(); iter != signals.end(); iter.next())
     {
-        GObject* source = iter.getKey();
-        if(source == nullptr)
+        GObject* source = iter.getKey().getObject();
+        if(source != nullptr)
         {
-            continue;
+            for(const guint& signalID : iter.getValue())
+            {
+                g_signal_handler_disconnect(source, signalID);
+            }
+            g_object_unref(source);
         }
-        for(const guint& signalID : iter.getValue())
-        {
-            g_signal_handler_disconnect(source, signalID);
-        }
-        g_object_unref(source);
-    }   
+    }
     signals.clear();
 }
 

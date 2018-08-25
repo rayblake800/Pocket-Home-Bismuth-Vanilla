@@ -26,7 +26,6 @@ WifiAccessPoint::WifiAccessPoint(const NMPPAccessPoint& accessPoint) :
 nmAccessPoint(accessPoint)
 {
     using namespace juce;
-    DBG("Creating " << String::toHexString(reinterpret_cast<long>(this)));
     if(nmAccessPoint.isNull())
     {
         return;

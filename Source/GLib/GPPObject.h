@@ -2,6 +2,7 @@
 #include <glib-object.h>
 #include <map>
 #include "JuceHeader.h"
+#include "GPPWeakRef.h"
 
 /**
  * @file GPPObject.h
@@ -280,7 +281,7 @@ private:
      * Holds a weak reference to the GObject stored in this GPPObject.  This is
      * needed for safely accessing and referencing the stored GObject.
      */
-    GWeakRef objectRef;
+    GPPWeakRef objectRef;
 
     /**
      * Only allow one thread to change the stored GObject at once.

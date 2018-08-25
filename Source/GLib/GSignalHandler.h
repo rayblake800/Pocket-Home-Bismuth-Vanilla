@@ -1,6 +1,7 @@
 #pragma once
 #include <glib-object.h>
 #include <map>
+#include "GPPWeakRef.h"
 #include "JuceHeader.h"
 
 /**
@@ -111,6 +112,6 @@ private:
      * that belong to this SignalHandler.  The SignalHandler holds a reference 
      * to each GObject* here, ensuring that all of them remain valid.
      */
-    juce::HashMap<GObject*, juce::Array<gulong>,
+    juce::HashMap<GPPWeakRef, juce::Array<gulong>,
             juce::DefaultHashFunctions, juce::CriticalSection> signals;
 };

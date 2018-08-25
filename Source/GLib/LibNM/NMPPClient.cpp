@@ -209,10 +209,9 @@ void NMPPClient::setWirelessEnabled(bool enabled)
 { 
     callInMainContext([enabled](GObject* clientObject)
     {
-        NMClient* client = NM_CLIENT(clientObject);
-        if(client != nullptr)
+        if(clientObject != nullptr && NM_IS_CLIENT(clientObject))
         {
-            nm_client_wireless_set_enabled(client, enabled);
+            nm_client_wireless_set_enabled(NM_CLIENT(clientObject), enabled);
         }
     });
 }

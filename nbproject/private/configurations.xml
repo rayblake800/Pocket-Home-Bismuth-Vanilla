@@ -17,12 +17,16 @@
         </df>
       </df>
       <df name="build">
+        <df name="Debug">
+        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
           <df name="build">
             <df name="intermediate">
               <df name="Debug">
+              </df>
+              <df name="Release">
               </df>
             </df>
           </df>
@@ -4612,6 +4616,8 @@
           <in>GLibThread.h</in>
           <in>GPPObject.cpp</in>
           <in>GPPObject.h</in>
+          <in>GPPWeakRef.cpp</in>
+          <in>GPPWeakRef.h</in>
           <in>GSignalHandler.cpp</in>
           <in>GSignalHandler.h</in>
         </df>
@@ -4668,6 +4674,7 @@
       </df>
       <df name="Tests">
         <in>test_ConfigFile.cpp</in>
+        <in>test_GPPObject.cpp</in>
         <in>test_LaunchedApp.cpp</in>
         <in>test_XWindowInterface.cpp</in>
       </df>
@@ -4689,12 +4696,16 @@
         </df>
       </df>
       <df name="build">
+        <df name="Debug">
+        </df>
       </df>
       <df name="Builds">
         <df name="LinuxMakefile">
           <df name="build">
             <df name="intermediate">
               <df name="Debug">
+              </df>
+              <df name="Release">
               </df>
             </df>
           </df>
