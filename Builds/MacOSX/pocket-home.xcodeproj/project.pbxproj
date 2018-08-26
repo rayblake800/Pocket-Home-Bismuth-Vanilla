@@ -15,6 +15,7 @@
 		97879AD470684A2B43C2567B = {isa = PBXBuildFile; fileRef = 69D23E4095ECE8F05D6A792A; };
 		88815811BE1323685970E489 = {isa = PBXBuildFile; fileRef = 166BE82D954A653EBC923CA7; };
 		D6EAB7C04995D2B1AFF7D205 = {isa = PBXBuildFile; fileRef = 4F5AECAE377D0069CD6CFA5D; };
+		AA987E6DC759C4CBB9FACA53 = {isa = PBXBuildFile; fileRef = C7A875D966FEB61C2DB8C37E; };
 		8BF75DF65195F66A3F4FB617 = {isa = PBXBuildFile; fileRef = D8E721D535F8BF33B6FFC25F; };
 		CCDB188F4BE61EA8EDD378AD = {isa = PBXBuildFile; fileRef = 7009667CD2D149DB5DFC0E19; };
 		E365392DE7E529EAA57260DA = {isa = PBXBuildFile; fileRef = 56F36E7FB73BB02FE6599D50; };
@@ -324,6 +325,7 @@
 		A97B710E3DB922B922556E74 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = ../../Source/Util/Utils.h; sourceTree = "SOURCE_ROOT"; };
 		AAE7BFD57345856E7DD7816D = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ClockLabel.h; path = "../../Source/Components/Pages/Home Page/Widgets/ClockLabel.h"; sourceTree = "SOURCE_ROOT"; };
 		AAEF752A5A464ABAA511816C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentEditorPage.cpp; path = "../../Source/Components/Pages/Settings Pages/UI Page/ComponentEditorPage.cpp"; sourceTree = "SOURCE_ROOT"; };
+		AC323B2ACC03C3CAC75592BF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = StressTest.h; path = ../../Tests/StressTest.h; sourceTree = "SOURCE_ROOT"; };
 		AC61110E42BA7191BE529001 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurableComponent.cpp; path = ../../Source/Components/Configurable/ConfigurableComponent.cpp; sourceTree = "SOURCE_ROOT"; };
 		AC931A8B5FE072A50B391E5A = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppConfigFile.h; path = "../../Source/Config Files/AppConfigFile.h"; sourceTree = "SOURCE_ROOT"; };
 		ACEA20182F89D6B2A0DB455A = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GPPDBusProxy.cpp; path = ../../Source/GLib/DBus/GPPDBusProxy.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -363,6 +365,7 @@
 		C4D7FE1DA1356C5ED7060AAF = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppMenuFolder.h; path = "../../Source/Components/Pages/Home Page/AppMenu/AppMenuFolder.h"; sourceTree = "SOURCE_ROOT"; };
 		C65E35B0D721312EDB479E3F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NMPPAccessPoint.h; path = ../../Source/GLib/LibNM/NMPPAccessPoint.h; sourceTree = "SOURCE_ROOT"; };
 		C78A5D5B3E1EDCD66541AC1D = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PagedList.h; path = ../../Source/Components/Widgets/PagedList.h; sourceTree = "SOURCE_ROOT"; };
+		C7A875D966FEB61C2DB8C37E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = StressTest.cpp; path = ../../Tests/StressTest.cpp; sourceTree = "SOURCE_ROOT"; };
 		CA27E02912D9A3D91388F5A6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScrollingAppMenu.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Scrolling Menu/ScrollingAppMenu.cpp"; sourceTree = "SOURCE_ROOT"; };
 		CD053589A2351711B21EACAE = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "include_juce_gui_basics.mm"; path = "../../JuceLibraryCode/include_juce_gui_basics.mm"; sourceTree = "SOURCE_ROOT"; };
 		CDB566C6123412FC865C161B = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppLauncher.h; path = ../../Source/Util/AppLauncher.h; sourceTree = "SOURCE_ROOT"; };
@@ -427,6 +430,8 @@
 					4F5AECAE377D0069CD6CFA5D, ); name = GLib; sourceTree = "<group>"; };
 		E3053D796E9CDC05AB8387DE = {isa = PBXGroup; children = (
 					084172DD6D469A493DFFC233,
+					C7A875D966FEB61C2DB8C37E,
+					AC323B2ACC03C3CAC75592BF,
 					D8E721D535F8BF33B6FFC25F,
 					7009667CD2D149DB5DFC0E19,
 					56F36E7FB73BB02FE6599D50, ); name = Tests; sourceTree = "<group>"; };
@@ -935,6 +940,7 @@
 					97879AD470684A2B43C2567B,
 					88815811BE1323685970E489,
 					D6EAB7C04995D2B1AFF7D205,
+					AA987E6DC759C4CBB9FACA53,
 					8BF75DF65195F66A3F4FB617,
 					CCDB188F4BE61EA8EDD378AD,
 					E365392DE7E529EAA57260DA,

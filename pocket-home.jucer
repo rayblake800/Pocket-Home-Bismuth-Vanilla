@@ -17,6 +17,8 @@
         <FILE id="BifyMD" name="test_GPPObject.cpp" compile="1" resource="0"
               file="Tests/GLib/test_GPPObject.cpp"/>
       </GROUP>
+      <FILE id="XMKT0p" name="StressTest.cpp" compile="1" resource="0" file="Tests/StressTest.cpp"/>
+      <FILE id="k0xGYN" name="StressTest.h" compile="0" resource="0" file="Tests/StressTest.h"/>
       <FILE id="lpsFrf" name="test_ConfigFile.cpp" compile="1" resource="0"
             file="Tests/test_ConfigFile.cpp"/>
       <FILE id="Bmp8Lw" name="test_LaunchedApp.cpp" compile="1" resource="0"
