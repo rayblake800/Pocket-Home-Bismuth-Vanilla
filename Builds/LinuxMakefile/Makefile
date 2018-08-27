@@ -68,8 +68,8 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/gpptest_object_daf215fd.o \
   $(JUCE_OBJDIR)/GPPTestObject_ea20eb6a.o \
-  $(JUCE_OBJDIR)/GTestObject_e1e53a6a.o \
   $(JUCE_OBJDIR)/test_GPPObject_627beab1.o \
   $(JUCE_OBJDIR)/StressTest_8f750ba9.o \
   $(JUCE_OBJDIR)/test_ConfigFile_8cfd452.o \
@@ -214,14 +214,14 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
 
+$(JUCE_OBJDIR)/gpptest_object_daf215fd.o: ../../Tests/GLib/gpptest_object.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling gpptest_object.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/GPPTestObject_ea20eb6a.o: ../../Tests/GLib/GPPTestObject.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling GPPTestObject.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/GTestObject_e1e53a6a.o: ../../Tests/GLib/GTestObject.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling GTestObject.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/test_GPPObject_627beab1.o: ../../Tests/GLib/test_GPPObject.cpp

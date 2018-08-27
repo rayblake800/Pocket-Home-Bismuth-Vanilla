@@ -4,12 +4,14 @@
 
 
 #include <glib-object.h>
+extern "C"
+{
+    G_BEGIN_DECLS
 
-G_BEGIN_DECLS
+    #define TEST_OBJECT_TYPE gpp_test_object_get_type()
+    G_DECLARE_FINAL_TYPE(TestObject, test_object, TEST, OBJECT, GObject)
 
-#define TEST_OBJECT_TYPE gpp_test_object_get_type()
-G_DECLARE_FINAL_TYPE(TestObject, test_object, TEST, OBJECT, GObject)
+    TestObject* test_object_new();
 
-TestObject* test_object_new();
-
-G_END_DECLS
+    G_END_DECLS
+}

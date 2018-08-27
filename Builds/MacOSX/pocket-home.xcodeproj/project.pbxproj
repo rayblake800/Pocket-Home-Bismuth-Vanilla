@@ -12,8 +12,8 @@
 		7FF75E28BA5CA892192A3B8F = {isa = PBXBuildFile; fileRef = 793D45A4A9D717F9F0133903; };
 		B97B8F50999FAC525F837AEC = {isa = PBXBuildFile; fileRef = B5DCAF01E0490D7413E9E85F; };
 		B60DD03FE5B471BE4AFBF56B = {isa = PBXBuildFile; fileRef = 81D682238B383EB3D7010236; };
+		3E83B05A8276C7D36C767268 = {isa = PBXBuildFile; fileRef = ADF1CF03D6808313E0DB0F6E; };
 		97879AD470684A2B43C2567B = {isa = PBXBuildFile; fileRef = 69D23E4095ECE8F05D6A792A; };
-		88815811BE1323685970E489 = {isa = PBXBuildFile; fileRef = 166BE82D954A653EBC923CA7; };
 		D6EAB7C04995D2B1AFF7D205 = {isa = PBXBuildFile; fileRef = 4F5AECAE377D0069CD6CFA5D; };
 		AA987E6DC759C4CBB9FACA53 = {isa = PBXBuildFile; fileRef = C7A875D966FEB61C2DB8C37E; };
 		8BF75DF65195F66A3F4FB617 = {isa = PBXBuildFile; fileRef = D8E721D535F8BF33B6FFC25F; };
@@ -165,7 +165,6 @@
 		13E187CB3062695D091137A3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GPPWeakRef.h; path = ../../Source/GLib/GPPWeakRef.h; sourceTree = "SOURCE_ROOT"; };
 		159F7A356414F09C404E271F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FolderMenuItem.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/FolderMenuItem.cpp"; sourceTree = "SOURCE_ROOT"; };
 		15BF8C9931EE608106C00125 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SetPasswordPage.h; path = "../../Source/Components/Pages/Settings Pages/Password Pages/SetPasswordPage.h"; sourceTree = "SOURCE_ROOT"; };
-		166BE82D954A653EBC923CA7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GTestObject.cpp; path = ../../Tests/GLib/GTestObject.cpp; sourceTree = "SOURCE_ROOT"; };
 		168113BE606EA9EB7993D914 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConnectionSettingsComponent.cpp; path = "../../Source/Components/Pages/Settings Pages/Quick Settings Page/ConnectionSettingsComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		170916E09422D64072DF440A = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ColourPicker.h; path = ../../Source/Components/Widgets/ColourPicker.h; sourceTree = "SOURCE_ROOT"; };
 		17AB6C1399ED873A9FACEA96 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuButton.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/AppMenuButton.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -289,6 +288,7 @@
 		8779CD99B39114CB02AA54C7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RemovePasswordPage.cpp; path = "../../Source/Components/Pages/Settings Pages/Password Pages/RemovePasswordPage.cpp"; sourceTree = "SOURCE_ROOT"; };
 		87DC26425F9CBA11CCC5C5B1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PageFactory.h; path = ../../Source/Components/Pages/PageFactory.h; sourceTree = "SOURCE_ROOT"; };
 		89234BC727CA2C744ADB0F0D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PopupEditorComponent.cpp; path = ../../Source/Components/Widgets/PopupEditorComponent.cpp; sourceTree = "SOURCE_ROOT"; };
+		8961D932A8B9EFD8E20B71F0 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gpptest_object.h"; path = "../../Tests/GLib/gpptest_object.h"; sourceTree = "SOURCE_ROOT"; };
 		8A5575DEE1EE90479556C79A = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NMPPDeviceWifi.cpp; path = ../../Source/GLib/LibNM/NMPPDeviceWifi.cpp; sourceTree = "SOURCE_ROOT"; };
 		8C652516D09DA9F2B71E602C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WifiStateManager.cpp; path = ../../Source/Wifi/WifiStateManager.cpp; sourceTree = "SOURCE_ROOT"; };
 		8E1E710ECEEBEF009ABF477C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BaseFolderMenuItem.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/BaseFolderMenuItem.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -331,6 +331,7 @@
 		ACEA20182F89D6B2A0DB455A = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GPPDBusProxy.cpp; path = ../../Source/GLib/DBus/GPPDBusProxy.cpp; sourceTree = "SOURCE_ROOT"; };
 		AD9CB3537563586C23BF79A5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PokeLookAndFeel.h; path = ../../Source/Components/PokeLookAndFeel.h; sourceTree = "SOURCE_ROOT"; };
 		ADC1E77A79394AAFDB0E4350 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PageComponent.h; path = ../../Source/Components/Pages/PageComponent.h; sourceTree = "SOURCE_ROOT"; };
+		ADF1CF03D6808313E0DB0F6E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gpptest_object.cpp"; path = "../../Tests/GLib/gpptest_object.cpp"; sourceTree = "SOURCE_ROOT"; };
 		AE7A39A13BC0CB5B976B744F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GVariantConverter.cpp; path = ../../Source/GLib/DBus/GVariantConverter.cpp; sourceTree = "SOURCE_ROOT"; };
 		AF9FAF5B2650B30ED5626FEB = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NMPPClient.cpp; path = ../../Source/GLib/LibNM/NMPPClient.cpp; sourceTree = "SOURCE_ROOT"; };
 		AFB69E8EEE8214A6B9EDB24E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = I2CBus.cpp; path = ../../Source/PocketCHIP/I2CBus.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -397,7 +398,6 @@
 		E3BB77CB324E7BEAE96C11CE = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Spinner.h; path = ../../Source/Components/Widgets/Spinner.h; sourceTree = "SOURCE_ROOT"; };
 		E41FEA68C9E55FCE3D60625F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = InputSettingsPage.h; path = "../../Source/Components/Pages/Settings Pages/Input Settings Page/InputSettingsPage.h"; sourceTree = "SOURCE_ROOT"; };
 		E43C5D0CB760B3B2A0389C2D = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LoginPage.h; path = "../../Source/Components/Pages/Login Page/LoginPage.h"; sourceTree = "SOURCE_ROOT"; };
-		E55743C6124B8FEF18EC2F0C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GTestObject.h; path = ../../Tests/GLib/GTestObject.h; sourceTree = "SOURCE_ROOT"; };
 		E5826A983B027063134745EB = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Localized.cpp; path = ../../Source/Util/Localized.cpp; sourceTree = "SOURCE_ROOT"; };
 		E74FB2AE953C4B7F19F17360 = {isa = PBXFileReference; lastKnownFileType = file; name = "juce_gui_basics"; path = "../../deps/JUCE/modules/juce_gui_basics"; sourceTree = "SOURCE_ROOT"; };
 		E7BBDF22ECBB01814A896A75 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GSignalHandler.h; path = ../../Source/GLib/GSignalHandler.h; sourceTree = "SOURCE_ROOT"; };
@@ -423,10 +423,10 @@
 		FD783D6449E228DE209A13C8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesktopEntryMenuItem.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/DesktopEntryMenuItem.h"; sourceTree = "SOURCE_ROOT"; };
 		FE2AD97F03F339F27E32A12D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryData.cpp; path = ../../JuceLibraryCode/BinaryData.cpp; sourceTree = "SOURCE_ROOT"; };
 		084172DD6D469A493DFFC233 = {isa = PBXGroup; children = (
+					ADF1CF03D6808313E0DB0F6E,
+					8961D932A8B9EFD8E20B71F0,
 					69D23E4095ECE8F05D6A792A,
 					501BF8B2C996143FF0C34D83,
-					166BE82D954A653EBC923CA7,
-					E55743C6124B8FEF18EC2F0C,
 					4F5AECAE377D0069CD6CFA5D, ); name = GLib; sourceTree = "<group>"; };
 		E3053D796E9CDC05AB8387DE = {isa = PBXGroup; children = (
 					084172DD6D469A493DFFC233,
@@ -937,8 +937,8 @@
 					B60DD03FE5B471BE4AFBF56B,
 					5CFC0887F5B5B1779EC1471E, ); runOnlyForDeploymentPostprocessing = 0; };
 		467462E1976B8F50EA1165E3 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+					3E83B05A8276C7D36C767268,
 					97879AD470684A2B43C2567B,
-					88815811BE1323685970E489,
 					D6EAB7C04995D2B1AFF7D205,
 					AA987E6DC759C4CBB9FACA53,
 					8BF75DF65195F66A3F4FB617,
