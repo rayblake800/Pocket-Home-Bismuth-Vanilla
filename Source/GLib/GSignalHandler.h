@@ -27,6 +27,13 @@ public:
      */
     virtual void connectAllSignals(GObject* source) = 0;
     
+    /**
+     * Unsubscribes this signal handler from all signals emitted by a GObject.
+     * 
+     * @param source  A GObject signal source.
+     */
+    void disconnectSignals(GObject* source);
+    
 protected:
     /**
      * Subscribe the signal handler to a single signal.
@@ -77,13 +84,6 @@ protected:
      * @param property  The name of the object property that changed.
      */
     virtual void propertyChanged(GObject* source, juce::String property) { }
-    
-    /**
-     * Unsubscribes this signal handler from all signals emitted by a GObject.
-     * 
-     * @param source  A GObject signal source.
-     */
-    void disconnectSignals(GObject* source);
     
     /**
      * Unsubscribes the signal handler from all signal sources, and removes all

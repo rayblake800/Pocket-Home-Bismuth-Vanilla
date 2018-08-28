@@ -9,6 +9,28 @@ GSignalHandler::~GSignalHandler()
     using namespace juce;
     unsubscribeAll();
 }
+    
+/*
+ * Unsubscribes this signal handler from all signals emitted by a GObject.
+ */
+void GSignalHandler::disconnectSignals(GObject* source)
+{
+    using namespace juce;
+    if(source != nullptr)
+    {
+        const ScopedLock changeSourceLock(signals.getLock());
+        GPPWeakRef sourceRef(source);
+        if(signals.contains(sourceRef))
+        {
+            for(const guint& signalID : signals[sourceRef])
+            {
+                g_signal_handler_disconnect(source, signalID);
+            }
+            signals.remove(sourceRef);
+            g_object_unref(source);
+        }
+    }       
+}
 
 /*
  * Subscribe the signal handler to a single signal.
@@ -76,28 +98,6 @@ void GSignalHandler::shareSignalSources(const GSignalHandler& otherHandler)
         g_object_unref(source);
     }
     
-}
-    
-/*
- * Unsubscribes this signal handler from all signals emitted by a GObject.
- */
-void GSignalHandler::disconnectSignals(GObject* source)
-{
-    using namespace juce;
-    if(source != nullptr)
-    {
-        const ScopedLock changeSourceLock(signals.getLock());
-        GPPWeakRef sourceRef(source);
-        if(signals.contains(sourceRef))
-        {
-            for(const guint& signalID : signals[sourceRef])
-            {
-                g_signal_handler_disconnect(source, signalID);
-            }
-            signals.remove(sourceRef);
-            g_object_unref(source);
-        }
-    }       
 }
     
 /*
