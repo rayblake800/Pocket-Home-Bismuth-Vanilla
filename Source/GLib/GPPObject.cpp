@@ -2,6 +2,22 @@
 #include "GPPObject.h"
 
 /*
+ * Gets this object's reference count.  Only use this for debugging.
+ * 
+ */
+int GPPObject::getReferenceCount() const
+{
+    GObject* object = getGObject();
+    if(object == NULL)
+    {
+        return 0;
+    }
+    int refCount = object->ref_count - 1;
+    g_clear_object(&object);
+    return refCount;
+}
+
+/*
  * Create a null GPPObject, with no internal GObject.
  */
 GPPObject::GPPObject(const GType objectType) : objectType(objectType) 
@@ -91,7 +107,10 @@ bool GPPObject::operator!=(GObject* rhs) const
  */
 void GPPObject::operator=(const GPPObject& rhs)
 {
+    int refCount = rhs.getReferenceCount();
     setGObject(rhs);
+    int newCount = rhs.getReferenceCount();
+    jassert(newCount = refCount +1 || newCount == 0);
 }
 
 /*
@@ -116,21 +135,24 @@ GObject* GPPObject::getGObject() const
  * previous GObject data will be removed.
  */
 void GPPObject::setGObject(GObject* toAssign)
-{
-    if(!isValidType(toAssign))
-    {
-        return;
-    }
+{ 
     if(toAssign == nullptr)
     {
         clearGObject();
+        return;
+    }
+    if(!isValidType(toAssign))
+    {
         return;
     }
     GObject* oldData = getGObject();
     if(toAssign != oldData)
     {
         clearGObject();
-        g_object_ref_sink(toAssign);
+        if(g_object_is_floating(toAssign))
+        {
+            g_object_ref_sink(toAssign);
+        }
         objectRef = toAssign;
     }
     g_clear_object(&oldData);
@@ -144,7 +166,8 @@ void GPPObject::setGObject(GObject* toAssign)
 void GPPObject::setGObject(const GPPObject& toCopy)
 {
     juce::ScopedLock lockData(objectLock);
-    objectRef = toCopy.objectRef;
+    GObject* copiedObject = toCopy.getGObject();
+    setGObject(copiedObject);
 }
 
 /*

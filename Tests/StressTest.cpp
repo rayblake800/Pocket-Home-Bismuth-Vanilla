@@ -24,7 +24,7 @@ int actionFreq, int testDuration) :juce::UnitTest(testName),
                 const ScopedLock threadLock(threads.getLock());
                 if(threads.size() > this->minThreads)
                 {
-                    int threadNum = getRandom().nextInt() % threads.size();
+                    int threadNum = abs(getRandom().nextInt()) % threads.size();
                     threads[threadNum]->signalThreadShouldExit();
                 }
             });
@@ -46,8 +46,8 @@ void StressTest::addAction(std::function<void()> testAction)
 void StressTest::runThreads()
 {
     using namespace juce;
-    endTime = Time::currentTimeMillis() + 1000 * testDuration;
     const ScopedLock threadLock(threads.getLock());
+    endTime = Time::currentTimeMillis() + (100 * testDuration);
     while(threads.size() < minThreads)
     {
         threads.add(new TestThread(*this));
@@ -56,6 +56,7 @@ void StressTest::runThreads()
     const ScopedUnlock threadUnlock(threads.getLock());
     while(!threads.isEmpty())
     {
+        Thread::sleep(testDuration * 1000);
         for(int i = 0; i < threads.size(); i++)
         {
             if(threads[i] == nullptr || !threads[i]->isThreadRunning())
@@ -65,6 +66,16 @@ void StressTest::runThreads()
             }
         }
     }
+    for(int i = 0; i < threadActionCounts.size(); i++)
+    {
+        DBG("Thread " << i << " ran " << threadActionCounts[i] << " actions.");
+    }
+    for(int i = 0; i < actionRunCounts.size(); i++)
+    {
+        DBG("Action " << i << " executed " << actionRunCounts[i] << " times.");
+    }
+    threadActionCounts.clear();
+    actionRunCounts.clear();
 }
 
 /*
@@ -82,8 +93,16 @@ void StressTest::TestThread::run()
     using namespace juce;
     while(!threadShouldExit() && Time::currentTimeMillis() < testSource.endTime)
     {
-        testSource.testActions[testSource.getRandom().nextInt()
-                % testSource.testActions.size()]();
+        int threadNum = testSource.threads.indexOf(this);
+        testSource.threadActionCounts.set
+            (threadNum, testSource.threadActionCounts[threadNum] + 1);
+
+        int actionNum = abs(Random::getSystemRandom().nextInt())
+            % testSource.testActions.size();
+        testSource.actionRunCounts.set
+            (actionNum, testSource.actionRunCounts[actionNum] + 1);
+        
+        testSource.testActions[actionNum]();
         sleep(testSource.getRandom().nextInt() % testSource.actionFreq);
     }
 

@@ -19,4 +19,10 @@ GTestObject* gtest_object_new();
 
 G_END_DECLS
 
-int gtestInstances();
+/**
+ * Gets the number of GTestObjects that currently exist.
+ *
+ * @return  The number of GTestObjects that have been initialized and not yet
+ *          destroyed.
+ */
+int gtest_object_count();

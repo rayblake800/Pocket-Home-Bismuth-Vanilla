@@ -27,9 +27,17 @@ GPPObject(G_OBJECT(toAssign), GTEST_TYPE_OBJECT) { }
  */
 juce::String GPPTestObject::getTestString()
 {
-    gchar** property = getProperty<char*>(GTEST_OBJECT_TEST_STRING);
-    juce::String value(*property);
-    g_free(property);
+    juce::String value;
+    if(!isNull())
+    {
+        gchar* property = getProperty<char*>(GTEST_OBJECT_TEST_STRING);
+        if(property != nullptr)
+        {
+            value = juce::CharPointer_UTF8(property);
+            //DBG("Found testString value " << value);
+            g_free(property);
+        }
+    }
     return value;
 }
 
@@ -38,9 +46,12 @@ juce::String GPPTestObject::getTestString()
  */
 int GPPTestObject::getTestInt()
 {
-    gint* property = getProperty<gint>(GTEST_OBJECT_TEST_INT);
-    int value = *property;
-    g_free(property);
+    int value = 0;
+    if(!isNull())
+    {
+        value = getProperty<gint>(GTEST_OBJECT_TEST_INT);
+        //DBG("Found testInt value " << value);
+    }
     return value;
 }
 
@@ -50,6 +61,7 @@ int GPPTestObject::getTestInt()
  */
 void GPPTestObject::setTestString(juce::String newString)
 {
+    //DBG("Setting testString value " << newString);
     setProperty<const char*>(GTEST_OBJECT_TEST_STRING, newString.toRawUTF8());
 }
 
@@ -59,6 +71,7 @@ void GPPTestObject::setTestString(juce::String newString)
  */
 void GPPTestObject::setTestInt(int newInt)
 {
+    //DBG("Setting testInt value " << newInt);
     setProperty<int>(GTEST_OBJECT_TEST_INT, newInt);
 }
  

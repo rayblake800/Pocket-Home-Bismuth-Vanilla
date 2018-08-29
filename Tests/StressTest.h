@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include "JuceHeader.h"
 /**
  * @file StressTest.h
@@ -29,6 +30,8 @@ public:
             int actionFreq, int testDuration);
             
 protected:
+
+
     /**
      * Adds a new action for threads to randomly perform while testing. 
      *
@@ -85,7 +88,12 @@ private:
     //Amount of time to allow TestThreads to act, in seconds.
     const int testDuration;
     //Saves the time an active test should end, in milliseconds since the epoch.
-    juce::uint32 endTime;
+    juce::uint64 endTime;
     //Holds all active test threads.
     juce::OwnedArray<TestThread, juce::CriticalSection> threads;
+    
+    //tracks how many actions each thread performed
+    juce::Array<int> threadActionCounts;
+    //tracks how many times each action was executed
+    juce::Array<int> actionRunCounts;
 };

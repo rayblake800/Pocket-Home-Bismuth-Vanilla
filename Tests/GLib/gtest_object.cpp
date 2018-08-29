@@ -1,7 +1,9 @@
 #include "gtest_object.h"
+#include "JuceHeader.h"
 #include <limits>
 
 static int objectCount = 0;
+static juce::CriticalSection countLock;
 
 struct _GTestObject
 {
@@ -14,6 +16,7 @@ G_DEFINE_TYPE(GTestObject, gtest_object, G_TYPE_OBJECT);
 
 static void gtest_object_init(GTestObject* object)
 {
+    juce::ScopedLock lock(countLock);
     objectCount++;
 }
 
@@ -25,6 +28,7 @@ static void finalize(GObject* object)
         g_free(testObject->testString);
         testObject->testString = NULL;
     }
+    juce::ScopedLock lock(countLock);
     objectCount--;
 }
 
@@ -48,6 +52,7 @@ static void set_property(GObject* object, guint prop_id,
             break;
         case testIntProp:
             testObject->testInt = g_value_get_int(value);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id,pspec);
     }
@@ -65,6 +70,7 @@ static void get_property(GObject* object, guint prop_id,
             break;
         case testIntProp:
             g_value_set_int(value, testObject->testInt);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id,pspec);
     }
@@ -100,7 +106,8 @@ GTestObject* gtest_object_new()
     return GTEST_OBJECT(g_type_create_instance(GTEST_TYPE_OBJECT));
 }
 
-int gtestInstances()
+int gtest_object_count()
 {
+    juce::ScopedLock lock(countLock);
     return objectCount;
 }

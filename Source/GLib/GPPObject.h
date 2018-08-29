@@ -26,6 +26,16 @@
  */
 class GPPObject
 {
+#ifdef JUCE_DEBUG
+public:
+    /**
+     * Gets this object's reference count.  Only use this for debugging.
+     * 
+     * @return  The stored object's reference count, or 0 if this object is
+     *          null.
+     */
+    int getReferenceCount() const;
+#endif
 protected:
     /**
      * Create a null GPPObject, with no internal GObject.
@@ -236,20 +246,20 @@ protected:
      * @param property  A name identifying some property held by the GObject.
      * 
      * @return  A pointer to a copy of the parameter data, or nullptr if the
-     *          parameter wasn't found.  If this value isn't null, it must be
-     *          freed with g_free() or g_object_unref(), depending on its type.
+     *          parameter wasn't found.  If this value is a pointer type it must
+     *          be freed with g_free() or g_object_unref(), depending on its 
+     *          type.
      */
-    template<typename T> T* getProperty(const char* property) const
+    template<typename T> T getProperty(const char* property) const
     {
         GObject* object = getGObject();
+        T pValue;
         if(object != nullptr)
         {
-            T* pValue = nullptr;
             g_object_get(object, property, &pValue, nullptr);
             g_object_unref(object);
-            return pValue;
         }
-        return nullptr;
+        return pValue;
     }
     
     /**
