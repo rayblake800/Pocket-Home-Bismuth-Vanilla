@@ -1,16 +1,71 @@
 #include "JuceHeader.h"
 #include "gtest_object.h"
 #include "../StressTest.h"
-
-
 #include "GPPTestObject.h"
+
+static const constexpr int minThreadCount = 30;
+static const constexpr int maxThreadCount = 50;
+static const constexpr int threadSleepMS = 300;
+static const constexpr int testSeconds = 300;
 
 class GPPObjectTest : public StressTest
 {
 private:
+    //Holds all GPPObjects created during the stress test
     juce::OwnedArray<GPPTestObject> testObjects;
+    //Holds all object listeners created during the stress test
     juce::OwnedArray<GPPTestObject::Listener> listeners;
+    //GPPTestObjects and OwnedArrays are not threadsafe, prevent concurrent
+    //access.
     juce::CriticalSection dataLock;
+
+    //Provides a less verbose way to test reference count changes.
+    class RefTest
+    {
+    public:
+        /**
+         * Initializes a GObject reference change test.
+         *
+         * @param testObject  The object with the reference count being tested.
+         *
+         * @param test        The unit test that created this RefTest.
+         */
+        RefTest(const GPPTestObject& testObject, GPPObjectTest& test) :
+            testObject(testObject),
+            test(test),
+            initialRefCount(testObject.getReferenceCount()),
+            nullObject(testObject.isNull()) { }
+
+        virtual ~RefTest() { }
+
+
+        /**
+         * Checks if the GPPTestObject's references changed as expected.
+         *
+         * @param changeExpected  The expected difference between the current
+         *                        reference count and the original count.  This
+         *                        is rounded up to zero if it is negative and
+         *                        the original reference count is zero.
+         *
+         * @param errorMsg        The message to print along with the expected
+         *                        and actual values if the test fails.
+         */
+        void check(int changeExpected, juce::String errorMsg) const
+        {
+            int expectedCount = initialRefCount + changeExpected;
+            if(expectedCount < 0)
+            {
+                expectedCount = 0;
+            }
+            test.expectEquals(testObject.getReferenceCount(), expectedCount,
+                    errorMsg);
+        }
+    private:
+        const GPPTestObject& testObject;
+        GPPObjectTest& test;
+        const bool nullObject;
+        const int initialRefCount;
+    };
 
     template<class ArrayType>
     int randomIndex(ArrayType& array)
@@ -65,9 +120,9 @@ private:
         }
         return listeners[index];
     }
-
 public:
-    GPPObjectTest() : StressTest("GTestObject testing", 10, 20, 10, 15) 
+    GPPObjectTest() : StressTest("GTestObject testing", minThreadCount,
+            maxThreadCount, threadSleepMS, testSeconds) 
     {
         using namespace juce;
         //add a new test object
@@ -75,6 +130,8 @@ public:
                 {
                     const ScopedLock objectLock(dataLock);
                     testObjects.add(new GPPTestObject());
+                    expectEquals(testObjects.getLast()->getReferenceCount(), 1,
+                            "New object should have a reference count of 1!");
                 });
         //remove a random test object
         addAction([this]()
@@ -82,10 +139,14 @@ public:
                     const ScopedLock objectLock(dataLock);
                     if(testObjects.size() > 1)
                     {
-                        testObjects.remove(randomIndex(testObjects));
+                        int index = randomIndex(testObjects);
+                        GPPTestObject temp(*testObjects[index]);
+                        RefTest refTest(temp, *this);
+                        testObjects.remove(index);
+                        refTest.check(-1,
+                                "reference count error after deleting object");
                     }
                 });
-        /*
         //create a new listener, and add it to a random test object
         addAction([this]()
                 {
@@ -94,8 +155,11 @@ public:
                     const ScopedLock objectLock(dataLock);
                     GPPTestObject::Listener* listener =
                             new GPPTestObject::Listener();
+                    RefTest refTest(tempObject, *this);
                     tempObject.addListener(*listener);
                     listeners.add(listener);
+                    refTest.check((tempObject.isNull() ? 0 : 1), 
+                            "Reference count error after adding new listener");
                 });
 
         //add a random listener to a random test object
@@ -104,9 +168,13 @@ public:
                     GPPTestObject tempObject = randomObject();
                     const ScopedLock objectLock(dataLock);
                     GPPTestObject::Listener* listener = randomListener();
-                    if(listener != nullptr)
+                    if(listener != nullptr 
+                            && !listener->isListening(tempObject))
                     {
+                        RefTest refTest(tempObject, *this);
                         tempObject.addListener(*listener);
+                        refTest.check((tempObject.isNull() ? 0 : 1), 
+                                "Reference count error after adding listener");
                     }
                 });
 
@@ -118,9 +186,14 @@ public:
                     
                     const ScopedLock objectLock(dataLock);
                     GPPTestObject::Listener* listener = randomListener();
-                    if(listener != nullptr)
+                    if(listener != nullptr && listener->isListening(tempObject))
                     {
-                        tempObject.removeListener(*listener);
+                        
+                        RefTest refTest(tempObject, *this);
+                        expect(tempObject.removeListener(*listener),
+                                "Listener was not removed from signal source!");
+                        refTest.check(-1,
+                                "Removing listener did not release reference!");
                     }
                 });
 
@@ -128,12 +201,26 @@ public:
         addAction([this]()
                 {
                     const ScopedLock objectLock(dataLock);
-                    if(listeners.size() > 1)
+                    GPPTestObject::Listener* listener = randomListener();
+                    if(listeners.size() < 2 || listener == nullptr)
                     {
-                        listeners.remove(randomIndex(listeners));
+                        return;
+                    }
+                    OwnedArray<RefTest> refTests;
+                    for(const GPPTestObject* object : testObjects)
+                    {
+                        if(listener->isListening(*object))
+                        {
+                            refTests.add(new RefTest(*object, *this));
+                        }
+                    }
+                    listeners.removeObject(listener);
+                    for(const RefTest* test : refTests)
+                    {
+                        test->check(-1,
+                                "Deleting listener didn't release reference!");
                     }
                 });
-        */
         //set a random test object equal to another random test object
         addAction([this]()
                 {
@@ -144,49 +231,71 @@ public:
                     }
                     int obj1 = randomIndex(testObjects);
                     int obj2 = randomIndex(testObjects);
-                    
-                    if(obj1 == obj2)
-                    {
-                        static int n = 0;
-                        n++;
-                        DBG("Self=self: "<<n);
-                    }
+
+                    GPPTestObject copy1(*testObjects[obj1]);
+
+                    int expectedRef1 = testObjects[obj1]->getReferenceCount();
+                    int expectedRef2 = testObjects[obj2]->getReferenceCount();
+
+                    int expectedCopyRef1 = expectedRef1;
                     if(testObjects[obj1]->isNull() 
                             && testObjects[obj2]->isNull())
                     {
-                        static int n = 0;
-                        n++;
-                        DBG("null=null: "<<n);
+                        expectedRef1 = 0;
+                        expectedRef2 = 0;
+                        expectedCopyRef1 = 0;
                     }
                     else if(testObjects[obj1]->isNull())
                     {
-                        static int n = 0;
-                        n++;
-                        DBG("null=value: "<<n);
+                        expectedRef1 = expectedRef2 + 1;
+                        expectedRef2 = expectedRef1;
+                        expectedCopyRef1 = 0;
                     }
                     else if(testObjects[obj2]->isNull())
                     {
-                        static int n = 0;
-                        n++;
-                        DBG("value=null: "<<n);
+                        expectedRef1 = 0;
+                        expectedRef2 = 0;
+                        expectedCopyRef1--;
                     }
                     else if(*testObjects[obj1] == *testObjects[obj2])
                     {
                         static int n = 0;
                         n++;
-                        DBG("v1=v1: " << n);
-                        return;
                     }
                     else
                     {
-                        static int n = 0;
-                        n++;
-                        DBG("v1=v2: " << n);
-                        return;
+                        expectedRef1 = expectedRef2 + 1;
+                        expectedRef2 = expectedRef1;
+                        expectedCopyRef1--;
                     }
                       
                     *testObjects[obj1] = *testObjects[obj2];
-                    
+                    String assignmentText = 
+                        String::toHexString((unsigned long) testObjects[obj1]);
+                    if(testObjects[obj1]->isNull())
+                    {
+                        assignmentText += "(null)";
+                    }
+                    assignmentText += " = "; 
+                    assignmentText += 
+                        String::toHexString((unsigned long) testObjects[obj2]);
+                    if(testObjects[obj2]->isNull())
+                    {
+                        assignmentText += "(null)";
+                    }
+                    expectEquals(testObjects[obj1]->getReferenceCount(),
+                            expectedRef1,
+                            assignmentText + 
+                            ": First GPPObject ref count is wrong");
+                    expectEquals( 
+                            testObjects[obj2]->getReferenceCount(),
+                            expectedRef2,
+                            assignmentText + 
+                            ": Second GPPObject ref count is wrong");
+                    expectEquals(copy1.getReferenceCount(),
+                            expectedCopyRef1,
+                            assignmentText + 
+                            ": Original first GObject ref count is wrong");
                 });
 
         //set a random test object equal to null
@@ -195,7 +304,11 @@ public:
                     const ScopedLock objectLock(dataLock);
                     int numObj = randomIndex(testObjects);
                     jassert(testObjects[numObj] != nullptr);
+                    GPPTestObject temp(*testObjects[numObj]);
+                    RefTest refTest(temp, *this);
                     *testObjects[numObj] = NULL;
+                    refTest.check(-1,
+                            "Ref count error after setting object to null.");
                 });
 
         //update a random test object's string property

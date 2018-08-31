@@ -162,7 +162,7 @@ public:
         expectGreaterThan(existingConfig.getSize(), lastSize,
 		"Failed to restore and save default config values!");
         lastSize = existingConfig.getSize();
-	int64 defaultSize = lastSize;
+    	int64 defaultSize = lastSize;
         
         beginTest("Reading default values");
         const String strKey = backgroundKey;
@@ -221,11 +221,11 @@ public:
                 existingConfig.getSize(),
                 lastSize,
 		"Changes were not written to file!");
-	lastSize = existingConfig.getSize();
+	    lastSize = existingConfig.getSize();
 
         expectEquals(config->getConfigValue<String>(strKey),
                 String(),
-		"Test string balue change failed!"); 
+		"Test string value change failed!"); 
         expectEquals(config->getConfigValue<int>(intKey),
                 -1, "Test int value change failed!"); 
         expect(config->getConfigValue<bool>(boolKey)
@@ -242,37 +242,38 @@ public:
 			"Listener registered wrong updated key!");
         existingConfig.deleteFile();
         
-	beginTest("Restoring defaults");
-	String largeString = defaultString;
-	for(int i = 0; i < 5; i++)
-	{
-	    largeString += largeString;
-	}
-	config->setConfigValue<String>(strKey, largeString);
-	config->setConfigValue<int>(intKey, newInt);
-	lastSize = existingConfig.getSize();
-	expectGreaterThan(lastSize, defaultSize,
-		"Test expects the current size to exceed the default.");
-	config->restoreDefaultValue(strKey);
-	expectEquals(config->getConfigValue<String>(strKey),
-		defaultString, "Default string should have been restored!");
-	expectGreaterThan(lastSize, existingConfig.getSize(),
-		"Config should still be greater than the default size.");
-	config->restoreDefaultValues();
-	lastSize = existingConfig.getSize();
-	expectEquals(defaultSize, lastSize,
-		"File size should have matched the default size.");
+    	beginTest("Restoring defaults");
+	    String largeString = defaultString;
+	    for(int i = 0; i < 5; i++)
+	    {
+	        largeString += largeString;
+	    }
+	    config->setConfigValue<String>(strKey, largeString);
+	    config->setConfigValue<int>(intKey, newInt);
+	    lastSize = existingConfig.getSize();
+	    expectGreaterThan(lastSize, defaultSize,
+		        "Test expects the current size to exceed the default.");
+	    config->restoreDefaultValue(strKey);
+	    expectEquals(config->getConfigValue<String>(strKey),
+		        defaultString, "Default string should have been restored!");
+	    expectGreaterThan(lastSize, existingConfig.getSize(),
+		        "Config should still be greater than the default size.");
+	    config->restoreDefaultValues();
+	    lastSize = existingConfig.getSize();
+	    expectEquals(defaultSize, lastSize,
+		        "File size should have matched the default size.");
 
         beginTest("Resource sharing");
+        existingConfig.deleteFile();
         ScopedPointer<TestConfigFile> config2
                 = new TestConfigFile("config.json");
         expectEquals(existingConfig.getSize(), int64(0),
-	       	"Config file should not have been updated!");
+	       	    "Config file should not have been updated!");
         config = nullptr;
-	config2 = nullptr;
+	    config2 = nullptr;
         config2 = new TestConfigFile("config.json");
         expectGreaterThan(existingConfig.getSize(), int64(0),
-		"Config file should have been restored from default again!");
+		        "Config file should have been restored from default again!");
         config2 = nullptr;
         //Restore existing config file
         expect(backup.copyFileTo(existingConfig),

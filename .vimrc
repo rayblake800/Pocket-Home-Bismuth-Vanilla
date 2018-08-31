@@ -63,5 +63,5 @@ noremap <F2> :NERDTreeToggle<cr>
 noremap <F3> :YcmCompleter GoTo<cr>
 noremap <F4> :! make debug<cr>
 noremap <F5> :!pocket-home<cr>
-noremap <F6> :ConqueGDB<cr>
+noremap <F6> :ConqueGdb pocket-home<cr>
 noremap <F7> :Dox<cr>

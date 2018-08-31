@@ -2,7 +2,17 @@
 
 GPPWeakRef::GPPWeakRef()
 {
-   g_weak_ref_init(&weakRef, NULL); 
+    initRef(nullptr);
+}
+
+/*
+ * Initialize the weak reference with another GPPWeakRef's data.
+ */
+GPPWeakRef::GPPWeakRef(const GPPWeakRef& toAssign)
+{
+    GObject* newData = toAssign.getObject();
+    initRef(newData);
+    g_clear_object(&newData);
 }
 
 /*
@@ -10,12 +20,18 @@ GPPWeakRef::GPPWeakRef()
  */ 
 GPPWeakRef::GPPWeakRef(GObject* value)
 {
-    g_weak_ref_init(&weakRef, value);
+   initRef(value); 
 }
 
 GPPWeakRef::~GPPWeakRef()
 {
-    g_weak_ref_clear(&weakRef);
+    using namespace juce;
+    const ScopedWriteLock destroyLock(referenceLock);
+    if(refInitialized && !refCleared)
+    {
+        g_weak_ref_clear(&weakRef);
+    }
+    refCleared = true;
 }
 
 /*
@@ -24,7 +40,7 @@ GPPWeakRef::~GPPWeakRef()
 GPPWeakRef& GPPWeakRef::operator=(const GPPWeakRef& rhs)
 {
     GObject* newData = rhs.getObject();
-    g_weak_ref_set(&weakRef, newData);
+    *this = newData;
     g_clear_object(&newData);
     return *this;
 }
@@ -34,7 +50,21 @@ GPPWeakRef& GPPWeakRef::operator=(const GPPWeakRef& rhs)
  */
 GPPWeakRef& GPPWeakRef::operator=(const GObject* rhs)
 {
-    g_weak_ref_set(&weakRef, const_cast<GObject*>(rhs));
+
+    using namespace juce;
+    const ScopedReadLock assignLock(referenceLock);
+    if(!refInitialized)
+    {
+        DBG("GPPWeakRef::" << __func__ << ": weak reference not initialized!");
+    }
+    else if(refCleared)
+    {
+        DBG("GPPWeakRef::" << __func__ << ": weak reference already cleared!");
+    }
+    else
+    {
+        g_weak_ref_set(&weakRef, const_cast<GObject*>(rhs));
+    }
     return *this;
 }
 
@@ -84,6 +114,34 @@ GPPWeakRef::operator juce::uint64() const
  */
 GObject* GPPWeakRef::getObject() const
 {
-    gpointer object = g_weak_ref_get(const_cast<GWeakRef*>(&weakRef));
-    return (object == NULL) ? NULL : G_OBJECT(object);
+    using namespace juce;
+    const ScopedReadLock assignLock(referenceLock);
+    if(!refInitialized)
+    {
+        DBG("GPPWeakRef::" << __func__ << ": weak reference not initialized!");
+    }
+    else if(refCleared)
+    {
+        DBG("GPPWeakRef::" << __func__ << ": weak reference already cleared!");
+    }
+    else
+    {
+        gpointer object = g_weak_ref_get(const_cast<GWeakRef*>(&weakRef));
+        return (object == NULL) ? nullptr : G_OBJECT(object);
+    }
+    return nullptr;
 }
+
+/*
+ * Initializes the object's GWeakRef. Only constructors should call this.
+ */
+void GPPWeakRef::initRef(const GObject* initialValue)
+{
+    using namespace juce;
+    const ScopedWriteLock initLock(referenceLock);
+    if(!refInitialized && !refCleared)
+    {
+        g_weak_ref_init(&weakRef, const_cast<GObject*>(initialValue));
+        refInitialized = true;
+    }
+} 

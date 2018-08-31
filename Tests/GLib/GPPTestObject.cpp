@@ -78,6 +78,13 @@ void GPPTestObject::setTestInt(int newInt)
 GPPTestObject::Listener::Listener()
 {
 }
+/*
+ * Checks if this object is listening to a particular GPPTestObject.
+ */
+bool GPPTestObject::Listener::isListening(const GPPTestObject& source) const
+{
+    return source.isConnected(*this);
+}
 
 /*
  * Connects to property change signals from a GTestObject.
@@ -136,12 +143,26 @@ void GPPTestObject::addListener(Listener& listener)
 /*
  * Disconnects a listener from this GPPTestObject's property changes.
  */
-void GPPTestObject::removeListener(Listener& listener)
+bool GPPTestObject::removeListener(Listener& listener)
 {
+    bool removedObject = false;
     GObject* testObject = getGObject();
     if(testObject != nullptr)
     {
-        listener.disconnectSignals(testObject);
+        removedObject = listener.disconnectSignals(testObject);
     }
     g_clear_object(&testObject);
+    return removedObject;
+}
+
+/*
+ * Checks if this GPPTestObject is being listened to by a particular
+ * listener.
+ */
+bool GPPTestObject::isConnected(const GPPTestObject::Listener& listener) const
+{
+    GObject* object = getGObject();
+    bool result = listener.isConnected(object);
+    g_clear_object(&object);
+    return result;
 }

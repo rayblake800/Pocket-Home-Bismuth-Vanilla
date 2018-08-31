@@ -13,7 +13,7 @@ GSignalHandler::~GSignalHandler()
 /*
  * Unsubscribes this signal handler from all signals emitted by a GObject.
  */
-void GSignalHandler::disconnectSignals(GObject* source)
+bool GSignalHandler::disconnectSignals(GObject* source)
 {
     using namespace juce;
     if(source != nullptr)
@@ -28,8 +28,26 @@ void GSignalHandler::disconnectSignals(GObject* source)
             }
             signals.remove(sourceRef);
             g_object_unref(source);
+            return true;
         }
-    }       
+    }
+    return false;
+}
+
+/*
+ * Checks if this signal handler is connected to a particular GObject signal
+ * source.
+ */
+bool GSignalHandler::isConnected(GObject* source) const
+{
+    using namespace juce;
+    if(source == nullptr)
+    {
+        return false;
+    }
+    const ScopedLock signalLock(signals.getLock());
+    GPPWeakRef sourceRef(source);
+    return signals.contains(sourceRef);
 }
 
 /*
@@ -48,13 +66,19 @@ void GSignalHandler::connectSignal(GObject* source,
             (source, signalName, callback, this);
     if(handlerID != 0)
     {
-        juce::Array<gulong>& existingSignals = signals.getReference(source);
-        if(existingSignals.isEmpty())
+        GPPWeakRef sourceRef(source);
+        
+        if(!signals.contains(sourceRef))
         {
             g_object_ref(source);
         }
-        existingSignals.add(handlerID);
+        signals.getReference(sourceRef).add(handlerID);
     }       
+    else
+    {
+        DBG("GSignalHandler::" << __func__ << ": Failed to subscribe to \""
+                << signalName << "\" signal.");
+    }
 }
         
 /*
@@ -119,6 +143,7 @@ void GSignalHandler::unsubscribeAll()
             }
             g_object_unref(source);
         }
+        g_clear_object(&source);
     }
     signals.clear();
 }

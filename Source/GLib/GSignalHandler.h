@@ -31,8 +31,22 @@ public:
      * Unsubscribes this signal handler from all signals emitted by a GObject.
      * 
      * @param source  A GObject signal source.
+     *
+     * @return  True if the signal source was removed, false if the signal
+     *          handler was not subscribed to this object's signals.
      */
-    void disconnectSignals(GObject* source);
+    bool disconnectSignals(GObject* source);
+    
+    /**
+     * Checks if this signal handler is connected to a particular GObject signal
+     * source.
+     *
+     * @param source  A GObject to search for in the list of signal sources
+     *                handled by this signal handler.
+     *
+     * @return  True iff this signal handler is connected to this GObject.
+     */
+    bool isConnected(GObject* source) const;
     
 protected:
     /**

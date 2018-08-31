@@ -20,6 +20,13 @@ public:
      */
     GPPWeakRef(GObject* value);
 
+    /**
+     * Initialize the weak reference with another GPPWeakRef's data.
+     *
+     * @param toAssign  This object's data will be copied to the new GPPWeakRef.
+     */
+    GPPWeakRef(const GPPWeakRef& toAssign);
+
     ~GPPWeakRef();
 
     /**
@@ -81,5 +88,20 @@ public:
     GObject* getObject() const;
 
 private:
+    /**
+     * Initializes the object's GWeakRef. Only constructors should call this.
+     *
+     * @param initialValue  The initial object for the weak reference to track.
+     */
+    void initRef(const GObject* initialValue = nullptr);        
+
     GWeakRef weakRef;
+    
+    //true iff the GWeakRef has been initialized
+    bool refInitialized = false;
+    //true iff the GWeakRef has been cleared
+    bool refCleared = false;
+    //Lock for reading when checking if the reference was initialized/cleared
+    //Lock for writing when initializing or clearing the reference.
+    juce::ReadWriteLock referenceLock;
 };

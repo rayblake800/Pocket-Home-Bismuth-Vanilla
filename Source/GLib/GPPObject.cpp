@@ -107,6 +107,10 @@ bool GPPObject::operator!=(GObject* rhs) const
  */
 void GPPObject::operator=(const GPPObject& rhs)
 {
+    if(*this == rhs)
+    {
+        return;
+    }
     int refCount = rhs.getReferenceCount();
     setGObject(rhs);
     int newCount = rhs.getReferenceCount();

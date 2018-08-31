@@ -69,6 +69,16 @@ public:
     public:
         friend class GPPTestObject;
         Listener();
+    
+        /**
+         * Checks if this object is listening to a particular GPPTestObject.
+         *
+         * @param source  A test object to search for in this object's
+         *                subscribed signal sources.
+         *
+         * @return  True iff this Listener is listening to the source object.
+         */
+        bool isListening(const GPPTestObject& source) const;
         
     protected:
         /**
@@ -105,7 +115,22 @@ public:
      * Disconnects a listener from this GPPTestObject's property changes.
      *
      * @param listener The listener object to disconnect.
+     *
+     * @return  True if the listener was removed from this object, false if the
+     *          listener was never listening to this object.
      */
-    void removeListener(Listener& listener);
+    bool removeListener(Listener& listener);
+    
+    
+    /**
+     * Checks if this GPPTestObject is being listened to by a particular
+     * listener.
+     *
+     * @param listener   The listener object to test.
+     *
+     * @return  True iff the listener is listening to this GPPTestObject's
+     *          signals.
+     */
+    bool isConnected(const Listener& listener) const;
 };
 
