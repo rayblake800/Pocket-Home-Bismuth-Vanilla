@@ -9,6 +9,7 @@
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{0EAA4235-1BE6-9631-C021-04197F639BB7}" name="Tests">
       <GROUP id="{F41B4B20-4755-0852-B372-7AD08DA75D1A}" name="GLib">
+        <FILE id="yEGkUA" name="test_LibNM.cpp" compile="1" resource="0" file="Tests/GLib/test_LibNM.cpp"/>
         <FILE id="U8iex8" name="gtest_object.cpp" compile="1" resource="0"
               file="Tests/GLib/gtest_object.cpp"/>
         <FILE id="hvDvXI" name="gtest_object.h" compile="0" resource="0" file="Tests/GLib/gtest_object.h"/>

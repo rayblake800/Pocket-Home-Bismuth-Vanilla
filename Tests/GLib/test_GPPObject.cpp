@@ -6,7 +6,7 @@
 static const constexpr int minThreadCount = 30;
 static const constexpr int maxThreadCount = 50;
 static const constexpr int threadSleepMS = 300;
-static const constexpr int testSeconds = 300;
+static const constexpr int testSeconds = 10;
 
 class GPPObjectTest : public StressTest
 {
@@ -364,6 +364,7 @@ public:
 
         
 
+        beginTest("threading stress test");
         testObjects.add(new GPPTestObject());
         listeners.add(new GPPTestObject::Listener());
         runThreads();

@@ -132,6 +132,7 @@ void GSignalHandler::unsubscribeAll()
 {
     using namespace juce;
     const ScopedLock changeSourceLock(signals.getLock());
+    int loopCount = 0;
     for(auto iter = signals.begin(); iter != signals.end(); iter.next())
     {
         GObject* source = iter.getKey().getObject();

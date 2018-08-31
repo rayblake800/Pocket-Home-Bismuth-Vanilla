@@ -12,6 +12,7 @@
 		7FF75E28BA5CA892192A3B8F = {isa = PBXBuildFile; fileRef = 793D45A4A9D717F9F0133903; };
 		B97B8F50999FAC525F837AEC = {isa = PBXBuildFile; fileRef = B5DCAF01E0490D7413E9E85F; };
 		B60DD03FE5B471BE4AFBF56B = {isa = PBXBuildFile; fileRef = 81D682238B383EB3D7010236; };
+		AA20CB8AC318E4B5296B8627 = {isa = PBXBuildFile; fileRef = EE0B7BA742ADA7856ACBC37E; };
 		C973138F6DA6328673892308 = {isa = PBXBuildFile; fileRef = BD3B90FCBD0704689D6B53DC; };
 		97879AD470684A2B43C2567B = {isa = PBXBuildFile; fileRef = 69D23E4095ECE8F05D6A792A; };
 		D6EAB7C04995D2B1AFF7D205 = {isa = PBXBuildFile; fileRef = 4F5AECAE377D0069CD6CFA5D; };
@@ -405,6 +406,7 @@
 		EC9ADBC521922E2752148D3D = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ProcessUtils.h; path = ../../Source/Util/ProcessUtils.h; sourceTree = "SOURCE_ROOT"; };
 		EDB8737E32ADFE4062B2F271 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigurableLabel.h; path = ../../Source/Components/Configurable/ConfigurableLabel.h; sourceTree = "SOURCE_ROOT"; };
 		EE0860C56D0E35295F0CD347 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppMenuPopupEditor.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Editors/AppMenuPopupEditor.cpp"; sourceTree = "SOURCE_ROOT"; };
+		EE0B7BA742ADA7856ACBC37E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test_LibNM.cpp"; path = "../../Tests/GLib/test_LibNM.cpp"; sourceTree = "SOURCE_ROOT"; };
 		EEA5E18A0CAB4FA3C57C4951 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		EF06DE8BB9E6C5B5EC0AF16C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Localized.h; path = ../../Source/Util/Localized.h; sourceTree = "SOURCE_ROOT"; };
 		EF0777B21B337F6A85095494 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ListEditor.h; path = ../../Source/Components/Widgets/ListEditor.h; sourceTree = "SOURCE_ROOT"; };
@@ -423,6 +425,7 @@
 		FD783D6449E228DE209A13C8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesktopEntryMenuItem.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/DesktopEntryMenuItem.h"; sourceTree = "SOURCE_ROOT"; };
 		FE2AD97F03F339F27E32A12D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryData.cpp; path = ../../JuceLibraryCode/BinaryData.cpp; sourceTree = "SOURCE_ROOT"; };
 		084172DD6D469A493DFFC233 = {isa = PBXGroup; children = (
+					EE0B7BA742ADA7856ACBC37E,
 					BD3B90FCBD0704689D6B53DC,
 					0A653E7255E1B2232E2FFF88,
 					69D23E4095ECE8F05D6A792A,
@@ -937,6 +940,7 @@
 					B60DD03FE5B471BE4AFBF56B,
 					5CFC0887F5B5B1779EC1471E, ); runOnlyForDeploymentPostprocessing = 0; };
 		467462E1976B8F50EA1165E3 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+					AA20CB8AC318E4B5296B8627,
 					C973138F6DA6328673892308,
 					97879AD470684A2B43C2567B,
 					D6EAB7C04995D2B1AFF7D205,
