@@ -2,6 +2,7 @@
 #include "PocketHomeApplication.h"
 #include "XWindowInterface.h"
 #include "TempTimer.h"
+#include "PocketHomeWindow.h"
 
 //Milliseconds to wait between window focus attempts.
 static const constexpr int focusWaitMs = 200;
@@ -23,17 +24,18 @@ static void focusAppWindow()
     xWindows.activateWindow(appWindow);
     Component * rootComponent = Desktop::getInstance().getComponent(0);
     rootComponent->grabKeyboardFocus();
-    if(!WindowFocus::isFocused())
-    {
-        TempTimer::initTimer(focusWaitMs, focusAppWindow);
-    }
-    else if(runTests)
+    if(runTests && xWindows.isActiveWindow(appWindow))
     {
         UnitTestRunner tester;
         tester.setPassesAreLogged(verboseTesting);
         tester.runAllTests();
         JUCEApplication::getInstance()->systemRequestedQuit();
     }
+    else if(!WindowFocus::isFocused())
+    {
+        TempTimer::initTimer(focusWaitMs, focusAppWindow);
+    }
+    
 }
 
 /**
@@ -66,13 +68,27 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         DBG("PocketHomeApplication::" << __func__
                 << ": Sound failed to initialize");
     }
-    homeWindow = new PocketHomeWindow
-            (getApplicationName(), args.contains("--fakeWifi"));
     runTests = args.contains("--test");
     verboseTesting = args.contains("-v");
+    if(!runTests)
+    {
+        gLibThread = new GLibSignalThread();
+        homeWindow = new PocketHomeWindow
+                (getApplicationName(), args.contains("--fakeWifi"));
+    }
+    else
+    {
+        //Use an empty window and don't initialize signal thread when testing
+        homeWindow = new DocumentWindow(getApplicationName(), Colours::dimgrey,
+                DocumentWindow::allButtons);
+        homeWindow->setBounds(0,0,50,50);
+        homeWindow->setLookAndFeel(&LookAndFeel::getDefaultLookAndFeel());
+        homeWindow->setUsingNativeTitleBar(true);
+        homeWindow->setResizable(true, false);
+        homeWindow->setVisible(true);
+        homeWindow->addToDesktop();
+    }           
     focusAppWindow();
-    
-    
 }
 
 /*

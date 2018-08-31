@@ -1,6 +1,5 @@
 #pragma once
 #include "JuceHeader.h"
-#include "PocketHomeWindow.h"
 #include "PokeLookAndFeel.h"
 #include "MainConfigFile.h"
 #include "ComponentConfigFile.h"
@@ -76,14 +75,14 @@ private:
     //Holds UI colour settings
     ColourConfigFile colourConfig;
 
-    //Runs the GLib event loop
-    GLibSignalThread gLibThread;
+    //Runs the GLib event loop. This will not be created if running unit tests.
+    juce::ScopedPointer<GLibSignalThread> gLibThread;
     
     //The program appearance manager.  This is dynamically allocated because it
     //should be created after/destroyed before all of the above resources.
     juce::ScopedPointer<PokeLookAndFeel> lookAndFeel = nullptr;
     
-    //The single program window.  This is dynamically allocated because it
-    //should be created after/destroyed before all of the above resources.
-    juce::ScopedPointer<PocketHomeWindow> homeWindow = nullptr;
+    //The single program window.  This is should be created after/destroyed 
+    //before all of the above resources.
+    juce::ScopedPointer<juce::DocumentWindow> homeWindow = nullptr;
 };
