@@ -144,6 +144,7 @@ NMPPActiveConnection NMPPDeviceWifi::getActiveConnection() const
             NMActiveConnection* con = nm_device_get_active_connection(device);
             if(con != nullptr)
             {
+                g_object_ref(G_OBJECT(con));
                 active = con;
             }
         }
@@ -170,6 +171,7 @@ juce::Array<NMPPConnection> NMPPDeviceWifi::getAvailableConnections() const
                 NMConnection* connection = NM_CONNECTION(cons->pdata[i]);
                 if(connection != nullptr)
                 {
+                    g_object_ref(G_OBJECT(connection));
                     available.add(NMPPConnection(connection));
                 }
             }
@@ -213,7 +215,13 @@ NMPPAccessPoint NMPPDeviceWifi::getAccessPoint(const char* path) const
         NMDeviceWifi* device = NM_DEVICE_WIFI(devObject);
         if(device != nullptr)
         {
-            ap = nm_device_wifi_get_access_point_by_path(device, path);
+            NMAccessPoint* nmAP = nm_device_wifi_get_access_point_by_path
+                    (device, path);
+            if(nmAP != nullptr && NM_IS_ACCESS_POINT(nmAP))
+            {
+                g_object_ref(G_OBJECT(nmAP));
+                ap = nmAP;
+            }
         }
     });
     return ap;
@@ -230,7 +238,13 @@ NMPPAccessPoint NMPPDeviceWifi::getActiveAccessPoint() const
         NMDeviceWifi* device = NM_DEVICE_WIFI(devObject);
         if(device != nullptr)
         {
-            ap = nm_device_wifi_get_active_access_point(device);
+            NMAccessPoint* nmAP = nm_device_wifi_get_active_access_point
+                    (device);
+            if(nmAP != nullptr && NM_IS_ACCESS_POINT(nmAP))
+            {
+                g_object_ref(G_OBJECT(nmAP));
+                ap = nmAP;
+            }
         }
     });
     return ap;
@@ -254,6 +268,7 @@ juce::Array<NMPPAccessPoint> NMPPDeviceWifi::getAccessPoints() const
                 NMAccessPoint* nmAP = NM_ACCESS_POINT(aps->pdata[i]);
                 if(nmAP != nullptr)
                 {
+                    g_object_ref(G_OBJECT(nmAP));
                     accessPoints.add(NMPPAccessPoint(nmAP));
                 }
             }

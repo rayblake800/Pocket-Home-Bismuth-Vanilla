@@ -77,8 +77,8 @@ juce::Time SavedConnection::lastConnectionTime() const
                 NM_SETTING_CONNECTION_TIMESTAMP);
         if(timestamp != nullptr)
         {
-	    lastTime = Time(1000 * GVariantConverter::getValue<uint64>
-	            (timestamp));
+	        lastTime = Time(1000 * GVariantConverter::getValue<uint64>
+	              (timestamp));
             g_variant_unref(timestamp);
         }
     }

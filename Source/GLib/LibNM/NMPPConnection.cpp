@@ -50,10 +50,7 @@ bool NMPPConnection::connectionMatches(const NMPPConnection& rhs) const
                         NM_SETTING_COMPARE_FLAG_FUZZY);
             }
         }
-        if(rhsObj != nullptr)
-        {
-            g_object_unref(rhsObj);
-        }
+        g_clear_object(&rhsObj);
     });
     return compatible;
 }

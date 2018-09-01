@@ -7,27 +7,6 @@
               companyCopyright="Next Thing Co." headerPath="../../Source/Wifi&#10;../../Source/Components/Configurable&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Pages&#10;../../Source/GLib/DBus&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Config Files&#10;../../Source/Components/Pages/Settings Pages/Quick Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Paged Menu&#10;../../Source/FreeDesktop/Icon Themes&#10;../../Source&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/PocketCHIP&#10;../../Source/Components/Pages/Settings Pages/DateTime Page&#10;../../Source/Components/Pages/Settings Pages/Home Settings Page&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Util&#10;../../Source/Components/Pages/Settings Pages/Password Pages&#10;../../Source/Components/Pages/Settings Pages/Input Settings Page&#10;../../Source/Bluetooth&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components/Pages/Settings Pages/Settings List Page&#10;../../Source/Components&#10;../../Source/FreeDesktop/Desktop Entries&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Components/Pages/Home Page/AppMenu/Scrolling Menu&#10;../../Source/Components/Pages/Settings Pages/Network Pages&#10;../../Source/GLib&#10;../../Source/Components/Pages/Settings Pages/UI Page&#10;../../Source/GLib/LibNM&#10;../../Source/Components/Widgets&#10;../../Source/FreeDesktop&#10;../../Source/Components/Pages/Settings Pages&#10;../../Source/Components/Pages/Power Page"
               cppLanguageStandard="14" defines="DONT_SET_USING_JUCE_NAMESPACE=1">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
-    <GROUP id="{0EAA4235-1BE6-9631-C021-04197F639BB7}" name="Tests">
-      <GROUP id="{F41B4B20-4755-0852-B372-7AD08DA75D1A}" name="GLib">
-        <FILE id="yEGkUA" name="test_LibNM.cpp" compile="1" resource="0" file="Tests/GLib/test_LibNM.cpp"/>
-        <FILE id="U8iex8" name="gtest_object.cpp" compile="1" resource="0"
-              file="Tests/GLib/gtest_object.cpp"/>
-        <FILE id="hvDvXI" name="gtest_object.h" compile="0" resource="0" file="Tests/GLib/gtest_object.h"/>
-        <FILE id="z04pvv" name="GPPTestObject.cpp" compile="1" resource="0"
-              file="Tests/GLib/GPPTestObject.cpp"/>
-        <FILE id="QwIQhb" name="GPPTestObject.h" compile="0" resource="0" file="Tests/GLib/GPPTestObject.h"/>
-        <FILE id="BifyMD" name="test_GPPObject.cpp" compile="1" resource="0"
-              file="Tests/GLib/test_GPPObject.cpp"/>
-      </GROUP>
-      <FILE id="XMKT0p" name="StressTest.cpp" compile="1" resource="0" file="Tests/StressTest.cpp"/>
-      <FILE id="k0xGYN" name="StressTest.h" compile="0" resource="0" file="Tests/StressTest.h"/>
-      <FILE id="lpsFrf" name="test_ConfigFile.cpp" compile="1" resource="0"
-            file="Tests/test_ConfigFile.cpp"/>
-      <FILE id="Bmp8Lw" name="test_LaunchedApp.cpp" compile="1" resource="0"
-            file="Tests/test_LaunchedApp.cpp"/>
-      <FILE id="DCiFAO" name="test_XWindowInterface.cpp" compile="1" resource="0"
-            file="Tests/test_XWindowInterface.cpp"/>
-    </GROUP>
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
       <FILE id="lJvIsl" name="bluetooth.json" compile="0" resource="1" file="assets/bluetooth.json"/>
       <FILE id="P08AkY" name="Lato-Regular.ttf" compile="0" resource="1"
@@ -500,6 +479,28 @@
             file="Source/PocketHomeApplication.cpp"/>
       <FILE id="cK501J" name="PocketHomeApplication.h" compile="0" resource="0"
             file="Source/PocketHomeApplication.h"/>
+    </GROUP>
+    <GROUP id="{0EAA4235-1BE6-9631-C021-04197F639BB7}" name="Tests">
+      <GROUP id="{F41B4B20-4755-0852-B372-7AD08DA75D1A}" name="GLib">
+        <FILE id="U8iex8" name="gtest_object.cpp" compile="1" resource="0"
+              file="Tests/GLib/gtest_object.cpp"/>
+        <FILE id="hvDvXI" name="gtest_object.h" compile="0" resource="0" file="Tests/GLib/gtest_object.h"/>
+        <FILE id="z04pvv" name="GPPTestObject.cpp" compile="1" resource="0"
+              file="Tests/GLib/GPPTestObject.cpp"/>
+        <FILE id="QwIQhb" name="GPPTestObject.h" compile="0" resource="0" file="Tests/GLib/GPPTestObject.h"/>
+        <FILE id="BifyMD" name="test_GPPObject.cpp" compile="1" resource="0"
+              file="Tests/GLib/test_GPPObject.cpp"/>
+      </GROUP>
+      <FILE id="XMKT0p" name="StressTest.cpp" compile="1" resource="0" file="Tests/StressTest.cpp"/>
+      <FILE id="k0xGYN" name="StressTest.h" compile="0" resource="0" file="Tests/StressTest.h"/>
+      <FILE id="lpsFrf" name="test_ConfigFile.cpp" compile="1" resource="0"
+            file="Tests/test_ConfigFile.cpp"/>
+      <FILE id="Bmp8Lw" name="test_LaunchedApp.cpp" compile="1" resource="0"
+            file="Tests/test_LaunchedApp.cpp"/>
+      <FILE id="WFXUSl" name="test_WifiStateManager.cpp" compile="1" resource="0"
+            file="Tests/test_WifiStateManager.cpp"/>
+      <FILE id="DCiFAO" name="test_XWindowInterface.cpp" compile="1" resource="0"
+            file="Tests/test_XWindowInterface.cpp"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

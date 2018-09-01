@@ -263,6 +263,7 @@ void NMPPAccessPoint::Listener::propertyChanged
 { 
     if(property == NM_ACCESS_POINT_STRENGTH && NM_IS_ACCESS_POINT(source))
     {
+        g_object_ref(source);
         NMPPAccessPoint tempAP(NM_ACCESS_POINT(source));
         unsigned int strength = tempAP.getSignalStrength();
         signalStrengthChanged(tempAP, strength);

@@ -25,6 +25,7 @@ resourceLock(resourceLock)
     if (classResource == nullptr)
     {
         classResource = createResource();
+        jassert(classResource != nullptr);
     }
     classResource->referenceList.add(this);
 }

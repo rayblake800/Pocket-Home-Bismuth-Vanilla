@@ -42,6 +42,7 @@ juce::Array<NMPPDeviceWifi> NMPPClient::getWifiDevices() const
                 NMDevice* dev = NM_DEVICE(devArray->pdata[i]);
                 if(dev != nullptr && NM_IS_DEVICE_WIFI(dev))
                 {
+                    g_object_ref(G_OBJECT(dev));
                     devices.add(NMPPDeviceWifi(NM_DEVICE_WIFI(dev)));
                 }
             }  
@@ -64,6 +65,7 @@ NMPPDeviceWifi NMPPClient::getWifiDeviceByIface(const char* interface) const
             NMDevice* dev = nm_client_get_device_by_iface(client, interface);
             if(dev != nullptr && NM_IS_DEVICE_WIFI(dev))
             {
+                g_object_ref(G_OBJECT(dev));
                 wifiDevice = NM_DEVICE_WIFI(dev);
             }
         }
@@ -85,6 +87,7 @@ NMPPDeviceWifi NMPPClient::getWifiDeviceByPath(const char* path) const
             NMDevice* dev = nm_client_get_device_by_path(client, path);
             if(dev != nullptr && NM_IS_DEVICE_WIFI(dev))
             {
+                g_object_ref(G_OBJECT(dev));
                 wifiDevice = NM_DEVICE_WIFI(dev);
             }
         }
@@ -108,8 +111,9 @@ juce::Array<NMPPActiveConnection> NMPPClient::getActiveConnections() const
             for(int i = 0; cons && i < cons->len; i++)
             {
                 NMActiveConnection* con = NM_ACTIVE_CONNECTION(cons->pdata[i]);
-                if(NM_IS_ACTIVE_CONNECTION(con))
+                if(con != nullptr && NM_IS_ACTIVE_CONNECTION(con))
                 {
+                    g_object_ref(G_OBJECT(con));
                     connections.add(NMPPActiveConnection(con));
                 }
             }
@@ -130,8 +134,9 @@ NMPPActiveConnection NMPPClient::getPrimaryConnection() const
         if(client != nullptr)
         {
             NMActiveConnection* con = nm_client_get_primary_connection(client);
-            if(con != nullptr)
+            if(con != nullptr && NM_IS_ACTIVE_CONNECTION(con))
             {
+                g_object_ref(G_OBJECT(con));
                 primary = con;
             }
         }
@@ -154,6 +159,7 @@ NMPPActiveConnection NMPPClient::getActivatingConnection() const
                     client);
             if(con != nullptr)
             {
+                g_object_ref(G_OBJECT(con));
                 activating = con;
             }
         }
@@ -179,8 +185,8 @@ void NMPPClient::deactivateConnection(NMPPActiveConnection& activeCon)
                     nm_client_deactivate_connection(client,
                             NM_ACTIVE_CONNECTION(conObject));
                 }
-                g_object_unref(conObject);
             }         
+            g_clear_object(&conObject);
         }
     });
 }
@@ -318,14 +324,8 @@ void NMPPClient::activateConnection(
                             handler);  
                 }
             }
-            if(conObj != nullptr)
-            {
-                g_object_unref(conObj);
-            }
-            if(devObj != nullptr)
-            {
-                g_object_unref(devObj);
-            }
+            g_clear_object(&conObj);
+            g_clear_object(&devObj);
         }
     });
 }
@@ -351,6 +351,7 @@ void NMPPClient::Listener::propertyChanged
     if(source != nullptr && NM_IS_CLIENT(source) 
             && property == NM_CLIENT_WIRELESS_ENABLED)
     {
+        g_object_ref(source);
         NMPPClient client(NM_CLIENT(source));
         bool enabled = client.wirelessEnabled();
         wirelessStateChange(enabled);
