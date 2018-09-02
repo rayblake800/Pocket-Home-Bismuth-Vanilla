@@ -68,11 +68,18 @@ void StressTest::runThreads()
     }
     for(int i = 0; i < threadActionCounts.size(); i++)
     {
-        DBG("Thread " << i << " ran " << threadActionCounts[i] << " actions.");
+        
+        String log;
+        log << "Thread " << i << " ran " 
+            << threadActionCounts[i] << " actions.";
+        logMessage(log);
     }
     for(int i = 0; i < actionRunCounts.size(); i++)
     {
-        DBG("Action " << i << " executed " << actionRunCounts[i] << " times.");
+        String log;
+        log << "Action " << i << " executed " 
+            << actionRunCounts[i] << " times.";
+        logMessage(log);
     }
     threadActionCounts.clear();
     actionRunCounts.clear();

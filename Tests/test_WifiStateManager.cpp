@@ -8,6 +8,8 @@ static const constexpr int maxThreadCount = 15;
 static const constexpr int threadSleepMS = 300;
 static const constexpr int testSeconds = 10;
 
+static const constexpr int resourceInitCount = 50;
+
 class WifiStateManagerTest : public StressTest
 {
 private:
@@ -104,11 +106,24 @@ public:
         //initialize shared resources
         GLibSignalThread signalThread;
         
-        ScopedPointer<WifiStateManager>  wifiManager = new WifiStateManager([]
-                (juce::ReadWriteLock& lock)->WifiStateManager::NetworkInterface*
-                {
-                    return new LibNMInterface(lock);
-                });
+        ScopedPointer<WifiStateManager>  wifiManager;
+        beginTest("Repeated initialization/destruction test");
+
+        for(int i = 0; i < resourceInitCount; i++)
+        {
+            wifiManager = new WifiStateManager([]
+            (juce::ReadWriteLock& lock)->WifiStateManager::NetworkInterface*
+            {
+                return new LibNMInterface(lock);
+            });
+            if(i < resourceInitCount - 1)
+            {
+                wifiManager = nullptr;
+            }
+        }
+        //If we haven't segfaulted by now, that's enough to pass.
+        //TODO: check memory use for leaks
+        expect(true);
 
         beginTest("threading stress test");
         runThreads();
