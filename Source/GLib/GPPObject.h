@@ -26,7 +26,6 @@
  */
 class GPPObject
 {
-#ifdef JUCE_DEBUG
 public:
     /**
      * Gets this object's reference count.  Only use this for debugging.
@@ -35,7 +34,7 @@ public:
      *          null.
      */
     int getReferenceCount() const;
-#endif
+    
 protected:
     /**
      * Create a null GPPObject, with no internal GObject.

@@ -4673,9 +4673,18 @@
         <in>PocketHomeApplication.h</in>
       </df>
       <df name="Tests">
+        <df name="GLib">
+          <in>GPPTestObject.cpp</in>
+          <in>GPPTestObject.h</in>
+          <in>gtest_object.cpp</in>
+          <in>gtest_object.h</in>
+          <in>test_GPPObject.cpp</in>
+        </df>
+        <in>StressTest.cpp</in>
+        <in>StressTest.h</in>
         <in>test_ConfigFile.cpp</in>
-        <in>test_GPPObject.cpp</in>
         <in>test_LaunchedApp.cpp</in>
+        <in>test_WifiStateManager.cpp</in>
         <in>test_XWindowInterface.cpp</in>
       </df>
       <in></in>
@@ -5644,6 +5653,8 @@
         </df>
       </df>
       <df name="Tests">
+        <df name="GLib">
+        </df>
       </df>
     </df>
     <itemPath>assets/configuration/apps.json</itemPath>

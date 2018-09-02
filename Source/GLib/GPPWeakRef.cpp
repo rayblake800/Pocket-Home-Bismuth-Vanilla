@@ -127,7 +127,9 @@ GObject* GPPWeakRef::getObject() const
     else
     {
         gpointer object = g_weak_ref_get(const_cast<GWeakRef*>(&weakRef));
-        return (object == NULL) ? nullptr : G_OBJECT(object);
+        jassert(object == nullptr || G_IS_OBJECT(object));
+        return (object == NULL || !G_IS_OBJECT(object)) 
+            ? nullptr : G_OBJECT(object);
     }
     return nullptr;
 }

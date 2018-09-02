@@ -37,6 +37,10 @@ wifiLock(wifiLock)
     updateAllWifiData();
 }
 
+LibNMInterface::~LibNMInterface() 
+{
+}
+
 /*
  * Check if the network manager found a valid wifi device.
  */
@@ -499,7 +503,7 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                 break;
             case NM_DEVICE_STATE_DISCONNECTED:
             {
-		stopTimer();
+		        stopTimer();
                 wifiLock.exitWrite();
                 if(oldState == NM_DEVICE_STATE_DEACTIVATING)
                 {
@@ -547,11 +551,11 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                 DBG("LibNMInterface::stateChanged"
                         << ": wlan0 device entered unmanaged state: "
                         << deviceStateString(newState));
-		if(!activeAP.isNull())
-	    	{
+		        if(!activeAP.isNull())
+	    	    {
                     wifiLock.exitWrite();
                     signalWifiDisconnected();
-		}
+		        }
                 else
                 {
                     wifiLock.exitWrite();

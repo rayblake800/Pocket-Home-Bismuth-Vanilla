@@ -8,7 +8,7 @@ static const constexpr int maxThreadCount = 15;
 static const constexpr int threadSleepMS = 300;
 static const constexpr int testSeconds = 10;
 
-static const constexpr int resourceInitCount = 50;
+static const constexpr int resourceInitCount = 10;
 
 class WifiStateManagerTest : public StressTest
 {
@@ -47,7 +47,6 @@ public:
     WifiStateManagerTest() : StressTest("WifiStateManager testing", 
             minThreadCount, maxThreadCount, threadSleepMS, testSeconds) 
     {
-        /*
         //enable wifi
         addAction([this]()
                 {
@@ -77,7 +76,6 @@ public:
                     const juce::ScopedLock arrayLock(listeners.getLock());
                     listeners.add(listener);
                 }); 
-                */
         //create and add a new listener, then let it go out of scope.
         addAction([this]()
                 {
@@ -104,13 +102,13 @@ public:
     {
         using namespace juce;
         //initialize shared resources
-        GLibSignalThread signalThread;
-        
+        ScopedPointer<GLibSignalThread> signalThread;
         ScopedPointer<WifiStateManager>  wifiManager;
         beginTest("Repeated initialization/destruction test");
 
         for(int i = 0; i < resourceInitCount; i++)
         {
+            signalThread = new GLibSignalThread();
             wifiManager = new WifiStateManager([]
             (juce::ReadWriteLock& lock)->WifiStateManager::NetworkInterface*
             {
@@ -118,6 +116,9 @@ public:
             });
             if(i < resourceInitCount - 1)
             {
+                //the signal thread must be destroyed before the wifiManager, as
+                //the wifi manager might have pending actions on the thread.
+                signalThread = nullptr;
                 wifiManager = nullptr;
             }
         }
@@ -129,6 +130,7 @@ public:
         runThreads();
         listeners.clear();
         wifiManager->enableWifi();
+        signalThread = nullptr;
         wifiManager = nullptr;
     }
 };

@@ -42,8 +42,7 @@ public:
      */
     LibNMInterface(juce::ReadWriteLock& wifiLock);
 
-    virtual ~LibNMInterface() { }
-
+    virtual ~LibNMInterface();
 protected:
     /**
      * Checks if the network manager found a valid wifi device.
