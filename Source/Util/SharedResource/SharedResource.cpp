@@ -130,3 +130,14 @@ std::function<void()> SharedResource::buildAsyncFunction(
         }
     };
 }
+
+
+/*
+ * Runs an arbitrary function on each Handler object connected to the
+ * SharedResource.i
+ */
+void SharedResource::foreachHandler
+(std::function<void(Handler*)> handlerAction)
+{
+    ScopedThreadWriteLock handlerLock(lockType);
+}

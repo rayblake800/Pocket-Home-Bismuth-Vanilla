@@ -13,8 +13,8 @@
  * claims on the lock simultaneously.  Threads must release the lock 
  * is made to take the lock for reading, the thread will yield until no other 
  * thread has the lock held for writing, and no callers are waiting to hold the
- * thread for wri.  When a request is made to take a thread-lock, the thread will
- * yield until no read-locks are held, no thread-locks are held by other
+ * thread for wri.  When a request is made to take a thread-lock, the thread
+ * will yield until no read-locks are held, no thread-locks are held by other
  * threads, and no other thread has been waiting longer to take a thread-lock.
  *
  * This allows the lock to be safely acquired multiple times by the same thread

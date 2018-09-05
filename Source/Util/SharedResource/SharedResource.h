@@ -27,14 +27,8 @@
  * will not be changed while it is being read, or while another thread is
  * already making changes.  This allows Handler objects across multiple threads
  * to share a single resource object safely.  To prevent deadlocks, Handler
- * objects should interact with eachother very carefully, or not at all.
- *
- * Each SharedResource subclass also has a single corresponding 
- * SharedResource::Listener subclass, defining objects that receive updates when 
- * the SharedResource changes.  Listeners automatically subscribe themselves to
- * updates from their resource, and prevent the resource from being destroyed
- * before they are. The SharedResource sends notifications to its listeners
- * asynchronously, locking itself for writing before doing so.
+ * objects with different resources should interact with eachother very
+ * carefully, or not at all.
  *
  * SharedResources may access their handler list, allowing handlers to be used
  * as Listener objects.
@@ -134,6 +128,17 @@ protected:
             LockType lockType, 
             std::function<void()> action,
             std::function<void()> ifDestroyed = [](){});
+
+    /**
+     * Runs an arbitrary function on each Handler object connected to the
+     * SharedResource.
+     *
+     * @param handlerAction  Some action that should run for every handler
+     *                       connected to this SharedResource, passing in a
+     *                       pointer to the Handler as a parameter.
+     */
+    void foreachHandler(std::function<void(Handler*)> handlerAction);
+
 private:
     /*
      * Holds pointers to every Handler that accesses this SharedResource.  This 
