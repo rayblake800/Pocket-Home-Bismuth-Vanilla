@@ -4554,20 +4554,41 @@
           <in>TransitionAnimator.h</in>
         </df>
         <df name="Config Files">
+          <df name="AppMenu">
+            <in>AppJSON.cpp</in>
+            <in>AppJSON.h</in>
+          </df>
+          <df name="Colour">
+          </df>
+          <df name="Component">
+            <in>ComponentJSON.cpp</in>
+            <in>ComponentJSON.h</in>
+          </df>
+          <df name="Main">
+          </df>
           <in>AppConfigFile.cpp</in>
           <in>AppConfigFile.h</in>
+          <in>AppConfigKeys.h</in>
           <in>ColourConfigFile.cpp</in>
           <in>ColourConfigFile.h</in>
+          <in>ColourConfigKeys.h</in>
+          <in>ColourJSON.cpp</in>
+          <in>ColourJSON.h</in>
           <in>ComponentConfigFile.cpp</in>
           <in>ComponentConfigFile.h</in>
+          <in>ComponentConfigKeys.h</in>
           <in>ConfigAlertWindows.cpp</in>
           <in>ConfigAlertWindows.h</in>
           <in>ConfigFile.cpp</in>
-          <in>ConfigFile.h</in>
+          <in>ConfigJSON.cpp</in>
+          <in>ConfigJSON.h</in>
           <in>JSONFile.cpp</in>
           <in>JSONFile.h</in>
           <in>MainConfigFile.cpp</in>
           <in>MainConfigFile.h</in>
+          <in>MainConfigKeys.h</in>
+          <in>MainJSON.cpp</in>
+          <in>MainJSON.h</in>
         </df>
         <df name="FreeDesktop">
           <df name="Desktop Entries">
@@ -4579,6 +4600,8 @@
           <df name="Icon Themes">
             <in>IconCache.cpp</in>
             <in>IconCache.h</in>
+            <in>IconLoader.cpp</in>
+            <in>IconLoader.h</in>
             <in>IconThemeIndex.cpp</in>
             <in>IconThemeIndex.h</in>
             <in>IconThread.cpp</in>
@@ -4646,6 +4669,8 @@
           <in>ProcessUtils.h</in>
           <in>ResourceManager.cpp</in>
           <in>ResourceManager.h</in>
+          <in>SharedResource.cpp</in>
+          <in>SharedResource.h</in>
           <in>TempTimer.cpp</in>
           <in>TempTimer.h</in>
           <in>Utils.cpp</in>
@@ -4658,13 +4683,17 @@
           <in>XWindowInterface.h</in>
         </df>
         <df name="Wifi">
+          <in>AccessPointState.h</in>
           <in>JsonWifiInterface.cpp</in>
           <in>JsonWifiInterface.h</in>
           <in>LibNMInterface.cpp</in>
           <in>LibNMInterface.h</in>
+          <in>NetworkInterface.cpp</in>
+          <in>NetworkInterface.h</in>
           <in>WifiAccessPoint.cpp</in>
           <in>WifiAccessPoint.h</in>
           <in>WifiDebugOutput.h</in>
+          <in>WifiState.h</in>
           <in>WifiStateManager.cpp</in>
           <in>WifiStateManager.h</in>
         </df>
@@ -5632,6 +5661,14 @@
           </df>
         </df>
         <df name="Config Files">
+          <df name="AppMenu">
+          </df>
+          <df name="Colour">
+          </df>
+          <df name="Component">
+          </df>
+          <df name="Main">
+          </df>
         </df>
         <df name="FreeDesktop">
           <df name="Desktop Entries">

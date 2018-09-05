@@ -40,6 +40,7 @@ set expandtab
 set autoindent
 set smartindent
 set cindent
+set formatoptions+=r
 
 " Code readability
 syntax on
@@ -57,6 +58,8 @@ inoremap jj <ESC>
 " build tools and project settings
 set syntax=cpp.doxygen
 set makeprg=make
+" set comments+=s:/**,mb:\s*,ex:\s*/
+" set comments+=s:/*,mb:\s*,ex:\s*/
 "F1: open cheat sheets
 map <F1> <leader>?<cr>
 noremap <F2> :NERDTreeToggle<cr> 

@@ -12,7 +12,7 @@
  * and other miscellaneous data relevant to UI components.
  */
 
-class ComponentConfigFile : public ResourceManager
+class ComponentConfigFile : public ResourceManager<ConfigJson>
 {
 public:
     ComponentConfigFile();

@@ -4,7 +4,7 @@
               bundleIdentifier="co.nextthing.PokeLaunch" includeBinaryInAppConfig="1"
               jucerVersion="5.3.2" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
               displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
-              companyCopyright="Next Thing Co." headerPath="../../Source/Wifi&#10;../../Source/Components/Configurable&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Pages&#10;../../Source/GLib/DBus&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Config Files&#10;../../Source/Components/Pages/Settings Pages/Quick Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Paged Menu&#10;../../Source/FreeDesktop/Icon Themes&#10;../../Source&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/PocketCHIP&#10;../../Source/Components/Pages/Settings Pages/DateTime Page&#10;../../Source/Components/Pages/Settings Pages/Home Settings Page&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Util&#10;../../Source/Components/Pages/Settings Pages/Password Pages&#10;../../Source/Components/Pages/Settings Pages/Input Settings Page&#10;../../Source/Bluetooth&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components/Pages/Settings Pages/Settings List Page&#10;../../Source/Components&#10;../../Source/FreeDesktop/Desktop Entries&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Components/Pages/Home Page/AppMenu/Scrolling Menu&#10;../../Source/Components/Pages/Settings Pages/Network Pages&#10;../../Source/GLib&#10;../../Source/Components/Pages/Settings Pages/UI Page&#10;../../Source/GLib/LibNM&#10;../../Source/Components/Widgets&#10;../../Source/FreeDesktop&#10;../../Source/Components/Pages/Settings Pages&#10;../../Source/Components/Pages/Power Page"
+              companyCopyright="Next Thing Co." headerPath="../../Source/Config Files/Component&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/GLib/LibNM&#10;../../Source/PocketCHIP&#10;../../Source/Components/Pages/Settings Pages/Settings List Page&#10;../../Source/Config Files/Colour&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Components/Widgets&#10;../../Source/Components/Pages/Settings Pages/DateTime Page&#10;../../Source/Util&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Scrolling Menu&#10;../../Source/FreeDesktop/Icon Themes&#10;../../Source/Components/Pages/Power Page&#10;../../Source/Components/Pages/Settings Pages/Input Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/Components/Pages/Settings Pages/Network Pages&#10;../../Source/Components/Pages/Settings Pages/UI Page&#10;../../Source/FreeDesktop&#10;../../Source/FreeDesktop/Desktop Entries&#10;../../Source/Components/Pages/Settings Pages&#10;../../Source/Config Files&#10;../../Source/Components&#10;../../Source/Components/Pages/Home Page/AppMenu/Paged Menu&#10;../../Source/Config Files/Main&#10;../../Source/Util/SharedResource&#10;../../Source/Components/Configurable&#10;../../Source/Config Files/AppMenu&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Components/Pages&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source&#10;../../Source/Wifi&#10;../../Source/GLib/DBus&#10;../../Source/Bluetooth&#10;../../Source/Components/Pages/Settings Pages/Password Pages&#10;../../Source/Components/Pages/Settings Pages/Quick Settings Page&#10;../../Source/Components/Pages/Settings Pages/Home Settings Page&#10;../../Source/GLib"
               cppLanguageStandard="14" defines="DONT_SET_USING_JUCE_NAMESPACE=1">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
@@ -307,29 +307,53 @@
               file="Source/Components/TransitionAnimator.h"/>
       </GROUP>
       <GROUP id="{85D01745-B7AD-BE3B-8D28-80F47A0AA8BA}" name="Config Files">
+        <GROUP id="{93AA6B7B-7C99-3489-3151-F638BDCB799E}" name="Main">
+          <FILE id="iCUbxT" name="MainConfigFile.cpp" compile="1" resource="0"
+                file="Source/Config Files/Main/MainConfigFile.cpp"/>
+          <FILE id="N1gZuQ" name="MainConfigFile.h" compile="0" resource="0"
+                file="Source/Config Files/Main/MainConfigFile.h"/>
+          <FILE id="KTgFy0" name="MainConfigKeys.h" compile="0" resource="0"
+                file="Source/Config Files/Main/MainConfigKeys.h"/>
+          <FILE id="vnpmBT" name="MainJSON.cpp" compile="1" resource="0" file="Source/Config Files/Main/MainJSON.cpp"/>
+          <FILE id="LbqcHx" name="MainJSON.h" compile="0" resource="0" file="Source/Config Files/Main/MainJSON.h"/>
+        </GROUP>
+        <GROUP id="{71ABC184-CCE0-A07D-F9A8-92DDE8589024}" name="Component">
+          <FILE id="FDPktI" name="ComponentConfigFile.cpp" compile="1" resource="0"
+                file="Source/Config Files/Component/ComponentConfigFile.cpp"/>
+          <FILE id="VIPq8u" name="ComponentConfigFile.h" compile="0" resource="0"
+                file="Source/Config Files/Component/ComponentConfigFile.h"/>
+          <FILE id="TWLeg9" name="ComponentConfigKeys.h" compile="0" resource="0"
+                file="Source/Config Files/Component/ComponentConfigKeys.h"/>
+          <FILE id="wljOnn" name="ComponentJSON.cpp" compile="1" resource="0"
+                file="Source/Config Files/Component/ComponentJSON.cpp"/>
+          <FILE id="otGVwO" name="ComponentJSON.h" compile="0" resource="0" file="Source/Config Files/Component/ComponentJSON.h"/>
+        </GROUP>
+        <GROUP id="{A1B399C5-3A9B-EFE3-1D4C-223F93E9566B}" name="Colour">
+          <FILE id="qkl5uS" name="ColourConfigFile.cpp" compile="1" resource="0"
+                file="Source/Config Files/Colour/ColourConfigFile.cpp"/>
+          <FILE id="xY2XIE" name="ColourConfigFile.h" compile="0" resource="0"
+                file="Source/Config Files/Colour/ColourConfigFile.h"/>
+          <FILE id="Gyqp2q" name="ColourConfigKeys.h" compile="0" resource="0"
+                file="Source/Config Files/Colour/ColourConfigKeys.h"/>
+          <FILE id="tupYKN" name="ColourJSON.cpp" compile="1" resource="0" file="Source/Config Files/Colour/ColourJSON.cpp"/>
+          <FILE id="NdqHUH" name="ColourJSON.h" compile="0" resource="0" file="Source/Config Files/Colour/ColourJSON.h"/>
+        </GROUP>
+        <GROUP id="{61EE16EA-0829-270B-A255-2C214D399ACC}" name="AppMenu">
+          <FILE id="DCzTro" name="AppConfigFile.cpp" compile="1" resource="0"
+                file="Source/Config Files/AppMenu/AppConfigFile.cpp"/>
+          <FILE id="IYWdZr" name="AppConfigFile.h" compile="0" resource="0" file="Source/Config Files/AppMenu/AppConfigFile.h"/>
+          <FILE id="yncgbN" name="AppConfigKeys.h" compile="0" resource="0" file="Source/Config Files/AppMenu/AppConfigKeys.h"/>
+          <FILE id="NBGdan" name="AppJSON.cpp" compile="1" resource="0" file="Source/Config Files/AppMenu/AppJSON.cpp"/>
+          <FILE id="He7OCW" name="AppJSON.h" compile="0" resource="0" file="Source/Config Files/AppMenu/AppJSON.h"/>
+        </GROUP>
         <FILE id="iRHEwR" name="ConfigAlertWindows.cpp" compile="1" resource="0"
               file="Source/Config Files/ConfigAlertWindows.cpp"/>
         <FILE id="v268RQ" name="ConfigAlertWindows.h" compile="0" resource="0"
               file="Source/Config Files/ConfigAlertWindows.h"/>
         <FILE id="s7mghU" name="JSONFile.cpp" compile="1" resource="0" file="Source/Config Files/JSONFile.cpp"/>
         <FILE id="BHOdLi" name="JSONFile.h" compile="0" resource="0" file="Source/Config Files/JSONFile.h"/>
-        <FILE id="qkl5uS" name="ColourConfigFile.cpp" compile="1" resource="0"
-              file="Source/Config Files/ColourConfigFile.cpp"/>
-        <FILE id="xY2XIE" name="ColourConfigFile.h" compile="0" resource="0"
-              file="Source/Config Files/ColourConfigFile.h"/>
-        <FILE id="dNgJxN" name="ConfigFile.cpp" compile="1" resource="0" file="Source/Config Files/ConfigFile.cpp"/>
-        <FILE id="sqDYSh" name="ConfigFile.h" compile="0" resource="0" file="Source/Config Files/ConfigFile.h"/>
-        <FILE id="DCzTro" name="AppConfigFile.cpp" compile="1" resource="0"
-              file="Source/Config Files/AppConfigFile.cpp"/>
-        <FILE id="IYWdZr" name="AppConfigFile.h" compile="0" resource="0" file="Source/Config Files/AppConfigFile.h"/>
-        <FILE id="FDPktI" name="ComponentConfigFile.cpp" compile="1" resource="0"
-              file="Source/Config Files/ComponentConfigFile.cpp"/>
-        <FILE id="VIPq8u" name="ComponentConfigFile.h" compile="0" resource="0"
-              file="Source/Config Files/ComponentConfigFile.h"/>
-        <FILE id="iCUbxT" name="MainConfigFile.cpp" compile="1" resource="0"
-              file="Source/Config Files/MainConfigFile.cpp"/>
-        <FILE id="N1gZuQ" name="MainConfigFile.h" compile="0" resource="0"
-              file="Source/Config Files/MainConfigFile.h"/>
+        <FILE id="dNgJxN" name="ConfigJSON.cpp" compile="1" resource="0" file="Source/Config Files/ConfigJSON.cpp"/>
+        <FILE id="sqDYSh" name="ConfigJSON.h" compile="0" resource="0" file="Source/Config Files/ConfigJSON.h"/>
       </GROUP>
       <GROUP id="{19EF72F0-004C-98C0-E6A4-143C67F2B66B}" name="FreeDesktop">
         <FILE id="Y2756N" name="XDGDirectories.cpp" compile="1" resource="0"
@@ -339,6 +363,8 @@
         <GROUP id="{B344B2B3-54B5-0A6A-4285-3E39C423A896}" name="Icon Themes">
           <FILE id="zBZMg7" name="IconCache.cpp" compile="1" resource="0" file="Source/FreeDesktop/Icon Themes/IconCache.cpp"/>
           <FILE id="pNIoHB" name="IconCache.h" compile="0" resource="0" file="Source/FreeDesktop/Icon Themes/IconCache.h"/>
+          <FILE id="M8FlwZ" name="IconLoader.cpp" compile="1" resource="0" file="Source/FreeDesktop/Icon Themes/IconLoader.cpp"/>
+          <FILE id="JdnTKT" name="IconLoader.h" compile="0" resource="0" file="Source/FreeDesktop/Icon Themes/IconLoader.h"/>
           <FILE id="gPlOWC" name="IconThemeIndex.cpp" compile="1" resource="0"
                 file="Source/FreeDesktop/Icon Themes/IconThemeIndex.cpp"/>
           <FILE id="M5TO7i" name="IconThemeIndex.h" compile="0" resource="0"
@@ -423,6 +449,30 @@
         <FILE id="b2jNEM" name="I2CBus.h" compile="0" resource="0" file="Source/PocketCHIP/I2CBus.h"/>
       </GROUP>
       <GROUP id="{3911B28B-4F73-61C8-49FD-75C1B19EC83E}" name="Util">
+        <GROUP id="{0D751F7C-CBE3-CB51-0E7F-436AFE2BD0C6}" name="SharedResource">
+          <FILE id="M1qebC" name="ScopedThreadWriteLock.cpp" compile="1" resource="0"
+                file="Source/Util/SharedResource/ScopedThreadWriteLock.cpp"/>
+          <FILE id="xHHOhS" name="ScopedThreadWriteLock.h" compile="0" resource="0"
+                file="Source/Util/SharedResource/ScopedThreadWriteLock.h"/>
+          <FILE id="yGbu9l" name="ScopedThreadReadLock.cpp" compile="1" resource="0"
+                file="Source/Util/SharedResource/ScopedThreadReadLock.cpp"/>
+          <FILE id="BzEWZb" name="ScopedThreadReadLock.h" compile="0" resource="0"
+                file="Source/Util/SharedResource/ScopedThreadReadLock.h"/>
+          <FILE id="XiD3rU" name="ThreadLock.cpp" compile="1" resource="0" file="Source/Util/SharedResource/ThreadLock.cpp"/>
+          <FILE id="dFDpOz" name="ThreadLock.h" compile="0" resource="0" file="Source/Util/SharedResource/ThreadLock.h"/>
+          <FILE id="WPePn7" name="ResourceListener.cpp" compile="1" resource="0"
+                file="Source/Util/SharedResource/ResourceListener.cpp"/>
+          <FILE id="Doo3j2" name="ResourceListener.h" compile="0" resource="0"
+                file="Source/Util/SharedResource/ResourceListener.h"/>
+          <FILE id="UYjztU" name="SharedResource.cpp" compile="1" resource="0"
+                file="Source/Util/SharedResource/SharedResource.cpp"/>
+          <FILE id="Ra7jPV" name="SharedResource.h" compile="0" resource="0"
+                file="Source/Util/SharedResource/SharedResource.h"/>
+          <FILE id="Yl2sdL" name="ResourceManager.cpp" compile="1" resource="0"
+                file="Source/Util/SharedResource/ResourceManager.cpp"/>
+          <FILE id="WuV2YN" name="ResourceManager.h" compile="0" resource="0"
+                file="Source/Util/SharedResource/ResourceManager.h"/>
+        </GROUP>
         <FILE id="HmnVgu" name="LaunchedApp.cpp" compile="1" resource="0" file="Source/Util/LaunchedApp.cpp"/>
         <FILE id="T5AXVq" name="LaunchedApp.h" compile="0" resource="0" file="Source/Util/LaunchedApp.h"/>
         <FILE id="Wa7niC" name="XWindowInterface.cpp" compile="1" resource="0"
@@ -434,10 +484,6 @@
         <FILE id="tbiPsS" name="ProcessUtils.h" compile="0" resource="0" file="Source/Util/ProcessUtils.h"/>
         <FILE id="U4ygJ9" name="AssetFiles.cpp" compile="1" resource="0" file="Source/Util/AssetFiles.cpp"/>
         <FILE id="cXrxti" name="AssetFiles.h" compile="0" resource="0" file="Source/Util/AssetFiles.h"/>
-        <FILE id="Yl2sdL" name="ResourceManager.cpp" compile="1" resource="0"
-              file="Source/Util/ResourceManager.cpp"/>
-        <FILE id="WuV2YN" name="ResourceManager.h" compile="0" resource="0"
-              file="Source/Util/ResourceManager.h"/>
         <FILE id="aeBK6f" name="LocalizedTime.cpp" compile="1" resource="0"
               file="Source/Util/LocalizedTime.cpp"/>
         <FILE id="o6D28t" name="LocalizedTime.h" compile="0" resource="0" file="Source/Util/LocalizedTime.h"/>
@@ -457,6 +503,13 @@
         <FILE id="bl4AYP" name="AppLauncher.h" compile="0" resource="0" file="Source/Util/AppLauncher.h"/>
       </GROUP>
       <GROUP id="{E98D5B9C-4E34-6090-B2F4-D1F92AFB0C81}" name="Wifi">
+        <FILE id="xI9ufo" name="AccessPointState.h" compile="0" resource="0"
+              file="Source/Wifi/AccessPointState.h"/>
+        <FILE id="FU08mo" name="WifiState.h" compile="0" resource="0" file="Source/Wifi/WifiState.h"/>
+        <FILE id="VgRe6V" name="NetworkInterface.cpp" compile="1" resource="0"
+              file="Source/Wifi/NetworkInterface.cpp"/>
+        <FILE id="tQPQ7a" name="NetworkInterface.h" compile="0" resource="0"
+              file="Source/Wifi/NetworkInterface.h"/>
         <FILE id="oqvpyg" name="LibNMInterface.cpp" compile="1" resource="0"
               file="Source/Wifi/LibNMInterface.cpp"/>
         <FILE id="eWhlRs" name="LibNMInterface.h" compile="0" resource="0"

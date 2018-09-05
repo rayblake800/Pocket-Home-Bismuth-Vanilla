@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include "ResourceManager.h"
+#include "SharedResource.h"
 #include "JSONFile.h"
 #include "JuceHeader.h"
 #include "ConfigAlertWindows.h"
@@ -39,7 +39,7 @@
  * external changes to the file that occur while the program is running will
  * most likely be ignored and may be overwritten.
  */
-class ConfigFile : public ResourceManager::SharedResource
+class ConfigFile : public SharedResource
 {
 protected:
     /**

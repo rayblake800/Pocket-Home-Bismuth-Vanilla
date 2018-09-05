@@ -364,8 +364,12 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
     //wifiLock must not be acquired in the GLib thread!
     MessageManager::callAsync([this, connection, isNew]()
     {
+        WifiStateManager stateManager;
+        if(stateManager.validNetworkInterface(this))
+        {
         ScopedWriteLock updateLock(wifiLock);
-        switch(connection.getConnectionState())
+        switch(connection.getConnectionState()):w
+        
         {
             case NM_ACTIVE_CONNECTION_STATE_UNKNOWN:
                 DBG("LibNMInterface::openingConnection"
