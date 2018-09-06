@@ -137,7 +137,7 @@ protected:
      *                       connected to this SharedResource, passing in a
      *                       pointer to the Handler as a parameter.
      */
-    void foreachHandler(std::function<void(Handler*)> handlerAction);
+    void foreachHandler(std::function<void(const Handler*)> handlerAction);
 
 private:
     /*

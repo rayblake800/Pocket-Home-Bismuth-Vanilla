@@ -62,21 +62,25 @@ SharedResource::Handler::~Handler()
 {
     using namespace juce;
     const ScopedThreadWriteLock cleanupLock(getResourceLock());
-    classResource->resourceManagers.removeAllInstancesOf(this);
-    if(classResource->resourceManagers.isEmpty())
+    SharedResource* classResource = getClassResource();
+    classResource->resourceHandlers.removeAllInstancesOf(this);
+    if(classResource->resourceHandlers.isEmpty())
     {
-        classResource = nullptr;
+        const ScopedWriteLock removalLock(resourceMapLock);
+        resourceMap[resourceKey] = nullptr;
     }
+
 }
 
 /*
  * Gets a reference to the SharedResource object shared by all
  * objects of this ResourceManager subclass.
  */
-juce::ScopedPointer<SharedResource>&
+SharedResource*
 SharedResource::ResourceManager::getClassResource()
 {
-    return classResource;
+    const juce::ScopedReadLock mapLock(resourceMapLock);
+    return resourceMap[resourceKey].get();
 }
 
 /**
@@ -85,7 +89,7 @@ SharedResource::ResourceManager::getClassResource()
  */
 juce::ReadWriteLock& SharedResource::ResourceManager::getResourceLock()
 {
-    return resourceLock;
+    return getClassResource()->resourceLock;;
 }
 
 /*
@@ -137,7 +141,16 @@ std::function<void()> SharedResource::buildAsyncFunction(
  * SharedResource.i
  */
 void SharedResource::foreachHandler
-(std::function<void(Handler*)> handlerAction)
+(std::function<void(const Handler*)> handlerAction)
 {
-    ScopedThreadWriteLock handlerLock(lockType);
+    ScopedThreadWriteLock handlerLock(resourceLock);
+    const int handlerCount = resourceHandlers.size();
+    for(int i = 0; i < handlerCount; i++)
+    {
+        //ensure nothing is messing with the handler list during the loop
+        jassert(resourceHandlers.size() == handlerCount);
+        handlerAction(resourceHandlers[i]);
+
+    }
 }
+
