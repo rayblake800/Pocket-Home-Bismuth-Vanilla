@@ -57,12 +57,14 @@ private:
     // Handles lock/unlock mechanics
     juce::ReadWriteLock lock;
     
-    // Prevents concurrent access to thread-lock data
+    // Prevents concurrent access to thread-lock data members below
     juce::CriticalSection metaLock;
     // Thread id of the last thread to acquire a thread-lock
     juce::Thread::ThreadID lockingThread;
     // The number of thread locks currently held
     int threadLockCount = 0;
+    //map of all threads holding read locks
+    std::map<juce::Thread::ThreadID, int> readLockMap;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ThreadLock)
 };
