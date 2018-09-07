@@ -3,50 +3,32 @@
 #include "SharedResource.h"
 
 /**
- * @file ResourceManager.h
+ * @file ResourceHandler.h
  *
- * @brief Provides a more convenient interface for 
- *        SharedResource::ResourceManager objects, interacting with their
- *        specific SharedResource type.
+ * @brief  Provides a more convenient interface for SharedResource::Handler 
+ *         objects, interacting with their specific SharedResource type.
  *
  * @tparam ResourceType  The type of SharedResource class managed by the
- *                       ResourceManager.
+ *                       ResourceHandler.
  */
 
 template <class ResourceType>
-class ResourceManager : private SharedResource::ResourceManager
+class ResourceHandler : private SharedResource::Handler
 {
 protected:
     /**
-     * @param classResource    This must be a reference to a static 
-     *                         ScopedPointer that will hold the class 
-     *                         SharedResource. This will initialize the 
-     *                         resource if necessary, and add the 
-     *                         ResourceManager to the SharedResource's 
-     *                         reference. 
-     *                        
-     *                         ResourceManager instances should never directly
-     *                         access the classResource ScopedPointer.
-     * 
-     * @param resourceLock     A reference to a static ReadWriteLock used to 
-     *                         control access to the SharedResource.  
-     *                         
-     *                         ResourceManager instances should never directly
-     *                         access the resourceLock.
-     * 
-     * @param createResource   This function will be used to create the 
-     *                         SharedResource if necessary.  This should not
-     *                         acquire the resource lock.
+     * @param resourceKey     The unique key string identifying the ResourceType
+     *                        SharedResource.
+     *
+     * @param createResource  A function that will create the resource if it
+     *                        has not yet been initialized.
      */
-    ResourceManager(
-            juce::ScopedPointer<SharedResource>& classResource,
-            juce::ReadWriteLock& resourceLock,
-            std::function<ResourceType*()> createResource) :
-    SharedResource::ResourceManager(classResource, resourceLock, createResource)
-    { }
+    ResourceHandler(const juce::Identifier& resourceKey,
+            const std::function<SharedResource*()> createResource) :
+    SharedResource::Handler(resourceKey, createResource) { }
 
 public:
-    virtual ~ResourceManager() { }
+    virtual ~ResourceHandler() { }
 
 protected:
     /**
@@ -57,19 +39,19 @@ protected:
     {
     private:
         //Disallow direct creation of LockedResourcePtr objects.
-        friend class ResourceManager;
+        friend class ResourceHandler;
 
         /**
          * Create the pointer, locking the SharedResource for reading.
          *
-         * @param resourceManager  The ResourceManager creating this pointer.
+         * @param resourceManager  The ResourceHandler creating this pointer.
          *
          * @param lockType         Sets if the resource will be locked for
          *                         writing, blocking all other access, or locked
          *                         for reading, only blocking write attempts.
          */
         LockedResourcePtr
-        (ResourceManager& resourceManager, SharedResource::LockType lockType) : 
+        (ResourceHandler& resourceManager, SharedResource::LockType lockType) : 
         resourceManager(resourceManager), lockType(lockType)
         {
             switch(lockType)
@@ -136,7 +118,7 @@ protected:
 
     private:
         // Used to access the SharedResource and lock.
-        ResourceManager& resourceManager;
+        ResourceHandler& resourceManager;
 
         // Indicates the lock type.
         const SharedResource::LockType lockType;
@@ -145,7 +127,7 @@ protected:
 
     /**
      * Gets a pointer to the class resource, locking it for reading.
-     * ResourceManagers should use this to access their SharedResource whenever
+     * ResourceHandlers should use this to access their SharedResource whenever
      * they need to read data from it without changing it.
      *
      * @return  A read-locked pointer to the class SharedResource.
@@ -157,7 +139,7 @@ protected:
 
     /**
      * Gets a pointer to the class resource, locking it for writing.
-     * ResourceManagers should use this to access their SharedResource whenever
+     * ResourceHandlers should use this to access their SharedResource whenever
      * they need to write to (or otherwise change) the resource.
      *
      * @return  A write-locked pointer to the class SharedResource.

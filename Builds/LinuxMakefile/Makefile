@@ -140,13 +140,18 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/PokeLookAndFeel_14171995.o \
   $(JUCE_OBJDIR)/LayoutManager_6a2c5f53.o \
   $(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o \
-  $(JUCE_OBJDIR)/MainConfigFile_ecd30980.o \
+  $(JUCE_OBJDIR)/ConfigKey_75384910.o \
+  $(JUCE_OBJDIR)/MainConfigKeys_379445f8.o \
   $(JUCE_OBJDIR)/MainJSON_7d61af2a.o \
   $(JUCE_OBJDIR)/ComponentConfigFile_340680dc.o \
+  $(JUCE_OBJDIR)/ComponentConfigKeys_7ec7bd54.o \
   $(JUCE_OBJDIR)/ComponentJSON_30e8db86.o \
   $(JUCE_OBJDIR)/ColourConfigFile_64de91a0.o \
+  $(JUCE_OBJDIR)/ColourConfigKeys_af9fce18.o \
   $(JUCE_OBJDIR)/ColourJSON_a63dcf4a.o \
   $(JUCE_OBJDIR)/AppConfigFile_38950ae3.o \
+  $(JUCE_OBJDIR)/AppFolder_a44c0b73.o \
+  $(JUCE_OBJDIR)/AppShortcut_82838b4b.o \
   $(JUCE_OBJDIR)/AppJSON_bd8d36cd.o \
   $(JUCE_OBJDIR)/ConfigAlertWindows_cf8924c0.o \
   $(JUCE_OBJDIR)/JSONFile_f406f23b.o \
@@ -179,9 +184,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/ScopedThreadWriteLock_777c0162.o \
   $(JUCE_OBJDIR)/ScopedThreadReadLock_9b17abb3.o \
   $(JUCE_OBJDIR)/ThreadLock_fe58c0d.o \
-  $(JUCE_OBJDIR)/ResourceListener_4637dbda.o \
   $(JUCE_OBJDIR)/SharedResource_6871b0cb.o \
-  $(JUCE_OBJDIR)/ResourceManager_cda0a351.o \
   $(JUCE_OBJDIR)/LaunchedApp_9de9080b.o \
   $(JUCE_OBJDIR)/XWindowInterface_b020667f.o \
   $(JUCE_OBJDIR)/ProcessUtils_6fe72270.o \
@@ -586,9 +589,14 @@ $(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o: ../../Source/Components/Transition
 	@echo "Compiling TransitionAnimator.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/MainConfigFile_ecd30980.o: ../../Source/Config\ Files/Main/MainConfigFile.cpp
+$(JUCE_OBJDIR)/ConfigKey_75384910.o: ../../Source/Config\ Files/ConfigKey.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling MainConfigFile.cpp"
+	@echo "Compiling ConfigKey.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/MainConfigKeys_379445f8.o: ../../Source/Config\ Files/Main/MainConfigKeys.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling MainConfigKeys.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/MainJSON_7d61af2a.o: ../../Source/Config\ Files/Main/MainJSON.cpp
@@ -601,6 +609,11 @@ $(JUCE_OBJDIR)/ComponentConfigFile_340680dc.o: ../../Source/Config\ Files/Compon
 	@echo "Compiling ComponentConfigFile.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/ComponentConfigKeys_7ec7bd54.o: ../../Source/Config\ Files/Component/ComponentConfigKeys.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ComponentConfigKeys.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/ComponentJSON_30e8db86.o: ../../Source/Config\ Files/Component/ComponentJSON.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ComponentJSON.cpp"
@@ -611,6 +624,11 @@ $(JUCE_OBJDIR)/ColourConfigFile_64de91a0.o: ../../Source/Config\ Files/Colour/Co
 	@echo "Compiling ColourConfigFile.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/ColourConfigKeys_af9fce18.o: ../../Source/Config\ Files/Colour/ColourConfigKeys.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ColourConfigKeys.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/ColourJSON_a63dcf4a.o: ../../Source/Config\ Files/Colour/ColourJSON.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ColourJSON.cpp"
@@ -619,6 +637,16 @@ $(JUCE_OBJDIR)/ColourJSON_a63dcf4a.o: ../../Source/Config\ Files/Colour/ColourJS
 $(JUCE_OBJDIR)/AppConfigFile_38950ae3.o: ../../Source/Config\ Files/AppMenu/AppConfigFile.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppConfigFile.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AppFolder_a44c0b73.o: ../../Source/Config\ Files/AppMenu/AppFolder.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AppFolder.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AppShortcut_82838b4b.o: ../../Source/Config\ Files/AppMenu/AppShortcut.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AppShortcut.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AppJSON_bd8d36cd.o: ../../Source/Config\ Files/AppMenu/AppJSON.cpp
@@ -781,19 +809,9 @@ $(JUCE_OBJDIR)/ThreadLock_fe58c0d.o: ../../Source/Util/SharedResource/ThreadLock
 	@echo "Compiling ThreadLock.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/ResourceListener_4637dbda.o: ../../Source/Util/SharedResource/ResourceListener.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ResourceListener.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/SharedResource_6871b0cb.o: ../../Source/Util/SharedResource/SharedResource.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling SharedResource.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/ResourceManager_cda0a351.o: ../../Source/Util/SharedResource/ResourceManager.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ResourceManager.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/LaunchedApp_9de9080b.o: ../../Source/Util/LaunchedApp.cpp

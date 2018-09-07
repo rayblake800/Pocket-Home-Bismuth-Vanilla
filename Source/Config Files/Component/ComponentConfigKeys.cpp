@@ -1,11 +1,11 @@
 /*
   ==============================================================================
 
-    AppConfigKeys.h
-    Created: 4 Sep 2018 3:43:14pm
+    ComponentConfigKeys.cpp
+    Created: 6 Sep 2018 9:30:10pm
     Author:  anthony
 
   ==============================================================================
 */
 
-#pragma once
+#include "ComponentConfigKeys.h"

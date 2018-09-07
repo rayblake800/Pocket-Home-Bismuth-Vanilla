@@ -1,12 +1,15 @@
 #include "AssetFiles.h"
-#include "ConfigFile.h"
+#include "ConfigJSON.h"
 
 
 /*
- * This constructor should only be called when constructing ConfigFile
+ * This constructor should only be called when constructing ConfigJSON
  * subclasses.
  */
-ConfigFile::ConfigFile(juce::String configFilename) :
+ConfigJSON::ConfigJSON(
+        const juce::Identifier& resourceKey,
+        const juce::String& configFilename) :
+SharedResource(resourceKey), 
 filename(configFilename),
 configJson(configPath + filename),
 defaultJson(defaultAssetPath + filename) { }
@@ -15,7 +18,7 @@ defaultJson(defaultAssetPath + filename) { }
 /*
  * Writes any pending changes to the file before destruction.
  */
-ConfigFile::~ConfigFile()
+ConfigJSON::~ConfigJSON()
 {
     writeChanges();
 }
@@ -24,7 +27,7 @@ ConfigFile::~ConfigFile()
  * Sets a configuration data value back to its default setting.  If this
  * changes the value, listeners will be notified and changes will be saved.
  */
-void ConfigFile::restoreDefaultValue(juce::String key)
+void ConfigJSON::restoreDefaultValue(const juce::Identifier& key)
 {
     using namespace juce;
     //Check key validity, find expected data type
@@ -42,7 +45,7 @@ void ConfigFile::restoreDefaultValue(juce::String key)
     }
     if(!keyFound)
     {
-        DBG("ConfigFile::" << __func__ << ": Key \"" << key 
+        DBG("ConfigJSON::" << __func__ << ": Key \"" << key 
                 << "\" is not expected in " << filename);
         throw BadKeyException(key);
     }
@@ -69,12 +72,12 @@ void ConfigFile::restoreDefaultValue(juce::String key)
     }
     catch(JSONFile::FileException e)
     {
-        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+        DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
         alertWindows.showPlaceholderError(e.getErrorMessage());
     }
     catch(JSONFile::TypeException e)
     {
-        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+        DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
         alertWindows.showPlaceholderError(e.getErrorMessage());
     }
 }
@@ -84,182 +87,152 @@ void ConfigFile::restoreDefaultValue(juce::String key)
  * updated values will notify their Listeners and be written to the JSON
  * file.
  */
-void ConfigFile::restoreDefaultValues()
+void ConfigJSON::restoreDefaultValues()
 {
     using namespace juce;
-    const std::vector<DataKey>& keys = getDataKeys();
-    for(const DataKey& key : keys)
+    const std::vector<ConfigKey>& keys = getConfigKeys();
+    for(const ConfigKey& key : keys)
     {
         try
         {
             switch(key.dataType)
             {
-                case stringType:
-                    setConfigValue<String>(key.keyString,
-                            defaultJson.getProperty<String>(key.keyString));
+                case ConfigKey::stringType:
+                    setConfigValue<String>(key,
+                            defaultJson.getProperty<String>(key));
                     break;
-                case intType:
-                    setConfigValue<int>(key.keyString,
-                            defaultJson.getProperty<int>(key.keyString));
+                case ConfigKey::intType:
+                    setConfigValue<int>(key,
+                            defaultJson.getProperty<int>(key));
                     break;
-                case boolType:
-                    setConfigValue<bool>(key.keyString,
-                            defaultJson.getProperty<bool>(key.keyString));
+                case ConfigKey::boolType:
+                    setConfigValue<bool>(key,
+                            defaultJson.getProperty<bool>(key));
                     break;
-                case doubleType:
-                    setConfigValue<double>(key.keyString,
-                            defaultJson.getProperty<double>(key.keyString));
+                case ConfigKey::doubleType:
+                    setConfigValue<double>(key,
+                            defaultJson.getProperty<double>(key));
                     break;
             }
         }
         catch(JSONFile::FileException e)
         {
-            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
             alertWindows.showPlaceholderError(e.getErrorMessage());
         }
         catch(JSONFile::TypeException e)
         {
-            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
             alertWindows.showPlaceholderError(e.getErrorMessage());
         }
     }
     writeChanges();
 }
 
-/*
- * Listeners safely remove themselves from all tracked ConfigFiles when
- * they are destroyed.
- */
-ConfigFile::Listener::~Listener()
-{
-    using namespace juce;
-    const ScopedLock removalLock(configKeyAccess);
-    while (configKeyMap.begin() != configKeyMap.end())
-    {
-        ConfigFile* trackedConfig = configKeyMap.begin()->first;
-        const ScopedUnlock removeUnlock(configKeyAccess);
-        trackedConfig->removeListener(this);
-    }
-}
+ConfigJSON::Listener::Listener(
+        const juce::Identifier& configJSONKey,
+        const std::function<SharedResource*()> initJSON) :
+ResourceHandler<ConfigJSON>(configJSONKey, initJSON) { }
+
 
 /*
  * Calls configValueChanged() for every key tracked by this listener.
  */
-void ConfigFile::Listener::loadAllConfigProperties()
+void ConfigJSON::Listener::loadAllConfigProperties()
 {
     using namespace juce;
-    const ScopedLock updateLock(configKeyAccess);
-    for (auto it = configKeyMap.begin(); it != configKeyMap.end(); it++)
+    //Copy keys in case the key list changes during configValueChanged() calls.
+    Array<Identifier> notifyKeys;
     {
-        for (const String& key : it->second)
-        {
-            const ScopedUnlock notifyUnlock(configKeyAccess);
-            configValueChanged(key);
-        }
+        const ScopedLock updateLock(subscribedKeys.getLock());
+        notifyKeys.addArray(subscribedKeys);
     }
+    for (const Identifier& key : notifyKeys)
+    {
+       configValueChanged(key);
+    }
+}
+/*
+ * Subscribe to receive updates on a ConfigJSON value.
+ */
+void ConfigJSON::Listener::subscribeToKey
+(const juce::Identifier& keyToTrack)
+{
+    using namespace juce;
+    const ScopedLock keyListLock(subscribedKeys.getLock());
+    subscribedKeys.add(keyToTrack);
 }
 
 /*
- * Adds a listener to the list of objects to notify when config values
- * change.
+ * Unsubscribe from updates on a ConfigJSON value.
  */
-void ConfigFile::addListener(ConfigFile::Listener* listener,
-        juce::StringArray trackedKeys)
+void ConfigJSON::Listener::unsubscribeFromKey
+(const juce::Identifier& keyToRemove)
 {
     using namespace juce;
-    const ScopedLock keyMapLock(listener->configKeyAccess);
-    listener->configKeyMap[this].mergeArray(trackedKeys,false);
-    const ScopedUnlock keyMapUnlock(listener->configKeyAccess);
-    for (const String& key : trackedKeys)
-    {
-        keyListeners[key].addIfNotAlreadyThere(listener);
-    }
+    const ScopedLock keyListLock(subscribedKeys.getLock());
+    subscribedKeys.removeAllInstancesOf(keyToRemove);
 }
 
-/*
- * Removes a listener from this ConfigFile.
- */
-void ConfigFile::removeListener(ConfigFile::Listener* listener)
-{
-    using namespace juce;
-    const ScopedLock keyMapLock(listener->configKeyAccess);
-    StringArray trackedKeys = listener->configKeyMap[this];
-    listener->configKeyMap.erase(this);
-    const ScopedUnlock keyMapUnlock(listener->configKeyAccess);
-    const ScopedLock lock(listenerLock);
-    for (const String& key : trackedKeys)
-    {
-        keyListeners[key].removeAllInstancesOf(listener);
-        notificationQueue[key].removeAllInstancesOf(listener);
-    }
-}
 
 /*
  * Announce new changes to each object tracking a particular key.
  */
-void ConfigFile::notifyListeners(juce::String key)
+void ConfigJSON::notifyListeners(const juce::Identifier& key)
 {
     using namespace juce;
-    const ScopedLock lock(listenerLock);
-    
-    /* In other Listener implementations, it's necessary to wait until the queue
-     * is empty, to prevent this notification event from interfering with
-     * others. Since these notifications are separated by key, that's not
-     * necessary here.
-     */ 
-    notificationQueue[key].addArray(keyListeners[key]);
-    while(!notificationQueue[key].isEmpty())
+    foreachHandler([this, &key](Handler* handler)
     {
-        Listener* toNotify = notificationQueue[key].removeAndReturn(
-                notificationQueue[key].size() - 1);
-        const ScopedUnlock signalUnlock(listenerLock);
-        const MessageManagerLock mmLock;
-        toNotify->configValueChanged(key);
-    }
+        Listener* toNotify = dynamic_cast<Listener*>(handler);
+        if(toNotify != nullptr)
+        {
+            toNotify->configValueChanged(key);
+        }
+    });
 }
 
 /*
  * Loads all initial configuration data from the JSON config file. This 
  * checks for all expected data keys, and replaces any missing or invalid
- * values with ones from the default config file. ConfigFile subclasses
+ * values with ones from the default config file. ConfigJSON subclasses
  * should call this once, after they load any custom object or array data.
  */
-void ConfigFile::loadJSONData()
+void ConfigJSON::loadJSONData()
 {
     using namespace juce;
-    const std::vector<DataKey>& dataKeys = getDataKeys();
-    for (const DataKey& key : dataKeys)
+    const std::vector<ConfigKey>& keys = getConfigKeys();
+    for (const ConfigKey& key : keys)
     {
         try
         {
             switch (key.dataType)
             {
-                case stringType:
-                    initProperty<String>(key.keyString);
+                case ConfigKey::stringType:
+                    initProperty<String>(key);
                     break;
-                case intType:
-                    initProperty<int>(key.keyString);
+                case ConfigKey::intType:
+                    initProperty<int>(key);
                     break;
-                case boolType:
-                    initProperty<bool>(key.keyString);
+                case ConfigKey::boolType:
+                    initProperty<bool>(key);
                     break;
-                case doubleType:
-                    initProperty<double>(key.keyString);
+                case ConfigKey::doubleType:
+                    initProperty<double>(key);
                     break;
                 default:
-                    DBG("ConfigFile::" << __func__ 
-                            << ": Unexpected type for key \"" << key.keyString
+                    DBG("ConfigJSON::" << __func__ 
+                            << ": Unexpected type for key \"" << key.key
                             << "\n in file " << filename);
             }
         }
         catch(JSONFile::FileException e)
         {
-            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
             alertWindows.showPlaceholderError(e.getErrorMessage());
         }
         catch(JSONFile::TypeException e)
         {
-            DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+            DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
             alertWindows.showPlaceholderError(e.getErrorMessage());
         }
     }
@@ -267,14 +240,14 @@ void ConfigFile::loadJSONData()
 }
  
 /*
- * Checks if a key string is valid for this ConfigFile.
+ * Checks if a key string is valid for this ConfigJSON.
  */
-bool ConfigFile::isValidKey(const juce::String& key) const
+bool ConfigJSON::isValidKey(const juce::Identifier& key) const
 {
-    const std::vector<DataKey>& dataKeys = getDataKeys();
-    for(const DataKey& dataKey : dataKeys)
+    const std::vector<ConfigKey>& keys = getConfigKeys();
+    for(const ConfigKey& configKey : keys)
     {
-        if(dataKey.keyString == key)
+        if(configKey.key == key)
         {
             return true;
         }
@@ -286,7 +259,7 @@ bool ConfigFile::isValidKey(const juce::String& key) const
  * Re-writes all data back to the config file, as long as there are
  * changes to write.
  */
-void ConfigFile::writeChanges()
+void ConfigJSON::writeChanges()
 {
     using namespace juce;
     writeDataToJSON();
@@ -296,12 +269,12 @@ void ConfigFile::writeChanges()
     }
     catch(JSONFile::FileException e)
     {
-        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+        DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
         alertWindows.showPlaceholderError(e.getErrorMessage());
     }
     catch(JSONFile::TypeException e)
     {
-        DBG("ConfigFile::" << __func__ << ": " << e.getErrorMessage());
+        DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
         alertWindows.showPlaceholderError(e.getErrorMessage());
     }
 }

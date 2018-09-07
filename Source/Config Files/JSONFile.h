@@ -63,7 +63,7 @@ public:
      * 
      * @throws TypeException   If no property with type T was found.
      */
-    template<typename T > T getProperty(const juce::String& key)
+    template<typename T > T getProperty(const juce::Identifier& key)
     {
         using namespace juce;
         readFileIfUnopened();
@@ -73,7 +73,7 @@ public:
             throw TypeException(getTypeName<T>(), "void", key);
         }
         
-        var property = jsonData[Identifier(key)];
+        var property = jsonData[key];
         typeCheck<T>(property, key);
         return extractProperty<T>(property);
     }
@@ -95,7 +95,8 @@ public:
      * @throws TypeException  If a property exists that shares this key but is 
      *                        not of type T.
      */
-    template<typename T > bool setProperty(const juce::String& key, T newValue)
+    template<typename T > bool setProperty
+    (const juce::Identifier& key, T newValue)
     {
         using namespace juce;
         readFileIfUnopened();
@@ -103,7 +104,7 @@ public:
         var newProperty(newValue);
         if(jsonData.hasProperty(key))
         {
-            var oldProperty = jsonData[Identifier(key)];
+            var oldProperty = jsonData[key];
             if(oldProperty == newProperty)
             {
                 return false;
@@ -125,7 +126,7 @@ public:
      * 
      * @return  True iff a value of type T exists at the given key.
      */
-    template<typename T> bool propertyExists(const juce::String& key)
+    template<typename T> bool propertyExists(const juce::Identifier& key)
     {
         using namespace juce;
         readFileIfUnopened();
@@ -214,7 +215,7 @@ public:
          *                      error.
          */
         TypeException(juce::String expectedType, juce::String foundType,
-                juce::String key) :
+                juce::Identifier key) :
                 expectedType(expectedType),
                 foundType(foundType),
                 key(key) { }
@@ -246,7 +247,7 @@ public:
          * 
          * @return  The property key string.
          */
-        juce::String getPropertyKey()
+        juce::Identifier getPropertyKey()
         {
             return key;
         }
@@ -266,9 +267,9 @@ public:
         }
         
     private:
-        juce::String expectedType;
-        juce::String foundType;
-        juce::String key;
+        const juce::String     expectedType;
+        const juce::String     foundType;
+        const juce::Identifier key;
     };
     
 private:
@@ -288,7 +289,7 @@ private:
      *                         of type T.
      */
     template<typename T > void typeCheck
-    (const juce::var& property, const juce::String& key)
+    (const juce::var& property, const juce::Identifier& key)
     {
         using namespace juce;
         String expected = getTypeName<T>();

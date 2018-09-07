@@ -59,6 +59,8 @@ public:
     class Handler
     {
     protected:
+        /* Allow SharedResource to construct generic Handler objects. */
+        friend class SharedResource;
         /**
          * Creates a new Handler for a SharedResource, initializing the resource
          * if necessary.
@@ -70,14 +72,14 @@ public:
          *                        has not yet been initialized.
          */
         Handler(const juce::Identifier& resourceKey,
-                std::function<SharedResource*()> createResource);
+                const std::function<SharedResource*()> createResource);
     
     public:
         /**
          * Removes a handler from the handler list, destroying the resource if
          * no handlers remain.
          */
-        ~Handler();
+        virtual ~Handler();
 
     protected:
         /**
@@ -137,7 +139,7 @@ protected:
      *                       connected to this SharedResource, passing in a
      *                       pointer to the Handler as a parameter.
      */
-    void foreachHandler(std::function<void(const Handler*)> handlerAction);
+    void foreachHandler(std::function<void(Handler*)> handlerAction);
 
 private:
     /*
@@ -145,7 +147,7 @@ private:
      * is used to ensure the SharedResource is never destroyed before all of its
      * Manager objects.
      */
-    juce::Array<const SharedResource::Handler*> resourceHandlers;
+    juce::Array<SharedResource::Handler*> resourceHandlers;
 
     /*
      * The lock used to control access to this SharedResource.

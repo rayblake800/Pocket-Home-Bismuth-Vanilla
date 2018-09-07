@@ -1,10 +1,9 @@
 #include "NetworkInterface.h"
 
+/* SharedResource type key */
+const juce::Identifier NetworkInterface::resourceKey = "NetworkInterface";
 
-NetworkInterface::NetworkInterface(
-        juce::ScopedPointer<SharedResource>& instanceHolder,
-        juce::ReadWriteLock& wifiLock) : 
-SharedResource(instanceHolder, wifiLock) { }
+NetworkInterface::NetworkInterface() : SharedResource(resourceKey) { }
 
 /*
  * Gets the current state of the wifi device.
@@ -29,49 +28,18 @@ void NetworkInterface::setWifiState(WifiState state)
         std::function<void()> setState = buildAsyncFunction(
                 SharedResource::write, [this, state]()
                 {
-                    jassert(notifyQueue.isEmpty());
-                    notifyQueue = listeners;
-                    while(!notifyQueue.isEmpty())
+                    foreachHandler([this, state](Handler* handler)
                     {
-                        Listener* toNotify = notifyQueue
-                                .removeAndReturn(notifyQueue.size() - 1);
-                        toNotify->wifiStateChanged(state);
-                    }
+                        
+                        Listener* toNotify = dynamic_cast<Listener*>(handler);
+                        if(toNotify != nullptr)
+                        {
+                            toNotify->wifiStateChanged(state);
+                        }
+                    });
                 });
         MessageManager::callAsync(setState);
     }
-}
-
-/*
- * Add a listener to the list of objects receiving updates whenever Wifi state 
- * changes.
- */
-void NetworkInterface::addListener
-(NetworkInterface::Listener* listener)
-{
-    listeners.add(listener);
-}
-
-/*
- * Searches the list of registered listeners for a particular one, and removes
- * it if it's found. 
- */
-void NetworkInterface::removeListener
-(Listener* listener)
-{
-    listeners.removeAllInstancesOf(listener);
-}
-
-
-/*
- * On destruction, listeners will remove themselves from
- * their NetworkInterface if necessary.
- */
-NetworkInterface::Listener::~Listener()
-{
-    auto networkInterface = 
-    WifiStateManager stateManager;
-    stateManager.removeListener(this);
 }
 
 /*
@@ -83,11 +51,9 @@ NetworkInterface::Listener::~Listener()
 void NetworkInterface::confirmWifiState()
 {
     using namespace juce;
-    wifiLock.enterRead();
     bool wifiConnecting = isWifiConnecting();
     bool wifiConnected = isWifiConnected();
     WifiState state = getWifiState();
-    wifiLock.exitRead();
     
     if(!wifiDeviceFound())
     {
@@ -120,7 +86,6 @@ void NetworkInterface::confirmWifiState()
                     << wifiStateString(state)
                     << ", but wifi is connecting.");
             setWifiState(connecting);
-            const ScopedWriteLock timerLock(wifiLock);
             if (!isTimerRunning())
             {
                 startTimer(wifiConnectionTimeout);
@@ -136,7 +101,6 @@ void NetworkInterface::confirmWifiState()
                     << wifiStateString(state)
                     << ", but wifi is connected.");
             setWifiState(connected);
-            const ScopedWriteLock timerLock(wifiLock);
             if (!isTimerRunning())
             {
                 startTimer(wifiConnectionTimeout);
@@ -161,7 +125,6 @@ void NetworkInterface::confirmWifiState()
  */
 void NetworkInterface::signalWifiConnecting()
 {
-    wifiLock.enterWrite();
     WifiState wifiState = getWifiState();
     if (wifiState != connecting)
     {
@@ -169,12 +132,7 @@ void NetworkInterface::signalWifiConnecting()
                 << ": started to connect during state "
                 << wifiStateString(wifiState));
         startTimer(wifiConnectionTimeout);
-        wifiLock.exitWrite();
         setWifiState(connecting);
-    }
-    else
-    {
-        wifiLock.exitWrite();
     }
 }
 
@@ -203,10 +161,7 @@ void NetworkInterface::signalConnectionFailed()
     {
         case connecting:
             DBG("NetworkInterface::" << __func__ << ": connection failed.");
-            {
-                const ScopedWriteLock timerLock(wifiLock);
-                stopTimer();
-            }
+            stopTimer();
             setWifiState(enabled);
             return;
         default:
@@ -223,11 +178,9 @@ void NetworkInterface::signalConnectionFailed()
  */
 void NetworkInterface::signalWifiDisconnected()
 {
-    wifiLock.enterWrite();
     //DBG("NetworkInterface::" << __func__ << ": wifi disconnected");
     stopTimer();
     WifiState currentState = getWifiState();
-    wifiLock.exitWrite();
     
     switch (currentState)
     {
@@ -255,9 +208,8 @@ void NetworkInterface::signalWifiEnabled()
 {
     using namespace juce;
     //DBG("NetworkInterface::" << __func__ << ": wifi enabled");
-    setWifiState(enabled);
-    const ScopedWriteLock timerLock(wifiLock);
     stopTimer();
+    setWifiState(enabled);
 }
 
 /*
@@ -269,12 +221,10 @@ void NetworkInterface::signalWifiDisabled()
 {
     using namespace juce;
     //DBG("NetworkInterface::" << __func__ << ": wifi disabled");
-    setWifiState(disabled);
-    const ScopedWriteLock timerLock(wifiLock);
     stopTimer();
+    setWifiState(disabled);
 }
 
-        
 /*
  * When wifi is connecting and a missing psk is required, the 
  * NetworkInterface should call this to notify its WifiStateManager.
@@ -283,9 +233,8 @@ void NetworkInterface::signalPskNeeded()
 {
     using namespace juce;
     //DBG("NetworkInterface::" << __func__ << ": missing password");
-    setWifiState(missingPassword);
-    const ScopedWriteLock timerLock(wifiLock);
     stopTimer();
+    setWifiState(missingPassword);
 }
      
 /*
@@ -296,29 +245,19 @@ void NetworkInterface::signalAPAdded
 (const WifiAccessPoint& addedAP)
 {
     using namespace juce;
-    MessageManager::callAsync([this, addedAP]()
-    {
-        WifiStateManager stateManager;
-        if(stateManager.validNetworkInterface(this))
-        {
-            wifiLock.enterWrite();
-            if (!addedAP.isNull())
+    std::function<void()> sendSignal = buildAsyncFunction(LockType::write,
+            [this, addedAP]
             {
-                jassert(notifyQueue.isEmpty());
-                notifyQueue = listeners;
-                while(this == WifiStateManager::sharedResource.get()
-                        && !notifyQueue.isEmpty())
+                foreachHandler([this, addedAP](Handler* handler)
                 {
-                    Listener* toNotify = notifyQueue
-                            .removeAndReturn(notifyQueue.size() - 1);
-                    wifiLock.exitWrite();
-                    toNotify->accessPointAdded(addedAP);
-                    wifiLock.enterWrite();
-                }
-            }
-        }
-        wifiLock.exitWrite();
-    });
+                    Listener* toNotify = dynamic_cast<Listener*>(handler);
+                    if(toNotify != nullptr && !addedAP.isNull())
+                    {
+                        toNotify->accessPointAdded(addedAP);
+                    }
+                });
+            });
+    MessageManager::callAsync(sendSignal);
 }
 
 /*
@@ -329,30 +268,21 @@ void NetworkInterface::signalAPRemoved
 (const WifiAccessPoint& removedAP)
 {
     using namespace juce;
-    MessageManager::callAsync([this, removedAP]()
-    {
-        WifiStateManager stateManager;
-        if(stateManager.validNetworkInterface(this))
-        {
-            wifiLock.enterWrite();
-            if (!removedAP.isNull())
+    std::function<void()> sendSignal = buildAsyncFunction(LockType::write,
+            [this, removedAP]
             {
-                jassert(notifyQueue.isEmpty());
-                notifyQueue = listeners;
-                while(this == WifiStateManager::sharedResource.get()
-                        && !notifyQueue.isEmpty())
+                foreachHandler([this, removedAP](Handler* handler)
                 {
-                    Listener* toNotify = notifyQueue
-                            .removeAndReturn(notifyQueue.size() - 1);
-                    wifiLock.exitWrite();
-                    toNotify->accessPointRemoved(removedAP);
-                    wifiLock.enterWrite();
-                }
-            }
-        }
-        wifiLock.exitWrite();
-    });
+                    Listener* toNotify = dynamic_cast<Listener*>(handler);
+                    if(toNotify != nullptr && !removedAP.isNull())
+                    {
+                        toNotify->accessPointRemoved(removedAP);
+                    }
+                });
+            });
+    MessageManager::callAsync(sendSignal);
 }
+
 
 /*
  * Whenever a wifi operation is attempted, the timer is set to
@@ -362,73 +292,67 @@ void NetworkInterface::signalAPRemoved
  */
 void NetworkInterface::timerCallback()
 {
-    WifiStateManager stateManager;
-    if(stateManager.validNetworkInterface(this))
+    stopTimer();
+    bool wifiEnabled = isWifiEnabled();
+    bool wifiConnected = isWifiConnected();
+    WifiState currentState = wifiState;
+    switch (currentState)
     {
-        wifiLock.enterWrite();
-        stopTimer();
-        bool wifiEnabled = isWifiEnabled();
-        bool wifiConnected = isWifiConnected();
-        WifiState currentState = wifiState;
-        wifiLock.exitWrite();
-        switch (currentState)
-        {
-            case connecting:
+        case connecting:
+            DBG("" << __func__
+                    << ": wifi connection timed out.");
+            setWifiState(enabled);
+            return;
+        case disconnecting:
+            if (wifiConnected)
+            {
                 DBG("" << __func__
-                        << ": wifi connection timed out.");
+                      << ": disconnecting failed, this shouldn't"
+                      << " be possible!");
+            }
+            else
+            {
+                DBG("" << __func__
+                    << ": finished disconnecting, but no signal was "
+                    << "received");
                 setWifiState(enabled);
-                return;
-            case disconnecting:
-                if (wifiConnected)
-                {
-                    DBG("" << __func__
-                          << ": disconnecting failed, this shouldn't"
-                          << " be possible!");
-                }
-                else
-                {
-                    DBG("" << __func__
-                        << ": finished disconnecting, but no signal was "
-                        << "received");
-                    setWifiState(enabled);
-                }
-                return;
-            case turningOn:
-                if (wifiEnabled)
-                {
-                    DBG("" << __func__
-                            << ": failed to enable wifi!");
-                }
-                else
-                {
-                    DBG("" << __func__
-                       << ": finished turning on wifi, but no signal was "
-                       << "received");
-                    setWifiState(wifiEnabled ? enabled : disabled);
-                }
-                return;
-            case turningOff:
-                if (wifiEnabled)
-                {
-                    DBG("" << __func__
-                            << ": failed to disable wifi!");
-                }
-                else
-                {
+            }
+            return;
+        case turningOn:
+            if (wifiEnabled)
+            {
+                DBG("" << __func__
+                        << ": failed to enable wifi!");
+            }
+            else
+            {
+                DBG("" << __func__
+                   << ": finished turning on wifi, but no signal was "
+                   << "received");
+                setWifiState(wifiEnabled ? enabled : disabled);
+            }
+            return;
+        case turningOff:
+            if (wifiEnabled)
+            {
+                DBG("" << __func__
+                        << ": failed to disable wifi!");
+            }
+            else
+            {
 
-                    DBG("" << __func__
-                      << ": finished turning off wifi, but no signal was "
-                      << "received");
-                    setWifiState(wifiEnabled ? enabled : disabled);
-                }
-                return;
-            case disabled:
-            case enabled:
-            case connected:
-                DBG("NetworkInterface::" << __func__
-                        << ": unexpected timeout from state "
-                        << wifiStateString(currentState));
-        }
+                DBG("" << __func__
+                  << ": finished turning off wifi, but no signal was "
+                  << "received");
+                setWifiState(wifiEnabled ? enabled : disabled);
+            }
+            return;
+        case disabled:
+        case enabled:
+        case connected:
+            DBG("NetworkInterface::" << __func__
+                    << ": unexpected timeout from state "
+                    << wifiStateString(currentState));
     }
 }
 

@@ -1,7 +1,8 @@
 #pragma once
+
 #include "JuceHeader.h"
 #include "WindowFocus.h"
-#include "ResourceManager.h"
+#include "ResourceHandler.h"
 #include "WindowFocusedTimer.h"
 #include "WifiAccessPoint.h"
 #include "NetworkInterface.h"
@@ -21,7 +22,7 @@
  */
 
 
-class WifiStateManager : private ResourceManager<NetworkInterface>
+class WifiStateManager : private ResourceHandler<NetworkInterface>
 {
 public:
     /**
@@ -32,11 +33,8 @@ public:
      *                            initialized.
      */
     WifiStateManager
-    (std::function<NetworkInterface*(juce::ReadWriteLock&)> 
-            createWifiResource = [](juce::ReadWriteLock& c)
-            {
-                return nullptr;
-            });
+    (std::function<SharedResource*()> createWifiResource 
+            = []() { return nullptr; });
 
     virtual ~WifiStateManager() { }
 
@@ -46,22 +44,6 @@ public:
      * @return  The WifiState that best describes the current wifi device state.
      */
     WifiState getWifiState();
-
-    /**
-     * Add a listener to the list of objects receiving updates whenever Wifi 
-     * state changes.
-     *
-     * @param listener  This object will be subscribed to state updates.
-     */
-    void addListener(NetworkInterface::Listener* listener);
-
-    /**
-     * Searches the list of registered listeners for a particular one, and
-     * removes it if it's found.
-     * 
-     * @param listener  This object will be unsubscribed from state updates.
-     */
-    void removeListener(NetworkInterface::Listener* listener);
 
     /**
      * Gets the connected or connecting wifi access point.

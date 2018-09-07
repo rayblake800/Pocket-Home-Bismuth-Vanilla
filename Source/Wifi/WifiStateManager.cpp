@@ -6,11 +6,11 @@ static juce::ScopedPointer<NetworkInterface> networkInterface;
 static juce::ReadWriteLock stateLock;
 
 WifiStateManager::WifiStateManager
-(std::function<NetworkInterface*(juce::ReadWriteLock&)> createWifiResource) :
-ResourceManager<NetworkInterface>(networkInterface, stateLock,
+(std::function<SharedResource*()> createWifiResource) :
+ResourceHandler<NetworkInterface>(NetworkInterface::resourceKey,
         [&createWifiResource]()
         {
-            return createWifiResource(stateLock);
+            return createWifiResource();
         }) { }
 
 /*
@@ -20,28 +20,6 @@ WifiState WifiStateManager::getWifiState()
 {
     auto wifiInterface = getReadLockedResource();
     return wifiInterface->getWifiState();
-}
-
-
-/*
- * Add a listener to the list of objects receiving updates whenever Wifi 
- * state changes.
- */
-void WifiStateManager::addListener(NetworkInterface::Listener* listener)
-{ 
-    auto wifiInterface = getWriteLockedResource();
-    wifiInterface->addListener(listener);
-}
-
-/*
- * Searches the list of registered listeners for a particular one, and
- * removes it if it's found. 
- */
-void WifiStateManager::removeListener(NetworkInterface::Listener* listener)
-{
-    
-    auto wifiInterface = getWriteLockedResource();
-    wifiInterface->removeListener(listener);
 }
 
 /*

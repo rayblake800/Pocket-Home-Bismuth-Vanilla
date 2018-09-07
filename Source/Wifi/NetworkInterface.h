@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SharedResource.h"
+#include "ResourceHandler.h"
 #include "WifiState.h"
 #include "AccessPointState.h"
 #include "WifiAccessPoint.h"
@@ -18,35 +19,23 @@ class NetworkInterface : public SharedResource, public juce::Timer
     friend class WifiStateManager;
 
 private:
-    /**
-     * @param instanceHolder  The static ScopedPointer used to store the
-     *                        NetworkInterface instance. This may only be used
-     *                        to initialize this object as a SharedResource.
-     *
-     * @param wifiLock        The static resource lock used to control access to
-     *                        the NetworkInterface.  This may only be used to
-     *                        initialize this object as a SharedResource.
-     */
-    NetworkInterface(juce::ScopedPointer<SharedResource>& instanceHolder,
-            juce::ReadWriteLock& wifiLock);
+
+    NetworkInterface();
+
 public:
     virtual ~NetworkInterface() { }
     
 protected:
     /**
-     * Listener objects can be added by a WifiStateManager to receive wifi state
-     * updates.
+     * Listener objects receive wifi state updates.
      */
-    class Listener : public ResourceManager<NetworkInterface>
+    class Listener : public ResourceHandler<NetworkInterface>
     {
     public:
         friend class NetworkInterface;
+
         Listener();
 
-        /**
-         * On destruction, listeners will remove themselves from their
-         * NetworkInterface if necessary.
-         */
         virtual ~Listener();
 
     private:
@@ -78,11 +67,6 @@ protected:
          * @param removedAP  The access point that is no longer visible.
          */
         virtual void accessPointRemoved(const WifiAccessPoint& removedAP) { };
-
-        /* The NetworkInterface being listened to. This should only be used
-           to ensure that the Listener and the NetworkInterface are disconnected
-           if one or the other is destroyed. */
-        juce::ScopedPointer<NetworkInterface> networkInterface == nullptr;
     };
 
 
@@ -101,22 +85,6 @@ protected:
      * @param state  The new state of the wifi device.
      */
     void setWifiState(WifiState state);
-
-    /**
-     * Add a listener to the list of objects receiving updates whenever 
-     * Wifi state changes.  
-     *
-     * @param listener  The listener object 
-     */
-    void addListener(Listener* listener);
-
-    /**
-     * Searches the list of registered listeners for a particular one, and 
-     * removes it if it's found. 
-     * 
-     * @see WifiStateManager::removeListener()
-     */
-    void removeListener(Listener* listener);
 
     /**
      * Gets the connected or connecting wifi access point.
@@ -306,10 +274,9 @@ private:
      */
     void timerCallback() override;
     
+    // SharedResource type key.
+    static const juce::Identifier resourceKey;
+    // Last registered Wifi state.
     WifiState wifiState = missingNetworkDevice;
-    //All objects tracking the current wifi state.
-    juce::Array<Listener*, juce::CriticalSection> listeners;
-    //Listeners waiting for a pending notification.
-    juce::Array<Listener*> notifyQueue;
 };
 

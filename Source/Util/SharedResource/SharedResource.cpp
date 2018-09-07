@@ -1,6 +1,7 @@
 #include <map>
 #include "SharedResource.h"
 #include "ScopedThreadWriteLock.h"
+#include "ScopedThreadReadLock.cpp"
 
 //Holds each SharedResource subclass's single object.
 static std::map<juce::Identifier, juce::ScopedPointer<SharedResource>> 
@@ -40,7 +41,7 @@ SharedResource::~SharedResource()
  */
 SharedResource::Handler::Handler(
         const juce::Identifier& resourceKey,
-        std::function<SharedResource*()> createResource) :
+        const std::function<SharedResource*()> createResource) :
 resourceKey(resourceKey)
 {
     using namespace juce;
@@ -77,7 +78,7 @@ SharedResource::Handler::~Handler()
  * objects of this ResourceManager subclass.
  */
 SharedResource*
-SharedResource::ResourceManager::getClassResource()
+SharedResource::Handler::getClassResource()
 {
     const juce::ScopedReadLock mapLock(resourceMapLock);
     return resourceMap[resourceKey].get();
@@ -87,7 +88,7 @@ SharedResource::ResourceManager::getClassResource()
  * Gets a reference to the lock used to control access to the
  * shared resource.
  */
-juce::ReadWriteLock& SharedResource::ResourceManager::getResourceLock()
+ThreadLock& SharedResource::Handler::getResourceLock()
 {
     return getClassResource()->resourceLock;;
 }
@@ -103,28 +104,31 @@ std::function<void()> SharedResource::buildAsyncFunction(
         std::function<void()> ifDestroyed)
 {
     using namespace juce;
-    ScopedPointer<SharedResource>& resource = instanceHolder;
-    ReadWriteLock& lock = resourceLock;
-    return [this, lockType, &resource, &lock, action, ifDestroyed]()
+    Identifier resKey = resourceKey;
+    return [this, lockType, resKey, action, ifDestroyed]()
     {
-        ScopedPointer<ResourceManager> resourceProtector = nullptr;
-        lock.enterWrite();
-        if(resource == this)
+        ScopedPointer<Handler> resourceProtector = nullptr;
+        SharedResource* resource;
         {
-            resourceProtector = new ResourceManager(resource, lock);
+            const juce::ScopedReadLock mapLock(resourceMapLock);
+            resource = resourceMap[resourceKey].get();
+            if(resource != nullptr && resource == this)
+            {
+                resourceProtector = new Handler(resKey,
+                        []()->SharedResource*{return nullptr;} );
+            }
         }
-        lock.exitWrite();
 
         if(resourceProtector != nullptr)
         {
             if(lockType == SharedResource::LockType::write)
             {
-                const ScopedWriteLock writeLock(lock);
+                const ScopedThreadWriteLock writeLock(resource->resourceLock);
                 action();
             }
             else if(lockType == SharedResource::LockType::read)
             {
-                const ScopedReadLock readLock(lock);
+                const ScopedThreadReadLock readLock(resource->resourceLock);
                 action();
             }
         }
@@ -138,19 +142,18 @@ std::function<void()> SharedResource::buildAsyncFunction(
 
 /*
  * Runs an arbitrary function on each Handler object connected to the
- * SharedResource.i
+ * SharedResource.
  */
 void SharedResource::foreachHandler
-(std::function<void(const Handler*)> handlerAction)
+(std::function<void(Handler*)> handlerAction)
 {
     ScopedThreadWriteLock handlerLock(resourceLock);
     const int handlerCount = resourceHandlers.size();
     for(int i = 0; i < handlerCount; i++)
     {
-        //ensure nothing is messing with the handler list during the loop
+        //check for changes to the handler list during the loop
         jassert(resourceHandlers.size() == handlerCount);
         handlerAction(resourceHandlers[i]);
-
     }
 }
 

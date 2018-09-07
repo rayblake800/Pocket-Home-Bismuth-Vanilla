@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include "JuceHeader.h"
 
 /**
@@ -33,23 +34,23 @@ public:
     /**
      * Requests to take a read-lock, blocking the calling thread until it 
      * is safe for it to read whatever resource is protected by the lock.  This 
-     * will block if any other thread holds a thread-lock, or if this thread 
-     * does not hold the thread-lock and another thread is waiting to hold the 
-     * thread-lock.
+     * will block if any other thread holds a write-lock, or if this thread 
+     * does not hold the write-lock and another thread is waiting to hold the 
+     * write-lock.
      */
     void takeReadLock();
 
     /**
-     * Requests to take a thread-lock, blocking the calling thread until it is
+     * Requests to take a write-lock, blocking the calling thread until it is
      * safe for it to write to whatever resource is protected by this lock. This
      * will block if any thread holds a read-lock, or if another thread holds
-     * the thread-lock.
+     * the write-lock.
      */
-    void takeThreadLock();
+    void takeWriteLock();
 
     /**
      * Releases a lock held by this thread.  This must be called exactly once
-     * for each call to takeReadLock or takeThreadLock, when the caller is ready
+     * for each call to takeReadLock or takeWriteLock, when the caller is ready
      * to stop accessing the locked resource.
      */
     void releaseLock();
@@ -59,10 +60,10 @@ private:
     
     // Prevents concurrent access to thread-lock data members below
     juce::CriticalSection metaLock;
-    // Thread id of the last thread to acquire a thread-lock
-    juce::Thread::ThreadID lockingThread;
+    // Thread id of the last thread to acquire a write-lock
+    juce::Thread::ThreadID writeLockThread;
     // The number of thread locks currently held
-    int threadLockCount = 0;
+    int writeLockCount = 0;
     //map of all threads holding read locks
     std::map<juce::Thread::ThreadID, int> readLockMap;
     
