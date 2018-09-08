@@ -1,15 +1,17 @@
 #include "ComponentJSON.h"
+#include "ComponentConfigKeys.h"
 
-// SharedResource object key
-const ComponentJSON juce::Identifier resourceKey("ComponentJSON");
-// JSON configutation file name
+/* SharedResource object key */
+const juce::Identifier ComponentJSON::resourceKey("ComponentJSON");
+
+/* Filename of the JSON configuration file */
 static const constexpr char * configFilename = "component.json";
 
-ComponentJSON::ComponentJSON() : ConfigFile(filenameConst)
+ComponentJSON::ComponentJSON() : ConfigJSON(resourceKey, configFilename)
 {
     using namespace juce;
-    StringArray keys = getComponentKeys();
-    for (const String& key : keys)
+    const Array<Identifier> keys = ComponentConfigKeys::componentKeys();
+    for (const Identifier& key : keys)
     {
 	DynamicObject::Ptr componentData = initProperty<DynamicObject*>(key);
         components[key] = ComponentSettings(componentData);
@@ -20,26 +22,20 @@ ComponentJSON::ComponentJSON() : ConfigFile(filenameConst)
 /*
  * Gets the configured settings for a particular component.
  */
-ComponentConfigFile::ComponentSettings
-ComponentJSON::getComponentSettings(juce::String componentKey)
+ComponentSettings ComponentJSON::getComponentSettings
+(const juce::Identifier& componentKey) const
 {
-    return components[componentKey];
+    return components.at(componentKey);
 }
 
 /*
- * @return the list of key Strings for each integer value tracked in 
- * components.json
+ * Gets the key string and data type for each basic value stored in 
+ * components.json.
  */
 const std::vector<ConfigKey>& 
-ComponentJSON::getDataKeys() const
+ComponentJSON::getConfigKeys() const
 {
-    static const std::vector<ConfigKey> keys = 
-    {
-        {smallTextKey,  ConfigFile::doubleType},
-        {mediumTextKey, ConfigFile::doubleType},
-        {largeTextKey,  ConfigFile::doubleType}
-    };
-    return keys;
+    return ComponentConfigKeys::basicKeys();
 }
 
 /*
@@ -48,8 +44,8 @@ ComponentJSON::getDataKeys() const
 void ComponentJSON::writeDataToJSON()
 {
     using namespace juce;
-    const StringArray& keys = getComponentKeys();
-    for (const String& key : keys)
+    const Array<Identifier>& keys = ComponentConfigKeys::componentKeys();
+    for (const Identifier& key : keys)
     {
         if(components.count(key) != 0)
         {

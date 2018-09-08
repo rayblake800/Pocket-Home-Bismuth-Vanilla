@@ -1,33 +1,32 @@
 #include "AppJSON.h"
 
-// SharedResource object key
+/* SharedResource object key */
 const juce::Identifier AppJSON::resourceKey = "AppJSON";
-// JSON configuration file name
+/* JSON configuration file name */
 static const constexpr char * jsonFilename = "apps.json";
-// JSON key to the application shortcut list.
-static const constexpr char * favoritesKey = "favorites";
-// JSON key to the application folder list.
-static const constexpr char * foldersKey = "folders";
+/* JSON key to the application shortcut list. */
+static const juce::Identifier shortcutKey = "shortcuts";
+/* JSON key to the application folder list. */
+static const juce::Identifier  foldersKey = "folders";
 
 AppJSON::AppJSON() : ConfigJSON(resourceKey, jsonFilename)
 {
     using namespace juce;
-    //load favorites
-    DBG("Loading AppConfigFile:");
-    Array<var> favoriteList = initProperty<Array<var>>(favoritesKey);
-    DBG("" << __func__ << ": Read " << favoriteList.size()
+    //load shortcuts
+    Array<var> shortcutList = initProperty<Array<var>>(shortcutKey);
+    DBG("AppJSON::" << __func__ << ": Read " << shortcuts.size()
             << " favorites");
-    for(const var& app : favoriteList)
+    for(const var& app : shortcutList)
     {
-        AppItem fave = AppItem(app);
-        if (!favoriteApps.contains(fave))
+        AppShortcut shortcut = AppShortcut(app);
+        if (!shortcuts.contains(shortcut))
         {
-            favoriteApps.add(fave);
+            shortcuts.add(shortcut);
         }
     }
     //load categories
     Array<var> categoryList = initProperty<Array<var>>(foldersKey);
-    DBG("" << __func__ << ": Read " << categoryList.size()
+    DBG("AppJSON::" << __func__ << ": Read " << categoryList.size()
             << " categories");
     for (const var& folder : categoryList)
     {
@@ -41,20 +40,20 @@ AppJSON::AppJSON() : ConfigJSON(resourceKey, jsonFilename)
 }
 
 /**
- * Get the main list of application shortcuts.
+ * Gets the main list of application shortcuts.
  */
-juce::Array<AppItem> AppJSON::getFavorites()
+juce::Array<AppShortcut> AppJSON::getShortcuts()
 {
-    return favoriteApps;
+    return shortcuts;
 }
 
 /**
- * Add a new app to the list of pinned favorite apps in the config file.
+ * Adds a new shortcut to the list of pinned application shortcuts.
  */
-void AppJSON::addFavoriteApp
-(AppItem newApp, int index, bool writeChangesNow)
+void AppJSON::addShortcut
+(AppShortcut newApp, int index, bool writeChangesNow)
 {
-    favoriteApps.insert(index, newApp);
+    shortcuts.insert(index, newApp);
     if (writeChangesNow)
     {
         writeChanges();
@@ -62,13 +61,13 @@ void AppJSON::addFavoriteApp
 }
 
 /**
- * Remove an app from the list of favorite applications.
+ * Removes a shortcut from the list of application shortcuts.
  */
-void AppJSON::removeFavoriteApp(int index, bool writeChangesNow)
+void AppJSON::removeShortcut(int index, bool writeChangesNow)
 {
-    if (index >= 0 && index < favoriteApps.size())
+    if (index >= 0 && index < shortcuts.size())
     {
-        favoriteApps.remove(index);
+        shortcuts.remove(index);
         if (writeChangesNow)
         {
             writeChanges();
@@ -77,15 +76,15 @@ void AppJSON::removeFavoriteApp(int index, bool writeChangesNow)
 }
 
 /**
- * Find the index of an AppItem in favorites.
+ * Finds the index of an application shortcut in the list.
  */
-int AppJSON::getFavoriteIndex(AppItem toFind)
+int AppJSON::getShortcutIndex(const AppShortcut& toFind)
 {
-    return favoriteApps.indexOf(toFind);
+    return shortcuts.indexOf(toFind);
 }
 
 /**
- * @return A list of folders to display in the AppMenu.
+ * Gets the list of application folders.
  */
 juce::Array<AppFolder> AppJSON::getFolders()
 {
@@ -93,10 +92,10 @@ juce::Array<AppFolder> AppJSON::getFolders()
 }
 
 /**
- * Add a new folder to the list of AppFolders in the config file.
+ * Adds a new folder to the list of application folders.
  */
 void AppJSON::addAppFolder
-(AppFolder newFolder, int index, bool writeChangesNow)
+(const AppFolder& newFolder, int index, bool writeChangesNow)
 {
     categoryFolders.insert(index, newFolder);
     if (writeChangesNow)
@@ -106,7 +105,7 @@ void AppJSON::addAppFolder
 }
 
 /**
- * Remove a folder from the list of AppFolders.
+ * Removes a folder from the list of application folders. 
  */
 void AppJSON::removeAppFolder(int index, bool writeChangesNow)
 {
@@ -119,9 +118,9 @@ void AppJSON::removeAppFolder(int index, bool writeChangesNow)
 }
 
 /**
- * Find the index of an AppFolder in the list of folders.
+ * Finds the index of an AppFolder in the list of folders.
  */
-int AppJSON::getFolderIndex(AppFolder toFind)
+int AppJSON::getFolderIndex(const AppFolder& toFind)
 {
     return categoryFolders.indexOf(toFind);
 }
@@ -129,18 +128,18 @@ int AppJSON::getFolderIndex(AppFolder toFind)
 
 
 /**
- * Copy all config data to a json object.
+ * Copies all shortcuts and folders back to the JSON configuration file.
  */
 void AppJSON::writeDataToJSON()
 {
     using namespace juce;
-    //set favorites
-    Array<var> favoriteArray;
-    for (int i = 0; i < favoriteApps.size(); i++)
+    //set shortcuts
+    Array<var> shortcutArray;
+    for (int i = 0; i < shortcuts.size(); i++)
     {
-        favoriteArray.add(var(favoriteApps[i].getDynamicObject()));
+        shortcutArray.add(var(shortcuts[i].getDynamicObject()));
     }
-    updateProperty<Array<var>>(favoritesKey, favoriteArray);
+    updateProperty<Array<var>>(shortcutKey, shortcutArray);
 
     //set folders
     Array<var> categoryArray;

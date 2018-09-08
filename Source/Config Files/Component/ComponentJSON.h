@@ -1,43 +1,49 @@
 #pragma once
+#include "ConfigJSON.h"
 #include "ConfigKey.h"
+#include "ComponentSettings.h"
 
 /**
  * @file ComponentJSON
  *
- * @brief
+ * @brief Reads and writes component settings in the components.json file.
  */
-class ComponentJSON : public ConfigFile
+class ComponentJSON : public ConfigJSON
 {
 public:
+    /* SharedResource object key */
+    static const juce::Identifier resourceKey;
+
     ComponentJSON();
 
     virtual ~ComponentJSON() { }
 
     /**
-     * Gets the configured settings for a particular component.
+     * @brief   Gets the configured settings for a particular component.
      * 
      * @param componentKey  A configurable UI component's key string.
      * 
-     * @return              the properties defined for that component.
+     * @return  The properties defined for that component.
      */
-    ComponentSettings getComponentSettings(juce::String componentKey);
+    ComponentSettings getComponentSettings
+    (const juce::Identifier& componentKey) const;
 
 private:
     /**
-     * Copy all ComponentSettings data back to the JSON file.
+     * @brief  Copies all ComponentSettings data back to the JSON file.
      */
     virtual void writeDataToJSON() final override;
 
     /**
-     * Gets the string key and data type for each basic value stored in
-     * components.json.
+     * @brief   Gets the key string and data type for each basic value stored in
+     *          components.json.
      * 
      * @return  Key strings and data types for each bool, int, String, or
      *          double stored in components.json.
      */
-    virtual const std::vector<DataKey>& getDataKeys() const final override;
+    virtual const std::vector<ConfigKey>& getConfigKeys() const final override;
 
-    //Stores all component settings loaded from the component config file
-    std::map<juce::String, ComponentSettings> components;
+    /* Stores all component settings loaded from the component config file */
+    std::map<juce::Identifier, ComponentSettings> components;
 };
 

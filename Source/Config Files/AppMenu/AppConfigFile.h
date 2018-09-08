@@ -19,7 +19,7 @@ public:
     virtual ~AppConfigFile() { }
 
     /**
-     * Gets the main list of application shortcuts. 
+     * @brief   Gets the main list of application shortcuts. 
      * 
      * @return  A list of AppShortcuts to be pinned to the main folder
      *          of the AppMenu.
@@ -27,7 +27,7 @@ public:
     juce::Array<AppShortcut> getShortcuts();
 
     /**
-     * Add a new app to the list of pinned shortcuts in the config file.
+     * @brief  Add a new app to the list of pinned shortcuts in the config file.
      * 
      * @param newApp            The new application data object.
      * 
@@ -40,7 +40,7 @@ public:
     (AppShortcut newApp, int index, bool writeChangesNow = true);
 
     /**
-     * Remove a shortcut from the list of application shortcuts.
+     * @brief  Remove a shortcut from the list of application shortcuts.
      * 
      * @param index            The position of the shortcut to remove.
      * 
@@ -50,7 +50,7 @@ public:
     void removeShortcut(int index, bool writeChangesNow = true);
 
     /**
-     * Find the index of an application shortcut in the list.
+     * @brief   Find the index of an application shortcut in the list.
      * 
      * @param toFind  The application shortcut to search for in the list.
      * 
@@ -60,14 +60,14 @@ public:
     
     
     /**
-     * Gets the list of application menu folders.
+     * @brief   Gets the list of application menu folders.
      *
-     * @return A list of folders to display in the AppMenu.
+     * @return  A list of folders to display in the AppMenu.
      */
     juce::Array<AppFolder> getFolders();
 
     /**
-     * Add a new folder to the list of AppFolders in the config file.
+     * @brief  Add a new folder to the list of AppFolders in the config file.
      * 
      * @param newFolder        The new application folder.
      * 
@@ -80,7 +80,7 @@ public:
     (AppFolder newFolder, int index, bool writeChangesNow = true);
 
     /**
-     * Remove a folder from the list of AppFolders.
+     * @brief  Remove a folder from the list of AppFolders.
      * 
      * @param index            The position of the folder to remove.
      * 
@@ -90,7 +90,7 @@ public:
     void removeFolder(int index, bool writeChangesNow = true);
 
     /**
-     * Find the index of an AppFolder in the list of folders.
+     * @brief   Find the index of an AppFolder in the list of folders.
      * 
      * @param toFind   The folder to search for in the folder list.
      * 

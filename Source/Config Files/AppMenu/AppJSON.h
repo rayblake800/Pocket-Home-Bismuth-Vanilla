@@ -13,7 +13,7 @@
 class AppJSON : public ConfigJSON
 {
 public:
-    // SharedResource object key
+    /* SharedResource object key */
     static const juce::Identifier resourceKey;
 
     AppJSON();
@@ -21,7 +21,7 @@ public:
     virtual ~AppJSON() { }
 
     /**
-     * Get the main list of application shortcuts.
+     * @brief   Gets the main list of application shortcuts.
      *
      * @return  A list of shortcuts to be pinned to the main column 
      *          of the AppMenu.
@@ -29,8 +29,7 @@ public:
     juce::Array<AppShortcut> getShortcuts();
 
     /**
-     * Add a new app to the list of pinned application shortcuts in the config
-     * file.
+     * @brief  Adds a new shortcut to the list of pinned application shortcuts.
      *
      * @param newApp           The new application shortcut data.
      *
@@ -39,10 +38,10 @@ public:
      * @param writeChangesNow  Iff true, immediately write changes to the JSON
      *                         file.
      */
-    void addShortcut(AppItem newApp, int index, bool writeChangesNow);
+    void addShortcut(AppShortcut newApp, int index, bool writeChangesNow);
 
     /**
-     * Remove an app from the list of application shortcuts.
+     * @brief  Removes a shortcut from the list of application shortcuts.
      * 
      * @param index             The index of the shortcut to remove from the 
      *                          list.
@@ -53,7 +52,7 @@ public:
     void removeShortcut(int index, bool writeChangesNow);
 
     /**
-     * Find the index of an application shortcut in the list.
+     * @brief  Finds the index of an application shortcut in the list.
      * 
      * @param toFind  The application shortcut to search for in the list.
      *
@@ -62,39 +61,55 @@ public:
     int getShortcutIndex(const AppShortcut& toFind);
 
     /**
-     * @return A list of folders to display in the AppMenu.
-     * @see AppConfigFile::getFolders
+     * @brief   Gets the list of application folders.
+     *
+     * @return  A list of folders to display in the AppMenu.
      */
     juce::Array<AppFolder> getFolders();
 
     /**
-     * Add a new folder to the list of AppFolders in the config file.
-     * @see AppConfigFile::addAppFolder
+     * @brief  Adds a new folder to the list of application folders.
+     * 
+     * @param newFolder        The new folder data.
+     *
+     * @param index            The index where the new folder will be inserted.
+     *
+     * @param writeChangesNow  Iff true, immediately write the changes to the
+     *                         JSON configuration file.
      */
     void addAppFolder
-    (AppFolder newFolder, int index, bool writeChangesNow);
+    (const AppFolder& newFolder, int index, bool writeChangesNow);
 
     /**
-     * Remove a folder from the list of AppFolders.
-     * @see AppConfigFile::removeAppFolder
+     * @brief  Removes a folder from the list of application folders.
+     * 
+     * @param index            The index of the folder to remove.
+     *
+     * @param writeChangesNow  Iff true, immediately write changes to the JSON
+     *                         configuration file.
      */
     void removeAppFolder(int index, bool writeChangesNow = true);
 
     /**
-     * Find the index of an AppFolder in the list of folders.
-     * @see AppConfigFile::getFolderIndex
+     * @brief   Finds the index of an AppFolder in the list of folders.
+     * 
+     * @param toFind  The folder object to search for in the list.
+     *
+     * @return  The index of the folder object, or -1 if it was not found.
      */
-    int getFolderIndex(AppFolder toFind);
+    int getFolderIndex(const AppFolder& toFind);
 
     private:
 
     /**
-     * Copy all shortcuts and folders back to the JSON configuration file.
+     * @brief  Copies all shortcuts and folders back to the JSON configuration 
+     *         file.
      */
     void writeDataToJSON() override final;
 
     /**
-     * Gets all parameters with basic data types tracked by this ConfigFile.
+     * @brief   Gets all parameters with basic data types tracked by this
+     *          ConfigFile.
      * 
      * @return  The empty list, as AppConfigFile doesn't track any ConfigKey
      *          variables, only its own custom data structures.
@@ -105,10 +120,10 @@ public:
         return keys;
     }
 
-    //Stores application shortcuts
-    juce::Array<AppItem> favoriteApps;
+    /* Stores application shortcuts */
+    juce::Array<AppShortcut> shortcuts;
 
-    //Stores application folders
+    /* Stores application folders */
     juce::Array<AppFolder> categoryFolders;
 };
 

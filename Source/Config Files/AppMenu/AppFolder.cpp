@@ -1,5 +1,8 @@
 #include "Source/Config Files/AppMenu/AppFolder.h"
 
+/*
+ * Create an AppFolder, initializing all folder data from parameters.
+ */
 AppFolder::AppFolder(
         const juce::String name,
         const juce::StringArray& categories,

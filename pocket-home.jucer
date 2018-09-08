@@ -315,8 +315,6 @@
         <GROUP id="{93AA6B7B-7C99-3489-3151-F638BDCB799E}" name="Main">
           <FILE id="N1gZuQ" name="MainConfigFile.h" compile="0" resource="0"
                 file="Source/Config Files/Main/MainConfigFile.h"/>
-          <FILE id="FMoGgJ" name="MainConfigKeys.cpp" compile="1" resource="0"
-                file="Source/Config Files/Main/MainConfigKeys.cpp"/>
           <FILE id="wTShcQ" name="MainConfigKeys.h" compile="0" resource="0"
                 file="Source/Config Files/Main/MainConfigKeys.h"/>
           <FILE id="vnpmBT" name="MainJSON.cpp" compile="1" resource="0" file="Source/Config Files/Main/MainJSON.cpp"/>
@@ -334,14 +332,16 @@
           <FILE id="wljOnn" name="ComponentJSON.cpp" compile="1" resource="0"
                 file="Source/Config Files/Component/ComponentJSON.cpp"/>
           <FILE id="otGVwO" name="ComponentJSON.h" compile="0" resource="0" file="Source/Config Files/Component/ComponentJSON.h"/>
+          <FILE id="NhCgv3" name="ComponentSettings.cpp" compile="1" resource="0"
+                file="Source/Config Files/Component/ComponentSettings.cpp"/>
+          <FILE id="E2LFpE" name="ComponentSettings.h" compile="0" resource="0"
+                file="Source/Config Files/Component/ComponentSettings.h"/>
         </GROUP>
         <GROUP id="{A1B399C5-3A9B-EFE3-1D4C-223F93E9566B}" name="Colour">
           <FILE id="qkl5uS" name="ColourConfigFile.cpp" compile="1" resource="0"
                 file="Source/Config Files/Colour/ColourConfigFile.cpp"/>
           <FILE id="xY2XIE" name="ColourConfigFile.h" compile="0" resource="0"
                 file="Source/Config Files/Colour/ColourConfigFile.h"/>
-          <FILE id="VDFs52" name="ColourConfigKeys.cpp" compile="1" resource="0"
-                file="Source/Config Files/Colour/ColourConfigKeys.cpp"/>
           <FILE id="T1U22N" name="ColourConfigKeys.h" compile="0" resource="0"
                 file="Source/Config Files/Colour/ColourConfigKeys.h"/>
           <FILE id="tupYKN" name="ColourJSON.cpp" compile="1" resource="0" file="Source/Config Files/Colour/ColourJSON.cpp"/>

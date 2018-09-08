@@ -7,10 +7,9 @@
  * @brief  Provides the keys for all parameters in the main.json configuration
  *         file.
  */
-
 namespace MainConfigKeys
 {
-    // ##################### Integer value keys: ##############################
+    //###################### Integer value keys: ###############################
     /* Sets the maximum number of AppMenu icon rows per screen. */
     static const ConfigKey maxRowsKey
         ("max menu row count", ConfigKey::intType);
@@ -18,7 +17,8 @@ namespace MainConfigKeys
     static const ConfigKey maxColumnsKey
         ("max menu column count", ConfigKey::intType);
 
-    // ###################### String value keys: ###############################
+    
+    //####################### String value keys: ###############################
     /* Sets the HomePage background color or image. */
     static const ConfigKey backgroundKey
         ("background", ConfigKey::stringType);
@@ -42,7 +42,8 @@ namespace MainConfigKeys
     static const ConfigKey wifiInterfaceKey
         ("Wifi interface", ConfigKey::stringType);
 
-    // ### Boolean value keys: ###
+    
+    //######################## Boolean value keys: #############################
     /* Sets if the cursor should be shown */
     static const ConfigKey showCursorKey
         ("cursor", ConfigKey::boolType);
@@ -52,6 +53,7 @@ namespace MainConfigKeys
     /* Sets if the HomePage clock should use 12 hour or 24 hour time */
     static const ConfigKey use24HrModeKey
         ("use 24h mode", ConfigKey::boolType);
+
 
     /* All possible values of menuTypeKey */
     static const juce::StringArray menuTypes = 

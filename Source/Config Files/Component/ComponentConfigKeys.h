@@ -1,15 +1,21 @@
 #pragma once
-#include "ComponentKey.h"
+#include "ConfigKey.h"
 
+/**
+ * @file   ComponentConfigKeys.h
+ *
+ * @brief  Provides the keys for all parameters in the component.json
+ *         configuration file.
+ */
 namespace ComponentConfigKeys
 {
     //######################### Text Size Keys #################################
-    static const ComponentKey smallTextKey
+    static const ConfigKey smallTextKey
         ("small text", ConfigKey::doubleType);
-    static const ComponentKey mediumTextKey
+    static const ConfigKey mediumTextKey
         ("medium text", ConfigKey::doubleType);
-    static const ComponentKey largeTextKey
-        ("large text", ConfigKey::doubleType;
+    static const ConfigKey largeTextKey
+        ("large text", ConfigKey::doubleType);
 
     //######################### UI Component Data ##############################
     //Defines all component types managed in the config file
@@ -45,4 +51,37 @@ namespace ComponentConfigKeys
             ("settings list button");
     static const juce::Identifier spinnerKey
             ("loading spinner");
+    
+    static const std::vector<ConfigKey> basicKeys()
+    {
+        return 
+        {
+            smallTextKey,
+            mediumTextKey,
+            largeTextKey
+        };
+    }
+    
+    static const juce::Array<juce::Identifier> componentKeys()
+    {
+        return
+        {
+            scrollingAppMenuKey,
+            pagedAppMenuKey,
+            menuFrameKey,
+            batteryIconKey,
+            batteryPercentKey,
+            clockLabelKey,
+            wifiIconKey,
+            powerButtonKey,
+            settingsButtonKey,
+            popupMenuKey,
+            pageLeftKey,
+            pageRightKey,
+            pageUpKey,
+            pageDownKey,
+            settingsListBtnKey,
+            spinnerKey
+        };
+    }
 }
