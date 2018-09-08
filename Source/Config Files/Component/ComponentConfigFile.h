@@ -1,6 +1,6 @@
 #pragma once
 #include "ConfigFile.h"
-#include "ResourceManager.h"
+#include "ConfigJSON.h"
 
 /**
  * @file ComponentConfigFile.h
@@ -12,7 +12,7 @@
  * and other miscellaneous data relevant to UI components.
  */
 
-class ComponentConfigFile : public ResourceManager<ConfigJson>
+class ComponentConfigFile : public ConfigFile<ConfigJSON>
 {
 public:
     ComponentConfigFile();

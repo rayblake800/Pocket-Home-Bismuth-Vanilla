@@ -1,13 +1,11 @@
 #pragma once
 #include "ConfigFile.h"
 #include "AppJSON.h"
-#include "AppItem.h"
-#include "AppFolder.h"
 
 /**
  * @file AppConfigFile.h
  * 
- * @brief Loads the pinned application links and folders displayed in the 
+ * @brief Loads the pinned application shortcuts and folders displayed in the 
  *        AppMenuComponent.
  * 
  * @see AppMenuComponent.h
@@ -23,13 +21,13 @@ public:
     /**
      * Gets the main list of application shortcuts. 
      * 
-     * @return  A list of AppItems to be pinned to the main folder
+     * @return  A list of AppShortcuts to be pinned to the main folder
      *          of the AppMenu.
      */
-    juce::Array<AppItem> getFavorites();
+    juce::Array<AppShortcut> getShortcuts();
 
     /**
-     * Add a new app to the list of pinned favorite apps in the config file.
+     * Add a new app to the list of pinned shortcuts in the config file.
      * 
      * @param newApp            The new application data object.
      * 
@@ -38,26 +36,27 @@ public:
      * @param writeChangesNow   Sets if the change should be written to the 
      *                           config file immediately.
      */
-    void addFavoriteApp(AppItem newApp, int index, bool writeChangesNow = true);
+    void addShortcut
+    (AppShortcut newApp, int index, bool writeChangesNow = true);
 
     /**
-     * Remove an app from the list of favorite applications
+     * Remove a shortcut from the list of application shortcuts.
      * 
-     * @param index            The position of the app to remove.
+     * @param index            The position of the shortcut to remove.
      * 
      * @param writeChangesNow  Sets if the change should be written to the 
      *                         config file immediately.
      */
-    void removeFavoriteApp(int index, bool writeChangesNow = true);
+    void removeShortcut(int index, bool writeChangesNow = true);
 
     /**
-     * Find the index of an AppItem in favorites.
+     * Find the index of an application shortcut in the list.
      * 
-     * @param toFind  The folder to search for in the favorites list/
+     * @param toFind  The application shortcut to search for in the list.
      * 
-     * @return  The index of toFind, or -1 if it isn't in the list.
+     * @return  The index of toFind, or -1 if it was not found in the list.
      */
-    int getFavoriteIndex(AppItem toFind);
+    int getShortcutIndex(const AppShortcut& toFind);
     
     
     /**
@@ -77,7 +76,7 @@ public:
      * @param writeChangesNow  Sets if the change should be written to the 
      *                         JSON config file immediately.
      */
-    void addAppFolder
+    void addFolder
     (AppFolder newFolder, int index, bool writeChangesNow = true);
 
     /**
@@ -88,7 +87,7 @@ public:
      * @param writeChangesNow  Sets if the change should be written to the 
      *                         config file immediately.
      */
-    void removeAppFolder(int index, bool writeChangesNow = true);
+    void removeFolder(int index, bool writeChangesNow = true);
 
     /**
      * Find the index of an AppFolder in the list of folders.

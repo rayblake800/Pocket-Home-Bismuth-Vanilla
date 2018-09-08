@@ -5,35 +5,35 @@
 /**
  * Gets the main list of application shortcuts. 
  */
-juce::Array<AppItem> AppConfigFile::getFavorites()
+juce::Array<AppShortcut> AppConfigFile::getShortcuts()
 {
     auto config = getReadLockedResource();
-    return config->getFavorites();
+    return config->getShortcuts();
 }
 
 /**
- * Add a new app to the list of pinned favorite apps in the config file.
+ * Add a new app to the list of pinned shortcuts in the config file.
  */
-void AppConfigFile::addFavoriteApp
-(AppItem newApp, int index, bool writeChangesNow)
+void AppConfigFile::addShortcut
+(AppShortcut newApp, int index, bool writeChangesNow)
 {
     auto config = getWriteLockedResource();
-    config->addFavoriteApp(newApp,index,writeChangesNow);
+    config->addShortcut(newApp,index,writeChangesNow);
 }
 
 /**
- * Remove an app from the list of favorite applications
+ * Remove a shortcut from the list of application shortcuts.
  */
-void AppConfigFile::removeFavoriteApp(int index, bool writeChangesNow)
+void AppConfigFile::removeShortcut(int index, bool writeChangesNow)
 {
     auto config = getWriteLockedResource();
-    config->removeFavoriteApp(index,writeChangesNow);
+    config->removeShortcut(index,writeChangesNow);
 }
 
 /**
- * Find the index of an AppItem in favorites.
+ * Find the index of an AppShortcut in favorites.
  */
-int AppConfigFile::getFavoriteIndex(AppItem toFind)
+int AppConfigFile::getShortcutIndex(const AppShortcut& toFind)
 {
     auto config = getReadLockedResource();
     return config->getFavoriteIndex(toFind);
@@ -51,7 +51,7 @@ juce::Array<AppFolder> AppConfigFile::getFolders()
 /**
  * Add a new folder to the list of AppFolders in the config file.
  */
-void AppConfigFile::addAppFolder
+void AppConfigFile::addFolder
 (AppFolder newFolder, int index, bool writeChangesNow)
 {
     auto config = getWriteLockedResource();
@@ -61,7 +61,7 @@ void AppConfigFile::addAppFolder
 /**
  * Remove a folder from the list of AppFolders.
  */
-void AppConfigFile::removeAppFolder(int index, bool writeChangesNow)
+void AppConfigFile::removeFolder(int index, bool writeChangesNow)
 {
     auto config = getWriteLockedResource();
     config->removeAppFolder(index,writeChangesNow);

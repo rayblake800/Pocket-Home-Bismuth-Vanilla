@@ -1,5 +1,5 @@
 #pragma once
-#include "AppItem.h"
+#include "AppShortcut.h"
 #include "AppFolder.h"
 #include "ConfigJSON.h"
 
@@ -23,10 +23,10 @@ public:
     /**
      * Get the main list of application shortcuts.
      *
-     * @return  A list of AppItems to be pinned to the main column 
+     * @return  A list of shortcuts to be pinned to the main column 
      *          of the AppMenu.
      */
-    juce::Array<AppItem> getShortcuts();
+    juce::Array<AppShortcut> getShortcuts();
 
     /**
      * Add a new app to the list of pinned application shortcuts in the config
@@ -59,7 +59,7 @@ public:
      *
      * @return  The index of toFind, or -1 if it was not found in the list.
      */
-    int getFavoriteIndex(const AppItem& toFind);
+    int getShortcutIndex(const AppShortcut& toFind);
 
     /**
      * @return A list of folders to display in the AppMenu.
