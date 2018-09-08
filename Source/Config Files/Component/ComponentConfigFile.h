@@ -35,31 +35,7 @@ public:
      * @see ConfigFile.h
      */
     void addListener(ConfigFile::Listener* listener, juce::StringArray trackedKeys);
-    //######################### Text Size Keys #################################
-    static const juce::String smallTextKey;
-    static const juce::String mediumTextKey;
-    static const juce::String largeTextKey;
-
-    //######################### UI Component Data ##############################
-    //Defines all component types managed in the config file
-    static const juce::String scrollingAppMenuKey;
-    static const juce::String pagedAppMenuKey;
-    static const juce::String menuFrameKey;
-    static const juce::String batteryIconKey;
-    static const juce::String batteryPercentKey;
-    static const juce::String clockLabelKey;
-    static const juce::String wifiIconKey;
-    static const juce::String powerButtonKey;
-    static const juce::String settingsButtonKey;
-    static const juce::String popupMenuKey;
-    static const juce::String pageLeftKey;
-    static const juce::String pageRightKey;
-    static const juce::String pageUpKey;
-    static const juce::String pageDownKey;
-    static const juce::String settingsListBtnKey;
-    static const juce::String spinnerKey;
-
-    /**
+      /**
      * Represents the three main text size options.  The actual size of
      * each of these options is set in components.json, either as a fraction
      * of the window height (if textSize <= 1) or as a fixed height in pixels
@@ -175,8 +151,8 @@ public:
          */
         float getHeightFraction();
 
-
         bool operator==(const ComponentSettings& rhs) const;
+
     private:
         /*
          * Position and size data is stored in terms of total screen size,
@@ -207,41 +183,7 @@ protected:
     static const juce::StringArray& getComponentKeys();
 
 private:
-    class ConfigJson : public ConfigFile
-    {
-    public:
-        ConfigJson();
-
-        virtual ~ConfigJson() { }
-
-        /**
-         * Gets the configured settings for a particular component.
-         * 
-         * @param componentKey  A configurable UI component's key string.
-         * 
-         * @return              the properties defined for that component.
-         */
-        ComponentSettings getComponentSettings(juce::String componentKey);
-
-    private:
-        /**
-         * Copy all ComponentSettings data back to the JSON file.
-         */
-        virtual void writeDataToJSON() final override;
-
-        /**
-         * Gets the string key and data type for each basic value stored in
-         * components.json.
-         * 
-         * @return  Key strings and data types for each bool, int, String, or
-         *          double stored in components.json.
-         */
-        virtual const std::vector<DataKey>& getDataKeys() const final override;
-
-        //Stores all component settings loaded from the component config file
-        std::map<juce::String, ComponentSettings> components;
-    };
-
+    
     //Defines the component config file's name
     static constexpr const char * filenameConst = "components.json";
 

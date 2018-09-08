@@ -48,32 +48,6 @@ void ComponentConfigFile::addListener(ConfigFile::Listener* listener,
     ConfigJson* config = static_cast<ConfigJson*> (sharedResource.get());
     config->addListener(listener, trackedKeys);
 }
-//######################### Text Size Keys #################################
-const juce::String ComponentConfigFile::smallTextKey  = "small text";
-const juce::String ComponentConfigFile::mediumTextKey = "medium text";
-const juce::String ComponentConfigFile::largeTextKey  = "large text";
-
-//######################### UI Component Data ##############################
-//Defines all component types managed in the config file
-const juce::String ComponentConfigFile::scrollingAppMenuKey
-        = "scrolling app menu";
-const juce::String ComponentConfigFile::pagedAppMenuKey = "paged app menu";
-const juce::String ComponentConfigFile::menuFrameKey = "menu frame";
-const juce::String ComponentConfigFile::batteryIconKey = "battery";
-const juce::String ComponentConfigFile::batteryPercentKey
-        = "battery percent text";
-const juce::String ComponentConfigFile::clockLabelKey = "time";
-const juce::String ComponentConfigFile::wifiIconKey = "wifi";
-const juce::String ComponentConfigFile::powerButtonKey = "power button";
-const juce::String ComponentConfigFile::settingsButtonKey = "settings button";
-const juce::String ComponentConfigFile::popupMenuKey = "popup menu";
-const juce::String ComponentConfigFile::pageLeftKey = "left arrow button";
-const juce::String ComponentConfigFile::pageRightKey = "right arrow button";
-const juce::String ComponentConfigFile::pageUpKey = "up arrow button";
-const juce::String ComponentConfigFile::pageDownKey = "down arrow button";
-const juce::String ComponentConfigFile::settingsListBtnKey
-        = "settings list button";
-const juce::String ComponentConfigFile::spinnerKey = "loading spinner";
 
 /*
  * Return the most appropriate font size for drawing text
@@ -172,60 +146,6 @@ const juce::StringArray& ComponentConfigFile::getComponentKeys()
         spinnerKey,
     };
     return keys;
-}
-
-ComponentConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
-{
-    using namespace juce;
-    StringArray keys = getComponentKeys();
-    for (const String& key : keys)
-    {
-	DynamicObject::Ptr componentData = initProperty<DynamicObject*>(key);
-        components[key] = ComponentSettings(componentData);
-    }
-    loadJSONData();
-}
-
-/*
- * Gets the configured settings for a particular component.
- */
-ComponentConfigFile::ComponentSettings
-ComponentConfigFile::ConfigJson::getComponentSettings(juce::String componentKey)
-{
-    return components[componentKey];
-}
-
-/*
- * @return the list of key Strings for each integer value tracked in 
- * components.json
- */
-const std::vector<ConfigFile::DataKey>& 
-ComponentConfigFile::ConfigJson::getDataKeys() const
-{
-    static const std::vector<ConfigFile::DataKey> keys = 
-    {
-        {smallTextKey,  ConfigFile::doubleType},
-        {mediumTextKey, ConfigFile::doubleType},
-        {largeTextKey,  ConfigFile::doubleType}
-    };
-    return keys;
-}
-
-/*
- * Copy all ComponentSettings data back to the JSON file.
- */
-void ComponentConfigFile::ConfigJson::writeDataToJSON()
-{
-    using namespace juce;
-    const StringArray& keys = getComponentKeys();
-    for (const String& key : keys)
-    {
-        if(components.count(key) != 0)
-        {
-            updateProperty<DynamicObject*>(key, 
-                    components[key].getDynamicObject());
-        }
-    }
 }
 
 ComponentConfigFile::ComponentSettings::ComponentSettings() :
