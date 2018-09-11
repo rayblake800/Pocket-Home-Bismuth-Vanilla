@@ -1,7 +1,7 @@
 #include "ConfigurableImageButton.h"
 
 ConfigurableImageButton::ConfigurableImageButton(
-        juce::String componentKey,
+        const juce::Identifier& componentKey,
         int assetIndex,
         juce::RectanglePlacement placement) :
 buttonImage(componentKey, assetIndex, placement),

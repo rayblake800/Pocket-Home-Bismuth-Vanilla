@@ -26,7 +26,7 @@ private:
      * 
      * @param state   New wifi state sent by the wifi manager.
      */
-    void wifiStateChanged(WifiStateManager::WifiState state) override;
+    virtual void wifiStateChanged(WifiState state) override;
 
     /**
      * All wifi icon states.  Each corresponds to an image asset file

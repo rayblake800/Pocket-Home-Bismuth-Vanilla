@@ -85,7 +85,7 @@ float ConfigurableComponent::getHeightFraction()
 ConfigurableComponent::Listener::Listener(ConfigurableComponent& component) :
 component(component)
 {
-   subscribeToKey(component.componentKey); 
+   addTrackedKey(component.componentKey); 
    loadAllConfigProperties();
 }
 

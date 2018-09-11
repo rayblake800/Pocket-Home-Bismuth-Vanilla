@@ -21,7 +21,7 @@ public:
     /**
      */
     FolderMenuItem
-    (const AppConfigFile::AppFolder& appFolder, DesktopEntryLoader& desktopEntries);
+    (const AppFolder& appFolder, DesktopEntryLoader& desktopEntries);
 
     virtual ~FolderMenuItem() { }
 
@@ -123,7 +123,7 @@ protected:
     void editFolder(juce::String name, juce::String icon, juce::StringArray categories);
 private:
     
-    AppConfigFile::AppFolder appFolder;
+    AppFolder appFolder;
     DesktopEntryLoader& desktopEntries;
 
     //localized text keys: 

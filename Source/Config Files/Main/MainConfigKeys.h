@@ -25,10 +25,10 @@ namespace MainConfigKeys
     /* Sets the AppMenuComponent type to use on the home page. */
     static const ConfigKey menuTypeKey
         ("Wifi interface", ConfigKey::stringType);
-    /* sets the command used to shut down the system on the power page. */
+    /* Sets the command used to shut down the system on the power page. */
     static const ConfigKey shutdownCommandKey
         ("shutdown command", ConfigKey::stringType);
-    /* sets the command used to restart the system on the power page. */
+    /* Sets the command used to restart the system on the power page. */
     static const ConfigKey restartCommandKey
         ("restart command", ConfigKey::stringType);
     /* Sets the command used to turn off the display from the power page. */
@@ -53,7 +53,6 @@ namespace MainConfigKeys
     /* Sets if the HomePage clock should use 12 hour or 24 hour time */
     static const ConfigKey use24HrModeKey
         ("use 24h mode", ConfigKey::boolType);
-
 
     /* All possible values of menuTypeKey */
     static const juce::StringArray menuTypes = 

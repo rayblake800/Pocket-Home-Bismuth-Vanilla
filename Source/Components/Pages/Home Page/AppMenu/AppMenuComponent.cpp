@@ -24,8 +24,8 @@ menuItemFactory(desktopEntries)
 #    if JUCE_DEBUG
     setName("AppMenuComponent");
 #    endif
-    subscribeToKey(MainConfigKeys::maxRowsKey);
-    subscribeToKey(MainConfigKeys::maxColumnsKey);
+    addTrackedKey(MainConfigKeys::maxRowsKey);
+    addTrackedKey(MainConfigKeys::maxColumnsKey);
     MainConfigFile mainConfig;
     maxRows = mainConfig.getConfigValue<int>(MainConfigKeys::maxRowsKey);
     maxColumns = mainConfig.getConfigValue<int>(MainConfigKeys::maxColumnsKey);

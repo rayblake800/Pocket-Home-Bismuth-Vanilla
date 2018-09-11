@@ -22,7 +22,7 @@ public:
      * 
      * @param placement     Defines how the image will be scaled.
      */
-    ConfigurableImageComponent(juce::String componentKey,
+    ConfigurableImageComponent(const juce::Identifier& componentKey,
             int assetIndex = 0,
             juce::RectanglePlacement placement 
             = juce::RectanglePlacement::centred);

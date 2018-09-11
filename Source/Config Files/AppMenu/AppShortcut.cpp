@@ -10,6 +10,15 @@ const bool launchInTerminal) :
     launchInTerminal(launchInTerminal) { }
 
 /*
+ * Creates this shortcut as a copy of another shortcut.
+ */
+AppShortcut::AppShortcut(const AppShortcut& rhs) :
+    name(rhs.name),
+    icon(rhs.icon),
+    shell(rhs.shell),
+    launchInTerminal(rhs.launchInTerminal) { }
+
+/*
  * Load an AppShortcut from JSON file data.
  */
 AppShortcut::AppShortcut(juce::var jsonObj) :

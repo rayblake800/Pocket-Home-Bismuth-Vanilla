@@ -4,7 +4,6 @@
 #include "Localized.h"
 #include "FileSelectTextEditor.h"
 #include "PopupEditorComponent.h"
-#include "IconThread.h"
 #include "CategoryPopupEditor.h"
 #include "SwitchComponent.h"
 

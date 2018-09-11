@@ -24,6 +24,13 @@ public:
             const juce::String& shell,
             const bool launchInTerminal = false);
 
+    /**
+     * @brief  Creates this shortcut as a copy of another shortcut.
+     *
+     * @param rhs  Another shortcut object to copy.
+     */
+    AppShortcut(const AppShortcut& rhs);
+
     virtual ~AppShortcut() { };
 
     /**
@@ -79,11 +86,11 @@ public:
 
 private:
     // Application display name
-    const juce::String name;
+    juce::String name;
     // Application icon name/path
-    const juce::String icon;
+    juce::String icon;
     // Application launch command
-    const juce::String shell;
+    juce::String shell;
     // Set if application launches in the terminal
-    const bool launchInTerminal;
+    bool launchInTerminal;
 };

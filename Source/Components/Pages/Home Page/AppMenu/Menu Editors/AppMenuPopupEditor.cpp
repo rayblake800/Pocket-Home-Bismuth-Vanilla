@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "IconLoader.h"
 #include "AppMenuPopupEditor.h"
 #include "ComponentConfigFile.h"
 
@@ -184,7 +185,7 @@ void AppMenuPopupEditor::fileSelected(FileSelectTextEditor* edited)
 {
     using namespace juce;
     String newIcon = getIconField();
-    IconThread iconThread;
+    IconLoader iconThread;
     iconThread.loadIcon(newIcon, iconPreview.getWidth(), [this](Image iconImg)
     {
         iconPreview.setImage(iconImg);

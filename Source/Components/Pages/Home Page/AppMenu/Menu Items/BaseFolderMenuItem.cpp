@@ -21,14 +21,14 @@ juce::Array<AppMenuItem::Ptr> BaseFolderMenuItem::getFolderItems() const
     AppConfigFile config;
     Array<AppMenuItem::Ptr> folderItems;
 
-    Array<AppConfigFile::AppItem> favorites = config.getFavorites();
-    for (const AppConfigFile::AppItem& app : favorites)
+    Array<AppShortcut> shortcuts = config.getShortcuts();
+    for (const AppShortcut& app : shortcuts)
     {
         folderItems.add(create(app));
     }
 
-    Array<AppConfigFile::AppFolder> folders = config.getFolders();
-    for (const AppConfigFile::AppFolder& folder : folders)
+    Array<AppFolder> folders = config.getFolders();
+    for (const AppFolder& folder : folders)
     {
         folderItems.add(create(folder));
     }

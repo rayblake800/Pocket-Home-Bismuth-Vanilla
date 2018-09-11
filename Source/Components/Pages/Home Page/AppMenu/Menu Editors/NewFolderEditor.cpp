@@ -5,11 +5,11 @@ AppMenuPopupEditor("New folder",
 [this, onConfirm](AppMenuPopupEditor* editor)
 {
     AppConfigFile appConfig;
-    AppConfigFile::AppFolder newFolder;
-    newFolder.name = editor->getNameField();
-    newFolder.icon = editor->getIconField();
-    newFolder.categories = editor->getCategories();
-    appConfig.addAppFolder(newFolder, appConfig.getFolders().size());
+    AppFolder newFolder(
+            editor->getNameField(),
+            editor->getCategories(),
+            editor->getIconField());
+    appConfig.addFolder(newFolder, appConfig.getFolders().size());
     onConfirm();
 },
 true, false)

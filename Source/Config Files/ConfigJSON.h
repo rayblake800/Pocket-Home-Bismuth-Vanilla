@@ -208,7 +208,7 @@ protected:
     /**
      * @brief Calls configValueChanged() for every key tracked by this listener.
      */
-    void loadAllConfigProperties();
+    virtual void loadAllConfigProperties();
 
     /**
      * @brief Adds a key to the list of keys tracked by this listener.
@@ -216,7 +216,7 @@ protected:
      * @param keyToTrack  Whenever a value with this key is updated, the
      *                    Listener will be notified.
      */
-    void subscribeToKey(const juce::Identifier& keyToTrack);
+    void addTrackedKey(const juce::Identifier& keyToTrack);
 
     /**
      * @brief Unsubscribes from updates to a ConfigJSON value.
@@ -224,7 +224,7 @@ protected:
      * @param keyToRemove  This listener will no longer receive updates when
      *                     the value with this key is updated.
      */
-    void unsubscribeFromKey(const juce::Identifier& keyToRemove);
+    void removeTrackedKey(const juce::Identifier& keyToRemove);
 
 private:
     /**

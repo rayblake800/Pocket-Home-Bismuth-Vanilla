@@ -1,5 +1,6 @@
 #include "ConfigurableImageComponent.h"
-#include "MainConfigFile.h"
+#include "MainConfigKeys.h"
+#include "ComponentConfigKeys.h"
 #include "PokeLookAndFeel.h"
 #include "AssetFiles.h"
 #include "PagedAppMenu.h"
@@ -8,19 +9,16 @@
 
 HomePage::HomePage() :
 PageComponent("HomePage"),
-frame(ComponentConfigFile::menuFrameKey, 0,
+frame(ComponentConfigKeys::menuFrameKey, 0,
         juce::RectanglePlacement::stretchToFit),
-powerButton(ComponentConfigFile::powerButtonKey),
-settingsButton(ComponentConfigFile::settingsButtonKey)
+powerButton(ComponentConfigKeys::powerButtonKey),
+settingsButton(ComponentConfigKeys::settingsButtonKey)
 {
 #    if JUCE_DEBUG
     setName("HomePage");
 #    endif
-    MainConfigFile mainConfig;
-    mainConfig.addListener(this,{
-        MainConfigFile::backgroundKey,
-        MainConfigFile::menuTypeKey
-    });
+    addTrackedKey(MainConfigKeys::backgroundKey);
+    addTrackedKey(MainConfigKeys::menuTypeKey);
 
     setWantsKeyboardFocus(true);
     addAndMakeVisible(frame);
@@ -48,14 +46,14 @@ settingsButton(ComponentConfigFile::settingsButtonKey)
  * should be calling this.  Depending on the key provided, this will update
  * the page background or recreate the AppMenu.
  */
-void HomePage::configValueChanged(juce::String key)
+void HomePage::configValueChanged(const juce::Identifier& key)
 {
     using namespace juce;
     MainConfigFile mainConfig;
-    if (key == MainConfigFile::backgroundKey)
+    if (key == MainConfigKeys::backgroundKey)
     {
         String background = mainConfig.getConfigValue<String>
-                (MainConfigFile::backgroundKey);
+                (MainConfigKeys::backgroundKey);
         if (background.containsOnly("0123456789ABCDEFXabcdefx"))
         {
             setBackgroundImage(Image());
@@ -67,11 +65,11 @@ void HomePage::configValueChanged(juce::String key)
             setBackgroundImage(AssetFiles::loadImageAsset(background));
         }
     }
-    else if (key == MainConfigFile::menuTypeKey)
+    else if (key == MainConfigKeys::menuTypeKey)
     {
         String menuType = mainConfig.getConfigValue<String>
-                (MainConfigFile::menuTypeKey);
-        if (!MainConfigFile::menuTypes.contains(menuType))
+                (MainConfigKeys::menuTypeKey);
+        if (!MainConfigKeys::menuTypes.contains(menuType))
         {
             DBG("HomePage::" << __func__ << ": Invalid menu type!");
             return;

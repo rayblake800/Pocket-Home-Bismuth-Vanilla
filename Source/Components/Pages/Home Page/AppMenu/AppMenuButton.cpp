@@ -1,7 +1,8 @@
 #include "PokeLookAndFeel.h"
 #include "Utils.h"
-#include "IconThread.h"
+#include "IconLoader.h"
 #include "AppMenuButton.h"
+#include "MainConfigKeys.h"
 
 AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem, juce::String name) :
 Button(name),
@@ -48,7 +49,7 @@ AppMenuPopupEditor* AppMenuButton::getEditor
     if(menuItem->isTerminalApp())
     {
         command = command.substring(mainConfig.getConfigValue<String>
-                (MainConfigFile::termLaunchCommandKey).length() + 1);
+                (MainConfigKeys::termLaunchCommandKey).length() + 1);
     }
     editor->setCommandField(command);
     editor->setTerminalCheckbox(menuItem->isTerminalApp());
@@ -106,7 +107,7 @@ void AppMenuButton::setSelected(bool select)
 void AppMenuButton::loadIcon(juce::String icon)
 {
     using namespace juce;
-    IconThread iconThread;
+    IconLoader iconThread;
     iconThread.loadIcon(icon, imageBounds.toNearestInt().getWidth(),
     [this](Image iconImg)
     {

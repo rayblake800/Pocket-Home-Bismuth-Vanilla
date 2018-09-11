@@ -1,6 +1,5 @@
 #pragma once
 #include "ConfigJSON.h"
-#include "ConfigListener.h"
 
 class ColourJSON : public ConfigJSON
 {
@@ -15,11 +14,12 @@ public:
     /**
      * Receives updates when color configurations change.
      */
-    class Listener : protected ConfigListener<ColourJSON>
+    class Listener : protected ConfigJSON::Listener
     {
     friend class ColourConfigFile;
     protected:
-        Listener() { }
+        Listener() : ConfigJSON::Listener(ColourJSON::resourceKey,
+                []()->SharedResource* { return new ColourJSON(); }) { }
 
         virtual ~Listener() { }
 
@@ -54,8 +54,10 @@ public:
          *  
          * @param newColour   The updated Colour value.
          */
-        virtual void colourChanged
-        (int colourId, juce::String updatedKey, juce::Colour newColour) = 0;
+        virtual void colourChanged(
+                const int colourId, 
+                const juce::Identifier& updatedKey, 
+                const juce::Colour newColour) = 0;
        
         /* All tracked ColourId values */        
         juce::Array<int> trackedColourIds;
@@ -75,12 +77,12 @@ private:
      *         of a single key value, and if so, notifies it that the tracked
      *         value has updated.
      *
-     * @param possibleListener  A Handler object attached to the ConfigJSON
+     * @param listener          A Listener object attached to the ConfigJSON
      *                          object.
      *
      * @param key               The key to an updated configuration value.
      */
-    virtual void notifyListener(SharedResource::Handler* possibleListener,
+    virtual void notifyListener(ConfigJSON::Listener* listener,
             const juce::Identifier& key) override; 
 };
 

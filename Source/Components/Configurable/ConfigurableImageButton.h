@@ -25,7 +25,7 @@ public:
      * @param placement     Defines how the image will be scaled.
      */
     ConfigurableImageButton(
-            juce::String componentKey,
+            const juce::Identifier& componentKey,
             int assetIndex = 0,
             juce::RectanglePlacement placement 
             = juce::RectanglePlacement::centred);

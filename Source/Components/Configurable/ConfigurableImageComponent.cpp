@@ -1,7 +1,7 @@
 #include "ConfigurableImageComponent.h"
 
 ConfigurableImageComponent::ConfigurableImageComponent(
-        juce::String componentKey,
+        const juce::Identifier& componentKey,
         int assetIndex,
         juce::RectanglePlacement placement) :
 ConfigurableComponent(componentKey),

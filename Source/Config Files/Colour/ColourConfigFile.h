@@ -13,7 +13,7 @@
 class ColourConfigFile : public ConfigFile<ColourJSON>
 {
 public:
-    ColourConfigFile();
+    ColourConfigFile() { }
 
     virtual ~ColourConfigFile() { }
     

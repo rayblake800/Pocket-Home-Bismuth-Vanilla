@@ -1,5 +1,6 @@
 #include "ComponentConfigFile.h"
 #include "ColourConfigFile.h"
+#include "ColourConfigKeys.h"
 #include "MainConfigFile.h"
 #include "SwitchComponent.h"
 #include "DrawableImageComponent.h"
@@ -13,12 +14,15 @@
 PokeLookAndFeel::PokeLookAndFeel() :
 seguibl(juce::Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
 BinaryData::LatoRegular_ttfSize)),
-cursor(juce::MouseCursor::NoCursor)
+cursor(juce::MouseCursor::NoCursor),
+mainListener(*this)
 {
-    ColourConfigFile colourConfig;
-    MainConfigFile mainConfig;
-    colourConfig.addListener(this, colourConfig.getColourIds());
-    mainConfig.addListener(this,{MainConfigFile::showCursorKey});
+    using namespace juce;
+    const juce::Array<int>& colourIds = ColourConfigKeys::getColourIds();
+    for(const int& id : colourIds)
+    {
+        addTrackedColourId(id);
+    }
     loadAllConfigProperties();
 }
 

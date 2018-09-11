@@ -2,7 +2,7 @@
 #include "FolderMenuItem.h"
 
 FolderMenuItem::FolderMenuItem(
-        const AppConfigFile::AppFolder& appFolder,
+        const AppFolder& appFolder,
         DesktopEntryLoader& desktopEntries) :
 Localized("FolderMenuItem"),
 appFolder(appFolder),
@@ -24,7 +24,7 @@ juce::Array<AppMenuItem::Ptr> FolderMenuItem::getFolderItems() const
 {
     using namespace juce;
     std::set<DesktopEntry> folderEntries =
-            desktopEntries.getCategoryListEntries(appFolder.categories);
+            desktopEntries.getCategoryListEntries(appFolder.getCategories());
     Array<AppMenuItem::Ptr> folderItems;
     for (const DesktopEntry& entry : folderEntries)
     {
@@ -38,7 +38,7 @@ juce::Array<AppMenuItem::Ptr> FolderMenuItem::getFolderItems() const
  */
 juce::String FolderMenuItem::getAppName() const
 {
-    return appFolder.name;
+    return appFolder.getName();
 }
 
 /**
@@ -46,7 +46,7 @@ juce::String FolderMenuItem::getAppName() const
  */
 juce::StringArray FolderMenuItem::getCategories() const
 {
-    return appFolder.categories;
+    return appFolder.getCategories();
 }
 
 /**
@@ -54,7 +54,7 @@ juce::StringArray FolderMenuItem::getCategories() const
  */
 juce::String FolderMenuItem::getIconName() const
 {
-    return appFolder.icon;
+    return appFolder.getIcon();
 }
 
 /**
@@ -73,7 +73,7 @@ bool FolderMenuItem::canChangeIndex(int offset) const
  */
 juce::String FolderMenuItem::getConfirmDeleteTitle() const
 {
-    return localeText(delete_NAME) + appFolder.name 
+    return localeText(delete_NAME) + appFolder.getName() 
             + localeText(folder);
 }
 
@@ -113,7 +113,7 @@ std::function<void(AppMenuPopupEditor*) > FolderMenuItem::getEditorCallback()
 bool FolderMenuItem::removeMenuItemSource()
 {
     AppConfigFile config;
-    config.removeAppFolder(config.getFolderIndex(appFolder));
+    config.removeFolder(config.getFolderIndex(appFolder));
     return true;
 }
 
@@ -131,9 +131,9 @@ bool FolderMenuItem::moveDataIndex(int offset)
         {
             return false;
         }
-        config.removeAppFolder(index, false);
-        config.addAppFolder(appFolder, index + offset);
-        DBG("FolderMenuItem::" << __func__ << ": Moved " << appFolder.name
+        config.removeFolder(index, false);
+        config.addFolder(appFolder, index + offset);
+        DBG("FolderMenuItem::" << __func__ << ": Moved " << appFolder.getName()
                 << " from " << index << " to "
                 << config.getFolderIndex(appFolder));
         return true;
@@ -152,9 +152,9 @@ void FolderMenuItem::editFolder
 {
     AppConfigFile config;
     int index = config.getFolderIndex(appFolder);
-    appFolder.name = name;
-    appFolder.icon = icon;
-    appFolder.categories = categories;
-    config.removeAppFolder(index, false);
-    config.addAppFolder(appFolder, index);
+    appFolder.setName(name);
+    appFolder.setIcon(icon);
+    appFolder.setCategories(categories);
+    config.removeFolder(index, false);
+    config.addFolder(appFolder, index);
 }

@@ -37,7 +37,7 @@ public:
             = []() { return nullptr; });
 
     virtual ~WifiStateManager() { }
-
+    
     /**
      * Gets the current state of the wifi device.
      * 
@@ -125,6 +125,7 @@ public:
      */
     juce::Time lastConnectionTime(const WifiAccessPoint& accessPoint);
 
+    typedef NetworkInterface::Listener Listener;
 private:
     /**
      * Checks if a saved pointer to the NetworkInterface is still valid.

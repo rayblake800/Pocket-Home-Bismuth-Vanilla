@@ -1,10 +1,10 @@
+#include "MainConfigKeys.h"
 #include "MainConfigFile.h"
 #include "AppMenuItem.h"
 
 AppMenuItem::AppMenuItem()
 {
-    MainConfigFile config;
-    config.addListener(this,{MainConfigFile::termLaunchCommandKey});
+    addTrackedKey(MainConfigKeys::termLaunchCommandKey);
     loadAllConfigProperties();
 }
 
@@ -200,7 +200,7 @@ juce::String AppMenuItem::getTermLaunchPrefix() const
  * AppConfigFile.
  */
 AppMenuItem::Ptr AppMenuItem::create
-(const AppConfigFile::AppItem& appItem) const
+(const AppShortcut& appItem) const
 {
     if (factoryInterface == nullptr)
     {
@@ -227,7 +227,7 @@ AppMenuItem::Ptr AppMenuItem::create(const DesktopEntry& desktopEntry) const
  * AppConfigFile. 
  */
 AppMenuItem::Ptr AppMenuItem::create
-(const AppConfigFile::AppFolder& appFolder) const
+(const AppFolder& appFolder) const
 {
     if (factoryInterface == nullptr)
     {
@@ -239,10 +239,10 @@ AppMenuItem::Ptr AppMenuItem::create
 /**
  * Updates the termLaunchPrefix if it's changed in configuration.
  */
-void AppMenuItem::configValueChanged(juce::String propertyKey)
+void AppMenuItem::configValueChanged(const juce::Identifier& propertyKey)
 {
     using namespace juce;
-    if (propertyKey == MainConfigFile::termLaunchCommandKey)
+    if (propertyKey == MainConfigKeys::termLaunchCommandKey)
     {
         MainConfigFile mainConfig;
         termLaunchPrefix = mainConfig.getConfigValue<String>(propertyKey);

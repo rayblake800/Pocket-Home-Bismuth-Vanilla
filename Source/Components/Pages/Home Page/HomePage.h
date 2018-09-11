@@ -26,7 +26,7 @@
  *  -Complete documentation
  */
 
-class HomePage : public PageComponent, public ConfigFile::Listener
+class HomePage : public PageComponent, public MainConfigFile::Listener
 {
 public:
     HomePage();
@@ -42,7 +42,7 @@ protected:
      * 
      * @param key     This should be the background key or the menu type key.
      */
-    void configValueChanged(juce::String key);
+    virtual void configValueChanged(const juce::Identifier& key) override;
 
 private:
     /**

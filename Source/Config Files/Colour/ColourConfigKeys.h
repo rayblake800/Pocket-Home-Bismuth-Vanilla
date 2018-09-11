@@ -28,6 +28,9 @@ namespace ColourConfigKeys
         highlightedText,
         none
     };
+    
+    /* Represents an invalid color key */
+    static const juce::Identifier invalidKey("");
 
     /**
      * @brief   Gets all Juce ColourId values defined by the colour config file.

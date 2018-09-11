@@ -1,7 +1,7 @@
 #include "Utils.h"
 #include "ConfigAppMenuItem.h"
 
-ConfigAppMenuItem::ConfigAppMenuItem(const AppConfigFile::AppItem& appItem) :
+ConfigAppMenuItem::ConfigAppMenuItem(const AppShortcut& appItem) :
 Localized("ConfigAppMenuItem"),
 appItem(appItem) { }
 
@@ -10,7 +10,7 @@ appItem(appItem) { }
  */
 juce::String ConfigAppMenuItem::getAppName() const
 {
-    return appItem.name;
+    return appItem.getDisplayName();
 }
 
 /**
@@ -19,8 +19,8 @@ juce::String ConfigAppMenuItem::getAppName() const
 juce::String ConfigAppMenuItem::getCommand() const
 {
     using namespace juce;
-    String command = appItem.shell;
-    if (appItem.launchInTerminal)
+    String command = appItem.getLaunchCommand();
+    if (appItem.isTerminalApplication())
     {
         command = getTermLaunchPrefix() + String(" ") + command;
     }
@@ -33,7 +33,7 @@ juce::String ConfigAppMenuItem::getCommand() const
  */
 bool ConfigAppMenuItem::isTerminalApp() const
 {
-    return appItem.launchInTerminal;
+    return appItem.isTerminalApplication();
 }
 
 /**
@@ -41,7 +41,7 @@ bool ConfigAppMenuItem::isTerminalApp() const
  */
 juce::String ConfigAppMenuItem::getIconName() const
 {
-    return appItem.icon;
+    return appItem.getIconName();
 }
 
 /**
@@ -54,8 +54,8 @@ juce::String ConfigAppMenuItem::getIconName() const
 bool ConfigAppMenuItem::canChangeIndex(int offset) const
 {
     AppConfigFile appConfig;
-    int newIndex = appConfig.getFavoriteIndex(appItem) + offset;
-    return newIndex >= 0 && newIndex < appConfig.getFavorites().size();
+    int newIndex = appConfig.getShortcutIndex(appItem) + offset;
+    return newIndex >= 0 && newIndex < appConfig.getShortcuts().size();
 }
 
 /**
@@ -103,13 +103,10 @@ void ConfigAppMenuItem::editApp
 (juce::String name, juce::String icon, juce::String command, bool terminal)
 {
     AppConfigFile appConfig;
-    int index = appConfig.getFavoriteIndex(appItem);
-    appItem.name = name;
-    appItem.icon = icon;
-    appItem.shell = command;
-    appItem.launchInTerminal = terminal;
-    appConfig.removeFavoriteApp(index, false);
-    appConfig.addFavoriteApp(appItem, index);
+    int index = appConfig.getShortcutIndex(appItem);
+    appItem = AppShortcut(name, icon, command, terminal);
+    appConfig.removeShortcut(index, false);
+    appConfig.addShortcut(appItem, index);
 }
 
 /**
@@ -118,7 +115,7 @@ void ConfigAppMenuItem::editApp
 bool ConfigAppMenuItem::removeMenuItemSource()
 {
     AppConfigFile appConfig;
-    appConfig.removeFavoriteApp(appConfig.getFavoriteIndex(appItem));
+    appConfig.removeShortcut(appConfig.getShortcutIndex(appItem));
     return true;
 }
 
@@ -128,19 +125,20 @@ bool ConfigAppMenuItem::removeMenuItemSource()
  */
 bool ConfigAppMenuItem::moveDataIndex(int offset)
 {
+    using namespace juce;
     if (canChangeIndex(offset))
     {
         AppConfigFile appConfig;
-        int index = appConfig.getFavoriteIndex(appItem);
+        int index = appConfig.getShortcutIndex(appItem);
         if (index == -1)
         {
             return false;
         }
-        appConfig.removeFavoriteApp(index, false);
-        appConfig.addFavoriteApp(appItem, index + offset);
-        DBG("ConfigAppMenuItem::" << __func__ << ": Moved " << appItem.name
-                << " from " << index << " to "
-                << appConfig.getFavoriteIndex(appItem));
+        appConfig.removeShortcut(index, false);
+        appConfig.addShortcut(appItem, index + offset);
+        DBG("ConfigAppMenuItem::" << __func__ << ": Moved " 
+                << appItem.getDisplayName()  << " from " << index << " to "
+                << appConfig.getShortcutIndex(appItem));
         return true;
     }
     return false;

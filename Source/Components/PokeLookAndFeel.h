@@ -157,10 +157,21 @@ public:
 private:
     /**
      * Updates the cursor visibility when the associated config key is changed. 
-     * 
-     * @param key  The cursor visibility key.
      */
-    void nonColorValueChanged(juce::String key) override;
+    class MainListener : protected MainConfigFile::Listener
+    {
+    public:
+        MainListener(PokeLookAndFeel& owner);
+        virtual ~MainListener() { }
+    private:
+        /**
+         * @param key  The cursor visibility key.
+         */
+        void configValueChanged(const juce::Identifier& key) override;
+        PokeLookAndFeel& owner;
+    };
+    friend class MainListener;
+    MainListener mainListener;
     
     /**
      * Updates Component colours when they're changed in the ColourConfigFile.
@@ -171,8 +182,9 @@ private:
      * 
      * @param newColour  The new colour value to apply to the colourID.
      */
-    void colourValueChanged
-    (int colourID, juce::String colourKey, juce::Colour newColour) override;
+    virtual void colourChanged(const int colourID,
+            const juce::Identifier& colourKey, 
+            const juce::Colour newColour) override;
 
     //Defines the maximum number of characters that will fit on a text button.
     static const int maxButtonStrSize = 30;

@@ -5,12 +5,12 @@ AppMenuPopupEditor("New favorite application link",
 [this, onConfirm](AppMenuPopupEditor* editor)
 {
     AppConfigFile appConfig;
-    AppConfigFile::AppItem newApp;
-    newApp.name = editor->getNameField();
-    newApp.icon = editor->getIconField();
-    newApp.shell = editor->getCommandField();
-    newApp.launchInTerminal = editor->launchInTerm();
-    appConfig.addFavoriteApp(newApp, appConfig.getFavorites().size());
+    AppShortcut newApp(
+            editor->getNameField(),
+            editor->getIconField(),
+            editor->getCommandField(),
+            editor->launchInTerm());
+    appConfig.addShortcut(newApp, appConfig.getShortcuts().size());
     onConfirm();
 }
 , false, true)
