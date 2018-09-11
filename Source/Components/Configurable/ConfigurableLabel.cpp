@@ -6,10 +6,7 @@ ConfigurableLabel::ConfigurableLabel(
         const juce::String &labelText,
         const int& fontPadding) :
 ScalingLabel(componentName, labelText, fontPadding),
-ConfigurableComponent(componentKey)
-{
-    loadAllConfigProperties();
-}
+ConfigurableComponent(componentKey) { }
 
 
 /**

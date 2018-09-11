@@ -140,18 +140,19 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/PokeLookAndFeel_14171995.o \
   $(JUCE_OBJDIR)/LayoutManager_6a2c5f53.o \
   $(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o \
-  $(JUCE_OBJDIR)/ConfigKey_75384910.o \
   $(JUCE_OBJDIR)/MainJSON_7d61af2a.o \
   $(JUCE_OBJDIR)/ComponentConfigFile_340680dc.o \
   $(JUCE_OBJDIR)/ComponentConfigKeys_7ec7bd54.o \
   $(JUCE_OBJDIR)/ComponentJSON_30e8db86.o \
   $(JUCE_OBJDIR)/ComponentSettings_c82bd4e1.o \
   $(JUCE_OBJDIR)/ColourConfigFile_64de91a0.o \
+  $(JUCE_OBJDIR)/ColourConfigKeys_af9fce18.o \
   $(JUCE_OBJDIR)/ColourJSON_a63dcf4a.o \
   $(JUCE_OBJDIR)/AppConfigFile_38950ae3.o \
   $(JUCE_OBJDIR)/AppFolder_a44c0b73.o \
   $(JUCE_OBJDIR)/AppShortcut_82838b4b.o \
   $(JUCE_OBJDIR)/AppJSON_bd8d36cd.o \
+  $(JUCE_OBJDIR)/ConfigKey_75384910.o \
   $(JUCE_OBJDIR)/ConfigAlertWindows_cf8924c0.o \
   $(JUCE_OBJDIR)/JSONFile_f406f23b.o \
   $(JUCE_OBJDIR)/ConfigJSON_cbbe9f81.o \
@@ -588,11 +589,6 @@ $(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o: ../../Source/Components/Transition
 	@echo "Compiling TransitionAnimator.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/ConfigKey_75384910.o: ../../Source/Config\ Files/ConfigKey.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ConfigKey.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/MainJSON_7d61af2a.o: ../../Source/Config\ Files/Main/MainJSON.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling MainJSON.cpp"
@@ -623,6 +619,11 @@ $(JUCE_OBJDIR)/ColourConfigFile_64de91a0.o: ../../Source/Config\ Files/Colour/Co
 	@echo "Compiling ColourConfigFile.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/ColourConfigKeys_af9fce18.o: ../../Source/Config\ Files/Colour/ColourConfigKeys.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ColourConfigKeys.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/ColourJSON_a63dcf4a.o: ../../Source/Config\ Files/Colour/ColourJSON.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ColourJSON.cpp"
@@ -646,6 +647,11 @@ $(JUCE_OBJDIR)/AppShortcut_82838b4b.o: ../../Source/Config\ Files/AppMenu/AppSho
 $(JUCE_OBJDIR)/AppJSON_bd8d36cd.o: ../../Source/Config\ Files/AppMenu/AppJSON.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppJSON.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ConfigKey_75384910.o: ../../Source/Config\ Files/ConfigKey.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ConfigKey.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigAlertWindows_cf8924c0.o: ../../Source/Config\ Files/ConfigAlertWindows.cpp

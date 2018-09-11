@@ -30,7 +30,7 @@ public:
      * 
      * @return a pointer to the new menu item.
      */
-    AppMenuItem::Ptr create(const AppConfigFile::AppItem& appItem) override;
+    AppMenuItem::Ptr create(const AppShortcut& appItem) override;
 
     /**
      * Get an AppMenuItem for an application link that was read from a desktop
@@ -50,7 +50,7 @@ public:
      * 
      * @return a pointer to the new menu item.
      */
-    AppMenuItem::Ptr create(const AppConfigFile::AppFolder& appFolder) override;
+    AppMenuItem::Ptr create(const AppFolder& appFolder) override;
 private:
     DesktopEntryLoader& desktopEntries;
 };

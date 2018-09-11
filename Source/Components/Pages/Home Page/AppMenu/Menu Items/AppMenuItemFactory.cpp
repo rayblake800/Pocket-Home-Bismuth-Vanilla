@@ -19,7 +19,7 @@ AppMenuItem::Ptr AppMenuItemFactory::createBaseFolderItem()
  * Get an AppMenuItem for an application link provided by the AppConfigFile
  */
 AppMenuItem::Ptr AppMenuItemFactory::create
-(const AppConfigFile::AppItem& appItem)
+(const AppShortcut& appItem)
 {
     return setFactory(new ConfigAppMenuItem(appItem));
 }
@@ -38,7 +38,7 @@ AppMenuItem::Ptr AppMenuItemFactory::create(const DesktopEntry& desktopEntry)
  * AppConfigFile
  */
 AppMenuItem::Ptr AppMenuItemFactory::create
-(const AppConfigFile::AppFolder& appFolder)
+(const AppFolder& appFolder)
 {
     return setFactory(new FolderMenuItem(appFolder, desktopEntries));
 }

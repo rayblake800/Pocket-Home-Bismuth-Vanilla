@@ -14,4 +14,13 @@ public:
     MainConfigFile() { }
 
     virtual ~MainConfigFile() { }
+
+    class Listener : public ConfigJSON::Listener
+    {
+    public:
+        Listener() : ConfigJSON::Listener(MainJSON::resourceKey,
+                []()->SharedResource* { return new MainJSON(); }) { }
+        
+        virtual ~Listener() { }
+    };
 };

@@ -31,8 +31,11 @@
  */
 
 
-class AppMenuComponent : public juce::Component, public ConfigurableComponent,
-private WindowFocus::Listener, private Localized
+class AppMenuComponent : public juce::Component, 
+    public ConfigurableComponent,
+    private WindowFocus::Listener, 
+    private Localized, 
+    private MainConfigFile::Listener
 {
 public:
     /**
@@ -41,7 +44,8 @@ public:
      * @param loadingSpinner   Reference to an overlay spinner that sits over
      *                         the PageComponent holding this AppMenuComponent.
      */
-    AppMenuComponent(juce::String componentKey, OverlaySpinner& loadingSpinner);
+    AppMenuComponent(const juce::Identifier& componentKey, 
+            OverlaySpinner& loadingSpinner);
 
     virtual ~AppMenuComponent();
 
@@ -268,7 +272,7 @@ private:
      *
      * @param key     the key of property that has changed
      */
-    void extraConfigValueChanged(juce::String key) final override;
+    virtual void configValueChanged(const juce::Identifier& key) final override;
 
     /**
      * Reposition child components, and update folder layout without animating.

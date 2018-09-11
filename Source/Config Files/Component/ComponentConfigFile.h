@@ -67,7 +67,16 @@ public:
      */
     int getFontHeight(TextSize sizeType);
 
-protected:
+    class Listener : protected ConfigJSON::Listener
+    {
+    public:
+        Listener() : ConfigJSON::Listener(ComponentJSON::resourceKey,
+                []()->SharedResource* { return new ComponentJSON(); }) { }
+
+        virtual ~Listener() { }
+    };
+
+private:
     /**
      * @brief   Gets the list of all configurable component keys.
      * 

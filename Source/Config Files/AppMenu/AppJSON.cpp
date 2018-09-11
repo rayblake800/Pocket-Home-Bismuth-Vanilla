@@ -1,4 +1,5 @@
 #include "AppJSON.h"
+#include "ConfigListener.h"
 
 /* SharedResource object key */
 const juce::Identifier AppJSON::resourceKey = "AppJSON";
@@ -124,8 +125,6 @@ int AppJSON::getFolderIndex(const AppFolder& toFind)
 {
     return categoryFolders.indexOf(toFind);
 }
-
-
 
 /**
  * Copies all shortcuts and folders back to the JSON configuration file.

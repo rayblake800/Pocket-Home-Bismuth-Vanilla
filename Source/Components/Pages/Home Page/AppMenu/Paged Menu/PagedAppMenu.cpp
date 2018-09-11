@@ -1,5 +1,6 @@
 #include "PageAppFolder.h"
 #include "PagedAppMenu.h"
+#include "ComponentConfigKeys.h"
 
 //folder navigation key bindings
 //TODO: set these in config
@@ -7,7 +8,7 @@ const juce::String PagedAppMenu::pageLeftBinding = "shift + cursor left";
 const juce::String PagedAppMenu::pageRightBinding = "shift + cursor right";
 
 PagedAppMenu::PagedAppMenu(OverlaySpinner& loadingSpinner) :
-AppMenuComponent(ComponentConfigFile::pagedAppMenuKey, loadingSpinner),
+AppMenuComponent(ComponentConfigKeys::pagedAppMenuKey, loadingSpinner),
 pageLeft(NavButton::left),
 pageRight(NavButton::right),
 closeFolderBtn(NavButton::up)

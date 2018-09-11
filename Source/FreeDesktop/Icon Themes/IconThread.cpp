@@ -3,23 +3,13 @@
 #include "XDGDirectories.h"
 #include "IconThread.h"
 
-const juce::String IconThread::defaultIconPath =
+const juce::Identifier IconThread::resourceKey = "IconThread";
+
+static const constexpr char* defaultIconPath =
         "/usr/share/pocket-home/appIcons/default.png";
 
-juce::ReadWriteLock IconThread::iconLock;
-
-juce::ScopedPointer<ResourceManager::SharedResource> IconThread::sharedResource
-        = nullptr;
-
-IconThread::IconThread() :
-ResourceManager(sharedResource, iconLock,
-        [this]()->ResourceManager::SharedResource*
-{
-    return new IconResource();
-})
-{
-    defaultIcon = AssetFiles::loadImageAsset(defaultIconPath);
-}
+IconThread::IconThread() : SharedResource(resourceKey),
+defaultIcon(AssetFiles::loadImageAsset(defaultIconPath)) { }
 
 /*
  * Queues up an icon request.  

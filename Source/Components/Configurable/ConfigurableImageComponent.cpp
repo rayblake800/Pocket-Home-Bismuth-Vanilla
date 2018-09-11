@@ -6,10 +6,7 @@ ConfigurableImageComponent::ConfigurableImageComponent(
         juce::RectanglePlacement placement) :
 ConfigurableComponent(componentKey),
 DrawableImageComponent(placement),
-assetIndex(assetIndex)
-{
-    loadAllConfigProperties();
-}
+assetIndex(assetIndex) { }
 
 /**
  * Load a new image from a different asset file.
@@ -19,7 +16,6 @@ void ConfigurableImageComponent::setImageAssetIndex(int index)
     if (index >= 0 && assetIndex != index)
     {
         assetIndex = index;
-        loadAllConfigProperties();
     }
 }
 

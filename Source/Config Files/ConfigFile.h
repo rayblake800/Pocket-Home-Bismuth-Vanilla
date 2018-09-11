@@ -46,8 +46,8 @@ public:
     template<typename ValueType>
     ValueType getConfigValue(const juce::Identifier& key)
     {
-        auto jsonPtr = getReadLockedResource();
-        return jsonPtr->getConfigValue<ValueType>(key);
+        auto jsonPtr = ResourceHandler<ConfigJSONType>::getReadLockedResource();
+        return jsonPtr->template getConfigValue<ValueType>(key);
     }
     
     /**
@@ -71,8 +71,9 @@ public:
     template<typename ValueType > 
     bool setProperty(const juce::Identifier& key, ValueType newValue)
     {
-        auto jsonPtr = getWriteLockedResource();
-        return jsonPtr->setConfigValue<ValueType>(key, newValue);
+        auto jsonPtr
+            = ResourceHandler<ConfigJSONType>::getWriteLockedResource();
+        return jsonPtr->template setConfigValue<ValueType>(key, newValue);
     }
 
 

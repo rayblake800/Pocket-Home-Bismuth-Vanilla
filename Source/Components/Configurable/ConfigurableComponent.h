@@ -4,8 +4,8 @@
 /**
  * @file ConfigurableComponent.h
  * 
- * @brief ConfigurableComponent applies properties set in a ComponentConfigFile
- * to a component, updating those properties as necessary.  
+ * @brief  Applies properties set in a ComponentConfigFile to a component, 
+ *         updating those properties as necessary.  
  * 
  * This may set the component size and position relative to the window, change 
  * component asset files, and/or change image color values.
@@ -13,83 +13,85 @@
  * @see ComponentConfigFile.h
  */
 
-class ConfigurableComponent : public ConfigFile::Listener
+class ConfigurableComponent
 {
 public:
     /**
      * @param componentKey  Sets the componentKey that defines this component's
-     *                       bounds and asset files.
+     *                      bounds and asset files.
      */
-    ConfigurableComponent(const juce::String& componentKey);
+    ConfigurableComponent(const juce::Identifier& componentKey);
 
     virtual ~ConfigurableComponent() { }
 
     /**
-     * Load and apply this component's relative bounds from config.  All
-     * sizes and coordinates are relative to the application window size.
-     * Any coordinates or dimensions that are not defined in config will remain
-     * unchanged.
+     * @brief  Loads and applies this component's relative bounds from the 
+     *         configuration file.
+     *
+     * All sizes and coordinates are relative to the application window size.
+     * Any coordinates or dimensions that are not defined in the configuration
+     * file will remain unchanged.
      */
     virtual void applyConfigBounds();
     
     /**
-     * Gets the componentKey that defines this component's bounds and asset
-     * files
+     * @brief  Gets the key that defines this component's properties.
      * 
-     * @return  the stored component key. 
+     * @return  The stored component key. 
      */
-    const juce::String& getComponentKey() const;
+    const juce::Identifier& getComponentKey() const;
         
     /**
-     * Gets this component's x-coordinate as a fraction of the window's
-     * width.
+     * @brief  Gets this component's x-coordinate as a fraction of the window's
+     *         width.
      * 
-     * @return the x coordinate fraction, or -1 if the x-coordinate fraction
-     *         is not defined.
+     * @return  The x coordinate fraction, or -1 if the x-coordinate fraction
+     *          is not defined.
      */
     float getXFraction();
 
     /**
-     * Gets this component's y-coordinate as a fraction of the window's
-     * height.
+     * @brief  Gets this component's y-coordinate as a fraction of the window's
+     *         height.
      * 
-     * @return the y coordinate fraction, or -1 if the y-coordinate fraction
-     *         is not defined.
+     * @return  The y coordinate fraction, or -1 if the y-coordinate fraction
+     *          is not defined.
      */
     float getYFraction();
 
     /**
-     * Gets this component's width as a fraction of the window's width.
+     * @brief  Gets this component's width as a fraction of the window's width.
      * 
-     * @return the width fraction, or -1 if the width fraction is not 
-     *         defined.
+     * @return  The width fraction, or -1 if the width fraction is not 
+     *          defined.
      */
     float getWidthFraction();      
 
     /**
-     * Gets this component's height as a fraction of the window's height.
+     * @brief  Gets this component's height as a fraction of the window's 
+     *         height.
      * 
-     * @return the height fraction, or -1 if the height fraction is not 
-     *         defined.
+     * @return  The height fraction, or -1 if the height fraction is not 
+     *          defined.
      */
     float getHeightFraction();
 
 protected:
     /**
-     * This method passes in asset file names and asset color values
-     * when the component is created, and whenever those values change
-     * in configuration.
+     * @brief  Passes in asset file names and asset color values when the 
+     *         component is created, and whenever those values change
+     *         in configuration.
      * 
      * By default, this will do nothing, inheriting classes are responsible
      * for implementing any useful behavior.
      * 
      * @param assetNames  A list of file names to load from the program asset 
-     *                     folder.
+     *                    folder.
      * 
      * @param colours     An optional list of Colour objects to use for 
-     *                     recoloring image assets.  Standard component colors 
-     *                     should be loaded through the component's LookAndFeel,
-     *                     not through here.
+     *                    recoloring image assets.  Standard component colors 
+     *                    should be loaded through the component's LookAndFeel,
+     *                    not through here.
      * 
      * @see PokeLookAndFeel.h
      */
@@ -97,24 +99,41 @@ protected:
             juce::Array<juce::Colour> colours) { }
 
     /**
-     * Handles updates to any tracked config key values other than the 
-     * one defining the component. Inheriting classes should override 
-     * this instead of loadConfigProperties.
+     * @brief  Handles updates to any tracked config key values other than the 
+     *         one defining the component. Inheriting classes should override 
+     *         this instead of loadConfigProperties.
      * 
-     * @param key     The updated data value's key.
+     * @param key  The updated data value's key
      */
-    virtual void extraConfigValueChanged(juce::String key) { }
+    virtual void extraConfigValueChanged(const juce::Identifier& key) { }
 
 private:
     /**
-     * Load and apply all component data from the ComponentConfigFile
-     * 
-     * @param key     This selects the correct component data from config.
+     * Package Listener functions as a separate object.
      */
-    void configValueChanged(juce::String key) final override;
+    class Listener : public ComponentConfigFile::Listener
+    {
+    public:
+        Listener(ConfigurableComponent& component);
 
-    //Component properties loaded from config
-    ComponentConfigFile::ComponentSettings componentSettings;
-    //this component's config key
-    const juce::String componentKey;
+        virtual ~Listener();
+
+        /**
+         * Load and apply all component data from the ComponentConfigFile.
+         * 
+         * @param key  Selects the correct component data from configuration.
+         */
+        virtual void configValueChanged(const juce::Identifier& key) 
+        final override;
+    private:
+        ConfigurableComponent& component;
+    };
+    friend Listener;
+    Listener configListener;
+
+    /* Component properties loaded from configuration file. */
+    ComponentSettings componentSettings;
+    
+    /* The component configuration key */
+    const juce::Identifier& componentKey;
 };

@@ -19,7 +19,7 @@ public:
     virtual ~AppConfigFile() { }
 
     /**
-     * @brief   Gets the main list of application shortcuts. 
+     * @brief  Gets the main list of application shortcuts. 
      * 
      * @return  A list of AppShortcuts to be pinned to the main folder
      *          of the AppMenu.
@@ -34,7 +34,7 @@ public:
      * @param index             The position to insert the new application.
      * 
      * @param writeChangesNow   Sets if the change should be written to the 
-     *                           config file immediately.
+     *                          config file immediately.
      */
     void addShortcut
     (AppShortcut newApp, int index, bool writeChangesNow = true);
@@ -50,17 +50,18 @@ public:
     void removeShortcut(int index, bool writeChangesNow = true);
 
     /**
-     * @brief   Find the index of an application shortcut in the list.
+     * @brief  Find the index of an application shortcut in the list.
      * 
      * @param toFind  The application shortcut to search for in the list.
      * 
-     * @return  The index of toFind, or -1 if it was not found in the list.
+     * @return        The index of toFind, or -1 if it was not found in the 
+     *                list.
      */
     int getShortcutIndex(const AppShortcut& toFind);
     
     
     /**
-     * @brief   Gets the list of application menu folders.
+     * @brief  Gets the list of application menu folders.
      *
      * @return  A list of folders to display in the AppMenu.
      */
@@ -90,11 +91,20 @@ public:
     void removeFolder(int index, bool writeChangesNow = true);
 
     /**
-     * @brief   Find the index of an AppFolder in the list of folders.
+     * @brief  Find the index of an AppFolder in the list of folders.
      * 
      * @param toFind   The folder to search for in the folder list.
      * 
-     * @return  The index of toFind, or -1 if it isn't in the list.
+     * @return         The index of toFind, or -1 if it isn't in the list.
      */
     int getFolderIndex(AppFolder toFind);
+
+    class Listener : protected ConfigJSON::Listener
+    {
+    public:
+        Listener() : ConfigJSON::Listener(AppJSON::resourceKey,
+                []()->SharedResource* { return new AppJSON(); }) { }
+
+        virtual ~Listener() { }
+    };
 };

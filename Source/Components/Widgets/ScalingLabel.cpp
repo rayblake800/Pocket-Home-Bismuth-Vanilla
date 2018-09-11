@@ -1,5 +1,5 @@
 #include "Utils.h"
-#include "ComponentConfigFile.h"
+#include "ComponentConfigKeys.h"
 #include "ScalingLabel.h"
 
 ScalingLabel::ScalingLabel(
@@ -38,18 +38,16 @@ void ScalingLabel::resized()
 
 ScalingLabel::SizeListener::SizeListener(ScalingLabel* label) : label(label)
 {
-    ComponentConfigFile config;
-    config.addListener(this,{
-        ComponentConfigFile::smallTextKey,
-        ComponentConfigFile::mediumTextKey,
-        ComponentConfigFile::largeTextKey
-    });
+    subscribeToKey(ComponentConfigKeys::smallTextKey);
+    subscribeToKey(ComponentConfigKeys::mediumTextKey);
+    subscribeToKey(ComponentConfigKeys::largeTextKey);
 }
 
 /*
  * Updates the ScalingLabel component when text size configuration changes.
  */
-void ScalingLabel::SizeListener::configValueChanged(juce::String propertyKey)
+void ScalingLabel::SizeListener::configValueChanged
+(const juce::Identifier& propertyKey)
 {
     if(label != nullptr)
     {

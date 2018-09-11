@@ -38,8 +38,7 @@ class ConfigJSON : public SharedResource
 {
 protected:
     /**
-     * This constructor should only be called when constructing ConfigJSON
-     * subclasses.
+     * @brief Creates the ConfigJSON resource, and prepares to read JSON data.
      *
      * @param resourceKey     The SharedResource object key for the specific
      *                        ConfigJSON variant being created.
@@ -54,26 +53,28 @@ protected:
 
 public:
     /**
-     * Writes any pending changes to the file before destruction.
+     * @brief  Writes any pending changes to the file before destruction.
      */
     virtual ~ConfigJSON();
 
     /**
-     * Gets one of the values stored in the json configuration file.
+     * @brief  Gets one of the values stored in the JSON configuration file.
      * 
-     * @param key  The key string that maps to the desired value.
+     * @param key                       The key string that maps to the desired 
+     *                                  value.
      * 
-     * @tparam T   The value's data type.
+     * @tparam ValueType                The value's data type.
      * 
-     * @return  The value read from the config file.
+     * @throws BadKeyException          If the key parameter was not a valid 
+     *                                  key string for this ConfigJSON.
      * 
-     * @throws BadKeyException           If the key parameter was not a valid 
-     *                                   key string for this ConfigJSON.
+     * @throws JSONFile::TypeException  If the key does not map to a value of 
+     *                                  type ValueType in this config file.
      * 
-     * @throws JSONFile::TypeException   If the key does not map to a value of 
-     *                                   type T in this config file.
+     * @return                          The value read from the config file.
      */
-    template<typename T > T getConfigValue(const juce::Identifier& key)
+    template<typename ValueType >
+    ValueType getConfigValue(const juce::Identifier& key)
     {      
         using namespace juce;
         if(!isValidKey(key))
@@ -82,7 +83,7 @@ public:
         }
         try
         {
-            return configJson.getProperty<T>(key);
+            return configJson.getProperty<ValueType>(key);
         }
         catch(JSONFile::TypeException e)
         {
@@ -100,32 +101,32 @@ public:
             DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
             alertWindows.showPlaceholderError(e.getErrorMessage());
         }
-        return T();
+        return ValueType();
     }
 
     /**
-     * Sets one of this ConfigJSON's values, notifying listeners and writing to
-     * the JSON file if the value is changed.
+     * @brief  Sets one of this ConfigJSON's values, notifying listeners and 
+     *         writing to the JSON file if the value is changed.
      * 
-     * @param key        The key string that maps to the value being updated.
+     * @param key               The key string that maps to the value being 
+     *                          updated.
      * 
-     * @param newValue   The new value to save to the file.
+     * @param newValue          The new value to save to the file.
      * 
-     * @tparam T         The value data type.
+     * @tparam ValueType        The value data type.
      * 
-     * 
-     * @throws BadKeyException           If the key parameter was not a valid 
-     *                                   key string for this ConfigJSON.
+     * @throws BadKeyException  If the key parameter was not a valid key string
+     *                          for this ConfigJSON.
      */
-    template<typename T>
-    void setConfigValue(const juce::Identifier& key, T newValue)
+    template<typename ValueType>
+    void setConfigValue(const juce::Identifier& key, ValueType newValue)
     {
         using namespace juce;
         if(!isValidKey(key))
         {
             throw BadKeyException(key);
         }
-        if(updateProperty<T>(key, newValue))
+        if(updateProperty<ValueType>(key, newValue))
         {
             configJson.writeChanges();
             notifyListeners(key);
@@ -133,10 +134,12 @@ public:
     }
      
     /**
-     * Sets a configuration data value back to its default setting.  If this
-     * changes the value, listeners will be notified and changes will be saved.
+     * @brief  Sets a configuration data value back to its default setting. 
+     *
+     * If this changes the value, listeners will be notified and changes will be
+     * saved.
      * 
-     * @param key       A key value defined in the config file.
+     * @param key                A key value defined in the config file.
      * 
      * @throws BadKeyException   If the key parameter was not a valid key string
      *                           for this ConfigJSON.
@@ -144,8 +147,9 @@ public:
     virtual void restoreDefaultValue(const juce::Identifier& key);
 
     /**
-     * Restores all values in the configuration file to their defaults. All 
-     * updated values will notify their Listeners and be written to the JSON
+     * @brief  Restores all values in the configuration file to their defaults. 
+     *
+     * All updated values will notify their Listeners and be written to the JSON
      * file.
      */
     virtual void restoreDefaultValues();
@@ -163,7 +167,7 @@ public:
         invalidKey(invalidKey) { }
         
         /**
-         * Gets the invalid key that caused the exception.
+         * @brief  Gets the invalid key that caused the exception.
          * 
          * @return  The unexpected key value.
          */
@@ -174,83 +178,88 @@ public:
     private:
         const juce::Identifier& invalidKey;
     };
-
+ 
+/**
+ * Receives updates whenever tracked key values are updated in a JSON
+ *        configuration file.
+ */
+class Listener : private SharedResource::Handler
+{
+public:
+    //Allow the ConfigJSON class access to the list of tracked keys.
+    friend ConfigJSON;
+    
     /**
-     * Listeners receive updates whenever key values they track are updated in
-     * a config file.  Listeners may track any number of keys in any number of
-     * ConfigJSON objects.
+     * @brief Initialize a new listener to track ConfigJSON properties.
+     *
+     * @param resourceKey      SharedResource object key for the Listener's
+     *                         ConfigJSON subclass.
+     *
+     * @param createResource   A function that creates the listener's ConfigJSON
+     *                         object if necessary.
      */
-    class Listener : private ResourceHandler<ConfigJSON>
-    {
-    protected:
-        friend class ConfigJSON;
+    Listener(const juce::Identifier& resourceKey,
+            const std::function<SharedResource*()> createResource) : 
+    SharedResource::Handler(resourceKey, createResource) { }
 
-        /**
-         * @param configJSONKey  The key string identifying this listener's 
-         *                       specific ConfigJSON object.
-         *
-         * @param initJSON       A function that will initialize the ConfigJSON
-         *                       if it does not yet exist.
-         */
-        Listener(const juce::Identifier& configJSONKey,
-                const std::function<SharedResource*()> initJSON);
-
-        virtual ~Listener() { }
-
-        /**
-         * Calls configValueChanged() for every key tracked by this listener.
-         */
-        void loadAllConfigProperties();
-
-    public:
-        /**
-         * Subscribe to receive updates on a ConfigJSON value.
-         *
-         * @param keyToTrack  Whenever a value with this key is updated, the
-         *                    Listener will be notified.
-         */
-        void subscribeToKey(const juce::Identifier& keyToTrack);
-
-        /**
-         * Unsubscribe from updates on a ConfigJSON value.
-         *
-         * @param keyToRemove  This Listener will no longer receive updates when
-         *                     the value with this key is updated.
-         */
-        void unsubscribeFromKey(const juce::Identifier& keyToRemove);
-
-    private:
-        /**
-         * Called whenever a key tracked by this listener changes in the config
-         * file. Listeners should implement this to handle config changes.
-         * 
-         * @param propertyKey   Passes in the updated value's key.
-         */
-        virtual void configValueChanged
-        (const juce::Identifier& propertyKey) = 0;
-
-        //Tracks all keys this listener follows.
-        juce::Array<juce::Identifier, juce::CriticalSection> subscribedKeys;
-    };
+    virtual ~Listener() { }
 
 protected:
     /**
-     * Announce new changes to each object tracking a particular key.
+     * @brief Calls configValueChanged() for every key tracked by this listener.
+     */
+    void loadAllConfigProperties();
+
+    /**
+     * @brief Adds a key to the list of keys tracked by this listener.
+     *
+     * @param keyToTrack  Whenever a value with this key is updated, the
+     *                    Listener will be notified.
+     */
+    void subscribeToKey(const juce::Identifier& keyToTrack);
+
+    /**
+     * @brief Unsubscribes from updates to a ConfigJSON value.
+     *
+     * @param keyToRemove  This listener will no longer receive updates when
+     *                     the value with this key is updated.
+     */
+    void unsubscribeFromKey(const juce::Identifier& keyToRemove);
+
+private:
+    /**
+     * @brief  This method will be called whenever a key tracked by this 
+     *         listener changes in the config file.
      * 
-     * @param key  Maps to a value that has changed in this ConfigJSON. 
+     * @param propertyKey   Passes in the updated value's key.
+     */
+    virtual void configValueChanged
+    (const juce::Identifier& propertyKey) = 0;
+
+    /* Tracks all keys this listener follows. */
+    juce::Array<juce::Identifier, juce::CriticalSection> subscribedKeys;
+};
+
+protected:
+    /**
+     * @brief  Announces a changed configuration value to each Listener object.
+     * 
+     * @param key  The key of an updated configuration value. 
      */
     void notifyListeners(const juce::Identifier& key);
 
     /**
-     * Loads all initial configuration data from the JSON config file. This 
-     * checks for all expected data keys, and replaces any missing or invalid
-     * values with ones from the default config file. ConfigJSON subclasses
-     * should call this once, after they load any custom object or array data.
+     * @brief  Loads all initial configuration data from the JSON config file. 
+     *
+     * This checks for all expected data keys, and replaces any missing or 
+     * invalid values with ones from the default config file. ConfigJSON 
+     * subclasses should call this once, after they load any custom object or 
+     * array data.
      */
     void loadJSONData();
 
     /**
-     * Checks if a key string is valid for this ConfigJSON.
+     * @brief  Checks if a key string is valid for this ConfigJSON.
      * 
      * @param key  A key string value to check.
      * 
@@ -366,30 +375,49 @@ protected:
     void writeChanges();
 
 private:
+     
+    /**
+     * @brief  Sets a configuration data value back to its default setting, 
+     *         notifying listeners if the value changes.
+     *
+     * This does not ensure that the key is valid for this ConfigFile.  An
+     * AlertWindow will be shown if any problems occur while accessing JSON
+     * data.
+     *
+     * @param key  The key of the value that will be restored.
+     */
+    void restoreDefaultValue(const ConfigKey& key);
     
     /**
-     * If ConfigJSONs define custom object or array data types, they must
-     * override this method to write that custom data back to the JSONFile
-     * object. 
+     * @brief  Checks if a single handler object is a Listener tracking updates
+     *         of a single key value, and if so, notifies it that the tracked
+     *         value has updated.
+     *
+     * @param listener   A Listener that might be tracking the updated value.
+     *
+     * @param key        The key to an updated configuration value.
+     */
+    virtual void notifyListener(Listener* listener,
+            const juce::Identifier& key);  
+    
+    /**
+     * @brief  Writes any custom object or array data back to the JSON file.
+     *
+     * ConfigJSON subclasses with custom object or array data must override this
+     * method to write that data back to the file.
      */
     virtual void writeDataToJSON() { }
     
-    //The name of this JSON config file.
+    /* The name of this JSON config file. */
     const juce::String filename;
-    
-    //The directory where all config files will be located
-    static const constexpr char* configPath = "~/.pocket-home/";
-    
-    //The pocket-home asset folder subdirectory containing default config files.
-    static const constexpr char* defaultAssetPath = "configuration/";
-    
-    //Holds configuration values read from the file.
+
+    /* Holds configuration values read from the file. */
     JSONFile configJson;
     
-    //Holds default config file values
+    /* Holds default config file values. */
     JSONFile defaultJson; 
     
-    //Used to send error messages to the user
+    /* Used to send error messages to the user. */
     ConfigAlertWindows alertWindows;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConfigJSON)

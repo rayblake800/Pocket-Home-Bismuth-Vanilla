@@ -56,6 +56,6 @@ private:
      *                    buttons created for this folder will be added to the
      *                    button map.
      */
-    AppMenuFolder* createFolderObject(AppMenuItem::Ptr folderItem,
+    virtual AppMenuFolder* createFolderObject(AppMenuItem::Ptr folderItem,
             std::map<juce::String, AppMenuButton::Ptr>& buttonMap) override;
 };

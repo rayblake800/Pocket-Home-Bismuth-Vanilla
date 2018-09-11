@@ -1,6 +1,7 @@
 #pragma once
 #include "DesktopEntry.h"
 #include "IconThread.h"
+#include "AppConfigFile.h"
 #include "Localized.h"
 #include "AppMenuPopupEditor.h"
 
@@ -20,7 +21,7 @@
  */
 
 class AppMenuItem : public juce::ReferenceCountedObject,
-public ConfigFile::Listener
+public AppConfigFile::Listener
 {
 public:
     friend class AppMenuButton;
@@ -118,7 +119,7 @@ public:
          * @return a pointer to the new menu item
          */
         virtual AppMenuItem::Ptr create
-        (const AppConfigFile::AppItem& appItem) = 0;
+        (const AppShortcut& appItem) = 0;
 
         /**
          * Get an AppMenuItem for an application link that was read from a 
@@ -139,7 +140,7 @@ public:
          * @return a pointer to the new menu item/
          */
         virtual AppMenuItem::Ptr create
-        (const AppConfigFile::AppFolder& appFolder) = 0;
+        (const AppFolder& appFolder) = 0;
 
     protected:
 
@@ -226,7 +227,7 @@ protected:
      * @return a pointer to the new menu item, or nullptr if the
      *          factoryInterface isn't set.
      */
-    AppMenuItem::Ptr create(const AppConfigFile::AppItem& appItem) const;
+    AppMenuItem::Ptr create(const AppShortcut& appItem) const;
 
     /**
      * Get an AppMenuItem for an application link that was read from a 
@@ -248,7 +249,7 @@ protected:
      * @return a pointer to the new menu item, or nullptr if the
      *          factoryInterface isn't set.
      */
-    AppMenuItem::Ptr create(const AppConfigFile::AppFolder& appFolder) const;
+    AppMenuItem::Ptr create(const AppFolder& appFolder) const;
 
 private:
 
@@ -257,7 +258,7 @@ private:
      * 
      * @param propertyKey
      */
-    void configValueChanged(juce::String propertyKey);
+    virtual void configValueChanged(const juce::Identifier& propertyKey);
 
 
 

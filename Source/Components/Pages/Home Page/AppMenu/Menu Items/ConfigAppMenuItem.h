@@ -20,7 +20,7 @@ public:
     /**
      * @param appItem      Defines all menu item data.
      */
-    ConfigAppMenuItem(const AppConfigFile::AppItem& appItem);
+    ConfigAppMenuItem(const AppShortcut& appItem);
     
     virtual ~ConfigAppMenuItem() { }
 
@@ -119,7 +119,7 @@ protected:
 
 private:
     //Application information structure
-    AppConfigFile::AppItem appItem;
+    AppShortcut appItem;
     
     //localized text keys: 
     static const constexpr char * remove_APP = "remove_APP";

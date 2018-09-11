@@ -100,7 +100,6 @@ public:
     int getFolderIndex(const AppFolder& toFind);
 
     private:
-
     /**
      * @brief  Copies all shortcuts and folders back to the JSON configuration 
      *         file.
@@ -114,7 +113,7 @@ public:
      * @return  The empty list, as AppConfigFile doesn't track any ConfigKey
      *          variables, only its own custom data structures.
      */
-    const std::vector<ConfigKey>& getDataKeys() const
+    virtual const std::vector<ConfigKey>& getConfigKeys() const final override
     {
         static const std::vector<ConfigKey> keys = {};
         return keys;

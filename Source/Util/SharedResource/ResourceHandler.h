@@ -57,10 +57,10 @@ protected:
             switch(lockType)
             {
                 case SharedResource::read:
-                    resourceManager.resourceLock.enterRead();
+                    resourceManager.getResourceLock().takeReadLock();
                     break;
                 case SharedResource::write:
-                    resourceManager.resourceLock.enterWrite();
+                    resourceManager.getResourceLock().takeWriteLock();
                     break;
             }
         }
@@ -71,15 +71,7 @@ protected:
          */
         virtual ~LockedResourcePtr()
         {
-            switch(lockType)
-            {
-                case SharedResource::read:
-                    resourceManager.resourceLock.exitRead();
-                    break;
-                case SharedResource::write:
-                    resourceManager.resourceLock.exitWrite();
-                    break;
-            }
+            resourceManager.getResourceLock().releaseLock();
         }
 
         /**
@@ -89,7 +81,7 @@ protected:
          */
         ResourceType& operator*()
         {
-            return *resourceManager.classResource.get();
+            return *resourceManager.getClassResource();
         }
 
         /**
@@ -99,7 +91,8 @@ protected:
          */
         ResourceType* operator->()
         {
-            return resourceManager.classResource.get();
+            return static_cast<ResourceType*>
+                    (resourceManager.getClassResource());
         }
 
         /**
@@ -134,7 +127,7 @@ protected:
      */
     LockedResourcePtr getReadLockedResource()
     {
-        return LockedResourcePtr(*this, false);
+        return LockedResourcePtr(*this, SharedResource::LockType::read);
     }
 
     /**
@@ -146,6 +139,6 @@ protected:
      */
     LockedResourcePtr getWriteLockedResource()
     {
-        return LockedResourcePtr(*this, true);
+        return LockedResourcePtr(*this, SharedResource::LockType::write);
     }
 };

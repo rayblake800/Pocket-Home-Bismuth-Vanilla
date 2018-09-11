@@ -2,16 +2,13 @@
 #include "ComponentConfigFile.h"
 #include "ConfigurableComponent.h"
 
-ConfigurableComponent::ConfigurableComponent(const juce::String& componentKey) :
-componentKey(componentKey)
-{ 
-    ComponentConfigFile config;
-    componentSettings = config.getComponentSettings(componentKey);
-    config.addListener(this,{componentKey});
-}
+ConfigurableComponent::ConfigurableComponent
+(const juce::Identifier& componentKey) :
+componentKey(componentKey), configListener(*this) { }
 
 /*
- * Load and apply this component's relative bounds from config.
+ * Loads and applies this component's relative bounds from the configuration 
+ * file.
  */
 void ConfigurableComponent::applyConfigBounds()
 {
@@ -46,17 +43,15 @@ void ConfigurableComponent::applyConfigBounds()
 }
 
 /*
- * Gets the componentKey that defines this component's bounds and asset
- * files
+ * Gets the key that defines this component's properties.
  */
-const juce::String& ConfigurableComponent::getComponentKey() const
+const juce::Identifier& ConfigurableComponent::getComponentKey() const
 {
     return componentKey;
 }
 
 /*
- * Gets this component's x-coordinate as a fraction of the window's
- * width.
+ * Gets this component's x-coordinate as a fraction of the window's* width.
  */
 float ConfigurableComponent::getXFraction()
 {
@@ -64,8 +59,7 @@ float ConfigurableComponent::getXFraction()
 }
 
 /*
- * Gets this component's y-coordinate as a fraction of the window's
- * height.
+ * Gets this component's y-coordinate as a fraction of the window's height.
  */
 float ConfigurableComponent::getYFraction()
 {
@@ -88,27 +82,33 @@ float ConfigurableComponent::getHeightFraction()
     return componentSettings.getHeightFraction();
 }
 
+ConfigurableComponent::Listener::Listener(ConfigurableComponent& component) :
+component(component)
+{
+   subscribeToKey(component.componentKey); 
+   loadAllConfigProperties();
+}
 
 /**
  * Load and apply all component data from the ComponentConfigFile.
  */
-void ConfigurableComponent::configValueChanged(juce::String key)
+void ConfigurableComponent::Listener::configValueChanged
+(const juce::Identifier& key)
 {
     ComponentConfigFile config;
-    if(key != componentKey)
+    if(key != component.componentKey)
     {
-        extraConfigValueChanged(key);
+        component.extraConfigValueChanged(key);
     }
     else
     {
-        ComponentConfigFile::ComponentSettings oldSettings 
-                = componentSettings;
-        componentSettings = config.getComponentSettings(key);
-        if (componentSettings.getBounds() != oldSettings.getBounds())
+        ComponentSettings oldSettings = component.componentSettings;
+        component.componentSettings = config.getComponentSettings(key);
+        if (component.componentSettings.getBounds() != oldSettings.getBounds())
         {
-            applyConfigBounds();
+            component.applyConfigBounds();
         }
-        applyConfigAssets(componentSettings.getAssetFiles(),
-                componentSettings.getColours());
+        component.applyConfigAssets(component.componentSettings.getAssetFiles(),
+                component.componentSettings.getColours());
     }
 }

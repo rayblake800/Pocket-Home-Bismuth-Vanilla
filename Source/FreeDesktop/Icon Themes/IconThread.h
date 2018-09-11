@@ -1,7 +1,6 @@
 #pragma once
 #include <map>
-#include <functional>
-#include "ResourceManager.h"
+#include "SharedResource.h"
 #include "IconThemeIndex.h"
 #include "JuceHeader.h"
 
@@ -24,128 +23,84 @@
  * @see IconThemeIndex.h, IconCache.h
  */
 
-
-class IconThread : private ResourceManager
+class IconThread : public juce::Thread, public SharedResource
 {
 public:
+    /* SharedResource object key */
+    static const juce::Identifier resourceKey;
+
     IconThread();
 
-    virtual ~IconThread() { }
+    /**
+     * @brief Ensures the thread exits before destruction.
+     */
+    virtual ~IconThread();
 
     /**
-     * Queues up an icon request.  
-     * 
-     * @param icon           This should be either a full icon file path, or the 
-     *                       filename(without extension) of an icon in one of 
-     *                       the system icon directories.  If no direct match
-     *                       is found, the icon thread will attempt to find and
-     *                       use an icon with a name partially matching this
-     *                       string.
-     * 
-     * @param size           The ideal width and height, in pixels, of the
-     *                       returned Image object.  IconThread will attempt
-     *                       to find an image file as close to this size as
-     *                       possible.
-     * 
-     * @param assignImage    This function will be called on the message thread.
-     *                       The image parameter passed to the callback will
-     *                       either be the requested image, or a default icon
-     *                       image if no image files match the request.
-     * 
-     * @param context        An icon context to use to limit which icon theme
-     *                       sub-directories are searched, or 
-     *                       IconThemeIndex::unknownCtx to search all
-     *                       sub-directories within icon themes. 
-     * 
-     * @param scale          The scale factor that the caller expects to apply
-     *                       to the image file before displaying the Image
-     *                       object.  This value is typically only relevant on
-     *                       extra high resolution displays.
+     * Holds a queued icon request
      */
-    void loadIcon(juce::String icon, int size, 
-            std::function<void(juce::Image) > assignImage,
-            IconThemeIndex::Context context = IconThemeIndex::unknownCtx,
-            int scale = 1);
-
-
-private:
-
-    /**
-     * Shares access to the icon map and the job queue.
-     */
-    class IconResource : public juce::Thread,
-    public ResourceManager::SharedResource
+    struct QueuedJob
     {
-    public:
-        IconResource();
-
-        /**
-         * Make sure the thread exits before destroying this object.
-         */
-        virtual ~IconResource();
-
-        struct QueuedJob
-        {
-            juce::String icon;
-            int size;
-            int scale;
-            IconThemeIndex::Context context;
-            std::function<void(juce::Image) > callback;
-        };
-
-        /**
-         * Returns the number of pending icon requests. 
-         */
-        int numJobsQueued();
-
-        /**
-         * Adds another job request to the queue.
-         * 
-         * @param newJob
-         */
-        void addQueuedJob(QueuedJob newJob);
-
-        /**
-         * Removes and returns the last job from the list.
-         * 
-         * @return the last job, or a QueuedJob with an empty icon string and
-         *          callback function if the queue is empty.
-         */
-        QueuedJob getQueuedJob();
-
-    private:
-        /**
-         * Asynchronously handles queued icon requests
-         */
-        void run() override;
-        
-        /**
-         * Search icon theme directories for an icon matching a given request.
-         * 
-         * @param request  Defines the name and size of the requested icon
-         * 
-         * @return  The full path of the best matching icon file, or the empty
-         *          string if no match is found.
-         */
-        juce::String getIconPath(const QueuedJob& request);
-
-        //Queued icon requests waiting for the icon thread.
-        juce::Array<QueuedJob, juce::CriticalSection> queuedJobs;
-        //Icon theme indexes used to load icons, in order of priority
-        juce::OwnedArray<IconThemeIndex> iconThemes;
-        //Directories to search, in order, for icon themes and un-themed icons.
-        juce::StringArray iconDirectories;
+        /* Name or path of an icon */
+        juce::String icon;
+        /* Ideal width/height, in pixels */
+        int size;
+        /* Expected scale factor of the icon */
+        int scale;
+        /* Category of icon requested */
+        IconThemeIndex::Context context;
+        /* Function used to asynchronously return the loaded image */
+        std::function<void(juce::Image) > callback;
     };
 
-    //Default image icons to copy into AppMenuButtons
+    /**
+     * @brief  Gets the number of pending icon requests. 
+     *
+     * @return  The number of queued requests.
+     */
+    int numJobsQueued();
+
+    /**
+     * @brief  Adds another icon request to the queue.
+     * 
+     * @param newJob  A new icon request.
+     */
+    void addQueuedJob(const QueuedJob newJob);
+
+    /**
+     * @brief  Removes and returns the last job from the list.
+     * 
+     * @return  The last job, or a QueuedJob with an empty icon string and
+     *          callback function if the queue is empty.
+     */
+    const QueuedJob getQueuedJob();
+
+private:
+    /**
+     * @brief  Asynchronously handles queued icon requests.
+     */
+    void run() override;
+    
+    /**
+     * @brief  Searches icon theme directories for an icon matching a given
+     *         request.
+     * 
+     * @param request  Defines the name and size of the requested icon/
+     * 
+     * @return         The full path of the best matching icon file, or the
+     *                 empty string if no match is found.
+     */
+    juce::String getIconPath(const QueuedJob& request);
+
+    /* Queued icon requests waiting for the icon thread. */
+    juce::Array<QueuedJob, juce::CriticalSection> queuedJobs;
+
+    /* Icon theme indexes used to load icons, in order of priority */
+    juce::OwnedArray<IconThemeIndex> iconThemes;
+
+    /* Directories to search, in order, for icon themes and un-themed icons. */
+    juce::StringArray iconDirectories;
+
+    /* Default icon */
     juce::Image defaultIcon;
-
-    //default icon path definitions
-    static const juce::String defaultIconPath;
-
-    //ResourceManager shared object and lock;
-    static juce::ScopedPointer<ResourceManager::SharedResource> sharedResource;
-    static juce::ReadWriteLock iconLock;
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconThread)
 };

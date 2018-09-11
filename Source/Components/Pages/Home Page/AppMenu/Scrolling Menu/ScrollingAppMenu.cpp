@@ -1,9 +1,10 @@
 
 #include "ScrollingAppFolder.h"
 #include "ScrollingAppMenu.h"
+#include "ComponentConfigKeys.h"
 
 ScrollingAppMenu::ScrollingAppMenu(OverlaySpinner& loadingSpinner) :
-AppMenuComponent(ComponentConfigFile::scrollingAppMenuKey, loadingSpinner) { }
+AppMenuComponent(ComponentConfigKeys::scrollingAppMenuKey, loadingSpinner) { }
 
 /**
  * Use key presses for menu navigation, setting specific controls based on 

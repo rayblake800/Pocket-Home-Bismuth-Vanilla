@@ -1,5 +1,6 @@
 #include <set>
 #include "MainConfigFile.h"
+#include "MainConfigKeys.h"
 #include "NewConfigAppEditor.h"
 #include "NewDesktopAppEditor.h"
 #include "NewFolderEditor.h"
@@ -12,7 +13,7 @@ const juce::String AppMenuComponent::reloadMenuBinding = "TAB";
 DesktopEntryLoader AppMenuComponent::desktopEntries;
 
 AppMenuComponent::AppMenuComponent(
-        juce::String componentKey,
+        const juce::Identifier& componentKey,
         OverlaySpinner& loadingSpinner) :
 Localized("AppMenuComponent"),
 ConfigurableComponent(componentKey),
@@ -23,13 +24,11 @@ menuItemFactory(desktopEntries)
 #    if JUCE_DEBUG
     setName("AppMenuComponent");
 #    endif
+    subscribeToKey(MainConfigKeys::maxRowsKey);
+    subscribeToKey(MainConfigKeys::maxColumnsKey);
     MainConfigFile mainConfig;
-    mainConfig.addListener(this,{
-        MainConfigFile::maxRowsKey,
-        MainConfigFile::maxColumnsKey
-    });
-    maxRows = mainConfig.getConfigValue<int>(MainConfigFile::maxRowsKey);
-    maxColumns = mainConfig.getConfigValue<int>(MainConfigFile::maxColumnsKey);
+    maxRows = mainConfig.getConfigValue<int>(MainConfigKeys::maxRowsKey);
+    maxColumns = mainConfig.getConfigValue<int>(MainConfigKeys::maxColumnsKey);
     setWantsKeyboardFocus(false);
     appLauncher.setLaunchFailureCallback([this]()
     {
@@ -166,13 +165,13 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         case 6://User selects "Pin to favorites"
         {
             AppConfigFile appConfig;
-            AppConfigFile::AppItem newFavorite;
-            newFavorite.name = selectedMenuItem->getAppName();
-            newFavorite.icon = selectedMenuItem->getIconName();
-            newFavorite.shell = selectedMenuItem->getCommand();
-            newFavorite.launchInTerminal = false;
-            appConfig.addFavoriteApp(newFavorite,
-                    appConfig.getFavorites().size());
+            AppShortcut newShortcut(
+                    selectedMenuItem->getAppName(),
+                    selectedMenuItem->getIconName(),
+                    selectedMenuItem->getCommand(),
+                    false);
+            appConfig.addShortcut(newShortcut,
+                    appConfig.getShortcuts().size());
             confirmNew();
             break;
         }
@@ -481,15 +480,15 @@ void AppMenuComponent::windowFocusLost()
 /*
  * Updates the layout if row/column size changes.
  */
-void AppMenuComponent::extraConfigValueChanged(juce::String key)
+void AppMenuComponent::configValueChanged(const juce::Identifier& key)
 {
     MainConfigFile mainConfig;
 
-    if (key == MainConfigFile::maxColumnsKey)
+    if (key == MainConfigKeys::maxColumnsKey)
     {
         maxColumns = mainConfig.getConfigValue<int>(key);
     }
-    else if (key == MainConfigFile::maxRowsKey)
+    else if (key == MainConfigKeys::maxRowsKey)
     {
         maxRows = mainConfig.getConfigValue<int>(key);
     }
