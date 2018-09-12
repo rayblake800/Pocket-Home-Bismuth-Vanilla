@@ -25,14 +25,17 @@ public:
     virtual ~ConfigurableComponent() { }
 
     /**
-     * @brief  Loads and applies this component's relative bounds from the 
-     *         configuration file.
+     * @brief  Loads and applies this component's relative bounds, asset files,
+     *         and custom colors from the configuration file.
      *
      * All sizes and coordinates are relative to the application window size.
      * Any coordinates or dimensions that are not defined in the configuration
      * file will remain unchanged.
+     *
+     * Subclasses must override applyConfigAssets to define how image assets
+     * and colors are applied. Otherwise, they are ignored by default. 
      */
-    virtual void applyConfigBounds();
+    virtual void applyConfigSettings();
     
     /**
      * @brief  Gets the key that defines this component's properties.

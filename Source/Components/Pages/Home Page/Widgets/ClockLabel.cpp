@@ -1,4 +1,4 @@
-#include "MainConfigFile.h"
+#include "MainConfigKeys.h"
 #include "ClockLabel.h"
 
 ClockLabel::ClockLabel() :
@@ -9,17 +9,14 @@ ConfigurableLabel(ComponentConfigFile::clockLabelKey, "clockLabel", "00:00")
 #    if JUCE_DEBUG
     setName("ClockLabel");
 #    endif
-    MainConfigFile config;
-    config.addListener(this,{
-        MainConfigFile::use24HrModeKey,
-        MainConfigFile::showClockKey
-    });
+    addTrackedKey(MainConfigKey::use24HrModeKey);
+    addTrackedKey(MainConfigKey::showClockKey);
     setJustificationType(Justification::centredRight);
     loadAllConfigProperties();
     startTimer(1);
 }
 
-/**
+/*
  * Updates the displayed time each minute.
  */
 void ClockLabel::timerCallback()
@@ -42,7 +39,7 @@ void ClockLabel::timerCallback()
     startTimer(60000 - timeNow.getSeconds()*1000);
 }
 
-/**
+/*
  * Enable the timer when the component becomes visible, disable it when
  * visibility is lost.
  */
@@ -59,7 +56,6 @@ void ClockLabel::visibilityChanged()
         {
             startTimer(1);
         }
-
     }
     else
     {
@@ -67,17 +63,16 @@ void ClockLabel::visibilityChanged()
     }
 }
 
-/**
+/*
  * Receives notification whenever clock configuration values change
  */
-void ClockLabel::extraConfigValueChanged(juce::String key)
+void ClockLabel::configValueChanged(const juce::Identifier& key)
 {
     using namespace juce;
     MainConfigFile config;
-    if (key == MainConfigFile::showClockKey)
+    if (key == MainConfigKeys::showClockKey)
     {
-        showClock = config.getConfigValue<bool>
-                (MainConfigFile::showClockKey);
+        showClock = config.getConfigValue<bool>(key);
         MessageManager::callAsync([this]
         {
             setAlpha(showClock ? 1 : 0);
@@ -91,10 +86,9 @@ void ClockLabel::extraConfigValueChanged(juce::String key)
             }
         });
     }
-    else if (key == MainConfigFile::use24HrModeKey)
+    else if (key == MainConfigKeys::use24HrModeKey)
     {
-        use24HrMode = config.getConfigValue<bool>
-                (MainConfigFile::use24HrModeKey);
+        use24HrMode = config.getConfigValue<bool>(keu);
         if (isVisible() && getAlpha() != 0)
         {
             stopTimer();

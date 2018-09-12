@@ -2,48 +2,46 @@
 #include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
 #include "ConfigurableLabel.h"
+#include "MainConfigFile.h"
 
 /**
  * @file ClockLabel.h
  * 
- * ClockLabel is a component managed by the ComponentConfigFile that displays
- * the current time.
+ * @brief  A configurable component that displays the current time.
  */
 
-class ClockLabel : public ConfigurableLabel, private WindowFocusedTimer{
+class ClockLabel : public ConfigurableLabel, public MainConfigFile::Listener,
+        private WindowFocusedTimer
+{
 public:
 
-   /**
-    * @param config  Shared component settings that define the label's bounds
-    *                and behavior.
-    */
     ClockLabel();
     
     virtual ~ClockLabel() { }
 
 private:
     /**
-     * Updates the displayed time each minute.
+     * @brief Updates the displayed time each minute.
      */
     void timerCallback();
     
     /**
-     * Enable the timer when the component becomes visible, disable it when
-     * visibility is lost.
+     * @brief  Enables the timer when the component becomes visible, disables 
+     *         it when visibility is lost.
      */
     void visibilityChanged() override;
     
     /**
-     * Receives notification whenever clock configuration values change.
+     * @brief Receives notification whenever clock configuration values change.
      * 
-     * @param key     This should be either the key for the clock visibility 
-     *                setting, or for the 12h/24h mode toggle
+     * @param key     The updated setting's key, either the clock visibility 
+     *                setting key, or the 12h/24h mode key. 
      */
-    void extraConfigValueChanged(juce::String key) override;
+    void configValueChanged(const juce::Identifier& key) override;
     
-    //If true, use 24 hour time, if false, use 12 hour AM/PM time.
+    /* If true, use 24 hour time, if false, use 12 hour AM/PM time. */
     bool use24HrMode = false;
-    //Indicates if the time should be shown at all.
+    /* Indicates if the time should be shown at all. */
     bool showClock = true;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ClockLabel)
