@@ -50,12 +50,13 @@ private:
 
 
     private:
-        void colourValueChanged(int colourID, juce::String colourKey,
-                juce::Colour newColour) override;
+        virtual void colourChanged(const int colourID,
+                const juce::Identifier& colourKey,
+                const juce::Colour newColour) override;
         
         int textHeight;
         
-        juce::StringArray colourKeys;
+        const juce::Array<juce::Identifier>& colourKeys;
         
         juce::Array<juce::Colour> colours;
     };

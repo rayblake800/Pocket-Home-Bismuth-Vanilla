@@ -7,10 +7,13 @@
 /** 
  * @file   BatteryIcon.h
  * 
- * BatteryIcon displays the current charge level and charging state of 
- * the PocketCHIP battery as a component icon, and writes the battery percentage
- * as text. While this icon is visible, it will periodically check battery state
- * and update itself accordingly.
+ * @brief  Displays the current charge level and charging state of the battery
+ *         as an icon, and writes the battery percentage as text.
+ *
+ * While this icon is visible, it will periodically check battery state and 
+ * update itself accordingly.  To reduce inaccuracies, a rolling average of the
+ * last several detected battery percentages is used to create the reported
+ * battery percentage.
  *
  */
 
@@ -22,15 +25,16 @@ public:
     virtual ~BatteryIcon() { }
 
     /**
-     * Run applyConfigBounds on all child components, and update bounds to
-     * fit children.
+     * @brief  Runs applyConfigBounds on all child components, and updates
+     *         bounds to fit the battery text and icon.
      */
     void applyConfigBounds();
 
 private:
-    //All tracked battery states.  Each corresponds with an image asset file
-    //defined in config.json
-
+    /**
+     * All tracked battery states.  Each corresponds with an image asset file
+     * that should be defined in config.json.
+     */
     enum BatteryIconImage
     {
         battery0,
@@ -45,39 +49,43 @@ private:
     };
 
     /**
-     * Set the icon's new display status.
+     * @brief  Sets the icon's new display status.
      * 
      * @param batteryImage  One of the battery resource files loaded from
      *                      the ComponentConfigFile.
      *
      * @param percent       The battery charge percentage.
      */
-    void setStatus(BatteryIconImage imageSelection, juce::String percent);
+    void setStatus(const BatteryIconImage imageSelection, 
+            const juce::String percent);
 
     /**
-     * Turn battery updates on when this component becomes visible, off
-     * when it's hidden.
+     * @brief  Enables battery updates when this component becomes visible, and
+     *         disables them when it's hidden.
      */
     void visibilityChanged() override;
     
     /**
-     * Clear cached battery percentages when the timer is disabled, so that
-     * the values will catch up more quickly on resume.
+     * @brief  Clears cached battery percentages when the timer is disabled, so 
+     *         that the values will catch up more quickly on resume.
      */
     void onSuspend() override;
 
-    //Shows the battery icon
+    /**
+     * @brief  Updates the battery percentage.
+     */
+    virtual void timerCallback() override;
+
+    /* Shows the battery icon */
     ConfigurableImageComponent batteryImage;
-    //Shows battery percentage text
+    
+    /* Shows battery percentage text */
     ConfigurableLabel batteryPercent;
-    //Gets battery info
+    
+    /* Gets battery info */
     BatteryMonitor batteryMonitor;
 
-    //periodically check battery status
-    void timerCallback();
-    //timer frequency in ms
-    const static int frequency = 2000;
-    //Use a rolling average for the battery percentage
+    /* Holds the last several recorded battery percentages */
     juce::Array<int> batteryPercents;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BatteryIcon)

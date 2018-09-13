@@ -1,9 +1,16 @@
 #include "BatteryIcon.h"
+#include "ComponentConfigKeys.h"
 #include "Utils.h"
 
+/* Battery update frequency in milliseconds. */
+static const constexpr int timerFrequency = 2000;
+
+/* Number of battery percentages to average to get the reported percent. */
+static const constexpr int percentageCount = 10;
+
 BatteryIcon::BatteryIcon() : WindowFocusedTimer("BatteryIcon"),
-batteryImage(ComponentConfigFile::batteryIconKey),
-batteryPercent(ComponentConfigFile::batteryPercentKey)
+batteryImage(ComponentConfigKeys::batteryIconKey),
+batteryPercent(ComponentConfigKeys::batteryPercentKey)
 {
     using namespace juce;
 
@@ -18,9 +25,9 @@ batteryPercent(ComponentConfigFile::batteryPercentKey)
     startTimer(1);
 }
 
-/**
- * Run applyConfigBounds on all child components, and update bounds to
- * fit children.
+/*
+ * Runs applyConfigBounds on all child components, and updates bounds to fit the
+ * battery text and icon.
  */
 void BatteryIcon::applyConfigBounds()
 {
@@ -37,7 +44,7 @@ void BatteryIcon::applyConfigBounds()
     }
 }
 
-/**
+/*
  * Set the icon's new display status.
  */
 void BatteryIcon::setStatus
@@ -48,9 +55,9 @@ void BatteryIcon::setStatus
     batteryPercent.setText(percent, dontSendNotification);
 }
 
-/**
- * Turn battery updates on when this component becomes visible, off
- * when it's hidden.
+/*
+ * Enables battery updates when this component becomes visible, and disables 
+ * them when it's hidden.
  */
 void BatteryIcon::visibilityChanged()
 {
@@ -68,7 +75,7 @@ void BatteryIcon::visibilityChanged()
 }
 
 /**
- * Clear cached battery percentages when the timer is disabled, so that
+ * Clears cached battery percentages when the timer is disabled, so that
  * the values will catch up more quickly on resume.
  */
 void BatteryIcon::onSuspend()
@@ -76,6 +83,9 @@ void BatteryIcon::onSuspend()
     batteryPercents.clear();
 }
 
+/*
+ * Updates the battery percentage.
+ */
 void BatteryIcon::timerCallback()
 {
     using namespace juce;
@@ -83,7 +93,8 @@ void BatteryIcon::timerCallback()
             batteryMonitor.getBatteryStatus();
     int batteryPercent = batteryStatus.percent;
     if (batteryPercent < 0)
-    {//no battery info loaded
+    {
+        //no battery detected
         setStatus(noBattery, "");
     }
     else
@@ -95,7 +106,7 @@ void BatteryIcon::timerCallback()
             batteryPercent += percent;
         }
         batteryPercent /= batteryPercents.size();
-        if (batteryPercents.size() > 10)
+        if (batteryPercents.size() > percentageCount)
         {
             batteryPercents.remove(0);
         }
@@ -108,8 +119,8 @@ void BatteryIcon::timerCallback()
         setStatus((BatteryIconImage) status,
                 String(batteryPercent) + String("%"));
     }
-    if (getTimerInterval() != frequency)
+    if (getTimerInterval() != timerFrequency)
     {
-        startTimer(frequency);
+        startTimer(timerFrequency);
     }
 }

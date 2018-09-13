@@ -1,6 +1,18 @@
 #include "PocketHomeApplication.h"
 #include "WifiSettingsComponent.h"
 
+/* Localized text keys: */
+static const constexpr char * wifi_not_found = "wifi_not_found";
+static const constexpr char * wifi_disabled = "wifi_disabled";
+static const constexpr char * wifi_turning_on = "wifi_turning_on";
+static const constexpr char * not_connected = "not_connected";
+static const constexpr char * wifi_turning_off = "wifi_turning_off";
+static const constexpr char * connecting_to_ap = "connecting_to_ap";
+static const constexpr char * connecting_to_unknown
+        = "connecting_to_unknown";   
+static const constexpr char * missing_psk = "missing_psk";
+static const constexpr char * disconnecting = "disconnecting";
+    
 WifiSettingsComponent::WifiSettingsComponent
 (std::function<void() > openWifiPage) :
 ConnectionSettingsComponent(openWifiPage, "wifi"),
@@ -9,91 +21,89 @@ Localized("WifiSettingsComponent")
 #    if JUCE_DEBUG
     setName("WifiSettingsComponent");
 #    endif
-    WifiStateManager wifiManager;
-    wifiManager.addListener(this);
     refresh();
 }
 
-/**
+/*
  * Checks if wifi is currently turned on.
  */
 bool WifiSettingsComponent::connectionEnabled()
 {
     WifiStateManager wifiManager;
-    DBG("Connection enabled? state = " << WifiStateManager::wifiStateString(wifiManager.getWifiState()));
     switch (wifiManager.getWifiState())
     {
-        case WifiStateManager::turningOn:
-        case WifiStateManager::enabled:
-        case WifiStateManager::connecting:
-        case WifiStateManager::missingPassword:
-        case WifiStateManager::connected:
-        case WifiStateManager::disconnecting:
+        case WifiState::turningOn:
+        case WifiState::enabled:
+        case WifiState::connecting:
+        case WifiState::missingPassword:
+        case WifiState::connected:
+        case WifiState::disconnecting:
             return true;
+        default:
+            return false;
     }
     return false;
 }
 
-
-
-/**
- * This method is used by the component to determine if it should show the
- * loading spinner.
+/*
+ * Determines if the loading spinner should be shown.
  */
 bool WifiSettingsComponent::shouldShowSpinner() 
 {
     WifiStateManager wifiManager;
     switch (wifiManager.getWifiState())
     {
-        case WifiStateManager::turningOn:
-        case WifiStateManager::turningOff:
-        case WifiStateManager::connecting:
-        case WifiStateManager::disconnecting:
-        case WifiStateManager::missingPassword:
+        case WifiState::turningOn:
+        case WifiState::turningOff:
+        case WifiState::connecting:
+        case WifiState::disconnecting:
+        case WifiState::missingPassword:
             return true;
+        default:
+            return false;
     }
     return false;
 }
 
-/**
- * This method is used by the component to determine if the connection 
- * switch should be enabled.
+/*
+ * Determines if the connection switch should be enabled.
  */
 bool WifiSettingsComponent::allowConnectionToggle()
 {
     WifiStateManager wifiManager;
     switch (wifiManager.getWifiState())
     {
-        case WifiStateManager::turningOn:
-        case WifiStateManager::turningOff:
+        case WifiState::turningOn:
+        case WifiState::turningOff:
             return false;
+        default:
+            return true;
     }
     return true;
 }
 
-/**
- * This method is used by the component to determine if the connection 
- * page should be accessible.
- * 
- * @return true whenever wifi is enabled and not being disabled.
+/*
+ * Determines if the connection page should be accessible.
  */
 bool WifiSettingsComponent::connectionPageAvailable() 
 {
     WifiStateManager wifiManager;
     switch (wifiManager.getWifiState())
     {
-        case WifiStateManager::turningOn:
-        case WifiStateManager::turningOff:
-        case WifiStateManager::missingNetworkDevice:
-        case WifiStateManager::disabled:
+        case WifiState::turningOn:
+        case WifiState::turningOff:
+        case WifiState::missingNetworkDevice:
+        case WifiState::disabled:
             return false;
+        default:
+            return true;
     }
     return true;
 }
 
 
-/**
- * @return the wifi icon
+/*
+ * Gets the wifi icon path.
  */
 juce::String WifiSettingsComponent::getIconAsset()
 {
@@ -125,17 +135,17 @@ juce::String WifiSettingsComponent::updateButtonText()
     WifiStateManager wifiManager;
     switch (wifiManager.getWifiState())
     {
-        case WifiStateManager::missingNetworkDevice:
+        case WifiState::missingNetworkDevice:
             return localeText(wifi_not_found);
-        case WifiStateManager::disabled:
+        case WifiState::disabled:
             return localeText(wifi_disabled);
-        case WifiStateManager::turningOn:
+        case WifiState::turningOn:
             return localeText(wifi_turning_on);
-        case WifiStateManager::enabled:
+        case WifiState::enabled:
             return localeText(not_connected);
-        case WifiStateManager::turningOff:
+        case WifiState::turningOff:
             return localeText(wifi_turning_off);
-        case WifiStateManager::connecting:
+        case WifiState::connecting:
         {
             WifiAccessPoint ap = wifiManager.getActiveAP();
             if (ap.isNull())
@@ -146,9 +156,9 @@ juce::String WifiSettingsComponent::updateButtonText()
             }
             return String(localeText(connecting_to_ap)) + ap.getSSID();
         }
-        case WifiStateManager::missingPassword:
+        case WifiState::missingPassword:
             return localeText(missing_psk);
-        case WifiStateManager::connected:
+        case WifiState::connected:
         {
             WifiAccessPoint ap = wifiManager.getActiveAP();
             if(ap.isNull())
@@ -157,7 +167,7 @@ juce::String WifiSettingsComponent::updateButtonText()
             }
             return ap.getSSID();
         }
-        case WifiStateManager::disconnecting:
+        case WifiState::disconnecting:
             return localeText(disconnecting);
         default:
             return "Unknown State";
@@ -167,8 +177,7 @@ juce::String WifiSettingsComponent::updateButtonText()
 /**
  * Use wifi status updates to keep the component updated.
  */
-void WifiSettingsComponent::wifiStateChanged
-(WifiStateManager::WifiState state)
+void WifiSettingsComponent::wifiStateChanged(const WifiState state)
 {
     refresh();
 }

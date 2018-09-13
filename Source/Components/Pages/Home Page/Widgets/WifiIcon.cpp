@@ -1,37 +1,39 @@
 #include "Utils.h"
 #include "WifiIcon.h"
+#include "ComponentConfigKeys.h"
+
+/* Timer frequency in milliseconds. */
+static const constexpr int frequency = 2000;
 
 WifiIcon::WifiIcon() :
 WindowFocusedTimer("WifiIcon"),
-ConfigurableImageComponent(ComponentConfigFile::wifiIconKey)
+ConfigurableImageComponent(ComponentConfigKeys::wifiIconKey)
 {
 #    if JUCE_DEBUG
     setName("WifiIcon");
 #    endif
-    WifiStateManager wifiManager;
-    wifiManager.addListener(this);
     startTimer(100);
 }
 
-/**
- * When the wifi state changes, set the timer to go off after a very short
- * delay so that the icon will update.
+/*
+ * Sets the timer to go off after a very short delay so that the icon will 
+ * update to match the new connection state.
  */
-void WifiIcon::wifiStateChanged(WifiStateManager::WifiState state)
+void WifiIcon::wifiStateChanged(const WifiState state)
 {
     startTimer(100);
 }
 
-/**
- * Set the WiFi connection status image.
+/*
+ * Sets the WiFi connection status image.
  */
-void WifiIcon::setStatus(WifiIconImage wifiState)
+void WifiIcon::setStatus(const WifiIconImage wifiState)
 {
     setImageAssetIndex((int) wifiState);
 }
 
-/**
- * Enable/disable the WiFi checking timer based on component visibility.
+/*
+ * Enables or disables the WiFi checking timer based on component visibility.
  */
 void WifiIcon::visibilityChanged()
 {
@@ -48,9 +50,8 @@ void WifiIcon::visibilityChanged()
     }
 }
 
-/**
- * Periodically checks the current WiFi connection state, and
- * updates the WiFi icon.
+/*
+ * Checks the current WiFi connection state, and updates the WiFi icon.
  */
 void WifiIcon::timerCallback()
 {
@@ -58,17 +59,17 @@ void WifiIcon::timerCallback()
     switch (wifiManager.getWifiState())
     {
             //wifi disabled
-        case WifiStateManager::missingNetworkDevice:
-        case WifiStateManager::disabled:
-        case WifiStateManager::turningOn:
+        case WifiState::missingNetworkDevice:
+        case WifiState::disabled:
+        case WifiState::turningOn:
             stopTimer();
             setStatus(wifiOff);
             return;
 
             //wifi disconnected
-        case WifiStateManager::enabled:
-        case WifiStateManager::turningOff:
-        case WifiStateManager::connecting:
+        case WifiState::enabled:
+        case WifiState::turningOff:
+        case WifiState::connecting:
             stopTimer();
             setStatus(wifiStrength0);
             return;
@@ -85,8 +86,9 @@ void WifiIcon::timerCallback()
     }
     else
     {
+        // wifi off
         wifiState = wifiStrength0;
-    }// wifi off
+    }    
     setStatus(wifiState);
     startTimer(frequency);
 }

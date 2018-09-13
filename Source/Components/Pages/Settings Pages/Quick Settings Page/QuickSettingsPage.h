@@ -1,5 +1,4 @@
 #pragma once
-
 #include "IconSliderComponent.h"
 #include "Localized.h"
 #include "SwitchComponent.h"
@@ -11,14 +10,14 @@
 //#include "BluetoothSettingsComponent.h"
 
 /**
- * @file QuickSettingsPage.h
+ * @file  QuickSettingsPage.h
  * 
  * @brief  Provides wireless device controls, brightness and volume sliders, and 
  *         a button to open additional settings pages.
  */
 
 class QuickSettingsPage : public PageComponent, public WindowFocusedTimer,
-        private juce::Slider::Listener, private Localized
+        private juce::Slider::Listener
 {
 public:
     QuickSettingsPage();
@@ -27,63 +26,66 @@ public:
 
     private:    
     /**
-     * Cancels the slider timer when visibility is lost.
+     * @brief  Cancels the slider timer when visibility is lost.
      */
     virtual void visibilityChanged() override;
     
     /**
-     * Used to update the sliders while they're being dragged.
+     * @brief  Updates the sliders while they're being dragged.
      */
     virtual void timerCallback() override;
     
     /**
-     * Opens the advanced settings page when its button is clicked.
+     * @brief  Opens the settings list page when its button is clicked.
      * 
-     * @param b
+     * @param button  This should always be the settingsListBtn.
      */
     void pageButtonClicked(juce::Button *b) override;
 
     /**
-     * Updates the advanced settings button when the page is resized.
+     * @brief  Updates the advanced settings button when the page is resized.
      */
     void pageResized() override;
 
     /**
-     * Slider::Listener requires this method to be implemented, but it's not 
-     * actually needed.
+     * @brief  Slider::Listener requires this method to be implemented, but it's
+     *         not actually used.  
+     *
+     * Brightness and volume do not need to be updated as frequently as this
+     * method would be called, so a timer is used instead to update the sliders
+     * while they're being dragged.
      */
-    void sliderValueChanged(juce::Slider* slider) { };
+    virtual void sliderValueChanged(juce::Slider* slider) override { };
     
     /**
-     * Starts a timer to update the slider values as its being dragged.
+     * @brief  Starts a timer to update the slider values as its being dragged.
      * 
-     * @param slider
+     * @param slider  The slider being dragged, either the brightness or volume
+     *                slider.
      */
-    void sliderDragStarted(juce::Slider* slider);
+    virtual void sliderDragStarted(juce::Slider* slider) override;
     
     /**
-     * Stops the timer and immediately updates slider values.
+     * @brief  Stops the timer and immediately updates slider values.
      * 
-     * @param slider
+     * @param slider  The slider component that was being dragged, either the
+     *                brightness or volume slider.
      */
-    void sliderDragEnded(juce::Slider* slider);
+    virtual void sliderDragEnded(juce::Slider* slider) override;
     
-    //Tracks the slider currently being dragged so the timer callback knows
-    //whether it should update brightness or volume
+    /* Tracks the slider currently being dragged so the timer callback knows
+       whether it should update brightness or volume. */
     juce::Slider* changingSlider;
 
-    //Turns wifi on or off, shows connection state, and opens the wifi page.
+    /* Turns wifi on or off, shows connection state, and opens the wifi page. */
     WifiSettingsComponent wifiComponent;
-    //Turns bluetooth on or of, shows connection state, and opens the bluetooth
-    //page.
+    /* Turns bluetooth on or off, shows connection state, and opens the 
+       bluetooth page. */
     //BluetoothSettingsComponent bluetoothComponent;
-    //sets the display brightness
+    /* Sets the display brightness */
     IconSliderComponent screenBrightnessSlider;
-    //sets system volume levels
+    /* Sets system volume levels */
     IconSliderComponent volumeSlider;
-    //opens the settings list page
+    /* Opens the settings list page */
     ConfigurableImageButton settingsListBtn;
-    
-    //localized text keys
-    static const constexpr char * advanced_settings = "advanced_settings";
 };

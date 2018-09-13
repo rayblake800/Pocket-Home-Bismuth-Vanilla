@@ -92,15 +92,15 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
     WifiState wifiState = wifiInterface->getWifiState();
     switch (wifiState)
     {
-        case connecting:
-        case connected:
+        case WifiState::connecting:
+        case WifiState::connected:
             DBG("WifiStateManager::" << __func__
                     << ": closing previous connection");
             disconnect();
             break;
-        case disconnecting:
-        case missingPassword:
-        case enabled:
+        case WifiState::disconnecting:
+        case WifiState::missingPassword:
+        case WifiState::enabled:
             break;
         default:
             DBG("WifiStateManager::" << __func__ << ": Can't connect to "

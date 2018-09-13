@@ -40,6 +40,13 @@ namespace ColourConfigKeys
      */
      const juce::Array<int>& getColourIds();
     
+     /**
+      * @brief  Gets all UI category color keys.
+      *
+      * @return  Keys for all generic UI element category colors.
+      */
+     const juce::Array<juce::Identifier>& getCategoryKeys();
+
     /**
      * @brief   Gets all keys used by the ColourConfigFile.
      * 

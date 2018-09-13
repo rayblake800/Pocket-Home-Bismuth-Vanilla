@@ -5,9 +5,9 @@
  *
  * @brief Describes the current state of the system wifi device.
  */
-
-enum WifiState
+enum class WifiState
 {
+    
     //no wifi device found
     missingNetworkDevice,
     //Wifi device is disabled.
@@ -24,14 +24,13 @@ enum WifiState
     missingPassword,
     //Wifi device is connected to an access point.
     connected,
-    //Wifi device is closing its connection to an access point.
+    //wifi device is closing its connection to an access point.
     disconnecting
 };
 
-
-#ifdef JUCE_DEBUG    
+#ifdef juce_debug    
 /**
- * Converts a WifiState to a string for debugging.
+ * converts a wifistate to a string for debugging.
  */
 static const char* wifiStateString(WifiState state)
 {

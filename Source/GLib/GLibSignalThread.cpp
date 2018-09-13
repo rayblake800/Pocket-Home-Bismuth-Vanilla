@@ -1,27 +1,35 @@
 #include "GLibSignalThread.h"
 
+static const juce::Identifier threadResourceKey = "GLibSignalThread";
 
-juce::ScopedPointer<ResourceManager::SharedResource> 
-GLibSignalThread::globalThread;
-
-juce::ReadWriteLock GLibSignalThread::threadLock;
-
-GLibSignalThread::GLibSignalThread()
-: ResourceManager(globalThread, threadLock, []()
+/* Private SharedResource class */
+class ThreadResource : public SharedResource, public GLibThread
 {
+public:
+    ThreadResource() : SharedResource(threadResourceKey),
+    GLibThread(g_main_context_default())
+    {
+        // Adding a reference to the default context prevents it from being 
+        // destroyed when the GLibThread removes a reference on destruction.
 
-    return new GLibDefaultThread();
-}) { }
+        //Is this necessary? TODO: remove if unneeded, uncomment if needed.
+        //g_main_context_ref(g_main_context_default());
+    }
 
-/**
+    virtual ~ThreadResource() { }
+};
+
+
+GLibSignalThread::GLibSignalThread() : 
+    ResourceHandler<ThreadResource>(threadResourceKey,
+        []()->SharedResource* { return new ThreadResource(); })  { }
+
+/*
  * Returns true if it's being executed on the GLib event thread.
  */
 bool GLibSignalThread::runningOnGLibThread()
 {
-    using namespace juce;
-    const ScopedReadLock accessLock(threadLock);
-    GLibDefaultThread* thread
-            = static_cast<GLibDefaultThread*> (globalThread.get());
+    auto thread = getReadLockedResource();
     return thread->runningOnThread();
 }
    
@@ -30,10 +38,7 @@ bool GLibSignalThread::runningOnGLibThread()
  */
 void GLibSignalThread::gLibCallAsync(std::function<void() > fn)
 {
-    using namespace juce;
-    const ScopedWriteLock accessLock(threadLock);
-    GLibDefaultThread* thread
-            = static_cast<GLibDefaultThread*> (globalThread.get());
+    auto thread = getWriteLockedResource();
     thread->callAsync(fn);
 }
 
@@ -43,21 +48,6 @@ void GLibSignalThread::gLibCallAsync(std::function<void() > fn)
  */
 void GLibSignalThread::gLibCall(std::function<void() > fn)
 {
-    threadLock.enterWrite();
-    GLibDefaultThread* thread 
-            = static_cast<GLibDefaultThread*> (globalThread.get());
-    //synchronous calls will lock the thread themselves
-    threadLock.exitWrite();
+    auto thread = getWriteLockedResource();
     thread->call(fn);
-}
-
-/**
- * Initializes and starts the main GLib event loop on its own thread.
- */
-GLibSignalThread::GLibDefaultThread::GLibDefaultThread() : 
-GLibThread(g_main_context_default())
-{
-    //Adding a reference to the default context prevents it from being 
-    //destroyed when the GLibThread removes a reference on destruction.
-    g_main_context_ref(g_main_context_default());
 }

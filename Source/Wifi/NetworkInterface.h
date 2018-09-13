@@ -277,6 +277,6 @@ private:
     // SharedResource type key.
     static const juce::Identifier resourceKey;
     // Last registered Wifi state.
-    WifiState wifiState = missingNetworkDevice;
+    WifiState wifiState = WifiState::missingNetworkDevice;
 };
 

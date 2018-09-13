@@ -3,10 +3,10 @@
 #include "DrawableImageComponent.h"
 
 /**
- * @file ConfigurableImageComponent
+ * @file  ConfigurableImageComponent.h
  * 
- * @brief ConfigurableImageComponent defines a DrawableImageComponent with 
- * properties set in the ComponentConfigFile.
+ * @brief  A DrawableImageComponent with relative bounds, image assets, and 
+ *         image colors set by the ComponentConfigFile.
  */
 
 class ConfigurableImageComponent : public DrawableImageComponent,
@@ -15,43 +15,43 @@ public ConfigurableComponent
 public:
     /**
      * @param componentKey  One of the component keys defined by the 
-     *                       ComponentConfigFile.
+     *                      ComponentConfigFile.
      * 
      * @param assetIndex    Selects which component asset file should be 
-     *                       loaded on initialization.
+     *                      loaded on initialization.
      * 
      * @param placement     Defines how the image will be scaled.
      */
     ConfigurableImageComponent(const juce::Identifier& componentKey,
-            int assetIndex = 0,
-            juce::RectanglePlacement placement 
-            = juce::RectanglePlacement::centred);
+            const int assetIndex = 0,
+            const juce::RectanglePlacement placement 
+                    = juce::RectanglePlacement::centred);
 
     ~ConfigurableImageComponent() { }
 
     /**
-     * Load a new image from a different asset file.
+     * @brief  Loads a new image from a different asset file.
      * 
      * @param index  The index of an asset file defined for this component in
-     *                the ComponentConfigFile.  If index is out of bounds or it 
-     *                equals the current loaded index, nothing will happen. 
+     *               the ComponentConfigFile.  If index is out of bounds or it 
+     *               equals the current loaded index, nothing will happen. 
      */
-    void setImageAssetIndex(int index);
+    void setImageAssetIndex(const int index);
 
 protected:
     /**
-     * (re)load the image file and set the colors.
+     * @brief  Reloads the image file and sets the image colors.
      * 
      * @param assetNames  The list of all asset files associated with this
-     *                     component.
+     *                    component.
      * 
      * @param colours     Custom colour values used to replace the default 
-     *                     image colours.
+     *                    image colours.
      */
-    virtual void applyConfigAssets(juce::StringArray assetNames,
-            juce::Array<juce::Colour> colours);
+    virtual void applyConfigAssets(const juce::StringArray& assetNames,
+            const juce::Array<juce::Colour>& colours) override;
 
 private:
-    //current selected image asset.
+    /* current selected image asset. */
     int assetIndex = 0;
 };

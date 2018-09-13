@@ -16,7 +16,7 @@ public:
      */
     class Listener : protected ConfigJSON::Listener
     {
-    friend class ColourConfigFile;
+    friend class ColourJSON;
     protected:
         Listener() : ConfigJSON::Listener(ColourJSON::resourceKey,
                 []()->SharedResource* { return new ColourJSON(); }) { }
@@ -29,16 +29,16 @@ public:
          *
          * @param colourId  A color identifier for this listener to track.
          */
-        void addTrackedColourId(int colourId);
+        void addTrackedColourId(const int colourId);
 
         /**
          * @brief  Stops this listener from receiving updates when a specific 
          *         Juce ColourId value changes.
          *
          * @param colourId  A color identifier this listener will no longer
-         *                  track.
+         *                  track
          */
-        void removeTrackedColourId(int colourId);
+        void removeTrackedColourId(const int colourId);
 
     private:
         /**
@@ -58,9 +58,17 @@ public:
                 const int colourId, 
                 const juce::Identifier& updatedKey, 
                 const juce::Colour newColour) = 0;
+        
+        
+        virtual void configValueChanged(const juce::Identifier& key) override
+        {
+            DBG("ColourJSON::Listener::" << __func__ 
+                    << ": Unexpected call with key=" << key
+                    << ", colourChanged() should be handling all updates");
+        };
        
         /* All tracked ColourId values */        
-        juce::Array<int> trackedColourIds;
+        juce::Array<int, juce::CriticalSection> trackedColourIds;
     };
      
 private:

@@ -4,8 +4,13 @@
 #include "PokeLookAndFeel.h"
 #include "QuickSettingsPage.h"
 
+/* Slider image assets.  TODO: define these in components.json. */
+static const constexpr char* brightnessLowIcon = "brightnessIconLo.svg";
+static const constexpr char* brightnessHighIcon = "brightnessIconHi.svg";
+static const constexpr char* volumeLowIcon = "volumeIconLo.svg";
+static const constexpr char* volumeHighIcon = "volumeIconHi.svg";
+
 QuickSettingsPage::QuickSettingsPage() :
-Localized("QuickSettingsPage"),
 WindowFocusedTimer("QuickSettingsPage"),
 PageComponent("QuickSettingsPage"),
 wifiComponent([this]()
@@ -17,9 +22,9 @@ wifiComponent([this]()
 //
 //    pushPageToStack(PageType::BluetoothSettings);
 //}),
-screenBrightnessSlider("brightnessIconLo.svg", "brightnessIconHi.svg"),
-volumeSlider("volumeIconLo.svg", "volumeIconHi.svg"),
-settingsListBtn(ComponentConfigFile::settingsListBtnKey)
+screenBrightnessSlider(brightnessLowIcon, brightnessHighIcon),
+volumeSlider(volumeLowIcon, volumeHighIcon),
+settingsListBtn(ComponentConfigKeys::settingsListBtnKey)
 {
 
 #    if JUCE_DEBUG
@@ -50,7 +55,7 @@ settingsListBtn(ComponentConfigFile::settingsListBtnKey)
     volumeSlider.addListener(this);
 }
 
-/**
+/*
  * Cancels the slider timer when visibility is lost.
  */
 void QuickSettingsPage::visibilityChanged()
@@ -62,7 +67,7 @@ void QuickSettingsPage::visibilityChanged()
     }
 }
 
-/**
+/*
  * Used to update the sliders while they're being dragged.
  */
 void QuickSettingsPage::timerCallback()
@@ -87,7 +92,7 @@ void QuickSettingsPage::pageResized()
 }
 
 
-/**
+/*
  * Opens the advanced settings page when its button is clicked.
  */
 void QuickSettingsPage::pageButtonClicked(juce::Button *button)
@@ -98,7 +103,7 @@ void QuickSettingsPage::pageButtonClicked(juce::Button *button)
     }
 }
 
-/**
+/*
  * Starts a timer to update the slider values as its being dragged.
  */
 void QuickSettingsPage::sliderDragStarted(juce::Slider* slider)
@@ -110,7 +115,7 @@ void QuickSettingsPage::sliderDragStarted(juce::Slider* slider)
     }
 }
 
-/**
+/*
  * Stops the timer and immediately updates slider values.
  */
 void QuickSettingsPage::sliderDragEnded(juce::Slider* slider)

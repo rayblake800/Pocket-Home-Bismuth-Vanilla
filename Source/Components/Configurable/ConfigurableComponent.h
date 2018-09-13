@@ -25,18 +25,23 @@ public:
     virtual ~ConfigurableComponent() { }
 
     /**
-     * @brief  Loads and applies this component's relative bounds, asset files,
-     *         and custom colors from the configuration file.
-     *
-     * All sizes and coordinates are relative to the application window size.
-     * Any coordinates or dimensions that are not defined in the configuration
-     * file will remain unchanged.
+     * @brief  Applies the relative bounds, asset files, and custom colors
+     *         defined in configuration file to this component.
      *
      * Subclasses must override applyConfigAssets to define how image assets
      * and colors are applied. Otherwise, they are ignored by default. 
      */
-    virtual void applyConfigSettings();
+    void applyConfigSettings();
     
+    /**
+     * @brief  Uses configuration data to set the component's bounds.
+     *
+     * All sizes and coordinates are relative to the application window size.
+     * Any coordinates or dimensions that are not defined in the configuration
+     * file will remain unchanged.
+     */
+    void applyConfigBounds();
+
     /**
      * @brief  Gets the key that defines this component's properties.
      * 
@@ -51,7 +56,7 @@ public:
      * @return  The x coordinate fraction, or -1 if the x-coordinate fraction
      *          is not defined.
      */
-    float getXFraction();
+    float getXFraction() const;
 
     /**
      * @brief  Gets this component's y-coordinate as a fraction of the window's
@@ -60,7 +65,7 @@ public:
      * @return  The y coordinate fraction, or -1 if the y-coordinate fraction
      *          is not defined.
      */
-    float getYFraction();
+    float getYFraction() const;
 
     /**
      * @brief  Gets this component's width as a fraction of the window's width.
@@ -68,7 +73,7 @@ public:
      * @return  The width fraction, or -1 if the width fraction is not 
      *          defined.
      */
-    float getWidthFraction();      
+    float getWidthFraction() const;      
 
     /**
      * @brief  Gets this component's height as a fraction of the window's 
@@ -77,7 +82,7 @@ public:
      * @return  The height fraction, or -1 if the height fraction is not 
      *          defined.
      */
-    float getHeightFraction();
+    float getHeightFraction() const;
 
 protected:
     /**
@@ -98,21 +103,13 @@ protected:
      * 
      * @see PokeLookAndFeel.h
      */
-    virtual void applyConfigAssets(juce::StringArray assetNames,
-            juce::Array<juce::Colour> colours) { }
-
-    /**
-     * @brief  Handles updates to any tracked config key values other than the 
-     *         one defining the component. Inheriting classes should override 
-     *         this instead of loadConfigProperties.
-     * 
-     * @param key  The updated data value's key
-     */
-    virtual void extraConfigValueChanged(const juce::Identifier& key) { }
+    virtual void applyConfigAssets(const juce::StringArray& assetNames,
+            const juce::Array<juce::Colour>& colours) { }
 
 private:
     /**
-     * Package Listener functions as a separate object.
+     * Listens for changes to component configuration data, and applies them
+     * to this component.
      */
     class Listener : public ComponentConfigFile::Listener
     {
@@ -122,9 +119,10 @@ private:
         virtual ~Listener();
 
         /**
-         * Load and apply all component data from the ComponentConfigFile.
+         * @brief  Applies changes to component settings to the component.
          * 
-         * @param key  Selects the correct component data from configuration.
+         * @param key  The key of the updated configuration value.  This should
+         *             always be the componentKey.
          */
         virtual void configValueChanged(const juce::Identifier& key) 
         final override;

@@ -24,7 +24,7 @@ public:
      * 
      * @return  The converted component settings.
      */
-    juce::DynamicObject * getDynamicObject();
+    juce::DynamicObject * getDynamicObject() const;
 
     /**
      * @brief   Gets the component bounds defined by this object.
@@ -32,28 +32,28 @@ public:
      * @return  The bounds of the component relative to the window,
      *          measured in pixels.
      */
-    juce::Rectangle<int> getBounds();
+    juce::Rectangle<int> getBounds() const;
 
     /**
      * @brief   Gets the list of configurable color values.
      *
      * @return  The list of component color values.
      */
-    juce::Array<juce::Colour> getColours();
+    const juce::Array<juce::Colour>& getColours() const;
 
     /**
      * @brief   Gets the list of configurable asset files.
      *
      * @return  The list of component asset files.
      */
-    juce::StringArray getAssetFiles();
+    const juce::StringArray& getAssetFiles() const;
 
     /**
      * @brief  Applies position and size settings to a UI component.
      * 
      * @param component  Any component object.
      */
-    void applyBounds(juce::Component * component);
+    void applyBounds(juce::Component * component) const;
     
     /**
      * @brief   Gets this component's x-coordinate as a fraction of the window's
@@ -62,7 +62,7 @@ public:
      * @return  The x coordinate fraction, or -1 if the x-coordinate fraction
      *          is not defined.
      */
-    float getXFraction();
+    float getXFraction() const;
      
     /**
      * @brief   Gets this component's y-coordinate as a fraction of the window's
@@ -71,7 +71,7 @@ public:
      * @return  The y coordinate fraction, or -1 if the y-coordinate fraction
      *          is not defined.
      */
-    float getYFraction();
+    float getYFraction() const;
           
     /**
      * @brief   Gets this component's width as a fraction of the window's width.
@@ -79,7 +79,7 @@ public:
      * @return  The width fraction, or -1 if the width fraction is not 
      *          defined.
      */
-    float getWidthFraction();      
+    float getWidthFraction() const;      
           
     /**
      * @brief   Gets this component's height as a fraction of the window's 
@@ -88,7 +88,7 @@ public:
      * @return  The height fraction, or -1 if the height fraction is not 
      *          defined.
      */
-    float getHeightFraction();
+    float getHeightFraction() const;
 
     /**
      * @brief   Compares these settings with another settings object.

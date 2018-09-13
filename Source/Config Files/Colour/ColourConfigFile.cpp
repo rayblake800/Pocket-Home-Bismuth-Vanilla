@@ -1,22 +1,23 @@
 #include "ColourIds.h"
 #include "ColourConfigFile.h"
+#include "ColourConfigKeys.h"
 #include "AssetFiles.h"
 #include "Utils.h"
 
 /*
  * Look up the Colour value saved for a specific Juce ColourId.
  */
-juce::Colour ColourConfigFile::getColour(int colourId) const
+juce::Colour ColourConfigFile::getColour(const int colourId) const
 {
+    using namespace ColourConfigKeys;
     using namespace juce;
-    String colourKey = getColourKey(colourId);
-    String colourStr = getColourString(colourKey);
+    String colourStr = getColourString(getColourKey(colourId));
     if(colourStr.isEmpty())
     {
         //No specific value set, look up the UICategory value.
-        colourKey = getCategoryKey(getUICategory(colourId));
-        colourStr = getColourString(colourKey);
+        colourStr = getColourString(getCategoryKey(getUICategory(colourId)));
     }
+    jassert(colourStr.isNotEmpty());
     return Colour(colourStr.getHexValue32());
 }
 
@@ -26,6 +27,7 @@ juce::Colour ColourConfigFile::getColour(int colourId) const
  */
 juce::Colour ColourConfigFile::getColour(UICategory category) const
 {
+    using namespace ColourConfigKeys;
     using namespace juce;
     if(category == none)
     {
@@ -37,7 +39,8 @@ juce::Colour ColourConfigFile::getColour(UICategory category) const
 /**
  * Gets the colour value associated with a particular key string.
  */
-juce::Colour ColourConfigFile::getColour(juce::String colourKey) const
+juce::Colour ColourConfigFile::getColour
+(const juce::Identifier& colourKey) const
 {
     using namespace juce;
     return Colour(getColourString(colourKey).getHexValue32());   
@@ -46,11 +49,13 @@ juce::Colour ColourConfigFile::getColour(juce::String colourKey) const
 /**
  * Sets the saved colour value for a single UI element.
  */
-void ColourConfigFile::setColour(int colourId, juce::Colour newColour)
+void ColourConfigFile::setColour
+(const int colourId, const juce::Colour newColour)
 {
+    using namespace ColourConfigKeys;
     using namespace juce;
-    String colourKey = getColourKey(colourId);
-    if(colourKey.isNotEmpty())
+    const Identifier& colourKey = getColourKey(colourId);
+    if(colourKey != invalidKey)
     {
         setColour(colourKey, newColour);
     }
@@ -59,8 +64,10 @@ void ColourConfigFile::setColour(int colourId, juce::Colour newColour)
 /**
  * Sets the saved colour value for a category of UI elements.
  */
-void ColourConfigFile::setColour(UICategory category, juce::Colour newColour)
+void ColourConfigFile::setColour
+(const UICategory category, const juce::Colour newColour)
 {
+    using namespace ColourConfigKeys;
     if(category != none)
     {
         setColour(getCategoryKey(category), newColour);
@@ -70,110 +77,24 @@ void ColourConfigFile::setColour(UICategory category, juce::Colour newColour)
 /*
  * Sets the saved colour value for a specific key string.
  */
-void ColourConfigFile::setColour(juce::String colourKey, juce::Colour newColour)
+void ColourConfigFile::setColour
+(const juce::Identifier& colourKey, const juce::Colour newColour)
 {
     using namespace juce;
     setConfigValue<String>(colourKey, newColour.toString());
 }
-   
-/*
- * Calls colourValueChanged for each Juce ColourId associated with
- * the updated value's key.
- */
-void ColourConfigFile::Listener::configValueChanged(juce::String propertyKey)
-{
-    using namespace juce;
-    ColourConfigFile config;
-    String colourString;
-    try
-    {
-        colourString = config.getColourString(propertyKey);
-    }
-    catch(ConfigFile::BadKeyException e)
-    {
-        nonColorValueChanged(propertyKey);
-        return;
-    }
-    if(colourString.isEmpty())
-    {
-        return;
-    }
-    Colour newColour = Colour(colourString.getHexValue32());
-    
-    int colourId = getColourId(propertyKey);
-    if(colourId >= 0)
-    {
-        colourValueChanged(colourId, propertyKey, newColour);
-    }
-    else
-    {
-        UICategory category = getCategoryType(propertyKey);
-        if(category == UICategory::none)
-        {
-            return;
-        }
-        
-        for(const int& trackedId : trackedColourIds)
-        {
-            if(getUICategory(trackedId) == category)
-            {
-                String idKey = getColourKey(trackedId);
-                if(idKey.isEmpty() || config.getColourString(idKey).isEmpty())
-                {
-                    colourValueChanged(trackedId, propertyKey, newColour);
-                }
-            }
-        }      
-    }
-}
+
 
 /*
  * Gets a Colour string saved to the colour config file.
  */
-juce::String ColourConfigFile::getColourString(juce::String colourKey) const
+juce::String ColourConfigFile::getColourString
+(const juce::Identifier& colourKey) const
 {
     using namespace juce;
     return getConfigValue<String>(colourKey);
 }
 
 
-/*
- * Gets the key string used to store a specific Juce ColourId in the
- * colour config file.
- */
-juce::String ColourConfigFile::getColourKey(int colourId)
-{
-    using namespace juce;
-    auto keySearch = colourIdKeys.find(colourId);
-    if(keySearch == colourIdKeys.end())
-    {
-        return String();
-    }
-    return keySearch->second;
-}
-
-ColourConfigFile::ConfigJson::ConfigJson() : ConfigFile(filenameConst)
-{
-    loadJSONData();
-}
-
-const std::vector<ConfigFile::DataKey>&  
-ColourConfigFile::ConfigJson::getDataKeys() const
-{
-    using namespace juce;
-    static std::vector<DataKey> keys;
-    if(keys.empty())
-    {
-        for(const String& key : uiCategoryKeys)
-        {
-            keys.push_back({key,stringType});
-        }
-        for (auto it = colourIds.begin(); it != colourIds.end(); it++)
-        {
-            keys.push_back({it->first, stringType});
-        }
-    }
-    return keys;
-}
 
 

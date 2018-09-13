@@ -90,8 +90,6 @@ Localized("WifiSettingsPage")
     
     connectionButton.addListener(this);
     errorLabel.setJustificationType(Justification::centred);
-    WifiStateManager wifiManager;
-    wifiManager.addListener(this);
     loadAccessPoints();
 }
 
@@ -253,23 +251,22 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
     }
     DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"
             " AP " << selectedAP.getSSID() << " with state "
-            << WifiStateManager::apStateString
-            (wifiManager.getAPState(selectedAP)));
+            << apStateString(wifiManager.getAPState(selectedAP)));
     switch (wifiManager.getAPState(selectedAP))
     {
-        case WifiStateManager::nullAP:
+        case AccessPointState::nullAP:
             DBG("WifiSettingsPage::" << __func__
                     << ": AP is suddenly null!");
             return;
-        case WifiStateManager::connectingAP:
-        case WifiStateManager::disconnectingAP:
+        case AccessPointState::connectingAP:
+        case AccessPointState::disconnectingAP:
             connectionBtnText = "";
             showButtonSpinner = true;
             break;
-        case WifiStateManager::connectedAP:
+        case AccessPointState::connectedAP:
             connectionBtnText = localeText(btn_disconnect);
             break;
-        case WifiStateManager::disconnectedAP:
+        case AccessPointState::disconnectedAP:
             showPasswordEntry = selectedAP.getRequiresAuth() &&
                     selectedAP.getSavedConnectionPath().isEmpty();
             if(lastConnecting == selectedAP)
@@ -277,11 +274,11 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
                 errorMessage = localeText(connection_failed);
             }
             break;
-        case WifiStateManager::invalidSecurityAP:
+        case AccessPointState::invalidSecurityAP:
             showPasswordEntry = selectedAP.getRequiresAuth();
             errorMessage = localeText(wrong_password);
             break;
-        case WifiStateManager::missingAP:
+        case AccessPointState::missingAP:
             errorMessage = localeText(lost_ap);
 
     }
@@ -399,13 +396,13 @@ void WifiSettingsPage::listPageButtonClicked(juce::Button* button)
         const WifiAccessPoint& selectedAP = visibleAPs[getSelectedIndex()];
         switch (wifiManager.getAPState(selectedAP))
         {
-            case WifiStateManager::connectedAP:
+            case AccessPointState::connectedAP:
                 DBG("WifiSettingsPage::" << __func__ << ": Disconnecting from "
                         << selectedAP.getSSID());
                 disconnect(selectedAP);
                 return;
-            case WifiStateManager::disconnectedAP:
-            case WifiStateManager::invalidSecurityAP:
+            case AccessPointState::disconnectedAP:
+            case AccessPointState::invalidSecurityAP:
                 DBG("WifiSettingsPage::" << __func__ << ": Connecting to "
                         << selectedAP.getSSID());
                 connect(selectedAP);
@@ -421,9 +418,9 @@ void WifiSettingsPage::listPageButtonClicked(juce::Button* button)
 /*
  * Keeps the page updated when wifi state changes.
  */
-void WifiSettingsPage::wifiStateChanged(WifiStateManager::WifiState state)
+void WifiSettingsPage::wifiStateChanged(WifiState state)
 {
-    if(state == WifiStateManager::connected)
+    if(state == WifiState::connected)
     {
         lastConnecting = WifiAccessPoint();
     }

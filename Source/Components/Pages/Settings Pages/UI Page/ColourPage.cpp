@@ -1,5 +1,6 @@
 #include "TempTimer.h"
 #include "ColourConfigFile.h"
+#include "ColourConfigKeys.h"
 #include "ColourPage.h"
 
 ColourPage::ColourPage() :
@@ -28,7 +29,7 @@ colourList("colourList", &listModel)
         SparseSet<int> selected = colourList.getSelectedRows();
         if(!selected.isEmpty())
         {
-            String selectedKey = listModel.getRowText(selected[0]);
+            Identifier selectedKey = listModel.getRowText(selected[0]);
             ColourConfigFile config;
             config.setColour(selectedKey, newColour);
         }
@@ -43,11 +44,15 @@ void ColourPage::pageResized()
     colourList.repaint();
 }
 
-ColourPage::ColourListModel::ColourListModel()
+ColourPage::ColourListModel::ColourListModel() : 
+colourKeys(ColourConfigKeys::getColourKeys())
 {
     using namespace juce;
     ColourConfigFile config;
-    colourKeys = config.getColourKeys();
+    for(const Identifier& key : colourKeys)
+    {
+
+    }
     config.addListener(this, config.getColourIds());
     DBG(__func__ << ": adding " << colourKeys.size() << " colors");
     for (const String& key : colourKeys)

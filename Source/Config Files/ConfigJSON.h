@@ -117,9 +117,12 @@ public:
      * 
      * @throws BadKeyException  If the key parameter was not a valid key string
      *                          for this ConfigJSON.
+     *
+     * @return                  True if the value changed, false if the new
+     *                          value matched the old value.
      */
     template<typename ValueType>
-    void setConfigValue(const juce::Identifier& key, ValueType newValue)
+    bool setConfigValue(const juce::Identifier& key, ValueType newValue)
     {
         using namespace juce;
         if(!isValidKey(key))
@@ -130,7 +133,9 @@ public:
         {
             configJson.writeChanges();
             notifyListeners(key);
+            return true;
         }
+        return false;
     }
      
     /**

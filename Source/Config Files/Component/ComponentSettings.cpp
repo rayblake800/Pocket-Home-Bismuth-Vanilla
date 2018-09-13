@@ -45,7 +45,7 @@ ComponentSettings::ComponentSettings(juce::DynamicObject* jsonObj)
 /*
  * Packages the component settings into a juce::DynamicObject.
  */
-juce::DynamicObject * ComponentSettings::getDynamicObject()
+juce::DynamicObject * ComponentSettings::getDynamicObject() const
 {
     using namespace juce;
     DynamicObject * componentObject = new DynamicObject();
@@ -90,7 +90,7 @@ juce::DynamicObject * ComponentSettings::getDynamicObject()
 /*
  * Gets the component bounds defined by this object.
  */
-juce::Rectangle<int> ComponentSettings::getBounds()
+juce::Rectangle<int> ComponentSettings::getBounds() const
 {
     using namespace juce;
     Rectangle<int> window = getWindowBounds();
@@ -104,7 +104,7 @@ juce::Rectangle<int> ComponentSettings::getBounds()
 /*
  * Gets the list of configurable color values.
  */
-juce::Array<juce::Colour> ComponentSettings::getColours()
+const juce::Array<juce::Colour>& ComponentSettings::getColours() const
 {
     return colours;
 }
@@ -112,7 +112,7 @@ juce::Array<juce::Colour> ComponentSettings::getColours()
 /*
  * Gets the list of configurable asset files.
  */
-juce::StringArray ComponentSettings::getAssetFiles()
+const juce::StringArray& ComponentSettings::getAssetFiles() const
 {
     return assetFiles;
 }
@@ -121,7 +121,7 @@ juce::StringArray ComponentSettings::getAssetFiles()
 /*
  * Applies position and size settings to a UI component.
  */
-void ComponentSettings::applyBounds(juce::Component * component)
+void ComponentSettings::applyBounds(juce::Component * component) const
 {
     using namespace juce;
     Rectangle<int> bounds = getBounds();
@@ -147,7 +147,7 @@ void ComponentSettings::applyBounds(juce::Component * component)
 /*
  * Gets this component's x-coordinate as a fraction of the window's width.
  */
-float ComponentSettings::getXFraction()
+float ComponentSettings::getXFraction() const
 {
     return x;
 }
@@ -155,7 +155,7 @@ float ComponentSettings::getXFraction()
 /*
  * Gets this component's y-coordinate as a fraction of the window's height.
  */
-float ComponentSettings::getYFraction()
+float ComponentSettings::getYFraction() const
 {
     return y;
 }
@@ -163,7 +163,7 @@ float ComponentSettings::getYFraction()
 /*
  * Gets this component's width as a fraction of the window's width.
  */
-float ComponentSettings::getWidthFraction()
+float ComponentSettings::getWidthFraction() const
 {
     return width;
 }
@@ -171,7 +171,7 @@ float ComponentSettings::getWidthFraction()
 /*
  * Gets this component's height as a fraction of the window's height.
  */
-float ComponentSettings::getHeightFraction()
+float ComponentSettings::getHeightFraction() const
 {
     return height;
 }

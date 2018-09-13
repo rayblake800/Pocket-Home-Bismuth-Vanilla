@@ -1,7 +1,14 @@
 #include "PokeLookAndFeel.h"
 #include "MainConfigFile.h"
+#include "MainConfigKeys.h"
 #include "I2CBus.h"
 #include "FelPage.h"
+
+/* localized text keys: */
+static const constexpr char * ask_to_reboot = "ask_to_reboot";
+static const constexpr char * yes_btn = "yes_btn";
+static const constexpr char * no_btn = "no_btn";
+static const constexpr char * flashing_info = "flashing_info";
 
 FelPage::FelPage() :
 Localized("FelPage"),
@@ -67,7 +74,7 @@ void FelPage::pageButtonClicked(juce::Button* button)
             ChildProcess c;
             MainConfigFile config;
             c.start(config.getConfigValue<String>
-                    (MainConfigFile::restartCommandKey));
+                    (MainConfigKeys::restartCommandKey));
             c.waitForProcessToFinish(10000);
         }
         catch (I2CBus::I2CException e)

@@ -2,16 +2,19 @@
 
 ConfigurableImageComponent::ConfigurableImageComponent(
         const juce::Identifier& componentKey,
-        int assetIndex,
-        juce::RectanglePlacement placement) :
+        const int assetIndex,
+        const juce::RectanglePlacement placement) :
 ConfigurableComponent(componentKey),
 DrawableImageComponent(placement),
-assetIndex(assetIndex) { }
+assetIndex(assetIndex) 
+{
+    applyConfigSettings();
+}
 
-/**
- * Load a new image from a different asset file.
+/*
+ * Loads a new image from a different asset file.
  */
-void ConfigurableImageComponent::setImageAssetIndex(int index)
+void ConfigurableImageComponent::setImageAssetIndex(const int index)
 {
     if (index >= 0 && assetIndex != index)
     {
@@ -20,10 +23,11 @@ void ConfigurableImageComponent::setImageAssetIndex(int index)
 }
 
 /**
- * (re)load the image file and set the colors.
+ * Reloads the image file and sets the image colors.
  */
-void ConfigurableImageComponent::applyConfigAssets(juce::StringArray assetNames,
-        juce::Array<juce::Colour> colours)
+void ConfigurableImageComponent::applyConfigAssets(
+        const juce::StringArray& assetNames,
+        const juce::Array<juce::Colour>& colours)
 {
     if (assetIndex >= 0 && assetIndex < assetNames.size())
     {

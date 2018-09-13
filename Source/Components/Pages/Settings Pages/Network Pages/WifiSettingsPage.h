@@ -103,7 +103,7 @@ private:
      * 
      * @param state  The new wifi connection state.
      */
-    void wifiStateChanged(WifiStateManager::WifiState state) override;
+    void wifiStateChanged(WifiState state) override;
    
     /**
      * Adds all newly detected access points to the access point list.

@@ -29,13 +29,13 @@ public:
     virtual ~ConfigFile() { }
 
     /**
-     * Gets one of the values stored in the JSON configuration file.
+     * @brief  Gets one of the values stored in the JSON configuration file.
      *
-     * @tparam ValueType  The type of value to retrieve.
+     * @tparam ValueType                  The type of value to retrieve.
      *
-     * @param key         The key identifying the desired value.
+     * @param key                         The key identifying the desired value.
      *
-     * @return  The requested configuration value.
+     * @return                            The requested configuration value.
      *
      * @throws ConfigJSON::FileException  If the file is missing or could not be
      *                                    read.
@@ -51,30 +51,30 @@ public:
     }
     
     /**
-     * Sets a property stored in this JSON data.
+     * @brief  Sets a value stored in this JSON data.
      * 
-     * @param key         The key string used to set the value.
+     * @param key                         The key string used to set the value.
      * 
-     * @param newValue    A new value to store in the JSON object.
+     * @param newValue                    A new value to store in the JSON 
+     *                                    object.
      * 
-     * @tparam ValueType  The type of value being stored.
+     * @tparam ValueType                  The type of value being stored.
      * 
-     * @return  True if the property changed, false if the existing value
-     *          matched the new value.
+     * @return                            True if the value changed, false if 
+     *                                    the existing value matched the new 
+     *                                    value.
      * 
-     * @throws ConfigJSON::FileException   If the file is missing or could not 
-     *                                     be read.
+     * @throws ConfigJSON::FileException  If the file is missing or could not 
+     *                                    be read.
      * 
      * @throws ConfigJSON::TypeException  If a property exists that shares this 
      *                                    key but is not of type ValueType.
      */
     template<typename ValueType > 
-    bool setProperty(const juce::Identifier& key, ValueType newValue)
+    bool setConfigValue(const juce::Identifier& key, ValueType newValue)
     {
         auto jsonPtr
             = ResourceHandler<ConfigJSONType>::getWriteLockedResource();
         return jsonPtr->template setConfigValue<ValueType>(key, newValue);
     }
-
-
 };

@@ -1,8 +1,18 @@
+#pragma once
+/* Since the main UI/message thread isn't a Juce thread, standard C++ thread
+   libraries need to be used to wait/notify. */
+#include <mutex>
+#include <condition_variable>
+
+#include "gio/gio.h"
+#include "GLibThread.h"
+#include "ResourceHandler.h"
+#include "JuceHeader.h"
+
 /**
  * @file GLibSignalThread.h
  * 
- * @brief GLibSignalThread runs the main event loop used to send and receive 
- *        GLib signals.
+ * @brief Runs the main event loop used to send and receive GLib signals.
  * 
  * On creation, this starts up a GLib event thread to handle events on the
  * global-default GMainContext, where libNM and other GLib libraries send
@@ -19,20 +29,11 @@
  * handlers.  For general purpose asynchronous execution, use the Juce
  * MessageManager.
  */
-#pragma once
-//Since the main UI/message thread isn't a Juce thread, standard C++ thread
-// libraries need to be used to wait/notify
-#include <mutex>
-#include <condition_variable>
 
-#include "gio/gio.h"
-#include "GLibThread.h"
-#include "ResourceManager.h"
-#include "JuceHeader.h"
+/* Private SharedResource class */
+class ThreadResource;
 
-
-
-class GLibSignalThread : private ResourceManager
+class GLibSignalThread : private ResourceHandler<ThreadResource>
 {
 public:
     GLibSignalThread();

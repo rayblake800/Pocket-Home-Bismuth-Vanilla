@@ -2,6 +2,7 @@
 #include "ConfigFile.h"
 #include "ComponentJSON.h"
 #include "ComponentSettings.h"
+#include "ComponentConfigKeys.h"
 
 /**
  * @file ComponentConfigFile.h

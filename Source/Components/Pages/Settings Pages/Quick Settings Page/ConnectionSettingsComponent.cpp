@@ -1,6 +1,15 @@
 #include "Utils.h"
 #include "ConnectionSettingsComponent.h"
 
+/* Padding space between child components, as a fraction of component height. */
+static const constexpr float childPaddingFraction = 0.1;
+/* Button alpha used when the connection button is being clicked. */
+static const constexpr float buttonDownAlpha = 0.5;
+/* Button alpha used when the connection button is not being clicked. */
+static const constexpr float buttonUpAlpha = 1.0;
+/* Connection button border size, as a fraction of the button's height. */
+static const constexpr float borderFraction = 0.1;
+
 ConnectionSettingsComponent::ConnectionSettingsComponent(
         std::function<void() > openConnectionPage,
         const juce::String& name) :
@@ -19,7 +28,7 @@ pageButton(name + "Button")
     icon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
 }
 
-/**
+/*
  * Updates the icon, switch, and connection button based on current
  * connection status.
  */
@@ -47,29 +56,29 @@ void ConnectionSettingsComponent::refresh()
     repaint();
 }
 
-/**
+/*
  * Arranges child components to fit within bounds.
  */
 void ConnectionSettingsComponent::resized()
 {
     int height = getHeight();
-    int spacing = height / 10;
+    int padding = height * childPaddingFraction;
     icon.setBounds(0, 0, height, height);
     spinner.setBounds(0, 0, height, height);
     toggle.setBounds(
-            icon.getRight() + spacing,
+            icon.getRight() + padding,
             0,
             height * 1.1f,
             height);
     pageButton.setBounds(
-            toggle.getRight() + spacing,
+            toggle.getRight() + padding,
             0,
-            getWidth() - toggle.getRight() - spacing,
+            getWidth() - toggle.getRight() - padding,
             height);
 }
 
-/**
- * Update the icon color if text color changes.
+/*
+ * If text color changes, updates the icon color to match.
  */
 void ConnectionSettingsComponent::colourChanged()
 {
@@ -78,10 +87,9 @@ void ConnectionSettingsComponent::colourChanged()
     icon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
 }
 
-/**
- * If the connection button is clicked this will run openConnectionPage(). 
- * If the switch is clicked, this will call  enabledStateChanged(), passing
- * it the switch toggle state.
+/*
+ * Handles click events from the connection page button or the connection toggle
+ * switch.
  */
 void ConnectionSettingsComponent::buttonClicked(juce::Button *b)
 {
@@ -96,8 +104,8 @@ void ConnectionSettingsComponent::buttonClicked(juce::Button *b)
     }
 }
 
-/**
- * Run refresh() when the component regains visibility.
+/*
+ * Runs refresh() when the component regains visibility.
  */
 void ConnectionSettingsComponent::visibilityChanged()
 {
@@ -107,23 +115,20 @@ void ConnectionSettingsComponent::visibilityChanged()
     }
 }
 
-/**
- * @param name internal component name
- */
 ConnectionSettingsComponent::ConnectionButton::ConnectionButton
-(const juce::String& name) : juce::Button(name){ }
+(const juce::String name) : juce::Button(name){ }
 
-/**
+/*
  * Sets the text that will be printed on the button.
  */
 void ConnectionSettingsComponent::ConnectionButton::setText
-(const juce::String &text)
+(const juce::String text)
 {
     displayText = text;
     resized();
 }
 
-/**
+/*
  * Draws the connection button outline and prints the button text
  */
 void ConnectionSettingsComponent::ConnectionButton::paintButton
@@ -133,7 +138,7 @@ void ConnectionSettingsComponent::ConnectionButton::paintButton
     const Rectangle<int>& bounds = getLocalBounds();
 
     g.setColour(findColour(TextButton::textColourOnId));
-    isButtonDown ? setAlpha(0.5f) : setAlpha(1.0f);
+    setAlpha((isButtonDown ? buttonDownAlpha : buttonUpAlpha));
 
     if (isEnabled())
     {
@@ -143,7 +148,6 @@ void ConnectionSettingsComponent::ConnectionButton::paintButton
                 bounds.getHeight() - 2 * borderSize,
                 1, borderSize);
     }
-
     g.setFont(textHeight);
     g.setColour(findColour(Label::textColourId));
     g.drawText(displayText, bounds.getX(), bounds.getY(),
@@ -151,12 +155,12 @@ void ConnectionSettingsComponent::ConnectionButton::paintButton
             Justification::centred);
 }
 
-/**
+/*
  * Calculates button text height based on button size.
  */
 void ConnectionSettingsComponent::ConnectionButton::resized()
 {
-    borderSize = getHeight() / 10;
+    borderSize = getHeight() * borderFraction;
     ComponentConfigFile config;
     textHeight = config.getFontHeight(getLocalBounds().reduced(borderSize * 2),
             displayText);

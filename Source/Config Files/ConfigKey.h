@@ -28,6 +28,14 @@ struct ConfigKey
      * @param dataType   The data type of that stored value
      */
     ConfigKey(const char* keyString, const DataType dataType);
+    
+    /**
+     * @param key        The key identifying a value stored in a configuration 
+     *                   file.
+     *
+     * @param dataType   The data type of that stored value
+     */
+    ConfigKey(const juce::Identifier& keyString, const DataType dataType);
 
     const juce::Identifier key;
     const DataType dataType;

@@ -1,14 +1,40 @@
 #include <map>
 #include "MainConfigFile.h"
+#include "MainConfigKeys.h"
 #include "Utils.h"
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
 #include "TransitionAnimator.h"
 
-#if JUCE_DEBUG
-//put any includes needed for test routines here.
-#include "SavedConnections.h"
-#endif
+/* Localized text keys: */
+static const constexpr char * shutdown = "shutdown";
+static const constexpr char * reboot = "reboot";
+static const constexpr char * sleep = "sleep";
+static const constexpr char * build = "build";
+static const constexpr char * version = "version";
+static const constexpr char * flash_software = "flash_software";
+
+/* Path to the release file used to determine build type */
+static const constexpr char* releaseFilePath = "/etc/os-release";
+/* Alternate path where the release file may be located */
+static const constexpr char* altReleaseFilePath = "/usr/lib/os-release";
+
+/* Release file data keys: */
+/* Nicely formatted system name key */
+static const constexpr char* prettyNameKey = "PRETTY_NAME";
+/* System name key */
+static const constexpr char* nameKey = "NAME";
+/* System version key */
+static const constexpr char* versionKey = "VERSION";
+
+/* Sleep mode start command */
+static const constexpr char* startSleepCommand = "xset dpms force off";
+/* Sleep mode exit command */
+static const constexpr char* stopSleepCommand = "xset dpms force on";
+/* Sleep mode checking command */
+static const constexpr char* sleepCheckCommand = "xset q | grep \"is O\"";
+/* Returned value indicating sleep mode is on */
+static const constexpr char* sleepingSystemResponse = "Monitor is Off";
 
 PowerPage::PowerPage() :Localized("PowerPage"),
 PageComponent("PowerPage"),
@@ -49,11 +75,11 @@ lockscreen([this]()
         + juce::JUCEApplication::getInstance()->getApplicationVersion(),
             NotificationType::dontSendNotification);
     
-    //Determine release label contents
-    File releaseFile("/etc/os-release");
+    // Determine release label contents
+    File releaseFile(releaseFilePath);
     if(!releaseFile.existsAsFile())
     {
-        releaseFile = File("/usr/lib/os-release");
+        releaseFile = File(altReleaseFilePath);
     }
     if(releaseFile.existsAsFile())
     {
@@ -70,15 +96,15 @@ lockscreen([this]()
             }
         }
         String buildText = localeText(build);
-        if(releaseVars.count("PRETTY_NAME"))
+        if(releaseVars.count(prettyNameKey))
         {
-            buildText += releaseVars["PRETTY_NAME"];
+            buildText += releaseVars[prettyNameKey];
         }
         else
         {
-            buildText += releaseVars["NAME"];
+            buildText += releaseVars[nameKey];
             buildText += " ";
-            buildText += releaseVars["VERSION"];
+            buildText += releaseVars[versionKey];
         }
         buildLabel.setJustificationType(Justification::centred);
         buildLabel.setText(buildText, NotificationType::dontSendNotification);
@@ -92,35 +118,32 @@ lockscreen([this]()
     addAndShowLayoutComponents();
 }
 
-/**
+/*
  * Turns off the display until key or mouse input is detected.
- * The lock screen will be visible when the display turns on again.
  */
 void PowerPage::startSleepMode()
 {
     using namespace juce;
     ChildProcess commandProcess;
-    StringArray cmd{ "xset", "q", "|", "grep", "is O"};
-    if (commandProcess.start(cmd))
+    if (commandProcess.start(sleepCheckCommand))
     {
         const String result(commandProcess.readAllProcessOutput());
-        if (result == "Monitor is Off")
+        if (result == sleepingSystemResponse)
         {
-            commandProcess.start("xset dpms force on");
+            commandProcess.start(stopSleepCommand);
         }
         else
         {
             addAndMakeVisible(lockscreen);
             lockscreen.setBounds(getLocalBounds());
             lockscreen.setAlwaysOnTop(true);
-            //Turn off the screen
-            commandProcess.start("xset dpms force off");
+            commandProcess.start(startSleepCommand);
         }
     }
     commandProcess.waitForProcessToFinish(10000);
 }
 
-/**
+/*
  * If the lock screen is visible, this will remove it from the screen.
  */
 void PowerPage::hideLockscreen()
@@ -132,8 +155,8 @@ void PowerPage::hideLockscreen()
     }
 }
 
-/**
- * Show the power spinner to indicate to the user that the system is
+/*
+ * Shows the power spinner to indicate to the user that the system is
  * restarting or shutting down.
  */
 void PowerPage::showPowerSpinner()
@@ -145,8 +168,8 @@ void PowerPage::showPowerSpinner()
     overlaySpinner.setVisible(true);
 }
 
-/**
- * Resize the lock screen and overlay spinner to fit the page.
+/*
+ * Resizes the lock screen and overlay spinner to fit the page.
  */
 void PowerPage::pageResized()
 {
@@ -154,7 +177,7 @@ void PowerPage::pageResized()
     overlaySpinner.setBounds(getLocalBounds());
 }
 
-/**
+/*
  * Handles all button clicks.
  */
 void PowerPage::pageButtonClicked(juce::Button *button)
@@ -177,13 +200,13 @@ void PowerPage::pageButtonClicked(juce::Button *button)
     {
         showPowerSpinner();
         commandProcess.start(mainConfig.getConfigValue<String>
-                (MainConfigFile::shutdownCommandKey));
+                (MainConfigKeys::shutdownCommandKey));
     }
     else if (button == &rebootButton)
     {
         showPowerSpinner();
         commandProcess.start(mainConfig.getConfigValue<String>
-                (MainConfigFile::restartCommandKey));
+                (MainConfigKeys::restartCommandKey));
     }
-    commandProcess.waitForProcessToFinish(10000);
+    commandProcess.waitForProcessToFinish(-1);
 }

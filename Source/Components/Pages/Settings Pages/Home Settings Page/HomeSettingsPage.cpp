@@ -1,4 +1,5 @@
 #include "MainConfigFile.h"
+#include "MainConfigKeys.h"
 #include "HomeSettingsPage.h"
 
 HomeSettingsPage::HomeSettingsPage() :
@@ -74,10 +75,10 @@ rowCounter(1, 1, 9)
     menuTypePicker.addListener(this);
     MainConfigFile mainConfig;
     rowCounter.setValue(mainConfig.getConfigValue<int>
-            (MainConfigFile::maxRowsKey));
+            (MainConfigKeys::maxRowsKey));
 
     columnCounter.setValue(mainConfig.getConfigValue<int>
-            (MainConfigFile::maxColumnsKey));
+            (MainConfigKeys::maxColumnsKey));
 
     updateComboBox();
     addAndShowLayoutComponents();
@@ -89,9 +90,9 @@ rowCounter(1, 1, 9)
 HomeSettingsPage::~HomeSettingsPage()
 {
     MainConfigFile mainConfig;
-    mainConfig.setConfigValue<int>(MainConfigFile::maxRowsKey,
+    mainConfig.setConfigValue<int>(MainConfigKeys::maxRowsKey,
                                    rowCounter.getValue());
-    mainConfig.setConfigValue<int>(MainConfigFile::maxColumnsKey,
+    mainConfig.setConfigValue<int>(MainConfigKeys::maxColumnsKey,
                                    columnCounter.getValue());
 }
 
@@ -105,7 +106,7 @@ void HomeSettingsPage::updateComboBox()
     /* Checking the current configuration */
     MainConfigFile mainConfig;
     String background
-            = mainConfig.getConfigValue<String>(MainConfigFile::backgroundKey);
+            = mainConfig.getConfigValue<String>(MainConfigKeys::backgroundKey);
     bool display = false;
     if ((background.length() == 6
          || background.length() == 8)
@@ -125,8 +126,8 @@ void HomeSettingsPage::updateComboBox()
     bgLabel.setVisible(display);
 
     String menuType
-            = mainConfig.getConfigValue<String>(MainConfigFile::menuTypeKey);
-    int menuIndex = MainConfigFile::menuTypes.indexOf(menuType);
+            = mainConfig.getConfigValue<String>(MainConfigKeys::menuTypeKey);
+    int menuIndex = MainConfigKeys::menuTypes.indexOf(menuType);
     if (menuIndex != -1)
     {
         menuTypePicker.setSelectedItemIndex(menuIndex, dontSendNotification);
@@ -149,7 +150,7 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
         {
             case 1:
                 mainConfig.setConfigValue<String>
-                        (MainConfigFile::backgroundKey,
+                        (MainConfigKeys::backgroundKey,
                          findColour(PageComponent::backgroundColourId)
                          .toString());
                 bgEditor.setVisible(false);
@@ -175,8 +176,8 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
     else if (box == &menuTypePicker && box->getSelectedItemIndex() >= 0)
     {
         mainConfig.setConfigValue<String>
-                (MainConfigFile::menuTypeKey,
-                 MainConfigFile::menuTypes[box->getSelectedItemIndex()]);
+                (MainConfigKeys::menuTypeKey,
+                 MainConfigKeys::menuTypes[box->getSelectedItemIndex()]);
     }
 }
 
@@ -199,12 +200,12 @@ void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
         else
         {
             mainConfig.setConfigValue<String>
-                    (MainConfigFile::backgroundKey, value);
+                    (MainConfigKeys::backgroundKey, value);
         }
     }
     else if (bgTypePicker.getSelectedId() == 3)
     {
         mainConfig.setConfigValue<String>
-                (MainConfigFile::backgroundKey, value);
+                (MainConfigKeys::backgroundKey, value);
     }
 }

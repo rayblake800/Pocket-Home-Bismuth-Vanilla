@@ -6,7 +6,7 @@
  * @brief Describes the current state of a Wifi access point.
  */
 
-enum AccessPointState
+enum class AccessPointState
 {
     // WifiAccessPoint contains no access point data.
     nullAP,
@@ -33,19 +33,19 @@ static const char* apStateString(AccessPointState state)
 {
     switch(state)
     {
-        case nullAP:
+        case AccessPointState::nullAP:
             return "nullAP";
-        case missingAP:
+        case AccessPointState::missingAP:
             return "missingAP";
-        case disconnectedAP:
+        case AccessPointState::disconnectedAP:
             return "disconnectedAP";
-        case connectingAP:
+        case AccessPointState::connectingAP:
             return "connectingAP";
-        case connectedAP:
+        case AccessPointState::connectedAP:
             return "connectedAP";
-        case disconnectingAP:
+        case AccessPointState::disconnectingAP:
             return "disconnectingAP";
-        case invalidSecurityAP:
+        case AccessPointState::invalidSecurityAP:
             return "invalidSecurityAP";
     }
     return "apStateString: missing AccessPointState!";

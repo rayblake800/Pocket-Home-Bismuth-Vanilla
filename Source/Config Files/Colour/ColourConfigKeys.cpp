@@ -4,6 +4,12 @@
 
 
 //=============================== Colour Keys: =================================
+ /**
+ * Keys for colour values assigned to UI element colour categories.  All
+ * Juce ColourId values are grouped under one of these categories.  When
+ * looking up colour values, if no value is explicitly assigned to a given
+ * ColourId, the value assigned to the associated UICategory will be used.
+ */
 static const juce::Array<juce::Identifier> uiCategoryKeys= 
 {
     "window background",
@@ -19,6 +25,10 @@ static const juce::Array<juce::Identifier> uiCategoryKeys=
     "highlighted text"
 };
 
+/**
+ * For each Juce ColourId value tracked in colours.json, colourIds maps that
+ * colour to its string key.
+ */
 static const std::map<int, juce::Identifier> colourIdKeys = 
 {
     {ColourIds::pageComponent::background,       "Page background"},
@@ -77,6 +87,10 @@ static const std::map<int, juce::Identifier> colourIdKeys =
             "Color picker focused color outline"}
 };
 
+/**
+ * For each colour key string tracked in colours.json, colourIds maps that
+ * key to its Juce ColourId value.
+ */
 static const std::map<juce::Identifier, int> colourIds
 {
     {"Page background",            ColourIds::pageComponent::background},
@@ -148,6 +162,10 @@ static const std::map<juce::Identifier, int> colourIds
 
 //======================= ColourId->UICategory Map =============================
 // Auto-generated using ColourIdSort.pl.
+/**
+ * Maps each Juce ColourId value to the UI element category used to select
+ * its default value.
+ */
 static const std::map<int, ColourConfigKeys::UICategory> idCategories =
 {
     {
@@ -743,22 +761,17 @@ const juce::Array<int>& ColourConfigKeys::getColourIds()
     }
     return idList;
 }
-
-/**
- * Finds the key representing a UICategory value.
+    
+/*
+ * Gets all UI category color keys.
  */
-const juce::Identifier& ColourConfigKeys::getCategoryKey
-(const UICategory category)
+const juce::Array<juce::Identifier>& ColourConfigKeys::getCategoryKeys()
 {
-    if(category == none)
-    {
-        return invalidKey;
-    }
-    return uiCategoryKeys[(int) category];
+    return uiCategoryKeys;
 }
 
-/**
- * Gets all keys used by the ColourConfigKeys.
+/*
+ * Gets all keys used by the ColourConfigFile.
  */
 const juce::Array<juce::Identifier>& ColourConfigKeys::getColourKeys()
 {
@@ -775,7 +788,7 @@ const juce::Array<juce::Identifier>& ColourConfigKeys::getColourKeys()
     return colourKeys;
 }
 
-/**
+/*
  * Gets the UICategory assigned to a Juce ColourId value.
  */
 ColourConfigKeys::UICategory ColourConfigKeys::getUICategory
@@ -831,4 +844,17 @@ const juce::Identifier& ColourConfigKeys::getColourKey(const int colourId)
         return invalidKey;
     }
     return keySearch->second;
+}
+
+/*
+ * Finds the key representing a UICategory value.
+ */
+const juce::Identifier& ColourConfigKeys::getCategoryKey
+(const UICategory category)
+{
+    if(category == none)
+    {
+        return invalidKey;
+    }
+    return uiCategoryKeys[(int) category];
 }

@@ -1,16 +1,17 @@
 #include "MainConfigKeys.h"
+#include "ComponentConfigKeys.h"
 #include "ClockLabel.h"
 
 ClockLabel::ClockLabel() :
 WindowFocusedTimer("ClockLabel"),
-ConfigurableLabel(ComponentConfigFile::clockLabelKey, "clockLabel", "00:00")
+ConfigurableLabel(ComponentConfigKeys::clockLabelKey, "clockLabel", "00:00")
 {
     using namespace juce;
 #    if JUCE_DEBUG
     setName("ClockLabel");
 #    endif
-    addTrackedKey(MainConfigKey::use24HrModeKey);
-    addTrackedKey(MainConfigKey::showClockKey);
+    addTrackedKey(MainConfigKeys::use24HrModeKey);
+    addTrackedKey(MainConfigKeys::showClockKey);
     setJustificationType(Justification::centredRight);
     loadAllConfigProperties();
     startTimer(1);
@@ -88,7 +89,7 @@ void ClockLabel::configValueChanged(const juce::Identifier& key)
     }
     else if (key == MainConfigKeys::use24HrModeKey)
     {
-        use24HrMode = config.getConfigValue<bool>(keu);
+        use24HrMode = config.getConfigValue<bool>(key);
         if (isVisible() && getAlpha() != 0)
         {
             stopTimer();

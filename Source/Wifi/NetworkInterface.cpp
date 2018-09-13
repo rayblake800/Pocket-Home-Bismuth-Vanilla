@@ -57,35 +57,35 @@ void NetworkInterface::confirmWifiState()
     
     if(!wifiDeviceFound())
     {
-        if (state != missingNetworkDevice)
+        if (state != WifiState::missingNetworkDevice)
         {
             DBG("NetworkInterface::" << __func__ << ": state was "
                     << wifiStateString(state)
                     << ", but should be missingNetworkDevice.");
-            setWifiState(missingNetworkDevice);
+            setWifiState(WifiState::missingNetworkDevice);
         }
         return;    
     }
     if (!isWifiEnabled())
     {
-        if (state != turningOn && state != disabled)
+        if (state != WifiState::turningOn && state != WifiState::disabled)
         {
             DBG("NetworkInterface::" << __func__ << ": state was "
                     << wifiStateString(state)
                     << ", but wifi is actually disabled."); 
-            setWifiState(disabled);
+            setWifiState(WifiState::disabled);
         }
         return;
     }
     if (wifiConnecting)
     {
-        if (state != connecting && state != turningOff)
+        if (state != WifiState::connecting && state != WifiState::turningOff)
         {
 
             DBG("NetworkInterface::" << __func__ << ": state was "
                     << wifiStateString(state)
                     << ", but wifi is connecting.");
-            setWifiState(connecting);
+            setWifiState(WifiState::connecting);
             if (!isTimerRunning())
             {
                 startTimer(wifiConnectionTimeout);
@@ -94,13 +94,13 @@ void NetworkInterface::confirmWifiState()
     }
     else if (wifiConnected)
     {
-        if (state != connected && state != disconnecting)
+        if (state != WifiState::connected && state != WifiState::disconnecting)
         {
 
             DBG("NetworkInterface::" << __func__ << ": state was "
                     << wifiStateString(state)
                     << ", but wifi is connected.");
-            setWifiState(connected);
+            setWifiState(WifiState::connected);
             if (!isTimerRunning())
             {
                 startTimer(wifiConnectionTimeout);
@@ -109,12 +109,12 @@ void NetworkInterface::confirmWifiState()
     }
     else
     {
-        if (state != enabled && state != turningOff)
+        if (state != WifiState::enabled && state != WifiState::turningOff)
         {
             DBG("NetworkInterface::" << __func__ << ": state was "
                     << wifiStateString(state)
                     << ", but wifi is enabled/not connected.");
-            setWifiState(enabled);
+            setWifiState(WifiState::enabled);
         }
     }
 }
@@ -126,13 +126,13 @@ void NetworkInterface::confirmWifiState()
 void NetworkInterface::signalWifiConnecting()
 {
     WifiState wifiState = getWifiState();
-    if (wifiState != connecting)
+    if (wifiState != WifiState::connecting)
     {
         DBG("NetworkInterface::" << __func__
                 << ": started to connect during state "
                 << wifiStateString(wifiState));
         startTimer(wifiConnectionTimeout);
-        setWifiState(connecting);
+        setWifiState(WifiState::connecting);
     }
 }
 
@@ -146,7 +146,7 @@ void NetworkInterface::signalWifiConnected()
     DBG("NetworkInterface::" << __func__ 
             << ": connection established during state "
             << wifiStateString(getWifiState()));
-    setWifiState(connected);
+    setWifiState(WifiState::connected);
 }
 
 /*
@@ -159,10 +159,10 @@ void NetworkInterface::signalConnectionFailed()
     using namespace juce;
     switch (getWifiState())
     {
-        case connecting:
+        case WifiState::connecting:
             DBG("NetworkInterface::" << __func__ << ": connection failed.");
             stopTimer();
-            setWifiState(enabled);
+            setWifiState(WifiState::enabled);
             return;
         default:
             DBG("NetworkInterface::" << __func__
@@ -184,13 +184,13 @@ void NetworkInterface::signalWifiDisconnected()
     
     switch (currentState)
     {
-        case connecting:
-        case disconnecting:
-        case connected:
-        case missingPassword:
-            setWifiState(enabled);
+        case WifiState::connecting:
+        case WifiState::disconnecting:
+        case WifiState::connected:
+        case WifiState::missingPassword:
+            setWifiState(WifiState::enabled);
             return;
-        case turningOff:
+        case WifiState::turningOff:
             return;
         default:
             DBG("NetworkInterface::" << __func__
@@ -209,7 +209,7 @@ void NetworkInterface::signalWifiEnabled()
     using namespace juce;
     //DBG("NetworkInterface::" << __func__ << ": wifi enabled");
     stopTimer();
-    setWifiState(enabled);
+    setWifiState(WifiState::enabled);
 }
 
 /*
@@ -222,7 +222,7 @@ void NetworkInterface::signalWifiDisabled()
     using namespace juce;
     //DBG("NetworkInterface::" << __func__ << ": wifi disabled");
     stopTimer();
-    setWifiState(disabled);
+    setWifiState(WifiState::disabled);
 }
 
 /*
@@ -234,7 +234,7 @@ void NetworkInterface::signalPskNeeded()
     using namespace juce;
     //DBG("NetworkInterface::" << __func__ << ": missing password");
     stopTimer();
-    setWifiState(missingPassword);
+    setWifiState(WifiState::missingPassword);
 }
      
 /*
@@ -298,12 +298,12 @@ void NetworkInterface::timerCallback()
     WifiState currentState = wifiState;
     switch (currentState)
     {
-        case connecting:
+        case WifiState::connecting:
             DBG("" << __func__
                     << ": wifi connection timed out.");
-            setWifiState(enabled);
+            setWifiState(WifiState::enabled);
             return;
-        case disconnecting:
+        case WifiState::disconnecting:
             if (wifiConnected)
             {
                 DBG("" << __func__
@@ -315,10 +315,10 @@ void NetworkInterface::timerCallback()
                 DBG("" << __func__
                     << ": finished disconnecting, but no signal was "
                     << "received");
-                setWifiState(enabled);
+                setWifiState(WifiState::enabled);
             }
             return;
-        case turningOn:
+        case WifiState::turningOn:
             if (wifiEnabled)
             {
                 DBG("" << __func__
@@ -329,10 +329,11 @@ void NetworkInterface::timerCallback()
                 DBG("" << __func__
                    << ": finished turning on wifi, but no signal was "
                    << "received");
-                setWifiState(wifiEnabled ? enabled : disabled);
+                setWifiState(wifiEnabled ?
+                        WifiState::enabled : WifiState::disabled);
             }
             return;
-        case turningOff:
+        case WifiState::turningOff:
             if (wifiEnabled)
             {
                 DBG("" << __func__
@@ -344,12 +345,13 @@ void NetworkInterface::timerCallback()
                 DBG("" << __func__
                   << ": finished turning off wifi, but no signal was "
                   << "received");
-                setWifiState(wifiEnabled ? enabled : disabled);
+                setWifiState(wifiEnabled ?
+                        WifiState::enabled : WifiState::disabled);
             }
             return;
-        case disabled:
-        case enabled:
-        case connected:
+        case WifiState::disabled:
+        case WifiState::enabled:
+        case WifiState::connected:
             DBG("NetworkInterface::" << __func__
                     << ": unexpected timeout from state "
                     << wifiStateString(currentState));

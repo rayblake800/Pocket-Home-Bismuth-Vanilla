@@ -3,42 +3,29 @@
 #include "ConfigurableComponent.h"
 
 /**
- * @file ConfigurableLabel.h
+ * @file   ConfigurableLabel.h
  * 
- * @brief ConfigurableLabel is a scaling label that sets its properties from the
- * component configuration file.
+ * @brief  A scaling label that loads its properties from the component 
+ *         configuration file.
  */
 
 class ConfigurableLabel : public ScalingLabel, public ConfigurableComponent {
 public:
     /**
-     * @param componentKey  The label's key in the ComponentConfigFile.
+     * @param componentKey   The label's key in the ComponentConfigFile.
      * 
-     * @param componentName The component's internal name value.
+     * @param componentName  The component's internal name value.
      *  
-     * @param labelText     The initial label display text.
+     * @param labelText      The initial label display text.
      *
-     * @param fontPadding  The font height will not exceed 
+     * @param fontPadding    The font height will not exceed 
      *                       (getHeight() - fontPadding).
      */
-    ConfigurableLabel(juce::String componentKey,
+    ConfigurableLabel(
+            const juce::Identifier& componentKey,
             const juce::String &componentName = juce::String(),
             const juce::String &labelText = juce::String(),
             const int& fontPadding = 0);
 
     virtual ~ConfigurableLabel() { }
-
-private:
-    /**
-     * Applies text color settings to a configurable label.
-     * 
-     * @param assetNames   This should be empty, and will be ignored.
-     * 
-     * @param colours      If this list has a color at index 0, it will be 
-     *                      applied to the label text.  If it has a color at
-     *                      index 1, that will be applied to the label
-     *                      background.
-     */
-    void applyConfigAssets(juce::StringArray assetNames,
-            juce::Array<juce::Colour> colours) override;
 };
