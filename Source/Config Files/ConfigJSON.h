@@ -92,14 +92,14 @@ public:
                     << e.getPropertyKey()
                     <<"\" , expected type:" << e.getExpectedType()
                     <<", actual type: "  << e.getFoundType()
-                    << ", error = " << e.getErrorMessage());
+                    << ", error = " << e.what());
             throw e;
         }
         catch (JSONFile::FileException e)
         {
             //Failed to access .json file
-            DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
-            alertWindows.showPlaceholderError(e.getErrorMessage());
+            DBG("ConfigJSON::" << __func__ << ": " << e.what());
+            alertWindows.showPlaceholderError(e.what());
         }
         return ValueType();
     }
@@ -171,6 +171,11 @@ public:
         BadKeyException(const juce::Identifier& invalidKey) : 
         invalidKey(invalidKey) { }
         
+        virtual const char* what() const noexcept override
+        {
+            return juce::CharPointer_UTF8(invalidKey);
+        }
+        
         /**
          * @brief  Gets the invalid key that caused the exception.
          * 
@@ -230,6 +235,32 @@ protected:
      *                     the value with this key is updated.
      */
     void removeTrackedKey(const juce::Identifier& keyToRemove);
+    
+
+    /**
+     * @brief  Requests a stored value directly from this Listener's ConfigJSON.
+     *
+     * @tparam ValueType        The type of value requested.
+     *
+     * @param key               The key to the requested value.
+     *
+     * @throws BadKeyException  If the key does not map to a value with the 
+     *                          correct type.
+     *
+     * @return                  The requested value.
+     */
+    template<typename ValueType>
+    ValueType getConfigValue(const juce::Identifier& key)
+    {
+        ThreadLock& configLock = getResourceLock();
+        configLock.takeReadLock();
+        
+        ConfigJSON* config = static_cast<ConfigJSON*>(getClassResource());
+        ValueType value = config->getConfigValue<ValueType>(key);
+
+        configLock.releaseLock();
+        return value;
+    }
 
 private:
     /**
@@ -332,8 +363,8 @@ protected:
         catch (JSONFile::FileException e)
         {
             //Failed to read from .json file
-            DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
-            alertWindows.showPlaceholderError(e.getErrorMessage());
+            DBG("ConfigJSON::" << __func__ << ": " << e.what());
+            alertWindows.showPlaceholderError(e.what());
         }
         catch(JSONFile::TypeException e)
         {
@@ -342,8 +373,8 @@ protected:
                     << e.getPropertyKey()
                     <<", expected type:" << e.getExpectedType()
                     <<", actual type: "  << e.getFoundType()
-                    << ", error = " << e.getErrorMessage());
-            alertWindows.showPlaceholderError(e.getErrorMessage());
+                    << ", error = " << e.what());
+            alertWindows.showPlaceholderError(e.what());
         }
         return T();
     }
@@ -371,13 +402,13 @@ protected:
         catch (JSONFile::FileException e)
         {
             //Failed to write to .json file
-            DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
-            alertWindows.showPlaceholderError(e.getErrorMessage());
+            DBG("ConfigJSON::" << __func__ << ": " << e.what());
+            alertWindows.showPlaceholderError(e.what());
         }
         catch(JSONFile::TypeException e)
         {
-            DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
-            alertWindows.showPlaceholderError(e.getErrorMessage());
+            DBG("ConfigJSON::" << __func__ << ": " << e.what());
+            alertWindows.showPlaceholderError(e.what());
         }
         return false;
     }

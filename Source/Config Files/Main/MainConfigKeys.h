@@ -61,24 +61,21 @@ namespace MainConfigKeys
         "Paged menu"
     };
 
-    static const std::vector<ConfigKey> allKeys()
+    static const std::vector<ConfigKey>& allKeys
     {
-        return 
-        {
-            maxRowsKey,
-            maxColumnsKey,
-            backgroundKey,
-            menuTypeKey,
-            shutdownCommandKey,
-            restartCommandKey,
-            sleepCommandKey,
-            termLaunchCommandKey,
-            wifiInterfaceKey,
-            showCursorKey,
-            showClockKey,
-            use24HrModeKey,
-            maxRowsKey,
-            maxColumnsKey
-        };
-    }
+        maxRowsKey,
+        maxColumnsKey,
+        backgroundKey,
+        menuTypeKey,
+        shutdownCommandKey,
+        restartCommandKey,
+        sleepCommandKey,
+        termLaunchCommandKey,
+        wifiInterfaceKey,
+        showCursorKey,
+        showClockKey,
+        use24HrModeKey,
+        maxRowsKey,
+        maxColumnsKey
+    };
 };

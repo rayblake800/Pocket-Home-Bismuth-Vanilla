@@ -18,10 +18,15 @@ cursor(juce::MouseCursor::NoCursor),
 mainListener(*this)
 {
     using namespace juce;
-    const juce::Array<int>& colourIds = ColourConfigKeys::getColourIds();
+    const Array<int>& colourIds = ColourConfigKeys::getColourIds();
     for(const int& id : colourIds)
     {
         addTrackedColourId(id);
+    }
+    const Array<Identifier>& categoryKeys = ColourConfigKeys::getCategoryKeys();
+    for(const Identifier& key : categoryKeys)
+    {
+        addTrackedKey(key);
     }
     loadAllConfigProperties();
 }

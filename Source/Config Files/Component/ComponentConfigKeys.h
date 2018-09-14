@@ -52,36 +52,30 @@ namespace ComponentConfigKeys
     static const juce::Identifier spinnerKey
             ("loading spinner");
     
-    static const std::vector<ConfigKey> basicKeys()
+    static const std::vector<ConfigKey>& basicKeys =
     {
-        return 
-        {
-            smallTextKey,
-            mediumTextKey,
-            largeTextKey
-        };
-    }
+        smallTextKey,
+        mediumTextKey,
+        largeTextKey
+    };
     
-    static const juce::Array<juce::Identifier> componentKeys()
+    static const juce::Array<juce::Identifier> componentKeys =
     {
-        return
-        {
-            scrollingAppMenuKey,
-            pagedAppMenuKey,
-            menuFrameKey,
-            batteryIconKey,
-            batteryPercentKey,
-            clockLabelKey,
-            wifiIconKey,
-            powerButtonKey,
-            settingsButtonKey,
-            popupMenuKey,
-            pageLeftKey,
-            pageRightKey,
-            pageUpKey,
-            pageDownKey,
-            settingsListBtnKey,
-            spinnerKey
-        };
-    }
+        scrollingAppMenuKey,
+        pagedAppMenuKey,
+        menuFrameKey,
+        batteryIconKey,
+        batteryPercentKey,
+        clockLabelKey,
+        wifiIconKey,
+        powerButtonKey,
+        settingsButtonKey,
+        popupMenuKey,
+        pageLeftKey,
+        pageRightKey,
+        pageUpKey,
+        pageDownKey,
+        settingsListBtnKey,
+        spinnerKey
+    };
 }

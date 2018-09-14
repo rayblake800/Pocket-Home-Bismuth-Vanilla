@@ -189,9 +189,9 @@ public:
          * 
          * @return  A short error message.
          */
-        juce::String getErrorMessage()
+        virtual const char* what() const noexcept override
         {
-            return errorMessage;
+            return errorMessage.toRawUTF8();
         }
         
     private:     
@@ -255,7 +255,7 @@ public:
         /**
          * Gets a short error message suitable for debug output only.
          */
-        juce::String getErrorMessage()
+        virtual const char* what() const noexcept override
         {
             juce::String error = "Key \"";
             error += key;
@@ -263,7 +263,7 @@ public:
             error += expectedType;
             error += ", Found:";
             error += foundType;
-            return error;
+            return error.toRawUTF8();
         }
         
     private:

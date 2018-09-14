@@ -32,6 +32,24 @@ void ColourJSON::Listener::removeTrackedColourId(const int colourId)
     trackedColourIds.removeAllInstancesOf(colourId);
 }
 
+/*
+ * Calls configValueChanged for each tracked key, and calls colourChanged for 
+ * each tracked colourId.
+ */
+void ColourJSON::Listener::loadAllConfigProperties()
+{
+    using namespace juce;
+    ConfigJSON::Listener::loadAllConfigProperties();
+    const ScopedLock colourLock(trackedColourIds.getLock());
+    for(const int& colourId : trackedColourIds)
+    {
+        const Identifier& key = ColourConfigKeys::getColourKey(colourId);
+        colourChanged(colourId, key,
+                Colour(getConfigValue<String>(key).getHexValue32()));
+        
+    }
+}
+
 /**
  * Checks if a single handler object is a Listener tracking updates of a single 
  * key value, and if so, notifies it that the tracked value has updated.

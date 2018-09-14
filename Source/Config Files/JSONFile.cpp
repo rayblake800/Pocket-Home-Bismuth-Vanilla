@@ -21,7 +21,7 @@ JSONFile::~JSONFile()
     }
     catch(FileException e)
     {
-        DBG("JSONFile::" << __func__ << ": " << e.getErrorMessage());
+        DBG("JSONFile::" << __func__ << ": " << e.what());
     }
 }
 

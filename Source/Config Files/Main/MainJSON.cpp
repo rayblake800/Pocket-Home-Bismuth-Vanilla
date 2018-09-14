@@ -15,6 +15,6 @@ MainJSON::MainJSON() : ConfigJSON(resourceKey, configFilename) { }
  */
 const std::vector<ConfigKey>& MainJSON::getConfigKeys() const
 {
-    return MainConfigKeys::allKeys();
+    return MainConfigKeys::allKeys;
 }
 

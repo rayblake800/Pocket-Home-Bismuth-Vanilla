@@ -40,6 +40,12 @@ public:
          */
         void removeTrackedColourId(const int colourId);
 
+        /**
+         * @brief  Calls configValueChanged for each tracked key, and calls
+         *         colourChanged for each tracked colourId.
+         */
+        virtual void loadAllConfigProperties() override;
+
     private:
         /**
          * @brief Notify the Listener when a colour value it tracks is updated. 

@@ -10,7 +10,7 @@ static const constexpr char * configFilename = "components.json";
 ComponentJSON::ComponentJSON() : ConfigJSON(resourceKey, configFilename)
 {
     using namespace juce;
-    const Array<Identifier> keys = ComponentConfigKeys::componentKeys();
+    const Array<Identifier> keys = ComponentConfigKeys::componentKeys;
     for (const Identifier& key : keys)
     {
 	DynamicObject::Ptr componentData = initProperty<DynamicObject*>(key);
@@ -35,7 +35,7 @@ ComponentSettings ComponentJSON::getComponentSettings
 const std::vector<ConfigKey>& 
 ComponentJSON::getConfigKeys() const
 {
-    return ComponentConfigKeys::basicKeys();
+    return ComponentConfigKeys::basicKeys;
 }
 
 /*
@@ -44,7 +44,7 @@ ComponentJSON::getConfigKeys() const
 void ComponentJSON::writeDataToJSON()
 {
     using namespace juce;
-    const Array<Identifier>& keys = ComponentConfigKeys::componentKeys();
+    const Array<Identifier>& keys = ComponentConfigKeys::componentKeys;
     for (const Identifier& key : keys)
     {
         if(components.count(key) != 0)

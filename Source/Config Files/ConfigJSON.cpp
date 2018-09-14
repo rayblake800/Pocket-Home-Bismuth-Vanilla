@@ -166,13 +166,13 @@ void ConfigJSON::loadJSONData()
         }
         catch(JSONFile::FileException e)
         {
-            DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
-            alertWindows.showPlaceholderError(e.getErrorMessage());
+            DBG("ConfigJSON::" << __func__ << ": " << e.what());
+            alertWindows.showPlaceholderError(e.what());
         }
         catch(JSONFile::TypeException e)
         {
-            DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
-            alertWindows.showPlaceholderError(e.getErrorMessage());
+            DBG("ConfigJSON::" << __func__ << ": " << e.what());
+            alertWindows.showPlaceholderError(e.what());
         }
     }
     writeChanges();
@@ -208,13 +208,13 @@ void ConfigJSON::writeChanges()
     }
     catch(JSONFile::FileException e)
     {
-        DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
-        alertWindows.showPlaceholderError(e.getErrorMessage());
+        DBG("ConfigJSON::" << __func__ << ": " << e.what());
+        alertWindows.showPlaceholderError(e.what());
     }
     catch(JSONFile::TypeException e)
     {
-        DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
-        alertWindows.showPlaceholderError(e.getErrorMessage());
+        DBG("ConfigJSON::" << __func__ << ": " << e.what());
+        alertWindows.showPlaceholderError(e.what());
     }
 }
 
@@ -248,13 +248,13 @@ void ConfigJSON::restoreDefaultValue(const ConfigKey& key)
     }
     catch(JSONFile::FileException e)
     {
-        DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
-        alertWindows.showPlaceholderError(e.getErrorMessage());
+        DBG("ConfigJSON::" << __func__ << ": " << e.what());
+        alertWindows.showPlaceholderError(e.what());
     }
     catch(JSONFile::TypeException e)
     {
-        DBG("ConfigJSON::" << __func__ << ": " << e.getErrorMessage());
-        alertWindows.showPlaceholderError(e.getErrorMessage());
+        DBG("ConfigJSON::" << __func__ << ": " << e.what());
+        alertWindows.showPlaceholderError(e.what());
     }
 }
 
