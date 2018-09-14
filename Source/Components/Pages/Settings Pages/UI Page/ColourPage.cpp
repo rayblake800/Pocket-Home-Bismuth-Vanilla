@@ -51,11 +51,10 @@ colourKeys(ColourConfigKeys::getColourKeys())
     ColourConfigFile config;
     for(const Identifier& key : colourKeys)
     {
-
+        addTrackedKey(key);
     }
-    config.addListener(this, config.getColourIds());
     DBG(__func__ << ": adding " << colourKeys.size() << " colors");
-    for (const String& key : colourKeys)
+    for (const Identifier& key : colourKeys)
     {
         colours.add(config.getColour(key));
     }
@@ -75,7 +74,7 @@ int ColourPage::ColourListModel::getNumRows()
 juce::String ColourPage::ColourListModel::getRowText(int index) const
 {
     using namespace juce;
-    return colourKeys[index];
+    return colourKeys[index].toString();
 }
 
 void ColourPage::ColourListModel::listResized(juce::ListBox& list)
@@ -97,7 +96,6 @@ void ColourPage::ColourListModel::paintListBoxItem(
 {
     using namespace juce;
     ColourConfigFile config;
-    config.addListener(this, config.getColourIds());
     Rectangle<int> fillArea(0, 0, width, height);
     float checkSize = fillArea.getHeight() / 4;
     g.fillCheckerBoard(fillArea.toFloat(), checkSize, checkSize,
@@ -118,7 +116,8 @@ void ColourPage::ColourListModel::paintListBoxItem(
     }
     g.setOpacity(1);
     g.setFont(Font(textHeight));
-    g.drawText(colourKeys[rowNumber], fillArea, Justification::centred);
+    g.drawText(colourKeys[rowNumber].toString(), fillArea, 
+            Justification::centred);
 }
 
 juce::Component* ColourPage::ColourListModel::refreshComponentForRow(
@@ -135,19 +134,48 @@ juce::Component* ColourPage::ColourListModel::refreshComponentForRow(
 
 void ColourPage::ColourListModel::selectedRowsChanged(int lastRowSelected) { }
 
-void ColourPage::ColourListModel::colourValueChanged
-(int colourID, juce::String colourKey, juce::Colour newColour)
+/**
+ * Listens for updates to generic UI element categories.
+ */
+void ColourPage::ColourListModel::configValueChanged
+(const juce::Identifier& key) 
 {
+    using namespace juce;
     ColourConfigFile config;
-    int colourIndex = colourKeys.indexOf(colourKey);
+    int colourIndex = colourKeys.indexOf(key);
+    Colour newColour(config.getConfigValue<String>(key).getHexValue32());
     if (colourIndex >= 0)
     {
         colours.set(colourIndex, newColour);
-        DBG("ColourPage::" << __func__ << ": Setting color " << colourKey 
+        DBG("ColourPage::" << __func__ << ": Setting color " << key 
                 << " index " << colourIndex << " to " << newColour.toString());
     }
     else
     {
-        DBG("ColourPage::" << __func__ << ": Unknown color key " <<colourKey);
+        DBG("ColourPage::" << __func__ << ": Unknown color key " << key);
+    }
+
+}
+
+/*
+ * Listens for updates to all tracked juce ColorId values.
+ */
+void ColourPage::ColourListModel::colourChanged(const int colourId,
+        const juce::Identifier& colourKey, const juce::Colour newColour)
+{
+    using namespace juce;
+    using namespace ColourConfigKeys;
+    ColourConfigFile config;
+    const Identifier& idKey = getColourKey(colourId); 
+    int colourIndex = colourKeys.indexOf(idKey);
+    if (colourIndex >= 0)
+    {
+        colours.set(colourIndex, newColour);
+        DBG("ColourPage::" << __func__ << ": Setting color " << idKey 
+                << " index " << colourIndex << " to " << newColour.toString());
+    }
+    else
+    {
+        DBG("ColourPage::" << __func__ << ": Unknown color key " << idKey);
     }
 }

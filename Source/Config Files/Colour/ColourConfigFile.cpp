@@ -7,7 +7,7 @@
 /*
  * Look up the Colour value saved for a specific Juce ColourId.
  */
-juce::Colour ColourConfigFile::getColour(const int colourId) const
+juce::Colour ColourConfigFile::getColour(const int colourId) 
 {
     using namespace ColourConfigKeys;
     using namespace juce;
@@ -25,7 +25,7 @@ juce::Colour ColourConfigFile::getColour(const int colourId) const
  * Gets the Colour value assigned as the default for all UI items in a
  * specific category.
  */
-juce::Colour ColourConfigFile::getColour(UICategory category) const
+juce::Colour ColourConfigFile::getColour(UICategory category) 
 {
     using namespace ColourConfigKeys;
     using namespace juce;
@@ -40,7 +40,7 @@ juce::Colour ColourConfigFile::getColour(UICategory category) const
  * Gets the colour value associated with a particular key string.
  */
 juce::Colour ColourConfigFile::getColour
-(const juce::Identifier& colourKey) const
+(const juce::Identifier& colourKey)
 {
     using namespace juce;
     return Colour(getColourString(colourKey).getHexValue32());   
@@ -89,7 +89,7 @@ void ColourConfigFile::setColour
  * Gets a Colour string saved to the colour config file.
  */
 juce::String ColourConfigFile::getColourString
-(const juce::Identifier& colourKey) const
+(const juce::Identifier& colourKey)
 {
     using namespace juce;
     return getConfigValue<String>(colourKey);

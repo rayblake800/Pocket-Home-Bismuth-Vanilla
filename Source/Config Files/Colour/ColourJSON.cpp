@@ -44,6 +44,10 @@ void ColourJSON::notifyListener(ConfigJSON::Listener* listener,
     Listener* colourListener = dynamic_cast<Listener*>(listener);
     if(colourListener != nullptr)
     {
+        // Call the default notifyListener method to notify listeners tracking
+        // colors by key:
+        ConfigJSON::notifyListener(listener, key);
+        // Check for and notify listeners tracking colors by ColorId:
         String colourStr = getConfigValue<String>(key);
         int colourId = getColourId(key);
         if(colourStr.isEmpty())

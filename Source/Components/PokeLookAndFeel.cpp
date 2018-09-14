@@ -1,7 +1,7 @@
 #include "ComponentConfigFile.h"
 #include "ColourConfigFile.h"
 #include "ColourConfigKeys.h"
-#include "MainConfigFile.h"
+#include "MainConfigKeys.h"
 #include "SwitchComponent.h"
 #include "DrawableImageComponent.h"
 #include "ListEditor.h"
@@ -286,16 +286,23 @@ juce::Font PokeLookAndFeel::getAlertWindowMessageFont()
     return Font(config.getFontHeight(ComponentConfigFile::mediumText));
 }
 
+PokeLookAndFeel::MainListener::MainListener(PokeLookAndFeel& owner) :
+owner(owner)
+{
+    addTrackedKey(MainConfigKeys::showCursorKey);
+}
+
 /*
  * Updates the cursor visibility when the associated config key is changed. 
  */
-void PokeLookAndFeel::nonColorValueChanged(juce::String key)
+void PokeLookAndFeel::MainListener::configValueChanged
+(const juce::Identifier& key)
 {
     using namespace juce;
-    if (key == MainConfigFile::showCursorKey)
+    if (key == MainConfigKeys::showCursorKey)
     {
         MainConfigFile config;
-        cursor = (config.getConfigValue<bool>(key) ?
+        owner.cursor = (config.getConfigValue<bool>(key) ?
                   MouseCursor::ParentCursor : MouseCursor::NoCursor);
     }
 }
@@ -303,8 +310,8 @@ void PokeLookAndFeel::nonColorValueChanged(juce::String key)
 /**
  * Updates Component colours when they're changed in the ColourConfigFile.
  */
-void PokeLookAndFeel::colourValueChanged
-(int colourID, juce::String colourKey, juce::Colour newColour)
+void PokeLookAndFeel::colourChanged(const int colourId,
+        const juce::Identifier& colourKey, const juce::Colour newColour)
 {
-    setColour(colourID, newColour);
+    setColour(colourId, newColour);
 }

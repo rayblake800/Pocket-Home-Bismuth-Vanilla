@@ -10,6 +10,11 @@ class AppShortcut
 {
 public:
     /**
+     * @brief  Creates a shortcut with empty values
+     */
+    AppShortcut() { }
+
+    /**
      * @param name               The application's display name.
      *
      * @param icon               The application's icon name or path.

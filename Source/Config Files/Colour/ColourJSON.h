@@ -58,14 +58,6 @@ public:
                 const int colourId, 
                 const juce::Identifier& updatedKey, 
                 const juce::Colour newColour) = 0;
-        
-        
-        virtual void configValueChanged(const juce::Identifier& key) override
-        {
-            DBG("ColourJSON::Listener::" << __func__ 
-                    << ": Unexpected call with key=" << key
-                    << ", colourChanged() should be handling all updates");
-        };
        
         /* All tracked ColourId values */        
         juce::Array<int, juce::CriticalSection> trackedColourIds;

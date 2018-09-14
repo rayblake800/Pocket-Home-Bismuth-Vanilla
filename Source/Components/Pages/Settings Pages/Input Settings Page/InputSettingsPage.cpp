@@ -1,4 +1,5 @@
 #include "MainConfigFile.h"
+#include "MainConfigKeys.h"
 #include "AppLauncher.h"
 #include "InputSettingsPage.h"
 
@@ -49,7 +50,7 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
     chooseMode.addItem(localeText(visible), 2);
     chooseMode.addListener(this);
     MainConfigFile mainConfig;
-    if (mainConfig.getConfigValue<bool>(MainConfigFile::showCursorKey))
+    if (mainConfig.getConfigValue<bool>(MainConfigKeys::showCursorKey))
     {
         chooseMode.setSelectedId(2);
     }
@@ -90,7 +91,7 @@ void InputSettingsPage::comboBoxChanged(juce::ComboBox* box)
     MainConfigFile mainConfig;
     if (box != &chooseMode) return;
     bool cursorVisible = (box->getSelectedId() == 2);
-    mainConfig.setConfigValue<bool>(MainConfigFile::showCursorKey,
+    mainConfig.setConfigValue<bool>(MainConfigKeys::showCursorKey,
                                     cursorVisible);
 }
 

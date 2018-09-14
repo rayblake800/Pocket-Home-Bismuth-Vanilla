@@ -34,7 +34,7 @@ public:
      *                  id will be returned. If colourId is not a valid id, 
      *                  Colour() will be returned.
      */
-    juce::Colour getColour(const int colourId) const;
+    juce::Colour getColour(const int colourId);
 
     /**
      * @brief  Gets the Colour value assigned as the default for all UI items in
@@ -46,7 +46,7 @@ public:
      *                  category that don't have a color value assigned to them 
      *                  specifically.
      */
-    juce::Colour getColour(const UICategory category) const;
+    juce::Colour getColour(const UICategory category);
     
     /**
      * @brief  Gets the colour value associated with a particular key string.
@@ -56,7 +56,7 @@ public:
      * @return           The saved Colour, or Colour() if the colour key isn't
      *                   found.
      */
-    juce::Colour getColour(const juce::Identifier& colourKey) const;
+    juce::Colour getColour(const juce::Identifier& colourKey);
        
     /**
      * @brief  Sets the saved colour value for a single UI element.
@@ -97,7 +97,7 @@ private:
      * @return  The colour hex string mapped to that key, or the empty string
      *          if the key isn't found.
      */
-    juce::String getColourString(const juce::Identifier& colourKey) const;
+    juce::String getColourString(const juce::Identifier& colourKey);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ColourConfigFile)
 };

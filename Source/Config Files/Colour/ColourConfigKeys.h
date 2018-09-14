@@ -30,7 +30,7 @@ namespace ColourConfigKeys
     };
     
     /* Represents an invalid color key */
-    static const juce::Identifier invalidKey("");
+    static const juce::Identifier invalidKey("invalid!");
 
     /**
      * @brief   Gets all Juce ColourId values defined by the colour config file.

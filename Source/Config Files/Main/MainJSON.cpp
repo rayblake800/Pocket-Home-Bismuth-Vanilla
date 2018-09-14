@@ -2,7 +2,7 @@
 #include "MainConfigKeys.h"
 
 /* SharedResource object key */
-static const juce::Identifier resourceKey;
+const juce::Identifier MainJSON::resourceKey;
 
 /* Filename of the JSON configuration file */
 static const constexpr char * configFilename = "config.json";

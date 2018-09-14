@@ -2,8 +2,9 @@
 
 #include "NMPPClient.h"
 #include "SavedConnections.h"
+#include "AccessPointState.h"
 #include "WindowFocus.h"
-#include "WifiStateManager.h"
+#include "NetworkInterface.h"
 
 /**
  * @file LibNMInterface.h
@@ -26,7 +27,7 @@
  * can expect a newer NetworkManager version.
  */
 
-class LibNMInterface : public WifiStateManager::NetworkInterface, 
+class LibNMInterface : public NetworkInterface, 
         public NMPPClient::ConnectionHandler 
 {
 public:
@@ -34,15 +35,11 @@ public:
      * Initializes the LibNM client interface and connects signal handlers. The
      * wifi device will be loaded from the interface name loaded from the
      * MainConfigFile, or selected automatically if the config value is empty.
-     *
-     * @param wifiLock  The lock used by the WifiStateManager to control access
-     *                  to the network interface.  LibNMInterface will acquire
-     *                  the lock when it is updated by NetworkManager.  The lock
-     *                  should never be acquired within the GLib event thread.
      */
-    LibNMInterface(juce::ReadWriteLock& wifiLock);
+    LibNMInterface();
 
-    virtual ~LibNMInterface();
+    virtual ~LibNMInterface() { }
+
 protected:
     /**
      * Checks if the network manager found a valid wifi device.
@@ -130,8 +127,7 @@ protected:
      * 
      * @return  the access point's current state. 
      */
-    WifiStateManager::AccessPointState getAPState
-    (const WifiAccessPoint& accessPoint) override;
+    AccessPointState getAPState(const WifiAccessPoint& accessPoint) override;
       
     /**
      * Finds the last time a connection was active using a specific access
@@ -301,20 +297,6 @@ private:
     
     juce::ScopedPointer<ClientListener> clientListener;
     juce::ScopedPointer<DeviceListener> deviceListener;
-    
-    /**
-     * Restricts concurrent access to the wifi data.  This is a reference to the
-     * ReadWriteLock used by WifiStateManager, so it should not be locked
-     * within this class in any method the WifiStateManager could call.
-     *
-     * The only reason this object is accessible here at all is so LibNM
-     * callback functions can acquire the lock when updating data.  Even then,
-     * the lock must never be acquired within the Glib event thread, as this 
-     * can easily create a deadlock where the GLib thread waits for the
-     * wifiLock, while another thread holding the wifiLock waits for access to
-     * the GLib thread.
-     */
-    juce::ReadWriteLock& wifiLock;
 
     //The client used to access the network manager.
     NMPPClient client;

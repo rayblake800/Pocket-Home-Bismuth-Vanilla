@@ -9,55 +9,8 @@ static const constexpr char* defaultIconPath =
         "/usr/share/pocket-home/appIcons/default.png";
 
 IconThread::IconThread() : SharedResource(resourceKey),
-defaultIcon(AssetFiles::loadImageAsset(defaultIconPath)) { }
-
-/*
- * Queues up an icon request.  
- */
-void IconThread::loadIcon(
-        juce::String icon,
-        int size,
-        std::function<void(juce::Image) > assignImage,
-        IconThemeIndex::Context context,
-        int scale)
-{
-    using namespace juce;
-    //DBG("IconThread::" << __func__ << ": Requesting icon " << icon 
-    //        << ", target size " << size);
-    //if the icon variable is a full path, return that
-    if (icon.substring(0, 1) == "/")
-    {
-        assignImage(AssetFiles::loadImageAsset(icon));
-    }
-    else
-    {
-        //assign the default icon for now
-        assignImage(defaultIcon);
-        //if icon is a partial path, trim it
-        if (icon.contains("/"))
-        {
-            icon = icon.substring(1 + icon.lastIndexOf("/"));
-        }
-        const ScopedWriteLock queueLock(iconLock);
-        IconResource* iconResource
-                = dynamic_cast<IconResource*> (sharedResource.get());
-        IconResource::QueuedJob iconRequest = {
-            icon,
-            size,
-            scale,
-            context,
-            assignImage
-        };
-        iconResource->addQueuedJob(iconRequest);
-        if (!iconResource->isThreadRunning())
-        {
-            iconResource->startThread();
-        }
-    }
-}
-
-IconThread::IconResource::IconResource() :
-Thread("IconThread") 
+juce::Thread(resourceKey.toString()),
+defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
 { 
     using namespace juce;
     //Icon directory search list and priority defined at
@@ -140,7 +93,7 @@ Thread("IconThread")
     } 
 }
 
-IconThread::IconResource::~IconResource()
+IconThread::~IconThread()
 {
     signalThreadShouldExit();
     waitForThreadToExit(-1);
@@ -149,7 +102,7 @@ IconThread::IconResource::~IconResource()
 /*
  * Returns the number of pending icon requests. 
  */
-int IconThread::IconResource::numJobsQueued()
+int IconThread::numJobsQueued()
 {
     return queuedJobs.size();
 }
@@ -157,17 +110,35 @@ int IconThread::IconResource::numJobsQueued()
 /*
  * Adds another job request to the queue.
  */
-void IconThread::IconResource::addQueuedJob
-(IconThread::IconResource::QueuedJob newJob)
+void IconThread::addQueuedJob(QueuedJob newJob)
 {
-    queuedJobs.add(newJob);
+    if (newJob.icon.substring(0, 1) == "/")
+    {
+        newJob.callback(AssetFiles::loadImageAsset(newJob.icon));
+    }
+    else
+    {
+        //assign the default icon for now
+        newJob.callback(defaultIcon);
+        //if icon is a partial path, trim it
+        if (newJob.icon.contains("/"))
+        {
+            newJob.icon = newJob.icon.substring
+                (1 + newJob.icon.lastIndexOf("/"));
+        }
+       
+        queuedJobs.add(newJob);
+        if (!isThreadRunning())
+        {
+            startThread();
+        }
+    }
 }
 
 /*
  * Removes and returns the last job from the list.
  */
-IconThread::IconResource::QueuedJob
-IconThread::IconResource::getQueuedJob()
+const IconThread::QueuedJob IconThread::getQueuedJob()
 {
     QueuedJob lastJob = queuedJobs.getLast();
     queuedJobs.removeLast();
@@ -178,10 +149,10 @@ IconThread::IconResource::getQueuedJob()
  * While AppMenuButtons still need icons, this finds them in a separate 
  * thread.
  */
-void IconThread::IconResource::run()
+void IconThread::run()
 {
     using namespace juce;
-    for(IconResource::QueuedJob activeJob = getQueuedJob();
+    for(QueuedJob activeJob = getQueuedJob();
         !threadShouldExit() && (activeJob.icon.isNotEmpty() 
                 || !queuedJobs.isEmpty());
         activeJob = getQueuedJob())
@@ -207,8 +178,7 @@ void IconThread::IconResource::run()
 /*
  * Search icon theme directories for an icon matching a given request.
  */
-juce::String IconThread::IconResource::getIconPath
-(const IconThread::IconResource::QueuedJob& request)
+juce::String IconThread::getIconPath(const IconThread::QueuedJob& request)
 {
     using namespace juce;
     //First, search themes in order to find a matching icon

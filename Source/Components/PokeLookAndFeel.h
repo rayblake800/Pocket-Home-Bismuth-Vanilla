@@ -176,15 +176,18 @@ private:
     /**
      * Updates Component colours when they're changed in the ColourConfigFile.
      * 
-     * @param colourID   The Juce ColourID of the updated Component element.
+     * @param colourId   The Juce ColourId of the updated Component element.
      * 
      * @param colourKey  The key string of the value updated in the config file.
      * 
      * @param newColour  The new colour value to apply to the colourID.
      */
-    virtual void colourChanged(const int colourID,
+    virtual void colourChanged(const int colourId,
             const juce::Identifier& colourKey, 
             const juce::Colour newColour) override;
+
+    // All colors are tracked by colourId, this method should do nothing.
+    virtual void configValueChanged(const juce::Identifier& key) override { }
 
     //Defines the maximum number of characters that will fit on a text button.
     static const int maxButtonStrSize = 30;

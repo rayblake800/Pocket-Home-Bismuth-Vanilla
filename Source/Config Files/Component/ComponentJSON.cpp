@@ -5,7 +5,7 @@
 const juce::Identifier ComponentJSON::resourceKey("ComponentJSON");
 
 /* Filename of the JSON configuration file */
-static const constexpr char * configFilename = "component.json";
+static const constexpr char * configFilename = "components.json";
 
 ComponentJSON::ComponentJSON() : ConfigJSON(resourceKey, configFilename)
 {

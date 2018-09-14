@@ -3,7 +3,7 @@
 ScopedThreadWriteLock::ScopedThreadWriteLock(ThreadLock& threadLock) :
 threadLock(threadLock)
 {
-    threadLock.takeThreadLock();
+    threadLock.takeWriteLock();
 }
 
 ScopedThreadWriteLock::~ScopedThreadWriteLock()

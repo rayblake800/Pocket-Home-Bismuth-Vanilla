@@ -18,8 +18,7 @@ class NetworkInterface : public SharedResource, public juce::Timer
        NetworkInterface. */
     friend class WifiStateManager;
 
-private:
-
+protected:
     NetworkInterface();
 
 public:
@@ -36,7 +35,7 @@ protected:
 
         Listener();
 
-        virtual ~Listener();
+        virtual ~Listener() { }
 
     private:
         /**
@@ -68,8 +67,6 @@ protected:
          */
         virtual void accessPointRemoved(const WifiAccessPoint& removedAP) { };
     };
-
-
 
     /**
      * Gets the current state of the wifi device.

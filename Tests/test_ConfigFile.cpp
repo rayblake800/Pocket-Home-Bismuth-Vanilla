@@ -1,27 +1,25 @@
+/*
+
+TODO: uncomment and update this after SharedResource updates compile.
+
 #include "JuceHeader.h"
 #include "ConfigFile.h"
 
-static juce::ScopedPointer<ResourceManager::SharedResource>
-        testResource = nullptr;
-
-static juce::ReadWriteLock configLock;
-
-
 //#### Integer value keys #######
-const juce::String maxRowsKey = "max menu row count";
-const juce::String maxColumnsKey = "max menu column count";
+const juce::Identifier maxRowsKey = "max menu row count";
+const juce::Identifier maxColumnsKey = "max menu column count";
 //string
-const juce::String menuTypeKey = "app menu type";
-const juce::String shutdownCommandKey = "shutdown command";
-const juce::String restartCommandKey = "restart command";
-const juce::String sleepCommandKey = "sleep command";
-const juce::String termLaunchCommandKey = "terminal launch command";
-const juce::String backgroundKey = "background";
-const juce::String wifiInterfaceKey = "Wifi interface";
+const juce::Identifier menuTypeKey = "app menu type";
+const juce::Identifier shutdownCommandKey = "shutdown command";
+const juce::Identifier restartCommandKey = "restart command";
+const juce::Identifier sleepCommandKey = "sleep command";
+const juce::Identifier termLaunchCommandKey = "terminal launch command";
+const juce::Identifier backgroundKey = "background";
+const juce::Identifier wifiInterfaceKey = "Wifi interface";
 //boolean
-const juce::String showCursorKey = "cursor";
-const juce::String showClockKey = "show clock";
-const juce::String use24HrModeKey = "use 24h mode";
+const juce::Identifier showCursorKey = "cursor";
+const juce::Identifier showClockKey = "show clock";
+const juce::Identifier use24HrModeKey = "use 24h mode";
 
 class TestJson : public ConfigFile
 {
@@ -77,7 +75,7 @@ public:
      * Gets one of the values stored in the json configuration file.
      * 
      * @see ConfigFile.h
-     */
+     /
     template<typename T > T getConfigValue(juce::String key)
     {
         const juce::ScopedReadLock readLock(configLock);
@@ -90,7 +88,7 @@ public:
      * file if the value has changed.  
      * 
      * @see ConfigFile.h
-     */
+     /
     template<typename T>
     void setConfigValue(juce::String key, T newValue)
     {
@@ -102,7 +100,7 @@ public:
  
     /*
      * Add a listener to track component setting changes.
-     */
+     /
     void addListener(TestListener& listener,
         juce::StringArray trackedKeys)
     {
@@ -115,7 +113,7 @@ public:
 
     /*
      * Restore a value to its default state.
-     */
+     /
     void restoreDefaultValue(juce::String key)
     {
         using namespace juce;
@@ -126,7 +124,7 @@ public:
 
     /*
      * Restore all values to their default states.
-     */
+     /
     void restoreDefaultValues()
     {
         using namespace juce;
@@ -282,3 +280,4 @@ public:
 };
 
 static ConfigTest test;
+*/

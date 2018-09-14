@@ -1,4 +1,6 @@
 #include "NavButton.h"
+#include "ComponentConfigFile.h"
+#include "ComponentConfigKeys.h"
 
 NavButton::NavButton(NavButton::WindowEdge edge) : edge(edge),
 ConfigurableImageButton(NavButton::getEdgeComponentKey(edge)) 
@@ -21,8 +23,8 @@ NavButton::WindowEdge NavButton::getEdge()
 float NavButton::xMarginFractionNeeded(NavButton::WindowEdge edge)
 {
     ComponentConfigFile config;
-    ComponentConfigFile::ComponentSettings settings
-            = config.getComponentSettings(getEdgeComponentKey(edge));
+    ComponentSettings settings = config.getComponentSettings
+        (getEdgeComponentKey(edge));
     return std::min(settings.getXFraction() + settings.getWidthFraction(),
             1.0f - settings.getXFraction()) + marginPadding;
 }
@@ -34,8 +36,8 @@ float NavButton::xMarginFractionNeeded(NavButton::WindowEdge edge)
 float NavButton::yMarginFractionNeeded(NavButton::WindowEdge edge)
 {
     ComponentConfigFile config;
-    ComponentConfigFile::ComponentSettings settings
-            = config.getComponentSettings(getEdgeComponentKey(edge));
+    ComponentSettings settings = config.getComponentSettings
+        (getEdgeComponentKey(edge));
     return std::min(settings.getYFraction() + settings.getHeightFraction(),
             1.0f - settings.getYFraction()) + marginPadding;
 }
@@ -63,19 +65,19 @@ float NavButton::yMarginFractionNeeded() const
  * Given a window edge, return the component key string for the
  * corresponding NavButton type.
  */
-juce::String NavButton::getEdgeComponentKey(NavButton::WindowEdge edge)
+const juce::Identifier& NavButton::getEdgeComponentKey(const WindowEdge edge)
 {
     switch(edge)
     {
         case up:
-            return ComponentConfigFile::pageUpKey;
+            return ComponentConfigKeys::pageUpKey;
         case down:
-            return ComponentConfigFile::pageDownKey;
+            return ComponentConfigKeys::pageDownKey;
         case left:
-            return ComponentConfigFile::pageLeftKey;
+            return ComponentConfigKeys::pageLeftKey;
         case right:
-            return ComponentConfigFile::pageRightKey;
+            return ComponentConfigKeys::pageRightKey;
     }
     DBG("NavButton::" << __func__ << ": Unknown edge value!");
-    return juce::String();
+    return juce::Identifier::null;
 }

@@ -1,5 +1,4 @@
 #include "AppJSON.h"
-#include "ConfigListener.h"
 
 /* SharedResource object key */
 const juce::Identifier AppJSON::resourceKey = "AppJSON";

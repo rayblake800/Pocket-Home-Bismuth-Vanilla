@@ -38,9 +38,9 @@ void ScalingLabel::resized()
 
 ScalingLabel::SizeListener::SizeListener(ScalingLabel* label) : label(label)
 {
-    subscribeToKey(ComponentConfigKeys::smallTextKey);
-    subscribeToKey(ComponentConfigKeys::mediumTextKey);
-    subscribeToKey(ComponentConfigKeys::largeTextKey);
+    addTrackedKey(ComponentConfigKeys::smallTextKey);
+    addTrackedKey(ComponentConfigKeys::mediumTextKey);
+    addTrackedKey(ComponentConfigKeys::largeTextKey);
 }
 
 /*

@@ -5,7 +5,7 @@
 Spinner::Spinner(int secondsToTimeout) :
 WindowFocusedTimer("SpinnerFrame"),
 ConfigurableImageComponent(
-ComponentConfigFile::spinnerKey,
+ComponentConfigKeys::spinnerKey,
 0,juce::RectanglePlacement::fillDestination),
 timeout(secondsToTimeout)
 {
@@ -13,7 +13,7 @@ timeout(secondsToTimeout)
     setName("spinner");
 #    endif
     ComponentConfigFile config;
-    numImages = config.getComponentSettings(ComponentConfigFile::spinnerKey)
+    numImages = config.getComponentSettings(ComponentConfigKeys::spinnerKey)
             .getAssetFiles().size();
 }
 

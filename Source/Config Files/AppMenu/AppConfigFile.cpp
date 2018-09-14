@@ -36,7 +36,7 @@ void AppConfigFile::removeShortcut(int index, bool writeChangesNow)
 int AppConfigFile::getShortcutIndex(const AppShortcut& toFind)
 {
     auto config = getReadLockedResource();
-    return config->getFavoriteIndex(toFind);
+    return config->getShortcutIndex(toFind);
 }
 
 /**

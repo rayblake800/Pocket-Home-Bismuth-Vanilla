@@ -252,6 +252,18 @@ protected:
      * @param key  The key of an updated configuration value. 
      */
     void notifyListeners(const juce::Identifier& key);
+    
+    /**
+     * @brief  Checks if a single handler object is a Listener tracking updates
+     *         of a single key value, and if so, notifies it that the tracked
+     *         value has updated.
+     *
+     * @param listener   A Listener that might be tracking the updated value.
+     *
+     * @param key        The key to an updated configuration value.
+     */
+    virtual void notifyListener(Listener* listener,
+            const juce::Identifier& key);  
 
     /**
      * @brief  Loads all initial configuration data from the JSON config file. 
@@ -392,18 +404,6 @@ private:
      * @param key  The key of the value that will be restored.
      */
     void restoreDefaultValue(const ConfigKey& key);
-    
-    /**
-     * @brief  Checks if a single handler object is a Listener tracking updates
-     *         of a single key value, and if so, notifies it that the tracked
-     *         value has updated.
-     *
-     * @param listener   A Listener that might be tracking the updated value.
-     *
-     * @param key        The key to an updated configuration value.
-     */
-    virtual void notifyListener(Listener* listener,
-            const juce::Identifier& key);  
     
     /**
      * @brief  Writes any custom object or array data back to the JSON file.

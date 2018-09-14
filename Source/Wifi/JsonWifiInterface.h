@@ -1,5 +1,6 @@
 #pragma once
-#include "WifiStateManager.h"
+#include "NetworkInterface.h"
+#include "AccessPointState.h"
 
 /**
  * @file JsonWifiInterface.h
@@ -11,10 +12,11 @@
  * should directly interact with this class.
  */
 
-class JsonWifiInterface : public WifiStateManager::NetworkInterface
+class JsonWifiInterface : public NetworkInterface
 {
 public:
-    JsonWifiInterface(juce::ReadWriteLock& wifiLock);
+    JsonWifiInterface();
+
     virtual ~JsonWifiInterface();
 
 protected:
@@ -103,8 +105,7 @@ protected:
      * 
      * @return  the access point's current state. 
      */
-    WifiStateManager::AccessPointState getAPState
-    (const WifiAccessPoint& accessPoint) override;
+    AccessPointState getAPState(const WifiAccessPoint& accessPoint) override;
       
     /**
      * Finds the last time a connection was active using a specific access
@@ -130,10 +131,6 @@ private:
     bool disconnecting = false;
     bool turningOn = false;
     bool turningOff = false;
-    
-    //Disallows concurrent modification
-    juce::ReadWriteLock& wifiLock;
-    
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(JsonWifiInterface)
 };

@@ -70,20 +70,20 @@ void WifiStateManager::connectToAccessPoint(const WifiAccessPoint& toConnect,
     auto wifiInterface = getWriteLockedResource();
     switch(getAPState(toConnect))
     {
-        case nullAP:
+        case AccessPointState::nullAP:
             DBG("WifiStateManager::" << __func__
                     << ": Tried to connect to null access point!");
             return;
-        case missingAP:
+        case AccessPointState::missingAP:
             DBG("WifiStateManager::" << __func__
                     << ": Access point " << toConnect.getSSID()
                     << "is no longer visible");
             return;
-        case connectedAP:
+        case AccessPointState::connectedAP:
             DBG("WifiStateManager::" << __func__
                     << ": already connected to " << toConnect.getSSID());
             return;
-        case connectingAP:
+        case AccessPointState::connectingAP:
             DBG("WifiStateManager::" << __func__
                     << ": already connecting to " << toConnect.getSSID());
             return;
@@ -125,11 +125,11 @@ void WifiStateManager::disconnect()
     WifiState wifiState = wifiInterface->getWifiState();
     switch (wifiState)
     {
-	case connecting:
-        case missingPassword:
-        case connected:
+        case WifiState::connecting:
+        case WifiState::missingPassword:
+        case WifiState::connected:
             DBG("WifiStateManager::" << __func__ << ": Disconnecting... ");
-            wifiInterface->setWifiState(disconnecting);
+            wifiInterface->setWifiState(WifiState::disconnecting);
             wifiInterface->startTimer(wifiInterface->wifiConnectionTimeout);
             wifiInterface->disconnect();
             return;
@@ -147,25 +147,25 @@ void WifiStateManager::disconnect()
 void WifiStateManager::enableWifi()
 {
     using namespace juce;
-    if(getWifiState() != missingNetworkDevice)
+    if(getWifiState() != WifiState::missingNetworkDevice)
     {
         auto wifiInterface = getWriteLockedResource();
         WifiState wifiState = wifiInterface->getWifiState();
         switch (wifiState)
         {
-            case disabled:
+            case WifiState::disabled:
                 DBG("WifiStateManager::" << __func__ 
                         << ": enabling wifi");
-                wifiInterface->setWifiState(turningOn);
+                wifiInterface->setWifiState(WifiState::turningOn);
                 wifiInterface->startTimer
                         (wifiInterface->wifiEnabledChangeTimeout);
                 wifiInterface->enableWifi();
                 return;
-            case turningOn:
+            case WifiState::turningOn:
                 DBG("WifiStateManager::" << __func__
                         << ": wifi is already being enabled");
                 return;
-            case missingNetworkDevice:
+            case WifiState::missingNetworkDevice:
                 DBG("WifiStateManager::" << __func__ 
                         << ": wifi device is missing");
             default:
@@ -185,18 +185,18 @@ void WifiStateManager::disableWifi()
     WifiState wifiState = wifiInterface->getWifiState();
     switch (wifiState)
     {
-        case turningOff:
+        case WifiState::turningOff:
             DBG("WifiStateManager::" << __func__
                     << ": wifi is already turning off.");
             return;          
-        case disabled:
-        case missingNetworkDevice:
+        case WifiState::disabled:
+        case WifiState::missingNetworkDevice:
             DBG("WifiStateManager::" << __func__
                     << ": wifi is already disabled");
             return;
         default:
             DBG("WifiStateManager::" << __func__ << ": disabling wifi");
-            wifiInterface->setWifiState(turningOff);
+            wifiInterface->setWifiState(WifiState::turningOff);
             wifiInterface->startTimer(wifiInterface->wifiEnabledChangeTimeout);
             wifiInterface->disableWifi();
     }
@@ -211,7 +211,7 @@ AccessPointState WifiStateManager::getAPState
     using namespace juce;
     if(accessPoint.isNull())
     {
-        return nullAP;
+        return AccessPointState::nullAP;
     }
     auto wifiInterface = getWriteLockedResource();
     return wifiInterface->getAPState(accessPoint);
@@ -229,7 +229,7 @@ juce::Time WifiStateManager::lastConnectionTime
     {
         return Time();
     }
-    if(getAPState(accessPoint) == connectedAP)
+    if(getAPState(accessPoint) == AccessPointState::connectedAP)
     {
         return Time::getCurrentTime();
     }

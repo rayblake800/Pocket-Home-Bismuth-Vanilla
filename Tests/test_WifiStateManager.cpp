@@ -18,10 +18,11 @@ private:
     public:
         TestListener(WifiStateManagerTest& test) : test(test) { }
     private:
-        virtual void wifiStateChanged(WifiStateManager::WifiState state) 
+        virtual void wifiStateChanged(WifiState state) 
         override
         {
-            test.expectNotEquals(state, WifiStateManager::missingNetworkDevice);
+            test.expectNotEquals((int) state,
+                    (int) WifiState::missingNetworkDevice);
         }
 
         virtual void accessPointAdded(const WifiAccessPoint& addedAP) override
@@ -64,24 +65,14 @@ public:
                 {
                     WifiStateManager wifiManager;
                     TestListener * listener = new TestListener(*this);
-                    wifiManager.addListener(listener);
                     const juce::ScopedLock arrayLock(listeners.getLock());
                     listeners.add(listener);
                 });
-        //create a new listener, without adding
-        addAction([this]()
-                {
-                    WifiStateManager wifiManager;
-                    TestListener * listener = new TestListener(*this);
-                    const juce::ScopedLock arrayLock(listeners.getLock());
-                    listeners.add(listener);
-                }); 
         //create and add a new listener, then let it go out of scope.
         addAction([this]()
                 {
                     WifiStateManager wifiManager;
                     TestListener listener(*this);
-                    wifiManager.addListener(&listener);
                 });
         //destroy a listener
         addAction([this]()
@@ -110,9 +101,9 @@ public:
         {
             signalThread = new GLibSignalThread();
             wifiManager = new WifiStateManager([]
-            (juce::ReadWriteLock& lock)->WifiStateManager::NetworkInterface*
+            ()->SharedResource*
             {
-                return new LibNMInterface(lock);
+                return new LibNMInterface();
             });
             if(i < resourceInitCount - 1)
             {

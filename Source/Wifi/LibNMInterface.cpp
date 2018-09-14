@@ -3,19 +3,18 @@
 #include "LibNMInterface.h"
 #include "JuceHeader.h"
 #include "MainConfigFile.h"
+#include "MainConfigKeys.h"
 #include "SavedConnections.h"
 #if JUCE_DEBUG
 #include "WifiDebugOutput.h"
 #endif
 
-LibNMInterface::LibNMInterface(juce::ReadWriteLock& wifiLock) :
-NetworkInterface(wifiLock),
-wifiLock(wifiLock)
+LibNMInterface::LibNMInterface()
 {
     using namespace juce;
     MainConfigFile config;
     String wifiIface = config.getConfigValue<String>
-            (MainConfigFile::wifiInterfaceKey);
+            (MainConfigKeys::wifiInterfaceKey);
     if(wifiIface.isNotEmpty())
     {
         wifiDevice = client.getWifiDeviceByIface(wifiIface.toRawUTF8());
@@ -35,10 +34,6 @@ wifiLock(wifiLock)
     clientListener = new ClientListener(*this, client);
     deviceListener = new DeviceListener(*this, wifiDevice);
     updateAllWifiData();
-}
-
-LibNMInterface::~LibNMInterface() 
-{
 }
 
 /*
@@ -198,12 +193,12 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
 /*
  * Finds the current network state of an access point object.
  */
-WifiStateManager::AccessPointState LibNMInterface::getAPState 
+AccessPointState LibNMInterface::getAPState 
 (const WifiAccessPoint& accessPoint)
 {
     if(accessPoint.isNull())
     {
-        return WifiStateManager::nullAP;
+        return AccessPointState::nullAP;
     }
     if(activeConnection.isConnectedAccessPoint(accessPoint.getNMAccessPoint())
             || activeAP.sharesConnectionWith(accessPoint))
@@ -212,31 +207,33 @@ WifiStateManager::AccessPointState LibNMInterface::getAPState
         //waiting for the connection state to switch to 
         //NM_ACTIVE_CONNECTION_STATE_DEACTIVATING. This approach can't be used
         //when connecting, as the connecting AP might not have been saved yet.
-        if(getWifiState() == WifiStateManager::disconnecting)
+        if(getWifiState() == WifiState::disconnecting)
         {
-            return WifiStateManager::disconnectingAP;
+            return AccessPointState::disconnectingAP;
         }
         switch(activeConnection.getConnectionState())
         {
             case NM_ACTIVE_CONNECTION_STATE_ACTIVATING:
-                return WifiStateManager::connectingAP;
+                return AccessPointState::connectingAP;
             case NM_ACTIVE_CONNECTION_STATE_ACTIVATED:
-                return WifiStateManager::connectedAP;
+                return AccessPointState::connectedAP;
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATING:
-                return WifiStateManager::disconnectingAP;
+                return AccessPointState::disconnectingAP;
             case NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
-                return WifiStateManager::disconnectedAP;
+                return AccessPointState::disconnectedAP;
+            case NM_ACTIVE_CONNECTION_STATE_UNKNOWN:
+                return AccessPointState::missingAP;
         }
     }
     if(failedConnectionAPs.contains(accessPoint))
     {
-        return WifiStateManager::invalidSecurityAP;
+        return AccessPointState::invalidSecurityAP;
     }
     if(visibleAPs.contains(accessPoint.getNMAccessPoint()))
     {
-        return WifiStateManager::disconnectedAP;
+        return AccessPointState::disconnectedAP;
     }
-    return WifiStateManager::missingAP;
+    return AccessPointState::missingAP;
 }     
     
 /*
@@ -362,14 +359,10 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
 {
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    MessageManager::callAsync([this, connection, isNew]()
+    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    [this, connection, isNew]()
     {
-        WifiStateManager stateManager;
-        if(stateManager.validNetworkInterface(this))
-        {
-        ScopedWriteLock updateLock(wifiLock);
-        switch(connection.getConnectionState()):w
-        
+        switch(connection.getConnectionState())
         {
             case NM_ACTIVE_CONNECTION_STATE_UNKNOWN:
                 DBG("LibNMInterface::openingConnection"
@@ -381,9 +374,9 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
                 DBG("LibNMInterface::openingConnection"
                         << ": setting new activating/activated connection");
                 if(activeConnection != connection)
-		{
-		    activeConnection = connection;
-		}
+		        {
+		            activeConnection = connection;
+		        }
                 const char* path = connection.getAccessPointPath();
                 activeAP = WifiAccessPoint(wifiDevice.getAccessPoint(path));
                 setAccessPointPaths(activeAP);
@@ -396,6 +389,7 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
                         << "being closed.");
         }
     });
+    MessageManager::callAsync(asyncAction);
 }
 
 
@@ -407,9 +401,9 @@ void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection,
 {   
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    MessageManager::callAsync([this, connection, error, isNew]()
+    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    [this, connection, error, isNew]()
     {
-        wifiLock.enterWrite();
         DBG("LibNMInterface::openingConnectionFailed" << ": Error "
                 << error->code << ":" << error->message);
         //TODO: is it necessary to make sure activeConnection or activeAP
@@ -429,9 +423,9 @@ void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection,
          }
          */
         g_error_free(error);
-        wifiLock.exitWrite();
         signalConnectionFailed();
     });
+    MessageManager::callAsync(asyncAction);
 }
 
 /*
@@ -442,7 +436,8 @@ void LibNMInterface::wirelessEnabledChange(bool enabled)
 {  
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    MessageManager::callAsync([this, enabled]()
+    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    [this, enabled]()
     {
         if (enabled)
         {
@@ -454,6 +449,7 @@ void LibNMInterface::wirelessEnabledChange(bool enabled)
             signalWifiDisabled();
         }
     });
+    MessageManager::callAsync(asyncAction);
 }
 
 
@@ -465,12 +461,11 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
 {
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    MessageManager::callAsync([this, newState, oldState, reason]()
+    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    [this, newState, oldState, reason]()
     {
-        wifiLock.enterWrite();
         if(lastNMState == newState)//duplicate callback, ignore
         {
-            wifiLock.exitWrite();
             return;
         }
         lastNMState = newState;
@@ -484,10 +479,9 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
             {
                 DBG("LibNMInterface::stateChanged: new connection activated, "
                         << "send connection signal");
-		stopTimer();
+		        stopTimer();
                 failedConnectionAPs.removeAllInstancesOf(activeAP);
-                wifiLock.exitWrite();
-		signalWifiConnected();
+                signalWifiConnected();
                 break;
             }
             case NM_DEVICE_STATE_PREPARE:
@@ -496,19 +490,16 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
             case NM_DEVICE_STATE_IP_CHECK:
             case NM_DEVICE_STATE_SECONDARIES:
             case NM_DEVICE_STATE_NEED_AUTH:
-                //activeConnectionChanged() or openingConnection() will register
-		//the new connection and send the connecting signal. 
+            //activeConnectionChanged() or openingConnection() will register
+		    //the new connection and send the connecting signal. 
 		
-		//Extend the connection timeout timer when activation state
-		//changes.
+		    //Extend the connection timeout timer when activation state changes.
                 stopTimer();
                 startTimer(wifiConnectionTimeout);
-                wifiLock.exitWrite();
                 break;
             case NM_DEVICE_STATE_DISCONNECTED:
             {
 		        stopTimer();
-                wifiLock.exitWrite();
                 if(oldState == NM_DEVICE_STATE_DEACTIVATING)
                 {
                     signalWifiDisconnected();
@@ -539,11 +530,9 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                         activeAP = WifiAccessPoint();
                         newConnectionAP = WifiAccessPoint();
                     }
-                    wifiLock.exitWrite();
                     signalConnectionFailed();
                     return;
                 }
-                wifiLock.exitWrite();
                 signalWifiDisconnected();
                 break;
             }
@@ -557,16 +546,12 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                         << deviceStateString(newState));
 		        if(!activeAP.isNull())
 	    	    {
-                    wifiLock.exitWrite();
                     signalWifiDisconnected();
 		        }
-                else
-                {
-                    wifiLock.exitWrite();
-                }
             }
         }
     });
+    MessageManager::callAsync(asyncAction);
 }
 
 /*
@@ -577,15 +562,15 @@ void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
 {    
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    MessageManager::callAsync([this, addedAP]()
+    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    [this, addedAP]()
     {
-        wifiLock.enterWrite();
         visibleAPs.add(addedAP);
-        wifiLock.exitWrite();
         WifiAccessPoint newAP(addedAP);
         setAccessPointPaths(newAP);
         signalAPAdded(newAP);
     });
+    MessageManager::callAsync(asyncAction);
 }
 
 /*
@@ -597,15 +582,15 @@ void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
     using namespace juce;
     jassert(!removedAP.isNull());
     //wifiLock must not be acquired in the GLib thread!
-    MessageManager::callAsync([this, removedAP]()
+    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    [this, removedAP]()
     {
-        wifiLock.enterWrite();
         visibleAPs.removeAllInstancesOf(removedAP);
-        wifiLock.exitWrite();
         WifiAccessPoint missingAP(removedAP);
         jassert(!missingAP.isNull());
         signalAPRemoved(missingAP);
     });
+    MessageManager::callAsync(asyncAction);
 }
 
 /*
@@ -616,9 +601,9 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
 {
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    MessageManager::callAsync([this, active]()
+    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    [this, active]()
     {
-        wifiLock.enterWrite();
         DBG("LibNMInterface::activeConnectionChanged" 
                 << ": new active connection with state "
                 << activeConnectionStateString(active.getConnectionState()));
@@ -628,7 +613,6 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
             if (active.isNull())
             {
                 activeAP = WifiAccessPoint();
-                wifiLock.exitWrite();
                 signalWifiDisconnected();
                 return;
             }
@@ -654,7 +638,6 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
                         //the right one
                     }
                 }
-                wifiLock.exitWrite();
                 if(active.getConnectionState() 
                         == NM_ACTIVE_CONNECTION_STATE_ACTIVATED)
 		{
@@ -667,6 +650,6 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
                 return;
             }
         }
-        wifiLock.exitWrite();
     });
+    MessageManager::callAsync(asyncAction);
 }

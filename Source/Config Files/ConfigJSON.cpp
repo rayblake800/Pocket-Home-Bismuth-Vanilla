@@ -83,7 +83,7 @@ void ConfigJSON::Listener::loadAllConfigProperties()
 /*
  * Adds a key to the list of keys tracked by this listener.
  */
-void ConfigJSON::Listener::subscribeToKey(const juce::Identifier& keyToTrack)
+void ConfigJSON::Listener::addTrackedKey(const juce::Identifier& keyToTrack)
 {
     const juce::ScopedLock keyListLock(subscribedKeys.getLock());
     subscribedKeys.add(keyToTrack);
@@ -92,7 +92,7 @@ void ConfigJSON::Listener::subscribeToKey(const juce::Identifier& keyToTrack)
 /*
  * Unsubscribes from updates to a ConfigJSON value.
  */
-void ConfigJSON::Listener::unsubscribeFromKey
+void ConfigJSON::Listener::removeTrackedKey
 (const juce::Identifier& keyToRemove)
 {
     const juce::ScopedLock keyListLock(subscribedKeys.getLock());
@@ -113,6 +113,21 @@ void ConfigJSON::notifyListeners(const juce::Identifier& key)
             notifyListener(listener, key);
         }
     });
+}
+    
+/**
+ * Checks if a single handler object is a Listener tracking updates of a single
+ * key value, and if so, notifies it that the tracked value has updated.
+ */
+void ConfigJSON::notifyListener
+(ConfigJSON::Listener* listener, const juce::Identifier& key)
+{
+    using namespace juce;
+    const ScopedLock trackedKeyLock(listener->subscribedKeys.getLock());
+    if(listener->subscribedKeys.contains(key))
+    {
+        listener->configValueChanged(key);
+    };
 }
 
 /*
@@ -242,20 +257,6 @@ void ConfigJSON::restoreDefaultValue(const ConfigKey& key)
         alertWindows.showPlaceholderError(e.getErrorMessage());
     }
 }
-    
-/**
- * Checks if a single handler object is a Listener tracking updates of a single
- * key value, and if so, notifies it that the tracked value has updated.
- */
-void ConfigJSON::notifyListener
-(ConfigJSON::Listener* listener, const juce::Identifier& key)
-{
-    using namespace juce;
-    const ScopedLock trackedKeyLock(listener->subscribedKeys.getLock());
-    if(listener->subscribedKeys.contains(key))
-    {
-        listener->configValueChanged(key);
-    };
-}
+
 
 

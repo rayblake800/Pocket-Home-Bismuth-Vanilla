@@ -1,7 +1,7 @@
 #include <map>
 #include "SharedResource.h"
 #include "ScopedThreadWriteLock.h"
-#include "ScopedThreadReadLock.cpp"
+#include "ScopedThreadReadLock.h"
 
 //Holds each SharedResource subclass's single object.
 static std::map<juce::Identifier, juce::ScopedPointer<SharedResource>> 

@@ -50,7 +50,26 @@ private:
 
 
     private:
-        virtual void colourChanged(const int colourID,
+
+        /**
+         * @brief Listens for updates to generic UI element categories.
+         *
+         * @param key  The key of an updated UI element category.
+         */
+        virtual void configValueChanged(const juce::Identifier& key) override;
+
+        /**
+         * @brief Listens for updates to all tracked juce ColorId values.
+         *
+         * @param colourId   The updated ColorId value.
+         *
+         * @param colourKey  The key to either the updated color, or to its
+         *                   generic category color if its specific color isn't
+         *                   set.
+         *
+         * @param newColour  The new color value.
+         */
+        virtual void colourChanged(const int colourId,
                 const juce::Identifier& colourKey,
                 const juce::Colour newColour) override;
         

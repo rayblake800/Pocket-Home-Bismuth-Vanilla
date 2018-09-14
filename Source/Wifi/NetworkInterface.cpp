@@ -1,10 +1,14 @@
 #include "NetworkInterface.h"
+#include "WifiState.h"
 
 /* SharedResource type key */
 const juce::Identifier NetworkInterface::resourceKey = "NetworkInterface";
 
 NetworkInterface::NetworkInterface() : SharedResource(resourceKey) { }
 
+NetworkInterface::Listener::Listener() : ResourceHandler<NetworkInterface>
+        (NetworkInterface::resourceKey,
+         []()->SharedResource* { return nullptr; }) { }
 /*
  * Gets the current state of the wifi device.
  */

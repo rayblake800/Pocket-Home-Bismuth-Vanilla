@@ -116,7 +116,7 @@ private:
     public:
         Listener(ConfigurableComponent& component);
 
-        virtual ~Listener();
+        virtual ~Listener() { }
 
         /**
          * @brief  Applies changes to component settings to the component.

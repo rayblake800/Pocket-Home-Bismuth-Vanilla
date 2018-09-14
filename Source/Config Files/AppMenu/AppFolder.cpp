@@ -1,4 +1,4 @@
-#include "Source/Config Files/AppMenu/AppFolder.h"
+#include "AppFolder.h"
 
 /*
  * Create an AppFolder, initializing all folder data from parameters.

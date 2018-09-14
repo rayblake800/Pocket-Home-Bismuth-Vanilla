@@ -28,7 +28,7 @@ enum class WifiState
     disconnecting
 };
 
-#ifdef juce_debug    
+#ifdef JUCE_DEBUG    
 /**
  * converts a wifistate to a string for debugging.
  */
@@ -36,23 +36,23 @@ static const char* wifiStateString(WifiState state)
 {
     switch (state)
     {
-        case missingNetworkDevice:
+        case WifiState::missingNetworkDevice:
             return "missingNetworkDevice";
-        case disabled:
+        case WifiState::disabled:
             return "disabled";
-        case turningOn:
+        case WifiState::turningOn:
             return "turningOn";
-        case enabled:
+        case WifiState::enabled:
             return "enabled";
-        case turningOff:
+        case WifiState::turningOff:
             return "turningOff";
-        case connecting:
+        case WifiState::connecting:
             return "connecting";
-        case missingPassword:
+        case WifiState::missingPassword:
             return "missingPassword";
-        case connected:
+        case WifiState::connected:
             return "connected";
-        case disconnecting:
+        case WifiState::disconnecting:
             return "disconnecting";
     }
     return "unexpected state value!";

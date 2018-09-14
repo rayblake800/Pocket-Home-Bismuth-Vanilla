@@ -103,7 +103,7 @@ private:
      * @return  The component key string for the NavButton placed on that
      *          side.
      */
-    static juce::String getEdgeComponentKey(WindowEdge edge);
+    static const juce::Identifier& getEdgeComponentKey(const WindowEdge edge);
     
     WindowEdge edge;
     

@@ -4,9 +4,7 @@
 #include "JsonWifiInterface.h"
 #include "TempTimer.h"
 
-JsonWifiInterface::JsonWifiInterface(juce::ReadWriteLock& wifiLock) : 
-WifiStateManager::NetworkInterface(wifiLock),
-wifiLock(wifiLock) 
+JsonWifiInterface::JsonWifiInterface() 
 {
     using namespace juce;
     auto json = JSON::parse(AssetFiles::findAssetFile("wifi.json"));
@@ -142,11 +140,10 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         //connection steps generated to reset it
         stopTimer();
         waitingToConnect = toConnect;
+        std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
         // try to connect to ap, dispatch events on success and failure
-        TempTimer::initTimer(Random().nextInt(2000) + 2000,
                 [this, psk]()
                 {
-                    ScopedWriteLock lock(wifiLock);
                     bool isTestCred = (waitingToConnect.getSSID() == "MyFi");
                     if (!isTestCred)
                     {
@@ -184,6 +181,7 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
                         signalWifiConnected();
                     }                
                 });    
+        TempTimer::initTimer(Random().nextInt(2000) + 2000, asyncAction);
         signalWifiConnecting();
     }
 }
@@ -203,16 +201,16 @@ void JsonWifiInterface::disconnect()
     else
     {
         disconnecting = true;
-        TempTimer::initTimer(Random().nextInt(2000), [this]()
+        std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+        [this]()
         {
-            ScopedWriteLock lock(wifiLock);
             DBG("JsonWifiInterface::" << __func__ << ": wifi disconnected");
             connectedAP = WifiAccessPoint();
             connected = false;
             disconnecting = false;
             signalWifiDisconnected();
         });
-
+        TempTimer::initTimer(Random().nextInt(2000), asyncAction);
     }
 }
 
@@ -238,9 +236,10 @@ void JsonWifiInterface::enableWifi()
         DBG("JsonWifiInterface::" << __func__ << ": enabling wifi...");
         turningOn = true;
         turningOff = false;
-        TempTimer::initTimer(Random().nextInt(2000), [this]()
+
+        std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+        [this]()
         {
-            ScopedWriteLock lock(wifiLock);
             if (turningOn)
             {
                 DBG("JsonWifiInterface::" << __func__ << ": wifi enabled");
@@ -249,6 +248,7 @@ void JsonWifiInterface::enableWifi()
                         signalWifiEnabled();
             }
         });
+        TempTimer::initTimer(Random().nextInt(2000), asyncAction);
     }
 }
 
@@ -269,9 +269,9 @@ void JsonWifiInterface::disableWifi()
         DBG("JsonWifiInterface::" << __func__ << ": disabling wifi...");
         turningOn = false;
         turningOff = true;
-        TempTimer::initTimer(Random().nextInt(2000), [this]()
-        {
-            ScopedWriteLock lock(wifiLock);
+
+        std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+            [this]{
             if (turningOff)
             {
                 DBG("JsonWifiInterface::" << __func__ << ": wifi disabled");
@@ -280,6 +280,7 @@ void JsonWifiInterface::disableWifi()
                         signalWifiDisabled();
             }
         });
+        TempTimer::initTimer(Random().nextInt(2000), asyncAction);
     }
 }
 
@@ -287,32 +288,32 @@ void JsonWifiInterface::disableWifi()
 /**
  * Finds the current network state of an access point object.
  */
-WifiStateManager::AccessPointState JsonWifiInterface::getAPState
+AccessPointState JsonWifiInterface::getAPState
 (const WifiAccessPoint& accessPoint)
 {
     if(accessPoint.isNull())
     {
-        return WifiStateManager::nullAP;
+        return AccessPointState::nullAP;
     }
     if(accessPoint == connectedAP)
     {
         if(disconnecting || 
-           getWifiState() == WifiStateManager::disconnecting)
+           getWifiState() == WifiState::disconnecting)
         {
-            return WifiStateManager::disconnectingAP;
+            return AccessPointState::disconnectingAP;
         }
         if(connected)
         {
-            return WifiStateManager::connectedAP;
+            return AccessPointState::connectedAP;
         }
     }
     if(accessPoint == waitingToConnect)
     {
-        return WifiStateManager::connectingAP;
+        return AccessPointState::connectingAP;
     }
     if(enabled && visibleAPs.contains(accessPoint))
     {
-        return WifiStateManager::disconnectedAP;
+        return AccessPointState::disconnectedAP;
     }
-    return WifiStateManager::missingAP;
+    return AccessPointState::missingAP;
 }

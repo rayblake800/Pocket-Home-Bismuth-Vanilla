@@ -3,7 +3,7 @@
 PopupEditorComponent::PopupEditorComponent(
         juce::String title,
         std::function<void(PopupEditorComponent*) > onConfirm) :
-ConfigurableImageComponent(ComponentConfigFile::popupMenuKey,
+ConfigurableImageComponent(ComponentConfigKeys::popupMenuKey,
 0, juce::RectanglePlacement::stretchToFit),
 onConfirm(onConfirm),
 titleLabel("EditorTitle", title, 2),
@@ -15,8 +15,6 @@ confirmButton("confirm.svg")
 #    if JUCE_DEBUG
     setName(title + String("popupEditor"));
 #    endif
-    loadAllConfigProperties();
-
     titleLabel.setJustificationType(Justification::centred);
     
     Colour btnColour = findColour(Label::textColourId);
