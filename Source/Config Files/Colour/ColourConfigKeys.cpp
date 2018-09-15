@@ -849,8 +849,6 @@ const juce::Identifier& ColourConfigKeys::getColourKey(const int colourId)
     auto keySearch = colourIdKeys.find(colourId);
     if(keySearch == colourIdKeys.end())
     {
-        DBG("ColourconfigKeys::" << __func__ << ": No key found for colourId "
-                << String::toHexString(colourId));
         return invalidKey;
     }
     return keySearch->second;
@@ -867,5 +865,5 @@ const juce::Identifier& ColourConfigKeys::getCategoryKey
         DBG("ColourconfigKeys::" << __func__ << ": No key, category == none");
         return invalidKey;
     }
-    return uiCategoryKeys[(int) category];
+    return uiCategoryKeys.getReference((int) category);
 }

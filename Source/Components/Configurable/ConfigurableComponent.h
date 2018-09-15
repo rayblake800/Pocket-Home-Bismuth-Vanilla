@@ -114,7 +114,19 @@ private:
     class Listener : public ComponentConfigFile::Listener
     {
     public:
-        Listener(ConfigurableComponent& component);
+        friend class ConfigurableComponent;
+        /**
+         * @brief  Creates the listener, stores a reference to the 
+         *         ConfigurableComponent that owns it, and starts tracking that
+         *         component's settings key.
+         *
+         * @param component      The ConfigurableComponent that holds this
+         *                       listener.
+         *
+         * @param componentKey   The key to the component's settings.
+         */
+        Listener(ConfigurableComponent& component,
+                const juce::Identifier& componentKey);
 
         virtual ~Listener() { }
 

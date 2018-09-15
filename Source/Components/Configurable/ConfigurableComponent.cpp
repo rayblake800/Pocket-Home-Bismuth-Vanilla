@@ -4,11 +4,12 @@
 
 ConfigurableComponent::ConfigurableComponent
 (const juce::Identifier& componentKey) :
-componentKey(componentKey), configListener(*this) 
+componentKey(componentKey), configListener(*this, componentKey) 
 {
     ComponentConfigFile config;
     componentSettings = config.getComponentSettings(componentKey);
 }
+
 
 /*
  * Applies the relative bounds, asset files, and custom colors defined in 
@@ -96,11 +97,15 @@ float ConfigurableComponent::getHeightFraction() const
     return componentSettings.getHeightFraction();
 }
 
-ConfigurableComponent::Listener::Listener(ConfigurableComponent& component) :
+/**
+ * Creates the listener, stores a reference to the ConfigurableComponent that 
+ * owns it, and starts tracking that component's settings key.
+ */
+ConfigurableComponent::Listener::Listener
+(ConfigurableComponent& component, const juce::Identifier& componentKey) :
 component(component)
 {
-   addTrackedKey(component.componentKey); 
-   loadAllConfigProperties();
+   addTrackedKey(componentKey); 
 }
 
 /*
