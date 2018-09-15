@@ -28,4 +28,17 @@ public:
             const int& fontPadding = 0);
 
     virtual ~ConfigurableLabel() { }
+
+    /**
+     * @brief  Applies color settings to this label.
+     *
+     * @param assetNames  Ignored parameter, ConfigurableLabel objects don't use
+     *                    asset files.
+     *
+     * @param colours     If not empty, the first element in this list will be
+     *                    used as the text color.  Any other colors in the list
+     *                    will be ignored.
+     */
+    virtual void applyConfigAssets(const juce::StringArray& assetNames,
+            const juce::Array<juce::Colour>& colours) override;
 };
