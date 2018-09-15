@@ -7,7 +7,7 @@
 #include "AppLauncher.h"
 #include "LayoutManager.h"
 #include "WindowFocus.h"
-#include "IconThread.h"
+#include "IconLoader.h"
 #include "MainConfigFile.h"
 #include "AppConfigFile.h"
 #include "DesktopEntryLoader.h"
@@ -354,7 +354,7 @@ private:
     static const juce::String openPopupMenuBinding;
     static const juce::String reloadMenuBinding;
     //The shared iconThread should exist as long as the AppMenu does.
-    IconThread iconThread;
+    IconLoader iconThread;
     //Sets if clicking unselected buttons immediately triggers
     //their action, or if it just selects them.
     bool onlyTriggerSelected = true;
