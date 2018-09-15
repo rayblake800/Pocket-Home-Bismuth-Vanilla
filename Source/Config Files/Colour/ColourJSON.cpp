@@ -40,28 +40,30 @@ void ColourJSON::Listener::loadAllConfigProperties()
 {
     using namespace juce;
     using namespace ColourConfigKeys;
-    ConfigJSON::Listener::loadAllConfigProperties();
     const ScopedLock colourLock(trackedColourIds.getLock());
     for(const int& colourId : trackedColourIds)
     {
         const Identifier& idKey = getColourKey(colourId);
         if(idKey != invalidKey)
         {
-            colourChanged(colourId, idKey,
-                    Colour(getConfigValue<String>(idKey).getHexValue32()));
-        }
-        else
-        {
-            UICategory idCategory = getUICategory(colourId);
-            if(idCategory != UICategory::none)
+            String colorStr = getConfigValue<String>(idKey);
+            if(colorStr.isNotEmpty())
             {
-                const Identifier& catKey = getCategoryKey(idCategory);
-                colourChanged(colourId, catKey,
-                        Colour(getConfigValue<String>(catKey).getHexValue32()));
+                colourChanged(colourId, idKey,
+                        Colour(colorStr.getHexValue32()));
+                return;
             }
         }
-        
+        // ID has no key, or specific color not defined, use category color:
+        UICategory idCategory = getUICategory(colourId);
+        if(idCategory != UICategory::none)
+        {
+            const Identifier& catKey = getCategoryKey(idCategory);
+            colourChanged(colourId, catKey,
+                    Colour(getConfigValue<String>(catKey).getHexValue32()));
+        }
     }
+    ConfigJSON::Listener::loadAllConfigProperties();
 }
 
 /**

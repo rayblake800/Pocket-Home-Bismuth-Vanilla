@@ -62,15 +62,21 @@ resourceKey(resourceKey)
 SharedResource::Handler::~Handler()
 {
     using namespace juce;
-    const ScopedThreadWriteLock cleanupLock(getResourceLock());
+    ThreadLock& resourceLock = getResourceLock();
+    resourceLock.takeWriteLock();
     SharedResource* classResource = getClassResource();
     classResource->resourceHandlers.removeAllInstancesOf(this);
     if(classResource->resourceHandlers.isEmpty())
     {
         const ScopedWriteLock removalLock(resourceMapLock);
-        resourceMap[resourceKey] = nullptr;
+        // Set map value to null before releasing lock
+        SharedResource* toDelete = resourceMap[resourceKey].release();
+        // Release lock before deleting resource
+        resourceLock.releaseLock();
+        delete toDelete;
+        return;
     }
-
+    resourceLock.releaseLock();
 }
 
 /*
