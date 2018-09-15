@@ -797,6 +797,9 @@ ColourConfigKeys::UICategory ColourConfigKeys::getUICategory
     auto searchIter = idCategories.find(colourId);
     if (searchIter == idCategories.end())
     {
+        DBG("ColourConfigKeys::" << __func__ 
+                << ": No category found for colorId"
+                << juce::String::toHexString(colourId));
         return UICategory::none;
     }
     return searchIter->second;
@@ -811,6 +814,8 @@ int ColourConfigKeys::getColourId(const juce::Identifier& colourKey)
     auto searchIter = colourIds.find(colourKey);
     if (searchIter == colourIds.end())
     {
+        DBG("ColourConfigKeys::" << __func__ << ": No Id found for key"
+                << colourKey.toString());
         return -1;
     }
     return searchIter->second;
@@ -825,6 +830,9 @@ ColourConfigKeys::UICategory ColourConfigKeys::getCategoryType
     int enumVal = uiCategoryKeys.indexOf(categoryKey);
     if(enumVal < 0)
     {
+        DBG("ColourConfigKeys::" << __func__ 
+                << ": No category matches key " << categoryKey.toString());
+
         return none;
     }
     return (UICategory) enumVal; 
@@ -841,6 +849,8 @@ const juce::Identifier& ColourConfigKeys::getColourKey(const int colourId)
     auto keySearch = colourIdKeys.find(colourId);
     if(keySearch == colourIdKeys.end())
     {
+        DBG("ColourconfigKeys::" << __func__ << ": No key found for colourId "
+                << String::toHexString(colourId));
         return invalidKey;
     }
     return keySearch->second;
@@ -854,6 +864,7 @@ const juce::Identifier& ColourConfigKeys::getCategoryKey
 {
     if(category == none)
     {
+        DBG("ColourconfigKeys::" << __func__ << ": No key, category == none");
         return invalidKey;
     }
     return uiCategoryKeys[(int) category];
