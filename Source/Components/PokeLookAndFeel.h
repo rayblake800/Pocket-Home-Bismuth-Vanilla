@@ -163,6 +163,11 @@ private:
     public:
         MainListener(PokeLookAndFeel& owner);
         virtual ~MainListener() { }
+
+        void loadSettings()
+        {
+            loadAllConfigProperties();
+        }
     private:
         /**
          * @param key  The cursor visibility key.

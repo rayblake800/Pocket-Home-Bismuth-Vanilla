@@ -28,7 +28,11 @@ mainListener(*this)
     {
         addTrackedKey(key);
     }
+    DBG("PokeLookAndFeel::PokeLookAndFeel: Tracking " << colourIds.size()
+            << " color id values, " << categoryKeys.size()
+            << " category keys.");
     loadAllConfigProperties();
+    mainListener.loadSettings();
 }
 
 /*
@@ -318,5 +322,8 @@ void PokeLookAndFeel::MainListener::configValueChanged
 void PokeLookAndFeel::colourChanged(const int colourId,
         const juce::Identifier& colourKey, const juce::Colour newColour)
 {
+    DBG("Color init: ColorID=" << juce::String::toHexString(colourId)
+            << ", key=" << colourKey.toString() 
+            << ", color=" <<newColour.toDisplayString(true));
     setColour(colourId, newColour);
 }

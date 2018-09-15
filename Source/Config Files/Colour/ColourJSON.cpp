@@ -51,7 +51,7 @@ void ColourJSON::Listener::loadAllConfigProperties()
             {
                 colourChanged(colourId, idKey,
                         Colour(colorStr.getHexValue32()));
-                return;
+                continue;
             }
         }
         // ID has no key, or specific color not defined, use category color:
