@@ -24,7 +24,7 @@ namespace MainConfigKeys
         ("background", ConfigKey::stringType);
     /* Sets the AppMenuComponent type to use on the home page. */
     static const ConfigKey menuTypeKey
-        ("Wifi interface", ConfigKey::stringType);
+        ("app menu type", ConfigKey::stringType);
     /* Sets the command used to shut down the system on the power page. */
     static const ConfigKey shutdownCommandKey
         ("shutdown command", ConfigKey::stringType);
