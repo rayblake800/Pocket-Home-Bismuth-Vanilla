@@ -19,6 +19,8 @@ resourceKey(resourceKey)
     const ScopedWriteLock resourceInitLock(resourceMapLock);
     jassert(resourceMap[resourceKey] == nullptr);
     resourceMap[resourceKey] = this;
+    DBG("SharedResource: Creating resource \"" << resourceKey.toString()
+            << "\"");
 }
 
 /*
@@ -33,6 +35,8 @@ SharedResource::~SharedResource()
         DBG("SharedResource::~SharedResource: Destroying resource while list of"
                 << " ResourceManagers is not empty!");
     }    
+    DBG("SharedResource: Destroying resource \"" << resourceKey.toString()
+            << "\"");
 }
 
 /*
