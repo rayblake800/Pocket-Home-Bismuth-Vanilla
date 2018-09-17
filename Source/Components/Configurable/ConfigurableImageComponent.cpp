@@ -1,5 +1,6 @@
 #include "ConfigurableImageComponent.h"
 
+
 ConfigurableImageComponent::ConfigurableImageComponent(
         const juce::Identifier& componentKey,
         const int assetIndex,
@@ -20,6 +21,7 @@ void ConfigurableImageComponent::setImageAssetIndex(const int index)
     {
         assetIndex = index;
     }
+    applyConfigSettings();
 }
 
 /**
@@ -45,5 +47,4 @@ void ConfigurableImageComponent::applyConfigAssets(
         int colourId = imageColour0Id + i;
         setColour(colourId, colours[i]);
     }
-    applyConfigBounds();
 }

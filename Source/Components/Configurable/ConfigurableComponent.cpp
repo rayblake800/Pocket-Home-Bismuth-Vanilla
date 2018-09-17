@@ -17,9 +17,9 @@ componentKey(componentKey), configListener(*this, componentKey)
  */
 void ConfigurableComponent::applyConfigSettings()
 {
-    applyConfigBounds();
     applyConfigAssets(componentSettings.getAssetFiles(), 
             componentSettings.getColours());
+    applyConfigBounds();
 }
 
 /*
