@@ -144,6 +144,8 @@ std::function<void()> SharedResource::buildAsyncFunction(
         }
         else
         {
+            DBG("SharedResource: Cancelled async function, resource "
+                    << resKey.toString() << " was destroyed.");
             ifDestroyed();
         }
     };
