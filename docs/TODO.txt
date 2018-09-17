@@ -15,7 +15,6 @@
         
 ## Misc. bug fixes and improvements
     -Define missing ColourId values for custom component classes.
-    -Recreate ResourceManager as a template class ResourceManager<SharedResourceType> to cut down on duplicate code.
     -Figure out why the "file" label in the file selection window gets cut off.
 
 #### Known documentation issues for individual classes

@@ -11,9 +11,7 @@ public:
     {
         // Adding a reference to the default context prevents it from being 
         // destroyed when the GLibThread removes a reference on destruction.
-
-        //Is this necessary? TODO: remove if unneeded, uncomment if needed.
-        //g_main_context_ref(g_main_context_default());
+        g_main_context_ref(g_main_context_default());
     }
 
     virtual ~ThreadResource() { }

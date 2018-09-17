@@ -107,10 +107,9 @@ public:
             });
             if(i < resourceInitCount - 1)
             {
-                //the signal thread must be destroyed before the wifiManager, as
-                //the wifi manager might have pending actions on the thread.
-                signalThread = nullptr;
+
                 wifiManager = nullptr;
+                signalThread = nullptr;
             }
         }
         //If we haven't segfaulted by now, that's enough to pass.
