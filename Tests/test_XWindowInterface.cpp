@@ -1,6 +1,7 @@
 #include "JuceHeader.h"
 #include "WindowFocus.h"
 #include "ProcessUtils.h"
+#include "AppLauncher.h"
 #include "XWindowInterface.h"
 
 class XWindowInterfaceTest : public juce::UnitTest
@@ -16,55 +17,65 @@ public:
         Window homeWin = xwin.getPocketHomeWindow();
         expect(homeWin != 0, "pocket-home window couldn't be found."); 
         xwin.activateWindow(homeWin);
-	system("sleep 2");
+        system("sleep 2");
         expect(xwin.isActiveWindow(homeWin),
 		"pocket-home window should have been active.");
         expectEquals(xwin.getDesktopIndex(), xwin.getWindowDesktop(homeWin),
 		"pocket-home window should have been on the current desktop");
         
-        beginTest("Other window test");
-        ChildProcess c;
-        c.start("xclock");
-	system("sleep 2");
-        Array<ProcessUtils::ProcessData> childProcs 
-                = ProcessUtils::getChildProcesses
-                (ProcessUtils::getProcessId());
-        int windowProcess = -1;
-        for(const ProcessUtils::ProcessData& process : childProcs)
+        if(AppLauncher::testCommand("xclock"))
         {
-            if(process.executableName.containsIgnoreCase("xclock"))
+            beginTest("Other window test");
+            ChildProcess c;
+            c.start("xclock");
+            system("sleep 2");
+            Array<ProcessUtils::ProcessData> childProcs 
+                    = ProcessUtils::getChildProcesses
+                    (ProcessUtils::getProcessId());
+            int windowProcess = -1;
+            for(const ProcessUtils::ProcessData& process : childProcs)
             {
-                windowProcess = process.processId;
-                break;
-            }
-        }
-        expect(windowProcess != -1, "New child process for xclock not found.");
-        
-        
-        Array<Window> xclockWindows = xwin.getMatchingWindows(
-                [&xwin, windowProcess](const Window win)->bool
+                if(process.executableName.containsIgnoreCase("xclock"))
                 {
-                    return (xwin.getWindowName(win).isNotEmpty()
-			    || xwin.getWindowClass(win).isNotEmpty()
-			    || xwin.getWindowClassName(win).isNotEmpty())
-                            && xwin.getWindowPID(win) == windowProcess;
-                });
-        expectEquals(xclockWindows.size(), 1, 
-		"Exactly one xclock window should have been found.");
-        Window xclockWin = xclockWindows[0];
-	xwin.activateWindow(xclockWin);
-	system("sleep 2");
-        expect(xwin.isActiveWindow(xclockWin), "xclock window should have been active.");
-        expect(!xwin.isActiveWindow(homeWin), "pocket-home window should not have been active.");
-        
-	logMessage("Activating home window:");
-        xwin.activateWindow(homeWin);
-	system("sleep 2");
-        expect(!xwin.isActiveWindow(xclockWin), 
-		"xclock window should not have been active.");
-        expect(xwin.isActiveWindow(homeWin),
-		"pocket-home window should have been active.");
-        c.kill();
+                    windowProcess = process.processId;
+                    break;
+                }
+            }
+            expect(windowProcess != -1,
+                    "New child process for xclock not found.");
+            
+            
+            Array<Window> xclockWindows = xwin.getMatchingWindows(
+                    [&xwin, windowProcess](const Window win)->bool
+                    {
+                        return (xwin.getWindowName(win).isNotEmpty()
+                    || xwin.getWindowClass(win).isNotEmpty()
+                    || xwin.getWindowClassName(win).isNotEmpty())
+                                && xwin.getWindowPID(win) == windowProcess;
+                    });
+            expectEquals(xclockWindows.size(), 1, 
+            "Exactly one xclock window should have been found.");
+            Window xclockWin = xclockWindows[0];
+            xwin.activateWindow(xclockWin);
+            system("sleep 2");
+            expect(xwin.isActiveWindow(xclockWin), 
+                    "xclock window should have been active.");
+            expect(!xwin.isActiveWindow(homeWin), 
+                    "pocket-home window should not have been active.");
+            
+            logMessage("Activating home window:");
+            xwin.activateWindow(homeWin);
+            system("sleep 2");
+            expect(!xwin.isActiveWindow(xclockWin), 
+            "xclock window should not have been active.");
+            expect(xwin.isActiveWindow(homeWin),
+            "pocket-home window should have been active.");
+            c.kill();
+        }
+        else
+        {
+            logMessage("xclock not found, skipping test");
+        }
      }
 };
 

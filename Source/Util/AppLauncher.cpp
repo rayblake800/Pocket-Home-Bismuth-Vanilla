@@ -9,7 +9,8 @@ static const int windowFocusTimeout = 1000;
  * Launch a new application, or focus its window if the application is
  * already running
  */
-void AppLauncher::startOrFocusApp(juce::String appTitle, juce::String command)
+void AppLauncher::startOrFocusApp(const juce::String appTitle,
+        const juce::String command)
 {
     using namespace juce;
     DBG("AppLauncher::" << __func__ << ": title = " << appTitle
@@ -66,15 +67,25 @@ void AppLauncher::startOrFocusApp(juce::String appTitle, juce::String command)
     }
 }
 
+/*
+ * Checks a string to see if it is a valid shell command.
+ */
+bool AppLauncher::testCommand(const juce::String command)
+{
+    using namespace juce;
+    String testResult = String("command -v ") + command;
+    return system(testResult.toRawUTF8()) == 0;
+}
+
+
 /**
  * Start a new instance of an application process
  */
-LaunchedApp* AppLauncher::startApp(const juce::String& command)
+LaunchedApp* AppLauncher::startApp(const juce::String command)
 {
     using namespace juce;
     DBG("AppsPageComponent::startApp - " << command);
-    String testExistance = String("command -v ") + command;
-    if (system(testExistance.toRawUTF8()) != 0)
+    if (!testCommand(command))
     {
         AlertWindow::showMessageBoxAsync
                 (AlertWindow::AlertIconType::WarningIcon,

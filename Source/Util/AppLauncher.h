@@ -28,7 +28,7 @@ public:
      * Assigns a function to call if loading an application fails.
      * @param failureCallback will run if an app fails to launch.
      */
-    void setLaunchFailureCallback(std::function<void() > failureCallback)
+    void setLaunchFailureCallback(const std::function<void() > failureCallback)
     {
         launchFailureCallback = failureCallback;
     }
@@ -41,7 +41,18 @@ public:
      * 
      * @param command   The shell command that starts the application.
      */
-    void startOrFocusApp(juce::String appTitle, juce::String command);
+    void startOrFocusApp(const juce::String appTitle,
+            const juce::String command);
+
+    /**
+     * @brief  Checks a string to see if it is a valid shell command.
+     *
+     * @param command  The command string to test.
+     *
+     * @return  True iff the command string is a valid shell command.
+     */
+    static bool testCommand(const juce::String command);
+
 private:
 
     /**
@@ -51,7 +62,7 @@ private:
      * 
      * @return   An object representing the application process.
      */
-    LaunchedApp* startApp(const juce::String& command);
+    LaunchedApp* startApp(const juce::String command);
 
     /**
      * Focus the window of a running application.
