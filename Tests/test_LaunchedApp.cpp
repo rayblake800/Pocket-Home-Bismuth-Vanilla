@@ -1,13 +1,13 @@
 #include "JuceHeader.h"
-#include "LaunchedApp.h"
+#include "LaunchedProcess.h"
 #include "AppLauncher.h"
 #include "WindowFocus.h"
 #include "XWindowInterface.h"
 
-class LaunchedAppTest : public juce::UnitTest
+class LaunchedProcessTest : public juce::UnitTest
 {
 public:
-    LaunchedAppTest() : juce::UnitTest("LaunchedApp testing") {}
+    LaunchedProcessTest() : juce::UnitTest("LaunchedProcess testing") {}
     
     void runTest() override
     {
@@ -17,7 +17,7 @@ public:
         if(AppLauncher::testCommand("echo"))
         {
             beginTest("echo test");
-            LaunchedApp echo("echo (test)");
+            LaunchedProcess echo("echo (test)");
             echo.waitForProcessToFinish(1000);
             expect(!echo.isRunning(), 
                 "Echo process still running, but should be finished.");
@@ -36,7 +36,7 @@ public:
         if(AppLauncher::testCommand("top"))
         {
             beginTest("top test");
-            LaunchedApp top("top");
+            LaunchedProcess top("top");
             system("sleep 1");
             expect(top.isRunning(), "\"top\" process is not running.");
             output = top.getProcessOutput();
@@ -53,7 +53,7 @@ public:
         expect(!AppLauncher::testCommand(badCommand),
                 "DefinitelyNotAValidLaunchCommand should have been invalid.");
         beginTest("bad command handling");
-        LaunchedApp bad("DefinitelyNotAValidLaunchCommand");
+        LaunchedProcess bad("DefinitelyNotAValidLaunchCommand");
         expect(!bad.isRunning(),
 		"Process running despite bad launch command.");
         output = bad.getProcessOutput();
@@ -64,7 +64,7 @@ public:
         if(AppLauncher::testCommand("xclock"))
         {
             beginTest("window activation");
-            LaunchedApp winApp("xclock");
+            LaunchedProcess winApp("xclock");
             system("sleep 1");
             expect(winApp.isRunning(),
             "Launched terminal process not running.");
@@ -85,4 +85,4 @@ public:
     }
 };
 
-static LaunchedAppTest test;
+static LaunchedProcessTest test;
