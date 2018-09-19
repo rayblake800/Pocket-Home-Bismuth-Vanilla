@@ -35,7 +35,7 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DDONT_SET_USING_JUCE_NAMESPACE=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.8.10 -DJUCE_APP_VERSION_HEX=0x80a $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/System -I../../Source/Config\ Files/Component -I../../Source/Config\ Files/Main -I../../Source/Components/Pages/Settings\ Pages/DateTime\ Page -I../../Source/Components/Pages/Settings\ Pages/Password\ Pages -I../../Source/Components/Pages/Login\ Page -I../../Source/FreeDesktop/Icon\ Themes -I../../Source/Components/Pages/Settings\ Pages/Network\ Pages -I../../Source/Components/Pages/Settings\ Pages/UI\ Page -I../../Source/Components/Pages/Settings\ Pages/Settings\ List\ Page -I../../Source/Components/Pages/Settings\ Pages/Input\ Settings\ Page -I../../Source/Bluetooth -I../../Source/Components/Pages -I../../Source/FreeDesktop -I../../Source/Util -I../../Source/Config\ Files/Colour -I../../Source/Config\ Files -I../../Source/Components/Pages/Settings\ Pages -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Pages/Home\ Page -I../../Source/Components/Pages/Settings\ Pages/Home\ Settings\ Page -I../../Source/PocketCHIP -I../../Source/Components/Pages/Settings\ Pages/Quick\ Settings\ Page -I../../Source/Wifi -I../../Source/Components/Pages/Home\ Page/AppMenu/Scrolling\ Menu -I../../Source/Util/SharedResource -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Components/Pages/Home\ Page/AppMenu/Paged\ Menu -I../../Source/GLib/DBus -I../../Source/Components/Configurable -I../../Source/Components -I../../Source/Config\ Files/AppMenu -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source -I../../Source/GLib/LibNM -I../../Source/Components/Widgets -I../../Source/GLib -I../../Source/FreeDesktop/Desktop\ Entries -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DDONT_SET_USING_JUCE_NAMESPACE=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.8.10 -DJUCE_APP_VERSION_HEX=0x80a $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/GLib/LibNM -I../../Source/Components/Pages/Settings\ Pages/Settings\ List\ Page -I../../Source/System/Bluetooth -I../../Source/System/Wifi -I../../Source/Config\ Files/Colour -I../../Source/Components/Configurable -I../../Source/Components/Pages/Settings\ Pages/Password\ Pages -I../../Source/Config\ Files/AppMenu -I../../Source/GLib/DBus -I../../Source/FreeDesktop/Icon\ Themes -I../../Source/Components/Pages/Login\ Page -I../../Source/Config\ Files/Component -I../../Source/Components/Pages/Settings\ Pages -I../../Source/Config\ Files/Main -I../../Source/FreeDesktop -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Components/Pages/Settings\ Pages/UI\ Page -I../../Source/Components/Pages/Settings\ Pages/Home\ Settings\ Page -I../../Source/FreeDesktop/Desktop\ Entries -I../../Source/Components/Widgets -I../../Source/System -I../../Source/Components/Pages/Home\ Page/AppMenu/Scrolling\ Menu -I../../Source/Components/Pages/Home\ Page -I../../Source/Components/Pages/Settings\ Pages/Input\ Settings\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/GLib -I../../Source/Config\ Files -I../../Source/Components/Pages/Home\ Page/AppMenu/Paged\ Menu -I../../Source/Components/Pages/Settings\ Pages/Network\ Pages -I../../Source/Components/Pages/Settings\ Pages/DateTime\ Page -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Pages/Settings\ Pages/Quick\ Settings\ Page -I../../Source/Components/Pages -I../../Source/Util -I../../Source/Util/SharedResource -I../../Source/Components $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
@@ -56,7 +56,7 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DDONT_SET_USING_JUCE_NAMESPACE=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.8.10 -DJUCE_APP_VERSION_HEX=0x80a $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/System -I../../Source/Config\ Files/Component -I../../Source/Config\ Files/Main -I../../Source/Components/Pages/Settings\ Pages/DateTime\ Page -I../../Source/Components/Pages/Settings\ Pages/Password\ Pages -I../../Source/Components/Pages/Login\ Page -I../../Source/FreeDesktop/Icon\ Themes -I../../Source/Components/Pages/Settings\ Pages/Network\ Pages -I../../Source/Components/Pages/Settings\ Pages/UI\ Page -I../../Source/Components/Pages/Settings\ Pages/Settings\ List\ Page -I../../Source/Components/Pages/Settings\ Pages/Input\ Settings\ Page -I../../Source/Bluetooth -I../../Source/Components/Pages -I../../Source/FreeDesktop -I../../Source/Util -I../../Source/Config\ Files/Colour -I../../Source/Config\ Files -I../../Source/Components/Pages/Settings\ Pages -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Pages/Home\ Page -I../../Source/Components/Pages/Settings\ Pages/Home\ Settings\ Page -I../../Source/PocketCHIP -I../../Source/Components/Pages/Settings\ Pages/Quick\ Settings\ Page -I../../Source/Wifi -I../../Source/Components/Pages/Home\ Page/AppMenu/Scrolling\ Menu -I../../Source/Util/SharedResource -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Components/Pages/Home\ Page/AppMenu/Paged\ Menu -I../../Source/GLib/DBus -I../../Source/Components/Configurable -I../../Source/Components -I../../Source/Config\ Files/AppMenu -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source -I../../Source/GLib/LibNM -I../../Source/Components/Widgets -I../../Source/GLib -I../../Source/FreeDesktop/Desktop\ Entries -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DDONT_SET_USING_JUCE_NAMESPACE=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.8.10 -DJUCE_APP_VERSION_HEX=0x80a $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/GLib/LibNM -I../../Source/Components/Pages/Settings\ Pages/Settings\ List\ Page -I../../Source/System/Bluetooth -I../../Source/System/Wifi -I../../Source/Config\ Files/Colour -I../../Source/Components/Configurable -I../../Source/Components/Pages/Settings\ Pages/Password\ Pages -I../../Source/Config\ Files/AppMenu -I../../Source/GLib/DBus -I../../Source/FreeDesktop/Icon\ Themes -I../../Source/Components/Pages/Login\ Page -I../../Source/Config\ Files/Component -I../../Source/Components/Pages/Settings\ Pages -I../../Source/Config\ Files/Main -I../../Source/FreeDesktop -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Components/Pages/Settings\ Pages/UI\ Page -I../../Source/Components/Pages/Settings\ Pages/Home\ Settings\ Page -I../../Source/FreeDesktop/Desktop\ Entries -I../../Source/Components/Widgets -I../../Source/System -I../../Source/Components/Pages/Home\ Page/AppMenu/Scrolling\ Menu -I../../Source/Components/Pages/Home\ Page -I../../Source/Components/Pages/Settings\ Pages/Input\ Settings\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/GLib -I../../Source/Config\ Files -I../../Source/Components/Pages/Home\ Page/AppMenu/Paged\ Menu -I../../Source/Components/Pages/Settings\ Pages/Network\ Pages -I../../Source/Components/Pages/Settings\ Pages/DateTime\ Page -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Pages/Settings\ Pages/Quick\ Settings\ Page -I../../Source/Components/Pages -I../../Source/Util -I../../Source/Util/SharedResource -I../../Source/Components $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
@@ -68,10 +68,22 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/NetworkInterface_906c708e.o \
+  $(JUCE_OBJDIR)/LibNMInterface_fa470af8.o \
+  $(JUCE_OBJDIR)/WifiAccessPoint_92e734fe.o \
+  $(JUCE_OBJDIR)/WifiStateManager_2b6fa074.o \
+  $(JUCE_OBJDIR)/JsonWifiInterface_3f6ac763.o \
+  $(JUCE_OBJDIR)/BluetoothDevice_3f6d0a2c.o \
+  $(JUCE_OBJDIR)/BluetoothStatus_1fa58dc8.o \
+  $(JUCE_OBJDIR)/BluezAdapter_d50e6911.o \
+  $(JUCE_OBJDIR)/Audio_b107995f.o \
+  $(JUCE_OBJDIR)/BatteryMonitor_6e446b6e.o \
+  $(JUCE_OBJDIR)/Display_195a9b4b.o \
+  $(JUCE_OBJDIR)/I2CBus_df256007.o \
   $(JUCE_OBJDIR)/SystemCommands_9ca9c9b8.o \
-  $(JUCE_OBJDIR)/BluetoothDevice_b56b2104.o \
-  $(JUCE_OBJDIR)/BluetoothStatus_95a3a4a0.o \
-  $(JUCE_OBJDIR)/BluezAdapter_eb8139.o \
+  $(JUCE_OBJDIR)/XWindowInterface_b7227772.o \
+  $(JUCE_OBJDIR)/ProcessUtils_57a5a4e3.o \
+  $(JUCE_OBJDIR)/AssetFiles_10e9ab48.o \
   $(JUCE_OBJDIR)/ConfigurableComponent_2fd2b8e8.o \
   $(JUCE_OBJDIR)/ConfigurableImageButton_bf755ad8.o \
   $(JUCE_OBJDIR)/ConfigurableImageComponent_8700fda1.o \
@@ -177,18 +189,11 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/GPPObject_f97abf7e.o \
   $(JUCE_OBJDIR)/GPPWeakRef_58d87b66.o \
   $(JUCE_OBJDIR)/GSignalHandler_3a448c6d.o \
-  $(JUCE_OBJDIR)/Audio_f2c8052.o \
-  $(JUCE_OBJDIR)/BatteryMonitor_95f8a5db.o \
-  $(JUCE_OBJDIR)/Display_81e1917e.o \
-  $(JUCE_OBJDIR)/I2CBus_459d5774.o \
   $(JUCE_OBJDIR)/ScopedThreadWriteLock_777c0162.o \
   $(JUCE_OBJDIR)/ScopedThreadReadLock_9b17abb3.o \
   $(JUCE_OBJDIR)/ThreadLock_fe58c0d.o \
   $(JUCE_OBJDIR)/SharedResource_6871b0cb.o \
   $(JUCE_OBJDIR)/LaunchedProcess_f13ef2d9.o \
-  $(JUCE_OBJDIR)/XWindowInterface_b020667f.o \
-  $(JUCE_OBJDIR)/ProcessUtils_6fe72270.o \
-  $(JUCE_OBJDIR)/AssetFiles_de972815.o \
   $(JUCE_OBJDIR)/LocalizedTime_cb579984.o \
   $(JUCE_OBJDIR)/TempTimer_170bcb6d.o \
   $(JUCE_OBJDIR)/Utils_94161fcd.o \
@@ -196,11 +201,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/WindowFocusedTimer_3fa91c4c.o \
   $(JUCE_OBJDIR)/Localized_63fd9217.o \
   $(JUCE_OBJDIR)/AppLauncher_58352abd.o \
-  $(JUCE_OBJDIR)/NetworkInterface_15f7b366.o \
-  $(JUCE_OBJDIR)/LibNMInterface_f2f523d0.o \
-  $(JUCE_OBJDIR)/WifiAccessPoint_affc3726.o \
-  $(JUCE_OBJDIR)/WifiStateManager_b0fae34c.o \
-  $(JUCE_OBJDIR)/JsonWifiInterface_6b47df8b.o \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/PocketHomeApplication_4065085c.o \
   $(JUCE_OBJDIR)/gtest_object_343fa2fd.o \
@@ -229,24 +229,84 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
 
+$(JUCE_OBJDIR)/NetworkInterface_906c708e.o: ../../Source/System/Wifi/NetworkInterface.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NetworkInterface.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/LibNMInterface_fa470af8.o: ../../Source/System/Wifi/LibNMInterface.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling LibNMInterface.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/WifiAccessPoint_92e734fe.o: ../../Source/System/Wifi/WifiAccessPoint.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling WifiAccessPoint.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/WifiStateManager_2b6fa074.o: ../../Source/System/Wifi/WifiStateManager.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling WifiStateManager.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/JsonWifiInterface_3f6ac763.o: ../../Source/System/Wifi/JsonWifiInterface.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling JsonWifiInterface.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/BluetoothDevice_3f6d0a2c.o: ../../Source/System/Bluetooth/BluetoothDevice.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling BluetoothDevice.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/BluetoothStatus_1fa58dc8.o: ../../Source/System/Bluetooth/BluetoothStatus.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling BluetoothStatus.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/BluezAdapter_d50e6911.o: ../../Source/System/Bluetooth/BluezAdapter.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling BluezAdapter.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/Audio_b107995f.o: ../../Source/System/Audio.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling Audio.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/BatteryMonitor_6e446b6e.o: ../../Source/System/BatteryMonitor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling BatteryMonitor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/Display_195a9b4b.o: ../../Source/System/Display.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling Display.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/I2CBus_df256007.o: ../../Source/System/I2CBus.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling I2CBus.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/SystemCommands_9ca9c9b8.o: ../../Source/System/SystemCommands.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling SystemCommands.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/BluetoothDevice_b56b2104.o: ../../Source/Bluetooth/BluetoothDevice.cpp
+$(JUCE_OBJDIR)/XWindowInterface_b7227772.o: ../../Source/System/XWindowInterface.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling BluetoothDevice.cpp"
+	@echo "Compiling XWindowInterface.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/BluetoothStatus_95a3a4a0.o: ../../Source/Bluetooth/BluetoothStatus.cpp
+$(JUCE_OBJDIR)/ProcessUtils_57a5a4e3.o: ../../Source/System/ProcessUtils.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling BluetoothStatus.cpp"
+	@echo "Compiling ProcessUtils.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/BluezAdapter_eb8139.o: ../../Source/Bluetooth/BluezAdapter.cpp
+$(JUCE_OBJDIR)/AssetFiles_10e9ab48.o: ../../Source/System/AssetFiles.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling BluezAdapter.cpp"
+	@echo "Compiling AssetFiles.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigurableComponent_2fd2b8e8.o: ../../Source/Components/Configurable/ConfigurableComponent.cpp
@@ -774,26 +834,6 @@ $(JUCE_OBJDIR)/GSignalHandler_3a448c6d.o: ../../Source/GLib/GSignalHandler.cpp
 	@echo "Compiling GSignalHandler.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/Audio_f2c8052.o: ../../Source/PocketCHIP/Audio.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling Audio.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/BatteryMonitor_95f8a5db.o: ../../Source/PocketCHIP/BatteryMonitor.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling BatteryMonitor.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/Display_81e1917e.o: ../../Source/PocketCHIP/Display.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling Display.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/I2CBus_459d5774.o: ../../Source/PocketCHIP/I2CBus.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling I2CBus.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/ScopedThreadWriteLock_777c0162.o: ../../Source/Util/SharedResource/ScopedThreadWriteLock.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ScopedThreadWriteLock.cpp"
@@ -817,21 +857,6 @@ $(JUCE_OBJDIR)/SharedResource_6871b0cb.o: ../../Source/Util/SharedResource/Share
 $(JUCE_OBJDIR)/LaunchedProcess_f13ef2d9.o: ../../Source/Util/LaunchedProcess.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling LaunchedProcess.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/XWindowInterface_b020667f.o: ../../Source/Util/XWindowInterface.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling XWindowInterface.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/ProcessUtils_6fe72270.o: ../../Source/Util/ProcessUtils.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ProcessUtils.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/AssetFiles_de972815.o: ../../Source/Util/AssetFiles.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling AssetFiles.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/LocalizedTime_cb579984.o: ../../Source/Util/LocalizedTime.cpp
@@ -867,31 +892,6 @@ $(JUCE_OBJDIR)/Localized_63fd9217.o: ../../Source/Util/Localized.cpp
 $(JUCE_OBJDIR)/AppLauncher_58352abd.o: ../../Source/Util/AppLauncher.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppLauncher.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/NetworkInterface_15f7b366.o: ../../Source/Wifi/NetworkInterface.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling NetworkInterface.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/LibNMInterface_f2f523d0.o: ../../Source/Wifi/LibNMInterface.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling LibNMInterface.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/WifiAccessPoint_affc3726.o: ../../Source/Wifi/WifiAccessPoint.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling WifiAccessPoint.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/WifiStateManager_b0fae34c.o: ../../Source/Wifi/WifiStateManager.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling WifiStateManager.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/JsonWifiInterface_6b47df8b.o: ../../Source/Wifi/JsonWifiInterface.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling JsonWifiInterface.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
