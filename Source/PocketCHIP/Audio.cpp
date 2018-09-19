@@ -1,5 +1,6 @@
 #include "JuceHeader.h"
 #include "Audio.h"
+#include "SystemCommands.h"
 #include <alsa/asoundlib.h>
 
 #define DEFAULT_BUFFER_SIZE 4096 /*in samples*/
@@ -119,19 +120,11 @@ bool Audio::initAudio()
 int Audio::getVolumePercent()
 {
     using namespace juce;
-    int volume = 0;
-    // Get initial brightness value
-    ChildProcess child;
-    // Get initial volume value
-    StringArray cmd{ "amixer", "sget", "Power Amplifier"};
-    if (child.start(cmd))
-    {
-        String result(child.readAllProcessOutput());
-        result = result.fromFirstOccurrenceOf("[", false, false);
-        result = result.initialSectionContainingOnly("0123456789");
-        volume = result.getIntValue();
-    }
-    return volume;
+    SystemCommands systemCommands;
+    String volume = systemCommands.runTextCommand
+        (SystemCommands::TextCommand::getVolume);
+    DBG("Audio::" << __func__ << ": System volume=" << volume);
+    return volume.getIntValue();
 }
 
 /*
@@ -140,11 +133,9 @@ int Audio::getVolumePercent()
 void Audio::setVolume(int volumePercent)
 {
     using namespace juce;
-    StringArray cmd{"amixer", "sset", "Power Amplifier",
-                    (String(volumePercent) + "%").toRawUTF8()};
-    ChildProcess child;
-    if (child.start(cmd))
-    {
-        String result(child.readAllProcessOutput());
-    }
+    String volumeArg(volumePercent);
+    volumeArg += "%";
+    SystemCommands systemCommands;
+    systemCommands.runActionCommand
+        (SystemCommands::ActionCommand::setVolume, volumeArg);
 }

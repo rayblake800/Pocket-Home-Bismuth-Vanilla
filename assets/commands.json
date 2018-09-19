@@ -1,0 +1,19 @@
+{
+    "POCKET_HOME_SCRIPTS" : "/usr/share/pocket-home/scripts",
+
+    "shutdown"            : "systemctl poweroff",
+    "restart"             : "systemctl reboot",
+    "sleep"               : "xset dpms force off",
+    "wake"                : "xset dpms force on",
+    "calibrate"           : "POCKET_HOME_SCRIPTS/calibrate.sh",
+    "set volume"          : "amixer sset 'Power Amplifier'",
+    "set brightness"      : "POCKET_HOME_SCRIPTS/setBrightness.sh",
+    
+    "sleep check"         : "POCKET_HOME_SCRIPTS/sleepCheck.sh",
+    "command check"       : "command -v",
+    "set password"        : "pkexec POCKET_HOME_SCRIPTS/passwordManager.sh",
+    
+    "get volume"          : "POCKET_HOME_SCRIPTS/printVolume.sh",
+    "get battery percent" : "",
+    "get brightness"      : "cat /sys/class/backlight/backlight/brightness",
+}

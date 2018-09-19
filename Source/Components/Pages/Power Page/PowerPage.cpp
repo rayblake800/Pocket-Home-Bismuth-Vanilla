@@ -1,10 +1,9 @@
 #include <map>
-#include "MainConfigFile.h"
-#include "MainConfigKeys.h"
 #include "Utils.h"
 #include "PokeLookAndFeel.h"
 #include "PowerPage.h"
 #include "TransitionAnimator.h"
+#include "SystemCommands.h"
 
 /* Localized text keys: */
 static const constexpr char * shutdown = "shutdown";
@@ -26,15 +25,6 @@ static const constexpr char* prettyNameKey = "PRETTY_NAME";
 static const constexpr char* nameKey = "NAME";
 /* System version key */
 static const constexpr char* versionKey = "VERSION";
-
-/* Sleep mode start command */
-static const constexpr char* startSleepCommand = "xset dpms force off";
-/* Sleep mode exit command */
-static const constexpr char* stopSleepCommand = "xset dpms force on";
-/* Sleep mode checking command */
-static const constexpr char* sleepCheckCommand = "xset q | grep \"is O\"";
-/* Returned value indicating sleep mode is on */
-static const constexpr char* sleepingSystemResponse = "Monitor is Off";
 
 PowerPage::PowerPage() :Localized("PowerPage"),
 PageComponent("PowerPage"),
@@ -124,23 +114,19 @@ lockscreen([this]()
 void PowerPage::startSleepMode()
 {
     using namespace juce;
-    ChildProcess commandProcess;
-    if (commandProcess.start(sleepCheckCommand))
+    SystemCommands systemCommands;
+    if(systemCommands.runIntCommand(SystemCommands::IntCommand::sleepCheck)
+            == 0)
     {
-        const String result(commandProcess.readAllProcessOutput());
-        if (result == sleepingSystemResponse)
-        {
-            commandProcess.start(stopSleepCommand);
-        }
-        else
-        {
-            addAndMakeVisible(lockscreen);
-            lockscreen.setBounds(getLocalBounds());
-            lockscreen.setAlwaysOnTop(true);
-            commandProcess.start(startSleepCommand);
-        }
+        systemCommands.runActionCommand(SystemCommands::ActionCommand::wake);
     }
-    commandProcess.waitForProcessToFinish(10000);
+    else
+    {
+        addAndMakeVisible(lockscreen);
+        lockscreen.setBounds(getLocalBounds());
+        lockscreen.setAlwaysOnTop(true);
+        systemCommands.runActionCommand(SystemCommands::ActionCommand::sleep);
+    }
 }
 
 /*
@@ -194,19 +180,17 @@ void PowerPage::pageButtonClicked(juce::Button *button)
         return;
     }
 
-    ChildProcess commandProcess;
-    MainConfigFile mainConfig;
+    SystemCommands systemCommands;
     if (button == &powerOffButton)
     {
         showPowerSpinner();
-        commandProcess.start(mainConfig.getConfigValue<String>
-                (MainConfigKeys::shutdownCommandKey));
+        systemCommands.runActionCommand
+            (SystemCommands::ActionCommand::shutdown);
     }
     else if (button == &rebootButton)
     {
         showPowerSpinner();
-        commandProcess.start(mainConfig.getConfigValue<String>
-                (MainConfigKeys::restartCommandKey));
+        systemCommands.runActionCommand
+            (SystemCommands::ActionCommand::restart);
     }
-    commandProcess.waitForProcessToFinish(-1);
 }

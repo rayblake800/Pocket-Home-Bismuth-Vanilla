@@ -21,10 +21,10 @@ public:
     virtual ~InputSettingsPage() { }
 
     /**
-     * Re-applies the Xmodmap file or runs Xinput Calibrator, depending on 
-     * which button was pressed.
+     * @brief  Runs the display calibration command when the calibration button
+     *         is clicked.
      * 
-     * @param button
+     * @param button  The calibration button.
      */
     void pageButtonClicked(juce::Button* button) override;
 
@@ -45,18 +45,10 @@ private:
 
     //Button for calibrating
     juce::TextButton calibrating;
-    //calibration command
-    static const constexpr char * calibrationCommand = "xinput_calibrator";
-
-    //Button for the FN key (xmodmap)
-    juce::TextButton fnmapping;
-    //Command to fix key mappings
-    static const constexpr char * keyFixCommand = "xmodmap ${HOME}/.Xmodmap";
 
     //localized text keys;
     static const constexpr char * input_settings = "input_settings";
     static const constexpr char * calibrate_screen = "calibrate_screen";
-    static const constexpr char * remap_keybord = "remap_keybord";
     static const constexpr char * select_cursor_visible
             = "select_cursor_visible";
     static const constexpr char * not_visible = "not_visible";

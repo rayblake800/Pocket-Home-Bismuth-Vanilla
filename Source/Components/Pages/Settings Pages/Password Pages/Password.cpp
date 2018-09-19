@@ -1,6 +1,7 @@
 #include <openssl/sha.h>
 #include <unistd.h>
 #include "AssetFiles.h"
+#include "SystemCommands.h"
 #include "Password.h"
 
 static const constexpr char * passwordScript = "scripts/passwordManager.sh";
@@ -90,20 +91,20 @@ static Password::ChangeResult runPasswordScript
     {
         return wrongPasswordError;
     }
-    File pwdScriptFile = AssetFiles::findAssetFile(passwordScript, false);
-    if (!pwdScriptFile.existsAsFile())
+    SystemCommands sysCommands;
+    String args(getlogin());
+    if(newPass.isNotEmpty())
+    {
+        args += String(" \"" + hashString(newPass) + "\"");
+    }
+    int result = sysCommands.runIntCommand
+        (SystemCommands::IntCommand::setPassword, args);
+    if (result == -1)
     {
         DBG("Password::" << __func__
-                << ": password update script is missing!");
+                << ": password update command is missing!");
         return noPasswordScript;
     }
-    String commandStr("pkexec " + pwdScriptFile.getFullPathName() + " "
-            + String(getlogin()));
-    if (newPass.isNotEmpty())
-    {
-        commandStr += String(" \"" + hashString(newPass) + "\"");
-    }
-    system(commandStr.toRawUTF8());
     if(newPass.isEmpty())
     {
         return passwordFileExists() ? fileDeleteFailed : passwordRemoveSuccess;

@@ -11,13 +11,15 @@
 #include "WifiIcon.h"
 #include "AppMenuPopupEditor.h"
 #include "AppMenuComponent.h"
+#include "SystemCommands.h"
 
 /**
  * @file HomePage.h
  * 
- * HomePage is the main page of the application. It displays the app launch
- * menu, assorted system information, and navigation controls to access
- * power and settings pages.
+ * @brief The main page of the application. 
+ *
+ * It displays the app launch menu, assorted system information, and navigation
+ * controls to access power and settings pages.
  */
 
 /**
@@ -35,10 +37,10 @@ public:
 
 protected:
     /**
-     * Tracks page background and menu type changes. Only the MainConfigFile 
-     * should be calling this.  Depending on the key provided, this will update
-     * the page background or recreate the AppMenu.
-     * 
+     * @brief  Tracks page background and menu type changes. 
+     *
+     * Only the MainConfigFile should be calling this.  Depending on the key 
+     * provided, this will update the page background or recreate the AppMenu.
      * 
      * @param key     This should be the background key or the menu type key.
      */
@@ -46,64 +48,70 @@ protected:
 
 private:
     /**
-     * Forward all clicks (except button clicks) to the appMenu so that it can 
-     * potentially create a pop-up menu
+     * @brief  Forward all clickss (except button clicks) to the AppMenu so that
+     *         it can potentially create a pop-up menu.
      * 
-     * @param event
+     * @param event  The detected mouse event.
      */
     virtual void mouseDown(const juce::MouseEvent& event) override;
 
     /**
-     * Opens the power page or the settings page, depending on which button
-     * was clicked.
+     * @brief  Opens the power page or the settings page, depending on which 
+     *         button was clicked.
      * 
-     * @param button
+     * @param button  The page button that was clicked.
      */
     void pageButtonClicked(juce::Button* button) override;
 
     /**
-     * Forwards all key events to the AppMenu.
+     * @brief  Forwards all key events to the AppMenu.
+     *
+     * @param keyPress  The detected KeyPress event.
      */
-    bool keyPressed(const juce::KeyPress &) override;
+    bool keyPressed(const juce::KeyPress& keyPress) override;
 
     /**
-     * Grab keyboard focus when the page becomes visible.
+     * @brief  Grabs keyboard focus when the page becomes visible.
      */
     void visibilityChanged() override;
 
     /**
-     * Update all child component bounds when the page is resized.
+     * @brief  Updates all child component bounds when the page is resized.
      */
     void pageResized() override;
 
-    //Loads AppMenu shortcuts and folder definitions.  This resource should
-    //exist as long as the home page exists.
+    /* Loads AppMenu shortcuts and folder definitions.  This resource should
+       exist as long as the home page exists. */
     AppConfigFile appConfig;
 
-    //This spinner activates when the AppMenu is loading.  The AppMenu controls
-    //it through a reference passed in on menu creation.
+    /* Loads system commands.  This resource should exist as long as the home
+       page exists. */
+    SystemCommands systemCommands;
+
+    /* This spinner activates when the AppMenu is loading.  The AppMenu controls
+       it through a reference passed in on menu creation. */
     OverlaySpinner loadingSpinner;
     
-    //Displays the time.
+    /* Displays the time. */
     ClockLabel clock;
     
-    //The application menu.  This is recreated whenever the menu type preference
-    //changes in MainConfigFile
+    /* The application menu.  This is recreated whenever the menu type 
+       preference changes in MainConfigFile. */
     juce::ScopedPointer<AppMenuComponent> appMenu;
     
-    //On pocketChip this displays the current battery status.
+    /* Displays the current battery status. */
     BatteryIcon batteryIcon;
     
-    //Displays the current wifi status.
+    /* Displays the current wifi status. */
     WifiIcon wifiIcon;
 
-    //Click to this open the power page
+    /* Opens the power page when clicked. */
     ConfigurableImageButton powerButton;
     
-    //Click this to open the settings page
+    /* Opens the settings page when clicked. */
     ConfigurableImageButton settingsButton;
 
-    //Page frame image.  This component is entirely decorative.
+    /* Page frame image.  This component is entirely decorative. */
     ConfigurableImageComponent frame;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomePage);

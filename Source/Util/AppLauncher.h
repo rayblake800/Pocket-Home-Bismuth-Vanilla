@@ -1,7 +1,7 @@
 #pragma once
 #include <functional>
 #include <map>
-#include "LaunchedApp.h"
+#include "LaunchedProcess.h"
 #include "Localized.h"
 #include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
@@ -62,14 +62,14 @@ private:
      * 
      * @return   An object representing the application process.
      */
-    LaunchedApp* startApp(const juce::String command);
+    LaunchedProcess* startApp(const juce::String command);
 
     /**
      * Focus the window of a running application.
      * 
      * @param ProcessInfo  The application's process information.
      */
-    void focusApp(LaunchedApp* runningApp);
+    void focusApp(LaunchedProcess* runningApp);
     
 
     /**
@@ -86,7 +86,7 @@ private:
     std::function<void() > launchFailureCallback;
 
     //holds all running processes launched by this object.
-    juce::OwnedArray<LaunchedApp> runningApps;
+    juce::OwnedArray<LaunchedProcess> runningApps;
 
     //timer interval in milliseconds
     static const int timerFrequency = 2000;
@@ -98,7 +98,7 @@ private:
     juce::uint32 lastLaunch = 0;
 
     //Process to check up on when the timer finishes
-    LaunchedApp * timedProcess = nullptr;
+    LaunchedProcess * timedProcess = nullptr;
 
     //localized text keys;
     static const constexpr char * could_not_open = "could_not_open";

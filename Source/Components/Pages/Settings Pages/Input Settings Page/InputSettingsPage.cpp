@@ -1,6 +1,6 @@
 #include "MainConfigFile.h"
 #include "MainConfigKeys.h"
-#include "AppLauncher.h"
+#include "SystemCommands.h"
 #include "InputSettingsPage.h"
 
 InputSettingsPage::InputSettingsPage() :
@@ -9,7 +9,6 @@ PageComponent("InputSettingsPage"),
 title("settings", localeText(input_settings)),
 chooseMode("chooseMode"),
 calibrating(localeText(calibrate_screen)),
-fnmapping(localeText(remap_keybord)),
 cursorVisible("cursorVisible", localeText(select_cursor_visible))
 {
     using namespace juce;
@@ -34,10 +33,7 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
         {
             RowItem(&calibrating, 10)
         }),
-        Row(20,
-        {
-            RowItem(&fnmapping, 10)
-        })
+        Row(20)
     });
     layout.setYMarginFraction(0.03);
     layout.setXPaddingWeight(1);
@@ -59,11 +55,10 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
         chooseMode.setSelectedId(1);
     }
     calibrating.addListener(this);
-    fnmapping.addListener(this);
     addAndShowLayoutComponents();
 }
 
-/**
+/*
  * Re-applies the Xmodmap file or runs Xinput Calibrator, depending on 
  * which button was pressed.
  */
@@ -72,18 +67,13 @@ void InputSettingsPage::pageButtonClicked(juce::Button* button)
     using namespace juce;
     if (button == &calibrating)
     {
-        AppLauncher launcher;
-        launcher.startOrFocusApp("XInput Calibrator", calibrationCommand);
-    }
-    if (button == &fnmapping)
-    {
-        ScopedPointer<ChildProcess> launchApp = new ChildProcess();
-        launchApp->start(keyFixCommand);
-        launchApp->waitForProcessToFinish(-1);
+        SystemCommands systemCommands;
+        systemCommands.runActionCommand
+            (SystemCommands::ActionCommand::calibrate);
     }
 }
 
-/**
+/*
  * Changes the cursor visibility settings.
  */
 void InputSettingsPage::comboBoxChanged(juce::ComboBox* box)

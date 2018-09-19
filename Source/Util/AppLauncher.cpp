@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include "AppLauncher.h"
+#include "SystemCommands.h"
 #include "XWindowInterface.h"
 
 //Ms to wait before forcibly terminating a window focus operation.
@@ -17,9 +18,9 @@ void AppLauncher::startOrFocusApp(const juce::String appTitle,
             << ", command = " << command);
     //before adding another process to the list, clean out any old dead ones,
     //so they don't start piling up
-    std::vector<LaunchedApp*> toRemove;
-    LaunchedApp* appInstance = nullptr;
-    for (LaunchedApp* app : runningApps)
+    std::vector<LaunchedProcess*> toRemove;
+    LaunchedProcess* appInstance = nullptr;
+    for (LaunchedProcess* app : runningApps)
     {
         if (!app->isRunning())
         {
@@ -30,7 +31,7 @@ void AppLauncher::startOrFocusApp(const juce::String appTitle,
             appInstance = app;
         }
     }
-    for (LaunchedApp* appProcess : toRemove)
+    for (LaunchedProcess* appProcess : toRemove)
     {
         DBG("AppLauncher::" << __func__ << ": removing terminated app "
                 << appProcess->getLaunchCommand());
@@ -55,7 +56,7 @@ void AppLauncher::startOrFocusApp(const juce::String appTitle,
             }
         }
     }
-    LaunchedApp* newApp = startApp(command);
+    LaunchedProcess* newApp = startApp(command);
     if(newApp != nullptr)
     {
         runningApps.add(newApp);
@@ -73,15 +74,16 @@ void AppLauncher::startOrFocusApp(const juce::String appTitle,
 bool AppLauncher::testCommand(const juce::String command)
 {
     using namespace juce;
-    String testResult = String("command -v ") + command;
-    return system(testResult.toRawUTF8()) == 0;
+    SystemCommands systemCommands;
+    return systemCommands.runIntCommand
+        (SystemCommands::IntCommand::commandCheck, command) == 0;
 }
 
 
 /**
  * Start a new instance of an application process
  */
-LaunchedApp* AppLauncher::startApp(const juce::String command)
+LaunchedProcess* AppLauncher::startApp(const juce::String command)
 {
     using namespace juce;
     DBG("AppsPageComponent::startApp - " << command);
@@ -96,7 +98,7 @@ LaunchedApp* AppLauncher::startApp(const juce::String command)
         return nullptr;
     }
     
-    LaunchedApp* newApp = new LaunchedApp(command);    
+    LaunchedProcess* newApp = new LaunchedProcess(command);    
     timedProcess = newApp;
     lastLaunch = juce::Time::getMillisecondCounter();
     startTimer(timerFrequency);
