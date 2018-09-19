@@ -797,9 +797,9 @@ ColourConfigKeys::UICategory ColourConfigKeys::getUICategory
     auto searchIter = idCategories.find(colourId);
     if (searchIter == idCategories.end())
     {
-        DBG("ColourConfigKeys::" << __func__ 
-                << ": No category found for colorId"
-                << juce::String::toHexString(colourId));
+        //DBG("ColourConfigKeys::" << __func__ 
+        //        << ": No category found for colorId "
+        //        << juce::String::toHexString(colourId));
         return UICategory::none;
     }
     return searchIter->second;
@@ -814,7 +814,7 @@ int ColourConfigKeys::getColourId(const juce::Identifier& colourKey)
     auto searchIter = colourIds.find(colourKey);
     if (searchIter == colourIds.end())
     {
-        DBG("ColourConfigKeys::" << __func__ << ": No Id found for key"
+        DBG("ColourConfigKeys::" << __func__ << ": No Id found for key "
                 << colourKey.toString());
         return -1;
     }
