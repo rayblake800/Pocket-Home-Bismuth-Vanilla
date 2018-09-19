@@ -212,11 +212,7 @@ void JSONFile::readFileIfUnopened()
             File sourceFile = AssetFiles::findAssetFile(filePath);
             if (sourceFile.existsAsFile())
             {
-                if (!sourceFile.hasWriteAccess())
-                {
-                    throw FileException(filePath, "No write access!");
-                }
-                else if (sourceFile.getSize() > 0)
+                if (sourceFile.getSize() > 0)
                 {
                     throw FileException(filePath, "Not a valid JSON file!");
                 }
