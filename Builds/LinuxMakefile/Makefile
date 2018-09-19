@@ -35,7 +35,7 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DDONT_SET_USING_JUCE_NAMESPACE=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.8.10 -DJUCE_APP_VERSION_HEX=0x80a $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/Config\ Files/Component -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source/GLib/LibNM -I../../Source/PocketCHIP -I../../Source/Components/Pages/Settings\ Pages/Settings\ List\ Page -I../../Source/Config\ Files/Colour -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Components/Widgets -I../../Source/Components/Pages/Settings\ Pages/DateTime\ Page -I../../Source/Util -I../../Source/Components/Pages/Home\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Scrolling\ Menu -I../../Source/FreeDesktop/Icon\ Themes -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Pages/Settings\ Pages/Input\ Settings\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/Components/Pages/Settings\ Pages/Network\ Pages -I../../Source/Components/Pages/Settings\ Pages/UI\ Page -I../../Source/FreeDesktop -I../../Source/FreeDesktop/Desktop\ Entries -I../../Source/Components/Pages/Settings\ Pages -I../../Source/Config\ Files -I../../Source/Components -I../../Source/Components/Pages/Home\ Page/AppMenu/Paged\ Menu -I../../Source/Config\ Files/Main -I../../Source/Util/SharedResource -I../../Source/Components/Configurable -I../../Source/Config\ Files/AppMenu -I../../Source/Components/Pages/Login\ Page -I../../Source/Components/Pages -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source -I../../Source/Wifi -I../../Source/GLib/DBus -I../../Source/Bluetooth -I../../Source/Components/Pages/Settings\ Pages/Password\ Pages -I../../Source/Components/Pages/Settings\ Pages/Quick\ Settings\ Page -I../../Source/Components/Pages/Settings\ Pages/Home\ Settings\ Page -I../../Source/GLib $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DDONT_SET_USING_JUCE_NAMESPACE=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.8.10 -DJUCE_APP_VERSION_HEX=0x80a $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/System -I../../Source/Config\ Files/Component -I../../Source/Config\ Files/Main -I../../Source/Components/Pages/Settings\ Pages/DateTime\ Page -I../../Source/Components/Pages/Settings\ Pages/Password\ Pages -I../../Source/Components/Pages/Login\ Page -I../../Source/FreeDesktop/Icon\ Themes -I../../Source/Components/Pages/Settings\ Pages/Network\ Pages -I../../Source/Components/Pages/Settings\ Pages/UI\ Page -I../../Source/Components/Pages/Settings\ Pages/Settings\ List\ Page -I../../Source/Components/Pages/Settings\ Pages/Input\ Settings\ Page -I../../Source/Bluetooth -I../../Source/Components/Pages -I../../Source/FreeDesktop -I../../Source/Util -I../../Source/Config\ Files/Colour -I../../Source/Config\ Files -I../../Source/Components/Pages/Settings\ Pages -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Pages/Home\ Page -I../../Source/Components/Pages/Settings\ Pages/Home\ Settings\ Page -I../../Source/PocketCHIP -I../../Source/Components/Pages/Settings\ Pages/Quick\ Settings\ Page -I../../Source/Wifi -I../../Source/Components/Pages/Home\ Page/AppMenu/Scrolling\ Menu -I../../Source/Util/SharedResource -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Components/Pages/Home\ Page/AppMenu/Paged\ Menu -I../../Source/GLib/DBus -I../../Source/Components/Configurable -I../../Source/Components -I../../Source/Config\ Files/AppMenu -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source -I../../Source/GLib/LibNM -I../../Source/Components/Widgets -I../../Source/GLib -I../../Source/FreeDesktop/Desktop\ Entries -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
@@ -56,7 +56,7 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DDONT_SET_USING_JUCE_NAMESPACE=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.8.10 -DJUCE_APP_VERSION_HEX=0x80a $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/Config\ Files/Component -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source/GLib/LibNM -I../../Source/PocketCHIP -I../../Source/Components/Pages/Settings\ Pages/Settings\ List\ Page -I../../Source/Config\ Files/Colour -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Components/Widgets -I../../Source/Components/Pages/Settings\ Pages/DateTime\ Page -I../../Source/Util -I../../Source/Components/Pages/Home\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu/Scrolling\ Menu -I../../Source/FreeDesktop/Icon\ Themes -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Pages/Settings\ Pages/Input\ Settings\ Page -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/Components/Pages/Settings\ Pages/Network\ Pages -I../../Source/Components/Pages/Settings\ Pages/UI\ Page -I../../Source/FreeDesktop -I../../Source/FreeDesktop/Desktop\ Entries -I../../Source/Components/Pages/Settings\ Pages -I../../Source/Config\ Files -I../../Source/Components -I../../Source/Components/Pages/Home\ Page/AppMenu/Paged\ Menu -I../../Source/Config\ Files/Main -I../../Source/Util/SharedResource -I../../Source/Components/Configurable -I../../Source/Config\ Files/AppMenu -I../../Source/Components/Pages/Login\ Page -I../../Source/Components/Pages -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors -I../../Source -I../../Source/Wifi -I../../Source/GLib/DBus -I../../Source/Bluetooth -I../../Source/Components/Pages/Settings\ Pages/Password\ Pages -I../../Source/Components/Pages/Settings\ Pages/Quick\ Settings\ Page -I../../Source/Components/Pages/Settings\ Pages/Home\ Settings\ Page -I../../Source/GLib $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DDONT_SET_USING_JUCE_NAMESPACE=1 -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=0.0.8.10 -DJUCE_APP_VERSION_HEX=0x80a $(shell pkg-config --cflags NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 x11 xext xinerama) -pthread -I../../JuceLibraryCode -I../../deps/JUCE/modules -I../../Source/System -I../../Source/Config\ Files/Component -I../../Source/Config\ Files/Main -I../../Source/Components/Pages/Settings\ Pages/DateTime\ Page -I../../Source/Components/Pages/Settings\ Pages/Password\ Pages -I../../Source/Components/Pages/Login\ Page -I../../Source/FreeDesktop/Icon\ Themes -I../../Source/Components/Pages/Settings\ Pages/Network\ Pages -I../../Source/Components/Pages/Settings\ Pages/UI\ Page -I../../Source/Components/Pages/Settings\ Pages/Settings\ List\ Page -I../../Source/Components/Pages/Settings\ Pages/Input\ Settings\ Page -I../../Source/Bluetooth -I../../Source/Components/Pages -I../../Source/FreeDesktop -I../../Source/Util -I../../Source/Config\ Files/Colour -I../../Source/Config\ Files -I../../Source/Components/Pages/Settings\ Pages -I../../Source/Components/Pages/Power\ Page -I../../Source/Components/Pages/Home\ Page -I../../Source/Components/Pages/Settings\ Pages/Home\ Settings\ Page -I../../Source/PocketCHIP -I../../Source/Components/Pages/Settings\ Pages/Quick\ Settings\ Page -I../../Source/Wifi -I../../Source/Components/Pages/Home\ Page/AppMenu/Scrolling\ Menu -I../../Source/Util/SharedResource -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Items -I../../Source/Components/Pages/Home\ Page/AppMenu/Paged\ Menu -I../../Source/GLib/DBus -I../../Source/Components/Configurable -I../../Source/Components -I../../Source/Config\ Files/AppMenu -I../../Source/Components/Pages/Home\ Page/AppMenu -I../../Source/Components/Pages/Home\ Page/Widgets -I../../Source -I../../Source/GLib/LibNM -I../../Source/Components/Widgets -I../../Source/GLib -I../../Source/FreeDesktop/Desktop\ Entries -I../../Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0
   JUCE_TARGET_APP := pocket-home
 
@@ -68,6 +68,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/SystemCommands_9ca9c9b8.o \
   $(JUCE_OBJDIR)/BluetoothDevice_b56b2104.o \
   $(JUCE_OBJDIR)/BluetoothStatus_95a3a4a0.o \
   $(JUCE_OBJDIR)/BluezAdapter_eb8139.o \
@@ -142,7 +143,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/TransitionAnimator_716e83f6.o \
   $(JUCE_OBJDIR)/MainJSON_7d61af2a.o \
   $(JUCE_OBJDIR)/ComponentConfigFile_340680dc.o \
-  $(JUCE_OBJDIR)/ComponentConfigKeys_7ec7bd54.o \
   $(JUCE_OBJDIR)/ComponentJSON_30e8db86.o \
   $(JUCE_OBJDIR)/ComponentSettings_c82bd4e1.o \
   $(JUCE_OBJDIR)/ColourConfigFile_64de91a0.o \
@@ -185,7 +185,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/ScopedThreadReadLock_9b17abb3.o \
   $(JUCE_OBJDIR)/ThreadLock_fe58c0d.o \
   $(JUCE_OBJDIR)/SharedResource_6871b0cb.o \
-  $(JUCE_OBJDIR)/LaunchedApp_9de9080b.o \
+  $(JUCE_OBJDIR)/LaunchedProcess_f13ef2d9.o \
   $(JUCE_OBJDIR)/XWindowInterface_b020667f.o \
   $(JUCE_OBJDIR)/ProcessUtils_6fe72270.o \
   $(JUCE_OBJDIR)/AssetFiles_de972815.o \
@@ -228,6 +228,11 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
+
+$(JUCE_OBJDIR)/SystemCommands_9ca9c9b8.o: ../../Source/System/SystemCommands.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling SystemCommands.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/BluetoothDevice_b56b2104.o: ../../Source/Bluetooth/BluetoothDevice.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
@@ -599,11 +604,6 @@ $(JUCE_OBJDIR)/ComponentConfigFile_340680dc.o: ../../Source/Config\ Files/Compon
 	@echo "Compiling ComponentConfigFile.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/ComponentConfigKeys_7ec7bd54.o: ../../Source/Config\ Files/Component/ComponentConfigKeys.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ComponentConfigKeys.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/ComponentJSON_30e8db86.o: ../../Source/Config\ Files/Component/ComponentJSON.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ComponentJSON.cpp"
@@ -814,9 +814,9 @@ $(JUCE_OBJDIR)/SharedResource_6871b0cb.o: ../../Source/Util/SharedResource/Share
 	@echo "Compiling SharedResource.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/LaunchedApp_9de9080b.o: ../../Source/Util/LaunchedApp.cpp
+$(JUCE_OBJDIR)/LaunchedProcess_f13ef2d9.o: ../../Source/Util/LaunchedProcess.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling LaunchedApp.cpp"
+	@echo "Compiling LaunchedProcess.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/XWindowInterface_b020667f.o: ../../Source/Util/XWindowInterface.cpp
