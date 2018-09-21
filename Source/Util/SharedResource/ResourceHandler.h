@@ -13,7 +13,7 @@
  */
 
 template <class ResourceType>
-class ResourceHandler : private SharedResource::Handler
+class ResourceHandler : public SharedResource::Handler
 {
 protected:
     /**

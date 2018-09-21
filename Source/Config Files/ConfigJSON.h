@@ -193,7 +193,7 @@ public:
  * Receives updates whenever tracked key values are updated in a JSON
  *        configuration file.
  */
-class Listener : private SharedResource::Handler
+class Listener : public SharedResource::Handler
 {
 public:
     //Allow the ConfigJSON class access to the list of tracked keys.

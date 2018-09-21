@@ -1,136 +1,16 @@
-/*
-
-TODO: uncomment and update this after SharedResource updates compile.
-
 #include "JuceHeader.h"
+#include "SharedResource.h"
+#include "MainConfigFile.h"
 #include "ConfigFile.h"
+#include "ConfigJSON.h"
 
-//#### Integer value keys #######
-const juce::Identifier maxRowsKey = "max menu row count";
-const juce::Identifier maxColumnsKey = "max menu column count";
-//string
-const juce::Identifier menuTypeKey = "app menu type";
-const juce::Identifier shutdownCommandKey = "shutdown command";
-const juce::Identifier restartCommandKey = "restart command";
-const juce::Identifier sleepCommandKey = "sleep command";
-const juce::Identifier termLaunchCommandKey = "terminal launch command";
-const juce::Identifier backgroundKey = "background";
-const juce::Identifier wifiInterfaceKey = "Wifi interface";
-//boolean
-const juce::Identifier showCursorKey = "cursor";
-const juce::Identifier showClockKey = "show clock";
-const juce::Identifier use24HrModeKey = "use 24h mode";
-
-class TestJson : public ConfigFile
+class TestListener : public MainConfigFile::Listener
 {
-public:
-    TestJson(juce::String configPath) : ConfigFile(configPath) 
+    public:
+    TestListener() { }
+    ~TestListener() { }
+    virtual void configValueChanged(const juce::Identifier& key) override
     {
-        loadJSONData();
-    }
-    
-    const std::vector<ConfigFile::DataKey>& getDataKeys() const
-    {
-        static const std::vector<DataKey> keys =
-        {
-            {maxRowsKey, intType},
-            {maxColumnsKey, intType},
-            {backgroundKey, stringType},
-            {menuTypeKey, stringType},
-            {shutdownCommandKey, stringType},
-            {restartCommandKey, stringType},
-            {termLaunchCommandKey, stringType},
-            {wifiInterfaceKey, stringType},
-            {showCursorKey, boolType},
-            {showClockKey, boolType},
-            {use24HrModeKey, boolType}
-        };
-        return keys;
-    }
-};
-
-
-static juce::String lastValueChanged;
-class TestListener : public ConfigFile::Listener
-{
-public:
-    virtual void configValueChanged(juce::String key) override
-    {
-        lastValueChanged = key;
-    }
-};
-
-
-class TestConfigFile : public ResourceManager
-{
-public:
-    TestConfigFile(juce::String filename) : 
-            ResourceManager(testResource,configLock,
-    [this, filename]()->ResourceManager::SharedResource*
-    {
-        return new TestJson(filename);
-    }) { }
-
-    /**
-     * Gets one of the values stored in the json configuration file.
-     * 
-     * @see ConfigFile.h
-     /
-    template<typename T > T getConfigValue(juce::String key)
-    {
-        const juce::ScopedReadLock readLock(configLock);
-        TestJson* config = static_cast<TestJson*> (testResource.get());
-        return config->getConfigValue<T>(key);
-    }
-
-    /**
-     * Sets one of this ConfigFile's values, writing it to the config 
-     * file if the value has changed.  
-     * 
-     * @see ConfigFile.h
-     /
-    template<typename T>
-    void setConfigValue(juce::String key, T newValue)
-    {
-        const juce::ScopedWriteLock writeLock(configLock);
-        TestJson* config = static_cast<TestJson*> (testResource.get());
-        config->setConfigValue<T>(key, newValue);
-    }
-
- 
-    /*
-     * Add a listener to track component setting changes.
-     /
-    void addListener(TestListener& listener,
-        juce::StringArray trackedKeys)
-    {
-        using namespace juce;
-        const ScopedWriteLock writeLock(configLock);
-        TestJson* config = static_cast<TestJson*>(testResource.get());
-        config->addListener(
-                static_cast<ConfigFile::Listener*>(&listener), trackedKeys);
-    }
-
-    /*
-     * Restore a value to its default state.
-     /
-    void restoreDefaultValue(juce::String key)
-    {
-        using namespace juce;
-        const ScopedWriteLock writeLock(configLock);
-        TestJson* config = static_cast<TestJson*>(testResource.get());
-        config->restoreDefaultValue(key);
-    }
-
-    /*
-     * Restore all values to their default states.
-     /
-    void restoreDefaultValues()
-    {
-        using namespace juce;
-        const ScopedWriteLock writeLock(configLock);
-        TestJson* config = static_cast<TestJson*>(testResource.get());
-        config->restoreDefaultValues();
     }
 };
 
@@ -143,6 +23,13 @@ public:
     void runTest() override
     {
         using namespace juce;
+
+        TestListener * tl = new TestListener();
+            
+        SharedResource::Handler* h = dynamic_cast<SharedResource::Handler*>(tl);
+        expect(h != nullptr);
+
+        /*
         TestListener testListener;
 
         beginTest("File backup/ConfigFile creation");
@@ -276,8 +163,8 @@ public:
         //Restore existing config file
         expect(backup.copyFileTo(existingConfig),
 		       	"Failed to restore backup!");
+        */
     }
 };
 
 static ConfigTest test;
-*/
