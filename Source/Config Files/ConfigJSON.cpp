@@ -112,6 +112,10 @@ void ConfigJSON::notifyListeners(const juce::Identifier& key)
         {
             notifyListener(listener, key);
         }
+        else
+        {
+            DBG("Config handler is not listener!");
+        }
     });
 }
     

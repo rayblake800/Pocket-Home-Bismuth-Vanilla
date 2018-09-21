@@ -179,6 +179,8 @@ juce::String WifiSettingsComponent::updateButtonText()
  */
 void WifiSettingsComponent::wifiStateChanged(const WifiState state)
 {
+    using namespace juce;
+    DBG("Wifi state change");
     refresh();
 }
 

@@ -565,10 +565,13 @@ void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
     std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
     [this, addedAP]()
     {
-        visibleAPs.add(addedAP);
-        WifiAccessPoint newAP(addedAP);
-        setAccessPointPaths(newAP);
-        signalAPAdded(newAP);
+        if(!addedAP.isNull())
+        {
+            WifiAccessPoint newAP(addedAP);
+            visibleAPs.add(addedAP);
+            setAccessPointPaths(newAP);
+            signalAPAdded(newAP);
+        }
     });
     MessageManager::callAsync(asyncAction);
 }
@@ -585,10 +588,18 @@ void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
     std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
     [this, removedAP]()
     {
-        visibleAPs.removeAllInstancesOf(removedAP);
-        WifiAccessPoint missingAP(removedAP);
-        jassert(!missingAP.isNull());
-        signalAPRemoved(missingAP);
+        // If the access point is now null, all references to the NMAP
+        // are now clear, and it shouldn't be necessary to call
+        // signalAPRemoved.
+        if(!removedAP.isNull())
+        {
+            visibleAPs.removeAllInstancesOf(removedAP);
+            WifiAccessPoint missingAP(removedAP);
+            if(!missingAP.isNull())
+            {
+                signalAPRemoved(missingAP);
+            }
+        }
     });
     MessageManager::callAsync(asyncAction);
 }

@@ -135,17 +135,17 @@ void GSignalHandler::unsubscribeAll()
     for(auto iter = signals.begin(); iter != signals.end(); iter.next())
     {
         GObject* source = iter.getKey().getObject();
-        int count = source->ref_count;
-        jassert(source->ref_count > 1);
         if(source != nullptr)
         {
+            int count = source->ref_count;
+            jassert(source->ref_count > 1);
             for(const guint& signalID : iter.getValue())
             {
                 g_signal_handler_disconnect(source, signalID);
             }
             g_object_unref(source);
+            g_clear_object(&source);
         }
-        g_clear_object(&source);
     }
     signals.clear();
 }

@@ -206,8 +206,15 @@ void GPPObject::clearGObject()
  */
 void GPPObject::callInMainContext(std::function<void()> call) const 
 {
-    GLibSignalThread globalDefault;
-    globalDefault.gLibCall(call);
+    if(g_main_context_is_owner(g_main_context_get_thread_default()))
+    { // Already running under main context, run call immediately
+        call();
+    }
+    else
+    {
+        GLibSignalThread globalDefault;
+        globalDefault.gLibCall(call);
+    }
 }
 
 /*

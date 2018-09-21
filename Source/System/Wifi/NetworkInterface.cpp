@@ -26,8 +26,8 @@ void NetworkInterface::setWifiState(WifiState state)
     using namespace juce;
     if (state != wifiState)
     {
-        DBG("setWifiState: Setting wifi state to "
-                << wifiStateString(wifiState));
+        DBG("NetworkInterface::setWifiState: Setting wifi state to "
+                << wifiStateString(state));
         wifiState = state;
         std::function<void()> setState = buildAsyncFunction(
                 SharedResource::write, [this, state]()
