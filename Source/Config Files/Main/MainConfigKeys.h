@@ -25,17 +25,6 @@ namespace MainConfigKeys
     /* Sets the AppMenuComponent type to use on the home page. */
     static const ConfigKey menuTypeKey
         ("app menu type", ConfigKey::stringType);
-    /* Sets the command used to shut down the system on the power page. */
-    static const ConfigKey shutdownCommandKey
-        ("shutdown command", ConfigKey::stringType);
-    /* Sets the command used to restart the system on the power page. */
-    static const ConfigKey restartCommandKey
-        ("restart command", ConfigKey::stringType);
-    /* Sets the command used to turn off the display from the power page. */
-    static const ConfigKey sleepCommandKey
-        ("sleep command", ConfigKey::stringType);
-    /* Sets the string prefix to put before commands in order to launch them
-       from the terminal */
     static const ConfigKey termLaunchCommandKey
         ("terminal launch command", ConfigKey::stringType);
     /* Sets the name of the wifi interface */
