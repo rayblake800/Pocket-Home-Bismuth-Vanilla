@@ -191,6 +191,16 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
 }
 
 /*
+ * Asynchronously scans for nearby wifi access points, updating the access point
+ * list.
+ */
+void LibNMInterface::scanAccessPoints()
+{
+    wifiDevice.requestScan();
+}
+
+
+/*
  * Finds the current network state of an access point object.
  */
 AccessPointState LibNMInterface::getAPState 

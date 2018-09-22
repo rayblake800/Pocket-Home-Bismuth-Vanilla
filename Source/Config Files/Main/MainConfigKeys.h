@@ -58,11 +58,9 @@ namespace MainConfigKeys
     {
         maxRowsKey,
         maxColumnsKey,
+        wifiScanFreqKey,
         backgroundKey,
         menuTypeKey,
-        shutdownCommandKey,
-        restartCommandKey,
-        sleepCommandKey,
         termLaunchCommandKey,
         wifiInterfaceKey,
         showCursorKey,

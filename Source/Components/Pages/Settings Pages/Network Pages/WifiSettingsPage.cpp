@@ -1,5 +1,7 @@
 #include "Utils.h"
 #include "LocalizedTime.h"
+#include "MainConfigFile.h"
+#include "MainConfigKeys.h"
 #include "WifiSettingsPage.h"
 
 //Wifi signal strength icon asset files
@@ -77,9 +79,11 @@ public:
 
 WifiSettingsPage::WifiSettingsPage() :
 passwordLabel("passwordLabel", localeText(password_field)),
-Localized("WifiSettingsPage")
+Localized("WifiSettingsPage"),
+WindowFocusedTimer("WifiSettingsPage")    
 {
     using namespace juce;
+    using namespace MainConfigKeys;
 #    if JUCE_DEBUG
     setName("WifiSettingsPage");
 #    endif
@@ -91,6 +95,13 @@ Localized("WifiSettingsPage")
     connectionButton.addListener(this);
     errorLabel.setJustificationType(Justification::centred);
     loadAccessPoints();
+
+    MainConfigFile mainConfig;
+    int scanFreq = mainConfig.getConfigValue<int>(wifiScanFreqKey);
+    if(scanFreq > 0)
+    {
+        startTimer(scanFreq);
+    }
 }
 
 /*
@@ -187,11 +198,13 @@ void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
     layout.setXMarginFraction(xMarginFraction);
     layout.setYMarginFraction(yMarginFraction);
     layout.setXPaddingFraction(xPaddingFraction);
+
     jassert(apLabel != nullptr);
     jassert(apIcon != nullptr);
     jassert(lockIcon == nullptr || wifiAP.getRequiresAuth());
     jassert(!visibleAPs[index].isNull());
     jassert(visibleAPs[index].getSSID().isNotEmpty());
+
     apLabel->setText(visibleAPs[index].getSSID(),
             NotificationType::dontSendNotification);
     apLabel->setJustificationType(Justification::centred);
@@ -298,6 +311,19 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
     connectionButton.setSpinnerVisible(showButtonSpinner);
     errorLabel.setText(errorMessage, NotificationType::dontSendNotification);
 }
+
+
+/*
+ * Periodically triggers a new scan for Wifi AP updates.
+ */
+void WifiSettingsPage::timerCallback() 
+{
+    using namespace juce;
+    DBG("WifiSettingsPage::" << __func__ << ": Scanning for AP updates.");
+    WifiStateManager wifiManager;
+    wifiManager.scanAccessPoints();
+}
+
 
 /*
  * Reloads the list of wifi access points within range of the wifi device,

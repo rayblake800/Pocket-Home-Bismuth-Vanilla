@@ -127,6 +127,12 @@ protected:
     virtual bool wifiDeviceFound() = 0;
 
     /**
+     * @brief  Asynchronously scans nearby wifi access points, updating the
+     *         access point list.
+     */
+    virtual void scanAccessPoints() = 0;
+
+    /**
      * Attempts to open a connection to a wifi access point. This will fail 
      * if wifi is disabled, the access point is invalid, or the psk is 
      * wrong.

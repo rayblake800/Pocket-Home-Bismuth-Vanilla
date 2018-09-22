@@ -100,6 +100,12 @@ protected:
             juce::String psk = juce::String()) override;
 
     /**
+     * @brief  Asynchronously scans nearby wifi access points, updating the
+     *         access point list.
+     */
+    virtual void scanAccessPoints() override;
+
+    /**
      * Checks the wifi device list, connection state, and active and pending 
      * connections.
      */

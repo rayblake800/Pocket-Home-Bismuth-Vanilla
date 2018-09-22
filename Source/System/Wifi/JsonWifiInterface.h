@@ -80,6 +80,13 @@ protected:
             juce::String psk = juce::String()) override;
 
     /**
+     * @brief  Asynchronously scans nearby wifi access points, updating the
+     *         access point list. 
+     */
+    virtual void scanAccessPoints() override { }
+
+
+    /**
      * Triggers a simulated wifi disconnection event.  If a simulated connection
      * exists, after a randomized delay of no more than two seconds, a 
      * disconnection event will trigger.

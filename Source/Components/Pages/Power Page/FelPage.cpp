@@ -1,6 +1,5 @@
 #include "PokeLookAndFeel.h"
-#include "MainConfigFile.h"
-#include "MainConfigKeys.h"
+#include "SystemCommands.h"
 #include "I2CBus.h"
 #include "FelPage.h"
 
@@ -71,11 +70,9 @@ void FelPage::pageButtonClicked(juce::Button* button)
         {
             I2CBus i2c;
             i2c.enableFelMode();
-            ChildProcess c;
-            MainConfigFile config;
-            c.start(config.getConfigValue<String>
-                    (MainConfigKeys::restartCommandKey));
-            c.waitForProcessToFinish(10000);
+            SystemCommands systemCommands;
+            systemCommands.runActionCommand
+                    (SystemCommands::ActionCommand::restart);
         }
         catch (I2CBus::I2CException e)
         {

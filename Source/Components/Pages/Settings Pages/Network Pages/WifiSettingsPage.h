@@ -9,6 +9,7 @@
 #include "PageComponent.h"
 #include "PageStackComponent.h"
 #include "FocusingListPage.h"
+#include "WindowFocusedTimer.h"
 
 /**
  * @file WifiSettingsPage.h
@@ -20,7 +21,7 @@
 
 class WifiSettingsPage : public FocusingListPage,
         public WifiStateManager::Listener, public juce::TextEditor::Listener,
-private Localized
+        private Localized, private WindowFocusedTimer
 {
 public:
     WifiSettingsPage();
@@ -61,6 +62,11 @@ protected:
     override;
 
 private:
+    /**
+     * @brief  Periodically triggers a new scan for Wifi AP updates.
+     */
+    void timerCallback() override;
+
     /**
      * Reloads the list of wifi access points within range of the wifi device,
      * and updates the access point list.

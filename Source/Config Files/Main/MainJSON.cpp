@@ -7,7 +7,10 @@ const juce::Identifier MainJSON::resourceKey = "MainJSON";
 /* Filename of the JSON configuration file */
 static const constexpr char * configFilename = "config.json";
 
-MainJSON::MainJSON() : ConfigJSON(resourceKey, configFilename) { } 
+MainJSON::MainJSON() : ConfigJSON(resourceKey, configFilename) 
+{
+    loadJSONData();
+} 
 
 /*
  * Gets the set of all basic (non-array, non-object) properties tracked by
