@@ -2,12 +2,6 @@
 #include "MainConfigFile.h"
 #include "AppMenuItem.h"
 
-AppMenuItem::AppMenuItem()
-{
-    addTrackedKey(MainConfigKeys::termLaunchCommandKey);
-    loadAllConfigProperties();
-}
-
 /**
  * @return true if this menu item is an application folder.
  */
@@ -192,7 +186,11 @@ bool AppMenuItem::moveDataIndex(int offset)
  */
 juce::String AppMenuItem::getTermLaunchPrefix() const
 {
-    return termLaunchPrefix;
+
+    using namespace juce;
+    using namespace MainConfigKeys;
+    MainConfigFile mainConfig;
+    return mainConfig.getConfigValue<String>(termLaunchCommandKey);
 }
 
 /**
@@ -236,15 +234,3 @@ AppMenuItem::Ptr AppMenuItem::create
     return factoryInterface->create(appFolder);
 }
 
-/**
- * Updates the termLaunchPrefix if it's changed in configuration.
- */
-void AppMenuItem::configValueChanged(const juce::Identifier& propertyKey)
-{
-    using namespace juce;
-    if (propertyKey == MainConfigKeys::termLaunchCommandKey)
-    {
-        MainConfigFile mainConfig;
-        termLaunchPrefix = mainConfig.getConfigValue<String>(propertyKey);
-    }
-}

@@ -2,16 +2,12 @@
 
 ### Documentation
 
-    1. Update README.md, documenting all major features and improvements.
-        -Find and document all hidden dependencies, including ones met by
-         default by every PocketCHIP.
-        -List all optional dependencies.
-    2. Create a list of all code files, and use it to systematically check
+    1. Create a list of all code files, and use it to systematically check
        existing documentation.
-    3. Create a Markdown page outlining the entire project structure.
-    4. Create pages documenting each code group.
-    5. Document all config files and options.
-    6. Generate UML diagrams.
+    2. Create a Markdown page outlining the entire project structure.
+    3. Create pages documenting each code group.
+    4. Document all config files and options.
+    5. Generate UML diagrams.
         
 ## Misc. bug fixes and improvements
     -Define missing ColourId values for custom component classes.
@@ -35,8 +31,7 @@
     4. Update the HomePage wifi icon to better use new wifi features.
        1. Add a Listener interface to WifiAccessPoint objects.
        2. Have the wifi icon extend WifiAccessPoint::Listener.
-    5. Make the wifi page regularly scan for updates when open.
-    6. Add a "Forget saved connection" button to saved wifi access points.
+    5. Add a "Forget saved connection" button to saved wifi access points.
 
 ## AppMenu Improvements
 

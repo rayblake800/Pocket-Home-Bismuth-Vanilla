@@ -1,8 +1,11 @@
 #include "Utils.h"
 #include "AppMenuFolder.h"
 
-AppMenuFolder::AppMenuFolder
-(AppMenuItem::Ptr folderItem,
+/*
+ * Creates a new folder component, loading menu buttons from a folder menu item.
+ */
+AppMenuFolder::AppMenuFolder(
+        AppMenuItem::Ptr folderItem,
         MouseListener* btnListener,
         std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap) :
 sourceFolderItem(folderItem),
@@ -15,11 +18,11 @@ buttonNameMap(buttonNameMap)
 #endif
 }
 
-/**
+/*
  * Sets the button grid row and column sizes, updating button layout
  * if the values change
  */
-void AppMenuFolder::updateGridSize(int maxRows, int maxColumns)
+void AppMenuFolder::updateGridSize(const int maxRows, const int maxColumns)
 {
     if (maxRows != this->maxRows || maxColumns != this->maxColumns)
     {
@@ -31,8 +34,8 @@ void AppMenuFolder::updateGridSize(int maxRows, int maxColumns)
     }
 }
 
-/**
- * Reload all folder menu buttons from their source menu item. 
+/*
+ * Reloads all folder menu buttons from their source menu item. 
  */
 void AppMenuFolder::reload()
 {
@@ -48,10 +51,10 @@ void AppMenuFolder::reload()
     layoutButtons();
 }
 
-/**
- * Set this folder's selected menu button.
+/*
+ * Sets this folder's selected menu button.
  */
-bool AppMenuFolder::selectIndex(int index)
+bool AppMenuFolder::selectIndex(const int index)
 {
     if (validBtnIndex(index))
     {
@@ -64,7 +67,7 @@ bool AppMenuFolder::selectIndex(int index)
     return false;
 }
 
-/**
+/*
  * Deselects the selected button, if one exists.
  */
 void AppMenuFolder::deselect()

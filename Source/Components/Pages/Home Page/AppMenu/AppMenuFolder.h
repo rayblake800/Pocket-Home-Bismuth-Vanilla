@@ -5,26 +5,23 @@
 #include "AppMenuButton.h"
 
 /**
- * @file AppMenuFolder.h 
+ * @file  AppMenuFolder.h 
  * 
- * @brief AppMenuFolder components organize and manage one folder in an
- * AppMenuComponent.
+ * @brief  Displays, organizes and manages one folder in an AppMenuComponent.
  */
 
 class AppMenuFolder : public juce::Component
 {
 public:
     /**
-     * Creates a new folder component, loading menu buttons from a
-     * folder menu item.
+     * @brief  Creates a new folder component, loading menu buttons from a
+     *         folder menu item.
      * 
      * @param folderItem     Provides all menu items for this folder.
      *
-     * @param btnListener    This will be assigned to listen to all folder menu 
-     *                        buttons.
+     * @param btnListener    Listens to all folder menu buttons.
      *
-     * @param buttonNameMap  This stores all menu buttons and re-uses them
-     *                        when possible.
+     * @param buttonNameMap  Stores all menu buttons so they can be re-used.
      */
     AppMenuFolder(
             AppMenuItem::Ptr folderItem,
@@ -42,40 +39,43 @@ public:
     (AppMenuItem::Ptr menuItem) = 0;
 
     /**
-     * Sets the button grid row and column sizes, updating button layout
-     * if the values change.
+     * @brief  Sets the button grid row and column sizes, updating button layout
+     *         if the values change.
      *
      * @param maxRows     Maximum number of menu item rows to display on screen.
      *
      * @param maxColumns  Maximum number of menu item columns to display on
-     *                     screen.
+     *                    screen.
      */
-    void updateGridSize(int maxRows, int maxColumns);
+    void updateGridSize(const int maxRows, const int maxColumns);
 
     /**
-     * Reload all folder menu buttons from their source menu item.
+     * @brief  Reloads all folder menu buttons from their source menu item.
      */
     void reload();
 
-
     /**
-     * Sets this folder's selected menu button.
+     * @brief  Sets this folder's selected menu button.
      *
      * @param index  The menu button index to select.
      *
-     * @return true iff index was valid and the selection changed.
+     * @return       True if the selection changed, false if the index was
+     *               invalid or matched the current selection and no change
+     *               occurred.
      */
-    bool selectIndex(int index);
+    bool selectIndex(const int index);
 
     /**
-     * Deselects the selected button, if one exists.
+     * @brief  Deselects the selected button, if one exists.
      */
     void deselect();
 
     /**
-     * Creates or reloads a button for a menu item, inserting it into
-     * the folder at a specific index. This shifts forward any buttons at 
-     * indices equal or greater than the index. 
+     * @brief  Creates or reloads a button for a menu item, inserting it into
+     *         the folder at a specific index. 
+     *
+     * This shifts forward any buttons at indices equal or greater than the 
+     * insertion index. 
      * 
      * @param newItem  The menu item to add to a new button or find in a cached
      *                 button.

@@ -20,14 +20,13 @@
  * these to provide accurate data.
  */
 
-class AppMenuItem : public juce::ReferenceCountedObject,
-public AppConfigFile::Listener
+class AppMenuItem : public juce::ReferenceCountedObject
 {
 public:
     friend class AppMenuButton;
     typedef juce::ReferenceCountedObjectPtr<AppMenuItem> Ptr;
 
-    AppMenuItem();
+    AppMenuItem() { }
 
     virtual ~AppMenuItem() { }
 
@@ -252,21 +251,8 @@ protected:
     AppMenuItem::Ptr create(const AppFolder& appFolder) const;
 
 private:
-
-    /**
-     * Updates the termLaunchPrefix if it's changed in configuration.
-     * 
-     * @param propertyKey
-     */
-    virtual void configValueChanged(const juce::Identifier& propertyKey);
-
-
-
     //folders will have a factory interface here to create new menu items.
     FactoryInterface* factoryInterface = nullptr;
-
-    //prefix to add before commands that launch in a terminal window.
-    juce::String termLaunchPrefix;
 
     /**
      * Using a private Localized member is necessary to allow AppMenuItem

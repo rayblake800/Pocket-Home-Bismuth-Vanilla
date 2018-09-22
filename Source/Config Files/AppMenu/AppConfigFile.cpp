@@ -2,7 +2,7 @@
 #include "AppConfigFile.h"
 #include "Utils.h"
 
-/**
+/*
  * Gets the main list of application shortcuts. 
  */
 juce::Array<AppShortcut> AppConfigFile::getShortcuts()
@@ -11,27 +11,28 @@ juce::Array<AppShortcut> AppConfigFile::getShortcuts()
     return config->getShortcuts();
 }
 
-/**
- * Add a new app to the list of pinned shortcuts in the config file.
+/*
+ * Adds a new shortcut to the list of shortcuts shown in the AppMenu's main 
+ * folder.
  */
 void AppConfigFile::addShortcut
-(AppShortcut newApp, int index, bool writeChangesNow)
+(const AppShortcut& shortcut, const int index, const bool writeChangesNow)
 {
     auto config = getWriteLockedResource();
-    config->addShortcut(newApp,index,writeChangesNow);
+    config->addShortcut(shortcut,index,writeChangesNow);
 }
 
-/**
- * Remove a shortcut from the list of application shortcuts.
+/*
+ * Removes a shortcut from the list of application shortcuts.
  */
-void AppConfigFile::removeShortcut(int index, bool writeChangesNow)
+void AppConfigFile::removeShortcut(const int index, const bool writeChangesNow)
 {
     auto config = getWriteLockedResource();
     config->removeShortcut(index,writeChangesNow);
 }
 
-/**
- * Find the index of an AppShortcut in favorites.
+/*
+ * Finds the index of an application shortcut in the list.
  */
 int AppConfigFile::getShortcutIndex(const AppShortcut& toFind)
 {
@@ -39,7 +40,7 @@ int AppConfigFile::getShortcutIndex(const AppShortcut& toFind)
     return config->getShortcutIndex(toFind);
 }
 
-/**
+/*
  * Gets the list of application menu folders.
  */
 juce::Array<AppFolder> AppConfigFile::getFolders()
@@ -48,29 +49,29 @@ juce::Array<AppFolder> AppConfigFile::getFolders()
     return config->getFolders();
 }
 
-/**
- * Add a new folder to the list of AppFolders in the config file.
+/*
+ * Adds a new folder to show in the AppMenu.
  */
-void AppConfigFile::addFolder
-(AppFolder newFolder, int index, bool writeChangesNow)
+void AppConfigFile::addFolder(const AppFolder& newFolder, const int index, 
+        const bool writeChangesNow)
 {
     auto config = getWriteLockedResource();
     config->addAppFolder(newFolder,index,writeChangesNow);
 }
 
-/**
- * Remove a folder from the list of AppFolders.
+/*
+ * Removes a folder from the list of AppFolders.
  */
-void AppConfigFile::removeFolder(int index, bool writeChangesNow)
+void AppConfigFile::removeFolder(const int index, const bool writeChangesNow)
 {
     auto config = getWriteLockedResource();
     config->removeAppFolder(index,writeChangesNow);
 }
 
-/**
- * Find the index of an AppFolder in the list of folders.
+/*
+ * Finds the index of an AppFolder in the list of folders.
  */
-int AppConfigFile::getFolderIndex(AppFolder toFind)
+int AppConfigFile::getFolderIndex(const AppFolder& toFind)
 {
     auto config = getReadLockedResource();
     return config->getFolderIndex(toFind);

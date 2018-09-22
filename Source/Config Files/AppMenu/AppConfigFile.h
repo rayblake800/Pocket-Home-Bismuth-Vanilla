@@ -5,10 +5,21 @@
 /**
  * @file AppConfigFile.h
  * 
- * @brief Loads the pinned application shortcuts and folders displayed in the 
- *        AppMenuComponent.
+ * @brief  Reads and edits the list of pinned application shortcuts and folders 
+ *         displayed in the AppMenuComponent.
+ *
+ * The apps.json file contains two types of custom objects: shortcuts, and
+ * folders.  Both types provide a display name, and an icon name.  Shortcuts
+ * provide an application launch command, and folders provide a list of
+ * application categories.  Each of these objects represents a menu item in the
+ * main folder of the AppMenuComponent.
+ *
+ * AppConfigFile reads all of these custom objects, so they can be used to
+ * create the AppMenuComponent.  It also provides methods for adding, editing,
+ * and deleting shortcuts and folders, so that the user can edit the application
+ * menu from within pocket-home.
  * 
- * @see AppMenuComponent.h
+ * @see  AppMenuComponent.h
  */
 
 class AppConfigFile : public ConfigFile<AppJSON>
@@ -21,36 +32,37 @@ public:
     /**
      * @brief  Gets the main list of application shortcuts. 
      * 
-     * @return  A list of AppShortcuts to be pinned to the main folder
-     *          of the AppMenu.
+     * @return  The list of AppShortcuts shown in the main folder of the 
+     *          AppMenu.
      */
     juce::Array<AppShortcut> getShortcuts();
 
     /**
-     * @brief  Add a new app to the list of pinned shortcuts in the config file.
+     * @brief  Adds a new shortcut to the list of shortcuts shown in the 
+     *         AppMenu's main folder.
      * 
-     * @param newApp            The new application data object.
+     * @param shortcut          The new application shortcut object.
      * 
      * @param index             The position to insert the new application.
      * 
      * @param writeChangesNow   Sets if the change should be written to the 
      *                          config file immediately.
      */
-    void addShortcut
-    (AppShortcut newApp, int index, bool writeChangesNow = true);
+    void addShortcut(const AppShortcut& shortcut, const int index,
+            const bool writeChangesNow = true);
 
     /**
-     * @brief  Remove a shortcut from the list of application shortcuts.
+     * @brief  Removes a shortcut from the list of application shortcuts.
      * 
      * @param index            The position of the shortcut to remove.
      * 
      * @param writeChangesNow  Sets if the change should be written to the 
      *                         config file immediately.
      */
-    void removeShortcut(int index, bool writeChangesNow = true);
+    void removeShortcut(const int index, const bool writeChangesNow = true);
 
     /**
-     * @brief  Find the index of an application shortcut in the list.
+     * @brief  Finds the index of an application shortcut in the list.
      * 
      * @param toFind  The application shortcut to search for in the list.
      * 
@@ -68,7 +80,7 @@ public:
     juce::Array<AppFolder> getFolders();
 
     /**
-     * @brief  Add a new folder to the list of AppFolders in the config file.
+     * @brief  Adds a new folder to show in the AppMenu.
      * 
      * @param newFolder        The new application folder.
      * 
@@ -77,34 +89,25 @@ public:
      * @param writeChangesNow  Sets if the change should be written to the 
      *                         JSON config file immediately.
      */
-    void addFolder
-    (AppFolder newFolder, int index, bool writeChangesNow = true);
+    void addFolder(const AppFolder& newFolder, const int index,
+            const bool writeChangesNow = true);
 
     /**
-     * @brief  Remove a folder from the list of AppFolders.
+     * @brief  Removes a folder from the list of AppFolders.
      * 
      * @param index            The position of the folder to remove.
      * 
      * @param writeChangesNow  Sets if the change should be written to the 
      *                         config file immediately.
      */
-    void removeFolder(int index, bool writeChangesNow = true);
+    void removeFolder(const int index, const bool writeChangesNow = true);
 
     /**
-     * @brief  Find the index of an AppFolder in the list of folders.
+     * @brief  Finds the index of an AppFolder in the list of folders.
      * 
      * @param toFind   The folder to search for in the folder list.
      * 
      * @return         The index of toFind, or -1 if it isn't in the list.
      */
-    int getFolderIndex(AppFolder toFind);
-
-    class Listener : protected ConfigJSON::Listener
-    {
-    public:
-        Listener() : ConfigJSON::Listener(AppJSON::resourceKey,
-                []()->SharedResource* { return new AppJSON(); }) { }
-
-        virtual ~Listener() { }
-    };
+    int getFolderIndex(const AppFolder& toFind);
 };
