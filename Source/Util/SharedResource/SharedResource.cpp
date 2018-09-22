@@ -162,8 +162,6 @@ void SharedResource::foreachHandler
     using namespace juce;
     ScopedThreadWriteLock handlerLock(resourceLock);
     const int handlerCount = resourceHandlers.size();
-    DBG("SharedResource::" << __func__ << ": " << resourceKey.toString()
-            << " acting on " << handlerCount << " handlers.");
     for(int i = 0; i < handlerCount; i++)
     {
         //check for changes to the handler list during the loop
