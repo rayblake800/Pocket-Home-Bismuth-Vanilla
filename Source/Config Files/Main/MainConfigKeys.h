@@ -16,6 +16,10 @@ namespace MainConfigKeys
     /* Sets the maximum number of AppMenu icon columns per screen. */
     static const ConfigKey maxColumnsKey
         ("max menu column count", ConfigKey::intType);
+    /* Sets how frequently, in milliseconds, to scan for new Wifi access points
+       while the Wifi page is open. */
+    static const ConfigKey wifiScanFreqKey
+        ("Wifi AP scan frequency", ConfigKey::intType);
 
     
     //####################### String value keys: ###############################
