@@ -8,6 +8,18 @@
  * @file  AppMenuFolder.h 
  * 
  * @brief  Displays, organizes and manages one folder in an AppMenuComponent.
+ * 
+ * AppMenuFolder components take a set of AppMenuItems, create AppMenuButton
+ * components for each of them, and positions those components on the screen.
+ * The AppMenuFolder allows the user to select a single button in the menu,
+ * edit menu items, add new items to the folder, or remove items from the 
+ * folder.  AppMenuFolder also provides methods for setting menu dimensions,
+ * margin, and padding.
+ *
+ * AppMenuFolder is abstract, allowing for multiple alternate folder types.
+ * AppMenuFolder subclasses are responsible for constructing AppManuButton
+ * component objects from AppMenuItem objects, and for arranging those buttons
+ * within the folder layout.
  */
 
 class AppMenuFolder : public juce::Component
@@ -24,19 +36,21 @@ public:
      * @param buttonNameMap  Stores all menu buttons so they can be re-used.
      */
     AppMenuFolder(
-            AppMenuItem::Ptr folderItem,
-            MouseListener* btnListener,
+            const AppMenuItem::Ptr folderItem,
+            const MouseListener* btnListener,
             std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap);
 
     virtual ~AppMenuFolder() { }
 
     /**
-     * Create an AppMenuButton component for an AppMenuItem.
+     * @brief  Creates an AppMenuButton component for an AppMenuItem.
      * 
-     * @param menuItem    The menu item to assign to the new button.
+     * @param menuItem  A pointer to the menu item to assign to the new button.
+     *
+     * @return          A reference-counted pointer to the new button component.
      */
     virtual AppMenuButton::Ptr createMenuButton
-    (AppMenuItem::Ptr menuItem) = 0;
+    (const AppMenuItem::Ptr menuItem) = 0;
 
     /**
      * @brief  Sets the button grid row and column sizes, updating button layout
@@ -77,147 +91,162 @@ public:
      * This shifts forward any buttons at indices equal or greater than the 
      * insertion index. 
      * 
-     * @param newItem  The menu item to add to a new button or find in a cached
-     *                 button.
+     * @param newItem        The menu item used to find a cached button or 
+     *                       create a newbutton.
      *
-     * @param index         The new button's index, which should be between 0 
+     * @param index          The new button's index, which should be between 0 
      *                       and appFolder.size(), inclusive. Values outside of 
      *                       this range will be rounded to the nearest valid 
      *                       value.
      *
-     * @param updateLayout  If set to true, the button layout will be
+     * @param updateLayout   If set to true, the button layout will be
      *                       reloaded after the new button is inserted.  If 
      *                       inserting many buttons, it's better to set this to 
      *                       false and update the layout once at the end.
      */
-    void insertButton(AppMenuItem::Ptr newItem, int index,
-            bool updateLayout = true);
+    void insertButton(const AppMenuItem::Ptr newItem, const int index,
+            const bool updateLayout = true);
 
     /**
-     * Remove the button at a given index, shifting back any buttons
-     * at greater indices to fill the gap.
+     * @brief  Removes the button at a given index, shifting back any buttons
+     *         at greater indices to fill the gap.
      * 
      * @param index   The index to remove. This should be between 0 and 
-     *                 appFolder.size(),  inclusive, otherwise this method will 
-     *                 do nothing.
+     *                appFolder.size(),  inclusive, otherwise this method will 
+     *                do nothing.
      */
-    void removeButton(int index);
+    void removeButton(const int index);
 
     /**
-     * Swap the indices and positions of two buttons in the folder.
+     * @brief  Swaps the indices and positions of two buttons in the folder.
+     * 
      * Both indices must be valid, or nothing will happen.
      *
      * @param btnIndex1  First button index.
      *
      * @param btnIndex2  Second button index.
      */
-    void swapButtons(int btnIndex1, int btnIndex2);
+    void swapButtons(const int btnIndex1, const int btnIndex2);
 
     /**
-     * Set the relative placement of folder buttons within the folder.
+     * @brief  Sets the relative size of the folder's margins.
      * 
-     * @param margin  The space between components and the edge of the
-     *                 folder component, as a fraction of folder width.
+     * @param margin  The space between button components and the edge of the
+     *                folder component, as a fraction of folder width.
      */
-    void setMargin(float margin);
+    void setMargin(const float margin);
 
     /**
-     * Set the relative space between folder buttons.
-     * 
-     * @param margin   The space between button components and the edge of the
-     *                  folder component, as a fraction of folder width.
+     * @brief  Sets the relative space between folder buttons.
      * 
      * @param xPadding The horizontal space between folder child components, 
-     *                  as a fraction of folder width.
+     *                 as a fraction of folder width.
      * 
      * @param yPadding The vertical space between folder child components, as 
-     *                  a fraction of folder height.
+     *                 a fraction of folder height.
      */
-    void setPadding(float xPadding, float yPadding);
+    void setPadding(const float xPadding, const float yPadding);
 
 
     /**
-     * Clear folderLayout,remove all child components, reload the
-     * button layout, and re-add the layout buttons as child
-     * components at their new positions.
+     * @brief  Updates the layout of all menu buttons within the folder.
+     *
+     * This clears the folder layout, removes all child components, reloads
+     * the button layout, and re-adds the layout buttons as child components at
+     * their new positions.
      */
     void layoutButtons();
 
     /**
-     * @return number of menu buttons in the folder.
+     * @brief  Gets the number of menu buttons in the folder.
+     *
+     * @return  The number of AppMenuButton child components.
      */
     int getButtonCount() const;
 
     /**
-     * Find the index of a menu button in this folder.
+     * @brief  Finds the index of a menu button in this folder.
      * 
      * @param menuButton  A button to search for in the folder.
      * 
-     * @return the button's index, or -1 if the button is not in this
-     *          folder.
+     * @return            The button's index, or -1 if the button is not in this
+     *                    folder.
      */
-    int getButtonIndex(AppMenuButton::Ptr menuButton) const;
+    int getButtonIndex(const AppMenuButton::Ptr menuButton) const;
 
     /**
-     * Get the display name of a menu button.
+     * @brief  Gets the display name of a menu button.
      * 
-     * @param index  
+     * @param index  The index of a menu item in the folder. 
      * 
-     * @return the button title at this index, or the empty string
-     *          if index does not correspond to a menu button.
+     * @return       The button title at this index, or the empty string
+     *               if the index does not correspond to a menu button.
      */
-    juce::String getMenuButtonName(int index) const;
+    juce::String getMenuButtonName(const int index) const;
 
     /**
-     * @return the index of the selected menu button, or -1 if no button
+     * @brief  Gets the currently selected button's index in the folder.
+     *
+     * @return  The index of the selected menu button, or -1 if no button
      *          is selected.
      */
     int getSelectedIndex() const;
 
     /**
-     * @return the selected button in this folder, or nullptr if there
-     *          is no selected button.
+     * @brief  Gets the folder's selected menu button.
+     *
+     * @return   A pointer tothe selected button in this folder, or nullptr if
+     *           there is no selected button.
      */
     AppMenuButton::Ptr getSelectedButton();
 
-
     /**
-     * @return margin space between components and the edge of the
+     * @brief  Gets the folder's  relative margin size.
+     *
+     * @return  The margin space between components and the edge of the
      *          folder component, as a fraction of folder width.
      */
     float getMargin() const;
 
     /**
-     * @return horizontal space between folder child  components, as a 
-     *          fraction of folder width.
+     * @brief  Gets the folder's relative horizontal padding size.
+     *
+     * @return  The amount of horizontal space between folder child  components,
+     *          as a fraction of folder width.
      */
     float getXPadding() const;
 
     /**
-     * @return vertical space between folder child components, as a fraction of
-     *          folder height.
+     * @brief  Gets the folder's relative vertical padding size.
+     *
+     * @return  The amount ofvertical space between folder child components, as
+     *          a fraction of folder height.
      */
     float getYPadding() const;
 
     /**
-     * @return the minimum width, in pixels, needed by this folder to display 
-     *          its contents properly. By default this returns 0.
+     * @brief  Gets the folder's minimum width.
+     *
+     * @return   The minimum width, in pixels, needed by this folder to display 
+     *           its contents properly. By default this returns 0.
      */
     virtual int getMinimumWidth();
 
 protected:
     /**
-     * Reposition folder buttons when folder bounds change.
+     * @brief  Repositions folder buttons when folder bounds change.
      */
     void resized() override;
 
     /**
-     * @param index
+     * @brief  Gets the display title of a folder menu item.
+     *
+     * @param index  The index of a menu item in this folder.
      * 
-     * @return the title of the menu button at this index, or String()
-     *          if there is no button at this index.
+     * @return       The title of the menu button at this index, or the empty
+     *               string if there is no button at this index.
      */
-    juce::String getButtonTitle(int index);
+    juce::String getButtonTitle(const int index);
 
     /**
      * @return the maximum number of menu item rows to show on screen.

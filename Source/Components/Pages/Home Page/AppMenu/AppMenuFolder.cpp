@@ -5,8 +5,8 @@
  * Creates a new folder component, loading menu buttons from a folder menu item.
  */
 AppMenuFolder::AppMenuFolder(
-        AppMenuItem::Ptr folderItem,
-        MouseListener* btnListener,
+        const AppMenuItem::Ptr folderItem,
+        const MouseListener* btnListener,
         std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap) :
 sourceFolderItem(folderItem),
 btnListener(btnListener),
@@ -79,13 +79,12 @@ void AppMenuFolder::deselect()
     }
 }
 
-/**
+/*
  * Creates or reloads a button for a menu item, inserting it into
- * the folder at a specific index. This shifts forward any buttons at 
- * indices equal or greater than the index. 
+ * the folder at a specific index. 
  */
 void AppMenuFolder::insertButton
-(AppMenuItem::Ptr newItem, int index, bool updateLayout)
+(const AppMenuItem::Ptr newItem, const int index, const bool updateLayout)
 {
     using namespace juce;
     AppMenuButton::Ptr menuButton = nullptr;
@@ -125,11 +124,11 @@ void AppMenuFolder::insertButton
     }
 }
 
-/**
- * Remove the button at a given index, shifting back any buttons
+/*
+ * Removes the button at a given index, shifting back any buttons
  * at greater indices to fill the gap.
  */
-void AppMenuFolder::removeButton(int index)
+void AppMenuFolder::removeButton(const int index)
 {
     if (validBtnIndex(index))
     {
@@ -140,12 +139,10 @@ void AppMenuFolder::removeButton(int index)
     }
 }
 
-/**
- * Swap the indices and positions of two buttons in the folder.
- * Both indices must be valid, or nothing will happen.
+/*
+ * Swaps the indices and positions of two buttons in the folder.
  */
-void AppMenuFolder::swapButtons
-(int btnIndex1, int btnIndex2)
+void AppMenuFolder::swapButtons(const int btnIndex1, const int btnIndex2)
 {
     if (validBtnIndex(btnIndex1) && validBtnIndex(btnIndex2) &&
         folderButtons[btnIndex1]->moveDataIndex(btnIndex2 - btnIndex1))
@@ -165,27 +162,25 @@ void AppMenuFolder::swapButtons
     }
 }
 
-/**
- * Set the relative placement of folder buttons within the folder.
+/*
+ * Sets the relative size of the folder's margins.
  */
-void AppMenuFolder::setMargin(float margin)
+void AppMenuFolder::setMargin(const float margin)
 {
     this->margin = margin;
 }
 
-/**
- * et the relative space between folder buttons.
+/*
+ * Sets the relative space between folder buttons.
  */
-void AppMenuFolder::setPadding(float xPadding, float yPadding)
+void AppMenuFolder::setPadding(const float xPadding, const float yPadding)
 {
     this->xPadding = xPadding;
     this->yPadding = yPadding;
 }
 
-/**
- * Clear folderLayout,remove all child components, reload the
- * button layout, and re-add the layout buttons as child
- * components at their new positions.
+/*
+ * Updates the layout of all menu buttons within the folder.
  */
 void AppMenuFolder::layoutButtons()
 {
@@ -207,27 +202,27 @@ void AppMenuFolder::layoutButtons()
     }
 }
 
-/**
- * @return number of menu buttons in the folder.
+/*
+ * Gets the number of menu buttons in the folder.
  */
 int AppMenuFolder::getButtonCount() const
 {
     return folderButtons.size();
 }
 
-/**
- * Find the index of a menu button in this folder.
+/*
+ * Finds the index of a menu button in this folder.
  */
 int AppMenuFolder::getButtonIndex
-(AppMenuButton::Ptr menuButton) const
+(const AppMenuButton::Ptr menuButton) const
 {
     return folderButtons.indexOf(menuButton);
 }
 
-/**
- * Get the display name of a menu button.
+/*
+ * Gets the display name of a menu button.
  */
-juce::String AppMenuFolder::getMenuButtonName(int index) const
+juce::String AppMenuFolder::getMenuButtonName(const int index) const
 {
     using namespace juce;
     if (index < 0 || index >= folderButtons.size())
@@ -237,17 +232,16 @@ juce::String AppMenuFolder::getMenuButtonName(int index) const
     return folderButtons.getUnchecked(index)->getMenuItem()->getAppName();
 }
 
-/**
- * @return the index of the selected menu button.
+/*
+ * Gets the folder's selected menu button.
  */
 int AppMenuFolder::getSelectedIndex() const
 {
     return selectedIndex;
 }
 
-/**
- * @return the selected button in this folder, or nullptr if there
- * is no selected button.
+/*
+ * Gets the folder's  relative margin size.
  */
 AppMenuButton::Ptr AppMenuFolder::getSelectedButton()
 {
@@ -258,44 +252,40 @@ AppMenuButton::Ptr AppMenuFolder::getSelectedButton()
     return folderButtons[selectedIndex];
 }
 
-/**
- * @return margin space between components and the edge of the
- * folder component, as a fraction of folder width.
+/*
+ * Gets the folder's relative horizontal padding size.
  */
 float AppMenuFolder::getMargin() const
 {
     return margin;
 }
 
-/**
- * @return horizontal space between folder child
- * components, as a fraction of folder width.
+/*
+ * Gets the folder's relative horizontal padding size.
  */
 float AppMenuFolder::getXPadding() const
 {
     return xPadding;
 }
 
-/**
- * @return vertical space between folder child
- * components, as a fraction of folder height.
+/*
+ * Gets the folder's relative vertical padding size.
  */
 float AppMenuFolder::getYPadding() const
 {
     return yPadding;
 }
 
-/**
- * @return the minimum width, in pixels, needed by this folder to
- * display its contents properly. 
+/*
+ * Gets the folder's minimum width.
  */
 int AppMenuFolder::getMinimumWidth()
 {
     return 0;
 }
 
-/**
- * Reposition folder buttons when folder bounds change.
+/*
+ * Repositions folder buttons when folder bounds change.
  */
 void AppMenuFolder::resized()
 {
@@ -308,11 +298,10 @@ void AppMenuFolder::resized()
     folderLayout.layoutComponents(bounds);
 }
 
-/**
- * @return the title of the menu button at this index, or String::empty
- * if there is no button at this index.
+/*
+ * Gets the display title of a folder menu item.
  */
-juce::String AppMenuFolder::getButtonTitle(int index)
+juce::String AppMenuFolder::getButtonTitle(const int index)
 {
     using namespace juce;
     if (index < 0 || index >= folderButtons.size())
