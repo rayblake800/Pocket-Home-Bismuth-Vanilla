@@ -37,7 +37,7 @@ public:
      */
     AppMenuFolder(
             const AppMenuItem::Ptr folderItem,
-            const MouseListener* btnListener,
+            MouseListener* btnListener,
             std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap);
 
     virtual ~AppMenuFolder() { }
@@ -290,22 +290,22 @@ private:
         return index >= 0 && index < folderButtons.size();
     }
 
-    //Listener to assign to all button components
+    /* Listener to assign to all button components */
     juce::MouseListener* btnListener = nullptr;
-    //Reference to the AppMenuComponent's button map
+    /* Reference to the AppMenuComponent's button map */
     std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap;
-    //Holds the folder menu item used to load this folder's menu items
+    /* Holds the folder menu item used to load this folder's menu items */
     AppMenuItem::Ptr sourceFolderItem = nullptr;
-    //folder layout manager and relative spacing values.
+    /* folder layout manager and relative spacing values. */
     LayoutManager folderLayout;
     float margin = 0;
     float xPadding = 0;
     float yPadding = 0;
     int maxRows = 1;
     int maxColumns = 1;
-    //Holds all menu buttons
+    /* Holds all menu buttons */
     juce::Array<AppMenuButton::Ptr> folderButtons;
-    //Tracks selected button index
+    /* Tracks selected button index */
     int selectedIndex = -1;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuFolder)

@@ -6,7 +6,7 @@
  */
 AppMenuFolder::AppMenuFolder(
         const AppMenuItem::Ptr folderItem,
-        const MouseListener* btnListener,
+        MouseListener* btnListener,
         std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap) :
 sourceFolderItem(folderItem),
 btnListener(btnListener),
@@ -109,9 +109,9 @@ void AppMenuFolder::insertButton
     {
         menuButton->addMouseListener(btnListener, false);
     }
-    index = median<int>(0, index, getButtonCount());
-    folderButtons.insert(index, menuButton);
-    if (selectedIndex >= index)
+    int insertIndex = median<int>(0, index, getButtonCount());
+    folderButtons.insert(insertIndex, menuButton);
+    if (selectedIndex >= insertIndex)
     {
         //DBG("AppMenuFolder::" << __func__  << ": index pushed from " 
         //        << selectedIndex << " to " << (selectedIndex + 1)
