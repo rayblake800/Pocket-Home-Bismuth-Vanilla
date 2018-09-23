@@ -25,8 +25,9 @@ public:
     virtual ~AppLauncher() { }
 
     /**
-     * Assigns a function to call if loading an application fails.
-     * @param failureCallback will run if an app fails to launch.
+     * @brief  Assigns a function to call if loading an application fails.
+     * 
+     * @param failureCallback   A function to run if an app fails to launch.
      */
     void setLaunchFailureCallback(const std::function<void() > failureCallback)
     {
@@ -34,46 +35,35 @@ public:
     }
 
     /**
-     * Launch a new application, or focus its window if the application is
-     * already running
-     * 
-     * @param appTitle  The application title.
+     * @brief  Launches a new application, or focuses its window if the 
+     *         application is already running
      * 
      * @param command   The shell command that starts the application.
      */
-    void startOrFocusApp(const juce::String appTitle,
-            const juce::String command);
+    void startOrFocusApp(const juce::String& command);
 
     /**
      * @brief  Checks a string to see if it is a valid shell command.
      *
      * @param command  The command string to test.
      *
-     * @return  True iff the command string is a valid shell command.
+     * @return         True if and only if the command string is a valid shell 
+     *                 command.
      */
-    static bool testCommand(const juce::String command);
+    static bool testCommand(const juce::String& command);
 
 private:
-
     /**
-     * Start a new instance of an application process.
+     * @brief  Starts a new instance of an application process.
      * 
      * @param command   The command used to launch the process.
      * 
-     * @return   An object representing the application process.
+     * @return          An object representing the application process.
      */
-    LaunchedProcess* startApp(const juce::String command);
+    LaunchedProcess* startApp(const juce::String& command);
 
     /**
-     * Focus the window of a running application.
-     * 
-     * @param ProcessInfo  The application's process information.
-     */
-    void focusApp(LaunchedProcess* runningApp);
-    
-
-    /**
-     * Track application launch success and respond appropriately.
+     * @brief  Tracks application launch success and responds appropriately.
      */
     virtual void timerCallback() override;
 
@@ -82,22 +72,22 @@ private:
      */
     virtual void onSuspend() override;
 
-    //function to run if application launching fails
+    /* The function to run if application launching fails */
     std::function<void() > launchFailureCallback;
 
-    //holds all running processes launched by this object.
+    /* Holds all running processes launched by this object. */
     juce::OwnedArray<LaunchedProcess> runningApps;
 
-    //timer interval in milliseconds
+    /* Timer interval in milliseconds. */
     static const int timerFrequency = 2000;
 
-    //milliseconds to wait before giving up on a launch
+    /* Milliseconds to wait before giving up on a launch. */
     static const int timeout = 15000;
 
-    //last launch time from Time::getMillisecondCounter()
+    /* Last launch time from Time::getMillisecondCounter() */
     juce::uint32 lastLaunch = 0;
 
-    //Process to check up on when the timer finishes
+    /* Process to check up on when the timer finishes. */
     LaunchedProcess * timedProcess = nullptr;
 
     //localized text keys;

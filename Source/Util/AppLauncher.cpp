@@ -3,21 +3,19 @@
 #include "SystemCommands.h"
 #include "XWindowInterface.h"
 
-//Ms to wait before forcibly terminating a window focus operation.
+/* Milliseconds to wait before forcibly terminating a window focus operation. */
 static const int windowFocusTimeout = 1000;
 
-/**
- * Launch a new application, or focus its window if the application is
+/*
+ * Launches a new application, or focuses its window if the application is
  * already running
  */
-void AppLauncher::startOrFocusApp(const juce::String appTitle,
-        const juce::String command)
+void AppLauncher::startOrFocusApp(const juce::String& command)
 {
     using namespace juce;
-    DBG("AppLauncher::" << __func__ << ": title = " << appTitle
-            << ", command = " << command);
-    //before adding another process to the list, clean out any old dead ones,
-    //so they don't start piling up
+    DBG("AppLauncher::" << __func__ << ": command = " << command);
+    // Before adding another process to the list, clean out any old dead ones,
+    // so they don't start piling up.
     std::vector<LaunchedProcess*> toRemove;
     LaunchedProcess* appInstance = nullptr;
     for (LaunchedProcess* app : runningApps)
@@ -64,14 +62,14 @@ void AppLauncher::startOrFocusApp(const juce::String appTitle,
     else
     {
         DBG("AppLauncher::" << __func__
-                << ": Failed to launch " << appTitle);
+                << ": Failed to launch " << command);
     }
 }
 
 /*
  * Checks a string to see if it is a valid shell command.
  */
-bool AppLauncher::testCommand(const juce::String command)
+bool AppLauncher::testCommand(const juce::String& command)
 {
     using namespace juce;
     SystemCommands systemCommands;
@@ -80,10 +78,10 @@ bool AppLauncher::testCommand(const juce::String command)
 }
 
 
-/**
- * Start a new instance of an application process
+/*
+ * Starts a new instance of an application process
  */
-LaunchedProcess* AppLauncher::startApp(const juce::String command)
+LaunchedProcess* AppLauncher::startApp(const juce::String& command)
 {
     using namespace juce;
     DBG("AppsPageComponent::startApp - " << command);
@@ -105,6 +103,9 @@ LaunchedProcess* AppLauncher::startApp(const juce::String command)
     return newApp;
 }
 
+/*
+ * Tracks application launch success and responds appropriately.
+ */
 void AppLauncher::timerCallback()
 {
     using namespace juce;
@@ -112,8 +113,8 @@ void AppLauncher::timerCallback()
     {
         if (timedProcess->isRunning())
         {
-            //if the process is still going and we have yet to reach timeout,
-            //wait longer
+            // If the process is still going and we have yet to reach timeout,
+            // wait longer.
             if (juce::Time::getMillisecondCounter() - lastLaunch < timeout)
             {
                 return;
