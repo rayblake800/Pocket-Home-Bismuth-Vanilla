@@ -8,6 +8,15 @@
  *
  * @brief  Reads application menu settings from the apps.json configuration 
  *         file.
+ *
+ * AppJSON defines the class of the singleton SharedResource object that
+ * accesses apps.json, the configuration file where application menu settings
+ * are stored.  It reads in the JSON data used to create AppShortcut and
+ * AppFolder objects, and writes any changes to those objects back to apps.json
+ * as JSON data.  Only AppConfigFile objects are allowed to access the AppJSON
+ * object.
+ *
+ * @see AppConfigFile.h
  */
 
 class AppJSON : public ConfigJSON
@@ -26,7 +35,7 @@ public:
      * @return  A list of shortcuts to be pinned to the main column 
      *          of the AppMenu.
      */
-    juce::Array<AppShortcut> getShortcuts();
+    juce::Array<AppShortcut> getShortcuts() const;
 
     /**
      * @brief  Adds a new shortcut to the list of pinned application shortcuts.
@@ -38,7 +47,8 @@ public:
      * @param writeChangesNow  Iff true, immediately write changes to the JSON
      *                         file.
      */
-    void addShortcut(AppShortcut newApp, int index, bool writeChangesNow);
+    void addShortcut(const AppShortcut& newShortcut, const int index,
+            const bool writeChangesNow);
 
     /**
      * @brief  Removes a shortcut from the list of application shortcuts.
@@ -49,23 +59,24 @@ public:
      * @param writeChangesNow   Iff true, immediately write changes to the JSON
      *                          file.
      */
-    void removeShortcut(int index, bool writeChangesNow);
+    void removeShortcut(const int index, const bool writeChangesNow);
 
     /**
      * @brief  Finds the index of an application shortcut in the list.
      * 
      * @param toFind  The application shortcut to search for in the list.
      *
-     * @return  The index of toFind, or -1 if it was not found in the list.
+     * @return        The index of toFind, or -1 if it was not found in the 
+     *                list.
      */
-    int getShortcutIndex(const AppShortcut& toFind);
+    int getShortcutIndex(const AppShortcut& toFind) const;
 
     /**
      * @brief   Gets the list of application folders.
      *
      * @return  A list of folders to display in the AppMenu.
      */
-    juce::Array<AppFolder> getFolders();
+    juce::Array<AppFolder> getFolders() const;
 
     /**
      * @brief  Adds a new folder to the list of application folders.
@@ -78,7 +89,7 @@ public:
      *                         JSON configuration file.
      */
     void addAppFolder
-    (const AppFolder& newFolder, int index, bool writeChangesNow);
+    (const AppFolder& newFolder, const int index, const bool writeChangesNow);
 
     /**
      * @brief  Removes a folder from the list of application folders.
@@ -88,7 +99,7 @@ public:
      * @param writeChangesNow  Iff true, immediately write changes to the JSON
      *                         configuration file.
      */
-    void removeAppFolder(int index, bool writeChangesNow = true);
+    void removeAppFolder(const int index, const bool writeChangesNow = true);
 
     /**
      * @brief   Finds the index of an AppFolder in the list of folders.
@@ -97,7 +108,7 @@ public:
      *
      * @return  The index of the folder object, or -1 if it was not found.
      */
-    int getFolderIndex(const AppFolder& toFind);
+    int getFolderIndex(const AppFolder& toFind) const;
 
     private:
     /**
@@ -123,6 +134,6 @@ public:
     juce::Array<AppShortcut> shortcuts;
 
     /* Stores application folders */
-    juce::Array<AppFolder> categoryFolders;
+    juce::Array<AppFolder> folders;
 };
 

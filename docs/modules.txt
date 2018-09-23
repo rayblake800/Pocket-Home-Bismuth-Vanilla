@@ -3,8 +3,8 @@ complete.
 
 X AccessPointState
 X AppConfigFile
-AppFolder
-AppJSON
+X AppFolder
+X AppJSON
 AppLauncher
 AppMenuButton
 AppMenuComponent
