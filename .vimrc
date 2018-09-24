@@ -68,4 +68,5 @@ noremap <F4> :! make debug<cr>
 noremap <F5> :!pocket-home<cr>
 noremap <F6> :ConqueGdb pocket-home<cr>
 noremap <F7> :Dox<cr>
+noremap <F8> :tabnew<cr>
 map <F11> :set invnumber<cr>
