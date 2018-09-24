@@ -18,18 +18,17 @@ class AppLauncher : public WindowFocusedTimer, private Localized
 public:
     AppLauncher() : WindowFocusedTimer("AppLauncher"),
     Localized("AppLauncher"),
-    launchFailureCallback([]()
-    {
-    }) { }
+    launchFailureCallback([](){}) { }
 
     virtual ~AppLauncher() { }
 
     /**
-     * @brief  Assigns a function to call if loading an application fails.
+     * @brief  Assigns a function to call if launching an application fails.
      * 
-     * @param failureCallback   A function to run if an app fails to launch.
+     * @param failureCallback   A function to run if an application fails to 
+     *                          launch.
      */
-    void setLaunchFailureCallback(const std::function<void() > failureCallback)
+    void setLaunchFailureCallback(const std::function<void()> failureCallback)
     {
         launchFailureCallback = failureCallback;
     }
@@ -55,42 +54,38 @@ public:
 private:
     /**
      * @brief  Starts a new instance of an application process.
+     *
+     * If the launch command is invalid, the user will be shown a 
+     * juce::AlertWindow containing an error message.
      * 
      * @param command   The command used to launch the process.
      * 
-     * @return          An object representing the application process.
+     * @return          A pointer to the object representing the application 
+     *                  process, or nullptr if the command was invalid.
      */
     LaunchedProcess* startApp(const juce::String& command);
 
     /**
-     * @brief  Tracks application launch success and responds appropriately.
+     * @brief  Checks if the last launched application started successfully, 
+     *         and displays an error message if the application process died.
      */
     virtual void timerCallback() override;
 
     /**
-     * Stop process tracking if window focus changes and the timer is suspended.
+     * @brief  Cancels pending checks on the last launched application if the
+     *         pocket-home window loses focus.
      */
     virtual void onSuspend() override;
 
     /* The function to run if application launching fails */
-    std::function<void() > launchFailureCallback;
+    std::function<void()> launchFailureCallback;
 
-    /* Holds all running processes launched by this object. */
+    /* Holds all running process objects created by the AppLauncher. */
     juce::OwnedArray<LaunchedProcess> runningApps;
 
-    /* Timer interval in milliseconds. */
-    static const int timerFrequency = 2000;
-
-    /* Milliseconds to wait before giving up on a launch. */
-    static const int timeout = 15000;
-
-    /* Last launch time from Time::getMillisecondCounter() */
+    /* Last application launch time from Time::getMillisecondCounter() */
     juce::uint32 lastLaunch = 0;
 
     /* Process to check up on when the timer finishes. */
     LaunchedProcess * timedProcess = nullptr;
-
-    //localized text keys;
-    static const constexpr char * could_not_open = "could_not_open";
-    static const constexpr char * not_valid_command = "not_valid_command";
 };

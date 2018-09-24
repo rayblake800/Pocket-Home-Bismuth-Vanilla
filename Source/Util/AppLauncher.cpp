@@ -3,8 +3,19 @@
 #include "SystemCommands.h"
 #include "XWindowInterface.h"
 
+/* Timer interval in milliseconds. */
+static const int timerFrequency = 2000;
+
 /* Milliseconds to wait before forcibly terminating a window focus operation. */
 static const int windowFocusTimeout = 1000;
+
+/* Milliseconds to wait before assuming the last application launch 
+   failed. */
+static const int pendingLaunchTimeout = 15000;
+
+/* Localized text keys: */
+static const constexpr char * could_not_open = "could_not_open";
+static const constexpr char * not_valid_command = "not_valid_command";
 
 /*
  * Launches a new application, or focuses its window if the application is
@@ -104,7 +115,8 @@ LaunchedProcess* AppLauncher::startApp(const juce::String& command)
 }
 
 /*
- * Tracks application launch success and responds appropriately.
+ * Checks if the last launched application started successfully, and displays an
+ * error message if the application process died.
  */
 void AppLauncher::timerCallback()
 {
@@ -115,13 +127,16 @@ void AppLauncher::timerCallback()
         {
             // If the process is still going and we have yet to reach timeout,
             // wait longer.
-            if (juce::Time::getMillisecondCounter() - lastLaunch < timeout)
+            if (juce::Time::getMillisecondCounter() - lastLaunch 
+                    < pendingLaunchTimeout)
             {
                 return;
             }
             else
             {
-                DBG("AppLauncher::" << __func__ << ": launch timed out");
+                DBG("AppLauncher::" << __func__ << ": Process \""
+                        << timedProcess->getLaunchCommand()
+                        << "\" launch timed out");
             }
         }
         else
@@ -146,8 +161,9 @@ void AppLauncher::timerCallback()
 
 }
 
-/**
- * Stop process tracking if window focus changes and the timer is suspended.
+/*
+ * Cancels pending checks on the last launched application if the pocket-home
+ * window loses focus.
  */
 void AppLauncher::onSuspend()
 {
