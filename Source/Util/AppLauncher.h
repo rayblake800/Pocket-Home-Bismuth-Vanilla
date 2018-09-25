@@ -11,6 +11,10 @@
  * 
  * @brief Launches and tracks new application processes, automatically
  *        switching window focus to the launched application.
+ *
+ * AppLauncher is responsible for launching and managing independant windowed 
+ * applications.  It runs application launch commands in new child processes,
+ * monitoring them so that any errors can be handled appropriately.
  */
 
 class AppLauncher : public WindowFocusedTimer, private Localized
