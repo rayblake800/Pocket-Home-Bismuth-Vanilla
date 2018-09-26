@@ -651,8 +651,7 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
             setLoadingState(true);
             loadingSpinner.setLoadingText(String("Launching ")
                     + buttonItem->getAppName());
-            appLauncher.startOrFocusApp(buttonItem->getAppName(),
-                    buttonItem->getCommand());
+            appLauncher.startOrFocusApp(buttonItem->getCommand());
         }
 
     }

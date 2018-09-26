@@ -14,7 +14,23 @@
  *
  * AppLauncher is responsible for launching and managing independant windowed 
  * applications.  It runs application launch commands in new child processes,
- * monitoring them so that any errors can be handled appropriately.
+ * monitoring them so that any errors can be handled appropriately.  
+ *
+ * AppLauncher attempts to avoid creating multiple processes simultaneously
+ * running the same command.  When given a launch command, if AppLauncher
+ * already created a process with that command, and that process is still
+ * running, AppLauncher will attempt to find and focus an application window
+ * belonging to that process, rather than creating a new process.
+ *
+ * If AppLauncher is given an invalid launch command, or the launched process
+ * dies before it gains window focus while still within a launch timeout period,
+ * the launch is considered a failure.  If a callback function was set using
+ * setLaunchFailureCallback, that callback function will run once each time an
+ * application launch fails.  If the launch fails because the launch command was
+ * invalid, an AlertWindow will also be created to explain the failure to the
+ * user.
+ *
+ * TODO: Read timeout periods from a ConfigFile.
  */
 
 class AppLauncher : public WindowFocusedTimer, private Localized
