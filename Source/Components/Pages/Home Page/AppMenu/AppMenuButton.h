@@ -4,14 +4,14 @@
 #include "AppMenuItem.h"
 
 /** 
- * @file AppMenuButton.h
+ * @file  AppMenuButton.h
  * 
- * @brief AppMenuButton is a custom button type for launching applications and 
- * opening application directories. 
+ * @brief  A custom button type used for launching applications and opening 
+ *         application directories. 
  * 
- * Each button displays an icon and a title.
  * Each button has an associated AppMenuItem that can be used for accessing and 
- * modifying the button's menu data.  
+ * modifying the button's menu data.  This is used to load a button icon, set
+ * a button title, and define how the button acts when clicked.
  * 
  * @see AppMenuComponent, AppMenuItem
  */
@@ -30,169 +30,165 @@ public:
     };
 
     /**
-     * Create a new AppMenuButton component for a menu item.
+     * @brief  Creates a new AppMenuButton component for a menu item.
      *
-     * @param menuItem    This is set as the button's menu data source.
-     *
-     * @param name        Sets the button's internal component name.
+     * @param menuItem    The new button's menu data source.
      */
-    AppMenuButton(AppMenuItem::Ptr menuItem, 
-            juce::String name = juce::String());
+    AppMenuButton(AppMenuItem::Ptr menuItem);
 
     virtual ~AppMenuButton() { }
 
     /**
-     * Get this button's menu data.
+     * @brief   Gets this button's menu data.
      * 
-     * @return  A pointer to this button's internal AppMenuItem.  This pointer
-     *          will be valid as long as this AppMenuButton still exists.
+     * @return  A pointer to this button's internal AppMenuItem.
      */
     AppMenuItem::Ptr getMenuItem();
 
 
     /**
-     * Gets a PopupEditorComponent configured to edit this button's data.
+     * @brief  Gets a PopupEditorComponent configured to edit this button's 
+     *         data.
      *
      * @param onConfirm  A callback function that will run if changes are made 
      *                   and confirmed in the new editor.  This should be used
-     *                   for updating button properties that aren't managed 
-     *                   internally (e.g., button icon, but not button bounds).
+     *                   for updating button properties that are defined by its
+     *                   AppMenuItem.
      *
-     * @return  A new PopupEditorComponent, ready to be added to the screen.
+     * @return           A new PopupEditorComponent, ready to be added to the 
+     *                   screen.
      */
     AppMenuPopupEditor* getEditor
     (const std::function<void(AppMenuPopupEditor*) >& onConfirm);
 
     /**
-     * Calling this method will create a message box asking for user 
-     * confirmation that this button and its source should be removed.
-     * If the user clicks "OK", removeButtonSource is called.
+     * @brief  Attempts to move this button's index 
      *
-     * @param onRemove  A callback function that is responsible for removing
-     *                  his button from its parent if the user clicks "OK".
+     * @param offset
+     *
+     * @return 
+     */
+    bool moveDataIndex(const int offset); 
+
+    /**
+     * @brief  Displays a confirmation window to the user requesting permission
+     *         to delete this button, and runs a deletion callback function if 
+     *         they confirm.
+     *
+     * @param onRemove  The callback function to run if the user clicks "OK".
+     *                  This should remove the button from its parent component,
+     *                  and delete the button's menu item data from its source.
      */
     void confirmRemoveButtonSource(const std::function<void() >& onRemove);
 
     /**
-     * If possible, change the index of this button's data source by some
-     * offset amount.
-     *
-     * @param offset  This will be added to the button's current index, if 
-     *                possible.
-     *
-     * @return  True iff the operation succeeded.
-     */
-    virtual bool moveDataIndex(int offset);
-
-    /**
-     * Checks if this button is currently selected.
+     * @brief Checks if this button is currently selected.
      * 
-     * @return  True iff this button is selected.
+     * @return  True if and only if this button is selected.
      */
     bool isSelected() const;
 
     /**
-     * Select or un-select this button.
+     * @brief  Selects or un-selects this button.
      *
      * @param select   Sets the button as selected if true and unselected if
      *                 false.
      */
     void setSelected(bool select);
-protected:
 
+protected:
     /**
-     * Triggers whenever the button is selected or unselected.
+     * @brief  Triggers whenever the button is selected or unselected.
      */
     virtual void selectionStateChanged() { }
 
     /**
-     * Requests an icon from the icon thread.
+     * @brief  Requests an icon from the icon thread.
      *
      * @param icon   An icon's full path, or the name of an icon file located
      *               in common icon directories.
      */
-    void loadIcon(juce::String icon);
-
+    void loadIcon(const juce::String& icon);
 
     /**
-     * Reload this button's data from its menu item.
+     * @brief  Reloads this button's data from its menu item.
      */
     virtual void reloadDataFromSource();
 
     /**
-     * Gets the button's text bounds.
+     * @brief  Gets the button's title bounds.
      *
      * @return   The area relative to this button's position where
-     *           it will draw its name.
+     *           it will draw its title.
      */
-    const juce::Rectangle<float>& getTextBounds() const;
+    const juce::Rectangle<float>& getTitleBounds() const;
 
     /**
-     * Gets the button's image bounds.
+     * @brief  Gets the button's icon bounds.
      *
      * @return   The area relative to this button's position where
-     *           it will draw its image.
+     *           it will draw its icon.
      */
-    const juce::Rectangle<float>& getImageBounds() const;
+    const juce::Rectangle<float>& getIconBounds() const;
 
     /**
-     * Gets the button's title font.
+     * @brief  Gets the button's title font.
      *
      * @return  The font used to draw this button's title.
      */
     const juce::Font& getTitleFont() const;
 
     /**
-     * Set new bounds to draw the button title within.
+     * @brief  Sets the bounds of the button's title.
      *
      * @param textBounds  The area relative to this button's position where
-     *                    it will draw its name.
+     *                    it will draw its title.
      */
-    void setTextBounds(const juce::Rectangle<float>& bounds);
+    void setTitleBounds(const juce::Rectangle<float>& bounds);
 
     /**
-     * Set new bounds to draw the button icon within.
+     * @brief  Sets the bounds of the button's icon.
      *
      * @param bounds  The area relative to this button's position where
      *                it will draw its icon.
      */
-    void setImageBounds(const juce::Rectangle<float>& bounds);
+    void setIconBounds(const juce::Rectangle<float>& bounds);
 
     /**
      * Sets if this button will draw an outline around its border.
      *
-     * @param shouldDraw   True iff the outline should be drawn.
+     * @param shouldDraw   True if and only if the outline should be drawn.
      */
-    void setDrawBorder(bool shouldDraw);
+    void setDrawBorder(const bool shouldDraw);
 
     /**
-     * Sets if this button will fill in its background with its background
-     * color.
+     * @brief  Sets if this button will fill in its background with its 
+     *         background color.
      * 
      * @param shouldFill  True to fill in the entire background, false to just
      *                    fill in the area behind the button text.
      */
-    void setFillBackground(bool shouldFill);
+    void setFillBackground(const bool shouldFill);
 
 
     /**
-     * Sets the button's title font.
+     * @brief  Sets the button's title font.
      *
      * @param font   The font used to draw this button's title.
      */
     void setTitleFont(const juce::Font& font);
 
     /**
-     * Set the text justification of the button title.
+     * Sets the text justification of the button title.
      *
      * @param justification  This will be used to position button title within
      *                       the text bounds.
      */
-    void setTextJustification(juce::Justification justification);
+    void setTextJustification(const juce::Justification justification);
 
 private:
     /**
-     * Custom button painting method to be called by juce library code.
+     * @brief  Custom button painting method called by juce library code.
      * 
      * @param g                   Used for performing graphics operation.
      *
@@ -205,24 +201,25 @@ private:
     void paintButton
     (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown);
 
-    //Icon image to draw
+    /* Icon image to draw: */
     juce::Image appIcon;
 
-    //bounds used to position and scale the button title and icon
-    juce::Rectangle<float> textBounds;
-    juce::Rectangle<float> imageBounds;
+    /* Bounds used to position and scale the button title and icon: */
+    juce::Rectangle<float> titleBounds;
+    juce::Rectangle<float> iconBounds;
     
-    //title font and justification
+    /* Title font and justification: */
     juce::Font titleFont;
     juce::Justification textJustification = juce::Justification::centredLeft;
     
-    //Pre-calculated text width
+    /* Pre-calculated text width */
     int textWidth;
-    //background draw options
+
+    /* Background drawing options: */
     bool fillBackground = true;
     bool drawBorder = true;
     
-    //Menu item data object
+    /* Menu item data object */
     AppMenuItem::Ptr menuItem;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuButton)

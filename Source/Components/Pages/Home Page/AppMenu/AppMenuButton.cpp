@@ -4,25 +4,35 @@
 #include "AppMenuButton.h"
 #include "MainConfigKeys.h"
 
-AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem, juce::String name) :
-Button(name),
+/* Extra characters applied when calculating title width, defining title padding
+   space relative to the font size. */
+static const constexpr char* titleBuffer = "     ";
+
+/*
+ * Creates a new AppMenuButton component for a menu item.
+ */
+AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem) :
+Button("AppMenuButton"),
 menuItem(menuItem)
 {
-
-    setName(name);
+    using namespace juce;
+#ifdef JUCE_DEBUG
+    setName(String("AppMenuButton:") + menuItem->getAppName());
+#endif
     setWantsKeyboardFocus(false);
-    textWidth = titleFont.getStringWidth(getMenuItem()->getAppName() + "    ");
+    textWidth = titleFont.getStringWidth(getMenuItem()->getAppName() 
+            + titleBuffer);
 }
 
-/**
- * Get this button's menu data.
+/*
+ * Gets this button's menu data.
  */
 AppMenuItem::Ptr AppMenuButton::getMenuItem()
 {
     return menuItem;
 }
 
-/**
+/*
  * Gets a PopupEditorComponent configured to edit this button's data
  */
 AppMenuPopupEditor* AppMenuButton::getEditor
@@ -56,10 +66,9 @@ AppMenuPopupEditor* AppMenuButton::getEditor
     return editor;
 };
 
-/**
- * Calling this method will create a message box asking for user 
- * confirmation that this button and its source should be removed.
- * If the user clicks "OK", removeButtonSource is called.
+/*
+ * Displays a confirmation window to the user requesting permission to delete 
+ * this button, and runs a deletion callback function if they confirm.
  */
 void AppMenuButton::confirmRemoveButtonSource
 (const std::function<void() >& onRemove)
@@ -73,26 +82,16 @@ void AppMenuButton::confirmRemoveButtonSource
             });
 }
 
-/**
- * If possible, change the index of this button's data source by some
- * offset amount.
- */
-bool AppMenuButton::moveDataIndex(int offset)
-{
-    return menuItem->moveDataIndex(offset);
-}
-
-/**
- * @return true if this button is selected, false otherwise.
+/*
+ * Checks if this button is currently selected.
  */
 bool AppMenuButton::isSelected() const
 {
     return getToggleState();
 }
 
-/**
- * @param select sets the button as selected if true and unselected if
- * false.
+/*
+ * Selects or un-selects this button.
  */
 void AppMenuButton::setSelected(bool select)
 {
@@ -101,14 +100,14 @@ void AppMenuButton::setSelected(bool select)
     selectionStateChanged();
 }
 
-/**
+/*
  * Requests an icon from the icon thread.
  */
-void AppMenuButton::loadIcon(juce::String icon)
+void AppMenuButton::loadIcon(const juce::String& icon)
 {
     using namespace juce;
     IconLoader iconThread;
-    iconThread.loadIcon(icon, imageBounds.toNearestInt().getWidth(),
+    iconThread.loadIcon(icon, iconBounds.toNearestInt().getWidth(),
     [this](Image iconImg)
     {
         appIcon = iconImg;
@@ -116,106 +115,104 @@ void AppMenuButton::loadIcon(juce::String icon)
     });
 }
 
-/**
- * Reload this button's data from its menu item
+/*
+ * Reloads this button's data from its menu item.
  */
 void AppMenuButton::reloadDataFromSource()
 {
     loadIcon(menuItem->getIconName());
 }
 
-/**
- * @return  the area relative to this button's position where
- *           it will draw its name.
+/*
+ * Gets the button's title bounds.
  */
-const juce::Rectangle<float>& AppMenuButton::getTextBounds() const
+const juce::Rectangle<float>& AppMenuButton::getTitleBounds() const
 {
-    return textBounds;
+    return titleBounds;
 }
 
-/**
- * @return  the area relative to this button's position where
- *           it will draw its image.
+/*
+ * Gets the button's image bounds.
  */
-const juce::Rectangle<float>& AppMenuButton::getImageBounds() const
+const juce::Rectangle<float>& AppMenuButton::getIconBounds() const
 {
-    return imageBounds;
+    return iconBounds;
 }
 
-/**
- * @return the font used to draw this button's title.
+/*
+ * Gets the button's title font.
  */
 const juce::Font& AppMenuButton::getTitleFont() const
 {
     return titleFont;
 }
 
-/**
- * Set new bounds to draw the button title within.
+/*
+ * Sets the bounds of the button's title.
  */
-void AppMenuButton::setTextBounds(const juce::Rectangle<float>& bounds)
+void AppMenuButton::setTitleBounds(const juce::Rectangle<float>& bounds)
 {
-    textBounds = bounds;
+    titleBounds = bounds;
     textWidth = std::min((int) bounds.getWidth(),
             titleFont.getStringWidth(getMenuItem()->getAppName() + "    "));
 }
 
-/**
- * Set new bounds to draw the button icon within.
+/*
+ * Sets the bounds of the button's icon.
  */
-void AppMenuButton::setImageBounds(const juce::Rectangle<float>& bounds)
+void AppMenuButton::setIconBounds(const juce::Rectangle<float>& bounds)
 {
-    imageBounds = bounds;
+    iconBounds = bounds;
     if(appIcon.isNull())
     {
         loadIcon(menuItem->getIconName());
     }
 }
 
-/**
+/*
  * Sets if this button will draw an outline around its border.
  */
-void AppMenuButton::setDrawBorder(bool shouldDraw)
+void AppMenuButton::setDrawBorder(const bool shouldDraw)
 {
     drawBorder = shouldDraw;
 }
 
-/**
- * Sets if this button will fill in its background with its background
- * color.
+/*
+ * Sets if this button will fill in its background with its background color.
  */
-void AppMenuButton::setFillBackground(bool shouldFill)
+void AppMenuButton::setFillBackground(const bool shouldFill)
 {
     fillBackground = shouldFill;
 }
 
-/**
+/*
  * Sets the button's title font.
  */
 void AppMenuButton::setTitleFont(const juce::Font& font)
 {
     titleFont = font;
-    textWidth = std::min((int) textBounds.getWidth(),
-            font.getStringWidth(getMenuItem()->getAppName() + "    "));
+    textWidth = std::min((int) titleBounds.getWidth(),
+            font.getStringWidth(getMenuItem()->getAppName() + titleBuffer));
 }
 
-/**
- * Set the text justification of the button title.
+/*
+ * Sets the text justification of the button title.
  */
-void AppMenuButton::setTextJustification(juce::Justification justification)
+void AppMenuButton::setTextJustification
+(const juce::Justification justification)
 {
     textJustification = justification;
 }
 
-/**
- * Custom button painting method.
+/*
+ * Custom button painting method called by juce library code.
  */
 void AppMenuButton::paintButton
 (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
     using namespace juce;
     Rectangle<int> border = getLocalBounds();
-    if ((imageBounds.isEmpty() || textBounds.isEmpty()) && !border.isEmpty())
+    if ((iconBounds.isEmpty() || titleBounds.isEmpty()) && !border.isEmpty())
     {
         resized();
     }
@@ -227,19 +224,19 @@ void AppMenuButton::paintButton
     }
     else
     {
-        Rectangle<float> textOval = textBounds.withSizeKeepingCentre
-                (textWidth, textBounds.getHeight());
+        Rectangle<float> textOval = titleBounds.withSizeKeepingCentre
+                (textWidth, titleBounds.getHeight());
         g.fillRoundedRectangle(textOval, textOval.getHeight() / 6);
     }
-    //app icon
+    // Draw icon:
     g.setOpacity(1);
-    g.drawImageWithin(appIcon, imageBounds.getX(), imageBounds.getY(),
-            imageBounds.getWidth(), imageBounds.getHeight(),
+    g.drawImageWithin(appIcon, iconBounds.getX(), iconBounds.getY(),
+            iconBounds.getWidth(), iconBounds.getHeight(),
             RectanglePlacement::xMid | RectanglePlacement::yTop, false);
-    //app title
+    // Draw title:
     g.setColour(findColour(textColourId));
     g.setFont(titleFont);
-    g.drawText(getMenuItem()->getAppName(), textBounds, textJustification,
+    g.drawText(getMenuItem()->getAppName(), titleBounds, textJustification,
             true);
     if (drawBorder)
     {

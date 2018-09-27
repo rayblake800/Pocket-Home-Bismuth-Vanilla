@@ -1,6 +1,5 @@
 #pragma once
-#include "AppShortcut.h"
-#include "AppFolder.h"
+#include "ConfigItemData.h"
 #include "ConfigJSON.h"
 
 /**

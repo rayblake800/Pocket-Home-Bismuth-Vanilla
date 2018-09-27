@@ -5,7 +5,7 @@ X AccessPointState
 X AppConfigFile
 X AppFolder
 X AppJSON
-AppLauncher
+X AppLauncher
 AppMenuButton
 AppMenuComponent
 AppMenuFolder

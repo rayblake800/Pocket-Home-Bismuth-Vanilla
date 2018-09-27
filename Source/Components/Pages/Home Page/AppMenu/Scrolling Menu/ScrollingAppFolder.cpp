@@ -69,7 +69,7 @@ juce::Font ScrollingAppFolder::getButtonFont()
 
 ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton
 (AppMenuItem* menuItem, juce::String name) :
-AppMenuButton(menuItem, name)
+AppMenuButton(menuItem)
 {
     using namespace juce;
     setTitleFont(ScrollingAppFolder::getButtonFont());
@@ -108,6 +108,6 @@ void ScrollingAppFolder::ScrollingMenuButton::resized()
         imageBounds.setRight(textBounds.getX());
     }
     imageBounds.reduce(padding, padding);
-    setImageBounds(imageBounds);
-    setTextBounds(textBounds);
+    setIconBounds(imageBounds);
+    setTitleBounds(textBounds);
 }

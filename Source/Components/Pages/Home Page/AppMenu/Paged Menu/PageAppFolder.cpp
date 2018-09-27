@@ -258,7 +258,7 @@ void PageAppFolder::resized()
 
 PageAppFolder::PageMenuButton::PageMenuButton
 (AppMenuItem::Ptr menuItem, juce::String name) :
-AppMenuButton(menuItem, name)
+AppMenuButton(menuItem)
 {
     setFillBackground(false);
     setDrawBorder(false);
@@ -293,8 +293,8 @@ void PageAppFolder::PageMenuButton::resized()
         setTitleFont(titleFont.withHeight(textHeight));
     }
 
-    setTextBounds(textBounds);
-    setImageBounds(imageBounds);
+    setTitleBounds(textBounds);
+    setIconBounds(imageBounds);
 }
 
 /**

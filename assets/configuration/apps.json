@@ -1,27 +1,22 @@
 {
-    "shortcuts": [
+    "menu":
+    [
         {
             "name": "Terminal",
             "icon": "terminal",
-            "shell": "vala-terminal -fs 8 -g 20 20",
+            "command": "vala-terminal -fs 8 -g 20 20",
             "launch in terminal": false
         },
         {
             "name": "Play PICO-8",
             "icon": "pico8",
-            "shell": "pico8",
+            "command": "pico8",
             "launch in terminal": false
         },
         {
             "name": "Make Music",
             "icon": "musicsequencer",
             "shell": "sunvox",
-            "launch in terminal": false
-        },
-        {
-            "name": "Get Help",
-            "icon": "help",
-            "shell": "surf /usr/share/pocketchip-localdoc/index.html",
             "launch in terminal": false
         },
         {
@@ -35,20 +30,20 @@
             "icon": "filebrowser",
             "shell": "pcmanfm",
             "launch in terminal": false
-        }
-    ],
-    "folders": [
+        },
         {
             "name": "All",
             "icon": "default",
-            "categories": [
+            "categories": 
+            [
                 "All"
             ]
         },
         {
             "name": "Multimedia",
             "icon": "applications-multimedia",
-            "categories": [
+            "categories": 
+            [
                 "AudioVideo",
                 "Audio",
                 "Video"
@@ -57,79 +52,113 @@
         {
             "name": "Development",
             "icon": "applications-development",
-            "categories": [
+            "categories": 
+            [
                 "Development"
             ]
         },
         {
             "name": "Education",
             "icon": "applications-accessories",
-            "categories": [
+            "categories": 
+            [
                 "Education"
             ]
         },
         {
             "name": "Games",
             "icon": "applications-games",
-            "categories": [
+            "folder items":
+            [
+                {
+                    "name": "PICO-8",
+                    "icon": "pico8",
+                    "command": "pico8",
+                    "launch in terminal": false
+                },
+                {
+                    "name": "Recursive games",
+                    "icon": "doom",
+                    "categories":
+                    [
+                        "Game"
+                    ]
+                }
+            ],
+            "categories": 
+            [
                 "Game"
             ]
         },
         {
             "name": "Graphics",
             "icon": "applications-graphics",
-            "categories": [
+            "categories": 
+            [
                 "Graphics"
             ]
         },
         {
             "name": "Internet",
             "icon": "applications-internet",
-            "categories": [
+            "categories": 
+            [
                 "Network"
             ]
         },
         {
             "name": "Office",
             "icon": "applications-office",
-            "categories": [
+            "categories":
+            [
                 "Office"
             ]
         },
         {
             "name": "Science",
             "icon": "applications-science",
-            "categories": [
+            "categories":
+            [
                 "Science"
             ]
         },
         {
             "name": "Settings",
             "icon": "configuration_section",
-            "categories": [
+            "categories": 
+            [
                 "Settings"
             ]
         },
         {
             "name": "System",
             "icon": "applications-system",
-            "categories": [
+            "categories": 
+            [
                 "System"
             ]
         },
         {
             "name": "Utility",
             "icon": "applications-utilities",
-            "categories": [
+            "categories": 
+            [
                 "Utility"
             ]
         },
         {
             "name": "Other",
             "icon": "applications-other",
-            "categories": [
+            "categories":
+            [
                 "Other"
             ]
+        },
+        {
+            "name": "Get Help",
+            "icon": "help",
+            "shell": "surf /usr/share/pocketchip-localdoc/index.html",
+            "launch in terminal": false
         }
     ]
 }

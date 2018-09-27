@@ -27,7 +27,8 @@
     1. Fix wifi error: libnm-glib-WARNING nm-access-point.c:310 ap_ssid == NULL
     2. Fix missing access point name bug that seems to be linked to changing
        access points while staying on the same network.
-    3. Track down rare segfault after repeated assertion failure at WifiSettingsPage.cpp:189
+    3. Track down rare segfault after repeated assertion failure at 
+       WifiSettingsPage.cpp:189
     4. Update the HomePage wifi icon to better use new wifi features.
        1. Add a Listener interface to WifiAccessPoint objects.
        2. Have the wifi icon extend WifiAccessPoint::Listener.
