@@ -54,10 +54,11 @@ static const juce::Array<juce::Identifier> keys =
     "URL"
 };
 
+
 /*
  * Loads desktop entry data from a .desktop or .directory file.
  */
-DesktopEntry::DesktopEntry(juce::File entryFile) :
+DesktopEntry::DesktopEntry(const juce::File& entryFile) :
 entryFile(entryFile)
 {
     using namespace juce;
@@ -67,28 +68,26 @@ entryFile(entryFile)
     String groupHeader;
     for (const String& line : lines)
     {
+        if(!isValid) // Don't continue after finding invalid data.
+        {
+            break;
+        }
         if(line.startsWithChar('#'))
         {
             continue; //skip comments
         }
-        else if(line.startsWithChar('[') && line.endsWithChar(']'))
+        else if(isHeaderLine(line))
         {
-            groupHeader = line.substring(1, line.length() - 1);
-            if(groupHeader.startsWith(actionPrefix))
+            groupHeader = extractHeader(line);
+            if(isValidActionHeader(groupHeader))
             {
-                String actionName = groupHeader.fromFirstOccurrenceOf
-                    (actionPrefix, false, false);
-                if(actionName.isNotEmpty())
-                {
-                    Action newAction;
-                    newAction.name = actionName;
-                    actions.add(newAction);
-                }
-                else
-                {
-                    DBG("DesktopEntry::DesktopEntry: Invalid group header "
-                            << groupHeader);
-                }
+                actions.add(Action());
+            }
+            else if(!isMainDataHeader(groupHeader))
+            {
+                DBG("DesktopEntry::DesktopEntry: Invalid group header "
+                        << groupHeader);
+                isValid = false;
             }
         }
         LineData lineData = parseLine(line);
@@ -109,13 +108,32 @@ entryFile(entryFile)
 
 
 /*
- * Creates an empty desktop entry object. 
+ *  Creates a desktop entry object without an existing file.
  */
-DesktopEntry::DesktopEntry(juce::String name) : 
+DesktopEntry::DesktopEntry
+(const juce::String& name, const juce::String& filename, const Type type) : 
 name(name),
 entryFile(XDGDirectories::getUserDataPath() 
         + entryDirectory + name + ".desktop") 
 { }
+          
+/*
+ * Checks if two desktop entries have the same desktop file ID.
+ */
+bool DesktopEntry::operator==(const DesktopEntry& toCompare) const
+{
+    return getDesktopFileId() == toCompare.getDesktopFileId();
+}
+    
+/*
+ * Alphabetically compares entries based on their names.
+ */
+bool DesktopEntry::operator<(const DesktopEntry& toCompare) const
+{
+    return name < toCompare.name;
+}
+
+/* ############## Functions for getting desktop entry data: ################# */
 
 /*
  * Gets the desktop entry's type.
@@ -123,14 +141,6 @@ entryFile(XDGDirectories::getUserDataPath()
 DesktopEntry::Type DesktopEntry::getType() const
 {
     return type;
-}
-
-/*
- * Sets the desktop entry's type.
- */
-void DesktopEntry::setType(const Type newType)
-{
-    type = newType;
 }
 
 /*
@@ -142,27 +152,11 @@ juce::String DesktopEntry::getName() const
 }
 
 /*
- * Sets the desktop entry's name
- */
-void DesktopEntry::setName(const juce::String& newName)
-{
-    name = newName;
-}
-
-/*
  * Gets a generic name describing the entry.
  */
 juce::String DesktopEntry::getGenericName() const
 {
     return genericName;
-}
-
-/*
- * Sets the generic name describing the entry.
- */
-void DesktopEntry::setGenericName(const juce::String& newGenericName)
-{
-    genericName = newGenericName;
 }
 
 /*
@@ -174,27 +168,11 @@ bool DesktopEntry::shouldBeDisplayed() const
 }
 
 /*
- * Sets if this desktop entry should appear in application menus.
- */
-void DesktopEntry::setIfDisplayed(const bool showEntry)
-{
-    noDisplay = !showEntry;
-}
-
-/*
  * Gets the name or path of the desktop entry's icon.
  */
-juce::String DesktopEntry::getIconName() const
+juce::String DesktopEntry::getIcon() const
 {
     return icon;
-}
-
-/*
- * Sets the name or path of the desktop entry's icon.
- */
-void DesktopEntry::setIconName(const juce::String& newIcon)
-{
-    icon = newIcon;
 }
 
 /*
@@ -216,17 +194,9 @@ juce::String DesktopEntry::getLaunchCommand() const
 /*
  * Gets the string value used to construct the launch command.
  */
-juce::String DesktopEntry::getExecString() const
+juce::String DesktopEntry::getExec() const
 {
     return exec;
-}
-
-/*
- * Sets the string value used to contstruct the launch command.
- */
-void DesktopEntry::setExecString(const juce::String& newExec)
-{
-    exec = newExec;
 }
 
 /*
@@ -239,14 +209,6 @@ juce::String DesktopEntry::getTryExec() const
 }
 
 /*
- * Sets the application name used when checking if this application is valid.
- */
-void DesktopEntry::setTryExec(const juce::String& newTryExec)
-{
-    tryExec = newTryExec;
-}
-
-/*
  * Gets the path where this application should run.
  */
 juce::String DesktopEntry::getRunDirectory() const
@@ -255,27 +217,11 @@ juce::String DesktopEntry::getRunDirectory() const
 }
 
 /*
- * Sets the path where this application should run.
- */
-void DesktopEntry::setRunDirectory(const juce::String& runningDirectory)
-{
-    path = runningDirectory;
-}
-
-/*
  * Checks if this application should be launched in a new terminal window.
  */
 bool DesktopEntry::getLaunchedInTerm() const
 {
     return terminal;
-}
-
-/*
- * Sets if this application should be launched in a new terminal window.
- */
-void DesktopEntry::setLaunchedInTerm(const bool termLaunch)
-{
-    terminal = termLaunch;
 }
 
 /*
@@ -325,19 +271,85 @@ juce::StringArray DesktopEntry::getCategories() const
 }
 
 /*
- * Sets the list of categories associated with this desktop entry.
- */
-void DesktopEntry::setCategories(const juce::StringArray& newCategories)
-{
-    categories = newCategories;
-}
-
-/*
  * Gets a list of keywords associated with this desktop entry.
  */
 juce::StringArray DesktopEntry::getKeywords() const
 {
     return keywords;
+}
+
+/* ############## Functions for setting desktop entry data: ################# */
+
+/*
+ * Sets the desktop entry's name.
+ */
+void DesktopEntry::setName(const juce::String& newName)
+{
+    name = newName;
+}
+
+/*
+ * Sets the generic name describing the entry.
+ */
+void DesktopEntry::setGenericName(const juce::String& newGenericName)
+{
+    genericName = newGenericName;
+}
+
+/*
+ * Sets if this desktop entry should appear in application menus.
+ */
+void DesktopEntry::setIfDisplayed(const bool showEntry)
+{
+    noDisplay = !showEntry;
+}
+
+/*
+ * Sets the name or path of the desktop entry's icon.
+ */
+void DesktopEntry::setIcon(const juce::String& newIcon)
+{
+    icon = newIcon;
+}
+
+/*
+ * Sets the string value used to construct the launch command.
+ */
+void DesktopEntry::setExec(const juce::String& newExec)
+{
+    exec = newExec;
+}
+
+/*
+ * Sets the application name used when checking if this application is valid.
+ */
+void DesktopEntry::setTryExec(const juce::String& newTryExec)
+{
+    tryExec = newTryExec;
+}
+
+/*
+ * Sets the path where this application should run.
+ */
+void DesktopEntry::setRunDirectory(const juce::String& runningDirectory)
+{
+    path = runningDirectory;
+}
+
+/*
+ * Sets if this application should be launched in a new terminal window.
+ */
+void DesktopEntry::setLaunchedInTerm(const bool termLaunch)
+{
+    terminal = termLaunch;
+}
+
+/*
+ * Sets the list of categories associated with this desktop entry.
+ */
+void DesktopEntry::setCategories(const juce::StringArray& newCategories)
+{
+    categories = newCategories;
 }
 
 /*
@@ -351,13 +363,9 @@ void DesktopEntry::setKeywords(const juce::StringArray& newKeywords)
 /*
  * Writes this desktop entry to the user's local application data directory.
  */
-bool DesktopEntry::writeFile()
+void DesktopEntry::writeFile()
 {
     using namespace juce;
-    if(!isDataValid())
-    {
-        return false;
-    }
     String outFileText = "";
     String locale = Localized::getLocaleName();
     StringArray foundKeys;
@@ -424,37 +432,21 @@ bool DesktopEntry::writeFile()
     outFile.create();
     DBG("DesktopEntry::" << __func__ << ": writing file " 
             << outFile.getFullPathName()); 
-    return outFile.replaceWithText(outFileText);
-}
-          
-/*
- * Checks if two desktop entries have the same desktop file ID.
- */
-bool DesktopEntry::operator==(const DesktopEntry& toCompare) const
-{
-    return getDesktopFileId() == toCompare.getDesktopFileId();
-}
-    
-/*
- * Alphabetically compares entries based on their names.
- */
-bool DesktopEntry::operator<(const DesktopEntry& toCompare) const
-{
-    return name < toCompare.name;
+    outFile.replaceWithText(outFileText);
 }
 
 /*
- * Checks if this desktop entry's data follows the desktop entry standard.
+ * Given a standard desktop entry data key, get the value mapped to that key.
  */
-bool DesktopEntry::isDataValid() const
+juce::String DesktopEntry::getValue(const juce::Identifier& key)
 {
-    if(type == Type::application && exec.isEmpty())
-    {
-        return false;
-    }
-    // Check for proper character escaping:
-    // Check for all required fields:
-    return true;  //replace this!
+}
+
+/*
+ * Gets the desktop file ID of the desktop entry.
+ */
+juce::String DesktopEntry::getDesktopFileId() const
+{
 }
 
 /*
@@ -477,105 +469,13 @@ DesktopEntry::LineData DesktopEntry::parseLine(const juce::String& line)
         {
             // Desktop entry contains an unclosed square bracket.
             // Something is wrong, return empty line data.
+            isValid = false;
             return lineData;
         }
         lineData.locale = line.substring(openIndex+1, closeIndex);
     }
     lineData.value = line.fromLastOccurrenceOf("=", false, false);
     return lineData;
-}
-
-/*
- * Expands all field codes in a command string, removing them and replacing them
- * with appropriate values.
- */
-juce::String DesktopEntry::expandFieldCodes
-(const juce::String& execString) const
-{ 
-    using namespace juce;
-    juce::Array<int> fieldCodes;
-    String expanded = execString;
-    for(int i = 0; i < execString.length() - 1; i++)
-    {
-        if(execString[i] == '%')
-        {
-           fieldCodes.add(i);
-           i++;
-        }
-    }
-    for(int i = fieldCodes.size() - 1; i >= 0; i--)
-    {
-        String replacementValue;
-        switch(execString[i+1])
-        {
-            // Deprecated field codes to remove.
-            case 'd':
-            case 'D':
-            case 'n':
-            case 'N':
-            case 'v':
-            case 'm':
-            // Field codes passing in files or urls, to be ignored.
-            case 'f':
-            case 'F':
-            case 'u':
-                break;
-            case 'i':
-                if(icon.isNotEmpty())
-                {
-                    replacementValue = String("\"--icon ") + icon + "\"";
-                }   
-                break;
-            case 'c':
-                replacementValue = name;
-                break;
-            case 'k':
-                replacementValue = entryFile.getFileName();
-                break;
-            case '%':
-                replacementValue = "%";
-                break;
-            default:
-                DBG("DesktopEntry::" << __func__ << ": Invalid field code %"
-                        << execString[i+1]
-                        << " found, can't get launch command.");
-                return String();
-        }
-        expanded = expanded.substring(0,i) + replacementValue
-                + expanded.substring(i+2);    
-    }
-    return expanded;
-}
-
-static juce::StringArray parseList(const juce::String& listStr)
-{
-    using namespace juce;
-    StringArray list;
-    // Split on semicolon or comma.
-    // Semicolon is the standard, but comma-separated lists were once valid and
-    // should still be supported.
-    list.addTokens(value, ";,", "\"");
-    return list;
-}
-
-static bool parseBool(const juce::String& boolStr)
-{
-    using namespace juce;
-    // Standard boolean strings supported: true, false.
-    // Using 0, 1 was once standard and should also be supported.
-    if(boolstr == "true" || boolstr == "1")
-    {
-        return true;
-    }
-    else if(boolstr == "false" || boolstr == "0")
-    {
-        return false;
-    }
-    else
-    {
-        // Error: invalid bool! TODO: do something about it.
-        return false;
-    }
 }
 
 /*
@@ -592,7 +492,11 @@ void DesktopEntry::saveLineData(const LineData& lineData)
             "Type", 
             [](const String& value, DesktopEntry* thisEntry)
             {
-                if(value == "directory")
+                if(value == "application")
+                {
+                    thisEntry->type = Type::application;
+                }
+                else if(value == "directory")
                 {
                     thisEntry->type = Type::directory;
                 }
@@ -602,7 +506,10 @@ void DesktopEntry::saveLineData(const LineData& lineData)
                 }
                 else
                 {
-                    thisEntry->type = Type::application;
+                    DBG("DesktopEntry::saveLineData: Invalid entry type "
+                            << value << " found in file "
+                            << thisEntry->entryFile.getFullPathName());
+                    thisEntry->isValid = false;
                 }
             }
         },
@@ -762,18 +669,151 @@ void DesktopEntry::saveActionLineData(const LineData& lineData)
 }
 
 /*
- * Given a standard desktop entry data key, get the value mapped to that key.
+ * Expands all field codes in a command string, removing them and replacing them
+ * with appropriate values.
  */
-juce::String DesktopEntry::getValue(const juce::Identifier& key)
+juce::String DesktopEntry::expandFieldCodes
+(const juce::String& execString) const
+{ 
+    using namespace juce;
+    juce::Array<int> fieldCodes;
+    String expanded = execString;
+    for(int i = 0; i < execString.length() - 1; i++)
+    {
+        if(execString[i] == '%')
+        {
+           fieldCodes.add(i);
+           i++;
+        }
+    }
+    for(int i = fieldCodes.size() - 1; i >= 0; i--)
+    {
+        String replacementValue;
+        switch(execString[i+1])
+        {
+            // Deprecated field codes to remove.
+            case 'd':
+            case 'D':
+            case 'n':
+            case 'N':
+            case 'v':
+            case 'm':
+            // Field codes passing in files or urls, to be ignored.
+            case 'f':
+            case 'F':
+            case 'u':
+                break;
+            case 'i':
+                if(icon.isNotEmpty())
+                {
+                    replacementValue = String("\"--icon ") + icon + "\"";
+                }   
+                break;
+            case 'c':
+                replacementValue = name;
+                break;
+            case 'k':
+                replacementValue = entryFile.getFileName();
+                break;
+            case '%':
+                replacementValue = "%";
+                break;
+            default:
+                DBG("DesktopEntry::" << __func__ << ": Invalid field code %"
+                        << execString[i+1]
+                        << " found, can't get launch command.");
+                return String();
+        }
+        expanded = expanded.substring(0,i) + replacementValue
+                + expanded.substring(i+2);    
+    }
+    return expanded;
+}
+
+/*
+ * Checks if a line from a desktop entry file contains a section header title.
+ */
+bool DesktopEntry::isHeaderLine(const juce::String& line)
+{
+    return line.startsWithChar('[') && line.endsWithChar(']');
+}
+
+/*
+ * Extracts a section header title from a desktop entry file line.
+ */
+juce::String DesktopEntry::extractHeader(const juce::String& headerLine)
+{
+    return headerLine.substring(1, headerLine.length() - 1);
+}
+
+/*
+ * Checks if a section header name describes the main desktop entry data 
+ * section.
+ */
+bool DesktopEntry::isMainDataHeader(const juce::String& header)
 {
 }
 
 /*
- * Gets the desktop file ID of the desktop entry.
- *
+ * Checks if a section header name describes a desktop entry action.
  */
-juce::String DesktopEntry::getDesktopFileId() const
+bool DesktopEntry::isValidActionHeader(const juce::String& header)
+{
+}
+   
+/*
+ * Checks if a string is non-empty and contains only valid characters allowed in
+ * desktop entry files.
+ */
+bool DesktopEntry::isValidString(const juce::String& string)
 {
 }
 
+/*
+ * Parses a list of strings from a single string value read from a desktop entry
+ * file.
+ */
+juce::StringArray DesktopEntry::parseList(const juce::String& listStr)
+{
+    using namespace juce;
+    StringArray list;
+    // Split on semicolon or comma.
+    // Semicolon is the standard, but comma-separated lists were once valid and
+    // should still be supported.
+    if(listStr.containsChar(';'))
+    {
+        list.addTokens(listStr, ";", "\"");
+    }
+    else if(listStr.containsChar(','))
+    {
+        list.addTokens(listStr, ",", "\"");
+    }
+    else
+    {
+        list.add(listStr);
+    }
+    return list;
+}
 
+/*
+ * Parses a boolean value from a string.
+ */
+static bool parseBool(const juce::String& boolStr)
+{
+    using namespace juce;
+    // Standard boolean strings supported: true, false.
+    // Using 0, 1 was once standard and should also be supported.
+    if(boolStr == "true" || boolStr == "1")
+    {
+        return true;
+    }
+    else if(boolStr == "false" || boolStr == "0")
+    {
+        return false;
+    }
+    else
+    {
+        // Error: invalid bool! TODO: do something about it.
+        return false;
+    }
+}
