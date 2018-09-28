@@ -434,8 +434,6 @@ bool DesktopEntry::operator==(const DesktopEntry& toCompare) const
 {
     return getDesktopFileId() == toCompare.getDesktopFileId();
 }
-
-
     
 /*
  * Alphabetically compares entries based on their names.
@@ -549,8 +547,35 @@ juce::String DesktopEntry::expandFieldCodes
     return expanded;
 }
 
-static juce::StringArray parseList(const juce::String listStr)
+static juce::StringArray parseList(const juce::String& listStr)
 {
+    using namespace juce;
+    StringArray list;
+    // Split on semicolon or comma.
+    // Semicolon is the standard, but comma-separated lists were once valid and
+    // should still be supported.
+    list.addTokens(value, ";,", "\"");
+    return list;
+}
+
+static bool parseBool(const juce::String& boolStr)
+{
+    using namespace juce;
+    // Standard boolean strings supported: true, false.
+    // Using 0, 1 was once standard and should also be supported.
+    if(boolstr == "true" || boolstr == "1")
+    {
+        return true;
+    }
+    else if(boolstr == "false" || boolstr == "0")
+    {
+        return false;
+    }
+    else
+    {
+        // Error: invalid bool! TODO: do something about it.
+        return false;
+    }
 }
 
 /*
