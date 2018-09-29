@@ -173,6 +173,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/IconLoader_ed34cf72.o \
   $(JUCE_OBJDIR)/IconThemeIndex_dea347e8.o \
   $(JUCE_OBJDIR)/IconThread_94e2d9e9.o \
+  $(JUCE_OBJDIR)/DesktopEntryUtils_5bd51e1a.o \
   $(JUCE_OBJDIR)/DesktopEntryLoader_a86a5c94.o \
   $(JUCE_OBJDIR)/DesktopEntry_3f1762e1.o \
   $(JUCE_OBJDIR)/GVariantConverter_2a602041.o \
@@ -752,6 +753,11 @@ $(JUCE_OBJDIR)/IconThemeIndex_dea347e8.o: ../../Source/FreeDesktop/Icon\ Themes/
 $(JUCE_OBJDIR)/IconThread_94e2d9e9.o: ../../Source/FreeDesktop/Icon\ Themes/IconThread.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling IconThread.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/DesktopEntryUtils_5bd51e1a.o: ../../Source/FreeDesktop/Desktop\ Entries/DesktopEntryUtils.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling DesktopEntryUtils.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/DesktopEntryLoader_a86a5c94.o: ../../Source/FreeDesktop/Desktop\ Entries/DesktopEntryLoader.cpp

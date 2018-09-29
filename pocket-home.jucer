@@ -432,6 +432,14 @@
           <FILE id="kTeYJT" name="IconThread.h" compile="0" resource="0" file="Source/FreeDesktop/Icon Themes/IconThread.h"/>
         </GROUP>
         <GROUP id="{EDE7E2EB-34F8-AA7C-E6C7-C8A1894467A0}" name="Desktop Entries">
+          <FILE id="oaRArv" name="DesktopEntryFormatError.h" compile="0" resource="0"
+                file="Source/FreeDesktop/Desktop Entries/DesktopEntryFormatError.h"/>
+          <FILE id="FMk2At" name="DesktopEntryFileError.h" compile="0" resource="0"
+                file="Source/FreeDesktop/Desktop Entries/DesktopEntryFileError.h"/>
+          <FILE id="mRqo9r" name="DesktopEntryUtils.cpp" compile="1" resource="0"
+                file="Source/FreeDesktop/Desktop Entries/DesktopEntryUtils.cpp"/>
+          <FILE id="PvHGDZ" name="DesktopEntryUtils.h" compile="0" resource="0"
+                file="Source/FreeDesktop/Desktop Entries/DesktopEntryUtils.h"/>
           <FILE id="CyIMe5" name="DesktopEntryLoader.cpp" compile="1" resource="0"
                 file="Source/FreeDesktop/Desktop Entries/DesktopEntryLoader.cpp"/>
           <FILE id="ZwmY3m" name="DesktopEntryLoader.h" compile="0" resource="0"
