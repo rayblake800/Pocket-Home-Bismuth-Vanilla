@@ -95,7 +95,7 @@ bool AppLauncher::testCommand(const juce::String& command)
 LaunchedProcess* AppLauncher::startApp(const juce::String& command)
 {
     using namespace juce;
-    DBG("AppsPageComponent::startApp - " << command);
+    DBG("AppLauncher::" << __func__  << ":Launching:"  << command);
     if (!testCommand(command))
     {
         AlertWindow::showMessageBoxAsync

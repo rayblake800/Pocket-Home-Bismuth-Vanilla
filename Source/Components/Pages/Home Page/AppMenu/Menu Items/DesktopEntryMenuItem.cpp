@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include "MainConfigFile.h"
+#include "DesktopEntryFileError.h"
 #include "DesktopEntryMenuItem.h"
 
 DesktopEntryMenuItem::DesktopEntryMenuItem(const DesktopEntry& desktopEntry)
@@ -11,7 +12,7 @@ desktopEntry(desktopEntry) { }
  */
 bool DesktopEntryMenuItem::isFolder() const
 {
-    return desktopEntry.getType() == DesktopEntry::directory;
+    return desktopEntry.getType() == DesktopEntry::Type::directory;
 }
 
 /**
@@ -19,7 +20,7 @@ bool DesktopEntryMenuItem::isFolder() const
  */
 juce::String DesktopEntryMenuItem::getAppName() const
 {
-    return desktopEntry.getValue(DesktopEntry::name);
+    return desktopEntry.getName();
 }
 
 /**
@@ -27,13 +28,7 @@ juce::String DesktopEntryMenuItem::getAppName() const
  */
 juce::String DesktopEntryMenuItem::getCommand() const
 {
-    using namespace juce;
-    String command = desktopEntry.getValue(DesktopEntry::exec);
-    if (desktopEntry.getValue(DesktopEntry::terminal))
-    {
-        command = getTermLaunchPrefix() + String(" ") + command;
-    }
-    return command;
+    return desktopEntry.getLaunchCommand();
 }
 
 /**
@@ -42,7 +37,7 @@ juce::String DesktopEntryMenuItem::getCommand() const
  */
 bool DesktopEntryMenuItem::isTerminalApp() const
 {
-    return desktopEntry.getValue(DesktopEntry::terminal);
+    return desktopEntry.getLaunchedInTerm();
 }
 
 /**
@@ -50,7 +45,7 @@ bool DesktopEntryMenuItem::isTerminalApp() const
  */
 juce::StringArray DesktopEntryMenuItem::getCategories() const
 {
-    return desktopEntry.getValue(DesktopEntry::categories);
+    return desktopEntry.getCategories();
 }
 
 /**
@@ -58,7 +53,7 @@ juce::StringArray DesktopEntryMenuItem::getCategories() const
  */
 juce::String DesktopEntryMenuItem::getIconName() const
 {
-    return desktopEntry.getValue(DesktopEntry::icon);
+    return desktopEntry.getIcon();
 }
 
 /**
@@ -117,10 +112,15 @@ DesktopEntryMenuItem::getEditorCallback()
 bool DesktopEntryMenuItem::removeMenuItemSource()
 {
     using namespace juce;
-    StringArray notShowIn = desktopEntry.getValue(DesktopEntry::notShowIn);
-    notShowIn.add("pocket-home");
-    desktopEntry.setValue(DesktopEntry::notShowIn, notShowIn);
-    desktopEntry.writeFile();
+    desktopEntry.setIfDisplayed(false);
+    try
+    {
+        desktopEntry.writeFile();
+    }
+    catch(DesktopEntryFileError e)
+    {
+        return false;
+    }
     return true;
 }
 
@@ -137,15 +137,15 @@ void DesktopEntryMenuItem::editEntry(juce::String name, juce::String icon,
         juce::StringArray categories,
         juce::String command, bool useTerminal)
 {
-    desktopEntry.setValue(DesktopEntry::name, name);
-    desktopEntry.setValue(DesktopEntry::icon, icon);
-    desktopEntry.setValue(DesktopEntry::categories, categories);
+    desktopEntry.setName(name);
+    desktopEntry.setIcon(icon);
+    desktopEntry.setCategories(categories);
     if (useTerminal)
     {
         command = command.fromLastOccurrenceOf
                 (getTermLaunchPrefix(), false, false);
     }
-    desktopEntry.setValue(DesktopEntry::exec, command);
-    desktopEntry.setValue(DesktopEntry::terminal, useTerminal);
+    desktopEntry.setExec(command);
+    desktopEntry.setLaunchedInTerm(useTerminal);
     desktopEntry.writeFile();
 }
