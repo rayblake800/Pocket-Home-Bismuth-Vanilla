@@ -138,15 +138,15 @@ juce::String DesktopEntryUtils::unquoteCommandFields
         if(section.isQuotedString())
         {
             section = section.unquoted();
-        }
-        for(int i = section.length() - 1; i > 0; i--)
-        {
-            if(charsToEscape.containsChar(section[i]))
+            for(int i = section.length() - 1; i > 0; i--)
             {
-                jassert(section[i - 1] == '\\');
-                section = section.substring(0, i - 1)
-                        + section.substring(i, section.length());
-                i--;
+                if(charsToEscape.containsChar(section[i]))
+                {
+                    jassert(section[i - 1] == '\\');
+                    section = section.substring(0, i - 1)
+                            + section.substring(i, section.length());
+                    i--;
+                }
             }
         }
     }
@@ -188,23 +188,21 @@ bool DesktopEntryUtils::isValidActionHeader(const juce::String& header)
 }
  
 /*
- * Checks if a string is non-empty and contains only valid characters allowed in
- * desktop entry files.
+ * Checks if a string contains only valid characters allowed in desktop entry 
+ * files.
  */
 bool DesktopEntryUtils::isValidString(const juce::String& string,
         const bool isLocaleString)
 {
-    if(string.isEmpty())
-    {
-        return false;
-    }
     for(int i = 0; i < string.length(); i++)
     {
         // TODO: Check if non-ascii characters are printable in the current
         //       locale.
-        if((string[i] < ' ' || string[i] > '-')
+        if((string[i] < 32 || string[i] > 126)
           && !(isLocaleString && string[i] > 127))
         {
+            DBG("DesktopEntryUtils::" << __func__ << ":Invalid character '"
+                    << string[i] << "'(" << int(string[i]) << ")");
             return false;
         }
     }
@@ -227,7 +225,7 @@ juce::String DesktopEntryUtils::addEscapeSequences
             {'\\' , "\\\\"}
         };
     String escaped = rawString;
-    for(int i = rawString.length() - 1; i <=0; i--)
+    for(int i = rawString.length() - 1; i >= 0; i--)
     {
         auto searchIter = escapeSequences.find(rawString[i]);
         if(searchIter != escapeSequences.end())
@@ -371,12 +369,13 @@ juce::String DesktopEntryUtils::boolString(const bool booleanValue)
  * Converts a list to a single string that can be written to a desktop entry
  * file.
  */
-juce::String DesktopEntryUtils::listString(const juce::StringArray& list)
+juce::String DesktopEntryUtils::listString(const juce::StringArray& list,
+        const bool isLocaleString)
 {
     for(juce::String& listItem : list)
     {
         listItem = addEscapeSequences(listItem);
-        if(!isValidString(listItem))
+        if(!isValidString(listItem, isLocaleString))
         {
             throw DesktopEntryFormatError(listItem);
         }

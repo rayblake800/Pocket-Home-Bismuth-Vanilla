@@ -2,11 +2,7 @@ VERSION=0.0.8.10
 BUILD=1
 DATA_PATH="/usr/share/pocket-home"
 
-.PHONY: all debug debugClean debugBuild debugInstall clean build devinstall pack install
-
-all:
-	$(MAKE) build
-	$(MAKE) devinstall
+.PHONY: debug debugClean debugBuild debugInstall clean build devinstall pack install
 
 debug:
 	$(MAKE) debugBuild

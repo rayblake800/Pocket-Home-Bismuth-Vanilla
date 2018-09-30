@@ -17,9 +17,10 @@ public:
      * @param badValue  The value that failed to comply with desktop entry
      *                  standards.
      */
-    DesktopEntryFormatError(const juce::String& badValue) :
+    DesktopEntryFormatError(const juce::String badValue) :
     badValue(badValue),
-    errorMessage(juce::String("Invalid desktop entry value: ") + badValue)
+    errorMessage(juce::String("Invalid desktop entry value:\"") + badValue
+            + "\"")
     { }
 
     /**

@@ -4,7 +4,7 @@
               bundleIdentifier="co.nextthing.PokeLaunch" includeBinaryInAppConfig="1"
               jucerVersion="5.3.2" companyName="Next Thing Co." companyWebsite="http://nextthing.co"
               displaySplashScreen="0" reportAppUsage="1" splashScreenColour="Dark"
-              companyCopyright="Next Thing Co." headerPath="../../Source/System/Wifi&#10;../../Source/System&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Components/Configurable&#10;../../Source/FreeDesktop&#10;../../Source/System/Bluetooth&#10;../../Source/Config Files/Component&#10;../../Source/Components/Pages/Settings Pages/DateTime Page&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/FreeDesktop/Desktop Entries&#10;../../Source/FreeDesktop/Icon Themes&#10;../../Source/Components/Widgets&#10;../../Source/Components/Pages/Power Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Util/SharedResource&#10;../../Source/GLib/LibNM&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Config Files/AppMenu&#10;../../Source/Components/Pages/Settings Pages/UI Page&#10;../../Source/Components/Pages/Settings Pages/Settings List Page&#10;../../Source/Components/Pages/Settings Pages/Network Pages&#10;../../Source&#10;../../Source/Config Files&#10;../../Source/GLib&#10;../../Source/Components/Pages/Settings Pages/Password Pages&#10;../../Source/Components/Pages/Settings Pages/Home Settings Page&#10;../../Source/Util&#10;../../Source/GLib/DBus&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source/Config Files/Colour&#10;../../Source/Components/Pages/Settings Pages&#10;../../Source/Components/Pages/Home Page/AppMenu/Paged Menu&#10;../../Source/Components/Pages&#10;../../Source/Components/Pages/Settings Pages/Input Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu/Scrolling Menu&#10;../../Source/Config Files/AppMenu/Menu Items&#10;../../Source/Config Files/Main&#10;../../Source/Components/Pages/Settings Pages/Quick Settings Page&#10;../../Source/Components"
+              companyCopyright="Next Thing Co." headerPath="../../Source/GLib/LibNM&#10;../../Source/Components/Pages/Settings Pages/Settings List Page&#10;../../Source/System/Bluetooth&#10;../../Source/System/Wifi&#10;../../Source/Config Files/Colour&#10;../../Source/Components/Configurable&#10;../../Source/Components/Pages/Settings Pages/Password Pages&#10;../../Source/Config Files/AppMenu&#10;../../Source/GLib/DBus&#10;../../Source/FreeDesktop/Icon Themes&#10;../../Source/Components/Pages/Login Page&#10;../../Source/Config Files/Component&#10;../../Source/Components/Pages/Settings Pages&#10;../../Source/Config Files/Main&#10;../../Source/FreeDesktop&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Editors&#10;../../Source/Components/Pages/Home Page/Widgets&#10;../../Source&#10;../../Source/Components/Pages/Home Page/AppMenu/Menu Items&#10;../../Source/Components/Pages/Settings Pages/UI Page&#10;../../Source/Components/Pages/Settings Pages/Home Settings Page&#10;../../Source/FreeDesktop/Desktop Entries&#10;../../Source/Components/Widgets&#10;../../Source/System&#10;../../Source/Components/Pages/Home Page/AppMenu/Scrolling Menu&#10;../../Source/Components/Pages/Home Page&#10;../../Source/Components/Pages/Settings Pages/Input Settings Page&#10;../../Source/Components/Pages/Home Page/AppMenu&#10;../../Source/GLib&#10;../../Source/Config Files&#10;../../Source/Components/Pages/Home Page/AppMenu/Paged Menu&#10;../../Source/Components/Pages/Settings Pages/Network Pages&#10;../../Source/Components/Pages/Settings Pages/DateTime Page&#10;../../Source/Components/Pages/Power Page&#10;../../Source/Components/Pages/Settings Pages/Quick Settings Page&#10;../../Source/Components/Pages&#10;../../Source/Util&#10;../../Source/Util/SharedResource&#10;../../Source/Components"
               cppLanguageStandard="14" defines="DONT_SET_USING_JUCE_NAMESPACE=1">
   <MAINGROUP id="NYF1Vz" name="pocket-home">
     <GROUP id="{A1DF3F2A-774E-D561-3D99-5D88F7D2D731}" name="assets">
@@ -127,6 +127,30 @@
               <FILE id="yT2LgN" name="AppMenuButton.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/AppMenu/AppMenuButton.h"/>
               <FILE id="wuxNd9" name="AppMenuButton.cpp" compile="1" resource="0"
                     file="Source/Components/Pages/Home Page/AppMenu/AppMenuButton.cpp"/>
+              <GROUP id="{0999720F-DD6B-E080-5269-A32810E91F5C}" name="Menu Items">
+                <FILE id="qQ1gT2" name="AppMenuItem.cpp" compile="1" resource="0" file="Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItem.cpp"/>
+                <FILE id="sNu85i" name="AppMenuItem.h" compile="0" resource="0" file="Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItem.h"/>
+                <FILE id="gqK6ot" name="AppMenuItemFactory.cpp" compile="1" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItemFactory.cpp"/>
+                <FILE id="aPbzXv" name="AppMenuItemFactory.h" compile="0" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Menu Items/AppMenuItemFactory.h"/>
+                <FILE id="k18rAG" name="ConfigAppMenuItem.cpp" compile="1" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Menu Items/ConfigAppMenuItem.cpp"/>
+                <FILE id="Utiaa0" name="ConfigAppMenuItem.h" compile="0" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Menu Items/ConfigAppMenuItem.h"/>
+                <FILE id="q2Br7X" name="DesktopEntryMenuItem.cpp" compile="1" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Menu Items/DesktopEntryMenuItem.cpp"/>
+                <FILE id="TCWtEN" name="DesktopEntryMenuItem.h" compile="0" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Menu Items/DesktopEntryMenuItem.h"/>
+                <FILE id="jdofoH" name="FolderMenuItem.cpp" compile="1" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Menu Items/FolderMenuItem.cpp"/>
+                <FILE id="PaT4m5" name="FolderMenuItem.h" compile="0" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Menu Items/FolderMenuItem.h"/>
+                <FILE id="f0mUcY" name="BaseFolderMenuItem.cpp" compile="1" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Menu Items/BaseFolderMenuItem.cpp"/>
+                <FILE id="ZIvJMb" name="BaseFolderMenuItem.h" compile="0" resource="0"
+                      file="Source/Components/Pages/Home Page/AppMenu/Menu Items/BaseFolderMenuItem.h"/>
+              </GROUP>
               <GROUP id="{A49BAA90-8955-9E45-DAB3-EAE88CC60FE2}" name="Menu Editors">
                 <FILE id="AimLwj" name="NewFolderEditor.cpp" compile="1" resource="0"
                       file="Source/Components/Pages/Home Page/AppMenu/Menu Editors/NewFolderEditor.cpp"/>
@@ -369,29 +393,6 @@
           <FILE id="NdqHUH" name="ColourJSON.h" compile="0" resource="0" file="Source/Config Files/Colour/ColourJSON.h"/>
         </GROUP>
         <GROUP id="{61EE16EA-0829-270B-A255-2C214D399ACC}" name="AppMenu">
-          <GROUP id="{0999720F-DD6B-E080-5269-A32810E91F5C}" name="Menu Items">
-            <FILE id="bErsrt" name="MenuItemData.cpp" compile="1" resource="0"
-                  file="Source/Config Files/AppMenu/Menu Items/MenuItemData.cpp"/>
-            <FILE id="do713e" name="MenuItemData.h" compile="0" resource="0" file="Source/Config Files/AppMenu/Menu Items/MenuItemData.h"/>
-            <FILE id="qQ1gT2" name="AppMenuItem.cpp" compile="1" resource="0" file="Source/Config Files/AppMenu/Menu Items/AppMenuItem.cpp"/>
-            <FILE id="sNu85i" name="AppMenuItem.h" compile="0" resource="0" file="Source/Config Files/AppMenu/Menu Items/AppMenuItem.h"/>
-            <FILE id="k18rAG" name="ConfigItemData.cpp" compile="1" resource="0"
-                  file="Source/Config Files/AppMenu/Menu Items/ConfigItemData.cpp"/>
-            <FILE id="Utiaa0" name="ConfigItemData.h" compile="0" resource="0"
-                  file="Source/Config Files/AppMenu/Menu Items/ConfigItemData.h"/>
-            <FILE id="q2Br7X" name="DesktopEntryItemData.cpp" compile="1" resource="0"
-                  file="Source/Config Files/AppMenu/Menu Items/DesktopEntryItemData.cpp"/>
-            <FILE id="TCWtEN" name="DesktopEntryItemData.h" compile="0" resource="0"
-                  file="Source/Config Files/AppMenu/Menu Items/DesktopEntryItemData.h"/>
-            <FILE id="jdofoH" name="OLD_FolderMenuItem.cpp" compile="1" resource="0"
-                  file="Source/Config Files/AppMenu/Menu Items/OLD_FolderMenuItem.cpp"/>
-            <FILE id="PaT4m5" name="OLD_FolderMenuItem.h" compile="0" resource="0"
-                  file="Source/Config Files/AppMenu/Menu Items/OLD_FolderMenuItem.h"/>
-            <FILE id="f0mUcY" name="OLD_BaseFolderMenuItem.cpp" compile="1" resource="0"
-                  file="Source/Config Files/AppMenu/Menu Items/OLD_BaseFolderMenuItem.cpp"/>
-            <FILE id="ZIvJMb" name="OLD_BaseFolderMenuItem.h" compile="0" resource="0"
-                  file="Source/Config Files/AppMenu/Menu Items/OLD_BaseFolderMenuItem.h"/>
-          </GROUP>
           <FILE id="DCzTro" name="AppConfigFile.cpp" compile="1" resource="0"
                 file="Source/Config Files/AppMenu/AppConfigFile.cpp"/>
           <FILE id="IYWdZr" name="AppConfigFile.h" compile="0" resource="0" file="Source/Config Files/AppMenu/AppConfigFile.h"/>
@@ -432,13 +433,13 @@
           <FILE id="kTeYJT" name="IconThread.h" compile="0" resource="0" file="Source/FreeDesktop/Icon Themes/IconThread.h"/>
         </GROUP>
         <GROUP id="{EDE7E2EB-34F8-AA7C-E6C7-C8A1894467A0}" name="Desktop Entries">
-          <FILE id="oaRArv" name="DesktopEntryFormatError.h" compile="0" resource="0"
+          <FILE id="HD1p8H" name="DesktopEntryFormatError.h" compile="0" resource="0"
                 file="Source/FreeDesktop/Desktop Entries/DesktopEntryFormatError.h"/>
-          <FILE id="FMk2At" name="DesktopEntryFileError.h" compile="0" resource="0"
+          <FILE id="WZVMU9" name="DesktopEntryFileError.h" compile="0" resource="0"
                 file="Source/FreeDesktop/Desktop Entries/DesktopEntryFileError.h"/>
-          <FILE id="mRqo9r" name="DesktopEntryUtils.cpp" compile="1" resource="0"
+          <FILE id="cgTKYu" name="DesktopEntryUtils.cpp" compile="1" resource="0"
                 file="Source/FreeDesktop/Desktop Entries/DesktopEntryUtils.cpp"/>
-          <FILE id="PvHGDZ" name="DesktopEntryUtils.h" compile="0" resource="0"
+          <FILE id="PlKXQv" name="DesktopEntryUtils.h" compile="0" resource="0"
                 file="Source/FreeDesktop/Desktop Entries/DesktopEntryUtils.h"/>
           <FILE id="CyIMe5" name="DesktopEntryLoader.cpp" compile="1" resource="0"
                 file="Source/FreeDesktop/Desktop Entries/DesktopEntryLoader.cpp"/>

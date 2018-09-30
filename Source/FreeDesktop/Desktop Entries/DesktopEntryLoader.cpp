@@ -3,6 +3,8 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include "Utils.h"
+#include "DesktopEntryFileError.h"
+#include "DesktopEntryFormatError.h"
 #include "DesktopEntryLoader.h"
 
 DesktopEntryLoader::DesktopEntryLoader() : Thread("DesktopEntryLoader") { }
@@ -64,10 +66,9 @@ std::set<juce::String> DesktopEntryLoader::getCategories()
     using namespace juce;
     const ScopedLock readLock(lock);
     std::set<String> categoryNames;
-    for (std::map<String, std::set < DesktopEntry>>::iterator it = categories.begin();
-         it != categories.end(); it++)
+    for (auto iter = categories.begin(); iter != categories.end(); iter++)
     {
-        categoryNames.insert(it->first);
+        categoryNames.insert(iter->first);
     }
     return categoryNames;
 }
@@ -88,7 +89,8 @@ void DesktopEntryLoader::loadEntries(
             if (!readLock.isLocked())
             {
                 DBG("DesktopEntryLoader::" << __func__
-                        << ": Can't load desktop entries, thread is already locked");
+                        << ": Can't load desktop entries, "
+                        << "thread is already locked");
                 return;
             }
             entries.clear();
@@ -189,35 +191,44 @@ void DesktopEntryLoader::run()
             const ScopedUnlock waitUnlock(lock);
             wait(1);
         }
-        DesktopEntry entry(file);
-        StringArray onlyShowIn = entry.getValue(DesktopEntry::onlyShowIn);
-        if (entry.getValue(DesktopEntry::hidden)
-            || entry.getValue(DesktopEntry::noDisplay)
-            || entry.getValue(DesktopEntry::notShowIn).contains("pocket-home")
-            || (!onlyShowIn.isEmpty() && !onlyShowIn.contains("pocket-home")))
+        try
         {
-            continue;
+            DesktopEntry entry(file);
+            if (entry.shouldBeDisplayed())
+            {
+                StringArray entryCategories = entry.getCategories();
+                if (entryCategories.isEmpty())
+                {
+                    entryCategories.add("Other");
+                }
+                entryCategories.add("All");
+                for (const String& category : entryCategories)
+                {
+                    categories[category].insert(entry);
+                }
+                entries.insert(entry);
+            }
         }
-        
-        StringArray deCategories = entry.getValue(DesktopEntry::categories);
-        if (deCategories.isEmpty())
+        catch(DesktopEntryFileError e)
         {
-            deCategories.add("Other");
+            DBG("DesktopEntryLoader::" << __func__ << ": File error: "
+                    << e.what());
         }
-        deCategories.add("All");
-        for (const String& category : deCategories)
+        catch(DesktopEntryFormatError e)
         {
-            categories[category].insert(entry);
+            DBG("DesktopEntryLoader::" << __func__ << ": Format error: "
+                    << e.what());
         }
-        entries.insert(entry);
 
     }
+    DBG("DesktopEntryLoader::" << __func__ << ": "
+                << entries.size() << "/" << allEntries.size()
+                << " loaded successfully.");
+
     MessageManager::callAsync([&uiCallPending, this]
     {
         const ScopedLock loadingLock(lock);
-        notifyCallback("Finished loading applications.");
-        DBG("DesktopEntryLoader::" << __func__
-                << ": All desktop entries loaded.");
+        notifyCallback("Finished loading applications.");        
         onFinish();
     });
 }

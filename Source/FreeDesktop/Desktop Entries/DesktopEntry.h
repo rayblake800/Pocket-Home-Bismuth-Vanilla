@@ -388,7 +388,7 @@ private:
     juce::String desktopFileID;
     
     /* The desktop entry's type. */
-    Type type;
+    Type type = Type::application;
 
     /* Specific name of the application. */
     juce::String name;
@@ -397,7 +397,7 @@ private:
     juce::String genericName;
 
     /* Sets if the application should appear in menus */
-    bool noDisplay;
+    bool noDisplay = false;
 
     /* Tooltip describing the entry. */
     juce::String comment;
@@ -428,7 +428,7 @@ private:
     juce::String path;
 
     /* Whether this program runs in a terminal window. */
-    bool terminal;
+    bool terminal = false;
 
     /* An alternate action the entry can perform. */
     struct Action

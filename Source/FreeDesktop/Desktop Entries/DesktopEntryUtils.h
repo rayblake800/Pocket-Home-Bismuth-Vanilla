@@ -18,7 +18,7 @@ namespace DesktopEntryUtils
      * @return      The extracted locale string, or the empty string if the line
      *              does not target a specific locale.
      */
-    static juce::String parseLocale(const juce::String& line);
+    juce::String parseLocale(const juce::String& line);
 
     /**
      * @brief  Extracts the data key from a line read from a desktop entry file.
@@ -31,7 +31,7 @@ namespace DesktopEntryUtils
      *
      * @return                          The extracted key string.
      */
-    static const juce::Identifier& parseKey(const juce::String& line);
+    const juce::Identifier& parseKey(const juce::String& line);
 
     /**
      * @brief  Extracts the data value from a line read from a desktop entry
@@ -45,7 +45,7 @@ namespace DesktopEntryUtils
      *
      * @return                          The extracted value string.
      */
-    static juce::String parseValue(const juce::String& line);
+    juce::String parseValue(const juce::String& line);
 
     /**
      * @brief  Makes a command execution string valid for writing into a desktop
@@ -60,7 +60,7 @@ namespace DesktopEntryUtils
      * @return         A version of that command that can be written to a 
      *                 desktop entry file.
      */
-    static juce::String quoteCommandFields(const juce::String& command);
+    juce::String quoteCommandFields(const juce::String& command);
 
     /**
      * @brief  Removes extra quotes and backslashes from a command execution
@@ -72,7 +72,7 @@ namespace DesktopEntryUtils
      * @return         A version of the command string ready to be processed
      *                 with expandFieldCodes.
      */
-    static juce::String unquoteCommandFields(const juce::String& command);
+    juce::String unquoteCommandFields(const juce::String& command);
 
     /**
      * @brief  Checks if a line from a desktop entry file contains a section
@@ -82,7 +82,7 @@ namespace DesktopEntryUtils
      *
      * @return      True if the line contains a valid header title.
      */
-    static bool isHeaderLine(const juce::String& line);
+    bool isHeaderLine(const juce::String& line);
 
     /**
      * @brief  Extracts a section header title from a desktop entry file line.
@@ -95,7 +95,7 @@ namespace DesktopEntryUtils
      *                    line.  Return values for invalid header lines are
      *                    undefined.
      */
-    static juce::String extractHeader(const juce::String& headerLine);
+    juce::String extractHeader(const juce::String& headerLine);
 
     /**
      * @brief  Checks if a section header name describes the main desktop entry
@@ -106,7 +106,7 @@ namespace DesktopEntryUtils
      * @return        Whether the header name exactly matches the standard name
      *                for the main data section.
      */
-    static bool isMainDataHeader(const juce::String& header);
+    bool isMainDataHeader(const juce::String& header);
 
     /**
      * @brief  Checks if a section header name describes a desktop entry action.
@@ -116,22 +116,20 @@ namespace DesktopEntryUtils
      * @return        Whether the header name matches the format of desktop 
      *                entry action data.
      */
-    static bool isValidActionHeader(const juce::String& header);
+    bool isValidActionHeader(const juce::String& header);
     
     /**
-     * @brief  Checks if a string is non-empty and contains only valid 
-     *         characters allowed in desktop entry files.
+     * @brief  Checks if a string contains only valid characters allowed in 
+     *         desktop entry files.
      *
      * @param string          The string to search for invalid characters.
      *
      * @param isLocaleString  Whether the string contains localized text that
      *                        has a larger set of permitted characters.
      *
-     * @return                Whether the string is non-empty and all characters 
-     *                        in the string are valid.
+     * @return                Whether all characters in the string are valid.
      */
-    static bool isValidString(const juce::String& string,
-            const bool isLocaleString = false);
+    bool isValidString(const juce::String& string, const bool isLocaleString);
 
     /**
      * @brief  Replaces newline, tab, carriage return, and backslash
@@ -143,7 +141,7 @@ namespace DesktopEntryUtils
      * @return           A copy of the string parameter, with characters 
      *                   replaced by escape sequences.
      */
-    static juce::String addEscapeSequences(const juce::String& rawString);
+    juce::String addEscapeSequences(const juce::String& rawString);
 
     /**
      * @brief  Replaces \s, \n, \t, \r and \\ escape sequences with the
@@ -158,8 +156,7 @@ namespace DesktopEntryUtils
      *                                  escape sequences replaced by their 
      *                                  character values.
      */
-    static juce::String replaceEscapeSequences
-    (const juce::String& escapedString);
+    juce::String replaceEscapeSequences(const juce::String& escapedString);
 
     /**
      * @brief  Validates a string value from a desktop entry file, and replaces
@@ -180,8 +177,8 @@ namespace DesktopEntryUtils
      *
      * @return                        The processed string value.
      */
-    static juce::String processStringValue(const juce::String& entryString,
-            const juce::File& sourceFile, const bool isLocaleString = false);
+    juce::String processStringValue(const juce::String& entryString,
+            const juce::File& sourceFile, const bool isLocaleString);
 
     /**
      * @brief  Parses a list of strings from a single string value read from
@@ -206,8 +203,8 @@ namespace DesktopEntryUtils
      *
      * @return                        The list of string values.
      */
-    static juce::StringArray parseList(const juce::String& listStr,
-            const juce::File& sourceFile, const bool isLocaleString = false);
+    juce::StringArray parseList(const juce::String& listStr,
+            const juce::File& sourceFile, const bool isLocaleString);
 
     /**
      * @brief  Parses a boolean value from a string.
@@ -226,8 +223,7 @@ namespace DesktopEntryUtils
      * @return                        The boolean value represented by the 
      *                                string.
      */
-    static bool parseBool(const juce::String& boolStr,
-            const juce::File& sourceFile);
+    bool parseBool(const juce::String& boolStr, const juce::File& sourceFile);
 
     /**
      * @brief  Converts a boolean value to a string that can be written to a
@@ -237,7 +233,7 @@ namespace DesktopEntryUtils
      *
      * @return              The value's string representation.
      */
-    static juce::String boolString(const bool booleanValue);
+    juce::String boolString(const bool booleanValue);
 
     /**
      * @brief  Converts a list to a single string that can be written to a 
@@ -248,7 +244,12 @@ namespace DesktopEntryUtils
      * @throws DesktopEntryFormatError  If any list strings contain invalid
      *                                  characters.
      *
-     * @return                          The list's string representation;
+     * @param isLocaleString            Whether the string value contains
+     *                                  localized text that may use non-ascii
+     *                                  characters.
+     *
+     * @return                          The list's string representation.
      */
-    static juce::String listString(const juce::StringArray& list);
+    juce::String listString(const juce::StringArray& list,
+            const bool isLocaleString);
 }

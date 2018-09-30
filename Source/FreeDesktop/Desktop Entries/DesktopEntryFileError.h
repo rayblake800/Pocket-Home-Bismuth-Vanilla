@@ -17,7 +17,7 @@ public:
      *
      * @param error  A brief description of the problem encountered.
      */
-    DesktopEntryFileError(const juce::File& file, const juce::String& error) :
+    DesktopEntryFileError(const juce::File& file, const juce::String error) :
             errorMessage(file.getFullPathName() + ": " + error) { }
 
     /**

@@ -9,10 +9,14 @@ AppMenuPopupEditor("New desktop application",
     entryName.removeCharacters("./\\");
     if (entryName.isNotEmpty())
     {
-        DesktopEntry(entryName, editor->getIconField(),
-                editor->getCommandField(), editor->getCategories(),
-                editor->launchInTerm());
-                onConfirm();
+        DesktopEntry newEntry(entryName, entryName,
+                DesktopEntry::Type::application);
+        newEntry.setIcon(editor->getIconField());
+        newEntry.setExec(editor->getCommandField());
+        newEntry.setCategories(editor->getCategories());
+        newEntry.setLaunchedInTerm(editor->launchInTerm());
+        newEntry.writeFile();
+        onConfirm();
     }
 },
 true, true)

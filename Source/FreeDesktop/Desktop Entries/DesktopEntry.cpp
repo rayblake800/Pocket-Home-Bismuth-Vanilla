@@ -10,7 +10,7 @@
 #include "DesktopEntry.h"
 
 /* Directory where desktop entries are stored within $XDG_DATA_DIRS */
-static const juce::String entryDirectory = "applications/";
+static const juce::String entryDirectory = "/applications/";
 
 /**
  * @brief Creates a DataConverter that gets and sets typical string values.
@@ -56,7 +56,8 @@ static const juce::String entryDirectory = "applications/";
     }, \
     .getValue = [](DesktopEntry* thisEntry)->juce::String \
     { \
-        return DesktopEntryUtils::listString(thisEntry->listParam); \
+        return DesktopEntryUtils::listString(thisEntry->listParam, \
+                isLocaleString); \
     } \
 }
 
@@ -626,15 +627,21 @@ void DesktopEntry::readEntryFile()
     }
     entryFile.readLines(lines);
     String locale = Localized::getLocaleName();
+    /* Last group header read: */
     String groupHeader;
+    /* Action ID, if the current header defines an action: */
+    String actionId;
+    /*If true, the current group is a custom one that should be skipped: */
+    bool skipCurrentGroup = false;
     for (const String& line : lines)
     {
-        if(line.startsWithChar('#'))
+        if(line.isEmpty() || line.startsWithChar('#'))
         {
-            continue; //skip comments
+            continue; //skip comments and empty lines
         }
         else if(isHeaderLine(line))
         {
+            skipCurrentGroup = false;
             groupHeader = extractHeader(line);
             if(isValidActionHeader(groupHeader))
             {
@@ -642,10 +649,16 @@ void DesktopEntry::readEntryFile()
             }
             else if(!isMainDataHeader(groupHeader))
             {
-                String errorMessage("Invald group header ");
-                errorMessage += groupHeader;
-                throw DesktopEntryFileError(entryFile, errorMessage);
+                DBG("DesktopEntry::" << __func__ 
+                        << ": Ignoring nonstandard group "
+                        << groupHeader);
+                skipCurrentGroup = true;
             }
+            continue;
+        }
+        if(skipCurrentGroup)
+        {
+            continue;
         }
         String lineLocale = parseLocale(line);
         if(lineLocale.isEmpty() || lineLocale == locale)
@@ -667,8 +680,9 @@ void DesktopEntry::readEntryFile()
             {
                 if(e.getBadValue() != line)
                 {
-                    DBG("DesktopEntry::" << __func__ 
-                            << ": Skipping unexpected key " << e.getBadValue());
+                    //DBG("DesktopEntry::" << __func__ 
+                    //        << ": Skipping unexpected key " 
+                    //        << e.getBadValue());
                     continue;
                 }
                 else
