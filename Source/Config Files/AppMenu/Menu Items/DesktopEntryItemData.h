@@ -5,125 +5,197 @@
 #include "AppMenuItem.h"
 
 /**
- * @file DesktopEntryMenuItem.h
+ * @file DesktopEntryItemData.h
  * 
- * @brief DesktopEntryMenuItem is an AppMenuItem that gets its data from a 
+ * @brief DesktopEntryItemData is an AppMenuItem that gets its data from a 
  * DesktopEntry object, loaded from a .desktop file. It represents a shortcut
  * to an installed application.
  * 
  * @see AppMenuItem, AppMenuComponent, DesktopEntry
  */
 
-class DesktopEntryMenuItem : public AppMenuItem, private Localized
+class DesktopEntryItemData : public MenuItemData, private Localized
 {
 public:
+    DesktopEntryItemData(DesktopEntry desktopEntry);
+
+    virtual ~DesktopEntryItemData() { }
+
     /**
-     * Create a new menu item representing a DesktopEntry
-     * @param desktopEntry defines the application/directory data
+     * @brief  Creates a copy of this object.
+     *
+     * The caller is responsible for ensuring this object is deleted.
+     *
+     * @return  A new DataSource object copying this object's JSON data.
      */
-    DesktopEntryMenuItem(const DesktopEntry& desktopEntry);
-
-    virtual ~DesktopEntryMenuItem() { }
+    virtual MenuItemData* clone() const override;
 
     /**
-     * @return true if this menu item is an application folder
+     * @brief  Gets the menu item's displayed title.
+     *
+     * @return  The displayed title string.
      */
-    bool isFolder() const override;
-
-    //TODO: load items from .Directory files!
+    virtual juce::String getTitle() const override;
 
     /**
-     * @return the display name of the associated application
+     * @brief  Sets the menu item's displayed title.
+     *
+     * @param title  The new title string to display.
      */
-    juce::String getAppName() const override;
+    virtual void setTitle(const juce::String& title) override;
 
     /**
-     * @return application shell command or directory path.
+     * @brief  Gets the name or path use to load the menu item's icon file.
+     *
+     * @return  The name or path of the icon.
      */
-    juce::String getCommand() const override;
+    virtual juce::String getIconName() const override;
 
     /**
-     * @return true iff this menu item is an application that launches in
-     * the terminal.
+     * @brief  Sets the name or path used to load the menu item's icon file.
+     *
+     * @param iconName  The new icon name or path.
      */
-    bool isTerminalApp() const override;
+    virtual void setIconName(const juce::String& iconName) override;
 
     /**
-     * @return all application categories linked to this menu item.
+     * @brief  Gets the application categories connected to this menu item.
+     *
+     * @return  Any category strings assigned to this menu item.
      */
-    juce::StringArray getCategories() const override;
+    virtual juce::StringArray getCategories() override;
 
     /**
-     * @return the name or path used to load the icon file. 
+     * @brief  Sets the application categories connected to this menu item.
+     *
+     * @param categories  The new set of category strings to assign to this menu
+     *                    item.
      */
-    juce::String getIconName() const override;
+    virtual void setCategories(const juce::StringArray& categories) override;
 
     /**
-     * @return true, changes to this menu item change the current user's
-     * .Desktop files
+     * @brief  Gets the menu item's application launch command.
+     *
+     * @return  The launch command string, or the empty string if the menu item
+     *          does not launch an application.
      */
-    bool changesDesktopEntries() const override;
-
-
-protected:
+    virtual juce::String getCommand() const override;
 
     /**
-     * Get an appropriate title to use for a deletion confirmation window.
+     * @brief  Sets the menu item's application launch command.
+     *
+     * @param newCommand  The new command string to run when this menu item is
+     *                    clicked.
+     */
+    virtual void setCommand(const juce::String& newCommand) override;
+
+    /**
+     * @brief  Checks if this menu item launches an application in a new
+     *         terminal window.
+     *
+     * @return  True if and only if the menu item has a launch command it should
+     *          run in a new terminal window
+     */
+    virtual bool getLaunchedInTerm() const override;
+
+    /**
+     * @brief  Sets if this menu item runs its command in a new terminal window.
+     *
+     * @param termLaunch  True to run any launch command assigned to this
+     *                    menu item within a new terminal window.
+     */
+    virtual void setLaunchedInTerm(const bool termLaunch) override;
+
+    /**
+     * @brief  Deletes this menu item data from its source JSON file.
+     */
+    virtual void deleteFromSource() override;
+
+
+    /**
+     * @brief  Writes all changes to this menu item back to its data source.
+     */
+    virtual void updateSource() override;
+
+    /**
+     * @brief  Checks if this menu item can be moved within its menu folder.
+     *
+     * @param offset  The amount to offset the menu item index.
+     *
+     * @return        True if and only if the menu item can be moved, and the 
+     *                offset is valid.
+     */
+    virtual bool canMoveIndex(const int offset) override;
+
+    /**
+     * @brief  Attempts to move this menu item within its menu folder.
+     *
+     * @param offset  The amount to offset the menu item index.
+     *
+     * @return        True if the menu item was moved, false if it couldn't be
+     *                moved by the given offset value.
+     */
+    virtual bool moveIndex(const int offset) override;
+    
+    /**
+     * @brief  Gets an appropriate title to use for a deletion confirmation 
+     *         window.
+     *
+     * @return  A localized confirmation title string.
      */
     virtual juce::String getConfirmDeleteTitle() const override;
 
     /**
-     * Gets appropriate descriptive text for a deletion confirmation window.
+     * @brief  Gets appropriate descriptive text for a deletion confirmation 
+     *         window.
+     *
+     * @return  A localized confirmation description string.
      */
     virtual juce::String getConfirmDeleteMessage() const override;
 
     /**
-     * @return true iff this menu item has categories that can be edited.
-     */
-    virtual bool hasEditableCategories() const override
-    {
-        return true;
-    };
-
-    /**
-     * @return true iff this menu item has a command that can be edited.
-     */
-    virtual bool hasEditableCommand() const override
-    {
-        return true;
-    };
-
-    /**
-     * @return the title to display over an editor for this menu item. 
+     * @brief  Gets an appropriate title to use for a menu item editor.
+     *
+     * @return  A localized editor title string.
      */
     virtual juce::String getEditorTitle() const override;
 
     /**
-     * Gets a PopupEditorComponent callback function that will apply 
-     * changes from an AppMenuPopupEditor to this menu item.
+     * @brief  Checks if a data field within this menu item can be edited.
+     *
+     * @param dataField  The type of data being checked.
+     *
+     * @return           True if and only if the data field is editable.
      */
-    std::function<void(AppMenuPopupEditor*) > getEditorCallback() override;
+    virtual bool isEditable(const DataField dataField) override;
 
     /**
-     * Removes the source of this menu item's data.  This will hide the desktop
-     * entry from pocket-home, but leave it otherwise unchanged and accessible
-     * to other programs.
-     * 
-     * @return true iff the source was removed.
+     * @brief  Gets the number of menu items in the folder opened by this menu
+     *         item.
+     *
+     * @return  The number of folder items, or zero if this menu item does not
+     *          open a folder.
      */
-    bool removeMenuItemSource() override;
+    virtual int folderItemCount() override;
 
     /**
-     * Update this button's desktopEntry. This writes to 
-     * ~/.local/share/applications, so changes will only affect the current user.
-     * @param name application display name
-     * @param icon application icon
-     * @param categories application categories
-     * @param command application launch command
-     * @param useTerminal sets if this launches in a terminal window
+     * @brief  Gets a single menu item in the folder this menu item would open.
+     *
+     * @param index  The index of a menu item in the folder.
+     *
+     * @return  A menu item, or nullptr if this menu item doesn't open a folder
+     *          or index is out of bounds.  The caller is responsible for
+     *          ensuring non-null return values are deleted.
      */
-    void editEntry(juce::String name, juce::String icon, juce::StringArray categories,
-            juce::String command, bool useTerminal);
+    virtual MenuItemData* getFolderItem(int index) override;
+
+    /**
+     * @brief  Gets all menu items in the folder this menu item would open.
+     *
+     * @return  An array of menu item objects.  The caller is responsible for
+     *          ensuring these objects are deleted.
+     */
+    virtual juce::Array<MenuItemData*> getFolderItems() override;
 
 private:
     //localized text keys: 

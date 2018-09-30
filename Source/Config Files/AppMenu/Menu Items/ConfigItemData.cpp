@@ -49,6 +49,7 @@ juce::String ConfigItemData::getTitle() const
  */
 void ConfigItemData::setTitle(const juce::String& title)
 {
+    jsonData.getDynamicObject()->setProperty(titleKey, title);
 }
 
 /*
@@ -56,6 +57,7 @@ void ConfigItemData::setTitle(const juce::String& title)
  */
 juce::String ConfigItemData::getIconName() const
 {
+    return jsonData.getProperty(iconKey, "");
 }
 
 /*
@@ -63,6 +65,7 @@ juce::String ConfigItemData::getIconName() const
  */
 void ConfigItemData::setIconName(const juce::String& iconName)
 {
+    jsonData.getDynamicObject()->setProperty(iconKey, "");
 }
 
 /*
@@ -70,12 +73,16 @@ void ConfigItemData::setIconName(const juce::String& iconName)
  */
 juce::StringArray ConfigItemData::getCategories()
 {
+    using namespace juce;
+    var category = jsonData.getProperty(categoryKey, var());
+    StringArray 
+
 }
 
 /*
  * Sets the application categories connected to this menu item.
  */
-void setCategories(const juce::StringArray& categories)
+void ConfigItemData::setCategories(const juce::StringArray& categories)
 {
 }
 
@@ -177,12 +184,22 @@ juce::String ConfigItemData::getEditorTitle() const
  */
 bool ConfigItemData::isEditable(const DataField dataField)
 {
+    switch(dataField)
+    {
+        case DataField::categories:
+            return folderItemCount() > 0;
+        case DataField::command:
+        case DataField::termLaunchOption:
+            return folderItemCount() == 0;
+        case DataField::icon:
+        case DataField::title:
+            return true;
 }
 
 /*
  * Gets the number of menu items in the folder opened by this menu item.
  */
-int folderItemCount()
+int ConfigItemData::folderItemCount()
 {
 }
 
@@ -190,7 +207,7 @@ int folderItemCount()
 /*
  * Gets a single menu item in the folder this menu item would open.
  */
-MenuItemData* getFolderItem(int index)
+MenuItemData* ConfigItemData::getFolderItem(int index)
 {
 }
 
@@ -198,7 +215,7 @@ MenuItemData* getFolderItem(int index)
 /*
  * Gets all menu items in the folder this menu item would open.
  */
-juce::Array<MenuItemData*> getFolderItems()
+juce::Array<MenuItemData*> ConfigItemData::getFolderItems()
 {
 }
 
