@@ -4,9 +4,10 @@
 #include "DesktopEntryFileError.h"
 #include "DesktopEntryItemData.h"
 
-DesktopEntryItemData::DesktopEntryItemData(DesktopEntry desktopEntry) :
+DesktopEntryItemData::DesktopEntryItemData
+(DesktopEntry desktopEntry, const int index) :
 desktopEntry(desktopEntry),
-MenuItemData(-1, nullptr),
+MenuItemData(index, nullptr),
 Localized("DesktopEntryItemData") { }
 
 /*

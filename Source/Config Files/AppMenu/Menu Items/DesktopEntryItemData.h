@@ -17,7 +17,7 @@
 class DesktopEntryItemData : public MenuItemData, private Localized
 {
 public:
-    DesktopEntryItemData(DesktopEntry desktopEntry);
+    DesktopEntryItemData(DesktopEntry desktopEntry, const int index);
 
     virtual ~DesktopEntryItemData() { }
 
