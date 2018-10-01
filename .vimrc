@@ -63,12 +63,10 @@ set makeprg=make
 "F1: open cheat sheets
 map <F1> <leader>?<cr>
 noremap <F2> :NERDTreeToggle<cr> 
-noremap <F3> :!make<cr>
-noremap <F4> :ConqueGdb pocket-home<cr>
+noremap <F3> :YcmCompleter GoTo<cr>
+noremap <F4> :! make debug<cr>
 noremap <F5> :!pocket-home<cr>
-noremap <F6> :Dox<cr>
-noremap <F7> :tabnew<cr>
-noremap <F8> :YcmCompleter GoTo<cr>
-noremap <F9> :YcmCompleter GetDoc<cr>
-noremap <F10> :YcmCompleter FixIt<cr>
+noremap <F6> :ConqueGdb pocket-home<cr>
+noremap <F7> :Dox<cr>
+noremap <F8> :tabnew<cr>
 map <F11> :set invnumber<cr>
