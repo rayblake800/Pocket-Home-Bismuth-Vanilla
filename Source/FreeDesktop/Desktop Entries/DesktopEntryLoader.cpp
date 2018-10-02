@@ -7,55 +7,126 @@
 #include "DesktopEntryFormatError.h"
 #include "DesktopEntryLoader.h"
 
-DesktopEntryLoader::DesktopEntryLoader() : Thread("DesktopEntryLoader") { }
+/* SharedResource object class key. */ 
+static const juce::Identifier desktopEntryThreadKey("DesktopEntryThread");
 
-DesktopEntryLoader::~DesktopEntryLoader()
+/**
+ * @brief  Asynchronously loads and caches desktop entry data.
+ */
+class DesktopEntryThread : public juce::Thread, public SharedResource
 {
-    if (isThreadRunning())
+    /* Only DesktopEntryLoader has direct access. */
+    friend class DesktopEntryLoader;
+    
+    /* Saved callback function for reporting loading progress. */
+    std::function<void(juce::String)> notifyCallback;
+
+    /* Saved callback function to run when loading is complete. */
+    std::function<void()> onFinish;
+
+    DesktopEntryThread() : Thread("DesktopEntryThread"),
+    SharedResource(desktopEntryThreadKey) { }
+
+public:
+    virtual ~DesktopEntryThread()
     {
-        stopThread(1000);
+        if (isThreadRunning())
+        {
+            stopThread(1000);
+        }
     }
-}
+
+private:
+    int size() const
+    {
+        return entries.size();
+    }
+
+    std::set<DesktopEntry> getCategoryListEntries
+        (const juce::StringArray& categoryList) const
+    {
+        using namespace juce;
+        std::set<DesktopEntry> categoryEntries;
+        for (String& category : categoryList)
+        {
+            std::set<DesktopEntry> catEntries = getCategoryEntries(category);
+            for (DesktopEntry entry : catEntries)
+            {
+                categoryEntries.insert(entry);
+            }
+        }
+        return categoryEntries;
+    }
+
+    std::set<DesktopEntry> getCategoryEntries
+        (const juce::String& category) const
+    {
+        return categories[category];
+    }
+
+    std::set<juce::String> DesktopEntryLoader::getCategories()
+    {
+        using namespace juce;
+        std::set<String> categoryNames;
+        for (auto iter = categories.begin(); iter != categories.end(); iter++)
+        {
+            categoryNames.insert(iter->first);
+        }
+        return categoryNames;
+    }
+
+    void DesktopEntryLoader::loadEntries(
+            std::function<void(juce::String) > notifyCallback,
+            std::function<void() > onFinish)
+    {
+        using namespace juce;
+        if (!isThreadRunning())
+        {
+            entries.clear();
+            categories.clear();
+            this->notifyCallback = notifyCallback;
+            this->onFinish = onFinish;
+            startThread();
+        }
+    }
+
+
+};
+
+DesktopEntryLoader::DesktopEntryLoader() : 
+SharedResource<DesktopEntryThread>(desktopEntryThreadKey,
+        []()->SharedResource* { return new DesktopEntryThread(); }) { }
+
+DesktopEntryLoader::~DesktopEntryLoader() { }
+
 
 /*
  * return the number of stored DesktopEntry objects 
  */
 int DesktopEntryLoader::size()
 {
-    using namespace juce;
-    const ScopedLock readLock(lock);
-    return entries.size();
+    auto deThread = getReadLockedResource();
+    return deThread->size();
 }
 
 /*
  * Get a list of all DesktopEntry objects within several categories
  */
 std::set<DesktopEntry> DesktopEntryLoader::getCategoryListEntries
-(juce::StringArray categoryList)
+(const juce::StringArray& categoryList)
 {
-    using namespace juce;
-    const ScopedLock readLock(lock);
-    std::set<DesktopEntry> categoryEntries;
-    for (String& category : categoryList)
-    {
-        std::set<DesktopEntry> catEntries = getCategoryEntries(category);
-        for (DesktopEntry entry : catEntries)
-        {
-            categoryEntries.insert(entry);
-        }
-    }
-    return categoryEntries;
+    auto deThread = getReadLockedResource();
+    return deThread->getCategoryListEntries(categoryList);
 }
 
 /*
  * Get all DesktopEntryLoader with a given category name
  */
 std::set<DesktopEntry> DesktopEntryLoader::getCategoryEntries
-(juce::String category)
+(const juce::String& category)
 {
-    using namespace juce;
-    const ScopedLock readLock(lock);
-    return categories[category];
+    auto deThread = getReadLockedResource();
+    return deThread->getCategoryEntries(category);
 }
 
 /*
@@ -63,14 +134,8 @@ std::set<DesktopEntry> DesktopEntryLoader::getCategoryEntries
  */
 std::set<juce::String> DesktopEntryLoader::getCategories()
 {
-    using namespace juce;
-    const ScopedLock readLock(lock);
-    std::set<String> categoryNames;
-    for (auto iter = categories.begin(); iter != categories.end(); iter++)
-    {
-        categoryNames.insert(iter->first);
-    }
-    return categoryNames;
+    auto deThread = getReadLockedResource();
+    return deThread->getCategories();
 }
 
 /*
@@ -81,25 +146,8 @@ void DesktopEntryLoader::loadEntries(
         std::function<void(juce::String) > notifyCallback,
         std::function<void() > onFinish)
 {
-    using namespace juce;
-    if (!isThreadRunning())
-    {
-        {
-            const ScopedTryLock readLock(lock);
-            if (!readLock.isLocked())
-            {
-                DBG("DesktopEntryLoader::" << __func__
-                        << ": Can't load desktop entries, "
-                        << "thread is already locked");
-                return;
-            }
-            entries.clear();
-            categories.clear();
-            this->notifyCallback = notifyCallback;
-            this->onFinish = onFinish;
-        }
-        startThread();
-    }
+    auto deThread = getWriteLockedResource();
+    return deThread->loadEntries(notifyCallback, onFinish);
 }
 
 /*
@@ -110,13 +158,9 @@ void DesktopEntryLoader::loadEntries(
 void DesktopEntryLoader::clearCallbacks()
 {
     using namespace juce;
-    const ScopedLock loadingLock(lock);
-    notifyCallback = [](String s)
-    {
-    };
-    onFinish = []()
-    {
-    };
+    auto deThread = getWriteLockedResource();
+    deThread->notifyCallback = [](String s){};
+    deThread->onFinish = [](){};
 }
 
 void DesktopEntryLoader::run()

@@ -3,6 +3,7 @@
 #include <set>
 #include <functional>
 #include "Utils.h"
+#include "ResourceHandler"
 #include "DesktopEntry.h"
 
 /** 
@@ -13,7 +14,11 @@
  * its own thread.
  */
 
-class DesktopEntryLoader : private juce::Thread {
+/* Private SharedResource object class. */
+class DesktopEntryThread;
+
+class DesktopEntryLoader : public ResourceHandler<DesktopEntryThread>
+{
 public:
     DesktopEntryLoader();
 
@@ -76,19 +81,11 @@ public:
     void clearCallbacks();
 
 private:
-    /**
-     * Loads all desktop entries outside of the main thread.
-     */
-    void run() override;
-
-    //list of all entries
+    /* The list of all entries. */
     std::set<DesktopEntry> entries;
-    //maps category names to lists of entries
+    /* Map of category names to lists of entries. */
     std::map<juce::String, std::set<DesktopEntry>> categories;
-    //protects desktopEntry data from concurrent access
-    juce::CriticalSection lock;
-    
-    //Callback function to send loading progress update strings.
+    /* Callback function to send loading progress update strings. */
     std::function<void(juce::String) > notifyCallback;
     //Callback to run when desktop entries finish loading.
     std::function<void() > onFinish;
