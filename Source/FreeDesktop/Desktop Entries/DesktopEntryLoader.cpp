@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include "Utils.h"
+#include "XDGDirectories.h"
 #include "DesktopEntryFileError.h"
 #include "DesktopEntryFormatError.h"
 #include "DesktopEntryLoader.h"
@@ -18,11 +19,14 @@ class DesktopEntryThread : public juce::Thread, public SharedResource
     /* Only DesktopEntryLoader has direct access. */
     friend class DesktopEntryLoader;
     
-    /* Saved callback function for reporting loading progress. */
-    std::function<void(juce::String)> notifyCallback;
-
-    /* Saved callback function to run when loading is complete. */
-    std::function<void()> onFinish;
+    /* The list of all entries. */
+    std::set<DesktopEntry> entries;
+    /* Map of category names to lists of entries. */
+    std::map<juce::String, std::set<DesktopEntry>> categories;
+    /* Callback function to send loading progress update strings. */
+    std::function<void(juce::String) > notifyCallback;
+    //Callback to run when desktop entries finish loading.
+    std::function<void() > onFinish;
 
     DesktopEntryThread() : Thread("DesktopEntryThread"),
     SharedResource(desktopEntryThreadKey) { }
@@ -37,34 +41,8 @@ public:
     }
 
 private:
-    int size() const
-    {
-        return entries.size();
-    }
 
-    std::set<DesktopEntry> getCategoryListEntries
-        (const juce::StringArray& categoryList) const
-    {
-        using namespace juce;
-        std::set<DesktopEntry> categoryEntries;
-        for (String& category : categoryList)
-        {
-            std::set<DesktopEntry> catEntries = getCategoryEntries(category);
-            for (DesktopEntry entry : catEntries)
-            {
-                categoryEntries.insert(entry);
-            }
-        }
-        return categoryEntries;
-    }
-
-    std::set<DesktopEntry> getCategoryEntries
-        (const juce::String& category) const
-    {
-        return categories[category];
-    }
-
-    std::set<juce::String> DesktopEntryLoader::getCategories()
+    std::set<juce::String> getCategories()
     {
         using namespace juce;
         std::set<String> categoryNames;
@@ -75,7 +53,7 @@ private:
         return categoryNames;
     }
 
-    void DesktopEntryLoader::loadEntries(
+    void loadEntries(
             std::function<void(juce::String) > notifyCallback,
             std::function<void() > onFinish)
     {
@@ -90,11 +68,123 @@ private:
         }
     }
 
+    virtual void run() override
+    {
+        using namespace juce;
+        const ScopedLock loadingLock(lock);
+        std::atomic<bool> uiCallPending;
+        uiCallPending = false;
+        //read the contents of all desktop application directories
+        DBG("DesktopEntryLoader::" << __func__ << ": finding desktop entries...");
+        std::vector<String> dirs = {
+                                    "~/.local/share/applications",
+                                    "/usr/share/applications",
+                                    "/usr/local/share/applications"
+        };
+        //track entry names and ignore duplicates
+        std::set<String> files;
+        Array<File> allEntries;
+        for (int i = 0; i < dirs.size(); i++)
+        {   
+            uiCallPending = true;
+            MessageManager::callAsync([&i, &dirs, &uiCallPending, this]
+            {
+                notifyCallback(String("Scanning application directory ") +
+                        String(i + 1) + String("/")
+                        + String(dirs.size()));
+                uiCallPending = false;
+                this->notify();
+            });
+            while (uiCallPending)
+            {
+                if (threadShouldExit())
+                {
+                    return;
+                }
+                const ScopedUnlock waitUnlock(lock);
+                wait(1);
+            }
+            File directory(dirs[i]);
+            if (directory.isDirectory())
+            {
+                Array<File> entries = directory.findChildFiles(File::findFiles,
+                        true, "*.directory;*.desktop");
+                for (File& file : entries)
+                {
+                    if (files.insert(file.getFileName()).second)
+                    {
+                        allEntries.add(file);
+                    }
+                }
+            }
+        }
+        int fileIndex = 0;
+        //read in files as DesktopEntry objects
+        for (File& file : allEntries)
+        {
+            fileIndex++;
+            uiCallPending = true;
+            MessageManager::callAsync([&fileIndex, &files, &uiCallPending, this]
+            {
+                notifyCallback(String("Reading file ") + String(fileIndex) +
+                        String("/") + String(files.size()));
+                uiCallPending = false;
+                this->notify();
+            });   
+            while (uiCallPending)
+            {
+                if (threadShouldExit())
+                {
+                    return;
+                }
+                const ScopedUnlock waitUnlock(lock);
+                wait(1);
+            }
+            try
+            {
+                DesktopEntry entry(file);
+                if (entry.shouldBeDisplayed())
+                {
+                    StringArray entryCategories = entry.getCategories();
+                    if (entryCategories.isEmpty())
+                    {
+                        entryCategories.add("Other");
+                    }
+                    entryCategories.add("All");
+                    for (const String& category : entryCategories)
+                    {
+                        categories[category].insert(entry);
+                    }
+                    entries.insert(entry);
+                }
+            }
+            catch(DesktopEntryFileError e)
+            {
+                DBG("DesktopEntryLoader::" << __func__ << ": File error: "
+                        << e.what());
+            }
+            catch(DesktopEntryFormatError e)
+            {
+                DBG("DesktopEntryLoader::" << __func__ << ": Format error: "
+                        << e.what());
+            }
 
+        }
+        DBG("DesktopEntryLoader::" << __func__ << ": "
+                    << entries.size() << "/" << allEntries.size()
+                    << " loaded successfully.");
+
+        MessageManager::callAsync([&uiCallPending, this]
+        {
+            const ScopedLock loadingLock(lock);
+            notifyCallback("Finished loading applications.");        
+            onFinish();
+        });
+    }
 };
 
 DesktopEntryLoader::DesktopEntryLoader() : 
-SharedResource<DesktopEntryThread>(desktopEntryThreadKey,
+ResourceHandler<DesktopEntryThread>(desktopEntryThreadKey,
         []()->SharedResource* { return new DesktopEntryThread(); }) { }
 
 DesktopEntryLoader::~DesktopEntryLoader() { }
@@ -106,17 +196,11 @@ DesktopEntryLoader::~DesktopEntryLoader() { }
 int DesktopEntryLoader::size()
 {
     auto deThread = getReadLockedResource();
-    return deThread->size();
-}
-
-/*
- * Get a list of all DesktopEntry objects within several categories
- */
-std::set<DesktopEntry> DesktopEntryLoader::getCategoryListEntries
-(const juce::StringArray& categoryList)
-{
-    auto deThread = getReadLockedResource();
-    return deThread->getCategoryListEntries(categoryList);
+    if(deThread->isThreadRunning())
+    {
+        return 0;
+    }
+    return deThread->entries.size();
 }
 
 /*
@@ -126,7 +210,35 @@ std::set<DesktopEntry> DesktopEntryLoader::getCategoryEntries
 (const juce::String& category)
 {
     auto deThread = getReadLockedResource();
-    return deThread->getCategoryEntries(category);
+    if(deThread->isThreadRunning())
+    {
+        return { };
+    }
+    return deThread->categories.at(category);
+}
+
+/*
+ * Get a list of all DesktopEntry objects within several categories
+ */
+std::set<DesktopEntry> DesktopEntryLoader::getCategoryListEntries
+(const juce::StringArray& categoryList)
+{
+    using namespace juce;
+    auto deThread = getReadLockedResource();
+    if(deThread->isThreadRunning())
+    {
+        return { };
+    }
+    std::set<DesktopEntry> categoryEntries;
+    for (const String& category : categoryList)
+    {
+        std::set<DesktopEntry> catEntries = deThread->categories.at(category);
+        for (DesktopEntry entry : catEntries)
+        {
+            categoryEntries.insert(entry);
+        }
+    }
+    return categoryEntries;
 }
 
 /*
@@ -134,8 +246,19 @@ std::set<DesktopEntry> DesktopEntryLoader::getCategoryEntries
  */
 std::set<juce::String> DesktopEntryLoader::getCategories()
 {
+    using namespace juce;
     auto deThread = getReadLockedResource();
-    return deThread->getCategories();
+    if(deThread->isThreadRunning())
+    {
+        return { };
+    }
+    std::set<String> categoryNames;
+    for (auto iter = deThread->categories.begin(); 
+              iter != deThread->categories.end(); iter++)
+    {
+        categoryNames.insert(iter->first);
+    }
+    return categoryNames;
 }
 
 /*
@@ -147,7 +270,14 @@ void DesktopEntryLoader::loadEntries(
         std::function<void() > onFinish)
 {
     auto deThread = getWriteLockedResource();
-    return deThread->loadEntries(notifyCallback, onFinish);
+    if (!deThread->isThreadRunning())
+    {
+        deThread->entries.clear();
+        deThread->categories.clear();
+        deThread->notifyCallback = notifyCallback;
+        deThread->onFinish = onFinish;
+        deThread->startThread();
+    }
 }
 
 /*
@@ -163,116 +293,4 @@ void DesktopEntryLoader::clearCallbacks()
     deThread->onFinish = [](){};
 }
 
-void DesktopEntryLoader::run()
-{
-    using namespace juce;
-    const ScopedLock loadingLock(lock);
-    std::atomic<bool> uiCallPending;
-    uiCallPending = false;
-    //read the contents of all desktop application directories
-    DBG("DesktopEntryLoader::" << __func__ << ": finding desktop entries...");
-    std::vector<String> dirs = {
-                                "~/.local/share/applications",
-                                "/usr/share/applications",
-                                "/usr/local/share/applications"
-    };
-    //track entry names and ignore duplicates
-    std::set<String> files;
-    Array<File> allEntries;
-    for (int i = 0; i < dirs.size(); i++)
-    {   
-        uiCallPending = true;
-        MessageManager::callAsync([&i, &dirs, &uiCallPending, this]
-        {
-            notifyCallback(String("Scanning application directory ") +
-                    String(i + 1) + String("/")
-                    + String(dirs.size()));
-            uiCallPending = false;
-            this->notify();
-        });
-        while (uiCallPending)
-        {
-            if (threadShouldExit())
-            {
-                return;
-            }
-            const ScopedUnlock waitUnlock(lock);
-            wait(1);
-        }
-        File directory(dirs[i]);
-        if (directory.isDirectory())
-        {
-            Array<File> entries = directory.findChildFiles(File::findFiles,
-                    true, "*.directory;*.desktop");
-            for (File& file : entries)
-            {
-                if (files.insert(file.getFileName()).second)
-                {
-                    allEntries.add(file);
-                }
-            }
-        }
-    }
-    int fileIndex = 0;
-    //read in files as DesktopEntry objects
-    for (File& file : allEntries)
-    {
-        fileIndex++;
-        uiCallPending = true;
-        MessageManager::callAsync([&fileIndex, &files, &uiCallPending, this]
-        {
-            notifyCallback(String("Reading file ") + String(fileIndex) +
-                    String("/") + String(files.size()));
-            uiCallPending = false;
-            this->notify();
-        });   
-        while (uiCallPending)
-        {
-            if (threadShouldExit())
-            {
-                return;
-            }
-            const ScopedUnlock waitUnlock(lock);
-            wait(1);
-        }
-        try
-        {
-            DesktopEntry entry(file);
-            if (entry.shouldBeDisplayed())
-            {
-                StringArray entryCategories = entry.getCategories();
-                if (entryCategories.isEmpty())
-                {
-                    entryCategories.add("Other");
-                }
-                entryCategories.add("All");
-                for (const String& category : entryCategories)
-                {
-                    categories[category].insert(entry);
-                }
-                entries.insert(entry);
-            }
-        }
-        catch(DesktopEntryFileError e)
-        {
-            DBG("DesktopEntryLoader::" << __func__ << ": File error: "
-                    << e.what());
-        }
-        catch(DesktopEntryFormatError e)
-        {
-            DBG("DesktopEntryLoader::" << __func__ << ": Format error: "
-                    << e.what());
-        }
 
-    }
-    DBG("DesktopEntryLoader::" << __func__ << ": "
-                << entries.size() << "/" << allEntries.size()
-                << " loaded successfully.");
-
-    MessageManager::callAsync([&uiCallPending, this]
-    {
-        const ScopedLock loadingLock(lock);
-        notifyCallback("Finished loading applications.");        
-        onFinish();
-    });
-}
