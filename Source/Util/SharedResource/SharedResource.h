@@ -141,6 +141,13 @@ protected:
      */
     void foreachHandler(std::function<void(Handler*)> handlerAction);
 
+    /**
+     * @brief  Gets the unique key identifying the SharedResource object.
+     *
+     * @return  The resource object's key.
+     */
+    const juce::Identifier& getResourceKey();
+
 private:
     /*
      * Holds pointers to every Handler that accesses this SharedResource.  This 

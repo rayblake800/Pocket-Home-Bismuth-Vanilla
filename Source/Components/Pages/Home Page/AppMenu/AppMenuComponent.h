@@ -370,7 +370,7 @@ private:
     //Holds the menu editor component that can be accessed via the pop-up menu
     juce::ScopedPointer<AppMenuPopupEditor> buttonEditor;
     //Loads system applications from .Desktop files
-    static DesktopEntryLoader desktopEntries;
+    DesktopEntryLoader desktopEntries;
     //Tracks if desktop entries are loading or applications are launching in
     //another thread
     std::atomic<bool> loadingState;

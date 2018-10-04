@@ -3,17 +3,20 @@
 #include <set>
 #include <functional>
 #include "Utils.h"
+#include "ResourceHandler.h"
 #include "DesktopEntry.h"
 
 /** 
- * @file   DesktopEntryLoader.h
+ * @file  DesktopEntryLoader.h
  *
- * Finds all .Desktop and .Directory files in the system, and stores and sorts 
- * them as DesktopEntry objects.   Desktop entry file indexing occurs within
- * its own thread.
+ * @brief  Finds and caches all desktop entry file data.
  */
 
-class DesktopEntryLoader : private juce::Thread {
+/* Private SharedResource object class. */
+class DesktopEntryThread;
+
+class DesktopEntryLoader : public ResourceHandler<DesktopEntryThread>
+{
 public:
     DesktopEntryLoader();
 
@@ -31,7 +34,7 @@ public:
      *
      * @return a set of all matching DesktopEntries
      */
-    std::set<DesktopEntry> getCategoryEntries(juce::String category);
+    std::set<DesktopEntry> getCategoryEntries(const juce::String& category);
 
     /**
      * Finds all DesktopEntry objects within several categories.
@@ -41,7 +44,8 @@ public:
      * @return the set of all DesktopEntry objects with at least one of the 
      *         category values in the category list.
      */
-    std::set<DesktopEntry> getCategoryListEntries(juce::StringArray categoryList);
+    std::set<DesktopEntry> getCategoryListEntries
+        (const juce::StringArray& categoryList);
 
     /**
      * Finds the list of all categories found in all desktop entries.
@@ -76,22 +80,6 @@ public:
     void clearCallbacks();
 
 private:
-    /**
-     * Loads all desktop entries outside of the main thread.
-     */
-    void run() override;
-
-    //list of all entries
-    std::set<DesktopEntry> entries;
-    //maps category names to lists of entries
-    std::map<juce::String, std::set<DesktopEntry>> categories;
-    //protects desktopEntry data from concurrent access
-    juce::CriticalSection lock;
-    
-    //Callback function to send loading progress update strings.
-    std::function<void(juce::String) > notifyCallback;
-    //Callback to run when desktop entries finish loading.
-    std::function<void() > onFinish;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DesktopEntryLoader)
 

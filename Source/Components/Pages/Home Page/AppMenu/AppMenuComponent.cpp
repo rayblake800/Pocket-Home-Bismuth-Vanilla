@@ -10,7 +10,6 @@
 //TODO: load these from config, set on input page
 const juce::String AppMenuComponent::openPopupMenuBinding = "CTRL + e";
 const juce::String AppMenuComponent::reloadMenuBinding = "TAB";
-DesktopEntryLoader AppMenuComponent::desktopEntries;
 
 AppMenuComponent::AppMenuComponent(
         const juce::Identifier& componentKey,

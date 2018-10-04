@@ -135,6 +135,7 @@
 		B7AF5A735E8C649AB188629F = {isa = PBXBuildFile; fileRef = 3B2D54137C44BEEF047456E3; };
 		C8F7BB692DB34F5141368323 = {isa = PBXBuildFile; fileRef = 5D3C32C2A3FB5F01989B8621; };
 		89FA68CC1C345270345C2308 = {isa = PBXBuildFile; fileRef = D0F2B9D40DC891BFCE4F05E8; };
+		A988FFEF943153A2F39AB9D8 = {isa = PBXBuildFile; fileRef = 7D10998566C1E318A1745606; };
 		6CA24ED8700A0A9049BC3C9B = {isa = PBXBuildFile; fileRef = D753D0AB4841AA1BD04C86CF; };
 		143D918C473AF5D4BC26E1E5 = {isa = PBXBuildFile; fileRef = CA2122593D43EFF3AB380FFF; };
 		7B613DAE69EDB04D79FC585F = {isa = PBXBuildFile; fileRef = 5601233B7FCBDC0AEBD7C66F; };
@@ -310,6 +311,7 @@
 		793D45A4A9D717F9F0133903 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		7A3ACDAAE26E457BBE035DFB = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FolderMenuItem.h; path = "../../Source/Components/Pages/Home Page/AppMenu/Menu Items/FolderMenuItem.h"; sourceTree = "SOURCE_ROOT"; };
 		7B0A2426B39E24A88E089D25 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UIPage.h; path = "../../Source/Components/Pages/Settings Pages/UI Page/UIPage.h"; sourceTree = "SOURCE_ROOT"; };
+		7D10998566C1E318A1745606 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ThreadResource.cpp; path = ../../Source/Util/SharedResource/ThreadResource.cpp; sourceTree = "SOURCE_ROOT"; };
 		7EA2EC2880B786A938232738 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NetworkInterface.cpp; path = ../../Source/System/Wifi/NetworkInterface.cpp; sourceTree = "SOURCE_ROOT"; };
 		80443BF272345A783E871949 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppFolder.cpp; path = "../../Source/Config Files/AppMenu/AppFolder.cpp"; sourceTree = "SOURCE_ROOT"; };
 		81A9B25F7121732877D8E945 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PagedAppMenu.cpp; path = "../../Source/Components/Pages/Home Page/AppMenu/Paged Menu/PagedAppMenu.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -341,6 +343,7 @@
 		964A432C1989D7BB5D758870 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Password.cpp; path = "../../Source/Components/Pages/Settings Pages/Password Pages/Password.cpp"; sourceTree = "SOURCE_ROOT"; };
 		96CDDEA4D2FF16D25A9EB5A1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ThreadLock.h; path = ../../Source/Util/SharedResource/ThreadLock.h; sourceTree = "SOURCE_ROOT"; };
 		981E053B45C0EA999DEBAC94 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PageFactory.cpp; path = ../../Source/Components/Pages/PageFactory.cpp; sourceTree = "SOURCE_ROOT"; };
+		990F911CEF5BB22BC5F70925 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ThreadResource.h; path = ../../Source/Util/SharedResource/ThreadResource.h; sourceTree = "SOURCE_ROOT"; };
 		9912A25465A1A956D891C7CB = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ScalingLabel.h; path = ../../Source/Components/Widgets/ScalingLabel.h; sourceTree = "SOURCE_ROOT"; };
 		9A058EB26BA78FC452403E8A = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ProcessUtils.h; path = ../../Source/System/ProcessUtils.h; sourceTree = "SOURCE_ROOT"; };
 		9A31713BEC517A71B37737E6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NMPPAccessPoint.cpp; path = ../../Source/GLib/LibNM/NMPPAccessPoint.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -801,6 +804,8 @@
 					D0F2B9D40DC891BFCE4F05E8,
 					E7BBDF22ECBB01814A896A75, ); name = GLib; sourceTree = "<group>"; };
 		0E7885820D857207FD605698 = {isa = PBXGroup; children = (
+					7D10998566C1E318A1745606,
+					990F911CEF5BB22BC5F70925,
 					D753D0AB4841AA1BD04C86CF,
 					4934B9D6654313DADE76681D,
 					CA2122593D43EFF3AB380FFF,
@@ -1165,6 +1170,7 @@
 					B7AF5A735E8C649AB188629F,
 					C8F7BB692DB34F5141368323,
 					89FA68CC1C345270345C2308,
+					A988FFEF943153A2F39AB9D8,
 					6CA24ED8700A0A9049BC3C9B,
 					143D918C473AF5D4BC26E1E5,
 					7B613DAE69EDB04D79FC585F,
