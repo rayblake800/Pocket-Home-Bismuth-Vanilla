@@ -7,11 +7,9 @@
 #include "DesktopEntry.h"
 
 /** 
- * @file   DesktopEntryLoader.h
+ * @file  DesktopEntryLoader.h
  *
- * Finds all .Desktop and .Directory files in the system, and stores and sorts 
- * them as DesktopEntry objects.   Desktop entry file indexing occurs within
- * its own thread.
+ * @brief  Finds and caches all desktop entry file data.
  */
 
 /* Private SharedResource object class. */

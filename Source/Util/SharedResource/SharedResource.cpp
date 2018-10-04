@@ -170,3 +170,11 @@ void SharedResource::foreachHandler
     }
 }
 
+/*
+ * Gets the unique key identifying the SharedResource object.
+ */
+const juce::Identifier& SharedResource::getResourceKey()
+{
+    return resourceKey;
+}
+

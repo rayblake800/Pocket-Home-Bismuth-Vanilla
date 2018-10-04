@@ -200,6 +200,9 @@
         "new_shortcut" : "New shortcut",
         "new_entry" : "New desktop menu entry",
         "new_folder" : "New folder"
+    },
+    "DesktopEntryThread" : {
+        "reading_entry" : "Reading file "
     }
 
 }
