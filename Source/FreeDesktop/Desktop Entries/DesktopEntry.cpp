@@ -148,11 +148,11 @@ DesktopEntry::keyGuide
             .readValue = []
             (DesktopEntry* thisEntry, const juce::String& value)
             {
-                if(value != "1.1")
-                {
-                    DBG("DesktopEntry::saveLineData: Warning, unexpected "
-                            << "desktop entry standard version " << value);
-                }
+                //if(value != "1.1")
+                //{
+                //    DBG("DesktopEntry::saveLineData: Warning, unexpected "
+                //            << "desktop entry standard version " << value);
+                //}
             },
             .getValue = []
             (DesktopEntry* thisEntry)->juce::String

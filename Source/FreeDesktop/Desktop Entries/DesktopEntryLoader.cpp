@@ -1,4 +1,7 @@
 #include <atomic>
+#include <stdlib.h>
+#include <dirent.h>
+#include <stdlib.h>
 #include "Utils.h"
 #include "Localized.h"
 #include "ThreadResource.h"
@@ -92,6 +95,12 @@ private:
     {
         using namespace juce;
         threadLock.takeWriteLock();
+        if(pendingEntryFiles.empty())
+        {
+            signalThreadShouldExit();
+            threadLock.releaseLock();
+            return;
+        }
         File entryFile = pendingEntryFiles.begin()->second;
         pendingEntryFiles.erase(pendingEntryFiles.begin());;   
         try
@@ -131,12 +140,13 @@ private:
             {
                 notifyCallback(notifyText);
             }));   
+        threadLock.releaseLock();
     }
 
     void cleanup() override
     {
         using namespace juce;
-        DBG("DesktopEntryThread::" << __func__ << ": Loaded"
+        DBG("DesktopEntryThread::" << __func__ << ": Loaded "
                 << entries.size() << " desktop entries.");
         MessageManager::callAsync(buildAsyncFunction(LockType::read,
                     [this] { onFinish(); }));
@@ -198,6 +208,17 @@ std::set<DesktopEntry> DesktopEntryLoader::getCategoryListEntries
 }
 
 /*
+ * Get all DesktopEntryLoader with a given category name
+ */
+std::set<DesktopEntry> DesktopEntryLoader::getCategoryEntries
+(juce::String category)
+{
+    using namespace juce;
+    const ScopedLock readLock(lock);
+    return categories[category];
+}
+
+/*
  * Get the list of all categories found in all desktop entries. 
  */
 std::set<juce::String> DesktopEntryLoader::getCategories()
@@ -245,4 +266,116 @@ void DesktopEntryLoader::clearCallbacks()
     deThread->onFinish = [](){};
 }
 
+void DesktopEntryLoader::run()
+{
+    using namespace juce;
+    const ScopedLock loadingLock(lock);
+    std::atomic<bool> uiCallPending;
+    uiCallPending = false;
+    //read the contents of all desktop application directories
+    DBG("DesktopEntryLoader::" << __func__ << ": finding desktop entries...");
+    std::vector<String> dirs = {
+                                "~/.local/share/applications",
+                                "/usr/share/applications",
+                                "/usr/local/share/applications"
+    };
+    //track entry names and ignore duplicates
+    std::set<String> files;
+    Array<File> allEntries;
+    for (int i = 0; i < dirs.size(); i++)
+    {   
+        uiCallPending = true;
+        MessageManager::callAsync([&i, &dirs, &uiCallPending, this]
+        {
+            notifyCallback(String("Scanning application directory ") +
+                    String(i + 1) + String("/")
+                    + String(dirs.size()));
+            uiCallPending = false;
+            this->notify();
+        });
+        while (uiCallPending)
+        {
+            if (threadShouldExit())
+            {
+                return;
+            }
+            const ScopedUnlock waitUnlock(lock);
+            wait(1);
+        }
+        File directory(dirs[i]);
+        if (directory.isDirectory())
+        {
+            Array<File> entries = directory.findChildFiles(File::findFiles,
+                    true, "*.directory;*.desktop");
+            for (File& file : entries)
+            {
+                if (files.insert(file.getFileName()).second)
+                {
+                    allEntries.add(file);
+                }
+            }
+        }
+    }
+    int fileIndex = 0;
+    //read in files as DesktopEntry objects
+    for (File& file : allEntries)
+    {
+        fileIndex++;
+        uiCallPending = true;
+        MessageManager::callAsync([&fileIndex, &files, &uiCallPending, this]
+        {
+            notifyCallback(String("Reading file ") + String(fileIndex) +
+                    String("/") + String(files.size()));
+            uiCallPending = false;
+            this->notify();
+        });   
+        while (uiCallPending)
+        {
+            if (threadShouldExit())
+            {
+                return;
+            }
+            const ScopedUnlock waitUnlock(lock);
+            wait(1);
+        }
+        try
+        {
+            DesktopEntry entry(file);
+            if (entry.shouldBeDisplayed())
+            {
+                StringArray entryCategories = entry.getCategories();
+                if (entryCategories.isEmpty())
+                {
+                    entryCategories.add("Other");
+                }
+                entryCategories.add("All");
+                for (const String& category : entryCategories)
+                {
+                    categories[category].insert(entry);
+                }
+                entries.insert(entry);
+            }
+        }
+        catch(DesktopEntryFileError e)
+        {
+            DBG("DesktopEntryLoader::" << __func__ << ": File error: "
+                    << e.what());
+        }
+        catch(DesktopEntryFormatError e)
+        {
+            DBG("DesktopEntryLoader::" << __func__ << ": Format error: "
+                    << e.what());
+        }
 
+    }
+    DBG("DesktopEntryLoader::" << __func__ << ": "
+                << entries.size() << "/" << allEntries.size()
+                << " loaded successfully.");
+
+    MessageManager::callAsync([&uiCallPending, this]
+    {
+        const ScopedLock loadingLock(lock);
+        notifyCallback("Finished loading applications.");        
+        onFinish();
+    });
+}

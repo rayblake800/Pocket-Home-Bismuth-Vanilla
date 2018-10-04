@@ -28,7 +28,10 @@ public:
      */
     ThreadResource(const juce::Identifier& resourceKey);
 
-    virtual ~ThreadResource() { }
+    /**
+     * @brief  Ensures the thread stops running before it is destroyed.
+     */
+    virtual ~ThreadResource();
 
 protected:
     

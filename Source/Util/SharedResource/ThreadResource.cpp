@@ -7,6 +7,14 @@ ThreadResource::ThreadResource(const juce::Identifier& resourceKey) :
     SharedResource(resourceKey), Thread(resourceKey.toString()) { }
 
 /*
+ * Ensures the thread stops running before it is destroyed.
+ */
+ThreadResource::~ThreadResource()
+{
+    stopThread(-1);
+}
+
+/*
  * Creates a ThreadLock tied to a single thread resource.
  */
 ThreadResource::ThreadLock::ThreadLock(const juce::Identifier& resourceKey) : 

@@ -506,9 +506,9 @@
       </GROUP>
       <GROUP id="{3911B28B-4F73-61C8-49FD-75C1B19EC83E}" name="Util">
         <GROUP id="{0D751F7C-CBE3-CB51-0E7F-436AFE2BD0C6}" name="SharedResource">
-          <FILE id="MVt2zB" name="ThreadResource.cpp" compile="1" resource="0"
+          <FILE id="ecMDjT" name="ThreadResource.cpp" compile="1" resource="0"
                 file="Source/Util/SharedResource/ThreadResource.cpp"/>
-          <FILE id="tl3XWy" name="ThreadResource.h" compile="0" resource="0"
+          <FILE id="UOsPvA" name="ThreadResource.h" compile="0" resource="0"
                 file="Source/Util/SharedResource/ThreadResource.h"/>
           <FILE id="M1qebC" name="ScopedThreadWriteLock.cpp" compile="1" resource="0"
                 file="Source/Util/SharedResource/ScopedThreadWriteLock.cpp"/>
