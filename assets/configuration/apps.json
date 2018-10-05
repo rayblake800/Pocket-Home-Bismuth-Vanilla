@@ -1,5 +1,5 @@
 {
-    "menu":
+    "folder items":
     [
         {
             "name": "Terminal",
@@ -16,19 +16,19 @@
         {
             "name": "Make Music",
             "icon": "musicsequencer",
-            "shell": "sunvox",
+            "command": "sunvox",
             "launch in terminal": false
         },
         {
             "name": "Write",
             "icon": "texteditor",
-            "shell": "leafpad",
+            "command": "leafpad",
             "launch in terminal": false
         },
         {
             "name": "Browse Files",
             "icon": "filebrowser",
-            "shell": "pcmanfm",
+            "command": "pcmanfm",
             "launch in terminal": false
         },
         {
@@ -157,7 +157,7 @@
         {
             "name": "Get Help",
             "icon": "help",
-            "shell": "surf /usr/share/pocketchip-localdoc/index.html",
+            "command": "surf /usr/share/pocketchip-localdoc/index.html",
             "launch in terminal": false
         }
     ]
