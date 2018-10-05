@@ -1,5 +1,4 @@
 #pragma once
-#include "ConfigItemData.h"
 #include "ConfigJSON.h"
 
 /**
@@ -29,90 +28,65 @@ public:
     virtual ~AppJSON() { }
 
     /**
-     * @brief   Gets the main list of application shortcuts.
+     * @brief  Gets all menu items within a folder in the application menu.
      *
-     * @return  A list of shortcuts to be pinned to the main column 
-     *          of the AppMenu.
+     * Menu items may be defined as objects containing menu data, or as paths to
+     * desktop entry files.
+     *
+     * @param folderIndex  The index of the folder within the menu tree, or the
+     *                     root folder by default.
+     *
+     * @return             A list of menu items to be pinned to the root folder 
+     *                     of the application menu, or the empty list if an 
+     *                     invalid folder index was given.
      */
-    juce::Array<AppShortcut> getShortcuts() const;
+    juce::Array<juce::var> getMenuItems
+    (const juce::Array<int> folderIndex = {}) const;
 
     /**
-     * @brief  Adds a new shortcut to the list of pinned application shortcuts.
+     * @brief  Adds a new menu item to the list of menu items.
      *
-     * @param newApp           The new application shortcut data.
+     * @param newApp           The new menu item's data.
      *
-     * @param index            Index to insert the shortcut into the list.
+     * @param index            Index to insert the menu item into the folder.
+     *                         If this index is invalid, the closest valid index
+     *                         will be used.
      *
-     * @param writeChangesNow  Iff true, immediately write changes to the JSON
-     *                         file.
+     * @param folderIndex      The index of the folder where the menu item will
+     *                         be added within the menu tree.  This selects the
+     *                         root menu folder by default.  If this is not a
+     *                         valid folder index, the closest valid index will
+     *                         be used.
+
+     * @param writeChangesNow  Whether changes should immediately be written to
+     *                         the JSON file.  By default, changes will be 
+     *                         written immediately.
      */
-    void addShortcut(const AppShortcut& newShortcut, const int index,
-            const bool writeChangesNow);
+    void addMenuItem(const juce::var& newItem, 
+            const int index,
+            const juce::Array<int> folderIndex = {},
+            const bool writeChangesNow = true);
 
     /**
-     * @brief  Removes a shortcut from the list of application shortcuts.
+     * @brief  Removes an item from the menu.
      * 
-     * @param index             The index of the shortcut to remove from the 
-     *                          list.
+     * @param index             The index of the menu item within its folder.
      *
-     * @param writeChangesNow   Iff true, immediately write changes to the JSON
-     *                          file.
+     * @param folderIndex       The index of the menu item's folder within the
+     *                          menu tree.  If not provided, the root folder is
+     *                          used by default.
+     *
+     * @param writeChangesNow   Whether changes should immediately be written to
+     *                          the JSON file.  By default, changes will be 
+     *                          written immediately.
      */
-    void removeShortcut(const int index, const bool writeChangesNow);
-
-    /**
-     * @brief  Finds the index of an application shortcut in the list.
-     * 
-     * @param toFind  The application shortcut to search for in the list.
-     *
-     * @return        The index of toFind, or -1 if it was not found in the 
-     *                list.
-     */
-    int getShortcutIndex(const AppShortcut& toFind) const;
-
-    /**
-     * @brief   Gets the list of application folders.
-     *
-     * @return  A list of folders to display in the AppMenu.
-     */
-    juce::Array<AppFolder> getFolders() const;
-
-    /**
-     * @brief  Adds a new folder to the list of application folders.
-     * 
-     * @param newFolder        The new folder data.
-     *
-     * @param index            The index where the new folder will be inserted.
-     *
-     * @param writeChangesNow  Iff true, immediately write the changes to the
-     *                         JSON configuration file.
-     */
-    void addAppFolder
-    (const AppFolder& newFolder, const int index, const bool writeChangesNow);
-
-    /**
-     * @brief  Removes a folder from the list of application folders.
-     * 
-     * @param index            The index of the folder to remove.
-     *
-     * @param writeChangesNow  Iff true, immediately write changes to the JSON
-     *                         configuration file.
-     */
-    void removeAppFolder(const int index, const bool writeChangesNow = true);
-
-    /**
-     * @brief   Finds the index of an AppFolder in the list of folders.
-     * 
-     * @param toFind  The folder object to search for in the list.
-     *
-     * @return  The index of the folder object, or -1 if it was not found.
-     */
-    int getFolderIndex(const AppFolder& toFind) const;
+    void removeMenuItem(const int index, 
+            const juce::Array<int> folderIndex = {},
+            const bool writeChangesNow = true);
 
     private:
     /**
-     * @brief  Copies all shortcuts and folders back to the JSON configuration 
-     *         file.
+     * @brief  Copies all menu data back to the JSON configuration file.
      */
     void writeDataToJSON() override final;
 
@@ -129,10 +103,7 @@ public:
         return keys;
     }
 
-    /* Stores application shortcuts */
-    juce::Array<AppShortcut> shortcuts;
-
-    /* Stores application folders */
-    juce::Array<AppFolder> folders;
+    /* Holds all JSON menu data */
+    juce::var menuItems;
 };
 

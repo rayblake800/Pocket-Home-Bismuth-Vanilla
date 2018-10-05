@@ -1,59 +1,96 @@
+#include "DesktopEntryLoader.h"
 #include "AppJSON.h"
 
 /* SharedResource object key */
 const juce::Identifier AppJSON::resourceKey = "AppJSON";
 /* JSON configuration file name */
 static const constexpr char * jsonFilename = "apps.json";
-/* JSON key to the application shortcut list. */
-static const juce::Identifier shortcutKey = "shortcuts";
-/* JSON key to the application folder list. */
-static const juce::Identifier  foldersKey = "folders";
+
+/* Menu item JSON keys: */
+static const juce::Identifier nameKey = "name";
+static const juce::Identifier iconKey = "icon";
+static const juce::Identifier commandKey = "command";
+static const juce::Identifier termKey = "launch in terminal";
+static const juce::Identifier itemListKey = "folder items";
+static const juce::Identifier categoryKey = "categories";
 
 AppJSON::AppJSON() : ConfigJSON(resourceKey, jsonFilename)
 {
     using namespace juce;
     // Load shortcuts:
-    Array<var> shortcutList = initProperty<Array<var>>(shortcutKey);
-    DBG("AppJSON::" << __func__ << ": Read " << shortcuts.size()
-            << " shortcuts.");
-    for(const var& app : shortcutList)
-    {
-        AppShortcut shortcut = AppShortcut(app);
-        if (!shortcuts.contains(shortcut))
-        {
-            shortcuts.add(shortcut);
-        }
-    }
-    // Load folders:
-    Array<var> folderList = initProperty<Array<var>>(foldersKey);
-    DBG("AppJSON::" << __func__ << ": Read " << folderList.size()
-            << " categories");
-    for (const var& folder : folderList)
-    {
-        AppFolder menuFolder = AppFolder(folder);
-        if (!folders.contains(menuFolder))
-        {
-            folders.add(menuFolder);
-        }
-    }
+    menuItems = initProperty<var>(itemListKey);
+    DBG("AppJSON::" << __func__ << ": Read " << menuItems.size()
+            << " menu items in the main menu folder.");
     loadJSONData();   
 }
 
 /*
- * Gets the main list of application shortcuts.
+ * Gets all menu items within a folder in the application menu.
  */
-juce::Array<AppShortcut> AppJSON::getShortcuts() const
+juce::Array<juce::var> AppJSON::getMenuItems
+    (const juce::Array<int> folderIndex) const
 {
-    return shortcuts;
+    using namespace juce;
+    var folder = menuItems;
+    for(int index : folderIndex)
+    {
+        if(!folder.isArray())
+        {
+            return {};
+        }
+        folder = folder[index];
+        if(!folder.isObject())
+        {
+            return {};
+        }
+        folder = folder.getProperty(itemListKey, var());
+    }
+    if(!folder.isArray())
+    {
+        return {};
+    }
+    Array<var> menuItems;
+    menuItems.addArray(folder.getArray());
+    StringArray desktopEntryCategories;
+    var categoryVars = folder.getProperty(categoryKey, var());
+    for(int i = 0; i < categoryVars.size(); i++)
+    {
+        desktopEntryCategories.add(categoryVars[i]);
+    }
+    if(!desktopEntryCategories.isEmpty())
+    {
+        DesktopEntryLoader entryLoader;
+        StringArray entryIDs = entryLoader.getCategoryListEntryIDs
+            (desktopEntryCategories);
+        for(const String& entryID : entryIDs)
+        {
+            menuItems.add(var(entryID));
+        }
+    }
+    return menuItems;
 }
 
 /*
- * Adds a new shortcut to the list of pinned application shortcuts.
+ * Adds a new menu item to the list of menu items.
  */
-void AppJSON::addShortcut
-(const AppShortcut& newApp, const int index, const bool writeChangesNow)
+void AppJSON::addMenuItem(
+        const juce::var& newItem, 
+        const int index,
+        const juce::Array<int> folderIndex, 
+        const bool writeChangesNow)
 {
-    shortcuts.insert(index, newApp);
+    using namespace juce;
+    var folder = menuItems;
+    for(int i : folderIndex)
+    {
+        var nextFolder = folder[i].getProperty(itemListKey, var());
+        if(!nextFolder.isArray())
+        {
+            break;
+        }
+        folder = nextFolder;
+    }
+    folder.insert(index, newItem);
     if (writeChangesNow)
     {
         writeChanges();
@@ -61,13 +98,25 @@ void AppJSON::addShortcut
 }
 
 /*
- * Removes a shortcut from the list of application shortcuts.
+ * Removes an item from the menu.
  */
-void AppJSON::removeShortcut(const int index, const bool writeChangesNow)
+void AppJSON::removeMenuItem(const int index, 
+        const juce::Array<int> folderIndex,
+        const bool writeChangesNow)
 {
-    if (index >= 0 && index < shortcuts.size())
+    using namespace juce;
+    var folder = menuItems;
+    for(int i : folderIndex)
     {
-        shortcuts.remove(index);
+        folder = folder[i].getProperty(itemListKey, var());
+        if(!folder.isArray())
+        {
+            return;
+        }
+    }
+    if (index >= 0 && index < folder.size())
+    {
+        folder.remove(index);
         if (writeChangesNow)
         {
             writeChanges();
@@ -76,74 +125,10 @@ void AppJSON::removeShortcut(const int index, const bool writeChangesNow)
 }
 
 /*
- * Finds the index of an application shortcut in the list.
- */
-int AppJSON::getShortcutIndex(const AppShortcut& toFind) const
-{
-    return shortcuts.indexOf(toFind);
-}
-
-/*
- * Gets the list of application folders.
- */
-juce::Array<AppFolder> AppJSON::getFolders() const
-{
-    return folders;
-}
-
-/*
- * Adds a new folder to the list of application folders.
- */
-void AppJSON::addAppFolder
-(const AppFolder& newFolder, const int index, const bool writeChangesNow)
-{
-    folders.insert(index, newFolder);
-    if (writeChangesNow)
-    {
-        writeChanges();
-    }
-}
-
-/*
- * Removes a folder from the list of application folders. 
- */
-void AppJSON::removeAppFolder(const int index, const bool writeChangesNow)
-{
-    int size =folders.size();
-    folders.remove(index);
-    if (writeChangesNow)
-    {
-        writeChanges();
-    }
-}
-
-/*
- * Finds the index of an AppFolder in the list of folders.
- */
-int AppJSON::getFolderIndex(const AppFolder& toFind) const
-{
-    return folders.indexOf(toFind);
-}
-
-/*
- * Copies all shortcuts and folders back to the JSON configuration file.
+ * Copies all menu data back to the JSON configuration file.
  */
 void AppJSON::writeDataToJSON()
 {
     using namespace juce;
-    // Set shortcuts:
-    Array<var> shortcutArray;
-    for (int i = 0; i < shortcuts.size(); i++)
-    {
-        shortcutArray.add(var(shortcuts[i].getDynamicObject()));
-    }
-    updateProperty<Array<var>>(shortcutKey, shortcutArray);
-
-    // Set folders:
-    Array<var> categoryArray;
-    for (int i = 0; i < folders.size(); i++)
-    {
-        categoryArray.add(var(folders[i].getDynamicObject()));
-    }
-    updateProperty<Array<var>>(foldersKey, categoryArray);
+    updateProperty<var>(itemListKey, menuItems);
 }
