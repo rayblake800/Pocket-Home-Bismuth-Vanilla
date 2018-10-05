@@ -297,6 +297,14 @@ bool DesktopEntry::operator<(const DesktopEntry& toCompare) const
 /* ############## Functions for getting desktop entry data: ################# */
 
 /*
+ * Gets the unique string identifying this desktop entry.
+ */
+juce::String DesktopEntry::getDesktopFileId() const
+{
+    return desktopFileID;
+}
+
+/*
  * Gets the desktop entry's type.
  */
 DesktopEntry::Type DesktopEntry::getType() const

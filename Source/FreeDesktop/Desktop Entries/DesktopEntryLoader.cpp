@@ -10,11 +10,17 @@
 #include "DesktopEntryFormatError.h"
 #include "DesktopEntryLoader.h"
 
-/* SharedResource object class key. */ 
+/* SharedResource object class key */ 
 static const juce::Identifier desktopEntryThreadKey("DesktopEntryThread");
 
-/* The desktop entry subdirectory within the data directory. */
+/* The desktop entry subdirectory within the data directory: */
 static const constexpr char* entryDirectory = "/applications/";
+
+/* Name of the desktop entry category holding every entry: */
+static const constexpr char* everyEntryCategory = "All";
+
+/* Name of the desktop entry category holding uncategorized entries: */
+static const constexpr char* miscEntryCategory = "Other";
 
 /* Localized text keys: */
 static const constexpr char* reading_entry = "reading_entry";
@@ -27,16 +33,15 @@ class DesktopEntryThread : public ThreadResource, private Localized
     /* Only DesktopEntryLoader has direct access. */
     friend class DesktopEntryLoader;
     
-    /* The list of all entries. */
-    std::set<DesktopEntry> entries;
-    
-    /* Tracks unloaded desktop entry files, mapping entry desktop IDs to their
-       juce file objects. */
+    /* Maps desktop ID strings to unloaded desktop entry files. */
     std::map<juce::String, juce::File> pendingEntryFiles;
 
-    /* Map of category names to lists of entries. */
-    std::map<juce::String, std::set<DesktopEntry>> categories;
-    
+    /* Maps desktop ID strings to desktop entry objects. */
+    std::map<juce::String, DesktopEntry> entries;
+
+    /* Maps category names to lists of desktop file Ids. */
+    std::map<juce::String, juce::StringArray> categories;
+
     /* Callback function to send loading progress update strings. */
     std::function<void(juce::String) > notifyCallback;
     
@@ -50,6 +55,42 @@ public:
     virtual ~DesktopEntryThread() { }
 
 private:
+    /**
+     * @brief  Find a desktop entry file using its desktop file ID.
+     *
+     * @param entryFileID  The desktop file ID of a desktop entry.
+     *
+     * @return             The first matching file found within application data
+     *                     directories, or an empty file object if no matching
+     *                     file is found.
+     */
+    juce::File findEntryFile(const juce::String& entryFileID)
+    {
+        using namespace juce;
+        StringArray dirs = XDGDirectories::getDataSearchPaths();
+        for(const String& dir : dirs)
+        {
+            File entryFile(dir + entryDirectory + entryFileID + ".desktop");
+            if(entryFile.existsAsFile())
+            {
+                return entryFile;
+            }
+        }
+        return File();
+    }
+
+    /**
+     * @brief  Discards any existing entry data and asynchronously reloads all
+     *         desktop entries from the file system.
+     * 
+     * @param notifyCallback  An optional callback function to send loading
+     *                        progress update strings.  This will be called 
+     *                        asynchronously on the message thread.
+     *
+     * @param onFinish        An optional callback function to run on 
+     *                        completion.  This will be called asynchronously on
+     *                        the message thread.
+     */
     void loadEntries(
             std::function<void(juce::String) > notifyCallback,
             std::function<void() > onFinish)
@@ -58,13 +99,19 @@ private:
         if (!isThreadRunning())
         {
             entries.clear();
-            categories.clear();
             this->notifyCallback = notifyCallback;
             this->onFinish = onFinish;
             startThread();
         }
     }
 
+    /**
+     * @brief  Finds all desktop entry files within the application data
+     *         directories, ignoring all files with duplicate desktop file IDs.
+     *
+     * This function runs once on the desktop entry thread when it first starts
+     * running.
+     */
     virtual void init() override
     {
         using namespace juce;
@@ -74,9 +121,9 @@ private:
             File directory(dir + entryDirectory);
             if(directory.isDirectory())
             {
-                Array<File> entries = directory.findChildFiles(File::findFiles,
-                        true, "*.directory;*.desktop");
-                for (File& file : entries)
+                Array<File> entryFiles = directory.findChildFiles
+                    (File::findFiles, true, "*.directory;*.desktop");
+                for (File& file : entryFiles)
                 {
                     String desktopID = file.getRelativePathFrom(directory);
                     if(!pendingEntryFiles.count(desktopID))
@@ -91,6 +138,16 @@ private:
                 << dirs.size() << " data directories.");
     }
 
+    /**
+     * @brief  Loads a DesktopEntry object from file data, calling the
+     *         notification callback if the object loaded successfully.
+     *
+     * This function will be called repeatedly on the desktop entry thread until
+     * all entries are loaded.
+     *
+     * @param threadLock  An object used to access the desktop entry thread's
+     *                    SharedResource lock.
+     */
     virtual void runLoop(ThreadResource::ThreadLock& threadLock) override
     {
         using namespace juce;
@@ -111,14 +168,16 @@ private:
                 StringArray entryCategories = entry.getCategories();
                 if (entryCategories.isEmpty())
                 {
-                    entryCategories.add("Other");
+                    // Categorize as "Other"
+                    entryCategories.add(miscEntryCategory);
                 }
-                entryCategories.add("All");
-                for (const String& category : entryCategories)
+                // Add to list of all entries
+                entryCategories.add(everyEntryCategory);
+                for(const String& category : entryCategories)
                 {
-                    categories[category].insert(entry);
+                    categories[category].add(entry.getDesktopFileId());
                 }
-                entries.insert(entry);
+                entries[entry.getDesktopFileId()] = entry;
             }
         }
         catch(DesktopEntryFileError e)
@@ -143,6 +202,13 @@ private:
         threadLock.releaseLock();
     }
 
+    /**
+     * @brief  Runs the loading finished callback function once all desktop
+     *         entries are loaded.
+     *
+     * This function will run once on the desktop entry thread just before the
+     * thread stops running.
+     */
     void cleanup() override
     {
         using namespace juce;
@@ -157,86 +223,140 @@ DesktopEntryLoader::DesktopEntryLoader() :
 ResourceHandler<DesktopEntryThread>(desktopEntryThreadKey,
         []()->SharedResource* { return new DesktopEntryThread(); }) { }
 
-DesktopEntryLoader::~DesktopEntryLoader() { }
-
-
 /*
- * return the number of stored DesktopEntry objects 
+ * Gets the number of cached desktop entries.
  */
 int DesktopEntryLoader::size()
 {
     auto deThread = getReadLockedResource();
-    if(deThread->isThreadRunning())
-    {
-        return 0;
-    }
     return deThread->entries.size();
 }
 
 /*
- * Get all DesktopEntryLoader with a given category name
+ *  Gets the desktop file IDs of all entries within a category.
  */
-std::set<DesktopEntry> DesktopEntryLoader::getCategoryEntries
+juce::StringArray DesktopEntryLoader::getCategoryEntryIDs
 (const juce::String& category)
 {
+    using namespace juce;
     auto deThread = getReadLockedResource();
-    if(deThread->isThreadRunning())
-    {
-        return { };
-    }
     return deThread->categories.at(category);
 }
 
 /*
- * Get a list of all DesktopEntry objects within several categories
+ * Gets the desktop file IDs of all entries within a list of several categories.
  */
-std::set<DesktopEntry> DesktopEntryLoader::getCategoryListEntries
+juce::StringArray DesktopEntryLoader::getCategoryListEntryIDs
+    (const juce::StringArray& categoryList)
+{
+    using namespace juce;
+    auto deThread = getReadLockedResource();
+    StringArray entryIDs;
+    for(const String& category : categoryList)
+    {
+        entryIDs.addArray(deThread->categories[category]);
+    }
+    entryIDs.removeDuplicates(false);
+    return entryIDs;
+}
+
+
+/*
+ * Finds a single DesktopEntry object using its desktop file ID.
+ */
+DesktopEntry DesktopEntryLoader::getDesktopEntry
+(const juce::String& entryFileID)
+{
+    auto deThread = getReadLockedResource();
+    return deThread->entries.at(entryFileID);
+}
+
+/*
+ * Gets all DesktopEntry objects in a single category.
+ */
+juce::Array<DesktopEntry> DesktopEntryLoader::getCategoryEntries
+(const juce::String& category)
+{
+    using namespace juce;
+    auto deThread = getReadLockedResource();
+    const StringArray& entryIDs = deThread->categories.at(category);
+    Array<DesktopEntry> entries;
+    for(const String& entryID : entryIDs)
+    {
+        entries.add(deThread->entries.at(entryID));
+    }
+    return entries;
+}
+
+/*
+ * Finds all DesktopEntry objects within several categories.
+ */
+juce::Array<DesktopEntry> DesktopEntryLoader::getCategoryListEntries
 (const juce::StringArray& categoryList)
 {
     using namespace juce;
     auto deThread = getReadLockedResource();
-    std::set<DesktopEntry> categoryEntries;
-    for (const String& category : categoryList)
+    StringArray entryIDs = getCategoryListEntryIDs(categoryList);
+    Array<DesktopEntry> categoryEntries;
+    for (const String& entryID : entryIDs)
     {
-        std::set<DesktopEntry> catEntries = deThread->categories.at(category);
-        for (DesktopEntry entry : catEntries)
-        {
-            categoryEntries.insert(entry);
-        }
+        categoryEntries.add(deThread->entries.at(entryID));
     }
     return categoryEntries;
 }
 
 /*
- * Get all DesktopEntryLoader with a given category name
+ * Reloads a single desktop entry from the file system.
  */
-std::set<DesktopEntry> DesktopEntryLoader::getCategoryEntries
-(juce::String category)
+void DesktopEntryLoader::reloadEntry(const juce::String& entryFileID)
 {
-    using namespace juce;
-    const ScopedLock readLock(lock);
-    return categories[category];
+   using namespace juce;
+   auto deThread = getWriteLockedResource();
+   // Remove old references to entry:
+   deThread->entries.erase(entryFileID);
+   for(auto& category : deThread->categories)
+   {
+       category.second.removeString(entryFileID);
+   }
+   try
+   {
+       File entryFile = deThread->findEntryFile(entryFileID);
+       DesktopEntry entry(entryFile);
+       if(entry.shouldBeDisplayed())
+       {
+           deThread->entries[entryFileID] = entry;
+           StringArray newCategories = entry.getCategories();
+           if(newCategories.isEmpty())
+           {
+               newCategories.add(miscEntryCategory);
+           }
+           newCategories.add(everyEntryCategory);
+           for(const String& category : newCategories)
+           {
+               deThread->categories[category].add(entryFileID);
+           }
+       }
+   }
+   catch(std::out_of_range e)
+   {
+       DBG("DesktopEntryLoader::" << __func__ << ": No entry found with ID "
+               << entryFileID);
+   }
+   catch(DesktopEntryFileError e)
+   {
+       DBG("DesktopEntryLoader::" << __func__ << ": File error in entry "
+               << entryFileID << ": " << e.what());
+   }
+   catch(DesktopEntryFormatError e)
+   {
+       DBG("DesktopEntryLoader::" << __func__ << ": Format error in entry "
+               << entryFileID << ": " << e.what());
+   }
 }
 
 /*
- * Get the list of all categories found in all desktop entries. 
- */
-std::set<juce::String> DesktopEntryLoader::getCategories()
-{
-    using namespace juce;
-    auto deThread = getReadLockedResource();    
-    std::set<String> categoryNames;
-    for (auto iter = deThread->categories.begin(); 
-              iter != deThread->categories.end(); iter++)
-    {
-        categoryNames.insert(iter->first);
-    }
-    return categoryNames;
-}
-
-/*
- * Discards any existing entry data and reloads all desktop entries
- * from the file system.
+ * Discards any existing entry data and asynchronously reloads all desktop 
+ * entries from the file system.
  */
 void DesktopEntryLoader::loadEntries(
         std::function<void(juce::String) > notifyCallback,
@@ -254,9 +374,8 @@ void DesktopEntryLoader::loadEntries(
 }
 
 /*
- * If entries are currently loading asynchronously, this will signal for
- * them to stop. Unless loading finishes on its own before this has a chance to
- * stop it, the onFinish callback to loadEntries will not be called.
+ * Removes the notifyCallback and onFinish callback functions that are currently
+ * set to run when the thread finishes loading. 
  */
 void DesktopEntryLoader::clearCallbacks()
 {
@@ -264,118 +383,4 @@ void DesktopEntryLoader::clearCallbacks()
     auto deThread = getWriteLockedResource();
     deThread->notifyCallback = [](String s){};
     deThread->onFinish = [](){};
-}
-
-void DesktopEntryLoader::run()
-{
-    using namespace juce;
-    const ScopedLock loadingLock(lock);
-    std::atomic<bool> uiCallPending;
-    uiCallPending = false;
-    //read the contents of all desktop application directories
-    DBG("DesktopEntryLoader::" << __func__ << ": finding desktop entries...");
-    std::vector<String> dirs = {
-                                "~/.local/share/applications",
-                                "/usr/share/applications",
-                                "/usr/local/share/applications"
-    };
-    //track entry names and ignore duplicates
-    std::set<String> files;
-    Array<File> allEntries;
-    for (int i = 0; i < dirs.size(); i++)
-    {   
-        uiCallPending = true;
-        MessageManager::callAsync([&i, &dirs, &uiCallPending, this]
-        {
-            notifyCallback(String("Scanning application directory ") +
-                    String(i + 1) + String("/")
-                    + String(dirs.size()));
-            uiCallPending = false;
-            this->notify();
-        });
-        while (uiCallPending)
-        {
-            if (threadShouldExit())
-            {
-                return;
-            }
-            const ScopedUnlock waitUnlock(lock);
-            wait(1);
-        }
-        File directory(dirs[i]);
-        if (directory.isDirectory())
-        {
-            Array<File> entries = directory.findChildFiles(File::findFiles,
-                    true, "*.directory;*.desktop");
-            for (File& file : entries)
-            {
-                if (files.insert(file.getFileName()).second)
-                {
-                    allEntries.add(file);
-                }
-            }
-        }
-    }
-    int fileIndex = 0;
-    //read in files as DesktopEntry objects
-    for (File& file : allEntries)
-    {
-        fileIndex++;
-        uiCallPending = true;
-        MessageManager::callAsync([&fileIndex, &files, &uiCallPending, this]
-        {
-            notifyCallback(String("Reading file ") + String(fileIndex) +
-                    String("/") + String(files.size()));
-            uiCallPending = false;
-            this->notify();
-        });   
-        while (uiCallPending)
-        {
-            if (threadShouldExit())
-            {
-                return;
-            }
-            const ScopedUnlock waitUnlock(lock);
-            wait(1);
-        }
-        try
-        {
-            DesktopEntry entry(file);
-            if (entry.shouldBeDisplayed())
-            {
-                StringArray entryCategories = entry.getCategories();
-                if (entryCategories.isEmpty())
-                {
-                    entryCategories.add("Other");
-                }
-                entryCategories.add("All");
-                for (const String& category : entryCategories)
-                {
-                    categories[category].insert(entry);
-                }
-                entries.insert(entry);
-            }
-        }
-        catch(DesktopEntryFileError e)
-        {
-            DBG("DesktopEntryLoader::" << __func__ << ": File error: "
-                    << e.what());
-        }
-        catch(DesktopEntryFormatError e)
-        {
-            DBG("DesktopEntryLoader::" << __func__ << ": Format error: "
-                    << e.what());
-        }
-
-    }
-    DBG("DesktopEntryLoader::" << __func__ << ": "
-                << entries.size() << "/" << allEntries.size()
-                << " loaded successfully.");
-
-    MessageManager::callAsync([&uiCallPending, this]
-    {
-        const ScopedLock loadingLock(lock);
-        notifyCallback("Finished loading applications.");        
-        onFinish();
-    });
 }

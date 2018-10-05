@@ -73,6 +73,13 @@ public:
     /* ########## Functions for getting desktop entry data: ################# */
 
     /**
+     * @brief  Gets the unique string identifying this desktop entry.
+     *
+     * @return  The desktop ID string created from the entry's path.
+     */
+    juce::String getDesktopFileId() const;
+
+    /**
      * @brief  Gets the desktop entry's type.
      *
      * @return  The entry type.

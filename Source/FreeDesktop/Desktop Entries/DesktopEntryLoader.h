@@ -20,43 +20,79 @@ class DesktopEntryLoader : public ResourceHandler<DesktopEntryThread>
 public:
     DesktopEntryLoader();
 
-    virtual ~DesktopEntryLoader();
+    virtual ~DesktopEntryLoader() { }
 
     /**
-     * @return the number of stored DesktopEntry objects
+     * @brief  Gets the number of cached desktop entries.
+     *
+     * @return  The number of stored DesktopEntry objects.
      */
     int size();
 
     /**
-     * Get all DesktopEntry objects with a given category name.
+     * @brief  Gets the desktop file IDs of all entries within a category.
      *
-     * @param category  The category name to search for.
+     * @param category  A desktop application category name.
      *
-     * @return a set of all matching DesktopEntries
+     * @return          ID strings for each desktop entry within that category.
      */
-    std::set<DesktopEntry> getCategoryEntries(const juce::String& category);
+    juce::StringArray getCategoryEntryIDs(const juce::String& category);
 
     /**
-     * Finds all DesktopEntry objects within several categories.
-     * 
-     * @param categoryList  One or more application category names.
+     * @brief  Gets the desktop file IDs of all entries within a list of several
+     *         categories.
      *
-     * @return the set of all DesktopEntry objects with at least one of the 
-     *         category values in the category list.
+     * @param categoryList  A list of desktop application category names.
+     *
+     * @return              ID strings for all desktop entries that are in at 
+     *                      least one of the given categories.
      */
-    std::set<DesktopEntry> getCategoryListEntries
+    juce::StringArray getCategoryListEntryIDs
         (const juce::StringArray& categoryList);
 
     /**
-     * Finds the list of all categories found in all desktop entries.
-     * 
-     * @return a set of all category entries.
+     * @brief  Finds a single DesktopEntry object using its desktop file ID.
+     *
+     * @param entryFileID         The desktop file ID of a desktop entry file.
+     *
+     * @throws std::out_of_range  When the ID parameter does not match a loaded
+     *                            desktop entry file.
+     *
+     * @return                    The desktop entry with the given desktop file 
+     *                            ID.
      */
-    std::set<juce::String> getCategories();
+    DesktopEntry getDesktopEntry(const juce::String& entryFileID);
 
     /**
-     * Discards any existing entry data and asynchronously reload all desktop 
-     * entries from the file system.
+     * @brief  Gets all DesktopEntry objects in a single category.
+     *
+     * @param category  A desktop application category string.
+     *
+     * @return          All DesktopEntry objects that have the given category.
+     */
+    juce::Array<DesktopEntry> getCategoryEntries(const juce::String& category);
+
+    /**
+     * @brief  Finds all DesktopEntry objects within several categories.
+     * 
+     * @param categoryList  One or more application category names.
+     *
+     * @return              All DesktopEntry objects with at least one of the 
+     *                      category values in the category list.
+     */
+    juce::Array<DesktopEntry> getCategoryListEntries
+        (const juce::StringArray& categoryList);
+    
+    /**
+     * @brief  Reloads a single desktop entry from the file system.
+     *
+     * @param entryFileID  The desktop file ID of a desktop entry file.
+     */
+    void reloadEntry(const juce::String& entryFileID);
+
+    /**
+     * @brief  Discards any existing entry data and asynchronously reloads all
+     *         desktop entries from the file system.
      * 
      * @param notifyCallback  An optional callback function to send loading
      *                        progress update strings.  This will be called 
@@ -72,17 +108,13 @@ public:
             std::function<void() > onFinish = std::function<void()>());
 
     /**
-     * This removes the notifyCallback and onFinish callback functions that
-     * are currently set to run when the thread finishes loading.  This should
-     * be called whenever it's necessary to delete an object referenced in the
-     * callbacks while desktop entries are still loading.
+     * @brief  Removes the notifyCallback and onFinish callback functions that
+     *         are currently set to run when the thread finishes loading. 
+     *
+     * This should be called whenever it's necessary to delete an object
+     * referenced in the callbacks while desktop entries are still loading.
      */
     void clearCallbacks();
 
-private:
-    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DesktopEntryLoader)
-
 };
-
-
