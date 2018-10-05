@@ -12,12 +12,11 @@ public:
     /**
      * @brief  Creates a menu data object for an item in the application menu.
      *
-     * @param index   The object's index within its folder.
+     * @param index        The object's index within its folder.
      *
-     * @param parent  The folder menu item defining this menu item, or nullptr
-     *                if this menu item is in the root folder.
+     * @param folderIndex  The index of the menu item's folder within the menu.
      */
-    MenuItemData(const int index, const MenuItemData* parent = nullptr);
+    MenuItemData(const int index, const juce::Array<int> folderIndex = {});
     
     virtual ~MenuItemData() { }
 
@@ -63,7 +62,7 @@ public:
      *
      * @return  Any category strings assigned to this menu item.
      */
-    virtual juce::StringArray getCategories() = 0;
+    virtual juce::StringArray getCategories() const = 0;
 
     /**
      * @brief  Sets the application categories connected to this menu item.
@@ -115,6 +114,23 @@ public:
      * @brief  Writes all changes to this menu item back to its data source.
      */
     virtual void updateSource() = 0;
+
+    /**
+     * @brief  Gets the menu item's index within its menu folder.
+     *
+     * @return  The menu item's index.
+     */
+    int getIndex() const;
+
+    /**
+     * @brief  Gets the index of the menu folder holding this menu item.
+     *
+     * Starting with the root folder, each index in the folder index array maps
+     * to a folder menu item within the previous folder.
+     *
+     * @return  The folder's index within the menu tree.
+     */
+    const juce::Array<int>& getFolderIndex() const;
 
     /**
      * @brief  Checks if this menu item can be moved within its menu folder.
@@ -209,23 +225,8 @@ public:
     virtual juce::Array<MenuItemData*> getFolderItems() = 0;
 
 protected:
-    /**
-     * @brief  Gets the data object of the folder menu item that defines this 
-     *         object.
-     *
-     * @return  A pointer to the parent object, or nullptr if this menu item
-     *          is in the topmost folder.
-     */
-    const MenuItemData* getParent() const;
-
-    /**
-     * @brief  Gets the menu item's index within its menu folder.
-     *
-     * @return  The menu item's index.
-     */
-    int getIndex() const;
 
 private:
-    juce::ScopedPointer<MenuItemData> parent = nullptr;
     int index = 0;
+    juce::Array<int> folderIndex;
 };
