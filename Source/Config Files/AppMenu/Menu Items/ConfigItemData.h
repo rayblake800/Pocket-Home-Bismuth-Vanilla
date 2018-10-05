@@ -1,6 +1,7 @@
 #pragma once
 #include "Localized.h"
-#include "IconThread.h"
+#include "ConfigFile.h"
+#include "AppJSON.h"
 #include "MenuItemData.h"
 
 /**
@@ -9,7 +10,10 @@
  * @brief  A MenuItemData object that reads its data from a JSON object.
  */
 
-class ConfigItemData : public MenuItemData, private Localized {
+class ConfigItemData : public MenuItemData, 
+    private ConfigFile<AppJSON>, 
+    private Localized 
+{
 public:
     /**
      * @param menuData  The JSON object holding menu data.
