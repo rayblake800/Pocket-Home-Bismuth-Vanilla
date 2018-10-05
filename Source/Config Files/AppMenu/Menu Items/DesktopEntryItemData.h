@@ -63,7 +63,7 @@ public:
      *
      * @return  Any category strings assigned to this menu item.
      */
-    virtual juce::StringArray getCategories() override;
+    virtual juce::StringArray getCategories() const override;
 
     /**
      * @brief  Sets the application categories connected to this menu item.

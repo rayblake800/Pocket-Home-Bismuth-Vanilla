@@ -4,6 +4,7 @@
 #include "AppConfigFile.h"
 #include "Localized.h"
 #include "AppMenuPopupEditor.h"
+#include "MenuItemData.h"
 
 /**
  * @file  AppMenuItem.h
@@ -11,47 +12,24 @@
  * @brief  Defines an item in the application menu.
  */
 
-class AppMenuItem
+class AppMenuItem : private Localized
 {
 public:
     /**
-     * The source of the menu item's data, used to read and write data.
+     * @brief  Creates a menu item from some source of menu data. 
+     *
+     * @param dataSource  A menu data source the new AppMenuItem will clone.
      */
-    class DataSource;
+    AppMenuItem(MenuItemData* dataSource);
 
     /**
-     * @brief 
+     * @brief  Creates a menu item copying data from another menu item. 
      *
-     * @param dataSource
-     */
-    AppMenuItem(DataSource* dataSource);
-
-    /**
-     * @brief 
-     *
-     * @param toCopy
+     * @param toCopy  A menu item to copy when constructing a new menu item.
      */
     AppMenuItem(const AppMenuItem& toCopy);
 
     virtual ~AppMenuItem() { }
-
-    /**
-     * @brief 
-     */
-    enum class Type
-    {
-        /* Loads and displays other menu items. */
-        folder,
-        /* Launches an application. */
-        shortcut
-    };
-
-    /**
-     * @brief 
-     *
-     * @return 
-     */
-    Type getType() const;
  
     /**
      * @brief  Gets the menu item's displayed title.
@@ -98,30 +76,16 @@ public:
      * @return  True if and only if the menu item has a launch command that 
      *          should run within a new terminal window.
      */
-    bool isTerminalApp() const;
-
-    /**
-     * @brief  Checks if this menu item has an index that can be moved by a
-     *         given amount.
-     * 
-     * @param offset  The value to add to the menu item index.
-     * 
-     * @return  True if this menu item has an index value i that can be changed 
-     *          to i+offset, false if the menu item has no index value, or
-     *          i+offset is out of bounds.
-     */
-    bool canChangeIndex(const int offset) const;
+    bool getLaunchedInTerm() const;
 
     /**
      * @brief  Compares this menu item with another.
      *
      * @param toCompare  Another menu item to compare with this one.
      * 
-     * @return  True if and only if both menu items store identical data.
+     * @return           Whether both menu items store identical data.
      */
     bool operator==(const AppMenuItem& toCompare) const;
-
-    
 
     /**
      * @brief  Displays an alert to the user asking if this item should be
@@ -133,71 +97,81 @@ public:
      */
     void deleteOnConfim(const std::function<void()> onConfirm = [](){} );
 
-private:
     /**
-     * @return true iff this menu item has categories that can be edited,
-     *          defaults to false.
+     * @brief  Checks if this menu item has categories that may be edited.
+     *
+     * @return  Whether menu item categories are editable.
      */
-    virtual bool hasEditableCategories() const;
+    bool hasEditableCategories() const;
 
     /**
-     * @return true iff this menu item has a command that can be edited,
-     *          defaults to false.
+     * @brief  Checks if the menu item has an editable command field.
+     *
+     * @return  Whether this menu item has a command that can be edited.
      */
-    virtual bool hasEditableCommand() const;
+    bool hasEditableCommand() const;
 
     /**
-     * @return the title to display over an editor for this menu item. 
+     * @brief  Gets a title to use when editing this menu item.
+     *
+     * @return  The title to display over an editor for this menu item. 
      */
-    virtual juce::String getEditorTitle() const;
+    juce::String getEditorTitle() const;
 
     /**
-     * Gets a PopupEditorComponent callback function that will apply 
-     * changes from an AppMenuPopupEditor to this menu item.
+     * @brief  Gets a PopupEditorComponent callback function that will apply 
+     *         changes from an AppMenuPopupEditor to this menu item.
+     *
+     * @return  A function that reads data from a menu item editor to edit this
+     *          menu item.
      */
-    virtual std::function<void(AppMenuPopupEditor*) > getEditorCallback();
+    std::function<void(AppMenuPopupEditor*) > getEditorCallback();
 
     /**
-     * Removes the source of this menu item's data
+     * @brief  Removes the source of this menu item's data
+     */
+    void removeMenuItemSource();
+    
+    /**
+     * @brief  Gets the menu item's index within its folder.
+     *
+     * @return  The menu item index. 
+     */
+    int getIndex() const;
+    
+    /**
+     * @brief  Gets the indices of this menu item and all its parents within
+     *         the application menu.
+     *
+     * @return  The indices of this menu item and all parents, listed in parent
+     *          ->child order, with this item's index as the last element.
+     */
+    juce::Array<int> getFullIndex() const;
+
+    /**
+     * @brief  Checks if this menu item has an index that can be moved by a
+     *         given amount.
      * 
-     * @return true iff the source was removed.
+     * @param offset  The value to add to the menu item index.
+     * 
+     * @return        True if this menu item has an index value i that can be
+     *                changed to i+offset, false if the menu item has no index
+     *                value, or i+offset is out of bounds.
      */
-    virtual bool removeMenuItemSource();
+    bool canMoveIndex(const int offset) const;
 
     /**
-     * If possible, change the index of this menu item by some
-     * offset amount.
+     * @brief  Attempts to change the index of this menu item by some
+     *         offset amount.
      * 
      * @param offset  This will be added to the menu item's current index, if
-     *                 possible.
+     *                possible.
      * 
-     * @return true iff the operation succeeded.
+     * @return        Whether the menu item's index was successfully adjusted.
      */
-    virtual bool moveDataIndex(int offset);
+    bool moveDataIndex(int offset);
 
-    /**
-     * Gets the string to add before a launch command to make it launch in the
-     * terminal.
-     */
-    juce::String getTermLaunchPrefix() const;
 private:
-    //folders will have a factory interface here to create new menu items.
-    FactoryInterface* factoryInterface = nullptr;
-
-    /**
-     * Using a private Localized member is necessary to allow AppMenuItem
-     * subclasses to inherit Localized. 
-     */
-    class LocaleText : public Localized{
-        public:
-            LocaleText() : Localized("AppMenuItem") {}
-            virtual ~LocaleText() {}
-    };
-    LocaleText txt;
-    //localized text keys;
-    static const constexpr char * delete_APP = "delete_APP";
-    static const constexpr char * question_mark = "question_mark";
-    static const constexpr char * really_delete = "really_delete";
-    static const constexpr char * edit_menu_item = "edit_menu_item";
-
+    /* Stores all menu data. */
+    juce::ScopedPointer<MenuItemData> dataSource;
 };

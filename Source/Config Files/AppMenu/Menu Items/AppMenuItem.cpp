@@ -1,236 +1,201 @@
 #include "MainConfigKeys.h"
 #include "MainConfigFile.h"
+#include "Utils.h"
 #include "AppMenuItem.h"
 
-/**
- * @return true if this menu item is an application folder.
+/* Localized text keys: */
+static const constexpr char * localizedClassKey = "AppMenuItem";
+static const constexpr char * delete_APP = "delete_APP";
+static const constexpr char * question_mark = "question_mark";
+static const constexpr char * really_delete = "really_delete";
+static const constexpr char * edit_menu_item = "edit_menu_item";
+
+/*
+ * Creates a menu item from some source of menu data.
  */
-bool AppMenuItem::isFolder() const
-{
-    return false;
-}
+AppMenuItem::AppMenuItem(MenuItemData* dataSource) : 
+Localized(localizedClassKey),
+dataSource(dataSource->clone()) { }
+
+/*
+ * Creates a menu item copying data from another menu item. 
+ */
+AppMenuItem::AppMenuItem(const AppMenuItem& toCopy) :
+Localized(localizedClassKey),
+dataSource(toCopy.dataSource->clone()) { }
 
 /**
- * @return all menu items in this folder, or an empty array if this isn't
- *          a folder.
+ * Gets the menu item's displayed title.
  */
-juce::Array<AppMenuItem::Ptr> AppMenuItem::getFolderItems() const
+juce::String AppMenuItem::getTitle() const
 {
-    return {};
+    return dataSource->getTitle();
 }
 
-/**
- * @return the display name of the associated application.
- */
-juce::String AppMenuItem::getAppName() const
-{
-    return juce::String();
-}
-
-/**
- * @return the application shell command or directory path.
- */
-juce::String AppMenuItem::getCommand() const
-{
-    return juce::String();
-}
-
-/**
- * @return true iff this menu item is an application that launches in
- *          the terminal. 
- */
-bool AppMenuItem::isTerminalApp() const
-{
-    return false;
-}
-
-/**
- * @return true iff changing this menu item makes changes to .desktop or
- *          .directory files.
- */
-bool AppMenuItem::changesDesktopEntries() const
-{
-    return false;
-}
-
-/**
- * @return all application categories linked to this menu item.
- */
-juce::StringArray AppMenuItem::getCategories() const
-{
-    return {};
-}
-
-/**
- * @return the name or path used to load the icon file. 
+/*
+ * Gets the menu item's icon name.
  */
 juce::String AppMenuItem::getIconName() const
 {
-    return juce::String();
+    return dataSource->getIconName();
 }
 
-/**
- * @return true iff this menu item has an index that can be moved by a given 
- *          amount.
+/*
+ * Gets all items within a folder menu item.
  */
-bool AppMenuItem::canChangeIndex(int offset) const
+juce::Array<AppMenuItem> AppMenuItem::getFolderItems() const
 {
-    return false;
+    using namespace juce;
+    OwnedArray<MenuItemData> folderData;
+    folderData.addArray(dataSource->getFolderItems());
+    Array<AppMenuItem> folderItems;
+    for(MenuItemData* dataItem : folderData)
+    {
+        folderItems.add(AppMenuItem(dataItem));
+    }
+    return folderItems;
 }
 
-/**
- * @return true iff this menu item and another share the same
- *          properties.
+/*
+ * Gets any launch command associated with this menu item.
+ */
+juce::String AppMenuItem::getCommand() const
+{
+    return dataSource->getCommand();
+}
+
+/*
+ * Gets all application categories associated with this menu item.
+ */
+juce::StringArray AppMenuItem::getCategories() const
+{
+    return dataSource->getCategories();
+}
+
+
+/*
+ * Checks if this menu item is a terminal application.
+ */
+bool AppMenuItem::getLaunchedInTerm() const
+{
+    return dataSource->getLaunchedInTerm();
+}
+
+/*
+ * Compares this menu item with another.
  */
 bool AppMenuItem::operator==(const AppMenuItem& toCompare) const
 {
-    return getAppName() == toCompare.getAppName()
+    return getTitle() == toCompare.getTitle()
+            && getIconName() == toCompare.getIconName()
             && getCategories() == toCompare.getCategories()
             && getCommand() == toCompare.getCommand()
-            && isFolder() == toCompare.isFolder()
-            && isTerminalApp() == toCompare.isTerminalApp()
-            && getIconName() == toCompare.getIconName()
-            && changesDesktopEntries() == toCompare.changesDesktopEntries();
+            && getLaunchedInTerm() == toCompare.getLaunchedInTerm();
 }
 
-/**
- * Assigns this FactoryInterface to a folder menu item.  This does nothing if 
- * the menu item is not a folder.
+/*
+ * Displays an alert to the user asking if this item should be removed from the
+ * menu, and deletes the menu item if the user confirms.
  */
-AppMenuItem::Ptr AppMenuItem::FactoryInterface::setFactory
-(AppMenuItem::Ptr menuItem)
+void AppMenuItem::deleteOnConfim(const std::function<void()> onConfirm)
 {
-    if (menuItem->isFolder())
-    {
-        menuItem->factoryInterface = this;
-    }
-    return menuItem;
+    confirmAction(
+            localeText(delete_APP) + getTitle() + localeText(question_mark),
+            localeText(really_delete),
+            [this, onConfirm]()
+            {
+                dataSource->deleteFromSource();
+                onConfirm();
+            });
 }
 
-/**
- * Get an appropriate title to use for a deletion confirmation window.
- */
-juce::String AppMenuItem::getConfirmDeleteTitle() const
-{
-    return txt.localeText(delete_APP) + getAppName()
-            + txt.localeText(question_mark);
-}
-
-/**
- * Gets appropriate descriptive text for a deletion confirmation window.
- */
-juce::String AppMenuItem::getConfirmDeleteMessage() const
-{
-    return txt.localeText(really_delete);
-}
-
-/**
- * @return true iff this menu item has categories that can be edited,
- *          defaults to false.
+/*
+ * Checks if this menu item has categories that may be edited.
  */
 bool AppMenuItem::hasEditableCategories() const
 {
-    return false;
+    return dataSource->isEditable(ConfigItemData::DataField::categories);
 }
 
-/**
- * @return true iff this menu item has a command that can be edited,
- *          defaults to false.
+/*
+ * Checks if the menu item has an editable command field.
  */
 bool AppMenuItem::hasEditableCommand() const
 {
-    return false;
+    return dataSource->isEditable(ConfigItemData::DataField::command);
 }
 
-/**
- * @return the title to display over an editor for this menu item. 
+/*
+ * Gets a title to use when editing this menu item.
  */
 juce::String AppMenuItem::getEditorTitle() const
 {
-    return txt.localeText(edit_menu_item);
+    return localeText(edit_menu_item);
 }
 
-/**
+/*
  * Gets a PopupEditorComponent callback function that will apply 
  * changes from an AppMenuPopupEditor to this menu item.
  */
 std::function<void(AppMenuPopupEditor*) > AppMenuItem::getEditorCallback()
 {
-    return [](AppMenuPopupEditor*)
-    {
-    };
+   return [this](AppMenuPopupEditor* editor)
+   {
+        dataSource->setTitle(editor->getNameField());
+        dataSource->setIconName(editor->getIconField());
+        if(hasEditableCommand())
+        {
+            dataSource->setCommand(editor->getCommandField());
+            dataSource->setLaunchedInTerm(editor->launchInTerm());
+        }
+        if(hasEditableCategories())
+        {
+            dataSource->setCategories(editor->getCategories());
+        }
+        dataSource->updateSource();
+   };
 }
 
-/**
- * Removes the source of this menu item's data
- * 
- * @return true iff the source was removed.
+/*
+ * Removes the source of this menu item's data.
  */
-bool AppMenuItem::removeMenuItemSource()
+void AppMenuItem::removeMenuItemSource()
 {
-    return false;
+    dataSource->deleteFromSource();
 }
 
-/**
- * If possible, change the index of this menu item by some
- * offset amount.
+/*
+ * Gets the menu item's index within its folder.
+ */
+int AppMenuItem::getIndex() const
+{
+    return dataSource->getIndex();
+}
+
+    
+/*
+ * Gets the indices of this menu item and all its parents within the application
+ * menu.
+ */
+juce::Array<int> AppMenuItem::getFullIndex() const
+{
+    return dataSource->getFullIndex();
+}
+
+/*
+ * Checks if this menu item has an index that can be moved by a given amount.
+ */
+bool AppMenuItem::canMoveIndex(const int offset) const
+{
+    return dataSource->canMoveIndex(offset);
+}
+
+/*
+ * Attempts to change the index of this menu item by some offset amount.
  */
 bool AppMenuItem::moveDataIndex(int offset)
 {
-    return false;
+    return dataSource->moveIndex(offset);
 }
 
-/**
- * Gets the string to add before a launch command to make it launch in the
- * terminal.
- */
-juce::String AppMenuItem::getTermLaunchPrefix() const
-{
-
-    using namespace juce;
-    using namespace MainConfigKeys;
-    MainConfigFile mainConfig;
-    return mainConfig.getConfigValue<String>(termLaunchCommandKey);
-}
-
-/**
- * Get an AppMenuItem for an application link provided by the 
- * AppConfigFile.
- */
-AppMenuItem::Ptr AppMenuItem::create
-(const AppShortcut& appItem) const
-{
-    if (factoryInterface == nullptr)
-    {
-        return nullptr;
-    }
-    return factoryInterface->create(appItem);
-}
-
-/**
- * Get an AppMenuItem for an application link that was read from a 
- * desktop entry file.
- */
-AppMenuItem::Ptr AppMenuItem::create(const DesktopEntry& desktopEntry) const
-{
-    if (factoryInterface == nullptr)
-    {
-        return nullptr;
-    }
-    return factoryInterface->create(desktopEntry);
-}
-
-/**
- * Get an AppMenuItem for an application folder provided by the 
- * AppConfigFile. 
- */
-AppMenuItem::Ptr AppMenuItem::create
-(const AppFolder& appFolder) const
-{
-    if (factoryInterface == nullptr)
-    {
-        return nullptr;
-    }
-    return factoryInterface->create(appFolder);
-}
 

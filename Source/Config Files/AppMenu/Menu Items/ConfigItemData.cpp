@@ -20,9 +20,9 @@ static const juce::Identifier categoryKey("categories");
 static const juce::Identifier folderItemKey("folder items");
 
 ConfigItemData::ConfigItemData(juce::var& jsonData, const int index,
-        const ConfigItemData* parent) :
+        const juce::Array<int>& folderIndex) :
 Localized("ConfigItemData"),
-MenuItemData(index, parent),
+MenuItemData(index, folderIndex),
 jsonData(jsonData) { }
 
 /*
@@ -31,9 +31,7 @@ jsonData(jsonData) { }
 MenuItemData* ConfigItemData::clone() const
 {
     juce::var dataCopy = jsonData.clone();
-    const ConfigItemData* parent = 
-        dynamic_cast<const ConfigItemData*>(getParent());
-    return new ConfigItemData(dataCopy, getIndex(), parent);
+    return new ConfigItemData(dataCopy, getIndex(), getFolderIndex());
 }
 
 /*
@@ -71,12 +69,16 @@ void ConfigItemData::setIconName(const juce::String& iconName)
 /*
  * Gets the application categories connected to this menu item.
  */
-juce::StringArray ConfigItemData::getCategories()
+juce::StringArray ConfigItemData::getCategories() const
 {
     using namespace juce;
-    var category = jsonData.getProperty(categoryKey, var());
-    StringArray 
-
+    var categoryList = jsonData.getProperty(categoryKey, var());
+    StringArray categoryStrings;
+    for(var& category : (*categoryList.getArray()))
+    {
+        categoryStrings.add(category);
+    }
+    return categoryStrings;
 }
 
 /*
@@ -84,6 +86,7 @@ juce::StringArray ConfigItemData::getCategories()
  */
 void ConfigItemData::setCategories(const juce::StringArray& categories)
 {
+    jsonData.getDynamicObject()->setProperty(categoryKey, categories);
 }
 
 /*
@@ -91,6 +94,7 @@ void ConfigItemData::setCategories(const juce::StringArray& categories)
  */
 juce::String ConfigItemData::getCommand() const
 {
+    return jsonData.getProperty(commandKey, "");
 }
 
 /*
@@ -98,6 +102,7 @@ juce::String ConfigItemData::getCommand() const
  */
 void ConfigItemData::setCommand(const juce::String& newCommand)
 {
+    jsonData.getDynamicObject()->setProperty(commandKey, newCommand);
 }
 
 /*
@@ -105,12 +110,14 @@ void ConfigItemData::setCommand(const juce::String& newCommand)
  */
 bool ConfigItemData::getLaunchedInTerm() const
 {
+    return jsonData.getProperty(launchInTermKey, false);
 }
 
 /*
  * Sets if this menu item runs its command in a new terminal window. */
 void ConfigItemData::setLaunchedInTerm(const bool termLaunch)
 {
+    jsonData.getDynamicObject()->setProperty(launchInTermKey, termLaunch);
 }
 
 /*

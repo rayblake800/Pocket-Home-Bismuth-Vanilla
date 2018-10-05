@@ -14,13 +14,13 @@ public:
     /**
      * @param menuData  The JSON object holding menu data.
      *
-     * @param index     Index of this menu item within its folder.
+     * @param index        Index of this menu item within its folder.
      *
-     * @param parent    The parent folder item, if this menu item is not in the
-     *                  root folder.
+     * @param folderIndex  The index of the folder containing this menu item.
+     *                     If no folderIndex is given, the root folder is used.
      */
     ConfigItemData(juce::var& jsonData, const int index,
-            const ConfigItemData* parent = nullptr);
+            const juce::Array<int>& folderIndex);
     
     virtual ~ConfigItemData() { }
 
@@ -66,7 +66,7 @@ public:
      *
      * @return  Any category strings assigned to this menu item.
      */
-    virtual juce::StringArray getCategories() override;
+    virtual juce::StringArray getCategories() const override;
 
     /**
      * @brief  Sets the application categories connected to this menu item.

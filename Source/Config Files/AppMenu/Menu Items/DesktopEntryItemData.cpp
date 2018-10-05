@@ -7,7 +7,7 @@
 DesktopEntryItemData::DesktopEntryItemData
 (DesktopEntry desktopEntry, const int index) :
 desktopEntry(desktopEntry),
-MenuItemData(index, nullptr),
+MenuItemData(index),
 Localized("DesktopEntryItemData") { }
 
 /*
@@ -15,7 +15,7 @@ Localized("DesktopEntryItemData") { }
  */
 MenuItemData* DesktopEntryItemData::clone() const
 {
-    return new DesktopEntryItemData(desktopEntry);
+    return new DesktopEntryItemData(desktopEntry, getIndex());
 }
 
 /*
@@ -69,7 +69,7 @@ void DesktopEntryItemData::setIconName(const juce::String& iconName)
 /*
  * Gets the application categories connected to this menu item.
  */
-juce::StringArray DesktopEntryItemData::getCategories()
+juce::StringArray DesktopEntryItemData::getCategories() const
 {
     return desktopEntry.getCategories();
 }
