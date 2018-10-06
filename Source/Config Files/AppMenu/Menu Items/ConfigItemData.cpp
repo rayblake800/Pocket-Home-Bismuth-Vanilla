@@ -30,8 +30,7 @@ jsonData(jsonData) { }
  */
 MenuItemData* ConfigItemData::clone() const
 {
-    juce::var dataCopy = jsonData.clone();
-    return new ConfigItemData(dataCopy, getIndex(), getFolderIndex());
+    return new ConfigItemData(jsonData, getIndex(), getFolderIndex());
 }
 
 /*
@@ -125,7 +124,9 @@ void ConfigItemData::setLaunchedInTerm(const bool termLaunch)
  */
 void ConfigItemData::deleteFromSource()
 {
-    // TODO: Implement after AppConfigFile redesign.
+    auto appJSON = getWriteLockedResource();
+    appJSON->removeMenuItem(getIndex(), getFolderIndex(), true);
+
 }
 
 /*
@@ -133,9 +134,10 @@ void ConfigItemData::deleteFromSource()
  */
 void ConfigItemData::updateSource()
 {
-    // TODO: Implement after AppConfigFile redesign.
+    auto appJSON = getWriteLockedResource();
+    deleteFromSource();
+    appJSON->addMenuItem(jsonData, getIndex(), getFolderIndex(), true);
 }
-
 
 /*
  * Checks if this menu item can be moved within its menu folder.

@@ -27,6 +27,8 @@ public:
 
     virtual ~AppJSON() { }
 
+    int getFolderSize(const juce::Array<int> 
+
     /**
      * @brief  Gets all menu items within a folder in the application menu.
      *
@@ -57,7 +59,7 @@ public:
      *                         root menu folder by default.  If this is not a
      *                         valid folder index, the closest valid index will
      *                         be used.
-
+     *
      * @param writeChangesNow  Whether changes should immediately be written to
      *                         the JSON file.  By default, changes will be 
      *                         written immediately.
