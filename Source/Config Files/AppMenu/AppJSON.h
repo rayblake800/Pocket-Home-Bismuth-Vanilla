@@ -27,7 +27,21 @@ public:
 
     virtual ~AppJSON() { }
 
-    int getFolderSize(const juce::Array<int> 
+    /**
+     * @brief  Gets the number of menu items within a menu folder.
+     *
+     * @param folderIndex             The index of a folder in the menu tree.
+     *
+     * @param includeDesktopEntries   Whether menu items loaded from desktop
+     *                                entry files should be included in the
+     *                                count.
+     *
+     * @return                        The number of menu items in the folder, or
+     *                                -1 if folderIndex doesn't specify a valid
+     *                                folder index.
+     */
+    int getFolderSize(const juce::Array<int> folderIndex,
+            const bool includeDesktopEntries = true) const;
 
     /**
      * @brief  Gets all menu items within a folder in the application menu.
@@ -57,8 +71,8 @@ public:
      * @param folderIndex      The index of the folder where the menu item will
      *                         be added within the menu tree.  This selects the
      *                         root menu folder by default.  If this is not a
-     *                         valid folder index, the closest valid index will
-     *                         be used.
+     *                         valid folder index, the menu item will not be
+     *                         added.
      *
      * @param writeChangesNow  Whether changes should immediately be written to
      *                         the JSON file.  By default, changes will be 
@@ -104,6 +118,16 @@ public:
         static const std::vector<ConfigKey> keys = {};
         return keys;
     }
+
+    /**
+     * @brief  Finds a folder within the folder data tree, and returns its data.
+     *
+     * @param folderIndex  The index of a folder within the folder data tree.
+     *
+     * @return             The folder's JSON data, or an empty var if no folder
+     *                     exists at the given index.
+     */
+    juce::var getFolderVar(const juce::Array<int>& folderIndex) const;
 
     /* Holds all JSON menu data */
     juce::var menuItems;
