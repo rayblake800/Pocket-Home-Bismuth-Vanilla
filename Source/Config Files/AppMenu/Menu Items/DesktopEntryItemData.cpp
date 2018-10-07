@@ -4,10 +4,10 @@
 #include "DesktopEntryFileError.h"
 #include "DesktopEntryItemData.h"
 
-DesktopEntryItemData::DesktopEntryItemData
-(DesktopEntry desktopEntry, const int index) :
+DesktopEntryItemData::DesktopEntryItemData(DesktopEntry desktopEntry, 
+        const int index, const juce::Array<int>& folderIndex) :
 desktopEntry(desktopEntry),
-MenuItemData(index),
+MenuItemData(index, folderIndex),
 Localized("DesktopEntryItemData") { }
 
 /*
@@ -16,6 +16,14 @@ Localized("DesktopEntryItemData") { }
 MenuItemData* DesktopEntryItemData::clone() const
 {
     return new DesktopEntryItemData(desktopEntry, getIndex());
+}
+
+/*
+ * Checks if this menu item represents a folder within the menu.
+ */
+bool DesktopEntryItemData::isFolder() const
+{
+    return desktopEntry.getType() == DesktopEntry::Type::directory;
 }
 
 /*
@@ -221,27 +229,9 @@ bool DesktopEntryItemData::isEditable(const DataField dataField)
 /*
  * Gets the number of menu items in the folder opened by this menu item.
  */
-int folderItemCount()
+int DesktopEntryItemData::getFolderSize()
 {
     return 0;
-}
-
-
-/*
- * Gets a single menu item in the folder this menu item would open.
- */
-MenuItemData* getFolderItem(int index)
-{
-    return nullptr;
-}
-
-
-/*
- * Gets all menu items in the folder this menu item would open.
- */
-juce::Array<MenuItemData*> getFolderItems()
-{
-    return {};
 }
 
 

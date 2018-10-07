@@ -17,7 +17,8 @@
 class DesktopEntryItemData : public MenuItemData, private Localized
 {
 public:
-    DesktopEntryItemData(DesktopEntry desktopEntry, const int index);
+    DesktopEntryItemData(DesktopEntry desktopEntry, const int index,
+            const juce::Array<int>& folderIndex = {});
 
     virtual ~DesktopEntryItemData() { }
 
@@ -29,6 +30,13 @@ public:
      * @return  A new DataSource object copying this object's JSON data.
      */
     virtual MenuItemData* clone() const override;
+
+    /**
+     * @brief  Checks if this menu item represents a folder within the menu.
+     *
+     * @return  Whether this menu item opens a new menu folder.
+     */
+    virtual bool isFolder() const override;
 
     /**
      * @brief  Gets the menu item's displayed title.
@@ -176,26 +184,7 @@ public:
      * @return  The number of folder items, or zero if this menu item does not
      *          open a folder.
      */
-    virtual int folderItemCount() override;
-
-    /**
-     * @brief  Gets a single menu item in the folder this menu item would open.
-     *
-     * @param index  The index of a menu item in the folder.
-     *
-     * @return  A menu item, or nullptr if this menu item doesn't open a folder
-     *          or index is out of bounds.  The caller is responsible for
-     *          ensuring non-null return values are deleted.
-     */
-    virtual MenuItemData* getFolderItem(int index) override;
-
-    /**
-     * @brief  Gets all menu items in the folder this menu item would open.
-     *
-     * @return  An array of menu item objects.  The caller is responsible for
-     *          ensuring these objects are deleted.
-     */
-    virtual juce::Array<MenuItemData*> getFolderItems() override;
+    virtual int getFolderSize() override;
 
 private:
     //localized text keys: 

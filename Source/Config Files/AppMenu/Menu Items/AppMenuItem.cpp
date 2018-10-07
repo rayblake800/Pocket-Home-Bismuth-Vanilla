@@ -24,12 +24,40 @@ AppMenuItem::AppMenuItem(const AppMenuItem& toCopy) :
 Localized(localizedClassKey),
 dataSource(toCopy.dataSource->clone()) { }
 
+
+/*
+ * Checks if this menu item represents a folder within the menu.
+ */
+bool AppMenuItem::isFolder() const
+{
+    return dataSource->isFolder();
+}
+
+/*
+ * Gets the number of menu items in the folder opened by this menu item.
+ */
+int AppMenuItem::getFolderSize()
+{
+    return dataSource->getFolderSize();
+}
+
 /**
  * Gets the menu item's displayed title.
  */
 juce::String AppMenuItem::getTitle() const
 {
     return dataSource->getTitle();
+}
+
+/*
+ * Sets the menu item's displayed title.
+ */
+void AppMenuItem::setTitle(const juce::String& title)
+{
+    if(dataSource->isEditable(MenuItemData::DataField::title))
+    {
+        dataSource->setTitle(title);
+    }
 }
 
 /*
@@ -41,19 +69,14 @@ juce::String AppMenuItem::getIconName() const
 }
 
 /*
- * Gets all items within a folder menu item.
+ * Sets the name or path used to load the menu item's icon file.
  */
-juce::Array<AppMenuItem> AppMenuItem::getFolderItems() const
+void AppMenuItem::setIconName(const juce::String& iconName)
 {
-    using namespace juce;
-    OwnedArray<MenuItemData> folderData;
-    folderData.addArray(dataSource->getFolderItems());
-    Array<AppMenuItem> folderItems;
-    for(MenuItemData* dataItem : folderData)
+    if(dataSource->isEditable(MenuItemData::DataField::icon))
     {
-        folderItems.add(AppMenuItem(dataItem));
+        dataSource->setIconName(iconName);
     }
-    return folderItems;
 }
 
 /*
@@ -65,6 +88,17 @@ juce::String AppMenuItem::getCommand() const
 }
 
 /*
+ * Sets the menu item's application launch command.
+ */
+void AppMenuItem::setCommand(const juce::String& newCommand)
+{
+    if(dataSource->isEditable(MenuItemData::DataField::command))
+    {
+        dataSource->setCommand(newCommand);
+    }
+}
+
+/*
  * Gets all application categories associated with this menu item.
  */
 juce::StringArray AppMenuItem::getCategories() const
@@ -72,6 +106,16 @@ juce::StringArray AppMenuItem::getCategories() const
     return dataSource->getCategories();
 }
 
+/*
+ * Sets the application categories connected to this menu item.
+ */
+void AppMenuItem::setCategories(const juce::StringArray& categories)
+{
+    if(dataSource->isEditable(MenuItemData::DataField::categories))
+    {
+        dataSource->setCategories(categories);
+    }
+}
 
 /*
  * Checks if this menu item is a terminal application.
@@ -79,6 +123,17 @@ juce::StringArray AppMenuItem::getCategories() const
 bool AppMenuItem::getLaunchedInTerm() const
 {
     return dataSource->getLaunchedInTerm();
+}
+
+/*
+ * Sets if this menu item runs its command in a new terminal window.
+ */
+void AppMenuItem::setLaunchedInTerm(const bool termLaunch)
+{
+    if(dataSource->isEditable(MenuItemData::DataField::termLaunchOption))
+    {
+        dataSource->setLaunchedInTerm(termLaunch);
+    }
 }
 
 /*
@@ -114,7 +169,7 @@ void AppMenuItem::deleteOnConfim(const std::function<void()> onConfirm)
  */
 bool AppMenuItem::hasEditableCategories() const
 {
-    return dataSource->isEditable(ConfigItemData::DataField::categories);
+    return dataSource->isEditable(MenuItemData::DataField::categories);
 }
 
 /*
@@ -122,7 +177,7 @@ bool AppMenuItem::hasEditableCategories() const
  */
 bool AppMenuItem::hasEditableCommand() const
 {
-    return dataSource->isEditable(ConfigItemData::DataField::command);
+    return dataSource->isEditable(MenuItemData::DataField::command);
 }
 
 /*
@@ -134,34 +189,19 @@ juce::String AppMenuItem::getEditorTitle() const
 }
 
 /*
- * Gets a PopupEditorComponent callback function that will apply 
- * changes from an AppMenuPopupEditor to this menu item.
+ * Removes the source of this menu item's data.
  */
-std::function<void(AppMenuPopupEditor*) > AppMenuItem::getEditorCallback()
+void AppMenuItem::deleteFromSource()
 {
-   return [this](AppMenuPopupEditor* editor)
-   {
-        dataSource->setTitle(editor->getNameField());
-        dataSource->setIconName(editor->getIconField());
-        if(hasEditableCommand())
-        {
-            dataSource->setCommand(editor->getCommandField());
-            dataSource->setLaunchedInTerm(editor->launchInTerm());
-        }
-        if(hasEditableCategories())
-        {
-            dataSource->setCategories(editor->getCategories());
-        }
-        dataSource->updateSource();
-   };
+    dataSource->deleteFromSource();
 }
 
 /*
- * Removes the source of this menu item's data.
+ * Writes all changes to this menu item back to its data source.
  */
-void AppMenuItem::removeMenuItemSource()
+void AppMenuItem::updateSource()
 {
-    dataSource->deleteFromSource();
+    dataSource->updateSource();
 }
 
 /*
@@ -174,12 +214,11 @@ int AppMenuItem::getIndex() const
 
     
 /*
- * Gets the indices of this menu item and all its parents within the application
- * menu.
+ * Gets the index of the menu folder holding this menu item.
  */
-juce::Array<int> AppMenuItem::getFullIndex() const
+const juce::Array<int>& AppMenuItem::getFolderIndex() const
 {
-    return dataSource->getFullIndex();
+    return dataSource->getFolderIndex();
 }
 
 /*

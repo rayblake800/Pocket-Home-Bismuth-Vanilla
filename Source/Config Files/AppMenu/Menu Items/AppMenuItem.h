@@ -1,9 +1,6 @@
 #pragma once
-#include "DesktopEntry.h"
 #include "IconThread.h"
-#include "AppConfigFile.h"
 #include "Localized.h"
-#include "AppMenuPopupEditor.h"
 #include "MenuItemData.h"
 
 /**
@@ -30,13 +27,36 @@ public:
     AppMenuItem(const AppMenuItem& toCopy);
 
     virtual ~AppMenuItem() { }
- 
+
+    /**
+     * @brief  Checks if this menu item represents a folder within the menu.
+     *
+     * @return  Whether this menu item opens a new menu folder.
+     */
+    bool isFolder() const;
+
+    /**
+     * @brief  Gets the number of menu items in the folder opened by this menu
+     *         item.
+     *
+     * @return  The number of folder items, or zero if this menu item does not
+     *          open a folder.
+     */
+    int getFolderSize();
+
     /**
      * @brief  Gets the menu item's displayed title.
      *
      * @return  The display title of the menu item.
      */
     juce::String getTitle() const;
+
+    /**
+     * @brief  Sets the menu item's displayed title.
+     *
+     * @param title  The new title string to display.
+     */
+    void setTitle(const juce::String& title);
 
     /**
      * @brief  Gets the menu item's icon name.
@@ -46,12 +66,11 @@ public:
     juce::String getIconName() const;
 
     /**
-     * @brief  Gets all items within a folder menu item.
+     * @brief  Sets the name or path used to load the menu item's icon file.
      *
-     * @return  All menu items in this folder, or an empty array if this isn't
-     *          a folder.
+     * @param iconName  The new icon name or path.
      */
-    juce::Array<AppMenuItem> getFolderItems() const;
+    void setIconName(const juce::String& iconName);
 
     /**
      * @brief  Gets any launch command associated with this menu item.
@@ -60,6 +79,14 @@ public:
      *          item doesn't launch an application.
      */
     juce::String getCommand() const;
+
+    /**
+     * @brief  Sets the menu item's application launch command.
+     *
+     * @param newCommand  The new command string to run when this menu item is
+     *                    clicked.
+     */
+    void setCommand(const juce::String& newCommand);
 
     /**
      * @brief  Gets all application categories associated with this menu item.
@@ -71,12 +98,28 @@ public:
     juce::StringArray getCategories() const;
 
     /**
+     * @brief  Sets the application categories connected to this menu item.
+     *
+     * @param categories  The new set of category strings to assign to this menu
+     *                    item.
+     */
+    void setCategories(const juce::StringArray& categories);
+
+    /**
      * @brief  Checks if this menu item is a terminal application.
      *
      * @return  True if and only if the menu item has a launch command that 
      *          should run within a new terminal window.
      */
     bool getLaunchedInTerm() const;
+
+    /**
+     * @brief  Sets if this menu item runs its command in a new terminal window.
+     *
+     * @param termLaunch  True to run any launch command assigned to this
+     *                    menu item within a new terminal window.
+     */
+    void setLaunchedInTerm(const bool termLaunch);
 
     /**
      * @brief  Compares this menu item with another.
@@ -119,18 +162,14 @@ public:
     juce::String getEditorTitle() const;
 
     /**
-     * @brief  Gets a PopupEditorComponent callback function that will apply 
-     *         changes from an AppMenuPopupEditor to this menu item.
-     *
-     * @return  A function that reads data from a menu item editor to edit this
-     *          menu item.
+     * @brief  Deletes this menu item data from its source.
      */
-    std::function<void(AppMenuPopupEditor*) > getEditorCallback();
+    void deleteFromSource();
 
     /**
-     * @brief  Removes the source of this menu item's data
+     * @brief  Writes all changes to this menu item back to its data source.
      */
-    void removeMenuItemSource();
+    void updateSource();
     
     /**
      * @brief  Gets the menu item's index within its folder.
@@ -138,15 +177,16 @@ public:
      * @return  The menu item index. 
      */
     int getIndex() const;
-    
+
     /**
-     * @brief  Gets the indices of this menu item and all its parents within
-     *         the application menu.
+     * @brief  Gets the index of the menu folder holding this menu item.
      *
-     * @return  The indices of this menu item and all parents, listed in parent
-     *          ->child order, with this item's index as the last element.
+     * Starting with the root folder, each index in the folder index array maps
+     * to a folder menu item within the previous folder.
+     *
+     * @return  The folder's index within the menu tree.
      */
-    juce::Array<int> getFullIndex() const;
+    const juce::Array<int>& getFolderIndex() const;
 
     /**
      * @brief  Checks if this menu item has an index that can be moved by a
