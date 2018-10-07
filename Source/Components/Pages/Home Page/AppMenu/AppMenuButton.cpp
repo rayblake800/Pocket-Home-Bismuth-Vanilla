@@ -11,23 +11,23 @@ static const constexpr char* titleBuffer = "     ";
 /*
  * Creates a new AppMenuButton component for a menu item.
  */
-AppMenuButton::AppMenuButton(AppMenuItem::Ptr menuItem) :
+AppMenuButton::AppMenuButton(AppMenuItem menuItem) :
 Button("AppMenuButton"),
 menuItem(menuItem)
 {
     using namespace juce;
 #ifdef JUCE_DEBUG
-    setName(String("AppMenuButton:") + menuItem->getAppName());
+    setName(String("AppMenuButton:") + menuItem.getTitle());
 #endif
     setWantsKeyboardFocus(false);
-    textWidth = titleFont.getStringWidth(getMenuItem()->getAppName() 
+    textWidth = titleFont.getStringWidth(getMenuItem().getTitle() 
             + titleBuffer);
 }
 
 /*
  * Gets this button's menu data.
  */
-AppMenuItem::Ptr AppMenuButton::getMenuItem()
+const AppMenuItem& AppMenuButton::getMenuItem() const
 {
     return menuItem;
 }
@@ -42,27 +42,37 @@ AppMenuPopupEditor* AppMenuButton::getEditor
     MainConfigFile mainConfig;
     
     AppMenuPopupEditor* editor = new AppMenuPopupEditor
-            (menuItem->getEditorTitle(),
+            (menuItem.getEditorTitle(),
             [this, onConfirm](AppMenuPopupEditor * editor)
             {
+                menuItem.setTitle(editor->getNameField());
+                menuItem.setIconName(editor->getIconField());
+                if(menuItem.hasEditableCommand())
+                {
+                    menuItem.setCommand(editor->getCommandField());
+                    menuItem.setLaunchedInTerm(editor->getTerminalCheckbox());
+                }
+                if(menuItem.hasEditableCategories())
+                {
+                    menuItem.setCategories(editor->getCategories());
+                }
+                menuItem.updateSource();
                 onConfirm(editor);
-                menuItem->getEditorCallback()(editor);
-                reloadDataFromSource();
             },
-    menuItem->hasEditableCategories(),
-            menuItem->hasEditableCommand());
+    menuItem.hasEditableCategories(),
+            menuItem.hasEditableCommand());
     File file;
-    editor->setNameField(menuItem->getAppName());
-    editor->setIconField(menuItem->getIconName());
-    editor->setCategories(menuItem->getCategories());
-    String command = menuItem->getCommand();
-    if(menuItem->isTerminalApp())
+    editor->setNameField(menuItem.getTitle());
+    editor->setIconField(menuItem.getIconName());
+    editor->setCategories(menuItem.getCategories());
+    String command = menuItem.getCommand();
+    if(menuItem.getLaunchedInTerm())
     {
         command = command.substring(mainConfig.getConfigValue<String>
                 (MainConfigKeys::termLaunchCommandKey).length() + 1);
     }
     editor->setCommandField(command);
-    editor->setTerminalCheckbox(menuItem->isTerminalApp());
+    editor->setTerminalCheckbox(menuItem.getLaunchedInTerm());
     return editor;
 };
 
@@ -73,13 +83,7 @@ AppMenuPopupEditor* AppMenuButton::getEditor
 void AppMenuButton::confirmRemoveButtonSource
 (const std::function<void() >& onRemove)
 {
-    confirmAction(menuItem->getConfirmDeleteTitle(),
-            menuItem->getConfirmDeleteMessage(),
-            [this, onRemove]()
-            {
-                menuItem->removeMenuItemSource();
-                onRemove();
-            });
+    menuItem.deleteOnConfim([this, onRemove]() { onRemove(); });
 }
 
 /*
@@ -120,7 +124,7 @@ void AppMenuButton::loadIcon(const juce::String& icon)
  */
 void AppMenuButton::reloadDataFromSource()
 {
-    loadIcon(menuItem->getIconName());
+    loadIcon(menuItem.getIconName());
 }
 
 /*
@@ -154,7 +158,7 @@ void AppMenuButton::setTitleBounds(const juce::Rectangle<float>& bounds)
 {
     titleBounds = bounds;
     textWidth = std::min((int) bounds.getWidth(),
-            titleFont.getStringWidth(getMenuItem()->getAppName() + "    "));
+            titleFont.getStringWidth(getMenuItem().getTitle() + "    "));
 }
 
 /*
@@ -165,7 +169,7 @@ void AppMenuButton::setIconBounds(const juce::Rectangle<float>& bounds)
     iconBounds = bounds;
     if(appIcon.isNull())
     {
-        loadIcon(menuItem->getIconName());
+        loadIcon(menuItem.getIconName());
     }
 }
 
@@ -192,7 +196,7 @@ void AppMenuButton::setTitleFont(const juce::Font& font)
 {
     titleFont = font;
     textWidth = std::min((int) titleBounds.getWidth(),
-            font.getStringWidth(getMenuItem()->getAppName() + titleBuffer));
+            font.getStringWidth(getMenuItem().getTitle() + titleBuffer));
 }
 
 /*
@@ -236,7 +240,7 @@ void AppMenuButton::paintButton
     // Draw title:
     g.setColour(findColour(textColourId));
     g.setFont(titleFont);
-    g.drawText(getMenuItem()->getAppName(), titleBounds, textJustification,
+    g.drawText(getMenuItem().getTitle(), titleBounds, textJustification,
             true);
     if (drawBorder)
     {

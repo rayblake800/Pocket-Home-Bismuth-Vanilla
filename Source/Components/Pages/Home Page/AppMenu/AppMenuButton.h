@@ -34,16 +34,16 @@ public:
      *
      * @param menuItem    The new button's menu data source.
      */
-    AppMenuButton(AppMenuItem::Ptr menuItem);
+    AppMenuButton(AppMenuItem menuItem);
 
     virtual ~AppMenuButton() { }
 
     /**
      * @brief   Gets this button's menu data.
      * 
-     * @return  A pointer to this button's internal AppMenuItem.
+     * @return  A copy of this button's internal AppMenuItem.
      */
-    AppMenuItem::Ptr getMenuItem();
+    const AppMenuItem& getMenuItem() const;
 
 
     /**
@@ -60,16 +60,7 @@ public:
      */
     AppMenuPopupEditor* getEditor
     (const std::function<void(AppMenuPopupEditor*) >& onConfirm);
-
-    /**
-     * @brief  Attempts to move this button's index 
-     *
-     * @param offset
-     *
-     * @return 
-     */
-    bool moveDataIndex(const int offset); 
-
+    
     /**
      * @brief  Displays a confirmation window to the user requesting permission
      *         to delete this button, and runs a deletion callback function if 
@@ -220,7 +211,7 @@ private:
     bool drawBorder = true;
     
     /* Menu item data object */
-    AppMenuItem::Ptr menuItem;
+    AppMenuItem menuItem;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuButton)
 };

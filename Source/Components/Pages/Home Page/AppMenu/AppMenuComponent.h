@@ -12,7 +12,6 @@
 #include "AppConfigFile.h"
 #include "DesktopEntryLoader.h"
 #include "AppMenuPopupEditor.h"
-#include "AppMenuItemFactory.h"
 #include "AppMenuFolder.h"
 #include "AppMenuButton.h"
 #include "Localized.h"
@@ -234,7 +233,7 @@ private:
      *                     by the folder to recycle menu buttons.
      */
     virtual AppMenuFolder* createFolderObject(
-            AppMenuItem::Ptr folderItem,
+            const AppMenuItem& folderItem,
             std::map<juce::String, AppMenuButton::Ptr>& buttonMap) = 0;
 
     /**
@@ -288,7 +287,7 @@ private:
      * @param folderItem  This defines the folder and provides all 
      *                     AppMenuItem objects.
      */
-    void openFolder(AppMenuItem::Ptr folderItem);
+    void openFolder(const AppMenuItem& folderItem);
 
     /**
      * @return the selected button in the active folder, or nullptr if
@@ -346,9 +345,6 @@ private:
     //Stores each button by name, so buttons don't need to be re-loaded
     //every time you close a folder and open it again.
     std::map<juce::String, AppMenuButton::Ptr> buttonNameMap;
-
-    //creates all menu items
-    AppMenuItemFactory menuItemFactory;
 
     //keyboard shortcuts
     static const juce::String openPopupMenuBinding;

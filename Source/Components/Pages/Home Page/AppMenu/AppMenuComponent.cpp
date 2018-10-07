@@ -18,11 +18,8 @@ Localized("AppMenuComponent"),
 ConfigurableComponent(componentKey),
 loadingState(false),
 loadingSpinner(loadingSpinner),
-menuItemFactory(desktopEntries)
+juce::Component(componentKey.toString())
 {
-#    if JUCE_DEBUG
-    setName("AppMenuComponent");
-#    endif
     addTrackedKey(MainConfigKeys::maxRowsKey);
     addTrackedKey(MainConfigKeys::maxColumnsKey);
     MainConfigFile mainConfig;
@@ -64,14 +61,12 @@ void AppMenuComponent::exitLoadingState()
  */
 void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
 {
+    using namespace juce;
     if (ignoringInput())
     {
         return;
     }
-    juce::PopupMenu editMenu;
-
-    AppMenuItem::Ptr selectedMenuItem = selectedButton == nullptr ?
-            nullptr : selectedButton->getMenuItem();
+    PopupMenu editMenu;
 
     /*
      * The pop-up menu really shouldn't be appearing when the button editor
@@ -97,7 +92,8 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
     {
         editMenu.addItem(1, localeText(edit_app));
         editMenu.addItem(2, localeText(delete_app));
-        if (selectedMenuItem->isFolder())
+        AppMenuItem selectedMenuItem = selectedButton->getMenuItem();
+        if (selectedMenuItem.isFolder())
         {
             editMenu.addItem(4, localeText(new_shortcut));
         }
@@ -105,11 +101,11 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         {
             editMenu.addItem(6, localeText(add_shortcut));
         }
-        if (selectedMenuItem->canChangeIndex(-1))
+        if (selectedMenuItem.canMoveIndex(-1))
         {
             editMenu.addItem(7, localeText(move_back));
         }
-        if (selectedMenuItem->canChangeIndex(1))
+        if (selectedMenuItem.canMoveIndex(1))
         {
             editMenu.addItem(8, localeText(move_forward));
         }
@@ -149,7 +145,7 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
             if (selectedButton != nullptr)
             {
                 newAppEditor->setCategories
-                        (selectedButton->getMenuItem()->getCategories());
+                        (selectedButton->getMenuItem().getCategories());
             }
             showPopupEditor(newAppEditor);
             break;
@@ -164,13 +160,12 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         case 6://User selects "Pin to favorites"
         {
             AppConfigFile appConfig;
-            AppShortcut newShortcut(
-                    selectedMenuItem->getAppName(),
-                    selectedMenuItem->getIconName(),
-                    selectedMenuItem->getCommand(),
-                    false);
-            appConfig.addShortcut(newShortcut,
-                    appConfig.getShortcuts().size());
+            AppMenuItem selectedMenuItem = selectedButton->getMenuItem();
+            Array<int> folderIndex = selectedMenuItem.getFolderIndex();
+            folderIndex.add(selectedMenuItem.getIndex());
+            appConfig.addMenuItem(selectedMenuItem,
+                    selectedMenuItem.getFolderSize(),
+                    folderIndex, true);
             confirmNew();
             break;
         }
@@ -247,7 +242,8 @@ void AppMenuComponent::loadBaseFolder()
             DBG("AppMenuComponent::" << __func__
                     << ": Loading desktop entries complete,"
                     << " creating base folder");
-            openFolder(menuItemFactory.createBaseFolderItem());
+            AppConfigFile config;
+            openFolder(config.getRootMenuItem());
             openFolders.getFirst()->selectIndex(savedIndex);
             loadingSpinner.setLoadingText("Building folder layout:");
             MessageManager::callAsync([this]()
@@ -523,7 +519,7 @@ void AppMenuComponent::resized()
  * If any folders after the active folder are already open, they
  * will first be closed.
  */
-void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
+void AppMenuComponent::openFolder(const AppMenuItem& folderItem)
 {
     while (getActiveFolderIndex() < openFolders.size() - 1)
     {
@@ -535,6 +531,9 @@ void AppMenuComponent::openFolder(AppMenuItem::Ptr folderItem)
     openFolders.add(newFolder);
     newFolder->addMouseListener(this, false);
     newFolder->updateGridSize(maxRows, maxColumns);
+    DBG("AppMenuComponent::" << __func__ << ": Opening folder "
+            << openFolders.size() << " holding " << newFolder->getButtonCount()
+            << " menu buttons.");
     addAndMakeVisible(newFolder);
     layoutFolders();
     setActiveFolderIndex(openFolders.size() - 1);
@@ -589,14 +588,6 @@ void AppMenuComponent::showMenuButtonEditor(AppMenuButton::Ptr button)
             (AppMenuPopupEditor * editor)
             {
                 openFolders[getActiveFolderIndex()]->repaint();
-                if (button->getMenuItem()->changesDesktopEntries())
-                {
-                    desktopEntries.loadEntries([](String s)
-                    {
-                    }, []()
-                    {
-                    });
-                }
             }));
 }
 
@@ -639,8 +630,8 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
                 return;
             }
         }
-        AppMenuItem::Ptr buttonItem = button->getMenuItem();
-        if (buttonItem->isFolder())
+        AppMenuItem buttonItem = button->getMenuItem();
+        if (buttonItem.isFolder())
         {
             openFolder(buttonItem);
             layoutFolders(true);
@@ -649,8 +640,8 @@ void AppMenuComponent::onButtonClick(AppMenuButton::Ptr button)
         {
             setLoadingState(true);
             loadingSpinner.setLoadingText(String("Launching ")
-                    + buttonItem->getAppName());
-            appLauncher.startOrFocusApp(buttonItem->getCommand());
+                    + buttonItem.getTitle());
+            appLauncher.startOrFocusApp(buttonItem.getCommand());
         }
 
     }

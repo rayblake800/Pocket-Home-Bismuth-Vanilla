@@ -1,11 +1,12 @@
 #include "Utils.h"
+#include "AppConfigFile.h"
 #include "AppMenuFolder.h"
 
 /*
  * Creates a new folder component, loading menu buttons from a folder menu item.
  */
 AppMenuFolder::AppMenuFolder(
-        const AppMenuItem::Ptr folderItem,
+        const AppMenuItem folderItem,
         MouseListener* btnListener,
         std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap) :
 sourceFolderItem(folderItem),
@@ -14,7 +15,7 @@ buttonNameMap(buttonNameMap)
 {
     using namespace juce;
 #if JUCE_DEBUG
-    setName(String("AppMenuFolder") + folderItem->getAppName());
+    setName(String("AppMenuFolder") + folderItem.getTitle());
 #endif
 }
 
@@ -41,13 +42,19 @@ void AppMenuFolder::reload()
 {
     using namespace juce;
     removeAllChildren();
-    Array<AppMenuItem::Ptr> menuItems = sourceFolderItem->getFolderItems();
-    for (AppMenuItem::Ptr menuItem : menuItems)
+    Array<int> folderIndex = sourceFolderItem.getFolderIndex();
+    if(sourceFolderItem.getIndex() >= 0)
+    {
+        folderIndex.add(sourceFolderItem.getIndex());
+    }
+    AppConfigFile appConfig;
+    Array<AppMenuItem> menuItems = appConfig.getMenuItems(folderIndex);
+    for (AppMenuItem& menuItem : menuItems)
     {
         insertButton(menuItem, folderButtons.size(), false);
     }
-    //DBG("AppMenuFolder::" << __func__ << ": added " << folderButtons.size() 
-    //       << " buttons from " << menuItems.size() << " menu items");
+    DBG("AppMenuFolder::" << __func__ << ": added " << folderButtons.size() 
+           << " buttons from " << menuItems.size() << " menu items");
     layoutButtons();
 }
 
@@ -84,16 +91,16 @@ void AppMenuFolder::deselect()
  * the folder at a specific index. 
  */
 void AppMenuFolder::insertButton
-(const AppMenuItem::Ptr newItem, const int index, const bool updateLayout)
+(const AppMenuItem newItem, const int index, const bool updateLayout)
 {
     using namespace juce;
     AppMenuButton::Ptr menuButton = nullptr;
-    String buttonName = newItem->getAppName();
+    String buttonName = newItem.getTitle();
     while (buttonNameMap.count(buttonName) > 0)
     {
         AppMenuButton::Ptr mappedButton = buttonNameMap[buttonName];
         if (mappedButton->getParentComponent() == nullptr &&
-            *mappedButton->getMenuItem() == *newItem)
+            mappedButton->getMenuItem() == newItem)
         {
             menuButton = mappedButton;
             break;
@@ -144,21 +151,24 @@ void AppMenuFolder::removeButton(const int index)
  */
 void AppMenuFolder::swapButtons(const int btnIndex1, const int btnIndex2)
 {
-    if (validBtnIndex(btnIndex1) && validBtnIndex(btnIndex2) &&
-        folderButtons[btnIndex1]->moveDataIndex(btnIndex2 - btnIndex1))
+    if (validBtnIndex(btnIndex1) && validBtnIndex(btnIndex2))
     {
-        AppMenuButton::Ptr btn1 = folderButtons[btnIndex1];
-        folderButtons.set(btnIndex1, folderButtons[btnIndex2]);
-        folderButtons.set(btnIndex2, btn1);
-        if (selectedIndex == btnIndex1)
+        AppMenuItem menuItem = folderButtons[btnIndex1]->getMenuItem();
+        if(menuItem.moveDataIndex(btnIndex2 - btnIndex1))
         {
-            selectedIndex = btnIndex2;
+            AppMenuButton::Ptr btn1 = folderButtons[btnIndex1];
+            folderButtons.set(btnIndex1, folderButtons[btnIndex2]);
+            folderButtons.set(btnIndex2, btn1);
+            if (selectedIndex == btnIndex1)
+            {
+                selectedIndex = btnIndex2;
+            }
+            else if (selectedIndex == btnIndex2)
+            {
+                selectedIndex = btnIndex1;
+            }
+            layoutButtons();
         }
-        else if (selectedIndex == btnIndex2)
-        {
-            selectedIndex = btnIndex1;
-        }
-        layoutButtons();
     }
 }
 
@@ -229,7 +239,7 @@ juce::String AppMenuFolder::getMenuButtonName(const int index) const
     {
         return String();
     }
-    return folderButtons.getUnchecked(index)->getMenuItem()->getAppName();
+    return folderButtons.getUnchecked(index)->getMenuItem().getTitle();
 }
 
 /*
@@ -308,7 +318,7 @@ juce::String AppMenuFolder::getButtonTitle(const int index)
     {
         return String();
     }
-    return folderButtons.getUnchecked(index)->getMenuItem()->getAppName();
+    return folderButtons.getUnchecked(index)->getMenuItem().getTitle();
 }
 
 /**

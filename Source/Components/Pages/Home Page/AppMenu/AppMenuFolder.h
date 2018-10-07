@@ -36,7 +36,7 @@ public:
      * @param buttonNameMap  Stores all menu buttons so they can be re-used.
      */
     AppMenuFolder(
-            const AppMenuItem::Ptr folderItem,
+            const AppMenuItem folderItem,
             MouseListener* btnListener,
             std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap);
 
@@ -50,7 +50,7 @@ public:
      * @return          A reference-counted pointer to the new button component.
      */
     virtual AppMenuButton::Ptr createMenuButton
-    (const AppMenuItem::Ptr menuItem) = 0;
+    (const AppMenuItem& menuItem) = 0;
 
     /**
      * @brief  Sets the button grid row and column sizes, updating button layout
@@ -104,7 +104,7 @@ public:
      *                       inserting many buttons, it's better to set this to 
      *                       false and update the layout once at the end.
      */
-    void insertButton(const AppMenuItem::Ptr newItem, const int index,
+    void insertButton(const AppMenuItem newItem, const int index,
             const bool updateLayout = true);
 
     /**
@@ -295,8 +295,8 @@ private:
     /* Reference to the AppMenuComponent's button map */
     std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap;
     /* Holds the folder menu item used to load this folder's menu items */
-    AppMenuItem::Ptr sourceFolderItem = nullptr;
-    /* folder layout manager and relative spacing values. */
+    AppMenuItem sourceFolderItem;
+    /* Folder layout manager and relative spacing values. */
     LayoutManager folderLayout;
     float margin = 0;
     float xPadding = 0;
