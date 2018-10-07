@@ -12,7 +12,7 @@ class PageAppFolder : public AppMenuFolder
 {
 public:
     PageAppFolder(
-            AppMenuItem::Ptr folderItem,
+            const AppMenuItem& folderItem,
             MouseListener* btnListener,
             std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap);
 
@@ -24,7 +24,7 @@ public:
      * @param menuItem
      */
     virtual AppMenuButton::Ptr createMenuButton
-    (AppMenuItem::Ptr menuItem) override;
+    (const AppMenuItem& menuItem) override;
 
     /**
      * Given a list of folder buttons, return an appropriate layout
@@ -148,12 +148,8 @@ private:
     public:
         /**
          * @param menuItem    This sets the button's menu data.
-         * 
-         * @param name        Sets the internal component name.
          */
-        PageMenuButton(
-                AppMenuItem::Ptr menuItem,
-                juce::String name);
+        PageMenuButton(const AppMenuItem& menuItem);
 
         virtual ~PageMenuButton() { }
     private:

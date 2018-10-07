@@ -134,7 +134,7 @@ juce::Rectangle<int> ScrollingAppMenu::updateFolderBounds(
  * @param folderItem
  */
 AppMenuFolder* ScrollingAppMenu::createFolderObject(
-        AppMenuItem::Ptr folderItem,
+        const AppMenuItem& folderItem,
         std::map<juce::String, AppMenuButton::Ptr>& buttonMap)
 {
     ScrollingAppFolder* folder = new ScrollingAppFolder

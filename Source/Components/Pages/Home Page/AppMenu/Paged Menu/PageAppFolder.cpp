@@ -2,7 +2,7 @@
 #include "PageAppFolder.h"
 
 PageAppFolder::PageAppFolder(
-        AppMenuItem::Ptr folderItem,
+        const AppMenuItem& folderItem,
         MouseListener* btnListener,
         std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap) :
 AppMenuFolder(folderItem, btnListener, buttonNameMap)
@@ -13,11 +13,9 @@ AppMenuFolder(folderItem, btnListener, buttonNameMap)
 /**
  * Create an AppMenuButton component for an AppMenuItem.
  */
-AppMenuButton::Ptr PageAppFolder::createMenuButton(AppMenuItem::Ptr menuItem)
+AppMenuButton::Ptr PageAppFolder::createMenuButton(const AppMenuItem& menuItem)
 {
-    return new PageMenuButton(
-            menuItem,
-            menuItem->getAppName() + juce::String("Button"));
+    return new PageMenuButton(menuItem);
 }
 
 /**
@@ -256,8 +254,7 @@ void PageAppFolder::resized()
 
 //############################  PageMenuButton  ################################
 
-PageAppFolder::PageMenuButton::PageMenuButton
-(AppMenuItem::Ptr menuItem, juce::String name) :
+PageAppFolder::PageMenuButton::PageMenuButton(const AppMenuItem& menuItem) :
 AppMenuButton(menuItem)
 {
     setFillBackground(false);

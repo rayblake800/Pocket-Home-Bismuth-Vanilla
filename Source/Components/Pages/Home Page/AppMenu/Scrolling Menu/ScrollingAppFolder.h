@@ -20,7 +20,7 @@ public:
      * @param buttonNameMap  Shared button map used to recycle menu buttons.
      */
     ScrollingAppFolder(
-            AppMenuItem::Ptr folderItem,
+            AppMenuItem folderItem,
             juce::MouseListener* btnListener,
             std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap);
 
@@ -32,7 +32,7 @@ public:
      * @param menuItem
      */
     virtual AppMenuButton::Ptr createMenuButton
-    (AppMenuItem::Ptr menuItem) override;
+    (const AppMenuItem& menuItem) override;
 
     /**
      * Given a list of folder buttons, return an appropriate layout
@@ -69,9 +69,7 @@ private:
          *  
          * @param name         Internal component name    
          */
-        ScrollingMenuButton(
-                AppMenuItem* menuItem,
-                juce::String name);
+        ScrollingMenuButton(AppMenuItem menuItem, juce::String name);
 
         virtual ~ScrollingMenuButton() { }
 

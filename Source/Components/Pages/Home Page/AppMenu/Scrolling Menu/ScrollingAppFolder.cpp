@@ -1,7 +1,7 @@
 #include "ScrollingAppFolder.h"
 
 ScrollingAppFolder::ScrollingAppFolder(
-        AppMenuItem::Ptr folderItem,
+        AppMenuItem folderItem,
         juce::MouseListener* btnListener,
         std::map<juce::String, AppMenuButton::Ptr>& buttonNameMap) :
 AppMenuFolder(folderItem, btnListener, buttonNameMap)
@@ -15,11 +15,11 @@ AppMenuFolder(folderItem, btnListener, buttonNameMap)
  * Create an AppMenuButton component for an AppMenuItem.
  */
 AppMenuButton::Ptr ScrollingAppFolder::createMenuButton
-(AppMenuItem::Ptr menuItem)
+(const AppMenuItem& menuItem)
 {
     return new ScrollingMenuButton(
             menuItem,
-            menuItem->getAppName() + juce::String("Button"));
+            menuItem.getTitle() + juce::String("Button"));
 }
 
 /**
@@ -68,7 +68,7 @@ juce::Font ScrollingAppFolder::getButtonFont()
 }
 
 ScrollingAppFolder::ScrollingMenuButton::ScrollingMenuButton
-(AppMenuItem* menuItem, juce::String name) :
+(AppMenuItem menuItem, juce::String name) :
 AppMenuButton(menuItem)
 {
     using namespace juce;
@@ -82,7 +82,7 @@ AppMenuButton(menuItem)
 int ScrollingAppFolder::ScrollingMenuButton::getTitleWidth()
 {
     using namespace juce;
-    String title = getMenuItem()->getAppName();
+    String title = getMenuItem().getTitle();
     const Font& titleFont = getTitleFont();
     return getTitleFont().getStringWidth(title);
 }

@@ -213,7 +213,7 @@ juce::Rectangle<int> PagedAppMenu::updateFolderBounds
  * @param folderItem
  */
 AppMenuFolder* PagedAppMenu::createFolderObject(
-        AppMenuItem::Ptr folderItem,
+        const AppMenuItem& folderItem,
         std::map<juce::String, AppMenuButton::Ptr>& buttonMap)
 {
     PageAppFolder* folder = new PageAppFolder(folderItem, this, buttonMap);

@@ -54,7 +54,7 @@ private:
      *                    button map.
      */
     AppMenuFolder* createFolderObject(
-            AppMenuItem::Ptr folderItem,
+            const AppMenuItem& folderItem,
             std::map<juce::String, AppMenuButton::Ptr>& buttonMap) override;
 
     /**
