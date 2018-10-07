@@ -47,6 +47,11 @@ public:
      */
     DesktopEntry(const juce::String& name, const juce::String& filename,
             const Type type);
+
+    /**
+     * @brief  Creates an invalid desktop entry object containing no data.
+     */
+    DesktopEntry() { }
             
     virtual ~DesktopEntry() { }
 
