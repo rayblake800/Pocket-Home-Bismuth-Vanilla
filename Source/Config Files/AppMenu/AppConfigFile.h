@@ -1,23 +1,22 @@
 #pragma once
 #include "ConfigFile.h"
 #include "AppJSON.h"
+#include "AppMenuItem.h"
 
 /**
  * @file AppConfigFile.h
  * 
- * @brief  Reads and edits the list of pinned application shortcuts and folders 
+ * @brief  Reads and edits the tree of pinned application shortcuts and folders 
  *         displayed in the AppMenuComponent.
  *
- * The apps.json file contains two types of custom objects: shortcuts, and
- * folders.  Both types provide a display name, and an icon name.  Shortcuts
- * provide an application launch command, and folders provide a list of
- * application categories.  Each of these objects represents a menu item in the
- * main folder of the AppMenuComponent.
+ * The apps.json file defines a tree of menu items.  Each menu item can hold 
+ * either an application launch command, or a list of other menu items and
+ * application categories to show in a new menu folder.  All menu items have a
+ * displayed title and icon.
  *
- * AppConfigFile reads all of these custom objects, so they can be used to
- * create the AppMenuComponent.  It also provides methods for adding, editing,
- * and deleting shortcuts and folders, so that the user can edit the application
- * menu from within pocket-home.
+ * AppConfigFile uses this JSON menu data to construct the AppMenuItem objects
+ * used to build the AppMenuComponent.  It also provides an interface for 
+ * adding, editing, or removing menu data from the JSON file.
  * 
  * @see  AppMenuComponent.h
  */
@@ -28,86 +27,43 @@ public:
     AppConfigFile() { }
 
     virtual ~AppConfigFile() { }
-
+    
     /**
-     * @brief  Gets the main list of application shortcuts. 
-     * 
-     * @return  The list of AppShortcuts shown in the main folder of the 
-     *          AppMenu.
+     * @brief  Gets a menu item representing the root folder of the application
+     *         menu.
+     *
+     * @return  A folder menu item holding the top level of the application
+     *          menu tree.
      */
-    juce::Array<AppShortcut> getShortcuts();
+    AppMenuItem getRootMenuItem();
 
     /**
-     * @brief  Adds a new shortcut to the list of shortcuts shown in the 
-     *         AppMenu's main folder.
+     * @brief  Gets all menu items within a menu folder.
+     *
+     * @param folderIndex  The index of the menu folder that should be accessed.
+     *
+     * @return             All menu items within the menu folder, or an empty
+     *                     array if the folder index is invalid.
+     */
+    juce::Array<AppMenuItem> getMenuItems(const juce::Array<int>& folderIndex);
+
+    /**
+     * @brief  Adds a new menu item to the list of items shown in a menu folder.
      * 
-     * @param shortcut          The new application shortcut object.
+     * @param menuItem          The new menu item object.
      * 
-     * @param index             The position to insert the new application.
+     * @param index             The position to insert the new menu item.
+     *
+     * @param folderIndex       The index of the menu folder where the new item
+     *                          should be inserted.
      * 
      * @param writeChangesNow   Sets if the change should be written to the 
-     *                          config file immediately.
+     *                          config file immediately.  If omitted, changes
+     *                          are written immediately by default.
      */
-    void addShortcut(const AppShortcut& shortcut, const int index,
+    void addMenuItem(
+            const AppMenuItem& menuItem, 
+            const int index,
+            const juce::Array<int> folderIndex, 
             const bool writeChangesNow = true);
-
-    /**
-     * @brief  Removes a shortcut from the list of application shortcuts.
-     * 
-     * @param index            The position of the shortcut to remove.
-     * 
-     * @param writeChangesNow  Sets if the change should be written to the 
-     *                         config file immediately.
-     */
-    void removeShortcut(const int index, const bool writeChangesNow = true);
-
-    /**
-     * @brief  Finds the index of an application shortcut in the list.
-     * 
-     * @param toFind  The application shortcut to search for in the list.
-     * 
-     * @return        The index of toFind, or -1 if it was not found in the 
-     *                list.
-     */
-    int getShortcutIndex(const AppShortcut& toFind);
-    
-    
-    /**
-     * @brief  Gets the list of application menu folders.
-     *
-     * @return  A list of folders to display in the AppMenu.
-     */
-    juce::Array<AppFolder> getFolders();
-
-    /**
-     * @brief  Adds a new folder to show in the AppMenu.
-     * 
-     * @param newFolder        The new application folder.
-     * 
-     * @param index            Where to insert the new folder.
-     * 
-     * @param writeChangesNow  Sets if the change should be written to the 
-     *                         JSON config file immediately.
-     */
-    void addFolder(const AppFolder& newFolder, const int index,
-            const bool writeChangesNow = true);
-
-    /**
-     * @brief  Removes a folder from the list of AppFolders.
-     * 
-     * @param index            The position of the folder to remove.
-     * 
-     * @param writeChangesNow  Sets if the change should be written to the 
-     *                         config file immediately.
-     */
-    void removeFolder(const int index, const bool writeChangesNow = true);
-
-    /**
-     * @brief  Finds the index of an AppFolder in the list of folders.
-     * 
-     * @param toFind   The folder to search for in the folder list.
-     * 
-     * @return         The index of toFind, or -1 if it isn't in the list.
-     */
-    int getFolderIndex(const AppFolder& toFind);
 };

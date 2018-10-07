@@ -1,80 +1,89 @@
 #include "AssetFiles.h"
 #include "AppConfigFile.h"
+#include "ConfigItemData.h"
+#include "DesktopEntryItemData.h"
+#include "DesktopEntryLoader.h"
 #include "Utils.h"
 
+/* Menu item JSON keys: */
+static const juce::Identifier nameKey = "name";
+static const juce::Identifier iconKey = "icon";
+static const juce::Identifier commandKey = "command";
+static const juce::Identifier termKey = "launch in terminal";
+static const juce::Identifier itemListKey = "folder items";
+static const juce::Identifier categoryKey = "categories";
+
 /*
- * Gets the main list of application shortcuts. 
+ * Gets all menu items within a menu folder.
  */
-juce::Array<AppShortcut> AppConfigFile::getShortcuts()
+juce::Array<AppMenuItem> AppConfigFile::getMenuItems
+    (const juce::Array<int>& folderIndex)
 {
-    auto config = getReadLockedResource();
-    return config->getShortcuts();
+    using namespace juce;
+    auto appJSON = getReadLockedResource();
+    Array<var> menuVars = appJSON->getMenuItems(folderIndex);
+    Array<AppMenuItem> menuItems;
+
+    for(const var& menuVar : menuVars)
+    {
+        int index = menuItems.size();
+        if(menuVar.isObject())
+        {
+            ConfigItemData configData(menuVar, index, folderIndex);
+            menuItems.add(AppMenuItem(&configData));
+        }
+        else if(menuVar.isString())
+        {
+            DesktopEntryLoader entryLoader;
+            DesktopEntry menuEntry = entryLoader.getDesktopEntry(menuVar);
+            DesktopEntryItemData entryData(menuEntry, index, folderIndex);
+            menuItems.add(AppMenuItem(&entryData));
+        }
+        else
+        {
+            DBG("AppConfigFile::" << __func__ << ": Invalid menu item data "
+                    << menuVar.toString());
+            continue;
+        }
+    }
+    return menuItems;
 }
 
 /*
- * Adds a new shortcut to the list of shortcuts shown in the AppMenu's main 
- * folder.
+ * Gets a menu item representing the root folder of the application menu.
  */
-void AppConfigFile::addShortcut
-(const AppShortcut& shortcut, const int index, const bool writeChangesNow)
+AppMenuItem AppConfigFile::getRootMenuItem()
 {
-    auto config = getWriteLockedResource();
-    config->addShortcut(shortcut,index,writeChangesNow);
+    using namespace juce;
+    DynamicObject* rootObject = new DynamicObject();
+    {
+        auto appJSON = getReadLockedResource();
+        Array<var> menuItems = appJSON->getMenuItems({});
+        rootObject->setProperty(itemListKey, menuItems);
+    }
+    var rootJSON(rootObject);
+    ConfigItemData rootData(rootJSON, -1, {});
+    return AppMenuItem(&rootData);
 }
 
 /*
- * Removes a shortcut from the list of application shortcuts.
+ * Adds a new menu item to the list of items shown in a menu folder.
  */
-void AppConfigFile::removeShortcut(const int index, const bool writeChangesNow)
+void AppConfigFile::addMenuItem(
+        const AppMenuItem& menuItem, 
+        const int index,
+        const juce::Array<int> folderIndex, 
+        const bool writeChangesNow) 
 {
-    auto config = getWriteLockedResource();
-    config->removeShortcut(index,writeChangesNow);
+    using namespace juce;
+    DynamicObject* menuObject = new DynamicObject();
+    menuObject->setProperty(nameKey, menuItem.getTitle());
+    menuObject->setProperty(iconKey, menuItem.getIconName());
+    menuObject->setProperty(commandKey, menuItem.getCommand());
+    menuObject->setProperty(termKey, menuItem.getLaunchedInTerm());
+    menuObject->setProperty(categoryKey, menuItem.getCategories());
+    var menuVar(menuObject);
+    auto appJSON = getWriteLockedResource();
+    appJSON->addMenuItem(menuVar, index, folderIndex, writeChangesNow);
 }
-
-/*
- * Finds the index of an application shortcut in the list.
- */
-int AppConfigFile::getShortcutIndex(const AppShortcut& toFind)
-{
-    auto config = getReadLockedResource();
-    return config->getShortcutIndex(toFind);
-}
-
-/*
- * Gets the list of application menu folders.
- */
-juce::Array<AppFolder> AppConfigFile::getFolders()
-{
-    auto config = getReadLockedResource();
-    return config->getFolders();
-}
-
-/*
- * Adds a new folder to show in the AppMenu.
- */
-void AppConfigFile::addFolder(const AppFolder& newFolder, const int index, 
-        const bool writeChangesNow)
-{
-    auto config = getWriteLockedResource();
-    config->addAppFolder(newFolder,index,writeChangesNow);
-}
-
-/*
- * Removes a folder from the list of AppFolders.
- */
-void AppConfigFile::removeFolder(const int index, const bool writeChangesNow)
-{
-    auto config = getWriteLockedResource();
-    config->removeAppFolder(index,writeChangesNow);
-}
-
-/*
- * Finds the index of an AppFolder in the list of folders.
- */
-int AppConfigFile::getFolderIndex(const AppFolder& toFind)
-{
-    auto config = getReadLockedResource();
-    return config->getFolderIndex(toFind);
-}
-
 
