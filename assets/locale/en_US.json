@@ -153,13 +153,13 @@
         "really_delete": "Really delete this menu item?",
         "edit_menu_item": "Edit Menu Item"
     },
-    "DesktopEntryMenuItem": {
+    "DesktopEntryItemData": {
         "remove_link_to": "Remove link to ",
         "question_mark": "?",
         "will_hide": "This application will be hidden from pocket-home.",
         "edit_app": "Edit Menu Item"
     },
-    "ConfigAppMenuItem": {
+    "ConfigItemData": {
         "remove_APP": "Remove \"",
         "from_favorites": "\" from favorites?",
         "will_remove_link": "This will permanently remove this link from the list of favorite applications.",
