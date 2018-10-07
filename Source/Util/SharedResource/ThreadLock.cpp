@@ -42,15 +42,18 @@ void ThreadLock::takeWriteLock()
     using namespace juce;
     const ScopedLock lockLock(metaLock);
     Thread::ThreadID threadId = Thread::getCurrentThreadId();
+    if(suspendedReadLocks.count(threadId) == 0)
+    {
+        suspendedReadLocks[threadId] = 0;
+    }
+    // Suspend all read locks before requesting a write lock:
     while(readLockMap.count(threadId) > 0 && readLockMap[threadId] > 0)
     {
-        DBG("ThreadLock::" << __func__ << ": Thread "
-                << String((unsigned long) threadId) << " trying to take "
-                << "a write lock while it is already read-locked "
-                << readLockMap[threadId] << " times.");
-        jassertfalse;
-        const ScopedUnlock lockUnlock(metaLock);
-        releaseLock();
+        // This should never happen if a write lock is already held.
+        jassert(writeLockCount == 0 || writeLockThread != threadId);
+        suspendedReadLocks[threadId]++;
+        readLockMap[threadId]--;
+        lock.exitRead();
     }
 
     if(writeLockCount == 0 || writeLockThread != threadId)
@@ -87,6 +90,14 @@ void ThreadLock::releaseLock()
         if(writeLockCount == 0)
         {
             lock.exitWrite();
+            // Reclaim suspended read locks:
+            while(suspendedReadLocks[threadId] > 0)
+            {
+                suspendedReadLocks[threadId]--;
+                readLockMap[threadId]++;
+                const ScopedUnlock lockUnlock(metaLock);
+                lock.enterRead();
+            }
         }
     }
     else

@@ -10,13 +10,11 @@
  *        lock.
  *
  * Threads can request to claim the lock for reading or writing. Threads can 
- * hold multiple claims to the lock, and multiple threads may hold reading
- * claims on the lock simultaneously.  Threads must release the lock 
- * is made to take the lock for reading, the thread will yield until no other 
- * thread has the lock held for writing, and no callers are waiting to hold the
- * thread for wri.  When a request is made to take a thread-lock, the thread
- * will yield until no read-locks are held, no thread-locks are held by other
- * threads, and no other thread has been waiting longer to take a thread-lock.
+ * hold multiple claims to the lock, and multiple threads may hold the lock for
+ * reading simultaneously.  When a request is made to claim the lock for
+ * writing, the thread will yield until no read-locks are held, no write-locks
+ * are held by other threads, and no other thread has been waiting longer to 
+ * claim the lock for writing.
  *
  * This allows the lock to be safely acquired multiple times by the same thread
  * for writing, so that any function that requires thread safety does not also
@@ -66,6 +64,9 @@ private:
     int writeLockCount = 0;
     //map of all threads holding read locks
     std::map<juce::Thread::ThreadID, int> readLockMap;
+    /* Tracks temporarily suspended read locks held by threads waiting for
+       write locks. */
+    std::map<juce::Thread::ThreadID, int> suspendedReadLocks;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ThreadLock)
 };
