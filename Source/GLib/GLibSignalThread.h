@@ -31,9 +31,9 @@
  */
 
 /* Private SharedResource class */
-class ThreadResource;
+class GThreadResource;
 
-class GLibSignalThread : private ResourceHandler<ThreadResource>
+class GLibSignalThread : private ResourceHandler<GThreadResource>
 {
 public:
     GLibSignalThread();

@@ -3,10 +3,10 @@
 static const juce::Identifier threadResourceKey = "GLibSignalThread";
 
 /* Private SharedResource class */
-class ThreadResource : public SharedResource, public GLibThread
+class GThreadResource : public SharedResource, public GLibThread
 {
 public:
-    ThreadResource() : SharedResource(threadResourceKey),
+    GThreadResource() : SharedResource(threadResourceKey),
     GLibThread(g_main_context_default())
     {
         // Adding a reference to the default context prevents it from being 
@@ -14,13 +14,13 @@ public:
         g_main_context_ref(g_main_context_default());
     }
 
-    virtual ~ThreadResource() { }
+    virtual ~GThreadResource() { }
 };
 
 
 GLibSignalThread::GLibSignalThread() : 
-    ResourceHandler<ThreadResource>(threadResourceKey,
-        []()->SharedResource* { return new ThreadResource(); })  { }
+    ResourceHandler<GThreadResource>(threadResourceKey,
+        []()->SharedResource* { return new GThreadResource(); })  { }
 
 /*
  * Returns true if it's being executed on the GLib event thread.
