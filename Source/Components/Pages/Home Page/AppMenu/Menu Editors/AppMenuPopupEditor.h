@@ -73,7 +73,7 @@ public:
     /**
      * @return true if the command should run in the terminal
      */
-    bool launchInTerm();
+    bool getTerminalCheckbox();
 
     /**
      * Set the value stored in the editable name field.

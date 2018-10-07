@@ -114,7 +114,7 @@ juce::String AppMenuPopupEditor::getCommandField()
 /**
  * @return true if the command should run in the terminal
  */
-bool AppMenuPopupEditor::launchInTerm()
+bool AppMenuPopupEditor::getTerminalCheckbox()
 {
     return terminalCheckbox.getToggleState();
 }

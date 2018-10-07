@@ -14,7 +14,7 @@ AppMenuPopupEditor("New desktop application",
         newEntry.setIcon(editor->getIconField());
         newEntry.setExec(editor->getCommandField());
         newEntry.setCategories(editor->getCategories());
-        newEntry.setLaunchedInTerm(editor->launchInTerm());
+        newEntry.setLaunchedInTerm(editor->getTerminalCheckbox());
         newEntry.writeFile();
         onConfirm();
     }

@@ -1,15 +1,11 @@
 #include "NewFolderEditor.h"
+#include "ConfigItemData.h"
 
 NewFolderEditor::NewFolderEditor(std::function<void() > onConfirm) :
 AppMenuPopupEditor("New folder",
 [this, onConfirm](AppMenuPopupEditor* editor)
 {
-    AppConfigFile appConfig;
-    AppFolder newFolder(
-            editor->getNameField(),
-            editor->getCategories(),
-            editor->getIconField());
-    appConfig.addFolder(newFolder, appConfig.getFolders().size());
+    DBG("NewFolderEditor.h: Editor not yet re-implemented!");
     onConfirm();
 },
 true, false)
