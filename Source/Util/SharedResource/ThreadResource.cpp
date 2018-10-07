@@ -1,5 +1,8 @@
 #include "ThreadResource.h"
 
+/* Number of milliseconds to wait before forcibly terminating the thread: */
+static const constexpr int timeoutMilliseconds = 1000;
+
 /*
  * Creates a new ThreadResource.
  */
@@ -11,7 +14,10 @@ ThreadResource::ThreadResource(const juce::Identifier& resourceKey) :
  */
 ThreadResource::~ThreadResource()
 {
-    stopThread(-1);
+    if(isThreadRunning())
+    {
+        stopThread(timeoutMilliseconds);
+    }
 }
 
 /*
