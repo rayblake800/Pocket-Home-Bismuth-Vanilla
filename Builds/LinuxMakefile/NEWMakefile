@@ -28,11 +28,11 @@
  
 ######### Build values: #########
 # Executable name:
-JUCE_TARGET_APP := pocket-home
+JUCE_TARGET_APP = pocket-home
 # Version number:
-APP_VERSION=0.0.8.10
+APP_VERSION = 0.0.8.10
 # Version hex 
-APP_VERSION_HEX=0x80a
+APP_VERSION_HEX = 0x80a
 
 # Build directories:
 JUCE_BINDIR := build
@@ -43,35 +43,35 @@ JUCE_OBJDIR := build/intermediate
 JUCE_OUTDIR := build/Debug
 
 # Pkg-config libraries:
-PKG_CONFIG_LIBS=NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 \
-                x11 xext xinerama
+PKG_CONFIG_LIBS = NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 \
+                  x11 xext xinerama
   
 # Additional library flags:
-LDFLAGS :=  -lcrypto -ldl -lpthread -lrt $(LDFLAGS)
+LDFLAGS := -lcrypto -ldl -lpthread -lrt $(LDFLAGS)
 
 # Preprocessor values used by JUCE library code:
-JUCE_DEFS:=-DDONT_SET_USING_JUCE_NAMESPACE=1 \
-           -DJUCER_LINUX_MAKE_6D53C8B4=1 \
-           -DJUCE_APP_VERSION=$(APP_VERSION) \
-           -DJUCE_APP_VERSION_HEX=$(APP_VERSION_HEX) \
+JUCE_DEFS         := -DDONT_SET_USING_JUCE_NAMESPACE=1 \
+                     -DJUCER_LINUX_MAKE_6D53C8B4=1 \
+                     -DJUCE_APP_VERSION=$(APP_VERSION) \
+                     -DJUCE_APP_VERSION_HEX=$(APP_VERSION_HEX) \
 
-JUCE_CPPFLAGS_APP:=-DJucePlugin_Build_VST=0 \
-                   -DJucePlugin_Build_VST3=0 \
-                   -DJucePlugin_Build_AU=0 \
-                   -DJucePlugin_Build_AUv3=0 \
-                   -DJucePlugin_Build_RTAS=0 \
-                   -DJucePlugin_Build_AAX=0 \
-                   -DJucePlugin_Build_Standalone=0
+JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 \
+                     -DJucePlugin_Build_VST3=0 \
+                     -DJucePlugin_Build_AU=0 \
+                     -DJucePlugin_Build_AUv3=0 \
+                     -DJucePlugin_Build_RTAS=0 \
+                     -DJucePlugin_Build_AAX=0 \
+                     -DJucePlugin_Build_Standalone=0
 
 # Extra compilation flags:
-CPPFLAGS:=-pthread $(CPPFLAGS) 
+CPPFLAGS := -pthread $(CPPFLAGS) 
 
 # Extra compilation flags (C++ only):
-CXXFLAGS:=-std=gnu++14 $(CXXFLAGS)
+CXXFLAGS := -std=gnu++14 $(CXXFLAGS)
 
 # Directories to search for header files:
-INCLUDE_DIRS:=JuceLibraryCode \
-              deps/JUCE/modules
+INCLUDE_DIRS := JuceLibraryCode \
+                deps/JUCE/modules
 
 # Directories to recursively search for header files:
 RECURSIVE_INCLUDE_DIRS := Source \
@@ -85,7 +85,7 @@ endif
 
 # Command used to strip unneeded symbols from object files:
 ifndef STRIP
-    STRIP=strip
+    STRIP = strip
 endif
 
 # Use the build system's architecture by default.
@@ -107,8 +107,7 @@ DEPFLAGS := $(if $(word 2, $(TARGET_ARCH)), , -MMD)
 
 # Generate the list of directory include flags:
 for includeDir in $(RECURSIVE_INCLUDE_DIRS); do
-    INCLUDE_DIRS := $(INCLUDE_DIRS) \
-        $(shell find $(includeDir) -type d)
+    INCLUDE_DIRS := $(INCLUDE_DIRS) $(shell find $(includeDir) -type d)
 done
 DIR_FLAGS := $(shell $(INCLUDE_DIRS) | sed 's/[^ ]* */-I/g')
 
@@ -118,17 +117,19 @@ JUCE_OUTDIR := $(OUTDIR)/$(CONFIG)
 
 ifeq ($(CONFIG),Debug)
     # Debug-specific preprocessor definitions:
-    JUCE_CONFIG_FLAGS=-DDEBUG=1 D_DEBUG=1
+    JUCE_CONFIG_FLAGS = -DDEBUG=1 D_DEBUG=1
     # Debug-specific compiler flags:
-    CONFIG_CFLAGS=-g -ggdb -O0 
+    CONFIG_CFLAGS  = -g -ggdb -O0 
+	CONFIG_LDFLAGS =
+
 endif
 
 ifeq ($(CONFIG),Release)
     # Release-specific preprocessor definitions:
-    JUCE_CONFIG_FLAGS=-DNDEBUG=1
+    JUCE_CONFIG_FLAGS = -DNDEBUG=1
     # Release-specific compiler flags:
-    CONFIG_CFLAGS=-03 -flto
-    CONFIG_LDFLAGS=-fvisibility=hidden -flto
+    CONFIG_CFLAGS  = -03 -flto
+    CONFIG_LDFLAGS =-fvisibility=hidden -flto
 endif
   
 JUCE_CPPFLAGS := $(DEPFLAGS) \
@@ -136,15 +137,24 @@ JUCE_CPPFLAGS := $(DEPFLAGS) \
                  $(JUCE_DEFS)\
                  $(shell pkg-config --cflags $(PKG_CONFIG_LIBS)) \
                  $(DIR_FLAGS)
-JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) $(CONFIG_CFLAGS) $(CFLAGS)
-JUCE_CXXFLAGS += $(JUCE_CFLAGS)  $(CXXFLAGS)
-JUCE_LDFLAGS += $(TARGET_ARCH) \
-                -L$(JUCE_BINDIR) \
-                -L$(JUCE_LIBDIR) \
-                $(shell pkg-config --libs $(PKG_CONFIG_LIBS)) \
-                $(CONFIG_LDFLAGS) \
-                -lcrypto -ldl -lpthread -lrt $(LDFLAGS)
+
+JUCE_CFLAGS   += $(JUCE_CPPFLAGS) \
+			     $(TARGET_ARCH) \
+			     $(CONFIG_CFLAGS) \
+			     $(CFLAGS)
+
+JUCE_CXXFLAGS += $(JUCE_CFLAGS)  \
+				 $(CXXFLAGS)
+
+JUCE_LDFLAGS  += $(TARGET_ARCH) \
+                 -L$(JUCE_BINDIR) \
+                 -L$(JUCE_LIBDIR) \
+                 $(shell pkg-config --libs $(PKG_CONFIG_LIBS)) \
+                 $(CONFIG_LDFLAGS) \
+                 $(LDFLAGS)
+
 CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
+
 OBJECTS_APP := \
   $(JUCE_OBJDIR)/NetworkInterface_906c708e.o \
   $(JUCE_OBJDIR)/LibNMInterface_fa470af8.o \
@@ -305,182 +315,183 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) :
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) \
-	$(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
+	                 $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) \
+					 $(TARGET_ARCH)
 
 $(JUCE_OBJDIR)/NetworkInterface_906c708e.o: \
     Source/System/Wifi/NetworkInterface.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling NetworkInterface.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/LibNMInterface_fa470af8.o: \
     Source/System/Wifi/LibNMInterface.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling LibNMInterface.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/WifiAccessPoint_92e734fe.o: \
     Source/System/Wifi/WifiAccessPoint.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling WifiAccessPoint.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/WifiStateManager_2b6fa074.o: \
     Source/System/Wifi/WifiStateManager.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling WifiStateManager.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/JsonWifiInterface_3f6ac763.o: \
     Source/System/Wifi/JsonWifiInterface.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling JsonWifiInterface.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/BluetoothDevice_3f6d0a2c.o: \
     Source/System/Bluetooth/BluetoothDevice.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling BluetoothDevice.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/BluetoothStatus_1fa58dc8.o: \
     Source/System/Bluetooth/BluetoothStatus.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling BluetoothStatus.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/BluezAdapter_d50e6911.o: \
     Source/System/Bluetooth/BluezAdapter.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling BluezAdapter.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	               -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Audio_b107995f.o: \
     Source/System/Audio.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling Audio.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/BatteryMonitor_6e446b6e.o: \
     Source/System/BatteryMonitor.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling BatteryMonitor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Display_195a9b4b.o: \
     Source/System/Display.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling Display.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/I2CBus_df256007.o: \
     Source/System/I2CBus.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling I2CBus.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/SystemCommands_9ca9c9b8.o: \
     Source/System/SystemCommands.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling SystemCommands.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/XWindowInterface_b7227772.o: \
     Source/System/XWindowInterface.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling XWindowInterface.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ProcessUtils_57a5a4e3.o: \
     Source/System/ProcessUtils.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ProcessUtils.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AssetFiles_10e9ab48.o: \
     Source/System/AssetFiles.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AssetFiles.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigurableComponent_2fd2b8e8.o: \
     Source/Components/Configurable/ConfigurableComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ConfigurableComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigurableImageButton_bf755ad8.o: \
     Source/Components/Configurable/ConfigurableImageButton.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ConfigurableImageButton.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigurableImageComponent_8700fda1.o: \
     Source/Components/Configurable/ConfigurableImageComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ConfigurableImageComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ConfigurableLabel_16cf925f.o: \
     Source/Components/Configurable/ConfigurableLabel.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ConfigurableLabel.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ScrollingAppFolder_b3d100d6.o: \
     Source/Components/Pages/Home\ Page/AppMenu/Scrolling\ Menu/ScrollingAppFolder.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ScrollingAppFolder.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/ScrollingAppMenu_8e65aa07.o: \
     Source/Components/Pages/Home\ Page/AppMenu/Scrolling\ Menu/ScrollingAppMenu.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling ScrollingAppMenu.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PageAppFolder_5f41e00e.o: \
     Source/Components/Pages/Home\ Page/AppMenu/Paged\ Menu/PageAppFolder.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PageAppFolder.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PagedAppMenu_e97bee87.o: \
     Source/Components/Pages/Home\ Page/AppMenu/Paged\ Menu/PagedAppMenu.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PagedAppMenu.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+	              -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AppMenuComponent_9a61c110.o: \
     Source/Components/Pages/Home\ Page/AppMenu/AppMenuComponent.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppMenuComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
+            	    -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AppMenuFolder_cf83dd05.o: \
     Source/Components/Pages/Home\ Page/AppMenu/AppMenuFolder.cpp
