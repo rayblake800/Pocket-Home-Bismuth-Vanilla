@@ -8,6 +8,15 @@ MenuItemData::MenuItemData
 index(index),
 folderIndex(folderIndex) { }
 
+
+/*
+ * Accesses the menu data lock.
+ */
+const juce::ReadWriteLock& MenuItemData::getLock()
+{
+    return dataLock;
+}
+
 /*
  * Gets the menu item's index within its menu folder.
  */

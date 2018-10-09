@@ -6,9 +6,12 @@
  *
  * @brief  Reads and writes properties of a menu item. 
  */
-class MenuItemData
+class MenuItemData : public juce::ReferenceCountedObject
 {
 public:
+    /* Custom reference-counting pointer object type. */
+    typedef juce::ReferenceCountedObjectPtr<MenuItemData> Ptr;
+
     /**
      * @brief  Creates a menu data object for an item in the application menu.
      *
@@ -21,13 +24,11 @@ public:
     virtual ~MenuItemData() { }
 
     /**
-     * @brief  Creates a copy of this object.
+     * @brief  Accesses the menu data lock.
      *
-     * The caller is responsible for ensuring this object is deleted.
-     *
-     * @return  A new MenuItemData object copying this object's data.
+     * @return  The lock used to control access to menu item data.
      */
-    virtual MenuItemData* clone() const = 0;
+    const juce::ReadWriteLock& getLock();
 
     /**
      * @brief  Checks if this menu item represents a folder within the menu.
@@ -215,4 +216,9 @@ public:
 private:
     int index = 0;
     juce::Array<int> folderIndex;
+
+    /* Prevents unsafe concurrent access to menu item data. */
+    const juce::ReadWriteLock dataLock;
+    
+    JUCE_DECLARE_NON_COPYABLE(MenuItemData);
 };
