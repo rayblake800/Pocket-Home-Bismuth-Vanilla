@@ -44,7 +44,7 @@ JUCE_LIBDIR := build
 # Directory where .o files will be created:
 JUCE_OBJDIR := build/intermediate
 # Directory where executable files will be created:
-JUCE_OUTDIR := build/Debug
+JUCE_OUTDIR := build
 # Data installation directory
 DATA_PATH := /usr/share/$(JUCE_TARGET_APP)
 
@@ -116,7 +116,7 @@ DIR_FLAGS := $(shell echo $(INCLUDE_DIRS) | xargs printf " -I'%s'") \
 
 # Keep debug and release build files in separate directories:
 JUCE_OBJDIR := $(JUCE_OBJDIR)/$(CONFIG)
-JUCE_OUTDIR := $(OUTDIR)/$(CONFIG)
+JUCE_OUTDIR := $(JUCE_OUTDIR)/$(CONFIG)
 
 ifeq ($(CONFIG),Debug)
     # Debug-specific preprocessor definitions:
@@ -312,9 +312,6 @@ build : $(JUCE_OUTDIR)/$(JUCE_TARGET_APP)
 
 $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(OBJECTS_APP) $(RESOURCES)
 	@echo Linking "pocket-home - App"
-	for dir in $(DIR_FLAGS); do
-	    @echo $(dir)
-	done
 	-$(V_AT)mkdir -p $(JUCE_BINDIR)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)

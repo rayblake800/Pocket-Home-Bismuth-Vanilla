@@ -21,6 +21,7 @@ public:
      * @param index        Index of this menu item within its folder.
      *
      * @param folderIndex  The index of the folder containing this menu item.
+     *                     If no folderIndex is given, the root folder is used.
      */
     ConfigItemData(const juce::var& jsonData, const int index,
             const juce::Array<int>& folderIndex);
@@ -192,20 +193,8 @@ public:
     virtual int getFolderSize() override;
 
 private:
-    /* Menu item title */
-    juce::String name;
-    /* Icon name or path */
-    juce::String icon;
-    /* Application launch command */
-    juce::String command;
-    /* Whether the menu item launches an application in a new terminal window */
-    bool launchInTerm = false;
-    /* If this menu item is a folder, this is the number of items in the folder
-       defined in the JSON configuration file. */
-    int numConfigFolderItems = 0;
-    /* If this menu item is a folder, this lists the application categories of
-       folder items that should be loaded from desktop entry files. */
-    juce::StringArray categories;
+    /* JSON object data */
+    juce::var jsonData;
 
     //localized text keys: 
     static const constexpr char * remove_APP = "remove_APP";
