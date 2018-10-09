@@ -257,7 +257,10 @@ juce::StringArray DesktopEntryLoader::getCategoryListEntryIDs
     {
         entryIDs.addArray(deThread->categories[category]);
     }
-    entryIDs.removeDuplicates(false);
+    if(categoryList.size() > 1)
+    {
+        entryIDs.removeDuplicates(false);
+    }
     return entryIDs;
 }
 
