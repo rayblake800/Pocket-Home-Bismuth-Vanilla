@@ -134,7 +134,8 @@ private:
             }
         }
         DBG("DesktopEntryThread::" << __func__ << ": Found " 
-                << pendingEntryFiles.size() << " unique desktop entry files in "
+                << String(pendingEntryFiles.size()) 
+                << " unique desktop entry files in "
                 << dirs.size() << " data directories.");
     }
 
@@ -213,7 +214,7 @@ private:
     {
         using namespace juce;
         DBG("DesktopEntryThread::" << __func__ << ": Loaded "
-                << entries.size() << " desktop entries.");
+                << String(entries.size()) << " desktop entries.");
         MessageManager::callAsync(buildAsyncFunction(LockType::read,
                     [this] { onFinish(); }));
     }
