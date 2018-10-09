@@ -28,15 +28,6 @@ public:
      * @return  A new MenuItemData object copying this object's data.
      */
     virtual MenuItemData* clone() const = 0;
-    
-    /**
-     * @brief  Exports this menu item's data to a generic juce var object that
-     *         can be written to a JSON file.
-     *
-     * @return  All menu item data, stored within a var object using the same 
-     *          data keys ass the AppConfigFile.
-     */
-    virtual juce::var toVar();
 
     /**
      * @brief  Checks if this menu item represents a folder within the menu.
