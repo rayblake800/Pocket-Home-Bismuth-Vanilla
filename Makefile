@@ -114,8 +114,6 @@ DIR_FLAGS := $(shell echo $(INCLUDE_DIRS) | xargs printf " -I'%s'") \
              $(shell find $(RECURSIVE_INCLUDE_DIRS) -type d \
                      -printf " -I'%p'")
 
-FAKE := $(shell echo $(DIR_FLAGS) > dirflags.txt )
-
 # Keep debug and release build files in separate directories:
 JUCE_OBJDIR := $(JUCE_OBJDIR)/$(CONFIG)
 JUCE_OUTDIR := $(OUTDIR)/$(CONFIG)
