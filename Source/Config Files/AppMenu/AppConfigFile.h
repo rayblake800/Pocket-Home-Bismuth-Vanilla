@@ -45,25 +45,43 @@ public:
      * @return             All menu items within the menu folder, or an empty
      *                     array if the folder index is invalid.
      */
-    juce::Array<AppMenuItem> getMenuItems(const juce::Array<int>& folderIndex);
+    juce::Array<AppMenuItem> getMenuItems(const MenuIndex& folderIndex);
 
     /**
-     * @brief  Adds a new menu item to the list of items shown in a menu folder.
-     * 
-     * @param menuItem          The new menu item object.
-     * 
-     * @param index             The position to insert the new menu item.
+     * @brief  Adds a new menu item to the list of menu items.
      *
-     * @param folderIndex       The index of the menu folder where the new item
-     *                          should be inserted.
+     * @param title            The title to print on the menu item.
+     *
+     * @param icon             The name or path of the menu item's icon.
+     *
+     * @param command          The menu item's application launch command, or 
+     *                         the empty string if the menu item does not launch 
+     *                         an application.
+     *
+     * @param launchInTerm     Whether the menu item launches an application
+     *                         within a new terminal window.
      * 
-     * @param writeChangesNow   Sets if the change should be written to the 
-     *                          config file immediately.  If omitted, changes
-     *                          are written immediately by default.
+     * @param categories       A list of application categories associated with
+     *                         the menu item.
+     *
+     * @param index            The index where the menu item will be inserted
+     *                         into the menu.
+     *
+     * @param writeChangesNow  Whether changes should immediately be written to
+     *                         the JSON file.  By default, changes will be 
+     *                         written immediately.
      */
     void addMenuItem(
-            const AppMenuItem& menuItem, 
-            const int index,
-            const juce::Array<int> folderIndex, 
+            const juce::String& title, 
+            const juce::String& icon,
+            const juce::String& command,
+            const bool launchInTerm,
+            const juce::StringArray& categories,
+            const MenuIndex& index,
             const bool writeChangesNow = true);
+
+    /**
+     * @brief  Removes all cached menu items.
+     */
+    void clearMenuItemCache();
 };

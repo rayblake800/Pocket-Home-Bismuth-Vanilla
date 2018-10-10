@@ -18,24 +18,11 @@ public:
     /**
      * @param menuData  The JSON object holding menu data.
      *
-     * @param index        Index of this menu item within its folder.
-     *
-     * @param folderIndex  The index of the folder containing this menu item.
-     *                     If no folderIndex is given, the root folder is used.
+     * @param index        Index of this menu item within the menu tree.
      */
-    ConfigItemData(const juce::var& jsonData, const int index,
-            const juce::Array<int>& folderIndex);
+    ConfigItemData(const juce::var& jsonData, const MenuIndex& index);
     
     virtual ~ConfigItemData() { }
-
-    /**
-     * @brief  Creates a copy of this object.
-     *
-     * The caller is responsible for ensuring this object is deleted.
-     *
-     * @return  A new DataSource object copying this object's JSON data.
-     */
-    virtual MenuItemData* clone() const override;
 
     /**
      * @brief  Checks if this menu item represents a folder within the menu.
@@ -124,7 +111,6 @@ public:
      * @brief  Deletes this menu item data from its source JSON file.
      */
     virtual void deleteFromSource() override;
-
 
     /**
      * @brief  Writes all changes to this menu item back to its data source.

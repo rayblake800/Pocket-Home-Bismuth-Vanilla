@@ -42,13 +42,9 @@ void AppMenuFolder::reload()
 {
     using namespace juce;
     removeAllChildren();
-    Array<int> folderIndex = sourceFolderItem.getFolderIndex();
-    if(sourceFolderItem.getIndex() >= 0)
-    {
-        folderIndex.add(sourceFolderItem.getIndex());
-    }
+    const MenuIndex& menuIndex = sourceFolderItem.getIndex();
     AppConfigFile appConfig;
-    Array<AppMenuItem> menuItems = appConfig.getMenuItems(folderIndex);
+    Array<AppMenuItem> menuItems = appConfig.getMenuItems(menuIndex);
     for (AppMenuItem& menuItem : menuItems)
     {
         insertButton(menuItem, folderButtons.size(), false);

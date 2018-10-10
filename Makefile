@@ -247,9 +247,10 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/AppMenuItem.o \
   $(JUCE_OBJDIR)/ConfigItemData.o \
   $(JUCE_OBJDIR)/DesktopEntryItemData.o \
-  $(JUCE_OBJDIR)/MenuItemData.o \
   $(JUCE_OBJDIR)/AppConfigFile.o \
   $(JUCE_OBJDIR)/AppJSON.o \
+  $(JUCE_OBJDIR)/MenuItemData.o \
+  $(JUCE_OBJDIR)/MenuIndex.o \
   $(JUCE_OBJDIR)/ConfigKey.o \
   $(JUCE_OBJDIR)/ConfigAlertWindows.o \
   $(JUCE_OBJDIR)/JSONFile.o \
@@ -942,13 +943,6 @@ $(JUCE_OBJDIR)/DesktopEntryItemData.o: \
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
 	    -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/MenuItemData.o: \
-    Source/Config\ Files/AppMenu/Menu\ Items/MenuItemData.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling MenuItemData.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/AppConfigFile.o: \
     Source/Config\ Files/AppMenu/AppConfigFile.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
@@ -960,6 +954,20 @@ $(JUCE_OBJDIR)/AppJSON.o: \
     Source/Config\ Files/AppMenu/AppJSON.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling AppJSON.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
+	    -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/MenuItemData.o: \
+    Source/Config\ Files/AppMenu/Menu\ Items/MenuItemData.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling MenuItemData.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
+	    -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/MenuIndex.o: \
+    Source/Config\ Files/AppMenu/Menu\ Items/MenuIndex.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling MenuItemData.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
 	    -o "$@" -c "$<"
 

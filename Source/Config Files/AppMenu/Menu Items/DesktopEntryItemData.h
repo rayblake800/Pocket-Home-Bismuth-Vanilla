@@ -17,19 +17,18 @@
 class DesktopEntryItemData : public MenuItemData, private Localized
 {
 public:
-    DesktopEntryItemData(DesktopEntry desktopEntry, const int index,
-            const juce::Array<int>& folderIndex = {});
+    /**
+     * @brief  Creates menu item data from a desktop entry. 
+     *
+     * @param desktopEntry  The desktop entry supplying application menu data.
+     *
+     * @param menuIndex     The index where the menu item will be placed in the
+     *                      menu.
+     */
+    DesktopEntryItemData(const DesktopEntry& desktopEntry,
+            const MenuIndex& menuIndex);
 
     virtual ~DesktopEntryItemData() { }
-
-    /**
-     * @brief  Creates a copy of this object.
-     *
-     * The caller is responsible for ensuring this object is deleted.
-     *
-     * @return  A new DataSource object copying this object's JSON data.
-     */
-    virtual MenuItemData* clone() const override;
 
     /**
      * @brief  Checks if this menu item represents a folder within the menu.
@@ -130,8 +129,8 @@ public:
      *
      * @param offset  The amount to offset the menu item index.
      *
-     * @return        True if and only if the menu item can be moved, and the 
-     *                offset is valid.
+     * @return        False, as the order of desktop entry menu items can't be
+     *                changed.
      */
     virtual bool canMoveIndex(const int offset) override;
 
@@ -140,8 +139,8 @@ public:
      *
      * @param offset  The amount to offset the menu item index.
      *
-     * @return        True if the menu item was moved, false if it couldn't be
-     *                moved by the given offset value.
+     * @return        False, as the order of desktop entry menu items can't be
+     *                changed.
      */
     virtual bool moveIndex(const int offset) override;
     

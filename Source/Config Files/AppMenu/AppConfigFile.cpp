@@ -17,7 +17,7 @@ static const juce::Identifier categoryKey = "categories";
  * Gets all menu items within a menu folder.
  */
 juce::Array<AppMenuItem> AppConfigFile::getMenuItems
-    (const juce::Array<int>& folderIndex)
+(const MenuIndex& folderIndex)
 {
     using namespace juce;
     auto appJSON = getReadLockedResource();
@@ -26,18 +26,18 @@ juce::Array<AppMenuItem> AppConfigFile::getMenuItems
 
     for(const var& menuVar : menuVars)
     {
-        int index = menuItems.size();
+        MenuIndex index = folderIndex.childIndex(menuItems.size());
+        MenuItemData::Ptr newItem;
         if(menuVar.isObject())
         {
-            ConfigItemData configData(menuVar, index, folderIndex);
-            menuItems.add(AppMenuItem(&configData));
+            newItem = new ConfigItemData(menuVar, index);
+            menuItems.add(AppMenuItem(newItem));
         }
         else if(menuVar.isString())
         {
             DesktopEntryLoader entryLoader;
             DesktopEntry menuEntry = entryLoader.getDesktopEntry(menuVar);
-            DesktopEntryItemData entryData(menuEntry, index, folderIndex);
-            menuItems.add(AppMenuItem(&entryData));
+            newItem = new DesktopEntryItemData(menuEntry, index);
         }
         else
         {
@@ -45,6 +45,8 @@ juce::Array<AppMenuItem> AppConfigFile::getMenuItems
                     << menuVar.toString());
             continue;
         }
+        menuItems.add(AppMenuItem(newItem));
+        appJSON->addCachedMenuItem(newItem);
     }
     return menuItems;
 }
@@ -55,35 +57,52 @@ juce::Array<AppMenuItem> AppConfigFile::getMenuItems
 AppMenuItem AppConfigFile::getRootMenuItem()
 {
     using namespace juce;
-    DynamicObject* rootObject = new DynamicObject();
+    auto appJSON = getReadLockedResource();
+    MenuIndex rootIndex;
+    MenuItemData::Ptr rootItem = appJSON->getCachedMenuItem(rootIndex);
+    if(rootItem == nullptr)
     {
-        auto appJSON = getReadLockedResource();
+        DynamicObject* rootObject = new DynamicObject();
         Array<var> menuItems = appJSON->getMenuItems({});
         rootObject->setProperty(itemListKey, menuItems);
+        var rootJSON(rootObject);
+        rootItem = new ConfigItemData(rootJSON, MenuIndex());
+        appJSON->addCachedMenuItem(rootItem);
     }
-    var rootJSON(rootObject);
-    ConfigItemData rootData(rootJSON, -1, {});
-    return AppMenuItem(&rootData);
+    return AppMenuItem(rootItem);
 }
 
 /*
  * Adds a new menu item to the list of items shown in a menu folder.
  */
 void AppConfigFile::addMenuItem(
-        const AppMenuItem& menuItem, 
-        const int index,
-        const juce::Array<int> folderIndex, 
+        const juce::String& title, 
+        const juce::String& icon,
+        const juce::String& command,
+        const bool launchInTerm,
+        const juce::StringArray& categories,
+        const MenuIndex& index,
         const bool writeChangesNow) 
 {
     using namespace juce;
     DynamicObject* menuObject = new DynamicObject();
-    menuObject->setProperty(nameKey, menuItem.getTitle());
-    menuObject->setProperty(iconKey, menuItem.getIconName());
-    menuObject->setProperty(commandKey, menuItem.getCommand());
-    menuObject->setProperty(termKey, menuItem.getLaunchedInTerm());
-    menuObject->setProperty(categoryKey, menuItem.getCategories());
+    menuObject->setProperty(nameKey,title);
+    menuObject->setProperty(iconKey, icon);
+    menuObject->setProperty(commandKey, command);
+    menuObject->setProperty(termKey, launchInTerm);
+    menuObject->setProperty(categoryKey, categories);
     var menuVar(menuObject);
     auto appJSON = getWriteLockedResource();
-    appJSON->addMenuItem(menuVar, index, folderIndex, writeChangesNow);
+    appJSON->addMenuItem(menuVar, index, writeChangesNow);
+    appJSON->addCachedMenuItem(new ConfigItemData(menuVar, index));
+}
+
+/*
+ * Removes all cached menu items.
+ */
+void AppConfigFile::clearMenuItemCache()
+{
+    auto appJSON = getWriteLockedResource();
+    appJSON->clearMenuItemCache();
 }
 

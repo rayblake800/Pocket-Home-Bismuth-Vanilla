@@ -4,19 +4,11 @@
 #include "DesktopEntryFileError.h"
 #include "DesktopEntryItemData.h"
 
-DesktopEntryItemData::DesktopEntryItemData(DesktopEntry desktopEntry, 
-        const int index, const juce::Array<int>& folderIndex) :
+DesktopEntryItemData::DesktopEntryItemData(const DesktopEntry& desktopEntry, 
+        const MenuIndex& menuIndex) :
 desktopEntry(desktopEntry),
-MenuItemData(index, folderIndex),
+MenuItemData(menuIndex),
 Localized("DesktopEntryItemData") { }
-
-/*
- * Creates a copy of this object.
- */
-MenuItemData* DesktopEntryItemData::clone() const
-{
-    return new DesktopEntryItemData(desktopEntry, getIndex());
-}
 
 /*
  * Checks if this menu item represents a folder within the menu.

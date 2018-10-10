@@ -3,11 +3,15 @@
 /*
  * Creates a menu data object for an item in the application menu.
  */
-MenuItemData::MenuItemData
-(const int index, const juce::Array<int> folderIndex) :
-index(index),
-folderIndex(folderIndex) { }
+MenuItemData::MenuItemData(const MenuIndex& index) : index(index) { }
 
+/*
+ * Gets the menu item's index within the menu.
+ */
+const MenuIndex& MenuItemData::getIndex() const
+{
+    return index;
+}
 
 /*
  * Accesses the menu data lock.
@@ -18,17 +22,11 @@ const juce::ReadWriteLock& MenuItemData::getLock()
 }
 
 /*
- * Gets the menu item's index within its menu folder.
+ * Updates the menu item data's saved index value.
  */
-int MenuItemData::getIndex() const
+void MenuItemData::updateIndex(const int depth, const int offset)
 {
-    return index;
+    index.moveIndex(depth, offset);
 }
 
-/*
- * Gets the index of the menu folder holding this menu item.
- */
-const juce::Array<int>& MenuItemData::getFolderIndex() const
-{
-    return folderIndex;
-}
+

@@ -1,5 +1,6 @@
 #pragma once
 #include "JuceHeader.h"
+#include "MenuIndex.h"
 
 /**
  * @file  MenuItemData.h
@@ -9,19 +10,27 @@
 class MenuItemData : public juce::ReferenceCountedObject
 {
 public:
+    /* Allow AppJSON to update stored indices when moving menu items. */
+    friend class AppJSON;
+    
     /* Custom reference-counting pointer object type. */
     typedef juce::ReferenceCountedObjectPtr<MenuItemData> Ptr;
 
     /**
      * @brief  Creates a menu data object for an item in the application menu.
      *
-     * @param index        The object's index within its folder.
-     *
-     * @param folderIndex  The index of the menu item's folder within the menu.
+     * @param index  The object's index within the menu.
      */
-    MenuItemData(const int index, const juce::Array<int> folderIndex);
+    MenuItemData(const MenuIndex& index);
     
     virtual ~MenuItemData() { }
+
+    /**
+     * @brief  Gets the menu item's index within the menu.
+     *
+     * @return  The menu item's index.
+     */
+    const MenuIndex& getIndex() const;
 
     /**
      * @brief  Accesses the menu data lock.
@@ -124,26 +133,10 @@ public:
     virtual void updateSource() = 0;
 
     /**
-     * @brief  Gets the menu item's index within its menu folder.
+     * @brief  Checks if this menu item can be moved within its parent folder.
      *
-     * @return  The menu item's index.
-     */
-    int getIndex() const;
-
-    /**
-     * @brief  Gets the index of the menu folder holding this menu item.
-     *
-     * Starting with the root folder, each index in the folder index array maps
-     * to a folder menu item within the previous folder.
-     *
-     * @return  The folder's index within the menu tree.
-     */
-    const juce::Array<int>& getFolderIndex() const;
-
-    /**
-     * @brief  Checks if this menu item can be moved within its menu folder.
-     *
-     * @param offset  The amount to offset the menu item index.
+     * @param offset  The amount to offset the menu item index at its greatest
+     *                depth.
      *
      * @return        True if and only if the menu item can be moved, and the 
      *                offset is valid.
@@ -151,7 +144,7 @@ public:
     virtual bool canMoveIndex(const int offset) = 0;
 
     /**
-     * @brief  Attempts to move this menu item within its menu folder.
+     * @brief  Attempts to move this menu item within its parent folder.
      *
      * @param offset  The amount to offset the menu item index.
      *
@@ -213,9 +206,21 @@ public:
      */
     virtual int getFolderSize() = 0;
 
+protected:
+    /**
+     * @brief  Updates the menu item data's saved index value.
+     *
+     * Use this to update the index value when menu items are moved.
+     *
+     * @param depth   The level in the menu tree where the index should be
+     *                moved.
+     *
+     * @param offset  The amount to offset the menu item index.
+     */
+    void updateIndex(const int depth, const int offset);
+
 private:
-    int index = 0;
-    juce::Array<int> folderIndex;
+    MenuIndex index;
 
     /* Prevents unsafe concurrent access to menu item data. */
     const juce::ReadWriteLock dataLock;

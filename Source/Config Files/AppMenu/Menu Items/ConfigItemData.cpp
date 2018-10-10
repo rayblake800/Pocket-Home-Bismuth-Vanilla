@@ -19,19 +19,11 @@ static const juce::Identifier categoryKey("categories");
 /* Folder item list key. */
 static const juce::Identifier folderItemKey("folder items");
 
-ConfigItemData::ConfigItemData(const juce::var& jsonData, const int index,
-        const juce::Array<int>& folderIndex) :
+ConfigItemData::ConfigItemData
+(const juce::var& jsonData, const MenuIndex& index) :
 Localized("ConfigItemData"),
-MenuItemData(index, folderIndex),
+MenuItemData(index),
 jsonData(jsonData) { }
-
-/*
- * Creates a copy of this object.
- */
-MenuItemData* ConfigItemData::clone() const
-{
-    return new ConfigItemData(jsonData, getIndex(), getFolderIndex());
-}
 
 /*
  * Checks if this menu item represents a folder within the menu.
@@ -138,8 +130,7 @@ void ConfigItemData::setLaunchedInTerm(const bool termLaunch)
 void ConfigItemData::deleteFromSource()
 {
     auto appJSON = getWriteLockedResource();
-    appJSON->removeMenuItem(getIndex(), getFolderIndex(), true);
-
+    appJSON->removeMenuItem(getIndex(), true);
 }
 
 /*
@@ -148,8 +139,8 @@ void ConfigItemData::deleteFromSource()
 void ConfigItemData::updateSource()
 {
     auto appJSON = getWriteLockedResource();
-    appJSON->removeMenuItem(getIndex(), getFolderIndex(), false);
-    appJSON->addMenuItem(jsonData, getIndex(), getFolderIndex(), true);
+    appJSON->removeMenuItem(getIndex(), false);
+    appJSON->addMenuItem(jsonData, getIndex(), true);
 }
 
 /*
@@ -158,9 +149,14 @@ void ConfigItemData::updateSource()
 bool ConfigItemData::canMoveIndex(const int offset)
 {
     auto appJSON = getReadLockedResource();
-    int newIndex = getIndex() + offset;
-    return newIndex >= 0 
-        && newIndex < appJSON->getFolderSize(getFolderIndex(), false);
+    int depth = getIndex().getDepth();
+    int newIndex = getIndex()[depth] + offset;
+    if(newIndex < 0)
+    {
+        return false;
+    }
+    MenuIndex parentFolderIndex = getIndex().parentIndex(); 
+    return  newIndex < appJSON->getFolderSize(parentFolderIndex, false);
 }
 
 
@@ -175,9 +171,10 @@ bool ConfigItemData::moveIndex(const int offset)
     {
         return false;
     }
-    int newIndex = getIndex() + offset;
-    appJSON->removeMenuItem(getIndex(), getFolderIndex(), false);
-    appJSON->addMenuItem(jsonData, newIndex, getFolderIndex(), true);
+    appJSON->removeMenuItem(getIndex(), false);
+    updateIndex(getIndex().getDepth(), offset);
+    appJSON->addMenuItem(jsonData, getIndex(), true);
+    appJSON->addCachedMenuItem(this);
     return true;
 }
 
@@ -235,10 +232,5 @@ bool ConfigItemData::isEditable(const DataField dataField)
 int ConfigItemData::getFolderSize()
 {
     auto appJSON = getReadLockedResource();
-    juce::Array<int> folderIndex = getFolderIndex();
-    if(getIndex() >= 0)
-    {
-        folderIndex.add(getIndex());
-    }
-    return appJSON->getFolderSize(folderIndex, true);
+    return appJSON->getFolderSize(getIndex(), true);
 }
