@@ -1,6 +1,7 @@
 # Pocket-home: Bismuth Edition Task List
 
 ### Documentation
+    -Priority:  Change list is out of date, check commit messages and update it.
 
     1. Create a list of all code files, and use it to systematically check
        existing documentation.
@@ -14,7 +15,6 @@
     -Figure out why the "file" label in the file selection window gets cut off.
 
 #### Known documentation issues for individual classes
-
     -AppMenu helper classes are missing full documentation.
     -PokeLookAndFeel.h is missing some @param tags.
 
@@ -23,37 +23,38 @@
 # Task list for release 0.10
 
 ## Wifi Improvements
-
-    1. Fix wifi error: libnm-glib-WARNING nm-access-point.c:310 ap_ssid == NULL
-    2. Fix missing access point name bug that seems to be linked to changing
-       access points while staying on the same network.
-    3. Track down rare segfault after repeated assertion failure at 
-       WifiSettingsPage.cpp:189
+    1. JSONWifiInterface really isn't helpful, and accomodating it creates
+       unacceptable design complexity.  Get rid of it.
+        -Eventually it should be replaced with a fake Wifi control library
+         that copies LibNM's interface.
+    2. The level of interaction between GLibSignalThread and NetworkInterface
+       creates way too many opportunities for deadlocks.  Merge GLibSignalThread
+       and NetworkInterface into a single SharedResource, and ensure GPPObjects
+       do not use that thread if they're not part of LibNM.
+    3. Using GLib SignalHandlers outside of the Wifi thread is not safe with
+       this version of LibNM.  Remove internal NMPPAccessPoint objects from
+       WifiAccessPoints and make WifiAccessPoint get that data through the
+       WifiStateManager.
     4. Update the HomePage wifi icon to better use new wifi features.
        1. Add a Listener interface to WifiAccessPoint objects.
        2. Have the wifi icon extend WifiAccessPoint::Listener.
     5. Add a "Forget saved connection" button to saved wifi access points.
 
-## AppMenu Improvements
-
-    1. Increase encapsulation: enforce strict Menu->Folder->Button hierarchy.
-    2. Separate AppMenuButton classes from AppMenuFolder classes.
-    3. Create separate classes to handle keyboard controls.
-    4. Create a separate class to handle popup menus.
-    5. For each menu type, create a custom Component for the HomeSettingsPage
-       that provides controls for its specific properties.
-    6. Design and implement TabbedAppMenu.
-
 ## FreeDesktop Standards/ DesktopEntry Improvements
-
-    -Read DesktopEntry data values using a key->function map.
-    -Enforce thorough implementation of the Desktop entry standard.
-    -Add support for .Desktop Actions
-    -Move all functionality in AssetFiles to XDGDirectories
-    -Select program data directories using XDGDirectories
+    1. Desktop entry loading is relatively quick now; load entries earlier, and
+       don't waste time sending loading updates.
+    2. Provide support for refreshing loaded entries, re-scanning files and 
+       re-reading ones with write times newer than the last entry read time.
+    3. Improve support for .Desktop Actions
+    4. Add support for launching applications through d-bus when desktop entries
+       request it.
+    5. Research the FreeDesktop standard for tracking launched applications, and
+       integrate it into AppLauncher. 
+    4. Move all functionality in AssetFiles to XDGDirectories
+    5. Place config files and lock files in directories selected with
+       XDGDirectories.
 
 ## Configuration Improvements
-
     1. Improve handling of invalid types in config files.
     2. Provide methods for easily reverting part or all of a config file to
        default values.
@@ -62,6 +63,16 @@
            looked up easily in the config file.
         2. Give folders the ability to contain shortcuts and other folders.
 
+
+
+## AppMenu Improvements
+    1. Increase encapsulation: enforce strict Menu->Folder->Button hierarchy.
+    2. Separate AppMenuButton classes from AppMenuFolder classes.
+    3. Create separate classes to handle keyboard controls.
+    4. Create a separate class to handle popup menus.
+    5. For each menu type, create a custom Component for the HomeSettingsPage
+       that provides controls for its specific properties.
+    6. Design and implement TabbedAppMenu.
 ## Settings Page Improvements
 
 ### Quick Settings Page
