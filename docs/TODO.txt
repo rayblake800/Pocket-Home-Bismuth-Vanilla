@@ -22,6 +22,19 @@
 
 # Task list for release 0.10
 
+## AppMenu Improvements
+    1. Re-think how various responsibilities should be spread between
+       MenuItemData, AppJSON, AppConfigFile, and AppMenuItem
+    2. Load all menu items at once and store as linked reference-counted
+       objects.
+    3. Increase encapsulation: enforce strict Menu->Folder->Button hierarchy.
+    4. Separate AppMenuButton classes from AppMenuFolder classes.
+    5. Create separate classes to handle keyboard controls.
+    6. Create a separate class to handle popup menus.
+    7. For each menu type, create a custom Component for the HomeSettingsPage
+       that provides controls for its specific properties.
+    8. Design and implement TabbedAppMenu.
+
 ## Wifi Improvements
     1. JSONWifiInterface really isn't helpful, and accomodating it creates
        unacceptable design complexity.  Get rid of it.
@@ -50,35 +63,18 @@
        request it.
     5. Research the FreeDesktop standard for tracking launched applications, and
        integrate it into AppLauncher. 
-    4. Move all functionality in AssetFiles to XDGDirectories
-    5. Place config files and lock files in directories selected with
+    6. Move all functionality in AssetFiles to XDGDirectories
+    7. Place config files and lock files in directories selected with
        XDGDirectories.
 
 ## Configuration Improvements
-    1. Improve handling of invalid types in config files.
-    2. Provide methods for easily reverting part or all of a config file to
-       default values.
-    -AppConfigFile Improvements
-        1. Assign hidden id values to each folder and shortcut so they can be
-           looked up easily in the config file.
-        2. Give folders the ability to contain shortcuts and other folders.
+    1. Add config. option for enabling/disabling that PocketCHIP audio hack. 
 
-
-
-## AppMenu Improvements
-    1. Increase encapsulation: enforce strict Menu->Folder->Button hierarchy.
-    2. Separate AppMenuButton classes from AppMenuFolder classes.
-    3. Create separate classes to handle keyboard controls.
-    4. Create a separate class to handle popup menus.
-    5. For each menu type, create a custom Component for the HomeSettingsPage
-       that provides controls for its specific properties.
-    6. Design and implement TabbedAppMenu.
 ## Settings Page Improvements
 
 ### Quick Settings Page
 
     1. Restore the IP address label.
-    2. Replace the SettingsListPage opening button with an icon.
 
 ### DateTime Page
 
@@ -159,4 +155,14 @@
         -Input options
     -Create a class that can automatically disable a component if one or more
      of these features is not available
-    -Ensure that everything controllable by touch/mouse input can also be controlled by keyboard input, and vice versa.
+
+## Control/Input improvements
+    -Create an organized control system for managing key presses and 
+     transferring keyboard focus.
+    -Ensure that everything controllable by touch/mouse input can also be
+     controlled by keyboard input, and vice versa.
+    -Look into alternate text entry methods for systems without physical
+     keyboards.
+     
+## Build improvements
+   -Switch to using CMake  
