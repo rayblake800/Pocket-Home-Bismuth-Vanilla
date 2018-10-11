@@ -1,6 +1,5 @@
 #pragma once
 #include "JuceHeader.h"
-#include "MenuIndex.h"
 
 /**
  * @file  MenuItemData.h
@@ -10,8 +9,6 @@
 class MenuItemData : public juce::ReferenceCountedObject
 {
 public:
-    /* Allow AppJSON to update stored indices when moving menu items. */
-    friend class AppJSON;
     
     /* Custom reference-counting pointer object type. */
     typedef juce::ReferenceCountedObjectPtr<MenuItemData> Ptr;
@@ -19,32 +16,16 @@ public:
     /**
      * @brief  Creates a menu data object for an item in the application menu.
      *
-     * @param index  The object's index within the menu.
+     * @param parent  The folder menu item this menu item is located in within
+     *                the menu tree, or nullptr if this menu item is the root
+     *                folder menu item.
+     *
+     * @param index   The object's index within its parent folder, or -1 if
+     *                this menu item is the root folder menu item.
      */
-    MenuItemData(const MenuIndex& index);
+    MenuItemData(const MenuItemData::Ptr parent, const int index);
     
     virtual ~MenuItemData() { }
-
-    /**
-     * @brief  Gets the menu item's index within the menu.
-     *
-     * @return  The menu item's index.
-     */
-    const MenuIndex& getIndex() const;
-
-    /**
-     * @brief  Accesses the menu data lock.
-     *
-     * @return  The lock used to control access to menu item data.
-     */
-    const juce::ReadWriteLock& getLock();
-
-    /**
-     * @brief  Checks if this menu item represents a folder within the menu.
-     *
-     * @return  Whether this menu item opens a new menu folder.
-     */
-    virtual bool isFolder() const = 0;
 
     /**
      * @brief  Gets the menu item's displayed title.
@@ -54,40 +35,11 @@ public:
     virtual juce::String getTitle() const = 0;
 
     /**
-     * @brief  Sets the menu item's displayed title.
-     *
-     * @param title  The new title string to display.
-     */
-    virtual void setTitle(const juce::String& title) = 0;
-
-    /**
      * @brief  Gets the name or path use to load the menu item's icon file.
      *
      * @return  The name or path of the icon.
      */
     virtual juce::String getIconName() const = 0;
-
-    /**
-     * @brief  Sets the name or path used to load the menu item's icon file.
-     *
-     * @param iconName  The new icon name or path.
-     */
-    virtual void setIconName(const juce::String& iconName) = 0;
-
-    /**
-     * @brief  Gets the application categories connected to this menu item.
-     *
-     * @return  Any category strings assigned to this menu item.
-     */
-    virtual juce::StringArray getCategories() const = 0;
-
-    /**
-     * @brief  Sets the application categories connected to this menu item.
-     *
-     * @param categories  The new set of category strings to assign to this menu
-     *                    item.
-     */
-    virtual void setCategories(const juce::StringArray& categories) = 0;
 
     /**
      * @brief  Gets the menu item's application launch command.
@@ -98,6 +50,36 @@ public:
     virtual juce::String getCommand() const = 0;
 
     /**
+     * @brief  Checks if this menu item launches an application in a new
+     *         terminal window.
+     *
+     * @return  Whether the menu item has a launch command it should run in a 
+     *          new terminal window
+     */
+    virtual bool getLaunchedInTerm() const = 0;
+
+    /**
+     * @brief  Gets the application categories connected to this menu item.
+     *
+     * @return  Any category strings assigned to this menu item.
+     */
+    virtual juce::StringArray getCategories() const = 0;
+
+    /**
+     * @brief  Sets the menu item's displayed title.
+     *
+     * @param title  The new title string to display.
+     */
+    virtual void setTitle(const juce::String& title) = 0;
+
+    /**
+     * @brief  Sets the name or path used to load the menu item's icon file.
+     *
+     * @param iconName  The new icon name or path.
+     */
+    virtual void setIconName(const juce::String& iconName) = 0;
+
+    /**
      * @brief  Sets the menu item's application launch command.
      *
      * @param newCommand  The new command string to run when this menu item is
@@ -106,21 +88,50 @@ public:
     virtual void setCommand(const juce::String& newCommand) = 0;
 
     /**
-     * @brief  Checks if this menu item launches an application in a new
-     *         terminal window.
-     *
-     * @return  True if and only if the menu item has a launch command it should
-     *          run in a new terminal window
-     */
-    virtual bool getLaunchedInTerm() const = 0;
-
-    /**
      * @brief  Sets if this menu item runs its command in a new terminal window.
      *
      * @param termLaunch  True to run any launch command assigned to this
      *                    menu item within a new terminal window.
      */
     virtual void setLaunchedInTerm(const bool termLaunch) = 0;
+
+    /**
+     * @brief  Sets the application categories connected to this menu item.
+     *
+     * @param categories  The new set of category strings to assign to this menu
+     *                    item.
+     */
+    virtual void setCategories(const juce::StringArray& categories) = 0;
+    
+    /**
+     * @brief  Gets this menu item's parent folder.
+     *
+     * @return  The parent folder's data, or nullptr if this menu item is the
+     *          root folder menu item.
+     */
+    MenuItemData::Ptr getParentFolder() const;
+
+    /**
+     * @brief  Gets this menu item's index within its parent folder.
+     *
+     * @return  The index, or -1 if this menu item is the root folder menu item. 
+     */
+    int getIndex() const;
+
+    /**
+     * @brief  Checks if this menu item represents a folder within the menu.
+     *
+     * @return  Whether this menu item opens a new menu folder.
+     */
+    bool isFolder() const;
+
+    /**
+     * @brief  Gets the number of folder items held by this menu item.
+     *
+     * @return  The number of folder items this menu item holds, or zero if this
+     *          menu item is not a folder.
+     */
+    int getFolderSize() const;
 
     /**
      * @brief  Deletes this menu item data from its source.
@@ -133,25 +144,29 @@ public:
     virtual void updateSource() = 0;
 
     /**
-     * @brief  Checks if this menu item can be moved within its parent folder.
+     * @brief  Gets the number of folder items held by this menu item that can
+     *         be reordered.
      *
-     * @param offset  The amount to offset the menu item index at its greatest
-     *                depth.
+     * Movable child folder items always come before un-movable ones, so any
+     * child folder items with an index less than the movable child count can
+     * have their positions swapped.
      *
-     * @return        True if and only if the menu item can be moved, and the 
-     *                offset is valid.
+     * @return  The number of child folder items held that can be re-arranged
+     *          in any order.
      */
-    virtual bool canMoveIndex(const int offset) = 0;
+    virtual int getMovableChildCount() = 0;
 
-    /**
-     * @brief  Attempts to move this menu item within its parent folder.
-     *
-     * @param offset  The amount to offset the menu item index.
-     *
-     * @return        True if the menu item was moved, false if it couldn't be
-     *                moved by the given offset value.
-     */
-    virtual bool moveIndex(const int offset) = 0;
+    MenuItemData::Ptr getChild(const int index) const;
+    juce::Array<MenuItemData::Ptr> getChildren() const;
+
+    bool addChild(const MenuItemData::Ptr newChild);
+    bool insertChild(const MenuItemData::Ptr newChild, const int index);
+    bool replaceChild(const MenuItemData::Ptr newChild, const int index);
+    bool removeChild(const int index);
+    bool swapChildren(const int childIdx1, const int childIdx2);
+    
+    virtual void saveChanges() = 0;
+    virtual void removeFromSource() = 0;
     
     /**
      * @brief  Gets an appropriate title to use for a deletion confirmation 

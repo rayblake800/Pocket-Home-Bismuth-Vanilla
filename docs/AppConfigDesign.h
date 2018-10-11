@@ -24,12 +24,12 @@ public:
 
     bool isFolder() const;
     int getFolderSize() const;
-    virtual int lastMovableChildIndex() = 0;
+    virtual int getMovableChildCount() = 0;
 
     MenuItemData::Ptr getChild(const int index) const;
     juce::Array<MenuItemData::Ptr> getChildren() const;
 
-    void addChild(const MenuItemData::Ptr newChild);
+    bool addChild(const MenuItemData::Ptr newChild);
     bool insertChild(const MenuItemData::Ptr newChild, const int index);
     bool replaceChild(const MenuItemData::Ptr newChild, const int index);
     bool removeChild(const int index);
