@@ -20,31 +20,24 @@ AppJSON::AppJSON() : ConfigJSON(resourceKey, jsonFilename)
     loadJSONData();   
 }
 
-
-
 /*
  * Gets the number of menu items within a menu folder.
  */
-int AppJSON::getFolderSize(const juce::Array<int> folderIndex,
+int AppJSON::getFolderSize(const MenuIndex& folderIndex,
         const bool includeDesktopEntries) const
 {
     using namespace juce;
-    if(!includeDesktopEntries)
+    if(!includeDesktopEntries || folderIndex.getDepth() == -1)
     {
         var folder = getFolderVar(folderIndex);
         return ((folder.isArray()) ? folder.size() : -1);
     }
-    var folder = menuItems;
-    var folderItem;
-    for(int i : folderIndex)
+    var folderItem = getItemVar(folderIndex);
+    if(!folderItem.isObject())
     {
-        folderItem = folder[i];
-        folder = folderItem.getProperty(itemListKey, var());
-        if(!folderItem.isObject() || !folder.isArray())
-        {
-            return -1;
-        }
+        return -1;
     }
+    var folder = folderItem.getProperty(itemListKey, var());
     int size = folder.size();
     var categories = folderItem.getProperty(categoryKey, var());
     if(categories.isArray())
@@ -63,25 +56,27 @@ int AppJSON::getFolderSize(const juce::Array<int> folderIndex,
 /*
  * Gets all menu items within a folder in the application menu.
  */
-juce::Array<juce::var> AppJSON::getMenuItems
-    (const juce::Array<int> folderIndex) const
+juce::Array<juce::var> AppJSON::getMenuItems(const MenuIndex& folderIndex) const
 {
     using namespace juce;
-    var folderObject;
-    var folderItems = menuItems;
-    for(int i : folderIndex)
+    // The root folder item needs to be handled differently because only its
+    // folder items are defined.
+    if(folderIndex.getDepth() == -1)
     {
-        folderObject = folderItems[i];
-        folderItems = folderObject.getProperty(itemListKey, var());
-        if(!folderObject.isObject())
-        {
-            return {};
-        }
+        Array<var> itemList;
+        itemList.addArray(*menuItems.getArray());
+        return itemList;
     }
-    Array<var> menuItems;
+    var folderObject = getItemVar(folderIndex);
+    if(!folderObject.isObject())
+    {
+        return {};
+    }
+    Array<var> itemList;
+    var folderItems = folderObject.getProperty(itemListKey, var());
     if(folderItems.isArray())
     {
-        menuItems.addArray(*folderItems.getArray());
+        itemList.addArray(*folderItems.getArray());
     }
     StringArray desktopEntryCategories;
     var categoryVars = folderObject.getProperty(categoryKey, var());
@@ -96,14 +91,15 @@ juce::Array<juce::var> AppJSON::getMenuItems
             (desktopEntryCategories);
         for(const String& entryID : entryIDs)
         {
-            menuItems.add(var(entryID));
+            itemList.add(var(entryID));
         }
     }
     DBG("AppJSON::" << __func__ << ": Found " << menuItems.size()
             << " menu items, " << folderItems.size() << " folder items and "
             << (menuItems.size() - folderItems.size()) << " desktop files from "
-            << desktopEntryCategories.size() << " categories.");
-    return menuItems;
+            << desktopEntryCategories.size() << " categories in folder "
+            << folderIndex.toString());
+    return itemList;
 }
 
 /*
@@ -111,15 +107,16 @@ juce::Array<juce::var> AppJSON::getMenuItems
  */
 void AppJSON::addMenuItem(
         const juce::var& newItem, 
-        const int index,
-        const juce::Array<int> folderIndex, 
+        const MenuIndex& index,
         const bool writeChangesNow)
 {
     using namespace juce;
-    var folder = getFolderVar(folderIndex);
+    MenuIndex parentIndex = index.parentIndex();
+    var folder = getFolderVar(parentIndex);
     if(folder.isArray())
     {
-        folder.insert(index, newItem);
+        folder.insert(index.folderIndex(), newItem);
+        //updateCacheIndices(index, true);
         if (writeChangesNow)
         {
             writeChanges();
@@ -130,20 +127,51 @@ void AppJSON::addMenuItem(
 /*
  * Removes an item from the menu.
  */
-void AppJSON::removeMenuItem(const int index, 
-        const juce::Array<int> folderIndex,
-        const bool writeChangesNow)
+void AppJSON::removeMenuItem(const MenuIndex& index, const bool writeChangesNow)
 {
     using namespace juce;
-    var folder = getFolderVar(folderIndex);
-    if (index >= 0 && index < folder.size())
+    var parentFolder = getFolderVar(index);
+    if (index.folderIndex() >= 0 && index.folderIndex() < parentFolder.size())
     {
-        folder.remove(index);
+        parentFolder.remove(index.folderIndex());
+        menuItemCache.erase(index);
+        updateCacheIndices(index, false);
         if (writeChangesNow)
         {
             writeChanges();
         }
     }
+}
+
+/*
+ * Saves a menu item's data to the list of cached menu items.
+ */
+void AppJSON::addCachedMenuItem(MenuItemData::Ptr menuItem)
+{
+    menuItemCache[menuItem->getIndex()] = menuItem;
+}
+
+/*
+ * Loads a cached menu item from the list of cached menu items.
+ */
+MenuItemData::Ptr AppJSON::getCachedMenuItem(const MenuIndex& cacheIndex)
+{
+    try
+    {
+        return menuItemCache.at(cacheIndex);
+    }
+    catch(std::out_of_range)
+    {
+        return nullptr;
+    }
+}
+
+/*
+ * Removes all cached menu items.
+ */
+void AppJSON::clearMenuItemCache()
+{
+    menuItemCache.clear();
 }
 
 /*
@@ -158,19 +186,78 @@ void AppJSON::writeDataToJSON()
 /*
  * Finds a folder within the folder data tree, and returns its data.
  */
-juce::var AppJSON::getFolderVar(const juce::Array<int>& folderIndex) const
+juce::var AppJSON::getItemVar(const MenuIndex& folderIndex) const
 {
     using namespace juce;
     var folder = menuItems;
-    for(int i : folderIndex)
+    for(int depth = 0; depth <= folderIndex.getDepth(); depth++)
     {
-        folder = folder[i];
+        int index = folderIndex[depth];
+        if(folder.size() <= index)
+        {
+            DBG("AppJSON::" << __func__ << ": Invalid index "
+                    << folderIndex.toString() << ": Menu item at depth "
+                    << depth << " is size " << folder.size() << ", needed "
+                    << index << " or greater.");
+            return var();
+        }
+        folder = folder[folderIndex[depth]];
         folder = folder.getProperty(itemListKey, var());
         if(!folder.isArray())
         {
+            DBG("AppJSON::" << __func__ << ": Invalid index "
+                    << folderIndex.toString() << ": Menu item at depth "
+                    << depth << " is not a folder.");
             return var();
         }
     }
     return folder;
 }
+    
+/*
+ * Finds a menu item within the menu tree and return its parent's data.
+ */
+juce::var AppJSON::getParentVar(const MenuIndex& menuIndex) const
+{
+    MenuIndex parentIndex = menuIndex.parentIndex();
+    return getItemVar(parentIndex);
+}
 
+/*
+ * Gets a menu item's folder data.
+ */
+juce::var AppJSON::getFolderVar(const MenuIndex& folderIndex) const
+{
+    using namespace juce;
+    return getItemVar(folderIndex).getProperty(itemListKey, var());
+}
+    
+/*
+ * Update cached item indices when a menu item is inserted or removed.
+ */
+void AppJSON::updateCacheIndices(const MenuIndex& changePoint,
+        const bool itemInserted)
+{
+    using namespace juce;
+    Array<MenuItemData::Ptr> updatedMenuItems;
+    int insertDepth = changePoint.getDepth();
+    int insertPos = changePoint[insertDepth];
+    int offset = (itemInserted ? 1 : -1);
+    for(std::pair<MenuIndex, MenuItemData::Ptr> cachedItem : menuItemCache)
+    {
+        if(cachedItem.first.getDepth() >= insertDepth
+                && cachedItem.first[insertDepth] >= insertPos)
+        {
+            updatedMenuItems.add(cachedItem.second);
+        }
+    }
+    for(const MenuItemData::Ptr& updatedItem : updatedMenuItems)
+    {
+        menuItemCache.erase(updatedItem->getIndex());
+    }
+    for(const MenuItemData::Ptr& updatedItem : updatedMenuItems)
+    {
+        updatedItem->updateIndex(insertDepth, offset);
+        menuItemCache[updatedItem->getIndex()] = updatedItem;
+    }
+}

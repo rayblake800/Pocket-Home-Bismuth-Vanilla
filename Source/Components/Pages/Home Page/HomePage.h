@@ -32,9 +32,11 @@ class HomePage : public PageComponent, public MainConfigFile::Listener
 {
 public:
     HomePage();
-
-    virtual ~HomePage() { }
-
+    
+    virtual ~HomePage()
+    {
+        appConfig.clearMenuItemCache();
+    }
 protected:
     /**
      * @brief  Tracks page background and menu type changes. 

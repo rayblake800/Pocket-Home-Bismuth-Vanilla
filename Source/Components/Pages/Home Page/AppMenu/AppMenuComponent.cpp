@@ -93,6 +93,9 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         editMenu.addItem(1, localeText(edit_app));
         editMenu.addItem(2, localeText(delete_app));
         AppMenuItem selectedMenuItem = selectedButton->getMenuItem();
+        DBG("AppMenuComponent::" << __func__ << ": Creating pop-up menu for "
+                << "button at index " 
+                << selectedMenuItem.getIndex().toString());
         if (selectedMenuItem.isFolder())
         {
             editMenu.addItem(4, localeText(new_shortcut));
@@ -160,12 +163,16 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         case 6://User selects "Pin to favorites"
         {
             AppConfigFile appConfig;
+            AppMenuItem rootItem = appConfig.getRootMenuItem();
             AppMenuItem selectedMenuItem = selectedButton->getMenuItem();
-            Array<int> folderIndex = selectedMenuItem.getFolderIndex();
-            folderIndex.add(selectedMenuItem.getIndex());
-            appConfig.addMenuItem(selectedMenuItem,
-                    selectedMenuItem.getFolderSize(),
-                    folderIndex, true);
+            MenuIndex newIndex = rootItem.getIndex()
+                .childIndex(rootItem.getFolderSize());
+            appConfig.addMenuItem(selectedMenuItem.getTitle(),
+                    selectedMenuItem.getIconName(),
+                    selectedMenuItem.getCommand(),
+                    selectedMenuItem.getLaunchedInTerm(),
+                    selectedMenuItem.getCategories(),
+                    newIndex, true);
             confirmNew();
             break;
         }

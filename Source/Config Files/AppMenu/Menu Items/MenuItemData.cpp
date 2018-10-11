@@ -3,23 +3,30 @@
 /*
  * Creates a menu data object for an item in the application menu.
  */
-MenuItemData::MenuItemData
-(const int index, const juce::Array<int> folderIndex) :
-index(index),
-folderIndex(folderIndex) { }
+MenuItemData::MenuItemData(const MenuIndex& index) : index(index) { }
 
 /*
- * Gets the menu item's index within its menu folder.
+ * Gets the menu item's index within the menu.
  */
-int MenuItemData::getIndex() const
+const MenuIndex& MenuItemData::getIndex() const
 {
     return index;
 }
 
 /*
- * Gets the index of the menu folder holding this menu item.
+ * Accesses the menu data lock.
  */
-const juce::Array<int>& MenuItemData::getFolderIndex() const
+const juce::ReadWriteLock& MenuItemData::getLock()
 {
-    return folderIndex;
+    return dataLock;
 }
+
+/*
+ * Updates the menu item data's saved index value.
+ */
+void MenuItemData::updateIndex(const int depth, const int offset)
+{
+    index.moveIndex(depth, offset);
+}
+
+

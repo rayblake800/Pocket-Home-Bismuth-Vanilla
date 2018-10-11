@@ -18,23 +18,11 @@ public:
     /**
      * @param menuData  The JSON object holding menu data.
      *
-     * @param index        Index of this menu item within its folder.
-     *
-     * @param folderIndex  The index of the folder containing this menu item.
+     * @param index        Index of this menu item within the menu tree.
      */
-    ConfigItemData(const juce::var& jsonData, const int index,
-            const juce::Array<int>& folderIndex);
+    ConfigItemData(const juce::var& jsonData, const MenuIndex& index);
     
     virtual ~ConfigItemData() { }
-
-    /**
-     * @brief  Creates a copy of this object.
-     *
-     * The caller is responsible for ensuring this object is deleted.
-     *
-     * @return  A new DataSource object copying this object's JSON data.
-     */
-    virtual MenuItemData* clone() const override;
 
     /**
      * @brief  Checks if this menu item represents a folder within the menu.
@@ -124,7 +112,6 @@ public:
      */
     virtual void deleteFromSource() override;
 
-
     /**
      * @brief  Writes all changes to this menu item back to its data source.
      */
@@ -192,20 +179,8 @@ public:
     virtual int getFolderSize() override;
 
 private:
-    /* Menu item title */
-    juce::String name;
-    /* Icon name or path */
-    juce::String icon;
-    /* Application launch command */
-    juce::String command;
-    /* Whether the menu item launches an application in a new terminal window */
-    bool launchInTerm = false;
-    /* If this menu item is a folder, this is the number of items in the folder
-       defined in the JSON configuration file. */
-    int numConfigFolderItems = 0;
-    /* If this menu item is a folder, this lists the application categories of
-       folder items that should be loaded from desktop entry files. */
-    juce::StringArray categories;
+    /* JSON object data */
+    juce::var jsonData;
 
     //localized text keys: 
     static const constexpr char * remove_APP = "remove_APP";

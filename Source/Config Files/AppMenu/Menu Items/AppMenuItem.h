@@ -17,7 +17,7 @@ public:
      *
      * @param dataSource  A menu data source the new AppMenuItem will clone.
      */
-    AppMenuItem(MenuItemData* dataSource);
+    AppMenuItem(MenuItemData::Ptr dataSource);
 
     /**
      * @brief  Creates a menu item copying data from another menu item. 
@@ -131,6 +131,16 @@ public:
     bool operator==(const AppMenuItem& toCompare) const;
 
     /**
+     * @brief  Compares this menu item with another.
+     *
+     * @param toCompare  Another menu item to compare with this one.
+     * 
+     * @return           Whether this menu item comes before the other in the
+     *                   menu tree.
+     */
+    bool operator<(const AppMenuItem& toCompare) const;
+
+    /**
      * @brief  Displays an alert to the user asking if this item should be
      *         removed from the menu, and deletes the menu item if the user
      *         confirms.
@@ -172,26 +182,16 @@ public:
     void updateSource();
     
     /**
-     * @brief  Gets the menu item's index within its folder.
+     * @brief  Gets the menu item's index within the menu tree.
      *
      * @return  The menu item index. 
      */
-    int getIndex() const;
-
-    /**
-     * @brief  Gets the index of the menu folder holding this menu item.
-     *
-     * Starting with the root folder, each index in the folder index array maps
-     * to a folder menu item within the previous folder.
-     *
-     * @return  The folder's index within the menu tree.
-     */
-    const juce::Array<int>& getFolderIndex() const;
+    const MenuIndex& getIndex() const;
 
     /**
      * @brief  Checks if this menu item has an index that can be moved by a
      *         given amount.
-     * 
+     *
      * @param offset  The value to add to the menu item index.
      * 
      * @return        True if this menu item has an index value i that can be
@@ -203,15 +203,15 @@ public:
     /**
      * @brief  Attempts to change the index of this menu item by some
      *         offset amount.
-     * 
-     * @param offset  This will be added to the menu item's current index, if
+     *
+     * @param offset  The amount to move the menu item's current index, if
      *                possible.
      * 
      * @return        Whether the menu item's index was successfully adjusted.
      */
-    bool moveDataIndex(int offset);
+    bool moveDataIndex(const int offset);
 
 private:
     /* Stores all menu data. */
-    juce::ScopedPointer<MenuItemData> dataSource;
+    MenuItemData::Ptr dataSource;
 };
