@@ -4,7 +4,10 @@
 /**
  * @file  MenuItemData.h
  *
- * @brief  Reads and writes properties of a menu item. 
+ * @brief  Reads and writes properties of a menu item in the application menu. 
+ *
+ * All menu items have a title string and an icon name or path.  Menu items
+ * define either an application to launch, or a folder of other menu items.
  */
 class MenuItemData : public juce::ReferenceCountedObject
 {
@@ -13,17 +16,7 @@ public:
     /* Custom reference-counting pointer object type. */
     typedef juce::ReferenceCountedObjectPtr<MenuItemData> Ptr;
 
-    /**
-     * @brief  Creates a menu data object for an item in the application menu.
-     *
-     * @param parent  The folder menu item this menu item is located in within
-     *                the menu tree, or nullptr if this menu item is the root
-     *                folder menu item.
-     *
-     * @param index   The object's index within its parent folder, or -1 if
-     *                this menu item is the root folder menu item.
-     */
-    MenuItemData(const MenuItemData::Ptr parent, const int index);
+    MenuItemData() { }
     
     virtual ~MenuItemData() { }
 
@@ -114,7 +107,7 @@ public:
     /**
      * @brief  Gets this menu item's index within its parent folder.
      *
-     * @return  The index, or -1 if this menu item is the root folder menu item. 
+     * @return  The index, or -1 if this menu item is the root folder menu item.
      */
     int getIndex() const;
 
@@ -156,16 +149,91 @@ public:
      */
     virtual int getMovableChildCount() = 0;
 
+    /**
+     * @brief  Gets a menu item contained in a folder menu item.
+     *
+     * @param index  The index of the child menu item to get.
+     *
+     * @return       The child menu item, or nullptr if the index is out of
+     *               bounds or this menu item is not a folder.
+     */
     MenuItemData::Ptr getChild(const int index) const;
+
+    /**
+     * @brief  Gets all menu items contained in a folder menu item.
+     *
+     * @return  All menu items within the folder, or an empty array if this
+     *          menu item is not a folder.
+     */
     juce::Array<MenuItemData::Ptr> getChildren() const;
 
-    bool addChild(const MenuItemData::Ptr newChild);
+    /**
+     * @brief  Attempts to insert a new menu item into this folder menu item's
+     *         array of child menu items, saving the change to this folder
+     *         item's data source.
+     *
+     * @param newChild  The new child menu item to insert.
+     *
+     * @param index     The index in the folder where the menu item should
+     *                  be inserted.  This should be between 0 and
+     *                  getMovableChildCount(), inclusive.
+     *
+     * @return          True if the new menu item was inserted, false if the
+     *                  index was out of bounds or this menu item is not a
+     *                  folder, and the new item could not be inserted.
+     */
     bool insertChild(const MenuItemData::Ptr newChild, const int index);
+
+    /**
+     * @brief  Attempts to replace a menu item in this folder menu item's
+     *         array of child menu items, saving the change to this folder
+     *         item's data source.
+     *
+     * @param newChild  The replacement menu item.
+     *
+     * @param index     The index in the folder of the menu item that should
+     *                  be replaced.  This should be between 0 and
+     *                  getMovableChildCount() - 1, inclusive.
+     *
+     * @return          True if the new menu item was replaced, false if the
+     *                  index was out of bounds or this menu item is not a
+     *                  folder, and the menu item could not be replaced.
+     */
     bool replaceChild(const MenuItemData::Ptr newChild, const int index);
+
+    /**
+     * @brief  Removes a menu item from this folder, deleting it from its
+     *         data source.
+     *
+     * @param index  The index of a menu item within this menu item.
+     *
+     * @return       True if a menu item was removed, false if this menu item
+     *               did not have a child menu item at the given index.
+     */
     bool removeChild(const int index);
+
+    /**
+     * @brief  Swaps the positions of two menu items, saving the change to this
+     *         menu item's data source.
+     *
+     * @param childIdx1  The index of the first child item to move.
+     *
+     * @param childIdx2  The index of the second child item to move.
+     *
+     * @return  True if the child menu items were swapped, false if the indices
+     *          did not specify two valid menu items within the folder's movable
+     *          child menu items.
+     */
     bool swapChildren(const int childIdx1, const int childIdx2);
     
+    /**
+     * @brief  Saves all changes to this menu item back to its data source.
+     */
     virtual void saveChanges() = 0;
+
+    /**
+     * @brief  Deletes this menu item from its data source.
+     */
     virtual void removeFromSource() = 0;
     
     /**
@@ -212,33 +280,15 @@ public:
      */
     virtual bool isEditable(const DataField dataField) = 0;
 
-    /**
-     * @brief  Gets the number of menu items in the folder opened by this menu
-     *         item.
-     *
-     * @return  The number of folder items, or zero if this menu item does not
-     *          open a folder.
-     */
-    virtual int getFolderSize() = 0;
-
-protected:
-    /**
-     * @brief  Updates the menu item data's saved index value.
-     *
-     * Use this to update the index value when menu items are moved.
-     *
-     * @param depth   The level in the menu tree where the index should be
-     *                moved.
-     *
-     * @param offset  The amount to offset the menu item index.
-     */
-    void updateIndex(const int depth, const int offset);
-
 private:
-    MenuIndex index;
+    /* The folder menu item that contains this menu item. */
+    MenuItemData::Ptr parent = nullptr;
 
-    /* Prevents unsafe concurrent access to menu item data. */
-    const juce::ReadWriteLock dataLock;
-    
+    /* The menu item's index within its parent folder. */
+    int index = -1;
+
+    /* Menu items contained in this menu item, if it is a folder. */
+    juce::Array<MenuItemData::Ptr> children;
+
     JUCE_DECLARE_NON_COPYABLE(MenuItemData);
 };

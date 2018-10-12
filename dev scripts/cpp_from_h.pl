@@ -21,7 +21,7 @@ if(-e $outFileName)
     {
         print "Replace existing file $outFileName?(Y/n):";
         $input = <STDIN>;
-        if($input eq "n\n")
+        if($input ne "Y\n")
         {
             die "Cancelled.\n";
         }
@@ -40,7 +40,9 @@ $header =~ s/^\n*(\#.*?\n+)*/\#include \"$inFileName\"\n/g;
 $header =~ s/\n\*/\n */g;
 #replace multiple asterisks with single asterisk
 $header =~ s/\*\*+/*/g;
-#remove javadoc fields
+#remove @brief fields before function summaries.
+$header =~ s/\s*\@brief\s*/ /g;
+#remove all other javadoc fields
 $header =~ s/\n\s*\*\s*@.*?\*\/\n*/\n *\//gs;  
 #remove empty lines in comment blocks
 $header =~ s/\n\s*\*\s*\n/\n/g;
@@ -66,6 +68,8 @@ while($altered ne $header)
 $header =~ s/virtual |static | override//g;
 #remove friend class declarations
 $header =~ s/friend.*?\n/\n/g;
+#remove type definitions
+$header =~ s/typedef.*?\n/\n/g;
 
 sub findCloseIndex
 {

@@ -1,67 +1,35 @@
-#include "MainConfigKeys.h"
-#include "MainConfigFile.h"
-#include "Utils.h"
 #include "AppMenuItem.h"
 
-/* Localized text keys: */
-static const constexpr char * localizedClassKey = "AppMenuItem";
-static const constexpr char * delete_APP = "delete_APP";
-static const constexpr char * question_mark = "question_mark";
-static const constexpr char * really_delete = "really_delete";
-static const constexpr char * edit_menu_item = "edit_menu_item";
-
 /*
- * Creates a menu item from some source of menu data.
+ * Creates a menu item from some source of menu data. 
  */
-AppMenuItem::AppMenuItem(MenuItemData::Ptr dataSource) : 
-Localized(localizedClassKey),
+AppMenuItem::AppMenuItem(MenuItemData::Ptr dataSource) :
 dataSource(dataSource) { }
 
 /*
  * Creates a menu item copying data from another menu item. 
  */
 AppMenuItem::AppMenuItem(const AppMenuItem& toCopy) :
-Localized(localizedClassKey),
 dataSource(toCopy.dataSource) { }
 
-
 /*
- * Checks if this menu item represents a folder within the menu.
+ * Checks if this menu item holds valid menu data.
  */
-bool AppMenuItem::isFolder() const
+bool AppMenuItem::isNull()
 {
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    return dataSource->isFolder();
+    return dataSource == nullptr;
 }
 
 /*
- * Gets the number of menu items in the folder opened by this menu item.
- */
-int AppMenuItem::getFolderSize()
-{
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    return dataSource->getFolderSize();
-}
-
-/**
  * Gets the menu item's displayed title.
  */
 juce::String AppMenuItem::getTitle() const
 {
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    return dataSource->getTitle();
-}
-
-/*
- * Sets the menu item's displayed title.
- */
-void AppMenuItem::setTitle(const juce::String& title)
-{
-    const juce::ScopedWriteLock writeLock(dataSource->getLock());
-    if(dataSource->isEditable(MenuItemData::DataField::title))
+    if(isNull())
     {
-        dataSource->setTitle(title);
+        return juce::String();
     }
+    return dataSource->getTitle();
 }
 
 /*
@@ -69,20 +37,11 @@ void AppMenuItem::setTitle(const juce::String& title)
  */
 juce::String AppMenuItem::getIconName() const
 {
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    return dataSource->getIconName();
-}
-
-/*
- * Sets the name or path used to load the menu item's icon file.
- */
-void AppMenuItem::setIconName(const juce::String& iconName)
-{
-    const juce::ScopedWriteLock writeLock(dataSource->getLock());
-    if(dataSource->isEditable(MenuItemData::DataField::icon))
+    if(isNull())
     {
-        dataSource->setIconName(iconName);
+        return juce::String();
     }
+    return dataSource->getIconName();
 }
 
 /*
@@ -90,41 +49,11 @@ void AppMenuItem::setIconName(const juce::String& iconName)
  */
 juce::String AppMenuItem::getCommand() const
 {
-    const juce::ScopedReadLock readLock(dataSource->getLock());
+    if(isNull())
+    {
+        return juce::String();
+    }
     return dataSource->getCommand();
-}
-
-/*
- * Sets the menu item's application launch command.
- */
-void AppMenuItem::setCommand(const juce::String& newCommand)
-{
-    const juce::ScopedWriteLock writeLock(dataSource->getLock());
-    if(dataSource->isEditable(MenuItemData::DataField::command))
-    {
-        dataSource->setCommand(newCommand);
-    }
-}
-
-/*
- * Gets all application categories associated with this menu item.
- */
-juce::StringArray AppMenuItem::getCategories() const
-{
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    return dataSource->getCategories();
-}
-
-/*
- * Sets the application categories connected to this menu item.
- */
-void AppMenuItem::setCategories(const juce::StringArray& categories)
-{
-    const juce::ScopedWriteLock writeLock(dataSource->getLock());
-    if(dataSource->isEditable(MenuItemData::DataField::categories))
-    {
-        dataSource->setCategories(categories);
-    }
 }
 
 /*
@@ -132,110 +61,35 @@ void AppMenuItem::setCategories(const juce::StringArray& categories)
  */
 bool AppMenuItem::getLaunchedInTerm() const
 {
-    const juce::ScopedReadLock readLock(dataSource->getLock());
+    if(isNull())
+    {
+        return false;
+    }
     return dataSource->getLaunchedInTerm();
 }
 
 /*
- * Sets if this menu item runs its command in a new terminal window.
+ * Gets all application categories associated with this menu item.
  */
-void AppMenuItem::setLaunchedInTerm(const bool termLaunch)
+juce::StringArray AppMenuItem::getCategories() const
 {
-    const juce::ScopedWriteLock writeLock(dataSource->getLock());
-    if(dataSource->isEditable(MenuItemData::DataField::termLaunchOption))
+    if(isNull())
     {
-        dataSource->setLaunchedInTerm(termLaunch);
+        return juce::StringArray();
     }
+    return dataSource->getCategories();
 }
 
 /*
- * Compares this menu item with another.
+ * Gets the folder menu item that contains this menu item.
  */
-bool AppMenuItem::operator==(const AppMenuItem& toCompare) const
+AppMenuItem AppMenuItem::getParentFolder() const
 {
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    const juce::ScopedReadLock otherReadLock(toCompare.dataSource->getLock());
-    if(dataSource == toCompare.dataSource)
+    if(isNull())
     {
-        return true;
+        return AppMenuItem();
     }
-    return getTitle() == toCompare.getTitle()
-            && getIconName() == toCompare.getIconName()
-            && getCategories() == toCompare.getCategories()
-            && getCommand() == toCompare.getCommand()
-            && getLaunchedInTerm() == toCompare.getLaunchedInTerm();
-}
-
-/*
- * Compares this menu item with another.
- */
-bool AppMenuItem::operator<(const AppMenuItem& toCompare) const
-{
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    const juce::ScopedReadLock otherReadLock(toCompare.dataSource->getLock());
-    return dataSource < toCompare.dataSource;
-}
-
-/*
- * Displays an alert to the user asking if this item should be removed from the
- * menu, and deletes the menu item if the user confirms.
- */
-void AppMenuItem::deleteOnConfim(const std::function<void()> onConfirm)
-{
-    confirmAction(
-            localeText(delete_APP) + getTitle() + localeText(question_mark),
-            localeText(really_delete),
-            [this, onConfirm]()
-            {
-                const juce::ScopedWriteLock writeLock(dataSource->getLock());
-                dataSource->deleteFromSource();
-                onConfirm();
-            });
-}
-
-/*
- * Checks if this menu item has categories that may be edited.
- */
-bool AppMenuItem::hasEditableCategories() const
-{
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    return dataSource->isEditable(MenuItemData::DataField::categories);
-}
-
-/*
- * Checks if the menu item has an editable command field.
- */
-bool AppMenuItem::hasEditableCommand() const
-{
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    return dataSource->isEditable(MenuItemData::DataField::command);
-}
-
-/*
- * Gets a title to use when editing this menu item.
- */
-juce::String AppMenuItem::getEditorTitle() const
-{
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    return localeText(edit_menu_item);
-}
-
-/*
- * Removes the source of this menu item's data.
- */
-void AppMenuItem::deleteFromSource()
-{
-    const juce::ScopedWriteLock writeLock(dataSource->getLock());
-    dataSource->deleteFromSource();
-}
-
-/*
- * Writes all changes to this menu item back to its data source.
- */
-void AppMenuItem::updateSource()
-{
-    const juce::ScopedWriteLock writeLock(dataSource->getLock());
-    dataSource->updateSource();
+    return AppMenuItem(dataSource->getParent());
 }
 
 /*
@@ -243,26 +97,177 @@ void AppMenuItem::updateSource()
  */
 const MenuIndex& AppMenuItem::getIndex() const
 {
-    const juce::ScopedReadLock readLock(dataSource->getLock());
+    if(isNull())
+    {
+        return -1;
+    }
     return dataSource->getIndex();
 }
-    
+
 /*
- * Checks if this menu item has an index that can be moved by a given amount.
+ * Checks if this menu item represents a folder within the menu.
  */
-bool AppMenuItem::canMoveIndex(const int offset) const
+bool AppMenuItem::isFolder() const
 {
-    const juce::ScopedReadLock readLock(dataSource->getLock());
-    return dataSource->canMoveIndex(offset);
+    if(isNull())
+    {
+        return false; 
+    }
+    return dataSource->isFolder();
 }
 
 /*
- * Attempts to change the index of this menu item by some offset amount.
+ * Gets the number of menu items in the folder opened by this menu item.
  */
-bool AppMenuItem::moveDataIndex(const int offset)
+int AppMenuItem::getFolderSize() const
 {
-    const juce::ScopedWriteLock writeLock(dataSource->getLock());
-    return dataSource->moveIndex(offset);
+    if(isNull())
+    {
+        return 0; 
+    }
+    return dataSource->getFolderSize();
 }
 
+/*
+ * Gets the number of folder items held by this menu item that can be reordered.
+ */
+int AppMenuItem::getMovableChildCount() const
+{
+    if(isNull())
+    {
+        return 0; 
+    }
+    return dataSource->getMovableChildCount();
+} 
 
+/*
+ * Gets a menu item held within this menu item.
+ */
+AppMenuItem AppMenuItem::getFolderItem(const int folderIndex) const
+{
+    if(isNull())
+    {
+        return AppMenuItem(); 
+    }
+    return AppMenuItem(dataSource->getChild(folderIndex));
+}
+
+/*
+ * Gets all menu items held within this menu item.
+ */
+juce::Array<AppMenuItem> AppMenuItem::getFolderItems() const
+{
+    if(isNull())
+    {
+        return {}; 
+    }
+    juce::Array<AppMenuItem> folderItems;
+    juce::Array<MenuItemData::Ptr> childData = dataSource->getChildren();
+    for(const MenuItemData::Ptr& item : childData)
+    {
+        folderItems.add(AppMenuItem(item);
+    }
+    return folderItems;
+}
+
+/*
+ * Compares this menu item with another.
+ */
+bool AppMenuItem::operator==(const AppMenuItem& toCompare) const
+{
+    if(dataSource == toCompare.dataSource)
+    {
+        return true;
+    }
+    return getTitle() == toCompare.getTitle()
+        && getIconName() == toCompare.getIconName()
+        && getCommand() == toCompare.getCommand()
+        && getLaunchedInTerm() == toCompare.getLaunchedInTerm()
+        && getCategories() == toCompare.getCategories();
+}
+
+/*
+ * Compares this menu item with another.
+ */
+bool AppMenuItem::operator<(const AppMenuItem& toCompare) const
+{
+    return getTitle() < toCompare.getTitle();
+}
+
+/*
+ * Gets a menu item's internal data object.
+ */
+MenuItemData::Ptr AppMenuItem::Editor::getMenuItemData
+(AppMenuItem& menuItem) const
+{
+    return menuItem.dataSource;
+}
+
+/*
+ * Removes a menu item's internal data object.
+ */
+MenuItemData::Ptr AppMenuItem::Editor::clearMenuItemData
+(AppMenuItem& menuItem) const
+{
+    menuItem.dataSource = nullptr;
+}
+
+/*
+ * Checks if this menu item has categories that may be edited.
+ */
+bool AppMenuItem::hasEditableCategories() const
+{
+    if(isNull())
+    {
+        return false;
+    }
+    return dataSource.isEditable(MenuItemData::DataField::categories);
+}
+
+/*
+ * Checks if the menu item has an editable command field.
+ */
+bool AppMenuItem::hasEditableCommand() const
+{
+    if(isNull())
+    {
+        return false;
+    }
+    return dataSource.isEditable(MenuItemData::DataField::command);
+}
+
+/*
+ * Gets an appropriate title to use for a deletion confirmation window.
+ */
+juce::String AppMenuItem::getConfirmDeleteTitle() const
+{
+    if(isNull())
+    {
+        return juce::String();
+    }
+    return dataSource.getConfirmDeleteTitle();
+}
+
+/*
+ * Gets appropriate descriptive text for a deletion confirmation window.
+ */
+juce::String AppMenuItem::getConfirmDeleteMessage() const
+{
+    if(isNull())
+    {
+        return juce::String();
+    }
+    return dataSource.getConfirmDeleteMessage();
+}
+
+/*
+ * Gets a title to use when editing this menu item.
+ */
+juce::String AppMenuItem::getEditorTitle() const
+{
+    if(isNull())
+    {
+        return juce::String();
+    }
+    return dataSource.getEditorTitle();
+}
