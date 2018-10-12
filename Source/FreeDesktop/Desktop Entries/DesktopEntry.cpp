@@ -9,8 +9,11 @@
 #include "DesktopEntryUtils.h"
 #include "DesktopEntry.h"
 
-/* Directory where desktop entries are stored within $XDG_DATA_DIRS */
-static const juce::String entryDirectory = "/applications/";
+/* Directory where desktop entries are stored within $XDG_DATA_DIRS: */
+static const constexpr char* entryDirectory = "/applications/";
+
+/* Desktop entry file extension: */
+static const constexpr char* fileExtension = ".desktop";
 
 /**
  * @brief Creates a DataConverter that gets and sets typical string values.
@@ -23,17 +26,17 @@ static const juce::String entryDirectory = "/applications/";
  * @return                The DataConverter that gets and sets the string
  *                        parameter.
  */
-#define STRING_CONVERTER(stringParam, isLocaleString) \
-{ \
-    .readValue = [](DesktopEntry* thisEntry, const juce::String& value) \
-    { \
-        thisEntry->stringParam = DesktopEntryUtils::processStringValue \
-            (value, thisEntry->entryFile, isLocaleString); \
-    }, \
-    .getValue = [](DesktopEntry* thisEntry)->juce::String \
-    { \
-        return DesktopEntryUtils::addEscapeSequences(thisEntry->stringParam); \
-    } \
+#define STRING_CONVERTER(stringParam, isLocaleString)                          \
+{                                                                              \
+    .readValue = [](DesktopEntry* thisEntry, const juce::String& value)        \
+    {                                                                          \
+        thisEntry->stringParam = DesktopEntryUtils::processStringValue         \
+            (value, thisEntry->entryFile, isLocaleString);                     \
+    },                                                                         \
+    .getValue = [](DesktopEntry* thisEntry)->juce::String                      \
+    {                                                                          \
+        return DesktopEntryUtils::addEscapeSequences(thisEntry->stringParam);  \
+    }                                                                          \
 }
 
 /**
@@ -47,18 +50,18 @@ static const juce::String entryDirectory = "/applications/";
  * @return                The DataConverter that gets and sets the list
  *                        parameter.
  */
-#define LIST_CONVERTER(listParam, isLocaleString) \
-{ \
-    .readValue = [](DesktopEntry* thisEntry, const juce::String& value) \
-    { \
-        thisEntry->listParam = DesktopEntryUtils::parseList \
-            (value, thisEntry->entryFile, isLocaleString); \
-    }, \
-    .getValue = [](DesktopEntry* thisEntry)->juce::String \
-    { \
-        return DesktopEntryUtils::listString(thisEntry->listParam, \
-                isLocaleString); \
-    } \
+#define LIST_CONVERTER(listParam, isLocaleString)                              \
+{                                                                              \
+    .readValue = [](DesktopEntry* thisEntry, const juce::String& value)        \
+    {                                                                          \
+        thisEntry->listParam = DesktopEntryUtils::parseList                    \
+            (value, thisEntry->entryFile, isLocaleString);                     \
+    },                                                                         \
+    .getValue = [](DesktopEntry* thisEntry)->juce::String                      \
+    {                                                                          \
+        return DesktopEntryUtils::listString(thisEntry->listParam,             \
+                isLocaleString);                                               \
+    }                                                                          \
 }
 
 /**
@@ -69,17 +72,17 @@ static const juce::String entryDirectory = "/applications/";
  * @return                The DataConverter that gets and sets the bool
  *                        parameter.
  */
-#define BOOL_CONVERTER(boolParam) \
-{ \
-    .readValue = [](DesktopEntry* thisEntry, const juce::String& value) \
-    { \
-        thisEntry->boolParam = DesktopEntryUtils::parseBool \
-            (value, thisEntry->entryFile); \
-    }, \
-    .getValue = [](DesktopEntry* thisEntry)->juce::String \
-    { \
-        return DesktopEntryUtils::boolString(thisEntry->boolParam); \
-    } \
+#define BOOL_CONVERTER(boolParam)                                              \
+{                                                                              \
+    .readValue = [](DesktopEntry* thisEntry, const juce::String& value)        \
+    {                                                                          \
+        thisEntry->boolParam = DesktopEntryUtils::parseBool                    \
+            (value, thisEntry->entryFile);                                     \
+    },                                                                         \
+    .getValue = [](DesktopEntry* thisEntry)->juce::String                      \
+    {                                                                          \
+        return DesktopEntryUtils::boolString(thisEntry->boolParam);            \
+    }                                                                          \
 }
 
 /* Stores all data keys defined in the desktop entry specifications,
@@ -115,7 +118,6 @@ DesktopEntry::keyGuide
                 const std::map <juce::String, Type> typeMap =
                 {
                     { "Application", Type::application },
-                    { "Directory",   Type::directory },
                     { "Link",        Type::link }
                 };
                 auto searchIter = typeMap.find(value);
@@ -135,8 +137,6 @@ DesktopEntry::keyGuide
                 {
                     case Type::application:
                         return "Application";
-                    case Type::directory:
-                        return "Directory";
                     case Type::link:
                         return "Link";
                 }
@@ -206,22 +206,15 @@ DesktopEntry::keyGuide
 /*
  * Loads desktop entry data from a .desktop or .directory file.
  */
-DesktopEntry::DesktopEntry(const juce::File& entryFile) :
-entryFile(entryFile)
+DesktopEntry::DesktopEntry
+(const juce::File& entryFile, const juce::String& entryID) :
+entryFile(entryFile), desktopFileID(entryID)
 {
     using namespace juce;
-    String entryPath = entryFile.getFullPathName();
-    StringArray dataDirs = XDGDirectories::getDataSearchPaths();
-    for(const String& dataDir : dataDirs)
-    {
-        if(entryPath.contains(dataDir))
-        {
-            desktopFileID = entryPath.fromLastOccurrenceOf
-                (dataDir, false, false)
-                .replaceCharacter(File::getSeparatorChar(), '-');
-            break;
-        }
-    }
+    const ScopedWriteLock initLock(entryLock);
+    jassert(entryFile.getFullPathName()
+            .replaceCharacter(File::getSeparatorChar(), '-')
+            .contains(entryID));
     readEntryFile();
 }
 
@@ -229,11 +222,12 @@ entryFile(entryFile)
  *  Creates a desktop entry object without an existing file.
  */
 DesktopEntry::DesktopEntry
-(const juce::String& name, const juce::String& filename, const Type type)
+(const juce::String& name, const juce::String& entryID, const Type type) :
+desktopFileID(entryID)
 {
     using namespace juce;
-    setName(name);
-    desktopFileID = filename.replaceCharacter(File::getSeparatorChar(), '-');
+    const ScopedWriteLock initLock(entryLock);
+    String filename = entryID.replaceCharacter('-', File::getSeparatorChar());
     // Validate filename:
     bool atElementBeginning = true;
     for(int i = 0; i < filename.length(); i++)
@@ -266,8 +260,7 @@ DesktopEntry::DesktopEntry
         throw DesktopEntryFormatError(filename);
     }
     entryFile = File(XDGDirectories::getUserDataPath() + entryDirectory
-            + filename 
-            + ((type == Type::directory) ? ".directory" : ".desktop"));
+            + filename + fileExtension);
     // Check if the file exists already, and if so, read data from it.
     if(entryFile.existsAsFile())
     {
@@ -275,7 +268,7 @@ DesktopEntry::DesktopEntry
     }
     // Apply name and type, possibly replacing existing file values.
     this->type = type;
-    setName(name);
+    this->name = name;
 }
           
 /*
@@ -291,6 +284,9 @@ bool DesktopEntry::operator==(const DesktopEntry& toCompare) const
  */
 bool DesktopEntry::operator<(const DesktopEntry& toCompare) const
 {
+    using namespace juce;
+    const ScopedReadLock selfReadLock(entryLock);
+    const ScopedReadLock rhsReadLock(toCompare.entryLock);
     return name < toCompare.name;
 }
 
@@ -309,6 +305,7 @@ juce::String DesktopEntry::getDesktopFileId() const
  */
 DesktopEntry::Type DesktopEntry::getType() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return type;
 }
 
@@ -317,6 +314,7 @@ DesktopEntry::Type DesktopEntry::getType() const
  */
 juce::String DesktopEntry::getName() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return name;
 }
 
@@ -325,6 +323,7 @@ juce::String DesktopEntry::getName() const
  */
 juce::String DesktopEntry::getGenericName() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return genericName;
 }
 
@@ -333,6 +332,7 @@ juce::String DesktopEntry::getGenericName() const
  */
 bool DesktopEntry::shouldBeDisplayed() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return !noDisplay && onlyShowIn.isEmpty();
 }
 
@@ -341,6 +341,7 @@ bool DesktopEntry::shouldBeDisplayed() const
  */
 juce::String DesktopEntry::getIcon() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return icon;
 }
 
@@ -350,6 +351,7 @@ juce::String DesktopEntry::getIcon() const
 juce::String DesktopEntry::getLaunchCommand() const
 {
     using namespace juce;
+    const ScopedReadLock readLock(entryLock);
     String command = exec;
     if(terminal && command.isNotEmpty())
     {
@@ -365,6 +367,7 @@ juce::String DesktopEntry::getLaunchCommand() const
  */
 juce::String DesktopEntry::getExec() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return exec;
 }
 
@@ -374,6 +377,7 @@ juce::String DesktopEntry::getExec() const
  */
 juce::String DesktopEntry::getTryExec() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return tryExec;
 }
 
@@ -382,6 +386,7 @@ juce::String DesktopEntry::getTryExec() const
  */
 juce::String DesktopEntry::getRunDirectory() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return path;
 }
 
@@ -390,6 +395,7 @@ juce::String DesktopEntry::getRunDirectory() const
  */
 bool DesktopEntry::getLaunchedInTerm() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return terminal;
 }
 
@@ -399,6 +405,7 @@ bool DesktopEntry::getLaunchedInTerm() const
 juce::StringArray DesktopEntry::getActionNames() const
 {
     using namespace juce;
+    const ScopedReadLock readLock(entryLock);
     StringArray names;
     for(const Action& action : actions)
     {
@@ -412,6 +419,7 @@ juce::StringArray DesktopEntry::getActionNames() const
  */
 juce::String DesktopEntry::getActionIcon(const int index) const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     if(index < 0 || index >= actions.size())
     {
         return juce::String();
@@ -424,6 +432,7 @@ juce::String DesktopEntry::getActionIcon(const int index) const
  */
 juce::String DesktopEntry::getActionLaunchCommand(const int index) const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     if(index < 0 || index >= actions.size())
     {
         return juce::String();
@@ -436,6 +445,7 @@ juce::String DesktopEntry::getActionLaunchCommand(const int index) const
  */
 juce::StringArray DesktopEntry::getCategories() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return categories;
 }
 
@@ -444,6 +454,7 @@ juce::StringArray DesktopEntry::getCategories() const
  */
 juce::StringArray DesktopEntry::getKeywords() const
 {
+    const juce::ScopedReadLock readLock(entryLock);
     return keywords;
 }
 
@@ -454,6 +465,7 @@ juce::StringArray DesktopEntry::getKeywords() const
  */
 void DesktopEntry::setName(const juce::String& newName)
 {
+    const juce::ScopedWriteLock writeLock(entryLock);
     name = newName;
 }
 

@@ -91,25 +91,25 @@ public:
     void reloadEntry(const juce::String& entryFileID);
 
     /**
-     * @brief  Discards any existing entry data and asynchronously reloads all
-     *         desktop entries from the file system.
-     * 
-     * @param notifyCallback  An optional callback function to send loading
-     *                        progress update strings.  This will be called 
-     *                        asynchronously on the message thread.
-     *
-     * @param onFinish        An optional callback function to run on 
-     *                        completion.  This will be called asynchronously on
-     *                        the message thread.
+     * @brief  Scans all desktop entry files for any changes made since the 
+     *         last time the DesktopEntryLoader read the entry files.
      */
-    void loadEntries
-    (std::function<void(juce::String) > notifyCallback 
-            = std::function<void(juce::String)>(),
-            std::function<void() > onFinish = std::function<void()>());
+    void scanForChanges();
 
     /**
-     * @brief  Removes the notifyCallback and onFinish callback functions that
-     *         are currently set to run when the thread finishes loading. 
+     * @brief  Schedules an action to run once all entries have been loaded.
+     *
+     * @param onFinish  A callback function to run when the thread is done 
+     *                  loading or reloading entries.  If loading finished
+     *                  before this function was called, the callback will run
+     *                  immediately.  Otherwise, it will run on the Juce message
+     *                  thread as soon as the desktop entry loader is finished.
+     */
+    void waitUntilLoaded(std::function<void()> onFinish);
+
+    /**
+     * @brief  Removes any onFinish callback functions that are currently set to
+     *         run when the thread finishes loading.
      *
      * This should be called whenever it's necessary to delete an object
      * referenced in the callbacks while desktop entries are still loading.

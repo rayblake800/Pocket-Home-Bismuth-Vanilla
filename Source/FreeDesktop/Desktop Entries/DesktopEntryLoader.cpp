@@ -30,11 +30,16 @@ static const constexpr char* reading_entry = "reading_entry";
  */
 class DesktopEntryThread : public ThreadResource, private Localized
 {
+private:
     /* Only DesktopEntryLoader has direct access. */
     friend class DesktopEntryLoader;
+
+    /* The last time desktop entry files were scanned, relative to 
+       Time::getMillisecondCounter(). */
+    juce::uint32 lastScanTime = 0;
     
-    /* Maps desktop ID strings to unloaded desktop entry files. */
-    std::map<juce::String, juce::File> pendingEntryFiles;
+    /* Maps desktop ID strings to desktop entry files. */
+    std::map<juce::String, juce::File> entryFiles;
 
     /* Maps desktop ID strings to desktop entry objects. */
     std::map<juce::String, DesktopEntry> entries;
@@ -42,11 +47,8 @@ class DesktopEntryThread : public ThreadResource, private Localized
     /* Maps category names to lists of desktop file Ids. */
     std::map<juce::String, juce::StringArray> categories;
 
-    /* Callback function to send loading progress update strings. */
-    std::function<void(juce::String) > notifyCallback;
-    
-    /* Callback to run when desktop entries finish loading. */
-    std::function<void() > onFinish;
+    /* Callbacks to run when desktop entries finish loading. */
+    juce::Array<std::function<void()>> onFinish;
 
     DesktopEntryThread() : ThreadResource(desktopEntryThreadKey),
     Localized("DesktopEntryThread") { }
