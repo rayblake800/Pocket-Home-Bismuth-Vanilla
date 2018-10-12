@@ -116,15 +116,12 @@ public:
 
     AppMenuItem getRootFolderItem() const;
 
-    void addMenuItem(const AppMenuItem& toCopy, AppMenuItem& folder);
-
-    bool insertMenuItem(const AppMenuItem& toCopy, AppMenuItem& folder,
+    bool insertMenuItem(const AppMenuItem& newItem, AppMenuItem& folder,
             const int index);
 
-    bool replaceMenuItem(const AppMenuItem& toCopy, AppMenuItem& folder,
-            const int index);
+    bool replaceMenuItem(AppMenuItem& toReplace, AppMenuItem& replacement);
 
-    bool removeMenuItem(AppMenuItem& folder, const int index);
+    bool removeMenuItem(AppMenuItem& toRemove);
     
     bool swapMenuItems(AppMenuItem& folder,
             const int folderIdx1, const int folderIdx2);
