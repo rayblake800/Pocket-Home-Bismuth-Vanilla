@@ -127,11 +127,6 @@ public:
     int getFolderSize() const;
 
     /**
-     * @brief  Deletes this menu item data from its source.
-     */
-    virtual void deleteFromSource() = 0;
-
-    /**
      * @brief  Writes all changes to this menu item back to its data source.
      */
     virtual void updateSource() = 0;
@@ -152,12 +147,12 @@ public:
     /**
      * @brief  Gets a menu item contained in a folder menu item.
      *
-     * @param index  The index of the child menu item to get.
+     * @param childIndex  The index of the child menu item to get.
      *
-     * @return       The child menu item, or nullptr if the index is out of
-     *               bounds or this menu item is not a folder.
+     * @return            The child menu item, or nullptr if the index is out of
+     *                    bounds or this menu item is not a folder.
      */
-    MenuItemData::Ptr getChild(const int index) const;
+    MenuItemData::Ptr getChild(const int childIndex) const;
 
     /**
      * @brief  Gets all menu items contained in a folder menu item.
@@ -172,45 +167,38 @@ public:
      *         array of child menu items, saving the change to this folder
      *         item's data source.
      *
-     * @param newChild  The new child menu item to insert.
+     * @param newChild    The new child menu item to insert.
      *
-     * @param index     The index in the folder where the menu item should
-     *                  be inserted.  This should be between 0 and
-     *                  getMovableChildCount(), inclusive.
+     * @param childIndex  The index in the folder where the menu item should
+     *                    be inserted.  This should be between 0 and
+     *                    getMovableChildCount(), inclusive.
      *
-     * @return          True if the new menu item was inserted, false if the
-     *                  index was out of bounds or this menu item is not a
-     *                  folder, and the new item could not be inserted.
+     * @return            True if the new menu item was inserted, false if the
+     *                    index was out of bounds or this menu item is not a
+     *                    folder, and the new item could not be inserted.
      */
-    bool insertChild(const MenuItemData::Ptr newChild, const int index);
+    bool insertChild(const MenuItemData::Ptr newChild, const int childIndex);
 
     /**
-     * @brief  Attempts to replace a menu item in this folder menu item's
-     *         array of child menu items, saving the change to this folder
-     *         item's data source.
+     * @brief  Attempts to replace this menu item in its parent folder, saving 
+     *         the change to the menu item's data source.
      *
      * @param newChild  The replacement menu item.
      *
-     * @param index     The index in the folder of the menu item that should
-     *                  be replaced.  This should be between 0 and
-     *                  getMovableChildCount() - 1, inclusive.
-     *
      * @return          True if the new menu item was replaced, false if the
-     *                  index was out of bounds or this menu item is not a
-     *                  folder, and the menu item could not be replaced.
+     *                  menu item was not located in the menu, or was not a
+     *                  movable menu item, and could not be replaced.
      */
-    bool replaceChild(const MenuItemData::Ptr newChild, const int index);
+    bool replace(const MenuItemData::Ptr replacement);
 
     /**
-     * @brief  Removes a menu item from this folder, deleting it from its
+     * @brief  Removes this menu item from its folder, deleting it from its
      *         data source.
      *
-     * @param index  The index of a menu item within this menu item.
-     *
      * @return       True if a menu item was removed, false if this menu item
-     *               did not have a child menu item at the given index.
+     *               was not located in a folder.
      */
-    bool removeChild(const int index);
+    bool remove();
 
     /**
      * @brief  Swaps the positions of two menu items, saving the change to this
@@ -281,6 +269,11 @@ public:
     virtual bool isEditable(const DataField dataField) = 0;
 
 private:
+    /**
+     * @brief  Deletes this menu item data from its data source.
+     */
+    virtual void deleteFromSource() = 0;
+
     /* The folder menu item that contains this menu item. */
     MenuItemData::Ptr parent = nullptr;
 

@@ -21,7 +21,7 @@ int MenuItemData::getIndex() const
  */
 bool MenuItemData::isFolder() const
 {
-    return !getCommand.isEmpty();
+    return getCommand().isEmpty();
 }
 
 /*
@@ -35,13 +35,13 @@ int MenuItemData::getFolderSize() const
 /*
  * Gets a menu item contained in a folder menu item.
  */
-MenuItemData::Ptr MenuItemData::getChild(const int index) const
+MenuItemData::Ptr MenuItemData::getChild(const int childIndex) const
 {
-    if(index < 0 || index >= children.size())
+    if(childIndex < 0 || childIndex >= children.size())
     {
         return nullptr;
     }
-    return children[index];
+    return children[childIndex];
 }
 
 /*
@@ -57,16 +57,16 @@ juce::Array<MenuItemData::Ptr> MenuItemData::getChildren() const
  * child menu items, saving the change to this folder item's data source.
  */
 bool MenuItemData::insertChild
-(const MenuItemData::Ptr newChild, const int index)
+(const MenuItemData::Ptr newChild, const int childIndex)
 {
-    if(index < 0 || index > getMovableChildCount())
+    if(childIndex < 0 || childIndex > getMovableChildCount())
     {
         return false;
     }
-    children.insert(index, newChild);
+    children.insert(childIndex, newChild);
     newChild->parent = this;
-    newChild->index = index;
-    for(int i = index + 1; i < children.size(); i++)
+    newChild->index = childIndex;
+    for(int i = childIndex + 1; i < children.size(); i++)
     {
         children[i]->index++;
     }
@@ -75,35 +75,43 @@ bool MenuItemData::insertChild
 }
 
 /*
- * Attempts to replace a menu item in this folder menu item's array of child 
- * menu items, saving the change to this folder item's data source.
+ * Attempts to replace this menu item in its parent folder, saving the change
+ * to the menu item's data source.
  */
-bool MenuItemData::replaceChild
-(const MenuItemData::Ptr newChild, const int index)
+bool MenuItemData::replace (const MenuItemData::Ptr replacement)
 {
-    if(index < 0 || index > getMovableChildCount())
+    if(parent == nullptr || index >= parent->getMovableChildCount()
+            || index < 0)
     {
         return false;
     }
-    children[index]->deleteFromSource();
-    newChild->parent = this;
-    newChild->index = index;
-    newChild->saveChanges();
-    children.set(index, newChild);
+    replacement->parent = parent;
+    replacement->index = index;
+    parent->children.set(index, replacement);
+    deleteFromSource();
+    parent->saveChanges();
+    parent = nullptr;
+    index = -1;
     return true;
 }
 
 /*
- * Removes a menu item from this folder, deleting it from its data source.
+ * Removes this menu item from its folder, deleting it from its data source.
  */
-bool MenuItemData::removeChild(const int index)
+bool MenuItemData::remove()
 {
-    if(index < 0 || index >= children.size())
+    if(parent == nullptr || index < 0)
     {
         return false;
     }
-    children[index]->deleteFromSource();
-    children.remove(index);
+    parent->children.remove(index);
+    for(int i = index; i < parent->children.size(); i++)
+    {
+        parent->children[i]->index++;
+    }
+    parent = nullptr;
+    index = -1;
+    deleteFromSource();
     return true;
 }
 
@@ -117,8 +125,8 @@ bool MenuItemData::swapChildren(const int childIdx1, const int childIdx2)
     {
         return false;
     }
-    chilren[childIdx1]->index = childIdx2;
-    chilren[childIdx2]->index = childIdx1;
     children.swap(childIdx1, childIdx2);
+    children[childIdx1]->index = childIdx1;
+    children[childIdx2]->index = childIdx2;
     return true;
 }

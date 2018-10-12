@@ -4,19 +4,14 @@
 #include "DesktopEntryFileError.h"
 #include "DesktopEntryItemData.h"
 
-DesktopEntryItemData::DesktopEntryItemData(const DesktopEntry& desktopEntry, 
-        const MenuIndex& menuIndex) :
-desktopEntry(desktopEntry),
-MenuItemData(menuIndex),
-Localized("DesktopEntryItemData") { }
+//localized text keys: 
+static const constexpr char * remove_link_to = "remove_link_to";
+static const constexpr char * question_mark = "question_mark";
+static const constexpr char * will_hide = "will_hide";
+static const constexpr char * edit_app = "edit_app";
 
-/*
- * Checks if this menu item represents a folder within the menu.
- */
-bool DesktopEntryItemData::isFolder() const
-{
-    return desktopEntry.getType() == DesktopEntry::Type::directory;
-}
+DesktopEntryItemData::DesktopEntryItemData(const DesktopEntry& desktopEntry) :
+desktopEntry(desktopEntry), Localized("DesktopEntryItemData") { }
 
 /*
  * Gets the menu item's displayed title.
@@ -24,6 +19,38 @@ bool DesktopEntryItemData::isFolder() const
 juce::String DesktopEntryItemData::getTitle() const
 {
     return desktopEntry.getName();
+}
+
+/*
+ * Gets the name or path use to load the menu item's icon file.
+ */
+juce::String DesktopEntryItemData::getIconName() const
+{
+    return desktopEntry.getIcon();
+}
+
+/*
+ * Gets the menu item's application launch command.
+ */
+juce::String DesktopEntryItemData::getCommand() const
+{
+    return desktopEntry.getExec();
+}
+
+/*
+ * Checks if this menu item launches an application in a new terminal window.
+ */
+bool DesktopEntryItemData::getLaunchedInTerm() const
+{
+    return desktopEntry.getLaunchedInTerm();
+}
+
+/*
+ * Gets the application categories connected to this menu item.
+ */
+juce::StringArray DesktopEntryItemData::getCategories() const
+{
+    return desktopEntry.getCategories();
 }
 
 /*
@@ -43,14 +70,6 @@ void DesktopEntryItemData::setTitle(const juce::String& title)
 }
 
 /*
- * Gets the name or path use to load the menu item's icon file.
- */
-juce::String DesktopEntryItemData::getIconName() const
-{
-    return desktopEntry.getIcon();
-}
-
-/*
  * Sets the name or path used to load the menu item's icon file.
  */
 void DesktopEntryItemData::setIconName(const juce::String& iconName)
@@ -64,38 +83,6 @@ void DesktopEntryItemData::setIconName(const juce::String& iconName)
         DBG("DesktopEntryItemData::" << __func__
                 << ": Invalid icon " << iconName);
     }
-}
-
-/*
- * Gets the application categories connected to this menu item.
- */
-juce::StringArray DesktopEntryItemData::getCategories() const
-{
-    return desktopEntry.getCategories();
-}
-
-/*
- * Sets the application categories connected to this menu item.
- */
-void DesktopEntryItemData::setCategories(const juce::StringArray& categories)
-{
-    try
-    {
-        desktopEntry.setCategories(categories);
-    }
-    catch(DesktopEntryFormatError e)
-    {
-        DBG("DesktopEntryItemData::" << __func__
-                << ": Invalid categories " << categories.joinIntoString(";"));
-    }
-}
-
-/*
- * Gets the menu item's application launch command.
- */
-juce::String DesktopEntryItemData::getCommand() const
-{
-    return desktopEntry.getExec();
 }
 
 /*
@@ -115,14 +102,6 @@ void DesktopEntryItemData::setCommand(const juce::String& newCommand)
 }
 
 /*
- * Checks if this menu item launches an application in a new terminal window.
- */
-bool DesktopEntryItemData::getLaunchedInTerm() const
-{
-    return desktopEntry.getLaunchedInTerm();
-}
-
-/*
  * Sets if this menu item runs its command in a new terminal window. */
 void DesktopEntryItemData::setLaunchedInTerm(const bool termLaunch)
 {
@@ -130,26 +109,33 @@ void DesktopEntryItemData::setLaunchedInTerm(const bool termLaunch)
 }
 
 /*
- * Deletes this menu item data from its source JSON file.
+ * Sets the application categories connected to this menu item.
  */
-void DesktopEntryItemData::deleteFromSource()
+void DesktopEntryItemData::setCategories(const juce::StringArray& categories)
 {
-    desktopEntry.setIfDisplayed(false);
     try
     {
-        desktopEntry.writeFile();
+        desktopEntry.setCategories(categories);
     }
-    catch(DesktopEntryFileError e)
+    catch(DesktopEntryFormatError e)
     {
-        DBG("DesktopEntryItemData::" << __func__ 
-                << ": Failed to hide entry:" << e.what());
+        DBG("DesktopEntryItemData::" << __func__
+                << ": Invalid categories " << categories.joinIntoString(";"));
     }
+}
+
+/*
+ * Gets the number of folder items held by this menu item that can be reordered.
+ */
+int DesktopEntryItemData::getMovableChildCount()
+{
+    return 0;
 }
 
 /*
  * Writes all changes to this menu item back to its data source.
  */
-void DesktopEntryItemData::updateSource()
+void DesktopEntryItemData::saveChanges()
 {
     try
     {
@@ -160,25 +146,6 @@ void DesktopEntryItemData::updateSource()
         DBG("DesktopEntryItemData::" << __func__ << ": Failed to write changes:"
                 << e.what());
     }
-}
-
-
-/*
- * Checks if this menu item can be moved within its menu folder.
- */
-bool DesktopEntryItemData::canMoveIndex(const int offset)
-{
-    return false;
-}
-
-
-/*
- * Attempts to move this menu item within its menu folder.
- *                moved by the given offset value.
- */
-bool DesktopEntryItemData::moveIndex(const int offset)
-{
-    return false;
 }
 
 /*
@@ -219,11 +186,20 @@ bool DesktopEntryItemData::isEditable(const DataField dataField)
 }
 
 /*
- * Gets the number of menu items in the folder opened by this menu item.
+ * Sets this menu item's desktop entry as hidden for the current user.
  */
-int DesktopEntryItemData::getFolderSize()
+void DesktopEntryItemData::removeFromSource()
 {
-    return 0;
+    desktopEntry.setIfDisplayed(false);
+    try
+    {
+        desktopEntry.writeFile();
+    }
+    catch(DesktopEntryFileError e)
+    {
+        DBG("DesktopEntryItemData::" << __func__ 
+                << ": Failed to hide entry:" << e.what());
+    }
 }
 
 
