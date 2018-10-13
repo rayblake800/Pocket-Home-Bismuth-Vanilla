@@ -2,6 +2,7 @@
 #include "IconThread.h"
 #include "Localized.h"
 #include "MenuItemData.h"
+#include "Nullable.h"
 
 /**
  * @file  AppMenuItem.h
@@ -9,7 +10,7 @@
  * @brief  Defines an item in the application menu.
  */
 
-class AppMenuItem : private Localized
+class AppMenuItem : private Localized, private Nullable<MenuItemData::Ptr>
 {
 public:
     /**
@@ -32,13 +33,6 @@ public:
     AppMenuItem() { }
 
     virtual ~AppMenuItem() { }
-
-    /**
-     * @brief  Checks if this menu item holds valid menu data.
-     *
-     * @return  Whether this menu item has menu data.
-     */
-    bool isNull();
 
     /**
      * @brief  Gets the menu item's displayed title.
@@ -173,23 +167,25 @@ public:
         Editor() { }
         virtual ~Editor() { }
 
-        /**
-         * @brief  Gets a menu item's internal data object.
-         *
-         * @param menuItem  The menu item to access.
-         *
-         * @return          The internal menu data object pointer, which
-         *                  can be used to edit the menu data.
-         */
-        MenuItemData::Ptr getMenuItemData(AppMenuItem& menuItem) const;
+        void setTitle(AppMenuItem& menuItem, const juce::String& title);
 
-        /**
-         * @brief  Removes a menu item's internal data object.
-         *
-         * @param menuItem  A menu item that has data that should be
-         *                  removed.
-         */
-        MenuItemData::Ptr clearMenuItemData(AppMenuItem& menuItem) const;
+        void setIconName(AppMenuItem& menuItem, const juce::String& iconName);
+
+        void setCommand(AppMenuItem& menuItem, const juce::String command);
+
+        void setLaunchInTerm(AppMenuItem& menuItem, const bool launchInTerm);
+
+        void setCategories
+            (AppMenuItem& menuItem, const juce::StringArray categories);
+
+        bool replace(AppMenuItem& toReplace, AppMenuItem& replacementItem);
+
+        bool insertChild(AppMenuItem& folderItem, AppMenuItem& childItem,
+                const int index);
+
+        bool remove(AppMenuItem& toRemove);
+
+        void saveChanges(AppMenuItem& menuItem);
     };
 
     /**
