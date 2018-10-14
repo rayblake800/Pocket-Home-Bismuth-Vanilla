@@ -1,0 +1,30 @@
+AppMenuButton
+    -get/set menu item
+    -draw button component
+    abstract:
+        -Get title font
+        -Get icon bounds
+        -Get title bounds
+        -Get justification
+        -Draw outline
+        -Draw background
+AppMenuFolder
+AppMenuComponent
+    -Creates, positions, and destroys AppMenuFolders
+    -Show/Hide loading spinner
+    -Show/Hide editor components
+    abstract:
+        -Create folder component
+        -Update folder bounds
+AppMenuController
+    -Handle button events
+    -Handle key events
+    -Create editor components
+    -Create context menus
+AppContextMenu
+
+Implementations:
+
+PagedMenuComponent
+PagedMenuController
+PagedMenuFolder
