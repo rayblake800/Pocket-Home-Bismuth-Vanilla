@@ -95,6 +95,15 @@ public:
      *         last time the DesktopEntryLoader read the entry files.
      */
     void scanForChanges();
+    
+    /**
+     * @brief  Identifies a callback function that will run after entries are 
+     *         loaded.
+     *
+     * A zero value represents an unset or invalid ID.
+     */
+       
+    typedef juce::uint32 CallbackID;
 
     /**
      * @brief  Schedules an action to run once all entries have been loaded.
@@ -104,17 +113,25 @@ public:
      *                  before this function was called, the callback will run
      *                  immediately.  Otherwise, it will run on the Juce message
      *                  thread as soon as the desktop entry loader is finished.
+     *
+     * @return          A callback ID that may later be used to cancel the
+     *                  callback function, if it is still pending.
      */
-    void waitUntilLoaded(std::function<void()> onFinish);
+    CallbackID waitUntilLoaded(std::function<void()> onFinish);
 
     /**
-     * @brief  Removes any onFinish callback functions that are currently set to
-     *         run when the thread finishes loading.
+     * @brief  Removes an onFinish callback functions that is set to run when 
+     *         the thread finishes loading.
      *
      * This should be called whenever it's necessary to delete an object
      * referenced in the callbacks while desktop entries are still loading.
+     *
+     * @param callbackID  The ID of the callback function that should be
+     *                    cancelled.  If this is invalid, no action will be
+     *                    taken, besides briefly locking the entry loader
+     *                    thread if the callbackID is non-zero.
      */
-    void clearCallbacks();
+    void clearCallback(CallbackID callbackID);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DesktopEntryLoader)
 };
