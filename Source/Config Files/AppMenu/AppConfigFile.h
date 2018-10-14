@@ -35,17 +35,7 @@ public:
      * @return  A folder menu item holding the top level of the application
      *          menu tree.
      */
-    AppMenuItem getRootMenuItem();
-
-    /**
-     * @brief  Gets all menu items within a menu folder.
-     *
-     * @param folderIndex  The index of the menu folder that should be accessed.
-     *
-     * @return             All menu items within the menu folder, or an empty
-     *                     array if the folder index is invalid.
-     */
-    juce::Array<AppMenuItem> getMenuItems(const MenuIndex& folderIndex);
+    AppMenuItem getRootFolderItem();
 
     /**
      * @brief  Adds a new menu item to the list of menu items.
@@ -63,25 +53,22 @@ public:
      * 
      * @param categories       A list of application categories associated with
      *                         the menu item.
+     * 
+     * @param parentFolder     The parent folder item the new menu item will be
+     *                         inserted into.
      *
      * @param index            The index where the menu item will be inserted
-     *                         into the menu.
+     *                         into the parent folder.
      *
-     * @param writeChangesNow  Whether changes should immediately be written to
-     *                         the JSON file.  By default, changes will be 
-     *                         written immediately.
+     * @return                 The created menu item, or a null menu item if
+     *                         creating the menu item failed.
      */
-    void addMenuItem(
+    AppMenuItem addMenuItem(
             const juce::String& title, 
             const juce::String& icon,
             const juce::String& command,
             const bool launchInTerm,
             const juce::StringArray& categories,
-            const MenuIndex& index,
-            const bool writeChangesNow = true);
-
-    /**
-     * @brief  Removes all cached menu items.
-     */
-    void clearMenuItemCache();
+            AppMenuItem& parentFolder,
+            const int index);
 };

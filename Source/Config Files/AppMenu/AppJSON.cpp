@@ -1,4 +1,4 @@
-#include "DesktopEntryLoader.h"
+#include "DesktopEntryItemData.h"
 #include "AppJSON.h"
 
 /* SharedResource object key */
@@ -7,171 +7,78 @@ const juce::Identifier AppJSON::resourceKey = "AppJSON";
 static const constexpr char * jsonFilename = "apps.json";
 
 /* Menu item JSON keys: */
-static const juce::Identifier itemListKey = "folder items";
-static const juce::Identifier categoryKey = "categories";
+static const juce::Identifier titleKey("name");
+static const juce::Identifier iconKey("icon");
+static const juce::Identifier commandKey("command");
+static const juce::Identifier launchInTermKey("launch in terminal");
+static const juce::Identifier categoryKey("categories");
+static const juce::Identifier folderItemKey("folder items");
+
+/* Localized text keys: */
+static const constexpr char * remove_APP = "remove_APP";
+static const constexpr char * from_favorites = "from_favorites";
+static const constexpr char * will_remove_link = "will_remove_link";
+static const constexpr char * edit_app = "edit_app";
 
 AppJSON::AppJSON() : ConfigJSON(resourceKey, jsonFilename)
 {
     using namespace juce;
-    // Load shortcuts:
-    menuItems = initProperty<var>(itemListKey);
-    DBG("AppJSON::" << __func__ << ": Read " << menuItems.size()
-            << " menu items in the main menu folder.");
+    // Load menu:
+    var rootFolder = initProperty<var>(folderItemKey);
+    rootFolderItem = AppMenuItem(new ConfigItemData(rootFolder));
     loadJSONData();   
 }
 
 /*
- * Gets the number of menu items within a menu folder.
+ * Gets a menu item representing the root folder of the application menu.
  */
-int AppJSON::getFolderSize(const MenuIndex& folderIndex,
-        const bool includeDesktopEntries) const
+AppMenuItem AppJSON::getRootFolderItem() const
+{
+    return rootFolderItem;
+}
+
+/**
+ * @brief  Recursively copies a menu item and all of its child folder items
+ *         into a juce::var object.
+ *
+ * @param menuItem  A non-null item located in the application menu.
+ *
+ * @return          All menu item data packaged in an object var. 
+ */
+static juce::var itemToVar(const AppMenuItem& menuItem)
 {
     using namespace juce;
-    if(!includeDesktopEntries || folderIndex.getDepth() == -1)
+    DynamicObject::Ptr itemObject = new DynamicObject();
+    itemObject->setProperty(titleKey, menuItem.getTitle());
+    itemObject->setProperty(iconKey, menuItem.getIconName());
+    if(menuItem.isFolder())
     {
-        var folder = getFolderVar(folderIndex);
-        return ((folder.isArray()) ? folder.size() : -1);
-    }
-    var folderItem = getItemVar(folderIndex);
-    if(!folderItem.isObject())
-    {
-        return -1;
-    }
-    var folder = folderItem.getProperty(itemListKey, var());
-    int size = folder.size();
-    var categories = folderItem.getProperty(categoryKey, var());
-    if(categories.isArray())
-    {
-        StringArray categoryStrings;
-        for(const var& category : *(categories.getArray()))
+        int configChildCount = menuItem.getMovableChildCount();
+        if(configChildCount > 0)
         {
-            categoryStrings.add(category);
+            Array<var> folderItems;
+            for(int i = 0; i < configChildCount; i++)
+            {
+                AppMenuItem folderItem = menuItem.getFolderItem(i);
+                if(!folderItem.isNull())
+                {
+                    folderItems.add(itemToVar(folderItem));
+                }
+            }
+            itemObject->setProperty(folderItemKey, folderItems);
         }
-        DesktopEntryLoader entryLoader;
-        size += entryLoader.getCategoryListEntryIDs(categoryStrings).size();
-    }
-    return size;
-}
-
-/*
- * Gets all menu items within a folder in the application menu.
- */
-juce::Array<juce::var> AppJSON::getMenuItems(const MenuIndex& folderIndex) const
-{
-    using namespace juce;
-    // The root folder item needs to be handled differently because only its
-    // folder items are defined.
-    if(folderIndex.getDepth() == -1)
-    {
-        Array<var> itemList;
-        itemList.addArray(*menuItems.getArray());
-        return itemList;
-    }
-    var folderObject = getItemVar(folderIndex);
-    if(!folderObject.isObject())
-    {
-        return {};
-    }
-    Array<var> itemList;
-    var folderItems = folderObject.getProperty(itemListKey, var());
-    if(folderItems.isArray())
-    {
-        itemList.addArray(*folderItems.getArray());
-    }
-    StringArray desktopEntryCategories;
-    var categoryVars = folderObject.getProperty(categoryKey, var());
-    for(int i = 0; i < categoryVars.size(); i++)
-    {
-        desktopEntryCategories.add(categoryVars[i]);
-    }
-    if(!desktopEntryCategories.isEmpty())
-    {
-        DesktopEntryLoader entryLoader;
-        StringArray entryIDs = entryLoader.getCategoryListEntryIDs
-            (desktopEntryCategories);
-        for(const String& entryID : entryIDs)
+        StringArray categories = menuItem.getCategories();
+        if(categories.isEmpty())
         {
-            itemList.add(var(entryID));
+            itemObject->setProperty(categoryKey, categories);
         }
     }
-    DBG("AppJSON::" << __func__ << ": Found " << menuItems.size()
-            << " menu items, " << folderItems.size() << " folder items and "
-            << (menuItems.size() - folderItems.size()) << " desktop files from "
-            << desktopEntryCategories.size() << " categories in folder "
-            << folderIndex.toString());
-    return itemList;
-}
-
-/*
- * Adds a new menu item to the list of menu items.
- */
-void AppJSON::addMenuItem(
-        const juce::var& newItem, 
-        const MenuIndex& index,
-        const bool writeChangesNow)
-{
-    using namespace juce;
-    MenuIndex parentIndex = index.parentIndex();
-    var folder = getFolderVar(parentIndex);
-    if(folder.isArray())
+    else
     {
-        folder.insert(index.folderIndex(), newItem);
-        //updateCacheIndices(index, true);
-        if (writeChangesNow)
-        {
-            writeChanges();
-        }
+        itemObject->setProperty(commandKey, menuItem.getCommand());
+        itemObject->setProperty(launchInTermKey, menuItem.getLaunchedInTerm());
     }
-}
-
-/*
- * Removes an item from the menu.
- */
-void AppJSON::removeMenuItem(const MenuIndex& index, const bool writeChangesNow)
-{
-    using namespace juce;
-    var parentFolder = getFolderVar(index);
-    if (index.folderIndex() >= 0 && index.folderIndex() < parentFolder.size())
-    {
-        parentFolder.remove(index.folderIndex());
-        menuItemCache.erase(index);
-        updateCacheIndices(index, false);
-        if (writeChangesNow)
-        {
-            writeChanges();
-        }
-    }
-}
-
-/*
- * Saves a menu item's data to the list of cached menu items.
- */
-void AppJSON::addCachedMenuItem(MenuItemData::Ptr menuItem)
-{
-    menuItemCache[menuItem->getIndex()] = menuItem;
-}
-
-/*
- * Loads a cached menu item from the list of cached menu items.
- */
-MenuItemData::Ptr AppJSON::getCachedMenuItem(const MenuIndex& cacheIndex)
-{
-    try
-    {
-        return menuItemCache.at(cacheIndex);
-    }
-    catch(std::out_of_range)
-    {
-        return nullptr;
-    }
-}
-
-/*
- * Removes all cached menu items.
- */
-void AppJSON::clearMenuItemCache()
-{
-    menuItemCache.clear();
+    return var(itemObject);
 }
 
 /*
@@ -180,84 +87,301 @@ void AppJSON::clearMenuItemCache()
 void AppJSON::writeDataToJSON()
 {
     using namespace juce;
-    updateProperty<var>(itemListKey, menuItems);
+    AppMenuItem rootItem = getRootFolderItem();
+    int numItems = rootItem.getMovableChildCount();
+    if(numItems > 0)
+    {
+        Array<var> rootFolder;
+        for(int i = 0; i < numItems; i++)
+        {
+            AppMenuItem folderItem = rootItem.getFolderItem(i);
+            if(!folderItem.isNull())
+            {
+                rootFolder.add(itemToVar(folderItem));
+            }
+        }
+        updateProperty<Array<var>>(folderItemKey, rootFolder);
+    }
+}
+
+/**
+ * Adds a new menu item to the list of menu items.
+ */
+AppMenuItem AppJSON::addMenuItem(
+        const juce::String& title, 
+        const juce::String& icon,
+        const juce::String& command,
+        const bool launchInTerm,
+        const juce::StringArray& categories,
+        AppMenuItem& parentFolder,
+        const int index)
+{
+    if(parentFolder.isNull() || index < 0 
+            || index > parentFolder.getMovableChildCount())
+    {
+        return AppMenuItem();
+    }
+    using namespace juce;
+    var voidVar;
+    MenuItemData::Ptr newData = new ConfigItemData(voidVar);
+    newData->setTitle(title);
+    newData->setIconName(icon);
+    newData->setCommand(command);
+    newData->setLaunchedInTerm(launchInTerm);
+    if(!categories.isEmpty())
+    {
+        newData->setCategories(categories);
+        static_cast<ConfigItemData*>(newData.get())->loadDesktopEntryItems();
+    }
+    AppMenuItem newItem(newData);
+    if(!insertChild(parentFolder, newItem, index))
+    {
+        return AppMenuItem();
+    }
+    return newItem;
 }
 
 /*
- * Finds a folder within the folder data tree, and returns its data.
+ * Recursively creates a menu item and all its child folder items.
  */
-juce::var AppJSON::getItemVar(const MenuIndex& folderIndex) const
+AppJSON::ConfigItemData::ConfigItemData(juce::var& menuData) :
+Localized("ConfigItemData")
 {
     using namespace juce;
-    var folder = menuItems;
-    for(int depth = 0; depth <= folderIndex.getDepth(); depth++)
+    pendingCallbackID = 0;
+    if(menuData.isVoid())
     {
-        int index = folderIndex[depth];
-        if(folder.size() <= index)
+        return;
+    }
+    var folderItems;
+    if(menuData.isObject())
+    {
+        title = menuData.getProperty(titleKey, String());
+        iconName = menuData.getProperty(iconKey, String());
+        command = menuData.getProperty(commandKey, String());
+        launchInTerm = menuData.getProperty(launchInTermKey, false);
+        var categoryVar = menuData.getProperty(categoryKey, var());
+        if(categoryVar.isArray())
         {
-            DBG("AppJSON::" << __func__ << ": Invalid index "
-                    << folderIndex.toString() << ": Menu item at depth "
-                    << depth << " is size " << folder.size() << ", needed "
-                    << index << " or greater.");
-            return var();
+            for(const var& category : *categoryVar.getArray())
+            {
+                categories.add(category.operator String());
+            }
         }
-        folder = folder[folderIndex[depth]];
-        folder = folder.getProperty(itemListKey, var());
-        if(!folder.isArray())
+        folderItems = menuData.getProperty(folderItemKey, var());
+    }
+    else if(menuData.isArray())
+    {
+        folderItems = menuData;
+    }
+    if(folderItems.isArray())
+    {
+        for(var& folderItem : *folderItems.getArray())
         {
-            DBG("AppJSON::" << __func__ << ": Invalid index "
-                    << folderIndex.toString() << ": Menu item at depth "
-                    << depth << " is not a folder.");
-            return var();
+            insertChild(new ConfigItemData(folderItem), getFolderSize());
         }
     }
-    return folder;
-}
-    
-/*
- * Finds a menu item within the menu tree and return its parent's data.
- */
-juce::var AppJSON::getParentVar(const MenuIndex& menuIndex) const
-{
-    MenuIndex parentIndex = menuIndex.parentIndex();
-    return getItemVar(parentIndex);
+    movableChildCount = getFolderSize();
+    loadDesktopEntryItems();
 }
 
 /*
- * Gets a menu item's folder data.
+ * Cancels any desktop entry menu items waiting to load before destroying this 
+ * menu item.
  */
-juce::var AppJSON::getFolderVar(const MenuIndex& folderIndex) const
+AppJSON::ConfigItemData::~ConfigItemData()
 {
-    using namespace juce;
-    return getItemVar(folderIndex).getProperty(itemListKey, var());
+    if(pendingCallbackID.get())
+    {
+        DesktopEntryLoader entryLoader;
+        entryLoader.clearCallback(pendingCallbackID.get());
+    }
 }
-    
+
 /*
- * Update cached item indices when a menu item is inserted or removed.
+ * Gets the menu item's displayed title.
  */
-void AppJSON::updateCacheIndices(const MenuIndex& changePoint,
-        const bool itemInserted)
+juce::String AppJSON::ConfigItemData::getTitle() const
+{
+    return title;
+}
+/*
+ * Gets the name or path used to load the menu item's icon file.
+ */
+juce::String AppJSON::ConfigItemData::getIconName() const
+{
+    return iconName;
+}
+
+/*
+ * Gets the menu item's application launch command.
+ */
+juce::String AppJSON::ConfigItemData::getCommand() const
+{
+    return command;
+}
+
+/*
+ * Checks if this menu item launches an application in a new terminal window.
+ */
+bool AppJSON::ConfigItemData::getLaunchedInTerm() const
+{
+    return launchInTerm;
+}
+
+/*
+ * Gets the application categories used to load this item's desktop entry child 
+ * folder items.
+ */
+juce::StringArray AppJSON::ConfigItemData::getCategories() const
+{
+    return categories;
+}
+
+/*
+ * Sets the menu item's displayed title.
+ */
+void AppJSON::ConfigItemData::setTitle(const juce::String& title)
+{
+    this->title = title;
+}
+
+/*
+ * Sets the name or path used to load the menu item's icon file.
+ */
+void AppJSON::ConfigItemData::setIconName(const juce::String& iconName)
+{
+    this->iconName = iconName;
+}
+
+/*
+ * Sets the menu item's application launch command.
+ */
+void AppJSON::ConfigItemData::setCommand(const juce::String& command)
+{
+    this->command = command;
+}
+
+/*
+ * Sets if this menu item runs its command in a new terminal window.
+ */
+void AppJSON::ConfigItemData::setLaunchedInTerm(const bool launchInTerm)
+{
+    this->launchInTerm = launchInTerm;
+}
+
+/*
+ * Sets the application categories used to load this item's desktop entry child 
+ * folder items.
+ */
+void AppJSON::ConfigItemData::setCategories(const juce::StringArray& categories)
+{
+    this->categories = categories;
+}
+
+/*
+ * Gets the number of folder items held by this menu item that can be reordered.
+ */
+int AppJSON::ConfigItemData::getMovableChildCount() const
+{
+    return movableChildCount;
+}
+
+/*
+ * Writes all changes to this menu item back to its data source.
+ */
+void AppJSON::ConfigItemData::saveChanges()
+{
+    JSONWriter jsonWriter;
+    jsonWriter.writeChanges();
+}
+
+/*
+ * Gets an appropriate title to use for a deletion confirmation window.
+ */
+juce::String AppJSON::ConfigItemData::getConfirmDeleteTitle() const
+{
+    return localeText(remove_APP) 
+            + getTitle() + localeText(from_favorites);
+}
+
+/*
+ * Gets appropriate descriptive text for a deletion confirmation window.
+ */
+juce::String AppJSON::ConfigItemData::getConfirmDeleteMessage() const
+{
+    return localeText(will_remove_link);
+}
+
+/*
+ * Gets an appropriate title to use for a menu item editor.
+ */
+juce::String AppJSON::ConfigItemData::getEditorTitle() const
+{
+    return localeText(edit_app);
+}
+
+/*
+ * Checks if a data field within this menu item can be edited.
+ */
+bool AppJSON::ConfigItemData::isEditable(const DataField dataField) const
+{
+    switch(dataField)
+    {
+        case DataField::categories:
+            return getFolderSize() > 0;
+        case DataField::command:
+        case DataField::termLaunchOption:
+            return getFolderSize() == 0;
+        case DataField::icon:
+        case DataField::title:
+            return true;
+    }
+    return false;
+}
+
+/*
+ * Loads all desktop entry child menu items defined by the menu item's category
+ * list.
+ */
+void AppJSON::ConfigItemData::loadDesktopEntryItems()
 {
     using namespace juce;
-    Array<MenuItemData::Ptr> updatedMenuItems;
-    int insertDepth = changePoint.getDepth();
-    int insertPos = changePoint[insertDepth];
-    int offset = (itemInserted ? 1 : -1);
-    for(std::pair<MenuIndex, MenuItemData::Ptr> cachedItem : menuItemCache)
+    if(!categories.isEmpty() && pendingCallbackID.get() == 0
+            && getFolderSize() <= getMovableChildCount())
     {
-        if(cachedItem.first.getDepth() >= insertDepth
-                && cachedItem.first[insertDepth] >= insertPos)
+        DesktopEntryLoader entryLoader;
+        pendingCallbackID = entryLoader.waitUntilLoaded([this]()
         {
-            updatedMenuItems.add(cachedItem.second);
-        }
-    }
-    for(const MenuItemData::Ptr& updatedItem : updatedMenuItems)
-    {
-        menuItemCache.erase(updatedItem->getIndex());
-    }
-    for(const MenuItemData::Ptr& updatedItem : updatedMenuItems)
-    {
-        updatedItem->updateIndex(insertDepth, offset);
-        menuItemCache[updatedItem->getIndex()] = updatedItem;
+            DesktopEntryLoader entryLoader;
+            Array<DesktopEntry> entries 
+                    = entryLoader.getCategoryListEntries(categories);
+            for(const DesktopEntry& entry : entries)
+            {
+                MenuItemData::Ptr newItem = new DesktopEntryItemData(entry);
+                insertChild(newItem, getFolderSize());
+            }
+            pendingCallbackID = 0;
+        });
     }
 }
+
+/*
+ * Removes this menu item from AppJSON's config file.
+ */
+void AppJSON::ConfigItemData::deleteFromSource()
+{
+    // This should only be called after a call to remove()
+    jassert(getIndex() == -1 && getParentFolder() == nullptr);
+    saveChanges();
+}
+
+/*
+ * Writes all config-defined menu data back to the JSON file.
+ */
+void AppJSON::ConfigItemData::JSONWriter::writeChanges()
+{
+    auto appJSON = getWriteLockedResource();
+    appJSON->writeDataToJSON();
+}
+
