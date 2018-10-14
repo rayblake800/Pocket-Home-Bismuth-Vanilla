@@ -65,6 +65,9 @@ void HomePage::configValueChanged(const juce::Identifier& key)
             setBackgroundImage(AssetFiles::loadImageAsset(background));
         }
     }
+    
+// Disabled until redesign
+#if 0
     else if (key == MainConfigKeys::menuTypeKey)
     {
         String menuType = mainConfig.getConfigValue<String>
@@ -113,6 +116,9 @@ void HomePage::configValueChanged(const juce::Identifier& key)
         pageResized();
 
     }
+
+//Disabled until redesign
+#endif
 }
 
 /**
@@ -121,10 +127,15 @@ void HomePage::configValueChanged(const juce::Identifier& key)
  */
 void HomePage::mouseDown(const juce::MouseEvent &event)
 {
+// Disabled until redesign
+#if 0
     if (event.mods.isPopupMenu() || event.mods.isCtrlDown())
     {
         appMenu->openPopupMenu(nullptr);
     }
+
+//Disabled until redesign
+#endif
 }
 
 /**
@@ -151,6 +162,8 @@ void HomePage::pageButtonClicked(juce::Button * button)
  */
 bool HomePage::keyPressed(const juce::KeyPress& key)
 {
+// Disabled until redesign
+#if 0
     using namespace juce;
     //don't interrupt animation or loading
     if (Desktop::getInstance().getAnimator().isAnimating(appMenu)
@@ -159,6 +172,11 @@ bool HomePage::keyPressed(const juce::KeyPress& key)
         return true;
     }
     else return appMenu->keyPressed(key);
+
+//Disabled until redesign
+#else
+    return false;
+#endif
 }
 
 /**
@@ -180,10 +198,16 @@ void HomePage::visibilityChanged()
  */
 void HomePage::pageResized()
 {
+// Disabled until redesign
+
+#if 0
     if (appMenu != nullptr)
     {
         appMenu->applyConfigBounds();
     }
+
+//Disabled until redesign
+#endif
     loadingSpinner.setBounds(getLocalBounds());
     frame.applyConfigBounds();
     clock.applyConfigBounds();

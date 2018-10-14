@@ -1,3 +1,5 @@
+// Disabled until redesign
+#if 0
 #pragma once
 #include "AppMenuComponent.h"
 
@@ -59,3 +61,6 @@ private:
     virtual AppMenuFolder* createFolderObject(const AppMenuItem& folderItem,
             std::map<juce::String, AppMenuButton::Ptr>& buttonMap) override;
 };
+
+//Disabled until redesign
+#endif

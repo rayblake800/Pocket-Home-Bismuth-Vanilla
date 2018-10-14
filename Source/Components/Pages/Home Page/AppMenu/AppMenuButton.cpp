@@ -1,3 +1,5 @@
+// Disabled until redesign
+#if 0
 #include "PokeLookAndFeel.h"
 #include "Utils.h"
 #include "IconLoader.h"
@@ -20,71 +22,26 @@ menuItem(menuItem)
     setName(String("AppMenuButton:") + menuItem.getTitle());
 #endif
     setWantsKeyboardFocus(false);
-    textWidth = titleFont.getStringWidth(getMenuItem().getTitle() 
-            + titleBuffer);
 }
 
 /*
  * Gets this button's menu data.
  */
-const AppMenuItem& AppMenuButton::getMenuItem() const
+AppMenuItem AppMenuButton::getMenuItem() const
 {
     return menuItem;
 }
 
-/*
- * Gets a PopupEditorComponent configured to edit this button's data
- */
-AppMenuPopupEditor* AppMenuButton::getEditor
-(const std::function<void(AppMenuPopupEditor*) >& onConfirm)
-{
-    using namespace juce;
-    MainConfigFile mainConfig;
-    
-    AppMenuPopupEditor* editor = new AppMenuPopupEditor
-            (menuItem.getEditorTitle(),
-            [this, onConfirm](AppMenuPopupEditor * editor)
-            {
-                menuItem.setTitle(editor->getNameField());
-                menuItem.setIconName(editor->getIconField());
-                if(menuItem.hasEditableCommand())
-                {
-                    menuItem.setCommand(editor->getCommandField());
-                    menuItem.setLaunchedInTerm(editor->getTerminalCheckbox());
-                }
-                if(menuItem.hasEditableCategories())
-                {
-                    menuItem.setCategories(editor->getCategories());
-                }
-                menuItem.updateSource();
-                onConfirm(editor);
-            },
-    menuItem.hasEditableCategories(),
-            menuItem.hasEditableCommand());
-    File file;
-    editor->setNameField(menuItem.getTitle());
-    editor->setIconField(menuItem.getIconName());
-    editor->setCategories(menuItem.getCategories());
-    String command = menuItem.getCommand();
-    if(menuItem.getLaunchedInTerm())
-    {
-        command = command.substring(mainConfig.getConfigValue<String>
-                (MainConfigKeys::termLaunchCommandKey).length() + 1);
-    }
-    editor->setCommandField(command);
-    editor->setTerminalCheckbox(menuItem.getLaunchedInTerm());
-    return editor;
-};
 
 /*
- * Displays a confirmation window to the user requesting permission to delete 
- * this button, and runs a deletion callback function if they confirm.
+ * Replaces the menu item used by this button.
  */
-void AppMenuButton::confirmRemoveButtonSource
-(const std::function<void() >& onRemove)
+void AppMenuButton::setMenuItem(const AppMenuItem newItem)
 {
-    menuItem.deleteOnConfim([this, onRemove]() { onRemove(); });
+    menuItem = newItem;
+    reloadDataFromSource();
 }
+
 
 /*
  * Checks if this button is currently selected.
@@ -111,7 +68,7 @@ void AppMenuButton::loadIcon(const juce::String& icon)
 {
     using namespace juce;
     IconLoader iconThread;
-    iconThread.loadIcon(icon, iconBounds.toNearestInt().getWidth(),
+    iconThread.loadIcon(icon, getIconBounds().toNearestInt().getWidth(),
     [this](Image iconImg)
     {
         appIcon = iconImg;
@@ -128,84 +85,17 @@ void AppMenuButton::reloadDataFromSource()
 }
 
 /*
- * Gets the button's title bounds.
+ * Calculates text size and calls menuButtonResized when the button's 
+ * component bounds change.
  */
-const juce::Rectangle<float>& AppMenuButton::getTitleBounds() const
+void AppMenuButton::resized()
 {
-    return titleBounds;
-}
-
-/*
- * Gets the button's image bounds.
- */
-const juce::Rectangle<float>& AppMenuButton::getIconBounds() const
-{
-    return iconBounds;
-}
-
-/*
- * Gets the button's title font.
- */
-const juce::Font& AppMenuButton::getTitleFont() const
-{
-    return titleFont;
-}
-
-/*
- * Sets the bounds of the button's title.
- */
-void AppMenuButton::setTitleBounds(const juce::Rectangle<float>& bounds)
-{
-    titleBounds = bounds;
-    textWidth = std::min((int) bounds.getWidth(),
-            titleFont.getStringWidth(getMenuItem().getTitle() + "    "));
-}
-
-/*
- * Sets the bounds of the button's icon.
- */
-void AppMenuButton::setIconBounds(const juce::Rectangle<float>& bounds)
-{
-    iconBounds = bounds;
-    if(appIcon.isNull())
+    if(textWidth == 0)
     {
-        loadIcon(menuItem.getIconName());
+        textWidth = getTitleFont().getStringWidth(getMenuItem().getTitle() 
+                + titleBuffer);
     }
-}
-
-/*
- * Sets if this button will draw an outline around its border.
- */
-void AppMenuButton::setDrawBorder(const bool shouldDraw)
-{
-    drawBorder = shouldDraw;
-}
-
-/*
- * Sets if this button will fill in its background with its background color.
- */
-void AppMenuButton::setFillBackground(const bool shouldFill)
-{
-    fillBackground = shouldFill;
-}
-
-/*
- * Sets the button's title font.
- */
-void AppMenuButton::setTitleFont(const juce::Font& font)
-{
-    titleFont = font;
-    textWidth = std::min((int) titleBounds.getWidth(),
-            font.getStringWidth(getMenuItem().getTitle() + titleBuffer));
-}
-
-/*
- * Sets the text justification of the button title.
- */
-void AppMenuButton::setTextJustification
-(const juce::Justification justification)
-{
-    textJustification = justification;
+    menuButtonResized();
 }
 
 /*
@@ -216,13 +106,16 @@ void AppMenuButton::paintButton
 {
     using namespace juce;
     Rectangle<int> border = getLocalBounds();
-    if ((iconBounds.isEmpty() || titleBounds.isEmpty()) && !border.isEmpty())
+    const Rectangle<float>& titleBounds = getTitleBounds();
+    const Rectangle<float>& iconBounds = getIconBounds();
+    if ((iconBounds.isEmpty() || titleBounds.isEmpty()) && 
+            !border.isEmpty())
     {
         resized();
     }
     g.setColour(findColour(isSelected() ?
             selectionColourId : backgroundColourId));
-    if (fillBackground)
+    if (shouldFillBackground())
     {
         g.fillRect(border);
     }
@@ -239,12 +132,15 @@ void AppMenuButton::paintButton
             RectanglePlacement::xMid | RectanglePlacement::yTop, false);
     // Draw title:
     g.setColour(findColour(textColourId));
-    g.setFont(titleFont);
-    g.drawText(getMenuItem().getTitle(), titleBounds, textJustification,
-            true);
-    if (drawBorder)
+    g.setFont(getTitleFont());
+    g.drawText(getMenuItem().getTitle(), titleBounds, 
+            getTextJustification(), true);
+    if (shouldDrawBorder())
     {
         g.setColour(findColour(borderColourId));
         g.drawRect(border, 2);
     }
 }
+
+//Disabled until redesign
+#endif

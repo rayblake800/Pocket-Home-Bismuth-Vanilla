@@ -1,3 +1,5 @@
+// Disabled until redesign
+#if 0
 #include "Utils.h"
 #include "PageAppFolder.h"
 
@@ -302,3 +304,6 @@ void PageAppFolder::PageMenuButton::selectionStateChanged()
     setFillBackground(isSelected());
     setDrawBorder(isSelected());
 }
+
+//Disabled until redesign
+#endif

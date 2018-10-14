@@ -1,3 +1,5 @@
+// Disabled until redesign
+#if 0
 
 #include "ScrollingAppFolder.h"
 #include "ScrollingAppMenu.h"
@@ -142,3 +144,6 @@ AppMenuFolder* ScrollingAppMenu::createFolderObject(
     folder->selectIndex(0);
     return folder;
 }
+
+//Disabled until redesign
+#endif

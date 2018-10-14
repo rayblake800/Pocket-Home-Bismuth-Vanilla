@@ -1,3 +1,5 @@
+// Disabled until redesign
+#if 0
 #include "Utils.h"
 #include "AppConfigFile.h"
 #include "AppMenuFolder.h"
@@ -17,6 +19,14 @@ buttonNameMap(buttonNameMap)
 #if JUCE_DEBUG
     setName(String("AppMenuFolder") + folderItem.getTitle());
 #endif
+}
+
+/*
+ * Gets the menu item used to create this folder component.
+ */
+const AppMenuItem& AppMenuFolder::getFolderMenuItem() const
+{
+    return sourceFolderItem;
 }
 
 /*
@@ -42,9 +52,8 @@ void AppMenuFolder::reload()
 {
     using namespace juce;
     removeAllChildren();
-    const MenuIndex& menuIndex = sourceFolderItem.getIndex();
     AppConfigFile appConfig;
-    Array<AppMenuItem> menuItems = appConfig.getMenuItems(menuIndex);
+    Array<AppMenuItem> menuItems = sourceFolderItem.getFolderItems();
     for (AppMenuItem& menuItem : menuItems)
     {
         insertButton(menuItem, folderButtons.size(), false);
@@ -150,7 +159,7 @@ void AppMenuFolder::swapButtons(const int btnIndex1, const int btnIndex2)
     if (validBtnIndex(btnIndex1) && validBtnIndex(btnIndex2))
     {
         AppMenuItem menuItem = folderButtons[btnIndex1]->getMenuItem();
-        if(menuItem.moveDataIndex(btnIndex2 - btnIndex1))
+        if(swapChildren(sourceFolderItem, btnIndex1, btnIndex2))
         {
             AppMenuButton::Ptr btn1 = folderButtons[btnIndex1];
             folderButtons.set(btnIndex1, folderButtons[btnIndex2]);
@@ -332,3 +341,6 @@ int AppMenuFolder::getMaxColumns() const
 {
     return maxColumns;
 }
+
+//Disabled until redesign
+#endif

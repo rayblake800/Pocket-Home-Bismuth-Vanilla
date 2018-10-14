@@ -1,6 +1,6 @@
+// Disabled until redesign
+#if 0
 #pragma once
-#include <set>
-#include <atomic>
 #include "JuceHeader.h"
 #include "OverlaySpinner.h"
 #include "ConfigurableComponent.h"
@@ -19,8 +19,8 @@
 /** 
  * @file   AppMenuComponent.h
  *
- * @brief AppMenuComponent is a scrolling application menu that loads its
- * contents from system .Desktop files and an AppConfigFile object.
+ * @brief  A nested application menu that loads its menu items from the
+ *         AppConfigFile.
  * 
  * The menu is divided into folders, which can contain different sets of menu 
  * buttons to launch applications or open sub-folders.  The user can navigate
@@ -346,40 +346,41 @@ private:
     //every time you close a folder and open it again.
     std::map<juce::String, AppMenuButton::Ptr> buttonNameMap;
 
-    //keyboard shortcuts
-    static const juce::String openPopupMenuBinding;
-    static const juce::String reloadMenuBinding;
     //The shared iconThread should exist as long as the AppMenu does.
     IconLoader iconThread;
+
     //Sets if clicking unselected buttons immediately triggers
     //their action, or if it just selects them.
     bool onlyTriggerSelected = true;
+
     //app grid dimensions, saved from config
     int maxRows = 1;
     int maxColumns = 1;
+
     //currently focused folder index
     int activeFolderIndex = 0;
+
     //Launches applications from the menu
     AppLauncher appLauncher;
-    //Page lading spinner reference
+
+    //Page loading spinner reference
     OverlaySpinner& loadingSpinner;
+
     //Holds the menu editor component that can be accessed via the pop-up menu
     juce::ScopedPointer<AppMenuPopupEditor> buttonEditor;
+
     //Loads system applications from .Desktop files
     DesktopEntryLoader desktopEntries;
+    
+    /* ID value for any pending callback function held by DesktopEntryLoader: */
+    juce::Atomic<DesktopEntryLoader::CallbackID> loaderCallbackID;
+
     //Tracks if desktop entries are loading or applications are launching in
     //another thread
-    std::atomic<bool> loadingState;
-    
-    //Localized text keys:
-    static const constexpr char* edit_app     = "edit_app";
-    static const constexpr char* delete_app   = "delete_app";
-    static const constexpr char* add_shortcut = "add_shortcut";
-    static const constexpr char* move_back    = "move_back";
-    static const constexpr char* move_forward = "move_forward";
-    static const constexpr char* new_shortcut = "new_shortcut";
-    static const constexpr char* new_entry    = "new_entry";
-    static const constexpr char* new_folder   = "new_folder";
+    juce::Atomic<bool> loadingState;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppMenuComponent);
 };
+
+//Disabled until redesign
+#endif

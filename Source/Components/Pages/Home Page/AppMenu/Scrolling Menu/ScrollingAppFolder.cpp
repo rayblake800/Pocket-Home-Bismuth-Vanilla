@@ -1,3 +1,5 @@
+// Disabled until redesign
+#if 0
 #include "ScrollingAppFolder.h"
 
 ScrollingAppFolder::ScrollingAppFolder(
@@ -111,3 +113,6 @@ void ScrollingAppFolder::ScrollingMenuButton::resized()
     setIconBounds(imageBounds);
     setTitleBounds(textBounds);
 }
+
+//Disabled until redesign
+#endif

@@ -1,15 +1,26 @@
-#include <set>
+// Disabled until redesign
+#if 0
 #include "MainConfigFile.h"
 #include "MainConfigKeys.h"
-#include "NewConfigAppEditor.h"
+#include "NewConfigItemEditor.h"
 #include "NewDesktopAppEditor.h"
-#include "NewFolderEditor.h"
 #include "AppMenuComponent.h"
 #include "Utils.h"
 
+/* Key codes: */
 //TODO: load these from config, set on input page
-const juce::String AppMenuComponent::openPopupMenuBinding = "CTRL + e";
-const juce::String AppMenuComponent::reloadMenuBinding = "TAB";
+static const juce::String openPopupMenuBinding = "CTRL + e";
+static const juce::String reloadMenuBinding = "TAB";
+
+/* Localized text keys: */
+static const constexpr char* edit_app     = "edit_app";
+static const constexpr char* delete_app   = "delete_app";
+static const constexpr char* add_shortcut = "add_shortcut";
+static const constexpr char* move_back    = "move_back";
+static const constexpr char* move_forward = "move_forward";
+static const constexpr char* new_shortcut = "new_shortcut";
+static const constexpr char* new_entry    = "new_entry";
+static const constexpr char* new_folder   = "new_folder";
 
 AppMenuComponent::AppMenuComponent(
         const juce::Identifier& componentKey,
@@ -35,7 +46,10 @@ juce::Component(componentKey.toString())
 
 AppMenuComponent::~AppMenuComponent()
 {
-    desktopEntries.clearCallbacks();
+    if(loaderCallbackID.get() != 0)
+    {
+        desktopEntries.clearCallback(loaderCallbackID.get());
+    }
 }
 
 /*
@@ -44,7 +58,7 @@ AppMenuComponent::~AppMenuComponent()
  */
 bool AppMenuComponent::isLoading() const
 {
-    return loadingState;
+    return loadingState.get();
 }
 
 /*
@@ -95,7 +109,7 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         AppMenuItem selectedMenuItem = selectedButton->getMenuItem();
         DBG("AppMenuComponent::" << __func__ << ": Creating pop-up menu for "
                 << "button at index " 
-                << selectedMenuItem.getIndex().toString());
+                << selectedMenuItem.getIndex());
         if (selectedMenuItem.isFolder())
         {
             editMenu.addItem(4, localeText(new_shortcut));
@@ -104,13 +118,19 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         {
             editMenu.addItem(6, localeText(add_shortcut));
         }
-        if (selectedMenuItem.canMoveIndex(-1))
+        AppMenuItem parentItem(selectedMenuItem.getParentFolder());
+        if(!parentItem.isNull())
         {
-            editMenu.addItem(7, localeText(move_back));
-        }
-        if (selectedMenuItem.canMoveIndex(1))
-        {
-            editMenu.addItem(8, localeText(move_forward));
+            int index = selectedMenuItem.getIndex();
+            int maxIndex = parentItem.getMovableChildCount() - 1;
+            if (index > 0)
+            {
+                editMenu.addItem(7, localeText(move_back));
+            }
+            if (index < maxIndex)
+            {
+                editMenu.addItem(8, localeText(move_forward));
+            }
         }
     }
     else
@@ -121,8 +141,9 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
     }
 
     AppMenuFolder* activeFolder = openFolders[getActiveFolderIndex()];
+    AppMenuItem activeFolderItem = activeFolder->getFolderMenuItem();
     const int selection = editMenu.show();
-    std::function<void() > confirmNew = [this]()
+    std::function<void()> confirmNew = [this]()
     {
         loadBaseFolder();
     };
@@ -139,7 +160,11 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
             });
             break;
         case 3://User selects "New favorite application"
-            showPopupEditor(new NewConfigAppEditor(confirmNew));
+            showPopupEditor(new NewConfigItemEditor(
+                        activeFolderItem, 
+                        false,
+                        activeFolderItem.getMovableChildCount(), 
+                        confirmNew));
             break;
         case 4://User selects "New application link"
         {
@@ -147,7 +172,7 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
                     = new NewDesktopAppEditor(confirmNew);
             if (selectedButton != nullptr)
             {
-                newAppEditor->setCategories
+                newAppEditor->setCategoryList
                         (selectedButton->getMenuItem().getCategories());
             }
             showPopupEditor(newAppEditor);
@@ -155,24 +180,25 @@ void AppMenuComponent::openPopupMenu(AppMenuButton::Ptr selectedButton)
         }
         case 5://User selects "New folder"
         {
-            AppMenuPopupEditor* newFolderEditor
-                    = new NewFolderEditor(confirmNew);
+            AppMenuPopupEditor* newFolderEditor = new NewConfigItemEditor(
+                    activeFolderItem, 
+                    true, 
+                    activeFolderItem.getMovableChildCount(), 
+                    confirmNew);
             showPopupEditor(newFolderEditor);
             break;
         }
         case 6://User selects "Pin to favorites"
         {
             AppConfigFile appConfig;
-            AppMenuItem rootItem = appConfig.getRootMenuItem();
+            AppMenuItem rootItem = appConfig.getRootFolderItem();
             AppMenuItem selectedMenuItem = selectedButton->getMenuItem();
-            MenuIndex newIndex = rootItem.getIndex()
-                .childIndex(rootItem.getFolderSize());
             appConfig.addMenuItem(selectedMenuItem.getTitle(),
                     selectedMenuItem.getIconName(),
                     selectedMenuItem.getCommand(),
                     selectedMenuItem.getLaunchedInTerm(),
                     selectedMenuItem.getCategories(),
-                    newIndex, true);
+                    rootItem, 0);
             confirmNew();
             break;
         }
@@ -236,28 +262,19 @@ void AppMenuComponent::loadBaseFolder()
             closeFolder();
         }
         setLoadingState(true);
-        desktopEntries.loadEntries([this](String loadingMsg)
-        {
-            if (!isLoading())
-            {
-                setLoadingState(true);
-            }
-            loadingSpinner.setLoadingText(loadingMsg);
-        },
-        [this, savedIndex]()
+
+        loaderCallbackID = desktopEntries.waitUntilLoaded([this, savedIndex]()
         {
             DBG("AppMenuComponent::" << __func__
                     << ": Loading desktop entries complete,"
                     << " creating base folder");
+            loaderCallbackID = 0;
             AppConfigFile config;
-            openFolder(config.getRootMenuItem());
+            openFolder(config.getRootFolderItem());
             openFolders.getFirst()->selectIndex(savedIndex);
             loadingSpinner.setLoadingText("Building folder layout:");
-            MessageManager::callAsync([this]()
-            {
-                layoutFolders();
-                setLoadingState(false);
-            });
+            layoutFolders();
+            setLoadingState(false);
         });
     }
 }
@@ -712,3 +729,6 @@ void AppMenuComponent::setLoadingState(bool loading)
     }
 }
 
+
+//Disabled until redesign
+#endif

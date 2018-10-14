@@ -33,10 +33,7 @@ class HomePage : public PageComponent, public MainConfigFile::Listener
 public:
     HomePage();
     
-    virtual ~HomePage()
-    {
-        appConfig.clearMenuItemCache();
-    }
+    virtual ~HomePage() { }
 protected:
     /**
      * @brief  Tracks page background and menu type changes. 
@@ -96,10 +93,11 @@ private:
     
     /* Displays the time. */
     ClockLabel clock;
-    
+   
+    // Disabled until pending menu redesign:
     /* The application menu.  This is recreated whenever the menu type 
        preference changes in MainConfigFile. */
-    juce::ScopedPointer<AppMenuComponent> appMenu;
+    //juce::ScopedPointer<AppMenuComponent> appMenu;
     
     /* Displays the current battery status. */
     BatteryIcon batteryIcon;

@@ -1,3 +1,5 @@
+// Disabled until redesign
+#if 0
 #pragma once
 #include "AppMenuFolder.h"
 
@@ -31,8 +33,8 @@ public:
      * 
      * @param menuItem
      */
-    virtual AppMenuButton::Ptr createMenuButton
-    (const AppMenuItem& menuItem) override;
+   // virtual AppMenuButton::Ptr createMenuButton
+    //(const AppMenuItem& menuItem) override;
 
     /**
      * Given a list of folder buttons, return an appropriate layout
@@ -42,15 +44,15 @@ public:
      * 
      * @return a Layout containing all items in the button array.
      */
-    virtual LayoutManager::Layout buildFolderLayout
-    (juce::Array<AppMenuButton::Ptr>& buttons);
+    //virtual LayoutManager::Layout buildFolderLayout
+    //(juce::Array<AppMenuButton::Ptr>& buttons);
 
 
     /**
      * @return the minimum width, in pixels, needed by this folder to
      *          display its contents properly. 
      */
-    int getMinimumWidth() override;
+    //int getMinimumWidth() override;
 
 private:
     /**
@@ -82,10 +84,13 @@ private:
         /**
          * Re-calculates draw values whenever the button is resized
          */
-        void resized() override;
+        //void resized() override;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ScrollingMenuButton)
     };
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ScrollingAppFolder)
 };
 
+
+//Disabled until redesign
+#endif

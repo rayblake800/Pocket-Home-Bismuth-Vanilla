@@ -1,3 +1,5 @@
+// Disabled until redesign
+#if 0
 #pragma once
 #include "NavButton.h"
 #include "AppMenuComponent.h"
@@ -86,3 +88,6 @@ private:
     NavButton pageLeft;
     NavButton pageRight;
 };
+
+//Disabled until redesign
+#endif

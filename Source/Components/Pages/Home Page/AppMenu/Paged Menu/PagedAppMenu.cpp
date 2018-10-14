@@ -1,3 +1,5 @@
+// Disabled until redesign
+#if 0
 #include "PageAppFolder.h"
 #include "PagedAppMenu.h"
 #include "ComponentConfigKeys.h"
@@ -244,3 +246,6 @@ void PagedAppMenu::buttonClicked(juce::Button* button)
         }
     }
 }
+
+//Disabled until redesign
+#endif
