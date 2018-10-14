@@ -185,9 +185,8 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/AppMenuComponent.o \
   $(JUCE_OBJDIR)/AppMenuFolder.o \
   $(JUCE_OBJDIR)/AppMenuButton.o \
-  $(JUCE_OBJDIR)/NewFolderEditor.o \
   $(JUCE_OBJDIR)/NewDesktopAppEditor.o \
-  $(JUCE_OBJDIR)/NewConfigAppEditor.o \
+  $(JUCE_OBJDIR)/NewConfigItemEditor.o \
   $(JUCE_OBJDIR)/CategoryPopupEditor.o \
   $(JUCE_OBJDIR)/AppMenuPopupEditor.o \
   $(JUCE_OBJDIR)/HomePage.o \
@@ -245,12 +244,10 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/ColourConfigKeys.o \
   $(JUCE_OBJDIR)/ColourJSON.o \
   $(JUCE_OBJDIR)/AppMenuItem.o \
-  $(JUCE_OBJDIR)/ConfigItemData.o \
   $(JUCE_OBJDIR)/DesktopEntryItemData.o \
   $(JUCE_OBJDIR)/AppConfigFile.o \
   $(JUCE_OBJDIR)/AppJSON.o \
   $(JUCE_OBJDIR)/MenuItemData.o \
-  $(JUCE_OBJDIR)/MenuIndex.o \
   $(JUCE_OBJDIR)/ConfigKey.o \
   $(JUCE_OBJDIR)/ConfigAlertWindows.o \
   $(JUCE_OBJDIR)/JSONFile.o \
@@ -509,13 +506,6 @@ $(JUCE_OBJDIR)/AppMenuButton.o: \
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
 	    -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/NewFolderEditor.o: \
-    Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors/NewFolderEditor.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling NewFolderEditor.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/NewDesktopAppEditor.o: \
     Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors/NewDesktopAppEditor.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
@@ -523,10 +513,10 @@ $(JUCE_OBJDIR)/NewDesktopAppEditor.o: \
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
 	    -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/NewConfigAppEditor.o: \
-    Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors/NewConfigAppEditor.cpp
+$(JUCE_OBJDIR)/NewConfigItemEditor.o: \
+    Source/Components/Pages/Home\ Page/AppMenu/Menu\ Editors/NewConfigItemEditor.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling NewConfigAppEditor.cpp"
+	@echo "Compiling NewConfigItemEditor.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
 	    -o "$@" -c "$<"
 
@@ -929,13 +919,6 @@ $(JUCE_OBJDIR)/AppMenuItem.o: \
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
 	    -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/ConfigItemData.o: \
-    Source/Config\ Files/AppMenu/Menu\ Items/ConfigItemData.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ConfigItemData.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
-
 $(JUCE_OBJDIR)/DesktopEntryItemData.o: \
     Source/Config\ Files/AppMenu/Menu\ Items/DesktopEntryItemData.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
@@ -959,13 +942,6 @@ $(JUCE_OBJDIR)/AppJSON.o: \
 
 $(JUCE_OBJDIR)/MenuItemData.o: \
     Source/Config\ Files/AppMenu/Menu\ Items/MenuItemData.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling MenuItemData.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
-	    -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/MenuIndex.o: \
-    Source/Config\ Files/AppMenu/Menu\ Items/MenuIndex.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling MenuItemData.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \

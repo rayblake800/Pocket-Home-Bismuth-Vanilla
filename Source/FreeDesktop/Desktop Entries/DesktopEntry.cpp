@@ -23,17 +23,17 @@ static const juce::String entryDirectory = "/applications/";
  * @return                The DataConverter that gets and sets the string
  *                        parameter.
  */
-#define STRING_CONVERTER(stringParam, isLocaleString) \
-{ \
-    .readValue = [](DesktopEntry* thisEntry, const juce::String& value) \
-    { \
-        thisEntry->stringParam = DesktopEntryUtils::processStringValue \
-            (value, thisEntry->entryFile, isLocaleString); \
-    }, \
-    .getValue = [](DesktopEntry* thisEntry)->juce::String \
-    { \
-        return DesktopEntryUtils::addEscapeSequences(thisEntry->stringParam); \
-    } \
+#define STRING_CONVERTER(stringParam, isLocaleString)                          \
+{                                                                              \
+    .readValue = [](DesktopEntry* thisEntry, const juce::String& value)        \
+    {                                                                          \
+        thisEntry->stringParam = DesktopEntryUtils::processStringValue         \
+            (value, thisEntry->entryFile, isLocaleString);                     \
+    },                                                                         \
+    .getValue = [](DesktopEntry* thisEntry)->juce::String                      \
+    {                                                                          \
+        return DesktopEntryUtils::addEscapeSequences(thisEntry->stringParam);  \
+    }                                                                          \
 }
 
 /**
@@ -47,18 +47,18 @@ static const juce::String entryDirectory = "/applications/";
  * @return                The DataConverter that gets and sets the list
  *                        parameter.
  */
-#define LIST_CONVERTER(listParam, isLocaleString) \
-{ \
-    .readValue = [](DesktopEntry* thisEntry, const juce::String& value) \
-    { \
-        thisEntry->listParam = DesktopEntryUtils::parseList \
-            (value, thisEntry->entryFile, isLocaleString); \
-    }, \
-    .getValue = [](DesktopEntry* thisEntry)->juce::String \
-    { \
-        return DesktopEntryUtils::listString(thisEntry->listParam, \
-                isLocaleString); \
-    } \
+#define LIST_CONVERTER(listParam, isLocaleString)                              \
+{                                                                              \
+    .readValue = [](DesktopEntry* thisEntry, const juce::String& value)        \
+    {                                                                          \
+        thisEntry->listParam = DesktopEntryUtils::parseList                    \
+            (value, thisEntry->entryFile, isLocaleString);                     \
+    },                                                                         \
+    .getValue = [](DesktopEntry* thisEntry)->juce::String                      \
+    {                                                                          \
+        return DesktopEntryUtils::listString(thisEntry->listParam,             \
+                isLocaleString);                                               \
+    }                                                                          \
 }
 
 /**
@@ -69,17 +69,17 @@ static const juce::String entryDirectory = "/applications/";
  * @return                The DataConverter that gets and sets the bool
  *                        parameter.
  */
-#define BOOL_CONVERTER(boolParam) \
-{ \
-    .readValue = [](DesktopEntry* thisEntry, const juce::String& value) \
-    { \
-        thisEntry->boolParam = DesktopEntryUtils::parseBool \
-            (value, thisEntry->entryFile); \
-    }, \
-    .getValue = [](DesktopEntry* thisEntry)->juce::String \
-    { \
-        return DesktopEntryUtils::boolString(thisEntry->boolParam); \
-    } \
+#define BOOL_CONVERTER(boolParam)                                              \
+{                                                                              \
+    .readValue = [](DesktopEntry* thisEntry, const juce::String& value)        \
+    {                                                                          \
+        thisEntry->boolParam = DesktopEntryUtils::parseBool                    \
+            (value, thisEntry->entryFile);                                     \
+    },                                                                         \
+    .getValue = [](DesktopEntry* thisEntry)->juce::String                      \
+    {                                                                          \
+        return DesktopEntryUtils::boolString(thisEntry->boolParam);            \
+    }                                                                          \
 }
 
 /* Stores all data keys defined in the desktop entry specifications,
@@ -115,7 +115,6 @@ DesktopEntry::keyGuide
                 const std::map <juce::String, Type> typeMap =
                 {
                     { "Application", Type::application },
-                    { "Directory",   Type::directory },
                     { "Link",        Type::link }
                 };
                 auto searchIter = typeMap.find(value);
@@ -135,11 +134,11 @@ DesktopEntry::keyGuide
                 {
                     case Type::application:
                         return "Application";
-                    case Type::directory:
-                        return "Directory";
                     case Type::link:
                         return "Link";
                 }
+                DBG("DesktopEntry: Unhandled entry type!");
+                return juce::String();
             }
         }
     },
@@ -150,8 +149,8 @@ DesktopEntry::keyGuide
             {
                 if(value != "1.1")
                 {
-                    DBG("DesktopEntry::saveLineData: Warning, unexpected "
-                            << "desktop entry standard version " << value);
+                    //DBG("DesktopEntry::saveLineData: Warning, unexpected "
+                    //        << "desktop entry standard version " << value);
                 }
             },
             .getValue = []
@@ -206,22 +205,10 @@ DesktopEntry::keyGuide
 /*
  * Loads desktop entry data from a .desktop or .directory file.
  */
-DesktopEntry::DesktopEntry(const juce::File& entryFile) :
-entryFile(entryFile)
+DesktopEntry::DesktopEntry
+(const juce::File& entryFile, const juce::String& desktopFileID) :
+entryFile(entryFile), desktopFileID(desktopFileID)
 {
-    using namespace juce;
-    String entryPath = entryFile.getFullPathName();
-    StringArray dataDirs = XDGDirectories::getDataSearchPaths();
-    for(const String& dataDir : dataDirs)
-    {
-        if(entryPath.contains(dataDir))
-        {
-            desktopFileID = entryPath.fromLastOccurrenceOf
-                (dataDir, false, false)
-                .replaceCharacter(File::getSeparatorChar(), '-');
-            break;
-        }
-    }
     readEntryFile();
 }
 
@@ -229,11 +216,12 @@ entryFile(entryFile)
  *  Creates a desktop entry object without an existing file.
  */
 DesktopEntry::DesktopEntry
-(const juce::String& name, const juce::String& filename, const Type type)
+(const juce::String& name, const juce::String& desktopFileID, const Type type) :
+desktopFileID(desktopFileID)
 {
     using namespace juce;
-    setName(name);
-    desktopFileID = filename.replaceCharacter(File::getSeparatorChar(), '-');
+    String filename = desktopFileID.replaceCharacter
+        ('-', File::getSeparatorChar());
     // Validate filename:
     bool atElementBeginning = true;
     for(int i = 0; i < filename.length(); i++)
@@ -266,8 +254,7 @@ DesktopEntry::DesktopEntry
         throw DesktopEntryFormatError(filename);
     }
     entryFile = File(XDGDirectories::getUserDataPath() + entryDirectory
-            + filename 
-            + ((type == Type::directory) ? ".directory" : ".desktop"));
+            + filename + ".desktop"); 
     // Check if the file exists already, and if so, read data from it.
     if(entryFile.existsAsFile())
     {
@@ -277,7 +264,7 @@ DesktopEntry::DesktopEntry
     this->type = type;
     setName(name);
 }
-          
+
 /*
  * Checks if two desktop entries have the same desktop file ID.
  */

@@ -1,25 +1,29 @@
 #pragma once
-#include "AppConfigFile.h"
+#include <map>
+#include "JuceHeader.h"
 
 /* 
- * @file DesktopEntry.h
+ * @file  DesktopEntry.h
  * 
- * DesktopEntry reads in standardized .Desktop file data
- * the Desktop entry format is very well documented at
- * https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html
+ * @brief  Reads in standardized .desktop application shortcut files.
+ *
+ * Although .directory files are part of the desktop entry standard, they are
+ * not relevant to this module and will be ignored.
+ *
+ * @see  https://specifications.freedesktop.org/desktop-entry-spec
+ *              /desktop-entry-spec-latest.html
  */
 
 class DesktopEntry
 {
 public:
     /**
-     * @brief  Defines all types of desktop entry.
+     * @brief  Defines all supported types of desktop entry.
      */
     enum class Type
     {
         application,
         link,
-        directory
     };
 
     /**
@@ -27,26 +31,33 @@ public:
      * 
      * @param entryFile               A valid desktop entry file.
      *
+     * @param desktopFileID           The entry file's desktop file ID.
+     *
      * @throws DesktopEntryFileError  If the file was not a valid desktop entry
      *                                file.
      */
-    DesktopEntry(const juce::File& entryFile);
+    DesktopEntry
+    (const juce::File& entryFile, const juce::String& desktopFileID);
 
     /**
      * @brief  Creates a desktop entry object without an existing file.
      *
      * @param name                      The name of the new desktop entry. 
      *
-     * @param filename                  The name of the new entry file, without
-     *                                  the file extension.
+     * @param desktopFileID             The new entry's desktop file ID.
      * 
      * @param type                      The type of desktop entry to create.       
      *
      * @throws DesktopEntryFormatError  If the name or filename provided do not 
      *                                  comply with desktop entry standards.
      */
-    DesktopEntry(const juce::String& name, const juce::String& filename,
+    DesktopEntry(const juce::String& name, const juce::String& desktopFileID,
             const Type type);
+
+    /**
+     * @brief  Creates an empty desktop entry with no data.
+     */
+    DesktopEntry() { }
             
     virtual ~DesktopEntry() { }
 
