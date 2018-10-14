@@ -61,7 +61,7 @@ public:
     /**
      * @return the text stored within this component's text editor box.
      */
-    juce::String getText();
+    juce::String getText() const;
 
     /**
      * @param shouldShow Sets the file selection button next to the text editor

@@ -55,7 +55,7 @@ void FileSelectTextEditor::setText(juce::String path, bool shouldNotify)
 /**
  * @return the text stored within this component's text editor box.
  */
-juce::String FileSelectTextEditor::getText()
+juce::String FileSelectTextEditor::getText() const
 {
     return filePath.getText();
 }
