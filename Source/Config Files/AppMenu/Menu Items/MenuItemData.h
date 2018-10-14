@@ -76,17 +76,18 @@ public:
      * @brief  Sets the menu item's application launch command.
      *
      * @param newCommand  The new command string to run when this menu item is
-     *                    clicked.
+     *                    activated.
      */
     virtual void setCommand(const juce::String& newCommand) = 0;
 
     /**
      * @brief  Sets if this menu item runs its command in a new terminal window.
      *
-     * @param termLaunch  True to run any launch command assigned to this
-     *                    menu item within a new terminal window.
+     * @param launchInTerm  True to run any launch command assigned to this
+     *                      menu item within a new terminal window, false to run
+     *                      menu commands normally.
      */
-    virtual void setLaunchedInTerm(const bool termLaunch) = 0;
+    virtual void setLaunchedInTerm(const bool launchInTerm) = 0;
 
     /**
      * @brief  Sets the application categories connected to this menu item.
@@ -127,11 +128,6 @@ public:
     int getFolderSize() const;
 
     /**
-     * @brief  Writes all changes to this menu item back to its data source.
-     */
-    virtual void updateSource() = 0;
-
-    /**
      * @brief  Gets the number of folder items held by this menu item that can
      *         be reordered.
      *
@@ -142,7 +138,7 @@ public:
      * @return  The number of child folder items held that can be re-arranged
      *          in any order.
      */
-    virtual int getMovableChildCount() = 0;
+    virtual int getMovableChildCount() const = 0;
 
     /**
      * @brief  Gets a menu item contained in a folder menu item.
@@ -218,11 +214,6 @@ public:
      * @brief  Saves all changes to this menu item back to its data source.
      */
     virtual void saveChanges() = 0;
-
-    /**
-     * @brief  Deletes this menu item from its data source.
-     */
-    virtual void removeFromSource() = 0;
     
     /**
      * @brief  Gets an appropriate title to use for a deletion confirmation 
@@ -266,7 +257,7 @@ public:
      *
      * @return           True if and only if the data field is editable.
      */
-    virtual bool isEditable(const DataField dataField) = 0;
+    virtual bool isEditable(const DataField dataField) const = 0;
 
 private:
     /**

@@ -7,9 +7,9 @@
 /**
  * @file DesktopEntryItemData.h
  * 
- * @brief DesktopEntryItemData is an AppMenuItem that gets its data from a 
- * DesktopEntry object, loaded from a .desktop file. It represents a shortcut
- * to an installed application.
+ * @brief  An AppMenuItem that gets its data from a DesktopEntry object, loaded 
+ *         from a .desktop file. It represents a shortcut to an installed 
+ *         application located in the application menu.
  * 
  * @see AppMenuItem, AppMenuComponent, DesktopEntry
  */
@@ -108,7 +108,7 @@ public:
      *
      * @return  Zero, as desktop entry menu items are never folders.
      */
-    virtual int getMovableChildCount() override;
+    virtual int getMovableChildCount() const override;
     
     /**
      * @brief  Writes all changes to this menu item back to its data source.
@@ -145,14 +145,14 @@ public:
      *
      * @return           True if and only if the data field is editable.
      */
-    virtual bool isEditable(const DataField dataField) override;
+    virtual bool isEditable(const DataField dataField) const override;
 
 private:
     /**
      * @brief  Sets this menu item's desktop entry as hidden for the current
      *         user.
      */
-    virtual void removeFromSource() override;
+    virtual void deleteFromSource() override;
 
     /* Application data source, set on construction. */
     DesktopEntry desktopEntry;

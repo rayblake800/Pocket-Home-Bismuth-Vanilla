@@ -127,7 +127,7 @@ void DesktopEntryItemData::setCategories(const juce::StringArray& categories)
 /*
  * Gets the number of folder items held by this menu item that can be reordered.
  */
-int DesktopEntryItemData::getMovableChildCount()
+int DesktopEntryItemData::getMovableChildCount() const
 {
     return 0;
 }
@@ -167,8 +167,6 @@ juce::String DesktopEntryItemData::getConfirmDeleteMessage() const
     return localeText(will_hide);
 }
 
-
-
 /*
  * Gets an appropriate title to use for a menu item editor.
  */
@@ -180,7 +178,7 @@ juce::String DesktopEntryItemData::getEditorTitle() const
 /*
  * Checks if a data field within this menu item can be edited.
  */
-bool DesktopEntryItemData::isEditable(const DataField dataField)
+bool DesktopEntryItemData::isEditable(const DataField dataField) const
 {
     return true;
 }
@@ -188,7 +186,7 @@ bool DesktopEntryItemData::isEditable(const DataField dataField)
 /*
  * Sets this menu item's desktop entry as hidden for the current user.
  */
-void DesktopEntryItemData::removeFromSource()
+void DesktopEntryItemData::deleteFromSource()
 {
     desktopEntry.setIfDisplayed(false);
     try

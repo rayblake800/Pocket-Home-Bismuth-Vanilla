@@ -4,21 +4,13 @@
  * Creates a menu item from some source of menu data. 
  */
 AppMenuItem::AppMenuItem(MenuItemData::Ptr dataSource) :
-dataSource(dataSource) { }
+Nullable(dataSource) { }
 
 /*
  * Creates a menu item copying data from another menu item. 
  */
 AppMenuItem::AppMenuItem(const AppMenuItem& toCopy) :
-dataSource(toCopy.dataSource) { }
-
-/*
- * Checks if this menu item holds valid menu data.
- */
-bool AppMenuItem::isNull()
-{
-    return dataSource == nullptr;
-}
+Nullable(toCopy.getData()) { }
 
 /*
  * Gets the menu item's displayed title.
@@ -29,7 +21,7 @@ juce::String AppMenuItem::getTitle() const
     {
         return juce::String();
     }
-    return dataSource->getTitle();
+    return getData()->getTitle();
 }
 
 /*
@@ -41,7 +33,7 @@ juce::String AppMenuItem::getIconName() const
     {
         return juce::String();
     }
-    return dataSource->getIconName();
+    return getData()->getIconName();
 }
 
 /*
@@ -53,7 +45,7 @@ juce::String AppMenuItem::getCommand() const
     {
         return juce::String();
     }
-    return dataSource->getCommand();
+    return getData()->getCommand();
 }
 
 /*
@@ -65,7 +57,7 @@ bool AppMenuItem::getLaunchedInTerm() const
     {
         return false;
     }
-    return dataSource->getLaunchedInTerm();
+    return getData()->getLaunchedInTerm();
 }
 
 /*
@@ -77,7 +69,7 @@ juce::StringArray AppMenuItem::getCategories() const
     {
         return juce::StringArray();
     }
-    return dataSource->getCategories();
+    return getData()->getCategories();
 }
 
 /*
@@ -89,19 +81,19 @@ AppMenuItem AppMenuItem::getParentFolder() const
     {
         return AppMenuItem();
     }
-    return AppMenuItem(dataSource->getParent());
+    return AppMenuItem(getData()->getParentFolder());
 }
 
 /*
  * Gets the menu item's index within its folder.
  */
-const MenuIndex& AppMenuItem::getIndex() const
+const int AppMenuItem::getIndex() const
 {
     if(isNull())
     {
         return -1;
     }
-    return dataSource->getIndex();
+    return getData()->getIndex();
 }
 
 /*
@@ -113,7 +105,7 @@ bool AppMenuItem::isFolder() const
     {
         return false; 
     }
-    return dataSource->isFolder();
+    return getData()->isFolder();
 }
 
 /*
@@ -125,7 +117,7 @@ int AppMenuItem::getFolderSize() const
     {
         return 0; 
     }
-    return dataSource->getFolderSize();
+    return getData()->getFolderSize();
 }
 
 /*
@@ -137,7 +129,7 @@ int AppMenuItem::getMovableChildCount() const
     {
         return 0; 
     }
-    return dataSource->getMovableChildCount();
+    return getData()->getMovableChildCount();
 } 
 
 /*
@@ -149,7 +141,7 @@ AppMenuItem AppMenuItem::getFolderItem(const int folderIndex) const
     {
         return AppMenuItem(); 
     }
-    return AppMenuItem(dataSource->getChild(folderIndex));
+    return AppMenuItem(getData()->getChild(folderIndex));
 }
 
 /*
@@ -162,12 +154,48 @@ juce::Array<AppMenuItem> AppMenuItem::getFolderItems() const
         return {}; 
     }
     juce::Array<AppMenuItem> folderItems;
-    juce::Array<MenuItemData::Ptr> childData = dataSource->getChildren();
+    juce::Array<MenuItemData::Ptr> childData = getData()->getChildren();
     for(const MenuItemData::Ptr& item : childData)
     {
-        folderItems.add(AppMenuItem(item);
+        folderItems.add(AppMenuItem(item));
     }
     return folderItems;
+}
+
+/*
+ * Gets an appropriate title to use for a deletion confirmation window.
+ */
+juce::String AppMenuItem::getConfirmDeleteTitle() const
+{
+    if(isNull())
+    {
+        return juce::String();
+    }
+    return getData()->getConfirmDeleteTitle();
+}
+
+/*
+ * Gets appropriate descriptive text for a deletion confirmation window.
+ */
+juce::String AppMenuItem::getConfirmDeleteMessage() const
+{
+    if(isNull())
+    {
+        return juce::String();
+    }
+    return getData()->getConfirmDeleteMessage();
+}
+
+/*
+ * Gets a title to use when editing this menu item.
+ */
+juce::String AppMenuItem::getEditorTitle() const
+{
+    if(isNull())
+    {
+        return juce::String();
+    }
+    return getData()->getEditorTitle();
 }
 
 /*
@@ -175,7 +203,7 @@ juce::Array<AppMenuItem> AppMenuItem::getFolderItems() const
  */
 bool AppMenuItem::operator==(const AppMenuItem& toCompare) const
 {
-    if(dataSource == toCompare.dataSource)
+    if(getData() == toCompare.getData())
     {
         return true;
     }
@@ -195,79 +223,140 @@ bool AppMenuItem::operator<(const AppMenuItem& toCompare) const
 }
 
 /*
- * Gets a menu item's internal data object.
+ * Checks if a data field within a menu item can be edited.
  */
-MenuItemData::Ptr AppMenuItem::Editor::getMenuItemData
-(AppMenuItem& menuItem) const
+bool AppMenuItem::Editor::isEditable
+(AppMenuItem menuItem, const DataField dataField) const
 {
-    return menuItem.dataSource;
-}
-
-/*
- * Removes a menu item's internal data object.
- */
-MenuItemData::Ptr AppMenuItem::Editor::clearMenuItemData
-(AppMenuItem& menuItem) const
-{
-    menuItem.dataSource = nullptr;
-}
-
-/*
- * Checks if this menu item has categories that may be edited.
- */
-bool AppMenuItem::hasEditableCategories() const
-{
-    if(isNull())
+    if(menuItem.isNull())
     {
         return false;
     }
-    return dataSource.isEditable(MenuItemData::DataField::categories);
+    return menuItem.getData()->isEditable(dataField);
 }
 
 /*
- * Checks if the menu item has an editable command field.
+ * Sets a menu item's displayed title.
  */
-bool AppMenuItem::hasEditableCommand() const
+void AppMenuItem::Editor::setTitle
+(AppMenuItem menuItem, const juce::String& title) const
 {
-    if(isNull())
+    if(!menuItem.isNull() && isEditable(menuItem, DataField::title))
     {
-        return false;
+        menuItem.getData()->setTitle(title);
     }
-    return dataSource.isEditable(MenuItemData::DataField::command);
 }
 
 /*
- * Gets an appropriate title to use for a deletion confirmation window.
+ * Sets the name or path used to load a menu item's icon file.
  */
-juce::String AppMenuItem::getConfirmDeleteTitle() const
+void AppMenuItem::Editor::setIconName
+(AppMenuItem menuItem, const juce::String& iconName) const
 {
-    if(isNull())
+    if(!menuItem.isNull() && isEditable(menuItem, DataField::icon))
     {
-        return juce::String();
+        menuItem.getData()->setIconName(iconName);
     }
-    return dataSource.getConfirmDeleteTitle();
 }
 
 /*
- * Gets appropriate descriptive text for a deletion confirmation window.
+ * Sets a menu item's application launch command.
  */
-juce::String AppMenuItem::getConfirmDeleteMessage() const
+void AppMenuItem::Editor::setCommand
+(AppMenuItem menuItem, const juce::String command) const
 {
-    if(isNull())
+    if(!menuItem.isNull() && isEditable(menuItem, DataField::command))
     {
-        return juce::String();
+        menuItem.getData()->setCommand(command);
     }
-    return dataSource.getConfirmDeleteMessage();
 }
 
 /*
- * Gets a title to use when editing this menu item.
+ * Sets if a menu item runs its command in a new terminal window.
  */
-juce::String AppMenuItem::getEditorTitle() const
+void AppMenuItem::Editor::setLaunchedInTerm
+(AppMenuItem menuItem, const bool launchInTerm) const
 {
-    if(isNull())
+    if(!menuItem.isNull() && isEditable(menuItem, DataField::termLaunchOption))
     {
-        return juce::String();
+        menuItem.getData()->setLaunchedInTerm(launchInTerm);
     }
-    return dataSource.getEditorTitle();
+}
+
+/*
+ * Sets the application categories connected to a menu item.
+ */
+void AppMenuItem::Editor::setCategories
+(AppMenuItem menuItem, const juce::StringArray categories) const
+{
+    if(!menuItem.isNull() && isEditable(menuItem, DataField::categories))
+    {
+        menuItem.getData()->setCategories(categories);
+    }
+}
+
+/*
+ * Attempts to replace a menu item in its parent folder, saving the change to 
+ * the menu item's data source.
+ */
+bool AppMenuItem::Editor::replace
+(AppMenuItem toReplace, AppMenuItem replacementItem) const
+{
+    if(!toReplace.isNull() && !replacementItem.isNull())
+    {
+        return toReplace.getData()->replace(replacementItem.getData());
+    }
+    return false;
+}
+
+/*
+ * Attempts to insert a menu item into a folder menu item, saving the change to
+ * the folder menu item's data source.
+ */
+bool AppMenuItem::Editor::insertChild
+(AppMenuItem folderItem, AppMenuItem childItem, const int index) const
+{
+    if(!folderItem.isNull() && !childItem.isNull())
+    {
+        return folderItem.getData()->insertChild(childItem.getData(), index);
+    }
+    return false;
+}
+
+/*
+ * Attempts to remove a menu item from the menu, saving the change to the menu
+ * item's data source.
+ */
+bool AppMenuItem::Editor::remove(AppMenuItem toRemove) const
+{
+    if(!toRemove.isNull())
+    {
+        return toRemove.getData()->remove();
+    }
+    return false;
+}
+
+/*
+ * Swaps the positions of two folder items, saving the change to the folder menu
+ * item's data source.
+ */
+bool AppMenuItem::Editor::swapChildren
+(AppMenuItem folderItem, const int childIdx1, const int childIdx2)
+{
+    if(!folderItem.isNull())
+    {
+        return folderItem.getData()->swapChildren(childIdx1, childIdx2);
+    }
+    return false;
+}
+
+/*
+ * Saves all changes made to a menu item back to the menu item's data source.
+ */
+void AppMenuItem::Editor::saveChanges(AppMenuItem menuItem) const
+{
+    if(!menuItem.isNull())
+    {
+        menuItem.getData()->saveChanges();
+    }
 }
