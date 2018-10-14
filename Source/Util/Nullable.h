@@ -27,7 +27,7 @@
  */
 
 template<class PtrType>
-Nullable
+class Nullable
 {
 protected:
     /**
@@ -58,11 +58,21 @@ public:
 
 protected:
     /**
+     * @brief  Gets this object's data pointer.
+     *
+     * @return  The data pointer's value. 
+     */
+    PtrType getData() const
+    {
+        return dataPtr;
+    }
+
+    /**
      * @brief  Accesses the object's data pointer.
      *
      * @return  A reference to the internal data pointer.
      */
-    PtrType& getData()
+    PtrType& getDataReference()
     {
         return dataPtr;
     }

@@ -4,60 +4,49 @@
 /* 
  * @file DesktopEntry.h
  * 
- * @brief  Reads in standardized .desktop file data.
- *
- * Although .directory files are part of the desktop entry standard, they are
- * ignored, as they are not relevant to this application.
- *
- * @see https://specifications.freedesktop.org/desktop-entry-spec 
+ * DesktopEntry reads in standardized .Desktop file data
+ * the Desktop entry format is very well documented at
+ * https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html
  */
 
-class DesktopEntry : public juce::ReferenceCountedObject
+class DesktopEntry
 {
 public:
-    /* Reference counted object pointer type: */
-    typedef juce::ReferenceCountedObjectPtr<DesktopEntry> Ptr;
-
     /**
-     * @brief  Defines all valid types of desktop entry.
+     * @brief  Defines all types of desktop entry.
      */
     enum class Type
     {
         application,
-        link
+        link,
+        directory
     };
 
     /**
-     * @brief  Loads desktop entry data from a .desktop file.
+     * @brief  Loads desktop entry data from a .desktop or .directory file.
      * 
      * @param entryFile               A valid desktop entry file.
-     *
-     * @param entryID                 The entry's desktop file ID.
      *
      * @throws DesktopEntryFileError  If the file was not a valid desktop entry
      *                                file.
      */
-    DesktopEntry(const juce::File& entryFile, const juce::String& entryID);
+    DesktopEntry(const juce::File& entryFile);
 
     /**
      * @brief  Creates a desktop entry object without an existing file.
      *
      * @param name                      The name of the new desktop entry. 
      *
-     * @param entryID                   The entry's desktop file ID.
+     * @param filename                  The name of the new entry file, without
+     *                                  the file extension.
      * 
-     * @param type                      The type of desktop entry to create.  
+     * @param type                      The type of desktop entry to create.       
      *
      * @throws DesktopEntryFormatError  If the name or filename provided do not 
      *                                  comply with desktop entry standards.
      */
     DesktopEntry(const juce::String& name, const juce::String& filename,
             const Type type);
-
-    /**
-     * @brief  Creates an invalid desktop entry object containing no data.
-     */
-    DesktopEntry() { }
             
     virtual ~DesktopEntry() { }
 
@@ -82,13 +71,6 @@ public:
     bool operator<(const DesktopEntry& toCompare) const;
 
     /* ########## Functions for getting desktop entry data: ################# */
-
-    /**
-     * @brief  Gets the unique string identifying this desktop entry.
-     *
-     * @return  The desktop ID string created from the entry's path.
-     */
-    juce::String getDesktopFileId() const;
 
     /**
      * @brief  Gets the desktop entry's type.
@@ -403,7 +385,7 @@ private:
     juce::File entryFile;
 
     /* The desktop entry's desktop file ID. */
-    const juce::String desktopFileID;
+    juce::String desktopFileID;
     
     /* The desktop entry's type. */
     Type type = Type::application;
@@ -486,10 +468,5 @@ private:
 
     /* The URL used if this entry is a link. */
     juce::String url;
-
-    /* Protects desktop entry data from concurrent modification. */
-    juce::ReadWriteLock entryLock;
-    
-    JUCE_DECLARE_NON_COPYABLE(DesktopEntry);
 };
 
