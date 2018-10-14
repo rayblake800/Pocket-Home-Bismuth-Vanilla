@@ -145,7 +145,10 @@
         "select_icon": "Select Icon",
         "edit_categories": "Edit categories",
         "command": "Command:",
-        "run_in_terminal": "Run in terminal:"
+        "run_in_terminal": "Run in terminal:",
+        "newAppTitleKey" : "New application shortcut",
+        "newFolderTitleKey" : "New application folder",
+        "newEntryTitleKey" : "New desktop entry file"
     },
     "AppMenuItem": {
         "delete_APP": "Delete ",
