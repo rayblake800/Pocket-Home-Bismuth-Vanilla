@@ -2,22 +2,34 @@
 #include "IconLoader.h"
 #include "AppMenuPopupEditor.h"
 #include "ComponentConfigFile.h"
+      
+/* Localized text keys: */
+static const constexpr char * name = "name";
+static const constexpr char * icon_path = "icon_path";
+static const constexpr char * select_icon = "select_icon";
+static const constexpr char * edit_categories = "edit_categories";
+static const constexpr char * command = "command";
+static const constexpr char * run_in_terminal = "run_in_terminal";
 
+/*
+ * Creates a new editor component for an application menu item.
+ */
 AppMenuPopupEditor::AppMenuPopupEditor(
-        juce::String title,
-        std::function<void(AppMenuPopupEditor*) > onConfirm,
+        const juce::String& editorTitle,
+        std::function<void() > onConfirm,
         bool showCategoryList,
         bool showCommandField) :
-PopupEditorComponent(title,
-[this, onConfirm](PopupEditorComponent* thisPopup)
+PopupEditorComponent(editorTitle,
+[this, onConfirm](PopupEditorComponent* e)
 {
-    onConfirm(this);
+    commitEdits();
+    onConfirm();
 }),
 Localized("AppMenuPopupEditor"),
 nameLabel("nameLabel", localeText(name)),
-nameEditor("nameEditor"),
+titleEditor("titleEditor"),
 iconLabel("iconLabel", localeText(icon_path)),
-iconPathEditor(localeText(select_icon)),
+iconNameEditor(localeText(select_icon)),
 categoryEditButton(localeText(edit_categories)),
 commandLabel("commandLabel", localeText(command)),
 commandEditor("commandEditor"),
@@ -25,10 +37,10 @@ terminalCheckboxLabel("runInTermLabel", localeText(run_in_terminal))
 {
     using namespace juce;
     categoryEditButton.addListener(this);
-    iconPathEditor.addFileSelectListener(this);
+    iconNameEditor.addFileSelectListener(this);
     
     ComponentConfigFile config;
-    nameEditor.setFont(Font(config.getFontHeight
+    titleEditor.setFont(Font(config.getFontHeight
             (ComponentConfigFile::smallText)));
     commandEditor.setFont(Font(config.getFontHeight
             (ComponentConfigFile::smallText)));
@@ -39,16 +51,16 @@ terminalCheckboxLabel("runInTermLabel", localeText(run_in_terminal))
         Row(10,
         {
             RowItem(&nameLabel, 20),
-            RowItem(&nameEditor, 41)
+            RowItem(&titleEditor, 41)
         }),
         Row(10,
         {
             RowItem(&iconLabel, 20),
-            RowItem(&iconPathEditor, 30),
+            RowItem(&iconNameEditor, 30),
             RowItem(&iconPreview, 10)
         })
     });
-    //launch command row
+    // Launch command row:
     if (showCommandField)
     {
         layout.addRow(Row(10,{
@@ -60,7 +72,7 @@ terminalCheckboxLabel("runInTermLabel", localeText(run_in_terminal))
             RowItem(&terminalCheckbox, 10)
         }));
     }
-    //category list rows:
+    // Category list rows:
     if (showCategoryList)
     {
 
@@ -77,92 +89,114 @@ terminalCheckboxLabel("runInTermLabel", localeText(run_in_terminal))
     setLayout(layout);
 }
 
-AppMenuPopupEditor::~AppMenuPopupEditor() { }
-
-/**
- * @return the contents of the editable name field 
+/*
+ * Gets the contents of the menu item name field.
  */
-juce::String AppMenuPopupEditor::getNameField()
+juce::String AppMenuPopupEditor::getTitleField() const
 {
-    return nameEditor.getText();
+    return titleEditor.getText();
 }
 
-/**
- * @return the contents of the editable icon field 
+/*
+ * Gets the contents of the menu item icon name field.
  */
-juce::String AppMenuPopupEditor::getIconField()
+juce::String AppMenuPopupEditor::getIconNameField() const
 {
-    return iconPathEditor.getText();
+    return iconNameEditor.getText();
 }
 
-/**
- * @return the contents of the editable category list. 
+/*
+ * Gets the list of application categories assigned in the category editor.
  */
-juce::StringArray AppMenuPopupEditor::getCategories()
+const juce::StringArray& AppMenuPopupEditor::getCategories() const
 {
     return categories;
 }
 
-/**
- * @return the contents of the editable launch command field.
+/*
+ * Gets the contents of the command field.
  */
-juce::String AppMenuPopupEditor::getCommandField()
+juce::String AppMenuPopupEditor::getCommandField() const
 {
     return commandEditor.getText();
 }
 
-/**
- * @return true if the command should run in the terminal
+/*
+ * Gets the state of the terminal checkbox.
  */
-bool AppMenuPopupEditor::getTerminalCheckbox()
+bool AppMenuPopupEditor::getTerminalCheckboxState() const
 {
     return terminalCheckbox.getToggleState();
 }
 
-/**
+/*
  * Set the value stored in the editable name field.
  */
-void AppMenuPopupEditor::setNameField(juce::String name)
+void AppMenuPopupEditor::setTitleField(const juce::String& name)
 {
-    nameEditor.setText(name);
+    titleEditor.setText(name);
 }
 
-/**
- * Set the value stored in the editable icon field, and update
- * the preview icon.
+/*
+ * Sets the value stored in the editable icon name field, and updates the 
+ * preview icon.
  */
-void AppMenuPopupEditor::setIconField(juce::String icon)
+void AppMenuPopupEditor::setIconField(const juce::String& icon)
 {
-    iconPathEditor.setText(icon);
+    iconNameEditor.setText(icon);
+    loadIconPreview();
 }
 
-/**
- * Set the values stored in the editable category list.
+/*
+ * Sets the category values stored in the editable category list.
  */
-void AppMenuPopupEditor::setCategories(juce::StringArray categories)
+void AppMenuPopupEditor::setCategoryList(const juce::StringArray& categories)
 {
     this->categories = categories;
 }
 
-/**
- * Set the value stored in the editable launch command field.
+/*
+ * Sets the value displayed in the editable launch command field.
  */
-void AppMenuPopupEditor::setCommandField(juce::String command)
+void AppMenuPopupEditor::setCommandField(const juce::String& command)
 {
     commandEditor.setText(command);
 }
 
-/**
- * @param launchInTerm new value to apply to the terminal launch checkbox.
+/*
+ * Sets the state of the "launch in terminal" checkbox.
  */
-void AppMenuPopupEditor::setTerminalCheckbox(bool launchInTerm)
+void AppMenuPopupEditor::setTerminalCheckboxState(const bool launchInTerm)
 {
     terminalCheckbox.setToggleState(launchInTerm,
             juce::NotificationType::dontSendNotification);
 }
 
-/**
- * Handles the category editor button.
+/*
+ * Updates the icon preview component.
+ */
+void AppMenuPopupEditor::loadIconPreview()
+{
+    using namespace juce;
+    String iconName = getIconNameField();
+    IconLoader iconThread;
+    iconThread.loadIcon(iconName, iconPreview.getWidth(), [this](Image iconImg)
+    {
+        iconPreview.setImage(iconImg);
+    });
+}
+
+/*
+ * Triggers whenever the icon field is set to a new value.
+ */
+void AppMenuPopupEditor::fileSelected(FileSelectTextEditor* iconEditor)
+{
+    using namespace juce;
+    loadIconPreview();
+}
+
+/*
+ * Triggers whenever the category editor button is clicked.
  */
 void AppMenuPopupEditor::editorButtonClicked(juce::Button* button)
 {
@@ -177,19 +211,4 @@ void AppMenuPopupEditor::editorButtonClicked(juce::Button* button)
         addAndMakeVisible(categoryEditor);
     }
 }
-
-/**
- * Triggers whenever the icon field is set to a new value.
- */
-void AppMenuPopupEditor::fileSelected(FileSelectTextEditor* edited)
-{
-    using namespace juce;
-    String newIcon = getIconField();
-    IconLoader iconThread;
-    iconThread.loadIcon(newIcon, iconPreview.getWidth(), [this](Image iconImg)
-    {
-        iconPreview.setImage(iconImg);
-    });
-}
-
 

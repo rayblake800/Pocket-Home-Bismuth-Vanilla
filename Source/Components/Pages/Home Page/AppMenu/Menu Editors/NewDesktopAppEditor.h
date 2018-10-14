@@ -3,10 +3,10 @@
 #include "AppMenuPopupEditor.h"
 
 /** 
- * @file   NewDesktopAppEditor.h
+ * @file  NewDesktopAppEditor.h
  * 
- * @brief NewConfigAppEditor creates a pop-up editor component that allows the 
- * user to create a new application link as a local .desktop file.  
+ * @brief  A pop-up editor component that allows the user to create a new 
+ *         application link as a local .desktop file.  
  * 
  * After entering data and pressing the confirm button, the new favorite 
  * application link is added to the menu, and the .desktop file is written.  
@@ -22,4 +22,11 @@ public:
      *                     confirm button.
      */
     NewDesktopAppEditor(std::function<void() > onConfirm = [](){});
+
+private:
+    /**
+     * @brief  Creates a new desktop entry file using the editor's field 
+     *         values.
+     */
+    virtual void commitEdits() override;
 };
