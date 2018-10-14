@@ -56,6 +56,9 @@ static const juce::Identifier& actionCommandKey
         case ActionCommand::setBrightness:
             return setBrightnessKey;
     }
+    DBG("SystemCommand::" << __func__ << ":Error, unhandled command type!");
+    jassertfalse;
+    return juce::Identifier::null;
 }
 
 /*########################    Int Commands:     ##############################*/
@@ -86,6 +89,9 @@ static const juce::Identifier& intCommandKey
         case IntCommand::setPassword:
             return setPasswordKey;
     }
+    DBG("SystemCommand::" << __func__ << ":Error, unhandled command type!");
+    jassertfalse;
+    return juce::Identifier::null;
 }
 
 /*########################    Text Commands:    ##############################*/
@@ -116,6 +122,9 @@ static const juce::Identifier& textCommandKey
         case TextCommand::getBrightness:
              return getBrightnessKey;
     }
+    DBG("SystemCommand::" << __func__ << ":Error, unhandled command type!");
+    jassertfalse;
+    return juce::Identifier::null;
 }
 
 
