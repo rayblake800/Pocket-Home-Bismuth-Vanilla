@@ -1,30 +1,44 @@
-AppMenuButton
-    -get/set menu item
-    -draw button component
-    abstract:
-        -Get title font
-        -Get icon bounds
-        -Get title bounds
-        -Get justification
-        -Draw outline
-        -Draw background
-AppMenuFolder
-AppMenuComponent
-    -Creates, positions, and destroys AppMenuFolders
-    -Show/Hide loading spinner
-    -Show/Hide editor components
-    abstract:
-        -Create folder component
-        -Update folder bounds
-AppMenuController
-    -Handle button events
-    -Handle key events
-    -Create editor components
-    -Create context menus
-AppContextMenu
+AppMenu Namespace:
+public interface:
+    MainComponent:
+        Functions:
+        -Set menu type (create controller instance)
+        -standard juce::Component interface
+        Data Members:
+        -Controller
 
-Implementations:
+internal implementation:
+    Controller
+        -Launch/focus application
+        -Enable/disable input
+        -Enable/disable loading spinner
+        -Op
+    InputHandler
+        -Handle button click
+        -Handle folder click
+        -Handle misc. click
+    ItemButton
+        -get/set menu item
+        -draw button component
+        abstract:
+            -Get title font
+            -Get icon bounds
+            -Get title bounds
+            -Get justification
+            -Draw outline
+            -Draw background
+    AppMenuFolder
+    AppMenuComponent
+        -Creates, positions, and destroys AppMenuFolders
+        -Show/Hide loading spinner
+        -Show/Hide editor components
+        abstract:
+            -Create folder component
+            -Update folder bounds
+    AppContextMenu
 
-PagedMenuComponent
-PagedMenuController
-PagedMenuFolder
+    Implementations:
+
+    PagedMenuComponent
+    PagedMenuController
+    PagedMenuFolder
