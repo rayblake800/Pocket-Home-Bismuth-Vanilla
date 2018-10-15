@@ -1,18 +1,31 @@
 AppMenu Namespace:
-public interface:
-    MainComponent:
-        Functions:
-        -Set menu type (create controller instance)
+Public interface:
+   *MainComponent* : 
+   // Displays an application menu in several possible ways
+   public:
+      Functions:
+        -Set menu type
         -standard juce::Component interface
-        Data Members:
+   private:
+        -Create controller for menu type
+      Data Members:
         -Controller
+      Controller Interface:
+        Functions:
+          -Create menu component
+          -Set loading spinner
+        Data Members:
+          -Menu component
+          -Main component reference
 
-internal implementation:
-    Controller
+Internal implementation:
+    *Controller*
+       Functions:
         -Launch/focus application
         -Enable/disable input
         -Enable/disable loading spinner
-        -Op
+       InputHandler interface:       
+
     InputHandler
         -Handle button click
         -Handle folder click
