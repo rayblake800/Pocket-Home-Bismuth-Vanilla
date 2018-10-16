@@ -1,0 +1,13 @@
+Creating the Menu:
+    -Create, add and make visible: AppMenu::MainComponent mainCmp
+    -Call mainCmp.showMenuType(paged)
+        -mainCmp initializes "control" data member as a PageMenuController
+            -control initializes data member "inputHandler" as a
+             PageInputHandler
+            -control initializes data member "menuCmp" as a PageMenuComponent 
+            -control calls inputHandler:addMenuComponent, adding a reference to
+             
+        -mainCmp calls control->addMenuComponent(), adding menuCmp as a 
+         visible child component to mainCmp 
+    
+

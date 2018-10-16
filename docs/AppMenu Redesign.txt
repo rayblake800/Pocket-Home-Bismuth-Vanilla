@@ -1,31 +1,86 @@
 AppMenu Namespace:
 Public interface:
+
    *MainComponent* : 
    // Displays an application menu in several possible ways
    public:
-      Functions:
-        -Set menu type
-        -standard juce::Component interface
+       Functions:
+           -Set menu type
+           -standard juce::Component interface
    private:
-        -Create controller for menu type
+           -Create controller for menu type
       Data Members:
-        -Controller
-      Controller Interface:
-        Functions:
-          -Create menu component
-          -Set loading spinner
-        Data Members:
-          -Menu component
-          -Main component reference
+           -Controller
+           -Loading Spinner
+      Controller Interface: friend class MainComponent
+          Protected:
+              Functions:
+                  -Show/Hide loading spinner
+          private:
+                  -Create + Save menu component(pure virtual) 
+                  -Add menu component to MainComponent
+              Data Members:
+                  -Main component reference
 
 Internal implementation:
-    *Controller*
-       Functions:
-        -Launch/focus application
-        -Enable/disable input
-        -Enable/disable loading spinner
-       InputHandler interface:       
 
+    *Controller* : public MainComponent::Controller
+    // Initializes menu component, creates input handler, handles item/folder
+    // click events
+    protected:
+        Functions:
+            -Launch/focus application
+            -Enable/disable input
+            -Create + show editor
+            -Create + show context menu
+            -Add menu item
+            -Remove menu item
+            -Swap menu items
+            -Open folder
+            -Close folder
+    private:    
+            -Handle window focus events
+            -Handle application launch events
+            -Create InputHandler(pure virtual)
+            -Handle MenuItem click
+            -Handle MenuItem right-clicked
+            -Handle Folder click
+            -Handle Folder right-clicked
+            -Handle Menu right-clicked
+        Data Members:
+            -InputHandler
+            -Menu Component
+        InputHandler interface: friend class Controller      
+        public:    
+            Functions:
+                -Add folder component(pure virtual)
+                -Add menuItem component(pure virtual)
+        protected:
+                -Signal MenuItem clicked
+                -Signal MenuItem right-clicked
+                -Signal Folder clicked
+                -Signal Folder right-clicked
+        private:
+                -Add MenuComponent(pure virtual)
+            Data Members:
+                -Controller reference
+        MenuComponent interface: friend class Controller
+        protected:
+            Functions:
+                -Open folder
+                -Close folder
+                -Check if folder is active folder
+        private:
+                -Assign inputHandler
+                -Add menu item component
+                -Remove menu item component
+                -Swap menu item components(pure virtual)
+                -Create folder component(pure virtual)
+            Data Members:
+                -Controller reference
+        
+    *MenuComponent* : public Controller::MenuComponent    
+    // Creates, arranges, opens, and closes folder components
     InputHandler
         -Handle button click
         -Handle folder click
