@@ -2,8 +2,8 @@
 #include "Utils.h"
 #include "LibNMInterface.h"
 #include "JuceHeader.h"
-#include "MainConfigFile.h"
-#include "MainConfigKeys.h"
+#include "Config/MainFile.h"
+#include "Config/MainKeys.h"
 #include "SavedConnections.h"
 #if JUCE_DEBUG
 #include "WifiDebugOutput.h"
@@ -11,10 +11,11 @@
 
 LibNMInterface::LibNMInterface()
 {
-    using namespace juce;
-    MainConfigFile config;
+    using juce::String;
+    using juce::Array;
+    Config::MainFile config;
     String wifiIface = config.getConfigValue<String>
-            (MainConfigKeys::wifiInterfaceKey);
+            (Config::MainKeys::wifiInterfaceKey);
     if(wifiIface.isNotEmpty())
     {
         wifiDevice = client.getWifiDeviceByIface(wifiIface.toRawUTF8());
