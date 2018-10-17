@@ -1,9 +1,9 @@
 #include <set>
 #include "Localized.h"
 #include "Utils.h"
-#include "MainConfigFile.h"
-#include "MainConfigKeys.h"
 #include "XDGDirectories.h"
+#include "Config/MainFile.h"
+#include "Config/MainKeys.h"
 #include "DesktopEntryFileError.h"
 #include "DesktopEntryFormatError.h"
 #include "DesktopEntryUtils.h"
@@ -332,9 +332,9 @@ juce::String DesktopEntry::getLaunchCommand() const
     String command = exec;
     if(terminal && command.isNotEmpty())
     {
-        MainConfigFile config;
+        Config::MainFile config;
         command = config.getConfigValue<String>
-                (MainConfigKeys::termLaunchCommandKey) + " " + command;
+                (Config::MainKeys::termLaunchCommandKey) + " " + command;
     }
     return command;
 }

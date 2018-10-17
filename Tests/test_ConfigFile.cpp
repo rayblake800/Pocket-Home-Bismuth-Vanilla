@@ -1,10 +1,10 @@
 #include "JuceHeader.h"
 #include "SharedResource.h"
-#include "MainConfigFile.h"
-#include "ConfigFile.h"
-#include "ConfigJSON.h"
+#include "Config/MainFile.h"
+#include "Config/FileHandler.h"
+#include "Config/FileResource.h"
 
-class TestListener : public MainConfigFile::Listener
+class TestListener : public Config::MainFile::Listener
 {
     public:
     TestListener() { }

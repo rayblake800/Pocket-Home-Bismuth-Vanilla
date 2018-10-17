@@ -352,6 +352,9 @@ namespace GVariantConverter
             case stringArrayType:
                 g_value_take_boxed(&value,
                         g_variant_get_strv(variant, nullptr));
+            default:
+                DBG("GVariantConverter::" << __func__ 
+                        << ": Unhandled variant type!");
         }
         return value;
     }
