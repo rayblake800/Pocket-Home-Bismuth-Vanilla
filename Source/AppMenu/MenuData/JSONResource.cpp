@@ -1,10 +1,8 @@
-#define APP_MENU_CONFIG_IMPLEMENTATION 
-
-#include "DesktopEntryItemData.h"
-#include "AppJSON.h"
+#include "DesktopEntryData.h"
+#include "JSONResource.h"
 
 /* SharedResource object key */
-const juce::Identifier AppJSON::resourceKey = "AppJSON";
+const juce::Identifier AppMenu::JSONResource::resourceKey = "JSONResource";
 /* JSON configuration file name */
 static const constexpr char * jsonFilename = "apps.json";
 
@@ -22,19 +20,20 @@ static const constexpr char * from_favorites = "from_favorites";
 static const constexpr char * will_remove_link = "will_remove_link";
 static const constexpr char * edit_app = "edit_app";
 
-AppJSON::AppJSON() : ConfigJSON(resourceKey, jsonFilename)
+AppMenu::JSONResource::JSONResource() : Config::FileResource
+(resourceKey, jsonFilename)
 {
     using namespace juce;
     // Load menu:
     var rootFolder = initProperty<var>(folderItemKey);
-    rootFolderItem = AppMenuItem(new ConfigItemData(rootFolder));
+    rootFolderItem = MenuItem(new ConfigItemData(rootFolder));
     loadJSONData();   
 }
 
 /*
  * Gets a menu item representing the root folder of the application menu.
  */
-AppMenuItem AppJSON::getRootFolderItem() const
+AppMenu::MenuItem AppMenu::JSONResource::getRootFolderItem() const
 {
     return rootFolderItem;
 }
@@ -47,7 +46,7 @@ AppMenuItem AppJSON::getRootFolderItem() const
  *
  * @return          All menu item data packaged in an object var. 
  */
-static juce::var itemToVar(const AppMenuItem& menuItem)
+static juce::var itemToVar(const AppMenu::MenuItem& menuItem)
 {
     using namespace juce;
     DynamicObject::Ptr itemObject = new DynamicObject();
@@ -61,7 +60,7 @@ static juce::var itemToVar(const AppMenuItem& menuItem)
             Array<var> folderItems;
             for(int i = 0; i < configChildCount; i++)
             {
-                AppMenuItem folderItem = menuItem.getFolderItem(i);
+                AppMenu::MenuItem folderItem = menuItem.getFolderItem(i);
                 if(!folderItem.isNull())
                 {
                     folderItems.add(itemToVar(folderItem));
@@ -86,17 +85,17 @@ static juce::var itemToVar(const AppMenuItem& menuItem)
 /*
  * Copies all menu data back to the JSON configuration file.
  */
-void AppJSON::writeDataToJSON()
+void AppMenu::JSONResource::writeDataToJSON()
 {
     using namespace juce;
-    AppMenuItem rootItem = getRootFolderItem();
+    MenuItem rootItem = getRootFolderItem();
     int numItems = rootItem.getMovableChildCount();
     if(numItems > 0)
     {
         Array<var> rootFolder;
         for(int i = 0; i < numItems; i++)
         {
-            AppMenuItem folderItem = rootItem.getFolderItem(i);
+            MenuItem folderItem = rootItem.getFolderItem(i);
             if(!folderItem.isNull())
             {
                 rootFolder.add(itemToVar(folderItem));
@@ -109,23 +108,23 @@ void AppJSON::writeDataToJSON()
 /**
  * Adds a new menu item to the list of menu items.
  */
-AppMenuItem AppJSON::addMenuItem(
+AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
         const juce::String& title, 
         const juce::String& icon,
         const juce::String& command,
         const bool launchInTerm,
         const juce::StringArray& categories,
-        AppMenuItem& parentFolder,
+        MenuItem& parentFolder,
         const int index)
 {
     if(parentFolder.isNull() || index < 0 
             || index > parentFolder.getMovableChildCount())
     {
-        return AppMenuItem();
+        return MenuItem();
     }
     using namespace juce;
     var voidVar;
-    MenuItemData::Ptr newData = new ConfigItemData(voidVar);
+    ItemData::Ptr newData = new ConfigItemData(voidVar);
     newData->setTitle(title);
     newData->setIconName(icon);
     newData->setCommand(command);
@@ -135,10 +134,10 @@ AppMenuItem AppJSON::addMenuItem(
         newData->setCategories(categories);
         static_cast<ConfigItemData*>(newData.get())->loadDesktopEntryItems();
     }
-    AppMenuItem newItem(newData);
+    MenuItem newItem(newData);
     if(!insertChild(parentFolder, newItem, index))
     {
-        return AppMenuItem();
+        return MenuItem();
     }
     return newItem;
 }
@@ -146,7 +145,7 @@ AppMenuItem AppJSON::addMenuItem(
 /*
  * Recursively creates a menu item and all its child folder items.
  */
-AppJSON::ConfigItemData::ConfigItemData(juce::var& menuData) :
+AppMenu::JSONResource::ConfigItemData::ConfigItemData(juce::var& menuData) :
 Localized("ConfigItemData")
 {
     using namespace juce;
@@ -191,7 +190,7 @@ Localized("ConfigItemData")
  * Cancels any desktop entry menu items waiting to load before destroying this 
  * menu item.
  */
-AppJSON::ConfigItemData::~ConfigItemData()
+AppMenu::JSONResource::ConfigItemData::~ConfigItemData()
 {
     if(pendingCallbackID.get())
     {
@@ -203,14 +202,14 @@ AppJSON::ConfigItemData::~ConfigItemData()
 /*
  * Gets the menu item's displayed title.
  */
-juce::String AppJSON::ConfigItemData::getTitle() const
+juce::String AppMenu::JSONResource::ConfigItemData::getTitle() const
 {
     return title;
 }
 /*
  * Gets the name or path used to load the menu item's icon file.
  */
-juce::String AppJSON::ConfigItemData::getIconName() const
+juce::String AppMenu::JSONResource::ConfigItemData::getIconName() const
 {
     return iconName;
 }
@@ -218,7 +217,7 @@ juce::String AppJSON::ConfigItemData::getIconName() const
 /*
  * Gets the menu item's application launch command.
  */
-juce::String AppJSON::ConfigItemData::getCommand() const
+juce::String AppMenu::JSONResource::ConfigItemData::getCommand() const
 {
     return command;
 }
@@ -226,7 +225,7 @@ juce::String AppJSON::ConfigItemData::getCommand() const
 /*
  * Checks if this menu item launches an application in a new terminal window.
  */
-bool AppJSON::ConfigItemData::getLaunchedInTerm() const
+bool AppMenu::JSONResource::ConfigItemData::getLaunchedInTerm() const
 {
     return launchInTerm;
 }
@@ -235,7 +234,7 @@ bool AppJSON::ConfigItemData::getLaunchedInTerm() const
  * Gets the application categories used to load this item's desktop entry child 
  * folder items.
  */
-juce::StringArray AppJSON::ConfigItemData::getCategories() const
+juce::StringArray AppMenu::JSONResource::ConfigItemData::getCategories() const
 {
     return categories;
 }
@@ -243,7 +242,7 @@ juce::StringArray AppJSON::ConfigItemData::getCategories() const
 /*
  * Sets the menu item's displayed title.
  */
-void AppJSON::ConfigItemData::setTitle(const juce::String& title)
+void AppMenu::JSONResource::ConfigItemData::setTitle(const juce::String& title)
 {
     this->title = title;
 }
@@ -251,7 +250,8 @@ void AppJSON::ConfigItemData::setTitle(const juce::String& title)
 /*
  * Sets the name or path used to load the menu item's icon file.
  */
-void AppJSON::ConfigItemData::setIconName(const juce::String& iconName)
+void AppMenu::JSONResource::ConfigItemData::setIconName
+(const juce::String& iconName)
 {
     this->iconName = iconName;
 }
@@ -259,7 +259,8 @@ void AppJSON::ConfigItemData::setIconName(const juce::String& iconName)
 /*
  * Sets the menu item's application launch command.
  */
-void AppJSON::ConfigItemData::setCommand(const juce::String& command)
+void AppMenu::JSONResource::ConfigItemData::setCommand
+(const juce::String& command)
 {
     this->command = command;
 }
@@ -267,7 +268,8 @@ void AppJSON::ConfigItemData::setCommand(const juce::String& command)
 /*
  * Sets if this menu item runs its command in a new terminal window.
  */
-void AppJSON::ConfigItemData::setLaunchedInTerm(const bool launchInTerm)
+void AppMenu::JSONResource::ConfigItemData::setLaunchedInTerm
+(const bool launchInTerm)
 {
     this->launchInTerm = launchInTerm;
 }
@@ -276,7 +278,8 @@ void AppJSON::ConfigItemData::setLaunchedInTerm(const bool launchInTerm)
  * Sets the application categories used to load this item's desktop entry child 
  * folder items.
  */
-void AppJSON::ConfigItemData::setCategories(const juce::StringArray& categories)
+void AppMenu::JSONResource::ConfigItemData::setCategories
+(const juce::StringArray& categories)
 {
     this->categories = categories;
 }
@@ -284,7 +287,7 @@ void AppJSON::ConfigItemData::setCategories(const juce::StringArray& categories)
 /*
  * Gets the number of folder items held by this menu item that can be reordered.
  */
-int AppJSON::ConfigItemData::getMovableChildCount() const
+int JSONResource::ConfigItemData::getMovableChildCount() const
 {
     return movableChildCount;
 }
@@ -292,7 +295,7 @@ int AppJSON::ConfigItemData::getMovableChildCount() const
 /*
  * Writes all changes to this menu item back to its data source.
  */
-void AppJSON::ConfigItemData::saveChanges()
+void JSONResource::ConfigItemData::saveChanges()
 {
     JSONWriter jsonWriter;
     jsonWriter.writeChanges();
@@ -301,7 +304,7 @@ void AppJSON::ConfigItemData::saveChanges()
 /*
  * Gets an appropriate title to use for a deletion confirmation window.
  */
-juce::String AppJSON::ConfigItemData::getConfirmDeleteTitle() const
+juce::String JSONResource::ConfigItemData::getConfirmDeleteTitle() const
 {
     return localeText(remove_APP) 
             + getTitle() + localeText(from_favorites);
@@ -310,7 +313,7 @@ juce::String AppJSON::ConfigItemData::getConfirmDeleteTitle() const
 /*
  * Gets appropriate descriptive text for a deletion confirmation window.
  */
-juce::String AppJSON::ConfigItemData::getConfirmDeleteMessage() const
+juce::String JSONResource::ConfigItemData::getConfirmDeleteMessage() const
 {
     return localeText(will_remove_link);
 }
@@ -318,7 +321,7 @@ juce::String AppJSON::ConfigItemData::getConfirmDeleteMessage() const
 /*
  * Gets an appropriate title to use for a menu item editor.
  */
-juce::String AppJSON::ConfigItemData::getEditorTitle() const
+juce::String JSONResource::ConfigItemData::getEditorTitle() const
 {
     return localeText(edit_app);
 }
@@ -326,7 +329,7 @@ juce::String AppJSON::ConfigItemData::getEditorTitle() const
 /*
  * Checks if a data field within this menu item can be edited.
  */
-bool AppJSON::ConfigItemData::isEditable(const DataField dataField) const
+bool JSONResource::ConfigItemData::isEditable(const DataField dataField) const
 {
     switch(dataField)
     {
@@ -346,7 +349,7 @@ bool AppJSON::ConfigItemData::isEditable(const DataField dataField) const
  * Loads all desktop entry child menu items defined by the menu item's category
  * list.
  */
-void AppJSON::ConfigItemData::loadDesktopEntryItems()
+void JSONResource::ConfigItemData::loadDesktopEntryItems()
 {
     using namespace juce;
     if(!categories.isEmpty() && pendingCallbackID.get() == 0
@@ -369,9 +372,9 @@ void AppJSON::ConfigItemData::loadDesktopEntryItems()
 }
 
 /*
- * Removes this menu item from AppJSON's config file.
+ * Removes this menu item from JSONResource's config file.
  */
-void AppJSON::ConfigItemData::deleteFromSource()
+void JSONResource::ConfigItemData::deleteFromSource()
 {
     // This should only be called after a call to remove()
     jassert(getIndex() == -1 && getParentFolder() == nullptr);
@@ -381,7 +384,7 @@ void AppJSON::ConfigItemData::deleteFromSource()
 /*
  * Writes all config-defined menu data back to the JSON file.
  */
-void AppJSON::ConfigItemData::JSONWriter::writeChanges()
+void JSONResource::ConfigItemData::JSONWriter::writeChanges()
 {
     auto appJSON = getWriteLockedResource();
     appJSON->writeDataToJSON();

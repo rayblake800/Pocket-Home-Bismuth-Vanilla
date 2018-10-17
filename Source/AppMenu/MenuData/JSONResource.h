@@ -15,8 +15,8 @@
  * accesses apps.json, the configuration file where application menu settings
  * are stored.  It reads in the JSON data used to create AppMenu::MenuItem
  * objects, and writes any changes to those objects back to apps.json
- * as JSON data.  Only AppConfigFile objects are allowed to access the JSONResource
- * object.
+ * as JSON data.  Only AppConfigFile objects are allowed to access the 
+ * JSONResource object.
  *
  * @see AppConfigFile.h
  */
