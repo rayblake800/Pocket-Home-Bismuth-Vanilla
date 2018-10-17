@@ -2,14 +2,13 @@
 
 #include "OverlaySpinner.h"
 #include "PageComponent.h"
-#include "AppConfigFile.h"
+#include "AppMenu/MenuData/ConfigFile.h"
 #include "ComponentConfigFile.h"
-#include "MainConfigFile.h"
+#include "Config/MainFile.h"
 #include "ConfigurableImageButton.h"
 #include "ClockLabel.h"
-#include "BatteryIcon.h"
 #include "WifiIcon.h"
-#include "AppMenuPopupEditor.h"
+#include "BatteryIcon.h"
 #include "AppMenuComponent.h"
 #include "SystemCommands.h"
 
@@ -28,7 +27,7 @@
  *  -Complete documentation
  */
 
-class HomePage : public PageComponent, public MainConfigFile::Listener
+class HomePage : public PageComponent, public Config::MainFile::Listener
 {
 public:
     HomePage();
@@ -81,7 +80,7 @@ private:
 
     /* Loads AppMenu shortcuts and folder definitions.  This resource should
        exist as long as the home page exists. */
-    AppConfigFile appConfig;
+    AppMenu::ConfigFile appConfig;
 
     /* Loads system commands.  This resource should exist as long as the home
        page exists. */

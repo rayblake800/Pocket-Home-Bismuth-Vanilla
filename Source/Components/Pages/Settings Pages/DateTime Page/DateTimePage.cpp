@@ -1,5 +1,6 @@
 #include "DateTimePage.h"
-#include "MainConfigKeys.h"
+#include "Config/MainKeys.h"
+#include "Config/MainFile.h"
 
 DateTimePage::DateTimePage() :
 Localized("DateTimePage"),
@@ -37,11 +38,11 @@ clockModeLabel("modeLabel", localeText(select_clock_mode))
     setClockMode.addItem(localeText(mode_am_pm), 2);
     setClockMode.addItem(localeText(hide_clock), 3);
     setClockMode.addListener(this);
-    MainConfigFile mainConfig;
-    if (mainConfig.getConfigValue<bool>(MainConfigKeys::showClockKey))
+    Config::MainFile mainConfig;
+    if (mainConfig.getConfigValue<bool>(Config::MainKeys::showClockKey))
     {
         if (mainConfig.getConfigValue<bool>
-            (MainConfigKeys::use24HrModeKey))
+            (Config::MainKeys::use24HrModeKey))
         {
             setClockMode.setSelectedId(1,
                     NotificationType::dontSendNotification);
@@ -64,17 +65,18 @@ clockModeLabel("modeLabel", localeText(select_clock_mode))
  */
 void DateTimePage::pageButtonClicked(juce::Button* button)
 {
-    using namespace juce;
+    using juce::String;
     if (button == &reconfigureBtn)
     {
-        MainConfigFile mainConfig;
+        Config::MainFile mainConfig;
         String configureTime = mainConfig.getConfigValue<String>
-                (MainConfigKeys::termLaunchCommandKey)
+                (Config::MainKeys::termLaunchCommandKey)
                 + reconfigureCommand;
         int ret = system(configureTime.toRawUTF8());
         if (ret != 0)
         {
-            AlertWindow::showMessageBox(AlertWindow::WarningIcon,
+            juce::AlertWindow::showMessageBox(
+                    juce::AlertWindow::WarningIcon,
                     localeText(failed_launch),
                     localeText(failed_to_run)
                     + "\n" + configureTime + "\n"
@@ -97,13 +99,13 @@ void DateTimePage::comboBoxChanged(juce::ComboBox* comboBox)
     }
     bool showClock = (comboBox->getSelectedId() != 3);
     bool use24HrMode = (comboBox->getSelectedId() == 1);
-    MainConfigFile mainConfig;
+    Config::MainFile mainConfig;
     if (showClock)
     {
         mainConfig.setConfigValue<bool>
-                (MainConfigKeys::use24HrModeKey, use24HrMode);
+                (Config::MainKeys::use24HrModeKey, use24HrMode);
     }
     mainConfig.setConfigValue<bool>
-            (MainConfigKeys::showClockKey, showClock);
+            (Config::MainKeys::showClockKey, showClock);
 }
 

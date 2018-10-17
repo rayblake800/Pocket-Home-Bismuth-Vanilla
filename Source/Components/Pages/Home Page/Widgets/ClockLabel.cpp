@@ -1,4 +1,4 @@
-#include "MainConfigKeys.h"
+#include "Config/MainKeys.h"
 #include "ComponentConfigKeys.h"
 #include "ClockLabel.h"
 
@@ -6,13 +6,12 @@ ClockLabel::ClockLabel() :
 WindowFocusedTimer("ClockLabel"),
 ConfigurableLabel(ComponentConfigKeys::clockLabelKey, "clockLabel", "00:00")
 {
-    using namespace juce;
 #    if JUCE_DEBUG
     setName("ClockLabel");
 #    endif
-    addTrackedKey(MainConfigKeys::use24HrModeKey);
-    addTrackedKey(MainConfigKeys::showClockKey);
-    setJustificationType(Justification::centredRight);
+    addTrackedKey(Config::MainKeys::use24HrModeKey);
+    addTrackedKey(Config::MainKeys::showClockKey);
+    setJustificationType(juce::Justification::centredRight);
     loadAllConfigProperties();
     startTimer(1);
 }
@@ -22,7 +21,8 @@ ConfigurableLabel(ComponentConfigKeys::clockLabelKey, "clockLabel", "00:00")
  */
 void ClockLabel::timerCallback()
 {
-    using namespace juce;
+    using juce::Time;
+    using juce::String;
     Time timeNow = Time::getCurrentTime();
     String hours = String(use24HrMode
             ? timeNow.getHours() : timeNow.getHoursInAmPmFormat());
@@ -36,7 +36,7 @@ void ClockLabel::timerCallback()
     {
         timeStr += String(timeNow.isAfternoon() ? " PM" : " AM");
     }
-    setText(timeStr, NotificationType::dontSendNotification);
+    setText(timeStr, juce::NotificationType::dontSendNotification);
     startTimer(60000 - timeNow.getSeconds()*1000);
 }
 
@@ -69,12 +69,11 @@ void ClockLabel::visibilityChanged()
  */
 void ClockLabel::configValueChanged(const juce::Identifier& key)
 {
-    using namespace juce;
-    MainConfigFile config;
-    if (key == MainConfigKeys::showClockKey)
+    Config::MainFile config;
+    if (key == Config::MainKeys::showClockKey)
     {
         showClock = config.getConfigValue<bool>(key);
-        MessageManager::callAsync([this]
+        juce::MessageManager::callAsync([this]
         {
             setAlpha(showClock ? 1 : 0);
             if (showClock && !isTimerRunning())
@@ -87,7 +86,7 @@ void ClockLabel::configValueChanged(const juce::Identifier& key)
             }
         });
     }
-    else if (key == MainConfigKeys::use24HrModeKey)
+    else if (key == Config::MainKeys::use24HrModeKey)
     {
         use24HrMode = config.getConfigValue<bool>(key);
         if (isVisible() && getAlpha() != 0)

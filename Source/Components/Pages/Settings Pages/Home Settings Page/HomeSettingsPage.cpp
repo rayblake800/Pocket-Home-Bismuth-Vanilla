@@ -1,5 +1,5 @@
-#include "MainConfigFile.h"
-#include "MainConfigKeys.h"
+#include "Config/MainFile.h"
+#include "Config/MainKeys.h"
 #include "HomeSettingsPage.h"
 
 HomeSettingsPage::HomeSettingsPage() :
@@ -73,12 +73,12 @@ rowCounter(1, 1, 9)
     menuTypePicker.addItem(localeText(scrolling_menu), 1);
     menuTypePicker.addItem(localeText(paged_menu), 2);
     menuTypePicker.addListener(this);
-    MainConfigFile mainConfig;
+    Config::MainFile mainConfig;
     rowCounter.setValue(mainConfig.getConfigValue<int>
-            (MainConfigKeys::maxRowsKey));
+            (Config::MainKeys::maxRowsKey));
 
     columnCounter.setValue(mainConfig.getConfigValue<int>
-            (MainConfigKeys::maxColumnsKey));
+            (Config::MainKeys::maxColumnsKey));
 
     updateComboBox();
     addAndShowLayoutComponents();
@@ -89,11 +89,12 @@ rowCounter(1, 1, 9)
  */
 HomeSettingsPage::~HomeSettingsPage()
 {
-    MainConfigFile mainConfig;
-    mainConfig.setConfigValue<int>(MainConfigKeys::maxRowsKey,
-                                   rowCounter.getValue());
-    mainConfig.setConfigValue<int>(MainConfigKeys::maxColumnsKey,
-                                   columnCounter.getValue());
+    // Disabled during AppMenu redesign
+    //Config::MainFile mainConfig;
+    //mainConfig.setConfigValue<int>(Config::MainKeys::maxRowsKey,
+    //                               rowCounter.getValue());
+    //mainConfig.setConfigValue<int>(Config::MainKeys::maxColumnsKey,
+    //                               columnCounter.getValue());
 }
 
 /**
@@ -102,23 +103,25 @@ HomeSettingsPage::~HomeSettingsPage()
  */
 void HomeSettingsPage::updateComboBox()
 {
-    using namespace juce;
+    using juce::String;
     /* Checking the current configuration */
-    MainConfigFile mainConfig;
-    String background
-            = mainConfig.getConfigValue<String>(MainConfigKeys::backgroundKey);
+    Config::MainFile mainConfig;
+    String background = mainConfig.getConfigValue<String>
+        (Config::MainKeys::backgroundKey);
     bool display = false;
     if ((background.length() == 6
          || background.length() == 8)
         && background.containsOnly("0123456789ABCDEF"))
     {
-        bgTypePicker.setSelectedItemIndex(1, dontSendNotification);
+        bgTypePicker.setSelectedItemIndex(1, 
+                juce::NotificationType::dontSendNotification);
         display = true;
         bgEditor.setText(background, false);
     }
     else if (background.length() > 0)
     {
-        bgTypePicker.setSelectedItemIndex(2, dontSendNotification);
+        bgTypePicker.setSelectedItemIndex(2, 
+                juce::NotificationType::dontSendNotification);
         display = true;
         bgEditor.setText(background, false);
     }
@@ -126,11 +129,12 @@ void HomeSettingsPage::updateComboBox()
     bgLabel.setVisible(display);
 
     String menuType
-            = mainConfig.getConfigValue<String>(MainConfigKeys::menuTypeKey);
-    int menuIndex = MainConfigKeys::menuTypes.indexOf(menuType);
+            = mainConfig.getConfigValue<String>(Config::MainKeys::menuTypeKey);
+    int menuIndex = Config::MainKeys::menuTypes.indexOf(menuType);
     if (menuIndex != -1)
     {
-        menuTypePicker.setSelectedItemIndex(menuIndex, dontSendNotification);
+        menuTypePicker.setSelectedItemIndex(menuIndex, 
+                juce::NotificationType::dontSendNotification);
     }
 }
 
@@ -141,16 +145,17 @@ void HomeSettingsPage::updateComboBox()
  */
 void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
 {
-    using namespace juce;
-    MainConfigFile mainConfig;
+    using juce::String;
+    Config::MainFile mainConfig;
     if (box == &bgTypePicker)
     {
-        bgEditor.setText("", NotificationType::dontSendNotification);
+        bgEditor.setText("", 
+                juce::NotificationType::dontSendNotification);
         switch (box->getSelectedId())
         {
             case 1:
                 mainConfig.setConfigValue<String>
-                        (MainConfigKeys::backgroundKey,
+                        (Config::MainKeys::backgroundKey,
                          findColour(PageComponent::backgroundColourId)
                          .toString());
                 bgEditor.setVisible(false);
@@ -160,14 +165,14 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
                 bgLabel.setVisible(true);
                 bgLabel.setText(
                         localeText(bg_color_hex_value),
-                        dontSendNotification);
+                        juce::NotificationType::dontSendNotification);
                 bgEditor.showFileSelectButton(false);
                 break;
             case 3:
                 bgLabel.setVisible(true);
                 bgLabel.setText(
                         localeText(bg_image_path),
-                        dontSendNotification);
+                        juce::NotificationType::dontSendNotification);
                 bgEditor.showFileSelectButton(true);
         }
         bgEditor.setVisible(true);
@@ -176,8 +181,8 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
     else if (box == &menuTypePicker && box->getSelectedItemIndex() >= 0)
     {
         mainConfig.setConfigValue<String>
-                (MainConfigKeys::menuTypeKey,
-                 MainConfigKeys::menuTypes[box->getSelectedItemIndex()]);
+                (Config::MainKeys::menuTypeKey,
+                 Config::MainKeys::menuTypes[box->getSelectedItemIndex()]);
     }
 }
 
@@ -188,9 +193,9 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
  */
 void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
 {
-    using namespace juce;
+    using juce::String;
     String value = edited->getText();
-    MainConfigFile mainConfig;
+    Config::MainFile mainConfig;
     //color value
     if (bgTypePicker.getSelectedId() == 2)
     {
@@ -200,12 +205,12 @@ void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
         else
         {
             mainConfig.setConfigValue<String>
-                    (MainConfigKeys::backgroundKey, value);
+                    (Config::MainKeys::backgroundKey, value);
         }
     }
     else if (bgTypePicker.getSelectedId() == 3)
     {
         mainConfig.setConfigValue<String>
-                (MainConfigKeys::backgroundKey, value);
+                (Config::MainKeys::backgroundKey, value);
     }
 }

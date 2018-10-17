@@ -1,7 +1,7 @@
 #include "ComponentConfigFile.h"
 #include "ColourConfigFile.h"
 #include "ColourConfigKeys.h"
-#include "MainConfigKeys.h"
+#include "Config/MainKeys.h"
 #include "SwitchComponent.h"
 #include "DrawableImageComponent.h"
 #include "ListEditor.h"
@@ -298,7 +298,7 @@ juce::Font PokeLookAndFeel::getAlertWindowMessageFont()
 PokeLookAndFeel::MainListener::MainListener(PokeLookAndFeel& owner) :
 owner(owner)
 {
-    addTrackedKey(MainConfigKeys::showCursorKey);
+    addTrackedKey(Config::MainKeys::showCursorKey);
 }
 
 /*
@@ -308,9 +308,9 @@ void PokeLookAndFeel::MainListener::configValueChanged
 (const juce::Identifier& key)
 {
     using namespace juce;
-    if (key == MainConfigKeys::showCursorKey)
+    if (key == Config::MainKeys::showCursorKey)
     {
-        MainConfigFile config;
+        Config::MainFile config;
         owner.cursor = (config.getConfigValue<bool>(key) ?
                   MouseCursor::ParentCursor : MouseCursor::NoCursor);
     }

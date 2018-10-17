@@ -1,5 +1,5 @@
-#include "MainConfigFile.h"
-#include "MainConfigKeys.h"
+#include "Config/MainFile.h"
+#include "Config/MainKeys.h"
 #include "SystemCommands.h"
 #include "InputSettingsPage.h"
 
@@ -11,7 +11,6 @@ chooseMode("chooseMode"),
 calibrating(localeText(calibrate_screen)),
 cursorVisible("cursorVisible", localeText(select_cursor_visible))
 {
-    using namespace juce;
 #    if JUCE_DEBUG
     setName("InputSettingsPage");
 #    endif
@@ -40,13 +39,13 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
     layout.setYPaddingWeight(3);
     setLayout(layout);
 
-    title.setJustificationType(Justification::centred);
+    title.setJustificationType(juce::Justification::centred);
     //ComboBox
     chooseMode.addItem(localeText(not_visible), 1);
     chooseMode.addItem(localeText(visible), 2);
     chooseMode.addListener(this);
-    MainConfigFile mainConfig;
-    if (mainConfig.getConfigValue<bool>(MainConfigKeys::showCursorKey))
+    Config::MainFile mainConfig;
+    if (mainConfig.getConfigValue<bool>(Config::MainKeys::showCursorKey))
     {
         chooseMode.setSelectedId(2);
     }
@@ -64,7 +63,6 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
  */
 void InputSettingsPage::pageButtonClicked(juce::Button* button)
 {
-    using namespace juce;
     if (button == &calibrating)
     {
         SystemCommands systemCommands;
@@ -78,10 +76,10 @@ void InputSettingsPage::pageButtonClicked(juce::Button* button)
  */
 void InputSettingsPage::comboBoxChanged(juce::ComboBox* box)
 {
-    MainConfigFile mainConfig;
+    Config::MainFile mainConfig;
     if (box != &chooseMode) return;
     bool cursorVisible = (box->getSelectedId() == 2);
-    mainConfig.setConfigValue<bool>(MainConfigKeys::showCursorKey,
+    mainConfig.setConfigValue<bool>(Config::MainKeys::showCursorKey,
                                     cursorVisible);
 }
 

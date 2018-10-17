@@ -1,6 +1,6 @@
 #pragma once
 #include "JuceHeader.h"
-#include "MainConfigFile.h"
+#include "Config/MainFile.h"
 #include "ColourConfigFile.h"
 #include "ComponentConfigFile.h"
 
@@ -158,7 +158,7 @@ private:
     /**
      * Updates the cursor visibility when the associated config key is changed. 
      */
-    class MainListener : protected MainConfigFile::Listener
+    class MainListener : protected Config::MainFile::Listener
     {
     public:
         MainListener(PokeLookAndFeel& owner);

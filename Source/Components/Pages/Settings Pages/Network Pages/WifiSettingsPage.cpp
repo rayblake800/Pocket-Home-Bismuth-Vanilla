@@ -1,7 +1,7 @@
 #include "Utils.h"
 #include "LocalizedTime.h"
-#include "MainConfigFile.h"
-#include "MainConfigKeys.h"
+#include "Config/MainFile.h"
+#include "Config/MainKeys.h"
 #include "WifiSettingsPage.h"
 
 //Wifi signal strength icon asset files
@@ -82,21 +82,20 @@ passwordLabel("passwordLabel", localeText(password_field)),
 Localized("WifiSettingsPage"),
 WindowFocusedTimer("WifiSettingsPage")    
 {
-    using namespace juce;
-    using namespace MainConfigKeys;
+    using namespace Config::MainKeys;
 #    if JUCE_DEBUG
     setName("WifiSettingsPage");
 #    endif
     passwordEditor.addListener(this);
     ComponentConfigFile config;
-    passwordEditor.setFont(Font(config.getFontHeight
+    passwordEditor.setFont(juce::Font(config.getFontHeight
             (ComponentConfigFile::smallText)));
     
     connectionButton.addListener(this);
-    errorLabel.setJustificationType(Justification::centred);
+    errorLabel.setJustificationType(juce::Justification::centred);
     loadAccessPoints();
 
-    MainConfigFile mainConfig;
+    Config::MainFile mainConfig;
     int scanFreq = mainConfig.getConfigValue<int>(wifiScanFreqKey);
     if(scanFreq > 0)
     {
@@ -147,7 +146,6 @@ static ComponentType * getFirstUnused
 void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
         const unsigned int index)
 {
-    using namespace juce;
     jassert(index < visibleAPs.size());
     const WifiAccessPoint& wifiAP = visibleAPs[index];
     ScalingLabel* apLabel = nullptr;
@@ -178,7 +176,7 @@ void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
             {
                 lockIcon->setImage(lockFile);
                 lockIcon->setColour(DrawableImageComponent::imageColour0Id,
-                        findColour(Label::ColourIds::textColourId));
+                        findColour(juce::Label::ColourIds::textColourId));
             }
         }
     }
@@ -206,12 +204,12 @@ void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
     jassert(visibleAPs[index].getSSID().isNotEmpty());
 
     apLabel->setText(visibleAPs[index].getSSID(),
-            NotificationType::dontSendNotification);
-    apLabel->setJustificationType(Justification::centred);
+            juce::NotificationType::dontSendNotification);
+    apLabel->setJustificationType(juce::Justification::centred);
     apLabel->setInterceptsMouseClicks(false, false);
     apIcon->setImage(getWifiAssetName(visibleAPs[index]));
     apIcon->setColour(DrawableImageComponent::imageColour0Id,
-                    findColour(Label::ColourIds::textColourId));
+                    findColour(juce::Label::ColourIds::textColourId));
 }
 
 /*
@@ -220,7 +218,7 @@ void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
  */
 void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
 {
-    using namespace juce;
+    using juce::String;
     jassert(getSelectedIndex() >= 0 && !layout.isEmpty());
     const WifiAccessPoint& selectedAP = visibleAPs[getSelectedIndex()];
     using Row = LayoutManager::Row;
@@ -255,12 +253,12 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
         LocalizedTime connTime(wifiManager.lastConnectionTime(selectedAP));
         lastConnectionLabel.setText(localeText(last_connected)
                 + connTime.approxTimePassed(),
-                NotificationType::dontSendNotification);
+                juce::NotificationType::dontSendNotification);
     }
     else
     {
         lastConnectionLabel.setText(String(),
-                NotificationType::dontSendNotification);
+                juce::NotificationType::dontSendNotification);
     }
     DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"
             " AP " << selectedAP.getSSID() << " with state "
@@ -309,7 +307,8 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
     }
     connectionButton.setButtonText(connectionBtnText);
     connectionButton.setSpinnerVisible(showButtonSpinner);
-    errorLabel.setText(errorMessage, NotificationType::dontSendNotification);
+    errorLabel.setText(errorMessage, 
+            juce::NotificationType::dontSendNotification);
 }
 
 
@@ -318,7 +317,6 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
  */
 void WifiSettingsPage::timerCallback() 
 {
-    using namespace juce;
     DBG("WifiSettingsPage::" << __func__ << ": Scanning for AP updates.");
     WifiStateManager wifiManager;
     wifiManager.scanAccessPoints();
@@ -360,7 +358,7 @@ void WifiSettingsPage::updateAPList()
  */
 void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
 {
-    using namespace juce;
+    using juce::String;
     if (accessPoint.isNull())
     {
         DBG("WifiSettingsPage::" << __func__ << ": ap is null!");
@@ -370,7 +368,7 @@ void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
     if (passwordEditor.isShowing() && !accessPoint.isValidKeyFormat(psk))
     {
         errorLabel.setText(localeText(invalid_key_format),
-                NotificationType::dontSendNotification);
+                juce::NotificationType::dontSendNotification);
         passwordEditor.clear();
         return;
     }
@@ -390,7 +388,8 @@ void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
         wifiManager.connectToAccessPoint(accessPoint);
     }
     passwordEditor.clear();
-    errorLabel.setText(String(), NotificationType::dontSendNotification);
+    errorLabel.setText(String(), 
+            juce::NotificationType::dontSendNotification);
 }
 
 /*

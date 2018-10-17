@@ -3,8 +3,6 @@
 #include "Localized.h"
 #include "DrawableImageButton.h"
 #include "ScalingLabel.h"
-#include "MainConfigFile.h"
-#include "ComponentConfigFile.h"
 #include "PageComponent.h"
 
 /**

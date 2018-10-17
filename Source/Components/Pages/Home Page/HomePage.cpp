@@ -1,5 +1,5 @@
 #include "ConfigurableImageComponent.h"
-#include "MainConfigKeys.h"
+#include "MainKeys.h"
 #include "ComponentConfigKeys.h"
 #include "PokeLookAndFeel.h"
 #include "AssetFiles.h"
@@ -17,8 +17,8 @@ settingsButton(ComponentConfigKeys::settingsButtonKey)
 #    if JUCE_DEBUG
     setName("HomePage");
 #    endif
-    addTrackedKey(MainConfigKeys::backgroundKey);
-    addTrackedKey(MainConfigKeys::menuTypeKey);
+    addTrackedKey(Config::MainKeys::backgroundKey);
+    addTrackedKey(Config::MainKeys::menuTypeKey);
 
     setWantsKeyboardFocus(true);
     addAndMakeVisible(frame);
@@ -49,11 +49,11 @@ settingsButton(ComponentConfigKeys::settingsButtonKey)
 void HomePage::configValueChanged(const juce::Identifier& key)
 {
     using namespace juce;
-    MainConfigFile mainConfig;
-    if (key == MainConfigKeys::backgroundKey)
+    Config::MainFile mainConfig;
+    if (key == Config::MainKeys::backgroundKey)
     {
         String background = mainConfig.getConfigValue<String>
-                (MainConfigKeys::backgroundKey);
+                (Config::MainKeys::backgroundKey);
         if (background.containsOnly("0123456789ABCDEFXabcdefx"))
         {
             setBackgroundImage(Image());

@@ -1,6 +1,5 @@
 #pragma once
 #include "ComponentConfigFile.h"
-#include "MainConfigFile.h"
 #include "PageComponent.h"
 #include "JuceHeader.h"
 
