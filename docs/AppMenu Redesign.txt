@@ -48,22 +48,7 @@ Internal implementation:
             -Handle Folder right-clicked
             -Handle Menu right-clicked
         Data Members:
-            -InputHandler
             -Menu Component
-        InputHandler interface: friend class Controller      
-        public:    
-            Functions:
-                -Add folder component(pure virtual)
-                -Add menuItem component(pure virtual)
-        protected:
-                -Signal MenuItem clicked
-                -Signal MenuItem right-clicked
-                -Signal Folder clicked
-                -Signal Folder right-clicked
-        private:
-                -Add MenuComponent(pure virtual)
-            Data Members:
-                -Controller reference
         MenuComponent interface: friend class Controller
         protected:
             Functions:
