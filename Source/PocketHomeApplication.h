@@ -1,7 +1,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "PokeLookAndFeel.h"
-#include "MainConfigFile.h"
+#include "Config/MainFile.h"
 #include "ComponentConfigFile.h"
 #include "ColourConfigFile.h"
 #include "GLibSignalThread.h"
@@ -67,7 +67,7 @@ private:
     //as long as the application is running.
 
     //Holds general user-set program configuration data.
-    MainConfigFile mainConfig;
+    Config::MainFile mainConfig;
     
     //Holds user-set UI component configuration data.
     ComponentConfigFile componentConfig;
