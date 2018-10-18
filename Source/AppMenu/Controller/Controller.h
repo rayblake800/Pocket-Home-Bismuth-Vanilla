@@ -161,7 +161,10 @@ public:
          * @param swapItem2   The second swapped menu item.
          */
         virtual void swapMenuItemComponents(MenuItem swapItem1,
-                MenuItem swapItem2);
+                MenuItem swapItem2) = 0;
+
+        /* Tracks whether user input should be handled or ignored. */
+        bool inputEnabled = true;
 
         /* The Controller managing this MenuComponent. */
         Controller& controller;

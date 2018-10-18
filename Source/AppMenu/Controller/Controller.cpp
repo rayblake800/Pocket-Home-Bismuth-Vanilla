@@ -22,48 +22,55 @@ AppMenu::Controller::~Controller()
 /*
  * Signals to the controller that a menu item was clicked.
  */
-void AppMenu::Controller::MenuComponent::signalItemClicked(MenuItem clickedItem, const bool rightClicked)
+void AppMenu::Controller::MenuComponent::signalItemClicked
+(MenuItem clickedItem, const bool rightClicked)
 {
+    controller.menuItemClicked(clickedItem, rightClicked);
 }
 
 /*
  * Signals to the controller that an open folder was clicked.
- */void AppMenu::Controller::MenuComponent::signalFolderClicked(MenuItem folderItem, const bool rightClicked,
-const int closestIndex)
+ */
+void AppMenu::Controller::MenuComponent::signalFolderClicked
+(MenuItem folderItem, const bool rightClicked, const int closestIndex)
 {
+    controller.folderClicked(folderItem, rightClicked, closestIndex);
 }
 
 /*
- * Signals to the controller that the menu was clicked somewhere
- *         other than at a folder or menu item.
- */void AppMenu::Controller::MenuComponent::signalMenuClicked(const bool rightClicked)
+ * Signals to the controller that the menu was clicked somewhere other than at a
+ * folder or menu item.
+ */
+void AppMenu::Controller::MenuComponent::signalMenuClicked
+(const bool rightClicked)
 {
+    menuClicked(rightClicked);
 }
 
 /*
  * Checks if user input should be enabled.
- */bool AppMenu::Controller::MenuComponent::getInputEnabled() const
+ */
+bool AppMenu::Controller::MenuComponent::getInputEnabled() const
 {
+    return inputEnabled;
 }
 
 /*
- * Sets if the MenuComponent and all its child Components should
- *         register user input.
- */void AppMenu::Controller::MenuComponent::setInputEnabled(const bool allowUserInput)
+ * Sets if the MenuComponent and all its child Components should register user 
+ * input.
+ */
+void AppMenu::Controller::MenuComponent::setInputEnabled
+(const bool allowUserInput)
 {
+    inputEnabled = allowUserInput;
 }
 
 /*
- * Ensures that two button components are correctly placed in
- *         their folder after their menu items had their indices
- *         swapped.
- */void AppMenu::Controller::MenuComponent::swapMenuItemComponents(MenuItem swapItem1,
-MenuItem swapItem2)
-{
-}/*
  * Launches or focuses an application from the menu.
- */void AppMenu::Controller::launchOrFocusApplication(MenuItem toLaunch)
+ */
+void AppMenu::Controller::launchOrFocusApplication(MenuItem toLaunch)
 {
+
 }
 
 /*
