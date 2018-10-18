@@ -202,14 +202,16 @@ AppMenu::JSONResource::ConfigItemData::~ConfigItemData()
 /*
  * Gets the menu item's displayed title.
  */
-juce::String AppMenu::JSONResource::ConfigItemData::getTitle() const
+juce::String 
+AppMenu::JSONResource::ConfigItemData::getTitle() const
 {
     return title;
 }
 /*
  * Gets the name or path used to load the menu item's icon file.
  */
-juce::String AppMenu::JSONResource::ConfigItemData::getIconName() const
+juce::String 
+AppMenu::JSONResource::ConfigItemData::getIconName() const
 {
     return iconName;
 }
@@ -217,7 +219,8 @@ juce::String AppMenu::JSONResource::ConfigItemData::getIconName() const
 /*
  * Gets the menu item's application launch command.
  */
-juce::String AppMenu::JSONResource::ConfigItemData::getCommand() const
+juce::String 
+AppMenu::JSONResource::ConfigItemData::getCommand() const
 {
     return command;
 }
@@ -225,7 +228,8 @@ juce::String AppMenu::JSONResource::ConfigItemData::getCommand() const
 /*
  * Checks if this menu item launches an application in a new terminal window.
  */
-bool AppMenu::JSONResource::ConfigItemData::getLaunchedInTerm() const
+bool 
+AppMenu::JSONResource::ConfigItemData::getLaunchedInTerm() const
 {
     return launchInTerm;
 }
@@ -234,7 +238,8 @@ bool AppMenu::JSONResource::ConfigItemData::getLaunchedInTerm() const
  * Gets the application categories used to load this item's desktop entry child 
  * folder items.
  */
-juce::StringArray AppMenu::JSONResource::ConfigItemData::getCategories() const
+juce::StringArray 
+AppMenu::JSONResource::ConfigItemData::getCategories() const
 {
     return categories;
 }
@@ -242,7 +247,8 @@ juce::StringArray AppMenu::JSONResource::ConfigItemData::getCategories() const
 /*
  * Sets the menu item's displayed title.
  */
-void AppMenu::JSONResource::ConfigItemData::setTitle(const juce::String& title)
+void 
+AppMenu::JSONResource::ConfigItemData::setTitle(const juce::String& title)
 {
     this->title = title;
 }
@@ -287,7 +293,8 @@ void AppMenu::JSONResource::ConfigItemData::setCategories
 /*
  * Gets the number of folder items held by this menu item that can be reordered.
  */
-int JSONResource::ConfigItemData::getMovableChildCount() const
+int 
+AppMenu::JSONResource::ConfigItemData::getMovableChildCount() const
 {
     return movableChildCount;
 }
@@ -295,7 +302,7 @@ int JSONResource::ConfigItemData::getMovableChildCount() const
 /*
  * Writes all changes to this menu item back to its data source.
  */
-void JSONResource::ConfigItemData::saveChanges()
+void AppMenu::JSONResource::ConfigItemData::saveChanges()
 {
     JSONWriter jsonWriter;
     jsonWriter.writeChanges();
@@ -304,7 +311,8 @@ void JSONResource::ConfigItemData::saveChanges()
 /*
  * Gets an appropriate title to use for a deletion confirmation window.
  */
-juce::String JSONResource::ConfigItemData::getConfirmDeleteTitle() const
+juce::String 
+AppMenu::JSONResource::ConfigItemData::getConfirmDeleteTitle() const
 {
     return localeText(remove_APP) 
             + getTitle() + localeText(from_favorites);
@@ -313,7 +321,8 @@ juce::String JSONResource::ConfigItemData::getConfirmDeleteTitle() const
 /*
  * Gets appropriate descriptive text for a deletion confirmation window.
  */
-juce::String JSONResource::ConfigItemData::getConfirmDeleteMessage() const
+juce::String 
+AppMenu::JSONResource::ConfigItemData::getConfirmDeleteMessage() const
 {
     return localeText(will_remove_link);
 }
@@ -321,7 +330,8 @@ juce::String JSONResource::ConfigItemData::getConfirmDeleteMessage() const
 /*
  * Gets an appropriate title to use for a menu item editor.
  */
-juce::String JSONResource::ConfigItemData::getEditorTitle() const
+juce::String 
+AppMenu::JSONResource::ConfigItemData::getEditorTitle() const
 {
     return localeText(edit_app);
 }
@@ -329,7 +339,9 @@ juce::String JSONResource::ConfigItemData::getEditorTitle() const
 /*
  * Checks if a data field within this menu item can be edited.
  */
-bool JSONResource::ConfigItemData::isEditable(const DataField dataField) const
+bool 
+AppMenu::JSONResource::ConfigItemData::isEditable
+(const DataField dataField) const
 {
     switch(dataField)
     {
@@ -349,7 +361,7 @@ bool JSONResource::ConfigItemData::isEditable(const DataField dataField) const
  * Loads all desktop entry child menu items defined by the menu item's category
  * list.
  */
-void JSONResource::ConfigItemData::loadDesktopEntryItems()
+void AppMenu::JSONResource::ConfigItemData::loadDesktopEntryItems()
 {
     using namespace juce;
     if(!categories.isEmpty() && pendingCallbackID.get() == 0
@@ -374,7 +386,7 @@ void JSONResource::ConfigItemData::loadDesktopEntryItems()
 /*
  * Removes this menu item from JSONResource's config file.
  */
-void JSONResource::ConfigItemData::deleteFromSource()
+void AppMenu::JSONResource::ConfigItemData::deleteFromSource()
 {
     // This should only be called after a call to remove()
     jassert(getIndex() == -1 && getParentFolder() == nullptr);
@@ -384,7 +396,7 @@ void JSONResource::ConfigItemData::deleteFromSource()
 /*
  * Writes all config-defined menu data back to the JSON file.
  */
-void JSONResource::ConfigItemData::JSONWriter::writeChanges()
+void AppMenu::JSONResource::ConfigItemData::JSONWriter::writeChanges()
 {
     auto appJSON = getWriteLockedResource();
     appJSON->writeDataToJSON();
