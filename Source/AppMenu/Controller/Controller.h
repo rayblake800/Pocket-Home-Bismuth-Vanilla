@@ -8,6 +8,7 @@
 #include "ContextMenu.h"
 #include "DesktopEntryLoader.h"
 #include "AppLauncher.h"
+#include "MenuItem.h"
 #include "JuceHeader.h"
 
 /**
@@ -20,8 +21,8 @@
  * ContextMenu, holding any menu editor components, handling window focus
  * change events, and launching applications from the menu.
  */
-class AppMenu::Controller : public MainComponent::Controller,
-    private WindowFocus::Listener
+class AppMenu::Controller : public MainComponent::MenuController,
+private WindowFocus::Listener
 {
 public:
     Controller();
@@ -34,18 +35,18 @@ public:
     /**
      * @brief  Creates and manages all menu folder components.
      */
-    class MenuComponent : public juce::Component
+    class ControlledMenu : public juce::Component
     {
     public:
         /**
-         * @brief  Creates a MenuComponent, linking it to a controller.
+         * @brief  Creates a ControlledMenu, linking it to a controller.
          *
          * @param controller  The controller that should receive user input 
          *                    events from the menu component.
          */
-        MenuComponent(Controller& controller);
+        ControlledMenu(Controller& controller);
 
-        virtual ~MenuComponent() { }
+        virtual ~ControlledMenu() { }
 
     protected:
         /**
@@ -60,7 +61,7 @@ public:
         /**
          * @brief  Signals to the controller that an open folder was clicked.
          *
-         * @param folderItem     The foler item that was clicked.
+         * @param folderItem     The folder item that was clicked.
          *
          * @param rightClicked   Whether the folder was right-clicked.
          *
@@ -97,17 +98,17 @@ public:
         /**
          * @brief  Checks if user input should be enabled.
          *
-         * @return  Whether the MenuComponent should register key and mouse
+         * @return  Whether the ControlledMenu should register key and mouse
          *          events.
          */
         bool getInputEnabled() const;
 
     private:
-        // Only the Controller may access the MenuComponent's private methods. 
+        // Only the Controller may access the ControlledMenu's private methods. 
         friend class Controller;
 
         /**
-         * @brief  Sets if the MenuComponent and all its child Components should
+         * @brief  Sets if the ControlledMenu and all its child Components should
          *         register user input.
          *
          * @param allowUserInput  Whether user mouse and key events should be
@@ -129,44 +130,10 @@ public:
          */
         virtual void closeActiveFolder() = 0;
 
-        /**
-         * @brief  Scans the folder tree for any changes and ensures all folder
-         *         and menu item components are up to date.
-         */
-        virtual void checkFolderStructure() = 0;
-
-        /**
-         * @brief  If the folder containing a menu item is open, ensure that a
-         *         menu button exists representing that menu item.
-         *
-         * @param toAdd  A menu item that was recently added to the menu.
-         */
-        virtual void addMenuItemComponent(MenuItem toAdd) = 0;
-
-        /**
-         * @brief  If the folder containing a menu item is open, remove
-         *         that menu item's button component.
-         *
-         * @param toRemove  A menu item that is about to be removed.
-         */
-        virtual void removeMenuItemComponent(MenuItem toRemove) = 0;
-
-        /**
-         * @brief  Ensures that two button components are correctly placed in
-         *         their folder after their menu items had their indices
-         *         swapped.
-         *
-         * @param swapItem1   The first of the two swapped menu items.
-         *
-         * @param swapItem2   The second swapped menu item.
-         */
-        virtual void swapMenuItemComponents(MenuItem swapItem1,
-                MenuItem swapItem2) = 0;
-
         /* Tracks whether user input should be handled or ignored. */
         bool inputEnabled = true;
 
-        /* The Controller managing this MenuComponent. */
+        /* The Controller managing this ControlledMenu. */
         Controller& controller;
     };
 
@@ -177,15 +144,6 @@ protected:
      * @param toLaunch  A menu item holding an application launch command.
      */
     void launchOrFocusApplication(MenuItem toLaunch);
-
-    /**
-     * @brief  Activates or deactivates the loading spinner component held
-     *         by the Controller's MainComponent.
-     *
-     * @param shouldShow  Whether the loading spinner should be shown or
-     *                    hidden.
-     */
-    void setLoadingSpinnerVisible(const bool shouldShow);
 
     /**
      * @brief  Handles mouse clicks on menu items.
@@ -224,9 +182,8 @@ private:
     virtual void windowFocusGained() override;
 
     /**
-     * @brief  Hides the loading spinner and context menu, destroy any menu
-     *         editor component, and stop waiting for applications to launch
-     *         when window focus is lost.
+     * @brief  Hides the loading spinner and stops waiting for applications to 
+     *         launch when window focus is lost.
      */
     virtual void windowFocusLost() override;
     
@@ -240,20 +197,29 @@ private:
      * @return  A Component pointer to the main menu component.
      */
     virtual juce::Component* initMenuComponent() override;
+        
+    /**
+     * @brief  Updates the ControlledMenu whenever the parent MainComponent 
+     *         is resized.
+     *
+     * @param parentBounds  The new bounds of the parent MainComponent.
+     */
+    virtual void parentResized(const juce::Rectangle<int> parentBounds) 
+        override;
 
     /**
-     * @brief  Creates the MenuComponent as whatever MenuComponent subclass
+     * @brief  Creates the ControlledMenu as whatever MenuComponent subclass
      *         is appropriate for the current AppMenu format.
      *
-     * @return   The new MenuComponent object.
+     * @return   The new ControlledMenu object.
      */
-    virtual MenuComponent* createMenuComponent() = 0;
+    virtual ControlledMenu* createMenuComponent() = 0;
 
     /* The main menu component: */
-    std::unique_ptr<MenuComponent> menuComponent = nullptr;
+    std::unique_ptr<ControlledMenu> menuComponent = nullptr;
 
     /* Holds any popup menu editor component: */
-    std::unique_ptr<PopupEditor> menuEditor;
+    std::unique_ptr<PopupEditor> menuEditor = nullptr;
 
     /* Launches applications from the menu */
     AppLauncher appLauncher;
@@ -265,7 +231,8 @@ private:
      * @brief  A private ContextMenu implementation that can edit the AppMenu
      *         through the Controller.
      */
-    class ContextMenu : public AppMenu::ContextMenu
+    class ContextMenu : public AppMenu::ContextMenu, private MenuItem::Editor
+
     {
     public:
         /**
@@ -279,40 +246,7 @@ private:
 
     private:
         /**
-         * @brief  Inserts a new menu item into the menu, updating the menu
-         *         component.
-         *
-         * @param folder   The folder where the new item will be added.
-         *
-         * @param newItem  The new menu item to insert into the folder.
-         *
-         * @param index    The index in the folder where the new item will be
-         *                 inserted.
-         */
-        virtual void insertMenuItem(MenuItem folder, MenuItem newItem,
-                const int index = 0) override;
-
-        /**
-         * @brief   Swaps two menu items, updating the menu component.
-         *
-         * @param folder      The folder containing the items to swap.
-         *
-         * @param swapIndex1  The folder index of the first item to move. 
-         *
-         * @param swapIndex2  The folder index of the second item to move.
-         */
-        virtual void swapMenuItems(MenuItem folder, const int swapIndex1,
-                const int swapIndex2) override;
-
-        /**
-         * @brief  Removes a menu item, updating the menu component.
-         *
-         * @param toRemove  The menu item to remove.
-         */
-        virtual void removeMenuItem(MenuItem toRemove) override;
-
-        /**
-         * @brief  Shows an editor component above the MenuComponent.
+         * @brief  Shows an editor component above the ControlledMenu.
          *
          * @param editor  The new editor to show.
          */

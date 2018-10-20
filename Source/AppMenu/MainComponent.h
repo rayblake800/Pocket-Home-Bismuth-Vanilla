@@ -1,5 +1,6 @@
 #pragma once
 #include "AppMenu.h"
+#include "MenuData/ConfigFile.h"
 #include "OverlaySpinner.h"
 #include "JuceHeader.h"
 
@@ -26,7 +27,7 @@ public:
     /**
      * @brief  Creates the menu component and controls its behavior.
      */
-    class Controller;
+    class MenuController;
     
     /**
      * @brief  Initializes the menu controller, and adds and shows its main
@@ -36,7 +37,7 @@ public:
      *                        will delete this controller on destruction or 
      *                        whenever a new controller is assigned.
      */
-    MainComponent(MainComponent::Controller* menuController);
+    MainComponent(MenuController* menuController);
 
     virtual ~MainComponent() { }
 
@@ -45,7 +46,7 @@ public:
      *
      * @param menuType  The new menu controller to initialize.
      */
-    void initMenu(MainComponent::Controller* newController);
+    void initMenu(MenuController* newController);
 
     /**
      * @brief  Gets the current menu format.
@@ -57,20 +58,20 @@ public:
     /**
      * @brief  Creates the menu component and controls its behavior.
      */
-    class Controller
+    class MenuController
     {
     public:
-        /* Only MainComponent may access the Controller's private methods. */
+        /* Only MainComponent may access the MenuController's private methods.*/
         friend class MainComponent;
 
-        Controller() { } 
+         MenuController() { } 
 
-        virtual ~Controller() { }
+        virtual ~MenuController() { }
 
     protected:
         /**
          * @brief  Activates or deactivates the loading spinner component held
-         *         by the Controller's MainComponent.
+         *         by the MenuController's MainComponent.
          *
          * @param shouldShow  Whether the loading spinner should be shown or
          *                    hidden.
@@ -79,8 +80,8 @@ public:
 
     private:
         /**
-         * @brief  Links the MainComponent's loading spinner to the Controller
-         *         so it can show or hide the spinner.
+         * @brief  Links the MainComponent's loading spinner to the 
+         *         MenuController so it can show or hide the spinner.
          *
          * @param spinner  The address of the MainComponent's loading spinner.
          */
@@ -112,20 +113,24 @@ public:
          *
          * @return  The controller's menu format. 
          */
-        virtual AppMenu::Format getMenuType() const = 0;
+        virtual AppMenu::Format getMenuFormat() const = 0;
 
         /* A pointer to the MainComponent's loading spinner. */
         OverlaySpinner* loadingSpinner = nullptr;
     };
 private:
     /**
-     * @brief  Notifies the Controller that its parent's bounds have changed
+     * @brief  Notifies the MenuController that its parent's bounds have changed
      *         whenever the MainComponent is moved or resized.
      */
     virtual void resized() override;
 
+    /* Loads AppMenu shortcuts and folder definitions.  This resource should
+       exist as long as the home page exists. */
+    AppMenu::ConfigFile appConfig;
+
     /* The menu's loading spinner. */
     OverlaySpinner loadingSpinner;
     /* The controller that creates and controls the application menu. */
-    std::unique_ptr<Controller> menuController = nullptr;
+    std::unique_ptr<MenuController> menuController = nullptr;
 };

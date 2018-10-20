@@ -1,6 +1,8 @@
+/* Only include this file directly in the AppMenu implementation! */
+#ifdef APPMENU_IMPLEMENTATION_ONLY
+
 #pragma once
 #include "LayoutManager.h"
-#include "ListEditor.h"
 #include "Localized.h"
 #include "FileSelectTextEditor.h"
 #include "PopupEditorComponent.h"
@@ -155,7 +157,7 @@ private:
     /* Launches a category editor pop-up */
     juce::TextButton categoryEditButton; 
     /* Holds the category editor when it's launched. */
-    juce::ScopedPointer<CategoryPopupEditor> categoryEditor;
+    juce::ScopedPointer<CategoryEditor> categoryEditor;
     /* List of editable categories associated with this application/folder: */
     juce::StringArray categories;
 
@@ -171,3 +173,5 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopupEditor)
 };
+/* Only include this file directly in the AppMenu implementation! */
+#endif

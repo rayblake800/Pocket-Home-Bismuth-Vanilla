@@ -1,12 +1,13 @@
+#define APPMENU_IMPLEMENTATION_ONLY
+
 #include "MainComponent.h"
 #include "Utils.h"
-
     
 /*
  * Initializes the menu controller, and adds and shows its main menu component 
  * as a child under the loading spinner.
  */
-AppMenu::MainComponent::MainComponent(Controller* menuController)
+AppMenu::MainComponent::MainComponent(MenuController* menuController)
 {
     initMenu(menuController);
 }
@@ -14,7 +15,7 @@ AppMenu::MainComponent::MainComponent(Controller* menuController)
 /*
  * Initializes or recreates the menu with a new menu controller.
  */
-void AppMenu::MainComponent::initMenu(Controller* newController)
+void AppMenu::MainComponent::initMenu(MenuController* newController)
 {
     if(newController == nullptr)
     {
@@ -50,7 +51,7 @@ AppMenu::Format AppMenu::MainComponent::getMenuFormat() const
  * Links the MainComponent's loading spinner to the Controller so it can show or
  * hide the spinner.
  */
-void AppMenu::MainComponent::Controller::connectLoadingSpinner
+void AppMenu::MainComponent::MenuController::connectLoadingSpinner
 (OverlaySpinner* spinner)
 {
     loadingSpinner = spinner;
@@ -60,7 +61,7 @@ void AppMenu::MainComponent::Controller::connectLoadingSpinner
  * Activates or deactivates the loading spinner component held by the 
  * Controller's MainComponent.
  */
-void AppMenu::MainComponent::Controller::setLoadingSpinnerVisible
+void AppMenu::MainComponent::MenuController::setLoadingSpinnerVisible
 (const bool shouldShow)
 {
     if(loadingSpinner != nullptr)

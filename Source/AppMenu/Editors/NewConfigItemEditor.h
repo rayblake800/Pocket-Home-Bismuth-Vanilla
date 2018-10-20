@@ -1,6 +1,9 @@
+/* Only include this file directly in the AppMenu implementation! */
+#ifdef APPMENU_IMPLEMENTATION_ONLY
+
 #pragma once
-#include "ConfigFile.h"
-#include "PopupEditor.h"
+#include "AppMenu/MenuData/ConfigFile.h"
+#include "AppMenu/Editors/PopupEditor.h"
 
 /** 
  * @file  NewConfigItemEditor.h
@@ -49,3 +52,6 @@ private:
     /* Index in the folder where the new menu item will be inserted. */
     int insertIndex;
 };
+
+/* Only include this file directly in the AppMenu implementation! */
+#endif

@@ -1,3 +1,4 @@
+#define APPMENU_IMPLEMENTATION_ONLY
 #include "NewDesktopAppEditor.h"
 #include "DesktopEntryFormatError.h"
 #include "DesktopEntryFileError.h"
@@ -6,7 +7,7 @@ static const constexpr char * newEntryTitleKey = "newEntryTitleKey";
 
 AppMenu::NewDesktopAppEditor::NewDesktopAppEditor
 (std::function<void() > onConfirm) :
-AppMenuPopupEditor(localeText(newEntryTitleKey), onConfirm, true, true)
+AppMenu::PopupEditor(localeText(newEntryTitleKey), onConfirm, true, true)
 {
 #    if JUCE_DEBUG
     setName("NewDesktopAppEditor");

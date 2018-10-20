@@ -59,7 +59,7 @@ namespace AppMenu
      *
      * @param newFormat   The new menu format to apply to the menu.
      */
-    void changeMenuFormat(const MainComponent* appMenu, const Format newFormat);
+    void changeMenuFormat(MainComponent* appMenu, const Format newFormat);
     
     /* ####################    Menu Control   ########################### */
     /**
@@ -109,6 +109,14 @@ namespace AppMenu
      */
     class DesktopEntryData;
     
+    /**
+     * @brief  An ItemData subclass that handles menu data read from the JSON
+     *         configuration file.
+     *
+     * @see  MenuData/ConfigData
+     */
+    class ConfigData;
+
     /**
      * @brief  Reads the entire menu structure from a JSON configuration file,
      *         initializes the entire menu as linked ItemData objects, and

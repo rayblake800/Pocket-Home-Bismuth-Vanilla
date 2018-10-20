@@ -1,12 +1,13 @@
+#define APPMENU_IMPLEMENTATION_ONLY
 #include "ExistingItemEditor.h"
 
 /*
  * Creates an editor for editing a specific menu item.
  */
 AppMenu::ExistingItemEditor::ExistingItemEditor
-(const MenuItem& editedItem, std::function<void()> onConfirm) :
+(const MenuItem editedItem, std::function<void()> onConfirm) :
     editedItem(editedItem),
-    AppMenuPopupEditor(editedItem.getEditorTitle(), onConfirm,
+    AppMenu::PopupEditor(editedItem.getEditorTitle(), onConfirm,
             isEditable(editedItem, DataField::categories),
             isEditable(editedItem, DataField::command)) 
 {

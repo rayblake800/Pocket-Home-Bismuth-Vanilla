@@ -1,5 +1,7 @@
+#define APPMENU_IMPLEMENTATION_ONLY
+
 #include "AppMenu.h"
-#include "Controller/MainComponent.h"
+#include "MainComponent.h"
 #include "MenuFormats/Paged/Controller.h"
 #include "MenuFormats/Scrolling/Controller.h"
 #include "JuceHeader.h"
@@ -12,7 +14,8 @@ AppMenu::MainComponent* AppMenu::createAppMenu(const Format menuFormat)
     switch(menuFormat)
     {
         case Format::Paged:
-            return new MainComponent(new Paged::Controller());
+            //return new MainComponent(new Paged::Controller());
+            return new MainComponent(new Scrolling::Controller());
         case Format::Scrolling:
             return new MainComponent(new Scrolling::Controller());
         default:
@@ -26,7 +29,7 @@ AppMenu::MainComponent* AppMenu::createAppMenu(const Format menuFormat)
  * Changes the format of an existing AppMenu::MainComponent.
  */
 void AppMenu::changeMenuFormat
-(const MainComponent* appMenu, const Format newFormat)
+(MainComponent* appMenu, const Format newFormat)
 {
     if(appMenu == nullptr)
     {
@@ -43,7 +46,8 @@ void AppMenu::changeMenuFormat
          switch(newFormat)
         {
             case Format::Paged:
-                appMenu->initMenu(new Paged::Controller());
+                //appMenu->initMenu(new Paged::Controller());
+                appMenu->initMenu(new Scrolling::Controller());
             case Format::Scrolling:
                 appMenu->initMenu(new Scrolling::Controller());
             default:

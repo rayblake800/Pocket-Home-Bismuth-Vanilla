@@ -1,6 +1,24 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Controller.h"
 #include "MenuItem.h"
+#include "Config/MainFile.h"
+#include "Config/MainKeys.h"
+
+/**
+ * @brief   Returns from the current function if the menu component is null.
+ *          This will also print an error and fail an assertion if it is null 
+ *          and debugging is enabled.
+ *
+ * @param functionName  The name of a function to print in the error message.
+ */
+#define CHECK_MENU_COMPONENT(functionName)          \
+    if(menuComponent == nullptr)                    \
+    {                                               \
+        DBG("AppMenu::Controller::" << functionName \
+                << ": Controller is null!");        \
+        jassertfalse;                               \
+        return;                                     \
+    }
 
 AppMenu::Controller::Controller() : contextMenu(*this) { }
 
@@ -14,15 +32,15 @@ AppMenu::Controller::~Controller()
 }
 
 /*
- * Creates a MenuComponent, linking it to a controller.
+ * Creates a ControlledMenu, linking it to a controller.
  */
- AppMenu::Controller::MenuComponent::MenuComponent(Controller& controller) :
+ AppMenu::Controller::ControlledMenu::ControlledMenu(Controller& controller) :
      controller(controller) { }
 
 /*
  * Signals to the controller that a menu item was clicked.
  */
-void AppMenu::Controller::MenuComponent::signalItemClicked
+void AppMenu::Controller::ControlledMenu::signalItemClicked
 (MenuItem clickedItem, const bool rightClicked)
 {
     controller.menuItemClicked(clickedItem, rightClicked);
@@ -31,7 +49,7 @@ void AppMenu::Controller::MenuComponent::signalItemClicked
 /*
  * Signals to the controller that an open folder was clicked.
  */
-void AppMenu::Controller::MenuComponent::signalFolderClicked
+void AppMenu::Controller::ControlledMenu::signalFolderClicked
 (MenuItem folderItem, const bool rightClicked, const int closestIndex)
 {
     controller.folderClicked(folderItem, rightClicked, closestIndex);
@@ -41,25 +59,25 @@ void AppMenu::Controller::MenuComponent::signalFolderClicked
  * Signals to the controller that the menu was clicked somewhere other than at a
  * folder or menu item.
  */
-void AppMenu::Controller::MenuComponent::signalMenuClicked
+void AppMenu::Controller::ControlledMenu::signalMenuClicked
 (const bool rightClicked)
 {
-    menuClicked(rightClicked);
+    controller.menuClicked(rightClicked);
 }
 
 /*
  * Checks if user input should be enabled.
  */
-bool AppMenu::Controller::MenuComponent::getInputEnabled() const
+bool AppMenu::Controller::ControlledMenu::getInputEnabled() const
 {
     return inputEnabled;
 }
 
 /*
- * Sets if the MenuComponent and all its child Components should register user 
+ * Sets if the ControlledMenu and all its child Components should register user 
  * input.
  */
-void AppMenu::Controller::MenuComponent::setInputEnabled
+void AppMenu::Controller::ControlledMenu::setInputEnabled
 (const bool allowUserInput)
 {
     inputEnabled = allowUserInput;
@@ -70,77 +88,141 @@ void AppMenu::Controller::MenuComponent::setInputEnabled
  */
 void AppMenu::Controller::launchOrFocusApplication(MenuItem toLaunch)
 {
-
-}
-
-/*
- * Activates or deactivates the loading spinner component held
- *         by the Controller's MainComponent.
- */void AppMenu::Controller::setLoadingSpinnerVisible(const bool shouldShow)
-{
+    CHECK_MENU_COMPONENT(__func__)
+    using juce::String;
+    String command = toLaunch.getCommand();
+    if(toLaunch.getLaunchedInTerm())
+    {
+        Config::MainFile mainConfig;
+        String termPrefix = mainConfig.getConfigValue<String>
+            (Config::MainKeys::termLaunchCommandKey);
+    }
+    setLoadingSpinnerVisible(true);
+    menuComponent->setInputEnabled(false);
+    appLauncher.startOrFocusApp(toLaunch.getCommand());
 }
 
 /*
  * Handles mouse clicks on menu items.
- */void AppMenu::Controller::menuItemClicked(MenuItem clickedItem, const bool rightClicked)
+ */
+void AppMenu::Controller::menuItemClicked
+(MenuItem clickedItem, const bool rightClicked)
 {
+    CHECK_MENU_COMPONENT(__func__)
+    if(menuEditor != nullptr && menuEditor->isShowing())
+    {
+        DBG("AppMenu::Controller::" << __func__ 
+                << ": Ignoring menu item click, editor is open.");
+        return;
+    }
+    if(rightClicked)
+    {
+        contextMenu.setMenuItemOptions(clickedItem);
+        contextMenu.show();
+    }
+    else
+    {
+        if(clickedItem.isFolder())
+        {
+            menuComponent->openFolder(clickedItem);
+        }
+        else
+        {
+            launchOrFocusApplication(clickedItem);
+        }
+    }
 }
 
 /*
  * Handles mouse clicks on open menu folders.
- */void AppMenu::Controller::folderClicked(MenuItem clickedFolder, const bool rightClicked,
-const int closestIndex)
+ */
+void AppMenu::Controller::folderClicked
+(MenuItem clickedFolder, const bool rightClicked, const int closestIndex)
 {
+    CHECK_MENU_COMPONENT(__func__)
+    if(menuEditor != nullptr && menuEditor->isShowing())
+    {
+        DBG("AppMenu::Controller::" << __func__ 
+                << ": Ignoring folder click, editor is open.");
+        return;
+    }
+    if(rightClicked)
+    {
+        contextMenu.setFolderOptions(clickedFolder, closestIndex);
+    }
+    else 
+    {
+        MenuItem activeFolder = menuComponent->getActiveFolder();
+        while(!(activeFolder == clickedFolder)
+                && !activeFolder.getParentFolder().isNull())
+        {
+            menuComponent->closeActiveFolder();
+            activeFolder = menuComponent->getActiveFolder();
+        }
+    }
 }
 
 /*
  * Handles any other clicks on the menu component.
- */void AppMenu::Controller::menuClicked(const bool rightClicked)
-{
-}/*
- * Scans desktop entries for updates whenever window focus is
- *         gained.
  */
-void AppMenu::Controller::windowFocusGained()
+void AppMenu::Controller::menuClicked(const bool rightClicked)
 {
+    CHECK_MENU_COMPONENT(__func__)
+    if(menuEditor != nullptr && menuEditor->isShowing())
+    {
+        DBG("AppMenu::Controller::" << __func__ 
+                << ": Ignoring menu click, editor is open.");
+        return;
+    }
+    if(rightClicked)
+    {
+        contextMenu.setGenericOptions();
+    }
 }
 
 /*
- * Hides the loading spinner and context menu, destroy any menu
- *         editor component, and stop waiting for applications to launch
- *         when window focus is lost.
+ * Scans desktop entries for updates whenever window focus is gained.
+ */
+void AppMenu::Controller::windowFocusGained()
+{
+    // TODO: scan for changes 
+}
+
+/*
+ * Hides the loading spinner and stops waiting for applications to launch when 
+ * window focus is lost.
  */
 void AppMenu::Controller::windowFocusLost()
 {
+    CHECK_MENU_COMPONENT(__func__)
+    setLoadingSpinnerVisible(false); 
+    menuComponent->setInputEnabled(true);
+}
+
+/*
+ * Updates the ControlledMenu whenever the parent MainComponent is resized.
+ */
+void AppMenu::Controller::parentResized
+(const juce::Rectangle<int> parentBounds) 
+{
+    CHECK_MENU_COMPONENT(__func__)
+    menuComponent->setBounds(parentBounds);
 }
 
 /*
  * Links the ContextMenu with the controller that holds it.
- AppMenu::Controller::ContextMenu::*/ContextMenu(Controller& controller)
-{
-} AppMenu::Controller::ContextMenu::~ContextMenu() { }/*
- * Inserts a new menu item into the menu, updating the menu
- *         component.
- */void AppMenu::Controller::ContextMenu::insertMenuItem(MenuItem folder, MenuItem newItem,
-const int index)
-{
-}
+ */
+AppMenu::Controller::ContextMenu::ContextMenu(Controller& controller) :
+menuController(controller) { } 
 
 /*
- * Swaps two menu items, updating the menu component.
- */void AppMenu::Controller::ContextMenu::swapMenuItems(MenuItem folder, const int swapIndex1,
-const int swapIndex2)
+ * Shows an editor component above the ControlledMenu.
+ */
+void AppMenu::Controller::ContextMenu::showPopupEditor(PopupEditor* editor)
 {
-}
-
-/*
- * Removes a menu item, updating the menu component.
- */void AppMenu::Controller::ContextMenu::removeMenuItem(MenuItem toRemove)
-{
-}
-
-/*
- * Shows an editor component above the MenuComponent.
- */void AppMenu::Controller::ContextMenu::showPopupEditor(PopupEditor* editor)
-{
+   menuController.menuEditor.reset(editor); 
+   if(menuController.menuComponent != nullptr)
+   {
+       menuController.menuComponent->addAndMakeVisible(editor);
+   }
 }

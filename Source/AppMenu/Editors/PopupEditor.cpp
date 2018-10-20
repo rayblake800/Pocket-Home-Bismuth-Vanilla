@@ -1,3 +1,4 @@
+#define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
 #include "IconLoader.h"
 #include "PopupEditor.h"
@@ -203,7 +204,7 @@ void AppMenu::PopupEditor::editorButtonClicked(juce::Button* button)
     using juce::StringArray;
     if (button == &categoryEditButton)
     {
-        categoryEditor = new CategoryPopupEditor(categories,
+        categoryEditor = new CategoryEditor(categories,
                 [this](StringArray newCategories)
                 {
                     categories = newCategories;

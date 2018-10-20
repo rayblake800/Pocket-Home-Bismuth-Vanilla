@@ -1,19 +1,28 @@
+/* Only include this file directly in the AppMenu implementation! */
+#ifdef APPMENU_IMPLEMENTATION_ONLY
+
 #pragma once
 #include "JuceHeader.h"
+#include "Localized.h"
 #include "AppMenu.h"
 #include "MenuData/MenuItem.h"
-#include "AbstractComponents/PopupEditor.h"
+#include "Editors/PopupEditor.h"
 
 /**
  * @file  ContextMenu.h
  *
  * @brief  Creates popup context menus used to edit the AppMenu.
+ *
+ * When given an application menu item through setMenuItemOptions, a folder
+ * through setFolderOptions, or when called with setGenericOptions, the
+ * ContextMenu will update its contents with relevant options for editing the
+ * given menu item, adding new items to the folder, or adding items to the root
+ * menu folder.
  */
-class AppMenu::ContextMenu : public juce::PopupMenu
+class AppMenu::ContextMenu : public juce::PopupMenu, private Localized
 {
 public:
-    ContextMenu() { }
-
+    ContextMenu();
     virtual ~ContextMenu() { }
 
     /**
@@ -40,6 +49,11 @@ public:
      */
     void setGenericOptions();
 
+    /**
+     * @brief  Shows the popup menu, and handles the user's selection.
+     */
+    void showAndHandleSelection();
+
 private:
     /**
      * @brief  Insert a new menu item into the menu, updating the menu
@@ -52,8 +66,8 @@ private:
      * @param index    The index in the folder where the new item will be
      *                 inserted.
      */
-    virtual void insertMenuItem
-    (MenuItem folder, MenuItem newItem, const int index = 0) = 0;
+    void insertMenuItem
+    (MenuItem folder, MenuItem newItem, const int index = 0);
 
     /**
      * @brief   Swaps two menu items, updating the menu component.
@@ -64,15 +78,15 @@ private:
      *
      * @param swapIndex2  The folder index of the second item to move.
      */
-    virtual void swapMenuItems
-    (MenuItem folder, const int swapIndex1, const int swapIndex2) = 0;
+    void swapMenuItems
+    (MenuItem folder, const int swapIndex1, const int swapIndex2);
 
     /**
      * @brief  Removes a menu item, updating the menu component.
      *
      * @param toRemove  The menu item to remove.
      */
-    virtual void removeMenuItem(MenuItem toRemove) = 0;
+    virtual void removeMenuItem(MenuItem toRemove);
 
     /**
      * @brief  Shows an editor component above the MenuComponent.
@@ -80,4 +94,12 @@ private:
      * @param editor  The new editor to show.
      */
     virtual void showPopupEditor(PopupEditor* editor) = 0;
+
+    /* Last menu item used to set context menu options: */
+    MenuItem editedItem;
+    /* Last saved index where menu items will be inserted into a folder: */
+    int insertIndex = 0;
 };
+
+/* Only include this file directly in the AppMenu implementation! */
+#endif

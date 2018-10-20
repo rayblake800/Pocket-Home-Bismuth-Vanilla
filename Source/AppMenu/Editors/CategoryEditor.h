@@ -1,3 +1,6 @@
+/* Only include this file directly in the AppMenu implementation! */
+#ifdef APPMENU_IMPLEMENTATION_ONLY
+
 #pragma once
 #include "ListEditor.h"
 #include "PopupEditorComponent.h"
@@ -33,3 +36,6 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CategoryEditor)
 };
+
+/* Only include this file directly in the AppMenu implementation! */
+#endif

@@ -1,3 +1,4 @@
+#define APPMENU_IMPLEMENTATION_ONLY
 #include "CategoryEditor.h"
 
 AppMenu::CategoryEditor::CategoryEditor(

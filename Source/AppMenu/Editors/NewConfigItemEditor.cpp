@@ -1,3 +1,4 @@
+#define APPMENU_IMPLEMENTATION_ONLY
 #include "NewConfigItemEditor.h"
 
 /* Localized title text key: */
@@ -9,7 +10,7 @@ AppMenu::NewConfigItemEditor::NewConfigItemEditor(
         const bool isFolder,
         const int insertIndex,
         const std::function<void() > onConfirm) :
-    AppMenuPopupEditor(
+    AppMenu::PopupEditor(
             localeText((isFolder ? newFolderTitleKey : newAppTitleKey)), 
             onConfirm, isFolder, !isFolder),
     parentFolder(parentFolder), 

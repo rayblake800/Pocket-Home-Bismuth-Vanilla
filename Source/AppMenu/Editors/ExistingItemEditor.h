@@ -1,3 +1,6 @@
+/* Only include this file directly in the AppMenu implementation! */
+#ifdef APPMENU_IMPLEMENTATION_ONLY
+
 #pragma once
 #include "PopupEditor.h"
 #include "MenuItem.h"
@@ -34,3 +37,6 @@ private:
     /*  The menu item being edited */
     MenuItem editedItem;
 };
+
+/* Only include this file directly in the AppMenu implementation! */
+#endif
