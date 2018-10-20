@@ -83,14 +83,10 @@ RECURSIVE_INCLUDE_DIRS := Source Tests
 
 ######### Load default values: #########
 # Default build type:
-ifndef CONFIG
-	CONFIG := Debug
-endif
+CONFIG ?= Debug
 
 # Command used to strip unneeded symbols from object files:
-ifndef STRIP
-	STRIP = strip
-endif
+STRIP ?= strip
 
 # Use the build system's architecture by default.
 ifeq ($(TARGET_ARCH),)
@@ -159,37 +155,38 @@ CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 
 # AppMenu Module:
 APPMENU_PREFIX := $(JUCE_OBJDIR)/AppMenu_
-SCROLLING_MENU_PREFIX := $(APPMENU_PREFIX)Scrolling/
-PAGED_MENU_PREFIX := $(APPMENU_PREFIX)Paged/
+SCROLLING_MENU_PREFIX := $(APPMENU_PREFIX)Scrolling_
+PAGED_MENU_PREFIX := $(APPMENU_PREFIX)Paged_
 OBJECTS_APPMENU_SCROLLING := \
   $(SCROLLING_MENU_PREFIX)MenuButton.o \
   $(SCROLLING_MENU_PREFIX)FolderComponent.o \
   $(SCROLLING_MENU_PREFIX)MenuComponent.o \
-  $(SCROLLING_MENU_PREFIX)Controller.o \
+  $(SCROLLING_MENU_PREFIX)Controller.o
 OBJECTS_APPMENU_PAGED := \
   $(PAGED_MENU_PREFIX)MenuButton.o \
   $(PAGED_MENU_PREFIX)FolderComponent.o \
   $(PAGED_MENU_PREFIX)MenuComponent.o \
-  $(PAGED_MENU_PREFIX)Controller.o \
+  $(PAGED_MENU_PREFIX)Controller.o
 OBJECTS_APPMENU_ABSTRACT_COMPONENT := \
   $(APPMENU_PREFIX)MenuButton.o \
   $(APPMENU_PREFIX)FolderComponent.o \
-  $(APPMENU_PREFIX)MenuComponent.o \
+  $(APPMENU_PREFIX)MenuComponent.o
 OBJECTS_APPMENU_CONTROL := \
   $(APPMENU_PREFIX)Controller.o \
-  $(APPMENU_PREFIX)ContextMenu.o \
+  $(APPMENU_PREFIX)ContextMenu.o
 OBJECTS_APPMENU_EDITOR := \
   $(APPMENU_PREFIX)NewConfigItemEditor.o \
   $(APPMENU_PREFIX)NewDesktopAppEditor.o \
   $(APPMENU_PREFIX)ExistingItemEditor.o \
-  $(APPMENU_PREFIX)PopupEditor.o \
   $(APPMENU_PREFIX)CategoryEditor.o \
+  $(APPMENU_PREFIX)PopupEditor.o
 OBJECTS_APPMENU_DATA := \
   $(APPMENU_PREFIX)JSONResource.o \
   $(APPMENU_PREFIX)ConfigFile.o \
   $(APPMENU_PREFIX)MenuItem.o \
   $(APPMENU_PREFIX)DesktopEntryData.o \
-  $(APPMENU_PREFIX)ItemData.o \
+  $(APPMENU_PREFIX)ConfigData.o \
+  $(APPMENU_PREFIX)ItemData.o
 OBJECTS_APPMENU := \
   $(OBJECTS_APPMENU_SCROLLING) \
   $(OBJECTS_APPMENU_PAGED) \
@@ -198,7 +195,7 @@ OBJECTS_APPMENU := \
   $(OBJECTS_APPMENU_EDITOR) \
   $(OBJECTS_APPMENU_DATA)\
   $(APPMENU_PREFIX)MainComponent.o \
-  $(APPMENU_PREFIX)AppMenu.o \
+  $(APPMENU_PREFIX)AppMenu.o 
 
 # Config Module:
 CONFIG_PREFIX := $(JUCE_OBJDIR)/Config_
@@ -206,7 +203,7 @@ OBJECTS_CONFIG := \
   $(CONFIG_PREFIX)MainResource.o \
   $(CONFIG_PREFIX)FileResource.o \
   $(CONFIG_PREFIX)DataKey.o \
-  $(CONFIG_PREFIX)AlertWindow.o \
+  $(CONFIG_PREFIX)AlertWindow.o 
 
 OBJECTS_APP := \
   $(JUCE_OBJDIR)/NetworkInterface.o \
@@ -335,7 +332,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/include_juce_data_structures.o \
   $(JUCE_OBJDIR)/include_juce_events.o \
   $(JUCE_OBJDIR)/include_juce_graphics.o \
-  $(JUCE_OBJDIR)/include_juce_gui_basics.o \
+  $(JUCE_OBJDIR)/include_juce_gui_basics.o 
 
 .PHONY: build devInstall debug release clean strip uninstall
 
@@ -409,11 +406,11 @@ $(PAGED_MENU_PREFIX)MenuComponent.o: \
 $(PAGED_MENU_PREFIX)Controller.o: \
 	Source/AppMenu/MenuFormats/Paged/Controller.cpp
 $(APPMENU_PREFIX)MenuButton.o: \
-    Source/AppMenu/AbstractComponents/MenuButton.cpp
+    Source/AppMenu/MenuComponents/MenuButton.cpp
 $(APPMENU_PREFIX)FolderComponent.o: \
-    Source/AppMenu/AbstractComponents/FolderComponent.cpp
+    Source/AppMenu/MenuComponents/FolderComponent.cpp
 $(APPMENU_PREFIX)MenuComponent.o: \
-    Source/AppMenu/AbstractComponents/MenuComponent.cpp
+    Source/AppMenu/MenuComponents/MenuComponent.cpp
 $(APPMENU_PREFIX)Controller.o: \
     Source/AppMenu/Controller/Controller.cpp
 $(APPMENU_PREFIX)ContextMenu.o: \
@@ -425,9 +422,9 @@ $(APPMENU_PREFIX)NewDesktopAppEditor.o: \
 $(APPMENU_PREFIX)ExistingItemEditor.o: \
     Source/AppMenu/Editors/ExistingItemEditor.cpp
 $(APPMENU_PREFIX)PopupEditor.o: \
-    Source/AppMenu/AbstractComponents/PopupEditor.cpp
+    Source/AppMenu/Editors/PopupEditor.cpp
 $(APPMENU_PREFIX)CategoryEditor.o: \
-    Source/AppMenu/Editors/CategoryEditor
+    Source/AppMenu/Editors/CategoryEditor.cpp
 $(APPMENU_PREFIX)JSONResource.o: \
     Source/AppMenu/MenuData/JSONResource.cpp
 $(APPMENU_PREFIX)ConfigFile.o: \
@@ -436,8 +433,14 @@ $(APPMENU_PREFIX)MenuItem.o: \
     Source/AppMenu/MenuData/MenuItem.cpp
 $(APPMENU_PREFIX)DesktopEntryData.o: \
     Source/AppMenu/MenuData/DesktopEntryData.cpp
+$(APPMENU_PREFIX)ConfigData.o: \
+    Source/AppMenu/MenuData/ConfigData.cpp
 $(APPMENU_PREFIX)ItemData.o: \
     Source/AppMenu/MenuData/ItemData.cpp
+$(APPMENU_PREFIX)MainComponent.o: \
+    Source/AppMenu/MainComponent.cpp
+$(APPMENU_PREFIX)AppMenu.o: \
+    Source/AppMenu/AppMenu.cpp
 
 $(JUCE_OBJDIR)/HomePage.o: \
 	Source/Components/Pages/Home\ Page/HomePage.cpp
@@ -660,12 +663,13 @@ $(JUCE_OBJDIR)/include_juce_graphics.o: \
 	JuceLibraryCode/include_juce_graphics.cpp
 $(JUCE_OBJDIR)/include_juce_gui_basics.o: \
 	JuceLibraryCode/include_juce_gui_basics.cpp
+
 $(OBJECTS_APP):
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "$@: Compiling $<"
+	@echo "Building $@:"
+	@echo "   Compiling $<"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
 		-o "$@" -c "$<"
-
 
 devinstall:
 	killall $(JUCE_TARGET_APP);\
