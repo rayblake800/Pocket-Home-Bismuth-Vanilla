@@ -89,21 +89,31 @@ public:
      * @param entryFileID  The desktop file ID of a desktop entry file.
      */
     void reloadEntry(const juce::String& entryFileID);
-
-    /**
-     * @brief  Scans all desktop entry files for any changes made since the 
-     *         last time the DesktopEntryLoader read the entry files.
-     */
-    void scanForChanges();
-    
+ 
     /**
      * @brief  Identifies a callback function that will run after entries are 
      *         loaded.
      *
      * A zero value represents an unset or invalid ID.
      */
-       
     typedef juce::uint32 CallbackID;
+
+    /**
+     * @brief  Scans all desktop entry files for any changes made since the 
+     *         last time the DesktopEntryLoader read the entry files.
+     *
+     * @param handleChanges  A callback to run on the juce message thread when 
+     *                       all changes have been read.  The function will
+     *                       be passed the list of application categories that
+     *                       have changed.
+     *
+     * @return               A callback ID that may later be used to cancel the
+     *                       callback function, if it is still pending.
+     */
+    CallbackID scanForChanges
+    (const std::function<void(const juce::StringArray)> handleChanges);
+   
+       
 
     /**
      * @brief  Schedules an action to run once all entries have been loaded.

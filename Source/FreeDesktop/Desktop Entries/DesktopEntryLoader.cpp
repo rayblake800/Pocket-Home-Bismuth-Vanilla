@@ -352,15 +352,13 @@ void DesktopEntryLoader::reloadEntry(const juce::String& entryFileID)
  * Scans all desktop entry files for any changes made since the last time the 
  * DesktopEntryLoader read the entry files.
  */
-void DesktopEntryLoader::scanForChanges()
+DesktopEntryLoader::CallbackID DesktopEntryLoader::scanForChanges
+(const std::function<void(const juce::StringArray)> handleChanges)
 {
-    auto deThread = getWriteLockedResource();
-    if(!deThread->isThreadRunning() 
-            && deThread->pendingFiles.isEmpty()
-            && deThread->onFinish.empty())
-    {
-        deThread->startThread();
-    }
+    // TODO: Implement a system for properly recording and sharing all changes.
+    DBG("DesktopEntryLoader::" << __func__
+            << ": Scanning for changes is not implemented yet!");
+    return 0;
 }
 
 /*
