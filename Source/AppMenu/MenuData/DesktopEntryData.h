@@ -1,3 +1,6 @@
+/* Only include this file directly in the AppMenu implementation! */
+#ifdef APPMENU_IMPLEMENTATION_ONLY
+
 #pragma once
 #include "DesktopEntry.h"
 #include "Localized.h"
@@ -111,6 +114,16 @@ public:
     virtual int getMovableChildCount() const override;
     
     /**
+     * @brief  Checks if this menu item could be moved within its folder,
+     *         assuming that another movable menu item exists that could be
+     *         swapped with this one.
+     *
+     * @return  Always false, as desktop entry menu items are simply ordered
+     *          alphabetically.
+     */
+    virtual bool isMovable() const override;
+
+    /**
      * @brief  Writes all changes to this menu item back to its data source.
      */
     virtual void saveChanges() override;
@@ -157,3 +170,6 @@ private:
     /* Application data source, set on construction. */
     DesktopEntry desktopEntry;
 };
+
+/* Only include this file directly in the AppMenu implementation! */
+#endif

@@ -1,3 +1,6 @@
+/* Only include this file directly in the AppMenu implementation! */
+#ifdef APPMENU_IMPLEMENTATION_ONLY
+
 #pragma once
 #include "IconThread.h"
 #include "Localized.h"
@@ -169,7 +172,7 @@ public:
      *
      * @param toCompare  Another menu item to compare with this one.
      * 
-     * @return           Whether both menu items store identical data.
+     * @return           Whether both menu items store the same data object.
      */
     bool operator==(const MenuItem& toCompare) const;
 
@@ -178,10 +181,150 @@ public:
      *
      * @param toCompare  Another menu item to compare with this one.
      * 
-     * @return           Whether this menu item comes before the other in the
-     *                   menu tree.
+     * @return           Whether this menu item's title comes before toCompare's
+     *                   title alphabetically.
      */
     bool operator<(const MenuItem& toCompare) const;
+
+    /**
+     * @brief  A wrapper for the ItemData::Listener class, used to track menu
+     *         data without directly interacting with ItemData objects.
+     */
+    class Listener : private ItemData::Listener
+    {
+    public:
+        /* Allow MenuItem to cast Listeners to their private base when adding
+           or removing them. */
+        friend class MenuItem;
+
+        Listener() { }
+        virtual ~Listener() { }
+
+    private:
+        /**
+         * @brief  This method will be called once any time a new child folder
+         *         item is added to a tracked MenuItem.
+         *
+         * @param folderItem  The tracked folder item.
+         *
+         * @param childIndex  The index where the new child item was inserted.
+         */
+        virtual void childAdded(MenuItem folderItem, 
+                const int childIndex) { }
+
+        /**
+         * @brief  This method will be called once any time a child folder item
+         *         is removed from a tracked ItemData object.
+         *
+         * @param folderItem    The tracked folder item.
+         *
+         * @param removedIndex  The former index of the tracked item's removed
+         *                      child item.
+         */
+        virtual void childRemoved(MenuItem folderItem,
+                const int removedIndex) { }
+
+        /**
+         * @brief  This method will be called once any time two child folder
+         *         items of a tracked ItemData object are swapped.
+         *
+         * @param folderItem  The tracked folder item.
+         *
+         * @param swapIndex1  The index of the first swapped child item.
+         *
+         * @param swapIndex2  The index of the second swapped child item.
+         */
+        virtual void childrenSwapped(MenuItem folderItem,
+                const int swapIndex1, const int swapIndex2) { }
+
+        /**
+         * @brief  This method will be called once any time a tracked ItemData
+         *         object is about to be removed from the menu.
+         *
+         * @param removedItem   The tracked object that will be removed.
+         */
+        virtual void removedFromMenu(MenuItem removedItem) { }
+
+        /**
+         * @brief  This method will be called once whenever any other element of
+         *         a tracked ItemData object's data changes.
+         *
+         * @param changedItem  The tracked ItemData that has changed in some
+         *                     way.
+         */
+        virtual void dataChanged(MenuItem changedItem) { }
+
+        /**
+         * @brief  Calls the childAdded method that passes in a MenuItem instead
+         *         of an ItemData::Ptr.
+         *
+         * @param folderItem  The tracked folder item.
+         *
+         * @param childIndex  The index where the new child item was inserted.
+         */
+        virtual void childAdded(ItemData::Ptr folderItem, 
+                const int childIndex) final override;
+
+        /**
+         * @brief  Calls the childRemoved method that passes in a MenuItem
+         *         instead of an ItemData::Ptr.
+         *
+         * @param folderItem    The tracked folder item.
+         *
+         * @param removedIndex  The former index of the tracked item's removed
+         *                      child item.
+         */
+        virtual void childRemoved(ItemData::Ptr folderItem,
+                const int removedIndex) final override;
+
+        /**
+         * @brief  Calls the childrenSwapped method that passes in a MenuItem
+         *         instead of an ItemData::Ptr.
+         *
+         * @param folderItem  The tracked folder item.
+         *
+         * @param swapIndex1  The index of the first swapped child item.
+         *
+         * @param swapIndex2  The index of the second swapped child item.
+         */
+        virtual void childrenSwapped(ItemData::Ptr folderItem,
+                const int swapIndex1, const int swapIndex2) final override;
+
+        /**
+         * @brief  Calls the removedFromMenu method that passes in a MenuItem
+         *         instead of an ItemData::Ptr.
+         *
+         * @param removedItem   The tracked object that will be removed.
+         */
+        virtual void removedFromMenu(ItemData::Ptr removedItem) final override;
+
+        /**
+         * @brief  Calls the dataChanged method that passes in a MenuItem 
+         *         instead of an ItemData::Ptr.
+         *
+         * @param changedItem  The tracked ItemData that has changed in some
+         *                     way.
+         */
+        virtual void dataChanged(ItemData::Ptr changedItem) final override;
+    };
+
+    /**
+     * @brief  If this MenuItem is not null, add a Listener object to its menu
+     *         data.
+     *
+     * @param toAdd  The listener that will track changes to the MenuItem's
+     *               data.
+     */
+    void addListener(Listener* toAdd);
+
+    /**
+     * @brief  If this menuItem is not null, make a Listener object stop
+     *         tracking its menu data.
+     *
+     * @param toRemove  The listener that will no longer track this menu item's
+     *                  data.
+     */
+    void removeListener(Listener* toRemove);
 
     /**
      * @brief  An interface for objects that can edit MenuItems.
@@ -273,23 +416,6 @@ public:
                 const juce::StringArray categories) const;
 
         /**
-         * @brief  Attempts to replace a menu item in its parent folder, saving 
-         *         the change to the menu item's data source.
-         *
-         * This will fail if toReplace is not located at a movable index in the
-         * menu, or if either it or replacementItem are null.
-         *
-         * @param toReplace         The menu item being replaced.
-         *
-         * @param replacementItem   The replacement menu item.
-         *
-         * @return                  Whether the menu item was successfully 
-         *                          replaced.
-         */
-        bool replace(MenuItem toReplace, MenuItem replacementItem)
-            const;
-
-        /**
          * @brief  Attempts to insert a menu item into a folder menu item,
          *         saving the change to the folder menu item's data source.
          *
@@ -350,3 +476,6 @@ public:
         void saveChanges(MenuItem menuItem) const;
     };
 };
+
+/* Only include this file directly in the AppMenu implementation! */
+#endif

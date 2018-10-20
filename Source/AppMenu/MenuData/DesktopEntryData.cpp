@@ -1,5 +1,5 @@
+#define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
-#include "MainConfigFile.h"
 #include "DesktopEntryFormatError.h"
 #include "DesktopEntryFileError.h"
 #include "DesktopEntryData.h"
@@ -61,6 +61,7 @@ void AppMenu::DesktopEntryData::setTitle(const juce::String& title)
     try
     {
         desktopEntry.setName(title);
+        signalDataChanged();
     }
     catch(DesktopEntryFormatError e)
     {
@@ -77,6 +78,7 @@ void AppMenu::DesktopEntryData::setIconName(const juce::String& iconName)
     try
     {
         desktopEntry.setIcon(iconName);
+        signalDataChanged();
     }
     catch(DesktopEntryFormatError e)
     {
@@ -93,6 +95,7 @@ void AppMenu::DesktopEntryData::setCommand(const juce::String& newCommand)
     try
     {
         desktopEntry.setExec(newCommand);
+        signalDataChanged();
     }
     catch(DesktopEntryFormatError e)
     {
@@ -106,6 +109,7 @@ void AppMenu::DesktopEntryData::setCommand(const juce::String& newCommand)
 void AppMenu::DesktopEntryData::setLaunchedInTerm(const bool termLaunch)
 {
     desktopEntry.setLaunchedInTerm(termLaunch);
+    signalDataChanged();
 }
 
 /*
@@ -116,6 +120,7 @@ void AppMenu::DesktopEntryData::setCategories(const juce::StringArray& categorie
     try
     {
         desktopEntry.setCategories(categories);
+        signalDataChanged();
     }
     catch(DesktopEntryFormatError e)
     {
@@ -130,6 +135,14 @@ void AppMenu::DesktopEntryData::setCategories(const juce::StringArray& categorie
 int AppMenu::DesktopEntryData::getMovableChildCount() const
 {
     return 0;
+}
+
+/*
+ * Checks if this menu item could be moved within its folder.
+ */
+bool AppMenu::DesktopEntryData::isMovable() const 
+{
+    return false;
 }
 
 /*

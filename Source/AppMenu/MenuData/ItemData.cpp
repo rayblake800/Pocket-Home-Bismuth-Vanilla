@@ -1,3 +1,4 @@
+#define APPMENU_IMPLEMENTATION_ONLY
 #include "ItemData.h"
 
 /*
@@ -74,27 +75,10 @@ bool AppMenu::ItemData::insertChild
         children[i]->index++;
     }
     newChild->saveChanges();
-    return true;
-}
-
-/*
- * Attempts to replace this menu item in its parent folder, saving the change
- * to the menu item's data source.
- */
-bool AppMenu::ItemData::replace (const AppMenu::ItemData::Ptr replacement)
-{
-    if(parent == nullptr || index >= parent->getMovableChildCount()
-            || index < 0)
+    foreachListener([this, &childIndex](Listener* listener)
     {
-        return false;
-    }
-    replacement->parent = parent;
-    replacement->index = index;
-    parent->children.set(index, replacement);
-    deleteFromSource();
-    parent->saveChanges();
-    parent = nullptr;
-    index = -1;
+        listener->childAdded(this, childIndex);
+    });
     return true;
 }
 
@@ -107,11 +91,19 @@ bool AppMenu::ItemData::remove()
     {
         return false;
     }
+    foreachListener([this](Listener* listener)
+    {
+        listener->removedFromMenu(this);
+    });
     parent->children.remove(index);
     for(int i = index; i < parent->children.size(); i++)
     {
         parent->children[i]->index++;
     }
+    parent->foreachListener([this](Listener* listener)
+    {
+        listener->childRemoved(parent, index);
+    });
     parent = nullptr;
     index = -1;
     deleteFromSource();
@@ -131,5 +123,76 @@ bool AppMenu::ItemData::swapChildren(const int childIdx1, const int childIdx2)
     children.swap(childIdx1, childIdx2);
     children[childIdx1]->index = childIdx1;
     children[childIdx2]->index = childIdx2;
+    foreachListener([this, &childIdx1, &childIdx2](Listener* listener)
+    {
+        listener->childrenSwapped(this, childIdx1, childIdx2);
+    });
     return true;
+}
+
+/*
+ * Removes all references to this listener from the menu items it tracks.
+ */
+AppMenu::ItemData::Listener::~Listener()
+{
+    juce::Array<ItemData::Ptr> trackedListCopy = trackedItemData;
+    for(ItemData::Ptr& trackedItem : trackedListCopy)
+    {
+        trackedItem->removeListener(this);
+    }
+}
+
+/*
+ * Connects a new Listener object to this ItemData.
+ */
+void AppMenu::ItemData::addListener(Listener* newListener)
+{
+    if(newListener != nullptr)
+    {
+        listeners.add(newListener);
+        newListener->trackedItemData.add(this);
+    }
+    else
+    {
+        DBG("AppMenu::ItemData::" << __func__ << ": Listener was null!");
+    }
+}
+
+/*
+ * Disconnects a Listener object from this ItemData.
+ */
+void AppMenu::ItemData::removeListener(Listener* toRemove)
+{
+    if(toRemove != nullptr)
+    {
+        toRemove->trackedItemData.removeAllInstancesOf(this);
+        listeners.removeAllInstancesOf(toRemove);
+    }
+    else
+    {
+        DBG("AppMenu::ItemData::" << __func__ << ": Listener was null!");
+    }
+}
+
+/*
+ * Signal to all listeners tracking this ItemData that the item has changed.
+ */
+void AppMenu::ItemData::signalDataChanged()
+{
+    foreachListener([this](Listener* listener)
+    {
+        listener->dataChanged(this);
+    });
+}
+
+/*
+ * Runs an arbitrary operation on each listener tracking this ItemData.
+ */
+void AppMenu::ItemData::foreachListener
+(const std::function<void(Listener*)> listenerAction)
+{
+    for(Listener* listener : listeners)
+    {
+        listenerAction(listener);
+    }
 }
