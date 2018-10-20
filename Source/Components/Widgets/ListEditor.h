@@ -35,7 +35,7 @@ public:
     /**
      * @return the number of rows in the list
      */
-    int getNumRows();
+    virtual int getNumRows() override;
 
     /**
      * @return all list row strings.
@@ -67,7 +67,7 @@ private:
      * 
      * @param source  The label component for one of the list rows.
      */
-    void labelTextChanged(juce::Label *source);
+    virtual void labelTextChanged(juce::Label *source) override;
 
     /**
      * Clicking a listBoxItem selects it.  This should not be called directly.
@@ -76,7 +76,8 @@ private:
      * 
      * @param mouseEvent
      */
-    void listBoxItemClicked(int row, const juce::MouseEvent& mouseEvent);
+    virtual void listBoxItemClicked
+    (int row, const juce::MouseEvent& mouseEvent) override;
 
     /**
      * Double clicking a listBoxItem makes it editable.  This should not be
@@ -87,7 +88,7 @@ private:
      * @param mouseEvent
      */
     virtual void listBoxItemDoubleClicked
-    (int row, const juce::MouseEvent & mouseEvent);
+    (int row, const juce::MouseEvent & mouseEvent) override;
 
     /**
      * Pressing the delete key removes the selected row.  This should not be
@@ -95,7 +96,7 @@ private:
      * 
      * @param lastRowSelected
      */
-    void deleteKeyPressed(int lastRowSelected);
+    virtual void deleteKeyPressed(int lastRowSelected) override;
 
     /**
      * Removes a string from the list, and updates the underlying ListBox.
@@ -158,10 +159,10 @@ private:
      * 
      * @return                          The created/updated list component.
      */
-    juce::Component* refreshComponentForRow(
+    virtual juce::Component* refreshComponentForRow(
             int rowNumber,
             bool isRowSelected,
-            juce::Component * existingComponentToUpdate);
+            juce::Component * existingComponentToUpdate) override;
 
     /**
      * Handles the add and delete item buttons.
