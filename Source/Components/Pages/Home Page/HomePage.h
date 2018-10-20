@@ -2,7 +2,6 @@
 
 #include "OverlaySpinner.h"
 #include "PageComponent.h"
-#include "AppMenu/MenuData/ConfigFile.h"
 #include "ComponentConfigFile.h"
 #include "Config/MainFile.h"
 #include "ConfigurableImageButton.h"
@@ -77,10 +76,6 @@ private:
      * @brief  Updates all child component bounds when the page is resized.
      */
     void pageResized() override;
-
-    /* Loads AppMenu shortcuts and folder definitions.  This resource should
-       exist as long as the home page exists. */
-    AppMenu::ConfigFile appConfig;
 
     /* Loads system commands.  This resource should exist as long as the home
        page exists. */
