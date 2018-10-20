@@ -47,6 +47,7 @@ syntax on
 set number
 set colorcolumn=81
 
+
 " read custom .vimrc from any folder
 set exrc
 " restrict certain commands
@@ -54,6 +55,9 @@ set secure
 
 " exit insert mode with jj
 inoremap jj <ESC>
+
+" prefix function definitions with a class/namespace name
+command -nargs=1 Nametag %s/\(\*\/[\n\r][a-zA-Z_:\-]\+ \)\([a-zA-Z_-]\+(\)/\1<args>::\2/gc
 
 " build tools and project settings
 set syntax=cpp.doxygen
