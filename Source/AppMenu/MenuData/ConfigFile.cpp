@@ -1,3 +1,4 @@
+#define APPMENU_IMPLEMENTATION_ONLY
 #include "ConfigFile.h"
 #include "Utils.h"
 
@@ -20,7 +21,7 @@ AppMenu::MenuItem AppMenu::ConfigFile::addMenuItem(
         const juce::String& command,
         const bool launchInTerm,
         const juce::StringArray& categories,
-        AppMenuItem& parentFolder,
+        MenuItem& parentFolder,
         const int index) 
 {
     auto appJSON = getWriteLockedResource();

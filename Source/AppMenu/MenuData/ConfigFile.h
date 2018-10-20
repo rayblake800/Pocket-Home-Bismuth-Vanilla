@@ -1,3 +1,6 @@
+/* Only include this file directly in the AppMenu implementation! */
+#ifdef APPMENU_IMPLEMENTATION_ONLY
+
 #pragma once
 #include "FileHandler.h"
 #include "MenuItem.h"
@@ -74,3 +77,6 @@ public:
             MenuItem& parentFolder,
             const int index);
 };
+
+/* Only include this file directly in the AppMenu implementation! */
+#endif
