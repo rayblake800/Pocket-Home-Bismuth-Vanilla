@@ -284,6 +284,8 @@ namespace GVariantConverter
             case unsupported:
                 return G_TYPE_INVALID;
         }
+        DBG("GVariantConverter::" << __func__ << ": Unhandled variant type!");
+        return G_TYPE_INVALID;
     }
 
     /**
