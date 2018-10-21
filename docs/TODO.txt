@@ -23,17 +23,13 @@
 # Task list for release 0.10
 
 ## AppMenu Improvements
-    1. Re-think how various responsibilities should be spread between
-       MenuItemData, AppJSON, AppConfigFile, and AppMenuItem
-    2. Load all menu items at once and store as linked reference-counted
-       objects.
-    3. Increase encapsulation: enforce strict Menu->Folder->Button hierarchy.
-    4. Separate AppMenuButton classes from AppMenuFolder classes.
-    5. Create separate classes to handle keyboard controls.
-    6. Create a separate class to handle popup menus.
-    7. For each menu type, create a custom Component for the HomeSettingsPage
-       that provides controls for its specific properties.
-    8. Design and implement TabbedAppMenu.
+    1. Document requirements for implementing menu format variants.
+    2. Finish implementing abstract components.
+    3. Refactor old menu format variants for the new design.
+    4. Remove old AppMenu files from the HomePage directory.
+    5. Write MenuItem test class.
+    6. Design and implement TabbedAppMenu.
+    7. Write AppMenu test class that can be applied to each menu variant.
 
 ## Wifi Improvements
     1. JSONWifiInterface really isn't helpful, and accomodating it creates
@@ -52,6 +48,7 @@
        1. Add a Listener interface to WifiAccessPoint objects.
        2. Have the wifi icon extend WifiAccessPoint::Listener.
     5. Add a "Forget saved connection" button to saved wifi access points.
+    6. Continue implementing test classes.
 
 ## FreeDesktop Standards/ DesktopEntry Improvements
     1. Desktop entry loading is relatively quick now; load entries earlier, and
@@ -66,9 +63,16 @@
     6. Move all functionality in AssetFiles to XDGDirectories
     7. Place config files and lock files in directories selected with
        XDGDirectories.
+    8. Write DesktopEntry and DesktopEntryLoader test classes.
 
 ## Configuration Improvements
     1. Add config. option for enabling/disabling that PocketCHIP audio hack. 
+    2. Recreate config test class.
+
+## Project Structure Improvements
+    1. Restructure project into Namespace packages
+    2. Don't recursively include all source directories in all files
+    3. Sort makefile *.o list by package
 
 ## Settings Page Improvements
 
