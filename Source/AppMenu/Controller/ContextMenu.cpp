@@ -4,6 +4,7 @@
 #include "AppMenu/Editors/NewConfigItemEditor.h"
 #include "AppMenu/Editors/NewDesktopAppEditor.h"
 #include "ContextMenu.h"
+#include "Utils.h"
 
 /* Localized text keys: */
 static const constexpr char* localeTextKey      = "AppMenu::ContextMenu";
@@ -121,20 +122,55 @@ void AppMenu::ContextMenu::showAndHandleSelection()
     {
         case OptionCode::Edit:
             jassert(!editedItem.isNull());
+            showPopupEditor(new ExistingItemEditor(editedItem));
             break;
         case OptionCode::Delete:
+            jassert(!editedItem.isNull());
+            confirmAction(editedItem.getConfirmDeleteTitle(),
+                    editedItem.getConfirmDeleteMessage(),
+                    [this]() { editedItem.remove(); });
             break;
         case OptionCode::PinToRoot:
+        {
+            jassert(!editedItem.isNull());
+            ConfigFile appConfig;
+            MenuItem rootFolder = appConfig.getRootFolderItem();
+            appConfig.addMenuItem(editedItem.getTitle(),
+                    editedItem.getIconName(),
+                    editedItem.getCommand(),
+                    editedItem.getLaunchedInTerm(),
+                    editedItem.getCategories(),
+                    rootFolder,
+                    rootFolder.getMovableChildCount());
+
             break;
+        }
         case OptionCode::MoveBack:
-            break;
         case OptionCode::MoveForward:
+        {
+            jassert(!editedItem.isNull());
+            MenuItem parent = editedItem.getParentFolder();
+            int itemIndex = editedItem.getIndex();
+            int swapIndex = itemIndex +
+                ((selectedOption == OptionCode::MoveBack) ? -1 : 1);
+            parent.swapChildren(itemIndex, swapIndex);
             break;
+        }
         case OptionCode::NewShortcut:
-            break;
         case OptionCode::NewFolder:
+        {
+            bool makeFolder = (selectedOption == OptionCode::NewFolder);
+            ConfigFile appConfig;
+            if(editedItem.isNull())
+            {
+                editedItem = appConfig.getRootFolderItem();
+            }
+            showPopupEditor(new NewConfigItemEditor
+                    (editedItem, makeFolder, insertIndex));
             break;
+        }
         case OptionCode::NewDesktopEntry:
+            showPopupEditor(new NewDesktopAppEditor());
             break;
         default:
             DBG("AppMenu::ContextMenu::" << __func__ 

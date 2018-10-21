@@ -80,14 +80,6 @@ public:
         void signalMenuClicked(const bool rightClicked);
 
         /**
-         * @brief  Gets the current selected menu item.
-         *
-         * @return   The selected item, or a null menu item if no item is
-         *           selected.
-         */
-        virtual MenuItem getSelectedItem() = 0;
-
-        /**
          * @brief  Gets the current active folder item.
          *
          * @return  The current active folder item.  This should never be null,
@@ -231,8 +223,7 @@ private:
      * @brief  A private ContextMenu implementation that can edit the AppMenu
      *         through the Controller.
      */
-    class ContextMenu : public AppMenu::ContextMenu, private MenuItem::Editor
-
+    class ContextMenu : public AppMenu::ContextMenu
     {
     public:
         /**

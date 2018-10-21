@@ -118,7 +118,7 @@ void AppMenu::Controller::menuItemClicked
     if(rightClicked)
     {
         contextMenu.setMenuItemOptions(clickedItem);
-        contextMenu.show();
+        contextMenu.showAndHandleSelection();
     }
     else
     {
@@ -149,6 +149,7 @@ void AppMenu::Controller::folderClicked
     if(rightClicked)
     {
         contextMenu.setFolderOptions(clickedFolder, closestIndex);
+        contextMenu.showAndHandleSelection();
     }
     else 
     {
@@ -177,6 +178,7 @@ void AppMenu::Controller::menuClicked(const bool rightClicked)
     if(rightClicked)
     {
         contextMenu.setGenericOptions();
+        contextMenu.showAndHandleSelection();
     }
 }
 

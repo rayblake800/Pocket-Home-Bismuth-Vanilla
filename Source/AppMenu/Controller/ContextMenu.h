@@ -19,7 +19,7 @@
  * given menu item, adding new items to the folder, or adding items to the root
  * menu folder.
  */
-class AppMenu::ContextMenu : public juce::PopupMenu, private Localized
+class AppMenu::ContextMenu : private juce::PopupMenu, private Localized
 {
 public:
     ContextMenu();
