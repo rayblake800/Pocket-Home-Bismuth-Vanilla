@@ -125,7 +125,7 @@ AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
         static_cast<ConfigData*>(newData.get())->loadDesktopEntryItems();
     }
     MenuItem newItem(newData);
-    if(!insertChild(parentFolder, newItem, index))
+    if(!parentFolder.insertChild(newItem, index))
     {
         return MenuItem();
     }

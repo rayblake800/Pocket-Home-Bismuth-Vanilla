@@ -75,9 +75,9 @@ bool AppMenu::ItemData::insertChild
         children[i]->index++;
     }
     newChild->saveChanges();
-    foreachListener([this, &childIndex](Listener* listener)
+    foreachListener([&childIndex](Listener* listener)
     {
-        listener->childAdded(this, childIndex);
+        listener->childAdded(childIndex);
     });
     return true;
 }
@@ -91,10 +91,6 @@ bool AppMenu::ItemData::remove()
     {
         return false;
     }
-    foreachListener([this](Listener* listener)
-    {
-        listener->removedFromMenu(this);
-    });
     parent->children.remove(index);
     for(int i = index; i < parent->children.size(); i++)
     {
@@ -102,7 +98,7 @@ bool AppMenu::ItemData::remove()
     }
     parent->foreachListener([this](Listener* listener)
     {
-        listener->childRemoved(parent, index);
+        listener->childRemoved(index);
     });
     parent = nullptr;
     index = -1;
@@ -123,9 +119,9 @@ bool AppMenu::ItemData::swapChildren(const int childIdx1, const int childIdx2)
     children.swap(childIdx1, childIdx2);
     children[childIdx1]->index = childIdx1;
     children[childIdx2]->index = childIdx2;
-    foreachListener([this, &childIdx1, &childIdx2](Listener* listener)
+    foreachListener([&childIdx1, &childIdx2](Listener* listener)
     {
-        listener->childrenSwapped(this, childIdx1, childIdx2);
+        listener->childrenSwapped(childIdx1, childIdx2);
     });
     return true;
 }
@@ -150,11 +146,12 @@ void AppMenu::ItemData::addListener(Listener* newListener)
     if(newListener != nullptr)
     {
         listeners.add(newListener);
-        newListener->trackedItemData.add(this);
+        newListener->trackedItemData = this;
     }
     else
     {
         DBG("AppMenu::ItemData::" << __func__ << ": Listener was null!");
+        jassertfalse;
     }
 }
 
@@ -165,23 +162,33 @@ void AppMenu::ItemData::removeListener(Listener* toRemove)
 {
     if(toRemove != nullptr)
     {
-        toRemove->trackedItemData.removeAllInstancesOf(this);
-        listeners.removeAllInstancesOf(toRemove);
+        if(toRemove->trackedItemData == this)
+        {
+            toRemove->trackedItemData = nullptr;
+            listeners.removeAllInstancesOf(toRemove);
+        }
+        else
+        {
+            DBG("AppMenu::ItemData::" << __func__ << 
+                    ": Listener was not listening to this item data!");
+            jassertfalse;
+        }
     }
     else
     {
         DBG("AppMenu::ItemData::" << __func__ << ": Listener was null!");
+        jassertfalse;
     }
 }
 
 /*
  * Signal to all listeners tracking this ItemData that the item has changed.
  */
-void AppMenu::ItemData::signalDataChanged()
+void AppMenu::ItemData::signalDataChanged(const DataField changedField)
 {
-    foreachListener([this](Listener* listener)
+    foreachListener([changedField](Listener* listener)
     {
-        listener->dataChanged(this);
+        listener->dataChanged(changedField);
     });
 }
 

@@ -136,7 +136,7 @@ void
 AppMenu::ConfigData::setTitle(const juce::String& title)
 {
     this->title = title;
-    signalDataChanged();
+    signalDataChanged(DataField::title);
 }
 
 /*
@@ -146,7 +146,7 @@ void AppMenu::ConfigData::setIconName
 (const juce::String& iconName)
 {
     this->iconName = iconName;
-    signalDataChanged();
+    signalDataChanged(DataField::icon);
 }
 
 /*
@@ -156,7 +156,7 @@ void AppMenu::ConfigData::setCommand
 (const juce::String& command)
 {
     this->command = command;
-    signalDataChanged();
+    signalDataChanged(DataField::command);
 }
 
 /*
@@ -166,7 +166,7 @@ void AppMenu::ConfigData::setLaunchedInTerm
 (const bool launchInTerm)
 {
     this->launchInTerm = launchInTerm;
-    signalDataChanged();
+    signalDataChanged(DataField::termLaunchOption);
 }
 
 /*
@@ -177,7 +177,7 @@ void AppMenu::ConfigData::setCategories
 (const juce::StringArray& categories)
 {
     this->categories = categories;
-    signalDataChanged();
+    signalDataChanged(DataField::categories);
 }
 
 /*

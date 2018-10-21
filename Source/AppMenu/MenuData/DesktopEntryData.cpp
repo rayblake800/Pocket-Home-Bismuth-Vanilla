@@ -61,7 +61,7 @@ void AppMenu::DesktopEntryData::setTitle(const juce::String& title)
     try
     {
         desktopEntry.setName(title);
-        signalDataChanged();
+        signalDataChanged(DataField::title);
     }
     catch(DesktopEntryFormatError e)
     {
@@ -78,7 +78,7 @@ void AppMenu::DesktopEntryData::setIconName(const juce::String& iconName)
     try
     {
         desktopEntry.setIcon(iconName);
-        signalDataChanged();
+        signalDataChanged(DataField::icon);
     }
     catch(DesktopEntryFormatError e)
     {
@@ -95,7 +95,7 @@ void AppMenu::DesktopEntryData::setCommand(const juce::String& newCommand)
     try
     {
         desktopEntry.setExec(newCommand);
-        signalDataChanged();
+        signalDataChanged(DataField::command);
     }
     catch(DesktopEntryFormatError e)
     {
@@ -109,7 +109,7 @@ void AppMenu::DesktopEntryData::setCommand(const juce::String& newCommand)
 void AppMenu::DesktopEntryData::setLaunchedInTerm(const bool termLaunch)
 {
     desktopEntry.setLaunchedInTerm(termLaunch);
-    signalDataChanged();
+    signalDataChanged(DataField::termLaunchOption);
 }
 
 /*
@@ -120,7 +120,7 @@ void AppMenu::DesktopEntryData::setCategories(const juce::StringArray& categorie
     try
     {
         desktopEntry.setCategories(categories);
-        signalDataChanged();
+        signalDataChanged(DataField::categories);
     }
     catch(DesktopEntryFormatError e)
     {
@@ -212,5 +212,3 @@ void AppMenu::DesktopEntryData::deleteFromSource()
                 << ": Failed to hide entry:" << e.what());
     }
 }
-
-

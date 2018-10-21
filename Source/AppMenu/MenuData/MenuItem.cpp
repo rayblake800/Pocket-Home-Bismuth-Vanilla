@@ -226,54 +226,6 @@ bool AppMenu::MenuItem::operator<(const MenuItem& toCompare) const
 }
 
 /*
- * Calls the childAdded method that passes in a MenuItem instead of an 
- * ItemData::Ptr.
- */
-void AppMenu::MenuItem::Listener::childAdded(ItemData::Ptr folderItem, 
-        const int childIndex)
-{
-    childAdded(MenuItem(folderItem), childIndex);
-}
-
-/*
- * Calls the childRemoved method that passes in a MenuItem instead of an 
- * ItemData::Ptr.
- */
-void AppMenu::MenuItem::Listener::childRemoved(ItemData::Ptr folderItem,
-        const int removedIndex)
-{
-    childRemoved(MenuItem(folderItem), removedIndex);
-}
-
-/*
- * Calls the childrenSwapped method that passes in a MenuItem instead of an 
- * ItemData::Ptr.
- */
-void AppMenu::MenuItem::Listener::childrenSwapped(ItemData::Ptr folderItem,
-        const int swapIndex1, const int swapIndex2)
-{
-    childrenSwapped(MenuItem(folderItem), swapIndex1, swapIndex2);
-}
-
-/*
- * Calls the removedFromMenu method that passes in a MenuItem instead of an 
- * ItemData::Ptr.
- */
-void AppMenu::MenuItem::Listener::removedFromMenu(ItemData::Ptr removedItem)
-{
-    removedFromMenu(MenuItem(removedItem));
-}
-
-/*
- * Calls the dataChanged method that passes in a MenuItem instead of an 
- * ItemData::Ptr.
- */
-void AppMenu::MenuItem::Listener::dataChanged(ItemData::Ptr changedItem)
-{
-    dataChanged(MenuItem(changedItem));
-}
-
-/*
  * If this MenuItem is not null, add a Listener object to its menu data.
  */
 void AppMenu::MenuItem::addListener(Listener* toAdd)
@@ -297,88 +249,80 @@ void AppMenu::MenuItem::removeListener(Listener* toRemove)
 }
 
 /*
- * Checks if a data field within a menu item can be edited.
+ * Checks if a data field within the menu item can be edited.
  */
-bool AppMenu::MenuItem::Editor::isEditable
-(MenuItem menuItem, const DataField dataField) const
+bool AppMenu::MenuItem::isEditable(const DataField dataField) const
 {
-    if(menuItem.isNull())
+    if(isNull())
     {
         return false;
     }
-    return menuItem.getData()->isEditable(dataField);
+    return getData()->isEditable(dataField);
 }
 
 /*
- * Sets a menu item's displayed title.
+ * Sets the menu item's displayed title.
  */
-void AppMenu::MenuItem::Editor::setTitle
-(MenuItem menuItem, const juce::String& title) const
+void AppMenu::MenuItem::setTitle(const juce::String& title)
 {
-    if(!menuItem.isNull() && isEditable(menuItem, DataField::title))
+    if(!isNull() && isEditable(DataField::title))
     {
-        menuItem.getData()->setTitle(title);
+        getData()->setTitle(title);
     }
 }
 
 /*
- * Sets the name or path used to load a menu item's icon file.
+ * Sets the name or path used to load the menu item's icon file.
  */
-void AppMenu::MenuItem::Editor::setIconName
-(MenuItem menuItem, const juce::String& iconName) const
+void AppMenu::MenuItem::setIconName(const juce::String& iconName)
 {
-    if(!menuItem.isNull() && isEditable(menuItem, DataField::icon))
+    if(!isNull() && isEditable(DataField::icon))
     {
-        menuItem.getData()->setIconName(iconName);
+        getData()->setIconName(iconName);
     }
 }
 
 /*
- * Sets a menu item's application launch command.
+ * Sets the menu item's application launch command.
  */
-void AppMenu::MenuItem::Editor::setCommand
-(MenuItem menuItem, const juce::String command) const
+void AppMenu::MenuItem::setCommand(const juce::String& command)
 {
-    if(!menuItem.isNull() && isEditable(menuItem, DataField::command))
+    if(!isNull() && isEditable(DataField::command))
     {
-        menuItem.getData()->setCommand(command);
+        getData()->setCommand(command);
     }
 }
 
 /*
- * Sets if a menu item runs its command in a new terminal window.
+ * Sets if the menu item runs its command in a new terminal window.
  */
-void AppMenu::MenuItem::Editor::setLaunchedInTerm
-(MenuItem menuItem, const bool launchInTerm) const
-{
-    if(!menuItem.isNull() && isEditable(menuItem, DataField::termLaunchOption))
+void AppMenu::MenuItem::setLaunchedInTerm(const bool launchInTerm){
+    if(!isNull() && isEditable(DataField::termLaunchOption))
     {
-        menuItem.getData()->setLaunchedInTerm(launchInTerm);
+        getData()->setLaunchedInTerm(launchInTerm);
     }
 }
 
 /*
- * Sets the application categories connected to a menu item.
+ * Sets the application categories connected to the menu item.
  */
-void AppMenu::MenuItem::Editor::setCategories
-(MenuItem menuItem, const juce::StringArray categories) const
+void AppMenu::MenuItem::setCategories(const juce::StringArray& categories)
 {
-    if(!menuItem.isNull() && isEditable(menuItem, DataField::categories))
+    if(!isNull() && isEditable(DataField::categories))
     {
-        menuItem.getData()->setCategories(categories);
+        getData()->setCategories(categories);
     }
 }
 
 /*
- * Attempts to insert a menu item into a folder menu item, saving the change to
- * the folder menu item's data source.
+ * Attempts to insert a menu item into this menu item, saving the change to the 
+ * folder menu item's data source.
  */
-bool AppMenu::MenuItem::Editor::insertChild
-(MenuItem folderItem, MenuItem childItem, const int index) const
+bool AppMenu::MenuItem::insertChild(MenuItem childItem, const int index)
 {
-    if(!folderItem.isNull() && !childItem.isNull())
+    if(!isNull() && !childItem.isNull())
     {
-        return folderItem.getData()->insertChild(childItem.getData(), index);
+        return getData()->insertChild(childItem.getData(), index);
     }
     return false;
 }
@@ -387,11 +331,11 @@ bool AppMenu::MenuItem::Editor::insertChild
  * Attempts to remove a menu item from the menu, saving the change to the menu
  * item's data source.
  */
-bool AppMenu::MenuItem::Editor::remove(MenuItem toRemove) const
+bool AppMenu::MenuItem::remove()
 {
-    if(!toRemove.isNull())
+    if(!isNull())
     {
-        return toRemove.getData()->remove();
+        return getData()->remove();
     }
     return false;
 }
@@ -400,12 +344,11 @@ bool AppMenu::MenuItem::Editor::remove(MenuItem toRemove) const
  * Swaps the positions of two folder items, saving the change to the folder menu
  * item's data source.
  */
-bool AppMenu::MenuItem::Editor::swapChildren
-(MenuItem folderItem, const int childIdx1, const int childIdx2)
+bool AppMenu::MenuItem::swapChildren(const int childIdx1, const int childIdx2)
 {
-    if(!folderItem.isNull())
+    if(!isNull())
     {
-        return folderItem.getData()->swapChildren(childIdx1, childIdx2);
+        return getData()->swapChildren(childIdx1, childIdx2);
     }
     return false;
 }
@@ -413,10 +356,10 @@ bool AppMenu::MenuItem::Editor::swapChildren
 /*
  * Saves all changes made to a menu item back to the menu item's data source.
  */
-void AppMenu::MenuItem::Editor::saveChanges(MenuItem menuItem) const
+void AppMenu::MenuItem::saveChanges()
 {
-    if(!menuItem.isNull())
+    if(!isNull())
     {
-        menuItem.getData()->saveChanges();
+        getData()->saveChanges();
     }
 }

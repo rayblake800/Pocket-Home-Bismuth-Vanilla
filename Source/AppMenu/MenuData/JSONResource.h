@@ -24,8 +24,7 @@
  * @see AppConfigFile.h
  */
 
-class AppMenu::JSONResource : public Config::FileResource, 
-    private MenuItem::Editor
+class AppMenu::JSONResource : public Config::FileResource
 {
 public:
     /* SharedResource object key */

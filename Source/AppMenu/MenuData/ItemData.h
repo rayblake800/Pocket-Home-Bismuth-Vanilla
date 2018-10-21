@@ -279,9 +279,10 @@ public:
      * Listeners connected to a menu item through its addListener method
      * are notified whenever the menu item's data changes, whenever the menu
      * item is removed from the menu, and whenever the menu item's child 
-     * folder items are added, removed, or swapped.
+     * folder items are added, removed, or swapped.  Each Listener may only
+     * connect to one ItemData at a time.
      *
-     * Listeners automatically disconnect from their tracked ItemData sources
+     * Listeners automatically disconnect from their tracked ItemData source
      * when they are destroyed.  ItemData is also automatically disconnected
      * from all listeners when it is removed from the menu, after calling
      * dataRemoved on each listener.
@@ -304,59 +305,43 @@ public:
     private:
         /**
          * @brief  This method will be called once any time a new child folder
-         *         item is added to a tracked ItemData object.
-         *
-         * @param folderItem  The tracked folder item.
+         *         item is added to the tracked ItemData object.
          *
          * @param childIndex  The index where the new child item was inserted.
          */
-        virtual void childAdded(ItemData::Ptr folderItem, 
-                const int childIndex) { }
+        virtual void childAdded(const int childIndex) { }
 
         /**
          * @brief  This method will be called once any time a child folder item
-         *         is removed from a tracked ItemData object.
-         *
-         * @param folderItem    The tracked folder item.
+         *         is removed from the tracked ItemData object.
          *
          * @param removedIndex  The former index of the tracked item's removed
          *                      child item.
          */
-        virtual void childRemoved(ItemData::Ptr folderItem,
-                const int removedIndex) { }
+        virtual void childRemoved( const int removedIndex) { }
 
         /**
          * @brief  This method will be called once any time two child folder
-         *         items of a tracked ItemData object are swapped.
-         *
-         * @param folderItem  The tracked folder item.
+         *         items of the tracked ItemData object are swapped.
          *
          * @param swapIndex1  The index of the first swapped child item.
          *
          * @param swapIndex2  The index of the second swapped child item.
          */
-        virtual void childrenSwapped(ItemData::Ptr folderItem,
-                const int swapIndex1, const int swapIndex2) { }
-
-        /**
-         * @brief  This method will be called once any time a tracked ItemData
-         *         object is about to be removed from the menu.
-         *
-         * @param removedItem   The tracked object that will be removed.
-         */
-        virtual void removedFromMenu(ItemData::Ptr removedItem) { }
+        virtual void childrenSwapped
+        (const int swapIndex1, const int swapIndex2) { }
 
         /**
          * @brief  This method will be called once whenever any other element of
-         *         a tracked ItemData object's data changes.
+         *         the tracked ItemData object's data changes.
          *
-         * @param changedItem  The tracked ItemData that has changed in some
-         *                     way.
+         * @param changedField  Indicates what part of the menu item's data
+         *                      changed.
          */
-        virtual void dataChanged(ItemData::Ptr changedItem) { }
+        virtual void dataChanged(const DataField changedField) { }
 
-        /* All ItemData objects tracked by this Listener. */
-        juce::Array<ItemData::Ptr> trackedItemData;
+        /* The ItemData object tracked by this Listener. */
+        ItemData::Ptr trackedItemData;
     };
 
     /**
@@ -377,8 +362,10 @@ protected:
     /**
      * @brief  Signal to all listeners tracking this ItemData that the item
      *         has changed.
+     *
+     * @param changedField  Indicates what part of the menu item's data changed.
      */
-    void signalDataChanged();
+    void signalDataChanged(const DataField changedField);
 
 private:
     /**

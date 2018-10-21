@@ -134,6 +134,13 @@ public:
      *                     at the given index.
      */
     MenuItem getFolderItem(const int folderIndex) const;
+
+    /**
+     * @brief  Gets all child menu items held within this menu item.
+     *
+     * @return  The list of all child menu items within this folder item, or the
+     *          empty list if this MenuItem is null or not a folder.
+     */
     juce::Array<MenuItem> getFolderItems() const;
 
     /**
@@ -185,127 +192,136 @@ public:
      *                   title alphabetically.
      */
     bool operator<(const MenuItem& toCompare) const;
+        
+    /* Describes the different data items held by the menu item. */
+    typedef ItemData::DataField DataField; 
+
+    /**
+     * @brief  Checks if a data field within the menu item can be edited.
+     *
+     * @param dataField  The type of data being checked.
+     *
+     * @return           True if and only if the data field is editable.
+     */
+    bool isEditable(const DataField dataField) const;
+
+    /**
+     * @brief  Sets the menu item's displayed title.
+     *
+     * This will do nothing if the menu item's title field is not editable.
+     *
+     * @param title  The new display title to assign to the menu item.
+     */
+    void setTitle(const juce::String& title);
+
+    /**
+     * @brief  Sets the name or path used to load the menu item's icon file.
+     *
+     * This will do nothing if the menu item's icon field is not editable.
+     *
+     * @param iconName  The new icon name or path.
+     */
+    void setIconName(const juce::String& iconName);
+
+    /**
+     * @brief   Sets the menu item's application launch command.
+     *
+     * This will do nothing if the menu item's command field is not
+     * editable.
+     *
+     * @param command   The new command string to run when this menu item is
+     *                  activated.
+     */
+    void setCommand(const juce::String& command);
+
+    /**
+     * @brief  Sets if the menu item runs its command in a new terminal 
+     *         window.
+     *
+     * This will do nothing if the menu item's launchInTerm option is not
+     * editable.
+     *
+     * @param launchInTerm   True to run any launch command assigned to this
+     *                       menu item within a new terminal window, false
+     *                       to run menu commands normally.
+     */
+    void setLaunchedInTerm(const bool launchInTerm);
+
+    /**
+     * @brief  Sets the application categories connected to the menu item.
+     *
+     * This will do nothing if the menu item's categories are not editable.
+     *
+     * @param categories   The new set of category strings to assign to this
+     *                     menu item.
+     */
+    void setCategories(const juce::StringArray& categories);
+
+    /**
+     * @brief  Attempts to insert a menu item into this menu item,
+     *         saving the change to the folder menu item's data source.
+     *
+     * This will fail if folderItem is not a folder, the index is outside of
+     * the bounds of the folder item's movable child items, or if the child
+     * MenuItem parameter is null.
+     *
+     * @param childItem   The new item to insert into the folder.
+     *
+     * @param index       The index in the folder where the new menu item
+     *                    should be inserted.
+     *
+     * @return            Whether the new item was inserted successfully.
+     */
+    bool insertChild(const MenuItem childItem, const int index);
+
+    /**
+     * @brief  Attempts to remove a menu item from the menu, saving the
+     *         change to the menu item's data source.
+     *
+     * @param toRemove  The menu item to remove from the application menu.
+     *
+     * @return          True if the menu item was removed, false if the menu
+     *                  item was null or otherwise not located in the menu.
+     */
+    bool remove();
+
+    /**
+     * @brief  Swaps the positions of two folder items, saving the change to 
+     *         the folder menu item's data source.
+     *
+     * @param childIdx1   The index within the folder item of the first 
+     *                    child item to move.
+     *
+     * @param childIdx2   The index within the folder item of the second 
+     *                    child item to move.
+     *
+     * @return            True if the child menu items were swapped, false 
+     *                    if the indices did not specify two valid menu 
+     *                    items within the folder's movable child menu 
+     *                    items, or if the folder item was null.
+     */
+    bool swapChildren(const int childIdx1, const int childIdx2);
+
+    /**
+     * @brief  Saves all changes made to the menu item back to the menu item's
+     *         data source.
+     */
+    void saveChanges();
 
     /**
      * @brief  A wrapper for the ItemData::Listener class, used to track menu
-     *         data without directly interacting with ItemData objects.
+     *         data without directly interacting with ItemData objects.  Each
+     *         listener may only track a single ItemData object.
      */
-    class Listener : private ItemData::Listener
+    class Listener : protected ItemData::Listener
     {
     public:
-        /* Allow MenuItem to cast Listeners to their private base when adding
+        /* Allow MenuItem to cast Listeners to their protected base when adding
            or removing them. */
         friend class MenuItem;
 
         Listener() { }
         virtual ~Listener() { }
-
-    private:
-        /**
-         * @brief  This method will be called once any time a new child folder
-         *         item is added to a tracked MenuItem.
-         *
-         * @param folderItem  The tracked folder item.
-         *
-         * @param childIndex  The index where the new child item was inserted.
-         */
-        virtual void childAdded(MenuItem folderItem, 
-                const int childIndex) { }
-
-        /**
-         * @brief  This method will be called once any time a child folder item
-         *         is removed from a tracked ItemData object.
-         *
-         * @param folderItem    The tracked folder item.
-         *
-         * @param removedIndex  The former index of the tracked item's removed
-         *                      child item.
-         */
-        virtual void childRemoved(MenuItem folderItem,
-                const int removedIndex) { }
-
-        /**
-         * @brief  This method will be called once any time two child folder
-         *         items of a tracked ItemData object are swapped.
-         *
-         * @param folderItem  The tracked folder item.
-         *
-         * @param swapIndex1  The index of the first swapped child item.
-         *
-         * @param swapIndex2  The index of the second swapped child item.
-         */
-        virtual void childrenSwapped(MenuItem folderItem,
-                const int swapIndex1, const int swapIndex2) { }
-
-        /**
-         * @brief  This method will be called once any time a tracked ItemData
-         *         object is about to be removed from the menu.
-         *
-         * @param removedItem   The tracked object that will be removed.
-         */
-        virtual void removedFromMenu(MenuItem removedItem) { }
-
-        /**
-         * @brief  This method will be called once whenever any other element of
-         *         a tracked ItemData object's data changes.
-         *
-         * @param changedItem  The tracked ItemData that has changed in some
-         *                     way.
-         */
-        virtual void dataChanged(MenuItem changedItem) { }
-
-        /**
-         * @brief  Calls the childAdded method that passes in a MenuItem instead
-         *         of an ItemData::Ptr.
-         *
-         * @param folderItem  The tracked folder item.
-         *
-         * @param childIndex  The index where the new child item was inserted.
-         */
-        virtual void childAdded(ItemData::Ptr folderItem, 
-                const int childIndex) final override;
-
-        /**
-         * @brief  Calls the childRemoved method that passes in a MenuItem
-         *         instead of an ItemData::Ptr.
-         *
-         * @param folderItem    The tracked folder item.
-         *
-         * @param removedIndex  The former index of the tracked item's removed
-         *                      child item.
-         */
-        virtual void childRemoved(ItemData::Ptr folderItem,
-                const int removedIndex) final override;
-
-        /**
-         * @brief  Calls the childrenSwapped method that passes in a MenuItem
-         *         instead of an ItemData::Ptr.
-         *
-         * @param folderItem  The tracked folder item.
-         *
-         * @param swapIndex1  The index of the first swapped child item.
-         *
-         * @param swapIndex2  The index of the second swapped child item.
-         */
-        virtual void childrenSwapped(ItemData::Ptr folderItem,
-                const int swapIndex1, const int swapIndex2) final override;
-
-        /**
-         * @brief  Calls the removedFromMenu method that passes in a MenuItem
-         *         instead of an ItemData::Ptr.
-         *
-         * @param removedItem   The tracked object that will be removed.
-         */
-        virtual void removedFromMenu(ItemData::Ptr removedItem) final override;
-
-        /**
-         * @brief  Calls the dataChanged method that passes in a MenuItem 
-         *         instead of an ItemData::Ptr.
-         *
-         * @param changedItem  The tracked ItemData that has changed in some
-         *                     way.
-         */
-        virtual void dataChanged(ItemData::Ptr changedItem) final override;
     };
 
     /**
@@ -326,155 +342,7 @@ public:
      */
     void removeListener(Listener* toRemove);
 
-    /**
-     * @brief  An interface for objects that can edit MenuItems.
-     */
-    class Editor
-    {
-    public:
-        Editor() { }
-        virtual ~Editor() { }
-        
-        typedef ItemData::DataField DataField; 
 
-        /**
-         * @brief  Checks if a data field within a menu item can be edited.
-         *
-         * @param menuItem   The menu item to check.
-         *
-         * @param dataField  The type of data being checked.
-         *
-         * @return           True if and only if the data field is editable.
-         */
-        bool isEditable(MenuItem menuItem, const DataField dataField)
-            const;
-
-        /**
-         * @brief  Sets a menu item's displayed title.
-         *
-         * This will do nothing if the menu item's title field is not editable.
-         *
-         * @param menuItem  The menu item being edited.
-         *
-         * @param title     The new display title to assign to the menu item.
-         */
-        void setTitle(MenuItem menuItem, const juce::String& title) const;
-
-        /**
-         * @brief  Sets the name or path used to load a menu item's icon file.
-         *
-         * This will do nothing if the menu item's icon field is not editable.
-         *
-         * @param menuItem  The menu item being edited.
-         *
-         * @param iconName  The new icon name or path.
-         */
-        void setIconName(MenuItem menuItem, const juce::String& iconName)
-            const;
-
-        /**
-         * @brief   Sets a menu item's application launch command.
-         *
-         * This will do nothing if the menu item's command field is not
-         * editable.
-         *
-         * @param menuItem  The menu item being edited.
-         *
-         * @param command   The new command string to run when this menu item is
-         *                  activated.
-         */
-        void setCommand(MenuItem menuItem, const juce::String command)
-            const;
-
-        /**
-         * @brief  Sets if a menu item runs its command in a new terminal 
-         *         window.
-         *
-         * This will do nothing if the menu item's launchInTerm option is not
-         * editable.
-         *
-         * @param menuItem       The menu item being edited.
-         *
-         * @param launchInTerm   True to run any launch command assigned to this
-         *                       menu item within a new terminal window, false
-         *                       to run menu commands normally.
-         */
-        void setLaunchedInTerm(MenuItem menuItem, const bool launchInTerm)
-            const;
-
-        /**
-         * @brief  Sets the application categories connected to a menu item.
-         *
-         * This will do nothing if the menu item's categories are not editable.
-         *
-         * @param menuItem     The menu item being edited.
-         *
-         * @param categories   The new set of category strings to assign to this
-         *                     menu item.
-         */
-        void setCategories(MenuItem menuItem, 
-                const juce::StringArray categories) const;
-
-        /**
-         * @brief  Attempts to insert a menu item into a folder menu item,
-         *         saving the change to the folder menu item's data source.
-         *
-         * This will fail if folderItem is not a folder, the index is outside of
-         * the bounds of the folder item's movable child items, or if either
-         * MenuItem parameter is null.
-         *
-         * @param folderItem  A folder menu item within the application menu.
-         *
-         * @param childItem   The new item to insert into the folder.
-         *
-         * @param index       The index in the folder where the new menu item
-         *                    should be inserted.
-         *
-         * @return            Whether the new item was inserted successfully.
-         */
-        bool insertChild(MenuItem folderItem, MenuItem childItem,
-                const int index) const;
-
-        /**
-         * @brief  Attempts to remove a menu item from the menu, saving the
-         *         change to the menu item's data source.
-         *
-         * @param toRemove  The menu item to remove from the application menu.
-         *
-         * @return          True if the menu item was removed, false if the menu
-         *                  item was null or otherwise not located in the menu.
-         */
-        bool remove(MenuItem toRemove) const;
-
-        /**
-         * @brief  Swaps the positions of two folder items, saving the change to 
-         *         the folder menu item's data source.
-         *
-         * @param folderItem  A folder menu item within the application menu.
-         *
-         * @param childIdx1   The index within the folder item of the first 
-         *                    child item to move.
-         *
-         * @param childIdx2   The index within the folder item of the second 
-         *                    child item to move.
-         *
-         * @return            True if the child menu items were swapped, false 
-         *                    if the indices did not specify two valid menu 
-         *                    items within the folder's movable child menu 
-         *                    items, or if the folder item was null.
-         */
-        bool swapChildren
-        (MenuItem folderItem, const int childIdx1, const int childIdx2);
-
-        /**
-         * @brief  Saves all changes made to a menu item back to the menu item's
-         *         data source.
-         *
-         * @param menuItem  A menu item that has been changed by an 
-         *                  MenuItem::Editor.
-         */
-        void saveChanges(MenuItem menuItem) const;
-    };
 };
 
 /* Only include this file directly in the AppMenu implementation! */
