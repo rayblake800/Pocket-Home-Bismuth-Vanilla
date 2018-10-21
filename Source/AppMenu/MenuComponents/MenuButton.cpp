@@ -1,31 +1,35 @@
-#include "Source/AppMenu/MenuComponents/MenuButton.h"
-
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
-#pragma once
-#include "FolderComponent.h"
-#include "AppMenu.h"
+#define APPMENU_IMPLEMENTATION_ONLY
+#include "MenuButton.h"
 
 /*
  * Creates a new MenuButton component for a menu item.
- AppMenu::MenuButton::*/MenuButton(MenuItem menuItem)
+ */
+AppMenu::MenuButton::MenuButton(MenuItem menuItem) : ItemButton(menuItem)
 {
-} AppMenu::MenuButton::~MenuButton() { }/*
- * Sets the location relative to the button's bounds where the
- *         button's icon will be drawn.
- */void AppMenu::MenuButton::setIconBounds(const juce::Rectangle<float>& newBounds)
+} 
+
+/*
+ * Sets the location relative to the button's bounds where the button's icon 
+ * will be drawn.
+ */
+void AppMenu::MenuButton::setIconBounds(const juce::Rectangle<float>& newBounds)
+{
+    iconBounds = newBounds;
+}
+
+/*
+ * Sets the location relative to the button's bounds where the button's title 
+ * will be printed.
+ */
+void AppMenu::MenuButton::setTitleBounds
+(const juce::Rectangle<float>& newBounds)
 {
 }
 
 /*
- * Sets the location relative to the button's bounds where the
- *         button's title will be printed.
- */void AppMenu::MenuButton::setTitleBounds(const juce::Rectangle<float>& newBounds)
-{
-}/*
- * Updates the component if necessary whenever its menu data
- *         changes.
- */void AppMenu::MenuButton::dataChanged(DataField changedField)
+ * Updates the component if necessary whenever its menu data changes.
+ */
+void AppMenu::MenuButton::dataChanged(MenuItem::DataField changedField)
 {
 }
 
@@ -44,23 +48,17 @@ void AppMenu::MenuButton::updateFont()
 }
 
 /*
- * Runs whenever the menu button is resized, just before
- *         recalculating icon bounds, text bounds, and font size.  
-
-/*
- * Calls AppMenu::MenuButton::menuButtonResized() and re-calculates title and icon layout
- *         whenever the button's bounds change.
+ * Calls AppMenu::MenuButton::menuButtonResized() and re-calculates title and 
+ * icon layout whenever the button's bounds change.
  */
-void AppMenu::MenuButton::resized() final
+void AppMenu::MenuButton::resized()
 {
 }
 
 /*
  * Draws the button object.
- */void AppMenu::MenuButton::paintButton
+ */
+void AppMenu::MenuButton::paintButton
 (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
 }
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

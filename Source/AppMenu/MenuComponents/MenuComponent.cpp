@@ -1,85 +1,111 @@
-#include "Source/AppMenu/MenuComponents/MenuComponent.h"
-
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
-#pragma once
-#include "Controller.h"
-#include "AppMenu.h"
+#define APPMENU_IMPLEMENTATION_ONLY
+#include "MenuComponent.h"
 
 /*
  * Creates the MenuComponent, linking it with its controller.
- AppMenu::MenuComponent::*/MenuComponent(Controller& controller)
-{
-} AppMenu::MenuComponent::~MenuComponent() { }
+ */
+ AppMenu::MenuComponent::MenuComponent(Controller& controller) :
+     ControlledMenu(controller) { }
 
 /*
  * Gets the MenuItem for the current active folder component.
- */MenuItem AppMenu::MenuComponent::getActiveFolder()
+ */
+AppMenu::MenuItem AppMenu::MenuComponent::getActiveFolder()
 {
+    jassert(!openFolders.isEmpty());
+    return openFolders.getLast()->getFolderItem();
 }
 
 /*
  * Creates a new folder component.
- AppMenu::MenuComponent::Folder::*/Folder(MenuComponent& menuComponent, MenuItem folderItem)
-{
-} AppMenu::MenuComponent::Folder::~Folder() { }
+ */
+ AppMenu::MenuComponent::Folder::Folder
+(MenuItem folderItem, MenuComponent& menuComponent) : 
+    menuComponent(menuComponent), folderItem(folderItem) { }
 
 /*
  * Gets the MenuItem that defines this folder.
- */MenuItem AppMenu::MenuComponent::Folder::getFolderItem() const
+ */
+AppMenu::MenuItem AppMenu::MenuComponent::Folder::getFolderItem() const
 {
-}/*
- * Signals to this Folder's MenuComponent that a menu item was
- *         clicked.
- */void AppMenu::MenuComponent::Folder::signalItemClicked(MenuItem clickedItem, const bool rightClicked)
-{
+    return folderItem;
 }
 
 /*
- * Signals to this Folder's MenuComponent that the folder was
- *         clicked.
- */void AppMenu::MenuComponent::Folder::signalFolderClicked
+ * Signals to this Folder's MenuComponent that a menu item was clicked.
+ */
+void AppMenu::MenuComponent::Folder::signalItemClicked
+(MenuItem clickedItem, const bool rightClicked)
+{
+    menuComponent.signalItemClicked(clickedItem, rightClicked);
+}
+
+/*
+ * Signals to this Folder's MenuComponent that the folder was clicked.
+ */
+void AppMenu::MenuComponent::Folder::signalFolderClicked
 (const bool rightClicked, const int closestIndex)
 {
+    menuComponent.signalFolderClicked(folderItem, rightClicked, closestIndex);
 }
 
 /*
  * Gets the number of open folder components.
- */int AppMenu::MenuComponent::openFolderCount() const
+ */
+int AppMenu::MenuComponent::openFolderCount() const
 {
+    return openFolders.size();
 }
 
 /*
  * Gets an open folder component from the list of open folders.
- */Folder* AppMenu::MenuComponent::getOpenFolder(const int folderIndex) const
+ */
+AppMenu::MenuComponent::Folder* 
+AppMenu::MenuComponent::getOpenFolder(const int folderIndex) const
 {
-}/*
- * Creates, shows, and activates a new folder component.
- */void AppMenu::MenuComponent::openFolder(MenuItem folderItem)
-{
+    if(folderIndex < 0 || folderIndex >= openFolders.size())
+    {
+        return nullptr;
+    }
+    return openFolders[folderIndex];
 }
 
 /*
- * Closes the current active folder as long as more than one
- *         folder is open. 
+ * Creates, shows, and activates a new folder component.
+ */
+void AppMenu::MenuComponent::openFolder(MenuItem folderItem)
+{
+    openFolders.add(createFolderComponent(folderItem));
+    addAndMakeVisible(openFolders.getLast());
+    updateMenuLayout();
+}
+
+/*
+ * Closes the current active folder as long as more than one folder is open. 
  */
 void AppMenu::MenuComponent::closeActiveFolder()
 {
+    if(openFolders.size() > 1)
+    {
+        removeChildComponent(openFolders.getLast());
+        openFolders.removeLast();
+        updateMenuLayout();
+    }
 }
 
 /*
- * Handles menu navigation key events not handled by the folder
- *         component.
- */bool AppMenu::MenuComponent::keyPressed(const juce::KeyPress& key)
+ * Handles menu navigation key events not handled by the folder component.
+ */
+bool AppMenu::MenuComponent::keyPressed(const juce::KeyPress& key)
 {
+    //TODO: redefine standard menu key shortcuts
+    return false;
 } 
 
 /*
  * Updates the menu layout when the component is resized.
  */
-void AppMenu::MenuComponent::resized() final
+void AppMenu::MenuComponent::resized()
 {
+    updateMenuLayout();
 }
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

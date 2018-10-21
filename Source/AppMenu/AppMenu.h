@@ -139,7 +139,7 @@ namespace AppMenu
      * @brief  Represents the main menu view, creating and positioning folder
      *         components.
      * 
-     * @see  AbstractComponents/MenuComponent.h
+     * @see  MenuComponents/MenuComponent.h
      */
     class MenuComponent;
 
@@ -147,16 +147,16 @@ namespace AppMenu
      * @brief  Represents an open folder in the menu, creating and positioning
      *         menu item button components.
      *
-     * @see  AbstractComponents/FolderComponent.h
+     * @see  MenuComponents/FolderComponent.h
      */
     class FolderComponent;
 
     /**
      * @brief  Represents a single menu item as a button component.
      *
-     * @see  AbstractComponents/ItemButton.h
+     * @see  MenuComponents/ItemButton.h
      */
-    class ItemButton;
+    class MenuButton;
     
     /* ####################    Menu Editors   ########################### */
     /**

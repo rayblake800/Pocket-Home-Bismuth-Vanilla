@@ -39,13 +39,13 @@ public:
         /**
          * @brief  Creates a new folder component.
          *
-         * @param menuComponent  The menuComponent that created this folder
-         *                       component.
-         *
          * @param folderItem     The menu data object used to construct the
          *                       folder.
+         *
+         * @param menuComponent  The menuComponent that created this folder
+         *                       component.
          */
-        Folder(MenuComponent& menuComponent, MenuItem folderItem);
+        Folder(MenuItem folderItem, MenuComponent& menuComponent);
 
         virtual ~Folder() { }
 
@@ -54,7 +54,7 @@ public:
          *
          * @return   The menu data object used to construct the folder.
          */
-        virtual MenuItem getFolderItem() const override;
+        MenuItem getFolderItem() const;
         
     protected:
         /**
@@ -78,6 +78,12 @@ public:
          */
         void signalFolderClicked
         (const bool rightClicked, const int closestIndex = -1);
+
+    private:
+        /* The menu component that owns this folder */
+        MenuComponent& menuComponent;
+        /* The MenuItem that defines this folder */
+        MenuItem folderItem;
     };
 protected:
     /**
@@ -156,7 +162,7 @@ private:
     virtual void resized() final override;
     
     /* The list of open folder components */
-    juce::OwnedArray openFolders;
+    juce::OwnedArray<Folder> openFolders;
 };
 
 /* Only include this file directly in the AppMenu implementation! */

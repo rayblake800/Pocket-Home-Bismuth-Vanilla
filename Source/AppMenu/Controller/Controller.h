@@ -188,7 +188,7 @@ private:
      *
      * @return  A Component pointer to the main menu component.
      */
-    virtual juce::Component* initMenuComponent() override;
+    virtual juce::Component* initMenuComponent() final override;
         
     /**
      * @brief  Updates the ControlledMenu whenever the parent MainComponent 

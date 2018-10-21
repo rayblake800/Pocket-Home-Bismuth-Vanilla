@@ -12,17 +12,16 @@ public:
 
 private:
     /**
-     * @brief  Creates the MenuComponent as whatever MenuComponent subclass
-     *         is appropriate for the current AppMenu format.
+     * @brief  Creates the ControlledMenu as a scrolling MenuComponent.
      *
-     * @return   The new MenuComponent object.
+     * @return   The new Scrolling::MenuComponent object.
      */
     virtual ControlledMenu* createMenuComponent() override;
 
     /**
      * @brief  Gets the menu controller's AppMenu format.
      *
-     * @return  The controller's menu format. 
+     * @return  The scrolling menu format type.
      */
     virtual AppMenu::Format getMenuFormat() const override;
 };

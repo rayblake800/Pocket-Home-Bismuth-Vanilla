@@ -49,14 +49,9 @@ protected:
     virtual void setTitleBounds(const juce::Rectangle<float>& newBounds);
 
     /**
-     * @brief  Re-calculates and saves the button's icon bounds.
+     * @brief  Re-calculates and saves the button's icon and title bounds.
      */
-    virtual void updateIconBounds() = 0;
-
-    /**
-     * @brief  Re-calculates and saves the button's title bounds.
-     */
-    virtual void updateTitleBounds() = 0;
+    virtual void updateButtonLayout() = 0;
     
     /**
      * @brief  Checks if this button will draw an outline around its border.
@@ -89,7 +84,7 @@ private:
      *
      * @param changedField  The updated data field.
      */
-    virtual void dataChanged(DataField changedField);
+    virtual void dataChanged(MenuItem::DataField changedField);
 
     /**
      * @brief  Reloads the button icon image if necessary.

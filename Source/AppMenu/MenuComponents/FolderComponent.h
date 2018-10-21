@@ -18,22 +18,15 @@ public:
     /**
      * @brief  Creates a new folder component.
      *
-     * @param menuComponent  The menuComponent that created this folder
-     *                       component.
-     *
      * @param folderItem     The menu data object used to construct the
      *                       folder.
+     *
+     * @param menuComponent  The menuComponent that created this folder
+     *                       component.
      */
-    FolderComponent(MenuComponent& menuComponent, MenuItem folderItem);
+    FolderComponent(MenuItem folderItem, MenuComponent& menuComponent) ;
 
     virtual ~FolderComponent() { }
-
-    /**
-     * @brief  Gets the MenuItem that defines this folder.
-     *
-     * @return   The menu data object used to construct the folder.
-     */
-    virtual MenuItem getFolderItem() const override;
 
     /**
      * @brief  Gets the current selected folder item.
@@ -58,12 +51,20 @@ public:
     class ItemButton : public juce::Button
     {
     public:
+        /* Buttons may only be selected and unselected through the folder
+           component. */
+        friend class FolderComponent;
+
         /**
          * @brief  Creates a new menu item component.
          *
-         * @param folderItem  Menu item data that will define this ItemButton.
+         * @param menuItem       Menu item data that will define this 
+         *                       ItemButton.
+         *
+         * @param parentFolder   The folder component that creates and owns this
+         *                       ItemButton.
          */
-        ItemButton(const MenuItem folderItem);
+        ItemButton(const MenuItem menuItem, FolderComponent& parentFolder);
 
         virtual ~ItemButton() { }
 
@@ -74,7 +75,18 @@ public:
          */
         MenuItem getMenuItem() const;
 
+    protected:
+        /**
+         * @brief  Checks if this is the current selected button within its
+         *         folder component.
+         *
+         * @return   Whether this button is the selected button.
+         */
+        bool isSelected() const;
+
     private:
+        /* The FolderComponent that created this button. */
+        FolderComponent& parentFolder;
         /* The button's menu data object. */
         MenuItem menuItem;
     };
@@ -138,11 +150,9 @@ private:
      * @brief  Creates and inserts a new ItemButton when a new child menu button
      *         is created.
      *
-     * @param folderItem  This should always be this folder's menu item.
-     *
      * @param childIndex  The index of the new menu item.
      */
-    virtual void childAdded(MenuItem folderItem, const int childIndex) override;
+    virtual void childAdded(const int childIndex) override;
 
     /**
      * @brief  Removes the corresponding ItemButton when a child menu item is
