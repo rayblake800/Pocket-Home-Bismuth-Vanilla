@@ -1,11 +1,16 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "MenuButton.h"
 
+/* Extra characters applied when calculating title width, defining title padding
+   space relative to the font size. */
+static const constexpr char* titleBuffer = "     ";
+
 /*
  * Creates a new MenuButton component for a menu item.
  */
 AppMenu::MenuButton::MenuButton(MenuItem menuItem) : ItemButton(menuItem)
 {
+    setWantsKeyboardFocus(false);
 } 
 
 /*
@@ -24,6 +29,7 @@ void AppMenu::MenuButton::setIconBounds(const juce::Rectangle<float>& newBounds)
 void AppMenu::MenuButton::setTitleBounds
 (const juce::Rectangle<float>& newBounds)
 {
+    titleBounds = newBounds;
 }
 
 /*
@@ -31,13 +37,27 @@ void AppMenu::MenuButton::setTitleBounds
  */
 void AppMenu::MenuButton::dataChanged(MenuItem::DataField changedField)
 {
+    switch(changedField)
+    {
+        default:
+            DBG("You forgot to implement " << __func__ );
+    }
 }
+
 
 /*
  * Reloads the button icon image if necessary.
  */
 void AppMenu::MenuButton::loadIcon()
 {
+    using juce::Icon;
+    IconLoader iconThread;
+    iconThread.loadIcon(icon, getIconBounds().toNearestInt().getWidth(),
+    [this](Image iconImg)
+    {
+        appIcon = iconImg;
+        repaint();
+    });
 }
 
 /*
@@ -61,4 +81,40 @@ void AppMenu::MenuButton::resized()
 void AppMenu::MenuButton::paintButton
 (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
+    using juce::Rectangle;
+    Rectangle<int> border = getLocalBounds();
+    const Rectangle<float>& titleBounds = getTitleBounds();
+    const Rectangle<float>& iconBounds = getIconBounds();
+    if ((iconBounds.isEmpty() || titleBounds.isEmpty()) && 
+            !border.isEmpty())
+    {
+        resized();
+    }
+    g.setColour(findColour(isSelected() ?
+            selectionColourId : backgroundColourId));
+    if (shouldFillBackground())
+    {
+        g.fillRect(border);
+    }
+    else
+    {
+        Rectangle<float> textOval = titleBounds.withSizeKeepingCentre
+                (textWidth, titleBounds.getHeight());
+        g.fillRoundedRectangle(textOval, textOval.getHeight() / 6);
+    }
+    // Draw icon:
+    g.setOpacity(1);
+    g.drawImageWithin(appIcon, iconBounds.getX(), iconBounds.getY(),
+            iconBounds.getWidth(), iconBounds.getHeight(),
+            RectanglePlacement::xMid | RectanglePlacement::yTop, false);
+    // Draw title:
+    g.setColour(findColour(textColourId));
+    g.setFont(getTitleFont());
+    g.drawText(getMenuItem().getTitle(), titleBounds, 
+            getTextJustification(), true);
+    if (shouldDrawBorder())
+    {
+        g.setColour(findColour(borderColourId));
+        g.drawRect(border, 2);
+    }
 }
