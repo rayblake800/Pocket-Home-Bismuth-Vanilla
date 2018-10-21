@@ -8,16 +8,16 @@ AppMenu::ExistingItemEditor::ExistingItemEditor
 (const MenuItem editedItem, std::function<void()> onConfirm) :
     editedItem(editedItem),
     AppMenu::PopupEditor(editedItem.getEditorTitle(), onConfirm,
-            isEditable(editedItem, DataField::categories),
-            isEditable(editedItem, DataField::command)) 
+            editedItem.isEditable(MenuItem::DataField::categories),
+            editedItem.isEditable(MenuItem::DataField::command)) 
 {
     setTitleField(editedItem.getTitle());
     setIconField(editedItem.getIconName());
-    if(isEditable(editedItem, DataField::categories))
+    if(editedItem.isEditable(MenuItem::DataField::categories))
     {
         setCategoryList(editedItem.getCategories());
     }
-    if(isEditable(editedItem, DataField::command))
+    if(editedItem.isEditable(MenuItem::DataField::command))
     {
         setCommandField(editedItem.getCommand());
         setTerminalCheckboxState(editedItem.getLaunchedInTerm());
@@ -29,16 +29,16 @@ AppMenu::ExistingItemEditor::ExistingItemEditor
  */
 void AppMenu::ExistingItemEditor::commitEdits()
 {
-    setTitle(editedItem, getTitleField());
-    setIconName(editedItem, getIconNameField());
-    if(isEditable(editedItem, DataField::categories))
+    editedItem.setTitle(getTitleField());
+    editedItem.setIconName(getIconNameField());
+    if(editedItem.isEditable(MenuItem::DataField::categories))
     {
-        setCategories(editedItem, getCategories());
+        editedItem.setCategories(getCategories());
     }
-    if(isEditable(editedItem, DataField::command))
+    if(editedItem.isEditable(MenuItem::DataField::command))
     {
-        setCommand(editedItem, getCommandField());
-        setLaunchedInTerm(editedItem, getTerminalCheckboxState());
+        editedItem.setCommand(getCommandField());
+        editedItem.setLaunchedInTerm(getTerminalCheckboxState());
     }
-    saveChanges(editedItem);
+    editedItem.saveChanges();
 }

@@ -10,8 +10,7 @@
  *
  * @brief  A component that allows the user to edit an AppMenuItem.
  */
-class AppMenu::ExistingItemEditor : public PopupEditor, 
-    private MenuItem::Editor
+class AppMenu::ExistingItemEditor : public PopupEditor
 {
 public:
     /**
