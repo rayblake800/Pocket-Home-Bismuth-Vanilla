@@ -41,7 +41,7 @@ protected:
      * The title bounds is the area relative to the component's bounds that the
      * menu item title will be drawn within.
      */
-    virtual void updateTitleBounds();
+    void updateTitleBounds();
 
     /**
      * @brief  Recalculates and saves the menu button icon bounds.
@@ -49,7 +49,7 @@ protected:
      * The icon bounds is the area relative to the component's bounds that the
      * menu item icon will be drawn within.
      */
-    virtual void updateIconBounds();
+    void updateIconBounds();
 
     /**
      * @brief  Recreates and saves the font used to draw the menu button's
@@ -57,7 +57,7 @@ protected:
      *
      * This resizes the font to fit within the current title bounds.
      */
-    virtual void updateFont(); 
+    void updateFont(); 
     
 private:
     /**
@@ -134,7 +134,7 @@ private:
      *
      * @param changedField  The updated data field.
      */
-    virtual void dataChanged(MenuItem::DataField changedField);
+    virtual void dataChanged(MenuItem::DataField changedField) final override;
 
     /**
      * @brief  Reloads the button icon image if necessary.
@@ -168,7 +168,8 @@ private:
      *
      */
     virtual void paintButton
-    (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown) override;
+    (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
+    final override;
 
     /* Pre-calculated title text width */
     int textWidth = 0;
