@@ -1,4 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
+#include "IconLoader.h"
+#include "ComponentConfigFile.h"
 #include "MenuButton.h"
 
 /* Extra characters applied when calculating title width, defining title padding
@@ -8,28 +10,58 @@ static const constexpr char* titleBuffer = "     ";
 /*
  * Creates a new MenuButton component for a menu item.
  */
-AppMenu::MenuButton::MenuButton(MenuItem menuItem) : ItemButton(menuItem)
+AppMenu::MenuButton::MenuButton
+(MenuItem menuItem, FolderComponent& sourceFolder) : 
+ItemButton(menuItem, sourceFolder)
 {
     setWantsKeyboardFocus(false);
 } 
 
 /*
- * Sets the location relative to the button's bounds where the button's icon 
- * will be drawn.
+ * Recalculates and saves the menu button title bounds.
  */
-void AppMenu::MenuButton::setIconBounds(const juce::Rectangle<float>& newBounds)
+void AppMenu::MenuButton::updateTitleBounds()
 {
-    iconBounds = newBounds;
+    titleBounds = findTitleBounds();
 }
 
 /*
- * Sets the location relative to the button's bounds where the button's title 
- * will be printed.
+ * Recalculates and saves the menu button icon bounds.
  */
-void AppMenu::MenuButton::setTitleBounds
-(const juce::Rectangle<float>& newBounds)
+void AppMenu::MenuButton::updateIconBounds()
 {
-    titleBounds = newBounds;
+    iconBounds = findIconBounds();
+}
+
+/*
+ * Recreates and saves the font used to draw the menu button's title.
+ */
+void AppMenu::MenuButton::updateFont()
+{
+    titleFont = findTitleFont(titleBounds);
+    textWidth = findTitleBGWidth(titleBounds, titleFont);
+}
+
+/*
+ * Updates the title font to fit the current title bounds.
+ */
+juce::Font AppMenu::MenuButton::findTitleFont
+(const juce::Rectangle<float>& titleBounds)
+{
+    ComponentConfigFile config;
+    return juce::Font(config.getFontHeight(ComponentConfigFile::smallText));
+}
+
+/*
+ * Finds the width of the background area that will be drawn behind the button's
+ * title.
+ */
+int AppMenu::MenuButton::findTitleBGWidth
+(const juce::Rectangle<float>& titleBounds, const juce::Font& titleFont)
+{
+    int width = titleFont.getStringWidth(getMenuItem().getTitle() 
+            + titleBuffer);
+    return std::min(width, int(titleBounds.getWidth()));
 }
 
 /*
@@ -37,10 +69,15 @@ void AppMenu::MenuButton::setTitleBounds
  */
 void AppMenu::MenuButton::dataChanged(MenuItem::DataField changedField)
 {
-    switch(changedField)
+    using DataField = MenuItem::DataField;
+    if(changedField == DataField::title)
     {
-        default:
-            DBG("You forgot to implement " << __func__ );
+        updateTitleBounds();
+        repaint();
+    }
+    else if(changedField == DataField::icon)
+    {
+        loadIcon();
     }
 }
 
@@ -50,21 +87,15 @@ void AppMenu::MenuButton::dataChanged(MenuItem::DataField changedField)
  */
 void AppMenu::MenuButton::loadIcon()
 {
-    using juce::Icon;
+    using juce::Image;
     IconLoader iconThread;
-    iconThread.loadIcon(icon, getIconBounds().toNearestInt().getWidth(),
+    iconThread.loadIcon(getMenuItem().getTitle(),
+            iconBounds.toNearestInt().getWidth(),
     [this](Image iconImg)
     {
-        appIcon = iconImg;
+        icon = iconImg;
         repaint();
     });
-}
-
-/*
- * Updates the button's title font to fit the current title bounds.
- */
-void AppMenu::MenuButton::updateFont()
-{
 }
 
 /*
@@ -73,6 +104,10 @@ void AppMenu::MenuButton::updateFont()
  */
 void AppMenu::MenuButton::resized()
 {
+    menuButtonResized();
+    updateTitleBounds();
+    updateIconBounds();
+    updateFont();
 }
 
 /*
@@ -82,9 +117,8 @@ void AppMenu::MenuButton::paintButton
 (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
     using juce::Rectangle;
+    using juce::RectanglePlacement;
     Rectangle<int> border = getLocalBounds();
-    const Rectangle<float>& titleBounds = getTitleBounds();
-    const Rectangle<float>& iconBounds = getIconBounds();
     if ((iconBounds.isEmpty() || titleBounds.isEmpty()) && 
             !border.isEmpty())
     {
@@ -104,12 +138,12 @@ void AppMenu::MenuButton::paintButton
     }
     // Draw icon:
     g.setOpacity(1);
-    g.drawImageWithin(appIcon, iconBounds.getX(), iconBounds.getY(),
+    g.drawImageWithin(icon, iconBounds.getX(), iconBounds.getY(),
             iconBounds.getWidth(), iconBounds.getHeight(),
             RectanglePlacement::xMid | RectanglePlacement::yTop, false);
     // Draw title:
     g.setColour(findColour(textColourId));
-    g.setFont(getTitleFont());
+    g.setFont(titleFont);
     g.drawText(getMenuItem().getTitle(), titleBounds, 
             getTextJustification(), true);
     if (shouldDrawBorder())

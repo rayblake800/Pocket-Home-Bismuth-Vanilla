@@ -157,6 +157,14 @@ private:
     virtual bool keyPressed(const juce::KeyPress& key) override; 
 
     /**
+     * @brief  notifies the controller when the menu is clicked.
+     * 
+     * @param event  a mouse event that may represent a click on the main menu
+     *               component.
+     */
+    virtual void mouseDown(const juce::MouseEvent& event) final override;
+
+    /**
      * @brief  Updates the menu layout when the component is resized.
      */
     virtual void resized() final override;

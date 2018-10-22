@@ -122,12 +122,23 @@ private:
      */
     virtual ItemButton* createMenuButton(const MenuItem folderItem) = 0;
 
+
+    /**
+     * @brief  Finds the closest menu index to a place where the menu was
+     *         clicked.
+     *
+     * @param event  A mouse click event on the folder component.
+     *
+     * @return       The closest menu index to the clicked spot, to use when
+     *               inserting new menu items.
+     */
+    virtual int closestIndex(const juce::MouseEvent& event) = 0;
+
     /**
      * @brief  Called whenever a folder menu item is clicked, allowing the
      *         folder to handle the event.
      *
-     * @param clickedItem   The menu item that was clicked, either a child menu
-     *                      item, or the folder itself.
+     * @param clickedItem   The child menu item that was clicked.
      *
      * @param rightClicked  Whether the click event was a right-click.
      *
@@ -144,7 +155,7 @@ private:
      *
      * @param event  An object describing the mouse event.
      */
-    virtual void mouseDown(const juce::MouseEvent& event) override;
+    virtual void mouseDown(const juce::MouseEvent& event) final override;
 
     /**
      * @brief  Creates and inserts a new ItemButton when a new child menu button
@@ -152,7 +163,7 @@ private:
      *
      * @param childIndex  The index of the new menu item.
      */
-    virtual void childAdded(const int childIndex) override;
+    virtual void childAdded(const int childIndex) final override;
 
     /**
      * @brief  Removes the corresponding ItemButton when a child menu item is
@@ -160,7 +171,7 @@ private:
      *
      * @param removedIndex  The index of the item that was just removed.
      */
-    virtual void childRemoved(const int removedIndex) override;
+    virtual void childRemoved(const int removedIndex) final override;
 
     /**
      * @brief  Swaps the positions of two of the folder's ItemButtons when their
@@ -170,7 +181,8 @@ private:
      *
      * @param swapIndex2  The index of the second swapped child item.
      */
-    virtual void childrenSwapped(const int swapIndex1, const int swapIndex2);
+    virtual void childrenSwapped(const int swapIndex1, const int swapIndex2)
+        final override;
 
     /**
      * @brief  Updates the sizes and positions of all buttons in the menu.

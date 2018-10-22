@@ -1,6 +1,11 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "MenuComponent.h"
 
+/* Key codes: */
+//TODO: load these from config, set on input page
+static const juce::String openPopupMenuBinding = "CTRL + e";
+static const juce::String reloadMenuBinding = "TAB";
+
 /*
  * Creates the MenuComponent, linking it with its controller.
  */
@@ -99,8 +104,24 @@ void AppMenu::MenuComponent::closeActiveFolder()
 bool AppMenu::MenuComponent::keyPressed(const juce::KeyPress& key)
 {
     //TODO: redefine standard menu key shortcuts
+    if(key == juce::KeyPress::createFromDescription(openPopupMenuBinding))
+    {
+        signalMenuClicked(true);
+        return true;
+    }
     return false;
 } 
+
+void AppMenu::MenuComponent::mouseDown(const juce::MouseEvent& event)
+{
+    if(event.eventComponent == this && event.mouseWasClicked())
+    {
+        signalMenuClicked(event.mods.isPopupMenu()
+                || event.mods.isRightButtonDown()
+                || event.mods.isCtrlDown());
+    }
+}
+
 
 /*
  * Updates the menu layout when the component is resized.

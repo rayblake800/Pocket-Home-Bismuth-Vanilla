@@ -171,13 +171,13 @@ private:
      * @brief  Scans desktop entries for updates whenever window focus is
      *         gained.
      */
-    virtual void windowFocusGained() override;
+    virtual void windowFocusGained() final override;
 
     /**
      * @brief  Hides the loading spinner and stops waiting for applications to 
      *         launch when window focus is lost.
      */
-    virtual void windowFocusLost() override;
+    virtual void windowFocusLost() final override;
     
     /**
      * @brief  Gets the main menu component, creating and saving it first if

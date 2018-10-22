@@ -26,9 +26,11 @@ public:
     /**
      * @brief  Creates a new MenuButton component for a menu item.
      *
-     * @param menuItem   The new button's menu data source.
+     * @param menuItem      The new button's menu data source.
+     *
+     * @param sourceFolder  The folder component creating the menu button.
      */
-    MenuButton(MenuItem menuItem);
+    MenuButton(MenuItem menuItem, FolderComponent& sourceFolder);
 
     virtual ~MenuButton() { }
 
@@ -68,11 +70,39 @@ private:
      */
     virtual juce::Rectangle<float> findTitleBounds() = 0;
 
+    /**
+     * @brief  Finds the area relative to the menu button's bounds where the
+     *         icon should be drawn.
+     *
+     * @return  An appropriate icon bounds area for the current button size
+     *          and the needs of the MenuButton subclass implementing this
+     *          method.
+     */
     virtual juce::Rectangle<float> findIconBounds() = 0;
 
+    /**
+     * @brief  Updates the title font to fit the current title bounds.
+     *
+     * @param titleBounds  The area the title will be drawn within.
+     *
+     * @return             An appropriate font for drawing the title within the
+     *                     given bounds.
+     */
     virtual juce::Font findTitleFont(const juce::Rectangle<float>& titleBounds);
 
-    virtual int findTitleWidth(const juce::Rectangle<float>& titleBounds,
+    /**
+     * @brief  Finds the width of the background area that will be drawn behind
+     *         the button's title.
+     *
+     * @param titleBounds  The title's bounding box.
+     *
+     * @param titleFont    The font that will be used to draw the title.
+     *
+     * @return             The width to draw the title background, or any value
+     *                     less than or equal to zero to skip drawing the title
+     *                     background.
+     */
+    virtual int findTitleBGWidth(const juce::Rectangle<float>& titleBounds,
             const juce::Font& titleFont);
     /**
      * @brief  Checks if this button will draw an outline around its border.
@@ -110,11 +140,6 @@ private:
      * @brief  Reloads the button icon image if necessary.
      */
     void loadIcon();
-   
-    /**
-     * @brief  Updates the button's title font to fit the current title bounds.
-     */
-    void updateFont();
 
     /**
      * @brief  Runs whenever the menu button is resized, just before

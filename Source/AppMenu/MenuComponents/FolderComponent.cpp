@@ -77,7 +77,7 @@ AppMenu::FolderComponent::getButtonComponent(const int index)
 bool AppMenu::FolderComponent::handleMenuClick
 (const MenuItem clickedItem, bool rightClicked)
 {
-
+    return false;
 }
 
 /*
@@ -87,6 +87,31 @@ bool AppMenu::FolderComponent::handleMenuClick
  */
 void AppMenu::FolderComponent::mouseDown(const juce::MouseEvent& event)
 {
+    if(!event.mouseWasClicked())
+    {
+        return;
+    }
+        //TODO: Don't assume Ctrl+LMB equals right click, define that sort of
+        //      thing in input settings.
+    bool rightClicked = event.mods.isPopupMenu()
+        || event.mods.isCtrlDown() || event.mods.isRightButtonDown();
+    if(event.eventComponent == this)
+    { 
+        signalFolderClicked(rightClicked, closestIndex(event));
+    }
+    else
+    {
+        ItemButton* const clickedButton = dynamic_cast<ItemButton* const>
+            (event.eventComponent);
+        if(clickedButton != nullptr)
+        {
+            MenuItem clickedItem = clickedButton->getMenuItem();
+            if(!handleMenuClick(clickedItem, rightClicked))
+            {
+                signalItemClicked(clickedItem, rightClicked);
+            }
+        }
+    }
 }
 
 /*
