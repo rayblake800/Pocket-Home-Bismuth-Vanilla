@@ -14,6 +14,7 @@ class AppMenu::MenuButton : public FolderComponent::ItemButton,
 private MenuItem::Listener
 {
 public:
+    /* juce ColourId values */
     enum ColourIds
     {
         textColourId = 0x1900200,
@@ -33,26 +34,46 @@ public:
 
 protected:
     /**
-     * @brief  Sets the location relative to the button's bounds where the
-     *         button's icon will be drawn.
+     * @brief  Recalculates and saves the menu button title bounds.
      *
-     * @param newBounds  The new icon bounds to save.
+     * The title bounds is the area relative to the component's bounds that the
+     * menu item title will be drawn within.
      */
-    virtual void setIconBounds(const juce::Rectangle<float>& newBounds);
+    virtual void updateTitleBounds();
 
     /**
-     * @brief  Sets the location relative to the button's bounds where the
-     *         button's title will be printed.
+     * @brief  Recalculates and saves the menu button icon bounds.
      *
-     * @param newBounds  The new title bounds to save.
+     * The icon bounds is the area relative to the component's bounds that the
+     * menu item icon will be drawn within.
      */
-    virtual void setTitleBounds(const juce::Rectangle<float>& newBounds);
+    virtual void updateIconBounds();
 
     /**
-     * @brief  Re-calculates and saves the button's icon and title bounds.
+     * @brief  Recreates and saves the font used to draw the menu button's
+     *         title.
+     *
+     * This resizes the font to fit within the current title bounds.
      */
-    virtual void updateButtonLayout() = 0;
+    virtual void updateFont(); 
     
+private:
+    /**
+     * @brief  Finds the area relative to the menu button's bounds where the
+     *         title should be drawn.
+     *
+     * @return  An appropriate title bounds area for the current button size
+     *          and the needs of the MenuButton subclass implementing this
+     *          method.
+     */
+    virtual juce::Rectangle<float> findTitleBounds() = 0;
+
+    virtual juce::Rectangle<float> findIconBounds() = 0;
+
+    virtual juce::Font findTitleFont(const juce::Rectangle<float>& titleBounds);
+
+    virtual int findTitleWidth(const juce::Rectangle<float>& titleBounds,
+            const juce::Font& titleFont);
     /**
      * @brief  Checks if this button will draw an outline around its border.
      *
@@ -77,7 +98,6 @@ protected:
      */
     virtual juce::Justification getTextJustification() const = 0;
 
-private:
     /**
      * @brief  Updates the component if necessary whenever its menu data
      *         changes.
