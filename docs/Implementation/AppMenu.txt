@@ -1,0 +1,69 @@
+# New AppMenu format implementation
+    ## Implement:
+        -AppMenu::Controller
+        -AppMenu::MenuComponent
+        -AppMenu::FolderComponent
+        -AppMenu::MenuButton
+    ## Additional requirements: 
+        -Add the new format to the Appmenu::Format enum class in AppMenu.h 
+        -Update AppMenu::createAppMenu and AppMenu::changeMenuFormat to 
+         initialize the new format.
+
+    ## Controller
+        ### Implement:
+            -AppMenu::Format getMenuFormat() const;
+                Return the new format's enum value.
+
+            -ControlledMenu* createMenuComponent();
+                Return a dynamically created NewFormat::MenuComponent object.
+
+        ## Optional overrides:
+            -void parentResized(const juce::Rectangle<int> parentBounds)
+                The default action sets the MenuComponent's bounds to match the
+                new parent bounds. 
+
+            -void menuItemClicked(MenuItem clickedItem, const bool rightClicked)
+                Override to change what happens when menu buttons are clicked.
+            -void folderClicked(MenuItem clickedFolder, const bool rightClicked, const int closestIndex);
+                Override to change what happens when menu folders are clicked.
+
+            -void menuClicked(const bool rightClicked)
+                Override to change what happens when the menu is clicked
+                somewhere outside of menu buttons and folder components.
+
+
+    ## MenuComponent
+
+    ## FolderComponent
+
+    ## MenuButton
+        ### Implement:
+            -juce::Rectangle<float> findTitleBounds();
+                Return the bounding rectangle relative to the button bounds 
+                where the menu item's title should be drawn.
+
+            -juce::Rectangle<float> findIconBounds();
+                Return the bounding rectangle relative to the button bounds
+                where the menu item's icon should be drawn.
+              
+            -bool shouldDrawBorder() const;
+                Return whether the menu button's border should be drawn.
+
+            -bool shouldFillBackground() const;
+                Return whether the menu button's background should be filled.
+
+            -juce::Justification getTextJustification() const;
+                Return the justification type to use when printing button text.
+    
+        ### Optional overrides:
+            -juce::Font findTitleFont(const juce::Rectangle<float>& titleBounds);
+                Override to change how the button's title font is updated.
+
+            -int findTitleBGWidth(const juce::Rectangle<float>& titleBounds, const juce::Font& titleFont);
+                Override to change how the width of the title background area
+                is calculated, or to disable drawing a background area behind
+                the title entirely.
+
+            -void menuButtonResized() { }
+                Override to add additional actions the button object should
+                perform each time its bounds change.
