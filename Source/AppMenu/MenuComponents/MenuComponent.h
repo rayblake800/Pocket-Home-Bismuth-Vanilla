@@ -27,7 +27,7 @@ public:
      *
      * @return  An object holding the last opened menu folder's data.
      */
-    virtual MenuItem getActiveFolder() override;
+    virtual MenuItem getActiveFolder() final override;
 
     /**
      * @brief  Represents a list of shortcuts and folders within the application
@@ -98,17 +98,6 @@ protected:
     virtual Folder* createFolderComponent(MenuItem folderItem) = 0;
 
     /**
-     * @brief  Finds a folder component in the list of open folders.
-     *
-     * @param folderItem  A menu item defining a folder.
-     *
-     * @return            A pointer to a folder component defined by folderItem,
-     *                    or nullptr if folderItem doesn't represent an open
-     *                    folder.
-     */
-    virtual Folder* findFolderComponent(MenuItem folderItem) = 0;
-
-    /**
      * @brief  Updates the positions and sizes of all open folder components.
      */
     virtual void updateMenuLayout() = 0;
@@ -137,13 +126,13 @@ private:
      *
      * @param folderItem  The new folder's menu data.
      */
-    virtual void openFolder(MenuItem folderItem) override;
+    virtual void openFolder(MenuItem folderItem) final override;
 
     /**
      * @brief  Closes the current active folder as long as more than one
      *         folder is open. 
      */
-    virtual void closeActiveFolder() override;
+    virtual void closeActiveFolder() final override;
 
     /**
      * @brief  Handles menu navigation key events not handled by the folder
@@ -154,7 +143,7 @@ private:
      * @return     True to indicate that the key event was handled, false to
      *             allow the key event to be passed on to other objects.
      */
-    virtual bool keyPressed(const juce::KeyPress& key) override; 
+    virtual bool keyPressed(const juce::KeyPress& key) final override; 
 
     /**
      * @brief  notifies the controller when the menu is clicked.

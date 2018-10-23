@@ -17,7 +17,7 @@
             -ControlledMenu* createMenuComponent();
                 Return a dynamically created NewFormat::MenuComponent object.
 
-        ## Optional overrides:
+        ### Optional overrides:
             -void parentResized(const juce::Rectangle<int> parentBounds)
                 The default action sets the MenuComponent's bounds to match the
                 new parent bounds. 
@@ -33,8 +33,26 @@
 
 
     ## MenuComponent
+        ### Implement:
+            -Folder* createFolderComponent(MenuItem folderItem);
+                Create a folder component as this menu format's 
+                AppMenu::FolderComponent class.
+
+            -void updateMenuLayout();
+                Reposition all folder components, adjusting for the current
+                MenuComponent bounds, the number of open folders, and any other
+                factor this menu format cares about.
 
     ## FolderComponent
+        ### Implement:
+            -int closestIndex(const juce::MouseEvent& event);
+               Find the closest folder index to an empty spot on the
+               FolderComponent that was clicked.
+
+        ### Optional overrides:
+            -bool handleMenuClick(const MenuItem clickedItem, bool rightClicked);
+               Override to optionally handle some or all menu item click at the 
+               folder level, and not pass them on to the controller.
 
     ## MenuButton
         ### Implement:
