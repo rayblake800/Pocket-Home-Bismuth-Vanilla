@@ -175,13 +175,24 @@ public:
 
 
     /**
-     * @brief  Compares this menu item with another.
+     * @brief  Checks if two menu items represent the same item in the menu.
      *
      * @param toCompare  Another menu item to compare with this one.
      * 
      * @return           Whether both menu items store the same data object.
      */
     bool operator==(const MenuItem& toCompare) const;
+    
+    /**
+     * @brief  Checks if two menu items do not represent the same item in the 
+     *         menu.
+     *
+     * @param toCompare  Another menu item to compare with this one.
+     * 
+     * @return           Whether the menu items do not store the same data 
+     *                   object.
+     */
+    bool operator!=(const MenuItem& toCompare) const;
 
     /**
      * @brief  Compares this menu item with another.

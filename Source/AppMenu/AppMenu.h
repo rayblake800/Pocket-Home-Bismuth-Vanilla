@@ -71,6 +71,15 @@ namespace AppMenu
      */
     class Controller;
 
+
+    /**
+     * @brief  Captures and handles key and mouse events for the menu component
+     *         and all its child components.
+     *
+     * @see  Controller/InputHandler.h
+     */
+    class InputHandler;
+
     /**
      * @brief  A context menu that provides different options for editing the
      *         menu depending on which menu item was selected or clicked.

@@ -32,52 +32,17 @@ public:
      */
     virtual ~Controller();
 
+
     /**
-     * @brief  Creates and manages all menu folder components.
+     * @brief  Defines the interface provided by AppMenu::MenuComponent to the
+     *         menu controller.
      */
     class ControlledMenu : public juce::Component
     {
     public:
-        /**
-         * @brief  Creates a ControlledMenu, linking it to a controller.
-         *
-         * @param controller  The controller that should receive user input 
-         *                    events from the menu component.
-         */
-        ControlledMenu(Controller& controller);
+        ControlledMenu() { }
 
         virtual ~ControlledMenu() { }
-
-    protected:
-        /**
-         * @brief  Signals to the controller that a menu item was clicked.
-         *
-         * @param clickedItem   The menu item that was clicked.
-         *
-         * @param rightClicked  Whether the menu item was right-clicked.
-         */
-        void signalItemClicked(MenuItem clickedItem, const bool rightClicked);
-
-        /**
-         * @brief  Signals to the controller that an open folder was clicked.
-         *
-         * @param folderItem     The folder item that was clicked.
-         *
-         * @param rightClicked   Whether the folder was right-clicked.
-         *
-         * @param closestIndex   The closest menu index to the spot that was
-         *                       clicked, or -1 to specify no particular index.
-         */
-        void signalFolderClicked(MenuItem folderItem, const bool rightClicked,
-                const int closestIndex = -1);
-
-        /**
-         * @brief  Signals to the controller that the menu was clicked somewhere
-         *         other than at a folder or menu item.
-         *
-         * @param rightClicked  Whether the menu was right-clicked.
-         */
-        void signalMenuClicked(const bool rightClicked);
 
         /**
          * @brief  Gets the current active folder item.
@@ -88,25 +53,11 @@ public:
         virtual MenuItem getActiveFolder() = 0;
 
         /**
-         * @brief  Checks if user input should be enabled.
+         * @brief  Gets the number of open folders held by the MenuComponent.
          *
-         * @return  Whether the ControlledMenu should register key and mouse
-         *          events.
+         * @return  The number of open folder components.
          */
-        bool getInputEnabled() const;
-
-    private:
-        // Only the Controller may access the ControlledMenu's private methods. 
-        friend class Controller;
-
-        /**
-         * @brief  Sets if the ControlledMenu and all its child Components should
-         *         register user input.
-         *
-         * @param allowUserInput  Whether user mouse and key events should be
-         *                        handled or ignored.
-         */
-        void setInputEnabled(const bool allowUserInput);
+        virtual int openFolderCount() = 0;
 
         /**
          * @brief  Opens a folder as a FolderComponent, making it the active
@@ -114,13 +65,98 @@ public:
          *
          * @param folderItem  A folder menu item to open.
          */
-        virtual void openFolder(MenuItem folderItem) = 0;
+        virtual void openFolder(const MenuItem folderItem) = 0;
 
         /**
          * @brief  Closes the current active FolderComponent as long as more
          *         than one folder is open.
          */
         virtual void closeActiveFolder() = 0;
+    };
+
+    /**
+     * @brief  Defines the interface between the controller and 
+     *         AppMenu::InputHandler.
+     */
+    class InputListener : public juce::KeyListener, public juce::MouseListener
+    {
+    public:
+        /**
+         * @brief  Creates a new InputListener, connecting it to the controller
+         *         and setting it to listen to the controller's menu component.
+         *
+         * @param controller     The controller that will receive input signals
+         *                       from this InputListener.
+         *
+         * @param menuComponent  The controller's AppMenu component.
+         */
+        InputListener(Controller& controller);
+
+        virtual ~InputListener() { }
+
+    protected:
+        /**
+         * @brief  Signals to the controller that a menu item was clicked.
+         *
+         * @param clickedItem   The menu item that was clicked.
+         */
+        void signalItemClicked(const MenuItem clickedItem);
+
+        /**
+         * @brief  Signals to the controller that a folder item was clicked.
+         *
+         * @param clickedFolder  The folder item that was clicked.
+         */
+        void signalFolderClicked(const MenuItem clickedFolder);
+
+        /**
+         * @brief  Signals to the controller that the user requested a generic
+         *         context menu.
+         */
+        void signalContextMenuRequested();
+        
+        /**
+         * @brief  Signals to the controller that the user requested a context
+         *         menu for an open folder.
+         *
+         * @param folderItem    The relevant folder menu item.
+         *
+         * @param closestIndex  The index in the menu where new items created
+         *                      through the context menu should be inserted.
+         */
+        void signalContextMenuRequested(const MenuItem folderItem,
+                const int closestIndex);
+        
+        /**
+         * @brief  Signals to the controller that the user requested a context
+         *         menu for a specific menu item.
+         *
+         * @param MenuItem  The menuItem that the context menu should affect. 
+         */
+        void signalContextMenuRequested(const MenuItem menuItem);
+
+        /**
+         * @brief  Checks it user input should be enabled.
+         * 
+         * Input is enabled unless it has been disabled using setInputEnabled()
+         * or a menu editor component is visible..
+         *
+         * @return   Whether user input should be handled or ignored.
+         */
+        bool getInputEnabled() const;
+
+    private:
+        /* Only the Controller may access the InputListener's private methods.*/
+        friend class Controller;
+
+        /**
+         * @brief  Sets if the InputListener should register user input, or
+         *         ignore it.
+         *
+         * @param allowUserInput  Whether user mouse and key events should 
+         *                        be handled or ignored.
+         */
+        void setInputEnabled(const bool allowUserInput);
 
         /* Tracks whether user input should be handled or ignored. */
         bool inputEnabled = true;
@@ -138,33 +174,29 @@ protected:
     void launchOrFocusApplication(MenuItem toLaunch);
 
     /**
-     * @brief  Handles mouse clicks on menu items.
-     *
-     * @param clickedItem   The menu item that was clicked.
-     *
-     * @param rightClicked  Whether the menu item was right-clicked.
+     * @brief  Displays a context menu with generic options for editing the
+     *         AppMenu.
      */
-    virtual void menuItemClicked(MenuItem clickedItem, const bool rightClicked);
+    void showContextMenu();
 
     /**
-     * @brief  Handles mouse clicks on open menu folders.
+     * @brief  Displays a context menu with options for editing an open menu
+     *         folder.
      *
-     * @param clickedFolder  The folder menu item that was clicked.
+     * @param folderItem    The folder menu item the context menu should edit.
      *
-     * @param rightClicked   Whether the folder was right-clicked.
-     *
-     * @param closestIndex   The closest folder index to the spot that was
-     *                       clicked, or -1 to specify no particular index.
+     * @param closestIndex  The index in the menu where new items created
+     *                      through the context menu should be inserted.
      */
-    virtual void folderClicked(MenuItem clickedFolder, const bool rightClicked,
-            const int closestIndex);
+    void showContextMenu(MenuItem folderItem, const int closestIndex);
 
     /**
-     * @brief  Handles any other clicks on the menu component.
+     * @brief  Displays a context menu with options for editing a single menu
+     *         item.
      *
-     * @param rightClicked  Whether the menu was right-clicked.
+     * @param menuItem  The menu item the context menu should edit.
      */
-    virtual void menuClicked(const bool rightClicked);
+    void showContextMenu(MenuItem menuItem);
      
 private:
     /**
@@ -181,7 +213,7 @@ private:
     
     /**
      * @brief  Gets the main menu component, creating and saving it first if
-     *         necessary.
+     *         necessary,
      *
      * This will only be used to add and show the menu component as a child
      * component of the MainComponent.
@@ -200,15 +232,26 @@ private:
         override;
 
     /**
-     * @brief  Creates the ControlledMenu as whatever MenuComponent subclass
-     *         is appropriate for the current AppMenu format.
+     * @brief  Creates the menuComponent as a subclass of AppMenu::MenuComponent
+     *         appropriate for the current AppMenu format.
      *
      * @return   The new ControlledMenu object.
      */
     virtual ControlledMenu* createMenuComponent() = 0;
 
+    /**
+     * @brief  Creates the inputListener as a subclass of AppMenu::InputHandler
+     *         appropriate for the current AppMenu format.
+     *
+     * @return  The new InputListener object. 
+     */
+    virtual InputListener* createInputHandler() = 0;
+
     /* The main menu component: */
     std::unique_ptr<ControlledMenu> menuComponent = nullptr;
+
+    /* The object listening for user input: */
+    std::unique_ptr<InputListener> inputListener = nullptr;
 
     /* Holds any popup menu editor component: */
     std::unique_ptr<PopupEditor> menuEditor = nullptr;

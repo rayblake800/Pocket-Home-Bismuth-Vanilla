@@ -210,11 +210,18 @@ AppMenu::MenuItem::getEditorTitle() const
 }
 
 /*
- * Compares this menu item with another.
+ * Checks if two menu items represent the same item in the menu.
  */
 bool AppMenu::MenuItem::operator==(const MenuItem& toCompare) const
 {
     return getData() == toCompare.getData();
+}
+/*
+ * Checks if two menu items do not represent the same item in the menu.
+ */
+bool AppMenu::MenuItem::operator!=(const MenuItem& toCompare) const
+{
+   return !operator==(toCompare);
 }
 
 /*

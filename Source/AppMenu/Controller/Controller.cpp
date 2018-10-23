@@ -34,50 +34,114 @@ AppMenu::Controller::~Controller()
 /*
  * Creates a ControlledMenu, linking it to a controller.
  */
- AppMenu::Controller::ControlledMenu::ControlledMenu(Controller& controller) :
-     controller(controller) { }
+ AppMenu::Controller::InputListener::InputListener(Controller& controller) :
+     controller(controller) 
+{
+    jassert(controller.menuComponent != nullptr);
+    controller.menuComponent->addMouseListener(this, true);
+    controller.menuComponent->addKeyListener(this);
+}
 
 /*
  * Signals to the controller that a menu item was clicked.
  */
-void AppMenu::Controller::ControlledMenu::signalItemClicked
-(MenuItem clickedItem, const bool rightClicked)
+void AppMenu::Controller::InputListener::signalItemClicked
+(const MenuItem clickedItem)
 {
-    controller.menuItemClicked(clickedItem, rightClicked);
+    // Ignore clicks if a menu editor is visible or input is disabled.
+    if(!getInputEnabled())
+    {
+        return;
+    }
+    // If the menu item is not in the active folder, close folders until it is.
+    const MenuItem parentFolder = clickedItem.getParentFolder();
+    if(parentFolder != controller.menuComponent->getActiveFolder())
+    {
+        while(parentFolder != controller.menuComponent->getActiveFolder()
+            && controller.menuComponent->openFolderCount() > 1)
+        {
+            controller.menuComponent->closeActiveFolder();
+        }
+        jassert(parentFolder != controller.menuComponent->getActiveFolder());
+    }
+    // Otherwise, open folder items and launch/focus shortcut items.
+    else
+    {
+        if(clickedItem.isFolder())
+        {
+            controller.menuComponent->openFolder(clickedItem);
+        }
+        else
+        {
+            controller.launchOrFocusApplication(clickedItem);
+        }
+    }
+}
+
+
+/*
+ * Signals to the controller that a folder item was clicked.
+ */
+void AppMenu::Controller::InputListener::signalFolderClicked
+(const MenuItem clickedFolder)
+{
 }
 
 /*
- * Signals to the controller that an open folder was clicked.
+ * Signals to the controller that the user requested a generic context menu.
  */
-void AppMenu::Controller::ControlledMenu::signalFolderClicked
-(MenuItem folderItem, const bool rightClicked, const int closestIndex)
+void AppMenu::Controller::InputListener::signalContextMenuRequested()
 {
-    controller.folderClicked(folderItem, rightClicked, closestIndex);
+    if(getInputEnabled())
+    {
+        controller.contextMenu.setGenericOptions();
+        controller.contextMenu.showAndHandleSelection();
+    }
 }
 
 /*
- * Signals to the controller that the menu was clicked somewhere other than at a
- * folder or menu item.
+ * Signals to the controller that the user requested a context menu for an open
+ * folder.
  */
-void AppMenu::Controller::ControlledMenu::signalMenuClicked
-(const bool rightClicked)
+void AppMenu::Controller::InputListener::signalContextMenuRequested
+(const MenuItem folderItem, const int closestIndex)
 {
-    controller.menuClicked(rightClicked);
+    if(getInputEnabled())
+    {
+        controller.contextMenu.setFolderOptions(folderItem, closestIndex);
+        controller.contextMenu.showAndHandleSelection();
+    }
+}
+
+/*
+ * Signals to the controller that the user requested a context menu for a
+ * specific menu item.
+ */
+void AppMenu::Controller::InputListener::signalContextMenuRequested
+(const MenuItem menuItem)
+{
+    if(getInputEnabled())
+    {
+        controller.contextMenu.setMenuItemOptions(menuItem);
+        controller.contextMenu.showAndHandleSelection();
+    }
 }
 
 /*
  * Checks if user input should be enabled.
  */
-bool AppMenu::Controller::ControlledMenu::getInputEnabled() const
+bool AppMenu::Controller::InputListener::getInputEnabled() const
 {
-    return inputEnabled;
+    return inputEnabled &&
+        (controller.menuEditor == nullptr 
+         || controller.menuEditor->isShowing());
 }
 
 /*
  * Sets if the ControlledMenu and all its child Components should register user 
- * input.
+ * input, or ignore it.
  */
-void AppMenu::Controller::ControlledMenu::setInputEnabled
+void AppMenu::Controller::InputListener::setInputEnabled
 (const bool allowUserInput)
 {
     inputEnabled = allowUserInput;
@@ -98,39 +162,8 @@ void AppMenu::Controller::launchOrFocusApplication(MenuItem toLaunch)
             (Config::MainKeys::termLaunchCommandKey);
     }
     setLoadingSpinnerVisible(true);
-    menuComponent->setInputEnabled(false);
+    inputListener->setInputEnabled(false);
     appLauncher.startOrFocusApp(toLaunch.getCommand());
-}
-
-/*
- * Handles mouse clicks on menu items.
- */
-void AppMenu::Controller::menuItemClicked
-(MenuItem clickedItem, const bool rightClicked)
-{
-    CHECK_MENU_COMPONENT(__func__)
-    if(menuEditor != nullptr && menuEditor->isShowing())
-    {
-        DBG("AppMenu::Controller::" << __func__ 
-                << ": Ignoring menu item click, editor is open.");
-        return;
-    }
-    if(rightClicked)
-    {
-        contextMenu.setMenuItemOptions(clickedItem);
-        contextMenu.showAndHandleSelection();
-    }
-    else
-    {
-        if(clickedItem.isFolder())
-        {
-            menuComponent->openFolder(clickedItem);
-        }
-        else
-        {
-            launchOrFocusApplication(clickedItem);
-        }
-    }
 }
 
 /*
