@@ -1,13 +1,34 @@
-Creating the Menu:
-    -Create, add and make visible: AppMenu::MainComponent mainCmp
-    -Call mainCmp.showMenuType(paged)
-        -mainCmp initializes "control" data member as a PageMenuController
-            -control initializes data member "inputHandler" as a
-             PageInputHandler
-            -control initializes data member "menuCmp" as a PageMenuComponent 
-            -control calls inputHandler:addMenuComponent, adding a reference to
-             
-        -mainCmp calls control->addMenuComponent(), adding menuCmp as a 
-         visible child component to mainCmp 
-    
+Creating the Menu: Call AppMenu::createAppMenu(Format)
+    1. AppMenu creates a MenuInitializer for Format.
 
+    2. AppMenu passes the initializer to a new MainComponent.
+        a. MainComponent creates the ConfigFile, initializing menu data.
+
+        b. MainComponent uses the initializer to create a MenuComponent.
+            I.  MenuComponent creates a new root FolderComponent.
+                i.  FolderComponent creates new MenuButtons for its menu items.
+
+                ii. FolderComponent adds and shows MenuButtons.
+
+            II. MenuComponent adds and shows FolderComponent.
+
+        c. MainComponent creates a new Controller, passing it the MenuComponent
+           and the OverlaySpinner.
+            I.  Controller stores a pointer to the MenuComponent and a reference
+                to the OverlaySpinner.
+
+        d. MainComponent creates a new InputHandler with the initializer,
+           passing it the Controller and the MenuComponent.
+            I.  InputHandler connects itself to the MenuComponent's mouse and
+                key events.
+
+            II. InputHandler stores a pointer to the MenuComponent.
+
+            III.InputHandler stores a pointer to the Controller.
+
+        e. MainComponent stores the Controller, InputHandler and MenuComponent 
+           in unique_ptr objects.
+
+        f. MainComponent adds and shows the MenuComponent as a child component.
+    
+    3. AppMenu returns the new MainComponent.

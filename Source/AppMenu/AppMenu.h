@@ -28,6 +28,7 @@ namespace AppMenu
         Invalid
     };
 
+
     /**
      * @brief  A container component that initializes and holds any format of
      *         AppMenu.
@@ -62,6 +63,14 @@ namespace AppMenu
     void changeMenuFormat(MainComponent* appMenu, const Format newFormat);
     
     /* ####################    Menu Control   ########################### */
+
+    /**
+     * @brief  Creates menu objects for a single menu Format type.
+     *
+     * @see  Control/Initializer.h
+     */
+    class Initializer;
+
     /**
      * @brief  Controls the behavior of the main menu component, launching
      *         applications, opening/closing menu folders, and allowing the 
@@ -213,7 +222,8 @@ namespace AppMenu
      */
     namespace Scrolling
     {
-       class Controller;
+       class MenuInitializer;
+       class InputHandler;
        class MenuComponent;
        class FolderComponent;
        class ItemButton;

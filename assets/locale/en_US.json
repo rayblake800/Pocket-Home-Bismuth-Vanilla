@@ -194,7 +194,7 @@
             "weeks_post" : " weeks ago",
             "years_post" : " years ago"
     },
-    "AppMenu::ContextMenu" : {
+    "AppMenu::Controller" : {
         "edit_app" : "Edit",
         "delete_app" : "Delete",
         "add_shortcut" : "Add application shortcut",

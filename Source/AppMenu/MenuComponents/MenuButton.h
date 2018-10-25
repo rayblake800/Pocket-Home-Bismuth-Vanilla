@@ -2,16 +2,15 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 
 #pragma once
-#include "FolderComponent.h"
 #include "AppMenu.h"
+#include "MenuData/MenuItem.h"
 
 /**
  * @file  MenuButton.h
  *
  * @brief  Represents a single menu item as a juce button component.
  */
-class AppMenu::MenuButton : public FolderComponent::ItemButton,
-private MenuItem::Listener
+class AppMenu::MenuButton : public juce::Button, private MenuItem::Listener
 {
 public:
     /* juce ColourId values */
@@ -26,13 +25,32 @@ public:
     /**
      * @brief  Creates a new MenuButton component for a menu item.
      *
-     * @param menuItem      The new button's menu data source.
-     *
-     * @param sourceFolder  The folder component creating the menu button.
+     * @param menuItem  The new button's menu data source.
      */
-    MenuButton(MenuItem menuItem, FolderComponent& sourceFolder);
+    MenuButton(MenuItem menuItem);
 
     virtual ~MenuButton() { }
+
+    /**
+     * @brief  Checks if this button is the selected button in its folder.
+     *
+     * @return  Whether the button is selected. 
+     */
+    bool isSelected() const;
+
+    /**
+     * @brief  Selects or deselects this button.
+     *
+     * @param isSelected  Whether the button should be selected.
+     */
+    void setSelected(const bool isSelected);
+
+    /**
+     * @brief  Gets the MenuItem that defines this button.
+     *
+     * @return  The MenuItem used to create the MenuButton. 
+     */
+    MenuItem getMenuItem() const;
 
 protected:
     /**
@@ -170,6 +188,12 @@ private:
     virtual void paintButton
     (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
     final override;
+    
+    /* The MenuItem that defines this button's data. */
+    MenuItem menuItem;
+
+    /* Whether the button is the selected button in its folder. */
+    bool selected = false;
 
     /* Pre-calculated title text width */
     int textWidth = 0;
@@ -185,9 +209,6 @@ private:
 
     /* The icon to draw on this button */
     juce::Image icon;
-
-    /* The name or path of the last loaded icon */
-    juce::String iconName;
 };
 
 /* Only include this file directly in the AppMenu implementation! */

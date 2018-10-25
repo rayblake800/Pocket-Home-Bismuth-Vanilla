@@ -352,8 +352,6 @@ public:
      *                  data.
      */
     void removeListener(Listener* toRemove);
-
-
 };
 
 /* Only include this file directly in the AppMenu implementation! */

@@ -1,83 +1,68 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-
 #include "MainComponent.h"
-#include "Utils.h"
     
 /*
- * Initializes the menu controller, and adds and shows its main menu component 
- * as a child under the loading spinner.
+ * Creates and initializes the application menu.
  */
-AppMenu::MainComponent::MainComponent(MenuController* menuController)
+AppMenu::MainComponent::MainComponent(const Initializer* initializer)
 {
-    initMenu(menuController);
+    initMenu(initializer);
+}
+
+AppMenu::MainComponent::~MainComponent()
+{
+    destroyMenu();
 }
 
 /*
- * Initializes or recreates the menu with a new menu controller.
+ * Initialize the menu as a new menu format, cleaning up any existing menu 
+ * first.
  */
-void AppMenu::MainComponent::initMenu(MenuController* newController)
+void AppMenu::MainComponent::initMenu(const Initializer* initializer)
 {
-    if(newController == nullptr)
+    jassert(initializer != nullptr);
+    if(initializer->getMenuFormat() == currentMenuFormat
+            || initializer->getMenuFormat() == Format::Invalid)
     {
-        DBG("AppMenu::MainComponent::" << __func__ 
-                << ": Error: new controller is null!");
-        jassertfalse;
+        DBG("AppMenu::MainComponent::" << __func__ << 
+                ": Skipping menu init, new format is invalid or matches old "
+                << "format.");
         return;
     }
-    if(menuController != nullptr)
-    {
-        removeAllChildren();
-    }
-    menuController.reset(newController);
-    menuController->connectLoadingSpinner(&loadingSpinner);
-    addAndMakeVisible(menuController->initMenuComponent());
-    addAndMakeVisible(loadingSpinner);
+    
+    destroyMenu(); // Clean up old menu instances
+
+    currentMenuFormat = initializer->getMenuFormat();
+    menuComponent.reset(initializer->createMenuComponent());
+    controller.reset(new Controller(menuComponent.get(), loadingSpinner));
+    inputHandler.reset(initializer->createInputHandler
+            (menuComponent.get(), controller.get()));
+    addAndMakeVisible(menuComponent.get());
 }
 
-
 /*
- * Gets the current menu type.
+ * Safely destroys all AppMenu objects held in the MainComponent.
  */
-AppMenu::Format AppMenu::MainComponent::getMenuFormat() const
+void AppMenu::MainComponent::destroyMenu()
 {
-    if(menuController == nullptr)
+    if(menuComponent != nullptr)
     {
-        return Format::Invalid;
+        removeChildComponent(menuComponent.get());
     }
-    return menuController->getMenuFormat();
+    inputHandler.reset();
+    controller.reset();
+    menuComponent.reset();
+    currentMenuFormat = Format::Invalid;
 }
 
 /*
- * Links the MainComponent's loading spinner to the Controller so it can show or
- * hide the spinner.
- */
-void AppMenu::MainComponent::MenuController::connectLoadingSpinner
-(OverlaySpinner* spinner)
-{
-    loadingSpinner = spinner;
-}
-
-/*
- * Activates or deactivates the loading spinner component held by the 
- * Controller's MainComponent.
- */
-void AppMenu::MainComponent::MenuController::setLoadingSpinnerVisible
-(const bool shouldShow)
-{
-    if(loadingSpinner != nullptr)
-    {
-        loadingSpinner->setVisible(shouldShow);
-    }
-}
-
-/*
- * Notifies the Controller that its parent's bounds have changed whenever the 
+ * Notifies the MenuComponent that its parent's bounds have changed whenever the 
  * MainComponent is moved or resized.
  */
 void AppMenu::MainComponent::resized()
 {
-    if(menuController != nullptr)
+    if(menuComponent != nullptr)
     {
-        menuController->parentResized(getLocalBounds());
+        menuComponent->parentResized(getLocalBounds());
     }
 }

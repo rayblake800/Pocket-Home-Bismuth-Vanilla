@@ -1,129 +1,59 @@
+/* Only include this file directly in the AppMenu implementation! */
+#ifdef APPMENU_IMPLEMENTATION_ONLY
+
 #pragma once
 #include "AppMenu.h"
+#include "Control/Initializer.h"
+#include "MenuComponents/MenuComponent.h"
+#include "Control/Controller.h"
 #include "MenuData/ConfigFile.h"
 #include "OverlaySpinner.h"
 #include "JuceHeader.h"
 
 /**
- * @file MainComponent.h
+ * @file  MainComponent.h
  *
- * @brief  The public interface for the AppMenu component.
- * 
- * AppMenu::MainComponent displays the application menu, and provides an
- * interface for switching between several menu implementations.  MainComponent
- * also holds the loading spinner used to indicate that menu data is loading or
- * an application is being launched from the menu.
- *
- * MainComponent is only responsible for initializing the menu Controller and 
- * the loading OverlaySpinner, holding the main menu Component created by the
- * Controller, and notifying the Controller when its bounds change.  All other
- * menu behavior is handled by the Controller or the main menu Component.
- *
+ * @brief  Creates and shows an AppMenu of any format.
  */
 
 class AppMenu::MainComponent : public juce::Component
 {
 public:
-    /**
-     * @brief  Creates the menu component and controls its behavior.
-     */
-    class MenuController;
     
     /**
-     * @brief  Initializes the menu controller, and adds and shows its main
-     *         menu component as a child under the loading spinner.
+     * @brief  Creates and initializes the application menu.
      *
-     * @param menuController  The application menu controller.  MainComponent
-     *                        will delete this controller on destruction or 
-     *                        whenever a new controller is assigned.
+     * @param initializer  A struct that defines how to initialize a specific
+                           menu format.
      */
-    MainComponent(MenuController* menuController);
+    MainComponent(const Initializer* initializer);
 
-    virtual ~MainComponent() { }
+    virtual ~MainComponent();
 
     /**
-     * @brief  Initializes or recreates the menu with a new menu controller.
+     * @brief  Initialize the menu as a new menu format, cleaning up any
+     *         existing menu first.
      *
-     * @param menuType  The new menu controller to initialize.
+     * @param initializer  A struct that defines how to initialize the new menu
+     *                     format.  If this matches the format of the existing
+     *                     menu, no action will be taken.
      */
-    void initMenu(MenuController* newController);
+    void initMenu(const Initializer* initializer);
 
-    /**
-     * @brief  Gets the current menu format.
-     *
-     * @return  The AppMenu format of the MainComponent's Controller object. 
-     */
-    AppMenu::Format getMenuFormat() const;
-
-    /**
-     * @brief  Creates the menu component and controls its behavior.
-     */
-    class MenuController
-    {
-    public:
-        /* Only MainComponent may access the MenuController's private methods.*/
-        friend class MainComponent;
-
-         MenuController() { } 
-
-        virtual ~MenuController() { }
-
-    protected:
-        /**
-         * @brief  Activates or deactivates the loading spinner component held
-         *         by the MenuController's MainComponent.
-         *
-         * @param shouldShow  Whether the loading spinner should be shown or
-         *                    hidden.
-         */
-        void setLoadingSpinnerVisible(const bool shouldShow);
-
-    private:
-        /**
-         * @brief  Links the MainComponent's loading spinner to the 
-         *         MenuController so it can show or hide the spinner.
-         *
-         * @param spinner  The address of the MainComponent's loading spinner.
-         */
-        void connectLoadingSpinner(OverlaySpinner* spinner);
-
-        /**
-         * @brief  Gets the main menu component, creating and saving it first if
-         *         necessary.
-         *
-         * This will only be used to add and show the menu component as a child
-         * component of the MainComponent.
-         *
-         * @return  A Component pointer to the main menu component.
-         */
-        virtual juce::Component* initMenuComponent() = 0;
-
-        /**
-         * @brief  Triggers whenever the parent MainComponent is resized.
-         *
-         * This should be implemented to update the main menu component's bounds
-         * to match the new parent bounds.
-         *
-         * @param parentBounds  The new bounds of the parent MainComponent.
-         */
-        virtual void parentResized(const juce::Rectangle<int> parentBounds) = 0;
-
-        /**
-         * @brief  Gets the menu controller's AppMenu format.
-         *
-         * @return  The controller's menu format. 
-         */
-        virtual AppMenu::Format getMenuFormat() const = 0;
-
-        /* A pointer to the MainComponent's loading spinner. */
-        OverlaySpinner* loadingSpinner = nullptr;
-    };
 private:
     /**
-     * @brief  Notifies the MenuController that its parent's bounds have changed
+     * @brief  Safely destroys all AppMenu objects held in the MainComponent.
+     */
+    void destroyMenu();
+
+    /**
+     * @brief  Notifies the MenuComponent that its parent's bounds have changed
      *         whenever the MainComponent is moved or resized.
      */
-    virtual void resized() override;
+    virtual void resized() final override;
+
+    /* Tracks the current AppMenu format. */
+    AppMenu::Format currentMenuFormat = Format::Invalid;
 
     /* Loads AppMenu shortcuts and folder definitions.  This resource should
        exist as long as the home page exists. */
@@ -131,6 +61,17 @@ private:
 
     /* The menu's loading spinner. */
     OverlaySpinner loadingSpinner;
-    /* The controller that creates and controls the application menu. */
-    std::unique_ptr<MenuController> menuController = nullptr;
+
+    /* Handles the appearance and layout of the menu. */
+    std::unique_ptr<MenuComponent> menuComponent;
+
+    /* Allows the inputHandler to control menu behavior. */
+    std::unique_ptr<Controller> controller;
+
+    /* Listens to key, mouse, and window focus events, and responds by
+       triggering appropriate menu events. */
+    std::unique_ptr<InputHandler> inputHandler;
 };
+
+/* Only include this file directly in the AppMenu implementation! */
+#endif

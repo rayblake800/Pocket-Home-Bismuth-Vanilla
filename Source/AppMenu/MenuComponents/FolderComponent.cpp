@@ -1,12 +1,36 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "FolderComponent.h"
+#include "MenuComponents/FolderComponent.h"
 
 /*
  * Creates a new folder component.
  */
-AppMenu::FolderComponent::FolderComponent
-(MenuItem folderItem, MenuComponent& menuComponent) :
-MenuComponent::Folder(folderItem, menuComponent) { } 
+AppMenu::FolderComponent::FolderComponent(MenuItem folderItem) :
+folderItem(folderItem) { }
+
+/*
+ * Creates, adds, and shows the folder's menu buttons if they have not yet been 
+ * initialized.
+ */
+void AppMenu::FolderComponent::initMenuItems()
+{
+    int itemCount = folderItem.getFolderSize();
+    for(int i = 0; i < itemCount; i++)
+    {
+        MenuItem buttonItem = folderItem.getFolderItem(i);
+        jassert(!buttonItem.isNull());
+        MenuButton* newButton = createMenuButton(buttonItem);
+        folderButtons.add(newButton);
+        addAndMakeVisible(newButton);
+    }
+}
+
+/*
+ * Gets the folder's menu item data.
+ */
+AppMenu::MenuItem AppMenu::FolderComponent::getFolderMenuItem() const
+{
+    return folderItem;
+}
 
 /*
  * Gets the current selected folder item.
@@ -30,37 +54,25 @@ int AppMenu::FolderComponent::getSelectedIndex() const
 }
 
 /*
- * Creates a new menu item component.
- */
-AppMenu::FolderComponent::ItemButton::ItemButton
-(const MenuItem menuItem, FolderComponent& parentFolder) :
-Button(menuItem.getTitle() + "_Button"),
-menuItem(menuItem), parentFolder(parentFolder) { }
-
-/*
- * Gets the menu item that defines this ItemButton.
- */
-AppMenu::MenuItem 
-AppMenu::FolderComponent::ItemButton::getMenuItem() const
-{
-    return menuItem;
-}
-
-/*
  * Sets the current selected menu index.
  */
 void AppMenu::FolderComponent::setSelectedIndex(const int newSelection)
 {
     if(newSelection >= 0 && newSelection < folderButtons.size())
     {
+        if(selectedIndex >= 0 && selectedIndex < folderButtons.size())
+        {
+            getButtonComponent(selectedIndex)->setSelected(false);
+        }
         selectedIndex = newSelection;
+        getButtonComponent(selectedIndex)->setSelected(true);
     }
 }
 
 /*
  * Gets the button component of a child menu item in this folder.
  */
-AppMenu::FolderComponent::ItemButton* 
+AppMenu::MenuButton* 
 AppMenu::FolderComponent::getButtonComponent(const int index)
 {
     if(index < 0 || index >= folderButtons.size())
@@ -70,59 +82,19 @@ AppMenu::FolderComponent::getButtonComponent(const int index)
     return folderButtons[index];
 }
 
-/*
- * Called whenever a folder menu item is clicked, allowing the folder to handle
- * the event.
- */
-bool AppMenu::FolderComponent::handleMenuClick
-(const MenuItem clickedItem, bool rightClicked)
-{
-    return false;
-}
-
-/*
- * Handles all mouse events over this folder component.  This passes on all 
- * mouse events to the MenuComponent, unless the FolderComponent implementation 
- * chooses to intercept them.
- */
-void AppMenu::FolderComponent::mouseDown(const juce::MouseEvent& event)
-{
-    if(!event.mouseWasClicked())
-    {
-        return;
-    }
-        //TODO: Don't assume Ctrl+LMB equals right click, define that sort of
-        //      thing in input settings.
-    bool rightClicked = event.mods.isPopupMenu()
-        || event.mods.isCtrlDown() || event.mods.isRightButtonDown();
-    if(event.eventComponent == this)
-    { 
-        signalFolderClicked(rightClicked, closestIndex(event));
-    }
-    else
-    {
-        ItemButton* const clickedButton = dynamic_cast<ItemButton* const>
-            (event.eventComponent);
-        if(clickedButton != nullptr)
-        {
-            MenuItem clickedItem = clickedButton->getMenuItem();
-            if(!handleMenuClick(clickedItem, rightClicked))
-            {
-                signalItemClicked(clickedItem, rightClicked);
-            }
-        }
-    }
-}
 
 /*
  * Creates and inserts a new ItemButton when a new child menu button is created.
  */
 void AppMenu::FolderComponent::childAdded(const int childIndex)
 {
-    MenuItem folderItem = getFolderItem();
     MenuItem newChild = folderItem.getFolderItem(childIndex);
     folderButtons.insert(childIndex, createMenuButton(newChild));
     addAndMakeVisible(folderButtons[childIndex]);
+    if(selectedIndex >= childIndex)
+    {
+        selectedIndex++;
+    }
     updateButtonLayout();
 }
 
@@ -133,6 +105,18 @@ void AppMenu::FolderComponent::childRemoved(const int removedIndex)
 {
     removeChildComponent(folderButtons[removedIndex]);
     folderButtons.remove(removedIndex);
+    if(removedIndex == folderButtons.size())
+    {
+        setSelectedIndex(selectedIndex - 1);
+    }
+    else if(selectedIndex == removedIndex)
+    {
+        getButtonComponent(selectedIndex)->setSelected(true);
+    }
+    else if(selectedIndex > removedIndex)
+    {
+        selectedIndex--;
+    }
     updateButtonLayout();
 }
 
@@ -148,4 +132,12 @@ void AppMenu::FolderComponent::childrenSwapped
         (folderButtons[swapIndex2]->getBounds());
     folderButtons[swapIndex2]->setBounds(firstBounds);
     folderButtons.swap(swapIndex1, swapIndex2);
+    if(selectedIndex == swapIndex1)
+    {
+        selectedIndex = swapIndex2;
+    }
+    else if(selectedIndex == swapIndex2)
+    {
+        selectedIndex = swapIndex1;
+    }
 }

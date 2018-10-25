@@ -10,12 +10,36 @@ static const constexpr char* titleBuffer = "     ";
 /*
  * Creates a new MenuButton component for a menu item.
  */
-AppMenu::MenuButton::MenuButton
-(MenuItem menuItem, FolderComponent& sourceFolder) : 
-ItemButton(menuItem, sourceFolder)
+AppMenu::MenuButton::MenuButton(MenuItem menuItem) : menuItem(menuItem),
+juce::Button(menuItem.getTitle())
 {
     setWantsKeyboardFocus(false);
 } 
+
+/*
+ * Checks if this button is the selected button in its folder.
+ */
+bool AppMenu::MenuButton::isSelected() const
+{
+    return selected;
+}
+
+/*
+ * Selects or deselects this button.
+ */
+void AppMenu::MenuButton::setSelected(const bool isSelected)
+{
+    selected = isSelected;
+    repaint();
+}
+
+/*
+ * Gets the MenuItem that defines this button.
+ */
+AppMenu::MenuItem AppMenu::MenuButton::getMenuItem() const
+{
+    return menuItem;
+}
 
 /*
  * Recalculates and saves the menu button title bounds.

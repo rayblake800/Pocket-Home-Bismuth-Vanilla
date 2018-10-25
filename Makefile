@@ -161,19 +161,21 @@ OBJECTS_APPMENU_SCROLLING := \
   $(SCROLLING_MENU_PREFIX)MenuButton.o \
   $(SCROLLING_MENU_PREFIX)FolderComponent.o \
   $(SCROLLING_MENU_PREFIX)MenuComponent.o \
-  $(SCROLLING_MENU_PREFIX)Controller.o
+  $(SCROLLING_MENU_PREFIX)InputHandler.o \
+  $(SCROLLING_MENU_PREFIX)Initializer.o 
 OBJECTS_APPMENU_PAGED := \
   $(PAGED_MENU_PREFIX)MenuButton.o \
   $(PAGED_MENU_PREFIX)FolderComponent.o \
   $(PAGED_MENU_PREFIX)MenuComponent.o \
-  $(PAGED_MENU_PREFIX)Controller.o
+  $(PAGED_MENU_PREFIX)InputHandler.o \
+  $(PAGED_MENU_PREFIX)Initializer.o 
 OBJECTS_APPMENU_ABSTRACT_COMPONENT := \
   $(APPMENU_PREFIX)MenuButton.o \
   $(APPMENU_PREFIX)FolderComponent.o \
   $(APPMENU_PREFIX)MenuComponent.o
 OBJECTS_APPMENU_CONTROL := \
   $(APPMENU_PREFIX)Controller.o \
-  $(APPMENU_PREFIX)ContextMenu.o
+  $(APPMENU_PREFIX)InputHandler.o 
 OBJECTS_APPMENU_EDITOR := \
   $(APPMENU_PREFIX)NewConfigItemEditor.o \
   $(APPMENU_PREFIX)NewDesktopAppEditor.o \
@@ -395,16 +397,20 @@ $(SCROLLING_MENU_PREFIX)FolderComponent.o: \
 	Source/AppMenu/MenuFormats/Scrolling/FolderComponent.cpp
 $(SCROLLING_MENU_PREFIX)MenuComponent.o: \
 	Source/AppMenu/MenuFormats/Scrolling/MenuComponent.cpp
-$(SCROLLING_MENU_PREFIX)Controller.o: \
-	Source/AppMenu/MenuFormats/Scrolling/Controller.cpp
+$(SCROLLING_MENU_PREFIX)InputHandler.o: \
+	Source/AppMenu/MenuFormats/Scrolling/InputHandler.cpp
+$(SCROLLING_MENU_PREFIX)Initializer.o: \
+	Source/AppMenu/MenuFormats/Scrolling/Initializer.cpp
 $(PAGED_MENU_PREFIX)MenuButton.o: \
 	Source/AppMenu/MenuFormats/Paged/MenuButton.cpp
 $(PAGED_MENU_PREFIX)FolderComponent.o: \
 	Source/AppMenu/MenuFormats/Paged/FolderComponent.cpp
 $(PAGED_MENU_PREFIX)MenuComponent.o: \
 	Source/AppMenu/MenuFormats/Paged/MenuComponent.cpp
-$(PAGED_MENU_PREFIX)Controller.o: \
-	Source/AppMenu/MenuFormats/Paged/Controller.cpp
+$(PAGED_MENU_PREFIX)InputHandler.o: \
+	Source/AppMenu/MenuFormats/Paged/InputHandler.cpp
+$(PAGED_MENU_PREFIX)Initializer.o: \
+	Source/AppMenu/MenuFormats/Paged/Initializer.cpp
 $(APPMENU_PREFIX)MenuButton.o: \
     Source/AppMenu/MenuComponents/MenuButton.cpp
 $(APPMENU_PREFIX)FolderComponent.o: \
@@ -412,9 +418,9 @@ $(APPMENU_PREFIX)FolderComponent.o: \
 $(APPMENU_PREFIX)MenuComponent.o: \
     Source/AppMenu/MenuComponents/MenuComponent.cpp
 $(APPMENU_PREFIX)Controller.o: \
-    Source/AppMenu/Controller/Controller.cpp
-$(APPMENU_PREFIX)ContextMenu.o: \
-    Source/AppMenu/Controller/ContextMenu.cpp
+    Source/AppMenu/Control/Controller.cpp
+$(APPMENU_PREFIX)InputHandler.o: \
+    Source/AppMenu/Control/InputHandler.cpp
 $(APPMENU_PREFIX)NewConfigItemEditor.o: \
     Source/AppMenu/Editors/NewConfigItemEditor.cpp
 $(APPMENU_PREFIX)NewDesktopAppEditor.o: \
