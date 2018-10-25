@@ -1,7 +1,7 @@
 {
-    
-    "max menu row count": 2,
-    "max menu column count": 3,
+    "scrolling AppMenu max rows":8,
+    "paged AppMenu grid width": 3,
+    "paged AppMenu grid height": 2,
     "Wifi AP scan frequency": 15000,
     "background": "FF4D4D4D",
     "app menu type": "Paged menu",

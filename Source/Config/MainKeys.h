@@ -12,12 +12,17 @@ namespace Config
     namespace MainKeys
     {
         //###################### Integer value keys: ###########################
-        /* Sets the maximum number of AppMenu icon rows per screen. */
-        static const DataKey maxRowsKey
-            ("max menu row count", DataKey::intType);
-        /* Sets the maximum number of AppMenu icon columns per screen. */
-        static const DataKey maxColumnsKey
-            ("max menu column count", DataKey::intType);
+        /* Sets the maximum number of AppMenu::Scrolling rows per screen.*/
+        static const DataKey scrollingMenuRowsKey
+            ("scrolling AppMenu max rows", DataKey::intType);
+        /* Sets the width in menu items of the paged AppMenu's grid of visible
+           menu items. */
+        static const DataKey pagedMenuWidthKey
+            ("paged AppMenu grid width", DataKey::intType);
+        /* Sets the height in menu items of the paged AppMenu's grid of visible
+           menu items. */
+        static const DataKey pagedMenuHeightKey
+            ("paged AppMenu grid height", DataKey::intType);
         /* Sets how frequently, in milliseconds, to scan for new Wifi access 
            points while the Wifi page is open. */
         static const DataKey wifiScanFreqKey
@@ -58,8 +63,9 @@ namespace Config
 
         static const std::vector<DataKey>& allKeys
         {
-            maxRowsKey,
-            maxColumnsKey,
+            scrollingMenuRowsKey,
+            pagedMenuWidthKey,
+            pagedMenuHeightKey,
             wifiScanFreqKey,
             backgroundKey,
             menuTypeKey,
@@ -67,9 +73,8 @@ namespace Config
             wifiInterfaceKey,
             showCursorKey,
             showClockKey,
-            use24HrModeKey,
-            maxRowsKey,
-            maxColumnsKey
+            use24HrModeKey
         };
     }
 }
+ 

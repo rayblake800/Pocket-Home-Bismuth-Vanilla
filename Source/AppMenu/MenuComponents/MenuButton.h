@@ -52,6 +52,15 @@ public:
      */
     MenuItem getMenuItem() const;
 
+    /**
+     * @brief  Gets the width of the button's title string.
+     *
+     * @return   The number of horizontal pixels needed to print the full button
+     *           title with the current title font.  This may be larger or
+     *           smaller than the width of the title bounds.
+     */
+    int getTitleWidth() const;
+
 protected:
     /**
      * @brief  Recalculates and saves the menu button title bounds.
@@ -86,7 +95,7 @@ private:
      *          and the needs of the MenuButton subclass implementing this
      *          method.
      */
-    virtual juce::Rectangle<float> findTitleBounds() = 0;
+    virtual juce::Rectangle<float> findTitleBounds() const = 0;
 
     /**
      * @brief  Finds the area relative to the menu button's bounds where the
@@ -96,7 +105,7 @@ private:
      *          and the needs of the MenuButton subclass implementing this
      *          method.
      */
-    virtual juce::Rectangle<float> findIconBounds() = 0;
+    virtual juce::Rectangle<float> findIconBounds() const = 0;
 
     /**
      * @brief  Updates the title font to fit the current title bounds.
@@ -106,7 +115,8 @@ private:
      * @return             An appropriate font for drawing the title within the
      *                     given bounds.
      */
-    virtual juce::Font findTitleFont(const juce::Rectangle<float>& titleBounds);
+    virtual juce::Font findTitleFont(const juce::Rectangle<float>& titleBounds)
+        const;
 
     /**
      * @brief  Finds the width of the background area that will be drawn behind
@@ -121,7 +131,7 @@ private:
      *                     background.
      */
     virtual int findTitleBGWidth(const juce::Rectangle<float>& titleBounds,
-            const juce::Font& titleFont);
+            const juce::Font& titleFont) const;
     /**
      * @brief  Checks if this button will draw an outline around its border.
      *

@@ -24,6 +24,15 @@ void AppMenu::FolderComponent::initMenuItems()
     }
 }
 
+
+/*
+ * Gets the number of menu items in this folder.
+ */
+int AppMenu::FolderComponent::getFolderSize() const
+{
+    return folderButtons.size();
+}
+
 /*
  * Gets the folder's menu item data.
  */
@@ -73,7 +82,7 @@ void AppMenu::FolderComponent::setSelectedIndex(const int newSelection)
  * Gets the button component of a child menu item in this folder.
  */
 AppMenu::MenuButton* 
-AppMenu::FolderComponent::getButtonComponent(const int index)
+AppMenu::FolderComponent::getButtonComponent(const int index) const
 {
     if(index < 0 || index >= folderButtons.size())
     {

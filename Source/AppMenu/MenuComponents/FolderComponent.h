@@ -39,6 +39,13 @@ public:
     MenuItem getFolderMenuItem() const;
 
     /**
+     * @brief  Gets the number of menu items in this folder.
+     *
+     * @return  The number of MenuButton child components this folder holds.
+     */
+    int getFolderSize() const;
+
+    /**
      * @brief  Gets the current selected folder item.
      *
      * @return  The item currently selected by the user, or a null MenuItem
@@ -76,7 +83,12 @@ public:
      * @return      The closest menu index to the clicked spot, to use when
      *              inserting new menu items.
      */
-    virtual int closestIndex(const int xPos, const int yPos) = 0;
+    virtual int closestIndex(const int xPos, const int yPos) const = 0;
+
+    /**
+     * @brief  Updates the sizes and positions of all buttons in the menu.
+     */
+    virtual void updateButtonLayout() = 0;
 
 protected:
     /**
@@ -87,7 +99,7 @@ protected:
      * @return       The MenuButton representing that menu item, or nullptr if
      *               the index is out of bounds.
      */
-    MenuButton* getButtonComponent(const int index);
+    MenuButton* getButtonComponent(const int index) const;
 
 private:
     /**
@@ -99,7 +111,7 @@ private:
      * @return            The button component, initialized as some concrete
      *                    subclass of FolderComponent::MenuButton.
      */
-    virtual MenuButton* createMenuButton(const MenuItem folderItem) = 0;
+    virtual MenuButton* createMenuButton(const MenuItem folderItem) const = 0;
 
     /**
      * @brief  Creates and inserts a new MenuButton when a new child menu button
@@ -127,11 +139,6 @@ private:
      */
     virtual void childrenSwapped(const int swapIndex1, const int swapIndex2)
         final override;
-
-    /**
-     * @brief  Updates the sizes and positions of all buttons in the menu.
-     */
-    virtual void updateButtonLayout() = 0;
 
     /* Holds the button components representing the menu's child folder items.*/
     juce::OwnedArray<MenuButton> folderButtons;

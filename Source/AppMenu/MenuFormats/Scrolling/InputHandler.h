@@ -26,9 +26,28 @@ public:
     virtual ~InputHandler() { }
 
 private:
+    /**
+     * @brief  Handles a key event received from the menu.
+     *
+     * @param keyType  The type of key event that was detected.
+     *
+     * @return         True to indicate that the key event was handled, false
+     *                 to pass it on to other active juce::KeyListener objects.
+     */
     virtual bool keyPress(const AppMenu::InputHandler::KeyType keyType)
         final override;
 
+    /**
+     * @brief  Handles clicks to menu item buttons.
+     *
+     * The scrolling menu handles menu button click events exactly like the
+     * standard InputHandler, except that only selected buttons are activated
+     * when they are clicked.
+     *
+     * @param clickedButton  The button component that was clicked.
+     *
+     * @param rightClicked   Whether the button was right clicked.
+     */
     virtual void menuItemClicked(const AppMenu::MenuButton* clickedButton,
             const bool rightClicked) final override;
 };

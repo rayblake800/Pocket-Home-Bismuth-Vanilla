@@ -81,7 +81,8 @@ private:
      * @return            The new component, as some concrete subclass of
      *                    AppMenu::FolderComponent.
      */
-    virtual FolderComponent* createFolderComponent(MenuItem folderItem) = 0;
+    virtual FolderComponent* createFolderComponent(MenuItem folderItem) 
+        const = 0;
 
     /**
      * @brief  Updates the menu layout when the component is resized.

@@ -42,6 +42,14 @@ AppMenu::MenuItem AppMenu::MenuButton::getMenuItem() const
 }
 
 /*
+ * Gets the width of the button's title string.
+ */
+int AppMenu::MenuButton::getTitleWidth() const
+{
+    return textWidth;
+}
+
+/*
  * Recalculates and saves the menu button title bounds.
  */
 void AppMenu::MenuButton::updateTitleBounds()
@@ -70,7 +78,7 @@ void AppMenu::MenuButton::updateFont()
  * Updates the title font to fit the current title bounds.
  */
 juce::Font AppMenu::MenuButton::findTitleFont
-(const juce::Rectangle<float>& titleBounds)
+(const juce::Rectangle<float>& titleBounds) const
 {
     ComponentConfigFile config;
     return juce::Font(config.getFontHeight(ComponentConfigFile::smallText));
@@ -81,7 +89,7 @@ juce::Font AppMenu::MenuButton::findTitleFont
  * title.
  */
 int AppMenu::MenuButton::findTitleBGWidth
-(const juce::Rectangle<float>& titleBounds, const juce::Font& titleFont)
+(const juce::Rectangle<float>& titleBounds, const juce::Font& titleFont) const
 {
     int width = titleFont.getStringWidth(getMenuItem().getTitle() 
             + titleBuffer);

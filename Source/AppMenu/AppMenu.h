@@ -226,7 +226,7 @@ namespace AppMenu
        class InputHandler;
        class MenuComponent;
        class FolderComponent;
-       class ItemButton;
+       class MenuButton;
     }
     
     /**
@@ -240,7 +240,7 @@ namespace AppMenu
        class InputHandler;
        class MenuComponent;
        class FolderComponent;
-       class ItemButton;
+       class MenuButton;
     }
 
 }

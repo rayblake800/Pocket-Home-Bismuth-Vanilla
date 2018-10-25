@@ -51,7 +51,23 @@ public:
     /**
      * @brief  Updates the sizes and positions of all buttons in the menu.
      */
-    virtual void updateButtonLayout() const final override;
+    virtual void updateButtonLayout() final override;
+
+    /**
+     * @brief  Gets the distance between the top of the folder component and
+     *         its selected menu item.
+     *
+     * @return  The distance in pixels between the top of the folder and the top
+     *          of the selected item, or zero if no folder item is selected.
+     */
+    int getSelectedItemYOffset() const;
+
+    /**
+     * @brief  Gets the minimum width needed to fit this folder's menu items.
+     *
+     * @return  The minimum folder width, in pixels.
+     */
+    int getMinimumWidth() const;
 };
 
 /* Only include this file directly in the AppMenu implementation! */
