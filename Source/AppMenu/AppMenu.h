@@ -222,7 +222,7 @@ namespace AppMenu
      */
     namespace Scrolling
     {
-       class MenuInitializer;
+       class Initializer;
        class InputHandler;
        class MenuComponent;
        class FolderComponent;
@@ -236,7 +236,8 @@ namespace AppMenu
      */
     namespace Paged
     {
-       class Controller;
+       class Initializer;
+       class InputHandler;
        class MenuComponent;
        class FolderComponent;
        class ItemButton;

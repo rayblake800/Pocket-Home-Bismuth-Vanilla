@@ -54,14 +54,9 @@
                 menu bounds, selected button, and any other factors this Format
                 cares about.
 
-        ### Optional overrides:
-            -bool handleMenuClick(const MenuItem clickedItem, bool rightClicked);
-               Override to optionally handle some or all menu item click at the 
-               folder level, and not pass them on to the controller.
-
     ## MenuComponent
         ### Implement:
-            -Folder* createFolderComponent(MenuItem folderItem);
+            -FolderComponent* createFolderComponent(MenuItem folderItem);
                 Create a folder component as this menu format's 
                 AppMenu::FolderComponent class.
 
