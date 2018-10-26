@@ -25,8 +25,6 @@ class AppMenu::ConfigData : public ItemData, private Localized
 {
 public:
 
-    typedef juce::ReferenceCountedObjectPtr<ConfigData> Ptr;
-
     /**
      * @brief  Creates a new menu item that initially holds no data.
      */
@@ -218,6 +216,7 @@ private:
 
     /* Application categories used to load desktop entry folder items. */
     juce::StringArray categories;
+        
 
     /* Holds the ID of a pending callback function that will load 
        DesktopEntry menu items. */

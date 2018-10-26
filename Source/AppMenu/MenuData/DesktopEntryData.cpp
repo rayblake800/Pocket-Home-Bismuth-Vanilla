@@ -159,6 +159,11 @@ void AppMenu::DesktopEntryData::saveChanges()
         DBG("DesktopEntryData::" << __func__ << ": Failed to write changes:"
                 << e.what());
     }
+    catch(DesktopEntryFormatError e)
+    {
+        DBG("DesktopEntryData::" << __func__ << ": Failed to write changes:"
+                                << e.what());
+    }
 }
 
 /*

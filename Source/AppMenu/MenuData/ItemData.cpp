@@ -48,22 +48,13 @@ AppMenu::ItemData::getChild(const int childIndex) const
 }
 
 /*
- * Gets all menu items contained in a folder menu item.
- */
-juce::Array<AppMenu::ItemData::Ptr> 
-AppMenu::ItemData::getChildren() const
-{
-    return children;
-}
-
-/*
  * Attempts to insert a new menu item into this folder menu item's array of 
  * child menu items, saving the change to this folder item's data source.
  */
 bool AppMenu::ItemData::insertChild
 (const AppMenu::ItemData::Ptr newChild, const int childIndex)
 {
-    if(childIndex < 0 || childIndex > getMovableChildCount())
+    if(childIndex < 0 || childIndex > children.size())
     {
         return false;
     }
@@ -74,7 +65,6 @@ bool AppMenu::ItemData::insertChild
     {
         children[i]->index++;
     }
-    newChild->saveChanges();
     foreachListener([&childIndex](Listener* listener)
     {
         listener->childAdded(childIndex);
@@ -131,10 +121,9 @@ bool AppMenu::ItemData::swapChildren(const int childIdx1, const int childIdx2)
  */
 AppMenu::ItemData::Listener::~Listener()
 {
-    juce::Array<ItemData::Ptr> trackedListCopy = trackedItemData;
-    for(ItemData::Ptr& trackedItem : trackedListCopy)
+    if(trackedItemData != nullptr)
     {
-        trackedItem->removeListener(this);
+        trackedItemData->removeListener(this);
     }
 }
 

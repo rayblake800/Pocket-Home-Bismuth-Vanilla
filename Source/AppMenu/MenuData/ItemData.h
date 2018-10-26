@@ -28,7 +28,7 @@ public:
     ItemData() { }
     
     virtual ~ItemData() { }
-
+    
     /**
      * @brief  Gets the menu item's displayed title.
      *
@@ -175,14 +175,6 @@ public:
      *                    bounds or this menu item is not a folder.
      */
     ItemData::Ptr getChild(const int childIndex) const;
-
-    /**
-     * @brief  Gets all menu items contained in a folder menu item.
-     *
-     * @return  All menu items within the folder, or an empty array if this
-     *          menu item is not a folder.
-     */
-    juce::Array<ItemData::Ptr> getChildren() const;
 
     /**
      * @brief  Attempts to insert a new menu item into this folder menu item's
@@ -341,7 +333,7 @@ public:
         virtual void dataChanged(const DataField changedField) { }
 
         /* The ItemData object tracked by this Listener. */
-        ItemData::Ptr trackedItemData;
+        ItemData::Ptr trackedItemData = nullptr;
     };
 
     /**
@@ -383,19 +375,21 @@ private:
      */
     virtual void deleteFromSource() = 0;
 
-    /* The folder menu item that contains this menu item. */
-    ItemData::Ptr parent = nullptr;
+    /* The folder menu item that contains this menu item.
+       This is not a reference-counted pointer so child items don't prevent
+       their parents from being destroyed.  */
+    ItemData* parent = nullptr;
 
     /* The menu item's index within its parent folder. */
     int index = -1;
 
     /* Menu items contained in this menu item, if it is a folder. */
-    juce::Array<ItemData::Ptr> children;
+    juce::ReferenceCountedArray<ItemData> children;
 
     /* Objects that should be notified if this menu item changes. */
     juce::Array<Listener*> listeners;
 
-    JUCE_DECLARE_NON_COPYABLE(ItemData);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ItemData)
 };
 
 /* Only include this file directly in the AppMenu implementation! */

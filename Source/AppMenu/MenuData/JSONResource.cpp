@@ -3,7 +3,9 @@
 #include "ConfigKeys.h"
 
 /* SharedResource object key */
-const juce::Identifier AppMenu::JSONResource::resourceKey("AppJSONResource");
+const juce::Identifier AppMenu::JSONResource::resourceKey
+    ("AppMenu::JSONResource");
+
 /* JSON configuration file name */
 static const constexpr char * jsonFilename = "apps.json";
 
@@ -12,11 +14,20 @@ AppMenu::JSONResource::JSONResource() : Config::FileResource
 {
     using namespace juce;
     // Load menu:
-    var rootFolder = initProperty<var>(folderItemKey);
     ConfigData::Ptr rootItem = new ConfigData();
-    rootItem->initMenuData(rootFolder);
     rootFolderItem = MenuItem(rootItem);
-    loadJSONData();   
+    loadJSONData(); 
+    var rootFolder = initProperty<var>(folderItemKey);
+    ((ConfigData*) rootItem.get())->initMenuData(rootFolder); 
+}
+
+
+/*
+ * Destroys all menu data on destruction.
+ */
+AppMenu::JSONResource::~JSONResource()
+{
+    rootFolderItem = MenuItem();
 }
 
 /*
@@ -129,6 +140,7 @@ AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
     {
         return MenuItem();
     }
+    newItem.saveChanges();
     return newItem;
 }
 

@@ -32,7 +32,10 @@ public:
 
     JSONResource();
 
-    virtual ~JSONResource() { }
+    /**
+     * @brief  Destroys all menu data on destruction.
+     */
+    virtual ~JSONResource();
 
     /**
      * @brief  Gets a menu item representing the root folder of the application

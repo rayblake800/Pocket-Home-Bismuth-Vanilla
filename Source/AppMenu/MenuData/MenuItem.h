@@ -352,6 +352,8 @@ public:
      *                  data.
      */
     void removeListener(Listener* toRemove);
+    
+    JUCE_LEAK_DETECTOR(MenuItem);
 };
 
 /* Only include this file directly in the AppMenu implementation! */

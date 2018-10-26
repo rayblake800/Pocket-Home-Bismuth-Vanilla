@@ -162,10 +162,9 @@ AppMenu::MenuItem::getFolderItems() const
         return {}; 
     }
     juce::Array<MenuItem> folderItems;
-    juce::Array<ItemData::Ptr> childData = getData()->getChildren();
-    for(const ItemData::Ptr& item : childData)
+    for(int i = 0; i < getData()->getFolderSize(); i++)
     {
-        folderItems.add(MenuItem(item));
+        folderItems.add(MenuItem(getData()->getChild(i)));
     }
     return folderItems;
 }

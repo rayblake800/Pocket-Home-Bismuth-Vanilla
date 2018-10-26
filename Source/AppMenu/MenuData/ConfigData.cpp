@@ -55,17 +55,20 @@ void AppMenu::ConfigData::initMenuData(juce::var& menuData)
             }
         }
         folderItems = menuData.getProperty(folderItemKey, var());
+        DBG("Loaded menu item " << title);
     }
-    else if(menuData.isArray())
+    if(folderItems.isVoid() && menuData.size() > 0)
     {
         folderItems = menuData;
     }
     if(folderItems.isArray())
     {
+        DBG("AppMenu::ConfigData::" << __func__
+                << ": Initializing " << folderItems.size() << " folder items.");
         for(var& folderItem : *folderItems.getArray())
         {
-            ConfigData::Ptr child = createChildItem();
-            child->initMenuData(folderItem);
+            ItemData::Ptr child = createChildItem();
+            ((ConfigData*)child.get())->initMenuData(folderItem);
             insertChild(child, getFolderSize());
         }
     }
@@ -277,8 +280,7 @@ void AppMenu::ConfigData::loadDesktopEntryItems()
                     = entryLoader.getCategoryListEntries(categories);
             for(const DesktopEntry& entry : entries)
             {
-                ItemData::Ptr newItem = new DesktopEntryData(entry);
-                insertChild(newItem, getFolderSize());
+                insertChild(new DesktopEntryData(entry), getFolderSize());
             }
             pendingCallbackID = 0;
         });
