@@ -1,8 +1,6 @@
+#if 0
 #include "./Source/AppMenu/MenuFormats/Paged/MenuComponent.h"
 
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
-#pragma once
 #include "AppMenu/MenuComponents/MenuComponent.h"
  AppMenu::Paged::MenuComponent::~MenuComponent() { }/*
  * Arranges folders from top to bottom, with the active folder

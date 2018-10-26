@@ -1,7 +1,5 @@
+#if 0
 #include "./Source/AppMenu/MenuFormats/Paged/Initializer.h"
-
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
 #include "AppMenu/Control/Initializer.h"
 

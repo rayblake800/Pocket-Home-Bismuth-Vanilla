@@ -1,4 +1,5 @@
 #pragma once
+#include "JuceHeader.h"
 
 /**
  * @file  AppMenu.h
@@ -11,7 +12,7 @@ namespace AppMenu
 {
     /* ####################  Public Interface ########################### */
     /* ## All outside interaction with the AppMenu module should be    ## */
-    /* ## through these classes and functions.                         ## */
+    /* ## through these functions.                                     ## */
     /* ################################################################## */
     /**
      * @brief  Defines the available menu implementations.  Each one (besides
@@ -49,7 +50,7 @@ namespace AppMenu
      * @return             A pointer to a newly allocated and initialized
      *                     AppMenu::MainComponent.
      */
-    MainComponent* createAppMenu(const Format menuFormat);
+    juce::Component* createAppMenu(const Format menuFormat);
 
     /**
      * @brief   Changes the format of an existing AppMenu::MainComponent.
@@ -60,7 +61,23 @@ namespace AppMenu
      *
      * @param newFormat   The new menu format to apply to the menu.
      */
-    void changeMenuFormat(MainComponent* appMenu, const Format newFormat);
+    void changeMenuFormat(juce::Component* appMenu, const Format newFormat);
+
+    /**
+     * @brief  Reads the menu format saved in the main JSON configuration file.
+     *
+     * @return  The saved format type, or Format::Invalid if the saved value is
+     *          invalid or does not exist.
+     */
+    //Format getSavedMenuFormat();
+
+    /**
+     * @brief  Saves a valid menu format selection to the main JSON 
+     *         configuration file. 
+     *
+     * @param savedFormat  A valid format type to save.
+     */
+    //void setSavedMenuFormat(const Format savedFormat);
     
     /* ####################    Menu Control   ########################### */
 

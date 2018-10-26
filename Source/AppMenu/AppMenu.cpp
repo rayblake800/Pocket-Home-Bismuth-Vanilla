@@ -1,18 +1,17 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-
-#include "AppMenu.h"
 #include "MainComponent.h"
-#include "JuceHeader.h"
+#include "MenuFormats/Scrolling/Initializer.h"
+#include "AppMenu.h"
 
 static AppMenu::Initializer* createInitializer(const AppMenu::Format menuFormat)
 {
-    return nullptr;
+    return new AppMenu::Scrolling::Initializer();
 }
 
 /*
  * Creates an AppMenu::MainComponent with a specific initial format.
  */
-AppMenu::MainComponent* AppMenu::createAppMenu(const Format menuFormat)
+juce::Component* AppMenu::createAppMenu(const Format menuFormat)
 {
     std::unique_ptr<Initializer> initializer(createInitializer(menuFormat));
     if(initializer == nullptr)
@@ -26,16 +25,18 @@ AppMenu::MainComponent* AppMenu::createAppMenu(const Format menuFormat)
  * Changes the format of an existing AppMenu::MainComponent.
  */
 void AppMenu::changeMenuFormat
-(MainComponent* appMenu, const Format newFormat)
+(juce::Component* appMenu, const Format newFormat)
 {
-    if(appMenu == nullptr)
+    MainComponent* mainComponent = dynamic_cast<MainComponent*>(appMenu);
+    if(mainComponent == nullptr)
     {
-        DBG("AppMenu::" << __func__ << ": Existing menu was null!");
+        DBG("AppMenu::" << __func__ 
+                << ": Existing menu was null or not an appMenu!");
         jassertfalse;
     }
     std::unique_ptr<Initializer> initializer(createInitializer(newFormat));
     if(initializer != nullptr)
     {
-        appMenu->initMenu(initializer.get());
+        mainComponent->initMenu(initializer.get());
     }
 }

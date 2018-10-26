@@ -13,9 +13,10 @@ AppMenu::Scrolling::InputHandler::InputHandler
 /*
  * Handles a key event received from the menu.
  */
-bool AppMenu::Scrolling::InputHandler::keyPress
+bool AppMenu::Scrolling::InputHandler::keyPressed
 (const AppMenu::InputHandler::KeyType keyType)
 {
+    return false;
 }
 
 /*

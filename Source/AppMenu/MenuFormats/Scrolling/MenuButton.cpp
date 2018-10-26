@@ -15,7 +15,7 @@
 juce::Rectangle<float> AppMenu::Scrolling::MenuButton::findTitleBounds() const 
 {
     return juce::Rectangle<float>(getHeight(), 0,
-            getWidth() - getHeight(), getHeight());
+            getTitleWidth(), getHeight());
 }
 
 /*

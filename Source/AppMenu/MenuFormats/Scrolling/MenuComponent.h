@@ -12,7 +12,7 @@
  *         scrolling AppMenu format.
  */
 class AppMenu::Scrolling::MenuComponent : public AppMenu::MenuComponent,
-    private ConfigurableComponent
+    public ConfigurableComponent
 {
 public:
     MenuComponent();

@@ -1,5 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "IconLoader.h"
+#include "AssetFiles.h"
 #include "ComponentConfigFile.h"
 #include "MenuButton.h"
 
@@ -91,9 +92,9 @@ juce::Font AppMenu::MenuButton::findTitleFont
 int AppMenu::MenuButton::findTitleBGWidth
 (const juce::Rectangle<float>& titleBounds, const juce::Font& titleFont) const
 {
-    int width = titleFont.getStringWidth(getMenuItem().getTitle() 
-            + titleBuffer);
-    return std::min(width, int(titleBounds.getWidth()));
+    const juce::String title = getMenuItem().getTitle();
+    const int width = titleFont.getStringWidth(title + titleBuffer);
+    return width;
 }
 
 /*
@@ -120,14 +121,19 @@ void AppMenu::MenuButton::dataChanged(MenuItem::DataField changedField)
 void AppMenu::MenuButton::loadIcon()
 {
     using juce::Image;
-    IconLoader iconThread;
-    iconThread.loadIcon(getMenuItem().getTitle(),
-            iconBounds.toNearestInt().getWidth(),
-    [this](Image iconImg)
+    if(!iconBounds.isEmpty())
     {
-        icon = iconImg;
-        repaint();
-    });
+        icon = AssetFiles::loadImageAsset("appIcons/default.png");
+        IconLoader iconThread;
+
+        iconThread.loadIcon(getMenuItem().getIconName(),
+                iconBounds.toNearestInt().getWidth(),
+        [this](Image iconImg)
+        {
+            icon = iconImg;
+            repaint();
+        });
+    }
 }
 
 /*
@@ -140,6 +146,10 @@ void AppMenu::MenuButton::resized()
     updateTitleBounds();
     updateIconBounds();
     updateFont();
+    if(icon.isNull())
+    {
+        loadIcon();
+    }
 }
 
 /*

@@ -1,6 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include <map>
-#include "InputHandler.h"
+#include "AppMenu/MenuData/ConfigFile.h"
+#include "AppMenu/Control/InputHandler.h"
 
 /*
  * Initializes the InputHandler, setting it to handle the menu component's input
@@ -14,6 +15,8 @@
     jassert(controller != nullptr);
     menuComponent->addKeyListener(this);
     menuComponent->addMouseListener(this, true);
+    ConfigFile appConfig;
+    menuComponent->openFolder(appConfig.getRootFolderItem());
 }
 
 /*

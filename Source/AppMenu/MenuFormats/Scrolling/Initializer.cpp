@@ -28,5 +28,5 @@ AppMenu::InputHandler* AppMenu::Scrolling::Initializer::createInputHandler(
         AppMenu::MenuComponent* const menuComponent,
         AppMenu::Controller* const controller) const 
 {
-    return new Scrolling::InputHandler();
+    return new Scrolling::InputHandler(menuComponent, controller);
 }

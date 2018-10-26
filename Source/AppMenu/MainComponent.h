@@ -3,6 +3,7 @@
 
 #pragma once
 #include "AppMenu.h"
+#include "DesktopEntryLoader.h"
 #include "Control/Initializer.h"
 #include "MenuComponents/MenuComponent.h"
 #include "Control/Controller.h"
@@ -71,6 +72,8 @@ private:
     /* Listens to key, mouse, and window focus events, and responds by
        triggering appropriate menu events. */
     std::unique_ptr<InputHandler> inputHandler;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 };
 
 /* Only include this file directly in the AppMenu implementation! */

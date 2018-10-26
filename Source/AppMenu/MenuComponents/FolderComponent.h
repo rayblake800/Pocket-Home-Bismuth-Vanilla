@@ -148,6 +148,8 @@ private:
 
     /* The menu item defining this folder. */
     MenuItem folderItem;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FolderComponent)
 };
 
 /* Only include this file directly in the AppMenu implementation! */

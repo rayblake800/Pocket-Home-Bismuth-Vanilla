@@ -1,4 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
+#include "Utils.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
 #include "ComponentConfigKeys.h"
@@ -40,8 +41,11 @@ void AppMenu::Scrolling::MenuComponent::updateMenuLayout()
         {
             folderX -= width;
         }
-        const int folderY = centerY - folder->getSelectedItemYOffset();
-        if(folderX != folder->getX())
+        const int folderY = median<int>(
+                buttonHeight,
+                centerY - folder->getSelectedItemYOffset(),
+                getHeight() - buttonHeight - folder->getHeight());
+        if(folderX != folder->getX() && !folder->getBounds().isEmpty())
         {
             const juce::Rectangle<int>
                 newBounds(folderX, folderY, width, height);
@@ -51,6 +55,7 @@ void AppMenu::Scrolling::MenuComponent::updateMenuLayout()
         {
             folder->setBounds(folderX, folderY, width, height);
         }
+        folder->updateButtonLayout();
     }
 }
 
@@ -71,4 +76,5 @@ void AppMenu::Scrolling::MenuComponent::parentResized
 (const juce::Rectangle<int> parentBounds)
 {
     applyConfigBounds();
+    updateMenuLayout();
 }

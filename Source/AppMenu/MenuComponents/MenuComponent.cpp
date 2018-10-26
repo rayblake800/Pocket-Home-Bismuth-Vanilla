@@ -19,6 +19,7 @@ void AppMenu::MenuComponent::openFolder(MenuItem folderItem)
     newFolder->initMenuItems();
     openFolders.add(newFolder);
     addAndMakeVisible(newFolder);
+    newFolder->updateButtonLayout();
     updateMenuLayout();
 }
 
@@ -62,4 +63,8 @@ AppMenu::MenuComponent::getOpenFolder(const int folderIndex) const
 void AppMenu::MenuComponent::resized()
 {
     updateMenuLayout();
+    for(int i = 0; i < openFolders.size(); i++)
+    {
+        openFolders[i]->updateButtonLayout();
+    }
 }

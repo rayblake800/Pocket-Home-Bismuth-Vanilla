@@ -91,6 +91,8 @@ private:
     
     /* The list of open folder components */
     juce::OwnedArray<FolderComponent> openFolders;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuComponent)
 };
 
 /* Only include this file directly in the AppMenu implementation! */

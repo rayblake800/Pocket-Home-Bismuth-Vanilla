@@ -219,6 +219,8 @@ private:
 
     /* The icon to draw on this button */
     juce::Image icon;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuButton)
 };
 
 /* Only include this file directly in the AppMenu implementation! */

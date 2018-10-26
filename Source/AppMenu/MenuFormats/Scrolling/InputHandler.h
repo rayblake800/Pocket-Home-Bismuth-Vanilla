@@ -34,7 +34,7 @@ private:
      * @return         True to indicate that the key event was handled, false
      *                 to pass it on to other active juce::KeyListener objects.
      */
-    virtual bool keyPress(const AppMenu::InputHandler::KeyType keyType)
+    virtual bool keyPressed(const AppMenu::InputHandler::KeyType keyType)
         final override;
 
     /**
