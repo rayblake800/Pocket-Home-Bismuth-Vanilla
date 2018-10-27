@@ -23,17 +23,16 @@ namespace ColourIds
             upDownButtonArrow      = 0x1005007,
             shadow                 = 0x1005008
         };
-    };
+    }
 
     namespace bubbleComponent
     {
         enum
         {
             background = 0x1000af0,
-            /**< The colour to use for an outline around the bubble. */
             outline    = 0x1000af1
         };
-    };
+    }
 
     namespace fileChooserDialogBox
     {
@@ -41,7 +40,7 @@ namespace ColourIds
         {
             titleText = 0x1000850
         };
-    };
+    }
 
     namespace directoryContentsDisplayComponent
     {
@@ -49,10 +48,9 @@ namespace ColourIds
         {
             highlight       = 0x1000540,
             text            = 0x1000541,
-            /**< The colour with which to draw the text in highlighted sections. */
             highlightedText = 0x1000542
         };
-    };
+    }
 
     namespace fileBrowserComponent
     {
@@ -62,10 +60,9 @@ namespace ColourIds
             currentPathBoxText       = 0x1000641,
             currentPathBoxArrow      = 0x1000642,
             filenameBoxBackground    = 0x1000643,
-            /**< The colour to use for the text of the filename TextEditor. */
             filenameBoxText          = 0x1000644
         };
-    };
+    }
 
     namespace fileSearchPathListComponent
     {
@@ -73,7 +70,7 @@ namespace ColourIds
         {
             background = 0x1004100
         };
-    };
+    }
 
     namespace propertyComponent
     {
@@ -82,7 +79,7 @@ namespace ColourIds
             background = 0x1008300,
             labelText  = 0x1008301
         };
-    };
+    }
 
     namespace textPropertyComponent
     {
@@ -92,7 +89,7 @@ namespace ColourIds
             text       = 0x100e402,
             outline    = 0x100e403
         };
-    };
+    }
 
     namespace booleanPropertyComponent
     {
@@ -101,17 +98,16 @@ namespace ColourIds
             background = 0x100e801,
             outline    = 0x100e803
         };
-    };
+    }
 
     namespace groupComponent
     {
         enum
         {
             outline = 0x1005400,
-            /**< The colour to use to draw the text label. */
             text    = 0x1005410
         };
-    };
+    }
 
     namespace tabbedComponent
     {
@@ -120,7 +116,7 @@ namespace ColourIds
             background = 0x1005800,
             outline    = 0x1005801
         };
-    };
+    }
 
     namespace tabbedButtonBar
     {
@@ -131,7 +127,7 @@ namespace ColourIds
             frontOutline = 0x1005814,
             frontText    = 0x1005815
         };
-    };
+    }
 
     namespace scrollBar
     {
@@ -139,10 +135,9 @@ namespace ColourIds
         {
             background = 0x1000300,
             thumb      = 0x1000400,
-            /**< A base colour to use for the slot area of the bar. The look and feel will probably use variations on this colour. */
             track      = 0x1000401
         };
-    };
+    }
 
     namespace sidePanel
     {
@@ -155,7 +150,7 @@ namespace ColourIds
             dismissButtonOver   = 0x100f004,
             dismissButtonDown   = 0x100f005
         };
-    };
+    }
 
     namespace progressBar
     {
@@ -164,7 +159,7 @@ namespace ColourIds
             background = 0x1001900,
             foreground = 0x1001a00
         };
-    };
+    }
 
     namespace treeView
     {
@@ -175,10 +170,9 @@ namespace ColourIds
             dragAndDropIndicator   = 0x1000502,
             selectedItemBackground = 0x1000503,
             oddItems               = 0x1000504,
-            /**< The colour to use to fill the backround of the even numbered items. */
             evenItems              = 0x1000505
         };
-    };
+    }
 
     namespace comboBox
     {
@@ -189,10 +183,9 @@ namespace ColourIds
             outline        = 0x1000c00,
             button         = 0x1000d00,
             arrow          = 0x1000e00,
-            /**< The colour that will be used to draw a box around the edge of the component when it has focus. */
             focusedOutline = 0x1000f00
         };
-    };
+    }
 
     namespace textEditor
     {
@@ -206,7 +199,7 @@ namespace ColourIds
             focusedOutline  = 0x1000206,
             shadow          = 0x1000207
         };
-    };
+    }
 
     namespace label
     {
@@ -217,10 +210,9 @@ namespace ColourIds
             outline               = 0x1000282,
             backgroundWhenEditing = 0x1000283,
             textWhenEditing       = 0x1000284,
-            /**< An optional border colour when the label is being edited. */
             outlineWhenEditing    = 0x1000285
         };
-    };
+    }
 
     namespace tableHeaderComponent
     {
@@ -231,7 +223,7 @@ namespace ColourIds
             outline    = 0x1003820,
             highlight  = 0x1003830
         };
-    };
+    }
 
     namespace listBox
     {
@@ -239,10 +231,9 @@ namespace ColourIds
         {
             background = 0x1002800,
             outline    = 0x1002810,
-            /**< The preferred colour to use for drawing text in the listbox. */
             text       = 0x1002820
         };
-    };
+    }
 
     namespace toolbar
     {
@@ -253,11 +244,9 @@ namespace ColourIds
             buttonMouseOverBackground = 0x1003220,
             buttonMouseDownBackground = 0x1003230,
             labelText                 = 0x1003240,
-            /**< A colour to use for an outline around buttons when
-                                                       the customisation dialog is active and the mouse moves over them. */
             editingModeOutline        = 0x1003250
         };
-    };
+    }
 
     namespace slider
     {
@@ -271,10 +260,9 @@ namespace ColourIds
             textBoxText         = 0x1001400,
             textBoxBackground   = 0x1001500,
             textBoxHighlight    = 0x1001600,
-            /**< The colour to use for a border around the text-editor box. */
             textBoxOutline      = 0x1001700
         };
-    };
+    }
 
     namespace tooltipWindow
     {
@@ -282,10 +270,9 @@ namespace ColourIds
         {
             background = 0x1001b00,
             text       = 0x1001c00,
-            /**< The colour to use to draw an outline around the tooltip. */
             outline    = 0x1001c10
         };
-    };
+    }
 
     namespace alertWindow
     {
@@ -293,10 +280,9 @@ namespace ColourIds
         {
             background = 0x1001800,
             text       = 0x1001810,
-            /**< An optional colour to use to draw a border around the window. */
             outline    = 0x1001820
         };
-    };
+    }
 
     namespace documentWindow
     {
@@ -304,7 +290,7 @@ namespace ColourIds
         {
             text = 0x1005701
         };
-    };
+    }
 
     namespace resizableWindow
     {
@@ -312,7 +298,7 @@ namespace ColourIds
         {
             background = 0x1005700
         };
-    };
+    }
 
     namespace popupMenu
     {
@@ -324,7 +310,7 @@ namespace ColourIds
             highlightedBackground = 0x1000900,
             highlightedText       = 0x1000800
         };
-    };
+    }
 
     namespace lassoComponent
     {
@@ -333,7 +319,7 @@ namespace ColourIds
             lassoFill    = 0x1000440,
             lassoOutline = 0x1000441
         };
-    };
+    }
 
     namespace caretComponent
     {
@@ -341,7 +327,7 @@ namespace ColourIds
         {
             caret = 0x1000204
         };
-    };
+    }
 
     namespace toggleButton
     {
@@ -349,10 +335,9 @@ namespace ColourIds
         {
             text         = 0x1006501,
             tick         = 0x1006502,
-            /**< The colour to use for the disabled tick mark. */
             tickDisabled = 0x1006503
         };
-    };
+    }
 
     namespace textButton
     {
@@ -361,10 +346,9 @@ namespace ColourIds
             button   = 0x1000100,
             buttonOn = 0x1000101,
             textOff  = 0x1000102,
-            /**< The colour to use for the button's text.when the button's toggle state is "on". */
             textOn   = 0x1000103
         };
-    };
+    }
 
     namespace hyperlinkButton
     {
@@ -372,7 +356,7 @@ namespace ColourIds
         {
             text = 0x1001f00
         };
-    };
+    }
 
     namespace drawableButton
     {
@@ -383,17 +367,16 @@ namespace ColourIds
             background   = 0x1004011,
             backgroundOn = 0x1004012
         };
-    };
+    }
 
     namespace colourSelector
     {
         enum
         {
             background = 0x1007000,
-            /**< the colour used for the labels next to the sliders. */
             labelText  = 0x1007001
         };
-    };
+    }
 
     namespace keyMappingEditorComponent
     {
@@ -402,7 +385,7 @@ namespace ColourIds
             background = 0x100ad00,
             text       = 0x100ad01
         };
-    };
+    }
 
     namespace codeEditorComponent
     {
@@ -414,7 +397,7 @@ namespace ColourIds
             lineNumberBackground = 0x1004504,
             lineNumberText       = 0x1004505
         };
-    };
+    }
 
     namespace jucer_CommonHeaders
     {
@@ -439,7 +422,7 @@ namespace ColourIds
             widgetBackground          = 0x2340010,
             secondaryWidgetBackground = 0x2340011
         };
-    };
+    }
 
     namespace pageComponent
     {
@@ -447,7 +430,7 @@ namespace ColourIds
         {
             background = 0x1900500
         };
-    };
+    }
 
     namespace overlaySpinner
     {
@@ -456,7 +439,7 @@ namespace ColourIds
             background = 0x1900400,
             text       = 0x1900401
         };
-    };
+    }
 
     namespace drawableImageButton
     {
@@ -468,7 +451,7 @@ namespace ColourIds
             image3 = 0x1900003,
             image4 = 0x1900004
         };
-    };
+    }
 
     namespace drawableImageComponent
     {
@@ -480,7 +463,7 @@ namespace ColourIds
             image3 = 0x1900003,
             image4 = 0x1900004
         };
-    };
+    }
 
     namespace switchComponent
     {
@@ -490,7 +473,7 @@ namespace ColourIds
             handle     = 0x100f001,
             handleOff  = 0x100f002
         };
-    };
+    }
 
     namespace fileSelectTextEditor
     {
@@ -499,7 +482,7 @@ namespace ColourIds
             fileWindow = 0x1900300,
             text       = 0x1900301
         };
-    };
+    }
 
     namespace listEditor
     {
@@ -510,7 +493,7 @@ namespace ColourIds
             selectedListItem = 0x1900102,
             text             = 0x1900103
         };
-    };
+    }
 
     namespace appMenuButton
     {
@@ -521,7 +504,7 @@ namespace ColourIds
             selection  = 0x1900202,
             border     = 0x1900203
         };
-    };
+    }
     
     namespace colourPicker
     {
@@ -532,6 +515,6 @@ namespace ColourIds
           outline           = 0x1900602,
           focusedOutline    = 0x1900603
       };
-    };
+    }
 
-};
+}
