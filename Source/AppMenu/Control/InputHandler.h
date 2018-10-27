@@ -59,7 +59,7 @@ protected:
     virtual bool keyPressed(const KeyType keyType) = 0;
 
     /**
-     * @brief  Handles clicks to menu item buttons.
+     * @brief  Handles clicks to menu item buttons in the active folder.
      *
      * By default, this sets the button as the selected button in its folder,
      * activates the button if it is left clicked, and shows the context menu
@@ -73,7 +73,8 @@ protected:
             const bool rightClicked);
 
     /**
-     * @brief  Handles clicks to menu folders.
+     * @brief  Handles clicks to menu folders, or menu buttons in inactive
+     *         folders.
      *
      * By default, this closes any folders open above the clicked folder, and
      * shows the context menu if the folder was right clicked.

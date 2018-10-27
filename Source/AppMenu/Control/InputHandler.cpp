@@ -29,7 +29,7 @@ AppMenu::InputHandler::~InputHandler()
 }
 
 /*
- * Handles clicks to menu item buttons.
+ * Handles clicks to menu item buttons in the active folder.
  */
 void AppMenu::InputHandler::menuItemClicked
 (const MenuButton* clickedButton, const bool rightClicked)
@@ -49,7 +49,7 @@ void AppMenu::InputHandler::menuItemClicked
 }
 
 /*
- * Handles clicks to menu folders.
+ * Handles clicks to menu folders, or menu item buttons in inactive folders.
  */
 void AppMenu::InputHandler::folderClicked(const FolderComponent* clickedFolder, 
 const int closestIndex, const bool rightClicked)
@@ -109,13 +109,23 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
         return;
     }
     MenuButton* clickedButton = dynamic_cast<MenuButton*>(event.eventComponent);
+    FolderComponent* clickedFolder = nullptr;
     if(clickedButton != nullptr)
     {
-        menuItemClicked(clickedButton, rightClicked);
-        return;
+        clickedFolder = dynamic_cast<FolderComponent*>
+            (clickedButton->getParentComponent());
+        if(clickedFolder != nullptr 
+                && clickedFolder->getFolderMenuItem() 
+                == menuComponent->getActiveFolder())
+        {
+            menuItemClicked(clickedButton, rightClicked);
+            return;
+        }
     }
-    FolderComponent* clickedFolder = dynamic_cast<FolderComponent*>
-        (event.eventComponent);
+    if(clickedFolder == nullptr)
+    {
+        clickedFolder = dynamic_cast<FolderComponent*>(event.eventComponent);
+    }
     if(clickedFolder != nullptr)
     {
         juce::Point<int> clickPos = event.getPosition();
