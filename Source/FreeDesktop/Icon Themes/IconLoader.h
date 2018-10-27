@@ -6,7 +6,7 @@
  * 
  * @brief  Sends icon search requests to the shared IconThread.
  */
-class IconLoader : private ResourceHandler<IconThread>
+class IconLoader : public ResourceHandler<IconThread>
 {
 public:
     IconLoader();
