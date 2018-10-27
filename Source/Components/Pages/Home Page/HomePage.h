@@ -1,6 +1,8 @@
 #pragma once
 
 #include "OverlaySpinner.h"
+#include "DesktopEntryLoader.h"
+#include "IconLoader.h"
 #include "PageComponent.h"
 #include "ComponentConfigFile.h"
 #include "Config/MainFile.h"
@@ -10,6 +12,7 @@
 #include "BatteryIcon.h"
 #include "AppMenuComponent.h"
 #include "SystemCommands.h"
+#include "AppMenu.h"
 
 /**
  * @file HomePage.h
@@ -81,17 +84,20 @@ private:
        page exists. */
     SystemCommands systemCommands;
 
-    /* This spinner activates when the AppMenu is loading.  The AppMenu controls
-       it through a reference passed in on menu creation. */
-    OverlaySpinner loadingSpinner;
+    /* Loads desktop entry file data.  This resource should exist as long as
+       the home page exists. */
+    DesktopEntryLoader entryLoader;
+
+    /* Loads icon images. This resource should exist as long as the home page
+       exists. */
+    IconLoader iconLoader;
     
     /* Displays the time. */
     ClockLabel clock;
    
-    // Disabled until pending menu redesign:
     /* The application menu.  This is recreated whenever the menu type 
        preference changes in MainConfigFile. */
-    //juce::ScopedPointer<AppMenuComponent> appMenu;
+    std::unique_ptr<juce::Component> appMenu;
     
     /* Displays the current battery status. */
     BatteryIcon batteryIcon;

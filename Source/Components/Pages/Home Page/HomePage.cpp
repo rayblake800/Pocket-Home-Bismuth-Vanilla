@@ -3,8 +3,6 @@
 #include "ComponentConfigKeys.h"
 #include "PokeLookAndFeel.h"
 #include "AssetFiles.h"
-#include "PagedAppMenu.h"
-#include "ScrollingAppMenu.h"
 #include "HomePage.h"
 
 HomePage::HomePage() :
@@ -35,9 +33,6 @@ settingsButton(ComponentConfigKeys::settingsButtonKey)
     settingsButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(settingsButton);
 
-    addChildComponent(loadingSpinner);
-    loadingSpinner.setAlwaysOnTop(true);
-
     loadAllConfigProperties();
 }
 
@@ -66,59 +61,18 @@ void HomePage::configValueChanged(const juce::Identifier& key)
         }
     }
     
-// Disabled until redesign
-#if 0
-    else if (key == MainConfigKeys::menuTypeKey)
+    else if (key == Config::MainKeys::menuTypeKey && appMenu == nullptr)
     {
-        String menuType = mainConfig.getConfigValue<String>
-                (MainConfigKeys::menuTypeKey);
-        if (!MainConfigKeys::menuTypes.contains(menuType))
-        {
-            DBG("HomePage::" << __func__ << ": Invalid menu type!");
-            return;
-        }
-        if (appMenu != nullptr)
-        {
-            removeChildComponent(appMenu);
-            appMenu = nullptr;
-        }
-
-        if (menuType == "Scrolling menu")
-        {
-            if (!isClass<AppMenuComponent, ScrollingAppMenu>(appMenu.get()))
-            {
-                DBG("HomePage::" << __func__
-                        << ": Initializing scrolling menu");
-                appMenu = new ScrollingAppMenu(loadingSpinner);
-            }
-            else
-            {
-                DBG("HomePage::" << __func__
-                        << ": Menu was already scrolling, don't recreate");
-            }
-        }
-        else//menuType == "pagedMenu"
-        {
-            if (!isClass<AppMenuComponent, PagedAppMenu>(appMenu.get()))
-            {
-                DBG("HomePage::" << __func__
-                        << ": Initializing paged menu");
-                appMenu = new PagedAppMenu(loadingSpinner);
-            }
-            else
-            {
-                DBG("HomePage::" << __func__ <<
-                        ": Menu was already paged, don't recreate");
-            }
-        }
-        addAndMakeVisible(appMenu);
+        appMenu.reset(AppMenu::createAppMenu(AppMenu::Format::Scrolling)); 
+        appMenu->setBounds(getLocalBounds());
+        addAndMakeVisible(appMenu.get());
         appMenu->toBack();
-        pageResized();
-
+        if(isShowing())
+        {
+            appMenu->grabKeyboardFocus();
+        }
     }
 
-//Disabled until redesign
-#endif
 }
 
 /**
@@ -198,17 +152,11 @@ void HomePage::visibilityChanged()
  */
 void HomePage::pageResized()
 {
-// Disabled until redesign
 
-#if 0
     if (appMenu != nullptr)
     {
-        appMenu->applyConfigBounds();
+        appMenu->setBounds(getLocalBounds());
     }
-
-//Disabled until redesign
-#endif
-    loadingSpinner.setBounds(getLocalBounds());
     frame.applyConfigBounds();
     clock.applyConfigBounds();
     batteryIcon.applyConfigBounds();
