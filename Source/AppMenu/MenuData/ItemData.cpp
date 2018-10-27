@@ -84,7 +84,7 @@ bool AppMenu::ItemData::remove()
     parent->children.remove(index);
     for(int i = index; i < parent->children.size(); i++)
     {
-        parent->children[i]->index++;
+        parent->children[i]->index--;
     }
     parent->foreachListener([this](Listener* listener)
     {
@@ -102,7 +102,9 @@ bool AppMenu::ItemData::remove()
  */
 bool AppMenu::ItemData::swapChildren(const int childIdx1, const int childIdx2)
 {
-    if(index < 0 || index > getMovableChildCount())
+    const int maxIndex = getMovableChildCount() - 1;
+    if(childIdx1 < 0 || childIdx1 > maxIndex 
+            || childIdx2 < 0 || childIdx2 > maxIndex)
     {
         return false;
     }
