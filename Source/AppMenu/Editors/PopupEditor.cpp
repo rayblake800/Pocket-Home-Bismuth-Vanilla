@@ -5,6 +5,7 @@
 #include "ComponentConfigFile.h"
       
 /* Localized text keys: */
+static const constexpr char * localizedObjectKey = "AppMenu::PopupEditor";
 static const constexpr char * name = "name";
 static const constexpr char * icon_path = "icon_path";
 static const constexpr char * select_icon = "select_icon";
@@ -26,7 +27,7 @@ PopupEditorComponent(editorTitle,
     commitEdits();
     onConfirm();
 }),
-Localized("PopupEditor"),
+Localized(localizedObjectKey),
 nameLabel("nameLabel", localeText(name)),
 titleEditor("titleEditor"),
 iconLabel("iconLabel", localeText(icon_path)),
