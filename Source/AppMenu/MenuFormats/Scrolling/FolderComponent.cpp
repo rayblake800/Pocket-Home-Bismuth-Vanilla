@@ -36,12 +36,13 @@ AppMenu::Scrolling::FolderComponent::createMenuButton
 void AppMenu::Scrolling::FolderComponent::updateButtonLayout()
 {
     const juce::Rectangle<int> folderBounds = getLocalBounds(); 
-    int buttonHeight = folderBounds.getHeight() / std::max(getFolderSize(), 1);
+    const int buttonHeight = folderBounds.getHeight() 
+        / std::max(getFolderSize(), 1);
+    const int buttonWidth = getMinimumWidth();
     int yPos = 0;
     for(int i = 0; i < getFolderSize(); i++)
     {
-        getButtonComponent(i)->setBounds(0, yPos, folderBounds.getWidth(),
-                buttonHeight);
+        getButtonComponent(i)->setBounds(0, yPos, buttonWidth, buttonHeight);
         yPos += buttonHeight;
     }
 }

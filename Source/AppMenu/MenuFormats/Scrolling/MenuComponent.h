@@ -22,10 +22,20 @@ public:
     /**
      * @brief  Arranges folders from left to right, with the selected item of
      *         the active folder centered.
+     *
+     * @param animateTransition  Whether changes to the menu layout should be
+     *                           animated.
+     */
+    void updateMenuLayout(bool animateTransition);
+
+private:
+    /**
+     * @brief  Arranges folders from left to right, with the selected item of
+     *         the active folder centered.  This will always animate any
+     *         changes to the menu layout.
      */
     virtual void updateMenuLayout() final override;
 
-private:
     /**
      * @brief  Creates a new Scrolling::FolderComponent for an opened folder
      *         menu item.

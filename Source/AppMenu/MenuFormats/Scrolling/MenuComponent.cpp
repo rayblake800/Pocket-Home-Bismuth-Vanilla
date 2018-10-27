@@ -1,5 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
+#include "TempTimer.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
 #include "ComponentConfigKeys.h"
@@ -17,7 +18,7 @@ AppMenu::Scrolling::MenuComponent::MenuComponent() :
  * Arranges folders from left to right, with the selected item of the active 
  * folder centered.
  */
-void AppMenu::Scrolling::MenuComponent::updateMenuLayout() 
+void AppMenu::Scrolling::MenuComponent::updateMenuLayout(bool animateTransition) 
 {
     Config::MainFile mainConfig;
     const int buttonHeight = getHeight()
@@ -45,18 +46,34 @@ void AppMenu::Scrolling::MenuComponent::updateMenuLayout()
                 buttonHeight,
                 centerY - folder->getSelectedItemYOffset(),
                 getHeight() - buttonHeight - folder->getHeight());
-        if(folderX != folder->getX() && !folder->getBounds().isEmpty())
+        if(animateTransition)
         {
             const juce::Rectangle<int>
                 newBounds(folderX, folderY, width, height);
             TransitionAnimator::transformBounds(folder, newBounds, animationMS);
+            TempTimer::initTimer(animationMS, [folder]()
+            {
+                juce::MessageManager::callAsync([folder]()
+                {
+                    folder->updateButtonLayout();
+                });
+            });
         }
         else
         {
             folder->setBounds(folderX, folderY, width, height);
+            folder->updateButtonLayout();
         }
-        folder->updateButtonLayout();
     }
+}
+
+/*
+ * Arranges folders from left to right, with the selected item of the active 
+ * folder centered.  This will always animate any changes to the menu layout.
+ */
+void AppMenu::Scrolling::MenuComponent::updateMenuLayout()
+{
+    updateMenuLayout(true);
 }
 
 /*
