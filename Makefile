@@ -324,6 +324,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/gtest_object.o \
   $(JUCE_OBJDIR)/GPPTestObject.o \
   $(JUCE_OBJDIR)/test_GPPObject.o \
+  $(JUCE_OBJDIR)/test_AppMenu.o \
   $(JUCE_OBJDIR)/StressTest.o \
   $(JUCE_OBJDIR)/test_ConfigFile.o \
   $(JUCE_OBJDIR)/test_LaunchedApp.o \
@@ -647,6 +648,8 @@ $(JUCE_OBJDIR)/GPPTestObject.o: \
 	Tests/GLib/GPPTestObject.cpp
 $(JUCE_OBJDIR)/test_GPPObject.o: \
 	Tests/GLib/test_GPPObject.cpp
+$(JUCE_OBJDIR)/test_AppMenu.o: \
+	Tests/test_AppMenu.cpp
 $(JUCE_OBJDIR)/StressTest.o: \
 	Tests/StressTest.cpp
 $(JUCE_OBJDIR)/test_ConfigFile.o: \
