@@ -69,7 +69,7 @@ static juce::var itemToVar(const AppMenu::MenuItem& menuItem)
             itemObject->setProperty(AppMenu::folderItemKey, folderItems);
         }
         StringArray categories = menuItem.getCategories();
-        if(categories.isEmpty())
+        if(!categories.isEmpty())
         {
             itemObject->setProperty(AppMenu::categoryKey, categories);
         }
