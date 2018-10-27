@@ -18,9 +18,20 @@ namespace TransitionAnimator
         moveDown,
         moveLeft,
         moveRight,
-	toDestination,
-	none
+        toDestination,
+        none
     };
+
+    /**
+     * @brief  Checks if a component is being animated through the default
+     *         juce Animator.
+     *
+     * @param possiblyAnimating  A component that is possibly being animated.
+     *
+     * @return                   Whether the component is being animated by the
+     *                           dedault animator.
+     */
+    bool isAnimating(juce::Component* possiblyAnimating);
 
     /**
      * Moves one set of components off-screen, while moving another set of

@@ -107,6 +107,15 @@ private:
 };
 
 /*
+ * Checks if a component is being animated through the default juce Animator.
+ */
+bool TransitionAnimator::isAnimating(juce::Component* possiblyAnimating)
+{
+    return juce::Desktop::getInstance().getAnimator().isAnimating
+        (possiblyAnimating);
+}
+
+/*
  * Moves one set of components off-screen, while moving another set of
  * components on-screen, animating the transition.  Any component that is
  * in both sets will appear to move off-screen while a duplicate component
@@ -121,8 +130,7 @@ void TransitionAnimator::animateTransition(
     using namespace juce;
     for (std::pair<Component*, Rectangle<int>>&inComponent : movingIn)
     {
-        if (inComponent.first == nullptr || Desktop::getInstance().getAnimator()
-            .isAnimating(inComponent.first))
+        if (inComponent.first == nullptr || isAnimating(inComponent.first))
         {
             continue;
         }
@@ -139,8 +147,7 @@ void TransitionAnimator::animateTransition(
     }
     for (Component* outComponent : movingOut)
     {
-        if (outComponent == nullptr || Desktop::getInstance().getAnimator()
-            .isAnimating(outComponent))
+        if (outComponent == nullptr || isAnimating(outComponent))
         {
             continue;
         }
@@ -182,18 +189,18 @@ void TransitionAnimator::transitionOut(
                 destination.setX(destination.getX() + windowBounds.getWidth());
                 break;
 	    case Transition::toDestination:
-            case Transition::none:
-		//component->setBounds(Rectangle<int>(0,0,0,0));
-		return;
+        case Transition::none:
+		    //component->setBounds(Rectangle<int>(0,0,0,0));
+		    return;
         }
-        if(useProxy)
-	{
+            if(useProxy)
+            {
             Component * proxy = static_cast<Component*>
-		    (AnimationProxy::getNewProxy(*component
-		    ,animationMilliseconds));
+                (AnimationProxy::getNewProxy(*component, 
+                         animationMilliseconds));
             component->setBounds(destination);
-	    component = proxy;
-	}
+            component = proxy;
+        }
         transformBounds(component, destination, animationMilliseconds);
     }
 }
@@ -215,16 +222,16 @@ void TransitionAnimator::transitionIn(
     if(transition == Transition::none)
     {
         component->setBounds(destination);
-	return;
+        return;
     }
     if(transition == Transition::toDestination)
     {
         transformBounds(component, destination, animationMilliseconds);
-	return;
+        return;
     }
     Rectangle<int> windowBounds = getWindowBounds();
     Rectangle<int> startBounds = destination;
-    if (destination.intersects(windowBounds))
+    if(destination.intersects(windowBounds))
     {
         switch (transition)
         {
@@ -239,9 +246,9 @@ void TransitionAnimator::transitionIn(
                 break;
             case Transition::moveRight:
                 startBounds.setX(startBounds.getX() - windowBounds.getWidth());
-		break;
-	    case Transition::toDestination:
-		startBounds = component->getBounds();
+                break;
+            case Transition::toDestination:
+                startBounds = component->getBounds();
         }
         component->setBounds(startBounds);
         transformBounds(component, destination, animationMilliseconds);
