@@ -87,7 +87,8 @@ private:
     /* Context menu option codes: */
     enum class OptionCode
     {
-        Edit = 1,
+        Cancelled,
+        Edit,
         Delete,
         NewShortcut,
         NewFolder,

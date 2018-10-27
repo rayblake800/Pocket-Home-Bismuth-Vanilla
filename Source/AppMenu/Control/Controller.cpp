@@ -10,14 +10,14 @@
 
 /* Localized text keys: */
 static const constexpr char* localeTextKey      = "AppMenu::Controller";
-static const constexpr char* editTextKey        = "edit_app";
-static const constexpr char* deleteTextKey      = "delete_app";
+static const constexpr char* editTextKey        = "edit";
+static const constexpr char* deleteTextKey      = "delete";
 static const constexpr char* pinItemTextKey     = "add_shortcut";
-static const constexpr char* moveBackTextKey    = "move_back";
-static const constexpr char* moveForwardTextKey = "move_forward";
-static const constexpr char* newShortcutTextKey = "new_shortcut";
-static const constexpr char* newEntryTextKey    = "new_entry";
-static const constexpr char* newFolderTextKey   = "new_folder";
+static const constexpr char* moveBackTextKey    = "moveBack";
+static const constexpr char* moveForwardTextKey = "moveForward";
+static const constexpr char* newShortcutTextKey = "newShortcut";
+static const constexpr char* newEntryTextKey    = "newEntry";
+static const constexpr char* newFolderTextKey   = "newFolder";
 
 
 
@@ -33,7 +33,7 @@ AppMenu::Controller::Controller
 void AppMenu::Controller::showContextMenu()
 {
     // Ignore request if a menu editor is visible or input is disabled.
-    if(!ignoringInput())
+    if(ignoringInput())
     {
         return;
     }
@@ -58,7 +58,7 @@ void AppMenu::Controller::showContextMenu
 (const MenuItem folderItem, const int insertIndex)
 {
     // Ignore request if a menu editor is visible or input is disabled.
-    if(!ignoringInput())
+    if(ignoringInput())
     {
         return;
     }
@@ -78,7 +78,7 @@ void AppMenu::Controller::showContextMenu
 void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
 {  
     // Ignore request if a menu editor is visible or input is disabled.
-    if(!ignoringInput())
+    if(ignoringInput())
     {
         return;
     }
@@ -103,8 +103,11 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
     int lastMovableIndex = parent.getMovableChildCount() - 1;
     if(menuItem.getIndex() <= lastMovableIndex)
     {
-        contextMenu.addItem(int(OptionCode::MoveBack), 
-                localeText(moveBackTextKey));
+        if(menuItem.getIndex() != 0)
+        {
+            contextMenu.addItem(int(OptionCode::MoveBack), 
+                    localeText(moveBackTextKey));
+        }
         if(menuItem.getIndex() != lastMovableIndex)
         {
             contextMenu.addItem(int(OptionCode::MoveForward), 
@@ -123,7 +126,7 @@ void AppMenu::Controller::activateMenuItem
 (const MenuItem clickedItem)
 {
     // Ignore clicks if a menu editor is visible or input is disabled.
-    if(!ignoringInput())
+    if(ignoringInput())
     {
         return;
     }
@@ -136,7 +139,7 @@ void AppMenu::Controller::activateMenuItem
         {
             menuComponent->closeActiveFolder();
         }
-        jassert(parentFolder != menuComponent->getActiveFolder());
+        jassert(parentFolder == menuComponent->getActiveFolder());
     }
     // Open folder items and launch/focus shortcut items.
     if(clickedItem.isFolder())
@@ -176,6 +179,8 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
 {
     switch(selectedOption)
     {
+        case OptionCode::Cancelled:
+            return;
         case OptionCode::Edit:
             jassert(!editedItem.isNull());
             createExistingItemEditor(editedItem);
@@ -207,7 +212,12 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
             int itemIndex = editedItem.getIndex();
             int swapIndex = itemIndex +
                 ((selectedOption == OptionCode::MoveBack) ? -1 : 1);
-            parent.swapChildren(itemIndex, swapIndex);
+            if(!parent.swapChildren(itemIndex, swapIndex))
+            {
+                DBG("AppMenu::Controller::" << __func__
+                        << ": Couldn't swap indices " << itemIndex
+                        << " and " << swapIndex);
+            }
             break;
         }
         case OptionCode::NewShortcut:
@@ -258,11 +268,12 @@ void AppMenu::Controller::openFolder(const MenuItem folderItem)
 void AppMenu::Controller::createNewShortcutEditor
 (const MenuItem folder, const int insertIndex)
 {
-    saveAndShowEditor(new NewConfigItemEditor(folder, false, insertIndex,
-                [this]()
-                {
-                    menuComponent->removeChildComponent(menuEditor.get());
-                }));
+    PopupEditor* newEditor = new NewConfigItemEditor(folder, false, insertIndex,
+    [this]()
+    {
+        menuComponent->removeChildComponent(menuEditor.get());
+    });
+    saveAndShowEditor(newEditor);
 }
 
 /*
@@ -272,11 +283,12 @@ void AppMenu::Controller::createNewShortcutEditor
 void AppMenu::Controller::createNewFolderEditor
 (const MenuItem folder, const int insertIndex)
 {
-    saveAndShowEditor(new NewConfigItemEditor(folder, true, insertIndex,
-                [this]()
-                {
-                    menuComponent->removeChildComponent(menuEditor.get());
-                }));
+    PopupEditor* newEditor = new NewConfigItemEditor(folder, true, insertIndex,
+    [this]()
+    {
+        menuComponent->removeChildComponent(menuEditor.get());
+    });
+    saveAndShowEditor(newEditor);
 }
 
 /*
@@ -285,10 +297,11 @@ void AppMenu::Controller::createNewFolderEditor
  */
 void AppMenu::Controller::createNewEntryEditor()
 {
-    saveAndShowEditor(new NewDesktopAppEditor([this]()
-                {
-                    menuComponent->removeChildComponent(menuEditor.get());
-                }));
+    PopupEditor* newEditor = new NewDesktopAppEditor([this]()
+    {
+        menuComponent->removeChildComponent(menuEditor.get());
+    });
+    saveAndShowEditor(newEditor);
 }
 
 /*
@@ -297,10 +310,11 @@ void AppMenu::Controller::createNewEntryEditor()
  */
 void AppMenu::Controller::createExistingItemEditor(const MenuItem toEdit)
 {
-    saveAndShowEditor(new ExistingItemEditor(toEdit,[this]()
-                {
-                    menuComponent->removeChildComponent(menuEditor.get());
-                }));
+    PopupEditor* newEditor = new ExistingItemEditor(toEdit,[this]()
+    {
+        menuComponent->removeChildComponent(menuEditor.get());
+    });
+    saveAndShowEditor(newEditor);
 }
 
 /*
