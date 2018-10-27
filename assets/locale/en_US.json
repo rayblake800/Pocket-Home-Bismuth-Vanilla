@@ -139,7 +139,7 @@
         "not_visible": "Not visible",
         "visible": "Visible"
     },
-    "AppMenuPopupEditor": {
+    "AppMenu::PopupEditor": {
         "name": "Name:",
         "icon_path": "Icon path:",
         "select_icon": "Select Icon",
@@ -156,19 +156,17 @@
         "really_delete": "Really delete this menu item?",
         "edit_menu_item": "Edit Menu Item"
     },
-    "DesktopEntryItemData": {
+    "AppMenu::DesktopEntryData": {
         "remove_link_to": "Remove link to ",
         "question_mark": "?",
         "will_hide": "This application will be hidden from pocket-home.",
         "edit_app": "Edit Menu Item"
     },
-    "ConfigItemData": {
+    "AppMenu::ConfigData": {
         "remove_APP": "Remove \"",
         "from_favorites": "\" from favorites?",
         "will_remove_link": "This will permanently remove this link from the list of favorite applications.",
-        "edit_app": "Edit Application"
-    },
-    "FolderMenuItem": {
+        "edit_app": "Edit Application",
         "delete_NAME": "Delete \"",
         "folder": "\" folder?",
         "will_remove_folder": "This will permanently remove this folder from the menu.",
@@ -195,14 +193,14 @@
             "years_post" : " years ago"
     },
     "AppMenu::Controller" : {
-        "edit_app" : "Edit",
-        "delete_app" : "Delete",
-        "add_shortcut" : "Add application shortcut",
-        "move_back" : "Move back",
-        "move_forward" : "Move forward",
-        "new_shortcut" : "New shortcut",
-        "new_entry" : "New desktop menu entry",
-        "new_folder" : "New folder"
+        "edit"        : "Edit",
+        "delete"      : "Delete",
+        "pinItem"     : "Pin to main menu",
+        "moveBack"    : "Move back",
+        "moveForward" : "Move forward",
+        "newShortcut" : "New shortcut",
+        "newEntry"    : "New desktop menu entry",
+        "newFolder"   : "New folder"
     },
     "DesktopEntryThread" : {
         "reading_entry" : "Reading file "
