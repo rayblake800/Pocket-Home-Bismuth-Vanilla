@@ -4,16 +4,23 @@
 #include "ConfigKeys.h"
 
 /* Localized text keys: */
+// Application shortcuts:
 static const constexpr char * remove_APP = "remove_APP";
 static const constexpr char * from_favorites = "from_favorites";
 static const constexpr char * will_remove_link = "will_remove_link";
 static const constexpr char * edit_app = "edit_app";
 
+// Folders:
+static const constexpr char * delete_NAME = "delete_NAME";
+static const constexpr char * folder = "folder";
+static const constexpr char * will_remove_folder = "will_remove_folder";
+static const constexpr char * edit_folder = "edit_folder";
+
 /*
  * Recursively creates a menu item and all its child folder items.
  */
 AppMenu::ConfigData::ConfigData() :
-Localized("ConfigItemData")
+Localized("AppMenu::ConfigData")
 {
     pendingCallbackID = 0;
 }
@@ -213,8 +220,14 @@ bool AppMenu::ConfigData::isMovable() const
 juce::String 
 AppMenu::ConfigData::getConfirmDeleteTitle() const
 {
-    return localeText(remove_APP) 
-            + getTitle() + localeText(from_favorites);
+    if(isFolder())
+    {
+        return localeText(delete_NAME) + getTitle() + localeText(folder);
+    }
+    else
+    {
+        return localeText(remove_APP) + getTitle() + localeText(from_favorites);
+    }
 }
 
 /*
@@ -223,7 +236,7 @@ AppMenu::ConfigData::getConfirmDeleteTitle() const
 juce::String 
 AppMenu::ConfigData::getConfirmDeleteMessage() const
 {
-    return localeText(will_remove_link);
+    return localeText(isFolder() ? will_remove_folder : will_remove_link);
 }
 
 /*
@@ -232,7 +245,7 @@ AppMenu::ConfigData::getConfirmDeleteMessage() const
 juce::String 
 AppMenu::ConfigData::getEditorTitle() const
 {
-    return localeText(edit_app);
+    return localeText(isFolder() ? edit_folder : edit_app);
 }
 
 /*
@@ -245,7 +258,7 @@ AppMenu::ConfigData::isEditable
     switch(dataField)
     {
         case DataField::categories:
-            return getFolderSize() > 0;
+            return isFolder();
         case DataField::command:
         case DataField::termLaunchOption:
             return getFolderSize() == 0;
