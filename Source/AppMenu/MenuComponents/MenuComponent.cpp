@@ -1,6 +1,11 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "MenuComponents/MenuComponent.h"
 
+AppMenu::MenuComponent::MenuComponent()
+{
+    setWantsKeyboardFocus(true);
+}
+
 /*
  * Gets the MenuItem for the current active folder component.
  */

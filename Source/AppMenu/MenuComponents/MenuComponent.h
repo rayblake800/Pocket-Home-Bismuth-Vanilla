@@ -15,7 +15,7 @@
 class AppMenu::MenuComponent : public juce::Component
 {
 public:
-    MenuComponent() { }
+    MenuComponent();
 
     virtual ~MenuComponent() { }
 
@@ -59,7 +59,6 @@ public:
      */
     int openFolderCount() const;
 
-protected:
     /**
      * @brief  Gets an open folder component from the list of open folders.
      *
