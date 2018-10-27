@@ -11,7 +11,7 @@ static const constexpr char * will_hide = "will_hide";
 static const constexpr char * edit_app = "edit_app";
 
 AppMenu::DesktopEntryData::DesktopEntryData(const DesktopEntry& desktopEntry) :
-desktopEntry(desktopEntry), Localized("DesktopEntryData") { }
+desktopEntry(desktopEntry), Localized("AppMenu::DesktopEntryData") { }
 
 /*
  * Gets the menu item's displayed title.
