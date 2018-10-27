@@ -75,10 +75,10 @@ rowCounter(1, 1, 9)
     menuTypePicker.addListener(this);
     Config::MainFile mainConfig;
     rowCounter.setValue(mainConfig.getConfigValue<int>
-            (Config::MainKeys::maxRowsKey));
+            (Config::MainKeys::pagedMenuWidthKey));
 
     columnCounter.setValue(mainConfig.getConfigValue<int>
-            (Config::MainKeys::maxColumnsKey));
+            (Config::MainKeys::pagedMenuHeightKey));
 
     updateComboBox();
     addAndShowLayoutComponents();
