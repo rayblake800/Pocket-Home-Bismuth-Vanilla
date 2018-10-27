@@ -52,7 +52,7 @@ public:
 
 private:
     //All of the localized text for this class.
-    std::map<juce::String, juce::String> localeStrings;
+    juce::StringPairArray localeStrings;
     //default locale to use if others aren't found.
     static const constexpr char * defaultLocale = "en_US";
 };

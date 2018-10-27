@@ -30,7 +30,7 @@ Localized::Localized(juce::String className, juce::String localeName)
         NamedValueSet& lineSet = classText.getDynamicObject()->getProperties();
         for (auto line = lineSet.begin(); line != lineSet.end(); line++)
         {
-            localeStrings[line->name.toString()] = line->value.toString();
+            localeStrings.set(line->name.toString(), line->value.toString());
         }
     }
     else
@@ -55,15 +55,11 @@ juce::String Localized::getLocaleName()
  */
 juce::String Localized::localeText(juce::String key) const
 {
-    using namespace juce;
-    try
+    using juce::String;
+    if(localeStrings.size() == 0)
     {
-        return localeStrings.at(key);
-    }
-    catch (std::out_of_range e)
-    {
-        DBG("Localized::" << __func__ << ": Failed to find text with key "
-                << key);
+        DBG("Localized::" << __func__ << ": localized text not found!");
         return String();
     }
+    return localeStrings[key];
 }
