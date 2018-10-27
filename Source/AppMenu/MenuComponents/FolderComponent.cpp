@@ -5,7 +5,11 @@
  * Creates a new folder component.
  */
 AppMenu::FolderComponent::FolderComponent(MenuItem folderItem) :
-folderItem(folderItem) { }
+folderItem(folderItem) 
+{
+    folderItem.addListener(this);
+    setWantsKeyboardFocus(false);
+}
 
 /*
  * Creates, adds, and shows the folder's menu buttons if they have not yet been 
@@ -68,14 +72,22 @@ int AppMenu::FolderComponent::getSelectedIndex() const
  */
 void AppMenu::FolderComponent::setSelectedIndex(const int newSelection)
 {
+    if(selectedIndex == newSelection)
+    {
+        return;
+    }
+    if(selectedIndex >= 0 && selectedIndex < folderButtons.size())
+    {
+        getButtonComponent(selectedIndex)->setSelected(false);
+    }
     if(newSelection >= 0 && newSelection < folderButtons.size())
     {
-        if(selectedIndex >= 0 && selectedIndex < folderButtons.size())
-        {
-            getButtonComponent(selectedIndex)->setSelected(false);
-        }
         selectedIndex = newSelection;
         getButtonComponent(selectedIndex)->setSelected(true);
+    }
+    else
+    {
+        selectedIndex = -1;
     }
 }
 
