@@ -46,7 +46,7 @@ public:
      *                                      type ValueType was found.
      */
     template<typename ValueType>
-    ValueType getConfigValue(const juce::Identifier& key)
+    ValueType getConfigValue(const juce::Identifier& key) const
     {
         typename ResourceHandler<ResourceType>::LockedResourcePtr jsonPtr 
             = ResourceHandler<ResourceType>::getReadLockedResource();

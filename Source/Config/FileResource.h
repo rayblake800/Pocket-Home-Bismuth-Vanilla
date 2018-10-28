@@ -5,7 +5,6 @@
 #include "JSONFile.h"
 #include "DataKey.h"
 #include "JuceHeader.h"
-#include "AlertWindow.h"
 
 /**
  * @file FileResource.h
@@ -99,7 +98,6 @@ public:
         {
             //Failed to access .json file
             DBG("FileResource::" << __func__ << ": " << e.what());
-            alertWindow.showPlaceholderError(e.what());
         }
         return ValueType();
     }
@@ -253,13 +251,13 @@ protected:
     template<typename ValueType>
     ValueType getConfigValue(const juce::Identifier& key)
     {
-        ThreadLock& configLock = getResourceLock();
-        configLock.takeReadLock();
+        const juce::ReadWriteLock& configLock = getResourceLock();
+        configLock.enterRead();
         
         FileResource* config = static_cast<FileResource*>(getClassResource());
         ValueType value = config->getConfigValue<ValueType>(key);
 
-        configLock.releaseLock();
+        configLock.exitRead();
         return value;
     }
 
@@ -365,7 +363,6 @@ protected:
         {
             //Failed to read from .json file
             DBG("FileResource::" << __func__ << ": " << e.what());
-            alertWindow.showPlaceholderError(e.what());
         }
         catch(JSONFile::TypeException e)
         {
@@ -375,7 +372,6 @@ protected:
                     <<", expected type:" << e.getExpectedType()
                     <<", actual type: "  << e.getFoundType()
                     << ", error = " << e.what());
-            alertWindow.showPlaceholderError(e.what());
         }
         return T();
     }
@@ -404,12 +400,10 @@ protected:
         {
             //Failed to write to .json file
             DBG("FileResource::" << __func__ << ": " << e.what());
-            alertWindow.showPlaceholderError(e.what());
         }
         catch(JSONFile::TypeException e)
         {
             DBG("FileResource::" << __func__ << ": " << e.what());
-            alertWindow.showPlaceholderError(e.what());
         }
         return false;
     }
@@ -454,8 +448,5 @@ private:
     /* Holds default config file values. */
     JSONFile defaultJson; 
     
-    /* Used to send error messages to the user. */
-    AlertWindow alertWindow;
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FileResource)
 };

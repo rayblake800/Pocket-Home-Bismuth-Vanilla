@@ -168,12 +168,10 @@ void Config::FileResource::loadJSONData()
         catch(JSONFile::FileException e)
         {
             DBG("FileResource::" << __func__ << ": " << e.what());
-            alertWindow.showPlaceholderError(e.what());
         }
         catch(JSONFile::TypeException e)
         {
             DBG("FileResource::" << __func__ << ": " << e.what());
-            alertWindow.showPlaceholderError(e.what());
         }
     }
     writeChanges();
@@ -210,12 +208,10 @@ void Config::FileResource::writeChanges()
     catch(JSONFile::FileException e)
     {
         DBG("FileResource::" << __func__ << ": " << e.what());
-        alertWindow.showPlaceholderError(e.what());
     }
     catch(JSONFile::TypeException e)
     {
         DBG("FileResource::" << __func__ << ": " << e.what());
-        alertWindow.showPlaceholderError(e.what());
     }
 }
 
@@ -250,12 +246,10 @@ void Config::FileResource::restoreDefaultValue(const DataKey& key)
     catch(JSONFile::FileException e)
     {
         DBG("FileResource::" << __func__ << ": " << e.what());
-        alertWindow.showPlaceholderError(e.what());
     }
     catch(JSONFile::TypeException e)
     {
         DBG("FileResource::" << __func__ << ": " << e.what());
-        alertWindow.showPlaceholderError(e.what());
     }
 }
 
