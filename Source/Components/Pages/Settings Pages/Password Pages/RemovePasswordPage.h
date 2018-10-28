@@ -39,22 +39,6 @@ private:
     //Triggers the attempted password removal
     juce::TextButton deleteButton;
 
-
-    //localized text keys;
-    static const constexpr char * current_password = "current_password";
-    static const constexpr char * remove_password = "remove_password";
-    static const constexpr char * apply = "apply";
-    
-    static const constexpr char * success = "success";
-    static const constexpr char * password_removed = "password_removed";
-    
-    static const constexpr char * cant_remove_password = "cant_remove_password";
-    static const constexpr char * wrong_password = "wrong_password";
-    static const constexpr char * check_agent_and_root = "check_agent_and_root";
-    
-    static const constexpr char * error = "error";
-    static const constexpr char * files_missing = "files_missing";
-    static const constexpr char * polkit_missing = "polkit_missing";
     
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RemovePasswordPage)

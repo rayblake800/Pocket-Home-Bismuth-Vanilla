@@ -124,18 +124,19 @@
         "filesMissing"      : "Important application files are missing! Please reinstall pocket-home.",
         "polkitMissing"     : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
     },
-    "RemovePasswordPage": {
-        "current_password": "Current password",
-        "remove_password": "Remove your password",
-        "apply": "Apply",
-        "success": "Success",
-        "password_removed": "Your Pocket-Home password has been removed.",
-        "cant_remove_password": "Removing password failed",
-        "wrong_password": "The current Pocket-Home password was incorrect.",
-        "check_agent_and_root": "The current password was correct, but the action failed. Most likely, either your root password was incorrect, or no PolicyKit authentication agent is running.",
-        "error": "Error",
-        "files_missing": "Important application files are missing! Please reinstall pocket-home.",
-        "polkit_missing": "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
+    "RemovePasswordPage":
+    {
+        "currentPassword"    : "Current password",
+        "removePassword"     : "Remove your password",
+        "apply"              : "Apply",
+        "success"            : "Success",
+        "passwordRemoved"    : "Your Pocket-Home password has been removed.",
+        "cantRemovePassword" : "Removing password failed",
+        "wrongPassword"      : "The current Pocket-Home password was incorrect.",
+        "checkAgent"         : "The current password was correct, but the action failed. Most likely, either your root password was incorrect, or no PolicyKit authentication agent is running.",
+        "error"              : "Error",
+        "filesMissing"       : "Important application files are missing! Please reinstall pocket-home.",
+        "polkitMissing"      : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
     },
     "InputSettingsPage": {
         "input_settings": "Input settings",

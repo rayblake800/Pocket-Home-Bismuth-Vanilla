@@ -4,12 +4,28 @@
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "RemovePasswordPage";
 
+/* Localized text value keys: */
+static const juce::Identifier currentPasswordTextKey    = "currentPassword";
+static const juce::Identifier removePasswordTextKey     = "removePassword";
+static const juce::Identifier applyTextKey              = "apply";
+
+static const juce::Identifier successTextKey            = "success";
+static const juce::Identifier passwordRemovedTextKey    = "passwordRemoved";
+
+static const juce::Identifier cantRemovePasswordTextKey = "cantRemovePassword";
+static const juce::Identifier wrongPasswordTextKey      = "wrongPassword";
+static const juce::Identifier checkAgentTextKey         = "checkAgent";
+
+static const juce::Identifier errorTextKey              = "error";
+static const juce::Identifier filesMissingTextKey       = "filesMissing";
+static const juce::Identifier polkitMissingTextKey      = "polkitMissing";
+    
 RemovePasswordPage::RemovePasswordPage() :
 Locale::TextUser(localeClassKey),
 PageComponent("RemovePasswordPage"),
-curPwdLabel("CurLabel", localeText(current_password)),
+curPwdLabel("CurLabel", localeText(currentPasswordTextKey)),
 curPassword("Current", 0x2022),
-titleLabel("Title", localeText(remove_password))
+titleLabel("Title", localeText(removePasswordTextKey))
 {
     using namespace juce;
 #    if JUCE_DEBUG
@@ -36,7 +52,7 @@ titleLabel("Title", localeText(remove_password))
             (ComponentConfigFile::smallText)));
     
     titleLabel.setJustificationType(Justification::centred);
-    deleteButton.setButtonText(localeText(apply));
+    deleteButton.setButtonText(localeText(applyTextKey));
     deleteButton.addListener(this);
     addAndShowLayoutComponents();
 }
@@ -71,8 +87,8 @@ void RemovePasswordPage::pageButtonClicked(juce::Button* button)
         case Password::passwordRemoveSuccess:
             AlertWindow::showMessageBoxAsync(
                     AlertWindow::AlertIconType::InfoIcon,
-                    localeText(success),
-                    localeText(password_removed),
+                    localeText(successTextKey),
+                    localeText(passwordRemovedTextKey),
                     "",
                     nullptr,
                     ModalCallbackFunction::create([this](int i)
@@ -82,20 +98,20 @@ void RemovePasswordPage::pageButtonClicked(juce::Button* button)
             curPassword.clear();
             return;
         case Password::wrongPasswordError:
-            title = localeText(cant_remove_password);
-            message = localeText(wrong_password);
+            title = localeText(cantRemovePasswordTextKey);
+            message = localeText(wrongPasswordTextKey);
             break;
         case Password::fileDeleteFailed:
-            title = localeText(cant_remove_password);
-            message = localeText(check_agent_and_root);
+            title = localeText(cantRemovePasswordTextKey);
+            message = localeText(checkAgentTextKey);
             break;
         case Password::noPasswordScript:
-            title = localeText(error);
-            message = localeText(files_missing);
+            title = localeText(errorTextKey);
+            message = localeText(filesMissingTextKey);
             break;
         case Password::noPKExec:
-            title = localeText(error);
-            message = localeText(polkit_missing);
+            title = localeText(errorTextKey);
+            message = localeText(polkitMissingTextKey);
             break;
     }
     AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,
