@@ -1,6 +1,6 @@
 #pragma once
 #include "JuceHeader.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "DrawableImageButton.h"
 #include "ScalingLabel.h"
 #include "PageComponent.h"
@@ -12,8 +12,8 @@
  * the clock display mode and adjust system time.
  */
 
-class DateTimePage : public PageComponent, private juce::ComboBox::Listener,
-private Localized
+class DateTimePage : public PageComponent, public Locale::TextUser,
+private juce::ComboBox::Listener
 {
 public:
     DateTimePage();
@@ -50,17 +50,6 @@ private:
     //Command for changing system time
     static const constexpr char * reconfigureCommand
             = " 'sudo dpkg-reconfigure tzdata ; exit'";
-
-    //localized text keys;
-    static const constexpr char * date_time_settings = "date_time_settings";
-    static const constexpr char * select_clock_mode = "select_clock_mode";
-    static const constexpr char * mode_24h = "mode_24h";
-    static const constexpr char * mode_am_pm = "mode_am_pm";
-    static const constexpr char * hide_clock = "hide_clock";
-    static const constexpr char * set_system_clock = "set_system_clock";
-    static const constexpr char * failed_launch = "failed_launch";
-    static const constexpr char * failed_to_run = "failed_to_run";
-    static const constexpr char * check_term_cmd = "check_term_cmd";
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DateTimePage)
 };

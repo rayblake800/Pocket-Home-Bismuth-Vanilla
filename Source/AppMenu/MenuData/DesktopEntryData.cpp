@@ -4,14 +4,17 @@
 #include "DesktopEntryFileError.h"
 #include "DesktopEntryData.h"
 
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "AppMenu::DesktopEntryData";
+
 //localized text keys: 
-static const constexpr char * remove_link_to = "remove_link_to";
-static const constexpr char * question_mark = "question_mark";
-static const constexpr char * will_hide = "will_hide";
-static const constexpr char * edit_app = "edit_app";
+static const juce::Identifier remove_link_to = "remove_link_to";
+static const juce::Identifier question_mark = "question_mark";
+static const juce::Identifier will_hide = "will_hide";
+static const juce::Identifier edit_app = "edit_app";
 
 AppMenu::DesktopEntryData::DesktopEntryData(const DesktopEntry& desktopEntry) :
-desktopEntry(desktopEntry), Localized("AppMenu::DesktopEntryData") { }
+desktopEntry(desktopEntry), Locale::TextUser(localeClassKey) { }
 
 /*
  * Gets the menu item's displayed title.

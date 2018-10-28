@@ -1,5 +1,5 @@
 #pragma once
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "WifiStateManager.h"
 #include "ConnectionSettingsComponent.h"
 
@@ -11,7 +11,7 @@
  */
 
 class WifiSettingsComponent : public ConnectionSettingsComponent,
-public WifiStateManager::Listener, private Localized
+public WifiStateManager::Listener, public Locale::TextUser
 {
 public:
     /**

@@ -5,7 +5,7 @@
 #include "AppMenu.h"
 #include "OverlaySpinner.h"
 #include "AppLauncher.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "MenuData/MenuItem.h"
 #include "MenuComponents/MenuComponent.h"
 #include "Editors/PopupEditor.h"
@@ -17,7 +17,7 @@
  * @brief  Implements core menu functionality, opening and closing folders,
  *         and launching application shortcuts.
  */
-class AppMenu::Controller : private Localized
+class AppMenu::Controller : public Locale::TextUser
 {
 public:
     /**

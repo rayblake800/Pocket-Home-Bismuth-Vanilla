@@ -1,6 +1,6 @@
 #pragma once
 #include "WifiStateManager.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "Spinner.h"
 #include "ScalingLabel.h"
 #include "SwitchComponent.h"
@@ -21,7 +21,7 @@
 
 class WifiSettingsPage : public FocusingListPage,
         public WifiStateManager::Listener, public juce::TextEditor::Listener,
-        private Localized, private WindowFocusedTimer
+        public Locale::TextUser, private WindowFocusedTimer
 {
 public:
     WifiSettingsPage();
@@ -195,16 +195,6 @@ private:
     //wifi is busy
     Spinner spinner;
      
-    //localized text keys;
-    static const constexpr char * password_field = "password_field";
-    static const constexpr char * btn_connect = "btn_connect";
-    static const constexpr char * btn_disconnect = "btn_disconnect";
-    static const constexpr char * wrong_password = "wrong_password";
-    static const constexpr char * invalid_key_format = "invalid_key_format";
-    static const constexpr char * connection_failed = "connection_failed";
-    static const constexpr char * lost_ap = "lost_ap";
-    static const constexpr char * last_connected = "last_connected";
-    static const constexpr char * connected_ap = "connected_ap";
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiSettingsPage)
 };

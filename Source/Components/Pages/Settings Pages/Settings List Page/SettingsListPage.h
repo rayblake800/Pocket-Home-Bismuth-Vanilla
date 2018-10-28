@@ -1,6 +1,6 @@
 #pragma once
 #include "PageComponent.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "NavButton.h"
 #include "ScalingLabel.h"
 #include "PagedList.h"
@@ -11,7 +11,7 @@
  * @brief A navigation page containing buttons that open other settings pages.
  */
 
-class SettingsListPage : public PageComponent, private Localized
+class SettingsListPage : public PageComponent, public Locale::TextUser
 {
 public:
     SettingsListPage();
@@ -75,15 +75,6 @@ private:
 
     //Number of page buttons to show on the screen at a time
     static const constexpr int buttonsPerPage = 5;
-
-    //localized text keys;
-    static const constexpr char * personalize_homepage = "personalize_homepage";
-    static const constexpr char * set_colors = "set_colors";
-    static const constexpr char * set_password = "set_password";
-    static const constexpr char * change_password = "change_password";
-    static const constexpr char * remove_password = "remove_password";
-    static const constexpr char * date_and_time = "date_and_time";
-    static const constexpr char * input_settings = "input_settings";
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsListPage)
 };

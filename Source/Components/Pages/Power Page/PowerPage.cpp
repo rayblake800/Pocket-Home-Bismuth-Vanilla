@@ -5,13 +5,17 @@
 #include "TransitionAnimator.h"
 #include "SystemCommands.h"
 
+
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "PowerPage";
+
 /* Localized text keys: */
-static const constexpr char * shutdown = "shutdown";
-static const constexpr char * reboot = "reboot";
-static const constexpr char * sleep = "sleep";
-static const constexpr char * build = "build";
-static const constexpr char * version = "version";
-static const constexpr char * flash_software = "flash_software";
+static const juce::Identifier shutdownTextKey      = "shutdown";
+static const juce::Identifier rebootTextKey        = "reboot";
+static const juce::Identifier sleepTextKey         = "sleep";
+static const juce::Identifier buildTextKey         = "build";
+static const juce::Identifier versionTextKey       = "version";
+static const juce::Identifier flashSoftwareTextKey = "flashSoftware";
 
 /* Path to the release file used to determine build type */
 static const constexpr char* releaseFilePath = "/etc/os-release";
@@ -26,13 +30,13 @@ static const constexpr char* nameKey = "NAME";
 /* System version key */
 static const constexpr char* versionKey = "VERSION";
 
-PowerPage::PowerPage() :Localized("PowerPage"),
+PowerPage::PowerPage() : Locale::TextUser(localeClassKey),
 PageComponent("PowerPage"),
-powerOffButton(localeText(shutdown)),
-rebootButton(localeText(reboot)),
-sleepButton(localeText(sleep)),
-felButton(localeText(flash_software)),
-versionLabel(localeText(version) 
+powerOffButton(localeText(shutdownTextKey)),
+rebootButton(localeText(rebootTextKey)),
+sleepButton(localeText(sleepTextKey)),
+felButton(localeText(flashSoftwareTextKey)),
+versionLabel(localeText(versionTextKey) 
 + juce::JUCEApplication::getInstance()->getApplicationVersion()),
 lockscreen([this]()
 {
@@ -61,7 +65,7 @@ lockscreen([this]()
     setLayout(layout);
  
     versionLabel.setJustificationType(Justification::centred);
-    versionLabel.setText(localeText(version) 
+    versionLabel.setText(localeText(versionTextKey) 
         + juce::JUCEApplication::getInstance()->getApplicationVersion(),
             NotificationType::dontSendNotification);
     
@@ -85,7 +89,7 @@ lockscreen([this]()
                         = line.substring(eqIndex + 1).unquoted();
             }
         }
-        String buildText = localeText(build);
+        String buildText = localeText(buildTextKey);
         if(releaseVars.count(prettyNameKey))
         {
             buildText += releaseVars[prettyNameKey];

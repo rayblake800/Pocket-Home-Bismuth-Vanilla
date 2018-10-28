@@ -1,6 +1,6 @@
 #pragma once
 #include "ConfigurableImageButton.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "ScalingLabel.h"
 #include "PageComponent.h"
 
@@ -11,9 +11,8 @@
  * and fixes button mapping.
  */
 
-class InputSettingsPage : public PageComponent,
-private juce::ComboBox::Listener,
-private Localized
+class InputSettingsPage : public PageComponent, public Locale::TextUser,
+private juce::ComboBox::Listener
 {
 public:
     InputSettingsPage();
@@ -46,13 +45,6 @@ private:
     //Button for calibrating
     juce::TextButton calibrating;
 
-    //localized text keys;
-    static const constexpr char * input_settings = "input_settings";
-    static const constexpr char * calibrate_screen = "calibrate_screen";
-    static const constexpr char * select_cursor_visible
-            = "select_cursor_visible";
-    static const constexpr char * not_visible = "not_visible";
-    static const constexpr char * visible = "visible";
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(InputSettingsPage)
 };

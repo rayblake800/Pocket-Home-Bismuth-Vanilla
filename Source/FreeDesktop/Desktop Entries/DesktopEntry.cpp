@@ -1,5 +1,5 @@
 #include <set>
-#include "Localized.h"
+#include "Locale.h"
 #include "Utils.h"
 #include "XDGDirectories.h"
 #include "Config/MainFile.h"
@@ -516,7 +516,7 @@ void DesktopEntry::writeFile()
     using namespace juce;
     using namespace DesktopEntryUtils;
     String outFileText = "";
-    String locale = Localized::getLocaleName();
+    String locale = Locale::getLocaleName();
     Array<Identifier> foundKeys;
 
     // Reload the source file to preserve comments and alternate locale data.
@@ -613,7 +613,7 @@ void DesktopEntry::readEntryFile()
         throw DesktopEntryFileError(entryFile, errorMessage);
     }
     entryFile.readLines(lines);
-    String locale = Localized::getLocaleName();
+    String locale = Locale::getLocaleName();
     /* Last group header read: */
     String groupHeader;
     /* Action ID, if the current header defines an action: */

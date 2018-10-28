@@ -8,24 +8,24 @@
 #include "Editors/NewDesktopAppEditor.h"
 #include "Controller.h"
 
-/* Localized text keys: */
-static const constexpr char* localeTextKey      = "AppMenu::Controller";
-static const constexpr char* editTextKey        = "edit";
-static const constexpr char* deleteTextKey      = "delete";
-static const constexpr char* pinItemTextKey     = "add_shortcut";
-static const constexpr char* moveBackTextKey    = "moveBack";
-static const constexpr char* moveForwardTextKey = "moveForward";
-static const constexpr char* newShortcutTextKey = "newShortcut";
-static const constexpr char* newEntryTextKey    = "newEntry";
-static const constexpr char* newFolderTextKey   = "newFolder";
 
-
+/* Localized object class key: */
+static const juce::Identifier localeClassKey     = "AppMenu::Controller";
+/* Text field keys: */
+static const juce::Identifier editTextKey        = "edit";
+static const juce::Identifier deleteTextKey      = "delete";
+static const juce::Identifier pinItemTextKey     = "pinItem";
+static const juce::Identifier moveBackTextKey    = "moveBack";
+static const juce::Identifier moveForwardTextKey = "moveForward";
+static const juce::Identifier newShortcutTextKey = "newShortcut";
+static const juce::Identifier newEntryTextKey    = "newEntry";
+static const juce::Identifier newFolderTextKey   = "newFolder";
 
 AppMenu::Controller::Controller
 (MenuComponent* menuComponent, OverlaySpinner& loadingSpinner) : 
     menuComponent(menuComponent), 
     loadingSpinner(loadingSpinner),
-    Localized(localeTextKey) { }
+    Locale::TextUser(localeClassKey) { }
 
 /*
  * Displays a context menu with generic options for editing the AppMenu.
@@ -87,16 +87,22 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
 
     contextMenu.addItem(int(OptionCode::Edit), localeText(editTextKey));
     contextMenu.addItem(int(OptionCode::Delete), localeText(deleteTextKey));
+    
+    ConfigFile appConfig;
+    const MenuItem rootFolder = appConfig.getRootFolderItem();
+    const MenuItem parent = menuItem.getParentFolder();
+    if(parent != rootFolder)
+    {
+        contextMenu.addItem(int(OptionCode::PinToRoot), 
+                localeText(pinItemTextKey));
+    }
 
-    contextMenu.addItem(int(OptionCode::PinToRoot), 
-            localeText(pinItemTextKey));
     if(menuItem.isFolder())
     {
         contextMenu.addItem(int(OptionCode::NewShortcut), 
                 localeText(newShortcutTextKey));
     }
 
-    MenuItem parent = menuItem.getParentFolder();
     // The menu item parameter should always have a valid parent and index.
     jassert(menuItem.getIndex() >= 0);
     jassert(!parent.isNull());
@@ -115,7 +121,7 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
         }
     }
     handleContextMenuAction(OptionCode(contextMenu.show()), menuItem,
-            lastMovableIndex);
+            rootFolder.getMovableChildCount());
 }
 
 /*
@@ -191,9 +197,7 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
                     editedItem.getConfirmDeleteMessage(),
                     [editedItem]() 
                     { 
-                        //TODO: figure out why editedItem is const
-                        MenuItem editedCopy(editedItem);
-                        editedCopy.remove(); 
+                        MenuItem(editedItem).remove();
                     });
             break;
         case OptionCode::PinToRoot:
@@ -202,6 +206,13 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
             ConfigFile appConfig;
             MenuItem rootFolder = appConfig.getRootFolderItem();
             copyMenuItem(editedItem, rootFolder, insertIndex);
+            // Move to the new selected item:
+            while(menuComponent->openFolderCount() > 1)
+            {
+                menuComponent->closeActiveFolder();
+            }
+            menuComponent->getOpenFolder(0)->setSelectedIndex(insertIndex);
+            menuComponent->updateMenuLayout();
             break;
         }
         case OptionCode::MoveBack:

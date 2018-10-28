@@ -7,10 +7,11 @@
 AppMenu::ExistingItemEditor::ExistingItemEditor
 (const MenuItem editedItem, std::function<void()> onConfirm) :
     editedItem(editedItem),
-    AppMenu::PopupEditor(editedItem.getEditorTitle(), onConfirm,
+    AppMenu::PopupEditor(onConfirm,
             editedItem.isEditable(MenuItem::DataField::categories),
             editedItem.isEditable(MenuItem::DataField::command)) 
 {
+    setEditorTitle(editedItem.getEditorTitle());
     setTitleField(editedItem.getTitle());
     setIconField(editedItem.getIconName());
     if(editedItem.isEditable(MenuItem::DataField::categories))

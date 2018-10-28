@@ -2,18 +2,38 @@
 #include "Config/MainKeys.h"
 #include "HomeSettingsPage.h"
 
+/* Localized object class key */
+static const juce::Identifier localeClassKey = "HomeSettingsPage";
+
+/* Localized text value keys: */
+static const juce::Identifier titleTextKey         = "title";
+static const juce::Identifier backgroundTextKey    = "background";
+static const juce::Identifier defaultBGOptionKey   = "defaultBGOption";
+static const juce::Identifier colorBGOptionKey     = "colorBGOption";
+static const juce::Identifier imageBGOptionKey     = "imageBGOption";
+static const juce::Identifier hexValueTextKey      = "hexValue";
+static const juce::Identifier imagePathTextKey     = "imagePath";
+static const juce::Identifier invalidColorTextKey  = "invalidColor";
+static const juce::Identifier chooseBGTextKey      = "chooseBG";
+static const juce::Identifier chooseBGImageTextKey = "chooseBGImage";
+static const juce::Identifier menuTypeTextKey      = "menuType";
+static const juce::Identifier scrollingMenuTextKey = "scrollingMenu";
+static const juce::Identifier pagedMenuTextKey     = "pagedMenu";
+static const juce::Identifier menuColumnsTextKey   = "menuColumns";
+static const juce::Identifier menuRowsTextKey      = "menuRows";
+
 HomeSettingsPage::HomeSettingsPage() :
-Localized("HomeSettingsPage"),
+Locale::TextUser(localeClassKey),
 PageComponent("HomeSettingsPage"),
-title("personalizeTitle", localeText(title_text)),
-bgTypeLabel("bgLabel", localeText(background_text)),
+title("personalizeTitle", localeText(titleTextKey)),
+bgTypeLabel("bgLabel", localeText(backgroundTextKey)),
 bgTypePicker("bgTypePicker"),
 bgLabel("bgTitle", ""),
-bgEditor(localeText(choose_background), localeText(choose_bg_image)),
-menuPickerLabel("menuPickerLabel", localeText(menu_type_text)),
+bgEditor(localeText(chooseBGTextKey), localeText(chooseBGImageTextKey)),
+menuPickerLabel("menuPickerLabel", localeText(menuTypeTextKey)),
 menuTypePicker("menuTypePicker"),
-columnCountLabel("columnCountLabel", localeText(menu_columns)),
-rowCountLabel("rowCountLabel", localeText(menu_rows)),
+columnCountLabel("columnCountLabel", localeText(menuColumnsTextKey)),
+rowCountLabel("rowCountLabel", localeText(menuRowsTextKey)),
 columnCounter(1, 1, 9),
 rowCounter(1, 1, 9)
 {
@@ -61,17 +81,17 @@ rowCounter(1, 1, 9)
     setLayout(layout);
 
     title.setJustificationType(Justification::centred);
-    bgTypePicker.addItem(localeText(default_bg), 1);
-    bgTypePicker.addItem(localeText(color_bg), 2);
-    bgTypePicker.addItem(localeText(image_bg), 3);
+    bgTypePicker.addItem(localeText(defaultBGOptionKey), 1);
+    bgTypePicker.addItem(localeText(colorBGOptionKey), 2);
+    bgTypePicker.addItem(localeText(imageBGOptionKey), 3);
     bgTypePicker.addListener(this);
 
     bgEditor.setColour(TextEditor::ColourIds::textColourId,
             Colour::greyLevel(0.f));
     bgEditor.addFileSelectListener(this);
 
-    menuTypePicker.addItem(localeText(scrolling_menu), 1);
-    menuTypePicker.addItem(localeText(paged_menu), 2);
+    menuTypePicker.addItem(localeText(scrollingMenuTextKey), 1);
+    menuTypePicker.addItem(localeText(pagedMenuTextKey), 2);
     menuTypePicker.addListener(this);
     Config::MainFile mainConfig;
     rowCounter.setValue(mainConfig.getConfigValue<int>
@@ -164,14 +184,14 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
             case 2:
                 bgLabel.setVisible(true);
                 bgLabel.setText(
-                        localeText(bg_color_hex_value),
+                        localeText(hexValueTextKey),
                         juce::NotificationType::dontSendNotification);
                 bgEditor.showFileSelectButton(false);
                 break;
             case 3:
                 bgLabel.setVisible(true);
                 bgLabel.setText(
-                        localeText(bg_image_path),
+                        localeText(imagePathTextKey),
                         juce::NotificationType::dontSendNotification);
                 bgEditor.showFileSelectButton(true);
         }
@@ -201,7 +221,7 @@ void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
     {
         value = value.toUpperCase();
         if (value.length() != 6 || !value.containsOnly("0123456789ABCDEF"))
-            bgEditor.setText(localeText(invalid_color), false);
+            bgEditor.setText(localeText(invalidColorTextKey), false);
         else
         {
             mainConfig.setConfigValue<String>

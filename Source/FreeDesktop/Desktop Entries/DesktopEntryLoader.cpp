@@ -3,7 +3,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include "Utils.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "ThreadResource.h"
 #include "XDGDirectories.h"
 #include "DesktopEntryFileError.h"
@@ -31,7 +31,7 @@ static const constexpr char* reading_entry = "reading_entry";
 /**
  * @brief  Asynchronously loads and caches desktop entry data.
  */
-class DesktopEntryThread : public ThreadResource, private Localized
+class DesktopEntryThread : public ThreadResource, public Locale::TextUser
 {
 private:
     /* Only DesktopEntryLoader has direct access. */
@@ -56,7 +56,7 @@ private:
     std::map<DesktopEntryLoader::CallbackID, std::function<void()>> onFinish;
 
     DesktopEntryThread() : ThreadResource(desktopEntryThreadKey),
-    Localized(desktopEntryThreadKey.toString()) 
+    Locale::TextUser(desktopEntryThreadKey) 
     {
         startThread();
     }
@@ -144,11 +144,11 @@ private:
     virtual void runLoop(ThreadResource::ThreadLock& threadLock) override
     {
         using namespace juce;
-        threadLock.takeWriteLock();
+        threadLock.enterWrite();
         if(pendingFiles.isEmpty())
         {
             signalThreadShouldExit();
-            threadLock.releaseLock();
+            threadLock.exitWrite();
             return;
         }
         String entryID = pendingFiles.getReference(0).first;
@@ -184,7 +184,7 @@ private:
             DBG("DesktopEntryLoader::" << __func__ << ": Format error: "
                     << e.what());
         }
-        threadLock.releaseLock();
+        threadLock.exitWrite();
     }
 
     /**

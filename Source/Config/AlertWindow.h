@@ -1,5 +1,5 @@
 #pragma once
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "Config.h"
 #include "JuceHeader.h"
 
@@ -15,10 +15,10 @@
  *      -Inappropriate data types in config files
  *      -Missing default config files
  */
-class Config::AlertWindow : private Localized
+class Config::AlertWindow : private Locale::TextUser
 {
 public:
-    AlertWindow() : Localized("ConfigAlertWindows") { }
+    AlertWindow() : Locale::TextUser("ConfigAlertWindows") { }
     
     virtual ~AlertWindow() { }
     

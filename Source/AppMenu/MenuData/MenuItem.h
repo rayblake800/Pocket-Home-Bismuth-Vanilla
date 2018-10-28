@@ -3,7 +3,6 @@
 
 #pragma once
 #include "IconThread.h"
-#include "Localized.h"
 #include "ItemData.h"
 #include "Nullable.h"
 #include "AppMenu.h"

@@ -1,23 +1,24 @@
 #pragma once
 #include <set>
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "JuceHeader.h"
 
 /**
- * @file FileSelectTextEditor.h
+ * @file  FileSelectTextEditor.h
  * 
- * @brief A file selection UI component.
+ * @brief  A file selection UI component.
  * 
  * This component allows a user to either type in a text value, or click a
  * button to open a file picker and choose a file/directory path.
  */
 
-class FileSelectTextEditor : public juce::Component,
-public juce::TextEditor::Listener, public juce::Button::Listener,
-private Localized
+class FileSelectTextEditor : public juce::Component, 
+    public Locale::TextUser,
+    public juce::TextEditor::Listener, 
+    public juce::Button::Listener
 {
 public:
-
+    /* Juce component ColourId values: */
     enum ColourIds
     {
         fileWindowColourId = 0x1900300,
@@ -25,145 +26,140 @@ public:
     };
     
     /**
-     * @param selectionTitle Sets the title displayed in the file selection 
+     * @brief  Creates a new FileSelectTextEditor, optionally setting its 
+     *         initial properties.
+     *
+     * @param selectionTitle  Sets the title displayed in the file selection 
      *                        window.  If left empty, this will use the default
      *                        image selection title.
      * 
-     * @param selectionText  Sets the short description displayed in the file
+     * @param selectionText   Sets the short description displayed in the file
      *                        selection window.  If left empty, this will use
      *                        the default image selection text.
      * 
-     * @param fileFilter     Used to set what types of files may be selected.
-     * 
-     * @param componentName  Sets the component name value
+     * @param fileFilter      Sets what types of files may be selected.  By
+     *                        default, this selects image files.
      */
     FileSelectTextEditor(
             const juce::String& selectionTitle = juce::String(),
-            const juce::String& selectionText = juce::String(),
-            juce::WildcardFileFilter fileFilter = imageFilter,
-            const juce::String& componentName 
-            = juce::String("fileSelectTextEditor"));
+            const juce::String& selectionText  = juce::String(),
+            const juce::WildcardFileFilter fileFilter = imageFilter);
     
     virtual ~FileSelectTextEditor() { }
 
     /**
-     * Set the initial text value for the file selection text editor.
+     * @brief  Sets the text value held by this editor.
      * 
-     * @param path          The initial text value. The usual purpose of this 
-     *                       is to set the path of the last selected file, but 
-     *                       any string will be allowed.
+     * @param newText       The new text value.
      * 
-     * @param shouldNotify  Sets whether FileSelectTextEditor::Listener objects
-     *                       will be notified of this change.
+     * @param shouldNotify  Sets whether Listener objects will be notified of 
+     *                      this change.
      */
-    void setText(juce::String path, bool shouldNotify = true);
+    void setText(const juce::String newText, const bool shouldNotify = true);
 
     /**
-     * @return the text stored within this component's text editor box.
+     * @brief  Gets the text value held by this editor.
+     *
+     * @return  The text stored within this component's text editor box.
      */
     juce::String getText() const;
 
     /**
-     * @param shouldShow Sets the file selection button next to the text editor
-     *                    box to be either visible or hidden. By default, the 
-     *                    button will be shown.
+     * @brief  Sets the visibility of the editor's file selection button.
+     *
+     * @param shouldShow  Whether the file selection button next to the text 
+     *                    editor box should be visible.
      */
-    void showFileSelectButton(bool shouldShow);
+    void showFileSelectButton(const bool shouldShow);
 
     /**
-     * Classes implementing listener can receive updates whenever this 
-     * button's text changes.
+     * @brief  Subscribes to receive updates when the editor's text changes.
      */
     class Listener
     {
     public:
-        
         Listener() { }
         
         virtual ~Listener() { }
         
         /**
-         * This will be called whenever a file is selected, the return 
-         * key is pressed while editing, or focus is lost.
+         * @brief  This will be called by tracked editors whenever a file is 
+         *         selected, the return key is pressed while editing, or focus 
+         *         is lost.
          * 
-         * @param edited   Points to the editor that changed. 
+         * @param edited   The updated editor notifying this listener.
          */
         virtual void fileSelected(FileSelectTextEditor* edited) = 0;
     };
     
     /**
-     * Adds a Listener to the list of Listeners that will be notified
-     * of changes.
+     * @brief  Adds a Listener to the list of Listeners that will be notified
+     *         of changes.
      * 
      * @param listener  An object that needs to track the contents of this
-     *                   editor.
+     *                  editor.
      */
-    void addFileSelectListener(Listener * listener);
+    void addFileSelectListener(Listener* listener);
     
 private:
-    
     /**
-     * Signals to all listeners that editor data has updated.
+     * @brief  Signals to all listeners that editor data has updated.
      */
     void notifyListeners();
     
     /**
-     * Runs notifyListeners when the editor loses focus.
+     * @brief  Calls notifyListeners when the editor loses focus.
      * 
-     * @param editor this component's internal TextEditor object.
+     * @param editor  This component's internal TextEditor object.
      */
     void textEditorFocusLost(juce::TextEditor& editor) override;
 
     /**
-     * Runs notifyListeners when the editor is focused and the return key
-     * is pressed.
+     * @brief  Calls notifyListeners when the editor is focused and the return
+     *         key is pressed.
      * 
-     * @param editor this component's internal TextEditor object.
+     * @param editor  This component's internal TextEditor object.
      */
     void textEditorReturnKeyPressed(juce::TextEditor & editor) override;
 
     /**
-     * Opens the file selection window when the file selection button is 
-     * clicked.
+     * @brief  Opens the file selection window when the file selection button is 
+     *         clicked.
      * 
-     * @param button Should be this component's file selection button.
+     * @param button  This component's file selection button.
      */
     void buttonClicked(juce::Button* button) override;
 
     /**
-     * Resize child components to fit within the parent component.
+     * @brief  Resizes child components to fit when the component's bounds
+     *         change.
      */
     void resized() override;
 
-    //Editable text field, shows the selected path, or whatever other value
-    //the user types in
+    /* The editable text field. This shows the selected path, or whatever other 
+       value the user types in. */
     juce::TextEditor filePath;
     
-    //Opens the file selection window.
+    /* Opens the file selection window. */
     juce::TextButton fileSelectButton;
     
-    //iff true, display fileSelectButton
-    bool showButton;
-    
-    //Sets which files the file selection window will allow.
+    /* Sets which files the file selection window will allow. */
     juce::WildcardFileFilter fileFilter;
     
-    //Title to display on the file selection window.
+    /* The title to display on the file selection window. */
     juce::String selectionTitle;
     
-    //Brief description to display on the file selection window.
+    /* A brief description to display on the file selection window. */
     juce::String selectionText;
     
-    //Stores all objects that track when this editor's value changes.
+    /* Stores all objects that track when this editor's value changes. */
     std::set<Listener*> listeners;
     
-    //Image preview component to use on the file selection window.
+    /* Image preview component to use in the file selection window. */
     juce::ImagePreviewComponent imagePreview;
 
-    //Default selection properties for selecting images.
+    /* Default file filter, limiting file selection to image files. */
     static const juce::WildcardFileFilter imageFilter;
-    static const constexpr char * img_select_title = "img_select_title";
-    static const constexpr char * img_select_text = "img_select_text";
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FileSelectTextEditor)
 };

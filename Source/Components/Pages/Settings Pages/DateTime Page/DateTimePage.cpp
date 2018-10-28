@@ -2,13 +2,27 @@
 #include "Config/MainKeys.h"
 #include "Config/MainFile.h"
 
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "DateTimePage";
+
+/* Localized text value keys: */
+static const juce::Identifier dateTimeTitleKey      = "dateTimeTitle";
+static const juce::Identifier clockModeTextKey      = "clockMode";
+static const juce::Identifier Mode24HourTextKey     = "mode24Hour";
+static const juce::Identifier mode12HourTextKey     = "mode12Hour";
+static const juce::Identifier hideClockTextKey      = "hideClock";
+static const juce::Identifier setSystemClockTextKey = "setSystemClock";
+static const juce::Identifier failedLaunchTextKey   = "failedLaunch";
+static const juce::Identifier failedToRunTextKey    = "failedToRun";
+static const juce::Identifier checkCommandTextKey   = "checkCommand";
+
 DateTimePage::DateTimePage() :
-Localized("DateTimePage"),
+Locale::TextUser(localeClassKey),
 PageComponent("DateTimePage"),
-titleLabel("dateTimeTitle", localeText(date_time_settings)),
+titleLabel("dateTimeTitle", localeText(dateTimeTitleKey)),
 setClockMode("setClockMode"),
-reconfigureBtn(localeText(set_system_clock)),
-clockModeLabel("modeLabel", localeText(select_clock_mode))
+reconfigureBtn(localeText(setSystemClockTextKey)),
+clockModeLabel("modeLabel", localeText(clockModeTextKey))
 {
     using namespace juce;
 #    if JUCE_DEBUG
@@ -34,9 +48,9 @@ clockModeLabel("modeLabel", localeText(select_clock_mode))
     reconfigureBtn.addListener(this);
     titleLabel.setJustificationType(Justification::centred);
 
-    setClockMode.addItem(localeText(mode_24h), 1);
-    setClockMode.addItem(localeText(mode_am_pm), 2);
-    setClockMode.addItem(localeText(hide_clock), 3);
+    setClockMode.addItem(localeText(Mode24HourTextKey), 1);
+    setClockMode.addItem(localeText(mode12HourTextKey), 2);
+    setClockMode.addItem(localeText(hideClockTextKey), 3);
     setClockMode.addListener(this);
     Config::MainFile mainConfig;
     if (mainConfig.getConfigValue<bool>(Config::MainKeys::showClockKey))
@@ -77,10 +91,10 @@ void DateTimePage::pageButtonClicked(juce::Button* button)
         {
             juce::AlertWindow::showMessageBox(
                     juce::AlertWindow::WarningIcon,
-                    localeText(failed_launch),
-                    localeText(failed_to_run)
+                    localeText(failedLaunchTextKey),
+                    localeText(failedToRunTextKey)
                     + "\n" + configureTime + "\n"
-                    + localeText(check_term_cmd));
+                    + localeText(checkCommandTextKey));
         }
     }
 }

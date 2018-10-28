@@ -1,6 +1,6 @@
 #pragma once
 #include "ScalingLabel.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "PageComponent.h"
 
 /**
@@ -15,7 +15,7 @@
  */
 
 
-class FelPage : public PageComponent, private Localized
+class FelPage : public PageComponent, public Locale::TextUser
 {
 public:
     FelPage();

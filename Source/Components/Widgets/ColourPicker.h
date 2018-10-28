@@ -1,6 +1,6 @@
 #pragma once
 #include "LayoutManager.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "JuceHeader.h"
 
 /**
@@ -9,11 +9,10 @@
  * @brief A UI component that allows the user to select a color value.
  */
 
-class ColourPicker : public juce::Component,
+class ColourPicker : public juce::Component, public Locale::TextUser,
         private juce::Slider::Listener,
         private juce::TextEditor::Listener,
-        private juce::Button::Listener,
-        private Localized
+        private juce::Button::Listener
 {
 public:
     /**

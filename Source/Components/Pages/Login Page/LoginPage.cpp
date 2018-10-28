@@ -3,21 +3,38 @@
 #include "LoginPage.h"
 #include "Password.h"
 
+/* Class localized text key: */
+static const juce::Identifier localeClassKey("LoginPage");
+
+/* Localized text value keys: */
+static const juce::Identifier passwordLabelKey     = "passwordLabel";
+static const juce::Identifier logInTextKey         = "logIn";
+static const juce::Identifier wrongPasswordTextKey = "wrongPassword";
+static const juce::Identifier retryPasswordTextKey = "retryPassword";
+static const juce::Identifier closeButtonTextKey   = "closeButton";
+
+// TODO: set these images in configuration files somewhere.
+static const constexpr char* backgroundImagePath = "login/background.png";
+static const constexpr char* iconImagePath       = "login/ntcbanner.png";
+
+/*
+ * Creates the login page, setting the action it should take when the user logs 
+ * in.
+ */
 LoginPage::LoginPage(std::function<void () > loginCallback) :
-Localized("LoginPage"),
+Locale::TextUser(localeClassKey),
 PageComponent("LoginPage"),
-ntcIcon("login/chipBismuth.png"),
-passwordLabel("pass", localeText(password_label)),
+ntcIcon(iconImagePath),
+passwordLabel("pass", localeText(passwordLabelKey)),
 passwordField("passwordField", 0x2022),
-loginButton(localeText(log_in), "loginButton"),
+loginButton(localeText(logInTextKey), "loginButton"),
 hashedPassword("none"),
 loginCallback(loginCallback),
 foundPassword(false)
 {
-    using namespace juce;
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("LoginPage");
-#    endif
+#endif
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     LayoutManager::Layout layout({
@@ -46,11 +63,11 @@ foundPassword(false)
     layout.setYPaddingWeight(2);
     setLayout(layout);
     
-    setBackgroundImage(AssetFiles::loadImageAsset("login/background.png"));
+    setBackgroundImage(AssetFiles::loadImageAsset(backgroundImagePath));
     loginButton.addListener(this);   
     
     ComponentConfigFile config;
-    passwordField.setFont(Font(config.getFontHeight
+    passwordField.setFont(juce::Font(config.getFontHeight
             (ComponentConfigFile::smallText)));
     passwordField.addListener(this);
     addAndShowLayoutComponents();
@@ -112,7 +129,7 @@ void LoginPage::displayError()
     using namespace juce;
     AlertWindow::showMessageBoxAsync(
             AlertWindow::AlertIconType::WarningIcon,
-            localeText(wrong_password),
-            localeText(wrong_password_retry),
-            localeText(close_button_text));
+            localeText(wrongPasswordTextKey),
+            localeText(retryPasswordTextKey),
+            localeText(closeButtonTextKey));
 }

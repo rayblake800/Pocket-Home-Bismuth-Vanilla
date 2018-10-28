@@ -3,7 +3,7 @@
 
 #pragma once
 #include "DesktopEntry.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "IconThread.h"
 #include "ItemData.h"
 
@@ -17,7 +17,7 @@
  * @see AppMenuItem, AppMenuComponent, DesktopEntry
  */
 
-class AppMenu::DesktopEntryData : public ItemData, private Localized
+class AppMenu::DesktopEntryData : public ItemData, public Locale::TextUser
 {
 public:
     /**

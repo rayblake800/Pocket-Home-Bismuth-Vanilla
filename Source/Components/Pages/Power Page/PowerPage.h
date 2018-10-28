@@ -7,7 +7,7 @@
 #include "OverlaySpinner.h"
 #include "SwitchComponent.h"
 #include "LoginPage.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "FocusingListPage.h"
 
 /**
@@ -20,7 +20,7 @@
  * off the display, or enter PocketCHIP flashing mode.
  */
 
-class PowerPage : public PageComponent, private Localized
+class PowerPage : public PageComponent, private Locale::TextUser
 {
 public:
     

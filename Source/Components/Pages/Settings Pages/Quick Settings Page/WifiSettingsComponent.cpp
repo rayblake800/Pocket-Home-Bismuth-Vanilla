@@ -1,22 +1,25 @@
 #include "PocketHomeApplication.h"
 #include "WifiSettingsComponent.h"
 
+
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "WifiSettingsComponent";
+
 /* Localized text keys: */
-static const constexpr char * wifi_not_found = "wifi_not_found";
-static const constexpr char * wifi_disabled = "wifi_disabled";
-static const constexpr char * wifi_turning_on = "wifi_turning_on";
-static const constexpr char * not_connected = "not_connected";
-static const constexpr char * wifi_turning_off = "wifi_turning_off";
-static const constexpr char * connecting_to_ap = "connecting_to_ap";
-static const constexpr char * connecting_to_unknown
-        = "connecting_to_unknown";   
-static const constexpr char * missing_psk = "missing_psk";
-static const constexpr char * disconnecting = "disconnecting";
+static const juce::Identifier wifiNotFoundTextKey      = "wifiNotFound";
+static const juce::Identifier wifiDisabledTextKey      = "wifiDisabled";
+static const juce::Identifier turningOnTextKey         = "turningOn";
+static const juce::Identifier notConnectedTextKey      = "notConnected";
+static const juce::Identifier turningOffTextKey        = "turningOff";
+static const juce::Identifier connectingAPTextKey      = "connectingAP";
+static const juce::Identifier connectingUnknownTextKey = "connectingUnknown";   
+static const juce::Identifier missingPSKTextKey        = "missingPSK";
+static const juce::Identifier disconnectingTextKey     = "disconnecting";
     
 WifiSettingsComponent::WifiSettingsComponent
 (std::function<void() > openWifiPage) :
 ConnectionSettingsComponent(openWifiPage, "wifi"),
-Localized("WifiSettingsComponent")
+Locale::TextUser(localeClassKey)
 {
 #    if JUCE_DEBUG
     setName("WifiSettingsComponent");
@@ -136,15 +139,15 @@ juce::String WifiSettingsComponent::updateButtonText()
     switch (wifiManager.getWifiState())
     {
         case WifiState::missingNetworkDevice:
-            return localeText(wifi_not_found);
+            return localeText(wifiNotFoundTextKey);
         case WifiState::disabled:
-            return localeText(wifi_disabled);
+            return localeText(wifiDisabledTextKey);
         case WifiState::turningOn:
-            return localeText(wifi_turning_on);
+            return localeText(turningOnTextKey);
         case WifiState::enabled:
-            return localeText(not_connected);
+            return localeText(notConnectedTextKey);
         case WifiState::turningOff:
-            return localeText(wifi_turning_off);
+            return localeText(turningOffTextKey);
         case WifiState::connecting:
         {
             WifiAccessPoint ap = wifiManager.getActiveAP();
@@ -152,12 +155,12 @@ juce::String WifiSettingsComponent::updateButtonText()
             {
                 DBG("WifiSettingsComponent::" << __func__ << ": wifi is "
                         << "connecting, but can't get the connecting AP.");
-                return localeText(connecting_to_unknown);
+                return localeText(connectingUnknownTextKey);
             }
-            return String(localeText(connecting_to_ap)) + ap.getSSID();
+            return String(localeText(connectingAPTextKey)) + ap.getSSID();
         }
         case WifiState::missingPassword:
-            return localeText(missing_psk);
+            return localeText(missingPSKTextKey);
         case WifiState::connected:
         {
             WifiAccessPoint ap = wifiManager.getActiveAP();
@@ -168,7 +171,7 @@ juce::String WifiSettingsComponent::updateButtonText()
             return ap.getSSID();
         }
         case WifiState::disconnecting:
-            return localeText(disconnecting);
+            return localeText(disconnectingTextKey);
         default:
             return "Unknown State";
     }

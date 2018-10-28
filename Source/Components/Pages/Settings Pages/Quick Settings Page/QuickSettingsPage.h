@@ -1,6 +1,5 @@
 #pragma once
 #include "IconSliderComponent.h"
-#include "Localized.h"
 #include "SwitchComponent.h"
 #include "ConfigurableImageButton.h"
 #include "PageComponent.h"

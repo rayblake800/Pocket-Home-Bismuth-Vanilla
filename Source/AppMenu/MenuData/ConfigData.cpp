@@ -3,24 +3,27 @@
 #include "DesktopEntryData.h"
 #include "ConfigKeys.h"
 
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "AppMenu::ConfigData";
+
 /* Localized text keys: */
 // Application shortcuts:
-static const constexpr char * remove_APP = "remove_APP";
-static const constexpr char * from_favorites = "from_favorites";
-static const constexpr char * will_remove_link = "will_remove_link";
-static const constexpr char * edit_app = "edit_app";
+static const juce::Identifier remove_APP = "remove_APP";
+static const juce::Identifier from_favorites = "from_favorites";
+static const juce::Identifier will_remove_link = "will_remove_link";
+static const juce::Identifier edit_app = "edit_app";
 
 // Folders:
-static const constexpr char * delete_NAME = "delete_NAME";
-static const constexpr char * folder = "folder";
-static const constexpr char * will_remove_folder = "will_remove_folder";
-static const constexpr char * edit_folder = "edit_folder";
+static const juce::Identifier delete_NAME = "delete_NAME";
+static const juce::Identifier folder = "folder";
+static const juce::Identifier will_remove_folder = "will_remove_folder";
+static const juce::Identifier edit_folder = "edit_folder";
 
 /*
  * Recursively creates a menu item and all its child folder items.
  */
 AppMenu::ConfigData::ConfigData() :
-Localized("AppMenu::ConfigData")
+Locale::TextUser(localeClassKey)
 {
     pendingCallbackID = 0;
 }
@@ -61,8 +64,6 @@ void AppMenu::ConfigData::initMenuData(juce::var& menuData)
                 categories.add(category.operator String());
             }
         }
-        folderItems = menuData.getProperty(folderItemKey, var());
-        DBG("Loaded menu item " << title);
     }
     if(folderItems.isVoid() && menuData.size() > 0)
     {

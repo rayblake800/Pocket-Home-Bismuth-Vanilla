@@ -1,7 +1,7 @@
 #pragma once
 #include "ScalingLabel.h"
 #include "PageComponent.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "JuceHeader.h"
 
 /**
@@ -12,7 +12,7 @@
  * average person from using this particular application.
  */
 
-class SetPasswordPage : public PageComponent, private Localized
+class SetPasswordPage : public PageComponent, public Locale::TextUser
 {
 public:
     SetPasswordPage();
@@ -63,32 +63,5 @@ private:
     //Button for applying the settings
     juce::TextButton setPassword;
     
-        
-    //localized text keys;
-    static const constexpr char * change_password = "change_password";
-    static const constexpr char * current_password = "current_password";
-    static const constexpr char * new_password = "new_password";
-    static const constexpr char * retype_password = "retype_password";
-    static const constexpr char * apply = "apply";
-    
-    static const constexpr char * confirmation_failed = "confirmation_failed";
-    static const constexpr char * fields_dont_match = "fields_dont_match";
-    
-    static const constexpr char * success = "success";
-    static const constexpr char * password_updated = "password_updated";
-    
-    static const constexpr char * missing_password = "missing_password";
-    static const constexpr char * ask_to_enter_new = "ask_to_enter_new";
-    
-    static const constexpr char * failed_set = "failed_set";
-    static const constexpr char * failed_update = "failed_update";
-    static const constexpr char * wrong_password = "wrong_password";
-    static const constexpr char * check_agent_and_root = "check_agent_and_root";
-    
-    static const constexpr char * error = "error";
-    static const constexpr char * securing_failed = "securing_failed";
-    static const constexpr char * files_missing = "files_missing";
-    static const constexpr char * polkit_missing = "polkit_missing";
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SetPasswordPage)
 };

@@ -3,20 +3,23 @@
 #include "I2CBus.h"
 #include "FelPage.h"
 
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "FelPage";
+
 /* localized text keys: */
-static const constexpr char * ask_to_reboot = "ask_to_reboot";
-static const constexpr char * yes_btn = "yes_btn";
-static const constexpr char * no_btn = "no_btn";
-static const constexpr char * flashing_info = "flashing_info";
+static const juce::Identifier rebootTextKey       = "reboot";
+static const juce::Identifier yesTextKey          = "yes";
+static const juce::Identifier noTextKey           = "no";
+static const juce::Identifier flashingInfoTextKey = "flashingInfo";
 
 FelPage::FelPage() :
-Localized("FelPage"),
+Locale::TextUser(localeClassKey),
 PageComponent("FelPage"),
 debounce(false),
-infoLine1("infoLine1", localeText(ask_to_reboot)),
-yesButton(localeText(yes_btn)),
-noButton(localeText(no_btn)),
-infoLine2("infoLine2", localeText(flashing_info))
+infoLine1("infoLine1", localeText(rebootTextKey)),
+yesButton(localeText(yesTextKey)),
+noButton(localeText(noTextKey)),
+infoLine2("infoLine2", localeText(flashingInfoTextKey))
 {
     using namespace juce;
 #    if JUCE_DEBUG

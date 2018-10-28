@@ -3,8 +3,19 @@
 #include "SystemCommands.h"
 #include "InputSettingsPage.h"
 
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "InputSettingsPage";
+
+//localized text keys;
+static const juce::Identifier input_settings = "input_settings";
+static const juce::Identifier calibrate_screen = "calibrate_screen";
+static const juce::Identifier select_cursor_visible
+        = "select_cursor_visible";
+static const juce::Identifier not_visible = "not_visible";
+static const juce::Identifier visible = "visible";
+
 InputSettingsPage::InputSettingsPage() :
-Localized("InputSettingsPage"),
+Locale::TextUser(localeClassKey),
 PageComponent("InputSettingsPage"),
 title("settings", localeText(input_settings)),
 chooseMode("chooseMode"),

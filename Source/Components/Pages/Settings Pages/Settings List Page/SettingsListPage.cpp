@@ -1,8 +1,20 @@
 #include "SettingsListPage.h"
 #include "Password.h"
 
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "SettingsListPage";
+
+/* Localized text value keys: */
+static const juce::Identifier homeSettingsTitleKey   = "homeSettings";
+static const juce::Identifier colorSettingsTitleKey  = "colorSettings";
+static const juce::Identifier setPasswordTitleKey    = "setPassword";
+static const juce::Identifier changePasswordTitleKey = "changePassword";
+static const juce::Identifier removePasswordTitleKey = "removePassword";
+static const juce::Identifier dateTimeTitleKey       = "dateTime";
+static const juce::Identifier inputSettingsTitleKey  = "inputSettings";
+
 SettingsListPage::SettingsListPage() :
-Localized("SettingsListPage"),
+Locale::TextUser(localeClassKey),
 PageComponent("SettingsListPage")
 {
 
@@ -27,19 +39,19 @@ juce::StringArray SettingsListPage::getButtonTitles()
 {
     using namespace juce;
     StringArray titleList;
-    titleList.add(localeText(personalize_homepage));
-    titleList.add(localeText(set_colors));
+    titleList.add(localeText(homeSettingsTitleKey));
+    titleList.add(localeText(colorSettingsTitleKey));
     if (Password::isPasswordSet())
     {
-        titleList.add(localeText(change_password));
-        titleList.add(localeText(remove_password));
+        titleList.add(localeText(changePasswordTitleKey));
+        titleList.add(localeText(removePasswordTitleKey));
     }
     else
     {
-        titleList.add(localeText(set_password));
+        titleList.add(localeText(setPasswordTitleKey));
     }
-    titleList.add(localeText(date_and_time));
-    titleList.add(localeText(input_settings));
+    titleList.add(localeText(dateTimeTitleKey));
+    titleList.add(localeText(inputSettingsTitleKey));
     return titleList;
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "JuceHeader.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "ScalingLabel.h"
 #include "PageComponent.h"
 
@@ -12,7 +12,7 @@
  * password.
  */
 
-class RemovePasswordPage : public PageComponent, private Localized
+class RemovePasswordPage : public PageComponent, public Locale::TextUser
 {
 public:
     RemovePasswordPage();

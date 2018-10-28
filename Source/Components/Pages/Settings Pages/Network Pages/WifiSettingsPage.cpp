@@ -1,5 +1,5 @@
 #include "Utils.h"
-#include "LocalizedTime.h"
+#include "Locale/Time.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
 #include "WifiSettingsPage.h"
@@ -13,7 +13,7 @@ const juce::StringArray WifiSettingsPage::wifiImageFiles
            "wifiStrength3.svg"
 };
 //Access point lock icon file
-static const constexpr char * lockFile = "lock.svg";
+static const constexpr char* lockFile = "lock.svg";
 
 //===================== List item Layout values ================================
 //Horizontal weights for components in each individual access point list item:
@@ -28,7 +28,20 @@ static const constexpr float yMarginFraction = 0.1;
 static const constexpr float xPaddingFraction = 0.04;
 static const constexpr float yPaddingFraction = 0.04;
 
-//anonymous comparator class object for Wifi access point array sorting.
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "WifiSettingsPage";
+
+/* Localized text value keys: */
+static const juce::Identifier passwordTextKey         = "password";
+static const juce::Identifier connectTextKey          = "connect";
+static const juce::Identifier disconnectTextKey       = "disconnect";
+static const juce::Identifier wrongPasswordTextKey    = "wrongPassword";
+static const juce::Identifier invalidFormatTextKey    = "invalidFormat";
+static const juce::Identifier connectionFailedTextKey = "connectionFailed";
+static const juce::Identifier lostAPTextKey           = "lostAP";
+static const juce::Identifier lastConnectedTextKey    = "lastConnected";
+
+/* Anonymous comparator class object for Wifi access point array sorting. */
 static class
 {
 public:
@@ -78,8 +91,8 @@ public:
 } apComparator;
 
 WifiSettingsPage::WifiSettingsPage() :
-passwordLabel("passwordLabel", localeText(password_field)),
-Localized("WifiSettingsPage"),
+passwordLabel("passwordLabel", localeText(passwordTextKey)),
+Locale::TextUser(localeClassKey),
 WindowFocusedTimer("WifiSettingsPage")    
 {
     using namespace Config::MainKeys;
@@ -243,15 +256,15 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
         layout.setXMarginFraction(xMarginFraction);
         layout.setYMarginFraction(yMarginFraction);
     }
-    String connectionBtnText = localeText(btn_connect);
+    String connectionBtnText = localeText(connectTextKey);
     bool showButtonSpinner = false;
     bool showPasswordEntry = false;
     String errorMessage = "";
     WifiStateManager wifiManager;
     if (selectedAP.getSavedConnectionPath().isNotEmpty())
     {
-        LocalizedTime connTime(wifiManager.lastConnectionTime(selectedAP));
-        lastConnectionLabel.setText(localeText(last_connected)
+        Locale::Time connTime(wifiManager.lastConnectionTime(selectedAP));
+        lastConnectionLabel.setText(localeText(lastConnectedTextKey)
                 + connTime.approxTimePassed(),
                 juce::NotificationType::dontSendNotification);
     }
@@ -275,22 +288,22 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
             showButtonSpinner = true;
             break;
         case AccessPointState::connectedAP:
-            connectionBtnText = localeText(btn_disconnect);
+            connectionBtnText = localeText(disconnectTextKey);
             break;
         case AccessPointState::disconnectedAP:
             showPasswordEntry = selectedAP.getRequiresAuth() &&
                     selectedAP.getSavedConnectionPath().isEmpty();
             if(lastConnecting == selectedAP)
             {
-                errorMessage = localeText(connection_failed);
+                errorMessage = localeText(connectionFailedTextKey);
             }
             break;
         case AccessPointState::invalidSecurityAP:
             showPasswordEntry = selectedAP.getRequiresAuth();
-            errorMessage = localeText(wrong_password);
+            errorMessage = localeText(wrongPasswordTextKey);
             break;
         case AccessPointState::missingAP:
-            errorMessage = localeText(lost_ap);
+            errorMessage = localeText(lostAPTextKey);
 
     }
     if (showPasswordEntry)
@@ -367,7 +380,7 @@ void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
     const String& psk = passwordEditor.getText();
     if (passwordEditor.isShowing() && !accessPoint.isValidKeyFormat(psk))
     {
-        errorLabel.setText(localeText(invalid_key_format),
+        errorLabel.setText(localeText(invalidFormatTextKey),
                 juce::NotificationType::dontSendNotification);
         passwordEditor.clear();
         return;

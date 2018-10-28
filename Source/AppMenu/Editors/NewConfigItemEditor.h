@@ -46,6 +46,28 @@ protected:
     virtual void commitEdits();
 
 private:
+    /**
+     * @brief  Private localized text data source.
+     */
+    class LocaleData: public Locale::TextUser
+    {
+    public:
+        LocaleData();
+
+        virtual ~LocaleData() { }
+
+        /**
+         * @brief  Gets the localized title displayed on the editor.
+         *
+         * @param isFolder  Whether the editor is for a folder, or for a
+         *                  shortcut.
+         *
+         * @return          An appropriate localized title string.
+         */
+        juce::String getTitle(const bool isFolder) const;
+    };
+    LocaleData localeData;
+
     /* Folder where the new menu item will be inserted. */
     MenuItem parentFolder;
 

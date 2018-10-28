@@ -2,72 +2,78 @@
 #include "ComponentConfigFile.h"
 #include "FileSelectTextEditor.h"
 
+/* Default file filter, allowing image types: */
 const juce::WildcardFileFilter FileSelectTextEditor::imageFilter
 ("*.png;*.jpg;*.jpeg;*.svg;*.gif;*.xpm", "", "Image files");
 
+/* Class localized text key: */
+static const juce::Identifier localeClassKey = "FileSelectTextEditor";
+
+/* Localized text value keys: */
+static const juce::Identifier defaultTitleKey       = "defaultTitle";
+static const juce::Identifier defaultDescriptionKey = "defaultDescription";
+
+/*
+ * Creates a new FileSelectTextEditor, optionally setting its initial 
+ * properties.
+ */
 FileSelectTextEditor::FileSelectTextEditor(
         const juce::String& selectionTitle,
         const juce::String& selectionText,
-        juce::WildcardFileFilter fileFilter,
-        const juce::String& componentName) :
-Localized("FileSelectTextEditor"),
+        const juce::WildcardFileFilter fileFilter) :
+Locale::TextUser(localeClassKey),
 fileFilter(fileFilter),
 selectionTitle(selectionTitle),
 selectionText(selectionText),
-filePath(componentName),
-fileSelectButton("..."),
-showButton(true)
+fileSelectButton("...")
 {
-    using namespace juce;
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("FileSelectTextEditor");
-#    endif
+#endif
     if(selectionTitle.isEmpty())
     {
-        this->selectionTitle = localeText(img_select_title);
+        this->selectionTitle = localeText(defaultTitleKey);
     }
     if(selectionText.isEmpty())
     {
-        this->selectionText = localeText(img_select_text);
-        
+        this->selectionText = localeText(defaultDescriptionKey);
     }
     fileSelectButton.addListener(this);
     filePath.addListener(this);
     ComponentConfigFile config;
-    filePath.setFont(Font(config.getFontHeight
+    filePath.setFont(juce::Font(config.getFontHeight
             (ComponentConfigFile::smallText)));
     addAndMakeVisible(filePath);
     addAndMakeVisible(fileSelectButton);
 }
 
-/**
- * Set the initial text value for the file selection text editor.
+/*
+ * Sets the text value held by this editor.
  */
-void FileSelectTextEditor::setText(juce::String path, bool shouldNotify)
+void FileSelectTextEditor::setText
+(const juce::String newText, const bool shouldNotify)
 {
-    filePath.setText(path, shouldNotify);
+    filePath.setText(newText, shouldNotify);
     if (shouldNotify)
     {
         notifyListeners();
     }
 }
 
-/**
- * @return the text stored within this component's text editor box.
+/*
+ * Gets the text value held by this editor.
  */
 juce::String FileSelectTextEditor::getText() const
 {
     return filePath.getText();
 }
 
-/**
- * @param shouldShow Sets the file selection button next to the text editor
- *                    box to be either visible or hidden. By default, the 
- *                    button will be shown.
+/*
+ * Sets the visibility of the editor's file selection button.
  */
-void FileSelectTextEditor::showFileSelectButton(bool shouldShow)
+void FileSelectTextEditor::showFileSelectButton(const bool shouldShow)
 {
-    if (shouldShow == showButton)
+    if(shouldShow == fileSelectButton.isShowing())
     {
         return;
     }
@@ -79,21 +85,20 @@ void FileSelectTextEditor::showFileSelectButton(bool shouldShow)
     else
     {
         removeChildComponent(&fileSelectButton);
+        fileSelectButton.setVisible(false);
     }
-    showButton = shouldShow;
     resized();
 }
 
-/**
- * Adds a Listener to the list of Listeners that will be notified
- * of changes.
+/*
+ * Adds a Listener to the list of Listeners that will be notified of changes.
  */
 void FileSelectTextEditor::addFileSelectListener(Listener * listener)
 {
     listeners.insert(listener);
 }
 
-/**
+/*
  * Signals to all listeners that editor data has updated.
  */
 void FileSelectTextEditor::notifyListeners()
@@ -105,8 +110,8 @@ void FileSelectTextEditor::notifyListeners()
     }
 }
 
-/**
- * Runs notifyListeners when the editor loses focus.
+/*
+ * Calls notifyListeners when the editor loses focus.
  */
 void FileSelectTextEditor::textEditorFocusLost(juce::TextEditor& editor)
 {
@@ -116,9 +121,9 @@ void FileSelectTextEditor::textEditorFocusLost(juce::TextEditor& editor)
     }
 }
 
-/**
- * Runs notifyListeners when the editor is focused and the return key
- * is pressed.
+/*
+ * Calls notifyListeners when the editor is focused and the return key is 
+ * pressed.
  */
 void FileSelectTextEditor::textEditorReturnKeyPressed(juce::TextEditor & editor)
 {
@@ -128,7 +133,7 @@ void FileSelectTextEditor::textEditorReturnKeyPressed(juce::TextEditor & editor)
     }
 }
 
-/**
+/*
  * Opens the file selection window when the file selection button is clicked.
  */
 void FileSelectTextEditor::buttonClicked(juce::Button* button)
@@ -162,7 +167,7 @@ void FileSelectTextEditor::resized()
 {
     using namespace juce;
     Rectangle<int> bounds = getLocalBounds();
-    if (!showButton)
+    if (!fileSelectButton.isVisible())
     {
         filePath.setBounds(bounds);
         return;

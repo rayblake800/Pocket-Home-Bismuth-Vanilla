@@ -1,8 +1,11 @@
 #include "RemovePasswordPage.h"
 #include "Password.h"
 
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "RemovePasswordPage";
+
 RemovePasswordPage::RemovePasswordPage() :
-Localized("RemovePasswordPage"),
+Locale::TextUser(localeClassKey),
 PageComponent("RemovePasswordPage"),
 curPwdLabel("CurLabel", localeText(current_password)),
 curPassword("Current", 0x2022),

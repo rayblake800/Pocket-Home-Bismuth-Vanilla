@@ -6,18 +6,16 @@
 #include "CounterComponent.h"
 #include "PageComponent.h"
 #include "Utils.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 
 /**
- * @file HomeSettingsPage.h
+ * @file  HomeSettingsPage.h
  * 
- * The HomeSettingsPage allows user configuration of the HomePage, setting the
- * page background, application menu type, and application menu dimensions.
+ * @brief  Allows the user to configure the HomePage, set the  page background, 
+ *         the application menu type, and the application menu dimensions.
  */
-
-
-class HomeSettingsPage : public PageComponent, private juce::ComboBox::Listener,
-private FileSelectTextEditor::Listener, private Localized
+class HomeSettingsPage : public PageComponent, public Locale::TextUser,
+    private juce::ComboBox::Listener, private FileSelectTextEditor::Listener
 {
 public:
     HomeSettingsPage();
@@ -73,21 +71,6 @@ private:
     //Set the max row count for AppMenu grids
     ScalingLabel rowCountLabel;
     CounterComponent rowCounter;
-
-    //localized text keys;
-    static const constexpr char * title_text = "title_text";
-    static const constexpr char * background_text = "background_text";
-    static const constexpr char * default_bg = "default_bg";
-    static const constexpr char * color_bg = "color_bg";
-    static const constexpr char * image_bg = "image_bg";
-    static const constexpr char * bg_color_hex_value = "bg_color_hex_value";
-    static const constexpr char * bg_image_path = "bg_image_path";
-    static const constexpr char * invalid_color = "invalid_color";
-    static const constexpr char * choose_background = "choose_background";
-    static const constexpr char * choose_bg_image = "choose_bg_image";
-    static const constexpr char * menu_type_text = "menu_type_text";
-    static const constexpr char * menu_columns = "menu_columns";
-    static const constexpr char * menu_rows = "menu_rows";
     
     // Don't forget to update these if adding/removing/re-ordering menu types!
     // Keep in the same order used in MainConfigFile::menuTypes

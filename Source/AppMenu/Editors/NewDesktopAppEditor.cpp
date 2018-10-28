@@ -7,13 +7,13 @@ static const constexpr char * newEntryTitleKey = "newEntryTitleKey";
 
 AppMenu::NewDesktopAppEditor::NewDesktopAppEditor
 (std::function<void() > onConfirm) :
-AppMenu::PopupEditor(localeText(newEntryTitleKey), onConfirm, true, true)
+AppMenu::PopupEditor(onConfirm, true, true)
 {
 #    if JUCE_DEBUG
     setName("NewDesktopAppEditor");
 #    endif
+    setEditorTitle(localeText(newEntryTitleKey));
 }
-
 
 /*
  * Creates a new desktop entry file using the editor's field values.

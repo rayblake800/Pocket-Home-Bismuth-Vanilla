@@ -5,29 +5,27 @@
 #include "ComponentConfigFile.h"
       
 /* Localized text keys: */
-static const constexpr char * localizedObjectKey = "AppMenu::PopupEditor";
-static const constexpr char * name = "name";
-static const constexpr char * icon_path = "icon_path";
-static const constexpr char * select_icon = "select_icon";
-static const constexpr char * edit_categories = "edit_categories";
-static const constexpr char * command = "command";
-static const constexpr char * run_in_terminal = "run_in_terminal";
+static const juce::Identifier localizedObjectKey = "AppMenu::PopupEditor";
+static const juce::Identifier name = "name";
+static const juce::Identifier icon_path = "icon_path";
+static const juce::Identifier select_icon = "select_icon";
+static const juce::Identifier edit_categories = "edit_categories";
+static const juce::Identifier command = "command";
+static const juce::Identifier run_in_terminal = "run_in_terminal";
 
 /*
  * Creates a new editor component for an application menu item.
  */
 AppMenu::PopupEditor::PopupEditor(
-        const juce::String& editorTitle,
         std::function<void() > onConfirm,
         bool showCategoryList,
         bool showCommandField) :
-PopupEditorComponent(editorTitle,
-[this, onConfirm](PopupEditorComponent* e)
+PopupEditorComponent([this, onConfirm](PopupEditorComponent* e)
 {
     commitEdits();
     onConfirm();
 }),
-Localized(localizedObjectKey),
+Locale::TextUser(localizedObjectKey),
 nameLabel("nameLabel", localeText(name)),
 titleEditor("titleEditor"),
 iconLabel("iconLabel", localeText(icon_path)),

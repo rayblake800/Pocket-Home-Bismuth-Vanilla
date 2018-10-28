@@ -4,8 +4,7 @@
 AppMenu::CategoryEditor::CategoryEditor(
         juce::StringArray categories,
         std::function<void(juce::StringArray) > onConfirm) :
-PopupEditorComponent("Edit Categories",
-[this, onConfirm](PopupEditorComponent* thisPopup)
+PopupEditorComponent( [this, onConfirm](PopupEditorComponent* thisPopup)
 {
     onConfirm(categoryList.getListItems());
 }),
@@ -15,6 +14,8 @@ categoryList(categories)
 #    if JUCE_DEBUG
     setName("categoryEditor");
 #    endif
+    //TODO: localize this!
+    setEditorTitle("Edit Categories");
     LayoutManager::Layout layout({
         LayoutManager::Row(40,
         {

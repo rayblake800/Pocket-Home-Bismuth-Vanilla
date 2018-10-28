@@ -121,6 +121,9 @@ AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
     if(parentFolder.isNull() || index < 0 
             || index > parentFolder.getMovableChildCount())
     {
+        DBG("AppMenu::JSONResource::" << __func__ << ": Failed to insert \""
+                << title << "\" into folder \"" << parentFolder.getTitle()
+                << "\" at index " << index);
         return MenuItem();
     }
     using namespace juce;
@@ -138,6 +141,9 @@ AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
     MenuItem newItem(newData);
     if(!parentFolder.insertChild(newItem, index))
     {
+        DBG("AppMenu::JSONResource::" << __func__ << ": Failed to insert \""
+                << title << "\" into folder \"" << parentFolder.getTitle()
+                << "\" at index " << index);
         return MenuItem();
     }
     newItem.saveChanges();

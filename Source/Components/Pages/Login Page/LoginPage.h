@@ -1,6 +1,6 @@
 #pragma once
 #include "JuceHeader.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "ScalingLabel.h"
 #include "DrawableImageComponent.h"
 #include "PageComponent.h"
@@ -8,9 +8,8 @@
 /**
  * @file LoginPage.h
  * 
- * The LoginPage is shown whenever the system exits sleep mode, when sleep mode
- * is triggered by this application.  If a pocket-home password is set, 
- * LoginPage will also be shown when the application starts.
+ * @brief  The page shown whenever the system exits sleep mode, or when the
+ *         application starts if the pocket-home password is set.
  * 
  * When a pocket-home password is set, the user has to enter the password to
  * close the LoginPage.  Otherwise, the page just functions as a lock screen,
@@ -18,14 +17,17 @@
  */
 
 class LoginPage : public PageComponent, public juce::TextEditor::Listener,
-private Localized
+public Locale::TextUser
 {
 public:
 
     /**
+     * @brief  Creates the login page, setting the action it should take when
+     *         the user logs in.
+     *
      * @param loginCallback  A callback function to run when the user logs in
-     *                        successfully.  This should close the LoginPage
-     *                        and show normal application content.
+     *                       successfully.  This should close the LoginPage
+     *                       and show normal application content.
      */
     LoginPage(std::function<void () > loginCallback);
 
@@ -72,14 +74,6 @@ private:
     juce::TextEditor passwordField;
     juce::String hashedPassword;
     DrawableImageComponent ntcIcon;
-
-    //localized text keys;
-    static const constexpr char * password_label = "password_label";
-    static const constexpr char * log_in = "log_in";
-    static const constexpr char * wrong_password = "wrong_password";
-    static const constexpr char * wrong_password_retry = "wrong_password_retry";
-    static const constexpr char * close_button_text = "close_button_text";
-
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LoginPage)
 };

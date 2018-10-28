@@ -19,8 +19,11 @@ const juce::uint32 ColourPicker::sliderThumbColors [4] =
   0x77777777
 };
 
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "ColourPicker";
+
 ColourPicker::ColourPicker(int numSavedColours, juce::Colour colour):
-Localized("ColourPicker"),
+Locale::TextUser(localeClassKey),
 numSavedColours(numSavedColours),
 selectionCallback([](juce::Colour c){}),	
 colour(colour)
@@ -154,15 +157,13 @@ void ColourPicker::updateColourButtons()
     if(!savedColours.contains(colour))
     {
         savedColours.insert(0,colour);
-	savedColours.resize(numSavedColours);
-	for(int i = 0; i < numSavedColours; i++)
-	{
-	   colourButtons[i]->setColour(savedColours[i]);
-	}
+        savedColours.resize(numSavedColours);
+        for(int i = 0; i < numSavedColours; i++)
+        {
+           colourButtons[i]->setColour(savedColours[i]);
+        }
     }
 }
-
-
 
 /**
  * Updates the color preview and text box when slider values change.

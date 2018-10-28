@@ -3,7 +3,7 @@
 
 #pragma once
 #include "LayoutManager.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "FileSelectTextEditor.h"
 #include "PopupEditorComponent.h"
 #include "CategoryEditor.h"
@@ -17,14 +17,11 @@
  *         editing application menu items.
  */
 class AppMenu::PopupEditor : public PopupEditorComponent,
-    public FileSelectTextEditor::Listener, 
-    protected Localized
+    public FileSelectTextEditor::Listener, public Locale::TextUser
 {
 public:
     /**
      * @brief  Creates a new editor component for an application menu item.
-     *
-     * @param editorTitle       The editor's displayed title string.
      *
      * @param onConfirm         An optional callback function to run when the 
      *                          confirm button is pressed.
@@ -37,7 +34,6 @@ public:
      *                          box.
      */
     PopupEditor(
-            const juce::String& editorTitle,
             const std::function<void()> onConfirm = [](){},
             bool showCategoryList = true,
             bool showCommandField = true);
