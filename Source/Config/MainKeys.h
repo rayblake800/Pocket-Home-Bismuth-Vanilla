@@ -30,6 +30,9 @@ namespace Config
 
         
         //####################### String value keys: ###########################
+        /* Selects the Locale used when loading displayed text. */
+        static const DataKey localeKey
+            ("locale", DataKey::stringType);
         /* Sets the HomePage background color or image. */
         static const DataKey backgroundKey
             ("background", DataKey::stringType);
@@ -61,12 +64,13 @@ namespace Config
             "Paged menu"
         };
 
-        static const std::vector<DataKey>& allKeys
+        static const std::vector<DataKey> allKeys
         {
             scrollingMenuRowsKey,
             pagedMenuWidthKey,
             pagedMenuHeightKey,
             wifiScanFreqKey,
+            localeKey,
             backgroundKey,
             menuTypeKey,
             termLaunchCommandKey,
