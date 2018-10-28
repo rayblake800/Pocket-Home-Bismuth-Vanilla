@@ -199,6 +199,13 @@ OBJECTS_APPMENU := \
   $(APPMENU_PREFIX)MainComponent.o \
   $(APPMENU_PREFIX)AppMenu.o 
 
+# Locale Module:
+LOCALE_PREFIX := $(JUCE_OBJDIR)/Locale_
+OBJECTS_LOCALE := \
+  $(LOCALE_PREFIX)Time.o \
+  $(LOCALE_PREFIX)TextUser.o \
+  $(LOCALE_PREFIX)Locale.o \
+  
 # Config Module:
 CONFIG_PREFIX := $(JUCE_OBJDIR)/Config_
 OBJECTS_CONFIG := \
@@ -307,17 +314,13 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/GPPWeakRef.o \
   $(JUCE_OBJDIR)/GSignalHandler.o \
   $(JUCE_OBJDIR)/ThreadResource.o \
-  $(JUCE_OBJDIR)/ScopedThreadWriteLock.o \
-  $(JUCE_OBJDIR)/ScopedThreadReadLock.o \
-  $(JUCE_OBJDIR)/ThreadLock.o \
   $(JUCE_OBJDIR)/SharedResource.o \
   $(JUCE_OBJDIR)/LaunchedProcess.o \
-  $(JUCE_OBJDIR)/LocalizedTime.o \
   $(JUCE_OBJDIR)/TempTimer.o \
   $(JUCE_OBJDIR)/Utils.o \
   $(JUCE_OBJDIR)/WindowFocus.o \
   $(JUCE_OBJDIR)/WindowFocusedTimer.o \
-  $(JUCE_OBJDIR)/Localized.o \
+  $(OBJECTS_LOCALE) \
   $(JUCE_OBJDIR)/AppLauncher.o \
   $(JUCE_OBJDIR)/Main.o \
   $(JUCE_OBJDIR)/PocketHomeApplication.o \
@@ -614,18 +617,10 @@ $(JUCE_OBJDIR)/GSignalHandler.o: \
 	Source/GLib/GSignalHandler.cpp
 $(JUCE_OBJDIR)/ThreadResource.o: \
 	Source/Util/SharedResource/ThreadResource.cpp
-$(JUCE_OBJDIR)/ScopedThreadWriteLock.o: \
-	Source/Util/SharedResource/ScopedThreadWriteLock.cpp
-$(JUCE_OBJDIR)/ScopedThreadReadLock.o: \
-	Source/Util/SharedResource/ScopedThreadReadLock.cpp
-$(JUCE_OBJDIR)/ThreadLock.o: \
-	Source/Util/SharedResource/ThreadLock.cpp
 $(JUCE_OBJDIR)/SharedResource.o: \
 	Source/Util/SharedResource/SharedResource.cpp
 $(JUCE_OBJDIR)/LaunchedProcess.o: \
 	Source/Util/LaunchedProcess.cpp
-$(JUCE_OBJDIR)/LocalizedTime.o: \
-	Source/Util/LocalizedTime.cpp
 $(JUCE_OBJDIR)/TempTimer.o: \
 	Source/Util/TempTimer.cpp
 $(JUCE_OBJDIR)/Utils.o: \
@@ -634,6 +629,15 @@ $(JUCE_OBJDIR)/WindowFocus.o: \
 	Source/Util/WindowFocus.cpp
 $(JUCE_OBJDIR)/WindowFocusedTimer.o: \
 	Source/Util/WindowFocusedTimer.cpp
+
+#Locale Module:
+$(LOCALE_PREFIX)Time.o: \
+	Source/Util/Locale/Time.cpp
+$(LOCALE_PREFIX)TextUser.o: \
+	Source/Util/Locale/TextUser.cpp
+$(LOCALE_PREFIX)Locale.o: \
+	Source/Util/Locale/Locale.cpp
+
 $(JUCE_OBJDIR)/Localized.o: \
 	Source/Util/Localized.cpp
 $(JUCE_OBJDIR)/AppLauncher.o: \
