@@ -2,7 +2,7 @@
 #include <functional>
 #include <map>
 #include "LaunchedProcess.h"
-#include "Localized.h"
+#include "Locale/TextUser.h"
 #include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
 
@@ -33,12 +33,10 @@
  * TODO: Read timeout periods from a ConfigFile.
  */
 
-class AppLauncher : public WindowFocusedTimer, private Localized
+class AppLauncher : public WindowFocusedTimer, private Locale::TextUser
 {
 public:
-    AppLauncher() : WindowFocusedTimer("AppLauncher"),
-    Localized("AppLauncher"),
-    launchFailureCallback([](){}) { }
+    AppLauncher();
 
     virtual ~AppLauncher() { }
 

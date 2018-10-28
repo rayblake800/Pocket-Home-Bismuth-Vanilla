@@ -9,13 +9,19 @@ static const int timerFrequency = 2000;
 /* Milliseconds to wait before forcibly terminating a window focus operation. */
 static const int windowFocusTimeout = 1000;
 
-/* Milliseconds to wait before assuming the last application launch 
-   failed. */
+/* Milliseconds to wait before assuming the last application launch failed. */
 static const int pendingLaunchTimeout = 15000;
 
-/* Localized text keys: */
-static const constexpr char * could_not_open = "could_not_open";
-static const constexpr char * not_valid_command = "not_valid_command";
+/* Class key: */
+static const juce::Identifier localeClassKey = "AppLauncher";
+
+/* Localized text value keys: */
+static const juce::Identifier couldNotOpenTextKey    = "couldNotOpen";
+static const juce::Identifier notValidCommandTextKey = "notValidCommand";
+
+AppLauncher::AppLauncher() : WindowFocusedTimer(localeClassKey.toString()), 
+    Locale::TextUser(localeClassKey),
+    launchFailureCallback([](){}) { }
 
 /*
  * Launches a new application, or focuses its window if the application is
@@ -100,9 +106,9 @@ LaunchedProcess* AppLauncher::startApp(const juce::String& command)
     {
         AlertWindow::showMessageBoxAsync
                 (AlertWindow::AlertIconType::WarningIcon,
-                localeText(could_not_open),
+                localeText(couldNotOpenTextKey),
                 String("\"") + command + String("\"")
-                + localeText(not_valid_command));
+                + localeText(notValidCommandTextKey));
         launchFailureCallback();
         return nullptr;
     }
@@ -152,7 +158,7 @@ void AppLauncher::timerCallback()
             }
             AlertWindow::showMessageBoxAsync
                     (AlertWindow::AlertIconType::WarningIcon,
-                    localeText(could_not_open), output);
+                    localeText(couldNotOpenTextKey), output);
             timedProcess = nullptr;
         }
     }
