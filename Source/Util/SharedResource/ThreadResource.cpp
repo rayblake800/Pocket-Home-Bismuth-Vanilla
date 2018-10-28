@@ -29,26 +29,35 @@ ThreadResource::ThreadLock::ThreadLock(const juce::Identifier& resourceKey) :
 /*
  * Blocks the thread until it can be locked for reading.
  */
-void ThreadResource::ThreadLock::takeReadLock()
+void ThreadResource::ThreadLock::enterRead() const
 {
-    getResourceLock().takeReadLock();
+    getResourceLock().enterRead();
 }
 
 /*
  * Blocks the thread until it can be locked for writing.
  */
-void ThreadResource::ThreadLock::takeWriteLock()
+void ThreadResource::ThreadLock::enterWrite() const
 {
-    getResourceLock().takeWriteLock();
+    getResourceLock().enterWrite();
 }
 
 /*
- * Releases a lock held on this thread. This must be called once for each call 
- * to takeReadLock or takeWriteLock.
+ * Releases a read lock held by this thread. This must be called once for each 
+ * call to takeReadLock.
  */
-void ThreadResource::ThreadLock::releaseLock()
+void ThreadResource::ThreadLock::exitRead() const
 {
-    getResourceLock().releaseLock();
+    getResourceLock().exitRead();
+}
+
+/*
+ * Releases a write lock held by this thread. This must be called once for each 
+ * call to takeWriteLock.
+ */
+void ThreadResource::ThreadLock::exitWrite() const
+{
+    getResourceLock().exitWrite();
 }
 
 /*
@@ -58,16 +67,16 @@ void ThreadResource::ThreadLock::releaseLock()
 void ThreadResource::run()
 {
     ThreadLock threadLock(getResourceKey());
-    threadLock.takeWriteLock();
+    threadLock.enterWrite();
     init();
-    threadLock.releaseLock();
+    threadLock.exitWrite();
 
     while(!threadShouldExit())
     {
         runLoop(threadLock);
     }
     
-    threadLock.takeWriteLock();
+    threadLock.enterWrite();
     cleanup();
-    threadLock.releaseLock();
+    threadLock.exitWrite();
 }

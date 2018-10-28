@@ -1,6 +1,5 @@
 #pragma once
 #include "JuceHeader.h"
-#include "ThreadLock.h"
 
 /**
  * @file SharedResource.h
@@ -22,9 +21,9 @@
  * RAII techniques, by declaring a Handlers at the highest scope where the 
  * resource will be needed.  
  *
- * Each SharedResource object type has a single ThreadLock object, available to
- * all of its handlers.  This is used to ensure that SharedResource data 
- * will not be changed while it is being read, or while another thread is
+ * Each SharedResource object type has a single juce::ReadWriteLock object, 
+ * available to all of its handlers.  This is used to ensure that SharedResource
+ * data will not be changed while it is being read, or while another thread is
  * already making changes.  This allows Handler objects across multiple threads
  * to share a single resource object safely.  To prevent deadlocks, Handler
  * objects with different resources should interact with eachother very
@@ -33,14 +32,13 @@
  * SharedResources may access their handler list, allowing handlers to be used
  * as Listener objects.
  *
- * @see ResourceManager.h, ResourceListener.h, ThreadLock.h
+ * @see ResourceManager.h, ResourceListener.h
  */
-
 class SharedResource
 {
 public: 
     /**
-     * Creates the single resource object instance.
+     * @brief  Creates the single resource object instance.
      *
      * @param resourceKey     A unique key string used to identify this
      *                        resource.     
@@ -54,16 +52,18 @@ public:
     virtual ~SharedResource();
 
     /**
-     * Interface for objects that directly access a SharedResource object.
+     * @brief  An interface for objects that directly access a SharedResource 
+     *         object.
      */
     class Handler
     {
     protected:
         /* Allow SharedResource to construct generic Handler objects. */
         friend class SharedResource;
+
         /**
-         * Creates a new Handler for a SharedResource, initializing the resource
-         * if necessary.
+         * @brief  Creates a new Handler for a SharedResource, initializing the 
+         *         resource if necessary.
          *
          * @param resourceKey     A unique key string used to identify the 
          *                        Handler's SharedResource type.
@@ -76,34 +76,36 @@ public:
     
     public:
         /**
-         * Removes a handler from the handler list, destroying the resource if
-         * no handlers remain.
+         * @brief  Removes a handler from the handler list, destroying the 
+         *         resource if no handlers remain.
          */
         virtual ~Handler();
 
     protected:
         /**
-         * Gets a pointer to the SharedResource object shared by all objects of 
-         * this Handler subclass.
+         * @brief  Gets a pointer to the SharedResource object shared by all 
+         *         objects of this Handler subclass.
          *
          * @return  The class SharedResource pointer.
          */
-        SharedResource* getClassResource();
+        SharedResource* getClassResource() const;
 
         /**
-         * Gets a reference to the lock used to control access to the shared
-         * resource.
+         * @brief  Gets a reference to the lock used to control access to the 
+         *         shared resource.
          *
          * @return  The class resource lock.
          */
-        ThreadLock& getResourceLock();
+        const juce::ReadWriteLock& getResourceLock() const;
 
     private:
-        // The key used to select this object's SharedResource.
+        /* The key used to select this object's SharedResource. */
         const juce::Identifier& resourceKey;        
     };
     
-    //Selects a type of lock to use to protect the SharedResource.
+    /**
+     * @brief  Selects the type of lock to use to protect the SharedResource.
+     */
     enum LockType
     {
         read,
@@ -112,10 +114,11 @@ public:
 
 protected:
     /**
-     * Packages an asynchronous action so that it will check if the 
-     * SharedResource instance that created it stil valid.  If it is valid,
-     * the SharedResource instance will be locked and the action will be
-     * executed.
+     * @brief  Packages an asynchronous action so that it will check if the 
+     *         SharedResource instance that created it is still valid.  
+     *
+     *  If it is valid,  the SharedResource instance will be locked and the 
+     *  action will be executed.
      *
      * @param lockType     Sets how the resource will be locked while the 
      *                     action function runs.
@@ -132,8 +135,8 @@ protected:
             std::function<void()> ifDestroyed = [](){});
 
     /**
-     * Runs an arbitrary function on each Handler object connected to the
-     * SharedResource.
+     * @brief  Runs an arbitrary function on each Handler object connected to 
+     *         the SharedResource.
      *
      * @param handlerAction  Some action that should run for every handler
      *                       connected to this SharedResource, passing in a
@@ -150,7 +153,7 @@ protected:
 
 private:
     /*
-     * Holds pointers to every Handler that accesses this SharedResource.  This 
+     * Holds pointers to every Handler that accesses this SharedResource. This 
      * is used to ensure the SharedResource is never destroyed before all of its
      * Manager objects.
      */
@@ -159,9 +162,9 @@ private:
     /*
      * The lock used to control access to this SharedResource.
      */
-    ThreadLock resourceLock;
+    juce::ReadWriteLock resourceLock;
       
-    // The key string identifying this SharedResource instance.
+    /* The key string identifying this SharedResource instance. */
     const juce::Identifier& resourceKey;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SharedResource)

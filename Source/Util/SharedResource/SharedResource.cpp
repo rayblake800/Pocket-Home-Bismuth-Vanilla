@@ -1,11 +1,11 @@
 #include <map>
 #include "SharedResource.h"
-#include "ScopedThreadWriteLock.h"
-#include "ScopedThreadReadLock.h"
 
-//Holds each SharedResource subclass's single object.
+/* Holds each SharedResource subclass's single object. */
 static std::map<juce::Identifier, juce::ScopedPointer<SharedResource>> 
 resourceMap;
+
+/* Locks the resource map when resources are being created or destroyed. */
 static juce::ReadWriteLock resourceMapLock;
 
 /*
@@ -54,7 +54,7 @@ resourceKey(resourceKey)
     {
         classResource = createResource();
     }
-    ScopedThreadWriteLock addHandlerLock(getResourceLock());
+    const juce::ScopedWriteLock addHandlerLock(getResourceLock());
     classResource->resourceHandlers.addIfNotAlreadyThere(this);
 }
 
@@ -65,22 +65,21 @@ resourceKey(resourceKey)
  */
 SharedResource::Handler::~Handler()
 {
-    using namespace juce;
-    ThreadLock& resourceLock = getResourceLock();
-    resourceLock.takeWriteLock();
+    const juce::ReadWriteLock& resourceLock = getResourceLock();
+    resourceLock.enterWrite();
     SharedResource* classResource = getClassResource();
     classResource->resourceHandlers.removeAllInstancesOf(this);
     if(classResource->resourceHandlers.isEmpty())
     {
-        const ScopedWriteLock removalLock(resourceMapLock);
+        const juce::ScopedWriteLock removalLock(resourceMapLock);
         // Set map value to null before releasing lock
         SharedResource* toDelete = resourceMap[resourceKey].release();
         // Release lock before deleting resource
-        resourceLock.releaseLock();
+        resourceLock.exitWrite();
         delete toDelete;
         return;
     }
-    resourceLock.releaseLock();
+    resourceLock.exitWrite();
 }
 
 /*
@@ -88,7 +87,7 @@ SharedResource::Handler::~Handler()
  * objects of this ResourceManager subclass.
  */
 SharedResource*
-SharedResource::Handler::getClassResource()
+SharedResource::Handler::getClassResource() const
 {
     const juce::ScopedReadLock mapLock(resourceMapLock);
     return resourceMap[resourceKey].get();
@@ -98,7 +97,7 @@ SharedResource::Handler::getClassResource()
  * Gets a reference to the lock used to control access to the
  * shared resource.
  */
-ThreadLock& SharedResource::Handler::getResourceLock()
+const juce::ReadWriteLock& SharedResource::Handler::getResourceLock() const
 {
     return getClassResource()->resourceLock;;
 }
@@ -113,19 +112,18 @@ std::function<void()> SharedResource::buildAsyncFunction(
         std::function<void()> action,
         std::function<void()> ifDestroyed)
 {
-    using namespace juce;
-    Identifier resKey = resourceKey;
+    const juce::Identifier& resKey = resourceKey;
     return [this, lockType, resKey, action, ifDestroyed]()
     {
-        ScopedPointer<Handler> resourceProtector = nullptr;
+        std::unique_ptr<Handler> resourceProtector = nullptr;
         SharedResource* resource;
         {
             const juce::ScopedReadLock mapLock(resourceMapLock);
             resource = resourceMap[resourceKey].get();
             if(resource != nullptr && resource == this)
             {
-                resourceProtector = new Handler(resKey,
-                        []()->SharedResource*{return nullptr;} );
+                resourceProtector.reset(new Handler(resKey,
+                        []()->SharedResource*{return nullptr;}));
             }
         }
 
@@ -133,12 +131,12 @@ std::function<void()> SharedResource::buildAsyncFunction(
         {
             if(lockType == SharedResource::LockType::write)
             {
-                const ScopedThreadWriteLock writeLock(resource->resourceLock);
+                const juce::ScopedWriteLock writeLock(resource->resourceLock);
                 action();
             }
             else if(lockType == SharedResource::LockType::read)
             {
-                const ScopedThreadReadLock readLock(resource->resourceLock);
+                const juce::ScopedReadLock readLock(resource->resourceLock);
                 action();
             }
         }
@@ -159,8 +157,7 @@ std::function<void()> SharedResource::buildAsyncFunction(
 void SharedResource::foreachHandler
 (std::function<void(Handler*)> handlerAction)
 {
-    using namespace juce;
-    ScopedThreadWriteLock handlerLock(resourceLock);
+    const juce::ScopedWriteLock handlerLock(resourceLock);
     const int handlerCount = resourceHandlers.size();
     for(int i = 0; i < handlerCount; i++)
     {

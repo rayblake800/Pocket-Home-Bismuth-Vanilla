@@ -63,7 +63,7 @@ protected:
          * No changes may be made to the ThreadResource's data members while
          * this is locked for reading.
          */
-        void takeReadLock();
+        void enterRead() const;
 
         /**
          * @brief  Blocks the thread until it can be locked for writing.
@@ -71,13 +71,19 @@ protected:
          * Once locked for writing, no other thread will be able to access the
          * ThreadResource's data members until the write lock has been released.
          */
-        void takeWriteLock();
+        void enterWrite() const;
 
         /**
-         * @brief  Releases a lock held on this thread. This must be called once
-         *         for each call to takeReadLock or takeWriteLock.
+         * @brief  Releases a read lock held by this thread. This must be called
+         *         once for each call to takeReadLock.
          */
-        void releaseLock();
+        void exitRead() const;
+
+        /**
+         * @brief  Releases a read lock held by this thread. This must be called
+         *         once for each call to takeWriteLock.
+         */
+        void exitWrite() const;
     };
 
 private:

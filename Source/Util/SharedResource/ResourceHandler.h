@@ -17,13 +17,17 @@ class ResourceHandler : public SharedResource::Handler
 {
 protected:
     /**
+     * @brief  Creates a new ResourceHandler, initializing its SharedResource
+     *         if necessary.
+     *
      * @param resourceKey     The unique key string identifying the ResourceType
      *                        SharedResource.
      *
      * @param createResource  A function that will create the resource if it
      *                        has not yet been initialized.
      */
-    ResourceHandler(const juce::Identifier& resourceKey,
+    ResourceHandler(
+            const juce::Identifier& resourceKey,
             const std::function<SharedResource*()> createResource) :
     SharedResource::Handler(resourceKey, createResource) { }
 
@@ -32,13 +36,13 @@ public:
 
 protected:
     /**
-     * A custom pointer object holding the class SharedResource.  As long as
-     * this object exists, the SharedResource will be locked.
+     * @brief  A custom pointer object holding the class SharedResource.  As 
+     *         long as this object exists, the SharedResource will be locked.
      */
     class LockedResourcePtr
     {
     private:
-        //Disallow direct creation of LockedResourcePtr objects.
+        /* Disallow direct creation of LockedResourcePtr objects. */
         friend class ResourceHandler;
 
         /**
@@ -50,18 +54,17 @@ protected:
          *                         writing, blocking all other access, or locked
          *                         for reading, only blocking write attempts.
          */
-        LockedResourcePtr
-        (ResourceHandler& resourceManager, SharedResource::LockType lockType) : 
+        LockedResourcePtr(const ResourceHandler& resourceManager, 
+                SharedResource::LockType lockType) : 
         resourceManager(resourceManager), lockType(lockType)
         {
-            switch(lockType)
+            if(lockType == SharedResource::LockType::read)
             {
-                case SharedResource::read:
-                    resourceManager.getResourceLock().takeReadLock();
-                    break;
-                case SharedResource::write:
-                    resourceManager.getResourceLock().takeWriteLock();
-                    break;
+                resourceManager.getResourceLock().enterRead();
+            }
+            else
+            {
+                resourceManager.getResourceLock().enterWrite();
             }
         }
 
@@ -71,7 +74,15 @@ protected:
          */
         virtual ~LockedResourcePtr()
         {
-            resourceManager.getResourceLock().releaseLock();
+            
+            if(lockType == SharedResource::LockType::read)
+            {
+                resourceManager.getResourceLock().exitRead();
+            }
+            else
+            {
+                resourceManager.getResourceLock().exitWrite();
+            }
         }
 
         /**
@@ -79,7 +90,7 @@ protected:
          *
          * @return  The single SharedResource instance.
          */
-        ResourceType& operator*()
+        ResourceType& operator*() const
         {
             return *resourceManager.getClassResource();
         }
@@ -89,7 +100,7 @@ protected:
          *
          * @return  The address of the SharedResource instance.
          */
-        ResourceType* operator->()
+        ResourceType* operator->() const
         {
             return static_cast<ResourceType*>
                     (resourceManager.getClassResource());
@@ -99,45 +110,46 @@ protected:
          * Checks if another SharedResource pointer points to this object's
          * SharedResource.
          *
-         * @rhs  A pointer to a SharedResource.
+         * @param rhs  A pointer to a SharedResource.
          *
-         * @return  True iff rhs has the same address as this object's
-         *          SharedResource.
+         * @return     Whether rhs has the same address as this object's
+         *             SharedResource.
          */
-        bool operator==(const SharedResource* rhs)
+        bool operator==(const SharedResource* rhs) const
         {
             return resourceManager.classResource.get() == rhs;
         }
 
     private:
-        // Used to access the SharedResource and lock.
-        ResourceHandler& resourceManager;
+        /* Used to access the SharedResource and lock. */
+        const ResourceHandler& resourceManager;
 
-        // Indicates the lock type.
+        /* Indicates the lock type. */
         const SharedResource::LockType lockType;
     };
     
-
     /**
-     * Gets a pointer to the class resource, locking it for reading.
+     * @brief  Gets a pointer to the class resource, locking it for reading.
+     *
      * ResourceHandlers should use this to access their SharedResource whenever
      * they need to read data from it without changing it.
      *
      * @return  A read-locked pointer to the class SharedResource.
      */
-    LockedResourcePtr getReadLockedResource()
+    LockedResourcePtr getReadLockedResource() const
     {
         return LockedResourcePtr(*this, SharedResource::LockType::read);
     }
 
     /**
-     * Gets a pointer to the class resource, locking it for writing.
+     * @brief  Gets a pointer to the class resource, locking it for writing.
+     *
      * ResourceHandlers should use this to access their SharedResource whenever
      * they need to write to (or otherwise change) the resource.
      *
      * @return  A write-locked pointer to the class SharedResource.
      */
-    LockedResourcePtr getWriteLockedResource()
+    LockedResourcePtr getWriteLockedResource() const
     {
         return LockedResourcePtr(*this, SharedResource::LockType::write);
     }
