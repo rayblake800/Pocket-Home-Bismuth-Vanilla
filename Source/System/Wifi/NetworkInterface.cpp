@@ -353,9 +353,7 @@ void NetworkInterface::timerCallback()
                         WifiState::enabled : WifiState::disabled);
             }
             return;
-        case WifiState::disabled:
-        case WifiState::enabled:
-        case WifiState::connected:
+        default:
             DBG("NetworkInterface::" << __func__
                     << ": unexpected timeout from state "
                     << wifiStateString(currentState));
