@@ -1,19 +1,18 @@
 #include "PopupEditorComponent.h"
 
-PopupEditorComponent::PopupEditorComponent(
-        juce::String title,
-        std::function<void(PopupEditorComponent*) > onConfirm) :
+PopupEditorComponent::PopupEditorComponent
+( std::function<void(PopupEditorComponent*) > onConfirm) :
 ConfigurableImageComponent(ComponentConfigKeys::popupMenuKey,
 0, juce::RectanglePlacement::stretchToFit),
 onConfirm(onConfirm),
-titleLabel("EditorTitle", title, 2),
+titleLabel("EditorTitle", "", 2),
 cancelButton("cancel.svg"),
 confirmButton("confirm.svg")
 {
     using namespace juce;
     setWantsKeyboardFocus(true);
 #    if JUCE_DEBUG
-    setName(title + String("popupEditor"));
+    setName(String("PopupEditorComponent"));
 #    endif
     titleLabel.setJustificationType(Justification::centred);
     
@@ -30,8 +29,15 @@ confirmButton("confirm.svg")
     setInterceptsMouseClicks(true, true);
 }
 
+/*
+ * Sets the title printed across the top of the component.
+ */
+void PopupEditorComponent::setEditorTitle(const juce::String newTitle)
+{
+    titleLabel.setText(newTitle, juce::NotificationType::dontSendNotification);
+}
 
-/**
+/*
  * Removes this component from the window.
  */
 void PopupEditorComponent::closePopup()
@@ -44,7 +50,7 @@ void PopupEditorComponent::closePopup()
     }
 }
 
-/**
+/*
  * Add, make visible, and set the layout of components below the title
  * label and above the cancel and confirm buttons.
  */
@@ -66,7 +72,7 @@ void PopupEditorComponent::setLayout(LayoutManager::Layout layout)
     }
 }
 
-/**
+/*
  * Manages the cancel and confirm buttons passing all other button events
  * to editorButtonClicked().
  */
@@ -87,7 +93,7 @@ void PopupEditorComponent::buttonClicked(juce::Button* buttonClicked)
     }
 }
 
-/**
+/*
  * The escape and return keys work the same as pressing the cancel and confirm 
  * buttons, respectively.
  */
@@ -108,7 +114,7 @@ bool PopupEditorComponent::keyPressed(const juce::KeyPress & key)
     return true;
 }
 
-/**
+/*
  * Re-apply the layout to fit the new bounds.
  */
 void PopupEditorComponent::resized()
@@ -117,7 +123,7 @@ void PopupEditorComponent::resized()
     layoutManager.layoutComponents(getLocalBounds());
 }
 
-/**
+/*
  * Grab keyboard focus when the component becomes visible.
  */
 void PopupEditorComponent::visibilityChanged()

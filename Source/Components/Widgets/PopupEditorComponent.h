@@ -30,14 +30,18 @@ public:
 
 protected:
     /**
-     * @param title      Text to print across the top of the component.
-     * 
      * @param onConfirm  The callback function to run when the confirm
-     *                    button is pressed.  When called, this editor passes 
-     *                    in a reference to itself as the only argument.
+     *                   button is pressed.  When called, this editor passes 
+     *                   in a reference to itself as the only argument.
      */
-    PopupEditorComponent(juce::String title,
-            std::function<void(PopupEditorComponent*) > onConfirm);
+    PopupEditorComponent(std::function<void(PopupEditorComponent*) > onConfirm);
+
+    /**
+     * @brief  Sets the title printed across the top of the component.
+     *
+     * @param newTitle  The new title string to show.
+     */
+    void setEditorTitle(const juce::String newTitle);
 
     /**
      * Add, make visible, and set the layout of components below the title
