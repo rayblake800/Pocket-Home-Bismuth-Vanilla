@@ -171,8 +171,7 @@ void AppMenu::Controller::setLoadingState(bool isLoading)
  */
 bool AppMenu::Controller::ignoringInput() const
 {
-    return loadingSpinner.isVisible()
-        || (menuEditor != nullptr && menuEditor->isShowing());
+    return loadingSpinner.isVisible() || menuComponent->showingEditor();;
 }
 
 
@@ -282,9 +281,9 @@ void AppMenu::Controller::createNewShortcutEditor
     PopupEditor* newEditor = new NewConfigItemEditor(folder, false, insertIndex,
     [this]()
     {
-        menuComponent->removeChildComponent(menuEditor.get());
+        menuComponent->removeEditor();
     });
-    saveAndShowEditor(newEditor);
+    menuComponent->saveAndShowEditor(newEditor);
 }
 
 /*
@@ -297,9 +296,9 @@ void AppMenu::Controller::createNewFolderEditor
     PopupEditor* newEditor = new NewConfigItemEditor(folder, true, insertIndex,
     [this]()
     {
-        menuComponent->removeChildComponent(menuEditor.get());
+        menuComponent->removeEditor();
     });
-    saveAndShowEditor(newEditor);
+    menuComponent->saveAndShowEditor(newEditor);
 }
 
 /*
@@ -310,32 +309,22 @@ void AppMenu::Controller::createNewEntryEditor()
 {
     PopupEditor* newEditor = new NewDesktopAppEditor([this]()
     {
-        menuComponent->removeChildComponent(menuEditor.get());
+        menuComponent->removeEditor();
     });
-    saveAndShowEditor(newEditor);
+    menuComponent->saveAndShowEditor(newEditor);
 }
 
 /*
- * Creates and shows a new PopupEditor component that edits an existing item in 
- * the menu.
+ * Creates and shows a new PopupEditor component that edits an existing item
+ * in the menu.
  */
 void AppMenu::Controller::createExistingItemEditor(const MenuItem toEdit)
 {
-    PopupEditor* newEditor = new ExistingItemEditor(toEdit,[this]()
+    PopupEditor* newEditor = new ExistingItemEditor(toEdit, [this]()
     {
-        menuComponent->removeChildComponent(menuEditor.get());
+        menuComponent->removeEditor();
     });
-    saveAndShowEditor(newEditor);
-}
-
-/*
- * Saves a new popup editor component, and adds it to the main menu component.
- */
-void AppMenu::Controller::saveAndShowEditor(PopupEditor* newEditor)
-{
-    jassert(menuEditor == nullptr || !menuEditor->isShowing());
-    menuEditor.reset(newEditor);
-    menuComponent->addAndMakeVisible(newEditor);
+    menuComponent->saveAndShowEditor(newEditor);
 }
 
 /*

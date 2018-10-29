@@ -1,4 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
+#include "Utils.h"
 #include "MenuComponents/MenuComponent.h"
 
 AppMenu::MenuComponent::MenuComponent()
@@ -63,6 +64,41 @@ AppMenu::MenuComponent::getOpenFolder(const int folderIndex) const
 }
 
 /*
+ * Saves a new popup editor component, and adds it to the main menu component.
+ */
+void AppMenu::MenuComponent::saveAndShowEditor(PopupEditor* newEditor)
+{
+    // Any pre-existing editor should have been removed first.
+    jassert(menuEditor == nullptr || !menuEditor->isShowing());
+    menuEditor.reset(newEditor);
+    addAndMakeVisible(newEditor);
+    menuEditor->applyConfigBounds();
+    //Center the menu editor within the menu
+    menuEditor->centreWithSize(menuEditor->getWidth(), 
+            menuEditor->getHeight());
+}
+
+/*
+ * Checks if the menu is currently showing a menu editor component.
+ */
+bool AppMenu::MenuComponent::showingEditor() const
+{
+    return menuEditor != nullptr && menuEditor->isShowing();
+}
+
+/*
+ * If a menu editor component exists, this will remove it from its parent 
+ * component.
+ */
+void AppMenu::MenuComponent::removeEditor()
+{
+    if(menuEditor != nullptr)
+    {
+        removeChildComponent(menuEditor.get());
+    }
+}
+
+/*
  * Updates the menu layout when the component is resized.
  */
 void AppMenu::MenuComponent::resized()
@@ -71,5 +107,12 @@ void AppMenu::MenuComponent::resized()
     for(int i = 0; i < openFolders.size(); i++)
     {
         openFolders[i]->updateButtonLayout();
+    }
+    if(showingEditor())
+    {
+        menuEditor->applyConfigBounds();
+        //Center the menu editor within the menu
+        menuEditor->centreWithSize(menuEditor->getWidth(), 
+                menuEditor->getHeight());
     }
 }

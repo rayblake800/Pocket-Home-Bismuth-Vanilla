@@ -4,6 +4,7 @@
 #pragma once
 #include "MenuComponents/FolderComponent.h"
 #include "MenuData/MenuItem.h"
+#include "Editors/PopupEditor.h"
 #include "AppMenu.h"
 #include "JuceHeader.h"
 
@@ -70,6 +71,27 @@ public:
      */
     FolderComponent* getOpenFolder(const int folderIndex) const;
 
+    /**
+     * @brief  Saves a new popup editor component, and adds it to the main menu
+     *         component.
+     *
+     * @param newEditor  The new menu editor component to save and show.
+     */
+    void saveAndShowEditor(PopupEditor* newEditor);
+
+    /**
+     * @brief  Checks if the menu is currently showing a menu editor component.
+     *
+     * @return  Whether a popup menu editor box is currently showing.
+     */
+    bool showingEditor() const;
+
+    /**
+     * @brief  If a menu editor component exists, this will remove it from its
+     *         parent component.
+     */
+    void removeEditor();
+
 private:
     /**
      * @brief  Creates a new folder component.
@@ -90,6 +112,9 @@ private:
     
     /* The list of open folder components */
     juce::OwnedArray<FolderComponent> openFolders;
+
+    /* Holds any popup menu editor component: */
+    std::unique_ptr<PopupEditor> menuEditor = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuComponent)
 };

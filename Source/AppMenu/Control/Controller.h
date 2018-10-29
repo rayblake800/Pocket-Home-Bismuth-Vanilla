@@ -165,14 +165,6 @@ private:
     void createExistingItemEditor(const MenuItem toEdit);
 
     /**
-     * @brief  Saves a new popup editor component, and adds it to the main menu
-     *         component.
-     *
-     * @param newEditor  The new menu editor component to save and show.
-     */
-    void saveAndShowEditor(PopupEditor* newEditor);
-
-    /**
      * @brief  Creates a copy of a menu item at a new index in the menu.
      *
      * @param toCopy       The menu item being copied.
@@ -187,9 +179,6 @@ private:
 
     /* Holds a reference to the loading spinner: */
     OverlaySpinner& loadingSpinner;
-
-    /* Holds any popup menu editor component: */
-    std::unique_ptr<PopupEditor> menuEditor = nullptr;
 
     /* The main menu component: */
     MenuComponent* const menuComponent;
