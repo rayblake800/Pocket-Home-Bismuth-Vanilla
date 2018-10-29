@@ -138,15 +138,16 @@
         "filesMissing"       : "Important application files are missing! Please reinstall pocket-home.",
         "polkitMissing"      : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
     },
-    "InputSettingsPage": {
-        "input_settings": "Input settings",
-        "calibrate_screen": "Calibrate the screen",
-        "remap_keybord": "Remap keyboard (FN key fix)",
-        "select_cursor_visible": "Select the visibility of the cursor:",
-        "not_visible": "Not visible",
-        "visible": "Visible"
+    "InputSettingsPage": 
+    {
+        "inputSettings" : "Input settings",
+        "calibrate"     : "Calibrate the screen",
+        "showCursor"    : "Select the visibility of the cursor:",
+        "notVisible"    : "Not visible",
+        "visible"       : "Visible"
     },
-    "AppMenu::Controller" : {
+    "AppMenu::Controller": 
+    {
         "edit"        : "Edit",
         "delete"      : "Delete",
         "pinItem"     : "Pin to main menu",
@@ -156,24 +157,27 @@
         "newEntry"    : "New desktop menu entry",
         "newFolder"   : "New folder"
     },
-    "AppMenu::PopupEditor": {
-        "name": "Name:",
-        "icon_path": "Icon path:",
-        "select_icon": "Select Icon",
-        "edit_categories": "Edit categories",
-        "command": "Command:",
-        "run_in_terminal": "Run in terminal:",
+    "AppMenu::PopupEditor": 
+    {
+        "name"             : "Name:",
+        "icon"             : "Icon path:",
+        "selectIcon"       : "Select Icon",
+        "editCategory"     : "Edit categories",
+        "command"          : "Command:",
+        "runInTerm"        : "Run in terminal:",
         "newEntryTitleKey" : "New desktop entry file"
     },
-    "AppMenu::NewConfigItemEditor" : {
-        "newAppTitleKey" : "New application shortcut",
+    "AppMenu::NewConfigItemEditor":
+    {
+        "newAppTitleKey"    : "New application shortcut",
         "newFolderTitleKey" : "New application folder"
     },
-    "AppMenu::DesktopEntryData": {
-        "remove_link_to": "Remove link to ",
-        "question_mark": "?",
-        "will_hide": "This application will be hidden from pocket-home.",
-        "edit_app": "Edit Menu Item"
+    "AppMenu::DesktopEntryData": 
+    {
+        "removeLinkTo"  : "Remove link to ",
+        "questionMark"  : "?",
+        "willHideEntry" : "This application will be hidden from pocket-home.",
+        "editApp"       : "Edit Menu Item"
     },
     "AppMenu::ConfigData": {
         "remove_APP": "Remove \"",

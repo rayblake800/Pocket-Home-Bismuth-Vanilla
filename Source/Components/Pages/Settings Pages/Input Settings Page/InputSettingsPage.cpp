@@ -6,21 +6,20 @@
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "InputSettingsPage";
 
-//localized text keys;
-static const juce::Identifier input_settings = "input_settings";
-static const juce::Identifier calibrate_screen = "calibrate_screen";
-static const juce::Identifier select_cursor_visible
-        = "select_cursor_visible";
-static const juce::Identifier not_visible = "not_visible";
-static const juce::Identifier visible = "visible";
+/* Localized text value keys: */
+static const juce::Identifier inputSettingsTextKey = "inputSettings";
+static const juce::Identifier calibrateTextKey     = "calibrate";
+static const juce::Identifier showCursorTextKey    = "showCursor";
+static const juce::Identifier notVisibleTextKey    = "notVisible";
+static const juce::Identifier visibleTextKey       = "visible";
 
 InputSettingsPage::InputSettingsPage() :
 Locale::TextUser(localeClassKey),
 PageComponent("InputSettingsPage"),
-title("settings", localeText(input_settings)),
+title("settings", localeText(inputSettingsTextKey)),
 chooseMode("chooseMode"),
-calibrating(localeText(calibrate_screen)),
-cursorVisible("cursorVisible", localeText(select_cursor_visible))
+calibrating(localeText(calibrateTextKey)),
+cursorVisible("cursorVisible", localeText(showCursorTextKey))
 {
 #    if JUCE_DEBUG
     setName("InputSettingsPage");
@@ -52,8 +51,8 @@ cursorVisible("cursorVisible", localeText(select_cursor_visible))
 
     title.setJustificationType(juce::Justification::centred);
     //ComboBox
-    chooseMode.addItem(localeText(not_visible), 1);
-    chooseMode.addItem(localeText(visible), 2);
+    chooseMode.addItem(localeText(notVisibleTextKey), 1);
+    chooseMode.addItem(localeText(visibleTextKey), 2);
     chooseMode.addListener(this);
     Config::MainFile mainConfig;
     if (mainConfig.getConfigValue<bool>(Config::MainKeys::showCursorKey))

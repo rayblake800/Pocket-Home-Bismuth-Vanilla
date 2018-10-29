@@ -8,10 +8,10 @@
 static const juce::Identifier localeClassKey = "AppMenu::DesktopEntryData";
 
 //localized text keys: 
-static const juce::Identifier remove_link_to = "remove_link_to";
-static const juce::Identifier question_mark = "question_mark";
-static const juce::Identifier will_hide = "will_hide";
-static const juce::Identifier edit_app = "edit_app";
+static const juce::Identifier removeLinkToTextKey  = "removeLinkTo";
+static const juce::Identifier questionMarkTextKey  = "questionMark";
+static const juce::Identifier willHideEntryTextKey = "willHideEntry";
+static const juce::Identifier editAppTextKey       = "editApp";
 
 AppMenu::DesktopEntryData::DesktopEntryData(const DesktopEntry& desktopEntry) :
 desktopEntry(desktopEntry), Locale::TextUser(localeClassKey) { }
@@ -175,8 +175,8 @@ void AppMenu::DesktopEntryData::saveChanges()
  */
 juce::String AppMenu::DesktopEntryData::getConfirmDeleteTitle() const
 {
-    return localeText(remove_link_to) 
-            + getTitle() + localeText(question_mark);
+    return localeText(removeLinkToTextKey) 
+            + getTitle() + localeText(questionMarkTextKey);
 }
 
 /*
@@ -185,7 +185,7 @@ juce::String AppMenu::DesktopEntryData::getConfirmDeleteTitle() const
  */
 juce::String AppMenu::DesktopEntryData::getConfirmDeleteMessage() const
 {
-    return localeText(will_hide);
+    return localeText(willHideEntryTextKey);
 }
 
 /*
@@ -193,7 +193,7 @@ juce::String AppMenu::DesktopEntryData::getConfirmDeleteMessage() const
  */
 juce::String AppMenu::DesktopEntryData::getEditorTitle() const
 {
-    return localeText(edit_app);
+    return localeText(editAppTextKey);
 }
 
 /*

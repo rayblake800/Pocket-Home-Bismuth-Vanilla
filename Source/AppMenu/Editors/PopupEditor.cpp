@@ -3,15 +3,17 @@
 #include "IconLoader.h"
 #include "PopupEditor.h"
 #include "ComponentConfigFile.h"
-      
-/* Localized text keys: */
-static const juce::Identifier localizedObjectKey = "AppMenu::PopupEditor";
-static const juce::Identifier name = "name";
-static const juce::Identifier icon_path = "icon_path";
-static const juce::Identifier select_icon = "select_icon";
-static const juce::Identifier edit_categories = "edit_categories";
-static const juce::Identifier command = "command";
-static const juce::Identifier run_in_terminal = "run_in_terminal";
+
+/* Localized object class key: */
+static const juce::Identifier localeClassKey = "AppMenu::PopupEditor";
+
+/* Localized text value keys: */
+static const juce::Identifier nameTextKey         = "name";
+static const juce::Identifier iconTextKey         = "icon";
+static const juce::Identifier selectIconTextKey   = "selectIcon";
+static const juce::Identifier editCategoryTextKey = "editCategory";
+static const juce::Identifier commandTextKey      = "command";
+static const juce::Identifier runInTermTextKey    = "runInTerm";
 
 /*
  * Creates a new editor component for an application menu item.
@@ -25,15 +27,15 @@ PopupEditorComponent([this, onConfirm](PopupEditorComponent* e)
     commitEdits();
     onConfirm();
 }),
-Locale::TextUser(localizedObjectKey),
-nameLabel("nameLabel", localeText(name)),
+Locale::TextUser(localeClassKey),
+nameLabel("nameLabel", localeText(nameTextKey)),
 titleEditor("titleEditor"),
-iconLabel("iconLabel", localeText(icon_path)),
-iconNameEditor(localeText(select_icon)),
-categoryEditButton(localeText(edit_categories)),
-commandLabel("commandLabel", localeText(command)),
+iconLabel("iconLabel", localeText(iconTextKey)),
+iconNameEditor(localeText(selectIconTextKey)),
+categoryEditButton(localeText(editCategoryTextKey)),
+commandLabel("commandLabel", localeText(commandTextKey)),
 commandEditor("commandEditor"),
-terminalCheckboxLabel("runInTermLabel", localeText(run_in_terminal))
+terminalCheckboxLabel("runInTermLabel", localeText(runInTermTextKey))
 {
     using namespace juce;
     categoryEditButton.addListener(this);
