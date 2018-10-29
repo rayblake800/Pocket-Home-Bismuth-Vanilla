@@ -239,7 +239,5 @@ private:
     //Clicking this confirms the color selection.
     juce::TextButton selectionButton;
 
-    static const constexpr char * set_colour = "set_colour"; 
-
    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ColourPicker)
 };

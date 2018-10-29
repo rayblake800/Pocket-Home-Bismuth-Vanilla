@@ -10,7 +10,7 @@
 #include "DesktopEntryFormatError.h"
 #include "DesktopEntryLoader.h"
 
-/* SharedResource object class key */ 
+/* SharedResource and Locale::TextUser object class key */ 
 static const juce::Identifier desktopEntryThreadKey("DesktopEntryThread");
 
 /* The desktop entry subdirectory within the data directory: */
@@ -25,13 +25,10 @@ static const constexpr char* miscEntryCategory = "Other";
 /* Desktop entry file extension: */
 static const constexpr char* fileExtension = ".desktop";
 
-/* Localized text keys: */
-static const constexpr char* reading_entry = "reading_entry";
-
 /**
  * @brief  Asynchronously loads and caches desktop entry data.
  */
-class DesktopEntryThread : public ThreadResource, public Locale::TextUser
+class DesktopEntryThread : public ThreadResource
 {
 private:
     /* Only DesktopEntryLoader has direct access. */
@@ -55,8 +52,7 @@ private:
     /* Callbacks to run when desktop entries finish loading. */
     std::map<DesktopEntryLoader::CallbackID, std::function<void()>> onFinish;
 
-    DesktopEntryThread() : ThreadResource(desktopEntryThreadKey),
-    Locale::TextUser(desktopEntryThreadKey) 
+    DesktopEntryThread() : ThreadResource(desktopEntryThreadKey)
     {
         startThread();
     }

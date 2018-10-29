@@ -6,18 +6,18 @@
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::ConfigData";
 
-/* Localized text keys: */
+/* Localized text value keys: */
 // Application shortcuts:
-static const juce::Identifier remove_APP = "remove_APP";
-static const juce::Identifier from_favorites = "from_favorites";
-static const juce::Identifier will_remove_link = "will_remove_link";
-static const juce::Identifier edit_app = "edit_app";
+static const juce::Identifier removeAPPTextKey      = "removeAPP";
+static const juce::Identifier fromMenuTextKey       = "fromMenu";
+static const juce::Identifier willRemoveAppTextKey  = "willRemoveApp";
+static const juce::Identifier editAppTextKey        = "editApp";
 
 // Folders:
-static const juce::Identifier delete_NAME = "delete_NAME";
-static const juce::Identifier folder = "folder";
-static const juce::Identifier will_remove_folder = "will_remove_folder";
-static const juce::Identifier edit_folder = "edit_folder";
+static const juce::Identifier deleteNAMETextKey       = "deleteNAME";
+static const juce::Identifier folderTextKey           = "folder";
+static const juce::Identifier willRemoveFolderTextKey = "willRemoveFolder";
+static const juce::Identifier editFolderTextKey       = "editFolder";
 
 /*
  * Recursively creates a menu item and all its child folder items.
@@ -223,11 +223,11 @@ AppMenu::ConfigData::getConfirmDeleteTitle() const
 {
     if(isFolder())
     {
-        return localeText(delete_NAME) + getTitle() + localeText(folder);
+        return localeText(deleteNAMETextKey) + getTitle() + localeText(folderTextKey);
     }
     else
     {
-        return localeText(remove_APP) + getTitle() + localeText(from_favorites);
+        return localeText(removeAPPTextKey) + getTitle() + localeText(fromMenuTextKey);
     }
 }
 
@@ -237,7 +237,7 @@ AppMenu::ConfigData::getConfirmDeleteTitle() const
 juce::String 
 AppMenu::ConfigData::getConfirmDeleteMessage() const
 {
-    return localeText(isFolder() ? will_remove_folder : will_remove_link);
+    return localeText(isFolder() ? willRemoveFolderTextKey : willRemoveLinkTextKey);
 }
 
 /*
@@ -246,7 +246,7 @@ AppMenu::ConfigData::getConfirmDeleteMessage() const
 juce::String 
 AppMenu::ConfigData::getEditorTitle() const
 {
-    return localeText(isFolder() ? edit_folder : edit_app);
+    return localeText(isFolder() ? editFolderTextKey : editAppTextKey);
 }
 
 /*

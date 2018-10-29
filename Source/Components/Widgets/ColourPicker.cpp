@@ -22,6 +22,9 @@ const juce::uint32 ColourPicker::sliderThumbColors [4] =
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "ColourPicker";
 
+/* Localized text item keys: */
+static const constexpr char * setColorTextKey = "setColor"; 
+
 ColourPicker::ColourPicker(int numSavedColours, juce::Colour colour):
 Locale::TextUser(localeClassKey),
 numSavedColours(numSavedColours),
@@ -76,7 +79,7 @@ colour(colour)
     colourField.setJustification(Justification::centred);
     colourField.addListener(this);
     
-    selectionButton.setButtonText(localeText(set_colour));
+    selectionButton.setButtonText(localeText(setColorTextKey));
     selectionButton.addListener(this);
     
     layoutManager.setLayout(layout,this);

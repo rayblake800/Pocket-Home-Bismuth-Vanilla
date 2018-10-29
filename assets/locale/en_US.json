@@ -179,20 +179,23 @@
         "willHideEntry" : "This application will be hidden from pocket-home.",
         "editApp"       : "Edit Menu Item"
     },
-    "AppMenu::ConfigData": {
-        "remove_APP": "Remove \"",
-        "from_favorites": "\" from favorites?",
-        "will_remove_link": "This will permanently remove this link from the list of favorite applications.",
-        "edit_app": "Edit Application",
-        "delete_NAME": "Delete \"",
-        "folder": "\" folder?",
-        "will_remove_folder": "This will permanently remove this folder from the menu.",
-        "edit_folder": "Edit Folder"
+    "AppMenu::ConfigData": 
+    {
+        "removeAPP"        : "Remove \"",
+        "fromMenu"         : "\" from the menu?",
+        "willRemoveApp"    : "This will permanently remove this shortcut from the application menu.",
+        "editApp"          : "Edit Application",
+        "deleteNAME"       : "Delete \"",
+        "folder"           : "\" folder?",
+        "willRemoveFolder" : "This will permanently remove this folder from the menu.",
+        "editFolder"       : "Edit Folder"
     },
-    "ColourPicker" : {
-	    "set_colour" : "Set Color"
+    "ColourPicker" : 
+    {
+	    "setColor" : "Set Color"
     },
-    "Locale::Time" : {
+    "Locale::Time":
+    {
 	    "never"          : "never",
         "now"            : "now",
         "momentsAgo"     : "moments ago",
@@ -208,9 +211,5 @@
         "daysPostfix"    : " days ago",
         "weeksPostfix"   : " weeks ago",
         "yearsPostfix"   : " years ago"
-    },
-    "DesktopEntryThread" : {
-        "reading_entry" : "Reading file "
     }
-
 }
