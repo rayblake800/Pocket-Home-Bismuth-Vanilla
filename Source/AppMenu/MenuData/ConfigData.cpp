@@ -223,11 +223,13 @@ AppMenu::ConfigData::getConfirmDeleteTitle() const
 {
     if(isFolder())
     {
-        return localeText(deleteNAMETextKey) + getTitle() + localeText(folderTextKey);
+        return localeText(deleteNAMETextKey) + getTitle() 
+            + localeText(folderTextKey);
     }
     else
     {
-        return localeText(removeAPPTextKey) + getTitle() + localeText(fromMenuTextKey);
+        return localeText(removeAPPTextKey) + getTitle() 
+            + localeText(fromMenuTextKey);
     }
 }
 
@@ -237,7 +239,8 @@ AppMenu::ConfigData::getConfirmDeleteTitle() const
 juce::String 
 AppMenu::ConfigData::getConfirmDeleteMessage() const
 {
-    return localeText(isFolder() ? willRemoveFolderTextKey : willRemoveLinkTextKey);
+    return localeText(isFolder() 
+            ? willRemoveFolderTextKey : willRemoveAppTextKey);
 }
 
 /*
