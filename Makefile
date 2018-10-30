@@ -164,10 +164,11 @@ OBJECTS_APPMENU_PAGED := \
   $(PAGED_MENU_PREFIX)MenuComponent.o \
   $(PAGED_MENU_PREFIX)InputHandler.o \
   $(PAGED_MENU_PREFIX)Initializer.o 
-OBJECTS_APPMENU_ABSTRACT_COMPONENT := \
+OBJECTS_APPMENU_COMPONENT := \
   $(APPMENU_PREFIX)MenuButton.o \
   $(APPMENU_PREFIX)FolderComponent.o \
-  $(APPMENU_PREFIX)MenuComponent.o
+  $(APPMENU_PREFIX)MenuComponent.o \
+  $(APPMENU_PREFIX)MainComponent.o 
 OBJECTS_APPMENU_CONTROL := \
   $(APPMENU_PREFIX)Controller.o \
   $(APPMENU_PREFIX)InputHandler.o 
@@ -187,11 +188,11 @@ OBJECTS_APPMENU_DATA := \
 OBJECTS_APPMENU := \
   $(OBJECTS_APPMENU_SCROLLING) \
   $(OBJECTS_APPMENU_PAGED) \
-  $(OBJECTS_APPMENU_ABSTRACT_COMPONENT) \
+  $(OBJECTS_APPMENU_COMPONENT) \
   $(OBJECTS_APPMENU_CONTROL) \
   $(OBJECTS_APPMENU_EDITOR) \
   $(OBJECTS_APPMENU_DATA)\
-  $(APPMENU_PREFIX)MainComponent.o \
+  $(APPMENU_PREFIX)Settings.o \
   $(APPMENU_PREFIX)AppMenu.o 
 
 # Locale Module:
@@ -416,20 +417,22 @@ $(APPMENU_PREFIX)FolderComponent.o: \
     Source/AppMenu/MenuComponents/FolderComponent.cpp
 $(APPMENU_PREFIX)MenuComponent.o: \
     Source/AppMenu/MenuComponents/MenuComponent.cpp
+$(APPMENU_PREFIX)MainComponent.o: \
+    Source/AppMenu/MenuComponents/MainComponent.cpp
 $(APPMENU_PREFIX)Controller.o: \
     Source/AppMenu/Control/Controller.cpp
 $(APPMENU_PREFIX)InputHandler.o: \
     Source/AppMenu/Control/InputHandler.cpp
 $(APPMENU_PREFIX)NewConfigItemEditor.o: \
-    Source/AppMenu/Editors/NewConfigItemEditor.cpp
+    Source/AppMenu/MenuComponents/Editors/NewConfigItemEditor.cpp
 $(APPMENU_PREFIX)NewDesktopAppEditor.o: \
-    Source/AppMenu/Editors/NewDesktopAppEditor.cpp
+    Source/AppMenu/MenuComponents/Editors/NewDesktopAppEditor.cpp
 $(APPMENU_PREFIX)ExistingItemEditor.o: \
-    Source/AppMenu/Editors/ExistingItemEditor.cpp
+    Source/AppMenu/MenuComponents/Editors/ExistingItemEditor.cpp
 $(APPMENU_PREFIX)PopupEditor.o: \
-    Source/AppMenu/Editors/PopupEditor.cpp
+    Source/AppMenu/MenuComponents/Editors/PopupEditor.cpp
 $(APPMENU_PREFIX)CategoryEditor.o: \
-    Source/AppMenu/Editors/CategoryEditor.cpp
+    Source/AppMenu/MenuComponents/Editors/CategoryEditor.cpp
 $(APPMENU_PREFIX)JSONResource.o: \
     Source/AppMenu/MenuData/JSONResource.cpp
 $(APPMENU_PREFIX)ConfigFile.o: \
@@ -442,8 +445,8 @@ $(APPMENU_PREFIX)ConfigData.o: \
     Source/AppMenu/MenuData/ConfigData.cpp
 $(APPMENU_PREFIX)ItemData.o: \
     Source/AppMenu/MenuData/ItemData.cpp
-$(APPMENU_PREFIX)MainComponent.o: \
-    Source/AppMenu/MainComponent.cpp
+$(APPMENU_PREFIX)Settings.o: \
+    Source/AppMenu/Settings.cpp
 $(APPMENU_PREFIX)AppMenu.o: \
     Source/AppMenu/AppMenu.cpp
 
