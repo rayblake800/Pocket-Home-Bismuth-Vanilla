@@ -10,7 +10,6 @@
 #include "ClockLabel.h"
 #include "WifiIcon.h"
 #include "BatteryIcon.h"
-#include "AppMenuComponent.h"
 #include "SystemCommands.h"
 #include "AppMenu.h"
 
@@ -48,27 +47,12 @@ protected:
 
 private:
     /**
-     * @brief  Forward all clickss (except button clicks) to the AppMenu so that
-     *         it can potentially create a pop-up menu.
-     * 
-     * @param event  The detected mouse event.
-     */
-    virtual void mouseDown(const juce::MouseEvent& event) override;
-
-    /**
      * @brief  Opens the power page or the settings page, depending on which 
      *         button was clicked.
      * 
      * @param button  The page button that was clicked.
      */
     void pageButtonClicked(juce::Button* button) override;
-
-    /**
-     * @brief  Forwards all key events to the AppMenu.
-     *
-     * @param keyPress  The detected KeyPress event.
-     */
-    bool keyPressed(const juce::KeyPress& keyPress) override;
 
     /**
      * @brief  Grabs keyboard focus when the page becomes visible.
