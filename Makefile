@@ -23,11 +23,6 @@
 ##	                                                                          ##
 ## V=1	                 Enable verbose build output.                         ##
 ##	                                                                          ##
-## TARGET_ARCH=ARCH_TYPE   Build for system architecture ARCH_TYPE, rather    ##
-##	                     than building for the compiling system's             ##
-##	                     architecture.  For example, to build for             ##
-##	                     PocketCHIP, use TARGET_ARCH=armv7l                   ##
-##	                                                                          ##
 ################################################################################
  
 ######### Build values: #########
