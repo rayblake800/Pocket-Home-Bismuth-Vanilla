@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "NewConfigItemEditor.h"
+#include "AppMenu/MenuComponents/Editors/NewConfigItemEditor.h"
 
 /* Localized object class key: */
 static const juce::Identifier localizedObjectKey =

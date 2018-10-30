@@ -179,6 +179,15 @@ bool DesktopEntryUtils::isMainDataHeader(const juce::String& header)
 }
 
 /*
+ * Gets the section header used to identify the main data section of a desktop
+ * entry.
+ */
+juce::String DesktopEntryUtils::getMainHeader()
+{
+    return "[" + mainGroupHeader + "]";
+}
+
+/*
  * Checks if a section header name describes a desktop entry action.
  */
 bool DesktopEntryUtils::isValidActionHeader(const juce::String& header)

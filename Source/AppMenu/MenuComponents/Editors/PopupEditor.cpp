@@ -1,8 +1,8 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
 #include "IconLoader.h"
-#include "PopupEditor.h"
 #include "ComponentConfigFile.h"
+#include "AppMenu/MenuComponents/Editors/PopupEditor.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::PopupEditor";

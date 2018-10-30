@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "MainComponent.h"
+#include "AppMenu/MenuComponents/MainComponent.h"
     
 /*
  * Creates and initializes the application menu.

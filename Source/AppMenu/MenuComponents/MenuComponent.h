@@ -2,10 +2,10 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 
 #pragma once
-#include "MenuComponents/FolderComponent.h"
-#include "MenuData/MenuItem.h"
-#include "Editors/PopupEditor.h"
-#include "AppMenu.h"
+#include "AppMenu/MenuComponents/FolderComponent.h"
+#include "AppMenu/MenuData/MenuItem.h"
+#include "AppMenu/MenuComponents/Editors/PopupEditor.h"
+#include "AppMenu/AppMenu.h"
 #include "JuceHeader.h"
 
 /**

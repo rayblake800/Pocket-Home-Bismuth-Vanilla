@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "CategoryEditor.h"
+#include "AppMenu/MenuComponents/Editors/CategoryEditor.h"
 
 AppMenu::CategoryEditor::CategoryEditor(
         juce::StringArray categories,

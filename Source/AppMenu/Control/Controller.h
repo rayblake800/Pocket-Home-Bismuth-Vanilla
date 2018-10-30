@@ -8,7 +8,7 @@
 #include "Locale/TextUser.h"
 #include "MenuData/MenuItem.h"
 #include "MenuComponents/MenuComponent.h"
-#include "Editors/PopupEditor.h"
+#include "AppMenu/MenuComponents/Editors/PopupEditor.h"
 #include "JuceHeader.h"
 
 /**

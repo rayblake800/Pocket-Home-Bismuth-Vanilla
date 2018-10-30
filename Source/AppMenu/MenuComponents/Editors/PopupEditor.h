@@ -8,7 +8,7 @@
 #include "PopupEditorComponent.h"
 #include "CategoryEditor.h"
 #include "SwitchComponent.h"
-#include "AppMenu.h"
+#include "AppMenu/AppMenu.h"
 
 /**
  * @file  PopupEditor.h

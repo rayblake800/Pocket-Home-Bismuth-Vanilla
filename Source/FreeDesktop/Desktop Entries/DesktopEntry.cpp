@@ -561,6 +561,11 @@ void DesktopEntry::writeFile()
         // from other locales unedited.
         outFileText += line;
     }
+    // Add the main group header if no source file exists.
+    if(outFileText.isEmpty())
+    {
+        outFileText = DesktopEntryUtils::getMainHeader() + "\n";
+    }
     // Copy keys not found in the original file
     for(auto keyIter = keyGuide.begin(); keyIter != keyGuide.end(); keyIter++)
     {

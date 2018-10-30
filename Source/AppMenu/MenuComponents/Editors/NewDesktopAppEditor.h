@@ -4,7 +4,7 @@
 #pragma once
 #include "DesktopEntry.h"
 #include "PopupEditor.h"
-#include "AppMenu.h"
+#include "AppMenu/AppMenu.h"
 
 /** 
  * @file  NewDesktopAppEditor.h

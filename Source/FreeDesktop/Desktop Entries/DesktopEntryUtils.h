@@ -109,6 +109,14 @@ namespace DesktopEntryUtils
     bool isMainDataHeader(const juce::String& header);
 
     /**
+     * @brief  Gets the section header used to identify the main data section of
+     *         a desktop entry.
+     *
+     * @return  The main data header, "[Desktop Entry]".
+     */
+    juce::String getMainHeader();
+
+    /**
      * @brief  Checks if a section header name describes a desktop entry action.
      *
      * @param header  A section header name read from a desktop entry file.

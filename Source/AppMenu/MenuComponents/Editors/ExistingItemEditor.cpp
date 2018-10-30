@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "ExistingItemEditor.h"
+#include "AppMenu/MenuComponents/Editors/ExistingItemEditor.h"
 
 /*
  * Creates an editor for editing a specific menu item.

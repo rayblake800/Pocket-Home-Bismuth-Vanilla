@@ -3,8 +3,8 @@
 
 #pragma once
 #include "ListEditor.h"
+#include "AppMenu/AppMenu.h"
 #include "PopupEditorComponent.h"
-#include "AppMenu.h"
 
 /**
  * @file CategoryEditor.h

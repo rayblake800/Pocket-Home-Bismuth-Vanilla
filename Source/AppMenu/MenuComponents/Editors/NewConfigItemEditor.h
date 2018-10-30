@@ -3,7 +3,7 @@
 
 #pragma once
 #include "AppMenu/MenuData/ConfigFile.h"
-#include "AppMenu/Editors/PopupEditor.h"
+#include "AppMenu/MenuComponents/Editors/PopupEditor.h"
 
 /** 
  * @file  NewConfigItemEditor.h

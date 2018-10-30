@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
-#include "MenuComponents/MenuComponent.h"
+#include "AppMenu/MenuComponents/MenuComponent.h"
 
 AppMenu::MenuComponent::MenuComponent()
 {
