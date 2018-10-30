@@ -63,7 +63,7 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
     LookAndFeel::setDefaultLookAndFeel(lookAndFeel);
 
     // open sound handle
-    if (!Audio::initAudio())
+    if (!Audio::chipAudioInit())
     {
         DBG("PocketHomeApplication::" << __func__
                 << ": Sound failed to initialize");

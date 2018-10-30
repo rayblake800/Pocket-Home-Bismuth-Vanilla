@@ -1,18 +1,19 @@
-#include "JuceHeader.h"
-#include "Audio.h"
-#include "SystemCommands.h"
 #include <alsa/asoundlib.h>
+#include "JuceHeader.h"
+#include "SystemCommands.h"
+#include "Audio.h"
 
-#define DEFAULT_BUFFER_SIZE 4096 /*in samples*/
+/* ALSA buffer size in samples: */
+static const constexpr int defaultBufferSize = 4096;
 snd_pcm_t *g_alsa_playback_handle = 0;
 
 /*
- * Initializes system audio.
+ * Opens a connection to Alsa audio. This is used as a quick fix to a PocketCHIP
+ * bug where touch screen presses cause buzzing when no application has opened 
+ * Alsa.
  */
-bool Audio::initAudio()
+bool Audio::chipAudioInit()
 {
-    // FIXME: this is a hack to fix touch screen presses causing buzzing
-    // when no application holds alsa open
     int err;
     int freq = 44100, channels = 2;
     snd_pcm_hw_params_t *hw_params;
@@ -77,7 +78,7 @@ bool Audio::initAudio()
         return false;
     }
     snd_pcm_uframes_t frames;
-    frames = DEFAULT_BUFFER_SIZE;
+    frames = defaultBufferSize;
     err = snd_pcm_hw_params_set_buffer_size_near(g_alsa_playback_handle,
             hw_params, &frames);
     if (err < 0)

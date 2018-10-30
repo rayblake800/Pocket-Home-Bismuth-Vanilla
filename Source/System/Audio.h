@@ -10,25 +10,28 @@
 namespace Audio
 {
     /**
-     * Initializes system audio.
+     * @brief  Opens a connection to Alsa audio.
+     *
+     * This is used as a quick fix to a PocketCHIP bug where touch screen 
+     * presses cause buzzing when no application has opened Alsa.
      * 
-     * @return true iff audio was successfully initialized.
+     * @return  Whether the Alsa connection was successfully initialized.
      */
-    bool initAudio();
+    bool chipAudioInit();
     
     /**
-     * Gets the system's volume level.
+     * @brief Gets the system's volume level.
      * 
-     * @return  system audio volume level, as a percentage of the maximum
+     * @return  The system audio volume level, as a percentage of the maximum
      *          volume.
      */
     int getVolumePercent();
     
     /**
-     * Changes the system audio volume level.
+     * @brief  Changes the system audio volume level.
      * 
      * @param volumePercent  The volume level, which will be constrained to
      *                       values between 0 and 100.
      */
-    void setVolume(int volumePercent);
+    void setVolume(const int volumePercent);
 };
