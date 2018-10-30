@@ -705,6 +705,12 @@ void DesktopEntry::saveActionLineData
 {
     //TODO: Don't assume action names and action groups are in the same order.
     using namespace juce;
+    if(actions.size() == 0)
+    {
+        //no action found yet!
+        jassertfalse;
+        return;
+    }
     if(key == StringRef("Name"))
     {
         actions.getReference(actions.size() - 1).name = value;
