@@ -1,44 +1,56 @@
-#if 0
-#include "./Source/AppMenu/MenuFormats/Paged/MenuButton.h"
-
+#define APPMENU_IMPLEMENTATION_ONLY
+#include "ComponentConfigFile.h"
 #include "AppMenu/MenuComponents/MenuButton.h"
+#include "AppMenu/MenuFormats/Paged/MenuButton.h"
 
 /*
  * Creates a new MenuButton component for a menu item.
- AppMenu::Paged::MenuButton::*/MenuButton(MenuItem menuItem)
+ */
+AppMenu::Paged::MenuButton::MenuButton(MenuItem menuItem) :
+AppMenu::MenuButton(menuItem) { } 
+
+/*
+ * Finds the area relative to the menu button's bounds where the title should be
+ * drawn.
+ */
+juce::Rectangle<float> AppMenu::Paged::MenuButton::findTitleBounds() const 
 {
-} AppMenu::Paged::MenuButton::~MenuButton() { }/*
- * Finds the area relative to the menu button's bounds where the
- *         title should be drawn.
- */juce::Rectangle<float> AppMenu::Paged::MenuButton::findTitleBounds() const final
-{
+    ComponentConfigFile config;
+    const int textHeight = config.getFontHeight(ComponentConfigFile::smallText); 
+    return getLocalBounds().withTop(getHeight() - textHeight).toFloat();
 }
 
 /*
- * Finds the area relative to the menu button's bounds where the
- *         icon should be drawn.
- */juce::Rectangle<float> AppMenu::Paged::MenuButton::findIconBounds() const final
+ * Finds the area relative to the menu button's bounds where the icon should be 
+ * drawn.
+ */
+juce::Rectangle<float> AppMenu::Paged::MenuButton::findIconBounds() const 
 {
+    ComponentConfigFile config;
+    const int textHeight = config.getFontHeight(ComponentConfigFile::smallText); 
+    return getLocalBounds().reduced(0, textHeight).toFloat();
 }
 
 /*
  * Checks if this button will draw an outline around its border.
- */bool AppMenu::Paged::MenuButton::shouldDrawBorder() const final
+ */
+bool AppMenu::Paged::MenuButton::shouldDrawBorder() const 
 {
+    return isSelected();
 }
 
 /*
- * Checks if this button will fill in its background with its 
- *         background color.
- */bool AppMenu::Paged::MenuButton::shouldFillBackground() const final
+ * Checks if this button will fill in its background with its background color.
+ */
+bool AppMenu::Paged::MenuButton::shouldFillBackground() const 
 {
+    return isSelected();
 }
 
 /*
  * Gets the text justification of the button title.
- */juce::Justification AppMenu::Paged::MenuButton::getTextJustification() const final
+ */
+juce::Justification AppMenu::Paged::MenuButton::getTextJustification() const 
 {
+    return juce::Justification::centred;
 }
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

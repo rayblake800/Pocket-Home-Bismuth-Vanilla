@@ -1,35 +1,32 @@
-#if 0
-#include "./Source/AppMenu/MenuFormats/Paged/FolderComponent.h"
-
-#include "AppMenu/MenuComponents/FolderComponent.h"
+#define APPMENU_IMPLEMENTATION_ONLY
+#include "AppMenu/MenuFormats/Paged/FolderComponent.h"
 
 /*
  * Creates a new paged folder component.
- AppMenu::Paged::FolderComponent::*/FolderComponent(MenuItem folderItem)
-{
-} AppMenu::Paged::FolderComponent::~FolderComponent() { }
+ */
+ AppMenu::Paged::FolderComponent::FolderComponent(MenuItem folderItem) :
+     AppMenu::FolderComponent(folderItem) { } 
+     
 
 /*
  * Finds the closest index to a spot on the folder that was clicked.
- */int AppMenu::Paged::FolderComponent::closestIndex(const int xPos, const int yPos) 
-const final
+ */
+int AppMenu::Paged::FolderComponent::closestIndex
+(const int xPos, const int yPos) const 
 {
 }
 
 /*
- * Creates a button component for one of the folder's child menu
- *         items.
- */AppMenu::MenuButton* AppMenu::Paged::FolderComponent::createMenuButton(const MenuItem folderItem)
-const final
+ * Creates a button component for one of the folder's child menu items.
+ */
+AppMenu::MenuButton* AppMenu::Paged::FolderComponent::createMenuButton
+(const MenuItem folderItem) const 
 {
 }
 
 /*
  * Updates the sizes and positions of all buttons in the menu.
  */
-void AppMenu::Paged::FolderComponent::updateButtonLayout() const final
+void AppMenu::Paged::FolderComponent::updateButtonLayout() const
 {
 }
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif
