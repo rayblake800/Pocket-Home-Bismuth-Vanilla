@@ -29,18 +29,6 @@ namespace AppMenu
         Invalid
     };
 
-
-    /**
-     * @brief  A container component that initializes and holds any format of
-     *         AppMenu.
-     *
-     * This selects the displayed menu format, initializes and displays the 
-     * menu, and holds the menu's loading spinner component.  It can also be
-     * used to dynamically change the menu format.
-     *
-     * @see  MainComponent.h
-     */
-    class MainComponent;
     
     /**
      * @brief  Creates an AppMenu::MainComponent with a specific initial format.
@@ -64,27 +52,20 @@ namespace AppMenu
     void changeMenuFormat(juce::Component* appMenu, const Format newFormat);
 
     /**
-     * @brief  Reads the menu format saved in the main JSON configuration file.
+     * @brief  Gets and sets menu property settings such as selected format and
+     *         menu dimensions.  This is provided so that settings pages can
+     *         allow the user to edit menu properties.
      *
-     * @return  The saved format type, or Format::Invalid if the saved value is
-     *          invalid or does not exist.
+     * @see  AppMenu/Settings.h
      */
-    //Format getSavedMenuFormat();
-
-    /**
-     * @brief  Saves a valid menu format selection to the main JSON 
-     *         configuration file. 
-     *
-     * @param savedFormat  A valid format type to save.
-     */
-    //void setSavedMenuFormat(const Format savedFormat);
+    namespace Settings { }
     
     /* ####################    Menu Control   ########################### */
 
     /**
      * @brief  Creates menu objects for a single menu Format type.
      *
-     * @see  Control/Initializer.h
+     * @see  AppMenu/Control/Initializer.h
      */
     class Initializer;
 
@@ -93,7 +74,7 @@ namespace AppMenu
      *         applications, opening/closing menu folders, and allowing the 
      *         user to edit the menu data.
      *
-     * @see  Controller/Controller.h
+     * @see  AppMenu/Control/Controller.h
      */
     class Controller;
 
@@ -102,17 +83,9 @@ namespace AppMenu
      * @brief  Captures and handles key and mouse events for the menu component
      *         and all its child components.
      *
-     * @see  Controller/InputHandler.h
+     * @see  AppMenu/Control/InputHandler.h
      */
     class InputHandler;
-
-    /**
-     * @brief  A context menu that provides different options for editing the
-     *         menu depending on which menu item was selected or clicked.
-     *
-     * @see  Controller/ContextMenu.h
-     */
-    class ContextMenu;
 
     /* ####################     Menu Data     ########################### */
     /**
@@ -120,10 +93,7 @@ namespace AppMenu
      *         menu, and provides access to the menu item's parent folder and
      *         child folder items.
      *
-     * MenuItem also provides the MenuItem::Editor interface used to make
-     * changes to menu data.
-     *
-     * @see  MenuData/MenuItem.h
+     * @see  AppMenu/MenuData/MenuItem.h
      */
     class MenuItem;
 
@@ -132,7 +102,7 @@ namespace AppMenu
      *         allowing menu items to interact with varying data sources through
      *         the same interface.
      *
-     * @see  MenuData/ItemData.h
+     * @see  AppMenu/MenuData/ItemData.h
      */
     class ItemData;
 
@@ -140,7 +110,7 @@ namespace AppMenu
      * @brief  An ItemData subclass that handles menu data read from desktop
      *         entry files.
      *
-     * @see  MenuData/DesktopEntryData
+     * @see  AppMenu/MenuData/DesktopEntryData
      */
     class DesktopEntryData;
     
@@ -148,7 +118,7 @@ namespace AppMenu
      * @brief  An ItemData subclass that handles menu data read from the JSON
      *         configuration file.
      *
-     * @see  MenuData/ConfigData
+     * @see  AppMenu/MenuData/ConfigData
      */
     class ConfigData;
 
@@ -157,7 +127,7 @@ namespace AppMenu
      *         initializes the entire menu as linked ItemData objects, and
      *         provides an interface for adding new menu items.
      *
-     * @see  MenuData/ConfigFile.h
+     * @see  AppMenu/MenuData/ConfigFile.h
      */
     class ConfigFile;
 
@@ -165,16 +135,29 @@ namespace AppMenu
      * @brief  The private SharedResource singleton used to read, store, and
      *         write data in the JSON configuration file.
      *
-     * @see  MenuData/JSONResource.h
+     * @see  AppMenu/MenuData/JSONResource.h
      */
     class JSONResource;
 
     /* ####################  Menu Components  ########################### */
+
+    /**
+     * @brief  A container component that initializes and holds any format of
+     *         AppMenu.
+     *
+     * This selects the displayed menu format, initializes and displays the 
+     * menu, and holds the menu's loading spinner component.  Its format may be
+     * dynamically changed using AppMenu::changeMenuFormat.
+     *
+     * @see  AppMenu/MenuComponents/MainComponent.h
+     */
+    class MainComponent;
+
     /**
      * @brief  Represents the main menu view, creating and positioning folder
      *         components.
      * 
-     * @see  MenuComponents/MenuComponent.h
+     * @see  AppMenu/MenuComponents/MenuComponent.h
      */
     class MenuComponent;
 
@@ -182,14 +165,14 @@ namespace AppMenu
      * @brief  Represents an open folder in the menu, creating and positioning
      *         menu item button components.
      *
-     * @see  MenuComponents/FolderComponent.h
+     * @see  AppMenu/MenuComponents/FolderComponent.h
      */
     class FolderComponent;
 
     /**
      * @brief  Represents a single menu item as a button component.
      *
-     * @see  MenuComponents/ItemButton.h
+     * @see  AppMenu/MenuComponents/ItemButton.h
      */
     class MenuButton;
     
@@ -197,7 +180,7 @@ namespace AppMenu
     /**
      * @brief  A component that allows the user to edit menu item data.
      *
-     * @see  Editors/PopupEditor.h
+     * @see  AppMenu/MenuComponents/Editors/PopupEditor.h
      */
     class PopupEditor;
 
@@ -205,14 +188,14 @@ namespace AppMenu
      * @brief  A component that allows the user to edit a menu item's list of
      *         category strings.
      *
-     * @see  Editors/CategoryEditor.h
+     * @see  AppMenu/MenuComponents/Editors/CategoryEditor.h
      */
     class CategoryEditor;
 
     /**
      * @brief  A PopupEditor that allows the user to edit an existing menu item.
      *
-     * @see  Editors/ExistingItemEditor.h
+     * @see  AppMenu/MenuComponents/Editors/ExistingItemEditor.h
      */
     class ExistingItemEditor;
 
@@ -220,14 +203,14 @@ namespace AppMenu
      * @brief  A PopupEditor that allows the user to add a new menu item defined
      *         in the JSON menu configuration file.
      *
-     * @see  Editors/NewConfigItemEditor.h
+     * @see  AppMenu/MenuComponents/Editors/NewConfigItemEditor.h
      */
     class NewConfigItemEditor;
     /**
      * @brief  A PopupEditor that allows the user to add a new menu item defined
      *         in a desktop entry file.
      *
-     * @see  Editors/NewDesktopAppEditor.h
+     * @see  AppMenu/MenuComponents/Editors/NewDesktopAppEditor.h
      */
     class NewDesktopAppEditor;
 
@@ -235,7 +218,7 @@ namespace AppMenu
     /**
      * @brief  Displays the menu as vertical scrolling menu folder panels.
      *
-     * @see  MenuFormats/Scrolling/
+     * @see  AppMenu/MenuFormats/Scrolling/
      */
     namespace Scrolling
     {
@@ -249,7 +232,7 @@ namespace AppMenu
     /**
      * @brief  Displays the menu as pages of menu item grids.
      *
-     * @see  MenuFormats/Paged
+     * @see  AppMenu/MenuFormats/Paged
      */
     namespace Paged
     {
