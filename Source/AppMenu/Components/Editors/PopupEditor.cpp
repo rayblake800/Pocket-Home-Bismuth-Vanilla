@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "IconLoader.h"
 #include "ComponentConfigFile.h"
-#include "AppMenu/MenuComponents/Editors/PopupEditor.h"
+#include "AppMenu/Components/Editors/PopupEditor.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::PopupEditor";

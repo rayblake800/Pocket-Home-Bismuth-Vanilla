@@ -2,14 +2,14 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 
 #pragma once
-#include "AppMenu.h"
-#include "DesktopEntryLoader.h"
-#include "Control/Initializer.h"
-#include "MenuComponents/MenuComponent.h"
-#include "Control/Controller.h"
-#include "MenuData/ConfigFile.h"
-#include "OverlaySpinner.h"
 #include "JuceHeader.h"
+#include "OverlaySpinner.h"
+#include "DesktopEntryLoader.h"
+#include "AppMenu/AppMenu.h"
+#include "AppMenu/Control/Initializer.h"
+#include "AppMenu/Components/MenuComponent.h"
+#include "AppMenu/Control/Controller.h"
+#include "Appmenu/Data/ConfigFile.h"
 
 /**
  * @file  MainComponent.h

@@ -1,8 +1,8 @@
 #pragma once
-#include "MenuComponents/MenuComponent.h"
-#include "Control/Controller.h"
-#include "Control/InputHandler.h"
-#include "AppMenu.h"
+#include "AppMenu/Components/MenuComponent.h"
+#include "AppMenyu/Control/Controller.h"
+#include "AppMenu/Control/InputHandler.h"
+#include "AppMenu/AppMenu.h"
 
 struct AppMenu::Initializer
 {

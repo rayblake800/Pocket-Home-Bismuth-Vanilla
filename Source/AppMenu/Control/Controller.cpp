@@ -2,11 +2,11 @@
 #include "Utils.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
-#include "MenuData/ConfigFile.h"
-#include "Editors/ExistingItemEditor.h"
-#include "Editors/NewConfigItemEditor.h"
-#include "Editors/NewDesktopAppEditor.h"
-#include "Controller.h"
+#include "AppMenu/Data/ConfigFile.h"
+#include "AppMenu/Components/Editors/ExistingItemEditor.h"
+#include "AppMenu/Components/Editors/NewConfigItemEditor.h"
+#include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
+#include "AppMenu/Control/Controller.h"
 
 
 /* Localized object class key: */

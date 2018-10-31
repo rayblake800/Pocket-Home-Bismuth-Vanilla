@@ -2,8 +2,8 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 
 #pragma once
-#include "AppMenu/MenuData/MenuItem.h"
-#include "AppMenu/MenuComponents/Editors/PopupEditor.h"
+#include "AppMenu/Data/MenuItem.h"
+#include "AppMenu/Components/Editors/PopupEditor.h"
 
 /**
  * @file  ExistingItemEditor.h

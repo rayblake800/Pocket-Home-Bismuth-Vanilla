@@ -6,8 +6,8 @@
 #include "Locale/TextUser.h"
 #include "FileSelectTextEditor.h"
 #include "PopupEditorComponent.h"
-#include "CategoryEditor.h"
 #include "SwitchComponent.h"
+#include "AppMenu/Components/Editors/CategoryEditor.h"
 #include "AppMenu/AppMenu.h"
 
 /**

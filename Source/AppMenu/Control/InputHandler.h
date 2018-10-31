@@ -4,11 +4,11 @@
 #pragma once
 #include "JuceHeader.h"
 #include "WindowFocus.h"
-#include "AppMenu.h"
-#include "MenuComponents/MenuButton.h"
-#include "MenuComponents/FolderComponent.h"
-#include "MenuComponents/MenuComponent.h"
-#include "Control/Controller.h"
+#include "AppMenu/AppMenu.h"
+#include "AppMenu/Components/MenuButton.h"
+#include "AppMenu/Components/FolderComponent.h"
+#include "AppMenu/Components/MenuComponent.h"
+#include "AppMenu/Control/Controller.h"
 
 
 class AppMenu::InputHandler : public juce::MouseListener,

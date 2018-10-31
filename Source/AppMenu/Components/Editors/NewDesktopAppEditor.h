@@ -3,8 +3,8 @@
 
 #pragma once
 #include "DesktopEntry.h"
-#include "PopupEditor.h"
 #include "AppMenu/AppMenu.h"
+#include "AppMenu/Components/Editors/PopupEditor.h"
 
 /** 
  * @file  NewDesktopAppEditor.h

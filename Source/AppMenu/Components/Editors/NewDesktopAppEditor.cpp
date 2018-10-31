@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "DesktopEntryFormatError.h"
 #include "DesktopEntryFileError.h"
-#include "AppMenu/MenuComponents/Editors/NewDesktopAppEditor.h"
+#include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
 
 static const constexpr char * newEntryTitleKey = "newEntryTitleKey";
 

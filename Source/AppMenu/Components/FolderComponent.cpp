@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/MenuComponents/FolderComponent.h"
+#include "AppMenu/Components/FolderComponent.h"
 
 /*
  * Creates a new folder component.
