@@ -5,7 +5,7 @@
 #include "DesktopEntry.h"
 #include "Locale/TextUser.h"
 #include "IconThread.h"
-#include "ItemData.h"
+#include "AppMenu/Data/ItemData.h"
 
 /**
  * @file DesktopEntryData.h

@@ -2,7 +2,7 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 
 #pragma once
-#include "AppMenu/MenuComponents/FolderComponent.h"
+#include "AppMenu/Components/FolderComponent.h"
 
 /**
  * @file   FolderComponent.h

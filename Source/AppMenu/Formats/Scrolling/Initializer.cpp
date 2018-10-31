@@ -1,8 +1,8 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 
-#include "AppMenu/MenuFormats/Scrolling/Initializer.h"
-#include "AppMenu/MenuFormats/Scrolling/MenuComponent.h"
-#include "AppMenu/MenuFormats/Scrolling/InputHandler.h"
+#include "AppMenu/Formats/Scrolling/Initializer.h"
+#include "AppMenu/Formats/Scrolling/MenuComponent.h"
+#include "AppMenu/Formats/Scrolling/InputHandler.h"
 
 /*
  * Gets the format this object initializes.

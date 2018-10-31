@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/MenuFormats/Paged/FolderComponent.h"
+#include "AppMenu/Formats/Paged/FolderComponent.h"
 
 /*
  * Creates a new paged folder component.

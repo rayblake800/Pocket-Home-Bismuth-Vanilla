@@ -1,4 +1,4 @@
-#include "./Source/AppMenu/MenuFormats/Tabbed/Initializer.h"
+#include "AppMenu/Formats/Tabbed/Initializer.h"
 
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY

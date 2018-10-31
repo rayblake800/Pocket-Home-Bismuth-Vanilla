@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 
-#include "MenuFormats/Scrolling/MenuButton.h"
+#include "AppMenu/Formats/Scrolling/MenuButton.h"
 
 /*
  * Creates a new MenuButton component for a menu item.

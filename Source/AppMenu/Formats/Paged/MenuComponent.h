@@ -2,7 +2,7 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 
 #pragma once
-#include "AppMenu/MenuComponents/MenuComponent.h"
+#include "AppMenu/Components/MenuComponent.h"
 
 /**
  * @file  MenuFormats/Paged/MenuComponent.h

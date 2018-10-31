@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "MainComponent.h"
-#include "MenuFormats/Scrolling/Initializer.h"
+#include "AppMenu/Components/MainComponent.h"
+#include "AppMenu/Formats/Scrolling/Initializer.h"
 #include "AppMenu.h"
 
 static AppMenu::Initializer* createInitializer(const AppMenu::Format menuFormat)

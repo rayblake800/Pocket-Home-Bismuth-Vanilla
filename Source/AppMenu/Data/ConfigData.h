@@ -4,7 +4,7 @@
 #pragma once
 #include "DesktopEntryLoader.h"
 #include "Locale/TextUser.h"
-#include "ItemData.h"
+#include "AppMenu/Data/ItemData.h"
 
 /**
  * @file  ConfigData.h

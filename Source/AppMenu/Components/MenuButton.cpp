@@ -2,7 +2,7 @@
 #include "IconLoader.h"
 #include "AssetFiles.h"
 #include "ComponentConfigFile.h"
-#include "AppMenu/MenuComponents/MenuButton.h"
+#include "AppMenu/Components/MenuButton.h"
 
 /* Extra characters applied when calculating title width, defining title padding
    space relative to the font size. */

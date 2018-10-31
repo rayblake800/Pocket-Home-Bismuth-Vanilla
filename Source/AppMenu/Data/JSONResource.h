@@ -4,9 +4,9 @@
 #pragma once
 #include "Config/FileResource.h"
 #include "Config/FileHandler.h"
-#include "MenuItem.h"
-#include "ConfigData.h"
-#include "AppMenu.h"
+#include "AppMenu/AppMenu.h"
+#include "AppMenu/Data/MenuItem.h"
+#include "AppMenu/Data/ConfigData.h"
 
 /**
  * @file JSONResource.h

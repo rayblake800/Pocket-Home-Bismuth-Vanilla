@@ -2,8 +2,8 @@
 #include "Utils.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
-#include "MenuFormats/Scrolling/MenuButton.h"
-#include "MenuFormats/Scrolling/FolderComponent.h"
+#include "AppMenu/Formats/Scrolling/MenuButton.h"
+#include "AppMenu/Formats/Scrolling/FolderComponent.h"
 
 /*
  * Creates a new scrolling folder component.

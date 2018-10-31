@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "ConfigFile.h"
 #include "Utils.h"
+#include "AppMenu/Data/ConfigFile.h"
 
 /*
  * Gets a menu item representing the root folder of the application menu.

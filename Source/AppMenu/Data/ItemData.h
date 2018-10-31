@@ -3,7 +3,7 @@
 
 #pragma once
 #include "JuceHeader.h"
-#include "AppMenu.h"
+#include "AppMenu/AppMenu.h"
 
 /**
  * @file  ItemData.h

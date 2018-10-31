@@ -3,7 +3,7 @@
 
 #pragma once
 #include "ConfigurableComponent.h"
-#include "AppMenu/MenuComponents/MenuComponent.h"
+#include "AppMenu/Components/MenuComponent.h"
 
 /**
  * @file  MenuFormats/Scrolling/MenuComponent.h

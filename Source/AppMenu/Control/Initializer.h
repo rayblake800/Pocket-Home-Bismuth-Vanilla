@@ -1,6 +1,6 @@
 #pragma once
 #include "AppMenu/Components/MenuComponent.h"
-#include "AppMenyu/Control/Controller.h"
+#include "AppMenu/Control/Controller.h"
 #include "AppMenu/Control/InputHandler.h"
 #include "AppMenu/AppMenu.h"
 

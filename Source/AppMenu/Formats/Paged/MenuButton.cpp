@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "ComponentConfigFile.h"
-#include "AppMenu/MenuComponents/MenuButton.h"
-#include "AppMenu/MenuFormats/Paged/MenuButton.h"
+#include "AppMenu/Components/MenuButton.h"
+#include "AppMenu/Formats/Paged/MenuButton.h"
 
 /*
  * Creates a new MenuButton component for a menu item.

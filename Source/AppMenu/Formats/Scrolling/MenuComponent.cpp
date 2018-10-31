@@ -5,8 +5,8 @@
 #include "Config/MainKeys.h"
 #include "ComponentConfigKeys.h"
 #include "TransitionAnimator.h"
-#include "AppMenu/MenuFormats/Scrolling/FolderComponent.h"
-#include "AppMenu/MenuFormats/Scrolling/MenuComponent.h"
+#include "AppMenu/Formats/Scrolling/FolderComponent.h"
+#include "AppMenu/Formats/Scrolling/MenuComponent.h"
 
 /* Animation duration in milliseconds: */
 static const constexpr int animationMS = 300;

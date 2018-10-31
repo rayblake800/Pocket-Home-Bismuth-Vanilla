@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "DesktopEntryFormatError.h"
 #include "DesktopEntryFileError.h"
-#include "DesktopEntryData.h"
+#include "AppMenu/Data/DesktopEntryData.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::DesktopEntryData";

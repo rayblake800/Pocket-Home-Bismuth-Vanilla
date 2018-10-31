@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/MenuFormats/Scrolling/FolderComponent.h"
-#include "AppMenu/MenuFormats/Scrolling/MenuComponent.h"
-#include "AppMenu/MenuFormats/Scrolling/InputHandler.h"
+#include "AppMenu/Formats/Scrolling/FolderComponent.h"
+#include "AppMenu/Formats/Scrolling/MenuComponent.h"
+#include "AppMenu/Formats/Scrolling/InputHandler.h"
 
 /*
  * Initializes the InputHandler, setting it to handle the menu component's input

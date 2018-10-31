@@ -3,7 +3,7 @@
 
 #pragma once
 #include "AppMenu.h"
-#include "AppMenu/MenuData/MenuItem.h"
+#include "AppMenu/Data/MenuItem.h"
 
 /**
  * @file  MenuButton.h

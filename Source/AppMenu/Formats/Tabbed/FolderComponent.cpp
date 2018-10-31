@@ -1,4 +1,4 @@
-#include "./Source/AppMenu/MenuFormats/Tabbed/FolderComponent.h"
+#include "AppMenu/Formats/Tabbed/FolderComponent.h"
 
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY

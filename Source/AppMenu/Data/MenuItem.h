@@ -3,9 +3,9 @@
 
 #pragma once
 #include "IconThread.h"
-#include "ItemData.h"
 #include "Nullable.h"
-#include "AppMenu.h"
+#include "AppMenu/AppMenu.h"
+#include "AppMenu/Data/ItemData.h"
 
 /**
  * @file  MenuItem.h
