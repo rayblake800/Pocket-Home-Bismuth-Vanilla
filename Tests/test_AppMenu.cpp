@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "JuceHeader.h"
-#include "AppMenu/MenuData/ConfigFile.h"
+#include "AppMenu/Data/ConfigFile.h"
 
 class AppMenuTest : public juce::UnitTest
 {
