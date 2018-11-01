@@ -543,22 +543,28 @@ void DesktopEntry::writeFile()
             String lineLocale = parseLocale(line);
             if (lineLocale.isEmpty()  || lineLocale == locale)
             {
-                const juce::Identifier& key = parseKey(line);
-                foundKeys.add(key);
-                outFileText += key.toString();
-                if (lineLocale.isNotEmpty())
+                try
                 {
-                    outFileText += "[";
-                    outFileText += lineLocale;
-                    outFileText += "]";
+                    const juce::Identifier& key = parseKey(line);
+                    foundKeys.add(key);
+                    outFileText += key.toString();
+                    if (lineLocale.isNotEmpty())
+                    {
+                        outFileText += "[";
+                        outFileText += lineLocale;
+                        outFileText += "]";
+                    }
+                    outFileText += "=";
+                    outFileText += getValue(key);
+                    continue;
                 }
-                outFileText += "=";
-                outFileText += getValue(key);
-                continue;
+                catch(DesktopEntryFormatError e) { } 
+                // Non-standard key, just copy the line without further
+                // processing.
             }
         }
-        // Copy field headers, unexpected lines, comments, Actions, and data 
-        // from other locales unedited.
+        // Copy field headers, unexpected lines, comments, Actions, 
+        // nonstandard keys, and data from other locales unedited.
         outFileText += line;
     }
     // Add the main group header if no source file exists.
@@ -663,7 +669,7 @@ void DesktopEntry::readEntryFile()
                 {
                     saveLineData(key, value);
                 }
-                else
+                else if(groupHeader.isNotEmpty())
                 {
                     saveActionLineData(key, value);
                 }
