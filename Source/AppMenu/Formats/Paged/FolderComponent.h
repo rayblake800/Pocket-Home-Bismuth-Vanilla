@@ -52,6 +52,89 @@ public:
      * @brief  Updates the sizes and positions of all buttons in the menu.
      */
     virtual void updateButtonLayout() final override;
+    
+    /**
+     * @brief  Gets the number of folder pages used by this FolderComponent.
+     *
+     * @return  The number of pages this folder needs to display all menu
+     *          buttons.
+     */
+    int getNumFolderPages() const;
+
+    /**
+     * @brief  Gets the index of the folder page containing the selected menu 
+     *         item.
+     *
+     * @return  The index of the selected item's page, or 0 if there is no 
+     *          selected item. 
+     */
+    int getCurrentFolderPage() const;
+
+    /**
+     * @brief  Gets the page column index of the selected menu item.
+     *
+     * @return  The column index of the selected item within its folder page, or
+     *          -1 if there is no selection.
+     */
+    int getSelectionColumn() const;
+
+
+    /**
+     * @brief  Gets the page row index of the selected menu item.
+     *
+     * @return  The row index of the selected item within its folder page, or -1
+     *          if there is no selection.
+     */
+    int getSelectionRow() const;
+
+    /**
+     * @brief  Finds what index value a menu item would have at a particular 
+     *         position within the folder.
+     * 
+     * @param page    The menu item's folder page index.
+     * 
+     * @param column  The menu item's column index in the folder page.
+     * 
+     * @param row     The menu item's row index in the folder page.
+     * 
+     * @return        The menu item's index within the entire folder, or -1 if
+     *                the page, column, or row values are out of bounds.
+     */
+    int positionIndex(const int page, const int column, const int row) const;
+
+    /**
+     * @brief  Selects a menu item based on its position in the folder 
+     *         component.  
+     *
+     * The selection will not change if there isn't a button located at the 
+     * given position.
+     *
+     * @param page    A menu item's folder page index.
+     * 
+     * @param column  A menu item's column index within its folder page.
+     * 
+     * @param row     A menu item's row index within its folder page.
+     * 
+     * @return        Whether a menu item at the given position was located and
+     *                selected.
+     */
+    bool setSelectedPosition(int page, int column, int row);
+
+private:
+    /**
+     * @brief  Gets the number of menu items that fit in one folder page.
+     *
+     * @return  The maximum number of menu items visible at one time.
+     */
+    int maxPageItemCount() const;
+
+    /**
+     * @brief  Gets the index of the selected menu item within its folder page.
+     *
+     * @return  The selected item's folder page index, or -1 if no menu item is
+     *          selected.
+     */
+    int selectedIndexInPage() const;
 };
 
 /* Only include this file directly in the AppMenu implementation! */
