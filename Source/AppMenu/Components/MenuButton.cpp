@@ -1,5 +1,4 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "IconLoader.h"
 #include "AssetFiles.h"
 #include "ComponentConfigFile.h"
 #include "AppMenu/Components/MenuButton.h"
@@ -16,6 +15,19 @@ juce::Button(menuItem.getTitle())
 {
     setWantsKeyboardFocus(false);
 } 
+
+/*
+ * Cancels any pending icon loading callback.
+ */
+AppMenu::MenuButton::~MenuButton()
+{
+    if(iconCallbackID)
+    {
+        IconLoader iconLoader;
+        iconLoader.cancelImageAssignment(iconCallbackID);
+        iconCallbackID = 0;
+    }
+}
 
 /*
  * Checks if this button is the selected button in its folder.
@@ -121,18 +133,20 @@ void AppMenu::MenuButton::dataChanged(MenuItem::DataField changedField)
 void AppMenu::MenuButton::loadIcon()
 {
     using juce::Image;
-    if(!iconBounds.isEmpty())
+    if(!iconBounds.isEmpty() && !iconCallbackID)
     {
         icon = AssetFiles::loadImageAsset("appIcons/default.png");
         IconLoader iconThread;
 
-        iconThread.loadIcon(getMenuItem().getIconName(),
+        iconCallbackID = iconThread.loadIcon(
+                getMenuItem().getIconName(),
                 iconBounds.toNearestInt().getWidth(),
-        [this](Image iconImg)
-        {
-            icon = iconImg;
-            repaint();
-        });
+                [this](Image iconImg)
+                {
+                    iconCallbackID = 0;
+                    icon = iconImg;
+                    repaint();
+                });
     }
 }
 

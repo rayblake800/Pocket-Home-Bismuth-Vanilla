@@ -1,4 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
+#include "AppMenu/Settings.h"
+#include "AppMenu/Data/ConfigKeys.h"
 #include "AppMenu/Components/MainComponent.h"
     
 /*
@@ -6,6 +8,7 @@
  */
 AppMenu::MainComponent::MainComponent(const Initializer* initializer)
 {
+    addTrackedKey(ConfigKeys::menuFormatKey);
     initMenu(initializer);
 }
 
@@ -66,3 +69,14 @@ void AppMenu::MainComponent::resized()
         menuComponent->parentResized(getLocalBounds());
     }
 }
+
+/*
+ * Updates the menu when the selected format changes.
+ */
+void AppMenu::MainComponent::configValueChanged
+(const juce::Identifier& propertyKey)
+{
+    jassert(propertyKey == ConfigKeys::menuFormatKey);
+    AppMenu::changeMenuFormat(this, Settings::getMenuFormat());
+}
+

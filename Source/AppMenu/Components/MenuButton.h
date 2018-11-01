@@ -3,6 +3,7 @@
 
 #pragma once
 #include "AppMenu.h"
+#include "IconLoader.h"
 #include "AppMenu/Data/MenuItem.h"
 
 /**
@@ -29,7 +30,10 @@ public:
      */
     MenuButton(MenuItem menuItem);
 
-    virtual ~MenuButton() { }
+    /**
+     * @brief  Cancels any pending icon loading callback.
+     */
+    virtual ~MenuButton();
 
     /**
      * @brief  Checks if this button is the selected button in its folder.
@@ -219,6 +223,9 @@ private:
 
     /* The icon to draw on this button */
     juce::Image icon;
+
+    /* ID used to cancel pending icon requests if necessary */
+    IconLoader::CallbackID iconCallbackID = 0;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuButton)
 };

@@ -9,7 +9,7 @@
 #include "AppMenu/Control/Initializer.h"
 #include "AppMenu/Components/MenuComponent.h"
 #include "AppMenu/Control/Controller.h"
-#include "Appmenu/Data/ConfigFile.h"
+#include "AppMenu/Data/ConfigFile.h"
 
 /**
  * @file  MainComponent.h
@@ -17,15 +17,15 @@
  * @brief  Creates and shows an AppMenu of any format.
  */
 
-class AppMenu::MainComponent : public juce::Component
+class AppMenu::MainComponent : public juce::Component, 
+    public ConfigFile::Listener
 {
 public:
-    
     /**
      * @brief  Creates and initializes the application menu.
      *
      * @param initializer  A struct that defines how to initialize a specific
-                           menu format.
+     *                     menu format.
      */
     MainComponent(const Initializer* initializer);
 
@@ -52,6 +52,14 @@ private:
      *         whenever the MainComponent is moved or resized.
      */
     virtual void resized() final override;
+
+    /**
+     * @brief  Updates the menu when the selected format changes.
+     *
+     * @param propertyKey  The menu format key.
+     */
+    virtual void configValueChanged(const juce::Identifier& propertyKey)
+        final override;
 
     /* Tracks the current AppMenu format. */
     AppMenu::Format currentMenuFormat = Format::Invalid;

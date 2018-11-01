@@ -2,9 +2,9 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 
 #pragma once
-#include "AppMenu/MenuComponents/FolderComponent.h"
-#include "AppMenu/MenuData/MenuItem.h"
-#include "AppMenu/MenuComponents/Editors/PopupEditor.h"
+#include "AppMenu/Components/FolderComponent.h"
+#include "AppMenu/Data/MenuItem.h"
+#include "AppMenu/Components/Editors/PopupEditor.h"
 #include "AppMenu/AppMenu.h"
 #include "JuceHeader.h"
 
@@ -42,8 +42,11 @@ public:
 
     /**
      * @brief  Updates the positions and sizes of all open folder components.
+     *
+     * @param animateTransition  Whether the change in folder bounds should be
+     *                           animated.
      */
-    virtual void updateMenuLayout() = 0;
+    void updateMenuLayout(const bool animate = true);
 
     /**
      * @brief  Updates the menu's bounds when its parent component's bounds
@@ -104,6 +107,38 @@ private:
      */
     virtual FolderComponent* createFolderComponent(MenuItem folderItem) 
         const = 0;
+
+    /**
+     * @brief   Finds the bounds where a menu folder should be placed.
+     *
+     * @param folderIndex    The index of an open folder component.
+     *
+     * @param closingFolder  Whether the active folder (not necessarily this
+     *                       folder!) is about to be closed.
+     *
+     * @return               The bounds within the MenuComponent where the
+     *                       folder should be placed.
+     */
+    virtual juce::Rectangle<int> getFolderBounds(const int folderIndex,
+            bool closingFolder = false) = 0;
+
+    /**
+     * @brief  Gets the duration in milliseconds to animate folder transitions.
+     *
+     * @return   The AppMenu format's animation duration.
+     */
+    virtual int getAnimationDuration() const = 0;
+
+    /**
+     * @brief  Updates the positions and sizes of all open folder components.
+     *
+     * @param animateTransition  Whether the change in folder bounds should be
+     *                           animated.
+     *
+     * @param closingFolder      Whether the last folder component is being
+     *                           closed.
+     */
+    void updateMenuLayout(const bool animate, const bool closingFolder);
 
     /**
      * @brief  Updates the menu layout when the component is resized.

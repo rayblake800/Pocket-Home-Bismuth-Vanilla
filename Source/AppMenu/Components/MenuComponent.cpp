@@ -1,5 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
+#include "TransitionAnimator.h"
 #include "AppMenu/Components/MenuComponent.h"
 
 AppMenu::MenuComponent::MenuComponent()
@@ -44,10 +45,18 @@ void AppMenu::MenuComponent::closeActiveFolder()
 {
     if(openFolders.size() > 1)
     {
+        updateMenuLayout(true, true);
         removeChildComponent(openFolders.getLast());
         openFolders.removeLast();
-        updateMenuLayout();
     }
+}
+
+/*
+ * Updates the positions and sizes of all open folder components.
+ */
+void AppMenu::MenuComponent::updateMenuLayout(const bool animate)
+{
+   updateMenuLayout(animate, false); 
 }
 
 /*
@@ -95,6 +104,30 @@ void AppMenu::MenuComponent::removeEditor()
     if(menuEditor != nullptr)
     {
         removeChildComponent(menuEditor.get());
+    }
+}
+
+/*
+ * Updates the positions and sizes of all open folder components.
+ */
+void AppMenu::MenuComponent::updateMenuLayout
+(const bool animate, const bool closingFolder)
+{
+    using juce::Rectangle;
+    for(int i = 0; i < openFolders.size(); i++)
+    {
+        Rectangle<int> newBounds = getFolderBounds(i, closingFolder);
+        Component* folder = openFolders[i];
+        if(animate)
+        {
+            TransitionAnimator::transformBounds(folder, newBounds,
+                    getAnimationDuration(), 
+                    closingFolder && (i == openFolders.size() - 1));
+        }
+        else
+        {
+            folder->setBounds(newBounds);
+        }
     }
 }
 
