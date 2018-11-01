@@ -118,7 +118,8 @@ void AppMenu::DesktopEntryData::setLaunchedInTerm(const bool termLaunch)
 /*
  * Sets the application categories connected to this menu item.
  */
-void AppMenu::DesktopEntryData::setCategories(const juce::StringArray& categories)
+void AppMenu::DesktopEntryData::setCategories
+(const juce::StringArray& categories)
 {
     try
     {
@@ -215,6 +216,11 @@ void AppMenu::DesktopEntryData::deleteFromSource()
         desktopEntry.writeFile();
     }
     catch(DesktopEntryFileError e)
+    {
+        DBG("DesktopEntryData::" << __func__ 
+                << ": Failed to hide entry:" << e.what());
+    }
+    catch(DesktopEntryFormatError e)
     {
         DBG("DesktopEntryData::" << __func__ 
                 << ": Failed to hide entry:" << e.what());
