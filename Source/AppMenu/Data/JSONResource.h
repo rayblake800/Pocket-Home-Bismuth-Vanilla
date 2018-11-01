@@ -18,10 +18,10 @@
  * accesses apps.json, the configuration file where application menu settings
  * are stored.  It reads in the JSON data used to create AppMenu::MenuItem
  * objects, and writes any changes to those objects back to apps.json
- * as JSON data.  Only AppConfigFile objects are allowed to access the 
+ * as JSON data.  Only AppMenu::ConfigFile objects are allowed to access the 
  * JSONResource object.
  *
- * @see AppConfigFile.h
+ * @see AppMenu/ConfigFile.h
  */
 
 class AppMenu::JSONResource : public Config::FileResource
@@ -90,15 +90,10 @@ private:
      * @brief   Gets all parameters with basic data types tracked by this
      *          ConfigFile.
      * 
-     * @return  The empty list, as AppConfigFile doesn't track any ConfigKey
-     *          variables.
+     * @return  The menu setting keys defined in AppMenu/Data/ConfigKeys.
      */
     virtual const std::vector<Config::DataKey>& getConfigKeys() 
-        const final override
-    {
-        static const std::vector<Config::DataKey> keys = {};
-        return keys;
-    }
+        const final override;
 
     /* Holds the root folder item */
     MenuItem rootFolderItem;

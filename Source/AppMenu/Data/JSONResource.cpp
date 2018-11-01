@@ -17,7 +17,7 @@ AppMenu::JSONResource::JSONResource() : Config::FileResource
     ConfigData::Ptr rootItem = new ConfigData();
     rootFolderItem = MenuItem(rootItem);
     loadJSONData(); 
-    var rootFolder = initProperty<var>(folderItemKey);
+    var rootFolder = initProperty<var>(ConfigKeys::folderItemKey);
     ((ConfigData*) rootItem.get())->initMenuData(rootFolder); 
 }
 
@@ -48,10 +48,15 @@ AppMenu::MenuItem AppMenu::JSONResource::getRootFolderItem() const
  */
 static juce::var itemToVar(const AppMenu::MenuItem& menuItem)
 {
-    using namespace juce;
+    using namespace AppMenu;
+    using juce::DynamicObject;
+    using juce::Array;
+    using juce::var;
+    using juce::StringArray;
+
     DynamicObject::Ptr itemObject = new DynamicObject();
-    itemObject->setProperty(AppMenu::titleKey, menuItem.getTitle());
-    itemObject->setProperty(AppMenu::iconKey, menuItem.getIconName());
+    itemObject->setProperty(ConfigKeys::titleKey, menuItem.getTitle());
+    itemObject->setProperty(ConfigKeys::iconKey, menuItem.getIconName());
     if(menuItem.isFolder())
     {
         int configChildCount = menuItem.getMovableChildCount();
@@ -60,24 +65,24 @@ static juce::var itemToVar(const AppMenu::MenuItem& menuItem)
             Array<var> folderItems;
             for(int i = 0; i < configChildCount; i++)
             {
-                AppMenu::MenuItem folderItem = menuItem.getFolderItem(i);
+                MenuItem folderItem = menuItem.getFolderItem(i);
                 if(!folderItem.isNull())
                 {
                     folderItems.add(itemToVar(folderItem));
                 }
             }
-            itemObject->setProperty(AppMenu::folderItemKey, folderItems);
+            itemObject->setProperty(ConfigKeys::folderItemKey, folderItems);
         }
         StringArray categories = menuItem.getCategories();
         if(!categories.isEmpty())
         {
-            itemObject->setProperty(AppMenu::categoryKey, categories);
+            itemObject->setProperty(ConfigKeys::categoryKey, categories);
         }
     }
     else
     {
-        itemObject->setProperty(AppMenu::commandKey, menuItem.getCommand());
-        itemObject->setProperty(AppMenu::launchInTermKey, 
+        itemObject->setProperty(ConfigKeys::commandKey, menuItem.getCommand());
+        itemObject->setProperty(ConfigKeys::launchInTermKey, 
                 menuItem.getLaunchedInTerm());
     }
     return var(itemObject);
@@ -88,7 +93,8 @@ static juce::var itemToVar(const AppMenu::MenuItem& menuItem)
  */
 void AppMenu::JSONResource::writeDataToJSON()
 {
-    using namespace juce;
+    using juce::Array;
+    using juce::var;
     MenuItem rootItem = getRootFolderItem();
     int numItems = rootItem.getMovableChildCount();
     if(numItems > 0)
@@ -102,8 +108,16 @@ void AppMenu::JSONResource::writeDataToJSON()
                 rootFolder.add(itemToVar(folderItem));
             }
         }
-        updateProperty<Array<var>>(folderItemKey, rootFolder);
+        updateProperty<Array<var>>(ConfigKeys::folderItemKey, rootFolder);
     }
+}
+
+/*
+ * Gets all parameters with basic data types tracked by this ConfigFile.
+ */
+const std::vector<Config::DataKey>& AppMenu::JSONResource::getConfigKeys() const 
+{
+    return ConfigKeys::allKeys;
 }
 
 /**
@@ -126,8 +140,6 @@ AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
                 << "\" at index " << index);
         return MenuItem();
     }
-    using namespace juce;
-    
     ItemData::Ptr newData = new ConfigData();
     newData->setTitle(title);
     newData->setIconName(icon);

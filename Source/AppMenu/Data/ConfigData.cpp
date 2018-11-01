@@ -52,11 +52,11 @@ void AppMenu::ConfigData::initMenuData(juce::var& menuData)
     var folderItems;
     if(menuData.isObject())
     {
-        title = menuData.getProperty(titleKey, String());
-        iconName = menuData.getProperty(iconKey, String());
-        command = menuData.getProperty(commandKey, String());
-        launchInTerm = menuData.getProperty(launchInTermKey, false);
-        var categoryVar = menuData.getProperty(categoryKey, var());
+        title = menuData.getProperty(ConfigKeys::titleKey, String());
+        iconName = menuData.getProperty(ConfigKeys::iconKey, String());
+        command = menuData.getProperty(ConfigKeys::commandKey, String());
+        launchInTerm = menuData.getProperty(ConfigKeys::launchInTermKey, false);
+        var categoryVar = menuData.getProperty(ConfigKeys::categoryKey, var());
         if(categoryVar.isArray())
         {
             for(const var& category : *categoryVar.getArray())
