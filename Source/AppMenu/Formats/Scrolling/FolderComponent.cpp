@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
-#include "Config/MainFile.h"
-#include "Config/MainKeys.h"
+#include "AppMenu/Data/ConfigFile.h"
+#include "AppMenu/Data/ConfigKeys.h"
 #include "AppMenu/Formats/Scrolling/MenuButton.h"
 #include "AppMenu/Formats/Scrolling/FolderComponent.h"
 
@@ -65,10 +65,10 @@ int AppMenu::Scrolling::FolderComponent::getSelectedItemYOffset() const
  */
 int AppMenu::Scrolling::FolderComponent::getMinimumWidth() const
 {
-    Config::MainFile mainConfig;
+    ConfigFile appConfig;
     const int iconWidth = getWindowBounds().getHeight() /
-        mainConfig.getConfigValue<int>
-        (Config::MainKeys::scrollingMenuRowsKey);
+        appConfig.getConfigValue<int>
+        (ConfigKeys::scrollingMenuRowsKey);
     int maxTextWidth = 0;
     for(int i = 0; i < getFolderSize(); i++)
     {
@@ -76,4 +76,12 @@ int AppMenu::Scrolling::FolderComponent::getMinimumWidth() const
                 getButtonComponent(i)->getTitleWidth());
     }
     return iconWidth + maxTextWidth;
+}
+
+/*
+ * Recalculates menu button layout when the folder bounds change.
+ */
+void AppMenu::Scrolling::FolderComponent::resized()
+{
+    updateButtonLayout();
 }
