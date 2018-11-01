@@ -51,7 +51,7 @@ public:
     /**
      * @brief  Updates the sizes and positions of all buttons in the menu.
      */
-    virtual void updateButtonLayout() const final override;
+    virtual void updateButtonLayout() final override;
 };
 
 /* Only include this file directly in the AppMenu implementation! */

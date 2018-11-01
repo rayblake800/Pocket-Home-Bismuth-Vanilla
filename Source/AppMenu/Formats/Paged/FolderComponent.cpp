@@ -14,6 +14,7 @@
 int AppMenu::Paged::FolderComponent::closestIndex
 (const int xPos, const int yPos) const 
 {
+    return 0;
 }
 
 /*
@@ -22,11 +23,12 @@ int AppMenu::Paged::FolderComponent::closestIndex
 AppMenu::MenuButton* AppMenu::Paged::FolderComponent::createMenuButton
 (const MenuItem folderItem) const 
 {
+    return nullptr;
 }
 
 /*
  * Updates the sizes and positions of all buttons in the menu.
  */
-void AppMenu::Paged::FolderComponent::updateButtonLayout() const
+void AppMenu::Paged::FolderComponent::updateButtonLayout()
 {
 }
