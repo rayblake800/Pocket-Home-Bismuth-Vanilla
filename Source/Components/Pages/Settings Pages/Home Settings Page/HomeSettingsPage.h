@@ -47,7 +47,7 @@ private:
      * 
      * @param edited
      */
-    void fileSelected(FileSelectTextEditor* edited);
+    virtual void fileSelected(FileSelectTextEditor* edited) override;
 
     //page title label
     ScalingLabel title;

@@ -26,6 +26,26 @@ namespace AppMenu
          */
         void setMenuFormat(const AppMenu::Format newFormat);
 
+        /**
+         * @brief  Gets the string representation of an AppMenu::Format value.
+         *
+         * @param format  An AppMenu format type.
+         *
+         * @return        The format's string representation.
+         */
+        juce::String formatToString(const AppMenu::Format format);
+
+        /**
+         * @brief  Gets an AppMenu::Format value from its string representation.
+         *
+         * @param formatString  An AppMenu format string.
+         *
+         * @return              The corresponding format value, or
+         *                      Format::Invalid if formatString is not a valid
+         *                      format string.
+         */
+        AppMenu::Format stringToFormat(const juce::String formatString);
+
         /* Paged menu format settings: */
 
         /**

@@ -81,6 +81,14 @@ public:
             const juce::StringArray& categories,
             MenuItem& parentFolder,
             const int index);
+
+    class Listener : public Config::FileResource::Listener
+    {
+    public:
+        Listener();
+
+        virtual ~Listener() { }
+    };
 };
 
 /* Only include this file directly in the AppMenu implementation! */

@@ -1,5 +1,6 @@
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
+#include "AppMenu/Settings.h"
 #include "HomeSettingsPage.h"
 
 /* Localized object class key */
@@ -21,6 +22,15 @@ static const juce::Identifier scrollingMenuTextKey = "scrollingMenu";
 static const juce::Identifier pagedMenuTextKey     = "pagedMenu";
 static const juce::Identifier menuColumnsTextKey   = "menuColumns";
 static const juce::Identifier menuRowsTextKey      = "menuRows";
+
+/* Background selection menu indices: */
+static const constexpr int defaultBackgroundIndex = 1;
+static const constexpr int colorBackgroundIndex   = 2;
+static const constexpr int imageBackgroundIndex   = 3;
+
+/* AppMenu format selection menu indices: */
+static const constexpr int pagedMenuIndex       = 1;
+static const constexpr int scrollingMenuIndex   = 2;
 
 HomeSettingsPage::HomeSettingsPage() :
 Locale::TextUser(localeClassKey),
@@ -81,24 +91,27 @@ rowCounter(1, 1, 9)
     setLayout(layout);
 
     title.setJustificationType(Justification::centred);
-    bgTypePicker.addItem(localeText(defaultBGOptionKey), 1);
-    bgTypePicker.addItem(localeText(colorBGOptionKey), 2);
-    bgTypePicker.addItem(localeText(imageBGOptionKey), 3);
+    bgTypePicker.addItem(localeText(defaultBGOptionKey),
+            defaultBackgroundIndex);
+    bgTypePicker.addItem(localeText(colorBGOptionKey),
+            colorBackgroundIndex);
+    bgTypePicker.addItem(localeText(imageBGOptionKey), 
+            imageBackgroundIndex);
     bgTypePicker.addListener(this);
 
     bgEditor.setColour(TextEditor::ColourIds::textColourId,
             Colour::greyLevel(0.f));
     bgEditor.addFileSelectListener(this);
 
-    menuTypePicker.addItem(localeText(scrollingMenuTextKey), 1);
-    menuTypePicker.addItem(localeText(pagedMenuTextKey), 2);
+    menuTypePicker.addItem(localeText(pagedMenuTextKey), 
+            pagedMenuIndex);
+    menuTypePicker.addItem(localeText(scrollingMenuTextKey), 
+            scrollingMenuIndex);
     menuTypePicker.addListener(this);
     Config::MainFile mainConfig;
-    rowCounter.setValue(mainConfig.getConfigValue<int>
-            (Config::MainKeys::pagedMenuWidthKey));
+    rowCounter.setValue(AppMenu::Settings::getPagedMenuRows());
 
-    columnCounter.setValue(mainConfig.getConfigValue<int>
-            (Config::MainKeys::pagedMenuHeightKey));
+    columnCounter.setValue(AppMenu::Settings::getPagedMenuColumns());
 
     updateComboBox();
     addAndShowLayoutComponents();
@@ -118,6 +131,43 @@ HomeSettingsPage::~HomeSettingsPage()
 }
 
 /**
+ * @brief  Checks if a string is a valid representation of a hexadecimal RGB
+ *         or ARGB color value.
+ *
+ * @param colorString  The potential color string.
+ *
+ * @return             Whether colorString represents a valid color value.
+ */
+static bool validColorString(const juce::String colorString)
+{
+    const int length = colorString.length();
+    if(length != 6 && length != 8 && length != 10)
+    {
+        return false;
+    }
+    int charIndex = 0;
+    if(colorString.startsWithIgnoreCase("0x"))
+    {
+        if(length == 6)
+        {
+            return false;
+        }
+        charIndex = 2;
+    }
+    for(;charIndex < length; charIndex++)
+    {
+        char c = colorString[charIndex];
+        if(!((c >= '0' && c <= '9')
+          || (c >= 'a' && c <= 'f')
+          || (c >= 'A' && c <= 'F')))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  * Initializes the background and AppMenuType combo boxes with values
  * loaded from the MainConfigFile, and updates their labels to match.
  */
@@ -129,33 +179,45 @@ void HomeSettingsPage::updateComboBox()
     String background = mainConfig.getConfigValue<String>
         (Config::MainKeys::backgroundKey);
     bool display = false;
-    if ((background.length() == 6
-         || background.length() == 8)
-        && background.containsOnly("0123456789ABCDEF"))
+    if (validColorString(background))
     {
-        bgTypePicker.setSelectedItemIndex(1, 
+        bgTypePicker.setSelectedItemIndex(colorBackgroundIndex, 
                 juce::NotificationType::dontSendNotification);
         display = true;
         bgEditor.setText(background, false);
     }
     else if (background.length() > 0)
     {
-        bgTypePicker.setSelectedItemIndex(2, 
+        bgTypePicker.setSelectedItemIndex(imageBackgroundIndex, 
                 juce::NotificationType::dontSendNotification);
         display = true;
         bgEditor.setText(background, false);
     }
+    else
+    {
+        bgTypePicker.setSelectedItemIndex(defaultBackgroundIndex,
+                juce::NotificationType::dontSendNotification);
+    }
     bgEditor.setVisible(display);
     bgLabel.setVisible(display);
 
-    String menuType
-            = mainConfig.getConfigValue<String>(Config::MainKeys::menuTypeKey);
-    int menuIndex = Config::MainKeys::menuTypes.indexOf(menuType);
-    if (menuIndex != -1)
+    AppMenu::Format menuType = AppMenu::Settings::getMenuFormat();
+
+    int menuIndex;
+    switch(menuType)
     {
-        menuTypePicker.setSelectedItemIndex(menuIndex, 
-                juce::NotificationType::dontSendNotification);
-    }
+        case AppMenu::Format::Scrolling:
+            menuIndex = scrollingMenuIndex;
+            break;
+        case AppMenu::Format::Paged:
+            menuIndex = pagedMenuIndex;
+            break;
+        case AppMenu::Format::Invalid:
+            DBG("HomeSettingsPage::" << __func__ << "No valid menu format!");
+            return;
+    } 
+    menuTypePicker.setSelectedItemIndex(menuIndex, 
+            juce::NotificationType::dontSendNotification);
 }
 
 /**
@@ -173,7 +235,7 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
                 juce::NotificationType::dontSendNotification);
         switch (box->getSelectedId())
         {
-            case 1:
+            case defaultBackgroundIndex:
                 mainConfig.setConfigValue<String>
                         (Config::MainKeys::backgroundKey,
                          findColour(PageComponent::backgroundColourId)
@@ -181,14 +243,14 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
                 bgEditor.setVisible(false);
                 bgLabel.setVisible(false);
                 return;
-            case 2:
+            case colorBackgroundIndex:
                 bgLabel.setVisible(true);
                 bgLabel.setText(
                         localeText(hexValueTextKey),
                         juce::NotificationType::dontSendNotification);
                 bgEditor.showFileSelectButton(false);
                 break;
-            case 3:
+            case imageBackgroundIndex:
                 bgLabel.setVisible(true);
                 bgLabel.setText(
                         localeText(imagePathTextKey),
@@ -198,11 +260,20 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
         bgEditor.setVisible(true);
         bgTypeLabel.setVisible(true);
     }
-    else if (box == &menuTypePicker && box->getSelectedItemIndex() >= 0)
+    else if (box == &menuTypePicker) 
     {
-        mainConfig.setConfigValue<String>
-                (Config::MainKeys::menuTypeKey,
-                 Config::MainKeys::menuTypes[box->getSelectedItemIndex()]);
+        AppMenu::Format selectedFormat = AppMenu::Format::Invalid;
+        switch(box->getSelectedId())
+        {
+            case scrollingMenuIndex:
+                selectedFormat = AppMenu::Format::Scrolling;
+                break;
+            case pagedMenuIndex:
+                selectedFormat = AppMenu::Format::Paged;
+        }
+        // All selections should correspond to valid formats
+        jassert(selectedFormat != AppMenu::Format::Invalid);
+        AppMenu::Settings::setMenuFormat(selectedFormat);
     }
 }
 
@@ -217,18 +288,19 @@ void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
     String value = edited->getText();
     Config::MainFile mainConfig;
     //color value
-    if (bgTypePicker.getSelectedId() == 2)
+    if (bgTypePicker.getSelectedId() == colorBackgroundIndex)
     {
-        value = value.toUpperCase();
-        if (value.length() != 6 || !value.containsOnly("0123456789ABCDEF"))
+        if (validColorString(value))
+        {
             bgEditor.setText(localeText(invalidColorTextKey), false);
+        }
         else
         {
             mainConfig.setConfigValue<String>
                     (Config::MainKeys::backgroundKey, value);
         }
     }
-    else if (bgTypePicker.getSelectedId() == 3)
+    else if (bgTypePicker.getSelectedId() == imageBackgroundIndex)
     {
         mainConfig.setConfigValue<String>
                 (Config::MainKeys::backgroundKey, value);

@@ -29,3 +29,7 @@ AppMenu::MenuItem AppMenu::ConfigFile::addMenuItem(
             parentFolder, index);
     return parentFolder.getFolderItem(index);
 }
+
+AppMenu::ConfigFile::Listener::Listener() : 
+    Config::FileResource::Listener(JSONResource::resourceKey, 
+            []()->SharedResource* { return new JSONResource(); }) { }

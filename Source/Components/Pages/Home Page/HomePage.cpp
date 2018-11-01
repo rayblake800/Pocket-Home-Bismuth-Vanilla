@@ -16,7 +16,6 @@ settingsButton(ComponentConfigKeys::settingsButtonKey)
     setName("HomePage");
 #    endif
     addTrackedKey(Config::MainKeys::backgroundKey);
-    addTrackedKey(Config::MainKeys::menuTypeKey);
 
     setWantsKeyboardFocus(false);
     addAndMakeVisible(frame);
@@ -32,6 +31,15 @@ settingsButton(ComponentConfigKeys::settingsButtonKey)
     settingsButton.addListener(this);
     settingsButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(settingsButton);
+    
+    appMenu.reset(AppMenu::createAppMenu(AppMenu::Format::Scrolling)); 
+    appMenu->setBounds(getLocalBounds());
+    addAndMakeVisible(appMenu.get());
+    appMenu->toBack();
+    if(isShowing())
+    {
+        appMenu->grabKeyboardFocus();
+    }
 
     loadAllConfigProperties();
 }
@@ -58,17 +66,6 @@ void HomePage::configValueChanged(const juce::Identifier& key)
         else
         {
             setBackgroundImage(AssetFiles::loadImageAsset(background));
-        }
-    }
-    else if (key == Config::MainKeys::menuTypeKey && appMenu == nullptr)
-    {
-        appMenu.reset(AppMenu::createAppMenu(AppMenu::Format::Scrolling)); 
-        appMenu->setBounds(getLocalBounds());
-        addAndMakeVisible(appMenu.get());
-        appMenu->toBack();
-        if(isShowing())
-        {
-            appMenu->grabKeyboardFocus();
         }
     }
 }
