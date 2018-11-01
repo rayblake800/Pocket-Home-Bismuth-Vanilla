@@ -118,6 +118,11 @@ void AppMenu::MenuComponent::updateMenuLayout
     {
         Rectangle<int> newBounds = getFolderBounds(i, closingFolder);
         Component* folder = openFolders[i];
+        if(newBounds == folder->getBounds())
+        {
+            // Bounds are unchanged, so no action is required.
+            continue;
+        }
         if(animate)
         {
             TransitionAnimator::transformBounds(folder, newBounds,
