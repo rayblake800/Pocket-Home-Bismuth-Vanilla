@@ -20,7 +20,7 @@
     "Image4"                      : "0xff0000ff",
 
     "AppMenuButton text"          : "",
-    "AppMenuButton background"    : "",
+    "AppMenuButton background"    : "0xaab8b8b8",
     "AppMenuButton selection"     : "0xfff799aa",
     "AppMenuButton border"        : "0xffb88e47",
 
