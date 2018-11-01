@@ -9,14 +9,16 @@
         -Add the new format to the Appmenu::Format enum class in AppMenu.h 
         -Update the createInitializer method in AppMenu.cpp to create the new
          format's initializer.
+        -Add the new format's identifier string to formatStrings in
+         AppMenu/Data/ConfigKeys.h
 
     ## MenuButton
         ### Implement:
-            -juce::Rectangle<float> findTitleBounds();
+            -Rectangle<float> findTitleBounds();
                 Return the bounding rectangle relative to the button bounds 
                 where the menu item's title should be drawn.
 
-            -juce::Rectangle<float> findIconBounds();
+            -Rectangle<float> findIconBounds();
                 Return the bounding rectangle relative to the button bounds
                 where the menu item's icon should be drawn.
               
@@ -26,14 +28,14 @@
             -bool shouldFillBackground() const;
                 Return whether the menu button's background should be filled.
 
-            -juce::Justification getTextJustification() const;
+            -Justification getTextJustification() const;
                 Return the justification type to use when printing button text.
     
         ### Optional overrides:
-            -juce::Font findTitleFont(const juce::Rectangle<float>& titleBounds);
+            -Font findTitleFont(const Rectangle<float>& titleBounds);
                 Override to change how the button's title font is updated.
 
-            -int findTitleBGWidth(const juce::Rectangle<float>& titleBounds, const juce::Font& titleFont);
+            -int findTitleBGWidth(const Rectangle<float>& titleBounds, const Font& titleFont);
                 Override to change how the width of the title background area
                 is calculated, or to disable drawing a background area behind
                 the title entirely.
@@ -60,10 +62,13 @@
                 Create a folder component as this menu format's 
                 AppMenu::FolderComponent class.
 
-            -void updateMenuLayout();
-                Reposition all folder components, adjusting for the current
-                MenuComponent bounds, the number of open folders, and any other
-                factor this menu format cares about.
+            -Rectangle<int> getFolderBounds(const int folderIndex, const bool closingFolder)
+                Return appropriate bounds for one folder component, to be used
+                when updating the layout of all folders.
+
+            -int getAnimationDuration() const;
+                Return the duration in milliseconds to use when animating menu
+                layout updates.
 
             -void parentResized(const juce::Rectangle<int> parentBounds)
                 Update the menu's bounds when its parent component is resized.
@@ -72,6 +77,7 @@
         ### Implement:
             -bool keyPress(const KeyType keyType)
                 Handle menu key press events.
+                
         ### Optional overrides:
             -void menuItemClicked(const MenuButton* clickedButton, const bool rightClicked);
                 Override to change how the menu behaves when MenuButtons are
