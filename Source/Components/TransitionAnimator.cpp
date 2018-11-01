@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "TempTimer.h"
 #include "TransitionAnimator.h"
 
 /**
@@ -14,7 +15,7 @@ class AnimationProxy : public juce::Component, private juce::Timer
 {
 public:
 
-    /**
+    /*
      * @param source             The proxy component will add itself to this
      *                           component's parent, and copy its bounds and
      *                           appearance.
@@ -33,8 +34,8 @@ public:
     }
 
     virtual ~AnimationProxy() { }
-private:
 
+private:
     AnimationProxy
     (juce::Component& source, const unsigned int animationDuration)
     {
@@ -78,21 +79,21 @@ private:
                 getHeight() / (float) image.getHeight()), false);
     }
 
-    /**
+    /*
      * Deletes the component if it is no longer animating.  If it is still
      * animating, the timer will be reset.
      */
     void timerCallback() override
     {
-        using namespace juce;
-        if (Desktop::getInstance().getAnimator().isAnimating(this))
+        const juce::MessageManagerLock mmLock;
+        if (juce::Desktop::getInstance().getAnimator().isAnimating(this))
         {
             startTimer(timeBuffer);
         }
         else
         {
             stopTimer();
-            MessageManager::callAsync([this]()
+            juce::MessageManager::callAsync([this]()
             {
                 selfHolder = nullptr;
             });
@@ -100,9 +101,11 @@ private:
     }
 
     juce::ScopedPointer<AnimationProxy> selfHolder;
+
     //Extra time to wait, in milliseconds, to ensure the timer is deleted
     //after animation finishes.
     static const constexpr unsigned int timeBuffer = 500;
+
     juce::Image image;
 };
 
@@ -117,9 +120,7 @@ bool TransitionAnimator::isAnimating(juce::Component* possiblyAnimating)
 
 /*
  * Moves one set of components off-screen, while moving another set of
- * components on-screen, animating the transition.  Any component that is
- * in both sets will appear to move off-screen while a duplicate component
- * moves on-screen simultaneously.
+ * components on-screen, animating the transition.
  */
 void TransitionAnimator::animateTransition(
         juce::Array<juce::Component*> movingOut,
@@ -153,7 +154,6 @@ void TransitionAnimator::animateTransition(
         }
         transitionOut(outComponent, transition, animationMilliseconds);
     }
-
 }
 
 /*
@@ -163,7 +163,7 @@ void TransitionAnimator::transitionOut(
         juce::Component* component,
         const TransitionAnimator::Transition transition,
         const unsigned int animationMilliseconds,
-	const bool useProxy)
+        const bool useProxy)
 {
     using namespace juce;
     if (component == nullptr)
@@ -188,16 +188,15 @@ void TransitionAnimator::transitionOut(
             case Transition::moveRight:
                 destination.setX(destination.getX() + windowBounds.getWidth());
                 break;
-	    case Transition::toDestination:
-        case Transition::none:
-		    //component->setBounds(Rectangle<int>(0,0,0,0));
-		    return;
+            case Transition::toDestination:
+            case Transition::none:
+                return;
         }
-            if(useProxy)
-            {
+        if(useProxy)
+        {
             Component * proxy = static_cast<Component*>
-                (AnimationProxy::getNewProxy(*component, 
-                         animationMilliseconds));
+                    (AnimationProxy::getNewProxy(*component, 
+                     animationMilliseconds));
             component->setBounds(destination);
             component = proxy;
         }
@@ -249,6 +248,11 @@ void TransitionAnimator::transitionIn(
                 break;
             case Transition::toDestination:
                 startBounds = component->getBounds();
+                break;
+            default:
+                DBG("TransitionAnimator::" << __func__ 
+                        << ": Unhandled transition type!");
+                jassertfalse;
         }
         component->setBounds(startBounds);
         transformBounds(component, destination, animationMilliseconds);
@@ -259,14 +263,34 @@ void TransitionAnimator::transitionIn(
  * Updates a component's bounds, animating the transformation.
  */
 void TransitionAnimator::transformBounds(
-        juce::Component* component,
+        juce::Component* const component,
         const juce::Rectangle<int>& destination,
-        const unsigned int animationMilliseconds)
+        const unsigned int animationMilliseconds,
+        const bool useProxy,
+        const std::function<void()> onFinish)
 {
-    using namespace juce;
+    using juce::Component;
+    if(component == nullptr)
+    {
+        return;
+    }
     if (component != nullptr)
     {
-        Desktop::getInstance().getAnimator().animateComponent(component,
+        juce::Component* toAnimate = component;
+        if(useProxy)
+        {
+            Component * proxy = static_cast<Component*>
+                    (AnimationProxy::getNewProxy(*toAnimate, 
+                     animationMilliseconds));
+            toAnimate->setBounds(destination);
+            toAnimate = proxy;
+        }
+        juce::Desktop::getInstance().getAnimator().animateComponent(toAnimate,
                 destination, 1.0, animationMilliseconds, false, 0.2, 1.0);
+    }
+    if(onFinish)
+    {
+        TempTimer::initTimer(animationMilliseconds, 
+                [onFinish]() { onFinish(); });
     }
 }

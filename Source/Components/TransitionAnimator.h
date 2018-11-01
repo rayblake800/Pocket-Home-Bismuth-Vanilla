@@ -4,9 +4,11 @@
 /**
  * @file TransitionAnimator.h
  * 
- * @brief Animates the transition when replacing visible Components on the 
- *        screen, making removed components slide out while new components
- *        slide in from the opposite direction. 
+ * @brief Animates juce::Component transitions.
+ *
+ * TransitionAnimator animates the transition when replacing visible Components 
+ * on the screen, making removed components slide out while new components slide
+ * in from the opposite direction.  
  */
 
 namespace TransitionAnimator
@@ -34,10 +36,11 @@ namespace TransitionAnimator
     bool isAnimating(juce::Component* possiblyAnimating);
 
     /**
-     * Moves one set of components off-screen, while moving another set of
-     * components on-screen, animating the transition.  Any component that is
-     * in both sets will appear to move off-screen while a duplicate component
-     * moves on-screen simultaneously.
+     * @brief  Moves one set of components off-screen, while moving another set 
+     *         of components on-screen, animating the transition.  
+     *
+     * Any component that is in both sets will appear to move off-screen while a
+     * duplicate component moves on-screen simultaneously.
      * 
      * @param movingOut              An array of all components that will move
      *                               off of the screen.  If a component in this
@@ -60,14 +63,13 @@ namespace TransitionAnimator
      *                               milliseconds.
      */
     void animateTransition(
-	    juce::Array<juce::Component*> movingOut,
-            juce::Array<std::pair<juce::Component*,juce::Rectangle<int>>> 
-                    movingIn,
-            const Transition transition,
-            const unsigned int animationMilliseconds);
+        juce::Array<juce::Component*> movingOut,
+        juce::Array<std::pair<juce::Component*,juce::Rectangle<int>>> movingIn,
+        const Transition transition,
+        const unsigned int animationMilliseconds);
     
     /**
-     * Moves a component off-screen, animating the transition.
+     * @brief  Moves a component off-screen, animating the transition.
      * 
      * @param component              An on-screen component to move off-screen.  
      *                               If the component is already outside of the
@@ -84,10 +86,11 @@ namespace TransitionAnimator
      *                               proxy component will be used to simulate
      *                               the transition animation.
      */
-    void transitionOut(juce::Component* component,
-	    const Transition transition,
-            const unsigned int animationMilliseconds,
-	    const bool useProxy = false);
+    void transitionOut(
+        juce::Component* const component,
+        const Transition transition,
+        const unsigned int animationMilliseconds,
+        const bool useProxy = false);
 
     /**
      * Moves a component into the screen bounds, animating the transition.
@@ -111,7 +114,7 @@ namespace TransitionAnimator
      */
     void transitionIn(juce::Component* component,
 	    const Transition transition,
-            const juce::Rectangle<int> destination,
+        const juce::Rectangle<int> destination,
 	    const unsigned int animationMilliseconds);
 
     /**
@@ -124,8 +127,17 @@ namespace TransitionAnimator
      * 
      * @param animationMilliseconds  The duration of the component animation, in
      *                               milliseconds.
+     *
+     * @param useProxy               Sets whether a proxy component should be
+     *                               animated in place of the real component.
+     *
+     * @param onFinish               An optional function to run once animation
+     *                               is finished.
      */
-    void transformBounds(juce::Component* component,
-            const juce::Rectangle<int>& destination,
-	    const unsigned int animationMilliseconds);
+    void transformBounds(
+        juce::Component* component,
+        const juce::Rectangle<int>& destination,
+        const unsigned int animationMilliseconds,
+        const bool useProxy = false,
+        const std::function<void()> onFinish = std::function<void()>());
 };
