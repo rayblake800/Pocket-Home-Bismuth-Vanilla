@@ -14,6 +14,12 @@ public:
     virtual ~IconLoader() { }
 
     /**
+     * @brief  Identifies pending icon callback functions so that they can be
+     *         cancelled.
+     */
+    typedef IconThread::CallbackID CallbackID;
+
+    /**
      * @brief  Adds a request to the list of queued tasks.
      * 
      * @param icon           This should be either a full icon file path, or the 
@@ -42,11 +48,21 @@ public:
      *                       to the image file before displaying the Image
      *                       object.  This value is typically only relevant on
      *                       extra high resolution displays.
+     *
+     * @return               A CallbackID value that can be used to cancel the
+     *                       image assignment
      */
-    void loadIcon(
+    CallbackID loadIcon(
             const juce::String icon, 
             const int size, 
             const std::function<void(juce::Image)> assignImage,
             const IconThemeIndex::Context context = IconThemeIndex::unknownCtx,
             const int scale = 1);
+
+    /**
+     * @brief  Cancels a pending image assignment.
+     *
+     * @param toCancel  The callback ID of the assignment function to cancel.
+     */
+    void cancelImageAssignment(const CallbackID toCancel);
 };

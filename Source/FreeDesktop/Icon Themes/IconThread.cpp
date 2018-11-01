@@ -8,13 +8,13 @@ const juce::Identifier IconThread::resourceKey = "IconThread";
 static const constexpr char* defaultIconPath =
         "/usr/share/pocket-home/appIcons/default.png";
 
-IconThread::IconThread() : SharedResource(resourceKey),
-juce::Thread(resourceKey.toString()),
+IconThread::IconThread() : ThreadResource(resourceKey),
 defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
 { 
     using namespace juce;
     //Icon directory search list and priority defined at
-    //https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html
+    //   https://specifications.freedesktop.org/icon-theme-spec
+    //   /icon-theme-spec-latest.html
     iconDirectories.add(String(getenv("HOME")) + "/.icons");
     StringArray dataDirs = XDGDirectories::getDataSearchPaths();
     for(String& dir : dataDirs)
@@ -100,6 +100,39 @@ IconThread::~IconThread()
 }
 
 /*
+ * Saves an icon loading callback function to the callback map so that it can be
+ * retrieved later.
+ */
+IconThread::CallbackID IconThread::saveIconCallback
+(const std::function<void(juce::Image)> loadingCallback)
+{
+    static CallbackID nextCallback = 0;
+    nextCallback++;
+    jassert(callbackMap.count(nextCallback) == 0);
+    if(loadingCallback)
+    {
+        callbackMap[nextCallback] = loadingCallback;
+        return nextCallback;
+    }
+    else
+    {
+        DBG("IconThread::" << __func__ << ": Invalid callback function!");
+        return 0;
+    }
+}
+
+/*
+ * Removes and returns an icon loading callback function from the callbackMap.
+ */
+std::function<void(juce::Image)> IconThread::takeIconCallback
+(const CallbackID callbackID)
+{
+    std::function<void(juce::Image)> callback = callbackMap[callbackID];
+    callbackMap.erase(callbackID);
+    return callback;
+}
+
+/*
  * Returns the number of pending icon requests. 
  */
 int IconThread::numJobsQueued()
@@ -112,14 +145,29 @@ int IconThread::numJobsQueued()
  */
 void IconThread::addQueuedJob(QueuedJob newJob)
 {
-    if (newJob.icon.substring(0, 1) == "/")
+    /* First, attempt to load the icon from assets or the image cache. */
+    juce::Image preLoadedIcon;
+    if(newJob.icon[0] == '/')
     {
-        newJob.callback(AssetFiles::loadImageAsset(newJob.icon));
+        preLoadedIcon = AssetFiles::loadImageAsset(newJob.icon);
+    }
+    if(preLoadedIcon.isNull() && imageCache.contains(newJob.icon))
+    {
+        preLoadedIcon = imageCache[newJob.icon];
+    }
+    if(preLoadedIcon.isValid()) // Icon already found, apply now.
+    {
+        auto callback = takeIconCallback(newJob.iconCallbackID);
+        if(callback)
+        {
+            callback(preLoadedIcon);
+        }
+        return;
     }
     else
     {
         //assign the default icon for now
-        newJob.callback(defaultIcon);
+        callbackMap[newJob.iconCallbackID](defaultIcon);
         //if icon is a partial path, trim it
         if (newJob.icon.contains("/"))
         {
@@ -138,8 +186,7 @@ void IconThread::addQueuedJob(QueuedJob newJob)
 /*
  * Removes and returns the last job from the list.
  */
-const IconThread::QueuedJob IconThread::getQueuedJob()
-{
+const IconThread::QueuedJob IconThread::takeQueuedJob(){
     QueuedJob lastJob = queuedJobs.getLast();
     queuedJobs.removeLast();
     return lastJob;
@@ -149,29 +196,42 @@ const IconThread::QueuedJob IconThread::getQueuedJob()
  * While AppMenuButtons still need icons, this finds them in a separate 
  * thread.
  */
-void IconThread::run()
+void IconThread::runLoop(ThreadLock& lock)
 {
-    using namespace juce;
-    for(QueuedJob activeJob = getQueuedJob();
-        !threadShouldExit() && (activeJob.icon.isNotEmpty() 
-                || !queuedJobs.isEmpty());
-        activeJob = getQueuedJob())
+    using juce::Image;
+    using juce::String;
+    using std::function;
+    if(queuedJobs.isEmpty())
     {
-        String icon = getIconPath(activeJob);
-        if (icon.isNotEmpty())
+        signalThreadShouldExit();
+        return;
+    }
+    lock.enterWrite();
+    QueuedJob activeJob = takeQueuedJob();        
+    lock.exitWrite();
+
+    String icon = getIconPath(activeJob);
+    if (icon.isNotEmpty())
+    {
+        Image iconImg = AssetFiles::loadImageAsset(icon);
+        if(iconImg.isNull())
         {
-            Image iconImg;
-            {
-                const MessageManagerLock lock;
-                iconImg = AssetFiles::loadImageAsset(icon);
-            }
-            if (!iconImg.isNull())
-            {
-                const MessageManagerLock lock;
-                activeJob.callback(iconImg);
-            }
+            DBG("IconThread::" << __func__ << ": Unable to load icon "
+                    << icon);
+            return;
         }
-        
+
+        lock.enterWrite();
+        function<void(Image)> loadingCallback 
+            = takeIconCallback(activeJob.iconCallbackID);
+        imageCache.set(activeJob.icon, iconImg);
+        lock.exitWrite();
+
+        if(loadingCallback)
+        {
+            const juce::MessageManagerLock lock;
+            loadingCallback(iconImg);
+        }
     }
 }
 

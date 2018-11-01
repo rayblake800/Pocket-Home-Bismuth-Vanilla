@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include "SharedResource.h"
+#include "ThreadResource.h"
 #include "IconThemeIndex.h"
 #include "JuceHeader.h"
 
@@ -23,7 +23,7 @@
  * @see IconThemeIndex.h, IconCache.h
  */
 
-class IconThread : public juce::Thread, public SharedResource
+class IconThread : public ThreadResource
 {
 public:
     /* SharedResource object key */
@@ -35,6 +35,38 @@ public:
      * @brief Ensures the thread exits before destruction.
      */
     virtual ~IconThread();
+
+
+    /**
+     * @brief  Identifies pending icon callback functions so that they can be
+     *         cancelled.
+     */
+    typedef unsigned int CallbackID;
+
+    /**
+     * @brief  Saves an icon loading callback function to the callback map so
+     *         that it can be retrieved later.
+     *
+     * @param loadingCallback  A function used to handle an icon's Image object
+     *                         once it has been created.
+     *
+     * @return                 A unique callback ID that can be used to retrieve
+     *                         or remove the callback function.
+     */
+    CallbackID saveIconCallback
+    (const std::function<void(juce::Image)> loadingCallback);
+
+    /**
+     * @brief  Removes and returns an icon loading callback function from the
+     *         callbackMap.
+     *
+     * @param callbackID  The ID of the function to take.
+     *
+     * @return            The callback function with that ID, or an invalid
+     *                    function if the ID was invalid.
+     */
+    std::function<void(juce::Image)> takeIconCallback
+    (const CallbackID callbackID);
 
     /**
      * Holds a queued icon request
@@ -49,8 +81,9 @@ public:
         int scale;
         /* Category of icon requested */
         IconThemeIndex::Context context;
-        /* Function used to asynchronously return the loaded image */
-        std::function<void(juce::Image) > callback;
+        
+        /* IDs the function used to asynchronously return the loaded image */
+        CallbackID iconCallbackID;
     };
 
     /**
@@ -73,13 +106,12 @@ public:
      * @return  The last job, or a QueuedJob with an empty icon string and
      *          callback function if the queue is empty.
      */
-    const QueuedJob getQueuedJob();
-
+    const QueuedJob takeQueuedJob();
 private:
     /**
      * @brief  Asynchronously handles queued icon requests.
      */
-    void run() override;
+    virtual void runLoop(ThreadLock& lock) override;
     
     /**
      * @brief  Searches icon theme directories for an icon matching a given
@@ -95,11 +127,18 @@ private:
     /* Queued icon requests waiting for the icon thread. */
     juce::Array<QueuedJob, juce::CriticalSection> queuedJobs;
 
+    /* Maps callback functions so they can be cancelled if necessary. */ 
+    std::map<CallbackID, std::function<void(juce::Image)>> callbackMap;
+
     /* Icon theme indexes used to load icons, in order of priority */
     juce::OwnedArray<IconThemeIndex> iconThemes;
 
     /* Directories to search, in order, for icon themes and un-themed icons. */
     juce::StringArray iconDirectories;
+
+    /* Stores loaded icon names mapped to image objects to avoid having to
+       repeatedly load icons: */
+    juce::HashMap<juce::String, juce::Image> imageCache;
 
     /* Default icon */
     juce::Image defaultIcon;
