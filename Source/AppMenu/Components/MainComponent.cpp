@@ -41,6 +41,10 @@ void AppMenu::MainComponent::initMenu(const Initializer* initializer)
     inputHandler.reset(initializer->createInputHandler
             (menuComponent.get(), controller.get()));
     addAndMakeVisible(menuComponent.get());
+    if(!getBounds().isEmpty())
+    {
+        menuComponent->parentResized(getLocalBounds());
+    }
 }
 
 /*
@@ -77,6 +81,10 @@ void AppMenu::MainComponent::configValueChanged
 (const juce::Identifier& propertyKey)
 {
     jassert(propertyKey == ConfigKeys::menuFormatKey);
-    AppMenu::changeMenuFormat(this, Settings::getMenuFormat());
+    const Format newFormat = Settings::getMenuFormat();
+    DBG("AppMenu::MainComponent::" << __func__
+            << ": Switching to Format::" 
+            << Settings::formatToString(newFormat));
+    AppMenu::changeMenuFormat(this, newFormat);
 }
 
