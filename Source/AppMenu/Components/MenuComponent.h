@@ -107,6 +107,31 @@ private:
      */
     virtual FolderComponent* createFolderComponent(MenuItem folderItem) 
         const = 0;
+    
+    /**
+     * @brief  Finds the initial bounds to apply to a newly created folder
+     *         component.
+     *
+     * @param newFolderIndex  The index the newly opened folder component will
+     *                        have in the list of open folders.
+     *
+     * @return                The initial bounds to apply to the component 
+     *                        before fully updating the folder layout.
+     */
+    virtual juce::Rectangle<int> initialFolderBounds(const int newFolderIndex)
+        const = 0;
+
+    /**
+     * @brief  Prepares to update the folder layout, updating cached data as
+     *         necessary.  
+     *
+     * This does nothing by default, but MenuComponent subclasses may override 
+     * it to define actions that should be taken at the start of each call to
+     * updateMenuLayout.
+     *
+     * @param closingFolder  Whether the active folder is being closed.
+     */
+    virtual void layoutUpdateStarting(const bool closingFolder = false) { }
 
     /**
      * @brief   Finds the bounds where a menu folder should be placed.
@@ -120,7 +145,7 @@ private:
      *                       folder should be placed.
      */
     virtual juce::Rectangle<int> getFolderBounds(const int folderIndex,
-            const bool closingFolder = false) = 0;
+            const bool closingFolder = false) const = 0;
 
     /**
      * @brief  Gets the duration in milliseconds to animate folder transitions.

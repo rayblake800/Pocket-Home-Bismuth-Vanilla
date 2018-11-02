@@ -22,6 +22,28 @@ public:
 
 private:
     /**
+     * @brief  Finds the initial bounds to apply to a newly created folder
+     *         component.
+     *
+     * @param newFolderIndex  The index the newly opened folder component will
+     *                        have in the list of open folders.
+     *
+     * @return                The initial bounds to apply to the component 
+     *                        before fully updating the folder layout.
+     */
+    virtual juce::Rectangle<int> initialFolderBounds(const int newFolderIndex)
+        const final override;
+
+    /**
+     * @brief  Prepares to update the folder layout, updating cached layout 
+     *         values.
+     *
+     * @param closingFolder  Whether the active folder is being closed.
+     */
+    virtual void layoutUpdateStarting(const bool closingFolder = false)
+        final override;
+
+    /**
      * @brief   Finds the bounds where a menu folder should be placed.
      *
      * @param folderIndex    The index of an open folder component.
@@ -33,7 +55,7 @@ private:
      *                       folder should be placed.
      */
      virtual juce::Rectangle<int> getFolderBounds(const int folderIndex,
-            const bool closingFolder = false) final override;
+            const bool closingFolder = false) const final override;
 
     /**
      * @brief  Gets the duration in milliseconds to animate folder transitions.

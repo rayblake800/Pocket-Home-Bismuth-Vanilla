@@ -4,6 +4,7 @@
 #pragma once
 #include "ConfigurableComponent.h"
 #include "AppMenu/Data/ConfigFile.h"
+#include "NavButton.h"
 #include "AppMenu/Components/MenuComponent.h"
 
 /**
@@ -20,7 +21,37 @@ public:
     
     virtual ~MenuComponent() { }
 
+    /**
+     * @brief  Adds a listener object to the menu's navigation buttons. 
+     *
+     * @param listener  The Listener that will handle button clicks on the 
+     *                  navigation buttons.
+     */
+    void addNavButtonListener(juce::Button::Listener* listener);
+
 private:
+    /**
+     * @brief  Finds the initial bounds to apply to a newly created folder
+     *         component.
+     *
+     * @param newFolderIndex  The index the newly opened folder component will
+     *                        have in the list of open folders.
+     *
+     * @return                The initial bounds to apply to the component 
+     *                        before fully updating the folder layout.
+     */
+    virtual juce::Rectangle<int> initialFolderBounds(const int newFolderIndex)
+        const final override;
+
+    /**
+     * @brief  Prepares to update the folder layout, showing or hiding the
+     *         navigation buttons based on the needs of the new layout.
+     *
+     * @param closingFolder  Whether the active folder is being closed.
+     */
+    virtual void layoutUpdateStarting(const bool closingFolder = false)
+        final override;
+
     /**
      * @brief   Finds the bounds where a menu folder should be placed.
      *
@@ -33,7 +64,7 @@ private:
      *                       folder should be placed.
      */
      virtual juce::Rectangle<int> getFolderBounds(const int folderIndex,
-            const bool closingFolder = false) final override;
+            const bool closingFolder = false) const final override;
 
     /**
      * @brief  Gets the duration in milliseconds to animate folder transitions.
@@ -70,6 +101,14 @@ private:
      */
     virtual void configValueChanged(const juce::Identifier& propertyKey)
         final override;
+
+    /* Navigation button that closes the active folder: */
+    NavButton upButton;
+    /* Navigation button that decrements the selected folder page: */
+    NavButton leftButton;
+    /* Navigation button the increments the selected folder page: */
+    NavButton rightButton;
+
 };
 
 /* Only include this file directly in the AppMenu implementation! */

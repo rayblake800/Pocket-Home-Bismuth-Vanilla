@@ -26,6 +26,7 @@ void AppMenu::MenuComponent::openFolder(MenuItem folderItem)
     newFolder->initMenuItems();
     openFolders.add(newFolder);
     addAndMakeVisible(newFolder);
+    newFolder->setBounds(initialFolderBounds(openFolders.size() - 1));
     newFolder->updateButtonLayout();
     updateMenuLayout();
 }
@@ -114,6 +115,7 @@ void AppMenu::MenuComponent::updateMenuLayout
 (const bool animate, const bool closingFolder)
 {
     using juce::Rectangle;
+    layoutUpdateStarting(closingFolder);
     for(int i = 0; i < openFolders.size(); i++)
     {
         Rectangle<int> newBounds = getFolderBounds(i, closingFolder);

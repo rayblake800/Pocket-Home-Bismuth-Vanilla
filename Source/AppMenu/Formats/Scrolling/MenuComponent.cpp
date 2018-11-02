@@ -19,10 +19,57 @@ AppMenu::Scrolling::MenuComponent::MenuComponent() :
 }
 
 /*
+ * Finds the initial bounds to apply to a newly created folder component.
+ */
+juce::Rectangle<int> AppMenu::Scrolling::MenuComponent::initialFolderBounds
+(const int newFolderIndex) const
+{    
+    using juce::Rectangle;
+    Rectangle<int> startingBounds = getFolderBounds(newFolderIndex, false);
+    if(newFolderIndex > 0)
+    {
+        startingBounds.setX(getOpenFolder(newFolderIndex-1)->getRight());
+        startingBounds.setWidth(0);
+    }
+    return startingBounds;
+}
+
+/*
+ * Prepares to update the folder layout, updating cached layout values.
+ */
+void AppMenu::Scrolling::MenuComponent::layoutUpdateStarting
+(const bool closingFolder)
+{
+    const int openFolders = openFolderCount();
+    const int lastIndex   = openFolders - 1;
+    int widthSum = 0;
+    for(int i = 0; i < openFolders; i++)
+    {
+        int width = static_cast<FolderComponent*>(getOpenFolder(i))
+            ->getMinimumWidth();
+        folderWidths.set(i, width);
+        if(!closingFolder || i < lastIndex)
+        {
+            widthSum += width;
+        }
+    }
+    folderRightEdge = (getWidth() / 2)  + folderWidths[lastIndex] / 2;
+    if(folderRightEdge < widthSum)
+    {
+        folderRightEdge = std::min(widthSum, getWidth());
+    }
+    if(closingFolder)
+    {
+        folderRightEdge += folderWidths[lastIndex] / 2;
+        folderRightEdge += folderWidths[lastIndex - 1] / 2;
+    }
+}
+
+/*
  * Finds the bounds where a menu folder should be placed.
  */
 juce::Rectangle<int> AppMenu::Scrolling::MenuComponent::getFolderBounds
-(const int folderIndex, const bool closingFolder)
+(const int folderIndex, const bool closingFolder) const
 {
     using juce::Rectangle;
     const int buttonHeight = getHeight() / maxRows;
@@ -30,32 +77,6 @@ juce::Rectangle<int> AppMenu::Scrolling::MenuComponent::getFolderBounds
     const int centerY = getHeight() / 2;
     const int openFolders = openFolderCount();
     const int lastIndex = openFolders - 1;
-
-    // Update cached layout values before updating the first folder.
-    if(folderIndex == 0)
-    {
-        int widthSum = 0;
-        for(int i = 0; i < openFolders; i++)
-        {
-            int width = static_cast<FolderComponent*>(getOpenFolder(i))
-                ->getMinimumWidth();
-            folderWidths.set(i, width);
-            if(!closingFolder || i < lastIndex)
-            {
-                widthSum += width;
-            }
-        }
-        folderRightEdge = centerX + folderWidths[lastIndex] / 2;
-        if(folderRightEdge < widthSum)
-        {
-            folderRightEdge = std::min(widthSum, getWidth());
-        }
-        if(closingFolder)
-        {
-            folderRightEdge += folderWidths[lastIndex] / 2;
-            folderRightEdge += folderWidths[lastIndex - 1] / 2;
-        }
-    }
 
     int folderX = folderRightEdge;
     for(int i = lastIndex; i >= folderIndex; i--)
@@ -71,20 +92,6 @@ juce::Rectangle<int> AppMenu::Scrolling::MenuComponent::getFolderBounds
             buttonHeight,
             centerY - folder->getSelectedItemYOffset(),
             getHeight() - buttonHeight - height);
-    if(folder->getBounds().isEmpty())
-    {
-        if(folderIndex > 0)
-        {
-            // New folder, set initial bounds for fancier animation
-            int initialX = getOpenFolder(folderIndex-1)->getRight();
-            folder->setBounds(initialX, folderY, 0, height);
-        }
-        else
-        {
-            // Root folder being initialized, don't animate
-            folder->setBounds(folderX, folderY, width, height);
-        }
-    }
     return Rectangle<int>(folderX, folderY, width, height); 
 }
 

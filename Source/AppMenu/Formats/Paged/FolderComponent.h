@@ -62,13 +62,18 @@ public:
     int getNumFolderPages() const;
 
     /**
-     * @brief  Gets the index of the folder page containing the selected menu 
-     *         item.
+     * @brief  Gets the index of the folder page that is currently being shown.
      *
-     * @return  The index of the selected item's page, or 0 if there is no 
-     *          selected item. 
+     * @return  The index of the visible folder page.
      */
     int getCurrentFolderPage() const;
+
+    /**
+     * @brief  Sets the index of the folder page that should be visible.
+     *
+     * @param indexToShow  The index of the folder page that should be visible.
+     */
+    void setCurrentFolderPage(const int indexToShow);
 
     /**
      * @brief  Gets the page column index of the selected menu item.
@@ -135,6 +140,9 @@ private:
      *          selected.
      */
     int selectedIndexInPage() const;
+    
+    /* Tracks which folder page is currently shown. */
+    int activeFolderPage = 0;
 };
 
 /* Only include this file directly in the AppMenu implementation! */

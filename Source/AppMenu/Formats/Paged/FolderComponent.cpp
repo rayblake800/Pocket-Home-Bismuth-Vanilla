@@ -102,12 +102,16 @@ int AppMenu::Paged::FolderComponent::getNumFolderPages() const
  */
 int AppMenu::Paged::FolderComponent::getCurrentFolderPage() const
 {
-    const int selected = getSelectedIndex();
-    if(selected <= 0)
-    {
-        return 0;
-    }
-    return selected / maxPageItemCount();
+    return activeFolderPage;
+}
+
+/*
+ * Sets the index of the folder page that should be visible.
+ */
+void AppMenu::Paged::FolderComponent::setCurrentFolderPage
+(const int indexToShow)
+{
+    activeFolderPage = indexToShow;
 }
 
 /*
