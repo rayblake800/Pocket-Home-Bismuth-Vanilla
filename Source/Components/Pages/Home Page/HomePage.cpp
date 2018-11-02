@@ -3,6 +3,7 @@
 #include "ComponentConfigKeys.h"
 #include "PokeLookAndFeel.h"
 #include "AssetFiles.h"
+#include "AppMenu/Settings.h"
 #include "HomePage.h"
 
 HomePage::HomePage() :
@@ -32,7 +33,10 @@ settingsButton(ComponentConfigKeys::settingsButtonKey)
     settingsButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(settingsButton);
     
-    appMenu.reset(AppMenu::createAppMenu(AppMenu::Format::Scrolling)); 
+    const AppMenu::Format menuFormat = AppMenu::Settings::getMenuFormat();
+    DBG("HomePage::" << __func__ << ": Initializing "
+            << AppMenu::Settings::formatToString(menuFormat) << " AppMenu");
+    appMenu.reset(AppMenu::createAppMenu(menuFormat)); 
     appMenu->setBounds(getLocalBounds());
     addAndMakeVisible(appMenu.get());
     appMenu->toBack();
@@ -51,7 +55,9 @@ settingsButton(ComponentConfigKeys::settingsButtonKey)
  */
 void HomePage::configValueChanged(const juce::Identifier& key)
 {
-    using namespace juce;
+    using juce::String;
+    using juce::Image;
+    using juce::Colour;
     Config::MainFile mainConfig;
     if (key == Config::MainKeys::backgroundKey)
     {
