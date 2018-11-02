@@ -120,7 +120,7 @@ private:
      *                       folder should be placed.
      */
     virtual juce::Rectangle<int> getFolderBounds(const int folderIndex,
-            bool closingFolder = false) = 0;
+            const bool closingFolder = false) = 0;
 
     /**
      * @brief  Gets the duration in milliseconds to animate folder transitions.
