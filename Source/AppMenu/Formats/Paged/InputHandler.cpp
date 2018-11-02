@@ -1,19 +1,20 @@
-#if 0
-#include "./Source/AppMenu/Formats/Paged/InputHandler.h"
-#include "AppMenu/Control/InputHandler.h"
+#define APPMENU_IMPLEMENTATION_ONLY
+#include "AppMenu/Formats/Paged/InputHandler.h"
 
 /*
- * Initializes the InputHandler, setting it to handle the menu
- *         component's input events.
- AppMenu::Paged::InputHandler::*/InputHandler(AppMenu::MenuComponent* menuComponent,
-AppMenu::Controller* controller)
-{
-} AppMenu::Paged::InputHandler::~InputHandler() { }/*
- * Handles a key event received from the menu.
- */bool AppMenu::Paged::InputHandler::keyPress(const AppMenu::InputHandler::KeyType keyType)
-final
-{
-}
+ * Initializes the InputHandler, setting it to handle the menu component's input
+ * events.
+ */
+AppMenu::Paged::InputHandler::InputHandler
+(AppMenu::MenuComponent* menuComponent, AppMenu::Controller* controller) :
+AppMenu::InputHandler(menuComponent, controller) { }
 
-/* Only include this file directly in the AppMenu implementation! */
-#endif
+/*
+ * Handles a key event received from the menu.
+ */
+bool AppMenu::Paged::InputHandler::keyPressed
+(const AppMenu::InputHandler::KeyType keyType)
+{
+    // implement after initial menu layout testing
+    return false;
+}

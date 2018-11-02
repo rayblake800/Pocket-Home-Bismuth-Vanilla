@@ -62,6 +62,7 @@ void AppMenu::Paged::FolderComponent::updateButtonLayout()
     const int xMargin     = pageWidth * xMarginFraction;
     const int yMargin     = getHeight() * yMarginFraction;
     
+    const int buttonsPerPage = pageRows * pageColumns;
     const int buttonXArea    = (pageWidth   - 2 * xMargin) / pageColumns;
     const int buttonYArea    = (getHeight() - 2 * yMargin) / pageRows;
     const int buttonXPadding = buttonXArea * buttonXPaddingFraction;
@@ -71,12 +72,13 @@ void AppMenu::Paged::FolderComponent::updateButtonLayout()
 
     for(int i = 0; i < getFolderSize(); i++)
     {
-        const int pageNum   = i / numPages;
-        const int pageIndex = i % numPages;
+        const int pageNum   = i / buttonsPerPage;
+        const int pageIndex = i % buttonsPerPage;
         const int column    = pageIndex % pageColumns;
         const int row       = pageIndex / pageColumns;
 
-        const int xPos = xMargin + column * buttonWidth 
+        const int xPos = pageNum * getWidth()
+            + xMargin + column * buttonWidth 
             + (column * 2 + 1) * buttonXPadding;
         const int yPos = yMargin + row * buttonHeight
             + (row * 2 + 1) * buttonYPadding;
