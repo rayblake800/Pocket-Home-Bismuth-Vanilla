@@ -1,11 +1,23 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "AppMenu/Components/MainComponent.h"
 #include "AppMenu/Formats/Scrolling/Initializer.h"
+#include "AppMenu/Formats/Paged/Initializer.h"
 #include "AppMenu.h"
 
 static AppMenu::Initializer* createInitializer(const AppMenu::Format menuFormat)
 {
-    return new AppMenu::Scrolling::Initializer();
+    switch(menuFormat)
+    {
+        case AppMenu::Format::Scrolling:
+            return new AppMenu::Scrolling::Initializer();
+        case AppMenu::Format::Paged:
+            return new AppMenu::Paged::Initializer();
+        case AppMenu::Format::Invalid:
+            return nullptr;
+    }
+    // Unhandled menu format!
+    jassertfalse;
+    return nullptr;
 }
 
 /*
