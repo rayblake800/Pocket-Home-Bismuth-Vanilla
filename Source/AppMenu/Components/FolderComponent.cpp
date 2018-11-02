@@ -163,3 +163,11 @@ void AppMenu::FolderComponent::childrenSwapped
         selectedIndex = swapIndex1;
     }
 }
+
+/*
+ * Recalculates menu button layout when the folder bounds change.
+ */
+void AppMenu::FolderComponent::resized()
+{
+    updateButtonLayout();
+}

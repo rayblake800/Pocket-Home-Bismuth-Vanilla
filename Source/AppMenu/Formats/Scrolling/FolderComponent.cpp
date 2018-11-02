@@ -77,11 +77,3 @@ int AppMenu::Scrolling::FolderComponent::getMinimumWidth() const
     }
     return iconWidth + maxTextWidth;
 }
-
-/*
- * Recalculates menu button layout when the folder bounds change.
- */
-void AppMenu::Scrolling::FolderComponent::resized()
-{
-    updateButtonLayout();
-}

@@ -68,12 +68,6 @@ public:
      * @return  The minimum folder width, in pixels.
      */
     int getMinimumWidth() const;
-
-private:
-    /**
-     * @brief  Recalculates menu button layout when the folder bounds change.
-     */
-    virtual void resized() override;
 };
 
 /* Only include this file directly in the AppMenu implementation! */
