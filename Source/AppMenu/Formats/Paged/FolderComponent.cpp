@@ -77,13 +77,18 @@ void AppMenu::Paged::FolderComponent::updateButtonLayout()
         const int column    = pageIndex % pageColumns;
         const int row       = pageIndex / pageColumns;
 
-        const int xPos = pageNum * getWidth()
+        const int xPos = pageNum * pageWidth
             + xMargin + column * buttonWidth 
             + (column * 2 + 1) * buttonXPadding;
         const int yPos = yMargin + row * buttonHeight
             + (row * 2 + 1) * buttonYPadding;
 
         getButtonComponent(i)->setBounds(xPos, yPos, buttonWidth, buttonHeight);
+        if(pageNum > 0)
+        {
+            DBG("Button " << i << ": "
+                    << getButtonComponent(i)->getBounds().toString());
+        }
     }
 }
 
