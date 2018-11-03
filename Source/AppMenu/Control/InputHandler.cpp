@@ -145,14 +145,14 @@ juce::Component* sourceComponent)
     using juce::KeyPress;
     static const std::map<juce::String, KeyType> keyMap =
     {
-        {"up",       KeyType::Up},
-        {"down",     KeyType::Down},
-        {"left",     KeyType::Left},
-        {"right",    KeyType::Right},
-        {"return",   KeyType::Select},
-        {"escape",   KeyType::Cancel},
-        {"tab",      KeyType::Tab},
-        {"ctrl + E", KeyType::Edit}
+        {"cursor up",     KeyType::Up},
+        {"cursor down",   KeyType::Down},
+        {"cursor left",   KeyType::Left},
+        {"cursor right",  KeyType::Right},
+        {"return",        KeyType::Select},
+        {"escape",        KeyType::Cancel},
+        {"tab",           KeyType::Tab},
+        {"ctrl + E",      KeyType::Edit}
     };
     const juce::String keyString = keyPress.getTextDescription();
     if(keyMap.count(keyString))
