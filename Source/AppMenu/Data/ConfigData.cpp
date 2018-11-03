@@ -57,6 +57,7 @@ void AppMenu::ConfigData::initMenuData(juce::var& menuData)
         command = menuData.getProperty(ConfigKeys::commandKey, String());
         launchInTerm = menuData.getProperty(ConfigKeys::launchInTermKey, false);
         var categoryVar = menuData.getProperty(ConfigKeys::categoryKey, var());
+        folderItems = menuData.getProperty(ConfigKeys::folderItemKey, var());
         if(categoryVar.isArray())
         {
             for(const var& category : *categoryVar.getArray())
