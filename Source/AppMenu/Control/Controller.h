@@ -153,8 +153,11 @@ private:
     /**
      * @brief  Creates and shows a new PopupEditor component that can create a 
      *         new desktop entry.
+     *
+     * @param categorySource  A MenuItem used to set the initial categories of
+     *                        the desktop entry.
      */
-    void createNewEntryEditor();
+    void createNewEntryEditor(const MenuItem categorySource);
 
     /**
      * @brief  Creates and shows a new PopupEditor component that edits an 

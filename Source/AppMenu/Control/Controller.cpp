@@ -70,6 +70,8 @@ void AppMenu::Controller::showContextMenu
             localeText(newFolderTextKey));
     handleContextMenuAction(OptionCode(contextMenu.show()), folderItem,
             insertIndex);
+    contextMenu.addItem(int(OptionCode::NewDesktopEntry), 
+            localeText(newEntryTextKey));
 }
 
 /*
@@ -237,7 +239,7 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
             createNewFolderEditor(editedItem, insertIndex);
             break;
         case OptionCode::NewDesktopEntry:
-            createNewEntryEditor();
+            createNewEntryEditor(editedItem);
             break;
         default:
             DBG("AppMenu::ContextMenu::" << __func__ 
@@ -305,12 +307,13 @@ void AppMenu::Controller::createNewFolderEditor
  * Creates and shows a new PopupEditor component that can create a new desktop 
  * entry.
  */
-void AppMenu::Controller::createNewEntryEditor()
+void AppMenu::Controller::createNewEntryEditor(const MenuItem categorySource)
 {
     PopupEditor* newEditor = new NewDesktopAppEditor([this]()
     {
         menuComponent->removeEditor();
     });
+    newEditor->setCategoryList(categorySource.getCategories());
     menuComponent->saveAndShowEditor(newEditor);
 }
 
