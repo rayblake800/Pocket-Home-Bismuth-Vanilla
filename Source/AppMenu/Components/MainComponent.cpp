@@ -9,6 +9,8 @@
 AppMenu::MainComponent::MainComponent(const Initializer* initializer)
 {
     addTrackedKey(ConfigKeys::menuFormatKey);
+    addChildComponent(&loadingSpinner);
+    loadingSpinner.setAlwaysOnTop(true);
     initMenu(initializer);
 }
 
@@ -72,6 +74,7 @@ void AppMenu::MainComponent::resized()
     {
         menuComponent->parentResized(getLocalBounds());
     }
+    loadingSpinner.setBounds(getLocalBounds());
 }
 
 /*

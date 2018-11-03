@@ -10,16 +10,17 @@
 
 
 /* Localized object class key: */
-static const juce::Identifier localeClassKey     = "AppMenu::Controller";
+static const juce::Identifier localeClassKey        = "AppMenu::Controller";
 /* Text field keys: */
-static const juce::Identifier editTextKey        = "edit";
-static const juce::Identifier deleteTextKey      = "delete";
-static const juce::Identifier pinItemTextKey     = "pinItem";
-static const juce::Identifier moveBackTextKey    = "moveBack";
-static const juce::Identifier moveForwardTextKey = "moveForward";
-static const juce::Identifier newShortcutTextKey = "newShortcut";
-static const juce::Identifier newEntryTextKey    = "newEntry";
-static const juce::Identifier newFolderTextKey   = "newFolder";
+static const juce::Identifier editTextKey           = "edit";
+static const juce::Identifier deleteTextKey         = "delete";
+static const juce::Identifier pinItemTextKey        = "pinItem";
+static const juce::Identifier moveBackTextKey       = "moveBack";
+static const juce::Identifier moveForwardTextKey    = "moveForward";
+static const juce::Identifier newShortcutTextKey    = "newShortcut";
+static const juce::Identifier newEntryTextKey       = "newEntry";
+static const juce::Identifier newFolderTextKey      = "newFolder";
+static const juce::Identifier launchingAPPTextKey   = "launchingAPP";
 
 AppMenu::Controller::Controller
 (MenuComponent* menuComponent, OverlaySpinner& loadingSpinner) : 
@@ -156,6 +157,9 @@ void AppMenu::Controller::activateMenuItem
     }
     else
     {
+        setLoadingState(true,
+                localeText(launchingAPPTextKey) + " "
+                + clickedItem.getTitle());
         launchOrFocusApplication(clickedItem);
     }
 }
@@ -163,8 +167,10 @@ void AppMenu::Controller::activateMenuItem
 /*
  * Sets if the Controller should show the loading spinner and ignore input.
  */
-void AppMenu::Controller::setLoadingState(bool isLoading)
+void AppMenu::Controller::setLoadingState
+(const bool isLoading, const juce::String loadingText)
 {
+    loadingSpinner.setLoadingText(loadingText);
     loadingSpinner.setVisible(isLoading);
 }
 

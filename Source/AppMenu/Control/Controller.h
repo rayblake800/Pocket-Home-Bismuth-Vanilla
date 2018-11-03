@@ -70,10 +70,14 @@ public:
      * @brief  Sets if the Controller should show the loading spinner and ignore
      *         input.
      *
-     * @param isLoading  Whether the Controller is currently busy and should 
-     *                   ignore input.
+     * @param isLoading    Whether the Controller is currently busy and should 
+     *                     ignore input.
+     *
+     * @param loadingText  An optional loading message to print on the loading
+     *                     spinner.
      */
-    void setLoadingState(bool isLoading);
+    void setLoadingState(const bool isLoading, 
+            const juce::String loadingText = juce::String());
 
     /**
      * @brief  Checks if the controller is currently ignoring user input.
