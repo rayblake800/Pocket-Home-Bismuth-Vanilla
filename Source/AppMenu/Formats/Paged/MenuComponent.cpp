@@ -16,8 +16,11 @@ AppMenu::Paged::MenuComponent::MenuComponent() :
     addTrackedKey(ConfigKeys::pagedMenuColumnsKey);
     addTrackedKey(ConfigKeys::pagedMenuRowsKey);
     addChildComponent(upButton);
+    upButton.setAlwaysOnTop(true);
     addChildComponent(leftButton);
+    leftButton.setAlwaysOnTop(true);
     addChildComponent(rightButton);
+    rightButton.setAlwaysOnTop(true);
 }
  
 /*

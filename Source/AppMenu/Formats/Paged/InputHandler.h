@@ -9,7 +9,8 @@
  *
  * @brief  Handles input events for a paged AppMenu.
  */
-class AppMenu::Paged::InputHandler : public AppMenu::InputHandler
+class AppMenu::Paged::InputHandler : public AppMenu::InputHandler,
+    public juce::Button::Listener
 {
 public:
     /**
@@ -36,6 +37,13 @@ private:
      */
     virtual bool keyPressed(const AppMenu::InputHandler::KeyType keyType)
         final override;
+    
+    /**
+     * @brief  Handles button click events from the folder navigation buttons.
+     *
+     * @param button  A NavButton held by the Paged MenuComponent.
+     */
+    virtual void buttonClicked(juce::Button* button) override;
 };
 
 /* Only include this file directly in the AppMenu implementation! */
