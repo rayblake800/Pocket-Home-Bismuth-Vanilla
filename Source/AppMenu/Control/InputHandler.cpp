@@ -143,21 +143,21 @@ juce::Component* sourceComponent)
 {
     // TODO: don't hardcode in key bindings, read them from input settings.
     using juce::KeyPress;
-    
-    static const std::map<int, KeyType> keyMap =
+    static const std::map<juce::String, KeyType> keyMap =
     {
-        {KeyPress::upKey,     KeyType::Up},
-        {KeyPress::downKey,   KeyType::Down},
-        {KeyPress::leftKey,   KeyType::Left},
-        {KeyPress::rightKey,  KeyType::Right},
-        {KeyPress::returnKey, KeyType::Select},
-        {KeyPress::escapeKey, KeyType::Cancel},
-        {KeyPress::tabKey,    KeyType::Tab},
-        {KeyPress::createFromDescription("ctrl+e").getKeyCode(), KeyType::Edit}
+        {"up",       KeyType::Up},
+        {"down",     KeyType::Down},
+        {"left",     KeyType::Left},
+        {"right",    KeyType::Right},
+        {"return",   KeyType::Select},
+        {"escape",   KeyType::Cancel},
+        {"tab",      KeyType::Tab},
+        {"ctrl + E", KeyType::Edit}
     };
-    if(keyMap.count(keyPress.getKeyCode()))
+    const juce::String keyString = keyPress.getTextDescription();
+    if(keyMap.count(keyString))
     {
-        return keyPressed(keyMap.at(keyPress.getKeyCode()));
+        return keyPressed(keyMap.at(keyString));
     }
     return false;
 }
