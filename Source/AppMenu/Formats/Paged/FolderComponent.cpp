@@ -9,7 +9,7 @@ static const constexpr float xMarginFraction = 0.05;
 
 /* Amount of empty space to leave on the top and bottom of the folder, as a
    fraction of the folder's height. */
-static const constexpr float yMarginFraction = 0.05;
+static const constexpr float yMarginFraction = 0.12;
 
 /* Amount of empty space to leave on the left and right sides of each menu 
    button, as a fraction of the button's width. */
@@ -84,11 +84,6 @@ void AppMenu::Paged::FolderComponent::updateButtonLayout()
             + (row * 2 + 1) * buttonYPadding;
 
         getButtonComponent(i)->setBounds(xPos, yPos, buttonWidth, buttonHeight);
-        if(pageNum > 0)
-        {
-            DBG("Button " << i << ": "
-                    << getButtonComponent(i)->getBounds().toString());
-        }
     }
 }
 
