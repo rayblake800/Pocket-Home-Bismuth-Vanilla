@@ -6,7 +6,7 @@
 const juce::Identifier IconThread::resourceKey = "IconThread";
 
 static const constexpr char* defaultIconPath =
-        "/usr/share/pocket-home/appIcons/default.png";
+        "/usr/share/pocket-home/appIcons/chip.png";
 
 IconThread::IconThread() : ThreadResource(resourceKey),
 defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))

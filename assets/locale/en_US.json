@@ -148,14 +148,15 @@
     },
     "AppMenu::Controller": 
     {
-        "edit"        : "Edit",
-        "delete"      : "Delete",
-        "pinItem"     : "Pin to main menu",
-        "moveBack"    : "Move back",
-        "moveForward" : "Move forward",
-        "newShortcut" : "New shortcut",
-        "newEntry"    : "New desktop menu entry",
-        "newFolder"   : "New folder"
+        "edit"         : "Edit",
+        "delete"       : "Delete",
+        "pinItem"      : "Pin to main menu",
+        "moveBack"     : "Move back",
+        "moveForward"  : "Move forward",
+        "newShortcut"  : "New shortcut",
+        "newEntry"     : "New desktop menu entry",
+        "newFolder"    : "New folder",
+        "launchingAPP" : "Launching"
     },
     "AppMenu::PopupEditor": 
     {
