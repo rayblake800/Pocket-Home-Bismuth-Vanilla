@@ -81,7 +81,16 @@ bool AppMenu::Scrolling::InputHandler::keyPressed
             }
             return true;
         case KeyType::Edit:
-            getController()->showContextMenu();
+            if(openFolderCount > 1)
+            {
+                MenuItem folderItem = activeFolder->getFolderMenuItem();
+                getController()->showContextMenu(folderItem,
+                        folderItem.getMovableChildCount());
+            }
+            else
+            {
+                getController()->showContextMenu();
+            }
             return true;
         case KeyType::Tab:
             activeFolder->setSelectedIndex(lastItemSelected ? 
