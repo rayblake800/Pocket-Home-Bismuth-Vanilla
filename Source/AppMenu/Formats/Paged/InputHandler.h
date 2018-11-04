@@ -44,6 +44,20 @@ private:
      * @param button  A NavButton held by the Paged MenuComponent.
      */
     virtual void buttonClicked(juce::Button* button) override;
+
+    /**
+     * @brief  Gets the AppMenu::Paged::MenuComponent used by the AppMenu.
+     *
+     * @return  The AppMenu's menu component.
+     */
+    Paged::MenuComponent* getPagedMenuComponent();
+
+    /**
+     * @brief  Gets the active Paged FolderComponent used by the AppMenu.
+     *
+     * @return   The last opened folder component.
+     */
+    Paged::FolderComponent* getActivePagedFolderComponent();
 };
 
 /* Only include this file directly in the AppMenu implementation! */
