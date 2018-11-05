@@ -1,5 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "NavButton.h"
+#include "TransitionAnimator.h"
 #include "AppMenu/Settings.h"
 #include "AppMenu/Formats/Paged/MenuComponent.h"
 #include "AppMenu/Formats/Paged/FolderComponent.h"
@@ -24,6 +25,12 @@ bool AppMenu::Paged::InputHandler::keyPressed
 (const AppMenu::InputHandler::KeyType keyType)
 {
    FolderComponent* activeFolder = getActivePagedFolderComponent();
+
+   // Suppress key events while animating the menu.
+   if(TransitionAnimator::isAnimating(activeFolder))
+   {
+       return true;
+   }
    const int folderPageIndex     = activeFolder->getCurrentFolderPage();
    const int selectedIndex       = activeFolder->getSelectedIndex();
    if(keyType == KeyType::Edit)
@@ -57,7 +64,7 @@ bool AppMenu::Paged::InputHandler::keyPressed
        {
            activeFolder->setSelectedIndex(-1);
        }
-       else if(getMenuComponent()->openFolderCount() > 0)
+       else if(folderPageIndex > 0)
        {
            activeFolder->setCurrentFolderPage(0);
            getMenuComponent()->updateMenuLayout(true);
@@ -96,7 +103,7 @@ bool AppMenu::Paged::InputHandler::keyPressed
        }
            
    }
-   if(keyType == KeyType::Up)
+   else if(keyType == KeyType::Up)
    {
        if(selectionRow > 0)
        {
