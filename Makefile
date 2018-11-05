@@ -121,7 +121,7 @@ ifeq ($(CONFIG),Release)
 	# Release-specific preprocessor definitions:
 	JUCE_CONFIG_FLAGS = -DNDEBUG=1
 	# Release-specific compiler flags:
-	CONFIG_CFLAGS  = -03 -flto
+	CONFIG_CFLAGS  = -O3 -flto
 	CONFIG_LDFLAGS =-fvisibility=hidden -flto
 endif
   
@@ -693,13 +693,13 @@ devinstall:
 debug:
 	$(MAKE) CONFIG=Debug
 	reset
-	$(MAKE) devInstall CONFIG=Debug
+	$(MAKE) devinstall CONFIG=Debug
 	gdb $(JUCE_TARGET_APP)
 
 release:
 	$(MAKE) CONFIG=Release
 	reset
-	$(MAKE) devInstall CONFIG=Release
+	$(MAKE) devinstall CONFIG=Release
 
 check-pkg-config:
 	@command -v pkg-config >/dev/null 2>&1 || { echo >&2 \
