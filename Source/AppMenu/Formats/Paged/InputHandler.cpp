@@ -141,6 +141,7 @@ bool AppMenu::Paged::InputHandler::keyPressed
        activeFolder->setSelectedIndex(newIndex);
        if(newPage != folderPageIndex)
        {
+           activeFolder->setCurrentFolderPage(newPage);
            getMenuComponent()->updateMenuLayout();
        }
    }
