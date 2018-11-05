@@ -135,7 +135,7 @@ bool AppMenu::Paged::InputHandler::keyPressed
        }
    }
    const int newIndex = activeFolder->positionIndex(newPage, newColumn, newRow);
-   if(newIndex > 0 && newIndex < activeFolder->getFolderSize() 
+   if(newIndex >= 0 && newIndex < activeFolder->getFolderSize() 
            && newIndex != selectedIndex)
    {
        activeFolder->setSelectedIndex(newIndex);
