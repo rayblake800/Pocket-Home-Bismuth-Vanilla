@@ -44,15 +44,33 @@ bool AppMenu::Paged::InputHandler::keyPressed
    }
    if(keyType == KeyType::Select)
    {
+       if(selectedIndex >= 0)
+       {
+            getController()->activateMenuItem
+                (activeFolder->getSelectedItem());
+       }
        return true;
    }
    if(keyType == KeyType::Cancel)
    {
+       if(selectedIndex >= 0)
+       {
+           activeFolder->setSelectedIndex(-1);
+       }
+       else if(folderPageIndex > 0)
+       {
+           activeFolder->setCurrentFolderPage(0);
+           getMenuComponent()->updateMenuLayout(true);
+       }
+       else if(activeFolderIndex > 0)
+       {
+           getMenuComponent()->closeActiveFolder();
+       }
        return true;
    }
    if(keyType == KeyType::Tab)
    {
-       return true;
+       return false;
    }
 
    const int maxIndex            = activeFolder->getFolderSize() - 1;
@@ -94,11 +112,39 @@ bool AppMenu::Paged::InputHandler::keyPressed
    }
    else if(keyType == KeyType::Left)
    {
+       if(selectionColumn > 0)
+       {
+            newColumn--;
+       }
+       else if(folderPageIndex > 0)
+       {
+           newPage--;
+           newColumn = numColumns - 1;
+       }
    }
    else if(keyType ==  KeyType::Right)
    {
+       if(selectionColumn < (numColumns - 1))
+       {
+           newColumn++;
+       }
+       else if(folderPageIndex < (activeFolder->getNumFolderPages() - 1))
+       {
+           newPage++;
+           newColumn = 0;
+       }
    }
-   return false;
+   const int newIndex = activeFolder->positionIndex(newPage, newColumn, newRow);
+   if(newIndex > 0 && newIndex < activeFolder->getFolderSize() 
+           && newIndex != selectedIndex)
+   {
+       activeFolder->setSelectedIndex(newIndex);
+       if(newPage != folderPageIndex)
+       {
+           getMenuComponent()->updateMenuLayout();
+       }
+   }
+   return true;
 }
 
 /*
