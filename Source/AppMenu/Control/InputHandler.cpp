@@ -13,6 +13,7 @@
 {
     jassert(menuComponent != nullptr);
     jassert(controller != nullptr);
+    menuComponent->setWantsKeyboardFocus(true);
     menuComponent->addKeyListener(this);
     menuComponent->addMouseListener(this, true);
     ConfigFile appConfig;
@@ -67,17 +68,6 @@ const int closestIndex, const bool rightClicked)
 }
 
 /*
- * Handles clicks elsewhere on the menu component.
- */
-void AppMenu::InputHandler::menuClicked(const bool rightClicked)
-{
-    if(rightClicked)
-    {
-        controller->showContextMenu();
-    }
-} 
-
-/*
  * Gets the menu component tracked by this InputHandler.
  */
 AppMenu::MenuComponent* AppMenu::InputHandler::getMenuComponent()
@@ -100,31 +90,45 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
 {
     // TODO: Don't just assume ctrl+click is equivalent to right click, define
     //       it in the input settings.
-    bool rightClicked = event.mods.isRightButtonDown()
+    const bool rightClicked = event.mods.isRightButtonDown()
         || event.mods.isPopupMenu()
         || event.mods.isCtrlDown();
+    AppMenu::FolderComponent* clickedFolder = nullptr;
     if((MenuComponent*) event.eventComponent == menuComponent)
     {
-        menuClicked(rightClicked);
-        return;
-    }
-    MenuButton* clickedButton = dynamic_cast<MenuButton*>(event.eventComponent);
-    FolderComponent* clickedFolder = nullptr;
-    if(clickedButton != nullptr)
-    {
-        clickedFolder = dynamic_cast<FolderComponent*>
-            (clickedButton->getParentComponent());
-        if(clickedFolder != nullptr 
-                && clickedFolder->getFolderMenuItem() 
-                == menuComponent->getActiveFolder())
+        const int activeFolderIndex = menuComponent->openFolderCount() - 1;
+        if(activeFolderIndex >= 0)
         {
-            menuItemClicked(clickedButton, rightClicked);
+            clickedFolder = menuComponent->getOpenFolder(activeFolderIndex); 
+        }
+        else
+        {
+            // At least one folder should be open!
+            jassertfalse;
             return;
         }
     }
     if(clickedFolder == nullptr)
     {
-        clickedFolder = dynamic_cast<FolderComponent*>(event.eventComponent);
+        MenuButton* clickedButton = dynamic_cast<MenuButton*>
+            (event.eventComponent);
+        if(clickedButton != nullptr)
+        {
+            clickedFolder = dynamic_cast<FolderComponent*>
+                (clickedButton->getParentComponent());
+            if(clickedFolder != nullptr 
+                    && clickedFolder->getFolderMenuItem() 
+                    == menuComponent->getActiveFolder())
+            {
+                menuItemClicked(clickedButton, rightClicked);
+                return;
+            }
+        }
+        if(clickedFolder == nullptr)
+        {
+            clickedFolder = dynamic_cast<FolderComponent*>
+                (event.eventComponent);
+        }
     }
     if(clickedFolder != nullptr)
     {

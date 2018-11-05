@@ -8,10 +8,10 @@
 #include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
 #include "AppMenu/Control/Controller.h"
 
-
 /* Localized object class key: */
 static const juce::Identifier localeClassKey        = "AppMenu::Controller";
-/* Text field keys: */
+
+/* Localixed text value keys: */
 static const juce::Identifier editTextKey           = "edit";
 static const juce::Identifier deleteTextKey         = "delete";
 static const juce::Identifier pinItemTextKey        = "pinItem";
@@ -22,6 +22,9 @@ static const juce::Identifier newEntryTextKey       = "newEntry";
 static const juce::Identifier newFolderTextKey      = "newFolder";
 static const juce::Identifier launchingAPPTextKey   = "launchingAPP";
 
+/*
+ * Creates a new menu controller.
+ */
 AppMenu::Controller::Controller
 (MenuComponent* menuComponent, OverlaySpinner& loadingSpinner) : 
     menuComponent(menuComponent), 
@@ -69,10 +72,10 @@ void AppMenu::Controller::showContextMenu
             localeText(newShortcutTextKey));
     contextMenu.addItem(int(OptionCode::NewFolder), 
             localeText(newFolderTextKey));
-    handleContextMenuAction(OptionCode(contextMenu.show()), folderItem,
-            insertIndex);
     contextMenu.addItem(int(OptionCode::NewDesktopEntry), 
             localeText(newEntryTextKey));
+    handleContextMenuAction(OptionCode(contextMenu.show()), folderItem,
+            insertIndex);
 }
 
 /*

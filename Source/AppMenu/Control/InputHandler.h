@@ -90,16 +90,6 @@ protected:
             const int closestIndex, const bool rightClicked);
 
     /**
-     * @brief  Handles clicks elsewhere on the menu component.
-     *
-     * By default, this opens the context menu when the component is
-     * right clicked.
-     *
-     * @param rightClicked  Whether the component was right clicked.
-     */
-    virtual void menuClicked(const bool rightClicked); 
-
-    /**
      * @brief   Gets the menu component tracked by this InputHandler.
      *
      * @return  The AppMenu's menu component.

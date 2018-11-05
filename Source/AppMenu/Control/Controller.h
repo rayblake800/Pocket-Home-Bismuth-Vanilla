@@ -15,7 +15,15 @@
  * @file  Controller.h
  *
  * @brief  Implements core menu functionality, opening and closing folders,
- *         and launching application shortcuts.
+ *         creating menu editors, handling popup context menus, and launching 
+ *         application shortcuts.
+ *
+ *  The controller is responsible for implementing all menu functionality not
+ *  related to menu display or input handling.  The controller defines the
+ *  behavior of activated menu items, launching applications, focusing 
+ *  application windows, opening or closing menu folders, defining the
+ *  behavior of popup windows, and creating appropriate popup editors when 
+ *  necessary.
  */
 class AppMenu::Controller : public Locale::TextUser
 {
@@ -32,12 +40,6 @@ public:
     Controller(MenuComponent* menuComponent, OverlaySpinner& loadingSpinner);
 
     virtual ~Controller() { }
-
-    /**
-     * @brief  Displays a context menu with generic options for editing the
-     *         AppMenu.
-     */
-    void showContextMenu();
 
     /**
      * @brief  Displays a context menu with options for editing an open menu
