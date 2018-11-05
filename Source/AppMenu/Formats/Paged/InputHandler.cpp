@@ -62,7 +62,7 @@ bool AppMenu::Paged::InputHandler::keyPressed
            activeFolder->setCurrentFolderPage(0);
            getMenuComponent()->updateMenuLayout(true);
        }
-       else if(activeFolderIndex > 0)
+       else if(getMenuComponent()->openFolderCount() > 0)
        {
            getMenuComponent()->closeActiveFolder();
        }
