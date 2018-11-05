@@ -57,7 +57,7 @@ bool AppMenu::Paged::InputHandler::keyPressed
        {
            activeFolder->setSelectedIndex(-1);
        }
-       else if(folderPageIndex > 0)
+       else if(getMenuComponent()->openFolderCount() > 0)
        {
            activeFolder->setCurrentFolderPage(0);
            getMenuComponent()->updateMenuLayout(true);
