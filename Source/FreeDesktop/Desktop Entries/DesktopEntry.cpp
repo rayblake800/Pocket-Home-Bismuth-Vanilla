@@ -265,6 +265,16 @@ desktopFileID(desktopFileID)
     setName(name);
 }
 
+
+/*
+ * Checks if the DesktopEntry does not contain all data required by a valid 
+ * desktop entry.
+ */
+bool DesktopEntry::isMissingData() const
+{
+    return name.isEmpty() || (exec.isEmpty() && !dBusActivatable);
+}
+
 /*
  * Checks if two desktop entries have the same desktop file ID.
  */

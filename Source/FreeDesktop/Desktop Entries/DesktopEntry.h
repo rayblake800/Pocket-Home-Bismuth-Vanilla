@@ -62,6 +62,14 @@ public:
     virtual ~DesktopEntry() { }
 
     /**
+     * @brief  Checks if the DesktopEntry does not contain all data required by
+     *         a valid desktop entry.
+     *
+     * @return  Whether the desktop entry is missing required data fields.
+     */
+    bool isMissingData() const;
+
+    /**
      * @brief Checks if two desktop entries have the same desktop file ID.
      *
      * @param toCompare  Another desktop entry to compare with this one.

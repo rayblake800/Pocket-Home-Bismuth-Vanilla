@@ -1,7 +1,6 @@
 #pragma once
 #include "AppMenu/AppMenu.h"
 
-
 /**
  * @file  AppMenu/Settings.h
  *

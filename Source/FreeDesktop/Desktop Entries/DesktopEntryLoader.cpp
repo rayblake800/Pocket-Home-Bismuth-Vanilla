@@ -1,4 +1,4 @@
-#include <atomic>
+#define DESKTOP_ENTRY_LOADER_IMPLEMENTATION
 #include <stdlib.h>
 #include <dirent.h>
 #include <stdlib.h>
@@ -6,208 +6,12 @@
 #include "Locale/TextUser.h"
 #include "ThreadResource.h"
 #include "XDGDirectories.h"
-#include "DesktopEntryFileError.h"
-#include "DesktopEntryFormatError.h"
+#include "DesktopEntryThread.h"
 #include "DesktopEntryLoader.h"
 
-/* SharedResource and Locale::TextUser object class key */ 
-static const juce::Identifier desktopEntryThreadKey("DesktopEntryThread");
-
-/* The desktop entry subdirectory within the data directory: */
-static const constexpr char* entryDirectory = "/applications/";
-
-/* Name of the desktop entry category holding every entry: */
-static const constexpr char* everyEntryCategory = "All";
-
-/* Name of the desktop entry category holding uncategorized entries: */
-static const constexpr char* miscEntryCategory = "Other";
-
-/* Desktop entry file extension: */
-static const constexpr char* fileExtension = ".desktop";
-
-/**
- * @brief  Asynchronously loads and caches desktop entry data.
- */
-class DesktopEntryThread : public ThreadResource
-{
-private:
-    /* Only DesktopEntryLoader has direct access. */
-    friend class DesktopEntryLoader;
-
-    /* The last time desktop entry files were scanned. */
-    juce::Time lastScanTime;
-    
-    /* Maps desktop ID strings to desktop entry files. */
-    std::map<juce::String, juce::File> entryFiles;
-
-    /* All <Desktop File ID, Desktop File> pairs waiting to be loaded. */
-    juce::Array<std::pair<juce::String, juce::File>> pendingFiles;
-
-    /* Maps desktop ID strings to desktop entry objects. */
-    std::map<juce::String, DesktopEntry> entries;
-
-    /* Maps category names to lists of desktop file Ids. */
-    std::map<juce::String, juce::StringArray> categories;
-
-    /* Callbacks to run when desktop entries finish loading. */
-    std::map<DesktopEntryLoader::CallbackID, std::function<void()>> onFinish;
-
-    DesktopEntryThread() : ThreadResource(desktopEntryThreadKey)
-    {
-        startThread();
-    }
-
-public:
-    virtual ~DesktopEntryThread() { }
-
-private:
-    /**
-     * @brief  Find a desktop entry file using its desktop file ID.
-     *
-     * @param entryFileID  The desktop file ID of a desktop entry.
-     *
-     * @return             The first matching file found within application data
-     *                     directories, or an empty file object if no matching
-     *                     file is found.
-     */
-    juce::File findEntryFile(const juce::String& entryFileID)
-    {
-        using namespace juce;
-        StringArray dirs = XDGDirectories::getDataSearchPaths();
-        for(const String& dir : dirs)
-        {
-            File entryFile(dir + entryDirectory + entryFileID + fileExtension);
-            if(entryFile.existsAsFile())
-            {
-                return entryFile;
-            }
-        }
-        return File();
-    }
-
-    /**
-     * @brief  Finds all desktop entry files within the application data
-     *         directories, ignoring all files with duplicate desktop file IDs.
-     *
-     * This function runs once on the desktop entry thread when it first starts
-     * running.
-     */
-    virtual void init() override
-    {
-        using namespace juce;
-        StringArray dirs = XDGDirectories::getDataSearchPaths();
-        std::map<String, File> oldFiles = entryFiles;
-        entryFiles.clear();
-        for(const String& dir : dirs)
-        {
-            File directory(dir + entryDirectory);
-            if(directory.isDirectory())
-            {
-                Array<File> desktopFiles = directory.findChildFiles
-                    (File::findFiles, true, "*.desktop");
-                for (File& file : desktopFiles)
-                {
-                    String desktopID = file.getRelativePathFrom(directory);
-                    if(!entryFiles.count(desktopID))
-                    {
-                        entryFiles[desktopID] = file;
-                        if(file.getLastModificationTime() > lastScanTime
-                                || file != oldFiles[desktopID])
-                        {
-                            pendingFiles.add({desktopID, file});
-                        }
-                    }
-                }
-            }
-        }
-        DBG("DesktopEntryThread::" << __func__ << ": Found " 
-                << String(entryFiles.size()) 
-                << " unique desktop entry files in "
-                << dirs.size() << " data directories.");
-        DBG("DesktopEntryThread::" << __func__ << ": Reloading "
-                << pendingFiles.size() << " entry files.");
-    }
-
-    /**
-     * @brief  Loads a DesktopEntry object from file data.
-     *
-     * This function will be called repeatedly on the desktop entry thread until
-     * all entries are loaded.
-     *
-     * @param threadLock  An object used to access the desktop entry thread's
-     *                    SharedResource lock.
-     */
-    virtual void runLoop(ThreadResource::ThreadLock& threadLock) override
-    {
-        using namespace juce;
-        threadLock.enterWrite();
-        if(pendingFiles.isEmpty())
-        {
-            signalThreadShouldExit();
-            threadLock.exitWrite();
-            return;
-        }
-        String entryID = pendingFiles.getReference(0).first;
-        File entryFile = pendingFiles.getReference(0).second;
-        pendingFiles.remove(0);   
-        try
-        {
-            DesktopEntry entry(entryFile, entryID);
-            if (entry.shouldBeDisplayed())
-            {
-                StringArray entryCategories = entry.getCategories();
-                if (entryCategories.isEmpty())
-                {
-                    // Categorize as "Other"
-                    entryCategories.add(miscEntryCategory);
-                }
-                // Add to list of all entries
-                entryCategories.add(everyEntryCategory);
-                for(const String& category : entryCategories)
-                {
-                    categories[category].add(entryID);
-                }
-                entries[entryID] = entry;
-            }
-        }
-        catch(DesktopEntryFileError e)
-        {
-            DBG("DesktopEntryLoader::" << __func__ << ": File error: "
-                    << e.what());
-        }
-        catch(DesktopEntryFormatError e)
-        {
-            DBG("DesktopEntryLoader::" << __func__ << ": Format error: "
-                    << e.what());
-        }
-        threadLock.exitWrite();
-    }
-
-    /**
-     * @brief  Runs the loading finished callback function once all desktop
-     *         entries are loaded.
-     *
-     * This function will run once on the desktop entry thread just before the
-     * thread stops running.
-     */
-    void cleanup() override
-    {
-        using namespace juce;
-        DBG("DesktopEntryThread::" << __func__ << ": Loaded "
-                << String(entries.size()) << " desktop entries.");
-        MessageManager::callAsync(buildAsyncFunction(LockType::read, [this] 
-        {
-            for(const auto& callback : onFinish)
-            {
-                callback.second();
-            }
-            onFinish.clear();
-        }));
-    }
-};
 
 DesktopEntryLoader::DesktopEntryLoader() : 
-ResourceHandler<DesktopEntryThread>(desktopEntryThreadKey,
+ResourceHandler<DesktopEntryThread>(DesktopEntryThread::resourceKey,
         []()->SharedResource* { return new DesktopEntryThread(); }) { }
 
 /*
@@ -349,12 +153,8 @@ void DesktopEntryLoader::reloadEntry(const juce::String& entryFileID)
  * DesktopEntryLoader read the entry files.
  */
 DesktopEntryLoader::CallbackID DesktopEntryLoader::scanForChanges
-(const std::function<void(const juce::StringArray)> handleChanges)
+(const std::function<void(std::map<juce::String, EntryChange>)> handleChanges)
 {
-    // TODO: Implement a system for properly recording and sharing all changes.
-    DBG("DesktopEntryLoader::" << __func__
-            << ": Scanning for changes is not implemented yet!");
-    return 0;
 }
 
 /*
