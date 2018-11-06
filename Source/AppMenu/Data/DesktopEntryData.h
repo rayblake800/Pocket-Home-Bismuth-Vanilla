@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "DesktopEntry.h"
 #include "Locale/TextUser.h"
@@ -13,6 +12,11 @@
  * @brief  An AppMenuItem that gets its data from a DesktopEntry object, loaded 
  *         from a .desktop file. It represents a shortcut to an installed 
  *         application located in the application menu.
+ *
+ * Editing desktop entries works by updating or creating .desktop files in the
+ * local user's directory. Changes to desktop entries through this interface 
+ * will be visible in other applications for the current user, but will not 
+ * affect other users.
  * 
  * @see AppMenuItem, AppMenuComponent, DesktopEntry
  */

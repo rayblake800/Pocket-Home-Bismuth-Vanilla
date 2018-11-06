@@ -8,6 +8,10 @@
  * @file  Scrolling/MenuButton.h
  *
  * @brief  Creates a MenuButton suitable for a scrolling AppMenu.
+ *
+ * The Scrolling::MenuButton displays the icon on the left side of the button,
+ * with the title printed directly to the right of the icon.  The button's
+ * background and outline are always drawn.
  */
 class AppMenu::Scrolling::MenuButton : public AppMenu::MenuButton
 {

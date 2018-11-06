@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "IconThread.h"
 #include "Nullable.h"
@@ -11,6 +10,21 @@
  * @file  MenuItem.h
  * 
  * @brief  Defines an item in the application menu.
+ *
+ * MenuItem is a nullable interface for AppMenu::ItemData objects of any type.  
+ * MenuItems mirror the ItemData interface, allowing them to be used 
+ * interchangably no matter what type of ItemData they contain.
+ *
+ * MenuItem also takes care of memory management issues with ItemData objects.
+ * All MenuItem methods check if their ItemData is null before dereferencing it,
+ * returning an appropriate default value instead if it does turn out to be
+ * null. ItemData objects are automatically deleted when the 
+ * AppMenu::JSONResource object and every MenuItem referencing them have been
+ * destroyed.
+ *
+ * Multiple MenuItem objects may hold the same ItemData object, but there are
+ * no controls used to prevent concurrent access errors.  All AppMenu classes
+ * are not threadsafe, and should only be used within the Juce message thread.
  */
 
 class AppMenu::MenuItem : public Nullable<AppMenu::ItemData::Ptr>
@@ -62,8 +76,8 @@ public:
     /**
      * @brief  Checks if this menu item is a terminal application.
      *
-     * @return  True if and only if the menu item has a launch command that 
-     *          should run within a new terminal window.
+     * @return  Whether the menu item has a launch command that should run 
+     *          within a new terminal window.
      */
     bool getLaunchedInTerm() const;
 
@@ -87,7 +101,7 @@ public:
     /**
      * @brief  Gets the menu item's index within its folder.
      *
-     * @return  The menu item index, or -1 if the menu item is null or not
+     * @return  The menu item index, or -1 if the menu item is null or not 
      *          placed within a folder. 
      */
     const int getIndex() const;
@@ -143,13 +157,6 @@ public:
     juce::Array<MenuItem> getFolderItems() const;
 
     /**
-     * @brief  Gets all menu items held within this menu item.
-     *
-     * @return  All menu items within this menu item, or an empty array if this
-     *          menu item is not a folder.
-     */
-    
-    /**
      * @brief  Gets an appropriate title to use for a deletion confirmation 
      *         window.
      *
@@ -171,7 +178,6 @@ public:
      * @return  A localized editor title string.
      */
     juce::String getEditorTitle() const;
-
 
     /**
      * @brief  Checks if two menu items represent the same item in the menu.
@@ -351,8 +357,6 @@ public:
      *                  data.
      */
     void removeListener(Listener* toRemove);
-    
-    JUCE_LEAK_DETECTOR(MenuItem);
 };
 
 /* Only include this file directly in the AppMenu implementation! */

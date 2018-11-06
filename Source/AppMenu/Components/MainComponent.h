@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "JuceHeader.h"
 #include "OverlaySpinner.h"
@@ -12,11 +11,17 @@
 #include "AppMenu/Data/ConfigFile.h"
 
 /**
- * @file  MainComponent.h
+ * @file  AppMenu/Components/MainComponent.h
  *
  * @brief  Creates and shows an AppMenu of any format.
+ *
+ * The MainComponent is a container component that holds the AppMenu's menu
+ * component, along with the menu's loading spinner.  It is the MainComponent
+ * that is passed outside the module by AppMenu::createAppMenu as a generic
+ * juce::Component pointer.  The MainComponent initializes the menu component
+ * in a particular AppMenu format, and automatically updates the menu whenever
+ * a new menu format is selected.
  */
-
 class AppMenu::MainComponent : public juce::Component, 
     public ConfigFile::Listener
 {

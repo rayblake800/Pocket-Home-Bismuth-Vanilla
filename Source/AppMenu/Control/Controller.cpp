@@ -32,30 +32,6 @@ AppMenu::Controller::Controller
     Locale::TextUser(localeClassKey) { }
 
 /*
- * Displays a context menu with generic options for editing the AppMenu.
- */
-void AppMenu::Controller::showContextMenu()
-{
-    // Ignore request if a menu editor is visible or input is disabled.
-    if(ignoringInput())
-    {
-        return;
-    }
-    juce::PopupMenu contextMenu;
-    contextMenu.addItem(int(OptionCode::NewShortcut), 
-            localeText(newShortcutTextKey));
-    contextMenu.addItem(int(OptionCode::NewFolder), 
-            localeText(newFolderTextKey));
-    contextMenu.addItem(int(OptionCode::NewDesktopEntry), 
-            localeText(newEntryTextKey));
-
-    ConfigFile appConfig;
-    MenuItem rootFolder = appConfig.getRootFolderItem();
-    handleContextMenuAction(OptionCode(contextMenu.show()),
-            rootFolder, rootFolder.getMovableChildCount());
-}
-
-/*
  * Displays a context menu with options for editing an open menu folder.
  */
 void AppMenu::Controller::showContextMenu
@@ -134,8 +110,7 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
  * Activates an item in the menu, launching application shortcut menu items, and
  * opening folder menu items.
  */
-void AppMenu::Controller::activateMenuItem
-(const MenuItem clickedItem)
+void AppMenu::Controller::activateMenuItem(const MenuItem clickedItem)
 {
     // Ignore clicks if a menu editor is visible or input is disabled.
     if(ignoringInput())
@@ -160,8 +135,7 @@ void AppMenu::Controller::activateMenuItem
     }
     else
     {
-        setLoadingState(true,
-                localeText(launchingAPPTextKey) + " "
+        setLoadingState(true, localeText(launchingAPPTextKey) + " "
                 + clickedItem.getTitle());
         launchOrFocusApplication(clickedItem);
     }

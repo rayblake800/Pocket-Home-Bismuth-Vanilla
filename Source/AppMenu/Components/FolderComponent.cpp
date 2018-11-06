@@ -29,7 +29,6 @@ void AppMenu::FolderComponent::initMenuItems()
     }
 }
 
-
 /*
  * Gets the number of menu items in this folder.
  */

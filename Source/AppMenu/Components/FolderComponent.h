@@ -1,15 +1,26 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "AppMenu/Components/MenuButton.h"
 #include "AppMenu/AppMenu.h"
 
 /**
- * @file  FolderComponent.h
+ * @file  AppMenu/Components/FolderComponent.h
  *
  * @brief  Creates and displays menu item components for all items in a single
  *         application menu folder.
+ *
+ * The FolderComponent is assigned a folder MenuItem on construction.  It is
+ * responsible for creating MenuButton components for each of that MenuItem's 
+ * child menu items, holding those MenuButtons as child components, and setting 
+ * how they are arranged within its bounds.  It listens for changes to its
+ * MenuItem, updating its child items whenever its menu data changes.  It also
+ * tracks which one of its MenuButtons, if any, is currently selected by the
+ * user.
+ *
+ * FolderComponent is an abstract base class.  Each AppMenu Format should have
+ * a FolderComponent implementation that defines how that format arranges 
+ * menu buttons within its folders.
  */
 class AppMenu::FolderComponent : public juce::Component,
     private MenuItem::Listener
@@ -32,18 +43,18 @@ public:
     void initMenuItems();
 
     /**
-     * @brief  Gets the folder's menu item data.
-     *
-     * @return  The MenuItem defining this folder.
-     */
-    MenuItem getFolderMenuItem() const;
-
-    /**
      * @brief  Gets the number of menu items in this folder.
      *
      * @return  The number of MenuButton child components this folder holds.
      */
     int getFolderSize() const;
+
+    /**
+     * @brief  Gets the folder's menu item data.
+     *
+     * @return  The MenuItem defining this folder.
+     */
+    MenuItem getFolderMenuItem() const;
 
     /**
      * @brief  Gets the current selected folder item.
@@ -68,7 +79,6 @@ public:
      *                      be selected.
      */
     void setSelectedIndex(const int newSelection);
-
 
     /**
      * @brief  Finds the closest menu index to a place where the menu was

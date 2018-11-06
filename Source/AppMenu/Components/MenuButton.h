@@ -1,25 +1,42 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
-#include "AppMenu.h"
 #include "IconLoader.h"
+#include "AppMenu/AppMenu.h"
 #include "AppMenu/Data/MenuItem.h"
 
 /**
- * @file  MenuButton.h
+ * @file  AppMenu/Components/MenuButton.h
  *
- * @brief  Represents a single menu item as a juce button component.
+ * @brief  Represents a single menu item as a juce::Button component.
+ *
+ * The MenuButton is responsible for displaying a MenuItem's data to the user.
+ * It draws the menu item's icon, prints its title, and draws itself differently
+ * depending on whether it is the selected menu item in its folder.  The 
+ * MenuButton tracks changes to its MenuItem, automatically updating itself
+ * when relevant menu data changes.
+ *
+ * MenuButton is an abstract class.  Each AppMenu Format should have its own
+ * MenuButton implementation that defines how the button's title and icon are
+ * placed, when the background or outline should be drawn, and optionally 
+ * updates the size of the button's font.
  */
 class AppMenu::MenuButton : public juce::Button, private MenuItem::Listener
 {
 public:
-    /* juce ColourId values */
+    /**
+     * @brief  ID values used to load the component's colors from the 
+     *         application's LookAndFeel object.
+     */
     enum ColourIds
     {
+        /* The color used to print the menu item's title */
         textColourId = 0x1900200,
+        /* The color that may be filled in for the menu item's background */
         backgroundColourId = 0x1900201,
+        /* The color used for the background when the menu item is selected */
         selectionColourId = 0x1900202,
+        /* The color that may be used to draw the menu item's border */
         borderColourId = 0x1900203
     };
 

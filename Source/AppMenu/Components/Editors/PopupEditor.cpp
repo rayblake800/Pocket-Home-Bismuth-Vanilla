@@ -37,7 +37,7 @@ commandLabel("commandLabel", localeText(commandTextKey)),
 commandEditor("commandEditor"),
 terminalCheckboxLabel("runInTermLabel", localeText(runInTermTextKey))
 {
-    using namespace juce;
+    using juce::Font;
     categoryEditButton.addListener(this);
     iconNameEditor.addFileSelectListener(this);
     
@@ -132,7 +132,7 @@ bool AppMenu::PopupEditor::getTerminalCheckboxState() const
 }
 
 /*
- * Set the value stored in the editable name field.
+ * Sets the value stored in the editable title field.
  */
 void AppMenu::PopupEditor::setTitleField(const juce::String& name)
 {

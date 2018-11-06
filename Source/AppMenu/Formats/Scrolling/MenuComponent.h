@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "ConfigurableComponent.h"
 #include "AppMenu/Data/ConfigFile.h"
@@ -10,12 +9,23 @@
  * @file  MenuFormats/Scrolling/MenuComponent.h
  *
  * @brief  Creates and arranges application menu folder components for the
- *         scrolling AppMenu format.
+ *         Scrolling AppMenu format.
+ *
+ * The Scrolling::MenuComponent arranges open FolderComponent objects from left
+ * to right. It attempts to keep the selected menu item in the active folder
+ * as centered as possible, only moving off-center when doing so would keep more
+ * of the menu visible.  It ensures each FolderComponent is wide enough to
+ * fully print the titles of all MenuButtons, and tall enough to fit the number
+ * of rows specified by the AppMenu config file.
  */
 class AppMenu::Scrolling::MenuComponent : public AppMenu::MenuComponent,
     public ConfigurableComponent, public ConfigFile::Listener
 {
 public:
+    /**
+     * @brief  Creates the menu component, listening to the AppMenu::ConfigFile
+     *         for changes to the number of rows to fit on screen.
+     */
     MenuComponent();
 
     virtual ~MenuComponent() { }
@@ -70,7 +80,7 @@ private:
      *
      * @param folderItem  The folder component's menu data source.
      *
-     * @return  The new Scrolling::FolderComponent object.
+     * @return            The new Scrolling::FolderComponent object.
      */
     virtual AppMenu::FolderComponent* createFolderComponent(MenuItem folderItem)
         const final override;
@@ -102,7 +112,7 @@ private:
 
     /* Holds the number of visible button rows to fit on the screen: */
     int maxRows;
-
 };
+
 /* Only include this file directly in the AppMenu implementation! */
 #endif

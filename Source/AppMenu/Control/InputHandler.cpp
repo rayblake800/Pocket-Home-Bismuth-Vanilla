@@ -7,7 +7,7 @@
  * Initializes the InputHandler, setting it to handle the menu component's input
  * events.
  */
- AppMenu::InputHandler::InputHandler
+AppMenu::InputHandler::InputHandler
 (MenuComponent* const menuComponent, Controller* const controller) :
      menuComponent(menuComponent), controller(controller)
 {
@@ -143,7 +143,7 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
  * keyPress method.
  */
 bool AppMenu::InputHandler::keyPressed(const juce::KeyPress& keyPress,
-juce::Component* sourceComponent) 
+        juce::Component* sourceComponent) 
 {
     // TODO: don't hardcode in key bindings, read them from input settings.
     using juce::KeyPress;

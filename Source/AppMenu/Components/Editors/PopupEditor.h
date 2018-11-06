@@ -13,8 +13,17 @@
 /**
  * @file  PopupEditor.h
  * 
- * @brief  A pop-up editor that provides a user interface for creating and 
- *         editing application menu items.
+ * @brief  A pop-up editor component that provides a user interface for creating
+ *         and editing application menu items.
+ *
+ * The PopupEditor provides editor components for setting all relevant menu item
+ * properties of a new or existing menu item. The user may edit any of these
+ * data fields, then press the cancel button to discard all changes, or the 
+ * confirm button to save changes.
+ *
+ * All saved changes are applied by the abstract commitEdits function, which
+ * subclasses should implement to create or edit whatever types of menu items
+ * they handle.
  */
 class AppMenu::PopupEditor : public PopupEditorComponent,
     public FileSelectTextEditor::Listener, public Locale::TextUser

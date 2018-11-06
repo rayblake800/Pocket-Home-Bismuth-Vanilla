@@ -11,6 +11,35 @@
 #include "AppMenu/Control/Controller.h"
 
 
+/**
+ * @file InputHandler.h
+ *
+ * @brief  Captures key, mouse, and window focus input events, and defines how
+ *         they are applied to the menu.
+ *
+ * InputHandler captures key and mouse events for the MenuComponent and its 
+ * FolderComponent and MenuButton child components.  These events are sorted 
+ * based on their type and target, and used to call various virtual methods that
+ * InputHandler subclasses may override.
+ *
+ * A default implementation for handling mouse clicks is provided.  This
+ * activates selected menu items, selects un-selected menu items, sets clicked
+ * folders as active, and calls for context menus to be created when menu
+ * items or folders are right-clicked.  InputHandler implementations can
+ * override these methods to change how the menu behaves when folders or menu
+ * items are clicked.
+ *
+ * The InputHandler listens for key events created while the menu is visible,
+ * identifies if the key events are relevant to the menu, categorizes them
+ * as a specific KeyType, and passes them to the virtual keyPressed method.
+ * All key event handling from this point must be implemented by an InputHandler
+ * subclass defined by the active AppMenu::Format.
+ *
+ * The InputHandler also registers when the application window gains and loses
+ * focus.  This is used to hide the loading spinner when the window loses focus,
+ * on the assumption that whatever action it was waiting for was probably the
+ * action that caused the window to lose focus.
+ */
 class AppMenu::InputHandler : public juce::MouseListener,
     public juce::KeyListener, private WindowFocus::Listener
 {
@@ -128,6 +157,7 @@ private:
      */
     virtual bool keyPressed(const juce::KeyPress& keyPress,
             juce::Component* sourceComponent) final override;
+
     /**
      * @brief  Scans desktop entries for updates whenever window focus is
      *         gained.

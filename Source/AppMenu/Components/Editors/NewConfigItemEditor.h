@@ -9,13 +9,12 @@
  * @file  NewConfigItemEditor.h
  * 
  * @brief  Creates a pop-up editor component that allows the user to add a new 
- *         application shortcut menu item to the AppConfigFile.  
+ *         item to the AppMenu, saved in the AppMenu JSON configuration file.
  * 
- * After entering data and pressing the confirm button, the new favorite 
- * application link is added to the menu and saved by AppConfigFile.
- *
-*/
-
+ * On construction, the editor is set to create either an application shortcut,
+ * or a menu folder.  After entering data and pressing the confirm button, the 
+ * new menu item is added to the menu, and saved by AppMenu::ConfigFile.
+ */
 class AppMenu::NewConfigItemEditor : public PopupEditor {
 public:
     /**
@@ -41,33 +40,11 @@ public:
 protected:
     /**
      * @brief  Creates the new application menu item and inserts it into the
-     *         parent folder item.
+     *         parent folder item provided on editor construction.
      */
     virtual void commitEdits();
 
 private:
-    /**
-     * @brief  Private localized text data source.
-     */
-    class LocaleData: public Locale::TextUser
-    {
-    public:
-        LocaleData();
-
-        virtual ~LocaleData() { }
-
-        /**
-         * @brief  Gets the localized title displayed on the editor.
-         *
-         * @param isFolder  Whether the editor is for a folder, or for a
-         *                  shortcut.
-         *
-         * @return          An appropriate localized title string.
-         */
-        juce::String getTitle(const bool isFolder) const;
-    };
-    LocaleData localeData;
-
     /* Folder where the new menu item will be inserted. */
     MenuItem parentFolder;
 

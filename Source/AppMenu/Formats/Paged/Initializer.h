@@ -1,10 +1,11 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "AppMenu/Control/Initializer.h"
 
 /**
+ * @file  AppMenu/Formats/Paged/Initializer.h
+ *
  * @brief  Initializes a paged AppMenu's objects.
  */
 struct AppMenu::Paged::Initializer : public AppMenu::Initializer

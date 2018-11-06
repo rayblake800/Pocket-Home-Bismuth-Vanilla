@@ -186,13 +186,13 @@ private:
     void copyMenuItem(const MenuItem toCopy, MenuItem copyFolder,
             const int insertIndex);
 
-    /* Holds a reference to the loading spinner: */
+    /* Holds a reference to the loading spinner */
     OverlaySpinner& loadingSpinner;
 
-    /* The main menu component: */
+    /* The main menu component */
     MenuComponent* const menuComponent;
 
-    /* Launches applications from the menu */
+    /* Launches or focuses applications from the menu */
     AppLauncher appLauncher;
 };
 

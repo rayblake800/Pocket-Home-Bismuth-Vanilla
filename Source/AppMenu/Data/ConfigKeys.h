@@ -10,7 +10,8 @@
 /**
  * @file   ConfigKeys.h
  *
- * @brief  Defines the data keys used to store menu item data in JSON objects.
+ * @brief  Defines the data keys used to store menu item data in the apps.json
+ *         configuration data.
  */
 
 namespace AppMenu
@@ -32,7 +33,7 @@ namespace AppMenu
            window. */
         static const juce::Identifier launchInTermKey("launch in terminal");
 
-        //######## Folder menu item data: ########
+        //############## Folder menu item data: #################
         /* The list of application categories used to select desktop entry 
            folder items. */
         static const juce::Identifier categoryKey("categories");
@@ -68,6 +69,7 @@ namespace AppMenu
             {Format::Invalid,   "Invalid"}
         };
 
+        /* Keys to all basic data values: */
         static const std::vector<Config::DataKey> allKeys =
         {
             scrollingMenuRowsKey,

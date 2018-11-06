@@ -21,7 +21,6 @@ AppMenu::JSONResource::JSONResource() : Config::FileResource
     ((ConfigData*) rootItem.get())->initMenuData(rootFolder); 
 }
 
-
 /*
  * Destroys all menu data on destruction.
  */
@@ -120,7 +119,7 @@ const std::vector<Config::DataKey>& AppMenu::JSONResource::getConfigKeys() const
     return ConfigKeys::allKeys;
 }
 
-/**
+/*
  * Adds a new menu item to the list of menu items.
  */
 AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
@@ -162,7 +161,6 @@ AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
     return newItem;
 }
 
-
 /*
  * Writes all changes to this menu item back to its data source.
  */
@@ -181,7 +179,6 @@ void AppMenu::JSONResource::ConfigData::deleteFromSource()
     jassert(getIndex() == -1 && getParentFolder() == nullptr);
     saveChanges();
 }
-
 
 /*
  * Creates an empty child menu item.

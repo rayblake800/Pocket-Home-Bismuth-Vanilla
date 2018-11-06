@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Components/Editors/PopupEditor.h"
@@ -8,7 +7,12 @@
 /**
  * @file  ExistingItemEditor.h
  *
- * @brief  A component that allows the user to edit an AppMenuItem.
+ * @brief  A component that allows the user to edit a menu item.
+ *
+ * All editable properties of an existing menu item may be changed through this 
+ * component.  The category list editor, command field, and launch in terminal
+ * checkbox will be automatically hidden if their respective data values cannot 
+ * be edited.
  */
 class AppMenu::ExistingItemEditor : public PopupEditor
 {

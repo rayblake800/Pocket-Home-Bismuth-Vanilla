@@ -1,162 +1,168 @@
-X AccessPointState
-AlertWindow
-X AppLauncher
-AppMenu
-AppMenuButton
-AppMenuComponent
-AppMenuFolder
-AssetFiles
-Audio
-BatteryIcon
-BatteryMonitor
-BluetoothDevice
-BluetoothSettingsComponent
-BluetoothSettingsPage
-BluetoothStatus
-BluezAdapter
-CategoryEditor
-ClockLabel
-ColourConfigFile
-ColourConfigKeys
-ColourIds
-ColourJSON
-ColourPage
-ColourPicker
-ComponentConfigFile
-ComponentConfigKeys
-ComponentEditorPage
-ComponentJSON
-ComponentSettings
-Config
-ConfigData
-ConfigFile
-ConfigKeys
-ConfigurableComponent
-ConfigurableImageButton
-ConfigurableImageComponent
-ConfigurableLabel
-ConnectionSettingsComponent
-Controller
-CounterComponent
-DataKey
-DateTimePage
-DesktopEntry
-DesktopEntryData
-DesktopEntryFileError
-DesktopEntryFormatError
-DesktopEntryLoader
-DesktopEntryUtils
-Display
-DrawableImageButton
-DrawableImageComponent
-ExistingItemEditor
-FelPage
-FileHandler
-FileResource
-FileSelectTextEditor
-FocusingListPage
-FolderComponent
-GLibSignalThread
-GLibThread
-GPPDBusProxy
-GPPObject
-GPPTestObject
-GPPWeakRef
-GSignalHandler
-GVariantConverter
-HomePage
-HomeSettingsPage
-I2CBus
-IconCache
-IconLoader
-IconSliderComponent
-IconThemeIndex
-IconThread
-Initializer
-InputHandler
-InputSettingsPage
-ItemData
-JSONFile
-JSONResource
-JsonWifiInterface
-KeybindingPage
-LaunchedProcess
-LayoutManager
-LibNMInterface
-ListEditor
-Locale
-LoginPage
-Main
-MainComponent
-MainFile
-MainKeys
-MainResource
-MenuButton
-MenuComponent
-MenuItem
-NMPPAccessPoint
-NMPPActiveConnection
-NMPPClient
-NMPPConnection
-NMPPDeviceWifi
-NavButton
-NetworkInterface
-NewConfigItemEditor
-NewDesktopAppEditor
-Nullable
-OverlaySpinner
-PageAppFolder
-PageComponent
-PageFactory
-PageStackComponent
-PagedAppMenu
-PagedList
-Password
-PocketHomeApplication
-PocketHomeWindow
-PokeLookAndFeel
-PopupEditor
-PopupEditorComponent
-PowerPage
-ProcessUtils
-QuickSettingsPage
-RemovePasswordPage
-ResourceHandler
-SavedConnection
-SavedConnections
-ScalingLabel
-ScalingTextButton
-ScrollingAppFolder
-ScrollingAppMenu
-SetPasswordPage
-SettingsListPage
-SharedResource
-Spinner
-StressTest
-SwitchComponent
-SystemCommands
-TempTimer
-TextUser
-ThreadResource
-Time
-TransitionAnimator
-UIPage
-Utils
-WifiAccessPoint
-WifiDebugOutput
-WifiIcon
-WifiSettingsComponent
-WifiSettingsPage
-WifiState
-WifiStateManager
-WindowFocus
-WindowFocusedTimer
-XDGDirectories
-XWindowInterface
-gtest_object
-test_AppMenu
-test_ConfigFile
-test_GPPObject
-test_LaunchedApp
-test_WifiStateManager
-test_XWindowInterface
+Use this file to track which files have been properly documented and formatted.
+
+X /Source/AppMenu/AppMenu
+X /Source/AppMenu/Components/Editors/CategoryEditor
+X /Source/AppMenu/Components/Editors/ExistingItemEditor
+X /Source/AppMenu/Components/Editors/NewConfigItemEditor
+X /Source/AppMenu/Components/Editors/NewDesktopAppEditor
+X /Source/AppMenu/Components/Editors/PopupEditor
+X /Source/AppMenu/Components/FolderComponent
+X /Source/AppMenu/Components/MainComponent
+X /Source/AppMenu/Components/MenuButton
+X /Source/AppMenu/Components/MenuComponent
+X /Source/AppMenu/Control/Controller
+X /Source/AppMenu/Control/Initializer
+X /Source/AppMenu/Control/InputHandler
+X /Source/AppMenu/Data/ConfigData
+X /Source/AppMenu/Data/ConfigFile
+X /Source/AppMenu/Data/ConfigKeys
+X /Source/AppMenu/Data/DesktopEntryData
+X /Source/AppMenu/Data/ItemData
+X /Source/AppMenu/Data/JSONResource
+X /Source/AppMenu/Data/MenuItem
+X /Source/AppMenu/Formats/Paged/FolderComponent
+X /Source/AppMenu/Formats/Paged/Initializer
+X /Source/AppMenu/Formats/Paged/InputHandler
+X /Source/AppMenu/Formats/Paged/MenuButton
+X /Source/AppMenu/Formats/Paged/MenuComponent
+X /Source/AppMenu/Formats/Scrolling/FolderComponent
+/Source/AppMenu/Formats/Scrolling/Initializer
+/Source/AppMenu/Formats/Scrolling/InputHandler
+/Source/AppMenu/Formats/Scrolling/MenuButton
+/Source/AppMenu/Formats/Scrolling/MenuComponent
+/Source/AppMenu/Settings
+/Source/Components/ColourIds
+/Source/Components/Configurable/ConfigurableComponent
+/Source/Components/Configurable/ConfigurableImageButton
+/Source/Components/Configurable/ConfigurableImageComponent
+/Source/Components/Configurable/ConfigurableLabel
+/Source/Components/LayoutManager
+/Source/Components/Pages/Home Page/HomePage
+/Source/Components/Pages/Home Page/Widgets/BatteryIcon
+/Source/Components/Pages/Home Page/Widgets/ClockLabel
+/Source/Components/Pages/Home Page/Widgets/WifiIcon
+/Source/Components/Pages/Login Page/LoginPage
+/Source/Components/Pages/PageComponent
+/Source/Components/Pages/PageFactory
+/Source/Components/Pages/PageStackComponent
+/Source/Components/Pages/Power Page/FelPage
+/Source/Components/Pages/Power Page/PowerPage
+/Source/Components/Pages/Settings Pages/DateTime Page/DateTimePage
+/Source/Components/Pages/Settings Pages/Home Settings Page/HomeSettingsPage
+/Source/Components/Pages/Settings Pages/Input Settings Page/InputSettingsPage
+/Source/Components/Pages/Settings Pages/Input Settings Page/KeybindingPage
+/Source/Components/Pages/Settings Pages/Network Pages/BluetoothSettingsPage
+/Source/Components/Pages/Settings Pages/Network Pages/FocusingListPage
+/Source/Components/Pages/Settings Pages/Network Pages/WifiSettingsPage
+/Source/Components/Pages/Settings Pages/Password Pages/Password
+/Source/Components/Pages/Settings Pages/Password Pages/RemovePasswordPage
+/Source/Components/Pages/Settings Pages/Password Pages/SetPasswordPage
+/Source/Components/Pages/Settings Pages/Quick Settings Page/BluetoothSettingsComponent
+/Source/Components/Pages/Settings Pages/Quick Settings Page/ConnectionSettingsComponent
+/Source/Components/Pages/Settings Pages/Quick Settings Page/QuickSettingsPage
+/Source/Components/Pages/Settings Pages/Quick Settings Page/WifiSettingsComponent
+/Source/Components/Pages/Settings Pages/Settings List Page/SettingsListPage
+/Source/Components/Pages/Settings Pages/UI Page/ColourPage
+/Source/Components/Pages/Settings Pages/UI Page/ComponentEditorPage
+/Source/Components/Pages/Settings Pages/UI Page/UIPage
+/Source/Components/PocketHomeWindow
+/Source/Components/PokeLookAndFeel
+/Source/Components/TransitionAnimator
+/Source/Components/Widgets/ColourPicker
+/Source/Components/Widgets/CounterComponent
+/Source/Components/Widgets/DrawableImageButton
+/Source/Components/Widgets/DrawableImageComponent
+/Source/Components/Widgets/FileSelectTextEditor
+/Source/Components/Widgets/IconSliderComponent
+/Source/Components/Widgets/ListEditor
+/Source/Components/Widgets/NavButton
+/Source/Components/Widgets/OverlaySpinner
+/Source/Components/Widgets/PagedList
+/Source/Components/Widgets/PopupEditorComponent
+/Source/Components/Widgets/ScalingLabel
+/Source/Components/Widgets/ScalingTextButton
+/Source/Components/Widgets/Spinner
+/Source/Components/Widgets/SwitchComponent
+/Source/Config/AlertWindow
+/Source/Config/Colour/ColourConfigFile
+/Source/Config/Colour/ColourConfigKeys
+/Source/Config/Colour/ColourJSON
+/Source/Config/Component/ComponentConfigFile
+/Source/Config/Component/ComponentConfigKeys
+/Source/Config/Component/ComponentJSON
+/Source/Config/Component/ComponentSettings
+/Source/Config/Config
+/Source/Config/DataKey
+/Source/Config/FileHandler
+/Source/Config/FileResource
+/Source/Config/MainFile
+/Source/Config/MainKeys
+/Source/Config/MainResource
+/Source/FreeDesktop/Desktop Entries/DesktopEntry
+/Source/FreeDesktop/Desktop Entries/DesktopEntryFileError
+/Source/FreeDesktop/Desktop Entries/DesktopEntryFormatError
+/Source/FreeDesktop/Desktop Entries/DesktopEntryLoader
+/Source/FreeDesktop/Desktop Entries/DesktopEntryUtils
+/Source/FreeDesktop/Icon Themes/IconCache
+/Source/FreeDesktop/Icon Themes/IconLoader
+/Source/FreeDesktop/Icon Themes/IconThemeIndex
+/Source/FreeDesktop/Icon Themes/IconThread
+/Source/FreeDesktop/XDGDirectories
+/Source/GLib/DBus/GPPDBusProxy
+/Source/GLib/DBus/GVariantConverter
+/Source/GLib/GLibSignalThread
+/Source/GLib/GLibThread
+/Source/GLib/GPPObject
+/Source/GLib/GPPWeakRef
+/Source/GLib/GSignalHandler
+/Source/GLib/LibNM/NMPPAccessPoint
+/Source/GLib/LibNM/NMPPActiveConnection
+/Source/GLib/LibNM/NMPPClient
+/Source/GLib/LibNM/NMPPConnection
+/Source/GLib/LibNM/NMPPDeviceWifi
+/Source/GLib/LibNM/SavedConnection
+/Source/GLib/LibNM/SavedConnections
+/Source/Main
+/Source/PocketHomeApplication
+/Source/System/AssetFiles
+/Source/System/Audio
+/Source/System/BatteryMonitor
+/Source/System/Bluetooth/BluetoothDevice
+/Source/System/Bluetooth/BluetoothStatus
+/Source/System/Bluetooth/BluezAdapter
+/Source/System/Display
+/Source/System/I2CBus
+/Source/System/ProcessUtils
+/Source/System/SystemCommands
+X /Source/System/Wifi/AccessPointState
+/Source/System/Wifi/JsonWifiInterface
+/Source/System/Wifi/LibNMInterface
+/Source/System/Wifi/NetworkInterface
+/Source/System/Wifi/WifiAccessPoint
+/Source/System/Wifi/WifiDebugOutput
+/Source/System/Wifi/WifiState
+/Source/System/Wifi/WifiStateManager
+/Source/System/XWindowInterface
+X /Source/Util/AppLauncher
+/Source/Util/JSONFile
+/Source/Util/LaunchedProcess
+/Source/Util/Locale/Locale
+/Source/Util/Locale/TextUser
+/Source/Util/Locale/Time
+/Source/Util/Nullable
+/Source/Util/SharedResource/ResourceHandler
+/Source/Util/SharedResource/SharedResource
+/Source/Util/SharedResource/ThreadResource
+/Source/Util/TempTimer
+/Source/Util/Utils
+/Source/Util/WindowFocus
+/Source/Util/WindowFocusedTimer
+/Tests/GLib/GPPTestObject
+/Tests/GLib/gtest_object
+/Tests/GLib/test_GPPObject
+/Tests/StressTest
+/Tests/test_AppMenu
+/Tests/test_ConfigFile
+/Tests/test_LaunchedApp
+/Tests/test_WifiStateManager
+/Tests/test_XWindowInterface

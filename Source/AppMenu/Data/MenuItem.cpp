@@ -215,6 +215,7 @@ bool AppMenu::MenuItem::operator==(const MenuItem& toCompare) const
 {
     return getData() == toCompare.getData();
 }
+
 /*
  * Checks if two menu items do not represent the same item in the menu.
  */

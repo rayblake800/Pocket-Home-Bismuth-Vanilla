@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "ConfigurableComponent.h"
 #include "AppMenu/Data/ConfigFile.h"
@@ -12,11 +11,25 @@
  *
  * @brief  Creates and arranges application menu folder components for the
  *         paged AppMenu format.
+ *
+ * In the Paged::MenuComponent, only the active page of the last opened 
+ * FolderComponent is visible.  The MenuComponent is responsible for ensuring
+ * each folder page is the same size as the MenuComponent, and the correct page
+ * is currently showing.  The MenuComponent also listens for changes to the
+ * paged menu grid dimensions, re-positioning its folder components if the
+ * grid dimensions change.
+ * 
+ * The Paged::MenuComponent also creates, shows, and holds the navigation
+ * buttons used to change the selected folder page.
  */
 class AppMenu::Paged::MenuComponent : public AppMenu::MenuComponent,
     public ConfigurableComponent, public ConfigFile::Listener
 {
 public:
+    /**
+     * @brief  Creates the menu component and initializes the navigation 
+     *         buttons.
+     */
     MenuComponent();
     
     virtual ~MenuComponent() { }
@@ -108,7 +121,6 @@ private:
     NavButton leftButton;
     /* Navigation button the increments the selected folder page: */
     NavButton rightButton;
-
 };
 
 /* Only include this file directly in the AppMenu implementation! */

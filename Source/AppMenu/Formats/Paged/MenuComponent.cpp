@@ -7,6 +7,9 @@
 /* Animation duration in milliseconds: */
 static const constexpr int animationMS = 300;
 
+/*
+ * Creates the menu component and initializes the navigation buttons.
+ */
 AppMenu::Paged::MenuComponent::MenuComponent() :
     ConfigurableComponent(ComponentConfigKeys::pagedAppMenuKey), 
     upButton(NavButton::WindowEdge::up),

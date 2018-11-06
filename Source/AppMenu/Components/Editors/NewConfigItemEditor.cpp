@@ -1,20 +1,21 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "AppMenu/Components/Editors/NewConfigItemEditor.h"
 
-/* Localized object class key: */
-static const juce::Identifier localizedObjectKey =
-    "AppMenu::NewConfigItemEditor";
+/* NewConfigItemEditor shares a localized object class key inherited from
+   AppMenu::PopupEditor. */
 
 /* Localized title text key: */
-static const juce::Identifier newAppTitleKey = "newAppTitleKey";
+static const juce::Identifier newAppTitleKey    = "newAppTitleKey";
 static const juce::Identifier newFolderTitleKey = "newFolderTitleKey";
 
+/* 
+ * Creates the new editor component. 
+ */
 AppMenu::NewConfigItemEditor::NewConfigItemEditor(
         const MenuItem parentFolder, 
         const bool isFolder,
         const int insertIndex,
         const std::function<void() > onConfirm) :
-    localeData(),
     AppMenu::PopupEditor(onConfirm, isFolder, !isFolder),
     parentFolder(parentFolder), 
     insertIndex(insertIndex)
@@ -22,9 +23,13 @@ AppMenu::NewConfigItemEditor::NewConfigItemEditor(
 #    if JUCE_DEBUG
     setName("NewConfigItemEditor");
 #    endif
-    setEditorTitle(localeData.getTitle(isFolder));
+    setEditorTitle(localeText(isFolder ? newFolderTitleKey : newAppTitleKey));
 }
 
+/*
+ * Creates the new application menu item and inserts it into the parent folder 
+ * provided on editor construction.
+ */
 void AppMenu::NewConfigItemEditor::commitEdits()
 {
     ConfigFile appConfig;
@@ -37,14 +42,3 @@ void AppMenu::NewConfigItemEditor::commitEdits()
             parentFolder, insertIndex);
 }
 
-AppMenu::NewConfigItemEditor::LocaleData::LocaleData() : 
-    Locale::TextUser(localizedObjectKey) { }
-
-/*
- * Gets the localized title displayed on the editor.
- */
-juce::String AppMenu::NewConfigItemEditor::LocaleData::getTitle
-(const bool isFolder) const
-{
-    return localeText(isFolder ? newFolderTitleKey : newAppTitleKey);
-}

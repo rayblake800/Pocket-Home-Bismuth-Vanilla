@@ -168,6 +168,10 @@
         "runInTerm"        : "Run in terminal:",
         "newEntryTitleKey" : "New desktop entry file"
     },
+    "AppMenu::CategoryEditor":
+    {
+        "editCategoryTitle" : "Edit Categories"
+    },
     "AppMenu::NewConfigItemEditor":
     {
         "newAppTitleKey"    : "New application shortcut",

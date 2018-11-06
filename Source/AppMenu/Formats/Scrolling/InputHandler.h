@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "AppMenu/Control/InputHandler.h"
 
@@ -8,6 +7,11 @@
  * @file  InputHandler.h
  *
  * @brief  Handles input events for a scrolling AppMenu.
+ *
+ * The Scrolling::InputHandler processes key events for the Scrolling menu,
+ * using them to scroll through the active folder component, close the folder,
+ * or activate menu items.  The InputHandler also slightly changes the behavior
+ * of clicked menu items, only activating them if they are currently selected.
  */
 class AppMenu::Scrolling::InputHandler : public AppMenu::InputHandler
 {

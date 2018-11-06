@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "Config/FileHandler.h"
 #include "AppMenu/Data/MenuItem.h"
@@ -82,6 +81,7 @@ public:
             MenuItem& parentFolder,
             const int index);
 
+    /* Listens for changes to AppMenu::ConfigFile's basic data values */
     class Listener : public Config::FileResource::Listener
     {
     public:

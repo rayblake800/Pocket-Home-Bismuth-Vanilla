@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "AppMenu/Components/FolderComponent.h"
 #include "AppMenu/Data/MenuItem.h"
@@ -9,14 +8,28 @@
 #include "JuceHeader.h"
 
 /**
- * @file MenuComponent.h
+ * @file AppMenu/Components/MenuComponent.h
  *
  * @brief  Creates and arranges application menu folder components.
+ *
+ * The MenuComponent provides the interface used by AppMenu::Controller
+ * and AppMenu::InputHandler to interact with menu components. It opens,
+ * closes, and positions child FolderComponent objects when folder MenuItem
+ * objects are opened, closed, or otherwise adjusted. It allows other objects
+ * to access open folder components within the menu. It updates the positions of
+ * its FolderComponents as necessary, optionally animating component
+ * transitions.  Finally, when PopupEditor components are created, it holds
+ * those as well, adding them as child components, and keeping them centered
+ * within its bounds.
+ *
+ * MenuComponent is an abstract class.  Each AppMenu format should have its own
+ * MenuComponent implementation that defines exactly where child folders should
+ * be placed when the component layout is updated.
  */
 class AppMenu::MenuComponent : public juce::Component
 {
 public:
-    MenuComponent();
+    MenuComponent() { }
 
     virtual ~MenuComponent() { }
 
@@ -33,6 +46,13 @@ public:
      * @param folderItem  The new folder's menu data.
      */
     void openFolder(MenuItem folderItem);
+
+    /**
+     * @brief  Gets the number of open folder components.
+     *
+     * @return   The open folder count.
+     */
+    int openFolderCount() const;
 
     /**
      * @brief  Closes the current active folder as long as more than one
@@ -55,13 +75,6 @@ public:
      * @param parentBounds  The new bounds of the menu's parent component.
      */
     virtual void parentResized(const juce::Rectangle<int> parentBounds) = 0;
-
-    /**
-     * @brief  Gets the number of open folder components.
-     *
-     * @return   The open folder count.
-     */
-    int openFolderCount() const;
 
     /**
      * @brief  Gets an open folder component from the list of open folders.

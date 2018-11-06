@@ -8,6 +8,14 @@
  * @file  InputHandler.h
  *
  * @brief  Handles input events for a paged AppMenu.
+ *
+ * The Paged::InputHandler's primary task is handling key events, determining
+ * what index to select next based on the active folder page, the dimensions of
+ * the folder page grid, and the position of the current selected menu item.  
+ * It also handles button events from the Paged::MenuComponent's navigation
+ * buttons, changing the visible folder page when the left and right navigation
+ * buttons are clicked, and closing the last opened FolderComponent when the up
+ * navigation button is clicked.
  */
 class AppMenu::Paged::InputHandler : public AppMenu::InputHandler,
     public juce::Button::Listener

@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "Config/FileResource.h"
 #include "Config/FileHandler.h"
@@ -16,14 +15,17 @@
  *
  * JSONResource defines the class of the singleton SharedResource object that
  * accesses apps.json, the configuration file where application menu settings
- * are stored.  It reads in the JSON data used to create AppMenu::MenuItem
- * objects, and writes any changes to those objects back to apps.json
- * as JSON data.  Only AppMenu::ConfigFile objects are allowed to access the 
+ * are stored.  Only AppMenu::ConfigFile objects are allowed to access the 
  * JSONResource object.
  *
- * @see AppMenu/ConfigFile.h
+ * JSONResource reads in the JSON data used to create AppMenu::MenuItem objects,
+ * and writes any changes to those objects back to apps.json as JSON data. 
+ * It also reads and writes the selected menu format, along with a few other
+ * simple configurable menu properties listed in ConfigKeys.h.
+ *
+ * @see AppMenu/Data/CofnigKeys.h
+ *      AppMenu/Data/ConfigFile.h
  */
-
 class AppMenu::JSONResource : public Config::FileResource
 {
 public:
@@ -92,8 +94,8 @@ private:
      * 
      * @return  The menu setting keys defined in AppMenu/Data/ConfigKeys.
      */
-    virtual const std::vector<Config::DataKey>& getConfigKeys() 
-        const final override;
+    virtual const std::vector<Config::DataKey>& getConfigKeys() const final 
+        override;
 
     /* Holds the root folder item */
     MenuItem rootFolderItem;
@@ -141,7 +143,6 @@ private:
             void writeChanges();
         };
     };
-
 };
 
 /* Only include this file directly in the AppMenu implementation! */

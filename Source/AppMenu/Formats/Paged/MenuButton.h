@@ -1,6 +1,5 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
-
 #pragma once
 #include "AppMenu/Components/MenuButton.h"
 
@@ -8,6 +7,10 @@
  * @file  Paged/MenuButton.h
  *
  * @brief  Creates a MenuButton suitable for a paged AppMenu.
+ *
+ * The Paged::MenuButton prints the menu item title at the bottom of the button,
+ * with the menu item's icon centered above it.  The button's background and 
+ * outline are only drawn if the button is currently selected.
  */
 class AppMenu::Paged::MenuButton : public AppMenu::MenuButton
 {

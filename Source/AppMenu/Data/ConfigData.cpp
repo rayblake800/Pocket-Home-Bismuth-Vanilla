@@ -99,16 +99,14 @@ AppMenu::ConfigData::~ConfigData()
 /*
  * Gets the menu item's displayed title.
  */
-juce::String 
-AppMenu::ConfigData::getTitle() const
+juce::String AppMenu::ConfigData::getTitle() const
 {
     return title;
 }
 /*
  * Gets the name or path used to load the menu item's icon file.
  */
-juce::String 
-AppMenu::ConfigData::getIconName() const
+juce::String AppMenu::ConfigData::getIconName() const
 {
     return iconName;
 }
@@ -116,8 +114,7 @@ AppMenu::ConfigData::getIconName() const
 /*
  * Gets the menu item's application launch command.
  */
-juce::String 
-AppMenu::ConfigData::getCommand() const
+juce::String AppMenu::ConfigData::getCommand() const
 {
     return command;
 }
@@ -125,8 +122,7 @@ AppMenu::ConfigData::getCommand() const
 /*
  * Checks if this menu item launches an application in a new terminal window.
  */
-bool 
-AppMenu::ConfigData::getLaunchedInTerm() const
+bool AppMenu::ConfigData::getLaunchedInTerm() const
 {
     return launchInTerm;
 }
@@ -135,8 +131,7 @@ AppMenu::ConfigData::getLaunchedInTerm() const
  * Gets the application categories used to load this item's desktop entry child 
  * folder items.
  */
-juce::StringArray 
-AppMenu::ConfigData::getCategories() const
+juce::StringArray AppMenu::ConfigData::getCategories() const
 {
     return categories;
 }
@@ -144,8 +139,7 @@ AppMenu::ConfigData::getCategories() const
 /*
  * Sets the menu item's displayed title.
  */
-void 
-AppMenu::ConfigData::setTitle(const juce::String& title)
+void AppMenu::ConfigData::setTitle(const juce::String& title)
 {
     this->title = title;
     signalDataChanged(DataField::title);
@@ -154,8 +148,7 @@ AppMenu::ConfigData::setTitle(const juce::String& title)
 /*
  * Sets the name or path used to load the menu item's icon file.
  */
-void AppMenu::ConfigData::setIconName
-(const juce::String& iconName)
+void AppMenu::ConfigData::setIconName(const juce::String& iconName)
 {
     this->iconName = iconName;
     signalDataChanged(DataField::icon);
@@ -164,8 +157,7 @@ void AppMenu::ConfigData::setIconName
 /*
  * Sets the menu item's application launch command.
  */
-void AppMenu::ConfigData::setCommand
-(const juce::String& command)
+void AppMenu::ConfigData::setCommand(const juce::String& command)
 {
     this->command = command;
     signalDataChanged(DataField::command);
@@ -174,8 +166,7 @@ void AppMenu::ConfigData::setCommand
 /*
  * Sets if this menu item runs its command in a new terminal window.
  */
-void AppMenu::ConfigData::setLaunchedInTerm
-(const bool launchInTerm)
+void AppMenu::ConfigData::setLaunchedInTerm(const bool launchInTerm)
 {
     this->launchInTerm = launchInTerm;
     signalDataChanged(DataField::termLaunchOption);
@@ -185,8 +176,7 @@ void AppMenu::ConfigData::setLaunchedInTerm
  * Sets the application categories used to load this item's desktop entry child 
  * folder items.
  */
-void AppMenu::ConfigData::setCategories
-(const juce::StringArray& categories)
+void AppMenu::ConfigData::setCategories(const juce::StringArray& categories)
 {
     this->categories = categories;
     signalDataChanged(DataField::categories);

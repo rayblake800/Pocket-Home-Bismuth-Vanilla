@@ -7,12 +7,15 @@
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::DesktopEntryData";
 
-//localized text keys: 
+/* Localized text value keys: */
 static const juce::Identifier removeLinkToTextKey  = "removeLinkTo";
 static const juce::Identifier questionMarkTextKey  = "questionMark";
 static const juce::Identifier willHideEntryTextKey = "willHideEntry";
 static const juce::Identifier editAppTextKey       = "editApp";
 
+/*
+ * Creates menu item data from a desktop entry. 
+ */
 AppMenu::DesktopEntryData::DesktopEntryData(const DesktopEntry& desktopEntry) :
 desktopEntry(desktopEntry), Locale::TextUser(localeClassKey) { }
 
@@ -171,8 +174,7 @@ void AppMenu::DesktopEntryData::saveChanges()
 }
 
 /*
- * Gets an appropriate title to use for a deletion confirmation 
- *         window.
+ * Gets an appropriate title to use for a deletion confirmation window.
  */
 juce::String AppMenu::DesktopEntryData::getConfirmDeleteTitle() const
 {
@@ -181,8 +183,7 @@ juce::String AppMenu::DesktopEntryData::getConfirmDeleteTitle() const
 }
 
 /*
- * Gets appropriate descriptive text for a deletion confirmation 
- *         window.
+ * Gets appropriate descriptive text for a deletion confirmation window.
  */
 juce::String AppMenu::DesktopEntryData::getConfirmDeleteMessage() const
 {

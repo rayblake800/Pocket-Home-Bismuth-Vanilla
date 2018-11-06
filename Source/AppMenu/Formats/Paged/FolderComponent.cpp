@@ -163,7 +163,7 @@ int AppMenu::Paged::FolderComponent::positionIndex
  * Selects a menu item based on its position in the folder component.  
  */
 bool AppMenu::Paged::FolderComponent::setSelectedPosition
-(int page, int column, int row)
+(const int page, const int column, const int row)
 {
     const int newIndex = positionIndex(page, column, row);
     if(newIndex < 0 || newIndex == getSelectedIndex())

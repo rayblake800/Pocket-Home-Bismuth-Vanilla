@@ -8,6 +8,11 @@
  * @file   FolderComponent.h
  *
  * @brief  Manages the folder buttons in a scrolling AppMenu folder.
+ *
+ * The Scrolling::FolderComponent arranges its menu buttons in a simple
+ * vertical list.  To assist the Scrolling::MenuComponent in creating the folder
+ * layout, it also shares how wide it needs to be to fit the widest menu item
+ * title, and the pixel offset of the current selected menu item.
  */
 class AppMenu::Scrolling::FolderComponent : public AppMenu::FolderComponent
 {

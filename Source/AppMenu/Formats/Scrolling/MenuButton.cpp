@@ -1,5 +1,4 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-
 #include "AppMenu/Formats/Scrolling/MenuButton.h"
 
 /*
@@ -9,8 +8,8 @@
      AppMenu::MenuButton(menuItem) { } 
      
 /*
- * Finds the area relative to the menu button's bounds where the
- *         title should be drawn.
+ * Finds the area relative to the menu button's bounds where the title should be
+ * drawn.
  */
 juce::Rectangle<float> AppMenu::Scrolling::MenuButton::findTitleBounds() const 
 {
@@ -19,8 +18,8 @@ juce::Rectangle<float> AppMenu::Scrolling::MenuButton::findTitleBounds() const
 }
 
 /*
- * Finds the area relative to the menu button's bounds where the
- *         icon should be drawn.
+ * Finds the area relative to the menu button's bounds where the icon should be 
+ * drawn.
  */
 juce::Rectangle<float> AppMenu::Scrolling::MenuButton::findIconBounds() const 
 {

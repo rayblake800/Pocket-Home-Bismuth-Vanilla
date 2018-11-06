@@ -11,6 +11,10 @@
 /* Animation duration in milliseconds: */
 static const constexpr int animationMS = 300;
 
+/*
+ * Creates the menu component, listening to the AppMenu::ConfigFile for changes 
+ * to the number of rows to fit on screen.
+ */
 AppMenu::Scrolling::MenuComponent::MenuComponent() :
     ConfigurableComponent(ComponentConfigKeys::scrollingAppMenuKey),
     maxRows(Settings::getScrollingMenuRows())

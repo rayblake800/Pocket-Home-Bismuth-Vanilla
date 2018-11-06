@@ -8,16 +8,19 @@ use warnings;
 use File::Find;
 use File::Slurp;
 
-my $sourceDir = "../Source";
-my $testDir = "../Tests";
+my $projectDir = "/home/anthony/Workspace/C++/PocketCHIP-pocket-home";
+my $sourceDir = "$projectDir/Source";
+my $testDir = "$projectDir/Tests";
 my %names;
 
 sub findModules
 {
-	if($_ =~ /^.+\.(h|cpp)$/)
+    my $name = $File::Find::name;
+    if($name =~ /^.+\.(h|cpp)$/)
 	{
-        my $name = $_;
         $name =~ s/\..*//;
+        $name =~ s/.*PocketCHIP-pocket-home//g;
+
         $names{$name} = 1;;
 	}
 }

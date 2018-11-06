@@ -3,11 +3,6 @@
 #include "TransitionAnimator.h"
 #include "AppMenu/Components/MenuComponent.h"
 
-AppMenu::MenuComponent::MenuComponent()
-{
-    setWantsKeyboardFocus(true);
-}
-
 /*
  * Gets the MenuItem for the current active folder component.
  */
