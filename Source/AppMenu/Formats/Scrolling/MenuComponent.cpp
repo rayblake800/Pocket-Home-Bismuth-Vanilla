@@ -76,6 +76,10 @@ juce::Rectangle<int> AppMenu::Scrolling::MenuComponent::getFolderBounds
 (const int folderIndex, const bool closingFolder) const
 {
     using juce::Rectangle;
+    if(getBounds().isEmpty() || openFolderCount() == 0)
+    {
+        return Rectangle<int>();
+    }
     const int buttonHeight = getHeight() / maxRows;
     const int centerX = getWidth() / 2;
     const int centerY = getHeight() / 2;
@@ -135,5 +139,5 @@ void AppMenu::Scrolling::MenuComponent::configValueChanged
 {
     jassert(propertyKey == ConfigKeys::scrollingMenuRowsKey);
     maxRows = Settings::getScrollingMenuRows();
-    updateMenuLayout(true);
+    updateMenuLayout(false);
 }
