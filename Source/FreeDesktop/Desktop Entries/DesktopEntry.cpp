@@ -383,39 +383,46 @@ bool DesktopEntry::getLaunchedInTerm() const
 /*
  * Gets the names of all alternate actions supported by this desktop entry.
  */
-juce::StringArray DesktopEntry::getActionNames() const
+juce::StringArray DesktopEntry::getActionIDs() const
 {
-    using namespace juce;
-    StringArray names;
-    for(const Action& action : actions)
+    return actionTypes;
+}
+
+/*
+ * Gets the display title of a desktop entry action.
+ */
+juce::String DesktopEntry::getActionTitle(const juce::String actionID) const
+{
+    if(actions.count(actionID) == 0)
     {
-        names.add(action.name);
+        return juce::String();
     }
-    return names;
+    return actions.at(actionID).title;
 }
 
 /*
  * Gets the name or path of an action's icon.
  */
-juce::String DesktopEntry::getActionIcon(const int index) const
+juce::String DesktopEntry::getActionIcon(const juce::String actionID) const
 {
-    if(index < 0 || index >= actions.size())
+    if(actions.count(actionID) == 0)
     {
         return juce::String();
     }
-    return actions[index].icon;
+    return actions.at(actionID).icon;
 }
 
 /*
  * Gets the command used to run a desktop entry action.
  */
-juce::String DesktopEntry::getActionLaunchCommand(const int index) const
+juce::String DesktopEntry::getActionLaunchCommand
+(const juce::String actionID) const
 {
-    if(index < 0 || index >= actions.size())
+    if(actions.count(actionID) == 0)
     {
         return juce::String();
     }
-    return expandFieldCodes(actions[index].exec);
+    return expandFieldCodes(actions.at(actionID).exec);
 }
 
 /*
@@ -521,14 +528,14 @@ void DesktopEntry::setKeywords(const juce::StringArray& newKeywords)
  */
 void DesktopEntry::writeFile()
 {
-    using namespace juce;
+    using juce::String;
     using namespace DesktopEntryUtils;
     String outFileText = "";
     String locale = Locale::getLocaleName();
-    Array<Identifier> foundKeys;
+    juce::Array<juce::Identifier> foundKeys;
 
     // Reload the source file to preserve comments and alternate locale data.
-    StringArray lines;
+    juce::StringArray lines;
     entryFile.readLines(lines);
     String sectionHeader;
     for(const String& line : lines)
@@ -595,7 +602,7 @@ void DesktopEntry::writeFile()
 
     }
     // Write files to the user data directory:
-    File outFile(XDGDirectories::getUserDataPath()
+    juce::File outFile(XDGDirectories::getUserDataPath()
             + entryDirectory
             + entryFile.getFullPathName().fromLastOccurrenceOf
                     (entryDirectory, false, false));
@@ -623,7 +630,8 @@ juce::String DesktopEntry::getValue(const juce::Identifier& key)
  */
 void DesktopEntry::readEntryFile()
 {
-    using namespace juce;
+    using juce::StringArray;
+    using juce::String;
     using namespace DesktopEntryUtils;
     StringArray lines;
     if(!entryFile.existsAsFile())
@@ -651,7 +659,7 @@ void DesktopEntry::readEntryFile()
             groupHeader = extractHeader(line);
             if(isValidActionHeader(groupHeader))
             {
-                actions.add(Action());
+                groupHeader = extractActionID(groupHeader);
             }
             else if(!isMainDataHeader(groupHeader))
             {
@@ -679,7 +687,7 @@ void DesktopEntry::readEntryFile()
                 }
                 else if(groupHeader.isNotEmpty())
                 {
-                    saveActionLineData(key, value);
+                    saveActionLineData(groupHeader, key, value);
                 }
             }
             catch(DesktopEntryFormatError e)
@@ -706,7 +714,6 @@ void DesktopEntry::readEntryFile()
 void DesktopEntry::saveLineData
 (const juce::Identifier& key, const juce::String& value)
 {
-    using namespace juce;
     auto searchIter = keyGuide.find(key);
     if(searchIter == keyGuide.end())
     {
@@ -719,28 +726,21 @@ void DesktopEntry::saveLineData
  * Saves data from a desktop entry line to the most recently created desktop 
  * action.
  */
-void DesktopEntry::saveActionLineData
-(const juce::Identifier& key, const juce::String& value)
+void DesktopEntry::saveActionLineData(const juce::String actionID, 
+        const juce::Identifier& key, const juce::String& value)
 {
-    //TODO: Don't assume action names and action groups are in the same order.
-    using namespace juce;
-    if(actions.size() == 0)
-    {
-        //no action found yet!
-        jassertfalse;
-        return;
-    }
+    using juce::StringRef;
     if(key == StringRef("Name"))
     {
-        actions.getReference(actions.size() - 1).name = value;
+        actions[actionID].title = value;
     }
     else if(key == StringRef("Icon"))
     {
-        actions.getReference(actions.size() - 1).icon = value;
+        actions[actionID].icon = value;
     }
     else if(key == StringRef("Exec"))
     {
-        actions.getReference(actions.size() - 1).exec = value;
+        actions[actionID].exec = value;
     }
     else
     {
@@ -756,7 +756,7 @@ void DesktopEntry::saveActionLineData
 juce::String DesktopEntry::expandFieldCodes
 (const juce::String& execString) const
 { 
-    using namespace juce;
+    using juce::String;
     juce::Array<int> fieldCodes;
     String expanded = execString;
     for(int i = 0; i < execString.length() - 1; i++)

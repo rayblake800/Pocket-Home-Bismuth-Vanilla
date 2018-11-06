@@ -188,6 +188,20 @@ juce::String DesktopEntryUtils::getMainHeader()
 }
 
 /*
+ * Extracts only the action ID from a section header returned by the 
+ * extractHeader function.
+ */
+juce::String DesktopEntryUtils::extractActionID
+(const juce::String& extractedHeader)
+{
+    if(!extractedHeader.startsWith(actionPrefix))
+    {
+        return juce::String();
+    }
+    return extractedHeader.substring(actionPrefix.length());
+}
+
+/*
  * Checks if a section header name describes a desktop entry action.
  */
 bool DesktopEntryUtils::isValidActionHeader(const juce::String& header)

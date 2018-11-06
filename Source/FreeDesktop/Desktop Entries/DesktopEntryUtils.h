@@ -125,6 +125,19 @@ namespace DesktopEntryUtils
      *                entry action data.
      */
     bool isValidActionHeader(const juce::String& header);
+
+    /**
+     * @brief  Extracts only the action ID from a section header returned by
+     *         the extractHeader function.
+     *
+     * @param extractedHeader  An action header string returned by 
+     *                         extractHeader().
+     *
+     * @return                 The action's string ID, or the empty string if
+     *                         extractedHeader wasn't a valid extracted icon
+     *                         header.
+     */
+    juce::String extractActionID(const juce::String& extractedHeader);
     
     /**
      * @brief  Checks if a string contains only valid characters allowed in 

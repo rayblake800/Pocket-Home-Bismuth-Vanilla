@@ -166,34 +166,42 @@ public:
     bool getLaunchedInTerm() const;
 
     /**
-     * @brief  Gets the names of all alternate actions supported by this desktop
+     * @brief  Gets the IDs of all alternate actions supported by this desktop
      *         entry.
      *
-     * @return  The list of action names.
+     * @return  The list of action IDs.
      */
-    juce::StringArray getActionNames() const;
+    juce::StringArray getActionIDs() const;
+
+    /**
+     * @brief  Gets the display title of a desktop entry action.
+     *
+     * @param actionID  The string identifying a desktop entry action.
+     *
+     * @return          The action's title, or the empty string if the action
+     *                  was not found.
+     */
+    juce::String getActionTitle(const juce::String actionID) const;
 
     /**
      * @brief  Gets the name or path of an action's icon.
      *
-     * @param index  The index of an action, which should match the index of
-     *               the action's name in the list returned by getActionNames().
+     * @param actionID  The string identifying a desktop entry action.
      *
      * @return       The action's icon name or path, or the empty string if the
      *               index is invalid or the action has no icon.
      */
-    juce::String getActionIcon(const int index) const;
+    juce::String getActionIcon(const juce::String actionID) const;
 
     /**
      * @brief  Gets the command used to run a desktop entry action.
      *
-     * @param index  The index of an action, which should match the index of
-     *               the action's name in the list returned by getActionNames().
+     * @param actionID  The string identifying a desktop entry action.
      *
      * @return       The action's launch command, or the empty string if the
      *               index is invalid.
      */
-    juce::String getActionLaunchCommand(const int index) const;
+    juce::String getActionLaunchCommand(const juce::String actionID) const;
 
     /**
      * @brief  Gets the list of categories associated with this desktop entry.
@@ -360,15 +368,15 @@ private:
      * @brief  Saves data from a desktop entry line to the most recently created
      *         desktop action.
      *
+     * @param actionID                The desktop action's ID string
+     *
      * @param key                     The key read from the desktop entry line.
      *
      * @param value                   The value read from the desktop entry 
      *                                line.
-     *
-     * @throws DesktopEntryFileError  If the key or value were invalid.
      */
-    void saveActionLineData
-    (const juce::Identifier& key, const juce::String& value);
+    void saveActionLineData(const juce::String actionID, 
+            const juce::Identifier& key, const juce::String& value);
 
     /**
      * @brief  Expands all field codes in a command string, removing them and
@@ -452,18 +460,18 @@ private:
     struct Action
     {
         /* The action's title */
-        juce::String name;
+        juce::String title;
         /* The action's icon name or path. */
         juce::String icon;
         /* The command to execute the action. */
         juce::String exec;
     };
 
-    /* All alternate actions the entry can perform. */
-    juce::Array<Action> actions;
-
     /* Names identifying application actions. */
     juce::StringArray actionTypes;
+    
+    /* Maps Action ID strings to Action data. */
+    std::map<juce::String, Action> actions;
 
     /* MIME types supported by this application. */
     juce::StringArray mimeTypes;
