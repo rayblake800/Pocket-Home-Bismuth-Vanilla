@@ -168,6 +168,5 @@ void AppMenu::FolderComponent::childrenSwapped
  */
 void AppMenu::FolderComponent::resized()
 {
-    DBG("Folder bounds: "<< getBounds().toString());
     updateButtonLayout();
 }
