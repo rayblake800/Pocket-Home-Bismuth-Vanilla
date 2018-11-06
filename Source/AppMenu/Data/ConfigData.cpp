@@ -286,6 +286,7 @@ void AppMenu::ConfigData::loadDesktopEntryItems()
             DesktopEntryLoader entryLoader;
             Array<DesktopEntry> entries 
                     = entryLoader.getCategoryListEntries(categories);
+            entries.sort();
             for(const DesktopEntry& entry : entries)
             {
                 insertChild(new DesktopEntryData(entry), getFolderSize());
