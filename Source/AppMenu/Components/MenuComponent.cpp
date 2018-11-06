@@ -138,7 +138,9 @@ void AppMenu::MenuComponent::updateMenuLayout
  */
 void AppMenu::MenuComponent::resized()
 {
-    updateMenuLayout();
+    // Don't animate the change the first time the MenuComponent's bounds are
+    // set.
+    updateMenuLayout(!openFolders.getLast()->getBounds().isEmpty());
     for(int i = 0; i < openFolders.size(); i++)
     {
         openFolders[i]->updateButtonLayout();
