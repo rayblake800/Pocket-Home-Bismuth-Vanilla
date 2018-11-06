@@ -72,6 +72,13 @@ public:
     virtual juce::StringArray getCategories() const override;
 
     /**
+     * @brief  Gets the unique desktop file ID tied to this menu item.
+     *
+     * @return   The desktop file ID of this menu item's desktop entry.
+     */
+    virtual juce::String getID() const final override;
+
+    /**
      * @brief  Sets the menu item's displayed title.
      *
      * @param title  The new title string to display.

@@ -60,6 +60,14 @@ juce::StringArray AppMenu::DesktopEntryData::getCategories() const
 }
 
 /*
+ * Gets the unique desktop file ID tied to this menu item.
+ */
+juce::String AppMenu::DesktopEntryData::getID() const
+{
+    return desktopEntry.getDesktopFileID();
+}
+
+/*
  * Sets the menu item's displayed title.
  */
 void AppMenu::DesktopEntryData::setTitle(const juce::String& title)

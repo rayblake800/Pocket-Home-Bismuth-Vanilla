@@ -91,6 +91,13 @@ public:
     Type getType() const;
 
     /**
+     * @brief  Gets the unique desktop file ID that identifies this entry.
+     *
+     * @return  The entry's desktop file ID.
+     */
+    juce::String getDesktopFileID() const;
+
+    /**
      * @brief  Gets the desktop entry's name.
      *
      * @return  The title of this desktop entry.

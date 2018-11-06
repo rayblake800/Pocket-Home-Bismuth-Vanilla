@@ -292,6 +292,14 @@ DesktopEntry::Type DesktopEntry::getType() const
 }
 
 /*
+ * Gets the unique desktop file ID that identifies this entry.
+ */
+juce::String DesktopEntry::getDesktopFileID() const
+{
+    return desktopFileID;
+}
+    
+/*
  * Gets the desktop entry's name.
  */
 juce::String DesktopEntry::getName() const
