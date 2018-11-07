@@ -111,6 +111,13 @@ juce::Array<DesktopEntry> DesktopEntryThread::getCategoryEntries
 DesktopEntryThread::CallbackID DesktopEntryThread::addLoadingCallback
 (const std::function<void()> loadingCallback)
 {
+    if(loadingCallback) // Ignore invalid callback functions
+    {
+        const CallbackID callbackID = generateCallbackID();
+        onFinish[callbackID] = loadingCallback;
+        return callbackID;
+    }
+    return 0;
 }
 
 /*
@@ -120,6 +127,13 @@ DesktopEntryThread::CallbackID DesktopEntryThread::addLoadingCallback
 DesktopEntryThread::CallbackID DesktopEntryThread::requestUpdate
 (const std::function<void(const ChangeMap)> updateCallback)
 {
+    if(updateCallback) // Ignore invalid callback functions
+    {
+        const CallbackID callbackID = generateCallbackID();
+        onUpdate[callbackID] = updateCallback;
+        return callbackID;
+    }
+    return 0;
 }
 
 /*
@@ -127,6 +141,8 @@ DesktopEntryThread::CallbackID DesktopEntryThread::requestUpdate
  */
 void DesktopEntryThread::cancelCallback(const CallbackID toCancel)
 {
+    onFinish.erase(toCancel);
+    onUpdate.erase(toCancel);
 }
 
 /*
