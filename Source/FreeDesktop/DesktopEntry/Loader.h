@@ -2,9 +2,8 @@
 #include <map>
 #include <set>
 #include <functional>
-#include "Utils.h"
 #include "ResourceHandler.h"
-#include "DesktopEntry.h"
+#include "DesktopEntry/Data.h"
 
 /** 
  * @file  DesktopEntryLoader.h

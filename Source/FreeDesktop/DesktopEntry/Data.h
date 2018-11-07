@@ -1,9 +1,10 @@
 #pragma once
 #include <map>
-#include "JuceHeader.h"
+#include "DesktopEntry.h"
+
 
 /* 
- * @file  DesktopEntry.h
+ * @file  DesktopEntry/Data.h
  * 
  * @brief  Reads in standardized .desktop application shortcut files.
  *
@@ -14,7 +15,7 @@
  *              /desktop-entry-spec-latest.html
  */
 
-class DesktopEntry
+class DesktopEntry::Data
 {
 public:
     /**
@@ -36,8 +37,7 @@ public:
      * @throws DesktopEntryFileError  If the file was not a valid desktop entry
      *                                file.
      */
-    DesktopEntry
-    (const juce::File& entryFile, const juce::String& desktopFileID);
+    Data(const juce::File& entryFile, const juce::String& desktopFileID);
 
     /**
      * @brief  Creates a desktop entry object without an existing file.
@@ -51,15 +51,15 @@ public:
      * @throws DesktopEntryFormatError  If the name or filename provided do not 
      *                                  comply with desktop entry standards.
      */
-    DesktopEntry(const juce::String& name, const juce::String& desktopFileID,
+    Data(const juce::String& name, const juce::String& desktopFileID,
             const Type type);
 
     /**
      * @brief  Creates an empty desktop entry with no data.
      */
-    DesktopEntry() { }
+    Data() { }
             
-    virtual ~DesktopEntry() { }
+    virtual ~Data();
 
     /**
      * @brief  Checks if the DesktopEntry does not contain all data required by
@@ -77,7 +77,7 @@ public:
      * @return           True if and only if both entries have identical desktop
      *                   file IDs.
      */
-    bool operator==(const DesktopEntry& toCompare) const;
+    bool operator==(const Data& toCompare) const;
     
     /**
      * @brief Alphabetically compares entries based on their names.
@@ -87,7 +87,7 @@ public:
      * @return  True if this entry's name comes before toCompare's name
      *          alphabetically, false otherwise.
      */
-    bool operator<(const DesktopEntry& toCompare) const;
+    bool operator<(const Data& toCompare) const;
 
     /* ########## Functions for getting desktop entry data: ################# */
 
@@ -406,9 +406,9 @@ private:
     struct DataConverter
     {
         /* Stores a desktop entry file value in a DesktopEntry */
-        const std::function<void(DesktopEntry*,const juce::String&)> readValue;
+        const std::function<void(Data*,const juce::String&)> readValue;
         /* Reads a desktop entry value from a DesktopEntry */
-        const std::function<juce::String(DesktopEntry*)> getValue;
+        const std::function<juce::String(Data*)> getValue;
     };
     
     /* Stores all data keys defined in the desktop entry specifications,
