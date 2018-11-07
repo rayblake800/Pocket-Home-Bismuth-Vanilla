@@ -5,6 +5,15 @@
  * 
  * @brief Provides a centralized location for accessing all project ColourId
  *        values.
+ *
+ * The Juce library assigns a set of unique ColourId values to each
+ * Component class. These values are stored and loaded by the ColourConfigFile,
+ * and set by the PokeLookAndFeel class. This allows the application's color
+ * theme to be centrally managed and easily configured.
+ *   
+ * In order easily track all of these ColourId values, the ColourIds namespace
+ * lists every one of these values, assigning each Component its own namespace 
+ * of ColourIds.
  */
 
 namespace ColourIds

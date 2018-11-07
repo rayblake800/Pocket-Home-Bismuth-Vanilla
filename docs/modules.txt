@@ -26,11 +26,11 @@ X /Source/AppMenu/Formats/Paged/InputHandler
 X /Source/AppMenu/Formats/Paged/MenuButton
 X /Source/AppMenu/Formats/Paged/MenuComponent
 X /Source/AppMenu/Formats/Scrolling/FolderComponent
-/Source/AppMenu/Formats/Scrolling/Initializer
-/Source/AppMenu/Formats/Scrolling/InputHandler
-/Source/AppMenu/Formats/Scrolling/MenuButton
-/Source/AppMenu/Formats/Scrolling/MenuComponent
-/Source/AppMenu/Settings
+X /Source/AppMenu/Formats/Scrolling/Initializer
+X /Source/AppMenu/Formats/Scrolling/InputHandler
+X /Source/AppMenu/Formats/Scrolling/MenuButton
+X /Source/AppMenu/Formats/Scrolling/MenuComponent
+X /Source/AppMenu/Settings
 /Source/Components/ColourIds
 /Source/Components/Configurable/ConfigurableComponent
 /Source/Components/Configurable/ConfigurableImageButton
