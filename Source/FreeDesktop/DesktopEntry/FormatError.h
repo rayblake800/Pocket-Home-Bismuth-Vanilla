@@ -1,14 +1,15 @@
 #pragma once
 #include <exception>
 #include "JuceHeader.h"
+#include "DesktopEntry/DesktopEntry.h"
 
 /**
- * @file  DesktopEntryFormatError.h
+ * @file  DesktopEntry/FormatError.h
  *
  * @brief  Signals that an attempt was made to add invalid data to a
  *         DesktopEntry object.
  */
- struct DesktopEntryFormatError : public std::exception
+ struct DesktopEntry::FormatError : public std::exception
 {
 public:
     /**
@@ -17,7 +18,7 @@ public:
      * @param badValue  The value that failed to comply with desktop entry
      *                  standards.
      */
-    DesktopEntryFormatError(const juce::String badValue) :
+    FormatError(const juce::String badValue) :
     badValue(badValue),
     errorMessage(juce::String("Invalid desktop entry value:\"") + badValue
             + "\"")

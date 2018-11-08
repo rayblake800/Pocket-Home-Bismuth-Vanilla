@@ -1,13 +1,14 @@
 #pragma once
 #include <exception>
 #include "JuceHeader.h"
+#include "DesktopEntry/DesktopEntry.h"
 
 /**
- * @file  DesktopEntryFileError.h
+ * @file  DesktopEntry/FileError.h
  *
  * @brief  Signals that a desktop entry file is invalid.
  */
-struct DesktopEntryFileError : public std::exception
+struct DesktopEntry::FileError : public std::exception
 {
 public:
     /**
@@ -17,7 +18,7 @@ public:
      *
      * @param error  A brief description of the problem encountered.
      */
-    DesktopEntryFileError(const juce::File& file, const juce::String error) :
+    FileError(const juce::File& file, const juce::String error) :
             errorMessage(file.getFullPathName() + ": " + error) { }
 
     /**

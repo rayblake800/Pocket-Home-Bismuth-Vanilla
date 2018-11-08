@@ -4,53 +4,23 @@
 #include <functional>
 #include "ResourceHandler.h"
 #include "DesktopEntry/Data.h"
+#include "DesktopEntry/DesktopEntry.h"
 
 /** 
- * @file  DesktopEntryLoader.h
+ * @file  DesktopEntry/Loader.h
  *
  * @brief  Finds and caches all desktop entry file data.
  */
-
-/* Private SharedResource object class. */
-class DesktopEntryThread;
-
-class DesktopEntryLoader : public ResourceHandler<DesktopEntryThread>
+class DesktopEntry::Loader : public ResourceHandler<DesktopEntry::Thread>
 {
 public:
-    DesktopEntryLoader();
+    Loader();
 
-    virtual ~DesktopEntryLoader() { }
-
-    /**
-     * @brief  Gets the number of cached desktop entries.
-     *
-     * @return  The number of stored DesktopEntry objects.
-     */
-    int size();
+    virtual ~Loader() { }
 
     /**
-     * @brief  Gets the desktop file IDs of all entries within a category.
-     *
-     * @param category  A desktop application category name.
-     *
-     * @return          ID strings for each desktop entry within that category.
-     */
-    juce::StringArray getCategoryEntryIDs(const juce::String& category);
-
-    /**
-     * @brief  Gets the desktop file IDs of all entries within a list of several
-     *         categories.
-     *
-     * @param categoryList  A list of desktop application category names.
-     *
-     * @return              ID strings for all desktop entries that are in at 
-     *                      least one of the given categories.
-     */
-    juce::StringArray getCategoryListEntryIDs
-        (const juce::StringArray& categoryList);
-
-    /**
-     * @brief  Finds a single DesktopEntry object using its desktop file ID.
+     * @brief  Finds a single DesktopEntry::Data object using its desktop file 
+     *         ID.
      *
      * @param entryFileID         The desktop file ID of a desktop entry file.
      *
@@ -60,16 +30,17 @@ public:
      * @return                    The desktop entry with the given desktop file 
      *                            ID.
      */
-    DesktopEntry getDesktopEntry(const juce::String& entryFileID);
+    Data getDesktopEntry(const juce::String& entryFileID) const;
 
     /**
-     * @brief  Gets all DesktopEntry objects in a single category.
+     * @brief  Gets all DesktopEntry::Data objects in a single category.
      *
      * @param category  A desktop application category string.
      *
      * @return          All DesktopEntry objects that have the given category.
      */
-    juce::Array<DesktopEntry> getCategoryEntries(const juce::String& category);
+    juce::Array<DesktopEntry::Data> getCategoryEntries
+        (const juce::String& category) const;
 
     /**
      * @brief  Finds all DesktopEntry objects within several categories.
@@ -79,8 +50,8 @@ public:
      * @return              All DesktopEntry objects with at least one of the 
      *                      category values in the category list.
      */
-    juce::Array<DesktopEntry> getCategoryListEntries
-        (const juce::StringArray& categoryList);
+    juce::Array<DesktopEntry::Data> getCategoryEntries
+        (const juce::StringArray& categoryList) const;
     
     /**
      * @brief  Reloads a single desktop entry from the file system.
