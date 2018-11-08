@@ -3,9 +3,12 @@
 
 namespace DesktopEntry
 {
-    class Data;
+    class FileData;
+
     class FileError;
+
     class FormatError;
+
     class Loader;
     
     typedef juce::uint32 CallbackID;
@@ -17,6 +20,7 @@ namespace DesktopEntry
         entryRemoved
     };
 
-    class Thread;
-    class Utils;
+    class LoadingThread;
+
+    namespace FileUtils;
 }
