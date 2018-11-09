@@ -1,7 +1,7 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
-#include "DesktopEntryLoader.h"
+#include "DesktopEntry/Loader.h"
 #include "Locale/TextUser.h"
 #include "AppMenu/Data/ItemData.h"
 
@@ -220,7 +220,7 @@ private:
 
     /* Holds the ID of a pending callback function that will load 
        DesktopEntry menu items. */
-    juce::Atomic<DesktopEntryLoader::CallbackID> pendingCallbackID;
+    juce::Atomic<DesktopEntry::CallbackID> pendingCallbackID;
 };
 
 /* Only include this file directly in the AppMenu implementation! */

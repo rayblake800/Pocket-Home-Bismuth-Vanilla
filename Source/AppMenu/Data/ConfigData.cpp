@@ -91,7 +91,7 @@ AppMenu::ConfigData::~ConfigData()
 {
     if(pendingCallbackID.get())
     {
-        DesktopEntryLoader entryLoader;
+        DesktopEntry::Loader entryLoader;
         entryLoader.clearCallback(pendingCallbackID.get());
     }
 }
@@ -274,7 +274,7 @@ void AppMenu::ConfigData::loadDesktopEntryItems()
     if(!categories.isEmpty() && pendingCallbackID.get() == 0
             && getFolderSize() <= getMovableChildCount())
     {
-        DesktopEntryLoader entryLoader;
+        DesktopEntry::Loader entryLoader;
         pendingCallbackID = entryLoader.waitUntilLoaded([this]()
         {
             if(getFolderSize() > getMovableChildCount())
@@ -283,11 +283,11 @@ void AppMenu::ConfigData::loadDesktopEntryItems()
                         << "Desktop entries already loaded, skipping callback");
                 return;
             }
-            DesktopEntryLoader entryLoader;
-            Array<DesktopEntry> entries 
-                    = entryLoader.getCategoryListEntries(categories);
+            DesktopEntry::Loader entryLoader;
+            Array<DesktopEntry::EntryFile> entries 
+                    = entryLoader.getCategoryEntries(categories);
             entries.sort();
-            for(const DesktopEntry& entry : entries)
+            for(const DesktopEntry::EntryFile& entry : entries)
             {
                 insertChild(new DesktopEntryData(entry), getFolderSize());
             }

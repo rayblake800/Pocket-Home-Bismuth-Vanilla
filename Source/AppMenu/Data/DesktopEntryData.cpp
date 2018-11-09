@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
-#include "DesktopEntryFormatError.h"
-#include "DesktopEntryFileError.h"
+#include "DesktopEntry/FormatError.h"
+#include "DesktopEntry/FileError.h"
 #include "AppMenu/Data/DesktopEntryData.h"
 
 /* Localized object class key: */
@@ -16,7 +16,8 @@ static const juce::Identifier editAppTextKey       = "editApp";
 /*
  * Creates menu item data from a desktop entry. 
  */
-AppMenu::DesktopEntryData::DesktopEntryData(const DesktopEntry& desktopEntry) :
+AppMenu::DesktopEntryData::DesktopEntryData
+(const DesktopEntry::EntryFile& desktopEntry) :
 desktopEntry(desktopEntry), Locale::TextUser(localeClassKey) { }
 
 /*
@@ -77,7 +78,7 @@ void AppMenu::DesktopEntryData::setTitle(const juce::String& title)
         desktopEntry.setName(title);
         signalDataChanged(DataField::title);
     }
-    catch(DesktopEntryFormatError e)
+    catch(DesktopEntry::FormatError e)
     {
         DBG("DesktopEntryData::" << __func__
                 << ": Invalid title " << title);
@@ -94,7 +95,7 @@ void AppMenu::DesktopEntryData::setIconName(const juce::String& iconName)
         desktopEntry.setIcon(iconName);
         signalDataChanged(DataField::icon);
     }
-    catch(DesktopEntryFormatError e)
+    catch(DesktopEntry::FormatError e)
     {
         DBG("DesktopEntryData::" << __func__
                 << ": Invalid icon " << iconName);
@@ -111,7 +112,7 @@ void AppMenu::DesktopEntryData::setCommand(const juce::String& newCommand)
         desktopEntry.setExec(newCommand);
         signalDataChanged(DataField::command);
     }
-    catch(DesktopEntryFormatError e)
+    catch(DesktopEntry::FormatError e)
     {
         DBG("DesktopEntryData::" << __func__
                 << ": Invalid launch command " << newCommand);
@@ -137,7 +138,7 @@ void AppMenu::DesktopEntryData::setCategories
         desktopEntry.setCategories(categories);
         signalDataChanged(DataField::categories);
     }
-    catch(DesktopEntryFormatError e)
+    catch(DesktopEntry::FormatError e)
     {
         DBG("DesktopEntryData::" << __func__
                 << ": Invalid categories " << categories.joinIntoString(";"));
@@ -169,12 +170,12 @@ void AppMenu::DesktopEntryData::saveChanges()
     {
         desktopEntry.writeFile();
     }
-    catch(DesktopEntryFileError e)
+    catch(DesktopEntry::FileError e)
     {
         DBG("DesktopEntryData::" << __func__ << ": Failed to write changes:"
                 << e.what());
     }
-    catch(DesktopEntryFormatError e)
+    catch(DesktopEntry::FormatError e)
     {
         DBG("DesktopEntryData::" << __func__ << ": Failed to write changes:"
                                 << e.what());
@@ -224,12 +225,12 @@ void AppMenu::DesktopEntryData::deleteFromSource()
     {
         desktopEntry.writeFile();
     }
-    catch(DesktopEntryFileError e)
+    catch(DesktopEntry::FileError e)
     {
         DBG("DesktopEntryData::" << __func__ 
                 << ": Failed to hide entry:" << e.what());
     }
-    catch(DesktopEntryFormatError e)
+    catch(DesktopEntry::FormatError e)
     {
         DBG("DesktopEntryData::" << __func__ 
                 << ": Failed to hide entry:" << e.what());

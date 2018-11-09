@@ -1,7 +1,7 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
-#include "DesktopEntry.h"
+#include "DesktopEntry/EntryFile.h"
 #include "Locale/TextUser.h"
 #include "IconThread.h"
 #include "AppMenu/Data/ItemData.h"
@@ -29,7 +29,7 @@ public:
      *
      * @param desktopEntry  The desktop entry supplying application menu data.
      */
-    DesktopEntryData(const DesktopEntry& desktopEntry);
+    DesktopEntryData(const DesktopEntry::EntryFile& desktopEntry);
 
     virtual ~DesktopEntryData() { }
 
@@ -179,7 +179,7 @@ private:
     virtual void deleteFromSource() override;
 
     /* Application data source, set on construction. */
-    DesktopEntry desktopEntry;
+    DesktopEntry::EntryFile desktopEntry;
 };
 
 /* Only include this file directly in the AppMenu implementation! */

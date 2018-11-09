@@ -1,6 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "DesktopEntryFormatError.h"
-#include "DesktopEntryFileError.h"
+#include "DesktopEntry/FormatError.h"
+#include "DesktopEntry/FileError.h"
+#include "DesktopEntry/EntryFile.h"
 #include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
 
 
@@ -36,8 +37,8 @@ void AppMenu::NewDesktopAppEditor::commitEdits()
     {
         try
         {
-            DesktopEntry newEntry(entryName, entryName,
-                    DesktopEntry::Type::application);
+            DesktopEntry::EntryFile newEntry(entryName, entryName,
+                    DesktopEntry::EntryFile::Type::application);
             newEntry.setIcon(getIconNameField());
             newEntry.setExec(getCommandField());
             newEntry.setCategories(getCategories());
@@ -45,12 +46,12 @@ void AppMenu::NewDesktopAppEditor::commitEdits()
             newEntry.writeFile();
         }
         // TODO: Explain the error to the user when something goes wrong.
-        catch(DesktopEntryFormatError e)
+        catch(DesktopEntry::FormatError e)
         {
             DBG("NewDesktopAppEditor::" << __func__
                     << ": Desktop entry format error:" << e.what());
         }
-        catch(DesktopEntryFileError e)
+        catch(DesktopEntry::FileError e)
         {
             DBG("NewDesktopAppEditor::" << __func__
                     << ": Desktop entry file error:" << e.what());

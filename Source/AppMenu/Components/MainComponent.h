@@ -3,7 +3,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "OverlaySpinner.h"
-#include "DesktopEntryLoader.h"
+#include "DesktopEntry/Loader.h"
 #include "AppMenu/AppMenu.h"
 #include "AppMenu/Control/Initializer.h"
 #include "AppMenu/Components/MenuComponent.h"
