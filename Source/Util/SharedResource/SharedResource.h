@@ -99,6 +99,13 @@ public:
         const juce::ReadWriteLock& getResourceLock() const;
 
     private:
+        /**
+         * @brief  Called by a resource to send updates to Handler objects.
+         *         Override this when implementing Handlers as SharedResource
+         *         listeners.
+         */
+        virtual void resourceUpdate() { }
+
         /* The key used to select this object's SharedResource. */
         const juce::Identifier& resourceKey;        
     };

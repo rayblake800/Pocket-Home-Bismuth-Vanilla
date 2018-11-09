@@ -1,8 +1,10 @@
 /* Only include this file directly in the AppMenu implementation! */
+
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
 #include "Config/FileResource.h"
 #include "Config/FileHandler.h"
+#include "DesktopEntry/DesktopEntry.h"
 #include "AppMenu/AppMenu.h"
 #include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Data/ConfigData.h"

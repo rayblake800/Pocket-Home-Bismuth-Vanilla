@@ -49,10 +49,10 @@ juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
  * DesktopEntry::Loader read the entry files.
  */
 DesktopEntry::CallbackID DesktopEntry::Loader::scanForChanges
-(const std::function<void(std::map<juce::String, UpdateType>)> handleChanges)
+(const std::function<void(juce::Array<EntryUpdate>)> handleChanges)
 {
    auto loadingThread = getWriteLockedResource();
-   CallbackID callbackID = loadingThread->addUpdateCallback(handleChanges);
+   CallbackID callbackID = 0; //loadingThread->addUpdateCallback(handleChanges);
    if(callbackID > 0 && !loadingThread->isThreadRunning())
    {
        loadingThread->startThread();

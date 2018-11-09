@@ -58,15 +58,14 @@ public:
      *
      * @param handleChanges  A callback to run on the juce message thread when 
      *                       all changes have been read.  The function will
-     *                       be passed the list of updated entry IDs mapped to 
-     *                       UpdatrType descriptions of the changes.
+     *                       be passed the list of all discovered desktop entry
+     *                       changes.
      *
      * @return               A callback ID that may later be used to cancel the
      *                       callback function, if it is still pending.
      */
     CallbackID scanForChanges
-    (const std::function<void(std::map<juce::String, UpdateType>)> 
-    handleChanges);
+    (const std::function<void(juce::Array<EntryUpdate>)> handleChanges);
 
     /**
      * @brief  Schedules an action to run once all entries have been loaded.
@@ -95,6 +94,20 @@ public:
      *                    thread if the callbackID is non-zero.
      */
     void clearCallback(CallbackID callbackID);
+
+    class Listener : protected ResourceHandler<LoadingThread>
+    {
+    public:
+        Listener();
+        
+        virtual ~Listener() { }
+
+    protected:
+        virtual void entriesLoaded() { }
+
+        virtual void entriesUpdated(juce::Array<EntryUpdate> updateList) { }
+
+    };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Loader)
 };

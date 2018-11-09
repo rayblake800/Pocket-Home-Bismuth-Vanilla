@@ -271,6 +271,8 @@ private:
     virtual void configValueChanged
     (const juce::Identifier& propertyKey) = 0;
 
+    virtual void resourceUpdate() override;
+
     /* Tracks all keys this listener follows. */
     juce::Array<juce::Identifier, juce::CriticalSection> subscribedKeys;
 };

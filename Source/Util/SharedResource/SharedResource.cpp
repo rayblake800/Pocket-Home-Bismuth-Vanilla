@@ -164,6 +164,7 @@ void SharedResource::foreachHandler
         //check for changes to the handler list during the loop
         jassert(resourceHandlers.size() == handlerCount);
         handlerAction(resourceHandlers[i]);
+        resourceHandlers[i]->resourceUpdate();
     }
 }
 

@@ -100,6 +100,13 @@ void Config::FileResource::Listener::removeTrackedKey
     subscribedKeys.removeAllInstancesOf(keyToRemove);
 }
 
+void Config::FileResource::Listener::resourceUpdate()
+{
+    static int counter = 0;
+    counter++;
+    DBG("Config update " << counter);
+}
+
 /*
  * Announces a changed configuration value to each Listener object.
  */

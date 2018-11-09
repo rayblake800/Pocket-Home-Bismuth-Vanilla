@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include "JuceHeader.h"
 
 namespace DesktopEntry
@@ -10,6 +11,8 @@ namespace DesktopEntry
     class FormatError;
 
     class Loader;
+
+    class Listener;
     
     typedef juce::uint32 CallbackID;
 
@@ -19,6 +22,12 @@ namespace DesktopEntry
         entryChanged,
         entryRemoved
     };
+
+    typedef struct
+    {
+        juce::String desktopFileId;
+        UpdateType updateType;
+    } EntryUpdate;
 
     class LoadingThread;
 
