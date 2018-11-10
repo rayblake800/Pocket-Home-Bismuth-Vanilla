@@ -93,13 +93,25 @@ AppMenu::MenuItem::getParentFolder() const
 /*
  * Gets the menu item's index within its folder.
  */
-const int AppMenu::MenuItem::getIndex() const
+int AppMenu::MenuItem::getIndex() const
 {
     if(isNull())
     {
         return -1;
     }
     return getData()->getIndex();
+}
+
+/*
+ * Gets an optional unique ID tied to this menu item.
+ */
+juce::String AppMenu::MenuItem::getID() const
+{
+    if(isNull())
+    {
+        return juce::String();
+    }
+    return getData()->getID();
 }
 
 /*

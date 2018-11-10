@@ -104,7 +104,15 @@ public:
      * @return  The menu item index, or -1 if the menu item is null or not 
      *          placed within a folder. 
      */
-    const int getIndex() const;
+    int getIndex() const;
+
+    /**
+     * @brief  Gets an optional unique ID tied to this menu item.
+     *
+     * @return   A unique ID string, or an empty string if the menu item is null
+     *           or has no ID.
+     */
+    juce::String getID() const;
 
     /**
      * @brief  Checks if this menu item represents a folder within the menu.
