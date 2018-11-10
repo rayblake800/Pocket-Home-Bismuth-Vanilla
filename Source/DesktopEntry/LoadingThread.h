@@ -10,6 +10,13 @@
  * @file  DesktopEntry/LoadingThread.h
  *
  * @brief  Loads, caches, and updates desktop entry data.
+ *
+ * The FreeDesktop standard defines a set of directories that may contain 
+ * desktop files, along with the order that they should be searched.  Each
+ * desktop entry has a desktop file ID based on its filename and path within
+ * its desktop entry directory.  When multiple entry files exist with the same 
+ * desktop file ID, the first one found using the standard search order will be
+ * used, and all others are ignored.
  */
 class DesktopEntry::LoadingThread : public ThreadResource
 {
@@ -34,6 +41,13 @@ public:
      *                     object.
      */
     EntryFile getDesktopEntry (const juce::String entryFileID) const;
+
+    /**
+     * @brief  Gets all loaded desktop entry file objects.
+     *
+     * @return  The complete list of loaded EntryFile objects.
+     */
+    juce::Array<EntryFile> getAllEntries() const;
 
     /**
      * @brief  Gets all desktop entries with a specific application category.
@@ -98,11 +112,16 @@ public:
      */
     void cancelCallback(const CallbackID toCancel);
 
+    /**
+     * @brief  Finds all relevant changes to the set of loaded desktop entry 
+     *         files, and prepares to fully update desktop entry data.
+     */
+    void findUpdatedFiles();
+
 private:
     /**
-     * @brief  Finds all unloaded or updated desktop entry files within the 
-     *         application data directories, ignoring files with duplicate
-     *         desktop file IDs.
+     * @brief  Scans for new and updated desktop entry files for the thread to
+     *         process.
      *
      * This function runs once whenever the desktop entry thread starts running.
      */
@@ -155,7 +174,7 @@ private:
     std::map<juce::String, juce::File> entryFiles;
 
     /* All <Desktop file ID, .desktop file> pairs waiting to be loaded. */
-    juce::Array<std::pair<juce::String, juce::File>> pendingFiles;
+    std::map<juce::String, juce::File> pendingFiles;
 
     /* Maps category names to lists of desktop file IDs. */
     std::map<juce::String, juce::StringArray> categories;

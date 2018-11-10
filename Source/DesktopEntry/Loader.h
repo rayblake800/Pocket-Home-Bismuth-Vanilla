@@ -32,6 +32,13 @@ public:
     EntryFile getDesktopEntry(const juce::String& entryFileID) const;
 
     /**
+     * @brief  Gets all loaded desktop entry file objects.
+     *
+     * @return  The complete list of loaded EntryFile objects.
+     */
+    juce::Array<EntryFile> getAllEntries() const;
+
+    /**
      * @brief  Gets all EntryFile objects in a single category.
      *
      * @param category  A desktop application category string.
@@ -55,17 +62,8 @@ public:
     /**
      * @brief  Scans all desktop entry files for any changes made since the 
      *         last time the LoadingThread read the entry files.
-     *
-     * @param handleChanges  A callback to run on the juce message thread when 
-     *                       all changes have been read.  The function will
-     *                       be passed the list of all discovered desktop entry
-     *                       changes.
-     *
-     * @return               A callback ID that may later be used to cancel the
-     *                       callback function, if it is still pending.
      */
-    CallbackID scanForChanges
-    (const std::function<void(juce::Array<EntryUpdate>)> handleChanges);
+    void scanForChanges();
 
     /**
      * @brief  Schedules an action to run once all entries have been loaded.
@@ -94,20 +92,6 @@ public:
      *                    thread if the callbackID is non-zero.
      */
     void clearCallback(CallbackID callbackID);
-
-    class Listener : protected ResourceHandler<LoadingThread>
-    {
-    public:
-        Listener();
-        
-        virtual ~Listener() { }
-
-    protected:
-        virtual void entriesLoaded() { }
-
-        virtual void entriesUpdated(juce::Array<EntryUpdate> updateList) { }
-
-    };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Loader)
 };

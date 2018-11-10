@@ -25,6 +25,16 @@ DesktopEntry::EntryFile DesktopEntry::Loader::getDesktopEntry
 }
 
 /*
+ * Gets all loaded desktop entry file objects.
+ */
+juce::Array<DesktopEntry::EntryFile> 
+DesktopEntry::Loader::getAllEntries() const
+{
+    auto loadingThread = getReadLockedResource();
+    return loadingThread->getAllEntries();
+}
+
+/*
  * Gets all EntryFile objects in a single category.
  */
 juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
@@ -48,16 +58,17 @@ juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
  * Scans all desktop entry files for any changes made since the last time the 
  * DesktopEntry::Loader read the entry files.
  */
-DesktopEntry::CallbackID DesktopEntry::Loader::scanForChanges
-(const std::function<void(juce::Array<EntryUpdate>)> handleChanges)
+void DesktopEntry::Loader::scanForChanges()
 {
    auto loadingThread = getWriteLockedResource();
-   CallbackID callbackID = 0; //loadingThread->addUpdateCallback(handleChanges);
-   if(callbackID > 0 && !loadingThread->isThreadRunning())
+   if(!loadingThread->isThreadRunning())
    {
        loadingThread->startThread();
    }
-   return callbackID;
+   else
+   {
+       loadingThread->findUpdatedFiles();
+   }
 }
 
 /*
