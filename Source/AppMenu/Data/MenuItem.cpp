@@ -284,7 +284,8 @@ bool AppMenu::MenuItem::isEditable(const DataField dataField) const
  */
 void AppMenu::MenuItem::setTitle(const juce::String& title)
 {
-    if(!isNull() && isEditable(DataField::title))
+    if(!isNull() && isEditable(DataField::title) 
+            && title != getData()->getTitle())
     {
         getData()->setTitle(title);
     }
@@ -295,7 +296,8 @@ void AppMenu::MenuItem::setTitle(const juce::String& title)
  */
 void AppMenu::MenuItem::setIconName(const juce::String& iconName)
 {
-    if(!isNull() && isEditable(DataField::icon))
+    if(!isNull() && isEditable(DataField::icon) 
+            && iconName != getData()->getIconName())
     {
         getData()->setIconName(iconName);
     }
@@ -306,7 +308,8 @@ void AppMenu::MenuItem::setIconName(const juce::String& iconName)
  */
 void AppMenu::MenuItem::setCommand(const juce::String& command)
 {
-    if(!isNull() && isEditable(DataField::command))
+    if(!isNull() && isEditable(DataField::command)
+            && command != getData()->getCommand())
     {
         getData()->setCommand(command);
     }
@@ -316,7 +319,8 @@ void AppMenu::MenuItem::setCommand(const juce::String& command)
  * Sets if the menu item runs its command in a new terminal window.
  */
 void AppMenu::MenuItem::setLaunchedInTerm(const bool launchInTerm){
-    if(!isNull() && isEditable(DataField::termLaunchOption))
+    if(!isNull() && isEditable(DataField::termLaunchOption)
+            && launchInTerm != getData()->getLaunchedInTerm())
     {
         getData()->setLaunchedInTerm(launchInTerm);
     }
@@ -327,7 +331,8 @@ void AppMenu::MenuItem::setLaunchedInTerm(const bool launchInTerm){
  */
 void AppMenu::MenuItem::setCategories(const juce::StringArray& categories)
 {
-    if(!isNull() && isEditable(DataField::categories))
+    if(!isNull() && isEditable(DataField::categories) 
+            && categories != getData()->getCategories())
     {
         getData()->setCategories(categories);
     }
