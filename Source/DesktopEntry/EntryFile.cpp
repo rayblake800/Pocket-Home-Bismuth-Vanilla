@@ -295,7 +295,7 @@ bool DesktopEntry::EntryFile::operator==(const EntryFile& toCompare) const
  */
 bool DesktopEntry::EntryFile::operator<(const EntryFile& toCompare) const
 {
-    return name < toCompare.name;
+    return name.toUpperCase() < toCompare.name.toUpperCase();
 }
 
 /*
