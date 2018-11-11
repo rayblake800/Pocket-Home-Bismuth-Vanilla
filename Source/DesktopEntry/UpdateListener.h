@@ -16,4 +16,4 @@ protected:
 
 public:
     virtual ~UpdateListener() { }
-}
+};

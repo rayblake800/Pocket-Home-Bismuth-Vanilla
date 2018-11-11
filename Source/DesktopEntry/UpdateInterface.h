@@ -9,15 +9,30 @@
  */
 class DesktopEntry::UpdateInterface
 {
-protected:
+public:
     UpdateInterface() { }
 
-public:
     virtual ~UpdateInterface() { }
 
-    virtual void entryAdded(const juce::String entryFileID) { }
+    /**
+     * @brief  Signals that new desktop entry files were found.
+     *
+     * @param entryFileIDs  The desktop file IDs of the newly discovered entry
+     *                      files.
+     */
+    virtual void entriesAdded(const juce::StringArray entryFileIDs) = 0;
 
-    virtual void entryRemoved(const juce::String entryFileID) { }
+    /**
+     * @brief  Signals that existing desktop entry files were removed.
+     *
+     * @param entryFileIDs  The desktop file IDs of the removed entry files.
+     */
+    virtual void entriesRemoved(const juce::StringArray entryFileIDs) = 0;
 
-    virtual void entryUpdated(const juce::String entryFileID) { }
+    /**
+     * @brief  Signals that existing desktop entry files were changed.
+     *
+     * @param entryFileIDs  The desktop file IDs of the updated entry files.
+     */
+    virtual void entriesUpdated(const juce::StringArray entryFileIDs) = 0;
 };

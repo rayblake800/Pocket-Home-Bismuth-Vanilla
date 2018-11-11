@@ -315,8 +315,8 @@ void DesktopEntry::LoadingThread::runLoop(ThreadResource::ThreadLock& threadLock
 void DesktopEntry::LoadingThread::cleanup() 
 {
     using juce::StringArray;
-    DBG("DesktopEntry::LoadingThread::" << __func__ << ": Loaded "
-            << juce::String(entries.size()) << " desktop entries.");
+    DBG("DesktopEntry::LoadingThread::" << __func__ << ": Updated "
+            << latestChanges.size() << " desktop entries.");
     juce::MessageManager::callAsync(buildAsyncFunction(LockType::read, [this] 
     {
         StringArray newEntries;
@@ -336,6 +336,11 @@ void DesktopEntry::LoadingThread::cleanup()
                     updated.add(change.first);
             }
         }
+        
+        DBG("DesktopEntry::LoadingThread::" << __func__ << ": "
+                << newEntries.size() << " added, "
+                << updated.size() << " updated, "
+                << removed.size() << " removed.");
         foreachHandler([this, &newEntries, &updated, &removed]
         (SharedResource::Handler* handler)
         {
@@ -345,15 +350,15 @@ void DesktopEntry::LoadingThread::cleanup()
             {
                 if(!newEntries.isEmpty())
                 {
-                    updateListener->entryAdded(newEntries);
+                    updateListener->entriesAdded(newEntries);
                 }
                 if(!updated.isEmpty())
                 {
-                    updateListener->entryUpdated(updated);
+                    updateListener->entriesUpdated(updated);
                 }
                 if(!removed.isEmpty())
                 {
-                    updateListener->entryRemoved(removed);
+                    updateListener->entriesRemoved(removed);
                 }
             }
         });

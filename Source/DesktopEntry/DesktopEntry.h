@@ -16,6 +16,8 @@ namespace DesktopEntry
     
     typedef juce::uint32 CallbackID;
 
+    class UpdateListener;
+    
     class UpdateInterface;
 
     enum class UpdateType
