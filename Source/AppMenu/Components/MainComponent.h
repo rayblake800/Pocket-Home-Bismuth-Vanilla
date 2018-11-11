@@ -67,8 +67,12 @@ private:
     AppMenu::Format currentMenuFormat = Format::Invalid;
 
     /* Loads AppMenu shortcuts and folder definitions.  This resource should
-       exist as long as the home page exists. */
+       exist as long as the AppMenu exists. */
     AppMenu::ConfigFile appConfig;
+
+    /* Loads, caches, and updates desktop entry files.  This resource should
+       exist as long as the AppMenu exists. */
+    DesktopEntry::Loader entryLoader;
 
     /* The menu's loading spinner. */
     OverlaySpinner loadingSpinner;
