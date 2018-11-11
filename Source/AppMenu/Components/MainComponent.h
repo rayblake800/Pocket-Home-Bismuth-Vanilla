@@ -28,11 +28,8 @@ class AppMenu::MainComponent : public juce::Component,
 public:
     /**
      * @brief  Creates and initializes the application menu.
-     *
-     * @param initializer  A struct that defines how to initialize a specific
-     *                     menu format.
      */
-    MainComponent(const Initializer* initializer);
+    MainComponent();
 
     virtual ~MainComponent();
 

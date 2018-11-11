@@ -2,16 +2,19 @@
 #include "AppMenu/Settings.h"
 #include "AppMenu/Data/ConfigKeys.h"
 #include "AppMenu/Components/MainComponent.h"
+#include "AppMenu/Formats/Paged/Initializer.h"
+#include "AppMenu/Formats/Scrolling/Initializer.h"
     
 /*
  * Creates and initializes the application menu.
  */
-AppMenu::MainComponent::MainComponent(const Initializer* initializer)
+AppMenu::MainComponent::MainComponent()
 {
     addTrackedKey(ConfigKeys::menuFormatKey);
     addChildComponent(&loadingSpinner);
     loadingSpinner.setAlwaysOnTop(true);
-    initMenu(initializer);
+    // Load and initialize selected menu format.
+    configValueChanged(ConfigKeys::menuFormatKey);
 }
 
 AppMenu::MainComponent::~MainComponent()
@@ -85,9 +88,23 @@ void AppMenu::MainComponent::configValueChanged
 {
     jassert(propertyKey == ConfigKeys::menuFormatKey);
     const Format newFormat = Settings::getMenuFormat();
+    std::unique_ptr<Initializer> initializer;
+    switch(newFormat)
+    
+    {
+        case AppMenu::Format::Scrolling:
+            initializer.reset(new AppMenu::Scrolling::Initializer());
+            break;
+        case AppMenu::Format::Paged:
+            initializer.reset(new AppMenu::Paged::Initializer());
+            break;
+        case AppMenu::Format::Invalid:
+            initializer.reset(nullptr);
+    }
+
     DBG("AppMenu::MainComponent::" << __func__
             << ": Switching to Format::" 
             << Settings::formatToString(newFormat));
-    AppMenu::changeMenuFormat(this, newFormat);
+    initMenu(initializer.get());
 }
 

@@ -7,8 +7,9 @@
         -AppMenu::Initializer
     ## Additional requirements: 
         -Add the new format to the Appmenu::Format enum class in AppMenu.h 
-        -Update the createInitializer method in AppMenu.cpp to create the new
-         format's initializer.
+        -Update the configValueChanged method in 
+         AppMenu/Components/MainComponent.cpp to create the new format's 
+         initializer.
         -Add the new format's identifier string to formatStrings in
          AppMenu/Data/ConfigKeys.h
 

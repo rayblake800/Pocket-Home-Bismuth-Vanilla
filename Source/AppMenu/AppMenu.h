@@ -57,25 +57,13 @@ namespace AppMenu
     };
     
     /**
-     * @brief  Creates an AppMenu::MainComponent with a specific initial format.
+     * @brief  Creates an AppMenu::MainComponent, initialized with the menu
+     *         format saved through AppMenu::Settings.
      *
-     * @param menuFormat   The initial format of the Component's menu.
-     *
-     * @return             A pointer to a newly allocated and initialized
-     *                     AppMenu::MainComponent.
+     * @return  A pointer to a newly allocated and initialized 
+     *          AppMenu::MainComponent.
      */
-    juce::Component* createAppMenu(const Format menuFormat);
-
-    /**
-     * @brief   Changes the format of an existing AppMenu::MainComponent.
-     *
-     * @param appMenu     The AppMenu::MainComponent to update.  If this pointer
-     *                    is null, or the new menu format is the same as the
-     *                    existing format, no action will be taken.
-     *
-     * @param newFormat   The new menu format to apply to the menu.
-     */
-    void changeMenuFormat(juce::Component* appMenu, const Format newFormat);
+    juce::Component* createAppMenu();
 
     /**
      * @brief  Gets and sets menu property settings such as selected format and
@@ -142,6 +130,14 @@ namespace AppMenu
      * @see  AppMenu/MenuData/DesktopEntryData.h
      */
     class DesktopEntryData;
+
+    /**
+     * @brief  Listens for changes to desktop entries, copying all changes over
+     *         to the menu.
+     *
+     * @see  AppMenu/MenuData/DesktopEntryUpdater.h
+     */
+    class DesktopEntryUpdater;
     
     /**
      * @brief  An ItemData subclass that handles menu data read from the JSON

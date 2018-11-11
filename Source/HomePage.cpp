@@ -33,10 +33,10 @@ settingsButton(ComponentConfigKeys::settingsButtonKey)
     settingsButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(settingsButton);
     
+    appMenu.reset(AppMenu::createAppMenu()); 
     const AppMenu::Format menuFormat = AppMenu::Settings::getMenuFormat();
-    DBG("HomePage::" << __func__ << ": Initializing "
+    DBG("HomePage::" << __func__ << ": Initialized "
             << AppMenu::Settings::formatToString(menuFormat) << " AppMenu");
-    appMenu.reset(AppMenu::createAppMenu(menuFormat)); 
     appMenu->setBounds(getLocalBounds());
     addAndMakeVisible(appMenu.get());
     appMenu->toBack();

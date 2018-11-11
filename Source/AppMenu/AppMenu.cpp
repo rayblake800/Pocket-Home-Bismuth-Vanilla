@@ -1,54 +1,12 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "AppMenu/Components/MainComponent.h"
-#include "AppMenu/Formats/Scrolling/Initializer.h"
-#include "AppMenu/Formats/Paged/Initializer.h"
-#include "AppMenu.h"
-
-static AppMenu::Initializer* createInitializer(const AppMenu::Format menuFormat)
-{
-    switch(menuFormat)
-    {
-        case AppMenu::Format::Scrolling:
-            return new AppMenu::Scrolling::Initializer();
-        case AppMenu::Format::Paged:
-            return new AppMenu::Paged::Initializer();
-        case AppMenu::Format::Invalid:
-            return nullptr;
-    }
-    // Unhandled menu format!
-    jassertfalse;
-    return nullptr;
-}
+#include "AppMenu/AppMenu.h"
 
 /*
- * Creates an AppMenu::MainComponent with a specific initial format.
+ * Creates an AppMenu::MainComponent, initialized with the menu format saved 
+ * through AppMenu::Settings.
  */
-juce::Component* AppMenu::createAppMenu(const Format menuFormat)
+juce::Component* AppMenu::createAppMenu()
 {
-    std::unique_ptr<Initializer> initializer(createInitializer(menuFormat));
-    if(initializer == nullptr)
-    {
-        return nullptr;
-    }
-    return new MainComponent(initializer.get());
-}
-
-/*
- * Changes the format of an existing AppMenu::MainComponent.
- */
-void AppMenu::changeMenuFormat
-(juce::Component* appMenu, const Format newFormat)
-{
-    MainComponent* mainComponent = dynamic_cast<MainComponent*>(appMenu);
-    if(mainComponent == nullptr)
-    {
-        DBG("AppMenu::" << __func__ 
-                << ": Existing menu was null or not an appMenu!");
-        jassertfalse;
-    }
-    std::unique_ptr<Initializer> initializer(createInitializer(newFormat));
-    if(initializer != nullptr)
-    {
-        mainComponent->initMenu(initializer.get());
-    }
+    return new MainComponent();
 }
