@@ -227,15 +227,14 @@ desktopFileID(desktopFileID)
 {
     using juce::String;
     using juce::File;
-    String filename = desktopFileID.replaceCharacter
-        ('-', File::getSeparatorChar());
+    String filename = desktopFileID;
     // Validate filename:
     bool atElementBeginning = true;
     for(int i = 0; i < filename.length(); i++)
     {
         char testChar = filename[i];
-        if((atElementBeginning && testChar == '.')
-                || (testChar >= '0' && testChar <= '9'))
+        if(atElementBeginning && (testChar == '.'
+                || (testChar >= '0' && testChar <= '9')))
         {
             DBG("DesktopEntry::EntryFile::EntryFile: Invalid element starting"
                 " char " << testChar << " in file name " << filename);
@@ -551,6 +550,7 @@ void DesktopEntry::EntryFile::writeFile()
     String outFileText = "";
     String locale = Locale::getLocaleName();
     juce::Array<juce::Identifier> foundKeys;
+    juce::Array<juce::Identifier> foundLocaleKeys;
 
     // Reload the source file to preserve comments and alternate locale data.
     juce::StringArray lines;
@@ -558,19 +558,24 @@ void DesktopEntry::EntryFile::writeFile()
     String sectionHeader;
     for(const String& line : lines)
     {
-        if(outFileText.isNotEmpty())
+        if(outFileText.isNotEmpty() && line.isNotEmpty())
         {
             outFileText += "\n";
         }
+        // Copy comments and empty lines without further processing
+        if(line.startsWithChar('#') || line.isEmpty())
+        {
+            outFileText += line;
+            continue;
+        }
         // Find and copy section headers
-        if(FileUtils::isHeaderLine(line))
+        else if(FileUtils::isHeaderLine(line))
         {
             sectionHeader = FileUtils::extractHeader(line);
         }
         // Parse lines that aren't section headers, empty, or comments if under 
         // the main data header.
-        else if(!line.startsWithChar('#') && line.isNotEmpty()
-            && FileUtils::isMainDataHeader(sectionHeader))
+        else if(line.isNotEmpty() && FileUtils::isMainDataHeader(sectionHeader))
         {
             String lineLocale = FileUtils::parseLocale(line);
             if (lineLocale.isEmpty()  || lineLocale == locale)
@@ -578,36 +583,60 @@ void DesktopEntry::EntryFile::writeFile()
                 try
                 {
                     const juce::Identifier& key = FileUtils::parseKey(line);
-                    foundKeys.add(key);
-                    outFileText += key.toString();
-                    if (lineLocale.isNotEmpty())
+                    if(foundLocaleKeys.contains(key) || (lineLocale.isEmpty()
+                            && foundKeys.contains(key)))
                     {
-                        outFileText += "[";
-                        outFileText += lineLocale;
-                        outFileText += "]";
+                       DBG("DesktopEntry::EntryFile::" << __func__
+                               << ": Skipping duplicate key " 
+                               << key.toString());
                     }
-                    outFileText += "=";
-                    outFileText += getValue(key);
+                    else
+                    {
+                        foundKeys.add(key);
+                        outFileText += key.toString();
+                        if (lineLocale.isNotEmpty())
+                        {
+                            foundLocaleKeys.add(key);
+                            outFileText += "[";
+                            outFileText += lineLocale;
+                            outFileText += "]";
+                        }
+                        outFileText += "=";
+                        outFileText += getValue(key);
+                    }
                     continue;
                 }
-                catch(FormatError e) { } 
-                // Non-standard key, just copy the line without further
-                // processing.
+                catch(FormatError e) 
+                { 
+                    // Non-standard key, just copy the line without further
+                    // processing.
+                    DBG("DesktopEntry::EntryFile::" << __func__
+                            << ": Copying non-standard line="
+                            << line);
+                }
             }
         }
-        // Copy field headers, unexpected lines, comments, Actions, 
-        // nonstandard keys, and data from other locales unedited.
+        // If no header has been located, the main header must be added before
+        // any non-comment content.
+        if(sectionHeader.isEmpty())
+        {
+            sectionHeader = FileUtils::getMainHeader();
+            outFileText += sectionHeader + "\n";
+        }
+        // Copy field headers, unexpected lines, Actions, nonstandard keys, and 
+        // data from other locales unedited.
         outFileText += line;
     }
-    // Add the main group header if no source file exists.
-    if(outFileText.isEmpty())
+    // Add the main group header if no header has been found yet.
+    if(sectionHeader.isEmpty())
     {
-        outFileText = FileUtils::getMainHeader() + "\n";
+        outFileText += FileUtils::getMainHeader() + "\n";
     }
     // Copy keys not found in the original file
     for(auto keyIter : keyGuide)
     {
-        if (!foundKeys.contains(keyIter.first.toString()))
+        if (!foundLocaleKeys.contains(keyIter.first)
+                && !foundKeys.contains(keyIter.first))
         {
             String value = keyIter.second.getValue(this);
             if(value.isNotEmpty())
@@ -798,6 +827,7 @@ juce::String DesktopEntry::EntryFile::expandFieldCodes
             case 'f':
             case 'F':
             case 'u':
+            case 'U':
                 break;
             case 'i':
                 if(icon.isNotEmpty())
