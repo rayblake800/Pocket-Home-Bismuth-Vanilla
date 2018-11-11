@@ -82,9 +82,17 @@ bool AppMenu::Scrolling::InputHandler::keyPressed
             return true;
         case KeyType::Edit:
         {
-            MenuItem folderItem = activeFolder->getFolderMenuItem();
-            getController()->showContextMenu(folderItem,
-                    folderItem.getMovableChildCount());
+            MenuItem folder= activeFolder->getFolderMenuItem();
+            if(selectedIndex >= 0)
+            {
+                getController()->showContextMenu
+                    (folder.getFolderItem(selectedIndex));
+            }
+            else
+            {
+                getController()->showContextMenu
+                    (folder, folder.getMovableChildCount());
+            }
             return true;
         }
         case KeyType::Tab:
