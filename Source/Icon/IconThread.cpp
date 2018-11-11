@@ -151,9 +151,19 @@ void IconThread::addQueuedJob(QueuedJob newJob)
     {
         preLoadedIcon = AssetFiles::loadImageAsset(newJob.icon);
     }
-    if(preLoadedIcon.isNull() && imageCache.contains(newJob.icon))
+    if(preLoadedIcon.isNull())
     {
-        preLoadedIcon = imageCache[newJob.icon];
+        //if icon is a partial path, trim it
+        if (newJob.icon.contains("/"))
+        {
+            newJob.icon = newJob.icon.substring
+                (1 + newJob.icon.lastIndexOf("/"));
+        }
+        if(imageCache.contains(newJob.icon))
+        {
+            preLoadedIcon = imageCache[newJob.icon];
+            jassert(preLoadedIcon.isValid());
+        }
     }
     if(preLoadedIcon.isValid()) // Icon already found, apply now.
     {
@@ -168,13 +178,6 @@ void IconThread::addQueuedJob(QueuedJob newJob)
     {
         //assign the default icon for now
         callbackMap[newJob.iconCallbackID](defaultIcon);
-        //if icon is a partial path, trim it
-        if (newJob.icon.contains("/"))
-        {
-            newJob.icon = newJob.icon.substring
-                (1 + newJob.icon.lastIndexOf("/"));
-        }
-       
         queuedJobs.add(newJob);
         if (!isThreadRunning())
         {
@@ -186,7 +189,8 @@ void IconThread::addQueuedJob(QueuedJob newJob)
 /*
  * Removes and returns the last job from the list.
  */
-const IconThread::QueuedJob IconThread::takeQueuedJob(){
+const IconThread::QueuedJob IconThread::takeQueuedJob()
+{
     QueuedJob lastJob = queuedJobs.getLast();
     queuedJobs.removeLast();
     return lastJob;
@@ -210,10 +214,11 @@ void IconThread::runLoop(ThreadLock& lock)
     QueuedJob activeJob = takeQueuedJob();        
     lock.exitWrite();
 
-    String icon = getIconPath(activeJob);
-    if (icon.isNotEmpty())
+    String icon = activeJob.icon;
+    String iconPath = getIconPath(activeJob);
+    if (iconPath.isNotEmpty())
     {
-        Image iconImg = AssetFiles::loadImageAsset(icon);
+        Image iconImg = AssetFiles::loadImageAsset(iconPath);
         if(iconImg.isNull())
         {
             DBG("IconThread::" << __func__ << ": Unable to load icon "
@@ -224,7 +229,7 @@ void IconThread::runLoop(ThreadLock& lock)
         lock.enterWrite();
         function<void(Image)> loadingCallback 
             = takeIconCallback(activeJob.iconCallbackID);
-        imageCache.set(activeJob.icon, iconImg);
+        imageCache.set(icon, iconImg);
         lock.exitWrite();
 
         if(loadingCallback)
