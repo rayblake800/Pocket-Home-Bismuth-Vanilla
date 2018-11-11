@@ -1,6 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include <map>
 #include "AppMenu/Data/ConfigFile.h"
+#include "DesktopEntry/Loader.h"
 #include "AppMenu/Control/InputHandler.h"
 
 /*
@@ -171,7 +172,8 @@ bool AppMenu::InputHandler::keyPressed(const juce::KeyPress& keyPress,
  */
 void AppMenu::InputHandler::windowFocusGained() 
 {
-    // TODO: Implement desktop entry data updates
+    DesktopEntry::Loader entryLoader;
+    entryLoader.scanForChanges();
 }
 
 /*
