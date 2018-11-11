@@ -1,10 +1,8 @@
 /* Only include this file directly in the AppMenu implementation! */
-
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
 #include "Config/FileResource.h"
 #include "Config/FileHandler.h"
-#include "DesktopEntry/DesktopEntry.h"
 #include "AppMenu/AppMenu.h"
 #include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Data/ConfigData.h"
@@ -22,10 +20,11 @@
  *
  * JSONResource reads in the JSON data used to create AppMenu::MenuItem objects,
  * and writes any changes to those objects back to apps.json as JSON data. 
- * It also reads and writes the selected menu format, along with a few other
- * simple configurable menu properties listed in ConfigKeys.h.
+ * 
+ * JSONResource also reads and writes the selected menu format, along with a few
+ * other simple configurable menu properties listed in ConfigKeys.h.
  *
- * @see AppMenu/Data/CofnigKeys.h
+ * @see AppMenu/Data/ConfigKeys.h
  *      AppMenu/Data/ConfigFile.h
  */
 class AppMenu::JSONResource : public Config::FileResource
