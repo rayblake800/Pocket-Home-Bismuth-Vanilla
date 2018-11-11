@@ -29,7 +29,10 @@ AppMenu::Controller::Controller
 (MenuComponent* menuComponent, OverlaySpinner& loadingSpinner) : 
     menuComponent(menuComponent), 
     loadingSpinner(loadingSpinner),
-    Locale::TextUser(localeClassKey) { }
+    Locale::TextUser(localeClassKey) 
+{ 
+   entryManager.initialEntryLoad(); 
+}
 
 /*
  * Displays a context menu with options for editing an open menu folder.
@@ -181,7 +184,7 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
                     editedItem.getConfirmDeleteMessage(),
                     [editedItem]() 
                     { 
-                        MenuItem(editedItem).remove();
+                        MenuItem(editedItem).remove(true);
                     });
             break;
         case OptionCode::PinToRoot:
@@ -279,8 +282,10 @@ void AppMenu::Controller::createNewFolderEditor
 (const MenuItem folder, const int insertIndex)
 {
     PopupEditor* newEditor = new NewConfigItemEditor(folder, true, insertIndex,
-    [this]()
+    [this, folder, insertIndex]()
     {
+        MenuItem newFolder = folder.getFolderItem(insertIndex);
+        entryManager.loadFolderEntries(newFolder);
         menuComponent->removeEditor();
     });
     menuComponent->saveAndShowEditor(newEditor);
@@ -327,4 +332,9 @@ void AppMenu::Controller::copyMenuItem
             toCopy.getCategories(),
             copyFolder,
             insertIndex);
+    if(toCopy.isFolder())
+    {
+        MenuItem newFolder = copyFolder.getFolderItem(insertIndex);
+        entryManager.loadFolderEntries(newFolder);
+    }
 }
