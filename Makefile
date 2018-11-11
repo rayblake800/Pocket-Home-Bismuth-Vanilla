@@ -313,8 +313,9 @@ DESKTOP_ENTRY_PREFIX := $(JUCE_OBJDIR)/DesktopEntry_
 OBJECTS_DESKTOP_ENTRY := \
   $(DESKTOP_ENTRY_PREFIX)FileUtils.o \
   $(DESKTOP_ENTRY_PREFIX)EntryFile.o \
-  $(DESKTOP_ENTRY_PREFIX)Loader.o \
-  $(DESKTOP_ENTRY_PREFIX)LoadingThread.o 
+  $(DESKTOP_ENTRY_PREFIX)LoadingThread.o \
+  $(DESKTOP_ENTRY_PREFIX)UpdateListener.o \
+  $(DESKTOP_ENTRY_PREFIX)Loader.o
 desktopEntry : $(OBJECTS_DESKTOP_ENTRY)
 	@echo "Built DesktopEntry module"
 
@@ -334,6 +335,7 @@ OBJECTS_APPMENU_DATA := \
   $(APPMENU_PREFIX)ConfigFile.o \
   $(APPMENU_PREFIX)MenuItem.o \
   $(APPMENU_PREFIX)DesktopEntryData.o \
+  $(APPMENU_PREFIX)DesktopEntryUpdater.o \
   $(APPMENU_PREFIX)ConfigData.o \
   $(APPMENU_PREFIX)ItemData.o
 OBJECTS_APPMENU_COMPONENT := \
@@ -733,6 +735,8 @@ $(DESKTOP_ENTRY_PREFIX)EntryFile.o: \
 	Source/DesktopEntry/EntryFile.cpp
 $(DESKTOP_ENTRY_PREFIX)LoadingThread.o: \
 	Source/DesktopEntry/LoadingThread.cpp
+$(DESKTOP_ENTRY_PREFIX)UpdateListener.o : \
+	Source/DesktopEntry/UpdateListener.cpp
 $(DESKTOP_ENTRY_PREFIX)Loader.o: \
 	Source/DesktopEntry/Loader.cpp
 
@@ -795,6 +799,8 @@ $(APPMENU_PREFIX)MenuItem.o: \
     Source/AppMenu/Data/MenuItem.cpp
 $(APPMENU_PREFIX)DesktopEntryData.o: \
     Source/AppMenu/Data/DesktopEntryData.cpp
+$(APPMENU_PREFIX)DesktopEntryUpdater.o: \
+    Source/AppMenu/Data/DesktopEntryUpdater.cpp
 $(APPMENU_PREFIX)ConfigData.o: \
     Source/AppMenu/Data/ConfigData.cpp
 $(APPMENU_PREFIX)ItemData.o: \
