@@ -2,6 +2,7 @@
 #include "DesktopEntry/FormatError.h"
 #include "DesktopEntry/FileError.h"
 #include "DesktopEntry/EntryFile.h"
+#include "DesktopEntry/Loader.h"
 #include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
 
 
@@ -44,6 +45,10 @@ void AppMenu::NewDesktopAppEditor::commitEdits()
             newEntry.setCategories(getCategories());
             newEntry.setLaunchedInTerm(getTerminalCheckboxState());
             newEntry.writeFile();
+
+            // Update loaded entries:
+            DesktopEntry::Loader entryLoader;
+            entryLoader.scanForChanges();
         }
         // TODO: Explain the error to the user when something goes wrong.
         catch(DesktopEntry::FormatError e)
