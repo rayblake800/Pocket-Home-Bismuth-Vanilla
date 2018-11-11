@@ -1,4 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
+#include "DesktopEntry/Loader.h"
 #include "AppMenu/Components/FolderComponent.h"
 
 /*
@@ -116,7 +117,12 @@ void AppMenu::FolderComponent::childAdded(const int childIndex)
     {
         selectedIndex++;
     }
-    updateButtonLayout();
+    // Trigger the parent's resized() method to force a layout update
+    juce::Component* parent = getParentComponent();
+    if(parent != nullptr)
+    {
+        parent->resized();
+    }
 }
 
 /*
@@ -138,7 +144,12 @@ void AppMenu::FolderComponent::childRemoved(const int removedIndex)
     {
         selectedIndex--;
     }
-    updateButtonLayout();
+    // Trigger the parent's resized() method to force a layout update
+    juce::Component* parent = getParentComponent();
+    if(parent != nullptr)
+    {
+        parent->resized();
+    }
 }
 
 /*

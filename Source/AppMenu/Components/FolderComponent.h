@@ -149,7 +149,7 @@ private:
      */
     virtual void childrenSwapped(const int swapIndex1, const int swapIndex2)
         final override;
-    
+
     /**
      * @brief  Recalculates menu button layout when the folder bounds change.
      */
