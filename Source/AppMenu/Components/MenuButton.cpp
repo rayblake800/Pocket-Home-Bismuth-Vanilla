@@ -184,7 +184,8 @@ void AppMenu::MenuButton::paintButton
             selectionColourId : backgroundColourId));
     if (shouldFillBackground())
     {
-        g.fillRect(border);
+        g.fillRoundedRectangle(border.toFloat(), border.getHeight() / 6);
+        //g.fillRect(border);
     }
     else
     {
@@ -205,6 +206,7 @@ void AppMenu::MenuButton::paintButton
     if (shouldDrawBorder())
     {
         g.setColour(findColour(borderColourId));
-        g.drawRect(border, 2);
+        g.drawRoundedRectangle(border.toFloat(), border.getHeight() / 6, 2);
+        //g.drawRect(border, 2);
     }
 }
