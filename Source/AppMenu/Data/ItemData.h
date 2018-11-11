@@ -194,13 +194,16 @@ public:
     bool insertChild(const ItemData::Ptr newChild, const int childIndex);
 
     /**
-     * @brief  Removes this menu item from its folder, deleting it from its
-     *         data source.
+     * @brief  Removes this menu item from its folder, optionally deleting it 
+     *         from its data source.
      *
-     * @return       True if a menu item was removed, false if this menu item
-     *               was not located in a folder.
+     * @param  updateSource  Whether the menu item should be deleted from its 
+     *                       data source.
+     *
+     * @return               True if a menu item was removed, false if this menu
+     *                       item was null or not located in a folder.
      */
-    bool remove();
+    bool remove(const bool deleteFromSource);
 
     /**
      * @brief  Swaps the positions of two menu items, saving the change to this

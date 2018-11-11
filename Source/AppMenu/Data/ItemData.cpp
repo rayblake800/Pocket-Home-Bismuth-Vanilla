@@ -75,7 +75,7 @@ bool AppMenu::ItemData::insertChild
 /*
  * Removes this menu item from its folder, deleting it from its data source.
  */
-bool AppMenu::ItemData::remove()
+bool AppMenu::ItemData::remove(const bool updateSource)
 {
     if(parent == nullptr || index < 0)
     {
@@ -92,7 +92,10 @@ bool AppMenu::ItemData::remove()
     });
     parent = nullptr;
     index = -1;
-    deleteFromSource();
+    if(updateSource)
+    {
+        deleteFromSource();
+    }
     return true;
 }
 
