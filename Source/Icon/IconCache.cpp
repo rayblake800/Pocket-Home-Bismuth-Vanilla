@@ -57,7 +57,7 @@ IconCache::IconCache(const juce::String& themePath)
      * during compilation, and the cost of checking this when each icon cache
      * object is created is insignificant.
      */
-    bigEndian == (htonl(47) == 47);
+    bigEndian = (htonl(47) == 47);
 
     uint32 hashOffset = read32(4);
     uint32 dirListOffset = read32(8);
