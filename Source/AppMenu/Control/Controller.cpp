@@ -309,10 +309,22 @@ void AppMenu::Controller::createNewEntryEditor(const MenuItem categorySource)
  * Creates and shows a new PopupEditor component that edits an existing item
  * in the menu.
  */
-void AppMenu::Controller::createExistingItemEditor(const MenuItem toEdit)
+void AppMenu::Controller::createExistingItemEditor(MenuItem toEdit)
 {
-    PopupEditor* newEditor = new ExistingItemEditor(toEdit, [this]()
+    juce::StringArray oldCategories = toEdit.getCategories();
+    PopupEditor* newEditor = new ExistingItemEditor(toEdit, 
+    [this, oldCategories, toEdit]()
     {
+        if(toEdit.isFolder() && oldCategories != toEdit.getCategories())
+        {
+            // Categories changed, refresh desktop entry items
+            for(int i = toEdit.getFolderSize() - 1;
+                    i >= toEdit.getMovableChildCount(); i--)
+            {
+               toEdit.getFolderItem(i).remove(false); 
+            }
+            entryManager.loadFolderEntries(toEdit);
+        }
         menuComponent->removeEditor();
     });
     menuComponent->saveAndShowEditor(newEditor);

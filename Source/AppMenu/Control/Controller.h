@@ -21,10 +21,9 @@
  *
  *  The controller is responsible for implementing all menu functionality not
  *  related to menu display or input handling.  The controller defines the
- *  behavior of activated menu items, launching applications, focusing 
- *  application windows, opening or closing menu folders, defining the
- *  behavior of popup windows, and creating appropriate popup editors when 
- *  necessary.
+ *  behavior of activated menu items, launches applications, opens or closes
+ *  menu folders, creates and handles popup context menus, and creates 
+ *  appropriate popup editors when necessary.
  */
 class AppMenu::Controller : public Locale::TextUser
 {
@@ -172,7 +171,7 @@ private:
      *
      * @param toEdit  The menu item that will be edited.
      */
-    void createExistingItemEditor(const MenuItem toEdit);
+    void createExistingItemEditor(MenuItem toEdit);
 
     /**
      * @brief  Creates a copy of a menu item at a new index in the menu.
