@@ -1,7 +1,6 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
-#include "DesktopEntry/Loader.h"
 #include "Locale/TextUser.h"
 #include "AppMenu/Data/ItemData.h"
 
@@ -32,11 +31,7 @@ public:
      */
     ConfigData();
 
-    /**
-     * @brief  Cancels any desktop entry menu items waiting to load before
-     *         destroying this menu item.
-     */
-    virtual ~ConfigData();
+    virtual ~ConfigData() { }
     
     /**
      * @brief  Recursively initializes menu item data, creating and initializing
@@ -176,15 +171,6 @@ public:
      */
     virtual bool isEditable(const DataField dataField) const override;
 
-    /**
-     * @brief  Loads all desktop entry child menu items defined by the menu 
-     *         item's category list.
-     *
-     * This will do nothing if this menu item has already started loading
-     * desktop entry menu items.
-     */
-    void loadDesktopEntryItems();
-
 private:
     /**
      * @brief  Creates an empty child menu item.
@@ -216,11 +202,6 @@ private:
 
     /* Application categories used to load desktop entry folder items. */
     juce::StringArray categories;
-        
-
-    /* Holds the ID of a pending callback function that will load 
-       DesktopEntry menu items. */
-    juce::Atomic<DesktopEntry::CallbackID> pendingCallbackID;
 };
 
 /* Only include this file directly in the AppMenu implementation! */

@@ -1,5 +1,4 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/Data/DesktopEntryData.h"
 #include "AppMenu/Data/ConfigKeys.h"
 #include "AppMenu/Data/ConfigData.h"
 
@@ -20,13 +19,9 @@ static const juce::Identifier willRemoveFolderTextKey = "willRemoveFolder";
 static const juce::Identifier editFolderTextKey       = "editFolder";
 
 /*
- * Recursively creates a menu item and all its child folder items.
+ * Creates a new menu item that initially holds no data.
  */
-AppMenu::ConfigData::ConfigData() :
-Locale::TextUser(localeClassKey)
-{
-    pendingCallbackID = 0;
-}
+AppMenu::ConfigData::ConfigData() : Locale::TextUser(localeClassKey) { }
 
 /*
  * Recursively initializes menu item data, creating and initializing all its 
@@ -81,20 +76,8 @@ void AppMenu::ConfigData::initMenuData(juce::var& menuData)
             insertChild(child, getFolderSize());
         }
     }
-    loadDesktopEntryItems();
 }
-/*
- * Cancels any desktop entry menu items waiting to load before destroying this 
- * menu item.
- */
-AppMenu::ConfigData::~ConfigData()
-{
-    if(pendingCallbackID.get())
-    {
-        DesktopEntry::Loader entryLoader;
-        entryLoader.clearCallback(pendingCallbackID.get());
-    }
-}
+
 
 /*
  * Gets the menu item's displayed title.
@@ -262,36 +245,4 @@ AppMenu::ConfigData::isEditable
             return true;
     }
     return false;
-}
-
-/*
- * Loads all desktop entry child menu items defined by the menu item's category
- * list.
- */
-void AppMenu::ConfigData::loadDesktopEntryItems()
-{
-    using namespace juce;
-    if(!categories.isEmpty() && pendingCallbackID.get() == 0
-            && getFolderSize() <= getMovableChildCount())
-    {
-        DesktopEntry::Loader entryLoader;
-        pendingCallbackID = entryLoader.waitUntilLoaded([this]()
-        {
-            if(getFolderSize() > getMovableChildCount())
-            {
-                DBG("AppMenu::ConfigData::"
-                        << "Desktop entries already loaded, skipping callback");
-                return;
-            }
-            DesktopEntry::Loader entryLoader;
-            Array<DesktopEntry::EntryFile> entries 
-                    = entryLoader.getCategoryEntries(categories);
-            entries.sort();
-            for(const DesktopEntry::EntryFile& entry : entries)
-            {
-                insertChild(new DesktopEntryData(entry), getFolderSize());
-            }
-            pendingCallbackID = 0;
-        });
-    }
 }
