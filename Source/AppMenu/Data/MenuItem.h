@@ -311,7 +311,8 @@ public:
 
     /**
      * @brief  Swaps the positions of two folder items, saving the change to 
-     *         the folder menu item's data source.
+     *         the folder menu item's data source if both folder items were
+     *         user-movable.
      *
      * @param childIdx1   The index within the folder item of the first 
      *                    child item to move.
@@ -321,8 +322,8 @@ public:
      *
      * @return            True if the child menu items were swapped, false 
      *                    if the indices did not specify two valid menu 
-     *                    items within the folder's movable child menu 
-     *                    items, or if the folder item was null.
+     *                    items within the folder's child menu items, or if the 
+     *                    folder item was null.
      */
     bool swapChildren(const int childIdx1, const int childIdx2);
 

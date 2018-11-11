@@ -366,7 +366,7 @@ bool AppMenu::MenuItem::remove()
 
 /*
  * Swaps the positions of two folder items, saving the change to the folder menu
- * item's data source.
+ * item's data source if both folder items were user-movable.
  */
 bool AppMenu::MenuItem::swapChildren(const int childIdx1, const int childIdx2)
 {

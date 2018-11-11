@@ -204,14 +204,17 @@ public:
 
     /**
      * @brief  Swaps the positions of two menu items, saving the change to this
-     *         menu item's data source.
+     *         menu item's data source if both items may be moved by the user.
+     *
+     * This method may be used to change the order of non-movable items, but the
+     * changes will not be saved if this is the case.
      *
      * @param childIdx1  The index of the first child item to move.
      *
      * @param childIdx2  The index of the second child item to move.
      *
      * @return  True if the child menu items were swapped, false if the indices
-     *          did not specify two valid menu items within the folder's movable
+     *          did not specify two valid menu items within the folder's
      *          child menu items.
      */
     bool swapChildren(const int childIdx1, const int childIdx2);

@@ -98,13 +98,14 @@ bool AppMenu::ItemData::remove()
 
 /*
  * Swaps the positions of two menu items, saving the change to this menu item's
- * data source.
+ * data source if both items may be moved by the user.
  */
 bool AppMenu::ItemData::swapChildren(const int childIdx1, const int childIdx2)
 {
-    const int maxIndex = getMovableChildCount() - 1;
-    if(childIdx1 < 0 || childIdx1 > maxIndex 
-            || childIdx2 < 0 || childIdx2 > maxIndex)
+    const int maxIndex = getFolderSize() - 1;
+    const int maxMovable = getMovableChildCount() - 1;
+    if((childIdx1 < 0 && childIdx2 < 0)
+            || (childIdx1 > maxIndex || childIdx2 > maxIndex))
     {
         return false;
     }
@@ -115,6 +116,10 @@ bool AppMenu::ItemData::swapChildren(const int childIdx1, const int childIdx2)
     {
         listener->childrenSwapped(childIdx1, childIdx2);
     });
+    if(childIdx1 <= maxMovable && childIdx2 <= maxMovable)
+    {
+        saveChanges();
+    }
     return true;
 }
 
