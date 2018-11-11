@@ -36,9 +36,20 @@ int AppMenu::Paged::FolderComponent::closestIndex
     const int pageWidth  = getWidth() / getNumFolderPages();
     const int pageX      = xPos % pageWidth;
     const int pageIndex  = xPos / pageWidth;
-    const int pageColumn = pageX / Settings::getPagedMenuColumns(); 
-    const int pageRow    = yPos / Settings::getPagedMenuRows();
-    return positionIndex(pageIndex, pageColumn, pageRow);
+    const int columnSize = pageWidth / Settings::getPagedMenuColumns();
+    const int rowSize    = getHeight() / Settings::getPagedMenuRows();
+    const int pageColumn = pageX / columnSize;
+    const int pageRow    = yPos / rowSize;
+    int index = positionIndex(pageIndex, pageColumn, pageRow);
+    if((pageX % columnSize) > (columnSize / 2))
+    {
+        index++;
+    }
+    DBG("AppMenu::Paged::FolderComponent::" << __func__
+            << ": Click at (" << xPos << ", " << yPos << ") = page "
+            << pageIndex << ", column " << pageColumn << ", row "
+            << pageRow << ", folder index " << index);
+    return index;
 }
 
 /*
