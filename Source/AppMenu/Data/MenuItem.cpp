@@ -352,14 +352,14 @@ bool AppMenu::MenuItem::insertChild(MenuItem childItem, const int index)
 }
 
 /*
- * Attempts to remove a menu item from the menu, saving the change to the menu
- * item's data source.
+ * Attempts to remove a menu item from the menu, optionally saving the change to
+ * the menu item's data source.
  */
-bool AppMenu::MenuItem::remove()
+bool AppMenu::MenuItem::remove(const bool updateSource)
 {
     if(!isNull())
     {
-        return getData()->remove();
+        return getData()->remove(updateSource);
     }
     return false;
 }

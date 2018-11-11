@@ -201,7 +201,7 @@ public:
      *                       data source.
      *
      * @return               True if a menu item was removed, false if this menu
-     *                       item was null or not located in a folder.
+     *                       item was not located in a folder.
      */
     bool remove(const bool deleteFromSource);
 

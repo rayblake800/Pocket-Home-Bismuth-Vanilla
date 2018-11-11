@@ -299,15 +299,16 @@ public:
     bool insertChild(const MenuItem childItem, const int index);
 
     /**
-     * @brief  Attempts to remove a menu item from the menu, saving the
-     *         change to the menu item's data source.
+     * @brief  Attempts to remove a menu item from the menu, optionally saving 
+     *         the change to the menu item's data source.
      *
-     * @param toRemove  The menu item to remove from the application menu.
+     * @param updateSource  Whether the menu item should be deleted from its
+     *                      data source.
      *
-     * @return          True if the menu item was removed, false if the menu
-     *                  item was null or otherwise not located in the menu.
+     * @return              True if the menu item was removed, false if the menu
+     *                      item was null or otherwise not located in the menu.
      */
-    bool remove();
+    bool remove(const bool updateSource);
 
     /**
      * @brief  Swaps the positions of two folder items, saving the change to 

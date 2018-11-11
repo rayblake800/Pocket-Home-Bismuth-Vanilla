@@ -73,7 +73,8 @@ bool AppMenu::ItemData::insertChild
 }
 
 /*
- * Removes this menu item from its folder, deleting it from its data source.
+ * Removes this menu item from its folder, optionally deleting it from its data
+ * source.
  */
 bool AppMenu::ItemData::remove(const bool updateSource)
 {
