@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "DesktopEntry/FormatError.h"
 #include "DesktopEntry/FileError.h"
+#include "DesktopEntry/Loader.h"
 #include "AppMenu/Data/DesktopEntryData.h"
 
 /* Localized object class key: */
@@ -180,6 +181,8 @@ void AppMenu::DesktopEntryData::saveChanges()
         DBG("DesktopEntryData::" << __func__ << ": Failed to write changes:"
                                 << e.what());
     }
+    DesktopEntry::Loader entryLoader;
+    entryLoader.scanForChanges();
 }
 
 /*
@@ -224,6 +227,8 @@ void AppMenu::DesktopEntryData::deleteFromSource()
     try
     {
         desktopEntry.writeFile();
+        DesktopEntry::Loader entryLoader;
+        entryLoader.scanForChanges();
     }
     catch(DesktopEntry::FileError e)
     {
