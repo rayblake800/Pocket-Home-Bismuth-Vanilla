@@ -244,10 +244,10 @@ void AppMenu::Controller::launchOrFocusApplication(MenuItem toLaunch)
         Config::MainFile mainConfig;
         String termPrefix = mainConfig.getConfigValue<String>
             (Config::MainKeys::termLaunchCommandKey);
-        command = termPrefix + command;
+        command = termPrefix + " " + command;
     }
     setLoadingState(true);
-    appLauncher.startOrFocusApp(toLaunch.getCommand());
+    appLauncher.startOrFocusApp(command);
 }
 
 /*
