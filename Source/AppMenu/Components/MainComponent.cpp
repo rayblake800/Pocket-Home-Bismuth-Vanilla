@@ -1,20 +1,24 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/Settings.h"
-#include "AppMenu/Data/ConfigKeys.h"
-#include "AppMenu/Components/MainComponent.h"
+#include "AppMenu/Data/JSON/ConfigKeys.h"
 #include "AppMenu/Formats/Paged/Initializer.h"
 #include "AppMenu/Formats/Scrolling/Initializer.h"
+#include "AppMenu/Components/MainComponent.h"
     
 /*
  * Creates and initializes the application menu.
  */
-AppMenu::MainComponent::MainComponent()
+AppMenu::MainComponent::MainComponent() : 
+formatUpdater(this)
 {
-    addTrackedKey(ConfigKeys::menuFormatKey);
     addChildComponent(&loadingSpinner);
     loadingSpinner.setAlwaysOnTop(true);
     // Load and initialize selected menu format.
-    configValueChanged(ConfigKeys::menuFormatKey);
+    // This needs to be done after the constructor has finished to prevent
+    // some annoying SharedResource conflicts.
+    juce::MessageManager::callAsync([this]()
+    {
+        formatUpdater.applySelectedFormat();
+    });
 }
 
 AppMenu::MainComponent::~MainComponent()
@@ -26,7 +30,7 @@ AppMenu::MainComponent::~MainComponent()
  * Initialize the menu as a new menu format, cleaning up any existing menu 
  * first.
  */
-void AppMenu::MainComponent::initMenu(const Initializer* initializer)
+void AppMenu::MainComponent::loadMenuFormat(const Initializer* initializer)
 {
     jassert(initializer != nullptr);
     if(initializer->getMenuFormat() == currentMenuFormat
@@ -81,16 +85,26 @@ void AppMenu::MainComponent::resized()
 }
 
 /*
- * Updates the menu when the selected format changes.
+ * @brief  Initializes the updater, tracking the format key and saving
+ *         a pointer to the MainComponent it updates.
+ *
+ * @param mainComponent  The MainComponent that holds this updater.
  */
-void AppMenu::MainComponent::configValueChanged
-(const juce::Identifier& propertyKey)
+AppMenu::MainComponent::FormatUpdater::FormatUpdater
+(MainComponent* mainComponent) : mainComponent(mainComponent)
 {
-    jassert(propertyKey == ConfigKeys::menuFormatKey);
+    addTrackedKey(ConfigKeys::menuFormatKey);
+}
+
+/**
+ * @brief  Applies the selected menu format to the updater's 
+ *         MainComponent.
+ */
+void AppMenu::MainComponent::FormatUpdater::applySelectedFormat()
+{
     const Format newFormat = Settings::getMenuFormat();
     std::unique_ptr<Initializer> initializer;
     switch(newFormat)
-    
     {
         case AppMenu::Format::Scrolling:
             initializer.reset(new AppMenu::Scrolling::Initializer());
@@ -105,6 +119,16 @@ void AppMenu::MainComponent::configValueChanged
     DBG("AppMenu::MainComponent::" << __func__
             << ": Switching to Format::" 
             << Settings::formatToString(newFormat));
-    initMenu(initializer.get());
+    mainComponent->loadMenuFormat(initializer.get());
 }
 
+
+/*
+ * Updates the menu when the selected format changes.
+ */
+void AppMenu::MainComponent::FormatUpdater::configValueChanged
+(const juce::Identifier& propertyKey)
+{
+    jassert(propertyKey == ConfigKeys::menuFormatKey);
+    applySelectedFormat();
+}

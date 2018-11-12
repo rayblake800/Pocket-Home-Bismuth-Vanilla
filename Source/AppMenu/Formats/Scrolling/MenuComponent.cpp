@@ -3,7 +3,6 @@
 #include "TempTimer.h"
 #include "ComponentConfigKeys.h"
 #include "TransitionAnimator.h"
-#include "AppMenu/Settings.h"
 #include "AppMenu/Data/JSON/ConfigKeys.h"
 #include "AppMenu/Formats/Scrolling/FolderComponent.h"
 #include "AppMenu/Formats/Scrolling/MenuComponent.h"

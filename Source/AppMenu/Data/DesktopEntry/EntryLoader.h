@@ -1,7 +1,7 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
-#include "AppMenu/AppMenu.h"
+#include "AppMenu/Implementation.h"
 #include "DesktopEntry/DesktopEntry.h"
 
 /**

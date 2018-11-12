@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "NavButton.h"
 #include "TransitionAnimator.h"
-#include "AppMenu/Settings.h"
+#include "AppMenu/AppMenu.h"
 #include "AppMenu/Formats/Paged/MenuComponent.h"
 #include "AppMenu/Formats/Paged/FolderComponent.h"
 #include "AppMenu/Formats/Paged/InputHandler.h"

@@ -14,11 +14,11 @@
 ################################################################################
 ## Build options:	                                                          ##
 ##	                                                                          ##
-## CONFIG=Debug	        Build debug binaries skipping optimizations,          ##
+## CONFIG=Debug	         Build debug binaries skipping optimizations,         ##
 ##	                     including all test code, and enabling gdb            ##
 ##	                     debugging symbols.                                   ##
 ##	                                                                          ##
-## CONFIG=Release	      Build release binaries using full optimization,     ##
+## CONFIG=Release	     Build release binaries using full optimization,      ##
 ##	                     removing all test code, and omitting gdb flags.      ##
 ##	                                                                          ##
 ## V=1	                 Enable verbose build output.                         ##
@@ -334,8 +334,10 @@ OBJECTS_APPMENU_DATA := \
   $(APPMENU_PREFIX)JSONResource.o \
   $(APPMENU_PREFIX)ConfigFile.o \
   $(APPMENU_PREFIX)MenuItem.o \
-  $(APPMENU_PREFIX)DesktopEntryData.o \
-  $(APPMENU_PREFIX)DesktopEntryUpdater.o \
+  $(APPMENU_PREFIX)EntryData.o \
+  $(APPMENU_PREFIX)EntryActions.o \
+  $(APPMENU_PREFIX)EntryLoader.o \
+  $(APPMENU_PREFIX)EntryUpdater.o \
   $(APPMENU_PREFIX)ConfigData.o \
   $(APPMENU_PREFIX)ItemData.o
 OBJECTS_APPMENU_COMPONENT := \
@@ -368,7 +370,6 @@ OBJECTS_APPMENU_PAGED := \
   $(PAGED_MENU_PREFIX)Initializer.o 
 OBJECTS_APPMENU := \
   $(APPMENU_PREFIX)AppMenu.o \
-  $(APPMENU_PREFIX)Settings.o \
   $(OBJECTS_APPMENU_DATA) \
   $(OBJECTS_APPMENU_COMPONENT) \
   $(OBJECTS_APPMENU_CONTROL) \
@@ -792,21 +793,23 @@ $(APPMENU_PREFIX)PopupEditor.o: \
 $(APPMENU_PREFIX)CategoryEditor.o: \
     Source/AppMenu/Components/Editors/CategoryEditor.cpp
 $(APPMENU_PREFIX)JSONResource.o: \
-    Source/AppMenu/Data/JSONResource.cpp
+    Source/AppMenu/Data/JSON/JSONResource.cpp
 $(APPMENU_PREFIX)ConfigFile.o: \
-    Source/AppMenu/Data/ConfigFile.cpp
+    Source/AppMenu/Data/JSON/ConfigFile.cpp
 $(APPMENU_PREFIX)MenuItem.o: \
     Source/AppMenu/Data/MenuItem.cpp
-$(APPMENU_PREFIX)DesktopEntryData.o: \
-    Source/AppMenu/Data/DesktopEntryData.cpp
-$(APPMENU_PREFIX)DesktopEntryUpdater.o: \
-    Source/AppMenu/Data/DesktopEntryUpdater.cpp
+$(APPMENU_PREFIX)EntryData.o: \
+    Source/AppMenu/Data/DesktopEntry/EntryData.cpp
+$(APPMENU_PREFIX)EntryActions.o: \
+    Source/AppMenu/Data/DesktopEntry/EntryActions.cpp
+$(APPMENU_PREFIX)EntryLoader.o: \
+    Source/AppMenu/Data/DesktopEntry/EntryLoader.cpp
+$(APPMENU_PREFIX)EntryUpdater.o: \
+    Source/AppMenu/Data/DesktopEntry/EntryUpdater.cpp
 $(APPMENU_PREFIX)ConfigData.o: \
-    Source/AppMenu/Data/ConfigData.cpp
+    Source/AppMenu/Data/JSON/ConfigData.cpp
 $(APPMENU_PREFIX)ItemData.o: \
     Source/AppMenu/Data/ItemData.cpp
-$(APPMENU_PREFIX)Settings.o: \
-    Source/AppMenu/Settings.cpp
 $(APPMENU_PREFIX)AppMenu.o: \
     Source/AppMenu/AppMenu.cpp
 

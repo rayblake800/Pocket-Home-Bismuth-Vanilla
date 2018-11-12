@@ -1,10 +1,10 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
+#include "PopupEditorComponent.h"
 #include "ListEditor.h"
 #include "Locale/TextUser.h"
-#include "AppMenu/AppMenu.h"
-#include "PopupEditorComponent.h"
+#include "AppMenu/Implementation.h"
 
 /**
  * @file CategoryEditor.h

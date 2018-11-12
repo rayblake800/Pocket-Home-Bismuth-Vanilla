@@ -4,26 +4,26 @@
 #include "JuceHeader.h"
 #include "OverlaySpinner.h"
 #include "DesktopEntry/Loader.h"
-#include "AppMenu/AppMenu.h"
 #include "AppMenu/Control/Initializer.h"
 #include "AppMenu/Components/MenuComponent.h"
 #include "AppMenu/Control/Controller.h"
-#include "AppMenu/Data/ConfigFile.h"
-
+#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Implementation.h"
 /**
  * @file  AppMenu/Components/MainComponent.h
  *
  * @brief  Creates and shows an AppMenu of any format.
  *
  * The MainComponent is a container component that holds the AppMenu's menu
- * component, along with the menu's loading spinner.  It is the MainComponent
- * that is passed outside the module by AppMenu::createAppMenu as a generic
- * juce::Component pointer.  The MainComponent initializes the menu component
- * in a particular AppMenu format, and automatically updates the menu whenever
- * a new menu format is selected.
+ * component, along with the menu's loading spinner. When the menu is created 
+ * by AppMenu::createAppMenu, the generic juce::Component pointer returned by
+ * that function is actually an AppMenu::MainComponent.
+ *
+ * The MainComponent's main responsibility is to initialize the menu component
+ * in a particular AppMenu format, and automatically update the menu whenever
+ * a new menu format is selected. 
  */
-class AppMenu::MainComponent : public juce::Component, 
-    public ConfigFile::Listener
+class AppMenu::MainComponent : public juce::Component 
 {
 public:
     /**
@@ -33,17 +33,17 @@ public:
 
     virtual ~MainComponent();
 
+private:
     /**
      * @brief  Initialize the menu as a new menu format, cleaning up any
      *         existing menu first.
      *
      * @param initializer  A struct that defines how to initialize the new menu
-     *                     format.  If this matches the format of the existing
+     *                     format. If this matches the format of the existing
      *                     menu, no action will be taken.
      */
-    void initMenu(const Initializer* initializer);
+    void loadMenuFormat(const Initializer* initializer);
 
-private:
     /**
      * @brief  Safely destroys all AppMenu objects held in the MainComponent.
      */
@@ -56,19 +56,43 @@ private:
     virtual void resized() final override;
 
     /**
-     * @brief  Updates the menu when the selected format changes.
-     *
-     * @param propertyKey  The menu format key.
+     * @brief  Private listener class that updates the menu format whenever the
+     *         saved format selection changes.
      */
-    virtual void configValueChanged(const juce::Identifier& propertyKey)
-        final override;
+    class FormatUpdater : public ConfigFile::Listener
+    {
+    public:
+        /**
+         * @brief  Initializes the updater, tracking the format key and saving
+         *         a pointer to the MainComponent it updates.
+         *
+         * @param mainComponent  The MainComponent that holds this updater.
+         */
+        FormatUpdater(MainComponent* mainComponent);
+
+        virtual ~FormatUpdater() { }
+
+        /**
+         * @brief  Applies the selected menu format to the updater's 
+         *         MainComponent.
+         */
+        void applySelectedFormat();
+
+        /**
+         * @brief  Updates the menu when the selected format changes.
+         *
+         * @param propertyKey  The menu format key.
+         */
+        virtual void configValueChanged(const juce::Identifier& propertyKey)
+            final override;
+
+    private:
+        MainComponent* const mainComponent;
+    };
+    FormatUpdater formatUpdater;
 
     /* Tracks the current AppMenu format. */
     AppMenu::Format currentMenuFormat = Format::Invalid;
-
-    /* Loads AppMenu shortcuts and folder definitions.  This resource should
-       exist as long as the AppMenu exists. */
-    AppMenu::ConfigFile appConfig;
 
     /* Loads, caches, and updates desktop entry files.  This resource should
        exist as long as the AppMenu exists. */

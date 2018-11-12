@@ -1,6 +1,6 @@
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
-#include "AppMenu/Settings.h"
+#include "AppMenu/AppMenu.h"
 #include "HomeSettingsPage.h"
 
 /* Localized object class key */

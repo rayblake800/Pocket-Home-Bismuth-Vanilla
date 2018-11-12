@@ -3,7 +3,7 @@
 #include "ComponentConfigKeys.h"
 #include "PokeLookAndFeel.h"
 #include "AssetFiles.h"
-#include "AppMenu/Settings.h"
+#include "AppMenu/AppMenu.h"
 #include "HomePage.h"
 
 HomePage::HomePage() :

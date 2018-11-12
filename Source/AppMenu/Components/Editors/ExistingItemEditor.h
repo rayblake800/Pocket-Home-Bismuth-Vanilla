@@ -1,7 +1,6 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
-#include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Components/Editors/PopupEditor.h"
 
 /**

@@ -2,13 +2,12 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 
 #pragma once
-#include "LayoutManager.h"
 #include "Locale/TextUser.h"
 #include "FileSelectTextEditor.h"
 #include "PopupEditorComponent.h"
 #include "SwitchComponent.h"
 #include "AppMenu/Components/Editors/CategoryEditor.h"
-#include "AppMenu/AppMenu.h"
+#include "AppMenu/Implementation.h"
 
 /**
  * @file  PopupEditor.h

@@ -4,7 +4,6 @@
 #include "AppMenu/Components/FolderComponent.h"
 #include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Components/Editors/PopupEditor.h"
-#include "AppMenu/AppMenu.h"
 #include "JuceHeader.h"
 
 /**

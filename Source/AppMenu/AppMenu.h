@@ -4,11 +4,14 @@
 /**
  * @file  AppMenu.h
  *
- * @brief  Defines all classes within the application menu component
- *         module.
+ * @brief  Defines the public interface for the AppMenu module, which creates
+ *         an application menu component.
+ *
+ * This file is the only file in the AppMenu module that should be included in
+ * outside sources.
  *
  * The AppMenu module displays an application launching menu. This menu displays
- * application shortcuts loaded from  standard desktop entry files, and from a
+ * application shortcuts loaded from standard desktop entry files, and from a
  * JSON configuration file. The user can use this menu to launch applications,
  * or to focus the window of an application that was alreay launched through
  * this menu.
@@ -28,11 +31,11 @@
  * reordered.  These will always be listed alphabetically within their folders,
  * after any menu items defined in the JSON file.
  * 
- * The AppMenu provides support for multiple display formats.  The display
+ * The AppMenu provides support for multiple display formats. The display
  * format defines the layout of the menu, and controls how user input events
- * are applied to the menu.  The selected format may be dynamically changed.
+ * are applied to the menu. The selected format may be dynamically changed.
  * Through the AppMenu::Settings interface, other objects may change the menu
- * format, and adjust various display properties for each menu format.  This is
+ * format, and adjust various display properties for each menu format. This is
  * used by the Home Settings Page to allow the user to edit the menu format.
  */
 namespace AppMenu
@@ -69,203 +72,97 @@ namespace AppMenu
      * @brief  Gets and sets menu property settings such as selected format and
      *         menu dimensions.  This is provided so that settings pages can
      *         allow the user to edit menu properties.
-     *
-     * @see  AppMenu/Settings.h
      */
-    namespace Settings { }
-    
-    /* ####################  Implementation   ########################### */
-    /* ## These classes are used to implement AppMenu functionality,   ## */
-    /* ## and cannot be referenced outside of the AppMenu module.      ## */
-    /* ################################################################## */
-
-    /* ####################    Menu Control   ########################### */
-    /**
-     * @brief  Creates menu objects for a single menu Format type.
-     *
-     * @see  AppMenu/Control/Initializer.h
-     */
-    class Initializer;
-
-    /**
-     * @brief  Controls the behavior of the main menu component, launching
-     *         applications, opening/closing menu folders, and allowing the 
-     *         user to edit the menu data.
-     *
-     * @see  AppMenu/Control/Controller.h
-     */
-    class Controller;
-
-    /**
-     * @brief  Captures and handles key, mouse, and window focus events for the
-     *         menu component and all its child components.
-     *
-     * @see  AppMenu/Control/InputHandler.h
-     */
-    class InputHandler;
-
-    /* ####################     Menu Data     ########################### */
-    /**
-     * @brief  Holds data describing a single menu item or folder in the
-     *         menu, and provides access to the menu item's parent folder and
-     *         child folder items.
-     *
-     * @see  AppMenu/MenuData/MenuItem.h
-     */
-    class MenuItem;
-
-    /**
-     * @brief  The abstract internal data object held within a MenuItem, 
-     *         allowing menu items to interact with varying data sources through
-     *         the same interface.
-     *
-     * @see  AppMenu/MenuData/ItemData.h
-     */
-    class ItemData;
-
-    /**
-     * @brief  An ItemData subclass that handles menu data read from desktop
-     *         entry files.
-     *
-     * @see  AppMenu/MenuData/DesktopEntryData.h
-     */
-    class DesktopEntryData;
-
-    /**
-     * @brief  Listens for changes to desktop entries, copying all changes over
-     *         to the menu.
-     *
-     * @see  AppMenu/MenuData/DesktopEntryUpdater.h
-     */
-    class DesktopEntryUpdater;
-    
-    /**
-     * @brief  An ItemData subclass that handles menu data read from the JSON
-     *         configuration file.
-     *
-     * @see  AppMenu/MenuData/ConfigData.h
-     */
-    class ConfigData;
-
-    /**
-     * @brief  Reads the entire menu structure from a JSON configuration file,
-     *         initializes the entire menu as linked ItemData objects, and
-     *         provides an interface for adding new menu items.
-     *
-     * @see  AppMenu/MenuData/ConfigFile.h
-     */
-    class ConfigFile;
-
-    /**
-     * @brief  The private SharedResource singleton used to read, store, and
-     *         write data in the JSON configuration file.
-     *
-     * @see  AppMenu/MenuData/JSONResource.h
-     */
-    class JSONResource;
-
-    /* ####################  Menu Components  ########################### */
-    /**
-     * @brief  A container component that initializes and holds any format of
-     *         AppMenu.
-     *
-     * This selects the displayed menu format, initializes and displays the 
-     * menu, and holds the menu's loading spinner component.  Its format may be
-     * dynamically changed using AppMenu::changeMenuFormat.
-     *
-     * @see  AppMenu/MenuComponents/MainComponent.h
-     */
-    class MainComponent;
-
-    /**
-     * @brief  Represents the main menu view, creating and positioning folder
-     *         components.
-     * 
-     * @see  AppMenu/MenuComponents/MenuComponent.h
-     */
-    class MenuComponent;
-
-    /**
-     * @brief  Represents an open folder in the menu, creating and positioning
-     *         menu item button components.
-     *
-     * @see  AppMenu/MenuComponents/FolderComponent.h
-     */
-    class FolderComponent;
-
-    /**
-     * @brief  Represents a single menu item as a button component.
-     *
-     * @see  AppMenu/MenuComponents/ItemButton.h
-     */
-    class MenuButton;
-    
-    /* ####################    Menu Editors   ########################### */
-    /**
-     * @brief  A component that allows the user to edit menu item data.
-     *
-     * @see  AppMenu/MenuComponents/Editors/PopupEditor.h
-     */
-    class PopupEditor;
-
-    /**
-     * @brief  A component that allows the user to edit a menu item's list of
-     *         category strings.
-     *
-     * @see  AppMenu/MenuComponents/Editors/CategoryEditor.h
-     */
-    class CategoryEditor;
-
-    /**
-     * @brief  A PopupEditor that allows the user to edit an existing menu item.
-     *
-     * @see  AppMenu/MenuComponents/Editors/ExistingItemEditor.h
-     */
-    class ExistingItemEditor;
-
-    /**
-     * @brief  A PopupEditor that allows the user to add a new menu item defined
-     *         in the JSON menu configuration file.
-     *
-     * @see  AppMenu/MenuComponents/Editors/NewConfigItemEditor.h
-     */
-    class NewConfigItemEditor;
-
-    /**
-     * @brief  A PopupEditor that allows the user to add a new menu item defined
-     *         in a desktop entry file.
-     *
-     * @see  AppMenu/MenuComponents/Editors/NewDesktopAppEditor.h
-     */
-    class NewDesktopAppEditor;
-
-    /* ####################    Menu Formats   ########################### */
-    /**
-     * @brief  Displays the menu as vertical scrolling menu folder panels.
-     *
-     * @see  AppMenu/MenuFormats/Scrolling/
-     */
-    namespace Scrolling
+    namespace Settings
     {
-       class Initializer;
-       class InputHandler;
-       class MenuComponent;
-       class FolderComponent;
-       class MenuButton;
-    }
-    
-    /**
-     * @brief  Displays the menu as pages of menu item grids.
-     *
-     * @see  AppMenu/MenuFormats/Paged
-     */
-    namespace Paged
-    {
-       class Initializer;
-       class InputHandler;
-       class MenuComponent;
-       class FolderComponent;
-       class MenuButton;
-    }
+        /**
+         * @brief  Gets the selected menu format.
+         *
+         * @return  The current AppMenu format selection.
+         */
+        AppMenu::Format getMenuFormat();
 
+        /**
+         * @brief  Saves the new menu format selection.
+         *
+         * @param newFormat  The new menu format to save to configuration files.
+         */
+        void setMenuFormat(const AppMenu::Format newFormat);
+
+        /**
+         * @brief  Gets the string representation of an AppMenu::Format value.
+         *
+         * @param format  An AppMenu format type.
+         *
+         * @return        The format's string representation.
+         */
+        juce::String formatToString(const AppMenu::Format format);
+
+        /**
+         * @brief  Gets an AppMenu::Format value from its string representation.
+         *
+         * @param formatString  An AppMenu format string.
+         *
+         * @return              The corresponding format value, or
+         *                      Format::Invalid if formatString is not a valid
+         *                      format string.
+         */
+        AppMenu::Format stringToFormat(const juce::String formatString);
+
+        /* Paged menu format settings: */
+
+        /**
+         * @brief  Gets the number of menu item columns displayed at one time
+         *         by the Paged AppMenu format.
+         *
+         * @return   The maximum number of menu columns the Paged menu will show
+         *           at once. This value will never be less than one.
+         */
+        int getPagedMenuColumns();
+
+        /**
+         * @brief  Sets the number of menu item columns the Paged menu displays
+         *         at one time.
+         *
+         * @param numColumns  The new column count to save to the configuration
+         *                    file.
+         */
+        void setPagedMenuColumns(const int numColumns);
+
+        /**
+         * @brief  Gets the number of menu item rows displayed at one time by 
+         *         the Paged AppMenu format.
+         *
+         * @return   The maximum number of menu rows the Paged menu will show at
+         *           once.  This value will never be less than one.
+         */
+        int getPagedMenuRows();
+
+        /**
+         * @brief  Sets the number of menu item rows the Paged menu displays at 
+         *         one time.
+         *
+         * @param numRows  The new row count to save to the configuration file.
+         */
+        void setPagedMenuRows(const int numRows);
+
+        /* Scrolling menu format settings: */
+
+        /**
+         * @brief  Gets the number of menu item rows displayed at one time by 
+         *         the Scrolling AppMenu format.
+         *
+         * @return   The maximum number of menu rows the Scrolling menu will 
+         *           show at once.  This value will never be less than one.
+         */
+        int getScrollingMenuRows();
+
+        /**
+         * @brief  Sets the number of menu item rows the Scrolling menu displays 
+         *         at one time.
+         *
+         * @param numRows  The new row count to save to the configuration file.
+         */
+        void setScrollingMenuRows(const int numRows);
+    }
 }

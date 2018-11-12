@@ -2,7 +2,6 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
 #include "IconLoader.h"
-#include "AppMenu/AppMenu.h"
 #include "AppMenu/Data/MenuItem.h"
 
 /**

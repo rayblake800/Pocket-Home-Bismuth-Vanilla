@@ -4,7 +4,6 @@
 #include "Config/FileResource.h"
 #include "Config/FileHandler.h"
 #include "AppMenu/Data/DesktopEntry/EntryLoader.h"
-#include "AppMenu/AppMenu.h"
 #include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Data/JSON/ConfigData.h"
 /**

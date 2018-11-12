@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/Settings.h"
+#include "AppMenu/AppMenu.h"
 #include "AppMenu/Formats/Paged/MenuButton.h"
 #include "AppMenu/Formats/Paged/FolderComponent.h"
 
@@ -103,9 +103,14 @@ void AppMenu::Paged::FolderComponent::updateButtonLayout()
  */
 int AppMenu::Paged::FolderComponent::getNumFolderPages() const
 {
-    const int pageSize = maxPageItemCount();
-    return getFolderSize() / pageSize + ((getFolderSize() % pageSize > 0) ?
-        1 : 0);
+    const int folderSize = getFolderSize();
+    const int pageSize   = maxPageItemCount();
+    int numPages = folderSize / pageSize;
+    if((folderSize % pageSize) > 0 || numPages == 0)
+    {
+        numPages++;
+    }
+    return numPages;
 }
 
 /*

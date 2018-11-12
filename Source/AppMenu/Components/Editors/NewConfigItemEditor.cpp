@@ -1,4 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
+#include "AppMenu/Data/JSON/ConfigFile.h"
 #include "AppMenu/Components/Editors/NewConfigItemEditor.h"
 
 /* NewConfigItemEditor shares a localized object class key inherited from

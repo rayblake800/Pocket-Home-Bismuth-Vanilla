@@ -1,4 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
+#include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Components/Editors/ExistingItemEditor.h"
 
 /*
