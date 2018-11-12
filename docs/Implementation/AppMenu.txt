@@ -11,8 +11,7 @@
          AppMenu/Components/MainComponent.cpp to create the new format's 
          initializer.
         -Add the new format's identifier string to formatStrings in
-         AppMenu/Data/ConfigKeys.h
-
+         AppMenu/Data/JSON/ConfigKeys.h
     ## MenuButton
         ### Implement:
             -Rectangle<float> findTitleBounds();

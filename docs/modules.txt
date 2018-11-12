@@ -13,13 +13,8 @@ X /Source/AppMenu/Components/MenuComponent
 X /Source/AppMenu/Control/Controller
 X /Source/AppMenu/Control/Initializer
 X /Source/AppMenu/Control/InputHandler
-X /Source/AppMenu/Data/ConfigData
-X /Source/AppMenu/Data/ConfigFile
-X /Source/AppMenu/Data/ConfigKeys
-X /Source/AppMenu/Data/DesktopEntryData
-X /Source/AppMenu/Data/ItemData
-X /Source/AppMenu/Data/JSONResource
-X /Source/AppMenu/Data/MenuItem
+X /Source/AppMenu/Data/JSON/ConfigDataX /Source/AppMenu/Data/JSON/ConfigFileX /Source/AppMenu/Data/JSON/ConfigKeysX /Source/AppMenu/Data/DesktopEntry/EntryDataX /Source/AppMenu/Data/ItemData
+X /Source/AppMenu/Data/JSON/JSONResourceX /Source/AppMenu/Data/MenuItem
 X /Source/AppMenu/Formats/Paged/FolderComponent
 X /Source/AppMenu/Formats/Paged/Initializer
 X /Source/AppMenu/Formats/Paged/InputHandler
