@@ -177,8 +177,7 @@
         "newAppTitleKey"    : "New application shortcut",
         "newFolderTitleKey" : "New application folder"
     },
-    "AppMenu::DesktopEntryData": 
-    {
+    "AppMenu::EntryData":     {
         "removeLinkTo"  : "Remove link to ",
         "questionMark"  : "?",
         "willHideEntry" : "This application will be hidden from pocket-home.",
