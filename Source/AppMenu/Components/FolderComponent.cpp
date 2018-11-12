@@ -18,8 +18,7 @@ folderItem(folderItem)
  */
 void AppMenu::FolderComponent::initMenuItems()
 {
-    int itemCount = folderItem.getFolderSize();
-    DBG("Folder: creating " << itemCount << " buttons");
+    const int itemCount = folderItem.getFolderSize();
     for(int i = 0; i < itemCount; i++)
     {
         MenuItem buttonItem = folderItem.getFolderItem(i);
