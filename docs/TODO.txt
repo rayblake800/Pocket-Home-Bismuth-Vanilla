@@ -23,13 +23,9 @@
 # Task list for release 0.10
 
 ## AppMenu Improvements
-    1. Document requirements for implementing menu format variants.
-    2. Finish implementing abstract components.
-    3. Refactor old menu format variants for the new design.
-    4. Remove old AppMenu files from the HomePage directory.
-    5. Write MenuItem test class.
-    6. Design and implement TabbedAppMenu.
-    7. Write AppMenu test class that can be applied to each menu variant.
+    1. Write unit tests
+    2. Add desktop actions to context menus
+    3. Show error alerts for desktop entry exceptions.
 
 ## Wifi Improvements
     1. JSONWifiInterface really isn't helpful, and accomodating it creates
@@ -51,19 +47,15 @@
     6. Continue implementing test classes.
 
 ## FreeDesktop Standards/ DesktopEntry Improvements
-    1. Desktop entry loading is relatively quick now; load entries earlier, and
-       don't waste time sending loading updates.
-    2. Provide support for refreshing loaded entries, re-scanning files and 
-       re-reading ones with write times newer than the last entry read time.
-    3. Improve support for .Desktop Actions
-    4. Add support for launching applications through d-bus when desktop entries
+    1. Fix problems with re-creating hidden entries.
+    2. Add support for launching applications through d-bus when desktop entries
        request it.
-    5. Research the FreeDesktop standard for tracking launched applications, and
+    3. Research the FreeDesktop standard for tracking launched applications, and
        integrate it into AppLauncher. 
-    6. Move all functionality in AssetFiles to XDGDirectories
-    7. Place config files and lock files in directories selected with
+    4. Move all functionality in AssetFiles to XDGDirectories
+    5. Place config files and lock files in directories selected with
        XDGDirectories.
-    8. Write DesktopEntry and DesktopEntryLoader test classes.
+    6. Write DesktopEntry and DesktopEntryLoader test classes.
 
 ## Configuration Improvements
     1. Add config. option for enabling/disabling that PocketCHIP audio hack. 
