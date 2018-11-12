@@ -135,8 +135,9 @@ void AppMenu::Controller::activateMenuItem(const MenuItem clickedItem)
     }
     else
     {
-        setLoadingState(true, localeText(launchingAPPTextKey) + " "
-                + clickedItem.getTitle());
+        const juce::String loadingText = localeText(launchingAPPTextKey) + " "
+            + clickedItem.getTitle();
+        setLoadingState(true, loadingText);
         launchOrFocusApplication(clickedItem);
     }
 }
@@ -243,6 +244,7 @@ void AppMenu::Controller::launchOrFocusApplication(MenuItem toLaunch)
         Config::MainFile mainConfig;
         String termPrefix = mainConfig.getConfigValue<String>
             (Config::MainKeys::termLaunchCommandKey);
+        command = termPrefix + command;
     }
     setLoadingState(true);
     appLauncher.startOrFocusApp(toLaunch.getCommand());
