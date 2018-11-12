@@ -2,7 +2,7 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 
 #pragma once
-#include "AppMenu/Data/ConfigFile.h"
+#include "AppMenu/Data/JSON/ConfigFile.h"
 #include "AppMenu/Components/Editors/PopupEditor.h"
 
 /** 
@@ -15,7 +15,8 @@
  * or a menu folder.  After entering data and pressing the confirm button, the 
  * new menu item is added to the menu, and saved by AppMenu::ConfigFile.
  */
-class AppMenu::NewConfigItemEditor : public PopupEditor {
+class AppMenu::NewConfigItemEditor : public PopupEditor 
+{
 public:
     /**
      * @brief  Creates the new editor component.
@@ -37,6 +38,7 @@ public:
             const bool isFolder,
             const int insertIndex = 0,
             const std::function<void() > onConfirm = [](){});
+
 protected:
     /**
      * @brief  Creates the new application menu item and inserts it into the
@@ -51,6 +53,5 @@ private:
     /* Index in the folder where the new menu item will be inserted. */
     int insertIndex;
 };
-
 /* Only include this file directly in the AppMenu implementation! */
 #endif
