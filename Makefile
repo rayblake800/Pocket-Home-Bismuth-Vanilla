@@ -883,7 +883,7 @@ $(TEST_PREFIX)GPPTestObject.o: \
 $(TEST_PREFIX)GPPObject.o: \
 	Tests/GLib/test_GPPObject.cpp
 $(TEST_PREFIX)AppMenu.o: \
-	Tests/test_AppMenu.cpp
+	Tests/AppMenu/AppMenu.cpp
 $(TEST_PREFIX)StressTest.o: \
 	Tests/StressTest.cpp
 $(TEST_PREFIX)ConfigFile.o: \
