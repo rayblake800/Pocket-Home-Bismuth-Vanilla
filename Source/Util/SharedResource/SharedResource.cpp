@@ -3,7 +3,7 @@
 
 /* Holds each SharedResource subclass's single object. */
 static std::map<juce::Identifier, juce::ScopedPointer<SharedResource>> 
-resourceMap;
+    resourceMap;
 
 /* Locks the resource map when resources are being created or destroyed. */
 static juce::ReadWriteLock resourceMapLock;
@@ -21,6 +21,15 @@ resourceKey(resourceKey)
     resourceMap[resourceKey] = this;
     DBG("SharedResource: Creating resource \"" << resourceKey.toString()
             << "\"");
+
+    /* The handler creating this resource can't add itself to the resource's
+     * handler list until all of the SharedResource's classes have been 
+     * constructed.  This means that if one of those constructors creates and
+     * then destroys a Handler, it could inadvertently destroy itself.  To
+     * prevent this, the handler list is created with an initial null handler,
+     * which the creating Handler will replace.
+     */
+    resourceHandlers.add(nullptr);
 }
 
 /*
@@ -48,14 +57,19 @@ SharedResource::Handler::Handler(
         const std::function<SharedResource*()> createResource) :
 resourceKey(resourceKey)
 {
-    using namespace juce;
     SharedResource* classResource = getClassResource();
     if(classResource == nullptr)
     {
         classResource = createResource();
+        const juce::ScopedWriteLock addHandlerLock(getResourceLock());
+        jassert(classResource->resourceHandlers[0] == nullptr);
+        classResource->resourceHandlers.set(0, this);
     }
-    const juce::ScopedWriteLock addHandlerLock(getResourceLock());
-    classResource->resourceHandlers.addIfNotAlreadyThere(this);
+    else
+    {
+        const juce::ScopedWriteLock addHandlerLock(getResourceLock());
+        classResource->resourceHandlers.add(this);
+    }
 }
 
 
@@ -65,9 +79,9 @@ resourceKey(resourceKey)
  */
 SharedResource::Handler::~Handler()
 {
+    SharedResource* classResource = getClassResource();
     const juce::ReadWriteLock& resourceLock = getResourceLock();
     resourceLock.enterWrite();
-    SharedResource* classResource = getClassResource();
     classResource->resourceHandlers.removeAllInstancesOf(this);
     if(classResource->resourceHandlers.isEmpty())
     {
@@ -163,8 +177,11 @@ void SharedResource::foreachHandler
     {
         //check for changes to the handler list during the loop
         jassert(resourceHandlers.size() == handlerCount);
-        handlerAction(resourceHandlers[i]);
-        resourceHandlers[i]->resourceUpdate();
+        if(resourceHandlers[i] != nullptr)
+        {
+            handlerAction(resourceHandlers[i]);
+            resourceHandlers[i]->resourceUpdate();
+        }
     }
 }
 
