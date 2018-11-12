@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
-#include "AppMenu/Data/ConfigFile.h"
-#include "AppMenu/Data/ConfigKeys.h"
+#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Data/JSON/ConfigKeys.h"
 #include "AppMenu/Formats/Scrolling/MenuButton.h"
 #include "AppMenu/Formats/Scrolling/FolderComponent.h"
 

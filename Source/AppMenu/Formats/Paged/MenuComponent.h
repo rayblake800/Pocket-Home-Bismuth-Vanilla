@@ -2,7 +2,7 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
 #include "ConfigurableComponent.h"
-#include "AppMenu/Data/ConfigFile.h"
+#include "AppMenu/Data/JSON/ConfigFile.h"
 #include "NavButton.h"
 #include "AppMenu/Components/MenuComponent.h"
 
