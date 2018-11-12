@@ -3,7 +3,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "OverlaySpinner.h"
-#include "DesktopEntry/Loader.h"
+#include "AppMenu/Data/DesktopEntry/EntryUpdater.h"
 #include "AppMenu/Control/Initializer.h"
 #include "AppMenu/Components/MenuComponent.h"
 #include "AppMenu/Control/Controller.h"
@@ -94,9 +94,10 @@ private:
     /* Tracks the current AppMenu format. */
     AppMenu::Format currentMenuFormat = Format::Invalid;
 
-    /* Loads, caches, and updates desktop entry files.  This resource should
-       exist as long as the AppMenu exists. */
-    DesktopEntry::Loader entryLoader;
+    /* Creates and listens to the resource that loads, caches, and updates 
+       desktop entry files.  This resource should exist as long as the AppMenu 
+       exists. */
+    EntryUpdater entryUpdater;
 
     /* The menu's loading spinner. */
     OverlaySpinner loadingSpinner;

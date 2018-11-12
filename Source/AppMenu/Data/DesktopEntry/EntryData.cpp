@@ -177,7 +177,8 @@ void AppMenu::EntryData::saveChanges()
     }
     catch(DesktopEntry::FormatError e)
     {
-        DBG("EntryData::" << __func__ << ": Failed to write changes:"                                << e.what());
+        DBG("EntryData::" << __func__ << ": Failed to write changes:"
+                << e.what());
     }
     DesktopEntry::Loader entryLoader;
     entryLoader.scanForChanges();
