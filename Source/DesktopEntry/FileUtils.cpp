@@ -1,3 +1,4 @@
+#define DESKTOP_ENTRY_IMPLEMENTATION_ONLY
 #include <map>
 #include <set>
 #include "DesktopEntry/FormatError.h"

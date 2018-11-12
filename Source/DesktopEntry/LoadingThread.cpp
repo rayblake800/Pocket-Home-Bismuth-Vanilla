@@ -1,4 +1,4 @@
-#define DESKTOP_ENTRY_LOADER_IMPLEMENTATION
+#define DESKTOP_ENTRY_IMPLEMENTATION_ONLY
 #include "XDGDirectories.h"
 #include "DesktopEntry/FileError.h"
 #include "DesktopEntry/FormatError.h"
@@ -138,21 +138,6 @@ DesktopEntry::CallbackID DesktopEntry::LoadingThread::addLoadingCallback
     return 0;
 }
 
-/*
- * Adds a callback function to run once when the thread finishes updating 
- * desktop entries.
- */
-DesktopEntry::CallbackID DesktopEntry::LoadingThread::addUpdateCallback
-(const std::function<void(const ChangeMap)> updateCallback)
-{
-    if(updateCallback) // Ignore invalid callback functions
-    {
-        const CallbackID callbackID = generateCallbackID();
-        onUpdate[callbackID] = updateCallback;
-        return callbackID;
-    }
-    return 0;
-}
 
 /*
  * Cancels a pending callback ID.
@@ -160,9 +145,7 @@ DesktopEntry::CallbackID DesktopEntry::LoadingThread::addUpdateCallback
 void DesktopEntry::LoadingThread::cancelCallback(const CallbackID toCancel)
 {
     onFinish.erase(toCancel);
-    onUpdate.erase(toCancel);
 }
-
 
 /*
  * Finds all relevant changes to the set of loaded desktop entry files, and 
@@ -170,11 +153,9 @@ void DesktopEntry::LoadingThread::cancelCallback(const CallbackID toCancel)
  */
 void DesktopEntry::LoadingThread::findUpdatedFiles()
 {
-    using juce::StringArray;
     using juce::String;
     using juce::File;
-    using juce::Array;
-    StringArray dirs = XDGDirectories::getDataSearchPaths();
+    juce::StringArray dirs = XDGDirectories::getDataSearchPaths();
     std::map<String, File> oldFiles = entryFiles;
     entryFiles.clear();
     for(const String& dir : dirs)
@@ -182,7 +163,7 @@ void DesktopEntry::LoadingThread::findUpdatedFiles()
         File directory(dir + entryDirectory);
         if(directory.isDirectory())
         {
-            Array<File> desktopFiles = directory.findChildFiles
+            juce::Array<File> desktopFiles = directory.findChildFiles
                 (File::findFiles, true, "*.desktop");
             for (File& file : desktopFiles)
             {
@@ -199,13 +180,11 @@ void DesktopEntry::LoadingThread::findUpdatedFiles()
                         pendingFiles[desktopID] = file;
                         if(!oldFiles.count(desktopID))
                         {
-                            latestChanges[desktopID] 
-                                = UpdateType::entryAdded;
+                            lastAddedIDs.add(desktopID);
                         }
                         else
                         {
-                            latestChanges[desktopID]
-                                = UpdateType::entryChanged;
+                            lastChangedIDs.add(desktopID);
                         }
                     }
                 }
@@ -219,8 +198,7 @@ void DesktopEntry::LoadingThread::findUpdatedFiles()
             String desktopID = iter.first;
             if(!entryFiles.count(desktopID))
             {
-                latestChanges[desktopID] = UpdateType::entryRemoved;
-                entries.erase(desktopID);
+                lastRemovedIDs.add(desktopID);
             }
         }
     }
@@ -239,7 +217,9 @@ void DesktopEntry::LoadingThread::findUpdatedFiles()
  */
 void DesktopEntry::LoadingThread::init() 
 {
-    latestChanges.clear();
+    lastAddedIDs.clear();
+    lastChangedIDs.clear();
+    lastRemovedIDs.clear();
     findUpdatedFiles();
 }
 
@@ -248,7 +228,6 @@ void DesktopEntry::LoadingThread::init()
  */
 void DesktopEntry::LoadingThread::runLoop(ThreadResource::ThreadLock& threadLock) 
 {
-    using juce::StringArray;
     using juce::String;
     threadLock.enterWrite();
     if(pendingFiles.empty())
@@ -265,7 +244,7 @@ void DesktopEntry::LoadingThread::runLoop(ThreadResource::ThreadLock& threadLock
         EntryFile entry(entryFile, entryID);
         if (entry.shouldBeDisplayed())
         {
-            StringArray entryCategories = entry.getCategories();
+            juce::StringArray entryCategories = entry.getCategories();
             if (entryCategories.isEmpty())
             {
                 // Categorize as "Other"
@@ -284,14 +263,15 @@ void DesktopEntry::LoadingThread::runLoop(ThreadResource::ThreadLock& threadLock
            list at all. */
         else
         {
-            if(entries.count(entryID))
+            if(entries.count(entryID) > 0)
             {
-                latestChanges[entryID] = UpdateType::entryRemoved;
+                lastChangedIDs.removeString(entryID);
+                lastRemovedIDs.add(entryID);
                 entries.erase(entryID);
             }
             else
             {
-                latestChanges.erase(entryID);
+                lastAddedIDs.removeString(entryID);
             }
         }
     }
@@ -314,65 +294,38 @@ void DesktopEntry::LoadingThread::runLoop(ThreadResource::ThreadLock& threadLock
  */
 void DesktopEntry::LoadingThread::cleanup() 
 {
-    using juce::StringArray;
-    DBG("DesktopEntry::LoadingThread::" << __func__ << ": Updated "
-            << latestChanges.size() << " desktop entries.");
+    DBG("DesktopEntry::LoadingThread::" << __func__ << ": "
+            << lastAddedIDs.size() << " added, "
+            << lastChangedIDs.size() << " updated, "
+            << lastRemovedIDs.size() << " removed.");
     juce::MessageManager::callAsync(buildAsyncFunction(LockType::read, [this] 
     {
-        StringArray newEntries;
-        StringArray updated;
-        StringArray removed;
-        for(const auto& change : latestChanges)
-        {
-            switch(change.second)
-            {
-                case UpdateType::entryAdded:
-                    newEntries.add(change.first);
-                    break;
-                case UpdateType::entryRemoved:
-                    removed.add(change.first);
-                    break;
-                case UpdateType::entryChanged:
-                    updated.add(change.first);
-            }
-        }
-        
-        DBG("DesktopEntry::LoadingThread::" << __func__ << ": "
-                << newEntries.size() << " added, "
-                << updated.size() << " updated, "
-                << removed.size() << " removed.");
-        foreachHandler([this, &newEntries, &updated, &removed]
-        (SharedResource::Handler* handler)
-        {
-            UpdateInterface* updateListener = dynamic_cast<UpdateInterface*>
-                (handler);
-            if(updateListener != nullptr)
-            {
-                if(!newEntries.isEmpty())
-                {
-                    updateListener->entriesAdded(newEntries);
-                }
-                if(!updated.isEmpty())
-                {
-                    updateListener->entriesUpdated(updated);
-                }
-                if(!removed.isEmpty())
-                {
-                    updateListener->entriesRemoved(removed);
-                }
-            }
-        });
-        
         for(const auto& callback : onFinish)
         {
             callback.second();
         }
         onFinish.clear();
-        for(const auto& callback : onUpdate)
+
+        foreachHandler([this](SharedResource::Handler* handler)
         {
-            callback.second(latestChanges);
-        }
-        onUpdate.clear();
+            UpdateInterface* updateListener = dynamic_cast<UpdateInterface*>
+                (handler);
+            if(updateListener != nullptr)
+            {
+                if(!lastAddedIDs.isEmpty())
+                {
+                    updateListener->entriesAdded(lastAddedIDs);
+                }
+                if(!lastChangedIDs.isEmpty())
+                {
+                    updateListener->entriesUpdated(lastChangedIDs);
+                }
+                if(!lastRemovedIDs.isEmpty())
+                {
+                    updateListener->entriesRemoved(lastRemovedIDs);
+                }
+            }
+        });
     }));
 }
 
@@ -398,17 +351,14 @@ DesktopEntry::CallbackID DesktopEntry::LoadingThread::generateCallbackID() const
 juce::File DesktopEntry::LoadingThread::findEntryFile
 (const juce::String entryFileID)
 {
-    using juce::StringArray;
-    using juce::String;
-    using juce::File;
-    StringArray dirs = XDGDirectories::getDataSearchPaths();
-    for(const String& dir : dirs)
+    juce::StringArray dirs = XDGDirectories::getDataSearchPaths();
+    for(const juce::String& dir : dirs)
     {
-        File entryFile(dir + entryDirectory + entryFileID + fileExtension);
+        juce::File entryFile(dir + entryDirectory + entryFileID + fileExtension);
         if(entryFile.existsAsFile())
         {
             return entryFile;
         }
     }
-    return File();
+    return juce::File();
 }

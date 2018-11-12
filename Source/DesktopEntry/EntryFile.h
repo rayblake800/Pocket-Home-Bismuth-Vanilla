@@ -1,17 +1,24 @@
 #pragma once
 #include <map>
-#include "DesktopEntry.h"
+#include "DesktopEntry/DesktopEntry.h"
 
 /* 
  * @file  DesktopEntry/EntryFile.h
  * 
  * @brief  Reads in standardized .desktop application shortcut files.
  *
+ * Desktop entry files store all the information needed to create application
+ * shortcuts to display in menus.  Each EntryFile loads and shares the data from
+ * one of these files, or collects the data needed to create a new desktop entry
+ * file.
+ *
+ * EntryFile objects follow the desktop entry standard defined at 
+ * freedesktop.org, ignoring invalid data when reading files, and preventing
+ * invalid data from being added to desktop entry files. Invalid actions are
+ * prevented through the use of DesktopEntry::FormatError exceptions.
+ * 
  * Although .directory files are part of the desktop entry standard, they are
  * not relevant to this module and will be ignored.
- *
- * @see  https://specifications.freedesktop.org/desktop-entry-spec
- *              /desktop-entry-spec-latest.html
  */
 
 class DesktopEntry::EntryFile

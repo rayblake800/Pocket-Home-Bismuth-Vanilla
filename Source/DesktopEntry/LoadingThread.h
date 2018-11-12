@@ -1,22 +1,28 @@
-// Only the DesktopEntryLoader may access the DesktopEntryThread
-#ifdef DESKTOP_ENTRY_LOADER_IMPLEMENTATION
-#pragma once
+// Only include when implementing the DesktopEntry module!
+#ifdef DESKTOP_ENTRY_IMPLEMENTATION_ONLY
 #include <map>
 #include "ThreadResource.h"
 #include "DesktopEntry/DesktopEntry.h"
 #include "DesktopEntry/EntryFile.h"
+#include "DesktopEntry/Implementation.h"
 
 /**
  * @file  DesktopEntry/LoadingThread.h
  *
  * @brief  Loads, caches, and updates desktop entry data.
  *
- * The FreeDesktop standard defines a set of directories that may contain 
+ * The desktop entry standard defines a set of directories that may contain 
  * desktop files, along with the order that they should be searched.  Each
  * desktop entry has a desktop file ID based on its filename and path within
  * its desktop entry directory.  When multiple entry files exist with the same 
  * desktop file ID, the first one found using the standard search order will be
  * used, and all others are ignored.
+ *
+ * The LoadingThread searches these directories for desktop entries, and caches
+ * all visible entries without duplicate IDs as EntryFile objects.  Once data is
+ * first loaded, the LoadingThread may be used to update the data, scanning 
+ * all desktop entry file directories for changes, and sharing these changes 
+ * with all DesktopEntry::UpdateListener objects.
  */
 class DesktopEntry::LoadingThread : public ThreadResource
 {
@@ -86,24 +92,6 @@ public:
      */
     CallbackID addLoadingCallback(const std::function<void()> loadingCallback);
 
-    /* A shorter name to use for objects mapping desktop file IDs to 
-       desktop entry update types. */
-    using ChangeMap = std::map<juce::String, UpdateType>;
-
-    /**
-     * @brief  Adds a callback function to run once when the thread finishes
-     *         updating desktop entries.
-     *
-     * @param updateCallback  A callback function to run when updates are
-     *                        finished.  The ChangeMap listing all updates will
-     *                        be passed in as a parameter.
-     *
-     * @return                An ID that can be used to cancel the callback
-     *                        function.
-     */
-    CallbackID addUpdateCallback
-        (const std::function<void(const ChangeMap)> updateCallback);
-
     /**
      * @brief  Cancels a pending callback ID.
      *
@@ -141,7 +129,8 @@ private:
     
     /**
      * @brief  Runs all registered callback functions once all desktop entry 
-     *         files have been loaded or updated.
+     *         files have been loaded or updated, and notifies UpdateListeners
+     *         of all new changes.
      *
      * This function will be called on the desktop entry thread just before the
      * thread stops running.
@@ -179,17 +168,25 @@ private:
     /* Maps category names to lists of desktop file IDs. */
     std::map<juce::String, juce::StringArray> categories;
 
-    /* The last time desktop entry files were scanned. */
-    juce::Time lastScanTime;
-
-    /* Stores all changes to desktop entries discovered since the last entry
-       update began: */
-    ChangeMap latestChanges;
-
     /* Callbacks to run when desktop entries finish loading. */
     std::map<CallbackID, std::function<void()>> onFinish;
 
-    /* Callbacks to run when desktop entries finish updating. */
-    std::map<CallbackID, std::function<void(ChangeMap)>> onUpdate;
+    /* Stored data from the last desktop entry update: */
+
+    /* The last time desktop entry files were scanned. */
+    juce::Time lastScanTime;
+
+    /* Lists the IDs of all new desktop entry files discovered in the last
+       update scan. */
+    juce::StringArray lastAddedIDs;
+
+    /* Lists the IDs of all changed desktop entry files found during the last
+       update scan. */
+    juce::StringArray lastChangedIDs;
+
+    /* Lists the IDs of all hidden or removed desktop entry files discovered
+       during the last update scan. */
+    juce::StringArray lastRemovedIDs;
 };
+// Only include when implementing the DesktopEntry module!
 #endif

@@ -1,5 +1,5 @@
 #pragma once
-#include "DesktopEntry/DesktopEntry.h"
+#include "DesktopEntry/Implementation.h"
 
 /**
  * @file DesktopEntry/UpdateInterface

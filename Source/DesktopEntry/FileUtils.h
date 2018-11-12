@@ -1,3 +1,5 @@
+// Only include when implementing the DesktopEntry module!
+#ifdef DESKTOP_ENTRY_IMPLEMENTATION_ONLY
 #pragma once
 #include "JuceHeader.h"
 
@@ -6,7 +8,6 @@
  *
  * @brief  Helps DesktopEntry validate, process, and create desktop entry data.
  */
- 
 namespace DesktopEntry
 {
     namespace FileUtils
@@ -273,3 +274,6 @@ namespace DesktopEntry
                 const bool isLocaleString);
     }
 }
+
+// Only include when implementing the DesktopEntry module!
+#endif

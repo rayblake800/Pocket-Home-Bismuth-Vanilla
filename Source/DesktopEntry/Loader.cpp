@@ -1,4 +1,4 @@
-#define DESKTOP_ENTRY_LOADER_IMPLEMENTATION
+#define DESKTOP_ENTRY_IMPLEMENTATION_ONLY
 #include <stdlib.h>
 #include <dirent.h>
 #include <stdlib.h>

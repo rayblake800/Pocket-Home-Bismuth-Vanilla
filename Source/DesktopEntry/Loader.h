@@ -5,6 +5,7 @@
 #include "ResourceHandler.h"
 #include "DesktopEntry/EntryFile.h"
 #include "DesktopEntry/DesktopEntry.h"
+#include "DesktopEntry/Implementation.h"
 
 /** 
  * @file  DesktopEntry/Loader.h

@@ -1,10 +1,9 @@
-#include <set>
+#define DESKTOP_ENTRY_IMPLEMENTATION_ONLY
 #include "Locale.h"
 #include "Utils.h"
 #include "XDGDirectories.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
-#include "DesktopEntry/DesktopEntry.h"
 #include "DesktopEntry/FileError.h"
 #include "DesktopEntry/FormatError.h"
 #include "DesktopEntry/FileUtils.h"
