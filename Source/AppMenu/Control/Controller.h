@@ -8,7 +8,7 @@
 #include "Locale/TextUser.h"
 #include "AppMenu/AppMenu.h"
 #include "AppMenu/Data/MenuItem.h"
-#include "AppMenu/Data/DesktopEntryUpdater.h"
+#include "AppMenu/Data/DesktopEntry/EntryLoader.h"
 #include "AppMenu/Components/MenuComponent.h"
 #include "AppMenu/Components/Editors/PopupEditor.h"
 
@@ -195,8 +195,8 @@ private:
     /* Launches or focuses applications from the menu */
     AppLauncher appLauncher;
 
-    /* Adds and updates menu items created from DesktopEntry::EntryFiles. */
-    DesktopEntryUpdater entryManager;
+    /* Updates desktop entry folder items after changing folder categories */
+    EntryLoader entryLoader;
 };
 
 /* Only include this file directly in the AppMenu implementation! */

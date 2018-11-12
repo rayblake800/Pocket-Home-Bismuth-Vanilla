@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/Data/ConfigKeys.h"
-#include "AppMenu/Data/ConfigData.h"
+#include "AppMenu/Data/JSON/ConfigKeys.h"
+#include "AppMenu/Data/JSON/ConfigData.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::ConfigData";

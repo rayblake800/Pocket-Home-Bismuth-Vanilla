@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include <map>
-#include "AppMenu/Data/ConfigFile.h"
+#include "AppMenu/Data/JSON/ConfigFile.h"
 #include "DesktopEntry/Loader.h"
 #include "AppMenu/Control/InputHandler.h"
 
@@ -54,7 +54,7 @@ void AppMenu::InputHandler::menuItemClicked
  * Handles clicks to menu folders, or menu item buttons in inactive folders.
  */
 void AppMenu::InputHandler::folderClicked(const FolderComponent* clickedFolder, 
-const int closestIndex, const bool rightClicked)
+        const int closestIndex, const bool rightClicked)
 {
     MenuItem folderItem = clickedFolder->getFolderMenuItem();
     while(folderItem != menuComponent->getActiveFolder()

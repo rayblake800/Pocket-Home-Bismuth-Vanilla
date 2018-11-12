@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
-#include "AppMenu/Data/ConfigFile.h"
+#include "AppMenu/Data/JSON/ConfigFile.h"
 #include "AppMenu/Components/Editors/ExistingItemEditor.h"
 #include "AppMenu/Components/Editors/NewConfigItemEditor.h"
 #include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
@@ -29,10 +29,7 @@ AppMenu::Controller::Controller
 (MenuComponent* menuComponent, OverlaySpinner& loadingSpinner) : 
     menuComponent(menuComponent), 
     loadingSpinner(loadingSpinner),
-    Locale::TextUser(localeClassKey) 
-{ 
-   entryManager.initialEntryLoad(); 
-}
+    Locale::TextUser(localeClassKey) { } 
 
 /*
  * Displays a context menu with options for editing an open menu folder.
@@ -159,7 +156,7 @@ void AppMenu::Controller::setLoadingState
  */
 bool AppMenu::Controller::ignoringInput() const
 {
-    return loadingSpinner.isVisible() || menuComponent->showingEditor();;
+    return loadingSpinner.isVisible() || menuComponent->showingEditor();
 }
 
 
@@ -284,8 +281,6 @@ void AppMenu::Controller::createNewFolderEditor
     PopupEditor* newEditor = new NewConfigItemEditor(folder, true, insertIndex,
     [this, folder, insertIndex]()
     {
-        MenuItem newFolder = folder.getFolderItem(insertIndex);
-        entryManager.loadFolderEntries(newFolder);
         menuComponent->removeEditor();
     });
     menuComponent->saveAndShowEditor(newEditor);
@@ -323,7 +318,7 @@ void AppMenu::Controller::createExistingItemEditor(MenuItem toEdit)
             {
                toEdit.getFolderItem(i).remove(false); 
             }
-            entryManager.loadFolderEntries(toEdit);
+            entryLoader.loadFolderEntries(toEdit);
         }
         menuComponent->removeEditor();
     });
@@ -344,9 +339,4 @@ void AppMenu::Controller::copyMenuItem
             toCopy.getCategories(),
             copyFolder,
             insertIndex);
-    if(toCopy.isFolder())
-    {
-        MenuItem newFolder = copyFolder.getFolderItem(insertIndex);
-        entryManager.loadFolderEntries(newFolder);
-    }
 }

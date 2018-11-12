@@ -25,7 +25,6 @@
 class AppMenu::ConfigData : public ItemData, public Locale::TextUser
 {
 public:
-
     /**
      * @brief  Creates a new menu item that initially holds no data.
      */
@@ -200,7 +199,7 @@ private:
     /* Whether the menu item launches an application in a terminal window. */
     bool launchInTerm = false;
 
-    /* Application categories used to load desktop entry folder items. */
+    /* Application categories used to select desktop entry folder items. */
     juce::StringArray categories;
 };
 

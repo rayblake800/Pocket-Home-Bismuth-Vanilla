@@ -1,37 +1,34 @@
 /* Only include this file directly in the AppMenu implementation! */
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
+#include "IconThread.h"
 #include "DesktopEntry/EntryFile.h"
 #include "Locale/TextUser.h"
-#include "IconThread.h"
 #include "AppMenu/Data/ItemData.h"
 
 /**
- * @file DesktopEntryData.h
+ * @file EntryData.h 
  * 
- * @brief  An AppMenuItem that gets its data from a DesktopEntry object, loaded 
- *         from a .desktop file. It represents a shortcut to an installed 
- *         application located in the application menu.
+ * @brief  An AppMenuItem that gets its data from a DesktopEntry::EntryFile
+ *         object, loaded from a .desktop file. It represents a shortcut to an 
+ *         installed application located in the application menu.
  *
  * Editing desktop entries works by updating or creating .desktop files in the
- * local user's directory. Changes to desktop entries through this interface 
+ * user's local directory. Changes to desktop entries through this interface 
  * will be visible in other applications for the current user, but will not 
  * affect other users.
- * 
- * @see AppMenuItem, AppMenuComponent, DesktopEntry
  */
 
-class AppMenu::DesktopEntryData : public ItemData, public Locale::TextUser
-{
+class AppMenu::EntryData : public ItemData, public Locale::TextUser{
 public:
     /**
      * @brief  Creates menu item data from a desktop entry. 
      *
      * @param desktopEntry  The desktop entry supplying application menu data.
      */
-    DesktopEntryData(const DesktopEntry::EntryFile& desktopEntry);
+    EntryData(const DesktopEntry::EntryFile& desktopEntry);
 
-    virtual ~DesktopEntryData() { }
+    virtual ~EntryData() { }
 
     /**
      * @brief  Gets the menu item's displayed title.
