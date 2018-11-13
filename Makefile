@@ -12,7 +12,7 @@
 ##   uninstall:	        Removes installed binaries and data files.            ##
 ##	                                                                          ##
 ################################################################################
-## Build options:	                                                          ##
+## Main build options:	                                                      ##
 ##	                                                                          ##
 ## CONFIG=Debug	         Build debug binaries skipping optimizations,         ##
 ##	                     including all test code, and enabling gdb            ##
@@ -24,8 +24,18 @@
 ## V=1	                 Enable verbose build output.                         ##
 ##	                                                                          ##
 ################################################################################
- 
 ######### Build values: #########
+
+# Default Options:
+# Build type: either Debug or Release
+CONFIG ?= Debug
+# Command used to strip unneeded symbols from object files:
+STRIP ?= strip
+# Use the build system's architecture by default.
+TARGET_ARCH ?= -march=native
+# Enable or disable verbose output
+V ?= 0
+
 # Executable name:
 JUCE_TARGET_APP = pocket-home
 # Version number:
@@ -76,18 +86,6 @@ INCLUDE_DIRS := JuceLibraryCode deps/JUCE/modules
 # Directories to recursively search for header files:
 RECURSIVE_INCLUDE_DIRS := Source Tests
 
-######### Load default values: #########
-# Default build type:
-CONFIG ?= Debug
-
-# Command used to strip unneeded symbols from object files:
-STRIP ?= strip
-
-# Use the build system's architecture by default.
-ifeq ($(TARGET_ARCH),)
-	TARGET_ARCH := -march=native
-endif
-
 #### Setup: #### 
 
 # build with "V=1" for verbose builds
@@ -104,6 +102,9 @@ DEPFLAGS := $(if $(word 2, $(TARGET_ARCH)), , -MMD)
 DIR_FLAGS := $(shell echo $(INCLUDE_DIRS) | xargs printf " -I'%s'") \
 	         $(shell find $(RECURSIVE_INCLUDE_DIRS) -type d \
 	                 -printf " -I'%p'")
+
+# Generate the build label from the /etc/os-release file:
+BUILD_NAME := $(shell ./project-scripts/buildLabel.sh)
 
 # Keep debug and release build files in separate directories:
 JUCE_OBJDIR := $(JUCE_OBJDIR)/$(CONFIG)
@@ -128,6 +129,7 @@ endif
 JUCE_CPPFLAGS := $(DEPFLAGS) \
 	             $(JUCE_CONFIG_FLAGS) \
 	             $(JUCE_DEFS)\
+                 -DBUILD_NAME="\"$(shell ./project-scripts/buildLabel.sh)\"" \
 	             $(shell pkg-config --cflags $(PKG_CONFIG_LIBS)) \
 	             $(DIR_FLAGS)
 

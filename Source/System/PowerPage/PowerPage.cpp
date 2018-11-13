@@ -17,19 +17,6 @@ static const juce::Identifier buildTextKey         = "build";
 static const juce::Identifier versionTextKey       = "version";
 static const juce::Identifier flashSoftwareTextKey = "flashSoftware";
 
-/* Path to the release file used to determine build type */
-static const constexpr char* releaseFilePath = "/etc/os-release";
-/* Alternate path where the release file may be located */
-static const constexpr char* altReleaseFilePath = "/usr/lib/os-release";
-
-/* Release file data keys: */
-/* Nicely formatted system name key */
-static const constexpr char* prettyNameKey = "PRETTY_NAME";
-/* System name key */
-static const constexpr char* nameKey = "NAME";
-/* System version key */
-static const constexpr char* versionKey = "VERSION";
-
 PowerPage::PowerPage() : Locale::TextUser(localeClassKey),
 PageComponent("PowerPage"),
 powerOffButton(localeText(shutdownTextKey)),
@@ -70,40 +57,15 @@ lockscreen([this]()
             NotificationType::dontSendNotification);
     
     // Determine release label contents
-    File releaseFile(releaseFilePath);
-    if(!releaseFile.existsAsFile())
-    {
-        releaseFile = File(altReleaseFilePath);
-    }
-    if(releaseFile.existsAsFile())
-    {
-        StringArray releaseLines
-                = StringArray::fromLines(releaseFile.loadFileAsString());
-        std::map<String, String> releaseVars;
-        for(const String& line : releaseLines)
-        {
-            int eqIndex = line.indexOfChar(0, '=');
-            if(eqIndex >= 0)
-            {
-                releaseVars[line.substring(0, eqIndex)]
-                        = line.substring(eqIndex + 1).unquoted();
-            }
-        }
-        String buildText = localeText(buildTextKey);
-        if(releaseVars.count(prettyNameKey))
-        {
-            buildText += releaseVars[prettyNameKey];
-        }
-        else
-        {
-            buildText += releaseVars[nameKey];
-            buildText += " ";
-            buildText += releaseVars[versionKey];
-        }
-        buildLabel.setJustificationType(Justification::centred);
-        buildLabel.setText(buildText, NotificationType::dontSendNotification);
-    }
-    
+    String buildText = localeText(buildTextKey) + " ";
+#ifdef BUILD_NAME
+    buildText += String(BUILD_NAME);
+#else
+    buildText += String("unset");
+#endif
+    buildLabel.setJustificationType(Justification::centred);
+    buildLabel.setText(buildText, NotificationType::dontSendNotification);
+
     powerOffButton.addListener(this);
     sleepButton.addListener(this);
     rebootButton.addListener(this);
