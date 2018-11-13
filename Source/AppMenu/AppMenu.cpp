@@ -19,9 +19,8 @@ juce::Component* AppMenu::createAppMenu()
  */
 AppMenu::Format AppMenu::Settings::getMenuFormat()
 {
-    using juce::String;
     ConfigFile appConfig;
-    return stringToFormat(appConfig.getConfigValue<String>
+    return stringToFormat(appConfig.getConfigValue<juce::String>
             (ConfigKeys::menuFormatKey));
 }
 
@@ -30,10 +29,12 @@ AppMenu::Format AppMenu::Settings::getMenuFormat()
  */
 void AppMenu::Settings::setMenuFormat(const AppMenu::Format newFormat)
 {
-    using juce::String;
-    ConfigFile appConfig;
-    appConfig.setConfigValue<String>(ConfigKeys::menuFormatKey, 
-            formatToString(newFormat));
+    if(newFormat != Format::Invalid)
+    {
+        ConfigFile appConfig;
+        appConfig.setConfigValue<juce::String>(ConfigKeys::menuFormatKey, 
+                formatToString(newFormat));
+    }
 }
 
 /*
@@ -53,7 +54,7 @@ AppMenu::Format AppMenu::Settings::stringToFormat
     for(auto iter = ConfigKeys::formatStrings.begin();
             iter != ConfigKeys::formatStrings.end(); iter++)
     {
-        if(formatString.equalsIgnoreCase(iter->second))
+        if(formatString == iter->second)
         {
              return iter->first;
         }
