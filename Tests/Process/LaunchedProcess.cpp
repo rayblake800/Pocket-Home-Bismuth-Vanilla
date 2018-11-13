@@ -3,16 +3,20 @@
 #include "AppLauncher.h"
 #include "WindowFocus.h"
 #include "XWindowInterface.h"
+#include "DelayUtils.h"
+#include "SystemCommands.h"
 
 class LaunchedProcessTest : public juce::UnitTest
 {
 public:
-    LaunchedProcessTest() : juce::UnitTest("LaunchedProcess testing") {}
+    LaunchedProcessTest() : juce::UnitTest("LaunchedProcess testing",
+            "Process") {}
     
     void runTest() override
     {
         using namespace juce;
         String output;
+        SystemCommands commandReader;
 
         if(AppLauncher::testCommand("echo"))
         {
@@ -37,8 +41,8 @@ public:
         {
             beginTest("top test");
             LaunchedProcess top("top");
-            system("sleep 1");
-            expect(top.isRunning(), "\"top\" process is not running.");
+            expect(DelayUtils::idleUntil([&top](){ return top.isRunning(); },
+                    500, 5000), "\"top\" process is not running.");
             output = top.getProcessOutput();
             expect(output.isEmpty(), String("Unexpected process output ") 
                     + output);
@@ -54,10 +58,11 @@ public:
                 "DefinitelyNotAValidLaunchCommand should have been invalid.");
         beginTest("bad command handling");
         LaunchedProcess bad("DefinitelyNotAValidLaunchCommand");
-        expect(!bad.isRunning(),
-		"Process running despite bad launch command.");
+        expect(!DelayUtils::idleUntil([&bad]() { return bad.isRunning(); },
+                200, 2000), "Process running despite bad launch command.");
         output = bad.getProcessOutput();
-        expectEquals(String(), output, "Bad process should have had no output.");
+        expectEquals(String(), output,
+                "Bad process should have had no output.");
         expectEquals(String(bad.getExitCode()), String("0"),
 			"Bad process error code should have been 0.");
         
@@ -65,13 +70,13 @@ public:
         {
             beginTest("window activation");
             LaunchedProcess winApp("xclock");
-            system("sleep 1");
-            expect(winApp.isRunning(),
-            "Launched terminal process not running.");
+            expect(DelayUtils::idleUntil([&winApp]()
+                    { return winApp.isRunning(); }, 100, 1000), 
+                    "Launched terminal process not running.");
             winApp.activateWindow();
-            MessageManager::getInstance()->runDispatchLoopUntil(5000);
-            expect(!WindowFocus::isFocused(),
-            "pocket-home window should not be focused.");
+            expect(DelayUtils::idleUntil(
+                    []() { return !WindowFocus::isFocused(); }, 500, 8000),
+                    "pocket-home window should not be focused.");
             winApp.kill();
             XWindowInterface xwin;
             xwin.activateWindow(xwin.getPocketHomeWindow());

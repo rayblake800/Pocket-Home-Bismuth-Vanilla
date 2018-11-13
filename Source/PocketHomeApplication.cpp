@@ -4,12 +4,14 @@
 #include "TempTimer.h"
 #include "PocketHomeWindow.h"
 
-//Milliseconds to wait between window focus attempts.
+/* Milliseconds to wait between window focus attempts: */
 static const constexpr int focusWaitMs = 200;
 
-//sets if tests should run after the window initializes
+/* Sets if tests should run after the window initializes. */
 static bool runTests = false;
 static bool verboseTesting = false;
+/* Specific test categories to run: */
+static juce::StringArray testCategories;
 
 /**
  * Attempts to activate the application window and grab keyboard focus.  This
@@ -28,7 +30,19 @@ static void focusAppWindow()
     {
         UnitTestRunner tester;
         tester.setPassesAreLogged(verboseTesting);
-        tester.runAllTests();
+        if(testCategories.isEmpty())
+        {
+            DBG("Running all pocket-home tests:");
+            tester.runAllTests();
+        }
+        else
+        {
+            for(const juce::String& category : testCategories)
+            {
+                DBG("Running test category: " << category);
+                tester.runTestsInCategory(category);
+            }
+        }
         JUCEApplication::getInstance()->systemRequestedQuit();
     }
     else if(!WindowFocus::isFocused())
@@ -45,16 +59,18 @@ static void focusAppWindow()
 void PocketHomeApplication::initialise(const juce::String &commandLine)
 {
     using namespace juce;
+    using std::cerr;
     StringArray args;
     args.addTokens(commandLine, true);
 
     if (args.contains("--help"))
     {
-        std::cerr << "arguments:" << std::endl;
-        std::cerr << "  --help:	Print usage help" << std::endl;
-        std::cerr << "  --fakeWifi:	Use fake WifiStatus"   << std::endl;
-        std::cerr << "  --test: 	Run all program tests" << std::endl;
-        std::cerr << "      -v: 	Verbose test output"   << std::endl;
+        cerr << "arguments:" << std::endl;
+        cerr << "  --help	         Print usage help\n";
+        cerr << "  --fakeWifi	     Use fake WifiStatus\n";
+        cerr << "  --test 	         Run all program tests\n";
+        cerr << "     -categories    Run tests within listed categories\n";
+        cerr << "     -v 	         Verbose test output\n";
         quit();
     }
 
@@ -69,7 +85,6 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
                 << ": Sound failed to initialize");
     }
     runTests = args.contains("--test");
-    verboseTesting = args.contains("-v");
     if(!runTests)
     {
         gLibThread = new GLibSignalThread();
@@ -78,6 +93,15 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
     }
     else
     {
+        verboseTesting = args.contains("-v");
+        int categoryIndex = args.indexOf("-categories");
+        if(categoryIndex != -1)
+        {
+            for(int i = categoryIndex + 1; i < args.size(); i++)
+            {
+                testCategories.add(args[i]);
+            }
+        }
         //Use an empty window and don't initialize signal thread when testing
         homeWindow = new DocumentWindow(getApplicationName(), Colours::dimgrey,
                 DocumentWindow::allButtons);

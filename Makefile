@@ -35,6 +35,8 @@ STRIP ?= strip
 TARGET_ARCH ?= -march=native
 # Enable or disable verbose output
 V ?= 0
+# Whether test classes will be built
+BUILD_TESTS ?= 1
 
 # Executable name:
 JUCE_TARGET_APP = pocket-home
@@ -177,6 +179,10 @@ OBJECTS_UTIL := \
   $(UTIL_PREFIX)ThreadResource.o \
   $(UTIL_PREFIX)WindowFocus.o \
   $(UTIL_PREFIX)WindowFocusedTimer.o 
+OBJECTS_UTIL_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_UTIL := $(OBJECTS_UTIL) $(OBJECTS_UTIL_TEST)
+endif
 util : $(OBJECTS_UTIL)
 	@echo "Built Utility module"
 
@@ -185,6 +191,10 @@ LAYOUT_PREFIX := $(JUCE_OBJDIR)/Layout_
 OBJECTS_LAYOUT := \
   $(LAYOUT_PREFIX)Manager.o \
   $(LAYOUT_PREFIX)TransitionAnimator.o 
+OBJECTS_LAYOUT_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_LAYOUT := $(OBJECTS_LAYOUT) $(OBJECTS_LAYOUT_TEST)
+endif
 layout : $(OBJECTS_LAYOUT)
 	@echo "Built Layout module"
 
@@ -195,6 +205,13 @@ OBJECTS_CONFIG := \
   $(CONFIG_PREFIX)FileResource.o \
   $(CONFIG_PREFIX)DataKey.o \
   $(CONFIG_PREFIX)AlertWindow.o 
+OBJECTS_CONFIG_TEST := \
+  $(CONFIG_PREFIX)Test_FileResource.o \
+  $(CONFIG_PREFIX)Test_FileHandler.o
+
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_CONFIG := $(OBJECTS_CONFIG) $(OBJECTS_CONFIG_TEST)
+endif
 config : $(OBJECTS_CONFIG)
 	@echo "Built Config module"
 
@@ -204,6 +221,10 @@ OBJECTS_LOCALE := \
   $(LOCALE_PREFIX)Time.o \
   $(LOCALE_PREFIX)TextUser.o \
   $(LOCALE_PREFIX)Locale.o 
+OBJECTS_LOCALE_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_LOCALE := $(OBJECTS_LOCALE) $(OBJECTS_LOCALE_TEST)
+endif
 locale : $(OBJECTS_LOCALE)
 	@echo "Built Locale module"
 
@@ -217,6 +238,10 @@ OBJECTS_CONFIGURABLE := \
   $(CONFIGURABLE_PREFIX)ImageButton.o \
   $(CONFIGURABLE_PREFIX)ImageComponent.o \
   $(CONFIGURABLE_PREFIX)Label.o 
+OBJECTS_CONFIGURABLE_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_CONFIGURABLE := $(OBJECTS_CONFIGURABLE) $(OBJECTS_CONFIGURABLE_TEST)
+endif
 configurable : $(OBJECTS_CONFIGURABLE)
 	@echo "Built Configurable module"
 
@@ -239,6 +264,10 @@ OBJECTS_WIDGET := \
   $(WIDGET_PREFIX)PopupEditor.o \
   $(WIDGET_PREFIX)FileSelectTextEditor.o \
   $(WIDGET_PREFIX)Counter.o 
+OBJECTS_WIDGET_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_WIDGET := $(OBJECTS_WIDGET) $(OBJECTS_WIDGET_TEST)
+endif
 widget : $(OBJECTS_WIDGET)
 	@echo "Built Widget module"
 
@@ -249,6 +278,10 @@ OBJECTS_PAGE := \
   $(PAGE_PREFIX)FocusingList.o \
   $(PAGE_PREFIX)Factory.o \
   $(PAGE_PREFIX)Stack.o 
+OBJECTS_PAGE_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_PAGE := $(OBJECTS_PAGE) $(OBJECTS_PAGE_TEST)
+endif
 page : $(OBJECTS_PAGE)
 	@echo "Built Page module"
 
@@ -260,21 +293,30 @@ OBJECTS_THEME := \
   $(THEME_PREFIX)ColourConfigKeys.o \
   $(THEME_PREFIX)ColourPage.o \
   $(THEME_PREFIX)LookAndFeel.o  
+OBJECTS_THEME_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_THEME := $(OBJECTS_THEME) $(OBJECTS_THEME_TEST)
+endif
 theme : $(OBJECTS_THEME)
 	@echo "Built Theme module"
 
 # System Module:
 SYSTEM_PREFIX := $(JUCE_OBJDIR)/System_
 OBJECTS_SYSTEM := \
-  $(CONFIG_PREFIX)Commands.o \
-  $(CONFIG_PREFIX)XWindowInterface.o \
-  $(CONFIG_PREFIX)Audio.o \
-  $(CONFIG_PREFIX)Display.o \
-  $(CONFIG_PREFIX)I2CBus.o \
-  $(CONFIG_PREFIX)BatteryMonitor.o \
-  $(CONFIG_PREFIX)BatteryIcon.o \
-  $(CONFIG_PREFIX)PowerPage.o \
-  $(CONFIG_PREFIX)FelPage.o  
+  $(SYSTEM_PREFIX)Commands.o \
+  $(SYSTEM_PREFIX)XWindowInterface.o \
+  $(SYSTEM_PREFIX)Audio.o \
+  $(SYSTEM_PREFIX)Display.o \
+  $(SYSTEM_PREFIX)I2CBus.o \
+  $(SYSTEM_PREFIX)BatteryMonitor.o \
+  $(SYSTEM_PREFIX)BatteryIcon.o \
+  $(SYSTEM_PREFIX)PowerPage.o \
+  $(SYSTEM_PREFIX)FelPage.o  
+OBJECTS_SYSTEM_TEST := \
+  $(SYSTEM_PREFIX)Test_XWindowInterface.o  
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_SYSTEM := $(OBJECTS_SYSTEM) $(OBJECTS_SYSTEM_TEST)
+endif
 system : $(OBJECTS_SYSTEM)
 	@echo "Built System module"
 
@@ -285,6 +327,10 @@ OBJECTS_PASSWORD := \
   $(PASSWORD_PREFIX)RemovePage.o \
   $(PASSWORD_PREFIX)SetPage.o \
   $(PASSWORD_PREFIX)LoginPage.o 
+OBJECTS_PASSWORD_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_PASSWORD := $(OBJECTS_PASSWORD) $(OBJECTS_PASSWORD_TEST)
+endif
 password : $(OBJECTS_PASSWORD)
 	@echo "Built Password module"
 
@@ -297,6 +343,10 @@ OBJECTS_SETTINGS := \
   $(SETTINGS_PREFIX)InputPage.o \
   $(SETTINGS_PREFIX)ConnectionComponent.o \
   $(SETTINGS_PREFIX)ListPage.o 
+OBJECTS_SETTINGS_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_SETTINGS := $(OBJECTS_SETTINGS) $(OBJECTS_SETTINGS_TEST)
+endif
 settings : $(OBJECTS_SETTINGS)
 	@echo "Built Settings module"
 
@@ -307,6 +357,10 @@ OBJECTS_ICON := \
   $(ICON_PREFIX)IconLoader.o \
   $(ICON_PREFIX)IconThemeIndex.o \
   $(ICON_PREFIX)IconThread.o 
+OBJECTS_ICON_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_ICON := $(OBJECTS_ICON) $(OBJECTS_ICON_TEST)
+endif
 icon : $(OBJECTS_ICON)
 	@echo "Built Icon module"
 
@@ -318,6 +372,15 @@ OBJECTS_DESKTOP_ENTRY := \
   $(DESKTOP_ENTRY_PREFIX)LoadingThread.o \
   $(DESKTOP_ENTRY_PREFIX)UpdateListener.o \
   $(DESKTOP_ENTRY_PREFIX)Loader.o
+OBJECTS_DESKTOP_ENTRY_TEST := \
+  $(DESKTOP_ENTRY_PREFIX)Test_FileUtils.o \
+  $(DESKTOP_ENTRY_PREFIX)Test_EntryFile.o \
+  $(DESKTOP_ENTRY_PREFIX)Test_LoadingThread.o \
+  $(DESKTOP_ENTRY_PREFIX)Test_Loader.o
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_DESKTOP_ENTRY := $(OBJECTS_DESKTOP_ENTRY) \
+                             $(OBJECTS_DESKTOP_ENTRY_TEST)
+endif
 desktopEntry : $(OBJECTS_DESKTOP_ENTRY)
 	@echo "Built DesktopEntry module"
 
@@ -327,6 +390,11 @@ OBJECTS_PROCESS := \
   $(CONFIG_PREFIX)Reader.o \
   $(CONFIG_PREFIX)Launched.o \
   $(CONFIG_PREFIX)Launcher.o  
+OBJECTS_PROCESS_TEST := \
+  $(CONFIG_PREFIX)Test_Launched.o
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_PROCESS := $(OBJECTS_PROCESS) $(OBJECTS_PROCESS_TEST)
+endif
 process : $(OBJECTS_PROCESS)
 	@echo "Built Process module"
 
@@ -378,6 +446,17 @@ OBJECTS_APPMENU := \
   $(OBJECTS_APPMENU_EDITOR) \
   $(OBJECTS_APPMENU_SCROLLING) \
   $(OBJECTS_APPMENU_PAGED)  
+OBJECTS_APPMENU_TEST := \
+  $(APPMENU_PREFIX)Test_AppMenu.o \
+  $(APPMENU_PREFIX)Test_ConfigFile.o \
+  $(APPMENU_PREFIX)Test_Controller.o \
+  $(APPMENU_PREFIX)Test_InputHandler.o \
+  $(APPMENU_PREFIX)Test_MenuComponent.o \
+  $(APPMENU_PREFIX)Test_PagedMenu.o \
+  $(APPMENU_PREFIX)Test_ScrollingMenu.o
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_APPMENU := $(OBJECTS_APPMENU) $(OBJECTS_APPMENU_TEST)
+endif
 appMenu : $(OBJECTS_APPMENU)
 	@echo "Built AppMenu module"
 
@@ -391,6 +470,13 @@ OBJECTS_GLIB := \
   $(GLIB_PREFIX)SignalHandler.o \
   $(GLIB_PREFIX)VariantConverter.o \
   $(GLIB_PREFIX)DBusProxy.o  
+OBJECTS_GLIB_TEST := \
+  $(GLIB_PREFIX)Test_Object.o \
+  $(GLIB_PREFIX)GPPTestObject.o \
+  $(GLIB_PREFIX)gtest_object.o
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_GLIB := $(OBJECTS_GLIB) $(OBJECTS_GLIB_TEST)
+endif
 glib : $(OBJECTS_GLIB)
 	@echo "Built GLib module"
 
@@ -404,6 +490,10 @@ OBJECTS_NM := \
   $(NM_PREFIX)AccessPoint.o \
   $(NM_PREFIX)SavedConnection.o \
   $(NM_PREFIX)SavedConnectionLoader.o  
+OBJECTS_NM_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_NM := $(OBJECTS_NM) $(OBJECTS_NM_TEST)
+endif
 libNM : $(OBJECTS_NM)
 	@echo "Built LibNM module"
 
@@ -418,6 +508,11 @@ OBJECTS_WIFI := \
   $(WIFI_PREFIX)SettingsComponent.o \
   $(WIFI_PREFIX)SettingsPage.o \
   $(WIFI_PREFIX)Icon.o
+OBJECTS_WIFI_TEST := \
+  $(WIFI_PREFIX)Test_StateManager.o
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_WIFI := $(OBJECTS_WIFI) $(OBJECTS_WIFI_TEST)
+endif
 wifi : $(OBJECTS_WIFI)
 	@echo "Built Wifi module"
 
@@ -429,34 +524,40 @@ OBJECTS_BLUETOOTH := \
   $(BLUETOOTH_PREFIX)Device.o \
   $(BLUETOOTH_PREFIX)SettingsComponent.o \
   $(BLUETOOTH_PREFIX)SettingsPage.o 
+OBJECTS_BLUETOOTH_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_BLUETOOTH := $(OBJECTS_BLUETOOTH) $(OBJECTS_BLUETOOTH_TEST)
+endif
 bluetooth : $(OBJECTS_BLUETOOTH)
 	@echo "Built Bluetooth module"
-
-# Testing Module:
-TEST_PREFIX := $(JUCE_OBJDIR)/Test_
-OBJECTS_TEST := \
-  $(TEST_PREFIX)AppMenu.o \
-  $(TEST_PREFIX)ConfigFile.o \
-  $(TEST_PREFIX)LaunchedApp.o \
-  $(TEST_PREFIX)WifiStateManager.o \
-  $(TEST_PREFIX)XWindowInterface.o \
-  $(TEST_PREFIX)StressTest.o \
-  $(TEST_PREFIX)gtest_object.o \
-  $(TEST_PREFIX)GPPTestObject.o
-testing : $(OBJECTS_TEST)
-	@echo "Built Testing module"
 
 OBJECTS_MAIN := \
   $(JUCE_OBJDIR)/Main.o \
   $(JUCE_OBJDIR)/PocketHomeApplication.o \
   $(JUCE_OBJDIR)/PocketHomeWindow.o \
   $(JUCE_OBJDIR)/HomePage.o 
+OBJECTS_MAIN_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_MAIN := $(OBJECTS_MAIN) $(OBJECTS_MAIN_TEST)
+endif
 main : $(OBJECTS_MAIN)
 	@echo "Built pocket-home"
 
+# Testing Module:
+TEST_PREFIX := $(JUCE_OBJDIR)/Test_
+OBJECTS_TEST := \
+  $(TEST_PREFIX)StressTest.o \
+  $(TEST_PREFIX)TestWindow.o \
+  $(TEST_PREFIX)DelayUtils.o
+testing : $(OBJECTS_TEST)
+	@echo "Built Testing module"
+
 MODULES := juce util layout config locale configurable widget page \
            theme system password settings icon desktopEntry process appMenu \
-           glib libNM wifi bluetooth testing main
+           glib libNM wifi bluetooth main
+ifeq ($(BUILD_TESTS), 1)
+    MODULES := $(MODULES) testing
+endif
 
 OBJECTS_APP := \
   $(OBJECTS_JUCE) \
@@ -479,8 +580,10 @@ OBJECTS_APP := \
   $(OBJECTS_NM) \
   $(OBJECTS_WIFI) \
   $(OBJECTS_BLUETOOTH) \
-  $(OBJECTS_TEST) \
   $(OBJECTS_MAIN)
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_TEST)
+endif
 
 $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(MODULES) $(RESOURCES)
 	@echo Linking "pocket-home - App"
@@ -596,6 +699,12 @@ $(CONFIG_PREFIX)DataKey.o: \
     Source/Config/DataKey.cpp
 $(CONFIG_PREFIX)AlertWindow.o: \
     Source/Config/AlertWindow.cpp
+# Tests:
+$(CONFIG_PREFIX)Test_FileResource.o: \
+    Tests/Config/FileResource.cpp
+$(CONFIG_PREFIX)Test_FileHandler.o: \
+    Tests/Config/FileHandler.cpp
+
 
 # Locale Module:
 $(LOCALE_PREFIX)Time.o: \
@@ -678,24 +787,27 @@ $(THEME_PREFIX)LookAndFeel.o : \
     Source/Theme/PokeLookAndFeel.cpp
 
 # System Module:
-$(CONFIG_PREFIX)Commands.o : \
+$(SYSTEM_PREFIX)Commands.o : \
     Source/System/SystemCommands.cpp
-$(CONFIG_PREFIX)XWindowInterface.o : \
+$(SYSTEM_PREFIX)XWindowInterface.o : \
     Source/System/XWindowInterface.cpp
-$(CONFIG_PREFIX)Audio.o : \
+$(SYSTEM_PREFIX)Audio.o : \
     Source/System/Audio.cpp
-$(CONFIG_PREFIX)Display.o : \
+$(SYSTEM_PREFIX)Display.o : \
     Source/System/Display.cpp
-$(CONFIG_PREFIX)I2CBus.o : \
+$(SYSTEM_PREFIX)I2CBus.o : \
     Source/System/I2CBus.cpp
-$(CONFIG_PREFIX)BatteryMonitor.o : \
+$(SYSTEM_PREFIX)BatteryMonitor.o : \
     Source/System/BatteryMonitor.cpp
-$(CONFIG_PREFIX)BatteryIcon.o : \
+$(SYSTEM_PREFIX)BatteryIcon.o : \
     Source/System/BatteryIcon.cpp
-$(CONFIG_PREFIX)PowerPage.o : \
+$(SYSTEM_PREFIX)PowerPage.o : \
     Source/System/PowerPage/PowerPage.cpp
-$(CONFIG_PREFIX)FelPage.o : \
+$(SYSTEM_PREFIX)FelPage.o : \
     Source/System/PowerPage/FelPage.cpp
+# Tests:
+$(SYSTEM_PREFIX)Test_XWindowInterface.o : \
+    Tests/System/XWindowInterface.cpp
 
 # Password Module:
 $(PASSWORD_PREFIX)Password.o : \
@@ -742,6 +854,15 @@ $(DESKTOP_ENTRY_PREFIX)UpdateListener.o : \
 	Source/DesktopEntry/UpdateListener.cpp
 $(DESKTOP_ENTRY_PREFIX)Loader.o: \
 	Source/DesktopEntry/Loader.cpp
+# Tests:
+$(DESKTOP_ENTRY_PREFIX)Test_FileUtils.o: \
+    Tests/DesktopEntry/FileUtils.cpp
+$(DESKTOP_ENTRY_PREFIX)Test_EntryFile.o: \
+	Tests/DesktopEntry/EntryFile.cpp
+$(DESKTOP_ENTRY_PREFIX)Test_LoadingThread.o: \
+	Tests/DesktopEntry/LoadingThread.cpp
+$(DESKTOP_ENTRY_PREFIX)Test_Loader.o: \
+	Tests/DesktopEntry/Loader.cpp
 
 # Process Module:
 $(CONFIG_PREFIX)Reader.o : \
@@ -750,6 +871,11 @@ $(CONFIG_PREFIX)Launched.o : \
     Source/Process/LaunchedProcess.cpp
 $(CONFIG_PREFIX)Launcher.o : \
     Source/Process/AppLauncher.cpp
+$(CONFIG_PREFIX)Launched.o : \
+    Source/Process/LaunchedProcess.cpp
+# Tests:
+$(CONFIG_PREFIX)Test_Launched.o : \
+    Tests/Process/LaunchedProcess.cpp
 
 # AppMenu Module
 $(SCROLLING_MENU_PREFIX)MenuButton.o: \
@@ -814,6 +940,21 @@ $(APPMENU_PREFIX)ItemData.o: \
     Source/AppMenu/Data/ItemData.cpp
 $(APPMENU_PREFIX)AppMenu.o: \
     Source/AppMenu/AppMenu.cpp
+# Tests:
+$(APPMENU_PREFIX)Test_AppMenu.o: \
+    Tests/AppMenu/AppMenu.cpp
+$(APPMENU_PREFIX)Test_ConfigFile.o: \
+    Tests/AppMenu/ConfigFile.cpp
+$(APPMENU_PREFIX)Test_Controller.o: \
+    Tests/AppMenu/Controller.cpp
+$(APPMENU_PREFIX)Test_InputHandler.o: \
+    Tests/AppMenu/InputHandler.cpp
+$(APPMENU_PREFIX)Test_MenuComponent.o: \
+    Tests/AppMenu/MenuComponent.cpp
+$(APPMENU_PREFIX)Test_PagedMenu.o: \
+    Tests/AppMenu/PagedMenu.cpp
+$(APPMENU_PREFIX)Test_ScrollingMenu.o: \
+    Tests/AppMenu/ScrollingMenu.cpp
 
 # GLib Module:
 $(GLIB_PREFIX)Object.o : \
@@ -830,6 +971,13 @@ $(GLIB_PREFIX)VariantConverter.o : \
     Source/GLib/DBus/GVariantConverter.cpp
 $(GLIB_PREFIX)DBusProxy.o : \
     Source/GLib/DBus/GPPDBusProxy.cpp
+# Tests
+$(GLIB_PREFIX)Test_Object.o : \
+    Tests/GLib/GPPObject.cpp
+$(GLIB_PREFIX)GPPTestObject.o : \
+    Tests/GLib/GPPTestObject.cpp
+$(GLIB_PREFIX)gtest_object.o : \
+    Tests/GLib/gtest_object.cpp
 
 # LibNM Module:
 $(NM_PREFIX)Client.o : \
@@ -864,6 +1012,9 @@ $(WIFI_PREFIX)SettingsPage.o : \
     Source/Wifi/WifiSettingsPage.cpp
 $(WIFI_PREFIX)Icon.o : \
     Source/Wifi/WifiIcon.cpp
+# Tests:
+$(WIFI_PREFIX)Test_StateManager.o : \
+    Tests/Wifi/WifiStateManager.cpp
 
 # Bluetooth Module:
 $(BLUETOOTH_PREFIX)BluezAdapter.o : \
@@ -878,21 +1029,9 @@ $(BLUETOOTH_PREFIX)SettingsPage.o : \
     Source/Bluetooth/BluetoothSettingsPage.cpp
 
 # Testing Module:
-$(TEST_PREFIX)gtest_object.o: \
-	Tests/GLib/gtest_object.cpp
-$(TEST_PREFIX)GPPTestObject.o: \
-	Tests/GLib/GPPTestObject.cpp
-$(TEST_PREFIX)GPPObject.o: \
-	Tests/GLib/test_GPPObject.cpp
-$(TEST_PREFIX)AppMenu.o: \
-	Tests/AppMenu/AppMenu.cpp
 $(TEST_PREFIX)StressTest.o: \
 	Tests/StressTest.cpp
-$(TEST_PREFIX)ConfigFile.o: \
-	Tests/test_ConfigFile.cpp
-$(TEST_PREFIX)LaunchedApp.o: \
-	Tests/test_LaunchedApp.cpp
-$(TEST_PREFIX)WifiStateManager.o: \
-	Tests/test_WifiStateManager.cpp
-$(TEST_PREFIX)XWindowInterface.o: \
-	Tests/test_XWindowInterface.cpp
+$(TEST_PREFIX)TestWindow.o: \
+	Tests/TestWindow.cpp
+$(TEST_PREFIX)DelayUtils.o: \
+	Tests/DelayUtils.cpp

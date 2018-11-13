@@ -1,0 +1,30 @@
+#include "TestWindow.h"
+
+/*
+ * Creates and shows a window holding a test component.
+ */
+TestWindow::TestWindow(const juce::String testName,
+        juce::Component* const testComponent,
+        const int xPos,
+        const int yPos,
+        const int width,
+        const int height) :
+WindowFocus::BroadcastWindow(testName, juce::Colours::white,
+        juce::DocumentWindow::allButtons)
+{
+    setBounds(xPos, yPos, width, height);
+    setLookAndFeel(&juce::LookAndFeel::getDefaultLookAndFeel());
+    setUsingNativeTitleBar(true);
+    setResizable(true, false);
+    setVisible(true);
+    if(testComponent != nullptr)
+    {
+        if(testComponent->getBounds().isEmpty())
+        {
+            testComponent->setBounds(0, 0, width, height);
+        }
+        testComponent->setVisible(true);
+        DocumentWindow::setContentOwned(testComponent, false);
+    }
+    addToDesktop();
+}
