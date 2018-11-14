@@ -2,7 +2,7 @@
 #include "SharedResource.h"
 
 /* Holds each SharedResource subclass's single object. */
-static std::map<juce::Identifier, juce::ScopedPointer<SharedResource>> 
+static std::map<juce::Identifier, SharedResource*> 
     resourceMap;
 
 /* Locks the resource map when resources are being created or destroyed. */
@@ -87,9 +87,14 @@ SharedResource::Handler::~Handler()
     {
         const juce::ScopedWriteLock removalLock(resourceMapLock);
         // Set map value to null before releasing lock
-        SharedResource* toDelete = resourceMap[resourceKey].release();
+        SharedResource* toDelete = resourceMap[resourceKey]();
+        resourceMap[resourceKey] = nullptr;
         // Release lock before deleting resource
         resourceLock.exitWrite();
+
+        
+        jassert(toDelete != nullptr);
+        jassert(toDelete->resourceHandlers.isEmpty());
         delete toDelete;
         return;
     }
