@@ -87,7 +87,7 @@ SharedResource::Handler::~Handler()
     {
         const juce::ScopedWriteLock removalLock(resourceMapLock);
         // Set map value to null before releasing lock
-        SharedResource* toDelete = resourceMap[resourceKey]();
+        SharedResource* toDelete = resourceMap[resourceKey];
         resourceMap[resourceKey] = nullptr;
         // Release lock before deleting resource
         resourceLock.exitWrite();
@@ -109,7 +109,7 @@ SharedResource*
 SharedResource::Handler::getClassResource() const
 {
     const juce::ScopedReadLock mapLock(resourceMapLock);
-    return resourceMap[resourceKey].get();
+    return resourceMap[resourceKey];
 }
 
 /**
@@ -138,7 +138,7 @@ std::function<void()> SharedResource::buildAsyncFunction(
         SharedResource* resource;
         {
             const juce::ScopedReadLock mapLock(resourceMapLock);
-            resource = resourceMap[resourceKey].get();
+            resource = resourceMap[resourceKey];
             if(resource != nullptr && resource == this)
             {
                 resourceProtector.reset(new Handler(resKey,
