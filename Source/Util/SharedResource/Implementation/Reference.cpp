@@ -9,17 +9,19 @@
  */
 SharedResource::Reference::~Reference()
 {
-    const juce::ScopedWriteLock resourceLock(getResourceLock());
-    Instance* resourceInstance = getResourceInstance();
-    jassert(resourceInstance != nullptr);
-    resourceInstance->references.removeFirstMatchingValue(this);
-    if(resourceInstance->references.isEmpty())
     {
-        Holder::setResource(resourceKey, nullptr);
-        delete resourceInstance;
-        resourceInstance = nullptr;
-        Holder::clearIfEmpty();
+        const juce::ScopedWriteLock resourceLock(getResourceLock());
+        Instance* resourceInstance = getResourceInstance();
+        jassert(resourceInstance != nullptr);
+        resourceInstance->references.removeFirstMatchingValue(this);
+        if(resourceInstance->references.isEmpty())
+        {
+            Holder::setResource(resourceKey, nullptr);
+            delete resourceInstance;
+            resourceInstance = nullptr;
+        }
     }
+    Holder::clearIfEmpty();
 }
 
 /*
