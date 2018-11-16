@@ -7,7 +7,7 @@
 PocketHomeWindow::PocketHomeWindow(juce::String windowName, bool fakeWifi) :
 WindowFocus::BroadcastWindow(windowName, juce::Colours::darkgrey,
         juce::DocumentWindow::allButtons),
-wifiManager([fakeWifi]()->SharedResource*
+wifiManager([fakeWifi]()->NetworkInterface*
 {
     if(fakeWifi)
     {

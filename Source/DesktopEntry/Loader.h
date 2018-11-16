@@ -2,7 +2,7 @@
 #include <map>
 #include <set>
 #include <functional>
-#include "ResourceHandler.h"
+#include "SharedResource/Handler.h"
 #include "DesktopEntry/EntryFile.h"
 #include "DesktopEntry/DesktopEntry.h"
 #include "DesktopEntry/Implementation.h"
@@ -12,7 +12,7 @@
  *
  * @brief  Finds and caches all desktop entry file data.
  */
-class DesktopEntry::Loader : public ResourceHandler<DesktopEntry::LoadingThread>
+class DesktopEntry::Loader : public SharedResource::Handler<LoadingThread>
 {
 public:
     Loader();

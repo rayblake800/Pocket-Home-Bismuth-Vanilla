@@ -11,8 +11,7 @@
 
 
 DesktopEntry::Loader::Loader() : 
-ResourceHandler<LoadingThread>(LoadingThread::resourceKey,
-        []()->SharedResource* { return new LoadingThread(); }) { }
+SharedResource::Handler<LoadingThread>() { }
 
 /*
  * Finds a single EntryFile object using its desktop file ID.

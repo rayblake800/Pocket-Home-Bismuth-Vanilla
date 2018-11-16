@@ -167,6 +167,23 @@ OBJECTS_JUCE := \
 juce : $(OBJECTS_JUCE)
 	@echo "Built Juce library modules"
 
+# SharedResource Module:
+SHARED_RESOURCE_PREFIX := $(JUCE_OBJDIR)/SharedResource_
+OBJECTS_SHARED_RESOURCE := \
+  $(SHARED_RESOURCE_PREFIX)Holder.o \
+  $(SHARED_RESOURCE_PREFIX)Instance.o \
+  $(SHARED_RESOURCE_PREFIX)Reference.o \
+  $(SHARED_RESOURCE_PREFIX)LockedInstancePtr.o \
+  $(SHARED_RESOURCE_PREFIX)Resource.o \
+  $(SHARED_RESOURCE_PREFIX)ThreadResource.o
+OBJECTS_SHARED_RESOURCE_TEST :=
+ifeq ($(BUILD_TESTS), 1)
+    OBJECTS_SHARED_RESOURCE := $(OBJECTS_SHARED_RESOURCE) \
+                               $(OBJECTS_SHARED_RESOURCE_TEST)
+endif
+sharedResource : $(OBJECTS_SHARED_RESOURCE)
+	@echo "Built SharedResource module"
+
 # Utility Module:
 UTIL_PREFIX := $(JUCE_OBJDIR)/Util_
 OBJECTS_UTIL := \
@@ -175,8 +192,6 @@ OBJECTS_UTIL := \
   $(UTIL_PREFIX)JSONFile.o \
   $(UTIL_PREFIX)XDGDirectories.o \
   $(UTIL_PREFIX)AssetFiles.o \
-  $(UTIL_PREFIX)SharedResource.o \
-  $(UTIL_PREFIX)ThreadResource.o \
   $(UTIL_PREFIX)WindowFocus.o \
   $(UTIL_PREFIX)WindowFocusedTimer.o 
 OBJECTS_UTIL_TEST :=
@@ -552,9 +567,9 @@ OBJECTS_TEST := \
 testing : $(OBJECTS_TEST)
 	@echo "Built Testing module"
 
-MODULES := juce util layout config locale configurable widget page \
-           theme system password settings icon desktopEntry process appMenu \
-           glib libNM wifi bluetooth main
+MODULES := juce util sharedResource layout config locale configurable widget \
+           page theme system password settings icon desktopEntry process \
+           appMenu glib libNM wifi bluetooth main
 ifeq ($(BUILD_TESTS), 1)
     MODULES := $(MODULES) testing
 endif
@@ -562,6 +577,7 @@ endif
 OBJECTS_APP := \
   $(OBJECTS_JUCE) \
   $(OBJECTS_UTIL) \
+  $(OBJECTS_SHARED_RESOURCE) \
   $(OBJECTS_LAYOUT) \
   $(OBJECTS_CONFIG) \
   $(OBJECTS_LOCALE) \
@@ -663,6 +679,20 @@ $(JUCE_PREFIX)graphics.o: \
 	JuceLibraryCode/include_juce_graphics.cpp
 $(JUCE_PREFIX)gui_basics.o: \
 	JuceLibraryCode/include_juce_gui_basics.cpp
+
+# SharedResource Module:
+$(SHARED_RESOURCE_PREFIX)Holder.o : \
+    Source/Util/SharedResource/Implementation/Holder.cpp
+$(SHARED_RESOURCE_PREFIX)Instance.o : \
+    Source/Util/SharedResource/Implementation/Instance.cpp
+$(SHARED_RESOURCE_PREFIX)Reference.o : \
+    Source/Util/SharedResource/Implementation/Reference.cpp
+$(SHARED_RESOURCE_PREFIX)LockedInstancePtr.o : \
+    Source/Util/SharedResource/Implementation/LockedInstancePtr.cpp
+$(SHARED_RESOURCE_PREFIX)Resource.o : \
+    Source/Util/SharedResource/Resource.cpp
+$(SHARED_RESOURCE_PREFIX)ThreadResource.o : \
+    Source/Util/SharedResource/ThreadResource.cpp
 
 # Utility Module:
 $(UTIL_PREFIX)Utils.o : \

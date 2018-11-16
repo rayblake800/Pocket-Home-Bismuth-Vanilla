@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include "ThreadResource.h"
+#include "SharedResource/ThreadResource.h"
 #include "IconThemeIndex.h"
 #include "JuceHeader.h"
 
@@ -23,7 +23,7 @@
  * @see IconThemeIndex.h, IconCache.h
  */
 
-class IconThread : public ThreadResource
+class IconThread : public SharedResource::ThreadResource
 {
 public:
     /* SharedResource object key */

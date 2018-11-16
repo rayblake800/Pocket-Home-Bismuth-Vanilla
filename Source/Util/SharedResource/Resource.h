@@ -1,116 +1,34 @@
 #pragma once
 #include "JuceHeader.h"
+#include "SharedResource/Implementation/Instance.h"
 
 /**
- * @file SharedResource.h
+ * @file SharedResource/Resource.h
  *
  * @brief  A basis for threadsafe, RAII-managed Singleton objects.
  *
- * Each SharedResource subclass has at most one object instance. SharedResources
- * may only be directly interacted with through subclasses of the 
- * SharedResource::Handler class.  Sharing a single object like this ensures 
- * that concurrent acccess to system resources can be controlled, and expensive
- * objects are not duplicated unnecessarily.
+ * @see SharedResource.h
  *
- * Each SharedResource subclass has at least one SharedResource::Handler class
- * assigned to it.  These managers define the lifecycle of the SharedResource 
- * object, and provide access to it. The SharedResource object is
- * only created when one of its Handler objects is created, and it is only 
- * destroyed when all of its handlers have been destroyed. This allows 
- * SharedResource initialization and destruction to be controlled using 
- * RAII techniques, by declaring a Handlers at the highest scope where the 
- * resource will be needed.  
+ * Resource object subclasses define access-controlled, reference counted
+ * singletons.  Each Reference subclass is automatically created and destroyed
+ * by its corresponding SharedResource::Handler class or classes, and may only
+ * be accessed through these Handler classes.
  *
- * Each SharedResource object type has a single juce::ReadWriteLock object, 
- * available to all of its handlers.  This is used to ensure that SharedResource
- * data will not be changed while it is being read, or while another thread is
- * already making changes.  This allows Handler objects across multiple threads
- * to share a single resource object safely.  To prevent deadlocks, Handler
- * objects with different resources should interact with eachother very
- * carefully, or not at all.
- *
- * SharedResources may access their handler list, allowing handlers to be used
- * as Listener objects.
- *
- * @see ResourceManager.h, ResourceListener.h
+ * Each concrete Resource subclass must declare a unique, constant identifying
+ * key, publically available as a juce::Identifier named resourceKey. Resource
+ * subclasses must also only use the default constructor.
  */
-class SharedResource
+class SharedResource::Resource : public Instance
 {
 public: 
     /**
      * @brief  Creates the single resource object instance.
      *
-     * @param resourceKey     A unique key string used to identify this
-     *                        resource.     
+     * @param resourceKey  The unique key used to identify this resource.     
      */
-    SharedResource(const juce::Identifier& resourceKey);
+    Resource(const juce::Identifier& resourceKey);
 
-    /**
-     * In debug builds, print an error message if the resource is destroyed
-     * while its Handler list is not empty.
-     */
-    virtual ~SharedResource();
-
-    /**
-     * @brief  An interface for objects that directly access a SharedResource 
-     *         object.
-     */
-    class Handler
-    {
-    protected:
-        /* Allow SharedResource to construct generic Handler objects. */
-        friend class SharedResource;
-
-        /**
-         * @brief  Creates a new Handler for a SharedResource, initializing the 
-         *         resource if necessary.
-         *
-         * @param resourceKey     A unique key string used to identify the 
-         *                        Handler's SharedResource type.
-         *
-         * @param createResource  A function that will create the resource if it
-         *                        has not yet been initialized.
-         */
-        Handler(const juce::Identifier& resourceKey,
-                const std::function<SharedResource*()> createResource);
-    
-    public:
-        /**
-         * @brief  Removes a handler from the handler list, destroying the 
-         *         resource if no handlers remain.
-         */
-        virtual ~Handler();
-
-    protected:
-        /**
-         * @brief  Gets a pointer to the SharedResource object shared by all 
-         *         objects of this Handler subclass.
-         *
-         * @return  The class SharedResource pointer.
-         */
-        SharedResource* getClassResource() const;
-
-        /**
-         * @brief  Gets a reference to the lock used to control access to the 
-         *         shared resource.
-         *
-         * @return  The class resource lock.
-         */
-        const juce::ReadWriteLock& getResourceLock() const;
-
-    private:
-        /* The key used to select this object's SharedResource. */
-        const juce::Identifier& resourceKey;        
-    };
-    
-    /**
-     * @brief  Selects the type of lock to use to protect the SharedResource.
-     */
-    enum LockType
-    {
-        read,
-        write
-    };
+    virtual ~Resource() { }
 
 protected:
     /**
@@ -135,37 +53,29 @@ protected:
             std::function<void()> ifDestroyed = [](){});
 
     /**
-     * @brief  Runs an arbitrary function on each Handler object connected to 
-     *         the SharedResource.
+     * @brief  Runs an arbitrary function on each Handler object with type
+     *         HandlerType connected to the resource.
      *
-     * @param handlerAction  Some action that should run for every handler
+     * @tparam HandlerType   The handlerAction will only run for Handlers that
+     *                       have this type.
+     *
+     * @param handlerAction  Some action that should run for every HandlerType
      *                       connected to this SharedResource, passing in a
-     *                       pointer to the Handler as a parameter.
+     *                       pointer to the HandlerType as a parameter.
      */
-    void foreachHandler(std::function<void(Handler*)> handlerAction);
-
-    /**
-     * @brief  Gets the unique key identifying the SharedResource object.
-     *
-     * @return  The resource object's key.
-     */
-    const juce::Identifier& getResourceKey();
+    template<class HandlerType>
+    void foreachHandler(const std::function<void(HandlerType*)> handlerAction)
+    {
+        foreachReference([&handlerAction](Reference* reference)
+        {
+            HandlerType* handler = dynamic_cast<HandlerType*>(reference);
+            if(handler != nullptr)
+            {
+                handlerAction(handler);
+            }
+        });
+    }
 
 private:
-    /*
-     * Holds pointers to every Handler that accesses this SharedResource. This 
-     * is used to ensure the SharedResource is never destroyed before all of its
-     * Manager objects.
-     */
-    juce::Array<SharedResource::Handler*> resourceHandlers;
-
-    /*
-     * The lock used to control access to this SharedResource.
-     */
-    juce::ReadWriteLock resourceLock;
-      
-    /* The key string identifying this SharedResource instance. */
-    const juce::Identifier& resourceKey;
-    
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SharedResource)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Resource)
 };

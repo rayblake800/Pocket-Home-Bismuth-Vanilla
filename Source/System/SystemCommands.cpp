@@ -1,6 +1,7 @@
-#include "SystemCommands.h"
 #include "JSONFile.h"
 #include "LaunchedProcess.h"
+#include "SharedResource/Resource.h"
+#include "SystemCommands.h"
 
 /* Script directory key */
 static const juce::Identifier scriptDirKey("POCKET_HOME_SCRIPTS");
@@ -129,10 +130,12 @@ static const juce::Identifier& textCommandKey
 
 
 /* Private SharedResource class */
-class SysCommandJSON : public SharedResource, public JSONFile
+class SysCommandJSON : public SharedResource::Resource, public JSONFile
 {
+public:
     friend class SystemCommands;
-    SysCommandJSON() : SharedResource(jsonResourceKey), JSONFile(filename) 
+    SysCommandJSON() : SharedResource::Resource(jsonResourceKey), 
+    JSONFile(filename) 
     {
         using namespace juce;
         scriptDir = getProperty<String>(scriptDirKey);
@@ -146,13 +149,13 @@ class SysCommandJSON : public SharedResource, public JSONFile
 
     virtual ~SysCommandJSON() { }
 
+private:
     /* Pocket-Home script directory path: */
     juce::String scriptDir;
 };
 
 SystemCommands::SystemCommands() :
-ResourceHandler<SysCommandJSON>(jsonResourceKey,
-        []()->SharedResource* { return new SysCommandJSON(); }) { }
+SharedResource::Handler<SysCommandJSON>(jsonResourceKey) { }
 
 
 /*

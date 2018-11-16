@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
-#include "SharedResource.h"
-#include "ResourceHandler.h"
+#include "SharedResource/Resource.h"
+#include "SharedResource/Handler.h"
 #include "JSONFile.h"
 #include "DataKey.h"
 #include "JuceHeader.h"
@@ -33,7 +33,7 @@
  * external changes to the file that occur while the program is running will
  * most likely be ignored and may be overwritten.
  */
-class Config::FileResource : public SharedResource
+class Config::FileResource : public SharedResource::Resource
 {
 protected:
     /**
@@ -191,7 +191,7 @@ public:
  * Receives updates whenever tracked key values are updated in a JSON
  *        configuration file.
  */
-class Listener : public SharedResource::Handler
+class Listener : public SharedResource::Handler<FileResource>
 {
 public:
     //Allow the FileResource class access to the list of tracked keys.
@@ -207,8 +207,8 @@ public:
      *                         FileResource object if necessary.
      */
     Listener(const juce::Identifier& resourceKey,
-            const std::function<SharedResource*()> createResource) : 
-    SharedResource::Handler(resourceKey, createResource) { }
+            const std::function<FileResource*()> createResource) : 
+    SharedResource::Handler<FileResource>(resourceKey, createResource) { }
 
     virtual ~Listener() { }
 
@@ -251,14 +251,9 @@ protected:
     template<typename ValueType>
     ValueType getConfigValue(const juce::Identifier& key)
     {
-        const juce::ReadWriteLock& configLock = getResourceLock();
-        configLock.enterRead();
-        
-        FileResource* config = static_cast<FileResource*>(getClassResource());
-        ValueType value = config->getConfigValue<ValueType>(key);
-
-        configLock.exitRead();
-        return value;
+        SharedResource::LockedPtr<FileResource> configFile
+            = getReadLockedResource();
+        return configFile->getConfigValue<ValueType>(key);
     }
 
 private:
@@ -271,7 +266,6 @@ private:
     virtual void configValueChanged
     (const juce::Identifier& propertyKey) = 0;
 
-    virtual void resourceUpdate() override;
 
     /* Tracks all keys this listener follows. */
     juce::Array<juce::Identifier, juce::CriticalSection> subscribedKeys;

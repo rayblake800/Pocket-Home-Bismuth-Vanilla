@@ -17,7 +17,7 @@ public:
     {
     public:
         Listener() : Config::FileResource::Listener(MainResource::resourceKey,
-                []()->SharedResource* { return new MainResource(); }) { }
+                []()->FileResource* { return new MainResource(); }) { }
         
         virtual ~Listener() { }
     };

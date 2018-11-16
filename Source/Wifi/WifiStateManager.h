@@ -2,7 +2,7 @@
 
 #include "JuceHeader.h"
 #include "WindowFocus.h"
-#include "ResourceHandler.h"
+#include "SharedResource/Handler.h"
 #include "WindowFocusedTimer.h"
 #include "WifiAccessPoint.h"
 #include "NetworkInterface.h"
@@ -22,7 +22,7 @@
  */
 
 
-class WifiStateManager : private ResourceHandler<NetworkInterface>
+class WifiStateManager : private SharedResource::Handler<NetworkInterface>
 {
 public:
     /**
@@ -33,7 +33,7 @@ public:
      *                            initialized.
      */
     WifiStateManager
-    (std::function<SharedResource*()> createWifiResource 
+    (std::function<NetworkInterface*()> createWifiResource 
             = []() { return nullptr; });
 
     virtual ~WifiStateManager() { }

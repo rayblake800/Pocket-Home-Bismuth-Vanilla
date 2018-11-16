@@ -1,5 +1,5 @@
 #define SHARED_RESOURCE_IMPLEMENTATION
-#include "SharedResource/Holder.h"
+#include "SharedResource/Implementation/Holder.h"
 
 /* Holds the unique SharedResource::Holder instance */
 static std::unique_ptr<SharedResource::Holder> holderInstance;
@@ -7,12 +7,20 @@ static std::unique_ptr<SharedResource::Holder> holderInstance;
 /* Prevents concurrent access to the containers holding resource data.*/
 juce::CriticalSection SharedResource::Holder::holderLock;
 
+SharedResource::Holder::Holder()
+{
+    DBG("SharedResource::Holder::" << __func__ 
+            << ": Creating SharedResource instance Holder ");
+}
+
 /*
  * Clears all resource locks.
  */
 SharedResource::Holder::~Holder()
 {
     const juce::ScopedLock cleanupLock(holderLock);
+    DBG("SharedResource::Holder::" << __func__ 
+            << ": Destroying SharedResource instance Holder ");
 #ifdef JUCE_DEBUG
     // Test that all resources were properly destroyed.
     for(int i = 0; i < resourceList.size(); i++)
@@ -51,17 +59,18 @@ SharedResource::Holder* SharedResource::Holder::getHolderInstance()
     {
         holderInstance.reset(new Holder());
     }
+    return holderInstance.get();
 }
 
 /*
- * Finds and gets an InstanceData pointer using its resource key.
+ * Finds and gets an Instance pointer using its resource key.
  */
-SharedResource::InstanceData* SharedResource::Holder::getResource
+SharedResource::Instance* SharedResource::Holder::getResource
 (const juce::Identifier& resourceKey)
 {
     const juce::ScopedLock resourceLock(holderLock);
     const int resourceIndex = getResourceIndex(resourceKey);
-    return resourceList.getUnchecked(resourceIndex);
+    return holderInstance->resourceList.getUnchecked(resourceIndex);
 }
 
 /*
@@ -70,13 +79,40 @@ SharedResource::InstanceData* SharedResource::Holder::getResource
  * to null while destroying the resource.
  */
 void SharedResource::Holder::setResource(const juce::Identifier& resourceKey,
-        InstanceData* resource)
+        Instance* resource)
 {
     const juce::ScopedLock resourceLock(holderLock);
     const int resourceIndex = getResourceIndex(resourceKey);
-    jassert((resourceList.getUnchecked(resourceIndex) == nullptr)
+    Holder* const holder = getHolderInstance();
+
+    // Make sure either a null resource is becoming non-null, or a
+    // non-null resource is becoming null.
+    jassert((holder->resourceList.getUnchecked(resourceIndex) == nullptr)
             != (resource == nullptr));
-    resourceList.set(resourceIndex, resource);
+
+    // If setting a resource to null, delete the old instance
+    holder->resourceList.set(resourceIndex, resource);
+
+}
+
+/*
+ * Deletes the holder instance if it is holding no valid Instance pointers.  
+ * This should be called after deleting a resource Instance.
+ */
+void SharedResource::Holder::clearIfEmpty()
+{
+    const juce::ScopedLock resourceLock(holderLock);
+    if(holderInstance != nullptr)
+    {
+        for(Instance* resourceInstance : holderInstance->resourceList)
+        {
+            if(resourceInstance != nullptr)
+            {
+                return;
+            }
+        }
+        holderInstance.reset(nullptr);
+    }
 }
 
 /*
@@ -87,7 +123,7 @@ SharedResource::Holder::getResourceLock(const juce::Identifier& resourceKey)
 {
     const juce::ScopedLock resourceLock(holderLock);
     const int resourceIndex = getResourceIndex(resourceKey);
-    return *resourceLocks[resourceIndex];
+    return *getHolderInstance()->resourceLocks[resourceIndex];
 }
 
 /*
@@ -98,11 +134,11 @@ SharedResource::Holder::getResourceLock(const juce::Identifier& resourceKey)
 int SharedResource::Holder::getResourceIndex
 (const juce::Identifier& resourceKey)
 {
-    if(resourceIndices.count(resourceKey) == 0)
+    if(getHolderInstance()->resourceIndices.count(resourceKey) == 0)
     {
         initResource(resourceKey);
     }
-    return resourceIndices.at(resourceKey);
+    return getHolderInstance()->resourceIndices.at(resourceKey);
 }
 
 /*
@@ -111,9 +147,10 @@ int SharedResource::Holder::getResourceIndex
  */
 void SharedResource::Holder::initResource(const juce::Identifier& resourceKey)
 {
-    jassert(resourceList.size() == resourceLocks.size());
-    resourceIndices[resourceKey] = resourceList.size();
-    resourceList.add(nullptr);
-    resourceLocks.add(new juce::ReadWriteLock());
+    Holder* const holder = getHolderInstance();
+    jassert(holder->resourceList.size() == holder->resourceLocks.size());
+    holder->resourceIndices[resourceKey] = holder->resourceList.size();
+    holder->resourceList.add(nullptr);
+    holder->resourceLocks.add(new juce::ReadWriteLock());
 }
 

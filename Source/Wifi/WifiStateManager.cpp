@@ -6,8 +6,8 @@ static juce::ScopedPointer<NetworkInterface> networkInterface;
 static juce::ReadWriteLock stateLock;
 
 WifiStateManager::WifiStateManager
-(std::function<SharedResource*()> createWifiResource) :
-ResourceHandler<NetworkInterface>(NetworkInterface::resourceKey,
+(std::function<NetworkInterface*()> createWifiResource) :
+SharedResource::Handler<NetworkInterface>(NetworkInterface::resourceKey,
         [&createWifiResource]()
         {
             return createWifiResource();

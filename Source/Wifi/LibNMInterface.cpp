@@ -370,7 +370,8 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
 {
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    std::function<void()> asyncAction 
+        = buildAsyncFunction(SharedResource::LockType::write,
     [this, connection, isNew]()
     {
         switch(connection.getConnectionState())
@@ -412,7 +413,8 @@ void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection,
 {   
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    std::function<void()> asyncAction 
+        = buildAsyncFunction(SharedResource::LockType::write,
     [this, connection, error, isNew]()
     {
         DBG("LibNMInterface::openingConnectionFailed" << ": Error "
@@ -447,7 +449,8 @@ void LibNMInterface::wirelessEnabledChange(bool enabled)
 {  
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    std::function<void()> asyncAction 
+        = buildAsyncFunction(SharedResource::LockType::write,
     [this, enabled]()
     {
         if (enabled)
@@ -472,7 +475,8 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
 {
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    std::function<void()> asyncAction 
+        = buildAsyncFunction(SharedResource::LockType::write,
     [this, newState, oldState, reason]()
     {
         if(lastNMState == newState)//duplicate callback, ignore
@@ -573,7 +577,8 @@ void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
 {    
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    std::function<void()> asyncAction 
+        = buildAsyncFunction(SharedResource::LockType::write,
     [this, addedAP]()
     {
         if(!addedAP.isNull())
@@ -596,7 +601,8 @@ void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
     using namespace juce;
     jassert(!removedAP.isNull());
     //wifiLock must not be acquired in the GLib thread!
-    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    std::function<void()> asyncAction
+        = buildAsyncFunction(SharedResource::LockType::write,
     [this, removedAP]()
     {
         // If the access point is now null, all references to the NMAP
@@ -623,7 +629,8 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
 {
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
-    std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+    std::function<void()> asyncAction 
+        = buildAsyncFunction(SharedResource::LockType::write,
     [this, active]()
     {
         DBG("LibNMInterface::activeConnectionChanged" 

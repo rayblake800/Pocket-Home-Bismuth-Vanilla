@@ -72,7 +72,7 @@ public:
     {
     public:
         Listener() : Config::FileResource::Listener(ComponentJSON::resourceKey,
-                []()->SharedResource* { return new ComponentJSON(); }) { }
+                []()->Config::FileResource* { return new ComponentJSON(); }) { }
 
         virtual ~Listener() { }
     };

@@ -31,4 +31,4 @@ AppMenu::MenuItem AppMenu::ConfigFile::addMenuItem(
 
 AppMenu::ConfigFile::Listener::Listener() : 
     Config::FileResource::Listener(JSONResource::resourceKey, 
-            []()->SharedResource* { return new JSONResource(); }) { }
+            []()->Config::FileResource* { return new JSONResource(); }) { }

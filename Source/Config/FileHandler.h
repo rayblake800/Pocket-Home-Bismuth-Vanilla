@@ -1,6 +1,6 @@
 #pragma once
 #include "FileResource.h"
-#include "ResourceHandler.h"
+#include "SharedResource/Handler.h"
 #include "Config.h"
 
 /**
@@ -16,15 +16,10 @@
  *                         (holding the SharedResource object key)
  */
 template<class ResourceType>
-class Config::FileHandler : public ResourceHandler<ResourceType>
+class Config::FileHandler : public SharedResource::Handler<ResourceType>
 {
 protected:
-    FileHandler() : ResourceHandler<ResourceType>(
-            ResourceType::resourceKey,
-            []()->SharedResource*
-            {
-                return new ResourceType();
-            }) { }
+    FileHandler() : SharedResource::Handler<ResourceType>() { }
 
 public:
     virtual ~FileHandler() { }
@@ -48,8 +43,8 @@ public:
     template<typename ValueType>
     ValueType getConfigValue(const juce::Identifier& key) const
     {
-        typename ResourceHandler<ResourceType>::LockedResourcePtr jsonPtr 
-            = ResourceHandler<ResourceType>::getReadLockedResource();
+        SharedResource::LockedPtr<ResourceType> jsonPtr 
+            = SharedResource::Handler<ResourceType>::getReadLockedResource();
         return jsonPtr->template getConfigValue<ValueType>(key);
     }
     
@@ -77,8 +72,8 @@ public:
     template<typename ValueType > 
     bool setConfigValue(const juce::Identifier& key, ValueType newValue)
     {
-        typename ResourceHandler<ResourceType>::LockedResourcePtr jsonPtr 
-            = ResourceHandler<ResourceType>::getWriteLockedResource();
+        SharedResource::LockedPtr<ResourceType> jsonPtr 
+            = SharedResource::Handler<ResourceType>::getReadLockedResource();
         return jsonPtr->template setConfigValue<ValueType>(key, newValue);
     }
 };

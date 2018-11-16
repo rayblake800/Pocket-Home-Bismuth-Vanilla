@@ -3,5 +3,4 @@
 #include "DesktopEntry/LoadingThread.h"
 
 DesktopEntry::UpdateListener::UpdateListener() : 
-    ResourceHandler<LoadingThread>(LoadingThread::resourceKey,
-            []()->SharedResource* { return new LoadingThread(); }) { }
+    SharedResource::Handler<LoadingThread>() { }

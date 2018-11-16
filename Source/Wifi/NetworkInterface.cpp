@@ -4,11 +4,12 @@
 /* SharedResource type key */
 const juce::Identifier NetworkInterface::resourceKey = "NetworkInterface";
 
-NetworkInterface::NetworkInterface() : SharedResource(resourceKey) { }
+NetworkInterface::NetworkInterface() : SharedResource::Resource(resourceKey) { }
 
-NetworkInterface::Listener::Listener() : ResourceHandler<NetworkInterface>
+NetworkInterface::Listener::Listener() : 
+    SharedResource::Handler<NetworkInterface>
         (NetworkInterface::resourceKey,
-         []()->SharedResource* { return nullptr; }) { }
+         []()->NetworkInterface* { return nullptr; }) { }
 /*
  * Gets the current state of the wifi device.
  */
@@ -30,16 +31,11 @@ void NetworkInterface::setWifiState(WifiState state)
                 << wifiStateString(state));
         wifiState = state;
         std::function<void()> setState = buildAsyncFunction(
-                SharedResource::write, [this, state]()
+                SharedResource::LockType::write, [this, state]()
                 {
-                    foreachHandler([this, state](Handler* handler)
+                    foreachHandler<Listener>([this, state](Listener* toNotify)
                     {
-                        
-                        Listener* toNotify = dynamic_cast<Listener*>(handler);
-                        if(toNotify != nullptr)
-                        {
-                            toNotify->wifiStateChanged(state);
-                        }
+                        toNotify->wifiStateChanged(state);
                     });
                 });
         MessageManager::callAsync(setState);
@@ -249,16 +245,13 @@ void NetworkInterface::signalAPAdded
 (const WifiAccessPoint& addedAP)
 {
     using namespace juce;
-    std::function<void()> sendSignal = buildAsyncFunction(LockType::write,
+    std::function<void()> sendSignal 
+        = buildAsyncFunction(SharedResource::LockType::write,
             [this, addedAP]
             {
-                foreachHandler([this, addedAP](Handler* handler)
+                foreachHandler<Listener>([this, addedAP](Listener* toNotify)
                 {
-                    Listener* toNotify = dynamic_cast<Listener*>(handler);
-                    if(toNotify != nullptr && !addedAP.isNull())
-                    {
-                        toNotify->accessPointAdded(addedAP);
-                    }
+                    toNotify->accessPointAdded(addedAP);
                 });
             });
     MessageManager::callAsync(sendSignal);
@@ -272,13 +265,13 @@ void NetworkInterface::signalAPRemoved
 (const WifiAccessPoint& removedAP)
 {
     using namespace juce;
-    std::function<void()> sendSignal = buildAsyncFunction(LockType::write,
+    std::function<void()> sendSignal 
+        = buildAsyncFunction(SharedResource::LockType::write,
             [this, removedAP]
             {
-                foreachHandler([this, removedAP](Handler* handler)
+                foreachHandler<Listener>([this, removedAP](Listener* toNotify)
                 {
-                    Listener* toNotify = dynamic_cast<Listener*>(handler);
-                    if(toNotify != nullptr && !removedAP.isNull())
+                    if(!removedAP.isNull())
                     {
                         toNotify->accessPointRemoved(removedAP);
                     }

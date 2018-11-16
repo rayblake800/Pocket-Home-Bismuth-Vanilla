@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SharedResource.h"
-#include "ResourceHandler.h"
+#include "SharedResource/Resource.h"
+#include "SharedResource/Handler.h"
 #include "WifiState.h"
 #include "AccessPointState.h"
 #include "WifiAccessPoint.h"
@@ -12,7 +12,7 @@
  * @brief  Defines an interface for communication between WifiStateManager and
  *         the system wifi libraries.
  */
-class NetworkInterface : public SharedResource, public juce::Timer
+class NetworkInterface : public SharedResource::Resource, public juce::Timer
 {
     /* Only the WifiStateManager may directly interact with the 
        NetworkInterface. */
@@ -28,7 +28,7 @@ protected:
     /**
      * Listener objects receive wifi state updates.
      */
-    class Listener : public ResourceHandler<NetworkInterface>
+    class Listener : public SharedResource::Handler<NetworkInterface>
     {
     public:
         friend class NetworkInterface;

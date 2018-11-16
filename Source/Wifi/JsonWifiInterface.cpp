@@ -140,7 +140,8 @@ void JsonWifiInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         //connection steps generated to reset it
         stopTimer();
         waitingToConnect = toConnect;
-        std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+        std::function<void()> asyncAction 
+            = buildAsyncFunction(SharedResource::LockType::write,
         // try to connect to ap, dispatch events on success and failure
                 [this, psk]()
                 {
@@ -201,7 +202,8 @@ void JsonWifiInterface::disconnect()
     else
     {
         disconnecting = true;
-        std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+        std::function<void()> asyncAction 
+            = buildAsyncFunction(SharedResource::LockType::write,
         [this]()
         {
             DBG("JsonWifiInterface::" << __func__ << ": wifi disconnected");
@@ -237,7 +239,8 @@ void JsonWifiInterface::enableWifi()
         turningOn = true;
         turningOff = false;
 
-        std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+        std::function<void()> asyncAction
+            = buildAsyncFunction(SharedResource::LockType::write,
         [this]()
         {
             if (turningOn)
@@ -270,7 +273,8 @@ void JsonWifiInterface::disableWifi()
         turningOn = false;
         turningOff = true;
 
-        std::function<void()> asyncAction = buildAsyncFunction(LockType::write,
+        std::function<void()> asyncAction 
+            = buildAsyncFunction(SharedResource::LockType::write,
             [this]{
             if (turningOff)
             {

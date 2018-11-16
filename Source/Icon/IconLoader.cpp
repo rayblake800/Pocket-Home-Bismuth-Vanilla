@@ -1,9 +1,5 @@
 #include "IconLoader.h"
 
-IconLoader::IconLoader() :
-ResourceHandler<IconThread>(IconThread::resourceKey,
-        []()->SharedResource* { return new IconThread(); }) { }
-
 /*
  * Adds a request to the list of queued tasks.
  */

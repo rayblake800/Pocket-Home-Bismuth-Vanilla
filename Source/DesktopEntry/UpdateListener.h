@@ -1,7 +1,7 @@
 #pragma once
 #include "DesktopEntry/DesktopEntry.h"
 #include "DesktopEntry/UpdateInterface.h"
-#include "ResourceHandler.h"
+#include "SharedResource/Handler.h"
 
 /**
  * @file DesktopEntry/UpdateListener.h"
@@ -16,7 +16,7 @@
  * @see DesktopEntry/UpdateInterface.h
  */
 class DesktopEntry::UpdateListener : public UpdateInterface,
-    public ResourceHandler<LoadingThread>
+    public SharedResource::Handler<LoadingThread>
 {
 protected:
     UpdateListener();

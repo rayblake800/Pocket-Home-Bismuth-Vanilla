@@ -24,7 +24,8 @@ static const constexpr char* fileExtension = ".desktop";
 /*
  * Creates and starts the thread resource.
  */
-DesktopEntry::LoadingThread::LoadingThread() : ThreadResource(resourceKey)
+DesktopEntry::LoadingThread::LoadingThread() : 
+SharedResource::ThreadResource(resourceKey)
 {
     startThread();
 }
@@ -298,7 +299,8 @@ void DesktopEntry::LoadingThread::cleanup()
             << lastAddedIDs.size() << " added, "
             << lastChangedIDs.size() << " updated, "
             << lastRemovedIDs.size() << " removed.");
-    juce::MessageManager::callAsync(buildAsyncFunction(LockType::read, [this] 
+    juce::MessageManager::callAsync(buildAsyncFunction(
+                SharedResource::LockType::read, [this] 
     {
         for(const auto& callback : onFinish)
         {
@@ -306,24 +308,19 @@ void DesktopEntry::LoadingThread::cleanup()
         }
         onFinish.clear();
 
-        foreachHandler([this](SharedResource::Handler* handler)
+        foreachHandler<UpdateInterface>([this](UpdateInterface* updateListener)
         {
-            UpdateInterface* updateListener = dynamic_cast<UpdateInterface*>
-                (handler);
-            if(updateListener != nullptr)
+        if(!lastAddedIDs.isEmpty())
+        {
+                updateListener->entriesAdded(lastAddedIDs);
+            }
+            if(!lastChangedIDs.isEmpty())
             {
-                if(!lastAddedIDs.isEmpty())
-                {
-                    updateListener->entriesAdded(lastAddedIDs);
-                }
-                if(!lastChangedIDs.isEmpty())
-                {
-                    updateListener->entriesUpdated(lastChangedIDs);
-                }
-                if(!lastRemovedIDs.isEmpty())
-                {
-                    updateListener->entriesRemoved(lastRemovedIDs);
-                }
+                updateListener->entriesUpdated(lastChangedIDs);
+            }
+            if(!lastRemovedIDs.isEmpty())
+            {
+                updateListener->entriesRemoved(lastRemovedIDs);
             }
         });
     }));

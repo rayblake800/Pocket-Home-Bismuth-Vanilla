@@ -19,7 +19,7 @@ public:
     friend class ColourJSON;
     protected:
         Listener() : Config::FileResource::Listener(ColourJSON::resourceKey,
-                []()->SharedResource* { return new ColourJSON(); }) { }
+                []()->FileResource* { return new ColourJSON(); }) { }
 
         virtual ~Listener() { }
 

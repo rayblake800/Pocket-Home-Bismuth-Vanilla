@@ -1,15 +1,15 @@
 #pragma once
 #include "IconThread.h"
-#include "ResourceHandler.h"
+#include "SharedResource/Handler.h"
 /**
  * @file IconLoader.h
  * 
  * @brief  Sends icon search requests to the shared IconThread.
  */
-class IconLoader : public ResourceHandler<IconThread>
+class IconLoader : public SharedResource::Handler<IconThread>
 {
 public:
-    IconLoader();
+    IconLoader() { }
 
     virtual ~IconLoader() { }
 

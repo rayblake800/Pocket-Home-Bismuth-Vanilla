@@ -101,7 +101,7 @@ public:
         {
             signalThread = new GLibSignalThread();
             wifiManager = new WifiStateManager([]
-            ()->SharedResource*
+            ()->NetworkInterface*
             {
                 return new LibNMInterface();
             });

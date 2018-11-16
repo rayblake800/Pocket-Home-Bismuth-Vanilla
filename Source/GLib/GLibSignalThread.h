@@ -6,7 +6,8 @@
 
 #include "gio/gio.h"
 #include "GLibThread.h"
-#include "ResourceHandler.h"
+#include "SharedResource/Resource.h"
+#include "SharedResource/Handler.h"
 #include "JuceHeader.h"
 
 /**
@@ -33,7 +34,7 @@
 /* Private SharedResource class */
 class GThreadResource;
 
-class GLibSignalThread : private ResourceHandler<GThreadResource>
+class GLibSignalThread : private SharedResource::Handler<GThreadResource>
 {
 public:
     GLibSignalThread();
@@ -64,7 +65,7 @@ public:
 
 private:
 
-    class GLibDefaultThread : public SharedResource, public GLibThread
+    class GLibDefaultThread : public SharedResource::Resource, public GLibThread
     {
     public:
 
@@ -75,7 +76,4 @@ private:
         
         virtual ~GLibDefaultThread() { }
     };
-
-    static juce::ScopedPointer<SharedResource> globalThread;
-    static juce::ReadWriteLock threadLock;
 };

@@ -1,5 +1,5 @@
 #pragma once
-#include "ResourceHandler.h"
+#include "SharedResource/Handler.h"
 
 /**
  * @file SystemCommands.h
@@ -34,7 +34,7 @@
 /* Private SharedResource class */
 class SysCommandJSON;
 
-class SystemCommands : public ResourceHandler<SysCommandJSON>
+class SystemCommands : public SharedResource::Handler<SysCommandJSON>
 {
 public:
     SystemCommands();

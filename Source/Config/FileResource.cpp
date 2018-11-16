@@ -13,7 +13,7 @@ static const constexpr char* defaultAssetPath = "configuration/";
 Config::FileResource::FileResource(
         const juce::Identifier& resourceKey,
         const juce::String& configFilename) :
-SharedResource(resourceKey), 
+SharedResource::Resource(resourceKey), 
 filename(configFilename),
 configJson(configPath + filename),
 defaultJson(defaultAssetPath + filename) { }
@@ -100,26 +100,15 @@ void Config::FileResource::Listener::removeTrackedKey
     subscribedKeys.removeAllInstancesOf(keyToRemove);
 }
 
-void Config::FileResource::Listener::resourceUpdate()
-{
-    static int counter = 0;
-    counter++;
-    DBG("Config update " << counter);
-}
-
 /*
  * Announces a changed configuration value to each Listener object.
  */
 void Config::FileResource::notifyListeners(const juce::Identifier& key)
 {
     using namespace juce;
-    foreachHandler([this, &key](Handler* handler)
+    foreachHandler<Listener>([this, &key](Listener* listener)
     {
-        Listener* listener = dynamic_cast<Listener*>(handler);
-        if(listener != nullptr)
-        {
-            notifyListener(listener, key);
-        }
+        notifyListener(listener, key);
     });
 }
     

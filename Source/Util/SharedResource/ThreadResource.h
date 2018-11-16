@@ -1,6 +1,7 @@
 #pragma once
-#include "SharedResource.h"
-#include "JuceHeader.h"
+#include "SharedResource/SharedResource.h"
+#include "SharedResource/Handler.h"
+#include "SharedResource/Resource.h"
 
 /**
  * @file  ThreadResource.h
@@ -17,7 +18,7 @@
  * objects are able to access their own resource locks to prevent handlers 
  * from modifying their data.
  */
-class ThreadResource : public SharedResource, public juce::Thread
+class SharedResource::ThreadResource : public Resource, public juce::Thread
 {
 public:
     /**
@@ -39,7 +40,7 @@ protected:
      * @brief  Prevents the thread object from being destroyed while the
      *         thread is running, and allows the thread to lock itself. 
      */
-    class ThreadLock : public SharedResource::Handler
+    class ThreadLock : public Handler<ThreadResource>
     {
     private:
         /* The ThreadLock may only be created by ThreadResource. */

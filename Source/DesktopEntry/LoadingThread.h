@@ -24,7 +24,7 @@
  * all desktop entry file directories for changes, and sharing these changes 
  * with all DesktopEntry::UpdateListener objects.
  */
-class DesktopEntry::LoadingThread : public ThreadResource
+class DesktopEntry::LoadingThread : public SharedResource::ThreadResource
 {
 public:
     /* SharedResource object class key */ 

@@ -6,13 +6,14 @@ static const constexpr int timeoutMilliseconds = 1000;
 /*
  * Creates a new ThreadResource.
  */
-ThreadResource::ThreadResource(const juce::Identifier& resourceKey) :
-    SharedResource(resourceKey), Thread(resourceKey.toString()) { }
+SharedResource::ThreadResource::ThreadResource
+(const juce::Identifier& resourceKey) :
+    Resource(resourceKey), Thread(resourceKey.toString()) { }
 
 /*
  * Ensures the thread stops running before it is destroyed.
  */
-ThreadResource::~ThreadResource()
+SharedResource::ThreadResource::~ThreadResource()
 {
     if(isThreadRunning())
     {
@@ -23,13 +24,14 @@ ThreadResource::~ThreadResource()
 /*
  * Creates a ThreadLock tied to a single thread resource.
  */
-ThreadResource::ThreadLock::ThreadLock(const juce::Identifier& resourceKey) : 
-    Handler(resourceKey, []()->SharedResource* { return nullptr; }) { }
+SharedResource::ThreadResource::ThreadLock::ThreadLock
+(const juce::Identifier& resourceKey) : 
+    Handler(resourceKey, []()->ThreadResource* { return nullptr; }) { }
 
 /*
  * Blocks the thread until it can be locked for reading.
  */
-void ThreadResource::ThreadLock::enterRead() const
+void SharedResource::ThreadResource::ThreadLock::enterRead() const
 {
     getResourceLock().enterRead();
 }
@@ -37,7 +39,7 @@ void ThreadResource::ThreadLock::enterRead() const
 /*
  * Blocks the thread until it can be locked for writing.
  */
-void ThreadResource::ThreadLock::enterWrite() const
+void SharedResource::ThreadResource::ThreadLock::enterWrite() const
 {
     getResourceLock().enterWrite();
 }
@@ -46,7 +48,7 @@ void ThreadResource::ThreadLock::enterWrite() const
  * Releases a read lock held by this thread. This must be called once for each 
  * call to takeReadLock.
  */
-void ThreadResource::ThreadLock::exitRead() const
+void SharedResource::ThreadResource::ThreadLock::exitRead() const
 {
     getResourceLock().exitRead();
 }
@@ -55,7 +57,7 @@ void ThreadResource::ThreadLock::exitRead() const
  * Releases a write lock held by this thread. This must be called once for each 
  * call to takeWriteLock.
  */
-void ThreadResource::ThreadLock::exitWrite() const
+void SharedResource::ThreadResource::ThreadLock::exitWrite() const
 {
     getResourceLock().exitWrite();
 }
@@ -64,7 +66,7 @@ void ThreadResource::ThreadLock::exitWrite() const
  * Initializes the thread, runs the action loop, then runs cleanup routines 
  * before the thread exits.
  */
-void ThreadResource::run()
+void SharedResource::ThreadResource::run()
 {
     ThreadLock threadLock(getResourceKey());
     threadLock.enterWrite();
