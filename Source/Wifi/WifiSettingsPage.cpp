@@ -7,13 +7,13 @@
 //Wifi signal strength icon asset files
 const juce::StringArray WifiSettingsPage::wifiImageFiles
         = {
-           "wifiStrength0.svg",
-           "wifiStrength1.svg",
-           "wifiStrength2.svg",
-           "wifiStrength3.svg"
+           "component assets/WifiIcon/wifiStrength0.svg",
+           "component assets/WifiIcon/wifiStrength1.svg",
+           "component assets/WifiIcon/wifiStrength2.svg",
+           "component assets/WifiIcon/wifiStrength3.svg"
 };
 //Access point lock icon file
-static const constexpr char* lockFile = "lock.svg";
+static const constexpr char* lockFile = "component assets/WifiIcon/lock.svg";
 
 //===================== List item Layout values ================================
 //Horizontal weights for components in each individual access point list item:

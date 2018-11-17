@@ -6,8 +6,8 @@ ConfigurableImageComponent(ComponentConfigKeys::popupMenuKey,
 0, juce::RectanglePlacement::stretchToFit),
 onConfirm(onConfirm),
 titleLabel("EditorTitle", "", 2),
-cancelButton("cancel.svg"),
-confirmButton("confirm.svg")
+cancelButton("component assets/PopupEditor/cancel.svg"),
+confirmButton("component assets/PopupEditor/confirm.svg")
 {
     using namespace juce;
     setWantsKeyboardFocus(true);
