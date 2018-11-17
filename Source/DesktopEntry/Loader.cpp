@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "Utils.h"
 #include "Locale/TextUser.h"
-#include "ThreadResource.h"
+#include "SharedResource/ThreadResource.h"
 #include "XDGDirectories.h"
 #include "DesktopEntry/LoadingThread.h"
 #include "DesktopEntry/Loader.h"

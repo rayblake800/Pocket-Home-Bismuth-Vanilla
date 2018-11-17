@@ -1,7 +1,7 @@
 // Only include when implementing the DesktopEntry module!
 #ifdef DESKTOP_ENTRY_IMPLEMENTATION_ONLY
 #include <map>
-#include "ThreadResource.h"
+#include "SharedResource/ThreadResource.h"
 #include "DesktopEntry/DesktopEntry.h"
 #include "DesktopEntry/EntryFile.h"
 #include "DesktopEntry/Implementation.h"

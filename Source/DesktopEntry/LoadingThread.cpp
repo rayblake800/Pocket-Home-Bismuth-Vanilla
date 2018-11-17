@@ -209,7 +209,7 @@ void DesktopEntry::LoadingThread::findUpdatedFiles()
             << " unique desktop entry files in "
             << dirs.size() << " data directories.");
     DBG("DesktopEntry::LoadingThread::" << __func__ << ": Reloading "
-            << pendingFiles.size() << " entry files.");
+            << ((int) pendingFiles.size()) << " entry files.");
 }
 
 /*
