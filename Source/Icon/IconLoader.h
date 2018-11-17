@@ -17,7 +17,7 @@ public:
      * @brief  Identifies pending icon callback functions so that they can be
      *         cancelled.
      */
-    typedef IconThread::CallbackID CallbackID;
+    typedef IconThread::RequestID RequestID;
 
     /**
      * @brief  Adds a request to the list of queued tasks.
@@ -52,7 +52,7 @@ public:
      * @return               A CallbackID value that can be used to cancel the
      *                       image assignment
      */
-    CallbackID loadIcon(
+    RequestID loadIcon(
             const juce::String icon, 
             const int size, 
             const std::function<void(juce::Image)> assignImage,
@@ -64,5 +64,5 @@ public:
      *
      * @param toCancel  The callback ID of the assignment function to cancel.
      */
-    void cancelImageAssignment(const CallbackID toCancel);
+    void cancelImageRequest(const RequestID toCancel);
 };

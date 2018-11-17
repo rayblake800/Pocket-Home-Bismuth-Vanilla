@@ -3,7 +3,7 @@
 /*
  * Adds a request to the list of queued tasks.
  */
-IconLoader::CallbackID IconLoader::loadIcon(
+IconLoader::RequestID IconLoader::loadIcon(
         const juce::String icon, 
         const int size, 
         const std::function<void(juce::Image)> assignImage,
@@ -11,26 +11,24 @@ IconLoader::CallbackID IconLoader::loadIcon(
         const int scale)
 {
     auto iconThread = getWriteLockedResource();
-    CallbackID callbackID = iconThread->saveIconCallback(assignImage);
-    IconThread::QueuedJob newJob = 
+    IconThread::IconRequest newJob = 
     {
         icon,
         size,
         scale,
         context,
-        callbackID
+        assignImage
     };
-    iconThread->addQueuedJob(newJob);
-    return callbackID;
+    return iconThread->addRequest(newJob);
 }
 
 /*
  * Cancels a pending image assignment.
  */
-void IconLoader::cancelImageAssignment(const CallbackID toCancel)
+void IconLoader::cancelImageRequest(const RequestID toCancel)
 {
     auto iconThread = getWriteLockedResource();
-    iconThread->takeIconCallback(toCancel);
+    iconThread->cancelRequest(toCancel);
 }
 
 

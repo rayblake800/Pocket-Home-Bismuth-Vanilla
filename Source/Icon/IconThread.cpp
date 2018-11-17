@@ -97,125 +97,93 @@ IconThread::~IconThread()
 {
     signalThreadShouldExit();
     waitForThreadToExit(-1);
+    imageCache.clear();
 }
 
 /*
- * Saves an icon loading callback function to the callback map so that it can be
- * retrieved later.
+ * Cancels a pending icon request.
  */
-IconThread::CallbackID IconThread::saveIconCallback
-(const std::function<void(juce::Image)> loadingCallback)
+void IconThread::cancelRequest(const RequestID requestID)
 {
-    static CallbackID nextCallback = 0;
-    nextCallback++;
-    jassert(callbackMap.count(nextCallback) == 0);
-    if(loadingCallback)
+    requestMap.erase(requestID);
+}
+
+/*
+ * Adds an icon loading request to the queue.
+ */
+IconThread::RequestID IconThread::addRequest(IconRequest request)
+{
+    using std::function;
+    using juce::Image;
+    /* Ignore requests without valid callbacks. */
+    if(!request.loadingCallback)
     {
-        callbackMap[nextCallback] = loadingCallback;
-        return nextCallback;
-    }
-    else
-    {
-        DBG("IconThread::" << __func__ << ": Invalid callback function!");
         return 0;
     }
-}
-
-/*
- * Removes and returns an icon loading callback function from the callbackMap.
- */
-std::function<void(juce::Image)> IconThread::takeIconCallback
-(const CallbackID callbackID)
-{
-    std::function<void(juce::Image)> callback = callbackMap[callbackID];
-    callbackMap.erase(callbackID);
-    return callback;
-}
-
-/*
- * Returns the number of pending icon requests. 
- */
-int IconThread::numJobsQueued()
-{
-    return queuedJobs.size();
-}
-
-/*
- * Adds another job request to the queue.
- */
-void IconThread::addQueuedJob(QueuedJob newJob)
-{
     /* First, attempt to load the icon from assets or the image cache. */
-    juce::Image preLoadedIcon;
-    if(newJob.icon[0] == '/')
+    Image preLoadedIcon;
+    if(request.icon[0] == '/')
     {
-        preLoadedIcon = AssetFiles::loadImageAsset(newJob.icon);
+        preLoadedIcon = AssetFiles::loadImageAsset(request.icon);
     }
     if(preLoadedIcon.isNull())
     {
         //if icon is a partial path, trim it
-        if (newJob.icon.contains("/"))
+        if (request.icon.contains("/"))
         {
-            newJob.icon = newJob.icon.substring
-                (1 + newJob.icon.lastIndexOf("/"));
+            request.icon = request.icon.substring
+                (1 + request.icon.lastIndexOf("/"));
         }
-        if(imageCache.contains(newJob.icon))
+        if(imageCache.contains(request.icon))
         {
-            preLoadedIcon = imageCache[newJob.icon];
+            preLoadedIcon = imageCache[request.icon];
             jassert(preLoadedIcon.isValid());
         }
     }
     if(preLoadedIcon.isValid()) // Icon already found, apply now.
     {
-        auto callback = takeIconCallback(newJob.iconCallbackID);
-        if(callback)
-        {
-            callback(preLoadedIcon);
-        }
-        return;
+        request.loadingCallback(preLoadedIcon);
+        return 0;
     }
     else
     {
         //assign the default icon for now
-        callbackMap[newJob.iconCallbackID](defaultIcon);
-        queuedJobs.add(newJob);
+        request.loadingCallback(defaultIcon);
+        static RequestID newID = 0;
+        while(newID == 0 || requestMap.count(newID) != 0)
+        {
+            newID++;
+        }
+        requestMap[newID] = request;
         if (!isThreadRunning())
         {
             startThread();
         }
+        return newID;
     }
 }
 
-/*
- * Removes and returns the last job from the list.
- */
-const IconThread::QueuedJob IconThread::takeQueuedJob()
-{
-    QueuedJob lastJob = queuedJobs.getLast();
-    queuedJobs.removeLast();
-    return lastJob;
-}
 
 /*
- * While AppMenuButtons still need icons, this finds them in a separate 
- * thread.
+ * Asynchronously handles queued icon requests.
  */
 void IconThread::runLoop(ThreadLock& lock)
 {
     using juce::Image;
     using juce::String;
     using std::function;
-    if(queuedJobs.isEmpty())
+    if(requestMap.empty())
     {
         signalThreadShouldExit();
         return;
     }
-    lock.enterWrite();
-    QueuedJob activeJob = takeQueuedJob();        
-    lock.exitWrite();
+    lock.enterRead();
+    RequestID requestID = requestMap.begin()->first;
+    IconRequest firstRequest = requestMap[requestID];
+    lock.exitRead();
 
-    String icon = activeJob.icon;
-    String iconPath = getIconPath(activeJob);
+    String icon = firstRequest.icon;
+    String iconPath = getIconPath(firstRequest);
     if (iconPath.isNotEmpty())
     {
         Image iconImg = AssetFiles::loadImageAsset(iconPath);
@@ -227,15 +195,26 @@ void IconThread::runLoop(ThreadLock& lock)
         }
 
         lock.enterWrite();
-        function<void(Image)> loadingCallback 
-            = takeIconCallback(activeJob.iconCallbackID);
         imageCache.set(icon, iconImg);
         lock.exitWrite();
 
-        if(loadingCallback)
+        // If callback wasn't removed, lock the message thread, check again that
+        // it's still there, run the callback, and remove it from the map.
+        const juce::MessageManagerLock mmLock;
+        lock.enterRead();
+        const bool requestPresent 
+            = (requestMap.count(requestID) != 0);
+        if(requestPresent)
         {
-            const juce::MessageManagerLock lock;
-            loadingCallback(iconImg);
+            firstRequest.loadingCallback(iconImg);
+        }
+        lock.exitRead();
+
+        if(requestPresent)
+        {
+            lock.enterWrite();
+            requestMap.erase(requestID);
+            lock.exitWrite();
         }
     }
 }
@@ -243,7 +222,7 @@ void IconThread::runLoop(ThreadLock& lock)
 /*
  * Search icon theme directories for an icon matching a given request.
  */
-juce::String IconThread::getIconPath(const IconThread::QueuedJob& request)
+juce::String IconThread::getIconPath(const IconRequest& request)
 {
     using namespace juce;
     //First, search themes in order to find a matching icon
@@ -262,7 +241,7 @@ juce::String IconThread::getIconPath(const IconThread::QueuedJob& request)
     if(request.context != IconThemeIndex::applicationsCtx &&
        request.icon.containsChar('-'))
     {
-        QueuedJob subRequest = request;
+        IconRequest subRequest = request;
         subRequest.icon = subRequest.icon.upToLastOccurrenceOf("-", false,
                 false);
         String iconPath = getIconPath(subRequest);
@@ -275,7 +254,7 @@ juce::String IconThread::getIconPath(const IconThread::QueuedJob& request)
     for(const String& iconDir : iconDirectories)
     {
         //TODO: add support for .xpm files, fix svg rendering problems
-        static const StringArray iconExtensions = {".png", ".xpm", ".svg"};
+        //static const StringArray iconExtensions = {".png", ".xpm", ".svg"};
         //for(const String& ext : iconExtensions)
         //{
             static const char* ext = ".png";

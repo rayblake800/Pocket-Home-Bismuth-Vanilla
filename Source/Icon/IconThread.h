@@ -38,40 +38,21 @@ public:
 
 
     /**
-     * @brief  Identifies pending icon callback functions so that they can be
-     *         cancelled.
+     * @brief  Identifies pending icon requests so that they can be cancelled.
      */
-    typedef unsigned int CallbackID;
+    typedef unsigned int RequestID;
 
     /**
-     * @brief  Saves an icon loading callback function to the callback map so
-     *         that it can be retrieved later.
+     * @brief  Cancels a pending icon request.
      *
-     * @param loadingCallback  A function used to handle an icon's Image object
-     *                         once it has been created.
-     *
-     * @return                 A unique callback ID that can be used to retrieve
-     *                         or remove the callback function.
+     * @param requestID  The ID of the icon loading request to remove.
      */
-    CallbackID saveIconCallback
-    (const std::function<void(juce::Image)> loadingCallback);
+    void cancelRequest(const RequestID requestID);
 
     /**
-     * @brief  Removes and returns an icon loading callback function from the
-     *         callbackMap.
-     *
-     * @param callbackID  The ID of the function to take.
-     *
-     * @return            The callback function with that ID, or an invalid
-     *                    function if the ID was invalid.
+     * Holds a pending icon request.
      */
-    std::function<void(juce::Image)> takeIconCallback
-    (const CallbackID callbackID);
-
-    /**
-     * Holds a queued icon request
-     */
-    struct QueuedJob
+    struct IconRequest
     {
         /* Name or path of an icon */
         juce::String icon;
@@ -81,32 +62,19 @@ public:
         int scale;
         /* Category of icon requested */
         IconThemeIndex::Context context;
-        
-        /* IDs the function used to asynchronously return the loaded image */
-        CallbackID iconCallbackID;
+        /* Function used to apply the requested icon */
+        std::function<void(juce::Image)> loadingCallback;
     };
 
     /**
-     * @brief  Gets the number of pending icon requests. 
+     * @brief  Adds an icon loading request to the queue.
+     * 
+     * @param request  A new icon request.
      *
-     * @return  The number of queued requests.
+     * @return         An ID that may be used to cancel the pending request.
      */
-    int numJobsQueued();
+    RequestID addRequest(IconRequest request);
 
-    /**
-     * @brief  Adds another icon request to the queue.
-     * 
-     * @param newJob  A new icon request.
-     */
-    void addQueuedJob(const QueuedJob newJob);
-
-    /**
-     * @brief  Removes and returns the last job from the list.
-     * 
-     * @return  The last job, or a QueuedJob with an empty icon string and
-     *          callback function if the queue is empty.
-     */
-    const QueuedJob takeQueuedJob();
 private:
     /**
      * @brief  Asynchronously handles queued icon requests.
@@ -117,23 +85,20 @@ private:
      * @brief  Searches icon theme directories for an icon matching a given
      *         request.
      * 
-     * @param request  Defines the name and size of the requested icon/
+     * @param request  Defines the name and size of the requested icon.
      * 
      * @return         The full path of the best matching icon file, or the
      *                 empty string if no match is found.
      */
-    juce::String getIconPath(const QueuedJob& request);
+    juce::String getIconPath(const IconRequest& request);
 
-    /* Queued icon requests waiting for the icon thread. */
-    juce::Array<QueuedJob, juce::CriticalSection> queuedJobs;
-
-    /* Maps callback functions so they can be cancelled if necessary. */ 
-    std::map<CallbackID, std::function<void(juce::Image)>> callbackMap;
+    /* All pending icon requests, mapped by ID so they can be cancelled. */
+    std::map<RequestID, IconRequest> requestMap;
 
     /* Icon theme indexes used to load icons, in order of priority */
     juce::OwnedArray<IconThemeIndex> iconThemes;
 
-    /* Directories to search, in order, for icon themes and un-themed icons. */
+    /* Directories to search, in order, for icon themes and unthemed icons. */
     juce::StringArray iconDirectories;
 
     /* Stores loaded icon names mapped to image objects to avoid having to
