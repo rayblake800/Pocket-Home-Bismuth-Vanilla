@@ -82,12 +82,15 @@ public:
     virtual ~LayoutManager() { }
 
     /**
-     * Defines one component's space in a LayoutManager row.
+     * @brief  Defines one component's space in a LayoutManager row.
      */
     class RowItem
     {
     public:
         /**
+         * @brief  Creates a RowItem, initializing the item's Component and
+         *         weight.
+         *
          * @param component  A component to place in the layout, or nullptr
          *                   to add an empty space.
          * 
@@ -98,13 +101,15 @@ public:
         component(component), weight(weight) { }
              
         /**
+         * @brief  Creates a RowItem with no Component and a specific weight.
+         *
          * @param weight     Sets this row item's width, relative to the other
          *                   RowItems in the row.
          */
         RowItem(const unsigned int weight = 1) : weight(weight) { }
         
         /**
-         * Gets the component assigned to this RowItem. 
+         * @brief  Gets the component assigned to this RowItem. 
          * 
          * @return  The Component* assigned to this RowItem on creation.  This
          *          value may be null.
@@ -112,42 +117,42 @@ public:
         juce::Component* getComponent() const;
         
         /**
-         * Gets the horizontal weight value assigned to this RowItem.
+         * @brief  Gets the horizontal weight value assigned to this RowItem.
          * 
-         * @return  the weight value. 
+         * @return  The item's weight value. 
          */
         unsigned int getWeight() const;
         
         /**
-         * Checks if this row item represents an empty space.
+         * @brief  Checks if this row item represents an empty space.
          * 
-         * @return  true iff this row item has no component.
+         * @return   Whether this row item has no component.
          */
         bool isEmpty() const;
         
         /**
-         * Checks if this RowItem and another are equivalent. RowItems are 
-         * equivalent if they have the same weight and Component.
+         * @brief  Checks if this RowItem and another are equivalent. RowItems 
+         *         are equivalent if they have the same weight and Component.
          *
          * @param rhs  The row item being compared to this one.
          *
-         * @return     True iff this and rhs are equivalent.
+         * @return     Whether this row item and rhs are equivalent.
          */
         bool operator==(const RowItem& rhs) const;
 
         /**
-         * Checks if this RowItem and another are not equivalent.
+         * @brief  Checks if this RowItem and another are not equivalent.
          *
          * @param rhs  Another RowItem being compared to this one.
          *
-         * @return     True iff this and rhs are not equivalent.
+         * @return     Whether this row item and rhs are not equivalent.
          */
         bool operator!=(const RowItem& rhs) const;
 
     private:
         /**
-         * Points to a component in the layout, or nullptr to add an empty space
-         * in the layout.
+         * @brief  Points to a component in the layout, or nullptr to represent 
+         *         an empty space in the layout.
          */
         juce::Component* component = nullptr;
 
@@ -158,13 +163,16 @@ public:
     };
 
     /**
-     * Defines one row of components in a LayoutManager
+     * @brief  Defines one row of components in a LayoutManager
      */
     class Row
     {
     public:
         /**
-         * @param weight    Sets this row's height, relative to other rows in
+         * @brief  Creates a new layout Row, optionally with an initial weight
+         *         and list of row items.
+         *
+         * @param weight    Sets this row's height relative to other rows in
          *                  the layout.
          * 
          * @param rowItems  The list of all RowItems arranged in this row.
@@ -173,53 +181,54 @@ public:
         weight(weight), rowItems(rowItems) { }
         
         /**
-         * Adds a new RowItem to the end of this row.
+         * @brief  Adds a new RowItem to the end of this row.
          *  
          * @param rowItem  The RowItem to add to the row.
          */
         void addRowItem(const RowItem rowItem);
         
         /**
-         * Gets the number of rowItems in the row.
+         * @brief  Gets the number of RowItems in the row.
          * 
          * @return  The number of components/empty spaces in the row layout.
          */
         unsigned int itemCount() const;
         
         /**
-         * Checks if this row is empty.
+         * @brief  Checks if this row is empty.
          * 
-         * @return true iff this row contains no row items. 
+         * @return  Whether this row contains no row items. 
          */
         bool isEmpty() const;
         
         /**
-         * Gets a RowItem from the row.
+         * @brief  Gets a RowItem from the row.
          * 
-         * @param index  The index of the row item within the row.
+         * @param index              The index of the row item within the row.
          * 
-         * @return the row item at the given index.
+         * @return                   The row item at the given index.
          * 
-         * @throw  std::out_of_range if the index is invalid. 
+         * @throw std::out_of_range  If the index is invalid. 
          */
         const RowItem& getRowItem(const unsigned int index) const;
         
         /**
-         * Gets the weight assigned to this row.
+         * @brief  Gets the weight assigned to this row.
          * 
          * @return  The weight value used to set the row's height.
          */
         unsigned int getWeight() const;
      
         /**
-         * Checks if this Row and another Row are equivalent.  Rows are
-         * equivalent if they have the same vertical weight and each RowItem
-         * in this Row is equivalent to another row item at the same index
-         * in the other row.
+         * @brief  Checks if this Row and another Row are equivalent.  
+         *
+         * Rows are equivalent if they have the same vertical weight and each 
+         * RowItem in this Row is equivalent to another row item at the same 
+         * index in the other row.
          *
          * @param rhs  The other row being compared to this one.
          *
-         * @return     True iff this row and rhs are equivalent.
+         * @return     Whether this row and rhs are equivalent.
          */
         bool operator==(const Row& rhs) const;
 
