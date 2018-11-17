@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "DesktopEntry/Loader.h"
-#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 #include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Data/DesktopEntry/EntryData.h"
 #include "AppMenu/Data/DesktopEntry/EntryActions.h"
@@ -23,7 +23,7 @@ AppMenu::EntryLoader::~EntryLoader()
  * Loads all desktop entry menu items for the first time.
  */
 void AppMenu::EntryLoader::initialEntryLoad(){
-    AppMenu::ConfigFile appConfig;
+    AppMenu::MenuFile appConfig;
     MenuItem rootFolder = appConfig.getRootFolderItem();
     loadFolderEntries(rootFolder);
 }

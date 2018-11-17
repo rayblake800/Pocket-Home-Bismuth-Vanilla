@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/Data/JSON/ConfigKeys.h"
+#include "AppMenu/Data/JSON/MenuKeys.h"
 #include "AppMenu/Formats/Paged/Initializer.h"
 #include "AppMenu/Formats/Scrolling/Initializer.h"
 #include "AppMenu/Components/MainComponent.h"
@@ -13,12 +13,7 @@ formatUpdater(this)
     addChildComponent(&loadingSpinner);
     loadingSpinner.setAlwaysOnTop(true);
     // Load and initialize selected menu format.
-    // This needs to be done after the constructor has finished to prevent
-    // some annoying SharedResource conflicts.
-    juce::MessageManager::callAsync([this]()
-    {
-        formatUpdater.applySelectedFormat();
-    });
+    formatUpdater.applySelectedFormat();
 }
 
 AppMenu::MainComponent::~MainComponent()
@@ -93,7 +88,7 @@ void AppMenu::MainComponent::resized()
 AppMenu::MainComponent::FormatUpdater::FormatUpdater
 (MainComponent* mainComponent) : mainComponent(mainComponent)
 {
-    addTrackedKey(ConfigKeys::menuFormatKey);
+    addTrackedKey(MenuKeys::menuFormatKey);
 }
 
 /**
@@ -129,6 +124,6 @@ void AppMenu::MainComponent::FormatUpdater::applySelectedFormat()
 void AppMenu::MainComponent::FormatUpdater::configValueChanged
 (const juce::Identifier& propertyKey)
 {
-    jassert(propertyKey == ConfigKeys::menuFormatKey);
+    jassert(propertyKey == MenuKeys::menuFormatKey);
     applySelectedFormat();
 }

@@ -1,8 +1,8 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "AppMenu/Implementation.h"
 #include "AppMenu/Components/MainComponent.h"
-#include "AppMenu/Data/JSON/ConfigFile.h"
-#include "AppMenu/Data/JSON/ConfigKeys.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
+#include "AppMenu/Data/JSON/MenuKeys.h"
 #include "AppMenu/AppMenu.h"
 
 /*
@@ -19,9 +19,9 @@ juce::Component* AppMenu::createAppMenu()
  */
 AppMenu::Format AppMenu::Settings::getMenuFormat()
 {
-    ConfigFile appConfig;
+    MenuFile appConfig;
     return stringToFormat(appConfig.getConfigValue<juce::String>
-            (ConfigKeys::menuFormatKey));
+            (MenuKeys::menuFormatKey));
 }
 
 /*
@@ -31,8 +31,8 @@ void AppMenu::Settings::setMenuFormat(const AppMenu::Format newFormat)
 {
     if(newFormat != Format::Invalid)
     {
-        ConfigFile appConfig;
-        appConfig.setConfigValue<juce::String>(ConfigKeys::menuFormatKey, 
+        MenuFile appConfig;
+        appConfig.setConfigValue<juce::String>(MenuKeys::menuFormatKey, 
                 formatToString(newFormat));
     }
 }
@@ -42,7 +42,7 @@ void AppMenu::Settings::setMenuFormat(const AppMenu::Format newFormat)
  */
 juce::String AppMenu::Settings::formatToString(const AppMenu::Format format)
 {
-    return ConfigKeys::formatStrings.at(format);
+    return MenuKeys::formatStrings.at(format);
 }
 
 /*
@@ -51,8 +51,8 @@ juce::String AppMenu::Settings::formatToString(const AppMenu::Format format)
 AppMenu::Format AppMenu::Settings::stringToFormat
 (const juce::String formatString)
 {
-    for(auto iter = ConfigKeys::formatStrings.begin();
-            iter != ConfigKeys::formatStrings.end(); iter++)
+    for(auto iter = MenuKeys::formatStrings.begin();
+            iter != MenuKeys::formatStrings.end(); iter++)
     {
         if(formatString == iter->second)
         {
@@ -68,9 +68,9 @@ AppMenu::Format AppMenu::Settings::stringToFormat
  */
 int AppMenu::Settings::getPagedMenuColumns()
 {
-    ConfigFile appConfig;
+    MenuFile appConfig;
     return std::max(1,
-            appConfig.getConfigValue<int>(ConfigKeys::pagedMenuColumnsKey));
+            appConfig.getConfigValue<int>(MenuKeys::pagedMenuColumnsKey));
 }
 
 /*
@@ -78,8 +78,8 @@ int AppMenu::Settings::getPagedMenuColumns()
  */
 void AppMenu::Settings::setPagedMenuColumns(const int numColumns)
 {
-    ConfigFile appConfig;
-    appConfig.setConfigValue<int>(ConfigKeys::pagedMenuColumnsKey, numColumns);
+    MenuFile appConfig;
+    appConfig.setConfigValue<int>(MenuKeys::pagedMenuColumnsKey, numColumns);
 }
 
 /*
@@ -88,9 +88,9 @@ void AppMenu::Settings::setPagedMenuColumns(const int numColumns)
  */
 int AppMenu::Settings::getPagedMenuRows()
 {
-    ConfigFile appConfig;
+    MenuFile appConfig;
     return std::max(1,
-            appConfig.getConfigValue<int>(ConfigKeys::pagedMenuRowsKey));
+            appConfig.getConfigValue<int>(MenuKeys::pagedMenuRowsKey));
 }
 
 /*
@@ -98,8 +98,8 @@ int AppMenu::Settings::getPagedMenuRows()
  */
 void AppMenu::Settings::setPagedMenuRows(const int numRows)
 {
-    ConfigFile appConfig;
-    appConfig.setConfigValue<int>(ConfigKeys::pagedMenuRowsKey, numRows);
+    MenuFile appConfig;
+    appConfig.setConfigValue<int>(MenuKeys::pagedMenuRowsKey, numRows);
 }
 
 /*
@@ -108,9 +108,9 @@ void AppMenu::Settings::setPagedMenuRows(const int numRows)
  */
 int AppMenu::Settings::getScrollingMenuRows()
 {
-    ConfigFile appConfig;
+    MenuFile appConfig;
     return std::max(1,
-            appConfig.getConfigValue<int>(ConfigKeys::scrollingMenuRowsKey));
+            appConfig.getConfigValue<int>(MenuKeys::scrollingMenuRowsKey));
 }
 
 /*
@@ -118,6 +118,6 @@ int AppMenu::Settings::getScrollingMenuRows()
  */
 void AppMenu::Settings::setScrollingMenuRows(const int numRows)
 {
-    ConfigFile appConfig;
-    appConfig.setConfigValue<int>(ConfigKeys::scrollingMenuRowsKey, numRows);
+    MenuFile appConfig;
+    appConfig.setConfigValue<int>(MenuKeys::scrollingMenuRowsKey, numRows);
 }

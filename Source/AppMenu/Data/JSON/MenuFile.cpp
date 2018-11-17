@@ -1,10 +1,10 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
-#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 /*
  * Gets a menu item representing the root folder of the application menu.
  */
-AppMenu::MenuItem AppMenu::ConfigFile::getRootFolderItem()
+AppMenu::MenuItem AppMenu::MenuFile::getRootFolderItem()
 {
     using namespace juce;
     auto appJSON = getReadLockedResource();
@@ -14,7 +14,7 @@ AppMenu::MenuItem AppMenu::ConfigFile::getRootFolderItem()
 /*
  * Adds a new menu item to the list of items shown in a menu folder.
  */
-AppMenu::MenuItem AppMenu::ConfigFile::addMenuItem(
+AppMenu::MenuItem AppMenu::MenuFile::addMenuItem(
         const juce::String& title, 
         const juce::String& icon,
         const juce::String& command,
@@ -29,6 +29,6 @@ AppMenu::MenuItem AppMenu::ConfigFile::addMenuItem(
     return parentFolder.getFolderItem(index);
 }
 
-AppMenu::ConfigFile::Listener::Listener() : 
-    Config::FileResource::Listener(JSONResource::resourceKey, 
-            []()->Config::FileResource* { return new JSONResource(); }) { }
+AppMenu::MenuFile::Listener::Listener() : 
+    Config::FileResource::Listener(MenuJSON::resourceKey, 
+            []()->Config::FileResource* { return new MenuJSON(); }) { }

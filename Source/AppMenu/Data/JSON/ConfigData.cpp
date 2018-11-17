@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/Data/JSON/ConfigKeys.h"
+#include "AppMenu/Data/JSON/MenuKeys.h"
 #include "AppMenu/Data/JSON/ConfigData.h"
 
 /* Localized object class key: */
@@ -47,12 +47,12 @@ void AppMenu::ConfigData::initMenuData(juce::var& menuData)
     var folderItems;
     if(menuData.isObject())
     {
-        title = menuData.getProperty(ConfigKeys::titleKey, String());
-        iconName = menuData.getProperty(ConfigKeys::iconKey, String());
-        command = menuData.getProperty(ConfigKeys::commandKey, String());
-        launchInTerm = menuData.getProperty(ConfigKeys::launchInTermKey, false);
-        var categoryVar = menuData.getProperty(ConfigKeys::categoryKey, var());
-        folderItems = menuData.getProperty(ConfigKeys::folderItemKey, var());
+        title = menuData.getProperty(MenuKeys::titleKey, String());
+        iconName = menuData.getProperty(MenuKeys::iconKey, String());
+        command = menuData.getProperty(MenuKeys::commandKey, String());
+        launchInTerm = menuData.getProperty(MenuKeys::launchInTermKey, false);
+        var categoryVar = menuData.getProperty(MenuKeys::categoryKey, var());
+        folderItems = menuData.getProperty(MenuKeys::folderItemKey, var());
         if(categoryVar.isArray())
         {
             for(const var& category : *categoryVar.getArray())

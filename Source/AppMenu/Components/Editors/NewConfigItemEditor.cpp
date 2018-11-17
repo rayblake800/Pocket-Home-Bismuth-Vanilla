@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 #include "AppMenu/Components/Editors/NewConfigItemEditor.h"
 
 /* NewConfigItemEditor shares a localized object class key inherited from
@@ -33,7 +33,7 @@ AppMenu::NewConfigItemEditor::NewConfigItemEditor(
  */
 void AppMenu::NewConfigItemEditor::commitEdits()
 {
-    ConfigFile appConfig;
+    MenuFile appConfig;
     MenuItem rootFolder = appConfig.getRootFolderItem();
     appConfig.addMenuItem(getTitleField(),
             getIconNameField(),

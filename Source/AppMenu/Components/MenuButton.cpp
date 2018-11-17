@@ -21,10 +21,10 @@ juce::Button(menuItem.getTitle())
  */
 AppMenu::MenuButton::~MenuButton()
 {
-    if(iconCallbackID)
+    if(iconCallbackID != 0)
     {
         IconLoader iconLoader;
-        iconLoader.cancelImageAssignment(iconCallbackID);
+        iconLoader.cancelImageRequest(iconCallbackID);
         iconCallbackID = 0;
     }
 }

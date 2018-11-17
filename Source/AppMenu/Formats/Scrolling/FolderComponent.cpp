@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
-#include "AppMenu/Data/JSON/ConfigFile.h"
-#include "AppMenu/Data/JSON/ConfigKeys.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
+#include "AppMenu/Data/JSON/MenuKeys.h"
 #include "AppMenu/Formats/Scrolling/MenuButton.h"
 #include "AppMenu/Formats/Scrolling/FolderComponent.h"
 
@@ -65,10 +65,10 @@ int AppMenu::Scrolling::FolderComponent::getSelectedItemYOffset() const
  */
 int AppMenu::Scrolling::FolderComponent::getMinimumWidth() const
 {
-    ConfigFile appConfig;
+    MenuFile appConfig;
     const int iconWidth = getWindowBounds().getHeight() /
         appConfig.getConfigValue<int>
-        (ConfigKeys::scrollingMenuRowsKey);
+        (MenuKeys::scrollingMenuRowsKey);
     int maxTextWidth = 0;
     for(int i = 0; i < getFolderSize(); i++)
     {

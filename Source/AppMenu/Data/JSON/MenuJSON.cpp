@@ -1,10 +1,10 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/Data/JSON/ConfigKeys.h"
-#include "AppMenu/Data/JSON/JSONResource.h"
+#include "AppMenu/Data/JSON/MenuKeys.h"
+#include "AppMenu/Data/JSON/MenuJSON.h"
 
 /* SharedResource object key */
-const juce::Identifier AppMenu::JSONResource::resourceKey 
-        = "AppMenu::JSONResource";
+const juce::Identifier AppMenu::MenuJSON::resourceKey 
+        = "AppMenu::MenuJSON";
 
 /* JSON configuration file name */
 static const constexpr char * jsonFilename = "apps.json";
@@ -12,13 +12,13 @@ static const constexpr char * jsonFilename = "apps.json";
 /*
  * Initializes the menu data tree.
  */
-AppMenu::JSONResource::JSONResource() :
+AppMenu::MenuJSON::MenuJSON() :
 Config::FileResource(resourceKey, jsonFilename)
 {
     ConfigData::Ptr rootItem = new ConfigData();
     rootFolderItem = MenuItem(rootItem);
     loadJSONData(); 
-    juce::var rootFolder = initProperty<juce::var>(ConfigKeys::folderItemKey);
+    juce::var rootFolder = initProperty<juce::var>(MenuKeys::folderItemKey);
     ((ConfigData*) rootItem.get())->initMenuData(rootFolder); 
     entryLoader.initialEntryLoad();
 }
@@ -26,7 +26,7 @@ Config::FileResource(resourceKey, jsonFilename)
 /*
  * Destroys all menu data on destruction.
  */
-AppMenu::JSONResource::~JSONResource()
+AppMenu::MenuJSON::~MenuJSON()
 {
     rootFolderItem = MenuItem();
 }
@@ -34,7 +34,7 @@ AppMenu::JSONResource::~JSONResource()
 /*
  * Gets a menu item representing the root folder of the application menu.
  */
-AppMenu::MenuItem AppMenu::JSONResource::getRootFolderItem() const
+AppMenu::MenuItem AppMenu::MenuJSON::getRootFolderItem() const
 {
     return rootFolderItem;
 }
@@ -42,7 +42,7 @@ AppMenu::MenuItem AppMenu::JSONResource::getRootFolderItem() const
 /*
  * Adds a new menu item to the list of menu items.
  */
-AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
+AppMenu::MenuItem AppMenu::MenuJSON::addMenuItem(
         const juce::String& title, 
         const juce::String& icon,
         const juce::String& command,
@@ -54,7 +54,7 @@ AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
     if(parentFolder.isNull() || index < 0 
             || index > parentFolder.getMovableChildCount())
     {
-        DBG("AppMenu::JSONResource::" << __func__ << ": Failed to insert \""
+        DBG("AppMenu::MenuJSON::" << __func__ << ": Failed to insert \""
                 << title << "\" into folder \"" << parentFolder.getTitle()
                 << "\" at index " << index);
         return MenuItem();
@@ -71,7 +71,7 @@ AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
     MenuItem newItem(newData);
     if(!parentFolder.insertChild(newItem, index))
     {
-        DBG("AppMenu::JSONResource::" << __func__ << ": Failed to insert \""
+        DBG("AppMenu::MenuJSON::" << __func__ << ": Failed to insert \""
                 << title << "\" into folder \"" << parentFolder.getTitle()
                 << "\" at index " << index);
         return MenuItem();
@@ -87,7 +87,7 @@ AppMenu::MenuItem AppMenu::JSONResource::addMenuItem(
 /*
  * Copies all menu data back to the JSON configuration file.
  */
-void AppMenu::JSONResource::writeDataToJSON()
+void AppMenu::MenuJSON::writeDataToJSON()
 {
     using juce::Array;
     using juce::var;
@@ -104,27 +104,27 @@ void AppMenu::JSONResource::writeDataToJSON()
                 rootFolder.add(itemToVar(folderItem));
             }
         }
-        updateProperty<Array<var>>(ConfigKeys::folderItemKey, rootFolder);
+        updateProperty<Array<var>>(MenuKeys::folderItemKey, rootFolder);
     }
 }
 
 /*
  * Gets all parameters with basic data types tracked by this ConfigFile.
  */
-const std::vector<Config::DataKey>& AppMenu::JSONResource::getConfigKeys() const 
+const std::vector<Config::DataKey>& AppMenu::MenuJSON::getConfigKeys() const 
 {
-    return ConfigKeys::allKeys;
+    return MenuKeys::allKeys;
 }
 
 /*
  * Recursively copies a menu item and all of its child folder items into a 
  * juce::var object.
  */
-juce::var AppMenu::JSONResource::itemToVar(const AppMenu::MenuItem& menuItem)
+juce::var AppMenu::MenuJSON::itemToVar(const AppMenu::MenuItem& menuItem)
 {
     juce::DynamicObject::Ptr itemObject = new juce::DynamicObject();
-    itemObject->setProperty(ConfigKeys::titleKey, menuItem.getTitle());
-    itemObject->setProperty(ConfigKeys::iconKey, menuItem.getIconName());
+    itemObject->setProperty(MenuKeys::titleKey, menuItem.getTitle());
+    itemObject->setProperty(MenuKeys::iconKey, menuItem.getIconName());
     if(menuItem.isFolder())
     {
         int configChildCount = menuItem.getMovableChildCount();
@@ -139,18 +139,18 @@ juce::var AppMenu::JSONResource::itemToVar(const AppMenu::MenuItem& menuItem)
                     folderItems.add(itemToVar(folderItem));
                 }
             }
-            itemObject->setProperty(ConfigKeys::folderItemKey, folderItems);
+            itemObject->setProperty(MenuKeys::folderItemKey, folderItems);
         }
         juce::StringArray categories = menuItem.getCategories();
         if(!categories.isEmpty())
         {
-            itemObject->setProperty(ConfigKeys::categoryKey, categories);
+            itemObject->setProperty(MenuKeys::categoryKey, categories);
         }
     }
     else
     {
-        itemObject->setProperty(ConfigKeys::commandKey, menuItem.getCommand());
-        itemObject->setProperty(ConfigKeys::launchInTermKey, 
+        itemObject->setProperty(MenuKeys::commandKey, menuItem.getCommand());
+        itemObject->setProperty(MenuKeys::launchInTermKey, 
                 menuItem.getLaunchedInTerm());
     }
     return juce::var(itemObject);
@@ -159,16 +159,16 @@ juce::var AppMenu::JSONResource::itemToVar(const AppMenu::MenuItem& menuItem)
 /*
  * Writes all changes to this menu item back to its data source.
  */
-void AppMenu::JSONResource::ConfigData::saveChanges()
+void AppMenu::MenuJSON::ConfigData::saveChanges()
 {
     JSONWriter jsonWriter;
     jsonWriter.writeChanges();
 }
 
 /*
- * Removes this menu item from JSONResource's config file.
+ * Removes this menu item from MenuJSON's config file.
  */
-void AppMenu::JSONResource::ConfigData::deleteFromSource()
+void AppMenu::MenuJSON::ConfigData::deleteFromSource()
 {
     // This should only be called after a call to remove()
     jassert(getIndex() == -1 && getParentFolder() == nullptr);
@@ -179,7 +179,7 @@ void AppMenu::JSONResource::ConfigData::deleteFromSource()
  * Creates an empty child menu item.
  */
 AppMenu::ConfigData::Ptr 
-AppMenu::JSONResource::ConfigData::createChildItem()
+AppMenu::MenuJSON::ConfigData::createChildItem()
 {
     return new ConfigData;
 }
@@ -187,7 +187,7 @@ AppMenu::JSONResource::ConfigData::createChildItem()
 /*
  * Writes all config-defined menu data back to the JSON file.
  */
-void AppMenu::JSONResource::ConfigData::JSONWriter::writeChanges()
+void AppMenu::MenuJSON::ConfigData::JSONWriter::writeChanges()
 {
     auto appJSON = getWriteLockedResource();
     appJSON->writeDataToJSON();

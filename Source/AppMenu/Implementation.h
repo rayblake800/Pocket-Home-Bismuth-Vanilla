@@ -109,17 +109,17 @@ namespace AppMenu
      *         initializes the entire menu as linked ItemData objects, and
      *         provides an interface for adding new menu items.
      *
-     * @see  AppMenu/Data/JSON/ConfigFile.h     
+     * @see  AppMenu/Data/JSON/MenuFile.h     
      */
-    class ConfigFile;
+    class MenuFile;
 
     /**
      * @brief  The private SharedResource singleton used to read, store, and
      *         write data in the JSON configuration file.
      *
-     * @see  AppMenu/Data/JSON/JSONResource.h     
+     * @see  AppMenu/Data/JSON/MenuJSON.h     
      */
-    class JSONResource;
+    class MenuJSON;
 
     /* ####################  Menu Components  ########################### */
     /**

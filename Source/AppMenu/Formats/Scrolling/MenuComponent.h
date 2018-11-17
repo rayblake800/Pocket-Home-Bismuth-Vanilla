@@ -2,7 +2,7 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
 #include "ConfigurableComponent.h"
-#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 #include "AppMenu/Components/MenuComponent.h"
 
 /**
@@ -19,11 +19,11 @@
  * of rows specified by the AppMenu config file.
  */
 class AppMenu::Scrolling::MenuComponent : public AppMenu::MenuComponent,
-    public ConfigurableComponent, public ConfigFile::Listener
+    public ConfigurableComponent, public MenuFile::Listener
 {
 public:
     /**
-     * @brief  Creates the menu component, listening to the AppMenu::ConfigFile
+     * @brief  Creates the menu component, listening to the AppMenu::MenuFile
      *         for changes to the number of rows to fit on screen.
      */
     MenuComponent();

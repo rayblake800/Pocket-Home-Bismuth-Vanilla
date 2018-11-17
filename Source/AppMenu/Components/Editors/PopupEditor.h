@@ -6,6 +6,7 @@
 #include "FileSelectTextEditor.h"
 #include "PopupEditorComponent.h"
 #include "SwitchComponent.h"
+#include "IconLoader.h"
 #include "AppMenu/Components/Editors/CategoryEditor.h"
 #include "AppMenu/Implementation.h"
 
@@ -46,7 +47,10 @@ public:
             bool showCategoryList = true,
             bool showCommandField = true);
 
-    virtual ~PopupEditor() { }
+    /**
+     * @brief  Cancels any pending icon request.
+     */
+    virtual ~PopupEditor();
 
     /**
      * @brief  Gets the contents of the menu item title field.
@@ -145,6 +149,9 @@ private:
      * @param button  The category editor button.
      */
     virtual void editorButtonClicked(juce::Button* button) override;
+
+    /* Used to cancel pending icon requests on destruction. */
+    IconLoader::RequestID iconRequestID;
 
     /* Label text: "Name:" */
     ScalingLabel nameLabel;     

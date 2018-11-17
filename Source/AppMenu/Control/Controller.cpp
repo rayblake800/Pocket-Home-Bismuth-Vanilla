@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
-#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 #include "AppMenu/Components/Editors/ExistingItemEditor.h"
 #include "AppMenu/Components/Editors/NewConfigItemEditor.h"
 #include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
@@ -70,7 +70,7 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
     contextMenu.addItem(int(OptionCode::Edit), localeText(editTextKey));
     contextMenu.addItem(int(OptionCode::Delete), localeText(deleteTextKey));
     
-    ConfigFile appConfig;
+    MenuFile appConfig;
     const MenuItem rootFolder = appConfig.getRootFolderItem();
     const MenuItem parent = menuItem.getParentFolder();
     if(parent != rootFolder)
@@ -188,7 +188,7 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
         case OptionCode::PinToRoot:
         {
             jassert(!editedItem.isNull());
-            ConfigFile appConfig;
+            MenuFile appConfig;
             MenuItem rootFolder = appConfig.getRootFolderItem();
             copyMenuItem(editedItem, rootFolder, insertIndex);
             // Move to the new selected item:
@@ -333,7 +333,7 @@ void AppMenu::Controller::createExistingItemEditor(MenuItem toEdit)
 void AppMenu::Controller::copyMenuItem
 (const MenuItem toCopy, MenuItem copyFolder, const int insertIndex)
 {
-    ConfigFile appConfig;
+    MenuFile appConfig;
     appConfig.addMenuItem(toCopy.getTitle(),
             toCopy.getIconName(),
             toCopy.getCommand(),

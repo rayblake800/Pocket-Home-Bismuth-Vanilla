@@ -2,7 +2,7 @@
 #ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
 #include "ConfigurableComponent.h"
-#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 #include "NavButton.h"
 #include "AppMenu/Components/MenuComponent.h"
 
@@ -23,7 +23,7 @@
  * buttons used to change the selected folder page.
  */
 class AppMenu::Paged::MenuComponent : public AppMenu::MenuComponent,
-    public ConfigurableComponent, public ConfigFile::Listener
+    public ConfigurableComponent, public MenuFile::Listener
 {
 public:
     /**

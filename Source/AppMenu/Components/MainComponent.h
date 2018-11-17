@@ -4,10 +4,11 @@
 #include "JuceHeader.h"
 #include "OverlaySpinner.h"
 #include "AppMenu/Data/DesktopEntry/EntryUpdater.h"
+#include "Icon/IconLoader.h"
 #include "AppMenu/Control/Initializer.h"
 #include "AppMenu/Components/MenuComponent.h"
 #include "AppMenu/Control/Controller.h"
-#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 #include "AppMenu/Implementation.h"
 /**
  * @file  AppMenu/Components/MainComponent.h
@@ -59,7 +60,7 @@ private:
      * @brief  Private listener class that updates the menu format whenever the
      *         saved format selection changes.
      */
-    class FormatUpdater : public ConfigFile::Listener
+    class FormatUpdater : public MenuFile::Listener
     {
     public:
         /**
@@ -98,6 +99,9 @@ private:
        desktop entry files.  This resource should exist as long as the AppMenu 
        exists. */
     EntryUpdater entryUpdater;
+    
+    /* Ensures the icon cache exists as long as the AppMenu does. */
+    const IconLoader iconLoader;
 
     /* The menu's loading spinner. */
     OverlaySpinner loadingSpinner;

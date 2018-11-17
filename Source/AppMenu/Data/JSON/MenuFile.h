@@ -3,11 +3,11 @@
 #pragma once
 #include "Config/FileHandler.h"
 #include "AppMenu/Data/MenuItem.h"
-#include "AppMenu/Data/JSON/JSONResource.h"
+#include "AppMenu/Data/JSON/MenuJSON.h"
 #include "AppMenu/AppMenu.h"
 
 /**
- * @file ConfigFile.h
+ * @file MenuFile.h
  * 
  * @brief  Reads and edits the tree of pinned application shortcuts and folders 
  *         displayed in the AppMenu, and loads AppMenu layout preferences.
@@ -17,25 +17,25 @@
  * application categories to show in a new menu folder.  All menu items have a
  * displayed title and icon.
  *
- * AppMenu::ConfigFile uses this JSON menu data to construct the 
+ * AppMenu::MenuFile uses this JSON menu data to construct the 
  * AppMenu::MenuItem objects used to build the AppMenuComponent, and it provides 
  * an interface for adding new menu items to the JSON file.  
  *
  * Along with the main menu structure, apps.json contains a few menu format
  * configuration options, as defined in AppMenu::ConfigKeys. 
- * AppMenu::ConfigFile reads and writes these values using the standard 
+ * AppMenu::MenuFile reads and writes these values using the standard 
  * Config::FileHandler interface.
  * 
  * @see  AppMenu/AppMenu.h
  *       AppMenu/Data/JSON/ConfigKeys.h
- *       AppMenu/Data/JSON/JSONResource.h
+ *       AppMenu/Data/JSON/MenuJSON.h
  */
-class AppMenu::ConfigFile : public Config::FileHandler<AppMenu::JSONResource>
+class AppMenu::MenuFile : public Config::FileHandler<AppMenu::MenuJSON>
 {
 public:
-    ConfigFile() { }
+    MenuFile() { }
 
-    virtual ~ConfigFile() { }
+    virtual ~MenuFile() { }
     
     /**
      * @brief  Gets a menu item representing the root folder of the application
@@ -81,7 +81,7 @@ public:
             MenuItem& parentFolder,
             const int index);
 
-    /* Listens for changes to AppMenu::ConfigFile's basic data values */
+    /* Listens for changes to AppMenu::MenuFile's basic data values */
     class Listener : public Config::FileResource::Listener
     {
     public:

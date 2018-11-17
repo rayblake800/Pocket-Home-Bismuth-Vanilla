@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "DesktopEntry/Loader.h"
-#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 #include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Data/DesktopEntry/EntryData.h"
 #include "AppMenu/Data/DesktopEntry/EntryActions.h"
@@ -40,7 +40,7 @@ void AppMenu::EntryUpdater::entriesAdded(const juce::StringArray entryFileIDs)
             << entryFileIDs.size() << " new entry files.");
     juce::Array<DesktopEntry::EntryFile> newEntries
         = loadEntryFiles(entryFileIDs);
-    ConfigFile appConfig;
+    MenuFile appConfig;
     EntryActions::recursiveFolderAction(appConfig.getRootFolderItem(), 
     [this, &newEntries](MenuItem folder)
     {
@@ -56,7 +56,7 @@ void AppMenu::EntryUpdater::entriesRemoved(const juce::StringArray entryFileIDs)
 {
     DBG("AppMenu::EntryUpdater::" << __func__ << ": Updating menu with "
             << entryFileIDs.size() << " removed entry files.");
-    ConfigFile appConfig;
+    MenuFile appConfig;
     EntryActions::recursiveFolderAction(appConfig.getRootFolderItem(), 
     [this, &entryFileIDs] (MenuItem folder)
     {
@@ -81,7 +81,7 @@ void AppMenu::EntryUpdater::entriesUpdated(const juce::StringArray entryFileIDs)
             << entryFileIDs.size() << " changed entry files.");
     juce::Array<DesktopEntry::EntryFile> newEntries
         = loadEntryFiles(entryFileIDs);
-    ConfigFile appConfig;
+    MenuFile appConfig;
     EntryActions::recursiveFolderAction(appConfig.getRootFolderItem(), 
     [this, &newEntries](MenuItem folder)
     {

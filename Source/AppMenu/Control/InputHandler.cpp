@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include <map>
-#include "AppMenu/Data/JSON/ConfigFile.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 #include "DesktopEntry/Loader.h"
 #include "AppMenu/Control/InputHandler.h"
 
@@ -17,7 +17,7 @@ AppMenu::InputHandler::InputHandler
     menuComponent->setWantsKeyboardFocus(true);
     menuComponent->addKeyListener(this);
     menuComponent->addMouseListener(this, true);
-    ConfigFile appConfig;
+    MenuFile appConfig;
     menuComponent->openFolder(appConfig.getRootFolderItem());
 }
 

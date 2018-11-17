@@ -241,7 +241,7 @@ private:
     juce::Image icon;
 
     /* ID used to cancel pending icon requests if necessary */
-    IconLoader::CallbackID iconCallbackID = 0;
+    IconLoader::RequestID iconCallbackID = 0;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuButton)
 };

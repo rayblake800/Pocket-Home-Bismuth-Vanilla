@@ -1,6 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "Utils.h"
-#include "IconLoader.h"
 #include "ComponentConfigFile.h"
 #include "AppMenu/Components/Editors/PopupEditor.h"
 
@@ -89,6 +88,20 @@ terminalCheckboxLabel("runInTermLabel", localeText(runInTermTextKey))
     layout.setXPaddingWeight(1);
     layout.setYPaddingWeight(2);
     setLayout(layout);
+}
+
+
+/*
+ * Cancel any pending icon request.
+ */
+AppMenu::PopupEditor::~PopupEditor()
+{
+    if(iconRequestID != 0)
+    {
+        IconLoader iconLoader;
+        iconLoader.cancelImageRequest(iconRequestID);
+        iconRequestID = 0;
+    }
 }
 
 /*
@@ -183,10 +196,16 @@ void AppMenu::PopupEditor::loadIconPreview()
     using juce::Image;
     String iconName = getIconNameField();
     IconLoader iconThread;
-    iconThread.loadIcon(iconName, iconPreview.getWidth(), [this](Image iconImg)
+    if(iconRequestID != 0)
     {
-        iconPreview.setImage(iconImg);
-    });
+        iconThread.cancelImageRequest(iconRequestID);
+    }
+    iconRequestID = iconThread.loadIcon(iconName, iconPreview.getWidth(), 
+        [this](Image iconImg)
+        {
+            iconRequestID = 0;
+            iconPreview.setImage(iconImg);
+        });
 }
 
 /*

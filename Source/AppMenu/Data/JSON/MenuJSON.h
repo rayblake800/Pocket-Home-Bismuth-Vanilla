@@ -7,26 +7,26 @@
 #include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Data/JSON/ConfigData.h"
 /**
- * @file JSONResource.h
+ * @file MenuJSON.h
  *
  * @brief  Reads application menu settings from the apps.json configuration 
  *         file.
  *
- * JSONResource defines the class of the singleton SharedResource object that
+ * MenuJSON defines the class of the singleton SharedResource object that
  * accesses apps.json, the configuration file where application menu settings
  * are stored.  Only AppMenu::ConfigFile objects are allowed to access the 
- * JSONResource object.
+ * MenuJSON object.
  *
- * JSONResource reads in the JSON data used to create AppMenu::MenuItem objects,
+ * MenuJSON reads in the JSON data used to create AppMenu::MenuItem objects,
  * and writes any changes to those objects back to apps.json as JSON data. 
  * 
- * JSONResource also reads and writes the selected menu format, along with a few
+ * MenuJSON also reads and writes the selected menu format, along with a few
  * other simple configurable menu properties listed in ConfigKeys.h.
  *
  * @see AppMenu/Data/JSON/ConfigKeys.h 
  *      AppMenu/Data/JSON/ConfigFile.h 
  */
-class AppMenu::JSONResource : public Config::FileResource
+class AppMenu::MenuJSON : public Config::FileResource
 {
 public:
     /* SharedResource object key */
@@ -35,12 +35,12 @@ public:
     /**
      * @brief  Initializes the menu data tree.
      */
-    JSONResource();
+    MenuJSON();
 
     /**
      * @brief  Destroys all menu data on destruction.
      */
-    virtual ~JSONResource();
+    virtual ~MenuJSON();
 
     /**
      * @brief  Gets a menu item representing the root folder of the application
@@ -131,14 +131,14 @@ private:
 
     private:
         /**
-         * @brief  Removes this menu item from JSONResource's config file.
+         * @brief  Removes this menu item from MenuJSON's config file.
          */
         virtual void deleteFromSource() override;
 
         /**
          * @brief  Creates an empty child menu item.
          *
-         * @return  A pointer to an empty JSONResource::ConfigData object.
+         * @return  A pointer to an empty MenuJSON::ConfigData object.
          */
         virtual ConfigData::Ptr createChildItem() override;
 
@@ -146,7 +146,7 @@ private:
          * @brief  A private Config::FileHandler used only for writing menu 
          *         changes.
          */
-        class JSONWriter : public Config::FileHandler<JSONResource>
+        class JSONWriter : public Config::FileHandler<MenuJSON>
         {
         public:
             JSONWriter() { }

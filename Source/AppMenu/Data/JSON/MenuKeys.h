@@ -16,7 +16,7 @@
 
 namespace AppMenu
 {
-    namespace ConfigKeys
+    namespace MenuKeys
     {
         //#####################    Menu Data keys:  ############################
         /* The menu item's printed title. */
