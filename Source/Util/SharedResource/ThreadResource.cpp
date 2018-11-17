@@ -68,17 +68,33 @@ void SharedResource::ThreadResource::ThreadLock::exitWrite() const
  */
 void SharedResource::ThreadResource::run()
 {
-    ThreadLock threadLock(getResourceKey());
-    threadLock.enterWrite();
+
+    ThreadLock* newLock = new ThreadLock(getResourceKey());
+    // Lock the message manager thread before setting the new lock to avoid 
+    // assigning it while the message manager is clearing the old lock.
+    {
+        const juce::MessageManagerLock mmLock;
+        threadLock.reset(newLock);
+    }
+    threadLock->enterWrite();
     init();
-    threadLock.exitWrite();
+    threadLock->exitWrite();
 
     while(!threadShouldExit())
     {
-        runLoop(threadLock);
+        runLoop(*threadLock);
     }
     
-    threadLock.enterWrite();
+    threadLock->enterWrite();
     cleanup();
-    threadLock.exitWrite();
+    threadLock->exitWrite();
+
+    std::function<void()> deleteLock = buildAsyncFunction(LockType::write,
+        [this, newLock]()
+        {
+            if(newLock == threadLock.get())
+            {
+                threadLock.reset(nullptr);
+            }
+        });
 }

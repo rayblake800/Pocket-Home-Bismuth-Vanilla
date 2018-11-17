@@ -120,4 +120,8 @@ private:
      *         routines before the thread exits.
      */
     virtual void run() final override;
+
+    /* Holds the threadLock used by the loading thread so it can be destroyed
+       after the thread exits. */
+    std::unique_ptr<ThreadLock> threadLock;
 };

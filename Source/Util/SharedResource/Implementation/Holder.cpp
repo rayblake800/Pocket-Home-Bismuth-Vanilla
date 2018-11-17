@@ -90,7 +90,6 @@ void SharedResource::Holder::setResource(const juce::Identifier& resourceKey,
     jassert((holder->resourceList.getUnchecked(resourceIndex) == nullptr)
             != (resource == nullptr));
 
-    // If setting a resource to null, delete the old instance
     holder->resourceList.set(resourceIndex, resource);
 
 }
