@@ -115,8 +115,8 @@ public:
 
         //Create resources that must be initialized before AppMenu can run:
         //TODO: AppMenu should be able to initialize these on its own if needed.
-        DesktopEntry::Loader entryLoader;
-        IconLoader iconLoader;
+        //DesktopEntry::Loader entryLoader;
+        //IconLoader iconLoader;
         
         beginTest("Initial AppMenu format tests");
         // Test format strings:
