@@ -416,8 +416,8 @@ process : $(OBJECTS_PROCESS)
 # AppMenu Module:
 APPMENU_PREFIX := $(JUCE_OBJDIR)/AppMenu_
 OBJECTS_APPMENU_DATA := \
-  $(APPMENU_PREFIX)JSONResource.o \
-  $(APPMENU_PREFIX)ConfigFile.o \
+  $(APPMENU_PREFIX)MenuJSON.o \
+  $(APPMENU_PREFIX)MenuFile.o \
   $(APPMENU_PREFIX)MenuItem.o \
   $(APPMENU_PREFIX)EntryData.o \
   $(APPMENU_PREFIX)EntryActions.o \
@@ -950,10 +950,10 @@ $(APPMENU_PREFIX)PopupEditor.o: \
     Source/AppMenu/Components/Editors/PopupEditor.cpp
 $(APPMENU_PREFIX)CategoryEditor.o: \
     Source/AppMenu/Components/Editors/CategoryEditor.cpp
-$(APPMENU_PREFIX)JSONResource.o: \
-    Source/AppMenu/Data/JSON/JSONResource.cpp
-$(APPMENU_PREFIX)ConfigFile.o: \
-    Source/AppMenu/Data/JSON/ConfigFile.cpp
+$(APPMENU_PREFIX)MenuJSON.o: \
+    Source/AppMenu/Data/JSON/MenuJSON.cpp
+$(APPMENU_PREFIX)MenuFile.o: \
+    Source/AppMenu/Data/JSON/MenuFile.cpp
 $(APPMENU_PREFIX)MenuItem.o: \
     Source/AppMenu/Data/MenuItem.cpp
 $(APPMENU_PREFIX)EntryData.o: \
