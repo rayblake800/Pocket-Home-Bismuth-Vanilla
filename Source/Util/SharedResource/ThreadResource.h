@@ -116,12 +116,18 @@ private:
     virtual void cleanup() { }
 
     /**
+     * @brief  Sets if the thread should wait until the next notification to
+     *         resume, running the cleanup function and removing the ThreadLock 
+     *         until the ThreadResource is notified.
+     *
+     * @return  Whether the thread should wait for a notification before
+     *          resuming.
+     */
+    virtual bool threadShouldWait() { return false; }
+
+    /**
      * @brief  Initializes the thread, runs the action loop, then runs cleanup
      *         routines before the thread exits.
      */
     virtual void run() final override;
-
-    /* Holds the threadLock used by the loading thread so it can be destroyed
-       after the thread exits. */
-    std::unique_ptr<ThreadLock> threadLock;
 };

@@ -212,12 +212,23 @@ void DesktopEntry::LoadingThread::findUpdatedFiles()
             << ((int) pendingFiles.size()) << " entry files.");
 }
 
+
+/*
+ * Checks if the thread has finished loading desktop entry files, and is either 
+ * running cleanup or waiting for another request.
+ */
+bool DesktopEntry::LoadingThread::isFinishedLoading()
+{
+    return finishedLoading;
+}
+
 /*
  * Finds all unloaded or updated desktop entry files within the application data
  * directories, ignoring files with duplicate desktop file IDs.
  */
 void DesktopEntry::LoadingThread::init() 
 {
+    finishedLoading = false;
     lastAddedIDs.clear();
     lastChangedIDs.clear();
     lastRemovedIDs.clear();
@@ -227,7 +238,8 @@ void DesktopEntry::LoadingThread::init()
 /*
  * Loads or updates a single desktop entry file in the list of pending files.
  */
-void DesktopEntry::LoadingThread::runLoop(ThreadResource::ThreadLock& threadLock) 
+void DesktopEntry::LoadingThread::runLoop
+(ThreadResource::ThreadLock& threadLock) 
 {
     using juce::String;
     threadLock.enterWrite();
@@ -295,6 +307,7 @@ void DesktopEntry::LoadingThread::runLoop(ThreadResource::ThreadLock& threadLock
  */
 void DesktopEntry::LoadingThread::cleanup() 
 {
+    finishedLoading = true;
     DBG("DesktopEntry::LoadingThread::" << __func__ << ": "
             << lastAddedIDs.size() << " added, "
             << lastChangedIDs.size() << " updated, "
@@ -324,6 +337,15 @@ void DesktopEntry::LoadingThread::cleanup()
             }
         });
     }));
+}
+
+
+/*
+ * Makes the thread sleep after loading or updating all desktop files.
+ */
+bool DesktopEntry::LoadingThread::threadShouldWait()
+{
+    return pendingFiles.empty();
 }
 
 /*

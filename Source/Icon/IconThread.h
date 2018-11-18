@@ -80,6 +80,15 @@ private:
      * @brief  Asynchronously handles queued icon requests.
      */
     virtual void runLoop(ThreadLock& lock) override;
+
+    /**
+     * @brief   Keeps the thread dormant when all icon requests have been
+     *          processed.
+     *
+     * @return  True if there are pending requests, false if all requests were
+     *          completed.
+     */
+    virtual bool threadShouldWait() override;
     
     /**
      * @brief  Searches icon theme directories for an icon matching a given

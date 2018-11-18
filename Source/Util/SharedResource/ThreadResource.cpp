@@ -15,8 +15,14 @@ SharedResource::ThreadResource::ThreadResource
  */
 SharedResource::ThreadResource::~ThreadResource()
 {
+    jassert(Thread::getCurrentThreadId() != getThreadId());
     if(isThreadRunning())
     {
+        signalThreadShouldExit();
+        notify();
+        DBG("SharedResource::ThreadResource::" << __func__ << ": Thread \""
+                << getResourceKey().toString() 
+                << "\" still running, stopping thread before destruction.");
         stopThread(timeoutMilliseconds);
     }
 }
@@ -68,33 +74,54 @@ void SharedResource::ThreadResource::ThreadLock::exitWrite() const
  */
 void SharedResource::ThreadResource::run()
 {
-
-    ThreadLock* newLock = new ThreadLock(getResourceKey());
-    // Lock the message manager thread before setting the new lock to avoid 
-    // assigning it while the message manager is clearing the old lock.
-    {
-        const juce::MessageManagerLock mmLock;
-        threadLock.reset(newLock);
-    }
-    threadLock->enterWrite();
-    init();
-    threadLock->exitWrite();
-
     while(!threadShouldExit())
     {
-        runLoop(*threadLock);
-    }
-    
-    threadLock->enterWrite();
-    cleanup();
-    threadLock->exitWrite();
+        ThreadLock* threadLock = new ThreadLock(getResourceKey());
+        threadLock->enterWrite();
+        init();
+        threadLock->exitWrite();
 
-    std::function<void()> deleteLock = buildAsyncFunction(LockType::write,
-        [this, newLock]()
+        while(!threadShouldExit() && !threadShouldWait())
         {
-            if(newLock == threadLock.get())
+            runLoop(*threadLock);
+        }
+        
+        threadLock->enterWrite();
+        cleanup();
+        threadLock->exitWrite();
+
+        // Delete the lock outside of the thread, just in case deleting the lock
+        // also deletes the thread.
+        std::function<void()> deleteLock = buildAsyncFunction(LockType::write,
+            [this, threadLock]()
             {
-                threadLock.reset(nullptr);
-            }
-        });
+                if(threadShouldExit())
+                {
+                    if(threadShouldWait())
+                    {
+                        notify();
+                    }
+                    waitForThreadToExit(-1);
+                }
+                delete threadLock;
+            });
+        
+        // Use the message thread if possible, create a new thread instead if the
+        // message thread is stopping.
+        juce::MessageManager* messageManager 
+            = juce::MessageManager::getInstanceWithoutCreating();
+        if(messageManager == nullptr || messageManager->hasStopMessageBeenSent())
+        {
+            juce::Thread::launch(deleteLock);
+        }
+        else
+        {
+            juce::MessageManager::callAsync(deleteLock);
+        }
+
+        if(threadShouldWait() && !threadShouldExit())
+        {
+            wait(-1);
+        }
+    }
 }

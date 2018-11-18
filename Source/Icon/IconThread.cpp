@@ -95,8 +95,6 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
 
 IconThread::~IconThread()
 {
-    signalThreadShouldExit();
-    waitForThreadToExit(-1);
     imageCache.clear();
 }
 
@@ -159,6 +157,10 @@ IconThread::RequestID IconThread::addRequest(IconRequest request)
         {
             startThread();
         }
+        else //Ensure thread isn't sleeping
+        {
+            notify();
+        }
         return newID;
     }
 }
@@ -172,11 +174,6 @@ void IconThread::runLoop(ThreadLock& lock)
     using juce::Image;
     using juce::String;
     using std::function;
-    if(requestMap.empty())
-    {
-        signalThreadShouldExit();
-        return;
-    }
     lock.enterRead();
     RequestID requestID = requestMap.begin()->first;
     IconRequest firstRequest = requestMap[requestID];
@@ -217,6 +214,21 @@ void IconThread::runLoop(ThreadLock& lock)
             lock.exitWrite();
         }
     }
+    else
+    {
+        // Couldn't find the icon, remove the request
+        lock.enterWrite();
+        requestMap.erase(requestID);
+        lock.exitWrite();
+    }
+}
+
+/*
+ * Keeps the thread dormant when all icon requests have been processed.
+ */
+bool IconThread::threadShouldWait()
+{
+    return requestMap.empty();
 }
 
 /*

@@ -22,9 +22,11 @@ SharedResource::Holder::~Holder()
     DBG("SharedResource::Holder::" << __func__ 
             << ": Destroying SharedResource instance Holder ");
 #ifdef JUCE_DEBUG
-    // Test that all resources were properly destroyed.
+    // Test that all resources were properly destroyed.  Claim all resource
+    // locks for writing in case a resource is still being deleted.
     for(int i = 0; i < resourceList.size(); i++)
     {
+        const juce::ScopedWriteLock resourceLock(*resourceLocks[i]);
         if(resourceList[i] != nullptr)
         {
             juce::String resourceName = "[Missing ID!]";
@@ -100,7 +102,6 @@ void SharedResource::Holder::setResource(const juce::Identifier& resourceKey,
  */
 void SharedResource::Holder::clearIfEmpty()
 {
-    const juce::ScopedLock resourceLock(holderLock);
     if(holderInstance != nullptr)
     {
         for(Instance* resourceInstance : holderInstance->resourceList)

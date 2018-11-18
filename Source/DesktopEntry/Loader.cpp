@@ -19,7 +19,8 @@ SharedResource::Handler<LoadingThread>() { }
 DesktopEntry::EntryFile DesktopEntry::Loader::getDesktopEntry
 (const juce::String& entryFileID) const
 {
-    auto loadingThread = getReadLockedResource();
+    SharedResource::LockedPtr<LoadingThread> loadingThread 
+        = getReadLockedResource();
     return loadingThread->getDesktopEntry(entryFileID);
 }
 
@@ -29,7 +30,8 @@ DesktopEntry::EntryFile DesktopEntry::Loader::getDesktopEntry
 juce::Array<DesktopEntry::EntryFile> 
 DesktopEntry::Loader::getAllEntries() const
 {
-    auto loadingThread = getReadLockedResource();
+    SharedResource::LockedPtr<LoadingThread> loadingThread 
+        = getReadLockedResource();
     return loadingThread->getAllEntries();
 }
 
@@ -39,7 +41,8 @@ DesktopEntry::Loader::getAllEntries() const
 juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
 (const juce::String& category) const
 {
-    auto loadingThread = getReadLockedResource();
+    SharedResource::LockedPtr<LoadingThread> loadingThread 
+        = getReadLockedResource();
     return loadingThread->getCategoryEntries(category);
 }
 
@@ -49,7 +52,8 @@ juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
 juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
 (const juce::StringArray& categoryList) const
 {
-    auto loadingThread = getReadLockedResource();
+    SharedResource::LockedPtr<LoadingThread> loadingThread 
+        = getReadLockedResource();
     return loadingThread->getCategoryEntries(categoryList);
 }
 
@@ -59,14 +63,15 @@ juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
  */
 void DesktopEntry::Loader::scanForChanges()
 {
-   auto loadingThread = getWriteLockedResource();
+   SharedResource::LockedPtr<LoadingThread> loadingThread 
+       = getWriteLockedResource();
    if(!loadingThread->isThreadRunning())
    {
        loadingThread->startThread();
    }
-   else
+   else if(loadingThread->isFinishedLoading())
    {
-       loadingThread->findUpdatedFiles();
+       loadingThread->notify();
    }
 }
 
@@ -76,13 +81,23 @@ void DesktopEntry::Loader::scanForChanges()
 DesktopEntry::CallbackID DesktopEntry::Loader::waitUntilLoaded
 (std::function<void()> onFinish)
 {
-    auto loadingThread = getWriteLockedResource();
-    if(!loadingThread->isThreadRunning())
+    SharedResource::LockedPtr<LoadingThread> loadingThread 
+        = getWriteLockedResource();
+    if(loadingThread->isFinishedLoading())
     {
         onFinish();
         return 0;
     }
-    return loadingThread->addLoadingCallback(onFinish);
+    CallbackID callbackID = loadingThread->addLoadingCallback(onFinish);
+    if(loadingThread->isThreadRunning())
+    {
+        loadingThread->notify();
+    }
+    else
+    {
+        loadingThread->startThread();
+    }
+    return callbackID;
 }
 
 
@@ -94,7 +109,8 @@ void DesktopEntry::Loader::clearCallback(CallbackID callbackID)
 {
     if(callbackID != 0)
     {
-        auto loadingThread = getWriteLockedResource();
+        SharedResource::LockedPtr<LoadingThread> loadingThread
+            = getWriteLockedResource();
         loadingThread->cancelCallback(callbackID);
     }
 }

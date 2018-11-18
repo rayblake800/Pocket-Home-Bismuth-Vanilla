@@ -106,6 +106,15 @@ public:
      */
     void findUpdatedFiles();
 
+    /**
+     * @brief  Checks if the thread has finished loading desktop entry files,
+     *         and is either running cleanup or waiting for another request.
+     *
+     * @return  True if entries have been loaded, and desktop entry data may be
+     *          accessed.
+     */
+    bool isFinishedLoading();
+
 private:
     /**
      * @brief  Scans for new and updated desktop entry files for the thread to
@@ -138,6 +147,16 @@ private:
     void cleanup() override;
 
     /**
+     * @brief   Makes the thread sleep after loading or updating all desktop
+     *          files.
+     *
+     * @return  True if there are still files to (re)load, false if all desktop
+     *          files were loaded or updated.
+     */
+    virtual bool threadShouldWait() override;
+    
+
+    /**
      * @brief  Generates a unique callback ID the thread can assign to a 
      *         callback function.
      *
@@ -167,6 +186,10 @@ private:
 
     /* Maps category names to lists of desktop file IDs. */
     std::map<juce::String, juce::StringArray> categories;
+
+    /* Tracks if desktop entries were completely loaded, and aren't currently
+       being updated. */
+    bool finishedLoading = false;
 
     /* Callbacks to run when desktop entries finish loading. */
     std::map<CallbackID, std::function<void()>> onFinish;
