@@ -7,7 +7,7 @@ const juce::Identifier AppMenu::MenuJSON::resourceKey
         = "AppMenu::MenuJSON";
 
 /* JSON configuration file name */
-static const constexpr char * jsonFilename = "apps.json";
+static const constexpr char * jsonFilename = "appMenu.json";
 
 /*
  * Initializes the menu data tree.
@@ -113,7 +113,8 @@ void AppMenu::MenuJSON::writeDataToJSON()
  */
 const std::vector<Config::DataKey>& AppMenu::MenuJSON::getConfigKeys() const 
 {
-    return MenuKeys::allKeys;
+    static const std::vector<Config::DataKey> emptyList;
+    return emptyList;
 }
 
 /*

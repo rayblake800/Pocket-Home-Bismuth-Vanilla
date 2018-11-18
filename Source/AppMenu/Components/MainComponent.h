@@ -8,6 +8,7 @@
 #include "AppMenu/Control/Initializer.h"
 #include "AppMenu/Components/MenuComponent.h"
 #include "AppMenu/Control/Controller.h"
+#include "AppMenu/ConfigFile.h"
 #include "AppMenu/Data/JSON/MenuFile.h"
 #include "AppMenu/Implementation.h"
 /**
@@ -60,7 +61,7 @@ private:
      * @brief  Private listener class that updates the menu format whenever the
      *         saved format selection changes.
      */
-    class FormatUpdater : public MenuFile::Listener
+    class FormatUpdater : public ConfigFile::Listener
     {
     public:
         /**
@@ -99,7 +100,10 @@ private:
        desktop entry files.  This resource should exist as long as the AppMenu 
        exists. */
     EntryUpdater entryUpdater;
-    
+
+    /* Ensures JSON menu data stays in memory as long as the AppMenu does. */
+    MenuFile menuConfig;
+
     /* Ensures the icon cache exists as long as the AppMenu does. */
     const IconLoader iconLoader;
 

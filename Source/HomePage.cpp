@@ -4,6 +4,7 @@
 #include "PokeLookAndFeel.h"
 #include "AssetFiles.h"
 #include "AppMenu/AppMenu.h"
+#include "AppMenu/ConfigFile.h"
 #include "HomePage.h"
 
 HomePage::HomePage() :
@@ -33,10 +34,11 @@ settingsButton(ComponentConfigKeys::settingsButtonKey)
     settingsButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(settingsButton);
     
+    AppMenu::ConfigFile appConfig;
     appMenu.reset(AppMenu::createAppMenu()); 
-    const AppMenu::Format menuFormat = AppMenu::Settings::getMenuFormat();
+    const AppMenu::Format menuFormat = appConfig.getMenuFormat();
     DBG("HomePage::" << __func__ << ": Initialized "
-            << AppMenu::Settings::formatToString(menuFormat) << " AppMenu");
+            << appConfig.formatToString(menuFormat) << " AppMenu");
     appMenu->setBounds(getLocalBounds());
     addAndMakeVisible(appMenu.get());
     appMenu->toBack();

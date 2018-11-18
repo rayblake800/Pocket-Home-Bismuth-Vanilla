@@ -1,5 +1,4 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "Utils.h"
 #include "AppMenu/Data/JSON/MenuFile.h"
 /*
  * Gets a menu item representing the root folder of the application menu.
@@ -23,12 +22,9 @@ AppMenu::MenuItem AppMenu::MenuFile::addMenuItem(
         MenuItem& parentFolder,
         const int index) 
 {
-    auto appJSON = getWriteLockedResource();
+    SharedResource::LockedPtr<MenuJSON> appJSON = getWriteLockedResource();
     appJSON->addMenuItem(title, icon, command, launchInTerm, categories,
             parentFolder, index);
     return parentFolder.getFolderItem(index);
 }
 
-AppMenu::MenuFile::Listener::Listener() : 
-    Config::FileResource::Listener(MenuJSON::resourceKey, 
-            []()->Config::FileResource* { return new MenuJSON(); }) { }

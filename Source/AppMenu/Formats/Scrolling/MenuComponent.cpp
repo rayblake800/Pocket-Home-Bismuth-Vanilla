@@ -3,7 +3,7 @@
 #include "TempTimer.h"
 #include "ComponentConfigKeys.h"
 #include "TransitionAnimator.h"
-#include "AppMenu/Data/JSON/MenuKeys.h"
+#include "AppMenu/Data/JSON/ConfigKeys.h"
 #include "AppMenu/Formats/Scrolling/FolderComponent.h"
 #include "AppMenu/Formats/Scrolling/MenuComponent.h"
 
@@ -15,10 +15,11 @@ static const constexpr int animationMS = 300;
  * to the number of rows to fit on screen.
  */
 AppMenu::Scrolling::MenuComponent::MenuComponent() :
-    ConfigurableComponent(ComponentConfigKeys::scrollingAppMenuKey),
-    maxRows(Settings::getScrollingMenuRows())
+    ConfigurableComponent(ComponentConfigKeys::scrollingAppMenuKey)
 { 
-    addTrackedKey(MenuKeys::scrollingMenuRowsKey);
+    ConfigFile formatConfig;
+    maxRows = formatConfig.getScrollingMenuRows();
+    addTrackedKey(ConfigKeys::scrollingMenuRowsKey);
 }
 
 /*
@@ -136,7 +137,8 @@ void AppMenu::Scrolling::MenuComponent::parentResized
 void AppMenu::Scrolling::MenuComponent::configValueChanged
 (const juce::Identifier& propertyKey)
 {
-    jassert(propertyKey == MenuKeys::scrollingMenuRowsKey);
-    maxRows = Settings::getScrollingMenuRows();
+    jassert(propertyKey == ConfigKeys::scrollingMenuRowsKey);
+    ConfigFile formatConfig;
+    maxRows = formatConfig.getScrollingMenuRows();
     updateMenuLayout(false);
 }

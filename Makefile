@@ -417,6 +417,7 @@ process : $(OBJECTS_PROCESS)
 APPMENU_PREFIX := $(JUCE_OBJDIR)/AppMenu_
 OBJECTS_APPMENU_DATA := \
   $(APPMENU_PREFIX)MenuJSON.o \
+  $(APPMENU_PREFIX)ConfigJSON.o \
   $(APPMENU_PREFIX)MenuFile.o \
   $(APPMENU_PREFIX)MenuItem.o \
   $(APPMENU_PREFIX)EntryData.o \
@@ -455,6 +456,7 @@ OBJECTS_APPMENU_PAGED := \
   $(PAGED_MENU_PREFIX)Initializer.o 
 OBJECTS_APPMENU := \
   $(APPMENU_PREFIX)AppMenu.o \
+  $(APPMENU_PREFIX)ConfigFile.o \
   $(OBJECTS_APPMENU_DATA) \
   $(OBJECTS_APPMENU_COMPONENT) \
   $(OBJECTS_APPMENU_CONTROL) \
@@ -952,6 +954,8 @@ $(APPMENU_PREFIX)CategoryEditor.o: \
     Source/AppMenu/Components/Editors/CategoryEditor.cpp
 $(APPMENU_PREFIX)MenuJSON.o: \
     Source/AppMenu/Data/JSON/MenuJSON.cpp
+$(APPMENU_PREFIX)ConfigJSON.o: \
+    Source/AppMenu/Data/JSON/ConfigJSON.cpp
 $(APPMENU_PREFIX)MenuFile.o: \
     Source/AppMenu/Data/JSON/MenuFile.cpp
 $(APPMENU_PREFIX)MenuItem.o: \
@@ -970,6 +974,8 @@ $(APPMENU_PREFIX)ItemData.o: \
     Source/AppMenu/Data/ItemData.cpp
 $(APPMENU_PREFIX)AppMenu.o: \
     Source/AppMenu/AppMenu.cpp
+$(APPMENU_PREFIX)ConfigFile.o: \
+    Source/AppMenu/ConfigFile.cpp
 # Tests:
 $(APPMENU_PREFIX)Test_AppMenu.o: \
     Tests/AppMenu/AppMenu.cpp

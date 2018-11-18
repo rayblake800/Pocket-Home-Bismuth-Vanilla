@@ -27,7 +27,7 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
     }
     iconDirectories.addArray(dataDirs);
     iconDirectories.add("/usr/share/pixmaps");
-    iconDirectories.add("/usr/share/pocket-home/appIcons");
+    iconDirectories.add("/usr/share/pocket-home/icons");
     
     StringArray themeNames;
     //Icon theme selection is stored in $HOME/.gtkrc-2.0

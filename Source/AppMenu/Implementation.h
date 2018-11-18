@@ -115,7 +115,7 @@ namespace AppMenu
 
     /**
      * @brief  The private SharedResource singleton used to read, store, and
-     *         write data in the JSON configuration file.
+     *         write menu data in the JSON menu file.
      *
      * @see  AppMenu/Data/JSON/MenuJSON.h     
      */

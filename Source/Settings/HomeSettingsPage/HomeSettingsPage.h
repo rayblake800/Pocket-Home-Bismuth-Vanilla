@@ -26,12 +26,18 @@ public:
     virtual ~HomeSettingsPage();
 
 private:
-
     /**
      * Initializes the background and AppMenuType combo boxes with values
      * loaded from the MainConfigFile, and updates their labels to match.
      */
     void updateComboBox();
+
+    /**
+     * @brief  Updates the menu row counter, and shows or hides the menu column
+     *         counter based on the selected menu format and saved menu
+     *         dimensions.
+     */
+    void updateMenuCounters();
     
     /**
      * If the background type ComboBox is updated, clear the background text

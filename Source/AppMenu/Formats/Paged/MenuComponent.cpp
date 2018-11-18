@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "ComponentConfigKeys.h"
-#include "AppMenu/Data/JSON/MenuKeys.h"
+#include "AppMenu/Data/JSON/ConfigKeys.h"
 #include "AppMenu/Formats/Paged/FolderComponent.h"
 #include "AppMenu/Formats/Paged/MenuComponent.h"
 
@@ -16,8 +16,9 @@ AppMenu::Paged::MenuComponent::MenuComponent() :
     leftButton(NavButton::WindowEdge::left),
     rightButton(NavButton::WindowEdge::right)
 { 
-    addTrackedKey(MenuKeys::pagedMenuColumnsKey);
-    addTrackedKey(MenuKeys::pagedMenuRowsKey);
+    ConfigFile formatConfig;
+    addTrackedKey(ConfigKeys::pagedMenuColumnsKey);
+    addTrackedKey(ConfigKeys::pagedMenuRowsKey);
     addChildComponent(upButton);
     upButton.setAlwaysOnTop(true);
     addChildComponent(leftButton);

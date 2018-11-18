@@ -1,5 +1,6 @@
 #define APPMENU_IMPLEMENTATION_ONLY
 #include "AppMenu/AppMenu.h"
+#include "AppMenu/ConfigFile.h"
 #include "AppMenu/Formats/Paged/MenuButton.h"
 #include "AppMenu/Formats/Paged/FolderComponent.h"
 
@@ -32,12 +33,13 @@ AppMenu::Paged::FolderComponent::FolderComponent(MenuItem folderItem) :
 int AppMenu::Paged::FolderComponent::closestIndex
 (const int xPos, const int yPos) const 
 {
+    ConfigFile formatConfig;
     const int pageCount  = getNumFolderPages();
     const int pageWidth  = getWidth() / getNumFolderPages();
     const int pageX      = xPos % pageWidth;
     const int pageIndex  = xPos / pageWidth;
-    const int columnSize = pageWidth / Settings::getPagedMenuColumns();
-    const int rowSize    = getHeight() / Settings::getPagedMenuRows();
+    const int columnSize = pageWidth / formatConfig.getPagedMenuColumns();
+    const int rowSize    = getHeight() / formatConfig.getPagedMenuRows();
     const int pageColumn = pageX / columnSize;
     const int pageRow    = yPos / rowSize;
     int index = positionIndex(pageIndex, pageColumn, pageRow);
@@ -66,9 +68,10 @@ AppMenu::MenuButton* AppMenu::Paged::FolderComponent::createMenuButton
  */
 void AppMenu::Paged::FolderComponent::updateButtonLayout()
 {
+    ConfigFile formatConfig;
     const int numPages    = getNumFolderPages();
-    const int pageColumns = Settings::getPagedMenuColumns();
-    const int pageRows    = Settings::getPagedMenuRows();
+    const int pageColumns = formatConfig.getPagedMenuColumns();
+    const int pageRows    = formatConfig.getPagedMenuRows();
     const int pageWidth   = getWidth() / numPages;
     const int xMargin     = pageWidth * xMarginFraction;
     const int yMargin     = getHeight() * yMarginFraction;
@@ -140,7 +143,8 @@ int AppMenu::Paged::FolderComponent::getSelectionColumn() const
     {
         return -1;
     }
-    return pageIndex % Settings::getPagedMenuColumns();
+    ConfigFile formatConfig;
+    return pageIndex % formatConfig.getPagedMenuColumns();
 }
 
 /*
@@ -153,7 +157,8 @@ int AppMenu::Paged::FolderComponent::getSelectionRow() const
     {
         return -1;
     }
-    return pageIndex / Settings::getPagedMenuColumns();
+    ConfigFile formatConfig;
+    return pageIndex / formatConfig.getPagedMenuColumns();
 }
 
 /*
@@ -163,8 +168,9 @@ int AppMenu::Paged::FolderComponent::getSelectionRow() const
 int AppMenu::Paged::FolderComponent::positionIndex
 (const int page, const int column, const int row) const
 {
-    const int maxRows = Settings::getPagedMenuRows();
-    const int maxColumns = Settings::getPagedMenuColumns();
+    ConfigFile formatConfig;
+    const int maxRows = formatConfig.getPagedMenuRows();
+    const int maxColumns = formatConfig.getPagedMenuColumns();
     if(page < 0 || column < 0 || row < 0 
             || column >= maxColumns || row >= maxRows)
     {
@@ -195,7 +201,8 @@ bool AppMenu::Paged::FolderComponent::setSelectedPosition
  */
 int AppMenu::Paged::FolderComponent::maxPageItemCount() const
 {
-    return Settings::getPagedMenuColumns() * Settings::getPagedMenuRows();
+    ConfigFile formatConfig;
+    return formatConfig.getPagedMenuColumns() * formatConfig.getPagedMenuRows();
 }
 
 /*

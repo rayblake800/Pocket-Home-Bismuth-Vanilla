@@ -95,7 +95,8 @@ private:
      * @brief   Gets all parameters with basic data types tracked by this
      *          ConfigFile.
      * 
-     * @return  The menu setting keys defined in AppMenu/Data/JSON/ConfigKeys.
+     * @return  The empty list, as MenuJSON only reads the JSON object used to
+     *          create the menu.
      */
     virtual const std::vector<Config::DataKey>& getConfigKeys() const final 
         override;

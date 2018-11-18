@@ -1,5 +1,5 @@
 #define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/Data/JSON/MenuKeys.h"
+#include "AppMenu/Data/JSON/ConfigKeys.h"
 #include "AppMenu/Formats/Paged/Initializer.h"
 #include "AppMenu/Formats/Scrolling/Initializer.h"
 #include "AppMenu/Components/MainComponent.h"
@@ -88,7 +88,7 @@ void AppMenu::MainComponent::resized()
 AppMenu::MainComponent::FormatUpdater::FormatUpdater
 (MainComponent* mainComponent) : mainComponent(mainComponent)
 {
-    addTrackedKey(MenuKeys::menuFormatKey);
+    addTrackedKey(ConfigKeys::menuFormatKey);
 }
 
 /**
@@ -97,7 +97,8 @@ AppMenu::MainComponent::FormatUpdater::FormatUpdater
  */
 void AppMenu::MainComponent::FormatUpdater::applySelectedFormat()
 {
-    const Format newFormat = Settings::getMenuFormat();
+    ConfigFile formatConfig;
+    const Format newFormat = formatConfig.getMenuFormat();
     std::unique_ptr<Initializer> initializer;
     switch(newFormat)
     {
@@ -113,7 +114,7 @@ void AppMenu::MainComponent::FormatUpdater::applySelectedFormat()
 
     DBG("AppMenu::MainComponent::" << __func__
             << ": Switching to Format::" 
-            << Settings::formatToString(newFormat));
+            << formatConfig.formatToString(newFormat));
     mainComponent->loadMenuFormat(initializer.get());
 }
 
@@ -124,6 +125,6 @@ void AppMenu::MainComponent::FormatUpdater::applySelectedFormat()
 void AppMenu::MainComponent::FormatUpdater::configValueChanged
 (const juce::Identifier& propertyKey)
 {
-    jassert(propertyKey == MenuKeys::menuFormatKey);
+    jassert(propertyKey == ConfigKeys::menuFormatKey);
     applySelectedFormat();
 }

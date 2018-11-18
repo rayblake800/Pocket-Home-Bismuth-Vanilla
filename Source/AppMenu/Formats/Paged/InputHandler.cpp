@@ -80,11 +80,12 @@ bool AppMenu::Paged::InputHandler::keyPressed
        return false;
    }
 
+   ConfigFile formatConfig;
    const int maxIndex            = activeFolder->getFolderSize() - 1;
    const int selectionColumn     = activeFolder->getSelectionColumn();
-   const int numColumns          = Settings::getPagedMenuColumns();
+   const int numColumns          = formatConfig.getPagedMenuColumns();
    const int selectionRow        = activeFolder->getSelectionRow();
-   const int numRows             = Settings::getPagedMenuRows();
+   const int numRows             = formatConfig.getPagedMenuRows();
 
    int newRow    = selectionRow;
    int newColumn = selectionColumn;

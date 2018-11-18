@@ -1,6 +1,6 @@
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
-#include "AppMenu/AppMenu.h"
+#include "AppMenu/ConfigFile.h"
 #include "HomeSettingsPage.h"
 
 /* Localized object class key */
@@ -76,13 +76,13 @@ rowCounter(1, 1, 9)
         }),
         Row(20,
         {
-            RowItem(&columnCountLabel, 20),
-            RowItem(&columnCounter, 10)
+            RowItem(&rowCountLabel, 20),
+            RowItem(&rowCounter, 10)
         }),
         Row(20,
         {
-            RowItem(&rowCountLabel, 20),
-            RowItem(&rowCounter, 10)
+            RowItem(&columnCountLabel, 20),
+            RowItem(&columnCounter, 10)
         })
     });
     layout.setYMarginFraction(0.05);
@@ -108,13 +108,10 @@ rowCounter(1, 1, 9)
     menuTypePicker.addItem(localeText(scrollingMenuTextKey), 
             scrollingMenuID);
     menuTypePicker.addListener(this);
-    Config::MainFile mainConfig;
-    rowCounter.setValue(AppMenu::Settings::getPagedMenuRows());
-
-    columnCounter.setValue(AppMenu::Settings::getPagedMenuColumns());
 
     updateComboBox();
     addAndShowLayoutComponents();
+    updateMenuCounters();
 }
 
 /**
@@ -122,8 +119,22 @@ rowCounter(1, 1, 9)
  */
 HomeSettingsPage::~HomeSettingsPage()
 {
-    AppMenu::Settings::setPagedMenuRows(rowCounter.getValue());
-    AppMenu::Settings::setPagedMenuColumns(columnCounter.getValue());
+    AppMenu::ConfigFile appConfig;
+    AppMenu::Format menuFormat = appConfig.getMenuFormat();
+    if(menuFormat == AppMenu::Format::Paged)
+    {
+        appConfig.setPagedMenuRows(rowCounter.getValue());
+        appConfig.setPagedMenuColumns(columnCounter.getValue());
+    }
+    else if(menuFormat == AppMenu::Format::Scrolling)
+    {
+        appConfig.setScrollingMenuRows(rowCounter.getValue());
+    }
+    else
+    {
+        // Invalid menu format!
+        jassertfalse;
+    }
 }
 
 /**
@@ -197,8 +208,8 @@ void HomeSettingsPage::updateComboBox()
     bgEditor.setVisible(display);
     bgLabel.setVisible(display);
 
-    AppMenu::Format menuType = AppMenu::Settings::getMenuFormat();
-
+    AppMenu::ConfigFile appConfig;
+    AppMenu::Format menuType = appConfig.getMenuFormat();
     int menuIndex;
     switch(menuType)
     {
@@ -216,7 +227,36 @@ void HomeSettingsPage::updateComboBox()
             juce::NotificationType::dontSendNotification);
 }
 
-/**
+/*
+ * Updates the menu row counter, and shows or hides the menu column counter 
+ * based on the selected menu format and saved menu dimensions.
+ */
+void HomeSettingsPage::updateMenuCounters()
+{
+    AppMenu::ConfigFile appConfig;
+    AppMenu::Format menuFormat = appConfig.getMenuFormat();
+    bool showColumns = false;
+    if(menuFormat == AppMenu::Format::Paged)
+    {
+        rowCounter.setValue(appConfig.getPagedMenuRows());
+        columnCounter.setValue(appConfig.getPagedMenuColumns());
+        showColumns = true;
+    }
+    else if(menuFormat == AppMenu::Format::Scrolling)
+    {
+        rowCounter.setValue(appConfig.getScrollingMenuRows());
+    }
+    else
+    {
+        // Invalid menu format!
+        jassertfalse;
+    }
+    columnCountLabel.setVisible(showColumns);
+    columnCounter.setVisible(showColumns);
+    columnCounter.setEnabled(showColumns);
+}
+
+/*
  * If the background type ComboBox is updated, clear the background text
  * field, and update its labels. If the menu type ComboBox is updated,
  * save the changed value to the MainConfigFile
@@ -258,6 +298,7 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
     }
     else if (box == &menuTypePicker) 
     {
+        AppMenu::ConfigFile appConfig;
         AppMenu::Format selectedFormat = AppMenu::Format::Invalid;
         switch(box->getSelectedId())
         {
@@ -269,7 +310,8 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
         }
         // All selections should correspond to valid formats
         jassert(selectedFormat != AppMenu::Format::Invalid);
-        AppMenu::Settings::setMenuFormat(selectedFormat);
+        appConfig.setMenuFormat(selectedFormat);
+        updateMenuCounters();
     }
 }
 

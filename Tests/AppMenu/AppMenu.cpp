@@ -3,6 +3,7 @@
 #include "DesktopEntry/Loader.h"
 #include "TestWindow.h"
 #include "DelayUtils.h"
+#include "AppMenu/ConfigFile.h"
 #include "AppMenu/AppMenu.h"
 
 /* Test window bounds: */
@@ -25,26 +26,26 @@ public:
     {
         using juce::String;
         using namespace AppMenu;
-        using namespace Settings;
-        Format initial = getMenuFormat();
+        ConfigFile config;
+        Format initial = config.getMenuFormat();
         logMessage(String("Initial menu format:") 
-                + formatToString(initial));
+                + config.formatToString(initial));
 
         expectNotEquals((int) initial,(int) Format::Invalid,
                 "Initial format was invalid!");
 
-        setMenuFormat(Format::Invalid);
-        expectEquals((int) initial,(int) getMenuFormat(), 
+        config.setMenuFormat(Format::Invalid);
+        expectEquals((int) initial,(int) config.getMenuFormat(), 
                 "Trying to set an invalid format should be ignored");
 
         for(int i = 0; i < (int) Format::Invalid; i++)
         {
-            setMenuFormat((Format) i);
-            expectEquals(i, (int) getMenuFormat(),
+            config.setMenuFormat((Format) i);
+            expectEquals(i, (int) config.getMenuFormat(),
                     "Failed to change menu format!");
         }
-        setMenuFormat(initial);
-        expectEquals((int) getMenuFormat(),(int) initial,
+        config.setMenuFormat(initial);
+        expectEquals((int) config.getMenuFormat(),(int) initial,
                 "Failed to restore initial menu format!");
     }
 
@@ -56,7 +57,7 @@ public:
     {
         using juce::String;
         using namespace AppMenu;
-        using namespace Settings;
+        ConfigFile config;
 
         const constexpr int numSettings = 3;
         juce::StringArray settingNames =
@@ -67,15 +68,15 @@ public:
         };
         juce::Array<std::function<int()>> getSettings =
         {
-            [](){ return getPagedMenuColumns(); },
-            [](){ return getPagedMenuRows(); },
-            [](){ return getScrollingMenuRows(); }
+            [&config](){ return config.getPagedMenuColumns(); },
+            [&config](){ return config.getPagedMenuRows(); },
+            [&config](){ return config.getScrollingMenuRows(); }
         };
         juce::Array<std::function<void(int)>> setSettings =
         {
-            [](int val){ setPagedMenuColumns(val); },
-            [](int val){ setPagedMenuRows(val); },
-            [](int val){ setScrollingMenuRows(val); }
+            [&config](int val){ config.setPagedMenuColumns(val); },
+            [&config](int val){ config.setPagedMenuRows(val); },
+            [&config](int val){ config.setScrollingMenuRows(val); }
         };
         juce::Array<int> testValues = { -999, -1, 0, 1, 5, 999};
         for(int settingNum = 0; settingNum < numSettings; settingNum++)
@@ -111,11 +112,10 @@ public:
     {
         using juce::String;
         using namespace AppMenu;
-        using namespace Settings;
-
-        //Create resources that must be initialized before AppMenu can run:
-        //TODO: AppMenu should be able to initialize these on its own if needed.
-        DesktopEntry::Loader entryLoader;
+        //Create AppMenu::ConfigFile to avoid pointlessly recreating and
+        //destroying JSON data whenever another ConfigFile instance is 
+        //destroyed.
+        ConfigFile config;
         
         beginTest("Initial AppMenu format tests");
         // Test format strings:
@@ -123,12 +123,13 @@ public:
         juce::StringArray formatStrings;
         for(int i = 0; i < numFormats; i++)
         {
-            String formatString = formatToString ((Format) i);
+            String formatString = config.formatToString ((Format) i);
             expect(formatString.isNotEmpty(),
                     String("Missing string for format number ") + String(i));
             if(i != (int) Format::Invalid)
             {
-                expectNotEquals(formatString, formatToString(Format::Invalid),
+                expectNotEquals(formatString, 
+                        config.formatToString(Format::Invalid),
                         String("Format number ") + String(i)
                         + String(" treated as invalid!"));
             }
@@ -136,13 +137,11 @@ public:
         juce::StringArray invalidFormats = { "", "paged", " Scrolling", "lsk" };
         for(const String& invalidStr : invalidFormats)
         {
-            expectEquals((int) stringToFormat(invalidStr),(int) Format::Invalid,
+            expectEquals((int) config.stringToFormat(invalidStr),
+                    (int) Format::Invalid,
                     "Invalid format not handled correctly");
         }
        
-        // TODO: interaction with settings before the menu is created causes
-        //       problems with SharedResource deadlocks.  Fix bugs in 
-        //       SharedResource destruction.
         // Test format changes before creating the menu
         beginTest("Initial format change test");
         formatChangeTest();
