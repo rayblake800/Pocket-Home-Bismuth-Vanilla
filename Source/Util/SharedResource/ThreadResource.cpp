@@ -15,6 +15,15 @@ SharedResource::ThreadResource::ThreadResource
  */
 SharedResource::ThreadResource::~ThreadResource()
 {
+    stopThreadResource();
+}
+
+/*
+ * Performs all necessary steps to stop the thread, and waits for the thread to 
+ * exit.
+ */
+void SharedResource::ThreadResource::stopThreadResource()
+{
     jassert(Thread::getCurrentThreadId() != getThreadId());
     if(isThreadRunning())
     {
@@ -22,7 +31,7 @@ SharedResource::ThreadResource::~ThreadResource()
         notify();
         DBG("SharedResource::ThreadResource::" << __func__ << ": Thread \""
                 << getResourceKey().toString() 
-                << "\" still running, stopping thread before destruction.");
+                << "\" is stopping.");
         stopThread(timeoutMilliseconds);
     }
 }
@@ -97,10 +106,7 @@ void SharedResource::ThreadResource::run()
             {
                 if(threadShouldExit())
                 {
-                    if(threadShouldWait())
-                    {
-                        notify();
-                    }
+                    notify();
                     waitForThreadToExit(-1);
                 }
                 delete threadLock;

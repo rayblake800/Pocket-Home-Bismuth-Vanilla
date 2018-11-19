@@ -2,7 +2,7 @@
 #include <nm-active-connection.h>
 #include "NMPPAccessPoint.h"
 #include "NMPPConnection.h"
-#include "GPPObject.h"
+#include "GLib/Object.h"
 
 /**
  * @file NMPPActiveConnection.h
@@ -11,7 +11,7 @@
  *        objects.
  */
 
-class NMPPActiveConnection : public GPPObject
+class NMPPActiveConnection : public GLib::Object
 {
 public:
     /**

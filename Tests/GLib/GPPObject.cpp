@@ -286,12 +286,12 @@ public:
                     expectEquals(testObjects[obj1]->getReferenceCount(),
                             expectedRef1,
                             assignmentText + 
-                            ": First GPPObject ref count is wrong");
+                            ": First GLib::Object ref count is wrong");
                     expectEquals( 
                             testObjects[obj2]->getReferenceCount(),
                             expectedRef2,
                             assignmentText + 
-                            ": Second GPPObject ref count is wrong");
+                            ": Second GLib::Object ref count is wrong");
                     expectEquals(copy1.getReferenceCount(),
                             expectedCopyRef1,
                             assignmentText + 

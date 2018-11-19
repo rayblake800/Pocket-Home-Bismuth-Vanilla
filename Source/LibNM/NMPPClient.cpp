@@ -4,7 +4,7 @@
 /*
  * Create a NMPPClient holding a new NMClient object.
  */
-NMPPClient::NMPPClient() : GPPObject(NM_TYPE_CLIENT)
+NMPPClient::NMPPClient() : GLib::Object(NM_TYPE_CLIENT)
 { 
     callInMainContext([this]()
     {
@@ -16,13 +16,13 @@ NMPPClient::NMPPClient() : GPPObject(NM_TYPE_CLIENT)
  * Create a NMPPClient that shares a NMClient with another NMPPClient.
  */
 NMPPClient::NMPPClient(const NMPPClient& toCopy) : 
-GPPObject(toCopy, NM_TYPE_CLIENT) { }
+GLib::Object(toCopy, NM_TYPE_CLIENT) { }
  
 /**
  * Create a NMPPClient holding an existing NMClient object.
  */
 NMPPClient::NMPPClient(NMClient* toAssign) :
-GPPObject(G_OBJECT(toAssign), NM_TYPE_CLIENT) { }
+GLib::Object(G_OBJECT(toAssign), NM_TYPE_CLIENT) { }
 
 /*
  * Get all wifi devices from Network Manager.

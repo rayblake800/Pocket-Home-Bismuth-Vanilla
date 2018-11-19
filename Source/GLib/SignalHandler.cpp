@@ -1,10 +1,10 @@
-#include "GSignalHandler.h"
+#include "GLib/SignalHandler.h"
 
 /*
  * Unsubscribes the signal handler from all signal sources, and removes all
  * held references to signal sources.
  */
-GSignalHandler::~GSignalHandler()
+GLib::SignalHandler::~SignalHandler()
 {
     using namespace juce;
     unsubscribeAll();
@@ -13,13 +13,12 @@ GSignalHandler::~GSignalHandler()
 /*
  * Unsubscribes this signal handler from all signals emitted by a GObject.
  */
-bool GSignalHandler::disconnectSignals(GObject* source)
+bool GLib::SignalHandler::disconnectSignals(GObject* source)
 {
-    using namespace juce;
     if(source != nullptr)
     {
-        const ScopedLock changeSourceLock(signals.getLock());
-        GPPWeakRef sourceRef(source);
+        const juce::ScopedLock changeSourceLock(signals.getLock());
+        WeakRef sourceRef(source);
         if(signals.contains(sourceRef))
         {
             for(const guint& signalID : signals[sourceRef])
@@ -38,25 +37,23 @@ bool GSignalHandler::disconnectSignals(GObject* source)
  * Checks if this signal handler is connected to a particular GObject signal
  * source.
  */
-bool GSignalHandler::isConnected(GObject* source) const
+bool GLib::SignalHandler::isConnected(GObject* source) const
 {
-    using namespace juce;
     if(source == nullptr)
     {
         return false;
     }
-    const ScopedLock signalLock(signals.getLock());
-    GPPWeakRef sourceRef(source);
+    const juce::ScopedLock signalLock(signals.getLock());
+    WeakRef sourceRef(source);
     return signals.contains(sourceRef);
 }
 
 /*
- * Subscribe the signal handler to a single signal.
+ * Subscribes the signal handler to a single signal.
  */
-void GSignalHandler::connectSignal(GObject* source,
+void GLib::SignalHandler::connectSignal(GObject* source,
         const char* signalName, GCallback callback)
 {
-    using namespace juce;
     if(source == nullptr || signalName == nullptr)
     {
         return;
@@ -66,7 +63,7 @@ void GSignalHandler::connectSignal(GObject* source,
             (source, signalName, callback, this);
     if(handlerID != 0)
     {
-        GPPWeakRef sourceRef(source);
+        WeakRef sourceRef(source);
         
         if(!signals.contains(sourceRef))
         {
@@ -76,16 +73,16 @@ void GSignalHandler::connectSignal(GObject* source,
     }       
     else
     {
-        DBG("GSignalHandler::" << __func__ << ": Failed to subscribe to \""
+        DBG("GLib::SignalHandler::" << __func__ << ": Failed to subscribe to \""
                 << signalName << "\" signal.");
     }
 }
         
 /*
- * Subscribe a signal handler to receive notifications when a specific 
+ * Subscribes the signal handler to receive notifications when a specific 
  * object property changes.
  */
-void GSignalHandler::connectNotifySignal
+void GLib::SignalHandler::connectNotifySignal
 (GObject* source, const char* propertyName)
 {   
     if(propertyName != nullptr)
@@ -98,10 +95,10 @@ void GSignalHandler::connectNotifySignal
 }
 
 /*
- * Connect to all relevant signals for all GObject signal sources tracked
+ * Connects to all relevant signals for all GObject signal sources tracked
  * by another signal handler.
  */
-void GSignalHandler::shareSignalSources(const GSignalHandler& otherHandler)
+void GLib::SignalHandler::shareSignalSources(const SignalHandler& otherHandler)
 {
     juce::Array<GObject*> signalSources;
     const juce::ScopedLock readSourceLock(otherHandler.signals.getLock());
@@ -128,10 +125,9 @@ void GSignalHandler::shareSignalSources(const GSignalHandler& otherHandler)
  * Unsubscribes the signal handler from all signal sources, and removes all
  * held references to signal sources.
  */
-void GSignalHandler::unsubscribeAll()
+void GLib::SignalHandler::unsubscribeAll()
 {
-    using namespace juce;
-    const ScopedLock changeSourceLock(signals.getLock());
+    const juce::ScopedLock changeSourceLock(signals.getLock());
     for(auto iter = signals.begin(); iter != signals.end(); iter.next())
     {
         GObject* source = iter.getKey().getObject();
@@ -150,12 +146,12 @@ void GSignalHandler::unsubscribeAll()
     signals.clear();
 }
 
-/**
+/*
  * Callback to handle property change signals.  This passes all received
  * signals to the signal handler's propertyChanged method.
  */
-void GSignalHandler::notifyCallback
-(GObject* objectData, GParamSpec* pSpec, GSignalHandler* signalHandler)
+void GLib::SignalHandler::notifyCallback
+(GObject* objectData, GParamSpec* pSpec, SignalHandler* signalHandler)
 {
     juce::String property(pSpec->name);
     signalHandler->propertyChanged(objectData, property);

@@ -6,20 +6,20 @@
  * with another NMPPDeviceWifi object
  */
 NMPPDeviceWifi::NMPPDeviceWifi(const NMPPDeviceWifi& toCopy) :
-GPPObject(toCopy, NM_TYPE_DEVICE_WIFI) { }
+GLib::Object(toCopy, NM_TYPE_DEVICE_WIFI) { }
 
 /*
  * Create a NMPPDeviceWifi to contain a NMDeviceWifi object.
  */
 NMPPDeviceWifi::NMPPDeviceWifi(NMDeviceWifi* toAssign) :
-GPPObject(G_OBJECT(toAssign), NM_TYPE_DEVICE_WIFI) { }
+GLib::Object(G_OBJECT(toAssign), NM_TYPE_DEVICE_WIFI) { }
 
     
 /**
  * Creates a null NMPPDeviceWifi.
  */
 NMPPDeviceWifi::NMPPDeviceWifi() :
-GPPObject(NM_TYPE_DEVICE_WIFI) { }
+GLib::Object(NM_TYPE_DEVICE_WIFI) { }
 
 /*
  * Gets the current state of the wifi network device.

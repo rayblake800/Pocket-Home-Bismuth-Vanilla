@@ -3,8 +3,8 @@
 #include "NMPPConnection.h"
 #include "NMPPActiveConnection.h"
 #include "NMPPDeviceWifi.h"
-#include "GSignalHandler.h"
-#include "GPPObject.h"
+#include "GLib/SignalHandler.h"
+#include "GLib/Object.h"
 
 /**
  * #file NMPPClient.h
@@ -12,7 +12,7 @@
  * @brief A RAII container and C++ interface for the LibNM NMClient class.
  */
 
-class NMPPClient : public GPPObject
+class NMPPClient : public GLib::Object
 {
 public:
     /**
@@ -229,7 +229,7 @@ public:
     /**
      * Listeners receive updates whenever wireless is enabled or disabled.
      */
-    class Listener : public GSignalHandler
+    class Listener : public GLib::SignalHandler
     {
     public:
         friend class NMPPClient;

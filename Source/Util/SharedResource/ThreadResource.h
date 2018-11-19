@@ -34,8 +34,13 @@ public:
      */
     virtual ~ThreadResource();
 
+    /**
+     * @brief  Performs all necessary steps to stop the thread, and waits for
+     *         the thread to exit.
+     */
+    virtual void stopThreadResource();
+
 protected:
-    
     /**
      * @brief  Prevents the thread object from being destroyed while the
      *         thread is running, and allows the thread to lock itself. 

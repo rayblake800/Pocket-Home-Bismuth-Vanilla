@@ -5,18 +5,18 @@
  * NMPPConnection.
  */
 NMPPConnection::NMPPConnection(const NMPPConnection& toCopy) :
-GPPObject(toCopy, NM_TYPE_CONNECTION) { }
+GLib::Object(toCopy, NM_TYPE_CONNECTION) { }
 
 /**
  * Create a NMPPConnection to contain a NMConnection object.
  */
 NMPPConnection::NMPPConnection(NMConnection* toAssign) :
-GPPObject(G_OBJECT(toAssign), NM_TYPE_CONNECTION) { }
+GLib::Object(G_OBJECT(toAssign), NM_TYPE_CONNECTION) { }
     
 /*
  * Creates a null NMPPConnection.
  */
-NMPPConnection::NMPPConnection() : GPPObject(NM_TYPE_CONNECTION) { }
+NMPPConnection::NMPPConnection() : GLib::Object(NM_TYPE_CONNECTION) { }
 
 /**
  * Check if this connection object and another could be describing the 

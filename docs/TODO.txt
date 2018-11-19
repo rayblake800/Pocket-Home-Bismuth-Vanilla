@@ -34,7 +34,7 @@
          that copies LibNM's interface.
     2. The level of interaction between GLibSignalThread and NetworkInterface
        creates way too many opportunities for deadlocks.  Merge GLibSignalThread
-       and NetworkInterface into a single SharedResource, and ensure GPPObjects
+       and NetworkInterface into a single SharedResource, and ensure GLib::Objects
        do not use that thread if they're not part of LibNM.
     3. Using GLib SignalHandlers outside of the Wifi thread is not safe with
        this version of LibNM.  Remove internal NMPPAccessPoint objects from

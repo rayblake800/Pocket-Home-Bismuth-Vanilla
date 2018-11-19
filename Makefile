@@ -175,7 +175,7 @@ main : $(OBJECTS_MAIN)
 
 # Include makefiles defining each module:
 include $(shell pwd)/JuceLibraryCode/Makefile
-include $(shell pwd)/build/makefiles/*.mk
+include $(shell pwd)/makefiles/*.mk
 
 $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(MODULES) $(RESOURCES)
 	@echo Linking "pocket-home - App"

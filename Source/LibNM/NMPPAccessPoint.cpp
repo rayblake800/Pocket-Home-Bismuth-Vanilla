@@ -7,18 +7,18 @@
  * NMPPAccessPoint.
  */
 NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy) :
-GPPObject(toCopy, NM_TYPE_ACCESS_POINT) { }
+GLib::Object(toCopy, NM_TYPE_ACCESS_POINT) { }
 
 /*
  * Create a NMPPAccessPoint to contain a NMAccessPoint object.
  */
 NMPPAccessPoint::NMPPAccessPoint(NMAccessPoint* toAssign) :
-GPPObject(G_OBJECT(toAssign), NM_TYPE_ACCESS_POINT) { }
+GLib::Object(G_OBJECT(toAssign), NM_TYPE_ACCESS_POINT) { }
     
 /**
  * Creates a null NMPPAccessPoint.
  */
-NMPPAccessPoint::NMPPAccessPoint() : GPPObject(NM_TYPE_ACCESS_POINT) { }
+NMPPAccessPoint::NMPPAccessPoint() : GLib::Object(NM_TYPE_ACCESS_POINT) { }
 
 /*
  * Gets the access point SSID as a byte array from the access point.  This 

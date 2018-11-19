@@ -6,8 +6,8 @@ GLIB_TEST_ROOT = Tests/GLib
 OBJECTS_GLIB := \
   $(GLIB_PREFIX)Object.o \
   $(GLIB_PREFIX)WeakRef.o \
-  $(GLIB_PREFIX)Thread.o \
-  $(GLIB_PREFIX)SignalThread.o \
+  $(GLIB_PREFIX)ThreadResource.o \
+  $(GLIB_PREFIX)EventLoop.o \
   $(GLIB_PREFIX)SignalHandler.o \
   $(GLIB_PREFIX)VariantConverter.o \
   $(GLIB_PREFIX)DBusProxy.o  
@@ -29,15 +29,15 @@ glib : $(OBJECTS_GLIB)
 	@echo "Built GLib module"
 
 $(GLIB_PREFIX)Object.o : \
-    $(GLIB_ROOT)/GPPObject.cpp
+    $(GLIB_ROOT)/Object.cpp
 $(GLIB_PREFIX)WeakRef.o : \
-    $(GLIB_ROOT)/GPPWeakRef.cpp
+    $(GLIB_ROOT)/WeakRef.cpp
 $(GLIB_PREFIX)Thread.o : \
-    $(GLIB_ROOT)/GLibThread.cpp
-$(GLIB_PREFIX)SignalThread.o : \
-    $(GLIB_ROOT)/GLibSignalThread.cpp
+    $(GLIB_ROOT)/ThreadResource.cpp
+$(GLIB_PREFIX)EventLoop.o : \
+    $(GLIB_ROOT)/EventLoop.cpp
 $(GLIB_PREFIX)SignalHandler.o : \
-    $(GLIB_ROOT)/GSignalHandler.cpp
+    $(GLIB_ROOT)/SignalHandler.cpp
 $(GLIB_PREFIX)VariantConverter.o : \
     $(GLIB_ROOT)/DBus/GVariantConverter.cpp
 $(GLIB_PREFIX)DBusProxy.o : \

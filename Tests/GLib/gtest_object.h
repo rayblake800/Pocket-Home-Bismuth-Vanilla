@@ -4,7 +4,7 @@
 /**
  * @file gpptest_object.h
  *
- * @brief  Defines a custom GObject type for GPPObject threading tests.
+ * @brief  Defines a custom GObject type for GLib::Object threading tests.
  */
 G_BEGIN_DECLS
 

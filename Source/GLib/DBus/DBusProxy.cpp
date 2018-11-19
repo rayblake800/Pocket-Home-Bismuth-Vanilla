@@ -1,10 +1,9 @@
 #include "Utils.h"
-#include "GLibSignalThread.h"
-#include "GPPDBusProxy.h"
+#include "GLib/DBus/DBusProxy.h"
 
-GPPDBusProxy::GPPDBusProxy
+GLib::DBusProxy::DBusProxy
 (const char* name, const char* path, const char* interface) :
-GPPObject(G_TYPE_DBUS_PROXY)
+GLib::Object(G_TYPE_DBUS_PROXY)
 {
     using namespace juce;
     if(name == nullptr || path == nullptr || interface == nullptr)
@@ -13,8 +12,8 @@ GPPObject(G_TYPE_DBUS_PROXY)
         return;
     }
 
-    callInMainContext([this, name, path, interface]()
-    {
+    //callInMainContext([this, name, path, interface]()
+    //{
         GError * error = nullptr;
         GDBusProxy * proxy = g_dbus_proxy_new_for_bus_sync(
                 G_BUS_TYPE_SYSTEM,
@@ -36,20 +35,20 @@ GPPObject(G_TYPE_DBUS_PROXY)
         {
             setGObject(G_OBJECT(proxy));
         }
-    }); 
+    //}); 
 }
  
-/**
- * Create an object holding an existing GDBusProxy.
+/*
+ * Creates an object holding an existing GDBusProxy.
  */
-GPPDBusProxy::GPPDBusProxy(GDBusProxy * proxy) :
-GPPObject(G_OBJECT(proxy), G_TYPE_DBUS_PROXY) { }
+GLib::DBusProxy::DBusProxy(GDBusProxy * proxy) :
+GLib::Object(G_OBJECT(proxy), G_TYPE_DBUS_PROXY) { }
         
 /*
- * Subscribe to all DBus signals and property changes emitted by this
+ * Subscribes to all DBus signals and property changes emitted by this
  * signal source.
  */
-void GPPDBusProxy::DBusSignalHandler::connectAllSignals(GObject* source)
+void GLib::DBusProxy::DBusSignalHandler::connectAllSignals(GObject* source)
 {
     if(source != nullptr && G_IS_DBUS_PROXY(source))
     {
@@ -60,49 +59,42 @@ void GPPDBusProxy::DBusSignalHandler::connectAllSignals(GObject* source)
 }
 
 /*
- * Called whenever the DBus object emits a signal.  DBusSignalHandler
- * subclasses should override this to handle the specific signals
- * they expect to receive.
+ * This will be called whenever the DBus object emits a signal.
  */
-void GPPDBusProxy::DBusSignalHandler::dBusSignalReceived(GPPDBusProxy& source, 
+void GLib::DBusProxy::DBusSignalHandler::dBusSignalReceived(DBusProxy& source, 
         juce::String senderName, juce::String signalName, GVariant* parameters)
 {
-    DBG("GPPDBusProxy::DBusSignalHandler::" << __func__ <<
+    DBG("GLib::DBusProxy::DBusSignalHandler::" << __func__ <<
             ": Received un-handled signal " << signalName << " from "
             << senderName);
 }
 
 /*
- * Called whenever a property of the DBus object changes. 
- * DBusSignalHandler subclasses should override this to handle the
- * specific property changes they need to receive.
+ * This will be called whenever a property of the DBus object changes. 
  */
-void GPPDBusProxy::DBusSignalHandler::dBusPropertyChanged
-(GPPDBusProxy& source, juce::String propertyName, GVariant* newValue)
+void GLib::DBusProxy::DBusSignalHandler::dBusPropertyChanged
+(DBusProxy& source, juce::String propertyName, GVariant* newValue)
 {   
-    DBG("GPPDBusProxy::DBusSignalHandler::" << __func__ <<
+    DBG("GLib::DBusProxy::DBusSignalHandler::" << __func__ <<
             ": Received un-handled change to property" << propertyName);
 }
 
 /*
- * Called whenever a property of the DBus object becomes invalid. 
- * DBusSignalHandler subclasses should override this to handle the
- * specific property changes they need to receive.
+ * This will be called whenever a property of the DBus object becomes invalid. 
  */
-void GPPDBusProxy::DBusSignalHandler::dBusPropertyInvalidated
-(GPPDBusProxy& source, juce::String propertyName)
+void GLib::DBusProxy::DBusSignalHandler::dBusPropertyInvalidated
+(DBusProxy& source, juce::String propertyName)
 {   
-    DBG("GPPDBusProxy::DBusSignalHandler::" << __func__ <<
+    DBG("GLib::DBusProxy::DBusSignalHandler::" << __func__ <<
             ": Received un-handled invalidation message for " << propertyName);
 }
 
 /*
- * Calls one of the methods provided by this interface.
+ * Calls one of the methods provided by this DBus interface.
  */
-GVariant* GPPDBusProxy::callMethod
+GVariant* GLib::DBusProxy::callMethod
 (const char *  methodName, GVariant* params, GError ** error) const
 {
-    using namespace juce;
     if(params != nullptr && !g_variant_is_of_type(params, G_VARIANT_TYPE_TUPLE))
     {
         GVariant* tuple = g_variant_new_tuple(&params, 1);
@@ -115,8 +107,8 @@ GVariant* GPPDBusProxy::callMethod
         GDBusProxy* proxy = G_DBUS_PROXY(proxyObj);
         if(proxy == nullptr)
         {
-            DBG("GPPDBusProxy::" << __func__ << ": invalid DBus proxy!");
-            DBG("GPPDBusProxy::" << __func__ 
+            DBG("GLib::DBusProxy::" << __func__ << ": invalid DBus proxy!");
+            DBG("GLib::DBusProxy::" << __func__ 
                     << ": params will now be unreferenced if non-null.");
             if(params != nullptr)
             {
@@ -134,10 +126,10 @@ GVariant* GPPDBusProxy::callMethod
                 (error==nullptr ? &defaultError: error));
         if (defaultError != nullptr)
         {
-            DBG("GPPDBusProxy::" << __func__ 
+            DBG("DBusProxy::" << __func__ 
                     << ": calling DBus adapter proxy method "
                     << methodName << " failed!");
-            DBG("Error: " << String(defaultError->message));
+            DBG("Error: " << juce::String(defaultError->message));
             g_clear_error(&defaultError);
         }
         if(result != nullptr  && g_variant_is_container(result))
@@ -162,9 +154,9 @@ GVariant* GPPDBusProxy::callMethod
 
 
 /*
- * Checks if the interface has a property with a particular name
+ * Checks if the DBus interface has a property with a particular name.
  */
-bool GPPDBusProxy::hasProperty(const char *  propertyName) const
+bool GLib::DBusProxy::hasProperty(const char *  propertyName) const
 {
     GDBusProxy * proxy = G_DBUS_PROXY(getGObject());
     if(proxy == nullptr)
@@ -183,10 +175,10 @@ bool GPPDBusProxy::hasProperty(const char *  propertyName) const
 }
 
 /*
- * Register a signal handler to receive DBus signals and property updates.
+ * Registers a signal handler to receive DBus signals and property updates.
  */
-void GPPDBusProxy::connectSignalHandler
-(GPPDBusProxy::DBusSignalHandler& signalHandler)
+void GLib::DBusProxy::connectSignalHandler
+(DBusProxy::DBusSignalHandler& signalHandler)
 {
     GObject* proxy = getGObject();
     if(proxy != nullptr)
@@ -197,33 +189,32 @@ void GPPDBusProxy::connectSignalHandler
 }
 
 /*
- * Callback function for handling all DBus signals.
+ * A callback function for handling all DBus signals.
  */
-void GPPDBusProxy::dBusSignalCallback(GDBusProxy* proxy,
+void GLib::DBusProxy::dBusSignalCallback(GDBusProxy* proxy,
         gchar* senderName,
         gchar* signalName,
         GVariant* parameters,
         DBusSignalHandler* handler)
 {
-    using namespace juce;
-    GPPDBusProxy proxyWrapper(proxy);
+    DBusProxy proxyWrapper(proxy);
     handler->dBusSignalReceived(proxyWrapper,
-            String(senderName),
-            String(signalName),
+            juce::String(senderName),
+            juce::String(signalName),
             parameters);
 }
 
-/**
- * Callback function for handling DBus property change signals.
+/*
+ * A callback function for handling DBus property change signals.
  */
-void GPPDBusProxy::dBusPropertiesChanged(GDBusProxy* proxy,
+void GLib::DBusProxy::dBusPropertiesChanged(GDBusProxy* proxy,
         GVariant* changedProperties,
         GStrv invalidatedProperties,
         DBusSignalHandler* handler)
 {
-    using namespace juce;
     using namespace GVariantConverter;
-    GPPDBusProxy proxyWrapper(proxy);
+    using juce::String;
+    DBusProxy proxyWrapper(proxy);
     iterateDict(changedProperties,[&proxyWrapper,handler]
             (GVariant* key, GVariant* property)
     {

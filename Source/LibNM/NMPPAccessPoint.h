@@ -1,8 +1,8 @@
 #pragma once
 #include <nm-access-point.h>
 #include "NMPPConnection.h"
-#include "GPPObject.h"
-#include "GSignalHandler.h"
+#include "GLib/Object.h"
+#include "SignalHandler.h"
 
 /**
  * @file NMPPAccessPoint
@@ -18,7 +18,7 @@
  * receive updates if signal strength changes or the access point is removed. 
  */
 
-class NMPPAccessPoint : public GPPObject
+class NMPPAccessPoint : public GLib::Object
 {
 public:
     /**
@@ -76,7 +76,8 @@ public:
     
     /**
      * Gets the wifi access point frequency in (TODO: what format? MHz? 
-     * documentation is unclear, do some tests and figure it out.)
+     * documentation is unclear, do some tests and figure it out. Or just remove
+     * this method, it is currently unused)
      * 
      * @return the wifi access point frequency, or zero if the access point is
      *         null.
@@ -147,7 +148,7 @@ public:
      * Listener objects can subscribe to receive updates when the access point
      * signal strength changes.
      */
-    class Listener : public GSignalHandler
+    class Listener : public GLib::SignalHandler
     {
     public:     
         Listener() { }

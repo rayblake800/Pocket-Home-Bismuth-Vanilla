@@ -85,12 +85,8 @@ sub readFiles
     if(-f)
     {
         my $file = $_;
-        my @lines = read_file($file);
-        my @matches;
-        foreach my $line(@lines)
-        {
-            push(@matches, ($line =~ /$toFind/g));
-        }
+        my $text= read_file($file);
+        my @matches = ($text =~ /$toFind/g);
         my $matchCount = @matches;
         if($matchCount > 0)
         {
@@ -99,49 +95,48 @@ sub readFiles
             printGreen($File::Find::name);
             print(":\n");
             my $changesMade = 0;
+            my $outText = "";
             my $input = "";
-            foreach my $line(@lines)
+            while($text =~ /(.*)(^.*?)($toFind)(.*?$)(.*)/ms)
             {
-                my $skipChars = 0;
-                while(substr($line, $skipChars) =~ /(.*)($toFind)(.*)/)
-                {
-                    print(substr($line, 0, $skipChars));
-                    print($1);
-                    printRed($2);
-                    print("$3\n");
+                print("Found line:\n");
+                print($2);
+                printRed($3);
+                print("$4\n");
 
-                    print($1);
-                    printGreen($replace);
-                    print("$3\n");
-                    
-                    print("Change line? (");
-                    printGreen("y"); print("es/");
-                    printRed("n");   print("o/");
-                    printWhite("s"); print("kip file/");
-                    printRed("q");   print("uit):");
-                    chomp($input = <STDIN>);
-                    if($input eq "y")
-                    {
-                        $changesMade++;
-                        $line = substr($line, 0, $skipChars)."$1$replace$3";
-                        $skipChars += length($1) + length($replace);
-                    }
-                    elsif($input eq "n")
-                    {
-                        $skipChars += length($1) + length($2);
-                    }
-                    elsif($input eq "s")
-                    {
-                        rewindLines(3);
-                        last;
-                    }
-                    elsif($input eq "q")
-                    {
-                        rewindLines(3);
-                        exit;
-                    }
-                    rewindLines(3);
+                print($2);
+                printGreen($replace);
+                print("$4\n");
+                
+                print("Change line? (");
+                printGreen("y"); print("es/");
+                printRed("n");   print("o/");
+                printWhite("s"); print("kip file/");
+                printRed("q");   print("uit):");
+                chomp($input = <STDIN>);
+                if($input eq "y")
+                {
+                    $changesMade++;
+                    $outText = "$outText$1$2$replace$4";
+                    $text = $5;
                 }
+                elsif($input eq "n")
+                {
+                    $outText = "$outText$1$2$3$4";
+                    $text = $5;
+                }
+                elsif($input eq "s")
+                {
+                    rewindLines(3);
+                    last;
+                }
+                elsif($input eq "q")
+                {
+                    rewindLines(5);
+                    exit;
+                }
+                rewindLines(5);
+
                 if($input eq "s")
                 {
                     last;
@@ -150,8 +145,7 @@ sub readFiles
             if($changesMade)
             {
                 print("Writing $changesMade changes back to $file.\n");
-                my $fileText = join("", @lines);
-                $fileText =~ s/\r//g;
+                my $fileText = "$outText$text";
                 length($fileText) > 0 or die "Empty output!\n";
                 write_file($file, $fileText);
             }

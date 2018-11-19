@@ -4,7 +4,7 @@
  * Creates a GPPTestObject containing a new GTestObject.
  */
 GPPTestObject::GPPTestObject() : 
-GPPObject(GTEST_TYPE_OBJECT)
+GLib::Object(GTEST_TYPE_OBJECT)
 {
     GObject* object = G_OBJECT(gtest_object_new());
     setGObject(object);
@@ -14,13 +14,13 @@ GPPObject(GTEST_TYPE_OBJECT)
  * Creates a GPPTestObject sharing data with another GPPTestObject.
  */
 GPPTestObject::GPPTestObject(const GPPTestObject& toCopy) :
-GPPObject(toCopy, GTEST_TYPE_OBJECT) { }
+GLib::Object(toCopy, GTEST_TYPE_OBJECT) { }
 
 /*
  * Creates a GPPTestObject holding a GTestObject. 
  */
 GPPTestObject::GPPTestObject(const GTestObject* toAssign) :
-GPPObject(G_OBJECT(toAssign), GTEST_TYPE_OBJECT) { }
+GLib::Object(G_OBJECT(toAssign), GTEST_TYPE_OBJECT) { }
 
 /*
  * Gets the GTestObject testString value.

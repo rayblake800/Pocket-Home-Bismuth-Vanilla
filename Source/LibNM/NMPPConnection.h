@@ -1,6 +1,6 @@
 #pragma once
 #include <nm-connection.h>
-#include "GPPObject.h"
+#include "GLib/Object.h"
 
 /**
  * @file NMPPConnection.h
@@ -8,7 +8,7 @@
  * @brief A RAII container and C++ interface for LibNM NMConnection objects.
  */
 
-class NMPPConnection : public GPPObject
+class NMPPConnection : public GLib::Object
 {
 public:
     /**

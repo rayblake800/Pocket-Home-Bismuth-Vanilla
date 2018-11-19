@@ -245,7 +245,7 @@ private:
     /**
      *#######################  Listener Classes  ###############################
      * These objects listen to signals from NetworkManager classes and pass them
-     * on to the LibNMInterface.  All GPPObject Listeners share a parent class,
+     * on to the LibNMInterface.  All GLib::Object Listeners share a parent class,
      * so LibNMInterface can't just inherit all Listener classes itself.
      */
     class ClientListener : public NMPPClient::Listener

@@ -87,7 +87,6 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
     runTests = args.contains("--test");
     if(!runTests)
     {
-        gLibThread = new GLibSignalThread();
         homeWindow = new PocketHomeWindow
                 (getApplicationName(), args.contains("--fakeWifi"));
     }

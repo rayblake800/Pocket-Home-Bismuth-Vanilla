@@ -3,8 +3,8 @@
 #include "NMPPAccessPoint.h"
 #include "NMPPConnection.h"
 #include "NMPPActiveConnection.h"
-#include "GPPObject.h"
-#include "GSignalHandler.h"
+#include "GLib/Object.h"
+#include "GLib/SignalHandler.h"
 
 /**
  * @file NMPPDeviceWifi.h
@@ -12,7 +12,7 @@
  * @brief A RAII container and C++ interface for LibNM NMDeviceWifi
  *        objects.
  */
-class NMPPDeviceWifi : public GPPObject
+class NMPPDeviceWifi : public GLib::Object
 {
 public:
     /**
@@ -157,7 +157,7 @@ public:
      * Listeners receive notifications when the wifi device changes, a new
      * access point object is added, or an access point is removed.
      */
-    class Listener : public GSignalHandler
+    class Listener : public GLib::SignalHandler
     {
     public:
         friend class NMPPDeviceWifi;

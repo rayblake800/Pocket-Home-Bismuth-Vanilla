@@ -1,13 +1,13 @@
 #pragma once
 #include "gtest_object.h"
-#include "GPPObject.h"
+#include "GLib/Object.h"
 #include "GSignalHandler.h"
 /**
  * @file GPPTestObject.h
  *
- * @brief A minimal GPPObject test class to use for thread safety testing.
+ * @brief A minimal GLib::Object test class to use for thread safety testing.
  */
-class GPPTestObject : public GPPObject
+class GPPTestObject : public GLib::Object
 {
 public:
     /**

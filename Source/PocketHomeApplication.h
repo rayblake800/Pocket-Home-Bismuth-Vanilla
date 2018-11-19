@@ -4,7 +4,6 @@
 #include "Config/MainFile.h"
 #include "ComponentConfigFile.h"
 #include "ColourConfigFile.h"
-#include "GLibSignalThread.h"
 
 /**
  * @file PocketHomeApplication.h
@@ -75,9 +74,6 @@ private:
     //Holds UI colour settings
     ColourConfigFile colourConfig;
 
-    //Runs the GLib event loop. This will not be created if running unit tests.
-    juce::ScopedPointer<GLibSignalThread> gLibThread;
-    
     //The program appearance manager.  This is dynamically allocated because it
     //should be created after/destroyed before all of the above resources.
     juce::ScopedPointer<PokeLookAndFeel> lookAndFeel = nullptr;
