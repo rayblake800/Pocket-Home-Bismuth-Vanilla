@@ -24,8 +24,8 @@ protected:
      * @brief  Creates a new Handler, initializing its Resource if necessary.
      *
      * This constructor determines the resource key directly from the
-     * ResourceType, and should not be used to implement abstract Resource
-     * subclasses.
+     * ResourceType, and should not be used to implement Handlers for abstract 
+     * Resource subclasses.
      *
      * @param createResource  An optional function that will create the
      *                        resource.  If no function is given, the default
@@ -43,8 +43,9 @@ protected:
     /**
      * @brief  Creates a new Handler, initializing its Resource if necessary.
      *
-     * This constructor should be used when implementing abstract Resource
-     * subclasses, where the resourceKey cannot be determined automatically.
+     * This constructor should be used when implementing Handlers for abstract 
+     * Resource subclasses, where the resource key cannot be determined 
+     * automatically.
      *
      * @param resourceKey     The unique key string identifying the ResourceType
      *                        Resource class.
