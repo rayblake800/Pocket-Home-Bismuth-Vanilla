@@ -108,7 +108,7 @@ void GLib::EventLoop::runLoop()
  * Terminates the GLib main loop.
  */
 void GLib::EventLoop::stopLoop()
-{
+n
     call([this]() 
         { 
             g_main_loop_quit(mainLoop); 

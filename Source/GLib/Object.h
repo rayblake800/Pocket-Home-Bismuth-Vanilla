@@ -200,38 +200,6 @@ protected:
     void clearGObject();
     
     /**
-     * @brief  Calls an arbitrary function from within the context assigned to 
-     *         this Object. 
-     *
-     * GLib::Object subclasses will need to implement this to use an appropriate
-     * context, probably through a GLib::ThreadResource.
-     * 
-     * @param call  A function to synchronously run on the GMainLoop that owns 
-     *              this object's GMainContext.
-     */
-    virtual void callInMainContext(std::function<void()> call) const = 0;
-    
-    /**
-     * @brief  Calls an arbitrary function from within the context assigned to 
-     *         this Object, passing in GObject data as a parameter.  
-     *
-     * This makes use of the zero parameter callInMainContext function, so it 
-     * does not need to be overridden to operate in a different context.
-     * 
-     * @param call            This function will synchronously run on the 
-     *                        GMainLoop that owns this object's GMainContext.  
-     *                        This object's GObject* data will be passed in as a
-     *                        parameter. Unlike getGObject, the data provided 
-     *                        through this parameter does not need to be 
-     *                        unreferenced by the caller.
-     * 
-     * @param skipCallIfNull  If this value is true and this Object is null,
-     *                        the call function parameter will not run.
-     */
-    void callInMainContext(std::function<void(GObject*)> call,
-            bool skipCallIfNull = true) const;
-    
-    /**
      * @brief  Gets the GType assigned to this Object class.
      * 
      * @return  The GType of GObjects held by this Object class.

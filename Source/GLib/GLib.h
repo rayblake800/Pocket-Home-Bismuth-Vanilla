@@ -59,11 +59,24 @@ namespace GLib
     class DBusProxy;
 
     /**
+     * @brief  Schedules functions to run on a ThreadResource's EventLoop,
+     *         selected using its GMainContext.
+     */
+    class ContextCaller;
+
+    /**
      * @brief  Creates a GLib ThreadResource to use exclusively for DBus 
      *         signals.
      *
      * @see  GLib/DBus/DBusThread.h
      */
     class DBusThread;
+
+    /**
+     * @brief  A smart pointer class used to temporarily hold gpointer values,
+     *         automatically unreferencing them on destruction.
+     */
+    template <typename GPointerType>
+    class ScopedGPointer;
 
 }

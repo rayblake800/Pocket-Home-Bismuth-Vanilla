@@ -18,9 +18,7 @@ int GLib::Object::getReferenceCount() const
 /*
  * Creates a null Object, with no internal GObject.
  */
-GLib::Object::Object(const GType objectType) : objectType(objectType) 
-{
-}
+GLib::Object::Object(const GType objectType) : objectType(objectType) { }
 
 /*
  * Creates a new Object as a reference to existing object data.
@@ -189,24 +187,6 @@ void GLib::Object::clearGObject()
         g_object_unref(object);
     }
     g_clear_object(&object);
-}
-
-/*
- * Call an arbitrary function from within the context assigned to this Object, 
- * passing in GObject data as a parameter.
- */
-void GLib::Object::callInMainContext(std::function<void(GObject*)> call,
-        bool skipCallIfNull) const 
-{
-    GObject* data = getGObject();
-    callInMainContext([&data, &call, skipCallIfNull]()
-    {
-        if(data != nullptr || !skipCallIfNull)
-        {
-            call(data);
-        }
-        g_clear_object(&data);
-    });
 }
 
 /*

@@ -37,21 +37,6 @@ public:
      *          loop.
      */
     bool runningOnLoop();
-
-    /**
-     * @brief  Runs a function on this GLib event loop, waiting until the 
-     *         function has finished.
-     * 
-     * @param fn  A function that needs to run on the GLib event loop.
-     */
-    void call(std::function<void()> fn);
-    
-    /**
-     * @brief  Asynchronously runs a function once on this GLib event loop.
-     * 
-     * @param fn   A function that needs to run on the GLib event loop.
-     */
-    void callAsync(std::function<void()> fn);
     
     /**
      * @brief  Gets the event loop's context.
