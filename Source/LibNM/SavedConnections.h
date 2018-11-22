@@ -1,5 +1,5 @@
 #pragma once
-#include "GPPDBusProxy.h"
+#include "GLib/DBus/DBusProxy.h"
 #include "NMPPAccessPoint.h"
 #include "SavedConnection.h"
 
@@ -13,7 +13,7 @@
  * all wifi connections.
  */
 
-class SavedConnections : public GPPDBusProxy
+class SavedConnections : public GLib::DBusProxy
 {
 public:
     SavedConnections();

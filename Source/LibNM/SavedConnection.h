@@ -1,7 +1,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "NMPPConnection.h"
-#include "GPPDBusProxy.h"
+#include "GLib/DBus/DBusProxy.h"
 
 /**
  * @file SavedConnection.h
@@ -9,7 +9,7 @@
  * @brief Controls a NetworkManager saved connection object over DBus. 
  */
 
-class SavedConnection : public GPPDBusProxy
+class SavedConnection : public GLib::DBusProxy
 {
 public:
     /**

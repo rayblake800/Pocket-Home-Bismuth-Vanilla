@@ -76,7 +76,7 @@ namespace GLib
      * @brief  A smart pointer class used to temporarily hold gpointer values,
      *         automatically unreferencing them on destruction.
      */
-    template <typename GPointerType>
+    template <typename GPointerType, typename Unreferencer> 
     class ScopedGPointer;
 
 }
