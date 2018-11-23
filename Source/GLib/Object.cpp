@@ -1,17 +1,17 @@
 #include "GLib/Object.h"
+#include "GLib/SmartPointers/GObjectPtr.h"
 
 /*
  * Gets this object's reference count.  Only use this for debugging.
  */
 int GLib::Object::getReferenceCount() const
 {
-    GObject* object = getGObject();
+    GObjectPtr<> object(getGObject());
     if(object == NULL)
     {
         return 0;
     }
-    int refCount = object->ref_count - 1;
-    g_clear_object(&object);
+    int refCount = ((GObject*) object)->ref_count - 1;
     return refCount;
 }
 

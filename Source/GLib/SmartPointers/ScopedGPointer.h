@@ -18,43 +18,15 @@
  * that the caller will free or unreference that data once it is no longer
  * needed. When that data is only needed within a single scope and does not
  * need to be copied elsewhere, it should be wrapped in a ScopedGPointer to 
- * ensure it is properly unreferenced when it goes out of scope. The
- * ScopedGPointer's Unreferencer template parameter may be used to change the
- * method of dereferencing used, since not all GLib data uses the g_object_unref
- * method.
+ * ensure it is properly unreferenced when it goes out of scope. The specific
+ * unreferencing function needed by the pointer is set by its Unreferencer
+ * template parameter, which should call the correct GLib unreference or free
+ * function within a static unref method.
  *
  *   When GLib GObject data needs to be copied, shared, replaced, or connected 
  * to signal handlers, define a GLib::Object subclass instead of using a 
  * ScopedGPointer. Always make sure GLib data will actually need to be
  * unreferenced before using it with a ScopedGPointer.
- */
-
-/**
- * @brief  Provides the unreferencing function, g_object_unref(), that 
- *         ScopedGPointer calls on its data pointer on destruction. 
- *
- * @tparam GPointerType  The type of GLib pointer being unreferenced. When using
- *                       the default unreferencer, this should always be
- *                       GObject*, or some GObject subclass pointer that doesn't
- *                       require its own unreferencing function.
- */
-template <typename GPointerType>
-struct DefaultUnref
-{
-    /**
-     * @brief  Unreferences a ScopedGPointer's data pointer using the 
-     *         g_object_unref() method from the GLib library.
-     *
-     * @param dataPtr  A GLib data pointer that needs to be unreferenced.
-     */
-    static void unref(GPointerType dataPtr)
-    {
-        g_object_unref(G_OBJECT(dataPtr));
-    }
-};
-
-/**
- * @brief  Holds and provides access to a GLib data pointer.
  *
  * @tparam GPointerType  The specific data pointer type being held.
  *
@@ -62,8 +34,7 @@ struct DefaultUnref
  *                       unref(GPointerType dataPtr) method used to unreference
  *                       or free the data pointer on destruction.
  */
-template <typename GPointerType, typename Unreferencer
-        = DefaultUnref<GPointerType>>
+template <typename GPointerType, typename Unreferencer>
 class GLib::ScopedGPointer
 {
 public:

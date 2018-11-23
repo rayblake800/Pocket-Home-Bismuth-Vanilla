@@ -3,7 +3,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "JuceHeader.h"
-#include "GLib/SmartPointers/MainContextPtr.h"
+#include "GLib/EventLoop.h"
 #include "GLib/GLib.h"
 
 
@@ -13,25 +13,29 @@
  * @brief  Runs functions synchronously and asynchronously within a GLib event
  *         loop attached to a specific GLib context.
  *
- * ContextCaller does nothing to ensure that its GMainContext is connected to a
- * valid GLib event loop. 
+ *  The ContextCaller will not run the event loop itself, or ensure that the 
+ * loop is running. That should be handled elsewhere, probably by a
+ * GLib::ThreadResource object.
+ *
  */
 class GLib::ContextCaller
 {
 public:
     /**
-     * @brief  Initializes the ContextCaller, setting its GLib context.
+     * @brief  Initializes the ContextCaller, setting its GLib event loop.
      *
-     * @param context  A non-null GLib context pointer, with an extra reference
-     *                 the ContextCaller can unreference when it is destroyed.
+     * @param eventLoop  A reference to the eventLoop where the ContextCaller
+     *                   will schedule function calls.
      */
-    ContextCaller(GMainContext* context);
+    ContextCaller(const EventLoop& eventLoop);
 
+    /**
+     * @brief  Cancels all pending calls when the ContextCaller is destroyed.
+     */
     virtual ~ContextCaller();
     
     void callAsync(std::function<void()> toCall,
-            std::function<void()> onFailure = std::function<void()>(),
-            std::function<void()> afterAdding = std::function<void()>());
+            std::function<void()> onFailure = std::function<void()>());
 
     void call(std::function<void()> toCall,
             std::function<void()> onFailure = std::function<void()>(),
@@ -85,6 +89,6 @@ private:
        is destroyed before a call can run. */
     juce::OwnedArray<CallData, juce::CriticalSection> pendingCalls;
 
-    /* The GLib context object used to schedule functions on the event loop. */ 
-    const MainContextPtr context;
+    /* The GLib event loop where the ContextCaller schedules calls. */
+    const EventLoop& eventLoop;
 };

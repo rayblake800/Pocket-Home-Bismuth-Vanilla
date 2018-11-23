@@ -3,6 +3,7 @@
 #include "WindowFocus.h"
 #include "JuceHeader.h"
 #include "GLib/EventLoop.h"
+#include "GLib/ContextCaller.h"
 #include "SharedResource/ThreadResource.h"
 
 /**
@@ -122,6 +123,9 @@ private:
     
     /* Runs the GLib event loop. */
     EventLoop eventLoop;
+
+    /* Executes functions in the event loop. */
+    ContextCaller contextCaller;
 
     /* Stores the ThreadLock so it can be accessed within the event loop. */
     SharedResource::ThreadResource::ThreadLock* threadLock = nullptr;

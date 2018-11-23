@@ -1,7 +1,14 @@
 #include "GLib/ContextCaller.h"
 
-GLib::ContextCaller::ContextCaller(GMainContext* context) : context(context) { }
+/*
+ * Initializes the ContextCaller, setting its GLib event loop.
+ */
+GLib::ContextCaller::ContextCaller(const EventLoop& eventLoop) : 
+    eventLoop(eventLoop) { }
 
+/*
+ * Cancels all pending calls when the ContextCaller is destroyed.
+ */
 GLib::ContextCaller::~ContextCaller()
 {
     const juce::ScopedLock clearLock(pendingCalls.getLock());
@@ -15,6 +22,10 @@ GLib::ContextCaller::~ContextCaller()
                 pending->onFailure();
             }
             pending->callPending->notify_one();
+        }
+        else if(pending->onFailure)
+        {
+            pending->onFailure();
         }
     }
 }

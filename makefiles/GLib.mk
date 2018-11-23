@@ -7,6 +7,7 @@ OBJECTS_GLIB := \
   $(GLIB_PREFIX)Object.o \
   $(GLIB_PREFIX)WeakRef.o \
   $(GLIB_PREFIX)ThreadResource.o \
+  $(GLIB_PREFIX)ThreadHandler.o \
   $(GLIB_PREFIX)EventLoop.o \
   $(GLIB_PREFIX)SignalHandler.o \
   $(GLIB_PREFIX)VariantConverter.o \
@@ -32,8 +33,10 @@ $(GLIB_PREFIX)Object.o : \
     $(GLIB_ROOT)/Object.cpp
 $(GLIB_PREFIX)WeakRef.o : \
     $(GLIB_ROOT)/WeakRef.cpp
-$(GLIB_PREFIX)Thread.o : \
+$(GLIB_PREFIX)ThreadResource.o : \
     $(GLIB_ROOT)/ThreadResource.cpp
+$(GLIB_PREFIX)ThreadHandler.o : \
+    $(GLIB_ROOT)/ThreadHandler.cpp
 $(GLIB_PREFIX)EventLoop.o : \
     $(GLIB_ROOT)/EventLoop.cpp
 $(GLIB_PREFIX)SignalHandler.o : \
@@ -41,7 +44,7 @@ $(GLIB_PREFIX)SignalHandler.o : \
 $(GLIB_PREFIX)VariantConverter.o : \
     $(GLIB_ROOT)/DBus/GVariantConverter.cpp
 $(GLIB_PREFIX)DBusProxy.o : \
-    $(GLIB_ROOT)/DBus/GPPDBusProxy.cpp
+    $(GLIB_ROOT)/DBus/DBusProxy.cpp
 
 # Tests
 $(GLIB_PREFIX)Test_Object.o : \

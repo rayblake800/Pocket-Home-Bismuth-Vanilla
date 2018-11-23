@@ -6,8 +6,10 @@
 GLib::ThreadResource::ThreadResource
 (const juce::Identifier& resourceKey, GMainContext* context) : 
 SharedResource::ThreadResource(resourceKey), 
-eventLoop(context)
+eventLoop(context), contextCaller(context)
 {  
+    // 
+    g_main_context_ref(context);
     jassert(context != nullptr);
 }
 

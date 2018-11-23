@@ -4,7 +4,7 @@
 #include "GLib/SmartPointers/ScopedGPointer.h"
 
 /**
- * @file  GLib/SmartPointers/MainLoopPtr.h
+ * @file  GLib/SmartPointers/LoopPtr.h
  *
  * @brief  Defines a ScopedGPointer that holds a GMainLoop*. 
  */
@@ -29,5 +29,5 @@ namespace GLib
     /**
      * @brief  Stores and automatically unreferences a GMainLoop*.
      */
-    typedef ScopedGPointer<GMainLoop*, LoopUnref> MainLoopPtr;
+    typedef ScopedGPointer<GMainLoop*, LoopUnref> LoopPtr;
 }

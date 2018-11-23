@@ -3,7 +3,7 @@
 #include "GLib/SmartPointers/ScopedGPointer.h"
 
 /**
- * @file  GLib/SmartPointers/MainContextPtr.h
+ * @file  GLib/SmartPointers/ContextPtr.h
  *
  * @brief  Defines a ScopedGPointer that holds a GMainContext*. 
  */
@@ -28,5 +28,5 @@ namespace GLib
     /**
      * @brief  Stores and automatically unreferences a GMainContext*.
      */
-    typedef ScopedGPointer<GMainContext*, ContextUnref> MainContextPtr;
+    typedef ScopedGPointer<GMainContext*, ContextUnref> ContextPtr;
 }

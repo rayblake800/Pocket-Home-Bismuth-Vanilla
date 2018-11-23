@@ -1,8 +1,8 @@
 #pragma once
 #include <gio/gio.h>
 #include "JuceHeader.h"
-#include "GLib/SmartPointers/MainContextPtr.h"
-#include "GLib/SmartPointers/MainLoopPtr.h"
+#include "GLib/SmartPointers/ContextPtr.h"
+#include "GLib/SmartPointers/LoopPtr.h"
 
 /**
  * @file  GLib/EventLoop.h
@@ -53,8 +53,8 @@ public:
 
 private:
     /* GLib thread/event loop context object. */
-    const MainContextPtr context;
+    const ContextPtr context;
 
     /* The GLib event loop managed by this object. */
-    const MainLoopPtr eventLoop;
+    const LoopPtr eventLoop;
 };

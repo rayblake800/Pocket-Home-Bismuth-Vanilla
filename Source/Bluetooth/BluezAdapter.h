@@ -1,10 +1,7 @@
-/**
- * 
- */
 #pragma once
-#include "GPPDBusProxy.h"
+#include "GLib/DBus/DBusProxy.h"
 
-class BluezAdapter : private GPPDBusProxy
+class BluezAdapter : private GLib::DBusProxy
 {
 public:
     BluezAdapter();
