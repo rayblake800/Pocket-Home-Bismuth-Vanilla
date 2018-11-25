@@ -20,16 +20,27 @@ public:
      * @brief  Calls a function on this GLib event loop, waiting until the 
      *         function has finished.
      * 
-     * @param toCall  A function that needs to be called on the GLib event loop.
+     * @param toCall     A function that needs to be called on the GLib event 
+     *                   loop.
+     *
+     * @param onFailure  An optional function to call if accessing the event
+     *                   loop failed.
      */
-    void call(const std::function<void()> toCall) const;
+    void call(const std::function<void()> toCall, 
+            const std::function<void()> onFailure 
+                = std::function<void()>()) const;
 
     /**
      * @brief  Asynchronously calls a function once on this GLib event loop.
      * 
      * @param toCall   A function that needs to be called on the GLib event loop.
+     *
+     * @param onFailure  An optional function to call if accessing the event
+     *                   loop failed.
      */
-    void callAsync(const std::function<void()> toCall) const;
+    void callAsync(const std::function<void()> toCall,
+            const std::function<void()> onFailure 
+                = std::function<void()>()) const;
 
     /**
      * @brief  Checks if the thread resource is currently running.

@@ -17,19 +17,25 @@ SharedResource::Handler<ThreadResource>(resourceKey,
  * Runs a function on this GLib event loop, waiting until the function has 
  * finished.
  */
-void GLib::ThreadHandler::call(const std::function<void()> toRun) const
+void GLib::ThreadHandler::call(const std::function<void()> toCall,
+        const std::function<void()> onFailure) const
 {
+    SharedResource::LockedPtr<ThreadResource> threadResource
+        = getWriteLockedResource();
+    threadResource->call(toCall, onFailure, [&threadResource]() 
+            { threadResource.unlock(); });
     
 }
 
 /*
  * Asynchronously runs a function once on this GLib event loop.
  */
-void GLib::ThreadHandler::callAsync(const std::function<void()> toRun) const
+void GLib::ThreadHandler::callAsync(const std::function<void()> toCall,
+        const std::function<void()> onFailure) const
 {
     SharedResource::LockedPtr<ThreadResource> threadResource
-        = getReadLockedResource();
-    threadResource->callAsync(toRun);
+        = getWriteLockedResource();
+    threadResource->callAsync(toCall, onFailure);
 }
 
 /*
