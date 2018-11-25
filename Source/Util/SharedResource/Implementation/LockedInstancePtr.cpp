@@ -20,6 +20,7 @@ lockType(lockType)
     {
         resourceLock.enterWrite();
     }
+    locked = true;
 }
 
 /*
@@ -27,22 +28,51 @@ lockType(lockType)
  */
 SharedResource::LockedInstancePtr::~LockedInstancePtr()
 {
-    const juce::ReadWriteLock& resourceLock 
-        = Holder::getHolderInstance()->getResourceLock(resourceKey);
-    if(lockType == LockType::read)
+    unlock();
+}
+
+/*
+ * Unlocks the resource. Once the resource is unlocked, the LockedInstancePtr 
+ * may no longer access the resource Instance or lock.
+ */
+void SharedResource::LockedInstancePtr::unlock()
+{
+    if(locked)
     {
-        resourceLock.exitRead();
+        const juce::ReadWriteLock& resourceLock 
+            = Holder::getHolderInstance()->getResourceLock(resourceKey);
+        if(lockType == LockType::read)
+        {
+            resourceLock.exitRead();
+        }
+        else
+        {
+            resourceLock.exitWrite();
+        }
+        locked = false;
     }
-    else
-    {
-        resourceLock.exitWrite();
-    }
+}
+
+
+/*
+ * Checks if the resource is still locked by this pointer.
+ */
+bool SharedResource::LockedInstancePtr::isLocked() const
+{
+    return locked;
 }
 
 /*
  * Accesses the resource Instance's methods or data.
  */
-SharedResource::Instance* SharedResource::LockedInstancePtr::operator->() const
+SharedResource::Instance* SharedResource::LockedInstancePtr::getInstance() const
 {
-    return Holder::getHolderInstance()->getResource(resourceKey);
+    if(locked)
+    {
+        return Holder::getHolderInstance()->getResource(resourceKey);
+    }
+    else
+    {
+        return nullptr;
+    }
 }

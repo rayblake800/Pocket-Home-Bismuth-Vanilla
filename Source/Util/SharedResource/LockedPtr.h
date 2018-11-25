@@ -12,7 +12,7 @@
  *                       accesses.
  */
 template<class ResourceType>
-class SharedResource::LockedPtr : public LockedInstancePtr
+class SharedResource::LockedPtr : private LockedInstancePtr
 {
 private:
     /**
